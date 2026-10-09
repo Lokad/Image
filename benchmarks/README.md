@@ -16,6 +16,8 @@ The [inlined word-refill round](WARM-PNG-WORD.md) lowers the measured 16-bit
 decode gap to 4.06x; 8-bit remains near 4.32x and is the largest measured gap.
 The [distance prefix round](WARM-PNG-DISTANCE.md) lowers the 8-bit gap to 3.66x;
 the 16-bit affected-path screen is 3.99x and becomes the largest measured gap.
+The [safe SIMD Adler round](WARM-PNG-ADLER.md) lowers these retained decode
+gaps to 2.92x at 8-bit and 3.25x at 16-bit, with verified scalar fallback.
 
 For warm memory comparisons, the Linux [original FFmpeg reference worker](../tools/WarmReference/README.md)
 excludes process launch, IPC and file transport from native elapsed samples.

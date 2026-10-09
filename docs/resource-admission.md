@@ -60,6 +60,14 @@ including long-code and unassigned-prefix fallback; cancellation is checked
 for each decoded symbol. Alignment returns complete unread lookahead bytes
 before stored payloads or the checksum.
 
+PNG Adler accumulation uses chunks of at most 4096 bytes. Normalized initial
+sums bound the largest intermediate `b` to 2408052720, below `uint.MaxValue`,
+so modulo reduction at chunk endpoints is exact. Safe AVX2 blocks use the
+RFC 1950 recurrence weights `32-i`; adjacent signed sums cannot saturate.
+Scalar fallback and tails retain the same recurrence. Cancellation is checked
+at every chunk; existing row work and working-memory charges remain unchanged.
+There is no additional array or heap buffer.
+
 The larger encoder allowance is deliberate. The documented default zlib
 compressor state is about 268 KiB before the managed IO buffer, whereas the
 inflater is substantially smaller. The earlier uniform 256 KiB charge was

@@ -208,11 +208,7 @@ internal static class PngCodec
                     if (filter is < 0 or > 4) throw new ImageDataException("Invalid PNG row filter.");
                     AddAdler((byte)filter);
                     ReadExactly(zlib, row, context.Cancellation);
-                    for (var i = 0; i < row.Length; i++)
-                    {
-                        if ((i & 65535) == 0) context.Cancellation.ThrowIfCancellationRequested();
-                        AddAdler(row[i]);
-                    }
+                    Adler32.Append(row, ref adlerA, ref adlerB, context.Cancellation);
                     Unfilter(row, previous, bytesPerPixel, filter, context.Cancellation);
                     if (header.ColorType == 6 && stepX == 1)
                     {
