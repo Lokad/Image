@@ -1,5 +1,6 @@
 using System.Buffers.Binary;
 using System.IO.Compression;
+using System.Runtime.InteropServices;
 
 namespace Lokad.Image.Internal;
 
@@ -213,10 +214,21 @@ internal static class PngCodec
                         AddAdler(row[i]);
                     }
                     Unfilter(row, previous, bytesPerPixel, filter, context.Cancellation);
-                    for (var x = 0; x < width; x++)
+                    if (header.ColorType == 6 && stepX == 1)
                     {
-                        if ((x & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested();
-                        WritePixel(row, x, startX + x * stepX, startY + y * stepY, header, result);
+                        // RGBA already has the destination channels and precision.
+                        // Dense Adam7 rows also qualify; sparse passes keep mapping.
+                        var offset = (startY + y * stepY) * result.Stride + startX * bytesPerPixel;
+                        CopyRgbaRow(row, result.Pixels.Slice(offset, row.Length),
+                            header.Depth == 16 && BitConverter.IsLittleEndian, context.Cancellation);
+                    }
+                    else
+                    {
+                        for (var x = 0; x < width; x++)
+                        {
+                            if ((x & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                            WritePixel(row, x, startX + x * stepX, startY + y * stepY, header, result);
+                        }
                     }
                     (previous, row) = (row, previous);
                 }
@@ -228,6 +240,22 @@ internal static class PngCodec
         {
             adlerA = (adlerA + value) % 65521;
             adlerB = (adlerB + adlerA) % 65521;
+        }
+    }
+
+    internal static void CopyRgbaRow(ReadOnlySpan<byte> row, Span<byte> destination, bool reverseSamples, CancellationToken cancellation)
+    {
+        // Legal RGBA rows are multiples of four/eight bytes. Chunking keeps
+        // cancellation at least as frequent as the old per-4096-pixel loop.
+        for (var offset = 0; offset < row.Length;)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            var count = Math.Min(16384, row.Length - offset);
+            var input = row.Slice(offset, count); var output = destination.Slice(offset, count);
+            if (reverseSamples)
+                BinaryPrimitives.ReverseEndianness(MemoryMarshal.Cast<byte, ushort>(input), MemoryMarshal.Cast<byte, ushort>(output));
+            else input.CopyTo(output);
+            offset += count;
         }
     }
 

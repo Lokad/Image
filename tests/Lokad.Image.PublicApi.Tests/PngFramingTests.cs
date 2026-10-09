@@ -4,6 +4,21 @@ namespace Lokad.Image.PublicApi.Tests;
 
 public sealed class PngFramingTests
 {
+    [Theory]
+    [InlineData(8)] [InlineData(16)]
+    public void WideRgbaRowsCrossCopyChunksAtBothInterlaceSettings(int depth)
+    {
+        foreach (var interlaced in new[] { false, true })
+        {
+            var frame = new AuthoredPng.Frame("wide-rgba", 6, depth, 16384 / (depth / 8 * 4) + 1, 5, interlaced);
+            var encoded = AuthoredPng.Build(frame); var unchanged = encoded.ToArray();
+            using var decoded = ImageCodec.Decode(encoded);
+            Assert.Equal(AuthoredPng.Expected(frame), OriginalPixels.Bytes(decoded));
+            Assert.Equal((frame.Width, frame.Height, depth), (decoded.Width, decoded.Height, decoded.BitDepth));
+            Assert.Equal(unchanged, encoded);
+        }
+    }
+
     [Fact]
     public void EveryFixedLiteralPrefixProducesItsAnalyticalSample()
     {

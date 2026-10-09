@@ -10,6 +10,8 @@ The [warm PNG framing round](WARM-PNG-FRAMING.md) records the initial three-pair
 screen and one reader optimization; PNG decode remains above the 2x target.
 The [literal prefix lookup round](WARM-PNG-LOOKUP.md) improves the 16-bit path
 further; the measured 8-bit decode becomes the largest known warm gap.
+The [contiguous RGBA row round](WARM-PNG-ROWS.md) brings both decode gaps to
+roughly 4.3-4.4x; it preserves exact samples and resource admission.
 
 For warm memory comparisons, the Linux [original FFmpeg reference worker](../tools/WarmReference/README.md)
 excludes process launch, IPC and file transport from native elapsed samples.
