@@ -15,14 +15,14 @@ internal static class ZlibFraming
             || ((data[0] << 8) + data[1]) % 31 != 0 || (data[1] & 32) != 0)
             throw new ImageDataException("Invalid PNG zlib header.");
         var window = 1 << ((data[0] >> 4) + 8);
-        // Arrays, prefix lookup and nested constructor scratch total 3992 bytes,
+        // Arrays, prefix lookup and nested constructor scratch total 4056 bytes,
         // independent of declared dimensions or input.
         context.Reserve(4096);
         try
         {
             Span<int> lengths = stackalloc int[320]; Span<int> codeLengths = stackalloc int[19];
             Span<int> counts = stackalloc int[48]; Span<int> symbols = stackalloc int[339];
-            Span<ushort> literalLookup = stackalloc ushort[512];
+            Span<ushort> literalLookup = stackalloc ushort[512]; Span<ushort> distanceLookup = stackalloc ushort[32];
             var reader = new Bits(data, context); reader.SkipBytes(2); long output = 0;
             bool final;
             do
@@ -69,7 +69,7 @@ internal static class ZlibFraming
                 if (lengths[256] == 0) throw new ImageDataException("PNG Deflate block has no end code.");
                 var literals = new Huffman(lengths[..literalCount], counts.Slice(16, 16), symbols.Slice(19, 288), context);
                 var distances = new Huffman(lengths.Slice(literalCount, distanceCount), counts.Slice(32, 16), symbols.Slice(307, 32), context);
-                BuildLiteralLookup(literals, literalLookup, context);
+                BuildLiteralLookup(literals, literalLookup, context); BuildDistanceLookup(distances, distanceLookup, context);
                 while (true)
                 {
                     var symbol = DecodeLiteral(ref reader, literals, literalLookup);
@@ -86,7 +86,7 @@ internal static class ZlibFraming
                             var extra = (symbol - 265) / 4 + 1;
                             length = 3 + (1 << (extra + 2)) + ((symbol - 265) % 4 << extra) + reader.Read(extra);
                         }
-                        var distanceSymbol = Decode(ref reader, distances.Counts, distances.Symbols, distances.Maximum);
+                        var distanceSymbol = DecodeDistance(ref reader, distances, distanceLookup);
                         if (distanceSymbol > 29) throw new ImageDataException("Invalid PNG Deflate distance code.");
                         var distance = distanceSymbol + 1;
                         if (distanceSymbol >= 4)
@@ -219,6 +219,35 @@ internal static class ZlibFraming
     {
         var entry = lookup[(int)(reader.Peek(9) & 511)];
         var length = entry & 15;
+        if (length == 0) return Decode(ref reader, tree.Counts, tree.Symbols, tree.Maximum);
+        reader.Consume(length); return entry >> 4;
+    }
+
+    private static void BuildDistanceLookup(scoped Huffman tree, scoped Span<ushort> lookup, OperationContext context)
+    {
+        // RFC 1951 section 3.2.2 canonical construction, five-bit root only.
+        // 32 clears/writes, at most 32 five-bit reversals and symbol visits
+        // fit within the conservative 512-unit construction charge.
+        context.Work(512); lookup.Clear();
+        int code = 0, index = 0;
+        for (var length = 1; length <= 5; length++)
+        {
+            var count = tree.Counts[length];
+            for (var i = 0; i < count; i++, code++)
+            {
+                var reversed = 0;
+                for (var bit = 0; bit < length; bit++) reversed = reversed * 2 + ((code >> bit) & 1);
+                var entry = (ushort)(tree.Symbols[index + i] << 4 | length);
+                for (var slot = reversed; slot < lookup.Length; slot += 1 << length) lookup[slot] = entry;
+            }
+            index += count; code *= 2;
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static int DecodeDistance(scoped ref Bits reader, scoped Huffman tree, scoped ReadOnlySpan<ushort> lookup)
+    {
+        var entry = lookup[(int)(reader.Peek(5) & 31)]; var length = entry & 15;
         if (length == 0) return Decode(ref reader, tree.Counts, tree.Symbols, tree.Maximum);
         reader.Consume(length); return entry >> 4;
     }

@@ -50,11 +50,12 @@ algorithm charges, separate from time, instructions or allocations.
 | VP8 encode | Supplied pixels plus 4096-byte fixed workspace; source/reconstruction planes, optional normalized alpha, mode/context arrays; arithmetic partitions retain capacity | Per-row conversion, bounded mode search and block transforms, bit/carry work and 64 KiB output writes; finalization explicitly checks cancellation | 48 depth/alpha/quality/effort/geometry cases at exact memory and encoded-size boundaries; nonseekable output and unchanged source |
 | VP8 arithmetic growth | Initial capacity 64, then doubling/clipping; old and new buffers plus 32 bytes each admitted together before copying; disposal releases retained capacity | Growth copy charges existing bytes; output maximum enforced per appended byte | Exact 64-to-128 and clipped 64-to-96 peaks, one-byte-below failures, disposal/reuse and independent BigInteger interval controls |
 
-PNG framing uses a 512-entry, nine-bit literal prefix lookup generated from the
-validated canonical tree. It and the existing arrays fit within the admitted
-4 KiB scratch; there is no heap table or static cache. Every fixed/dynamic block
-charges 8192 additional bounded construction units before building the lookup.
-Stored blocks do not build it. Actual prefix bits keep their exact work charge,
+PNG framing uses a 512-entry, nine-bit literal prefix lookup and a 32-entry,
+five-bit distance lookup generated from the validated canonical trees. They and
+the existing arrays total 4056 bytes within the admitted 4 KiB scratch; there is
+no heap table or static cache. Every fixed/dynamic block charges 8192 additional
+bounded literal construction units and 512 distance construction units.
+Stored blocks build neither lookup. Actual prefix bits keep their exact work charge,
 including long-code and unassigned-prefix fallback; cancellation is checked
 for each decoded symbol. Alignment returns complete unread lookahead bytes
 before stored payloads or the checksum.

@@ -14,6 +14,8 @@ The [contiguous RGBA row round](WARM-PNG-ROWS.md) brings both decode gaps to
 roughly 4.3-4.4x; it preserves exact samples and resource admission.
 The [inlined word-refill round](WARM-PNG-WORD.md) lowers the measured 16-bit
 decode gap to 4.06x; 8-bit remains near 4.32x and is the largest measured gap.
+The [distance prefix round](WARM-PNG-DISTANCE.md) lowers the 8-bit gap to 3.66x;
+the 16-bit affected-path screen is 3.99x and becomes the largest measured gap.
 
 For warm memory comparisons, the Linux [original FFmpeg reference worker](../tools/WarmReference/README.md)
 excludes process launch, IPC and file transport from native elapsed samples.
