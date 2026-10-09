@@ -268,6 +268,11 @@ internal static class PngCodec
 
     internal static void Unfilter(Span<byte> row, ReadOnlySpan<byte> previous, int stride, int filter, CancellationToken cancellation = default)
     {
+        if (filter == 0)
+        {
+            // PNG section 9.2: None stores the original bytes without prediction.
+            cancellation.ThrowIfCancellationRequested(); return;
+        }
         for (var i = 0; i < row.Length; i++)
         {
             if ((i & 65535) == 0) cancellation.ThrowIfCancellationRequested();

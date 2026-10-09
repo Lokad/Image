@@ -75,6 +75,10 @@ replaces the former 1 KiB table; it is fixed shared format data, not an image
 cache or per-operation buffer. Per-image admission and work remain unchanged;
 cancellation is checked every 4096 bytes as before.
 
+Filter-None PNG rows already contain their original bytes. This branch checks
+cancellation and returns without reading neighbour rows or rewriting pixels.
+Row work and memory admission remain unchanged; other filters retain prediction.
+
 The larger encoder allowance is deliberate. The documented default zlib
 compressor state is about 268 KiB before the managed IO buffer, whereas the
 inflater is substantially smaller. The earlier uniform 256 KiB charge was
