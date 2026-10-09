@@ -48,6 +48,11 @@ try {
     } finally { $archive.Dispose() }
     $consumer = Join-Path $repoRoot ('artifacts/package-smoke/' + [Guid]::NewGuid().ToString('N'))
     New-Item -ItemType Directory -Path $consumer -Force | Out-Null
+    # The supplied directory may contain several builds with the same ID and
+    # version. Give NuGet a feed containing only the explicitly selected pack.
+    $feedDirectory = Join-Path $consumer 'feed'
+    New-Item -ItemType Directory -Path $feedDirectory -Force | Out-Null
+    Copy-Item -LiteralPath $package -Destination (Join-Path $feedDirectory 'Lokad.Image.0.1.0.nupkg')
     @'
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
@@ -61,6 +66,9 @@ try {
 '@ | Set-Content -LiteralPath (Join-Path $consumer 'Consumer.csproj') -Encoding utf8
     @'
 using Lokad.Image;
+if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(
+    File.ReadAllBytes(typeof(ImageBuffer).Assembly.Location))).ToLowerInvariant() != args[4])
+    throw new Exception("Package consumer loaded a different assembly.");
 using var source = ImageBuffer.Create(2, 1, 16);
 new ushort[] { 12345, 1, 65534, 43210, 54321, 65534, 1, 12345 }.CopyTo(source.GetRow16(0));
 using var flipped = ImageTransforms.FlipHorizontal(source);
@@ -269,7 +277,7 @@ if (vp8Maximum > 4 || Math.Sqrt(vp8Squares/(31*23*3)) > 1.5)
 Console.WriteLine("Exact Release package consumer passed.");
 '@ | Set-Content -LiteralPath (Join-Path $consumer 'Program.cs') -Encoding utf8
     $config = [xml]'<configuration><packageSources><clear /><add key="local" value="" /></packageSources></configuration>'
-    $config.configuration.packageSources.add.value = Split-Path -Parent $package
+    $config.configuration.packageSources.add.value = $feedDirectory
     $config.Save((Join-Path $consumer 'NuGet.Config'))
     # An isolated package cache proves this exact pack is used even when its
     # prerelease version matches an older local build.
@@ -281,7 +289,7 @@ Console.WriteLine("Exact Release package consumer passed.");
     $pngExpected = Join-Path $repoRoot 'tests/Fixtures/png-authored-c6-d16-adam7-all-filters.rgba'
     dotnet build (Join-Path $consumer 'Consumer.csproj') -c Release --no-restore --tl:off --nologo -v minimal -m:1 -nr:false -p:UseSharedCompilation=false
     if ($LASTEXITCODE -ne 0) { throw 'Package-only consumer build failed.' }
-    dotnet (Join-Path $consumer 'bin/Release/net10.0/Consumer.dll') $vp8Fixture $vp8Expected $pngFixture $pngExpected
+    dotnet (Join-Path $consumer 'bin/Release/net10.0/Consumer.dll') $vp8Fixture $vp8Expected $pngFixture $pngExpected $librarySha256
     if ($LASTEXITCODE -ne 0) { throw 'Package-only consumer failed.' }
     & (Join-Path $PSScriptRoot 'verify-usage.ps1') -ConsumerDirectory $consumer -GuidePath (Join-Path $repoRoot 'docs/usage.md') -LibrarySha256 $librarySha256
 } finally { Pop-Location }
