@@ -1,0 +1,46 @@
+using Lokad.Image.Internal;
+
+namespace Lokad.Image.Tests;
+
+public sealed class JpegAdmissionTests
+{
+    [Fact]
+    public void SingleSymbolHuffmanTableAdmitsItsArraysAndAllLengthVisits()
+    {
+        var counts = new byte[16]; counts[0] = 1;
+        byte[] symbols = [7];
+        var limits = new ImageLimits { MaxWorkingBytes = 205, MaxWork = 16 };
+        _ = new JpegHuffman(counts, symbols, new OperationContext(limits, default));
+        Assert.Throws<ImageLimitException>(() => new JpegHuffman(counts, symbols,
+            new OperationContext(limits with { MaxWorkingBytes = 204 }, default)));
+        Assert.Throws<ImageLimitException>(() => new JpegHuffman(counts, symbols,
+            new OperationContext(limits with { MaxWork = 15 }, default)));
+    }
+
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void EachFullBlockTransformAdmitsWorkBeforeChangingItsDestination(bool inverse)
+    {
+        var pixels = Enumerable.Repeat((byte)127, 64).ToArray();
+        var coefficients = Enumerable.Repeat(23.0, 64).ToArray();
+        var integerCoefficients = new int[64];
+        var quantization = Enumerable.Repeat((ushort)1, 64).ToArray();
+        var context = new OperationContext(new ImageLimits { MaxWork = 4096 }, default);
+        Transform();
+        var unchangedPixels = pixels.ToArray(); var unchangedCoefficients = coefficients.ToArray();
+        Assert.Throws<ImageLimitException>(Transform);
+        Assert.Equal(unchangedPixels, pixels); Assert.Equal(unchangedCoefficients, coefficients);
+
+        using var cancellation = new CancellationTokenSource();
+        context = new OperationContext(ImageLimits.Default, cancellation.Token);
+        cancellation.Cancel();
+        Assert.Throws<OperationCanceledException>(Transform);
+        Assert.Equal(unchangedPixels, pixels); Assert.Equal(unchangedCoefficients, coefficients);
+
+        void Transform()
+        {
+            if (inverse) JpegTransform.Inverse(integerCoefficients, quantization, pixels, context);
+            else JpegTransform.Forward(pixels, coefficients, context);
+        }
+    }
+}

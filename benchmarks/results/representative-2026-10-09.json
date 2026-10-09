@@ -1,0 +1,4622 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "measuredDate": "2026-10-09",
+  "method": "Four sequential dedicated-VM Release SerialShort jobs: two baseline and two current runs; one launch, three warmups, three measured iterations per case per run. Values are full single-image process/file invocations, not isolated library throughput. Kernel child peak RSS is a separate untimed execution, not BenchmarkDotNet allocation. Native FFmpeg controls retain normal CPU dispatch and one codec/filter thread. No quality selection or fixture generation is timed.",
+  "scope": {
+    "calibrationSources": 6,
+    "totalSources": 8,
+    "measuredSourceImages": 5,
+    "profiles": 12,
+    "ownedSamples": 87,
+    "nativeAnchors": 24,
+    "acceptedPairs": 11,
+    "excludedAnchors": 13,
+    "workloadPairs": 16,
+    "casesPerRun": 32
+  },
+  "machine": {
+    "system": "Linux",
+    "architecture": "x86_64",
+    "kernel": "6.17.0-1022-azure",
+    "distribution": {
+      "NAME": "Ubuntu",
+      "ID": "ubuntu",
+      "PRETTY_NAME": "Ubuntu 24.04.4 LTS",
+      "VERSION_ID": "24.04",
+      "VERSION": "24.04.4 LTS (Noble Numbat)",
+      "VERSION_CODENAME": "noble",
+      "ID_LIKE": "debian",
+      "HOME_URL": "https://www.ubuntu.com/",
+      "SUPPORT_URL": "https://help.ubuntu.com/",
+      "BUG_REPORT_URL": "https://bugs.launchpad.net/ubuntu/",
+      "PRIVACY_POLICY_URL": "https://www.ubuntu.com/legal/terms-and-policies/privacy-policy",
+      "UBUNTU_CODENAME": "noble",
+      "LOGO": "ubuntu-logo"
+    },
+    "logicalProcessors": 4,
+    "cpuModel": "AMD EPYC 9V45 96-Core Processor",
+    "memoryTotal": "16373452 kB",
+    "swapTotal": "0 kB"
+  },
+  "toolchain": {
+    "sdk": "10.0.204",
+    "runtime": ".NET 10.0.8",
+    "powershell": "7.6.6",
+    "benchmarkDotNet": "0.15.6",
+    "ffmpegSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
+    "ffmpegVersion": "ffmpeg version n8.1 Copyright (c) 2000-2026 the FFmpeg developers",
+    "baselineLibrarySha256": "ecf7f4df558705f1595950082fa511ebc187cde7dafea2a36d5eeb1494aba797",
+    "currentLibrarySha256": "f7109d7835bb06156716b486b8108aa3cd1d4c7c432fff3fe48eb4fcf48b9b32"
+  },
+  "runs": [
+    {
+      "id": "89a4f6f9b0a640789b09cd967fe55029",
+      "cohort": "baseline",
+      "calibrationSha256": "21885e329cf35c871ddc33b28c948edf60d5fcf0dfbb6efab48f04494684e012",
+      "librarySha256": "ecf7f4df558705f1595950082fa511ebc187cde7dafea2a36d5eeb1494aba797",
+      "probeSha256": "50489688cdb82d3c529496e5bba32bb05031f22cfb4678d99db0f45b12eb869b",
+      "benchmarkAssemblySha256": "9e930ac4bd7cb68693cf4deffc20a1e5c0b0f2f5b703a80cedf151365e9f9db5",
+      "validationWorkerLibraryHashes": [
+        "c3ff35f30cdef9f1590ee227a700e6dd521c427434ee2c6ebc12c5b4c645093c"
+      ],
+      "workerBenchmarkAssemblyHashes": [
+        "a467a694df8d3b06d12253e7c98a150d1127fa0c640e8b425beaccf9ef429cf6"
+      ]
+    },
+    {
+      "id": "c0dcf0b8c444419a8983d0c4819b2aa5",
+      "cohort": "baseline",
+      "calibrationSha256": "21885e329cf35c871ddc33b28c948edf60d5fcf0dfbb6efab48f04494684e012",
+      "librarySha256": "ecf7f4df558705f1595950082fa511ebc187cde7dafea2a36d5eeb1494aba797",
+      "probeSha256": "50489688cdb82d3c529496e5bba32bb05031f22cfb4678d99db0f45b12eb869b",
+      "benchmarkAssemblySha256": "9e930ac4bd7cb68693cf4deffc20a1e5c0b0f2f5b703a80cedf151365e9f9db5",
+      "validationWorkerLibraryHashes": [
+        "c3ff35f30cdef9f1590ee227a700e6dd521c427434ee2c6ebc12c5b4c645093c"
+      ],
+      "workerBenchmarkAssemblyHashes": [
+        "a467a694df8d3b06d12253e7c98a150d1127fa0c640e8b425beaccf9ef429cf6"
+      ]
+    },
+    {
+      "id": "7ac1cb6c50a14f6caec502b6b96a7c0d",
+      "cohort": "current",
+      "calibrationSha256": "c6a4c9e440bde13929f10cd821b1b3af2f9f1456eb36921175a6a9c39a0e9559",
+      "librarySha256": "f7109d7835bb06156716b486b8108aa3cd1d4c7c432fff3fe48eb4fcf48b9b32",
+      "probeSha256": "50489688cdb82d3c529496e5bba32bb05031f22cfb4678d99db0f45b12eb869b",
+      "benchmarkAssemblySha256": "9e930ac4bd7cb68693cf4deffc20a1e5c0b0f2f5b703a80cedf151365e9f9db5",
+      "validationWorkerLibraryHashes": [
+        "e4743822a07135e872310efb29efc9ae6647b8fb62ad8d1245b36610546cb00f"
+      ],
+      "workerBenchmarkAssemblyHashes": [
+        "a467a694df8d3b06d12253e7c98a150d1127fa0c640e8b425beaccf9ef429cf6"
+      ]
+    },
+    {
+      "id": "6d5d9ca73b1d4e37a7f292c51af3fe53",
+      "cohort": "current",
+      "calibrationSha256": "c6a4c9e440bde13929f10cd821b1b3af2f9f1456eb36921175a6a9c39a0e9559",
+      "librarySha256": "f7109d7835bb06156716b486b8108aa3cd1d4c7c432fff3fe48eb4fcf48b9b32",
+      "probeSha256": "50489688cdb82d3c529496e5bba32bb05031f22cfb4678d99db0f45b12eb869b",
+      "benchmarkAssemblySha256": "9e930ac4bd7cb68693cf4deffc20a1e5c0b0f2f5b703a80cedf151365e9f9db5",
+      "validationWorkerLibraryHashes": [
+        "e4743822a07135e872310efb29efc9ae6647b8fb62ad8d1245b36610546cb00f"
+      ],
+      "workerBenchmarkAssemblyHashes": [
+        "a467a694df8d3b06d12253e7c98a150d1127fa0c640e8b425beaccf9ef429cf6"
+      ]
+    }
+  ],
+  "quietness": [
+    {
+      "observation": "representative-baseline-before",
+      "capturedUtc": "2026-10-09T11:28:52Z",
+      "source": {
+        "sourceSha256": "ec3dcbfa8e189bd5718a1641548ba8015acf905ea50b85ddbae6fcb17d8c92e9",
+        "files": 1052,
+        "sourceRevision": null,
+        "verifiedAllFileBytes": true
+      },
+      "quietness": {
+        "sampleSeconds": 5.000297788006719,
+        "cpuBusyFraction": 0.0009995002498750624,
+        "ioWaitFraction": 0.0,
+        "stealFraction": 0.0,
+        "loadAverage": [
+          0.0,
+          0.14453125,
+          0.177734375
+        ],
+        "passed": true,
+        "thresholds": {
+          "maxCpuBusyFraction": 0.05,
+          "maxIoWaitFraction": 0.01,
+          "maxStealFraction": 0.01,
+          "maxOneMinuteLoadAverage": 0.25
+        },
+        "scope": "Five-second aggregate Linux CPU sample and current load averages. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+      }
+    },
+    {
+      "observation": "representative-baseline-after-cooldown",
+      "capturedUtc": "2026-10-09T11:36:02Z",
+      "source": {
+        "sourceSha256": "ec3dcbfa8e189bd5718a1641548ba8015acf905ea50b85ddbae6fcb17d8c92e9",
+        "files": 1052,
+        "sourceRevision": null,
+        "verifiedAllFileBytes": true
+      },
+      "quietness": {
+        "sampleSeconds": 5.000275981001323,
+        "cpuBusyFraction": 0.0005,
+        "ioWaitFraction": 0.0,
+        "stealFraction": 0.0,
+        "loadAverage": [
+          0.064453125,
+          0.40185546875,
+          0.3369140625
+        ],
+        "passed": true,
+        "thresholds": {
+          "maxCpuBusyFraction": 0.05,
+          "maxIoWaitFraction": 0.01,
+          "maxStealFraction": 0.01,
+          "maxOneMinuteLoadAverage": 0.25
+        },
+        "scope": "Five-second aggregate Linux CPU sample and current load averages. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+      }
+    },
+    {
+      "observation": "representative-baseline-repeat-before",
+      "capturedUtc": "2026-10-09T11:36:02Z",
+      "source": {
+        "sourceSha256": "ec3dcbfa8e189bd5718a1641548ba8015acf905ea50b85ddbae6fcb17d8c92e9",
+        "files": 1052,
+        "sourceRevision": null,
+        "verifiedAllFileBytes": true
+      },
+      "quietness": {
+        "sampleSeconds": 5.000275981001323,
+        "cpuBusyFraction": 0.0005,
+        "ioWaitFraction": 0.0,
+        "stealFraction": 0.0,
+        "loadAverage": [
+          0.064453125,
+          0.40185546875,
+          0.3369140625
+        ],
+        "passed": true,
+        "thresholds": {
+          "maxCpuBusyFraction": 0.05,
+          "maxIoWaitFraction": 0.01,
+          "maxStealFraction": 0.01,
+          "maxOneMinuteLoadAverage": 0.25
+        },
+        "scope": "Five-second aggregate Linux CPU sample and current load averages. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+      }
+    },
+    {
+      "observation": "representative-baseline-repeat-after",
+      "capturedUtc": "2026-10-09T11:42:04Z",
+      "source": {
+        "sourceSha256": "ec3dcbfa8e189bd5718a1641548ba8015acf905ea50b85ddbae6fcb17d8c92e9",
+        "files": 1052,
+        "sourceRevision": null,
+        "verifiedAllFileBytes": true
+      },
+      "quietness": {
+        "sampleSeconds": 5.000283952002064,
+        "cpuBusyFraction": 0.0,
+        "ioWaitFraction": 0.0,
+        "stealFraction": 0.0,
+        "loadAverage": [
+          0.1103515625,
+          0.49169921875,
+          0.435546875
+        ],
+        "passed": true,
+        "thresholds": {
+          "maxCpuBusyFraction": 0.05,
+          "maxIoWaitFraction": 0.01,
+          "maxStealFraction": 0.01,
+          "maxOneMinuteLoadAverage": 0.25
+        },
+        "scope": "Five-second aggregate Linux CPU sample and current load averages. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+      }
+    },
+    {
+      "observation": "jpeg-candidate-measure-before",
+      "capturedUtc": "2026-10-09T11:56:41Z",
+      "source": {
+        "sourceSha256": "25c0efe8978a0cc4b634217443e709bbea3cd6da36f91706e28bb0014e906a3a",
+        "files": 1052,
+        "sourceRevision": null,
+        "verifiedAllFileBytes": true
+      },
+      "quietness": {
+        "sampleSeconds": 5.000294315002975,
+        "cpuBusyFraction": 0.0005002501250625312,
+        "ioWaitFraction": 0.0015007503751875938,
+        "stealFraction": 0.0,
+        "loadAverage": [
+          0.22314453125,
+          0.31201171875,
+          0.28076171875
+        ],
+        "passed": true,
+        "thresholds": {
+          "maxCpuBusyFraction": 0.05,
+          "maxIoWaitFraction": 0.01,
+          "maxStealFraction": 0.01,
+          "maxOneMinuteLoadAverage": 0.25
+        },
+        "scope": "Five-second aggregate Linux CPU sample and current load averages. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+      }
+    },
+    {
+      "observation": "jpeg-candidate-measure-after-cooldown",
+      "capturedUtc": "2026-10-09T12:03:21Z",
+      "source": {
+        "sourceSha256": "25c0efe8978a0cc4b634217443e709bbea3cd6da36f91706e28bb0014e906a3a",
+        "files": 1052,
+        "sourceRevision": null,
+        "verifiedAllFileBytes": true
+      },
+      "quietness": {
+        "sampleSeconds": 5.000295777004794,
+        "cpuBusyFraction": 0.0009995002498750624,
+        "ioWaitFraction": 0.0,
+        "stealFraction": 0.0,
+        "loadAverage": [
+          0.09423828125,
+          0.4765625,
+          0.41552734375
+        ],
+        "passed": true,
+        "thresholds": {
+          "maxCpuBusyFraction": 0.05,
+          "maxIoWaitFraction": 0.01,
+          "maxStealFraction": 0.01,
+          "maxOneMinuteLoadAverage": 0.25
+        },
+        "scope": "Five-second aggregate Linux CPU sample and current load averages. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+      }
+    },
+    {
+      "observation": "jpeg-candidate-repeat-retry-before",
+      "capturedUtc": "2026-10-09T12:05:08Z",
+      "source": {
+        "sourceSha256": "25c0efe8978a0cc4b634217443e709bbea3cd6da36f91706e28bb0014e906a3a",
+        "files": 1052,
+        "sourceRevision": null,
+        "verifiedAllFileBytes": true
+      },
+      "quietness": {
+        "sampleSeconds": 5.000288468989311,
+        "cpuBusyFraction": 0.0,
+        "ioWaitFraction": 0.0,
+        "stealFraction": 0.0,
+        "loadAverage": [
+          0.013671875,
+          0.3310546875,
+          0.3642578125
+        ],
+        "passed": true,
+        "thresholds": {
+          "maxCpuBusyFraction": 0.05,
+          "maxIoWaitFraction": 0.01,
+          "maxStealFraction": 0.01,
+          "maxOneMinuteLoadAverage": 0.25
+        },
+        "scope": "Five-second aggregate Linux CPU sample and current load averages. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+      }
+    },
+    {
+      "observation": "jpeg-candidate-repeat-retry-after-cooldown",
+      "capturedUtc": "2026-10-09T12:11:22Z",
+      "source": {
+        "sourceSha256": "25c0efe8978a0cc4b634217443e709bbea3cd6da36f91706e28bb0014e906a3a",
+        "files": 1052,
+        "sourceRevision": null,
+        "verifiedAllFileBytes": true
+      },
+      "quietness": {
+        "sampleSeconds": 5.000269580006716,
+        "cpuBusyFraction": 0.0005,
+        "ioWaitFraction": 0.0,
+        "stealFraction": 0.0,
+        "loadAverage": [
+          0.1201171875,
+          0.50634765625,
+          0.4755859375
+        ],
+        "passed": true,
+        "thresholds": {
+          "maxCpuBusyFraction": 0.05,
+          "maxIoWaitFraction": 0.01,
+          "maxStealFraction": 0.01,
+          "maxOneMinuteLoadAverage": 0.25
+        },
+        "scope": "Five-second aggregate Linux CPU sample and current load averages. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+      }
+    }
+  ],
+  "initialPostRunObservations": [
+    {
+      "observation": "representative-baseline-after",
+      "capturedUtc": "2026-10-09T11:33:51Z",
+      "quietness": {
+        "sampleSeconds": 5.0002790950093186,
+        "cpuBusyFraction": 0.0005,
+        "ioWaitFraction": 0.0,
+        "stealFraction": 0.0,
+        "loadAverage": [
+          0.5830078125,
+          0.62841796875,
+          0.39404296875
+        ],
+        "passed": false,
+        "thresholds": {
+          "maxCpuBusyFraction": 0.05,
+          "maxIoWaitFraction": 0.01,
+          "maxStealFraction": 0.01,
+          "maxOneMinuteLoadAverage": 0.25
+        },
+        "scope": "Five-second aggregate Linux CPU sample and current load averages. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+      }
+    },
+    {
+      "observation": "jpeg-candidate-measure-after",
+      "capturedUtc": "2026-10-09T12:00:36Z",
+      "quietness": {
+        "sampleSeconds": 5.000301035994198,
+        "cpuBusyFraction": 0.0015,
+        "ioWaitFraction": 0.0,
+        "stealFraction": 0.0,
+        "loadAverage": [
+          1.14990234375,
+          0.798828125,
+          0.4931640625
+        ],
+        "passed": false,
+        "thresholds": {
+          "maxCpuBusyFraction": 0.05,
+          "maxIoWaitFraction": 0.01,
+          "maxStealFraction": 0.01,
+          "maxOneMinuteLoadAverage": 0.25
+        },
+        "scope": "Five-second aggregate Linux CPU sample and current load averages. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+      }
+    },
+    {
+      "observation": "jpeg-candidate-repeat-retry-after",
+      "capturedUtc": "2026-10-09T12:09:02Z",
+      "quietness": {
+        "sampleSeconds": 5.000278192004771,
+        "cpuBusyFraction": 0.00100150225338007,
+        "ioWaitFraction": 0.24837255883825737,
+        "stealFraction": 0.0,
+        "loadAverage": [
+          1.18505859375,
+          0.80078125,
+          0.55419921875
+        ],
+        "passed": false,
+        "thresholds": {
+          "maxCpuBusyFraction": 0.05,
+          "maxIoWaitFraction": 0.01,
+          "maxStealFraction": 0.01,
+          "maxOneMinuteLoadAverage": 0.25
+        },
+        "scope": "Five-second aggregate Linux CPU sample and current load averages. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+      }
+    }
+  ],
+  "regressionPolicy": "Provisional guard: each current mean must be at most 20% above the slower repeated baseline mean. Flag repeats and paired native control drift of 10% or more; investigate the same input and retain flagged results without comparative claims. All 32 regression guards pass, 31 routine repeat checks pass, and the one flagged native row has a completed targeted control. Preserve identical inputs/settings/quality/bitstreams. This is an initial invocation guard, not a general throughput, memory or perceptual-quality guarantee.",
+  "repeatabilityIssues": [
+    {
+      "reason": "Candidate repeat drift",
+      "name": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg422-Asymmetric-129x67-d8-native5-owned13)",
+      "means": [
+        2517578.9752604165,
+        2442463.0286458335,
+        2342054.6028645835,
+        2960156.0924479165
+      ]
+    }
+  ],
+  "targetedNativeControl": {
+    "runId": "f3c3ea9d783b4577afe24d187f4ddfa8",
+    "fullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg422-Asymmetric-129x67-d8-native5-owned13)",
+    "samplesNanoseconds": [
+      2439896.203125,
+      2534384.078125,
+      2458065.60546875
+    ],
+    "meanMilliseconds": 2.47744862890625,
+    "quietness": [
+      {
+        "capturedUtc": "2026-10-09T12:16:39Z",
+        "quietness": {
+          "sampleSeconds": 5.00021457701223,
+          "cpuBusyFraction": 0.0015,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0,
+          "loadAverage": [
+            0.0,
+            0.16455078125,
+            0.32470703125
+          ],
+          "passed": true,
+          "thresholds": {
+            "maxCpuBusyFraction": 0.05,
+            "maxIoWaitFraction": 0.01,
+            "maxStealFraction": 0.01,
+            "maxOneMinuteLoadAverage": 0.25
+          },
+          "scope": "Five-second aggregate Linux CPU sample and current load averages. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+        }
+      },
+      {
+        "capturedUtc": "2026-10-09T12:19:28Z",
+        "quietness": {
+          "sampleSeconds": 5.000337587000104,
+          "cpuBusyFraction": 0.0005,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0,
+          "loadAverage": [
+            0.109375,
+            0.1728515625,
+            0.30322265625
+          ],
+          "passed": true,
+          "thresholds": {
+            "maxCpuBusyFraction": 0.05,
+            "maxIoWaitFraction": 0.01,
+            "maxStealFraction": 0.01,
+            "maxOneMinuteLoadAverage": 0.25
+          },
+          "scope": "Five-second aggregate Linux CPU sample and current load averages. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+        }
+      }
+    ],
+    "reason": "One native small-image row has 26.4% variation between the two current means. A separate same-image Short control returns within 10% of the baseline and first current mean. Retain the original variation and do not use this row for a comparative speed claim."
+  },
+  "quality": [
+    {
+      "profile": {
+        "width": 129,
+        "depth": 8,
+        "encoder": "Jpeg444",
+        "pattern": "ColorTiles",
+        "alpha": "Opaque",
+        "backgroundRgb": null,
+        "height": 67,
+        "hasAlpha": false,
+        "encodedHasAlpha": false,
+        "sourceMetric": "whole-raster-RGB"
+      },
+      "sourceSha256": "e45c54c77945f905bcc0d030a0a12b911b1d867df334f564dd7d4b5dba89102d",
+      "referenceSha256": "e45c54c77945f905bcc0d030a0a12b911b1d867df334f564dd7d4b5dba89102d",
+      "sourceAlphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b",
+      "ownedEvaluationOrder": [
+        1,
+        25,
+        50,
+        75,
+        100,
+        20,
+        16,
+        13
+      ],
+      "matches": [
+        {
+          "native": {
+            "setting": 16,
+            "encodedBytes": 470,
+            "encodedSha256": "8d17505eec7de2ad90f8cb73dda2d083af639c19afe9502dc60dfdaf5ffc5917",
+            "nativeDecodedSha256": "172558ebe6cc51166d78a146296f6d2ebf9eb3459fd4011e9fde006d6d0520c5",
+            "publicDecodedSha256": "172558ebe6cc51166d78a146296f6d2ebf9eb3459fd4011e9fde006d6d0520c5",
+            "codec": "JPEG",
+            "sampling": "1x2,1x2,1x2",
+            "sourceError": {
+              "sumSquared": 25830,
+              "maximum": 2,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 2,
+              "rgbRmse": 0.9980891149046854,
+              "rgbPsnr": 48.14741722414331
+            },
+            "decoderDifference": {
+              "sumSquared": 0,
+              "maximum": 0,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 0,
+              "rgbRmse": 0,
+              "rgbPsnr": null
+            },
+            "alphaExact": true,
+            "alphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+          },
+          "closestOwned": {
+            "setting": 13,
+            "encodedBytes": 1301,
+            "encodedSha256": "fb23735fbd87192eade1f6c6d62dfd16dec4bd15bb6dfd549b4bf911674243dd",
+            "nativeDecodedSha256": "1a33639365c9fb974180ad1896e3bd2f34957c7f5c854ce9dc571337285269c1",
+            "publicDecodedSha256": "1a33639365c9fb974180ad1896e3bd2f34957c7f5c854ce9dc571337285269c1",
+            "codec": "JPEG",
+            "sampling": "1x1,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 11382,
+              "maximum": 1,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.6625465651129433,
+              "rgbPsnr": 51.70647547315342
+            },
+            "decoderDifference": {
+              "sumSquared": 0,
+              "maximum": 0,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 0,
+              "rgbRmse": 0,
+              "rgbPsnr": null
+            },
+            "alphaExact": true,
+            "alphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+          },
+          "psnrGapDb": 3.55905824901011,
+          "matched": false,
+          "exclusionReason": "No sampled owned setting meets the fixed 0.25 dB band within the bounded search budget."
+        },
+        {
+          "native": {
+            "setting": 5,
+            "encodedBytes": 470,
+            "encodedSha256": "3e022a71e92b3833ce80f10a4be0e885318b9e176d93a57be793e322dd294313",
+            "nativeDecodedSha256": "172558ebe6cc51166d78a146296f6d2ebf9eb3459fd4011e9fde006d6d0520c5",
+            "publicDecodedSha256": "172558ebe6cc51166d78a146296f6d2ebf9eb3459fd4011e9fde006d6d0520c5",
+            "codec": "JPEG",
+            "sampling": "1x2,1x2,1x2",
+            "sourceError": {
+              "sumSquared": 25830,
+              "maximum": 2,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 2,
+              "rgbRmse": 0.9980891149046854,
+              "rgbPsnr": 48.14741722414331
+            },
+            "decoderDifference": {
+              "sumSquared": 0,
+              "maximum": 0,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 0,
+              "rgbRmse": 0,
+              "rgbPsnr": null
+            },
+            "alphaExact": true,
+            "alphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+          },
+          "closestOwned": {
+            "setting": 13,
+            "encodedBytes": 1301,
+            "encodedSha256": "fb23735fbd87192eade1f6c6d62dfd16dec4bd15bb6dfd549b4bf911674243dd",
+            "nativeDecodedSha256": "1a33639365c9fb974180ad1896e3bd2f34957c7f5c854ce9dc571337285269c1",
+            "publicDecodedSha256": "1a33639365c9fb974180ad1896e3bd2f34957c7f5c854ce9dc571337285269c1",
+            "codec": "JPEG",
+            "sampling": "1x1,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 11382,
+              "maximum": 1,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.6625465651129433,
+              "rgbPsnr": 51.70647547315342
+            },
+            "decoderDifference": {
+              "sumSquared": 0,
+              "maximum": 0,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 0,
+              "rgbRmse": 0,
+              "rgbPsnr": null
+            },
+            "alphaExact": true,
+            "alphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+          },
+          "psnrGapDb": 3.55905824901011,
+          "matched": false,
+          "exclusionReason": "No sampled owned setting meets the fixed 0.25 dB band within the bounded search budget."
+        }
+      ]
+    },
+    {
+      "profile": {
+        "width": 129,
+        "depth": 8,
+        "encoder": "Jpeg422",
+        "pattern": "Asymmetric",
+        "alpha": "Opaque",
+        "backgroundRgb": null,
+        "height": 67,
+        "hasAlpha": false,
+        "encodedHasAlpha": false,
+        "sourceMetric": "whole-raster-RGB"
+      },
+      "sourceSha256": "afc2e41fe92d4740997c4045fe58867ef3c4541bc7e6fc0359e91ef3b4b18055",
+      "referenceSha256": "afc2e41fe92d4740997c4045fe58867ef3c4541bc7e6fc0359e91ef3b4b18055",
+      "sourceAlphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b",
+      "ownedEvaluationOrder": [
+        1,
+        25,
+        50,
+        75,
+        100,
+        13
+      ],
+      "matches": [
+        {
+          "native": {
+            "setting": 16,
+            "encodedBytes": 3127,
+            "encodedSha256": "95fb1368af31b5cf93faa1fcba05620650f78b8460334aa4620254de20506413",
+            "nativeDecodedSha256": "da899f2c59fcf4501a4aa9e33423dc146bd04a0ff4e5fb293ac13cc8cbd5f2a5",
+            "publicDecodedSha256": "9f92e2548a9b1a65fe1b72df32941edb6e1470f2de3e50f24bed69bcec2f0dbb",
+            "codec": "JPEG",
+            "sampling": "2x2,1x2,1x2",
+            "sourceError": {
+              "sumSquared": 125603961,
+              "maximum": 226,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 226,
+              "rgbRmse": 69.59992695566697,
+              "rgbPsnr": 11.278627932205625
+            },
+            "decoderDifference": {
+              "sumSquared": 9300,
+              "maximum": 2,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 2,
+              "rgbRmse": 0.5988921083898265,
+              "rgbPsnr": 52.58383180033712
+            },
+            "alphaExact": true,
+            "alphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+          },
+          "closestOwned": {
+            "setting": 1,
+            "encodedBytes": 1638,
+            "encodedSha256": "3a27627abe04a5b8a202add52ae69be5245a8e60f0de3f24fa3da2b8fcb57e27",
+            "nativeDecodedSha256": "5d29d38289fd62ad800dca457a0e9195124863e117a53e3238325d6932afe17c",
+            "publicDecodedSha256": "4b40870bd5fd128114e20b2c11de53d4bcb22c4a4a75c4fd097a751d2fa8b3a6",
+            "codec": "JPEG",
+            "sampling": "2x1,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 123804930,
+              "maximum": 218,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 218,
+              "rgbRmse": 69.09968786729524,
+              "rgbPsnr": 11.341281896453445
+            },
+            "decoderDifference": {
+              "sumSquared": 7566,
+              "maximum": 2,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 2,
+              "rgbRmse": 0.5401822190746989,
+              "rgbPsnr": 53.47999791630923
+            },
+            "alphaExact": true,
+            "alphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+          },
+          "psnrGapDb": 0.06265396424782066,
+          "matched": true,
+          "exclusionReason": null
+        },
+        {
+          "native": {
+            "setting": 5,
+            "encodedBytes": 7292,
+            "encodedSha256": "a7eb67b76fb29a50f58c3c21df485490264331784f556b579bd59e716ab3da5b",
+            "nativeDecodedSha256": "295fb4ac4ecf8e97af0053fb5ac8b26529e751b5d5bbeaa8915fd7ee35682592",
+            "publicDecodedSha256": "85e2fe1d4e3e3a42b77ca32609a719b99c63e3cfe4af2a2e35564f2c04dab9d6",
+            "codec": "JPEG",
+            "sampling": "2x2,1x2,1x2",
+            "sourceError": {
+              "sumSquared": 114148502,
+              "maximum": 195,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 195,
+              "rgbRmse": 66.35019818088298,
+              "rgbPsnr": 11.693959120816103
+            },
+            "decoderDifference": {
+              "sumSquared": 9434,
+              "maximum": 3,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.6031912765847517,
+              "rgbPsnr": 52.52170256677965
+            },
+            "alphaExact": true,
+            "alphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+          },
+          "closestOwned": {
+            "setting": 13,
+            "encodedBytes": 5189,
+            "encodedSha256": "02795d53372440eda250755fac286894d80a7890dc3efa26c31a9897d8fa10d1",
+            "nativeDecodedSha256": "59574cdcb17e4db0d11c980b5c170e8b81c31f6c9c4e28c81141764870a053ec",
+            "publicDecodedSha256": "305cf02d5047bf58b6840e76f4bb721c09079ebdaffa4834ef551f18caefa4f9",
+            "codec": "JPEG",
+            "sampling": "2x1,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 118303694,
+              "maximum": 231,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 231,
+              "rgbRmse": 67.5470316792724,
+              "rgbPsnr": 11.53867823023376
+            },
+            "decoderDifference": {
+              "sumSquared": 9339,
+              "maximum": 2,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 2,
+              "rgbRmse": 0.6001465361574103,
+              "rgbPsnr": 52.565657531854704
+            },
+            "alphaExact": true,
+            "alphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+          },
+          "psnrGapDb": 0.15528089058234354,
+          "matched": true,
+          "exclusionReason": null
+        }
+      ]
+    },
+    {
+      "profile": {
+        "width": 129,
+        "depth": 8,
+        "encoder": "Jpeg420",
+        "pattern": "ProceduralTexture",
+        "alpha": "Opaque",
+        "backgroundRgb": null,
+        "height": 67,
+        "hasAlpha": false,
+        "encodedHasAlpha": false,
+        "sourceMetric": "whole-raster-RGB"
+      },
+      "sourceSha256": "ad167ee806eb352367a5e822ad62aa7ac0ba26b924044f9f8b6e02ded7b0813c",
+      "referenceSha256": "ad167ee806eb352367a5e822ad62aa7ac0ba26b924044f9f8b6e02ded7b0813c",
+      "sourceAlphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b",
+      "ownedEvaluationOrder": [
+        1,
+        25,
+        50,
+        75,
+        100,
+        16,
+        15,
+        11
+      ],
+      "matches": [
+        {
+          "native": {
+            "setting": 16,
+            "encodedBytes": 766,
+            "encodedSha256": "12f42f1bc186d5ab7575d60fb17b979c7f27fd3c92520cd394b32388fe5d591d",
+            "nativeDecodedSha256": "fe0e744f4ffe0acbcc6164f76d5603e0f782b3123743e0e0db151e763189296d",
+            "publicDecodedSha256": "c318567b53d5f9bdd342255cddc2eb7334a940bd3f103469c2f49710160ca76f",
+            "codec": "JPEG",
+            "sampling": "2x2,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 928026,
+              "maximum": 38,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 38,
+              "rgbRmse": 5.98256172355283,
+              "rgbPsnr": 32.59305984805907
+            },
+            "decoderDifference": {
+              "sumSquared": 8824,
+              "maximum": 2,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 2,
+              "rgbRmse": 0.5833643237334147,
+              "rgbPsnr": 52.812006291555136
+            },
+            "alphaExact": true,
+            "alphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+          },
+          "closestOwned": {
+            "setting": 11,
+            "encodedBytes": 1652,
+            "encodedSha256": "65665e806b248c9c4ff979857cd6d0c1ba96a820ad8840fe8118bcd0fb944a23",
+            "nativeDecodedSha256": "80310c6e90cce7094a3d8fca42d739a7ca2b4844b01e7735ad640c1a6d8592b8",
+            "publicDecodedSha256": "626dc393f3b3d0dd88e5869d0f91493f0dbd7e4fe9e5269f472ba6094f388928",
+            "codec": "JPEG",
+            "sampling": "2x2,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 504565,
+              "maximum": 33,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 33,
+              "rgbRmse": 4.411290686198962,
+              "rgbPsnr": 35.23949006928589
+            },
+            "decoderDifference": {
+              "sumSquared": 9674,
+              "maximum": 3,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.6108156526338898,
+              "rgbPsnr": 52.41260045535212
+            },
+            "alphaExact": true,
+            "alphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+          },
+          "psnrGapDb": 2.6464302212268214,
+          "matched": false,
+          "exclusionReason": "No sampled owned setting meets the fixed 0.25 dB band within the bounded search budget."
+        },
+        {
+          "native": {
+            "setting": 5,
+            "encodedBytes": 1143,
+            "encodedSha256": "7c80109e81c73c35265858a39dc0c645e18660cbc62300b6c7be321189505855",
+            "nativeDecodedSha256": "205589321a114a4c2a9284f8420f233044857ddb72f8adab5f87a8639aca0d0e",
+            "publicDecodedSha256": "53d5c4db650c0501e86cf8764bb46a922d308bd96012141ef6d773d5a73a137d",
+            "codec": "JPEG",
+            "sampling": "2x2,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 472830,
+              "maximum": 33,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 33,
+              "rgbRmse": 4.270312208056354,
+              "rgbPsnr": 35.52161104832209
+            },
+            "decoderDifference": {
+              "sumSquared": 9046,
+              "maximum": 2,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 2,
+              "rgbRmse": 0.5906570715381048,
+              "rgbPsnr": 52.704095451777484
+            },
+            "alphaExact": true,
+            "alphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+          },
+          "closestOwned": {
+            "setting": 11,
+            "encodedBytes": 1652,
+            "encodedSha256": "65665e806b248c9c4ff979857cd6d0c1ba96a820ad8840fe8118bcd0fb944a23",
+            "nativeDecodedSha256": "80310c6e90cce7094a3d8fca42d739a7ca2b4844b01e7735ad640c1a6d8592b8",
+            "publicDecodedSha256": "626dc393f3b3d0dd88e5869d0f91493f0dbd7e4fe9e5269f472ba6094f388928",
+            "codec": "JPEG",
+            "sampling": "2x2,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 504565,
+              "maximum": 33,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 33,
+              "rgbRmse": 4.411290686198962,
+              "rgbPsnr": 35.23949006928589
+            },
+            "decoderDifference": {
+              "sumSquared": 9674,
+              "maximum": 3,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.6108156526338898,
+              "rgbPsnr": 52.41260045535212
+            },
+            "alphaExact": true,
+            "alphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+          },
+          "psnrGapDb": 0.2821209790361979,
+          "matched": false,
+          "exclusionReason": "No sampled owned setting meets the fixed 0.25 dB band within the bounded search budget."
+        }
+      ]
+    },
+    {
+      "profile": {
+        "width": 129,
+        "depth": 8,
+        "encoder": "Vp8",
+        "pattern": "SoftGradient",
+        "alpha": "Opaque",
+        "backgroundRgb": null,
+        "height": 67,
+        "hasAlpha": false,
+        "encodedHasAlpha": false,
+        "sourceMetric": "whole-raster-RGB"
+      },
+      "sourceSha256": "73b07d7dbbd83eee36c4cfb9b4e5d2a0720522bfc3ee3d20557acbeff2d06af7",
+      "referenceSha256": "73b07d7dbbd83eee36c4cfb9b4e5d2a0720522bfc3ee3d20557acbeff2d06af7",
+      "sourceAlphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b",
+      "ownedEvaluationOrder": [
+        1,
+        25,
+        50,
+        75,
+        100,
+        87,
+        83,
+        91
+      ],
+      "matches": [
+        {
+          "native": {
+            "setting": 50,
+            "encodedBytes": 286,
+            "encodedSha256": "e0c9f43e2d95f79c908010c8030b6ee6f73604c0ea3356642d3320aa0ee001a6",
+            "nativeDecodedSha256": "b7ba30dc9a5eac2f4aadcaab868d8c9c5366c76c414efd1d8c43b9d2c883ae62",
+            "publicDecodedSha256": "3d651bc3b0e950a61f6d2ea2f06d8c1682ec94d1b8ec8dc3405b66b7926dc09f",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 192823,
+              "maximum": 14,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 14,
+              "rgbRmse": 2.7270087652761617,
+              "rgbPsnr": 39.41707293121833
+            },
+            "decoderDifference": {
+              "sumSquared": 668,
+              "maximum": 1,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.16050750627420896,
+              "rgbPsnr": 64.02089666112103
+            },
+            "alphaExact": true,
+            "alphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+          },
+          "closestOwned": {
+            "setting": 83,
+            "encodedBytes": 544,
+            "encodedSha256": "a686f3e8b54b0ab9b0eef375c6a028d58dfa511c9180b67e966ca6ab0c8b1bfb",
+            "nativeDecodedSha256": "b47daee7272f0fc4fd8e05d875064c8da236c74872e80a24285c31622c0c9d05",
+            "publicDecodedSha256": "820ab1eff0272e3ff5bcffb785cd6912523fac4ec65e4b8fe10f128b8ca970e2",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 196374,
+              "maximum": 11,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 11,
+              "rgbRmse": 2.7520043078247136,
+              "rgbPsnr": 39.337821421021275
+            },
+            "decoderDifference": {
+              "sumSquared": 689,
+              "maximum": 1,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.1630109307343979,
+              "rgbPsnr": 63.886469066800224
+            },
+            "alphaExact": true,
+            "alphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+          },
+          "psnrGapDb": 0.0792515101970586,
+          "matched": true,
+          "exclusionReason": null
+        },
+        {
+          "native": {
+            "setting": 85,
+            "encodedBytes": 414,
+            "encodedSha256": "cfbd776e1472ecdedfd5311258f24b5339f07c59679e6c4bb181b7bb5b43d10e",
+            "nativeDecodedSha256": "096913a20560d80b50992da28a644fe391e0e79370561681d036b67383b8e2aa",
+            "publicDecodedSha256": "307e9c7352d4aad58eb7fce2c34fa1e78acc183bdb1cae688144c5be5a8ceadf",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 93277,
+              "maximum": 10,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 10,
+              "rgbRmse": 1.8966814687578875,
+              "rgbPsnr": 42.57091558844208
+            },
+            "decoderDifference": {
+              "sumSquared": 689,
+              "maximum": 1,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.1630109307343979,
+              "rgbPsnr": 63.886469066800224
+            },
+            "alphaExact": true,
+            "alphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+          },
+          "closestOwned": {
+            "setting": 91,
+            "encodedBytes": 548,
+            "encodedSha256": "bc6e45a22f85970af4835597ebaf5fa82fa738979f6ef5514d122accef591a2c",
+            "nativeDecodedSha256": "146c079af845f9e3ea1eaf4bfd8b64847785d99a484bae511d0023eac7337424",
+            "publicDecodedSha256": "630c99e724dbcebaf36eac4cf2f44c2e676283a038a52acb8b488e14c641f543",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 112925,
+              "maximum": 9,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 9,
+              "rgbRmse": 2.086902530936216,
+              "rgbPsnr": 41.740760293542166
+            },
+            "decoderDifference": {
+              "sumSquared": 703,
+              "maximum": 1,
+              "samples": 25929,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.16465873653685767,
+              "rgbPsnr": 63.799108035678245
+            },
+            "alphaExact": true,
+            "alphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+          },
+          "psnrGapDb": 0.830155294899909,
+          "matched": false,
+          "exclusionReason": "No sampled owned setting meets the fixed 0.25 dB band within the bounded search budget."
+        }
+      ]
+    },
+    {
+      "profile": {
+        "width": 513,
+        "depth": 16,
+        "encoder": "Vp8",
+        "pattern": "GrayRamp",
+        "alpha": "Gradient",
+        "backgroundRgb": null,
+        "height": 259,
+        "hasAlpha": true,
+        "encodedHasAlpha": true,
+        "sourceMetric": "premultiplied-RGB-before-rounding"
+      },
+      "sourceSha256": "36758b95fb7c80b72857f69606871ab45945c4d9a3063129bf2411cf8891a582",
+      "referenceSha256": "7ecafac4f3f9f282a055ce77c1220a402e9489827408e0e20ccda59f8972e148",
+      "sourceAlphaSha256": "53a844f5b25b3a0199bd9824b2aabad755cfefe233c541d89abf6431d4924e39",
+      "ownedEvaluationOrder": [
+        1,
+        25,
+        50,
+        75,
+        100,
+        81,
+        62,
+        53
+      ],
+      "matches": [
+        {
+          "native": {
+            "setting": 50,
+            "encodedBytes": 550,
+            "encodedSha256": "76cf3f6d82f7e8b9461abf181011f405386b881c8edd2b44b4742706f17563e1",
+            "nativeDecodedSha256": "d94c3be1ad2e4aa4d3ed040f1007fd18c41582dd0e11bca54018104708e0d1cf",
+            "publicDecodedSha256": "f82192f6dc7d42fa30db53c73b1a81f9d2b6c0e320afe63c43767131f68b44c0",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 7792638556,
+              "maximum": 603,
+              "samples": 398601,
+              "scale": 255,
+              "rgbMaximum": 2.364705882352941,
+              "rgbRmse": 0.5483184937644673,
+              "rgbPsnr": 53.35014572714268
+            },
+            "decoderDifference": {
+              "sumSquared": 1148,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.05366631211022099,
+              "rgbPsnr": 73.53676856718687
+            },
+            "alphaExact": true,
+            "alphaSha256": "53a844f5b25b3a0199bd9824b2aabad755cfefe233c541d89abf6431d4924e39"
+          },
+          "closestOwned": {
+            "setting": 50,
+            "encodedBytes": 134732,
+            "encodedSha256": "b0171a98607bf68eee58aeaa7a141543e0c25a4d610266f747a5a54536c5cdb9",
+            "nativeDecodedSha256": "7582da228a596f40d8d0fa16acd9bfe1c58ece528232115ddbe7f447dafdf8f9",
+            "publicDecodedSha256": "39fd0fc3a1fb5c75904ce9c0f14be9a9abd4bfe07aa77e60a8bac2a63f63c3da",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 8950210050,
+              "maximum": 1235,
+              "samples": 398601,
+              "scale": 255,
+              "rgbMaximum": 4.8431372549019605,
+              "rgbRmse": 0.5876344407568207,
+              "rgbPsnr": 52.74865877876163
+            },
+            "decoderDifference": {
+              "sumSquared": 5727,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.11986555472635362,
+              "rgbPsnr": 66.55691561667312
+            },
+            "alphaExact": true,
+            "alphaSha256": "53a844f5b25b3a0199bd9824b2aabad755cfefe233c541d89abf6431d4924e39"
+          },
+          "psnrGapDb": 0.6014869483810558,
+          "matched": false,
+          "exclusionReason": "No sampled owned setting meets the fixed 0.25 dB band within the bounded search budget."
+        },
+        {
+          "native": {
+            "setting": 85,
+            "encodedBytes": 760,
+            "encodedSha256": "6cbb3c5e634c64d1430e3608263fe5bab1a91b771290d023978a9df0105150e8",
+            "nativeDecodedSha256": "a4d72127f03778f1335ec90b4963735c37ef40460ac36f93fcfce630144623bd",
+            "publicDecodedSha256": "0c35a89b49e3d27d00e309e5857c428c7d473fb64ba0c24cfe0c3d166b162056",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 4644695541,
+              "maximum": 502,
+              "samples": 398601,
+              "scale": 255,
+              "rgbMaximum": 1.968627450980392,
+              "rgbRmse": 0.4233204540509763,
+              "rgbPsnr": 55.597418543150646
+            },
+            "decoderDifference": {
+              "sumSquared": 3303,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.09103011573480776,
+              "rgbPsnr": 68.94710171089227
+            },
+            "alphaExact": true,
+            "alphaSha256": "53a844f5b25b3a0199bd9824b2aabad755cfefe233c541d89abf6431d4924e39"
+          },
+          "closestOwned": {
+            "setting": 62,
+            "encodedBytes": 134856,
+            "encodedSha256": "10696597cd2fe9a525e17264684b71909d74d8c1545b0932af0ae4b0ef165a48",
+            "nativeDecodedSha256": "a5cb95107e7550dd61bf25317c724f7e4de7f4d278223bdc2cf700b39fc1e1a1",
+            "publicDecodedSha256": "c6e805b3194533f8a79ee97e61d1086051c82c2300862767a89ac95711023689",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 5045828283,
+              "maximum": 1080,
+              "samples": 398601,
+              "scale": 255,
+              "rgbMaximum": 4.235294117647059,
+              "rgbRmse": 0.4412216973410771,
+              "rgbPsnr": 55.23766638899119
+            },
+            "decoderDifference": {
+              "sumSquared": 3478,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.09341047852059918,
+              "rgbPsnr": 68.72289167113946
+            },
+            "alphaExact": true,
+            "alphaSha256": "53a844f5b25b3a0199bd9824b2aabad755cfefe233c541d89abf6431d4924e39"
+          },
+          "psnrGapDb": 0.359752154159459,
+          "matched": false,
+          "exclusionReason": "No sampled owned setting meets the fixed 0.25 dB band within the bounded search budget."
+        }
+      ]
+    },
+    {
+      "profile": {
+        "width": 513,
+        "depth": 16,
+        "encoder": "Vp8",
+        "pattern": "SeededNoise",
+        "alpha": "BinaryEdges",
+        "backgroundRgb": null,
+        "height": 259,
+        "hasAlpha": true,
+        "encodedHasAlpha": true,
+        "sourceMetric": "premultiplied-RGB-before-rounding"
+      },
+      "sourceSha256": "46fae00b2b51762e0e4fec5edf4379591d8e0cca8e9b248688f8839777df6b70",
+      "referenceSha256": "a86c219efa94b53fa4184608460e3575b956380b6ee4b8f1ae1c03097b7d0fe3",
+      "sourceAlphaSha256": "42c652cb58086f713a5a2f1e177f231e3db8b06d1727da45a4ed1f853d21ffdb",
+      "ownedEvaluationOrder": [
+        1,
+        25,
+        50,
+        75,
+        100
+      ],
+      "matches": [
+        {
+          "native": {
+            "setting": 50,
+            "encodedBytes": 37964,
+            "encodedSha256": "5a1b9e4f518ae2cf81f78b94fe72f739b3a607120142cd91fd6c97cb112a0946",
+            "nativeDecodedSha256": "addb33e2470364a3f8911e6d84ba5bd18814b8f6684815259d1a974e7f376e8d",
+            "publicDecodedSha256": "d0b5c5a0db724132d3c59a66c592f46e176f403520d64182affc118b0c08d2fa",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 46245088264050,
+              "maximum": 62730,
+              "samples": 398601,
+              "scale": 255,
+              "rgbMaximum": 246,
+              "rgbRmse": 42.239953745111166,
+              "rgbPsnr": 15.616334929647879
+            },
+            "decoderDifference": {
+              "sumSquared": 5893,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.1215903276032428,
+              "rgbPsnr": 66.43282303685493
+            },
+            "alphaExact": true,
+            "alphaSha256": "42c652cb58086f713a5a2f1e177f231e3db8b06d1727da45a4ed1f853d21ffdb"
+          },
+          "closestOwned": {
+            "setting": 75,
+            "encodedBytes": 257138,
+            "encodedSha256": "3b257060ba84a4dfa3015e7f2fa4ec47fa2fe86942a46a3ed694b89676a9cb09",
+            "nativeDecodedSha256": "edc4a7630b446d5dc3b0ff3c859ca74bea82c9f87874da146cf96c6459c86e05",
+            "publicDecodedSha256": "043145a88a322217a055cc875e63f2379e4868af73fac7972608bd12bbb50100",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 45374342000400,
+              "maximum": 60945,
+              "samples": 398601,
+              "scale": 255,
+              "rgbMaximum": 239,
+              "rgbRmse": 41.84039709844627,
+              "rgbPsnr": 15.698887655144077
+            },
+            "decoderDifference": {
+              "sumSquared": 5342,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.11576645909327908,
+              "rgbPsnr": 66.85914861095287
+            },
+            "alphaExact": true,
+            "alphaSha256": "42c652cb58086f713a5a2f1e177f231e3db8b06d1727da45a4ed1f853d21ffdb"
+          },
+          "psnrGapDb": 0.08255272549619629,
+          "matched": true,
+          "exclusionReason": null
+        },
+        {
+          "native": {
+            "setting": 85,
+            "encodedBytes": 54152,
+            "encodedSha256": "b36d0d42e3ae09e6b9dae230000177c1b5a680c1f3fc0a347d18e915241a9687",
+            "nativeDecodedSha256": "ff4ace42b3b6e832f82e43eb8098420cc8da407c3c42b02d9aa570e3a1c45ee4",
+            "publicDecodedSha256": "cba11ced9d5312456fc926b70babd6bcb102ce58200cffa9dd45c5ae1196a881",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 44942333587200,
+              "maximum": 61965,
+              "samples": 398601,
+              "scale": 255,
+              "rgbMaximum": 243,
+              "rgbRmse": 41.64073983939607,
+              "rgbPsnr": 15.740434866590775
+            },
+            "decoderDifference": {
+              "sumSquared": 5992,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.12260740775371286,
+              "rgbPsnr": 66.36046940089231
+            },
+            "alphaExact": true,
+            "alphaSha256": "42c652cb58086f713a5a2f1e177f231e3db8b06d1727da45a4ed1f853d21ffdb"
+          },
+          "closestOwned": {
+            "setting": 100,
+            "encodedBytes": 520722,
+            "encodedSha256": "b88d3d221cc61cd6e51e0e8d60a81d791e9f9090cdfec83822126fb7baa70a83",
+            "nativeDecodedSha256": "67307c41341c1283625dcf3fa9f3a05eb0dd10b89c0ada0d4689496aad5757b7",
+            "publicDecodedSha256": "e9e17fa3a14a8df283615990c699b54395ed6b022098cba17140709d59d15d05",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 44628331243500,
+              "maximum": 60945,
+              "samples": 398601,
+              "scale": 255,
+              "rgbMaximum": 239,
+              "rgbRmse": 41.49501744865934,
+              "rgbPsnr": 15.770884577793218
+            },
+            "decoderDifference": {
+              "sumSquared": 5308,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.11539746409728202,
+              "rgbPsnr": 66.88687830588243
+            },
+            "alphaExact": true,
+            "alphaSha256": "42c652cb58086f713a5a2f1e177f231e3db8b06d1727da45a4ed1f853d21ffdb"
+          },
+          "psnrGapDb": 0.03044971120244125,
+          "matched": true,
+          "exclusionReason": null
+        }
+      ]
+    },
+    {
+      "profile": {
+        "width": 513,
+        "depth": 16,
+        "encoder": "Jpeg444",
+        "pattern": "GrayRamp",
+        "alpha": "Gradient",
+        "backgroundRgb": 2113632,
+        "height": 259,
+        "hasAlpha": true,
+        "encodedHasAlpha": false,
+        "sourceMetric": "whole-raster-RGB-after-once-flattening"
+      },
+      "sourceSha256": "36758b95fb7c80b72857f69606871ab45945c4d9a3063129bf2411cf8891a582",
+      "referenceSha256": "d12766adeab784d1e25e793ebe3e63356a5f4ffecdf95e2622346dcc8496f241",
+      "sourceAlphaSha256": "53a844f5b25b3a0199bd9824b2aabad755cfefe233c541d89abf6431d4924e39",
+      "ownedEvaluationOrder": [
+        1,
+        25,
+        50,
+        75,
+        100,
+        17,
+        15,
+        11
+      ],
+      "matches": [
+        {
+          "native": {
+            "setting": 16,
+            "encodedBytes": 2569,
+            "encodedSha256": "48ad2bff430f5b77fe84e595159aaac40ce05492ed030e1ccd9f7669b1716e1d",
+            "nativeDecodedSha256": "619cd949be83207ddaf08a80ec7d7f3edfc2d7f69f1aee39f60238d102def20b",
+            "publicDecodedSha256": "619cd949be83207ddaf08a80ec7d7f3edfc2d7f69f1aee39f60238d102def20b",
+            "codec": "JPEG",
+            "sampling": "1x2,1x2,1x2",
+            "sourceError": {
+              "sumSquared": 828904,
+              "maximum": 79,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 79,
+              "rgbRmse": 1.44205865596808,
+              "rgbPsnr": 44.95114509386552
+            },
+            "decoderDifference": {
+              "sumSquared": 0,
+              "maximum": 0,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 0,
+              "rgbRmse": 0,
+              "rgbPsnr": null
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "closestOwned": {
+            "setting": 11,
+            "encodedBytes": 12132,
+            "encodedSha256": "dd5227b730190c1037af9e983c0b01d000e16562b20736021f1f84b98f6a5a95",
+            "nativeDecodedSha256": "f3c9aa9a17a29c56344ef9347a6a640bedbe8200011e8d1b418df265cdc759a0",
+            "publicDecodedSha256": "216ed14e9db244c25c6ca9b52ae993e38fa9e1ac3cc48fb86a5f8db773cc2d40",
+            "codec": "JPEG",
+            "sampling": "1x1,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 386398,
+              "maximum": 63,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 63,
+              "rgbRmse": 0.9845737278262997,
+              "rgbPsnr": 48.26583874944048
+            },
+            "decoderDifference": {
+              "sumSquared": 183372,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.6782617388256365,
+              "rgbPsnr": 51.502857230096204
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "psnrGapDb": 3.314693655574961,
+          "matched": false,
+          "exclusionReason": "No sampled owned setting meets the fixed 0.25 dB band within the bounded search budget."
+        },
+        {
+          "native": {
+            "setting": 5,
+            "encodedBytes": 3027,
+            "encodedSha256": "37b9c71c2659036d2e62adb33939b399989ca840128e58eb0ee94590898f6d48",
+            "nativeDecodedSha256": "17eea9a0b104527906a48d796382b0fb7a093be0159e7b6779952a26a7f0d67c",
+            "publicDecodedSha256": "b1e1a2f9b45b563391fd94d94537db7cb2d8b1e858095dc21340dc5479e64f7f",
+            "codec": "JPEG",
+            "sampling": "1x2,1x2,1x2",
+            "sourceError": {
+              "sumSquared": 434664,
+              "maximum": 42,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 42,
+              "rgbRmse": 1.04425759876536,
+              "rgbPsnr": 47.75465072495899
+            },
+            "decoderDifference": {
+              "sumSquared": 15,
+              "maximum": 2,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 2,
+              "rgbRmse": 0.006134461392737344,
+              "rgbPsnr": 92.3752748572496
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "closestOwned": {
+            "setting": 11,
+            "encodedBytes": 12132,
+            "encodedSha256": "dd5227b730190c1037af9e983c0b01d000e16562b20736021f1f84b98f6a5a95",
+            "nativeDecodedSha256": "f3c9aa9a17a29c56344ef9347a6a640bedbe8200011e8d1b418df265cdc759a0",
+            "publicDecodedSha256": "216ed14e9db244c25c6ca9b52ae993e38fa9e1ac3cc48fb86a5f8db773cc2d40",
+            "codec": "JPEG",
+            "sampling": "1x1,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 386398,
+              "maximum": 63,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 63,
+              "rgbRmse": 0.9845737278262997,
+              "rgbPsnr": 48.26583874944048
+            },
+            "decoderDifference": {
+              "sumSquared": 183372,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.6782617388256365,
+              "rgbPsnr": 51.502857230096204
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "psnrGapDb": 0.511188024481483,
+          "matched": false,
+          "exclusionReason": "No sampled owned setting meets the fixed 0.25 dB band within the bounded search budget."
+        }
+      ]
+    },
+    {
+      "profile": {
+        "width": 513,
+        "depth": 16,
+        "encoder": "Jpeg444",
+        "pattern": "SeededNoise",
+        "alpha": "BinaryEdges",
+        "backgroundRgb": 2113632,
+        "height": 259,
+        "hasAlpha": true,
+        "encodedHasAlpha": false,
+        "sourceMetric": "whole-raster-RGB-after-once-flattening"
+      },
+      "sourceSha256": "46fae00b2b51762e0e4fec5edf4379591d8e0cca8e9b248688f8839777df6b70",
+      "referenceSha256": "3fee4e14dd07c41fe4e78473e8b8e2aed07bcd084b47d12ef12257ba5a92cda6",
+      "sourceAlphaSha256": "42c652cb58086f713a5a2f1e177f231e3db8b06d1727da45a4ed1f853d21ffdb",
+      "ownedEvaluationOrder": [
+        1,
+        25,
+        50,
+        75,
+        100,
+        68,
+        24
+      ],
+      "matches": [
+        {
+          "native": {
+            "setting": 16,
+            "encodedBytes": 50527,
+            "encodedSha256": "b605948530411f658a6671327e36421a35d11c69468191aa28d41ab1ca42d411",
+            "nativeDecodedSha256": "e12451ba95019e2997a5b318afa82bbc8c1de4b02a5e69e3e84a1ea4f397c2c5",
+            "publicDecodedSha256": "7579c8f24a05822acef239f03630fee4c950c685090b4aa218571747233d8f27",
+            "codec": "JPEG",
+            "sampling": "1x2,1x2,1x2",
+            "sourceError": {
+              "sumSquared": 249824127,
+              "maximum": 209,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 209,
+              "rgbRmse": 25.03502314684191,
+              "rgbPsnr": 20.159843663190795
+            },
+            "decoderDifference": {
+              "sumSquared": 10139,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.15948813132316544,
+              "rgbPsnr": 64.07623621725949
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "closestOwned": {
+            "setting": 24,
+            "encodedBytes": 134465,
+            "encodedSha256": "39f7e08f06a423255226038ebda3a47665790015dcf2de8fe0152e4328db34c4",
+            "nativeDecodedSha256": "0a3e9b83b4f6a3f081d3f834a6a505ece450463384fe72cbce8bb2255402f7f9",
+            "publicDecodedSha256": "dda2f15dbf738525b3b39226e1f85cb645a2911617a3de334ca9b2863748a761",
+            "codec": "JPEG",
+            "sampling": "1x1,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 242678944,
+              "maximum": 199,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 199,
+              "rgbRmse": 24.67441451166366,
+              "rgbPsnr": 20.28586648305773
+            },
+            "decoderDifference": {
+              "sumSquared": 9760,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.1564788756373404,
+              "rgbPsnr": 64.24168927113949
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "psnrGapDb": 0.12602281986693928,
+          "matched": true,
+          "exclusionReason": null
+        },
+        {
+          "native": {
+            "setting": 5,
+            "encodedBytes": 97890,
+            "encodedSha256": "d65981bdd01ca4931010bb04692954415568d8bdb5970fcdb68053b68876b3b3",
+            "nativeDecodedSha256": "2bbdd9c2949af792b11062d90a63e58511892459c994530c4fe94bfd927cf964",
+            "publicDecodedSha256": "b09e35b3e39c7f0f14a1e4ee3400a50a028dcf186a08240b33b7daf6aca56413",
+            "codec": "JPEG",
+            "sampling": "1x2,1x2,1x2",
+            "sourceError": {
+              "sumSquared": 26558450,
+              "maximum": 62,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 62,
+              "rgbRmse": 8.162668711200377,
+              "rgbPsnr": 29.89416019569973
+            },
+            "decoderDifference": {
+              "sumSquared": 10788,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.16451339958679964,
+              "rgbPsnr": 63.806778069997875
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "closestOwned": {
+            "setting": 68,
+            "encodedBytes": 221105,
+            "encodedSha256": "326395ca8b95456f8e4b4f956d7eae0ba57f54e01efb3b35759ad1243b0e3c94",
+            "nativeDecodedSha256": "fb0113b492694a46f612192608051b2fec9aabe6cec4dc7375fb870bb1bf5efe",
+            "publicDecodedSha256": "ea1a7914e58920fe75e5c47361fedf4f3a2ec01e054d2967adbd6f995dd6e56e",
+            "codec": "JPEG",
+            "sampling": "1x1,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 28131548,
+              "maximum": 70,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 70,
+              "rgbRmse": 8.400934980144818,
+              "rgbPsnr": 29.644251139534923
+            },
+            "decoderDifference": {
+              "sumSquared": 10565,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.1628041828203392,
+              "rgbPsnr": 63.89749243392309
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "psnrGapDb": 0.24990905616481057,
+          "matched": true,
+          "exclusionReason": null
+        }
+      ]
+    },
+    {
+      "profile": {
+        "width": 513,
+        "depth": 16,
+        "encoder": "Jpeg422",
+        "pattern": "GrayRamp",
+        "alpha": "Gradient",
+        "backgroundRgb": 2113632,
+        "height": 259,
+        "hasAlpha": true,
+        "encodedHasAlpha": false,
+        "sourceMetric": "whole-raster-RGB-after-once-flattening"
+      },
+      "sourceSha256": "36758b95fb7c80b72857f69606871ab45945c4d9a3063129bf2411cf8891a582",
+      "referenceSha256": "d12766adeab784d1e25e793ebe3e63356a5f4ffecdf95e2622346dcc8496f241",
+      "sourceAlphaSha256": "53a844f5b25b3a0199bd9824b2aabad755cfefe233c541d89abf6431d4924e39",
+      "ownedEvaluationOrder": [
+        1,
+        25,
+        50,
+        75,
+        100,
+        18,
+        16,
+        12
+      ],
+      "matches": [
+        {
+          "native": {
+            "setting": 16,
+            "encodedBytes": 2391,
+            "encodedSha256": "ccc3b9eb9d7bf20549860780155b2d5a6a36f1ad6bebc6df02bacfd8767df83e",
+            "nativeDecodedSha256": "d84cff32c5518767757ff297c2005ed55104ed781c5dcc1bcf66da3b51b50ce1",
+            "publicDecodedSha256": "9ec1cf45c1263293a4b4e84f4d06ed048924275ac5c4a856b1123959e9153c9f",
+            "codec": "JPEG",
+            "sampling": "2x2,1x2,1x2",
+            "sourceError": {
+              "sumSquared": 819806,
+              "maximum": 79,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 79,
+              "rgbRmse": 1.4341228459968456,
+              "rgbPsnr": 44.999076522720344
+            },
+            "decoderDifference": {
+              "sumSquared": 10870,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.1651374522861823,
+              "rgbPsnr": 63.77389200694346
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "closestOwned": {
+            "setting": 16,
+            "encodedBytes": 9644,
+            "encodedSha256": "86bb1cbcddf49842625fa1d481d0aa75ce13d61cba35f33986aa896f059658c2",
+            "nativeDecodedSha256": "93d129af2531b5192eb3670676617a48c01d41d97cd82d97e7189e4a5ed46c9e",
+            "publicDecodedSha256": "ee334d21771a0c3f01fe9c079768ad10e809c3bd82a4d842b828d35b6372fa71",
+            "codec": "JPEG",
+            "sampling": "2x1,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 316956,
+              "maximum": 55,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 55,
+              "rgbRmse": 0.891723674105709,
+              "rgbPsnr": 49.126197673688836
+            },
+            "decoderDifference": {
+              "sumSquared": 189113,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.6887974015679593,
+              "rgbPsnr": 51.368973606515844
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "psnrGapDb": 4.1271211509684935,
+          "matched": false,
+          "exclusionReason": "No sampled owned setting meets the fixed 0.25 dB band within the bounded search budget."
+        },
+        {
+          "native": {
+            "setting": 5,
+            "encodedBytes": 2844,
+            "encodedSha256": "a0b1944e305fcf965b9a9d34b3fd21a1caccaaa4acfa3b4f105cfdda571b087e",
+            "nativeDecodedSha256": "5cec639b5964bf2837b2d7bdfec3e4f80a61704d9350029c5bcfc267e96a1a90",
+            "publicDecodedSha256": "6459de439a8871dfa1dc79410be83642a918ac95fe47fa19902d721714189d2f",
+            "codec": "JPEG",
+            "sampling": "2x2,1x2,1x2",
+            "sourceError": {
+              "sumSquared": 426166,
+              "maximum": 53,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 53,
+              "rgbRmse": 1.0339992105412756,
+              "rgbPsnr": 47.840399465197585
+            },
+            "decoderDifference": {
+              "sumSquared": 10873,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.1651602387709794,
+              "rgbPsnr": 63.772693567488034
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "closestOwned": {
+            "setting": 16,
+            "encodedBytes": 9644,
+            "encodedSha256": "86bb1cbcddf49842625fa1d481d0aa75ce13d61cba35f33986aa896f059658c2",
+            "nativeDecodedSha256": "93d129af2531b5192eb3670676617a48c01d41d97cd82d97e7189e4a5ed46c9e",
+            "publicDecodedSha256": "ee334d21771a0c3f01fe9c079768ad10e809c3bd82a4d842b828d35b6372fa71",
+            "codec": "JPEG",
+            "sampling": "2x1,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 316956,
+              "maximum": 55,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 55,
+              "rgbRmse": 0.891723674105709,
+              "rgbPsnr": 49.126197673688836
+            },
+            "decoderDifference": {
+              "sumSquared": 189113,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.6887974015679593,
+              "rgbPsnr": 51.368973606515844
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "psnrGapDb": 1.285798208491252,
+          "matched": false,
+          "exclusionReason": "No sampled owned setting meets the fixed 0.25 dB band within the bounded search budget."
+        }
+      ]
+    },
+    {
+      "profile": {
+        "width": 513,
+        "depth": 16,
+        "encoder": "Jpeg422",
+        "pattern": "SeededNoise",
+        "alpha": "BinaryEdges",
+        "backgroundRgb": 2113632,
+        "height": 259,
+        "hasAlpha": true,
+        "encodedHasAlpha": false,
+        "sourceMetric": "whole-raster-RGB-after-once-flattening"
+      },
+      "sourceSha256": "46fae00b2b51762e0e4fec5edf4379591d8e0cca8e9b248688f8839777df6b70",
+      "referenceSha256": "3fee4e14dd07c41fe4e78473e8b8e2aed07bcd084b47d12ef12257ba5a92cda6",
+      "sourceAlphaSha256": "42c652cb58086f713a5a2f1e177f231e3db8b06d1727da45a4ed1f853d21ffdb",
+      "ownedEvaluationOrder": [
+        1,
+        25,
+        50,
+        75,
+        100,
+        20,
+        39
+      ],
+      "matches": [
+        {
+          "native": {
+            "setting": 16,
+            "encodedBytes": 28853,
+            "encodedSha256": "735e53af0360c8d55f3900d8e527bc5d1f8fb16aa08f2368fd457764929159ae",
+            "nativeDecodedSha256": "b0e3bda2597d6394a154b629cffc95f5fb8d918801b822641bf5f659f70f8348",
+            "publicDecodedSha256": "2bfbd1e83041b2a003e672601ffccc3349ef18a3884d92c1d3ba04d951471b25",
+            "codec": "JPEG",
+            "sampling": "2x2,1x2,1x2",
+            "sourceError": {
+              "sumSquared": 711449575,
+              "maximum": 251,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 251,
+              "rgbRmse": 42.24768050570495,
+              "rgbPsnr": 15.614746205083401
+            },
+            "decoderDifference": {
+              "sumSquared": 87664,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.4689660993988187,
+              "rgbPsnr": 54.70797461690006
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "closestOwned": {
+            "setting": 20,
+            "encodedBytes": 73660,
+            "encodedSha256": "1ffcfef5ebd1e72ad33ba639c5b47c6f31c358f23cf043896ff98b8423718d95",
+            "nativeDecodedSha256": "681e98a5fa75732acdb56b4e82bc8e47e11b424cb0bbbccd6ef322764bca021b",
+            "publicDecodedSha256": "10a6bab16e5eaaef08273691eee9567e8d29a9c862c62256ea28129c4c634117",
+            "codec": "JPEG",
+            "sampling": "2x1,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 697012876,
+              "maximum": 252,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 252,
+              "rgbRmse": 41.81683975007167,
+              "rgbPsnr": 15.703779438360058
+            },
+            "decoderDifference": {
+              "sumSquared": 78560,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.44394742920343333,
+              "rgbPsnr": 55.18417270001748
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "psnrGapDb": 0.08903323327665769,
+          "matched": true,
+          "exclusionReason": null
+        },
+        {
+          "native": {
+            "setting": 5,
+            "encodedBytes": 63951,
+            "encodedSha256": "2b76b6e8844032b41f1d5c7bc3eacfefe479b06b6694ac8954669ce1b9a907d1",
+            "nativeDecodedSha256": "ba3f63a23b1c4f25fba9c5ee94b9389a8bdb52f4c28b583916ff2d18ef7e265f",
+            "publicDecodedSha256": "10019db6c1972f7a16462a7f46e1aa070375d8de2c8f56892478aebb817c7b90",
+            "codec": "JPEG",
+            "sampling": "2x2,1x2,1x2",
+            "sourceError": {
+              "sumSquared": 566509303,
+              "maximum": 236,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 236,
+              "rgbRmse": 37.699390692621755,
+              "rgbPsnr": 16.604116987040996
+            },
+            "decoderDifference": {
+              "sumSquared": 117064,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.541929119793496,
+              "rgbPsnr": 53.451953851917146
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "closestOwned": {
+            "setting": 39,
+            "encodedBytes": 110675,
+            "encodedSha256": "9bec3109a0a1ecf0eae50998ac0cf1a82afe6552c9884b7d8ff7c39b18cb7099",
+            "nativeDecodedSha256": "7d46b4229377b6d1535ebfc0be6e129e728e82a101ebe488ae8fbf2bc90b737f",
+            "publicDecodedSha256": "9e64ee1de8b6025e8ead4aef50e3b210029cdfd8ad64e40e85ae8209fa1da556",
+            "codec": "JPEG",
+            "sampling": "2x1,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 544158943,
+              "maximum": 252,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 252,
+              "rgbRmse": 36.948234690353615,
+              "rgbPsnr": 16.77892973785263
+            },
+            "decoderDifference": {
+              "sumSquared": 79880,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.4476615933439992,
+              "rgbPsnr": 55.11180688581976
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "psnrGapDb": 0.1748127508116304,
+          "matched": true,
+          "exclusionReason": null
+        }
+      ]
+    },
+    {
+      "profile": {
+        "width": 513,
+        "depth": 16,
+        "encoder": "Jpeg420",
+        "pattern": "GrayRamp",
+        "alpha": "Gradient",
+        "backgroundRgb": 2113632,
+        "height": 259,
+        "hasAlpha": true,
+        "encodedHasAlpha": false,
+        "sourceMetric": "whole-raster-RGB-after-once-flattening"
+      },
+      "sourceSha256": "36758b95fb7c80b72857f69606871ab45945c4d9a3063129bf2411cf8891a582",
+      "referenceSha256": "d12766adeab784d1e25e793ebe3e63356a5f4ffecdf95e2622346dcc8496f241",
+      "sourceAlphaSha256": "53a844f5b25b3a0199bd9824b2aabad755cfefe233c541d89abf6431d4924e39",
+      "ownedEvaluationOrder": [
+        1,
+        25,
+        50,
+        75,
+        100,
+        18,
+        16,
+        12
+      ],
+      "matches": [
+        {
+          "native": {
+            "setting": 16,
+            "encodedBytes": 2077,
+            "encodedSha256": "f4ac5cd689c7df863c31b32f81311b28c9c3f7b15bd91250fdb323d16646f912",
+            "nativeDecodedSha256": "a62e19a17e4654e05182c39707c54cc403bfaecda289db495faae590f6fb7055",
+            "publicDecodedSha256": "a86ec16b869228f94cd4d429417fb4e089d19cbb6f5d739514f8eecf5c4b53a0",
+            "codec": "JPEG",
+            "sampling": "2x2,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 820622,
+              "maximum": 79,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 79,
+              "rgbRmse": 1.4348364009015064,
+              "rgbPsnr": 44.99475589022123
+            },
+            "decoderDifference": {
+              "sumSquared": 10881,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.1652209873666046,
+              "rgbPsnr": 63.76949934480544
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "closestOwned": {
+            "setting": 16,
+            "encodedBytes": 8088,
+            "encodedSha256": "0cdc8830c7328d11230b31eb926e9f6cc3c3dfa242efb5a10a39235325b42412",
+            "nativeDecodedSha256": "f24fcabb4098fceb98c782a84f32b5818c0391b86e050cf73b9884346a8c3626",
+            "publicDecodedSha256": "9c8c9b11d86bb6ee14e632b453afbbeeb2ecc7b6cbb8a0931f3499bbf080f73b",
+            "codec": "JPEG",
+            "sampling": "2x2,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 316244,
+              "maximum": 57,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 57,
+              "rgbRmse": 0.8907215409769218,
+              "rgbPsnr": 49.13596450254033
+            },
+            "decoderDifference": {
+              "sumSquared": 189134,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.6888356441633833,
+              "rgbPsnr": 51.36849137220179
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "psnrGapDb": 4.141208612319096,
+          "matched": false,
+          "exclusionReason": "No sampled owned setting meets the fixed 0.25 dB band within the bounded search budget."
+        },
+        {
+          "native": {
+            "setting": 5,
+            "encodedBytes": 2529,
+            "encodedSha256": "919996993f7e66bc151dcf75519d84f9cc7c1b5110d5ef7532fbcf8ebc1dfa6e",
+            "nativeDecodedSha256": "7398ed0e04629e2ff27fba9b940778aad531ffc1c2b7ac0aff49e02a7e4d6ef5",
+            "publicDecodedSha256": "aeaa999909c60f5c1878368c60467b6c76db3b851d0f1ea90331e1f398de5892",
+            "codec": "JPEG",
+            "sampling": "2x2,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 426982,
+              "maximum": 53,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 53,
+              "rgbRmse": 1.034988660489514,
+              "rgbPsnr": 47.832091776372245
+            },
+            "decoderDifference": {
+              "sumSquared": 10884,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.16524376233223304,
+              "rgbPsnr": 63.76830211672921
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "closestOwned": {
+            "setting": 16,
+            "encodedBytes": 8088,
+            "encodedSha256": "0cdc8830c7328d11230b31eb926e9f6cc3c3dfa242efb5a10a39235325b42412",
+            "nativeDecodedSha256": "f24fcabb4098fceb98c782a84f32b5818c0391b86e050cf73b9884346a8c3626",
+            "publicDecodedSha256": "9c8c9b11d86bb6ee14e632b453afbbeeb2ecc7b6cbb8a0931f3499bbf080f73b",
+            "codec": "JPEG",
+            "sampling": "2x2,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 316244,
+              "maximum": 57,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 57,
+              "rgbRmse": 0.8907215409769218,
+              "rgbPsnr": 49.13596450254033
+            },
+            "decoderDifference": {
+              "sumSquared": 189134,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.6888356441633833,
+              "rgbPsnr": 51.36849137220179
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "psnrGapDb": 1.3038727261680847,
+          "matched": false,
+          "exclusionReason": "No sampled owned setting meets the fixed 0.25 dB band within the bounded search budget."
+        }
+      ]
+    },
+    {
+      "profile": {
+        "width": 513,
+        "depth": 16,
+        "encoder": "Jpeg420",
+        "pattern": "SeededNoise",
+        "alpha": "BinaryEdges",
+        "backgroundRgb": 2113632,
+        "height": 259,
+        "hasAlpha": true,
+        "encodedHasAlpha": false,
+        "sourceMetric": "whole-raster-RGB-after-once-flattening"
+      },
+      "sourceSha256": "46fae00b2b51762e0e4fec5edf4379591d8e0cca8e9b248688f8839777df6b70",
+      "referenceSha256": "3fee4e14dd07c41fe4e78473e8b8e2aed07bcd084b47d12ef12257ba5a92cda6",
+      "sourceAlphaSha256": "42c652cb58086f713a5a2f1e177f231e3db8b06d1727da45a4ed1f853d21ffdb",
+      "ownedEvaluationOrder": [
+        1,
+        25,
+        50,
+        75,
+        100,
+        20
+      ],
+      "matches": [
+        {
+          "native": {
+            "setting": 16,
+            "encodedBytes": 20895,
+            "encodedSha256": "0eb91c4b9b7c66196259ebcaeb0b59e9d0bcb11d37eec9dfc1515fabc563415f",
+            "nativeDecodedSha256": "6be22702080169be4371d496bf36dd9af10101f6cefe8eac2eb62efa2e2c6e4a",
+            "publicDecodedSha256": "4cd3c1fd81c703df7fbb2ae9f9f90072621088e52b6272d09faef1f0adaf9eb3",
+            "codec": "JPEG",
+            "sampling": "2x2,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 858092901,
+              "maximum": 252,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 252,
+              "rgbRmse": 46.39786132972146,
+              "rgbPsnr": 14.800844357110224
+            },
+            "decoderDifference": {
+              "sumSquared": 91883,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.4801184455337994,
+              "rgbPsnr": 54.50383578216558
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "closestOwned": {
+            "setting": 20,
+            "encodedBytes": 56609,
+            "encodedSha256": "c66b22056d0e5eea536bc5ad8760f53ff0fc003631a30b0a80e67a2f54349104",
+            "nativeDecodedSha256": "53eeb78a2fe27fc7432e6729ee1ea264aa2c1495a1750c19652cc71fb6c02dfc",
+            "publicDecodedSha256": "e29eac6a9a3414758843567c003c4f43382a7b3e8df6baa916fe93e6d7e91e25",
+            "codec": "JPEG",
+            "sampling": "2x2,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 850101983,
+              "maximum": 255,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 255,
+              "rgbRmse": 46.181317923514506,
+              "rgbPsnr": 14.841477155400373
+            },
+            "decoderDifference": {
+              "sumSquared": 84980,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.4617311466558684,
+              "rgbPsnr": 54.84302018027145
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "psnrGapDb": 0.040632798290151526,
+          "matched": true,
+          "exclusionReason": null
+        },
+        {
+          "native": {
+            "setting": 5,
+            "encodedBytes": 45567,
+            "encodedSha256": "b3011ccb3ce8af22e8d4481b7153391f7bd78bc9fdd97c4f3b936025515fbdc4",
+            "nativeDecodedSha256": "edca199c728e9e7e12e1330cf4be8d4d968cbe0946028b94d412382835fe1578",
+            "publicDecodedSha256": "8f72eeba6a9e0d4e9aa254e0b38b12323bc91c3d04a60e7d2a74d0df8bd77e53",
+            "codec": "JPEG",
+            "sampling": "2x2,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 757890849,
+              "maximum": 249,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 249,
+              "rgbRmse": 43.604784017574204,
+              "rgbPsnr": 15.340120814841484
+            },
+            "decoderDifference": {
+              "sumSquared": 125559,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.5612479039925689,
+              "rgbPsnr": 53.14770896626571
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "closestOwned": {
+            "setting": 50,
+            "encodedBytes": 92028,
+            "encodedSha256": "f277cfe2fe5d780e4d5f4d5ec238ce2069a18e4c117eb7178acaaf35e222216c",
+            "nativeDecodedSha256": "3e1bb7ba8ee6b053a0383d94c247983af528d49103da72651feb5d3e8727c20d",
+            "publicDecodedSha256": "67d2e5d350437ddd07eeb955fc8913a12d35914904d7b4aa3336b73fe7109473",
+            "codec": "JPEG",
+            "sampling": "2x2,1x1,1x1",
+            "sourceError": {
+              "sumSquared": 723357569,
+              "maximum": 251,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 251,
+              "rgbRmse": 42.599776749113516,
+              "rgbPsnr": 15.542657146287699
+            },
+            "decoderDifference": {
+              "sumSquared": 85334,
+              "maximum": 3,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 3,
+              "rgbRmse": 0.46269186068419993,
+              "rgbPsnr": 54.82496641276067
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          "psnrGapDb": 0.20253633144621572,
+          "matched": true,
+          "exclusionReason": null
+        }
+      ]
+    }
+  ],
+  "workloads": [
+    {
+      "type": "MatchedQualityEncodeInvocation",
+      "parameters": [
+        {
+          "name": "Workload",
+          "value": "Jpeg420-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native16-owned20"
+        }
+      ],
+      "managedFullName": "MatchedQualityEncodeInvocation.Managed(Workload: Jpeg420-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native16-owned20)",
+      "nativeFullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg420-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native16-owned20)",
+      "outputs": {
+        "managed": {
+          "Setting": 20,
+          "EncodedBytes": 56609,
+          "EncodedSha256": "c66b22056d0e5eea536bc5ad8760f53ff0fc003631a30b0a80e67a2f54349104",
+          "NativeDecodedSha256": "53eeb78a2fe27fc7432e6729ee1ea264aa2c1495a1750c19652cc71fb6c02dfc",
+          "PublicDecodedSha256": "e29eac6a9a3414758843567c003c4f43382a7b3e8df6baa916fe93e6d7e91e25",
+          "Codec": "JPEG",
+          "Sampling": "2x2,1x1,1x1",
+          "SourceError": {
+            "SumSquared": 850101983,
+            "Maximum": 255,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 255,
+            "RgbRmse": 46.181317923514506,
+            "RgbPsnr": 14.841477155400373
+          },
+          "DecoderDifference": {
+            "SumSquared": 84980,
+            "Maximum": 3,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 3,
+            "RgbRmse": 0.4617311466558684,
+            "RgbPsnr": 54.84302018027145
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+        },
+        "ffmpeg": {
+          "Setting": 16,
+          "EncodedBytes": 20895,
+          "EncodedSha256": "0eb91c4b9b7c66196259ebcaeb0b59e9d0bcb11d37eec9dfc1515fabc563415f",
+          "NativeDecodedSha256": "6be22702080169be4371d496bf36dd9af10101f6cefe8eac2eb62efa2e2c6e4a",
+          "PublicDecodedSha256": "4cd3c1fd81c703df7fbb2ae9f9f90072621088e52b6272d09faef1f0adaf9eb3",
+          "Codec": "JPEG",
+          "Sampling": "2x2,1x1,1x1",
+          "SourceError": {
+            "SumSquared": 858092901,
+            "Maximum": 252,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 252,
+            "RgbRmse": 46.39786132972146,
+            "RgbPsnr": 14.800844357110224
+          },
+          "DecoderDifference": {
+            "SumSquared": 91883,
+            "Maximum": 3,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 3,
+            "RgbRmse": 0.4801184455337994,
+            "RgbPsnr": 54.50383578216558
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+        }
+      },
+      "childPeakResidentBytes": {
+        "managed": [
+          39653376,
+          39686144,
+          39514112,
+          39464960
+        ],
+        "native": [
+          13955072,
+          13967360,
+          13787136,
+          13864960
+        ]
+      }
+    },
+    {
+      "type": "MatchedQualityEncodeInvocation",
+      "parameters": [
+        {
+          "name": "Workload",
+          "value": "Jpeg420-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native5-owned50"
+        }
+      ],
+      "managedFullName": "MatchedQualityEncodeInvocation.Managed(Workload: Jpeg420-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native5-owned50)",
+      "nativeFullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg420-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native5-owned50)",
+      "outputs": {
+        "managed": {
+          "Setting": 50,
+          "EncodedBytes": 92028,
+          "EncodedSha256": "f277cfe2fe5d780e4d5f4d5ec238ce2069a18e4c117eb7178acaaf35e222216c",
+          "NativeDecodedSha256": "3e1bb7ba8ee6b053a0383d94c247983af528d49103da72651feb5d3e8727c20d",
+          "PublicDecodedSha256": "67d2e5d350437ddd07eeb955fc8913a12d35914904d7b4aa3336b73fe7109473",
+          "Codec": "JPEG",
+          "Sampling": "2x2,1x1,1x1",
+          "SourceError": {
+            "SumSquared": 723357569,
+            "Maximum": 251,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 251,
+            "RgbRmse": 42.599776749113516,
+            "RgbPsnr": 15.542657146287699
+          },
+          "DecoderDifference": {
+            "SumSquared": 85334,
+            "Maximum": 3,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 3,
+            "RgbRmse": 0.46269186068419993,
+            "RgbPsnr": 54.82496641276067
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+        },
+        "ffmpeg": {
+          "Setting": 5,
+          "EncodedBytes": 45567,
+          "EncodedSha256": "b3011ccb3ce8af22e8d4481b7153391f7bd78bc9fdd97c4f3b936025515fbdc4",
+          "NativeDecodedSha256": "edca199c728e9e7e12e1330cf4be8d4d968cbe0946028b94d412382835fe1578",
+          "PublicDecodedSha256": "8f72eeba6a9e0d4e9aa254e0b38b12323bc91c3d04a60e7d2a74d0df8bd77e53",
+          "Codec": "JPEG",
+          "Sampling": "2x2,1x1,1x1",
+          "SourceError": {
+            "SumSquared": 757890849,
+            "Maximum": 249,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 249,
+            "RgbRmse": 43.604784017574204,
+            "RgbPsnr": 15.340120814841484
+          },
+          "DecoderDifference": {
+            "SumSquared": 125559,
+            "Maximum": 3,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 3,
+            "RgbRmse": 0.5612479039925689,
+            "RgbPsnr": 53.14770896626571
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+        }
+      },
+      "childPeakResidentBytes": {
+        "managed": [
+          40652800,
+          40873984,
+          40640512,
+          40681472
+        ],
+        "native": [
+          14409728,
+          14245888,
+          14131200,
+          14135296
+        ]
+      }
+    },
+    {
+      "type": "MatchedQualityEncodeInvocation",
+      "parameters": [
+        {
+          "name": "Workload",
+          "value": "Jpeg422-Asymmetric-129x67-d8-native16-owned1"
+        }
+      ],
+      "managedFullName": "MatchedQualityEncodeInvocation.Managed(Workload: Jpeg422-Asymmetric-129x67-d8-native16-owned1)",
+      "nativeFullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg422-Asymmetric-129x67-d8-native16-owned1)",
+      "outputs": {
+        "managed": {
+          "Setting": 1,
+          "EncodedBytes": 1638,
+          "EncodedSha256": "3a27627abe04a5b8a202add52ae69be5245a8e60f0de3f24fa3da2b8fcb57e27",
+          "NativeDecodedSha256": "5d29d38289fd62ad800dca457a0e9195124863e117a53e3238325d6932afe17c",
+          "PublicDecodedSha256": "4b40870bd5fd128114e20b2c11de53d4bcb22c4a4a75c4fd097a751d2fa8b3a6",
+          "Codec": "JPEG",
+          "Sampling": "2x1,1x1,1x1",
+          "SourceError": {
+            "SumSquared": 123804930,
+            "Maximum": 218,
+            "Samples": 25929,
+            "Scale": 1,
+            "RgbMaximum": 218,
+            "RgbRmse": 69.09968786729524,
+            "RgbPsnr": 11.341281896453445
+          },
+          "DecoderDifference": {
+            "SumSquared": 7566,
+            "Maximum": 2,
+            "Samples": 25929,
+            "Scale": 1,
+            "RgbMaximum": 2,
+            "RgbRmse": 0.5401822190746989,
+            "RgbPsnr": 53.47999791630923
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+        },
+        "ffmpeg": {
+          "Setting": 16,
+          "EncodedBytes": 3127,
+          "EncodedSha256": "95fb1368af31b5cf93faa1fcba05620650f78b8460334aa4620254de20506413",
+          "NativeDecodedSha256": "da899f2c59fcf4501a4aa9e33423dc146bd04a0ff4e5fb293ac13cc8cbd5f2a5",
+          "PublicDecodedSha256": "9f92e2548a9b1a65fe1b72df32941edb6e1470f2de3e50f24bed69bcec2f0dbb",
+          "Codec": "JPEG",
+          "Sampling": "2x2,1x2,1x2",
+          "SourceError": {
+            "SumSquared": 125603961,
+            "Maximum": 226,
+            "Samples": 25929,
+            "Scale": 1,
+            "RgbMaximum": 226,
+            "RgbRmse": 69.59992695566697,
+            "RgbPsnr": 11.278627932205625
+          },
+          "DecoderDifference": {
+            "SumSquared": 9300,
+            "Maximum": 2,
+            "Samples": 25929,
+            "Scale": 1,
+            "RgbMaximum": 2,
+            "RgbRmse": 0.5988921083898265,
+            "RgbPsnr": 52.58383180033712
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+        }
+      },
+      "childPeakResidentBytes": {
+        "managed": [
+          36597760,
+          36610048,
+          36687872,
+          36540416
+        ],
+        "native": [
+          8040448,
+          8179712,
+          8175616,
+          8073216
+        ]
+      }
+    },
+    {
+      "type": "MatchedQualityEncodeInvocation",
+      "parameters": [
+        {
+          "name": "Workload",
+          "value": "Jpeg422-Asymmetric-129x67-d8-native5-owned13"
+        }
+      ],
+      "managedFullName": "MatchedQualityEncodeInvocation.Managed(Workload: Jpeg422-Asymmetric-129x67-d8-native5-owned13)",
+      "nativeFullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg422-Asymmetric-129x67-d8-native5-owned13)",
+      "outputs": {
+        "managed": {
+          "Setting": 13,
+          "EncodedBytes": 5189,
+          "EncodedSha256": "02795d53372440eda250755fac286894d80a7890dc3efa26c31a9897d8fa10d1",
+          "NativeDecodedSha256": "59574cdcb17e4db0d11c980b5c170e8b81c31f6c9c4e28c81141764870a053ec",
+          "PublicDecodedSha256": "305cf02d5047bf58b6840e76f4bb721c09079ebdaffa4834ef551f18caefa4f9",
+          "Codec": "JPEG",
+          "Sampling": "2x1,1x1,1x1",
+          "SourceError": {
+            "SumSquared": 118303694,
+            "Maximum": 231,
+            "Samples": 25929,
+            "Scale": 1,
+            "RgbMaximum": 231,
+            "RgbRmse": 67.5470316792724,
+            "RgbPsnr": 11.53867823023376
+          },
+          "DecoderDifference": {
+            "SumSquared": 9339,
+            "Maximum": 2,
+            "Samples": 25929,
+            "Scale": 1,
+            "RgbMaximum": 2,
+            "RgbRmse": 0.6001465361574103,
+            "RgbPsnr": 52.565657531854704
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+        },
+        "ffmpeg": {
+          "Setting": 5,
+          "EncodedBytes": 7292,
+          "EncodedSha256": "a7eb67b76fb29a50f58c3c21df485490264331784f556b579bd59e716ab3da5b",
+          "NativeDecodedSha256": "295fb4ac4ecf8e97af0053fb5ac8b26529e751b5d5bbeaa8915fd7ee35682592",
+          "PublicDecodedSha256": "85e2fe1d4e3e3a42b77ca32609a719b99c63e3cfe4af2a2e35564f2c04dab9d6",
+          "Codec": "JPEG",
+          "Sampling": "2x2,1x2,1x2",
+          "SourceError": {
+            "SumSquared": 114148502,
+            "Maximum": 195,
+            "Samples": 25929,
+            "Scale": 1,
+            "RgbMaximum": 195,
+            "RgbRmse": 66.35019818088298,
+            "RgbPsnr": 11.693959120816103
+          },
+          "DecoderDifference": {
+            "SumSquared": 9434,
+            "Maximum": 3,
+            "Samples": 25929,
+            "Scale": 1,
+            "RgbMaximum": 3,
+            "RgbRmse": 0.6031912765847517,
+            "RgbPsnr": 52.52170256677965
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+        }
+      },
+      "childPeakResidentBytes": {
+        "managed": [
+          36798464,
+          36663296,
+          36761600,
+          36691968
+        ],
+        "native": [
+          7954432,
+          8175616,
+          8273920,
+          8253440
+        ]
+      }
+    },
+    {
+      "type": "MatchedQualityEncodeInvocation",
+      "parameters": [
+        {
+          "name": "Workload",
+          "value": "Jpeg422-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native16-owned20"
+        }
+      ],
+      "managedFullName": "MatchedQualityEncodeInvocation.Managed(Workload: Jpeg422-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native16-owned20)",
+      "nativeFullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg422-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native16-owned20)",
+      "outputs": {
+        "managed": {
+          "Setting": 20,
+          "EncodedBytes": 73660,
+          "EncodedSha256": "1ffcfef5ebd1e72ad33ba639c5b47c6f31c358f23cf043896ff98b8423718d95",
+          "NativeDecodedSha256": "681e98a5fa75732acdb56b4e82bc8e47e11b424cb0bbbccd6ef322764bca021b",
+          "PublicDecodedSha256": "10a6bab16e5eaaef08273691eee9567e8d29a9c862c62256ea28129c4c634117",
+          "Codec": "JPEG",
+          "Sampling": "2x1,1x1,1x1",
+          "SourceError": {
+            "SumSquared": 697012876,
+            "Maximum": 252,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 252,
+            "RgbRmse": 41.81683975007167,
+            "RgbPsnr": 15.703779438360058
+          },
+          "DecoderDifference": {
+            "SumSquared": 78560,
+            "Maximum": 3,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 3,
+            "RgbRmse": 0.44394742920343333,
+            "RgbPsnr": 55.18417270001748
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+        },
+        "ffmpeg": {
+          "Setting": 16,
+          "EncodedBytes": 28853,
+          "EncodedSha256": "735e53af0360c8d55f3900d8e527bc5d1f8fb16aa08f2368fd457764929159ae",
+          "NativeDecodedSha256": "b0e3bda2597d6394a154b629cffc95f5fb8d918801b822641bf5f659f70f8348",
+          "PublicDecodedSha256": "2bfbd1e83041b2a003e672601ffccc3349ef18a3884d92c1d3ba04d951471b25",
+          "Codec": "JPEG",
+          "Sampling": "2x2,1x2,1x2",
+          "SourceError": {
+            "SumSquared": 711449575,
+            "Maximum": 251,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 251,
+            "RgbRmse": 42.24768050570495,
+            "RgbPsnr": 15.614746205083401
+          },
+          "DecoderDifference": {
+            "SumSquared": 87664,
+            "Maximum": 3,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 3,
+            "RgbRmse": 0.4689660993988187,
+            "RgbPsnr": 54.70797461690006
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+        }
+      },
+      "childPeakResidentBytes": {
+        "managed": [
+          40054784,
+          40222720,
+          40288256,
+          40210432
+        ],
+        "native": [
+          13877248,
+          13828096,
+          14061568,
+          13963264
+        ]
+      }
+    },
+    {
+      "type": "MatchedQualityEncodeInvocation",
+      "parameters": [
+        {
+          "name": "Workload",
+          "value": "Jpeg422-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native5-owned39"
+        }
+      ],
+      "managedFullName": "MatchedQualityEncodeInvocation.Managed(Workload: Jpeg422-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native5-owned39)",
+      "nativeFullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg422-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native5-owned39)",
+      "outputs": {
+        "managed": {
+          "Setting": 39,
+          "EncodedBytes": 110675,
+          "EncodedSha256": "9bec3109a0a1ecf0eae50998ac0cf1a82afe6552c9884b7d8ff7c39b18cb7099",
+          "NativeDecodedSha256": "7d46b4229377b6d1535ebfc0be6e129e728e82a101ebe488ae8fbf2bc90b737f",
+          "PublicDecodedSha256": "9e64ee1de8b6025e8ead4aef50e3b210029cdfd8ad64e40e85ae8209fa1da556",
+          "Codec": "JPEG",
+          "Sampling": "2x1,1x1,1x1",
+          "SourceError": {
+            "SumSquared": 544158943,
+            "Maximum": 252,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 252,
+            "RgbRmse": 36.948234690353615,
+            "RgbPsnr": 16.77892973785263
+          },
+          "DecoderDifference": {
+            "SumSquared": 79880,
+            "Maximum": 3,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 3,
+            "RgbRmse": 0.4476615933439992,
+            "RgbPsnr": 55.11180688581976
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+        },
+        "ffmpeg": {
+          "Setting": 5,
+          "EncodedBytes": 63951,
+          "EncodedSha256": "2b76b6e8844032b41f1d5c7bc3eacfefe479b06b6694ac8954669ce1b9a907d1",
+          "NativeDecodedSha256": "ba3f63a23b1c4f25fba9c5ee94b9389a8bdb52f4c28b583916ff2d18ef7e265f",
+          "PublicDecodedSha256": "10019db6c1972f7a16462a7f46e1aa070375d8de2c8f56892478aebb817c7b90",
+          "Codec": "JPEG",
+          "Sampling": "2x2,1x2,1x2",
+          "SourceError": {
+            "SumSquared": 566509303,
+            "Maximum": 236,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 236,
+            "RgbRmse": 37.699390692621755,
+            "RgbPsnr": 16.604116987040996
+          },
+          "DecoderDifference": {
+            "SumSquared": 117064,
+            "Maximum": 3,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 3,
+            "RgbRmse": 0.541929119793496,
+            "RgbPsnr": 53.451953851917146
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+        }
+      },
+      "childPeakResidentBytes": {
+        "managed": [
+          41373696,
+          41189376,
+          41246720,
+          41209856
+        ],
+        "native": [
+          14340096,
+          14344192,
+          14299136,
+          14139392
+        ]
+      }
+    },
+    {
+      "type": "MatchedQualityEncodeInvocation",
+      "parameters": [
+        {
+          "name": "Workload",
+          "value": "Jpeg444-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native16-owned24"
+        }
+      ],
+      "managedFullName": "MatchedQualityEncodeInvocation.Managed(Workload: Jpeg444-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native16-owned24)",
+      "nativeFullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg444-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native16-owned24)",
+      "outputs": {
+        "managed": {
+          "Setting": 24,
+          "EncodedBytes": 134465,
+          "EncodedSha256": "39f7e08f06a423255226038ebda3a47665790015dcf2de8fe0152e4328db34c4",
+          "NativeDecodedSha256": "0a3e9b83b4f6a3f081d3f834a6a505ece450463384fe72cbce8bb2255402f7f9",
+          "PublicDecodedSha256": "dda2f15dbf738525b3b39226e1f85cb645a2911617a3de334ca9b2863748a761",
+          "Codec": "JPEG",
+          "Sampling": "1x1,1x1,1x1",
+          "SourceError": {
+            "SumSquared": 242678944,
+            "Maximum": 199,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 199,
+            "RgbRmse": 24.67441451166366,
+            "RgbPsnr": 20.28586648305773
+          },
+          "DecoderDifference": {
+            "SumSquared": 9760,
+            "Maximum": 3,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 3,
+            "RgbRmse": 0.1564788756373404,
+            "RgbPsnr": 64.24168927113949
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+        },
+        "ffmpeg": {
+          "Setting": 16,
+          "EncodedBytes": 50527,
+          "EncodedSha256": "b605948530411f658a6671327e36421a35d11c69468191aa28d41ab1ca42d411",
+          "NativeDecodedSha256": "e12451ba95019e2997a5b318afa82bbc8c1de4b02a5e69e3e84a1ea4f397c2c5",
+          "PublicDecodedSha256": "7579c8f24a05822acef239f03630fee4c950c685090b4aa218571747233d8f27",
+          "Codec": "JPEG",
+          "Sampling": "1x2,1x2,1x2",
+          "SourceError": {
+            "SumSquared": 249824127,
+            "Maximum": 209,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 209,
+            "RgbRmse": 25.03502314684191,
+            "RgbPsnr": 20.159843663190795
+          },
+          "DecoderDifference": {
+            "SumSquared": 10139,
+            "Maximum": 3,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 3,
+            "RgbRmse": 0.15948813132316544,
+            "RgbPsnr": 64.07623621725949
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+        }
+      },
+      "childPeakResidentBytes": {
+        "managed": [
+          42205184,
+          42057728,
+          42106880,
+          42221568
+        ],
+        "native": [
+          14299136,
+          14483456,
+          14221312,
+          14356480
+        ]
+      }
+    },
+    {
+      "type": "MatchedQualityEncodeInvocation",
+      "parameters": [
+        {
+          "name": "Workload",
+          "value": "Jpeg444-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native5-owned68"
+        }
+      ],
+      "managedFullName": "MatchedQualityEncodeInvocation.Managed(Workload: Jpeg444-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native5-owned68)",
+      "nativeFullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg444-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native5-owned68)",
+      "outputs": {
+        "managed": {
+          "Setting": 68,
+          "EncodedBytes": 221105,
+          "EncodedSha256": "326395ca8b95456f8e4b4f956d7eae0ba57f54e01efb3b35759ad1243b0e3c94",
+          "NativeDecodedSha256": "fb0113b492694a46f612192608051b2fec9aabe6cec4dc7375fb870bb1bf5efe",
+          "PublicDecodedSha256": "ea1a7914e58920fe75e5c47361fedf4f3a2ec01e054d2967adbd6f995dd6e56e",
+          "Codec": "JPEG",
+          "Sampling": "1x1,1x1,1x1",
+          "SourceError": {
+            "SumSquared": 28131548,
+            "Maximum": 70,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 70,
+            "RgbRmse": 8.400934980144818,
+            "RgbPsnr": 29.644251139534923
+          },
+          "DecoderDifference": {
+            "SumSquared": 10565,
+            "Maximum": 3,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 3,
+            "RgbRmse": 0.1628041828203392,
+            "RgbPsnr": 63.89749243392309
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+        },
+        "ffmpeg": {
+          "Setting": 5,
+          "EncodedBytes": 97890,
+          "EncodedSha256": "d65981bdd01ca4931010bb04692954415568d8bdb5970fcdb68053b68876b3b3",
+          "NativeDecodedSha256": "2bbdd9c2949af792b11062d90a63e58511892459c994530c4fe94bfd927cf964",
+          "PublicDecodedSha256": "b09e35b3e39c7f0f14a1e4ee3400a50a028dcf186a08240b33b7daf6aca56413",
+          "Codec": "JPEG",
+          "Sampling": "1x2,1x2,1x2",
+          "SourceError": {
+            "SumSquared": 26558450,
+            "Maximum": 62,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 62,
+            "RgbRmse": 8.162668711200377,
+            "RgbPsnr": 29.89416019569973
+          },
+          "DecoderDifference": {
+            "SumSquared": 10788,
+            "Maximum": 3,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 3,
+            "RgbRmse": 0.16451339958679964,
+            "RgbPsnr": 63.806778069997875
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+        }
+      },
+      "childPeakResidentBytes": {
+        "managed": [
+          44785664,
+          44933120,
+          44879872,
+          44961792
+        ],
+        "native": [
+          14917632,
+          14938112,
+          14901248,
+          14921728
+        ]
+      }
+    },
+    {
+      "type": "MatchedQualityEncodeInvocation",
+      "parameters": [
+        {
+          "name": "Workload",
+          "value": "Vp8-SeededNoise-513x259-d16-BinaryEdgesAlpha-native50-owned75"
+        }
+      ],
+      "managedFullName": "MatchedQualityEncodeInvocation.Managed(Workload: Vp8-SeededNoise-513x259-d16-BinaryEdgesAlpha-native50-owned75)",
+      "nativeFullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Vp8-SeededNoise-513x259-d16-BinaryEdgesAlpha-native50-owned75)",
+      "outputs": {
+        "managed": {
+          "Setting": 75,
+          "EncodedBytes": 257138,
+          "EncodedSha256": "3b257060ba84a4dfa3015e7f2fa4ec47fa2fe86942a46a3ed694b89676a9cb09",
+          "NativeDecodedSha256": "edc4a7630b446d5dc3b0ff3c859ca74bea82c9f87874da146cf96c6459c86e05",
+          "PublicDecodedSha256": "043145a88a322217a055cc875e63f2379e4868af73fac7972608bd12bbb50100",
+          "Codec": "VP8",
+          "Sampling": "4:2:0",
+          "SourceError": {
+            "SumSquared": 45374342000400,
+            "Maximum": 60945,
+            "Samples": 398601,
+            "Scale": 255,
+            "RgbMaximum": 239,
+            "RgbRmse": 41.84039709844627,
+            "RgbPsnr": 15.698887655144077
+          },
+          "DecoderDifference": {
+            "SumSquared": 5342,
+            "Maximum": 1,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 1,
+            "RgbRmse": 0.11576645909327908,
+            "RgbPsnr": 66.85914861095287
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "42c652cb58086f713a5a2f1e177f231e3db8b06d1727da45a4ed1f853d21ffdb"
+        },
+        "ffmpeg": {
+          "Setting": 50,
+          "EncodedBytes": 37964,
+          "EncodedSha256": "5a1b9e4f518ae2cf81f78b94fe72f739b3a607120142cd91fd6c97cb112a0946",
+          "NativeDecodedSha256": "addb33e2470364a3f8911e6d84ba5bd18814b8f6684815259d1a974e7f376e8d",
+          "PublicDecodedSha256": "d0b5c5a0db724132d3c59a66c592f46e176f403520d64182affc118b0c08d2fa",
+          "Codec": "VP8",
+          "Sampling": "4:2:0",
+          "SourceError": {
+            "SumSquared": 46245088264050,
+            "Maximum": 62730,
+            "Samples": 398601,
+            "Scale": 255,
+            "RgbMaximum": 246,
+            "RgbRmse": 42.239953745111166,
+            "RgbPsnr": 15.616334929647879
+          },
+          "DecoderDifference": {
+            "SumSquared": 5893,
+            "Maximum": 1,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 1,
+            "RgbRmse": 0.1215903276032428,
+            "RgbPsnr": 66.43282303685493
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "42c652cb58086f713a5a2f1e177f231e3db8b06d1727da45a4ed1f853d21ffdb"
+        }
+      },
+      "childPeakResidentBytes": {
+        "managed": [
+          40140800,
+          40095744,
+          40062976,
+          40022016
+        ],
+        "native": [
+          13897728,
+          13836288,
+          13873152,
+          13873152
+        ]
+      }
+    },
+    {
+      "type": "MatchedQualityEncodeInvocation",
+      "parameters": [
+        {
+          "name": "Workload",
+          "value": "Vp8-SeededNoise-513x259-d16-BinaryEdgesAlpha-native85-owned100"
+        }
+      ],
+      "managedFullName": "MatchedQualityEncodeInvocation.Managed(Workload: Vp8-SeededNoise-513x259-d16-BinaryEdgesAlpha-native85-owned100)",
+      "nativeFullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Vp8-SeededNoise-513x259-d16-BinaryEdgesAlpha-native85-owned100)",
+      "outputs": {
+        "managed": {
+          "Setting": 100,
+          "EncodedBytes": 520722,
+          "EncodedSha256": "b88d3d221cc61cd6e51e0e8d60a81d791e9f9090cdfec83822126fb7baa70a83",
+          "NativeDecodedSha256": "67307c41341c1283625dcf3fa9f3a05eb0dd10b89c0ada0d4689496aad5757b7",
+          "PublicDecodedSha256": "e9e17fa3a14a8df283615990c699b54395ed6b022098cba17140709d59d15d05",
+          "Codec": "VP8",
+          "Sampling": "4:2:0",
+          "SourceError": {
+            "SumSquared": 44628331243500,
+            "Maximum": 60945,
+            "Samples": 398601,
+            "Scale": 255,
+            "RgbMaximum": 239,
+            "RgbRmse": 41.49501744865934,
+            "RgbPsnr": 15.770884577793218
+          },
+          "DecoderDifference": {
+            "SumSquared": 5308,
+            "Maximum": 1,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 1,
+            "RgbRmse": 0.11539746409728202,
+            "RgbPsnr": 66.88687830588243
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "42c652cb58086f713a5a2f1e177f231e3db8b06d1727da45a4ed1f853d21ffdb"
+        },
+        "ffmpeg": {
+          "Setting": 85,
+          "EncodedBytes": 54152,
+          "EncodedSha256": "b36d0d42e3ae09e6b9dae230000177c1b5a680c1f3fc0a347d18e915241a9687",
+          "NativeDecodedSha256": "ff4ace42b3b6e832f82e43eb8098420cc8da407c3c42b02d9aa570e3a1c45ee4",
+          "PublicDecodedSha256": "cba11ced9d5312456fc926b70babd6bcb102ce58200cffa9dd45c5ae1196a881",
+          "Codec": "VP8",
+          "Sampling": "4:2:0",
+          "SourceError": {
+            "SumSquared": 44942333587200,
+            "Maximum": 61965,
+            "Samples": 398601,
+            "Scale": 255,
+            "RgbMaximum": 243,
+            "RgbRmse": 41.64073983939607,
+            "RgbPsnr": 15.740434866590775
+          },
+          "DecoderDifference": {
+            "SumSquared": 5992,
+            "Maximum": 1,
+            "Samples": 398601,
+            "Scale": 1,
+            "RgbMaximum": 1,
+            "RgbRmse": 0.12260740775371286,
+            "RgbPsnr": 66.36046940089231
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "42c652cb58086f713a5a2f1e177f231e3db8b06d1727da45a4ed1f853d21ffdb"
+        }
+      },
+      "childPeakResidentBytes": {
+        "managed": [
+          40591360,
+          40759296,
+          40562688,
+          40562688
+        ],
+        "native": [
+          13631488,
+          13713408,
+          13496320,
+          13692928
+        ]
+      }
+    },
+    {
+      "type": "MatchedQualityEncodeInvocation",
+      "parameters": [
+        {
+          "name": "Workload",
+          "value": "Vp8-SoftGradient-129x67-d8-native50-owned83"
+        }
+      ],
+      "managedFullName": "MatchedQualityEncodeInvocation.Managed(Workload: Vp8-SoftGradient-129x67-d8-native50-owned83)",
+      "nativeFullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Vp8-SoftGradient-129x67-d8-native50-owned83)",
+      "outputs": {
+        "managed": {
+          "Setting": 83,
+          "EncodedBytes": 544,
+          "EncodedSha256": "a686f3e8b54b0ab9b0eef375c6a028d58dfa511c9180b67e966ca6ab0c8b1bfb",
+          "NativeDecodedSha256": "b47daee7272f0fc4fd8e05d875064c8da236c74872e80a24285c31622c0c9d05",
+          "PublicDecodedSha256": "820ab1eff0272e3ff5bcffb785cd6912523fac4ec65e4b8fe10f128b8ca970e2",
+          "Codec": "VP8",
+          "Sampling": "4:2:0",
+          "SourceError": {
+            "SumSquared": 196374,
+            "Maximum": 11,
+            "Samples": 25929,
+            "Scale": 1,
+            "RgbMaximum": 11,
+            "RgbRmse": 2.7520043078247136,
+            "RgbPsnr": 39.337821421021275
+          },
+          "DecoderDifference": {
+            "SumSquared": 689,
+            "Maximum": 1,
+            "Samples": 25929,
+            "Scale": 1,
+            "RgbMaximum": 1,
+            "RgbRmse": 0.1630109307343979,
+            "RgbPsnr": 63.886469066800224
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+        },
+        "ffmpeg": {
+          "Setting": 50,
+          "EncodedBytes": 286,
+          "EncodedSha256": "e0c9f43e2d95f79c908010c8030b6ee6f73604c0ea3356642d3320aa0ee001a6",
+          "NativeDecodedSha256": "b7ba30dc9a5eac2f4aadcaab868d8c9c5366c76c414efd1d8c43b9d2c883ae62",
+          "PublicDecodedSha256": "3d651bc3b0e950a61f6d2ea2f06d8c1682ec94d1b8ec8dc3405b66b7926dc09f",
+          "Codec": "VP8",
+          "Sampling": "4:2:0",
+          "SourceError": {
+            "SumSquared": 192823,
+            "Maximum": 14,
+            "Samples": 25929,
+            "Scale": 1,
+            "RgbMaximum": 14,
+            "RgbRmse": 2.7270087652761617,
+            "RgbPsnr": 39.41707293121833
+          },
+          "DecoderDifference": {
+            "SumSquared": 668,
+            "Maximum": 1,
+            "Samples": 25929,
+            "Scale": 1,
+            "RgbMaximum": 1,
+            "RgbRmse": 0.16050750627420896,
+            "RgbPsnr": 64.02089666112103
+          },
+          "AlphaExact": true,
+          "AlphaSha256": "5665190b7011a2f526aeeda437e0fe2da39d028c73f399799582b168ec7d1c8b"
+        }
+      },
+      "childPeakResidentBytes": {
+        "managed": [
+          36864000,
+          36921344,
+          37060608,
+          36962304
+        ],
+        "native": [
+          7827456,
+          7770112,
+          8204288,
+          8216576
+        ]
+      }
+    },
+    {
+      "type": "PngCropResizePipeline",
+      "parameters": [
+        {
+          "name": "Width",
+          "value": "129"
+        },
+        {
+          "name": "Depth",
+          "value": "8"
+        },
+        {
+          "name": "Frames",
+          "value": "1"
+        },
+        {
+          "name": "Upscale",
+          "value": "False"
+        }
+      ],
+      "managedFullName": "PngCropResizePipeline.Managed(Width: 129, Depth: 8, Frames: 1, Upscale: False)",
+      "nativeFullName": "PngCropResizePipeline.Ffmpeg(Width: 129, Depth: 8, Frames: 1, Upscale: False)",
+      "outputs": {
+        "managed": {
+          "outputFiles": 1,
+          "outputBytes": 4639,
+          "outputIndexSha256": "77982dc12668cc8a744a96c47d80355635d5f03f8348505a0e07671c62e798bd",
+          "frames": [
+            {
+              "frame": 0,
+              "name": "frame-0000.png",
+              "encodedBytes": 4639,
+              "encodedSha256": "d48e3b4db07ea54c8b3d012059d001baaae560bc26bc067475d810d750267483",
+              "decodedWidth": 60,
+              "decodedHeight": 28,
+              "decodedDepth": 8,
+              "exact": true,
+              "allRgbaSamplesExact": true,
+              "alphaExact": true,
+              "hiddenRgbExact": true,
+              "managedDecodedSha256": "326eb9013393b51581b770eba70105fb2589b70a452bbd2a145760e9ec837fc2",
+              "referenceSha256": "326eb9013393b51581b770eba70105fb2589b70a452bbd2a145760e9ec837fc2",
+              "publicEncodedSha256": "d48e3b4db07ea54c8b3d012059d001baaae560bc26bc067475d810d750267483"
+            }
+          ],
+          "nativeDecoded": {
+            "outputBytes": 6720,
+            "outputSha256": "326eb9013393b51581b770eba70105fb2589b70a452bbd2a145760e9ec837fc2",
+            "frameValidation": [
+              {
+                "frame": 0,
+                "exact": true,
+                "allRgbaSamplesExact": true,
+                "actualSha256": "326eb9013393b51581b770eba70105fb2589b70a452bbd2a145760e9ec837fc2",
+                "expectedSha256": "326eb9013393b51581b770eba70105fb2589b70a452bbd2a145760e9ec837fc2"
+              }
+            ]
+          }
+        },
+        "ffmpeg": {
+          "outputFiles": 1,
+          "outputBytes": 4059,
+          "outputIndexSha256": "10a98419a7cd9cedcbc9b5a45bc589e23c5069169eda075878a95eaff3d4856f",
+          "frames": [
+            {
+              "frame": 0,
+              "name": "frame-0000.png",
+              "encodedBytes": 4059,
+              "encodedSha256": "ed5bf0c7a78733789b06122970135740786cd85434aa8bd54431d7e31eeada66",
+              "decodedWidth": 60,
+              "decodedHeight": 28,
+              "decodedDepth": 8,
+              "exact": true,
+              "allRgbaSamplesExact": true,
+              "alphaExact": true,
+              "hiddenRgbExact": true,
+              "managedDecodedSha256": "326eb9013393b51581b770eba70105fb2589b70a452bbd2a145760e9ec837fc2",
+              "referenceSha256": "326eb9013393b51581b770eba70105fb2589b70a452bbd2a145760e9ec837fc2",
+              "publicEncodedSha256": null
+            }
+          ],
+          "nativeDecoded": {
+            "outputBytes": 6720,
+            "outputSha256": "326eb9013393b51581b770eba70105fb2589b70a452bbd2a145760e9ec837fc2",
+            "frameValidation": [
+              {
+                "frame": 0,
+                "exact": true,
+                "allRgbaSamplesExact": true,
+                "actualSha256": "326eb9013393b51581b770eba70105fb2589b70a452bbd2a145760e9ec837fc2",
+                "expectedSha256": "326eb9013393b51581b770eba70105fb2589b70a452bbd2a145760e9ec837fc2"
+              }
+            ]
+          }
+        }
+      },
+      "childPeakResidentBytes": {
+        "managed": [
+          41697280,
+          41730048,
+          41648128,
+          41684992
+        ],
+        "native": [
+          8278016,
+          8138752,
+          8335360,
+          8290304
+        ]
+      }
+    },
+    {
+      "type": "PngCropResizePipeline",
+      "parameters": [
+        {
+          "name": "Width",
+          "value": "129"
+        },
+        {
+          "name": "Depth",
+          "value": "16"
+        },
+        {
+          "name": "Frames",
+          "value": "1"
+        },
+        {
+          "name": "Upscale",
+          "value": "False"
+        }
+      ],
+      "managedFullName": "PngCropResizePipeline.Managed(Width: 129, Depth: 16, Frames: 1, Upscale: False)",
+      "nativeFullName": "PngCropResizePipeline.Ffmpeg(Width: 129, Depth: 16, Frames: 1, Upscale: False)",
+      "outputs": {
+        "managed": {
+          "outputFiles": 1,
+          "outputBytes": 13285,
+          "outputIndexSha256": "d51cff58a8c0a4947af611e042fdd8d7ae939b2c206f7aa703f56bc6ffddc970",
+          "frames": [
+            {
+              "frame": 0,
+              "name": "frame-0000.png",
+              "encodedBytes": 13285,
+              "encodedSha256": "96bd5f5d9a8a5446939c5fe71452ae863c6ff2aa6614264dc993c10782626320",
+              "decodedWidth": 60,
+              "decodedHeight": 28,
+              "decodedDepth": 16,
+              "exact": true,
+              "allRgbaSamplesExact": true,
+              "alphaExact": true,
+              "hiddenRgbExact": true,
+              "managedDecodedSha256": "42dc6839b393606310924756ca4e9f5b1597ee10123e5e3f10b0988cf30b5065",
+              "referenceSha256": "42dc6839b393606310924756ca4e9f5b1597ee10123e5e3f10b0988cf30b5065",
+              "publicEncodedSha256": "96bd5f5d9a8a5446939c5fe71452ae863c6ff2aa6614264dc993c10782626320"
+            }
+          ],
+          "nativeDecoded": {
+            "outputBytes": 13440,
+            "outputSha256": "42dc6839b393606310924756ca4e9f5b1597ee10123e5e3f10b0988cf30b5065",
+            "frameValidation": [
+              {
+                "frame": 0,
+                "exact": true,
+                "allRgbaSamplesExact": true,
+                "actualSha256": "42dc6839b393606310924756ca4e9f5b1597ee10123e5e3f10b0988cf30b5065",
+                "expectedSha256": "42dc6839b393606310924756ca4e9f5b1597ee10123e5e3f10b0988cf30b5065"
+              }
+            ]
+          }
+        },
+        "ffmpeg": {
+          "outputFiles": 1,
+          "outputBytes": 13342,
+          "outputIndexSha256": "117630b8c1cce32afff2b765869c360853fcba9841e16d54add088b61158a125",
+          "frames": [
+            {
+              "frame": 0,
+              "name": "frame-0000.png",
+              "encodedBytes": 13342,
+              "encodedSha256": "72c19e475c62d3b587b48c0396740576e4b0228bbec4c9407d4fe5772630a564",
+              "decodedWidth": 60,
+              "decodedHeight": 28,
+              "decodedDepth": 16,
+              "exact": true,
+              "allRgbaSamplesExact": true,
+              "alphaExact": true,
+              "hiddenRgbExact": true,
+              "managedDecodedSha256": "42dc6839b393606310924756ca4e9f5b1597ee10123e5e3f10b0988cf30b5065",
+              "referenceSha256": "42dc6839b393606310924756ca4e9f5b1597ee10123e5e3f10b0988cf30b5065",
+              "publicEncodedSha256": null
+            }
+          ],
+          "nativeDecoded": {
+            "outputBytes": 13440,
+            "outputSha256": "42dc6839b393606310924756ca4e9f5b1597ee10123e5e3f10b0988cf30b5065",
+            "frameValidation": [
+              {
+                "frame": 0,
+                "exact": true,
+                "allRgbaSamplesExact": true,
+                "actualSha256": "42dc6839b393606310924756ca4e9f5b1597ee10123e5e3f10b0988cf30b5065",
+                "expectedSha256": "42dc6839b393606310924756ca4e9f5b1597ee10123e5e3f10b0988cf30b5065"
+              }
+            ]
+          }
+        }
+      },
+      "childPeakResidentBytes": {
+        "managed": [
+          42070016,
+          42033152,
+          42029056,
+          42016768
+        ],
+        "native": [
+          9011200,
+          9023488,
+          9220096,
+          9027584
+        ]
+      }
+    },
+    {
+      "type": "GeometryRawFile",
+      "parameters": [
+        {
+          "name": "Width",
+          "value": "129"
+        },
+        {
+          "name": "Depth",
+          "value": "16"
+        },
+        {
+          "name": "Frames",
+          "value": "1"
+        },
+        {
+          "name": "Operation",
+          "value": "FlipHorizontal"
+        }
+      ],
+      "managedFullName": "GeometryRawFile.Managed(Width: 129, Depth: 16, Frames: 1, Operation: FlipHorizontal)",
+      "nativeFullName": "GeometryRawFile.Ffmpeg(Width: 129, Depth: 16, Frames: 1, Operation: FlipHorizontal)",
+      "outputs": {
+        "managed": {
+          "outputBytes": 69144,
+          "outputSha256": "3bc1820b49e78e23a0b17d6323c1e0aab2b82889128384a17d0eb10a332af416",
+          "frameValidation": [
+            {
+              "frame": 0,
+              "exact": true,
+              "allRgbaSamplesExact": true,
+              "actualSha256": "3bc1820b49e78e23a0b17d6323c1e0aab2b82889128384a17d0eb10a332af416",
+              "expectedSha256": "3bc1820b49e78e23a0b17d6323c1e0aab2b82889128384a17d0eb10a332af416"
+            }
+          ]
+        },
+        "ffmpeg": {
+          "outputBytes": 69144,
+          "outputSha256": "3bc1820b49e78e23a0b17d6323c1e0aab2b82889128384a17d0eb10a332af416",
+          "frameValidation": [
+            {
+              "frame": 0,
+              "exact": true,
+              "allRgbaSamplesExact": true,
+              "actualSha256": "3bc1820b49e78e23a0b17d6323c1e0aab2b82889128384a17d0eb10a332af416",
+              "expectedSha256": "3bc1820b49e78e23a0b17d6323c1e0aab2b82889128384a17d0eb10a332af416"
+            }
+          ]
+        }
+      },
+      "childPeakResidentBytes": {
+        "managed": [
+          35594240,
+          35508224,
+          35598336,
+          35483648
+        ],
+        "native": [
+          6868992,
+          6893568,
+          7049216,
+          6905856
+        ]
+      }
+    },
+    {
+      "type": "GeometryRawFile",
+      "parameters": [
+        {
+          "name": "Width",
+          "value": "129"
+        },
+        {
+          "name": "Depth",
+          "value": "16"
+        },
+        {
+          "name": "Frames",
+          "value": "1"
+        },
+        {
+          "name": "Operation",
+          "value": "Clockwise90"
+        }
+      ],
+      "managedFullName": "GeometryRawFile.Managed(Width: 129, Depth: 16, Frames: 1, Operation: Clockwise90)",
+      "nativeFullName": "GeometryRawFile.Ffmpeg(Width: 129, Depth: 16, Frames: 1, Operation: Clockwise90)",
+      "outputs": {
+        "managed": {
+          "outputBytes": 69144,
+          "outputSha256": "8cbcc5a17b359c8cffb21d139bde165974732dd9a8168e55ed0d7e061959911d",
+          "frameValidation": [
+            {
+              "frame": 0,
+              "exact": true,
+              "allRgbaSamplesExact": true,
+              "actualSha256": "8cbcc5a17b359c8cffb21d139bde165974732dd9a8168e55ed0d7e061959911d",
+              "expectedSha256": "8cbcc5a17b359c8cffb21d139bde165974732dd9a8168e55ed0d7e061959911d"
+            }
+          ]
+        },
+        "ffmpeg": {
+          "outputBytes": 69144,
+          "outputSha256": "8cbcc5a17b359c8cffb21d139bde165974732dd9a8168e55ed0d7e061959911d",
+          "frameValidation": [
+            {
+              "frame": 0,
+              "exact": true,
+              "allRgbaSamplesExact": true,
+              "actualSha256": "8cbcc5a17b359c8cffb21d139bde165974732dd9a8168e55ed0d7e061959911d",
+              "expectedSha256": "8cbcc5a17b359c8cffb21d139bde165974732dd9a8168e55ed0d7e061959911d"
+            }
+          ]
+        }
+      },
+      "childPeakResidentBytes": {
+        "managed": [
+          35565568,
+          35549184,
+          35536896,
+          35590144
+        ],
+        "native": [
+          6905856,
+          6807552,
+          6967296,
+          7118848
+        ]
+      }
+    },
+    {
+      "type": "NearestResizeRawFile",
+      "parameters": [
+        {
+          "name": "Width",
+          "value": "129"
+        },
+        {
+          "name": "Depth",
+          "value": "16"
+        },
+        {
+          "name": "Frames",
+          "value": "1"
+        },
+        {
+          "name": "Upscale",
+          "value": "True"
+        }
+      ],
+      "managedFullName": "NearestResizeRawFile.Managed(Width: 129, Depth: 16, Frames: 1, Upscale: True)",
+      "nativeFullName": "NearestResizeRawFile.Ffmpeg(Width: 129, Depth: 16, Frames: 1, Upscale: True)",
+      "outputs": {
+        "managed": {
+          "outputBytes": 277560,
+          "outputSha256": "3002da66e1b5a4819c03123d6d3646b611da6cdd92d9c977ea25b96524651329",
+          "frameValidation": [
+            {
+              "frame": 0,
+              "exact": true,
+              "allRgbaSamplesExact": true,
+              "actualSha256": "3002da66e1b5a4819c03123d6d3646b611da6cdd92d9c977ea25b96524651329",
+              "expectedSha256": "3002da66e1b5a4819c03123d6d3646b611da6cdd92d9c977ea25b96524651329"
+            }
+          ]
+        },
+        "ffmpeg": {
+          "outputBytes": 277560,
+          "outputSha256": "3002da66e1b5a4819c03123d6d3646b611da6cdd92d9c977ea25b96524651329",
+          "frameValidation": [
+            {
+              "frame": 0,
+              "exact": true,
+              "allRgbaSamplesExact": true,
+              "actualSha256": "3002da66e1b5a4819c03123d6d3646b611da6cdd92d9c977ea25b96524651329",
+              "expectedSha256": "3002da66e1b5a4819c03123d6d3646b611da6cdd92d9c977ea25b96524651329"
+            }
+          ]
+        }
+      },
+      "childPeakResidentBytes": {
+        "managed": [
+          35876864,
+          35868672,
+          35975168,
+          36077568
+        ],
+        "native": [
+          9875456,
+          10219520,
+          10129408,
+          10215424
+        ]
+      }
+    }
+  ],
+  "cases": [
+    {
+      "fullName": "GeometryRawFile.Ffmpeg(Width: 129, Depth: 16, Frames: 1, Operation: Clockwise90)",
+      "samplesNanoseconds": [
+        [
+          2212338.9921875,
+          2244276.0625,
+          2237290.5234375
+        ],
+        [
+          2268295.033203125,
+          2252670.126953125,
+          2200750.220703125
+        ],
+        [
+          2393613.248046875,
+          2472025.966796875,
+          2391788.712890625
+        ],
+        [
+          2212337.3984375,
+          2287392.14453125,
+          2226023.90234375
+        ]
+      ],
+      "baselineMeanMilliseconds": 2.2359368264973956,
+      "currentMeanMilliseconds": 2.3305302288411456,
+      "currentToBaselineRatio": 1.0423059369221674,
+      "provisionalMaximumMilliseconds": 2.6886861523437497
+    },
+    {
+      "fullName": "GeometryRawFile.Ffmpeg(Width: 129, Depth: 16, Frames: 1, Operation: FlipHorizontal)",
+      "samplesNanoseconds": [
+        [
+          2213056.3046875,
+          2180060.8203125,
+          2131825.30859375
+        ],
+        [
+          2117356.9140625,
+          2086932.9765625,
+          2046368.58203125
+        ],
+        [
+          2195426.732421875,
+          2242475.662109375,
+          2190730.572265625
+        ],
+        [
+          2166621.3125,
+          2218988.66015625,
+          2110998.41015625
+        ]
+      ],
+      "baselineMeanMilliseconds": 2.129266817708333,
+      "currentMeanMilliseconds": 2.1875402249348954,
+      "currentToBaselineRatio": 1.0273678276211904,
+      "provisionalMaximumMilliseconds": 2.6099769734374996
+    },
+    {
+      "fullName": "GeometryRawFile.Managed(Width: 129, Depth: 16, Frames: 1, Operation: Clockwise90)",
+      "samplesNanoseconds": [
+        [
+          28755621.78125,
+          28739937.625,
+          27851686.34375
+        ],
+        [
+          28045550.640625,
+          27418002.515625,
+          28504869.484375
+        ],
+        [
+          27823208.21875,
+          29512500.25,
+          28966337.5
+        ],
+        [
+          27722873.4375,
+          27986876.96875,
+          27543656.40625
+        ]
+      ],
+      "baselineMeanMilliseconds": 28.219278065104167,
+      "currentMeanMilliseconds": 28.259242130208335,
+      "currentToBaselineRatio": 1.0014161972893838,
+      "provisionalMaximumMilliseconds": 34.138898299999994
+    },
+    {
+      "fullName": "GeometryRawFile.Managed(Width: 129, Depth: 16, Frames: 1, Operation: FlipHorizontal)",
+      "samplesNanoseconds": [
+        [
+          27511374.375,
+          27679649.6875,
+          28782775.75
+        ],
+        [
+          27642506.15625,
+          28278679.03125,
+          28029743.9375
+        ],
+        [
+          27685745.3125,
+          27747970.34375,
+          27815018.0625
+        ],
+        [
+          27731506.75,
+          27617773.5625,
+          27471599.375
+        ]
+      ],
+      "baselineMeanMilliseconds": 27.987454822916668,
+      "currentMeanMilliseconds": 27.678268901041665,
+      "currentToBaselineRatio": 0.9889526959907109,
+      "provisionalMaximumMilliseconds": 33.589519925
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg420-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native16-owned20)",
+      "samplesNanoseconds": [
+        [
+          31062170.90625,
+          32177311.53125,
+          30695347.28125
+        ],
+        [
+          30868871.6875,
+          31049425,
+          30888669.8125
+        ],
+        [
+          30900684.65625,
+          30751650.59375,
+          30660766.5625
+        ],
+        [
+          31195695.3125,
+          31175864.5625,
+          30705827.625
+        ]
+      ],
+      "baselineMeanMilliseconds": 31.123632703125,
+      "currentMeanMilliseconds": 30.898414885416663,
+      "currentToBaselineRatio": 0.9927637682960536,
+      "provisionalMaximumMilliseconds": 37.573931887499995
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg420-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native5-owned50)",
+      "samplesNanoseconds": [
+        [
+          31329551.65625,
+          31591083.90625,
+          31175185.90625
+        ],
+        [
+          31531185.53125,
+          31396671.90625,
+          31583570.28125
+        ],
+        [
+          31860016.25,
+          31576204.4375,
+          31457294.6875
+        ],
+        [
+          31531650.8125,
+          31275194,
+          31557372.3125
+        ]
+      ],
+      "baselineMeanMilliseconds": 31.43454153125,
+      "currentMeanMilliseconds": 31.54295541666667,
+      "currentToBaselineRatio": 1.003448877576563,
+      "provisionalMaximumMilliseconds": 37.8045710875
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg422-Asymmetric-129x67-d8-native16-owned1)",
+      "samplesNanoseconds": [
+        [
+          2309700.677734375,
+          2502709.060546875,
+          2379107.103515625
+        ],
+        [
+          2238483.873046875,
+          2241669.744140625,
+          2444066.365234375
+        ],
+        [
+          2242819.515625,
+          2288476.9921875,
+          2222461.05859375
+        ],
+        [
+          2329284.95703125,
+          2457228.828125,
+          2416322.71875
+        ]
+      ],
+      "baselineMeanMilliseconds": 2.3526228040364585,
+      "currentMeanMilliseconds": 2.32609901171875,
+      "currentToBaselineRatio": 0.9887258627808075,
+      "provisionalMaximumMilliseconds": 2.8766067367187502
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg422-Asymmetric-129x67-d8-native5-owned13)",
+      "samplesNanoseconds": [
+        [
+          2583834.125,
+          2505659.7421875,
+          2463243.05859375
+        ],
+        [
+          2460854.0078125,
+          2447721.68359375,
+          2418813.39453125
+        ],
+        [
+          2307729.19140625,
+          2369254.87109375,
+          2349179.74609375
+        ],
+        [
+          2718990.890625,
+          3341757.91015625,
+          2819719.4765625
+        ]
+      ],
+      "baselineMeanMilliseconds": 2.480021001953125,
+      "currentMeanMilliseconds": 2.65110534765625,
+      "currentToBaselineRatio": 1.0689850390655518,
+      "provisionalMaximumMilliseconds": 3.0210947703124997
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg422-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native16-owned20)",
+      "samplesNanoseconds": [
+        [
+          32131330.4375,
+          30948870.5,
+          31065589.125
+        ],
+        [
+          30933970.65625,
+          31930922.65625,
+          31018692.96875
+        ],
+        [
+          31261850,
+          31663917,
+          31136294.75
+        ],
+        [
+          31330608.96875,
+          31179376.34375,
+          31133313.125
+        ]
+      ],
+      "baselineMeanMilliseconds": 31.338229390625,
+      "currentMeanMilliseconds": 31.284226697916665,
+      "currentToBaselineRatio": 0.9982767790727676,
+      "provisionalMaximumMilliseconds": 37.658316025
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg422-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native5-owned39)",
+      "samplesNanoseconds": [
+        [
+          31506692.1875,
+          31803581.125,
+          31815077.9375
+        ],
+        [
+          32166861.8125,
+          31962936.1875,
+          31967125.9375
+        ],
+        [
+          31672120.375,
+          31901458.125,
+          31674798.125
+        ],
+        [
+          32177137.65625,
+          32035201.15625,
+          31966779.96875
+        ]
+      ],
+      "baselineMeanMilliseconds": 31.87037919791667,
+      "currentMeanMilliseconds": 31.904582567708335,
+      "currentToBaselineRatio": 1.0010732024736595,
+      "provisionalMaximumMilliseconds": 38.438769575
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg444-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native16-owned24)",
+      "samplesNanoseconds": [
+        [
+          32069654.933333334,
+          32211018.933333334,
+          32917896.733333334
+        ],
+        [
+          32369195.75,
+          32359377.5,
+          32227074
+        ],
+        [
+          32379255.90625,
+          32170846.84375,
+          32047980.09375
+        ],
+        [
+          32367246.875,
+          32452893.5,
+          31955000.8125
+        ]
+      ],
+      "baselineMeanMilliseconds": 32.35903630833333,
+      "currentMeanMilliseconds": 32.228870671875,
+      "currentToBaselineRatio": 0.9959774563365222,
+      "provisionalMaximumMilliseconds": 38.87942824
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Jpeg444-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native5-owned68)",
+      "samplesNanoseconds": [
+        [
+          32942889,
+          34087054.6875,
+          32898679.5
+        ],
+        [
+          32944834.769230768,
+          32711502.846153848,
+          32606470
+        ],
+        [
+          33294480.25,
+          32990778,
+          33006959.6875
+        ],
+        [
+          32951227.6875,
+          33023688.1875,
+          33407349.3125
+        ]
+      ],
+      "baselineMeanMilliseconds": 33.03190513381411,
+      "currentMeanMilliseconds": 33.11241385416667,
+      "currentToBaselineRatio": 1.0024373017549675,
+      "provisionalMaximumMilliseconds": 39.971449275
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Vp8-SeededNoise-513x259-d16-BinaryEdgesAlpha-native50-owned75)",
+      "samplesNanoseconds": [
+        [
+          21892336.203125,
+          22133061.328125,
+          22220440.828125
+        ],
+        [
+          21944049.265625,
+          21863418.109375,
+          21930041.203125
+        ],
+        [
+          21915559.640625,
+          22005711.421875,
+          22551790.140625
+        ],
+        [
+          22238469.3125,
+          22303911.90625,
+          22091086.0625
+        ]
+      ],
+      "baselineMeanMilliseconds": 21.997224489583335,
+      "currentMeanMilliseconds": 22.1844214140625,
+      "currentToBaselineRatio": 1.0085100247337027,
+      "provisionalMaximumMilliseconds": 26.49833534375
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Vp8-SeededNoise-513x259-d16-BinaryEdgesAlpha-native85-owned100)",
+      "samplesNanoseconds": [
+        [
+          23255872.53125,
+          23358234.5,
+          23062646.59375
+        ],
+        [
+          23203518.875,
+          23038746.59375,
+          23304498.53125
+        ],
+        [
+          23411964.5625,
+          23360551.03125,
+          23266958.25
+        ],
+        [
+          23637187.640625,
+          23548896.359375,
+          27501691.015625
+        ]
+      ],
+      "baselineMeanMilliseconds": 23.203919604166668,
+      "currentMeanMilliseconds": 24.121208143229165,
+      "currentToBaselineRatio": 1.0395316202913314,
+      "provisionalMaximumMilliseconds": 27.87070145
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Ffmpeg(Workload: Vp8-SoftGradient-129x67-d8-native50-owned83)",
+      "samplesNanoseconds": [
+        [
+          2604406.4453125,
+          2556799.14453125,
+          2539140.84375
+        ],
+        [
+          2527301.173828125,
+          2515285.111328125,
+          2505088.869140625
+        ],
+        [
+          2628072.26953125,
+          2542288.40625,
+          2597079.28125
+        ],
+        [
+          2595290.18359375,
+          2554501.5078125,
+          2585025.3984375
+        ]
+      ],
+      "baselineMeanMilliseconds": 2.5413369313151044,
+      "currentMeanMilliseconds": 2.5837095078125,
+      "currentToBaselineRatio": 1.0166733407031818,
+      "provisionalMaximumMilliseconds": 3.0801385734375
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Managed(Workload: Jpeg420-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native16-owned20)",
+      "samplesNanoseconds": [
+        [
+          132068135.25,
+          132080298.75,
+          131215669.75
+        ],
+        [
+          132041479.5,
+          133713632.75,
+          133121150.75
+        ],
+        [
+          117096339.2,
+          118016952.4,
+          121303106.4
+        ],
+        [
+          118393254.6,
+          117849100.4,
+          118667845.6
+        ]
+      ],
+      "baselineMeanMilliseconds": 132.37339445833334,
+      "currentMeanMilliseconds": 118.5544331,
+      "currentToBaselineRatio": 0.895606202327288,
+      "provisionalMaximumMilliseconds": 159.55050519999998
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Managed(Workload: Jpeg420-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native5-owned50)",
+      "samplesNanoseconds": [
+        [
+          135116389,
+          134567916.25,
+          135174422
+        ],
+        [
+          134920983,
+          134022877,
+          162446290.25
+        ],
+        [
+          121013754,
+          120999585.4,
+          121713682
+        ],
+        [
+          122809056,
+          120753456.8,
+          124391126.2
+        ]
+      ],
+      "baselineMeanMilliseconds": 139.37481291666668,
+      "currentMeanMilliseconds": 121.94677673333334,
+      "currentToBaselineRatio": 0.8749556263529931,
+      "provisionalMaximumMilliseconds": 172.5560601
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Managed(Workload: Jpeg422-Asymmetric-129x67-d8-native16-owned1)",
+      "samplesNanoseconds": [
+        [
+          39413951.78571428,
+          38758697.428571425,
+          39356486.21428572
+        ],
+        [
+          39316234.15384615,
+          38922018.76923077,
+          38112151.92307692
+        ],
+        [
+          36844121.64285714,
+          37498452.71428572,
+          36457573.28571428
+        ],
+        [
+          37045189.71428572,
+          37080533.35714286,
+          36245152.21428572
+        ]
+      ],
+      "baselineMeanMilliseconds": 38.979923379120876,
+      "currentMeanMilliseconds": 36.8618371547619,
+      "currentToBaselineRatio": 0.9456621244798674,
+      "provisionalMaximumMilliseconds": 47.01165417142857
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Managed(Workload: Jpeg422-Asymmetric-129x67-d8-native5-owned13)",
+      "samplesNanoseconds": [
+        [
+          39146739.76923077,
+          39432633.538461536,
+          39884187.538461536
+        ],
+        [
+          39176277.692307696,
+          38113913,
+          39821594.538461536
+        ],
+        [
+          37217524.28571428,
+          38562336.78571428,
+          37693673.428571425
+        ],
+        [
+          37557163,
+          36650446.64285714,
+          38790866.71428572
+        ]
+      ],
+      "baselineMeanMilliseconds": 39.26255767948718,
+      "currentMeanMilliseconds": 37.745335142857144,
+      "currentToBaselineRatio": 0.9613570122197435,
+      "provisionalMaximumMilliseconds": 47.38542433846154
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Managed(Workload: Jpeg422-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native16-owned20)",
+      "samplesNanoseconds": [
+        [
+          141135484.25,
+          142324446.5,
+          140489563
+        ],
+        [
+          142042557.25,
+          141003569,
+          140212569
+        ],
+        [
+          122875266.4,
+          126534736.4,
+          122826714
+        ],
+        [
+          123317195,
+          123441252.6,
+          123201893.4
+        ]
+      ],
+      "baselineMeanMilliseconds": 141.20136483333332,
+      "currentMeanMilliseconds": 123.69950963333334,
+      "currentToBaselineRatio": 0.8760503822278329,
+      "provisionalMaximumMilliseconds": 169.57979749999998
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Managed(Workload: Jpeg422-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native5-owned39)",
+      "samplesNanoseconds": [
+        [
+          146669685.5,
+          143612388.75,
+          144399986
+        ],
+        [
+          146247415,
+          146282775,
+          144411536.75
+        ],
+        [
+          127634448,
+          125757468.25,
+          126809359
+        ],
+        [
+          125940779.75,
+          125810730,
+          126156223.5
+        ]
+      ],
+      "baselineMeanMilliseconds": 145.27063116666667,
+      "currentMeanMilliseconds": 126.35150141666666,
+      "currentToBaselineRatio": 0.8697663140989977,
+      "provisionalMaximumMilliseconds": 174.7766907
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Managed(Workload: Jpeg444-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native16-owned24)",
+      "samplesNanoseconds": [
+        [
+          167610981,
+          166796335.25,
+          166018805.25
+        ],
+        [
+          168626397,
+          165602004.75,
+          165036066.5
+        ],
+        [
+          137813599.25,
+          138553660.75,
+          138174629
+        ],
+        [
+          141628305,
+          138161780.75,
+          138642890.75
+        ]
+      ],
+      "baselineMeanMilliseconds": 166.61509829166667,
+      "currentMeanMilliseconds": 138.82914425,
+      "currentToBaselineRatio": 0.8332326762306608,
+      "provisionalMaximumMilliseconds": 200.1704486
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Managed(Workload: Jpeg444-SeededNoise-513x259-d16-BinaryEdgesAlpha-bg204060-native5-owned68)",
+      "samplesNanoseconds": [
+        [
+          172393577.66666666,
+          170992596.33333334,
+          172933207.66666666
+        ],
+        [
+          175016821.66666666,
+          172265067.33333334,
+          172349039.66666666
+        ],
+        [
+          144736616.5,
+          144879530.25,
+          146250800
+        ],
+        [
+          145257857.75,
+          146661588,
+          146640016.25
+        ]
+      ],
+      "baselineMeanMilliseconds": 172.65838505555556,
+      "currentMeanMilliseconds": 145.7377347916667,
+      "currentToBaselineRatio": 0.8440814197629225,
+      "provisionalMaximumMilliseconds": 207.85237146666668
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Managed(Workload: Vp8-SeededNoise-513x259-d16-BinaryEdgesAlpha-native50-owned75)",
+      "samplesNanoseconds": [
+        [
+          118635508.8,
+          117292440.6,
+          118539430.2
+        ],
+        [
+          117014875.6,
+          116611043,
+          120569620.2
+        ],
+        [
+          117595811,
+          118251236.4,
+          117309631.4
+        ],
+        [
+          116938309.6,
+          117158958,
+          116997728.6
+        ]
+      ],
+      "baselineMeanMilliseconds": 118.1104864,
+      "currentMeanMilliseconds": 117.37527916666666,
+      "currentToBaselineRatio": 0.9937752586096086,
+      "provisionalMaximumMilliseconds": 141.78695184
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Managed(Workload: Vp8-SeededNoise-513x259-d16-BinaryEdgesAlpha-native85-owned100)",
+      "samplesNanoseconds": [
+        [
+          159653837,
+          161756558.75,
+          161523912
+        ],
+        [
+          159566936.25,
+          159462221.25,
+          162855723.5
+        ],
+        [
+          160792000.5,
+          162503948.5,
+          159463706.5
+        ],
+        [
+          161106131.5,
+          160720095,
+          160064036.75
+        ]
+      ],
+      "baselineMeanMilliseconds": 160.803198125,
+      "currentMeanMilliseconds": 160.7749864583333,
+      "currentToBaselineRatio": 0.9998245578011157,
+      "provisionalMaximumMilliseconds": 193.1737231
+    },
+    {
+      "fullName": "MatchedQualityEncodeInvocation.Managed(Workload: Vp8-SoftGradient-129x67-d8-native50-owned83)",
+      "samplesNanoseconds": [
+        [
+          40244537.76923077,
+          40485715.07692308,
+          39642575.692307696
+        ],
+        [
+          39970227.307692304,
+          39851761,
+          40032227.76923077
+        ],
+        [
+          40040966.384615384,
+          39912145.07692308,
+          40299101.538461536
+        ],
+        [
+          40579456.84615385,
+          41349689.76923077,
+          40527709.92307692
+        ]
+      ],
+      "baselineMeanMilliseconds": 40.03784076923077,
+      "currentMeanMilliseconds": 40.45151158974358,
+      "currentToBaselineRatio": 1.0103319962456798,
+      "provisionalMaximumMilliseconds": 48.14913141538462
+    },
+    {
+      "fullName": "NearestResizeRawFile.Ffmpeg(Width: 129, Depth: 16, Frames: 1, Upscale: True)",
+      "samplesNanoseconds": [
+        [
+          6171569.17578125,
+          6184977.22265625,
+          6182050.28515625
+        ],
+        [
+          6320293.4765625,
+          6162559.890625,
+          6309652.390625
+        ],
+        [
+          6282844.7734375,
+          6421882.453125,
+          6515589.109375
+        ],
+        [
+          6464818.5625,
+          6587691.3359375,
+          6939715.4140625
+        ]
+      ],
+      "baselineMeanMilliseconds": 6.221850406901041,
+      "currentMeanMilliseconds": 6.535423608072917,
+      "currentToBaselineRatio": 1.0503987046721779,
+      "provisionalMaximumMilliseconds": 7.5170023031249995
+    },
+    {
+      "fullName": "NearestResizeRawFile.Managed(Width: 129, Depth: 16, Frames: 1, Upscale: True)",
+      "samplesNanoseconds": [
+        [
+          30226414.78125,
+          30175185.53125,
+          30037061.5
+        ],
+        [
+          29614689.265625,
+          30125851.046875,
+          29746362.015625
+        ],
+        [
+          29959159.578125,
+          30080769.140625,
+          30144496.953125
+        ],
+        [
+          29826670.125,
+          29743363.59375,
+          30326592.5
+        ]
+      ],
+      "baselineMeanMilliseconds": 29.9875940234375,
+      "currentMeanMilliseconds": 30.0135086484375,
+      "currentToBaselineRatio": 1.0008641781991494,
+      "provisionalMaximumMilliseconds": 36.175464725000005
+    },
+    {
+      "fullName": "PngCropResizePipeline.Ffmpeg(Width: 129, Depth: 16, Frames: 1, Upscale: False)",
+      "samplesNanoseconds": [
+        [
+          3329724.078125,
+          3347051.1875,
+          3355282.36328125
+        ],
+        [
+          3305359.125,
+          3360968.99609375,
+          3364368.20703125
+        ],
+        [
+          3411164.33203125,
+          3369740.37890625,
+          3402089.25390625
+        ],
+        [
+          3356433.69140625,
+          3337490.6640625,
+          3333663.734375
+        ]
+      ],
+      "baselineMeanMilliseconds": 3.343792326171875,
+      "currentMeanMilliseconds": 3.368430342447917,
+      "currentToBaselineRatio": 1.007368285429451,
+      "provisionalMaximumMilliseconds": 4.0128230515625
+    },
+    {
+      "fullName": "PngCropResizePipeline.Ffmpeg(Width: 129, Depth: 8, Frames: 1, Upscale: False)",
+      "samplesNanoseconds": [
+        [
+          2757646.55859375,
+          2776935.16796875,
+          2786448.1640625
+        ],
+        [
+          2757706.14453125,
+          2780403.4921875,
+          2754362.35546875
+        ],
+        [
+          2787601.625,
+          2827506.5,
+          2770196.86328125
+        ],
+        [
+          2766337.267578125,
+          2738178.693359375,
+          2759812.275390625
+        ]
+      ],
+      "baselineMeanMilliseconds": 2.76891698046875,
+      "currentMeanMilliseconds": 2.774938870768229,
+      "currentToBaselineRatio": 1.002174817931327,
+      "provisionalMaximumMilliseconds": 3.32841195625
+    },
+    {
+      "fullName": "PngCropResizePipeline.Managed(Width: 129, Depth: 16, Frames: 1, Upscale: False)",
+      "samplesNanoseconds": [
+        [
+          59634086.88888889,
+          59515111.222222224,
+          60102470.55555555
+        ],
+        [
+          59389482.88888889,
+          59652735.44444445,
+          59646894.44444445
+        ],
+        [
+          60388700.666666664,
+          60597046.333333336,
+          60588592.333333336
+        ],
+        [
+          58780197.666666664,
+          59388568.44444445,
+          60170938
+        ]
+      ],
+      "baselineMeanMilliseconds": 59.65679690740741,
+      "currentMeanMilliseconds": 59.9856739074074,
+      "currentToBaselineRatio": 1.005512816930323,
+      "provisionalMaximumMilliseconds": 71.70066746666667
+    },
+    {
+      "fullName": "PngCropResizePipeline.Managed(Width: 129, Depth: 8, Frames: 1, Upscale: False)",
+      "samplesNanoseconds": [
+        [
+          49712679.1,
+          50859323.4,
+          50793579.8
+        ],
+        [
+          49845000.7,
+          49311663.1,
+          50865871.5
+        ],
+        [
+          49647185.81818182,
+          50383873,
+          49919570.09090909
+        ],
+        [
+          50572372.63636363,
+          50126223.09090909,
+          50437706.72727273
+        ]
+      ],
+      "baselineMeanMilliseconds": 50.23135293333334,
+      "currentMeanMilliseconds": 50.181155227272725,
+      "currentToBaselineRatio": 0.9990006698380743,
+      "provisionalMaximumMilliseconds": 60.54623292
+    }
+  ]
+}

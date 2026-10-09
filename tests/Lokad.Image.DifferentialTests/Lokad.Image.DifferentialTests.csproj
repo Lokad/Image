@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><IsTestProject>true</IsTestProject></PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
+    <ProjectReference Include="../../src/Lokad.Image/Lokad.Image.csproj" />
+    <Using Include="Xunit" />
+    <Compile Include="../../tools/Shared/*.cs" LinkBase="Shared" />
+    <Compile Include="../../tools/FormatCases/AuthoredVp8.cs" Link="Shared/AuthoredVp8.cs" />
+    <Compile Include="../../tools/FormatCases/AuthoredPng.cs" Link="Shared/AuthoredPng.cs" />
+    <Compile Include="../../tools/FormatCases/AuthoredDeflate.cs" Link="Shared/AuthoredDeflate.cs" />
+    <Compile Include="../../src/Lokad.Image/Internal/Vp8Tables.cs" Link="FormatConstants/Vp8Tables.cs" />
+  </ItemGroup>
+</Project>

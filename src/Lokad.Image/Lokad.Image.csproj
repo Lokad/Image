@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>Lokad.Image</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Lokad</Authors>
+    <Company>Lokad</Company>
+    <Description>Safe managed image codecs and basic image editing for .NET.</Description>
+    <PackageTags>image;png;jpeg;webp;codec</PackageTags>
+    <PackageProjectUrl>https://github.com/lokad/image</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/lokad/image.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <DebugType>portable</DebugType>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageOutputPath>../../artifacts/nuget/</PackageOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+    <None Include="../../LICENSE.txt" Pack="true" PackagePath="/" />
+    <None Include="../../SPEC.md" Pack="true" PackagePath="/" />
+    <None Include="../../docs/resource-admission.md" Pack="true" PackagePath="docs/" />
+    <None Include="../../docs/usage.md" Pack="true" PackagePath="docs/" />
+  </ItemGroup>
+  <Target Name="RequireReleasePackage" BeforeTargets="GenerateNuspec" Condition="'$(Configuration)' != 'Release'">
+    <Error Text="Produce NuGet packages with -c Release." />
+  </Target>
+</Project>

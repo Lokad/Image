@@ -1,0 +1,55 @@
+name: ci
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  correctness:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Locked restore
+        run: dotnet restore Lokad.Image.slnx --locked-mode --tl:off
+      - name: Offline correctness
+        shell: pwsh
+        run: ./test.ps1
+      - name: Exact Release package consumer
+        shell: pwsh
+        run: ./tools/PackageSmokeTest/verify-package.ps1
+  differential:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Provision pinned Linux tools and live oracle
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake pkg-config perl autoconf automake libtool xz-utils curl git python3 libicu74 libssl3t64 zlib1g ca-certificates
+          bash tools/setup-linux.sh --jobs=4
+      - name: Locked restore
+        run: |
+          source external/linux-x64/environment.sh
+          dotnet restore Lokad.Image.slnx --locked-mode --tl:off
+      - name: Live interoperability
+        run: |
+          source external/linux-x64/environment.sh
+          pwsh -NoLogo -NoProfile -File ./test.ps1 -Differential
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: differential-oracle-identity
+          path: external/linux-x64/oracle-identity.json

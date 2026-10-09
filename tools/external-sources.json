@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "name": "ffmpeg",
+      "url": "https://github.com/FFmpeg/FFmpeg.git",
+      "tag": "n8.1",
+      "commit": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
+      "destination": "external/ffmpeg"
+    },
+    {
+      "name": "libwebp",
+      "url": "https://chromium.googlesource.com/webm/libwebp",
+      "tag": "v1.6.0",
+      "commit": "4fa21912338357f89e4fd51cf2368325b59e9bd9",
+      "destination": "external/libwebp"
+    },
+    {
+      "name": "zlib",
+      "url": "https://github.com/madler/zlib.git",
+      "tag": "v1.3.1",
+      "commit": "51b7f2abdade71cd9bb0e7a373ef2610ec6f9daf",
+      "destination": "external/zlib"
+    },
+    {
+      "name": "zimg",
+      "url": "https://github.com/sekrit-twc/zimg.git",
+      "tag": "release-3.0.6",
+      "commit": "f819b14e8f39d1282400b0d9543e8ef73c1b2bbd",
+      "destination": "external/zimg"
+    }
+  ],
+  "linuxBootstrap": {
+    "architecture": "x86_64",
+    "dotnet": {
+      "version": "10.0.204",
+      "url": "https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.204/dotnet-sdk-10.0.204-linux-x64.tar.gz",
+      "file": "dotnet-sdk-10.0.204-linux-x64.tar.gz",
+      "sha512": "54822b15db93c3ea654aa485397126b19753414db38dbaac902d446673077c567a4d7ee3488b5eb6eef0747e9b557f88dcfdc9cce55784c43930e8e0810f58c4"
+    },
+    "powershell": {
+      "version": "7.6.6",
+      "url": "https://github.com/PowerShell/PowerShell/releases/download/v7.6.6/powershell-7.6.6-linux-x64.tar.gz",
+      "file": "powershell-7.6.6-linux-x64.tar.gz",
+      "sha256": "ddbc4a2d113bbd46d283cfedcbcd117a70caefd7673f41f2b4e0000badf103bc"
+    },
+    "nasm": {
+      "version": "2.16.03",
+      "url": "https://www.nasm.us/pub/nasm/releasebuilds/2.16.03/nasm-2.16.03.tar.xz",
+      "file": "nasm-2.16.03.tar.xz",
+      "sha256": "1412a1c760bbd05db026b6c0d1657affd6631cd0a63cddb6f73cc6d4aa616148",
+      "sourceCommit": "b9b8718a0878523d5c45f0ab583261a3ab835ae6"
+    }
+  },
+  "executables": {
+    "windows-x64": {
+      "version": "8.1-essentials_build-www.gyan.dev",
+      "ffmpegSha256": "1a65d5b0b10d8d9a81d2824a3538046a40ed3607c906b335a166add87613f705",
+      "ffprobeSha256": "54b944d6095c4588d7548424d7acd5118390a9d4f01b1c92f841547fc9a7429c"
+    }
+  }
+}

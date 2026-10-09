@@ -1,0 +1,67 @@
+namespace Lokad.Image.Internal;
+
+/// <summary>Owned RFC 9649 section 2.7.1.2 alpha decoding and inverse filtering.</summary>
+internal static class WebpAlpha
+{
+    public static byte[] Decode(ReadOnlySpan<byte> payload, int width, int height, OperationContext context)
+    {
+        if (payload.Length == 0) throw new ImageDataException("Missing WebP alpha header.");
+        var compression = payload[0] & 3; var filter = payload[0] >> 2 & 3;
+        var preprocessing = payload[0] >> 4 & 3;
+        if (compression > 1 || preprocessing > 1) throw new UnsupportedImageException("Unsupported WebP alpha coding.");
+        var count = width * height;
+        context.Reserve(count + 32L); var alpha = new byte[count];
+        if (compression == 0)
+        {
+            if (payload.Length != count + 1) throw new ImageDataException("WebP raw alpha size differs from the raster.");
+            CopyRaw(payload[1..], alpha, context);
+        }
+        else
+        {
+            using var decoded = new WebpLosslessDecoder(payload[1..], width, height, context, header: false).Decode();
+            for (var y = 0; y < height; y++)
+            {
+                context.Work(width);
+                var row = decoded.GetRow8(y);
+                for (var x = 0; x < width; x++) alpha[y * width + x] = row[x * 4 + 1];
+            }
+            context.Release(decoded.ByteLength);
+        }
+        Unfilter(alpha, width, height, filter, context);
+        return alpha;
+    }
+
+    internal static void Unfilter(Span<byte> alpha, int width, int height, int filter, OperationContext context)
+    {
+        if (filter == 0) return;
+        for (var y = 0; y < height; y++)
+        {
+            context.Work(width * 4L);
+            for (var x = 0; x < width; x++)
+            {
+                var position = y * width + x; int predictor;
+                if (position == 0) predictor = 0;
+                else if (y == 0) predictor = alpha[position - 1];
+                else if (x == 0) predictor = alpha[position - width];
+                else predictor = filter switch
+                {
+                    1 => alpha[position - 1],
+                    2 => alpha[position - width],
+                    3 => Math.Clamp(alpha[position - 1] + alpha[position - width] - alpha[position - width - 1], 0, 255),
+                    _ => throw new ImageDataException("Invalid WebP alpha filter.")
+                };
+                alpha[position] = unchecked((byte)(alpha[position] + predictor));
+            }
+        }
+    }
+
+    internal static void CopyRaw(ReadOnlySpan<byte> source, Span<byte> destination, OperationContext context)
+    {
+        for (var offset = 0; offset < source.Length;)
+        {
+            var count = Math.Min(65536, source.Length - offset);
+            context.Work(count); source.Slice(offset, count).CopyTo(destination.Slice(offset, count));
+            offset += count;
+        }
+    }
+}

@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" />
+    <ProjectReference Include="../../src/Lokad.Image/Lokad.Image.csproj" />
+    <ProjectReference Include="../../tools/ImageProbe/ImageProbe.csproj" ReferenceOutputAssembly="false" />
+    <Compile Include="../../tools/Shared/*.cs" LinkBase="Shared" />
+  </ItemGroup>
+</Project>

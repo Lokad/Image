@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Lokad.Image/Lokad.Image.csproj" />
+    <Compile Include="../Shared/*.cs" LinkBase="Shared" />
+    <Compile Include="../FormatCases/AuthoredVp8.cs" Link="Shared/AuthoredVp8.cs" />
+    <Compile Include="../FormatCases/AuthoredPng.cs" Link="Shared/AuthoredPng.cs" />
+    <Compile Include="../../src/Lokad.Image/Internal/Vp8Tables.cs" Link="FormatConstants/Vp8Tables.cs" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><IsTestProject>true</IsTestProject></PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
+    <ProjectReference Include="../../src/Lokad.Image/Lokad.Image.csproj" />
+    <Using Include="Xunit" />
+    <Compile Include="../../tools/Shared/AuthoredJpeg.cs" Link="Shared/AuthoredJpeg.cs" />
+    <Compile Include="../../tools/Shared/AuthoredWebp.cs" Link="Shared/AuthoredWebp.cs" />
+    <Compile Include="../../tools/Shared/AuthoredAlpha.cs" Link="Shared/AuthoredAlpha.cs" />
+    <Compile Include="../../tools/Shared/OriginalPixels.cs" Link="Shared/OriginalPixels.cs" />
+    <Compile Include="../../tools/Shared/OriginalExif.cs" Link="Shared/OriginalExif.cs" />
+    <Compile Include="../../tools/Shared/ExactResizeReference.cs" Link="Shared/ExactResizeReference.cs" />
+    <Compile Include="../../tools/Shared/JpegQualityCorpus.cs" Link="Shared/JpegQualityCorpus.cs" />
+    <Compile Include="../../tools/Shared/JpegQualitySyntax.cs" Link="Shared/JpegQualitySyntax.cs" />
+    <Compile Include="../../tools/FormatCases/AuthoredVp8.cs" Link="Shared/AuthoredVp8.cs" />
+    <Compile Include="../../tools/FormatCases/AuthoredPng.cs" Link="Shared/AuthoredPng.cs" />
+    <Compile Include="../../tools/FormatCases/AuthoredDeflate.cs" Link="Shared/AuthoredDeflate.cs" />
+    <Compile Include="../../src/Lokad.Image/Internal/Vp8Tables.cs" Link="FormatConstants/Vp8Tables.cs" />
+  </ItemGroup>
+</Project>
