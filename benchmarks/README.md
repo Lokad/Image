@@ -4,6 +4,8 @@ The initial [dedicated-VM results](RESULTS.md) include the complete representati
 table, original numeric snapshot, reproduction commands and measured limitations.
 The subsequent [horizontal-flip round](HORIZONTAL-FLIP.md) separates the warm
 primitive improvement from the equivalent FFmpeg raw-file batch comparison.
+The [warm single-CPU flip round](WARM-HORIZONTAL-FLIP.md) measures in-memory
+owned outputs and bounded storage reuse, with independent confirmation samples.
 
 For warm memory comparisons, the Linux [original FFmpeg reference worker](../tools/WarmReference/README.md)
 excludes process launch, IPC and file transport from native elapsed samples.
@@ -16,6 +18,8 @@ native samples; it never treats protocol latency as the FFmpeg operation time.
 The selected CPU must belong to the machine's allowed affinity. These narrow
 families require no encoder calibration. Other supported operations remain
 unmeasured until their own equivalent warm cases are added.
+Use `-WarmConfirm` with `-DedicatedVm -Warm` when short-run uncertainty requires
+more samples on the same two inputs.
 
 For rapid horizontal-flip tuning, use the explicit six-case selection:
 

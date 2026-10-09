@@ -44,6 +44,8 @@ included in that same rounding. PNG preserves the selected source precision.
 
 Callers own supplied streams, which remain open. Image buffers own their memory
 and must be disposed. Operations accept finite `ImageLimits` and cancellation.
+Stop using row spans before disposing their owner; released pixel storage may
+be reused by later operations.
 The [resource admission notes](docs/resource-admission.md) explain what the limits
 count and the current hardening evidence.
 Full ICC color management and metadata round-tripping are not implemented.

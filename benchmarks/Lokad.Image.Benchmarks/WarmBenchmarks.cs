@@ -14,7 +14,7 @@ using Perfolizer.Horology;
 
 internal static class WarmBenchmarks
 {
-    public static Summary[] Run(string[] args, bool smoke)
+    public static Summary[] Run(string[] args, bool smoke, bool confirm)
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Warm native reference runs require the dedicated Linux environment.");
         var arguments = args.ToList();
@@ -37,9 +37,9 @@ internal static class WarmBenchmarks
             process.ProcessorAffinity = affinity;
             if (process.ProcessorAffinity != affinity) throw new InvalidOperationException("Requested one-CPU affinity was not applied.");
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU", cpu.ToString(System.Globalization.CultureInfo.InvariantCulture));
-            Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE", smoke ? "smoke" : "measure");
+            Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE", smoke ? "smoke" : confirm ? "confirm" : "measure");
             using var identity = new JpegBenchmarkCase();
-            var job = (smoke ? Job.Dry : Job.ShortRun).WithId(smoke ? "WarmDry" : "WarmShort")
+            var job = (smoke ? Job.Dry : Job.ShortRun).WithId(smoke ? "WarmDry" : confirm ? "WarmConfirm" : "WarmShort")
                 .WithAffinity(affinity).WithGcServer(false).WithGcConcurrent(false)
                 .WithEnvironmentVariable("DOTNET_PROCESSOR_COUNT", "1")
                 .WithEnvironmentVariable("DOTNET_TieredCompilation", "0")
@@ -48,6 +48,7 @@ internal static class WarmBenchmarks
                 .WithArguments([new MsBuildArgument("/m:1"), new MsBuildArgument("/p:BuildInParallel=false"),
                     new MsBuildArgument("/p:NuGetAudit=false"), new MsBuildArgument("/p:RestoreIgnoreFailedSources=true")]);
             if (!smoke) job = job.WithIterationTime(TimeInterval.FromMilliseconds(200));
+            if (confirm) job = job.WithIterationCount(12);
             var config = ManualConfig.Create(DefaultConfig.Instance).AddJob(job).AddExporter(JsonExporter.Full)
                 .WithOptions(ConfigOptions.KeepBenchmarkFiles);
             var summaries = BenchmarkSwitcher.FromTypes([typeof(WarmHorizontalFlip)])
@@ -74,7 +75,7 @@ internal static class WarmBenchmarks
                         || value.GetProperty("nativeExitCode").GetInt32() != 0 || value.GetProperty("smoke").GetBoolean() != smoke)
                         throw new InvalidOperationException("Warm receipt contract differs.");
                     var before = Samples(value, "nativeBefore"); var after = Samples(value, "nativeAfter");
-                    if (before.Length != (smoke ? 1 : 3) || after.Length != before.Length)
+                    if (before.Length != (smoke ? 1 : confirm ? 12 : 3) || after.Length != before.Length)
                         throw new InvalidOperationException("Warm native measurement count differs.");
                     var nativeBefore = before.Average(); var nativeAfter = after.Average();
                     var managed = report.ResultStatistics?.Mean ?? throw new InvalidOperationException("Missing managed statistics.");
@@ -93,7 +94,7 @@ internal static class WarmBenchmarks
             var output = Path.Combine(identity.Root, "artifacts", "benchmark-runs", runId, "warm-parity.json");
             Directory.CreateDirectory(Path.GetDirectoryName(output)!);
             File.WriteAllText(output, JsonSerializer.Serialize(new { schemaVersion = 1, project = "Lokad.Image", runId, complete,
-                smoke, cpu, expectedPairs = 2, actualPairs = pairs.Count,
+                smoke, confirm, cpu, expectedPairs = 2, actualPairs = pairs.Count,
                 method = "Managed BenchmarkDotNet elapsed samples and native worker internal monotonic samples, one pinned CPU, owned RGBA memory outputs. Native pre/post samples bracket managed measurements. IPC/startup/filesystem excluded. Screened rows require independent repeats before certification.", pairs },
                 new JsonSerializerOptions { WriteIndented = true, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals }) + "\n");
             if (!complete) Environment.ExitCode = 1;

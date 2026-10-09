@@ -18,6 +18,7 @@ public class WarmHorizontalFlip
     private NativeWarmSample[] before = [];
     private bool smoke, ready;
     private int cpu;
+    private int sampleCount;
     private JsonElement sourceIdentity;
 
     [GlobalSetup]
@@ -27,6 +28,7 @@ public class WarmHorizontalFlip
         ready = false;
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
+        sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
         if (cpu is < 0 or > 62 || Process.GetCurrentProcess().ProcessorAffinity.ToInt64() != (1L << cpu)
             || Environment.ProcessorCount != 1 || GCSettings.IsServerGC
             || Environment.GetEnvironmentVariable("DOTNET_TieredCompilation") != "0")
@@ -51,7 +53,7 @@ public class WarmHorizontalFlip
             ValidateManaged();
             native = new NativeWarmReference(state, Depth, cpu);
             RequireNativeOutput();
-            before = native.Measure(smoke);
+            before = native.Measure(smoke, sampleCount: sampleCount);
             ready = true;
         }
         catch { native?.Dispose(); source?.Dispose(); state.Dispose(); throw; }
@@ -84,14 +86,14 @@ public class WarmHorizontalFlip
         {
             if (!ready) return;
             ValidateManaged();
-            var after = native.Measure(smoke, before[0].Operations);
+            var after = native.Measure(smoke, before[0].Operations, sampleCount);
             native.Check(); RequireNativeOutput(); native.Stop();
             var directory = Path.Combine(state.Root, "artifacts", "benchmark-validation");
             Directory.CreateDirectory(directory);
             var path = Path.Combine(directory, nameof(WarmHorizontalFlip) + "-" + Guid.NewGuid().ToString("N") + ".json");
             File.WriteAllText(path, JsonSerializer.Serialize(new
             {
-                schemaVersion = 1, name = nameof(WarmHorizontalFlip), smoke,
+                schemaVersion = 1, name = nameof(WarmHorizontalFlip), smoke, nativeSampleCount = smoke ? 1 : sampleCount,
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"),
                 width = source.Width, height = source.Height, depth = Depth, cpu, managedAffinityCount = 1,
                 processorCount = Environment.ProcessorCount, serverGc = GCSettings.IsServerGC,

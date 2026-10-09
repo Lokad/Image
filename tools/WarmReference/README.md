@@ -44,6 +44,9 @@ subjects are pinned to the chosen allowed logical CPU. Native pre/post samples
 bracket the managed BenchmarkDotNet samples. Statistics, identities, exact checks
 and raw native elapsed/count values remain under ignored benchmark artifacts.
 Screened ratios need independent repeats before parity is certified.
+If short-run uncertainty overlaps the target, add `-WarmConfirm` to the dedicated
+VM command. It keeps the same two inputs and boundary, extending both managed
+and native measurements from three to twelve samples per case.
 The verification command reuses exactly the two declared inputs, validates
 sample counters and every pixel, and requires rejection of multi-CPU affinity,
 zero/excessive counts, trailing protocol tokens and unknown commands.

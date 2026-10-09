@@ -7,6 +7,14 @@ process RSS, GC retention, runtime/JIT state, or additional buffers retained by
 the caller. Releasing admission ends an algorithm's use of storage; it does not
 force the .NET collector to reclaim that storage.
 
+Horizontal flips may reuse one released exact-size pixel array, with a global
+idle-storage ceiling of 4 MiB. It retains only released storage, never a larger
+array or a source/result owner. Every returned image is fully written, and
+simultaneously live buffers have separate storage. Results keep their exact
+byte admission charge; pooled capacity is never rounded up. Failed private
+results release their lease. Idle cache storage is outside per-operation
+admission, as is GC retention; the fixed ceiling bounds the cache separately.
+
 `MaxDimension` and `MaxPixels` constrain newly created buffers and codec input
 geometry. A transform can use an existing larger buffer to produce a smaller
 result under lower geometry limits; the supplied buffer still counts in

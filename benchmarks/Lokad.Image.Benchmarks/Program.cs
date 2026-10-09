@@ -254,12 +254,13 @@ var horizontalFlipSmoke = args.Contains("--horizontal-flip-smoke");
 var horizontalFlipShort = args.Contains("--horizontal-flip-short");
 var warmSmoke = args.Contains("--warm-smoke");
 var warmShort = args.Contains("--warm-short");
-if (new[] { representativeSmoke, representativeShort, horizontalFlipSmoke, horizontalFlipShort, warmSmoke, warmShort }.Count(value => value) > 1)
+var warmConfirm = args.Contains("--warm-confirm");
+if (new[] { representativeSmoke, representativeShort, horizontalFlipSmoke, horizontalFlipShort, warmSmoke, warmShort, warmConfirm }.Count(value => value) > 1)
     throw new ArgumentException("Choose one benchmark selection/job.");
 var benchmarkArguments = args.Where(argument => argument is not ("--representative-smoke" or "--representative-short"
-    or "--horizontal-flip-smoke" or "--horizontal-flip-short" or "--warm-smoke" or "--warm-short")).ToArray();
-var summaries = warmSmoke || warmShort
-    ? WarmBenchmarks.Run(benchmarkArguments, warmSmoke)
+    or "--horizontal-flip-smoke" or "--horizontal-flip-short" or "--warm-smoke" or "--warm-short" or "--warm-confirm")).ToArray();
+var summaries = warmSmoke || warmShort || warmConfirm
+    ? WarmBenchmarks.Run(benchmarkArguments, warmSmoke, warmConfirm)
     : horizontalFlipSmoke || horizontalFlipShort
     ? HorizontalFlipBenchmarks.Run(benchmarkArguments, horizontalFlipSmoke)
     : representativeSmoke || representativeShort

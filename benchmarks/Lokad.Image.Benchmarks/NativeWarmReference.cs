@@ -71,15 +71,16 @@ internal sealed class NativeWarmReference : IDisposable
         return sample;
     }
 
-    public NativeWarmSample[] Measure(bool smoke, long? fixedCount = null)
+    public NativeWarmSample[] Measure(bool smoke, long? fixedCount = null, int sampleCount = 3)
     {
+        if (sampleCount is not (3 or 12)) throw new ArgumentOutOfRangeException(nameof(sampleCount));
         if (smoke) return [Sample(1)];
         var count = fixedCount ?? 1;
         if (fixedCount is null)
             while (Sample(count).ElapsedNanoseconds < 200_000_000)
                 count = checked(count * 2);
         for (var i = 0; i < 3; i++) Sample(count);
-        return Enumerable.Range(0, 3).Select(_ => Sample(count)).ToArray();
+        return Enumerable.Range(0, sampleCount).Select(_ => Sample(count)).ToArray();
     }
 
     public void Check()

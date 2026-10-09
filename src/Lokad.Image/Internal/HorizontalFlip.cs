@@ -10,19 +10,23 @@ internal static class HorizontalFlip
     {
         var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
         context.Reserve(source.ByteLength);
-        var result = ImageBuffer.Allocate(source.Width, source.Height, source.BitDepth, context);
-        var stride = source.Stride;
-        for (var y = 0; y < source.Height; y++)
+        var result = ImageBuffer.AllocateForOverwrite(source.Width, source.Height, source.BitDepth, context);
+        try
         {
-            var input = source.Pixels.Slice(y * stride, stride);
-            var output = result.Pixels.Slice(y * stride, stride);
-            if (source.BitDepth == 8)
-                Reverse(MemoryMarshal.Cast<byte, uint>(input), MemoryMarshal.Cast<byte, uint>(output), context);
-            else
-                Reverse(MemoryMarshal.Cast<byte, ulong>(input), MemoryMarshal.Cast<byte, ulong>(output), context);
+            var stride = source.Stride;
+            for (var y = 0; y < source.Height; y++)
+            {
+                var input = source.Pixels.Slice(y * stride, stride);
+                var output = result.Pixels.Slice(y * stride, stride);
+                if (source.BitDepth == 8)
+                    Reverse(MemoryMarshal.Cast<byte, uint>(input), MemoryMarshal.Cast<byte, uint>(output), context);
+                else
+                    Reverse(MemoryMarshal.Cast<byte, ulong>(input), MemoryMarshal.Cast<byte, ulong>(output), context);
+            }
+            result.Orientation = source.Orientation;
+            return result;
         }
-        result.Orientation = source.Orientation;
-        return result;
+        catch { result.Dispose(); throw; }
     }
 
     private static void Reverse(ReadOnlySpan<uint> source, Span<uint> destination, OperationContext context)
