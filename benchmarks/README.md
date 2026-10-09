@@ -22,6 +22,9 @@ The [eight-byte CRC round](WARM-PNG-CRC.md) lowers the decode screens to
 2.75x / 2.76x; its affected encode screen is 0.80x, with confirmation pending.
 The [filter-None dispatch round](WARM-PNG-NONE.md) lowers the retained decode
 screens to 2.36x at both depths. They remain above the target.
+The [JPEG forward-DCT round](WARM-JPEG-DCT.md) measures one warm matched-quality
+4:4:4 encode pair and vectorizes independent coefficients without changing bits.
+This largest measured gap remains above the target.
 
 For warm memory comparisons, the Linux [original FFmpeg reference worker](../tools/WarmReference/README.md)
 excludes process launch, IPC and file transport from native elapsed samples.

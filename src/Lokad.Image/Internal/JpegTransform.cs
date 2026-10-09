@@ -1,3 +1,6 @@
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+
 namespace Lokad.Image.Internal;
 
 internal static class JpegTransform
@@ -64,6 +67,52 @@ internal static class JpegTransform
         if (pixels.Length != 64 || coefficients.Length != 64)
             throw new ArgumentException("JPEG transforms operate on complete 8x8 blocks.");
         context.Work(4096);
+        // T.81 A.3.3 coefficients are independent. SIMD lanes compute different
+        // horizontal frequencies; each lane keeps the scalar y/x accumulation
+        // order and its two separate multiplications (no FMA or reassociation).
+        // Safe span construction/copy uses the existing frozen basis and output;
+        // no new table, per-block allocation or image cache is needed.
+        if (Avx512F.IsSupported)
+        {
+            for (var v = 0; v < 8; v++)
+            {
+                var sum = Vector512<double>.Zero;
+                for (var y = 0; y < 8; y++)
+                {
+                    var vertical = Vector512.Create(Cosines[y * 8 + v]);
+                    for (var x = 0; x < 8; x++)
+                    {
+                        var sample = Vector512.Create((double)(pixels[y * 8 + x] - 128));
+                        var horizontal = Vector512.Create(Cosines.AsSpan(x * 8, 8));
+                        var term = Avx512F.Multiply(Avx512F.Multiply(sample, horizontal), vertical);
+                        sum = Avx512F.Add(sum, term);
+                    }
+                }
+                Avx512F.Divide(sum, Vector512.Create(4d)).CopyTo(coefficients[(v * 8)..]);
+            }
+            return;
+        }
+        if (Avx.IsSupported)
+        {
+            for (var v = 0; v < 8; v++)
+            for (var u = 0; u < 8; u += 4)
+            {
+                var sum = Vector256<double>.Zero;
+                for (var y = 0; y < 8; y++)
+                {
+                    var vertical = Vector256.Create(Cosines[y * 8 + v]);
+                    for (var x = 0; x < 8; x++)
+                    {
+                        var sample = Vector256.Create((double)(pixels[y * 8 + x] - 128));
+                        var horizontal = Vector256.Create(Cosines.AsSpan(x * 8 + u, 4));
+                        var term = Avx.Multiply(Avx.Multiply(sample, horizontal), vertical);
+                        sum = Avx.Add(sum, term);
+                    }
+                }
+                Avx.Divide(sum, Vector256.Create(4d)).CopyTo(coefficients[(v * 8 + u)..]);
+            }
+            return;
+        }
         for (var v = 0; v < 8; v++)
         for (var u = 0; u < 8; u++)
         {

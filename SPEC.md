@@ -122,6 +122,9 @@ formula: luma basis `1+2(u+v)+uv`, chroma basis `2+3(u+v)+uv`, scaled by
 information through color conversion, sampling and coefficient rounding. Huffman
 tables are independently designed fixed-length canonical tables; encoded size is
 not yet optimized. Optional restart intervals count MCUs and reset DC predictors.
+The forward transform evaluates independent coefficients with safe AVX/AVX-512
+when available, preserving the frozen binary64 basis, separate multiplications
+and accumulation order. Other processors use the original scalar calculation.
 
 JPEG requires opaque input or an explicit `BackgroundRgb` packed as 0xRRGGBB.
 Alpha flattening operates in encoded sample space before 16-to-8-bit conversion,
