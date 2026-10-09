@@ -68,6 +68,13 @@ Scalar fallback and tails retain the same recurrence. Cancellation is checked
 at every chunk; existing row work and working-memory charges remain unchanged.
 There is no additional array or heap buffer.
 
+PNG CRC uses an 8 KiB shared polynomial table generated once from the format's
+reflected polynomial. Eight independent byte contributions combine into one
+word update, with a byte tail. The table is read-only after initialization and
+replaces the former 1 KiB table; it is fixed shared format data, not an image
+cache or per-operation buffer. Per-image admission and work remain unchanged;
+cancellation is checked every 4096 bytes as before.
+
 The larger encoder allowance is deliberate. The documented default zlib
 compressor state is about 268 KiB before the managed IO buffer, whereas the
 inflater is substantially smaller. The earlier uniform 256 KiB charge was
