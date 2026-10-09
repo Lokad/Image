@@ -1,3 +1,6 @@
+using System.Buffers.Binary;
+using System.Runtime.CompilerServices;
+
 namespace Lokad.Image.Internal;
 
 // Independently written framing walk, not an inflater. RFC 1950 section 2.2 and
@@ -110,7 +113,7 @@ internal static class ZlibFraming
         private readonly ReadOnlySpan<byte> data;
         private readonly OperationContext context;
         private int position;
-        private uint buffer;
+        private ulong buffer;
         private int available;
         public Bits(ReadOnlySpan<byte> data, OperationContext context) { this.data = data; this.context = context; }
         public readonly int Position => position;
@@ -118,23 +121,32 @@ internal static class ZlibFraming
         public int Read(int count)
         {
             context.Work(count);
-            while (available < count)
-            {
-                if (position == data.Length) throw new ImageDataException("Truncated PNG Deflate stream.");
-                buffer |= (uint)data[position++] << available; available += 8;
-            }
+            Fill(count);
             var value = (int)(buffer & ((1u << count) - 1)); buffer >>= count; available -= count; return value;
         }
 
         public uint Peek(int count)
         {
             context.Cancellation.ThrowIfCancellationRequested();
+            Fill(count);
+            return (uint)buffer;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void Fill(int count)
+        {
+            // Reads request at most 16 bits. A four-byte refill therefore
+            // occupies at most 47 bits; the wider cache never drops high bits.
             while (available < count)
             {
+                if (data.Length - position >= 4)
+                {
+                    buffer |= (ulong)BinaryPrimitives.ReadUInt32LittleEndian(data.Slice(position, 4)) << available;
+                    position += 4; available += 32; continue;
+                }
                 if (position == data.Length) throw new ImageDataException("Truncated PNG Deflate stream.");
-                buffer |= (uint)data[position++] << available; available += 8;
+                buffer |= (ulong)data[position++] << available; available += 8;
             }
-            return buffer;
         }
 
         public void Consume(int count)

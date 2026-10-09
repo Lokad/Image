@@ -33,6 +33,39 @@ public sealed class ZlibFramingTests
                 new OperationContext(ImageLimits.Default, default)));
     }
 
+    [Theory]
+    [InlineData(0)] [InlineData(1)] [InlineData(2)]
+    [InlineData(3)] [InlineData(4)] [InlineData(5)]
+    public void WordLookaheadPreservesStoredPayloadSkipsAndTheFinalChecksum(int storedLength)
+    {
+        // Original RFC 1951 stream: fixed literal, nonfinal stored payload,
+        // final fixed literal. Payload lengths exercise every word boundary.
+        var payload = Enumerable.Range(0, storedLength).Select(i => (byte)(53 * i + 1)).ToArray();
+        var bits = new BitWriter();
+        bits.Number(0, 1); bits.Number(1, 2); bits.Code(400, 9); bits.Code(0, 7);
+        bits.Number(0, 1); bits.Number(0, 2); bits.Align();
+        bits.Number(storedLength, 16); bits.Number(storedLength ^ 65535, 16);
+        foreach (var value in payload) bits.Number(value, 8);
+        bits.Number(1, 1); bits.Number(1, 2); bits.Code(48 + 17, 8); bits.Code(0, 7); bits.Align();
+        byte[] expanded = [144, .. payload, 17];
+        uint a = 1, b = 0;
+        foreach (var value in expanded) { a += value; b += a; }
+        var adler = b << 16 | a;
+        byte[] encoded = [0x78, 0x01, .. bits.Bytes(), (byte)(adler >> 24), (byte)(adler >> 16), (byte)(adler >> 8), (byte)adler];
+        var limits = new ImageLimits { MaxWork = 17803L + storedLength, MaxWorkingBytes = 4096 };
+        for (var trailing = 0; trailing <= 9; trailing++)
+            Assert.Equal(encoded.Length, ZlibFraming.Validate([.. encoded, .. Enumerable.Repeat((byte)211, trailing)], expanded.Length,
+                new OperationContext(limits, default)));
+        Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, expanded.Length,
+            new OperationContext(limits with { MaxWork = limits.MaxWork - 1 }, default)));
+        for (var length = 0; length < encoded.Length; length++)
+            Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(encoded.AsSpan(0, length), expanded.Length,
+                new OperationContext(ImageLimits.Default, default)));
+        using var inflater = new System.IO.Compression.ZLibStream(new MemoryStream(encoded), System.IO.Compression.CompressionMode.Decompress);
+        var actual = new byte[expanded.Length]; inflater.ReadExactly(actual);
+        Assert.Equal(expanded, actual); Assert.Equal(-1, inflater.ReadByte());
+    }
+
     [Fact]
     public void IncompleteTreeAcceptsItsEndCodeAndRejectsTheUnassignedPrefix()
     {
