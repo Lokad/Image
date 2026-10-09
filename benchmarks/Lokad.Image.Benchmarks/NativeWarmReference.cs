@@ -1,0 +1,118 @@
+using System.Diagnostics;
+using System.Globalization;
+using System.Text.Json;
+
+// Original development worker; no bindings or native assets enter Lokad.Image.
+internal sealed class NativeWarmReference : IDisposable
+{
+    private readonly Process process;
+    private readonly Task<string> errors;
+    private bool stopped;
+    private bool disposed;
+    private long completed;
+    public JsonElement Ready { get; }
+    public string Executable { get; }
+    public JsonElement BuildIdentity { get; }
+    private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
+
+    public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu)
+    {
+        Executable = Path.Combine(state.Root, "external", "warm-reference", "ffmpeg-warm");
+        var identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, "identity.json");
+        if (!File.Exists(Executable) || !File.Exists(identityPath))
+            throw new InvalidOperationException("Build the pinned Linux warm reference with bash tools/WarmReference/build-linux.sh.");
+        using (var document = JsonDocument.Parse(File.ReadAllText(identityPath))) BuildIdentity = document.RootElement.Clone();
+        if (BuildIdentity.GetProperty("workerSha256").GetString() != JpegBenchmarkCase.HashFile(Executable)
+            || BuildIdentity.GetProperty("sourceSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", "ffmpeg-warm.c"))
+            || BuildIdentity.GetProperty("buildScriptSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", "build-linux.sh")))
+            throw new InvalidOperationException("Native reference build identity differs from the current source/binary.");
+        var start = new ProcessStartInfo(Executable) { RedirectStandardInput = true, RedirectStandardOutput = true,
+            RedirectStandardError = true, UseShellExecute = false };
+        foreach (var argument in new[] { "hflip", state.Input, "513", "259", depth.ToString(CultureInfo.InvariantCulture), state.NativeOutput })
+            start.ArgumentList.Add(argument);
+        process = Process.Start(start) ?? throw new InvalidOperationException("Could not start native warm worker.");
+        errors = process.StandardError.ReadToEndAsync();
+        try
+        {
+            Ready = Read();
+            if (Ready.GetProperty("state").GetString() != "ready" || Ready.GetProperty("schemaVersion").GetInt32() != 1
+                || Ready.GetProperty("width").GetInt32() != HorizontalFlipInput.Width
+                || Ready.GetProperty("height").GetInt32() != HorizontalFlipInput.Height
+                || Ready.GetProperty("depth").GetInt32() != depth || Ready.GetProperty("cpu").GetInt32() != cpu
+                || Ready.GetProperty("affinityCount").GetInt32() != 1 || Ready.GetProperty("filterThreads").GetInt32() != 1
+                || Ready.GetProperty("threadType").GetInt32() != 0 || Ready.GetProperty("operation").GetString() != "hflip")
+                throw new InvalidOperationException("Native warm worker geometry/thread/CPU contract differs.");
+            completed = 1; // Its untimed initial exact check processes one image.
+        }
+        catch { Dispose(); throw; }
+    }
+
+    private JsonElement Read()
+    {
+        var line = process.StandardOutput.ReadLineAsync().WaitAsync(TimeSpan.FromSeconds(30)).GetAwaiter().GetResult();
+        if (line is null)
+            throw new InvalidOperationException("Native warm worker ended: " + errors.WaitAsync(TimeSpan.FromSeconds(5)).GetAwaiter().GetResult());
+        using var document = JsonDocument.Parse(line);
+        return document.RootElement.Clone();
+    }
+
+    public NativeWarmSample Sample(long operations)
+    {
+        if (operations is < 1 or > 10_000_000) throw new ArgumentOutOfRangeException(nameof(operations));
+        process.StandardInput.WriteLine("sample " + operations.ToString(CultureInfo.InvariantCulture));
+        process.StandardInput.Flush();
+        var response = Read();
+        var sample = response.Deserialize<NativeWarmSample>(Options) ?? throw new InvalidOperationException("Missing native sample.");
+        if (sample.State != "sample" || sample.Operations != operations || sample.CompletedOperations != completed + operations
+            || sample.ElapsedNanoseconds <= 0 || !double.IsFinite(sample.ElapsedNanoseconds)
+            || sample.Cpu != Ready.GetProperty("cpu").GetInt32() || sample.OutputStride < HorizontalFlipInput.Width * (Ready.GetProperty("depth").GetInt32() / 8) * 4)
+            throw new InvalidOperationException("Native sample counters/elapsed time/CPU differ.");
+        completed += operations;
+        return sample;
+    }
+
+    public NativeWarmSample[] Measure(bool smoke, long? fixedCount = null)
+    {
+        if (smoke) return [Sample(1)];
+        var count = fixedCount ?? 1;
+        if (fixedCount is null)
+            while (Sample(count).ElapsedNanoseconds < 200_000_000)
+                count = checked(count * 2);
+        for (var i = 0; i < 3; i++) Sample(count);
+        return Enumerable.Range(0, 3).Select(_ => Sample(count)).ToArray();
+    }
+
+    public void Check()
+    {
+        process.StandardInput.WriteLine("check"); process.StandardInput.Flush();
+        var value = Read();
+        if (value.GetProperty("state").GetString() != "checked" || !value.GetProperty("exact").GetBoolean()
+            || !value.GetProperty("sourceUnchanged").GetBoolean())
+            throw new InvalidOperationException("Native final exact/source check failed.");
+        completed++;
+    }
+
+    public void Stop()
+    {
+        if (stopped) return;
+        process.StandardInput.WriteLine("quit"); process.StandardInput.Flush(); process.StandardInput.Close();
+        if (!process.WaitForExit(10_000)) throw new TimeoutException("Native worker did not stop.");
+        var message = errors.GetAwaiter().GetResult();
+        if (process.ExitCode != 0 || !string.IsNullOrWhiteSpace(message))
+            throw new InvalidOperationException("Native warm worker failed: " + message);
+        stopped = true;
+    }
+
+    public void Dispose()
+    {
+        if (disposed) return;
+        try { if (!stopped && !process.HasExited) process.Kill(entireProcessTree: true); }
+        finally { process.Dispose(); disposed = true; }
+    }
+}
+
+internal sealed record NativeWarmSample(string State, long Operations, double ElapsedNanoseconds,
+    long CompletedOperations, ulong Observed, int OutputStride, int Cpu)
+{
+    public double NanosecondsPerOperation => ElapsedNanoseconds / Operations;
+}

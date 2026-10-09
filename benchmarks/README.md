@@ -5,6 +5,18 @@ table, original numeric snapshot, reproduction commands and measured limitations
 The subsequent [horizontal-flip round](HORIZONTAL-FLIP.md) separates the warm
 primitive improvement from the equivalent FFmpeg raw-file batch comparison.
 
+For warm memory comparisons, the Linux [original FFmpeg reference worker](../tools/WarmReference/README.md)
+excludes process launch, IPC and file transport from native elapsed samples.
+After building that worker, use `./bench.ps1 -Smoke -Warm -Cpu 0 -NoBuild` to
+validate the two horizontal-flip cases, or replace `-Smoke` with `-DedicatedVm`
+on the quiet VM for measurement. Both subjects use one pinned CPU; managed
+workers disable server/background GC. Native samples bracket the managed
+BenchmarkDotNet iterations. `warm-parity.json` joins managed and internally timed
+native samples; it never treats protocol latency as the FFmpeg operation time.
+The selected CPU must belong to the machine's allowed affinity. These narrow
+families require no encoder calibration. Other supported operations remain
+unmeasured until their own equivalent warm cases are added.
+
 For rapid horizontal-flip tuning, use the explicit six-case selection:
 
 ```powershell

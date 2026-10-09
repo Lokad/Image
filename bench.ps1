@@ -1,4 +1,5 @@
-param([switch]$Smoke, [switch]$DedicatedVm, [string]$Filter, [switch]$NoBuild, [switch]$HorizontalFlip)
+param([switch]$Smoke, [switch]$DedicatedVm, [string]$Filter, [switch]$NoBuild, [switch]$HorizontalFlip,
+    [switch]$Warm, [ValidateRange(0, 62)][int]$Cpu = 0)
 $ErrorActionPreference = 'Stop'
 if (-not $Smoke -and -not $DedicatedVm) {
     throw 'Performance measurement requires the quiet dedicated VM. Use -Smoke to verify the harness.'
@@ -17,7 +18,11 @@ try {
     # otherwise expand to matching filenames before BenchmarkDotNet sees them.
     $runArtifacts = Join-Path $PSScriptRoot "artifacts/benchmark-runs/$env:LOKAD_IMAGE_BENCHMARK_RUN_ID"
     $benchmarkDll = Join-Path $PSScriptRoot 'benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll'
-    if ($HorizontalFlip) {
+    if ($Warm) {
+        if ($HorizontalFlip -or $PSBoundParameters.ContainsKey('Filter')) { throw '-Warm supplies its own narrow selection.' }
+        $warmJob = if ($Smoke) { '--warm-smoke' } else { '--warm-short' }
+        dotnet $benchmarkDll $warmJob --warm-cpu $Cpu --artifacts "$runArtifacts" --buildTimeout 600 --stopOnFirstError
+    } elseif ($HorizontalFlip) {
         if ($PSBoundParameters.ContainsKey('Filter')) { throw '-HorizontalFlip supplies its own narrow selection.' }
         $flipJob = if ($Smoke) { '--horizontal-flip-smoke' } else { '--horizontal-flip-short' }
         dotnet $benchmarkDll $flipJob --artifacts "$runArtifacts" --buildTimeout 600 --stopOnFirstError
