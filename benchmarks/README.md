@@ -6,6 +6,8 @@ The subsequent [horizontal-flip round](HORIZONTAL-FLIP.md) separates the warm
 primitive improvement from the equivalent FFmpeg raw-file batch comparison.
 The [warm single-CPU flip round](WARM-HORIZONTAL-FLIP.md) measures in-memory
 owned outputs and bounded storage reuse, with independent confirmation samples.
+The [warm PNG framing round](WARM-PNG-FRAMING.md) records the initial three-pair
+screen and one reader optimization; PNG decode remains above the 2x target.
 
 For warm memory comparisons, the Linux [original FFmpeg reference worker](../tools/WarmReference/README.md)
 excludes process launch, IPC and file transport from native elapsed samples.
@@ -20,6 +22,12 @@ families require no encoder calibration. Other supported operations remain
 unmeasured until their own equivalent warm cases are added.
 Use `-WarmConfirm` with `-DedicatedVm -Warm` when short-run uncertainty requires
 more samples on the same two inputs.
+
+For the separate PNG worker, build/verify it as described in its reference
+instructions, then use `-WarmFamily Png`. The initial selection contains only
+Encode8, Decode8 and Decode16 on the same two original rasters. Add
+`-WarmCases Decode16` or `-WarmCases Decode8,Decode16` to iterate affected
+decode paths without running unrelated cases or quality calibration.
 
 For rapid horizontal-flip tuning, use the explicit six-case selection:
 

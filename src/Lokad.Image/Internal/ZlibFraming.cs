@@ -123,7 +123,28 @@ internal static class ZlibFraming
             var value = (int)(buffer & ((1u << count) - 1)); buffer >>= count; available -= count; return value;
         }
 
-        public void Align() { buffer = 0; available = 0; }
+        public uint Peek(int count)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            while (available < count)
+            {
+                if (position == data.Length) throw new ImageDataException("Truncated PNG Deflate stream.");
+                buffer |= (uint)data[position++] << available; available += 8;
+            }
+            return buffer;
+        }
+
+        public void Consume(int count)
+        {
+            context.Work(count); buffer >>= count; available -= count;
+        }
+
+        public void Align()
+        {
+            // Prefix lookahead can include complete bytes beyond the symbol.
+            // Discard only padding bits, returning unread bytes to the input.
+            position -= available / 8; buffer = 0; available = 0;
+        }
         public void SkipBytes(int count)
         {
             if (count > data.Length - position) throw new ImageDataException("Truncated PNG zlib stream.");
@@ -159,15 +180,22 @@ internal static class ZlibFraming
 
     private static int Decode(scoped ref Bits reader, scoped ReadOnlySpan<int> counts, scoped ReadOnlySpan<int> symbols, int maximum)
     {
+        // A bounded lookahead and one work charge per prefix avoid repeating
+        // admission/cancellation accounting for every individual code bit.
+        // Consume still charges the exact matched length, never the lookahead.
+        var bits = reader.Peek(maximum);
         int code = 0, first = 0, index = 0;
         for (var length = 1; length <= maximum; length++)
         {
             // Huffman code bits appear most significant first in the otherwise
             // least-significant-first Deflate bitstream (RFC 1951 section 3.1.1).
-            code = code * 2 + reader.Read(1); var count = counts[length];
-            if (code >= first && code - first < count) return symbols[index + code - first];
+            code = code * 2 + (int)(bits & 1); bits >>= 1; var count = counts[length];
+            if (code >= first && code - first < count)
+            {
+                reader.Consume(length); return symbols[index + code - first];
+            }
             index += count; first = (first + count) * 2;
         }
-        throw new ImageDataException("Invalid PNG Deflate prefix code.");
+        reader.Consume(maximum); throw new ImageDataException("Invalid PNG Deflate prefix code.");
     }
 }
