@@ -4,6 +4,22 @@ namespace Lokad.Image.PublicApi.Tests;
 
 public sealed class PngFramingTests
 {
+    [Fact]
+    public void EveryFixedLiteralPrefixProducesItsAnalyticalSample()
+    {
+        // The leading zero is the filter byte; samples 1..255 exercise every
+        // fixed literal category, including the full nine-bit range 144..255.
+        var raw = Enumerable.Range(0, 256).Select(value => (byte)value).ToArray();
+        var frame = new AuthoredPng.Frame("fixed-literals", 0, 8, 255, 1, false);
+        var compressed = AuthoredDeflate.Fixed(raw.Select(value => new AuthoredDeflate.Token(value)), raw);
+        using var image = ImageCodec.Decode(AuthoredPng.Wrap(frame, compressed));
+        for (var x = 0; x < 255; x++)
+        {
+            var sample = (byte)(x + 1);
+            Assert.Equal(new byte[] { sample, sample, sample, sample == 17 ? (byte)0 : (byte)255 }, image.GetRow8(0).Slice(x * 4, 4).ToArray());
+        }
+    }
+
     [Theory]
     [InlineData(false)]
     [InlineData(true)]

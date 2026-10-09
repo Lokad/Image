@@ -12,12 +12,14 @@ internal static class ZlibFraming
             || ((data[0] << 8) + data[1]) % 31 != 0 || (data[1] & 32) != 0)
             throw new ImageDataException("Invalid PNG zlib header.");
         var window = 1 << ((data[0] >> 4) + 8);
-        // Fixed maximum stack scratch, independent of declared dimensions or input.
+        // Arrays, prefix lookup and nested constructor scratch total 3992 bytes,
+        // independent of declared dimensions or input.
         context.Reserve(4096);
         try
         {
             Span<int> lengths = stackalloc int[320]; Span<int> codeLengths = stackalloc int[19];
             Span<int> counts = stackalloc int[48]; Span<int> symbols = stackalloc int[339];
+            Span<ushort> literalLookup = stackalloc ushort[512];
             var reader = new Bits(data, context); reader.SkipBytes(2); long output = 0;
             bool final;
             do
@@ -64,9 +66,10 @@ internal static class ZlibFraming
                 if (lengths[256] == 0) throw new ImageDataException("PNG Deflate block has no end code.");
                 var literals = new Huffman(lengths[..literalCount], counts.Slice(16, 16), symbols.Slice(19, 288), context);
                 var distances = new Huffman(lengths.Slice(literalCount, distanceCount), counts.Slice(32, 16), symbols.Slice(307, 32), context);
+                BuildLiteralLookup(literals, literalLookup, context);
                 while (true)
                 {
-                    var symbol = Decode(ref reader, literals.Counts, literals.Symbols, literals.Maximum);
+                    var symbol = DecodeLiteral(ref reader, literals, literalLookup);
                     if (symbol == 256) break;
                     int length;
                     if (symbol < 256) length = 1;
@@ -176,6 +179,36 @@ internal static class ZlibFraming
             for (var symbol = 0; symbol < lengths.Length; symbol++)
                 if (lengths[symbol] != 0) symbols[offsets[lengths[symbol]]++] = symbol;
         }
+    }
+
+    private static void BuildLiteralLookup(scoped Huffman tree, scoped Span<ushort> lookup, OperationContext context)
+    {
+        // Conservative bounded construction charge: 512 clears/table writes, at most
+        // 288 nine-bit reversals and canonical-symbol visits (RFC 1951 3.2.2).
+        context.Work(8192); lookup.Clear();
+        int code = 0, index = 0;
+        for (var length = 1; length <= 9; length++)
+        {
+            var count = tree.Counts[length];
+            for (var i = 0; i < count; i++, code++)
+            {
+                var reversed = 0;
+                for (var bit = 0; bit < length; bit++) reversed = reversed * 2 + ((code >> bit) & 1);
+                var entry = (ushort)(tree.Symbols[index + i] << 4 | length);
+                for (var slot = reversed; slot < lookup.Length; slot += 1 << length) lookup[slot] = entry;
+            }
+            index += count; code *= 2;
+        }
+        // Zero entries include long prefixes and unassigned incomplete paths.
+        // Both are handled by the full canonical decoder, never accepted here.
+    }
+
+    private static int DecodeLiteral(scoped ref Bits reader, scoped Huffman tree, scoped ReadOnlySpan<ushort> lookup)
+    {
+        var entry = lookup[(int)(reader.Peek(9) & 511)];
+        var length = entry & 15;
+        if (length == 0) return Decode(ref reader, tree.Counts, tree.Symbols, tree.Maximum);
+        reader.Consume(length); return entry >> 4;
     }
 
     private static int Decode(scoped ref Bits reader, scoped ReadOnlySpan<int> counts, scoped ReadOnlySpan<int> symbols, int maximum)

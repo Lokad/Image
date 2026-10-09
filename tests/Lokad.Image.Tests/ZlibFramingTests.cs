@@ -18,9 +18,9 @@ public sealed class ZlibFramingTests
         bits.Number(1, 1); bits.Number(0, 2); bits.Align(); // Final stored block.
         bits.Number(1, 16); bits.Number(65534, 16); bits.Number(7, 8);
         byte[] encoded = [0x78, 0x01, .. bits.Bytes(), 0, 0, 0, 0];
-        // One work unit/block, all consumed bits, fixed-tree construction,
+        // One work unit/block, all consumed bits, fixed-tree and lookup construction,
         // and one stored byte. Lookahead must never charge unused bits.
-        var work = 720L + 9 * literals;
+        var work = 720L + 8192 + 9 * literals;
         var limits = new ImageLimits { MaxWork = work, MaxWorkingBytes = 4096 };
         Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, literals + 1, new OperationContext(limits, default)));
         Assert.Equal(encoded.Length, ZlibFraming.Validate([.. encoded, 53, 97, 211], literals + 1, new OperationContext(limits, default)));
@@ -31,6 +31,33 @@ public sealed class ZlibFramingTests
         for (var length = 0; length < encoded.Length; length++)
             Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(encoded.AsSpan(0, length), literals + 1,
                 new OperationContext(ImageLimits.Default, default)));
+    }
+
+    [Fact]
+    public void IncompleteTreeAcceptsItsEndCodeAndRejectsTheUnassignedPrefix()
+    {
+        // RFC 1951 dynamic block: only EOB has a one-bit code (zero), and
+        // distances are empty. Prefix one is explicitly unassigned.
+        foreach (var unassigned in new[] { false, true })
+        {
+            var bits = new BitWriter();
+            bits.Number(1, 1); bits.Number(2, 2);
+            bits.Number(0, 5); bits.Number(0, 5); bits.Number(14, 4);
+            ReadOnlySpan<int> order = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1];
+            foreach (var symbol in order) bits.Number(symbol is 0 or 1 ? 1 : 0, 3);
+            for (var symbol = 0; symbol < 257; symbol++) bits.Code(symbol == 256 ? 1 : 0, 1);
+            bits.Code(0, 1); // Empty distance alphabet.
+            bits.Code(unassigned ? 1 : 0, 1); bits.Align();
+            byte[] encoded = [0x78, 0x01, .. bits.Bytes(), 0, 0, 0, 1];
+            if (unassigned)
+                Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(encoded, 0, new OperationContext(ImageLimits.Default, default)));
+            else
+            {
+                Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, 0, new OperationContext(ImageLimits.Default, default)));
+                using var inflater = new System.IO.Compression.ZLibStream(new MemoryStream(encoded), System.IO.Compression.CompressionMode.Decompress);
+                Assert.Equal(-1, inflater.ReadByte());
+            }
+        }
     }
 
     [Fact]

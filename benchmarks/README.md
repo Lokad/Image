@@ -8,6 +8,8 @@ The [warm single-CPU flip round](WARM-HORIZONTAL-FLIP.md) measures in-memory
 owned outputs and bounded storage reuse, with independent confirmation samples.
 The [warm PNG framing round](WARM-PNG-FRAMING.md) records the initial three-pair
 screen and one reader optimization; PNG decode remains above the 2x target.
+The [literal prefix lookup round](WARM-PNG-LOOKUP.md) improves the 16-bit path
+further; the measured 8-bit decode becomes the largest known warm gap.
 
 For warm memory comparisons, the Linux [original FFmpeg reference worker](../tools/WarmReference/README.md)
 excludes process launch, IPC and file transport from native elapsed samples.
