@@ -5,6 +5,23 @@ namespace Lokad.Image.Tests;
 public sealed class JpegPrimitiveTests
 {
     [Fact]
+    public void EightBitFlattenIsTheUniqueNearestEncodedSpaceSample()
+    {
+        // Original rational-error control independent of the division formula:
+        // denominator 255 is odd, so exactly one integer has residual <=127.
+        // All channel/alpha byte values, endpoint/near-endpoint backgrounds and
+        // the asymmetric warm JPEG background channels are included.
+        foreach (var background in new[] { 0, 1, 32, 64, 96, 128, 254, 255 })
+        for (var alpha = 0; alpha <= 255; alpha++)
+        for (var value = 0; value <= 255; value++)
+        {
+            var actual = JpegEncoder.Flatten8(value, alpha, background);
+            var residual = actual * 255L - (value * alpha + background * (255 - alpha));
+            Assert.InRange(residual, -127L, 127L);
+        }
+    }
+
+    [Fact]
     public void EntropyBitsUnstuffBytesAndHandleSignAndRestarts()
     {
         var reader = new JpegEntropyReader(new byte[] { 0xFF, 0, 0b01111111, 0xFF, 0xD0, 0b10011111 }, 0, Context());

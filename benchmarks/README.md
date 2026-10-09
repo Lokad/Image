@@ -25,6 +25,8 @@ screens to 2.36x at both depths. They remain above the target.
 The [JPEG forward-DCT round](WARM-JPEG-DCT.md) measures one warm matched-quality
 4:4:4 encode pair and vectorizes independent coefficients without changing bits.
 This largest measured gap remains above the target.
+The [JPEG RGB extraction round](WARM-JPEG-RGB.md) reduces repeated row access
+and uses the exact normalized 8-bit alpha blend, preserving all encoded bytes.
 
 For warm memory comparisons, the Linux [original FFmpeg reference worker](../tools/WarmReference/README.md)
 excludes process launch, IPC and file transport from native elapsed samples.
