@@ -248,6 +248,13 @@ if (args.SequenceEqual(["--validate-geometry"]))
     return;
 }
 
+if (args.Length is 2 or 3 && args[0] == "--prepare-warm-jpeg")
+{
+    WarmJpeg.Prepare(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture),
+        args.Length == 3 ? int.Parse(args[2], System.Globalization.CultureInfo.InvariantCulture) : 5);
+    return;
+}
+
 var representativeSmoke = args.Contains("--representative-smoke");
 var representativeShort = args.Contains("--representative-short");
 var horizontalFlipSmoke = args.Contains("--horizontal-flip-smoke");

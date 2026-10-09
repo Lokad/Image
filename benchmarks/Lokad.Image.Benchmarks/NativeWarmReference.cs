@@ -15,24 +15,32 @@ internal sealed class NativeWarmReference : IDisposable
     public JsonElement BuildIdentity { get; }
     private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
 
-    public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null)
+    public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null, int? nativeQuality = null)
     {
-        if (operation is not ("hflip" or "png-encode" or "png-decode")) throw new ArgumentOutOfRangeException(nameof(operation));
-        var png = operation != "hflip";
-        Executable = Path.Combine(state.Root, "external", "warm-reference", png ? "ffmpeg-png-warm" : "ffmpeg-warm");
-        var identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, png ? "png-identity.json" : "identity.json");
+        if (operation is not ("hflip" or "png-encode" or "png-decode" or "jpeg-encode")) throw new ArgumentOutOfRangeException(nameof(operation));
+        var codec = operation != "hflip"; var jpeg = operation == "jpeg-encode";
+        var stem = jpeg ? "ffmpeg-jpeg-warm" : codec ? "ffmpeg-png-warm" : "ffmpeg-warm";
+        var buildScript = jpeg ? "build-jpeg-linux.sh" : codec ? "build-png-linux.sh" : "build-linux.sh";
+        Executable = Path.Combine(state.Root, "external", "warm-reference", stem);
+        var identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, jpeg ? "jpeg-identity.json" : codec ? "png-identity.json" : "identity.json");
         if (!File.Exists(Executable) || !File.Exists(identityPath))
             throw new InvalidOperationException("Build the pinned Linux warm reference with its tools/WarmReference build script.");
         using (var document = JsonDocument.Parse(File.ReadAllText(identityPath))) BuildIdentity = document.RootElement.Clone();
         if (BuildIdentity.GetProperty("workerSha256").GetString() != JpegBenchmarkCase.HashFile(Executable)
-            || BuildIdentity.GetProperty("sourceSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", png ? "ffmpeg-png-warm.c" : "ffmpeg-warm.c"))
-            || BuildIdentity.GetProperty("buildScriptSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", png ? "build-png-linux.sh" : "build-linux.sh")))
+            || BuildIdentity.GetProperty("sourceSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", stem + ".c"))
+            || BuildIdentity.GetProperty("buildScriptSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", buildScript)))
             throw new InvalidOperationException("Native reference build identity differs from the current source/binary.");
         var start = new ProcessStartInfo(Executable) { RedirectStandardInput = true, RedirectStandardOutput = true,
             RedirectStandardError = true, UseShellExecute = false };
         foreach (var argument in new[] { operation, state.Input, "513", "259", depth.ToString(CultureInfo.InvariantCulture), state.NativeOutput })
             start.ArgumentList.Add(argument);
         if (operation == "png-decode") start.ArgumentList.Add(expectedRaw ?? throw new ArgumentNullException(nameof(expectedRaw)));
+        if (jpeg)
+        {
+            if (depth != 8 || nativeQuality is not (>= 1 and <= 31)) throw new ArgumentOutOfRangeException(nameof(nativeQuality));
+            start.ArgumentList.Add(nativeQuality.Value.ToString(CultureInfo.InvariantCulture));
+        }
+        else if (nativeQuality.HasValue) throw new ArgumentException("Native quality applies only to JPEG.", nameof(nativeQuality));
         process = Process.Start(start) ?? throw new InvalidOperationException("Could not start native warm worker.");
         errors = process.StandardError.ReadToEndAsync();
         try
@@ -42,12 +50,16 @@ internal sealed class NativeWarmReference : IDisposable
                 || Ready.GetProperty("width").GetInt32() != HorizontalFlipInput.Width
                 || Ready.GetProperty("height").GetInt32() != HorizontalFlipInput.Height
                 || Ready.GetProperty("depth").GetInt32() != depth || Ready.GetProperty("cpu").GetInt32() != cpu
-                || Ready.GetProperty("affinityCount").GetInt32() != 1 || Ready.GetProperty(png ? "codecThreads" : "filterThreads").GetInt32() != 1
+                || Ready.GetProperty("affinityCount").GetInt32() != 1 || Ready.GetProperty(codec ? "codecThreads" : "filterThreads").GetInt32() != 1
                 || Ready.GetProperty("threadType").GetInt32() != 0 || Ready.GetProperty("operation").GetString() != operation
-                || (png && (Ready.GetProperty("activeThreadType").GetInt32() != 0 || !Ready.GetProperty("independentLiveOutputs").GetBoolean()))
+                || (codec && (Ready.GetProperty("activeThreadType").GetInt32() != 0 || !Ready.GetProperty("independentLiveOutputs").GetBoolean()))
+                || (jpeg && (Ready.GetProperty("conversionThreads").GetInt32() != 1 || Ready.GetProperty("qscale").GetInt32() != nativeQuality
+                    || Ready.GetProperty("backgroundRgb").GetInt32() != 0x204060 || Ready.GetProperty("sampling").GetString() != "444"
+                    || !Ready.GetProperty("colorConversionTimed").GetBoolean() || !Ready.GetProperty("flatteningTimed").GetBoolean()
+                    || !Ready.GetProperty("bitstreamDeterministic").GetBoolean()))
                 || (operation == "png-encode" && (Ready.GetProperty("compressionLevel").GetInt32() != 6 || Ready.GetProperty("filter").GetInt32() != 0)))
                 throw new InvalidOperationException("Native warm worker geometry/thread/CPU contract differs.");
-            completed = png ? Ready.GetProperty("initialCompletedOperations").GetInt64() : 1;
+            completed = codec ? Ready.GetProperty("initialCompletedOperations").GetInt64() : 1;
         }
         catch { Dispose(); throw; }
     }
@@ -71,7 +83,7 @@ internal sealed class NativeWarmReference : IDisposable
         if (sample.State != "sample" || sample.Operations != operations || sample.CompletedOperations != completed + operations
             || sample.ElapsedNanoseconds <= 0 || !double.IsFinite(sample.ElapsedNanoseconds)
             || sample.Cpu != Ready.GetProperty("cpu").GetInt32()
-            || (Ready.GetProperty("operation").GetString() == "png-encode" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
+            || (Ready.GetProperty("operation").GetString() is "png-encode" or "jpeg-encode" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
                 : sample.OutputStride < HorizontalFlipInput.Width * (Ready.GetProperty("depth").GetInt32() / 8) * 4))
             throw new InvalidOperationException("Native sample counters/elapsed time/CPU differ.");
         completed += operations;

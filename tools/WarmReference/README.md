@@ -91,3 +91,43 @@ verification script also tests twenty protocol/affinity rejection controls.
 Native PNG binaries and their separate build identities remain ignored under
 external/warm-reference/. The single-CPU, GC/JIT and quiet-VM policy is identical
 to horizontal flip; three-sample screens are priorities, not certification.
+
+## JPEG
+
+The original `ffmpeg-jpeg-warm.c` adapter uses the public codec and swscale APIs:
+
+```bash
+bash tools/WarmReference/build-jpeg-linux.sh
+python3 tools/WarmReference/verify-jpeg-linux.py --cpu 0
+```
+
+Build Release managed binaries and capture the owned source inventory first.
+Prepare exactly one quality anchor outside timing, then execute the narrow pair:
+
+```powershell
+dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-jpeg 0 5
+./bench.ps1 -Smoke -Warm -WarmFamily Jpeg -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Jpeg -Cpu 0 -NoBuild
+```
+
+Encode8 reuses the existing 513x259 RGBA8 raster. Both subjects flatten its alpha
+onto RGB 0x204060 with the specified single rounding, convert to full-range
+BT.601 and encode a complete independent 4:4:4 JPEG. Every timed operation
+includes flattening, color conversion, encoding and output acquisition/release.
+Native contexts and scratch frames are reused; source processing and encoding
+execute again each time. Managed MemoryStream creation, growth and disposal
+are included. Native optimal Huffman and managed fixed Huffman are explicit.
+
+Preparation checks one native qscale against at most eight managed settings,
+using the existing fixed 0.25 dB source RGB-error band and decoder/alpha bounds.
+It retains all settings and unmatched anchors under ignored artifacts. Timing
+refuses an unmatched pair. Setup and cleanup freshly validate the selected
+bitstreams, geometry, sampling, decoder agreement, quality, independent live
+storage and unchanged input; they never enumerate qualities. Changed output,
+native worker or source/reference identities require preparing only this pair
+again. Prepared codec output is a validation target, never a timed image cache.
+
+The protocol controls reuse one source raster and reject fourteen invalid
+requests, arguments, sizes and affinities. They verify deterministic owned
+bitstreams, opaque decoded alpha and exact operation counters without publishing
+timing claims. Single-CPU quiet-VM and GC/JIT policies match the other warm families.

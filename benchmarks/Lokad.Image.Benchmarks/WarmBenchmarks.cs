@@ -29,12 +29,12 @@ internal static class WarmBenchmarks
             if (familyOption + 1 == arguments.Count) throw new ArgumentException("Supply a warm family.");
             family = arguments[familyOption + 1]; arguments.RemoveRange(familyOption, 2);
         }
-        if (family is not ("Flip" or "Png")) throw new ArgumentException("Choose Flip or Png.");
+        if (family is not ("Flip" or "Png" or "Jpeg")) throw new ArgumentException("Choose Flip, Png or Jpeg.");
         string? selection = null;
         var selectionOption = arguments.IndexOf("--warm-cases");
         if (selectionOption >= 0)
         {
-            if (selectionOption + 1 == arguments.Count || family != "Png") throw new ArgumentException("Supply explicit PNG case names.");
+            if (selectionOption + 1 == arguments.Count || family == "Flip") throw new ArgumentException("Supply explicit codec case names.");
             selection = arguments[selectionOption + 1]; arguments.RemoveRange(selectionOption, 2);
         }
         if (arguments.Any(argument => argument is "--job" or "-j" or "--filter" or "-f"))
@@ -55,8 +55,8 @@ internal static class WarmBenchmarks
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU", cpu.ToString(System.Globalization.CultureInfo.InvariantCulture));
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE", smoke ? "smoke" : confirm ? "confirm" : "measure");
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES", selection);
-            var expectedPairs = family == "Png" ? WarmPng.SelectedCases().Length : 2;
-            var type = family == "Png" ? typeof(WarmPng) : typeof(WarmHorizontalFlip);
+            var expectedPairs = family == "Png" ? WarmPng.SelectedCases().Length : family == "Jpeg" ? WarmJpeg.SelectedCases().Length : 2;
+            var type = family == "Png" ? typeof(WarmPng) : family == "Jpeg" ? typeof(WarmJpeg) : typeof(WarmHorizontalFlip);
             using var identity = new JpegBenchmarkCase();
             var job = (smoke ? Job.Dry : Job.ShortRun).WithId(smoke ? "WarmDry" : confirm ? "WarmConfirm" : "WarmShort")
                 .WithAffinity(affinity).WithGcServer(false).WithGcConcurrent(false)
@@ -86,13 +86,18 @@ internal static class WarmBenchmarks
             if (complete)
                 foreach (var report in reports)
                 {
-                    var caseId = family == "Png" ? report.BenchmarkCase.Parameters.Items.Single(p => p.Name == "Case").Value.ToString()!
+                    var caseId = family != "Flip" ? report.BenchmarkCase.Parameters.Items.Single(p => p.Name == "Case").Value.ToString()!
                         : "RGBA" + report.BenchmarkCase.Parameters.Items.Single(p => p.Name == "Depth").Value;
-                    var receipt = evidence.Single(e => family == "Png" ? e.Value.GetProperty("caseId").GetString() == caseId
+                    var receipt = evidence.Single(e => family != "Flip" ? e.Value.GetProperty("caseId").GetString() == caseId
                         : "RGBA" + e.Value.GetProperty("depth").GetInt32() == caseId);
                     var value = receipt.Value;
                     var depth = value.GetProperty("depth").GetInt32();
-                    if (!value.GetProperty("allRgbaSamplesExact").GetBoolean() || !value.GetProperty("sourceUnchanged").GetBoolean()
+                    var outputVerified = family == "Jpeg"
+                        ? value.GetProperty("qualityMatched").GetBoolean() && value.GetProperty("alphaExact").GetBoolean()
+                            && value.GetProperty("decoderAgreementWithinBounds").GetBoolean()
+                            && value.GetProperty("psnrGapDb").GetDouble() <= EncoderQualityCalibration.MaximumPsnrGapDb
+                        : value.GetProperty("allRgbaSamplesExact").GetBoolean();
+                    if (!outputVerified || !value.GetProperty("sourceUnchanged").GetBoolean()
                         || !value.GetProperty("independentOwnedOutput").GetBoolean() || value.GetProperty("cpu").GetInt32() != cpu
                         || value.GetProperty("nativeExitCode").GetInt32() != 0 || value.GetProperty("smoke").GetBoolean() != smoke)
                         throw new InvalidOperationException("Warm receipt contract differs.");

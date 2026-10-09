@@ -43,6 +43,13 @@ Encode8, Decode8 and Decode16 on the same two original rasters. Add
 `-WarmCases Decode16` or `-WarmCases Decode8,Decode16` to iterate affected
 decode paths without running unrelated cases or quality calibration.
 
+`-WarmFamily Jpeg` selects one RGBA8 4:4:4 encode pair on the existing 513x259
+raster. Follow the reference-worker instructions to prepare one native quality
+anchor against at most eight managed settings outside timing. The fixed match
+band is 0.25 dB; unmatched pairs refuse measurement. Both timed operations
+include alpha flattening onto RGB 0x204060 and full-range BT.601 conversion.
+Setup and cleanup revalidate selected outputs without quality enumeration.
+
 For rapid horizontal-flip tuning, use the explicit six-case selection:
 
 ```powershell
