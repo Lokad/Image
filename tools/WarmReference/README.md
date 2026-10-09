@@ -50,3 +50,44 @@ and native measurements from three to twelve samples per case.
 The verification command reuses exactly the two declared inputs, validates
 sample counters and every pixel, and requires rejection of multi-CPU affinity,
 zero/excessive counts, trailing protocol tokens and unknown commands.
+
+## PNG
+
+`ffmpeg-png-warm.c` is a separate original adapter for public FFmpeg codec APIs:
+
+```bash
+bash tools/WarmReference/build-png-linux.sh
+python3 tools/WarmReference/verify-png-linux.py --cpu 0
+```
+
+```powershell
+./bench.ps1 -Smoke -Warm -WarmFamily Png -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Png -Cpu 0 -NoBuild
+# Iterate one measured gap without adding images or unrelated cases.
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Png -WarmCases Decode16 -Cpu 0 -NoBuild
+```
+
+The three pairs are RGBA8 encode, RGBA8 decode and RGBA16 decode on the same two
+original 513x259 rasters as horizontal flip. Both decoders consume identical
+resident PNG bytes and produce independent owned RGBA pixels. Native 16-bit
+decode includes acquiring a second owned frame and converting big-endian PNG
+samples to little-endian RGBA16; padded rows need no packing copy. Managed decode
+includes the complete public call, allocation, validation and disposal.
+
+Encode uses compression level 6, filter None and noninterlaced RGBA on both
+subjects. Full inflated rows must match, and prepared IDAT payload sizes must
+be within 5% before timing. Managed output is a fresh MemoryStream, including
+creation, growth, encoding and disposal; no redundant ToArray is timed. Native
+encoding includes independent packet acquisition, encoding and release.
+Contexts, resident input and native wrappers are reused outside the intervals.
+For independent still PNGs, every native encoded frame is forced intra and
+every decoded input is marked key. Reuse without those settings can exercise
+sequence delta frames and fails the intended workload.
+
+Before timing, two simultaneously live results are checked for independent
+storage and exact samples. Repeated complete operations, output sizes, counters,
+all PNG row filters, alpha and hidden RGB are verified outside timing. The
+verification script also tests twenty protocol/affinity rejection controls.
+Native PNG binaries and their separate build identities remain ignored under
+external/warm-reference/. The single-CPU, GC/JIT and quiet-VM policy is identical
+to horizontal flip; three-sample screens are priorities, not certification.

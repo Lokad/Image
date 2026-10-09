@@ -15,21 +15,24 @@ internal sealed class NativeWarmReference : IDisposable
     public JsonElement BuildIdentity { get; }
     private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
 
-    public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu)
+    public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null)
     {
-        Executable = Path.Combine(state.Root, "external", "warm-reference", "ffmpeg-warm");
-        var identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, "identity.json");
+        if (operation is not ("hflip" or "png-encode" or "png-decode")) throw new ArgumentOutOfRangeException(nameof(operation));
+        var png = operation != "hflip";
+        Executable = Path.Combine(state.Root, "external", "warm-reference", png ? "ffmpeg-png-warm" : "ffmpeg-warm");
+        var identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, png ? "png-identity.json" : "identity.json");
         if (!File.Exists(Executable) || !File.Exists(identityPath))
-            throw new InvalidOperationException("Build the pinned Linux warm reference with bash tools/WarmReference/build-linux.sh.");
+            throw new InvalidOperationException("Build the pinned Linux warm reference with its tools/WarmReference build script.");
         using (var document = JsonDocument.Parse(File.ReadAllText(identityPath))) BuildIdentity = document.RootElement.Clone();
         if (BuildIdentity.GetProperty("workerSha256").GetString() != JpegBenchmarkCase.HashFile(Executable)
-            || BuildIdentity.GetProperty("sourceSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", "ffmpeg-warm.c"))
-            || BuildIdentity.GetProperty("buildScriptSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", "build-linux.sh")))
+            || BuildIdentity.GetProperty("sourceSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", png ? "ffmpeg-png-warm.c" : "ffmpeg-warm.c"))
+            || BuildIdentity.GetProperty("buildScriptSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", png ? "build-png-linux.sh" : "build-linux.sh")))
             throw new InvalidOperationException("Native reference build identity differs from the current source/binary.");
         var start = new ProcessStartInfo(Executable) { RedirectStandardInput = true, RedirectStandardOutput = true,
             RedirectStandardError = true, UseShellExecute = false };
-        foreach (var argument in new[] { "hflip", state.Input, "513", "259", depth.ToString(CultureInfo.InvariantCulture), state.NativeOutput })
+        foreach (var argument in new[] { operation, state.Input, "513", "259", depth.ToString(CultureInfo.InvariantCulture), state.NativeOutput })
             start.ArgumentList.Add(argument);
+        if (operation == "png-decode") start.ArgumentList.Add(expectedRaw ?? throw new ArgumentNullException(nameof(expectedRaw)));
         process = Process.Start(start) ?? throw new InvalidOperationException("Could not start native warm worker.");
         errors = process.StandardError.ReadToEndAsync();
         try
@@ -39,10 +42,12 @@ internal sealed class NativeWarmReference : IDisposable
                 || Ready.GetProperty("width").GetInt32() != HorizontalFlipInput.Width
                 || Ready.GetProperty("height").GetInt32() != HorizontalFlipInput.Height
                 || Ready.GetProperty("depth").GetInt32() != depth || Ready.GetProperty("cpu").GetInt32() != cpu
-                || Ready.GetProperty("affinityCount").GetInt32() != 1 || Ready.GetProperty("filterThreads").GetInt32() != 1
-                || Ready.GetProperty("threadType").GetInt32() != 0 || Ready.GetProperty("operation").GetString() != "hflip")
+                || Ready.GetProperty("affinityCount").GetInt32() != 1 || Ready.GetProperty(png ? "codecThreads" : "filterThreads").GetInt32() != 1
+                || Ready.GetProperty("threadType").GetInt32() != 0 || Ready.GetProperty("operation").GetString() != operation
+                || (png && (Ready.GetProperty("activeThreadType").GetInt32() != 0 || !Ready.GetProperty("independentLiveOutputs").GetBoolean()))
+                || (operation == "png-encode" && (Ready.GetProperty("compressionLevel").GetInt32() != 6 || Ready.GetProperty("filter").GetInt32() != 0)))
                 throw new InvalidOperationException("Native warm worker geometry/thread/CPU contract differs.");
-            completed = 1; // Its untimed initial exact check processes one image.
+            completed = png ? Ready.GetProperty("initialCompletedOperations").GetInt64() : 1;
         }
         catch { Dispose(); throw; }
     }
@@ -65,7 +70,9 @@ internal sealed class NativeWarmReference : IDisposable
         var sample = response.Deserialize<NativeWarmSample>(Options) ?? throw new InvalidOperationException("Missing native sample.");
         if (sample.State != "sample" || sample.Operations != operations || sample.CompletedOperations != completed + operations
             || sample.ElapsedNanoseconds <= 0 || !double.IsFinite(sample.ElapsedNanoseconds)
-            || sample.Cpu != Ready.GetProperty("cpu").GetInt32() || sample.OutputStride < HorizontalFlipInput.Width * (Ready.GetProperty("depth").GetInt32() / 8) * 4)
+            || sample.Cpu != Ready.GetProperty("cpu").GetInt32()
+            || (Ready.GetProperty("operation").GetString() == "png-encode" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
+                : sample.OutputStride < HorizontalFlipInput.Width * (Ready.GetProperty("depth").GetInt32() / 8) * 4))
             throw new InvalidOperationException("Native sample counters/elapsed time/CPU differ.");
         completed += operations;
         return sample;
@@ -113,7 +120,7 @@ internal sealed class NativeWarmReference : IDisposable
 }
 
 internal sealed record NativeWarmSample(string State, long Operations, double ElapsedNanoseconds,
-    long CompletedOperations, ulong Observed, int OutputStride, int Cpu)
+    long CompletedOperations, ulong Observed, int OutputStride, int Cpu, int OutputBytes = 0)
 {
     public double NanosecondsPerOperation => ElapsedNanoseconds / Operations;
 }

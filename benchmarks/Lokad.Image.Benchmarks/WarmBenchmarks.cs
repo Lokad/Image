@@ -22,6 +22,21 @@ internal static class WarmBenchmarks
         if (cpuOption < 0 || cpuOption + 1 == arguments.Count || !int.TryParse(arguments[cpuOption + 1], out var cpu) || cpu is < 0 or > 62)
             throw new ArgumentException("Supply --warm-cpu with one allowed logical CPU (0..62).");
         arguments.RemoveRange(cpuOption, 2);
+        var family = "Flip";
+        var familyOption = arguments.IndexOf("--warm-family");
+        if (familyOption >= 0)
+        {
+            if (familyOption + 1 == arguments.Count) throw new ArgumentException("Supply a warm family.");
+            family = arguments[familyOption + 1]; arguments.RemoveRange(familyOption, 2);
+        }
+        if (family is not ("Flip" or "Png")) throw new ArgumentException("Choose Flip or Png.");
+        string? selection = null;
+        var selectionOption = arguments.IndexOf("--warm-cases");
+        if (selectionOption >= 0)
+        {
+            if (selectionOption + 1 == arguments.Count || family != "Png") throw new ArgumentException("Supply explicit PNG case names.");
+            selection = arguments[selectionOption + 1]; arguments.RemoveRange(selectionOption, 2);
+        }
         if (arguments.Any(argument => argument is "--job" or "-j" or "--filter" or "-f"))
             throw new ArgumentException("Warm runs use a fixed narrow selection and job.");
         var runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID");
@@ -31,6 +46,7 @@ internal static class WarmBenchmarks
         var oldAffinity = process.ProcessorAffinity;
         var oldCpu = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU");
         var oldMode = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE");
+        var oldCases = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
         try
         {
             var affinity = new IntPtr(1L << cpu);
@@ -38,6 +54,9 @@ internal static class WarmBenchmarks
             if (process.ProcessorAffinity != affinity) throw new InvalidOperationException("Requested one-CPU affinity was not applied.");
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU", cpu.ToString(System.Globalization.CultureInfo.InvariantCulture));
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE", smoke ? "smoke" : confirm ? "confirm" : "measure");
+            Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES", selection);
+            var expectedPairs = family == "Png" ? WarmPng.SelectedCases().Length : 2;
+            var type = family == "Png" ? typeof(WarmPng) : typeof(WarmHorizontalFlip);
             using var identity = new JpegBenchmarkCase();
             var job = (smoke ? Job.Dry : Job.ShortRun).WithId(smoke ? "WarmDry" : confirm ? "WarmConfirm" : "WarmShort")
                 .WithAffinity(affinity).WithGcServer(false).WithGcConcurrent(false)
@@ -51,25 +70,28 @@ internal static class WarmBenchmarks
             if (confirm) job = job.WithIterationCount(12);
             var config = ManualConfig.Create(DefaultConfig.Instance).AddJob(job).AddExporter(JsonExporter.Full)
                 .WithOptions(ConfigOptions.KeepBenchmarkFiles);
-            var summaries = BenchmarkSwitcher.FromTypes([typeof(WarmHorizontalFlip)])
+            var summaries = BenchmarkSwitcher.FromTypes([type])
                 .Run(["--filter", "*", .. arguments], config).ToArray();
             if (arguments.Any(argument => argument is "--list" or "--help" or "-h")) return summaries;
             var reports = summaries.SelectMany(summary => summary.Reports).ToArray();
             var evidenceDirectory = Path.Combine(identity.Root, "artifacts", "benchmark-validation");
             var evidence = Directory.Exists(evidenceDirectory)
-                ? Directory.GetFiles(evidenceDirectory, "WarmHorizontalFlip-*.json")
+                ? Directory.GetFiles(evidenceDirectory, type.Name + "-*.json")
                     .Select(path => (Path: path, Value: Read(path)))
                     .Where(record => record.Value.GetProperty("runId").GetString() == runId).ToArray()
                 : [];
-            var complete = summaries.Length == 1 && reports.Length == 2 && evidence.Length == 2
+            var complete = summaries.Length == 1 && reports.Length == expectedPairs && evidence.Length == expectedPairs
                 && reports.All(report => report.Success) && summaries.All(summary => !summary.HasCriticalValidationErrors);
             var pairs = new List<object>();
             if (complete)
                 foreach (var report in reports)
                 {
-                    var depth = (int)report.BenchmarkCase.Parameters.Items.Single(p => p.Name == "Depth").Value;
-                    var receipt = evidence.Single(e => e.Value.GetProperty("depth").GetInt32() == depth);
+                    var caseId = family == "Png" ? report.BenchmarkCase.Parameters.Items.Single(p => p.Name == "Case").Value.ToString()!
+                        : "RGBA" + report.BenchmarkCase.Parameters.Items.Single(p => p.Name == "Depth").Value;
+                    var receipt = evidence.Single(e => family == "Png" ? e.Value.GetProperty("caseId").GetString() == caseId
+                        : "RGBA" + e.Value.GetProperty("depth").GetInt32() == caseId);
                     var value = receipt.Value;
+                    var depth = value.GetProperty("depth").GetInt32();
                     if (!value.GetProperty("allRgbaSamplesExact").GetBoolean() || !value.GetProperty("sourceUnchanged").GetBoolean()
                         || !value.GetProperty("independentOwnedOutput").GetBoolean() || value.GetProperty("cpu").GetInt32() != cpu
                         || value.GetProperty("nativeExitCode").GetInt32() != 0 || value.GetProperty("smoke").GetBoolean() != smoke)
@@ -82,20 +104,20 @@ internal static class WarmBenchmarks
                     var ratio = managed / Math.Min(nativeBefore, nativeAfter);
                     pairs.Add(new
                     {
-                        caseName = report.BenchmarkCase.DisplayInfo, depth, cpu,
+                        caseName = report.BenchmarkCase.DisplayInfo, caseId, depth, cpu,
                         sourceSha256 = value.GetProperty("sourceIdentity").GetProperty("sourceSha256").GetString(),
                         evidenceFile = Path.GetFileName(receipt.Path), evidenceSha256 = JpegBenchmarkCase.HashFile(receipt.Path),
                         managedStatistics = report.ResultStatistics, nativeBeforeNanoseconds = before, nativeAfterNanoseconds = after,
                         ratio = smoke ? (double?)null : ratio,
                         status = smoke ? "execution/output check only" : ratio > 2 ? ">2x-screened" : "<=2x-screened; independent repeat needed"
                     });
-                    if (!smoke) Console.WriteLine($"Warm RGBA{depth}: managed {managed / 1000:F2} us; native before/after {nativeBefore / 1000:F2}/{nativeAfter / 1000:F2} us; worst bracket ratio {ratio:F2}x (screening).");
+                    if (!smoke) Console.WriteLine($"Warm {family}/{caseId}: managed {managed / 1000:F2} us; native before/after {nativeBefore / 1000:F2}/{nativeAfter / 1000:F2} us; worst bracket ratio {ratio:F2}x (screening).");
                 }
             var output = Path.Combine(identity.Root, "artifacts", "benchmark-runs", runId, "warm-parity.json");
             Directory.CreateDirectory(Path.GetDirectoryName(output)!);
             File.WriteAllText(output, JsonSerializer.Serialize(new { schemaVersion = 1, project = "Lokad.Image", runId, complete,
-                smoke, confirm, cpu, expectedPairs = 2, actualPairs = pairs.Count,
-                method = "Managed BenchmarkDotNet elapsed samples and native worker internal monotonic samples, one pinned CPU, owned RGBA memory outputs. Native pre/post samples bracket managed measurements. IPC/startup/filesystem excluded. Screened rows require independent repeats before certification.", pairs },
+                smoke, confirm, family, cpu, expectedPairs, actualPairs = pairs.Count,
+                method = "Managed BenchmarkDotNet elapsed samples and native worker internal monotonic samples, one pinned CPU, complete owned memory outputs. Native pre/post samples bracket managed measurements. IPC/startup/filesystem excluded. Screened rows require independent repeats before certification.", pairs },
                 new JsonSerializerOptions { WriteIndented = true, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals }) + "\n");
             if (!complete) Environment.ExitCode = 1;
             return summaries;
@@ -104,6 +126,7 @@ internal static class WarmBenchmarks
         {
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU", oldCpu);
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE", oldMode);
+            Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES", oldCases);
             process.ProcessorAffinity = oldAffinity;
         }
     }

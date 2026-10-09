@@ -1,7 +1,11 @@
 param([switch]$Smoke, [switch]$DedicatedVm, [string]$Filter, [switch]$NoBuild, [switch]$HorizontalFlip,
-    [switch]$Warm, [ValidateRange(0, 62)][int]$Cpu = 0, [switch]$WarmConfirm)
+    [switch]$Warm, [ValidateRange(0, 62)][int]$Cpu = 0, [switch]$WarmConfirm,
+    [ValidateSet('Flip', 'Png')][string]$WarmFamily = 'Flip', [string]$WarmCases)
 $ErrorActionPreference = 'Stop'
 if ($WarmConfirm -and (-not $Warm -or $Smoke)) { throw '-WarmConfirm requires -Warm with -DedicatedVm.' }
+if (($PSBoundParameters.ContainsKey('WarmFamily') -or $PSBoundParameters.ContainsKey('WarmCases')) -and -not $Warm) {
+    throw '-WarmFamily/-WarmCases require -Warm.'
+}
 if (-not $Smoke -and -not $DedicatedVm) {
     throw 'Performance measurement requires the quiet dedicated VM. Use -Smoke to verify the harness.'
 }
@@ -22,7 +26,9 @@ try {
     if ($Warm) {
         if ($HorizontalFlip -or $PSBoundParameters.ContainsKey('Filter')) { throw '-Warm supplies its own narrow selection.' }
         $warmJob = if ($Smoke) { '--warm-smoke' } elseif ($WarmConfirm) { '--warm-confirm' } else { '--warm-short' }
-        dotnet $benchmarkDll $warmJob --warm-cpu $Cpu --artifacts "$runArtifacts" --buildTimeout 600 --stopOnFirstError
+        $warmArguments = @($warmJob, '--warm-cpu', $Cpu, '--warm-family', $WarmFamily)
+        if ($PSBoundParameters.ContainsKey('WarmCases')) { $warmArguments += @('--warm-cases', $WarmCases) }
+        dotnet $benchmarkDll @warmArguments --artifacts "$runArtifacts" --buildTimeout 600 --stopOnFirstError
     } elseif ($HorizontalFlip) {
         if ($PSBoundParameters.ContainsKey('Filter')) { throw '-HorizontalFlip supplies its own narrow selection.' }
         $flipJob = if ($Smoke) { '--horizontal-flip-smoke' } else { '--horizontal-flip-short' }
