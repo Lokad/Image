@@ -250,9 +250,15 @@ if (args.SequenceEqual(["--validate-geometry"]))
 
 var representativeSmoke = args.Contains("--representative-smoke");
 var representativeShort = args.Contains("--representative-short");
-if (representativeSmoke && representativeShort) throw new ArgumentException("Choose one representative job.");
-var benchmarkArguments = args.Where(argument => argument is not ("--representative-smoke" or "--representative-short")).ToArray();
-var summaries = representativeSmoke || representativeShort
+var horizontalFlipSmoke = args.Contains("--horizontal-flip-smoke");
+var horizontalFlipShort = args.Contains("--horizontal-flip-short");
+if (new[] { representativeSmoke, representativeShort, horizontalFlipSmoke, horizontalFlipShort }.Count(value => value) > 1)
+    throw new ArgumentException("Choose one benchmark selection/job.");
+var benchmarkArguments = args.Where(argument => argument is not ("--representative-smoke" or "--representative-short"
+    or "--horizontal-flip-smoke" or "--horizontal-flip-short")).ToArray();
+var summaries = horizontalFlipSmoke || horizontalFlipShort
+    ? HorizontalFlipBenchmarks.Run(benchmarkArguments, horizontalFlipSmoke)
+    : representativeSmoke || representativeShort
     ? RepresentativeBenchmarks.Run(benchmarkArguments, representativeSmoke)
     : BenchmarkSwitcher.FromAssembly(typeof(PngFlipInvocation).Assembly).Run(args).ToArray();
 var inspection = args.Contains("--list") || args.Contains("--help") || args.Contains("-h");

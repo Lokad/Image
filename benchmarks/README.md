@@ -3,6 +3,27 @@
 The initial [dedicated-VM results](RESULTS.md) include the complete representative
 table, original numeric snapshot, reproduction commands and measured limitations.
 
+For rapid horizontal-flip tuning, use the explicit six-case selection:
+
+```powershell
+./bench.ps1 -Smoke -HorizontalFlip
+./bench.ps1 -DedicatedVm -HorizontalFlip -NoBuild
+```
+
+This selection needs no encoder calibration. It reuses just two original
+513x259 rasters, RGBA8 and RGBA16, with explicit zero-alpha hidden RGB. Two
+`HorizontalFlipPrimitive` cases measure the warm public operation, including
+allocation and disposal. These diagnostic rows have no native parity ratio.
+Four `HorizontalFlipBatch` cases compare FFmpeg and managed edits of 32 exact
+repeats of each raster, reading the same raw input and writing all output in one
+process per subject. Startup/JIT, file transport and context reuse remain in
+the batch boundary. Repeated frames do not add distinct source images.
+Setup and cleanup validate exact independently placed pixels; batch receipts
+include every frame, output hashes and separate untimed child-memory counters.
+Both families retain full BenchmarkDotNet JSON. Measure baseline and candidate
+sequentially on the quiet VM with identical jobs and inputs; Dry runs verify
+execution and output only.
+
 After restoring/building and generating the default representative quality
 calibration below, `./bench.ps1 -Smoke` runs a small routine selection:
 
