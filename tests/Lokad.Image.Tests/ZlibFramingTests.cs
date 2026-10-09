@@ -4,6 +4,85 @@ namespace Lokad.Image.Tests;
 
 public sealed class ZlibFramingTests
 {
+    [Fact]
+    public void LiteralLookaheadRejectsAnUnassignedPrefixAfterAShortLiteral()
+    {
+        // Original incomplete alphabet: literal 65 = 0, EOB = 10, 11 unassigned.
+        var bits = new BitWriter(); bits.Number(1, 1); bits.Number(2, 2);
+        bits.Number(0, 5); bits.Number(0, 5); bits.Number(15, 4);
+        ReadOnlySpan<int> order = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
+        foreach (var symbol in order) bits.Number(symbol < 16 ? 4 : 0, 3);
+        for (var symbol = 0; symbol < 257; symbol++) bits.Code(symbol == 65 ? 1 : symbol == 256 ? 2 : 0, 4);
+        bits.Code(0, 4); bits.Code(0, 1); bits.Code(3, 2); bits.Align();
+        byte[] encoded = [0x78, 0x01, .. bits.Bytes(), 0, 0, 0, 1];
+        var error = Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(encoded, 2, new OperationContext(ImageLimits.Default, default)));
+        Assert.Equal("Invalid PNG Deflate prefix code.", error.Message);
+    }
+
+    [Fact]
+    public void LiteralLookaheadFallsBackToATenBitCodeAfterAShortLiteral()
+    {
+        // Original complete comb: EOB at depth 1, literal 17 at depth 2,
+        // fillers at depths 3..10, and literal 65 as the final depth-10 leaf.
+        var bits = new BitWriter(); bits.Number(1, 1); bits.Number(2, 2);
+        bits.Number(0, 5); bits.Number(0, 5); bits.Number(15, 4);
+        ReadOnlySpan<int> order = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
+        foreach (var symbol in order) bits.Number(symbol < 16 ? 4 : 0, 3);
+        for (var symbol = 0; symbol < 257; symbol++)
+            bits.Code(symbol == 256 ? 1 : symbol == 17 ? 2 : symbol == 65 ? 10 : symbol is >= 1 and <= 8 ? symbol + 2 : 0, 4);
+        bits.Code(0, 4); // Empty distance alphabet.
+        bits.Code(2, 2); bits.Code(1023, 10); bits.Code(2, 2); bits.Code(0, 1); bits.Align();
+        byte[] expanded = [17, 65, 17]; uint a = 1, b = 0;
+        foreach (var value in expanded) { a += value; b += a; }
+        byte[] encoded = [0x78, 0x01, .. bits.Bytes(), (byte)(b >> 8), (byte)b, (byte)(a >> 8), (byte)a];
+        var limits = new ImageLimits { MaxWork = 10428, MaxWorkingBytes = 4096 };
+        Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, 3, new OperationContext(limits, default)));
+        Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, 3,
+            new OperationContext(limits with { MaxWork = 10427 }, default)));
+        for (var length = 0; length < encoded.Length; length++)
+            Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(encoded.AsSpan(0, length), 3,
+                new OperationContext(ImageLimits.Default, default)));
+        using var inflater = new System.IO.Compression.ZLibStream(new MemoryStream(encoded), System.IO.Compression.CompressionMode.Decompress);
+        var actual = new byte[3]; inflater.ReadExactly(actual);
+        Assert.Equal(expanded, actual); Assert.Equal(-1, inflater.ReadByte());
+    }
+
+    [Theory]
+    [InlineData(0)] [InlineData(1)] [InlineData(2)] [InlineData(3)]
+    [InlineData(4)] [InlineData(5)] [InlineData(6)] [InlineData(7)]
+    [InlineData(32)] [InlineData(33)]
+    public void AdjacentLiteralsPreserveShortTailsAndExactConsumedWork(int literals)
+    {
+        // Original RFC 1951 fixed stream. Alternating nine/eight-bit literals
+        // exercise paired lookahead, an odd final literal and every alignment.
+        var bits = new BitWriter(); bits.Number(1, 1); bits.Number(1, 2);
+        var expanded = new byte[literals];
+        for (var i = 0; i < literals; i++)
+        {
+            expanded[i] = (byte)((i & 1) == 0 ? 144 : 65);
+            bits.Code((i & 1) == 0 ? 400 : 48 + 65, (i & 1) == 0 ? 9 : 8);
+        }
+        bits.Code(0, 7); bits.Align();
+        uint a = 1, b = 0;
+        foreach (var value in expanded) { a += value; b += a; }
+        byte[] encoded = [0x78, 0x01, .. bits.Bytes(), (byte)(b >> 8), (byte)b, (byte)(a >> 8), (byte)a];
+        // Block/header/tree/lookup/EOB plus only the actual literal bits.
+        var work = 9387L + 9 * ((literals + 1) / 2) + 8 * (literals / 2);
+        var limits = new ImageLimits { MaxWork = work, MaxWorkingBytes = 4096 };
+        Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, literals, new OperationContext(limits, default)));
+        Assert.Equal(encoded.Length, ZlibFraming.Validate([.. encoded, 29, 71, 211], literals, new OperationContext(limits, default)));
+        Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, literals,
+            new OperationContext(limits with { MaxWork = work - 1 }, default)));
+        for (var length = 0; length < encoded.Length; length++)
+            Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(encoded.AsSpan(0, length), literals,
+                new OperationContext(ImageLimits.Default, default)));
+        if (literals != 0)
+            Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(encoded, literals - 1, new OperationContext(ImageLimits.Default, default)));
+        using var inflater = new System.IO.Compression.ZLibStream(new MemoryStream(encoded), System.IO.Compression.CompressionMode.Decompress);
+        var actual = new byte[literals]; inflater.ReadExactly(actual);
+        Assert.Equal(expanded, actual); Assert.Equal(-1, inflater.ReadByte());
+    }
+
     [Theory]
     [InlineData(0)] [InlineData(1)] [InlineData(2)] [InlineData(3)]
     [InlineData(4)] [InlineData(5)] [InlineData(6)] [InlineData(7)]
