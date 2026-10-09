@@ -272,6 +272,8 @@ apply to new buffers and codec input; transforms count an existing larger source
 in working memory even when their result fits lower geometry limits. Exact
 mapping checks work/cancellation every 1024 output pixels, and cloning every
 16 KiB of row data, including when the caller raises dimension limits.
+Horizontal flip reverses whole RGBA8/RGBA16 pixels with safe span-based SIMD
+when supported, with a scalar fallback and the same admission checkpoints.
 See [resource admission](docs/resource-admission.md) for review evidence and scope.
 
 Malformed data raises `ImageDataException`, unsupported features raise

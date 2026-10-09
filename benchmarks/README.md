@@ -2,6 +2,8 @@
 
 The initial [dedicated-VM results](RESULTS.md) include the complete representative
 table, original numeric snapshot, reproduction commands and measured limitations.
+The subsequent [horizontal-flip round](HORIZONTAL-FLIP.md) separates the warm
+primitive improvement from the equivalent FFmpeg raw-file batch comparison.
 
 For rapid horizontal-flip tuning, use the explicit six-case selection:
 
