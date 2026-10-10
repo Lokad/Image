@@ -31,6 +31,8 @@ The [JPEG byte-output round](WARM-JPEG-BYTE.md) removes per-byte heap arrays
 while retaining the same span dispatch, cancellation and output admission.
 The [JPEG decode screen](WARM-JPEG-DECODE.md) reuses that prepared JPEG and
 measures complete decode to independent RGBA8 on both subjects.
+The [inverse-DCT round](WARM-JPEG-INVERSE.md) preserves the frozen scalar pixels
+and accumulation order while computing independent output pixels in SIMD lanes.
 The first [warm VP8 quality preparation](WARM-WEBP-MATCH.md) is unmatched and
 retained explicitly; it supplies no warm speed ratio.
 

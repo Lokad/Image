@@ -25,6 +25,17 @@ internal static class JpegTransform
         0.7071067811865475, -0.8314696123025453, 0.38268343236509, 0.19509032201612878, -0.7071067811865471, 0.9807852804032307, -0.9238795325112864, 0.5555702330196015,
         0.7071067811865475, -0.9807852804032304, 0.9238795325112865, -0.8314696123025451, 0.7071067811865466, -0.5555702330196015, 0.38268343236508956, -0.19509032201612858
     ];
+    // The same owned, frozen basis in frequency-major order for independent
+    // output-pixel SIMD lanes. This is only a transpose, with no new constants.
+    private static readonly double[] InverseCosines = TransposeCosines();
+
+    private static double[] TransposeCosines()
+    {
+        var result = new double[64];
+        for (var u = 0; u < 8; u++)
+        for (var x = 0; x < 8; x++) result[u * 8 + x] = Cosines[x * 8 + u];
+        return result;
+    }
 
     private static int[] BuildZigzag()
     {
@@ -48,6 +59,53 @@ internal static class JpegTransform
         if (coefficients.Length != 64 || quantization.Length != 64 || pixels.Length != 64)
             throw new ArgumentException("JPEG transforms operate on complete 8x8 blocks.");
         context.Work(4096);
+        // T.81 A.3.3 output pixels are independent. Every lane keeps the
+        // scalar v/u accumulation order and separate multiplications; no FMA,
+        // reassociation or reduced logical work. Round/clamp stays scalar.
+        // The only additional storage is the 512-byte static basis transpose.
+        if (Avx512F.IsSupported)
+        {
+            for (var y = 0; y < 8; y++)
+            {
+                var sum = Vector512<double>.Zero;
+                for (var v = 0; v < 8; v++)
+                {
+                    var vertical = Vector512.Create(Cosines[y * 8 + v]);
+                    for (var u = 0; u < 8; u++)
+                    {
+                        var index = v * 8 + u;
+                        var sample = Vector512.Create((double)coefficients[index] * quantization[index]);
+                        var horizontal = Vector512.Create(InverseCosines.AsSpan(u * 8, 8));
+                        sum = Avx512F.Add(sum, Avx512F.Multiply(Avx512F.Multiply(sample, horizontal), vertical));
+                    }
+                }
+                for (var x = 0; x < 8; x++)
+                    pixels[y * 8 + x] = (byte)Math.Clamp(Math.Round(sum.GetElement(x) / 4 + 128, MidpointRounding.AwayFromZero), 0, 255);
+            }
+            return;
+        }
+        if (Avx.IsSupported)
+        {
+            for (var y = 0; y < 8; y++)
+            for (var x = 0; x < 8; x += 4)
+            {
+                var sum = Vector256<double>.Zero;
+                for (var v = 0; v < 8; v++)
+                {
+                    var vertical = Vector256.Create(Cosines[y * 8 + v]);
+                    for (var u = 0; u < 8; u++)
+                    {
+                        var index = v * 8 + u;
+                        var sample = Vector256.Create((double)coefficients[index] * quantization[index]);
+                        var horizontal = Vector256.Create(InverseCosines.AsSpan(u * 8 + x, 4));
+                        sum = Avx.Add(sum, Avx.Multiply(Avx.Multiply(sample, horizontal), vertical));
+                    }
+                }
+                for (var lane = 0; lane < 4; lane++)
+                    pixels[y * 8 + x + lane] = (byte)Math.Clamp(Math.Round(sum.GetElement(lane) / 4 + 128, MidpointRounding.AwayFromZero), 0, 255);
+            }
+            return;
+        }
         for (var y = 0; y < 8; y++)
         for (var x = 0; x < 8; x++)
         {

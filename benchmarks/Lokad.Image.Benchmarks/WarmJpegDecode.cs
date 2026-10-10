@@ -66,6 +66,8 @@ public class WarmJpegDecode
             native = new NativeWarmReference(state, 8, cpu, "jpeg-decode");
             nativePixels = File.ReadAllBytes(state.NativeOutput);
             using (var output = ImageCodec.Decode(encoded)) { ValidateGeometry(output); managedPixels = OriginalPixels.Bytes(output); }
+            if (JpegBenchmarkCase.Hash(managedPixels) != prepared.Match.ClosestOwned.PublicDecodedSha256)
+                throw new InvalidOperationException("Prepared owned JPEG decoded pixels changed.");
             var difference = JpegQualityCorpus.Compare(nativePixels, managedPixels);
             decoderMaximum = difference.Maximum; decoderRmse = difference.Rmse;
             if (decoderMaximum > 4 || decoderRmse > 1.5) throw new InvalidOperationException("JPEG decoder agreement exceeds maximum 4/RMSE 1.5.");

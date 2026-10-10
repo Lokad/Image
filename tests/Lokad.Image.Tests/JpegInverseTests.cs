@@ -1,0 +1,76 @@
+using System.Security.Cryptography;
+using Lokad.Image.Internal;
+
+namespace Lokad.Image.Tests;
+
+public sealed class JpegInverseTests
+{
+    // Original analytic/dense/extreme coefficient blocks. Hashes were captured
+    // from the owned scalar implementation before this optimization. Half ties,
+    // clipping, ushort quantizers and the full int coefficient range are covered.
+    [Theory]
+    [InlineData(0, "1df1b7ce1fd8fcbe20cde61646875e54fe38d8945ea7911afd59e025cc520a68")]
+    [InlineData(1, "dcbffc1a75cc58ab562156a4244112da7cc5274b1fa66e09a279a5018bfef432")]
+    [InlineData(2, "c354e929475813d85401c35279e491162a070f17d4c6e1e1a3f24701f67fbc33")]
+    [InlineData(3, "761421230b7d9df6f62ba984f246d5880b13a45ac28bbc93e38abc39f0c15add")]
+    [InlineData(4, "1df1b7ce1fd8fcbe20cde61646875e54fe38d8945ea7911afd59e025cc520a68")]
+    [InlineData(5, "8667e718294e9e0df1d30600ba3eeb201f764aad2dad72748643e4a285e1d1f7")]
+    [InlineData(6, "7c8975e1e60a5c8337f28edf8c33c3b180360b7279644a9bc1af3c51e6220bf5")]
+    [InlineData(7, "49ea434f002d18c4ebd735f86896b9348859effd2868b8ccb3fcc231f77e9f9a")]
+    [InlineData(8, "d1808250fe4a165a52e7a62af64ad250e79e120ce0d222c5d16edb2e24755773")]
+    [InlineData(9, "3e1188e2c0235db3a3cae7df0538ff8c989af0872cf439340373bc62225d6909")]
+    [InlineData(10, "131c2bf93f5290d4a1cbdc847280d216568d7ae2d7e5da059ecc27e5d63f356a")]
+    [InlineData(11, "4dbbf55a28dce428112ac79b5b535181da0a0f81c50008c01f3f85b58f1652a8")]
+    public void InversePreservesOriginalPixelsInputAndBoundaries(int pattern, string expected)
+    {
+        var coefficients = new int[64]; var quantization = new ushort[64];
+        for (var i = 0; i < 64; i++)
+        {
+            coefficients[i] = pattern switch
+            {
+                0 => 0, 1 => i == 0 ? 80 : 0, 2 => i == 0 ? -80 : 0,
+                3 => i == 0 ? 4 : 0, 4 => i == 0 ? -4 : 0,
+                5 => i == 0 ? 1020 : 0, 6 => i == 0 ? -1020 : 0, 7 => i == 27 ? 1023 : 0,
+                8 => ((i & 1) == 0 ? 1 : -1) * (i * 17 + 3),
+                9 => (i * 7919 + i * i * 12347 + 23459) % 4095 - 2047,
+                10 => (i & 1) == 0 ? int.MinValue : int.MaxValue,
+                _ => i % 3 == 0 ? 0 : i % 3 == 1 ? int.MaxValue : int.MinValue
+            };
+            quantization[i] = (ushort)(pattern < 7 ? 1 : pattern == 7 ? 3
+                : pattern == 8 ? 1 + i * 2 % 31 : pattern == 9 ? 1 + i * 73 % 255 : 65535);
+        }
+
+        var originalCoefficients = coefficients.ToArray(); var originalQuantization = quantization.ToArray();
+        var guarded = Enumerable.Repeat((byte)19, 66).ToArray();
+        var context = new OperationContext(ImageLimits.Default with { MaxWork = 4096 }, default);
+        JpegTransform.Inverse(coefficients, quantization, guarded.AsSpan(1, 64), context);
+        Assert.Equal(19, guarded[0]); Assert.Equal(19, guarded[^1]);
+        Assert.Equal(originalCoefficients, coefficients); Assert.Equal(originalQuantization, quantization);
+        Assert.Equal(expected, Convert.ToHexStringLower(SHA256.HashData(guarded.AsSpan(1, 64))));
+        Assert.Throws<ImageLimitException>(() => context.Work(1));
+    }
+
+    [Fact]
+    public void WorkAndCancellationRejectBeforeAnyPixelIsWritten()
+    {
+        var pixels = Enumerable.Repeat((byte)19, 64).ToArray();
+        Assert.Throws<ImageLimitException>(() => JpegTransform.Inverse(new int[64], new ushort[64], pixels,
+            new OperationContext(ImageLimits.Default with { MaxWork = 4095 }, default)));
+        Assert.All(pixels, value => Assert.Equal(19, value));
+        using var cancellation = new CancellationTokenSource();
+        var context = new OperationContext(ImageLimits.Default, cancellation.Token); cancellation.Cancel();
+        Assert.Throws<OperationCanceledException>(() => JpegTransform.Inverse(new int[64], new ushort[64], pixels, context));
+        Assert.All(pixels, value => Assert.Equal(19, value));
+    }
+
+    [Theory]
+    [InlineData(63,64,64)] [InlineData(65,64,64)] [InlineData(64,63,64)]
+    [InlineData(64,65,64)] [InlineData(64,64,63)] [InlineData(64,64,65)]
+    public void OnlyCompleteCoefficientQuantizerAndPixelBlocksAreAccepted(int input, int quantizers, int output)
+    {
+        var pixels = Enumerable.Repeat((byte)19, output).ToArray();
+        Assert.Throws<ArgumentException>(() => JpegTransform.Inverse(new int[input], new ushort[quantizers], pixels,
+            new OperationContext(ImageLimits.Default, default)));
+        Assert.All(pixels, value => Assert.Equal(19, value));
+    }
+}
