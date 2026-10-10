@@ -39,6 +39,8 @@ The [full-resolution sampling round](WARM-JPEG-SAMPLING.md) reads exact samples
 directly and retains both differing timing screens and their uncertainty.
 The [shared inverse-DCT products round](WARM-JPEG-INVERSE-ROWS.md) interleaves
 independent AVX-512 output rows while preserving each pixel's arithmetic order.
+The [block-coordinate round](WARM-JPEG-COORDINATES.md) derives encoder geometry
+once per block while preserving every sampled pixel and encoded byte.
 The first [warm VP8 quality preparation](WARM-WEBP-MATCH.md) is unmatched and
 retained explicitly; it supplies no warm speed ratio.
 

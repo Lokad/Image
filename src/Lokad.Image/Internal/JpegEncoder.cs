@@ -66,16 +66,20 @@ internal static class JpegEncoder
                 for (var bx = 0; bx < blockH; bx++)
                 {
                     context.Work(64L * (component == 0 ? 1 : h * v) * 12);
+                    // Geometry is constant for this block. Preserve sample
+                    // traversal and arithmetic while deriving its origin once.
+                    var samplesX = component == 0 ? 1 : h; var samplesY = component == 0 ? 1 : v;
+                    var sourceLeft = mcu % columns * h * 8 + bx * 8;
+                    var sourceTop = mcu / columns * v * 8 + by * 8;
                     for (var y = 0; y < 8; y++)
                     for (var x = 0; x < 8; x++)
                     {
                         double sum = 0;
-                        var samplesX = component == 0 ? 1 : h; var samplesY = component == 0 ? 1 : v;
                         for (var dy = 0; dy < samplesY; dy++)
                         for (var dx = 0; dx < samplesX; dx++)
                         {
-                            var sourceX = mcu % columns * h * 8 + bx * 8 + x * samplesX + dx;
-                            var sourceY = mcu / columns * v * 8 + by * 8 + y * samplesY + dy;
+                            var sourceX = sourceLeft + x * samplesX + dx;
+                            var sourceY = sourceTop + y * samplesY + dy;
                             sourceX = Math.Min(sourceX, image.Width - 1); sourceY = Math.Min(sourceY, image.Height - 1);
                             ReadRgb(image, sourceX, sourceY, options.BackgroundRgb, out var r, out var g, out var b);
                             sum += component switch
