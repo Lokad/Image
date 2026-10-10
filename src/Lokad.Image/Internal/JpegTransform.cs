@@ -65,22 +65,44 @@ internal static class JpegTransform
         // The only additional storage is the 512-byte static basis transpose.
         if (Avx512F.IsSupported)
         {
-            for (var y = 0; y < 8; y++)
+            // Share the exact horizontal product across output rows. Each
+            // row still accumulates terms in the original v/u order; only
+            // independent rows are interleaved, with no reassociation/FMA.
+            Vector512<double> sum0 = Vector512<double>.Zero, sum1 = Vector512<double>.Zero,
+                sum2 = Vector512<double>.Zero, sum3 = Vector512<double>.Zero,
+                sum4 = Vector512<double>.Zero, sum5 = Vector512<double>.Zero,
+                sum6 = Vector512<double>.Zero, sum7 = Vector512<double>.Zero;
+            for (var v = 0; v < 8; v++)
             {
-                var sum = Vector512<double>.Zero;
-                for (var v = 0; v < 8; v++)
+                var vertical0 = Vector512.Create(Cosines[v]); var vertical1 = Vector512.Create(Cosines[8 + v]);
+                var vertical2 = Vector512.Create(Cosines[16 + v]); var vertical3 = Vector512.Create(Cosines[24 + v]);
+                var vertical4 = Vector512.Create(Cosines[32 + v]); var vertical5 = Vector512.Create(Cosines[40 + v]);
+                var vertical6 = Vector512.Create(Cosines[48 + v]); var vertical7 = Vector512.Create(Cosines[56 + v]);
+                for (var u = 0; u < 8; u++)
                 {
-                    var vertical = Vector512.Create(Cosines[y * 8 + v]);
-                    for (var u = 0; u < 8; u++)
-                    {
-                        var index = v * 8 + u;
-                        var sample = Vector512.Create((double)coefficients[index] * quantization[index]);
-                        var horizontal = Vector512.Create(InverseCosines.AsSpan(u * 8, 8));
-                        sum = Avx512F.Add(sum, Avx512F.Multiply(Avx512F.Multiply(sample, horizontal), vertical));
-                    }
+                    var index = v * 8 + u;
+                    var sample = Vector512.Create((double)coefficients[index] * quantization[index]);
+                    var horizontal = Avx512F.Multiply(sample, Vector512.Create(InverseCosines.AsSpan(u * 8, 8)));
+                    sum0 = Avx512F.Add(sum0, Avx512F.Multiply(horizontal, vertical0));
+                    sum1 = Avx512F.Add(sum1, Avx512F.Multiply(horizontal, vertical1));
+                    sum2 = Avx512F.Add(sum2, Avx512F.Multiply(horizontal, vertical2));
+                    sum3 = Avx512F.Add(sum3, Avx512F.Multiply(horizontal, vertical3));
+                    sum4 = Avx512F.Add(sum4, Avx512F.Multiply(horizontal, vertical4));
+                    sum5 = Avx512F.Add(sum5, Avx512F.Multiply(horizontal, vertical5));
+                    sum6 = Avx512F.Add(sum6, Avx512F.Multiply(horizontal, vertical6));
+                    sum7 = Avx512F.Add(sum7, Avx512F.Multiply(horizontal, vertical7));
                 }
-                for (var x = 0; x < 8; x++)
-                    pixels[y * 8 + x] = (byte)Math.Clamp(Math.Round(sum.GetElement(x) / 4 + 128, MidpointRounding.AwayFromZero), 0, 255);
+            }
+            for (var x = 0; x < 8; x++)
+            {
+                pixels[x] = (byte)Math.Clamp(Math.Round(sum0.GetElement(x) / 4 + 128, MidpointRounding.AwayFromZero), 0, 255);
+                pixels[8 + x] = (byte)Math.Clamp(Math.Round(sum1.GetElement(x) / 4 + 128, MidpointRounding.AwayFromZero), 0, 255);
+                pixels[16 + x] = (byte)Math.Clamp(Math.Round(sum2.GetElement(x) / 4 + 128, MidpointRounding.AwayFromZero), 0, 255);
+                pixels[24 + x] = (byte)Math.Clamp(Math.Round(sum3.GetElement(x) / 4 + 128, MidpointRounding.AwayFromZero), 0, 255);
+                pixels[32 + x] = (byte)Math.Clamp(Math.Round(sum4.GetElement(x) / 4 + 128, MidpointRounding.AwayFromZero), 0, 255);
+                pixels[40 + x] = (byte)Math.Clamp(Math.Round(sum5.GetElement(x) / 4 + 128, MidpointRounding.AwayFromZero), 0, 255);
+                pixels[48 + x] = (byte)Math.Clamp(Math.Round(sum6.GetElement(x) / 4 + 128, MidpointRounding.AwayFromZero), 0, 255);
+                pixels[56 + x] = (byte)Math.Clamp(Math.Round(sum7.GetElement(x) / 4 + 128, MidpointRounding.AwayFromZero), 0, 255);
             }
             return;
         }
