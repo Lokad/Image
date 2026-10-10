@@ -51,6 +51,8 @@ The [sample-conversion round](WARM-JPEG-ROUND-SAMPLES.md) uses safe SIMD for fin
 inverse-DCT rounding and byte output, preserving half ties and exact decoded pixels.
 The [coefficient-quantization round](WARM-JPEG-QUANTIZATION.md) preserves every
 quotient and encoded byte, with an explicit safe stack destination and modest gains.
+The [component-row round](WARM-JPEG-COMPONENT-ROW.md) vectorizes exact 8-bit alpha
+blending and component construction; encode screens improve to roughly 2.5x.
 The first [warm VP8 quality preparation](WARM-WEBP-MATCH.md) is unmatched and
 retained explicitly; it supplies no warm speed ratio.
 

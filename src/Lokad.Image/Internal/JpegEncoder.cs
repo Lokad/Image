@@ -77,25 +77,35 @@ internal static class JpegEncoder
                     var samplesX = component == 0 ? 1 : h; var samplesY = component == 0 ? 1 : v;
                     var sourceLeft = mcu % columns * h * 8 + bx * 8;
                     var sourceTop = mcu / columns * v * 8 + by * 8;
-                    for (var y = 0; y < 8; y++)
-                    for (var x = 0; x < 8; x++)
+                    if (image.BitDepth == 8 && h == 1 && v == 1 && sourceLeft <= image.Width - 8
+                        && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported)
                     {
-                        double sum = 0;
-                        for (var dy = 0; dy < samplesY; dy++)
-                        for (var dx = 0; dx < samplesX; dx++)
+                        for (var y = 0; y < 8; y++)
+                            SampleComponentRow8(image.GetRow8(Math.Min(sourceTop + y, image.Height - 1)).Slice(sourceLeft * 4, 32),
+                                component, options.BackgroundRgb, pixels.AsSpan(y * 8, 8));
+                    }
+                    else
+                    {
+                        for (var y = 0; y < 8; y++)
+                        for (var x = 0; x < 8; x++)
                         {
-                            var sourceX = sourceLeft + x * samplesX + dx;
-                            var sourceY = sourceTop + y * samplesY + dy;
-                            sourceX = Math.Min(sourceX, image.Width - 1); sourceY = Math.Min(sourceY, image.Height - 1);
-                            ReadRgb(image, sourceX, sourceY, options.BackgroundRgb, out var r, out var g, out var b);
-                            sum += component switch
+                            double sum = 0;
+                            for (var dy = 0; dy < samplesY; dy++)
+                            for (var dx = 0; dx < samplesX; dx++)
                             {
-                                0 => 0.299 * r + 0.587 * g + 0.114 * b,
-                                1 => 128 - 0.168735892 * r - 0.331264108 * g + 0.5 * b,
-                                _ => 128 + 0.5 * r - 0.418687589 * g - 0.081312411 * b
-                            };
+                                var sourceX = sourceLeft + x * samplesX + dx;
+                                var sourceY = sourceTop + y * samplesY + dy;
+                                sourceX = Math.Min(sourceX, image.Width - 1); sourceY = Math.Min(sourceY, image.Height - 1);
+                                ReadRgb(image, sourceX, sourceY, options.BackgroundRgb, out var r, out var g, out var b);
+                                sum += component switch
+                                {
+                                    0 => 0.299 * r + 0.587 * g + 0.114 * b,
+                                    1 => 128 - 0.168735892 * r - 0.331264108 * g + 0.5 * b,
+                                    _ => 128 + 0.5 * r - 0.418687589 * g - 0.081312411 * b
+                                };
+                            }
+                            pixels[y * 8 + x] = (byte)Math.Clamp(Math.Round(sum / (samplesX * samplesY), MidpointRounding.AwayFromZero), 0, 255);
                         }
-                        pixels[y * 8 + x] = (byte)Math.Clamp(Math.Round(sum / (samplesX * samplesY), MidpointRounding.AwayFromZero), 0, 255);
                     }
                     JpegTransform.Forward(pixels, transformed, context);
                     Quantize(transformed, q, quantized);
@@ -118,6 +128,59 @@ internal static class JpegEncoder
             }
         }
         writer.Align(); context.Cancellation.ThrowIfCancellationRequested(); output.Write(new byte[] { 255, 217 });
+    }
+
+    internal static void SampleComponentRow8(ReadOnlySpan<byte> rgba, int component, uint? background, Span<byte> pixels)
+    {
+        if (rgba.Length != 32 || pixels.Length != 8 || (uint)component > 2)
+            throw new ArgumentException("JPEG component rows have eight RGBA pixels and a valid component.");
+        var color = background ?? 0;
+        if (Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported)
+        {
+            // T.81 component samples retain the owned encoded-space RGB blend
+            // and binary64 color matrix. One complete row is acquired, without
+            // overread or pixel caching. Each lane preserves separate operations.
+            var packed = Vector256.Create(rgba).AsInt32(); var mask = Vector256.Create(255);
+            var alpha = Avx2.ShiftRightLogical(packed.AsUInt32(), 24).AsInt32();
+            if (background is null && Avx2.MoveMask(Avx2.CompareEqual(alpha, mask).AsByte()) != -1)
+                throw new ArgumentException("JPEG requires opaque pixels or an explicit RGB background.", "image");
+            var inverseAlpha = Avx2.Subtract(mask, alpha);
+            var r = Avx512F.ConvertToVector512Double(BlendRow8(Avx2.And(packed, mask), alpha, inverseAlpha, (int)(color >> 16 & 255)));
+            var g = Avx512F.ConvertToVector512Double(BlendRow8(Avx2.And(Avx2.ShiftRightLogical(packed.AsUInt32(), 8).AsInt32(), mask), alpha, inverseAlpha, (int)(color >> 8 & 255)));
+            var b = Avx512F.ConvertToVector512Double(BlendRow8(Avx2.And(Avx2.ShiftRightLogical(packed.AsUInt32(), 16).AsInt32(), mask), alpha, inverseAlpha, (int)(color & 255)));
+            var samples = component switch
+            {
+                0 => Avx512F.Add(Avx512F.Add(Avx512F.Multiply(Vector512.Create(0.299), r), Avx512F.Multiply(Vector512.Create(0.587), g)), Avx512F.Multiply(Vector512.Create(0.114), b)),
+                1 => Avx512F.Add(Avx512F.Subtract(Avx512F.Subtract(Vector512.Create(128d), Avx512F.Multiply(Vector512.Create(0.168735892), r)), Avx512F.Multiply(Vector512.Create(0.331264108), g)), Avx512F.Multiply(Vector512.Create(0.5), b)),
+                _ => Avx512F.Subtract(Avx512F.Subtract(Avx512F.Add(Vector512.Create(128d), Avx512F.Multiply(Vector512.Create(0.5), r)), Avx512F.Multiply(Vector512.Create(0.418687589), g)), Avx512F.Multiply(Vector512.Create(0.081312411), b))
+            };
+            JpegTransform.RoundSamples(samples, pixels);
+            return;
+        }
+        for (var x = 0; x < 8; x++)
+        {
+            var pixel = rgba.Slice(x * 4, 4); var alpha = pixel[3];
+            if (alpha != 255 && background is null)
+                throw new ArgumentException("JPEG requires opaque pixels or an explicit RGB background.", "image");
+            var r = Flatten8(pixel[0], alpha, (int)(color >> 16 & 255));
+            var g = Flatten8(pixel[1], alpha, (int)(color >> 8 & 255));
+            var b = Flatten8(pixel[2], alpha, (int)(color & 255));
+            var sample = component switch
+            {
+                0 => 0.299 * r + 0.587 * g + 0.114 * b,
+                1 => 128 - 0.168735892 * r - 0.331264108 * g + 0.5 * b,
+                _ => 128 + 0.5 * r - 0.418687589 * g - 0.081312411 * b
+            };
+            pixels[x] = (byte)Math.Clamp(Math.Round(sample, MidpointRounding.AwayFromZero), 0, 255);
+        }
+    }
+
+    private static Vector256<int> BlendRow8(Vector256<int> value, Vector256<int> alpha, Vector256<int> inverseAlpha, int background)
+    {
+        var numerator = Avx2.Add(Avx2.Add(Avx2.MultiplyLow(value, alpha), Avx2.MultiplyLow(Vector256.Create(background), inverseAlpha)), Vector256.Create(127));
+        // For 0 <= n <= 65152, floor(n/255) = (n + 1 + (n >> 8)) >> 8.
+        // Byte products bound n to this range; all arithmetic is exact Int32.
+        return Avx2.ShiftRightLogical(Avx2.Add(Avx2.Add(numerator, Vector256.Create(1)), Avx2.ShiftRightLogical(numerator.AsUInt32(), 8).AsInt32()).AsUInt32(), 8).AsInt32();
     }
 
     private static void ReadRgb(ImageBuffer image, int x, int y, uint? background, out int r, out int g, out int b)
