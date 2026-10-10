@@ -125,7 +125,14 @@ Backreferences cannot extend outside the raster or refer before its first pixel.
 
 VP8L's fixed parser allowance is 512 bytes. Arrays of pixel/cache words admit
 their payload plus 32 bytes. A single-leaf prefix table admits 64 bytes; a complete
-table admits 320 plus two bytes per leaf. Its input length vector is admitted
+table admits 320 plus two bytes per leaf. When a code of at most eight bits is
+present, an additional canonical lookup admits `4*(1<<min(8,maxLength))+32`
+bytes and charges `(1<<min(8,maxLength))+8*leafCount` construction work units.
+Trees with only longer codes retain canonical traversal without that storage;
+zero-bit single leaves retain their original charge. Short lookup reads charge
+the original number of code bits; tight work budgets and incomplete input use
+the original bit-by-bit traversal without speculative state changes.
+Its input length vector is admitted
 separately while constructing it, as is the temporary code-length tree for a
 complex definition. Tables and the color cache are released when their image
 is decoded. Palette/transform data survive until their inverse transform ends.

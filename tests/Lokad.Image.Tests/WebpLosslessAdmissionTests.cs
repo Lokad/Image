@@ -52,13 +52,14 @@ public sealed class WebpLosslessAdmissionTests
     public void HuffmanConstructionAdmitsSingleLeafOrCompleteTreeStorageAndWork(bool single)
     {
         byte[] lengths = single ? [0, 0, 1] : [1, 2, 2];
-        var bytes = single ? 64 : 326;
-        var limits = new ImageLimits { MaxWorkingBytes = bytes, MaxWork = 48 };
+        var bytes = single ? 64 : 374;
+        var work = single ? 48 : 76;
+        var limits = new ImageLimits { MaxWorkingBytes = bytes, MaxWork = work };
         Assert.Equal(bytes, new WebpHuffman(lengths, new OperationContext(limits, default)).MemoryBytes);
         Assert.Throws<ImageLimitException>(() => new WebpHuffman(lengths,
             new OperationContext(limits with { MaxWorkingBytes = bytes - 1 }, default)));
         Assert.Throws<ImageLimitException>(() => new WebpHuffman(lengths,
-            new OperationContext(limits with { MaxWork = 47 }, default)));
+            new OperationContext(limits with { MaxWork = work - 1 }, default)));
         using var cancellation = new CancellationTokenSource();
         var canceled = new OperationContext(limits, cancellation.Token); cancellation.Cancel();
         Assert.Throws<OperationCanceledException>(() => new WebpHuffman(lengths, canceled));

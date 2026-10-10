@@ -64,6 +64,9 @@ retained explicitly; it supplies no warm speed ratio.
 The [still VP8L decode screens](WARM-WEBP-DECODE.md) add one lossless pair from
 the existing raster, with exact RGBA and independent outputs. This direction
 becomes the largest measured warm gap; other WebP decode strategies remain open.
+The [admitted VP8L short-prefix round](WARM-WEBP-PREFIX.md) replaces short-code
+bit traversal with independently generated canonical entries. It lowers this
+gap to roughly 2.05x while retaining exact pixels and failure boundaries.
 
 For warm memory comparisons, the Linux [original FFmpeg reference worker](../tools/WarmReference/README.md)
 excludes process launch, IPC and file transport from native elapsed samples.

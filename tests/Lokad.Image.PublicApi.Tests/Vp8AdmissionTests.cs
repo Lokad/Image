@@ -45,7 +45,7 @@ public sealed class Vp8AdmissionTests
         {
             // The owned alpha encoder's fixed full-alphabet trees, main-raster
             // allocation and RGBA conversion have independently declared peaks.
-            var lossless = Math.Max(4432, Math.Max(4392 + pixels * 4, 544 + pixels * 8));
+            var lossless = Math.Max(8944, Math.Max(8904 + pixels * 4, 544 + pixels * 8));
             peak = Math.Max(peak, planes + alphaBytes + lossless);
         }
         if (orient) peak = Math.Max(peak, pixels * 8);

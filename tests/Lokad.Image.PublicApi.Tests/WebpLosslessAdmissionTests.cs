@@ -12,17 +12,17 @@ public sealed class WebpLosslessAdmissionTests
             yield return ["cross-color", 0, 5, 3, 1168L, orient];
             yield return ["subtract-green", 0, 3, 2, 1128L, orient];
             foreach (var colors in new[] { 1, 2, 3, 4, 16, 17, 256 })
-                yield return ["palette", colors, 9, 1, 1928L + colors * 4, orient];
-            yield return ["palette-predictor", 2, 9, 1, 1972L, orient];
-            yield return ["backward", 0, 5, 1, 1388L, orient];
+                yield return ["palette", colors, 9, 1, 2984L + colors * 4, orient];
+            yield return ["palette-predictor", 2, 9, 1, 3028L, orient];
+            yield return ["backward", 0, 5, 1, 1428L, orient];
             foreach (var groups in new[] { 2, 16, 256 }) yield return ["groups", groups, 8, 1, 808L + groups * 360, orient];
             yield return ["duplicate", 0, 1, 1, 1128L, orient];
-            yield return ["repeats", 0, 5, 1, 1388L, orient];
-            yield return ["repeats", 1, 1, 1, 1896L, orient];
+            yield return ["repeats", 0, 5, 1, 1428L, orient];
+            yield return ["repeats", 1, 1, 1, 2952L, orient];
             foreach (var cacheBits in Enumerable.Range(1, 11))
             {
                 var cacheSize = 1 << cacheBits;
-                yield return ["cache", cacheBits, 2, 1, 512L + cacheSize * 4 + 32 + Math.Max(708 + cacheSize, 876), orient];
+                yield return ["cache", cacheBits, 2, 1, 512L + cacheSize * 4 + 32 + Math.Max(748 + cacheSize, 916), orient];
             }
             foreach (var size in new[] { (1, 1), (64, 1), (99, 1), (17, 11), (16384, 1) })
             {

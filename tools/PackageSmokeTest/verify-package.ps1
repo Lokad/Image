@@ -222,7 +222,7 @@ foreach (var exhausted in new[] { webpLimits with { MaxWorkingBytes = webpLimits
 }
 // The fixed full-alphabet encoder's five trees peak while building the distance
 // tree: 512 parser + 72 references + 3376 existing trees + 72 lengths + 400 tree.
-var webpDecodeLimits = new ImageLimits { MaxWorkingBytes = webp.Length + 4432 };
+var webpDecodeLimits = new ImageLimits { MaxWorkingBytes = webp.Length + 8944 };
 using var admittedWebpPixels = ImageCodec.Decode(webp.ToArray(), new DecodeOptions { Limits = webpDecodeLimits });
 if (!admittedWebpPixels.GetRow8(0).SequenceEqual(webpPixels.GetRow8(0)))
     throw new Exception("Package consumer VP8L decode admission changes its pixels.");

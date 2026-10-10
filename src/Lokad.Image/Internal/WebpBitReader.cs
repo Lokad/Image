@@ -7,6 +7,7 @@ internal ref struct WebpBitReader
     private readonly OperationContext context;
     private int position, available;
     private ulong bits;
+    internal int Position => position;
 
     public WebpBitReader(ReadOnlySpan<byte> data, OperationContext context)
     {
@@ -24,5 +25,27 @@ internal ref struct WebpBitReader
         }
         var value = (int)(bits & ((1ul << count) - 1));
         bits >>= count; available -= count; return value;
+    }
+
+    internal bool TryReadHuffman(ReadOnlySpan<int> codes, out int symbol)
+    {
+        symbol = 0;
+        var candidateBits = bits; var candidateAvailable = available; var candidatePosition = position;
+        var mask = codes.Length - 1;
+        while (true)
+        {
+            var packed = codes[(int)candidateBits & mask]; var count = packed & 15;
+            if (count != 0 && count <= candidateAvailable)
+            {
+                // Charge the same logical one-bit reads. A tight budget falls
+                // back without mutation, retaining partial consumption and
+                // limit-before-truncation precedence. Read no unnecessary byte.
+                if (!context.TryWork(count)) return false;
+                bits = candidateBits >> count; available = candidateAvailable - count; position = candidatePosition;
+                symbol = packed >> 4; return true;
+            }
+            if (candidateAvailable >= 8 || (1 << candidateAvailable) >= codes.Length || candidatePosition == data.Length) return false;
+            candidateBits |= (ulong)data[candidatePosition++] << candidateAvailable; candidateAvailable += 8;
+        }
     }
 }
