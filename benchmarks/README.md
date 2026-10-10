@@ -67,6 +67,9 @@ becomes the largest measured warm gap; other WebP decode strategies remain open.
 The [admitted VP8L short-prefix round](WARM-WEBP-PREFIX.md) replaces short-code
 bit traversal with independently generated canonical entries. It lowers this
 gap to roughly 2.05x while retaining exact pixels and failure boundaries.
+The [rejected JPEG primitive trials](WARM-JPEG-REJECTED-PRIMITIVES.md) retain
+three discarded candidates, 27 additional boundary controls and one current
+CPU profile. The retained native JPEG decode gap remains about 2.91x.
 
 For warm memory comparisons, the Linux [original FFmpeg reference worker](../tools/WarmReference/README.md)
 excludes process launch, IPC and file transport from native elapsed samples.
