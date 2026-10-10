@@ -132,6 +132,38 @@ requests, arguments, sizes and affinities. They verify deterministic owned
 bitstreams, opaque decoded alpha and exact operation counters without publishing
 timing claims. Single-CPU quiet-VM and GC/JIT policies match the other warm families.
 
+## JPEG decode
+
+`ffmpeg-jpeg-decode-warm.c` uses the public software `mjpeg` decoder and
+single-threaded swscale. It reuses the already prepared managed 513x259,
+8-bit 4:4:4 JPEG; both subjects receive identical resident encoded bytes.
+No source raster or encoder-quality enumeration is added.
+
+```bash
+bash tools/WarmReference/build-jpeg-decode-linux.sh
+python3 tools/WarmReference/verify-jpeg-decode-linux.py --cpu 0
+```
+
+After a Release benchmark build and owned source inventory:
+
+```powershell
+./bench.ps1 -Smoke -Warm -WarmFamily JpegDecode -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -Cpu 0 -NoBuild
+```
+
+Each native interval resets decoder state, decodes all coefficients/pixels,
+converts full-range BT.601 to RGBA8, allocates independent output, and releases
+it. Codec/conversion/input packet/frame wrappers are reused. Padded owned
+RGBA rows need no tight-row copy inside timing. Managed public Decode,
+allocation and disposal are included. Startup, I/O, IPC and checks are excluded.
+Two simultaneously live outputs must have independent storage; mutation of
+one leaves the other intact. Repeated output pixels and encoded source bytes
+must remain unchanged. Fourteen invalid protocol/argument/affinity controls
+reuse this JPEG. Setup verifies the native pixels exactly against the pinned
+public FFmpeg CLI with the same conversion flags and normal SIMD; managed/native
+agreement retains RGB maximum 4/RMSE 1.5 and exact opaque alpha. Decoder timing
+does not require an encoder-quality match because its encoded input is identical.
+
 ## Still VP8 WebP
 
 The original `ffmpeg-webp-warm.c` worker calls the public still `libwebp`

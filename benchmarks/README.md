@@ -29,6 +29,8 @@ The [JPEG RGB extraction round](WARM-JPEG-RGB.md) reduces repeated row access
 and uses the exact normalized 8-bit alpha blend, preserving all encoded bytes.
 The [JPEG byte-output round](WARM-JPEG-BYTE.md) removes per-byte heap arrays
 while retaining the same span dispatch, cancellation and output admission.
+The [JPEG decode screen](WARM-JPEG-DECODE.md) reuses that prepared JPEG and
+measures complete decode to independent RGBA8 on both subjects.
 The first [warm VP8 quality preparation](WARM-WEBP-MATCH.md) is unmatched and
 retained explicitly; it supplies no warm speed ratio.
 
