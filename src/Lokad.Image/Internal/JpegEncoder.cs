@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Numerics;
 
 namespace Lokad.Image.Internal;
 
@@ -162,12 +163,11 @@ internal static class JpegEncoder
         return result;
     }
 
-    private static int Category(int value)
-    {
-        var magnitude = Math.Abs(value); var size = 0;
-        while (magnitude != 0) { size++; magnitude >>= 1; }
-        return size;
-    }
+    // T.81 F.1.2.1 SIZE is the magnitude's binary width, with zero in category
+    // zero. Keep Math.Abs's full-Int32 overflow behavior; the BCL provides
+    // hardware leading-zero counting where available and a safe fallback.
+    internal static int Category(int value)
+        => 32 - BitOperations.LeadingZeroCount((uint)Math.Abs(value));
 
     private static void WriteQuantization(Stream output, ushort[] values, byte id)
     {

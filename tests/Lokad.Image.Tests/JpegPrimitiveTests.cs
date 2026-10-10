@@ -5,6 +5,36 @@ namespace Lokad.Image.Tests;
 public sealed class JpegPrimitiveTests
 {
     [Fact]
+    public void MagnitudeCategoriesCoverEveryJpegCoefficientAndDifference()
+    {
+        // Independent T.81 category intervals: 2^(SIZE-1) through 2^SIZE-1.
+        // Cover both signs throughout the complete 16-bit magnitude domain.
+        Assert.Equal(0, JpegEncoder.Category(0));
+        for (var category = 1; category <= 16; category++)
+        for (var value = 1 << (category - 1); value < 1 << category; value++)
+        {
+            Assert.Equal(category, JpegEncoder.Category(value));
+            Assert.Equal(category, JpegEncoder.Category(-value));
+        }
+    }
+
+    [Fact]
+    public void MagnitudeCategoriesKeepFullIntegerBoundariesAndOverflow()
+    {
+        for (var category = 1; category <= 31; category++)
+        {
+            var first = 1 << (category - 1); var last = (int)((1L << category) - 1);
+            Assert.Equal(category - 1, JpegEncoder.Category(first - 1));
+            Assert.Equal(category - 1, JpegEncoder.Category(1 - first));
+            Assert.Equal(category, JpegEncoder.Category(first));
+            Assert.Equal(category, JpegEncoder.Category(-first));
+            Assert.Equal(category, JpegEncoder.Category(last));
+            Assert.Equal(category, JpegEncoder.Category(-last));
+        }
+        Assert.Throws<OverflowException>(() => JpegEncoder.Category(int.MinValue));
+    }
+
+    [Fact]
     public void EightBitFlattenIsTheUniqueNearestEncodedSpaceSample()
     {
         // Original rational-error control independent of the division formula:

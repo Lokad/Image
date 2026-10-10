@@ -45,6 +45,8 @@ The [native-prepared JPEG decode screen](WARM-JPEG-NATIVE-DECODE.md) selects
 one existing native JPEG explicitly, using the same original source raster.
 The [adaptive long-prefix round](WARM-JPEG-LONG-PREFIX.md) extends input-derived
 Huffman lookup for nine/ten-bit codes with explicit memory/work admission.
+The [magnitude-category round](WARM-JPEG-CATEGORY.md) replaces the coefficient
+width loop with the BCL leading-zero primitive while preserving encoded bytes.
 The first [warm VP8 quality preparation](WARM-WEBP-MATCH.md) is unmatched and
 retained explicitly; it supplies no warm speed ratio.
 
