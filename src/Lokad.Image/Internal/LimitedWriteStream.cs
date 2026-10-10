@@ -15,6 +15,12 @@ internal sealed class LimitedWriteStream(Stream output, int maximum, Cancellatio
         output.Write(data); written += data.Length;
     }
     public override void Write(byte[] data, int offset, int count) => Write(data.AsSpan(offset, count));
+    public override void WriteByte(byte value)
+    {
+        // Stream.WriteByte's default one-element array would allocate on every
+        // entropy/header byte. Keep the same span write and admission checks.
+        Span<byte> data = stackalloc byte[1]; data[0] = value; Write(data);
+    }
     public override void Flush() => output.Flush();
     public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException();
     public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();

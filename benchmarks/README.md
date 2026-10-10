@@ -27,6 +27,8 @@ The [JPEG forward-DCT round](WARM-JPEG-DCT.md) measures one warm matched-quality
 This largest measured gap remains above the target.
 The [JPEG RGB extraction round](WARM-JPEG-RGB.md) reduces repeated row access
 and uses the exact normalized 8-bit alpha blend, preserving all encoded bytes.
+The [JPEG byte-output round](WARM-JPEG-BYTE.md) removes per-byte heap arrays
+while retaining the same span dispatch, cancellation and output admission.
 The first [warm VP8 quality preparation](WARM-WEBP-MATCH.md) is unmatched and
 retained explicitly; it supplies no warm speed ratio.
 
