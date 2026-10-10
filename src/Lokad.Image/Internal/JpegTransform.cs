@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
@@ -61,7 +62,8 @@ internal static class JpegTransform
         context.Work(4096);
         // T.81 A.3.3 output pixels are independent. Every lane keeps the
         // scalar v/u accumulation order and separate multiplications; no FMA,
-        // reassociation or reduced logical work. Round/clamp stays scalar.
+        // reassociation or reduced logical work. Final round/clamp preserves
+        // the original away-from-zero sample policy.
         // The only additional storage is the 512-byte static basis transpose.
         if (Avx512F.IsSupported)
         {
@@ -92,6 +94,21 @@ internal static class JpegTransform
                     sum6 = Avx512F.Add(sum6, Avx512F.Multiply(horizontal, vertical6));
                     sum7 = Avx512F.Add(sum7, Avx512F.Multiply(horizontal, vertical7));
                 }
+            }
+            if (Avx512F.VL.IsSupported)
+            {
+                // Multiplication by the exact power-of-two 0.25 gives the
+                // same binary64 result as division by four, including underflow.
+                var scale = Vector512.Create(0.25); var offset = Vector512.Create(128.0);
+                RoundSamples(Avx512F.Add(Avx512F.Multiply(sum0, scale), offset), pixels[..8]);
+                RoundSamples(Avx512F.Add(Avx512F.Multiply(sum1, scale), offset), pixels.Slice(8, 8));
+                RoundSamples(Avx512F.Add(Avx512F.Multiply(sum2, scale), offset), pixels.Slice(16, 8));
+                RoundSamples(Avx512F.Add(Avx512F.Multiply(sum3, scale), offset), pixels.Slice(24, 8));
+                RoundSamples(Avx512F.Add(Avx512F.Multiply(sum4, scale), offset), pixels.Slice(32, 8));
+                RoundSamples(Avx512F.Add(Avx512F.Multiply(sum5, scale), offset), pixels.Slice(40, 8));
+                RoundSamples(Avx512F.Add(Avx512F.Multiply(sum6, scale), offset), pixels.Slice(48, 8));
+                RoundSamples(Avx512F.Add(Avx512F.Multiply(sum7, scale), offset), pixels.Slice(56, 8));
+                return;
             }
             for (var x = 0; x < 8; x++)
             {
@@ -140,6 +157,28 @@ internal static class JpegTransform
             }
             pixels[y * 8 + x] = (byte)Math.Clamp(Math.Round(sum / 4 + 128, MidpointRounding.AwayFromZero), 0, 255);
         }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static void RoundSamples(Vector512<double> samples, Span<byte> pixels)
+    {
+        if (pixels.Length != 8) throw new ArgumentException("JPEG sample rows have eight pixels.", nameof(pixels));
+        if (Avx512F.IsSupported && Avx512F.VL.IsSupported)
+        {
+            // Transform sums are finite. Clipping before rounding is equivalent
+            // at the byte endpoints. Within [0,255], floor and an exact
+            // half-fraction comparison implement away-from-zero ties without
+            // adding 0.5 (which can move a value just below a tie onto it).
+            var clipped = Avx512F.Min(Avx512F.Max(samples, Vector512<double>.Zero), Vector512.Create(255.0));
+            var integral = Avx512F.RoundScale(clipped, 0x09); // floor, suppress precision exception
+            var aboveHalf = Avx512F.CompareGreaterThanOrEqual(Avx512F.Subtract(clipped, integral), Vector512.Create(0.5));
+            var increment = Avx512F.And(aboveHalf.AsInt64(), Vector512.Create(1.0).AsInt64()).AsDouble();
+            var rounded = Avx512F.Add(integral, increment);
+            Avx512F.VL.ConvertToVector128Byte(Avx512F.ConvertToVector256Int32WithTruncation(rounded)).GetLower().CopyTo(pixels);
+            return;
+        }
+        for (var x = 0; x < 8; x++)
+            pixels[x] = (byte)Math.Clamp(Math.Round(samples.GetElement(x), MidpointRounding.AwayFromZero), 0, 255);
     }
 
     public static void Forward(ReadOnlySpan<byte> pixels, Span<double> coefficients, OperationContext context)

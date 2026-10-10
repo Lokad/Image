@@ -1,10 +1,54 @@
 using System.Security.Cryptography;
+using System.Runtime.Intrinsics;
 using Lokad.Image.Internal;
 
 namespace Lokad.Image.Tests;
 
 public sealed class JpegInverseTests
 {
+    [Fact]
+    public void EightSampleRoundingPreservesEveryByteHalfTieNeighborhoodAndClipping()
+    {
+        var samples = new List<double> { -1e16, -65535, -double.Epsilon, -0.0, 0.0, double.Epsilon, 65535, 1e16 };
+        for (var integer = -2; integer <= 257; integer++)
+        {
+            var half = integer + 0.5;
+            samples.AddRange([Math.BitDecrement(half), half, Math.BitIncrement(half), integer]);
+        }
+        var values = samples.ToArray();
+        for (var start = 0; start < values.Length; start += 8)
+        {
+            var guarded = Enumerable.Repeat((byte)19, 10).ToArray();
+            JpegTransform.RoundSamples(Vector512.Create(values.AsSpan(start, 8)), guarded.AsSpan(1, 8));
+            Assert.Equal(19, guarded[0]); Assert.Equal(19, guarded[^1]);
+            for (var lane = 0; lane < 8; lane++)
+                Assert.Equal((byte)Math.Clamp(Math.Round(values[start + lane], MidpointRounding.AwayFromZero), 0, 255), guarded[lane + 1]);
+        }
+    }
+
+    [Fact]
+    public void EightSampleRoundingKeepsDistinctLanesInOrder()
+    {
+        double[] samples = [254.75, 0.25, 127.5, 1.5, 255, -1, Math.BitDecrement(2.5), 192.75];
+        byte[] expected = [255, 0, 128, 2, 255, 0, 2, 193];
+        for (var phase = 0; phase < 8; phase++)
+        {
+            var rotated = Enumerable.Range(0, 8).Select(index => samples[(index + phase) & 7]).ToArray();
+            var actual = new byte[8];
+            JpegTransform.RoundSamples(Vector512.Create(rotated), actual);
+            Assert.Equal(Enumerable.Range(0, 8).Select(index => expected[(index + phase) & 7]), actual);
+        }
+    }
+
+    [Theory]
+    [InlineData(0)] [InlineData(7)] [InlineData(9)]
+    public void EightSampleRoundingRejectsIncompleteRowsBeforeWriting(int length)
+    {
+        var pixels = Enumerable.Repeat((byte)19, length).ToArray();
+        Assert.Throws<ArgumentException>(() => JpegTransform.RoundSamples(Vector512<double>.Zero, pixels));
+        Assert.All(pixels, value => Assert.Equal(19, value));
+    }
+
     // Original analytic/dense/extreme coefficient blocks. Hashes were captured
     // from the owned scalar implementation before this optimization. Half ties,
     // clipping, ushort quantizers and the full int coefficient range are covered.

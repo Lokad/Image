@@ -47,6 +47,8 @@ The [adaptive long-prefix round](WARM-JPEG-LONG-PREFIX.md) extends input-derived
 Huffman lookup for nine/ten-bit codes with explicit memory/work admission.
 The [magnitude-category round](WARM-JPEG-CATEGORY.md) replaces the coefficient
 width loop with the BCL leading-zero primitive while preserving encoded bytes.
+The [sample-conversion round](WARM-JPEG-ROUND-SAMPLES.md) uses safe SIMD for final
+inverse-DCT rounding and byte output, preserving half ties and exact decoded pixels.
 The first [warm VP8 quality preparation](WARM-WEBP-MATCH.md) is unmatched and
 retained explicitly; it supplies no warm speed ratio.
 
