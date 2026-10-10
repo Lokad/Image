@@ -389,6 +389,11 @@ internal ref struct JpegDecoder
 
     private double Interpolate(Component component, int x, int y)
     {
+        // Equal sampling factors map the centered coordinates exactly to x/y;
+        // both interpolation fractions are zero. The full-resolution plane
+        // already covers the output raster, including padded block rows.
+        if (component.H == maxH && component.V == maxV)
+            return component.Plane[y * component.BlockColumns * 8 + x];
         var cx = (x + 0.5) * component.H / maxH - 0.5; var cy = (y + 0.5) * component.V / maxV - 0.5;
         var ix = (int)Math.Floor(cx); var iy = (int)Math.Floor(cy); var fx = cx - ix; var fy = cy - iy;
         var x0 = Math.Clamp(ix, 0, component.SampleWidth - 1); var x1 = Math.Clamp(ix + 1, 0, component.SampleWidth - 1);
