@@ -261,6 +261,12 @@ if (args.Length is 2 or 3 && args[0] == "--prepare-warm-webp")
     return;
 }
 
+if (args.Length == 2 && args[0] == "--prepare-warm-webp-decode")
+{
+    WarmWebpDecode.Prepare(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture));
+    return;
+}
+
 if (args.Length is 2 or 3 && args[0] == "--prepare-warm-jpeg")
 {
     WarmJpeg.Prepare(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture),

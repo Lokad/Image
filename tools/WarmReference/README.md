@@ -216,3 +216,57 @@ framing, independent live packet storage, alpha and operation counters, and
 reject fourteen invalid requests/arguments/affinities. Native binaries, static
 archives and identities remain ignored. Measurement requires the quiet VM and
 the same one-CPU, GC/JIT, bracketing and repeat policy as the other warm families.
+
+## Still VP8L WebP decode
+
+The original `ffmpeg-webp-decode-warm.c` adapter uses FFmpeg's public software
+`webp` decoder and public ARGB-to-RGBA conversion APIs. It accepts one complete
+version-zero VP8L RIFF input. Build the worker and the Release solution, then
+capture the owned source inventory:
+
+```bash
+bash tools/WarmReference/build-webp-decode-linux.sh
+dotnet build Lokad.Image.slnx -c Release --tl:off
+```
+
+```powershell
+./tools/WarmReference/capture-source.ps1
+dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-webp-decode 0
+```
+
+Preparation runs once, outside every benchmark launch, and refuses to overwrite
+its manifest. It freezes one original Lokad.Image VP8L encoding of the existing
+513x259 RGBA8 raster at effort 4 under ignored `artifacts/warm-reference/webp-decode/`.
+Both Lokad.Image and the pinned FFmpeg CLI must reproduce every original RGBA
+byte, including alpha and zero-alpha hidden RGB. The selected profile has no
+transforms, color cache or spatial entropy groups. No quality matching or
+additional source image is needed for identical-input lossless decoding.
+
+```bash
+python3 tools/WarmReference/verify-webp-decode-linux.py --cpu 0
+```
+
+```powershell
+./bench.ps1 -Smoke -Warm -WarmFamily WebpDecode -WarmCases Lossless8 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily WebpDecode -WarmCases Lossless8 -Cpu 0 -NoBuild
+```
+
+Run measurement sequentially on the quiet dedicated VM; check quietness before
+and after each run and repeat this one pair. Setup consumes the frozen bytes
+without encoding again. Managed timing covers the full public span Decode call,
+independent output acquisition and disposal. Native timing includes decoder
+state reset, every decoded pixel, ARGB-to-RGBA conversion and independent owned
+output allocation/release. Codec/conversion contexts and packet/frame wrappers
+are reused; padded output rows require no extra packing copy. Neither subject
+caches decoded pixels. Startup, IPC, I/O, generation, hashing and validation are
+excluded. CPU affinity, codec and conversion threads are each one; thread types
+are zero and normal SIMD remains enabled.
+
+Twenty negative controls check affinity, arguments, protocol, geometry and RIFF
+framing using the same frozen input. Successful controls check operation counts,
+source integrity, independent live native output storage and exact public-CLI
+pixels. Setup and cleanup check complete managed/native RGBA and source integrity.
+The [retained screens](../../benchmarks/WARM-WEBP-DECODE.md) cover this one VP8L
+profile only. Other VP8L strategies and VP8 decode remain unmeasured. This native
+adapter, its ignored binaries and static archives are development-only and never
+production build inputs.

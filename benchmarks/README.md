@@ -61,6 +61,9 @@ The [canonical fallback-prefix round](WARM-JPEG-CANONICAL-PREFIX.md) consumes ei
 prefix bits together when no short code is assigned, preserving source positions and work limits.
 The first [warm VP8 quality preparation](WARM-WEBP-MATCH.md) is unmatched and
 retained explicitly; it supplies no warm speed ratio.
+The [still VP8L decode screens](WARM-WEBP-DECODE.md) add one lossless pair from
+the existing raster, with exact RGBA and independent outputs. This direction
+becomes the largest measured warm gap; other WebP decode strategies remain open.
 
 For warm memory comparisons, the Linux [original FFmpeg reference worker](../tools/WarmReference/README.md)
 excludes process launch, IPC and file transport from native elapsed samples.
