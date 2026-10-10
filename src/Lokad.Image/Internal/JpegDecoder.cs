@@ -1,4 +1,6 @@
 using System.Buffers.Binary;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
@@ -361,11 +363,25 @@ internal ref struct JpegDecoder
         var result = ImageBuffer.Allocate(info.Width, info.Height, 8, context); result.Orientation = info.Orientation;
         try
         {
+            var fullResolutionYcbcr = components.Length == 3 && !rgb
+                && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported;
+            if (fullResolutionYcbcr)
+                foreach (var component in components)
+                    fullResolutionYcbcr &= component.H == maxH && component.V == maxV;
             for (var y = 0; y < info.Height; y++)
             {
                 context.Work(info.Width * 32L);
                 var row = result.GetRow8(y);
-                for (var x = 0; x < info.Width; x++)
+                var x = 0;
+                if (fullResolutionYcbcr)
+                {
+                    var first = components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width);
+                    var second = components[1].Plane.AsSpan(y * components[1].BlockColumns * 8, info.Width);
+                    var third = components[2].Plane.AsSpan(y * components[2].BlockColumns * 8, info.Width);
+                    for (; x <= info.Width - 8; x += 8)
+                        RenderYcbcrRow8(first.Slice(x, 8), second.Slice(x, 8), third.Slice(x, 8), row.Slice(x * 4, 32), block[..24]);
+                }
+                for (; x < info.Width; x++)
                 {
                     var first = Interpolate(components[0], x, y);
                     double r = first, g = first, b = first;
@@ -405,4 +421,39 @@ internal ref struct JpegDecoder
     }
 
     private static byte Round(double value) => (byte)Math.Clamp(Math.Round(value, MidpointRounding.AwayFromZero), 0, 255);
+
+    internal static void RenderYcbcrRow8(ReadOnlySpan<byte> first, ReadOnlySpan<byte> second, ReadOnlySpan<byte> third,
+        Span<byte> rgba, Span<byte> scratch)
+    {
+        if (first.Length != 8 || second.Length != 8 || third.Length != 8 || rgba.Length != 32 || scratch.Length != 24)
+            throw new ArgumentException("JPEG color rows have eight component samples, eight RGBA pixels and 24 scratch bytes.");
+        if (Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported)
+        {
+            // Retain each separate operation of the owned full-resolution
+            // binary64 YCbCr policy. The already used inverse-block workspace
+            // holds three rounded rows; no new scratch/cache is needed.
+            var luma = Avx512F.ConvertToVector512Double(WidenSamples8(first));
+            var cb = Avx512F.ConvertToVector512Double(Avx2.Subtract(WidenSamples8(second), Vector256.Create(128)));
+            var cr = Avx512F.ConvertToVector512Double(Avx2.Subtract(WidenSamples8(third), Vector256.Create(128)));
+            JpegTransform.RoundSamples(Avx512F.Add(luma, Avx512F.Multiply(Vector512.Create(1.402), cr)), scratch[..8]);
+            JpegTransform.RoundSamples(Avx512F.Subtract(Avx512F.Subtract(luma, Avx512F.Multiply(Vector512.Create(0.344136286), cb)),
+                Avx512F.Multiply(Vector512.Create(0.714136286), cr)), scratch.Slice(8, 8));
+            JpegTransform.RoundSamples(Avx512F.Add(luma, Avx512F.Multiply(Vector512.Create(1.772), cb)), scratch.Slice(16, 8));
+            var red = WidenSamples8(scratch[..8]);
+            var green = Avx2.ShiftLeftLogical(WidenSamples8(scratch.Slice(8, 8)).AsUInt32(), 8);
+            var blue = Avx2.ShiftLeftLogical(WidenSamples8(scratch.Slice(16, 8)).AsUInt32(), 16);
+            Avx2.Or(Avx2.Or(red.AsUInt32(), green), Avx2.Or(blue, Vector256.Create(0xFF000000u))).AsByte().CopyTo(rgba);
+            return;
+        }
+        for (var x = 0; x < 8; x++)
+        {
+            var cb = second[x] - 128; var cr = third[x] - 128;
+            rgba[x * 4] = Round(first[x] + 1.402 * cr);
+            rgba[x * 4 + 1] = Round(first[x] - 0.344136286 * cb - 0.714136286 * cr);
+            rgba[x * 4 + 2] = Round(first[x] + 1.772 * cb); rgba[x * 4 + 3] = 255;
+        }
+    }
+
+    private static Vector256<int> WidenSamples8(ReadOnlySpan<byte> samples)
+        => Avx2.ConvertToVector256Int32(Vector128.Create(Vector64.Create(samples), Vector64<byte>.Zero));
 }

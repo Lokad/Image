@@ -53,6 +53,8 @@ The [coefficient-quantization round](WARM-JPEG-QUANTIZATION.md) preserves every
 quotient and encoded byte, with an explicit safe stack destination and modest gains.
 The [component-row round](WARM-JPEG-COMPONENT-ROW.md) vectorizes exact 8-bit alpha
 blending and component construction; encode screens improve to roughly 2.5x.
+The [decode color-row round](WARM-JPEG-COLOR-ROW.md) preserves every decoded pixel
+while constructing full-resolution RGBA rows with safe SIMD; decode remains above 2x.
 The first [warm VP8 quality preparation](WARM-WEBP-MATCH.md) is unmatched and
 retained explicitly; it supplies no warm speed ratio.
 
