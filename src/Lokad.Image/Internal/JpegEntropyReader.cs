@@ -69,6 +69,30 @@ internal ref struct JpegEntropyReader
         symbol = packed >> 4; return true;
     }
 
+    internal bool TryReadLongHuffman(ReadOnlySpan<ushort> longCodes, out int symbol)
+    {
+        symbol = 0;
+        var candidateBits = bits; var candidateAvailable = available; var candidatePosition = position;
+        while (true)
+        {
+            var prefix = candidateAvailable >= 10 ? (int)((candidateBits >> (candidateAvailable - 10)) & 1023)
+                : (int)((candidateBits & ((1u << candidateAvailable) - 1)) << (10 - candidateAvailable));
+            var packed = longCodes[prefix]; var count = packed & 15;
+            if (count != 0 && count <= candidateAvailable)
+            {
+                if (!context.TryWork(count)) return false;
+                bits = candidateBits; available = candidateAvailable - count; position = candidatePosition;
+                symbol = packed >> 4; return true;
+            }
+            if (candidateAvailable >= 10 || candidatePosition >= data.Length) return false;
+            // Inspect only while the complete code is unavailable. Never
+            // commit bytes beyond its last required byte, even at padding.
+            var next = data[candidatePosition++];
+            if (next == 255 && (candidatePosition >= data.Length || data[candidatePosition++] != 0)) return false;
+            candidateBits = candidateBits << 8 | next; candidateAvailable += 8;
+        }
+    }
+
     public void Restart(int expected)
     {
         if ((uint)expected > 7) throw new ArgumentOutOfRangeException(nameof(expected));

@@ -42,7 +42,7 @@ public sealed class JpegHuffmanTests
     }
 
     [Theory]
-    [InlineData(1)] [InlineData(4)] [InlineData(8)] [InlineData(16)]
+    [InlineData(1)] [InlineData(4)] [InlineData(8)] [InlineData(9)] [InlineData(10)] [InlineData(16)]
     public void OneLengthCanonicalCodesPreserveSymbolsPaddingPositionsAndWork(int length)
     {
         var values = length == 1 ? new byte[] { 17 } : new byte[] { 17, 29, 43 };
@@ -59,7 +59,7 @@ public sealed class JpegHuffmanTests
             if (value == 255) bytes.Add(0);
         }
         var payloadBytes = bytes.Count; bytes.Add(255); bytes.Add(0xD0);
-        var context = new OperationContext(ImageLimits.Default with { MaxWork = 272 + 3 * length }, default);
+        var context = new OperationContext(ImageLimits.Default with { MaxWork = 272 + (length is 9 or 10 ? 1024 : 0) + 3 * length }, default);
         var table = new JpegHuffman(lengths, values, context);
         var reader = new JpegEntropyReader(bytes.ToArray(), 0, context);
         foreach (var code in codes) Assert.Equal(values[code], table.Read(ref reader));
@@ -88,6 +88,31 @@ public sealed class JpegHuffmanTests
         var reader = new JpegEntropyReader(new byte[] { 0x10 }, 0, context);
         try { table.Read(ref reader); Assert.Fail("A four-bit code needs four work units."); }
         catch (ImageLimitException) { Assert.Equal(1, reader.Position); }
+        Assert.Throws<ImageLimitException>(() => context.Work(1));
+    }
+
+    [Fact]
+    public void LongPrefixStorageIsAdmittedBeforeAllocation()
+    {
+        var lengths = new byte[16]; lengths[9] = 1;
+        const int previousPayload = 17 * 4 * 3 + 1 + 512;
+        var context = new OperationContext(ImageLimits.Default with { MaxWorkingBytes = previousPayload + 2047 }, default);
+        Assert.Throws<ImageLimitException>(() => new JpegHuffman(lengths, new byte[] { 17 }, context));
+        context.Reserve(2047); Assert.Throws<ImageLimitException>(() => context.Reserve(1));
+    }
+
+    [Theory]
+    [InlineData(1, 7, false)] [InlineData(2, 9, false)] [InlineData(1, 9, true)]
+    public void LongPrefixFallbackPreservesPartialWorkPositionAndFormatPrecedence(int bytes, int budget, bool marker)
+    {
+        var lengths = new byte[16]; lengths[9] = 1;
+        var context = new OperationContext(ImageLimits.Default with { MaxWork = 1296 + budget }, default);
+        var table = new JpegHuffman(lengths, new byte[] { 17 }, context);
+        var input = marker ? new byte[] { 0, 255, 0xD0 } : new byte[bytes];
+        var reader = new JpegEntropyReader(input, 0, context);
+        try { table.Read(ref reader); Assert.Fail("A ten-bit code cannot complete with this input/work allowance."); }
+        catch (ImageLimitException) { Assert.False(marker); Assert.Equal(bytes, reader.Position); }
+        catch (ImageDataException error) { Assert.True(marker); Assert.Equal("Unexpected marker in JPEG entropy data.", error.Message); Assert.Equal(3, reader.Position); }
         Assert.Throws<ImageLimitException>(() => context.Work(1));
     }
 }

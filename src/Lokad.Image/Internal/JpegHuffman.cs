@@ -8,6 +8,7 @@ internal sealed class JpegHuffman
     private readonly int[] firstSymbol;
     private readonly byte[] symbols;
     private readonly ushort[] shortCodes;
+    private readonly ushort[]? longCodes;
 
     public JpegHuffman(ReadOnlySpan<byte> lengthCounts, ReadOnlySpan<byte> values, OperationContext context)
     {
@@ -40,11 +41,25 @@ internal sealed class JpegHuffman
             var packed = (ushort)(symbols[firstSymbol[length] + index] << 4 | length);
             shortCodes.AsSpan(prefix, 1 << (8 - length)).Fill(packed);
         }
+        // Only tables with nine/ten-bit codes need the additional canonical
+        // lookup. Fixed short-code tables keep their original storage/work.
+        if (counts[9] != 0 || counts[10] != 0)
+        {
+            context.Reserve(1024 * sizeof(ushort)); context.Work(1024); longCodes = new ushort[1024];
+            for (var length = 9; length <= 10; length++)
+            for (var index = 0; index < counts[length]; index++)
+            {
+                var prefix = (firstCode[length] + index) << (10 - length);
+                var packed = (ushort)(symbols[firstSymbol[length] + index] << 4 | length);
+                longCodes.AsSpan(prefix, 1 << (10 - length)).Fill(packed);
+            }
+        }
     }
 
     public int Read(ref JpegEntropyReader reader)
     {
         if (reader.TryReadHuffman(shortCodes, out var symbol)) return symbol;
+        if (longCodes is not null && reader.TryReadLongHuffman(longCodes, out symbol)) return symbol;
         var code = 0;
         for (var length = 1; length <= 16; length++)
         {
