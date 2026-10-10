@@ -55,6 +55,8 @@ The [component-row round](WARM-JPEG-COMPONENT-ROW.md) vectorizes exact 8-bit alp
 blending and component construction; encode screens improve to roughly 2.5x.
 The [decode color-row round](WARM-JPEG-COLOR-ROW.md) preserves every decoded pixel
 while constructing full-resolution RGBA rows with safe SIMD; decode remains above 2x.
+The [baseline coefficient-block round](WARM-JPEG-BASELINE-BLOCK.md) separates
+admitted baseline scans from progressive decoding while preserving failure boundaries.
 The first [warm VP8 quality preparation](WARM-WEBP-MATCH.md) is unmatched and
 retained explicitly; it supplies no warm speed ratio.
 
