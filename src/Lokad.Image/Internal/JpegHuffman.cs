@@ -60,8 +60,9 @@ internal sealed class JpegHuffman
     {
         if (reader.TryReadHuffman(shortCodes, out var symbol)) return symbol;
         if (longCodes is not null && reader.TryReadLongHuffman(longCodes, out symbol)) return symbol;
-        var code = 0;
-        for (var length = 1; length <= 16; length++)
+        var code = 0; var firstLength = 1;
+        if (reader.TryReadCanonicalPrefix(shortCodes, out var prefix)) { code = prefix; firstLength = 9; }
+        for (var length = firstLength; length <= 16; length++)
         {
             code = code << 1 | reader.ReadBits(1);
             var index = code - firstCode[length];

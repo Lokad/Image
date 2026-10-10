@@ -93,6 +93,27 @@ internal ref struct JpegEntropyReader
         }
     }
 
+    internal bool TryReadCanonicalPrefix(ReadOnlySpan<ushort> shortCodes, out int prefix)
+    {
+        prefix = 0;
+        var candidateBits = bits; var candidateAvailable = available; var candidatePosition = position;
+        if (candidateAvailable < 8)
+        {
+            if (candidatePosition >= data.Length) return false;
+            var next = data[candidatePosition++];
+            if (next == 255 && (candidatePosition >= data.Length || data[candidatePosition++] != 0)) return false;
+            candidateBits = candidateBits << 8 | next; candidateAvailable += 8;
+        }
+        var value = (int)((candidateBits >> (candidateAvailable - 8)) & 255);
+        // T.81 C.2: a complete prefix with no assigned code of length <=8
+        // can start canonical traversal at length nine. Admit the same eight
+        // logical bits together; tight work budgets, markers and truncation
+        // retain the original one-bit traversal without any state mutation.
+        if (shortCodes[value] != 0 || !context.TryWork(8)) return false;
+        bits = candidateBits; available = candidateAvailable - 8; position = candidatePosition;
+        prefix = value; return true;
+    }
+
     public void Restart(int expected)
     {
         if ((uint)expected > 7) throw new ArgumentOutOfRangeException(nameof(expected));

@@ -57,6 +57,8 @@ The [decode color-row round](WARM-JPEG-COLOR-ROW.md) preserves every decoded pix
 while constructing full-resolution RGBA rows with safe SIMD; decode remains above 2x.
 The [baseline coefficient-block round](WARM-JPEG-BASELINE-BLOCK.md) separates
 admitted baseline scans from progressive decoding while preserving failure boundaries.
+The [canonical fallback-prefix round](WARM-JPEG-CANONICAL-PREFIX.md) consumes eight
+prefix bits together when no short code is assigned, preserving source positions and work limits.
 The first [warm VP8 quality preparation](WARM-WEBP-MATCH.md) is unmatched and
 retained explicitly; it supplies no warm speed ratio.
 
