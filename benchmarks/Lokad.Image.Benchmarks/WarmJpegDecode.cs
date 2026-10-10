@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegDecodeCase { Decode8 }
+public enum WarmJpegDecodeCase { Decode8, NativeDecode8 }
 
 [MemoryDiagnoser]
 public class WarmJpegDecode
@@ -22,12 +22,17 @@ public class WarmJpegDecode
     private int cpu, sampleCount, decoderMaximum;
     private double decoderRmse;
     private string rasterHash = "";
+    private string inputOrigin = "", sampling = "";
 
     public static WarmJpegDecodeCase[] SelectedCases()
     {
         var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
-        if (selection is not (null or "Decode8")) throw new ArgumentException("The warm JPEG decode family has one Decode8 case.");
-        return [WarmJpegDecodeCase.Decode8];
+        return selection switch
+        {
+            null or "Decode8" => [WarmJpegDecodeCase.Decode8],
+            "NativeDecode8" => [WarmJpegDecodeCase.NativeDecode8],
+            _ => throw new ArgumentException("Choose one warm JPEG decode case: Decode8 or NativeDecode8.")
+        };
     }
 
     [GlobalSetup]
@@ -54,10 +59,18 @@ public class WarmJpegDecode
             var prepared = JsonSerializer.Deserialize<WarmJpegPreparation>(File.ReadAllText(Path.Combine(state.Root, "artifacts", "warm-reference", "jpeg-match.json")), EncoderQualityCalibration.Json)
                 ?? throw new InvalidOperationException("Reuse the existing warm JPEG preparation.");
             rasterHash = JpegBenchmarkCase.Hash(HorizontalFlipInput.Create(8));
-            encoded = File.ReadAllBytes(Path.Combine(state.Root, prepared.ManagedFile));
+            var (file, selected) = Case switch
+            {
+                WarmJpegDecodeCase.Decode8 => (prepared.ManagedFile, prepared.Match.ClosestOwned),
+                WarmJpegDecodeCase.NativeDecode8 => (prepared.NativeFile, prepared.Match.Native),
+                _ => throw new ArgumentOutOfRangeException(nameof(Case))
+            };
+            inputOrigin = Case == WarmJpegDecodeCase.Decode8 ? "prepared-owned" : "prepared-native";
+            encoded = File.ReadAllBytes(Path.Combine(state.Root, file));
+            var header = JpegQualitySyntax.Read(encoded); sampling = header.Sampling;
             if (prepared.SchemaVersion != 1 || prepared.Project != "Lokad.Image" || prepared.RasterSha256 != rasterHash
-                || JpegBenchmarkCase.Hash(encoded) != prepared.Match.ClosestOwned.EncodedSha256
-                || !JpegBenchmarkCase.MatchesSampling(JpegQualitySyntax.Read(encoded), JpegSampling.YCbCr444))
+                || encoded.Length != selected.EncodedBytes || JpegBenchmarkCase.Hash(encoded) != selected.EncodedSha256
+                || !JpegBenchmarkCase.MatchesSampling(header, JpegSampling.YCbCr444))
                 throw new InvalidOperationException("Prepared JPEG/input identity or sampling differs.");
             var info = ImageCodec.Identify(encoded);
             if ((info.Format, info.Width, info.Height, info.BitDepth) != (ImageFormat.Jpeg, 513, 259, 8))
@@ -66,8 +79,8 @@ public class WarmJpegDecode
             native = new NativeWarmReference(state, 8, cpu, "jpeg-decode");
             nativePixels = File.ReadAllBytes(state.NativeOutput);
             using (var output = ImageCodec.Decode(encoded)) { ValidateGeometry(output); managedPixels = OriginalPixels.Bytes(output); }
-            if (JpegBenchmarkCase.Hash(managedPixels) != prepared.Match.ClosestOwned.PublicDecodedSha256)
-                throw new InvalidOperationException("Prepared owned JPEG decoded pixels changed.");
+            if (JpegBenchmarkCase.Hash(managedPixels) != selected.PublicDecodedSha256)
+                throw new InvalidOperationException("Prepared JPEG decoded pixels changed.");
             var difference = JpegQualityCorpus.Compare(nativePixels, managedPixels);
             decoderMaximum = difference.Maximum; decoderRmse = difference.Rmse;
             if (decoderMaximum > 4 || decoderRmse > 1.5) throw new InvalidOperationException("JPEG decoder agreement exceeds maximum 4/RMSE 1.5.");
@@ -124,7 +137,8 @@ public class WarmJpegDecode
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), width = 513, height = 259, depth = 8,
                 cpu, managedAffinityCount = 1, processorCount = Environment.ProcessorCount, serverGc = GCSettings.IsServerGC,
                 gcConfiguration = GC.GetConfigurationVariables(), runtime = RuntimeInformation.FrameworkDescription, platform = RuntimeInformation.RuntimeIdentifier,
-                sourceIdentity, inputSha256 = JpegBenchmarkCase.Hash(encoded), rasterSha256 = rasterHash,
+                sourceIdentity, inputOrigin, sampling, inputBytes = encoded.Length,
+                inputSha256 = JpegBenchmarkCase.Hash(encoded), rasterSha256 = rasterHash,
                 managedOutputBytes = managedPixels.Length, nativeOutputBytes = nativePixels.Length,
                 managedOutputSha256 = JpegBenchmarkCase.Hash(managedPixels), nativeOutputSha256 = JpegBenchmarkCase.Hash(nativePixels),
                 alphaExact = true, decoderAgreementWithinBounds = true, decoderMaximum, decoderRmse, nativeCliPixelsExact = true,

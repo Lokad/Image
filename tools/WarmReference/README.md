@@ -137,6 +137,9 @@ timing claims. Single-CPU quiet-VM and GC/JIT policies match the other warm fami
 `ffmpeg-jpeg-decode-warm.c` uses the public software `mjpeg` decoder and
 single-threaded swscale. It reuses the already prepared managed 513x259,
 8-bit 4:4:4 JPEG; both subjects receive identical resident encoded bytes.
+The default `Decode8` selects only that input. Explicit `-WarmCases NativeDecode8`
+selects only the already prepared native JPEG from the same original raster,
+with its variable Huffman tables and common 1x2 component factors (still 4:4:4).
 No source raster or encoder-quality enumeration is added.
 
 ```bash
@@ -149,6 +152,7 @@ After a Release benchmark build and owned source inventory:
 ```powershell
 ./bench.ps1 -Smoke -Warm -WarmFamily JpegDecode -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases NativeDecode8 -Cpu 0 -NoBuild
 ```
 
 Each native interval resets decoder state, decodes all coefficients/pixels,
