@@ -73,6 +73,9 @@ CPU profile. The retained native JPEG decode gap remains about 2.91x.
 The [short-code Huffman wrapper round](WARM-JPEG-HUFFMAN-HOT.md) moves canonical
 fallback into a helper and verifies actual wrapper inlining. Native-input repeats
 improve to 2.79x / 2.80x; the existing owned-input screen improves to 2.74x.
+The [rejected MCU-coordinate hoist](WARM-JPEG-MCU-REJECTION.md) moves division
+out of the component block loop but shows no useful gain. The accepted wrapper
+implementation and its warm ratios remain the baseline.
 
 For warm memory comparisons, the Linux [original FFmpeg reference worker](../tools/WarmReference/README.md)
 excludes process launch, IPC and file transport from native elapsed samples.
