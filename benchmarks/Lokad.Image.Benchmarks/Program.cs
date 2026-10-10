@@ -248,6 +248,19 @@ if (args.SequenceEqual(["--validate-geometry"]))
     return;
 }
 
+if (args.SequenceEqual(["--validate-warm-webp-controls"]))
+{
+    WarmWebp.ValidateControls();
+    return;
+}
+
+if (args.Length is 2 or 3 && args[0] == "--prepare-warm-webp")
+{
+    WarmWebp.Prepare(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture),
+        args.Length == 3 ? int.Parse(args[2], System.Globalization.CultureInfo.InvariantCulture) : 75);
+    return;
+}
+
 if (args.Length is 2 or 3 && args[0] == "--prepare-warm-jpeg")
 {
     WarmJpeg.Prepare(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture),

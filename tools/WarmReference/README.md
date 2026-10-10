@@ -131,3 +131,52 @@ The protocol controls reuse one source raster and reject fourteen invalid
 requests, arguments, sizes and affinities. They verify deterministic owned
 bitstreams, opaque decoded alpha and exact operation counters without publishing
 timing claims. Single-CPU quiet-VM and GC/JIT policies match the other warm families.
+
+## Still VP8 WebP
+
+The original `ffmpeg-webp-warm.c` worker calls the public still `libwebp`
+encoder through FFmpeg codec APIs. Its packet contains the complete RIFF WebP:
+
+```bash
+bash tools/WarmReference/build-webp-linux.sh
+python3 tools/WarmReference/verify-webp-linux.py --cpu 0
+```
+
+After the Release build and owned source inventory, prepare one anchor and run
+one pair:
+
+```powershell
+dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-webp 0 75
+./bench.ps1 -Smoke -Warm -WarmFamily Webp -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Webp -Cpu 0 -NoBuild
+```
+
+The first quality-75 preparation is [unmatched](../../benchmarks/WARM-WEBP-MATCH.md).
+Smoke/timing therefore cannot accept it. Run the benchmark executable with
+`--validate-warm-webp-controls` to check the preparation gate without encodes or
+native tools; eleven synthetic invalid records must be rejected before a worker
+can start. Retrieve and retain the full catalog when extending this evidence.
+
+Encode8 reuses the existing 513x259 RGBA8 raster, including transparency. Each
+native operation repacks resident RGBA into its reused BGRA scratch frame,
+encodes all pixels/alpha, acquires complete independent WebP bytes, and releases
+the packet. The scalar repacking loop executes on the same CPU/thread; native
+SIMD dispatch remains enabled. Codec/frame/packet wrappers are reused. Managed
+MemoryStream creation, growth, encoding and disposal are timed. Neither subject
+caches converted pixels or encoded bytes to replace work.
+
+Both effort settings are fixed at 4. Native quality is explicitly set with no
+global-quality override and the `none` preset; animation/lossless encoders are
+excluded. Native adaptive coding and managed fixed entropy are declared. Alpha
+must reproduce exactly. Quality uses the existing integer alpha-weighted RGB
+source error before composite rounding; decoder agreement retains unweighted
+maximum 4/RMSE 1.5 bounds including hidden RGB. At most eight managed settings
+are prepared against one native anchor, with fixed maximum 0.25 dB gap.
+Unmatched anchors remain recorded and cannot be timed. Setup and cleanup freshly
+check selected bitstreams, geometry, quality, source integrity and ownership.
+
+Protocol controls reuse this one raster, check complete still VP8/alpha RIFF
+framing, independent live packet storage, alpha and operation counters, and
+reject fourteen invalid requests/arguments/affinities. Native binaries, static
+archives and identities remain ignored. Measurement requires the quiet VM and
+the same one-CPU, GC/JIT, bracketing and repeat policy as the other warm families.

@@ -27,6 +27,8 @@ The [JPEG forward-DCT round](WARM-JPEG-DCT.md) measures one warm matched-quality
 This largest measured gap remains above the target.
 The [JPEG RGB extraction round](WARM-JPEG-RGB.md) reduces repeated row access
 and uses the exact normalized 8-bit alpha blend, preserving all encoded bytes.
+The first [warm VP8 quality preparation](WARM-WEBP-MATCH.md) is unmatched and
+retained explicitly; it supplies no warm speed ratio.
 
 For warm memory comparisons, the Linux [original FFmpeg reference worker](../tools/WarmReference/README.md)
 excludes process launch, IPC and file transport from native elapsed samples.
@@ -36,8 +38,8 @@ on the quiet VM for measurement. Both subjects use one pinned CPU; managed
 workers disable server/background GC. Native samples bracket the managed
 BenchmarkDotNet iterations. `warm-parity.json` joins managed and internally timed
 native samples; it never treats protocol latency as the FFmpeg operation time.
-The selected CPU must belong to the machine's allowed affinity. These narrow
-families require no encoder calibration. Other supported operations remain
+The selected CPU must belong to the machine's allowed affinity. Flip and PNG
+require no encoder calibration. Other supported operations remain
 unmeasured until their own equivalent warm cases are added.
 Use `-WarmConfirm` with `-DedicatedVm -Warm` when short-run uncertainty requires
 more samples on the same two inputs.
@@ -54,6 +56,13 @@ anchor against at most eight managed settings outside timing. The fixed match
 band is 0.25 dB; unmatched pairs refuse measurement. Both timed operations
 include alpha flattening onto RGB 0x204060 and full-range BT.601 conversion.
 Setup and cleanup revalidate selected outputs without quality enumeration.
+
+`-WarmFamily Webp` selects one still VP8 encode pair on the same RGBA8 alpha
+raster. Its separate native worker accepts one quality anchor, with at most
+eight managed settings and the same fixed match band. Effort is 4 on both
+subjects. Source quality uses alpha-weighted RGB before composite rounding;
+alpha is exact and decoder agreement still includes hidden RGB. Every native
+operation includes RGBA-to-BGRA repacking and complete independent WebP bytes.
 
 For rapid horizontal-flip tuning, use the explicit six-case selection:
 

@@ -1,0 +1,523 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "date": "2026-10-09",
+  "correctnessOnly": true,
+  "noTimingClaim": true,
+  "scope": "One VP8 preparation on the existing 513x259 RGBA8 alpha raster; no timed pair.",
+  "provenance": "Original complete retained preparation catalog, native protocol-control JSON and terminal receipts. No catalog rows reconstructed. The original four-decimal summary is retained alongside unrounded numeric errors; no benchmark timings.",
+  "sourceInventory": {
+    "sourceSha256": "bd02863724b4f313384ebbe22309e98ae2620b2798eeedbb089066575cd8ad0e",
+    "files": 1125,
+    "sourceRevision": "446d009fbb5e1b893c53cb9bddecd662051ac166"
+  },
+  "nativeSourceSha256": "87522d8fb80d90be1a8debffb48cc9d94e0ce8c6fdeab83cb90da11274251cf5",
+  "nativeControls": {
+    "schemaVersion": 1,
+    "project": "Lokad.Image",
+    "correctnessOnly": true,
+    "complete": true,
+    "cpu": 0,
+    "distinctSourceRasters": 1,
+    "scoredCases": 0,
+    "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "encodedSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+    "encodedBytes": 98590,
+    "vp8WithAlpha": true,
+    "alphaExact": true,
+    "independentLiveOutputs": true,
+    "countersExact": true,
+    "sourceUnchanged": true,
+    "negativeControls": 14,
+    "workerSha256": "d9f188960b873813aa2a484691209a3d2e005c8763333edb6bf4b10b366ef841"
+  },
+  "lastObservedProcesses": {
+    "build": {
+      "status": "completed",
+      "exitCode": 0,
+      "startedUtc": "2026-10-09T20:47:53Z",
+      "finishedUtc": "2026-10-09T20:48:08Z"
+    },
+    "controls": {
+      "status": "completed",
+      "exitCode": 0,
+      "startedUtc": "2026-10-09T20:48:16Z",
+      "finishedUtc": "2026-10-09T20:48:18Z"
+    },
+    "preparation": {
+      "status": "completed",
+      "exitCode": 0,
+      "startedUtc": "2026-10-09T20:48:38Z",
+      "finishedUtc": "2026-10-09T20:48:39Z"
+    }
+  },
+  "preparationSummary": "Prepared one warm VP8 pair: native quality 75, owned quality 100, gap 0.8984 dB, matched=False; 8 owned settings, one source raster.",
+  "quality": {
+    "nativeQuality": 75,
+    "closestManagedQuality": 100,
+    "loggedGapDb": 0.8984,
+    "maximumPsnrGapDb": 0.25,
+    "matched": false,
+    "ownedSettings": 8,
+    "distinctSourceRasters": 1,
+    "effort": 4,
+    "alphaExact": true,
+    "psnrGapDb": 0.8983635456757593
+  },
+  "localGateControls": {
+    "validSyntheticPreparationAccepted": true,
+    "invalidPreparationsRejected": 11,
+    "sourceRasters": 0,
+    "encodes": 0,
+    "nativeWorkers": 0,
+    "platforms": [
+      "Windows",
+      "Linux"
+    ]
+  },
+  "completeness": {
+    "fullQualityCatalogRetrieved": true,
+    "benchmarkDotNetSmokeExecuted": true,
+    "warmTimingExecuted": false,
+    "ratio": null,
+    "refusalSmokeValidated": true,
+    "matchedPairSmokePassed": false
+  },
+  "originalCatalogSha256": "2deb6a2e0e98654ff4c8a8de267671aefc36485f7f7ed35e6cf056ebbe293343",
+  "preparation": {
+    "generatedUtc": "2026-10-09T20:48:39.5806947Z",
+    "recipe": "HorizontalFlipInput.Create(8): original 513x259 asymmetric RGBA8, phase zero, alpha zero at both first-row ends, hidden RGB unchanged. VP8 target is 8-bit 4:2:0 with exact source alpha; effort 4 on both subjects. No extra source raster.",
+    "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "referenceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "nativeQuality": 75,
+    "match": {
+      "native": {
+        "setting": 75,
+        "encodedBytes": 98590,
+        "encodedSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "nativeDecodedSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+        "publicDecodedSha256": "f8bc9742ab57cc3c399ff3506edeb91072fed7338e3c9997971157403000c75a",
+        "codec": "VP8",
+        "sampling": "4:2:0",
+        "sourceError": {
+          "sumSquared": 36019095866581,
+          "maximum": 30613,
+          "samples": 398601,
+          "scale": 255,
+          "rgbMaximum": 120.05098039215686,
+          "rgbRmse": 37.27838001414046,
+          "rgbPsnr": 16.701662984721693
+        },
+        "decoderDifference": {
+          "sumSquared": 7038,
+          "maximum": 1,
+          "samples": 398601,
+          "scale": 1,
+          "rgbMaximum": 1,
+          "rgbRmse": 0.13287872101604442,
+          "rgbPsnr": 65.66169482281468
+        },
+        "alphaExact": true,
+        "alphaSha256": "c879f6709c3f9686ff110c901d7130e2d1f5a91d3453d321eeda1c65caf708ee"
+      },
+      "closestOwned": {
+        "setting": 100,
+        "encodedBytes": 466474,
+        "encodedSha256": "8f213dc5081cb4203ad5064e7ec38c6bdbbb1600c3a4cff86eaa7b05f48fa4e3",
+        "nativeDecodedSha256": "b7c0f81bd7bb70f26b03781ecae0e9deba2c93c37490451eb932226609cf4f3e",
+        "publicDecodedSha256": "0dbffbbd5cb8ffdb78b1004aa66a1a14b9bb958c2eb0a1f9fd59958997bc6cc6",
+        "codec": "VP8",
+        "sampling": "4:2:0",
+        "sourceError": {
+          "sumSquared": 44296474407211,
+          "maximum": 32718,
+          "samples": 398601,
+          "scale": 255,
+          "rgbMaximum": 128.30588235294118,
+          "rgbRmse": 41.34045083505884,
+          "rgbPsnr": 15.803299439045935
+        },
+        "decoderDifference": {
+          "sumSquared": 4531,
+          "maximum": 1,
+          "samples": 398601,
+          "scale": 1,
+          "rgbMaximum": 1,
+          "rgbRmse": 0.10661733902743994,
+          "rgbPsnr": 67.57424682601454
+        },
+        "alphaExact": true,
+        "alphaSha256": "c879f6709c3f9686ff110c901d7130e2d1f5a91d3453d321eeda1c65caf708ee"
+      },
+      "psnrGapDb": 0.8983635456757593,
+      "matched": false,
+      "exclusionReason": "Native target lies outside the sampled owned error range."
+    },
+    "ownedSettings": [
+      {
+        "setting": 1,
+        "encodedBytes": 146300,
+        "encodedSha256": "00739b3789847cafe206d49d376cb270615e31d67c12f3022b939d97ea42184f",
+        "nativeDecodedSha256": "0794a3e9fa9df63cdba671ea7d0e14a50ea88962f2290816f2d7643f8dfae712",
+        "publicDecodedSha256": "9b90d0f1f48290d6234fb9d86c7e13777e6d4a125bde83df85867297a520adaf",
+        "codec": "VP8",
+        "sampling": "4:2:0",
+        "sourceError": {
+          "sumSquared": 46349137807776,
+          "maximum": 51250,
+          "samples": 398601,
+          "scale": 255,
+          "rgbMaximum": 200.98039215686273,
+          "rgbRmse": 42.287446124162834,
+          "rgbPsnr": 15.60657445890968
+        },
+        "decoderDifference": {
+          "sumSquared": 2238,
+          "maximum": 1,
+          "samples": 398601,
+          "scale": 1,
+          "rgbMaximum": 1,
+          "rgbRmse": 0.07493088277595936,
+          "rgbPsnr": 70.6375866258831
+        },
+        "alphaExact": true,
+        "alphaSha256": "c879f6709c3f9686ff110c901d7130e2d1f5a91d3453d321eeda1c65caf708ee"
+      },
+      {
+        "setting": 25,
+        "encodedBytes": 169010,
+        "encodedSha256": "72ff73983ce99a91ce0b9497cc61f727554affaabf615009afb22ab8f2bc9b12",
+        "nativeDecodedSha256": "253e8327c09423e520ff3a76950160da3edc31f00121516a361b87425f0c88cb",
+        "publicDecodedSha256": "e940539613cf9ab435819614ec895d70ec12a7d514a85f1666f21ae12fd6a670",
+        "codec": "VP8",
+        "sampling": "4:2:0",
+        "sourceError": {
+          "sumSquared": 49482243452574,
+          "maximum": 48756,
+          "samples": 398601,
+          "scale": 255,
+          "rgbMaximum": 191.2,
+          "rgbRmse": 43.693347464597615,
+          "rgbPsnr": 15.322497239682294
+        },
+        "decoderDifference": {
+          "sumSquared": 4369,
+          "maximum": 1,
+          "samples": 398601,
+          "scale": 1,
+          "rgbMaximum": 1,
+          "rgbRmse": 0.10469400900834312,
+          "rgbPsnr": 67.73236700071072
+        },
+        "alphaExact": true,
+        "alphaSha256": "c879f6709c3f9686ff110c901d7130e2d1f5a91d3453d321eeda1c65caf708ee"
+      },
+      {
+        "setting": 50,
+        "encodedBytes": 194622,
+        "encodedSha256": "35f8186a2905157da22f28a3775e7d218a3cdbaa2248169867fada9b5d8cbdf2",
+        "nativeDecodedSha256": "704f76afce5a05ac737027a5680cde7572bd53e4acb058dd5b7dbfc8fc91e68b",
+        "publicDecodedSha256": "816ec7880619221fd4198c987502f92d6707e3d66f26e5db8ba2167aa3293446",
+        "codec": "VP8",
+        "sampling": "4:2:0",
+        "sourceError": {
+          "sumSquared": 46048542526706,
+          "maximum": 40587,
+          "samples": 398601,
+          "scale": 255,
+          "rgbMaximum": 159.16470588235293,
+          "rgbRmse": 42.150096388264735,
+          "rgbPsnr": 15.634832166667378
+        },
+        "decoderDifference": {
+          "sumSquared": 4658,
+          "maximum": 1,
+          "samples": 398601,
+          "scale": 1,
+          "rgbMaximum": 1,
+          "rgbRmse": 0.1081012087582472,
+          "rgbPsnr": 67.4541926058198
+        },
+        "alphaExact": true,
+        "alphaSha256": "c879f6709c3f9686ff110c901d7130e2d1f5a91d3453d321eeda1c65caf708ee"
+      },
+      {
+        "setting": 75,
+        "encodedBytes": 235540,
+        "encodedSha256": "3209ff4be4e827391799c82f70755927198c276aaa3d9eef08a6133412227c80",
+        "nativeDecodedSha256": "ba677fa0e33d40661c7b19af96c4e92168d472823bc95a001b9e9afceb9ccf4f",
+        "publicDecodedSha256": "e103979daa36cbe26499739ffa0c08e711ba442a5f658f179b42ea19b4be5c72",
+        "codec": "VP8",
+        "sampling": "4:2:0",
+        "sourceError": {
+          "sumSquared": 44789742370501,
+          "maximum": 35607,
+          "samples": 398601,
+          "scale": 255,
+          "rgbMaximum": 139.63529411764705,
+          "rgbRmse": 41.569989021457516,
+          "rgbPsnr": 15.755205412478816
+        },
+        "decoderDifference": {
+          "sumSquared": 4602,
+          "maximum": 1,
+          "samples": 398601,
+          "scale": 1,
+          "rgbMaximum": 1,
+          "rgbRmse": 0.10744942980971374,
+          "rgbPsnr": 67.50672130448017
+        },
+        "alphaExact": true,
+        "alphaSha256": "c879f6709c3f9686ff110c901d7130e2d1f5a91d3453d321eeda1c65caf708ee"
+      },
+      {
+        "setting": 88,
+        "encodedBytes": 283006,
+        "encodedSha256": "f61409d413019fcb99cf65b62ff2ed93d713f5b549bbef393000b53225d3770a",
+        "nativeDecodedSha256": "e8b344deb89252e2693947d6a8daeef23bfc78c259e164af1a6bbcae6dd5f7e2",
+        "publicDecodedSha256": "f1b533dcc923f74e85a1a9663869fee64526c83d945d143fbf8e1db18014026c",
+        "codec": "VP8",
+        "sampling": "4:2:0",
+        "sourceError": {
+          "sumSquared": 44394944865723,
+          "maximum": 33500,
+          "samples": 398601,
+          "scale": 255,
+          "rgbMaximum": 131.37254901960785,
+          "rgbRmse": 41.38637495626518,
+          "rgbPsnr": 15.793655846760526
+        },
+        "decoderDifference": {
+          "sumSquared": 4623,
+          "maximum": 1,
+          "samples": 398601,
+          "scale": 1,
+          "rgbMaximum": 1,
+          "rgbRmse": 0.10769430917946954,
+          "rgbPsnr": 67.4869485134256
+        },
+        "alphaExact": true,
+        "alphaSha256": "c879f6709c3f9686ff110c901d7130e2d1f5a91d3453d321eeda1c65caf708ee"
+      },
+      {
+        "setting": 94,
+        "encodedBytes": 330028,
+        "encodedSha256": "1a0f0b6c4453a912fadbc0cdb6a8a70cdd87045a7dca1c0938d72e5758b50ba0",
+        "nativeDecodedSha256": "581571bd2c663459b15010d82cc7185ac31f80854f5007fcec726ebc2e9cf6ab",
+        "publicDecodedSha256": "e344d97f301c4fbcf253ae04050e9a62a13848efdd85f1242ea0b0183d74812b",
+        "codec": "VP8",
+        "sampling": "4:2:0",
+        "sourceError": {
+          "sumSquared": 44332834172690,
+          "maximum": 33660,
+          "samples": 398601,
+          "scale": 255,
+          "rgbMaximum": 132,
+          "rgbRmse": 41.357414044787866,
+          "rgbPsnr": 15.799736092642874
+        },
+        "decoderDifference": {
+          "sumSquared": 4549,
+          "maximum": 1,
+          "samples": 398601,
+          "scale": 1,
+          "rgbMaximum": 1,
+          "rgbRmse": 0.10682890489557052,
+          "rgbPsnr": 67.55702807950685
+        },
+        "alphaExact": true,
+        "alphaSha256": "c879f6709c3f9686ff110c901d7130e2d1f5a91d3453d321eeda1c65caf708ee"
+      },
+      {
+        "setting": 97,
+        "encodedBytes": 379080,
+        "encodedSha256": "36f7c1ffd8af6781709ab90bb78655340aa5f4ab73e45f5c7db8dfd2297d8f69",
+        "nativeDecodedSha256": "1036bf1000ded73eb1cb2e48902fd2b5326da2815d7160b80bb2f33fe6308cac",
+        "publicDecodedSha256": "6a366d912af65e738750298d46f7b590bf21fb5e2db70613ad49eabfe7791d2c",
+        "codec": "VP8",
+        "sampling": "4:2:0",
+        "sourceError": {
+          "sumSquared": 44317602544015,
+          "maximum": 32890,
+          "samples": 398601,
+          "scale": 255,
+          "rgbMaximum": 128.98039215686273,
+          "rgbRmse": 41.35030875925144,
+          "rgbPsnr": 15.801228473863777
+        },
+        "decoderDifference": {
+          "sumSquared": 4520,
+          "maximum": 1,
+          "samples": 398601,
+          "scale": 1,
+          "rgbMaximum": 1,
+          "rgbRmse": 0.10648784185280252,
+          "rgbPsnr": 67.58480309969259
+        },
+        "alphaExact": true,
+        "alphaSha256": "c879f6709c3f9686ff110c901d7130e2d1f5a91d3453d321eeda1c65caf708ee"
+      },
+      {
+        "setting": 100,
+        "encodedBytes": 466474,
+        "encodedSha256": "8f213dc5081cb4203ad5064e7ec38c6bdbbb1600c3a4cff86eaa7b05f48fa4e3",
+        "nativeDecodedSha256": "b7c0f81bd7bb70f26b03781ecae0e9deba2c93c37490451eb932226609cf4f3e",
+        "publicDecodedSha256": "0dbffbbd5cb8ffdb78b1004aa66a1a14b9bb958c2eb0a1f9fd59958997bc6cc6",
+        "codec": "VP8",
+        "sampling": "4:2:0",
+        "sourceError": {
+          "sumSquared": 44296474407211,
+          "maximum": 32718,
+          "samples": 398601,
+          "scale": 255,
+          "rgbMaximum": 128.30588235294118,
+          "rgbRmse": 41.34045083505884,
+          "rgbPsnr": 15.803299439045935
+        },
+        "decoderDifference": {
+          "sumSquared": 4531,
+          "maximum": 1,
+          "samples": 398601,
+          "scale": 1,
+          "rgbMaximum": 1,
+          "rgbRmse": 0.10661733902743994,
+          "rgbPsnr": 67.57424682601454
+        },
+        "alphaExact": true,
+        "alphaSha256": "c879f6709c3f9686ff110c901d7130e2d1f5a91d3453d321eeda1c65caf708ee"
+      }
+    ],
+    "ownedEvaluationOrder": [
+      1,
+      25,
+      50,
+      75,
+      100,
+      88,
+      94,
+      97
+    ],
+    "sourceIdentity": {
+      "sourceSha256": "bd02863724b4f313384ebbe22309e98ae2620b2798eeedbb089066575cd8ad0e",
+      "sourceRevision": "446d009fbb5e1b893c53cb9bddecd662051ac166"
+    },
+    "librarySha256": "12b6a8ce067c21d1cf2c9d7abc77710a848ed3db5f729ab3b709c2801ddd1213",
+    "benchmarkAssemblySha256": "3336854abde21894ecd09a90d83760ed34349a4a9c4f2b467320c385f3472863",
+    "ffmpegSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
+    "nativeBuild": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Original development-only warm WebP FFmpeg worker",
+      "sourceSha256": "87522d8fb80d90be1a8debffb48cc9d94e0ce8c6fdeab83cb90da11274251cf5",
+      "buildScriptSha256": "edef331a49b4389bf4144a3914aff0e030995d2f6947ae2f03c09dbdcf8b3719",
+      "workerSha256": "d9f188960b873813aa2a484691209a3d2e005c8763333edb6bf4b10b366ef841",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "staticArchives": {
+        "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+        "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+        "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+        "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+        "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+        "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+        "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+        "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+        "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+        "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+        "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+        "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+        "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+      },
+      "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lswscale -lavutil -lm -lz -latomic -pthread"
+    },
+    "nativeReady": {
+      "schemaVersion": 1,
+      "state": "ready",
+      "operation": "webp-encode",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "cpu": 0,
+      "affinityCount": 1,
+      "codecThreads": 1,
+      "threadType": 0,
+      "activeThreadType": 0,
+      "conversionThreads": 1,
+      "quality": 75,
+      "effort": 4,
+      "lossless": false,
+      "inputFormat": "BGRA",
+      "repackingTimed": true,
+      "outputBytes": 98590,
+      "initialCompletedOperations": 3,
+      "independentLiveOutputs": true,
+      "bitstreamDeterministic": true,
+      "ffmpegVersion": "n8.1",
+      "avcodecVersion": 4070500
+    }
+  },
+  "refusalSmoke": {
+    "receipt": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "correctnessOnly": true,
+      "noTimingClaim": true,
+      "runId": "15a691e9cf624dca9adc9bb0e2f69237",
+      "underlyingExitCode": 1,
+      "preparationGateRejected": true,
+      "actualPairs": 0,
+      "nativeAnchor": 75,
+      "ownedSettings": 8,
+      "distinctSourceRasters": 1
+    },
+    "originalReceiptSha256": "e444081ceab93a2e2dd695bf7a701018219a78b0ec583522d8f90ebdcd1fc51c",
+    "originalParitySha256": "140b341cc283e5292cf1f8db78223c2bcb2ae74d35433ef9055da92adc5b7036",
+    "checkpointProcess": {
+      "status": "completed",
+      "supervisorPid": 1207888,
+      "startedUtc": "2026-10-10T15:58:13Z",
+      "childPid": 1207889,
+      "exitCode": 0,
+      "finishedUtc": "2026-10-10T15:58:28Z"
+    },
+    "originalCheckpointLogSha256": "ab953308797d560f06f14817ba01d93fe0ef3584f26acc3229683eaee6700d89",
+    "nativeBuild": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Original development-only warm WebP FFmpeg worker",
+      "sourceSha256": "87522d8fb80d90be1a8debffb48cc9d94e0ce8c6fdeab83cb90da11274251cf5",
+      "buildScriptSha256": "f930165b1f364f20234e387785aef20cdb300d4fdd023a05d3976cbac3aca5c1",
+      "workerSha256": "d9f188960b873813aa2a484691209a3d2e005c8763333edb6bf4b10b366ef841",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "staticArchives": {
+        "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+        "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+        "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+        "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+        "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+        "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+        "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+        "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+        "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+        "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+        "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+        "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+        "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+      },
+      "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavutil -lm -lz -latomic -pthread"
+    }
+  }
+}
