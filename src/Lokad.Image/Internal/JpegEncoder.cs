@@ -1,5 +1,7 @@
 using System.Buffers.Binary;
 using System.Numerics;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
@@ -27,7 +29,10 @@ internal static class JpegEncoder
         acSymbols[^1] = 0xF0;
         var acCodes = new int[256]; Array.Fill(acCodes, -1);
         for (var i = 0; i < acSymbols.Length; i++) acCodes[acSymbols[i]] = i;
-        var pixels = new byte[64]; var transformed = new double[64]; var quantized = new int[64]; var predictors = new int[components];
+        var pixels = new byte[64]; var transformed = new double[64]; var predictors = new int[components];
+        // The existing quantization destination fits in the admitted fixed
+        // workspace. Keep it on the safe stack when passed to the SIMD helper.
+        Span<int> quantized = stackalloc int[64];
         output.Write(new byte[] { 255, 216 });
         Segment(output, 0xE0, new byte[] { 74, 70, 73, 70, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0 });
         WriteQuantization(output, luma, 0);
@@ -93,7 +98,7 @@ internal static class JpegEncoder
                         pixels[y * 8 + x] = (byte)Math.Clamp(Math.Round(sum / (samplesX * samplesY), MidpointRounding.AwayFromZero), 0, 255);
                     }
                     JpegTransform.Forward(pixels, transformed, context);
-                    for (var i = 0; i < 64; i++) quantized[i] = (int)Math.Round(transformed[i] / q[i], MidpointRounding.AwayFromZero);
+                    Quantize(transformed, q, quantized);
                     var difference = quantized[0] - predictors[component]; predictors[component] = quantized[0];
                     var category = Category(difference);
                     if (category > 11) throw new ImageDataException("JPEG DC transform exceeds its coding range.");
@@ -161,6 +166,36 @@ internal static class JpegEncoder
             result[v * 8 + u] = (ushort)Math.Clamp((basis * scale + 50) / 100, 1, 255);
         }
         return result;
+    }
+
+    internal static void Quantize(ReadOnlySpan<double> coefficients, ReadOnlySpan<ushort> quantization, Span<int> result)
+    {
+        if (coefficients.Length != 64 || quantization.Length != 64 || result.Length != 64)
+            throw new ArgumentException("JPEG quantization operates on complete 8x8 blocks.");
+        // T.81 F.1.1.4: retain the original binary64 quotient and nearest,
+        // away-from-zero rounding. Encoder coefficients are finite and bounded
+        // by the 8-bit transform; generated quantizers are in [1,255].
+        // No reciprocal approximation, reordered transform, new scratch or work.
+        if (Avx512F.IsSupported && Avx2.IsSupported)
+        {
+            var magnitudeMask = Vector512.Create(long.MaxValue); var signMask = Vector512.Create(long.MinValue);
+            var half = Vector512.Create(0.5); var one = Vector512.Create(1.0).AsInt64();
+            for (var i = 0; i < 64; i += 8)
+            {
+                var integers = Avx2.ConvertToVector256Int32(Vector128.Create(quantization.Slice(i, 8)));
+                var divisors = Avx512F.ConvertToVector512Double(integers);
+                var quotient = Avx512F.Divide(Vector512.Create(coefficients.Slice(i, 8)), divisors);
+                var magnitude = Avx512F.And(quotient.AsInt64(), magnitudeMask).AsDouble();
+                var integral = Avx512F.RoundScale(magnitude, 0x09); // floor, suppress precision exception
+                var atLeastHalf = Avx512F.CompareGreaterThanOrEqual(Avx512F.Subtract(magnitude, integral), half);
+                var rounded = Avx512F.Add(integral, Avx512F.And(atLeastHalf.AsInt64(), one).AsDouble());
+                var signed = Avx512F.Or(rounded.AsInt64(), Avx512F.And(quotient.AsInt64(), signMask)).AsDouble();
+                Avx512F.ConvertToVector256Int32WithTruncation(signed).CopyTo(result.Slice(i, 8));
+            }
+            return;
+        }
+        for (var i = 0; i < 64; i++)
+            result[i] = (int)Math.Round(coefficients[i] / quantization[i], MidpointRounding.AwayFromZero);
     }
 
     // T.81 F.1.2.1 SIZE is the magnitude's binary width, with zero in category
