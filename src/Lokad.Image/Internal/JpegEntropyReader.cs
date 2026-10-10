@@ -43,6 +43,32 @@ internal ref struct JpegEntropyReader
         return value < 1 << (count - 1) ? value - ((1 << count) - 1) : value;
     }
 
+    internal bool TryReadHuffman(ReadOnlySpan<ushort> shortCodes, out int symbol)
+    {
+        symbol = 0;
+        var candidateBits = bits; var candidateAvailable = available; var candidatePosition = position;
+        // Complete cached short codes need no additional input inspection.
+        var prefix = (int)((bits & ((1u << available) - 1)) << (8 - available));
+        var packed = shortCodes[prefix]; var count = packed & 15;
+        if (count == 0 || count > available)
+        {
+            // Inspect at most one unstuffed byte without changing reader state
+            // or raising format errors. Markers/truncation use the scalar path.
+            if (candidatePosition >= data.Length) return false;
+            var next = data[candidatePosition++];
+            if (next == 255 && (candidatePosition >= data.Length || data[candidatePosition++] != 0)) return false;
+            candidateBits = candidateBits << 8 | next; candidateAvailable += 8;
+            prefix = (int)((candidateBits >> (candidateAvailable - 8)) & 255);
+            packed = shortCodes[prefix]; count = packed & 15;
+            if (count == 0) return false;
+        }
+        // Preserve exact logical work. Near the limit, fall back without any
+        // mutation to retain the original per-bit failure position/precedence.
+        if (!context.TryWork(count)) return false;
+        bits = candidateBits; available = candidateAvailable - count; position = candidatePosition;
+        symbol = packed >> 4; return true;
+    }
+
     public void Restart(int expected)
     {
         if ((uint)expected > 7) throw new ArgumentOutOfRangeException(nameof(expected));

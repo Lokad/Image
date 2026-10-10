@@ -33,6 +33,16 @@ internal sealed class OperationContext
         work += units;
     }
 
+    // An entropy code may admit its full logical bit cost together. When the
+    // budget is too tight, its caller retains the original one-bit sequence so
+    // partial consumption and format/limit failure precedence stay unchanged.
+    public bool TryWork(long units)
+    {
+        Cancellation.ThrowIfCancellationRequested();
+        if (units < 0 || units > Limits.MaxWork - work) return false;
+        work += units; return true;
+    }
+
     public int PixelBytes(int width, int height, int bitDepth)
     {
         if (width < 1 || height < 1)

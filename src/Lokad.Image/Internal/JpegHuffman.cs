@@ -7,6 +7,7 @@ internal sealed class JpegHuffman
     private readonly int[] counts;
     private readonly int[] firstSymbol;
     private readonly byte[] symbols;
+    private readonly ushort[] shortCodes;
 
     public JpegHuffman(ReadOnlySpan<byte> lengthCounts, ReadOnlySpan<byte> values, OperationContext context)
     {
@@ -28,10 +29,22 @@ internal sealed class JpegHuffman
         }
         if (offset != values.Length) throw new ImageDataException("JPEG Huffman counts do not match symbols.");
         symbols = values.ToArray();
+        // Original eight-bit prefixes derived from this encoded canonical
+        // table (T.81 C.2). Packed symbol/length entries; zero means fallback.
+        // Admit all additional storage before allocating it, on every decode.
+        context.Reserve(256 * sizeof(ushort)); context.Work(256); shortCodes = new ushort[256];
+        for (var length = 1; length <= 8; length++)
+        for (var index = 0; index < counts[length]; index++)
+        {
+            var prefix = (firstCode[length] + index) << (8 - length);
+            var packed = (ushort)(symbols[firstSymbol[length] + index] << 4 | length);
+            shortCodes.AsSpan(prefix, 1 << (8 - length)).Fill(packed);
+        }
     }
 
     public int Read(ref JpegEntropyReader reader)
     {
+        if (reader.TryReadHuffman(shortCodes, out var symbol)) return symbol;
         var code = 0;
         for (var length = 1; length <= 16; length++)
         {

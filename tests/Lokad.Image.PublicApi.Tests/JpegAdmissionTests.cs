@@ -56,7 +56,7 @@ public sealed class JpegAdmissionTests
             rewritten.Write(payload);
         }
         rewritten.Write(original.AsSpan(2)); var encoded = rewritten.ToArray();
-        var charge = huffman ? definitions * 205L : 128L;
+        var charge = huffman ? definitions * 717L : 128L;
         var peak = encoded.Length + WorkspacePeak(32, 24, JpegSampling.Grayscale, progressive: false, orient: false) + charge;
         using var expected = ImageCodec.Decode(original);
         var options = new DecodeOptions { Limits = new ImageLimits { MaxWorkingBytes = peak } };
@@ -119,8 +119,9 @@ public sealed class JpegAdmissionTests
         var allPlanes = firstPlane + (components - 1) * mcus * 64;
         var quantization = progressive || components == 1 ? 128 : 256;
         // Both original builders emit one DC/AC pair: 12 DC symbols and 162 or
-        // 176 AC symbols. Each table has three admitted 17-element Int32 arrays.
-        var tables = 2 * 204 + 12 + (progressive ? 176 : 162);
+        // 176 AC symbols. Each table has three 17-element Int32 arrays and
+        // one 256-entry ushort prefix lookup, all admitted before allocation.
+        var tables = 2 * (204 + 512) + 12 + (progressive ? 176 : 162);
         var state = 1024 + quantization + tables + components * (256 + 128);
         var coefficientPeak = allPlanes * 4 + firstPlane;
         var resultPeak = allPlanes + (long)width * height * 4 * (orient ? 2 : 1);

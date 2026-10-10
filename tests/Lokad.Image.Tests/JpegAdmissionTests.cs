@@ -9,12 +9,12 @@ public sealed class JpegAdmissionTests
     {
         var counts = new byte[16]; counts[0] = 1;
         byte[] symbols = [7];
-        var limits = new ImageLimits { MaxWorkingBytes = 205, MaxWork = 16 };
+        var limits = new ImageLimits { MaxWorkingBytes = 717, MaxWork = 272 };
         _ = new JpegHuffman(counts, symbols, new OperationContext(limits, default));
         Assert.Throws<ImageLimitException>(() => new JpegHuffman(counts, symbols,
-            new OperationContext(limits with { MaxWorkingBytes = 204 }, default)));
+            new OperationContext(limits with { MaxWorkingBytes = 716 }, default)));
         Assert.Throws<ImageLimitException>(() => new JpegHuffman(counts, symbols,
-            new OperationContext(limits with { MaxWork = 15 }, default)));
+            new OperationContext(limits with { MaxWork = 271 }, default)));
     }
 
     [Theory]
