@@ -61,13 +61,14 @@ public sealed class JpegMixedCanonicalTests
     }
 
     [Theory]
-    [InlineData(11)] [InlineData(12)]
-    public void EveryPartialElevenAndTwelveBitBudgetRetainsOriginalBitsAndBytePosition(int length)
+    [InlineData(9)] [InlineData(10)] [InlineData(11)] [InlineData(12)]
+    [InlineData(13)] [InlineData(14)] [InlineData(15)] [InlineData(16)]
+    public void EveryPartialLongCanonicalBudgetRetainsOriginalBitsAndBytePosition(int length)
     {
         for (var offset = 0; offset < 8; offset++)
         for (var budget = 0; budget < length; budget++)
         {
-            var context = Context(272 + (offset == 0 ? 0 : 1) + budget);
+            var context = Context(272 + (length <= 10 ? 1024 : 0) + (offset == 0 ? 0 : 1) + budget);
             var counts = new byte[16]; counts[length - 1] = 1;
             var tree = new JpegHuffman(counts, new byte[] { 17 }, context);
             var input = Stuff(new string('0', offset + length)); var unchanged = input.ToArray();

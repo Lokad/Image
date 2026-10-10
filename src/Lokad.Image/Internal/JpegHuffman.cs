@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Lokad.Image.Internal;
 
 /// <summary>Canonical JPEG Huffman tables derived from the encoded length counts.</summary>
@@ -56,10 +58,18 @@ internal sealed class JpegHuffman
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Read(ref JpegEntropyReader reader)
     {
         if (reader.TryReadHuffman(shortCodes, out var symbol)) return symbol;
-        if (longCodes is not null && reader.TryReadLongHuffman(longCodes, out symbol)) return symbol;
+        return ReadLong(ref reader);
+    }
+
+    // Keep canonical traversal out of the common short-code wrapper so the
+    // caller can inline that wrapper without its cold loop and saved registers.
+    private int ReadLong(ref JpegEntropyReader reader)
+    {
+        if (longCodes is not null && reader.TryReadLongHuffman(longCodes, out var symbol)) return symbol;
         var code = 0; var firstLength = 1;
         if (reader.TryReadCanonicalPrefix(shortCodes, out var prefix)) { code = prefix; firstLength = 9; }
         for (var length = firstLength; length <= 16; length++)
