@@ -405,7 +405,9 @@ reduces it to 9.08x, the largest measured warm gap at that checkpoint. The
 without a longer repeat. [Horizontal kernel-weight reuse](../../benchmarks/WARM-RESIZE-XWEIGHTS.md)
 reduces complete resize to 8.65x; [destination-row acquisition](../../benchmarks/WARM-RESIZE-DESTINATION.md)
 reduces it to 7.25x, and [vertical kernel-weight reuse](../../benchmarks/WARM-RESIZE-YWEIGHTS.md)
-reduces it to 7.07x. A short current profile will select the next primitive.
+reduces it to 7.07x. A fresh profile selects
+[typed-row accessor inlining](../../benchmarks/WARM-TYPED-ROW-INLINE.md), reaching
+6.93x. Inspection of the remaining Resize body is next.
 Run sequentially on the quiet dedicated VM and preserve
 source/raw/actual timed DLLs before edits. Other sizes, directions, depths and
 bicubic remain unmeasured; independent quiet confirmation remains open. Native

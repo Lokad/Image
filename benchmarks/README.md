@@ -1,9 +1,14 @@
 # Development benchmarks
 
+The [typed-row accessor inlining round](WARM-TYPED-ROW-INLINE.md) reduces complete
+warm bilinear resize a further 2.3%, from 7.07x to 6.93x FFmpeg. All 535 method
+bodies remain identical; only two inlining flags change. A fresh baseline profile
+selected this primitive. Inspection of the remaining Resize body is next.
+
 The [vertical weight-reuse round](WARM-RESIZE-YWEIGHTS.md) reduces complete warm
 bilinear resize a further 2.2%, from 7.25x to 7.07x FFmpeg. Exact pixels,
 admission and allocations remain. It is still the largest measured gap;
-a short profile of the current operation will select the next primitive.
+that checkpoint selected a short profile of the current operation.
 
 The [destination-row acquisition round](WARM-RESIZE-DESTINATION.md) reduces
 complete warm bilinear resize a further 16.1%, from 8.65x to 7.25x FFmpeg.

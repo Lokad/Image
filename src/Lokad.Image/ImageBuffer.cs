@@ -48,12 +48,14 @@ public sealed class ImageBuffer : IDisposable
         return new ImageBuffer(width, height, bitDepth, PixelStoragePool.Shared.Rent(length), reusableStorage: true);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Span<byte> GetRow8(int y)
     {
         if (BitDepth != 8) throw new InvalidOperationException("Use GetRow16 for 16-bit pixels.");
         return Row(y);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Span<ushort> GetRow16(int y)
     {
         if (BitDepth != 16) throw new InvalidOperationException("Use GetRow8 for 8-bit pixels.");
