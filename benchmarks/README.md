@@ -1,5 +1,10 @@
 # Development benchmarks
 
+The [paired output-row trial](WARM-RESIZE-PAIRED-ROWS-REJECTED.md) is slower and
+discarded after one short screen. Production is restored exactly. Its retained
+JIT reveals per-tap wide coefficient stack materialization; a different packed
+sample formulation is the next bulk-filtering hypothesis.
+
 The [packed output trial](WARM-RESIZE-PACKED-OUTPUT-REJECTED.md) shows no useful
 gain in one short screen and is discarded without a longer repeat. Production
 bytes are restored exactly; six literal half-rounding regression cases remain.
