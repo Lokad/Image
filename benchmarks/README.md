@@ -1,5 +1,11 @@
 # Development benchmarks
 
+The [integer VP8 chroma-expansion round](WARM-VP8-CHROMA-INTEGER.md) reduces
+complete decode a further 5.3%, from 2.29x to 2.17x FFmpeg, with exact original
+samples, pixels and allocations. This remains the largest measured gap.
+The [scoped-work trial](WARM-VP8-LOCAL-WORK-REJECTED.md) is flat and discarded
+without a longer repeat. Both reuse the same single native-input pair.
+
 The [VP8 coefficient-token round](WARM-VP8-COEFFICIENT-TOKEN.md) reduces complete
 decode a further 3.6%, from 2.38x to 2.29x FFmpeg, replacing generic traversal
 with fixed format decisions. Pixels, arithmetic state, work and allocations

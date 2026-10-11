@@ -31,13 +31,19 @@ internal static class Vp8Color
 
     private static double Chroma(byte[] plane, int stride, int width, int height, int x, int y)
     {
-        var sx = Math.Clamp((x + 0.5) / 2 - 0.5, 0, width - 1); var sy = Math.Clamp((y + 0.5) / 2 - 0.5, 0, height - 1);
-        var left = (int)sx; var top = (int)sy; var right = Math.Min(left + 1, width - 1); var bottom = Math.Min(top + 1, height - 1);
-        var dx = sx - left; var dy = sy - top;
-        // Round expanded YUV samples before applying the color matrix, as in the oracle.
-        var sample = (plane[top * stride + left] * (1 - dx) + plane[top * stride + right] * dx) * (1 - dy)
-            + (plane[bottom * stride + left] * (1 - dx) + plane[bottom * stride + right] * dx) * dy;
-        return Math.Floor(sample + 0.5);
+        // Render supplies nonnegative coordinates within the doubled chroma
+        // extent. Centered phases are 1/4 on odd pixels and 3/4 on even pixels;
+        // the first pixel clamps to phase zero. Integer division maps -1/2 to
+        // zero here, while duplicated last samples provide the other edge.
+        var left = (x - 1) / 2; var top = (y - 1) / 2;
+        var right = Math.Min(left + 1, width - 1); var bottom = Math.Min(top + 1, height - 1);
+        var dx = x == 0 ? 0 : (x & 1) == 0 ? 3 : 1;
+        var dy = y == 0 ? 0 : (y & 1) == 0 ? 3 : 1;
+        var first = plane[top * stride + left] * (4 - dx) + plane[top * stride + right] * dx;
+        var second = plane[bottom * stride + left] * (4 - dx) + plane[bottom * stride + right] * dx;
+        // The weighted sum is at most 255*16. Round the exact /16 expansion
+        // before the unchanged color matrix, with the original half-up rule.
+        return (first * (4 - dy) + second * dy + 8) >> 4;
     }
 
     private static byte Sample(double value) => (byte)Math.Clamp((int)Math.Floor(value + 0.5), 0, 255);

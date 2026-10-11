@@ -311,3 +311,6 @@ continues that same pair and preserves its pixel, ownership and thread contract.
 The [fixed coefficient-token round](../../benchmarks/WARM-VP8-COEFFICIENT-TOKEN.md)
 retains those boundaries and replaces generic tree traversal with format-specific
 decisions. No additional image or encoder-quality enumeration occurs.
+The [integer chroma-expansion round](../../benchmarks/WARM-VP8-CHROMA-INTEGER.md)
+preserves the exact original samples and matrix on that pair. Scoped work caching
+was flat and discarded; its original trial evidence remains available.
