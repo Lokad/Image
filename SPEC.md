@@ -80,6 +80,10 @@ read one bounded 16-byte group per source row and interleave independent sample
 pairs. Four unrolled taps preserve the same binary64 arithmetic order and pixels,
 without new workspace. Duplicate clamped offsets and other counts retain the
 general paired path.
+The four-tap path may prepare weights and alpha coefficients with packed
+binary64 arithmetic, preserving wy*wx then *alpha and consuming coefficients
+in the original tap order. Inactive coefficients only add zero; output pixels
+and admission remain unchanged.
 
 An original development-only reference uses exact integer kernel weights and
 `BigInteger` separable accumulation, with no production resize helpers. Public

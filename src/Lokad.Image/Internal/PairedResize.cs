@@ -44,6 +44,9 @@ internal static class PairedResize
             var offsets = horizontalOffsets.Slice(baseX, weights.Length);
             var quad = weights.Length == 4 && offsets[1] == offsets[0] + 4
                 && offsets[2] == offsets[0] + 8 && offsets[3] == offsets[0] + 12;
+            var quadWeights = quad
+                ? MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(weights))
+                : Vector256<double>.Zero;
             var sums = Vector512<double>.Zero;
             double weightSum0 = 0, weightSum1 = 0;
             for (var ty = 0; ty < count; ty++)
@@ -63,18 +66,24 @@ internal static class PairedResize
                     var pixels1 = MemoryMarshal.Read<Vector128<uint>>(input.Slice(row1 + first, 16));
                     var low = Sse2.UnpackLow(pixels0, pixels1);
                     var high = Sse2.UnpackHigh(pixels0, pixels1);
-                    var weight0 = wy0 * weights[0]; var weight1 = wy1 * weights[0];
-                    sums = Tap(sums, low, weight0, weight1);
-                    weightSum0 += weight0; weightSum1 += weight1;
-                    weight0 = wy0 * weights[1]; weight1 = wy1 * weights[1];
-                    sums = Tap(sums, Sse2.ShiftRightLogical128BitLane(low.AsByte(), 8).AsUInt32(), weight0, weight1);
-                    weightSum0 += weight0; weightSum1 += weight1;
-                    weight0 = wy0 * weights[2]; weight1 = wy1 * weights[2];
-                    sums = Tap(sums, high, weight0, weight1);
-                    weightSum0 += weight0; weightSum1 += weight1;
-                    weight0 = wy0 * weights[3]; weight1 = wy1 * weights[3];
-                    sums = Tap(sums, Sse2.ShiftRightLogical128BitLane(high.AsByte(), 8).AsUInt32(), weight0, weight1);
-                    weightSum0 += weight0; weightSum1 += weight1;
+                    var weights0 = Avx.Multiply(Vector256.Create(wy0), quadWeights);
+                    var weights1 = Avx.Multiply(Vector256.Create(wy1), quadWeights);
+                    var weighted0 = Avx.Multiply(weights0,
+                        Avx.ConvertToVector256Double(Sse2.ShiftRightLogical(pixels0, 24).AsInt32()));
+                    var weighted1 = Avx.Multiply(weights1,
+                        Avx.ConvertToVector256Double(Sse2.ShiftRightLogical(pixels1, 24).AsInt32()));
+                    // Prepare four coefficients together; consume their taps in
+                    // the original order, with separate multiply/add operations.
+                    sums = Tap(sums, low, weighted0.GetElement(0), weighted1.GetElement(0));
+                    weightSum0 += weights0.GetElement(0); weightSum1 += weights1.GetElement(0);
+                    sums = Tap(sums, Sse2.ShiftRightLogical128BitLane(low.AsByte(), 8).AsUInt32(),
+                        weighted0.GetElement(1), weighted1.GetElement(1));
+                    weightSum0 += weights0.GetElement(1); weightSum1 += weights1.GetElement(1);
+                    sums = Tap(sums, high, weighted0.GetElement(2), weighted1.GetElement(2));
+                    weightSum0 += weights0.GetElement(2); weightSum1 += weights1.GetElement(2);
+                    sums = Tap(sums, Sse2.ShiftRightLogical128BitLane(high.AsByte(), 8).AsUInt32(),
+                        weighted0.GetElement(3), weighted1.GetElement(3));
+                    weightSum0 += weights0.GetElement(3); weightSum1 += weights1.GetElement(3);
                 }
                 else for (var tx = 0; tx < weights.Length; tx++)
                 {
@@ -105,11 +114,10 @@ internal static class PairedResize
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static Vector512<double> Tap(Vector512<double> sums, Vector128<uint> pixels,
-        double weight0, double weight1)
+        double weighted0, double weighted1)
     {
-        if (weight0 == 0 && weight1 == 0) return sums;
-        var weighted = Avx512F.InsertVector256(Vector512.Create(weight0 * (pixels.GetElement(0) >> 24)),
-            Vector256.Create(weight1 * (pixels.GetElement(1) >> 24)), 1);
+        var weighted = Avx512F.InsertVector256(Vector512.Create(weighted0),
+            Vector256.Create(weighted1), 1);
         var colors = Sse2.Or(Sse2.And(pixels.AsUInt64(), Vector128.Create(0x00ffffff00ffffffUL)),
             Vector128.Create(0x0100000001000000UL)).AsByte();
         var samples = Avx512F.ConvertToVector512Double(Avx2.ConvertToVector256Int32(colors));

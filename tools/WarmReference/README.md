@@ -433,6 +433,12 @@ reduces the same complete operation a further 20.5%, to 2.08x (conservative uppe
 2.12x), without extra allocations. Two bounded 16-byte reads and four unrolled
 taps retain per-pixel arithmetic order. Clamped duplicate offsets and other
 counts retain the general paired path. No performance raster or pair is added.
+The [packed alpha/coefficient kernel](../../benchmarks/WARM-RESIZE-QUAD-ALPHA.md)
+reduces the same operation a further 8.9%, to 1.91x (conservative upper 1.93x),
+retaining exact pixels and allocations. Packed preparation replaces repeated
+scalar alpha conversions without changing each coefficient's arithmetic order.
+This pair clears the numerical target; independent quiet confirmation remains
+open.
 Run sequentially on the quiet dedicated VM and preserve
 source/raw/actual timed DLLs before edits. Other sizes, directions, depths and
 bicubic remain unmeasured; independent quiet confirmation remains open. Native

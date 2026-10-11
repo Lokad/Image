@@ -1,5 +1,12 @@
 # Development benchmarks
 
+The [packed alpha/coefficient kernel](WARM-RESIZE-QUAD-ALPHA.md) reduces complete
+warm bilinear resize a further 8.9%, from 2.08x to 1.91x FFmpeg (conservative
+upper 1.93x). Packed preparation replaces repeated scalar alpha conversions
+while retaining exact pixels and allocation totals on the same single pair.
+This case clears the numerical target; independent quiet confirmation and
+other material warm coverage remain open.
+
 The [grouped four-tap sample kernel](WARM-RESIZE-QUAD-SAMPLES.md) reduces complete
 warm bilinear resize a further 20.5%, from 2.64x to 2.08x FFmpeg (conservative
 upper 2.12x). Two bounded grouped reads replace eight separate sample reads per
