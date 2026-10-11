@@ -921,4 +921,14 @@ Its [first screen](WARM-NEAREST16-BASELINE.md) reaches 2.12x with wide short-run
 uncertainty. [Exact row recurrence](WARM-NEAREST-RECURRENCE.md) then removes
 repeated coordinate division and mapping callbacks, reducing the screened mean
 by 70.78% and reaching 0.62x, conservative upper 0.64x. This pair clears the
-numerical target; independent quiet confirmation and broader coverage remain open.
+numerical target. Its [prepared confirmation](WARM-PREPARED-CONFIRM.md) supplies
+independent quiet evidence for this fixed pair; broader coverage remains open.
+
+The `VerticalFlip/Whole16` warm selection reuses the same existing RGBA16 raster.
+[Reversed row copies](WARM-VFLIP-ROWS.md) replace generic per-pixel mapping and
+use existing admitted complete-overwrite storage, reducing the screened mean
+98.58%, from 67.28x to 0.99x. Both twelve-sample repeats clear the numerical 2x
+bound but fail their post-run quiet guards, so independent quiet confirmation
+remains open. No image or geometry sweep is added. The
+[prepared-job recipe](../tools/WarmReference/README.md) supports fixed short
+screens and confirmation without compilation inside the scored windows.

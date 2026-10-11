@@ -1,25 +1,29 @@
 # Warm FFmpeg reference
 
-## Prepared confirmation
+## Prepared short screens and confirmation
 
 Compile, generate the BenchmarkDotNet child and validate it before the quiet
-interval. For a new case, prepare the fixed confirmation job on the VM:
+interval. For a new case, prepare the fixed short or confirmation job on the VM:
 
 ```powershell
-./bench.ps1 -DedicatedVm -Warm -WarmFamily Crop -WarmCases Fixed16 -Cpu 0 -NoBuild -WarmConfirm -PrepareWarmConfirm
+./bench.ps1 -DedicatedVm -Warm -WarmFamily VerticalFlip -WarmCases Whole16 -Cpu 0 -NoBuild -PrepareWarm
+./bench.ps1 -DedicatedVm -Warm -WarmFamily VerticalFlip -WarmCases Whole16 -Cpu 0 -NoBuild -WarmConfirm -PrepareWarm
 ```
 
-Preparation generates and executes the actual twelve-iteration WarmConfirm job
+Preparation generates and executes the actual three-iteration WarmShort or
+twelve-iteration WarmConfirm job
 with one native operation before and after for execution/output validation.
 Its receipt is explicitly validation-only, with a null parity ratio. Retain
 the generated files; allow preparation activity to settle before a fresh guard.
 This supplies a compatible child without compiling inside the scored window.
-A retained compatible `WarmConfirm` child can run directly without
+A retained compatible `WarmShort` or `WarmConfirm` child can run directly without
 rebuilding the host. Verify its generated entry selects the declared method,
 case and job, and smoke-check its current assemblies first. Keep the generated
 files ignored; freeze the actual child, benchmark/library DLLs, runtime config,
 owned source inventory and native identity. Never reuse a child for a different
 method or case without verifying its generated dispatch.
+The existing `-PrepareWarmConfirm` switch remains an alias for confirmation
+preparation and still requires `-WarmConfirm`.
 
 On the dedicated VM, a controller sets these values and checks the unchanged
 quiet guard immediately before and after the process:
@@ -57,6 +61,11 @@ to overwrite evidence. Both modes reproduce retained official report statistics.
 This recipe supplied the independent
 [RGBA16 nearest confirmation](../../benchmarks/WARM-PREPARED-CONFIRM.md);
 it does not certify other cases or earlier failed intervals.
+
+For a short screen, use `LOKAD_IMAGE_WARM_MODE=measure`, the verified `WarmShort`
+child and `--job WarmShort`; both native brackets contain three samples. Preserve
+the declared method and case consistently across preparation and replay. Every
+statistical attempt needs a unique receipt and fresh guards.
 
 ## Worker contract
 
@@ -383,6 +392,38 @@ The [integer chroma-expansion round](../../benchmarks/WARM-VP8-CHROMA-INTEGER.md
 preserves the exact original samples and matrix on that pair. Scoped work caching
 was flat and discarded; its original trial evidence remains available.
 
+## Warm vertical flip
+
+`WarmVerticalFlip/Whole16` reuses the existing original RGBA16 513x259 raster.
+Build the original public-API adapter and validate exact full-word samples,
+independent owners and fourteen rejection controls:
+
+```bash
+bash tools/WarmReference/build-vflip-linux.sh
+python3 tools/WarmReference/verify-vflip-linux.py --cpu 0 --depth 16
+```
+
+```powershell
+./bench.ps1 -Smoke -Warm -WarmFamily VerticalFlip -WarmCases Whole16 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily VerticalFlip -WarmCases Whole16 -Cpu 0 -NoBuild -PrepareWarm
+```
+
+Native vflip produces a shared negative-stride view. Each timed operation
+allocates an independent frame, copies every reversed row and releases the
+view/output. Managed timing includes the complete public call, admission,
+materialization and disposal. Both sides may reuse released storage; neither
+caches output pixels. Graph/source/frame wrappers are reused. Full samples,
+alpha, hidden RGB, source and simultaneous owners are exact, as are pinned
+normal/scalar CLI pixels. Use the same single CPU/filter thread, normal SIMD
+and quiet-VM policy as other families. `Whole8` is an explicit correctness
+selection; only `Whole16` is measured in this round.
+
+The [reversed-row round](../../benchmarks/WARM-VFLIP-ROWS.md) brings the screened
+mean from 67.28x to 0.99x. Two twelve-sample repeats clear the numerical 2x bound
+but fail their post-run quiet guards; independent quiet confirmation remains
+open. The accepted source and actual binaries are frozen with every raw attempt.
+It adds no performance raster or geometry sweep. Other transforms remain open.
+
 ## Warm owned crop
 
 `WarmCrop/Fixed16` reuses the existing original RGBA16 513x259 raster and one
@@ -459,8 +500,9 @@ full-word sample against the integer reference. Its
 [specialized row kernel](../../benchmarks/WARM-NEAREST-RECURRENCE.md) removes
 per-pixel division/callbacks and reduces the screened mean 70.78%, reaching
 0.62x with conservative upper 0.64x on Down16. No extra performance raster is
-added. Other resize directions, sizes and filtered kernels remain unmeasured;
-independent quiet confirmation remains open. These native tools and their ignored
+added. Its [prepared repeat](../../benchmarks/WARM-PREPARED-CONFIRM.md) supplies
+independent quiet confirmation for Down16 only. Other resize directions, sizes
+and filtered kernels remain open. These native tools and their ignored
 static archives are never production build inputs.
 
 The [current JPEG decode confirmation](../../benchmarks/WARM-JPEG-DECODE-CONFIRM.md)

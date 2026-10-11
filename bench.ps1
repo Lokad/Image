@@ -1,9 +1,10 @@
 param([switch]$Smoke, [switch]$DedicatedVm, [string]$Filter, [switch]$NoBuild, [switch]$HorizontalFlip,
-    [switch]$Warm, [ValidateRange(0, 62)][int]$Cpu = 0, [switch]$WarmConfirm, [switch]$PrepareWarmConfirm,
-    [ValidateSet('Flip', 'Png', 'Jpeg', 'JpegDecode', 'Webp', 'WebpDecode', 'Vp8Decode', 'Nearest', 'Bilinear', 'Crop')][string]$WarmFamily = 'Flip', [string]$WarmCases)
+    [switch]$Warm, [ValidateRange(0, 62)][int]$Cpu = 0, [switch]$WarmConfirm, [switch]$PrepareWarmConfirm, [switch]$PrepareWarm,
+    [ValidateSet('Flip', 'Png', 'Jpeg', 'JpegDecode', 'Webp', 'WebpDecode', 'Vp8Decode', 'Nearest', 'Bilinear', 'Crop', 'VerticalFlip')][string]$WarmFamily = 'Flip', [string]$WarmCases)
 $ErrorActionPreference = 'Stop'
 if ($WarmConfirm -and (-not $Warm -or $Smoke)) { throw '-WarmConfirm requires -Warm with -DedicatedVm.' }
 if ($PrepareWarmConfirm -and -not $WarmConfirm) { throw '-PrepareWarmConfirm requires -WarmConfirm.' }
+if ($PrepareWarm -and (-not $Warm -or $Smoke)) { throw '-PrepareWarm requires a fixed warm timing job.' }
 if (($PSBoundParameters.ContainsKey('WarmFamily') -or $PSBoundParameters.ContainsKey('WarmCases')) -and -not $Warm) {
     throw '-WarmFamily/-WarmCases require -Warm.'
 }
@@ -28,7 +29,7 @@ try {
         if ($HorizontalFlip -or $PSBoundParameters.ContainsKey('Filter')) { throw '-Warm supplies its own narrow selection.' }
         $warmJob = if ($Smoke) { '--warm-smoke' } elseif ($WarmConfirm) { '--warm-confirm' } else { '--warm-short' }
         $warmArguments = @($warmJob, '--warm-cpu', $Cpu, '--warm-family', $WarmFamily)
-        if ($PrepareWarmConfirm) { $warmArguments += '--warm-prepare' }
+        if ($PrepareWarmConfirm -or $PrepareWarm) { $warmArguments += '--warm-prepare' }
         if ($PSBoundParameters.ContainsKey('WarmCases')) { $warmArguments += @('--warm-cases', $WarmCases) }
         dotnet $benchmarkDll @warmArguments --artifacts "$runArtifacts" --buildTimeout 600 --stopOnFirstError
     } elseif ($HorizontalFlip) {
