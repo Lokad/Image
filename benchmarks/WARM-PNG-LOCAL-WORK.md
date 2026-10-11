@@ -69,7 +69,19 @@ cancellable tokens. All 2,034 tests pass on Windows and Linux: 454 internal,
 Release package passes all three usage examples on both platforms. SHA256:
 `02d84f78e5bbad2539fe2461905157c00504a4d235bb8166c3099328e0da2464`.
 
-Recheck the single frozen matched JPEG encode case before reranking.
-Its 2.12x / 2.13x screens predate Work inlining. Native JPEG decode at 2.06x
-has one affected screen; other provisional, unknown and unmatched paths stay
-open. No blanket gain is inferred for other codecs.
+A subsequent single frozen matched JPEG encode recheck screens at 2.02x
+FFmpeg (conservative upper 2.20x), with unchanged encoded bytes, quality
+gap 0.08244 dB. Allocation estimates are 1,051,958 versus the pre-Work
+1,051,907 B/op; retain the +51 difference without attributing it. Its managed
+mean is 7,638.30 µs;
+native brackets are 3,784.38 / 3,778.61 µs. The seven historical owned quality
+settings are reused; no new quality enumeration or benchmark image. Its actual
+statistical DLL also matches the same package in all production IL and flags.
+The new PNG-only accounting is not used by this path, so no JPEG gain is
+attributed to it. Prequiet passes, postquiet fails; confirmation remains open.
+
+PNG16 remains the largest current measured gap. Profile that current code
+once on the same input before selecting the next primitive; earlier framing
+percentages predate Work and local accounting. Native JPEG decode at 2.06x
+has one affected screen. Other provisional, unknown and unmatched paths stay
+open; no blanket gain is inferred.
