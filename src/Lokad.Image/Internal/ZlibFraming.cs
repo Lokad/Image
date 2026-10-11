@@ -70,35 +70,43 @@ internal static class ZlibFraming
                 var literals = new Huffman(lengths[..literalCount], counts.Slice(16, 16), symbols.Slice(19, 288), context);
                 var distances = new Huffman(lengths.Slice(literalCount, distanceCount), counts.Slice(32, 16), symbols.Slice(307, 32), context);
                 BuildLiteralLookup(literals, literalLookup, context); BuildDistanceLookup(distances, distanceLookup, context);
-                while (true)
+                // Only reader bit charges occur in this region. A noncancelable
+                // operation can check those exact charges locally, then publish
+                // them on every exit before further parent-context work occurs.
+                reader.BeginLocalWork();
+                try
                 {
-                    var symbol = DecodeLiteral(ref reader, literals, literalLookup);
-                    if (symbol == 256) break;
-                    int length;
-                    if (symbol < 256) length = 1;
-                    else
+                    while (true)
                     {
-                        if (symbol > 285) throw new ImageDataException("Invalid PNG Deflate length code.");
-                        if (symbol < 265) length = symbol - 254;
-                        else if (symbol == 285) length = 258;
+                        var symbol = DecodeLiteral(ref reader, literals, literalLookup);
+                        if (symbol == 256) break;
+                        int length;
+                        if (symbol < 256) length = 1;
                         else
                         {
-                            var extra = (symbol - 265) / 4 + 1;
-                            length = 3 + (1 << (extra + 2)) + ((symbol - 265) % 4 << extra) + reader.Read(extra);
+                            if (symbol > 285) throw new ImageDataException("Invalid PNG Deflate length code.");
+                            if (symbol < 265) length = symbol - 254;
+                            else if (symbol == 285) length = 258;
+                            else
+                            {
+                                var extra = (symbol - 265) / 4 + 1;
+                                length = 3 + (1 << (extra + 2)) + ((symbol - 265) % 4 << extra) + reader.Read(extra);
+                            }
+                            var distanceSymbol = DecodeDistance(ref reader, distances, distanceLookup);
+                            if (distanceSymbol > 29) throw new ImageDataException("Invalid PNG Deflate distance code.");
+                            var distance = distanceSymbol + 1;
+                            if (distanceSymbol >= 4)
+                            {
+                                var extra = distanceSymbol / 2 - 1;
+                                distance = 1 + ((2 + (distanceSymbol & 1)) << extra) + reader.Read(extra);
+                            }
+                            if (distance > output || distance > window) throw new ImageDataException("PNG Deflate distance exceeds history or window.");
                         }
-                        var distanceSymbol = DecodeDistance(ref reader, distances, distanceLookup);
-                        if (distanceSymbol > 29) throw new ImageDataException("Invalid PNG Deflate distance code.");
-                        var distance = distanceSymbol + 1;
-                        if (distanceSymbol >= 4)
-                        {
-                            var extra = distanceSymbol / 2 - 1;
-                            distance = 1 + ((2 + (distanceSymbol & 1)) << extra) + reader.Read(extra);
-                        }
-                        if (distance > output || distance > window) throw new ImageDataException("PNG Deflate distance exceeds history or window.");
+                        if (length > expectedBytes - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
+                        output += length;
                     }
-                    if (length > expectedBytes - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
-                    output += length;
                 }
+                finally { reader.EndLocalWork(); }
             } while (!final);
             if (output != expectedBytes) throw new ImageDataException("Truncated PNG pixel data.");
             reader.Align(); var checksum = reader.Position; reader.SkipBytes(4);
@@ -115,12 +123,33 @@ internal static class ZlibFraming
         private int position;
         private ulong buffer;
         private int available;
-        public Bits(ReadOnlySpan<byte> data, OperationContext context) { this.data = data; this.context = context; }
+        private long remainingWork;
+        private long initialWork;
+        public Bits(ReadOnlySpan<byte> data, OperationContext context) { this.data = data; this.context = context; remainingWork = -1; }
         public readonly int Position => position;
+
+        public void BeginLocalWork()
+        {
+            if (!context.Cancellation.CanBeCanceled) initialWork = remainingWork = context.RemainingWork;
+        }
+
+        public void EndLocalWork()
+        {
+            if (remainingWork < 0) return;
+            context.Work(initialWork - remainingWork); remainingWork = -1;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void Work(int count)
+        {
+            if (remainingWork < 0) { context.Work(count); return; }
+            if (count < 0 || count > remainingWork) throw new ImageLimitException("Computational work limit exceeded.");
+            remainingWork -= count;
+        }
 
         public int Read(int count)
         {
-            context.Work(count);
+            Work(count);
             Fill(count);
             var value = (int)(buffer & ((1u << count) - 1)); buffer >>= count; available -= count; return value;
         }
@@ -151,7 +180,7 @@ internal static class ZlibFraming
 
         public void Consume(int count)
         {
-            context.Work(count); buffer >>= count; available -= count;
+            Work(count); buffer >>= count; available -= count;
         }
 
         public void Align()

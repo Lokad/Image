@@ -9,6 +9,8 @@ internal sealed class OperationContext
     private long liveBytes;
     private long work;
 
+    public long RemainingWork => Limits.MaxWork - work;
+
     public OperationContext(ImageLimits limits, CancellationToken cancellation)
     {
         ArgumentNullException.ThrowIfNull(limits);

@@ -5,6 +5,33 @@ namespace Lokad.Image.Tests;
 public sealed class ZlibFramingTests
 {
     [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void TruncatedDistanceExtraBitsRetainAdmittedWorkAndErrorPrecedence(bool cancellable)
+    {
+        // Original fixed stream, deliberately missing the distance's thirteen
+        // extra bits and checksum. Read charges before attempting its refill.
+        var bits = new BitWriter(); bits.Number(1, 1); bits.Number(1, 2);
+        for (var i = 0; i < 12; i++) bits.Code(0x30 + 65, 8);
+        bits.Code(1, 7); bits.Code(29, 5); bits.Align();
+        byte[] encoded = [0x78, 0x01, .. bits.Bytes()];
+        using var cancellation = new CancellationTokenSource();
+        var token = cancellable ? cancellation.Token : default;
+        const long prior = 11, work = 9380 + 12 * 8 + 7 + 5 + 13;
+        var limits = ImageLimits.Default with { MaxWork = prior + work, MaxWorkingBytes = 4096 };
+        var context = new OperationContext(limits, token); context.Work(prior);
+        var error = Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(encoded, 64, context));
+        Assert.Equal("Truncated PNG Deflate stream.", error.Message);
+        Assert.Throws<ImageLimitException>(() => context.Work(1));
+        context.Reserve(4096); context.Release(4096);
+
+        var tight = new OperationContext(limits with { MaxWork = limits.MaxWork - 1 }, token); tight.Work(prior);
+        Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, 64, tight));
+        tight.Work(12); // The failing thirteen-bit charge is atomic.
+        Assert.Throws<ImageLimitException>(() => tight.Work(1));
+        tight.Reserve(4096); tight.Release(4096);
+    }
+
+    [Theory]
     [InlineData(false, false)] [InlineData(false, true)]
     [InlineData(true, false)] [InlineData(true, true)]
     public void ReservedCodeAfterLiteralsRetainsExactFailureWork(bool distanceError, bool cancellable)
