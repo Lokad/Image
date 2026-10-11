@@ -281,22 +281,48 @@ internal static class JpegTransform
         // no new table, per-block allocation or image cache is needed.
         if (Avx512F.IsSupported)
         {
-            for (var v = 0; v < 8; v++)
+            // Keep basis initialization outside the accumulator lifetime.
+            var basis = Cosines.AsSpan(0, 64);
+            // The first horizontal product is identical for all eight vertical
+            // frequencies. Share it without changing any lane's y/x additions
+            // or combining its two rounded multiplications.
+            var sum0 = Vector512<double>.Zero; var sum1 = Vector512<double>.Zero;
+            var sum2 = Vector512<double>.Zero; var sum3 = Vector512<double>.Zero;
+            var sum4 = Vector512<double>.Zero; var sum5 = Vector512<double>.Zero;
+            var sum6 = Vector512<double>.Zero; var sum7 = Vector512<double>.Zero;
+            for (var y = 0; y < 8; y++)
             {
-                var sum = Vector512<double>.Zero;
-                for (var y = 0; y < 8; y++)
+                var vertical0 = Vector512.Create(basis[y * 8]);
+                var vertical1 = Vector512.Create(basis[y * 8 + 1]);
+                var vertical2 = Vector512.Create(basis[y * 8 + 2]);
+                var vertical3 = Vector512.Create(basis[y * 8 + 3]);
+                var vertical4 = Vector512.Create(basis[y * 8 + 4]);
+                var vertical5 = Vector512.Create(basis[y * 8 + 5]);
+                var vertical6 = Vector512.Create(basis[y * 8 + 6]);
+                var vertical7 = Vector512.Create(basis[y * 8 + 7]);
+                for (var x = 0; x < 8; x++)
                 {
-                    var vertical = Vector512.Create(Cosines[y * 8 + v]);
-                    for (var x = 0; x < 8; x++)
-                    {
-                        var sample = Vector512.Create((double)(pixels[y * 8 + x] - 128));
-                        var horizontal = Vector512.Create(Cosines.AsSpan(x * 8, 8));
-                        var term = Avx512F.Multiply(Avx512F.Multiply(sample, horizontal), vertical);
-                        sum = Avx512F.Add(sum, term);
-                    }
+                    var sample = Vector512.Create((double)(pixels[y * 8 + x] - 128));
+                    var horizontal = Avx512F.Multiply(sample, Vector512.Create(basis.Slice(x * 8, 8)));
+                    sum0 = Avx512F.Add(sum0, Avx512F.Multiply(horizontal, vertical0));
+                    sum1 = Avx512F.Add(sum1, Avx512F.Multiply(horizontal, vertical1));
+                    sum2 = Avx512F.Add(sum2, Avx512F.Multiply(horizontal, vertical2));
+                    sum3 = Avx512F.Add(sum3, Avx512F.Multiply(horizontal, vertical3));
+                    sum4 = Avx512F.Add(sum4, Avx512F.Multiply(horizontal, vertical4));
+                    sum5 = Avx512F.Add(sum5, Avx512F.Multiply(horizontal, vertical5));
+                    sum6 = Avx512F.Add(sum6, Avx512F.Multiply(horizontal, vertical6));
+                    sum7 = Avx512F.Add(sum7, Avx512F.Multiply(horizontal, vertical7));
                 }
-                Avx512F.Divide(sum, Vector512.Create(4d)).CopyTo(coefficients[(v * 8)..]);
             }
+            var divisor = Vector512.Create(4d);
+            Avx512F.Divide(sum0, divisor).CopyTo(coefficients);
+            Avx512F.Divide(sum1, divisor).CopyTo(coefficients[8..]);
+            Avx512F.Divide(sum2, divisor).CopyTo(coefficients[16..]);
+            Avx512F.Divide(sum3, divisor).CopyTo(coefficients[24..]);
+            Avx512F.Divide(sum4, divisor).CopyTo(coefficients[32..]);
+            Avx512F.Divide(sum5, divisor).CopyTo(coefficients[40..]);
+            Avx512F.Divide(sum6, divisor).CopyTo(coefficients[48..]);
+            Avx512F.Divide(sum7, divisor).CopyTo(coefficients[56..]);
             return;
         }
         if (Avx.IsSupported)

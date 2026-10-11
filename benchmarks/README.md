@@ -1,8 +1,11 @@
 # Development benchmarks
 
-The [current encoder cost profile](WARM-JPEG-ENCODER-COSTS.md) records one
-discarded signed-writer trial and one narrow profile of the restored code.
-Entropy writing and the forward transform lead the next encoder investigation.
+The [shared forward-product round](WARM-JPEG-FORWARD-SHARED.md) retains exact
+JPEG coefficients and bytes while reducing complete warm encode screens to
+2.12x / 2.13x. PNG decode now has the largest measured gap; uniform parity is open.
+
+The [encoder cost profile before sharing](WARM-JPEG-ENCODER-COSTS.md) records two
+discarded writer trials and the profile that selected the forward transform.
 
 The [signed-amplitude extension round](WARM-JPEG-SIGNED.md) replaces a conditional
 JPEG amplitude offset with an exact sign mask. Native-input warm decode screens

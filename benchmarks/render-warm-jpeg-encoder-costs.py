@@ -5,7 +5,9 @@ data=json.loads((root/'warm-jpeg-encoder-costs-evidence.json').read_text(encodin
 row=data['observations']['rejectedSignedWriter'][0]; profile=data['profile']
 memory_row=data['observations']['rejectedMemoryStreamByte'][0]
 lines=['# Warm JPEG encoder costs','',
-    'The current restored encoder profile points to entropy writing and the forward',
+    'This checkpoint precedes the [shared forward-product round](WARM-JPEG-FORWARD-SHARED.md).',
+    'Its profile describes the encoder before that accepted change.','',
+    'The restored encoder profile at this checkpoint points to entropy writing and the forward',
     'transform. An exact signed-amplitude writer mask and a guarded stock',
     'MemoryStream byte path gave no useful improvement in their separate complete',
     'warm encode screens and were discarded. Production codec behavior',
