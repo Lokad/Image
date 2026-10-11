@@ -1,10 +1,33 @@
 using System.Buffers.Binary;
+using System.Security.Cryptography;
 using Lokad.Image.Tooling;
 
 namespace Lokad.Image.PublicApi.Tests;
 
 public sealed class ResizeReferenceTests
 {
+    [Theory]
+    [InlineData(8, ResizeFilter.Bilinear, "4920566bb257cb6dda29eaa0b48876ed0d9da0435186f9c8f817a1742b6540bf")]
+    [InlineData(8, ResizeFilter.Bicubic, "da6936513ba65f959adcc10cafc83410f6f7253b834535b822831d3a4b698f92")]
+    [InlineData(16, ResizeFilter.Bilinear, "10a39d150207778a378bb653ae928135089a54f33221d0d074a333c5c346f659")]
+    [InlineData(16, ResizeFilter.Bicubic, "ae77b88f4eecec987e663fb7aa4401d2b923ad6f9351ad4a51e7545982916ccd")]
+    public void FilteredOriginalRastersRetainBinary64Rounding(int depth, ResizeFilter filter, string expected)
+    {
+        // Original asymmetric-v1 inputs and pre-SIMD scalar outputs. Concatenate
+        // these five existing target shapes, transparent then opaque, in order.
+        // This tightens the independent rational-reference test's one-level bound
+        // to exact retained pixels across edges, shrinking and mixed-axis scaling.
+        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
+        foreach (var target in new[] { (5, 3), (19, 15), (4, 15), (1, 1), (9, 7) })
+        foreach (var opaque in new[] { false, true })
+        {
+            using var source = OriginalPixels.Buffer(9, 7, depth, opaque: opaque);
+            using var resized = ImageTransforms.Resize(source, target.Item1, target.Item2, filter);
+            hash.AppendData(OriginalPixels.Bytes(resized));
+        }
+        Assert.Equal(expected, Convert.ToHexStringLower(hash.GetHashAndReset()));
+    }
+
     public static IEnumerable<object[]> Profiles()
     {
         foreach (var depth in new[] { 8, 16 })

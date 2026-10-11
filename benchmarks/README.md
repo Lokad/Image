@@ -1,11 +1,15 @@
 # Development benchmarks
 
+The [four-channel resize SIMD trial](WARM-RESIZE-SIMD-REJECTED.md) shows no useful
+gain in its short screen and is discarded without a longer repeat. Four exact
+scalar-pixel regressions remain; production retains source-row span acquisition.
+
 The [filtered source-row acquisition round](WARM-ROW-SPAN.md) reduces complete
 warm bilinear resize by about 66.8%, from the [row inlining round's](WARM-ROW-INLINE.md)
 27.46x to 9.08x FFmpeg on the same original raster. This remains the largest
 measured gap. Managed rational-reference pixels, native alpha and allocations
-remain exact; native RGB meets the existing filtered comparison bound. Safe
-double-precision channel accumulation with SIMD is the next narrow primitive.
+remain exact; native RGB meets the existing filtered comparison bound. Horizontal
+kernel-weight reuse is the next narrow primitive.
 
 The [current JPEG decode confirmation](WARM-JPEG-DECODE-CONFIRM.md) reaches
 1.90x FFmpeg with a twelve-sample conservative upper below 2x. The first
