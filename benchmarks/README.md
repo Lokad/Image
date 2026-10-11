@@ -1,5 +1,10 @@
 # Development benchmarks
 
+The [PNG literal-batch trials](WARM-PNG-LITERAL-BATCHES.md) discard all three
+batching variants: PNG16 gains come with a PNG8 regression. Two inlining
+diagnostics are also discarded without timing. Four failure-budget controls
+are retained; production stays unchanged and PNG16 remains the largest gap.
+
 The [work-admission round](WARM-WORK-ADMISSION.md) adds one inlining hint with
 unchanged admission semantics. PNG16 screens reach 2.22x / 2.22x, PNG8 2.11x
 and native-input JPEG decode 2.06x. PNG16 remains the largest measured gap.

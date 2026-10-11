@@ -5,6 +5,37 @@ namespace Lokad.Image.Tests;
 public sealed class ZlibFramingTests
 {
     [Theory]
+    [InlineData(false, false)] [InlineData(false, true)]
+    [InlineData(true, false)] [InlineData(true, true)]
+    public void ReservedCodeAfterLiteralsRetainsExactFailureWork(bool distanceError, bool cancellable)
+    {
+        // Original RFC 1951 fixed literals followed by a reserved code, with
+        // enough declared output for further literals. A speculative lookahead
+        // must not charge or consume future prefixes before this format error.
+        var bits = new BitWriter(); bits.Number(1, 1); bits.Number(1, 2);
+        for (var i = 0; i < 12; i++) bits.Code(0x30 + 65, 8);
+        if (distanceError) { bits.Code(1, 7); bits.Code(30, 5); }
+        else bits.Code(198, 8); // Reserved fixed literal/length symbol 286.
+        bits.Align(); byte[] encoded = [0x78, 0x01, .. bits.Bytes(), 0, 0, 0, 0];
+        using var cancellation = new CancellationTokenSource();
+        var token = cancellable ? cancellation.Token : default;
+        // Header plus fixed trees/lookups: 9,380; twelve eight-bit literals;
+        // then either eight reserved length bits or seven length + five distance.
+        var work = 9380 + 12 * 8 + (distanceError ? 12 : 8);
+        var context = new OperationContext(ImageLimits.Default with { MaxWork = work, MaxWorkingBytes = 4096 }, token);
+        var error = Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(encoded, 64, context));
+        Assert.Equal(distanceError ? "Invalid PNG Deflate distance code." : "Invalid PNG Deflate length code.", error.Message);
+        Assert.Throws<ImageLimitException>(() => context.Work(1));
+        context.Reserve(4096); context.Release(4096);
+
+        var tight = new OperationContext(ImageLimits.Default with { MaxWork = work - 1, MaxWorkingBytes = 4096 }, token);
+        Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, 64, tight));
+        tight.Work(distanceError ? 4 : 7); // Failing prefix admission is atomic.
+        Assert.Throws<ImageLimitException>(() => tight.Work(1));
+        tight.Reserve(4096); tight.Release(4096);
+    }
+
+    [Theory]
     [InlineData(false)]
     [InlineData(true)]
     public void PrefixLookaheadReturnsStoredHeaderBytesAndExactWork(bool trailingBytes)
