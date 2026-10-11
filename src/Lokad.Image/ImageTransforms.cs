@@ -155,6 +155,19 @@ public static class ImageTransforms
             if (source.BitDepth == 8) destination8 = result.GetRow8(y);
             else destination16 = result.GetRow16(y);
             var cy = (y + 0.5) * source.Height / height - 0.5;
+            var firstY = (int)Math.Ceiling(cy - radius * scaleY);
+            var lastY = Math.Floor(cy + radius * scaleY);
+            // Reuse short vertical support across the output row without a
+            // heap workspace. Wider support retains direct evaluation.
+            var cachedY = lastY - firstY < 8;
+            var y0 = cachedY ? Kernel((firstY - cy) / scaleY, filter) : 0;
+            var y1 = cachedY && lastY - firstY >= 1 ? Kernel((firstY + 1 - cy) / scaleY, filter) : 0;
+            var y2 = cachedY && lastY - firstY >= 2 ? Kernel((firstY + 2 - cy) / scaleY, filter) : 0;
+            var y3 = cachedY && lastY - firstY >= 3 ? Kernel((firstY + 3 - cy) / scaleY, filter) : 0;
+            var y4 = cachedY && lastY - firstY >= 4 ? Kernel((firstY + 4 - cy) / scaleY, filter) : 0;
+            var y5 = cachedY && lastY - firstY >= 5 ? Kernel((firstY + 5 - cy) / scaleY, filter) : 0;
+            var y6 = cachedY && lastY - firstY >= 6 ? Kernel((firstY + 6 - cy) / scaleY, filter) : 0;
+            var y7 = cachedY && lastY - firstY >= 7 ? Kernel((firstY + 7 - cy) / scaleY, filter) : 0;
             for (var x = 0; x < width; x++)
             {
                 var cx = (x + 0.5) * source.Width / width - 0.5;
@@ -172,10 +185,14 @@ public static class ImageTransforms
                 var w6 = cached && lastX - firstX >= 6 ? Kernel((firstX + 6 - cx) / scaleX, filter) : 0;
                 var w7 = cached && lastX - firstX >= 7 ? Kernel((firstX + 7 - cx) / scaleX, filter) : 0;
                 double r = 0, g = 0, b = 0, alpha = 0, weightSum = 0;
-                for (var sy = (int)Math.Ceiling(cy - radius * scaleY); sy <= Math.Floor(cy + radius * scaleY); sy++)
+                for (var sy = firstY; sy <= lastY; sy++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
-                    var wy = Kernel((sy - cy) / scaleY, filter);
+                    var wy = cachedY ? (sy - firstY) switch
+                    {
+                        0 => y0, 1 => y1, 2 => y2, 3 => y3,
+                        4 => y4, 5 => y5, 6 => y6, _ => y7
+                    } : Kernel((sy - cy) / scaleY, filter);
                     if (wy == 0) continue;
                     var iy = Math.Clamp(sy, 0, source.Height - 1);
                     ReadOnlySpan<byte> row8 = default;

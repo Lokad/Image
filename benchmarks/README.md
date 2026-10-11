@@ -1,9 +1,14 @@
 # Development benchmarks
 
+The [vertical weight-reuse round](WARM-RESIZE-YWEIGHTS.md) reduces complete warm
+bilinear resize a further 2.2%, from 7.25x to 7.07x FFmpeg. Exact pixels,
+admission and allocations remain. It is still the largest measured gap;
+a short profile of the current operation will select the next primitive.
+
 The [destination-row acquisition round](WARM-RESIZE-DESTINATION.md) reduces
 complete warm bilinear resize a further 16.1%, from 8.65x to 7.25x FFmpeg.
 Pixels, admission and allocations remain. It is still the largest measured gap;
-vertical kernel-weight reuse is next.
+that checkpoint selected vertical kernel-weight reuse.
 
 The [horizontal weight-reuse round](WARM-RESIZE-XWEIGHTS.md) reduces complete warm
 bilinear resize a further 5.7%, from 9.08x to 8.65x FFmpeg. Original pixels,
