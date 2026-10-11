@@ -119,10 +119,19 @@ internal sealed class NativeWarmReference : IDisposable
     public NativeWarmSample[] Measure(bool smoke, long? fixedCount = null, int sampleCount = 3)
     {
         if (sampleCount is not (3 or 12)) throw new ArgumentOutOfRangeException(nameof(sampleCount));
+        // Shorter complete-operation batches allow prepared quiet confirmations
+        // to finish without carrying their own sustained work into the load guard.
+        // Historical jobs keep 200 ms; preparation must declare 50 ms explicitly.
+        var targetMilliseconds = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_NATIVE_SAMPLE_MS") switch
+        {
+            null or "200" => 200,
+            "50" => 50,
+            _ => throw new InvalidOperationException("Native warm sample target must be 50 or 200 ms.")
+        };
         if (smoke) return [Sample(1)];
         var count = fixedCount ?? 1;
         if (fixedCount is null)
-            while (Sample(count).ElapsedNanoseconds < 200_000_000)
+            while (Sample(count).ElapsedNanoseconds < targetMilliseconds * 1_000_000L)
                 count = checked(count * 2);
         for (var i = 0; i < 3; i++) Sample(count);
         return Enumerable.Range(0, sampleCount).Select(_ => Sample(count)).ToArray();

@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../../src/Lokad.Image/Lokad.Image.csproj" />
+    <Compile Include="../../Shared/OriginalPixels.cs" Link="OriginalPixels.cs" />
+    <Compile Include="../../Shared/ExactResizeReference.cs" Link="ExactResizeReference.cs" />
+    <Compile Include="../../Shared/ResizeOracle.cs" Link="ResizeOracle.cs" />
+    <Compile Include="../../Shared/OracleProcess.cs" Link="OracleProcess.cs" />
+  </ItemGroup>
+</Project>

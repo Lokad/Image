@@ -1,5 +1,53 @@
 # Warm FFmpeg reference
 
+## Prepared confirmation
+
+Compile, generate the BenchmarkDotNet child and validate it before the quiet
+interval. A retained compatible `WarmConfirm` child can run directly without
+rebuilding the host. Verify its generated entry selects the declared method,
+case and job, and smoke-check its current assemblies first. Keep the generated
+files ignored; freeze the actual child, benchmark/library DLLs, runtime config,
+owned source inventory and native identity. Never reuse a child for a different
+method or case without verifying its generated dispatch.
+
+On the dedicated VM, a controller sets these values and checks the unchanged
+quiet guard immediately before and after the process:
+
+```bash
+export LOKAD_IMAGE_BENCHMARK_RUN_ID=unique-confirmation-id
+export LOKAD_IMAGE_WARM_MODE=confirm LOKAD_IMAGE_WARM_CASES=Down16 LOKAD_IMAGE_WARM_CPU=0
+export LOKAD_IMAGE_WARM_NATIVE_SAMPLE_MS=50
+export DOTNET_PROCESSOR_COUNT=1 DOTNET_TieredCompilation=0
+export DOTNET_GCServer=0 DOTNET_gcConcurrent=0
+# prepared_child points to the verified retained WarmConfirm generated DLL.
+taskset -c 0 dotnet "$prepared_child" \
+  --benchmarkName 'WarmNearestResize.Managed(Case: Down16)' --job WarmConfirm --benchmarkId 0
+```
+
+The optional native calibration target accepts only `50` or `200` milliseconds;
+the historical default is `200`. Both count whole operations, keep three native
+warmups, and keep twelve pre/post samples for confirmation. The shorter declared
+target reduces sustained work without excluding allocation or processing. Record
+the setting, raw elapsed/count values, both guards and actual binary identities.
+A failed guard stays failed. A preparatory failure launches no benchmark;
+subsequent attempts require a fresh guard and unique evidence identity.
+
+The standalone child emits console measurements rather than the host's full
+JSON export. Recover them with the pinned BenchmarkDotNet APIs:
+
+```powershell
+dotnet build tools/WarmReference/ParseBenchmarkLog/ParseBenchmarkLog.csproj -c Release --tl:off
+dotnet tools/WarmReference/ParseBenchmarkLog/bin/Release/net10.0/ParseBenchmarkLog.dll confirm.log confirm-statistics.json
+```
+
+The parser requires one twelve-iteration confirmation, retains actual and
+adjusted result rows, and refuses to overwrite evidence. It reproduces the
+retained official report's statistics. This recipe supplied the independent
+[RGBA16 nearest confirmation](../../benchmarks/WARM-PREPARED-CONFIRM.md);
+it does not certify other cases or earlier failed intervals.
+
+## Worker contract
+
 `ffmpeg-warm.c` is an original development-only adapter using public FFmpeg
 filter APIs. No implementation code or tables are copied from upstream. It is
 not a library build input, native binding or NuGet asset. Build the pinned Linux
