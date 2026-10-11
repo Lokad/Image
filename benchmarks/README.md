@@ -365,7 +365,7 @@ Initial restore is separate; routine builds use cached dependencies. Larger
 matrices are optional targeted work, not routine baseline prerequisites.
 
 The current BenchmarkDotNet cases compare PNG, baseline/progressive JPEG and lossy/lossless WebP
-decodeÃ¢â‚¬â€œflipÃ¢â‚¬â€œPNG encode pipelines. Both subjects launch one process, read the same
+decodeÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“flipÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“PNG encode pipelines. Both subjects launch one process, read the same
 encoded input file and write one encoded output file. Source pixels and fixture
 generation happen outside the timed methods. FFmpeg runs with its normal CPU
 capabilities and one codec thread; it is the baseline for each case.
@@ -967,3 +967,11 @@ short-screen quiet guards pass, with conservative upper 1.198x. The twelve-actua
 repeat reaches 1.043x, upper 1.062x, but fails its post-run load guard; independent
 quiet confirmation remains open. The native transpose graph allocates independent
 output pixels directly, without an extra packing copy. No image/shape sweep is added.
+
+The `Transpose/Whole16` selection reuses the same raster and swaps 513x259 to
+259x513. [Bounded tile placement](WARM-TRANSPOSE-TILES.md) removes generic
+per-pixel mapping, reducing screened mean 95.84%, from 26.14x to 1.092x. Both
+short-screen quiet guards pass, with conservative upper 1.182x. The twelve-actual
+repeat reaches 1.088x, upper 1.093x, but fails its post-run load guard; independent
+quiet confirmation remains open. The public FFmpeg cclock_flip graph allocates
+independent output pixels directly. No image or geometry sweep is added.

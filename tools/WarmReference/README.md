@@ -728,3 +728,36 @@ screened mean 96.06%, with both short-screen guards passing. The independent
 twelve-actual repeat reaches 1.043x, upper 1.062x, but fails its post-run load
 guard. Quiet certification remains open; later cooldown cannot certify the
 failed interval. Other material cases remain open.
+
+## Warm plain transpose
+
+`WarmTranspose/Whole16` reuses the original RGBA16 513x259 raster, producing
+259x513. Build the original public-API worker and validate full channel bytes,
+source, independent live owners and fourteen rejection controls:
+
+```bash
+bash tools/WarmReference/build-transpose-linux.sh
+python3 tools/WarmReference/verify-transpose-linux.py --cpu 0 --depth 16
+```
+
+```powershell
+./bench.ps1 -Smoke -Warm -WarmFamily Transpose -WarmCases Whole16 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Transpose -WarmCases Whole16 -Cpu 0 -NoBuild -PrepareWarm
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Transpose -WarmCases Whole16 -Cpu 0 -NoBuild -WarmConfirm -PrepareWarm
+```
+
+The public FFmpeg transpose graph uses `dir=cclock_flip:passthrough=none`.
+Independent forward placement verifies the axis-swap equation before timing.
+Each native operation allocates and processes independent output pixels before
+release; graph/source/frame wrappers are reused and padded rows need no extra
+packing or materialization copy. Managed timing includes complete
+Transpose(mirrored:false), admission, tile placement and disposal. Channel bytes,
+alpha and hidden RGB match pinned normal/scalar CLI output; two held outputs
+prove mutation isolation. One CPU/filter thread and normal SIMD apply. Prepare
+the actual fixed job for validation before replay under fresh quiet guards.
+
+The [bounded tile round](../../benchmarks/WARM-TRANSPOSE-TILES.md) reduces screened
+mean 95.84%, with both short-screen guards passing. The twelve-actual repeat
+reaches 1.088x, upper 1.093x, but fails its post-run load guard. Quiet certification
+remains open; later cooldown cannot certify the failed interval. Mirrored
+transpose and other material cases remain open.
