@@ -761,3 +761,35 @@ mean 95.84%, with both short-screen guards passing. The twelve-actual repeat
 reaches 1.088x, upper 1.093x, but fails its post-run load guard. Quiet certification
 remains open; later cooldown cannot certify the failed interval. Mirrored
 transpose and other material cases remain open.
+
+## Warm mirrored transpose
+
+`WarmTransverse/Whole16` reuses the original RGBA16 513x259 raster, producing
+259x513 with both output axes reversed. Build the original public-API worker and
+validate every channel byte, source, independent live owners and fourteen controls:
+
+```bash
+bash tools/WarmReference/build-transverse-linux.sh
+python3 tools/WarmReference/verify-transverse-linux.py --cpu 0 --depth 16
+```
+
+```powershell
+./bench.ps1 -Smoke -Warm -WarmFamily Transverse -WarmCases Whole16 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Transverse -WarmCases Whole16 -Cpu 0 -NoBuild -PrepareWarm
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Transverse -WarmCases Whole16 -Cpu 0 -NoBuild -WarmConfirm -PrepareWarm
+```
+
+The public transpose graph uses `dir=clock_flip:passthrough=none`; full independent
+forward placement verifies this mapping before timing. Every native operation
+allocates and processes independent pixels before release, using reused graph/
+source/frame wrappers and directly exposed padded rows. There is no extra copy.
+Managed timing includes complete Transpose(mirrored:true), admission, placement
+and disposal. Pinned normal/scalar CLI, exact alpha/hidden RGB, source integrity
+and two held outputs are checked. One CPU/filter thread and normal SIMD apply.
+Prepare the actual fixed job for validation before statistical replay under fresh
+guards, with source and actual child binaries frozen before edits.
+
+The [tile round](../../benchmarks/WARM-TRANSVERSE-TILES.md) reduces screened mean
+96.32%. The twelve-actual repeat reaches 1.021x, upper 1.033x, but fails its post-run
+load guard. Quiet certification remains open; later cooldown cannot certify the
+failed interval. Broader editing and other material cases remain open.

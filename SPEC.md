@@ -337,9 +337,9 @@ partial failures dispose their private result before publication.
 Clockwise and counterclockwise quarter turns place complete RGBA8/RGBA16 pixels
 in bounded 32x32 tiles with the same reusable storage policy, both-buffer admission and at most
 1024 pixels between work/cancellation checks. Partial tiles preserve exact
-placement and precision. Plain transpose uses the same complete-pixel tile,
-allocation, admission and bounded-work policy with exact axis swapping.
-Mirrored transpose retains the general mapping path.
+placement and precision. Plain and mirrored transpose use the same complete-pixel
+tile, allocation, admission and bounded-work policy, with exact axis swapping
+and reversal of both axes when mirrored.
 Normal-orientation AutoOrient copies complete RGBA8/RGBA16 rows into independent
 storage with the same complete-overwrite policy and at most 1024 pixels between
 work/cancellation checks. It retains every channel byte and resets orientation
