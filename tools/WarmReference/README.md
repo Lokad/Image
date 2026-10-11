@@ -407,7 +407,10 @@ reduces complete resize to 8.65x; [destination-row acquisition](../../benchmarks
 reduces it to 7.25x, and [vertical kernel-weight reuse](../../benchmarks/WARM-RESIZE-YWEIGHTS.md)
 reduces it to 7.07x. A fresh profile selects
 [typed-row accessor inlining](../../benchmarks/WARM-TYPED-ROW-INLINE.md), reaching
-6.93x. Inspection of the remaining Resize body is next.
+6.93x. [Preparing horizontal geometry once](../../benchmarks/WARM-RESIZE-GEOMETRY.md)
+reduces it to 6.34x, including preparation and admitted workspace allocation.
+It retains exact binary64 pixels and direct evaluation under tight memory limits.
+Substantial filtering-loop improvements take priority while this gap remains.
 Run sequentially on the quiet dedicated VM and preserve
 source/raw/actual timed DLLs before edits. Other sizes, directions, depths and
 bicubic remain unmeasured; independent quiet confirmation remains open. Native

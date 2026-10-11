@@ -7,6 +7,26 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class ResizeReferenceTests
 {
     [Theory]
+    [InlineData(8, ResizeFilter.Bilinear)]
+    [InlineData(8, ResizeFilter.Bicubic)]
+    [InlineData(16, ResizeFilter.Bilinear)]
+    [InlineData(16, ResizeFilter.Bicubic)]
+    public void PreparedHorizontalGeometryRetainsPixelsWithTightMemoryLimits(int depth, ResizeFilter filter)
+    {
+        using var source = OriginalPixels.Buffer(67, 13, depth);
+        var sourcePixels = OriginalPixels.Bytes(source);
+        foreach (var target in new[] { (40, 7), (71, 17) })
+        {
+            using var prepared = ImageTransforms.Resize(source, target.Item1, target.Item2, filter);
+            var peak = sourcePixels.Length + (long)target.Item1 * target.Item2 * 4 * (depth / 8) + 4096;
+            using var direct = ImageTransforms.Resize(source, target.Item1, target.Item2, filter,
+                limits: new ImageLimits { MaxWorkingBytes = peak });
+            Assert.Equal(OriginalPixels.Bytes(direct), OriginalPixels.Bytes(prepared));
+            Assert.Equal(sourcePixels, OriginalPixels.Bytes(source));
+        }
+    }
+
+    [Theory]
     [InlineData(8, ResizeFilter.Bilinear, "4920566bb257cb6dda29eaa0b48876ed0d9da0435186f9c8f817a1742b6540bf")]
     [InlineData(8, ResizeFilter.Bicubic, "da6936513ba65f959adcc10cafc83410f6f7253b834535b822831d3a4b698f92")]
     [InlineData(16, ResizeFilter.Bilinear, "10a39d150207778a378bb653ae928135089a54f33221d0d074a333c5c346f659")]
@@ -154,6 +174,8 @@ public sealed class ResizeReferenceTests
             else new ushort[] { 65535, 65535, 65535, (ushort)(1 - y) }.CopyTo(source.GetRow16(y).Slice(x * 4, 4));
         var peak = (5 * 2 + 3 * 3) * 4 * (depth / 8) + 4096;
         using var exact = ImageTransforms.Resize(source, 3, 3, filter, limits: new ImageLimits { MaxWorkingBytes = peak });
+        using var prepared = ImageTransforms.Resize(source, 3, 3, filter);
+        Assert.Equal(OriginalPixels.Bytes(exact), OriginalPixels.Bytes(prepared));
         Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 3, 3, filter, limits: new ImageLimits { MaxWorkingBytes = peak - 1 }));
         // The ordinary float path's entire work fits; resolving half alpha must
         // consume additional work rather than escaping the operation budget.

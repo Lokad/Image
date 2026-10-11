@@ -147,6 +147,34 @@ public static class ImageTransforms
         if (units > context.Limits.MaxWork) throw new ImageLimitException("Resize work limit exceeded.");
         var result = ImageBuffer.Allocate(width, height, source.BitDepth, context);
         var maximum = source.BitDepth == 8 ? 255 : 65535;
+        double[]? horizontalWeights = null;
+        int[]? horizontalOffsets = null;
+        int[]? horizontalCounts = null;
+        var planElements = (long)width * 8;
+        var planBytes = planElements * (sizeof(double) + sizeof(int)) + (long)width * sizeof(int) + 3 * 64;
+        // Prepare short horizontal support once for all output rows. Leave room
+        // for exact tiny-alpha arithmetic; tight memory limits keep the direct path.
+        if (tapsX <= 8 && planElements <= Array.MaxLength
+            && planBytes <= context.Limits.MaxWorkingBytes - source.ByteLength - result.ByteLength - ResizeAlpha.ScratchBytes)
+        {
+            context.Reserve(planBytes);
+            horizontalWeights = new double[(int)planElements];
+            horizontalOffsets = new int[(int)planElements];
+            horizontalCounts = new int[width];
+            for (var x = 0; x < width; x++)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                var center = (x + 0.5) * source.Width / width - 0.5;
+                var first = (int)Math.Ceiling(center - radius * scaleX);
+                var last = (int)Math.Floor(center + radius * scaleX);
+                horizontalCounts[x] = last - first + 1;
+                for (var tap = 0; tap <= last - first; tap++)
+                {
+                    horizontalWeights[x * 8 + tap] = Kernel((first + tap - center) / scaleX, filter);
+                    horizontalOffsets[x * 8 + tap] = Math.Clamp(first + tap, 0, source.Width - 1) * 4;
+                }
+            }
+        }
         for (var y = 0; y < height; y++)
         {
             context.Work(width * tapsX * tapsY * 4);
@@ -170,12 +198,13 @@ public static class ImageTransforms
             var y7 = cachedY && lastY - firstY >= 7 ? Kernel((firstY + 7 - cy) / scaleY, filter) : 0;
             for (var x = 0; x < width; x++)
             {
-                var cx = (x + 0.5) * source.Width / width - 0.5;
-                var firstX = (int)Math.Ceiling(cx - radius * scaleX);
-                var lastX = (int)Math.Floor(cx + radius * scaleX);
+                var planned = horizontalWeights is not null;
+                var cx = planned ? 0 : (x + 0.5) * source.Width / width - 0.5;
+                var firstX = planned ? 0 : (int)Math.Ceiling(cx - radius * scaleX);
+                var lastX = planned ? horizontalCounts![x] - 1 : (int)Math.Floor(cx + radius * scaleX);
                 // Reuse short horizontal support across vertical taps without
                 // a heap workspace. Wider support retains direct evaluation.
-                var cached = lastX - firstX < 8;
+                var cached = !planned && lastX - firstX < 8;
                 var w0 = cached ? Kernel((firstX - cx) / scaleX, filter) : 0;
                 var w1 = cached && lastX - firstX >= 1 ? Kernel((firstX + 1 - cx) / scaleX, filter) : 0;
                 var w2 = cached && lastX - firstX >= 2 ? Kernel((firstX + 2 - cx) / scaleX, filter) : 0;
@@ -201,15 +230,14 @@ public static class ImageTransforms
                     else row16 = source.GetRow16(iy);
                     for (var sx = firstX; sx <= lastX; sx++)
                     {
-                        var wx = cached ? (sx - firstX) switch
+                        var wx = planned ? horizontalWeights![x * 8 + sx] : cached ? (sx - firstX) switch
                         {
                             0 => w0, 1 => w1, 2 => w2, 3 => w3,
                             4 => w4, 5 => w5, 6 => w6, _ => w7
                         } : Kernel((sx - cx) / scaleX, filter);
                         var weight = wy * wx;
                         if (weight == 0) continue;
-                        var ix = Math.Clamp(sx, 0, source.Width - 1);
-                        var offset = ix * 4;
+                        var offset = planned ? horizontalOffsets![x * 8 + sx] : Math.Clamp(sx, 0, source.Width - 1) * 4;
                         int a, red, green, blue;
                         if (source.BitDepth == 8)
                         {

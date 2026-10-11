@@ -57,6 +57,12 @@ followed by unpremultiplication. Round halves away from zero and clamp to sample
 range. Filtered pixels whose rounded alpha is zero have RGB zero; exact permutations and
 identity resize preserve hidden RGB. No linear-light or ICC conversion is applied.
 
+Short horizontal support may prepare weights and clamped sample offsets once
+per operation, reusing them across output rows. This optional geometry workspace
+is admitted conservatively and leaves 4 KiB for exact tiny-alpha arithmetic.
+Wide support or tight memory limits retain direct evaluation with the same tap
+order, binary64 arithmetic and pixels. Geometry is not cached across calls.
+
 An original development-only reference uses exact integer kernel weights and
 `BigInteger` separable accumulation, with no production resize helpers. Public
 tests cover both depths, transparent/opaque rasters, up/down/mixed scaling,

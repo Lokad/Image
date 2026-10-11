@@ -1,9 +1,16 @@
 # Development benchmarks
 
+The [horizontal geometry preparation round](WARM-RESIZE-GEOMETRY.md) reduces
+complete warm bilinear resize a further 7.8%, from 6.93x to 6.34x FFmpeg.
+Preparation and admitted workspace allocation are included; tight memory limits
+retain direct evaluation with identical pixels. The largest measured gap remains
+resize. Further work prioritizes substantial filtering-loop improvements;
+independent quiet confirmation and broader warm coverage remain open.
+
 The [typed-row accessor inlining round](WARM-TYPED-ROW-INLINE.md) reduces complete
 warm bilinear resize a further 2.3%, from 7.07x to 6.93x FFmpeg. All 535 method
 bodies remain identical; only two inlining flags change. A fresh baseline profile
-selected this primitive. Inspection of the remaining Resize body is next.
+selected this primitive. The next round inspected the remaining Resize body.
 
 The [vertical weight-reuse round](WARM-RESIZE-YWEIGHTS.md) reduces complete warm
 bilinear resize a further 2.2%, from 7.25x to 7.07x FFmpeg. Exact pixels,
