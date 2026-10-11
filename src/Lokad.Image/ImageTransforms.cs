@@ -134,9 +134,7 @@ public static class ImageTransforms
         context.PixelBytes(width, height, source.BitDepth);
         if (width == source.Width && height == source.Height) return source.Clone(limits, cancellationToken);
         if (filter == ResizeFilter.Nearest)
-            return Map(source, width, height, (x, y) =>
-                (ResizeSampling.Nearest(x, source.Width, width),
-                 ResizeSampling.Nearest(y, source.Height, height)), limits, cancellationToken);
+            return NearestResize.Apply(source, width, height, context);
 
         var scaleX = Math.Max(1, (double)source.Width / width);
         var scaleY = Math.Max(1, (double)source.Height / height);

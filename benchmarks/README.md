@@ -918,4 +918,7 @@ owned output allocation/release, with normal SIMD and one CPU/thread.
 The explicit `Nearest/Down16` selection reuses the existing full-precision
 RGBA16 raster with exact integer center mapping and every output sample checked.
 Its [first screen](WARM-NEAREST16-BASELINE.md) reaches 2.12x with wide short-run
-uncertainty; parity and independent quiet confirmation remain open.
+uncertainty. [Exact row recurrence](WARM-NEAREST-RECURRENCE.md) then removes
+repeated coordinate division and mapping callbacks, reducing the screened mean
+by 70.78% and reaching 0.62x, conservative upper 0.64x. This pair clears the
+numerical target; independent quiet confirmation and broader coverage remain open.

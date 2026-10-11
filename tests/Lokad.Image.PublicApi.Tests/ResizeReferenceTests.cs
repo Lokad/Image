@@ -7,6 +7,33 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class ResizeReferenceTests
 {
     [Theory]
+    [InlineData(8, 1, 5, 2053, 3)] [InlineData(16, 1, 5, 2053, 3)]
+    [InlineData(8, 513, 3, 2051, 2)] [InlineData(16, 513, 3, 2051, 2)]
+    [InlineData(8, 2053, 2, 513, 1)] [InlineData(16, 2053, 2, 513, 1)]
+    [InlineData(8, 4093, 1, 1025, 5)] [InlineData(16, 4093, 1, 1025, 5)]
+    public void NearestPreservesExactCellsAcrossCopyCheckpointsWithNoScratch(int depth,
+        int sourceWidth, int sourceHeight, int width, int height)
+    {
+        using var source = OriginalPixels.Buffer(sourceWidth, sourceHeight, depth);
+        var input = OriginalPixels.Bytes(source);
+        var expected = ExactResizeReference.Resize(input, sourceWidth, sourceHeight, depth, width, height, ResizeFilter.Nearest);
+        var work = (long)width * height * 4;
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + (long)expected.Length, MaxWork = work };
+        using var first = ImageTransforms.Resize(source, width, height, ResizeFilter.Nearest, limits);
+        using var second = ImageTransforms.Resize(source, width, height, ResizeFilter.Nearest, limits);
+        Assert.Equal(expected, OriginalPixels.Bytes(first));
+        Assert.Equal(expected, OriginalPixels.Bytes(second));
+        if (depth == 8) first.GetRow8(0)[0] ^= 255;
+        else first.GetRow16(0)[0] ^= 65535;
+        Assert.Equal(expected, OriginalPixels.Bytes(second));
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, width, height, ResizeFilter.Nearest,
+            limits with { MaxWorkingBytes = limits.MaxWorkingBytes - 1 }));
+        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, width, height, ResizeFilter.Nearest,
+            limits with { MaxWork = work - 1 }));
+    }
+
+    [Theory]
     [InlineData(ResizeFilter.Bilinear, 255, 255, 1, 255, 128)]
     [InlineData(ResizeFilter.Bilinear, 255, 254, 0, 254, 127)]
     [InlineData(ResizeFilter.Bilinear, 254, 255, 1, 255, 128)]

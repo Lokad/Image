@@ -363,8 +363,11 @@ without a production change. The packed swscale-neighbor CLI alternative fails
 exact selected pixels and is not timed. Run sequentially on the dedicated quiet
 VM, preserving source, raw samples and the actual statistical DLL before edits.
 The RGBA16 path uses RGBA64LE/GBRP16LE/GBRAP16LE throughout and validates every
-full-word sample against the integer reference. Adding the pair makes no
-performance claim. Other resize directions, sizes and filtered kernels remain unmeasured;
+full-word sample against the integer reference. Its
+[specialized row kernel](../../benchmarks/WARM-NEAREST-RECURRENCE.md) removes
+per-pixel division/callbacks and reduces the screened mean 70.78%, reaching
+0.62x with conservative upper 0.64x on Down16. No extra performance raster is
+added. Other resize directions, sizes and filtered kernels remain unmeasured;
 independent quiet confirmation remains open. These native tools and their ignored
 static archives are never production build inputs.
 
