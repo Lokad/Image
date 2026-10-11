@@ -1,5 +1,11 @@
 # Development benchmarks
 
+The [polynomial CRC folding round](WARM-PNG-CRC-FOLD.md) uses safe carryless
+multiplication and independently derived PNG polynomial constants. Complete
+PNG16 decode screens reach 1.9955x / 2.0021x, PNG8 2.0370x / 2.0359x; fixed
+allocation controls remain identical. Uniform <=2x parity remains open.
+Native-input JPEG decode is now the largest retained measured gap.
+
 The [PNG local-accounting round](WARM-PNG-LOCAL-WORK.md) retains every exact bit
 charge while avoiding repeated shared tally writes. Complete PNG16 decode
 screens reach 2.09x / 2.10x, PNG8 2.07x / 2.07x. Both improve, remain above 2x,

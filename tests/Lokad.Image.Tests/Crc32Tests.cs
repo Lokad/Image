@@ -7,7 +7,9 @@ public sealed class Crc32Tests
     [Theory]
     [InlineData(0)] [InlineData(1)] [InlineData(7)] [InlineData(8)]
     [InlineData(9)] [InlineData(15)] [InlineData(16)] [InlineData(17)]
-    [InlineData(31)] [InlineData(32)] [InlineData(33)] [InlineData(4095)]
+    [InlineData(31)] [InlineData(32)] [InlineData(33)]
+    [InlineData(47)] [InlineData(48)] [InlineData(49)]
+    [InlineData(63)] [InlineData(64)] [InlineData(65)] [InlineData(4095)]
     [InlineData(4096)] [InlineData(4097)] [InlineData(8193)] [InlineData(65521)]
     public void WordAndCancellationBoundariesMatchTheBitwiseRecurrenceWithoutChangingSource(int length)
     {
@@ -44,6 +46,27 @@ public sealed class Crc32Tests
         using var cancellation = new CancellationTokenSource(); cancellation.Cancel();
         Assert.Throws<OperationCanceledException>(() => Crc32.Compute(bytes, cancellation.Token));
         Assert.Equal(original, bytes);
+    }
+
+    [Theory]
+    [InlineData(16)] [InlineData(32)] [InlineData(48)]
+    public void EveryByteValueAtEveryWidePositionMatchesTheBitwiseRecurrence(int length)
+    {
+        for (var value = 0; value < 256; value++)
+        for (var position = 0; position < length; position++)
+        {
+            var bytes = new byte[length + 16]; bytes[position + 7] = (byte)value;
+            var original = bytes.ToArray(); var data = bytes.AsSpan(7, length);
+            Assert.Equal(Bitwise(data), Crc32.Compute(data));
+            Assert.Equal(original, bytes);
+        }
+    }
+
+    [Fact]
+    public void EmptyChecksumKeepsTheOriginalNoWorkCancellationBoundary()
+    {
+        using var cancellation = new CancellationTokenSource(); cancellation.Cancel();
+        Assert.Equal(0u, Crc32.Compute([], cancellation.Token));
     }
 
     private static uint Bitwise(ReadOnlySpan<byte> bytes)
