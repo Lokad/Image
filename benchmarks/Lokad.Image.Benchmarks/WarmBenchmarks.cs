@@ -29,7 +29,7 @@ internal static class WarmBenchmarks
             if (familyOption + 1 == arguments.Count) throw new ArgumentException("Supply a warm family.");
             family = arguments[familyOption + 1]; arguments.RemoveRange(familyOption, 2);
         }
-        if (family is not ("Flip" or "Png" or "Jpeg" or "JpegDecode" or "Webp" or "WebpDecode" or "Vp8Decode" or "Nearest")) throw new ArgumentException("Choose Flip, Png, Jpeg, JpegDecode, Webp, WebpDecode, Vp8Decode or Nearest.");
+        if (family is not ("Flip" or "Png" or "Jpeg" or "JpegDecode" or "Webp" or "WebpDecode" or "Vp8Decode" or "Nearest" or "Bilinear")) throw new ArgumentException("Choose Flip, Png, Jpeg, JpegDecode, Webp, WebpDecode, Vp8Decode, Nearest or Bilinear.");
         string? selection = null;
         var selectionOption = arguments.IndexOf("--warm-cases");
         if (selectionOption >= 0)
@@ -55,8 +55,8 @@ internal static class WarmBenchmarks
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU", cpu.ToString(System.Globalization.CultureInfo.InvariantCulture));
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE", smoke ? "smoke" : confirm ? "confirm" : "measure");
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES", selection);
-            var expectedPairs = family == "Png" ? WarmPng.SelectedCases().Length : family == "Jpeg" ? WarmJpeg.SelectedCases().Length : family == "JpegDecode" ? WarmJpegDecode.SelectedCases().Length : family == "Webp" ? WarmWebp.SelectedCases().Length : family == "WebpDecode" ? WarmWebpDecode.SelectedCases().Length : family == "Vp8Decode" ? WarmVp8Decode.SelectedCases().Length : family == "Nearest" ? WarmNearestResize.SelectedCases().Length : 2;
-            var type = family == "Png" ? typeof(WarmPng) : family == "Jpeg" ? typeof(WarmJpeg) : family == "JpegDecode" ? typeof(WarmJpegDecode) : family == "Webp" ? typeof(WarmWebp) : family == "WebpDecode" ? typeof(WarmWebpDecode) : family == "Vp8Decode" ? typeof(WarmVp8Decode) : family == "Nearest" ? typeof(WarmNearestResize) : typeof(WarmHorizontalFlip);
+            var expectedPairs = family == "Png" ? WarmPng.SelectedCases().Length : family == "Jpeg" ? WarmJpeg.SelectedCases().Length : family == "JpegDecode" ? WarmJpegDecode.SelectedCases().Length : family == "Webp" ? WarmWebp.SelectedCases().Length : family == "WebpDecode" ? WarmWebpDecode.SelectedCases().Length : family == "Vp8Decode" ? WarmVp8Decode.SelectedCases().Length : family == "Nearest" ? WarmNearestResize.SelectedCases().Length : family == "Bilinear" ? WarmBilinearResize.SelectedCases().Length : 2;
+            var type = family == "Png" ? typeof(WarmPng) : family == "Jpeg" ? typeof(WarmJpeg) : family == "JpegDecode" ? typeof(WarmJpegDecode) : family == "Webp" ? typeof(WarmWebp) : family == "WebpDecode" ? typeof(WarmWebpDecode) : family == "Vp8Decode" ? typeof(WarmVp8Decode) : family == "Nearest" ? typeof(WarmNearestResize) : family == "Bilinear" ? typeof(WarmBilinearResize) : typeof(WarmHorizontalFlip);
             using var identity = new JpegBenchmarkCase();
             var job = (smoke ? Job.Dry : Job.ShortRun).WithId(smoke ? "WarmDry" : confirm ? "WarmConfirm" : "WarmShort")
                 .WithAffinity(affinity).WithGcServer(false).WithGcConcurrent(false)
@@ -103,6 +103,10 @@ internal static class WarmBenchmarks
                             && value.GetProperty("decoderRmse").GetDouble() is >= 0 and <= 1.5
                         : family == "WebpDecode" ? value.GetProperty("allRgbaSamplesExact").GetBoolean()
                             && value.GetProperty("nativeCliPixelsExact").GetBoolean()
+                        : family == "Bilinear" ? value.GetProperty("managedRationalReferenceExact").GetBoolean()
+                            && value.GetProperty("nativeAlphaExact").GetBoolean() && value.GetProperty("nativeZeroAlphaRgbZero").GetBoolean()
+                            && value.GetProperty("nativeRgbMaximum").GetInt32() <= 1 && value.GetProperty("nativeRgbRmse").GetDouble() <= 0.25
+                            && value.GetProperty("nativeCliPixelsExact").GetBoolean() && value.GetProperty("nativePixelsDeterministic").GetBoolean()
                         : value.GetProperty("allRgbaSamplesExact").GetBoolean();
                     if (!outputVerified || !value.GetProperty("sourceUnchanged").GetBoolean()
                         || !value.GetProperty("independentOwnedOutput").GetBoolean() || value.GetProperty("cpu").GetInt32() != cpu

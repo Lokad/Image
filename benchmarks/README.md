@@ -1,5 +1,11 @@
 # Development benchmarks
 
+The [first matched warm bilinear resize screen](WARM-BILINEAR-BASELINE.md)
+reaches 29.18x FFmpeg on the same original raster, the largest current measured
+gap. Managed rational-reference pixels and native alpha are exact; native RGB
+meets the existing filtered comparison bound. One CPU profile selects row access
+for the first narrow optimization. Production is unchanged.
+
 The [current JPEG decode confirmation](WARM-JPEG-DECODE-CONFIRM.md) reaches
 1.90x FFmpeg with a twelve-sample conservative upper below 2x. The first
 [matched warm nearest resize screen](WARM-NEAREST-BASELINE.md) reaches 1.31x

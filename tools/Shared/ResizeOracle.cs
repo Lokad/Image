@@ -2,6 +2,17 @@ namespace Lokad.Image.Tooling;
 
 internal static class ResizeOracle
 {
+    // One RGBA8 filtered profile. zscale processes straight alpha in float
+    // premultiplied space; explicit GBR/range preserve encoded samples.
+    public static string PremultipliedBilinearFilter(int width, int height)
+        => $"format=gbrap,zscale=w={width}:h={height}:filter=bilinear:rangein=full:range=full:matrixin=gbr:matrix=gbr:dither=none,format=gbrap,format=rgba";
+
+    public static string[] PremultipliedBilinearArguments(int sourceWidth, int sourceHeight, int width, int height)
+        => ["-hide_banner", "-loglevel", "error", "-cpuflags", "0", "-threads:v", "1", "-f", "rawvideo",
+            "-pixel_format", "rgba", "-video_size", $"{sourceWidth}x{sourceHeight}", "-i", "pipe:0",
+            "-filter_threads", "1", "-vf", PremultipliedBilinearFilter(width, height),
+            "-frames:v", "1", "-threads:v", "1", "-pix_fmt", "rgba", "-f", "rawvideo", "pipe:1"];
+
     // Opaque RGBA comparison profile. FFmpeg documents bicubic B/C parameters;
     // B=0,C=0.5 matches the public Catmull-Rom kernel. Downsizing widens support.
     // This does not establish transparent-alpha or high-frequency upscale parity.

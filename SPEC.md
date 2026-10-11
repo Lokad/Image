@@ -73,6 +73,13 @@ scratch, charges additional bounded work and checks cancellation; it adds no
 coefficient arrays or runtime package dependency. Other filtered channels retain
 binary64 accumulation and the original rounding convention.
 
+A live RGBA8 bilinear 513x259-to-256x129 profile checks the same original
+transparent raster against FFmpeg's widened triangle kernel with encoded-space
+premultiplied-alpha filtering. Managed output matches the exact rational reference;
+native alpha is exact and native RGB uses the existing filtered maximum error 1 /
+RMSE 0.25 comparison bound. This establishes that one native profile only; other
+sizes, depths, bicubic and tiny-alpha native comparisons remain open.
+
 ## Formats and metadata
 
 PNG follows the [W3C specification](https://www.w3.org/TR/png/). Validate signature,

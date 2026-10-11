@@ -364,3 +364,42 @@ The [current JPEG decode confirmation](../../benchmarks/WARM-JPEG-DECODE-CONFIRM
 reuses the existing frozen native input and worker without a production change
 or quality search. Its twelve-sample conservative upper is below 2x; independent
 quiet confirmation remains open.
+
+## Warm bilinear resize
+
+`WarmBilinearResize/Down8` covers one 513x259 RGBA8 to 256x129 bilinear resize
+on the same original transparent raster as the warm nearest case.
+
+```bash
+bash tools/WarmReference/build-bilinear-linux.sh
+python3 tools/WarmReference/verify-bilinear-linux.py --cpu 0
+```
+
+```powershell
+./bench.ps1 -Smoke -Warm -WarmFamily Bilinear -WarmCases Down8 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Bilinear -WarmCases Down8 -Cpu 0 -NoBuild
+```
+
+The original public-FFmpeg-API adapter times all packed/planar conversion, the
+zscale widened triangle kernel with straight-alpha metadata and encoded-space
+premultiplication/unpremultiplication, final RGBA conversion, and independent
+output pixel acquisition/release. Graph/source/wrappers/geometry contexts are
+reused; every call filters the full raster. Managed timing covers complete
+public Resize/admission/allocation/materialization/disposal. Startup, IPC, I/O,
+hashing, generation and validation are excluded; neither subject caches outputs.
+One CPU/filter thread, thread type zero and normal SIMD are required.
+
+Managed pixels match an independent exact rational reference. Native alpha and
+pinned CLI/deterministic pixels are exact; native RGB uses the existing filtered
+maximum 1 / RMSE 0.25 bound. The single one-level difference is a float rounding
+boundary, documented with a full-sample float audit. Fourteen native negative
+controls, independent live outputs, counters/source integrity and a focused live
+test on both OSes pass. The selected output has no zero-alpha pixels; other alpha
+edge cases remain open. No extra source raster or quality search occurs.
+
+The [first screen](../../benchmarks/WARM-BILINEAR-BASELINE.md) reaches about 29.18x,
+the largest current warm gap. One CPU profile selects row access as the first
+optimization primitive. Run sequentially on the quiet dedicated VM and preserve
+source/raw/actual timed DLLs before edits. Other sizes, directions, depths and
+bicubic remain unmeasured; independent quiet confirmation remains open. Native
+sources/tools/static archives are development-only and never production inputs.
