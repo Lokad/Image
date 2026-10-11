@@ -1,5 +1,11 @@
 # Development benchmarks
 
+The [RGBA16 bilinear precision audit](BILINEAR16-PRECISION.md) reproduces the
+existing authored raster on both OSes. Managed pixels match the rational
+reference; native float alpha differs by one sample at 62 rounding boundaries.
+Exact-alpha acceptance refuses timing, leaving this case unmatched. No RGBA16
+performance figure or new performance image is introduced.
+
 The [packed alpha/coefficient kernel](WARM-RESIZE-QUAD-ALPHA.md) reduces complete
 warm bilinear resize a further 8.9%, from 2.08x to 1.91x FFmpeg (conservative
 upper 1.93x). Packed preparation replaces repeated scalar alpha conversions

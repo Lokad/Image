@@ -73,8 +73,17 @@ static void check_source(Work *work)
         if (memcmp(work->source->data[0]+(size_t)y*work->source->linesize[0],work->original+(size_t)y*work->row_bytes,(size_t)work->row_bytes)) fail("Source was changed.");
 }
 /* Independent validation only: exact integer triangle weights. The source is
- * always reduced to floor(size/2), so each axis has support at most three.
+ * always reduced to floor(size/2), so eight positions cover each axis support.
  * These reference pixels are never used by the timed filter operation. */
+static unsigned sample(const uint8_t *p, int depth)
+{
+    return depth==8?p[0]:(unsigned)p[0]|((unsigned)p[1]<<8);
+}
+static void put_sample(uint8_t *p, int depth, unsigned value)
+{
+    p[0]=(uint8_t)value;
+    if(depth==16)p[1]=(uint8_t)(value>>8);
+}
 static void make_reference(Work *work)
 {
     size_t bytes=(size_t)work->output_row_bytes*work->output_height;
@@ -83,7 +92,10 @@ static void make_reference(Work *work)
         int64_t cx=((int64_t)2*x+1)*work->width-work->output_width;
         int64_t cy=((int64_t)2*y+1)*work->height-work->output_height;
         int fx=(int)(cx/(2*work->output_width)),fy=(int)(cy/(2*work->output_height));
-        uint64_t values[4]={0},sum=0;
+        /* 128-bit validation arithmetic also covers the largest admitted
+         * geometry with full 16-bit alpha/color products. Never timed. */
+        __uint128_t values[4]={0},sum=0;
+        int sample_bytes=work->depth/8,pixel_bytes=4*sample_bytes;
         for(int sy=fy-3;sy<=fy+4;sy++) {
             int64_t wy=2*work->height-llabs((int64_t)2*work->output_height*sy-cy);
             if(wy<=0)continue;
@@ -92,26 +104,33 @@ static void make_reference(Work *work)
                 int64_t wx=2*work->width-llabs((int64_t)2*work->output_width*sx-cx);
                 if(wx<=0)continue;
                 int ix=sx<0?0:sx>=work->width?work->width-1:sx;
-                const uint8_t *p=work->original+(size_t)iy*work->row_bytes+ix*4;
+                const uint8_t *p=work->original+(size_t)iy*work->row_bytes+ix*pixel_bytes;
                 uint64_t weight=(uint64_t)wx*(uint64_t)wy;
-                values[3]+=weight*p[3];sum+=weight;
-                for(int c=0;c<3;c++)values[c]+=weight*p[3]*p[c];
+                unsigned alpha=sample(p+3*sample_bytes,work->depth);
+                values[3]+=(__uint128_t)weight*alpha;sum+=weight;
+                for(int c=0;c<3;c++)values[c]+=(__uint128_t)weight*alpha*sample(p+c*sample_bytes,work->depth);
             }
         }
-        uint8_t *p=work->reference+(size_t)y*work->output_row_bytes+x*4;
-        p[3]=(uint8_t)((2*values[3]+sum)/(2*sum));
-        for(int c=0;c<3;c++)p[c]=p[3]&&values[3]?(uint8_t)((2*values[c]+values[3])/(2*values[3])):0;
+        uint8_t *p=work->reference+(size_t)y*work->output_row_bytes+x*pixel_bytes;
+        unsigned alpha=(unsigned)((2*values[3]+sum)/(2*sum));
+        put_sample(p+3*sample_bytes,work->depth,alpha);
+        for(int c=0;c<3;c++)put_sample(p+c*sample_bytes,work->depth,
+            alpha&&values[3]?(unsigned)((2*values[c]+values[3])/(2*values[3])):0);
     }
 }
 static void check_frame(Work *work, AVFrame *frame)
 {
     uint64_t squared=0;
+    int sample_bytes=work->depth/8,pixel_bytes=4*sample_bytes;
     for(int y=0;y<work->output_height;y++)for(int x=0;x<work->output_width;x++) {
-        const uint8_t *a=frame->data[0]+(size_t)y*frame->linesize[0]+x*4;
-        const uint8_t *b=work->reference+(size_t)y*work->output_row_bytes+x*4;
-        if(a[3]!=b[3]||(!a[3]&&(a[0]||a[1]||a[2])))fail("Bilinear alpha or zero-alpha RGB differs.");
+        const uint8_t *a=frame->data[0]+(size_t)y*frame->linesize[0]+x*pixel_bytes;
+        const uint8_t *b=work->reference+(size_t)y*work->output_row_bytes+x*pixel_bytes;
+        unsigned alpha=sample(a+3*sample_bytes,work->depth);
+        if(alpha!=sample(b+3*sample_bytes,work->depth))fail("Bilinear alpha differs from the exact reference; refusing timing.");
         for(int c=0;c<3;c++) {
-            int d=abs((int)a[c]-b[c]);if(d>1)fail("Bilinear RGB exceeds existing filtered bound.");
+            unsigned value=sample(a+c*sample_bytes,work->depth);
+            if(!alpha&&value)fail("Bilinear zero-alpha RGB differs.");
+            int d=abs((int)value-(int)sample(b+c*sample_bytes,work->depth));if(d>1)fail("Bilinear RGB exceeds existing filtered bound.");
             squared+=(uint64_t)d*d;
         }
     }
@@ -144,8 +163,8 @@ int main(int argc, char **argv)
     av_log_set_level(AV_LOG_ERROR);
     Work work = {0}; work.cpu = affinity_cpu();
     work.width = number(argv[3]); work.height = number(argv[4]); work.depth = number(argv[5]);
-    if (work.depth != 8 || work.width < 2 || work.height < 2) fail("Use RGBA8 dimensions at least two.");
-    work.output_width=work.width/2;work.output_height=work.height/2;work.output_row_bytes=work.output_width*4;
+    if ((work.depth != 8 && work.depth != 16) || work.width < 2 || work.height < 2) fail("Use RGBA8/RGBA16 dimensions at least two.");
+    work.output_width=work.width/2;work.output_height=work.height/2;work.output_row_bytes=work.output_width*(work.depth/8)*4;
     work.row_bytes = work.width * (work.depth / 8) * 4;
     size_t bytes = (size_t)work.row_bytes * work.height;
     if (bytes > 512U * 1024U * 1024U) fail("Reference input exceeds 512 MiB.");
@@ -175,9 +194,10 @@ int main(int argc, char **argv)
     outputs->name=av_strdup("in");outputs->filter_ctx=work.input;outputs->pad_idx=0;
     inputs->name=av_strdup("out");inputs->filter_ctx=work.output;inputs->pad_idx=0;
     char graph[2048];
-    snprintf(graph,sizeof(graph),"[in]format=gbrap,"
+    const char *planar=work.depth==16?"gbrap16le":"gbrap",*packed=work.depth==16?"rgba64le":"rgba";
+    snprintf(graph,sizeof(graph),"[in]format=%s,"
         "zscale=w=%d:h=%d:filter=bilinear:rangein=full:range=full:matrixin=gbr:matrix=gbr:dither=none,"
-        "format=gbrap,format=rgba[out]",work.output_width,work.output_height);
+        "format=%s,format=%s[out]",planar,work.output_width,work.output_height,planar,packed);
     require(avfilter_graph_parse_ptr(work.graph,graph,&inputs,&outputs,NULL),"Parse bilinear graph");
     if(inputs||outputs)fail("Unconnected graph endpoint.");
     avfilter_inout_free(&inputs);avfilter_inout_free(&outputs);

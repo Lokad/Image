@@ -367,6 +367,13 @@ quiet confirmation remains open.
 
 ## Warm bilinear resize
 
+The [RGBA16 precision audit](../../benchmarks/BILINEAR16-PRECISION.md) extends
+the shared CLI oracle and native adapter to full 16-bit samples. The authored
+raster remains unmatched under exact-alpha acceptance, and timing is refused.
+The audit uses `tools/WarmReference/Bilinear16Audit/Audit.csproj`; its native
+refusal/ownership controls are in `verify-bilinear16-linux.py`. It introduces
+no production algorithm change or performance raster.
+
 `WarmBilinearResize/Down8` covers one 513x259 RGBA8 to 256x129 bilinear resize
 on the same original transparent raster as the warm nearest case.
 

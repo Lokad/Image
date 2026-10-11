@@ -31,7 +31,7 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-bilinear-') as name:
   result=run(arguments,protocol,cpus);assert result.returncode!=0 and result.stderr,label;controls.append(label)
  reject('missing argument',base[:-1])
  for label,index,value in [('operation',1,'nearest-resize'),('dimension zero',3,'0'),('dimension text',3,'513x'),
-  ('dimension bound',3,'32769'),('minimum output',3,'1'),('wrong precision',5,'16')]:
+  ('dimension bound',3,'32769'),('minimum output',3,'1'),('wrong precision',5,'12')]:
   values=base.copy();values[index]=value;reject(label,values)
  for label,data in [('truncated input',pixels[:-1]),('extra input',pixels+b'\0')]:
   path=folder/(label+'.raw');path.write_bytes(data);values=base.copy();values[2]=str(path);reject(label,values)

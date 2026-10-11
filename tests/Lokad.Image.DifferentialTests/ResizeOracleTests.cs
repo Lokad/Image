@@ -5,30 +5,45 @@ namespace Lokad.Image.DifferentialTests;
 
 public sealed class ResizeOracleTests
 {
-    [Fact]
-    public void TransparentBilinearDownsamplePreservesPremultipliedColorAndExactAlpha()
+    [Theory]
+    [InlineData(8)]
+    [InlineData(16)]
+    public void TransparentBilinearDownsampleRetainsPrecisionAndAuditsNativeRounding(int depth)
     {
-        var pixels = OriginalPixels.Generate(513, 259, 8);
-        pixels[3] = pixels[513 * 4 - 1] = 0;
-        var expected = ExactResizeReference.Resize(pixels, 513, 259, 8, 256, 129, ResizeFilter.Bilinear);
+        var sampleBytes = depth / 8; var pixelBytes = sampleBytes * 4;
+        var pixels = OriginalPixels.Generate(513, 259, depth);
+        pixels.AsSpan(3 * sampleBytes, sampleBytes).Clear();
+        pixels.AsSpan((513 * 4 - 1) * sampleBytes, sampleBytes).Clear();
+        var expected = ExactResizeReference.Resize(pixels, 513, 259, depth, 256, 129, ResizeFilter.Bilinear);
         var native = OracleProcess.Run(OracleProcess.Ffmpeg,
-            ResizeOracle.PremultipliedBilinearArguments(513, 259, 256, 129), pixels);
+            ResizeOracle.PremultipliedBilinearArguments(513, 259, 256, 129, depth), pixels);
         Assert.Equal(expected.Length, native.Length);
-        long squared = 0; var maximum = 0;
-        for (var i = 0; i < native.Length; i += 4)
+        long squared = 0, alphaSquared = 0; var maximum = 0; var alphaMaximum = 0;
+        int Read(byte[] data, int offset) => depth == 8 ? data[offset]
+            : BinaryPrimitives.ReadUInt16LittleEndian(data.AsSpan(offset, 2));
+        for (var i = 0; i < native.Length; i += pixelBytes)
         {
-            Assert.Equal(expected[i + 3], native[i + 3]);
+            var alpha = Read(native, i + 3 * sampleBytes);
+            var alphaDifference = Math.Abs(Read(expected, i + 3 * sampleBytes) - alpha);
+            alphaMaximum = Math.Max(alphaMaximum, alphaDifference);
+            alphaSquared += (long)alphaDifference * alphaDifference;
             for (var c = 0; c < 3; c++)
             {
-                if (native[i + 3] == 0) Assert.Equal(0, native[i + c]);
-                var difference = Math.Abs(expected[i + c] - native[i + c]);
+                var value = Read(native, i + c * sampleBytes);
+                if (alpha == 0) Assert.Equal(0, value);
+                var difference = Math.Abs(Read(expected, i + c * sampleBytes) - value);
                 maximum = Math.Max(maximum, difference); squared += difference * difference;
             }
         }
-        Assert.True(maximum <= 1 && Math.Sqrt((double)squared / (native.Length / 4 * 3)) <= 0.25,
+        Assert.True(maximum <= 1 && Math.Sqrt((double)squared / (native.Length / pixelBytes * 3)) <= 0.25,
             "Native premultiplied resize exceeds the existing filtered RGB comparison bound.");
-        using var source = OriginalPixels.Buffer(513, 259, 8);
-        source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
+        // The 16-bit native float path can cross a rounding boundary by one
+        // raw sample. This audit does not qualify an exact-alpha warm pair.
+        Assert.InRange(alphaMaximum, 0, depth == 8 ? 0 : 1);
+        Assert.InRange(Math.Sqrt((double)alphaSquared / (native.Length / pixelBytes)), 0, 0.25);
+        using var source = OriginalPixels.Buffer(513, 259, depth);
+        if (depth == 8) source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
+        else source.GetRow16(0)[3] = source.GetRow16(0)[513 * 4 - 1] = 0;
         using var resized = ImageTransforms.Resize(source, 256, 129, ResizeFilter.Bilinear);
         Assert.Equal(expected, OriginalPixels.Bytes(resized));
         Assert.Equal(pixels, OriginalPixels.Bytes(source));

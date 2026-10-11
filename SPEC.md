@@ -90,6 +90,11 @@ An original development-only reference uses exact integer kernel weights and
 tests cover both depths, transparent/opaque rasters, up/down/mixed scaling,
 one-pixel output and identity. Nearest and identity are exact; filtered values
 allow one sample of binary64 rounding disagreement at exact rational halves.
+RGBA16 CLI controls preserve full sample precision. On the authored filtered
+case, the native float path can differ by one alpha sample near rounding
+boundaries while managed output matches the rational reference. The
+[precision audit](benchmarks/BILINEAR16-PRECISION.md) records this limitation;
+the case does not qualify for exact-alpha warm performance acceptance.
 Live nearest coordinate-equation controls also cover original 1025/2049-wide
 sources at both depths in both directions, including alpha and hidden RGB.
 Fractional-support edges and tiny positive alpha separately require zero RGB

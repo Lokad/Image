@@ -2,16 +2,21 @@ namespace Lokad.Image.Tooling;
 
 internal static class ResizeOracle
 {
-    // One RGBA8 filtered profile. zscale processes straight alpha in float
+    // Full-precision RGBA8/RGBA16 profiles. zscale processes straight alpha in float
     // premultiplied space; explicit GBR/range preserve encoded samples.
-    public static string PremultipliedBilinearFilter(int width, int height)
-        => $"format=gbrap,zscale=w={width}:h={height}:filter=bilinear:rangein=full:range=full:matrixin=gbr:matrix=gbr:dither=none,format=gbrap,format=rgba";
+    public static string PremultipliedBilinearFilter(int width, int height, int depth = 8)
+    {
+        if (width < 1 || height < 1 || depth is not (8 or 16)) throw new ArgumentException("Invalid bilinear oracle geometry.");
+        var planar = depth == 16 ? "gbrap16le" : "gbrap";
+        var packed = depth == 16 ? "rgba64le" : "rgba";
+        return $"format={planar},zscale=w={width}:h={height}:filter=bilinear:rangein=full:range=full:matrixin=gbr:matrix=gbr:dither=none,format={planar},format={packed}";
+    }
 
-    public static string[] PremultipliedBilinearArguments(int sourceWidth, int sourceHeight, int width, int height)
+    public static string[] PremultipliedBilinearArguments(int sourceWidth, int sourceHeight, int width, int height, int depth = 8)
         => ["-hide_banner", "-loglevel", "error", "-cpuflags", "0", "-threads:v", "1", "-f", "rawvideo",
-            "-pixel_format", "rgba", "-video_size", $"{sourceWidth}x{sourceHeight}", "-i", "pipe:0",
-            "-filter_threads", "1", "-vf", PremultipliedBilinearFilter(width, height),
-            "-frames:v", "1", "-threads:v", "1", "-pix_fmt", "rgba", "-f", "rawvideo", "pipe:1"];
+            "-pixel_format", depth == 16 ? "rgba64le" : "rgba", "-video_size", $"{sourceWidth}x{sourceHeight}", "-i", "pipe:0",
+            "-filter_threads", "1", "-vf", PremultipliedBilinearFilter(width, height, depth),
+            "-frames:v", "1", "-threads:v", "1", "-pix_fmt", depth == 16 ? "rgba64le" : "rgba", "-f", "rawvideo", "pipe:1"];
 
     // Opaque RGBA comparison profile. FFmpeg documents bicubic B/C parameters;
     // B=0,C=0.5 matches the public Catmull-Rom kernel. Downsizing widens support.
