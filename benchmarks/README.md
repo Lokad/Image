@@ -1,5 +1,9 @@
 # Development benchmarks
 
+The [current PNG framing profile](WARM-PNG-FRAMING-COSTS.md) identifies strict
+Deflate framing as the largest PNG16 cost. A separate literal admission branch
+showed no useful gain and was discarded. A wider prefix-only refill is next.
+
 The [shared forward-product round](WARM-JPEG-FORWARD-SHARED.md) retains exact
 JPEG coefficients and bytes while reducing complete warm encode screens to
 2.12x / 2.13x. PNG decode now has the largest measured gap; uniform parity is open.

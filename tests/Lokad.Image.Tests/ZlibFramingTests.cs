@@ -4,6 +4,41 @@ namespace Lokad.Image.Tests;
 
 public sealed class ZlibFramingTests
 {
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void PrefixLookaheadReturnsStoredHeaderBytesAndExactWork(bool trailingBytes)
+    {
+        // Original RFC 1951 fixed literals followed by a final stored block.
+        // The prefix lookahead crosses into LEN/NLEN and the stored payload.
+        var bits = new BitWriter(); bits.Number(0, 1); bits.Number(1, 2);
+        for (var i = 0; i < 12; i++) bits.Code(0x30 + 65, 8);
+        bits.Code(0, 7); // Fixed end-of-block symbol 256.
+        bits.Number(1, 1); bits.Number(0, 2); bits.Align();
+        bits.Number(3, 16); bits.Number(65532, 16);
+        bits.Number(0, 8); bits.Number(127, 8); bits.Number(255, 8);
+        byte[] raw = [.. Enumerable.Repeat((byte)65, 12), 0, 127, 255];
+        uint a = 1, b = 0;
+        foreach (var value in raw) { a += value; b += a; }
+        byte[] encoded = [0x78, 0x01, .. bits.Bytes(), (byte)(b >> 8), (byte)b, (byte)(a >> 8), (byte)a];
+        var streamLength = encoded.Length;
+        if (trailingBytes) encoded = [.. encoded, 99, 88];
+        var context = new OperationContext(ImageLimits.Default with { MaxWork = 9522, MaxWorkingBytes = 4096 }, default);
+        Assert.Equal(streamLength, ZlibFraming.Validate(encoded, raw.Length, context));
+        Assert.Throws<ImageLimitException>(() => context.Work(1));
+        context.Reserve(4096); context.Release(4096);
+        using var inflater = new System.IO.Compression.ZLibStream(new MemoryStream(encoded, 0, streamLength), System.IO.Compression.CompressionMode.Decompress);
+        var actual = new byte[raw.Length]; inflater.ReadExactly(actual);
+        Assert.Equal(raw, actual); Assert.Equal(-1, inflater.ReadByte());
+
+        var tight = new OperationContext(ImageLimits.Default with { MaxWork = 9521, MaxWorkingBytes = 4096 }, default);
+        Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, raw.Length, tight));
+        // Stored-byte work remains one three-unit charge after LEN/NLEN;
+        // an insufficient charge does not consume the last two budget units.
+        tight.Work(2); tight.Reserve(4096); tight.Release(4096);
+        Assert.Throws<ImageLimitException>(() => tight.Work(1));
+    }
+
     [Fact]
     public void LiteralLookaheadRejectsAnUnassignedPrefixAfterAShortLiteral()
     {
