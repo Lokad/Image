@@ -419,6 +419,8 @@ The [packed RGBA8 accumulation kernel](../../benchmarks/WARM-RESIZE-PACKED-KERNE
 reduces the same complete operation to 2.89x without added allocations. Bounded
 sample loading and packed widening retain separate binary64 multiply/add and
 the original tap order; scalar and UInt16 behavior remain unchanged.
+The [packed output trial](../../benchmarks/WARM-RESIZE-PACKED-OUTPUT-REJECTED.md)
+shows no useful short-screen gain and is restored without a longer repeat.
 Run sequentially on the quiet dedicated VM and preserve
 source/raw/actual timed DLLs before edits. Other sizes, directions, depths and
 bicubic remain unmeasured; independent quiet confirmation remains open. Native

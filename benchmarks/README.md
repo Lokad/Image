@@ -1,5 +1,10 @@
 # Development benchmarks
 
+The [packed output trial](WARM-RESIZE-PACKED-OUTPUT-REJECTED.md) shows no useful
+gain in one short screen and is discarded without a longer repeat. Production
+bytes are restored exactly; six literal half-rounding regression cases remain.
+The next resize hypothesis is wider filtering across independent output pixels.
+
 The [packed RGBA8 accumulation kernel](WARM-RESIZE-PACKED-KERNEL.md) reduces
 complete warm bilinear resize a further 34.1%, from 4.35x to 2.89x FFmpeg.
 One bounded sample read and packed widening replace scalar channel conversions,

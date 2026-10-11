@@ -7,6 +7,26 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class ResizeReferenceTests
 {
     [Theory]
+    [InlineData(ResizeFilter.Bilinear, 255, 255, 1, 255, 128)]
+    [InlineData(ResizeFilter.Bilinear, 255, 254, 0, 254, 127)]
+    [InlineData(ResizeFilter.Bilinear, 254, 255, 1, 255, 128)]
+    [InlineData(ResizeFilter.Bicubic, 255, 255, 1, 255, 128)]
+    [InlineData(ResizeFilter.Bicubic, 255, 254, 0, 254, 127)]
+    [InlineData(ResizeFilter.Bicubic, 254, 255, 1, 255, 128)]
+    public void ByteFilteringRoundsAtAndOnEitherSideOfColorHalves(ResizeFilter filter,
+        byte leftAlpha, byte rightAlpha, byte red, byte green, byte blue)
+    {
+        // Original two-pixel input: the center has equal geometric weights.
+        // Alpha imbalance moves all three RGB values below or above their halves.
+        using var source = ImageBuffer.Create(2, 1, 8);
+        var input = new byte[] { 0, 254, 0, leftAlpha, 1, 255, 255, rightAlpha };
+        input.CopyTo(source.GetRow8(0));
+        using var result = ImageTransforms.Resize(source, 3, 1, filter);
+        Assert.Equal(new byte[] { red, green, blue, 255 }, result.GetRow8(0).Slice(4, 4).ToArray());
+        Assert.Equal(input, source.GetRow8(0).ToArray());
+    }
+
+    [Theory]
     [InlineData(8, ResizeFilter.Bilinear)]
     [InlineData(8, ResizeFilter.Bicubic)]
     [InlineData(16, ResizeFilter.Bilinear)]
