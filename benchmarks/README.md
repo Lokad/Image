@@ -1,16 +1,18 @@
 # Development benchmarks
 
-The [first matched warm bilinear resize screen](WARM-BILINEAR-BASELINE.md)
-reaches 29.18x FFmpeg on the same original raster, the largest current measured
-gap. Managed rational-reference pixels and native alpha are exact; native RGB
-meets the existing filtered comparison bound. One CPU profile selects row access
-for the first narrow optimization. Production is unchanged.
+The [row-access inlining round](WARM-ROW-INLINE.md) reduces complete warm bilinear
+resize by about 5.2%, from the [first screen's](WARM-BILINEAR-BASELINE.md) 29.18x
+to 27.46x FFmpeg on the same original raster. This remains the largest measured
+gap. Managed rational-reference pixels, native alpha and allocations remain
+exact; native RGB meets the existing filtered comparison bound. Repeated source
+row acquisition is the next narrow primitive.
 
 The [current JPEG decode confirmation](WARM-JPEG-DECODE-CONFIRM.md) reaches
 1.90x FFmpeg with a twelve-sample conservative upper below 2x. The first
 [matched warm nearest resize screen](WARM-NEAREST-BASELINE.md) reaches 1.31x
-on the same original raster. Production is unchanged. Filtered resize and other
-material paths remain uncovered; independent quiet confirmation remains open.
+on the same original raster. Those benchmark checkpoints leave production
+unchanged. Other filtered resize cases and material paths remain uncovered;
+independent quiet confirmation remains open.
 
 The [VP8L lookup inlining round](WARM-VP8L-READ-INLINE.md) reduces complete warm
 decode from about 2.00x to 1.74x FFmpeg on the same frozen literal/run input.

@@ -397,9 +397,10 @@ controls, independent live outputs, counters/source integrity and a focused live
 test on both OSes pass. The selected output has no zero-alpha pixels; other alpha
 edge cases remain open. No extra source raster or quality search occurs.
 
-The [first screen](../../benchmarks/WARM-BILINEAR-BASELINE.md) reaches about 29.18x,
-the largest current warm gap. One CPU profile selects row access as the first
-optimization primitive. Run sequentially on the quiet dedicated VM and preserve
+The [first screen](../../benchmarks/WARM-BILINEAR-BASELINE.md) reaches about 29.18x.
+The [row-access inlining round](../../benchmarks/WARM-ROW-INLINE.md) reduces that
+to 27.46x, still the largest measured warm gap. Repeated checked source-row
+acquisition is the next primitive. Run sequentially on the quiet dedicated VM and preserve
 source/raw/actual timed DLLs before edits. Other sizes, directions, depths and
 bicubic remain unmeasured; independent quiet confirmation remains open. Native
 sources/tools/static archives are development-only and never production inputs.

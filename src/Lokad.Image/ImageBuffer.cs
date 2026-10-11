@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Lokad.Image.Internal;
 
@@ -59,6 +60,7 @@ public sealed class ImageBuffer : IDisposable
         return MemoryMarshal.Cast<byte, ushort>(Row(y));
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private Span<byte> Row(int y)
     {
         ObjectDisposedException.ThrowIf(pixels is null, this);
