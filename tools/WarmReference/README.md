@@ -411,6 +411,10 @@ reduces it to 7.07x. A fresh profile selects
 reduces it to 6.34x, including preparation and admitted workspace allocation.
 It retains exact binary64 pixels and direct evaluation under tight memory limits.
 Substantial filtering-loop improvements take priority while this gap remains.
+The [compact prepared kernel](../../benchmarks/WARM-RESIZE-PREPARED.md) reaches
+4.35x, retaining exact pixels and the same admitted geometry/allocation footprint.
+It captures local buffer views and specializes sample depth for short support;
+wide support and tight memory retain direct evaluation.
 Run sequentially on the quiet dedicated VM and preserve
 source/raw/actual timed DLLs before edits. Other sizes, directions, depths and
 bicubic remain unmeasured; independent quiet confirmation remains open. Native

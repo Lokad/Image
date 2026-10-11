@@ -62,6 +62,9 @@ per operation, reusing them across output rows. This optional geometry workspace
 is admitted conservatively and leaves 4 KiB for exact tiny-alpha arithmetic.
 Wide support or tight memory limits retain direct evaluation with the same tap
 order, binary64 arithmetic and pixels. Geometry is not cached across calls.
+When both supports are short, a byte/UInt16-specialized kernel captures local
+buffer views and prepares vertical weights/row offsets in bounded stack storage.
+It retains the same per-pixel tap order, alpha handling and admission checkpoints.
 
 An original development-only reference uses exact integer kernel weights and
 `BigInteger` separable accumulation, with no production resize helpers. Public

@@ -1,5 +1,11 @@
 # Development benchmarks
 
+The [compact prepared filtering kernel](WARM-RESIZE-PREPARED.md) reduces complete
+warm bilinear resize a further 31.6%, from 6.34x to 4.35x FFmpeg. It removes
+repeated row-access calls and runtime depth/fallback dispatch from short-support
+filtering, retaining exact pixels, admission and allocations. Resize remains the
+largest measured gap; independent quiet confirmation and broader coverage are open.
+
 The [horizontal geometry preparation round](WARM-RESIZE-GEOMETRY.md) reduces
 complete warm bilinear resize a further 7.8%, from 6.93x to 6.34x FFmpeg.
 Preparation and admitted workspace allocation are included; tight memory limits

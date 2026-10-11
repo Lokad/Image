@@ -175,6 +175,17 @@ public static class ImageTransforms
                 }
             }
         }
+        if (horizontalWeights is not null && tapsY <= 8)
+        {
+            if (source.BitDepth == 8)
+                PreparedResize.Apply<byte>(source, result, horizontalWeights, horizontalOffsets,
+                    horizontalCounts, scaleY, radius, filter, width * tapsX * tapsY * 4, context);
+            else
+                PreparedResize.Apply<ushort>(source, result, horizontalWeights, horizontalOffsets,
+                    horizontalCounts, scaleY, radius, filter, width * tapsX * tapsY * 4, context);
+            result.Orientation = source.Orientation;
+            return result;
+        }
         for (var y = 0; y < height; y++)
         {
             context.Work(width * tapsX * tapsY * 4);
