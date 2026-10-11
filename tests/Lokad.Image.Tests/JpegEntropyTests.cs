@@ -5,6 +5,38 @@ namespace Lokad.Image.Tests;
 public sealed class JpegEntropyTests
 {
     [Fact]
+    public void EverySignedAmplitudeKeepsValueStuffingPositionPaddingAndWork()
+    {
+        // Original T.81 F.2.2.1 payloads: enumerate signed values in each
+        // category, encode negative values by complementing their magnitude,
+        // and append an independently constructed RST0 marker.
+        var data = new byte[6];
+        for (var width = 1; width <= 16; width++)
+        {
+            var minimum = 1 << (width - 1); var maximum = (1 << width) - 1;
+            var context = new OperationContext(ImageLimits.Default with { MaxWork = 1 << width }, default);
+            for (var magnitude = minimum; magnitude <= maximum; magnitude++)
+            foreach (var sign in new[] { -1, 1 })
+            {
+                var expected = sign * magnitude;
+                var code = sign > 0 ? magnitude : maximum - magnitude;
+                var byteCount = (width + 7) / 8; var padding = byteCount * 8 - width;
+                var padded = (code << padding) | ((1 << padding) - 1); var length = 0;
+                for (var index = byteCount - 1; index >= 0; index--)
+                {
+                    var next = (byte)(padded >> (index * 8)); data[length++] = next;
+                    if (next == 255) data[length++] = 0;
+                }
+                var marker = length; data[length++] = 255; data[length++] = 0xD0;
+                var reader = new JpegEntropyReader(data.AsSpan(0, length), 0, context);
+                Assert.Equal(expected, reader.ReadSigned(width)); Assert.Equal(marker, reader.Position);
+                reader.Restart(0); Assert.Equal(length, reader.Position);
+            }
+            Assert.Throws<ImageLimitException>(() => context.Work(1));
+        }
+    }
+
+    [Fact]
     public void MixedBitWidthsUnstuffCompleteBytesAndStopBeforeRestart()
     {
         // Original T.81 stream: eight payload bytes, three stuffed FF bytes,

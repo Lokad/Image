@@ -1,5 +1,9 @@
 # Development benchmarks
 
+The [signed-amplitude extension round](WARM-JPEG-SIGNED.md) replaces a conditional
+JPEG amplitude offset with an exact sign mask. Native-input warm decode screens
+reach 2.13x / 2.15x; the owned affected screen is 2.01x. Uniform parity remains open.
+
 The [fused inverse-certificate magnitude round](WARM-JPEG-MAGNITUDE.md) removes
 the separate coefficient reduction, retaining exact bounds and all decoded pixels.
 Native-input decode screens reach roughly 2.6x; uniform warm parity remains open.

@@ -40,7 +40,11 @@ internal ref struct JpegEntropyReader
     {
         if (count == 0) return 0;
         var value = ReadBits(count);
-        return value < 1 << (count - 1) ? value - ((1 << count) - 1) : value;
+        // T.81 F.2.2.1: a missing leading one subtracts 2^count - 1.
+        // ReadBits admits only 1..16 here, so the difference fits Int32;
+        // its sign gives an exact mask without a data-dependent branch.
+        var threshold = 1 << (count - 1);
+        return value + (((value - threshold) >> 31) & (1 - (threshold << 1)));
     }
 
     internal bool TryReadHuffman(ReadOnlySpan<ushort> shortCodes, out int symbol)
