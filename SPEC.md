@@ -75,6 +75,11 @@ RGBA8 output rows together, sharing horizontal geometry. Bounded sample reads
 and direct weight broadcasts preserve each pixel's arithmetic order. Paired
 vertical geometry adds 192 bytes of fixed stack storage and no heap workspace.
 Unequal supports and odd tails retain the single-row path.
+For exactly four consecutive horizontal sample offsets, the paired path may
+read one bounded 16-byte group per source row and interleave independent sample
+pairs. Four unrolled taps preserve the same binary64 arithmetic order and pixels,
+without new workspace. Duplicate clamped offsets and other counts retain the
+general paired path.
 
 An original development-only reference uses exact integer kernel weights and
 `BigInteger` separable accumulation, with no production resize helpers. Public

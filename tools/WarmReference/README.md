@@ -428,6 +428,11 @@ The [reformulated paired packed-sample kernel](../../benchmarks/WARM-RESIZE-PAIR
 reaches 2.64x, with direct coefficient construction and unchanged allocation
 totals. Per-pixel binary64 arithmetic, alpha handling and scalar/UInt16 behavior
 remain; unequal row supports and odd tails retain the single-row path.
+The [grouped four-tap sample kernel](../../benchmarks/WARM-RESIZE-QUAD-SAMPLES.md)
+reduces the same complete operation a further 20.5%, to 2.08x (conservative upper
+2.12x), without extra allocations. Two bounded 16-byte reads and four unrolled
+taps retain per-pixel arithmetic order. Clamped duplicate offsets and other
+counts retain the general paired path. No performance raster or pair is added.
 Run sequentially on the quiet dedicated VM and preserve
 source/raw/actual timed DLLs before edits. Other sizes, directions, depths and
 bicubic remain unmeasured; independent quiet confirmation remains open. Native

@@ -1,5 +1,12 @@
 # Development benchmarks
 
+The [grouped four-tap sample kernel](WARM-RESIZE-QUAD-SAMPLES.md) reduces complete
+warm bilinear resize a further 20.5%, from 2.64x to 2.08x FFmpeg (conservative
+upper 2.12x). Two bounded grouped reads replace eight separate sample reads per
+paired-row tap group. Exact pixels and allocation totals remain unchanged.
+The same single raster/pair is retained. Independent quiet confirmation,
+the remaining resize gap and uniform warm parity remain open.
+
 The [reformulated paired packed-sample kernel](WARM-RESIZE-PAIRED-WEIGHTS.md)
 reduces complete warm bilinear resize a further 8.1%, from 2.89x to 2.64x FFmpeg.
 It shares horizontal geometry across independent output rows and constructs

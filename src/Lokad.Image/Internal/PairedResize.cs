@@ -1,4 +1,6 @@
 using System.Buffers.Binary;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
@@ -40,6 +42,8 @@ internal static class PairedResize
             var baseX = x * 8;
             var weights = horizontalWeights.Slice(baseX, horizontalCounts[x]);
             var offsets = horizontalOffsets.Slice(baseX, weights.Length);
+            var quad = weights.Length == 4 && offsets[1] == offsets[0] + 4
+                && offsets[2] == offsets[0] + 8 && offsets[3] == offsets[0] + 12;
             var sums = Vector512<double>.Zero;
             double weightSum0 = 0, weightSum1 = 0;
             for (var ty = 0; ty < count; ty++)
@@ -50,7 +54,29 @@ internal static class PairedResize
                 if (wy0 == 0 && wy1 == 0) continue;
                 var row0 = verticalOffsets[ty];
                 var row1 = verticalOffsets[ty + 8];
-                for (var tx = 0; tx < weights.Length; tx++)
+                if (quad)
+                {
+                    // Consecutive support admits one bounded read per row.
+                    // Interleaving keeps each pair's two output pixels independent.
+                    var first = offsets[0];
+                    var pixels0 = MemoryMarshal.Read<Vector128<uint>>(input.Slice(row0 + first, 16));
+                    var pixels1 = MemoryMarshal.Read<Vector128<uint>>(input.Slice(row1 + first, 16));
+                    var low = Sse2.UnpackLow(pixels0, pixels1);
+                    var high = Sse2.UnpackHigh(pixels0, pixels1);
+                    var weight0 = wy0 * weights[0]; var weight1 = wy1 * weights[0];
+                    sums = Tap(sums, low, weight0, weight1);
+                    weightSum0 += weight0; weightSum1 += weight1;
+                    weight0 = wy0 * weights[1]; weight1 = wy1 * weights[1];
+                    sums = Tap(sums, Sse2.ShiftRightLogical128BitLane(low.AsByte(), 8).AsUInt32(), weight0, weight1);
+                    weightSum0 += weight0; weightSum1 += weight1;
+                    weight0 = wy0 * weights[2]; weight1 = wy1 * weights[2];
+                    sums = Tap(sums, high, weight0, weight1);
+                    weightSum0 += weight0; weightSum1 += weight1;
+                    weight0 = wy0 * weights[3]; weight1 = wy1 * weights[3];
+                    sums = Tap(sums, Sse2.ShiftRightLogical128BitLane(high.AsByte(), 8).AsUInt32(), weight0, weight1);
+                    weightSum0 += weight0; weightSum1 += weight1;
+                }
+                else for (var tx = 0; tx < weights.Length; tx++)
                 {
                     var weight0 = wy0 * weights[tx];
                     var weight1 = wy1 * weights[tx];
@@ -75,6 +101,19 @@ internal static class PairedResize
             Store(source, output, sums.GetUpper(), weightSum1, x, y + 1, width, height, filter, context);
         }
         return true;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector512<double> Tap(Vector512<double> sums, Vector128<uint> pixels,
+        double weight0, double weight1)
+    {
+        if (weight0 == 0 && weight1 == 0) return sums;
+        var weighted = Avx512F.InsertVector256(Vector512.Create(weight0 * (pixels.GetElement(0) >> 24)),
+            Vector256.Create(weight1 * (pixels.GetElement(1) >> 24)), 1);
+        var colors = Sse2.Or(Sse2.And(pixels.AsUInt64(), Vector128.Create(0x00ffffff00ffffffUL)),
+            Vector128.Create(0x0100000001000000UL)).AsByte();
+        var samples = Avx512F.ConvertToVector512Double(Avx2.ConvertToVector256Int32(colors));
+        return Avx512F.Add(sums, Avx512F.Multiply(weighted, samples));
     }
 
     private static void Store(ImageBuffer source, Span<byte> output, Vector256<double> sums,
