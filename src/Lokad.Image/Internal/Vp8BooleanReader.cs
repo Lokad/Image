@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Lokad.Image.Internal;
 
 /// <summary>Owned bit-at-a-time interval decoder, derived from RFC 6386 section 7.2.</summary>
@@ -12,6 +14,7 @@ internal struct Vp8BooleanReader
         value = data[offset]; range = 255; position = offset + 1; end = offset + length; shift = 7;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Read(ReadOnlySpan<byte> data, int probability, OperationContext context)
     {
         context.Work(1);

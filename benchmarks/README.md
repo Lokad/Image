@@ -1,10 +1,16 @@
 # Development benchmarks
 
+The [VP8 arithmetic reader inlining round](WARM-VP8-READ-INLINE.md) reduces
+complete decode about 8%, from 2.64x to 2.43x FFmpeg, preserving all production
+method bodies and pixels. The grouped-shift trial was flat and discarded.
+VP8 decode remains the largest measured gap. Current CPU attribution must guide
+the next primitive; required coverage and independent quiet confirmation remain open.
+
 The [native-input VP8 decode screen](WARM-VP8-NATIVE-DECODE.md) adds one frozen
-input pair at 2.64x FFmpeg, now the largest measured gap. Production is unchanged;
+input pair at 2.64x FFmpeg, the largest measured gap at that checkpoint. Production was unchanged;
 native pixels match the CLI exactly, alpha is exact and managed RGB is within
 the specified bounds. One CPU profile selects arithmetic bit-reader
-renormalization as the next primitive. Independent quiet confirmation remains open.
+renormalization as the next primitive, followed by the inlining round above.
 
 The [PNG bit-reader inlining round](WARM-PNG-READ-INLINE.md) improves complete
 PNG16 decode about 3% and PNG8 about 9%, preserving all pixels and method bodies.

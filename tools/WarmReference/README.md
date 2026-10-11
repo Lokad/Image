@@ -304,3 +304,5 @@ framing. Run one pair sequentially on the quiet dedicated VM and archive its
 source, raw samples and actual timed library before changing source.
 The [retained VP8 screen](../../benchmarks/WARM-VP8-NATIVE-DECODE.md) covers only
 this frozen native keyframe/alpha profile; broader VP8 coverage remains open.
+The [reader inlining round](../../benchmarks/WARM-VP8-READ-INLINE.md) reuses the
+same native worker, input and correctness boundary, with no encode-quality search.
