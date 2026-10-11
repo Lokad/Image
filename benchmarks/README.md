@@ -1,10 +1,16 @@
 # Development benchmarks
 
+The [native-input VP8 decode screen](WARM-VP8-NATIVE-DECODE.md) adds one frozen
+input pair at 2.64x FFmpeg, now the largest measured gap. Production is unchanged;
+native pixels match the CLI exactly, alpha is exact and managed RGB is within
+the specified bounds. One CPU profile selects arithmetic bit-reader
+renormalization as the next primitive. Independent quiet confirmation remains open.
+
 The [PNG bit-reader inlining round](WARM-PNG-READ-INLINE.md) improves complete
 PNG16 decode about 3% and PNG8 about 9%, preserving all pixels and method bodies.
 The means are now 1.95x / 1.81x FFmpeg; longer conservative uppers are below 2x.
-Quiet independent confirmation and required-path coverage remain open. Measure
-one material uncovered direction next, then rerank.
+Quiet independent confirmation and required-path coverage remain open. That
+checkpoint selected the uncovered VP8 decode direction measured above.
 
 The [certified JPEG forward/quantization round](WARM-JPEG-FORWARD-INTERLEAVED.md)
 reduces complete encoding time about 3.7%, from 2.02x to 1.95x FFmpeg, retaining
@@ -769,3 +775,10 @@ critical validation failures and failed benchmark cases return a failing status.
 Measurement, optimization and published comparisons require the dedicated quiet
 VM supplied by the project owner, using `./bench.ps1 -DedicatedVm` after the
 benchmark matrix and reproducible machine/tool manifests are complete.
+
+The `Vp8Decode` warm family adds one identical native-input decode pair,
+`Native8`, using the existing frozen 513x259 RGBA8 raster and quality-75 VP8/ALPH
+input. It does not search encode qualities or require a matched encode pair.
+Its [reference protocol](../tools/WarmReference/README.md#warm-native-input-vp8-decode)
+includes decoder reset, chroma expansion, color conversion, alpha merge and
+owned output allocation/release, with normal SIMD and one CPU/thread.

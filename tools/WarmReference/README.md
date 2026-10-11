@@ -267,6 +267,40 @@ framing using the same frozen input. Successful controls check operation counts,
 source integrity, independent live native output storage and exact public-CLI
 pixels. Setup and cleanup check complete managed/native RGBA and source integrity.
 The [retained screens](../../benchmarks/WARM-WEBP-DECODE.md) cover this one VP8L
-profile only. Other VP8L strategies and VP8 decode remain unmeasured. This native
+profile only. Other VP8L strategies remain unmeasured. This native
 adapter, its ignored binaries and static archives are development-only and never
 production build inputs.
+
+## Warm native-input VP8 decode
+
+`WarmVp8Decode/Native8` reuses the quality-75 native VP8/ALPH file already frozen
+in ignored `artifacts/warm-reference/webp-match.json`. It requires that exact
+input and original raster identity. It neither regenerates the input nor searches
+encoder qualities. An unmatched encode pair does not prevent identical-input
+decode comparison.
+
+```bash
+bash tools/WarmReference/build-vp8-decode-linux.sh
+python3 tools/WarmReference/verify-vp8-decode-linux.py --cpu 0
+```
+
+```powershell
+./bench.ps1 -Smoke -Warm -WarmFamily Vp8Decode -WarmCases Native8 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Vp8Decode -WarmCases Native8 -Cpu 0 -NoBuild
+```
+
+The original development adapter uses software FFmpeg webp decoding, normal
+SIMD, one codec thread and one thread per conversion context. Its timed operation
+resets decoder state, decodes every pixel, expands centered chroma bilinearly,
+converts limited-range BT.601 through RGBA16, reduces to RGBA8 without dither,
+merges exact alpha, and allocates/releases scratch and independent owned output.
+Contexts and packet/frame wrappers are reused. Managed timing covers the public
+span Decode and output disposal. Startup, I/O, IPC, encoding and validation are
+excluded. Native output must match the pinned CLI exactly. Managed RGB, including
+hidden RGB, must satisfy the specified maximum 4/RMSE 1.5 bounds; alpha is exact.
+Both retain frozen pixel hashes and test distinct live outputs and source integrity.
+Seventeen negative controls cover affinity, arguments, protocol, geometry and
+framing. Run one pair sequentially on the quiet dedicated VM and archive its
+source, raw samples and actual timed library before changing source.
+The [retained VP8 screen](../../benchmarks/WARM-VP8-NATIVE-DECODE.md) covers only
+this frozen native keyframe/alpha profile; broader VP8 coverage remains open.

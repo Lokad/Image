@@ -29,7 +29,7 @@ internal static class WarmBenchmarks
             if (familyOption + 1 == arguments.Count) throw new ArgumentException("Supply a warm family.");
             family = arguments[familyOption + 1]; arguments.RemoveRange(familyOption, 2);
         }
-        if (family is not ("Flip" or "Png" or "Jpeg" or "JpegDecode" or "Webp" or "WebpDecode")) throw new ArgumentException("Choose Flip, Png, Jpeg, JpegDecode, Webp or WebpDecode.");
+        if (family is not ("Flip" or "Png" or "Jpeg" or "JpegDecode" or "Webp" or "WebpDecode" or "Vp8Decode")) throw new ArgumentException("Choose Flip, Png, Jpeg, JpegDecode, Webp, WebpDecode or Vp8Decode.");
         string? selection = null;
         var selectionOption = arguments.IndexOf("--warm-cases");
         if (selectionOption >= 0)
@@ -55,8 +55,8 @@ internal static class WarmBenchmarks
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU", cpu.ToString(System.Globalization.CultureInfo.InvariantCulture));
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE", smoke ? "smoke" : confirm ? "confirm" : "measure");
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES", selection);
-            var expectedPairs = family == "Png" ? WarmPng.SelectedCases().Length : family == "Jpeg" ? WarmJpeg.SelectedCases().Length : family == "JpegDecode" ? WarmJpegDecode.SelectedCases().Length : family == "Webp" ? WarmWebp.SelectedCases().Length : family == "WebpDecode" ? WarmWebpDecode.SelectedCases().Length : 2;
-            var type = family == "Png" ? typeof(WarmPng) : family == "Jpeg" ? typeof(WarmJpeg) : family == "JpegDecode" ? typeof(WarmJpegDecode) : family == "Webp" ? typeof(WarmWebp) : family == "WebpDecode" ? typeof(WarmWebpDecode) : typeof(WarmHorizontalFlip);
+            var expectedPairs = family == "Png" ? WarmPng.SelectedCases().Length : family == "Jpeg" ? WarmJpeg.SelectedCases().Length : family == "JpegDecode" ? WarmJpegDecode.SelectedCases().Length : family == "Webp" ? WarmWebp.SelectedCases().Length : family == "WebpDecode" ? WarmWebpDecode.SelectedCases().Length : family == "Vp8Decode" ? WarmVp8Decode.SelectedCases().Length : 2;
+            var type = family == "Png" ? typeof(WarmPng) : family == "Jpeg" ? typeof(WarmJpeg) : family == "JpegDecode" ? typeof(WarmJpegDecode) : family == "Webp" ? typeof(WarmWebp) : family == "WebpDecode" ? typeof(WarmWebpDecode) : family == "Vp8Decode" ? typeof(WarmVp8Decode) : typeof(WarmHorizontalFlip);
             using var identity = new JpegBenchmarkCase();
             var job = (smoke ? Job.Dry : Job.ShortRun).WithId(smoke ? "WarmDry" : confirm ? "WarmConfirm" : "WarmShort")
                 .WithAffinity(affinity).WithGcServer(false).WithGcConcurrent(false)
@@ -96,7 +96,7 @@ internal static class WarmBenchmarks
                         ? value.GetProperty("qualityMatched").GetBoolean() && value.GetProperty("alphaExact").GetBoolean()
                             && value.GetProperty("decoderAgreementWithinBounds").GetBoolean()
                             && value.GetProperty("psnrGapDb").GetDouble() <= EncoderQualityCalibration.MaximumPsnrGapDb
-                        : family == "JpegDecode" ? value.GetProperty("alphaExact").GetBoolean()
+                        : family is "JpegDecode" or "Vp8Decode" ? value.GetProperty("alphaExact").GetBoolean()
                             && value.GetProperty("decoderAgreementWithinBounds").GetBoolean()
                             && value.GetProperty("nativeCliPixelsExact").GetBoolean()
                             && value.GetProperty("decoderMaximum").GetInt32() is >= 0 and <= 4

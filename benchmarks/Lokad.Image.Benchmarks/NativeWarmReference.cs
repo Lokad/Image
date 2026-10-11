@@ -17,12 +17,12 @@ internal sealed class NativeWarmReference : IDisposable
 
     public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null, int? nativeQuality = null)
     {
-        if (operation is not ("hflip" or "png-encode" or "png-decode" or "jpeg-encode" or "jpeg-decode" or "webp-encode" or "webp-decode")) throw new ArgumentOutOfRangeException(nameof(operation));
-        var codec = operation != "hflip"; var jpeg = operation == "jpeg-encode"; var jpegDecode = operation == "jpeg-decode"; var webp = operation == "webp-encode"; var webpDecode = operation == "webp-decode";
-        var stem = webpDecode ? "ffmpeg-webp-decode-warm" : jpegDecode ? "ffmpeg-jpeg-decode-warm" : webp ? "ffmpeg-webp-warm" : jpeg ? "ffmpeg-jpeg-warm" : codec ? "ffmpeg-png-warm" : "ffmpeg-warm";
-        var buildScript = webpDecode ? "build-webp-decode-linux.sh" : jpegDecode ? "build-jpeg-decode-linux.sh" : webp ? "build-webp-linux.sh" : jpeg ? "build-jpeg-linux.sh" : codec ? "build-png-linux.sh" : "build-linux.sh";
+        if (operation is not ("hflip" or "png-encode" or "png-decode" or "jpeg-encode" or "jpeg-decode" or "webp-encode" or "webp-decode" or "vp8-decode")) throw new ArgumentOutOfRangeException(nameof(operation));
+        var codec = operation != "hflip"; var jpeg = operation == "jpeg-encode"; var jpegDecode = operation == "jpeg-decode"; var webp = operation == "webp-encode"; var webpDecode = operation == "webp-decode"; var vp8Decode = operation == "vp8-decode";
+        var stem = vp8Decode ? "ffmpeg-vp8-decode-warm" : webpDecode ? "ffmpeg-webp-decode-warm" : jpegDecode ? "ffmpeg-jpeg-decode-warm" : webp ? "ffmpeg-webp-warm" : jpeg ? "ffmpeg-jpeg-warm" : codec ? "ffmpeg-png-warm" : "ffmpeg-warm";
+        var buildScript = vp8Decode ? "build-vp8-decode-linux.sh" : webpDecode ? "build-webp-decode-linux.sh" : jpegDecode ? "build-jpeg-decode-linux.sh" : webp ? "build-webp-linux.sh" : jpeg ? "build-jpeg-linux.sh" : codec ? "build-png-linux.sh" : "build-linux.sh";
         Executable = Path.Combine(state.Root, "external", "warm-reference", stem);
-        var identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, webpDecode ? "webp-decode-identity.json" : jpegDecode ? "jpeg-decode-identity.json" : webp ? "webp-identity.json" : jpeg ? "jpeg-identity.json" : codec ? "png-identity.json" : "identity.json");
+        var identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, vp8Decode ? "vp8-decode-identity.json" : webpDecode ? "webp-decode-identity.json" : jpegDecode ? "jpeg-decode-identity.json" : webp ? "webp-identity.json" : jpeg ? "jpeg-identity.json" : codec ? "png-identity.json" : "identity.json");
         if (!File.Exists(Executable) || !File.Exists(identityPath))
             throw new InvalidOperationException("Build the pinned Linux warm reference with its tools/WarmReference build script.");
         using (var document = JsonDocument.Parse(File.ReadAllText(identityPath))) BuildIdentity = document.RootElement.Clone();
@@ -71,6 +71,11 @@ internal sealed class NativeWarmReference : IDisposable
                     || !Ready.GetProperty("lossless").GetBoolean() || !Ready.GetProperty("colorConversionTimed").GetBoolean()
                     || !Ready.GetProperty("stateResetTimed").GetBoolean() || !Ready.GetProperty("pixelsDeterministic").GetBoolean()
                     || Ready.GetProperty("outputBytes").GetInt32() != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4))
+                || (vp8Decode && (depth != 8 || Ready.GetProperty("conversionThreads").GetInt32() != 1
+                    || Ready.GetProperty("decoder").GetString() != "webp" || Ready.GetProperty("inputFormat").GetString() != "YUVA420P"
+                    || Ready.GetProperty("lossless").GetBoolean() || !Ready.GetProperty("colorConversionTimed").GetBoolean()
+                    || !Ready.GetProperty("stateResetTimed").GetBoolean() || !Ready.GetProperty("pixelsDeterministic").GetBoolean()
+                    || Ready.GetProperty("outputBytes").GetInt32() != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4))
                 || (operation == "png-encode" && (Ready.GetProperty("compressionLevel").GetInt32() != 6 || Ready.GetProperty("filter").GetInt32() != 0)))
                 throw new InvalidOperationException("Native warm worker geometry/thread/CPU contract differs.");
             completed = codec ? Ready.GetProperty("initialCompletedOperations").GetInt64() : 1;
@@ -99,7 +104,7 @@ internal sealed class NativeWarmReference : IDisposable
             || sample.Cpu != Ready.GetProperty("cpu").GetInt32()
             || (Ready.GetProperty("operation").GetString() is "png-encode" or "jpeg-encode" or "webp-encode" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
                 : sample.OutputStride < HorizontalFlipInput.Width * (Ready.GetProperty("depth").GetInt32() / 8) * 4)
-            || (Ready.GetProperty("operation").GetString() is "jpeg-decode" or "webp-decode" && sample.OutputBytes != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4))
+            || (Ready.GetProperty("operation").GetString() is "jpeg-decode" or "webp-decode" or "vp8-decode" && sample.OutputBytes != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4))
             throw new InvalidOperationException("Native sample counters/elapsed time/CPU differ.");
         completed += operations;
         return sample;
