@@ -365,7 +365,7 @@ Initial restore is separate; routine builds use cached dependencies. Larger
 matrices are optional targeted work, not routine baseline prerequisites.
 
 The current BenchmarkDotNet cases compare PNG, baseline/progressive JPEG and lossy/lossless WebP
-decodeÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œflipÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œPNG encode pipelines. Both subjects launch one process, read the same
+decodeÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“flipÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“PNG encode pipelines. Both subjects launch one process, read the same
 encoded input file and write one encoded output file. Source pixels and fixture
 generation happen outside the timed methods. FFmpeg runs with its normal CPU
 capabilities and one codec thread; it is the baseline for each case.
@@ -983,3 +983,12 @@ pass, while the short conservative bound remains 2.195x. The twelve-actual repea
 reaches 1.021x, upper 1.033x, but fails its post-run load guard; independent quiet
 confirmation remains open. Native clock_flip allocates independent pixels directly.
 No performance image or geometry sweep is added.
+
+The `Clone/Whole16` selection reuses the existing original full-precision raster.
+[Complete-overwrite storage](WARM-CLONE-REUSE.md) removes fresh full-array
+allocation and zeroing, retaining Clone's row loop and 16 KiB work/cancellation
+intervals. Screened mean falls 95.21%, from 22.55x to 1.046x. The twelve-actual
+repeat passes both quiet guards at 1.076x, conservative upper 1.089x, certifying
+this fixed pair only. Native null-filter output is allocated and copied inside
+each operation; output caching and redundant packing copies are excluded.
+Broader Clone and editing cases remain open.

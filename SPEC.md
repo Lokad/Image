@@ -343,7 +343,12 @@ and reversal of both axes when mirrored.
 Normal-orientation AutoOrient copies complete RGBA8/RGBA16 rows into independent
 storage with the same complete-overwrite policy and at most 1024 pixels between
 work/cancellation checks. It retains every channel byte and resets orientation
-to Normal; source buffers, Clone and other mapping kernels are unchanged.
+to Normal; source buffers and other mapping kernels are unchanged.
+Clone uses the same admitted complete-overwrite storage policy, preserving every
+channel byte, source orientation and independent ownership. Its original row
+copying, sample work count and at most 16384-byte cancellation intervals are
+unchanged. Private partial results are disposed on failure; zero-initialized
+Create buffers retain their separate allocation policy.
 See [resource admission](docs/resource-admission.md) for review evidence and scope.
 
 Malformed data raises `ImageDataException`, unsupported features raise

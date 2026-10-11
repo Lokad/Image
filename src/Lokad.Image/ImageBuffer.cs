@@ -74,19 +74,23 @@ public sealed class ImageBuffer : IDisposable
     {
         var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
         context.Reserve(ByteLength);
-        var result = Allocate(Width, Height, BitDepth, context);
-        for (var y = 0; y < Height; y++)
+        var result = AllocateForOverwrite(Width, Height, BitDepth, context);
+        try
         {
-            var row = Row(y); var destination = result.Row(y);
-            for (var offset = 0; offset < row.Length;)
+            for (var y = 0; y < Height; y++)
             {
-                var count = Math.Min(16384, row.Length - offset);
-                context.Work(count / (BitDepth / 8));
-                row.Slice(offset, count).CopyTo(destination.Slice(offset, count)); offset += count;
+                var row = Row(y); var destination = result.Row(y);
+                for (var offset = 0; offset < row.Length;)
+                {
+                    var count = Math.Min(16384, row.Length - offset);
+                    context.Work(count / (BitDepth / 8));
+                    row.Slice(offset, count).CopyTo(destination.Slice(offset, count)); offset += count;
+                }
             }
+            result.Orientation = Orientation;
+            return result;
         }
-        result.Orientation = Orientation;
-        return result;
+        catch { result.Dispose(); throw; }
     }
 
     internal int Sample(int x, int y, int channel)

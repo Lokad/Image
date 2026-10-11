@@ -793,3 +793,32 @@ The [tile round](../../benchmarks/WARM-TRANSVERSE-TILES.md) reduces screened mea
 96.32%. The twelve-actual repeat reaches 1.021x, upper 1.033x, but fails its post-run
 load guard. Quiet certification remains open; later cooldown cannot certify the
 failed interval. Broader editing and other material cases remain open.
+
+## Warm full-raster Clone
+
+`WarmClone/Whole16` reuses the existing original RGBA16 513x259 raster and the
+original null-filter worker used for normal-orientation copying:
+
+```bash
+bash tools/WarmReference/build-normal-orient-linux.sh
+python3 tools/WarmReference/verify-normal-orient-linux.py --cpu 0 --depth 16
+```
+
+```powershell
+./bench.ps1 -Smoke -Warm -WarmFamily Clone -WarmCases Whole16 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Clone -WarmCases Whole16 -Cpu 0 -NoBuild -PrepareWarm
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Clone -WarmCases Whole16 -Cpu 0 -NoBuild -WarmConfirm -PrepareWarm
+```
+
+Each native operation materializes the shared null-filter view with
+av_frame_get_buffer and av_frame_copy into an independent raster before release.
+Graph/source/frame wrappers are reused, with padded rows exposed directly and
+no redundant packing copy. Managed timing includes public Clone, both-buffer
+admission, every row copy and disposal. Exact channel bytes, alpha, hidden RGB,
+source and held outputs are validated along with pinned normal/scalar CLI output.
+One CPU/filter thread and normal SIMD apply. Preparation validates the actual
+fixed job before fresh quiet guards and immutable statistical replay.
+
+The [Clone round](../../benchmarks/WARM-CLONE-REUSE.md) reduces screened mean
+95.21%. Its independent twelve-actual repeat passes both quiet guards at 1.076x,
+upper 1.089x, certifying this fixed pair. Other material cases remain open.
