@@ -161,15 +161,34 @@ public static class ImageTransforms
                     var wy = Kernel((sy - cy) / scaleY, filter);
                     if (wy == 0) continue;
                     var iy = Math.Clamp(sy, 0, source.Height - 1);
+                    ReadOnlySpan<byte> row8 = default;
+                    ReadOnlySpan<ushort> row16 = default;
+                    if (source.BitDepth == 8) row8 = source.GetRow8(iy);
+                    else row16 = source.GetRow16(iy);
                     for (var sx = (int)Math.Ceiling(cx - radius * scaleX); sx <= Math.Floor(cx + radius * scaleX); sx++)
                     {
                         var weight = wy * Kernel((sx - cx) / scaleX, filter);
                         if (weight == 0) continue;
                         var ix = Math.Clamp(sx, 0, source.Width - 1);
-                        var a = source.Sample(ix, iy, 3);
-                        r += weight * a * source.Sample(ix, iy, 0);
-                        g += weight * a * source.Sample(ix, iy, 1);
-                        b += weight * a * source.Sample(ix, iy, 2);
+                        var offset = ix * 4;
+                        int a, red, green, blue;
+                        if (source.BitDepth == 8)
+                        {
+                            a = row8[offset + 3];
+                            red = row8[offset];
+                            green = row8[offset + 1];
+                            blue = row8[offset + 2];
+                        }
+                        else
+                        {
+                            a = row16[offset + 3];
+                            red = row16[offset];
+                            green = row16[offset + 1];
+                            blue = row16[offset + 2];
+                        }
+                        r += weight * a * red;
+                        g += weight * a * green;
+                        b += weight * a * blue;
                         alpha += weight * a;
                         weightSum += weight;
                     }

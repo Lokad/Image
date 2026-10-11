@@ -399,8 +399,9 @@ edge cases remain open. No extra source raster or quality search occurs.
 
 The [first screen](../../benchmarks/WARM-BILINEAR-BASELINE.md) reaches about 29.18x.
 The [row-access inlining round](../../benchmarks/WARM-ROW-INLINE.md) reduces that
-to 27.46x, still the largest measured warm gap. Repeated checked source-row
-acquisition is the next primitive. Run sequentially on the quiet dedicated VM and preserve
+to 27.46x, and [one source-row span per vertical tap](../../benchmarks/WARM-ROW-SPAN.md)
+reduces it to 9.08x, still the largest measured warm gap. Safe double-precision
+channel accumulation with SIMD is next. Run sequentially on the quiet dedicated VM and preserve
 source/raw/actual timed DLLs before edits. Other sizes, directions, depths and
 bicubic remain unmeasured; independent quiet confirmation remains open. Native
 sources/tools/static archives are development-only and never production inputs.

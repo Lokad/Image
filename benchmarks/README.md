@@ -1,11 +1,11 @@
 # Development benchmarks
 
-The [row-access inlining round](WARM-ROW-INLINE.md) reduces complete warm bilinear
-resize by about 5.2%, from the [first screen's](WARM-BILINEAR-BASELINE.md) 29.18x
-to 27.46x FFmpeg on the same original raster. This remains the largest measured
-gap. Managed rational-reference pixels, native alpha and allocations remain
-exact; native RGB meets the existing filtered comparison bound. Repeated source
-row acquisition is the next narrow primitive.
+The [filtered source-row acquisition round](WARM-ROW-SPAN.md) reduces complete
+warm bilinear resize by about 66.8%, from the [row inlining round's](WARM-ROW-INLINE.md)
+27.46x to 9.08x FFmpeg on the same original raster. This remains the largest
+measured gap. Managed rational-reference pixels, native alpha and allocations
+remain exact; native RGB meets the existing filtered comparison bound. Safe
+double-precision channel accumulation with SIMD is the next narrow primitive.
 
 The [current JPEG decode confirmation](WARM-JPEG-DECODE-CONFIRM.md) reaches
 1.90x FFmpeg with a twelve-sample conservative upper below 2x. The first
