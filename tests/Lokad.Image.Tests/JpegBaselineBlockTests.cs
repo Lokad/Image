@@ -130,6 +130,34 @@ public sealed class JpegBaselineBlockTests
         context.Work(64); Assert.Throws<ImageLimitException>(() => context.Work(1));
     }
 
+    [Theory]
+    [InlineData(68)] [InlineData(69)] [InlineData(72)]
+    public void TruncatedAmplitudeKeepsAdmittedWorkAndReusableReaderWithParentWorkAlreadyConsumed(int allowance)
+    {
+        var tables = Tables();
+        foreach (var cancellable in new[] { false, true })
+        {
+            using var cancellation = new CancellationTokenSource();
+            var context = new OperationContext(ImageLimits.Default with { MaxWork = 11 + allowance },
+                cancellable ? cancellation.Token : default);
+            context.Work(11);
+            // Category five occupies four bits; only four amplitude bits remain.
+            // Its original one-unit amplitude charge precedes the missing refill.
+            var reader = new JpegEntropyReader(new byte[] { 0x5F }, 0, context);
+            var block = Enumerable.Repeat(12345, 64).ToArray(); var predictor = 7;
+            try { JpegDecoder.ReadBaselineBlock(ref reader, block, ref predictor, tables.Dc, tables.Ac, context); Assert.Fail("The incomplete amplitude must fail."); }
+            catch (ImageLimitException error) { Assert.Equal(68, allowance); Assert.Equal("Computational work limit exceeded.", error.Message); }
+            catch (ImageDataException error) { Assert.NotEqual(68, allowance); Assert.Equal("Truncated JPEG entropy data.", error.Message); }
+            Assert.Equal(7, predictor); Assert.Equal(1, reader.Position); Assert.All(block, value => Assert.Equal(12345, value));
+            Assert.Equal(allowance - Math.Min(allowance, 69), context.RemainingWork);
+            if (allowance == 72)
+            {
+                context.Work(1); Assert.Equal(0, reader.ReadBits(0)); Assert.Equal(1, context.RemainingWork); context.Work(1);
+            }
+            Assert.Throws<ImageLimitException>(() => context.Work(1));
+        }
+    }
+
     private static (JpegHuffman Dc, JpegHuffman Ac) Tables()
     {
         var dc = new byte[16]; dc[3] = 13; var ac = new byte[16]; ac[7] = (byte)AcSymbols.Length;

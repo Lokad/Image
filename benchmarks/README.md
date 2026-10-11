@@ -1,5 +1,11 @@
 # Development benchmarks
 
+The [JPEG local entropy-work round](WARM-JPEG-LOCAL-WORK.md) preserves every exact
+charge within each baseline coefficient block. Native-input decode screens reach
+1.92x / 1.90x FFmpeg; the owned-input affected screen reaches 1.77x. Actual package
+allocation counts remain equal. Uniform warm parity remains open; historical
+VP8L decode needs a current recheck before reranking.
+
 The [polynomial CRC folding round](WARM-PNG-CRC-FOLD.md) uses safe carryless
 multiplication and independently derived PNG polynomial constants. Complete
 PNG16 decode screens reach 1.9955x / 2.0021x, PNG8 2.0370x / 2.0359x; fixed

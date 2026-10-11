@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Lokad.Image.Internal;
 
 /// <summary>MSB-first JPEG entropy bits with marker-aware byte unstuffing.</summary>
@@ -8,18 +10,50 @@ internal ref struct JpegEntropyReader
     private int position;
     private uint bits;
     private int available;
+    private long remainingWork, initialWork;
     public int Position => position;
 
     public JpegEntropyReader(ReadOnlySpan<byte> data, int start, OperationContext context)
     {
         if ((uint)start > (uint)data.Length) throw new ArgumentOutOfRangeException(nameof(start));
-        this.data = data; this.context = context; position = start; bits = 0; available = 0;
+        this.data = data; this.context = context; position = start; bits = 0; available = 0; remainingWork = -1; initialWork = 0;
+    }
+
+    internal void BeginLocalWork()
+    {
+        // Baseline block traversal makes no other parent-context charges in
+        // this scope. Keep each exact entropy admission locally, then publish
+        // successful charges before any further parent work, on every exit.
+        // Cancellable readers retain their original per-call context checks.
+        if (!context.Cancellation.CanBeCanceled) initialWork = remainingWork = context.RemainingWork;
+    }
+
+    internal void EndLocalWork()
+    {
+        if (remainingWork < 0) return;
+        context.Work(initialWork - remainingWork); remainingWork = -1;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void Work(int units)
+    {
+        if (remainingWork < 0) { context.Work(units); return; }
+        if (units < 0 || units > remainingWork) throw new ImageLimitException("Computational work limit exceeded.");
+        remainingWork -= units;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private bool TryWork(int units)
+    {
+        if (remainingWork < 0) return context.TryWork(units);
+        if (units < 0 || units > remainingWork) return false;
+        remainingWork -= units; return true;
     }
 
     public int ReadBits(int count)
     {
         if ((uint)count > 16) throw new ArgumentOutOfRangeException(nameof(count));
-        context.Work(1);
+        Work(1);
         while (available < count)
         {
             if (position >= data.Length) throw new ImageDataException("Truncated JPEG entropy data.");
@@ -68,7 +102,7 @@ internal ref struct JpegEntropyReader
         }
         // Preserve exact logical work. Near the limit, fall back without any
         // mutation to retain the original per-bit failure position/precedence.
-        if (!context.TryWork(count)) return false;
+        if (!TryWork(count)) return false;
         bits = candidateBits; available = candidateAvailable - count; position = candidatePosition;
         symbol = packed >> 4; return true;
     }
@@ -84,7 +118,7 @@ internal ref struct JpegEntropyReader
             var packed = longCodes[prefix]; var count = packed & 15;
             if (count != 0 && count <= candidateAvailable)
             {
-                if (!context.TryWork(count)) return false;
+                if (!TryWork(count)) return false;
                 bits = candidateBits; available = candidateAvailable - count; position = candidatePosition;
                 symbol = packed >> 4; return true;
             }
@@ -113,7 +147,7 @@ internal ref struct JpegEntropyReader
         // can start canonical traversal at length nine. Admit the same eight
         // logical bits together; tight work budgets, markers and truncation
         // retain the original one-bit traversal without any state mutation.
-        if (shortCodes[value] != 0 || !context.TryWork(8)) return false;
+        if (shortCodes[value] != 0 || !TryWork(8)) return false;
         bits = candidateBits; available = candidateAvailable - 8; position = candidatePosition;
         prefix = value; return true;
     }

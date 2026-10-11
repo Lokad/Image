@@ -262,26 +262,31 @@ internal ref struct JpegDecoder
         // Ah=Al=0. Keep symbol/amplitude traversal and every failure boundary
         // while removing progressive/refinement state from this hot loop.
         context.Work(64);
-        var category = dc.Read(ref reader);
-        if (category > 11) throw new ImageDataException("Invalid JPEG DC coefficient category.");
-        var nextPredictor = (long)predictor + reader.ReadSigned(category);
-        if (nextPredictor is < -32768 or > 32767) throw new ImageDataException("JPEG DC predictor is out of range.");
-        predictor = (int)nextPredictor; block[0] = predictor;
-        var k = 1;
-        while (k <= 63)
+        reader.BeginLocalWork();
+        try
         {
-            var symbol = ac.Read(ref reader); var run = symbol >> 4; var size = symbol & 15;
-            if (size == 0)
+            var category = dc.Read(ref reader);
+            if (category > 11) throw new ImageDataException("Invalid JPEG DC coefficient category.");
+            var nextPredictor = (long)predictor + reader.ReadSigned(category);
+            if (nextPredictor is < -32768 or > 32767) throw new ImageDataException("JPEG DC predictor is out of range.");
+            predictor = (int)nextPredictor; block[0] = predictor;
+            var k = 1;
+            while (k <= 63)
             {
-                if (run == 15) { k += 16; if (k > 64) throw new ImageDataException("JPEG zero run exceeds band."); continue; }
-                if (run != 0) throw new ImageDataException("Invalid baseline JPEG end-of-block symbol.");
-                return;
+                var symbol = ac.Read(ref reader); var run = symbol >> 4; var size = symbol & 15;
+                if (size == 0)
+                {
+                    if (run == 15) { k += 16; if (k > 64) throw new ImageDataException("JPEG zero run exceeds band."); continue; }
+                    if (run != 0) throw new ImageDataException("Invalid baseline JPEG end-of-block symbol.");
+                    return;
+                }
+                if (size > 10) throw new ImageDataException("Invalid JPEG AC coefficient category.");
+                k += run;
+                if (k > 63) throw new ImageDataException("JPEG coefficient run exceeds band.");
+                block[JpegTransform.Zigzag[k++]] = reader.ReadSigned(size);
             }
-            if (size > 10) throw new ImageDataException("Invalid JPEG AC coefficient category.");
-            k += run;
-            if (k > 63) throw new ImageDataException("JPEG coefficient run exceeds band.");
-            block[JpegTransform.Zigzag[k++]] = reader.ReadSigned(size);
         }
+        finally { reader.EndLocalWork(); }
     }
 
     private void ReadBlock(ref JpegEntropyReader reader, Span<int> block, Component component,
