@@ -392,6 +392,40 @@ The [integer chroma-expansion round](../../benchmarks/WARM-VP8-CHROMA-INTEGER.md
 preserves the exact original samples and matrix on that pair. Scoped work caching
 was flat and discarded; its original trial evidence remains available.
 
+## Warm half turn
+
+`WarmHalfTurn/Whole16` reuses the existing original RGBA16 513x259 raster.
+Build the original public-API adapter and validate full-word samples, source,
+independent live owners and fourteen rejection controls:
+
+```bash
+bash tools/WarmReference/build-halfturn-linux.sh
+python3 tools/WarmReference/verify-halfturn-linux.py --cpu 0 --depth 16
+```
+
+```powershell
+./bench.ps1 -Smoke -Warm -WarmFamily HalfTurn -WarmCases Whole16 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily HalfTurn -WarmCases Whole16 -Cpu 0 -NoBuild -PrepareWarm
+```
+
+Native hflip allocates independent pixels; vflip's allocation callback lets it
+place rows in reversed order during that pixel pass. The observed output has
+positive padded stride. The worker accepts either stride sign, verifies every
+pixel and owner, then releases output inside each timed operation. It adds no
+redundant full copy to enforce positive stride. Managed timing includes the
+complete public Rotate(Half), admission, materialization and disposal. Both
+sides may reuse released storage; neither caches output pixels. Graph/source/
+frame wrappers are reused. Full precision, alpha, hidden RGB, source and live
+owners are exact, as are pinned normal/scalar CLI pixels. Use one CPU/filter
+thread, thread type zero, normal SIMD and the unchanged quiet-VM policy.
+
+The [complete-pixel round](../../benchmarks/WARM-HALFTURN-PIXELS.md) brings the
+screened mean from 53.87x to 0.90x, with conservative short upper 1.53x and
+both short guards passing. Its longer confirmation and coverage limits are
+reported separately: the twelve-sample repeat passes both guards at 0.933x,
+conservative upper 0.967x, certifying only this fixed pair. `Whole8` is an explicit correctness selection; only
+`Whole16` is measured in this round. No image or geometry sweep is added.
+
 ## Warm vertical flip
 
 `WarmVerticalFlip/Whole16` reuses the existing original RGBA16 513x259 raster.

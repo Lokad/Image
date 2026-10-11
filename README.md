@@ -46,7 +46,7 @@ Callers own supplied streams, which remain open. Image buffers own their memory
 and must be disposed. Operations accept finite `ImageLimits` and cancellation.
 Stop using row spans before disposing their owner; released pixel storage may
 be reused by later operations.
-Crop and vertical flip copy complete channel bytes at both sample depths, with
+Crop, flips and half turns retain complete channel bytes at both sample depths, with
 bounded work/cancellation checks and independently owned outputs.
 The [resource admission notes](docs/resource-admission.md) explain what the limits
 count and the current hardening evidence.

@@ -932,3 +932,12 @@ bound but fail their post-run quiet guards, so independent quiet confirmation
 remains open. No image or geometry sweep is added. The
 [prepared-job recipe](../tools/WarmReference/README.md) supports fixed short
 screens and confirmation without compilation inside the scored windows.
+
+The `HalfTurn/Whole16` selection reuses that same full-precision raster. Its
+[complete-pixel reversal round](WARM-HALFTURN-PIXELS.md) replaces generic mapping
+with safe SIMD reversal and existing admitted complete-overwrite storage,
+reducing the screened mean 98.26%, from 53.87x to 0.90x. The native public-API
+graph uses hflip allocation followed by vflip row placement; no additional full
+copy is needed for independent ownership. Its independent twelve-sample repeat
+passes both quiet guards at 0.933x, with conservative upper 0.967x. Only this
+fixed pair is certified; broader half-turn and orientation coverage remains open.

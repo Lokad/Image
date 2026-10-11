@@ -1,6 +1,6 @@
 param([switch]$Smoke, [switch]$DedicatedVm, [string]$Filter, [switch]$NoBuild, [switch]$HorizontalFlip,
     [switch]$Warm, [ValidateRange(0, 62)][int]$Cpu = 0, [switch]$WarmConfirm, [switch]$PrepareWarmConfirm, [switch]$PrepareWarm,
-    [ValidateSet('Flip', 'Png', 'Jpeg', 'JpegDecode', 'Webp', 'WebpDecode', 'Vp8Decode', 'Nearest', 'Bilinear', 'Crop', 'VerticalFlip')][string]$WarmFamily = 'Flip', [string]$WarmCases)
+    [ValidateSet('Flip', 'Png', 'Jpeg', 'JpegDecode', 'Webp', 'WebpDecode', 'Vp8Decode', 'Nearest', 'Bilinear', 'Crop', 'VerticalFlip', 'HalfTurn')][string]$WarmFamily = 'Flip', [string]$WarmCases)
 $ErrorActionPreference = 'Stop'
 if ($WarmConfirm -and (-not $Warm -or $Smoke)) { throw '-WarmConfirm requires -Warm with -DedicatedVm.' }
 if ($PrepareWarmConfirm -and -not $WarmConfirm) { throw '-PrepareWarmConfirm requires -WarmConfirm.' }
