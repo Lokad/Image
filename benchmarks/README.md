@@ -1,5 +1,9 @@
 # Development benchmarks
 
+The [fused inverse-certificate magnitude round](WARM-JPEG-MAGNITUDE.md) removes
+the separate coefficient reduction, retaining exact bounds and all decoded pixels.
+Native-input decode screens reach roughly 2.6x; uniform warm parity remains open.
+
 The initial [dedicated-VM results](RESULTS.md) include the complete representative
 table, original numeric snapshot, reproduction commands and measured limitations.
 The subsequent [horizontal-flip round](HORIZONTAL-FLIP.md) separates the warm

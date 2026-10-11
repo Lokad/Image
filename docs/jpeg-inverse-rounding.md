@@ -18,6 +18,9 @@ Let `a[v,u]` be the exact coefficient/quantizer product and let
 `M = sum(abs(a[v,u]))`. A signed Int32 times UInt16 is an integer of magnitude
 less than 2^47. Across 64 entries, `M <= 2^53 - 2^37`; both the products and
 the nonnegative accumulation, including `M + 128`, are exact binary64 integers.
+The horizontal pass reuses each dequantized product for four independent
+magnitude sums, then combines them. Every partial sum stays below 2^53, so
+this regrouping gives exactly the original serial M and the same certificate.
 All frozen basis entries have magnitude below one. This analysis treats those
 stored entries as exact inputs; it does not approximate an ideal cosine.
 
@@ -50,7 +53,10 @@ FMA. A zero quantizer contributes exact zero, including at Int32.MinValue.
 
 The implementation chooses the deliberately larger, exactly computed bound
 `E = 512*u*(M + 128) = 2^-44*(M + 128)`. If `E >= 0.5`, it keeps the original
-whole-block calculation. Otherwise it clips the separable samples to [0,255],
+whole-block calculation.
+The horizontal sums are computed before this check, with no destination writes;
+an extreme block discards them and uses the original direct evaluation.
+Otherwise it clips the separable samples to [0,255],
 subtracts their integer floors and measures distance from the half boundary.
 The floor subtraction is exact. The final distance subtraction has absolute
 rounding error at most u. The margin between E and the sample-difference bound
@@ -68,7 +74,8 @@ therefore retain the original byte rather than selecting a tolerance.
 The transform still admits all 4096 logical work units before writing any pixel.
 The two passes use eight vector locals, replacing the original eight output-sum
 locals; no additional array, image cache, per-block allocation or static table
-is introduced. The original AVX-512 direct path remains the extreme-block path.
+is introduced. Magnitude partial sums use scalar locals. The original AVX-512
+direct path remains the extreme-block path.
 Fixed-size fallback loops remain inside the same admitted block operation.
 
 The original twelve scalar pixel hashes, half-boundary sample controls, full

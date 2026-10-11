@@ -60,21 +60,8 @@ internal static class JpegTransform
         if (coefficients.Length != 64 || quantization.Length != 64 || pixels.Length != 64)
             throw new ArgumentException("JPEG transforms operate on complete 8x8 blocks.");
         context.Work(4096);
-        if (Avx512F.IsSupported && Avx512F.VL.IsSupported)
-        {
-            // Exact integer products and sum: magnitude is below 2^53 even
-            // for Int32.MinValue and UInt16.MaxValue. See the independent
-            // error/rounding certificate in docs/jpeg-inverse-rounding.md.
-            double magnitude = 0;
-            for (var i = 0; i < 64; i++)
-                magnitude += Math.Abs((double)coefficients[i] * quantization[i]);
-            var error = (magnitude + 128) * 5.684341886080802e-14; // 2^-44
-            if (error < 0.5)
-            {
-                InverseSeparable(coefficients, quantization, pixels, error);
-                return;
-            }
-        }
+        if (Avx512F.IsSupported && Avx512F.VL.IsSupported
+            && TryInverseSeparable(coefficients, quantization, pixels)) return;
         // T.81 A.3.3 output pixels are independent. Every lane keeps the
         // scalar v/u accumulation order and separate multiplications; no FMA,
         // reassociation or reduced logical work. Final round/clamp preserves
@@ -174,8 +161,8 @@ internal static class JpegTransform
         }
     }
 
-    private static void InverseSeparable(ReadOnlySpan<int> coefficients, ReadOnlySpan<ushort> quantization,
-        Span<byte> pixels, double error)
+    private static bool TryInverseSeparable(ReadOnlySpan<int> coefficients, ReadOnlySpan<ushort> quantization,
+        Span<byte> pixels)
     {
         // Give the JIT fixed-size views before either bounded pass. The public
         // primitive already validated these lengths; no checks or storage are
@@ -187,18 +174,34 @@ internal static class JpegTransform
             row2 = Vector512<double>.Zero, row3 = Vector512<double>.Zero,
             row4 = Vector512<double>.Zero, row5 = Vector512<double>.Zero,
             row6 = Vector512<double>.Zero, row7 = Vector512<double>.Zero;
+        // Reuse each exact dequantized sample for the certificate. Independent
+        // sums avoid a separate 64-term serial reduction. All partial sums and
+        // the total are integers below 2^53, so regrouping changes no bit of E.
+        // See docs/jpeg-inverse-rounding.md for the bound against direct output.
+        double magnitude0 = 0, magnitude1 = 0, magnitude2 = 0, magnitude3 = 0;
         for (var u = 0; u < 8; u++)
         {
             var horizontal = Vector512.Create(horizontalBasis.Slice(u * 8, 8));
-            row0 = Avx512F.Add(row0, Avx512F.Multiply(Vector512.Create((double)coefficients[u] * quantization[u]), horizontal));
-            row1 = Avx512F.Add(row1, Avx512F.Multiply(Vector512.Create((double)coefficients[8 + u] * quantization[8 + u]), horizontal));
-            row2 = Avx512F.Add(row2, Avx512F.Multiply(Vector512.Create((double)coefficients[16 + u] * quantization[16 + u]), horizontal));
-            row3 = Avx512F.Add(row3, Avx512F.Multiply(Vector512.Create((double)coefficients[24 + u] * quantization[24 + u]), horizontal));
-            row4 = Avx512F.Add(row4, Avx512F.Multiply(Vector512.Create((double)coefficients[32 + u] * quantization[32 + u]), horizontal));
-            row5 = Avx512F.Add(row5, Avx512F.Multiply(Vector512.Create((double)coefficients[40 + u] * quantization[40 + u]), horizontal));
-            row6 = Avx512F.Add(row6, Avx512F.Multiply(Vector512.Create((double)coefficients[48 + u] * quantization[48 + u]), horizontal));
-            row7 = Avx512F.Add(row7, Avx512F.Multiply(Vector512.Create((double)coefficients[56 + u] * quantization[56 + u]), horizontal));
+            var sample0 = (double)coefficients[u] * quantization[u]; magnitude0 += Math.Abs(sample0);
+            row0 = Avx512F.Add(row0, Avx512F.Multiply(Vector512.Create(sample0), horizontal));
+            var sample1 = (double)coefficients[8 + u] * quantization[8 + u]; magnitude1 += Math.Abs(sample1);
+            row1 = Avx512F.Add(row1, Avx512F.Multiply(Vector512.Create(sample1), horizontal));
+            var sample2 = (double)coefficients[16 + u] * quantization[16 + u]; magnitude2 += Math.Abs(sample2);
+            row2 = Avx512F.Add(row2, Avx512F.Multiply(Vector512.Create(sample2), horizontal));
+            var sample3 = (double)coefficients[24 + u] * quantization[24 + u]; magnitude3 += Math.Abs(sample3);
+            row3 = Avx512F.Add(row3, Avx512F.Multiply(Vector512.Create(sample3), horizontal));
+            var sample4 = (double)coefficients[32 + u] * quantization[32 + u]; magnitude0 += Math.Abs(sample4);
+            row4 = Avx512F.Add(row4, Avx512F.Multiply(Vector512.Create(sample4), horizontal));
+            var sample5 = (double)coefficients[40 + u] * quantization[40 + u]; magnitude1 += Math.Abs(sample5);
+            row5 = Avx512F.Add(row5, Avx512F.Multiply(Vector512.Create(sample5), horizontal));
+            var sample6 = (double)coefficients[48 + u] * quantization[48 + u]; magnitude2 += Math.Abs(sample6);
+            row6 = Avx512F.Add(row6, Avx512F.Multiply(Vector512.Create(sample6), horizontal));
+            var sample7 = (double)coefficients[56 + u] * quantization[56 + u]; magnitude3 += Math.Abs(sample7);
+            row7 = Avx512F.Add(row7, Avx512F.Multiply(Vector512.Create(sample7), horizontal));
         }
+        var magnitude = (magnitude0 + magnitude1) + (magnitude2 + magnitude3);
+        var error = (magnitude + 128) * 5.684341886080802e-14; // 2^-44, exact power-of-two scaling
+        if (error >= 0.5) return false; // no destination byte was written
         for (var y = 0; y < 8; y++)
         {
             var basis = verticalBasis.Slice(y * 8, 8);
@@ -241,6 +244,7 @@ internal static class JpegTransform
             Avx512F.VL.ConvertToVector128Byte(Avx512F.ConvertToVector256Int32WithTruncation(rounded))
                 .GetLower().CopyTo(pixels.Slice(y * 8, 8));
         }
+        return true;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
