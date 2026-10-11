@@ -266,6 +266,9 @@ Twenty negative controls check affinity, arguments, protocol, geometry and RIFF
 framing using the same frozen input. Successful controls check operation counts,
 source integrity, independent live native output storage and exact public-CLI
 pixels. Setup and cleanup check complete managed/native RGBA and source integrity.
+The [lookup inlining round](../../benchmarks/WARM-VP8L-READ-INLINE.md) reuses this
+same input and worker, reaching about 1.74x with unchanged production method
+bodies and exact RGBA. Independent quiet confirmation remains open.
 The [retained screens](../../benchmarks/WARM-WEBP-DECODE.md) cover this one VP8L
 profile only. Other VP8L strategies remain unmeasured. This native
 adapter, its ignored binaries and static archives are development-only and never

@@ -1,5 +1,10 @@
 # Development benchmarks
 
+The [VP8L lookup inlining round](WARM-VP8L-READ-INLINE.md) reduces complete warm
+decode from about 2.00x to 1.74x FFmpeg on the same frozen literal/run input.
+All production method bodies, exact RGBA and allocation counts remain.
+Independent quiet confirmation and broader material coverage remain open.
+
 The [eight-pixel VP8 color-conversion round](WARM-VP8-COLOR-BLOCK.md) reduces
 complete warm decode to about 1.94x FFmpeg on the existing frozen input. Exact
 pixels, admission and allocation counts remain. Independent quiet confirmation

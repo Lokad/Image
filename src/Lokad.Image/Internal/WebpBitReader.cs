@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Lokad.Image.Internal;
 
 /// <summary>VP8L least-significant-bit-first fields, bounded by the chunk payload.</summary>
@@ -27,6 +29,7 @@ internal ref struct WebpBitReader
         bits >>= count; available -= count; return value;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal bool TryReadHuffman(ReadOnlySpan<int> codes, out int symbol)
     {
         symbol = 0;
