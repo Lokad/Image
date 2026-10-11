@@ -17,14 +17,15 @@ internal sealed class NativeWarmReference : IDisposable
 
     public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null, int? nativeQuality = null)
     {
-        if (operation is not ("hflip" or "png-encode" or "png-decode" or "jpeg-encode" or "jpeg-decode" or "webp-encode" or "webp-decode" or "vp8-decode" or "nearest-resize" or "bilinear-resize")) throw new ArgumentOutOfRangeException(nameof(operation));
+        if (operation is not ("hflip" or "crop" or "png-encode" or "png-decode" or "jpeg-encode" or "jpeg-decode" or "webp-encode" or "webp-decode" or "vp8-decode" or "nearest-resize" or "bilinear-resize")) throw new ArgumentOutOfRangeException(nameof(operation));
+        var crop = operation == "crop";
         var nearest = operation == "nearest-resize";
         var bilinear = operation == "bilinear-resize";
-        var codec = operation is not ("hflip" or "nearest-resize" or "bilinear-resize"); var jpeg = operation == "jpeg-encode"; var jpegDecode = operation == "jpeg-decode"; var webp = operation == "webp-encode"; var webpDecode = operation == "webp-decode"; var vp8Decode = operation == "vp8-decode";
-        var stem = bilinear ? "ffmpeg-bilinear-warm" : nearest ? "ffmpeg-nearest-warm" : vp8Decode ? "ffmpeg-vp8-decode-warm" : webpDecode ? "ffmpeg-webp-decode-warm" : jpegDecode ? "ffmpeg-jpeg-decode-warm" : webp ? "ffmpeg-webp-warm" : jpeg ? "ffmpeg-jpeg-warm" : codec ? "ffmpeg-png-warm" : "ffmpeg-warm";
-        var buildScript = bilinear ? "build-bilinear-linux.sh" : nearest ? "build-nearest-linux.sh" : vp8Decode ? "build-vp8-decode-linux.sh" : webpDecode ? "build-webp-decode-linux.sh" : jpegDecode ? "build-jpeg-decode-linux.sh" : webp ? "build-webp-linux.sh" : jpeg ? "build-jpeg-linux.sh" : codec ? "build-png-linux.sh" : "build-linux.sh";
+        var codec = operation is not ("hflip" or "crop" or "nearest-resize" or "bilinear-resize"); var jpeg = operation == "jpeg-encode"; var jpegDecode = operation == "jpeg-decode"; var webp = operation == "webp-encode"; var webpDecode = operation == "webp-decode"; var vp8Decode = operation == "vp8-decode";
+        var stem = crop ? "ffmpeg-crop-warm" : bilinear ? "ffmpeg-bilinear-warm" : nearest ? "ffmpeg-nearest-warm" : vp8Decode ? "ffmpeg-vp8-decode-warm" : webpDecode ? "ffmpeg-webp-decode-warm" : jpegDecode ? "ffmpeg-jpeg-decode-warm" : webp ? "ffmpeg-webp-warm" : jpeg ? "ffmpeg-jpeg-warm" : codec ? "ffmpeg-png-warm" : "ffmpeg-warm";
+        var buildScript = crop ? "build-crop-linux.sh" : bilinear ? "build-bilinear-linux.sh" : nearest ? "build-nearest-linux.sh" : vp8Decode ? "build-vp8-decode-linux.sh" : webpDecode ? "build-webp-decode-linux.sh" : jpegDecode ? "build-jpeg-decode-linux.sh" : webp ? "build-webp-linux.sh" : jpeg ? "build-jpeg-linux.sh" : codec ? "build-png-linux.sh" : "build-linux.sh";
         Executable = Path.Combine(state.Root, "external", "warm-reference", stem);
-        var identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, bilinear ? "bilinear-identity.json" : nearest ? "nearest-identity.json" : vp8Decode ? "vp8-decode-identity.json" : webpDecode ? "webp-decode-identity.json" : jpegDecode ? "jpeg-decode-identity.json" : webp ? "webp-identity.json" : jpeg ? "jpeg-identity.json" : codec ? "png-identity.json" : "identity.json");
+        var identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, crop ? "crop-identity.json" : bilinear ? "bilinear-identity.json" : nearest ? "nearest-identity.json" : vp8Decode ? "vp8-decode-identity.json" : webpDecode ? "webp-decode-identity.json" : jpegDecode ? "jpeg-decode-identity.json" : webp ? "webp-identity.json" : jpeg ? "jpeg-identity.json" : codec ? "png-identity.json" : "identity.json");
         if (!File.Exists(Executable) || !File.Exists(identityPath))
             throw new InvalidOperationException("Build the pinned Linux warm reference with its tools/WarmReference build script.");
         using (var document = JsonDocument.Parse(File.ReadAllText(identityPath))) BuildIdentity = document.RootElement.Clone();
@@ -55,8 +56,10 @@ internal sealed class NativeWarmReference : IDisposable
                 || Ready.GetProperty("affinityCount").GetInt32() != 1 || Ready.GetProperty(codec ? "codecThreads" : "filterThreads").GetInt32() != 1
                 || Ready.GetProperty("threadType").GetInt32() != 0 || Ready.GetProperty("operation").GetString() != operation
                 || (codec && (Ready.GetProperty("activeThreadType").GetInt32() != 0 || !Ready.GetProperty("independentLiveOutputs").GetBoolean()))
-                || ((nearest || bilinear) && ((nearest ? depth is not (8 or 16) : depth != 8) || Ready.GetProperty("outputWidth").GetInt32() != 256
+                || ((nearest || bilinear || crop) && ((bilinear ? depth != 8 : depth is not (8 or 16)) || Ready.GetProperty("outputWidth").GetInt32() != 256
                     || Ready.GetProperty("outputHeight").GetInt32() != 129 || !Ready.GetProperty("independentLiveOutputs").GetBoolean()))
+                || (crop && (Ready.GetProperty("cropX").GetInt32() != 127 || Ready.GetProperty("cropY").GetInt32() != 65
+                    || !Ready.GetProperty("ownedCopyTimed").GetBoolean()))
                 || (bilinear && (Ready.GetProperty("kernel").GetString() != "triangle" || Ready.GetProperty("alphaMode").GetString() != "straight"
                     || !Ready.GetProperty("premultipliedAlphaTimed").GetBoolean() || !Ready.GetProperty("encodedSampleSpace").GetBoolean()))
                 || (jpeg && (Ready.GetProperty("conversionThreads").GetInt32() != 1 || Ready.GetProperty("qscale").GetInt32() != nativeQuality
@@ -84,7 +87,7 @@ internal sealed class NativeWarmReference : IDisposable
                     || Ready.GetProperty("outputBytes").GetInt32() != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4))
                 || (operation == "png-encode" && (Ready.GetProperty("compressionLevel").GetInt32() != 6 || Ready.GetProperty("filter").GetInt32() != 0)))
                 throw new InvalidOperationException("Native warm worker geometry/thread/CPU contract differs.");
-            completed = codec || nearest || bilinear ? Ready.GetProperty("initialCompletedOperations").GetInt64() : 1;
+            completed = codec || nearest || bilinear || crop ? Ready.GetProperty("initialCompletedOperations").GetInt64() : 1;
         }
         catch { Dispose(); throw; }
     }
@@ -109,7 +112,7 @@ internal sealed class NativeWarmReference : IDisposable
             || sample.ElapsedNanoseconds <= 0 || !double.IsFinite(sample.ElapsedNanoseconds)
             || sample.Cpu != Ready.GetProperty("cpu").GetInt32()
             || (Ready.GetProperty("operation").GetString() is "png-encode" or "jpeg-encode" or "webp-encode" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
-                : sample.OutputStride < (Ready.GetProperty("operation").GetString() is "nearest-resize" or "bilinear-resize" ? 256 : HorizontalFlipInput.Width) * (Ready.GetProperty("depth").GetInt32() / 8) * 4)
+                : sample.OutputStride < (Ready.GetProperty("operation").GetString() is "nearest-resize" or "bilinear-resize" or "crop" ? 256 : HorizontalFlipInput.Width) * (Ready.GetProperty("depth").GetInt32() / 8) * 4)
             || (Ready.GetProperty("operation").GetString() is "jpeg-decode" or "webp-decode" or "vp8-decode" && sample.OutputBytes != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4))
             throw new InvalidOperationException("Native sample counters/elapsed time/CPU differ.");
         completed += operations;

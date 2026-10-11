@@ -15,7 +15,7 @@ public static class ImageTransforms
         if (x < 0 || y < 0 || width < 1 || height < 1 || (long)x + width > source.Width
             || (long)y + height > source.Height)
             throw new ArgumentOutOfRangeException(nameof(width), "Crop rectangle must fit the source.");
-        return Map(source, width, height, (dx, dy) => (dx + x, dy + y), limits, cancellationToken);
+        return CropCopy.Apply(source, x, y, width, height, limits, cancellationToken);
     }
 
     public static ImageBuffer CropCentered(ImageBuffer source, int width, int height,

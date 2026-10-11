@@ -18,6 +18,9 @@ internal static class WarmBenchmarks
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Warm native reference runs require the dedicated Linux environment.");
         var arguments = args.ToList();
+        var prepare = arguments.Remove("--warm-prepare");
+        if (prepare && !confirm) throw new ArgumentException("Preparation requires the fixed confirmation job.");
+        var validationOnly = smoke || prepare;
         var cpuOption = arguments.IndexOf("--warm-cpu");
         if (cpuOption < 0 || cpuOption + 1 == arguments.Count || !int.TryParse(arguments[cpuOption + 1], out var cpu) || cpu is < 0 or > 62)
             throw new ArgumentException("Supply --warm-cpu with one allowed logical CPU (0..62).");
@@ -29,7 +32,7 @@ internal static class WarmBenchmarks
             if (familyOption + 1 == arguments.Count) throw new ArgumentException("Supply a warm family.");
             family = arguments[familyOption + 1]; arguments.RemoveRange(familyOption, 2);
         }
-        if (family is not ("Flip" or "Png" or "Jpeg" or "JpegDecode" or "Webp" or "WebpDecode" or "Vp8Decode" or "Nearest" or "Bilinear")) throw new ArgumentException("Choose Flip, Png, Jpeg, JpegDecode, Webp, WebpDecode, Vp8Decode, Nearest or Bilinear.");
+        if (family is not ("Flip" or "Png" or "Jpeg" or "JpegDecode" or "Webp" or "WebpDecode" or "Vp8Decode" or "Nearest" or "Bilinear" or "Crop")) throw new ArgumentException("Choose Flip, Png, Jpeg, JpegDecode, Webp, WebpDecode, Vp8Decode, Nearest, Bilinear or Crop.");
         string? selection = null;
         var selectionOption = arguments.IndexOf("--warm-cases");
         if (selectionOption >= 0)
@@ -53,10 +56,10 @@ internal static class WarmBenchmarks
             process.ProcessorAffinity = affinity;
             if (process.ProcessorAffinity != affinity) throw new InvalidOperationException("Requested one-CPU affinity was not applied.");
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU", cpu.ToString(System.Globalization.CultureInfo.InvariantCulture));
-            Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE", smoke ? "smoke" : confirm ? "confirm" : "measure");
+            Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE", validationOnly ? "smoke" : confirm ? "confirm" : "measure");
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES", selection);
-            var expectedPairs = family == "Png" ? WarmPng.SelectedCases().Length : family == "Jpeg" ? WarmJpeg.SelectedCases().Length : family == "JpegDecode" ? WarmJpegDecode.SelectedCases().Length : family == "Webp" ? WarmWebp.SelectedCases().Length : family == "WebpDecode" ? WarmWebpDecode.SelectedCases().Length : family == "Vp8Decode" ? WarmVp8Decode.SelectedCases().Length : family == "Nearest" ? WarmNearestResize.SelectedCases().Length : family == "Bilinear" ? WarmBilinearResize.SelectedCases().Length : 2;
-            var type = family == "Png" ? typeof(WarmPng) : family == "Jpeg" ? typeof(WarmJpeg) : family == "JpegDecode" ? typeof(WarmJpegDecode) : family == "Webp" ? typeof(WarmWebp) : family == "WebpDecode" ? typeof(WarmWebpDecode) : family == "Vp8Decode" ? typeof(WarmVp8Decode) : family == "Nearest" ? typeof(WarmNearestResize) : family == "Bilinear" ? typeof(WarmBilinearResize) : typeof(WarmHorizontalFlip);
+            var expectedPairs = family == "Png" ? WarmPng.SelectedCases().Length : family == "Jpeg" ? WarmJpeg.SelectedCases().Length : family == "JpegDecode" ? WarmJpegDecode.SelectedCases().Length : family == "Webp" ? WarmWebp.SelectedCases().Length : family == "WebpDecode" ? WarmWebpDecode.SelectedCases().Length : family == "Vp8Decode" ? WarmVp8Decode.SelectedCases().Length : family == "Nearest" ? WarmNearestResize.SelectedCases().Length : family == "Bilinear" ? WarmBilinearResize.SelectedCases().Length : family == "Crop" ? WarmCrop.SelectedCases().Length : 2;
+            var type = family == "Png" ? typeof(WarmPng) : family == "Jpeg" ? typeof(WarmJpeg) : family == "JpegDecode" ? typeof(WarmJpegDecode) : family == "Webp" ? typeof(WarmWebp) : family == "WebpDecode" ? typeof(WarmWebpDecode) : family == "Vp8Decode" ? typeof(WarmVp8Decode) : family == "Nearest" ? typeof(WarmNearestResize) : family == "Bilinear" ? typeof(WarmBilinearResize) : family == "Crop" ? typeof(WarmCrop) : typeof(WarmHorizontalFlip);
             using var identity = new JpegBenchmarkCase();
             var job = (smoke ? Job.Dry : Job.ShortRun).WithId(smoke ? "WarmDry" : confirm ? "WarmConfirm" : "WarmShort")
                 .WithAffinity(affinity).WithGcServer(false).WithGcConcurrent(false)
@@ -110,10 +113,10 @@ internal static class WarmBenchmarks
                         : value.GetProperty("allRgbaSamplesExact").GetBoolean();
                     if (!outputVerified || !value.GetProperty("sourceUnchanged").GetBoolean()
                         || !value.GetProperty("independentOwnedOutput").GetBoolean() || value.GetProperty("cpu").GetInt32() != cpu
-                        || value.GetProperty("nativeExitCode").GetInt32() != 0 || value.GetProperty("smoke").GetBoolean() != smoke)
+                        || value.GetProperty("nativeExitCode").GetInt32() != 0 || value.GetProperty("smoke").GetBoolean() != validationOnly)
                         throw new InvalidOperationException("Warm receipt contract differs.");
                     var before = Samples(value, "nativeBefore"); var after = Samples(value, "nativeAfter");
-                    if (before.Length != (smoke ? 1 : confirm ? 12 : 3) || after.Length != before.Length)
+                    if (before.Length != (validationOnly ? 1 : confirm ? 12 : 3) || after.Length != before.Length)
                         throw new InvalidOperationException("Warm native measurement count differs.");
                     var nativeBefore = before.Average(); var nativeAfter = after.Average();
                     var managed = report.ResultStatistics?.Mean ?? throw new InvalidOperationException("Missing managed statistics.");
@@ -124,15 +127,15 @@ internal static class WarmBenchmarks
                         sourceSha256 = value.GetProperty("sourceIdentity").GetProperty("sourceSha256").GetString(),
                         evidenceFile = Path.GetFileName(receipt.Path), evidenceSha256 = JpegBenchmarkCase.HashFile(receipt.Path),
                         managedStatistics = report.ResultStatistics, nativeBeforeNanoseconds = before, nativeAfterNanoseconds = after,
-                        ratio = smoke ? (double?)null : ratio,
-                        status = smoke ? "execution/output check only" : ratio > 2 ? ">2x-screened" : "<=2x-screened; independent repeat needed"
+                        ratio = validationOnly ? (double?)null : ratio,
+                        status = validationOnly ? "execution/output check only" : ratio > 2 ? ">2x-screened" : "<=2x-screened; independent repeat needed"
                     });
-                    if (!smoke) Console.WriteLine($"Warm {family}/{caseId}: managed {managed / 1000:F2} us; native before/after {nativeBefore / 1000:F2}/{nativeAfter / 1000:F2} us; worst bracket ratio {ratio:F2}x (screening).");
+                    if (!validationOnly) Console.WriteLine($"Warm {family}/{caseId}: managed {managed / 1000:F2} us; native before/after {nativeBefore / 1000:F2}/{nativeAfter / 1000:F2} us; worst bracket ratio {ratio:F2}x (screening).");
                 }
             var output = Path.Combine(identity.Root, "artifacts", "benchmark-runs", runId, "warm-parity.json");
             Directory.CreateDirectory(Path.GetDirectoryName(output)!);
             File.WriteAllText(output, JsonSerializer.Serialize(new { schemaVersion = 1, project = "Lokad.Image", runId, complete,
-                smoke, confirm, family, cpu, expectedPairs, actualPairs = pairs.Count,
+                smoke = validationOnly, prepare, confirm, family, cpu, expectedPairs, actualPairs = pairs.Count,
                 method = "Managed BenchmarkDotNet elapsed samples and native worker internal monotonic samples, one pinned CPU, complete owned memory outputs. Native pre/post samples bracket managed measurements. IPC/startup/filesystem excluded. Screened rows require independent repeats before certification.", pairs },
                 new JsonSerializerOptions { WriteIndented = true, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals }) + "\n");
             if (!complete) Environment.ExitCode = 1;

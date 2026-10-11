@@ -3,7 +3,18 @@
 ## Prepared confirmation
 
 Compile, generate the BenchmarkDotNet child and validate it before the quiet
-interval. A retained compatible `WarmConfirm` child can run directly without
+interval. For a new case, prepare the fixed confirmation job on the VM:
+
+```powershell
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Crop -WarmCases Fixed16 -Cpu 0 -NoBuild -WarmConfirm -PrepareWarmConfirm
+```
+
+Preparation generates and executes the actual twelve-iteration WarmConfirm job
+with one native operation before and after for execution/output validation.
+Its receipt is explicitly validation-only, with a null parity ratio. Retain
+the generated files; allow preparation activity to settle before a fresh guard.
+This supplies a compatible child without compiling inside the scored window.
+A retained compatible `WarmConfirm` child can run directly without
 rebuilding the host. Verify its generated entry selects the declared method,
 case and job, and smoke-check its current assemblies first. Keep the generated
 files ignored; freeze the actual child, benchmark/library DLLs, runtime config,
@@ -40,9 +51,10 @@ dotnet build tools/WarmReference/ParseBenchmarkLog/ParseBenchmarkLog.csproj -c R
 dotnet tools/WarmReference/ParseBenchmarkLog/bin/Release/net10.0/ParseBenchmarkLog.dll confirm.log confirm-statistics.json
 ```
 
-The parser requires one twelve-iteration confirmation, retains actual and
-adjusted result rows, and refuses to overwrite evidence. It reproduces the
-retained official report's statistics. This recipe supplied the independent
+The parser defaults to one twelve-iteration confirmation; explicitly add `3`
+for the fixed short job. It retains actual and adjusted result rows and refuses
+to overwrite evidence. Both modes reproduce retained official report statistics.
+This recipe supplied the independent
 [RGBA16 nearest confirmation](../../benchmarks/WARM-PREPARED-CONFIRM.md);
 it does not certify other cases or earlier failed intervals.
 
@@ -370,6 +382,38 @@ is discarded as flat, without a longer repeat. Its offset controls remain.
 The [integer chroma-expansion round](../../benchmarks/WARM-VP8-CHROMA-INTEGER.md)
 preserves the exact original samples and matrix on that pair. Scoped work caching
 was flat and discarded; its original trial evidence remains available.
+
+## Warm owned crop
+
+`WarmCrop/Fixed16` reuses the existing original RGBA16 513x259 raster and one
+rectangle at x=127,y=65, width=256,height=129. Build the original public-API adapter
+and validate its exact samples, independent owners and fourteen rejection controls:
+
+```bash
+bash tools/WarmReference/build-crop-linux.sh
+python3 tools/WarmReference/verify-crop-linux.py --cpu 0 --depth 16
+```
+
+```powershell
+./bench.ps1 -Smoke -Warm -WarmFamily Crop -WarmCases Fixed16 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Crop -WarmCases Fixed16 -Cpu 0 -NoBuild
+```
+
+Native crop produces a view, so every timed operation allocates a new owned frame,
+copies all cropped pixels and releases the view/output. The managed complete
+public call likewise includes admission, materialization and disposal. Graph,
+source and native frame wrappers are reused; source processing and output copying
+repeat every time. Released storage may be reused on either side. Source, full
+UInt16 values, alpha, hidden RGB, simultaneous owners and pinned CLI pixels are
+exact. Startup, IPC, I/O, generation and checks are excluded; use the same single
+CPU/filter-thread, normal-SIMD and quiet-VM policy as other warm families.
+
+The [row-copy and reusable-storage round](../../benchmarks/WARM-CROP-COPY.md)
+screens two substantial primitives separately, bringing this pair from about
+70x to 0.99x with conservative upper 1.0031x and independent quiet confirmation.
+It adds no performance raster or rectangle sweep. Both sample depths have
+focused correctness controls; only this RGBA16 rectangle is timed. Other
+rectangles/transforms retain their coverage limits.
 
 ## Warm nearest resize
 
