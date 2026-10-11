@@ -306,3 +306,5 @@ The [retained VP8 screen](../../benchmarks/WARM-VP8-NATIVE-DECODE.md) covers onl
 this frozen native keyframe/alpha profile; broader VP8 coverage remains open.
 The [reader inlining round](../../benchmarks/WARM-VP8-READ-INLINE.md) reuses the
 same native worker, input and correctness boundary, with no encode-quality search.
+The [branchless interval-selection round](../../benchmarks/WARM-VP8-BRANCHLESS.md)
+continues that same pair and preserves its pixel, ownership and thread contract.

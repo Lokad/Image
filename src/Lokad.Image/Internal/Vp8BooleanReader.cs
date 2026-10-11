@@ -22,8 +22,12 @@ internal struct Vp8BooleanReader
         if (value >= range) throw new ImageDataException("Invalid VP8 arithmetic interval.");
         var boundary = 1 + ((range - 1) * probability >> 8);
         var result = value >= boundary ? 1 : 0;
-        if (result == 0) range = boundary;
-        else { value -= boundary; range -= boundary; }
+        // The result is 0/1, so its negation selects either interval without a
+        // data-dependent branch: left (boundary, value), right (range-boundary,
+        // value-boundary). All valid interval arithmetic stays within +/-508.
+        var mask = -result;
+        value -= boundary & mask;
+        range = boundary + ((range - 2 * boundary) & mask);
         while (range < 128)
         {
             if (position == end) throw new ImageDataException("Truncated VP8 arithmetic bits.");
