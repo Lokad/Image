@@ -322,3 +322,45 @@ is discarded as flat, without a longer repeat. Its offset controls remain.
 The [integer chroma-expansion round](../../benchmarks/WARM-VP8-CHROMA-INTEGER.md)
 preserves the exact original samples and matrix on that pair. Scoped work caching
 was flat and discarded; its original trial evidence remains available.
+
+## Warm nearest resize
+
+`WarmNearestResize/Down8` covers one 513x259 RGBA8 to 256x129 nearest resize
+on the existing original raster. It preserves exact integer center coordinates,
+alpha and zero-alpha hidden RGB. No extra source image or quality search occurs.
+
+```bash
+bash tools/WarmReference/build-nearest-linux.sh
+python3 tools/WarmReference/verify-nearest-linux.py --cpu 0
+```
+
+```powershell
+./bench.ps1 -Smoke -Warm -WarmFamily Nearest -WarmCases Down8 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Nearest -WarmCases Down8 -Cpu 0 -NoBuild
+```
+
+The original development adapter uses public FFmpeg filter APIs with one filter
+thread, thread type zero and normal SIMD. The timed operation includes packed
+and planar conversion, plane extraction, separate RGB and replicated-alpha zscale
+point kernels, merging and independently owned output pixel acquisition/release.
+The graph, geometry contexts, immutable source and frame wrappers are reused;
+every operation processes every selected sample. Padded output rows need no extra
+packing copy. Managed timing covers the complete public Resize call, admission,
+allocation, materialization and disposal. Startup, IPC, I/O, hashing, generation
+and validation are excluded. Neither subject caches output pixels.
+
+Fourteen negative controls cover affinity, arguments, geometry, precision, input
+framing and bounded protocol. Operation counters, exact pinned CLI pixels,
+source integrity and two simultaneously live independent outputs also pass.
+The [first screen](../../benchmarks/WARM-NEAREST-BASELINE.md) reaches about 1.31x
+without a production change. The packed swscale-neighbor CLI alternative fails
+exact selected pixels and is not timed. Run sequentially on the dedicated quiet
+VM, preserving source, raw samples and the actual statistical DLL before edits.
+Other resize directions, sizes, depths and filtered kernels remain unmeasured;
+independent quiet confirmation remains open. These native tools and their ignored
+static archives are never production build inputs.
+
+The [current JPEG decode confirmation](../../benchmarks/WARM-JPEG-DECODE-CONFIRM.md)
+reuses the existing frozen native input and worker without a production change
+or quality search. Its twelve-sample conservative upper is below 2x; independent
+quiet confirmation remains open.

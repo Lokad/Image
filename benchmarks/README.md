@@ -1,5 +1,11 @@
 # Development benchmarks
 
+The [current JPEG decode confirmation](WARM-JPEG-DECODE-CONFIRM.md) reaches
+1.90x FFmpeg with a twelve-sample conservative upper below 2x. The first
+[matched warm nearest resize screen](WARM-NEAREST-BASELINE.md) reaches 1.31x
+on the same original raster. Production is unchanged. Filtered resize and other
+material paths remain uncovered; independent quiet confirmation remains open.
+
 The [VP8L lookup inlining round](WARM-VP8L-READ-INLINE.md) reduces complete warm
 decode from about 2.00x to 1.74x FFmpeg on the same frozen literal/run input.
 All production method bodies, exact RGBA and allocation counts remain.

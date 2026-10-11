@@ -29,12 +29,12 @@ internal static class WarmBenchmarks
             if (familyOption + 1 == arguments.Count) throw new ArgumentException("Supply a warm family.");
             family = arguments[familyOption + 1]; arguments.RemoveRange(familyOption, 2);
         }
-        if (family is not ("Flip" or "Png" or "Jpeg" or "JpegDecode" or "Webp" or "WebpDecode" or "Vp8Decode")) throw new ArgumentException("Choose Flip, Png, Jpeg, JpegDecode, Webp, WebpDecode or Vp8Decode.");
+        if (family is not ("Flip" or "Png" or "Jpeg" or "JpegDecode" or "Webp" or "WebpDecode" or "Vp8Decode" or "Nearest")) throw new ArgumentException("Choose Flip, Png, Jpeg, JpegDecode, Webp, WebpDecode, Vp8Decode or Nearest.");
         string? selection = null;
         var selectionOption = arguments.IndexOf("--warm-cases");
         if (selectionOption >= 0)
         {
-            if (selectionOption + 1 == arguments.Count || family == "Flip") throw new ArgumentException("Supply explicit codec case names.");
+            if (selectionOption + 1 == arguments.Count || family == "Flip") throw new ArgumentException("Supply explicit case names.");
             selection = arguments[selectionOption + 1]; arguments.RemoveRange(selectionOption, 2);
         }
         if (arguments.Any(argument => argument is "--job" or "-j" or "--filter" or "-f"))
@@ -55,8 +55,8 @@ internal static class WarmBenchmarks
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU", cpu.ToString(System.Globalization.CultureInfo.InvariantCulture));
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE", smoke ? "smoke" : confirm ? "confirm" : "measure");
             Environment.SetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES", selection);
-            var expectedPairs = family == "Png" ? WarmPng.SelectedCases().Length : family == "Jpeg" ? WarmJpeg.SelectedCases().Length : family == "JpegDecode" ? WarmJpegDecode.SelectedCases().Length : family == "Webp" ? WarmWebp.SelectedCases().Length : family == "WebpDecode" ? WarmWebpDecode.SelectedCases().Length : family == "Vp8Decode" ? WarmVp8Decode.SelectedCases().Length : 2;
-            var type = family == "Png" ? typeof(WarmPng) : family == "Jpeg" ? typeof(WarmJpeg) : family == "JpegDecode" ? typeof(WarmJpegDecode) : family == "Webp" ? typeof(WarmWebp) : family == "WebpDecode" ? typeof(WarmWebpDecode) : family == "Vp8Decode" ? typeof(WarmVp8Decode) : typeof(WarmHorizontalFlip);
+            var expectedPairs = family == "Png" ? WarmPng.SelectedCases().Length : family == "Jpeg" ? WarmJpeg.SelectedCases().Length : family == "JpegDecode" ? WarmJpegDecode.SelectedCases().Length : family == "Webp" ? WarmWebp.SelectedCases().Length : family == "WebpDecode" ? WarmWebpDecode.SelectedCases().Length : family == "Vp8Decode" ? WarmVp8Decode.SelectedCases().Length : family == "Nearest" ? WarmNearestResize.SelectedCases().Length : 2;
+            var type = family == "Png" ? typeof(WarmPng) : family == "Jpeg" ? typeof(WarmJpeg) : family == "JpegDecode" ? typeof(WarmJpegDecode) : family == "Webp" ? typeof(WarmWebp) : family == "WebpDecode" ? typeof(WarmWebpDecode) : family == "Vp8Decode" ? typeof(WarmVp8Decode) : family == "Nearest" ? typeof(WarmNearestResize) : typeof(WarmHorizontalFlip);
             using var identity = new JpegBenchmarkCase();
             var job = (smoke ? Job.Dry : Job.ShortRun).WithId(smoke ? "WarmDry" : confirm ? "WarmConfirm" : "WarmShort")
                 .WithAffinity(affinity).WithGcServer(false).WithGcConcurrent(false)
