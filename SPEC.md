@@ -339,6 +339,10 @@ tiles with the same reusable storage policy, both-buffer admission and at most
 1024 pixels between work/cancellation checks. Partial tiles preserve exact
 placement and precision. Other quarter-turn and transpose kernels retain the
 general mapping path.
+Normal-orientation AutoOrient copies complete RGBA8/RGBA16 rows into independent
+storage with the same complete-overwrite policy and at most 1024 pixels between
+work/cancellation checks. It retains every channel byte and resets orientation
+to Normal; source buffers, Clone and other mapping kernels are unchanged.
 See [resource admission](docs/resource-admission.md) for review evidence and scope.
 
 Malformed data raises `ImageDataException`, unsupported features raise

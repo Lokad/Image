@@ -661,3 +661,37 @@ Run sequentially on the quiet dedicated VM and preserve
 source/raw/actual timed DLLs before edits. Other sizes, directions, depths and
 bicubic remain unmeasured; independent quiet confirmation remains open. Native
 sources/tools/static archives are development-only and never production inputs.
+
+## Warm normal orientation
+
+`WarmNormalOrientation/Whole16` reuses the existing original RGBA16 513x259
+raster with Normal metadata. Build the original public-API worker and validate
+full channel bytes, source, independent live owners and fourteen rejection controls:
+
+```bash
+bash tools/WarmReference/build-normal-orient-linux.sh
+python3 tools/WarmReference/verify-normal-orient-linux.py --cpu 0 --depth 16
+```
+
+```powershell
+./bench.ps1 -Smoke -Warm -WarmFamily NormalOrientation -WarmCases Whole16 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily NormalOrientation -WarmCases Whole16 -Cpu 0 -NoBuild -PrepareWarm
+./bench.ps1 -DedicatedVm -Warm -WarmFamily NormalOrientation -WarmCases Whole16 -Cpu 0 -NoBuild -WarmConfirm -PrepareWarm
+```
+
+The public FFmpeg null graph produces a shared view. Every native timed operation
+uses `av_frame_get_buffer` and `av_frame_copy` to allocate and materialize an
+independently owned raster before release; padded rows need no extra packing
+copy. Graph/source/frame wrappers are reused. Managed timing includes complete
+AutoOrient, both-buffer admission, every row copy and disposal. Both sides may
+reuse released storage; processed outputs are never cached. Every channel byte,
+alpha and hidden RGB matches pinned normal/scalar CLI output; held outputs prove
+mutation isolation. One CPU/filter thread, normal SIMD and the same existing
+raster apply. Preparation validates the actual fixed job with one native
+operation before/after and null ratios; frozen prepared children then run under
+fresh unchanged quiet guards after build activity settles.
+
+The [row-copy round](../../benchmarks/WARM-NORMAL-ROWS.md) reduces screened mean
+98.47%. Its twelve-sample repeat reaches 1.062x, upper 1.0871x, but fails the
+post-run I/O-wait guard. Quiet confirmation remains open; later cooldown does
+not certify the failed interval. Other material cases remain open.

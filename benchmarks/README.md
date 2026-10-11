@@ -365,7 +365,7 @@ Initial restore is separate; routine builds use cached dependencies. Larger
 matrices are optional targeted work, not routine baseline prerequisites.
 
 The current BenchmarkDotNet cases compare PNG, baseline/progressive JPEG and lossy/lossless WebP
-decode–flip–PNG encode pipelines. Both subjects launch one process, read the same
+decodeâ€“flipâ€“PNG encode pipelines. Both subjects launch one process, read the same
 encoded input file and write one encoded output file. Source pixels and fixture
 generation happen outside the timed methods. FFmpeg runs with its normal CPU
 capabilities and one codec thread; it is the baseline for each case.
@@ -950,3 +950,12 @@ transpose graph allocates independent pixels directly. Only this fixed pair
 is measured. Its independent twelve-sample repeat passes both quiet guards at
 0.990x, with conservative upper below 1.014x, certifying this fixed pair.
 Other quarter-turn and transpose cases remain open.
+
+The `NormalOrientation/Whole16` selection reuses that raster with Normal metadata.
+[Bounded row copies](WARM-NORMAL-ROWS.md) remove generic per-pixel mapping and use
+existing admitted complete-overwrite storage, reducing the screened mean 98.47%,
+from 71.13x to 1.08x. Native null-filter output is explicitly allocated and copied
+inside each operation to preserve independent ownership. The twelve-sample repeat
+reaches 1.062x, conservative upper 1.0871x, but fails its post-run I/O-wait guard;
+independent quiet confirmation remains open. Failed screen guards are retained.
+No additional performance raster or shape sweep is added.
