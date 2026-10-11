@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Lokad.Image.Internal;
 
 internal sealed class OperationContext
@@ -25,6 +27,7 @@ internal sealed class OperationContext
 
     public void Release(long bytes) => liveBytes -= bytes;
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Work(long units)
     {
         Cancellation.ThrowIfCancellationRequested();

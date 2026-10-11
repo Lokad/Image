@@ -1,9 +1,11 @@
 # Warm PNG framing costs
 
-The current retained PNG16 profile identifies strict Deflate framing as the
+Before Work inlining, the retained PNG16 profile identified strict framing as the
 largest sampled cost. Separate literal output-admission and wider prefix-refill
 trials gave no useful complete-operation gain and were discarded. Production
-codec behavior and the retained 2.36/2.33x decode gap are unchanged.
+codec behavior was unchanged during those trials. Their historical 2.36/2.33x
+baseline is below; the accepted [work-admission round](WARM-WORK-ADMISSION.md)
+records the subsequent improvement.
 
 The [numeric evidence](warm-png-framing-costs-evidence.json) retains original
 timing samples, source/input/output identities, the profile, assembly controls
@@ -29,7 +31,7 @@ one codec thread, normal SIMD, .NET 10.0.8 / SDK 10.0.204, disabled tiering
 and non-concurrent workstation GC. The separate profile includes generated
 warmup/calibration workload loops and is not native parity timing.
 
-| Current method | Inclusive sampled percent |
+| Method before Work inlining | Inclusive sampled percent |
 | --- | ---: |
 | `ZlibFraming.Validate` | 56.51% |
 | `PngCodec.DecodeRaster` | 32.20% |
@@ -79,5 +81,5 @@ open. One retained-code JIT inspection on the same Decode16 input shows
 separate OperationContext.Work calls in the consumed-prefix path. Its optimized
 Validate listing is 7,441 bytes; this inspection supplies no parity timing.
 Both quiet checks pass. Next, try inlining only Work with its original method
-body and admission/cancellation semantics; avoid repeating refill and
-literal-admission trials.
+body and admission/cancellation semantics. The subsequent work-admission
+report records that trial; avoid repeating refill and literal-admission trials.

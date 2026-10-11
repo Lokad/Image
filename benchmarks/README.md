@@ -1,8 +1,12 @@
 # Development benchmarks
 
-The [current PNG framing profile](WARM-PNG-FRAMING-COSTS.md) identifies strict
-Deflate framing as the largest PNG16 cost. A separate literal admission branch
-showed no useful gain and was discarded. A wider prefix-only refill is next.
+The [work-admission round](WARM-WORK-ADMISSION.md) adds one inlining hint with
+unchanged admission semantics. PNG16 screens reach 2.22x / 2.22x, PNG8 2.11x
+and native-input JPEG decode 2.06x. PNG16 remains the largest measured gap.
+
+The [PNG framing profile before Work inlining](WARM-PNG-FRAMING-COSTS.md)
+identified strict framing as the largest PNG16 cost. Literal-admission and
+wider-prefix-refill trials were discarded; their original evidence is retained.
 
 The [shared forward-product round](WARM-JPEG-FORWARD-SHARED.md) retains exact
 JPEG coefficients and bytes while reducing complete warm encode screens to
