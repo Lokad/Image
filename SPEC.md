@@ -64,11 +64,17 @@ Wide support or tight memory limits retain direct evaluation with the same tap
 order, binary64 arithmetic and pixels. Geometry is not cached across calls.
 When both supports are short, a byte/UInt16-specialized kernel captures local
 buffer views and prepares vertical weights/row offsets in bounded stack storage.
-It retains the same per-pixel tap order, alpha handling and admission checkpoints.
+It retains the same per-pixel tap order, alpha handling and per-row work charges,
+with bounded cancellation and memory admission.
 On supported hardware, this kernel loads RGBA8 samples with bounded four-byte
 reads and widens them into independent binary64 RGB/alpha accumulation lanes.
 Multiplication and addition remain separate, with the original tap order and
 exact pixels. Scalar and UInt16 filtering retain their existing behavior.
+On AVX512F/AVX2 hardware, matching short row supports may filter two independent
+RGBA8 output rows together, sharing horizontal geometry. Bounded sample reads
+and direct weight broadcasts preserve each pixel's arithmetic order. Paired
+vertical geometry adds 192 bytes of fixed stack storage and no heap workspace.
+Unequal supports and odd tails retain the single-row path.
 
 An original development-only reference uses exact integer kernel weights and
 `BigInteger` separable accumulation, with no production resize helpers. Public

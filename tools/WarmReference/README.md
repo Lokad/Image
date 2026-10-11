@@ -424,6 +424,10 @@ shows no useful short-screen gain and is restored without a longer repeat.
 The [paired output-row trial](../../benchmarks/WARM-RESIZE-PAIRED-ROWS-REJECTED.md)
 is slower and discarded after one short screen. Its actual timed-DLL JIT retains
 per-tap wide coefficient stack materialization for the next code-shape decision.
+The [reformulated paired packed-sample kernel](../../benchmarks/WARM-RESIZE-PAIRED-WEIGHTS.md)
+reaches 2.64x, with direct coefficient construction and unchanged allocation
+totals. Per-pixel binary64 arithmetic, alpha handling and scalar/UInt16 behavior
+remain; unequal row supports and odd tails retain the single-row path.
 Run sequentially on the quiet dedicated VM and preserve
 source/raw/actual timed DLLs before edits. Other sizes, directions, depths and
 bicubic remain unmeasured; independent quiet confirmation remains open. Native

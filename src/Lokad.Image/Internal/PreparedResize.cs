@@ -20,6 +20,8 @@ internal static class PreparedResize
         var packed8 = typeof(T) == typeof(byte) && Avx.IsSupported && Sse41.IsSupported;
         ReadOnlySpan<byte> packedInput = packed8 ? MemoryMarshal.Cast<T, byte>(input) : default;
         var output = MemoryMarshal.Cast<byte, T>(result.Pixels);
+        var paired8 = packed8 && Avx512F.IsSupported && Avx2.IsSupported;
+        Span<byte> pairedOutput = paired8 ? MemoryMarshal.Cast<T, byte>(output) : default;
         var sourceHeight = source.Height;
         var stride = source.Width * 4;
         var width = result.Width;
@@ -30,6 +32,12 @@ internal static class PreparedResize
         for (var y = 0; y < height; y++)
         {
             context.Work(rowWork);
+            if (paired8 && PairedResize.TryRows(source, result, packedInput, pairedOutput,
+                horizontalWeights, horizontalOffsets, horizontalCounts, y, scaleY, radius, filter, rowWork, context))
+            {
+                y++;
+                continue;
+            }
             var center = (y + 0.5) * sourceHeight / height - 0.5;
             var first = (int)Math.Ceiling(center - radius * scaleY);
             var last = (int)Math.Floor(center + radius * scaleY);

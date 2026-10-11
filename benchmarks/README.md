@@ -1,5 +1,12 @@
 # Development benchmarks
 
+The [reformulated paired packed-sample kernel](WARM-RESIZE-PAIRED-WEIGHTS.md)
+reduces complete warm bilinear resize a further 8.1%, from 2.89x to 2.64x FFmpeg.
+It shares horizontal geometry across independent output rows and constructs
+wide weighted-alpha coefficients directly in registers. Exact pixels and
+allocation totals remain unchanged. The remaining resize gap stays first;
+independent quiet confirmation and uniform warm parity remain open.
+
 The [paired output-row trial](WARM-RESIZE-PAIRED-ROWS-REJECTED.md) is slower and
 discarded after one short screen. Production is restored exactly. Its retained
 JIT reveals per-tap wide coefficient stack materialization; a different packed
