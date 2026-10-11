@@ -111,6 +111,10 @@ before chroma expansion. The original T.81 basis is frozen as binary64 values;
 this keeps coefficient and pixel rounding independent of platform `Math.Cos`
 differences. RGB component identifiers or Adobe transform 0 select
 direct RGB planes. Decode produces opaque RGBA8; no ICC conversion is applied.
+On AVX-512/VL, horizontal/vertical passes are accepted only when a conservative
+rounding certificate proves the original byte. Uncertain rows and extreme blocks
+use the original direct evaluation; other processors retain that evaluation.
+The [inverse rounding proof](docs/jpeg-inverse-rounding.md) defines the bound.
 
 The JPEG encoder emits baseline Huffman JFIF with selectable grayscale, 4:4:4,
 4:2:2 or 4:2:0 sampling (default 4:2:0). Grayscale explicitly converts RGB to

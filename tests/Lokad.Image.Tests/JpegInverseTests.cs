@@ -6,6 +6,34 @@ namespace Lokad.Image.Tests;
 
 public sealed class JpegInverseTests
 {
+    // Captured from the accepted owned assembly, before two-pass evaluation.
+    // These families include every frequency/sign, half ties, sparse/dense
+    // cancellation, zero quantizers and full coefficient/quantizer extremes.
+    [Theory]
+    [InlineData(0, "e78ff88013c3fd671404fefcf0e73bd7a80bf08e6cec8fde0327ca6365718132")]
+    [InlineData(1, "7250bb064871676160023abf0d0089e270d4ccedd6722ddf402a3a8b0005ce58")]
+    [InlineData(2, "fe1cc707f870503b140b5321e5ed707c0fbe4d525efd6b69ea28e5936a897e9e")]
+    [InlineData(3, "c5233a1a8192212f341a013a2033296ed9cb9fdc2c7718c27f9e52763dabb593")]
+    [InlineData(4, "b512670ceee5c45de5b58758fb630636f81b519ceb73564362e50c638b120122")]
+    [InlineData(5, "dfa839469288aa294670c5c717a118e93e2d0122f53179352d535c356539dbad")]
+    [InlineData(6, "cd6036a68891d19d3b95c5fad49e0b26b51f879e03218b424c592b4c5204ca2e")]
+    [InlineData(7, "1e22b138073c4922f423a81d61e5fe6e7a8c7ec0964727e7998ecbd5a107ad5c")]
+    public void OriginalCoefficientFamiliesKeepEveryFrozenByte(int family, string expected)
+    {
+        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
+        foreach (var (coefficients, quantizers) in JpegInverseBlocks.Generate(family))
+        {
+            var originalCoefficients = coefficients.ToArray(); var originalQuantizers = quantizers.ToArray();
+            var guarded = Enumerable.Repeat((byte)19, 66).ToArray();
+            JpegTransform.Inverse(coefficients, quantizers, guarded.AsSpan(1, 64),
+                new OperationContext(ImageLimits.Default with { MaxWork = 4096 }, default));
+            Assert.Equal(19, guarded[0]); Assert.Equal(19, guarded[^1]);
+            Assert.Equal(originalCoefficients, coefficients); Assert.Equal(originalQuantizers, quantizers);
+            hash.AppendData(guarded.AsSpan(1, 64));
+        }
+        Assert.Equal(expected, Convert.ToHexStringLower(hash.GetHashAndReset()));
+    }
+
     [Fact]
     public void EightSampleRoundingPreservesEveryByteHalfTieNeighborhoodAndClipping()
     {

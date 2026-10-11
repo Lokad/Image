@@ -76,6 +76,9 @@ improve to 2.79x / 2.80x; the existing owned-input screen improves to 2.74x.
 The [rejected MCU-coordinate hoist](WARM-JPEG-MCU-REJECTION.md) moves division
 out of the component block loop but shows no useful gain. The accepted wrapper
 implementation and its warm ratios remain the baseline.
+The [certified separable inverse round](WARM-JPEG-SEPARABLE.md) preserves the
+original rounded bytes through an error bound and direct fallback. Native decode
+screens improve to 2.69x / 2.68x; the existing owned-input screen reaches 2.63x.
 
 For warm memory comparisons, the Linux [original FFmpeg reference worker](../tools/WarmReference/README.md)
 excludes process launch, IPC and file transport from native elapsed samples.
