@@ -1,5 +1,12 @@
 # Development benchmarks
 
+The [packed RGBA8 accumulation kernel](WARM-RESIZE-PACKED-KERNEL.md) reduces
+complete warm bilinear resize a further 34.1%, from 4.35x to 2.89x FFmpeg.
+One bounded sample read and packed widening replace scalar channel conversions,
+while retaining exact binary64 ordering, alpha behavior and allocation totals.
+The remaining resize gap takes priority over small tweaks. Independent quiet
+confirmation and other material warm cases remain open.
+
 The [compact prepared filtering kernel](WARM-RESIZE-PREPARED.md) reduces complete
 warm bilinear resize a further 31.6%, from 6.34x to 4.35x FFmpeg. It removes
 repeated row-access calls and runtime depth/fallback dispatch from short-support

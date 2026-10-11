@@ -415,6 +415,10 @@ The [compact prepared kernel](../../benchmarks/WARM-RESIZE-PREPARED.md) reaches
 4.35x, retaining exact pixels and the same admitted geometry/allocation footprint.
 It captures local buffer views and specializes sample depth for short support;
 wide support and tight memory retain direct evaluation.
+The [packed RGBA8 accumulation kernel](../../benchmarks/WARM-RESIZE-PACKED-KERNEL.md)
+reduces the same complete operation to 2.89x without added allocations. Bounded
+sample loading and packed widening retain separate binary64 multiply/add and
+the original tap order; scalar and UInt16 behavior remain unchanged.
 Run sequentially on the quiet dedicated VM and preserve
 source/raw/actual timed DLLs before edits. Other sizes, directions, depths and
 bicubic remain unmeasured; independent quiet confirmation remains open. Native

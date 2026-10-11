@@ -65,6 +65,10 @@ order, binary64 arithmetic and pixels. Geometry is not cached across calls.
 When both supports are short, a byte/UInt16-specialized kernel captures local
 buffer views and prepares vertical weights/row offsets in bounded stack storage.
 It retains the same per-pixel tap order, alpha handling and admission checkpoints.
+On supported hardware, this kernel loads RGBA8 samples with bounded four-byte
+reads and widens them into independent binary64 RGB/alpha accumulation lanes.
+Multiplication and addition remain separate, with the original tap order and
+exact pixels. Scalar and UInt16 filtering retain their existing behavior.
 
 An original development-only reference uses exact integer kernel weights and
 `BigInteger` separable accumulation, with no production resize helpers. Public

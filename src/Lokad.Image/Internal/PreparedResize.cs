@@ -1,5 +1,8 @@
+using System.Buffers.Binary;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
@@ -14,6 +17,8 @@ internal static class PreparedResize
         // Byte and UInt16 specializations keep sample conversion and storage
         // outside runtime depth dispatch. Views remain local to this operation.
         ReadOnlySpan<T> input = MemoryMarshal.Cast<byte, T>(source.Pixels);
+        var packed8 = typeof(T) == typeof(byte) && Avx.IsSupported && Sse41.IsSupported;
+        ReadOnlySpan<byte> packedInput = packed8 ? MemoryMarshal.Cast<T, byte>(input) : default;
         var output = MemoryMarshal.Cast<byte, T>(result.Pixels);
         var sourceHeight = source.Height;
         var stride = source.Width * 4;
@@ -40,6 +45,7 @@ internal static class PreparedResize
                 var weights = horizontalWeights.Slice(baseX, horizontalCounts[x]);
                 var offsets = horizontalOffsets.Slice(baseX, weights.Length);
                 double red = 0, green = 0, blue = 0, alpha = 0, weightSum = 0;
+                var packedSums = Vector256<double>.Zero;
                 for (var ty = 0; ty < count; ty++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
@@ -51,6 +57,19 @@ internal static class PreparedResize
                         var weight = wy * weights[tx];
                         if (weight == 0) continue;
                         var offset = rowOffset + offsets[tx];
+                        if (packed8)
+                        {
+                            // One bounded load widens RGBA together. A final lane
+                            // of one accumulates weighted alpha alongside RGB.
+                            var pixel = BinaryPrimitives.ReadUInt32LittleEndian(packedInput.Slice(offset, 4));
+                            var weightedAlpha = weight * (pixel >> 24);
+                            var lanes = Vector128.CreateScalar((pixel & 0x00ffffffu) | 0x01000000u).AsByte();
+                            var values = Avx.ConvertToVector256Double(Sse41.ConvertToVector128Int32(lanes));
+                            // Keep each lane's original multiply/add and tap order.
+                            packedSums = Avx.Add(packedSums, Avx.Multiply(Vector256.Create(weightedAlpha), values));
+                            weightSum += weight;
+                            continue;
+                        }
                         var a = double.CreateChecked(input[offset + 3]);
                         red += weight * a * double.CreateChecked(input[offset]);
                         green += weight * a * double.CreateChecked(input[offset + 1]);
@@ -58,6 +77,13 @@ internal static class PreparedResize
                         alpha += weight * a;
                         weightSum += weight;
                     }
+                }
+                if (packed8)
+                {
+                    red = packedSums.GetElement(0);
+                    green = packedSums.GetElement(1);
+                    blue = packedSums.GetElement(2);
+                    alpha = packedSums.GetElement(3);
                 }
                 var normalizedAlpha = alpha / weightSum;
                 var roundedAlpha = normalizedAlpha > 0 && normalizedAlpha < 1
