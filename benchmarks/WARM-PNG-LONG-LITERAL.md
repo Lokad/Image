@@ -1,0 +1,90 @@
+# Warm PNG long-literal fallback
+
+Skipping canonical depths already excluded by the nine-bit literal lookup lowers
+complete PNG8 decode time by about 1.3% in two screens. PNG16 is effectively
+unchanged. Both remain near 2.01x FFmpeg; uniform warm parity remains open.
+
+The [numeric evidence](warm-png-long-literal-evidence.json) preserves samples,
+confidence bounds, allocations, input/output/source/library identities, quietness
+failures and immutable raw/source archive hashes. Regenerate this report with
+`python benchmarks/render-warm-png-long-literal.py`. No new benchmark image,
+quality search, effort change or broad profile sweep.
+
+| Stage | Case | Managed mean, µs | Native before / after, µs | Worst bracket ratio | Conservative upper |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Retained CRC | Decode16 | 5823.74 | 2940.46 / 2918.46 | 1.9955x | 2.2661x |
+| Retained CRC | Decode8 | 2889.42 | 1420.09 / 1418.48 | 2.0370x | 2.1347x |
+| Retained CRC | Decode16 | 5847.17 | 2924.02 / 2920.57 | 2.0021x | 2.1793x |
+| Retained CRC | Decode8 | 2883.34 | 1416.25 / 1429.64 | 2.0359x | 3.0357x |
+| Long-literal fallback | Decode8 | 2848.78 | 1421.46 / 1420.98 | 2.0048x | 2.0443x |
+| Long-literal fallback | Decode8 | 2847.37 | 1419.24 / 1419.77 | 2.0063x | 2.0559x |
+| Long-literal fallback | Decode16 | 5849.60 | 2918.68 / 2911.30 | 2.0093x | 2.0767x |
+| Frozen ranking recheck | Lossless8 | 4262.90 | 2157.10 / 2151.33 | 1.9815x | 2.2750x |
+
+One current PNG8 EventPipe profile selects strict Deflate framing: 59.1% inclusive,
+with a 36.4% visible Validate leaf. Canonical fallback accounts for 14.9%, bit reads
+7.4%, inflation 31.8%, row copying 4.5%, CRC 0.7% and Adler 0.9%. Inclusive costs
+overlap and cannot be added. Canonical attribution combines its callers; it is
+not a measurement of long literals alone. The 1,904.53 ms weighted workload and
+1,864 segments include warmup/calibration. Visible leaves may include inlined or
+unattributed native work. This profile supplies attribution, not parity timing.
+Its actual retained child library and both PNG correctness receipts match the
+previously accepted package in every production method body and implementation flag.
+
+The changed primitive stores independently derived canonical code/symbol positions
+at depth ten while constructing the existing Huffman tree. A failed nine-bit literal
+root entry proves no assigned code through depth nine matches. Scalar masks reverse
+the first nine incoming bits; the remaining canonical search starts at depth ten.
+The original full maximum-depth lookahead and single atomic charge for the entire
+matched prefix remain. An invalid path consumes and charges the original maximum
+depth. Incomplete trees with maximum depth at most nine retain the original fallback.
+Distance and code-length decoding, tables, bit refill, cursor/error precedence,
+cancellation, scratch/output/work admission and all pixels remain unchanged.
+Two stack integers add no lookup, buffer, cache or heap allocation. Canonical state
+follows RFC 1951 section 3.2.2; no upstream implementation or table is copied.
+
+Two new cases first pass against original production and then the candidate.
+Original literal-only grammars assign every byte value a 10-, 11- or 15-bit code,
+optionally with one short literal and a nonzero long-code offset. Assigned paths
+in incomplete trees and empty distance alphabets exercise the framing contract.
+Default and cancellable tokens verify exact successful work after eleven parent
+units, whole-prefix admission at the one-unit-short budget, invalid-path format/limit
+precedence, unchanged source bytes and scratch release. All 116 framing/CRC controls
+pass on Windows and Linux.
+
+The earlier frozen VP8L screen is a ranking recheck of accepted production, before
+the PNG change. It uses the same original literal/run input, all exact RGBA samples,
+alpha and hidden RGB, independently owned outputs and the pinned CLI pixel check.
+Its actual saved statistical DLL matches the previously verified package in all
+production IL and implementation flags. One failed prequiet attempt starts no child
+and yields no samples. Do not attribute this recheck to unrelated codec work.
+
+PNG screens reuse the same original 513x259 RGBA8/RGBA16 rasters and encoded bytes.
+All samples, alpha, hidden RGB, source bytes, compression effort and output sizes
+remain exact. Complete public decode and owned disposal are timed. Native reset,
+full decode, necessary conversion and independent owned output acquisition/release
+are included. PNG16 byte-order conversion includes its second output allocation;
+VP8L ARGB-to-RGBA conversion is included. Native packet/frame/context wrappers
+are reused; no decoded pixel cache replaces work. Startup, IPC, I/O, generation,
+hashing, validation and tight-row transport packing are excluded.
+
+Sequential Release jobs use CPU 0, one codec/conversion thread, thread type zero,
+normal SIMD, .NET 10.0.8 / SDK 10.0.204, disabled tiering and non-concurrent
+workstation GC on the dedicated AMD EPYC 9V45 VM. Statistical prechecks pass;
+postchecks fail and remain recorded together with passing/failing cooldowns.
+These short screens do not certify <=2x passing status.
+
+A separate fixed-count control compares complete public span decode and owned
+disposal through both actual packages on the same two original PNG inputs.
+All three repeats of sixteen operations have exactly equal allocation counts.
+This control makes no timing claim. BDN allocations remain in the numeric evidence.
+
+All 2,049 tests pass on Windows and Linux: 469 internal, 686 public and 894 live
+FFmpeg comparisons. The same actual dependency-free Release package passes all
+three usage examples on both platforms. Every actual statistical child matches
+that package in every production method body and implementation flag. SHA256:
+`108a4bb6845cd4b04d22489c3ade62eda5409c9e2aaf42b7c515935a3dccdcf4`.
+
+JPEG encode is now the largest retained measured point gap, near 2.0215x. PNG
+decode stays near 2.01x; VP8L has only one current ranking screen, near 1.98x.
+Unknown, unmatched, uncovered and unconfirmed required paths remain open.

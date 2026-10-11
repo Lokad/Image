@@ -1,16 +1,22 @@
 # Development benchmarks
 
+The [PNG long-literal fallback round](WARM-PNG-LONG-LITERAL.md) skips canonical
+depths already excluded by the root lookup. PNG8 decode improves about 1.3%;
+PNG16 is effectively unchanged, both near 2.01x FFmpeg. A frozen VP8L ranking
+recheck reaches 1.98x. JPEG encode is now the largest measured point gap, near
+2.0215x; uniform warm parity and required-path coverage remain open.
+
 The [JPEG local entropy-work round](WARM-JPEG-LOCAL-WORK.md) preserves every exact
 charge within each baseline coefficient block. Native-input decode screens reach
 1.92x / 1.90x FFmpeg; the owned-input affected screen reaches 1.77x. Actual package
-allocation counts remain equal. Uniform warm parity remains open; historical
-VP8L decode needs a current recheck before reranking.
+allocation counts remain equal. Uniform warm parity remains open; VP8L was
+subsequently rechecked in the PNG long-literal round.
 
 The [polynomial CRC folding round](WARM-PNG-CRC-FOLD.md) uses safe carryless
 multiplication and independently derived PNG polynomial constants. Complete
 PNG16 decode screens reach 1.9955x / 2.0021x, PNG8 2.0370x / 2.0359x; fixed
 allocation controls remain identical. Uniform <=2x parity remains open.
-Native-input JPEG decode is now the largest retained measured gap.
+Native-input JPEG decode was the largest retained measured gap at that checkpoint.
 
 The [PNG local-accounting round](WARM-PNG-LOCAL-WORK.md) retains every exact bit
 charge while avoiding repeated shared tally writes. Complete PNG16 decode

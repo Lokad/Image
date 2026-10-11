@@ -201,22 +201,28 @@ internal static class ZlibFraming
         public readonly ReadOnlySpan<int> Counts;
         public readonly ReadOnlySpan<int> Symbols;
         public readonly int Maximum;
+        public readonly int FirstLongCode;
+        public readonly int FirstLongSymbol;
 
         public Huffman(ReadOnlySpan<int> lengths, Span<int> counts, Span<int> symbols, OperationContext context)
         {
-            Counts = counts; Symbols = symbols; counts.Clear(); Maximum = 0; context.Work(lengths.Length * 2L + 16);
+            Counts = counts; Symbols = symbols; counts.Clear(); Maximum = 0; FirstLongCode = 0; context.Work(lengths.Length * 2L + 16);
             foreach (var length in lengths) if (length > 0) { counts[length]++; Maximum = Math.Max(Maximum, length); }
             var space = 1;
             for (var length = 1; length <= Maximum; length++)
             {
                 space = space * 2 - counts[length];
                 if (space < 0) throw new ImageDataException("Oversubscribed PNG Deflate prefix codes.");
+                // Assigned nine-bit prefixes occupy 512 - space positions.
+                // The next canonical depth starts at twice that position.
+                if (length == 9) FirstLongCode = 1024 - 2 * space;
             }
             // Incomplete trees are usable when every actual symbol has a code;
             // any unassigned path fails in Decode. Empty distances are legal for
             // literal-only dynamic blocks, and cannot decode a match.
             Span<int> offsets = stackalloc int[16]; offsets.Clear();
             for (var length = 1; length < 15; length++) offsets[length + 1] = offsets[length] + counts[length];
+            FirstLongSymbol = offsets[10];
             for (var symbol = 0; symbol < lengths.Length; symbol++)
                 if (lengths[symbol] != 0) symbols[offsets[lengths[symbol]]++] = symbol;
         }
@@ -241,15 +247,41 @@ internal static class ZlibFraming
             index += count; code *= 2;
         }
         // Zero entries include long prefixes and unassigned incomplete paths.
-        // Both are handled by the full canonical decoder, never accepted here.
+        // Both are handled by the canonical fallback, never accepted here.
     }
 
     private static int DecodeLiteral(scoped ref Bits reader, scoped Huffman tree, scoped ReadOnlySpan<ushort> lookup)
     {
         var entry = lookup[(int)(reader.Peek(9) & 511)];
         var length = entry & 15;
-        if (length == 0) return Decode(ref reader, tree.Counts, tree.Symbols, tree.Maximum);
+        if (length == 0) return DecodeLongLiteral(ref reader, tree);
         reader.Consume(length); return entry >> 4;
+    }
+
+    private static int DecodeLongLiteral(scoped ref Bits reader, scoped Huffman tree)
+    {
+        if (tree.Maximum <= 9) return Decode(ref reader, tree.Counts, tree.Symbols, tree.Maximum);
+        // A root miss has already excluded every assigned code through depth
+        // nine. Keep the original full lookahead and atomic matched-bit charge,
+        // but begin the canonical search at depth ten (RFC 1951 section 3.2.2).
+        var bits = reader.Peek(tree.Maximum);
+        var reversed = (uint)bits;
+        reversed = (reversed & 0x55555555) << 1 | (reversed >> 1 & 0x55555555);
+        reversed = (reversed & 0x33333333) << 2 | (reversed >> 2 & 0x33333333);
+        reversed = (reversed & 0x0f0f0f0f) << 4 | (reversed >> 4 & 0x0f0f0f0f);
+        var code = (int)(BinaryPrimitives.ReverseEndianness(reversed) >> 23);
+        bits >>= 9;
+        var first = tree.FirstLongCode; var index = tree.FirstLongSymbol;
+        for (var length = 10; length <= tree.Maximum; length++)
+        {
+            code = code * 2 + (int)(bits & 1); bits >>= 1; var count = tree.Counts[length];
+            if (code >= first && code - first < count)
+            {
+                reader.Consume(length); return tree.Symbols[index + code - first];
+            }
+            index += count; first = (first + count) * 2;
+        }
+        reader.Consume(tree.Maximum); throw new ImageDataException("Invalid PNG Deflate prefix code.");
     }
 
     private static void BuildDistanceLookup(scoped Huffman tree, scoped Span<ushort> lookup, OperationContext context)

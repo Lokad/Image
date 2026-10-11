@@ -6,6 +6,75 @@ public sealed class ZlibFramingTests
 {
     [Theory]
     [InlineData(false)] [InlineData(true)]
+    public void LongLiteralCodesRetainWholePrefixAdmissionAndIncompletePathErrors(bool shortLiteral)
+    {
+        // Original RFC 1951 grammars, deliberately incomplete: all 257 codes
+        // have the long depth, except an optional one-bit literal zero. Each
+        // byte value exercises a different canonical symbol offset. Framing
+        // accepts assigned paths in incomplete trees, including empty distances.
+        foreach (var depth in new[] { 10, 11, 15 })
+        {
+            foreach (var cancellable in new[] { false, true })
+            {
+                var encoded = LongLiteralStream(depth, shortLiteral, false);
+                var original = encoded.ToArray();
+                using var cancellation = new CancellationTokenSource();
+                var token = cancellable ? cancellation.Token : default;
+                const long prior = 11;
+                var work = 10413L + 257 * depth - (shortLiteral ? depth - 1 : 0);
+                var limits = ImageLimits.Default with { MaxWork = prior + work, MaxWorkingBytes = 4096 };
+                var context = new OperationContext(limits, token); context.Work(prior);
+                Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, 256, context));
+                Assert.Equal(original, encoded);
+                Assert.Throws<ImageLimitException>(() => context.Work(1));
+                context.Reserve(4096); context.Release(4096);
+
+                var tight = new OperationContext(limits with { MaxWork = limits.MaxWork - 1 }, token); tight.Work(prior);
+                var limitError = Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, 256, tight));
+                Assert.Equal("Computational work limit exceeded.", limitError.Message);
+                tight.Work(depth - 1); // EOB's entire prefix fails admission.
+                Assert.Throws<ImageLimitException>(() => tight.Work(1));
+                tight.Reserve(4096); tight.Release(4096);
+                Assert.Equal(original, encoded);
+
+                var invalid = LongLiteralStream(depth, shortLiteral, true);
+                var invalidOriginal = invalid.ToArray();
+                var failed = new OperationContext(limits, token); failed.Work(prior);
+                var dataError = Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(invalid, 256, failed));
+                Assert.Equal("Invalid PNG Deflate prefix code.", dataError.Message);
+                Assert.Throws<ImageLimitException>(() => failed.Work(1));
+                failed.Reserve(4096); failed.Release(4096);
+                var failedTight = new OperationContext(limits with { MaxWork = limits.MaxWork - 1 }, token); failedTight.Work(prior);
+                Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(invalid, 256, failedTight));
+                failedTight.Work(depth - 1);
+                Assert.Throws<ImageLimitException>(() => failedTight.Work(1));
+                failedTight.Reserve(4096); failedTight.Release(4096);
+                Assert.Equal(invalidOriginal, invalid);
+            }
+        }
+    }
+
+    private static byte[] LongLiteralStream(int depth, bool shortLiteral, bool invalidEnd)
+    {
+        var bits = new BitWriter(); bits.Number(1, 1); bits.Number(2, 2);
+        bits.Number(0, 5); bits.Number(0, 5); bits.Number(15, 4);
+        ReadOnlySpan<int> order = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
+        foreach (var symbol in order) bits.Number(symbol < 16 ? 4 : 0, 3);
+        for (var symbol = 0; symbol < 257; symbol++) bits.Code(shortLiteral && symbol == 0 ? 1 : depth, 4);
+        bits.Code(0, 4); // Empty distance alphabet.
+        var first = shortLiteral ? (1 << (depth - 1)) - 1 : 0;
+        uint a = 1, b = 0;
+        for (var symbol = 0; symbol < 256; symbol++)
+        {
+            bits.Code(shortLiteral && symbol == 0 ? 0 : first + symbol, shortLiteral && symbol == 0 ? 1 : depth);
+            a = (a + (uint)symbol) % 65521; b = (b + a) % 65521;
+        }
+        bits.Code(invalidEnd ? (1 << depth) - 1 : first + 256, depth); bits.Align();
+        return [0x78, 0x01, .. bits.Bytes(), (byte)(b >> 8), (byte)b, (byte)(a >> 8), (byte)a];
+    }
+
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
     public void TruncatedDistanceExtraBitsRetainAdmittedWorkAndErrorPrecedence(bool cancellable)
     {
         // Original fixed stream, deliberately missing the distance's thirteen
