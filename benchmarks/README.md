@@ -1,5 +1,10 @@
 # Development benchmarks
 
+The [horizontal weight-reuse round](WARM-RESIZE-XWEIGHTS.md) reduces complete warm
+bilinear resize a further 5.7%, from 9.08x to 8.65x FFmpeg. Original pixels,
+admission and allocations remain. It is still the largest measured gap;
+destination-row acquisition is the next primitive.
+
 The [four-channel resize SIMD trial](WARM-RESIZE-SIMD-REJECTED.md) shows no useful
 gain in its short screen and is discarded without a longer repeat. Four exact
 scalar-pixel regressions remain; production retains source-row span acquisition.
@@ -8,8 +13,8 @@ The [filtered source-row acquisition round](WARM-ROW-SPAN.md) reduces complete
 warm bilinear resize by about 66.8%, from the [row inlining round's](WARM-ROW-INLINE.md)
 27.46x to 9.08x FFmpeg on the same original raster. This remains the largest
 measured gap. Managed rational-reference pixels, native alpha and allocations
-remain exact; native RGB meets the existing filtered comparison bound. Horizontal
-kernel-weight reuse is the next narrow primitive.
+remain exact; native RGB meets the existing filtered comparison bound. That
+checkpoint selected horizontal kernel-weight reuse for the next trial.
 
 The [current JPEG decode confirmation](WARM-JPEG-DECODE-CONFIRM.md) reaches
 1.90x FFmpeg with a twelve-sample conservative upper below 2x. The first

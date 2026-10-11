@@ -154,6 +154,19 @@ public static class ImageTransforms
             for (var x = 0; x < width; x++)
             {
                 var cx = (x + 0.5) * source.Width / width - 0.5;
+                var firstX = (int)Math.Ceiling(cx - radius * scaleX);
+                var lastX = (int)Math.Floor(cx + radius * scaleX);
+                // Reuse short horizontal support across vertical taps without
+                // a heap workspace. Wider support retains direct evaluation.
+                var cached = lastX - firstX < 8;
+                var w0 = cached ? Kernel((firstX - cx) / scaleX, filter) : 0;
+                var w1 = cached && lastX - firstX >= 1 ? Kernel((firstX + 1 - cx) / scaleX, filter) : 0;
+                var w2 = cached && lastX - firstX >= 2 ? Kernel((firstX + 2 - cx) / scaleX, filter) : 0;
+                var w3 = cached && lastX - firstX >= 3 ? Kernel((firstX + 3 - cx) / scaleX, filter) : 0;
+                var w4 = cached && lastX - firstX >= 4 ? Kernel((firstX + 4 - cx) / scaleX, filter) : 0;
+                var w5 = cached && lastX - firstX >= 5 ? Kernel((firstX + 5 - cx) / scaleX, filter) : 0;
+                var w6 = cached && lastX - firstX >= 6 ? Kernel((firstX + 6 - cx) / scaleX, filter) : 0;
+                var w7 = cached && lastX - firstX >= 7 ? Kernel((firstX + 7 - cx) / scaleX, filter) : 0;
                 double r = 0, g = 0, b = 0, alpha = 0, weightSum = 0;
                 for (var sy = (int)Math.Ceiling(cy - radius * scaleY); sy <= Math.Floor(cy + radius * scaleY); sy++)
                 {
@@ -165,9 +178,14 @@ public static class ImageTransforms
                     ReadOnlySpan<ushort> row16 = default;
                     if (source.BitDepth == 8) row8 = source.GetRow8(iy);
                     else row16 = source.GetRow16(iy);
-                    for (var sx = (int)Math.Ceiling(cx - radius * scaleX); sx <= Math.Floor(cx + radius * scaleX); sx++)
+                    for (var sx = firstX; sx <= lastX; sx++)
                     {
-                        var weight = wy * Kernel((sx - cx) / scaleX, filter);
+                        var wx = cached ? (sx - firstX) switch
+                        {
+                            0 => w0, 1 => w1, 2 => w2, 3 => w3,
+                            4 => w4, 5 => w5, 6 => w6, _ => w7
+                        } : Kernel((sx - cx) / scaleX, filter);
+                        var weight = wy * wx;
                         if (weight == 0) continue;
                         var ix = Math.Clamp(sx, 0, source.Width - 1);
                         var offset = ix * 4;
