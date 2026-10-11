@@ -1,0 +1,73 @@
+# Warm PNG bit-reader inlining
+
+Inlining the existing `Bits.Read` helper reduces complete PNG16 decode about
+3% and PNG8 about 9%. Original production method bodies and all decoded
+samples remain exact. The retained means move below 2x on these chosen cases;
+uniform coverage and independent passing confirmation remain open.
+
+The [numeric evidence](warm-png-read-inline-evidence.json) preserves samples,
+uncertainty, fixed-count allocations, identities, quietness and immutable
+source/raw archive hashes. Regenerate this report with
+`python benchmarks/render-warm-png-read-inline.py`.
+
+| Stage | Case | Managed mean, µs | Native before / after, µs | Worst bracket ratio | Conservative upper |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Retained long-literal | Decode8 | 2847.37 | 1419.24 / 1419.77 | 2.0063x | 2.0559x |
+| Retained long-literal | Decode16 | 5849.60 | 2918.68 / 2911.30 | 2.0093x | 2.0767x |
+| Read inline screen | Decode16 | 5697.39 | 2918.84 / 2920.90 | 1.9519x | 2.1837x |
+| Read inline 12-sample repeat | Decode8 | 2577.33 | 1422.35 / 1425.94 | 1.8120x | 1.8258x |
+| Read inline 12-sample repeat | Decode16 | 5693.45 | 2922.14 / 2921.70 | 1.9487x | 1.9626x |
+
+The only production change is `AggressiveInlining` on the existing bit-read
+method. Its work charge still precedes refill and extraction. Strict grammar,
+full bounded lookahead, exact successful/failing atomic work, cancellation,
+cursor/alignment, malformed/truncated-input precedence, checksums and resource
+admission remain. All production method bodies before and after are identical;
+the single method implementation flag changes. No table, buffer, cache, unsafe
+code or dependency is added. Earlier refill/batching trials are not repeated.
+
+One retained optimized-JIT inspection shows a remaining `Bits.Read` call site
+in Validate. Its actual diagnostic DLL matches the retained package in every
+production method body/flag, and the original PNG16 receipt proves exact output.
+A candidate probe loads the saved actual statistical DLL, reconstructs the same
+frozen input through the retained encoder, and checks every output byte. The
+call site disappears; Validate native code grows from 11,078 to 11,561 bytes.
+Both JIT checks pass pre/post quietness. These inspections supply no timing or
+CPU-cost attribution; the prior PNG8 CPU profile only guides the choice.
+
+The first complete PNG16 screen is followed by one 12-sample repeat including
+affected PNG8. Only the existing two original 513x259 RGBA8/16 rasters are used,
+with zero-alpha hidden RGB. Identical encoded inputs, all decoded samples and
+ownership remain exact. Level 6, filter None and noninterlaced RGBA are unchanged;
+there is no new image, quality/effort search or broad matrix.
+
+Both subjects perform complete public decode and independent owned output
+acquisition/release, including native 16-bit endian conversion and its second
+output allocation. Native input/frame/context reuse is declared, padded rows
+remain directly exposed, and no decoded image is cached. Startup, IPC, file I/O,
+generation, hashing and validation are excluded. Sequential Release jobs use
+the dedicated EPYC 9V45 VM, CPU 0, one codec/conversion thread, thread type zero,
+normal SIMD, .NET 10.0.8 / SDK 10.0.204, disabled tiering and non-concurrent
+workstation GC. Statistical prequiet passes and postquiet fails; all original
+failures and passing/failing cooldowns remain. Neither threshold nor workload
+boundary is weakened. Formal quiet independent passing confirmation is open.
+
+All 116 existing framing/CRC controls pass with normal and disabled intrinsics
+on Windows and Linux. All 2,063 Release tests pass both platforms: 483 internal,
+686 public and 894 live FFmpeg comparisons. No implementation-mirroring test
+is added for a flag-only change. The same actual dependency-free Release package
+passes all three usage examples on both OSes. Both saved statistical DLLs and
+the fresh Linux build match it in all production method bodies/flags, and its
+DLL bytes equal the fresh Windows build. Actual package SHA256:
+`394662763f2590ae0b71b261d4ae0587080a7a0899822799cb82a23e65a94780`.
+
+Fixed-count complete public span decode/disposal through old/new actual
+packages gives exactly equal allocations at each depth: three repeats of
+16 operations, same frozen input hashes. No particular harness allocation
+is attributed to BenchmarkDotNet estimate differences.
+
+PNG16 now screens at 1.9519x / 1.9487x; the longer upper is 1.9626x while the
+short upper remains above 2x. PNG8 has one affected longer screen at 1.8120x,
+upper 1.8258x. Current selected matched warm point estimates are below 2x.
+Unknown, unmatched, uncovered and unconfirmed required paths remain open;
+measure one material uncovered path next and rerank.

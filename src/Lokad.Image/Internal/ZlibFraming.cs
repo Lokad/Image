@@ -147,6 +147,7 @@ internal static class ZlibFraming
             remainingWork -= count;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int Read(int count)
         {
             Work(count);

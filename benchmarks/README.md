@@ -1,10 +1,16 @@
 # Development benchmarks
 
+The [PNG bit-reader inlining round](WARM-PNG-READ-INLINE.md) improves complete
+PNG16 decode about 3% and PNG8 about 9%, preserving all pixels and method bodies.
+The means are now 1.95x / 1.81x FFmpeg; longer conservative uppers are below 2x.
+Quiet independent confirmation and required-path coverage remain open. Measure
+one material uncovered direction next, then rerank.
+
 The [certified JPEG forward/quantization round](WARM-JPEG-FORWARD-INTERLEAVED.md)
 reduces complete encoding time about 3.7%, from 2.02x to 1.95x FFmpeg, retaining
 all encoded bytes. Its 12-sample upper is below 2x; quietness and independent
-passing confirmation remain open. PNG16 decode is now the largest retained
-measured point gap near 2.0093x. Uniform parity and required-path coverage are open.
+passing confirmation remain open. That checkpoint left PNG16 decode as the largest
+retained measured point gap near 2.0093x, before the reader round above.
 
 The [JPEG paired alpha-blending trial](WARM-JPEG-PAIRED-BLEND.md) gives no useful
 complete-operation gain and is discarded. A current encode CPU profile and one
