@@ -1,5 +1,9 @@
 # Development benchmarks
 
+The [reader-state caching trial](WARM-VP8-READER-STATE-REJECTED.md) is flat and
+discarded without a longer repeat. Three offset regression controls remain;
+production retains the accepted integer chroma implementation.
+
 The [integer VP8 chroma-expansion round](WARM-VP8-CHROMA-INTEGER.md) reduces
 complete decode a further 5.3%, from 2.29x to 2.17x FFmpeg, with exact original
 samples, pixels and allocations. This remains the largest measured gap.

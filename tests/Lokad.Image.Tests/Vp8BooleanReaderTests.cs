@@ -84,6 +84,30 @@ public sealed class Vp8BooleanReaderTests
     }
 
     [Theory]
+    [InlineData(1)] [InlineData(3)] [InlineData(11)]
+    public void NonzeroPartitionOffsetsPreserveAbsoluteCursorAndRepeatedFailureState(int offset)
+    {
+        foreach (var length in new[] { 1, 2, 3, 5 })
+            foreach (var probability in new[] { 0, 1, 128, 254, 255 })
+                foreach (var spanLength in new[] { 0, offset, offset + 1, offset + length - 1, offset + length })
+                {
+                    var bytes = Enumerable.Range(0, offset + length).Select(i => (byte)((i * 53 + 17) & 255)).ToArray();
+                    bytes[offset] = 192; var data = bytes[..spanLength];
+                    var reader = new Vp8BooleanReader(bytes, offset, length);
+                    var scalar = new Scalar(offset + length, 255, 192, 7, offset + 1);
+                    var actualWork = new OperationContext(new ImageLimits { MaxWork = 8 }, default);
+                    var referenceWork = new OperationContext(new ImageLimits { MaxWork = 8 }, default);
+                    for (var step = 0; step < 12; step++)
+                    {
+                        int? expectedBit = null, actualBit = null;
+                        var expected = Record.Exception(() => expectedBit = scalar.Read(data, probability, referenceWork));
+                        var actual = Record.Exception(() => actualBit = reader.Read(data, probability, actualWork));
+                        Equal(expected, actual, expectedBit, actualBit, scalar, reader, referenceWork, actualWork);
+                    }
+                }
+    }
+
+    [Theory]
     [InlineData(false)] [InlineData(true)]
     public void WorkAndCancellationRejectionPrecedeValidationAndLeaveCursorUnchanged(bool cancelled)
     {
@@ -215,9 +239,9 @@ public sealed class Vp8BooleanReaderTests
     }
 
     // Retained original bit-by-bit recurrence, independently of any bulk path.
-    private sealed class Scalar(int end, int range, int value, int shift)
+    private sealed class Scalar(int end, int range, int value, int shift, int initialPosition = 1)
     {
-        private int position = 1;
+        private int position = initialPosition;
         public int[] State => [position, end, shift, range, value];
         public int Read(ReadOnlySpan<byte> data, int probability, OperationContext context)
         {
