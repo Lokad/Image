@@ -1,5 +1,10 @@
 # Development benchmarks
 
+The [eight-pixel VP8 color-conversion round](WARM-VP8-COLOR-BLOCK.md) reduces
+complete warm decode to about 1.94x FFmpeg on the existing frozen input. Exact
+pixels, admission and allocation counts remain. Independent quiet confirmation
+and coverage of the other required cases remain open.
+
 The [reader-state caching trial](WARM-VP8-READER-STATE-REJECTED.md) is flat and
 discarded without a longer repeat. Three offset regression controls remain;
 production retains the accepted integer chroma implementation.

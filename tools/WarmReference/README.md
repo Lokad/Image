@@ -311,6 +311,9 @@ continues that same pair and preserves its pixel, ownership and thread contract.
 The [fixed coefficient-token round](../../benchmarks/WARM-VP8-COEFFICIENT-TOKEN.md)
 retains those boundaries and replaces generic tree traversal with format-specific
 decisions. No additional image or encoder-quality enumeration occurs.
+The [eight-pixel conversion round](../../benchmarks/WARM-VP8-COLOR-BLOCK.md)
+retains exact scalar pixels with a safe SIMD interior kernel. Complete warm
+decode screens reach about 1.94x; independent quiet confirmation remains open.
 The [reader-state caching trial](../../benchmarks/WARM-VP8-READER-STATE-REJECTED.md)
 is discarded as flat, without a longer repeat. Its offset controls remain.
 The [integer chroma-expansion round](../../benchmarks/WARM-VP8-CHROMA-INTEGER.md)
