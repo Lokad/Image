@@ -695,3 +695,36 @@ The [row-copy round](../../benchmarks/WARM-NORMAL-ROWS.md) reduces screened mean
 98.47%. Its twelve-sample repeat reaches 1.062x, upper 1.0871x, but fails the
 post-run I/O-wait guard. Quiet confirmation remains open; later cooldown does
 not certify the failed interval. Other material cases remain open.
+
+## Warm counterclockwise quarter turn
+
+`WarmCounterclockwise/Whole16` reuses the original RGBA16 513x259 raster,
+producing 259x513. Build the original public-API worker and validate full channel
+bytes, source, independent live owners and fourteen rejection controls:
+
+```bash
+bash tools/WarmReference/build-counterclockwise-linux.sh
+python3 tools/WarmReference/verify-counterclockwise-linux.py --cpu 0 --depth 16
+```
+
+```powershell
+./bench.ps1 -Smoke -Warm -WarmFamily Counterclockwise -WarmCases Whole16 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Counterclockwise -WarmCases Whole16 -Cpu 0 -NoBuild -PrepareWarm
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Counterclockwise -WarmCases Whole16 -Cpu 0 -NoBuild -WarmConfirm -PrepareWarm
+```
+
+The public FFmpeg transpose graph uses `dir=cclock:passthrough=none`. Each timed
+operation allocates and processes independent output pixels before release.
+Graph/source/frame wrappers are reused; padded rows need no extra packing or
+materialization copy. Managed timing includes complete Rotate(CounterClockwise90),
+both-buffer admission, tile placement and disposal. Every channel byte, alpha
+and hidden RGB matches the independent coordinate reference and pinned
+normal/scalar CLI output; two held outputs prove mutation isolation. One CPU/
+filter thread and normal SIMD apply. Prepared children execute their actual
+fixed jobs for validation only before statistical replay under fresh guards.
+
+The [bounded tile round](../../benchmarks/WARM-COUNTERCLOCKWISE-TILES.md) reduces
+screened mean 96.06%, with both short-screen guards passing. The independent
+twelve-actual repeat reaches 1.043x, upper 1.062x, but fails its post-run load
+guard. Quiet certification remains open; later cooldown cannot certify the
+failed interval. Other material cases remain open.

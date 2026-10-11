@@ -334,11 +334,10 @@ pixels with safe SIMD and a scalar fallback at the same bounded work intervals.
 Crop, vertical flip and half turns use the
 existing bounded reusable storage only for results that overwrite every sample;
 partial failures dispose their private result before publication.
-Clockwise quarter turns place complete RGBA8/RGBA16 pixels in bounded 32x32
-tiles with the same reusable storage policy, both-buffer admission and at most
+Clockwise and counterclockwise quarter turns place complete RGBA8/RGBA16 pixels
+in bounded 32x32 tiles with the same reusable storage policy, both-buffer admission and at most
 1024 pixels between work/cancellation checks. Partial tiles preserve exact
-placement and precision. Other quarter-turn and transpose kernels retain the
-general mapping path.
+placement and precision. Transpose kernels retain the general mapping path.
 Normal-orientation AutoOrient copies complete RGBA8/RGBA16 rows into independent
 storage with the same complete-overwrite policy and at most 1024 pixels between
 work/cancellation checks. It retains every channel byte and resets orientation

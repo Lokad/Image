@@ -83,6 +83,8 @@ public static class ImageTransforms
             return ClockwiseTurn.Apply(source, limits, cancellationToken);
         if (orientation == ImageOrientation.Normal)
             return NormalOrientation.Apply(source, limits, cancellationToken);
+        if (orientation == ImageOrientation.Rotate270)
+            return CounterclockwiseTurn.Apply(source, limits, cancellationToken);
         return Map(source, (int)orientation >= 5 ? h : w, (int)orientation >= 5 ? w : h, (x, y) => orientation switch
         {
             ImageOrientation.Normal => (x, y),
