@@ -308,3 +308,6 @@ The [reader inlining round](../../benchmarks/WARM-VP8-READ-INLINE.md) reuses the
 same native worker, input and correctness boundary, with no encode-quality search.
 The [branchless interval-selection round](../../benchmarks/WARM-VP8-BRANCHLESS.md)
 continues that same pair and preserves its pixel, ownership and thread contract.
+The [fixed coefficient-token round](../../benchmarks/WARM-VP8-COEFFICIENT-TOKEN.md)
+retains those boundaries and replaces generic tree traversal with format-specific
+decisions. No additional image or encoder-quality enumeration occurs.

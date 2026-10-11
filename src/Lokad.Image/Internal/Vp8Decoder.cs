@@ -235,12 +235,11 @@ internal ref struct Vp8Decoder
     {
         ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
         ReadOnlySpan<byte> zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
-        ReadOnlySpan<sbyte> tree = [-12, 2, -1, 4, -2, 6, 8, 12, -3, 10, -4, -5, 14, 16, -6, -7, 18, 20, -8, -9, -10, -11];
         var previousZero = false; var predictor = initialContext; nonzero = 0;
         for (var c = plane == 0 ? 1 : 0; c < 16; c++)
         {
             var p = probabilities.AsSpan(((plane * 8 + bands[c]) * 3 + predictor) * 11, 11);
-            var token = tokens.Tree(data, tree, p, context, previousZero ? 2 : 0);
+            var token = tokens.CoefficientToken(data, p, context, previousZero);
             if (token == 11) break;
             var value = token < 5 ? token : Category(ref tokens, token - 5);
             previousZero = value == 0; predictor = Math.Min(value, 2);

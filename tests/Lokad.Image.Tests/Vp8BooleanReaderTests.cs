@@ -141,6 +141,79 @@ public sealed class Vp8BooleanReaderTests
                     }
     }
 
+    // RFC 6386 section 13.2: retained tree traversal is the reference for the
+    // fixed coefficient-token decision primitive, including its skipped EOB.
+    private static readonly sbyte[] CoefficientTree = [-12, 2, -1, 4, -2, 6, 8, 12, -3, 10, -4, -5, 14, 16, -6, -7, 18, 20, -8, -9, -10, -11];
+    private static int CoefficientToken(ref Vp8BooleanReader reader, byte[] data, byte[] probabilities,
+        OperationContext context, bool previousZero) => reader.CoefficientToken(data, probabilities, context, previousZero);
+
+    private static int? CompareCoefficientToken(byte[] partition, byte[] data, byte[] probabilities,
+        int range, int value, int shift, long budget, bool previousZero, bool cancelled = false)
+    {
+        using var cancellation = new CancellationTokenSource();
+        var reader = Reader(partition, range, value, shift);
+        var scalar = new Scalar(partition.Length, range, value, shift);
+        var actualWork = new OperationContext(new ImageLimits { MaxWork = Math.Max(1, budget) }, cancellation.Token);
+        var referenceWork = new OperationContext(new ImageLimits { MaxWork = Math.Max(1, budget) }, cancellation.Token);
+        if (budget == 0) { actualWork.Work(1); referenceWork.Work(1); }
+        if (cancelled) cancellation.Cancel();
+        int? expectedToken = null, actualToken = null;
+        var expected = Record.Exception(() => expectedToken = scalar.Tree(data, CoefficientTree, probabilities, referenceWork, previousZero ? 2 : 0));
+        var actual = Record.Exception(() => actualToken = CoefficientToken(ref reader, data, probabilities, actualWork, previousZero));
+        Equal(expected, actual, expectedToken, actualToken, scalar, reader, referenceWork, actualWork);
+        return expected is null ? expectedToken : null;
+    }
+
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void CoefficientTokensCoverEveryLeafAndPreserveEachPartialWorkBudget(bool previousZero)
+    {
+        var leaves = new HashSet<int>(); var probabilities = Enumerable.Repeat((byte)128, 11).ToArray();
+        for (var value = 0; value < 255; value++)
+            for (var budget = 1; budget <= 8; budget++)
+            {
+                byte[] data = [(byte)value, 0x53, 0xad, 0x17, 0x80, 0x5a, 0, 0];
+                var token = CompareCoefficientToken(data, data, probabilities, 255, value, 7, budget, previousZero);
+                if (token is not null) leaves.Add(token.Value);
+            }
+        Assert.Equal(Enumerable.Range(0, previousZero ? 11 : 12), leaves.Order());
+    }
+
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void CoefficientTokensPreserveIntervalPartitionSpanAndProbabilityFailures(bool previousZero)
+    {
+        byte[][] probabilities = [Enumerable.Repeat((byte)128, 11).ToArray(), new byte[11],
+            Enumerable.Repeat((byte)255, 11).ToArray(), [1, 254, 63, 191, 0, 255, 127, 128, 129, 2, 253]];
+        foreach (var p in probabilities)
+            foreach (var range in new[] { 128, 191, 255 })
+                foreach (var value in new[] { 0, range / 2, range - 1, range })
+                    foreach (var shift in new[] { 0, 3, 7 })
+                        foreach (var length in new[] { 1, 2, 8 })
+                            foreach (var budget in new[] { 1, 2, 4, 8 })
+                            {
+                                byte[] bytes = [0, 0x53, 0xad, 0x17, 0x80, 0x5a, 0, 0]; var partition = bytes[..length];
+                                CompareCoefficientToken(partition, partition, p, range, value, shift, budget, previousZero);
+                                CompareCoefficientToken(partition, partition[..(length - 1)], p, range, value, shift, budget, previousZero);
+                            }
+        for (var length = 0; length < 11; length++)
+            for (var value = 0; value < 255; value++)
+            {
+                byte[] data = [0, 0x53, 0xad, 0x17, 0x80, 0x5a, 0, 0];
+                CompareCoefficientToken(data, data, probabilities[0][..length], 255, value, 7, 8, previousZero);
+            }
+    }
+
+    [Fact]
+    public void CoefficientTokenCancellationAndExhaustedWorkPreserveValidationOrder()
+    {
+        foreach (var previousZero in new[] { false, true })
+            foreach (var length in new[] { 0, 1, 11 })
+                foreach (var value in new[] { 0, 255 })
+                    foreach (var cancelled in new[] { false, true })
+                        CompareCoefficientToken([0], [], new byte[length], 255, value, 7, 0, previousZero, cancelled);
+    }
+
     // Retained original bit-by-bit recurrence, independently of any bulk path.
     private sealed class Scalar(int end, int range, int value, int shift)
     {
@@ -167,9 +240,9 @@ public sealed class Vp8BooleanReaderTests
             var result = 0; for (var i = 0; i < bits; i++) result = result * 2 + Read(data, 128, context);
             return result;
         }
-        public int Tree(ReadOnlySpan<byte> data, ReadOnlySpan<sbyte> tree, ReadOnlySpan<byte> probabilities, OperationContext context)
+        public int Tree(ReadOnlySpan<byte> data, ReadOnlySpan<sbyte> tree, ReadOnlySpan<byte> probabilities, OperationContext context, int root = 0)
         {
-            var node = 0; do { node = tree[node + Read(data, probabilities[node / 2], context)]; } while (node >= 0);
+            var node = root; do { node = tree[node + Read(data, probabilities[node / 2], context)]; } while (node >= 0);
             return -node - 1;
         }
     }

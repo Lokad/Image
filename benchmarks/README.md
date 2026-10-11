@@ -1,5 +1,11 @@
 # Development benchmarks
 
+The [VP8 coefficient-token round](WARM-VP8-COEFFICIENT-TOKEN.md) reduces complete
+decode a further 3.6%, from 2.38x to 2.29x FFmpeg, replacing generic traversal
+with fixed format decisions. Pixels, arithmetic state, work and allocations
+remain exact. This is still the largest measured gap; coverage and independent
+quiet confirmation remain open.
+
 The [VP8 branchless interval-selection round](WARM-VP8-BRANCHLESS.md) reduces
 complete decode a further 2.2%, from 2.43x to 2.38x FFmpeg. Only the arithmetic
 interval-selection body changes; pixels, work, failure state and allocations
@@ -8,8 +14,8 @@ remain exact. VP8 decode is still the largest measured gap and above 2x.
 The [VP8 arithmetic reader inlining round](WARM-VP8-READ-INLINE.md) reduces
 complete decode about 8%, from 2.64x to 2.43x FFmpeg, preserving all production
 method bodies and pixels. The grouped-shift trial was flat and discarded.
-That checkpoint left VP8 decode as the largest measured gap. Current attribution
-selected interval selection above; required coverage and quiet confirmation remain open.
+That checkpoint left VP8 decode as the largest measured gap. Its profile selected
+interval selection; required coverage and quiet confirmation remain open.
 
 The [native-input VP8 decode screen](WARM-VP8-NATIVE-DECODE.md) adds one frozen
 input pair at 2.64x FFmpeg, the largest measured gap at that checkpoint. Production was unchanged;
