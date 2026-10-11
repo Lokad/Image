@@ -4,6 +4,40 @@ namespace Lokad.Image.Tests;
 
 public sealed class JpegComponentRowTests
 {
+    [Fact]
+    public void MixedLaneAlphaKeepsIndependentChannelAndBackgroundProducts()
+    {
+        var rgba = new byte[34]; var pixels = new byte[10];
+        foreach (var background in new uint[] { 0, 0xFFFFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0x204060, 0x0101FE, 0xFF7F80 })
+        for (var phase = 0; phase < 256; phase++)
+        {
+            Array.Fill(rgba, (byte)123);
+            for (var lane = 0; lane < 8; lane++)
+            {
+                rgba[1 + lane * 4] = (byte)(phase + lane * 73);
+                rgba[2 + lane * 4] = (byte)(255 - phase + lane * 127);
+                rgba[3 + lane * 4] = (byte)(phase * 17 + lane * 31);
+                rgba[4 + lane * 4] = (byte)(phase + lane * 37);
+            }
+            var original = rgba.ToArray();
+            for (var component = 0; component < 3; component++)
+            {
+                Array.Fill(pixels, (byte)123);
+                JpegEncoder.SampleComponentRow8(rgba.AsSpan(1, 32), component, background, pixels.AsSpan(1, 8));
+                for (var lane = 0; lane < 8; lane++)
+                {
+                    var alpha = rgba[4 + lane * 4];
+                    var r = (rgba[1 + lane * 4] * alpha + (int)(background >> 16 & 255) * (255 - alpha) + 127) / 255;
+                    var g = (rgba[2 + lane * 4] * alpha + (int)(background >> 8 & 255) * (255 - alpha) + 127) / 255;
+                    var b = (rgba[3 + lane * 4] * alpha + (int)(background & 255) * (255 - alpha) + 127) / 255;
+                    Assert.Equal(OriginalSample(r, g, b, component), pixels[lane + 1]);
+                }
+                Assert.Equal(123, pixels[0]); Assert.Equal(123, pixels[^1]);
+            }
+            Assert.Equal(original, rgba);
+        }
+    }
+
     [Theory]
     [InlineData(0)] [InlineData(1)] [InlineData(2)]
     public void EveryOpaqueRgbColorKeepsTheOriginalRoundedComponent(int component)

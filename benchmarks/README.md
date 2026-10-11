@@ -1,5 +1,10 @@
 # Development benchmarks
 
+The [JPEG paired alpha-blending trial](WARM-JPEG-PAIRED-BLEND.md) gives no useful
+complete-operation gain and is discarded. A current encode CPU profile and one
+mixed-lane control are retained. JPEG encode remains the largest measured point
+gap near 2.0215x; the next optimization will address a distinct encoder primitive.
+
 The [PNG long-literal fallback round](WARM-PNG-LONG-LITERAL.md) skips canonical
 depths already excluded by the root lookup. PNG8 decode improves about 1.3%;
 PNG16 is effectively unchanged, both near 2.01x FFmpeg. A frozen VP8L ranking
