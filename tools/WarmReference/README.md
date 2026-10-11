@@ -325,18 +325,24 @@ was flat and discarded; its original trial evidence remains available.
 
 ## Warm nearest resize
 
-`WarmNearestResize/Down8` covers one 513x259 RGBA8 to 256x129 nearest resize
+`WarmNearestResize/Down8` and the explicit `Down16` selection each cover one
+513x259 RGBA8 or RGBA16 to 256x129 nearest resize at the same sample depth
 on the existing original raster. It preserves exact integer center coordinates,
 alpha and zero-alpha hidden RGB. No extra source image or quality search occurs.
 
 ```bash
 bash tools/WarmReference/build-nearest-linux.sh
 python3 tools/WarmReference/verify-nearest-linux.py --cpu 0
+# Reuse the existing RGBA16 precision-audit input for full-word controls.
+python3 tools/WarmReference/verify-nearest-linux.py --cpu 0 --depth 16
 ```
 
 ```powershell
 ./bench.ps1 -Smoke -Warm -WarmFamily Nearest -WarmCases Down8 -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily Nearest -WarmCases Down8 -Cpu 0 -NoBuild
+# Select one depth per run; Down8 remains the default.
+./bench.ps1 -Smoke -Warm -WarmFamily Nearest -WarmCases Down16 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Nearest -WarmCases Down16 -Cpu 0 -NoBuild
 ```
 
 The original development adapter uses public FFmpeg filter APIs with one filter
@@ -356,7 +362,9 @@ The [first screen](../../benchmarks/WARM-NEAREST-BASELINE.md) reaches about 1.31
 without a production change. The packed swscale-neighbor CLI alternative fails
 exact selected pixels and is not timed. Run sequentially on the dedicated quiet
 VM, preserving source, raw samples and the actual statistical DLL before edits.
-Other resize directions, sizes, depths and filtered kernels remain unmeasured;
+The RGBA16 path uses RGBA64LE/GBRP16LE/GBRAP16LE throughout and validates every
+full-word sample against the integer reference. Adding the pair makes no
+performance claim. Other resize directions, sizes and filtered kernels remain unmeasured;
 independent quiet confirmation remains open. These native tools and their ignored
 static archives are never production build inputs.
 

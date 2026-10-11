@@ -914,3 +914,8 @@ input. It does not search encode qualities or require a matched encode pair.
 Its [reference protocol](../tools/WarmReference/README.md#warm-native-input-vp8-decode)
 includes decoder reset, chroma expansion, color conversion, alpha merge and
 owned output allocation/release, with normal SIMD and one CPU/thread.
+
+The explicit `Nearest/Down16` selection reuses the existing full-precision
+RGBA16 raster with exact integer center mapping and every output sample checked.
+Its [first screen](WARM-NEAREST16-BASELINE.md) reaches 2.12x with wide short-run
+uncertainty; parity and independent quiet confirmation remain open.

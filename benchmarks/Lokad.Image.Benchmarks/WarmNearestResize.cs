@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmNearestCase { Down8 }
+public enum WarmNearestCase { Down8, Down16 }
 
 /// <summary>One complete nearest resize on the existing original raster.</summary>
 [MemoryDiagnoser]
@@ -21,21 +21,22 @@ public class WarmNearestResize
     private NativeWarmSample[] before = [];
     private JsonElement sourceIdentity;
     private bool smoke, ready;
-    private int cpu, sampleCount;
+    private int cpu, sampleCount, depth;
     private const int Width = 256, Height = 129;
 
     public static WarmNearestCase[] SelectedCases()
         => Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES") switch
         {
             null or "Down8" => [WarmNearestCase.Down8],
-            _ => throw new ArgumentException("Choose the single nearest case Down8.")
+            "Down16" => [WarmNearestCase.Down16],
+            _ => throw new ArgumentException("Choose one nearest case: Down8 or Down16.")
         };
 
     [GlobalSetup]
     public void Setup()
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Use the dedicated Linux VM.");
-        if (Case != WarmNearestCase.Down8) throw new ArgumentOutOfRangeException(nameof(Case));
+        depth = Case switch { WarmNearestCase.Down8 => 8, WarmNearestCase.Down16 => 16, _ => throw new ArgumentOutOfRangeException(nameof(Case)) };
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -49,14 +50,14 @@ public class WarmNearestResize
         {
             using (var manifest = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/benchmark-source.json"))))
                 sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = manifest.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = manifest.RootElement.GetProperty("sourceRevision").GetString() });
-            input = HorizontalFlipInput.Create(8);
-            expected = ExactResizeReference.Resize(input, 513, 259, 8, Width, Height, ResizeFilter.Nearest);
-            source = JpegBenchmarkCase.Buffer(input, 513, 259, 8);
+            input = HorizontalFlipInput.Create(depth);
+            expected = ExactResizeReference.Resize(input, 513, 259, depth, Width, Height, ResizeFilter.Nearest);
+            source = JpegBenchmarkCase.Buffer(input, 513, 259, depth);
             File.WriteAllBytes(state.Input, input);
             ValidateManaged();
-            native = new NativeWarmReference(state, 8, cpu, "nearest-resize");
+            native = new NativeWarmReference(state, depth, cpu, "nearest-resize");
             RequireNativeOutput();
-            var arguments = ResizeOracle.NearestArguments(513, 259, Width, Height, 8).ToList();
+            var arguments = ResizeOracle.NearestArguments(513, 259, Width, Height, depth).ToList();
             arguments.RemoveRange(arguments.IndexOf("-cpuflags"), 2);
             if (!OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), input).AsSpan().SequenceEqual(expected))
                 throw new InvalidOperationException("Pinned CLI nearest pixels differ from the original integer reference.");
@@ -70,10 +71,11 @@ public class WarmNearestResize
     {
         using var first = ImageTransforms.Resize(source, Width, Height, ResizeFilter.Nearest);
         using var second = ImageTransforms.Resize(source, Width, Height, ResizeFilter.Nearest);
-        if ((first.Width, first.Height, first.BitDepth, first.Orientation) != (Width, Height, 8, ImageOrientation.Normal)
+        if ((first.Width, first.Height, first.BitDepth, first.Orientation) != (Width, Height, depth, ImageOrientation.Normal)
             || !OriginalPixels.Bytes(first).AsSpan().SequenceEqual(expected) || !OriginalPixels.Bytes(second).AsSpan().SequenceEqual(expected))
             throw new InvalidOperationException("Nearest geometry or RGBA differs from exact center coordinates.");
-        first.GetRow8(0)[0] ^= 255;
+        if (depth == 8) first.GetRow8(0)[0] ^= 255;
+        else first.GetRow16(0)[0] ^= 65535;
         if (!OriginalPixels.Bytes(second).AsSpan().SequenceEqual(expected) || !OriginalPixels.Bytes(source).AsSpan().SequenceEqual(input))
             throw new InvalidOperationException("Nearest outputs alias or source changed.");
     }
@@ -102,7 +104,7 @@ public class WarmNearestResize
             File.WriteAllText(path, JsonSerializer.Serialize(new
             {
                 schemaVersion = 1, name = nameof(WarmNearestResize), caseId = Case.ToString(), smoke,
-                runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), width = 513, height = 259, depth = 8,
+                runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), width = 513, height = 259, depth,
                 outputWidth = Width, outputHeight = Height, cpu, managedAffinityCount = 1, processorCount = Environment.ProcessorCount,
                 serverGc = GCSettings.IsServerGC, gcConfiguration = GC.GetConfigurationVariables(), runtime = RuntimeInformation.FrameworkDescription,
                 platform = RuntimeInformation.RuntimeIdentifier, sourceIdentity,
@@ -112,7 +114,7 @@ public class WarmNearestResize
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmNearestResize).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = "One resident original 513x259 RGBA8 raster to independently owned 256x129 nearest output. Complete public Resize, admission, allocation/materialization/disposal. Native public FFmpeg filter graph includes packing/plane extraction, separate RGB and replicated-alpha zscale point kernels, merging, output pixel allocation/release. Graph/source/frame wrappers and geometry contexts are reused; every call filters every selected sample. Native padded output rows exposed directly. Exact integer center mapping, alpha and hidden RGB. No codec, expression evaluator or output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this downsample case is measured."
+                boundary = $"One resident original 513x259 RGBA{depth} raster to independently owned 256x129 nearest output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Native public FFmpeg filter graph includes packing/plane extraction, separate RGB and replicated-alpha zscale point kernels, merging, output pixel allocation/release. Graph/source/frame wrappers and geometry contexts are reused; every call filters every selected sample. Native padded output rows exposed directly. Exact integer center mapping, alpha and hidden RGB. No codec, expression evaluator or output cache. Startup, IPC, I/O, generation, hashing and validation excluded; one CPU/filter thread, normal SIMD. Only this downsample case is measured."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
         }
         finally { native?.Dispose(); source?.Dispose(); state?.Dispose(); ready = false; }

@@ -78,7 +78,8 @@ static void check_frame(Work *work, AVFrame *frame)
         int sy=(int)(((uint64_t)2*y+1)*work->height/((uint64_t)2*work->output_height));
         for (int x=0;x<work->output_width;x++) {
             int sx=(int)(((uint64_t)2*x+1)*work->width/((uint64_t)2*work->output_width));
-            if (memcmp(frame->data[0]+(size_t)y*frame->linesize[0]+x*4,work->original+(size_t)sy*work->row_bytes+sx*4,4)) fail("Independent nearest coordinates differ.");
+            int pixel_bytes=(work->depth/8)*4;
+            if (memcmp(frame->data[0]+(size_t)y*frame->linesize[0]+x*pixel_bytes,work->original+(size_t)sy*work->row_bytes+sx*pixel_bytes,(size_t)pixel_bytes)) fail("Independent nearest coordinates differ.");
         }
     }
 }
@@ -108,8 +109,8 @@ int main(int argc, char **argv)
     av_log_set_level(AV_LOG_ERROR);
     Work work = {0}; work.cpu = affinity_cpu();
     work.width = number(argv[3]); work.height = number(argv[4]); work.depth = number(argv[5]);
-    if (work.depth != 8 || work.width < 2 || work.height < 2) fail("Use RGBA8 dimensions at least two.");
-    work.output_width=work.width/2;work.output_height=work.height/2;work.output_row_bytes=work.output_width*4;
+    if ((work.depth != 8 && work.depth != 16) || work.width < 2 || work.height < 2) fail("Use RGBA8/RGBA16 dimensions at least two.");
+    work.output_width=work.width/2;work.output_height=work.height/2;work.output_row_bytes=work.output_width*(work.depth/8)*4;
     work.row_bytes = work.width * (work.depth / 8) * 4;
     size_t bytes = (size_t)work.row_bytes * work.height;
     if (bytes > 512U * 1024U * 1024U) fail("Reference input exceeds 512 MiB.");
@@ -138,11 +139,14 @@ int main(int argc, char **argv)
     outputs->name=av_strdup("in");outputs->filter_ctx=work.input;outputs->pad_idx=0;
     inputs->name=av_strdup("out");inputs->filter_ctx=work.output;inputs->pad_idx=0;
     char graph[2048];
+    const char *rgb=work.depth==16?"gbrp16le":"gbrp";
+    const char *planar=work.depth==16?"gbrap16le":"gbrap";
+    const char *packed=work.depth==16?"rgba64le":"rgba";
     snprintf(graph,sizeof(graph),"[in]extractplanes=r+g+b+a[r][g][b][a];"
-        "[g][b][r]mergeplanes=0x001020:format=gbrp,zscale=w=%d:h=%d:filter=point:rangein=full:range=full:matrixin=gbr:matrix=gbr:dither=none,format=gbrp,setsar=1,extractplanes=r+g+b[rs][gs][bs];"
-        "[a]mergeplanes=0x000000:format=gbrp,zscale=w=%d:h=%d:filter=point:rangein=full:range=full:matrixin=gbr:matrix=gbr:dither=none,format=gbrp,setsar=1,extractplanes=g[as];"
-        "[gs][bs][rs][as]mergeplanes=0x00102030:format=gbrap,format=rgba[out]",
-        work.output_width,work.output_height,work.output_width,work.output_height);
+        "[g][b][r]mergeplanes=0x001020:format=%s,zscale=w=%d:h=%d:filter=point:rangein=full:range=full:matrixin=gbr:matrix=gbr:dither=none,format=%s,setsar=1,extractplanes=r+g+b[rs][gs][bs];"
+        "[a]mergeplanes=0x000000:format=%s,zscale=w=%d:h=%d:filter=point:rangein=full:range=full:matrixin=gbr:matrix=gbr:dither=none,format=%s,setsar=1,extractplanes=g[as];"
+        "[gs][bs][rs][as]mergeplanes=0x00102030:format=%s,format=%s[out]",
+        rgb,work.output_width,work.output_height,rgb,rgb,work.output_width,work.output_height,rgb,planar,packed);
     require(avfilter_graph_parse_ptr(work.graph,graph,&inputs,&outputs,NULL),"Parse nearest graph");
     if(inputs||outputs)fail("Unconnected graph endpoint.");
     avfilter_inout_free(&inputs);avfilter_inout_free(&outputs);

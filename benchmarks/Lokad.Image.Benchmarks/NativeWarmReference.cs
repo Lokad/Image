@@ -55,7 +55,7 @@ internal sealed class NativeWarmReference : IDisposable
                 || Ready.GetProperty("affinityCount").GetInt32() != 1 || Ready.GetProperty(codec ? "codecThreads" : "filterThreads").GetInt32() != 1
                 || Ready.GetProperty("threadType").GetInt32() != 0 || Ready.GetProperty("operation").GetString() != operation
                 || (codec && (Ready.GetProperty("activeThreadType").GetInt32() != 0 || !Ready.GetProperty("independentLiveOutputs").GetBoolean()))
-                || ((nearest || bilinear) && (depth != 8 || Ready.GetProperty("outputWidth").GetInt32() != 256
+                || ((nearest || bilinear) && ((nearest ? depth is not (8 or 16) : depth != 8) || Ready.GetProperty("outputWidth").GetInt32() != 256
                     || Ready.GetProperty("outputHeight").GetInt32() != 129 || !Ready.GetProperty("independentLiveOutputs").GetBoolean()))
                 || (bilinear && (Ready.GetProperty("kernel").GetString() != "triangle" || Ready.GetProperty("alphaMode").GetString() != "straight"
                     || !Ready.GetProperty("premultipliedAlphaTimed").GetBoolean() || !Ready.GetProperty("encodedSampleSpace").GetBoolean()))
