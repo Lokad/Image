@@ -392,6 +392,38 @@ The [integer chroma-expansion round](../../benchmarks/WARM-VP8-CHROMA-INTEGER.md
 preserves the exact original samples and matrix on that pair. Scoped work caching
 was flat and discarded; its original trial evidence remains available.
 
+## Warm clockwise quarter turn
+
+`WarmClockwise/Whole16` reuses the existing original RGBA16 513x259 raster,
+producing 259x513. Build the original public-API adapter and validate full-word
+samples, source, independent live owners and fourteen rejection controls:
+
+```bash
+bash tools/WarmReference/build-clockwise-linux.sh
+python3 tools/WarmReference/verify-clockwise-linux.py --cpu 0 --depth 16
+```
+
+```powershell
+./bench.ps1 -Smoke -Warm -WarmFamily Clockwise -WarmCases Whole16 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Clockwise -WarmCases Whole16 -Cpu 0 -NoBuild -PrepareWarm
+```
+
+Native transpose uses clockwise placement with passthrough disabled, allocating
+and processing independent output pixels before release inside every operation.
+Graph/source/frame wrappers are reused. Padded rows need no packing or extra
+materialization copy. Managed timing includes complete Rotate(Clockwise90),
+admission, materialization and disposal. Both sides may reuse released storage;
+neither caches outputs. Full precision, alpha, hidden RGB, source and live
+owners are exact, as are pinned normal/scalar CLI pixels. Use one CPU/filter
+thread, thread type zero, normal SIMD and the unchanged quiet-VM policy.
+
+The [bounded-tile round](../../benchmarks/WARM-CLOCKWISE-TILES.md) brings the
+screened mean from 26.57x to 1.00x, with conservative short upper 1.51x and both
+short guards passing. Its longer confirmation and coverage limits are reported
+separately: twelve samples pass both guards at 0.990x, with conservative upper
+below 1.014x, certifying this fixed pair. `Whole8` is an explicit correctness selection; only `Whole16` is
+measured in this round. No image or geometry sweep is added.
+
 ## Warm half turn
 
 `WarmHalfTurn/Whole16` reuses the existing original RGBA16 513x259 raster.

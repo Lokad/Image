@@ -941,3 +941,12 @@ graph uses hflip allocation followed by vflip row placement; no additional full
 copy is needed for independent ownership. Its independent twelve-sample repeat
 passes both quiet guards at 0.933x, with conservative upper 0.967x. Only this
 fixed pair is certified; broader half-turn and orientation coverage remains open.
+
+The `Clockwise/Whole16` selection reuses the same raster, swapping 513x259 to
+259x513. [Bounded pixel tiles](WARM-CLOCKWISE-TILES.md) replace per-pixel mapping
+with typed cache-local placement and existing admitted complete-overwrite
+storage, reducing the screened mean 96.19%, from 26.57x to 1.00x. The native
+transpose graph allocates independent pixels directly. Only this fixed pair
+is measured. Its independent twelve-sample repeat passes both quiet guards at
+0.990x, with conservative upper below 1.014x, certifying this fixed pair.
+Other quarter-turn and transpose cases remain open.

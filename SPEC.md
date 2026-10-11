@@ -27,7 +27,7 @@ metadata round-tripping, drawing and font rendering are deferred.
 straight alpha. `GetRow8` exposes byte samples; `GetRow16` exposes native-endian
 unsigned 16-bit samples. 8-bit images use four bytes/pixel, 16-bit images eight.
 Rows have no padding. Dispose drops ownership; callers must cease using
-previously returned spans, which safe C# cannot revoke. Released crop, flip and half-turn
+previously returned spans, which safe C# cannot revoke. Released crop and rotation/flip
 storage may be reused by a later result. Live buffers never share their pixel
 storage. New `ImageBuffer.Create` buffers are zero initialized.
 
@@ -334,6 +334,11 @@ pixels with safe SIMD and a scalar fallback at the same bounded work intervals.
 Crop, vertical flip and half turns use the
 existing bounded reusable storage only for results that overwrite every sample;
 partial failures dispose their private result before publication.
+Clockwise quarter turns place complete RGBA8/RGBA16 pixels in bounded 32x32
+tiles with the same reusable storage policy, both-buffer admission and at most
+1024 pixels between work/cancellation checks. Partial tiles preserve exact
+placement and precision. Other quarter-turn and transpose kernels retain the
+general mapping path.
 See [resource admission](docs/resource-admission.md) for review evidence and scope.
 
 Malformed data raises `ImageDataException`, unsupported features raise
