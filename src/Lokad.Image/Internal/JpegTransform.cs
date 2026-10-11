@@ -269,6 +269,110 @@ internal static class JpegTransform
             pixels[x] = (byte)Math.Clamp(Math.Round(samples.GetElement(x), MidpointRounding.AwayFromZero), 0, 255);
     }
 
+    internal static bool TryForwardQuantized(ReadOnlySpan<byte> pixels, ReadOnlySpan<ushort> quantization, Span<int> result, OperationContext context)
+    {
+        if (pixels.Length != 64 || quantization.Length != 64 || result.Length != 64)
+            throw new ArgumentException("JPEG quantized transforms operate on complete 8x8 blocks.");
+        if (!Avx512F.IsSupported || !Avx2.IsSupported || quantization.Contains((ushort)0)) return false;
+        context.Work(4096);
+        // Stored basis values are exact inputs to the certificate. Row/column
+        // regrouping may change coefficient bits, so only a certified quantized
+        // integer is accepted. See docs/jpeg-forward-quantization.md.
+        Span<double> horizontal = stackalloc double[64];
+        var basis = Cosines.AsSpan(0, 64);
+        pixels = pixels[..64]; quantization = quantization[..64]; result = result[..64];
+        // Interleave independent rows, retaining each row's original x order.
+        // A single accumulator at a time serializes the vector additions even
+        // though the separable evaluation needs fewer arithmetic operations.
+        Vector512<double> row0 = Vector512<double>.Zero, row1 = Vector512<double>.Zero,
+            row2 = Vector512<double>.Zero, row3 = Vector512<double>.Zero,
+            row4 = Vector512<double>.Zero, row5 = Vector512<double>.Zero,
+            row6 = Vector512<double>.Zero, row7 = Vector512<double>.Zero;
+        for (var x = 0; x < 8; x++)
+        {
+            var weights = Vector512.Create(basis.Slice(x * 8, 8));
+            row0 = Avx512F.Add(row0, Avx512F.Multiply(Vector512.Create((double)(pixels[x] - 128)), weights));
+            row1 = Avx512F.Add(row1, Avx512F.Multiply(Vector512.Create((double)(pixels[8 + x] - 128)), weights));
+            row2 = Avx512F.Add(row2, Avx512F.Multiply(Vector512.Create((double)(pixels[16 + x] - 128)), weights));
+            row3 = Avx512F.Add(row3, Avx512F.Multiply(Vector512.Create((double)(pixels[24 + x] - 128)), weights));
+            row4 = Avx512F.Add(row4, Avx512F.Multiply(Vector512.Create((double)(pixels[32 + x] - 128)), weights));
+            row5 = Avx512F.Add(row5, Avx512F.Multiply(Vector512.Create((double)(pixels[40 + x] - 128)), weights));
+            row6 = Avx512F.Add(row6, Avx512F.Multiply(Vector512.Create((double)(pixels[48 + x] - 128)), weights));
+            row7 = Avx512F.Add(row7, Avx512F.Multiply(Vector512.Create((double)(pixels[56 + x] - 128)), weights));
+        }
+        row0.CopyTo(horizontal[..8]); row1.CopyTo(horizontal.Slice(8, 8));
+        row2.CopyTo(horizontal.Slice(16, 8)); row3.CopyTo(horizontal.Slice(24, 8));
+        row4.CopyTo(horizontal.Slice(32, 8)); row5.CopyTo(horizontal.Slice(40, 8));
+        row6.CopyTo(horizontal.Slice(48, 8)); row7.CopyTo(horizontal.Slice(56, 8));
+        // The vertical frequencies are independent as well. Reuse this same
+        // scratch after every horizontal row has been consumed; no additional
+        // storage and no change to a frequency's y accumulation order.
+        Vector512<double> sum0 = Vector512<double>.Zero, sum1 = Vector512<double>.Zero,
+            sum2 = Vector512<double>.Zero, sum3 = Vector512<double>.Zero,
+            sum4 = Vector512<double>.Zero, sum5 = Vector512<double>.Zero,
+            sum6 = Vector512<double>.Zero, sum7 = Vector512<double>.Zero;
+        for (var y = 0; y < 8; y++)
+        {
+            var samples = Vector512.Create(horizontal.Slice(y * 8, 8)); var offset = y * 8;
+            sum0 = Avx512F.Add(sum0, Avx512F.Multiply(samples, Vector512.Create(basis[offset])));
+            sum1 = Avx512F.Add(sum1, Avx512F.Multiply(samples, Vector512.Create(basis[offset + 1])));
+            sum2 = Avx512F.Add(sum2, Avx512F.Multiply(samples, Vector512.Create(basis[offset + 2])));
+            sum3 = Avx512F.Add(sum3, Avx512F.Multiply(samples, Vector512.Create(basis[offset + 3])));
+            sum4 = Avx512F.Add(sum4, Avx512F.Multiply(samples, Vector512.Create(basis[offset + 4])));
+            sum5 = Avx512F.Add(sum5, Avx512F.Multiply(samples, Vector512.Create(basis[offset + 5])));
+            sum6 = Avx512F.Add(sum6, Avx512F.Multiply(samples, Vector512.Create(basis[offset + 6])));
+            sum7 = Avx512F.Add(sum7, Avx512F.Multiply(samples, Vector512.Create(basis[offset + 7])));
+        }
+        var scale = Vector512.Create(0.25);
+        Avx512F.Multiply(sum0, scale).CopyTo(horizontal[..8]);
+        Avx512F.Multiply(sum1, scale).CopyTo(horizontal.Slice(8, 8));
+        Avx512F.Multiply(sum2, scale).CopyTo(horizontal.Slice(16, 8));
+        Avx512F.Multiply(sum3, scale).CopyTo(horizontal.Slice(24, 8));
+        Avx512F.Multiply(sum4, scale).CopyTo(horizontal.Slice(32, 8));
+        Avx512F.Multiply(sum5, scale).CopyTo(horizontal.Slice(40, 8));
+        Avx512F.Multiply(sum6, scale).CopyTo(horizontal.Slice(48, 8));
+        Avx512F.Multiply(sum7, scale).CopyTo(horizontal.Slice(56, 8));
+        var magnitudeMask = Vector512.Create(long.MaxValue); var signMask = Vector512.Create(long.MinValue);
+        var half = Vector512.Create(0.5); var one = Vector512.Create(1.0).AsInt64();
+        // 2^-30 exceeds the direct/separable quotient difference and the
+        // rounding error of the distance test throughout the byte-input domain.
+        var error = Vector512.Create(1.0 / 1073741824.0);
+        for (var v = 0; v < 8; v++)
+        {
+            var coefficients = Vector512.Create(horizontal.Slice(v * 8, 8));
+            var integers = Avx2.ConvertToVector256Int32(Vector128.Create(quantization.Slice(v * 8, 8)));
+            var quotient = Avx512F.Divide(coefficients, Avx512F.ConvertToVector512Double(integers));
+            var magnitude = Avx512F.And(quotient.AsInt64(), magnitudeMask).AsDouble();
+            var integral = Avx512F.RoundScale(magnitude, 0x09);
+            var fraction = Avx512F.Subtract(magnitude, integral);
+            var distance = Avx512F.And(Avx512F.Subtract(fraction, half).AsInt64(), magnitudeMask).AsDouble();
+            var uncertain = Vector512.ExtractMostSignificantBits(Avx512F.CompareLessThanOrEqual(distance, error));
+            var atLeastHalf = Avx512F.CompareGreaterThanOrEqual(fraction, half);
+            var rounded = Avx512F.Add(integral, Avx512F.And(atLeastHalf.AsInt64(), one).AsDouble());
+            var signed = Avx512F.Or(rounded.AsInt64(), Avx512F.And(quotient.AsInt64(), signMask)).AsDouble();
+            var quantized = Avx512F.ConvertToVector256Int32WithTruncation(signed);
+            for (var u = 0; uncertain != 0 && u < 8; u++)
+            {
+                if ((uncertain & (1UL << u)) == 0) continue;
+                var index = v * 8 + u;
+                quantized = quantized.WithElement(u, (int)Math.Round(ForwardCoefficient(pixels, v, u) / quantization[index], MidpointRounding.AwayFromZero));
+            }
+            quantized.CopyTo(result.Slice(v * 8, 8));
+        }
+        return true;
+    }
+
+    private static double ForwardCoefficient(ReadOnlySpan<byte> pixels, int v, int u)
+    {
+        double sum = 0;
+        for (var y = 0; y < 8; y++)
+        {
+            var vertical = Cosines[y * 8 + v];
+            for (var x = 0; x < 8; x++) sum += (pixels[y * 8 + x] - 128) * Cosines[x * 8 + u] * vertical;
+        }
+        return sum / 4;
+    }
+
     public static void Forward(ReadOnlySpan<byte> pixels, Span<double> coefficients, OperationContext context)
     {
         if (pixels.Length != 64 || coefficients.Length != 64)

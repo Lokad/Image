@@ -107,8 +107,11 @@ internal static class JpegEncoder
                             pixels[y * 8 + x] = (byte)Math.Clamp(Math.Round(sum / (samplesX * samplesY), MidpointRounding.AwayFromZero), 0, 255);
                         }
                     }
-                    JpegTransform.Forward(pixels, transformed, context);
-                    Quantize(transformed, q, quantized);
+                    if (!JpegTransform.TryForwardQuantized(pixels, q, quantized, context))
+                    {
+                        JpegTransform.Forward(pixels, transformed, context);
+                        Quantize(transformed, q, quantized);
+                    }
                     var difference = quantized[0] - predictors[component]; predictors[component] = quantized[0];
                     var category = Category(difference);
                     if (category > 11) throw new ImageDataException("JPEG DC transform exceeds its coding range.");

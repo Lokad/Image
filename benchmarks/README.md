@@ -1,15 +1,21 @@
 # Development benchmarks
 
+The [certified JPEG forward/quantization round](WARM-JPEG-FORWARD-INTERLEAVED.md)
+reduces complete encoding time about 3.7%, from 2.02x to 1.95x FFmpeg, retaining
+all encoded bytes. Its 12-sample upper is below 2x; quietness and independent
+passing confirmation remain open. PNG16 decode is now the largest retained
+measured point gap near 2.0093x. Uniform parity and required-path coverage are open.
+
 The [JPEG paired alpha-blending trial](WARM-JPEG-PAIRED-BLEND.md) gives no useful
 complete-operation gain and is discarded. A current encode CPU profile and one
-mixed-lane control are retained. JPEG encode remains the largest measured point
-gap near 2.0215x; the next optimization will address a distinct encoder primitive.
+mixed-lane control are retained. That checkpoint left JPEG encode as the largest
+measured point gap near 2.0215x, before the certified transform round above.
 
 The [PNG long-literal fallback round](WARM-PNG-LONG-LITERAL.md) skips canonical
 depths already excluded by the root lookup. PNG8 decode improves about 1.3%;
 PNG16 is effectively unchanged, both near 2.01x FFmpeg. A frozen VP8L ranking
-recheck reaches 1.98x. JPEG encode is now the largest measured point gap, near
-2.0215x; uniform warm parity and required-path coverage remain open.
+recheck reaches 1.98x. That round left JPEG encode as the largest measured point
+gap near 2.0215x; uniform warm parity and required-path coverage remain open.
 
 The [JPEG local entropy-work round](WARM-JPEG-LOCAL-WORK.md) preserves every exact
 charge within each baseline coefficient block. Native-input decode screens reach

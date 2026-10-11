@@ -129,6 +129,11 @@ not yet optimized. Optional restart intervals count MCUs and reset DC predictors
 The forward transform evaluates independent coefficients with safe AVX/AVX-512
 when available, preserving the frozen binary64 basis, separate multiplications
 and accumulation order. Other processors use the original scalar calculation.
+Encoding on AVX-512 can combine a separable transform with quantization when a
+conservative [rounding certificate](docs/jpeg-forward-quantization.md) proves the
+original quantized integer. Uncertain coefficients use the original direct
+evaluation. Encoded bytes, standalone coefficient bits and work admission remain
+unchanged; unsupported hardware uses the original transform and quantization.
 
 JPEG requires opaque input or an explicit `BackgroundRgb` packed as 0xRRGGBB.
 Alpha flattening operates in encoded sample space before 16-to-8-bit conversion,
