@@ -1,9 +1,14 @@
 # Development benchmarks
 
+The [destination-row acquisition round](WARM-RESIZE-DESTINATION.md) reduces
+complete warm bilinear resize a further 16.1%, from 8.65x to 7.25x FFmpeg.
+Pixels, admission and allocations remain. It is still the largest measured gap;
+vertical kernel-weight reuse is next.
+
 The [horizontal weight-reuse round](WARM-RESIZE-XWEIGHTS.md) reduces complete warm
 bilinear resize a further 5.7%, from 9.08x to 8.65x FFmpeg. Original pixels,
 admission and allocations remain. It is still the largest measured gap;
-destination-row acquisition is the next primitive.
+that checkpoint selected destination-row acquisition.
 
 The [four-channel resize SIMD trial](WARM-RESIZE-SIMD-REJECTED.md) shows no useful
 gain in its short screen and is discarded without a longer repeat. Four exact

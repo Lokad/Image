@@ -403,7 +403,8 @@ to 27.46x, and [one source-row span per vertical tap](../../benchmarks/WARM-ROW-
 reduces it to 9.08x, the largest measured warm gap at that checkpoint. The
 [four-channel SIMD trial](../../benchmarks/WARM-RESIZE-SIMD-REJECTED.md) is discarded
 without a longer repeat. [Horizontal kernel-weight reuse](../../benchmarks/WARM-RESIZE-XWEIGHTS.md)
-reduces complete resize to 8.65x; destination-row acquisition is next. Run sequentially on the quiet dedicated VM and preserve
+reduces complete resize to 8.65x; [destination-row acquisition](../../benchmarks/WARM-RESIZE-DESTINATION.md)
+reduces it to 7.25x. Vertical kernel-weight reuse is next. Run sequentially on the quiet dedicated VM and preserve
 source/raw/actual timed DLLs before edits. Other sizes, directions, depths and
 bicubic remain unmeasured; independent quiet confirmation remains open. Native
 sources/tools/static archives are development-only and never production inputs.

@@ -150,6 +150,10 @@ public static class ImageTransforms
         for (var y = 0; y < height; y++)
         {
             context.Work(width * tapsX * tapsY * 4);
+            Span<byte> destination8 = default;
+            Span<ushort> destination16 = default;
+            if (source.BitDepth == 8) destination8 = result.GetRow8(y);
+            else destination16 = result.GetRow16(y);
             var cy = (y + 0.5) * source.Height / height - 0.5;
             for (var x = 0; x < width; x++)
             {
@@ -218,10 +222,21 @@ public static class ImageTransforms
                 // Zero-alpha filtered output has no visible color. This also
                 // prevents tiny positive weight residue from exposing hidden RGB.
                 var hasColor = roundedAlpha > 0 && alpha > 0;
-                result.SetSample(x, y, 0, Round(hasColor ? r / alpha : 0, maximum));
-                result.SetSample(x, y, 1, Round(hasColor ? g / alpha : 0, maximum));
-                result.SetSample(x, y, 2, Round(hasColor ? b / alpha : 0, maximum));
-                result.SetSample(x, y, 3, roundedAlpha);
+                var destinationOffset = x * 4;
+                if (source.BitDepth == 8)
+                {
+                    destination8[destinationOffset] = (byte)Round(hasColor ? r / alpha : 0, maximum);
+                    destination8[destinationOffset + 1] = (byte)Round(hasColor ? g / alpha : 0, maximum);
+                    destination8[destinationOffset + 2] = (byte)Round(hasColor ? b / alpha : 0, maximum);
+                    destination8[destinationOffset + 3] = (byte)roundedAlpha;
+                }
+                else
+                {
+                    destination16[destinationOffset] = (ushort)Round(hasColor ? r / alpha : 0, maximum);
+                    destination16[destinationOffset + 1] = (ushort)Round(hasColor ? g / alpha : 0, maximum);
+                    destination16[destinationOffset + 2] = (ushort)Round(hasColor ? b / alpha : 0, maximum);
+                    destination16[destinationOffset + 3] = (ushort)roundedAlpha;
+                }
             }
         }
         result.Orientation = source.Orientation;
