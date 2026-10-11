@@ -1,5 +1,9 @@
 # Development benchmarks
 
+The [current encoder cost profile](WARM-JPEG-ENCODER-COSTS.md) records one
+discarded signed-writer trial and one narrow profile of the restored code.
+Entropy writing and the forward transform lead the next encoder investigation.
+
 The [signed-amplitude extension round](WARM-JPEG-SIGNED.md) replaces a conditional
 JPEG amplitude offset with an exact sign mask. Native-input warm decode screens
 reach 2.13x / 2.15x; the owned affected screen is 2.01x. Uniform parity remains open.
