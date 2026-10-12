@@ -267,13 +267,16 @@ AVX2 packing and scalar tails. Both decoders consume identical resident JPEG
 bytes; the native boundary includes GRAY8-to-RGBA conversion and output ownership.
 The [progressive accounting rejection](WARM-JPEGPROGRESSIVE-ACCOUNTING-REJECTION.md)
 adds one lossless six-scan ProgressiveGray input from that same raster. Coefficient,
-quantization and pixel hashes remain exact. Its 2.39x baseline is the remaining
-measured gap; the small accounting trial is discarded and production restored.
+quantization and pixel hashes remain exact. Its 2.39x baseline identifies the
+next measured gap; the small accounting trial is discarded and production restored.
 The [EOB-tail correction rejection](WARM-JPEG-CORRECTION-REJECTION.md) is also flat,
 with both quiet guards passing. A separate profile places about 93% of sampled
-CPU in scan decoding. The next hypothesis improves progressive coefficient
-traversal; exact work, memory, cancellation and error contracts remain required.
-No image, quality or scan-strategy sweep is added.
+CPU in scan decoding. The [grouped refinement round](WARM-JPEG-REFINEMENT.md)
+reduces complete decode about 20%, with an independent quiet confirmation at
+1.914x FFmpeg, conservative upper 1.942x. Spectral coefficient traversal and safe
+AVX2/BMI2 corrections preserve pixels, logical work, memory admission and scalar
+failure/cancellation behavior. This fixed pair clears 2x; broader coverage stays
+open. No image, quality or scan-strategy sweep is added.
 The [adaptive long-prefix round](WARM-JPEG-LONG-PREFIX.md) extends input-derived
 Huffman lookup for nine/ten-bit codes with explicit memory/work admission.
 The [magnitude-category round](WARM-JPEG-CATEGORY.md) replaces the coefficient

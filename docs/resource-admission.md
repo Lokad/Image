@@ -114,6 +114,15 @@ most one band per block and bit reads remain charged. Direct tests cover table
 construction's memory/work boundaries and full block transforms' work exhaustion
 and cancellation before changing their destination.
 
+Progressive scan coefficients remain in spectral order. Once EOI and every
+component's DC progression are validated, the existing 64-entry approximation
+array becomes per-block natural-order reconstruction workspace. This adds no
+allocation or memory admission. AVX2/BMI2 correction groups admit exactly one
+logical unit per existing nonzero coefficient. Their speculative reader commits
+only complete valid input and available work; otherwise the original scalar
+sequence preserves partial consumption, errors and cancellation checks. Zero-run
+boundaries and lanes outside the active spectral prefix remain unchanged.
+
 Lossless WebP auxiliary syntax and the 16-bit entropy group identifiers follow
 [RFC 9649 sections 3.7.2.2 and 3.8.3](https://www.rfc-editor.org/rfc/rfc9649.html#section-3.7.2.2).
 The implementation reads each transform's auxiliary image separately; only the

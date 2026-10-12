@@ -81,6 +81,27 @@ internal ref struct JpegEntropyReader
         return value + (((value - threshold) >> 31) & (1 - (threshold << 1)));
     }
 
+    internal bool TryReadCorrectionBits(int count, out int value)
+    {
+        value = 0;
+        if (count is < 1 or > 16) throw new ArgumentOutOfRangeException(nameof(count));
+        // Correction bits each charge one unit. Speculate only through bytes
+        // required by this group, then admit its exact cost atomically. Any
+        // marker, truncation, tight budget or cancellable token uses ReadBits(1).
+        if (context.Cancellation.CanBeCanceled) return false;
+        var candidateBits = bits; var candidateAvailable = available; var candidatePosition = position;
+        while (candidateAvailable < count)
+        {
+            if (candidatePosition >= data.Length) return false;
+            var next = data[candidatePosition++];
+            if (next == 255 && (candidatePosition >= data.Length || data[candidatePosition++] != 0)) return false;
+            candidateBits = candidateBits << 8 | next; candidateAvailable += 8;
+        }
+        if (!TryWork(count)) return false;
+        bits = candidateBits; available = candidateAvailable - count; position = candidatePosition;
+        value = (int)((bits >> available) & ((1u << count) - 1)); return true;
+    }
+
     internal bool TryReadHuffman(ReadOnlySpan<ushort> shortCodes, out int symbol)
     {
         symbol = 0;

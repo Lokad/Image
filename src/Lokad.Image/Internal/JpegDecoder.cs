@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Numerics;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
@@ -292,6 +293,8 @@ internal ref struct JpegDecoder
     private void ReadBlock(ref JpegEntropyReader reader, Span<int> block, Component component,
         JpegHuffman? dc, JpegHuffman? ac, int ss, int se, int ah, int al, ref int eobRun)
     {
+        // Progressive scans revisit spectral bands. Retain their coefficients
+        // in scan order and map to natural order once, after the final scan.
         context.Work(64);
         if (ss == 0)
         {
@@ -323,7 +326,7 @@ internal ref struct JpegDecoder
                 if (size > 10) throw new ImageDataException("Invalid JPEG AC coefficient category.");
                 k += run;
                 if (k > se) throw new ImageDataException("JPEG coefficient run exceeds band.");
-                block[JpegTransform.Zigzag[k++]] = reader.ReadSigned(size) << al;
+                block[k++] = reader.ReadSigned(size) << al;
             }
             return;
         }
@@ -350,7 +353,12 @@ internal ref struct JpegDecoder
                 else run = 16;
                 while (positionInBand <= se)
                 {
-                    ref var value = ref block[JpegTransform.Zigzag[positionInBand]];
+                    if (TryRefineRun(ref reader, block, ref positionInBand, se, ref run, newValue != 0, increment, out var finished))
+                    {
+                        if (finished) break;
+                        continue;
+                    }
+                    ref var value = ref block[positionInBand];
                     if (value != 0) Refine(ref reader, ref value, increment);
                     else
                     {
@@ -361,14 +369,16 @@ internal ref struct JpegDecoder
                     positionInBand++;
                 }
                 if (run != 0 || (newValue != 0 && positionInBand > se)) throw new ImageDataException("JPEG refinement run exceeds band.");
-                if (newValue != 0) block[JpegTransform.Zigzag[positionInBand++]] = newValue;
+                if (newValue != 0) block[positionInBand++] = newValue;
             }
         }
         if (eobRun > 0)
         {
+            var tailZeros = int.MaxValue;
             while (positionInBand <= se)
             {
-                ref var value = ref block[JpegTransform.Zigzag[positionInBand++]];
+                if (TryRefineRun(ref reader, block, ref positionInBand, se, ref tailZeros, false, increment, out _)) continue;
+                ref var value = ref block[positionInBand++];
                 if (value != 0) Refine(ref reader, ref value, increment);
             }
             eobRun--;
@@ -381,6 +391,53 @@ internal ref struct JpegDecoder
             value += value > 0 ? increment : -increment;
     }
 
+    internal static bool TryRefineRun(ref JpegEntropyReader reader, Span<int> block, ref int position,
+        int end, ref int run, bool inserting, int increment, out bool finished)
+    {
+        // T.81 G.1.2: a run counts only zeros; each existing nonzero consumes
+        // one correction. Bound the group before a new coefficient's zero, or
+        // through a ZRL's final zero. EOB tails use an unexhausted zero budget.
+        finished = false;
+        if (!Avx2.IsSupported || !Bmi2.IsSupported || position > block.Length - 8) return false;
+        var values = Vector256.Create(block.Slice(position, 8));
+        var count = Math.Min(8, end - position + 1);
+        var zeros = (uint)Avx.MoveMask(Avx2.CompareEqual(values, Vector256<int>.Zero).AsSingle()) & ((1u << count) - 1);
+        var stop = inserting ? run + 1 : run;
+        var zeroCount = BitOperations.PopCount(zeros);
+        if (stop <= zeroCount)
+        {
+            var boundary = zeros;
+            for (var i = 1; i < stop; i++) boundary &= boundary - 1;
+            count = BitOperations.TrailingZeroCount(boundary) + (inserting ? 0 : 1);
+            zeros &= (1u << count) - 1;
+            zeroCount = BitOperations.PopCount(zeros);
+            finished = true;
+        }
+        var corrections = count - zeroCount;
+        if (corrections != 0)
+        {
+            // A refused group changes neither reader nor coefficients. The
+            // caller then retains its original per-bit failures/cancellation.
+            if (!reader.TryReadCorrectionBits(corrections, out var bits)) { finished = false; return false; }
+            // First spectral coefficient consumes the oldest (MSB) correction.
+            // Reverse the eight-bit field, then deposit it only at nonzero lanes.
+            var reversed = (uint)bits << (8 - corrections);
+            reversed = ((reversed & 0x55u) << 1) | ((reversed >> 1) & 0x55u);
+            reversed = ((reversed & 0x33u) << 2) | ((reversed >> 2) & 0x33u);
+            reversed = ((reversed & 0x0Fu) << 4) | ((reversed >> 4) & 0x0Fu);
+            var packed = Bmi2.ParallelBitDeposit(reversed, ~zeros & ((1u << count) - 1));
+            var lanes = Vector256.Create(1, 2, 4, 8, 16, 32, 64, 128);
+            var correctionMask = Avx2.CompareEqual(Avx2.And(Vector256.Create((int)packed), lanes), lanes);
+            var missingBit = Avx2.CompareEqual(Avx2.And(Avx2.Abs(values).AsInt32(), Vector256.Create(increment)), Vector256<int>.Zero);
+            var delta = Avx2.And(Avx2.Sign(Vector256.Create(increment), values), Avx2.And(correctionMask, missingBit));
+            // Lanes beyond the admitted prefix have zero delta, including
+            // coefficients outside a short spectral band.
+            Avx2.Add(values, delta).CopyTo(block.Slice(position, 8));
+        }
+        position += count; run -= zeroCount;
+        return true;
+    }
+
     private ImageBuffer Render()
     {
         Span<byte> block = stackalloc byte[64];
@@ -391,8 +448,17 @@ internal ref struct JpegDecoder
             for (var y = 0; y < component.BlockRows; y++)
             for (var x = 0; x < component.BlockColumns; x++)
             {
-                JpegTransform.Inverse(component.Coefficients.AsSpan((y * component.BlockColumns + x) * 64, 64),
-                    component.FrozenQuantization!, block, context);
+                ReadOnlySpan<int> coefficients = component.Coefficients.AsSpan((y * component.BlockColumns + x) * 64, 64);
+                if (progressive)
+                {
+                    // EOI has validated every component's DC progression. The
+                    // already admitted progression array is no longer needed;
+                    // reuse it for this block without new scratch admission.
+                    var natural = component.Approximation.AsSpan();
+                    for (var k = 0; k < 64; k++) natural[JpegTransform.Zigzag[k]] = coefficients[k];
+                    coefficients = natural;
+                }
+                JpegTransform.Inverse(coefficients, component.FrozenQuantization!, block, context);
                 for (var by = 0; by < 8; by++)
                     block.Slice(by * 8, 8).CopyTo(component.Plane.AsSpan((y * 8 + by) * component.BlockColumns * 8 + x * 8, 8));
             }

@@ -156,6 +156,14 @@ rounding certificate proves the original byte. Uncertain rows and extreme blocks
 use the original direct evaluation; other processors retain that evaluation.
 The [inverse rounding proof](docs/jpeg-inverse-rounding.md) defines the bound.
 
+Progressive scans retain coefficients in spectral order. After all scans and
+component DC progression are validated, reconstruction reuses the already
+admitted approximation array to map each block to natural order. On AVX2/BMI2,
+correction traversal groups existing nonzero coefficients while preserving
+zero-run insertion boundaries and signs. Each correction retains its original
+logical work charge. Cancellable tokens, incomplete entropy, tight work budgets
+and unsupported hardware retain scalar correction reads and failure precedence.
+
 The JPEG encoder emits baseline Huffman JFIF with selectable grayscale, 4:4:4,
 4:2:2 or 4:2:0 sampling (default 4:2:0). Grayscale explicitly converts RGB to
 luma. Chroma downsampling averages each sampling cell and extends edge pixels.

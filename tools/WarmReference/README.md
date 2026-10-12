@@ -286,7 +286,11 @@ records this six-scan pair and rejects a small uncertain local-accounting change
 The [EOB-tail correction trial](../../benchmarks/WARM-JPEG-CORRECTION-REJECTION.md)
 is flat despite passing quiet guards. Its separate CPU diagnosis targets the
 dominant progressive scan loop; diagnostic sample shares do not certify parity.
-Production remains unchanged. The fixture producer is used only outside timing,
+The [grouped refinement round](../../benchmarks/WARM-JPEG-REFINEMENT.md) retains
+spectral layout and safe grouped corrections after independent quiet confirmation
+clears this fixed pair. Both actual timing libraries match the final actual
+package's complete production methods and flags; work/pixels/admission stay exact.
+The fixture producer is used only outside timing,
 and its checkout/build/binaries stay ignored under external/.
 Two simultaneously live outputs must have independent storage; mutation of
 one leaves the other intact. Repeated output pixels and encoded source bytes
