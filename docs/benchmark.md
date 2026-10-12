@@ -68,12 +68,14 @@ timing comparison; compression efficiency parity is not established.
 | [Bilinear resize RGBA8](../benchmarks/WARM-BILINEAR8-QUIET.md) | 729.12 | 376.29 | 1.938 / 1.958 | 157,955 | Confirmed |
 | [Bilinear resize RGBA16](../benchmarks/bilinear16-precision-evidence.json) | — | — | — | — | Unmatched alpha; no timing |
 | [Bicubic resize RGBA8](../benchmarks/bicubic8-boundary-evidence.json) | — | — | — | — | Unmatched boundary/alpha; no timing |
+| [Crop RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 2.34 | 2.27 | 1.033 / 1.039 | 96 | Confirmed |
 | [Crop RGBA16](../benchmarks/WARM-CROP-COPY.md) | 4.11 | 4.15 | 0.991 / 1.003 | 96 | Confirmed |
+| [Clone RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 9.82 | 7.19 | 1.366 / 1.390 | 96 | Confirmed |
 | [Clone RGBA16](../benchmarks/WARM-CLONE-REUSE.md) | 17.86 | 16.60 | 1.076 / 1.089 | 96 | Confirmed |
 | [Normal orientation RGBA16](../benchmarks/WARM-FLIP-ORIENTATION-QUIET.md) | 18.01 | 16.59 | 1.086 / 1.102 | 128 | Confirmed |
 | [Vertical flip RGBA16](../benchmarks/WARM-DIRECTIONS16-QUIET.md) | 17.16 | 17.57 | 0.977 / 0.983 | 128 | Confirmed |
 | [Horizontal flip RGBA8](../benchmarks/WARM-FLIP-ORIENTATION-QUIET.md) | 11.60 | 9.32 | 1.244 / 1.261 | 128 | Confirmed |
-| [Horizontal flip RGBA16](../benchmarks/WARM-FLIP-ORIENTATION-QUIET.md) | 23.22 | 28.30 | 0.820 / 0.834 | 128 | Quiet guard failed / open |
+| [Horizontal flip RGBA16](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 21.72 | 21.94 | 0.990 / 1.007 | 128 | Confirmed |
 | [Half turn RGBA16](../benchmarks/WARM-HALFTURN-PIXELS.md) | 20.78 | 22.28 | 0.933 / 0.967 | 128 | Confirmed |
 | [Clockwise quarter turn RGBA16](../benchmarks/WARM-CLOCKWISE-TILES.md) | 43.69 | 44.12 | 0.990 / 1.013 | 128 | Confirmed |
 | [Counterclockwise quarter turn RGBA16](../benchmarks/WARM-DIRECTIONS16-QUIET.md) | 49.20 | 44.42 | 1.108 / 1.133 | 128 | Confirmed |
@@ -90,8 +92,8 @@ These are distinct boundaries. FFmpeg allocation totals are **not measured**;
 they must not be interpreted as zero. Retained owners and cold allocation patterns
 need separate coverage.
 
-Other depths/directions/profiles and horizontal RGBA16 quiet
-certification remain open. Unmatched cases receive no parity timing. GIF and
+Other depths/directions/profiles remain open. Unmatched cases receive no parity
+timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 

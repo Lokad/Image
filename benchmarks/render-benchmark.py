@@ -99,12 +99,14 @@ def render():
         row('Bilinear resize RGBA8', 'warm-bilinear8-quiet-evidence.json', ['observations', -1], 'WARM-BILINEAR8-QUIET.md', True),
         pending('Bilinear resize RGBA16', 'bilinear16-precision-evidence.json', 'Unmatched alpha; no timing'),
         pending('Bicubic resize RGBA8', 'bicubic8-boundary-evidence.json', 'Unmatched boundary/alpha; no timing'),
+        row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
+        row('Clone RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'clone8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Clone RGBA16', 'warm-clone-reuse-evidence.json', ['observations', -1], 'WARM-CLONE-REUSE.md', True),
         row('Normal orientation RGBA16', 'warm-flip-orientation-quiet-evidence.json', ['cases', 'normal16', 'observations', -1], 'WARM-FLIP-ORIENTATION-QUIET.md', True),
         row('Vertical flip RGBA16', 'warm-directions16-quiet-evidence.json', ['cases', 'vflip16', 'observations', -1], 'WARM-DIRECTIONS16-QUIET.md', True),
         row('Horizontal flip RGBA8', 'warm-flip-orientation-quiet-evidence.json', ['cases', 'flip8', 'observations', -1], 'WARM-FLIP-ORIENTATION-QUIET.md', True),
-        row('Horizontal flip RGBA16', 'warm-flip-orientation-quiet-evidence.json', ['cases', 'flip16', 'observations', -1], 'WARM-FLIP-ORIENTATION-QUIET.md'),
+        row('Horizontal flip RGBA16', 'warm-cropclone8-flip16-evidence.json', ['cases', 'flip16', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Half turn RGBA16', 'warm-halfturn-pixels-evidence.json', ['observations', -1], 'WARM-HALFTURN-PIXELS.md', True),
         row('Clockwise quarter turn RGBA16', 'warm-clockwise-tiles-evidence.json', ['observations', -1], 'WARM-CLOCKWISE-TILES.md', True),
         row('Counterclockwise quarter turn RGBA16', 'warm-directions16-quiet-evidence.json', ['cases', 'ccw16', 'observations', -1], 'WARM-DIRECTIONS16-QUIET.md', True),
@@ -162,8 +164,8 @@ These are distinct boundaries. FFmpeg allocation totals are **not measured**;
 they must not be interpreted as zero. Retained owners and cold allocation patterns
 need separate coverage.
 
-Other depths/directions/profiles and horizontal RGBA16 quiet
-certification remain open. Unmatched cases receive no parity timing. GIF and
+Other depths/directions/profiles remain open. Unmatched cases receive no parity
+timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 

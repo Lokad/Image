@@ -64,6 +64,8 @@ public class WarmCrop
             var arguments = new List<string> { "-v", "error", "-threads", "1", "-filter_threads", "1", "-cpuflags", "0",
                 "-f", "rawvideo", "-pix_fmt", format, "-s", "513x259", "-i", "pipe:0", "-vf", "crop=w=256:h=129:x=127:y=65:exact=1",
                 "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", format, "pipe:1" };
+            if (!OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), input).AsSpan().SequenceEqual(expected))
+                throw new InvalidOperationException("Scalar CLI crop pixels differ from the original integer reference.");
             arguments.RemoveRange(arguments.IndexOf("-cpuflags"), 2);
             if (!OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), input).AsSpan().SequenceEqual(expected))
                 throw new InvalidOperationException("Pinned CLI crop pixels differ from the original integer reference.");
@@ -116,7 +118,7 @@ public class WarmCrop
                 platform = RuntimeInformation.RuntimeIdentifier, sourceIdentity,
                 nativeSampleTargetMilliseconds = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_NATIVE_SAMPLE_MS") ?? "200",
                 cropX = 127, cropY = 65, inputSha256 = JpegBenchmarkCase.Hash(input), outputSha256 = JpegBenchmarkCase.Hash(expected),
-                allRgbaSamplesExact = true, alphaExact = true, hiddenRgbExact = true, nativeCliPixelsExact = true,
+                allRgbaSamplesExact = true, alphaExact = true, hiddenRgbExact = true, nativeCliPixelsExact = true, nativeCliNormalScalarPixelsExact = true,
                 sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmCrop).Assembly.Location),
