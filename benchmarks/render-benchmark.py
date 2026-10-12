@@ -77,6 +77,7 @@ def render():
         row('PNG RGBA16, Adam7', 'warm-pngscatter-evidence.json', ['observations', -1], 'WARM-PNG-SCATTER.md', True),
         row('PNG RGB16, None', 'warm-pngrgb16-row-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-ROW.md'),
         row('PNG gray8, None', 'warm-pnggray8-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY8-ROW.md'),
+        row('PNG gray-alpha8, None', 'warm-pnggrayalpha8-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA8-ROW.md', True),
         row('JPEG baseline gray', 'warm-jpegac-fused-evidence.json', ['regressionControl', 'observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
         row('JPEG baseline 4:2:0', 'warm-jpeg420-bulk-evidence.json', ['observations', -1], 'WARM-JPEG420-BULK.md', True),
         row('JPEG baseline 4:2:2', 'warm-coverage-quiet-evidence.json', ['cases', 'jpeg422', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
@@ -197,7 +198,8 @@ Historical horizontal-flip launches and their bounds remain in the earlier repor
 
 A [literal-classifier experiment](../benchmarks/WARM-PNG-LITERAL-CLASSIFIER-REJECTED.md)
 was reverted after a 3.1% screen improvement; the gray8 row retains its accepted
-implementation and measured result. Gray-alpha expansion is the next coverage screen.
+implementation and measured result. The gray-alpha8 row confirms 1.372x / upper
+1.409x after a 59.0% screen reduction; RGB8 expansion is the next coverage screen.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

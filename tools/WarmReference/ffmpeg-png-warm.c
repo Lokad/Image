@@ -105,10 +105,10 @@ typedef struct {
     struct SwsContext *conversion;
     uint8_t *original, *encoded;
     size_t raw_bytes, encoded_bytes;
-    int encode, width, height, depth, row_bytes, cpu, stride, output_bytes, rgb, gray;
+    int encode, width, height, depth, row_bytes, cpu, stride, output_bytes, rgb, gray, gray_alpha;
     uint64_t completed, observed;
 } Work;
-static AVFrame *result_frame(Work *work) { return work->depth == 16 || work->gray ? work->converted : work->decoded; }
+static AVFrame *result_frame(Work *work) { return work->depth == 16 || work->gray || work->gray_alpha ? work->converted : work->decoded; }
 static void release(Work *work)
 {
     if (work->encode) av_packet_unref(work->packet);
@@ -144,14 +144,14 @@ static void apply(Work *work)
     } else {
         require(avcodec_send_packet(work->codec, work->input), "Submit complete PNG");
         require(avcodec_receive_frame(work->codec, work->decoded), "Receive PNG pixels");
-        int format = work->gray ? AV_PIX_FMT_GRAY8 : work->depth == 8 ? AV_PIX_FMT_RGBA : work->rgb ? AV_PIX_FMT_RGB48BE : AV_PIX_FMT_RGBA64BE;
+        int format = work->gray_alpha ? AV_PIX_FMT_YA8 : work->gray ? AV_PIX_FMT_GRAY8 : work->depth == 8 ? AV_PIX_FMT_RGBA : work->rgb ? AV_PIX_FMT_RGB48BE : AV_PIX_FMT_RGBA64BE;
         if (work->decoded->format != format || work->decoded->width != work->width || work->decoded->height != work->height
-            || !work->decoded->buf[0] || work->decoded->linesize[0] < work->width * (work->gray ? 1 : work->rgb ? 6 : work->depth / 8 * 4)) fail("Decoded PNG format differs.");
-        if (work->depth == 16 || work->gray) {
+            || !work->decoded->buf[0] || work->decoded->linesize[0] < work->width * (work->gray_alpha ? 2 : work->gray ? 1 : work->rgb ? 6 : work->depth / 8 * 4)) fail("Decoded PNG format differs.");
+        if (work->depth == 16 || work->gray || work->gray_alpha) {
             work->converted->width = work->width; work->converted->height = work->height;
-            work->converted->format = work->gray ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE;
+            work->converted->format = work->gray || work->gray_alpha ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE;
             require(av_frame_get_buffer(work->converted, 32), "Allocate owned native-endian output");
-            if (work->rgb || work->gray) {
+            if (work->rgb || work->gray || work->gray_alpha) {
                 int rows = sws_scale(work->conversion, (const uint8_t * const *)work->decoded->data, work->decoded->linesize,
                     0, work->height, work->converted->data, work->converted->linesize);
                 if (rows != work->height) fail("RGB16 conversion row count differs.");
@@ -240,17 +240,19 @@ int main(int argc, char **argv)
         work.encoded = read_file(argv[2], &work.encoded_bytes);
         work.rgb = work.encoded_bytes >= 33 && work.encoded[25] == 2;
         work.gray = work.encoded_bytes >= 33 && work.encoded[25] == 0;
+        work.gray_alpha = work.encoded_bytes >= 33 && work.encoded[25] == 4;
         if (work.rgb && (work.depth != 16 || interlace)) fail("RGB decode requires noninterlaced RGB16.");
         if (work.gray && (work.depth != 8 || interlace)) fail("Gray decode requires noninterlaced gray8.");
-        check_profile(work.encoded, work.encoded_bytes, work.width, work.height, work.depth, interlace, work.gray ? 0 : work.rgb ? 2 : 6);
-        if (work.rgb || work.gray) {
+        if (work.gray_alpha && (work.depth != 8 || interlace)) fail("Gray-alpha decode requires noninterlaced gray-alpha8.");
+        check_profile(work.encoded, work.encoded_bytes, work.width, work.height, work.depth, interlace, work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6);
+        if (work.rgb || work.gray || work.gray_alpha) {
             work.conversion = sws_alloc_context(); if (!work.conversion) fail("Allocate RGB conversion failed.");
             require(av_opt_set_int(work.conversion, "srcw", work.width, 0), "Source width");
             require(av_opt_set_int(work.conversion, "srch", work.height, 0), "Source height");
             require(av_opt_set_int(work.conversion, "dstw", work.width, 0), "Output width");
             require(av_opt_set_int(work.conversion, "dsth", work.height, 0), "Output height");
-            require(av_opt_set_int(work.conversion, "src_format", work.gray ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_RGB48BE, 0), "Source format");
-            require(av_opt_set_int(work.conversion, "dst_format", work.gray ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE, 0), "Output format");
+            require(av_opt_set_int(work.conversion, "src_format", work.gray_alpha ? AV_PIX_FMT_YA8 : work.gray ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_RGB48BE, 0), "Source format");
+            require(av_opt_set_int(work.conversion, "dst_format", work.gray || work.gray_alpha ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE, 0), "Output format");
             require(av_opt_set_int(work.conversion, "sws_flags", SWS_POINT | SWS_BITEXACT, 0), "Conversion policy");
             require(av_opt_set_int(work.conversion, "threads", 1, 0), "Conversion thread count");
             require(sws_init_context(work.conversion, NULL, NULL), "Initialize RGB conversion");
@@ -262,9 +264,9 @@ int main(int argc, char **argv)
         memcpy(work.input->data, work.encoded, work.encoded_bytes);
     }
     check_independent_owners(&work); check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"compressionLevel\":%d,\"filter\":%d,\"colorType\":%d,\"conversionThreads\":%d,\"rgbExpansionTimed\":%s,\"grayExpansionTimed\":%s,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"compressionLevel\":%d,\"filter\":%d,\"colorType\":%d,\"conversionThreads\":%d,\"rgbExpansionTimed\":%s,\"grayExpansionTimed\":%s,\"grayAlphaExpansionTimed\":%s,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
         argv[1], work.width, work.height, work.depth, work.cpu, work.encode ? 6 : -1, work.encode ? 0 : -1,
-        work.gray ? 0 : work.rgb ? 2 : 6, work.rgb || work.gray ? 1 : 0, work.rgb ? "true" : "false", work.gray ? "true" : "false", work.output_bytes, work.completed, av_version_info(), avcodec_version(), avutil_version()); fflush(stdout);
+        work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6, work.rgb || work.gray || work.gray_alpha ? 1 : 0, work.rgb ? "true" : "false", work.gray ? "true" : "false", work.gray_alpha ? "true" : "false", work.output_bytes, work.completed, av_version_info(), avcodec_version(), avutil_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;

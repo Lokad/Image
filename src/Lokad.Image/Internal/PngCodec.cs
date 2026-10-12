@@ -239,6 +239,11 @@ internal static class PngCodec
                         var offset = (startY + y * stepY) * result.Stride + startX * 4;
                         CopyGray8Row(row, result.Pixels.Slice(offset, width * 4), context.Cancellation);
                     }
+                    else if (header.ColorType == 4 && header.Depth == 8 && stepX == 1)
+                    {
+                        var offset = (startY + y * stepY) * result.Stride + startX * 4;
+                        CopyGrayAlpha8Row(row, result.Pixels.Slice(offset, width * 4), context.Cancellation);
+                    }
                     else
                     {
                         for (var x = 0; x < width; x++)
@@ -324,6 +329,32 @@ internal static class PngCodec
             if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
             var output = destination.Slice(x * 4, 4); var value = row[x];
             output[0] = value; output[1] = value; output[2] = value; output[3] = 255;
+        }
+    }
+
+    internal static void CopyGrayAlpha8Row(ReadOnlySpan<byte> row, Span<byte> destination, CancellationToken cancellation)
+    {
+        // PNG section 7.3: replicate gray into RGB and retain its associated alpha,
+        // including hidden RGB at zero alpha. Byte shuffles need no sample scaling.
+        var pixels = row.Length / 2; var x = 0;
+        if (Avx2.IsSupported)
+        {
+            // Each lane selects four pixels from its copy of the bounded input.
+            var shuffle = Vector256.Create(
+                (byte)0, 0, 0, 1, 2, 2, 2, 3, 4, 4, 4, 5, 6, 6, 6, 7,
+                8, 8, 8, 9, 10, 10, 10, 11, 12, 12, 12, 13, 14, 14, 14, 15);
+            for (; x <= pixels - 8; x += 8)
+            {
+                if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+                var packed = MemoryMarshal.Read<Vector128<byte>>(row[(x * 2)..]);
+                Avx2.Shuffle(Vector256.Create(packed, packed), shuffle).CopyTo(destination[(x * 4)..]);
+            }
+        }
+        for (; x < pixels; x++)
+        {
+            if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+            var output = destination.Slice(x * 4, 4); var gray = row[x * 2];
+            output[0] = gray; output[1] = gray; output[2] = gray; output[3] = row[x * 2 + 1];
         }
     }
 

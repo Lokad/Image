@@ -159,6 +159,11 @@ Dense gray8 rows without tRNS expand directly to equal RGB samples and opaque
 alpha. Bounded AVX2 groups process eight samples; tails and other hardware use
 scalar expansion. Dense Adam7 passes also qualify; sparse/transparency paths,
 work and memory admission remain unchanged, with no additional workspace.
+Dense gray-alpha8 rows expand directly to equal RGB samples and retain alpha,
+including hidden RGB. Bounded AVX2 byte shuffles process eight pixels; scalar
+tails and other hardware preserve all samples. Dense Adam7 passes qualify,
+while sparse passes retain their mapping. No workspace or admission change is
+introduced; cancellation is checked at most every 4096 pixels.
 The registered FFmpeg 8.1 decoder ignores tRNS alpha for 1/2/4-bit grayscale.
 For these cases the reference pipeline applies the declared transparent gray key
 through FFmpeg's [colorkey filter](https://ffmpeg.org/ffmpeg-filters.html#colorkey),
