@@ -121,6 +121,10 @@ timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
+A [literal-classifier experiment](../benchmarks/WARM-PNG-LITERAL-CLASSIFIER-REJECTED.md)
+was reverted after a 3.1% screen improvement; the gray8 row retains its accepted
+implementation and measured result. Gray-alpha expansion is the next coverage screen.
+
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),
 regenerate with `python benchmarks/render-benchmark.py`, and run it with `--check`.

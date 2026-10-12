@@ -42,3 +42,8 @@ The [gray8 round](WARM-PNG-GRAY8-ROW.md) exposes a 7.921x gap and reduces it to
 2.245x by direct expansion, with the same existing raster projection. The updated
 profile places the remaining substantial cost in inflation/framing. Keep this
 gap and the JPEG/RGB16 upper-bound gaps open; use one primitive per round.
+
+A [compact literal classifier](WARM-PNG-LITERAL-CLASSIFIER-REJECTED.md) screen
+lowered gray8 mean only 3.1%, to 2.181x (upper 2.522x), and was reverted.
+The summary retains the accepted gray8 result. Screen one gray-alpha projection
+next; preserve framing checks and prioritize substantial expansion/data-flow gaps.
