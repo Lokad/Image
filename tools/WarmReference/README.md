@@ -30,8 +30,15 @@ method or case without verifying its generated dispatch.
 The existing `-PrepareWarmConfirm` switch remains an alias for confirmation
 preparation and still requires `-WarmConfirm`.
 
-On the dedicated VM, a controller sets these values and checks the unchanged
-quiet guard immediately before and after the process:
+On the exclusively used dedicated VM, a controller sets these values and runs
+`python3 tools/WarmReference/capture-vm-environment.py .` immediately before and
+after the process. Protocol `exclusive-vm-idle-v2` requires no overlapping live
+build, codec or profiler job and a five-second idle sample on both CPU0 and the
+aggregate CPUs: busy <=5%, I/O wait <=1%, steal <=1%. Load averages are recorded
+as diagnostics only. Previous work on this VM does not require waiting for the
+historical load average to decay. Compile and prepare outside these intervals.
+Earlier receipts used an additional one-minute-load <=0.25 guard; their failures
+remain failures under their recorded protocol and are not reclassified.
 
 ```bash
 export LOKAD_IMAGE_BENCHMARK_RUN_ID=unique-confirmation-id

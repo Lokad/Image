@@ -82,16 +82,16 @@ public class WarmPng
             File.WriteAllBytes(rawPath, pixels); File.WriteAllBytes(state.Input, Encode ? pixels : encoded);
             native = new NativeWarmReference(state, Depth, cpu, Encode ? "png-encode" : Interlaced ? "png-adam7-decode" : "png-decode", rawPath);
             ValidateNative();
-            if (Prepared)
+            if (!Encode)
             {
                 var arguments = new List<string> { "-v", "error", "-threads", "1", "-filter_threads", "1", "-cpuflags", "0",
                     "-noautorotate", "-f", "image2pipe", "-i", "pipe:0", "-frames:v", "1", "-threads:v", "1",
                     "-pix_fmt", Depth == 16 ? "rgba64le" : "rgba", "-f", "rawvideo", "pipe:1" };
                 if (!OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), encoded).AsSpan().SequenceEqual(pixels))
-                    throw new InvalidOperationException("Scalar native CLI prepared PNG samples differ.");
+                    throw new InvalidOperationException("Scalar native CLI PNG samples differ.");
                 arguments.RemoveRange(arguments.IndexOf("-cpuflags"), 2);
                 if (!OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), encoded).AsSpan().SequenceEqual(pixels))
-                    throw new InvalidOperationException("Normal native CLI prepared PNG samples differ.");
+                    throw new InvalidOperationException("Normal native CLI PNG samples differ.");
             }
             if (Encode)
             {
@@ -246,7 +246,7 @@ public class WarmPng
                     : "BCL Optimal (zlib default level 6) / FFmpeg level 6; filter None; noninterlaced RGBA",
                 managedIdatBytes = IdatBytes(encoded), nativeIdatBytes = Encode ? IdatBytes(File.ReadAllBytes(state.NativeOutput)) : IdatBytes(encoded),
                 allRgbaSamplesExact = true, alphaExact = true, hiddenRgbExact = true,
-                nativeCliNormalScalarPixelsExact = Encode || Prepared,
+                nativeCliNormalScalarPixelsExact = true,
                 nativeEndianRepackingTimed = Encode && Depth == 16, nativeEndianWorkspaceReused = Encode && Depth == 16,
                 nativeSampleTargetMilliseconds = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_NATIVE_SAMPLE_MS") ?? "200",
                 sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,

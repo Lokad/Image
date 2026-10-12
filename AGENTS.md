@@ -23,6 +23,8 @@ BenchmarkDotNet smoke runs verify execution and output correctness. Performance
 measurement and tuning require the dedicated quiet VM supplied by the project
 owner. Run benchmarks sequentially in Release, use FFmpeg baselines with
 equivalent workload boundaries, and do not publish local timing numbers.
+Use the versioned idle/process guard in `tools/WarmReference/capture-vm-environment.py`.
+VM use is exclusive; do not wait for historical load average to decay after our own work.
 Maintain `docs/benchmark.md` after every accepted performance round. Keep at most
 three tables, include allocations and verification status, and check the generated
 summary with `python benchmarks/render-benchmark.py --check`.

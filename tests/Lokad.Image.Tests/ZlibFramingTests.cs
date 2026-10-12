@@ -132,6 +132,36 @@ public sealed class ZlibFramingTests
     }
 
     [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void LiteralRunsRetainEveryTightBudgetAndOutputFailure(bool reservedCode)
+    {
+        var bits = new BitWriter(); bits.Number(1, 1); bits.Number(1, 2);
+        for (var i = 0; i < 40; i++)
+            if ((i & 1) == 0) bits.Code(48 + 65, 8); else bits.Code(400, 9);
+        if (reservedCode) bits.Code(198, 8); else bits.Code(0, 7);
+        bits.Align(); byte[] encoded = [0x78, 0x01, .. bits.Bytes(), 0, 0, 0, 0];
+        var original = encoded.ToArray();
+        using var cancellation = new CancellationTokenSource();
+        // Compare admission and format failure precedence against the cancelable
+        // per-symbol path, at every bit budget through the literal run and EOB.
+        foreach (var expected in new[] { 0L, 19, 39, 40, 41 })
+        for (var extra = 0; extra <= 348; extra++)
+        {
+            var limits = ImageLimits.Default with { MaxWork = 9380 + extra, MaxWorkingBytes = 4096 };
+            var direct = new OperationContext(limits, default);
+            var checkedSymbols = new OperationContext(limits, cancellation.Token);
+            var first = Record.Exception(() => ZlibFraming.Validate(encoded, expected, direct));
+            var second = Record.Exception(() => ZlibFraming.Validate(encoded, expected, checkedSymbols));
+            Assert.Equal(second?.GetType(), first?.GetType());
+            Assert.Equal(second?.Message, first?.Message);
+            Assert.Equal(checkedSymbols.RemainingWork, direct.RemainingWork);
+            direct.Reserve(4096); direct.Release(4096);
+            checkedSymbols.Reserve(4096); checkedSymbols.Release(4096);
+        }
+        Assert.Equal(original, encoded);
+    }
+
+    [Theory]
     [InlineData(false)]
     [InlineData(true)]
     public void PrefixLookaheadReturnsStoredHeaderBytesAndExactWork(bool trailingBytes)

@@ -69,7 +69,7 @@ def table(rows):
 def render():
     decodes = [
         row('PNG RGBA8, None', 'warm-png-read-inline-evidence.json', ['observations', 1, 'cases', 0], 'WARM-PNG-READ-INLINE.md'),
-        row('PNG RGBA16, None', 'warm-png-read-inline-evidence.json', ['observations', 1, 'cases', 1], 'WARM-PNG-READ-INLINE.md'),
+        row('PNG RGBA16, None', 'warm-pngliteralrun-evidence.json', ['observations', -1], 'WARM-PNG-LITERAL-RUN.md', True),
         row('PNG RGBA8, Paeth', 'warm-paeth4-evidence.json', ['observations', -1], 'WARM-PAETH-FOUR-CHANNEL.md', True),
         row('PNG RGBA16, Paeth', 'warm-paethvector-evidence.json', ['observations', -1], 'WARM-PAETH-VECTOR.md', True),
         row('PNG RGBA16, Adam7', 'warm-pngscatter-evidence.json', ['observations', -1], 'WARM-PNG-SCATTER.md', True),
@@ -129,6 +129,9 @@ Ratio = Lokad.Image / the faster FFmpeg pre/post mean; lower is faster. Upper is
 the retained conservative confidence bound, taking the larger filtered/all-actual
 bound where available. **Confirmed** requires an independent quiet repeat and
 upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
+The latest PNG16 None repeat uses `exclusive-vm-idle-v2`: live job checks and
+five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
+Earlier receipts retain their original load guard and its failures.
 
 **Decode**
 

@@ -78,6 +78,7 @@ internal static class ZlibFraming
                 {
                     while (true)
                     {
+                        output += reader.ReadLiteralRun(literalLookup, expectedBytes - output);
                         var symbol = DecodeLiteral(ref reader, literals, literalLookup);
                         if (symbol == 256) break;
                         int length;
@@ -137,6 +138,34 @@ internal static class ZlibFraming
         {
             if (remainingWork < 0) return;
             context.Work(initialWork - remainingWork); remainingWork = -1;
+        }
+
+        public long ReadLiteralRun(scoped ReadOnlySpan<ushort> lookup, long maximum)
+        {
+            // Framing needs only the output count for literal bytes. Walk their
+            // RFC 1951 prefixes together, keeping the bit cache in locals rather
+            // than re-entering the length/distance dispatcher for each byte.
+            // Cancelable operations retain the original per-symbol checks.
+            if (remainingWork < 0 || maximum <= 0) return 0;
+            var cached = buffer; var bits = available; var offset = position;
+            var budget = remainingWork; long count = 0;
+            while (count < maximum)
+            {
+                if (bits < 9)
+                {
+                    // Short tails retain Fill's original truncation precedence.
+                    if (data.Length - offset < 4) break;
+                    cached |= (ulong)BinaryPrimitives.ReadUInt32LittleEndian(data.Slice(offset, 4)) << bits;
+                    offset += 4; bits += 32;
+                }
+                var entry = lookup[(int)(cached & 511)]; var length = entry & 15;
+                // Leave long/unassigned prefixes, EOB, matches, output overflow
+                // and a tight atomic work charge to the original dispatcher.
+                if (length == 0 || entry >> 4 >= 256 || length > budget) break;
+                cached >>= length; bits -= length; budget -= length; count++;
+            }
+            buffer = cached; available = bits; position = offset; remainingWork = budget;
+            return count;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -5,6 +5,12 @@ ratios, allocations and verification status in three tables. Update it after eac
 accepted performance round with `python benchmarks/render-benchmark.py`, then
 verify with `--check`. The reports below preserve the detailed evidence and history.
 
+The [PNG16 literal-run round](WARM-PNG-LITERAL-RUN.md) confirms complete decode
+at 1.958x FFmpeg, conservative upper 1.968x. It groups Deflate literal validation
+without changing exact work charges or cancellation. New measurements use the
+exclusive VM idle/process guard; load averages are diagnostic only and previous
+guard failures stay failed. Both OSes pass 2,387 tests and the same actual package.
+
 The [matched JPEG encode quiet confirmation](WARM-JPEG-ENCODE-QUIET.md) reaches
 1.956x FFmpeg (upper 1.969x), with unchanged production and quality preparation.
 The earlier post-load failure remains uncertified in the retained evidence.
