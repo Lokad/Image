@@ -8,6 +8,9 @@ namespace Lokad.Image.Internal;
 
 internal static class PngCodec
 {
+    // Separate from released pixels: a compressed input remains leased until
+    // the inflater and its streams are disposed, even when output stays live.
+    private static readonly PixelStoragePool compressedStorage = new(1024 * 1024);
     internal static ReadOnlySpan<byte> Signature => [137, 80, 78, 71, 13, 10, 26, 10];
     private sealed record Header(ImageInfo Info, int ColorType, int Depth, int Interlace,
         byte[] Palette, byte[] Transparency, int CompressedLength);
@@ -121,7 +124,7 @@ internal static class PngCodec
     {
         var header = Scan(data, context);
         context.Reserve(header.CompressedLength);
-        var compressed = new byte[header.CompressedLength];
+        var compressed = compressedStorage.Rent(header.CompressedLength);
         try
         {
             int source = 8, target = 0;
@@ -144,7 +147,11 @@ internal static class PngCodec
             try { return DecodeRaster(header, compressed, streamLength, context); }
             finally { context.Release(256 * 1024); }
         }
-        finally { context.Release(header.CompressedLength + (long)header.Palette.Length + header.Transparency.Length); }
+        finally
+        {
+            compressedStorage.Return(compressed);
+            context.Release(header.CompressedLength + (long)header.Palette.Length + header.Transparency.Length);
+        }
     }
 
     private static long FilteredLength(Header header)

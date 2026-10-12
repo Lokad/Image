@@ -108,3 +108,12 @@ reverted without a long confirmation or repeated screen. The accepted palette8
 result remains 2.433x. Two wide-palette memory/work controls remain; production
 and the actual package are unchanged after exact restoration. Prioritize a
 substantial remaining allocation or shared-work strategy over another table tweak.
+
+The [compressed-input reuse round](WARM-PNG-INPUT-REUSE.md) lowers palette8
+allocation 96.9%, from 89,564 to 2,760 B/op, with exact admitted capacities and
+independent live leases. Both guards pass; 2.398x / upper 2.597x stays open and
+no long repeat is launched. Its 5,974-sample profile places 37.8% in BCL inflation,
+about 35% in framing and 19.7% in palette expansion. Allocation is now small;
+prioritize substantive parsing/inflation before further small allocation tuning.
+Other reported rows retain their measured sources; held/first-use owners and
+material unknowns remain open. No average or narrowed scope completes parity.

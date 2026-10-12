@@ -5,6 +5,20 @@ namespace Lokad.Image.Tests;
 public sealed class PixelStoragePoolTests
 {
     [Fact]
+    public void IndependentPoolsRespectTheirOwnCeilingsAndExactLeases()
+    {
+        var input = new PixelStoragePool(32); var output = new PixelStoragePool(64);
+        var first = input.Rent(32); var held = input.Rent(32); var raster = output.Rent(32);
+        Assert.NotSame(first, held); Assert.NotSame(first, raster); Assert.NotSame(held, raster);
+        first.AsSpan().Fill(0xa5); input.Return(first);
+        var larger = input.Rent(33); input.Return(larger);
+        Assert.Same(first, input.Rent(32));
+        output.Return(raster); Assert.Same(raster, output.Rent(32));
+        Assert.Equal(32, held.Length); Assert.Equal(33, larger.Length);
+        Assert.Throws<ArgumentOutOfRangeException>(() => new PixelStoragePool(-1));
+    }
+
+    [Fact]
     public void OnlyReleasedExactSizeStorageCanBeReused()
     {
         var pool = new PixelStoragePool();

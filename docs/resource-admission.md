@@ -14,6 +14,10 @@ simultaneously live buffers have separate storage. Results keep their exact
 byte admission charge; pooled capacity is never rounded up. Failed private
 results release their lease. Idle cache storage is outside per-operation
 admission, as is GC retention; the fixed ceiling bounds the cache separately.
+PNG decode has a separate one-array cache for concatenated IDAT bytes, capped at
+1 MiB. Exact-size leases are fully copied before framing and returned after all
+inflater streams are disposed, including failure exits. Larger inputs remain
+uncached. Active input/result byte admission and error ordering are unchanged.
 
 `MaxDimension` and `MaxPixels` constrain newly created buffers and codec input
 geometry. A transform can use an existing larger buffer to produce a smaller

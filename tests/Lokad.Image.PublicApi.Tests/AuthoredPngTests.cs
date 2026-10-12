@@ -85,6 +85,32 @@ public sealed class AuthoredPngTests
             else image.GetRow16(y).Fill((ushort)(value * 257));
     }
 
+    [Fact]
+    public void EqualLengthCompressedInputsKeepSamplesIndependentAcrossFailure()
+    {
+        var frame = new AuthoredPng.Frame("equal-idat-leases", 6, 8, 2, 2, false);
+        byte[] firstPixels = [1, 2, 3, 0, 11, 12, 13, 255, 21, 22, 23, 255, 31, 32, 33, 128];
+        byte[] secondPixels = [101, 102, 103, 255, 111, 112, 113, 0, 121, 122, 123, 64, 131, 132, 133, 255];
+        var firstRows = Rows(firstPixels); var secondRows = Rows(secondPixels);
+        var firstCompressed = AuthoredPng.StoredZlib(firstRows); var secondCompressed = AuthoredPng.StoredZlib(secondRows);
+        Assert.Equal(firstCompressed.Length, secondCompressed.Length);
+        var firstEncoded = AuthoredPng.Wrap(frame, firstCompressed); var secondEncoded = AuthoredPng.Wrap(frame, secondCompressed);
+        var firstOriginal = firstEncoded.ToArray(); var secondOriginal = secondEncoded.ToArray();
+        using var first = ImageCodec.Decode(firstEncoded);
+        var badRows = secondRows.ToArray(); badRows[9] = 5;
+        Assert.Throws<ImageDataException>(() => ImageCodec.Decode(AuthoredPng.Wrap(frame, AuthoredPng.StoredZlib(badRows))));
+        using var second = ImageCodec.Decode(secondEncoded);
+        Assert.Equal(firstPixels, OriginalPixels.Bytes(first)); Assert.Equal(secondPixels, OriginalPixels.Bytes(second));
+        Assert.Equal(firstOriginal, firstEncoded); Assert.Equal(secondOriginal, secondEncoded);
+
+        static byte[] Rows(byte[] pixels)
+        {
+            var result = new byte[18];
+            for (var y = 0; y < 2; y++) pixels.AsSpan(y * 8, 8).CopyTo(result.AsSpan(y * 9 + 1));
+            return result;
+        }
+    }
+
     [Theory]
     [InlineData(false)] [InlineData(true)]
     public void WidePaletteRowsRetainExactPixelsMemoryThresholdAndWorkFailure(bool interlace)

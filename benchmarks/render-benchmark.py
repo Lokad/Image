@@ -81,7 +81,7 @@ def render():
         row('PNG RGB8, None', 'warm-pngrgb8-row-evidence.json', ['observations', -1], 'WARM-PNG-RGB8-ROW.md', True),
         row('PNG gray16, None', 'warm-pnggray16-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY16-ROW.md', True),
         row('PNG gray-alpha16, None', 'warm-pnggrayalpha16-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ROW.md', True),
-        row('PNG palette8 + tRNS, None', 'warm-pngdecode-reuse-evidence.json', ['cases', 'palette8', 'observations', -1], 'WARM-PNG-DECODE-REUSE.md'),
+        row('PNG palette8 + tRNS, None', 'warm-pnginput-reuse-evidence.json', ['observations', -1], 'WARM-PNG-INPUT-REUSE.md'),
         row('PNG palette4 + tRNS → RGBA8, None', 'warm-pngdecode-reuse-evidence.json', ['cases', 'palette4', 'observations', -1], 'WARM-PNG-DECODE-REUSE.md', True),
         row('PNG opaque gray1 → RGBA8, None', 'warm-pnggray1-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-ROW.md', True),
         row('PNG opaque gray4 → RGBA8, None', 'warm-pnggray4-reuse-evidence.json', ['observations', -1], 'WARM-PNG-GRAY4-REUSE.md', True),
@@ -203,15 +203,14 @@ timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-The latest [gray4 check](../benchmarks/WARM-PNG-GRAY4-REUSE.md) confirms
-1.504x / upper 1.532x with 13,544 B/op after shared PNG storage. Production and
-package validation are unchanged. The [storage round](../benchmarks/WARM-PNG-DECODE-REUSE.md)
-also confirms palette4 at 1.572x / upper 1.617x. Palette8 remains the largest
-reported gap at 2.433x / upper 2.634x and 89,564 B/op. Stop tuning confirmed pairs;
-other profiles, retained-owner boundaries and the full required scope stay open.
-The [packed-palette table trial](../benchmarks/WARM-PNG-PALETTE-WORD-REJECTED.md)
-was reverted; its post-guard failed and its observed mean remained above 2x.
-Accepted timings stay unchanged. Earlier failures and reverted experiments remain recorded.
+The latest [PNG input reuse](../benchmarks/WARM-PNG-INPUT-REUSE.md) lowers palette8
+allocation 96.9%, to 2,760 B/op. Its 2.398x / upper 2.597x screen remains above
+target; a small timing change is not independently certified. Input retention is
+capped separately at 1 MiB, pixels at 4 MiB; first-use and retained owners stay
+distinct. [Gray4](../benchmarks/WARM-PNG-GRAY4-REUSE.md) and palette4 remain
+confirmed at their reported sources. Stop tuning passing pairs; remaining gaps,
+other profiles and the full required scope stay open. Failed guards and reverted
+experiments remain recorded.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

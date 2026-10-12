@@ -139,6 +139,10 @@ chunk lengths/names/order/CRCs, image geometry, transparency and decoded pixel
 count. An owned bounded Deflate framing walk validates final blocks, stored
 lengths, fixed/dynamic prefix trees, repeats, backward distances, the declared
 zlib window and the exact filtered-raster byte count before BCL inflation.
+Concatenated IDAT bytes may reuse one released exact-size private array, retained
+up to 1 MiB independently of pixel storage. Every byte is copied before framing;
+the lease ends after the inflater and streams are disposed, including failures.
+Input admission remains exact and live leases never share storage.
 Validate the zlib header and Adler checksum at the actual stream boundary;
 ignore unused trailing IDAT bytes as permitted by PNG section 11.2.3. Future
 reserved chunk bits follow unknown-chunk handling: unknown critical chunks fail,
