@@ -259,6 +259,12 @@ internal static class PngCodec
                         var offset = (startY + y * stepY) * result.Stride + startX * 8;
                         CopyGrayAlpha16Row(row, result.Pixels.Slice(offset, width * 8), context.Cancellation);
                     }
+                    else if (header.ColorType == 3 && header.Depth == 8 && stepX == 1)
+                    {
+                        var offset = (startY + y * stepY) * result.Stride + startX * 4;
+                        CopyPalette8Row(row, result.Pixels.Slice(offset, width * 4),
+                            header.Palette, header.Transparency, context.Cancellation);
+                    }
                     else
                     {
                         for (var x = 0; x < width; x++)
@@ -429,6 +435,24 @@ internal static class PngCodec
             var input = row.Slice(x * 4, 4); var gray = BinaryPrimitives.ReadUInt16BigEndian(input);
             samples[x * 4] = gray; samples[x * 4 + 1] = gray; samples[x * 4 + 2] = gray;
             samples[x * 4 + 3] = BinaryPrimitives.ReadUInt16BigEndian(input[2..]);
+        }
+    }
+
+    internal static void CopyPalette8Row(ReadOnlySpan<byte> row, Span<byte> destination,
+        ReadOnlySpan<byte> palette, ReadOnlySpan<byte> transparency, CancellationToken cancellation)
+    {
+        // PNG sections 7.3/11.2.2/11.3.2.1: indices select RGB triples. Missing
+        // tRNS entries are opaque; zero alpha preserves the palette's hidden RGB.
+        var colors = palette.Length / 3;
+        for (var x = 0; x < row.Length; x++)
+        {
+            if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+            var index = row[x];
+            if (index >= colors) throw new ImageDataException("PNG palette index out of range.");
+            var rgb = palette.Slice(index * 3, 3);
+            var alpha = index < transparency.Length ? transparency[index] : (byte)255;
+            var rgba = (uint)BinaryPrimitives.ReadUInt16LittleEndian(rgb) | (uint)rgb[2] << 16 | (uint)alpha << 24;
+            BinaryPrimitives.WriteUInt32LittleEndian(destination[(x * 4)..], rgba);
         }
     }
 

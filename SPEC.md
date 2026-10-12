@@ -180,6 +180,11 @@ every gray/alpha sample and hidden RGB. Bounded 16-byte AVX2 groups produce four
 pixels; scalar tails and other hardware preserve full samples. Dense Adam7 passes
 qualify; sparse mapping stays unchanged. No workspace/admission change is
 introduced and cancellation is checked at most every 4096 pixels.
+Dense palette8 rows expand directly from the existing RGB palette/tRNS storage
+into RGBA8, preserving hidden RGB and defaulting missing alpha entries to 255.
+Each palette index is validated before its output pixel is written. Dense Adam7
+passes qualify; packed/sparse mapping stays unchanged. No palette workspace or
+admission change is introduced; cancellation is checked at most every 4096 pixels.
 The registered FFmpeg 8.1 decoder ignores tRNS alpha for 1/2/4-bit grayscale.
 For these cases the reference pipeline applies the declared transparent gray key
 through FFmpeg's [colorkey filter](https://ffmpeg.org/ffmpeg-filters.html#colorkey),

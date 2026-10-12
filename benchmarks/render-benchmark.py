@@ -81,6 +81,7 @@ def render():
         row('PNG RGB8, None', 'warm-pngrgb8-row-evidence.json', ['observations', -1], 'WARM-PNG-RGB8-ROW.md', True),
         row('PNG gray16, None', 'warm-pnggray16-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY16-ROW.md', True),
         row('PNG gray-alpha16, None', 'warm-pnggrayalpha16-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ROW.md', True),
+        row('PNG palette8 + tRNS, None', 'warm-pngpalette8-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE8-ROW.md'),
         row('JPEG baseline gray', 'warm-jpegac-fused-evidence.json', ['regressionControl', 'observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
         row('JPEG baseline 4:2:0', 'warm-jpeg420-bulk-evidence.json', ['observations', -1], 'WARM-JPEG420-BULK.md', True),
         row('JPEG baseline 4:2:2', 'warm-coverage-quiet-evidence.json', ['cases', 'jpeg422', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
@@ -199,11 +200,12 @@ timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-The latest [gray-alpha16 row](../benchmarks/WARM-PNG-GRAY-ALPHA16-ROW.md)
-confirms 1.776x / upper 1.785x after a 38.3% screen reduction. Evidence for the
-rejected [literal classifier](../benchmarks/WARM-PNG-LITERAL-CLASSIFIER-REJECTED.md)
+The latest [palette8 row](../benchmarks/WARM-PNG-PALETTE8-ROW.md) lowers its
+screened mean 65.7%, to 2.715x / upper 2.954x, and remains open. Framing validation
+is the next substantial target on this largest measured matched gap. Evidence for
+the rejected [literal classifier](../benchmarks/WARM-PNG-LITERAL-CLASSIFIER-REJECTED.md)
 remains retained; the failed [gray16 guard](../benchmarks/WARM-PNG-GRAY16-ROW.md)
-remains unscored. Indexed-palette8 expansion is the next coverage screen.
+remains unscored.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),
