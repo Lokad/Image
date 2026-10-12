@@ -164,6 +164,12 @@ Dense gray8 rows without tRNS expand directly to equal RGB samples and opaque
 alpha. Bounded AVX2 groups process eight samples; tails and other hardware use
 scalar expansion. Dense Adam7 passes also qualify; sparse/transparency paths,
 work and memory admission remain unchanged, with no additional workspace.
+Dense gray16 rows without tRNS expand directly into native-endian RGBA16,
+retaining the full gray sample in RGB and inserting alpha 65535. Bounded
+eight-byte AVX2 groups produce four pixels; scalar tails and other hardware
+preserve all samples. Dense Adam7 passes qualify; sparse/transparency paths
+retain their mapping. Workspace/admission are unchanged and cancellation is
+checked at most every 4096 pixels.
 Dense gray-alpha8 rows expand directly to equal RGB samples and retain alpha,
 including hidden RGB. Bounded AVX2 byte shuffles process eight pixels; scalar
 tails and other hardware preserve all samples. Dense Adam7 passes qualify,

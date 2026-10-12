@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8 and gray-alpha8 None confirmed; RGB16 and gray8 None screens above 2x | RGB16/gray8 parity; gray16/gray-alpha16/packed/palette expansion; other filter implementations |
+| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8, gray16 and gray-alpha8 None confirmed; RGB16 and gray8 None screens above 2x | RGB16/gray8 parity; gray-alpha16/packed/palette expansion; other filter implementations |
 | PNG encode | RGBA8/16, level 6/None | RGB and gray projections; compression policies with materially different work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
@@ -49,6 +49,8 @@ The summary retains the accepted gray8 result. The
 [gray-alpha8 row](WARM-PNG-GRAY-ALPHA8-ROW.md) then lowers its newly covered
 3.358x screen by 59.0%, confirming 1.372x / upper 1.409x. Stop tuning that fixed
 pair. The [RGB8 row](WARM-PNG-RGB8-ROW.md) then lowers a new 2.956x screen
-by 51.9%, confirming 1.416x / upper 1.440x. Stop tuning this fixed pair. Next
-screen one gray16 projection; preserve framing checks and prioritize substantial
-expansion/data-flow gaps.
+by 51.9%, confirming 1.416x / upper 1.440x. Stop tuning this fixed pair. The
+[gray16 row](WARM-PNG-GRAY16-ROW.md) lowers a newly covered 4.199x screen
+by 56.8%, confirming 1.815x / upper 1.837x. Its failed first post-confirmation
+guard remains unscored. Stop tuning this fixed pair. Next screen one gray-alpha16
+projection; preserve framing checks and prioritize substantial expansion/data-flow gaps.

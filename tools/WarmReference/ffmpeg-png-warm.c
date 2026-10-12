@@ -144,9 +144,9 @@ static void apply(Work *work)
     } else {
         require(avcodec_send_packet(work->codec, work->input), "Submit complete PNG");
         require(avcodec_receive_frame(work->codec, work->decoded), "Receive PNG pixels");
-        int format = work->gray_alpha ? AV_PIX_FMT_YA8 : work->gray ? AV_PIX_FMT_GRAY8 : work->rgb ? (work->depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE) : work->depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64BE;
+        int format = work->gray_alpha ? AV_PIX_FMT_YA8 : work->gray ? (work->depth == 8 ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_GRAY16BE) : work->rgb ? (work->depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE) : work->depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64BE;
         if (work->decoded->format != format || work->decoded->width != work->width || work->decoded->height != work->height
-            || !work->decoded->buf[0] || work->decoded->linesize[0] < work->width * (work->gray_alpha ? 2 : work->gray ? 1 : work->rgb ? work->depth / 8 * 3 : work->depth / 8 * 4)) fail("Decoded PNG format differs.");
+            || !work->decoded->buf[0] || work->decoded->linesize[0] < work->width * (work->gray_alpha ? 2 : work->gray ? work->depth / 8 : work->rgb ? work->depth / 8 * 3 : work->depth / 8 * 4)) fail("Decoded PNG format differs.");
         if (work->depth == 16 || work->gray || work->gray_alpha || work->rgb) {
             work->converted->width = work->width; work->converted->height = work->height;
             work->converted->format = work->depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE;
@@ -242,7 +242,7 @@ int main(int argc, char **argv)
         work.gray = work.encoded_bytes >= 33 && work.encoded[25] == 0;
         work.gray_alpha = work.encoded_bytes >= 33 && work.encoded[25] == 4;
         if (work.rgb && interlace) fail("RGB decode requires noninterlaced RGB8/16.");
-        if (work.gray && (work.depth != 8 || interlace)) fail("Gray decode requires noninterlaced gray8.");
+        if (work.gray && interlace) fail("Gray decode requires noninterlaced gray8/16.");
         if (work.gray_alpha && (work.depth != 8 || interlace)) fail("Gray-alpha decode requires noninterlaced gray-alpha8.");
         check_profile(work.encoded, work.encoded_bytes, work.width, work.height, work.depth, interlace, work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6);
         if (work.rgb || work.gray || work.gray_alpha) {
@@ -251,7 +251,7 @@ int main(int argc, char **argv)
             require(av_opt_set_int(work.conversion, "srch", work.height, 0), "Source height");
             require(av_opt_set_int(work.conversion, "dstw", work.width, 0), "Output width");
             require(av_opt_set_int(work.conversion, "dsth", work.height, 0), "Output height");
-            require(av_opt_set_int(work.conversion, "src_format", work.gray_alpha ? AV_PIX_FMT_YA8 : work.gray ? AV_PIX_FMT_GRAY8 : work.depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE, 0), "Source format");
+            require(av_opt_set_int(work.conversion, "src_format", work.gray_alpha ? AV_PIX_FMT_YA8 : work.gray ? (work.depth == 8 ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_GRAY16BE) : work.depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE, 0), "Source format");
             require(av_opt_set_int(work.conversion, "dst_format", work.depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE, 0), "Output format");
             require(av_opt_set_int(work.conversion, "sws_flags", SWS_POINT | SWS_BITEXACT, 0), "Conversion policy");
             require(av_opt_set_int(work.conversion, "threads", 1, 0), "Conversion thread count");
