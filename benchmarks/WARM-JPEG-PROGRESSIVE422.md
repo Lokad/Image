@@ -1,0 +1,67 @@
+# Warm progressive JPEG 4:2:2 coverage
+
+The existing implementation independently confirms at 1.757x
+FFmpeg, conservative upper 1.781x. Both unchanged quiet
+guards pass. This fixed progressive 4:2:2 point clears 2x without a production
+change. Broader required, unmatched and unconfirmed warm cases remain open.
+
+| Run | Managed mean (microseconds) | Worst native bracket ratio | Conservative upper | Quiet guards |
+| --- | ---: | ---: | ---: | --- |
+| Coverage screen | 3820.31 | 1.72945x | 1.82400x | Pass |
+| Independent coverage confirmation | 3882.57 | 1.75676x | 1.78129x | Pass |
+
+One default lossless jpegtran rewrite converts the existing native baseline
+4:2:2 qscale5/RGB0x204060 JPEG from the original 513x259 raster. The new input has
+10 scans and 71,251 bytes. No source raster, geometry, quality or scan-strategy
+enumeration is added. The default benchmark selection remains one Decode8 case;
+Progressive422 is explicit.
+
+The original public-libjpeg-API coefficient visitor supports grayscale, 4:2:0 and 4:4:4 and now accepts the shared
+vertical factors of this 4:2:2 input (2x2,1x2,1x2). Its 553,808-byte canonical dumps prove
+all 276,672 valid signed coefficients, component geometry and quantization
+unchanged. Padded dummy blocks outside valid component dimensions are not
+claimed as image coefficients. Owned decoded bytes retain the exact baseline
+hash. The prior grayscale, 4:2:0 and 4:4:4 canonical dumps retain their original hashes. Producer
+revision, original visitor/build script and binary hashes are recorded; checkout,
+static library, producer and reference tools stay ignored under external/.
+No upstream source, tables, binaries, documentation or corpus is tracked.
+
+Normal/scalar Windows decoded bytes and allocation controls are exact to the
+retained actual package, at 2,329,592 allocated bytes per public Stream decode
+with tiering off. The adapter matches the normal native CLI exactly. Owned/native
+RGB maximum3/RMSE0.599884 remain within the unchanged maximum4/RMSE1.5 bounds;
+alpha is exactly opaque. Source preservation, independent held outputs and
+15 invalid protocol/input/sampling/affinity controls pass. Both actual generated
+timing libraries retain all 562 production methods and implementation flags
+from the previously accepted actual package. No new production package or codec
+optimization is needed.
+
+The resident-input boundary includes full public decode, admission, allocation
+and disposal. Native software MJPEG performs per-operation state reset, complete
+decode, horizontal chroma-grid expansion/cropping at full vertical resolution, full-range conversion and independent
+output acquisition/release, while reusing context and packet/frame wrappers.
+CPU0, one codec/conversion thread, thread type zero, normal SIMD, tiering off and
+nonconcurrent workstation GC remain fixed. Startup, I/O, IPC, preparation,
+hashing, coefficient dumps and validation are excluded. Native brackets target
+50ms and managed iterations200ms. Prepared children validate outside scored
+windows with one native operation per bracket and null ratios.
+
+One short screen is followed by one independent confirmation containing 12 actual
+managed iterations and 12 native samples in each bracket. BenchmarkDotNet selects
+12 results for its reported statistics. All 12 actual measurements remain
+available, and a second Statistics calculation includes every one without
+overhead subtraction. Both views clear 2x. The displayed conservative upper is
+the larger of their bounds: filtered 1.78129x,
+all-actual 1.78129x. Each calculation uses
+its managed confidence critical value for the native bracket lower bound.
+The existing parser retains both views; earlier raw/statistical artifacts remain
+unchanged.
+
+The [numeric evidence](warm-jpegprogressive422-evidence.json) retains raw actual
+and filtered measurements, both statistical views, native samples, guards,
+provenance and actual package/child/source identities with immutable archives.
+Regenerate with `python benchmarks/render-warm-jpegprogressive422.py`; use
+`--check` to verify. The [preceding refinement improvement](WARM-JPEG-MASK.md)
+supplies the production implementation. See the
+[reference recipe](../tools/WarmReference/README.md). No further tuning of this
+passing fixed point is planned; cover one material unmeasured case and rerank.

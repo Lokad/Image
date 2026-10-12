@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444 }
+public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422 }
 
 internal sealed record WarmJpegFixedPreparation(int SchemaVersion, string Project, string Recipe,
     string RasterSha256, string NativeFile, int EncodedBytes, string EncodedSha256,
@@ -35,11 +35,11 @@ public class WarmJpegDecode
     private JpegSampling Sampling => Case switch
     {
         WarmJpegDecodeCase.NativeDecode420 or WarmJpegDecodeCase.Progressive420 => JpegSampling.YCbCr420,
-        WarmJpegDecodeCase.NativeDecode422 => JpegSampling.YCbCr422,
+        WarmJpegDecodeCase.NativeDecode422 or WarmJpegDecodeCase.Progressive422 => JpegSampling.YCbCr422,
         WarmJpegDecodeCase.OwnedDecodeGray or WarmJpegDecodeCase.ProgressiveGray => JpegSampling.Grayscale,
         _ => JpegSampling.YCbCr444
     };
-    private bool IsProgressive => Case is WarmJpegDecodeCase.ProgressiveGray or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.Progressive444;
+    private bool IsProgressive => Case is WarmJpegDecodeCase.ProgressiveGray or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.Progressive444 or WarmJpegDecodeCase.Progressive422;
 
     public static WarmJpegDecodeCase[] SelectedCases()
     {
@@ -54,7 +54,8 @@ public class WarmJpegDecode
             "ProgressiveGray" => [WarmJpegDecodeCase.ProgressiveGray],
             "Progressive420" => [WarmJpegDecodeCase.Progressive420],
             "Progressive444" => [WarmJpegDecodeCase.Progressive444],
-            _ => throw new ArgumentException("Choose one warm JPEG decode case: Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420 or Progressive444.")
+            "Progressive422" => [WarmJpegDecodeCase.Progressive422],
+            _ => throw new ArgumentException("Choose one warm JPEG decode case: Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444 or Progressive422.")
         };
     }
 
@@ -62,6 +63,7 @@ public class WarmJpegDecode
     public static void PrepareProgressiveGray(int cpu) => PrepareProgressive(cpu, JpegSampling.Grayscale);
     public static void PrepareProgressive420(int cpu) => PrepareProgressive(cpu, JpegSampling.YCbCr420);
     public static void PrepareProgressive444(int cpu) => PrepareProgressive(cpu, JpegSampling.YCbCr444);
+    public static void PrepareProgressive422(int cpu) => PrepareProgressive(cpu, JpegSampling.YCbCr422);
     private static void PrepareProgressive(int cpu, JpegSampling sampling)
     {
         if (!OperatingSystem.IsLinux() || cpu is < 0 or > 62) throw new ArgumentException("Progressive preparation requires Linux and one allowed CPU.");
@@ -70,7 +72,7 @@ public class WarmJpegDecode
         try
         {
             using var state = new JpegBenchmarkCase();
-            var label = sampling == JpegSampling.Grayscale ? "gray" : sampling == JpegSampling.YCbCr444 ? "444" : "420";
+            var label = sampling == JpegSampling.Grayscale ? "gray" : sampling == JpegSampling.YCbCr444 ? "444" : sampling == JpegSampling.YCbCr422 ? "422" : "420";
             WarmJpegFixedPreparation baseline;
             if (sampling == JpegSampling.YCbCr444)
             {
@@ -204,7 +206,7 @@ public class WarmJpegDecode
                 });
             rasterHash = JpegBenchmarkCase.Hash(HorizontalFlipInput.Create(8));
             string decodedHash;
-            if (Case is WarmJpegDecodeCase.NativeDecode420 or WarmJpegDecodeCase.NativeDecode422 or WarmJpegDecodeCase.OwnedDecodeGray or WarmJpegDecodeCase.ProgressiveGray or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.Progressive444)
+            if (Case is WarmJpegDecodeCase.NativeDecode420 or WarmJpegDecodeCase.NativeDecode422 or WarmJpegDecodeCase.OwnedDecodeGray or WarmJpegDecodeCase.ProgressiveGray or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.Progressive444 or WarmJpegDecodeCase.Progressive422)
             {
                 var label = Sampling == JpegSampling.YCbCr420 ? "420" : Sampling == JpegSampling.YCbCr422 ? "422" : Sampling == JpegSampling.YCbCr444 ? "444" : "gray";
                 WarmJpegFixedPreparation prepared;

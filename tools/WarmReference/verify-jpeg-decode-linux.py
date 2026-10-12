@@ -9,7 +9,7 @@ import tempfile
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--cpu', type=int, default=0)
-parser.add_argument('--sampling', choices=['444','420','422','gray','progressive-gray','progressive-420','progressive-444'], default='444')
+parser.add_argument('--sampling', choices=['444','420','422','gray','progressive-gray','progressive-420','progressive-444','progressive-422'], default='444')
 arguments = parser.parse_args()
 root = Path(__file__).resolve().parents[2]
 worker = root/'external/warm-reference/ffmpeg-jpeg-decode-warm'

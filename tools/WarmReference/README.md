@@ -251,6 +251,9 @@ python3 tools/WarmReference/verify-jpeg-decode-linux.py --cpu 0 --sampling progr
 # Or rewrite the existing full-resolution native input, retaining its factors.
 dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-jpeg-progressive-444 0
 python3 tools/WarmReference/verify-jpeg-decode-linux.py --cpu 0 --sampling progressive-444
+# Or rewrite the existing horizontal-only native input, retaining its factors.
+dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-jpeg-progressive-422 0
+python3 tools/WarmReference/verify-jpeg-decode-linux.py --cpu 0 --sampling progressive-422
 ```
 
 After a Release benchmark build and owned source inventory:
@@ -265,6 +268,7 @@ After a Release benchmark build and owned source inventory:
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases ProgressiveGray -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases Progressive420 -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases Progressive444 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases Progressive422 -Cpu 0 -NoBuild
 ```
 
 Each native interval resets decoder state, decodes all coefficients/pixels,
@@ -312,6 +316,11 @@ the [per-block mask round](../../benchmarks/WARM-JPEG-MASK.md) then reduces
 confirmed managed time 12.4%, clearing this fixed pair with an all-actual upper
 1.878x and passing independent quiet guards. Earlier failed guards remain failed.
 No additional raster or quality/scan-strategy search is added.
+The [progressive 4:2:2 coverage point](../../benchmarks/WARM-JPEG-PROGRESSIVE422.md)
+retains all 276,672 valid signed coefficients, quantization, shared vertical
+sampling factors and owned pixels. Its independent quiet confirmation is 1.757x
+FFmpeg, conservative upper 1.781x including all twelve actual measurements.
+Production methods and flags remain identical to the accepted actual package.
 Two simultaneously live outputs must have independent storage; mutation of
 one leaves the other intact. Repeated output pixels and encoded source bytes
 must remain unchanged. Fifteen invalid protocol/argument/affinity controls per

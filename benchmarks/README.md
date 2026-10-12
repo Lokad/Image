@@ -295,6 +295,11 @@ reuses nonzero positions across refinement symbols, reducing confirmed managed
 time 12.4% while preserving exact semantics. Its independent quiet confirmation
 is 1.860x FFmpeg, conservative upper 1.878x including every actual sample. This
 fixed point clears 2x; broader required warm coverage remains open.
+The [progressive 4:2:2 coverage point](WARM-JPEG-PROGRESSIVE422.md) independently
+confirms at 1.757x FFmpeg, conservative upper 1.781x including every actual
+measurement. One lossless rewrite preserves all valid coefficients and owned
+pixels. It adds no production change or source raster; this passing point needs
+no further tuning.
 The [adaptive long-prefix round](WARM-JPEG-LONG-PREFIX.md) extends input-derived
 Huffman lookup for nine/ten-bit codes with explicit memory/work admission.
 The [magnitude-category round](WARM-JPEG-CATEGORY.md) replaces the coefficient
