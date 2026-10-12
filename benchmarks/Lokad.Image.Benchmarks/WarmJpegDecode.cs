@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420 }
+public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444 }
 
 internal sealed record WarmJpegFixedPreparation(int SchemaVersion, string Project, string Recipe,
     string RasterSha256, string NativeFile, int EncodedBytes, string EncodedSha256,
@@ -39,7 +39,7 @@ public class WarmJpegDecode
         WarmJpegDecodeCase.OwnedDecodeGray or WarmJpegDecodeCase.ProgressiveGray => JpegSampling.Grayscale,
         _ => JpegSampling.YCbCr444
     };
-    private bool IsProgressive => Case is WarmJpegDecodeCase.ProgressiveGray or WarmJpegDecodeCase.Progressive420;
+    private bool IsProgressive => Case is WarmJpegDecodeCase.ProgressiveGray or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.Progressive444;
 
     public static WarmJpegDecodeCase[] SelectedCases()
     {
@@ -53,13 +53,15 @@ public class WarmJpegDecode
             "OwnedDecodeGray" => [WarmJpegDecodeCase.OwnedDecodeGray],
             "ProgressiveGray" => [WarmJpegDecodeCase.ProgressiveGray],
             "Progressive420" => [WarmJpegDecodeCase.Progressive420],
-            _ => throw new ArgumentException("Choose one warm JPEG decode case: Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray or Progressive420.")
+            "Progressive444" => [WarmJpegDecodeCase.Progressive444],
+            _ => throw new ArgumentException("Choose one warm JPEG decode case: Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420 or Progressive444.")
         };
     }
 
     // One explicit, untimed fixed-setting input preparation; no quality search.
     public static void PrepareProgressiveGray(int cpu) => PrepareProgressive(cpu, JpegSampling.Grayscale);
     public static void PrepareProgressive420(int cpu) => PrepareProgressive(cpu, JpegSampling.YCbCr420);
+    public static void PrepareProgressive444(int cpu) => PrepareProgressive(cpu, JpegSampling.YCbCr444);
     private static void PrepareProgressive(int cpu, JpegSampling sampling)
     {
         if (!OperatingSystem.IsLinux() || cpu is < 0 or > 62) throw new ArgumentException("Progressive preparation requires Linux and one allowed CPU.");
@@ -68,8 +70,18 @@ public class WarmJpegDecode
         try
         {
             using var state = new JpegBenchmarkCase();
-            var label = sampling == JpegSampling.Grayscale ? "gray" : "420";
-            var baseline = JsonSerializer.Deserialize<WarmJpegFixedPreparation>(File.ReadAllText(Path.Combine(state.Root,"artifacts","warm-reference",$"jpeg-decode{label}.json")),EncoderQualityCalibration.Json)
+            var label = sampling == JpegSampling.Grayscale ? "gray" : sampling == JpegSampling.YCbCr444 ? "444" : "420";
+            WarmJpegFixedPreparation baseline;
+            if (sampling == JpegSampling.YCbCr444)
+            {
+                var match = JsonSerializer.Deserialize<WarmJpegPreparation>(File.ReadAllText(Path.Combine(state.Root,"artifacts","warm-reference","jpeg-match.json")),EncoderQualityCalibration.Json)
+                    ?? throw new InvalidOperationException("Reuse the existing native 4:4:4 preparation.");
+                var baselineBytes = File.ReadAllBytes(Path.Combine(state.Root,match.NativeFile));
+                baseline = new WarmJpegFixedPreparation(match.SchemaVersion,match.Project,"Existing fixed native 4:4:4 input",match.RasterSha256,
+                    match.NativeFile,match.Match.Native.EncodedBytes,match.Match.Native.EncodedSha256,JpegQualitySyntax.Read(baselineBytes).QuantizationHash,
+                    match.Match.Native.PublicDecodedSha256,match.FfmpegSha256);
+            }
+            else baseline = JsonSerializer.Deserialize<WarmJpegFixedPreparation>(File.ReadAllText(Path.Combine(state.Root,"artifacts","warm-reference",$"jpeg-decode{label}.json")),EncoderQualityCalibration.Json)
                 ?? throw new InvalidOperationException("Prepare the existing fixed JPEG input first.");
             var original = Path.Combine(state.Root,baseline.NativeFile); var originalBytes = File.ReadAllBytes(original);
             if (baseline.SchemaVersion!=1 || baseline.Project!="Lokad.Image" || baseline.RasterSha256!=JpegBenchmarkCase.Hash(HorizontalFlipInput.Create(8))
@@ -101,7 +113,7 @@ public class WarmJpegDecode
             if (!File.ReadAllBytes(original).AsSpan().SequenceEqual(originalBytes)) throw new InvalidOperationException("Progressive preparation changed the original input.");
             var recipe = sampling == JpegSampling.Grayscale
                 ? "Existing original-raster owned grayscale quality85/RGB204060 input; one default lossless jpegtran progressive rewrite; coefficients/quantization and owned decoded bytes exact; no scan or quality enumeration."
-                : "Existing original-raster native 4:2:0 qscale5/RGB204060 input; one default lossless jpegtran progressive rewrite; coefficient geometry/quantization and all valid coefficient values plus owned decoded bytes exact; no scan or quality enumeration.";
+                : $"Existing original-raster native {label} qscale5/RGB204060 input; one default lossless jpegtran progressive rewrite; coefficient geometry/quantization and all valid coefficient values plus owned decoded bytes exact; no scan or quality enumeration.";
             var fixedInput = new WarmJpegFixedPreparation(1,"Lokad.Image",recipe,
                 baseline.RasterSha256,Path.GetRelativePath(state.Root,input),bytes.Length,JpegBenchmarkCase.Hash(bytes),header.QuantizationHash,baseline.ManagedDecodedSha256,JpegBenchmarkCase.HashFile(state.Ffmpeg));
             var record = new WarmJpegProgressivePreparation(fixedInput,baseline.EncodedSha256,JpegBenchmarkCase.HashFile(before),identity);
@@ -192,9 +204,9 @@ public class WarmJpegDecode
                 });
             rasterHash = JpegBenchmarkCase.Hash(HorizontalFlipInput.Create(8));
             string decodedHash;
-            if (Case is WarmJpegDecodeCase.NativeDecode420 or WarmJpegDecodeCase.NativeDecode422 or WarmJpegDecodeCase.OwnedDecodeGray or WarmJpegDecodeCase.ProgressiveGray or WarmJpegDecodeCase.Progressive420)
+            if (Case is WarmJpegDecodeCase.NativeDecode420 or WarmJpegDecodeCase.NativeDecode422 or WarmJpegDecodeCase.OwnedDecodeGray or WarmJpegDecodeCase.ProgressiveGray or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.Progressive444)
             {
-                var label = Sampling == JpegSampling.YCbCr420 ? "420" : Sampling == JpegSampling.YCbCr422 ? "422" : "gray";
+                var label = Sampling == JpegSampling.YCbCr420 ? "420" : Sampling == JpegSampling.YCbCr422 ? "422" : Sampling == JpegSampling.YCbCr444 ? "444" : "gray";
                 WarmJpegFixedPreparation prepared;
                 if (IsProgressive)
                 {
@@ -211,7 +223,7 @@ public class WarmJpegDecode
                     || encoded.Length != prepared.EncodedBytes || JpegBenchmarkCase.Hash(encoded) != prepared.EncodedSha256
                     || JpegQualitySyntax.Read(encoded).QuantizationHash != prepared.QuantizationSha256
                     || JpegBenchmarkCase.HashFile(state.Ffmpeg) != prepared.FfmpegSha256) throw new InvalidOperationException("Prepared fixed JPEG identity differs.");
-                inputOrigin = IsProgressive ? (Sampling == JpegSampling.Grayscale ? "lossless-progressive-owned-gray" : "lossless-progressive-native-420") : Case == WarmJpegDecodeCase.OwnedDecodeGray ? "prepared-owned-gray" : "prepared-native-fixed" + label;
+                inputOrigin = IsProgressive ? (Sampling == JpegSampling.Grayscale ? "lossless-progressive-owned-gray" : "lossless-progressive-native-"+label) : Case == WarmJpegDecodeCase.OwnedDecodeGray ? "prepared-owned-gray" : "prepared-native-fixed" + label;
             }
             else
             {

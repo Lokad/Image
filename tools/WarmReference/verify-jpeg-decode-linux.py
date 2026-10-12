@@ -9,7 +9,7 @@ import tempfile
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--cpu', type=int, default=0)
-parser.add_argument('--sampling', choices=['444','420','422','gray','progressive-gray','progressive-420'], default='444')
+parser.add_argument('--sampling', choices=['444','420','422','gray','progressive-gray','progressive-420','progressive-444'], default='444')
 arguments = parser.parse_args()
 root = Path(__file__).resolve().parents[2]
 worker = root/'external/warm-reference/ffmpeg-jpeg-decode-warm'
@@ -23,7 +23,7 @@ if progressive:prepared=prepared['input']
 input_file = root/prepared['nativeFile' if fixed else 'managedFile']
 encoded = input_file.read_bytes()
 assert hashlib.sha256(encoded).hexdigest() == (prepared['encodedSha256'] if fixed else prepared['match']['closestOwned']['encodedSha256'])
-operation='jpeg-gray-decode' if sampling=='gray' else f'jpeg{sampling}-decode' if fixed else 'jpeg-decode'
+operation='jpeg-gray-decode' if sampling=='gray' else f'jpeg{sampling}-decode' if fixed and sampling!='444' else 'jpeg-decode'
 allowed = sorted(os.sched_getaffinity(0))
 assert arguments.cpu in allowed
 other = next(cpu for cpu in allowed if cpu != arguments.cpu)
@@ -74,7 +74,7 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-jpeg-decode-controls-') as 
         changed = command.copy(); changed[index] = value; reject(name, changed)
     damaged = folder/'truncated.jpg'; damaged.write_bytes(encoded[:-1])
     changed = command.copy(); changed[2] = str(damaged); reject('truncated JPEG', changed)
-    changed=command.copy();changed[1]='jpeg-decode' if fixed else 'jpeg420-decode'
+    changed=command.copy();changed[1]='jpeg420-decode' if sampling=='444' else 'jpeg-decode'
     reject('wrong declared sampling',changed)
     report = dict(schemaVersion=1, project='Lokad.Image', correctnessOnly=True, complete=True,
         cpu=arguments.cpu, distinctSourceRasters=1, extraSourceRasters=0, qualityEnumeration=False,

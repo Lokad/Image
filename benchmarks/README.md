@@ -282,6 +282,12 @@ lossless rewrite of the existing native baseline input. All valid coefficients,
 quantization, geometry and owned pixels remain exact. Independent confirmation
 is 1.881x FFmpeg, conservative upper 1.894x including every actual measurement.
 This adds one explicit case and no production change or source raster.
+The [progressive 4:4:4 baseline and wider-group rejection](WARM-JPEG-REFINE16-REJECTION.md)
+use a lossless rewrite of the existing full-resolution native input. The 2.13x
+baseline exposes the largest remaining measured gap. A 16-lane correction trial
+is slower and is discarded; all production bytes are restored. The next diagnosis
+counts correction prefixes and EOB versus zero-run work before another traversal
+primitive. No additional performance raster or scan/quality sweep is added.
 The [adaptive long-prefix round](WARM-JPEG-LONG-PREFIX.md) extends input-derived
 Huffman lookup for nine/ten-bit codes with explicit memory/work admission.
 The [magnitude-category round](WARM-JPEG-CATEGORY.md) replaces the coefficient

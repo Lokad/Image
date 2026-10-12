@@ -279,6 +279,12 @@ if (args.Length == 2 && args[0] == "--prepare-warm-jpeg-progressive-420")
     return;
 }
 
+if (args.Length == 2 && args[0] == "--prepare-warm-jpeg-progressive-444")
+{
+    WarmJpegDecode.PrepareProgressive444(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture));
+    return;
+}
+
 if (args.Length == 2 && args[0] == "--prepare-warm-jpeg-gray-decode")
 {
     WarmJpegDecode.PrepareGray(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture));
