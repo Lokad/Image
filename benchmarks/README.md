@@ -269,8 +269,11 @@ The [progressive accounting rejection](WARM-JPEGPROGRESSIVE-ACCOUNTING-REJECTION
 adds one lossless six-scan ProgressiveGray input from that same raster. Coefficient,
 quantization and pixel hashes remain exact. Its 2.39x baseline is the remaining
 measured gap; the small accounting trial is discarded and production restored.
-The next hypothesis batches correction bits without changing logical work or
-marker/limit failure precedence. No image, quality or scan-strategy sweep is added.
+The [EOB-tail correction rejection](WARM-JPEG-CORRECTION-REJECTION.md) is also flat,
+with both quiet guards passing. A separate profile places about 93% of sampled
+CPU in scan decoding. The next hypothesis improves progressive coefficient
+traversal; exact work, memory, cancellation and error contracts remain required.
+No image, quality or scan-strategy sweep is added.
 The [adaptive long-prefix round](WARM-JPEG-LONG-PREFIX.md) extends input-derived
 Huffman lookup for nine/ten-bit codes with explicit memory/work admission.
 The [magnitude-category round](WARM-JPEG-CATEGORY.md) replaces the coefficient

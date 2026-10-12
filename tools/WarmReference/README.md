@@ -283,6 +283,9 @@ representation admits an unspecified range tag. The
 the former rounded/clipped samples, work, admission and output ownership.
 The [progressive accounting trial](../../benchmarks/WARM-JPEGPROGRESSIVE-ACCOUNTING-REJECTION.md)
 records this six-scan pair and rejects a small uncertain local-accounting change.
+The [EOB-tail correction trial](../../benchmarks/WARM-JPEG-CORRECTION-REJECTION.md)
+is flat despite passing quiet guards. Its separate CPU diagnosis targets the
+dominant progressive scan loop; diagnostic sample shares do not certify parity.
 Production remains unchanged. The fixture producer is used only outside timing,
 and its checkout/build/binaries stay ignored under external/.
 Two simultaneously live outputs must have independent storage; mutation of
