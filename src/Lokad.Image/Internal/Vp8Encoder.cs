@@ -100,14 +100,20 @@ internal static class Vp8Encoder
             context.Work(stride * 64L);
             for (var x = 0; x < stride / 2; x++)
             {
-                double r = 0, g = 0, b = 0;
+                double r = 0, g = 0, b = 0; int alphaSum = 0, redSum = 0, greenSum = 0, blueSum = 0;
                 for (var dy = 0; dy < 2; dy++)
                     for (var dx = 0; dx < 2; dx++)
                     {
-                        r += Sample(image, x * 2 + dx, y * 2 + dy, 0) / 4.0;
-                        g += Sample(image, x * 2 + dx, y * 2 + dy, 1) / 4.0;
-                        b += Sample(image, x * 2 + dx, y * 2 + dy, 2) / 4.0;
+                        var sx = x * 2 + dx; var sy = y * 2 + dy;
+                        var red = Sample(image, sx, sy, 0); var green = Sample(image, sx, sy, 1); var blue = Sample(image, sx, sy, 2);
+                        var a = Sample(image, sx, sy, 3);
+                        r += red / 4.0; g += green / 4.0; b += blue / 4.0;
+                        alphaSum += a; redSum += a * red; greenSum += a * green; blueSum += a * blue;
                     }
+                if (alphaSum != 0)
+                {
+                    r = (double)redSum / alphaSum; g = (double)greenSum / alphaSum; b = (double)blueSum / alphaSum;
+                }
                 result.U[y * stride / 2 + x] = Round(128 + 224.0 / 255 * (-.168735891647855 * r - .331264108352145 * g + .5 * b));
                 result.V[y * stride / 2 + x] = Round(128 + 224.0 / 255 * (.5 * r - .418687589158345 * g - .081312410841655 * b));
             }

@@ -1,6 +1,7 @@
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
@@ -104,8 +105,55 @@ internal static class Vp8Fixtures
                 encodedHash = Hash(encoded),
                 expectedHash = Hash(expected),
                 yuvHash = Hash(yuv),
-                comparison = "exact-yuv-and-alpha; rgb-max4-rmse1.5-after-explicit-conversion"
+                comparison = "exact-yuv-and-alpha; rgb-max4-rmse1.5-after-explicit-conversion",
+                chromaPreparation = managedDepth == 0 ? null : "encoded-alpha-weighted-2x2-v1"
             });
+        }
+    }
+
+    public static void RefreshManaged(string output, string executable, string executableHash)
+    {
+        var path = Path.Combine(output, "vp8-manifest.json");
+        var manifest = JsonNode.Parse(File.ReadAllText(path))!.AsObject();
+        if (manifest["ffmpegSha256"]!.GetValue<string>() != executableHash)
+            throw new InvalidOperationException("Managed fixture refresh requires its registered original FFmpeg oracle.");
+        var count = 0; var changed = 0;
+        foreach (var node in manifest["fixtures"]!.AsArray())
+        {
+            var fixture = node!.AsObject();
+            if (fixture["authoring"]?.GetValue<string>() != "Lokad.Image.EncodeWebp") continue;
+            count++;
+            var name = fixture["name"]!.GetValue<string>();
+            if (Path.GetFileName(name) != name || fixture["recipe"]!.GetValue<string>() != "asymmetric-v1")
+                throw new InvalidOperationException("Unexpected managed fixture provenance.");
+            var options = fixture["managedOptions"]!.AsObject();
+            var width = fixture["width"]!.GetValue<int>(); var height = fixture["height"]!.GetValue<int>();
+            using var source = OriginalPixels.Buffer(width, height, options["bitDepth"]!.GetValue<int>(),
+                opaque: !fixture["alpha"]!.GetValue<bool>());
+            if (Hash(OriginalPixels.Bytes(source)) != fixture["inputHash"]!.GetValue<string>())
+                throw new InvalidOperationException("Original managed fixture input changed.");
+            using var stream = new MemoryStream();
+            ImageCodec.EncodeWebp(source, stream, new WebpEncodeOptions { Lossless = options["lossless"]!.GetValue<bool>(),
+                Quality = options["quality"]!.GetValue<int>(), Effort = options["effort"]!.GetValue<int>() });
+            var encoded = stream.ToArray();
+            if (ImageCodec.Identify(encoded).HasAlpha != fixture["alpha"]!.GetValue<bool>())
+                throw new InvalidOperationException("Fixture alpha geometry changed.");
+            var decode = fixture["decode"]!.AsArray().Select(value => value!.GetValue<string>()).ToArray();
+            var yuvDecode = fixture["yuvDecode"]!.AsArray().Select(value => value!.GetValue<string>()).ToArray();
+            var expected = OracleProcess.Run(executable, decode, encoded); var yuv = OracleProcess.Run(executable, yuvDecode, encoded);
+            if (Hash(encoded) != fixture["encodedHash"]!.GetValue<string>()) changed++;
+            WriteIfChanged(name + ".webp", encoded); WriteIfChanged(name + ".rgba", expected); WriteIfChanged(name + ".yuv", yuv);
+            fixture["encodedHash"] = Hash(encoded); fixture["expectedHash"] = Hash(expected); fixture["yuvHash"] = Hash(yuv);
+            fixture["chromaPreparation"] = "encoded-alpha-weighted-2x2-v1";
+        }
+        if (count != 42) throw new InvalidOperationException("Unexpected managed fixture count.");
+        File.WriteAllText(path, manifest.ToJsonString(new JsonSerializerOptions { WriteIndented = true }) + "\n");
+        Console.WriteLine($"Refreshed {count} existing managed VP8 fixtures; {changed} bitstreams changed. Original inputs/options and native fixtures retained.");
+
+        void WriteIfChanged(string name, byte[] bytes)
+        {
+            var target = Path.Combine(output, name);
+            if (!File.ReadAllBytes(target).AsSpan().SequenceEqual(bytes)) File.WriteAllBytes(target, bytes);
         }
     }
 

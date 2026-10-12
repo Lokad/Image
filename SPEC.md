@@ -304,7 +304,11 @@ encoder's quality settings. Limited-range BT.601 source conversion uses
 Y=16+(219/255)(0.299R+0.587G+0.114B),
 U=128+(224/255)(-0.168735892R-0.331264108G+0.5B), and
 V=128+(224/255)(0.5R-0.418687589G-0.081312411B).
-Chroma averages each 2x2 source RGB cell before rounding; odd and padded edges
+Chroma averages each 2x2 source RGB cell in encoded sample space, weighted by
+its normalized alpha before matrix conversion and rounding. Fully transparent
+cells retain their original unweighted average; opaque and uniform-opacity
+cells keep the same result. Luma and exact normalized alpha are unchanged.
+Odd and padded edges
 extend the last source pixel. Alpha is normalized once and preserved exactly in
 a raw unfiltered ALPH chunk. Optional metadata is stripped.
 

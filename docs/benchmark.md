@@ -56,7 +56,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG8-ENCODE.md) | 7,241.99 | 17,219.43 | 0.421 / 0.430 | 527,629 | Confirmed |
 | [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG16-ENCODE-CRC.md) | 16,470.31 | 19,951.52 | 0.826 / 0.838 | 2,103,836 | Confirmed |
 | [JPEG 4:4:4, matched quality](../benchmarks/WARM-JPEG-ENCODE-QUIET.md) | 7,390.28 | 3,779.05 | 1.956 / 1.969 | 1,051,857 | Confirmed |
-| [WebP VP8 + alpha](../benchmarks/WARM-VP8-CHROMA-REJECTED.md) | — | — | — | — | Unmatched quality; no timing |
+| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-ALPHAWEIGHTED.md) | 42,879.92 | 54,484.52 | 0.787 / 0.805 | 2,615,472 | Confirmed |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-ENCODE-EXACT.md) | 7,363.30 | 121,587.95 | 0.061 / 0.063 | 2,100,170 | Confirmed |
 
 **Editing**
@@ -92,6 +92,11 @@ match the exact rational reference; RGBA8 native alpha stays exact. The latest
 RGBA16 independent confirmation clears 2x with both quiet guards passing.
 Earlier failed screens/prechecks and rejected prototypes remain recorded in
 the linked reports.
+
+‡ VP8 encode fixes native quality 75 / managed quality 100 at effort 4. Source
+PSNR gap is 0.00365 dB within the unchanged 0.25 dB band; alpha is exact.
+Managed output is 471,436 bytes versus 98,590 bytes. Quality-matched timing is
+confirmed; compression efficiency parity is not established.
 
 Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
 diagnostics or raw GC allocated bytes / operation count (rounded up, including

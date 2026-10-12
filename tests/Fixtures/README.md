@@ -13,6 +13,15 @@ encoded/expected hashes and oracle identity.
 
 The corpus contains 88 PNG, 30 JPEG, 60 lossless WebP and 164 lossy WebP fixtures.
 
+The 42 managed VP8 fixtures retain their original sources and options. Their
+`encoded-alpha-weighted-2x2-v1` provenance records alpha-weighted encoded-space
+chroma preparation. Fifteen alpha bitstreams and their native decoded goldens
+were refreshed for that conversion; opaque bitstreams and native fixtures remain
+identical. With the manifest's registered original FFmpeg executable, use
+`dotnet tools/Fixtures/bin/Release/net10.0/Fixtures.dll tests/Fixtures
+--refresh-managed-vp8` to refresh only managed outputs. The command verifies
+original input hashes and keeps all other fixture records and corpus counts.
+
 Additional EXIF controls are generated during tests by `tools/Shared/OriginalExif.cs`;
 they do not change these frozen corpus counts. The original wrapper writes one
 IFD0 SHORT orientation tag in both TIFF byte orders, using the public

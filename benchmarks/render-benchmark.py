@@ -90,7 +90,7 @@ def render():
         row('PNG RGBA8, level 6 / None', 'warm-png8encode-evidence.json', ['observations', -1], 'WARM-PNG8-ENCODE.md', True),
         row('PNG RGBA16, level 6 / None', 'warm-png16-encode-crc-evidence.json', ['observations', -1], 'WARM-PNG16-ENCODE-CRC.md', True),
         row('JPEG 4:4:4, matched quality', 'warm-jpegencode-quiet-evidence.json', ['observations', -1], 'WARM-JPEG-ENCODE-QUIET.md', True),
-        pending('WebP VP8 + alpha', 'WARM-VP8-CHROMA-REJECTED.md', 'Unmatched quality; no timing'),
+        row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
     ]
     edits = [
@@ -164,6 +164,11 @@ match the exact rational reference; RGBA8 native alpha stays exact. The latest
 RGBA16 independent confirmation clears 2x with both quiet guards passing.
 Earlier failed screens/prechecks and rejected prototypes remain recorded in
 the linked reports.
+
+‡ VP8 encode fixes native quality 75 / managed quality 100 at effort 4. Source
+PSNR gap is 0.00365 dB within the unchanged 0.25 dB band; alpha is exact.
+Managed output is 471,436 bytes versus 98,590 bytes. Quality-matched timing is
+confirmed; compression efficiency parity is not established.
 
 Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
 diagnostics or raw GC allocated bytes / operation count (rounded up, including

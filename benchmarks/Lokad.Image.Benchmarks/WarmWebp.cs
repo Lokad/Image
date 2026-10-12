@@ -11,7 +11,7 @@ public enum WarmWebpCase { Encode8 }
 internal sealed record WarmWebpPreparation(int SchemaVersion, string Project, string GeneratedUtc, string Recipe,
     string RasterSha256, string ReferenceSha256, int NativeQuality, string NativeFile, string ManagedFile,
     QualityMatch Match, QualitySample[] OwnedSettings, int[] OwnedEvaluationOrder, JsonElement SourceIdentity,
-    string LibrarySha256, string BenchmarkAssemblySha256, string FfmpegSha256, JsonElement NativeBuild, JsonElement NativeReady);
+    string LibrarySha256, string BenchmarkAssemblySha256, string FfmpegSha256, JsonElement NativeBuild, JsonElement NativeReady, string QualityPolicy);
 
 [MemoryDiagnoser]
 public class WarmWebp
@@ -51,10 +51,18 @@ public class WarmWebp
 
     private static void ValidatePreparation(WarmWebpPreparation record)
     {
+        var allowedPolicy = record.QualityPolicy switch
+        {
+            "fixed-anchor-v1" => record.NativeQuality == 75 && record.OwnedSettings.Length == 1
+                && record.OwnedSettings[0].Setting == 100 && record.OwnedEvaluationOrder.Length == 1
+                && record.OwnedEvaluationOrder[0] == 100,
+            "bounded-v1" => record.OwnedSettings.Length is >= 5 and <= EncoderQualityCalibration.MaximumOwnedSettings,
+            _ => false
+        };
         if (record.SchemaVersion != 1 || record.Project != "Lokad.Image" || record.Recipe != Recipe
             || record.NativeQuality is < 1 or > 100 || record.NativeQuality != record.Match.Native.Setting
             || !record.Match.Matched || record.Match.PsnrGapDb is not (>= 0 and <= EncoderQualityCalibration.MaximumPsnrGapDb)
-            || record.OwnedSettings.Length is < 5 or > EncoderQualityCalibration.MaximumOwnedSettings
+            || !allowedPolicy
             || record.OwnedEvaluationOrder.Length != record.OwnedSettings.Length
             || record.OwnedEvaluationOrder.Distinct().Count() != record.OwnedSettings.Length
             || !record.OwnedEvaluationOrder.Order().SequenceEqual(record.OwnedSettings.Select(sample => sample.Setting).Order())
@@ -75,8 +83,12 @@ public class WarmWebp
         int[] seeds = [1, 25, 50, 75, 100]; var owned = seeds.Select(Sample).ToArray(); var native = Sample(75);
         var matched = EncoderQualityCalibration.Match(native, owned);
         var record = new WarmWebpPreparation(1, "Lokad.Image", "", Recipe, "", "", 75, "", "", matched,
-            owned, seeds, empty, "", "", "", empty, empty);
+            owned, seeds, empty, "", "", "", empty, empty, "bounded-v1");
         ValidatePreparation(record);
+        var fixedOwned = Sample(100);
+        var fixedRecord = record with { QualityPolicy = "fixed-anchor-v1", OwnedSettings = [fixedOwned],
+            OwnedEvaluationOrder = [100], Match = EncoderQualityCalibration.Match(native, [fixedOwned]) };
+        ValidatePreparation(fixedRecord);
         WarmWebpPreparation[] rejected = [
             record with { Match = matched with { Matched = false, PsnrGapDb = 0.8984, ExclusionReason = "Synthetic outside-band control" } },
             record with { Match = matched with { PsnrGapDb = 0.8984 } },
@@ -88,7 +100,11 @@ public class WarmWebp
             record with { OwnedEvaluationOrder = [1, 25, 50, 75, 75] },
             record with { OwnedEvaluationOrder = [1, 25, 50, 75, 99] },
             record with { Match = matched with { Native = native with { AlphaExact = false } } },
-            record with { Match = matched with { ClosestOwned = matched.ClosestOwned with { Codec = "JPEG" } } }
+            record with { Match = matched with { ClosestOwned = matched.ClosestOwned with { Codec = "JPEG" } } },
+            fixedRecord with { NativeQuality = 74 },
+            fixedRecord with { OwnedSettings = [Sample(99)], OwnedEvaluationOrder = [99] },
+            fixedRecord with { OwnedSettings = [fixedOwned, fixedOwned], OwnedEvaluationOrder = [100, 100] },
+            fixedRecord with { QualityPolicy = "unknown" }
         ];
         foreach (var invalid in rejected)
         {
@@ -103,8 +119,8 @@ public class WarmWebp
     // selected bitstreams again without repeating quality enumeration.
     public static void Prepare(int cpu, int nativeQuality = 75)
     {
-        if (!OperatingSystem.IsLinux() || cpu is < 0 or > 62 || nativeQuality is < 1 or > 100)
-            throw new ArgumentException("VP8 preparation requires Linux, one allowed CPU and quality 1..100.");
+        if (!OperatingSystem.IsLinux() || cpu is < 0 or > 62 || nativeQuality != 75)
+            throw new ArgumentException("The fixed VP8 pair requires Linux, one allowed CPU, native quality 75 and owned quality 100.");
         using var process = Process.GetCurrentProcess(); var oldAffinity = process.ProcessorAffinity;
         process.ProcessorAffinity = new IntPtr(1L << cpu);
         try
@@ -118,14 +134,10 @@ public class WarmWebp
             using var native = new NativeWarmReference(state, 8, cpu, "webp-encode", nativeQuality: nativeQuality);
             var nativeBytes = File.ReadAllBytes(state.NativeOutput);
             var nativeSample = EncoderQualityCalibration.Validate(nativeBytes, reference, TargetProfile, nativeQuality, state.Ffmpeg);
-            var files = new Dictionary<int, byte[]>(); var order = new List<int>();
-            var owned = EncoderQualityCalibration.SampleOwned([nativeSample], quality =>
-            {
-                using var output = new MemoryStream();
-                ImageCodec.EncodeWebp(source, output, new WebpEncodeOptions { Lossless = false, Quality = quality, Effort = 4 });
-                var bytes = output.ToArray(); files.Add(quality, bytes); order.Add(quality);
-                return EncoderQualityCalibration.Validate(bytes, reference, TargetProfile, quality, state.Ffmpeg);
-            });
+            using var output = new MemoryStream();
+            ImageCodec.EncodeWebp(source, output, new WebpEncodeOptions { Lossless = false, Quality = 100, Effort = 4 });
+            var ownedBytes = output.ToArray();
+            QualitySample[] owned = [EncoderQualityCalibration.Validate(ownedBytes, reference, TargetProfile, 100, state.Ffmpeg)];
             var match = EncoderQualityCalibration.Match(nativeSample, owned);
             native.Check();
             if (!File.ReadAllBytes(state.NativeOutput).AsSpan().SequenceEqual(nativeBytes)
@@ -134,12 +146,12 @@ public class WarmWebp
             var directory = Path.Combine(state.Root, "artifacts", "warm-reference", "webp-match-" + Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(directory);
             var nativeFile = Path.Combine(directory, "native.webp"); var managedFile = Path.Combine(directory, "managed.webp");
-            File.WriteAllBytes(nativeFile, nativeBytes); File.WriteAllBytes(managedFile, files[match.ClosestOwned.Setting]);
+            File.WriteAllBytes(nativeFile, nativeBytes); File.WriteAllBytes(managedFile, ownedBytes);
             var record = new WarmWebpPreparation(1, "Lokad.Image", DateTime.UtcNow.ToString("O"), Recipe,
                 JpegBenchmarkCase.Hash(pixels), JpegBenchmarkCase.Hash(reference), nativeQuality,
-                Path.GetRelativePath(state.Root, nativeFile), Path.GetRelativePath(state.Root, managedFile), match, owned, order.ToArray(), SourceIdentity(state.Root),
+                Path.GetRelativePath(state.Root, nativeFile), Path.GetRelativePath(state.Root, managedFile), match, owned, [100], SourceIdentity(state.Root),
                 JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), JpegBenchmarkCase.HashFile(typeof(WarmWebp).Assembly.Location),
-                JpegBenchmarkCase.HashFile(state.Ffmpeg), native.BuildIdentity, native.Ready);
+                JpegBenchmarkCase.HashFile(state.Ffmpeg), native.BuildIdentity, native.Ready, "fixed-anchor-v1");
             var path = Path.Combine(state.Root, "artifacts", "warm-reference", "webp-match.json");
             File.WriteAllText(path, JsonSerializer.Serialize(record, EncoderQualityCalibration.Json) + "\n");
             Console.WriteLine($"Prepared one warm VP8 pair: native quality {nativeQuality}, owned quality {match.ClosestOwned.Setting}, gap {match.PsnrGapDb:F4} dB, matched={match.Matched}; {owned.Length} owned settings, one source raster. {path}");
@@ -237,6 +249,7 @@ public class WarmWebp
                 recipe = Recipe, sampling = "4:2:0", effort = 4, lossless = false, qualityMatched = true, alphaExact = true, decoderAgreementWithinBounds = true,
                 psnrGapDb = prepared.Match.PsnrGapDb, maximumPsnrGapDb = EncoderQualityCalibration.MaximumPsnrGapDb,
                 ownedEnumeratedSettings = prepared.OwnedSettings.Length, ownedEvaluationOrder = prepared.OwnedEvaluationOrder,
+                ownedSettingsPolicy = prepared.QualityPolicy, qualityEnumerationPerformed = prepared.QualityPolicy != "fixed-anchor-v1",
                 ownedSettings = prepared.OwnedSettings, managedQuality, nativeQuality,
                 sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),

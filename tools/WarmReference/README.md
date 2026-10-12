@@ -1,5 +1,12 @@
 # Warm FFmpeg reference
 
+Lossy VP8 warm preparation uses `fixed-anchor-v1`: native quality 75, managed
+quality 100, effort 4, the existing original RGBA8 raster and the unchanged
+0.25 dB source-PSNR band. Prepare exactly one owned setting; no quality sweep.
+The gate recomputes the match and enforces exact alpha and registered decoder
+agreement. Report both packet sizes alongside timing; equal source quality
+does not establish equal compression efficiency.
+
 After a source overlay or rollback that preserves file timestamps, force a
 Release rebuild before preparation: `dotnet build benchmarks/Lokad.Image.Benchmarks
 -c Release -t:Rebuild --no-restore --tl:off`. Incremental build can retain a

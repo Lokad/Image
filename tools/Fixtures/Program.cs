@@ -30,6 +30,11 @@ if (args.Length == 2 && args[1] == "--authored-png")
     AuthoredPngFixtures.Generate(output, executable, executableHash, version);
     return;
 }
+if (args.Length == 2 && args[1] == "--refresh-managed-vp8")
+{
+    Vp8Fixtures.RefreshManaged(output, executable, executableHash);
+    return;
+}
 var fixtures = new List<object>();
 foreach (var depth in new[] { 8, 16 })
 foreach (var format in new[] { "rgba", "rgb", "gray", "grayalpha" })
