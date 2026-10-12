@@ -159,6 +159,11 @@ lanes, preserving exact ties, overflow, scalar fallback, tails, alias/error beha
 and admission. Complete decode improves39.2%, independently confirming at1.548x
 FFmpeg, upper1.607x. A guard-failed attempt remains failed; the fresh bounded
 confirmation passes unchanged limits. This fixed pair clears2x.
+The [Paeth RGBA8 baseline](WARM-PNG-PAETH8-BASELINE.md) covers the four-byte-pixel
+path on the existing eight-bit raster. Its quiet screen mean is2.071x with a wide
+upper7.146x; it is unconfirmed. A short CPU profile attributes about30% to Paeth
+prediction/unfiltering and selects one four-channel primitive. The existing
+eight-channel implementation and its passing point stay unchanged.
 The means are now 1.95x / 1.81x FFmpeg; longer conservative uppers are below 2x.
 Quiet independent confirmation and required-path coverage remain open. That
 checkpoint selected the uncovered VP8 decode direction measured above.

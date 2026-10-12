@@ -133,6 +133,9 @@ python3 tools/WarmReference/verify-png-adam7-linux.py --cpu 0
 # Or author one existing-raster noninterlaced Paeth input.
 dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-png-paeth-16
 python3 tools/WarmReference/verify-png-paeth-linux.py --cpu 0
+# Or prepare the single eight-bit Paeth input on the existing eight-bit raster.
+dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-png-paeth-8
+python3 tools/WarmReference/verify-png-paeth-linux.py --cpu 0 --depth 8
 ```
 
 ```powershell
@@ -143,9 +146,10 @@ python3 tools/WarmReference/verify-png-paeth-linux.py --cpu 0
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily Png -WarmCases Encode16 -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily Png -WarmCases DecodeAdam7_16 -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily Png -WarmCases DecodePaeth16 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Png -WarmCases DecodePaeth8 -Cpu 0 -NoBuild
 ```
 
-The default pair is RGBA8 decode. Encode8, Encode16, Decode16, DecodeAdam7_16 and DecodePaeth16
+The default pair is RGBA8 decode. Encode8, Encode16, Decode16, DecodeAdam7_16, DecodePaeth16 and DecodePaeth8
 are explicitly selectable on the same two original 513x259 rasters as horizontal
 flip; any selection is capped at three distinct pairs. Both decoders consume identical
 resident PNG bytes and produce independent owned RGBA pixels. Native 16-bit
@@ -196,6 +200,11 @@ upper1.607x. All564 production methods/flags match the actual package validated
 on both OSes. Thirteen normal/scalar controls include every predictor triple,
 aliases, tails, errors and cancellation. One guard-failed confirmation is frozen;
 a fresh process with stricter starting load passes the same unchanged guard limits.
+The [Paeth RGBA8 baseline](../../benchmarks/WARM-PNG-PAETH8-BASELINE.md) uses the
+existing eight-bit raster with the same fixed filter/effort. Its quiet three-sample
+mean is2.071x, upper7.146x; no parity confirmation is claimed. A short profile
+selects four-channel reconstruction. Generalized preparation retains the exact
+previous RGBA16 input bytes; default selection remains one Decode8 case.
 
 ## JPEG
 

@@ -8,7 +8,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16 }
+public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8 }
 
 [MemoryDiagnoser]
 public class WarmPng
@@ -29,7 +29,7 @@ public class WarmPng
         var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
         var result = selection is null ? new[] { WarmPngCase.Decode8 } : selection.Split(',')
             .Select(value => Enum.TryParse<WarmPngCase>(value, out var parsed) && Enum.IsDefined(parsed)
-                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, Decode8, Decode16, DecodeAdam7_16 or DecodePaeth16.")).ToArray();
+                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16 or DecodePaeth8.")).ToArray();
         if (result.Length is < 1 or > 3 || result.Distinct().Count() != result.Length)
             throw new ArgumentException("Choose one to three distinct PNG cases.");
         return result;
@@ -37,7 +37,7 @@ public class WarmPng
     private int Depth => Case is WarmPngCase.Decode16 or WarmPngCase.Encode16 or WarmPngCase.DecodeAdam7_16 or WarmPngCase.DecodePaeth16 ? 16 : 8;
     private bool Encode => Case is WarmPngCase.Encode8 or WarmPngCase.Encode16;
     private bool Interlaced => Case == WarmPngCase.DecodeAdam7_16;
-    private bool Paeth => Case == WarmPngCase.DecodePaeth16;
+    private bool Paeth => Case is WarmPngCase.DecodePaeth16 or WarmPngCase.DecodePaeth8;
     private bool Prepared => Interlaced || Paeth;
 
     [GlobalSetup]
@@ -65,7 +65,7 @@ public class WarmPng
             source = JpegBenchmarkCase.Buffer(pixels, HorizontalFlipInput.Width, HorizontalFlipInput.Height, Depth);
             if (Prepared)
             {
-                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", Paeth ? "png-paeth-16" : "png-adam7-16");
+                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", Paeth ? "png-paeth-" + Depth : "png-adam7-16");
                 using var prepared = JsonDocument.Parse(File.ReadAllBytes(directory + ".json"));
                 encoded = File.ReadAllBytes(Path.Combine(directory, "input.png"));
                 if (prepared.RootElement.GetProperty("inputSha256").GetString() != JpegBenchmarkCase.Hash(encoded)
@@ -86,7 +86,7 @@ public class WarmPng
             {
                 var arguments = new List<string> { "-v", "error", "-threads", "1", "-filter_threads", "1", "-cpuflags", "0",
                     "-noautorotate", "-f", "image2pipe", "-i", "pipe:0", "-frames:v", "1", "-threads:v", "1",
-                    "-pix_fmt", "rgba64le", "-f", "rawvideo", "pipe:1" };
+                    "-pix_fmt", Depth == 16 ? "rgba64le" : "rgba", "-f", "rawvideo", "pipe:1" };
                 if (!OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), encoded).AsSpan().SequenceEqual(pixels))
                     throw new InvalidOperationException("Scalar native CLI prepared PNG samples differ.");
                 arguments.RemoveRange(arguments.IndexOf("-cpuflags"), 2);
@@ -194,7 +194,7 @@ public class WarmPng
                     if (Paeth)
                     {
                         var offset = x * bytesPerPixel + i;
-                        int ByteAt(int rowY, int byteX) => rowY < 0 || byteX < 0 ? 0 : pixels[rowY * source.Stride + (byteX ^ 1)];
+                        int ByteAt(int rowY, int byteX) => rowY < 0 || byteX < 0 ? 0 : pixels[rowY * source.Stride + (Depth == 16 ? byteX ^ 1 : byteX)];
                         prediction = WarmPngPaethInput.Predict(ByteAt(y, offset - bytesPerPixel), ByteAt(y - 1, offset), ByteAt(y - 1, offset - bytesPerPixel));
                     }
                     if (row[(x - startX) / stepX * bytesPerPixel + i] != unchecked((byte)(original - prediction)))
@@ -241,7 +241,7 @@ public class WarmPng
                 nativeOutputSha256 = JpegBenchmarkCase.HashFile(state.NativeOutput),
                 interlace = Interlaced ? 1 : 0,
                 filter = Paeth ? 4 : 0,
-                compression = Paeth ? "Authored noninterlaced PNG RGBA16; every row Paeth; BCL Optimal level 6; identical resident encoded input"
+                compression = Paeth ? $"Authored noninterlaced PNG RGBA{Depth}; every row Paeth; BCL Optimal level 6; identical resident encoded input"
                     : Interlaced ? "Authored PNG Adam7 RGBA16; BCL Optimal level 6; filter None; identical resident encoded input"
                     : "BCL Optimal (zlib default level 6) / FFmpeg level 6; filter None; noninterlaced RGBA",
                 managedIdatBytes = IdatBytes(encoded), nativeIdatBytes = Encode ? IdatBytes(File.ReadAllBytes(state.NativeOutput)) : IdatBytes(encoded),
