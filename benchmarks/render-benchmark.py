@@ -60,11 +60,11 @@ def row(label, name, path, report, confirmed=False):
 
 
 def pending(label, report, status):
-    return f'| [{label}](../benchmarks/{report}) | â€” | â€” | â€” | â€” | {status} |'
+    return f'| [{label}](../benchmarks/{report}) | — | — | — | — | {status} |'
 
 
 def table(rows):
-    return '\n'.join(['| Operation / fixed profile | Lokad Âµs | FFmpeg Âµs | Ratio / upper | Lokad allocated B/op | Status |',
+    return '\n'.join(['| Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |',
                       '| --- | ---: | ---: | ---: | ---: | --- |', *rows])
 
 
@@ -83,8 +83,8 @@ def render():
         row('PNG gray-alpha16, None', 'warm-pnggrayalpha16-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ROW.md', True),
         row('PNG palette8 + tRNS, None', 'warm-pngdecode-reuse-evidence.json', ['cases', 'palette8', 'observations', -1], 'WARM-PNG-DECODE-REUSE.md'),
         row('PNG palette4 + tRNS → RGBA8, None', 'warm-pngdecode-reuse-evidence.json', ['cases', 'palette4', 'observations', -1], 'WARM-PNG-DECODE-REUSE.md', True),
-        row('PNG opaque gray1 â†’ RGBA8, None', 'warm-pnggray1-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-ROW.md', True),
-        row('PNG opaque gray4 â†’ RGBA8, None', 'warm-pnggray4-evidence.json', ['observations', -1], 'WARM-PNG-GRAY4.md'),
+        row('PNG opaque gray1 → RGBA8, None', 'warm-pnggray1-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-ROW.md', True),
+        row('PNG opaque gray4 → RGBA8, None', 'warm-pnggray4-reuse-evidence.json', ['observations', -1], 'WARM-PNG-GRAY4-REUSE.md', True),
         row('JPEG baseline gray', 'warm-jpegac-fused-evidence.json', ['regressionControl', 'observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
         row('JPEG baseline 4:2:0', 'warm-jpeg420-bulk-evidence.json', ['observations', -1], 'WARM-JPEG420-BULK.md', True),
         row('JPEG baseline 4:2:2', 'warm-coverage-quiet-evidence.json', ['cases', 'jpeg422', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
@@ -103,14 +103,14 @@ def render():
         row('PNG RGBA16, level 6 / None', 'warm-png16-encode-crc-evidence.json', ['observations', -1], 'WARM-PNG16-ENCODE-CRC.md', True),
         row('JPEG 4:4:4, matched quality', 'warm-jpegencode-quiet-evidence.json', ['observations', -1], 'WARM-JPEG-ENCODE-QUIET.md', True),
         row('JPEG 4:2:0, matched quality', 'warm-jpeg420-chroma-row-evidence.json', ['observations', -1], 'WARM-JPEG420-CHROMA-ROW.md'),
-        row('WebP VP8 + alphaâ€¡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
+        row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
     ]
     edits = [
         row('Nearest resize RGBA8', 'warm-coverage-quiet-evidence.json', ['cases', 'nearest8', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
         row('Nearest resize RGBA16', 'warm-prepared-confirm-evidence.json', ['observations', -1], 'WARM-PREPARED-CONFIRM.md', True),
         row('Bilinear resize RGBA8', 'warm-bilinear8-quiet-evidence.json', ['observations', -1], 'WARM-BILINEAR8-QUIET.md', True),
-        row('Bilinear resize RGBA16â€ ', 'warm-bilinear16-register-evidence.json', ['observations', -1], 'WARM-BILINEAR16-REGISTER.md', True),
+        row('Bilinear resize RGBA16†', 'warm-bilinear16-register-evidence.json', ['observations', -1], 'WARM-BILINEAR16-REGISTER.md', True),
         pending('Bicubic resize RGBA8', 'bicubic8-boundary-evidence.json', 'Unmatched boundary/alpha; no timing'),
         row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
@@ -138,9 +138,9 @@ def render():
 Updated 2026-10-13. Latest retained warm measurements on the dedicated AMD EPYC
 9V45 VM: Ubuntu 24.04.4, .NET 10.0.8 / SDK 10.0.204, FFmpeg n8.1
 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread, normal SIMD,
-tiering off, workstation nonconcurrent GC. Two original 513Ã—259 RGBA8/16 rasters,
+tiering off, workstation nonconcurrent GC. Two original 513×259 RGBA8/16 rasters,
 with documented projections for other pixel formats;
-resize/crop outputs are 256Ã—129, quarter turns/transposes 259Ã—513.
+resize/crop outputs are 256×129, quarter turns/transposes 259×513.
 
 Times cover complete public operations and independent output acquisition/release,
 including admission, conversion and disposal. Native wrappers/contexts are reused;
@@ -152,7 +152,7 @@ at those sources, not a simultaneous rerun of the current HEAD.
 Ratio = Lokad.Image / the faster FFmpeg pre/post mean; lower is faster. Upper is
 the retained conservative confidence bound, taking the larger filtered/all-actual
 bound where available. **Confirmed** requires an independent quiet repeat and
-upper â‰¤2. Failed guards remain failures. Full required warm coverage is **open**.
+upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
 Recent confirmations use `exclusive-vm-idle-v2`: live job checks and
 five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
 Earlier receipts retain their original load guard and its failures.
@@ -175,14 +175,14 @@ timing comparison; compression efficiency parity is not established.
 
 {table(edits)}
 
-â€  RGBA16 bilinear allows native-only alpha maximum error 1 / RMSE <=0.25 in
+† RGBA16 bilinear allows native-only alpha maximum error 1 / RMSE <=0.25 in
 full 16-bit sample units, alongside the same RGB bound. Managed pixels still
 match the exact rational reference; RGBA8 native alpha stays exact. The latest
 RGBA16 independent confirmation clears 2x with both quiet guards passing.
 Earlier failed screens/prechecks and rejected prototypes remain recorded in
 the linked reports.
 
-â€¡ VP8 encode fixes native quality 75 / managed quality 100 at effort 4. Source
+‡ VP8 encode fixes native quality 75 / managed quality 100 at effort 4. Source
 PSNR gap is 0.00365 dB within the unchanged 0.25 dB band; alpha is exact.
 Managed output is 471,436 bytes versus 98,590 bytes. Quality-matched timing is
 confirmed; compression efficiency parity is not established.
@@ -200,15 +200,16 @@ The [material coverage audit](../benchmarks/WARM-COVERAGE.md) lists distinct
 unmeasured primitives and public boundaries without expanding a profile matrix.
 Other depths/directions/profiles remain open. Unmatched cases receive no parity
 timing. GIF and
-animation are deferred. No averages establish the uniform â‰¤2Ã— target.
+animation are deferred. No averages establish the uniform ≤2× target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-The latest [PNG storage round](../benchmarks/WARM-PNG-DECODE-REUSE.md) confirms
-palette4 at 1.572x / upper 1.617x and 13,656 B/op, down from 545,417 B/op.
-Palette8 remains open at 2.433x / upper 2.634x, with allocation down 85.6% to
-89,564 B/op. Gray4's earlier 2.630x result needs checking with the shared storage
-policy. Stop tuning confirmed pairs; other profiles and retained-owner boundaries
-remain open. Earlier failed guards and reverted experiments remain recorded.
+The latest [gray4 check](../benchmarks/WARM-PNG-GRAY4-REUSE.md) confirms
+1.504x / upper 1.532x with 13,544 B/op after shared PNG storage. Production and
+package validation are unchanged. The [storage round](../benchmarks/WARM-PNG-DECODE-REUSE.md)
+also confirms palette4 at 1.572x / upper 1.617x. Palette8 remains the largest
+reported gap at 2.433x / upper 2.634x and 89,564 B/op. Stop tuning confirmed pairs;
+other profiles, retained-owner boundaries and the full required scope stay open.
+Earlier failed guards and reverted experiments remain recorded.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

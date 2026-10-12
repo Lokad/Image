@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8, gray16, gray-alpha8/16 and opaque gray1 and palette4 None confirmed; RGB16, gray8, gray4 and palette8 None above 2x | RGB16/gray8/gray4/palette8 parity; packed gray2 and palette1/2; other filter implementations |
+| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8, gray16, gray-alpha8/16 and opaque gray1/4 and palette4 None confirmed; RGB16, gray8 and palette8 None above 2x | RGB16/gray8/palette8 parity; packed gray2 and palette1/2; other filter implementations |
 | PNG encode | RGBA8/16, level 6/None | RGB and gray projections; compression policies with materially different work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
@@ -94,3 +94,10 @@ The preceding split/whole-row BCL diagnostic improves only 7.2% and introduces n
 read-pattern change. Next check gray4 with the shared policy, then rank the
 remaining measured gaps. Other PNG rows retain their earlier measured sources;
 held-owner and first-use allocation patterns remain distinct and open.
+
+The [gray4 storage check](WARM-PNG-GRAY4-REUSE.md) independently confirms 1.504x /
+upper 1.532x, with allocations down 97.5% to 13,544 B/op. Production/package are
+unchanged; their complete validation is reused. Stop tuning gray4. Palette8 at
+2.433x remains the largest reported mean gap; gray8/RGB16 retain older measured
+sources and JPEG420 remains above the upper-bound target. Other material required
+warm coverage remains open; no average or coverage narrowing completes the goal.
