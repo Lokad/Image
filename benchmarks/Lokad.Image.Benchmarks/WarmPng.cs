@@ -93,12 +93,12 @@ public class WarmPng
                 if (!OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), encoded).AsSpan().SequenceEqual(pixels))
                     throw new InvalidOperationException("Normal native CLI prepared PNG samples differ.");
             }
-            if (Encode && Depth == 16)
+            if (Encode)
             {
                 var arguments = new List<string> { "-v", "error", "-threads", "1", "-filter_threads", "1", "-cpuflags", "0",
-                    "-f", "rawvideo", "-pix_fmt", "rgba64le", "-s", "513x259", "-i", "pipe:0",
+                    "-f", "rawvideo", "-pix_fmt", Depth == 16 ? "rgba64le" : "rgba", "-s", "513x259", "-i", "pipe:0",
                     "-frames:v", "1", "-c:v", "png", "-threads", "1", "-compression_level", "6", "-pred", "none",
-                    "-pix_fmt", "rgba64be", "-f", "image2pipe", "pipe:1" };
+                    "-pix_fmt", Depth == 16 ? "rgba64be" : "rgba", "-f", "image2pipe", "pipe:1" };
                 var scalar = OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), pixels);
                 ValidatePng(scalar);
                 using (var decoded = ImageCodec.Decode(scalar)) ValidatePixels(decoded);
@@ -246,7 +246,7 @@ public class WarmPng
                     : "BCL Optimal (zlib default level 6) / FFmpeg level 6; filter None; noninterlaced RGBA",
                 managedIdatBytes = IdatBytes(encoded), nativeIdatBytes = Encode ? IdatBytes(File.ReadAllBytes(state.NativeOutput)) : IdatBytes(encoded),
                 allRgbaSamplesExact = true, alphaExact = true, hiddenRgbExact = true,
-                nativeCliNormalScalarPixelsExact = Encode && Depth == 16 || Prepared,
+                nativeCliNormalScalarPixelsExact = Encode || Prepared,
                 nativeEndianRepackingTimed = Encode && Depth == 16, nativeEndianWorkspaceReused = Encode && Depth == 16,
                 nativeSampleTargetMilliseconds = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_NATIVE_SAMPLE_MS") ?? "200",
                 sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,

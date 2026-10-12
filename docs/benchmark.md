@@ -43,9 +43,10 @@ upper ≤2. Failed guards remain failures. Full required warm coverage is **open
 
 | Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
+| [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG8-ENCODE.md) | 7,241.99 | 17,219.43 | 0.421 / 0.430 | 527,629 | Confirmed |
 | [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG16-ENCODE-CRC.md) | 16,470.31 | 19,951.52 | 0.826 / 0.838 | 2,103,836 | Confirmed |
 | [JPEG 4:4:4, matched quality](../benchmarks/WARM-JPEG-FORWARD-INTERLEAVED.md) | 7,393.29 | 3,781.85 | 1.955 / 1.974 | 1,051,907 | Quiet guard failed / open |
-| [WebP VP8 + alpha](../benchmarks/WARM-WEBP-MATCH.md) | — | — | — | — | Unmatched quality; no timing |
+| [WebP VP8 + alpha](../benchmarks/WARM-VP8-CHROMA-REJECTED.md) | — | — | — | — | Unmatched quality; no timing |
 
 **Editing**
 
@@ -78,7 +79,7 @@ These are distinct boundaries. FFmpeg allocation totals are **not measured**;
 they must not be interpreted as zero. Retained owners and cold allocation patterns
 need separate coverage.
 
-Other depths/directions/profiles, PNG8 and VP8L encode, and horizontal-flip quiet
+Other depths/directions/profiles, VP8L encode, and horizontal-flip quiet
 certification remain open. Unmatched cases receive no parity timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Horizontal flips retain the worst upper bound of their two historical launches.

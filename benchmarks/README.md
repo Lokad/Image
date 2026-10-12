@@ -5,6 +5,11 @@ ratios, allocations and verification status in three tables. Update it after eac
 accepted performance round with `python benchmarks/render-benchmark.py`, then
 verify with `--check`. The reports below preserve the detailed evidence and history.
 
+The [RGBA8 PNG encode coverage](WARM-PNG8-ENCODE.md) independently confirms at
+0.421x FFmpeg (upper 0.430x), with production unchanged. The single
+[VP8 chroma candidate](WARM-VP8-CHROMA-REJECTED.md) improves quality but remains
+outside the fixed matching band; it is rejected without parity timing.
+
 The [four-channel Paeth round](WARM-PAETH-FOUR-CHANNEL.md) confirms RGBA8 decode
 at 1.743x FFmpeg (conservative upper 1.842x), about 14.7% faster than its scalar
 baseline, with unchanged pixels, allocations and admission.
