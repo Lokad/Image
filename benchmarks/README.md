@@ -260,6 +260,11 @@ input on the same raster. Full vertical chroma resolution reuses one row in the
 existing eight-pixel renderer, removing repeated scalar interpolation/color work
 with exact owned output bytes. The native boundary includes horizontal chroma
 expansion and intermediate/output ownership; no quality enumeration is needed.
+The [grayscale byte-expansion round](WARM-JPEGGRAY-PIXELS.md) selects one fixed
+OwnedDecodeGray input on the same raster. Repeating already-rounded luma bytes
+into RGB removes identity interpolation and floating-point round calls, with safe
+AVX2 packing and scalar tails. Both decoders consume identical resident JPEG
+bytes; the native boundary includes GRAY8-to-RGBA conversion and output ownership.
 The [adaptive long-prefix round](WARM-JPEG-LONG-PREFIX.md) extends input-derived
 Huffman lookup for nine/ten-bit codes with explicit memory/work admission.
 The [magnitude-category round](WARM-JPEG-CATEGORY.md) replaces the coefficient

@@ -417,6 +417,25 @@ internal ref struct JpegDecoder
                 var row = result.GetRow8(y);
                 var x = 0;
                 var subsampledEnd = 2;
+                if (components.Length == 1)
+                {
+                    // A single component always has the full sampling factors.
+                    // Its plane already contains rounded/clipped bytes: repeating
+                    // that byte in RGB is identical to interpolation and Round.
+                    var samples = components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width);
+                    if (Avx2.IsSupported)
+                        for (; x <= info.Width - 8; x += 8)
+                        {
+                            var packed = Avx2.MultiplyLow(WidenSamples8(samples.Slice(x, 8)), Vector256.Create(0x010101)).AsUInt32();
+                            Avx2.Or(packed, Vector256.Create(0xFF000000u)).AsByte().CopyTo(row.Slice(x * 4, 32));
+                        }
+                    for (; x < info.Width; x++)
+                    {
+                        var value = samples[x];
+                        row[x * 4] = value; row[x * 4 + 1] = value; row[x * 4 + 2] = value; row[x * 4 + 3] = 255;
+                    }
+                    continue;
+                }
                 if (fullResolutionYcbcr)
                 {
                     var first = components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width);

@@ -9,17 +9,18 @@ import tempfile
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--cpu', type=int, default=0)
-parser.add_argument('--sampling', choices=['444','420','422'], default='444')
+parser.add_argument('--sampling', choices=['444','420','422','gray'], default='444')
 arguments = parser.parse_args()
 root = Path(__file__).resolve().parents[2]
 worker = root/'external/warm-reference/ffmpeg-jpeg-decode-warm'
-subsampled=arguments.sampling!='444'
-profile=f'jpeg-decode{arguments.sampling}.json' if subsampled else 'jpeg-match.json'
+fixed=arguments.sampling!='444'
+subsampled=arguments.sampling in ('420','422')
+profile=f'jpeg-decode{arguments.sampling}.json' if fixed else 'jpeg-match.json'
 prepared = json.loads((root/'artifacts/warm-reference'/profile).read_text())
-input_file = root/prepared['nativeFile' if subsampled else 'managedFile']
+input_file = root/prepared['nativeFile' if fixed else 'managedFile']
 encoded = input_file.read_bytes()
-assert hashlib.sha256(encoded).hexdigest() == (prepared['encodedSha256'] if subsampled else prepared['match']['closestOwned']['encodedSha256'])
-operation=f'jpeg{arguments.sampling}-decode' if subsampled else 'jpeg-decode'
+assert hashlib.sha256(encoded).hexdigest() == (prepared['encodedSha256'] if fixed else prepared['match']['closestOwned']['encodedSha256'])
+operation='jpeg-gray-decode' if arguments.sampling=='gray' else f'jpeg{arguments.sampling}-decode' if fixed else 'jpeg-decode'
 allowed = sorted(os.sched_getaffinity(0))
 assert arguments.cpu in allowed
 other = next(cpu for cpu in allowed if cpu != arguments.cpu)
@@ -40,6 +41,7 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-jpeg-decode-controls-') as 
     assert ready['operation'] == operation and (ready['width'], ready['height'], ready['depth']) == (513,259,8)
     assert ready['sampling']==arguments.sampling and ready['chromaExpansionTimed']==subsampled
     assert ready['chromaVerticalFactor']==(2 if arguments.sampling=='420' else 1)
+    assert ready['grayscale']==(arguments.sampling=='gray')
     assert ready['cpu'] == arguments.cpu and ready['affinityCount'] == 1
     assert ready['codecThreads'] == ready['conversionThreads'] == 1
     assert ready['threadType'] == ready['activeThreadType'] == 0
@@ -69,7 +71,7 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-jpeg-decode-controls-') as 
         changed = command.copy(); changed[index] = value; reject(name, changed)
     damaged = folder/'truncated.jpg'; damaged.write_bytes(encoded[:-1])
     changed = command.copy(); changed[2] = str(damaged); reject('truncated JPEG', changed)
-    changed=command.copy();changed[1]='jpeg-decode' if subsampled else 'jpeg420-decode'
+    changed=command.copy();changed[1]='jpeg-decode' if fixed else 'jpeg420-decode'
     reject('wrong declared sampling',changed)
     report = dict(schemaVersion=1, project='Lokad.Image', correctnessOnly=True, complete=True,
         cpu=arguments.cpu, distinctSourceRasters=1, extraSourceRasters=0, qualityEnumeration=False,
@@ -77,5 +79,5 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-jpeg-decode-controls-') as 
         outputSha256=hashlib.sha256(raw).hexdigest(), alphaExact=True, independentLiveOutputs=True,
         countersExact=True, sourceUnchanged=True, nativeReady=ready, negativeControls=negatives)
 destination = root/'artifacts/warm-reference'
-(destination/(f'jpeg-decode{arguments.sampling}-controls.json' if subsampled else 'jpeg-decode-controls.json')).write_text(json.dumps(report,indent=2)+'\n')
+(destination/(f'jpeg-decode{arguments.sampling}-controls.json' if fixed else 'jpeg-decode-controls.json')).write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps(report))

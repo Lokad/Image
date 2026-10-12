@@ -17,7 +17,7 @@ internal sealed class NativeWarmReference : IDisposable
 
     public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null, int? nativeQuality = null)
     {
-        if (operation is not ("hflip" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "png-encode" or "png-decode" or "jpeg-encode" or "jpeg-decode" or "jpeg420-decode" or "jpeg422-decode" or "webp-encode" or "webp-decode" or "vp8-decode" or "nearest-resize" or "bilinear-resize")) throw new ArgumentOutOfRangeException(nameof(operation));
+        if (operation is not ("hflip" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "png-encode" or "png-decode" or "jpeg-encode" or "jpeg-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode" or "webp-encode" or "webp-decode" or "vp8-decode" or "nearest-resize" or "bilinear-resize")) throw new ArgumentOutOfRangeException(nameof(operation));
         var normal = operation == "normal-orient";
         var transverse = operation == "transverse";
         var transpose = operation == "transpose";
@@ -28,7 +28,7 @@ internal sealed class NativeWarmReference : IDisposable
         var crop = operation == "crop";
         var nearest = operation == "nearest-resize";
         var bilinear = operation == "bilinear-resize";
-        var codec = operation is not ("hflip" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "nearest-resize" or "bilinear-resize"); var jpeg = operation == "jpeg-encode"; var jpegDecode = operation is "jpeg-decode" or "jpeg420-decode" or "jpeg422-decode"; var webp = operation == "webp-encode"; var webpDecode = operation == "webp-decode"; var vp8Decode = operation == "vp8-decode";
+        var codec = operation is not ("hflip" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "nearest-resize" or "bilinear-resize"); var jpeg = operation == "jpeg-encode"; var jpegDecode = operation is "jpeg-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode"; var webp = operation == "webp-encode"; var webpDecode = operation == "webp-decode"; var vp8Decode = operation == "vp8-decode";
         var stem = transverse ? "ffmpeg-transverse-warm" : transpose ? "ffmpeg-transpose-warm" : counterclockwise ? "ffmpeg-counterclockwise-warm" : normal ? "ffmpeg-normal-orient-warm" : clockwise ? "ffmpeg-clockwise-warm" : halfTurn ? "ffmpeg-halfturn-warm" : vertical ? "ffmpeg-vflip-warm" : crop ? "ffmpeg-crop-warm" : bilinear ? "ffmpeg-bilinear-warm" : nearest ? "ffmpeg-nearest-warm" : vp8Decode ? "ffmpeg-vp8-decode-warm" : webpDecode ? "ffmpeg-webp-decode-warm" : jpegDecode ? "ffmpeg-jpeg-decode-warm" : webp ? "ffmpeg-webp-warm" : jpeg ? "ffmpeg-jpeg-warm" : codec ? "ffmpeg-png-warm" : "ffmpeg-warm";
         var buildScript = transverse ? "build-transverse-linux.sh" : transpose ? "build-transpose-linux.sh" : counterclockwise ? "build-counterclockwise-linux.sh" : normal ? "build-normal-orient-linux.sh" : clockwise ? "build-clockwise-linux.sh" : halfTurn ? "build-halfturn-linux.sh" : vertical ? "build-vflip-linux.sh" : crop ? "build-crop-linux.sh" : bilinear ? "build-bilinear-linux.sh" : nearest ? "build-nearest-linux.sh" : vp8Decode ? "build-vp8-decode-linux.sh" : webpDecode ? "build-webp-decode-linux.sh" : jpegDecode ? "build-jpeg-decode-linux.sh" : webp ? "build-webp-linux.sh" : jpeg ? "build-jpeg-linux.sh" : codec ? "build-png-linux.sh" : "build-linux.sh";
         Executable = Path.Combine(state.Root, "external", "warm-reference", stem);
@@ -99,8 +99,9 @@ internal sealed class NativeWarmReference : IDisposable
                     || Ready.GetProperty("inputFormat").GetString() != "BGRA" || !Ready.GetProperty("repackingTimed").GetBoolean()
                     || !Ready.GetProperty("bitstreamDeterministic").GetBoolean()))
                 || (jpegDecode && (depth != 8 || Ready.GetProperty("conversionThreads").GetInt32() != 1
-                    || Ready.GetProperty("decoder").GetString() != "mjpeg" || Ready.GetProperty("sampling").GetString() != (operation == "jpeg420-decode" ? "420" : operation == "jpeg422-decode" ? "422" : "444")
-                    || Ready.GetProperty("chromaExpansionTimed").GetBoolean() != (operation != "jpeg-decode")
+                    || Ready.GetProperty("decoder").GetString() != "mjpeg" || Ready.GetProperty("sampling").GetString() != (operation == "jpeg420-decode" ? "420" : operation == "jpeg422-decode" ? "422" : operation == "jpeg-gray-decode" ? "gray" : "444")
+                    || Ready.GetProperty("chromaExpansionTimed").GetBoolean() != (operation is "jpeg420-decode" or "jpeg422-decode")
+                    || Ready.GetProperty("grayscale").GetBoolean() != (operation == "jpeg-gray-decode")
                     || Ready.GetProperty("chromaVerticalFactor").GetInt32() != (operation == "jpeg420-decode" ? 2 : 1)
                     || !Ready.GetProperty("colorConversionTimed").GetBoolean() || !Ready.GetProperty("stateResetTimed").GetBoolean()
                     || !Ready.GetProperty("pixelsDeterministic").GetBoolean()

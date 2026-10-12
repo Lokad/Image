@@ -221,6 +221,9 @@ Explicit NativeDecode420 or NativeDecode422 selects one fixed baseline 4:2:0
 or 4:2:2 JPEG from the same
 original raster, prepared at native qscale 5 with alpha flattened onto RGB
 0x204060. This is identical-input decoding, with no encode quality search.
+OwnedDecodeGray selects one owned baseline grayscale JPEG at fixed quality 85
+on that same raster. Native MJPEG cannot encode the equivalent one-component
+input; FFmpeg supplies the decode oracle for the identical resident bytes.
 
 ```bash
 bash tools/WarmReference/build-jpeg-decode-linux.sh
@@ -231,6 +234,9 @@ python3 tools/WarmReference/verify-jpeg-decode-linux.py --cpu 0 --sampling 420
 # Alternatively, prepare and validate the single 4:2:2 input.
 dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-jpeg422-decode 0
 python3 tools/WarmReference/verify-jpeg-decode-linux.py --cpu 0 --sampling 422
+# Or prepare the one-component grayscale input.
+dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-jpeg-gray-decode 0
+python3 tools/WarmReference/verify-jpeg-decode-linux.py --cpu 0 --sampling gray
 ```
 
 After a Release benchmark build and owned source inventory:
@@ -241,6 +247,7 @@ After a Release benchmark build and owned source inventory:
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases NativeDecode8 -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases NativeDecode420 -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases NativeDecode422 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases OwnedDecodeGray -Cpu 0 -NoBuild
 ```
 
 Each native interval resets decoder state, decodes all coefficients/pixels,
@@ -259,6 +266,12 @@ including intermediate acquisition/release inside each operation. Its
 [reused-row round](../../benchmarks/WARM-JPEG422-ROWS.md) supplies the same chroma
 row twice to the existing eight-pixel renderer, preserving exact interpolation
 and color bytes without adding a workspace or method.
+Grayscale decoding includes expanding owned GRAY8 samples into independent
+RGBA8 inside each operation. The software decoder leaves GRAY8 color range
+untagged; the conversion explicitly uses full JPEG range. Only this grayscale
+representation admits an unspecified range tag. The
+[direct byte-expansion round](../../benchmarks/WARM-JPEGGRAY-PIXELS.md) preserves
+the former rounded/clipped samples, work, admission and output ownership.
 Two simultaneously live outputs must have independent storage; mutation of
 one leaves the other intact. Repeated output pixels and encoded source bytes
 must remain unchanged. Fifteen invalid protocol/argument/affinity controls per

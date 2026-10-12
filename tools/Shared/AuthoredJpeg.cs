@@ -7,6 +7,30 @@ internal static class AuthoredJpeg
 {
     private static readonly byte[] AcSymbols = BuildAcSymbols();
 
+    public static byte[] GrayscaleDcGrid(int width, int height, bool progressive)
+    {
+        using var output = Header(width, height, 0, progressive: progressive);
+        var columns = (width + 7) / 8; var rows = (height + 7) / 8;
+        Scan(output, 0, progressive ? 0 : 63, 0, 0, bits =>
+        {
+            var predictor = 0;
+            for (var by = 0; by < rows; by++)
+            for (var bx = 0; bx < columns; bx++)
+            {
+                // Unit quantization and DC-only IDCT give exactly this byte.
+                var dc = (((bx + by * columns) & 255) - 128) * 8;
+                bits.Dc(dc - predictor); predictor = dc;
+                if (!progressive) bits.Ac(0);
+            }
+        });
+        if (progressive)
+            Scan(output, 1, 63, 0, 0, bits =>
+            {
+                for (var block = 0; block < columns * rows; block++) bits.Ac(0);
+            });
+        output.Write(new byte[] { 255, 217 }); return output.ToArray();
+    }
+
     public static byte[] DirectRgb(bool adobe = true)
     {
         using var output = Header(8, 8, 0, JpegSampling.YCbCr444, progressive: false, rgbIds: !adobe, adobeRgb: adobe);
