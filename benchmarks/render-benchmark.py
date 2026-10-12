@@ -83,6 +83,7 @@ def render():
         row('PNG gray-alpha16, None', 'warm-pnggrayalpha16-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ROW.md', True),
         row('PNG palette8 + tRNS, None', 'warm-pngpalette8-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE8-ROW.md'),
         row('PNG opaque gray1 → RGBA8, None', 'warm-pnggray1-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-ROW.md', True),
+        row('PNG opaque gray4 → RGBA8, None', 'warm-pnggray4-evidence.json', ['observations', -1], 'WARM-PNG-GRAY4.md'),
         row('JPEG baseline gray', 'warm-jpegac-fused-evidence.json', ['regressionControl', 'observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
         row('JPEG baseline 4:2:0', 'warm-jpeg420-bulk-evidence.json', ['observations', -1], 'WARM-JPEG420-BULK.md', True),
         row('JPEG baseline 4:2:2', 'warm-coverage-quiet-evidence.json', ['cases', 'jpeg422', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
@@ -201,12 +202,11 @@ timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-The latest [packed-gray1 row](../benchmarks/WARM-PNG-GRAY1-ROW.md) confirms
-0.980x / upper 1.001x after an 88.3% screen reduction. Its failed precheck remains
-unchanged; gray2/4 performance stays open despite correctness coverage. A palette
-literal-width audit found limited four-code opportunity, so no framing experiment
-was launched. The [palette8 gap](../benchmarks/WARM-PNG-PALETTE8-ROW.md) remains
-2.715x / upper 2.954x. Existing rejected experiments and failed guards stay retained.
+The latest [gray4 boundary](../benchmarks/WARM-PNG-GRAY4.md) is exact but remains
+2.630x / upper 2.775x. Production is unchanged; gray1 stays confirmed and gray2
+stays unmeasured. Palette8 remains the largest measured matched gap at 2.715x /
+upper 2.954x. Prioritize substantial framing/data-flow work; retained repeats,
+failed guards and rejected experiments remain distinct from passing confirmations.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

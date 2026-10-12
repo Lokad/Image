@@ -45,6 +45,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG gray-alpha16, None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ROW.md) | 3,195.37 | 1,798.83 | 1.776 / 1.785 | 1,573,649 | Confirmed |
 | [PNG palette8 + tRNS, None](../benchmarks/WARM-PNG-PALETTE8-ROW.md) | 992.81 | 365.69 | 2.715 / 2.954 | 621,315 | Above 2x / open |
 | [PNG opaque gray1 → RGBA8, None](../benchmarks/WARM-PNG-GRAY1-ROW.md) | 299.69 | 305.79 | 0.980 / 1.001 | 537,700 | Confirmed |
+| [PNG opaque gray4 → RGBA8, None](../benchmarks/WARM-PNG-GRAY4.md) | 420.42 | 159.85 | 2.630 / 2.775 | 545,302 | Upper above 2x / open |
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-AC-FUSED.md) | 1,267.57 | 682.73 | 1.857 / 1.880 | 1,221,545 | Confirmed |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG420-BULK.md) | 1,721.81 | 1,007.73 | 1.709 / 1.719 | 1,619,530 | Confirmed |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-COVERAGE-QUIET.md) | 2,087.01 | 1,336.37 | 1.562 / 1.567 | 1,978,646 | Confirmed |
@@ -127,12 +128,11 @@ timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-The latest [packed-gray1 row](../benchmarks/WARM-PNG-GRAY1-ROW.md) confirms
-0.980x / upper 1.001x after an 88.3% screen reduction. Its failed precheck remains
-unchanged; gray2/4 performance stays open despite correctness coverage. A palette
-literal-width audit found limited four-code opportunity, so no framing experiment
-was launched. The [palette8 gap](../benchmarks/WARM-PNG-PALETTE8-ROW.md) remains
-2.715x / upper 2.954x. Existing rejected experiments and failed guards stay retained.
+The latest [gray4 boundary](../benchmarks/WARM-PNG-GRAY4.md) is exact but remains
+2.630x / upper 2.775x. Production is unchanged; gray1 stays confirmed and gray2
+stays unmeasured. Palette8 remains the largest measured matched gap at 2.715x /
+upper 2.954x. Prioritize substantial framing/data-flow work; retained repeats,
+failed guards and rejected experiments remain distinct from passing confirmations.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

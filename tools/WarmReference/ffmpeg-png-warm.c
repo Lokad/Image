@@ -105,7 +105,7 @@ typedef struct {
     struct SwsContext *conversion;
     uint8_t *original, *encoded;
     size_t raw_bytes, encoded_bytes;
-    int encode, width, height, depth, row_bytes, cpu, stride, output_bytes, rgb, gray, gray_alpha, palette, mono;
+    int encode, width, height, depth, row_bytes, cpu, stride, output_bytes, rgb, gray, gray_alpha, palette, mono, coded_depth;
     uint64_t completed, observed;
 } Work;
 static AVFrame *result_frame(Work *work) { return work->depth == 16 || work->gray || work->gray_alpha || work->rgb || work->palette ? work->converted : work->decoded; }
@@ -243,13 +243,16 @@ int main(int argc, char **argv)
         work.gray = work.encoded_bytes >= 33 && work.encoded[25] == 0;
         work.gray_alpha = work.encoded_bytes >= 33 && work.encoded[25] == 4;
         work.palette = work.encoded_bytes >= 33 && work.encoded[25] == 3;
-        work.mono = work.gray && work.encoded[24] == 1;
+        work.coded_depth = work.encoded_bytes >= 33 ? work.encoded[24] : 0;
+        work.mono = work.gray && work.coded_depth == 1;
+        if (work.gray && work.coded_depth < 8 && (work.depth != 8 || (work.coded_depth != 1 && work.coded_depth != 4))) fail("Packed gray requires gray1/4 to RGBA8.");
+        if (work.gray && work.coded_depth >= 8 && work.coded_depth != work.depth) fail("Gray coded/output precision differs.");
         if (work.mono && work.depth != 8) fail("Packed gray1 requires RGBA8 output.");
         if (work.rgb && interlace) fail("RGB decode requires noninterlaced RGB8/16.");
         if (work.gray && interlace) fail("Gray decode requires noninterlaced gray8/16.");
         if (work.gray_alpha && interlace) fail("Gray-alpha decode requires noninterlaced gray-alpha8/16.");
         if (work.palette && (work.depth != 8 || interlace)) fail("Palette decode requires noninterlaced palette8.");
-        check_profile(work.encoded, work.encoded_bytes, work.width, work.height, work.mono ? 1 : work.depth, interlace, work.palette ? 3 : work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6);
+        check_profile(work.encoded, work.encoded_bytes, work.width, work.height, work.gray ? work.coded_depth : work.depth, interlace, work.palette ? 3 : work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6);
         if (work.rgb || work.gray || work.gray_alpha || work.palette) {
             work.conversion = sws_alloc_context(); if (!work.conversion) fail("Allocate RGB conversion failed.");
             require(av_opt_set_int(work.conversion, "srcw", work.width, 0), "Source width");
@@ -270,7 +273,7 @@ int main(int argc, char **argv)
     }
     check_independent_owners(&work); check_and_write(&work, argv[6]);
     printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":%d,\"codedDepth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"compressionLevel\":%d,\"filter\":%d,\"colorType\":%d,\"conversionThreads\":%d,\"rgbExpansionTimed\":%s,\"grayExpansionTimed\":%s,\"grayAlphaExpansionTimed\":%s,\"paletteExpansionTimed\":%s,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
-        argv[1], work.width, work.height, work.depth, work.mono ? 1 : work.depth, work.cpu, work.encode ? 6 : -1, work.encode ? 0 : -1,
+        argv[1], work.width, work.height, work.depth, work.encode ? work.depth : work.coded_depth, work.cpu, work.encode ? 6 : -1, work.encode ? 0 : -1,
         work.palette ? 3 : work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6, work.rgb || work.gray || work.gray_alpha || work.palette ? 1 : 0, work.rgb ? "true" : "false", work.gray ? "true" : "false", work.gray_alpha ? "true" : "false", work.palette ? "true" : "false", work.output_bytes, work.completed, av_version_info(), avcodec_version(), avutil_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
