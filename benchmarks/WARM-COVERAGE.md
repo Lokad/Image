@@ -101,3 +101,10 @@ unchanged; their complete validation is reused. Stop tuning gray4. Palette8 at
 2.433x remains the largest reported mean gap; gray8/RGB16 retain older measured
 sources and JPEG420 remains above the upper-bound target. Other material required
 warm coverage remains open; no average or coverage narrowing completes the goal.
+
+The [packed-palette table trial](WARM-PNG-PALETTE-WORD-REJECTED.md) retains an
+unscored 2.189x mean: its post-guard fails aggregate I/O wait at 1.45%. It was
+reverted without a long confirmation or repeated screen. The accepted palette8
+result remains 2.433x. Two wide-palette memory/work controls remain; production
+and the actual package are unchanged after exact restoration. Prioritize a
+substantial remaining allocation or shared-work strategy over another table tweak.

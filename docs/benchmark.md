@@ -135,7 +135,9 @@ package validation are unchanged. The [storage round](../benchmarks/WARM-PNG-DEC
 also confirms palette4 at 1.572x / upper 1.617x. Palette8 remains the largest
 reported gap at 2.433x / upper 2.634x and 89,564 B/op. Stop tuning confirmed pairs;
 other profiles, retained-owner boundaries and the full required scope stay open.
-Earlier failed guards and reverted experiments remain recorded.
+The [packed-palette table trial](../benchmarks/WARM-PNG-PALETTE-WORD-REJECTED.md)
+was reverted; its post-guard failed and its observed mean remained above 2x.
+Accepted timings stay unchanged. Earlier failures and reverted experiments remain recorded.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

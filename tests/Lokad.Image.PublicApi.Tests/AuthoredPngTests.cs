@@ -86,6 +86,40 @@ public sealed class AuthoredPngTests
     }
 
     [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void WidePaletteRowsRetainExactPixelsMemoryThresholdAndWorkFailure(bool interlace)
+    {
+        var frame = new AuthoredPng.Frame("wide-palette-budget", 3, 8, 513, 5, interlace);
+        var compressed = AuthoredPng.StoredZlib(AuthoredPng.FilteredRows(frame));
+        var encoded = AuthoredPng.Wrap(frame, compressed); var expected = AuthoredPng.Expected(frame);
+        // Input, IDAT, full PLTE, half-length tRNS, result, inflater and both
+        // maximum-width pass rows. Preserve the original exact memory threshold.
+        var peak = encoded.Length + (long)compressed.Length + 768 + 128 + 513 * 5 * 4L + 256 * 1024 + 2 * 513;
+        foreach (var extra in new[] { 0, 1024 })
+        {
+            using var image = ImageCodec.Decode(encoded, new DecodeOptions { Limits = ImageLimits.Default with { MaxWorkingBytes = peak + extra } });
+            Assert.Equal(expected, OriginalPixels.Bytes(image));
+        }
+        Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(encoded, new DecodeOptions { Limits = ImageLimits.Default with { MaxWorkingBytes = peak - 1 } }));
+        using var cancellation = new CancellationTokenSource();
+        long low = 1, high = ImageLimits.Default.MaxWork;
+        while (low < high)
+        {
+            var middle = low + (high - low) / 2;
+            var options = new DecodeOptions { Limits = ImageLimits.Default with { MaxWorkingBytes = peak + 1024, MaxWork = middle } };
+            try { using var image = ImageCodec.Decode(encoded, options, cancellation.Token); high = middle; }
+            catch (ImageLimitException) { low = middle + 1; }
+        }
+        foreach (var work in new[] { low - 1, low })
+        {
+            var options = new DecodeOptions { Limits = ImageLimits.Default with { MaxWorkingBytes = peak + 1024, MaxWork = work } };
+            var direct = Record.Exception(() => { using var image = ImageCodec.Decode(encoded, options); });
+            var scalar = Record.Exception(() => { using var image = ImageCodec.Decode(encoded, options, cancellation.Token); });
+            Assert.Equal(scalar?.GetType(), direct?.GetType()); Assert.Equal(scalar?.Message, direct?.Message);
+        }
+    }
+
+    [Theory]
     [InlineData("vpAg", false)]
     [InlineData("vpbg", false)]
     [InlineData("Vpbg", true)]
