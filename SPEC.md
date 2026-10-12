@@ -93,8 +93,9 @@ allow one sample of binary64 rounding disagreement at exact rational halves.
 RGBA16 CLI controls preserve full sample precision. On the authored filtered
 case, the native float path can differ by one alpha sample near rounding
 boundaries while managed output matches the rational reference. The
-[precision audit](benchmarks/BILINEAR16-PRECISION.md) records this limitation;
-the case does not qualify for exact-alpha warm performance acceptance.
+[precision audit](benchmarks/BILINEAR16-PRECISION.md) records this limitation
+under the original exact-alpha gate. The native-only bilinear comparison bound
+below subsequently permits this rounding difference; managed pixels remain exact.
 Live nearest coordinate-equation controls also cover original 1025/2049-wide
 sources at both depths in both directions, including alpha and hidden RGB.
 Fractional-support edges and tiny positive alpha separately require zero RGB
@@ -148,6 +149,12 @@ opaque pixels. No implicit grayscale conversion or alpha removal occurs.
 
 The original corpus covers every legal static color/depth profile at both interlace
 settings, all five filters, packed padding, partial palette alpha and hidden RGB.
+Dense RGB16 rows without tRNS expand directly into native-endian RGBA16 with
+opaque alpha. On AVX2 hardware, bounded 24-byte groups become four output pixels
+through byte shuffles; scalar tails and other hardware preserve full samples.
+This also covers dense Adam7 passes. Sparse passes and transparency retain their
+existing mapping. Work and memory admission are unchanged; expansion checks
+cancellation at most every 4096 pixels and adds no workspace.
 The registered FFmpeg 8.1 decoder ignores tRNS alpha for 1/2/4-bit grayscale.
 For these cases the reference pipeline applies the declared transparent gray key
 through FFmpeg's [colorkey filter](https://ffmpeg.org/ffmpeg-filters.html#colorkey),

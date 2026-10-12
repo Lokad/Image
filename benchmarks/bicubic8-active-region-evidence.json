@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "correctnessOnly": true,
+  "noTimingClaim": true,
+  "requiredCaseOpen": true,
+  "referenceBackend": "zimg public API; FFmpeg scaler backend, not FFmpeg CLI",
+  "haloPixels": 4,
+  "paddedInputAreaRatio": 1.0469642574905733,
+  "geometry": {
+    "sourceWidth": 513,
+    "sourceHeight": 259,
+    "width": 256,
+    "height": 129,
+    "depth": 8
+  },
+  "managedRationalSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+  "nativeNormalScalarExact": false,
+  "nativeDispatchDifference": {
+    "rgbMaximum": 1,
+    "rgbRmse": 0.003177053548595931,
+    "alphaMaximum": 1,
+    "alphaRmse": 0.005502818164535149,
+    "alphaDifferentPixels": 1,
+    "alphaExamples": [
+      {
+        "x": 6,
+        "y": 4,
+        "expected": 172,
+        "actual": 173
+      }
+    ],
+    "zeroAlphaNonzeroRgb": 0
+  },
+  "modes": {
+    "normal": {
+      "outputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+      "nativeRational": {
+        "rgbMaximum": 1,
+        "rgbRmse": 0.003177053548595931,
+        "alphaMaximum": 1,
+        "alphaRmse": 0.005502818164535149,
+        "alphaDifferentPixels": 1,
+        "alphaExamples": [
+          {
+            "x": 6,
+            "y": 4,
+            "expected": 172,
+            "actual": 173
+          }
+        ],
+        "zeroAlphaNonzeroRgb": 0
+      }
+    },
+    "scalar": {
+      "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "nativeRational": {
+        "rgbMaximum": 0,
+        "rgbRmse": 0.0,
+        "alphaMaximum": 0,
+        "alphaRmse": 0.0,
+        "alphaDifferentPixels": 0,
+        "alphaExamples": [],
+        "zeroAlphaNonzeroRgb": 0
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "tmp/zimg-bicubic-edge-audit.c",
+      "sha256": "957bccc3275257ace38623bf24906c68709a2e2ec493de1d6abab24f52bbea5b",
+      "bytes": 3509
+    },
+    {
+      "path": "tmp/zimg-bicubic-edge-audit",
+      "sha256": "9393e26f4d15d7cdd079cd8478f67c15c7941d9b36133476998a204d6e587f35",
+      "bytes": 1070416
+    },
+    {
+      "path": "tmp/bicubic8-edge-reference.rgba",
+      "sha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "bytes": 132096
+    },
+    {
+      "path": "tmp/zimg-bicubic-edge-normal.rgba",
+      "sha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+      "bytes": 132096
+    },
+    {
+      "path": "tmp/zimg-bicubic-edge-scalar.rgba",
+      "sha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "bytes": 132096
+    },
+    {
+      "path": "artifacts/warm-reference/webp-decode/source.rgba",
+      "sha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "bytes": 531468
+    }
+  ],
+  "head": "169eee34e00617f3ceb2e7888d71bff54fe29998",
+  "sourceSha256": "a3156003403d8517f7b0b0dcc75ed10b57fa4ed979427a04713af0944fc8494e",
+  "sourceFiles": 1605,
+  "archive": {
+    "sha256": "f456bfd7de537f0d0fb0d8a184d1e008b830efb146c04a74756cb8aaa1e812ef",
+    "files": 7,
+    "name": "zimg-bicubic-edge-frozen.tar.gz",
+    "location": "ignored development artifacts"
+  },
+  "zimgRevision": "f819b14e8f39d1282400b0d9543e8ef73c1b2bbd",
+  "ffmpegRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
+  "comparisonPolicy": "Pending; existing RGBA8 exact-alpha gate is unchanged. No timing."
+}

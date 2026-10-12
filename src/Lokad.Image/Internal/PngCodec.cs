@@ -2,6 +2,7 @@ using System.Buffers.Binary;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
@@ -228,6 +229,11 @@ internal static class PngCodec
                         CopySparseRgbaRow(row, result.Pixels.Slice(offset, length), bytesPerPixel, stepX,
                             header.Depth == 16 && BitConverter.IsLittleEndian, context.Cancellation);
                     }
+                    else if (header.ColorType == 2 && header.Depth == 16 && stepX == 1 && header.Transparency.Length == 0)
+                    {
+                        var offset = (startY + y * stepY) * result.Stride + startX * 8;
+                        CopyRgb16Row(row, result.Pixels.Slice(offset, width * 8), context.Cancellation);
+                    }
                     else
                     {
                         for (var x = 0; x < width; x++)
@@ -289,6 +295,44 @@ internal static class PngCodec
                 var value = MemoryMarshal.Read<uint>(row[(x * 4)..]);
                 MemoryMarshal.Write(destination[(x * stepX * 4)..], in value);
             }
+        }
+    }
+
+    internal static void CopyRgb16Row(ReadOnlySpan<byte> row, Span<byte> destination, CancellationToken cancellation)
+    {
+        // PNG section 7.3: RGB16 has three big-endian samples per pixel.
+        // Expand to four native-endian samples with opaque alpha, without scaling.
+        var pixels = row.Length / 6;
+        var x = 0;
+        if (Avx2.IsSupported && BitConverter.IsLittleEndian)
+        {
+            // Each 128-bit lane addresses its own 16 input bytes. Duplicate the
+            // middle eight-byte word so both lanes contain two complete pixels.
+            // Swap sample bytes while inserting the two opaque alpha bytes.
+            var shuffle = Vector256.Create(
+                (byte)1, 0, 3, 2, 5, 4, 128, 128, 7, 6, 9, 8, 11, 10, 128, 128,
+                5, 4, 7, 6, 9, 8, 128, 128, 11, 10, 13, 12, 15, 14, 128, 128);
+            var alpha = Vector256.Create(0xffff000000000000UL).AsByte();
+            for (; x <= pixels - 4; x += 4)
+            {
+                if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+                var input = row[(x * 6)..];
+                var first = MemoryMarshal.Read<ulong>(input);
+                var middle = MemoryMarshal.Read<ulong>(input[8..]);
+                var last = MemoryMarshal.Read<ulong>(input[16..]);
+                var packed = Vector256.Create(first, middle, middle, last).AsByte();
+                (Avx2.Shuffle(packed, shuffle) | alpha).CopyTo(destination[(x * 8)..]);
+            }
+        }
+        var samples = MemoryMarshal.Cast<byte, ushort>(destination);
+        for (; x < pixels; x++)
+        {
+            if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+            var input = row[(x * 6)..];
+            samples[x * 4] = BinaryPrimitives.ReadUInt16BigEndian(input);
+            samples[x * 4 + 1] = BinaryPrimitives.ReadUInt16BigEndian(input[2..]);
+            samples[x * 4 + 2] = BinaryPrimitives.ReadUInt16BigEndian(input[4..]);
+            samples[x * 4 + 3] = ushort.MaxValue;
         }
     }
 

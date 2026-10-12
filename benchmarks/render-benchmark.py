@@ -73,6 +73,7 @@ def render():
         row('PNG RGBA8, Paeth', 'warm-paeth4-evidence.json', ['observations', -1], 'WARM-PAETH-FOUR-CHANNEL.md', True),
         row('PNG RGBA16, Paeth', 'warm-paethvector-evidence.json', ['observations', -1], 'WARM-PAETH-VECTOR.md', True),
         row('PNG RGBA16, Adam7', 'warm-pngscatter-evidence.json', ['observations', -1], 'WARM-PNG-SCATTER.md', True),
+        row('PNG RGB16, None', 'warm-pngrgb16-row-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-ROW.md'),
         row('JPEG baseline gray', 'warm-jpegac-fused-evidence.json', ['regressionControl', 'observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
         row('JPEG baseline 4:2:0', 'warm-jpeg420-bulk-evidence.json', ['observations', -1], 'WARM-JPEG420-BULK.md', True),
         row('JPEG baseline 4:2:2', 'warm-coverage-quiet-evidence.json', ['cases', 'jpeg422', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
@@ -125,7 +126,8 @@ def render():
 Updated 2026-10-12. Latest retained warm measurements on the dedicated AMD EPYC
 9V45 VM: Ubuntu 24.04.4, .NET 10.0.8 / SDK 10.0.204, FFmpeg n8.1
 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread, normal SIMD,
-tiering off, workstation nonconcurrent GC. Two original 513×259 RGBA8/16 rasters;
+tiering off, workstation nonconcurrent GC. Two original 513×259 RGBA8/16 rasters,
+with documented projections for other pixel formats;
 resize/crop outputs are 256×129, quarter turns/transposes 259×513.
 
 Times cover complete public operations and independent output acquisition/release,
@@ -182,6 +184,8 @@ These are distinct boundaries. FFmpeg allocation totals are **not measured**;
 they must not be interpreted as zero. Retained owners and cold allocation patterns
 need separate coverage.
 
+The [material coverage audit](../benchmarks/WARM-COVERAGE.md) lists distinct
+unmeasured primitives and public boundaries without expanding a profile matrix.
 Other depths/directions/profiles remain open. Unmatched cases receive no parity
 timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.

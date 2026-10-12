@@ -14,6 +14,7 @@
 #include <libavutil/frame.h>
 #include <libavutil/opt.h>
 #include <libavutil/pixfmt.h>
+#include <libswscale/swscale.h>
 
 static void fail(const char *message) { fprintf(stderr, "%s\n", message); exit(1); }
 static void require(int code, const char *message)
@@ -82,12 +83,12 @@ static uint32_t big32(const uint8_t *value)
 {
     return (uint32_t)value[0] << 24 | (uint32_t)value[1] << 16 | (uint32_t)value[2] << 8 | value[3];
 }
-static void check_profile(const uint8_t *data, size_t size, int width, int height, int depth, int interlace)
+static void check_profile(const uint8_t *data, size_t size, int width, int height, int depth, int interlace, int color)
 {
     static const uint8_t signature[] = {137,80,78,71,13,10,26,10};
     if (size < 33 || memcmp(data, signature, 8) || big32(data+8) != 13 || memcmp(data+12, "IHDR", 4)
         || big32(data+16) != (uint32_t)width || big32(data+20) != (uint32_t)height
-        || data[24] != depth || data[25] != 6 || data[26] || data[27] || data[28] != interlace) fail("PNG input/profile differs.");
+        || data[24] != depth || data[25] != color || data[26] || data[27] || data[28] != interlace) fail("PNG input/profile differs.");
 }
 static void swap_samples(const AVFrame *input, AVFrame *output, int width, int height)
 {
@@ -101,9 +102,10 @@ typedef struct {
     AVCodecContext *codec;
     AVFrame *source, *prepared, *decoded, *converted;
     AVPacket *input, *packet;
+    struct SwsContext *conversion;
     uint8_t *original, *encoded;
     size_t raw_bytes, encoded_bytes;
-    int encode, width, height, depth, row_bytes, cpu, stride, output_bytes;
+    int encode, width, height, depth, row_bytes, cpu, stride, output_bytes, rgb;
     uint64_t completed, observed;
 } Work;
 static AVFrame *result_frame(Work *work) { return work->depth == 16 ? work->converted : work->decoded; }
@@ -142,14 +144,18 @@ static void apply(Work *work)
     } else {
         require(avcodec_send_packet(work->codec, work->input), "Submit complete PNG");
         require(avcodec_receive_frame(work->codec, work->decoded), "Receive PNG pixels");
-        int format = work->depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64BE;
+        int format = work->depth == 8 ? AV_PIX_FMT_RGBA : work->rgb ? AV_PIX_FMT_RGB48BE : AV_PIX_FMT_RGBA64BE;
         if (work->decoded->format != format || work->decoded->width != work->width || work->decoded->height != work->height
-            || !work->decoded->buf[0] || work->decoded->linesize[0] < work->row_bytes) fail("Decoded PNG format differs.");
+            || !work->decoded->buf[0] || work->decoded->linesize[0] < work->width * (work->rgb ? 6 : work->depth / 8 * 4)) fail("Decoded PNG format differs.");
         if (work->depth == 16) {
             work->converted->width = work->width; work->converted->height = work->height;
             work->converted->format = AV_PIX_FMT_RGBA64LE;
             require(av_frame_get_buffer(work->converted, 32), "Allocate owned native-endian output");
-            swap_samples(work->decoded, work->converted, work->width, work->height);
+            if (work->rgb) {
+                int rows = sws_scale(work->conversion, (const uint8_t * const *)work->decoded->data, work->decoded->linesize,
+                    0, work->height, work->converted->data, work->converted->linesize);
+                if (rows != work->height) fail("RGB16 conversion row count differs.");
+            } else swap_samples(work->decoded, work->converted, work->width, work->height);
         }
         AVFrame *output = result_frame(work);
         work->output_bytes = (int)work->raw_bytes; work->stride = output->linesize[0];
@@ -159,7 +165,7 @@ static void apply(Work *work)
 }
 static void check_packet(Work *work, const AVPacket *packet)
 {
-    check_profile(packet->data, (size_t)packet->size, work->width, work->height, work->depth, 0);
+    check_profile(packet->data, (size_t)packet->size, work->width, work->height, work->depth, 0, 6);
     AVCodecContext *decoder = context(0, work->width, work->height, work->depth);
     AVFrame *decoded = av_frame_alloc(); if (!decoded) fail("Check frame allocation failed.");
     require(avcodec_send_packet(decoder, packet), "Check encoded PNG");
@@ -232,15 +238,31 @@ int main(int argc, char **argv)
         if (work.depth == 16) work.prepared = frame(work.width, work.height, AV_PIX_FMT_RGBA64BE);
     } else {
         work.encoded = read_file(argv[2], &work.encoded_bytes);
-        check_profile(work.encoded, work.encoded_bytes, work.width, work.height, work.depth, interlace);
+        work.rgb = work.encoded_bytes >= 33 && work.encoded[25] == 2;
+        if (work.rgb && (work.depth != 16 || interlace)) fail("RGB decode requires noninterlaced RGB16.");
+        check_profile(work.encoded, work.encoded_bytes, work.width, work.height, work.depth, interlace, work.rgb ? 2 : 6);
+        if (work.rgb) {
+            work.conversion = sws_alloc_context(); if (!work.conversion) fail("Allocate RGB conversion failed.");
+            require(av_opt_set_int(work.conversion, "srcw", work.width, 0), "Source width");
+            require(av_opt_set_int(work.conversion, "srch", work.height, 0), "Source height");
+            require(av_opt_set_int(work.conversion, "dstw", work.width, 0), "Output width");
+            require(av_opt_set_int(work.conversion, "dsth", work.height, 0), "Output height");
+            require(av_opt_set_int(work.conversion, "src_format", AV_PIX_FMT_RGB48BE, 0), "Source format");
+            require(av_opt_set_int(work.conversion, "dst_format", AV_PIX_FMT_RGBA64LE, 0), "Output format");
+            require(av_opt_set_int(work.conversion, "sws_flags", SWS_POINT | SWS_BITEXACT, 0), "Conversion policy");
+            require(av_opt_set_int(work.conversion, "threads", 1, 0), "Conversion thread count");
+            require(sws_init_context(work.conversion, NULL, NULL), "Initialize RGB conversion");
+            int64_t threads; require(av_opt_get_int(work.conversion, "threads", 0, &threads), "Read conversion threads");
+            if (threads != 1) fail("Conversion threading differs.");
+        }
         require(av_new_packet(work.input, (int)work.encoded_bytes), "Allocate encoded input with decoder padding");
         work.input->flags |= AV_PKT_FLAG_KEY;
         memcpy(work.input->data, work.encoded, work.encoded_bytes);
     }
     check_independent_owners(&work); check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"compressionLevel\":%d,\"filter\":%d,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"compressionLevel\":%d,\"filter\":%d,\"colorType\":%d,\"conversionThreads\":%d,\"rgbExpansionTimed\":%s,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
         argv[1], work.width, work.height, work.depth, work.cpu, work.encode ? 6 : -1, work.encode ? 0 : -1,
-        work.output_bytes, work.completed, av_version_info(), avcodec_version(), avutil_version()); fflush(stdout);
+        work.rgb ? 2 : 6, work.rgb ? 1 : 0, work.rgb ? "true" : "false", work.output_bytes, work.completed, av_version_info(), avcodec_version(), avutil_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;
@@ -259,5 +281,5 @@ int main(int argc, char **argv)
     if (ferror(stdin)) fail("Protocol read failed.");
     av_frame_free(&work.source); av_frame_free(&work.prepared); av_frame_free(&work.decoded); av_frame_free(&work.converted);
     av_packet_free(&work.input); av_packet_free(&work.packet); avcodec_free_context(&work.codec);
-    free(work.original); free(work.encoded); return 0;
+    sws_freeContext(work.conversion); free(work.original); free(work.encoded); return 0;
 }

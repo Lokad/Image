@@ -8,7 +8,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8 }
+public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16 }
 
 [MemoryDiagnoser]
 public class WarmPng
@@ -23,18 +23,19 @@ public class WarmPng
     private JsonElement sourceIdentity;
     private bool smoke, ready;
     private int cpu, sampleCount, managedOutputBytes, nativeOutputBytes;
-    private readonly PngEncodeOptions encodeOptions = new() { ColorType = PngColorType.Rgba, Compression = CompressionLevel.Optimal };
+    private PngEncodeOptions encodeOptions => new() { ColorType = Rgb ? PngColorType.Rgb : PngColorType.Rgba, Compression = CompressionLevel.Optimal };
     public static WarmPngCase[] SelectedCases()
     {
         var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
         var result = selection is null ? new[] { WarmPngCase.Decode8 } : selection.Split(',')
             .Select(value => Enum.TryParse<WarmPngCase>(value, out var parsed) && Enum.IsDefined(parsed)
-                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16 or DecodePaeth8.")).ToArray();
+                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8 or DecodeRgb16.")).ToArray();
         if (result.Length is < 1 or > 3 || result.Distinct().Count() != result.Length)
             throw new ArgumentException("Choose one to three distinct PNG cases.");
         return result;
     }
-    private int Depth => Case is WarmPngCase.Decode16 or WarmPngCase.Encode16 or WarmPngCase.DecodeAdam7_16 or WarmPngCase.DecodePaeth16 ? 16 : 8;
+    private int Depth => Case is WarmPngCase.Decode16 or WarmPngCase.Encode16 or WarmPngCase.DecodeAdam7_16 or WarmPngCase.DecodePaeth16 or WarmPngCase.DecodeRgb16 ? 16 : 8;
+    private bool Rgb => Case == WarmPngCase.DecodeRgb16;
     private bool Encode => Case is WarmPngCase.Encode8 or WarmPngCase.Encode16;
     private bool Interlaced => Case == WarmPngCase.DecodeAdam7_16;
     private bool Paeth => Case is WarmPngCase.DecodePaeth16 or WarmPngCase.DecodePaeth8;
@@ -62,6 +63,8 @@ public class WarmPng
                     sourceRevision = manifest.RootElement.GetProperty("sourceRevision").GetString()
                 });
             pixels = HorizontalFlipInput.Create(Depth);
+            if (Rgb)
+                for (var i = 6; i < pixels.Length; i += 8) { pixels[i] = 255; pixels[i + 1] = 255; }
             source = JpegBenchmarkCase.Buffer(pixels, HorizontalFlipInput.Width, HorizontalFlipInput.Height, Depth);
             if (Prepared)
             {
@@ -78,9 +81,28 @@ public class WarmPng
                 ImageCodec.EncodePng(source, output, encodeOptions); encoded = output.ToArray();
             }
             ValidatePng(encoded); ValidateManaged();
+            if (Rgb)
+            {
+                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", "png-rgb16");
+                Directory.CreateDirectory(directory);
+                foreach (var (name, bytes) in new[] { ("input.png", encoded), ("expected.raw", pixels) })
+                {
+                    var path = Path.Combine(directory, name);
+                    if (File.Exists(path))
+                    {
+                        if (!File.ReadAllBytes(path).AsSpan().SequenceEqual(bytes))
+                            throw new InvalidOperationException("Frozen RGB16 input differs; preserve it before changing preparation.");
+                    }
+                    else File.WriteAllBytes(path, bytes);
+                }
+            }
             var rawPath = Path.Combine(state.DirectoryPath, "expected.raw");
             File.WriteAllBytes(rawPath, pixels); File.WriteAllBytes(state.Input, Encode ? pixels : encoded);
             native = new NativeWarmReference(state, Depth, cpu, Encode ? "png-encode" : Interlaced ? "png-adam7-decode" : "png-decode", rawPath);
+            if (native.Ready.GetProperty("colorType").GetInt32() != (Rgb ? 2 : 6)
+                || native.Ready.GetProperty("conversionThreads").GetInt32() != (Rgb ? 1 : 0)
+                || native.Ready.GetProperty("rgbExpansionTimed").GetBoolean() != Rgb)
+                throw new InvalidOperationException("Native PNG color/expansion boundary differs.");
             ValidateNative();
             if (!Encode)
             {
@@ -168,7 +190,7 @@ public class WarmPng
     {
         var info = ImageCodec.Identify(bytes);
         if (info.Format != ImageFormat.Png || info.Width != source.Width || info.Height != source.Height || info.BitDepth != Depth
-            || bytes[25] != 6 || bytes[28] != (Interlaced ? 1 : 0)) throw new InvalidOperationException("PNG profile differs.");
+            || bytes[25] != (Rgb ? 2 : 6) || bytes[28] != (Interlaced ? 1 : 0)) throw new InvalidOperationException("PNG profile differs.");
         using var compressed = new MemoryStream();
         for (var position = 8; position < bytes.Length;)
         {
@@ -180,7 +202,7 @@ public class WarmPng
         using var inflater = new ZLibStream(compressed, CompressionMode.Decompress);
         foreach (var (startX, startY, stepX, stepY) in Interlaced ? WarmPngAdam7Input.Passes : [(0, 0, 1, 1)])
         {
-            var bytesPerPixel = Depth / 8 * 4;
+            var bytesPerPixel = Depth / 8 * (Rgb ? 3 : 4);
             var row = new byte[(source.Width - startX + stepX - 1) / stepX * bytesPerPixel];
             for (var y = startY; y < source.Height; y += stepY)
             {
@@ -189,7 +211,7 @@ public class WarmPng
                 for (var x = startX; x < source.Width; x += stepX)
                 for (var i = 0; i < bytesPerPixel; i++)
                 {
-                    var original = pixels[y * source.Stride + x * bytesPerPixel + (Depth == 16 ? i ^ 1 : i)];
+                    var original = pixels[y * source.Stride + x * Depth / 8 * 4 + (Depth == 16 ? i ^ 1 : i)];
                     var prediction = 0;
                     if (Paeth)
                     {
@@ -240,10 +262,13 @@ public class WarmPng
                 managedOutputBytes, nativeOutputBytes, managedEncodedSha256 = JpegBenchmarkCase.Hash(encoded),
                 nativeOutputSha256 = JpegBenchmarkCase.HashFile(state.NativeOutput),
                 interlace = Interlaced ? 1 : 0,
+                colorType = Rgb ? 2 : 6,
+                rasterRecipe = Rgb ? "Existing original RGBA16 raster; RGB unchanged, alpha set to 65535 for RGB PNG. No additional original image." : "Existing original RGBA raster, all samples unchanged.",
+                originalRasterSha256 = JpegBenchmarkCase.Hash(HorizontalFlipInput.Create(Depth)),
                 filter = Paeth ? 4 : 0,
                 compression = Paeth ? $"Authored noninterlaced PNG RGBA{Depth}; every row Paeth; BCL Optimal level 6; identical resident encoded input"
                     : Interlaced ? "Authored PNG Adam7 RGBA16; BCL Optimal level 6; filter None; identical resident encoded input"
-                    : "BCL Optimal (zlib default level 6) / FFmpeg level 6; filter None; noninterlaced RGBA",
+                    : $"BCL Optimal (zlib default level 6) / FFmpeg level 6; filter None; noninterlaced {(Rgb ? "RGB" : "RGBA")}",
                 managedIdatBytes = IdatBytes(encoded), nativeIdatBytes = Encode ? IdatBytes(File.ReadAllBytes(state.NativeOutput)) : IdatBytes(encoded),
                 allRgbaSamplesExact = true, alphaExact = true, hiddenRgbExact = true,
                 nativeCliNormalScalarPixelsExact = true,
@@ -255,7 +280,7 @@ public class WarmPng
                 nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
                 boundary = Encode
                     ? "Warm RGBA input to complete owned PNG: fresh managed MemoryStream (creation, growth, encode and disposal included; no redundant ToArray); native codec context/packet wrapper reused, real independently owned packet acquisition, encode and release included. Both level 6/filter None. For RGBA16, native LE-to-BE full-frame sample conversion runs inside every operation, using a reused prepared frame; managed conversion/row storage is included in public EncodePng. IPC, file IO, hashes and validation excluded."
-                    : "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE conversion and second output allocation included natively; no conversion for RGBA8. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded."
+                    : "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE conversion or RGB48BE-to-RGBA64LE FFmpeg conversion and second output allocation included natively; no conversion for RGBA8. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
             Console.WriteLine("Validated warm PNG pair: " + path);
         }

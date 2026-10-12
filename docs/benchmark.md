@@ -3,7 +3,8 @@
 Updated 2026-10-12. Latest retained warm measurements on the dedicated AMD EPYC
 9V45 VM: Ubuntu 24.04.4, .NET 10.0.8 / SDK 10.0.204, FFmpeg n8.1
 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread, normal SIMD,
-tiering off, workstation nonconcurrent GC. Two original 513×259 RGBA8/16 rasters;
+tiering off, workstation nonconcurrent GC. Two original 513×259 RGBA8/16 rasters,
+with documented projections for other pixel formats;
 resize/crop outputs are 256×129, quarter turns/transposes 259×513.
 
 Times cover complete public operations and independent output acquisition/release,
@@ -36,6 +37,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA8, Paeth](../benchmarks/WARM-PAETH-FOUR-CHANNEL.md) | 5,099.55 | 2,925.24 | 1.743 / 1.842 | 881,892 | Confirmed |
 | [PNG RGBA16, Paeth](../benchmarks/WARM-PAETH-VECTOR.md) | 8,778.54 | 5,671.15 | 1.548 / 1.607 | 1,844,468 | Confirmed |
 | [PNG RGBA16, Adam7](../benchmarks/WARM-PNG-SCATTER.md) | 6,567.82 | 3,984.54 | 1.648 / 1.700 | 2,024,532 | Confirmed |
+| [PNG RGB16, None](../benchmarks/WARM-PNG-RGB16-ROW.md) | 4,484.58 | 2,226.47 | 2.014 / 2.187 | 1,807,712 | Above 2x / open |
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-AC-FUSED.md) | 1,267.57 | 682.73 | 1.857 / 1.880 | 1,221,545 | Confirmed |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG420-BULK.md) | 1,721.81 | 1,007.73 | 1.709 / 1.719 | 1,619,530 | Confirmed |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-COVERAGE-QUIET.md) | 2,087.01 | 1,336.37 | 1.562 / 1.567 | 1,978,646 | Confirmed |
@@ -110,6 +112,8 @@ These are distinct boundaries. FFmpeg allocation totals are **not measured**;
 they must not be interpreted as zero. Retained owners and cold allocation patterns
 need separate coverage.
 
+The [material coverage audit](../benchmarks/WARM-COVERAGE.md) lists distinct
+unmeasured primitives and public boundaries without expanding a profile matrix.
 Other depths/directions/profiles remain open. Unmatched cases receive no parity
 timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.

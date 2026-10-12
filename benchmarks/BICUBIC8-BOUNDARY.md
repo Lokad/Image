@@ -48,3 +48,18 @@ identity. All production bodies and flags remain equivalent to the accepted
 Release package on both OSes; its 2,137-test results remain applicable. No new
 performance image, geometry matrix, quality search or production package is made.
 The required warm bicubic case remains open.
+
+An additional correctness-only diagnostic uses the public zimg active-region API.
+FFmpeg's zscale wrapper fixes that region to the complete input frame and exposes
+no boundary-mode option. A four-pixel repeated-edge halo around the same original
+raster, with active region 513x259 starting at (4,4), preserves sample centers and
+supplies the required edge extension. Physical input is 521x267, 4.7% more pixels.
+This is a labeled scaler-backend diagnostic, not a stock FFmpeg CLI result.
+
+Scalar zimg matches the rational reference byte for byte. Normal SIMD differs by
+one alpha sample at (6,4): 173 instead of 172, alpha RMSE 0.005503; RGB maximum 1 /
+RMSE 0.003177. Zero-alpha RGB is zero. The normal/scalar equality gate failed and
+both outputs were retained. The existing exact-alpha RGBA8 gate remains unchanged;
+this result receives no timing or parity status. The
+[active-region evidence](bicubic8-active-region-evidence.json) records both outputs,
+the original adapter, native binary and immutable raw archive identities.
