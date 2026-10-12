@@ -224,6 +224,10 @@ original raster, prepared at native qscale 5 with alpha flattened onto RGB
 OwnedDecodeGray selects one owned baseline grayscale JPEG at fixed quality 85
 on that same raster. Native MJPEG cannot encode the equivalent one-component
 input; FFmpeg supplies the decode oracle for the identical resident bytes.
+ProgressiveGray losslessly rewrites that same grayscale input into six scans.
+A pinned ignored jpegtran producer and an original coefficient visitor prove
+unchanged quantization, coefficient geometry, all DCT values and owned pixels.
+Only the encoded scan organization differs; no scan or quality search is added.
 
 ```bash
 bash tools/WarmReference/build-jpeg-decode-linux.sh
@@ -237,6 +241,10 @@ python3 tools/WarmReference/verify-jpeg-decode-linux.py --cpu 0 --sampling 422
 # Or prepare the one-component grayscale input.
 dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-jpeg-gray-decode 0
 python3 tools/WarmReference/verify-jpeg-decode-linux.py --cpu 0 --sampling gray
+# One lossless progressive rewrite of the already prepared grayscale input.
+bash tools/WarmReference/build-jpegtran-linux.sh
+dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-jpeg-progressive-gray 0
+python3 tools/WarmReference/verify-jpeg-decode-linux.py --cpu 0 --sampling progressive-gray
 ```
 
 After a Release benchmark build and owned source inventory:
@@ -248,6 +256,7 @@ After a Release benchmark build and owned source inventory:
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases NativeDecode420 -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases NativeDecode422 -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases OwnedDecodeGray -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases ProgressiveGray -Cpu 0 -NoBuild
 ```
 
 Each native interval resets decoder state, decodes all coefficients/pixels,
@@ -272,6 +281,10 @@ untagged; the conversion explicitly uses full JPEG range. Only this grayscale
 representation admits an unspecified range tag. The
 [direct byte-expansion round](../../benchmarks/WARM-JPEGGRAY-PIXELS.md) preserves
 the former rounded/clipped samples, work, admission and output ownership.
+The [progressive accounting trial](../../benchmarks/WARM-JPEGPROGRESSIVE-ACCOUNTING-REJECTION.md)
+records this six-scan pair and rejects a small uncertain local-accounting change.
+Production remains unchanged. The fixture producer is used only outside timing,
+and its checkout/build/binaries stay ignored under external/.
 Two simultaneously live outputs must have independent storage; mutation of
 one leaves the other intact. Repeated output pixels and encoded source bytes
 must remain unchanged. Fifteen invalid protocol/argument/affinity controls per
