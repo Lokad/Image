@@ -163,6 +163,51 @@ public sealed class JpegBaselineBlockTests
         var dc = new byte[16]; dc[3] = 13; var ac = new byte[16]; ac[7] = (byte)AcSymbols.Length;
         return (new JpegHuffman(dc, Enumerable.Range(0, 13).Select(i => (byte)i).ToArray(), Context()), new JpegHuffman(ac, AcSymbols, Context()));
     }
+
+    [Fact]
+    public void AcPrefixAndAmplitudeRetainEveryBudgetTruncationAndPartialState()
+    {
+        var tables = Tables();
+        // Original T.81 grammars: mixed amplitudes, a stuffed FF byte, a zero
+        // run, EOB, an invalid category and a run exceeding the remaining band.
+        var lead = Dc(0) + Ac(4) + Signed(-10, 4) + Ac(0x38) + Signed(255, 8)
+            + Ac(0xF0) + Ac(10) + Signed(-777, 10);
+        foreach (var text in new[] { lead + Ac(0), lead + Ac(0x0B) + new string('1', 11),
+                     Dc(0) + string.Concat(Enumerable.Repeat(Ac(0xF0), 3)) + Ac(0xF1) + "1" })
+        {
+            var original = Stuff(text);
+            for (var length = 0; length <= original.Length; length++)
+            for (var work = 63; work <= 130; work++)
+            {
+                var input = original.AsSpan(0, length).ToArray();
+                var fast = Decode(input, work, false); var checkedSymbols = Decode(input, work, true);
+                Assert.Equal(checkedSymbols.Error, fast.Error);
+                Assert.Equal(checkedSymbols.Message, fast.Message);
+                Assert.Equal(checkedSymbols.Position, fast.Position);
+                Assert.Equal(checkedSymbols.RemainingWork, fast.RemainingWork);
+                Assert.Equal(checkedSymbols.Predictor, fast.Predictor);
+                Assert.Equal(checkedSymbols.Block, fast.Block);
+                Assert.Equal(original.AsSpan(0, length).ToArray(), input);
+            }
+        }
+
+        (Type? Error, string? Message, int Position, long RemainingWork, int Predictor, int[] Block)
+            Decode(byte[] input, long work, bool cancelable)
+        {
+            using var cancellation = new CancellationTokenSource();
+            var context = new OperationContext(ImageLimits.Default with { MaxWork = work }, cancelable ? cancellation.Token : default);
+            var reader = new JpegEntropyReader(input, 0, context);
+            var block = Enumerable.Repeat(12345, 64).ToArray(); var predictor = 17;
+            Exception? error = null;
+            try
+            {
+                JpegDecoder.ReadBaselineBlock(ref reader, block, ref predictor, tables.Dc, tables.Ac, context);
+                reader.Restart(0);
+            }
+            catch (Exception failure) when (failure is ImageDataException or ImageLimitException) { error = failure; }
+            return (error?.GetType(), error?.Message, reader.Position, context.RemainingWork, predictor, block);
+        }
+    }
     private static string Dc(int size) => Convert.ToString(size, 2).PadLeft(4, '0');
     private static string Ac(byte symbol) => Convert.ToString(Array.IndexOf(AcSymbols, symbol), 2).PadLeft(8, '0');
     private static string Signed(int value, int size) => size == 0 ? "" : Convert.ToString(value >= 0 ? value : value + (1 << size) - 1, 2).PadLeft(size, '0');

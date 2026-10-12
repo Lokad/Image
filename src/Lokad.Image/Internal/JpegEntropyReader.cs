@@ -128,6 +128,48 @@ internal ref struct JpegEntropyReader
         symbol = packed >> 4; return true;
     }
 
+    internal bool TryReadBaselineAc(ReadOnlySpan<ushort> shortCodes, int remainingCoefficients, out int symbol, out int value)
+    {
+        symbol = value = 0;
+        // T.81 F.2.2: a valid nonzero AC symbol is immediately followed by its
+        // amplitude. Inspect their required bytes together and publish the bit
+        // cache once. Only the noncancelable baseline local-work scope qualifies.
+        if (remainingWork < 0) return false;
+        var candidateBits = bits; var candidateAvailable = available; var candidatePosition = position;
+        var prefix = (int)((bits & ((1u << available) - 1)) << (8 - available));
+        var packed = shortCodes[prefix]; var count = packed & 15;
+        if (count == 0 || count > available)
+        {
+            if (candidatePosition >= data.Length) return false;
+            var next = data[candidatePosition++];
+            if (next == 255 && (candidatePosition >= data.Length || data[candidatePosition++] != 0)) return false;
+            candidateBits = candidateBits << 8 | next; candidateAvailable += 8;
+            prefix = (int)((candidateBits >> (candidateAvailable - 8)) & 255);
+            packed = shortCodes[prefix]; count = packed & 15;
+            if (count == 0) return false;
+        }
+        var token = packed >> 4; var size = token & 15;
+        // These syntax failures precede amplitude admission. EOB/zero runs,
+        // long codes and every speculative failure retain the original path.
+        if (size is < 1 or > 10 || token >> 4 >= remainingCoefficients) return false;
+        candidateAvailable -= count;
+        while (candidateAvailable < size)
+        {
+            if (candidatePosition >= data.Length) return false;
+            var next = data[candidatePosition++];
+            if (next == 255 && (candidatePosition >= data.Length || data[candidatePosition++] != 0)) return false;
+            candidateBits = candidateBits << 8 | next; candidateAvailable += 8;
+        }
+        // Prefix bits cost count, and ReadBits(size) costs one. If the combined
+        // charge cannot fit, the original sequence preserves partial admission.
+        if (!TryWork(count + 1)) return false;
+        bits = candidateBits; available = candidateAvailable - size; position = candidatePosition;
+        var amplitude = (int)((bits >> available) & ((1u << size) - 1));
+        var threshold = 1 << (size - 1);
+        value = amplitude + (((amplitude - threshold) >> 31) & (1 - (threshold << 1)));
+        symbol = token; return true;
+    }
+
     internal bool TryReadLongHuffman(ReadOnlySpan<ushort> longCodes, out int symbol)
     {
         symbol = 0;

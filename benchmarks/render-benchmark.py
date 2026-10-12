@@ -73,11 +73,11 @@ def render():
         row('PNG RGBA8, Paeth', 'warm-paeth4-evidence.json', ['observations', -1], 'WARM-PAETH-FOUR-CHANNEL.md', True),
         row('PNG RGBA16, Paeth', 'warm-paethvector-evidence.json', ['observations', -1], 'WARM-PAETH-VECTOR.md', True),
         row('PNG RGBA16, Adam7', 'warm-pngscatter-evidence.json', ['observations', -1], 'WARM-PNG-SCATTER.md', True),
-        row('JPEG baseline gray', 'warm-jpeggray-pixels-evidence.json', ['observations', -1], 'WARM-JPEGGRAY-PIXELS.md', True),
+        row('JPEG baseline gray', 'warm-jpegac-fused-evidence.json', ['regressionControl', 'observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
         row('JPEG baseline 4:2:0', 'warm-jpeg420-bulk-evidence.json', ['observations', -1], 'WARM-JPEG420-BULK.md', True),
         row('JPEG baseline 4:2:2', 'warm-jpeg422-rows-evidence.json', ['observations', -1], 'WARM-JPEG422-ROWS.md'),
         row('JPEG baseline 4:4:4, owned input', 'warm-jpeg-local-work-evidence.json', ['observations', 'ownedAffected'], 'WARM-JPEG-LOCAL-WORK.md'),
-        row('JPEG baseline 4:4:4, native input', 'warm-jpeg-local-work-evidence.json', ['observations', 'nativeLocalAccounting', -1], 'WARM-JPEG-LOCAL-WORK.md'),
+        row('JPEG baseline 4:4:4, native input', 'warm-jpegac-fused-evidence.json', ['observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
         row('JPEG progressive gray', 'warm-jpegrefinement-evidence.json', ['observations', -1], 'WARM-JPEG-REFINEMENT.md', True),
         row('JPEG progressive 4:2:0', 'warm-jpegprogressive420-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE420.md', True),
         row('JPEG progressive 4:2:2', 'warm-jpegprogressive422-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE422.md', True),
@@ -129,7 +129,7 @@ Ratio = Lokad.Image / the faster FFmpeg pre/post mean; lower is faster. Upper is
 the retained conservative confidence bound, taking the larger filtered/all-actual
 bound where available. **Confirmed** requires an independent quiet repeat and
 upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
-The latest PNG16 None, VP8 and bilinear8 repeats use `exclusive-vm-idle-v2`: live job checks and
+Recent confirmations use `exclusive-vm-idle-v2`: live job checks and
 five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
 Earlier receipts retain their original load guard and its failures.
 

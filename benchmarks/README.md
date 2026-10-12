@@ -5,6 +5,12 @@ ratios, allocations and verification status in three tables. Update it after eac
 accepted performance round with `python benchmarks/render-benchmark.py`, then
 verify with `--check`. The reports below preserve the detailed evidence and history.
 
+The [combined JPEG AC read](WARM-JPEG-AC-FUSED.md) groups a short Huffman prefix
+and amplitude without changing work/admission or failure precedence. Complete
+native-input 4:4:4 decode confirms at 1.941x FFmpeg, upper 1.961x; the grayscale
+regression control confirms at 1.857x, upper 1.880x. Both OSes pass 2,388 tests,
+254 scalar JPEG controls and the same actual package/all three examples.
+
 The [bilinear RGBA8 confirmation](WARM-BILINEAR8-QUIET.md) reaches 1.938x FFmpeg,
 conservative upper 1.958x, with both current idle guards passing. The fixed resize
 geometry, exact managed reference, native alpha and RGB bounds are unchanged.

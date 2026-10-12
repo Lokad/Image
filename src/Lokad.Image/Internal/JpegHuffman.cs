@@ -65,6 +65,10 @@ internal sealed class JpegHuffman
         return ReadLong(ref reader);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal bool TryReadBaselineAc(ref JpegEntropyReader reader, int remainingCoefficients, out int symbol, out int value)
+        => reader.TryReadBaselineAc(shortCodes, remainingCoefficients, out symbol, out value);
+
     // Keep canonical traversal out of the common short-code wrapper so the
     // caller can inline that wrapper without its cold loop and saved registers.
     private int ReadLong(ref JpegEntropyReader reader)

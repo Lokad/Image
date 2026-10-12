@@ -274,6 +274,12 @@ internal ref struct JpegDecoder
             var k = 1;
             while (k <= 63)
             {
+                if (ac.TryReadBaselineAc(ref reader, 64 - k, out var fastSymbol, out var amplitude))
+                {
+                    k += fastSymbol >> 4;
+                    block[JpegTransform.Zigzag[k++]] = amplitude;
+                    continue;
+                }
                 var symbol = ac.Read(ref reader); var run = symbol >> 4; var size = symbol & 15;
                 if (size == 0)
                 {
