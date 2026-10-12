@@ -278,10 +278,14 @@ public sealed class ZlibFramingTests
     [Theory]
     [InlineData(0)] [InlineData(1)] [InlineData(2)] [InlineData(3)]
     [InlineData(4)] [InlineData(5)] [InlineData(6)] [InlineData(7)]
+    [InlineData(24)] [InlineData(25)] [InlineData(26)] [InlineData(27)]
+    [InlineData(28)] [InlineData(29)] [InlineData(30)] [InlineData(31)]
     public void PrefixLookaheadPreservesEveryStoredBlockAlignmentAndExactWork(int literals)
     {
         // RFC 1951 sections 3.2.3/3.2.6: literal 144 has a nine-bit fixed
         // prefix, EOB has seven. Varying its count covers all bit alignments.
+        // Longer runs cross successive seven-byte refills, including a full
+        // 64-bit cache, before returning lookahead bytes to the stored header.
         var bits = new BitWriter();
         bits.Number(0, 1); bits.Number(1, 2); // Nonfinal fixed block.
         for (var i = 0; i < literals; i++) bits.Code(400, 9);

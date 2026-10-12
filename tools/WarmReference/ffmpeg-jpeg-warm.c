@@ -107,7 +107,10 @@ static void write_packet(const Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if (argc != 8 || strcmp(argv[1], "jpeg-encode")) fail("Usage: ffmpeg-jpeg-warm jpeg-encode INPUT WIDTH HEIGHT 8 OUTPUT QSCALE");
+    if ((argc != 8 && argc != 9) || strcmp(argv[1], "jpeg-encode") || (argc == 9 && strcmp(argv[8], "420")))
+        fail("Usage: ffmpeg-jpeg-warm jpeg-encode INPUT WIDTH HEIGHT 8 OUTPUT QSCALE [420]");
+    int subsampled = argc == 9;
+    enum AVPixelFormat yuv_format = subsampled ? AV_PIX_FMT_YUVJ420P : AV_PIX_FMT_YUVJ444P;
     Work work = {0}; work.cpu = affinity_cpu();
     work.width = number(argv[3]); work.height = number(argv[4]); work.quality = number(argv[7]);
     if (number(argv[5]) != 8 || work.quality > 31) fail("JPEG requires depth 8 and qscale 1..31.");
@@ -116,7 +119,7 @@ int main(int argc, char **argv)
     av_log_set_level(AV_LOG_ERROR); work.original = read_file(argv[2], work.raw_bytes);
     work.rgba = frame(work.width, work.height, AV_PIX_FMT_RGBA);
     work.flattened = frame(work.width, work.height, AV_PIX_FMT_RGBA);
-    work.yuv = frame(work.width, work.height, AV_PIX_FMT_YUVJ444P);
+    work.yuv = frame(work.width, work.height, yuv_format);
     for (int y = 0; y < work.height; y++) memcpy(work.rgba->data[0] + (size_t)y*work.rgba->linesize[0],
         work.original + (size_t)y*work.width*4, (size_t)work.width*4);
     work.conversion = sws_alloc_context(); if (!work.conversion) fail("Allocate conversion failed.");
@@ -125,7 +128,7 @@ int main(int argc, char **argv)
     require(av_opt_set_int(work.conversion, "dstw", work.width, 0), "Set target width");
     require(av_opt_set_int(work.conversion, "dsth", work.height, 0), "Set target height");
     require(av_opt_set_int(work.conversion, "src_format", AV_PIX_FMT_RGBA, 0), "Set source format");
-    require(av_opt_set_int(work.conversion, "dst_format", AV_PIX_FMT_YUVJ444P, 0), "Set target format");
+    require(av_opt_set_int(work.conversion, "dst_format", yuv_format, 0), "Set target format");
     require(av_opt_set_int(work.conversion, "sws_flags", SWS_AREA|SWS_ACCURATE_RND|SWS_BITEXACT, 0), "Set conversion flags");
     require(av_opt_set_int(work.conversion, "threads", 1, 0), "Set conversion threads");
     require(sws_init_context(work.conversion, NULL, NULL), "Initialize conversion");
@@ -138,7 +141,7 @@ int main(int argc, char **argv)
     work.codec = avcodec_alloc_context3(codec); if (!work.codec) fail("Allocate codec failed.");
     work.codec->thread_count = 1; work.codec->thread_type = 0;
     work.codec->width = work.width; work.codec->height = work.height; work.codec->time_base = (AVRational){1,1};
-    work.codec->pix_fmt = AV_PIX_FMT_YUVJ444P; work.codec->color_range = AVCOL_RANGE_JPEG; work.codec->colorspace = AVCOL_SPC_SMPTE170M;
+    work.codec->pix_fmt = yuv_format; work.codec->color_range = AVCOL_RANGE_JPEG; work.codec->colorspace = AVCOL_SPC_SMPTE170M;
     work.codec->gop_size = 1; work.codec->flags |= AV_CODEC_FLAG_QSCALE; work.codec->global_quality = work.quality*FF_QP2LAMBDA;
     require(av_opt_set(work.codec->priv_data, "huffman", "optimal", 0), "Set Huffman effort");
     require(avcodec_open2(work.codec, codec, NULL), "Open JPEG encoder");
@@ -152,8 +155,8 @@ int main(int argc, char **argv)
     if (held->buf->buffer == work.packet->buf->buffer) fail("Live packets alias.");
     check_packet(&work, held); check_packet(&work, work.packet); av_packet_free(&held); av_packet_unref(work.packet);
     apply(&work); check_packet(&work, work.packet); check_source(&work); write_packet(&work, argv[6]); av_packet_unref(work.packet);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"jpeg-encode\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"qscale\":%d,\"backgroundRgb\":2113632,\"sampling\":\"444\",\"colorConversionTimed\":true,\"flatteningTimed\":true,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"bitstreamDeterministic\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
-        work.width, work.height, work.cpu, work.quality, work.output_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"jpeg-encode\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"qscale\":%d,\"backgroundRgb\":2113632,\"sampling\":\"%s\",\"colorConversionTimed\":true,\"flatteningTimed\":true,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"bitstreamDeterministic\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
+        work.width, work.height, work.cpu, work.quality, subsampled ? "420" : "444", work.output_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;

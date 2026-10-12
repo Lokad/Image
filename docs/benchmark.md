@@ -58,6 +58,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG8-ENCODE.md) | 7,241.99 | 17,219.43 | 0.421 / 0.430 | 527,629 | Confirmed |
 | [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG16-ENCODE-CRC.md) | 16,470.31 | 19,951.52 | 0.826 / 0.838 | 2,103,836 | Confirmed |
 | [JPEG 4:4:4, matched quality](../benchmarks/WARM-JPEG-ENCODE-QUIET.md) | 7,390.28 | 3,779.05 | 1.956 / 1.969 | 1,051,857 | Confirmed |
+| [JPEG 4:2:0, matched quality](../benchmarks/WARM-JPEG420-LUMA-ROW.md) | 6,258.27 | 1,807.82 | 3.462 / 3.731 | 527,251 | Above 2x / open |
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-ALPHAWEIGHTED.md) | 42,879.92 | 54,484.52 | 0.787 / 0.805 | 2,615,472 | Confirmed |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-ENCODE-EXACT.md) | 7,363.30 | 121,587.95 | 0.061 / 0.063 | 2,100,170 | Confirmed |
 

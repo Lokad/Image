@@ -12,7 +12,7 @@ round, at most three, with correctness established before timing.
 | PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB16 None screen remains above 2x | Gray/gray-alpha sample expansion; packed/palette expansion; other filter implementations |
 | PNG encode | RGBA8/16, level 6/None | RGB and gray projections; compression policies with materially different work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
-| JPEG encode | RGBA8 to 4:4:4, matched quality | Default 4:2:0, 4:2:2, grayscale, full 16-bit source normalization |
+| JPEG encode | RGBA8 to 4:4:4, matched quality; default 4:2:0 sampling screen above 2x | 4:2:0 parity; 4:2:2, grayscale, full 16-bit source normalization |
 | WebP | VP8 with alpha decode/encode; VP8L native and managed inputs; exact VP8L backend encode | Material opaque/alpha alternatives and full 16-bit source normalization |
 | Resize | Nearest/bilinear at both depths, fixed downsample | Bicubic at both depths; upsample/wide-support paths; tight-memory fallback |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes | Retained live output owners versus released-storage reuse |
@@ -30,5 +30,8 @@ generic sample-expansion path absent from the existing RGBA rows. Native timing
 includes RGB48BE-to-owned-RGBA64LE conversion on one thread. The
 [row-expansion round](WARM-PNG-RGB16-ROW.md) reduces its screened mean 36.5%,
 from 3.167x to 2.014x; upper 2.187x remains open. Rank this gap against the next
-eligible bicubic or default JPEG 4:2:0 pair. No averages, easy-case
+eligible bicubic pair. The [4:2:0 luma round](WARM-JPEG420-LUMA-ROW.md) reduces
+its screen from 4.206x to 3.462x, upper 3.731x. This larger measured gap now
+comes first. Two [framing experiments](WARM-PNG-LITERAL-REJECTED.md) were
+reverted without a useful parity gain. No averages, easy-case
 selection or tolerance changes establish the uniform warm target.

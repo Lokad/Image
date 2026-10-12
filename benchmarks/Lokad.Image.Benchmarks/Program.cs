@@ -334,6 +334,12 @@ if (args.Length is 2 or 3 && args[0] == "--prepare-warm-jpeg")
     return;
 }
 
+if (args.Length == 2 && args[0] == "--prepare-warm-jpeg420")
+{
+    WarmJpeg.Prepare(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture), subsampled: true);
+    return;
+}
+
 var representativeSmoke = args.Contains("--representative-smoke");
 var representativeShort = args.Contains("--representative-short");
 var horizontalFlipSmoke = args.Contains("--horizontal-flip-smoke");

@@ -211,8 +211,13 @@ unchanged; unsupported hardware uses the original transform and quantization.
 JPEG requires opaque input or an explicit `BackgroundRgb` packed as 0xRRGGBB.
 Alpha flattening operates in encoded sample space before 16-to-8-bit conversion,
 with one nearest-integer rounding. Output is opaque and strips input metadata.
-Both 8-bit and 16-bit RGBA sources are accepted. JPEG coefficient planes,
-Huffman tables, scans and transforms are charged against operation limits.
+Both 8-bit and 16-bit RGBA sources are accepted.
+Dense one-to-one 8-bit encoder component rows may use the existing AVX-512/AVX2
+sample kernel, including luma in 4:2:0 and 4:2:2. Subsampled chroma, right-edge
+padding, other depths and other hardware retain their existing paths. Sample
+arithmetic, work charges, memory admission and encoded bytes are unchanged.
+JPEG coefficient planes, Huffman tables, scans and transforms are charged against
+operation limits.
 Component coefficient storage is released after conversion to its sample plane;
 table/sample-plane charges conservatively remain through optional orientation.
 Every Huffman redefinition is charged, including unused or replaced tables.

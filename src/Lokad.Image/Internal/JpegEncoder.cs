@@ -77,7 +77,7 @@ internal static class JpegEncoder
                     var samplesX = component == 0 ? 1 : h; var samplesY = component == 0 ? 1 : v;
                     var sourceLeft = mcu % columns * h * 8 + bx * 8;
                     var sourceTop = mcu / columns * v * 8 + by * 8;
-                    if (image.BitDepth == 8 && h == 1 && v == 1 && sourceLeft <= image.Width - 8
+                    if (image.BitDepth == 8 && samplesX == 1 && samplesY == 1 && sourceLeft <= image.Width - 8
                         && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported)
                     {
                         for (var y = 0; y < 8; y++)

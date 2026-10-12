@@ -91,6 +91,7 @@ def render():
         row('PNG RGBA8, level 6 / None', 'warm-png8encode-evidence.json', ['observations', -1], 'WARM-PNG8-ENCODE.md', True),
         row('PNG RGBA16, level 6 / None', 'warm-png16-encode-crc-evidence.json', ['observations', -1], 'WARM-PNG16-ENCODE-CRC.md', True),
         row('JPEG 4:4:4, matched quality', 'warm-jpegencode-quiet-evidence.json', ['observations', -1], 'WARM-JPEG-ENCODE-QUIET.md', True),
+        row('JPEG 4:2:0, matched quality', 'warm-jpeg420-luma-row-evidence.json', ['observations', -1], 'WARM-JPEG420-LUMA-ROW.md'),
         row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
     ]
