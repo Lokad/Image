@@ -9,19 +9,21 @@ import tempfile
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--cpu', type=int, default=0)
-parser.add_argument('--sampling', choices=['444','420','422','gray','progressive-gray'], default='444')
+parser.add_argument('--sampling', choices=['444','420','422','gray','progressive-gray','progressive-420'], default='444')
 arguments = parser.parse_args()
 root = Path(__file__).resolve().parents[2]
 worker = root/'external/warm-reference/ffmpeg-jpeg-decode-warm'
 fixed=arguments.sampling!='444'
-subsampled=arguments.sampling in ('420','422')
-profile='jpeg-progressive-gray.json' if arguments.sampling=='progressive-gray' else f'jpeg-decode{arguments.sampling}.json' if fixed else 'jpeg-match.json'
+progressive=arguments.sampling.startswith('progressive-')
+sampling=arguments.sampling.removeprefix('progressive-')
+subsampled=sampling in ('420','422')
+profile=f'jpeg-progressive-{sampling}.json' if progressive else f'jpeg-decode{sampling}.json' if fixed else 'jpeg-match.json'
 prepared = json.loads((root/'artifacts/warm-reference'/profile).read_text())
-if arguments.sampling=='progressive-gray':prepared=prepared['input']
+if progressive:prepared=prepared['input']
 input_file = root/prepared['nativeFile' if fixed else 'managedFile']
 encoded = input_file.read_bytes()
 assert hashlib.sha256(encoded).hexdigest() == (prepared['encodedSha256'] if fixed else prepared['match']['closestOwned']['encodedSha256'])
-operation='jpeg-gray-decode' if arguments.sampling in ('gray','progressive-gray') else f'jpeg{arguments.sampling}-decode' if fixed else 'jpeg-decode'
+operation='jpeg-gray-decode' if sampling=='gray' else f'jpeg{sampling}-decode' if fixed else 'jpeg-decode'
 allowed = sorted(os.sched_getaffinity(0))
 assert arguments.cpu in allowed
 other = next(cpu for cpu in allowed if cpu != arguments.cpu)
@@ -40,9 +42,9 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-jpeg-decode-controls-') as 
     ready = rows[0]
     assert ready['schemaVersion'] == 1 and ready['state'] == 'ready'
     assert ready['operation'] == operation and (ready['width'], ready['height'], ready['depth']) == (513,259,8)
-    assert ready['sampling']==('gray' if arguments.sampling=='progressive-gray' else arguments.sampling) and ready['chromaExpansionTimed']==subsampled
-    assert ready['chromaVerticalFactor']==(2 if arguments.sampling=='420' else 1)
-    assert ready['grayscale']==(arguments.sampling in ('gray','progressive-gray'))
+    assert ready['sampling']==sampling and ready['chromaExpansionTimed']==subsampled
+    assert ready['chromaVerticalFactor']==(2 if sampling=='420' else 1)
+    assert ready['grayscale']==(sampling=='gray')
     assert ready['cpu'] == arguments.cpu and ready['affinityCount'] == 1
     assert ready['codecThreads'] == ready['conversionThreads'] == 1
     assert ready['threadType'] == ready['activeThreadType'] == 0

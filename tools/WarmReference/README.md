@@ -245,6 +245,9 @@ python3 tools/WarmReference/verify-jpeg-decode-linux.py --cpu 0 --sampling gray
 bash tools/WarmReference/build-jpegtran-linux.sh
 dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-jpeg-progressive-gray 0
 python3 tools/WarmReference/verify-jpeg-decode-linux.py --cpu 0 --sampling progressive-gray
+# Or rewrite the existing native 4:2:0 input once, without changing quality.
+dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-jpeg-progressive-420 0
+python3 tools/WarmReference/verify-jpeg-decode-linux.py --cpu 0 --sampling progressive-420
 ```
 
 After a Release benchmark build and owned source inventory:
@@ -257,6 +260,7 @@ After a Release benchmark build and owned source inventory:
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases NativeDecode422 -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases OwnedDecodeGray -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases ProgressiveGray -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases Progressive420 -Cpu 0 -NoBuild
 ```
 
 Each native interval resets decoder state, decodes all coefficients/pixels,
@@ -292,6 +296,11 @@ clears this fixed pair. Both actual timing libraries match the final actual
 package's complete production methods and flags; work/pixels/admission stay exact.
 The fixture producer is used only outside timing,
 and its checkout/build/binaries stay ignored under external/.
+The [progressive 4:2:0 coverage point](../../benchmarks/WARM-JPEG-PROGRESSIVE420.md)
+proves all valid three-component coefficients/quantization/geometry and owned
+pixels unchanged. One independent confirmation clears 2x with no codec change;
+the conservative bound also includes all twelve actual measurements before
+BenchmarkDotNet's result selection or overhead subtraction.
 Two simultaneously live outputs must have independent storage; mutation of
 one leaves the other intact. Repeated output pixels and encoded source bytes
 must remain unchanged. Fifteen invalid protocol/argument/affinity controls per

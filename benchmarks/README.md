@@ -277,6 +277,11 @@ reduces complete decode about 20%, with an independent quiet confirmation at
 AVX2/BMI2 corrections preserve pixels, logical work, memory admission and scalar
 failure/cancellation behavior. This fixed pair clears 2x; broader coverage stays
 open. No image, quality or scan-strategy sweep is added.
+The [progressive 4:2:0 coverage point](WARM-JPEG-PROGRESSIVE420.md) uses one
+lossless rewrite of the existing native baseline input. All valid coefficients,
+quantization, geometry and owned pixels remain exact. Independent confirmation
+is 1.881x FFmpeg, conservative upper 1.894x including every actual measurement.
+This adds one explicit case and no production change or source raster.
 The [adaptive long-prefix round](WARM-JPEG-LONG-PREFIX.md) extends input-derived
 Huffman lookup for nine/ten-bit codes with explicit memory/work admission.
 The [magnitude-category round](WARM-JPEG-CATEGORY.md) replaces the coefficient

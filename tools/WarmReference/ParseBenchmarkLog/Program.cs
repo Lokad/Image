@@ -27,9 +27,12 @@ if (actual.Length != expectedActual || results.Length < (expectedActual == 12 ? 
 // WorkloadResult already contains the engine's overhead adjustment and outlier
 // selection. Apply Statistics to those values, as BDN's full report does.
 var statistics = new Statistics(results.Select(m => m.Nanoseconds / m.Operations));
+// Retain a second, conservative view containing every actual measurement,
+// without overhead subtraction or the engine's outlier selection.
+var unfilteredActualStatistics = new Statistics(actual.Select(m => m.Nanoseconds / m.Operations));
 var evidence = new
 {
-    statistics, actual, results,
+    statistics, unfilteredActualStatistics, actual, results,
     rawGc = lines.Single(line => line.StartsWith("// GC:", StringComparison.Ordinal)),
     rawThreading = lines.Single(line => line.StartsWith("// Threading:", StringComparison.Ordinal))
 };
