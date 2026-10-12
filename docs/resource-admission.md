@@ -123,6 +123,15 @@ only complete valid input and available work; otherwise the original scalar
 sequence preserves partial consumption, errors and cancellation checks. Zero-run
 boundaries and lanes outside the active spectral prefix remain unchanged.
 
+On supported 64-bit BMI2/AVX2 hardware, one local 64-bit nonzero-position mask is
+built per refinement block and reused across symbols. Corrections preserve
+nonzero status; only coefficient insertion changes the mask. Selecting a zero-run
+boundary adds no scratch allocation, tables or admission. Complete correction
+fields are admitted in groups of at most 16 original logical bits. Failed
+speculation retains scalar per-bit updates, work and error precedence, including
+refining an overlong run's existing coefficients before reporting its format
+error. Other hardware retains the preceding traversal.
+
 Lossless WebP auxiliary syntax and the 16-bit entropy group identifiers follow
 [RFC 9649 sections 3.7.2.2 and 3.8.3](https://www.rfc-editor.org/rfc/rfc9649.html#section-3.7.2.2).
 The implementation reads each transform's auxiliary image separately; only the

@@ -159,8 +159,10 @@ The [inverse rounding proof](docs/jpeg-inverse-rounding.md) defines the bound.
 Progressive scans retain coefficients in spectral order. After all scans and
 component DC progression are validated, reconstruction reuses the already
 admitted approximation array to map each block to natural order. On AVX2/BMI2,
-correction traversal groups existing nonzero coefficients while preserving
-zero-run insertion boundaries and signs. Each correction retains its original
+correction traversal can discover one nonzero-position mask per refinement block,
+reuse it across symbols and update it only when a coefficient is inserted. Zero
+runs count only zero positions; grouped bits visit nonzero positions in spectral
+order while preserving insertion boundaries and signs. Each correction retains its original
 logical work charge. Cancellable tokens, incomplete entropy, tight work budgets
 and unsupported hardware retain scalar correction reads and failure precedence.
 

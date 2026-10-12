@@ -333,6 +333,11 @@ internal ref struct JpegDecoder
 
         // Successive-approximation AC decoding: existing nonzero coefficients
         // consume correction bits while run counts count only zero coefficients.
+        if (Avx2.IsSupported && Bmi2.X64.IsSupported)
+        {
+            ReadMaskedRefinement(ref reader, block, ac!, ss, se, al, ref eobRun);
+            return;
+        }
         var positionInBand = ss;
         var increment = 1 << al;
         if (eobRun == 0)
@@ -389,6 +394,87 @@ internal ref struct JpegDecoder
     {
         if (reader.ReadBits(1) != 0 && (Math.Abs(value) & increment) == 0)
             value += value > 0 ? increment : -increment;
+    }
+
+    private static void ReadMaskedRefinement(ref JpegEntropyReader reader, Span<int> block,
+        JpegHuffman ac, int start, int end, int low, ref int eobRun)
+    {
+        // T.81 G.1.2: corrections preserve nonzero status. Discover positions
+        // once; subsequent symbols only add a newly inserted coefficient.
+        ulong nonzero = 0;
+        for (var i = 0; i < 64; i += 8)
+        {
+            var values = Vector256.Create(block.Slice(i, 8));
+            var zeros = (uint)Avx.MoveMask(Avx2.CompareEqual(values, Vector256<int>.Zero).AsSingle());
+            nonzero |= (ulong)(~zeros & 255) << i;
+        }
+        var bandEnd = end == 63 ? ulong.MaxValue : (1UL << (end + 1)) - 1;
+        var position = start; var increment = 1 << low;
+        if (eobRun == 0)
+        {
+            while (position <= end)
+            {
+                var symbol = ac.Read(ref reader); var run = symbol >> 4; var size = symbol & 15;
+                var newValue = 0;
+                if (size != 0)
+                {
+                    if (size != 1) throw new ImageDataException("Invalid JPEG refinement symbol.");
+                    newValue = reader.ReadBits(1) == 0 ? -increment : increment;
+                }
+                else if (run != 15) { eobRun = (1 << run) + reader.ReadBits(run); break; }
+                else run = 16;
+                var remainingBand = bandEnd & (ulong.MaxValue << position);
+                var zeros = ~nonzero & remainingBand;
+                var target = Bmi2.X64.ParallelBitDeposit(1UL << (newValue != 0 ? run : run - 1), zeros);
+                var stop = target == 0 ? end + 1 : BitOperations.TrailingZeroCount(target) + (newValue != 0 ? 0 : 1);
+                var prefix = (stop == 64 ? ulong.MaxValue : (1UL << stop) - 1) & remainingBand;
+                // Refine before reporting an overlong zero run, retaining
+                // the original entropy/work/format failure precedence.
+                RefineMaskedBits(ref reader, block, nonzero & prefix, increment);
+                run -= BitOperations.PopCount(zeros & prefix); position = stop;
+                if (run != 0 || (newValue != 0 && position > end)) throw new ImageDataException("JPEG refinement run exceeds band.");
+                if (newValue != 0)
+                {
+                    block[position] = newValue; nonzero |= 1UL << position; position++;
+                }
+            }
+        }
+        if (eobRun > 0)
+        {
+            if (position <= end) RefineMaskedBits(ref reader, block, nonzero & bandEnd & (ulong.MaxValue << position), increment);
+            eobRun--;
+        }
+    }
+
+    internal static void RefineMaskedBits(ref JpegEntropyReader reader, Span<int> block, ulong positions, int increment)
+    {
+        while (positions != 0)
+        {
+            var count = Math.Min(16, BitOperations.PopCount(positions));
+            var selected = Bmi2.X64.IsSupported ? Bmi2.X64.ParallelBitDeposit((1UL << count) - 1, positions) : 0;
+            if (selected != 0 && reader.TryReadCorrectionBits(count, out var bits))
+            {
+                // Reverse the bounded MSB-first field into increasing positions.
+                var reversed = (uint)bits << (16 - count);
+                reversed = ((reversed & 0x5555u) << 1) | ((reversed >> 1) & 0x5555u);
+                reversed = ((reversed & 0x3333u) << 2) | ((reversed >> 2) & 0x3333u);
+                reversed = ((reversed & 0x0F0Fu) << 4) | ((reversed >> 4) & 0x0F0Fu);
+                reversed = ((reversed & 255u) << 8) | (reversed >> 8);
+                var ones = Bmi2.X64.ParallelBitDeposit(reversed, selected);
+                while (ones != 0)
+                {
+                    ref var value = ref block[BitOperations.TrailingZeroCount(ones)];
+                    if ((Math.Abs(value) & increment) == 0) value += value > 0 ? increment : -increment;
+                    ones &= ones - 1;
+                }
+                positions &= ~selected;
+            }
+            else
+            {
+                ref var value = ref block[BitOperations.TrailingZeroCount(positions)];
+                Refine(ref reader, ref value, increment); positions &= positions - 1;
+            }
+        }
     }
 
     internal static bool TryRefineRun(ref JpegEntropyReader reader, Span<int> block, ref int position,

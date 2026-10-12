@@ -290,8 +290,11 @@ counts correction prefixes and EOB versus zero-run work before another traversal
 primitive. No additional performance raster or scan/quality sweep is added.
 The [isolated traversal count and direct-boundary rejection](WARM-JPEG-INSERTION-REJECTION.md)
 find 54,930 empty insertion prefixes. A direct-boundary check is flat and its
-post-load guard fails; it is discarded. The next hypothesis reuses one nonzero
-bitmask per block across refinement symbols, with exact semantics still required.
+post-load guard fails; it is discarded. The [per-block mask round](WARM-JPEG-MASK.md)
+reuses nonzero positions across refinement symbols, reducing confirmed managed
+time 12.4% while preserving exact semantics. Its independent quiet confirmation
+is 1.860x FFmpeg, conservative upper 1.878x including every actual sample. This
+fixed point clears 2x; broader required warm coverage remains open.
 The [adaptive long-prefix round](WARM-JPEG-LONG-PREFIX.md) extends input-derived
 Huffman lookup for nine/ten-bit codes with explicit memory/work admission.
 The [magnitude-category round](WARM-JPEG-CATEGORY.md) replaces the coefficient

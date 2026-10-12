@@ -308,7 +308,10 @@ BenchmarkDotNet's result selection or overhead subtraction.
 The [progressive full-resolution baseline](../../benchmarks/WARM-JPEG-REFINE16-REJECTION.md)
 retains the existing common sampling factors and all valid coefficients/pixels.
 It exposes a 2.13x gap. A wider correction-group trial is slower and is restored;
-the largest-cost traversal remains the next target, with no additional raster.
+the [per-block mask round](../../benchmarks/WARM-JPEG-MASK.md) then reduces
+confirmed managed time 12.4%, clearing this fixed pair with an all-actual upper
+1.878x and passing independent quiet guards. Earlier failed guards remain failed.
+No additional raster or quality/scan-strategy search is added.
 Two simultaneously live outputs must have independent storage; mutation of
 one leaves the other intact. Repeated output pixels and encoded source bytes
 must remain unchanged. Fifteen invalid protocol/argument/affinity controls per
