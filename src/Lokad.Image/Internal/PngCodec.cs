@@ -171,11 +171,11 @@ internal static class PngCodec
 
     private static ImageBuffer DecodeRaster(Header header, byte[] compressed, int streamLength, OperationContext context)
     {
-        using var input = new MemoryStream(compressed, 0, streamLength, false);
-        using var zlib = new ZLibStream(input, CompressionMode.Decompress);
+        using var zlib = new PngInflatedReader(compressed, streamLength);
         var result = ImageBuffer.AllocateForOverwrite(header.Info.Width, header.Info.Height, header.Depth == 16 ? 16 : 8, context);
         result.Orientation = header.Info.Orientation;
         uint adlerA = 1, adlerB = 0;
+        var bufferedBytes = 0;
         try
         {
             if (header.Interlace == 0) ReadPass(0, 0, 1, 1);
@@ -195,6 +195,7 @@ internal static class PngCodec
             throw new ImageDataException("Invalid PNG compressed data.", exception);
         }
         catch { result.Dispose(); throw; }
+        finally { zlib.Dispose(); context.Release(bufferedBytes); }
         return result;
 
         void ReadPass(int startX, int startY, int stepX, int stepY)
@@ -210,6 +211,14 @@ internal static class PngCodec
             var row = new byte[rowBytes];
             try
             {
+                // Only the single-pass, noncancelable case can preflight all
+                // remaining row work and memory without moving a failure ahead.
+                if (header.Interlace == 0 && !context.Cancellation.CanBeCanceled
+                    && context.RemainingWork >= height * (rowBytes * 6L + width * 4L)
+                    && context.RemainingWorkingBytes >= PngInflatedReader.BufferBytes)
+                {
+                    bufferedBytes = PngInflatedReader.BufferBytes; context.Reserve(bufferedBytes); zlib.EnableBuffer();
+                }
                 for (var y = 0; y < height; y++)
                 {
                     context.Work(rowBytes * 6L + width * 4L);
@@ -625,7 +634,7 @@ internal static class PngCodec
         }
     }
 
-    private static void ReadExactly(Stream stream, Span<byte> buffer, CancellationToken cancellation)
+    private static void ReadExactly(PngInflatedReader stream, Span<byte> buffer, CancellationToken cancellation)
     {
         while (!buffer.IsEmpty)
         {

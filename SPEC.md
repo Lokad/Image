@@ -143,6 +143,10 @@ Concatenated IDAT bytes may reuse one released exact-size private array, retaine
 up to 1 MiB independently of pixel storage. Every byte is copied before framing;
 the lease ends after the inflater and streams are disposed, including failures.
 Input admission remains exact and live leases never share storage.
+Noninterlaced, noncancelable decoding may admit 8 KiB of buffered BCL output when
+all remaining row work and memory fit. Tight budgets retain unbuffered reads.
+A speculative inflater error reopens the owned input, skips only delivered bytes
+and resumes original reads, preserving row/filter/palette failure ordering.
 Validate the zlib header and Adler checksum at the actual stream boundary;
 ignore unused trailing IDAT bytes as permitted by PNG section 11.2.3. Future
 reserved chunk bits follow unknown-chunk handling: unknown critical chunks fail,

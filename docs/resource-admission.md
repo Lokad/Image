@@ -18,6 +18,11 @@ PNG decode has a separate one-array cache for concatenated IDAT bytes, capped at
 1 MiB. Exact-size leases are fully copied before framing and returned after all
 inflater streams are disposed, including failure exits. Larger inputs remain
 uncached. Active input/result byte admission and error ordering are unchanged.
+Noninterlaced, noncancelable PNG output buffering admits a separate 8 KiB only
+after original pass-row admission and a preflight of all remaining row work.
+Insufficient budgets keep original reads; the buffer remains admitted through
+inflater disposal. Speculative compressed-data failures resume the original
+read boundary from the already-delivered byte position.
 
 `MaxDimension` and `MaxPixels` constrain newly created buffers and codec input
 geometry. A transform can use an existing larger buffer to produce a smaller

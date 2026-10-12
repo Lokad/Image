@@ -43,7 +43,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGB8, None](../benchmarks/WARM-PNG-RGB8-ROW.md) | 2,139.12 | 1,510.62 | 1.416 / 1.440 | 727,305 | Confirmed |
 | [PNG gray16, None](../benchmarks/WARM-PNG-GRAY16-ROW.md) | 1,743.26 | 960.42 | 1.815 / 1.837 | 1,331,046 | Confirmed |
 | [PNG gray-alpha16, None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ROW.md) | 3,195.37 | 1,798.83 | 1.776 / 1.785 | 1,573,649 | Confirmed |
-| [PNG palette8 + tRNS, None](../benchmarks/WARM-PNG-INPUT-REUSE.md) | 867.02 | 361.58 | 2.398 / 2.597 | 2,760 | Above 2x / open |
+| [PNG palette8 + tRNS, None](../benchmarks/WARM-PNG-INFLATE-BUFFER.md) | 737.54 | 363.65 | 2.028 / 2.446 | 10,976 | Above 2x / open |
 | [PNG palette4 + tRNS → RGBA8, None](../benchmarks/WARM-PNG-DECODE-REUSE.md) | 214.75 | 136.64 | 1.572 / 1.617 | 13,656 | Confirmed |
 | [PNG opaque gray1 → RGBA8, None](../benchmarks/WARM-PNG-GRAY1-ROW.md) | 299.69 | 305.79 | 0.980 / 1.001 | 537,700 | Confirmed |
 | [PNG opaque gray4 → RGBA8, None](../benchmarks/WARM-PNG-GRAY4-REUSE.md) | 220.61 | 146.67 | 1.504 / 1.532 | 13,544 | Confirmed |
@@ -129,14 +129,13 @@ timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-The latest [PNG input reuse](../benchmarks/WARM-PNG-INPUT-REUSE.md) lowers palette8
-allocation 96.9%, to 2,760 B/op. Its 2.398x / upper 2.597x screen remains above
-target; a small timing change is not independently certified. Input retention is
-capped separately at 1 MiB, pixels at 4 MiB; first-use and retained owners stay
-distinct. [Gray4](../benchmarks/WARM-PNG-GRAY4-REUSE.md) and palette4 remain
-confirmed at their reported sources. Stop tuning passing pairs; remaining gaps,
-other profiles and the full required scope stay open. Failed guards and reverted
-experiments remain recorded.
+The latest [buffered PNG inflation](../benchmarks/WARM-PNG-INFLATE-BUFFER.md)
+reduces palette8 mean 14.9%, to 2.028x / upper 2.446x with 10,976 B/op. It remains
+open; no long repeat was launched. A bounded 32 KiB follow-up gave no material
+timing benefit, so 8 KiB is retained. Original memory/work thresholds and failure
+ordering are preserved through fallback. Confirmed rows remain at their reported
+sources; other profiles and the full required scope stay open. Earlier failed
+guards and reverted experiments remain recorded.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

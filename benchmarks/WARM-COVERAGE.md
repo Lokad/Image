@@ -117,3 +117,13 @@ about 35% in framing and 19.7% in palette expansion. Allocation is now small;
 prioritize substantive parsing/inflation before further small allocation tuning.
 Other reported rows retain their measured sources; held/first-use owners and
 material unknowns remain open. No average or narrowed scope completes parity.
+
+The [buffered inflation round](WARM-PNG-INFLATE-BUFFER.md) reduces palette8 mean
+14.9%, to 2.028x / upper 2.446x. Both quiet guards pass; no long confirmation.
+8 KiB is admitted only for single-pass, noncancelable decodes with complete row
+work preflight. Speculative compressed errors replay from delivered bytes with
+original reads. Tight budgets, cancelable calls and Adam7 retain the original path.
+One larger-buffer follow-up is not retained. Remaining profile cost is about41%
+framing,30% BCL inflation and24% palette expansion; prioritize a substantial
+remaining primitive. Other rows retain their earlier measured sources and all
+required/material unknowns remain open.

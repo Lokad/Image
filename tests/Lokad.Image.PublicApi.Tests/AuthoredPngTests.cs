@@ -112,6 +112,81 @@ public sealed class AuthoredPngTests
     }
 
     [Theory]
+    [InlineData(-1, false)] [InlineData(-1, true)]
+    [InlineData(0, false)] [InlineData(0, true)]
+    [InlineData(4, false)] [InlineData(4, true)]
+    [InlineData(8, false)] [InlineData(8, true)]
+    [InlineData(32, false)] [InlineData(32, true)]
+    public void InflaterReadAheadRetainsFilterAndChecksumFailureOrder(int badRow, bool badChecksum)
+    {
+        var frame = new AuthoredPng.Frame("inflater-failure-order", 6, 8, 513, 33, false);
+        var rows = AuthoredPng.FilteredRows(frame);
+        if (badRow >= 0) rows[badRow * (513 * 4 + 1)] = 5;
+        var compressed = AuthoredPng.StoredZlib(rows);
+        if (badChecksum) compressed[^1] ^= 1;
+        var encoded = AuthoredPng.Wrap(frame, compressed);
+        using var cancellation = new CancellationTokenSource();
+        var direct = Record.Exception(() => { using var image = ImageCodec.Decode(encoded); });
+        var original = Record.Exception(() => { using var image = ImageCodec.Decode(encoded, cancellationToken: cancellation.Token); });
+        Assert.Equal(original?.GetType(), direct?.GetType()); Assert.Equal(original?.Message, direct?.Message);
+        if (badRow >= 0) Assert.Equal("Invalid PNG row filter.", direct?.Message);
+        else if (!badChecksum) Assert.Null(direct);
+    }
+
+    [Fact]
+    public void InflaterBufferPreservesOriginalMemoryAndWorkThresholds()
+    {
+        var frame = new AuthoredPng.Frame("inflater-admission", 6, 8, 513, 9, false);
+        var compressed = AuthoredPng.StoredZlib(AuthoredPng.FilteredRows(frame));
+        var encoded = AuthoredPng.Wrap(frame, compressed); var expected = AuthoredPng.Expected(frame);
+        var peak = encoded.Length + (long)compressed.Length + 513 * 9 * 4L + 256 * 1024 + 513 * 8;
+        foreach (var extra in new[] { 0, 8191, 8192 })
+        {
+            using var image = ImageCodec.Decode(encoded, new DecodeOptions { Limits = ImageLimits.Default with { MaxWorkingBytes = peak + extra } });
+            Assert.Equal(expected, OriginalPixels.Bytes(image));
+        }
+        Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(encoded, new DecodeOptions { Limits = ImageLimits.Default with { MaxWorkingBytes = peak - 1 } }));
+        using var cancellation = new CancellationTokenSource();
+        long low = 1, high = ImageLimits.Default.MaxWork;
+        while (low < high)
+        {
+            var middle = low + (high - low) / 2;
+            try { using var image = ImageCodec.Decode(encoded, new DecodeOptions { Limits = ImageLimits.Default with { MaxWork = middle } }, cancellation.Token); high = middle; }
+            catch (ImageLimitException) { low = middle + 1; }
+        }
+        foreach (var work in new[] { low - 1, low })
+        {
+            var options = new DecodeOptions { Limits = ImageLimits.Default with { MaxWork = work } };
+            var direct = Record.Exception(() => { using var image = ImageCodec.Decode(encoded, options); });
+            var original = Record.Exception(() => { using var image = ImageCodec.Decode(encoded, options, cancellation.Token); });
+            Assert.Equal(original?.GetType(), direct?.GetType()); Assert.Equal(original?.Message, direct?.Message);
+        }
+    }
+
+    [Theory]
+    [InlineData(0)] [InlineData(16)]
+    public void InflaterReadAheadRetainsPaletteAndChecksumFailureOrder(int badRow)
+    {
+        var frame = new AuthoredPng.Frame("inflater-palette-order", 3, 8, 513, 17, false);
+        var rows = new byte[(513 + 1) * 17]; rows[badRow * (513 + 1) + 1] = 1;
+        var compressed = AuthoredPng.StoredZlib(rows); compressed[^1] ^= 1;
+        var originalEncoded = AuthoredPng.Wrap(frame, compressed);
+        using var output = new MemoryStream(); output.Write(originalEncoded.AsSpan(0, 8));
+        for (var offset = 8; offset < originalEncoded.Length;)
+        {
+            var length = System.Buffers.Binary.BinaryPrimitives.ReadInt32BigEndian(originalEncoded.AsSpan(offset));
+            var name = Encoding.ASCII.GetString(originalEncoded.AsSpan(offset + 4, 4));
+            var payload = originalEncoded.AsSpan(offset + 8, length);
+            AuthoredPng.Chunk(output, name, name == "PLTE" ? payload[..3] : name == "tRNS" ? payload[..1] : payload);
+            offset += length + 12;
+        }
+        var encoded = output.ToArray(); using var cancellation = new CancellationTokenSource();
+        var direct = Record.Exception(() => { using var image = ImageCodec.Decode(encoded); });
+        var original = Record.Exception(() => { using var image = ImageCodec.Decode(encoded, cancellationToken: cancellation.Token); });
+        Assert.NotNull(original); Assert.Equal(original.GetType(), direct?.GetType()); Assert.Equal(original.Message, direct?.Message);
+    }
+
+    [Theory]
     [InlineData(false)] [InlineData(true)]
     public void WidePaletteRowsRetainExactPixelsMemoryThresholdAndWorkFailure(bool interlace)
     {
