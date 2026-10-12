@@ -175,6 +175,11 @@ including hidden RGB. Bounded AVX2 byte shuffles process eight pixels; scalar
 tails and other hardware preserve all samples. Dense Adam7 passes qualify,
 while sparse passes retain their mapping. No workspace or admission change is
 introduced; cancellation is checked at most every 4096 pixels.
+Dense gray-alpha16 rows expand directly into native-endian RGBA16, retaining
+every gray/alpha sample and hidden RGB. Bounded 16-byte AVX2 groups produce four
+pixels; scalar tails and other hardware preserve full samples. Dense Adam7 passes
+qualify; sparse mapping stays unchanged. No workspace/admission change is
+introduced and cancellation is checked at most every 4096 pixels.
 The registered FFmpeg 8.1 decoder ignores tRNS alpha for 1/2/4-bit grayscale.
 For these cases the reference pipeline applies the declared transparent gray key
 through FFmpeg's [colorkey filter](https://ffmpeg.org/ffmpeg-filters.html#colorkey),

@@ -42,6 +42,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG gray-alpha8, None](../benchmarks/WARM-PNG-GRAY-ALPHA8-ROW.md) | 1,574.21 | 1,147.07 | 1.372 / 1.409 | 661,014 | Confirmed |
 | [PNG RGB8, None](../benchmarks/WARM-PNG-RGB8-ROW.md) | 2,139.12 | 1,510.62 | 1.416 / 1.440 | 727,305 | Confirmed |
 | [PNG gray16, None](../benchmarks/WARM-PNG-GRAY16-ROW.md) | 1,743.26 | 960.42 | 1.815 / 1.837 | 1,331,046 | Confirmed |
+| [PNG gray-alpha16, None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ROW.md) | 3,195.37 | 1,798.83 | 1.776 / 1.785 | 1,573,649 | Confirmed |
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-AC-FUSED.md) | 1,267.57 | 682.73 | 1.857 / 1.880 | 1,221,545 | Confirmed |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG420-BULK.md) | 1,721.81 | 1,007.73 | 1.709 / 1.719 | 1,619,530 | Confirmed |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-COVERAGE-QUIET.md) | 2,087.01 | 1,336.37 | 1.562 / 1.567 | 1,978,646 | Confirmed |
@@ -124,13 +125,11 @@ timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-A [literal-classifier experiment](../benchmarks/WARM-PNG-LITERAL-CLASSIFIER-REJECTED.md)
-was reverted after a 3.1% screen improvement; the gray8 row retains its accepted
-implementation and measured result. The gray-alpha8 row confirms 1.372x / upper
-1.409x after a 59.0% screen reduction. The RGB8 row confirms 1.416x / upper 1.440x
-after a 51.9% screen reduction. The gray16 row confirms 1.815x / upper 1.837x
-after a 56.8% reduction; its failed first confirmation guard remains unscored.
-Gray-alpha16 expansion is the next coverage screen.
+The latest [gray-alpha16 row](../benchmarks/WARM-PNG-GRAY-ALPHA16-ROW.md)
+confirms 1.776x / upper 1.785x after a 38.3% screen reduction. Evidence for the
+rejected [literal classifier](../benchmarks/WARM-PNG-LITERAL-CLASSIFIER-REJECTED.md)
+remains retained; the failed [gray16 guard](../benchmarks/WARM-PNG-GRAY16-ROW.md)
+remains unscored. Indexed-palette8 expansion is the next coverage screen.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

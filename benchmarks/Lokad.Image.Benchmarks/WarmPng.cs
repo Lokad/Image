@@ -8,7 +8,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16 }
+public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16 }
 
 [MemoryDiagnoser]
 public class WarmPng
@@ -29,15 +29,15 @@ public class WarmPng
         var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
         var result = selection is null ? new[] { WarmPngCase.Decode8 } : selection.Split(',')
             .Select(value => Enum.TryParse<WarmPngCase>(value, out var parsed) && Enum.IsDefined(parsed)
-                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8 or DecodeGray16.")).ToArray();
+                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16 or DecodeGrayAlpha16.")).ToArray();
         if (result.Length is < 1 or > 3 || result.Distinct().Count() != result.Length)
             throw new ArgumentException("Choose one to three distinct PNG cases.");
         return result;
     }
-    private int Depth => Case is WarmPngCase.Decode16 or WarmPngCase.Encode16 or WarmPngCase.DecodeAdam7_16 or WarmPngCase.DecodePaeth16 or WarmPngCase.DecodeRgb16 or WarmPngCase.DecodeGray16 ? 16 : 8;
+    private int Depth => Case is WarmPngCase.Decode16 or WarmPngCase.Encode16 or WarmPngCase.DecodeAdam7_16 or WarmPngCase.DecodePaeth16 or WarmPngCase.DecodeRgb16 or WarmPngCase.DecodeGray16 or WarmPngCase.DecodeGrayAlpha16 ? 16 : 8;
     private bool Rgb => Case is WarmPngCase.DecodeRgb16 or WarmPngCase.DecodeRgb8;
     private bool Gray => Case is WarmPngCase.DecodeGray8 or WarmPngCase.DecodeGray16;
-    private bool GrayAlpha => Case == WarmPngCase.DecodeGrayAlpha8;
+    private bool GrayAlpha => Case is WarmPngCase.DecodeGrayAlpha8 or WarmPngCase.DecodeGrayAlpha16;
     private int ColorType => GrayAlpha ? 4 : Gray ? 0 : Rgb ? 2 : 6;
     private bool Encode => Case is WarmPngCase.Encode8 or WarmPngCase.Encode16;
     private bool Interlaced => Case == WarmPngCase.DecodeAdam7_16;
@@ -95,7 +95,7 @@ public class WarmPng
             ValidatePng(encoded); ValidateManaged();
             if (Rgb || Gray || GrayAlpha)
             {
-                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", GrayAlpha ? "png-gray-alpha8" : Gray ? "png-gray" + Depth : "png-rgb" + Depth);
+                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", GrayAlpha ? "png-gray-alpha" + Depth : Gray ? "png-gray" + Depth : "png-rgb" + Depth);
                 Directory.CreateDirectory(directory);
                 foreach (var (name, bytes) in new[] { ("input.png", encoded), ("expected.raw", pixels) })
                 {
@@ -225,7 +225,9 @@ public class WarmPng
                 for (var x = startX; x < source.Width; x += stepX)
                 for (var i = 0; i < bytesPerPixel; i++)
                 {
-                    var original = pixels[y * source.Stride + x * Depth / 8 * 4 + (GrayAlpha && i == 1 ? 3 : Depth == 16 ? i ^ 1 : i)];
+                    var sampleByte = Depth == 16 ? i ^ 1 : i;
+                    var sourceByte = GrayAlpha && sampleByte >= Depth / 8 ? sampleByte + 2 * Depth / 8 : sampleByte;
+                    var original = pixels[y * source.Stride + x * Depth / 8 * 4 + sourceByte];
                     var prediction = 0;
                     if (Paeth)
                     {
@@ -277,7 +279,7 @@ public class WarmPng
                 nativeOutputSha256 = JpegBenchmarkCase.HashFile(state.NativeOutput),
                 interlace = Interlaced ? 1 : 0,
                 colorType = ColorType,
-                rasterRecipe = GrayAlpha ? "Existing original RGBA8 raster; red retained as gray, green/blue set to red, alpha unchanged including hidden RGB. No additional original image."
+                rasterRecipe = GrayAlpha ? $"Existing original RGBA{Depth} raster; red retained as gray, green/blue set to red, alpha unchanged including hidden RGB. No additional original image."
                     : Gray ? $"Existing original RGBA{Depth} raster; red retained as gray, green/blue set to red, alpha set to {(Depth == 16 ? 65535 : 255)}. No additional original image."
                     : Rgb ? $"Existing original RGBA{Depth} raster; RGB unchanged, alpha set to {(Depth == 16 ? 65535 : 255)} for RGB PNG. No additional original image." : "Existing original RGBA raster, all samples unchanged.",
                 originalRasterSha256 = JpegBenchmarkCase.Hash(HorizontalFlipInput.Create(Depth)),
@@ -296,7 +298,7 @@ public class WarmPng
                 nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
                 boundary = Encode
                     ? "Warm RGBA input to complete owned PNG: fresh managed MemoryStream (creation, growth, encode and disposal included; no redundant ToArray); native codec context/packet wrapper reused, real independently owned packet acquisition, encode and release included. Both level 6/filter None. For RGBA16, native LE-to-BE full-frame sample conversion runs inside every operation, using a reused prepared frame; managed conversion/row storage is included in public EncodePng. IPC, file IO, hashes and validation excluded."
-                    : "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE, RGB48BE-to-RGBA64LE, GRAY16BE-to-RGBA64LE, RGB24-to-RGBA, GRAY8-to-RGBA or YA8-to-RGBA FFmpeg conversion and second output allocation included natively; direct RGBA8 requires no conversion. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded."
+                    : "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE, RGB48BE-to-RGBA64LE, GRAY16BE-to-RGBA64LE, YA16BE-to-RGBA64LE, RGB24-to-RGBA, GRAY8-to-RGBA or YA8-to-RGBA FFmpeg conversion and second output allocation included natively; direct RGBA8 requires no conversion. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
             Console.WriteLine("Validated warm PNG pair: " + path);
         }

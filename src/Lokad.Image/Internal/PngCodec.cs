@@ -254,6 +254,11 @@ internal static class PngCodec
                         var offset = (startY + y * stepY) * result.Stride + startX * 4;
                         CopyGrayAlpha8Row(row, result.Pixels.Slice(offset, width * 4), context.Cancellation);
                     }
+                    else if (header.ColorType == 4 && header.Depth == 16 && stepX == 1)
+                    {
+                        var offset = (startY + y * stepY) * result.Stride + startX * 8;
+                        CopyGrayAlpha16Row(row, result.Pixels.Slice(offset, width * 8), context.Cancellation);
+                    }
                     else
                     {
                         for (var x = 0; x < width; x++)
@@ -395,6 +400,35 @@ internal static class PngCodec
             if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
             var output = destination.Slice(x * 4, 4); var gray = row[x * 2];
             output[0] = gray; output[1] = gray; output[2] = gray; output[3] = row[x * 2 + 1];
+        }
+    }
+
+    internal static void CopyGrayAlpha16Row(ReadOnlySpan<byte> row, Span<byte> destination, CancellationToken cancellation)
+    {
+        // PNG section 7.3: retain full big-endian gray/alpha samples. Replicate
+        // gray into native-endian RGB, including hidden RGB under zero alpha.
+        var pixels = row.Length / 4; var x = 0;
+        if (Avx2.IsSupported && BitConverter.IsLittleEndian)
+        {
+            // Each lane selects two pixels from a copy of four complete inputs,
+            // reversing sample bytes while repeating gray and retaining alpha.
+            var shuffle = Vector256.Create(
+                (byte)1, 0, 1, 0, 1, 0, 3, 2, 5, 4, 5, 4, 5, 4, 7, 6,
+                9, 8, 9, 8, 9, 8, 11, 10, 13, 12, 13, 12, 13, 12, 15, 14);
+            for (; x <= pixels - 4; x += 4)
+            {
+                if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+                var packed = MemoryMarshal.Read<Vector128<byte>>(row[(x * 4)..]);
+                Avx2.Shuffle(Vector256.Create(packed, packed), shuffle).CopyTo(destination[(x * 8)..]);
+            }
+        }
+        var samples = MemoryMarshal.Cast<byte, ushort>(destination);
+        for (; x < pixels; x++)
+        {
+            if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+            var input = row.Slice(x * 4, 4); var gray = BinaryPrimitives.ReadUInt16BigEndian(input);
+            samples[x * 4] = gray; samples[x * 4 + 1] = gray; samples[x * 4 + 2] = gray;
+            samples[x * 4 + 3] = BinaryPrimitives.ReadUInt16BigEndian(input[2..]);
         }
     }
 
