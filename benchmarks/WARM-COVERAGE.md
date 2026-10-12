@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8, gray16 and gray-alpha8/16 None confirmed; RGB16, gray8 and palette8 None screens above 2x | RGB16/gray8/palette8 parity; packed expansion; other filter implementations |
+| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8, gray16, gray-alpha8/16 and opaque gray1 None confirmed; RGB16, gray8 and palette8 None screens above 2x | RGB16/gray8/palette8 parity; packed gray2/4 and packed palette; other filter implementations |
 | PNG encode | RGBA8/16, level 6/None | RGB and gray projections; compression policies with materially different work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
@@ -58,5 +58,13 @@ by 38.3%, confirming 1.776x / upper 1.785x. Stop tuning that fixed pair. The
 [palette8 row](WARM-PNG-PALETTE8-ROW.md) lowers a new 7.895x screen by
 65.7% to 2.715x, upper 2.954x; it remains open. Its profile places 33.7% in
 framing validation and 20.1% in palette lookup. Prioritize this largest measured
-matched gap with one substantial framing primitive; preserve checks and avoid
-repeating the rejected small changes.
+matched gap with a substantial strategy; preserve checks and avoid repeating
+the rejected small changes. The subsequent audit below limits the proposed
+four-literal opportunity and records why a larger expansion gap was selected.
+
+The [packed-gray row](WARM-PNG-GRAY1-ROW.md) lowers a new gray1 8.323x screen
+by 88.3%, confirming 0.980x / upper 1.001x. The same safe kernel handles depths
+1/2/4 correctly; depth 2/4 performance remains open. A palette literal-width audit
+finds only 46.5% eligible four-eight-bit groups, a roughly 11% opportunity under
+uniform per-literal cost before overhead. No framing experiment was launched.
+Stop tuning gray1; establish one gray4/native boundary next using the same raster.
