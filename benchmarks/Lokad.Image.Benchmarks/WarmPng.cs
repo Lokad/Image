@@ -8,7 +8,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmPngCase { Encode8, Decode8, Decode16 }
+public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16 }
 
 [MemoryDiagnoser]
 public class WarmPng
@@ -27,15 +27,15 @@ public class WarmPng
     public static WarmPngCase[] SelectedCases()
     {
         var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
-        var result = selection is null ? Enum.GetValues<WarmPngCase>() : selection.Split(',')
+        var result = selection is null ? new[] { WarmPngCase.Encode8, WarmPngCase.Decode8, WarmPngCase.Decode16 } : selection.Split(',')
             .Select(value => Enum.TryParse<WarmPngCase>(value, out var parsed) && Enum.IsDefined(parsed)
-                ? parsed : throw new ArgumentException("Choose Encode8, Decode8 or Decode16.")).ToArray();
+                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, Decode8 or Decode16.")).ToArray();
         if (result.Length is < 1 or > 3 || result.Distinct().Count() != result.Length)
             throw new ArgumentException("Choose one to three distinct PNG cases.");
         return result;
     }
-    private int Depth => Case == WarmPngCase.Decode16 ? 16 : 8;
-    private bool Encode => Case == WarmPngCase.Encode8;
+    private int Depth => Case is WarmPngCase.Decode16 or WarmPngCase.Encode16 ? 16 : 8;
+    private bool Encode => Case is WarmPngCase.Encode8 or WarmPngCase.Encode16;
 
     [GlobalSetup]
     public void Setup()
@@ -69,6 +69,20 @@ public class WarmPng
             File.WriteAllBytes(rawPath, pixels); File.WriteAllBytes(state.Input, Encode ? pixels : encoded);
             native = new NativeWarmReference(state, Depth, cpu, Encode ? "png-encode" : "png-decode", rawPath);
             ValidateNative();
+            if (Encode && Depth == 16)
+            {
+                var arguments = new List<string> { "-v", "error", "-threads", "1", "-filter_threads", "1", "-cpuflags", "0",
+                    "-f", "rawvideo", "-pix_fmt", "rgba64le", "-s", "513x259", "-i", "pipe:0",
+                    "-frames:v", "1", "-c:v", "png", "-threads", "1", "-compression_level", "6", "-pred", "none",
+                    "-pix_fmt", "rgba64be", "-f", "image2pipe", "pipe:1" };
+                var scalar = OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), pixels);
+                ValidatePng(scalar);
+                using (var decoded = ImageCodec.Decode(scalar)) ValidatePixels(decoded);
+                arguments.RemoveRange(arguments.IndexOf("-cpuflags"), 2);
+                var normal = OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), pixels);
+                ValidatePng(normal);
+                using (var decoded = ImageCodec.Decode(normal)) ValidatePixels(decoded);
+            }
             before = native.Measure(smoke, sampleCount: sampleCount);
             ready = true;
         }
@@ -188,12 +202,16 @@ public class WarmPng
                 nativeOutputSha256 = JpegBenchmarkCase.HashFile(state.NativeOutput),
                 compression = "BCL Optimal (zlib default level 6) / FFmpeg level 6; filter None; noninterlaced RGBA",
                 managedIdatBytes = IdatBytes(encoded), nativeIdatBytes = Encode ? IdatBytes(File.ReadAllBytes(state.NativeOutput)) : IdatBytes(encoded),
-                allRgbaSamplesExact = true, sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
+                allRgbaSamplesExact = true, alphaExact = true, hiddenRgbExact = true,
+                nativeCliNormalScalarPixelsExact = Encode && Depth == 16,
+                nativeEndianRepackingTimed = Encode && Depth == 16, nativeEndianWorkspaceReused = Encode && Depth == 16,
+                nativeSampleTargetMilliseconds = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_NATIVE_SAMPLE_MS") ?? "200",
+                sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmPng).Assembly.Location), nativeBuild = native.BuildIdentity,
                 nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
                 boundary = Encode
-                    ? "Warm RGBA input to complete owned PNG: fresh managed MemoryStream (creation, growth, encode and disposal included; no redundant ToArray); native codec context/packet wrapper reused, real independently owned packet acquisition, encode and release included. Both level 6/filter None. IPC, file IO, hashes and validation excluded."
+                    ? "Warm RGBA input to complete owned PNG: fresh managed MemoryStream (creation, growth, encode and disposal included; no redundant ToArray); native codec context/packet wrapper reused, real independently owned packet acquisition, encode and release included. Both level 6/filter None. For RGBA16, native LE-to-BE full-frame sample conversion runs inside every operation, using a reused prepared frame; managed conversion/row storage is included in public EncodePng. IPC, file IO, hashes and validation excluded."
                     : "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE conversion and second output allocation included natively; no conversion for RGBA8. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
             Console.WriteLine("Validated warm PNG pair: " + path);

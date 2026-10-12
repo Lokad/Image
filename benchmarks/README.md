@@ -305,6 +305,12 @@ instructions, then use `-WarmFamily Png`. The initial selection contains only
 Encode8, Decode8 and Decode16 on the same two original rasters. Add
 `-WarmCases Decode16` or `-WarmCases Decode8,Decode16` to iterate affected
 decode paths without running unrelated cases or quality calibration.
+Explicit `-WarmCases Encode16` adds required RGBA16 encode coverage on the same
+original raster, while retaining the three-case default and three-pair cap.
+The [bulk chunk CRC round](WARM-PNG16-ENCODE-CRC.md) removes bitwise encoder
+payload CRC work without changing the encoded PNG bytes or compression settings.
+Native sample endian conversion and prepared-frame reuse are declared in its
+workload boundary and evidence.
 
 `-WarmFamily Jpeg` selects one RGBA8 4:4:4 encode pair on the existing 513x259
 raster. Follow the reference-worker instructions to prepare one native quality

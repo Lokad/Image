@@ -134,10 +134,12 @@ python3 tools/WarmReference/verify-png-linux.py --cpu 0
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily Png -Cpu 0 -NoBuild
 # Iterate one measured gap without adding images or unrelated cases.
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily Png -WarmCases Decode16 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Png -WarmCases Encode16 -Cpu 0 -NoBuild
 ```
 
-The three pairs are RGBA8 encode, RGBA8 decode and RGBA16 decode on the same two
-original 513x259 rasters as horizontal flip. Both decoders consume identical
+The three default pairs are RGBA8 encode, RGBA8 decode and RGBA16 decode on the same two
+original 513x259 rasters as horizontal flip. RGBA16 encode is explicitly selectable
+as Encode16; any selection is capped at three distinct pairs. Both decoders consume identical
 resident PNG bytes and produce independent owned RGBA pixels. Native 16-bit
 decode includes acquiring a second owned frame and converting big-endian PNG
 samples to little-endian RGBA16; padded rows need no packing copy. Managed decode
@@ -149,6 +151,11 @@ be within 5% before timing. Managed output is a fresh MemoryStream, including
 creation, growth, encoding and disposal; no redundant ToArray is timed. Native
 encoding includes independent packet acquisition, encoding and release.
 Contexts, resident input and native wrappers are reused outside the intervals.
+RGBA16 encoding includes little-to-big-endian conversion of every sample inside
+each native operation, using a reused prepared big-endian frame. Managed row
+conversion/storage is included in the public EncodePng call. The
+[bulk encoder CRC round](../../benchmarks/WARM-PNG16-ENCODE-CRC.md) changes only
+managed chunk CRC computation and preserves the entire encoded PNG byte stream.
 For independent still PNGs, every native encoded frame is forced intra and
 every decoded input is marked key. Reuse without those settings can exercise
 sequence delta frames and fails the intended workload.

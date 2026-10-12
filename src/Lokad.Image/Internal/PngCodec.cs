@@ -403,10 +403,8 @@ internal static class PngCodec
         BinaryPrimitives.WriteInt32BigEndian(head, payload.Length); type.CopyTo(head[4..]);
         output.Write(head); output.Write(payload);
         // Incremental CRC avoids duplicating large payload buffers.
-        uint crc = uint.MaxValue;
-        foreach (var value in type) crc = UpdateCrc(crc, value);
-        foreach (var value in payload) crc = UpdateCrc(crc, value);
-        Span<byte> tail = stackalloc byte[4]; BinaryPrimitives.WriteUInt32BigEndian(tail, ~crc); output.Write(tail);
+        var crc = Crc32.ComputeChunk(type, payload);
+        Span<byte> tail = stackalloc byte[4]; BinaryPrimitives.WriteUInt32BigEndian(tail, crc); output.Write(tail);
     }
 
     private static uint UpdateCrc(uint crc, byte value)

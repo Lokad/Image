@@ -69,6 +69,23 @@ public sealed class Crc32Tests
         Assert.Equal(0u, Crc32.Compute([], cancellation.Token));
     }
 
+    [Theory]
+    [InlineData(0)] [InlineData(1)] [InlineData(7)] [InlineData(8)]
+    [InlineData(15)] [InlineData(16)] [InlineData(17)] [InlineData(31)]
+    [InlineData(32)] [InlineData(33)] [InlineData(4095)] [InlineData(4096)]
+    [InlineData(4097)] [InlineData(65535)] [InlineData(65536)]
+    public void ChunkTypeSeedAndPayloadTailsMatchIndependentRecurrence(int length)
+    {
+        foreach (var type in new[] { "IHDR"u8.ToArray(), "IDAT"u8.ToArray(), "IEND"u8.ToArray(), "tEXt"u8.ToArray() })
+        {
+            var bytes = Enumerable.Range(0, length + 9).Select(i => (byte)(i * 53 + 11)).ToArray();
+            var original = bytes.ToArray(); var payload = bytes.AsSpan(3, length);
+            var joined = new byte[type.Length + payload.Length]; type.CopyTo(joined, 0); payload.CopyTo(joined.AsSpan(type.Length));
+            Assert.Equal(Bitwise(joined), Crc32.ComputeChunk(type, payload));
+            Assert.Equal(original, bytes);
+        }
+    }
+
     private static uint Bitwise(ReadOnlySpan<byte> bytes)
     {
         // Independent literal PNG polynomial recurrence, with no production tables.

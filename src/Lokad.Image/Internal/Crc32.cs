@@ -135,4 +135,41 @@ internal static class Crc32
         }
         return ~crc;
     }
+    public static uint ComputeChunk(ReadOnlySpan<byte> type, ReadOnlySpan<byte> bytes)
+    {
+        var crc = uint.MaxValue;
+        // Continue one reflected PNG polynomial state across type and payload.
+        // This avoids copying them into a temporary contiguous chunk buffer.
+        foreach (var value in type) crc = Table[(crc ^ value) & 255] ^ (crc >> 8);
+        var i = 0;
+        if (Pclmulqdq.IsSupported && Sse2.IsSupported && bytes.Length >= 16)
+        {
+            var input = ReadPolynomial(bytes.Slice(0, 16));
+            var folded = Sse2.Xor(Pclmulqdq.CarrylessMultiply(
+                Vector128.Create(input.GetElement(1) >> 32 ^ ReverseBits(crc), 0UL), FoldFactors, 0),
+                Sse2.ShiftLeftLogical128BitLane(input.AsByte(), 4).AsUInt64());
+            for (i = 16; i <= bytes.Length - 16; i += 16)
+            {
+                input = ReadPolynomial(bytes.Slice(i, 16));
+                var adjusted = Sse2.Xor(folded, Vector128.Create(input.GetElement(1) >> 32, 0UL));
+                folded = Sse2.Xor(Sse2.Xor(Pclmulqdq.CarrylessMultiply(adjusted, FoldFactors, 0),
+                    Pclmulqdq.CarrylessMultiply(adjusted, FoldFactors, 0x11)),
+                    Sse2.ShiftLeftLogical128BitLane(input.AsByte(), 4).AsUInt64());
+            }
+            crc = Reduce(folded);
+        }
+        for (; i <= bytes.Length - 8; i += 8)
+        {
+            var word = BinaryPrimitives.ReadUInt64LittleEndian(bytes.Slice(i, 8)) ^ crc;
+            crc = Table[7 * 256 + (int)(word & 255)] ^ Table[6 * 256 + (int)(word >> 8 & 255)]
+                ^ Table[5 * 256 + (int)(word >> 16 & 255)] ^ Table[4 * 256 + (int)(word >> 24 & 255)]
+                ^ Table[3 * 256 + (int)(word >> 32 & 255)] ^ Table[2 * 256 + (int)(word >> 40 & 255)]
+                ^ Table[256 + (int)(word >> 48 & 255)] ^ Table[(int)(word >> 56)];
+        }
+        for (; i < bytes.Length; i++)
+        {
+            crc = Table[(crc ^ bytes[i]) & 255] ^ (crc >> 8);
+        }
+        return ~crc;
+    }
 }
