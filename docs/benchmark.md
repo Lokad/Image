@@ -17,7 +17,7 @@ Ratio = Lokad.Image / the faster FFmpeg pre/post mean; lower is faster. Upper is
 the retained conservative confidence bound, taking the larger filtered/all-actual
 bound where available. **Confirmed** requires an independent quiet repeat and
 upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
-The latest PNG16 None repeat uses `exclusive-vm-idle-v2`: live job checks and
+The latest PNG16 None and VP8 repeats use `exclusive-vm-idle-v2`: live job checks and
 five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
 Earlier receipts retain their original load guard and its failures.
 
@@ -39,7 +39,7 @@ Earlier receipts retain their original load guard and its failures.
 | [JPEG progressive 4:2:0](../benchmarks/WARM-JPEG-PROGRESSIVE420.md) | 3,646.81 | 1,938.47 | 1.881 / 1.894 | 1,637,521 | Confirmed |
 | [JPEG progressive 4:2:2](../benchmarks/WARM-JPEG-PROGRESSIVE422.md) | 3,882.57 | 2,210.07 | 1.757 / 1.781 | 1,996,661 | Confirmed |
 | [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-MASK.md) | 6,217.13 | 3,342.33 | 1.860 / 1.878 | 2,682,364 | Confirmed |
-| [WebP VP8 + alpha](../benchmarks/WARM-VP8-COLOR-BLOCK.md) | 11,788.99 | 6,066.98 | 1.943 / 1.956 | 1,966,667 | Quiet guard failed / open |
+| [WebP VP8 + alpha](../benchmarks/WARM-VP8-DECODE-QUIET.md) | 11,623.12 | 6,074.58 | 1.913 / 1.948 | 1,966,616 | Confirmed |
 | [WebP VP8L](../benchmarks/WARM-VP8L-READ-INLINE.md) | 3,767.14 | 2,158.83 | 1.745 / 1.760 | 1,074,326 | Quiet guard failed / open |
 
 **Encode**

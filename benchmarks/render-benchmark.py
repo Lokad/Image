@@ -82,7 +82,7 @@ def render():
         row('JPEG progressive 4:2:0', 'warm-jpegprogressive420-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE420.md', True),
         row('JPEG progressive 4:2:2', 'warm-jpegprogressive422-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE422.md', True),
         row('JPEG progressive 4:4:4', 'warm-jpegmask-evidence.json', ['observations', -1], 'WARM-JPEG-MASK.md', True),
-        row('WebP VP8 + alpha', 'warm-vp8-color-block-evidence.json', ['candidate', -1], 'WARM-VP8-COLOR-BLOCK.md'),
+        row('WebP VP8 + alpha', 'warm-vp8decode-quiet-evidence.json', ['observations', -1], 'WARM-VP8-DECODE-QUIET.md', True),
         row('WebP VP8L', 'warm-vp8l-read-inline-evidence.json', ['candidate', -1], 'WARM-VP8L-READ-INLINE.md'),
     ]
     encodes = [
@@ -129,7 +129,7 @@ Ratio = Lokad.Image / the faster FFmpeg pre/post mean; lower is faster. Upper is
 the retained conservative confidence bound, taking the larger filtered/all-actual
 bound where available. **Confirmed** requires an independent quiet repeat and
 upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
-The latest PNG16 None repeat uses `exclusive-vm-idle-v2`: live job checks and
+The latest PNG16 None and VP8 repeats use `exclusive-vm-idle-v2`: live job checks and
 five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
 Earlier receipts retain their original load guard and its failures.
 

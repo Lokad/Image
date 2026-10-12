@@ -5,6 +5,10 @@ ratios, allocations and verification status in three tables. Update it after eac
 accepted performance round with `python benchmarks/render-benchmark.py`, then
 verify with `--check`. The reports below preserve the detailed evidence and history.
 
+The [independent VP8 decode confirmation](WARM-VP8-DECODE-QUIET.md) reaches
+1.913x FFmpeg, conservative upper 1.948x, with both current idle guards passing.
+The existing native VP8/ALPH input and production implementation are unchanged.
+
 The [PNG16 literal-run round](WARM-PNG-LITERAL-RUN.md) confirms complete decode
 at 1.958x FFmpeg, conservative upper 1.968x. It groups Deflate literal validation
 without changing exact work charges or cancellation. New measurements use the
