@@ -149,6 +149,11 @@ opaque pixels. No implicit grayscale conversion or alpha removal occurs.
 
 The original corpus covers every legal static color/depth profile at both interlace
 settings, all five filters, packed padding, partial palette alpha and hidden RGB.
+Dense RGB8 rows without tRNS expand directly into RGBA8 with opaque alpha.
+Bounded 24-byte AVX2 groups produce eight pixels; scalar tails and other hardware
+retain every sample. Dense Adam7 passes qualify, while sparse/transparency paths
+retain their mapping. No workspace or admission change is introduced;
+cancellation is checked at most every 4096 pixels.
 Dense RGB16 rows without tRNS expand directly into native-endian RGBA16 with
 opaque alpha. On AVX2 hardware, bounded 24-byte groups become four output pixels
 through byte shuffles; scalar tails and other hardware preserve full samples.

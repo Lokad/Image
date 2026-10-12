@@ -108,7 +108,7 @@ typedef struct {
     int encode, width, height, depth, row_bytes, cpu, stride, output_bytes, rgb, gray, gray_alpha;
     uint64_t completed, observed;
 } Work;
-static AVFrame *result_frame(Work *work) { return work->depth == 16 || work->gray || work->gray_alpha ? work->converted : work->decoded; }
+static AVFrame *result_frame(Work *work) { return work->depth == 16 || work->gray || work->gray_alpha || work->rgb ? work->converted : work->decoded; }
 static void release(Work *work)
 {
     if (work->encode) av_packet_unref(work->packet);
@@ -144,17 +144,17 @@ static void apply(Work *work)
     } else {
         require(avcodec_send_packet(work->codec, work->input), "Submit complete PNG");
         require(avcodec_receive_frame(work->codec, work->decoded), "Receive PNG pixels");
-        int format = work->gray_alpha ? AV_PIX_FMT_YA8 : work->gray ? AV_PIX_FMT_GRAY8 : work->depth == 8 ? AV_PIX_FMT_RGBA : work->rgb ? AV_PIX_FMT_RGB48BE : AV_PIX_FMT_RGBA64BE;
+        int format = work->gray_alpha ? AV_PIX_FMT_YA8 : work->gray ? AV_PIX_FMT_GRAY8 : work->rgb ? (work->depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE) : work->depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64BE;
         if (work->decoded->format != format || work->decoded->width != work->width || work->decoded->height != work->height
-            || !work->decoded->buf[0] || work->decoded->linesize[0] < work->width * (work->gray_alpha ? 2 : work->gray ? 1 : work->rgb ? 6 : work->depth / 8 * 4)) fail("Decoded PNG format differs.");
-        if (work->depth == 16 || work->gray || work->gray_alpha) {
+            || !work->decoded->buf[0] || work->decoded->linesize[0] < work->width * (work->gray_alpha ? 2 : work->gray ? 1 : work->rgb ? work->depth / 8 * 3 : work->depth / 8 * 4)) fail("Decoded PNG format differs.");
+        if (work->depth == 16 || work->gray || work->gray_alpha || work->rgb) {
             work->converted->width = work->width; work->converted->height = work->height;
-            work->converted->format = work->gray || work->gray_alpha ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE;
+            work->converted->format = work->depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE;
             require(av_frame_get_buffer(work->converted, 32), "Allocate owned native-endian output");
             if (work->rgb || work->gray || work->gray_alpha) {
                 int rows = sws_scale(work->conversion, (const uint8_t * const *)work->decoded->data, work->decoded->linesize,
                     0, work->height, work->converted->data, work->converted->linesize);
-                if (rows != work->height) fail("RGB16 conversion row count differs.");
+                if (rows != work->height) fail("PNG conversion row count differs.");
             } else swap_samples(work->decoded, work->converted, work->width, work->height);
         }
         AVFrame *output = result_frame(work);
@@ -241,7 +241,7 @@ int main(int argc, char **argv)
         work.rgb = work.encoded_bytes >= 33 && work.encoded[25] == 2;
         work.gray = work.encoded_bytes >= 33 && work.encoded[25] == 0;
         work.gray_alpha = work.encoded_bytes >= 33 && work.encoded[25] == 4;
-        if (work.rgb && (work.depth != 16 || interlace)) fail("RGB decode requires noninterlaced RGB16.");
+        if (work.rgb && interlace) fail("RGB decode requires noninterlaced RGB8/16.");
         if (work.gray && (work.depth != 8 || interlace)) fail("Gray decode requires noninterlaced gray8.");
         if (work.gray_alpha && (work.depth != 8 || interlace)) fail("Gray-alpha decode requires noninterlaced gray-alpha8.");
         check_profile(work.encoded, work.encoded_bytes, work.width, work.height, work.depth, interlace, work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6);
@@ -251,8 +251,8 @@ int main(int argc, char **argv)
             require(av_opt_set_int(work.conversion, "srch", work.height, 0), "Source height");
             require(av_opt_set_int(work.conversion, "dstw", work.width, 0), "Output width");
             require(av_opt_set_int(work.conversion, "dsth", work.height, 0), "Output height");
-            require(av_opt_set_int(work.conversion, "src_format", work.gray_alpha ? AV_PIX_FMT_YA8 : work.gray ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_RGB48BE, 0), "Source format");
-            require(av_opt_set_int(work.conversion, "dst_format", work.gray || work.gray_alpha ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE, 0), "Output format");
+            require(av_opt_set_int(work.conversion, "src_format", work.gray_alpha ? AV_PIX_FMT_YA8 : work.gray ? AV_PIX_FMT_GRAY8 : work.depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE, 0), "Source format");
+            require(av_opt_set_int(work.conversion, "dst_format", work.depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE, 0), "Output format");
             require(av_opt_set_int(work.conversion, "sws_flags", SWS_POINT | SWS_BITEXACT, 0), "Conversion policy");
             require(av_opt_set_int(work.conversion, "threads", 1, 0), "Conversion thread count");
             require(sws_init_context(work.conversion, NULL, NULL), "Initialize RGB conversion");

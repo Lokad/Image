@@ -234,6 +234,11 @@ internal static class PngCodec
                         var offset = (startY + y * stepY) * result.Stride + startX * 8;
                         CopyRgb16Row(row, result.Pixels.Slice(offset, width * 8), context.Cancellation);
                     }
+                    else if (header.ColorType == 2 && header.Depth == 8 && stepX == 1 && header.Transparency.Length == 0)
+                    {
+                        var offset = (startY + y * stepY) * result.Stride + startX * 4;
+                        CopyRgb8Row(row, result.Pixels.Slice(offset, width * 4), context.Cancellation);
+                    }
                     else if (header.ColorType == 0 && header.Depth == 8 && stepX == 1 && header.Transparency.Length == 0)
                     {
                         var offset = (startY + y * stepY) * result.Stride + startX * 4;
@@ -355,6 +360,37 @@ internal static class PngCodec
             if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
             var output = destination.Slice(x * 4, 4); var gray = row[x * 2];
             output[0] = gray; output[1] = gray; output[2] = gray; output[3] = row[x * 2 + 1];
+        }
+    }
+
+    internal static void CopyRgb8Row(ReadOnlySpan<byte> row, Span<byte> destination, CancellationToken cancellation)
+    {
+        // PNG section 7.3: retain the three byte samples and insert opaque alpha.
+        var pixels = row.Length / 3; var x = 0;
+        if (Avx2.IsSupported && BitConverter.IsLittleEndian)
+        {
+            // Duplicate the middle word: each 128-bit lane holds four complete
+            // RGB pixels, with its byte indices relative to that lane.
+            var shuffle = Vector256.Create(
+                (byte)0, 1, 2, 128, 3, 4, 5, 128, 6, 7, 8, 128, 9, 10, 11, 128,
+                4, 5, 6, 128, 7, 8, 9, 128, 10, 11, 12, 128, 13, 14, 15, 128);
+            var alpha = Vector256.Create(0xff000000u).AsByte();
+            for (; x <= pixels - 8; x += 8)
+            {
+                if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+                var input = row[(x * 3)..];
+                var first = MemoryMarshal.Read<ulong>(input);
+                var middle = MemoryMarshal.Read<ulong>(input[8..]);
+                var last = MemoryMarshal.Read<ulong>(input[16..]);
+                var packed = Vector256.Create(first, middle, middle, last).AsByte();
+                (Avx2.Shuffle(packed, shuffle) | alpha).CopyTo(destination[(x * 4)..]);
+            }
+        }
+        for (; x < pixels; x++)
+        {
+            if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+            var input = row.Slice(x * 3, 3); var output = destination.Slice(x * 4, 4);
+            output[0] = input[0]; output[1] = input[1]; output[2] = input[2]; output[3] = 255;
         }
     }
 
