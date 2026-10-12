@@ -822,3 +822,22 @@ fixed job before fresh quiet guards and immutable statistical replay.
 The [Clone round](../../benchmarks/WARM-CLONE-REUSE.md) reduces screened mean
 95.21%. Its independent twelve-actual repeat passes both quiet guards at 1.076x,
 upper 1.089x, certifying this fixed pair. Other material cases remain open.
+
+## Warm RGBA8 transpose coverage
+
+Use the existing transpose worker and second retained original raster:
+
+```bash
+python3 tools/WarmReference/verify-transpose-linux.py --cpu 0 --depth 8
+```
+
+```powershell
+./bench.ps1 -Smoke -Warm -WarmFamily Transpose -WarmCases Whole8 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Transpose -WarmCases Whole8 -Cpu 0 -NoBuild -PrepareWarm
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Transpose -WarmCases Whole8 -Cpu 0 -NoBuild -WarmConfirm -PrepareWarm
+```
+
+The owned-output boundary and validation are identical to the plain-transpose
+reference above, with four-byte pixels. The [coverage round](../../benchmarks/WARM-TRANSPOSE8-PARITY.md)
+changes no production code and adds no raster or geometry. The independent
+repeat passes both quiet guards at 0.991x, upper 1.003x, certifying this fixed pair.
