@@ -429,6 +429,43 @@ reject fourteen invalid requests/arguments/affinities. Native binaries, static
 archives and identities remain ignored. Measurement requires the quiet VM and
 the same one-CPU, GC/JIT, bracketing and repeat policy as the other warm families.
 
+## Still VP8L WebP encode
+
+`WarmWebpLossless/Encode8` uses **libwebp exact=1 (FFmpeg encoder backend)** as
+the explicitly approved exact lossless baseline. FFmpeg's public libwebp wrapper
+has no exact-RGB option and changes hidden RGB on the retained raster. Its
+original adapter, `ffmpeg-webp-lossless-warm.c`, is retained for this mismatch
+diagnosis; it does not supply parity timings. The original
+`libwebp-lossless-warm.c` adapter uses only libwebp's public encoding API.
+No upstream implementations or tables are copied; production has no bindings.
+
+```bash
+bash tools/WarmReference/build-libwebp-lossless-linux.sh
+python3 tools/WarmReference/verify-webp-lossless-linux.py --cpu 0
+```
+
+After a Release benchmark build and owned source capture, prepare the one case:
+
+```powershell
+./bench.ps1 -DedicatedVm -Warm -WarmFamily WebpLossless -WarmCases Encode8 -Cpu 0 -NoBuild -PrepareWarm
+./bench.ps1 -DedicatedVm -Warm -WarmFamily WebpLossless -WarmCases Encode8 -Cpu 0 -NoBuild -WarmConfirm -PrepareWarm
+```
+
+Reuse the existing original 513x259 RGBA8 raster, including hidden RGB. Managed
+Lossless=true/Effort=4 and native lossless=1/method=4/quality=75/exact=1 are fixed;
+quality is a lossless compression control. Syntax, managed decode and normal/
+scalar FFmpeg decode must reproduce every RGBA byte before timing. Compression
+ratios need not match and output sizes must accompany the comparison.
+
+Each native call repacks every pixel into reusable BGRA scratch, freshly imports
+and allocates picture pixels, encodes to independently owned bytes and releases
+pixels/packet. Only config/picture/writer wrappers and BGRA scratch are reused.
+Managed timing includes admission and fresh MemoryStream creation, growth and
+disposal, without ToArray. Output checks, startup, I/O and IPC are excluded.
+One CPU, thread_level=0, normal SIMD and the same quiet bracketing policy apply.
+The [retained comparison](../../benchmarks/WARM-VP8L-ENCODE-EXACT.md) declares
+the substantial compression difference, allocation and failed pre-run guard.
+
 ## Still VP8L WebP decode
 
 The original `ffmpeg-webp-decode-warm.c` adapter uses FFmpeg's public software

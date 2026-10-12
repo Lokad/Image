@@ -21,6 +21,12 @@ Recent confirmations use `exclusive-vm-idle-v2`: live job checks and
 five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
 Earlier receipts retain their original load guard and its failures.
 
+*VP8L encode uses **libwebp exact=1 (FFmpeg encoder backend)** through its public
+API. The public FFmpeg encoder changes hidden RGB and exposes no exact option.
+Both subjects preserve every decoded RGBA sample, but compression differs:
+Lokad.Image emits 533,100 bytes versus 183,812 bytes. This is an exact-pixel
+timing comparison; compression efficiency parity is not established.
+
 **Decode**
 
 | Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |
@@ -50,7 +56,7 @@ Earlier receipts retain their original load guard and its failures.
 | [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG16-ENCODE-CRC.md) | 16,470.31 | 19,951.52 | 0.826 / 0.838 | 2,103,836 | Confirmed |
 | [JPEG 4:4:4, matched quality](../benchmarks/WARM-JPEG-ENCODE-QUIET.md) | 7,390.28 | 3,779.05 | 1.956 / 1.969 | 1,051,857 | Confirmed |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8-CHROMA-REJECTED.md) | — | — | — | — | Unmatched quality; no timing |
-| [WebP VP8L](../benchmarks/../SPEC.md) | — | — | — | — | Unmeasured / open |
+| [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-ENCODE-EXACT.md) | 7,363.30 | 121,587.95 | 0.061 / 0.063 | 2,100,170 | Confirmed |
 
 **Editing**
 
@@ -83,7 +89,7 @@ These are distinct boundaries. FFmpeg allocation totals are **not measured**;
 they must not be interpreted as zero. Retained owners and cold allocation patterns
 need separate coverage.
 
-Other depths/directions/profiles, VP8L encode, and horizontal-flip quiet
+Other depths/directions/profiles and horizontal-flip quiet
 certification remain open. Unmatched cases receive no parity timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Horizontal flips retain the worst upper bound of their two historical launches.

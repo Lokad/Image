@@ -90,7 +90,7 @@ def render():
         row('PNG RGBA16, level 6 / None', 'warm-png16-encode-crc-evidence.json', ['observations', -1], 'WARM-PNG16-ENCODE-CRC.md', True),
         row('JPEG 4:4:4, matched quality', 'warm-jpegencode-quiet-evidence.json', ['observations', -1], 'WARM-JPEG-ENCODE-QUIET.md', True),
         pending('WebP VP8 + alpha', 'WARM-VP8-CHROMA-REJECTED.md', 'Unmatched quality; no timing'),
-        pending('WebP VP8L', '../SPEC.md', 'Unmeasured / open'),
+        row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
     ]
     edits = [
         row('Nearest resize RGBA8', 'warm-nearest-baseline-evidence.json', ['observation'], 'WARM-NEAREST-BASELINE.md'),
@@ -134,6 +134,12 @@ Recent confirmations use `exclusive-vm-idle-v2`: live job checks and
 five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
 Earlier receipts retain their original load guard and its failures.
 
+*VP8L encode uses **libwebp exact=1 (FFmpeg encoder backend)** through its public
+API. The public FFmpeg encoder changes hidden RGB and exposes no exact option.
+Both subjects preserve every decoded RGBA sample, but compression differs:
+Lokad.Image emits 533,100 bytes versus 183,812 bytes. This is an exact-pixel
+timing comparison; compression efficiency parity is not established.
+
 **Decode**
 
 {table(decodes)}
@@ -155,7 +161,7 @@ These are distinct boundaries. FFmpeg allocation totals are **not measured**;
 they must not be interpreted as zero. Retained owners and cold allocation patterns
 need separate coverage.
 
-Other depths/directions/profiles, VP8L encode, and horizontal-flip quiet
+Other depths/directions/profiles and horizontal-flip quiet
 certification remain open. Unmatched cases receive no parity timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Horizontal flips retain the worst upper bound of their two historical launches.
