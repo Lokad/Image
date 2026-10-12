@@ -40,7 +40,7 @@ Earlier receipts retain their original load guard and its failures.
 | [JPEG progressive 4:2:2](../benchmarks/WARM-JPEG-PROGRESSIVE422.md) | 3,882.57 | 2,210.07 | 1.757 / 1.781 | 1,996,661 | Confirmed |
 | [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-MASK.md) | 6,217.13 | 3,342.33 | 1.860 / 1.878 | 2,682,364 | Confirmed |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8-DECODE-QUIET.md) | 11,623.12 | 6,074.58 | 1.913 / 1.948 | 1,966,616 | Confirmed |
-| [WebP VP8L](../benchmarks/WARM-VP8L-READ-INLINE.md) | 3,767.14 | 2,158.83 | 1.745 / 1.760 | 1,074,326 | Quiet guard failed / open |
+| [WebP VP8L](../benchmarks/WARM-VP8L-DECODE-QUIET.md) | 3,948.44 | 2,332.84 | 1.693 / 1.732 | 1,074,301 | Confirmed |
 
 **Encode**
 
@@ -50,6 +50,7 @@ Earlier receipts retain their original load guard and its failures.
 | [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG16-ENCODE-CRC.md) | 16,470.31 | 19,951.52 | 0.826 / 0.838 | 2,103,836 | Confirmed |
 | [JPEG 4:4:4, matched quality](../benchmarks/WARM-JPEG-ENCODE-QUIET.md) | 7,390.28 | 3,779.05 | 1.956 / 1.969 | 1,051,857 | Confirmed |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8-CHROMA-REJECTED.md) | — | — | — | — | Unmatched quality; no timing |
+| [WebP VP8L](../benchmarks/../SPEC.md) | — | — | — | — | Unmeasured / open |
 
 **Editing**
 

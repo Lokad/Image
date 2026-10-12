@@ -5,6 +5,11 @@ ratios, allocations and verification status in three tables. Update it after eac
 accepted performance round with `python benchmarks/render-benchmark.py`, then
 verify with `--check`. The reports below preserve the detailed evidence and history.
 
+The [VP8L decode confirmation](WARM-VP8L-DECODE-QUIET.md) reaches 1.693x FFmpeg,
+conservative upper 1.732x, with exact RGBA/alpha/hidden RGB and both idle guards
+passing. The literal/run input and implementation are unchanged; broader
+required decode profiles and VP8L encode still need performance coverage.
+
 The [owned-input JPEG 4:4:4 confirmation](WARM-JPEG444-OWNED-QUIET.md) reaches
 1.748x FFmpeg, conservative upper 1.793x, with both current idle guards passing.
 The input/output hashes, normal/scalar agreement and implementation are unchanged.
