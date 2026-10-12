@@ -218,6 +218,15 @@ internal static class PngCodec
                         CopyRgbaRow(row, result.Pixels.Slice(offset, row.Length),
                             header.Depth == 16 && BitConverter.IsLittleEndian, context.Cancellation);
                     }
+                    else if (header.ColorType == 6)
+                    {
+                        // Sparse RGBA pass pixels already have the output channels
+                        // and precision; only their placement and byte order differ.
+                        var offset = (startY + y * stepY) * result.Stride + startX * bytesPerPixel;
+                        var length = ((width - 1) * stepX + 1) * bytesPerPixel;
+                        CopySparseRgbaRow(row, result.Pixels.Slice(offset, length), bytesPerPixel, stepX,
+                            header.Depth == 16 && BitConverter.IsLittleEndian, context.Cancellation);
+                    }
                     else
                     {
                         for (var x = 0; x < width; x++)
@@ -252,6 +261,33 @@ internal static class PngCodec
                 BinaryPrimitives.ReverseEndianness(MemoryMarshal.Cast<byte, ushort>(input), MemoryMarshal.Cast<byte, ushort>(output));
             else input.CopyTo(output);
             offset += count;
+        }
+    }
+
+    internal static void CopySparseRgbaRow(ReadOnlySpan<byte> row, Span<byte> destination,
+        int bytesPerPixel, int stepX, bool reverseSamples, CancellationToken cancellation)
+    {
+        var pixels = row.Length / bytesPerPixel;
+        if (bytesPerPixel == 8)
+        {
+            for (var x = 0; x < pixels; x++)
+            {
+                if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+                var value = MemoryMarshal.Read<ulong>(row[(x * 8)..]);
+                // Swap each 16-bit channel, retaining RGBA channel order.
+                if (reverseSamples)
+                    value = (value & 0x00ff00ff00ff00ffUL) << 8 | (value >> 8 & 0x00ff00ff00ff00ffUL);
+                MemoryMarshal.Write(destination[(x * stepX * 8)..], in value);
+            }
+        }
+        else
+        {
+            for (var x = 0; x < pixels; x++)
+            {
+                if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+                var value = MemoryMarshal.Read<uint>(row[(x * 4)..]);
+                MemoryMarshal.Write(destination[(x * stepX * 4)..], in value);
+            }
         }
     }
 

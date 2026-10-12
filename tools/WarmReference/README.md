@@ -176,6 +176,11 @@ one authored seven-pass/filter-None input and exact normal/scalar CLI samples.
 Its independent quiet confirmation remains above2x. A six-second profile selects
 generic sparse-pixel conversion and repeated destination access for the next
 substantial primitive. Earlier failed quiet guards remain failed.
+The [sparse RGBA reconstruction round](../../benchmarks/WARM-PNG-SCATTER.md)
+then reduces complete decode20%, independently clearing this fixed pair at1.648x
+FFmpeg, conservative upper1.700x. Both timing libraries match all563 production
+methods and flags in the same actual package verified on both OSes. Exact samples,
+allocations, admission and cancellation are preserved; no workspace is added.
 
 ## JPEG
 

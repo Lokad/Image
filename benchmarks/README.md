@@ -145,6 +145,11 @@ seven-pass/filter-None input on the existing raster. Independent quiet confirmat
 is 2.009x FFmpeg, conservative upper2.076x. The case stays open. Generic sparse
 conversion and repeated destination access consume about18% of sampled CPU and
 identify the next substantial primitive; the default PNG selection is one Decode8.
+The [sparse RGBA reconstruction round](WARM-PNG-SCATTER.md) removes generic
+sample conversion and repeated destination access from sparse Adam7 passes.
+Complete decode improves20%, independently confirming at1.648x FFmpeg with a
+conservative upper1.700x. Pixels, allocation, work/memory admission and cancellation
+remain exact. This fixed pair clears2x; broader required coverage remains open.
 The means are now 1.95x / 1.81x FFmpeg; longer conservative uppers are below 2x.
 Quiet independent confirmation and required-path coverage remain open. That
 checkpoint selected the uncovered VP8 decode direction measured above.
