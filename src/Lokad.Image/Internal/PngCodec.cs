@@ -166,7 +166,7 @@ internal static class PngCodec
     {
         using var input = new MemoryStream(compressed, 0, streamLength, false);
         using var zlib = new ZLibStream(input, CompressionMode.Decompress);
-        var result = ImageBuffer.Allocate(header.Info.Width, header.Info.Height, header.Depth == 16 ? 16 : 8, context);
+        var result = ImageBuffer.AllocateForOverwrite(header.Info.Width, header.Info.Height, header.Depth == 16 ? 16 : 8, context);
         result.Orientation = header.Info.Orientation;
         uint adlerA = 1, adlerB = 0;
         try

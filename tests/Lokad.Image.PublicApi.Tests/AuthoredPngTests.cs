@@ -5,6 +5,10 @@ using Lokad.Image.Tooling;
 
 namespace Lokad.Image.PublicApi.Tests;
 
+[CollectionDefinition("PNG storage ownership", DisableParallelization = true)]
+public sealed class PngStorageOwnershipCollection { }
+
+[Collection("PNG storage ownership")]
 public sealed class AuthoredPngTests
 {
     [Fact]
@@ -42,10 +46,43 @@ public sealed class AuthoredPngTests
                     for (var i = 0; i < expected.Length; i++) Assert.Equal(i % 4 == 3 ? (byte)255 : expected[i], direct[i]);
                 else Assert.Equal(expected, direct);
             }
+            // Force the next complete-overwrite lease to contain nonzero data,
+            // including alpha and unused Adam7 destinations before reconstruction.
+            using (var zero = ImageBuffer.Create(frame.Width, frame.Height, frame.Depth == 16 ? 16 : 8))
+            using (var dirty = zero.Clone()) Fill(dirty, 0xa5);
             using var decoded = ImageCodec.Decode(encoded);
             Assert.Equal((frame.Width, frame.Height, frame.Depth == 16 ? 16 : 8), (decoded.Width, decoded.Height, decoded.BitDepth));
             Assert.Equal(analytical, OriginalPixels.Bytes(decoded));
+            using var held = ImageCodec.Decode(encoded);
+            Fill(decoded, 0x3c);
+            Assert.Equal(analytical, OriginalPixels.Bytes(held));
+            Assert.All(OriginalPixels.Bytes(decoded), value => Assert.Equal((byte)0x3c, value));
         }
+    }
+
+    [Fact]
+    public void FailedPartialDecodeNeverPublishesDirtyStorageToTheNextOwner()
+    {
+        var frame = new AuthoredPng.Frame("failed-owned-output", 6, 8, 1, 2, false);
+        byte[] filtered = [0, 1, 2, 3, 0, 5, 6, 7, 8, 255]; // Invalid second-row filter.
+        var compressed = AuthoredDeflate.Fixed(filtered.Select(value => new AuthoredDeflate.Token(value)), filtered);
+        using (var zero = ImageBuffer.Create(1, 2, 8))
+        using (var dirty = zero.Clone()) Fill(dirty, 0xa5);
+        Assert.Throws<ImageDataException>(() => ImageCodec.Decode(AuthoredPng.Wrap(frame, compressed)));
+        var valid = AuthoredPng.Build(frame);
+        using var first = ImageCodec.Decode(valid);
+        using var second = ImageCodec.Decode(valid);
+        Assert.Equal(AuthoredPng.Expected(frame), OriginalPixels.Bytes(first));
+        Fill(first, 0x3c);
+        Assert.Equal(AuthoredPng.Expected(frame), OriginalPixels.Bytes(second));
+        Assert.All(OriginalPixels.Bytes(first), value => Assert.Equal((byte)0x3c, value));
+    }
+
+    private static void Fill(ImageBuffer image, byte value)
+    {
+        for (var y = 0; y < image.Height; y++)
+            if (image.BitDepth == 8) image.GetRow8(y).Fill(value);
+            else image.GetRow16(y).Fill((ushort)(value * 257));
     }
 
     [Theory]

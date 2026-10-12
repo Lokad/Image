@@ -81,8 +81,8 @@ def render():
         row('PNG RGB8, None', 'warm-pngrgb8-row-evidence.json', ['observations', -1], 'WARM-PNG-RGB8-ROW.md', True),
         row('PNG gray16, None', 'warm-pnggray16-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY16-ROW.md', True),
         row('PNG gray-alpha16, None', 'warm-pnggrayalpha16-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ROW.md', True),
-        row('PNG palette8 + tRNS, None', 'warm-pngpalette8-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE8-ROW.md'),
-        row('PNG palette4 + tRNS → RGBA8, None', 'warm-pngpalette4-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE4-ROW.md'),
+        row('PNG palette8 + tRNS, None', 'warm-pngdecode-reuse-evidence.json', ['cases', 'palette8', 'observations', -1], 'WARM-PNG-DECODE-REUSE.md'),
+        row('PNG palette4 + tRNS → RGBA8, None', 'warm-pngdecode-reuse-evidence.json', ['cases', 'palette4', 'observations', -1], 'WARM-PNG-DECODE-REUSE.md', True),
         row('PNG opaque gray1 â†’ RGBA8, None', 'warm-pnggray1-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-ROW.md', True),
         row('PNG opaque gray4 â†’ RGBA8, None', 'warm-pnggray4-evidence.json', ['observations', -1], 'WARM-PNG-GRAY4.md'),
         row('JPEG baseline gray', 'warm-jpegac-fused-evidence.json', ['regressionControl', 'observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
@@ -144,7 +144,7 @@ resize/crop outputs are 256Ã—129, quarter turns/transposes 259Ã—513.
 
 Times cover complete public operations and independent output acquisition/release,
 including admission, conversion and disposal. Native wrappers/contexts are reused;
-managed editing may reuse released pixel storage. No output is cached. Startup,
+managed editing and PNG decode may reuse released pixel storage. No output is cached. Startup,
 I/O, IPC, fixture preparation and validation are excluded. Each linked report
 declares the exact workload, input and measured source; these are rolling results
 at those sources, not a simultaneous rerun of the current HEAD.
@@ -203,13 +203,12 @@ timing. GIF and
 animation are deferred. No averages establish the uniform â‰¤2Ã— target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-The latest [packed palette expansion](../benchmarks/WARM-PNG-PALETTE4-ROW.md)
-reduces a new 17.984x gap by 84.5%, to 2.704x / upper 4.328x. It remains open;
-no longer repeat was launched. Palette8 at 2.715x, palette4 at 2.704x and gray4
-at 2.630x are the largest measured mean gaps. The
-[token-loop experiment](../benchmarks/WARM-PNG-TOKEN-RUN-REJECTED.md) was reverted
-after only a 4.2% gain. Prioritize substantial inflation/framing data flow;
-keep failed guards and rejected experiments distinct from confirmations.
+The latest [PNG storage round](../benchmarks/WARM-PNG-DECODE-REUSE.md) confirms
+palette4 at 1.572x / upper 1.617x and 13,656 B/op, down from 545,417 B/op.
+Palette8 remains open at 2.433x / upper 2.634x, with allocation down 85.6% to
+89,564 B/op. Gray4's earlier 2.630x result needs checking with the shared storage
+policy. Stop tuning confirmed pairs; other profiles and retained-owner boundaries
+remain open. Earlier failed guards and reverted experiments remain recorded.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

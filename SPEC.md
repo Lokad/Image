@@ -27,8 +27,10 @@ metadata round-tripping, drawing and font rendering are deferred.
 straight alpha. `GetRow8` exposes byte samples; `GetRow16` exposes native-endian
 unsigned 16-bit samples. 8-bit images use four bytes/pixel, 16-bit images eight.
 Rows have no padding. Dispose drops ownership; callers must cease using
-previously returned spans, which safe C# cannot revoke. Released crop and rotation/flip
-storage may be reused by a later result. Live buffers never share their pixel
+previously returned spans, which safe C# cannot revoke. Released PNG decode,
+crop and rotation/flip storage may be reused by a later result. Complete-overwrite
+operations reconstruct every output sample before publishing their owner and
+dispose private results on failure. Live buffers never share their pixel
 storage. New `ImageBuffer.Create` buffers are zero initialized.
 
 Transforms return new owned buffers and preserve precision and source pixels.

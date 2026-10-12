@@ -9,7 +9,7 @@ resize/crop outputs are 256Ã—129, quarter turns/transposes 259Ã—513.
 
 Times cover complete public operations and independent output acquisition/release,
 including admission, conversion and disposal. Native wrappers/contexts are reused;
-managed editing may reuse released pixel storage. No output is cached. Startup,
+managed editing and PNG decode may reuse released pixel storage. No output is cached. Startup,
 I/O, IPC, fixture preparation and validation are excluded. Each linked report
 declares the exact workload, input and measured source; these are rolling results
 at those sources, not a simultaneous rerun of the current HEAD.
@@ -43,8 +43,8 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGB8, None](../benchmarks/WARM-PNG-RGB8-ROW.md) | 2,139.12 | 1,510.62 | 1.416 / 1.440 | 727,305 | Confirmed |
 | [PNG gray16, None](../benchmarks/WARM-PNG-GRAY16-ROW.md) | 1,743.26 | 960.42 | 1.815 / 1.837 | 1,331,046 | Confirmed |
 | [PNG gray-alpha16, None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ROW.md) | 3,195.37 | 1,798.83 | 1.776 / 1.785 | 1,573,649 | Confirmed |
-| [PNG palette8 + tRNS, None](../benchmarks/WARM-PNG-PALETTE8-ROW.md) | 992.81 | 365.69 | 2.715 / 2.954 | 621,315 | Above 2x / open |
-| [PNG palette4 + tRNS → RGBA8, None](../benchmarks/WARM-PNG-PALETTE4-ROW.md) | 395.24 | 146.14 | 2.704 / 4.328 | 545,417 | Above 2x / open |
+| [PNG palette8 + tRNS, None](../benchmarks/WARM-PNG-DECODE-REUSE.md) | 886.34 | 364.35 | 2.433 / 2.634 | 89,564 | Above 2x / open |
+| [PNG palette4 + tRNS → RGBA8, None](../benchmarks/WARM-PNG-DECODE-REUSE.md) | 214.75 | 136.64 | 1.572 / 1.617 | 13,656 | Confirmed |
 | [PNG opaque gray1 â†’ RGBA8, None](../benchmarks/WARM-PNG-GRAY1-ROW.md) | 299.69 | 305.79 | 0.980 / 1.001 | 537,700 | Confirmed |
 | [PNG opaque gray4 â†’ RGBA8, None](../benchmarks/WARM-PNG-GRAY4.md) | 420.42 | 159.85 | 2.630 / 2.775 | 545,302 | Upper above 2x / open |
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-AC-FUSED.md) | 1,267.57 | 682.73 | 1.857 / 1.880 | 1,221,545 | Confirmed |
@@ -129,13 +129,12 @@ timing. GIF and
 animation are deferred. No averages establish the uniform â‰¤2Ã— target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-The latest [packed palette expansion](../benchmarks/WARM-PNG-PALETTE4-ROW.md)
-reduces a new 17.984x gap by 84.5%, to 2.704x / upper 4.328x. It remains open;
-no longer repeat was launched. Palette8 at 2.715x, palette4 at 2.704x and gray4
-at 2.630x are the largest measured mean gaps. The
-[token-loop experiment](../benchmarks/WARM-PNG-TOKEN-RUN-REJECTED.md) was reverted
-after only a 4.2% gain. Prioritize substantial inflation/framing data flow;
-keep failed guards and rejected experiments distinct from confirmations.
+The latest [PNG storage round](../benchmarks/WARM-PNG-DECODE-REUSE.md) confirms
+palette4 at 1.572x / upper 1.617x and 13,656 B/op, down from 545,417 B/op.
+Palette8 remains open at 2.433x / upper 2.634x, with allocation down 85.6% to
+89,564 B/op. Gray4's earlier 2.630x result needs checking with the shared storage
+policy. Stop tuning confirmed pairs; other profiles and retained-owner boundaries
+remain open. Earlier failed guards and reverted experiments remain recorded.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

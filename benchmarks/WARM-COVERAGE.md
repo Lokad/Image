@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8, gray16, gray-alpha8/16 and opaque gray1 None confirmed; RGB16, gray8, gray4 and palette4/8 None above 2x | RGB16/gray8/gray4/palette4/8 parity; packed gray2 and palette1/2; other filter implementations |
+| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8, gray16, gray-alpha8/16 and opaque gray1 and palette4 None confirmed; RGB16, gray8, gray4 and palette8 None above 2x | RGB16/gray8/gray4/palette8 parity; packed gray2 and palette1/2; other filter implementations |
 | PNG encode | RGBA8/16, level 6/None | RGB and gray projections; compression policies with materially different work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
@@ -84,3 +84,13 @@ measured. Its profile places 38.4% in BCL inflation, 29.7% in framing and 13.5%
 in packed expansion. Palette8 (2.715x), palette4 (2.704x) and gray4 (2.630x)
 remain the largest measured mean gaps. Investigate substantial inflation/framing
 data flow; another small row or token-dispatch gain cannot close them alone.
+
+The [shared PNG storage round](WARM-PNG-DECODE-REUSE.md) reduces palette4 screen
+time 41.4% and allocations 97.5%, independently confirming 1.572x / upper 1.617x.
+Palette8 screen time falls 10.7% and allocations 85.6%, but 2.433x / upper 2.634x
+remains open; no longer repeat. Every frozen PNG profile overwrites poisoned
+storage, live owners stay independent, and partial failures never publish pixels.
+The preceding split/whole-row BCL diagnostic improves only 7.2% and introduces no
+read-pattern change. Next check gray4 with the shared policy, then rank the
+remaining measured gaps. Other PNG rows retain their earlier measured sources;
+held-owner and first-use allocation patterns remain distinct and open.
