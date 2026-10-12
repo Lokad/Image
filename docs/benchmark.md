@@ -45,7 +45,7 @@ upper ≤2. Failed guards remain failures. Full required warm coverage is **open
 | --- | ---: | ---: | ---: | ---: | --- |
 | [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG8-ENCODE.md) | 7,241.99 | 17,219.43 | 0.421 / 0.430 | 527,629 | Confirmed |
 | [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG16-ENCODE-CRC.md) | 16,470.31 | 19,951.52 | 0.826 / 0.838 | 2,103,836 | Confirmed |
-| [JPEG 4:4:4, matched quality](../benchmarks/WARM-JPEG-FORWARD-INTERLEAVED.md) | 7,393.29 | 3,781.85 | 1.955 / 1.974 | 1,051,907 | Quiet guard failed / open |
+| [JPEG 4:4:4, matched quality](../benchmarks/WARM-JPEG-ENCODE-QUIET.md) | 7,390.28 | 3,779.05 | 1.956 / 1.969 | 1,051,857 | Confirmed |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8-CHROMA-REJECTED.md) | — | — | — | — | Unmatched quality; no timing |
 
 **Editing**

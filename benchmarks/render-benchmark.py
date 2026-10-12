@@ -88,7 +88,7 @@ def render():
     encodes = [
         row('PNG RGBA8, level 6 / None', 'warm-png8encode-evidence.json', ['observations', -1], 'WARM-PNG8-ENCODE.md', True),
         row('PNG RGBA16, level 6 / None', 'warm-png16-encode-crc-evidence.json', ['observations', -1], 'WARM-PNG16-ENCODE-CRC.md', True),
-        row('JPEG 4:4:4, matched quality', 'warm-jpeg-forward-interleaved-evidence.json', ['observations', 'interleavedConfirmation'], 'WARM-JPEG-FORWARD-INTERLEAVED.md'),
+        row('JPEG 4:4:4, matched quality', 'warm-jpegencode-quiet-evidence.json', ['observations', -1], 'WARM-JPEG-ENCODE-QUIET.md', True),
         pending('WebP VP8 + alpha', 'WARM-VP8-CHROMA-REJECTED.md', 'Unmatched quality; no timing'),
     ]
     edits = [

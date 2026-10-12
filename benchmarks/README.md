@@ -5,6 +5,10 @@ ratios, allocations and verification status in three tables. Update it after eac
 accepted performance round with `python benchmarks/render-benchmark.py`, then
 verify with `--check`. The reports below preserve the detailed evidence and history.
 
+The [matched JPEG encode quiet confirmation](WARM-JPEG-ENCODE-QUIET.md) reaches
+1.956x FFmpeg (upper 1.969x), with unchanged production and quality preparation.
+The earlier post-load failure remains uncertified in the retained evidence.
+
 The [RGBA8 PNG encode coverage](WARM-PNG8-ENCODE.md) independently confirms at
 0.421x FFmpeg (upper 0.430x), with production unchanged. The single
 [VP8 chroma candidate](WARM-VP8-CHROMA-REJECTED.md) improves quality but remains
