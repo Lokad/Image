@@ -409,7 +409,7 @@ internal ref struct JpegDecoder
             var subsampledYcbcr = components.Length == 3 && !rgb
                 && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported
                 && components[0].H == maxH && components[0].V == maxV
-                && components[1].H * 2 == maxH && components[1].V * 2 == maxV
+                && components[1].H * 2 == maxH && (components[1].V * 2 == maxV || components[1].V == maxV)
                 && components[2].H == components[1].H && components[2].V == components[1].V;
             for (var y = 0; y < info.Height; y++)
             {
@@ -427,13 +427,15 @@ internal ref struct JpegDecoder
                 }
                 if (subsampledYcbcr)
                 {
-                    // At 2:1 centered sampling the interpolation fractions are
-                    // exactly 1/4 or 3/4. Share row geometry across both chroma
-                    // planes; leave edge pixels to the general clamp policy.
+                    // Centered horizontal 2:1 sampling has exact quarter
+                    // fractions. Full vertical resolution reuses one row in
+                    // both inputs; the same dyadic sum reproduces that row.
+                    // Share geometry and leave edges to the general clamp policy.
                     var chroma = components[1]; var stride = chroma.BlockColumns * 8;
-                    var iy = (y - 1) >> 1;
+                    var fullVertical = chroma.V == maxV;
+                    var iy = fullVertical ? y : (y - 1) >> 1;
                     var y0 = Math.Clamp(iy, 0, chroma.SampleHeight - 1);
-                    var y1 = Math.Clamp(iy + 1, 0, chroma.SampleHeight - 1);
+                    var y1 = Math.Clamp(iy + (fullVertical ? 0 : 1), 0, chroma.SampleHeight - 1);
                     var topWeight = (y & 1) == 0 ? 1 : 3;
                     // The first two pixels use the original scalar path below.
                     // Start SIMD at the next even pixel, then retain scalar tails.

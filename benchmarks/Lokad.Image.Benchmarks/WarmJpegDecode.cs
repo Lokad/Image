@@ -6,9 +6,9 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420 }
+public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422 }
 
-internal sealed record WarmJpeg420Preparation(int SchemaVersion, string Project, string Recipe,
+internal sealed record WarmJpegSubsampledPreparation(int SchemaVersion, string Project, string Recipe,
     string RasterSha256, string NativeFile, int EncodedBytes, string EncodedSha256,
     string QuantizationSha256, string ManagedDecodedSha256, string FfmpegSha256);
 
@@ -29,7 +29,12 @@ public class WarmJpegDecode
     private string inputOrigin = "", sampling = "";
     private int scalarDecoderMaximum;
     private double scalarDecoderRmse;
-    private JpegSampling Sampling => Case == WarmJpegDecodeCase.NativeDecode420 ? JpegSampling.YCbCr420 : JpegSampling.YCbCr444;
+    private JpegSampling Sampling => Case switch
+    {
+        WarmJpegDecodeCase.NativeDecode420 => JpegSampling.YCbCr420,
+        WarmJpegDecodeCase.NativeDecode422 => JpegSampling.YCbCr422,
+        _ => JpegSampling.YCbCr444
+    };
 
     public static WarmJpegDecodeCase[] SelectedCases()
     {
@@ -39,40 +44,45 @@ public class WarmJpegDecode
             null or "Decode8" => [WarmJpegDecodeCase.Decode8],
             "NativeDecode8" => [WarmJpegDecodeCase.NativeDecode8],
             "NativeDecode420" => [WarmJpegDecodeCase.NativeDecode420],
-            _ => throw new ArgumentException("Choose one warm JPEG decode case: Decode8, NativeDecode8 or NativeDecode420.")
+            "NativeDecode422" => [WarmJpegDecodeCase.NativeDecode422],
+            _ => throw new ArgumentException("Choose one warm JPEG decode case: Decode8, NativeDecode8, NativeDecode420 or NativeDecode422.")
         };
     }
 
     // One explicit, untimed fixed-setting input preparation; no quality search.
-    public static void Prepare420(int cpu)
+    public static void Prepare420(int cpu) => PrepareSubsampled(cpu, JpegSampling.YCbCr420);
+    public static void Prepare422(int cpu) => PrepareSubsampled(cpu, JpegSampling.YCbCr422);
+    private static void PrepareSubsampled(int cpu, JpegSampling sampling)
     {
         if (!OperatingSystem.IsLinux() || cpu is < 0 or > 62) throw new ArgumentException("JPEG preparation requires Linux and one allowed CPU.");
         using var process = Process.GetCurrentProcess(); var oldAffinity = process.ProcessorAffinity;
         process.ProcessorAffinity = new IntPtr(1L << cpu);
         try
         {
+            var label = sampling == JpegSampling.YCbCr420 ? "420" : "422";
+            var display = sampling == JpegSampling.YCbCr420 ? "4:2:0" : "4:2:2";
             using var state = new JpegBenchmarkCase(); var pixels = HorizontalFlipInput.Create(8);
             File.WriteAllBytes(state.Input, pixels);
-            var folder = Path.Combine(state.Root, "artifacts", "warm-reference", "jpeg-decode420");
+            var folder = Path.Combine(state.Root, "artifacts", "warm-reference", $"jpeg-decode{label}");
             Directory.CreateDirectory(folder); var input = Path.Combine(folder, "native.jpg");
             // The original asymmetric raster, alpha flattened onto RGB 0x204060,
-            // area chroma reduction at the centered 4:2:0 grid, fixed qscale 5.
-            OracleProcess.Run(state.Ffmpeg, JpegBenchmarkCase.EncodeArguments(state.Input, input, 513, 259, 8, JpegSampling.YCbCr420, 5, 0x204060), []);
+            // area chroma reduction at the centered subsampled grid, fixed qscale 5.
+            OracleProcess.Run(state.Ffmpeg, JpegBenchmarkCase.EncodeArguments(state.Input, input, 513, 259, 8, sampling, 5, 0x204060), []);
             var bytes = File.ReadAllBytes(input); var header = JpegQualitySyntax.Read(bytes);
             if ((header.Width, header.Height, header.Depth, header.Components) != (513, 259, 8, 3)
-                || !JpegBenchmarkCase.MatchesSampling(header, JpegSampling.YCbCr420)) throw new InvalidOperationException("Prepared JPEG 4:2:0 header differs.");
+                || !JpegBenchmarkCase.MatchesSampling(header, sampling)) throw new InvalidOperationException($"Prepared JPEG {display} header differs.");
             using var decoded = ImageCodec.Decode(bytes); ValidateGeometry(decoded); var actual = OriginalPixels.Bytes(decoded);
-            var arguments = JpegOracle.DecodeArguments(513, 259, JpegSampling.YCbCr420).ToList();
+            var arguments = JpegOracle.DecodeArguments(513, 259, sampling).ToList();
             arguments.InsertRange(arguments.IndexOf("-i"), ["-threads:v", "1", "-thread_type:v", "0"]);
             arguments.InsertRange(arguments.IndexOf("-filter_complex"), ["-filter_complex_threads", "1"]);
             ValidateAgreement(OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), bytes), actual);
             arguments.RemoveRange(arguments.IndexOf("-cpuflags"), 2);
             ValidateAgreement(OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), bytes), actual);
             if (!File.ReadAllBytes(state.Input).AsSpan().SequenceEqual(pixels)) throw new InvalidOperationException("Preparation source changed.");
-            var record = new WarmJpeg420Preparation(1, "Lokad.Image", "Original RGBA8 513x259 raster; native baseline 4:2:0, alpha flatten RGB 0x204060, centered area chroma, optimal Huffman, fixed qscale 5; normal SIMD, one thread; no quality enumeration.",
+            var record = new WarmJpegSubsampledPreparation(1, "Lokad.Image", $"Original RGBA8 513x259 raster; native baseline {display}, alpha flatten RGB 0x204060, centered area chroma, optimal Huffman, fixed qscale 5; normal SIMD, one thread; no quality enumeration.",
                 JpegBenchmarkCase.Hash(pixels), Path.GetRelativePath(state.Root, input), bytes.Length, JpegBenchmarkCase.Hash(bytes), header.QuantizationHash, JpegBenchmarkCase.Hash(actual), JpegBenchmarkCase.HashFile(state.Ffmpeg));
-            File.WriteAllText(Path.Combine(state.Root, "artifacts", "warm-reference", "jpeg-decode420.json"), JsonSerializer.Serialize(record, EncoderQualityCalibration.Json) + "\n");
-            Console.WriteLine($"Prepared one fixed JPEG 4:2:0 decode input: {bytes.Length} bytes, SHA256 {record.EncodedSha256}.");
+            File.WriteAllText(Path.Combine(state.Root, "artifacts", "warm-reference", $"jpeg-decode{label}.json"), JsonSerializer.Serialize(record, EncoderQualityCalibration.Json) + "\n");
+            Console.WriteLine($"Prepared one fixed JPEG {display} decode input: {bytes.Length} bytes, SHA256 {record.EncodedSha256}.");
         }
         finally { process.ProcessorAffinity = oldAffinity; }
     }
@@ -107,16 +117,17 @@ public class WarmJpegDecode
                 });
             rasterHash = JpegBenchmarkCase.Hash(HorizontalFlipInput.Create(8));
             string decodedHash;
-            if (Case == WarmJpegDecodeCase.NativeDecode420)
+            if (Case is WarmJpegDecodeCase.NativeDecode420 or WarmJpegDecodeCase.NativeDecode422)
             {
-                var prepared = JsonSerializer.Deserialize<WarmJpeg420Preparation>(File.ReadAllText(Path.Combine(state.Root, "artifacts", "warm-reference", "jpeg-decode420.json")), EncoderQualityCalibration.Json)
-                    ?? throw new InvalidOperationException("Prepare one fixed JPEG 4:2:0 input first.");
+                var label = Sampling == JpegSampling.YCbCr420 ? "420" : "422";
+                var prepared = JsonSerializer.Deserialize<WarmJpegSubsampledPreparation>(File.ReadAllText(Path.Combine(state.Root, "artifacts", "warm-reference", $"jpeg-decode{label}.json")), EncoderQualityCalibration.Json)
+                    ?? throw new InvalidOperationException("Prepare one fixed subsampled JPEG input first.");
                 encoded = File.ReadAllBytes(Path.Combine(state.Root, prepared.NativeFile)); decodedHash = prepared.ManagedDecodedSha256;
                 if (prepared.SchemaVersion != 1 || prepared.Project != "Lokad.Image" || prepared.RasterSha256 != rasterHash
                     || encoded.Length != prepared.EncodedBytes || JpegBenchmarkCase.Hash(encoded) != prepared.EncodedSha256
                     || JpegQualitySyntax.Read(encoded).QuantizationHash != prepared.QuantizationSha256
-                    || JpegBenchmarkCase.HashFile(state.Ffmpeg) != prepared.FfmpegSha256) throw new InvalidOperationException("Prepared JPEG 4:2:0 identity differs.");
-                inputOrigin = "prepared-native-fixed420";
+                    || JpegBenchmarkCase.HashFile(state.Ffmpeg) != prepared.FfmpegSha256) throw new InvalidOperationException("Prepared subsampled JPEG identity differs.");
+                inputOrigin = "prepared-native-fixed" + label;
             }
             else
             {
@@ -135,7 +146,7 @@ public class WarmJpegDecode
             if ((info.Format, info.Width, info.Height, info.BitDepth) != (ImageFormat.Jpeg, 513, 259, 8))
                 throw new InvalidOperationException("JPEG decode input geometry differs.");
             File.WriteAllBytes(state.Input, encoded);
-            native = new NativeWarmReference(state, 8, cpu, Case == WarmJpegDecodeCase.NativeDecode420 ? "jpeg420-decode" : "jpeg-decode");
+            native = new NativeWarmReference(state, 8, cpu, Case == WarmJpegDecodeCase.NativeDecode420 ? "jpeg420-decode" : Case == WarmJpegDecodeCase.NativeDecode422 ? "jpeg422-decode" : "jpeg-decode");
             nativePixels = File.ReadAllBytes(state.NativeOutput);
             using (var output = ImageCodec.Decode(encoded)) { ValidateGeometry(output); managedPixels = OriginalPixels.Bytes(output); }
             if (JpegBenchmarkCase.Hash(managedPixels) != decodedHash)
@@ -208,7 +219,7 @@ public class WarmJpegDecode
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmJpegDecode).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = "Identical resident prepared 8-bit JPEG to independent owned RGBA8. Public managed Decode, allocation and disposal; native software mjpeg decoder, per-operation state reset, full-range BT.601 conversion, owned output allocation and release. For 4:2:0, expand both ceil-sized chroma planes by two and crop to the original grid inside every operation, including intermediate acquisition/release. Native context/conversion/input packet/frame wrappers reused; every call decodes and converts all pixels. Padded native rows are exposed without a gratuitous packing copy. Startup, I/O, IPC, generation, hashing, checks and tight-row file writes excluded. No encoder quality search or additional source raster. Decoder RGB maximum 4/RMSE 1.5, exact opaque alpha."
+                boundary = "Identical resident prepared 8-bit JPEG to independent owned RGBA8. Public managed Decode, allocation and disposal; native software mjpeg decoder, per-operation state reset, full-range BT.601 conversion, owned output allocation and release. For subsampled inputs, expand both ceil-sized chroma planes by their sampling factors and crop to the original grid inside every operation, including intermediate acquisition/release. Native context/conversion/input packet/frame wrappers reused; every call decodes and converts all pixels. Padded native rows are exposed without a gratuitous packing copy. Startup, I/O, IPC, generation, hashing, checks and tight-row file writes excluded. No encoder quality search or additional source raster. Decoder RGB maximum 4/RMSE 1.5, exact opaque alpha."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
         }
         finally { native?.Dispose(); state?.Dispose(); ready = false; }

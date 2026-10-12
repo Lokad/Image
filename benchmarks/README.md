@@ -255,6 +255,11 @@ work with bulk interpolation and color conversion, preserving every owned byte.
 The native comparison includes decoder reset, exact chroma-grid expansion,
 conversion, intermediate/output acquisition and disposal. Its default selection
 still covers one 4:4:4 input; each explicit decode selection runs one pair.
+The [reused-row 4:2:2 round](WARM-JPEG422-ROWS.md) selects one fixed NativeDecode422
+input on the same raster. Full vertical chroma resolution reuses one row in the
+existing eight-pixel renderer, removing repeated scalar interpolation/color work
+with exact owned output bytes. The native boundary includes horizontal chroma
+expansion and intermediate/output ownership; no quality enumeration is needed.
 The [adaptive long-prefix round](WARM-JPEG-LONG-PREFIX.md) extends input-derived
 Huffman lookup for nine/ten-bit codes with explicit memory/work admission.
 The [magnitude-category round](WARM-JPEG-CATEGORY.md) replaces the coefficient

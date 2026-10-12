@@ -79,12 +79,13 @@ static void initialize_conversion(Work *work)
     int64_t threads; require(av_opt_get_int(work->conversion, "threads", 0, &threads), "Read conversion threads");
     if (threads != 1) fail("Conversion threading differs.");
     if (work->subsampled) {
-        int cw=(work->width+1)/2, ch=(work->height+1)/2;
+        int vertical=work->subsampled==420 ? 2 : 1;
+        int cw=(work->width+1)/2, ch=(work->height+vertical-1)/vertical;
         work->chroma=sws_alloc_context(); if (!work->chroma) fail("Allocate chroma expansion failed.");
         require(av_opt_set_int(work->chroma,"srcw",cw,0),"Set chroma width");
         require(av_opt_set_int(work->chroma,"srch",ch,0),"Set chroma height");
         require(av_opt_set_int(work->chroma,"dstw",cw*2,0),"Set expanded chroma width");
-        require(av_opt_set_int(work->chroma,"dsth",ch*2,0),"Set expanded chroma height");
+        require(av_opt_set_int(work->chroma,"dsth",ch*vertical,0),"Set expanded chroma height");
         require(av_opt_set_int(work->chroma,"src_format",AV_PIX_FMT_GRAY8,0),"Set chroma input format");
         require(av_opt_set_int(work->chroma,"dst_format",AV_PIX_FMT_GRAY8,0),"Set chroma output format");
         require(av_opt_set_int(work->chroma,"sws_flags",SWS_BILINEAR|SWS_ACCURATE_RND,0),"Set chroma expansion flags");
@@ -106,20 +107,21 @@ static void apply(Work *work)
     require(avcodec_send_packet(work->codec, work->input), "Submit complete JPEG");
     require(avcodec_receive_frame(work->codec, work->decoded), "Receive JPEG pixels");
     AVFrame *decoded = work->decoded;
-    if (decoded->width != work->width || decoded->height != work->height || decoded->format != (work->subsampled ? AV_PIX_FMT_YUVJ420P : AV_PIX_FMT_YUVJ444P)
+    if (decoded->width != work->width || decoded->height != work->height || decoded->format != (work->subsampled==420 ? AV_PIX_FMT_YUVJ420P : work->subsampled==422 ? AV_PIX_FMT_YUVJ422P : AV_PIX_FMT_YUVJ444P)
         || decoded->color_range != AVCOL_RANGE_JPEG || !decoded->buf[0]) fail("Expected owned full-range JPEG pixels at the declared sampling.");
     const uint8_t *planes[4]={decoded->data[0],decoded->data[1],decoded->data[2],NULL};
     int strides[4]={decoded->linesize[0],decoded->linesize[1],decoded->linesize[2],0};
     if (work->subsampled) {
-        int cw=(work->width+1)/2, ch=(work->height+1)/2;
-        work->u->width=work->v->width=cw*2; work->u->height=work->v->height=ch*2;
+        int vertical=work->subsampled==420 ? 2 : 1;
+        int cw=(work->width+1)/2, ch=(work->height+vertical-1)/vertical;
+        work->u->width=work->v->width=cw*2; work->u->height=work->v->height=ch*vertical;
         work->u->format=work->v->format=AV_PIX_FMT_GRAY8;
         require(av_frame_get_buffer(work->u,32),"Allocate independent expanded U");
         require(av_frame_get_buffer(work->v,32),"Allocate independent expanded V");
         const uint8_t *u[4]={decoded->data[1],NULL,NULL,NULL}, *v[4]={decoded->data[2],NULL,NULL,NULL};
         int us[4]={decoded->linesize[1],0,0,0}, vs[4]={decoded->linesize[2],0,0,0};
-        if (sws_scale(work->chroma,u,us,0,ch,work->u->data,work->u->linesize)!=ch*2
-            || sws_scale(work->chroma,v,vs,0,ch,work->v->data,work->v->linesize)!=ch*2) fail("Chroma expansion incomplete.");
+        if (sws_scale(work->chroma,u,us,0,ch,work->u->data,work->u->linesize)!=ch*vertical
+            || sws_scale(work->chroma,v,vs,0,ch,work->v->data,work->v->linesize)!=ch*vertical) fail("Chroma expansion incomplete.");
         // Consume only the original bounds: a crop view keeps the doubled grid
         // at odd dimensions without a redundant full-frame packing copy.
         planes[1]=work->u->data[0]; planes[2]=work->v->data[0];
@@ -159,9 +161,9 @@ static void check_and_write(Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if (argc != 7 || (strcmp(argv[1], "jpeg-decode") && strcmp(argv[1], "jpeg420-decode"))) fail("Usage: ffmpeg-jpeg-decode-warm jpeg-decode|jpeg420-decode INPUT WIDTH HEIGHT 8 OUTPUT");
+    if (argc != 7 || (strcmp(argv[1], "jpeg-decode") && strcmp(argv[1], "jpeg420-decode") && strcmp(argv[1], "jpeg422-decode"))) fail("Usage: ffmpeg-jpeg-decode-warm jpeg-decode|jpeg420-decode|jpeg422-decode INPUT WIDTH HEIGHT 8 OUTPUT");
     Work work = {0}; work.cpu = affinity_cpu(); work.width = number(argv[3]); work.height = number(argv[4]);
-    work.subsampled=!strcmp(argv[1],"jpeg420-decode");
+    work.subsampled=!strcmp(argv[1],"jpeg420-decode") ? 420 : !strcmp(argv[1],"jpeg422-decode") ? 422 : 0;
     if (number(argv[5]) != 8) fail("JPEG decode reference requires depth 8.");
     work.row_bytes = work.width*4; work.raw_bytes = (size_t)work.row_bytes*work.height;
     if (work.raw_bytes > 512U*1024U*1024U) fail("Reference output exceeds 512 MiB.");
@@ -188,8 +190,8 @@ int main(int argc, char **argv)
     check_frame(&work, held); check_frame(&work, work.rgba);
     held->data[0][0] ^= 255; check_frame(&work, work.rgba); av_frame_free(&held); release(&work);
     check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"decoder\":\"mjpeg\",\"sampling\":\"%s\",\"chromaExpansionTimed\":%s,\"colorConversionTimed\":true,\"stateResetTimed\":true,\"pixelsDeterministic\":true,\"outputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
-        argv[1],work.width, work.height, work.cpu, work.subsampled ? "420" : "444", work.subsampled ? "true" : "false", work.raw_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"decoder\":\"mjpeg\",\"sampling\":\"%s\",\"chromaExpansionTimed\":%s,\"chromaVerticalFactor\":%d,\"colorConversionTimed\":true,\"stateResetTimed\":true,\"pixelsDeterministic\":true,\"outputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
+        argv[1],work.width, work.height, work.cpu, work.subsampled==420 ? "420" : work.subsampled==422 ? "422" : "444", work.subsampled ? "true" : "false", work.subsampled==420 ? 2 : 1, work.raw_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;
