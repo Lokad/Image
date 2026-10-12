@@ -9,10 +9,12 @@ import tempfile
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--cpu',type=int,default=0)
+parser.add_argument('--native-input',action='store_true')
 arguments = parser.parse_args()
 root = Path(__file__).resolve().parents[2]
 worker = root/'external/warm-reference/ffmpeg-webp-decode-warm'
-prepared = json.loads((root/'artifacts/warm-reference/webp-decode/preparation.json').read_text())
+family = 'webp-native-decode' if arguments.native_input else 'webp-decode'
+prepared = json.loads((root/f'artifacts/warm-reference/{family}/preparation.json').read_text())
 input_file = root/prepared['InputFile']; encoded = input_file.read_bytes()
 expected = (root/prepared['RasterFile']).read_bytes()
 assert hashlib.sha256(encoded).hexdigest() == prepared['InputSha256'] and len(encoded) == prepared['InputBytes']
@@ -66,5 +68,5 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-vp8l-decode-controls-') as 
         distinctSourceRasters=1,extraSourceRasters=0,qualityEnumeration=False,
         inputSha256=prepared['InputSha256'],inputBytes=len(encoded),rasterSha256=prepared['RasterSha256'],outputBytes=len(raw),outputSha256=hashlib.sha256(raw).hexdigest(),
         allRgbaSamplesExact=True,alphaExact=True,hiddenRgbExact=True,nativeCliPixelsExact=True,independentLiveOutputs=True,countersExact=True,sourceUnchanged=True,nativeReady=ready,negativeControls=negatives)
-(root/'artifacts/warm-reference/webp-decode-controls.json').write_text(json.dumps(report,indent=2)+'\n')
+(root/f'artifacts/warm-reference/{family}-controls.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps(report))

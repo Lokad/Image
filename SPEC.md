@@ -224,6 +224,11 @@ expansion before allocation. Predictor-mode validation and entropy group discove
 charge every atlas entry, checking work/cancellation every 1024 entries. Decoder
 workspace charges are released before optional orientation. Exact memory/work
 boundaries are recorded in [resource admission](docs/resource-admission.md).
+Canonical Huffman lookup may resolve an entire symbol using local bit-reader
+state and the existing tables. It charges the same logical bit reads and consumes
+no byte beyond the symbol. Tight work budgets and truncated inputs retain the
+per-bit path, partial consumption and original error precedence. Table admission
+and zero-bit single leaves are unchanged; no additional lookup storage is used.
 Output is RGBA8; VP8L dimensions are at most 16384
 per side.
 

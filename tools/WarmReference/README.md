@@ -466,6 +466,37 @@ One CPU, thread_level=0, normal SIMD and the same quiet bracketing policy apply.
 The [retained comparison](../../benchmarks/WARM-VP8L-ENCODE-EXACT.md) declares
 the substantial compression difference, allocation and failed pre-run guard.
 
+## Native-input VP8L decode
+
+`WarmWebpDecode/NativeLossless8` freezes one fixed libwebp exact=1/method=4/
+quality=75 encoding of the same original RGBA8 raster. It adds native adaptive
+coding coverage beyond `Lossless8`; the prior input and default selection remain
+unchanged. No additional performance image or encoder-setting sweep is needed.
+
+```bash
+python3 tools/WarmReference/prepare-webp-native-decode-linux.py --cpu 0
+python3 tools/WarmReference/verify-webp-decode-linux.py --cpu 0 --native-input
+```
+
+Preparation refuses to overwrite its ignored `webp-native-decode/` directory
+and requires the exact input identity established by the encode baseline. Both
+normal and scalar FFmpeg decoding must reproduce every original RGBA sample,
+including hidden RGB. Setup independently checks managed pixels, simultaneous
+owned results, native output and normal/scalar CLI agreement before timing.
+
+```powershell
+./bench.ps1 -DedicatedVm -Warm -WarmFamily WebpDecode -WarmCases NativeLossless8 -Cpu 0 -NoBuild -PrepareWarm
+./bench.ps1 -DedicatedVm -Warm -WarmFamily WebpDecode -WarmCases NativeLossless8 -Cpu 0 -NoBuild -WarmConfirm -PrepareWarm
+```
+
+Decode timing uses FFmpeg's public software decoder, with exactly the same
+frozen input on both subjects. The approved encoder-backend exception applies
+only to the untimed preparation. Public Decode/admission/entropy/transforms,
+ARGB-to-RGBA conversion and independent output acquisition/release remain in
+their respective boundaries; native wrappers/contexts are reused. No decoded
+pixels are cached. The [canonical lookup round](../../benchmarks/WARM-VP8L-CANONICAL.md)
+retains source identities, all actuals, allocation and failed guards.
+
 ## Still VP8L WebP decode
 
 The original `ffmpeg-webp-decode-warm.c` adapter uses FFmpeg's public software

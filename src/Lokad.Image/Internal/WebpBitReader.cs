@@ -51,4 +51,32 @@ internal ref struct WebpBitReader
             candidateBits |= (ulong)data[candidatePosition++] << candidateAvailable; candidateAvailable += 8;
         }
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal bool TryReadCanonical(ReadOnlySpan<int> firstCode, ReadOnlySpan<int> counts,
+        ReadOnlySpan<int> firstSymbol, ReadOnlySpan<ushort> symbols, out int symbol)
+    {
+        symbol = 0;
+        var candidateBits = bits; var candidateAvailable = available; var candidatePosition = position;
+        var code = 0;
+        // RFC 9649 section 3.7: walk the canonical prefix using local bits.
+        // No extra table, allocation or byte beyond the actual code is needed.
+        for (var length = 1; length <= 15; length++)
+        {
+            if (candidateAvailable < length)
+            {
+                if (candidatePosition == data.Length) return false;
+                candidateBits |= (ulong)data[candidatePosition++] << candidateAvailable; candidateAvailable += 8;
+            }
+            code = code * 2 + (int)(candidateBits >> (length - 1) & 1);
+            var index = code - firstCode[length];
+            if ((uint)index >= (uint)counts[length]) continue;
+            // A partial budget or missing byte keeps the original per-bit path,
+            // including consumed prefixes and limit-before-truncation order.
+            if (!context.TryWork(length)) return false;
+            bits = candidateBits >> length; available = candidateAvailable - length; position = candidatePosition;
+            symbol = symbols[firstSymbol[length] + index]; return true;
+        }
+        return false;
+    }
 }

@@ -5,7 +5,7 @@ namespace Lokad.Image.Tests;
 public sealed class WebpHuffmanTests
 {
     [Theory]
-    [InlineData(1)] [InlineData(2)] [InlineData(5)] [InlineData(8)] [InlineData(9)] [InlineData(12)]
+    [InlineData(1)] [InlineData(2)] [InlineData(5)] [InlineData(8)] [InlineData(9)] [InlineData(10)] [InlineData(12)] [InlineData(15)]
     public void CompleteUniformCodesPreserveSymbolsFieldsAndExactRequiredBytes(int length)
     {
         var alphabet = 1 << length;
@@ -129,11 +129,16 @@ public sealed class WebpHuffmanTests
         using var cancellation = new CancellationTokenSource();
         var context = new OperationContext(ImageLimits.Default, cancellation.Token);
         var tree = new WebpHuffman(Enumerable.Repeat((byte)8, 256).ToArray(), Context());
+        var longTree = new WebpHuffman(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 15 }, Context());
         var single = new WebpHuffman(new byte[] { 0, 0, 1 }, Context());
         var reader = new WebpBitReader(new byte[] { 0 }, context); cancellation.Cancel();
         try { tree.Read(ref reader); Assert.Fail("Cancellation must be observed before committing bits."); }
         catch (OperationCanceledException) { }
         Assert.Equal(0, reader.Position); Assert.Equal(2, single.Read(ref reader)); Assert.Equal(0, reader.Position);
+        var longReader = new WebpBitReader(new byte[] { 255, 255 }, context);
+        try { longTree.Read(ref longReader); Assert.Fail("Long canonical lookup must observe cancellation without consuming bytes."); }
+        catch (OperationCanceledException) { }
+        Assert.Equal(0, longReader.Position);
     }
 
     private static OperationContext Context(long work = long.MaxValue)

@@ -72,6 +72,7 @@ internal sealed class WebpHuffman
     {
         if (single >= 0) return single;
         if (shortCodes.Length != 0 && reader.TryReadHuffman(shortCodes, out var symbol)) return symbol;
+        if (reader.TryReadCanonical(firstCode, counts, firstSymbol, symbols, out var canonical)) return canonical;
         var code = 0;
         for (var length = 1; length <= 15; length++)
         {
