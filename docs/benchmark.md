@@ -17,7 +17,7 @@ Ratio = Lokad.Image / the faster FFmpeg pre/post mean; lower is faster. Upper is
 the retained conservative confidence bound, taking the larger filtered/all-actual
 bound where available. **Confirmed** requires an independent quiet repeat and
 upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
-The latest PNG16 None and VP8 repeats use `exclusive-vm-idle-v2`: live job checks and
+The latest PNG16 None, VP8 and bilinear8 repeats use `exclusive-vm-idle-v2`: live job checks and
 five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
 Earlier receipts retain their original load guard and its failures.
 
@@ -57,7 +57,7 @@ Earlier receipts retain their original load guard and its failures.
 | --- | ---: | ---: | ---: | ---: | --- |
 | [Nearest resize RGBA8](../benchmarks/WARM-NEAREST-BASELINE.md) | 313.08 | 238.62 | 1.312 / 1.497 | 132,434 | Quiet guard failed / open |
 | [Nearest resize RGBA16](../benchmarks/WARM-PREPARED-CONFIRM.md) | 105.69 | 170.58 | 0.620 / 0.629 | 264,466 | Confirmed |
-| [Bilinear resize RGBA8](../benchmarks/WARM-RESIZE-QUAD-ALPHA.md) | 729.78 | 383.01 | 1.905 / 1.927 | 157,990 | Quiet guard failed / open |
+| [Bilinear resize RGBA8](../benchmarks/WARM-BILINEAR8-QUIET.md) | 729.12 | 376.29 | 1.938 / 1.958 | 157,955 | Confirmed |
 | [Bilinear resize RGBA16](../benchmarks/bilinear16-precision-evidence.json) | — | — | — | — | Unmatched alpha; no timing |
 | [Bicubic resize RGBA8](../benchmarks/bicubic8-boundary-evidence.json) | — | — | — | — | Unmatched boundary/alpha; no timing |
 | [Crop RGBA16](../benchmarks/WARM-CROP-COPY.md) | 4.11 | 4.15 | 0.991 / 1.003 | 96 | Confirmed |

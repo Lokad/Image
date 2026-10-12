@@ -5,6 +5,10 @@ ratios, allocations and verification status in three tables. Update it after eac
 accepted performance round with `python benchmarks/render-benchmark.py`, then
 verify with `--check`. The reports below preserve the detailed evidence and history.
 
+The [bilinear RGBA8 confirmation](WARM-BILINEAR8-QUIET.md) reaches 1.938x FFmpeg,
+conservative upper 1.958x, with both current idle guards passing. The fixed resize
+geometry, exact managed reference, native alpha and RGB bounds are unchanged.
+
 The [independent VP8 decode confirmation](WARM-VP8-DECODE-QUIET.md) reaches
 1.913x FFmpeg, conservative upper 1.948x, with both current idle guards passing.
 The existing native VP8/ALPH input and production implementation are unchanged.

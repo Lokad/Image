@@ -94,7 +94,7 @@ def render():
     edits = [
         row('Nearest resize RGBA8', 'warm-nearest-baseline-evidence.json', ['observation'], 'WARM-NEAREST-BASELINE.md'),
         row('Nearest resize RGBA16', 'warm-prepared-confirm-evidence.json', ['observations', -1], 'WARM-PREPARED-CONFIRM.md', True),
-        row('Bilinear resize RGBA8', 'warm-resize-quad-alpha-evidence.json', ['candidate', -1], 'WARM-RESIZE-QUAD-ALPHA.md'),
+        row('Bilinear resize RGBA8', 'warm-bilinear8-quiet-evidence.json', ['observations', -1], 'WARM-BILINEAR8-QUIET.md', True),
         pending('Bilinear resize RGBA16', 'bilinear16-precision-evidence.json', 'Unmatched alpha; no timing'),
         pending('Bicubic resize RGBA8', 'bicubic8-boundary-evidence.json', 'Unmatched boundary/alpha; no timing'),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
@@ -129,7 +129,7 @@ Ratio = Lokad.Image / the faster FFmpeg pre/post mean; lower is faster. Upper is
 the retained conservative confidence bound, taking the larger filtered/all-actual
 bound where available. **Confirmed** requires an independent quiet repeat and
 upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
-The latest PNG16 None and VP8 repeats use `exclusive-vm-idle-v2`: live job checks and
+The latest PNG16 None, VP8 and bilinear8 repeats use `exclusive-vm-idle-v2`: live job checks and
 five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
 Earlier receipts retain their original load guard and its failures.
 
