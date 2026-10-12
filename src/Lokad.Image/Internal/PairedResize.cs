@@ -95,18 +95,20 @@ internal static class PairedResize
                     var offset = offsets[tx] * sampleBytes;
                     if (wide16)
                     {
-                        // Each bounded UInt64 load contains one full RGBA16 pixel.
-                        // Two pixels occupy separate four-channel double lanes;
-                        // no tap reassociation or fused multiply-add is introduced.
+                        // Widen each independently bounded RGBA16 pixel once.
+                        // Alpha remains in SIMD lanes through coefficient
+                        // application, with the original multiply/add order.
                         var pixel16a = BinaryPrimitives.ReadUInt64LittleEndian(input.Slice(row0 + offset, 8));
                         var pixel16b = BinaryPrimitives.ReadUInt64LittleEndian(input.Slice(row1 + offset, 8));
-                        var pixels16 = Vector128.Create(
-                            (pixel16a & 0x0000ffffffffffffUL) | 0x0001000000000000UL,
-                            (pixel16b & 0x0000ffffffffffffUL) | 0x0001000000000000UL).AsUInt16();
+                        var pixels16 = Vector128.Create(pixel16a, pixel16b).AsUInt16();
                         var samples16 = Avx512F.ConvertToVector512Double(Avx2.ConvertToVector256Int32(pixels16));
-                        var weighted16 = Avx512F.InsertVector256(Vector512.Create(weight0 * (pixel16a >> 48)),
-                            Vector256.Create(weight1 * (pixel16b >> 48)), 1);
-                        sums = Avx512F.Add(sums, Avx512F.Multiply(weighted16, samples16));
+                        var alphas16 = Avx512F.PermuteVar8x64(samples16, Vector512.Create(3L, 3, 3, 3, 7, 7, 7, 7));
+                        var coefficients16 = Avx512F.InsertVector256(Vector512.Create(weight0), Vector256.Create(weight1), 1);
+                        var weighted16 = Avx512F.Multiply(coefficients16, alphas16);
+                        var colors16 = Avx512F.Or(Avx512F.And(samples16.AsUInt64(),
+                            Vector512.Create(ulong.MaxValue, ulong.MaxValue, ulong.MaxValue, 0, ulong.MaxValue, ulong.MaxValue, ulong.MaxValue, 0)),
+                            Vector512.Create(0UL, 0, 0, 0x3ff0000000000000UL, 0, 0, 0, 0x3ff0000000000000UL)).AsDouble();
+                        sums = Avx512F.Add(sums, Avx512F.Multiply(weighted16, colors16));
                         weightSum0 += weight0; weightSum1 += weight1;
                         continue;
                     }
@@ -143,6 +145,7 @@ internal static class PairedResize
         return Avx512F.Add(sums, Avx512F.Multiply(weighted, samples));
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void Store<T>(ImageBuffer source, Span<byte> output, Vector256<double> sums,
         double weightSum, int x, int y, int width, int height, ResizeFilter filter, OperationContext context) where T : unmanaged
     {
@@ -164,6 +167,7 @@ internal static class PairedResize
         output[destination + 3] = (byte)roundedAlpha;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void Store16(ImageBuffer source, Span<byte> output, Vector256<double> sums,
         double weightSum, int x, int y, int width, int height, ResizeFilter filter, OperationContext context)
     {

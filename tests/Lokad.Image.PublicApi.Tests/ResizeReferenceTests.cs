@@ -7,6 +7,26 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class ResizeReferenceTests
 {
     [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void UInt16PairedStoresKeepVisibleAndZeroAlphaRowsIndependent(bool reverse)
+    {
+        using var source = ImageBuffer.Create(2, 2, 16);
+        ushort[] hidden = [65535, 17, 54321, 0, 21, 65535, 9, 0];
+        ushort[] visible = [100, 200, 300, 65535, 65535, 12345, 54321, 65535];
+        hidden.CopyTo(source.GetRow16(reverse ? 1 : 0));
+        visible.CopyTo(source.GetRow16(reverse ? 0 : 1));
+        var input = OriginalPixels.Bytes(source);
+        using var prepared = ImageTransforms.Resize(source, 3, 2, ResizeFilter.Bilinear);
+        using var direct = ImageTransforms.Resize(source, 3, 2, ResizeFilter.Bilinear,
+            new ImageLimits { MaxWorkingBytes = input.Length + 3 * 2 * 8 + 4096 });
+        Assert.Equal(OriginalPixels.Bytes(direct), OriginalPixels.Bytes(prepared));
+        Assert.Equal(new ushort[12], prepared.GetRow16(reverse ? 1 : 0).ToArray());
+        Assert.Equal(visible.AsSpan(0, 4).ToArray(), prepared.GetRow16(reverse ? 0 : 1).Slice(0, 4).ToArray());
+        Assert.Equal(visible.AsSpan(4, 4).ToArray(), prepared.GetRow16(reverse ? 0 : 1).Slice(8, 4).ToArray());
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+    }
+
+    [Theory]
     [InlineData(ResizeFilter.Bilinear, 3)] [InlineData(ResizeFilter.Bilinear, 4)]
     [InlineData(ResizeFilter.Bicubic, 3)] [InlineData(ResizeFilter.Bicubic, 4)]
     public void UInt16PairedRowsPreserveTinyAlphaHalvesAndOddTails(ResizeFilter filter, int height)

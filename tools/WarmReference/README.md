@@ -1,5 +1,13 @@
 # Warm FFmpeg reference
 
+After a source overlay or rollback that preserves file timestamps, force a
+Release rebuild before preparation: `dotnet build benchmarks/Lokad.Image.Benchmarks
+-c Release -t:Rebuild --no-restore --tl:off`. Incremental build can retain a
+superseded DLL. Verify every production method body and implementation flag
+against the accepted actual package before profiling or measurement, and check
+each proof before reporting success. Freeze the four actual child files and
+original receipts before another preparation or source mutation.
+
 RGBA16 bilinear comparisons may explicitly use `--allow-alpha-rounding1`:
 native alpha maximum error 1 and RMSE <=0.25 in full 16-bit sample units.
 The worker still refuses the original raster in its default exact-alpha mode,

@@ -66,7 +66,7 @@ timing comparison; compression efficiency parity is not established.
 | [Nearest resize RGBA8](../benchmarks/WARM-COVERAGE-QUIET.md) | 58.67 | 252.66 | 0.232 / 0.241 | 132,294 | Confirmed |
 | [Nearest resize RGBA16](../benchmarks/WARM-PREPARED-CONFIRM.md) | 105.69 | 170.58 | 0.620 / 0.629 | 264,466 | Confirmed |
 | [Bilinear resize RGBA8](../benchmarks/WARM-BILINEAR8-QUIET.md) | 729.12 | 376.29 | 1.938 / 1.958 | 157,955 | Confirmed |
-| [Bilinear resize RGBA16†](../benchmarks/WARM-BILINEAR16-SIMD.md) | 936.46 | 419.61 | 2.232 / 3.203 | 290,111 | Above 2x / open |
+| [Bilinear resize RGBA16†](../benchmarks/WARM-BILINEAR16-REGISTER.md) | 784.03 | 418.41 | 1.874 / 1.908 | 290,118 | Confirmed |
 | [Bicubic resize RGBA8](../benchmarks/bicubic8-boundary-evidence.json) | — | — | — | — | Unmatched boundary/alpha; no timing |
 | [Crop RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 2.34 | 2.27 | 1.033 / 1.039 | 96 | Confirmed |
 | [Crop RGBA16](../benchmarks/WARM-CROP-COPY.md) | 4.11 | 4.15 | 0.991 / 1.003 | 96 | Confirmed |
@@ -89,9 +89,9 @@ timing comparison; compression efficiency parity is not established.
 † RGBA16 bilinear allows native-only alpha maximum error 1 / RMSE <=0.25 in
 full 16-bit sample units, alongside the same RGB bound. Managed pixels still
 match the exact rational reference; RGBA8 native alpha stays exact. The latest
-RGBA16 screen is above 2x; confirmation and its one fresh attempt failed before
-launch. It remains open. A separate four-tap prototype was reverted after only
-about 1% observed mean-time reduction.
+RGBA16 independent confirmation clears 2x with both quiet guards passing.
+Earlier failed screens/prechecks and rejected prototypes remain recorded in
+the linked reports.
 
 Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
 diagnostics or raw GC allocated bytes / operation count (rounded up, including

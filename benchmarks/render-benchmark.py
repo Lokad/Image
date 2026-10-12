@@ -97,7 +97,7 @@ def render():
         row('Nearest resize RGBA8', 'warm-coverage-quiet-evidence.json', ['cases', 'nearest8', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
         row('Nearest resize RGBA16', 'warm-prepared-confirm-evidence.json', ['observations', -1], 'WARM-PREPARED-CONFIRM.md', True),
         row('Bilinear resize RGBA8', 'warm-bilinear8-quiet-evidence.json', ['observations', -1], 'WARM-BILINEAR8-QUIET.md', True),
-        row('Bilinear resize RGBA16†', 'warm-bilinear16-simd-evidence.json', ['observations', -1], 'WARM-BILINEAR16-SIMD.md'),
+        row('Bilinear resize RGBA16†', 'warm-bilinear16-register-evidence.json', ['observations', -1], 'WARM-BILINEAR16-REGISTER.md', True),
         pending('Bicubic resize RGBA8', 'bicubic8-boundary-evidence.json', 'Unmatched boundary/alpha; no timing'),
         row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
@@ -161,9 +161,9 @@ timing comparison; compression efficiency parity is not established.
 † RGBA16 bilinear allows native-only alpha maximum error 1 / RMSE <=0.25 in
 full 16-bit sample units, alongside the same RGB bound. Managed pixels still
 match the exact rational reference; RGBA8 native alpha stays exact. The latest
-RGBA16 screen is above 2x; confirmation and its one fresh attempt failed before
-launch. It remains open. A separate four-tap prototype was reverted after only
-about 1% observed mean-time reduction.
+RGBA16 independent confirmation clears 2x with both quiet guards passing.
+Earlier failed screens/prechecks and rejected prototypes remain recorded in
+the linked reports.
 
 Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
 diagnostics or raw GC allocated bytes / operation count (rounded up, including

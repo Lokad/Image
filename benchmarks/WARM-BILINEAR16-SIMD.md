@@ -61,8 +61,12 @@ Managed allocation is raw GC bytes / operations rounded up, including harness.
 Both OSes pass 2,396 Release tests each (648 internal, 852 public API, 896 live
 FFmpeg comparisons), 145 scalar resize/admission controls each and all three
 usage examples through the same actual dependency-free Release package.
-All 571 production method bodies and flags in the accepted candidate's fresh
-and actual timed child match its package; earlier packages remain separately bound.
+All 571 production method bodies and flags in the actual timed child match
+its package; earlier packages remain separately bound. A subsequent audit found
+that the original fresh-DLL QA assertion failed after timestamp-preserving
+rollback left a stale prototype. That fresh-DLL claim is corrected; forced
+rebuild and verified current identities are recorded in the
+[subsequent register-construction report](WARM-BILINEAR16-REGISTER.md).
 RGBA8 validation-only BenchmarkDotNet smoke and native rejection controls pass.
 
 [Numeric evidence](warm-bilinear16-simd-evidence.json) retains original and

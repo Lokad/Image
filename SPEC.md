@@ -123,6 +123,8 @@ On AVX-512-capable CPUs, short-support RGBA16 filtering processes two output
 rows in independent SIMD lanes, with the original tap and multiply/add order.
 Other CPUs and an unpaired final row retain scalar filtering. Memory admission,
 per-row work charges and exact tiny-alpha rounding remain unchanged.
+RGBA16 tap alpha extraction and coefficient application stay in SIMD lanes;
+full samples are widened once, with no intermediate image or added scratch.
 RGBA16 stores normalize and round four channels together. Half comparisons use
 the fractional remainder, preserving adjacent binary64 values on either side
 of a half; final channels saturate to the full 16-bit range.

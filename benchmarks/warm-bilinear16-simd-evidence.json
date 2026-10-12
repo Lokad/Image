@@ -2329,7 +2329,7 @@
     "librarySha256": "003d7c8913187173091c79a11b4271a5642f1cb04fd82c58cc891050f9021296",
     "productionMethodsAndFlagsSha256": "bdda909a31bdafdb68b8f607edf9ed1f54d390eeba258a9dd81366dc4d54b567"
   },
-  "allFreshAndTimedProductionMethodsAndFlagsMatch": true,
+  "allFreshAndTimedProductionMethodsAndFlagsMatch": false,
   "productionMethodDefinitions": 571,
   "validation": {
     "windowsReleaseTests": 2396,
@@ -2348,5 +2348,30 @@
       "source": "59026241084478dd42901fbd156af10187b7c336ec156a7e7905f9043716340d"
     }
   },
-  "nextAction": "Stop tuning this fixed pair when independently confirmed; prioritize remaining substantial gaps and unmatched/uncovered cases. Full required warm scope remains open."
+  "nextAction": "Stop tuning this fixed pair when independently confirmed; prioritize remaining substantial gaps and unmatched/uncovered cases. Full required warm scope remains open.",
+  "originalTimedChildMethodsAndFlagsMatchAcceptedPackage": true,
+  "historicalFreshIdentityCorrection": {
+    "reason": "A timestamp-preserving source rollback left a stale compiled prototype. The original fresh-DLL QA assertion failed; it did not verify the accepted package. Original timed child/package identities remain valid.",
+    "originalQaArchive": {
+      "sha256": "41a50d53f9cc5f894af3d56c28d73edadfa5f7343a934a05d730fa30d9a90086",
+      "files": 110,
+      "source": "59026241084478dd42901fbd156af10187b7c336ec156a7e7905f9043716340d"
+    },
+    "rejectedProfileArchive": {
+      "sha256": "304221ca85c8ba1386500f6dba6f1355d6b5ea3a59247e9d4242b6094921a4ec",
+      "files": 29,
+      "source": "cf00f479b212e0f01b43ce79d69846ebb7fa49c292c29f076ce08b70f5f212b0",
+      "profilingOnly": true,
+      "rejected": true,
+      "reason": "Stale compiled four-tap prototype after timestamp-preserving source rollback; method identity differs from accepted package."
+    },
+    "forcedRebuildVerifiedBeforeProfiling": true,
+    "correctedOriginalPackageProfileArchive": {
+      "sha256": "64d63fd54e4dfa772a474bb6861ec15a172d022180b4625649013f2a6558137a",
+      "files": 35,
+      "profilingOnly": true,
+      "noTimingClaim": true,
+      "source": "cf00f479b212e0f01b43ce79d69846ebb7fa49c292c29f076ce08b70f5f212b0"
+    }
+  }
 }
