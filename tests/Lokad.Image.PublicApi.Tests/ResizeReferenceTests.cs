@@ -7,6 +7,26 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class ResizeReferenceTests
 {
     [Theory]
+    [InlineData(ResizeFilter.Bilinear, 3)] [InlineData(ResizeFilter.Bilinear, 4)]
+    [InlineData(ResizeFilter.Bicubic, 3)] [InlineData(ResizeFilter.Bicubic, 4)]
+    public void UInt16PairedRowsPreserveTinyAlphaHalvesAndOddTails(ResizeFilter filter, int height)
+    {
+        using var source = ImageBuffer.Create(2, 2, 16);
+        ushort[] row = [65535, 23, 42, 0, 65535, 54321, 12345, 1];
+        row.CopyTo(source.GetRow16(0)); row.CopyTo(source.GetRow16(1));
+        var input = OriginalPixels.Bytes(source);
+        using var prepared = ImageTransforms.Resize(source, 3, height, filter);
+        using var direct = ImageTransforms.Resize(source, 3, height, filter,
+            new ImageLimits { MaxWorkingBytes = input.Length + 3L * height * 8 + 4096 });
+        Assert.Equal(OriginalPixels.Bytes(direct), OriginalPixels.Bytes(prepared));
+        for (var y = 0; y < height; y++)
+            Assert.Equal(new ushort[] { 65535, 54321, 12345, 1 }, prepared.GetRow16(y).Slice(4, 4).ToArray());
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+        Assert.Throws<OperationCanceledException>(() => ImageTransforms.Resize(source, 3, height, filter,
+            cancellationToken: new CancellationToken(true)));
+    }
+
+    [Theory]
     [InlineData(8, 1, 5, 2053, 3)] [InlineData(16, 1, 5, 2053, 3)]
     [InlineData(8, 513, 3, 2051, 2)] [InlineData(16, 513, 3, 2051, 2)]
     [InlineData(8, 2053, 2, 513, 1)] [InlineData(16, 2053, 2, 513, 1)]

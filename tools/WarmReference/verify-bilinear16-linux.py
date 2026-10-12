@@ -1,4 +1,4 @@
-"""Correctness-only RGBA16 precision, ownership and timing-refusal controls."""
+"""Correctness-only RGBA16 strict refusal and explicit bounded native alpha."""
 import argparse
 import hashlib
 import json
@@ -24,6 +24,16 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-bilinear16-') as name:
     assert failed.returncode != 0 and not failed.stdout
     assert 'alpha differs from the exact reference; refusing timing' in failed.stderr
 
+    bounded = subprocess.run(command + ['--allow-alpha-rounding1'], input='check\nquit\n', capture_output=True, text=True, timeout=30)
+    assert bounded.returncode == 0 and not bounded.stderr, bounded.stderr
+    ready16, check16 = map(json.loads, bounded.stdout.splitlines())
+    assert ready16['alphaTolerance1'] and ready16['depth'] == 16 and ready16['independentLiveOutputs']
+    assert check16['matched'] and not check16['alphaExact'] and check16['alphaMaximum'] == 1
+    assert check16['alphaMeanSquared'] == 62 / (256 * 129) and check16['sourceUnchanged']
+    bounded_output_sha256 = digest(output)
+    invalid = subprocess.run(command + ['--unknown'], input='quit\n', capture_output=True, text=True, timeout=30)
+    assert invalid.returncode != 0 and not invalid.stdout and 'RGBA16-only' in invalid.stderr
+
     # This small control adds no performance raster. Hidden RGB and ownership
     # must remain correct when all 16-bit alpha samples are zero.
     raw = folder / 'zero-alpha.raw'
@@ -46,7 +56,9 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-bilinear16-') as name:
                   strictAlphaMismatchRefusesReadyAndSample=True, mismatchExitCode=failed.returncode,
                   mismatchStderr=failed.stderr.strip(), rgba16ZeroAlphaRgbZero=True,
                   rgba16IndependentLiveOutputs=True, rgba16SourceUnchanged=True,
-                  strictAlphaWarmComparisonOpen=True)
-    target = root / 'artifacts/warm-reference/bilinear16-native-audit.json'
+                  boundedAlpha16Explicit=True, nativeAlphaMaximum=check16['alphaMaximum'],
+                  nativeAlphaMeanSquared=check16['alphaMeanSquared'], boundedOutputSha256=bounded_output_sha256,
+                  unknownToleranceRejected=True, strictAlphaWarmComparisonOpen=True)
+    target = root / 'artifacts/warm-reference/bilinear16-bounded-native-controls.json'
     target.write_text(json.dumps(record, indent=2) + '\n')
     print(json.dumps(record))

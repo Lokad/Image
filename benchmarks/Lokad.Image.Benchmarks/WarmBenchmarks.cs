@@ -111,8 +111,13 @@ internal static class WarmBenchmarks
                                 && value.GetProperty("nativeCliNormalScalarPixelsExact").GetBoolean()
                                 && value.GetProperty("bitstreamSyntaxVerified").GetBoolean()))
                         : family == "Bilinear" ? value.GetProperty("managedRationalReferenceExact").GetBoolean()
-                            && value.GetProperty("nativeAlphaExact").GetBoolean() && value.GetProperty("nativeZeroAlphaRgbZero").GetBoolean()
-                            && value.GetProperty("nativeRgbMaximum").GetInt32() <= 1 && value.GetProperty("nativeRgbRmse").GetDouble() <= 0.25
+                            && (depth == 8 ? value.GetProperty("nativeAlphaExact").GetBoolean()
+                                : depth == 16 && value.GetProperty("nativeAlphaBounded16").GetBoolean()
+                                    && value.GetProperty("nativeAlphaMaximum").GetInt32() is >= 0 and <= 1
+                                    && value.GetProperty("nativeAlphaRmse").GetDouble() is >= 0 and <= 0.25)
+                            && value.GetProperty("nativeZeroAlphaRgbZero").GetBoolean()
+                            && value.GetProperty("nativeRgbMaximum").GetInt32() is >= 0 and <= 1 && value.GetProperty("nativeRgbRmse").GetDouble() is >= 0 and <= 0.25
+                            && value.GetProperty("nativeCliNormalScalarPixelsExact").GetBoolean()
                             && value.GetProperty("nativeCliPixelsExact").GetBoolean() && value.GetProperty("nativePixelsDeterministic").GetBoolean()
                         : value.GetProperty("allRgbaSamplesExact").GetBoolean();
                     if (!outputVerified || !value.GetProperty("sourceUnchanged").GetBoolean()

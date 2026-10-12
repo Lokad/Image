@@ -1,5 +1,15 @@
 # Warm FFmpeg reference
 
+RGBA16 bilinear comparisons may explicitly use `--allow-alpha-rounding1`:
+native alpha maximum error 1 and RMSE <=0.25 in full 16-bit sample units.
+The worker still refuses the original raster in its default exact-alpha mode,
+rejects this option at depth 8, and validates RGB maximum 1 / RMSE <=0.25,
+zero-alpha RGB, source integrity and independent output ownership before ready.
+The managed Down16 benchmark must match the exact rational reference; the
+tolerance applies only to FFmpeg's float-stage rounding. Down8 retains exact
+native alpha. Both normal and scalar CLI outputs must match the native worker.
+Run `verify-bilinear16-linux.py` and `verify-bilinear-linux.py` before measuring.
+
 Maintain [docs/benchmark.md](../../docs/benchmark.md) after every accepted round.
 Its [renderer](../../benchmarks/render-benchmark.py) selects retained measurements
 and allocations; run it with `--check` before committing. Keep failed quiet guards,

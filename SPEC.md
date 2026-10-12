@@ -113,6 +113,20 @@ native alpha is exact and native RGB uses the existing filtered maximum error 1 
 RMSE 0.25 comparison bound. This establishes that one native profile only; other
 sizes, depths, bicubic and tiny-alpha native comparisons remain open.
 
+The original RGBA16 bilinear comparison admits a native-only alpha maximum
+error of one full 16-bit sample and RMSE at most 0.25, alongside the same RGB
+bounds. FFmpeg's float stages differ near half-sample rounding boundaries.
+Lokad.Image must still match the exact rational reference on that raster;
+this comparison tolerance does not change its pixel contract. RGBA8 native
+alpha remains exact, and native zero-alpha RGB must remain zero at both depths.
+On AVX-512-capable CPUs, short-support RGBA16 filtering processes two output
+rows in independent SIMD lanes, with the original tap and multiply/add order.
+Other CPUs and an unpaired final row retain scalar filtering. Memory admission,
+per-row work charges and exact tiny-alpha rounding remain unchanged.
+RGBA16 stores normalize and round four channels together. Half comparisons use
+the fractional remainder, preserving adjacent binary64 values on either side
+of a half; final channels saturate to the full 16-bit range.
+
 ## Formats and metadata
 
 PNG follows the [W3C specification](https://www.w3.org/TR/png/). Validate signature,

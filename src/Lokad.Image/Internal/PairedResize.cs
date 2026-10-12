@@ -6,13 +6,13 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
-/// <summary>Two independent RGBA8 output rows sharing horizontal geometry.</summary>
+/// <summary>Two independent RGBA output rows sharing horizontal geometry.</summary>
 internal static class PairedResize
 {
-    internal static bool TryRows(ImageBuffer source, ImageBuffer result,
+    internal static bool TryRows<T>(ImageBuffer source, ImageBuffer result,
         ReadOnlySpan<byte> input, Span<byte> output, ReadOnlySpan<double> horizontalWeights,
         ReadOnlySpan<int> horizontalOffsets, ReadOnlySpan<int> horizontalCounts, int y,
-        double scaleY, int radius, ResizeFilter filter, long rowWork, OperationContext context)
+        double scaleY, int radius, ResizeFilter filter, long rowWork, OperationContext context) where T : unmanaged
     {
         var height = result.Height;
         if (y + 1 >= height) return false;
@@ -27,7 +27,9 @@ internal static class PairedResize
         // The caller has charged the first row. Each accepted pair charges both.
         context.Work(rowWork);
         var width = result.Width;
-        var stride = source.Width * 4;
+        var wide16 = typeof(T) == typeof(ushort);
+        var sampleBytes = wide16 ? 2 : 1;
+        var stride = source.Width * 4 * sampleBytes;
         Span<double> verticalWeights = stackalloc double[16];
         Span<int> verticalOffsets = stackalloc int[16];
         for (var tap = 0; tap < count; tap++)
@@ -42,7 +44,7 @@ internal static class PairedResize
             var baseX = x * 8;
             var weights = horizontalWeights.Slice(baseX, horizontalCounts[x]);
             var offsets = horizontalOffsets.Slice(baseX, weights.Length);
-            var quad = weights.Length == 4 && offsets[1] == offsets[0] + 4
+            var quad = !wide16 && weights.Length == 4 && offsets[1] == offsets[0] + 4
                 && offsets[2] == offsets[0] + 8 && offsets[3] == offsets[0] + 12;
             var quadWeights = quad
                 ? MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(weights))
@@ -90,7 +92,24 @@ internal static class PairedResize
                     var weight0 = wy0 * weights[tx];
                     var weight1 = wy1 * weights[tx];
                     if (weight0 == 0 && weight1 == 0) continue;
-                    var offset = offsets[tx];
+                    var offset = offsets[tx] * sampleBytes;
+                    if (wide16)
+                    {
+                        // Each bounded UInt64 load contains one full RGBA16 pixel.
+                        // Two pixels occupy separate four-channel double lanes;
+                        // no tap reassociation or fused multiply-add is introduced.
+                        var pixel16a = BinaryPrimitives.ReadUInt64LittleEndian(input.Slice(row0 + offset, 8));
+                        var pixel16b = BinaryPrimitives.ReadUInt64LittleEndian(input.Slice(row1 + offset, 8));
+                        var pixels16 = Vector128.Create(
+                            (pixel16a & 0x0000ffffffffffffUL) | 0x0001000000000000UL,
+                            (pixel16b & 0x0000ffffffffffffUL) | 0x0001000000000000UL).AsUInt16();
+                        var samples16 = Avx512F.ConvertToVector512Double(Avx2.ConvertToVector256Int32(pixels16));
+                        var weighted16 = Avx512F.InsertVector256(Vector512.Create(weight0 * (pixel16a >> 48)),
+                            Vector256.Create(weight1 * (pixel16b >> 48)), 1);
+                        sums = Avx512F.Add(sums, Avx512F.Multiply(weighted16, samples16));
+                        weightSum0 += weight0; weightSum1 += weight1;
+                        continue;
+                    }
                     var pixel0 = BinaryPrimitives.ReadUInt32LittleEndian(input.Slice(row0 + offset, 4));
                     var pixel1 = BinaryPrimitives.ReadUInt32LittleEndian(input.Slice(row1 + offset, 4));
                     var pixels = Vector128.CreateScalar(
@@ -106,8 +125,8 @@ internal static class PairedResize
                 }
                 context.Cancellation.ThrowIfCancellationRequested();
             }
-            Store(source, output, sums.GetLower(), weightSum0, x, y, width, height, filter, context);
-            Store(source, output, sums.GetUpper(), weightSum1, x, y + 1, width, height, filter, context);
+            Store<T>(source, output, sums.GetLower(), weightSum0, x, y, width, height, filter, context);
+            Store<T>(source, output, sums.GetUpper(), weightSum1, x, y + 1, width, height, filter, context);
         }
         return true;
     }
@@ -124,24 +143,57 @@ internal static class PairedResize
         return Avx512F.Add(sums, Avx512F.Multiply(weighted, samples));
     }
 
-    private static void Store(ImageBuffer source, Span<byte> output, Vector256<double> sums,
-        double weightSum, int x, int y, int width, int height, ResizeFilter filter, OperationContext context)
+    private static void Store<T>(ImageBuffer source, Span<byte> output, Vector256<double> sums,
+        double weightSum, int x, int y, int width, int height, ResizeFilter filter, OperationContext context) where T : unmanaged
     {
+        if (typeof(T) == typeof(ushort))
+        {
+            Store16(source, output, sums, weightSum, x, y, width, height, filter, context);
+            return;
+        }
         var alpha = sums.GetElement(3);
         var normalizedAlpha = alpha / weightSum;
         var roundedAlpha = normalizedAlpha > 0 && normalizedAlpha < 1
             ? ResizeAlpha.Round(source, x, y, width, height, filter, context)
-            : Round(normalizedAlpha);
+            : Round(normalizedAlpha, 255);
         var hasColor = roundedAlpha > 0 && alpha > 0;
         var destination = (y * width + x) * 4;
-        output[destination] = (byte)Round(hasColor ? sums.GetElement(0) / alpha : 0);
-        output[destination + 1] = (byte)Round(hasColor ? sums.GetElement(1) / alpha : 0);
-        output[destination + 2] = (byte)Round(hasColor ? sums.GetElement(2) / alpha : 0);
+        output[destination] = (byte)Round(hasColor ? sums.GetElement(0) / alpha : 0, 255);
+        output[destination + 1] = (byte)Round(hasColor ? sums.GetElement(1) / alpha : 0, 255);
+        output[destination + 2] = (byte)Round(hasColor ? sums.GetElement(2) / alpha : 0, 255);
         output[destination + 3] = (byte)roundedAlpha;
     }
 
-    private static int Round(double value)
-        => (int)Math.Clamp(Math.Round(value, MidpointRounding.AwayFromZero), 0, 255);
+    private static void Store16(ImageBuffer source, Span<byte> output, Vector256<double> sums,
+        double weightSum, int x, int y, int width, int height, ResizeFilter filter, OperationContext context)
+    {
+        var alpha = sums.GetElement(3);
+        var normalizedAlpha = alpha / weightSum;
+        var tinyAlpha = normalizedAlpha > 0 && normalizedAlpha < 1;
+        var alphaValue = tinyAlpha ? ResizeAlpha.Round(source, x, y, width, height, filter, context) : normalizedAlpha;
+        var hasColor = alpha > 0 && alphaValue >= 1;
+        var values = hasColor ? Avx.Divide(sums, Vector256.Create(alpha)) : Vector256<double>.Zero;
+        values = values.WithElement(3, alphaValue);
+        var packed = Round16(values);
+        BinaryPrimitives.WriteUInt64LittleEndian(output.Slice((y * width + x) * 8, 8), packed);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static ulong Round16(Vector256<double> values)
+    {
+        values = Avx.Min(Avx.Max(values, Vector256<double>.Zero), Vector256.Create(65535d));
+        var integral = Avx.RoundToNegativeInfinity(values);
+        // Subtract the integral part before testing halves. Adding 0.5 first
+        // can incorrectly round a representable value just below a half.
+        var fraction = Avx.Subtract(values, integral);
+        var increment = Avx.And(Avx.Compare(fraction, Vector256.Create(0.5), FloatComparisonMode.OrderedGreaterThanOrEqualNonSignaling),
+            Vector256.Create(1d));
+        var rounded = Avx.ConvertToVector128Int32WithTruncation(Avx.Add(integral, increment));
+        return Sse41.PackUnsignedSaturate(rounded, Vector128<int>.Zero).AsUInt64().GetElement(0);
+    }
+
+    private static int Round(double value, int maximum)
+        => (int)Math.Clamp(Math.Round(value, MidpointRounding.AwayFromZero), 0, maximum);
 
     private static double Kernel(double distance, ResizeFilter filter)
     {

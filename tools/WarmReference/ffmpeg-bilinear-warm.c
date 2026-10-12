@@ -49,6 +49,8 @@ typedef struct {
     AVFilterContext *input, *output;
     AVFrame *source, *result;
     uint8_t *original, *reference;
+    int allow_alpha_rounding1, alpha_maximum;
+    uint64_t alpha_squared;
     int width, height, depth, row_bytes, output_width, output_height, output_row_bytes, cpu;
     uint64_t completed, observed;
 } Work;
@@ -120,13 +122,16 @@ static void make_reference(Work *work)
 }
 static void check_frame(Work *work, AVFrame *frame)
 {
-    uint64_t squared=0;
+    uint64_t squared=0,alpha_squared=0;int alpha_maximum=0;
     int sample_bytes=work->depth/8,pixel_bytes=4*sample_bytes;
     for(int y=0;y<work->output_height;y++)for(int x=0;x<work->output_width;x++) {
         const uint8_t *a=frame->data[0]+(size_t)y*frame->linesize[0]+x*pixel_bytes;
         const uint8_t *b=work->reference+(size_t)y*work->output_row_bytes+x*pixel_bytes;
         unsigned alpha=sample(a+3*sample_bytes,work->depth);
-        if(alpha!=sample(b+3*sample_bytes,work->depth))fail("Bilinear alpha differs from the exact reference; refusing timing.");
+        int alpha_difference=abs((int)alpha-(int)sample(b+3*sample_bytes,work->depth));
+        if(alpha_difference>(work->allow_alpha_rounding1?1:0))fail("Bilinear alpha differs from the exact reference; refusing timing.");
+        if(alpha_difference>alpha_maximum)alpha_maximum=alpha_difference;
+        alpha_squared+=(uint64_t)alpha_difference*alpha_difference;
         for(int c=0;c<3;c++) {
             unsigned value=sample(a+c*sample_bytes,work->depth);
             if(!alpha&&value)fail("Bilinear zero-alpha RGB differs.");
@@ -134,6 +139,9 @@ static void check_frame(Work *work, AVFrame *frame)
             squared+=(uint64_t)d*d;
         }
     }
+    if(alpha_squared*16>(uint64_t)work->output_width*work->output_height)
+        fail("Bilinear alpha RMSE exceeds approved 0.25 bound.");
+    work->alpha_maximum=alpha_maximum;work->alpha_squared=alpha_squared;
     if(squared*16>(uint64_t)work->output_width*work->output_height*3)
         fail("Bilinear RGB RMSE exceeds existing 0.25 bound.");
 }
@@ -158,13 +166,17 @@ static void check_and_write(Work *work,const char *path)
 
 int main(int argc, char **argv)
 {
-    if (argc != 7 || strcmp(argv[1], "bilinear-resize"))
-        fail("Usage: ffmpeg-bilinear-warm bilinear-resize INPUT_RAW WIDTH HEIGHT DEPTH OUTPUT_RAW");
+    if ((argc != 7 && argc != 8) || strcmp(argv[1], "bilinear-resize"))
+        fail("Usage: ffmpeg-bilinear-warm bilinear-resize INPUT_RAW WIDTH HEIGHT DEPTH OUTPUT_RAW [--allow-alpha-rounding1]");
     av_log_set_level(AV_LOG_ERROR);
     Work work = {0}; work.cpu = affinity_cpu();
     work.width = number(argv[3]); work.height = number(argv[4]); work.depth = number(argv[5]);
     if ((work.depth != 8 && work.depth != 16) || work.width < 2 || work.height < 2) fail("Use RGBA8/RGBA16 dimensions at least two.");
     work.output_width=work.width/2;work.output_height=work.height/2;work.output_row_bytes=work.output_width*(work.depth/8)*4;
+    if(argc==8) {
+        if(work.depth!=16 || strcmp(argv[7],"--allow-alpha-rounding1"))fail("Alpha tolerance is explicit and RGBA16-only.");
+        work.allow_alpha_rounding1=1;
+    }
     work.row_bytes = work.width * (work.depth / 8) * 4;
     size_t bytes = (size_t)work.row_bytes * work.height;
     if (bytes > 512U * 1024U * 1024U) fail("Reference input exceeds 512 MiB.");
@@ -205,15 +217,16 @@ int main(int argc, char **argv)
     if (work.graph->nb_threads != 1 || work.graph->thread_type != 0) fail("Graph threading differs.");
     make_reference(&work);
     check_ownership(&work);check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"bilinear-resize\",\"width\":%d,\"height\":%d,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"filterThreads\":1,\"threadType\":0,\"outputWidth\":%d,\"outputHeight\":%d,\"kernel\":\"triangle\",\"alphaMode\":\"straight\",\"premultipliedAlphaTimed\":true,\"encodedSampleSpace\":true,\"independentLiveOutputs\":true,\"initialCompletedOperations\":%" PRIu64 ",\"inputStride\":%d,\"ffmpegVersion\":\"%s\",\"avfilterVersion\":%u,\"avutilVersion\":%u}\n",
-           work.width, work.height, work.depth, work.cpu, work.output_width,work.output_height,work.completed,work.source->linesize[0],
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"bilinear-resize\",\"width\":%d,\"height\":%d,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"filterThreads\":1,\"threadType\":0,\"outputWidth\":%d,\"outputHeight\":%d,\"kernel\":\"triangle\",\"alphaMode\":\"straight\",\"premultipliedAlphaTimed\":true,\"encodedSampleSpace\":true,\"independentLiveOutputs\":true,\"alphaTolerance1\":%s,\"initialCompletedOperations\":%" PRIu64 ",\"inputStride\":%d,\"ffmpegVersion\":\"%s\",\"avfilterVersion\":%u,\"avutilVersion\":%u}\n",
+           work.width, work.height, work.depth, work.cpu, work.output_width,work.output_height,work.allow_alpha_rounding1?"true":"false",work.completed,work.source->linesize[0],
            av_version_info(), avfilter_version(), avutil_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;
         if (!strcmp(line, "check\n")) {
             check_and_write(&work, argv[6]);
-            puts("{\"state\":\"checked\",\"matched\":true,\"alphaExact\":true,\"sourceUnchanged\":true}"); fflush(stdout); continue;
+            printf("{\"state\":\"checked\",\"matched\":true,\"alphaExact\":%s,\"alphaMaximum\":%d,\"alphaMeanSquared\":%.17g,\"sourceUnchanged\":true}\n",
+                work.alpha_maximum?"false":"true",work.alpha_maximum,(double)work.alpha_squared/(work.output_width*work.output_height)); fflush(stdout); continue;
         }
         uint64_t count; char extra;
         if (sscanf(line, "sample %" SCNu64 " %c", &count, &extra) != 1 || !count || count > UINT64_C(10000000))

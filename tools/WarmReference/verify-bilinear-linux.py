@@ -30,6 +30,7 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-bilinear-') as name:
  def reject(label,arguments,protocol='quit\n',cpus=None):
   result=run(arguments,protocol,cpus);assert result.returncode!=0 and result.stderr,label;controls.append(label)
  reject('missing argument',base[:-1])
+ reject('RGBA8 alpha tolerance forbidden',base+['--allow-alpha-rounding1'])
  for label,index,value in [('operation',1,'nearest-resize'),('dimension zero',3,'0'),('dimension text',3,'513x'),
   ('dimension bound',3,'32769'),('minimum output',3,'1'),('wrong precision',5,'12')]:
   values=base.copy();values[index]=value;reject(label,values)

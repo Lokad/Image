@@ -3,7 +3,11 @@
 Lokad.Image matches the exact rational reference on the existing original
 513x259-to-256x129 RGBA16 raster. FFmpeg's float path differs by one raw alpha
 sample at 62 of 33,024 output pixels. This case remains unmatched under
-exact-alpha performance acceptance. No RGBA16 performance timing is reported.
+exact-alpha performance acceptance. This historical audit reports no timing.
+The current comparison additionally allows an explicit native-only alpha bound
+of maximum 1 / RMSE 0.25 at depth 16. Managed rational pixels remain exact;
+the default native mode and RGBA8 still require exact alpha. Current timing and
+confirmation status belong in the [benchmark summary](../docs/benchmark.md).
 
 | Subject | RGB maximum / RMSE | Alpha maximum / RMSE |
 | --- | ---: | ---: |
@@ -36,7 +40,8 @@ single RGBA8 BenchmarkDotNet smoke case still pass.
 
 The added live test audits full-precision native rounding while retaining exact
 managed rational pixels. Its one-sample native alpha diagnostic bound does not
-qualify a matched performance pair. All 2129 Release tests pass on each OS.
+qualify a matched performance pair under this audit's strict-alpha rule.
+All 2129 Release tests passed on each OS at the audited source.
 All 543 production method bodies and implementation flags match the retained
 Release package; production output and algorithms are unchanged.
 

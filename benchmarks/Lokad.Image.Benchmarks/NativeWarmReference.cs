@@ -51,6 +51,7 @@ internal sealed class NativeWarmReference : IDisposable
             start.ArgumentList.Add(nativeQuality.Value.ToString(CultureInfo.InvariantCulture));
         }
         else if (nativeQuality.HasValue) throw new ArgumentException("Native quality applies only to JPEG or VP8.", nameof(nativeQuality));
+        if (bilinear && depth == 16) start.ArgumentList.Add("--allow-alpha-rounding1");
         process = Process.Start(start) ?? throw new InvalidOperationException("Could not start native warm worker.");
         errors = process.StandardError.ReadToEndAsync();
         try
@@ -63,7 +64,7 @@ internal sealed class NativeWarmReference : IDisposable
                 || Ready.GetProperty("affinityCount").GetInt32() != 1 || Ready.GetProperty(codec ? "codecThreads" : "filterThreads").GetInt32() != 1
                 || Ready.GetProperty("threadType").GetInt32() != 0 || Ready.GetProperty("operation").GetString() != operation
                 || (codec && (Ready.GetProperty("activeThreadType").GetInt32() != 0 || !Ready.GetProperty("independentLiveOutputs").GetBoolean()))
-                || ((nearest || bilinear || crop) && ((bilinear ? depth != 8 : depth is not (8 or 16)) || Ready.GetProperty("outputWidth").GetInt32() != 256
+                || ((nearest || bilinear || crop) && ((depth is not (8 or 16)) || Ready.GetProperty("outputWidth").GetInt32() != 256
                     || Ready.GetProperty("outputHeight").GetInt32() != 129 || !Ready.GetProperty("independentLiveOutputs").GetBoolean()))
                 || (normal && (depth is not (8 or 16) || Ready.GetProperty("outputWidth").GetInt32() != 513
                     || Ready.GetProperty("outputHeight").GetInt32() != 259 || !Ready.GetProperty("independentLiveOutputs").GetBoolean()
@@ -89,7 +90,8 @@ internal sealed class NativeWarmReference : IDisposable
                 || (crop && (Ready.GetProperty("cropX").GetInt32() != 127 || Ready.GetProperty("cropY").GetInt32() != 65
                     || !Ready.GetProperty("ownedCopyTimed").GetBoolean()))
                 || (bilinear && (Ready.GetProperty("kernel").GetString() != "triangle" || Ready.GetProperty("alphaMode").GetString() != "straight"
-                    || !Ready.GetProperty("premultipliedAlphaTimed").GetBoolean() || !Ready.GetProperty("encodedSampleSpace").GetBoolean()))
+                    || !Ready.GetProperty("premultipliedAlphaTimed").GetBoolean() || !Ready.GetProperty("encodedSampleSpace").GetBoolean()
+                    || Ready.GetProperty("alphaTolerance1").GetBoolean() != (depth == 16)))
                 || (jpeg && (Ready.GetProperty("conversionThreads").GetInt32() != 1 || Ready.GetProperty("qscale").GetInt32() != nativeQuality
                     || Ready.GetProperty("backgroundRgb").GetInt32() != 0x204060 || Ready.GetProperty("sampling").GetString() != "444"
                     || !Ready.GetProperty("colorConversionTimed").GetBoolean() || !Ready.GetProperty("flatteningTimed").GetBoolean()
@@ -178,7 +180,11 @@ internal sealed class NativeWarmReference : IDisposable
         process.StandardInput.WriteLine("check"); process.StandardInput.Flush();
         var value = Read();
         var verified = Ready.GetProperty("operation").GetString() == "bilinear-resize"
-            ? value.GetProperty("matched").GetBoolean() && value.GetProperty("alphaExact").GetBoolean()
+            ? value.GetProperty("matched").GetBoolean()
+                && (Ready.GetProperty("depth").GetInt32() == 8 ? value.GetProperty("alphaExact").GetBoolean()
+                    : Ready.GetProperty("alphaTolerance1").GetBoolean()
+                        && value.GetProperty("alphaMaximum").GetInt32() is >= 0 and <= 1
+                        && value.GetProperty("alphaMeanSquared").GetDouble() is >= 0 and <= 0.0625)
             : value.GetProperty("exact").GetBoolean();
         if (value.GetProperty("state").GetString() != "checked" || !verified
             || !value.GetProperty("sourceUnchanged").GetBoolean())
