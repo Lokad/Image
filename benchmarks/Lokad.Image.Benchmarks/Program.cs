@@ -2,6 +2,12 @@ using BenchmarkDotNet.Running;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
+if (args.SequenceEqual(["--prepare-warm-png-adam7-16"]))
+{
+    WarmPngAdam7Input.Prepare();
+    return;
+}
+
 if (args.SequenceEqual(["--validate-png-crop-resize-cleanup"]))
 {
     Environment.SetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID", "png-pipeline-cleanup-" + Guid.NewGuid().ToString("N"));

@@ -82,12 +82,12 @@ static uint32_t big32(const uint8_t *value)
 {
     return (uint32_t)value[0] << 24 | (uint32_t)value[1] << 16 | (uint32_t)value[2] << 8 | value[3];
 }
-static void check_profile(const uint8_t *data, size_t size, int width, int height, int depth)
+static void check_profile(const uint8_t *data, size_t size, int width, int height, int depth, int interlace)
 {
     static const uint8_t signature[] = {137,80,78,71,13,10,26,10};
     if (size < 33 || memcmp(data, signature, 8) || big32(data+8) != 13 || memcmp(data+12, "IHDR", 4)
         || big32(data+16) != (uint32_t)width || big32(data+20) != (uint32_t)height
-        || data[24] != depth || data[25] != 6 || data[26] || data[27] || data[28]) fail("PNG input/profile differs.");
+        || data[24] != depth || data[25] != 6 || data[26] || data[27] || data[28] != interlace) fail("PNG input/profile differs.");
 }
 static void swap_samples(const AVFrame *input, AVFrame *output, int width, int height)
 {
@@ -159,7 +159,7 @@ static void apply(Work *work)
 }
 static void check_packet(Work *work, const AVPacket *packet)
 {
-    check_profile(packet->data, (size_t)packet->size, work->width, work->height, work->depth);
+    check_profile(packet->data, (size_t)packet->size, work->width, work->height, work->depth, 0);
     AVCodecContext *decoder = context(0, work->width, work->height, work->depth);
     AVFrame *decoded = av_frame_alloc(); if (!decoded) fail("Check frame allocation failed.");
     require(avcodec_send_packet(decoder, packet), "Check encoded PNG");
@@ -207,9 +207,10 @@ static void check_and_write(Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if (argc < 7 || (strcmp(argv[1], "png-encode") && strcmp(argv[1], "png-decode")))
-        fail("Usage: ffmpeg-png-warm png-encode|png-decode INPUT WIDTH HEIGHT DEPTH OUTPUT [EXPECTED_RAW]");
+    if (argc < 7 || (strcmp(argv[1], "png-encode") && strcmp(argv[1], "png-decode") && strcmp(argv[1], "png-adam7-decode")))
+        fail("Usage: ffmpeg-png-warm png-encode|png-decode|png-adam7-decode INPUT WIDTH HEIGHT DEPTH OUTPUT [EXPECTED_RAW]");
     Work work = {0}; work.encode = !strcmp(argv[1], "png-encode"); work.cpu = affinity_cpu();
+    int interlace = !strcmp(argv[1], "png-adam7-decode");
     if (argc != (work.encode ? 7 : 8)) fail("PNG argument count differs.");
     uint16_t endian = 1; if (*(uint8_t *)&endian != 1) fail("This reference requires a little-endian host.");
     av_log_set_level(AV_LOG_ERROR);
@@ -231,7 +232,7 @@ int main(int argc, char **argv)
         if (work.depth == 16) work.prepared = frame(work.width, work.height, AV_PIX_FMT_RGBA64BE);
     } else {
         work.encoded = read_file(argv[2], &work.encoded_bytes);
-        check_profile(work.encoded, work.encoded_bytes, work.width, work.height, work.depth);
+        check_profile(work.encoded, work.encoded_bytes, work.width, work.height, work.depth, interlace);
         require(av_new_packet(work.input, (int)work.encoded_bytes), "Allocate encoded input with decoder padding");
         work.input->flags |= AV_PKT_FLAG_KEY;
         memcpy(work.input->data, work.encoded, work.encoded_bytes);

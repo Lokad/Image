@@ -140,6 +140,11 @@ renormalization as the next primitive, followed by the inlining round above.
 
 The [PNG bit-reader inlining round](WARM-PNG-READ-INLINE.md) improves complete
 PNG16 decode about 3% and PNG8 about 9%, preserving all pixels and method bodies.
+The [Adam7 RGBA16 baseline and diagnosis](WARM-PNG-ADAM7-BASELINE.md) cover one
+seven-pass/filter-None input on the existing raster. Independent quiet confirmation
+is 2.009x FFmpeg, conservative upper2.076x. The case stays open. Generic sparse
+conversion and repeated destination access consume about18% of sampled CPU and
+identify the next substantial primitive; the default PNG selection is one Decode8.
 The means are now 1.95x / 1.81x FFmpeg; longer conservative uppers are below 2x.
 Quiet independent confirmation and required-path coverage remain open. That
 checkpoint selected the uncovered VP8 decode direction measured above.

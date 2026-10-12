@@ -17,7 +17,7 @@ internal sealed class NativeWarmReference : IDisposable
 
     public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null, int? nativeQuality = null)
     {
-        if (operation is not ("hflip" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "png-encode" or "png-decode" or "jpeg-encode" or "jpeg-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode" or "webp-encode" or "webp-decode" or "vp8-decode" or "nearest-resize" or "bilinear-resize")) throw new ArgumentOutOfRangeException(nameof(operation));
+        if (operation is not ("hflip" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "png-encode" or "png-decode" or "png-adam7-decode" or "jpeg-encode" or "jpeg-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode" or "webp-encode" or "webp-decode" or "vp8-decode" or "nearest-resize" or "bilinear-resize")) throw new ArgumentOutOfRangeException(nameof(operation));
         var normal = operation == "normal-orient";
         var transverse = operation == "transverse";
         var transpose = operation == "transpose";
@@ -44,7 +44,7 @@ internal sealed class NativeWarmReference : IDisposable
             RedirectStandardError = true, UseShellExecute = false };
         foreach (var argument in new[] { operation, state.Input, "513", "259", depth.ToString(CultureInfo.InvariantCulture), state.NativeOutput })
             start.ArgumentList.Add(argument);
-        if (operation == "png-decode") start.ArgumentList.Add(expectedRaw ?? throw new ArgumentNullException(nameof(expectedRaw)));
+        if (operation is "png-decode" or "png-adam7-decode") start.ArgumentList.Add(expectedRaw ?? throw new ArgumentNullException(nameof(expectedRaw)));
         if (jpeg || webp)
         {
             if (depth != 8 || !nativeQuality.HasValue || nativeQuality < 1 || nativeQuality > (webp ? 100 : 31)) throw new ArgumentOutOfRangeException(nameof(nativeQuality));

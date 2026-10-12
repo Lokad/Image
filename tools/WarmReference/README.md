@@ -127,6 +127,9 @@ zero/excessive counts, trailing protocol tokens and unknown commands.
 ```bash
 bash tools/WarmReference/build-png-linux.sh
 python3 tools/WarmReference/verify-png-linux.py --cpu 0
+# After a Release benchmark build, author one existing-raster Adam7 input.
+dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-png-adam7-16
+python3 tools/WarmReference/verify-png-adam7-linux.py --cpu 0
 ```
 
 ```powershell
@@ -135,11 +138,12 @@ python3 tools/WarmReference/verify-png-linux.py --cpu 0
 # Iterate one measured gap without adding images or unrelated cases.
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily Png -WarmCases Decode16 -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily Png -WarmCases Encode16 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Png -WarmCases DecodeAdam7_16 -Cpu 0 -NoBuild
 ```
 
-The three default pairs are RGBA8 encode, RGBA8 decode and RGBA16 decode on the same two
-original 513x259 rasters as horizontal flip. RGBA16 encode is explicitly selectable
-as Encode16; any selection is capped at three distinct pairs. Both decoders consume identical
+The default pair is RGBA8 decode. Encode8, Encode16, Decode16 and DecodeAdam7_16
+are explicitly selectable on the same two original 513x259 rasters as horizontal
+flip; any selection is capped at three distinct pairs. Both decoders consume identical
 resident PNG bytes and produce independent owned RGBA pixels. Native 16-bit
 decode includes acquiring a second owned frame and converting big-endian PNG
 samples to little-endian RGBA16; padded rows need no packing copy. Managed decode
@@ -167,6 +171,11 @@ verification script also tests twenty protocol/affinity rejection controls.
 Native PNG binaries and their separate build identities remain ignored under
 external/warm-reference/. The single-CPU, GC/JIT and quiet-VM policy is identical
 to horizontal flip; three-sample screens are priorities, not certification.
+The [Adam7 RGBA16 baseline](../../benchmarks/WARM-PNG-ADAM7-BASELINE.md) retains
+one authored seven-pass/filter-None input and exact normal/scalar CLI samples.
+Its independent quiet confirmation remains above2x. A six-second profile selects
+generic sparse-pixel conversion and repeated destination access for the next
+substantial primitive. Earlier failed quiet guards remain failed.
 
 ## JPEG
 

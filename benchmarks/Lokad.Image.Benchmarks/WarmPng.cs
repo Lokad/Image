@@ -8,7 +8,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16 }
+public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16 }
 
 [MemoryDiagnoser]
 public class WarmPng
@@ -27,15 +27,16 @@ public class WarmPng
     public static WarmPngCase[] SelectedCases()
     {
         var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
-        var result = selection is null ? new[] { WarmPngCase.Encode8, WarmPngCase.Decode8, WarmPngCase.Decode16 } : selection.Split(',')
+        var result = selection is null ? new[] { WarmPngCase.Decode8 } : selection.Split(',')
             .Select(value => Enum.TryParse<WarmPngCase>(value, out var parsed) && Enum.IsDefined(parsed)
-                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, Decode8 or Decode16.")).ToArray();
+                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, Decode8, Decode16 or DecodeAdam7_16.")).ToArray();
         if (result.Length is < 1 or > 3 || result.Distinct().Count() != result.Length)
             throw new ArgumentException("Choose one to three distinct PNG cases.");
         return result;
     }
-    private int Depth => Case is WarmPngCase.Decode16 or WarmPngCase.Encode16 ? 16 : 8;
+    private int Depth => Case is WarmPngCase.Decode16 or WarmPngCase.Encode16 or WarmPngCase.DecodeAdam7_16 ? 16 : 8;
     private bool Encode => Case is WarmPngCase.Encode8 or WarmPngCase.Encode16;
+    private bool Interlaced => Case == WarmPngCase.DecodeAdam7_16;
 
     [GlobalSetup]
     public void Setup()
@@ -60,15 +61,36 @@ public class WarmPng
                 });
             pixels = HorizontalFlipInput.Create(Depth);
             source = JpegBenchmarkCase.Buffer(pixels, HorizontalFlipInput.Width, HorizontalFlipInput.Height, Depth);
-            using (var output = new MemoryStream())
+            if (Interlaced)
+            {
+                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", "png-adam7-16");
+                using var prepared = JsonDocument.Parse(File.ReadAllBytes(directory + ".json"));
+                encoded = File.ReadAllBytes(Path.Combine(directory, "input.png"));
+                if (prepared.RootElement.GetProperty("inputSha256").GetString() != JpegBenchmarkCase.Hash(encoded)
+                    || prepared.RootElement.GetProperty("rasterSha256").GetString() != JpegBenchmarkCase.Hash(pixels)
+                    || !File.ReadAllBytes(Path.Combine(directory, "expected.raw")).AsSpan().SequenceEqual(pixels))
+                    throw new InvalidOperationException("Prepared Adam7 input/raster differs.");
+            }
+            else using (var output = new MemoryStream())
             {
                 ImageCodec.EncodePng(source, output, encodeOptions); encoded = output.ToArray();
             }
             ValidatePng(encoded); ValidateManaged();
             var rawPath = Path.Combine(state.DirectoryPath, "expected.raw");
             File.WriteAllBytes(rawPath, pixels); File.WriteAllBytes(state.Input, Encode ? pixels : encoded);
-            native = new NativeWarmReference(state, Depth, cpu, Encode ? "png-encode" : "png-decode", rawPath);
+            native = new NativeWarmReference(state, Depth, cpu, Encode ? "png-encode" : Interlaced ? "png-adam7-decode" : "png-decode", rawPath);
             ValidateNative();
+            if (Interlaced)
+            {
+                var arguments = new List<string> { "-v", "error", "-threads", "1", "-filter_threads", "1", "-cpuflags", "0",
+                    "-noautorotate", "-f", "image2pipe", "-i", "pipe:0", "-frames:v", "1", "-threads:v", "1",
+                    "-pix_fmt", "rgba64le", "-f", "rawvideo", "pipe:1" };
+                if (!OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), encoded).AsSpan().SequenceEqual(pixels))
+                    throw new InvalidOperationException("Scalar native CLI Adam7 samples differ.");
+                arguments.RemoveRange(arguments.IndexOf("-cpuflags"), 2);
+                if (!OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), encoded).AsSpan().SequenceEqual(pixels))
+                    throw new InvalidOperationException("Normal native CLI Adam7 samples differ.");
+            }
             if (Encode && Depth == 16)
             {
                 var arguments = new List<string> { "-v", "error", "-threads", "1", "-filter_threads", "1", "-cpuflags", "0",
@@ -144,7 +166,7 @@ public class WarmPng
     {
         var info = ImageCodec.Identify(bytes);
         if (info.Format != ImageFormat.Png || info.Width != source.Width || info.Height != source.Height || info.BitDepth != Depth
-            || bytes[25] != 6 || bytes[28] != 0) throw new InvalidOperationException("PNG profile differs.");
+            || bytes[25] != 6 || bytes[28] != (Interlaced ? 1 : 0)) throw new InvalidOperationException("PNG profile differs.");
         using var compressed = new MemoryStream();
         for (var position = 8; position < bytes.Length;)
         {
@@ -154,14 +176,19 @@ public class WarmPng
         }
         compressed.Position = 0;
         using var inflater = new ZLibStream(compressed, CompressionMode.Decompress);
-        var row = new byte[source.Stride];
-        for (var y = 0; y < source.Height; y++)
+        foreach (var (startX, startY, stepX, stepY) in Interlaced ? WarmPngAdam7Input.Passes : [(0, 0, 1, 1)])
         {
-            if (inflater.ReadByte() != 0) throw new InvalidOperationException("Expected PNG filter None on every row.");
-            inflater.ReadExactly(row);
-            var original = pixels.AsSpan(y * row.Length, row.Length);
-            for (var i = 0; i < row.Length; i++)
-                if (row[i] != original[Depth == 16 ? i ^ 1 : i]) throw new InvalidOperationException("PNG source samples differ.");
+            var bytesPerPixel = Depth / 8 * 4;
+            var row = new byte[(source.Width - startX + stepX - 1) / stepX * bytesPerPixel];
+            for (var y = startY; y < source.Height; y += stepY)
+            {
+                if (inflater.ReadByte() != 0) throw new InvalidOperationException("Expected PNG filter None on every pass row.");
+                inflater.ReadExactly(row);
+                for (var x = startX; x < source.Width; x += stepX)
+                for (var i = 0; i < bytesPerPixel; i++)
+                    if (row[(x - startX) / stepX * bytesPerPixel + i] != pixels[y * source.Stride + x * bytesPerPixel + (Depth == 16 ? i ^ 1 : i)])
+                        throw new InvalidOperationException("PNG source/pass samples differ.");
+            }
         }
         if (inflater.ReadByte() != -1) throw new InvalidOperationException("PNG filtered length differs.");
     }
@@ -200,10 +227,12 @@ public class WarmPng
                 inputSha256 = JpegBenchmarkCase.Hash(Encode ? pixels : encoded), rasterSha256 = JpegBenchmarkCase.Hash(pixels),
                 managedOutputBytes, nativeOutputBytes, managedEncodedSha256 = JpegBenchmarkCase.Hash(encoded),
                 nativeOutputSha256 = JpegBenchmarkCase.HashFile(state.NativeOutput),
-                compression = "BCL Optimal (zlib default level 6) / FFmpeg level 6; filter None; noninterlaced RGBA",
+                interlace = Interlaced ? 1 : 0,
+                compression = Interlaced ? "Authored PNG Adam7 RGBA16; BCL Optimal level 6; filter None; identical resident encoded input"
+                    : "BCL Optimal (zlib default level 6) / FFmpeg level 6; filter None; noninterlaced RGBA",
                 managedIdatBytes = IdatBytes(encoded), nativeIdatBytes = Encode ? IdatBytes(File.ReadAllBytes(state.NativeOutput)) : IdatBytes(encoded),
                 allRgbaSamplesExact = true, alphaExact = true, hiddenRgbExact = true,
-                nativeCliNormalScalarPixelsExact = Encode && Depth == 16,
+                nativeCliNormalScalarPixelsExact = Encode && Depth == 16 || Interlaced,
                 nativeEndianRepackingTimed = Encode && Depth == 16, nativeEndianWorkspaceReused = Encode && Depth == 16,
                 nativeSampleTargetMilliseconds = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_NATIVE_SAMPLE_MS") ?? "200",
                 sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
