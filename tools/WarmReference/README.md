@@ -130,6 +130,9 @@ python3 tools/WarmReference/verify-png-linux.py --cpu 0
 # After a Release benchmark build, author one existing-raster Adam7 input.
 dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-png-adam7-16
 python3 tools/WarmReference/verify-png-adam7-linux.py --cpu 0
+# Or author one existing-raster noninterlaced Paeth input.
+dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-png-paeth-16
+python3 tools/WarmReference/verify-png-paeth-linux.py --cpu 0
 ```
 
 ```powershell
@@ -139,9 +142,10 @@ python3 tools/WarmReference/verify-png-adam7-linux.py --cpu 0
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily Png -WarmCases Decode16 -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily Png -WarmCases Encode16 -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily Png -WarmCases DecodeAdam7_16 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily Png -WarmCases DecodePaeth16 -Cpu 0 -NoBuild
 ```
 
-The default pair is RGBA8 decode. Encode8, Encode16, Decode16 and DecodeAdam7_16
+The default pair is RGBA8 decode. Encode8, Encode16, Decode16, DecodeAdam7_16 and DecodePaeth16
 are explicitly selectable on the same two original 513x259 rasters as horizontal
 flip; any selection is capped at three distinct pairs. Both decoders consume identical
 resident PNG bytes and produce independent owned RGBA pixels. Native 16-bit
@@ -181,6 +185,11 @@ then reduces complete decode20%, independently clearing this fixed pair at1.648x
 FFmpeg, conservative upper1.700x. Both timing libraries match all563 production
 methods and flags in the same actual package verified on both OSes. Exact samples,
 allocations, admission and cancellation are preserved; no workspace is added.
+The [Paeth RGBA16 baseline](../../benchmarks/WARM-PNG-PAETH-BASELINE.md) uses one
+fixed all-Paeth/noninterlaced input on the existing raster. Its quiet screen
+exposes2.604x FFmpeg, upper2.721x. A six-second profile attributes about46% of
+sampled CPU to Paeth prediction/unfiltering, selecting grouped channel reconstruction
+for one substantial primitive. Exact analytical and normal/scalar CLI samples pass.
 
 ## JPEG
 

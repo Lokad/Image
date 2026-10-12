@@ -150,6 +150,10 @@ sample conversion and repeated destination access from sparse Adam7 passes.
 Complete decode improves20%, independently confirming at1.648x FFmpeg with a
 conservative upper1.700x. Pixels, allocation, work/memory admission and cancellation
 remain exact. This fixed pair clears2x; broader required coverage remains open.
+The [Paeth RGBA16 baseline and diagnosis](WARM-PNG-PAETH-BASELINE.md) expose2.604x
+FFmpeg, conservative upper2.721x, with both quiet guards passing. One fixed input
+on the existing raster preserves exact samples. Prediction/unfiltering consumes
+about46% of sampled CPU, identifying the next substantial primitive.
 The means are now 1.95x / 1.81x FFmpeg; longer conservative uppers are below 2x.
 Quiet independent confirmation and required-path coverage remain open. That
 checkpoint selected the uncovered VP8 decode direction measured above.

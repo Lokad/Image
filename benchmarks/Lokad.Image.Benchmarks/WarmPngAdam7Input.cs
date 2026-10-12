@@ -43,7 +43,7 @@ internal static class WarmPngAdam7Input
         return output.ToArray();
     }
 
-    private static void Chunk(Stream output, ReadOnlySpan<byte> type, ReadOnlySpan<byte> bytes)
+    internal static void Chunk(Stream output, ReadOnlySpan<byte> type, ReadOnlySpan<byte> bytes)
     {
         Span<byte> field = stackalloc byte[4]; BinaryPrimitives.WriteInt32BigEndian(field, bytes.Length);
         output.Write(field); output.Write(type); output.Write(bytes);

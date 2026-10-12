@@ -1,0 +1,62 @@
+using System.Buffers.Binary;
+using System.IO.Compression;
+using System.Text.Json;
+using Lokad.Image;
+using Lokad.Image.Tooling;
+
+// Original fixture authoring: PNG sections 9.4/11, https://www.w3.org/TR/png-3/.
+// One existing raster and one fixed filter/compression profile; no enumeration.
+internal static class WarmPngPaethInput
+{
+    internal static int Predict(int left, int up, int upperLeft)
+    {
+        var p = left + up - upperLeft;
+        var a = Math.Abs(p - left); var b = Math.Abs(p - up); var c = Math.Abs(p - upperLeft);
+        return a <= b && a <= c ? left : b <= c ? up : upperLeft;
+    }
+
+    internal static byte[] Build(byte[] pixels)
+    {
+        const int width = HorizontalFlipInput.Width, height = HorizontalFlipInput.Height;
+        if (pixels.Length != width * height * 8) throw new ArgumentException("Expected the original RGBA16 raster.");
+        var previous = new byte[width * 8]; var row = new byte[width * 8]; var filtered = new byte[width * 8];
+        using var compressed = new MemoryStream();
+        using (var zlib = new ZLibStream(compressed, CompressionLevel.Optimal, leaveOpen: true))
+        {
+            for (var y = 0; y < height; y++)
+            {
+                for (var i = 0; i < row.Length; i++) row[i] = pixels[y * row.Length + (i ^ 1)];
+                for (var i = 0; i < row.Length; i++)
+                    filtered[i] = unchecked((byte)(row[i] - Predict(i >= 8 ? row[i - 8] : 0,
+                        previous[i], i >= 8 ? previous[i - 8] : 0)));
+                zlib.WriteByte(4); zlib.Write(filtered); (previous, row) = (row, previous);
+            }
+        }
+        using var output = new MemoryStream(); output.Write(new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 });
+        var header = new byte[13]; BinaryPrimitives.WriteInt32BigEndian(header, width);
+        BinaryPrimitives.WriteInt32BigEndian(header.AsSpan(4), height); header[8] = 16; header[9] = 6;
+        WarmPngAdam7Input.Chunk(output, "IHDR"u8, header);
+        WarmPngAdam7Input.Chunk(output, "IDAT"u8, compressed.ToArray()); WarmPngAdam7Input.Chunk(output, "IEND"u8, []);
+        return output.ToArray();
+    }
+
+    internal static void Prepare()
+    {
+        using var state = new JpegBenchmarkCase(); var pixels = HorizontalFlipInput.Create(16); var encoded = Build(pixels);
+        using var image = ImageCodec.Decode(encoded);
+        if (image.BitDepth != 16 || !OriginalPixels.Bytes(image).AsSpan().SequenceEqual(pixels))
+            throw new InvalidOperationException("Authored Paeth samples differ.");
+        var directory = Path.Combine(state.Root, "artifacts", "warm-reference", "png-paeth-16");
+        Directory.CreateDirectory(directory); File.WriteAllBytes(Path.Combine(directory, "input.png"), encoded);
+        File.WriteAllBytes(Path.Combine(directory, "expected.raw"), pixels);
+        File.WriteAllText(directory + ".json", JsonSerializer.Serialize(new
+        {
+            schemaVersion = 1, project = "Lokad.Image", correctnessOnly = true,
+            recipe = "Original HorizontalFlipInput RGBA16 raster; noninterlaced PNG; every row Paeth; BCL Optimal level 6; one IDAT. No raster, geometry, filter or effort enumeration.",
+            width = image.Width, height = image.Height, depth = 16, interlace = 0, filter = 4,
+            rasterSha256 = JpegBenchmarkCase.Hash(pixels), inputSha256 = JpegBenchmarkCase.Hash(encoded),
+            encodedBytes = encoded.Length, allRgbaSamplesExact = true
+        }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
+        Console.WriteLine("Prepared one original-raster Paeth RGBA16 input; no timing measurement.");
+    }
+}
