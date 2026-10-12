@@ -102,15 +102,15 @@ def render():
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
         row('Clone RGBA16', 'warm-clone-reuse-evidence.json', ['observations', -1], 'WARM-CLONE-REUSE.md', True),
         row('Normal orientation RGBA16', 'warm-flip-orientation-quiet-evidence.json', ['cases', 'normal16', 'observations', -1], 'WARM-FLIP-ORIENTATION-QUIET.md', True),
-        row('Vertical flip RGBA16', 'warm-vflip-rows-evidence.json', ['observations', -1], 'WARM-VFLIP-ROWS.md'),
+        row('Vertical flip RGBA16', 'warm-directions16-quiet-evidence.json', ['cases', 'vflip16', 'observations', -1], 'WARM-DIRECTIONS16-QUIET.md', True),
         row('Horizontal flip RGBA8', 'warm-flip-orientation-quiet-evidence.json', ['cases', 'flip8', 'observations', -1], 'WARM-FLIP-ORIENTATION-QUIET.md', True),
         row('Horizontal flip RGBA16', 'warm-flip-orientation-quiet-evidence.json', ['cases', 'flip16', 'observations', -1], 'WARM-FLIP-ORIENTATION-QUIET.md'),
         row('Half turn RGBA16', 'warm-halfturn-pixels-evidence.json', ['observations', -1], 'WARM-HALFTURN-PIXELS.md', True),
         row('Clockwise quarter turn RGBA16', 'warm-clockwise-tiles-evidence.json', ['observations', -1], 'WARM-CLOCKWISE-TILES.md', True),
-        row('Counterclockwise quarter turn RGBA16', 'warm-counterclockwise-tiles-evidence.json', ['observations', -1], 'WARM-COUNTERCLOCKWISE-TILES.md'),
+        row('Counterclockwise quarter turn RGBA16', 'warm-directions16-quiet-evidence.json', ['cases', 'ccw16', 'observations', -1], 'WARM-DIRECTIONS16-QUIET.md', True),
         row('Transpose RGBA8', 'warm-transpose8-parity-evidence.json', ['observations', -1], 'WARM-TRANSPOSE8-PARITY.md', True),
         row('Transpose RGBA16', 'warm-coverage-quiet-evidence.json', ['cases', 'transpose16', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
-        row('Mirrored transpose RGBA16', 'warm-transverse-tiles-evidence.json', ['observations', -1], 'WARM-TRANSVERSE-TILES.md'),
+        row('Mirrored transpose RGBA16', 'warm-directions16-quiet-evidence.json', ['cases', 'mirror16', 'observations', -1], 'WARM-DIRECTIONS16-QUIET.md', True),
     ]
     return f'''# Lokad.Image benchmark state
 

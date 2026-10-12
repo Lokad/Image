@@ -71,15 +71,15 @@ timing comparison; compression efficiency parity is not established.
 | [Crop RGBA16](../benchmarks/WARM-CROP-COPY.md) | 4.11 | 4.15 | 0.991 / 1.003 | 96 | Confirmed |
 | [Clone RGBA16](../benchmarks/WARM-CLONE-REUSE.md) | 17.86 | 16.60 | 1.076 / 1.089 | 96 | Confirmed |
 | [Normal orientation RGBA16](../benchmarks/WARM-FLIP-ORIENTATION-QUIET.md) | 18.01 | 16.59 | 1.086 / 1.102 | 128 | Confirmed |
-| [Vertical flip RGBA16](../benchmarks/WARM-VFLIP-ROWS.md) | 17.78 | 17.75 | 1.002 / 1.032 | 128 | Quiet guard failed / open |
+| [Vertical flip RGBA16](../benchmarks/WARM-DIRECTIONS16-QUIET.md) | 17.16 | 17.57 | 0.977 / 0.983 | 128 | Confirmed |
 | [Horizontal flip RGBA8](../benchmarks/WARM-FLIP-ORIENTATION-QUIET.md) | 11.60 | 9.32 | 1.244 / 1.261 | 128 | Confirmed |
 | [Horizontal flip RGBA16](../benchmarks/WARM-FLIP-ORIENTATION-QUIET.md) | 23.22 | 28.30 | 0.820 / 0.834 | 128 | Quiet guard failed / open |
 | [Half turn RGBA16](../benchmarks/WARM-HALFTURN-PIXELS.md) | 20.78 | 22.28 | 0.933 / 0.967 | 128 | Confirmed |
 | [Clockwise quarter turn RGBA16](../benchmarks/WARM-CLOCKWISE-TILES.md) | 43.69 | 44.12 | 0.990 / 1.013 | 128 | Confirmed |
-| [Counterclockwise quarter turn RGBA16](../benchmarks/WARM-COUNTERCLOCKWISE-TILES.md) | 49.14 | 47.12 | 1.043 / 1.062 | 128 | Quiet guard failed / open |
+| [Counterclockwise quarter turn RGBA16](../benchmarks/WARM-DIRECTIONS16-QUIET.md) | 49.20 | 44.42 | 1.108 / 1.133 | 128 | Confirmed |
 | [Transpose RGBA8](../benchmarks/WARM-TRANSPOSE8-PARITY.md) | 38.00 | 38.36 | 0.991 / 1.002 | 128 | Confirmed |
 | [Transpose RGBA16](../benchmarks/WARM-COVERAGE-QUIET.md) | 48.75 | 44.49 | 1.096 / 1.103 | 128 | Confirmed |
-| [Mirrored transpose RGBA16](../benchmarks/WARM-TRANSVERSE-TILES.md) | 45.49 | 44.57 | 1.021 / 1.033 | 128 | Quiet guard failed / open |
+| [Mirrored transpose RGBA16](../benchmarks/WARM-DIRECTIONS16-QUIET.md) | 44.93 | 42.63 | 1.054 / 1.085 | 128 | Confirmed |
 
 Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
 diagnostics or raw GC allocated bytes / operation count (rounded up, including
