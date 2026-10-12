@@ -76,7 +76,7 @@ def render():
         row('JPEG baseline gray', 'warm-jpegac-fused-evidence.json', ['regressionControl', 'observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
         row('JPEG baseline 4:2:0', 'warm-jpeg420-bulk-evidence.json', ['observations', -1], 'WARM-JPEG420-BULK.md', True),
         row('JPEG baseline 4:2:2', 'warm-jpeg422-rows-evidence.json', ['observations', -1], 'WARM-JPEG422-ROWS.md'),
-        row('JPEG baseline 4:4:4, owned input', 'warm-jpeg-local-work-evidence.json', ['observations', 'ownedAffected'], 'WARM-JPEG-LOCAL-WORK.md'),
+        row('JPEG baseline 4:4:4, owned input', 'warm-jpeg444owned-quiet-evidence.json', ['observations', -1], 'WARM-JPEG444-OWNED-QUIET.md', True),
         row('JPEG baseline 4:4:4, native input', 'warm-jpegac-fused-evidence.json', ['observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
         row('JPEG progressive gray', 'warm-jpegrefinement-evidence.json', ['observations', -1], 'WARM-JPEG-REFINEMENT.md', True),
         row('JPEG progressive 4:2:0', 'warm-jpegprogressive420-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE420.md', True),

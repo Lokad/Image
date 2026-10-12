@@ -33,7 +33,7 @@ Earlier receipts retain their original load guard and its failures.
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-AC-FUSED.md) | 1,267.57 | 682.73 | 1.857 / 1.880 | 1,221,545 | Confirmed |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG420-BULK.md) | 1,721.81 | 1,007.73 | 1.709 / 1.719 | 1,619,530 | Confirmed |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-JPEG422-ROWS.md) | 2,130.87 | 1,333.83 | 1.598 / 1.614 | 1,978,646 | Quiet guard failed / open |
-| [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-JPEG-LOCAL-WORK.md) | 3,371.71 | 1,904.25 | 1.771 / 1.847 | 2,596,301 | Quiet guard failed / open |
+| [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-JPEG444-OWNED-QUIET.md) | 3,564.61 | 2,039.57 | 1.748 / 1.793 | 2,596,174 | Confirmed |
 | [JPEG baseline 4:4:4, native input](../benchmarks/WARM-JPEG-AC-FUSED.md) | 3,339.18 | 1,719.98 | 1.941 / 1.961 | 2,664,358 | Confirmed |
 | [JPEG progressive gray](../benchmarks/WARM-JPEG-REFINEMENT.md) | 3,336.90 | 1,743.36 | 1.914 / 1.942 | 1,232,501 | Confirmed |
 | [JPEG progressive 4:2:0](../benchmarks/WARM-JPEG-PROGRESSIVE420.md) | 3,646.81 | 1,938.47 | 1.881 / 1.894 | 1,637,521 | Confirmed |

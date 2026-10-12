@@ -5,6 +5,10 @@ ratios, allocations and verification status in three tables. Update it after eac
 accepted performance round with `python benchmarks/render-benchmark.py`, then
 verify with `--check`. The reports below preserve the detailed evidence and history.
 
+The [owned-input JPEG 4:4:4 confirmation](WARM-JPEG444-OWNED-QUIET.md) reaches
+1.748x FFmpeg, conservative upper 1.793x, with both current idle guards passing.
+The input/output hashes, normal/scalar agreement and implementation are unchanged.
+
 The [PNG RGBA8 decode confirmation](WARM-PNG8-DECODE-QUIET.md) reaches 1.953x
 FFmpeg, conservative upper 1.995x, with both current idle guards passing. The
 earlier screen's failed I/O-wait guard remains failed; production is unchanged.
