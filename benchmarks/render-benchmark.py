@@ -75,7 +75,7 @@ def render():
         row('PNG RGBA16, Adam7', 'warm-pngscatter-evidence.json', ['observations', -1], 'WARM-PNG-SCATTER.md', True),
         row('JPEG baseline gray', 'warm-jpegac-fused-evidence.json', ['regressionControl', 'observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
         row('JPEG baseline 4:2:0', 'warm-jpeg420-bulk-evidence.json', ['observations', -1], 'WARM-JPEG420-BULK.md', True),
-        row('JPEG baseline 4:2:2', 'warm-jpeg422-rows-evidence.json', ['observations', -1], 'WARM-JPEG422-ROWS.md'),
+        row('JPEG baseline 4:2:2', 'warm-coverage-quiet-evidence.json', ['cases', 'jpeg422', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
         row('JPEG baseline 4:4:4, owned input', 'warm-jpeg444owned-quiet-evidence.json', ['observations', -1], 'WARM-JPEG444-OWNED-QUIET.md', True),
         row('JPEG baseline 4:4:4, native input', 'warm-jpegac-fused-evidence.json', ['observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
         row('JPEG progressive gray', 'warm-jpegrefinement-evidence.json', ['observations', -1], 'WARM-JPEG-REFINEMENT.md', True),
@@ -94,7 +94,7 @@ def render():
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
     ]
     edits = [
-        row('Nearest resize RGBA8', 'warm-nearest-baseline-evidence.json', ['observation'], 'WARM-NEAREST-BASELINE.md'),
+        row('Nearest resize RGBA8', 'warm-coverage-quiet-evidence.json', ['cases', 'nearest8', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
         row('Nearest resize RGBA16', 'warm-prepared-confirm-evidence.json', ['observations', -1], 'WARM-PREPARED-CONFIRM.md', True),
         row('Bilinear resize RGBA8', 'warm-bilinear8-quiet-evidence.json', ['observations', -1], 'WARM-BILINEAR8-QUIET.md', True),
         pending('Bilinear resize RGBA16', 'bilinear16-precision-evidence.json', 'Unmatched alpha; no timing'),
@@ -109,7 +109,7 @@ def render():
         row('Clockwise quarter turn RGBA16', 'warm-clockwise-tiles-evidence.json', ['observations', -1], 'WARM-CLOCKWISE-TILES.md', True),
         row('Counterclockwise quarter turn RGBA16', 'warm-counterclockwise-tiles-evidence.json', ['observations', -1], 'WARM-COUNTERCLOCKWISE-TILES.md'),
         row('Transpose RGBA8', 'warm-transpose8-parity-evidence.json', ['observations', -1], 'WARM-TRANSPOSE8-PARITY.md', True),
-        row('Transpose RGBA16', 'warm-transpose-tiles-evidence.json', ['observations', -1], 'WARM-TRANSPOSE-TILES.md'),
+        row('Transpose RGBA16', 'warm-coverage-quiet-evidence.json', ['cases', 'transpose16', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
         row('Mirrored transpose RGBA16', 'warm-transverse-tiles-evidence.json', ['observations', -1], 'WARM-TRANSVERSE-TILES.md'),
     ]
     return f'''# Lokad.Image benchmark state

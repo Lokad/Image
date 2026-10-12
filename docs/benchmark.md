@@ -38,7 +38,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA16, Adam7](../benchmarks/WARM-PNG-SCATTER.md) | 6,567.82 | 3,984.54 | 1.648 / 1.700 | 2,024,532 | Confirmed |
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-AC-FUSED.md) | 1,267.57 | 682.73 | 1.857 / 1.880 | 1,221,545 | Confirmed |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG420-BULK.md) | 1,721.81 | 1,007.73 | 1.709 / 1.719 | 1,619,530 | Confirmed |
-| [JPEG baseline 4:2:2](../benchmarks/WARM-JPEG422-ROWS.md) | 2,130.87 | 1,333.83 | 1.598 / 1.614 | 1,978,646 | Quiet guard failed / open |
+| [JPEG baseline 4:2:2](../benchmarks/WARM-COVERAGE-QUIET.md) | 2,087.01 | 1,336.37 | 1.562 / 1.567 | 1,978,646 | Confirmed |
 | [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-JPEG444-OWNED-QUIET.md) | 3,564.61 | 2,039.57 | 1.748 / 1.793 | 2,596,174 | Confirmed |
 | [JPEG baseline 4:4:4, native input](../benchmarks/WARM-JPEG-AC-FUSED.md) | 3,339.18 | 1,719.98 | 1.941 / 1.961 | 2,664,358 | Confirmed |
 | [JPEG progressive gray](../benchmarks/WARM-JPEG-REFINEMENT.md) | 3,336.90 | 1,743.36 | 1.914 / 1.942 | 1,232,501 | Confirmed |
@@ -63,7 +63,7 @@ timing comparison; compression efficiency parity is not established.
 
 | Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| [Nearest resize RGBA8](../benchmarks/WARM-NEAREST-BASELINE.md) | 313.08 | 238.62 | 1.312 / 1.497 | 132,434 | Quiet guard failed / open |
+| [Nearest resize RGBA8](../benchmarks/WARM-COVERAGE-QUIET.md) | 58.67 | 252.66 | 0.232 / 0.241 | 132,294 | Confirmed |
 | [Nearest resize RGBA16](../benchmarks/WARM-PREPARED-CONFIRM.md) | 105.69 | 170.58 | 0.620 / 0.629 | 264,466 | Confirmed |
 | [Bilinear resize RGBA8](../benchmarks/WARM-BILINEAR8-QUIET.md) | 729.12 | 376.29 | 1.938 / 1.958 | 157,955 | Confirmed |
 | [Bilinear resize RGBA16](../benchmarks/bilinear16-precision-evidence.json) | — | — | — | — | Unmatched alpha; no timing |
@@ -78,7 +78,7 @@ timing comparison; compression efficiency parity is not established.
 | [Clockwise quarter turn RGBA16](../benchmarks/WARM-CLOCKWISE-TILES.md) | 43.69 | 44.12 | 0.990 / 1.013 | 128 | Confirmed |
 | [Counterclockwise quarter turn RGBA16](../benchmarks/WARM-COUNTERCLOCKWISE-TILES.md) | 49.14 | 47.12 | 1.043 / 1.062 | 128 | Quiet guard failed / open |
 | [Transpose RGBA8](../benchmarks/WARM-TRANSPOSE8-PARITY.md) | 38.00 | 38.36 | 0.991 / 1.002 | 128 | Confirmed |
-| [Transpose RGBA16](../benchmarks/WARM-TRANSPOSE-TILES.md) | 48.90 | 44.95 | 1.088 / 1.093 | 128 | Quiet guard failed / open |
+| [Transpose RGBA16](../benchmarks/WARM-COVERAGE-QUIET.md) | 48.75 | 44.49 | 1.096 / 1.103 | 128 | Confirmed |
 | [Mirrored transpose RGBA16](../benchmarks/WARM-TRANSVERSE-TILES.md) | 45.49 | 44.57 | 1.021 / 1.033 | 128 | Quiet guard failed / open |
 
 Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
