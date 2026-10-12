@@ -288,6 +288,10 @@ baseline exposes the largest remaining measured gap. A 16-lane correction trial
 is slower and is discarded; all production bytes are restored. The next diagnosis
 counts correction prefixes and EOB versus zero-run work before another traversal
 primitive. No additional performance raster or scan/quality sweep is added.
+The [isolated traversal count and direct-boundary rejection](WARM-JPEG-INSERTION-REJECTION.md)
+find 54,930 empty insertion prefixes. A direct-boundary check is flat and its
+post-load guard fails; it is discarded. The next hypothesis reuses one nonzero
+bitmask per block across refinement symbols, with exact semantics still required.
 The [adaptive long-prefix round](WARM-JPEG-LONG-PREFIX.md) extends input-derived
 Huffman lookup for nine/ten-bit codes with explicit memory/work admission.
 The [magnitude-category round](WARM-JPEG-CATEGORY.md) replaces the coefficient
