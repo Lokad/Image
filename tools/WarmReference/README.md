@@ -1,5 +1,10 @@
 # Warm FFmpeg reference
 
+Maintain [docs/benchmark.md](../../docs/benchmark.md) after every accepted round.
+Its [renderer](../../benchmarks/render-benchmark.py) selects retained measurements
+and allocations; run it with `--check` before committing. Keep failed quiet guards,
+unmatched outputs and unmeasured cases visibly open, and retain their raw evidence.
+
 ## Prepared short screens and confirmation
 
 Compile, generate the BenchmarkDotNet child and validate it before the quiet

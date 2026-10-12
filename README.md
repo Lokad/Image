@@ -11,6 +11,8 @@ flips, quarter turns and EXIF orientation. Encoders prioritize correctness;
 compression efficiency and further performance tuning remain ahead. The initial
 [dedicated-VM invocation results](benchmarks/RESULTS.md) document the measured
 workloads, encoded sizes, quality exclusions and memory scope.
+The maintained [warm benchmark state](docs/benchmark.md) compares Lokad.Image
+with FFmpeg and records allocations and remaining gaps.
 See [SPEC.md](SPEC.md) for the precise support matrix.
 The [usage guide](docs/usage.md) covers cropping, 16-bit editing, limits,
 cancellation and buffer ownership with runnable examples.

@@ -310,10 +310,12 @@ internal static class PngCodec
             // PNG section 9.2: None stores the original bytes without prediction.
             cancellation.ThrowIfCancellationRequested(); return;
         }
-        if (filter == 4 && stride == 8 && Vector128.IsHardwareAccelerated
+        if (filter == 4 && (stride == 8 || stride == 4) && Vector128.IsHardwareAccelerated
             && previous.Length >= row.Length && !((ReadOnlySpan<byte>)row).Overlaps(previous))
         {
-            UnfilterPaeth8(row, previous, cancellation); return;
+            if (stride == 8) UnfilterPaeth8(row, previous, cancellation);
+            else UnfilterPaeth4(row, previous, cancellation);
+            return;
         }
         for (var i = 0; i < row.Length; i++)
         {
@@ -358,6 +360,37 @@ internal static class PngCodec
             if ((offset & 65535) == 0) cancellation.ThrowIfCancellationRequested();
             row[offset] = unchecked((byte)(row[offset] + Paeth(offset >= 8 ? row[offset - 8] : 0,
                 previous[offset], offset >= 8 ? previous[offset - 8] : 0)));
+        }
+    }
+
+    private static void UnfilterPaeth4(Span<byte> row, ReadOnlySpan<byte> previous, CancellationToken cancellation)
+    {
+        // PNG section 9.4: each of four channel bytes depends only on its own
+        // decoded left byte and the previous row. Distances fit signed 16 bits.
+        var left = Vector128<short>.Zero; var upperLeft = Vector128<short>.Zero;
+        var byteMask = Vector128.Create((ushort)255);
+        var offset = 0; var end = row.Length & ~3;
+        for (; offset < end; offset += 4)
+        {
+            if ((offset & 65535) == 0) cancellation.ThrowIfCancellationRequested();
+            var up = Vector128.WidenLower(Vector128.Create(MemoryMarshal.Read<uint>(previous[offset..]), 0U, 0U, 0U).AsByte()).AsInt16();
+            var delta = Vector128.WidenLower(Vector128.Create(MemoryMarshal.Read<uint>(row[offset..]), 0U, 0U, 0U).AsByte()).AsInt16();
+            var a = Vector128.Abs(up - upperLeft);
+            var b = Vector128.Abs(left - upperLeft);
+            var c = Vector128.Abs(left + up - upperLeft - upperLeft);
+            // Ties select left first, then up, then upper-left.
+            var chooseLeft = Vector128.LessThanOrEqual(a, b) & Vector128.LessThanOrEqual(a, c);
+            var prediction = Vector128.ConditionalSelect(chooseLeft, left,
+                Vector128.ConditionalSelect(Vector128.LessThanOrEqual(b, c), up, upperLeft));
+            left = ((prediction + delta).AsUInt16() & byteMask).AsInt16();
+            var value = Vector128.Narrow(left.AsUInt16(), Vector128<ushort>.Zero).AsUInt32().GetElement(0);
+            MemoryMarshal.Write(row[offset..], in value); upperLeft = up;
+        }
+        for (; offset < row.Length; offset++)
+        {
+            if ((offset & 65535) == 0) cancellation.ThrowIfCancellationRequested();
+            row[offset] = unchecked((byte)(row[offset] + Paeth(offset >= 4 ? row[offset - 4] : 0,
+                previous[offset], offset >= 4 ? previous[offset - 4] : 0)));
         }
     }
 

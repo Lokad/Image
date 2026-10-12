@@ -1,5 +1,14 @@
 # Development benchmarks
 
+The maintained [benchmark state](../docs/benchmark.md) summarizes current warm
+ratios, allocations and verification status in three tables. Update it after each
+accepted performance round with `python benchmarks/render-benchmark.py`, then
+verify with `--check`. The reports below preserve the detailed evidence and history.
+
+The [four-channel Paeth round](WARM-PAETH-FOUR-CHANNEL.md) confirms RGBA8 decode
+at 1.743x FFmpeg (conservative upper 1.842x), about 14.7% faster than its scalar
+baseline, with unchanged pixels, allocations and admission.
+
 The [RGBA16 bilinear precision audit](BILINEAR16-PRECISION.md) reproduces the
 existing authored raster on both OSes. Managed pixels match the rational
 reference; native float alpha differs by one sample at 62 rounding boundaries.
