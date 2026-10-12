@@ -5,6 +5,10 @@ ratios, allocations and verification status in three tables. Update it after eac
 accepted performance round with `python benchmarks/render-benchmark.py`, then
 verify with `--check`. The reports below preserve the detailed evidence and history.
 
+The [PNG RGBA8 decode confirmation](WARM-PNG8-DECODE-QUIET.md) reaches 1.953x
+FFmpeg, conservative upper 1.995x, with both current idle guards passing. The
+earlier screen's failed I/O-wait guard remains failed; production is unchanged.
+
 The [combined JPEG AC read](WARM-JPEG-AC-FUSED.md) groups a short Huffman prefix
 and amplitude without changing work/admission or failure precedence. Complete
 native-input 4:4:4 decode confirms at 1.941x FFmpeg, upper 1.961x; the grayscale
