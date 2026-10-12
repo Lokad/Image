@@ -101,10 +101,10 @@ def render():
         pending('Bicubic resize RGBA8', 'bicubic8-boundary-evidence.json', 'Unmatched boundary/alpha; no timing'),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
         row('Clone RGBA16', 'warm-clone-reuse-evidence.json', ['observations', -1], 'WARM-CLONE-REUSE.md', True),
-        row('Normal orientation RGBA16', 'warm-normal-rows-evidence.json', ['observations', -1], 'WARM-NORMAL-ROWS.md'),
+        row('Normal orientation RGBA16', 'warm-flip-orientation-quiet-evidence.json', ['cases', 'normal16', 'observations', -1], 'WARM-FLIP-ORIENTATION-QUIET.md', True),
         row('Vertical flip RGBA16', 'warm-vflip-rows-evidence.json', ['observations', -1], 'WARM-VFLIP-ROWS.md'),
-        row('Horizontal flip RGBA8', 'results/warm-horizontal-flip-2026-10-09.json', ['observations', 'confirmation', 1, 'cases', 0], 'WARM-HORIZONTAL-FLIP.md'),
-        row('Horizontal flip RGBA16', 'results/warm-horizontal-flip-2026-10-09.json', ['observations', 'confirmation', 0, 'cases', 1], 'WARM-HORIZONTAL-FLIP.md'),
+        row('Horizontal flip RGBA8', 'warm-flip-orientation-quiet-evidence.json', ['cases', 'flip8', 'observations', -1], 'WARM-FLIP-ORIENTATION-QUIET.md', True),
+        row('Horizontal flip RGBA16', 'warm-flip-orientation-quiet-evidence.json', ['cases', 'flip16', 'observations', -1], 'WARM-FLIP-ORIENTATION-QUIET.md'),
         row('Half turn RGBA16', 'warm-halfturn-pixels-evidence.json', ['observations', -1], 'WARM-HALFTURN-PIXELS.md', True),
         row('Clockwise quarter turn RGBA16', 'warm-clockwise-tiles-evidence.json', ['observations', -1], 'WARM-CLOCKWISE-TILES.md', True),
         row('Counterclockwise quarter turn RGBA16', 'warm-counterclockwise-tiles-evidence.json', ['observations', -1], 'WARM-COUNTERCLOCKWISE-TILES.md'),
@@ -162,10 +162,10 @@ These are distinct boundaries. FFmpeg allocation totals are **not measured**;
 they must not be interpreted as zero. Retained owners and cold allocation patterns
 need separate coverage.
 
-Other depths/directions/profiles and horizontal-flip quiet
+Other depths/directions/profiles and horizontal RGBA16 quiet
 certification remain open. Unmatched cases receive no parity timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
-Horizontal flips retain the worst upper bound of their two historical launches.
+Historical horizontal-flip launches and their bounds remain in the earlier report.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),
