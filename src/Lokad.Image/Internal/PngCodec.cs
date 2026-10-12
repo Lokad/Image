@@ -270,6 +270,12 @@ internal static class PngCodec
                         CopyPalette8Row(row, result.Pixels.Slice(offset, width * 4),
                             header.Palette, header.Transparency, context.Cancellation);
                     }
+                    else if (header.ColorType == 3 && header.Depth < 8 && stepX == 1)
+                    {
+                        var offset = (startY + y * stepY) * result.Stride + startX * 4;
+                        CopyPackedPaletteRow(row, result.Pixels.Slice(offset, width * 4), width, header.Depth,
+                            header.Palette, header.Transparency, context.Cancellation);
+                    }
                     else
                     {
                         for (var x = 0; x < width; x++)
@@ -483,6 +489,58 @@ internal static class PngCodec
         {
             if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
             var index = row[x];
+            if (index >= colors) throw new ImageDataException("PNG palette index out of range.");
+            var rgb = palette.Slice(index * 3, 3);
+            var alpha = index < transparency.Length ? transparency[index] : (byte)255;
+            var rgba = (uint)BinaryPrimitives.ReadUInt16LittleEndian(rgb) | (uint)rgb[2] << 16 | (uint)alpha << 24;
+            BinaryPrimitives.WriteUInt32LittleEndian(destination[(x * 4)..], rgba);
+        }
+    }
+
+    internal static void CopyPackedPaletteRow(ReadOnlySpan<byte> row, Span<byte> destination, int pixels, int depth,
+        ReadOnlySpan<byte> palette, ReadOnlySpan<byte> transparency, CancellationToken cancellation)
+    {
+        // PNG sections 7.3/11.2.2/11.3.2.1: packed indices are MSB-first,
+        // select RGB triples, and default to opaque beyond the tRNS entries.
+        var x = 0; var mask = (1 << depth) - 1; var colors = palette.Length / 3;
+        if (depth == 4 && pixels >= 16 && colors == 16 && transparency.Length is 0 or 16 && Ssse3.IsSupported)
+        {
+            // Split the 48 RGB bytes into three registers, then select each
+            // component into a 16-entry byte lookup. These shuffle positions
+            // are derived directly from RGB triples, not codec tables.
+            var first = Vector128.Create(palette[..16]);
+            var middle = Vector128.Create(palette.Slice(16, 16));
+            var last = Vector128.Create(palette.Slice(32, 16));
+            var red = Ssse3.Shuffle(first, Vector128.Create((byte)0, 3, 6, 9, 12, 15, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128))
+                | Ssse3.Shuffle(middle, Vector128.Create((byte)128, 128, 128, 128, 128, 128, 2, 5, 8, 11, 14, 128, 128, 128, 128, 128))
+                | Ssse3.Shuffle(last, Vector128.Create((byte)128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 1, 4, 7, 10, 13));
+            var green = Ssse3.Shuffle(first, Vector128.Create((byte)1, 4, 7, 10, 13, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128))
+                | Ssse3.Shuffle(middle, Vector128.Create((byte)128, 128, 128, 128, 128, 0, 3, 6, 9, 12, 15, 128, 128, 128, 128, 128))
+                | Ssse3.Shuffle(last, Vector128.Create((byte)128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 2, 5, 8, 11, 14));
+            var blue = Ssse3.Shuffle(first, Vector128.Create((byte)2, 5, 8, 11, 14, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128))
+                | Ssse3.Shuffle(middle, Vector128.Create((byte)128, 128, 128, 128, 128, 1, 4, 7, 10, 13, 128, 128, 128, 128, 128, 128))
+                | Ssse3.Shuffle(last, Vector128.Create((byte)128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 0, 3, 6, 9, 12, 15));
+            var alpha = transparency.Length == 0 ? Vector128.Create((byte)255) : Vector128.Create(transparency);
+            var nibble = Vector128.Create((byte)15);
+            for (; x <= pixels - 16; x += 16)
+            {
+                if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+                var packed = Vector128.CreateScalar(BinaryPrimitives.ReadUInt64LittleEndian(row[(x / 2)..])).AsByte();
+                var indices = Sse2.UnpackLow(Sse2.ShiftRightLogical(packed.AsUInt16(), 4).AsByte() & nibble, packed & nibble);
+                var r = Ssse3.Shuffle(red, indices); var g = Ssse3.Shuffle(green, indices);
+                var b = Ssse3.Shuffle(blue, indices); var a = Ssse3.Shuffle(alpha, indices);
+                var rgLow = Sse2.UnpackLow(r, g).AsUInt16(); var baLow = Sse2.UnpackLow(b, a).AsUInt16();
+                var rgHigh = Sse2.UnpackHigh(r, g).AsUInt16(); var baHigh = Sse2.UnpackHigh(b, a).AsUInt16();
+                Sse2.UnpackLow(rgLow, baLow).AsByte().CopyTo(destination.Slice(x * 4, 16));
+                Sse2.UnpackHigh(rgLow, baLow).AsByte().CopyTo(destination.Slice(x * 4 + 16, 16));
+                Sse2.UnpackLow(rgHigh, baHigh).AsByte().CopyTo(destination.Slice(x * 4 + 32, 16));
+                Sse2.UnpackHigh(rgHigh, baHigh).AsByte().CopyTo(destination.Slice(x * 4 + 48, 16));
+            }
+        }
+        for (; x < pixels; x++)
+        {
+            if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+            var bit = x * depth; var index = row[bit / 8] >> (8 - depth - bit % 8) & mask;
             if (index >= colors) throw new ImageDataException("PNG palette index out of range.");
             var rgb = palette.Slice(index * 3, 3);
             var alpha = index < transparency.Length ? transparency[index] : (byte)255;

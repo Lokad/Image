@@ -60,11 +60,11 @@ def row(label, name, path, report, confirmed=False):
 
 
 def pending(label, report, status):
-    return f'| [{label}](../benchmarks/{report}) | — | — | — | — | {status} |'
+    return f'| [{label}](../benchmarks/{report}) | â€” | â€” | â€” | â€” | {status} |'
 
 
 def table(rows):
-    return '\n'.join(['| Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |',
+    return '\n'.join(['| Operation / fixed profile | Lokad Âµs | FFmpeg Âµs | Ratio / upper | Lokad allocated B/op | Status |',
                       '| --- | ---: | ---: | ---: | ---: | --- |', *rows])
 
 
@@ -82,8 +82,9 @@ def render():
         row('PNG gray16, None', 'warm-pnggray16-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY16-ROW.md', True),
         row('PNG gray-alpha16, None', 'warm-pnggrayalpha16-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ROW.md', True),
         row('PNG palette8 + tRNS, None', 'warm-pngpalette8-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE8-ROW.md'),
-        row('PNG opaque gray1 → RGBA8, None', 'warm-pnggray1-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-ROW.md', True),
-        row('PNG opaque gray4 → RGBA8, None', 'warm-pnggray4-evidence.json', ['observations', -1], 'WARM-PNG-GRAY4.md'),
+        row('PNG palette4 + tRNS → RGBA8, None', 'warm-pngpalette4-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE4-ROW.md'),
+        row('PNG opaque gray1 â†’ RGBA8, None', 'warm-pnggray1-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-ROW.md', True),
+        row('PNG opaque gray4 â†’ RGBA8, None', 'warm-pnggray4-evidence.json', ['observations', -1], 'WARM-PNG-GRAY4.md'),
         row('JPEG baseline gray', 'warm-jpegac-fused-evidence.json', ['regressionControl', 'observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
         row('JPEG baseline 4:2:0', 'warm-jpeg420-bulk-evidence.json', ['observations', -1], 'WARM-JPEG420-BULK.md', True),
         row('JPEG baseline 4:2:2', 'warm-coverage-quiet-evidence.json', ['cases', 'jpeg422', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
@@ -102,14 +103,14 @@ def render():
         row('PNG RGBA16, level 6 / None', 'warm-png16-encode-crc-evidence.json', ['observations', -1], 'WARM-PNG16-ENCODE-CRC.md', True),
         row('JPEG 4:4:4, matched quality', 'warm-jpegencode-quiet-evidence.json', ['observations', -1], 'WARM-JPEG-ENCODE-QUIET.md', True),
         row('JPEG 4:2:0, matched quality', 'warm-jpeg420-chroma-row-evidence.json', ['observations', -1], 'WARM-JPEG420-CHROMA-ROW.md'),
-        row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
+        row('WebP VP8 + alphaâ€¡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
     ]
     edits = [
         row('Nearest resize RGBA8', 'warm-coverage-quiet-evidence.json', ['cases', 'nearest8', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
         row('Nearest resize RGBA16', 'warm-prepared-confirm-evidence.json', ['observations', -1], 'WARM-PREPARED-CONFIRM.md', True),
         row('Bilinear resize RGBA8', 'warm-bilinear8-quiet-evidence.json', ['observations', -1], 'WARM-BILINEAR8-QUIET.md', True),
-        row('Bilinear resize RGBA16†', 'warm-bilinear16-register-evidence.json', ['observations', -1], 'WARM-BILINEAR16-REGISTER.md', True),
+        row('Bilinear resize RGBA16â€ ', 'warm-bilinear16-register-evidence.json', ['observations', -1], 'WARM-BILINEAR16-REGISTER.md', True),
         pending('Bicubic resize RGBA8', 'bicubic8-boundary-evidence.json', 'Unmatched boundary/alpha; no timing'),
         row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
@@ -134,12 +135,12 @@ def render():
     ]
     return f'''# Lokad.Image benchmark state
 
-Updated 2026-10-12. Latest retained warm measurements on the dedicated AMD EPYC
+Updated 2026-10-13. Latest retained warm measurements on the dedicated AMD EPYC
 9V45 VM: Ubuntu 24.04.4, .NET 10.0.8 / SDK 10.0.204, FFmpeg n8.1
 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread, normal SIMD,
-tiering off, workstation nonconcurrent GC. Two original 513×259 RGBA8/16 rasters,
+tiering off, workstation nonconcurrent GC. Two original 513Ã—259 RGBA8/16 rasters,
 with documented projections for other pixel formats;
-resize/crop outputs are 256×129, quarter turns/transposes 259×513.
+resize/crop outputs are 256Ã—129, quarter turns/transposes 259Ã—513.
 
 Times cover complete public operations and independent output acquisition/release,
 including admission, conversion and disposal. Native wrappers/contexts are reused;
@@ -151,7 +152,7 @@ at those sources, not a simultaneous rerun of the current HEAD.
 Ratio = Lokad.Image / the faster FFmpeg pre/post mean; lower is faster. Upper is
 the retained conservative confidence bound, taking the larger filtered/all-actual
 bound where available. **Confirmed** requires an independent quiet repeat and
-upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
+upper â‰¤2. Failed guards remain failures. Full required warm coverage is **open**.
 Recent confirmations use `exclusive-vm-idle-v2`: live job checks and
 five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
 Earlier receipts retain their original load guard and its failures.
@@ -174,14 +175,14 @@ timing comparison; compression efficiency parity is not established.
 
 {table(edits)}
 
-† RGBA16 bilinear allows native-only alpha maximum error 1 / RMSE <=0.25 in
+â€  RGBA16 bilinear allows native-only alpha maximum error 1 / RMSE <=0.25 in
 full 16-bit sample units, alongside the same RGB bound. Managed pixels still
 match the exact rational reference; RGBA8 native alpha stays exact. The latest
 RGBA16 independent confirmation clears 2x with both quiet guards passing.
 Earlier failed screens/prechecks and rejected prototypes remain recorded in
 the linked reports.
 
-‡ VP8 encode fixes native quality 75 / managed quality 100 at effort 4. Source
+â€¡ VP8 encode fixes native quality 75 / managed quality 100 at effort 4. Source
 PSNR gap is 0.00365 dB within the unchanged 0.25 dB band; alpha is exact.
 Managed output is 471,436 bytes versus 98,590 bytes. Quality-matched timing is
 confirmed; compression efficiency parity is not established.
@@ -199,14 +200,16 @@ The [material coverage audit](../benchmarks/WARM-COVERAGE.md) lists distinct
 unmeasured primitives and public boundaries without expanding a profile matrix.
 Other depths/directions/profiles remain open. Unmatched cases receive no parity
 timing. GIF and
-animation are deferred. No averages establish the uniform ≤2× target.
+animation are deferred. No averages establish the uniform â‰¤2Ã— target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-The latest [gray4 boundary](../benchmarks/WARM-PNG-GRAY4.md) is exact but remains
-2.630x / upper 2.775x. Production is unchanged; gray1 stays confirmed and gray2
-stays unmeasured. Palette8 remains the largest measured matched gap at 2.715x /
-upper 2.954x. Prioritize substantial framing/data-flow work; retained repeats,
-failed guards and rejected experiments remain distinct from passing confirmations.
+The latest [packed palette expansion](../benchmarks/WARM-PNG-PALETTE4-ROW.md)
+reduces a new 17.984x gap by 84.5%, to 2.704x / upper 4.328x. It remains open;
+no longer repeat was launched. Palette8 at 2.715x, palette4 at 2.704x and gray4
+at 2.630x are the largest measured mean gaps. The
+[token-loop experiment](../benchmarks/WARM-PNG-TOKEN-RUN-REJECTED.md) was reverted
+after only a 4.2% gain. Prioritize substantial inflation/framing data flow;
+keep failed guards and rejected experiments distinct from confirmations.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

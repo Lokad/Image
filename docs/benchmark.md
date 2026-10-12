@@ -1,11 +1,11 @@
 # Lokad.Image benchmark state
 
-Updated 2026-10-12. Latest retained warm measurements on the dedicated AMD EPYC
+Updated 2026-10-13. Latest retained warm measurements on the dedicated AMD EPYC
 9V45 VM: Ubuntu 24.04.4, .NET 10.0.8 / SDK 10.0.204, FFmpeg n8.1
 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread, normal SIMD,
-tiering off, workstation nonconcurrent GC. Two original 513×259 RGBA8/16 rasters,
+tiering off, workstation nonconcurrent GC. Two original 513Ã—259 RGBA8/16 rasters,
 with documented projections for other pixel formats;
-resize/crop outputs are 256×129, quarter turns/transposes 259×513.
+resize/crop outputs are 256Ã—129, quarter turns/transposes 259Ã—513.
 
 Times cover complete public operations and independent output acquisition/release,
 including admission, conversion and disposal. Native wrappers/contexts are reused;
@@ -17,7 +17,7 @@ at those sources, not a simultaneous rerun of the current HEAD.
 Ratio = Lokad.Image / the faster FFmpeg pre/post mean; lower is faster. Upper is
 the retained conservative confidence bound, taking the larger filtered/all-actual
 bound where available. **Confirmed** requires an independent quiet repeat and
-upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
+upper â‰¤2. Failed guards remain failures. Full required warm coverage is **open**.
 Recent confirmations use `exclusive-vm-idle-v2`: live job checks and
 five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
 Earlier receipts retain their original load guard and its failures.
@@ -30,7 +30,7 @@ timing comparison; compression efficiency parity is not established.
 
 **Decode**
 
-| Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |
+| Operation / fixed profile | Lokad Âµs | FFmpeg Âµs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | [PNG RGBA8, None](../benchmarks/WARM-PNG8-DECODE-QUIET.md) | 2,961.21 | 1,516.02 | 1.953 / 1.995 | 755,274 | Confirmed |
 | [PNG RGBA16, None](../benchmarks/WARM-PNG-LITERAL-RUN.md) | 5,740.60 | 2,931.33 | 1.958 / 1.968 | 2,032,864 | Confirmed |
@@ -44,8 +44,9 @@ timing comparison; compression efficiency parity is not established.
 | [PNG gray16, None](../benchmarks/WARM-PNG-GRAY16-ROW.md) | 1,743.26 | 960.42 | 1.815 / 1.837 | 1,331,046 | Confirmed |
 | [PNG gray-alpha16, None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ROW.md) | 3,195.37 | 1,798.83 | 1.776 / 1.785 | 1,573,649 | Confirmed |
 | [PNG palette8 + tRNS, None](../benchmarks/WARM-PNG-PALETTE8-ROW.md) | 992.81 | 365.69 | 2.715 / 2.954 | 621,315 | Above 2x / open |
-| [PNG opaque gray1 → RGBA8, None](../benchmarks/WARM-PNG-GRAY1-ROW.md) | 299.69 | 305.79 | 0.980 / 1.001 | 537,700 | Confirmed |
-| [PNG opaque gray4 → RGBA8, None](../benchmarks/WARM-PNG-GRAY4.md) | 420.42 | 159.85 | 2.630 / 2.775 | 545,302 | Upper above 2x / open |
+| [PNG palette4 + tRNS → RGBA8, None](../benchmarks/WARM-PNG-PALETTE4-ROW.md) | 395.24 | 146.14 | 2.704 / 4.328 | 545,417 | Above 2x / open |
+| [PNG opaque gray1 â†’ RGBA8, None](../benchmarks/WARM-PNG-GRAY1-ROW.md) | 299.69 | 305.79 | 0.980 / 1.001 | 537,700 | Confirmed |
+| [PNG opaque gray4 â†’ RGBA8, None](../benchmarks/WARM-PNG-GRAY4.md) | 420.42 | 159.85 | 2.630 / 2.775 | 545,302 | Upper above 2x / open |
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-AC-FUSED.md) | 1,267.57 | 682.73 | 1.857 / 1.880 | 1,221,545 | Confirmed |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG420-BULK.md) | 1,721.81 | 1,007.73 | 1.709 / 1.719 | 1,619,530 | Confirmed |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-COVERAGE-QUIET.md) | 2,087.01 | 1,336.37 | 1.562 / 1.567 | 1,978,646 | Confirmed |
@@ -61,24 +62,24 @@ timing comparison; compression efficiency parity is not established.
 
 **Encode**
 
-| Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |
+| Operation / fixed profile | Lokad Âµs | FFmpeg Âµs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG8-ENCODE.md) | 7,241.99 | 17,219.43 | 0.421 / 0.430 | 527,629 | Confirmed |
 | [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG16-ENCODE-CRC.md) | 16,470.31 | 19,951.52 | 0.826 / 0.838 | 2,103,836 | Confirmed |
 | [JPEG 4:4:4, matched quality](../benchmarks/WARM-JPEG-ENCODE-QUIET.md) | 7,390.28 | 3,779.05 | 1.956 / 1.969 | 1,051,857 | Confirmed |
 | [JPEG 4:2:0, matched quality](../benchmarks/WARM-JPEG420-CHROMA-ROW.md) | 3,605.37 | 1,822.42 | 1.978 / 2.022 | 527,335 | Upper above 2x / open |
-| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-ALPHAWEIGHTED.md) | 42,879.92 | 54,484.52 | 0.787 / 0.805 | 2,615,472 | Confirmed |
+| [WebP VP8 + alphaâ€¡](../benchmarks/WARM-VP8-ALPHAWEIGHTED.md) | 42,879.92 | 54,484.52 | 0.787 / 0.805 | 2,615,472 | Confirmed |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-ENCODE-EXACT.md) | 7,363.30 | 121,587.95 | 0.061 / 0.063 | 2,100,170 | Confirmed |
 
 **Editing**
 
-| Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |
+| Operation / fixed profile | Lokad Âµs | FFmpeg Âµs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | [Nearest resize RGBA8](../benchmarks/WARM-COVERAGE-QUIET.md) | 58.67 | 252.66 | 0.232 / 0.241 | 132,294 | Confirmed |
 | [Nearest resize RGBA16](../benchmarks/WARM-PREPARED-CONFIRM.md) | 105.69 | 170.58 | 0.620 / 0.629 | 264,466 | Confirmed |
 | [Bilinear resize RGBA8](../benchmarks/WARM-BILINEAR8-QUIET.md) | 729.12 | 376.29 | 1.938 / 1.958 | 157,955 | Confirmed |
-| [Bilinear resize RGBA16†](../benchmarks/WARM-BILINEAR16-REGISTER.md) | 784.03 | 418.41 | 1.874 / 1.908 | 290,118 | Confirmed |
-| [Bicubic resize RGBA8](../benchmarks/bicubic8-boundary-evidence.json) | — | — | — | — | Unmatched boundary/alpha; no timing |
+| [Bilinear resize RGBA16â€ ](../benchmarks/WARM-BILINEAR16-REGISTER.md) | 784.03 | 418.41 | 1.874 / 1.908 | 290,118 | Confirmed |
+| [Bicubic resize RGBA8](../benchmarks/bicubic8-boundary-evidence.json) | â€” | â€” | â€” | â€” | Unmatched boundary/alpha; no timing |
 | [Crop RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 2.34 | 2.27 | 1.033 / 1.039 | 96 | Confirmed |
 | [Crop RGBA16](../benchmarks/WARM-CROP-COPY.md) | 4.11 | 4.15 | 0.991 / 1.003 | 96 | Confirmed |
 | [Clone RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 9.82 | 7.19 | 1.366 / 1.390 | 96 | Confirmed |
@@ -100,14 +101,14 @@ timing comparison; compression efficiency parity is not established.
 | [Mirrored transpose RGBA16](../benchmarks/WARM-DIRECTIONS16-QUIET.md) | 44.93 | 42.63 | 1.054 / 1.085 | 128 | Confirmed |
 | [Mirrored transpose RGBA8](../benchmarks/WARM-DIRECTIONS8-QUIET.md) | 36.59 | 37.98 | 0.964 / 0.991 | 128 | Confirmed |
 
-† RGBA16 bilinear allows native-only alpha maximum error 1 / RMSE <=0.25 in
+â€  RGBA16 bilinear allows native-only alpha maximum error 1 / RMSE <=0.25 in
 full 16-bit sample units, alongside the same RGB bound. Managed pixels still
 match the exact rational reference; RGBA8 native alpha stays exact. The latest
 RGBA16 independent confirmation clears 2x with both quiet guards passing.
 Earlier failed screens/prechecks and rejected prototypes remain recorded in
 the linked reports.
 
-‡ VP8 encode fixes native quality 75 / managed quality 100 at effort 4. Source
+â€¡ VP8 encode fixes native quality 75 / managed quality 100 at effort 4. Source
 PSNR gap is 0.00365 dB within the unchanged 0.25 dB band; alpha is exact.
 Managed output is 471,436 bytes versus 98,590 bytes. Quality-matched timing is
 confirmed; compression efficiency parity is not established.
@@ -125,14 +126,16 @@ The [material coverage audit](../benchmarks/WARM-COVERAGE.md) lists distinct
 unmeasured primitives and public boundaries without expanding a profile matrix.
 Other depths/directions/profiles remain open. Unmatched cases receive no parity
 timing. GIF and
-animation are deferred. No averages establish the uniform ≤2× target.
+animation are deferred. No averages establish the uniform â‰¤2Ã— target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-The latest [gray4 boundary](../benchmarks/WARM-PNG-GRAY4.md) is exact but remains
-2.630x / upper 2.775x. Production is unchanged; gray1 stays confirmed and gray2
-stays unmeasured. Palette8 remains the largest measured matched gap at 2.715x /
-upper 2.954x. Prioritize substantial framing/data-flow work; retained repeats,
-failed guards and rejected experiments remain distinct from passing confirmations.
+The latest [packed palette expansion](../benchmarks/WARM-PNG-PALETTE4-ROW.md)
+reduces a new 17.984x gap by 84.5%, to 2.704x / upper 4.328x. It remains open;
+no longer repeat was launched. Palette8 at 2.715x, palette4 at 2.704x and gray4
+at 2.630x are the largest measured mean gaps. The
+[token-loop experiment](../benchmarks/WARM-PNG-TOKEN-RUN-REJECTED.md) was reverted
+after only a 4.2% gain. Prioritize substantial inflation/framing data flow;
+keep failed guards and rejected experiments distinct from confirmations.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

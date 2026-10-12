@@ -162,6 +162,43 @@ public sealed class ZlibFramingTests
     }
 
     [Theory]
+    [InlineData(0)] [InlineData(1)] [InlineData(2)] [InlineData(3)]
+    public void MatchRunsRetainEveryTightBudgetOutputAndTruncationFailure(int shape)
+    {
+        // Independently authored fixed-code streams exercise repeated matches,
+        // extra bits, overlapping history and a distance beyond available history.
+        var bits = new BitWriter(); bits.Number(1, 1); bits.Number(1, 2);
+        for (var i = 0; i < 64; i++) bits.Code(48 + 65, 8);
+        for (var i = 0; i < 16; i++)
+        {
+            if (shape == 0) { bits.Code(1, 7); bits.Code(0, 5); } // Length 3, distance 1.
+            else if (shape == 1) { bits.Code(9, 7); bits.Number(1, 1); bits.Code(4, 5); bits.Number(1, 1); } // 12, 6.
+            else if (shape == 2) { bits.Code(196, 8); bits.Number(31, 5); bits.Code(11, 5); bits.Number(15, 4); } // 258, 64.
+            else { bits.Code(197, 8); bits.Code(13, 5); bits.Number(31, 5); } // 258, 128; first match fails.
+        }
+        bits.Code(0, 7); bits.Align(); byte[] encoded = [0x78, 0x01, .. bits.Bytes(), 0, 0, 0, 0];
+        using var cancellation = new CancellationTokenSource();
+        foreach (var expected in new[] { 0L, 63, 64, 65, 112, 256, 4192 })
+        for (var extra = 0; extra <= 938; extra++) Compare(encoded, expected, 9380 + extra);
+        // Every truncation also compares the remaining atomic work charge.
+        for (var length = 0; length <= encoded.Length; length++) Compare(encoded[..length], 4192, 20000);
+
+        void Compare(byte[] input, long expected, long work)
+        {
+            var limits = ImageLimits.Default with { MaxWork = work, MaxWorkingBytes = 4096 };
+            var direct = new OperationContext(limits, default);
+            var checkedSymbols = new OperationContext(limits, cancellation.Token);
+            var first = Record.Exception(() => ZlibFraming.Validate(input, expected, direct));
+            var second = Record.Exception(() => ZlibFraming.Validate(input, expected, checkedSymbols));
+            Assert.Equal(second?.GetType(), first?.GetType());
+            Assert.Equal(second?.Message, first?.Message);
+            Assert.Equal(checkedSymbols.RemainingWork, direct.RemainingWork);
+            direct.Reserve(4096); direct.Release(4096);
+            checkedSymbols.Reserve(4096); checkedSymbols.Release(4096);
+        }
+    }
+
+    [Theory]
     [InlineData(false)]
     [InlineData(true)]
     public void PrefixLookaheadReturnsStoredHeaderBytesAndExactWork(bool trailingBytes)

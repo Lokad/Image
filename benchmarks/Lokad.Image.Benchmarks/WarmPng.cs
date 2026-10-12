@@ -8,7 +8,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray4 }
+public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray4, DecodePalette4 }
 
 [MemoryDiagnoser]
 public class WarmPng
@@ -29,7 +29,7 @@ public class WarmPng
         var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
         var result = selection is null ? new[] { WarmPngCase.Decode8 } : selection.Split(',')
             .Select(value => Enum.TryParse<WarmPngCase>(value, out var parsed) && Enum.IsDefined(parsed)
-                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1 or DecodeGray4.")).ToArray();
+                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray4 or DecodePalette4.")).ToArray();
         if (result.Length is < 1 or > 3 || result.Distinct().Count() != result.Length)
             throw new ArgumentException("Choose one to three distinct PNG cases.");
         return result;
@@ -37,10 +37,10 @@ public class WarmPng
     private int Depth => Case is WarmPngCase.Decode16 or WarmPngCase.Encode16 or WarmPngCase.DecodeAdam7_16 or WarmPngCase.DecodePaeth16 or WarmPngCase.DecodeRgb16 or WarmPngCase.DecodeGray16 or WarmPngCase.DecodeGrayAlpha16 ? 16 : 8;
     private bool Rgb => Case is WarmPngCase.DecodeRgb16 or WarmPngCase.DecodeRgb8;
     private bool Mono => Case is WarmPngCase.DecodeGray1 or WarmPngCase.DecodeGray4;
-    private int CodedDepth => Case == WarmPngCase.DecodeGray4 ? 4 : Mono ? 1 : Depth;
+    private int CodedDepth => Case is WarmPngCase.DecodeGray4 or WarmPngCase.DecodePalette4 ? 4 : Mono ? 1 : Depth;
     private bool Gray => Case is WarmPngCase.DecodeGray8 or WarmPngCase.DecodeGray16 or WarmPngCase.DecodeGray1 or WarmPngCase.DecodeGray4;
     private bool GrayAlpha => Case is WarmPngCase.DecodeGrayAlpha8 or WarmPngCase.DecodeGrayAlpha16;
-    private bool Palette => Case == WarmPngCase.DecodePalette8;
+    private bool Palette => Case is WarmPngCase.DecodePalette8 or WarmPngCase.DecodePalette4;
     private int ColorType => Palette ? 3 : GrayAlpha ? 4 : Gray ? 0 : Rgb ? 2 : 6;
     private bool Encode => Case is WarmPngCase.Encode8 or WarmPngCase.Encode16;
     private bool Interlaced => Case == WarmPngCase.DecodeAdam7_16;
@@ -70,7 +70,7 @@ public class WarmPng
                 });
             pixels = HorizontalFlipInput.Create(Depth);
             if (Mono) WarmPngMonoInput.Project(pixels, CodedDepth);
-            if (Palette) WarmPngPaletteInput.Project(pixels);
+            if (Palette) WarmPngPaletteInput.Project(pixels, CodedDepth);
             if (Rgb)
                 for (var i = 3 * Depth / 8; i < pixels.Length; i += 4 * Depth / 8)
                     pixels.AsSpan(i, Depth / 8).Fill(255);
@@ -94,7 +94,7 @@ public class WarmPng
                     throw new InvalidOperationException("Prepared PNG input/raster differs.");
             }
             else if (Mono) encoded = WarmPngMonoInput.Build(pixels, CodedDepth);
-            else if (Palette) encoded = WarmPngPaletteInput.Build(pixels);
+            else if (Palette) encoded = WarmPngPaletteInput.Build(pixels, CodedDepth);
             else using (var output = new MemoryStream())
             {
                 ImageCodec.EncodePng(source, output, encodeOptions); encoded = output.ToArray();
@@ -102,7 +102,7 @@ public class WarmPng
             ValidatePng(encoded); ValidateManaged();
             if (Rgb || Gray || GrayAlpha || Palette)
             {
-                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", Mono ? "png-gray" + CodedDepth : Palette ? "png-palette8" : GrayAlpha ? "png-gray-alpha" + Depth : Gray ? "png-gray" + Depth : "png-rgb" + Depth);
+                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", Mono ? "png-gray" + CodedDepth : Palette ? "png-palette" + CodedDepth : GrayAlpha ? "png-gray-alpha" + Depth : Gray ? "png-gray" + Depth : "png-rgb" + Depth);
                 Directory.CreateDirectory(directory);
                 foreach (var (name, bytes) in new[] { ("input.png", encoded), ("expected.raw", pixels) })
                 {
@@ -227,20 +227,21 @@ public class WarmPng
         {
             var bytesPerPixel = Depth / 8 * (Palette || Gray ? 1 : GrayAlpha ? 2 : Rgb ? 3 : 4);
             var passWidth = (source.Width - startX + stepX - 1) / stepX;
-            var row = new byte[Mono ? (passWidth * CodedDepth + 7) / 8 : passWidth * bytesPerPixel];
+            var packed = CodedDepth < 8;
+            var row = new byte[packed ? (passWidth * CodedDepth + 7) / 8 : passWidth * bytesPerPixel];
             for (var y = startY; y < source.Height; y += stepY)
             {
                 if (inflater.ReadByte() != (Paeth ? 4 : 0)) throw new InvalidOperationException("PNG row filter differs from the fixed profile.");
                 inflater.ReadExactly(row);
-                if (Mono)
+                if (packed)
                 {
                     var maximum = (1 << CodedDepth) - 1;
                     for (var x = 0; x < passWidth; x++)
                         if (((row[x * CodedDepth / 8] >> (8 - CodedDepth - x * CodedDepth % 8)) & maximum)
                             * (255 / maximum) != pixels[y * source.Stride + x * 4])
-                            throw new InvalidOperationException("Packed gray samples differ.");
+                            throw new InvalidOperationException("Packed PNG samples differ.");
                     if ((passWidth * CodedDepth & 7) != 0 && (row[^1] & ((1 << (8 - (passWidth * CodedDepth & 7))) - 1)) != 0)
-                        throw new InvalidOperationException("Packed gray padding differs.");
+                        throw new InvalidOperationException("Packed PNG padding differs.");
                     continue;
                 }
                 for (var x = startX; x < source.Width; x += stepX)
@@ -301,7 +302,7 @@ public class WarmPng
                 interlace = Interlaced ? 1 : 0,
                 colorType = ColorType, codedDepth = CodedDepth,
                 rasterRecipe = Mono ? $"Existing original RGBA8 raster; gray is {(CodedDepth == 1 ? "255 when red>=128, otherwise 0" : "(red>>4)*17")}; RGB equal gray, alpha 255. Packed MSB-first, unused low bits zero. No additional original image."
-                    : Palette ? "Existing original RGBA8 raster; red is index i; original 256-entry palette R=i,G=255-i,B=(73*i+19)%256,A=i. Includes nonzero hidden RGB at i=0. No additional original image."
+                    : Palette ? $"Existing original RGBA8 raster; {(CodedDepth == 4 ? "index j=red>>4, i=j*17, packed MSB-first, unused low bits zero" : "red is index i")}; original {1 << CodedDepth}-entry palette R=i,G=255-i,B=(73*i+19)%256,A=i. Includes nonzero hidden RGB at i=0. No additional original image."
                     : GrayAlpha ? $"Existing original RGBA{Depth} raster; red retained as gray, green/blue set to red, alpha unchanged including hidden RGB. No additional original image."
                     : Gray ? $"Existing original RGBA{Depth} raster; red retained as gray, green/blue set to red, alpha set to {(Depth == 16 ? 65535 : 255)}. No additional original image."
                     : Rgb ? $"Existing original RGBA{Depth} raster; RGB unchanged, alpha set to {(Depth == 16 ? 65535 : 255)} for RGB PNG. No additional original image." : "Existing original RGBA raster, all samples unchanged.",
@@ -309,7 +310,7 @@ public class WarmPng
                 filter = Paeth ? 4 : 0,
                 compression = Paeth ? $"Authored noninterlaced PNG RGBA{Depth}; every row Paeth; BCL Optimal level 6; identical resident encoded input"
                     : Interlaced ? "Authored PNG Adam7 RGBA16; BCL Optimal level 6; filter None; identical resident encoded input"
-                    : $"BCL Optimal (zlib default level 6) / FFmpeg level 6; filter None; noninterlaced {(Mono ? "packed gray" + CodedDepth + ", opaque" : Palette ? "palette8, 256 entries and full tRNS" : GrayAlpha ? "gray-alpha" : Gray ? "gray" : Rgb ? "RGB" : "RGBA")}",
+                    : $"BCL Optimal (zlib default level 6) / FFmpeg level 6; filter None; noninterlaced {(Mono ? "packed gray" + CodedDepth + ", opaque" : Palette ? $"palette{CodedDepth}, {1 << CodedDepth} entries and full tRNS" : GrayAlpha ? "gray-alpha" : Gray ? "gray" : Rgb ? "RGB" : "RGBA")}",
                 managedIdatBytes = IdatBytes(encoded), nativeIdatBytes = Encode ? IdatBytes(File.ReadAllBytes(state.NativeOutput)) : IdatBytes(encoded),
                 allRgbaSamplesExact = true, alphaExact = true, hiddenRgbExact = true,
                 nativeCliNormalScalarPixelsExact = true,

@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8, gray16, gray-alpha8/16 and opaque gray1 None confirmed; RGB16, gray8, gray4 and palette8 None above 2x | RGB16/gray8/gray4/palette8 parity; packed gray2 and packed palette; other filter implementations |
+| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8, gray16, gray-alpha8/16 and opaque gray1 None confirmed; RGB16, gray8, gray4 and palette4/8 None above 2x | RGB16/gray8/gray4/palette4/8 parity; packed gray2 and palette1/2; other filter implementations |
 | PNG encode | RGBA8/16, level 6/None | RGB and gray projections; compression policies with materially different work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
@@ -66,8 +66,21 @@ The [packed-gray row](WARM-PNG-GRAY1-ROW.md) lowers a new gray1 8.323x screen
 by 88.3%, confirming 0.980x / upper 1.001x. The same safe kernel handles depths
 1/2/4 correctly; gray2 remains unmeasured and gray4 remains above 2x. A palette literal-width audit
 finds only 46.5% eligible four-eight-bit groups, a roughly 11% opportunity under
-uniform per-literal cost before overhead. No framing experiment was launched.
+uniform per-literal cost before overhead. No four-literal grouping experiment was launched.
 Stop tuning gray1. The [gray4 boundary](WARM-PNG-GRAY4.md) is exact but remains
 2.630x / upper 2.775x. Its profile puts 26.8% in framing and 40.1% in BCL
 inflation; prioritize a substantial data-flow opportunity, preserving contracts.
 Do not repeat or micro-tune its 14.2% unpacking share first.
+
+The [full token-loop experiment](WARM-PNG-TOKEN-RUN-REJECTED.md) kept literals
+and short-code matches in one cache, but lowered palette8 only 4.2%, to 2.603x /
+upper 2.815x. It was reverted; no long confirmation. Four new controls retain
+exact work/failure precedence across budgets, outputs and truncations.
+
+The [packed palette round](WARM-PNG-PALETTE4-ROW.md) then exposed a new 17.984x
+gap and reduced its mean 84.5%, to 2.704x / upper 4.328x. No longer repeat was
+launched. The new primitive handles palette1/2/4 correctly; only palette4 is
+measured. Its profile places 38.4% in BCL inflation, 29.7% in framing and 13.5%
+in packed expansion. Palette8 (2.715x), palette4 (2.704x) and gray4 (2.630x)
+remain the largest measured mean gaps. Investigate substantial inflation/framing
+data flow; another small row or token-dispatch gain cannot close them alone.

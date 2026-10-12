@@ -189,8 +189,12 @@ introduced and cancellation is checked at most every 4096 pixels.
 Dense palette8 rows expand directly from the existing RGB palette/tRNS storage
 into RGBA8, preserving hidden RGB and defaulting missing alpha entries to 255.
 Each palette index is validated before its output pixel is written. Dense Adam7
-passes qualify; packed/sparse mapping stays unchanged. No palette workspace or
-admission change is introduced; cancellation is checked at most every 4096 pixels.
+passes qualify; sparse mapping stays unchanged. Dense packed palette1/2/4 rows
+also expand directly. Full 16-entry palette4 rows with absent/full tRNS use bounded
+eight-byte SSSE3 groups to produce sixteen pixels; partial palettes/alpha, tails
+and other hardware retain scalar validation. Unused padding bits are ignored.
+No palette workspace or admission change is introduced; cancellation is checked
+at most every 4096 pixels.
 The registered FFmpeg 8.1 decoder ignores tRNS alpha for 1/2/4-bit grayscale.
 For these cases the reference pipeline applies the declared transparent gray key
 through FFmpeg's [colorkey filter](https://ffmpeg.org/ffmpeg-filters.html#colorkey),
