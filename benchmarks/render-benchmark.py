@@ -45,6 +45,8 @@ def row(label, name, path, report, confirmed=False):
         assert quiet and upper <= 2
         assert evidence.get('independentQuietConfirmationThisPair') or observation.get('certifiedThisPair')
     status = 'Confirmed' if confirmed else ('Above 2x / open' if quiet and ratio > 2 else ('Quiet certification open' if quiet is None else ('Quiet repeat open' if quiet else 'Quiet guard failed / open')))
+    if not confirmed and quiet and evidence.get('independentQuietRepeatCompleted') and upper > 2:
+        status = 'Upper above 2x / open'
     memory = observation.get('managedMemory')
     if memory:
         allocated = memory['BytesAllocatedPerOperation']
@@ -91,7 +93,7 @@ def render():
         row('PNG RGBA8, level 6 / None', 'warm-png8encode-evidence.json', ['observations', -1], 'WARM-PNG8-ENCODE.md', True),
         row('PNG RGBA16, level 6 / None', 'warm-png16-encode-crc-evidence.json', ['observations', -1], 'WARM-PNG16-ENCODE-CRC.md', True),
         row('JPEG 4:4:4, matched quality', 'warm-jpegencode-quiet-evidence.json', ['observations', -1], 'WARM-JPEG-ENCODE-QUIET.md', True),
-        row('JPEG 4:2:0, matched quality', 'warm-jpeg420-luma-row-evidence.json', ['observations', -1], 'WARM-JPEG420-LUMA-ROW.md'),
+        row('JPEG 4:2:0, matched quality', 'warm-jpeg420-chroma-row-evidence.json', ['observations', -1], 'WARM-JPEG420-CHROMA-ROW.md'),
         row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
     ]

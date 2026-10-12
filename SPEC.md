@@ -216,6 +216,10 @@ Dense one-to-one 8-bit encoder component rows may use the existing AVX-512/AVX2
 sample kernel, including luma in 4:2:0 and 4:2:2. Subsampled chroma, right-edge
 padding, other depths and other hardware retain their existing paths. Sample
 arithmetic, work charges, memory admission and encoded bytes are unchanged.
+Dense 2:1 chroma rows may convert sixteen RGBA8 pixels from one or two source
+rows with safe SIMD. Unrounded binary64 component values accumulate in the
+original row/pixel order, average, then round once. Edges and other depths or
+hardware retain scalar sampling; no extra workspace or pixel cache is introduced.
 JPEG coefficient planes, Huffman tables, scans and transforms are charged against
 operation limits.
 Component coefficient storage is released after conversion to its sample plane;
