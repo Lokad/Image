@@ -154,6 +154,11 @@ The [Paeth RGBA16 baseline and diagnosis](WARM-PNG-PAETH-BASELINE.md) expose2.60
 FFmpeg, conservative upper2.721x, with both quiet guards passing. One fixed input
 on the existing raster preserves exact samples. Prediction/unfiltering consumes
 about46% of sampled CPU, identifying the next substantial primitive.
+The [eight-channel Paeth round](WARM-PAETH-VECTOR.md) uses safe128-bit predictor
+lanes, preserving exact ties, overflow, scalar fallback, tails, alias/error behavior
+and admission. Complete decode improves39.2%, independently confirming at1.548x
+FFmpeg, upper1.607x. A guard-failed attempt remains failed; the fresh bounded
+confirmation passes unchanged limits. This fixed pair clears2x.
 The means are now 1.95x / 1.81x FFmpeg; longer conservative uppers are below 2x.
 Quiet independent confirmation and required-path coverage remain open. That
 checkpoint selected the uncovered VP8 decode direction measured above.

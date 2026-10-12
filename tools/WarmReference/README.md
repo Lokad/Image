@@ -190,6 +190,12 @@ fixed all-Paeth/noninterlaced input on the existing raster. Its quiet screen
 exposes2.604x FFmpeg, upper2.721x. A six-second profile attributes about46% of
 sampled CPU to Paeth prediction/unfiltering, selecting grouped channel reconstruction
 for one substantial primitive. Exact analytical and normal/scalar CLI samples pass.
+The [eight-channel Paeth round](../../benchmarks/WARM-PAETH-VECTOR.md) then reduces
+complete decode39.2%, independently clearing this fixed pair at1.548x FFmpeg,
+upper1.607x. All564 production methods/flags match the actual package validated
+on both OSes. Thirteen normal/scalar controls include every predictor triple,
+aliases, tails, errors and cancellation. One guard-failed confirmation is frozen;
+a fresh process with stricter starting load passes the same unchanged guard limits.
 
 ## JPEG
 
