@@ -406,11 +406,17 @@ internal ref struct JpegDecoder
             if (fullResolutionYcbcr)
                 foreach (var component in components)
                     fullResolutionYcbcr &= component.H == maxH && component.V == maxV;
+            var subsampledYcbcr = components.Length == 3 && !rgb
+                && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported
+                && components[0].H == maxH && components[0].V == maxV
+                && components[1].H * 2 == maxH && components[1].V * 2 == maxV
+                && components[2].H == components[1].H && components[2].V == components[1].V;
             for (var y = 0; y < info.Height; y++)
             {
                 context.Work(info.Width * 32L);
                 var row = result.GetRow8(y);
                 var x = 0;
+                var subsampledEnd = 2;
                 if (fullResolutionYcbcr)
                 {
                     var first = components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width);
@@ -419,8 +425,36 @@ internal ref struct JpegDecoder
                     for (; x <= info.Width - 8; x += 8)
                         RenderYcbcrRow8(first.Slice(x, 8), second.Slice(x, 8), third.Slice(x, 8), row.Slice(x * 4, 32), block[..24]);
                 }
+                if (subsampledYcbcr)
+                {
+                    // At 2:1 centered sampling the interpolation fractions are
+                    // exactly 1/4 or 3/4. Share row geometry across both chroma
+                    // planes; leave edge pixels to the general clamp policy.
+                    var chroma = components[1]; var stride = chroma.BlockColumns * 8;
+                    var iy = (y - 1) >> 1;
+                    var y0 = Math.Clamp(iy, 0, chroma.SampleHeight - 1);
+                    var y1 = Math.Clamp(iy + 1, 0, chroma.SampleHeight - 1);
+                    var topWeight = (y & 1) == 0 ? 1 : 3;
+                    // The first two pixels use the original scalar path below.
+                    // Start SIMD at the next even pixel, then retain scalar tails.
+                    for (var start = 2; start <= info.Width - 8; start += 8)
+                    {
+                        var column = start / 2 - 1;
+                        if (column > stride - 8 || column > chroma.SampleWidth - 6) break;
+                        RenderYcbcr420Row8(components[0].Plane.AsSpan(y * components[0].BlockColumns * 8 + start, 8),
+                            chroma.Plane.AsSpan(y0 * stride + column, 8), chroma.Plane.AsSpan(y1 * stride + column, 8),
+                            components[2].Plane.AsSpan(y0 * stride + column, 8), components[2].Plane.AsSpan(y1 * stride + column, 8),
+                            topWeight, row.Slice(start * 4, 32), block[..24]);
+                        subsampledEnd = start + 8;
+                    }
+                }
                 for (; x < info.Width; x++)
                 {
+                    if (x == 2 && subsampledEnd > 2)
+                    {
+                        x = subsampledEnd;
+                        if (x >= info.Width) break;
+                    }
                     var first = Interpolate(components[0], x, y);
                     double r = first, g = first, b = first;
                     if (components.Length == 3)
@@ -494,4 +528,56 @@ internal ref struct JpegDecoder
 
     private static Vector256<int> WidenSamples8(ReadOnlySpan<byte> samples)
         => Avx2.ConvertToVector256Int32(Vector128.Create(Vector64.Create(samples), Vector64<byte>.Zero));
+
+    internal static void RenderYcbcr420Row8(ReadOnlySpan<byte> luma, ReadOnlySpan<byte> cbTop, ReadOnlySpan<byte> cbBottom,
+        ReadOnlySpan<byte> crTop, ReadOnlySpan<byte> crBottom, int topWeight, Span<byte> rgba, Span<byte> scratch)
+    {
+        if (luma.Length != 8 || cbTop.Length != 8 || cbBottom.Length != 8 || crTop.Length != 8 || crBottom.Length != 8
+            || topWeight is not (1 or 3) || rgba.Length != 32 || scratch.Length != 24)
+            throw new ArgumentException("JPEG 4:2:0 rows have eight samples, quarter weights, eight RGBA pixels and 24 scratch bytes.");
+        if (Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported)
+        {
+            var first = Avx512F.ConvertToVector512Double(WidenSamples8(luma));
+            var cb = Interpolate420Row8(cbTop, cbBottom, topWeight);
+            var cr = Interpolate420Row8(crTop, crBottom, topWeight);
+            JpegTransform.RoundSamples(Avx512F.Add(first, Avx512F.Multiply(Vector512.Create(1.402), cr)), scratch[..8]);
+            JpegTransform.RoundSamples(Avx512F.Subtract(Avx512F.Subtract(first, Avx512F.Multiply(Vector512.Create(0.344136286), cb)),
+                Avx512F.Multiply(Vector512.Create(0.714136286), cr)), scratch.Slice(8, 8));
+            JpegTransform.RoundSamples(Avx512F.Add(first, Avx512F.Multiply(Vector512.Create(1.772), cb)), scratch.Slice(16, 8));
+            var red = WidenSamples8(scratch[..8]);
+            var green = Avx2.ShiftLeftLogical(WidenSamples8(scratch.Slice(8, 8)).AsUInt32(), 8);
+            var blue = Avx2.ShiftLeftLogical(WidenSamples8(scratch.Slice(16, 8)).AsUInt32(), 16);
+            Avx2.Or(Avx2.Or(red.AsUInt32(), green), Avx2.Or(blue, Vector256.Create(0xFF000000u))).AsByte().CopyTo(rgba);
+            return;
+        }
+        for (var x = 0; x < 8; x++)
+        {
+            var left = x / 2 + (x & 1); var right = left + 1;
+            var fx = (x & 1) == 0 ? 0.75 : 0.25;
+            var top = topWeight / 4d; var bottom = (4 - topWeight) / 4d;
+            var cb = (cbTop[left] * (1 - fx) + cbTop[right] * fx) * top
+                + (cbBottom[left] * (1 - fx) + cbBottom[right] * fx) * bottom - 128;
+            var cr = (crTop[left] * (1 - fx) + crTop[right] * fx) * top
+                + (crBottom[left] * (1 - fx) + crBottom[right] * fx) * bottom - 128;
+            rgba[x * 4] = Round(luma[x] + 1.402 * cr);
+            rgba[x * 4 + 1] = Round(luma[x] - 0.344136286 * cb - 0.714136286 * cr);
+            rgba[x * 4 + 2] = Round(luma[x] + 1.772 * cb); rgba[x * 4 + 3] = 255;
+        }
+    }
+
+    private static Vector512<double> Interpolate420Row8(ReadOnlySpan<byte> top, ReadOnlySpan<byte> bottom, int topWeight)
+    {
+        // T.81 sampling maps these centered pixels to exact quarter fractions.
+        // Integer numerators reproduce the binary64 horizontal/vertical sums
+        // exactly: their maximum is 16*255. No chroma rounding is introduced.
+        var left = Vector256.Create(0, 1, 1, 2, 2, 3, 3, 4);
+        var right = Vector256.Create(1, 2, 2, 3, 3, 4, 4, 5);
+        var a = Vector256.Create(1, 3, 1, 3, 1, 3, 1, 3);
+        var b = Vector256.Create(3, 1, 3, 1, 3, 1, 3, 1);
+        var upper = WidenSamples8(top); var lower = WidenSamples8(bottom);
+        upper = Avx2.Add(Avx2.MultiplyLow(Avx2.PermuteVar8x32(upper, left), a), Avx2.MultiplyLow(Avx2.PermuteVar8x32(upper, right), b));
+        lower = Avx2.Add(Avx2.MultiplyLow(Avx2.PermuteVar8x32(lower, left), a), Avx2.MultiplyLow(Avx2.PermuteVar8x32(lower, right), b));
+        var sum = Avx2.Add(Avx2.MultiplyLow(upper, Vector256.Create(topWeight)), Avx2.MultiplyLow(lower, Vector256.Create(4 - topWeight)));
+        return Avx512F.Multiply(Avx512F.ConvertToVector512Double(Avx2.Subtract(sum, Vector256.Create(128 * 16))), Vector512.Create(1d / 16));
+    }
 }

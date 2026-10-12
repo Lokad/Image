@@ -217,10 +217,16 @@ The default `Decode8` selects only that input. Explicit `-WarmCases NativeDecode
 selects only the already prepared native JPEG from the same original raster,
 with its variable Huffman tables and common 1x2 component factors (still 4:4:4).
 No source raster or encoder-quality enumeration is added.
+Explicit NativeDecode420 selects one fixed baseline 4:2:0 JPEG from the same
+original raster, prepared at native qscale 5 with alpha flattened onto RGB
+0x204060. This is identical-input decoding, with no encode quality search.
 
 ```bash
 bash tools/WarmReference/build-jpeg-decode-linux.sh
 python3 tools/WarmReference/verify-jpeg-decode-linux.py --cpu 0
+# After a Release benchmark build, prepare this single input once.
+dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-jpeg420-decode 0
+python3 tools/WarmReference/verify-jpeg-decode-linux.py --cpu 0 --sampling 420
 ```
 
 After a Release benchmark build and owned source inventory:
@@ -229,6 +235,7 @@ After a Release benchmark build and owned source inventory:
 ./bench.ps1 -Smoke -Warm -WarmFamily JpegDecode -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -Cpu 0 -NoBuild
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases NativeDecode8 -Cpu 0 -NoBuild
+./bench.ps1 -DedicatedVm -Warm -WarmFamily JpegDecode -WarmCases NativeDecode420 -Cpu 0 -NoBuild
 ```
 
 Each native interval resets decoder state, decodes all coefficients/pixels,
@@ -236,12 +243,19 @@ converts full-range BT.601 to RGBA8, allocates independent output, and releases
 it. Codec/conversion/input packet/frame wrappers are reused. Padded owned
 RGBA rows need no tight-row copy inside timing. Managed public Decode,
 allocation and disposal are included. Startup, I/O, IPC and checks are excluded.
+The 4:2:0 path includes acquiring and expanding both ceil-sized chroma planes by
+two, using a crop view at the original bounds, and releasing the intermediates.
+This preserves the specified chroma grid at odd dimensions. Contexts and wrappers
+are reused; there is no additional full-frame packing copy. The
+[eight-pixel render round](../../benchmarks/WARM-JPEG420-BULK.md) records this pair
+and one managed interpolation/color primitive with exact owned output bytes.
 Two simultaneously live outputs must have independent storage; mutation of
 one leaves the other intact. Repeated output pixels and encoded source bytes
-must remain unchanged. Fourteen invalid protocol/argument/affinity controls
-reuse this JPEG. Setup verifies the native pixels exactly against the pinned
+must remain unchanged. Fifteen invalid protocol/argument/affinity controls per
+sampling mode include rejecting wrong declared sampling. Setup verifies the native pixels exactly against the pinned
 public FFmpeg CLI with the same conversion flags and normal SIMD; managed/native
-agreement retains RGB maximum 4/RMSE 1.5 and exact opaque alpha. Decoder timing
+agreement retains RGB maximum 4/RMSE 1.5 and exact opaque alpha. Setup also verifies
+managed agreement against the pinned scalar CLI under those bounds. Decoder timing
 does not require an encoder-quality match because its encoded input is identical.
 
 ## Still VP8 WebP

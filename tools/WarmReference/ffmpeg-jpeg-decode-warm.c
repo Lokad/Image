@@ -52,12 +52,12 @@ static uint8_t *read_file(const char *path, size_t *size)
 }
 typedef struct {
     AVCodecContext *codec;
-    struct SwsContext *conversion;
-    AVFrame *decoded, *rgba;
+    struct SwsContext *conversion, *chroma;
+    AVFrame *decoded, *rgba, *u, *v;
     AVPacket *input;
     uint8_t *encoded, *expected;
     size_t encoded_bytes, raw_bytes;
-    int width, height, cpu, row_bytes, stride;
+    int width, height, cpu, row_bytes, stride, subsampled;
     uint64_t completed, observed;
 } Work;
 static void initialize_conversion(Work *work)
@@ -78,8 +78,27 @@ static void initialize_conversion(Work *work)
     require(sws_setColorspaceDetails(work->conversion, matrix, 1, matrix, 1, 0, 1<<16, 1<<16), "Set full-range BT.601");
     int64_t threads; require(av_opt_get_int(work->conversion, "threads", 0, &threads), "Read conversion threads");
     if (threads != 1) fail("Conversion threading differs.");
+    if (work->subsampled) {
+        int cw=(work->width+1)/2, ch=(work->height+1)/2;
+        work->chroma=sws_alloc_context(); if (!work->chroma) fail("Allocate chroma expansion failed.");
+        require(av_opt_set_int(work->chroma,"srcw",cw,0),"Set chroma width");
+        require(av_opt_set_int(work->chroma,"srch",ch,0),"Set chroma height");
+        require(av_opt_set_int(work->chroma,"dstw",cw*2,0),"Set expanded chroma width");
+        require(av_opt_set_int(work->chroma,"dsth",ch*2,0),"Set expanded chroma height");
+        require(av_opt_set_int(work->chroma,"src_format",AV_PIX_FMT_GRAY8,0),"Set chroma input format");
+        require(av_opt_set_int(work->chroma,"dst_format",AV_PIX_FMT_GRAY8,0),"Set chroma output format");
+        require(av_opt_set_int(work->chroma,"sws_flags",SWS_BILINEAR|SWS_ACCURATE_RND,0),"Set chroma expansion flags");
+        require(av_opt_set_int(work->chroma,"threads",1,0),"Set chroma threads");
+        require(sws_init_context(work->chroma,NULL,NULL),"Initialize chroma expansion");
+        require(av_opt_get_int(work->chroma,"threads",0,&threads),"Read chroma threads");
+        if (threads!=1) fail("Chroma threading differs.");
+    }
 }
-static void release(Work *work) { av_frame_unref(work->decoded); av_frame_unref(work->rgba); }
+static void release(Work *work)
+{
+    av_frame_unref(work->decoded); av_frame_unref(work->rgba);
+    if (work->subsampled) { av_frame_unref(work->u); av_frame_unref(work->v); }
+}
 static void apply(Work *work)
 {
     // Reestablish independent still-image decoder state on every operation.
@@ -87,11 +106,28 @@ static void apply(Work *work)
     require(avcodec_send_packet(work->codec, work->input), "Submit complete JPEG");
     require(avcodec_receive_frame(work->codec, work->decoded), "Receive JPEG pixels");
     AVFrame *decoded = work->decoded;
-    if (decoded->width != work->width || decoded->height != work->height || decoded->format != AV_PIX_FMT_YUVJ444P
-        || decoded->color_range != AVCOL_RANGE_JPEG || !decoded->buf[0]) fail("Expected owned full-range 8-bit 4:4:4 JPEG pixels.");
+    if (decoded->width != work->width || decoded->height != work->height || decoded->format != (work->subsampled ? AV_PIX_FMT_YUVJ420P : AV_PIX_FMT_YUVJ444P)
+        || decoded->color_range != AVCOL_RANGE_JPEG || !decoded->buf[0]) fail("Expected owned full-range JPEG pixels at the declared sampling.");
+    const uint8_t *planes[4]={decoded->data[0],decoded->data[1],decoded->data[2],NULL};
+    int strides[4]={decoded->linesize[0],decoded->linesize[1],decoded->linesize[2],0};
+    if (work->subsampled) {
+        int cw=(work->width+1)/2, ch=(work->height+1)/2;
+        work->u->width=work->v->width=cw*2; work->u->height=work->v->height=ch*2;
+        work->u->format=work->v->format=AV_PIX_FMT_GRAY8;
+        require(av_frame_get_buffer(work->u,32),"Allocate independent expanded U");
+        require(av_frame_get_buffer(work->v,32),"Allocate independent expanded V");
+        const uint8_t *u[4]={decoded->data[1],NULL,NULL,NULL}, *v[4]={decoded->data[2],NULL,NULL,NULL};
+        int us[4]={decoded->linesize[1],0,0,0}, vs[4]={decoded->linesize[2],0,0,0};
+        if (sws_scale(work->chroma,u,us,0,ch,work->u->data,work->u->linesize)!=ch*2
+            || sws_scale(work->chroma,v,vs,0,ch,work->v->data,work->v->linesize)!=ch*2) fail("Chroma expansion incomplete.");
+        // Consume only the original bounds: a crop view keeps the doubled grid
+        // at odd dimensions without a redundant full-frame packing copy.
+        planes[1]=work->u->data[0]; planes[2]=work->v->data[0];
+        strides[1]=work->u->linesize[0]; strides[2]=work->v->linesize[0];
+    }
     work->rgba->width = work->width; work->rgba->height = work->height; work->rgba->format = AV_PIX_FMT_RGBA;
     require(av_frame_get_buffer(work->rgba, 32), "Allocate independent RGBA output");
-    if (sws_scale(work->conversion, (const uint8_t *const *)decoded->data, decoded->linesize,
+    if (sws_scale(work->conversion, planes, strides,
         0, work->height, work->rgba->data, work->rgba->linesize) != work->height) fail("Color conversion incomplete.");
     work->stride = work->rgba->linesize[0];
     work->observed += work->rgba->data[0][work->row_bytes/2]; work->completed++;
@@ -123,8 +159,9 @@ static void check_and_write(Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if (argc != 7 || strcmp(argv[1], "jpeg-decode")) fail("Usage: ffmpeg-jpeg-decode-warm jpeg-decode INPUT WIDTH HEIGHT 8 OUTPUT");
+    if (argc != 7 || (strcmp(argv[1], "jpeg-decode") && strcmp(argv[1], "jpeg420-decode"))) fail("Usage: ffmpeg-jpeg-decode-warm jpeg-decode|jpeg420-decode INPUT WIDTH HEIGHT 8 OUTPUT");
     Work work = {0}; work.cpu = affinity_cpu(); work.width = number(argv[3]); work.height = number(argv[4]);
+    work.subsampled=!strcmp(argv[1],"jpeg420-decode");
     if (number(argv[5]) != 8) fail("JPEG decode reference requires depth 8.");
     work.row_bytes = work.width*4; work.raw_bytes = (size_t)work.row_bytes*work.height;
     if (work.raw_bytes > 512U*1024U*1024U) fail("Reference output exceeds 512 MiB.");
@@ -138,6 +175,7 @@ int main(int argc, char **argv)
     if (work.codec->thread_count != 1 || work.codec->thread_type != 0 || work.codec->active_thread_type != 0) fail("Codec threading differs.");
     work.input = av_packet_alloc(); work.decoded = av_frame_alloc(); work.rgba = av_frame_alloc();
     if (!work.input || !work.decoded || !work.rgba) fail("Allocate packet/frame wrappers failed.");
+    if (work.subsampled) { work.u=av_frame_alloc(); work.v=av_frame_alloc(); if (!work.u || !work.v) fail("Allocate chroma wrappers failed."); }
     require(av_new_packet(work.input, (int)work.encoded_bytes), "Allocate padded resident input");
     memcpy(work.input->data, work.encoded, work.encoded_bytes); work.input->flags |= AV_PKT_FLAG_KEY;
     initialize_conversion(&work); apply(&work);
@@ -150,8 +188,8 @@ int main(int argc, char **argv)
     check_frame(&work, held); check_frame(&work, work.rgba);
     held->data[0][0] ^= 255; check_frame(&work, work.rgba); av_frame_free(&held); release(&work);
     check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"jpeg-decode\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"decoder\":\"mjpeg\",\"sampling\":\"444\",\"colorConversionTimed\":true,\"stateResetTimed\":true,\"pixelsDeterministic\":true,\"outputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
-        work.width, work.height, work.cpu, work.raw_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"decoder\":\"mjpeg\",\"sampling\":\"%s\",\"chromaExpansionTimed\":%s,\"colorConversionTimed\":true,\"stateResetTimed\":true,\"pixelsDeterministic\":true,\"outputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
+        argv[1],work.width, work.height, work.cpu, work.subsampled ? "420" : "444", work.subsampled ? "true" : "false", work.raw_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;
@@ -169,5 +207,5 @@ int main(int argc, char **argv)
     }
     if (ferror(stdin)) fail("Protocol read failed.");
     av_packet_free(&work.input); av_frame_free(&work.decoded); av_frame_free(&work.rgba);
-    avcodec_free_context(&work.codec); sws_freeContext(work.conversion); free(work.encoded); free(work.expected); return 0;
+    av_frame_free(&work.u); av_frame_free(&work.v); avcodec_free_context(&work.codec); sws_freeContext(work.conversion); sws_freeContext(work.chroma); free(work.encoded); free(work.expected); return 0;
 }

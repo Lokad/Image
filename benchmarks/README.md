@@ -249,6 +249,12 @@ The [block-coordinate round](WARM-JPEG-COORDINATES.md) derives encoder geometry
 once per block while preserving every sampled pixel and encoded byte.
 The [native-prepared JPEG decode screen](WARM-JPEG-NATIVE-DECODE.md) selects
 one existing native JPEG explicitly, using the same original source raster.
+The [eight-pixel 4:2:0 render round](WARM-JPEG420-BULK.md) uncovers one fixed
+NativeDecode420 case on that raster and replaces repeated scalar geometry/color
+work with bulk interpolation and color conversion, preserving every owned byte.
+The native comparison includes decoder reset, exact chroma-grid expansion,
+conversion, intermediate/output acquisition and disposal. Its default selection
+still covers one 4:4:4 input; each explicit decode selection runs one pair.
 The [adaptive long-prefix round](WARM-JPEG-LONG-PREFIX.md) extends input-derived
 Huffman lookup for nine/ten-bit codes with explicit memory/work admission.
 The [magnitude-category round](WARM-JPEG-CATEGORY.md) replaces the coefficient
