@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB16 None screen remains above 2x | Gray/gray-alpha sample expansion; packed/palette expansion; other filter implementations |
+| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB16 and gray8 None screens above 2x | RGB16/gray8 parity; gray16/gray-alpha/packed/palette expansion; other filter implementations |
 | PNG encode | RGBA8/16, level 6/None | RGB and gray projections; compression policies with materially different work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
@@ -37,3 +37,8 @@ independent mean to 1.978x; upper 2.022x remains open. Return to material unknow
 paths before further small tuning. Two [framing experiments](WARM-PNG-LITERAL-REJECTED.md) were
 reverted without a useful parity gain. No averages, easy-case
 selection or tolerance changes establish the uniform warm target.
+
+The [gray8 round](WARM-PNG-GRAY8-ROW.md) exposes a 7.921x gap and reduces it to
+2.245x by direct expansion, with the same existing raster projection. The updated
+profile places the remaining substantial cost in inflation/framing. Keep this
+gap and the JPEG/RGB16 upper-bound gaps open; use one primitive per round.

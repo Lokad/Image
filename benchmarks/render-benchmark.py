@@ -76,6 +76,7 @@ def render():
         row('PNG RGBA16, Paeth', 'warm-paethvector-evidence.json', ['observations', -1], 'WARM-PAETH-VECTOR.md', True),
         row('PNG RGBA16, Adam7', 'warm-pngscatter-evidence.json', ['observations', -1], 'WARM-PNG-SCATTER.md', True),
         row('PNG RGB16, None', 'warm-pngrgb16-row-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-ROW.md'),
+        row('PNG gray8, None', 'warm-pnggray8-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY8-ROW.md'),
         row('JPEG baseline gray', 'warm-jpegac-fused-evidence.json', ['regressionControl', 'observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
         row('JPEG baseline 4:2:0', 'warm-jpeg420-bulk-evidence.json', ['observations', -1], 'WARM-JPEG420-BULK.md', True),
         row('JPEG baseline 4:2:2', 'warm-coverage-quiet-evidence.json', ['cases', 'jpeg422', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),

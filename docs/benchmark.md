@@ -38,6 +38,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA16, Paeth](../benchmarks/WARM-PAETH-VECTOR.md) | 8,778.54 | 5,671.15 | 1.548 / 1.607 | 1,844,468 | Confirmed |
 | [PNG RGBA16, Adam7](../benchmarks/WARM-PNG-SCATTER.md) | 6,567.82 | 3,984.54 | 1.648 / 1.700 | 2,024,532 | Confirmed |
 | [PNG RGB16, None](../benchmarks/WARM-PNG-RGB16-ROW.md) | 4,484.58 | 2,226.47 | 2.014 / 2.187 | 1,807,712 | Above 2x / open |
+| [PNG gray8, None](../benchmarks/WARM-PNG-GRAY8-ROW.md) | 836.63 | 372.62 | 2.245 / 3.003 | 620,246 | Above 2x / open |
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-AC-FUSED.md) | 1,267.57 | 682.73 | 1.857 / 1.880 | 1,221,545 | Confirmed |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG420-BULK.md) | 1,721.81 | 1,007.73 | 1.709 / 1.719 | 1,619,530 | Confirmed |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-COVERAGE-QUIET.md) | 2,087.01 | 1,336.37 | 1.562 / 1.567 | 1,978,646 | Confirmed |

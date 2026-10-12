@@ -234,6 +234,11 @@ internal static class PngCodec
                         var offset = (startY + y * stepY) * result.Stride + startX * 8;
                         CopyRgb16Row(row, result.Pixels.Slice(offset, width * 8), context.Cancellation);
                     }
+                    else if (header.ColorType == 0 && header.Depth == 8 && stepX == 1 && header.Transparency.Length == 0)
+                    {
+                        var offset = (startY + y * stepY) * result.Stride + startX * 4;
+                        CopyGray8Row(row, result.Pixels.Slice(offset, width * 4), context.Cancellation);
+                    }
                     else
                     {
                         for (var x = 0; x < width; x++)
@@ -295,6 +300,30 @@ internal static class PngCodec
                 var value = MemoryMarshal.Read<uint>(row[(x * 4)..]);
                 MemoryMarshal.Write(destination[(x * stepX * 4)..], in value);
             }
+        }
+    }
+
+    internal static void CopyGray8Row(ReadOnlySpan<byte> row, Span<byte> destination, CancellationToken cancellation)
+    {
+        // PNG section 7.3: gray8 samples expand identically into RGB; no scaling.
+        var x = 0;
+        if (Avx2.IsSupported && BitConverter.IsLittleEndian)
+        {
+            var replicate = Vector256.Create(0x00010101);
+            var alpha = Vector256.Create(unchecked((int)0xff000000));
+            for (; x <= row.Length - 8; x += 8)
+            {
+                if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+                var packed = Vector128.CreateScalar(MemoryMarshal.Read<ulong>(row[x..])).AsByte();
+                var samples = Avx2.ConvertToVector256Int32(packed);
+                (Avx2.MultiplyLow(samples, replicate) | alpha).AsByte().CopyTo(destination[(x * 4)..]);
+            }
+        }
+        for (; x < row.Length; x++)
+        {
+            if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+            var output = destination.Slice(x * 4, 4); var value = row[x];
+            output[0] = value; output[1] = value; output[2] = value; output[3] = 255;
         }
     }
 
