@@ -107,6 +107,7 @@ def render():
         row('JPEG progressive 4:2:2', 'warm-jpegprogressive422-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE422.md', True),
         row('JPEG progressive 4:4:4', 'warm-jpegmask-evidence.json', ['observations', -1], 'WARM-JPEG-MASK.md', True),
         row('WebP VP8 + alpha', 'warm-vp8decode-quiet-evidence.json', ['observations', -1], 'WARM-VP8-DECODE-QUIET.md', True),
+        row('WebP VP8, opaque', 'warm-vp8opaque-decode-evidence.json', ['observations', -1], 'WARM-VP8-OPAQUE-DECODE.md'),
         row('WebP VP8L, literal/run input', 'warm-vp8ldecode-quiet-evidence.json', ['observations', -1], 'WARM-VP8L-DECODE-QUIET.md', True),
         row('WebP VP8L, native input', 'warm-vp8l-canonical-evidence.json', ['observations', -1], 'WARM-VP8L-CANONICAL.md', True),
     ]
@@ -229,6 +230,7 @@ of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animat
 are deferred.
 
 JPEG420 RGBA8's independent upper is **2.014x**, so that pair remains open.
+Opaque VP8 decoding also remains open at **1.983x / upper 2.004x**.
 JPEG444/422 RGBA8 and JPEG444/420 RGBA16 are confirmed with adaptive Huffman
 coding; remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove

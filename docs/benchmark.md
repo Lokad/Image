@@ -69,6 +69,7 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG progressive 4:2:2](../benchmarks/WARM-JPEG-PROGRESSIVE422.md) | 3,882.57 | 2,210.07 | 1.757 / 1.781 | 1,996,661 | Confirmed |
 | [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-MASK.md) | 6,217.13 | 3,342.33 | 1.860 / 1.878 | 2,682,364 | Confirmed |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8-DECODE-QUIET.md) | 11,623.12 | 6,074.58 | 1.913 / 1.948 | 1,966,616 | Confirmed |
+| [WebP VP8, opaque](../benchmarks/WARM-VP8-OPAQUE-DECODE.md) | 9,504.58 | 4,792.69 | 1.983 / 2.004 | 760,548 | Upper above 2x / open |
 | [WebP VP8L, literal/run input](../benchmarks/WARM-VP8L-DECODE-QUIET.md) | 3,948.44 | 2,332.84 | 1.693 / 1.732 | 1,074,301 | Confirmed |
 | [WebP VP8L, native input](../benchmarks/WARM-VP8L-CANONICAL.md) | 5,703.55 | 3,023.03 | 1.887 / 1.904 | 1,216,180 | Confirmed |
 
@@ -155,6 +156,7 @@ of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animat
 are deferred.
 
 JPEG420 RGBA8's independent upper is **2.014x**, so that pair remains open.
+Opaque VP8 decoding also remains open at **1.983x / upper 2.004x**.
 JPEG444/422 RGBA8 and JPEG444/420 RGBA16 are confirmed with adaptive Huffman
 coding; remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove

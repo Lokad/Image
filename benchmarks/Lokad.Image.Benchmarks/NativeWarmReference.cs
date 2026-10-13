@@ -15,8 +15,9 @@ internal sealed class NativeWarmReference : IDisposable
     public JsonElement BuildIdentity { get; }
     private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
 
-    public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null, int? nativeQuality = null, string? jpegSampling = null)
+    public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null, int? nativeQuality = null, string? jpegSampling = null, bool vp8Opaque = false)
     {
+        if (vp8Opaque && operation != "vp8-decode") throw new ArgumentException("Opaque VP8 applies only to VP8 decoding.", nameof(vp8Opaque));
         if (jpegSampling is not (null or "444" or "420" or "422") || jpegSampling is not null && operation != "jpeg-encode")
             throw new ArgumentException("JPEG sampling applies only to the 444/420/422 encode worker.", nameof(jpegSampling));
         if (operation is not ("hflip" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "png-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "png-decode" or "png-adam7-decode" or "jpeg-encode" or "jpeg-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode" or "webp-encode" or "webp-lossless-encode" or "webp-decode" or "vp8-decode" or "nearest-resize" or "bilinear-resize")) throw new ArgumentOutOfRangeException(nameof(operation));
@@ -123,7 +124,8 @@ internal sealed class NativeWarmReference : IDisposable
                     || !Ready.GetProperty("stateResetTimed").GetBoolean() || !Ready.GetProperty("pixelsDeterministic").GetBoolean()
                     || Ready.GetProperty("outputBytes").GetInt32() != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4))
                 || (vp8Decode && (depth != 8 || Ready.GetProperty("conversionThreads").GetInt32() != 1
-                    || Ready.GetProperty("decoder").GetString() != "webp" || Ready.GetProperty("inputFormat").GetString() != "YUVA420P"
+                    || Ready.GetProperty("decoder").GetString() != "webp" || Ready.GetProperty("inputFormat").GetString() != (vp8Opaque ? "YUV420P" : "YUVA420P")
+                    || Ready.GetProperty("alphaMergeTimed").GetBoolean() == vp8Opaque
                     || Ready.GetProperty("lossless").GetBoolean() || !Ready.GetProperty("colorConversionTimed").GetBoolean()
                     || !Ready.GetProperty("stateResetTimed").GetBoolean() || !Ready.GetProperty("pixelsDeterministic").GetBoolean()
                     || Ready.GetProperty("outputBytes").GetInt32() != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4))

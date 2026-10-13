@@ -13,7 +13,7 @@ round, at most three, with correctness established before timing.
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level 6/None; RGBA8 NoCompression/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x and 4:2:2 confirmed 1.821x / upper 1.862x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x and 4:2:0 confirmed 1.888x / upper 1.931x; adaptive 4:2:0 RGBA8 quiet repeat 1.977x / upper 2.014x, open | RGBA8 4:2:0 upper bound; grayscale, constrained fallback and other material normalization layouts |
-| WebP | VP8 with alpha decode/encode; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Material opaque/alpha alternatives and distinct public boundaries |
+| WebP | VP8 with alpha decode/encode; opaque VP8 decode quiet repeat 1.983x / upper 2.004x, open; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Opaque VP8 upper bound; other material opaque/alpha alternatives and distinct public boundaries |
 | Resize | Nearest/bilinear at both depths, fixed downsample | Bicubic at both depths; upsample/wide-support paths; tight-memory fallback |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes | Retained live output owners versus released-storage reuse |
 | Public boundaries | Resident encoded span to owned output; complete single operations | Fresh Stream decoding and decode/orient/crop/fit compositions |
@@ -405,3 +405,12 @@ The original failed post-run I/O guard remains unscored; the unchanged child
 passes a quiet repeat after pending writes are flushed outside timing. Full
 tests and the same actual package pass on both OSes. Stop tuning this pair;
 material opaque WebP paths and the remaining required scope stay open.
+
+The [opaque VP8 decode check](WARM-VP8-OPAQUE-DECODE.md) retains a quiet repeat
+at 1.983x / upper 2.004x with 760,548 B/op. The upper remains above two. No
+production changes are made; fresh/actual method and flag checks permit reuse
+of the tested package. Normal/scalar native and both managed OSes preserve the
+existing RGB/alpha/geometry bounds and independent owners. The extended native
+adapter retains the previous alpha packet/pixels; original untimed rejections
+remain recorded. Do not repeat unchanged timing; profile one complete decode
+and select a substantial primitive. Full required warm coverage remains open.

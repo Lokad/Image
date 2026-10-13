@@ -44,7 +44,7 @@ static uint32_t little32(const uint8_t *data)
 {
     return (uint32_t)data[0] | (uint32_t)data[1]<<8 | (uint32_t)data[2]<<16 | (uint32_t)data[3]<<24;
 }
-static uint8_t *read_file(const char *path, size_t *size)
+static uint8_t *read_file(const char *path, size_t *size, int *has_alpha)
 {
     FILE *file = fopen(path, "rb"); if (!file) fail("Open VP8 failed.");
     if (fseek(file, 0, SEEK_END)) fail("VP8 seek failed.");
@@ -54,23 +54,24 @@ static uint8_t *read_file(const char *path, size_t *size)
     if (fread(data, 1, (size_t)length, file) != (size_t)length || ferror(file) || fclose(file)) fail("VP8 read failed.");
     if (memcmp(data, "RIFF", 4) || memcmp(data+8, "WEBP", 4)
         || little32(data+4) != (uint32_t)length-8) fail("Complete VP8 RIFF required.");
-    size_t offset = 12; int extended = 0, alpha = 0, lossy = 0;
+    size_t offset = 12; int extended = 0, alpha = 0, lossy = 0; *has_alpha = 0;
     while (offset < (size_t)length) {
         if ((size_t)length-offset < 8) fail("Truncated VP8 chunk.");
         uint32_t count = little32(data+offset+4); size_t bytes = (size_t)count+(count&1);
         if (bytes > (size_t)length-offset-8) fail("VP8 chunk exceeds RIFF.");
         const uint8_t *payload = data+offset+8;
         if (!memcmp(data+offset, "VP8X", 4)) {
-            if (extended++ || offset != 12 || count != 10 || payload[0] != 0x10) fail("Alpha-only extended VP8 required.");
+            if (extended++ || offset != 12 || count != 10 || (payload[0] != 0 && payload[0] != 0x10)) fail("Still opaque/alpha VP8 extension required.");
+            *has_alpha = !!(payload[0] & 0x10);
         } else if (!memcmp(data+offset, "ALPH", 4)) {
-            if (!extended || alpha++ || lossy || count < 1) fail("One preceding alpha chunk required.");
+            if (!extended || !*has_alpha || alpha++ || lossy || count < 1) fail("One preceding alpha chunk required.");
         } else if (!memcmp(data+offset, "VP8 ", 4)) {
-            if (!alpha || lossy++ || count < 10 || (payload[0]&1)
+            if ((*has_alpha && !alpha) || lossy++ || count < 10 || (payload[0]&1)
                 || memcmp(payload+3, "\x9d\x01\x2a", 3)) fail("One VP8 key frame required.");
         } else fail("Unexpected frozen VP8 profile chunk.");
         offset += 8+bytes;
     }
-    if (extended != 1 || alpha != 1 || lossy != 1) fail("Complete VP8X/ALPH/VP8 profile required.");
+    if (lossy != 1 || alpha != *has_alpha || (*has_alpha && extended != 1)) fail("Complete opaque or VP8X/ALPH/VP8 profile required.");
     *size = (size_t)length; return data;
 }
 typedef struct {
@@ -80,7 +81,7 @@ typedef struct {
     AVPacket *input;
     uint8_t *encoded, *expected;
     size_t encoded_bytes, raw_bytes;
-    int width, height, cpu, row_bytes, stride;
+    int width, height, cpu, row_bytes, stride, has_alpha;
     uint64_t completed, observed;
 } Work;
 static struct SwsContext *conversion(int sw, int sh, int sf, int dw, int dh, int df, int flags, int color)
@@ -133,8 +134,9 @@ static void apply(Work *work)
     require(avcodec_send_packet(work->codec,work->input), "Submit complete VP8");
     require(avcodec_receive_frame(work->codec,work->decoded), "Receive VP8 pixels");
     AVFrame *decoded=work->decoded;
-    if (decoded->width!=work->width || decoded->height!=work->height || decoded->format!=AV_PIX_FMT_YUVA420P
-        || !decoded->buf[0] || !decoded->data[3]) fail("Expected owned YUVA420P VP8 pixels.");
+    if (decoded->width!=work->width || decoded->height!=work->height
+        || decoded->format!=(work->has_alpha ? AV_PIX_FMT_YUVA420P : AV_PIX_FMT_YUV420P)
+        || !decoded->buf[0] || (work->has_alpha && !decoded->data[3])) fail("Expected owned YUV(A)420P VP8 pixels.");
     int cw=(work->width+1)/2, ch=(work->height+1)/2;
     allocate(work->u,cw*2,ch*2,AV_PIX_FMT_GRAY8); allocate(work->v,cw*2,ch*2,AV_PIX_FMT_GRAY8);
     const uint8_t *u[4]={decoded->data[1],NULL,NULL,NULL}, *v[4]={decoded->data[2],NULL,NULL,NULL};
@@ -148,7 +150,7 @@ static void apply(Work *work)
     allocate(work->rgba,work->width,work->height,AV_PIX_FMT_RGBA);
     if (sws_scale(work->precision,(const uint8_t *const *)work->rgb64->data,work->rgb64->linesize,
         0,work->height,work->rgba->data,work->rgba->linesize)!=work->height) fail("Precision reduction incomplete.");
-    for (int y=0;y<work->height;y++) for (int x=0;x<work->width;x++)
+    if (work->has_alpha) for (int y=0;y<work->height;y++) for (int x=0;x<work->width;x++)
         work->rgba->data[0][(size_t)y*work->rgba->linesize[0]+x*4+3]=decoded->data[3][(size_t)y*decoded->linesize[3]+x];
     work->stride=work->rgba->linesize[0]; work->observed+=work->rgba->data[0][work->row_bytes/2]; work->completed++;
 }
@@ -183,7 +185,7 @@ int main(int argc, char **argv)
     if (number(argv[5]) != 8) fail("VP8 decode reference requires depth 8.");
     work.row_bytes = work.width*4; work.raw_bytes = (size_t)work.row_bytes*work.height;
     if (work.raw_bytes > 512U*1024U*1024U) fail("Reference output exceeds 512 MiB.");
-    av_log_set_level(AV_LOG_ERROR); work.encoded = read_file(argv[2], &work.encoded_bytes);
+    av_log_set_level(AV_LOG_ERROR); work.encoded = read_file(argv[2], &work.encoded_bytes, &work.has_alpha);
     const AVCodec *codec = avcodec_find_decoder_by_name("webp");
     if (!codec || codec->id != AV_CODEC_ID_WEBP) fail("Pinned software VP8 decoder missing.");
     work.codec = avcodec_alloc_context3(codec); if (!work.codec) fail("Allocate decoder failed.");
@@ -206,8 +208,9 @@ int main(int argc, char **argv)
     check_frame(&work, held); check_frame(&work, work.rgba);
     held->data[0][0] ^= 255; check_frame(&work, work.rgba); av_frame_free(&held); release(&work);
     check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"vp8-decode\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"decoder\":\"webp\",\"inputFormat\":\"YUVA420P\",\"lossless\":false,\"colorConversionTimed\":true,\"stateResetTimed\":true,\"pixelsDeterministic\":true,\"outputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
-        work.width, work.height, work.cpu, work.raw_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"vp8-decode\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"decoder\":\"webp\",\"inputFormat\":\"%s\",\"alphaMergeTimed\":%s,\"lossless\":false,\"colorConversionTimed\":true,\"stateResetTimed\":true,\"pixelsDeterministic\":true,\"outputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
+        work.width, work.height, work.cpu, work.has_alpha ? "YUVA420P" : "YUV420P", work.has_alpha ? "true" : "false",
+        work.raw_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;
