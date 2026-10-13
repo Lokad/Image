@@ -157,6 +157,11 @@ filter None, splits IDAT output into bounded chunks, and strips metadata. Select
 gray requires equal RGB channels; selecting a format without alpha requires
 opaque pixels. No implicit grayscale conversion or alpha removal occurs.
 
+RGBA8 encoding copies complete RGBA rows in groups of at most 4096 pixels, with
+cancellation checked before each group. Encoded bytes, hidden RGB/alpha, work
+charges, memory admission and row workspace remain unchanged across compression
+policies. Other color types and 16-bit sample packing retain their validation.
+
 The original corpus covers every legal static color/depth profile at both interlace
 settings, all five filters, packed padding, partial palette alpha and hidden RGB.
 Dense RGB8 rows without tRNS expand directly into RGBA8 with opaque alpha.

@@ -10,7 +10,7 @@ round, at most three, with correctness established before timing.
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
 | PNG decode | RGBA8 all five filters; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None confirmed | Other material depths/layouts; partial palette/alpha paths |
-| PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16, level 6/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; materially different compression work/public boundaries |
+| PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level 6/None; RGBA8 NoCompression/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
 | WebP | VP8 with alpha decode/encode; VP8L native and managed inputs; exact VP8L backend encode | Material opaque/alpha alternatives and full 16-bit source normalization |
@@ -261,3 +261,11 @@ Canonical normal/scalar CLI, original alpha/hidden RGB, source/owners and the
 level-6/None size gate pass. Production is unchanged and verification reused.
 Stop tuning this fixed pair. Unmatched 8-bit compression comparisons, JPEG420's
 bound and full required material scope remain open.
+
+The [RGBA8 NoCompression encode check](WARM-PNG-STORED8-ENCODE.md) exposes an
+11.526x gap dominated by repeated component access. One bulk RGBA8 row-copy
+primitive reduces the screen mean by 83.7%; the independent repeat confirms
+1.883x / upper 1.933x with 2,102,472 B/op. All actuals, exact encoded bytes,
+admission and cancellation are preserved. Both quietness guards pass and the
+same actual package/full Release/differential tests pass on both OSes. Stop
+tuning this fixed case. Other material work and full required parity stay open.

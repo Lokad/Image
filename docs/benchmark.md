@@ -71,6 +71,7 @@ timing comparison; compression efficiency parity is not established.
 | Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG8-ENCODE.md) | 7,241.99 | 17,219.43 | 0.421 / 0.430 | 527,629 | Confirmed |
+| [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED8-ENCODE.md) | 357.17 | 189.72 | 1.883 / 1.933 | 2,102,472 | Confirmed |
 | [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG16-ENCODE-CRC.md) | 16,470.31 | 19,951.52 | 0.826 / 0.838 | 2,103,836 | Confirmed |
 | [PNG RGB8, level 6 / None](../benchmarks/WARM-PNG-RGB8-ENCODE-BOUNDARY.md) | — | — | — | — | Compression-size gate failed; no timing |
 | [PNG RGB16, level 6 / None](../benchmarks/WARM-PNG-RGB16-ENCODE.md) | 13,121.10 | 15,174.40 | 0.865 / 0.871 | 2,102,765 | Confirmed |
@@ -165,6 +166,10 @@ independently confirms 0.903x / upper 0.915x with 1,052,368 B/op. Both complete
 words and hidden RGB are exact; native storage packing/endian conversion occurs
 inside every operation before FFmpeg PNG encoding. Production is unchanged.
 Other material layouts and encoding projections remain open. The
+[NoCompression RGBA8 check](../benchmarks/WARM-PNG-STORED8-ENCODE.md) drops from
+11.526x to an independently confirmed 1.883x / upper 1.933x, with 2,102,472 B/op.
+One bulk row-copy primitive preserves encoded bytes, admission and cancellation;
+full tests and the same actual package pass on both OSes. The
 [RGB16 check](../benchmarks/WARM-PNG-RGB16-CURRENT.md) is confirmed at 1.819x / upper
 1.823x with 15,024 B/op. JPEG420's earlier upper-bound gap remains open.
 Stop tuning confirmed pairs. Other profiles, ownership boundaries and the full

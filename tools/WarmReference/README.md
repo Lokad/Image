@@ -67,6 +67,13 @@ Allocations are unmeasured.
 The [gray-alpha16 result](../../benchmarks/WARM-PNG-GRAY-ALPHA16-ENCODE.md)
 independently confirms its fixed pair, including timed packing and exact words.
 
+`png-store-encode` is an explicit RGBA8 level-0 operation. All existing encoder
+operations retain level 6. The managed `EncodeNoCompression8` case uses public
+NoCompression encoding; correctness preparation requires stored Deflate blocks
+and exact scanlines for both outputs, plus source/held-owner and normal/scalar
+CLI checks. The [result](../../benchmarks/WARM-PNG-STORED8-ENCODE.md) confirms a
+bulk RGBA8 row-copy optimization with unchanged bytes and workload boundaries.
+
 Maintain [docs/benchmark.md](../../docs/benchmark.md) after every accepted round.
 Its [renderer](../../benchmarks/render-benchmark.py) selects retained measurements
 and allocations; run it with `--check` before committing. Keep failed quiet guards,

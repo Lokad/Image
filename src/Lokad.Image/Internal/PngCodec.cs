@@ -962,24 +962,36 @@ internal static class PngCodec
                 for (var y = 0; y < source.Height; y++)
                 {
                     context.Work(rowBytes * 8L);
-                    var position = 0;
-                    for (var x = 0; x < source.Width; x++)
+                    if (color == 6 && source.BitDepth == 8)
                     {
-                        if ((x & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested();
-                        var r = source.Sample(x, y, 0); var g = source.Sample(x, y, 1); var b = source.Sample(x, y, 2);
-                        var a = source.Sample(x, y, 3);
-                        var maximum = source.BitDepth == 8 ? 255 : 65535;
-                        if ((color is 0 or 4) && (r != g || r != b))
-                            throw new ArgumentException("Grayscale encoding requires equal RGB channels.", nameof(source));
-                        if ((color is 0 or 2) && a != maximum)
-                            throw new ArgumentException("Encoding without alpha requires opaque pixels.", nameof(source));
-                        WriteSample(row, ref position, r, source.BitDepth);
-                        if (color is 2 or 6)
+                        for (var x = 0; x < source.Width; x += 4096)
                         {
-                            WriteSample(row, ref position, g, source.BitDepth);
-                            WriteSample(row, ref position, b, source.BitDepth);
+                            context.Cancellation.ThrowIfCancellationRequested();
+                            var bytes = Math.Min(4096, source.Width - x) * 4;
+                            source.GetRow8(y).Slice(x * 4, bytes).CopyTo(row.AsSpan(x * 4, bytes));
                         }
-                        if (color is 4 or 6) WriteSample(row, ref position, a, source.BitDepth);
+                    }
+                    else
+                    {
+                        var position = 0;
+                        for (var x = 0; x < source.Width; x++)
+                        {
+                            if ((x & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                            var r = source.Sample(x, y, 0); var g = source.Sample(x, y, 1); var b = source.Sample(x, y, 2);
+                            var a = source.Sample(x, y, 3);
+                            var maximum = source.BitDepth == 8 ? 255 : 65535;
+                            if ((color is 0 or 4) && (r != g || r != b))
+                                throw new ArgumentException("Grayscale encoding requires equal RGB channels.", nameof(source));
+                            if ((color is 0 or 2) && a != maximum)
+                                throw new ArgumentException("Encoding without alpha requires opaque pixels.", nameof(source));
+                            WriteSample(row, ref position, r, source.BitDepth);
+                            if (color is 2 or 6)
+                            {
+                                WriteSample(row, ref position, g, source.BitDepth);
+                                WriteSample(row, ref position, b, source.BitDepth);
+                            }
+                            if (color is 4 or 6) WriteSample(row, ref position, a, source.BitDepth);
+                        }
                     }
                     zlib.WriteByte(0); // Correctness-first encoder: PNG filter None.
                     zlib.Write(row);

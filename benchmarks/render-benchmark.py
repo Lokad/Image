@@ -106,6 +106,7 @@ def render():
     ]
     encodes = [
         row('PNG RGBA8, level 6 / None', 'warm-png8encode-evidence.json', ['observations', -1], 'WARM-PNG8-ENCODE.md', True),
+        row('PNG RGBA8, NoCompression / None', 'warm-pngstore8copy-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-ENCODE.md', True),
         row('PNG RGBA16, level 6 / None', 'warm-png16-encode-crc-evidence.json', ['observations', -1], 'WARM-PNG16-ENCODE-CRC.md', True),
         pending('PNG RGB8, level 6 / None', 'WARM-PNG-RGB8-ENCODE-BOUNDARY.md', 'Compression-size gate failed; no timing'),
         row('PNG RGB16, level 6 / None', 'warm-pngrgb16encode-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-ENCODE.md', True),
@@ -239,6 +240,10 @@ independently confirms 0.903x / upper 0.915x with 1,052,368 B/op. Both complete
 words and hidden RGB are exact; native storage packing/endian conversion occurs
 inside every operation before FFmpeg PNG encoding. Production is unchanged.
 Other material layouts and encoding projections remain open. The
+[NoCompression RGBA8 check](../benchmarks/WARM-PNG-STORED8-ENCODE.md) drops from
+11.526x to an independently confirmed 1.883x / upper 1.933x, with 2,102,472 B/op.
+One bulk row-copy primitive preserves encoded bytes, admission and cancellation;
+full tests and the same actual package pass on both OSes. The
 [RGB16 check](../benchmarks/WARM-PNG-RGB16-CURRENT.md) is confirmed at 1.819x / upper
 1.823x with 15,024 B/op. JPEG420's earlier upper-bound gap remains open.
 Stop tuning confirmed pairs. Other profiles, ownership boundaries and the full
