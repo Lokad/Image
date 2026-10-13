@@ -85,7 +85,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG gray-alpha8, level 6 / None](../benchmarks/WARM-PNG-GRAY-ALPHA8-ENCODE-BOUNDARY.md) | — | — | — | — | Compression-size gate failed; no timing |
 | [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ENCODE.md) | 9,316.78 | 10,318.59 | 0.903 / 0.915 | 1,052,368 | Confirmed |
 | [JPEG 4:4:4, matched quality](../benchmarks/WARM-JPEG-ENCODE-QUIET.md) | 7,390.28 | 3,779.05 | 1.956 / 1.969 | 1,051,857 | Confirmed |
-| [JPEG 4:4:4 from RGBA16, full normalization](../benchmarks/WARM-JPEG16-COMPONENT-ROW.md) | 7,372.57 | 3,853.99 | 1.913 / 1.922 | 1,051,739 | Confirmed |
+| [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG444-RGBA16-ADAPTIVE.md) | 6,767.17 | 3,851.77 | 1.757 / 1.790 | 556,280 | Confirmed |
 | [JPEG 4:2:2, matched quality](../benchmarks/WARM-JPEG422-ENCODE.md) | 4,632.95 | 2,359.67 | 1.963 / 1.990 | 527,307 | Confirmed |
 | [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG420-RGBA8-ADAPTIVE.md) | 3,501.53 | 1,771.06 | 1.977 / 2.014 | 297,772 | Upper above 2x / open |
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-ADAPTIVE-HUFFMAN.md) | 3,481.14 | 1,843.98 | 1.888 / 1.931 | 297,772 | Confirmed |
@@ -210,6 +210,12 @@ Stop tuning this pair. The [RGBA8 shared-encoder repeat](../benchmarks/WARM-JPEG
 averages 1.977x / upper 2.014x with 297,772 B/op, allocations down 43.5%.
 Its independent quiet upper remains above two; retain this open result without
 repeating unchanged timing. Other shared JPEG encoder cases need revalidation.
+
+The [RGBA16 JPEG444 adaptive revalidation](../benchmarks/WARM-JPEG444-RGBA16-ADAPTIVE.md)
+independently confirms 1.757x / upper 1.790x with 556,280 B/op, allocations down
+47.1% from its earlier fixed-table confirmation. Full normalization, coefficients,
+decoded samples, source/owners and both quiet guards pass. Stop tuning this pair;
+JPEG422 RGBA8 shared-encoder revalidation remains open.
 
 The [adaptive JPEG Huffman prototype](../benchmarks/JPEG-HUFFMAN-PROTOTYPE.md)
 cuts one existing packet by 49.9% while preserving every coefficient and pixel

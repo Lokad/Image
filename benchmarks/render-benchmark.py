@@ -120,7 +120,7 @@ def render():
         pending('PNG gray-alpha8, level 6 / None', 'WARM-PNG-GRAY-ALPHA8-ENCODE-BOUNDARY.md', 'Compression-size gate failed; no timing'),
         row('PNG gray-alpha16, level 6 / None', 'warm-pnggrayalpha16encode-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ENCODE.md', True),
         row('JPEG 4:4:4, matched quality', 'warm-jpegencode-quiet-evidence.json', ['observations', -1], 'WARM-JPEG-ENCODE-QUIET.md', True),
-        row('JPEG 4:4:4 from RGBA16, full normalization', 'warm-jpeg16-component-row-evidence.json', ['observations', -1], 'WARM-JPEG16-COMPONENT-ROW.md', True),
+        row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg44416-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG444-RGBA16-ADAPTIVE.md', True),
         row('JPEG 4:2:2, matched quality', 'warm-jpeg422encode-evidence.json', ['observations', -1], 'WARM-JPEG422-ENCODE.md', True),
         row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg4208-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG420-RGBA8-ADAPTIVE.md'),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG-ADAPTIVE-HUFFMAN.md', True),
@@ -284,6 +284,12 @@ Stop tuning this pair. The [RGBA8 shared-encoder repeat](../benchmarks/WARM-JPEG
 averages 1.977x / upper 2.014x with 297,772 B/op, allocations down 43.5%.
 Its independent quiet upper remains above two; retain this open result without
 repeating unchanged timing. Other shared JPEG encoder cases need revalidation.
+
+The [RGBA16 JPEG444 adaptive revalidation](../benchmarks/WARM-JPEG444-RGBA16-ADAPTIVE.md)
+independently confirms 1.757x / upper 1.790x with 556,280 B/op, allocations down
+47.1% from its earlier fixed-table confirmation. Full normalization, coefficients,
+decoded samples, source/owners and both quiet guards pass. Stop tuning this pair;
+JPEG422 RGBA8 shared-encoder revalidation remains open.
 
 The [adaptive JPEG Huffman prototype](../benchmarks/JPEG-HUFFMAN-PROTOTYPE.md)
 cuts one existing packet by 49.9% while preserving every coefficient and pixel
