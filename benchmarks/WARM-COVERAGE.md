@@ -10,7 +10,7 @@ round, at most three, with correctness established before timing.
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
 | PNG decode | RGBA8 all five filters; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None confirmed | Other material depths/layouts; partial palette/alpha paths |
-| PNG encode | RGBA8/16, level 6/None | RGB8 exact pixels/scanlines, unscored compression-size mismatch; other RGB/gray projections and materially different compression work |
+| PNG encode | RGBA8/16 and RGB16, level 6/None confirmed | RGB8 exact pixels/scanlines, unscored compression-size mismatch; gray projections and materially different compression work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
 | WebP | VP8 with alpha decode/encode; VP8L native and managed inputs; exact VP8L backend encode | Material opaque/alpha alternatives and full 16-bit source normalization |
@@ -214,3 +214,12 @@ only 120 bytes. No performance samples or allocations are scored, no production
 change is made, and the comparison remains open. The prior full verification is
 reused after all fresh/generated production methods and flags match the same
 actual package. Other material cases and JPEG420's upper-bound gap remain open.
+
+The [PNG RGB16 encode check](WARM-PNG-RGB16-ENCODE.md) independently confirms
+0.865x / upper 0.871x with 2,102,765 B/op. Both quietness guards pass; all 12
+actuals are retained. Timed native RGBA64LE-to-RGB48BE packing, exact words and
+scanlines, held owners and matched level-6/None compression are established using
+the existing projection. Production is unchanged and full verification reused.
+The initial harness classification failure and CPU0 I/O-wait guard failure stay
+unscored in the evidence. Stop tuning this fixed pair. RGB8's comparison, gray
+encoding projections, JPEG420's bound and full required warm coverage stay open.

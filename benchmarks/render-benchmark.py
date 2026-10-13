@@ -108,6 +108,7 @@ def render():
         row('PNG RGBA8, level 6 / None', 'warm-png8encode-evidence.json', ['observations', -1], 'WARM-PNG8-ENCODE.md', True),
         row('PNG RGBA16, level 6 / None', 'warm-png16-encode-crc-evidence.json', ['observations', -1], 'WARM-PNG16-ENCODE-CRC.md', True),
         pending('PNG RGB8, level 6 / None', 'WARM-PNG-RGB8-ENCODE-BOUNDARY.md', 'Compression-size gate failed; no timing'),
+        row('PNG RGB16, level 6 / None', 'warm-pngrgb16encode-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-ENCODE.md', True),
         row('JPEG 4:4:4, matched quality', 'warm-jpegencode-quiet-evidence.json', ['observations', -1], 'WARM-JPEG-ENCODE-QUIET.md', True),
         row('JPEG 4:2:0, matched quality', 'warm-jpeg420-chroma-row-evidence.json', ['observations', -1], 'WARM-JPEG420-CHROMA-ROW.md'),
         row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
@@ -216,7 +217,9 @@ production. All five filters have a confirmed RGBA8 case. The
 [RGB8 encode check](../benchmarks/WARM-PNG-RGB8-ENCODE-BOUNDARY.md) is exact in
 pixels/scanlines but unscored: IDAT sizes differ by 12.31%, exceeding the existing
 5% gate. Row batching recovers only 120 bytes; the compression comparison remains
-open. Other material layouts and encoding projections remain open. The
+open. The [RGB16 encode check](../benchmarks/WARM-PNG-RGB16-ENCODE.md) independently
+confirms 0.865x / upper 0.871x with 2,102,765 B/op and unchanged production.
+Other material layouts and encoding projections remain open. The
 [RGB16 check](../benchmarks/WARM-PNG-RGB16-CURRENT.md) is confirmed at 1.819x / upper
 1.823x with 15,024 B/op. JPEG420's earlier upper-bound gap remains open.
 Stop tuning confirmed pairs. Other profiles, ownership boundaries and the full

@@ -148,7 +148,7 @@ internal sealed class NativeWarmReference : IDisposable
         if (sample.State != "sample" || sample.Operations != operations || sample.CompletedOperations != completed + operations
             || sample.ElapsedNanoseconds <= 0 || !double.IsFinite(sample.ElapsedNanoseconds)
             || sample.Cpu != Ready.GetProperty("cpu").GetInt32()
-            || (Ready.GetProperty("operation").GetString() is "png-encode" or "jpeg-encode" or "webp-encode" or "webp-lossless-encode" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
+            || (Ready.GetProperty("operation").GetString() is "png-encode" or "png-rgb-encode" or "jpeg-encode" or "webp-encode" or "webp-lossless-encode" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
                 : sample.OutputStride < (Ready.GetProperty("operation").GetString() is "nearest-resize" or "bilinear-resize" or "crop" ? 256
                     : Ready.GetProperty("operation").GetString() is "quarter-turn-cw" or "quarter-turn-ccw" or "transpose" or "transverse" ? 259 : HorizontalFlipInput.Width) * (Ready.GetProperty("depth").GetInt32() / 8) * 4)
             || (Ready.GetProperty("operation").GetString() is "jpeg-decode" or "webp-decode" or "vp8-decode" && sample.OutputBytes != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4))

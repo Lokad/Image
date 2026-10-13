@@ -25,15 +25,18 @@ tolerance applies only to FFmpeg's float-stage rounding. Down8 retains exact
 native alpha. Both normal and scalar CLI outputs must match the native worker.
 Run `verify-bilinear16-linux.py` and `verify-bilinear-linux.py` before measuring.
 
-PNG RGB8 encoding has an explicit `png-rgb-encode` operation. It accepts the
-existing opaque RGBA8 projection and includes single-thread RGBA-to-RGB24 packing
-inside every native encode operation. The converted frame/context/wrappers are
+PNG RGB8/16 encoding has an explicit `png-rgb-encode` operation. It accepts the
+existing opaque RGBA8/16 projection and includes single-thread RGBA-to-RGB24 or
+RGBA64LE-to-RGB48BE packing inside every native encode operation. The converted
+frame/context/wrappers are
 reused; independent packet acquisition/release remains included. Full pixels,
 source integrity and held owners are checked outside timing. The
 [boundary evidence](../../benchmarks/WARM-PNG-RGB8-ENCODE-BOUNDARY.md) remains
 unscored because the existing 5% IDAT-size gate fails despite identical filtered
 scanlines and level 6/None. Do not interpret preparation or correctness controls
 as performance measurements.
+The [RGB16 result](../../benchmarks/WARM-PNG-RGB16-ENCODE.md) independently
+confirms its fixed pair, including native packing and matched payload sizes.
 
 Maintain [docs/benchmark.md](../../docs/benchmark.md) after every accepted round.
 Its [renderer](../../benchmarks/render-benchmark.py) selects retained measurements

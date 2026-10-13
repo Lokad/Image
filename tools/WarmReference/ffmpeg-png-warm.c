@@ -63,7 +63,8 @@ static AVCodecContext *context(int encode, int width, int height, int depth, int
     value->max_pixels = (int64_t)(width + 255) * (height + 64);
     if (encode) {
         value->width = width; value->height = height; value->time_base = (AVRational){1,1};
-        value->pix_fmt = encode_rgb ? AV_PIX_FMT_RGB24 : depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64BE;
+        value->pix_fmt = encode_rgb ? (depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE)
+            : depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64BE;
         value->gop_size = 1;
         value->compression_level = 6;
         require(av_opt_set(value->priv_data, "pred", "none", 0), "Set PNG filter None");
@@ -138,7 +139,7 @@ static void apply(Work *work)
             if (rows != work->height) fail("RGB encode conversion row count differs.");
             input = work->prepared;
         }
-        if (work->depth == 16) { swap_samples(work->source, work->prepared, work->width, work->height); input = work->prepared; }
+        if (work->depth == 16 && !work->encode_rgb) { swap_samples(work->source, work->prepared, work->width, work->height); input = work->prepared; }
         input->pts = (int64_t)work->completed;
         input->pict_type = AV_PICTURE_TYPE_I;
         require(avcodec_send_frame(work->codec, input), "Submit PNG source");
@@ -178,13 +179,20 @@ static void check_packet(Work *work, const AVPacket *packet)
     require(avcodec_send_packet(decoder, packet), "Check encoded PNG");
     require(avcodec_receive_frame(decoder, decoded), "Check PNG roundtrip");
     if (work->encode_rgb) {
-        if (decoded->width != work->width || decoded->height != work->height || decoded->format != AV_PIX_FMT_RGB24
-            || !decoded->buf[0] || decoded->linesize[0] < work->width * 3) fail("RGB PNG roundtrip geometry/ownership differs.");
+        int sample_bytes = work->depth / 8;
+        int format = work->depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE;
+        if (decoded->width != work->width || decoded->height != work->height || decoded->format != format
+            || !decoded->buf[0] || decoded->linesize[0] < work->width * 3 * sample_bytes) fail("RGB PNG roundtrip geometry/ownership differs.");
         for (int y = 0; y < work->height; y++) {
             const uint8_t *row = decoded->data[0] + (size_t)y * decoded->linesize[0];
             const uint8_t *expected = work->original + (size_t)y * work->row_bytes;
-            for (int x = 0; x < work->width; x++)
-                if (memcmp(row + x * 3, expected + x * 4, 3) || expected[x * 4 + 3] != 255) fail("RGB PNG roundtrip samples differ.");
+            for (int x = 0; x < work->width; x++) {
+                for (int i = 0; i < 3 * sample_bytes; i++)
+                    if (row[x * 3 * sample_bytes + i] != expected[x * 4 * sample_bytes + (sample_bytes == 2 ? i ^ 1 : i)])
+                        fail("RGB PNG roundtrip samples differ.");
+                for (int i = 0; i < sample_bytes; i++)
+                    if (expected[(x * 4 + 3) * sample_bytes + i] != 255) fail("RGB PNG roundtrip alpha differs.");
+            }
         }
     } else check_frame(decoded, work, 1);
     av_frame_free(&decoded); avcodec_free_context(&decoder);
@@ -238,7 +246,6 @@ int main(int argc, char **argv)
     av_log_set_level(AV_LOG_ERROR);
     work.width = number(argv[3]); work.height = number(argv[4]); work.depth = number(argv[5]);
     if (work.depth != 8 && work.depth != 16) fail("Depth must be 8 or 16.");
-    if (work.encode_rgb && work.depth != 8) fail("RGB encode reference requires RGBA8 input.");
     work.row_bytes = work.width * work.depth / 8 * 4; work.raw_bytes = (size_t)work.row_bytes * work.height;
     if (work.raw_bytes > 512U * 1024U * 1024U) fail("Reference raster exceeds 512 MiB.");
     size_t original_bytes;
@@ -252,17 +259,20 @@ int main(int argc, char **argv)
         work.source = frame(work.width, work.height, work.depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE);
         for (int y = 0; y < work.height; y++) memcpy(work.source->data[0] + (size_t)y * work.source->linesize[0],
             work.original + (size_t)y * work.row_bytes, (size_t)work.row_bytes);
-        if (work.depth == 16) work.prepared = frame(work.width, work.height, AV_PIX_FMT_RGBA64BE);
+        if (work.depth == 16 && !work.encode_rgb) work.prepared = frame(work.width, work.height, AV_PIX_FMT_RGBA64BE);
         if (work.encode_rgb) {
-            for (size_t i = 3; i < work.raw_bytes; i += 4) if (work.original[i] != 255) fail("RGB encode input requires opaque pixels.");
-            work.prepared = frame(work.width, work.height, AV_PIX_FMT_RGB24);
+            int sample_bytes = work.depth / 8;
+            for (size_t i = 3U * sample_bytes; i < work.raw_bytes; i += 4U * sample_bytes)
+                for (int j = 0; j < sample_bytes; j++)
+                    if (work.original[i+j] != 255) fail("RGB encode input requires opaque pixels.");
+            work.prepared = frame(work.width, work.height, work.depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE);
             work.conversion = sws_alloc_context(); if (!work.conversion) fail("Allocate RGB encode conversion failed.");
             require(av_opt_set_int(work.conversion, "srcw", work.width, 0), "RGB encode source width");
             require(av_opt_set_int(work.conversion, "srch", work.height, 0), "RGB encode source height");
             require(av_opt_set_int(work.conversion, "dstw", work.width, 0), "RGB encode output width");
             require(av_opt_set_int(work.conversion, "dsth", work.height, 0), "RGB encode output height");
-            require(av_opt_set_int(work.conversion, "src_format", AV_PIX_FMT_RGBA, 0), "RGB encode source format");
-            require(av_opt_set_int(work.conversion, "dst_format", AV_PIX_FMT_RGB24, 0), "RGB encode output format");
+            require(av_opt_set_int(work.conversion, "src_format", work.depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE, 0), "RGB encode source format");
+            require(av_opt_set_int(work.conversion, "dst_format", work.depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE, 0), "RGB encode output format");
             require(av_opt_set_int(work.conversion, "sws_flags", SWS_POINT | SWS_BITEXACT, 0), "RGB encode conversion policy");
             require(av_opt_set_int(work.conversion, "threads", 1, 0), "RGB encode conversion thread count");
             require(sws_init_context(work.conversion, NULL, NULL), "Initialize RGB encode conversion");
