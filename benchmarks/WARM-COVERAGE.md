@@ -420,3 +420,10 @@ diagnostic profile dominated by token decisions and rejects a 2.016x bulk-shift
 trial without twelve-actual repetition. Original production/tests are restored,
 with fresh both-OS proofs against the tested package. Opaque VP8 remains open;
 prototype a wider arithmetic window before another production/timing round.
+
+The [arithmetic-window correctness prototype](VP8-WINDOW-PROTOTYPE.md) passes
+5,418,833 scalar/actual-package comparisons per OS/mode and preserves exact
+opaque/alpha samples and held owners. Production remains unchanged; no timing
+claim is made. The private state adds at most 32 bytes across eight partitions.
+Fixed admission, one-primitive integration and complete-operation VM measurement
+remain open.
