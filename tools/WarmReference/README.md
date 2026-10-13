@@ -346,6 +346,12 @@ RGBA8 against the exact integer reference before Ready and after timing; that
 reference is a validation target and is never used as timed source pixels.
 See the [RGBA16 row report](../../benchmarks/WARM-JPEG16-COMPONENT-ROW.md).
 
+`--prepare-warm-jpeg42016 0` / `-WarmCases Encode420_16` select the same RGBA16
+source and normalization reference with 4:2:0 sampling. The fixed qscale-5 /
+quality-69 anchor and complete operation boundary remain unchanged. The
+[chroma-row report](../../benchmarks/WARM-JPEG42016-CHROMA-ROW.md) records the
+substantial improvement and its remaining above-2x screen; it is unconfirmed.
+
 The protocol controls reuse one source raster and reject fourteen invalid
 requests, arguments, sizes and affinities. They verify deterministic owned
 bitstreams, opaque decoded alpha and exact operation counters without publishing

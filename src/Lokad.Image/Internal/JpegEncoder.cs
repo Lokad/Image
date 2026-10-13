@@ -104,6 +104,18 @@ internal static class JpegEncoder
                             SampleSubsampledComponentRow8(top, bottom, samplesY, component, options.BackgroundRgb, pixels.AsSpan(y * 8, 8));
                         }
                     }
+                    else if (image.BitDepth == 16 && samplesX == 2 && samplesY is 1 or 2 && sourceLeft <= image.Width - 16
+                        && Avx512F.IsSupported && Avx512DQ.IsSupported)
+                    {
+                        for (var y = 0; y < 8; y++)
+                        {
+                            var top = image.GetRow16(Math.Min(sourceTop + y * samplesY, image.Height - 1)).Slice(sourceLeft * 4, 64);
+                            ReadOnlySpan<ushort> bottom = samplesY == 2
+                                ? image.GetRow16(Math.Min(sourceTop + y * samplesY + 1, image.Height - 1)).Slice(sourceLeft * 4, 64)
+                                : [];
+                            SampleSubsampledComponentRow16(top, bottom, samplesY, component, options.BackgroundRgb, pixels.AsSpan(y * 8, 8));
+                        }
+                    }
                     else
                     {
                         for (var y = 0; y < 8; y++)
@@ -255,6 +267,71 @@ internal static class JpegEncoder
             Avx512F.Multiply(inverseScaled, Vector512.Create((double)background)));
         return Avx512F.RoundScale(Avx512F.Divide(Avx512F.Add(numerator, Vector512.Create(2147418112d)),
             Vector512.Create(4294836225d)), 1);
+    }
+
+    internal static void SampleSubsampledComponentRow16(ReadOnlySpan<ushort> top, ReadOnlySpan<ushort> bottom,
+        int rows, int component, uint? background, Span<byte> pixels)
+    {
+        if (top.Length != 64 || pixels.Length != 8 || rows is not (1 or 2) || component is not (1 or 2)
+            || (rows == 2 ? bottom.Length != 64 : !bottom.IsEmpty))
+            throw new ArgumentException("JPEG chroma rows have sixteen RGBA pixels, one or two source rows and eight outputs.");
+        if (Avx512F.IsSupported && Avx512DQ.IsSupported)
+        {
+            var even = Vector512.Create(0L, 2, 4, 6, 8, 10, 12, 14);
+            var odd = Vector512.Create(1L, 3, 5, 7, 9, 11, 13, 15);
+            var left = ChromaValuesRow16(top[..32], component, background).AsInt64();
+            var right = ChromaValuesRow16(top[32..], component, background).AsInt64();
+            // Preserve dy/dx traversal, binary64 matrix order and the original
+            // zero-initialized sum. Round only after all unrounded taps average.
+            var sum = Avx512F.Add(Vector512<double>.Zero, Avx512F.PermuteVar8x64x2(left, even, right).AsDouble());
+            sum = Avx512F.Add(sum, Avx512F.PermuteVar8x64x2(left, odd, right).AsDouble());
+            if (rows == 2)
+            {
+                left = ChromaValuesRow16(bottom[..32], component, background).AsInt64();
+                right = ChromaValuesRow16(bottom[32..], component, background).AsInt64();
+                sum = Avx512F.Add(sum, Avx512F.PermuteVar8x64x2(left, even, right).AsDouble());
+                sum = Avx512F.Add(sum, Avx512F.PermuteVar8x64x2(left, odd, right).AsDouble());
+            }
+            JpegTransform.RoundSamples(Avx512F.Divide(sum, Vector512.Create(rows * 2d)), pixels);
+            return;
+        }
+        var color = background ?? 0;
+        for (var x = 0; x < 8; x++)
+        {
+            double sum = 0;
+            for (var dy = 0; dy < rows; dy++)
+            for (var dx = 0; dx < 2; dx++)
+            {
+                var pixel = (dy == 0 ? top : bottom).Slice((x * 2 + dx) * 4, 4);
+                var alpha = pixel[3];
+                if (alpha != 65535 && background is null)
+                    throw new ArgumentException("JPEG requires opaque pixels or an explicit RGB background.", "image");
+                var r = Flatten(pixel[0], alpha, (int)(color >> 16 & 255), 65535);
+                var g = Flatten(pixel[1], alpha, (int)(color >> 8 & 255), 65535);
+                var b = Flatten(pixel[2], alpha, (int)(color & 255), 65535);
+                sum += component == 1 ? 128 - 0.168735892 * r - 0.331264108 * g + 0.5 * b
+                    : 128 + 0.5 * r - 0.418687589 * g - 0.081312411 * b;
+            }
+            pixels[x] = (byte)Math.Clamp(Math.Round(sum / (rows * 2), MidpointRounding.AwayFromZero), 0, 255);
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector512<double> ChromaValuesRow16(ReadOnlySpan<ushort> rgba, int component, uint? background)
+    {
+        var color = background ?? 0;
+        var packed = Vector512.Create(rgba).AsUInt64(); var mask = Vector512.Create(65535UL);
+        var alphaWords = Avx512F.ShiftRightLogical(packed, 48);
+        if (background is null && !Vector512.EqualsAll(alphaWords, mask))
+            throw new ArgumentException("JPEG requires opaque pixels or an explicit RGB background.", "image");
+        var alpha = Avx512DQ.ConvertToVector512Double(alphaWords);
+        var inverseScaled = Avx512F.Multiply(Avx512F.Subtract(Vector512.Create(65535d), alpha), Vector512.Create(65535d));
+        var r = BlendRow16(Avx512F.And(packed, mask), alpha, inverseScaled, (int)(color >> 16 & 255));
+        var g = BlendRow16(Avx512F.And(Avx512F.ShiftRightLogical(packed, 16), mask), alpha, inverseScaled, (int)(color >> 8 & 255));
+        var b = BlendRow16(Avx512F.And(Avx512F.ShiftRightLogical(packed, 32), mask), alpha, inverseScaled, (int)(color & 255));
+        return component == 1
+            ? Avx512F.Add(Avx512F.Subtract(Avx512F.Subtract(Vector512.Create(128d), Avx512F.Multiply(Vector512.Create(0.168735892), r)), Avx512F.Multiply(Vector512.Create(0.331264108), g)), Avx512F.Multiply(Vector512.Create(0.5), b))
+            : Avx512F.Subtract(Avx512F.Subtract(Avx512F.Add(Vector512.Create(128d), Avx512F.Multiply(Vector512.Create(0.5), r)), Avx512F.Multiply(Vector512.Create(0.418687589), g)), Avx512F.Multiply(Vector512.Create(0.081312411), b));
     }
 
     internal static void SampleSubsampledComponentRow8(ReadOnlySpan<byte> top, ReadOnlySpan<byte> bottom,

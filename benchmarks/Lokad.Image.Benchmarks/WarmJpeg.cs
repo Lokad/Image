@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegCase { Encode8, Encode420_8, Encode422_8, Encode16 }
+public enum WarmJpegCase { Encode8, Encode420_8, Encode422_8, Encode16, Encode420_16 }
 
 internal sealed record WarmJpegPreparation(int SchemaVersion, string Project, string GeneratedUtc, string Recipe,
     string RasterSha256, string ReferenceSha256, int NativeQuality, uint BackgroundRgb, string NativeFile, string ManagedFile,
@@ -20,14 +20,14 @@ public class WarmJpeg
     public static IEnumerable<WarmJpegCase> Cases => SelectedCases();
     [ParamsSource(nameof(Cases))] public WarmJpegCase Case { get; set; }
     private const uint Background = 0x204060;
-    private bool Source16 => Case == WarmJpegCase.Encode16;
+    private bool Source16 => Case is WarmJpegCase.Encode16 or WarmJpegCase.Encode420_16;
     private int Depth => Source16 ? 16 : 8;
     private bool FixedAnchor => Subsampled || Source16;
     private bool Horizontal => Case == WarmJpegCase.Encode422_8;
-    private bool Subsampled => Case is WarmJpegCase.Encode420_8 or WarmJpegCase.Encode422_8;
+    private bool Subsampled => Case is WarmJpegCase.Encode420_8 or WarmJpegCase.Encode422_8 or WarmJpegCase.Encode420_16;
     private string NativeSampling => Horizontal ? "422" : Subsampled ? "420" : "444";
     private string DisplaySampling => Horizontal ? "4:2:2" : Subsampled ? "4:2:0" : "4:4:4";
-    private string FixedPolicy => Source16 ? Fixed16Policy : Horizontal ? Fixed422Policy : Fixed420Policy;
+    private string FixedPolicy => Source16 ? (Subsampled ? Fixed42016Policy : Fixed16Policy) : Horizontal ? Fixed422Policy : Fixed420Policy;
     private int FixedQuality => Horizontal ? 65 : 69;
     private EncoderQualityProfile TargetProfile => ProfileFor(Subsampled, Horizontal, Depth);
     private static EncoderQualityProfile ProfileFor(bool subsampled, bool horizontal = false, int depth = 8) => new(513, depth,
@@ -43,6 +43,7 @@ public class WarmJpeg
     private const string Fixed420Policy = "fixed-anchor-v1: native qscale 5 / managed quality 69 / 4:2:0; one owned evaluation; no quality sweep";
     private const string Fixed422Policy = "fixed-anchor-v1: native qscale 5 / managed quality 65 / 4:2:2; one owned evaluation; no quality sweep";
     private const string Fixed16Policy = "fixed-anchor-v1: native qscale 5 / managed quality 69 / RGBA16 to 4:4:4; one owned evaluation; no quality sweep";
+    private const string Fixed42016Policy = "fixed-anchor-v1: native qscale 5 / managed quality 69 / RGBA16 to 4:2:0; one owned evaluation; no quality sweep";
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
     private ImageBuffer source = null!;
@@ -64,7 +65,8 @@ public class WarmJpeg
             "Encode420_8" => [WarmJpegCase.Encode420_8],
             "Encode422_8" => [WarmJpegCase.Encode422_8],
             "Encode16" => [WarmJpegCase.Encode16],
-            _ => throw new ArgumentException("Choose one JPEG case: Encode8, Encode16, Encode420_8 or Encode422_8.")
+            "Encode420_16" => [WarmJpegCase.Encode420_16],
+            _ => throw new ArgumentException("Choose one JPEG case: Encode8, Encode16, Encode420_8, Encode422_8 or Encode420_16.")
         };
     }
 
@@ -85,11 +87,11 @@ public class WarmJpeg
         if (!OperatingSystem.IsLinux() || cpu is < 0 or > 62 || nativeQscale is < 1 or > 31)
             throw new ArgumentException("JPEG preparation requires Linux, one allowed CPU and qscale 1..31.");
         if (subsampled && horizontal) throw new ArgumentException("Choose one JPEG subsampling layout.");
-        if (depth is not (8 or 16) || depth == 16 && (subsampled || horizontal))
-            throw new ArgumentException("The RGBA16 case requires 4:4:4 sampling.");
+        if (depth is not (8 or 16) || depth == 16 && horizontal)
+            throw new ArgumentException("The RGBA16 cases require 4:4:4 or 4:2:0 sampling.");
         var fixedAnchor = subsampled || horizontal || depth == 16;
         var sampling = horizontal ? "422" : subsampled ? "420" : "444";
-        if (fixedAnchor && nativeQscale != 5) throw new ArgumentException("The fixed subsampled anchor requires native qscale 5.");
+        if (fixedAnchor && nativeQscale != 5) throw new ArgumentException("The fixed JPEG anchor requires native qscale 5.");
         using var process = Process.GetCurrentProcess(); var oldAffinity = process.ProcessorAffinity;
         process.ProcessorAffinity = new IntPtr(1L << cpu);
         try
@@ -127,8 +129,8 @@ public class WarmJpeg
                 Path.GetRelativePath(state.Root, nativeFile), Path.GetRelativePath(state.Root, managedFile), match, owned, order.ToArray(), SourceIdentity(state.Root),
                 JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), JpegBenchmarkCase.HashFile(typeof(WarmJpeg).Assembly.Location),
                 JpegBenchmarkCase.HashFile(state.Ffmpeg), native.BuildIdentity, native.Ready,
-                sampling, depth == 16 ? Fixed16Policy : horizontal ? Fixed422Policy : subsampled ? Fixed420Policy : EncoderQualityCalibration.OwnedQualityPolicy, depth);
-            var path = Path.Combine(state.Root, "artifacts", "warm-reference", depth == 16 ? "jpeg16-match.json" : horizontal ? "jpeg422-match.json" : subsampled ? "jpeg420-match.json" : "jpeg-match.json");
+                sampling, depth == 16 ? (subsampled ? Fixed42016Policy : Fixed16Policy) : horizontal ? Fixed422Policy : subsampled ? Fixed420Policy : EncoderQualityCalibration.OwnedQualityPolicy, depth);
+            var path = Path.Combine(state.Root, "artifacts", "warm-reference", depth == 16 ? (subsampled ? "jpeg42016-match.json" : "jpeg16-match.json") : horizontal ? "jpeg422-match.json" : subsampled ? "jpeg420-match.json" : "jpeg-match.json");
             File.WriteAllText(path, JsonSerializer.Serialize(record, EncoderQualityCalibration.Json) + "\n");
             Console.WriteLine($"Prepared one warm JPEG pair: native qscale {nativeQscale}, owned quality {match.ClosestOwned.Setting}, gap {match.PsnrGapDb:F4} dB, matched={match.Matched}; {owned.Length} owned settings, one source raster. {path}");
         }
@@ -169,7 +171,7 @@ public class WarmJpeg
         state = new JpegBenchmarkCase();
         try
         {
-            var path = Path.Combine(state.Root, "artifacts", "warm-reference", Source16 ? "jpeg16-match.json" : Horizontal ? "jpeg422-match.json" : Subsampled ? "jpeg420-match.json" : "jpeg-match.json");
+            var path = Path.Combine(state.Root, "artifacts", "warm-reference", Source16 ? (Subsampled ? "jpeg42016-match.json" : "jpeg16-match.json") : Horizontal ? "jpeg422-match.json" : Subsampled ? "jpeg420-match.json" : "jpeg-match.json");
             prepared = JsonSerializer.Deserialize<WarmJpegPreparation>(File.ReadAllText(path), EncoderQualityCalibration.Json)
                 ?? throw new InvalidOperationException("Missing warm JPEG preparation; run --prepare-warm-jpeg first.");
             if (prepared.SchemaVersion != 1 || prepared.Project != "Lokad.Image" || prepared.Recipe != Recipe || prepared.BackgroundRgb != Background || prepared.SourceDepth != Depth

@@ -274,9 +274,10 @@ quotient reproduces the original integer normalization for every sample.
 Right-edge padding and other hardware retain their existing paths. Sample
 arithmetic, work charges, memory admission and encoded bytes are unchanged;
 no additional image workspace or converted-pixel cache is introduced.
-Dense 2:1 chroma rows may convert sixteen RGBA8 pixels from one or two source
+Dense 2:1 chroma rows may convert sixteen RGBA8 or RGBA16 pixels from one or two source
 rows with safe SIMD. Unrounded binary64 component values accumulate in the
-original row/pixel order, average, then round once. Edges and other depths or
+original row/pixel order, average, then round once. RGBA16 taps use the same exact
+single-round normalization as the full-resolution row kernel. Edges and other
 hardware retain scalar sampling; no extra workspace or pixel cache is introduced.
 JPEG coefficient planes, Huffman tables, scans and transforms are charged against
 operation limits.

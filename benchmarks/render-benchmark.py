@@ -120,6 +120,7 @@ def render():
         row('JPEG 4:4:4 from RGBA16, full normalization', 'warm-jpeg16-component-row-evidence.json', ['observations', -1], 'WARM-JPEG16-COMPONENT-ROW.md', True),
         row('JPEG 4:2:2, matched quality', 'warm-jpeg422encode-evidence.json', ['observations', -1], 'WARM-JPEG422-ENCODE.md', True),
         row('JPEG 4:2:0, matched quality', 'warm-jpeg420-chroma-row-evidence.json', ['observations', -1], 'WARM-JPEG420-CHROMA-ROW.md'),
+        row('JPEG 4:2:0 from RGBA16, full normalization', 'warm-jpeg42016-chroma-row-evidence.json', ['observations', -1], 'WARM-JPEG42016-CHROMA-ROW.md'),
         row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
     ]

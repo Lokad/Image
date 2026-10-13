@@ -12,7 +12,7 @@ round, at most three, with correctness established before timing.
 | PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS confirmed | Other material depths/layouts; shorter palettes or distinct transparency paths |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level 6/None; RGBA8 NoCompression/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
-| JPEG encode | RGBA8 to 4:4:4 and 4:2:2; RGBA16 to 4:4:4 with full normalization, matched quality; 4:2:0 RGBA8 repeat mean below 2x, upper remains above | 4:2:0 RGBA8 upper-bound gap; grayscale and subsampled RGBA16 normalization |
+| JPEG encode | RGBA8 to 4:4:4 and 4:2:2; RGBA16 to 4:4:4 confirmed; 4:2:0 RGBA8 upper above 2x; 4:2:0 RGBA16 screen improved 42.9%, mean still above 2x | Both 4:2:0 gaps; grayscale and other material normalization layouts |
 | WebP | VP8 with alpha decode/encode; VP8L native and managed inputs; exact VP8L backend encode | Material opaque/alpha alternatives and full 16-bit source normalization |
 | Resize | Nearest/bilinear at both depths, fixed downsample | Bicubic at both depths; upsample/wide-support paths; tight-memory fallback |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes | Retained live output owners versus released-storage reuse |
@@ -299,3 +299,10 @@ Full 16-bit blending/normalization, conversion, encoding and owned release are
 timed. Exact normalized and encoded bytes, resource/cancellation contracts and
 both quiet guards are preserved; full tests and the same actual package pass
 on both OSes. Stop tuning this fixed case; subsampled RGBA16 remains open.
+
+The [RGBA16 4:2:0 chroma round](WARM-JPEG42016-CHROMA-ROW.md) reduces its
+screened mean 42.9%, from 3.549x to 2.022x, upper 2.796x, with 527,306 B/op.
+Exact bytes, tap order, normalization and resource contracts are preserved;
+full tests and the same actual package pass on both OSes. The pair remains
+open and has no twelve-actual confirmation. Prioritize the next material
+normalization gap before small further tuning of this remainder.
