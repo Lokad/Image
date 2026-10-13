@@ -332,6 +332,13 @@ storage and unchanged input; they never enumerate qualities. Changed output,
 native worker or source/reference identities require preparing only this pair
 again. Prepared codec output is a validation target, never a timed image cache.
 
+For the explicit 4:2:2 pair, prepare with `--prepare-warm-jpeg422 0` and select
+`-WarmCases Encode422_8` with `-WarmFamily Jpeg`. Its fixed anchor uses native
+qscale 5 and managed quality 65, one owned evaluation and the same 0.25 dB gate.
+`--prepare-warm-jpeg420 0` / `Encode420_8` retain the existing quality-69 anchor.
+The [4:2:2 report](../../benchmarks/WARM-JPEG422-ENCODE.md) records output sizes,
+the initial untimed quality-69 rejection and the quiet confirmation.
+
 The protocol controls reuse one source raster and reject fourteen invalid
 requests, arguments, sizes and affinities. They verify deterministic owned
 bitstreams, opaque decoded alpha and exact operation counters without publishing

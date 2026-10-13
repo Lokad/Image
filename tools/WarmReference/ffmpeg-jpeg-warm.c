@@ -107,10 +107,10 @@ static void write_packet(const Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if ((argc != 8 && argc != 9) || strcmp(argv[1], "jpeg-encode") || (argc == 9 && strcmp(argv[8], "420")))
-        fail("Usage: ffmpeg-jpeg-warm jpeg-encode INPUT WIDTH HEIGHT 8 OUTPUT QSCALE [420]");
-    int subsampled = argc == 9;
-    enum AVPixelFormat yuv_format = subsampled ? AV_PIX_FMT_YUVJ420P : AV_PIX_FMT_YUVJ444P;
+    if ((argc != 8 && argc != 9) || strcmp(argv[1], "jpeg-encode") || (argc == 9 && strcmp(argv[8], "420") && strcmp(argv[8], "422")))
+        fail("Usage: ffmpeg-jpeg-warm jpeg-encode INPUT WIDTH HEIGHT 8 OUTPUT QSCALE [420|422]");
+    const char *sampling = argc == 9 ? argv[8] : "444";
+    enum AVPixelFormat yuv_format = !strcmp(sampling, "422") ? AV_PIX_FMT_YUVJ422P : !strcmp(sampling, "420") ? AV_PIX_FMT_YUVJ420P : AV_PIX_FMT_YUVJ444P;
     Work work = {0}; work.cpu = affinity_cpu();
     work.width = number(argv[3]); work.height = number(argv[4]); work.quality = number(argv[7]);
     if (number(argv[5]) != 8 || work.quality > 31) fail("JPEG requires depth 8 and qscale 1..31.");
@@ -156,7 +156,7 @@ int main(int argc, char **argv)
     check_packet(&work, held); check_packet(&work, work.packet); av_packet_free(&held); av_packet_unref(work.packet);
     apply(&work); check_packet(&work, work.packet); check_source(&work); write_packet(&work, argv[6]); av_packet_unref(work.packet);
     printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"jpeg-encode\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"qscale\":%d,\"backgroundRgb\":2113632,\"sampling\":\"%s\",\"colorConversionTimed\":true,\"flatteningTimed\":true,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"bitstreamDeterministic\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
-        work.width, work.height, work.cpu, work.quality, subsampled ? "420" : "444", work.output_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
+        work.width, work.height, work.cpu, work.quality, sampling, work.output_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;

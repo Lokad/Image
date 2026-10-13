@@ -82,6 +82,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG gray-alpha8, level 6 / None](../benchmarks/WARM-PNG-GRAY-ALPHA8-ENCODE-BOUNDARY.md) | — | — | — | — | Compression-size gate failed; no timing |
 | [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ENCODE.md) | 9,316.78 | 10,318.59 | 0.903 / 0.915 | 1,052,368 | Confirmed |
 | [JPEG 4:4:4, matched quality](../benchmarks/WARM-JPEG-ENCODE-QUIET.md) | 7,390.28 | 3,779.05 | 1.956 / 1.969 | 1,051,857 | Confirmed |
+| [JPEG 4:2:2, matched quality](../benchmarks/WARM-JPEG422-ENCODE.md) | 4,632.95 | 2,359.67 | 1.963 / 1.990 | 527,307 | Confirmed |
 | [JPEG 4:2:0, matched quality](../benchmarks/WARM-JPEG420-CHROMA-ROW.md) | 3,605.37 | 1,822.42 | 1.978 / 2.022 | 527,335 | Upper above 2x / open |
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-ALPHAWEIGHTED.md) | 42,879.92 | 54,484.52 | 0.787 / 0.805 | 2,615,472 | Confirmed |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-ENCODE-EXACT.md) | 7,363.30 | 121,587.95 | 0.061 / 0.063 | 2,100,170 | Confirmed |

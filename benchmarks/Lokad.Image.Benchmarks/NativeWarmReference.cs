@@ -17,8 +17,8 @@ internal sealed class NativeWarmReference : IDisposable
 
     public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null, int? nativeQuality = null, string? jpegSampling = null)
     {
-        if (jpegSampling is not (null or "444" or "420") || jpegSampling is not null && operation != "jpeg-encode")
-            throw new ArgumentException("JPEG sampling applies only to the 444/420 encode worker.", nameof(jpegSampling));
+        if (jpegSampling is not (null or "444" or "420" or "422") || jpegSampling is not null && operation != "jpeg-encode")
+            throw new ArgumentException("JPEG sampling applies only to the 444/420/422 encode worker.", nameof(jpegSampling));
         if (operation is not ("hflip" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "png-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "png-decode" or "png-adam7-decode" or "jpeg-encode" or "jpeg-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode" or "webp-encode" or "webp-lossless-encode" or "webp-decode" or "vp8-decode" or "nearest-resize" or "bilinear-resize")) throw new ArgumentOutOfRangeException(nameof(operation));
         var normal = operation == "normal-orient";
         var transverse = operation == "transverse";
@@ -53,7 +53,7 @@ internal sealed class NativeWarmReference : IDisposable
             start.ArgumentList.Add(nativeQuality.Value.ToString(CultureInfo.InvariantCulture));
         }
         else if (nativeQuality.HasValue) throw new ArgumentException("Native quality applies only to JPEG or VP8.", nameof(nativeQuality));
-        if (jpeg && jpegSampling == "420") start.ArgumentList.Add("420");
+        if (jpeg && jpegSampling is "420" or "422") start.ArgumentList.Add(jpegSampling);
         if (bilinear && depth == 16) start.ArgumentList.Add("--allow-alpha-rounding1");
         process = Process.Start(start) ?? throw new InvalidOperationException("Could not start native warm worker.");
         errors = process.StandardError.ReadToEndAsync();
