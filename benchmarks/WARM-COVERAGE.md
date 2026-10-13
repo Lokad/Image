@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8, gray16, gray-alpha8/16 and opaque gray1/4 and palette4 None confirmed; RGB16, gray8 and palette8 None above 2x | RGB16/gray8/palette8 parity; packed gray2 and palette1/2; other filter implementations |
+| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8, gray8/16, gray-alpha8/16 and opaque gray1/4 and palette4 None confirmed; RGB16 and palette8 None above 2x | RGB16/palette8 parity; packed gray2 and palette1/2; other filter implementations |
 | PNG encode | RGBA8/16, level 6/None | RGB and gray projections; compression policies with materially different work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
@@ -127,3 +127,9 @@ One larger-buffer follow-up is not retained. Remaining profile cost is about41%
 framing,30% BCL inflation and24% palette expansion; prioritize a substantial
 remaining primitive. Other rows retain their earlier measured sources and all
 required/material unknowns remain open.
+
+The [current gray8 check](WARM-PNG-GRAY8-CURRENT.md) independently confirms 1.563x /
+upper 1.580x and 9,904 B/op after shared PNG improvements. Both guards pass, all12
+actuals retained. Production/package unchanged; full validation reused. Stop tuning
+gray8. Palette8 (2.028x), RGB16 (earlier2.014x) and JPEG420 upper-bound gap remain
+open, together with all required/material unknowns and distinct public boundaries.
