@@ -74,6 +74,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG16-ENCODE-CRC.md) | 16,470.31 | 19,951.52 | 0.826 / 0.838 | 2,103,836 | Confirmed |
 | [PNG RGB8, level 6 / None](../benchmarks/WARM-PNG-RGB8-ENCODE-BOUNDARY.md) | — | — | — | — | Compression-size gate failed; no timing |
 | [PNG RGB16, level 6 / None](../benchmarks/WARM-PNG-RGB16-ENCODE.md) | 13,121.10 | 15,174.40 | 0.865 / 0.871 | 2,102,765 | Confirmed |
+| [PNG gray8, level 6 / None](../benchmarks/WARM-PNG-GRAY8-ENCODE-BOUNDARY.md) | — | — | — | — | Compression-size gate failed; no timing |
 | [JPEG 4:4:4, matched quality](../benchmarks/WARM-JPEG-ENCODE-QUIET.md) | 7,390.28 | 3,779.05 | 1.956 / 1.969 | 1,051,857 | Confirmed |
 | [JPEG 4:2:0, matched quality](../benchmarks/WARM-JPEG420-CHROMA-ROW.md) | 3,605.37 | 1,822.42 | 1.978 / 2.022 | 527,335 | Upper above 2x / open |
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-ALPHAWEIGHTED.md) | 42,879.92 | 54,484.52 | 0.787 / 0.805 | 2,615,472 | Confirmed |
@@ -145,6 +146,9 @@ pixels/scanlines but unscored: IDAT sizes differ by 12.31%, exceeding the existi
 5% gate. Row batching recovers only 120 bytes; the compression comparison remains
 open. The [RGB16 encode check](../benchmarks/WARM-PNG-RGB16-ENCODE.md) independently
 confirms 0.865x / upper 0.871x with 2,102,765 B/op and unchanged production.
+The [gray8 encode check](../benchmarks/WARM-PNG-GRAY8-ENCODE-BOUNDARY.md) also has
+exact pixels/scanlines but remains unscored: IDAT sizes differ by 16.65%, and
+batching saves only 34 bytes. Its compression comparison remains open.
 Other material layouts and encoding projections remain open. The
 [RGB16 check](../benchmarks/WARM-PNG-RGB16-CURRENT.md) is confirmed at 1.819x / upper
 1.823x with 15,024 B/op. JPEG420's earlier upper-bound gap remains open.

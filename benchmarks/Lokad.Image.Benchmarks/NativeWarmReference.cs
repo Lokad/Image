@@ -19,7 +19,7 @@ internal sealed class NativeWarmReference : IDisposable
     {
         if (jpegSampling is not (null or "444" or "420") || jpegSampling is not null && operation != "jpeg-encode")
             throw new ArgumentException("JPEG sampling applies only to the 444/420 encode worker.", nameof(jpegSampling));
-        if (operation is not ("hflip" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "png-encode" or "png-rgb-encode" or "png-decode" or "png-adam7-decode" or "jpeg-encode" or "jpeg-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode" or "webp-encode" or "webp-lossless-encode" or "webp-decode" or "vp8-decode" or "nearest-resize" or "bilinear-resize")) throw new ArgumentOutOfRangeException(nameof(operation));
+        if (operation is not ("hflip" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "png-encode" or "png-rgb-encode" or "png-gray-encode" or "png-decode" or "png-adam7-decode" or "jpeg-encode" or "jpeg-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode" or "webp-encode" or "webp-lossless-encode" or "webp-decode" or "vp8-decode" or "nearest-resize" or "bilinear-resize")) throw new ArgumentOutOfRangeException(nameof(operation));
         var normal = operation == "normal-orient";
         var transverse = operation == "transverse";
         var transpose = operation == "transpose";
@@ -122,7 +122,7 @@ internal sealed class NativeWarmReference : IDisposable
                     || Ready.GetProperty("lossless").GetBoolean() || !Ready.GetProperty("colorConversionTimed").GetBoolean()
                     || !Ready.GetProperty("stateResetTimed").GetBoolean() || !Ready.GetProperty("pixelsDeterministic").GetBoolean()
                     || Ready.GetProperty("outputBytes").GetInt32() != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4))
-                || (operation is "png-encode" or "png-rgb-encode" && (Ready.GetProperty("compressionLevel").GetInt32() != 6 || Ready.GetProperty("filter").GetInt32() != 0)))
+                || (operation is "png-encode" or "png-rgb-encode" or "png-gray-encode" && (Ready.GetProperty("compressionLevel").GetInt32() != 6 || Ready.GetProperty("filter").GetInt32() != 0)))
                 throw new InvalidOperationException("Native warm worker geometry/thread/CPU contract differs.");
             completed = codec || nearest || bilinear || crop || vertical || halfTurn || clockwise || counterclockwise || transpose || transverse || normal ? Ready.GetProperty("initialCompletedOperations").GetInt64() : 1;
         }
@@ -148,7 +148,7 @@ internal sealed class NativeWarmReference : IDisposable
         if (sample.State != "sample" || sample.Operations != operations || sample.CompletedOperations != completed + operations
             || sample.ElapsedNanoseconds <= 0 || !double.IsFinite(sample.ElapsedNanoseconds)
             || sample.Cpu != Ready.GetProperty("cpu").GetInt32()
-            || (Ready.GetProperty("operation").GetString() is "png-encode" or "png-rgb-encode" or "jpeg-encode" or "webp-encode" or "webp-lossless-encode" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
+            || (Ready.GetProperty("operation").GetString() is "png-encode" or "png-rgb-encode" or "png-gray-encode" or "jpeg-encode" or "webp-encode" or "webp-lossless-encode" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
                 : sample.OutputStride < (Ready.GetProperty("operation").GetString() is "nearest-resize" or "bilinear-resize" or "crop" ? 256
                     : Ready.GetProperty("operation").GetString() is "quarter-turn-cw" or "quarter-turn-ccw" or "transpose" or "transverse" ? 259 : HorizontalFlipInput.Width) * (Ready.GetProperty("depth").GetInt32() / 8) * 4)
             || (Ready.GetProperty("operation").GetString() is "jpeg-decode" or "webp-decode" or "vp8-decode" && sample.OutputBytes != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4))

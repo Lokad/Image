@@ -38,6 +38,14 @@ as performance measurements.
 The [RGB16 result](../../benchmarks/WARM-PNG-RGB16-ENCODE.md) independently
 confirms its fixed pair, including native packing and matched payload sizes.
 
+`png-gray-encode` accepts the frozen opaque grayscale RGBA8 projection and times
+single-thread full-range RGBA-to-GRAY8 conversion inside every encode operation.
+Equal RGB and opaque input are validated before ready; exact samples and held
+owners remain required. Native packet acquisition/release is included. The
+[gray8 boundary evidence](../../benchmarks/WARM-PNG-GRAY8-ENCODE-BOUNDARY.md)
+remains unscored because the existing IDAT-size gate fails despite exact scanlines
+and level 6/None. Allocations are unmeasured.
+
 Maintain [docs/benchmark.md](../../docs/benchmark.md) after every accepted round.
 Its [renderer](../../benchmarks/render-benchmark.py) selects retained measurements
 and allocations; run it with `--check` before committing. Keep failed quiet guards,

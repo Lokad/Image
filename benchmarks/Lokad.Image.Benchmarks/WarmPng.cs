@@ -8,7 +8,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray4, DecodePalette4, DecodePalette2, DecodePalette1, DecodeGray2, DecodeUp8, DecodeSub8, DecodeAverage8, EncodeRgb8, EncodeRgb16 }
+public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray4, DecodePalette4, DecodePalette2, DecodePalette1, DecodeGray2, DecodeUp8, DecodeSub8, DecodeAverage8, EncodeRgb8, EncodeRgb16, EncodeGray8 }
 
 [MemoryDiagnoser]
 public class WarmPng
@@ -29,7 +29,7 @@ public class WarmPng
         var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
         var result = selection is null ? new[] { WarmPngCase.Decode8 } : selection.Split(',')
             .Select(value => Enum.TryParse<WarmPngCase>(value, out var parsed) && Enum.IsDefined(parsed)
-                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, EncodeRgb8, EncodeRgb16, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeUp8, DecodeSub8, DecodeAverage8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray2, DecodeGray4, DecodePalette1, DecodePalette2 or DecodePalette4.")).ToArray();
+                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, EncodeRgb8, EncodeRgb16, EncodeGray8, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeUp8, DecodeSub8, DecodeAverage8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray2, DecodeGray4, DecodePalette1, DecodePalette2 or DecodePalette4.")).ToArray();
         if (result.Length is < 1 or > 3 || result.Distinct().Count() != result.Length)
             throw new ArgumentException("Choose one to three distinct PNG cases.");
         return result;
@@ -38,11 +38,11 @@ public class WarmPng
     private bool Rgb => Case is WarmPngCase.DecodeRgb16 or WarmPngCase.DecodeRgb8 or WarmPngCase.EncodeRgb8 or WarmPngCase.EncodeRgb16;
     private bool Mono => Case is WarmPngCase.DecodeGray1 or WarmPngCase.DecodeGray2 or WarmPngCase.DecodeGray4;
     private int CodedDepth => Case is WarmPngCase.DecodeGray4 or WarmPngCase.DecodePalette4 ? 4 : Case is WarmPngCase.DecodePalette2 or WarmPngCase.DecodeGray2 ? 2 : Mono || Case == WarmPngCase.DecodePalette1 ? 1 : Depth;
-    private bool Gray => Case is WarmPngCase.DecodeGray8 or WarmPngCase.DecodeGray16 or WarmPngCase.DecodeGray1 or WarmPngCase.DecodeGray2 or WarmPngCase.DecodeGray4;
+    private bool Gray => Case is WarmPngCase.DecodeGray8 or WarmPngCase.DecodeGray16 or WarmPngCase.DecodeGray1 or WarmPngCase.DecodeGray2 or WarmPngCase.DecodeGray4 or WarmPngCase.EncodeGray8;
     private bool GrayAlpha => Case is WarmPngCase.DecodeGrayAlpha8 or WarmPngCase.DecodeGrayAlpha16;
     private bool Palette => Case is WarmPngCase.DecodePalette8 or WarmPngCase.DecodePalette4 or WarmPngCase.DecodePalette2 or WarmPngCase.DecodePalette1;
     private int ColorType => Palette ? 3 : GrayAlpha ? 4 : Gray ? 0 : Rgb ? 2 : 6;
-    private bool Encode => Case is WarmPngCase.Encode8 or WarmPngCase.Encode16 or WarmPngCase.EncodeRgb8 or WarmPngCase.EncodeRgb16;
+    private bool Encode => Case is WarmPngCase.Encode8 or WarmPngCase.Encode16 or WarmPngCase.EncodeRgb8 or WarmPngCase.EncodeRgb16 or WarmPngCase.EncodeGray8;
     private bool Interlaced => Case == WarmPngCase.DecodeAdam7_16;
     private bool Paeth => Case is WarmPngCase.DecodePaeth16 or WarmPngCase.DecodePaeth8;
     private bool Up => Case == WarmPngCase.DecodeUp8;
@@ -124,13 +124,14 @@ public class WarmPng
             }
             var rawPath = Path.Combine(state.DirectoryPath, "expected.raw");
             File.WriteAllBytes(rawPath, pixels); File.WriteAllBytes(state.Input, Encode ? pixels : encoded);
-            native = new NativeWarmReference(state, Depth, cpu, Encode ? Rgb ? "png-rgb-encode" : "png-encode" : Interlaced ? "png-adam7-decode" : "png-decode", rawPath);
+            native = new NativeWarmReference(state, Depth, cpu, Encode ? Rgb ? "png-rgb-encode" : Gray ? "png-gray-encode" : "png-encode" : Interlaced ? "png-adam7-decode" : "png-decode", rawPath);
             if (native.Ready.GetProperty("colorType").GetInt32() != ColorType
                 || native.Ready.GetProperty("codedDepth").GetInt32() != CodedDepth
                 || native.Ready.GetProperty("conversionThreads").GetInt32() != (Rgb || Gray || GrayAlpha || Palette ? 1 : 0)
                 || native.Ready.GetProperty("rgbExpansionTimed").GetBoolean() != (Rgb && !Encode)
                 || native.Ready.GetProperty("rgbPackingTimed").GetBoolean() != (Rgb && Encode)
-                || native.Ready.GetProperty("grayExpansionTimed").GetBoolean() != Gray
+                || native.Ready.GetProperty("grayExpansionTimed").GetBoolean() != (Gray && !Encode)
+                || native.Ready.GetProperty("grayPackingTimed").GetBoolean() != (Gray && Encode)
                 || native.Ready.GetProperty("grayAlphaExpansionTimed").GetBoolean() != GrayAlpha
                 || native.Ready.GetProperty("paletteExpansionTimed").GetBoolean() != Palette)
                 throw new InvalidOperationException("Native PNG color/expansion boundary differs.");
@@ -151,7 +152,7 @@ public class WarmPng
                 var arguments = new List<string> { "-v", "error", "-threads", "1", "-filter_threads", "1", "-cpuflags", "0",
                     "-f", "rawvideo", "-pix_fmt", Depth == 16 ? "rgba64le" : "rgba", "-s", "513x259", "-i", "pipe:0",
                     "-frames:v", "1", "-c:v", "png", "-threads", "1", "-compression_level", "6", "-pred", "none",
-                    "-pix_fmt", Rgb ? Depth == 16 ? "rgb48be" : "rgb24" : Depth == 16 ? "rgba64be" : "rgba", "-f", "image2pipe", "pipe:1" };
+                    "-pix_fmt", Gray ? "gray" : Rgb ? Depth == 16 ? "rgb48be" : "rgb24" : Depth == 16 ? "rgba64be" : "rgba", "-f", "image2pipe", "pipe:1" };
                 var scalar = OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), pixels);
                 ValidatePng(scalar);
                 using (var decoded = ImageCodec.Decode(scalar)) ValidatePixels(decoded);
@@ -331,12 +332,15 @@ public class WarmPng
                 nativeCliNormalScalarPixelsExact = true,
                 nativeEndianRepackingTimed = Encode && Depth == 16, nativeEndianWorkspaceReused = Encode && Depth == 16,
                 nativeRgbPackingTimed = Encode && Rgb, nativeRgbWorkspaceReused = Encode && Rgb,
+                nativeGrayPackingTimed = Encode && Gray, nativeGrayWorkspaceReused = Encode && Gray,
                 nativeSampleTargetMilliseconds = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_NATIVE_SAMPLE_MS") ?? "200",
                 sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmPng).Assembly.Location), nativeBuild = native.BuildIdentity,
                 nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = Encode && Rgb
+                boundary = Encode && Gray
+                    ? "Warm opaque grayscale RGBA8 input to complete owned gray8 PNG: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray. Native one-thread full-range RGBA-to-GRAY8 conversion runs inside every encode operation into a reused prepared frame; codec/packet wrappers reused, real independent owned packet acquisition/encode/release included. Both level6/filter None/color0. Equal RGB and opacity fixed and independently validated. IPC/file IO/hashes/validation excluded."
+                    : Encode && Rgb
                     ? $"Warm opaque RGBA{Depth} input to complete owned RGB{Depth} PNG: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray. Native one-thread {(Depth == 16 ? "RGBA64LE-to-RGB48BE" : "RGBA-to-RGB24")} conversion runs inside every encode operation into a reused prepared frame; codec/packet wrappers reused, real independent owned packet acquisition/encode/release included. Both level6/filter None/color2. Opacity fixed and independently validated. IPC/file IO/hashes/validation excluded."
                     : Encode
                     ? "Warm RGBA input to complete owned PNG: fresh managed MemoryStream (creation, growth, encode and disposal included; no redundant ToArray); native codec context/packet wrapper reused, real independently owned packet acquisition, encode and release included. Both level 6/filter None. For RGBA16, native LE-to-BE full-frame sample conversion runs inside every operation, using a reused prepared frame; managed conversion/row storage is included in public EncodePng. IPC, file IO, hashes and validation excluded."
