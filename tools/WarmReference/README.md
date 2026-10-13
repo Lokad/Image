@@ -52,15 +52,20 @@ and level 6/None. Allocations are unmeasured.
 The [gray16 result](../../benchmarks/WARM-PNG-GRAY16-ENCODE.md) independently
 confirms its fixed pair with exact words and matched compressed payload sizes.
 
-`png-gray-alpha-encode` accepts the frozen grayscale RGBA8 projection with
+`png-gray-alpha-encode` accepts the frozen grayscale RGBA8/16 projection with
 original varied alpha and hidden RGB. The original adapter losslessly packs
-red/alpha into reused YA8 storage inside every operation, then invokes FFmpeg's
-PNG encoder and acquires/releases independent packets. Native colorspace
+red/alpha into reused YA8 or YA16BE storage inside every operation, then invokes
+FFmpeg's
+PNG encoder and acquires/releases independent packets. RGBA8-to-YA8 colorspace
 conversion changes alpha and fails exactness; no tolerance is used. Normal/scalar
-CLI validation encodes identical canonical YA8 bytes outside timing. The
+CLI validation encodes identical canonical YA8/YA16BE bytes outside timing. At
+16 bits, packing includes full-word LE-to-BE conversion; the separate RGBA16 swap
+branch excludes this mode. The
 [boundary evidence](../../benchmarks/WARM-PNG-GRAY-ALPHA8-ENCODE-BOUNDARY.md)
 remains unscored because the existing IDAT-size gate fails by a 5.17% difference.
 Allocations are unmeasured.
+The [gray-alpha16 result](../../benchmarks/WARM-PNG-GRAY-ALPHA16-ENCODE.md)
+independently confirms its fixed pair, including timed packing and exact words.
 
 Maintain [docs/benchmark.md](../../docs/benchmark.md) after every accepted round.
 Its [renderer](../../benchmarks/render-benchmark.py) selects retained measurements

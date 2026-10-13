@@ -10,7 +10,7 @@ round, at most three, with correctness established before timing.
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
 | PNG decode | RGBA8 all five filters; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None confirmed | Other material depths/layouts; partial palette/alpha paths |
-| PNG encode | RGBA8/16, RGB16 and gray16, level 6/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; gray-alpha16 and materially different compression work |
+| PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16, level 6/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
 | WebP | VP8 with alpha decode/encode; VP8L native and managed inputs; exact VP8L backend encode | Material opaque/alpha alternatives and full 16-bit source normalization |
@@ -252,3 +252,12 @@ existing size gate: 126,485 versus 119,940 IDAT bytes, 5.17%. Batching saves onl
 61 bytes. No timing/allocations are scored; production is unchanged and prior
 verification reused after method/flag identity checks. The comparison and full
 required material scope remain open.
+
+The [gray-alpha16 encode check](WARM-PNG-GRAY-ALPHA16-ENCODE.md) independently
+confirms 0.903x / upper 0.915x with 1,052,368 B/op. Both guards pass; all 12 actuals
+are retained. Exact full-word red/alpha extraction and endian packing occur
+inside the native operation, followed by FFmpeg PNG encode/owned packet release.
+Canonical normal/scalar CLI, original alpha/hidden RGB, source/owners and the
+level-6/None size gate pass. Production is unchanged and verification reused.
+Stop tuning this fixed pair. Unmatched 8-bit compression comparisons, JPEG420's
+bound and full required material scope remain open.

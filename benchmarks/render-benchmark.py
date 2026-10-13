@@ -112,6 +112,7 @@ def render():
         pending('PNG gray8, level 6 / None', 'WARM-PNG-GRAY8-ENCODE-BOUNDARY.md', 'Compression-size gate failed; no timing'),
         row('PNG gray16, level 6 / None', 'warm-pnggray16encode-evidence.json', ['observations', -1], 'WARM-PNG-GRAY16-ENCODE.md', True),
         pending('PNG gray-alpha8, level 6 / None', 'WARM-PNG-GRAY-ALPHA8-ENCODE-BOUNDARY.md', 'Compression-size gate failed; no timing'),
+        row('PNG gray-alpha16, level 6 / None', 'warm-pnggrayalpha16encode-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ENCODE.md', True),
         row('JPEG 4:4:4, matched quality', 'warm-jpegencode-quiet-evidence.json', ['observations', -1], 'WARM-JPEG-ENCODE-QUIET.md', True),
         row('JPEG 4:2:0, matched quality', 'warm-jpeg420-chroma-row-evidence.json', ['observations', -1], 'WARM-JPEG420-CHROMA-ROW.md'),
         row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
@@ -233,6 +234,10 @@ The [gray-alpha8 encode check](../benchmarks/WARM-PNG-GRAY-ALPHA8-ENCODE-BOUNDAR
 preserves every sample with explicit timed lossless storage packing before the
 native PNG encoder, but remains unscored: IDAT sizes differ by 5.17%; batching
 saves only 61 bytes. Native colorspace conversion's alpha rounding is rejected.
+The [gray-alpha16 encode check](../benchmarks/WARM-PNG-GRAY-ALPHA16-ENCODE.md)
+independently confirms 0.903x / upper 0.915x with 1,052,368 B/op. Both complete
+words and hidden RGB are exact; native storage packing/endian conversion occurs
+inside every operation before FFmpeg PNG encoding. Production is unchanged.
 Other material layouts and encoding projections remain open. The
 [RGB16 check](../benchmarks/WARM-PNG-RGB16-CURRENT.md) is confirmed at 1.819x / upper
 1.823x with 15,024 B/op. JPEG420's earlier upper-bound gap remains open.

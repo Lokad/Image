@@ -67,7 +67,7 @@ static AVCodecContext *context(int encode, int width, int height, int depth, int
     if (encode) {
         value->width = width; value->height = height; value->time_base = (AVRational){1,1};
         value->pix_fmt = encode_color == 0 ? (depth == 8 ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_GRAY16BE)
-            : encode_color == 4 ? AV_PIX_FMT_YA8
+            : encode_color == 4 ? (depth == 8 ? AV_PIX_FMT_YA8 : AV_PIX_FMT_YA16BE)
             : encode_color == 2 ? (depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE)
             : depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64BE;
         value->gop_size = 1;
@@ -104,12 +104,18 @@ static void swap_samples(const AVFrame *input, AVFrame *output, int width, int h
         for (int i = 0; i < width * 8; i += 2) { target[i] = source[i+1]; target[i+1] = source[i]; }
     }
 }
-static void pack_gray_alpha8(const AVFrame *input, AVFrame *output, int width, int height)
+static void pack_gray_alpha(const AVFrame *input, AVFrame *output, int width, int height, int depth)
 {
+    int sample_bytes = depth / 8;
     for (int y = 0; y < height; y++) {
         const uint8_t *source = input->data[0] + (size_t)y * input->linesize[0];
         uint8_t *target = output->data[0] + (size_t)y * output->linesize[0];
-        for (int x = 0; x < width; x++) { target[x*2] = source[x*4]; target[x*2+1] = source[x*4+3]; }
+        for (int x = 0; x < width; x++)
+            for (int i = 0; i < sample_bytes; i++) {
+                int source_byte = sample_bytes == 2 ? i ^ 1 : i;
+                target[(x*2)*sample_bytes+i] = source[(x*4)*sample_bytes+source_byte];
+                target[(x*2+1)*sample_bytes+i] = source[(x*4+3)*sample_bytes+source_byte];
+            }
     }
 }
 typedef struct {
@@ -181,7 +187,7 @@ static void apply(Work *work)
                 || work->prepared->linesize[0] < work->width * 2) fail("Gray16 converted frame differs.");
             input = work->prepared;
         } else if (work->encode_gray_alpha) {
-            pack_gray_alpha8(work->source, work->prepared, work->width, work->height);
+            pack_gray_alpha(work->source, work->prepared, work->width, work->height, work->depth);
             input = work->prepared;
         } else if (work->encode_rgb || work->encode_gray) {
             int rows = sws_scale(work->conversion, (const uint8_t * const *)work->source->data, work->source->linesize,
@@ -189,7 +195,7 @@ static void apply(Work *work)
             if (rows != work->height) fail("PNG encode conversion row count differs.");
             input = work->prepared;
         }
-        if (work->depth == 16 && !work->encode_rgb && !work->encode_gray) { swap_samples(work->source, work->prepared, work->width, work->height); input = work->prepared; }
+        if (work->depth == 16 && !work->encode_rgb && !work->encode_gray && !work->encode_gray_alpha) { swap_samples(work->source, work->prepared, work->width, work->height); input = work->prepared; }
         input->pts = (int64_t)work->completed;
         input->pict_type = AV_PICTURE_TYPE_I;
         require(avcodec_send_frame(work->codec, input), "Submit PNG source");
@@ -229,13 +235,19 @@ static void check_packet(Work *work, const AVPacket *packet)
     require(avcodec_send_packet(decoder, packet), "Check encoded PNG");
     require(avcodec_receive_frame(decoder, decoded), "Check PNG roundtrip");
     if (work->encode_gray_alpha) {
-        if (decoded->width != work->width || decoded->height != work->height || decoded->format != AV_PIX_FMT_YA8
-            || !decoded->buf[0] || decoded->linesize[0] < work->width * 2) fail("Gray-alpha PNG roundtrip geometry/ownership differs.");
+        int sample_bytes = work->depth / 8;
+        int format = work->depth == 8 ? AV_PIX_FMT_YA8 : AV_PIX_FMT_YA16BE;
+        if (decoded->width != work->width || decoded->height != work->height || decoded->format != format
+            || !decoded->buf[0] || decoded->linesize[0] < work->width * 2 * sample_bytes) fail("Gray-alpha PNG roundtrip geometry/ownership differs.");
         for (int y = 0; y < work->height; y++) {
             const uint8_t *row = decoded->data[0] + (size_t)y * decoded->linesize[0];
             const uint8_t *expected = work->original + (size_t)y * work->row_bytes;
             for (int x = 0; x < work->width; x++)
-                if (row[x*2] != expected[x*4] || row[x*2+1] != expected[x*4+3]) fail("Gray-alpha PNG roundtrip samples differ.");
+                for (int i = 0; i < sample_bytes; i++) {
+                    int source_byte = sample_bytes == 2 ? i ^ 1 : i;
+                    if (row[(x*2)*sample_bytes+i] != expected[(x*4)*sample_bytes+source_byte]
+                        || row[(x*2+1)*sample_bytes+i] != expected[(x*4+3)*sample_bytes+source_byte]) fail("Gray-alpha PNG roundtrip samples differ.");
+                }
         }
     } else if (work->encode_gray) {
         int sample_bytes = work->depth / 8;
@@ -321,7 +333,6 @@ int main(int argc, char **argv)
     av_log_set_level(AV_LOG_ERROR);
     work.width = number(argv[3]); work.height = number(argv[4]); work.depth = number(argv[5]);
     if (work.depth != 8 && work.depth != 16) fail("Depth must be 8 or 16.");
-    if (work.encode_gray_alpha && work.depth != 8) fail("Gray-alpha encode reference requires RGBA8 input.");
     work.row_bytes = work.width * work.depth / 8 * 4; work.raw_bytes = (size_t)work.row_bytes * work.height;
     if (work.raw_bytes > 512U * 1024U * 1024U) fail("Reference raster exceeds 512 MiB.");
     size_t original_bytes;
@@ -335,7 +346,7 @@ int main(int argc, char **argv)
         work.source = frame(work.width, work.height, work.depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE);
         for (int y = 0; y < work.height; y++) memcpy(work.source->data[0] + (size_t)y * work.source->linesize[0],
             work.original + (size_t)y * work.row_bytes, (size_t)work.row_bytes);
-        if (work.depth == 16 && !work.encode_rgb && !work.encode_gray) work.prepared = frame(work.width, work.height, AV_PIX_FMT_RGBA64BE);
+        if (work.depth == 16 && !work.encode_rgb && !work.encode_gray && !work.encode_gray_alpha) work.prepared = frame(work.width, work.height, AV_PIX_FMT_RGBA64BE);
         if (work.encode_rgb || work.encode_gray || work.encode_gray_alpha) {
             int sample_bytes = work.depth / 8;
             if (!work.encode_gray_alpha)
@@ -347,10 +358,10 @@ int main(int argc, char **argv)
                     if (memcmp(work.original+i, work.original+i+sample_bytes, (size_t)sample_bytes)
                         || memcmp(work.original+i, work.original+i+2*sample_bytes, (size_t)sample_bytes))
                         fail("Gray encode input requires equal RGB samples.");
-            enum AVPixelFormat output_format = work.encode_gray_alpha ? AV_PIX_FMT_YA8 : work.encode_gray ? (work.depth == 8 ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_GRAY16BE)
+            enum AVPixelFormat output_format = work.encode_gray_alpha ? (work.depth == 8 ? AV_PIX_FMT_YA8 : AV_PIX_FMT_YA16BE) : work.encode_gray ? (work.depth == 8 ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_GRAY16BE)
                 : work.depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE;
             if (work.encode_gray_alpha) {
-                work.prepared = frame(work.width, work.height, AV_PIX_FMT_YA8);
+                work.prepared = frame(work.width, work.height, output_format);
             } else if (work.encode_gray && work.depth == 16) {
                 work.prepared = av_frame_alloc(); if (!work.prepared) fail("Allocate gray16 frame wrapper failed.");
                 gray16_graph(&work);
