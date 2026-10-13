@@ -334,6 +334,12 @@ if (args.Length is 2 or 3 && args[0] == "--prepare-warm-jpeg")
     return;
 }
 
+if (args.Length == 2 && args[0] == "--prepare-warm-jpeg16")
+{
+    WarmJpeg.Prepare(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture), depth: 16);
+    return;
+}
+
 if (args.Length == 2 && args[0] == "--prepare-warm-jpeg422")
 {
     WarmJpeg.Prepare(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture), horizontal: true);

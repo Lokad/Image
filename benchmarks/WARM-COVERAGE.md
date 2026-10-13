@@ -12,7 +12,7 @@ round, at most three, with correctness established before timing.
 | PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS confirmed | Other material depths/layouts; shorter palettes or distinct transparency paths |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level 6/None; RGBA8 NoCompression/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
-| JPEG encode | RGBA8 to 4:4:4 and 4:2:2, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; grayscale, full 16-bit source normalization |
+| JPEG encode | RGBA8 to 4:4:4 and 4:2:2; RGBA16 to 4:4:4 with full normalization, matched quality; 4:2:0 RGBA8 repeat mean below 2x, upper remains above | 4:2:0 RGBA8 upper-bound gap; grayscale and subsampled RGBA16 normalization |
 | WebP | VP8 with alpha decode/encode; VP8L native and managed inputs; exact VP8L backend encode | Material opaque/alpha alternatives and full 16-bit source normalization |
 | Resize | Nearest/bilinear at both depths, fixed downsample | Bicubic at both depths; upsample/wide-support paths; tight-memory fallback |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes | Retained live output owners versus released-storage reuse |
@@ -291,3 +291,11 @@ the existing original raster establish one fixed source-quality anchor; the
 first unmatched setting remains untimed. Flattening, conversion and owned
 packet release are included. Output sizes and Huffman differences are explicit;
 production is unchanged and verification reused. Required scope stays open.
+
+The [RGBA16 JPEG component-row round](WARM-JPEG16-COMPONENT-ROW.md) exposes a
+3.107x scalar sampling gap and reduces the screen mean 38.4%. One safe eight-pixel
+row primitive independently confirms 1.913x / upper 1.922x with 1,051,739 B/op.
+Full 16-bit blending/normalization, conversion, encoding and owned release are
+timed. Exact normalized and encoded bytes, resource/cancellation contracts and
+both quiet guards are preserved; full tests and the same actual package pass
+on both OSes. Stop tuning this fixed case; subsampled RGBA16 remains open.

@@ -57,16 +57,33 @@ typedef struct {
     struct SwsContext *conversion;
     AVFrame *rgba, *flattened, *yuv;
     AVPacket *packet;
-    uint8_t *original, *expected;
+    uint8_t *original, *expected, *normalized_expected;
     size_t raw_bytes;
-    int width, height, cpu, quality, output_bytes, expected_bytes;
+    int width, height, depth, cpu, quality, output_bytes, expected_bytes;
     uint64_t completed, observed;
 } Work;
 static void apply(Work *work)
 {
-    /* Exact 8-bit single-round flattening to RGB 0x204060. Scratch frames and
+    /* Exact single-round flattening/normalization to RGB 0x204060. Scratch frames and
      * contexts are reused; both transforms execute again for every operation. */
     const int background[3] = {32,64,96};
+    if (work->depth == 16) {
+        const uint64_t maximum = 65535, denominator = maximum * maximum;
+        for (int y = 0; y < work->height; y++) {
+            const uint8_t *source = work->rgba->data[0] + (size_t)y * work->rgba->linesize[0];
+            uint8_t *target = work->flattened->data[0] + (size_t)y * work->flattened->linesize[0];
+            for (int x = 0; x < work->width; x++) {
+                const uint8_t *pixel = source + (size_t)x * 8;
+                uint64_t alpha = (uint64_t)pixel[6] | (uint64_t)pixel[7] << 8;
+                for (int c = 0; c < 3; c++) {
+                    uint64_t value = (uint64_t)pixel[c*2] | (uint64_t)pixel[c*2+1] << 8;
+                    uint64_t numerator = value * alpha * 255 + (uint64_t)background[c] * (maximum-alpha) * maximum;
+                    target[x*4+c] = (uint8_t)((numerator + denominator/2) / denominator);
+                }
+                target[x*4+3] = 255;
+            }
+        }
+    } else
     for (int y = 0; y < work->height; y++) {
         const uint8_t *source = work->rgba->data[0] + (size_t)y * work->rgba->linesize[0];
         uint8_t *target = work->flattened->data[0] + (size_t)y * work->flattened->linesize[0];
@@ -93,7 +110,11 @@ static void check_source(const Work *work)
 {
     for (int y = 0; y < work->height; y++)
         if (memcmp(work->rgba->data[0] + (size_t)y * work->rgba->linesize[0],
-                   work->original + (size_t)y * work->width*4, (size_t)work->width*4)) fail("Source changed.");
+                   work->original + (size_t)y * work->width*4*(work->depth/8), (size_t)work->width*4*(work->depth/8))) fail("Source changed.");
+    if (work->normalized_expected)
+        for (int y = 0; y < work->height; y++)
+            if (memcmp(work->flattened->data[0] + (size_t)y * work->flattened->linesize[0],
+                       work->normalized_expected + (size_t)y * work->width*4, (size_t)work->width*4)) fail("Full-source normalized reference differs.");
 }
 static void check_packet(const Work *work, const AVPacket *packet)
 {
@@ -107,21 +128,25 @@ static void write_packet(const Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if ((argc != 8 && argc != 9) || strcmp(argv[1], "jpeg-encode") || (argc == 9 && strcmp(argv[8], "420") && strcmp(argv[8], "422")))
-        fail("Usage: ffmpeg-jpeg-warm jpeg-encode INPUT WIDTH HEIGHT 8 OUTPUT QSCALE [420|422]");
-    const char *sampling = argc == 9 ? argv[8] : "444";
-    enum AVPixelFormat yuv_format = !strcmp(sampling, "422") ? AV_PIX_FMT_YUVJ422P : !strcmp(sampling, "420") ? AV_PIX_FMT_YUVJ420P : AV_PIX_FMT_YUVJ444P;
+    if (argc < 8 || argc > 10 || strcmp(argv[1], "jpeg-encode"))
+        fail("Usage: ffmpeg-jpeg-warm jpeg-encode INPUT WIDTH HEIGHT 8|16 OUTPUT QSCALE [NORMALIZED-RGBA8 when depth16] [420|422]");
     Work work = {0}; work.cpu = affinity_cpu();
-    work.width = number(argv[3]); work.height = number(argv[4]); work.quality = number(argv[7]);
-    if (number(argv[5]) != 8 || work.quality > 31) fail("JPEG requires depth 8 and qscale 1..31.");
-    work.raw_bytes = (size_t)work.width * work.height * 4;
+    work.width = number(argv[3]); work.height = number(argv[4]); work.depth = number(argv[5]); work.quality = number(argv[7]);
+    if ((work.depth != 8 && work.depth != 16) || work.quality > 31) fail("JPEG requires depth 8/16 and qscale 1..31.");
+    int next = 8 + (work.depth == 16);
+    if (argc < next || argc > next+1 || (argc == next+1 && strcmp(argv[next], "420") && strcmp(argv[next], "422")))
+        fail("Expected normalized RGBA8 for depth16 and optional 420/422 sampling.");
+    const char *sampling = argc == next+1 ? argv[next] : "444";
+    enum AVPixelFormat yuv_format = !strcmp(sampling, "422") ? AV_PIX_FMT_YUVJ422P : !strcmp(sampling, "420") ? AV_PIX_FMT_YUVJ420P : AV_PIX_FMT_YUVJ444P;
+    work.raw_bytes = (size_t)work.width * work.height * 4 * (work.depth/8);
     if (work.raw_bytes > 512U*1024U*1024U) fail("Reference raster exceeds 512 MiB.");
     av_log_set_level(AV_LOG_ERROR); work.original = read_file(argv[2], work.raw_bytes);
-    work.rgba = frame(work.width, work.height, AV_PIX_FMT_RGBA);
+    if (work.depth == 16) work.normalized_expected = read_file(argv[8], (size_t)work.width * work.height * 4);
+    work.rgba = frame(work.width, work.height, work.depth == 16 ? AV_PIX_FMT_RGBA64LE : AV_PIX_FMT_RGBA);
     work.flattened = frame(work.width, work.height, AV_PIX_FMT_RGBA);
     work.yuv = frame(work.width, work.height, yuv_format);
     for (int y = 0; y < work.height; y++) memcpy(work.rgba->data[0] + (size_t)y*work.rgba->linesize[0],
-        work.original + (size_t)y*work.width*4, (size_t)work.width*4);
+        work.original + (size_t)y*work.width*4*(work.depth/8), (size_t)work.width*4*(work.depth/8));
     work.conversion = sws_alloc_context(); if (!work.conversion) fail("Allocate conversion failed.");
     require(av_opt_set_int(work.conversion, "srcw", work.width, 0), "Set source width");
     require(av_opt_set_int(work.conversion, "srch", work.height, 0), "Set source height");
@@ -155,8 +180,8 @@ int main(int argc, char **argv)
     if (held->buf->buffer == work.packet->buf->buffer) fail("Live packets alias.");
     check_packet(&work, held); check_packet(&work, work.packet); av_packet_free(&held); av_packet_unref(work.packet);
     apply(&work); check_packet(&work, work.packet); check_source(&work); write_packet(&work, argv[6]); av_packet_unref(work.packet);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"jpeg-encode\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"qscale\":%d,\"backgroundRgb\":2113632,\"sampling\":\"%s\",\"colorConversionTimed\":true,\"flatteningTimed\":true,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"bitstreamDeterministic\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
-        work.width, work.height, work.cpu, work.quality, sampling, work.output_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"jpeg-encode\",\"width\":%d,\"height\":%d,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"qscale\":%d,\"backgroundRgb\":2113632,\"sampling\":\"%s\",\"colorConversionTimed\":true,\"flatteningTimed\":true,\"fullSourceNormalizationTimed\":%s,\"normalizedReferenceExact\":%s,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"bitstreamDeterministic\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
+        work.width, work.height, work.depth, work.cpu, work.quality, sampling, work.depth == 16 ? "true" : "false", work.depth == 16 ? "true" : "false", work.output_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;
@@ -175,5 +200,5 @@ int main(int argc, char **argv)
     }
     if (ferror(stdin)) fail("Protocol read failed.");
     av_packet_free(&work.packet); av_frame_free(&work.rgba); av_frame_free(&work.flattened); av_frame_free(&work.yuv);
-    avcodec_free_context(&work.codec); sws_freeContext(work.conversion); free(work.original); free(work.expected); return 0;
+    avcodec_free_context(&work.codec); sws_freeContext(work.conversion); free(work.original); free(work.expected); free(work.normalized_expected); return 0;
 }

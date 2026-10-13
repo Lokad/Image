@@ -85,6 +85,13 @@ internal static class JpegEncoder
                             SampleComponentRow8(image.GetRow8(Math.Min(sourceTop + y, image.Height - 1)).Slice(sourceLeft * 4, 32),
                                 component, options.BackgroundRgb, pixels.AsSpan(y * 8, 8));
                     }
+                    else if (image.BitDepth == 16 && samplesX == 1 && samplesY == 1 && sourceLeft <= image.Width - 8
+                        && Avx512F.IsSupported && Avx512DQ.IsSupported)
+                    {
+                        for (var y = 0; y < 8; y++)
+                            SampleComponentRow16(image.GetRow16(Math.Min(sourceTop + y, image.Height - 1)).Slice(sourceLeft * 4, 32),
+                                component, options.BackgroundRgb, pixels.AsSpan(y * 8, 8));
+                    }
                     else if (image.BitDepth == 8 && samplesX == 2 && samplesY is 1 or 2 && sourceLeft <= image.Width - 16
                         && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported)
                     {
@@ -189,6 +196,65 @@ internal static class JpegEncoder
             };
             pixels[x] = (byte)Math.Clamp(Math.Round(sample, MidpointRounding.AwayFromZero), 0, 255);
         }
+    }
+
+    internal static void SampleComponentRow16(ReadOnlySpan<ushort> rgba, int component, uint? background, Span<byte> pixels)
+    {
+        if (rgba.Length != 32 || pixels.Length != 8 || (uint)component > 2)
+            throw new ArgumentException("JPEG component rows have eight RGBA pixels and a valid component.");
+        var color = background ?? 0;
+        if (Avx512F.IsSupported && Avx512DQ.IsSupported)
+        {
+            var packed = Vector512.Create(rgba).AsUInt64(); var mask = Vector512.Create(65535UL);
+            var alphaWords = Avx512F.ShiftRightLogical(packed, 48);
+            if (background is null && !Vector512.EqualsAll(alphaWords, mask))
+                throw new ArgumentException("JPEG requires opaque pixels or an explicit RGB background.", "image");
+            var alpha = Avx512DQ.ConvertToVector512Double(alphaWords);
+            var inverseScaled = Avx512F.Multiply(Avx512F.Subtract(Vector512.Create(65535d), alpha), Vector512.Create(65535d));
+            var r = BlendRow16(Avx512F.And(packed, mask), alpha, inverseScaled, (int)(color >> 16 & 255));
+            var g = BlendRow16(Avx512F.And(Avx512F.ShiftRightLogical(packed, 16), mask), alpha, inverseScaled, (int)(color >> 8 & 255));
+            var b = BlendRow16(Avx512F.And(Avx512F.ShiftRightLogical(packed, 32), mask), alpha, inverseScaled, (int)(color & 255));
+            var samples = component switch
+            {
+                0 => Avx512F.Add(Avx512F.Add(Avx512F.Multiply(Vector512.Create(0.299), r), Avx512F.Multiply(Vector512.Create(0.587), g)), Avx512F.Multiply(Vector512.Create(0.114), b)),
+                1 => Avx512F.Add(Avx512F.Subtract(Avx512F.Subtract(Vector512.Create(128d), Avx512F.Multiply(Vector512.Create(0.168735892), r)), Avx512F.Multiply(Vector512.Create(0.331264108), g)), Avx512F.Multiply(Vector512.Create(0.5), b)),
+                _ => Avx512F.Subtract(Avx512F.Subtract(Avx512F.Add(Vector512.Create(128d), Avx512F.Multiply(Vector512.Create(0.5), r)), Avx512F.Multiply(Vector512.Create(0.418687589), g)), Avx512F.Multiply(Vector512.Create(0.081312411), b))
+            };
+            JpegTransform.RoundSamples(samples, pixels);
+            return;
+        }
+        for (var x = 0; x < 8; x++)
+        {
+            var pixel = rgba.Slice(x * 4, 4); var alpha = pixel[3];
+            if (alpha != 65535 && background is null)
+                throw new ArgumentException("JPEG requires opaque pixels or an explicit RGB background.", "image");
+            var r = Flatten(pixel[0], alpha, (int)(color >> 16 & 255), 65535);
+            var g = Flatten(pixel[1], alpha, (int)(color >> 8 & 255), 65535);
+            var b = Flatten(pixel[2], alpha, (int)(color & 255), 65535);
+            var sample = component switch
+            {
+                0 => 0.299 * r + 0.587 * g + 0.114 * b,
+                1 => 128 - 0.168735892 * r - 0.331264108 * g + 0.5 * b,
+                _ => 128 + 0.5 * r - 0.418687589 * g - 0.081312411 * b
+            };
+            pixels[x] = (byte)Math.Clamp(Math.Round(sample, MidpointRounding.AwayFromZero), 0, 255);
+        }
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    private static Vector512<double> BlendRow16(Vector512<ulong> values, Vector512<double> alpha,
+        Vector512<double> inverseScaled, int background)
+    {
+        // SPEC.md: one rounding after the full encoded-space blend. Every
+        // product/sum is an integer below 2^40, hence exact in binary64. The
+        // adjusted numerator divided by odd 65535^2 is at least 1/65535^2
+        // from an integer unless exact; division error is below 2^-43.
+        // Flooring therefore reproduces the integer quotient for every input.
+        var weighted = Avx512F.Multiply(Avx512DQ.ConvertToVector512Double(values), alpha);
+        var numerator = Avx512F.Add(Avx512F.Multiply(weighted, Vector512.Create(255d)),
+            Avx512F.Multiply(inverseScaled, Vector512.Create((double)background)));
+        return Avx512F.RoundScale(Avx512F.Divide(Avx512F.Add(numerator, Vector512.Create(2147418112d)),
+            Vector512.Create(4294836225d)), 1);
     }
 
     internal static void SampleSubsampledComponentRow8(ReadOnlySpan<byte> top, ReadOnlySpan<byte> bottom,

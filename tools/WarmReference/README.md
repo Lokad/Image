@@ -339,6 +339,13 @@ qscale 5 and managed quality 65, one owned evaluation and the same 0.25 dB gate.
 The [4:2:2 report](../../benchmarks/WARM-JPEG422-ENCODE.md) records output sizes,
 the initial untimed quality-69 rejection and the quiet confirmation.
 
+`--prepare-warm-jpeg16 0` / `-WarmCases Encode16` select the original RGBA16
+4:4:4 case. Its fixed qscale-5/quality-69 anchor includes full 16-bit blending
+and normalization inside every operation. The native adapter checks normalized
+RGBA8 against the exact integer reference before Ready and after timing; that
+reference is a validation target and is never used as timed source pixels.
+See the [RGBA16 row report](../../benchmarks/WARM-JPEG16-COMPONENT-ROW.md).
+
 The protocol controls reuse one source raster and reject fourteen invalid
 requests, arguments, sizes and affinities. They verify deterministic owned
 bitstreams, opaque decoded alpha and exact operation counters without publishing

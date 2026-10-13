@@ -267,10 +267,13 @@ JPEG requires opaque input or an explicit `BackgroundRgb` packed as 0xRRGGBB.
 Alpha flattening operates in encoded sample space before 16-to-8-bit conversion,
 with one nearest-integer rounding. Output is opaque and strips input metadata.
 Both 8-bit and 16-bit RGBA sources are accepted.
-Dense one-to-one 8-bit encoder component rows may use the existing AVX-512/AVX2
-sample kernel, including luma in 4:2:0 and 4:2:2. Subsampled chroma, right-edge
-padding, other depths and other hardware retain their existing paths. Sample
-arithmetic, work charges, memory admission and encoded bytes are unchanged.
+Dense one-to-one encoder component rows may use safe SIMD: AVX-512/AVX2 for
+RGBA8 and AVX-512F/DQ for RGBA16, including luma in 4:2:0 and 4:2:2. The RGBA16
+blend's integer products and sums are exact in binary64; flooring its adjusted
+quotient reproduces the original integer normalization for every sample.
+Right-edge padding and other hardware retain their existing paths. Sample
+arithmetic, work charges, memory admission and encoded bytes are unchanged;
+no additional image workspace or converted-pixel cache is introduced.
 Dense 2:1 chroma rows may convert sixteen RGBA8 pixels from one or two source
 rows with safe SIMD. Unrounded binary64 component values accumulate in the
 original row/pixel order, average, then round once. Edges and other depths or

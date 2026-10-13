@@ -49,10 +49,11 @@ internal sealed class NativeWarmReference : IDisposable
         if (operation is "png-decode" or "png-adam7-decode") start.ArgumentList.Add(expectedRaw ?? throw new ArgumentNullException(nameof(expectedRaw)));
         if (jpeg || webp)
         {
-            if (depth != 8 || !nativeQuality.HasValue || nativeQuality < 1 || nativeQuality > (webp ? 100 : 31)) throw new ArgumentOutOfRangeException(nameof(nativeQuality));
+            if ((jpeg && depth is not (8 or 16)) || (webp && depth != 8) || !nativeQuality.HasValue || nativeQuality < 1 || nativeQuality > (webp ? 100 : 31)) throw new ArgumentOutOfRangeException(nameof(nativeQuality));
             start.ArgumentList.Add(nativeQuality.Value.ToString(CultureInfo.InvariantCulture));
         }
         else if (nativeQuality.HasValue) throw new ArgumentException("Native quality applies only to JPEG or VP8.", nameof(nativeQuality));
+        if (jpeg && depth == 16) start.ArgumentList.Add(expectedRaw ?? throw new ArgumentNullException(nameof(expectedRaw)));
         if (jpeg && jpegSampling is "420" or "422") start.ArgumentList.Add(jpegSampling);
         if (bilinear && depth == 16) start.ArgumentList.Add("--allow-alpha-rounding1");
         process = Process.Start(start) ?? throw new InvalidOperationException("Could not start native warm worker.");
@@ -98,7 +99,9 @@ internal sealed class NativeWarmReference : IDisposable
                 || (jpeg && (Ready.GetProperty("conversionThreads").GetInt32() != 1 || Ready.GetProperty("qscale").GetInt32() != nativeQuality
                     || Ready.GetProperty("backgroundRgb").GetInt32() != 0x204060 || Ready.GetProperty("sampling").GetString() != (jpegSampling ?? "444")
                     || !Ready.GetProperty("colorConversionTimed").GetBoolean() || !Ready.GetProperty("flatteningTimed").GetBoolean()
-                    || !Ready.GetProperty("bitstreamDeterministic").GetBoolean()))
+                    || !Ready.GetProperty("bitstreamDeterministic").GetBoolean()
+                    || Ready.GetProperty("fullSourceNormalizationTimed").GetBoolean() != (depth == 16)
+                    || (depth == 16 && !Ready.GetProperty("normalizedReferenceExact").GetBoolean())))
                 || (webp && (Ready.GetProperty("conversionThreads").GetInt32() != 1 || Ready.GetProperty("quality").GetInt32() != nativeQuality
                     || Ready.GetProperty("effort").GetInt32() != 4 || Ready.GetProperty("lossless").GetBoolean() != webpLossless
                     || Ready.GetProperty("inputFormat").GetString() != "BGRA" || !Ready.GetProperty("repackingTimed").GetBoolean()
