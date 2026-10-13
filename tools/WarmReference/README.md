@@ -73,6 +73,11 @@ NoCompression encoding; correctness preparation requires stored Deflate blocks
 and exact scanlines for both outputs, plus source/held-owner and normal/scalar
 CLI checks. The [result](../../benchmarks/WARM-PNG-STORED8-ENCODE.md) confirms a
 bulk RGBA8 row-copy optimization with unchanged bytes and workload boundaries.
+`DecodeNoCompression8` uses the same frozen PNG bytes with the existing
+`png-decode` worker. Stored-block structure and exact scanlines are checked
+outside timing; full decode/independent output acquisition/release is included.
+The [decode result](../../benchmarks/WARM-PNG-STORED8-DECODE.md) independently
+confirms this fixed case without production or native-worker changes.
 
 Maintain [docs/benchmark.md](../../docs/benchmark.md) after every accepted round.
 Its [renderer](../../benchmarks/render-benchmark.py) selects retained measurements

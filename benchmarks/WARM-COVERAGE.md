@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8 all five filters; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None confirmed | Other material depths/layouts; partial palette/alpha paths |
+| PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None confirmed | Other material depths/layouts; partial palette/alpha paths |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level 6/None; RGBA8 NoCompression/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
@@ -269,3 +269,11 @@ primitive reduces the screen mean by 83.7%; the independent repeat confirms
 admission and cancellation are preserved. Both quietness guards pass and the
 same actual package/full Release/differential tests pass on both OSes. Stop
 tuning this fixed case. Other material work and full required parity stay open.
+
+The [stored-Deflate RGBA8 decode check](WARM-PNG-STORED8-DECODE.md) independently
+confirms 1.159x / upper 1.168x with 12,976 B/op. Both guards pass; all 12 actuals
+are retained. It uses the same frozen level-0 PNG from the encode case with exact
+RGBA, alpha, hidden RGB, normal/scalar CLI, source and held owners. Production,
+native worker and package are unchanged and full verification reused after
+fresh/actual-child method/flag identity checks. Stop tuning this fixed case;
+other material work and the full required scope stay open.
