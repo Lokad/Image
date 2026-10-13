@@ -137,6 +137,7 @@ def render():
         row('Bilinear resize RGBA8', 'warm-bilinear8-quiet-evidence.json', ['observations', -1], 'WARM-BILINEAR8-QUIET.md', True),
         row('Bilinear resize RGBA16†', 'warm-bilinear16-register-evidence.json', ['observations', -1], 'WARM-BILINEAR16-REGISTER.md', True),
         row('Bilinear upscale RGBA8†', 'warm-bilinearup8-batch-evidence.json', ['observations', -1], 'WARM-BILINEAR-UP8-BATCH.md', True),
+        row('Bilinear upscale RGBA16†', 'warm-bilinearup16-rows-evidence.json', ['observations', -1], 'WARM-BILINEAR-UP16-ROWS.md', True),
         pending('Bicubic resize RGBA8', 'bicubic8-boundary-evidence.json', 'Unmatched boundary/alpha; no timing'),
         row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
@@ -229,7 +230,8 @@ Full required warm coverage is **open**. The
 layouts, resize directions/fallbacks, fresh Streams, retained owners and composed
 public operations. RGBA8 bilinear upscaling now confirms **1.764x / upper 1.787x**
 after a four-pixel kernel cuts its baseline mean 41.8%. Stop tuning that pair;
-other upscale depths and material paths remain open. Bicubic remains unmatched.
+RGBA16 upscaling also confirms **1.331x / upper 1.416x** with horizontal row reuse,
+cutting its baseline mean 52.4%. Other material paths remain open. Bicubic remains unmatched.
 PNG RGB8, gray8 and gray-alpha8
 encoding preserves exact samples but exceeds the 5% IDAT-size gate by differences
 of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animation

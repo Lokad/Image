@@ -93,8 +93,17 @@ Existing unused geometry slots hold fractional numerators and bounded source
 offsets; no extra workspace or pixel cache is introduced. Premultiplied integer
 sums remain below 2^47 under output-array admission. Near a quantization boundary
 or tiny alpha, the original binary64 calculation and exact-alpha work/memory
-checks remain active, preserving established pixels and rounding. Other depths,
-filters, mixed scaling and unsupported hardware retain their existing paths.
+checks remain active, preserving established pixels and rounding. Other filters,
+mixed scaling and unsupported hardware retain their existing paths.
+
+RGBA16 bilinear enlargement may use the same four-output strategy with exact
+64-bit horizontal intermediates, reusing at most four operation-local rows.
+Its optional workspace is `128 * outputWidth + 64` bytes and leaves room for
+exact tiny-alpha scratch; tighter budgets retain the existing paired-row path.
+Unsigned full-word premultiplication and output-array admission keep integer
+sums below 2^62. A conservative precision bound covers final binary64 conversion,
+with original rounding near ambiguous boundaries. Intermediates are never rounded
+to pixels or reused across operations, and admission is released on every exit.
 
 An original development-only reference uses exact integer kernel weights and
 `BigInteger` separable accumulation, with no production resize helpers. Public

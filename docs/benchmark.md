@@ -106,6 +106,7 @@ timing comparison; compression efficiency parity is not established.
 | [Bilinear resize RGBA8](../benchmarks/WARM-BILINEAR8-QUIET.md) | 729.12 | 376.29 | 1.938 / 1.958 | 157,955 | Confirmed |
 | [Bilinear resize RGBA16†](../benchmarks/WARM-BILINEAR16-REGISTER.md) | 784.03 | 418.41 | 1.874 / 1.908 | 290,118 | Confirmed |
 | [Bilinear upscale RGBA8†](../benchmarks/WARM-BILINEAR-UP8-BATCH.md) | 3,797.55 | 2,152.25 | 1.764 / 1.787 | 2,235,599 | Confirmed |
+| [Bilinear upscale RGBA16†](../benchmarks/WARM-BILINEAR-UP16-ROWS.md) | 2,550.27 | 1,916.08 | 1.331 / 1.416 | 4,498,974 | Confirmed |
 | [Bicubic resize RGBA8](../benchmarks/bicubic8-boundary-evidence.json) | — | — | — | — | Unmatched boundary/alpha; no timing |
 | [Crop RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 2.34 | 2.27 | 1.033 / 1.039 | 96 | Confirmed |
 | [Crop RGBA16](../benchmarks/WARM-CROP-COPY.md) | 4.11 | 4.15 | 0.991 / 1.003 | 96 | Confirmed |
@@ -155,7 +156,8 @@ Full required warm coverage is **open**. The
 layouts, resize directions/fallbacks, fresh Streams, retained owners and composed
 public operations. RGBA8 bilinear upscaling now confirms **1.764x / upper 1.787x**
 after a four-pixel kernel cuts its baseline mean 41.8%. Stop tuning that pair;
-other upscale depths and material paths remain open. Bicubic remains unmatched.
+RGBA16 upscaling also confirms **1.331x / upper 1.416x** with horizontal row reuse,
+cutting its baseline mean 52.4%. Other material paths remain open. Bicubic remains unmatched.
 PNG RGB8, gray8 and gray-alpha8
 encoding preserves exact samples but exceeds the 5% IDAT-size gate by differences
 of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animation

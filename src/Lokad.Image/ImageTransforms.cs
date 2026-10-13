@@ -185,7 +185,7 @@ public static class ImageTransforms
                     horizontalWeights[x * 8 + tap] = Kernel((first + tap - center) / scaleX, filter);
                     horizontalOffsets[x * 8 + tap] = Math.Clamp(first + tap, 0, source.Width - 1) * 4;
                 }
-                if (source.BitDepth == 8 && filter == ResizeFilter.Bilinear
+                if (filter == ResizeFilter.Bilinear
                     && width > source.Width && height > source.Height)
                 {
                     // Two-tap support leaves these existing geometry slots free.

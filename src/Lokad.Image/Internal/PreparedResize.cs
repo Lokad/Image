@@ -24,6 +24,10 @@ internal static class PreparedResize
             && result.Width > source.Width && result.Height > source.Height
             && BilinearUpsample.TryApply(source, result, horizontalWeights, horizontalOffsets,
                 horizontalCounts, rowWork, context)) return;
+        if (paired && Avx512DQ.IsSupported && typeof(T) == typeof(ushort) && filter == ResizeFilter.Bilinear
+            && result.Width > source.Width && result.Height > source.Height
+            && BilinearUpsample16.TryApply(source, result, horizontalWeights, horizontalOffsets,
+                horizontalCounts, rowWork, context)) return;
         ReadOnlySpan<byte> packedInput = packed8 || paired ? MemoryMarshal.Cast<T, byte>(input) : default;
         var output = MemoryMarshal.Cast<byte, T>(result.Pixels);
         Span<byte> pairedOutput = paired ? MemoryMarshal.Cast<T, byte>(output) : default;

@@ -7,7 +7,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmBilinearCase { Down8, Down16, Up8 }
+public enum WarmBilinearCase { Down8, Down16, Up8, Up16 }
 
 /// <summary>One complete bilinear resize on the existing original raster.</summary>
 [MemoryDiagnoser]
@@ -25,10 +25,10 @@ public class WarmBilinearResize
     private int cpu, sampleCount;
     private byte[] nativePixels = [];
     private int nativeRgbMaximum, nativeAlphaMaximum;
-    private int Depth => Case == WarmBilinearCase.Down16 ? 16 : 8;
+    private int Depth => Case is WarmBilinearCase.Down16 or WarmBilinearCase.Up16 ? 16 : 8;
     private double nativeRgbRmse, nativeAlphaRmse;
-    private int Width => Case == WarmBilinearCase.Up8 ? 1027 : 256;
-    private int Height => Case == WarmBilinearCase.Up8 ? 519 : 129;
+    private int Width => Case is WarmBilinearCase.Up8 or WarmBilinearCase.Up16 ? 1027 : 256;
+    private int Height => Case is WarmBilinearCase.Up8 or WarmBilinearCase.Up16 ? 519 : 129;
 
     public static WarmBilinearCase[] SelectedCases()
         => Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES") switch
@@ -36,14 +36,15 @@ public class WarmBilinearResize
             null or "Down8" => [WarmBilinearCase.Down8],
             "Down16" => [WarmBilinearCase.Down16],
             "Up8" => [WarmBilinearCase.Up8],
-            _ => throw new ArgumentException("Choose one bilinear case: Down8, Down16 or Up8.")
+            "Up16" => [WarmBilinearCase.Up16],
+            _ => throw new ArgumentException("Choose one bilinear case: Down8, Down16, Up8 or Up16.")
         };
 
     [GlobalSetup]
     public void Setup()
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Use the dedicated Linux VM.");
-        if (Case is not (WarmBilinearCase.Down8 or WarmBilinearCase.Down16 or WarmBilinearCase.Up8)) throw new ArgumentOutOfRangeException(nameof(Case));
+        if (Case is not (WarmBilinearCase.Down8 or WarmBilinearCase.Down16 or WarmBilinearCase.Up8 or WarmBilinearCase.Up16)) throw new ArgumentOutOfRangeException(nameof(Case));
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
