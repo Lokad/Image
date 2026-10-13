@@ -256,6 +256,14 @@ internal static class PngCodec
                         var offset = (startY + y * stepY) * result.Stride + startX * 4;
                         CopyRgb8Row(row, result.Pixels.Slice(offset, width * 4), context.Cancellation);
                     }
+                    else if (header.ColorType == 2 && header.Depth == 8 && stepX == 1 && header.Transparency.Length == 6)
+                    {
+                        var offset = (startY + y * stepY) * result.Stride + startX * 4;
+                        CopyRgb8TransparentRow(row, result.Pixels.Slice(offset, width * 4),
+                            BinaryPrimitives.ReadUInt16BigEndian(header.Transparency),
+                            BinaryPrimitives.ReadUInt16BigEndian(header.Transparency.AsSpan(2)),
+                            BinaryPrimitives.ReadUInt16BigEndian(header.Transparency.AsSpan(4)), context.Cancellation);
+                    }
                     else if (header.ColorType == 0 && header.Depth < 8 && stepX == 1 && header.Transparency.Length == 0)
                     {
                         var offset = (startY + y * stepY) * result.Stride + startX * 4;
@@ -779,6 +787,44 @@ internal static class PngCodec
             if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
             var input = row.Slice(x * 3, 3); var output = destination.Slice(x * 4, 4);
             output[0] = input[0]; output[1] = input[1]; output[2] = input[2]; output[3] = 255;
+        }
+    }
+
+    internal static void CopyRgb8TransparentRow(ReadOnlySpan<byte> row, Span<byte> destination,
+        ushort redKey, ushort greenKey, ushort blueKey, CancellationToken cancellation)
+    {
+        // PNG 11.3.2.1: compare all three complete 16-bit keys. Keys above 255
+        // never match RGB8 samples; zero alpha retains the original RGB bytes.
+        var pixels = row.Length / 3; var x = 0;
+        if (Avx2.IsSupported && BitConverter.IsLittleEndian)
+        {
+            var shuffle = Vector256.Create(
+                (byte)0, 1, 2, 128, 3, 4, 5, 128, 6, 7, 8, 128, 9, 10, 11, 128,
+                4, 5, 6, 128, 7, 8, 9, 128, 10, 11, 12, 128, 13, 14, 15, 128);
+            var opaque = Vector256.Create(0xff000000u);
+            // The shuffle leaves alpha zero. An out-of-range key sets that
+            // byte, making equality impossible without truncating any key.
+            var key = Vector256.Create(redKey > 255 || greenKey > 255 || blueKey > 255
+                ? 0xff000000u : (uint)redKey | (uint)greenKey << 8 | (uint)blueKey << 16);
+            for (; x <= pixels - 8; x += 8)
+            {
+                if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+                var input = row[(x * 3)..];
+                var first = MemoryMarshal.Read<ulong>(input);
+                var middle = MemoryMarshal.Read<ulong>(input[8..]);
+                var last = MemoryMarshal.Read<ulong>(input[16..]);
+                var packed = Vector256.Create(first, middle, middle, last).AsByte();
+                var rgb = Avx2.Shuffle(packed, shuffle).AsUInt32();
+                var alpha = Avx2.AndNot(Avx2.CompareEqual(rgb, key), opaque);
+                (rgb | alpha).AsByte().CopyTo(destination[(x * 4)..]);
+            }
+        }
+        for (; x < pixels; x++)
+        {
+            if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+            var input = row.Slice(x * 3, 3); var output = destination.Slice(x * 4, 4);
+            output[0] = input[0]; output[1] = input[1]; output[2] = input[2];
+            output[3] = input[0] == redKey && input[1] == greenKey && input[2] == blueKey ? (byte)0 : (byte)255;
         }
     }
 

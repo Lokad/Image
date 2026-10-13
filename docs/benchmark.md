@@ -47,6 +47,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG gray16 + tRNS key32639, None](../benchmarks/WARM-PNG-GRAY16-TRANSPARENCY.md) | 3,501.16 | 2,033.36 | 1.722 / 1.755 | 10,960 | Confirmed |
 | [PNG gray-alpha8, None](../benchmarks/WARM-PNG-GRAY-ALPHA8-ROW.md) | 1,574.21 | 1,147.07 | 1.372 / 1.409 | 661,014 | Confirmed |
 | [PNG RGB8, None](../benchmarks/WARM-PNG-RGB8-ROW.md) | 2,139.12 | 1,510.62 | 1.416 / 1.440 | 727,305 | Confirmed |
+| [PNG RGB8 + tRNS key(48,139,231), None](../benchmarks/WARM-PNG-RGB8-TRANSPARENCY.md) | 1,779.35 | 1,255.63 | 1.417 / 1.439 | 11,984 | Confirmed |
 | [PNG gray16, None](../benchmarks/WARM-PNG-GRAY16-ROW.md) | 1,743.26 | 960.42 | 1.815 / 1.837 | 1,331,046 | Confirmed |
 | [PNG gray-alpha16, None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ROW.md) | 3,195.37 | 1,798.83 | 1.776 / 1.785 | 1,573,649 | Confirmed |
 | [PNG palette8 + tRNS, None](../benchmarks/WARM-PNG-PALETTE-SIMD.md) | 553.32 | 362.52 | 1.526 / 1.543 | 10,976 | Confirmed |
@@ -190,7 +191,14 @@ required scope remain open; earlier failures and rejected experiments stay recor
 The [gray16 transparency check](../benchmarks/WARM-PNG-GRAY16-TRANSPARENCY.md)
 independently confirms 1.722x / upper 1.755x with 10,960 B/op and unchanged
 production. Full 16-bit samples, alpha and hidden RGB are exact; the prior gray8
-fixture is unchanged. RGB transparency and other material coverage remain open.
+fixture is unchanged. RGB16 transparency and other material coverage remain open.
+
+The [RGB8 transparency round](../benchmarks/WARM-PNG-RGB8-TRANSPARENCY.md)
+reduces the screened mean 59.9%, from 3.524x to an independently confirmed
+1.417x / upper 1.439x with unchanged 11,984 B/op. One exact RGB-key row kernel
+preserves hidden RGB, work and cancellation. Full tests and the same actual
+package pass on both OSes. RGB16 transparency and other material coverage remain
+open.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

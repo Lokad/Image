@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS and gray8/16 tRNS confirmed | Other material depths/layouts; RGB transparency or shorter palettes |
+| PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8 tRNS confirmed | Other material depths/layouts; RGB16 transparency or shorter palettes |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level 6/None; RGBA8 NoCompression/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4 and 4:2:2; RGBA16 to 4:4:4 confirmed; 4:2:0 RGBA8 upper above 2x; 4:2:0 RGBA16 screen improved 42.9%, mean still above 2x | Both 4:2:0 gaps; grayscale and other material normalization layouts |
@@ -335,4 +335,12 @@ The [gray16 tRNS check](WARM-PNG-GRAY16-TRANSPARENCY.md) independently confirms
 samples, hidden RGB and alpha match managed and normal/scalar FFmpeg outputs;
 the previous gray8 fixture remains byte-identical. Both guards pass and the
 same-package validation is reused after all fresh/actual method and flag checks.
-Stop tuning this pair; RGB transparency and the required scope remain open.
+Stop tuning this pair; RGB16 transparency and the required scope remain open.
+
+The [RGB8 tRNS row round](WARM-PNG-RGB8-TRANSPARENCY.md) exposes a 3.524x
+generic mapping gap and reduces the screen mean 59.9%. One full-triplet row
+kernel independently confirms 1.417x / upper 1.439x with unchanged 11,984 B/op.
+Native alpha expansion occurs inside decoding into already owned RGBA; no
+redundant conversion is timed. Exact original RGB, hidden RGB, prior native
+controls, both guards, full tests and the same actual package pass on both OSes.
+Stop tuning this pair; JPEG420 gaps and the required scope remain open.

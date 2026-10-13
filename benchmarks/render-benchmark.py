@@ -85,6 +85,7 @@ def render():
         row('PNG gray16 + tRNS key32639, None', 'warm-pnggray16trns-evidence.json', ['observations', -1], 'WARM-PNG-GRAY16-TRANSPARENCY.md', True),
         row('PNG gray-alpha8, None', 'warm-pnggrayalpha8-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA8-ROW.md', True),
         row('PNG RGB8, None', 'warm-pngrgb8-row-evidence.json', ['observations', -1], 'WARM-PNG-RGB8-ROW.md', True),
+        row('PNG RGB8 + tRNS key(48,139,231), None', 'warm-pngrgb8trns-row-evidence.json', ['observations', -1], 'WARM-PNG-RGB8-TRANSPARENCY.md', True),
         row('PNG gray16, None', 'warm-pnggray16-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY16-ROW.md', True),
         row('PNG gray-alpha16, None', 'warm-pnggrayalpha16-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ROW.md', True),
         row('PNG palette8 + tRNS, None', 'warm-pngpalette-simd-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE-SIMD.md', True),
@@ -264,7 +265,14 @@ required scope remain open; earlier failures and rejected experiments stay recor
 The [gray16 transparency check](../benchmarks/WARM-PNG-GRAY16-TRANSPARENCY.md)
 independently confirms 1.722x / upper 1.755x with 10,960 B/op and unchanged
 production. Full 16-bit samples, alpha and hidden RGB are exact; the prior gray8
-fixture is unchanged. RGB transparency and other material coverage remain open.
+fixture is unchanged. RGB16 transparency and other material coverage remain open.
+
+The [RGB8 transparency round](../benchmarks/WARM-PNG-RGB8-TRANSPARENCY.md)
+reduces the screened mean 59.9%, from 3.524x to an independently confirmed
+1.417x / upper 1.439x with unchanged 11,984 B/op. One exact RGB-key row kernel
+preserves hidden RGB, work and cancellation. Full tests and the same actual
+package pass on both OSes. RGB16 transparency and other material coverage remain
+open.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

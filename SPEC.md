@@ -166,9 +166,15 @@ The original corpus covers every legal static color/depth profile at both interl
 settings, all five filters, packed padding, partial palette alpha and hidden RGB.
 Dense RGB8 rows without tRNS expand directly into RGBA8 with opaque alpha.
 Bounded 24-byte AVX2 groups produce eight pixels; scalar tails and other hardware
-retain every sample. Dense Adam7 passes qualify, while sparse/transparency paths
+retain every sample. Dense Adam7 passes qualify, while sparse paths
 retain their mapping. No workspace or admission change is introduced;
 cancellation is checked at most every 4096 pixels.
+Dense RGB8 rows with a six-byte tRNS key use bounded eight-pixel expansion and
+compare all three complete 16-bit keys. Exact matches receive alpha zero while
+retaining their RGB samples; any key channel above 255 never matches. Scalar
+tails and other hardware preserve the same mapping. Dense Adam7 passes qualify;
+sparse paths, admission, work and cancellation cadence remain unchanged, with
+no additional workspace.
 Dense packed gray1/2/4 rows without tRNS expand directly into RGBA8. Bounded
 AVX2 groups read one/two/four bytes for eight pixels, extract MSB-first samples,
 apply exact scales 255/85/17 and insert opaque alpha. Scalar tails ignore unused
