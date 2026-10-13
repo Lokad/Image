@@ -18,8 +18,8 @@ internal sealed class NativeWarmReference : IDisposable
     public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null, int? nativeQuality = null, string? jpegSampling = null, bool vp8Opaque = false, int? resizeWidth = null, int? resizeHeight = null)
     {
         if (resizeWidth.HasValue != resizeHeight.HasValue || resizeWidth.HasValue &&
-            (operation != "bilinear-resize" || resizeWidth < 256 || resizeHeight < 129 || resizeWidth > 32768 || resizeHeight > 32768))
-            throw new ArgumentException("Explicit resize dimensions require bounded bilinear output geometry.");
+            (operation is not ("bilinear-resize" or "nearest-resize") || resizeWidth < 256 || resizeHeight < 129 || resizeWidth > 32768 || resizeHeight > 32768))
+            throw new ArgumentException("Explicit resize dimensions require bounded bilinear or nearest output geometry.");
         if (vp8Opaque && operation != "vp8-decode") throw new ArgumentException("Opaque VP8 applies only to VP8 decoding.", nameof(vp8Opaque));
         if (jpegSampling is not (null or "444" or "420" or "422") || jpegSampling is not null && operation != "jpeg-encode")
             throw new ArgumentException("JPEG sampling applies only to the 444/420/422 encode worker.", nameof(jpegSampling));

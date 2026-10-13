@@ -104,13 +104,16 @@ static void check_and_write(Work *work,const char *path)
 
 int main(int argc, char **argv)
 {
-    if (argc != 7 || strcmp(argv[1], "nearest-resize"))
-        fail("Usage: ffmpeg-nearest-warm nearest-resize INPUT_RAW WIDTH HEIGHT DEPTH OUTPUT_RAW");
+    if ((argc != 7 && argc != 9) || strcmp(argv[1], "nearest-resize"))
+        fail("Usage: ffmpeg-nearest-warm nearest-resize INPUT_RAW WIDTH HEIGHT DEPTH OUTPUT_RAW [OUTPUT_WIDTH OUTPUT_HEIGHT]");
     av_log_set_level(AV_LOG_ERROR);
     Work work = {0}; work.cpu = affinity_cpu();
     work.width = number(argv[3]); work.height = number(argv[4]); work.depth = number(argv[5]);
     if ((work.depth != 8 && work.depth != 16) || work.width < 2 || work.height < 2) fail("Use RGBA8/RGBA16 dimensions at least two.");
-    work.output_width=work.width/2;work.output_height=work.height/2;work.output_row_bytes=work.output_width*(work.depth/8)*4;
+    work.output_width=argc==9?number(argv[7]):work.width/2;
+    work.output_height=argc==9?number(argv[8]):work.height/2;
+    work.output_row_bytes=work.output_width*(work.depth/8)*4;
+    if ((size_t)work.output_row_bytes*work.output_height > 512U*1024U*1024U) fail("Reference output exceeds 512 MiB.");
     work.row_bytes = work.width * (work.depth / 8) * 4;
     size_t bytes = (size_t)work.row_bytes * work.height;
     if (bytes > 512U * 1024U * 1024U) fail("Reference input exceeds 512 MiB.");
