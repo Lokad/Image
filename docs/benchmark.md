@@ -89,6 +89,7 @@ timing comparison; compression efficiency parity is not established.
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-ALPHAWEIGHTED.md) | 42,879.92 | 54,484.52 | 0.787 / 0.805 | 2,615,472 | Confirmed |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-RGBA16-ENCODE.md) | 43,362.07 | 53,579.62 | 0.809 / 0.819 | 2,615,472 | Confirmed |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-ENCODE-EXACT.md) | 7,363.30 | 121,587.95 | 0.061 / 0.063 | 2,100,170 | Confirmed |
+| [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-RGBA16-ENCODE.md) | 7,928.11 | 121,282.99 | 0.065 / 0.066 | 2,100,119 | Confirmed |
 
 **Editing**
 

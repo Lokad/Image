@@ -13,7 +13,7 @@ round, at most three, with correctness established before timing.
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level 6/None; RGBA8 NoCompression/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4 and 4:2:2; RGBA16 to 4:4:4 confirmed; 4:2:0 RGBA8 upper above 2x; 4:2:0 RGBA16 screen improved 42.9%, mean still above 2x | Both 4:2:0 gaps; grayscale and other material normalization layouts |
-| WebP | VP8 with alpha decode/encode, RGBA16 VP8 encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Material opaque/alpha alternatives and RGBA16 lossless normalization |
+| WebP | VP8 with alpha decode/encode; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Material opaque/alpha alternatives and distinct public boundaries |
 | Resize | Nearest/bilinear at both depths, fixed downsample | Bicubic at both depths; upsample/wide-support paths; tight-memory fallback |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes | Retained live output owners versus released-storage reuse |
 | Public boundaries | Resident encoded span to owned output; complete single operations | Fresh Stream decoding and decode/orient/crop/fit compositions |
@@ -313,3 +313,11 @@ repacking are timed; exact alpha, integer-reference checks, source/owners and
 the unchanged quality gate pass. Production is unchanged and verification is
 reused after all current/actual-child method and flag checks. Stop tuning this
 fixed pair; RGBA16 lossless WebP and the remaining required scope stay open.
+
+The [RGBA16 VP8L encode check](WARM-VP8L-RGBA16-ENCODE.md) independently confirms
+0.0654x / upper 0.0664x against the approved exact backend, with 2,100,119 B/op.
+Normalization, repacking, fresh import allocation and owned packet release are
+timed. All normalized RGBA samples and hidden RGB are exact; both guards pass.
+Production is unchanged and same-package validation is reused after all method/
+flag checks. Stop tuning this pair; PNG transparency paths and required scope
+remain open.

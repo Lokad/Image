@@ -537,6 +537,13 @@ measurement. See the [RGBA16 VP8 report](../../benchmarks/WARM-VP8-RGBA16-ENCODE
 
 ## Still VP8L WebP encode
 
+`-WarmFamily WebpLossless -WarmCases Encode16` selects the original RGBA16 input.
+All four channels normalize with `(sample+128)/257` inside each managed/native
+operation. The original libwebp `exact=1` adapter checks its normalized reference
+before Ready and after timing, including hidden RGB. The
+[RGBA16 report](../../benchmarks/WARM-VP8L-RGBA16-ENCODE.md) records the independent
+quiet confirmation and both encoded sizes; compression efficiency is unconfirmed.
+
 `WarmWebpLossless/Encode8` uses **libwebp exact=1 (FFmpeg encoder backend)** as
 the explicitly approved exact lossless baseline. FFmpeg's public libwebp wrapper
 has no exact-RGB option and changes hidden RGB on the retained raster. Its
