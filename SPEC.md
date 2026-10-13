@@ -87,6 +87,15 @@ binary64 arithmetic, preserving wy*wx then *alpha and consuming coefficients
 in the original tap order. Inactive coefficients only add zero; output pixels
 and admission remain unchanged.
 
+For RGBA8 bilinear enlargement on both axes, AVX512F/AVX512DQ hardware may
+filter four output pixels together using exact integer triangle coefficients.
+Existing unused geometry slots hold fractional numerators and bounded source
+offsets; no extra workspace or pixel cache is introduced. Premultiplied integer
+sums remain below 2^47 under output-array admission. Near a quantization boundary
+or tiny alpha, the original binary64 calculation and exact-alpha work/memory
+checks remain active, preserving established pixels and rounding. Other depths,
+filters, mixed scaling and unsupported hardware retain their existing paths.
+
 An original development-only reference uses exact integer kernel weights and
 `BigInteger` separable accumulation, with no production resize helpers. Public
 tests cover both depths, transparent/opaque rasters, up/down/mixed scaling,

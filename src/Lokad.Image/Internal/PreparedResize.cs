@@ -20,6 +20,10 @@ internal static class PreparedResize
         var packed8 = typeof(T) == typeof(byte) && Avx.IsSupported && Sse41.IsSupported;
         var paired = (typeof(T) == typeof(byte) || typeof(T) == typeof(ushort))
             && Avx512F.IsSupported && Avx2.IsSupported && Avx.IsSupported && Sse41.IsSupported;
+        if (paired && Avx512DQ.IsSupported && typeof(T) == typeof(byte) && filter == ResizeFilter.Bilinear
+            && result.Width > source.Width && result.Height > source.Height
+            && BilinearUpsample.TryApply(source, result, horizontalWeights, horizontalOffsets,
+                horizontalCounts, rowWork, context)) return;
         ReadOnlySpan<byte> packedInput = packed8 || paired ? MemoryMarshal.Cast<T, byte>(input) : default;
         var output = MemoryMarshal.Cast<byte, T>(result.Pixels);
         Span<byte> pairedOutput = paired ? MemoryMarshal.Cast<T, byte>(output) : default;

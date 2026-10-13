@@ -136,7 +136,7 @@ def render():
         row('Nearest resize RGBA16', 'warm-prepared-confirm-evidence.json', ['observations', -1], 'WARM-PREPARED-CONFIRM.md', True),
         row('Bilinear resize RGBA8', 'warm-bilinear8-quiet-evidence.json', ['observations', -1], 'WARM-BILINEAR8-QUIET.md', True),
         row('Bilinear resize RGBA16†', 'warm-bilinear16-register-evidence.json', ['observations', -1], 'WARM-BILINEAR16-REGISTER.md', True),
-        row('Bilinear upscale RGBA8†', 'warm-bilinearup8-evidence.json', ['observations', -1], 'WARM-BILINEAR-UP8.md'),
+        row('Bilinear upscale RGBA8†', 'warm-bilinearup8-batch-evidence.json', ['observations', -1], 'WARM-BILINEAR-UP8-BATCH.md', True),
         pending('Bicubic resize RGBA8', 'bicubic8-boundary-evidence.json', 'Unmatched boundary/alpha; no timing'),
         row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
@@ -227,9 +227,10 @@ need separate coverage.
 Full required warm coverage is **open**. The
 [material coverage audit](../benchmarks/WARM-COVERAGE.md) tracks remaining depths,
 layouts, resize directions/fallbacks, fresh Streams, retained owners and composed
-public operations. The newly covered RGBA8 bilinear upscale is **3.041x / upper
-3.403x**; slower packing and single-row trials are rejected. This larger gap is
-the next optimization priority. Bicubic remains unmatched. PNG RGB8, gray8 and gray-alpha8
+public operations. RGBA8 bilinear upscaling now confirms **1.764x / upper 1.787x**
+after a four-pixel kernel cuts its baseline mean 41.8%. Stop tuning that pair;
+other upscale depths and material paths remain open. Bicubic remains unmatched.
+PNG RGB8, gray8 and gray-alpha8
 encoding preserves exact samples but exceeds the 5% IDAT-size gate by differences
 of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animation
 are deferred.

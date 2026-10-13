@@ -35,4 +35,7 @@ not accepted. The [numeric evidence](warm-bilinearup8-evidence.json) records the
 strict refusal, compatible baseline, profile, rejected trials and immutable raw
 builds. Next, investigate a dedicated two-tap upsampling kernel as one substantial
 primitive. The 3.041× gap takes priority over small upper-bound margins; full
-required warm coverage remains open.
+required warm coverage remains open. The subsequent
+[four-pixel kernel](WARM-BILINEAR-UP8-BATCH.md) independently confirms
+1.764× / upper 1.787× and closes this fixed pair; the original baseline and
+rejected evidence remain unchanged here.

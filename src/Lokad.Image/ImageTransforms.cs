@@ -185,6 +185,18 @@ public static class ImageTransforms
                     horizontalWeights[x * 8 + tap] = Kernel((first + tap - center) / scaleX, filter);
                     horizontalOffsets[x * 8 + tap] = Math.Clamp(first + tap, 0, source.Width - 1) * 4;
                 }
+                if (source.BitDepth == 8 && filter == ResizeFilter.Bilinear
+                    && width > source.Width && height > source.Height)
+                {
+                    // Two-tap support leaves these existing geometry slots free.
+                    // Prepare the exact fractional numerator and bounded reads
+                    // once, instead of performing integer division per pixel.
+                    var numerator = (2L * x + 1) * source.Width - width;
+                    var cell = numerator < 0 ? -1 : (int)(numerator / (2L * width));
+                    horizontalOffsets[x * 8 + 3] = (int)(numerator - cell * (2L * width));
+                    horizontalOffsets[x * 8 + 4] = Math.Clamp(cell, 0, source.Width - 1) * 4;
+                    horizontalOffsets[x * 8 + 5] = Math.Clamp(cell + 1, 0, source.Width - 1) * 4;
+                }
             }
         }
         if (horizontalWeights is not null && tapsY <= 8)
