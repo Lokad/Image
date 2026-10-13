@@ -245,7 +245,7 @@ int main(int argc, char **argv)
         work.palette = work.encoded_bytes >= 33 && work.encoded[25] == 3;
         work.coded_depth = work.encoded_bytes >= 33 ? work.encoded[24] : 0;
         work.mono = work.gray && work.coded_depth == 1;
-        if (work.gray && work.coded_depth < 8 && (work.depth != 8 || (work.coded_depth != 1 && work.coded_depth != 4))) fail("Packed gray requires gray1/4 to RGBA8.");
+        if (work.gray && work.coded_depth < 8 && (work.depth != 8 || (work.coded_depth != 1 && work.coded_depth != 2 && work.coded_depth != 4))) fail("Packed gray requires gray1/2/4 to RGBA8.");
         if (work.gray && work.coded_depth >= 8 && work.coded_depth != work.depth) fail("Gray coded/output precision differs.");
         if (work.mono && work.depth != 8) fail("Packed gray1 requires RGBA8 output.");
         if (work.rgb && interlace) fail("RGB decode requires noninterlaced RGB8/16.");

@@ -2,24 +2,24 @@ using System.Buffers.Binary;
 using System.IO.Compression;
 
 // Original fixture authoring, PNG sections 7/9/11, https://www.w3.org/TR/png-3/.
-// One existing raster projected to packed opaque gray1/4; no geometry/effort sweep.
+// One existing raster projected to packed opaque gray1/2/4; no geometry/effort sweep.
 internal static class WarmPngMonoInput
 {
     internal static void Project(Span<byte> pixels, int depth = 1)
     {
-        if (depth is not (1 or 4)) throw new ArgumentOutOfRangeException(nameof(depth));
+        if (depth is not (1 or 2 or 4)) throw new ArgumentOutOfRangeException(nameof(depth));
         if (pixels.Length != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4)
             throw new ArgumentException("Expected the existing RGBA8 raster.");
         for (var i = 0; i < pixels.Length; i += 4)
         {
-            var gray = depth == 1 ? (pixels[i] >= 128 ? (byte)255 : (byte)0) : (byte)((pixels[i] >> 4) * 17);
+            var gray = (byte)((pixels[i] >> (8 - depth)) * (255 / ((1 << depth) - 1)));
             pixels[i] = gray; pixels[i + 1] = gray; pixels[i + 2] = gray; pixels[i + 3] = 255;
         }
     }
 
     internal static byte[] Build(ReadOnlySpan<byte> pixels, int depth = 1)
     {
-        if (depth is not (1 or 4)) throw new ArgumentOutOfRangeException(nameof(depth));
+        if (depth is not (1 or 2 or 4)) throw new ArgumentOutOfRangeException(nameof(depth));
         const int width = HorizontalFlipInput.Width, height = HorizontalFlipInput.Height;
         if (pixels.Length != width * height * 4) throw new ArgumentException("Expected projected opaque gray pixels.");
         var maximum = (1 << depth) - 1; var scale = 255 / maximum;

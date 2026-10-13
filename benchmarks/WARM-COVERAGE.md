@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/4 and palette1/2/4/8 None confirmed | Packed gray2; other filter implementations; partial palette/alpha paths |
+| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None confirmed | Other filter implementations; partial palette/alpha paths |
 | PNG encode | RGBA8/16, level 6/None | RGB and gray projections; compression policies with materially different work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
@@ -170,3 +170,12 @@ this fixed pair. The original-raster projection adds no original image; palette2
 bytes and the generic native PAL8 worker remain unchanged. Partial palette/alpha,
 other CPUs and public ownership boundaries remain distinct. JPEG420's upper gap
 stays open; packed gray2 is the next one-pair material screen.
+
+The [packed gray2 check](WARM-PNG-GRAY2-CURRENT.md) independently confirms 0.756x /
+upper 0.783x with 9,136 B/op. All 12 actuals retained; both guards pass. The existing
+AVX2 expansion supports this depth; production/package unchanged, full validation
+reused. Stop timing this fixed pair. Gray1/4 bytes remain exact; no original image
+was added. The development gray-depth whitelist was extended with the same timed
+native conversion/output boundary. JPEG420's upper-bound gap and full material
+unknowns remain open. PNG Up RGBA8 is the next useful screen: its reconstruction
+still follows the generic scalar filter loop, distinct from None and Paeth.
