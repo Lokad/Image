@@ -84,7 +84,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG gray16, level 6 / None](../benchmarks/WARM-PNG-GRAY16-ENCODE.md) | 5,667.73 | 4,927.46 | 1.150 / 1.156 | 1,051,455 | Confirmed |
 | [PNG gray-alpha8, level 6 / None](../benchmarks/WARM-PNG-GRAY-ALPHA8-ENCODE-BOUNDARY.md) | — | — | — | — | Compression-size gate failed; no timing |
 | [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ENCODE.md) | 9,316.78 | 10,318.59 | 0.903 / 0.915 | 1,052,368 | Confirmed |
-| [JPEG 4:4:4, matched quality](../benchmarks/WARM-JPEG-ENCODE-QUIET.md) | 7,390.28 | 3,779.05 | 1.956 / 1.969 | 1,051,857 | Confirmed |
+| [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG444-RGBA8-ADAPTIVE.md) | 6,705.88 | 3,783.34 | 1.772 / 1.818 | 559,384 | Confirmed |
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG444-RGBA16-ADAPTIVE.md) | 6,767.17 | 3,851.77 | 1.757 / 1.790 | 556,280 | Confirmed |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG422-RGBA8-ADAPTIVE.md) | 4,277.49 | 2,349.58 | 1.821 / 1.862 | 294,110 | Confirmed |
 | [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG420-RGBA8-ADAPTIVE.md) | 3,501.53 | 1,771.06 | 1.977 / 2.014 | 297,772 | Upper above 2x / open |
@@ -154,7 +154,8 @@ of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animat
 are deferred.
 
 JPEG420 RGBA8's independent upper is **2.014x**, so that pair remains open.
-JPEG444 RGBA8 still needs revalidation after the shared adaptive-Huffman change.
+JPEG444/422 RGBA8 and JPEG444/420 RGBA16 are confirmed with adaptive Huffman
+coding; remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove
 the uniform target. Linked reports retain superseded raw evidence, failed guards,
 rejected experiments, correctness controls and exact package/source identities.

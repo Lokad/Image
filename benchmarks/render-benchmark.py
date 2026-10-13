@@ -119,7 +119,7 @@ def render():
         row('PNG gray16, level 6 / None', 'warm-pnggray16encode-evidence.json', ['observations', -1], 'WARM-PNG-GRAY16-ENCODE.md', True),
         pending('PNG gray-alpha8, level 6 / None', 'WARM-PNG-GRAY-ALPHA8-ENCODE-BOUNDARY.md', 'Compression-size gate failed; no timing'),
         row('PNG gray-alpha16, level 6 / None', 'warm-pnggrayalpha16encode-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ENCODE.md', True),
-        row('JPEG 4:4:4, matched quality', 'warm-jpegencode-quiet-evidence.json', ['observations', -1], 'WARM-JPEG-ENCODE-QUIET.md', True),
+        row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-jpeg4448-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG444-RGBA8-ADAPTIVE.md', True),
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg44416-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG444-RGBA16-ADAPTIVE.md', True),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg4228-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA8-ADAPTIVE.md', True),
         row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg4208-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG420-RGBA8-ADAPTIVE.md'),
@@ -228,7 +228,8 @@ of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animat
 are deferred.
 
 JPEG420 RGBA8's independent upper is **2.014x**, so that pair remains open.
-JPEG444 RGBA8 still needs revalidation after the shared adaptive-Huffman change.
+JPEG444/422 RGBA8 and JPEG444/420 RGBA16 are confirmed with adaptive Huffman
+coding; remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove
 the uniform target. Linked reports retain superseded raw evidence, failed guards,
 rejected experiments, correctness controls and exact package/source identities.

@@ -22,12 +22,13 @@ public class WarmJpeg
     private const uint Background = 0x204060;
     private bool Source16 => Case is WarmJpegCase.Encode16 or WarmJpegCase.Encode420_16;
     private int Depth => Source16 ? 16 : 8;
-    private bool FixedAnchor => Subsampled || Source16;
+    private bool FixedAnchor => Subsampled || Source16 || AdaptiveEntropy;
     private bool Horizontal => Case == WarmJpegCase.Encode422_8;
     private bool Subsampled => Case is WarmJpegCase.Encode420_8 or WarmJpegCase.Encode422_8 or WarmJpegCase.Encode420_16;
     private string NativeSampling => Horizontal ? "422" : Subsampled ? "420" : "444";
     private string DisplaySampling => Horizontal ? "4:2:2" : Subsampled ? "4:2:0" : "4:4:4";
-    private string FixedPolicy => Source16 ? (Subsampled ? Fixed42016Policy : Fixed16Policy) : Horizontal ? Fixed422Policy : Fixed420Policy;
+    private string FixedPolicy => Source16 ? (Subsampled ? Fixed42016Policy : Fixed16Policy)
+        : Horizontal ? Fixed422Policy : Subsampled ? Fixed420Policy : Fixed444Policy;
     private int FixedQuality => Horizontal ? 65 : 69;
     private EncoderQualityProfile TargetProfile => ProfileFor(Subsampled, Horizontal, Depth);
     private static EncoderQualityProfile ProfileFor(bool subsampled, bool horizontal = false, int depth = 8) => new(513, depth,
@@ -53,6 +54,7 @@ public class WarmJpeg
         return AdaptiveEntropy ? name.Replace("-match.json", "-adaptive-match.json") : name;
     }
     private string Recipe => RecipeFor(Subsampled, Horizontal, Depth);
+    private const string Fixed444Policy = "fixed-anchor-v1: native qscale 5 / managed quality 69 / 4:4:4; previously matched anchor; one owned evaluation; no quality sweep";
     private const string Fixed420Policy = "fixed-anchor-v1: native qscale 5 / managed quality 69 / 4:2:0; one owned evaluation; no quality sweep";
     private const string Fixed422Policy = "fixed-anchor-v1: native qscale 5 / managed quality 65 / 4:2:2; one owned evaluation; no quality sweep";
     private const string Fixed16Policy = "fixed-anchor-v1: native qscale 5 / managed quality 69 / RGBA16 to 4:4:4; one owned evaluation; no quality sweep";
@@ -102,7 +104,7 @@ public class WarmJpeg
         if (subsampled && horizontal) throw new ArgumentException("Choose one JPEG subsampling layout.");
         if (depth is not (8 or 16) || depth == 16 && horizontal)
             throw new ArgumentException("The RGBA16 cases require 4:4:4 or 4:2:0 sampling.");
-        var fixedAnchor = subsampled || horizontal || depth == 16;
+        var fixedAnchor = subsampled || horizontal || depth == 16 || AdaptiveEntropy;
         var sampling = horizontal ? "422" : subsampled ? "420" : "444";
         if (fixedAnchor && nativeQscale != 5) throw new ArgumentException("The fixed JPEG anchor requires native qscale 5.");
         using var process = Process.GetCurrentProcess(); var oldAffinity = process.ProcessorAffinity;
@@ -142,7 +144,9 @@ public class WarmJpeg
                 Path.GetRelativePath(state.Root, nativeFile), Path.GetRelativePath(state.Root, managedFile), match, owned, order.ToArray(), SourceIdentity(state.Root),
                 JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), JpegBenchmarkCase.HashFile(typeof(WarmJpeg).Assembly.Location),
                 JpegBenchmarkCase.HashFile(state.Ffmpeg), native.BuildIdentity, native.Ready,
-                sampling, depth == 16 ? (subsampled ? Fixed42016Policy : Fixed16Policy) : horizontal ? Fixed422Policy : subsampled ? Fixed420Policy : EncoderQualityCalibration.OwnedQualityPolicy, depth);
+                sampling, depth == 16 ? (subsampled ? Fixed42016Policy : Fixed16Policy)
+                    : horizontal ? Fixed422Policy : subsampled ? Fixed420Policy
+                    : AdaptiveEntropy ? Fixed444Policy : EncoderQualityCalibration.OwnedQualityPolicy, depth);
             var path = Path.Combine(state.Root, "artifacts", "warm-reference", MatchFile(subsampled, horizontal, depth));
             if (AdaptiveEntropy && File.Exists(path)) throw new InvalidOperationException("Preserve the existing adaptive preparation before replacing it.");
             File.WriteAllText(path, JsonSerializer.Serialize(record, EncoderQualityCalibration.Json) + "\n");
