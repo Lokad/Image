@@ -15,7 +15,7 @@ internal sealed class NativeWarmReference : IDisposable
     public JsonElement BuildIdentity { get; }
     private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
 
-    public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null, int? nativeQuality = null, string? jpegSampling = null, bool vp8Opaque = false, int? resizeWidth = null, int? resizeHeight = null)
+    public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null, int? nativeQuality = null, string? jpegSampling = null, bool vp8Opaque = false, int? resizeWidth = null, int? resizeHeight = null, bool bicubicScalar = false)
     {
         if (resizeWidth.HasValue != resizeHeight.HasValue || resizeWidth.HasValue &&
             (operation is not ("bilinear-resize" or "nearest-resize") || resizeWidth < 256 || resizeHeight < 129 || resizeWidth > 32768 || resizeHeight > 32768))
@@ -23,7 +23,7 @@ internal sealed class NativeWarmReference : IDisposable
         if (vp8Opaque && operation != "vp8-decode") throw new ArgumentException("Opaque VP8 applies only to VP8 decoding.", nameof(vp8Opaque));
         if (jpegSampling is not (null or "444" or "420" or "422") || jpegSampling is not null && operation != "jpeg-encode")
             throw new ArgumentException("JPEG sampling applies only to the 444/420/422 encode worker.", nameof(jpegSampling));
-        if (operation is not ("hflip" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "png-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "png-decode" or "png-adam7-decode" or "jpeg-encode" or "jpeg-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode" or "webp-encode" or "webp-lossless-encode" or "webp-decode" or "vp8-decode" or "nearest-resize" or "bilinear-resize")) throw new ArgumentOutOfRangeException(nameof(operation));
+        if (operation is not ("hflip" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "png-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "png-decode" or "png-adam7-decode" or "jpeg-encode" or "jpeg-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode" or "webp-encode" or "webp-lossless-encode" or "webp-decode" or "vp8-decode" or "nearest-resize" or "bilinear-resize" or "bicubic-resize")) throw new ArgumentOutOfRangeException(nameof(operation));
         var normal = operation == "normal-orient";
         var transverse = operation == "transverse";
         var transpose = operation == "transpose";
@@ -34,11 +34,13 @@ internal sealed class NativeWarmReference : IDisposable
         var crop = operation == "crop";
         var nearest = operation == "nearest-resize";
         var bilinear = operation == "bilinear-resize";
-        var codec = operation is not ("hflip" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "nearest-resize" or "bilinear-resize"); var jpeg = operation == "jpeg-encode"; var jpegDecode = operation is "jpeg-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode"; var webpLossless = operation == "webp-lossless-encode"; var webp = operation == "webp-encode" || webpLossless; var webpDecode = operation == "webp-decode"; var vp8Decode = operation == "vp8-decode";
-        var stem = transverse ? "ffmpeg-transverse-warm" : transpose ? "ffmpeg-transpose-warm" : counterclockwise ? "ffmpeg-counterclockwise-warm" : normal ? "ffmpeg-normal-orient-warm" : clockwise ? "ffmpeg-clockwise-warm" : halfTurn ? "ffmpeg-halfturn-warm" : vertical ? "ffmpeg-vflip-warm" : crop ? "ffmpeg-crop-warm" : bilinear ? "ffmpeg-bilinear-warm" : nearest ? "ffmpeg-nearest-warm" : vp8Decode ? "ffmpeg-vp8-decode-warm" : webpDecode ? "ffmpeg-webp-decode-warm" : jpegDecode ? "ffmpeg-jpeg-decode-warm" : webpLossless ? "libwebp-lossless-warm" : webp ? "ffmpeg-webp-warm" : jpeg ? "ffmpeg-jpeg-warm" : codec ? "ffmpeg-png-warm" : "ffmpeg-warm";
-        var buildScript = transverse ? "build-transverse-linux.sh" : transpose ? "build-transpose-linux.sh" : counterclockwise ? "build-counterclockwise-linux.sh" : normal ? "build-normal-orient-linux.sh" : clockwise ? "build-clockwise-linux.sh" : halfTurn ? "build-halfturn-linux.sh" : vertical ? "build-vflip-linux.sh" : crop ? "build-crop-linux.sh" : bilinear ? "build-bilinear-linux.sh" : nearest ? "build-nearest-linux.sh" : vp8Decode ? "build-vp8-decode-linux.sh" : webpDecode ? "build-webp-decode-linux.sh" : jpegDecode ? "build-jpeg-decode-linux.sh" : webpLossless ? "build-libwebp-lossless-linux.sh" : webp ? "build-webp-linux.sh" : jpeg ? "build-jpeg-linux.sh" : codec ? "build-png-linux.sh" : "build-linux.sh";
+        var bicubic = operation == "bicubic-resize";
+        if (bicubicScalar && !bicubic) throw new ArgumentException("Scalar backend applies only to the bicubic worker.");
+        var codec = operation is not ("hflip" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "nearest-resize" or "bilinear-resize" or "bicubic-resize"); var jpeg = operation == "jpeg-encode"; var jpegDecode = operation is "jpeg-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode"; var webpLossless = operation == "webp-lossless-encode"; var webp = operation == "webp-encode" || webpLossless; var webpDecode = operation == "webp-decode"; var vp8Decode = operation == "vp8-decode";
+        var stem = bicubic ? "zimg-bicubic-warm" : transverse ? "ffmpeg-transverse-warm" : transpose ? "ffmpeg-transpose-warm" : counterclockwise ? "ffmpeg-counterclockwise-warm" : normal ? "ffmpeg-normal-orient-warm" : clockwise ? "ffmpeg-clockwise-warm" : halfTurn ? "ffmpeg-halfturn-warm" : vertical ? "ffmpeg-vflip-warm" : crop ? "ffmpeg-crop-warm" : bilinear ? "ffmpeg-bilinear-warm" : nearest ? "ffmpeg-nearest-warm" : vp8Decode ? "ffmpeg-vp8-decode-warm" : webpDecode ? "ffmpeg-webp-decode-warm" : jpegDecode ? "ffmpeg-jpeg-decode-warm" : webpLossless ? "libwebp-lossless-warm" : webp ? "ffmpeg-webp-warm" : jpeg ? "ffmpeg-jpeg-warm" : codec ? "ffmpeg-png-warm" : "ffmpeg-warm";
+        var buildScript = bicubic ? "build-bicubic-linux.sh" : transverse ? "build-transverse-linux.sh" : transpose ? "build-transpose-linux.sh" : counterclockwise ? "build-counterclockwise-linux.sh" : normal ? "build-normal-orient-linux.sh" : clockwise ? "build-clockwise-linux.sh" : halfTurn ? "build-halfturn-linux.sh" : vertical ? "build-vflip-linux.sh" : crop ? "build-crop-linux.sh" : bilinear ? "build-bilinear-linux.sh" : nearest ? "build-nearest-linux.sh" : vp8Decode ? "build-vp8-decode-linux.sh" : webpDecode ? "build-webp-decode-linux.sh" : jpegDecode ? "build-jpeg-decode-linux.sh" : webpLossless ? "build-libwebp-lossless-linux.sh" : webp ? "build-webp-linux.sh" : jpeg ? "build-jpeg-linux.sh" : codec ? "build-png-linux.sh" : "build-linux.sh";
         Executable = Path.Combine(state.Root, "external", "warm-reference", stem);
-        var identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, transverse ? "transverse-identity.json" : transpose ? "transpose-identity.json" : counterclockwise ? "counterclockwise-identity.json" : normal ? "normal-orient-identity.json" : clockwise ? "clockwise-identity.json" : halfTurn ? "halfturn-identity.json" : vertical ? "vflip-identity.json" : crop ? "crop-identity.json" : bilinear ? "bilinear-identity.json" : nearest ? "nearest-identity.json" : vp8Decode ? "vp8-decode-identity.json" : webpDecode ? "webp-decode-identity.json" : jpegDecode ? "jpeg-decode-identity.json" : webpLossless ? "libwebp-lossless-identity.json" : webp ? "webp-identity.json" : jpeg ? "jpeg-identity.json" : codec ? "png-identity.json" : "identity.json");
+        var identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, bicubic ? "bicubic-identity.json" : transverse ? "transverse-identity.json" : transpose ? "transpose-identity.json" : counterclockwise ? "counterclockwise-identity.json" : normal ? "normal-orient-identity.json" : clockwise ? "clockwise-identity.json" : halfTurn ? "halfturn-identity.json" : vertical ? "vflip-identity.json" : crop ? "crop-identity.json" : bilinear ? "bilinear-identity.json" : nearest ? "nearest-identity.json" : vp8Decode ? "vp8-decode-identity.json" : webpDecode ? "webp-decode-identity.json" : jpegDecode ? "jpeg-decode-identity.json" : webpLossless ? "libwebp-lossless-identity.json" : webp ? "webp-identity.json" : jpeg ? "jpeg-identity.json" : codec ? "png-identity.json" : "identity.json");
         if (!File.Exists(Executable) || !File.Exists(identityPath))
             throw new InvalidOperationException("Build the pinned Linux warm reference with its tools/WarmReference build script.");
         using (var document = JsonDocument.Parse(File.ReadAllText(identityPath))) BuildIdentity = document.RootElement.Clone();
@@ -50,7 +52,7 @@ internal sealed class NativeWarmReference : IDisposable
             RedirectStandardError = true, UseShellExecute = false };
         foreach (var argument in new[] { operation, state.Input, "513", "259", depth.ToString(CultureInfo.InvariantCulture), state.NativeOutput })
             start.ArgumentList.Add(argument);
-        if (operation is "png-decode" or "png-adam7-decode") start.ArgumentList.Add(expectedRaw ?? throw new ArgumentNullException(nameof(expectedRaw)));
+        if (operation is "png-decode" or "png-adam7-decode" or "bicubic-resize") start.ArgumentList.Add(expectedRaw ?? throw new ArgumentNullException(nameof(expectedRaw)));
         if (jpeg || webp)
         {
             if ((jpeg && depth is not (8 or 16)) || (webp && depth is not (8 or 16)) || !nativeQuality.HasValue || nativeQuality < 1 || nativeQuality > (webp ? 100 : 31)) throw new ArgumentOutOfRangeException(nameof(nativeQuality));
@@ -67,6 +69,7 @@ internal sealed class NativeWarmReference : IDisposable
         if (bilinear && depth == 16) start.ArgumentList.Add("--allow-alpha-rounding1");
         var up8Compatibility = bilinear && depth == 8 && resizeWidth == 1027 && resizeHeight == 519;
         if (up8Compatibility) start.ArgumentList.Add("--up8-alpha-compat");
+        if (bicubicScalar) start.ArgumentList.Add("--scalar");
         process = Process.Start(start) ?? throw new InvalidOperationException("Could not start native warm worker.");
         errors = process.StandardError.ReadToEndAsync();
         try
@@ -79,8 +82,12 @@ internal sealed class NativeWarmReference : IDisposable
                 || Ready.GetProperty("affinityCount").GetInt32() != 1 || Ready.GetProperty(codec ? "codecThreads" : "filterThreads").GetInt32() != 1
                 || Ready.GetProperty("threadType").GetInt32() != 0 || Ready.GetProperty("operation").GetString() != operation
                 || (codec && (Ready.GetProperty("activeThreadType").GetInt32() != 0 || !Ready.GetProperty("independentLiveOutputs").GetBoolean()))
-                || ((nearest || bilinear || crop) && ((depth is not (8 or 16)) || Ready.GetProperty("outputWidth").GetInt32() != (resizeWidth ?? 256)
+                || ((nearest || bilinear || bicubic || crop) && ((depth is not (8 or 16)) || Ready.GetProperty("outputWidth").GetInt32() != (resizeWidth ?? 256)
                     || Ready.GetProperty("outputHeight").GetInt32() != (resizeHeight ?? 129) || !Ready.GetProperty("independentLiveOutputs").GetBoolean()))
+                || (bicubic && (depth != 8 || Ready.GetProperty("scalar").GetBoolean() != bicubicScalar
+                    || Ready.GetProperty("haloPixels").GetInt32() != 4 || !Ready.GetProperty("haloAndPackingTimed").GetBoolean()
+                    || !Ready.GetProperty("outputAllocationAndRepackingTimed").GetBoolean() || !Ready.GetProperty("alphaTolerance1").GetBoolean()
+                    || Ready.GetProperty("backend").GetString() != "zimg (FFmpeg zscale backend)"))
                 || (normal && (depth is not (8 or 16) || Ready.GetProperty("outputWidth").GetInt32() != 513
                     || Ready.GetProperty("outputHeight").GetInt32() != 259 || !Ready.GetProperty("independentLiveOutputs").GetBoolean()
                     || !Ready.GetProperty("ownedCopyTimed").GetBoolean() || !Ready.GetProperty("sharedNullView").GetBoolean()))
@@ -142,7 +149,7 @@ internal sealed class NativeWarmReference : IDisposable
                     || Ready.GetProperty("outputBytes").GetInt32() != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4))
                 || (operation is "png-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" && (Ready.GetProperty("compressionLevel").GetInt32() != (operation == "png-store-encode" ? 0 : 6) || Ready.GetProperty("filter").GetInt32() != 0)))
                 throw new InvalidOperationException("Native warm worker geometry/thread/CPU contract differs.");
-            completed = codec || nearest || bilinear || crop || vertical || halfTurn || clockwise || counterclockwise || transpose || transverse || normal ? Ready.GetProperty("initialCompletedOperations").GetInt64() : 1;
+            completed = codec || nearest || bilinear || bicubic || crop || vertical || halfTurn || clockwise || counterclockwise || transpose || transverse || normal ? Ready.GetProperty("initialCompletedOperations").GetInt64() : 1;
         }
         catch { Dispose(); throw; }
     }
@@ -167,7 +174,7 @@ internal sealed class NativeWarmReference : IDisposable
             || sample.ElapsedNanoseconds <= 0 || !double.IsFinite(sample.ElapsedNanoseconds)
             || sample.Cpu != Ready.GetProperty("cpu").GetInt32()
             || (Ready.GetProperty("operation").GetString() is "png-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "jpeg-encode" or "webp-encode" or "webp-lossless-encode" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
-                : sample.OutputStride < (Ready.GetProperty("operation").GetString() is "nearest-resize" or "bilinear-resize" or "crop" ? 256
+                : sample.OutputStride < (Ready.GetProperty("operation").GetString() is "nearest-resize" or "bilinear-resize" or "bicubic-resize" or "crop" ? 256
                     : Ready.GetProperty("operation").GetString() is "quarter-turn-cw" or "quarter-turn-ccw" or "transpose" or "transverse" ? 259 : HorizontalFlipInput.Width) * (Ready.GetProperty("depth").GetInt32() / 8) * 4)
             || (Ready.GetProperty("operation").GetString() is "jpeg-decode" or "webp-decode" or "vp8-decode" && sample.OutputBytes != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4))
             throw new InvalidOperationException("Native sample counters/elapsed time/CPU differ.");
@@ -200,7 +207,7 @@ internal sealed class NativeWarmReference : IDisposable
     {
         process.StandardInput.WriteLine("check"); process.StandardInput.Flush();
         var value = Read();
-        var verified = Ready.GetProperty("operation").GetString() == "bilinear-resize"
+        var verified = Ready.GetProperty("operation").GetString() is "bilinear-resize" or "bicubic-resize"
             ? value.GetProperty("matched").GetBoolean()
                 && (Ready.GetProperty("alphaTolerance1").GetBoolean()
                     ? value.GetProperty("alphaMaximum").GetInt32() is >= 0 and <= 1

@@ -159,6 +159,12 @@ public static class ImageTransforms
         if (units > context.Limits.MaxWork) throw new ImageLimitException("Resize work limit exceeded.");
         var result = ImageBuffer.Allocate(width, height, source.BitDepth, context);
         var maximum = source.BitDepth == 8 ? 255 : 65535;
+        if (filter == ResizeFilter.Bicubic && CachedBicubicResize.TryApply(source, result, scaleX, scaleY,
+            tapsX, tapsY, width * tapsX * tapsY * 4, context))
+        {
+            result.Orientation = source.Orientation;
+            return result;
+        }
         double[]? horizontalWeights = null;
         int[]? horizontalOffsets = null;
         int[]? horizontalCounts = null;
@@ -326,7 +332,7 @@ public static class ImageTransforms
     private static int Round(double value, int maximum)
         => (int)Math.Clamp(Math.Round(value, MidpointRounding.AwayFromZero), 0, maximum);
 
-    private static double Kernel(double distance, ResizeFilter filter)
+    internal static double Kernel(double distance, ResizeFilter filter)
     {
         var x = Math.Abs(distance);
         if (filter == ResizeFilter.Bilinear) return Math.Max(0, 1 - x);

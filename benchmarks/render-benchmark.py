@@ -140,7 +140,7 @@ def render():
         row('Bilinear resize RGBA16†', 'warm-bilinear16-register-evidence.json', ['observations', -1], 'WARM-BILINEAR16-REGISTER.md', True),
         row('Bilinear upscale RGBA8†', 'warm-bilinearup8-batch-evidence.json', ['observations', -1], 'WARM-BILINEAR-UP8-BATCH.md', True),
         row('Bilinear upscale RGBA16†', 'warm-bilinearup16-rows-evidence.json', ['observations', -1], 'WARM-BILINEAR-UP16-ROWS.md', True),
-        pending('Bicubic resize RGBA8', 'bicubic8-boundary-evidence.json', 'Unmatched boundary/alpha; no timing'),
+        row('Bicubic resize RGBA8§', 'warm-bicubic8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-RGBA8-ROWS.md', True),
         row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
         row('Clone RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'clone8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
@@ -218,6 +218,13 @@ PSNR gap is 0.00365 dB within the unchanged 0.25 dB band; alpha is exact.
 Managed output is 471,436 bytes versus 98,590 bytes. Quality-matched timing is
 confirmed; compression efficiency parity is not established.
 
+§ Bicubic RGBA8 uses **zimg, FFmpeg's zscale backend**, with timed four-pixel
+clamped edge padding (4.697% additional input area), complete source/output
+packing, filtering and independent output allocation/release. The explicit
+native-only RGB/alpha maximum-1 / RMSE-0.25 bounds preserve exact managed pixels.
+Scalar backend pixels are exact; normal SIMD differs by one RGB and one alpha
+sample. This comparison is distinct from the unmatched ordinary FFmpeg CLI.
+
 Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
 diagnostics or raw GC allocated bytes / operation count (rounded up, including
 harness overhead). Decoder timing uses resident encoded spans. Separate fresh
@@ -233,7 +240,9 @@ layouts, resize directions/fallbacks, fresh Streams, retained owners and compose
 public operations. RGBA8 bilinear upscaling now confirms **1.764x / upper 1.787x**
 after a four-pixel kernel cuts its baseline mean 41.8%. Stop tuning that pair;
 RGBA16 upscaling also confirms **1.331x / upper 1.416x** with horizontal row reuse,
-cutting its baseline mean 52.4%. Other material paths remain open. Bicubic remains unmatched.
+cutting its baseline mean 52.4%. Bicubic RGBA8 now confirms **1.554x / upper 1.593x**
+against the explicitly adjusted scaler backend, cutting its baseline mean 93.0%.
+Other material paths, including bicubic RGBA16, remain open.
 PNG RGB8, gray8 and gray-alpha8
 encoding preserves exact samples but exceeds the 5% IDAT-size gate by differences
 of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animation

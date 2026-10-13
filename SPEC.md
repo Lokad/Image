@@ -64,6 +64,14 @@ per operation, reusing them across output rows. This optional geometry workspace
 is admitted conservatively and leaves 4 KiB for exact tiny-alpha arithmetic.
 Wide support or tight memory limits retain direct evaluation with the same tap
 order, binary64 arithmetic and pixels. Geometry is not cached across calls.
+RGBA8 bicubic downsampling on AVX-512F/DQ and AVX2 may reuse unrounded horizontal
+intermediates in sixteen operation-local rows, with up to sixteen taps per axis.
+Source premultiplication is exact integer arithmetic. Conservative rounding
+guards retain the original binary64 order and exact tiny-alpha handling near
+ambiguous samples. Optional workspace is `716*outputWidth + 32*sourceWidth + 128`
+bytes, admitted before allocation and released on every exit, leaving 4 KiB for
+tiny-alpha arithmetic. Tight budgets, unsupported hardware and other directions
+retain the previous path; work charges and bounded cancellation are preserved.
 When both supports are short, a byte/UInt16-specialized kernel captures local
 buffer views and prepares vertical weights/row offsets in bounded stack storage.
 It retains the same per-pixel tap order, alpha handling and per-row work charges,
