@@ -10,7 +10,7 @@ round, at most three, with correctness established before timing.
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
 | PNG decode | RGBA8 all five filters; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None confirmed | Other material depths/layouts; partial palette/alpha paths |
-| PNG encode | RGBA8/16, level 6/None | RGB and gray projections; compression policies with materially different work |
+| PNG encode | RGBA8/16, level 6/None | RGB8 exact pixels/scanlines, unscored compression-size mismatch; other RGB/gray projections and materially different compression work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
 | WebP | VP8 with alpha decode/encode; VP8L native and managed inputs; exact VP8L backend encode | Material opaque/alpha alternatives and full 16-bit source normalization |
@@ -204,3 +204,13 @@ exact; no original image was added. All five filter types have confirmed RGBA8
 cases, with other material layouts still open. RGB8 PNG encoding is the next useful
 one-pair screen, reusing the existing opaque RGB projection. JPEG420's upper-bound
 gap and the full required scope remain open.
+
+The [PNG RGB8 encode boundary check](WARM-PNG-RGB8-ENCODE-BOUNDARY.md) adds that
+material case using the same projection. Native packing runs within each encode
+operation; exact scanlines/pixels, normal/scalar CLI and held output owners pass.
+The existing 5% compression-size gate stops preparation: both use level 6/None,
+but IDAT payloads are 191,758 versus 168,159 bytes. A single managed write saves
+only 120 bytes. No performance samples or allocations are scored, no production
+change is made, and the comparison remains open. The prior full verification is
+reused after all fresh/generated production methods and flags match the same
+actual package. Other material cases and JPEG420's upper-bound gap remain open.
