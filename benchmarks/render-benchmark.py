@@ -281,6 +281,12 @@ useful gain; all three are discarded. Exact original production is restored
 and JPEG420 remains open. The next investigation targets Huffman coding rather
 than further stream dispatch changes.
 
+The [adaptive JPEG Huffman prototype](../benchmarks/JPEG-HUFFMAN-PROTOTYPE.md)
+cuts one existing packet by 49.9% while preserving every coefficient and pixel
+in independent C#, managed and normal/scalar FFmpeg checks. Production is
+unchanged; complete encode speed and allocations remain unmeasured, and this
+correctness result does not establish parity.
+
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),
 regenerate with `python benchmarks/render-benchmark.py`, and run it with `--check`.

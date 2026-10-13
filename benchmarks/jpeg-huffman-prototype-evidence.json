@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "correctnessOnly": true,
+  "noTimingClaim": true,
+  "productionChanged": false,
+  "uniformWarmParityComplete": false,
+  "totalRetainedPerformanceRasters": 2,
+  "scope": "Original development-only adaptive JPEG entropy prototype for one existing RGBA16 JPEG420 quality anchor. Production encoding and published performance are unchanged.",
+  "prototype": {
+    "correctnessOnly": true,
+    "noTimingClaim": true,
+    "productionUnchanged": true,
+    "originalInputsAdded": 0,
+    "tableControls": {
+      "histograms": 259,
+      "lengthLimitingExercised": true,
+      "canonicalPrefixAndReservedOnesExact": true
+    },
+    "case": {
+      "originalBytes": 147730,
+      "adaptiveBytes": 74056,
+      "events": 122378,
+      "blocks": 3366,
+      "coefficientSha256": "ba9ed95336dba28afb5d804d3913cc1bb192bda2d02646b9d68852f3703e2061",
+      "allQuantizedCoefficientsAndAmplitudesExact": true,
+      "originalSha256": "0c2f9a0debc94fc606b1ecf511bc12bf1d6c032634d6731ec2c70f2cc5f262cd",
+      "adaptiveSha256": "ab163b4b8897668c5a2a4a4ac0869fabbe00704213e414943b1f5a33991b905d",
+      "worstPackedEventCacheBytes": 861696,
+      "actualPackedEventBytes": 489512,
+      "tables": [
+        {
+          "symbols": 10,
+          "maximumWidth": 7
+        },
+        {
+          "symbols": 9,
+          "maximumWidth": 7
+        },
+        {
+          "symbols": 73,
+          "maximumWidth": 16
+        },
+        {
+          "symbols": 57,
+          "maximumWidth": 14
+        }
+      ]
+    }
+  },
+  "managedBothOs": [
+    {
+      "os": "windows",
+      "proof": {
+        "correctnessOnly": true,
+        "noTimingClaim": true,
+        "productionUnchanged": true,
+        "allManagedPixelsExact": true,
+        "geometryPrecisionAlphaExact": true,
+        "decodedSha256": "c72f4cfc86ad86352ab50f5989e092536b22a2361b7216aa9e70b3a186398281",
+        "actualLibrarySha256": "41eb477717f1e16572a898346a6d9e49a9e3f357c3c963a10dbc23bd9a89c8c9",
+        "safeCSharpEntropy": {
+          "correctnessOnly": true,
+          "noTimingClaim": true,
+          "productionUnchanged": true,
+          "originalSafeCSharpBuilder": true,
+          "tableCases": 7,
+          "allCanonicalTablesAndPacketBytesExact": true,
+          "adaptiveBytes": 74056,
+          "adaptiveSha256": "ab163b4b8897668c5a2a4a4ac0869fabbe00704213e414943b1f5a33991b905d",
+          "packedEventBytes": 489512
+        }
+      }
+    },
+    {
+      "os": "linux",
+      "proof": {
+        "correctnessOnly": true,
+        "noTimingClaim": true,
+        "productionUnchanged": true,
+        "allManagedPixelsExact": true,
+        "geometryPrecisionAlphaExact": true,
+        "decodedSha256": "c72f4cfc86ad86352ab50f5989e092536b22a2361b7216aa9e70b3a186398281",
+        "actualLibrarySha256": "41eb477717f1e16572a898346a6d9e49a9e3f357c3c963a10dbc23bd9a89c8c9",
+        "safeCSharpEntropy": {
+          "correctnessOnly": true,
+          "noTimingClaim": true,
+          "productionUnchanged": true,
+          "originalSafeCSharpBuilder": true,
+          "tableCases": 7,
+          "allCanonicalTablesAndPacketBytesExact": true,
+          "adaptiveBytes": 74056,
+          "adaptiveSha256": "ab163b4b8897668c5a2a4a4ac0869fabbe00704213e414943b1f5a33991b905d",
+          "packedEventBytes": 489512
+        }
+      }
+    }
+  ],
+  "ffmpegNormalAndScalar": [
+    {
+      "scalar": false,
+      "allFfmpegPixelsAlphaAndGeometryExact": true,
+      "decodedSha256": "b3709fa133c59a0f7acc83c747feccae35fcd5e38db690dea68bc9ea71e4d412"
+    },
+    {
+      "scalar": true,
+      "allFfmpegPixelsAlphaAndGeometryExact": true,
+      "decodedSha256": "b3709fa133c59a0f7acc83c747feccae35fcd5e38db690dea68bc9ea71e4d412"
+    }
+  ],
+  "originalActualPackageSha256": "3e827024d830b9c57dbf7878c2452397758c2305a913985ff67a7876fecd5b18",
+  "encodedSizeReductionFraction": 0.4987071007919853,
+  "cachePayloadEstimates": {
+    "quantizedShortCoefficients": 430848,
+    "actualPackedEvents": 489512,
+    "worstPackedEvents": 861696,
+    "actualAllocatedBytesPerOperation": null
+  },
+  "rawArchives": [
+    {
+      "correctnessOnly": true,
+      "noTimingClaim": true,
+      "sha256": "b73f4f8beafbdabdd36c074a3fd0eab854f1a41112a29c20995f40ad7ce37f98",
+      "files": 19,
+      "source": "85aef60839ee9a8a20c82e5115713c52bc9c018bdb68d381c1b0a8275d8bb3a8"
+    },
+    {
+      "correctnessOnly": true,
+      "noTimingClaim": true,
+      "sha256": "2a3fec181012f023975a12e3e84dc9ee2abcff966dc62cb9ac9b78eddd5a1426",
+      "files": 26,
+      "priorIndependentFfmpegEvidenceSha256": "b73f4f8beafbdabdd36c074a3fd0eab854f1a41112a29c20995f40ad7ce37f98"
+    }
+  ],
+  "nextAction": "Integrate one independently implemented C# entropy coding primitive with admitted bounded caching and unchanged quantized coefficients/decoded samples. Establish complete-operation timing on the dedicated VM; no speed or two-times parity claim is made by this prototype."
+}

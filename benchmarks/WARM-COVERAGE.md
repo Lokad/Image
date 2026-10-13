@@ -351,3 +351,9 @@ cached byte dispatch and batched symbols do not establish useful headroom and
 are discarded without twelve-actual repetitions. All original production is
 restored, with fresh both-OS method/flag proofs against the validated package.
 Investigate a larger Huffman coding change next; both JPEG420 gaps remain open.
+
+The [adaptive Huffman correctness prototype](JPEG-HUFFMAN-PROTOTYPE.md) cuts the
+same JPEG420 RGBA16 packet by 49.9%, preserving every coefficient and decoded
+pixel. Safe C# and independent table/packet generation agree; both managed OSes
+and normal/scalar FFmpeg pass. Production is unchanged. Bounded cache admission,
+complete-operation timing and allocations remain open; this is no parity score.
