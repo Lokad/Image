@@ -213,6 +213,13 @@ zero/excessive counts, trailing protocol tokens and unknown commands.
 
 ## PNG
 
+`-WarmFamily Png -WarmCases DecodeGray8Transparency` selects the existing
+original raster's gray8 projection with tRNS key 127 and nonzero hidden RGB.
+The original adapter admits FFmpeg's YA8 decoder output and includes owned
+RGBA conversion in each operation. The
+[transparency report](../../benchmarks/WARM-PNG-GRAY8-TRANSPARENCY.md) records
+the row-kernel improvement and independent quiet confirmation.
+
 `ffmpeg-png-warm.c` is a separate original adapter for public FFmpeg codec APIs:
 
 ```bash

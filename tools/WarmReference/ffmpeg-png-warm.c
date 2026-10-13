@@ -127,7 +127,7 @@ typedef struct {
     AVFilterContext *gray_input, *gray_output;
     uint8_t *original, *encoded;
     size_t raw_bytes, encoded_bytes;
-    int encode, encode_stored, encode_rgb, encode_gray, encode_gray_alpha, width, height, depth, row_bytes, cpu, stride, output_bytes, rgb, gray, gray_alpha, palette, mono, coded_depth;
+    int encode, encode_stored, encode_rgb, encode_gray, encode_gray_alpha, width, height, depth, row_bytes, cpu, stride, output_bytes, rgb, gray, gray_alpha, palette, mono, coded_depth, gray_transparency;
     uint64_t completed, observed;
 } Work;
 static void gray16_graph(Work *work)
@@ -207,9 +207,9 @@ static void apply(Work *work)
     } else {
         require(avcodec_send_packet(work->codec, work->input), "Submit complete PNG");
         require(avcodec_receive_frame(work->codec, work->decoded), "Receive PNG pixels");
-        int format = work->mono ? AV_PIX_FMT_MONOBLACK : work->palette ? AV_PIX_FMT_PAL8 : work->gray_alpha ? (work->depth == 8 ? AV_PIX_FMT_YA8 : AV_PIX_FMT_YA16BE) : work->gray ? (work->depth == 8 ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_GRAY16BE) : work->rgb ? (work->depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE) : work->depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64BE;
+        int format = work->mono ? AV_PIX_FMT_MONOBLACK : work->palette ? AV_PIX_FMT_PAL8 : (work->gray_alpha || work->gray_transparency) ? (work->depth == 8 ? AV_PIX_FMT_YA8 : AV_PIX_FMT_YA16BE) : work->gray ? (work->depth == 8 ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_GRAY16BE) : work->rgb ? (work->depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE) : work->depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64BE;
         if (work->decoded->format != format || work->decoded->width != work->width || work->decoded->height != work->height
-            || !work->decoded->buf[0] || work->decoded->linesize[0] < (work->mono ? (work->width + 7) / 8 : work->width * (work->palette ? 1 : work->gray_alpha ? work->depth / 8 * 2 : work->gray ? work->depth / 8 : work->rgb ? work->depth / 8 * 3 : work->depth / 8 * 4))) fail("Decoded PNG format differs.");
+            || !work->decoded->buf[0] || work->decoded->linesize[0] < (work->mono ? (work->width + 7) / 8 : work->width * (work->palette ? 1 : (work->gray_alpha || work->gray_transparency) ? work->depth / 8 * 2 : work->gray ? work->depth / 8 : work->rgb ? work->depth / 8 * 3 : work->depth / 8 * 4))) fail("Decoded PNG format differs.");
         if (work->palette && (!work->decoded->data[1] || !work->decoded->buf[0])) fail("Decoded PNG palette ownership differs.");
         if (work->depth == 16 || work->gray || work->gray_alpha || work->rgb || work->palette) {
             work->converted->width = work->width; work->converted->height = work->height;
@@ -394,6 +394,18 @@ int main(int argc, char **argv)
         work.gray_alpha = work.encoded_bytes >= 33 && work.encoded[25] == 4;
         work.palette = work.encoded_bytes >= 33 && work.encoded[25] == 3;
         work.coded_depth = work.encoded_bytes >= 33 ? work.encoded[24] : 0;
+        if (work.gray) {
+            for (size_t offset = 8; offset < work.encoded_bytes;) {
+                if (work.encoded_bytes-offset < 12) fail("Truncated PNG chunk.");
+                uint32_t length = big32(work.encoded+offset);
+                if ((uint64_t)length+12 > work.encoded_bytes-offset) fail("PNG chunk exceeds input.");
+                if (!memcmp(work.encoded+offset+4,"tRNS",4)) {
+                    if (length != 2 || work.gray_transparency || work.coded_depth < 8) fail("Gray tRNS worker requires one two-byte key and gray8/16.");
+                    work.gray_transparency = 1;
+                }
+                offset += (size_t)length+12;
+            }
+        }
         work.mono = work.gray && work.coded_depth == 1;
         if (work.gray && work.coded_depth < 8 && (work.depth != 8 || (work.coded_depth != 1 && work.coded_depth != 2 && work.coded_depth != 4))) fail("Packed gray requires gray1/2/4 to RGBA8.");
         if (work.gray && work.coded_depth >= 8 && work.coded_depth != work.depth) fail("Gray coded/output precision differs.");
@@ -409,7 +421,7 @@ int main(int argc, char **argv)
             require(av_opt_set_int(work.conversion, "srch", work.height, 0), "Source height");
             require(av_opt_set_int(work.conversion, "dstw", work.width, 0), "Output width");
             require(av_opt_set_int(work.conversion, "dsth", work.height, 0), "Output height");
-            require(av_opt_set_int(work.conversion, "src_format", work.mono ? AV_PIX_FMT_MONOBLACK : work.palette ? AV_PIX_FMT_PAL8 : work.gray_alpha ? (work.depth == 8 ? AV_PIX_FMT_YA8 : AV_PIX_FMT_YA16BE) : work.gray ? (work.depth == 8 ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_GRAY16BE) : work.depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE, 0), "Source format");
+            require(av_opt_set_int(work.conversion, "src_format", work.mono ? AV_PIX_FMT_MONOBLACK : work.palette ? AV_PIX_FMT_PAL8 : (work.gray_alpha || work.gray_transparency) ? (work.depth == 8 ? AV_PIX_FMT_YA8 : AV_PIX_FMT_YA16BE) : work.gray ? (work.depth == 8 ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_GRAY16BE) : work.depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE, 0), "Source format");
             require(av_opt_set_int(work.conversion, "dst_format", work.depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE, 0), "Output format");
             require(av_opt_set_int(work.conversion, "sws_flags", SWS_POINT | SWS_BITEXACT, 0), "Conversion policy");
             require(av_opt_set_int(work.conversion, "threads", 1, 0), "Conversion thread count");
@@ -422,9 +434,9 @@ int main(int argc, char **argv)
         memcpy(work.input->data, work.encoded, work.encoded_bytes);
     }
     check_independent_owners(&work); check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":%d,\"codedDepth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"compressionLevel\":%d,\"filter\":%d,\"colorType\":%d,\"conversionThreads\":%d,\"rgbExpansionTimed\":%s,\"rgbPackingTimed\":%s,\"grayExpansionTimed\":%s,\"grayPackingTimed\":%s,\"grayPlaneExtractionTimed\":%s,\"grayFilterOutputAllocationTimed\":%s,\"grayAlphaExpansionTimed\":%s,\"grayAlphaPackingTimed\":%s,\"grayAlphaStoragePackingTimed\":%s,\"paletteExpansionTimed\":%s,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":%d,\"codedDepth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"compressionLevel\":%d,\"filter\":%d,\"colorType\":%d,\"conversionThreads\":%d,\"rgbExpansionTimed\":%s,\"rgbPackingTimed\":%s,\"grayExpansionTimed\":%s,\"grayTransparencyExpansionTimed\":%s,\"grayPackingTimed\":%s,\"grayPlaneExtractionTimed\":%s,\"grayFilterOutputAllocationTimed\":%s,\"grayAlphaExpansionTimed\":%s,\"grayAlphaPackingTimed\":%s,\"grayAlphaStoragePackingTimed\":%s,\"paletteExpansionTimed\":%s,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
         argv[1], work.width, work.height, work.depth, work.encode ? work.depth : work.coded_depth, work.cpu, work.encode ? (work.encode_stored ? 0 : 6) : -1, work.encode ? 0 : -1,
-        work.encode_gray_alpha ? 4 : work.encode_gray ? 0 : work.encode_rgb ? 2 : work.palette ? 3 : work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6, work.encode_gray || work.encode_rgb || work.rgb || work.gray || work.gray_alpha || work.palette ? 1 : 0, work.rgb ? "true" : "false", work.encode_rgb ? "true" : "false", work.gray ? "true" : "false", work.encode_gray ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_alpha ? "true" : "false", work.encode_gray_alpha ? "true" : "false", work.encode_gray_alpha ? "true" : "false", work.palette ? "true" : "false", work.output_bytes, work.completed, av_version_info(), avcodec_version(), avutil_version()); fflush(stdout);
+        work.encode_gray_alpha ? 4 : work.encode_gray ? 0 : work.encode_rgb ? 2 : work.palette ? 3 : work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6, work.encode_gray || work.encode_rgb || work.rgb || work.gray || work.gray_alpha || work.palette ? 1 : 0, work.rgb ? "true" : "false", work.encode_rgb ? "true" : "false", work.gray ? "true" : "false", work.gray_transparency ? "true" : "false", work.encode_gray ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_alpha ? "true" : "false", work.encode_gray_alpha ? "true" : "false", work.encode_gray_alpha ? "true" : "false", work.palette ? "true" : "false", work.output_bytes, work.completed, av_version_info(), avcodec_version(), avutil_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;

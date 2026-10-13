@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS confirmed | Other material depths/layouts; shorter palettes or distinct transparency paths |
+| PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS and gray8 tRNS confirmed | Other material depths/layouts; gray16/RGB transparency or shorter palettes |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level 6/None; RGBA8 NoCompression/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4 and 4:2:2; RGBA16 to 4:4:4 confirmed; 4:2:0 RGBA8 upper above 2x; 4:2:0 RGBA16 screen improved 42.9%, mean still above 2x | Both 4:2:0 gaps; grayscale and other material normalization layouts |
@@ -321,3 +321,11 @@ timed. All normalized RGBA samples and hidden RGB are exact; both guards pass.
 Production is unchanged and same-package validation is reused after all method/
 flag checks. Stop tuning this pair; PNG transparency paths and required scope
 remain open.
+
+The [gray8 tRNS row round](WARM-PNG-GRAY8-TRANSPARENCY.md) exposes a 3.593x
+generic mapping gap and reduces the screen mean 79.4%. One exact-key row
+primitive independently confirms 0.739x / upper 0.761x with unchanged 9,936 B/op.
+The native format rejection remains untimed; explicit YA8 conversion, exact
+hidden RGB, source/owners, both guards, full tests and the same actual package
+pass. Stop tuning this pair; gray16/RGB transparency and required scope remain
+open.

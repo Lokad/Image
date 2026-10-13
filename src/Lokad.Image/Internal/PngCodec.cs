@@ -266,6 +266,12 @@ internal static class PngCodec
                         var offset = (startY + y * stepY) * result.Stride + startX * 4;
                         CopyGray8Row(row, result.Pixels.Slice(offset, width * 4), context.Cancellation);
                     }
+                    else if (header.ColorType == 0 && header.Depth == 8 && stepX == 1 && header.Transparency.Length == 2)
+                    {
+                        var offset = (startY + y * stepY) * result.Stride + startX * 4;
+                        CopyGray8TransparentRow(row, result.Pixels.Slice(offset, width * 4),
+                            BinaryPrimitives.ReadUInt16BigEndian(header.Transparency), context.Cancellation);
+                    }
                     else if (header.ColorType == 0 && header.Depth == 16 && stepX == 1 && header.Transparency.Length == 0)
                     {
                         var offset = (startY + y * stepY) * result.Stride + startX * 8;
@@ -408,6 +414,35 @@ internal static class PngCodec
             if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
             var output = destination.Slice(x * 4, 4); var value = row[x];
             output[0] = value; output[1] = value; output[2] = value; output[3] = 255;
+        }
+    }
+
+    internal static void CopyGray8TransparentRow(ReadOnlySpan<byte> row, Span<byte> destination,
+        ushort transparentKey, CancellationToken cancellation)
+    {
+        // PNG 11.3.2.1: compare the complete two-byte key; keys beyond gray8's
+        // sample range never match. Transparent pixels retain their gray RGB.
+        var x = 0;
+        if (Avx2.IsSupported && BitConverter.IsLittleEndian)
+        {
+            var replicate = Vector256.Create(0x00010101);
+            var opaque = Vector256.Create(unchecked((int)0xff000000));
+            var key = Vector256.Create((int)transparentKey);
+            for (; x <= row.Length - 8; x += 8)
+            {
+                if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+                var packed = Vector128.CreateScalar(MemoryMarshal.Read<ulong>(row[x..])).AsByte();
+                var samples = Avx2.ConvertToVector256Int32(packed);
+                var alpha = Avx2.AndNot(Avx2.CompareEqual(samples, key), opaque);
+                (Avx2.MultiplyLow(samples, replicate) | alpha).AsByte().CopyTo(destination[(x * 4)..]);
+            }
+        }
+        for (; x < row.Length; x++)
+        {
+            if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+            var output = destination.Slice(x * 4, 4); var value = row[x];
+            output[0] = value; output[1] = value; output[2] = value;
+            output[3] = value == transparentKey ? (byte)0 : (byte)255;
         }
     }
 
