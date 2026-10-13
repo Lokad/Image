@@ -414,3 +414,9 @@ existing RGB/alpha/geometry bounds and independent owners. The extended native
 adapter retains the previous alpha packet/pixels; original untimed rejections
 remain recorded. Do not repeat unchanged timing; profile one complete decode
 and select a substantial primitive. Full required warm coverage remains open.
+
+The [normalization investigation](VP8-NORMALIZATION-REJECTED.md) records a
+diagnostic profile dominated by token decisions and rejects a 2.016x bulk-shift
+trial without twelve-actual repetition. Original production/tests are restored,
+with fresh both-OS proofs against the tested package. Opaque VP8 remains open;
+prototype a wider arithmetic window before another production/timing round.

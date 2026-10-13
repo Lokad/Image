@@ -231,6 +231,8 @@ are deferred.
 
 JPEG420 RGBA8's independent upper is **2.014x**, so that pair remains open.
 Opaque VP8 decoding also remains open at **1.983x / upper 2.004x**.
+Its [bulk normalization trial](../benchmarks/VP8-NORMALIZATION-REJECTED.md) is rejected;
+the tested production is restored. A wider arithmetic window is the next investigation.
 JPEG444/422 RGBA8 and JPEG444/420 RGBA16 are confirmed with adaptive Huffman
 coding; remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove

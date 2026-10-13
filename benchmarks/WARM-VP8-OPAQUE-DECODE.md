@@ -45,6 +45,8 @@ before the five-second quietness checks.
 The [numeric evidence](warm-vp8opaque-decode-evidence.json) retains both runs,
 native controls, untimed rejections and source/package identities. The old native
 worker and alpha input were frozen before mutation; all four actual child files,
-raw results, source and package were frozen before later preparation. Next, use
-one CPU profile to select a substantial primitive. JPEG420 RGBA8's upper-bound
+raw results, source and package were frozen before later preparation. The
+[rejected normalization round](VP8-NORMALIZATION-REJECTED.md) records one
+diagnostic CPU profile and discards a 2.016× candidate, restoring all production.
+Prototype a wider arithmetic window next. JPEG420 RGBA8's upper-bound
 gap and the remaining material contract stay open.
