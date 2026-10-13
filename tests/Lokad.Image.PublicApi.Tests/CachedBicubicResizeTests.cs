@@ -33,6 +33,9 @@ public sealed class CachedBicubicResizeTests
     [InlineData(16,61,39,18,11)]
     [InlineData(8,513,31,256,15)]
     [InlineData(16,513,31,256,15)]
+    [InlineData(8,17,9,35,19)]
+    [InlineData(8,67,13,135,27)]
+    [InlineData(8,513,9,1027,19)]
     public void SeparableRowsMatchOriginalOrderAtCacheAdmissionBoundary(int depth,int sourceWidth,int sourceHeight,int width,int height)
     {
         using var source=OriginalPixels.Buffer(sourceWidth,sourceHeight,depth);

@@ -142,6 +142,7 @@ def render():
         row('Bilinear upscale RGBA16†', 'warm-bilinearup16-rows-evidence.json', ['observations', -1], 'WARM-BILINEAR-UP16-ROWS.md', True),
         row('Bicubic resize RGBA8§', 'warm-bicubic16-rows-evidence.json', ['byteRegressionControl', 'observations', -1], 'WARM-BICUBIC-RGBA16-ROWS.md', True),
         row('Bicubic resize RGBA16§', 'warm-bicubic16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-RGBA16-ROWS.md', True),
+        row('Bicubic upscale RGBA8§', 'warm-bicubicup8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-UP8-ROWS.md', True),
         row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
         row('Clone RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'clone8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
@@ -226,6 +227,10 @@ native-only RGB/alpha maximum-1 / RMSE-0.25 bounds preserve exact managed pixels
 RGBA8 scalar backend pixels are exact; normal SIMD differs by one RGB and one
 alpha sample. RGBA16 normal/scalar results both stay within those bounds. This
 comparison is distinct from the unmatched ordinary FFmpeg CLI.
+RGBA8 bicubic upscaling uses premultiplied float output and timed straight-RGBA
+unpremultiplication/quantization, preserving unclamped alpha for the color ratio
+and clearing RGB when rounded alpha is zero. Its packing uses equivalent bounded
+quantization; the slower general-purpose-math comparison remains superseded.
 
 Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
 diagnostics or raw GC allocated bytes / operation count (rounded up, including
