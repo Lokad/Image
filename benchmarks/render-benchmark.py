@@ -75,7 +75,7 @@ def render():
         row('PNG RGBA8, Paeth', 'warm-paeth4-evidence.json', ['observations', -1], 'WARM-PAETH-FOUR-CHANNEL.md', True),
         row('PNG RGBA16, Paeth', 'warm-paethvector-evidence.json', ['observations', -1], 'WARM-PAETH-VECTOR.md', True),
         row('PNG RGBA16, Adam7', 'warm-pngscatter-evidence.json', ['observations', -1], 'WARM-PNG-SCATTER.md', True),
-        row('PNG RGB16, None', 'warm-pngrgb16-row-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-ROW.md'),
+        row('PNG RGB16, None', 'warm-pngrgb16-current-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-CURRENT.md', True),
         row('PNG gray8, None', 'warm-pnggray8-current-evidence.json', ['observations', -1], 'WARM-PNG-GRAY8-CURRENT.md', True),
         row('PNG gray-alpha8, None', 'warm-pnggrayalpha8-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA8-ROW.md', True),
         row('PNG RGB8, None', 'warm-pngrgb8-row-evidence.json', ['observations', -1], 'WARM-PNG-RGB8-ROW.md', True),
@@ -203,10 +203,11 @@ timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-The latest [palette8 SIMD expansion](../benchmarks/WARM-PNG-PALETTE-SIMD.md) reduces
-managed screen mean 24.5% and independently confirms 1.526x / upper 1.543x with
-10,976 B/op. [Gray8](../benchmarks/WARM-PNG-GRAY8-CURRENT.md) is also confirmed at
-1.563x / upper 1.580x with 9,904 B/op. RGB16 and JPEG420 retain earlier open results.
+The latest [RGB16 check](../benchmarks/WARM-PNG-RGB16-CURRENT.md) independently
+confirms 1.819x / upper 1.823x with 15,024 B/op, using unchanged shared PNG
+improvements. [Palette8 SIMD expansion](../benchmarks/WARM-PNG-PALETTE-SIMD.md)
+is confirmed at 1.526x / upper 1.543x with 10,976 B/op. JPEG420's earlier upper-bound
+gap remains open.
 Stop tuning confirmed pairs. Other profiles, ownership boundaries and the full
 required scope remain open; earlier failures and rejected experiments stay recorded.
 

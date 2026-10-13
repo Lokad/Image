@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8, gray8/16, gray-alpha8/16 and opaque gray1/4 and palette4/8 None confirmed; RGB16 None above 2x at its earlier source | RGB16 parity; packed gray2 and palette1/2; other filter implementations |
+| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/4 and palette4/8 None confirmed | Packed gray2 and palette1/2; other filter implementations |
 | PNG encode | RGBA8/16, level 6/None | RGB and gray projections; compression policies with materially different work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
@@ -140,4 +140,12 @@ independently confirms1.526x /upper1.543x with10,976B/op. All12 actuals retained
 both guards pass. Full both-OS Release/live/package validation passes. Stop tuning
 this fixed pair. Full palettes with absent/full alpha use safe register byte lookups;
 partial palettes/alpha and other CPUs retain scalar expansion. Their performance
-is distinct. RGB16's earlier source remains unmeasured under shared PNG improvements.
+is distinct. The next RGB16 check measures its shared PNG improvements.
+
+The [current RGB16 check](WARM-PNG-RGB16-CURRENT.md) independently confirms 1.819x /
+upper 1.823x with15,024B/op (99.2% lower allocation). All12 actuals retained; both
+guards pass. Production/package unchanged; full validation reused. Stop tuning
+this fixed pair. JPEG420's earlier upper-bound gap remains open. Packed palette2
+is a useful next material screen: its dense expansion still follows the scalar
+path, distinct from the confirmed palette4/8 SIMD kernels. Reuse the original
+RGBA8 raster and add one fixed projection, without a shape/quality/image matrix.

@@ -37,7 +37,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA8, Paeth](../benchmarks/WARM-PAETH-FOUR-CHANNEL.md) | 5,099.55 | 2,925.24 | 1.743 / 1.842 | 881,892 | Confirmed |
 | [PNG RGBA16, Paeth](../benchmarks/WARM-PAETH-VECTOR.md) | 8,778.54 | 5,671.15 | 1.548 / 1.607 | 1,844,468 | Confirmed |
 | [PNG RGBA16, Adam7](../benchmarks/WARM-PNG-SCATTER.md) | 6,567.82 | 3,984.54 | 1.648 / 1.700 | 2,024,532 | Confirmed |
-| [PNG RGB16, None](../benchmarks/WARM-PNG-RGB16-ROW.md) | 4,484.58 | 2,226.47 | 2.014 / 2.187 | 1,807,712 | Above 2x / open |
+| [PNG RGB16, None](../benchmarks/WARM-PNG-RGB16-CURRENT.md) | 4,020.98 | 2,210.00 | 1.819 / 1.823 | 15,024 | Confirmed |
 | [PNG gray8, None](../benchmarks/WARM-PNG-GRAY8-CURRENT.md) | 564.59 | 361.22 | 1.563 / 1.580 | 9,904 | Confirmed |
 | [PNG gray-alpha8, None](../benchmarks/WARM-PNG-GRAY-ALPHA8-ROW.md) | 1,574.21 | 1,147.07 | 1.372 / 1.409 | 661,014 | Confirmed |
 | [PNG RGB8, None](../benchmarks/WARM-PNG-RGB8-ROW.md) | 2,139.12 | 1,510.62 | 1.416 / 1.440 | 727,305 | Confirmed |
@@ -129,10 +129,11 @@ timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-The latest [palette8 SIMD expansion](../benchmarks/WARM-PNG-PALETTE-SIMD.md) reduces
-managed screen mean 24.5% and independently confirms 1.526x / upper 1.543x with
-10,976 B/op. [Gray8](../benchmarks/WARM-PNG-GRAY8-CURRENT.md) is also confirmed at
-1.563x / upper 1.580x with 9,904 B/op. RGB16 and JPEG420 retain earlier open results.
+The latest [RGB16 check](../benchmarks/WARM-PNG-RGB16-CURRENT.md) independently
+confirms 1.819x / upper 1.823x with 15,024 B/op, using unchanged shared PNG
+improvements. [Palette8 SIMD expansion](../benchmarks/WARM-PNG-PALETTE-SIMD.md)
+is confirmed at 1.526x / upper 1.543x with 10,976 B/op. JPEG420's earlier upper-bound
+gap remains open.
 Stop tuning confirmed pairs. Other profiles, ownership boundaries and the full
 required scope remain open; earlier failures and rejected experiments stay recorded.
 
