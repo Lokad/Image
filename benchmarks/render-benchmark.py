@@ -121,7 +121,7 @@ def render():
         row('PNG gray-alpha16, level 6 / None', 'warm-pnggrayalpha16encode-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ENCODE.md', True),
         row('JPEG 4:4:4, matched quality', 'warm-jpegencode-quiet-evidence.json', ['observations', -1], 'WARM-JPEG-ENCODE-QUIET.md', True),
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg44416-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG444-RGBA16-ADAPTIVE.md', True),
-        row('JPEG 4:2:2, matched quality', 'warm-jpeg422encode-evidence.json', ['observations', -1], 'WARM-JPEG422-ENCODE.md', True),
+        row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg4228-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA8-ADAPTIVE.md', True),
         row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg4208-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG420-RGBA8-ADAPTIVE.md'),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG-ADAPTIVE-HUFFMAN.md', True),
         row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
@@ -219,83 +219,19 @@ These are distinct boundaries. FFmpeg allocation totals are **not measured**;
 they must not be interpreted as zero. Retained owners and cold allocation patterns
 need separate coverage.
 
-The [material coverage audit](../benchmarks/WARM-COVERAGE.md) lists distinct
-unmeasured primitives and public boundaries without expanding a profile matrix.
-Other depths/directions/profiles remain open. Unmatched cases receive no parity
-timing. GIF and
-animation are deferred. No averages establish the uniform ≤2× target.
-Historical horizontal-flip launches and their bounds remain in the earlier report.
+Full required warm coverage is **open**. The
+[material coverage audit](../benchmarks/WARM-COVERAGE.md) tracks remaining depths,
+layouts, resize directions/fallbacks, fresh Streams, retained owners and composed
+public operations. Bicubic remains unmatched. PNG RGB8, gray8 and gray-alpha8
+encoding preserves exact samples but exceeds the 5% IDAT-size gate by differences
+of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animation
+are deferred.
 
-The latest [PNG Average RGBA8 check](../benchmarks/WARM-PNG-AVERAGE8-BASELINE.md)
-independently confirms 1.704x / upper 1.743x with 12,976 B/op using unchanged
-production. All five filters have a confirmed RGBA8 case. The
-[RGB8 encode check](../benchmarks/WARM-PNG-RGB8-ENCODE-BOUNDARY.md) is exact in
-pixels/scanlines but unscored: IDAT sizes differ by 12.31%, exceeding the existing
-5% gate. Row batching recovers only 120 bytes; the compression comparison remains
-open. The [RGB16 encode check](../benchmarks/WARM-PNG-RGB16-ENCODE.md) independently
-confirms 0.865x / upper 0.871x with 2,102,765 B/op and unchanged production.
-The [gray8 encode check](../benchmarks/WARM-PNG-GRAY8-ENCODE-BOUNDARY.md) also has
-exact pixels/scanlines but remains unscored: IDAT sizes differ by 16.65%, and
-batching saves only 34 bytes. Its compression comparison remains open.
-The [gray16 encode check](../benchmarks/WARM-PNG-GRAY16-ENCODE.md) independently
-confirms 1.150x / upper 1.156x with 1,051,455 B/op. Its native baseline uses exact
-red-plane extraction and includes conversion/intermediate ownership within each
-operation. Production is unchanged.
-The [gray-alpha8 encode check](../benchmarks/WARM-PNG-GRAY-ALPHA8-ENCODE-BOUNDARY.md)
-preserves every sample with explicit timed lossless storage packing before the
-native PNG encoder, but remains unscored: IDAT sizes differ by 5.17%; batching
-saves only 61 bytes. Native colorspace conversion's alpha rounding is rejected.
-The [gray-alpha16 encode check](../benchmarks/WARM-PNG-GRAY-ALPHA16-ENCODE.md)
-independently confirms 0.903x / upper 0.915x with 1,052,368 B/op. Both complete
-words and hidden RGB are exact; native storage packing/endian conversion occurs
-inside every operation before FFmpeg PNG encoding. Production is unchanged.
-Other material layouts and encoding projections remain open. The
-[NoCompression RGBA8 check](../benchmarks/WARM-PNG-STORED8-ENCODE.md) drops from
-11.526x to an independently confirmed 1.883x / upper 1.933x, with 2,102,472 B/op.
-One bulk row-copy primitive preserves encoded bytes, admission and cancellation;
-full tests and the same actual package pass on both OSes. The
-[stored-Deflate RGBA8 decode check](../benchmarks/WARM-PNG-STORED8-DECODE.md)
-independently confirms 1.159x / upper 1.168x with 12,976 B/op, unchanged production
-and exact frozen input. The
-[RGB16 check](../benchmarks/WARM-PNG-RGB16-CURRENT.md) is confirmed at 1.819x / upper
-1.823x with 15,024 B/op. JPEG420 RGBA8's upper-bound gap remains open.
-Stop tuning confirmed pairs. Other profiles, ownership boundaries and the full
-required scope remain open; earlier failures and rejected experiments stay recorded.
-
-The [gray16 transparency check](../benchmarks/WARM-PNG-GRAY16-TRANSPARENCY.md)
-independently confirms 1.722x / upper 1.755x with 10,960 B/op and unchanged
-production. Full 16-bit samples, alpha and hidden RGB are exact; the prior gray8
-fixture is unchanged. RGB16 transparency and other material coverage remain open.
-
-The [RGB8 transparency round](../benchmarks/WARM-PNG-RGB8-TRANSPARENCY.md)
-reduces the screened mean 59.9%, from 3.524x to an independently confirmed
-1.417x / upper 1.439x with unchanged 11,984 B/op. One exact RGB-key row kernel
-preserves hidden RGB, work and cancellation. Full tests and the same actual
-package pass on both OSes. RGB16 transparency and other material coverage remain
-open.
-
-The earlier [JPEG420 RGBA16 entropy checks](../benchmarks/WARM-JPEG42016-ENTROPY-REJECTED.md)
-retain the restored 2.046x baseline and three rejected dispatch trials. The
-[adaptive Huffman round](../benchmarks/WARM-JPEG-ADAPTIVE-HUFFMAN.md) now confirms
-1.888x / upper 1.931x with 297,772 B/op, reducing the baseline mean 7.8% and
-allocations 43.5%. Packet size falls 49.9% with exact coefficients/pixels. Final
-admission checks, full tests and the same actual package pass on both OSes.
-Stop tuning this pair. The [RGBA8 shared-encoder repeat](../benchmarks/WARM-JPEG420-RGBA8-ADAPTIVE.md)
-averages 1.977x / upper 2.014x with 297,772 B/op, allocations down 43.5%.
-Its independent quiet upper remains above two; retain this open result without
-repeating unchanged timing. Other shared JPEG encoder cases need revalidation.
-
-The [RGBA16 JPEG444 adaptive revalidation](../benchmarks/WARM-JPEG444-RGBA16-ADAPTIVE.md)
-independently confirms 1.757x / upper 1.790x with 556,280 B/op, allocations down
-47.1% from its earlier fixed-table confirmation. Full normalization, coefficients,
-decoded samples, source/owners and both quiet guards pass. Stop tuning this pair;
-JPEG422 RGBA8 shared-encoder revalidation remains open.
-
-The [adaptive JPEG Huffman prototype](../benchmarks/JPEG-HUFFMAN-PROTOTYPE.md)
-cuts one existing packet by 49.9% while preserving every coefficient and pixel
-in independent C#, managed and normal/scalar FFmpeg checks. It supplies the
-correctness reference for the integrated round; the prototype itself makes no
-timing or allocation claim.
+JPEG420 RGBA8's independent upper is **2.014x**, so that pair remains open.
+JPEG444 RGBA8 still needs revalidation after the shared adaptive-Huffman change.
+Stop tuning confirmed pairs; no averages or rolling older-source results prove
+the uniform target. Linked reports retain superseded raw evidence, failed guards,
+rejected experiments, correctness controls and exact package/source identities.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

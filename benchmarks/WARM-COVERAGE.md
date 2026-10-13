@@ -12,7 +12,7 @@ round, at most three, with correctness established before timing.
 | PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8 tRNS confirmed | Other material depths/layouts; RGB16 transparency or shorter palettes |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level 6/None; RGBA8 NoCompression/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
-| JPEG encode | RGBA8 to 4:4:4 and 4:2:2 at earlier sources; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x and 4:2:0 confirmed 1.888x / upper 1.931x; adaptive 4:2:0 RGBA8 quiet repeat 1.977x / upper 2.014x, open | RGBA8 4:2:0 upper bound and other shared encoder revalidation; grayscale, constrained fallback and other material normalization layouts |
+| JPEG encode | RGBA8 4:4:4 at an earlier source; adaptive RGBA8 4:2:2 confirmed 1.821x / upper 1.862x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x and 4:2:0 confirmed 1.888x / upper 1.931x; adaptive 4:2:0 RGBA8 quiet repeat 1.977x / upper 2.014x, open | RGBA8 4:2:0 upper bound and 4:4:4 shared revalidation; grayscale, constrained fallback and other material normalization layouts |
 | WebP | VP8 with alpha decode/encode; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Material opaque/alpha alternatives and distinct public boundaries |
 | Resize | Nearest/bilinear at both depths, fixed downsample | Bicubic at both depths; upsample/wide-support paths; tight-memory fallback |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes | Retained live output owners versus released-storage reuse |
@@ -378,3 +378,11 @@ coefficients and decoded pixels are unchanged; allocations fall 47.1% against
 the earlier fixed-table confirmation. Both guards and all fresh/actual method
 and flag proofs pass; the unchanged package's both-OS validation is reused.
 Stop tuning this pair; JPEG422 RGBA8 shared-encoder revalidation remains open.
+
+The [RGBA8 JPEG422 adaptive revalidation](WARM-JPEG422-RGBA8-ADAPTIVE.md)
+independently confirms 1.821x / upper 1.862x with 294,110 B/op. Quality65,
+coefficients and decoded samples are unchanged; allocations fall 44.2% against
+the earlier fixed-table confirmation. Both guards and all fresh/actual method
+and flag proofs pass; unchanged-package validation is reused. All twelve actuals
+remain recorded. Stop tuning this pair; JPEG444 RGBA8 shared revalidation remains
+open, using its existing quality69 anchor without repeating a quality sweep.
