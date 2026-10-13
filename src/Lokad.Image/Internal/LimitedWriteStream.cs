@@ -22,6 +22,14 @@ internal sealed class LimitedWriteStream(Stream output, int maximum, Cancellatio
         Span<byte> data = stackalloc byte[1]; data[0] = value; Write(data);
     }
     public override void Flush() => output.Flush();
+    internal bool SupportsAdaptiveJpeg(long worstEncodedBytes)
+    {
+        // Plain MemoryStream has no caller callbacks; other streams retain the
+        // original incremental encode and failure sequence.
+        if (cancellation.CanBeCanceled || output.GetType() != typeof(MemoryStream)) return false;
+        var memory = (MemoryStream)output;
+        return memory.CanSeek && memory.CanWrite && memory.Position <= int.MaxValue - worstEncodedBytes;
+    }
     public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException();
     public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
     public override void SetLength(long value) => throw new NotSupportedException();

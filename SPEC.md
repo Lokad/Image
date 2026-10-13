@@ -263,8 +263,13 @@ formula: luma basis `1+2(u+v)+uv`, chroma basis `2+3(u+v)+uv`, scaled by
 `quality<50 ? 5000/quality : 200-2*quality`, then
 `clamp((basis*scale+50)/100,1,255)` with integer division. Quality 100 still loses
 information through color conversion, sampling and coefficient rounding. Huffman
-tables are independently designed fixed-length canonical tables; encoded size is
-not yet optimized. Optional restart intervals count MCUs and reset DC predictors.
+tables use independently implemented canonical coding. Large encodes to an
+ordinary MemoryStream with an explicit background, a noncancellable token and
+sufficient work/memory admission use per-image adaptive tables limited to 16
+bits. Other calls retain the original fixed-length tables. This selection does
+not change quantized coefficients or decoded samples; encoded bytes may differ
+with stream, cancellation or resource options. Optional restart intervals count
+MCUs and reset DC predictors.
 The forward transform evaluates independent coefficients with safe AVX/AVX-512
 when available, preserving the frozen binary64 basis, separate multiplications
 and accumulation order. Other processors use the original scalar calculation.
@@ -273,6 +278,15 @@ conservative [rounding certificate](docs/jpeg-forward-quantization.md) proves th
 original quantized integer. Uncertain coefficients use the original direct
 evaluation. Encoded bytes, standalone coefficient bits and work admission remain
 unchanged; unsupported hardware uses the original transform and quantization.
+
+Adaptive coding requires at least 256 blocks. Sampling and transforms run once;
+an admitted packed-event buffer records DC/AC symbols and amplitudes, including
+restart positions. Separate luma/chroma tables reserve the all-ones code. The
+buffer is private, leased per thread, and retained only up to 4 MiB; every encode
+recomputes its events. Admission includes its full capacity and a 64 KiB table/
+scratch allowance. Histogram traversal and table construction charge work.
+Lower output quotas retain adaptive coding and enforce every write; combined
+symbol writes apply only when conservative output and work bounds are satisfied.
 
 JPEG requires opaque input or an explicit `BackgroundRgb` packed as 0xRRGGBB.
 Alpha flattening operates in encoded sample space before 16-to-8-bit conversion,

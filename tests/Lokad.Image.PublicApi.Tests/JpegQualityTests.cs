@@ -7,7 +7,7 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class JpegQualityTests
 {
     [Fact]
-    public void FrozenOriginalQualityReportReproducesEveryOwnedBitstreamAndProfile()
+    public void FrozenOriginalQualityReportRetainsFixedBitstreamsAndCurrentDecodedSamples()
     {
         var root = new DirectoryInfo(AppContext.BaseDirectory);
         while (root is not null && !File.Exists(Path.Combine(root.FullName, "Lokad.Image.slnx"))) root = root.Parent;
@@ -38,11 +38,20 @@ public sealed class JpegQualityTests
             Assert.Equal("Lokad.Image", subject); Assert.Contains(setting, JpegQualityCorpus.ManagedQualities); ownedCount++;
             Assert.Equal("Lokad.Image-quality-1..100", entry.GetProperty("settingKind").GetString());
             using var image = JpegQualityCorpus.Buffer(source, depth); using var encoded = new MemoryStream();
-            ImageCodec.EncodeJpeg(image, encoded, new JpegEncodeOptions { Sampling = sampling, Quality = setting, BackgroundRgb = background });
+            var options = new JpegEncodeOptions { Sampling = sampling, Quality = setting, BackgroundRgb = background };
+            // The historical report records the original fixed tables. Keep its
+            // byte evidence immutable, while testing current entropy separately.
+            using var historicalToken = new CancellationTokenSource();
+            ImageCodec.EncodeJpeg(image, encoded, options, historicalToken.Token);
             var bytes = encoded.ToArray(); Assert.Equal(entry.GetProperty("encodedHash").GetString(), Hash(bytes)); Assert.Equal(entry.GetProperty("encodedBytes").GetInt32(), bytes.Length);
             var header = JpegQualitySyntax.Read(bytes); Assert.Equal(entry.GetProperty("quantizationHash").GetString(), header.QuantizationHash);
             Assert.Equal(entry.GetProperty("codedSampling").GetString(), header.Sampling); Assert.Equal(sampling == JpegSampling.Grayscale ? 1 : 3, header.Components);
             using var decoded = ImageCodec.Decode(bytes); Assert.Equal(entry.GetProperty("managedDecodedHash").GetString(), Hash(OriginalPixels.Bytes(decoded)));
+            using var current = new MemoryStream(); ImageCodec.EncodeJpeg(image, current, options);
+            var currentHeader = JpegQualitySyntax.Read(current.ToArray());
+            Assert.Equal(header.QuantizationHash, currentHeader.QuantizationHash); Assert.Equal(header.Sampling, currentHeader.Sampling);
+            using var currentDecoded = ImageCodec.Decode(current.ToArray());
+            Assert.Equal(entry.GetProperty("managedDecodedHash").GetString(), Hash(OriginalPixels.Bytes(currentDecoded)));
         }
         Assert.Equal(160, ownedCount);
     }
@@ -83,7 +92,7 @@ public sealed class JpegQualityTests
             using var original = JpegQualityCorpus.Buffer(source, depth); using var normalized = JpegQualityCorpus.Buffer(reference, 8);
             using var first = new MemoryStream(); using var second = new MemoryStream();
             ImageCodec.EncodeJpeg(original, first, new JpegEncodeOptions { Sampling = sampling, Quality = 85, BackgroundRgb = JpegQualityCorpus.Background(pattern) });
-            ImageCodec.EncodeJpeg(normalized, second, new JpegEncodeOptions { Sampling = sampling, Quality = 85 });
+            ImageCodec.EncodeJpeg(normalized, second, new JpegEncodeOptions { Sampling = sampling, Quality = 85, BackgroundRgb = JpegQualityCorpus.Background(pattern) });
             Assert.Equal(second.ToArray(), first.ToArray());
         }
     }

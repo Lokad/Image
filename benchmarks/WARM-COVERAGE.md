@@ -12,7 +12,7 @@ round, at most three, with correctness established before timing.
 | PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8 tRNS confirmed | Other material depths/layouts; RGB16 transparency or shorter palettes |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level 6/None; RGBA8 NoCompression/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
-| JPEG encode | RGBA8 to 4:4:4 and 4:2:2; RGBA16 to 4:4:4 confirmed; 4:2:0 RGBA8 upper above 2x; restored 4:2:0 RGBA16 screen 2.046x after three rejected entropy/output trials | Both 4:2:0 gaps; larger Huffman coding investigation, grayscale and other material normalization layouts |
+| JPEG encode | RGBA8 to 4:4:4 and 4:2:2; RGBA16 to 4:4:4 at earlier sources; adaptive 4:2:0 RGBA16 confirmed 1.888x / upper 1.931x; 4:2:0 RGBA8 earlier upper above 2x | RGBA8 4:2:0 and shared encoder revalidation; grayscale, constrained fallback and other material normalization layouts |
 | WebP | VP8 with alpha decode/encode; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Material opaque/alpha alternatives and distinct public boundaries |
 | Resize | Nearest/bilinear at both depths, fixed downsample | Bicubic at both depths; upsample/wide-support paths; tight-memory fallback |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes | Retained live output owners versus released-storage reuse |
@@ -357,3 +357,10 @@ same JPEG420 RGBA16 packet by 49.9%, preserving every coefficient and decoded
 pixel. Safe C# and independent table/packet generation agree; both managed OSes
 and normal/scalar FFmpeg pass. Production is unchanged. Bounded cache admission,
 complete-operation timing and allocations remain open; this is no parity score.
+
+The integrated [adaptive Huffman round](WARM-JPEG-ADAPTIVE-HUFFMAN.md) confirms
+JPEG420 RGBA16 at 1.888x / upper 1.931x with 297,772 B/op. The restored baseline
+mean falls 7.8%, allocations 43.5% and packet size 49.9%, with exact coefficients
+and decoded pixels. Corrected exact output quotas, historical fixed quality
+evidence, full tests and the same actual package pass on both OSes. Stop tuning
+this pair; revalidate JPEG420 RGBA8 and the shared encoder scope next.

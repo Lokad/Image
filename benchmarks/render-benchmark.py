@@ -123,7 +123,7 @@ def render():
         row('JPEG 4:4:4 from RGBA16, full normalization', 'warm-jpeg16-component-row-evidence.json', ['observations', -1], 'WARM-JPEG16-COMPONENT-ROW.md', True),
         row('JPEG 4:2:2, matched quality', 'warm-jpeg422encode-evidence.json', ['observations', -1], 'WARM-JPEG422-ENCODE.md', True),
         row('JPEG 4:2:0, matched quality', 'warm-jpeg420-chroma-row-evidence.json', ['observations', -1], 'WARM-JPEG420-CHROMA-ROW.md'),
-        row('JPEG 4:2:0 from RGBA16, full normalization', 'warm-jpeg42016-entropy-rejected-evidence.json', ['observations', 0], 'WARM-JPEG42016-ENTROPY-REJECTED.md'),
+        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG-ADAPTIVE-HUFFMAN.md', True),
         row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
         row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8encode16-evidence.json', ['observations', -1], 'WARM-VP8-RGBA16-ENCODE.md', True),
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
@@ -274,18 +274,19 @@ preserves hidden RGB, work and cancellation. Full tests and the same actual
 package pass on both OSes. RGB16 transparency and other material coverage remain
 open.
 
-The [JPEG420 RGBA16 entropy checks](../benchmarks/WARM-JPEG42016-ENTROPY-REJECTED.md)
-retain the validated encoder at 2.046x / upper 3.240x with 527,306 B/op. Inlining,
-cached byte dispatch and symbol batching provide insufficient headroom or no
-useful gain; all three are discarded. Exact original production is restored
-and JPEG420 remains open. The next investigation targets Huffman coding rather
-than further stream dispatch changes.
+The earlier [JPEG420 RGBA16 entropy checks](../benchmarks/WARM-JPEG42016-ENTROPY-REJECTED.md)
+retain the restored 2.046x baseline and three rejected dispatch trials. The
+[adaptive Huffman round](../benchmarks/WARM-JPEG-ADAPTIVE-HUFFMAN.md) now confirms
+1.888x / upper 1.931x with 297,772 B/op, reducing the baseline mean 7.8% and
+allocations 43.5%. Packet size falls 49.9% with exact coefficients/pixels. Final
+admission checks, full tests and the same actual package pass on both OSes.
+Stop tuning this pair; JPEG420 RGBA8 and shared encoder revalidation remain open.
 
 The [adaptive JPEG Huffman prototype](../benchmarks/JPEG-HUFFMAN-PROTOTYPE.md)
 cuts one existing packet by 49.9% while preserving every coefficient and pixel
-in independent C#, managed and normal/scalar FFmpeg checks. Production is
-unchanged; complete encode speed and allocations remain unmeasured, and this
-correctness result does not establish parity.
+in independent C#, managed and normal/scalar FFmpeg checks. It supplies the
+correctness reference for the integrated round; the prototype itself makes no
+timing or allocation claim.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

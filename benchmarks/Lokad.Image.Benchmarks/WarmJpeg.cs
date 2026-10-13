@@ -36,8 +36,21 @@ public class WarmJpeg
     private static string RecipeFor(bool subsampled, bool horizontal = false, int depth = 8)
     {
         var recipe = horizontal ? Recipe444.Replace("4:4:4", "4:2:2") : subsampled ? Recipe444.Replace("4:4:4", "4:2:0") : Recipe444;
-        return depth == 16 ? recipe.Replace("Create(8)", "Create(16)").Replace("RGBA8", "RGBA16")
+        var result = depth == 16 ? recipe.Replace("Create(8)", "Create(16)").Replace("RGBA8", "RGBA16")
             + " Full 16-bit alpha flattening and normalization to 8-bit use one rounding after blending, inside every operation." : recipe;
+        return AdaptiveEntropy ? result + " Independently implemented adaptive Huffman coding, admitted private event workspace, same coefficients and quality anchor." : result;
+    }
+    private static bool AdaptiveEntropy => Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") switch
+    {
+        null => false,
+        "adaptive-v1" => true,
+        _ => throw new InvalidOperationException("Unknown JPEG entropy preparation policy.")
+    };
+    private static string MatchFile(bool subsampled, bool horizontal, int depth)
+    {
+        var name = depth == 16 ? (subsampled ? "jpeg42016-match.json" : "jpeg16-match.json")
+            : horizontal ? "jpeg422-match.json" : subsampled ? "jpeg420-match.json" : "jpeg-match.json";
+        return AdaptiveEntropy ? name.Replace("-match.json", "-adaptive-match.json") : name;
     }
     private string Recipe => RecipeFor(Subsampled, Horizontal, Depth);
     private const string Fixed420Policy = "fixed-anchor-v1: native qscale 5 / managed quality 69 / 4:2:0; one owned evaluation; no quality sweep";
@@ -130,7 +143,8 @@ public class WarmJpeg
                 JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), JpegBenchmarkCase.HashFile(typeof(WarmJpeg).Assembly.Location),
                 JpegBenchmarkCase.HashFile(state.Ffmpeg), native.BuildIdentity, native.Ready,
                 sampling, depth == 16 ? (subsampled ? Fixed42016Policy : Fixed16Policy) : horizontal ? Fixed422Policy : subsampled ? Fixed420Policy : EncoderQualityCalibration.OwnedQualityPolicy, depth);
-            var path = Path.Combine(state.Root, "artifacts", "warm-reference", depth == 16 ? (subsampled ? "jpeg42016-match.json" : "jpeg16-match.json") : horizontal ? "jpeg422-match.json" : subsampled ? "jpeg420-match.json" : "jpeg-match.json");
+            var path = Path.Combine(state.Root, "artifacts", "warm-reference", MatchFile(subsampled, horizontal, depth));
+            if (AdaptiveEntropy && File.Exists(path)) throw new InvalidOperationException("Preserve the existing adaptive preparation before replacing it.");
             File.WriteAllText(path, JsonSerializer.Serialize(record, EncoderQualityCalibration.Json) + "\n");
             Console.WriteLine($"Prepared one warm JPEG pair: native qscale {nativeQscale}, owned quality {match.ClosestOwned.Setting}, gap {match.PsnrGapDb:F4} dB, matched={match.Matched}; {owned.Length} owned settings, one source raster. {path}");
         }
@@ -171,7 +185,7 @@ public class WarmJpeg
         state = new JpegBenchmarkCase();
         try
         {
-            var path = Path.Combine(state.Root, "artifacts", "warm-reference", Source16 ? (Subsampled ? "jpeg42016-match.json" : "jpeg16-match.json") : Horizontal ? "jpeg422-match.json" : Subsampled ? "jpeg420-match.json" : "jpeg-match.json");
+            var path = Path.Combine(state.Root, "artifacts", "warm-reference", MatchFile(Subsampled, Horizontal, Depth));
             prepared = JsonSerializer.Deserialize<WarmJpegPreparation>(File.ReadAllText(path), EncoderQualityCalibration.Json)
                 ?? throw new InvalidOperationException("Missing warm JPEG preparation; run --prepare-warm-jpeg first.");
             if (prepared.SchemaVersion != 1 || prepared.Project != "Lokad.Image" || prepared.Recipe != Recipe || prepared.BackgroundRgb != Background || prepared.SourceDepth != Depth
@@ -253,7 +267,7 @@ public class WarmJpeg
                 managedOutputBytes = encoded.Length, nativeOutputBytes = nativeQuality.EncodedBytes,
                 managedEncodedSha256 = JpegBenchmarkCase.Hash(encoded), nativeOutputSha256 = JpegBenchmarkCase.HashFile(state.NativeOutput),
                 recipe = Recipe, sampling = DisplaySampling, qualityPolicy = prepared.QualityPolicy,
-                backgroundRgb = Background, qualityMatched = true, fullSourceNormalizationTimed = Source16, normalizedReferenceExact = true, alphaExact = true, decoderAgreementWithinBounds = true,
+                backgroundRgb = Background, managedHuffman = AdaptiveEntropy ? "adaptive-v1" : "original-fixed", privateEntropyWorkspaceReused = AdaptiveEntropy, qualityMatched = true, fullSourceNormalizationTimed = Source16, normalizedReferenceExact = true, alphaExact = true, decoderAgreementWithinBounds = true,
                 psnrGapDb = prepared.Match.PsnrGapDb, maximumPsnrGapDb = EncoderQualityCalibration.MaximumPsnrGapDb,
                 ownedEnumeratedSettings = prepared.OwnedSettings.Length, ownedEvaluationOrder = prepared.OwnedEvaluationOrder,
                 ownedSettings = prepared.OwnedSettings, managedQuality, nativeQuality,
@@ -261,7 +275,7 @@ public class WarmJpeg
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmJpeg).Assembly.Location), nativeBuild = native.BuildIdentity,
                 nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = $"Resident original RGBA{Depth} to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, {DisplaySampling} encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Native optimal Huffman and managed fixed Huffman recorded. Quality matched by frozen <=0.25 dB RGB source-error band; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded."
+                boundary = $"Resident original RGBA{Depth} to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, {DisplaySampling} encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Native optimal Huffman and managed {(AdaptiveEntropy ? "adaptive Huffman with histogram/cache work and private workspace reuse" : "fixed Huffman")} recorded. Quality matched by frozen <=0.25 dB RGB source-error band; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded."
             }, new JsonSerializerOptions(EncoderQualityCalibration.Json) { PropertyNamingPolicy = null }) + "\n");
             Console.WriteLine("Validated warm JPEG pair: " + path);
         }

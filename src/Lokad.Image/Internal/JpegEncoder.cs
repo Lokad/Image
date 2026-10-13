@@ -8,8 +8,11 @@ namespace Lokad.Image.Internal;
 
 internal static class JpegEncoder
 {
+
     public static void Encode(ImageBuffer image, Stream output, JpegEncodeOptions options, OperationContext context)
     {
+        if (CanUseAdaptive(image, output, options, context))
+        { EncodeAdaptive(image, output, options, context); return; }
         if (options.Quality is < 1 or > 100 || !Enum.IsDefined(options.Sampling)
             || options.RestartInterval is < 0 or > 65535 || options.BackgroundRgb > 0xFFFFFF)
             throw new ArgumentOutOfRangeException(nameof(options));
@@ -164,6 +167,217 @@ internal static class JpegEncoder
         }
         writer.Align(); context.Cancellation.ThrowIfCancellationRequested(); output.Write(new byte[] { 255, 217 });
     }
+
+    private static bool CanUseAdaptive(ImageBuffer image, Stream output, JpegEncodeOptions options, OperationContext context)
+    {
+        // The original path retains tight-limit, cancellable and caller-stream
+        // failure sequencing. This first cache path requires explicit flattening.
+        if (context.Cancellation.CanBeCanceled || options.BackgroundRgb is null or > 0xFFFFFF
+            || options.Quality is < 1 or > 100 || !Enum.IsDefined(options.Sampling)
+            || options.RestartInterval is < 0 or > 65535) return false;
+        var width = image.Width; var height = image.Height;
+        if (width > 65535 || height > 65535 || width > context.Limits.MaxDimension
+            || height > context.Limits.MaxDimension || (long)width * height > context.Limits.MaxPixels) return false;
+        var h = options.Sampling is JpegSampling.YCbCr420 or JpegSampling.YCbCr422 ? 2 : 1;
+        var v = options.Sampling == JpegSampling.YCbCr420 ? 2 : 1;
+        var components = options.Sampling == JpegSampling.Grayscale ? 1 : 3;
+        var mcus = ((width + h * 8L - 1) / (h * 8)) * ((height + v * 8L - 1) / (v * 8));
+        var blocks = mcus * (h * v + components - 1);
+        // Small images do not amortize per-image table construction and caching.
+        if (blocks < 256) return false;
+        var cacheSamples = blocks * 64 + (options.RestartInterval == 0 ? 0 : mcus);
+        var work = 2 * mcus + mcus * (h * v * (4096 + 768) + (components - 1) * (4096 + 768 * h * v))
+            + blocks * 192 + 262145;
+        var memory = image.ByteLength + 8192L + cacheSamples * sizeof(uint) + 65536;
+        var outputMaximum = blocks * 432 + 2048;
+        return cacheSamples <= Array.MaxLength && work <= context.RemainingWork && memory <= context.RemainingWorkingBytes
+            && output is LimitedWriteStream limited && limited.SupportsAdaptiveJpeg(outputMaximum);
+    }
+
+    private static void EncodeAdaptive(ImageBuffer image, Stream output, JpegEncodeOptions options, OperationContext context)
+    {
+        context.PixelBytes(image.Width, image.Height, image.BitDepth);
+        context.Reserve(image.ByteLength); context.Reserve(8192);
+        var components = options.Sampling == JpegSampling.Grayscale ? 1 : 3;
+        var h = options.Sampling is JpegSampling.YCbCr420 or JpegSampling.YCbCr422 ? 2 : 1;
+        var v = options.Sampling == JpegSampling.YCbCr420 ? 2 : 1;
+        var columns = (image.Width + h * 8 - 1) / (h * 8); var rows = (image.Height + v * 8 - 1) / (v * 8);
+        var blockCount = checked(columns * rows * (h * v + components - 1));
+        var eventCapacity = checked(blockCount * 64 + (options.RestartInterval == 0 ? 0 : columns * rows));
+        context.Reserve(eventCapacity * 4L + 65536);
+        var cache = adaptiveEvents; adaptiveEvents = null;
+        if (cache is null || cache.Length != eventCapacity) cache = new uint[eventCapacity];
+        try
+        {
+            var frequencies = new long[4][]; for (var t = 0; t < 4; t++) frequencies[t] = new long[256];
+            var luma = Quantization(options.Quality, false); var chroma = Quantization(options.Quality, true);
+            var pixels = new byte[64]; var transformed = new double[64]; var predictors = new int[components];
+            Span<int> quantized = stackalloc int[64]; var eventCount = 0;
+            for (var mcu = 0; mcu < columns * rows; mcu++)
+            {
+                context.Work(1);
+                if (options.RestartInterval != 0 && mcu != 0 && mcu % options.RestartInterval == 0)
+                { cache[eventCount++] = 1u << 24; Array.Clear(predictors); }
+                for (var component = 0; component < components; component++)
+                {
+                    var blockH = component == 0 ? h : 1; var blockV = component == 0 ? v : 1;
+                    var q = component == 0 ? luma : chroma;
+                    for (var by = 0; by < blockV; by++)
+                    for (var bx = 0; bx < blockH; bx++)
+                    {
+                        context.Work(64L * (component == 0 ? 1 : h * v) * 12);
+                        // Geometry is constant for this block. Preserve sample
+                        // traversal and arithmetic while deriving its origin once.
+                        var samplesX = component == 0 ? 1 : h; var samplesY = component == 0 ? 1 : v;
+                        var sourceLeft = mcu % columns * h * 8 + bx * 8;
+                        var sourceTop = mcu / columns * v * 8 + by * 8;
+                        if (image.BitDepth == 8 && samplesX == 1 && samplesY == 1 && sourceLeft <= image.Width - 8
+                            && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported)
+                        {
+                            for (var y = 0; y < 8; y++)
+                                SampleComponentRow8(image.GetRow8(Math.Min(sourceTop + y, image.Height - 1)).Slice(sourceLeft * 4, 32),
+                                    component, options.BackgroundRgb, pixels.AsSpan(y * 8, 8));
+                        }
+                        else if (image.BitDepth == 16 && samplesX == 1 && samplesY == 1 && sourceLeft <= image.Width - 8
+                            && Avx512F.IsSupported && Avx512DQ.IsSupported)
+                        {
+                            for (var y = 0; y < 8; y++)
+                                SampleComponentRow16(image.GetRow16(Math.Min(sourceTop + y, image.Height - 1)).Slice(sourceLeft * 4, 32),
+                                    component, options.BackgroundRgb, pixels.AsSpan(y * 8, 8));
+                        }
+                        else if (image.BitDepth == 8 && samplesX == 2 && samplesY is 1 or 2 && sourceLeft <= image.Width - 16
+                            && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported)
+                        {
+                            for (var y = 0; y < 8; y++)
+                            {
+                                var top = image.GetRow8(Math.Min(sourceTop + y * samplesY, image.Height - 1)).Slice(sourceLeft * 4, 64);
+                                ReadOnlySpan<byte> bottom = samplesY == 2
+                                    ? image.GetRow8(Math.Min(sourceTop + y * samplesY + 1, image.Height - 1)).Slice(sourceLeft * 4, 64)
+                                    : [];
+                                SampleSubsampledComponentRow8(top, bottom, samplesY, component, options.BackgroundRgb, pixels.AsSpan(y * 8, 8));
+                            }
+                        }
+                        else if (image.BitDepth == 16 && samplesX == 2 && samplesY is 1 or 2 && sourceLeft <= image.Width - 16
+                            && Avx512F.IsSupported && Avx512DQ.IsSupported)
+                        {
+                            for (var y = 0; y < 8; y++)
+                            {
+                                var top = image.GetRow16(Math.Min(sourceTop + y * samplesY, image.Height - 1)).Slice(sourceLeft * 4, 64);
+                                ReadOnlySpan<ushort> bottom = samplesY == 2
+                                    ? image.GetRow16(Math.Min(sourceTop + y * samplesY + 1, image.Height - 1)).Slice(sourceLeft * 4, 64)
+                                    : [];
+                                SampleSubsampledComponentRow16(top, bottom, samplesY, component, options.BackgroundRgb, pixels.AsSpan(y * 8, 8));
+                            }
+                        }
+                        else
+                        {
+                            for (var y = 0; y < 8; y++)
+                            for (var x = 0; x < 8; x++)
+                            {
+                                double sum = 0;
+                                for (var dy = 0; dy < samplesY; dy++)
+                                for (var dx = 0; dx < samplesX; dx++)
+                                {
+                                    var sourceX = sourceLeft + x * samplesX + dx;
+                                    var sourceY = sourceTop + y * samplesY + dy;
+                                    sourceX = Math.Min(sourceX, image.Width - 1); sourceY = Math.Min(sourceY, image.Height - 1);
+                                    ReadRgb(image, sourceX, sourceY, options.BackgroundRgb, out var r, out var g, out var b);
+                                    sum += component switch
+                                    {
+                                        0 => 0.299 * r + 0.587 * g + 0.114 * b,
+                                        1 => 128 - 0.168735892 * r - 0.331264108 * g + 0.5 * b,
+                                        _ => 128 + 0.5 * r - 0.418687589 * g - 0.081312411 * b
+                                    };
+                                }
+                                pixels[y * 8 + x] = (byte)Math.Clamp(Math.Round(sum / (samplesX * samplesY), MidpointRounding.AwayFromZero), 0, 255);
+                            }
+                        }
+                        if (!JpegTransform.TryForwardQuantized(pixels, q, quantized, context))
+                        {
+                            JpegTransform.Forward(pixels, transformed, context);
+                            Quantize(transformed, q, quantized);
+                        }
+                        context.Work(64);
+                        var group = component == 0 ? 0 : 1;
+                        var difference = quantized[0] - predictors[component]; predictors[component] = quantized[0];
+                        var category = Category(difference);
+                        if (category > 11) throw new ImageDataException("JPEG DC transform exceeds its coding range.");
+                        frequencies[group][category]++;
+                        cache[eventCount++] = PackEntropyEvent(group, category, difference, category);
+                        var zeros = 0;
+                        for (var i = 1; i < 64; i++)
+                        {
+                            var value = quantized[JpegTransform.Zigzag[i]];
+                            if (value == 0) { zeros++; continue; }
+                            while (zeros >= 16) { frequencies[group + 2][240]++; cache[eventCount++] = PackEntropyEvent(group + 2, 240, 0, 0); zeros -= 16; }
+                            category = Category(value);
+                            if (category > 10) throw new ImageDataException("JPEG AC transform exceeds its coding range.");
+                            frequencies[group + 2][zeros << 4 | category]++;
+                        cache[eventCount++] = PackEntropyEvent(group + 2, zeros << 4 | category, value, category); zeros = 0;
+                        }
+                        if (zeros != 0) { frequencies[group + 2][0]++; cache[eventCount++] = PackEntropyEvent(group + 2, 0, 0, 0); }
+                    }
+                }
+            }
+            var tables = new JpegEncodingTable?[4];
+            for (var t = 0; t < 4; t++) if (frequencies[t].Any(x => x != 0)) tables[t] = JpegHuffmanBuilder.Build(frequencies[t], context);
+            output.Write(new byte[] { 255, 216 });
+            Segment(output, 0xE0, new byte[] { 74, 70, 73, 70, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0 });
+            WriteQuantization(output, luma, 0); if (components == 3) WriteQuantization(output, chroma, 1);
+            var frame = new byte[6 + 3 * components]; frame[0] = 8;
+            BinaryPrimitives.WriteUInt16BigEndian(frame.AsSpan(1), (ushort)image.Height);
+            BinaryPrimitives.WriteUInt16BigEndian(frame.AsSpan(3), (ushort)image.Width); frame[5] = (byte)components;
+            for (var c = 0; c < components; c++)
+            {
+                frame[6 + c * 3] = (byte)(c + 1); frame[7 + c * 3] = c == 0 ? (byte)(h << 4 | v) : (byte)17;
+                frame[8 + c * 3] = c == 0 ? (byte)0 : (byte)1;
+            }
+            Segment(output, 0xC0, frame);
+            for (var t = 0; t < 4; t++)
+            {
+                if (tables[t] is not { } table) continue;
+                var payload = new byte[17 + table.Symbols.Length]; payload[0] = (byte)((t >= 2 ? 16 : 0) | (t & 1));
+                table.Counts.CopyTo(payload, 1); table.Symbols.CopyTo(payload, 17); Segment(output, 0xC4, payload);
+            }
+            if (options.RestartInterval != 0)
+            {
+                Span<byte> interval = stackalloc byte[2]; BinaryPrimitives.WriteUInt16BigEndian(interval, (ushort)options.RestartInterval);
+                Segment(output, 0xDD, interval);
+            }
+            var scan = new byte[4 + components * 2]; scan[0] = (byte)components;
+            for (var c = 0; c < components; c++) { scan[1 + c * 2] = (byte)(c + 1); scan[2 + c * 2] = c == 0 ? (byte)0 : (byte)17; }
+            scan[2 + components * 2] = 63; Segment(output, 0xDA, scan);
+            var writer = new JpegEntropyWriter(output, context); var restart = 0;
+            var combineWords = (long)context.Limits.MaxOutputBytes >= blockCount * 432L + 2048;
+            for (var i = 0; i < eventCount; i++)
+            {
+                var entry = cache[i];
+                if ((entry & (1u << 24)) != 0) { writer.Restart(restart++); continue; }
+                var tableIndex = (int)(entry >> 30); var symbol = (int)(entry >> 16 & 255); var count = (int)(entry >> 26 & 15);
+                var table = tables[tableIndex]!; var length = table.Lengths[symbol];
+                var hasAmplitude = tableIndex < 2 || count != 0;
+                if (combineWords && hasAmplitude && length + count <= 16)
+                {
+                    // Admission already guarantees both original work charges
+                    // and output capacity on a noncancellable stock stream.
+                    // Append one complete symbol without extra per-symbol guards.
+                    context.Work(1);
+                    writer.Write(table.Codes[symbol] << count | (int)(entry & 65535), length + count);
+                }
+                else
+                {
+                    writer.Write(table.Codes[symbol], length);
+                    if (hasAmplitude) writer.Write((int)(entry & 65535), count);
+                }
+            }
+            writer.Align(); context.Cancellation.ThrowIfCancellationRequested(); output.Write(new byte[] { 255, 217 });
+        }
+        finally { if (cache.Length <= MaximumRetainedEvents) adaptiveEvents = cache; }
+    }
+
+    private static uint PackEntropyEvent(int table, int symbol, int value, int count)
+        => (uint)table << 30 | (uint)count << 26 | (uint)symbol << 16
+            | (uint)(value < 0 ? value + ((1 << count) - 1) : value);
 
     internal static void SampleComponentRow8(ReadOnlySpan<byte> rgba, int component, uint? background, Span<byte> pixels)
     {
@@ -510,4 +724,7 @@ internal static class JpegEncoder
         BinaryPrimitives.WriteUInt16BigEndian(header[2..], (ushort)(payload.Length + 2));
         output.Write(header); output.Write(payload);
     }
+    [ThreadStatic] private static uint[]? adaptiveEvents;
+    private const int MaximumRetainedEvents = 1024 * 1024;
+
 }

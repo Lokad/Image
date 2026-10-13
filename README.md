@@ -43,6 +43,9 @@ ImageCodec.EncodeWebp(thumbnail, webpOutput,
 JPEG requires an explicit background for transparent input. JPEG and WebP output
 uses 8-bit samples; 16-bit input is reduced once, with JPEG background flattening
 included in that same rounding. PNG preserves the selected source precision.
+Large JPEG encodes to ordinary MemoryStream outputs can use adaptive Huffman
+tables without changing decoded pixels. See [SPEC.md](SPEC.md) for selection
+and resource limits; encoded bytes can vary with the output and resource options.
 
 Callers own supplied streams, which remain open. Image buffers own their memory
 and must be disposed. Operations accept finite `ImageLimits` and cancellation.
