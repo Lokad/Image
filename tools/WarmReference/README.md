@@ -7,13 +7,15 @@ The gate recomputes the match and enforces exact alpha and registered decoder
 agreement. Report both packet sizes alongside timing; equal source quality
 does not establish equal compression efficiency.
 
-After a source overlay or rollback that preserves file timestamps, force a
-Release rebuild before preparation: `dotnet build benchmarks/Lokad.Image.Benchmarks
--c Release -t:Rebuild --no-restore --tl:off`. Incremental build can retain a
-superseded DLL. Verify every production method body and implementation flag
-against the accepted actual package before profiling or measurement, and check
-each proof before reporting success. Freeze the four actual child files and
-original receipts before another preparation or source mutation.
+Build when production or harness inputs change, then reuse verified immutable
+artifacts throughout a bounded experiment. Timestamp-preserving overlays can
+require a forced rebuild; unchanged inputs do not. Use focused correctness checks
+and the existing short screen before a warranted independent confirmation.
+Do not repeat whole-library method audits, package proofs or repository
+synchronization for unchanged production. Accepted production changes require
+full cross-platform Release/differential tests and actual-package qualification.
+Retain the actual child files, measurements and failed runs until the experiment
+decision; existing receipts and logs are sufficient.
 
 RGBA16 bilinear comparisons may explicitly use `--allow-alpha-rounding1`:
 native alpha maximum error 1 and RMSE <=0.25 in full 16-bit sample units.
@@ -24,6 +26,14 @@ The managed Down16 benchmark must match the exact rational reference; the
 tolerance applies only to FFmpeg's float-stage rounding. Down8 retains exact
 native alpha. Both normal and scalar CLI outputs must match the native worker.
 Run `verify-bilinear16-linux.py` and `verify-bilinear-linux.py` before measuring.
+
+`WarmBilinearResize/Up8` uses the same RGBA8 raster at 1027×519. Its native
+`--up8-alpha-compat` option is restricted to that input/depth/output geometry:
+native alpha maximum error 1/RMSE ≤0.25, plus writable output acquisition and a
+pass clearing RGB where alpha is zero, both inside timing. Managed output remains
+exact against the rational reference. CLI agreement applies after the same
+zero-alpha normalization; its original strict refusal remains retained. Down8
+continues to require exact native alpha.
 
 PNG RGB8/16 encoding has an explicit `png-rgb-encode` operation. It accepts the
 existing opaque RGBA8/16 projection and includes single-thread RGBA-to-RGB24 or

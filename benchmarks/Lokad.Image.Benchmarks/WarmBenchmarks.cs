@@ -112,6 +112,9 @@ internal static class WarmBenchmarks
                                 && value.GetProperty("bitstreamSyntaxVerified").GetBoolean()))
                         : family == "Bilinear" ? value.GetProperty("managedRationalReferenceExact").GetBoolean()
                             && (depth == 8 ? value.GetProperty("nativeAlphaExact").GetBoolean()
+                                || value.GetProperty("caseId").GetString() == "Up8" && value.GetProperty("nativeAlphaBoundedUp8").GetBoolean()
+                                    && value.GetProperty("nativeAlphaMaximum").GetInt32() is >= 0 and <= 1
+                                    && value.GetProperty("nativeAlphaRmse").GetDouble() is >= 0 and <= 0.25
                                 : depth == 16 && value.GetProperty("nativeAlphaBounded16").GetBoolean()
                                     && value.GetProperty("nativeAlphaMaximum").GetInt32() is >= 0 and <= 1
                                     && value.GetProperty("nativeAlphaRmse").GetDouble() is >= 0 and <= 0.25)

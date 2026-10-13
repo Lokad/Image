@@ -5,7 +5,8 @@ Updated 2026-10-13. Latest retained warm measurements on the dedicated AMD EPYC
 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread, normal SIMD,
 tiering off, workstation nonconcurrent GC. Two original 513×259 RGBA8/16 rasters,
 with documented projections for other pixel formats;
-resize/crop outputs are 256×129, quarter turns/transposes 259×513.
+downsample/crop outputs are 256×129, the bilinear upscale is 1027×519,
+and quarter turns/transposes are 259×513.
 
 Times cover complete public operations and independent output acquisition/release,
 including admission, conversion and disposal. Native wrappers/contexts are reused;
@@ -104,6 +105,7 @@ timing comparison; compression efficiency parity is not established.
 | [Nearest resize RGBA16](../benchmarks/WARM-PREPARED-CONFIRM.md) | 105.69 | 170.58 | 0.620 / 0.629 | 264,466 | Confirmed |
 | [Bilinear resize RGBA8](../benchmarks/WARM-BILINEAR8-QUIET.md) | 729.12 | 376.29 | 1.938 / 1.958 | 157,955 | Confirmed |
 | [Bilinear resize RGBA16†](../benchmarks/WARM-BILINEAR16-REGISTER.md) | 784.03 | 418.41 | 1.874 / 1.908 | 290,118 | Confirmed |
+| [Bilinear upscale RGBA8†](../benchmarks/WARM-BILINEAR-UP8.md) | 6,529.25 | 2,146.93 | 3.041 / 3.403 | 2,235,481 | Above 2x / open |
 | [Bicubic resize RGBA8](../benchmarks/bicubic8-boundary-evidence.json) | — | — | — | — | Unmatched boundary/alpha; no timing |
 | [Crop RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 2.34 | 2.27 | 1.033 / 1.039 | 96 | Confirmed |
 | [Crop RGBA16](../benchmarks/WARM-CROP-COPY.md) | 4.11 | 4.15 | 0.991 / 1.003 | 96 | Confirmed |
@@ -126,10 +128,11 @@ timing comparison; compression efficiency parity is not established.
 | [Mirrored transpose RGBA16](../benchmarks/WARM-DIRECTIONS16-QUIET.md) | 44.93 | 42.63 | 1.054 / 1.085 | 128 | Confirmed |
 | [Mirrored transpose RGBA8](../benchmarks/WARM-DIRECTIONS8-QUIET.md) | 36.59 | 37.98 | 0.964 / 0.991 | 128 | Confirmed |
 
-† RGBA16 bilinear allows native-only alpha maximum error 1 / RMSE <=0.25 in
-full 16-bit sample units, alongside the same RGB bound. Managed pixels still
-match the exact rational reference; RGBA8 native alpha stays exact. The latest
-RGBA16 independent confirmation clears 2x with both quiet guards passing.
+† RGBA16 bilinear and the explicit RGBA8 upscale allow native-only alpha maximum
+error 1 / RMSE <=0.25, alongside the same RGB bound. Up8 also includes writable
+output acquisition and zero-alpha RGB clearing inside native timing. Managed
+pixels remain exact against the rational reference; Down8 native alpha stays
+exact. The RGBA16 independent confirmation clears 2x with both guards passing.
 Earlier failed screens/prechecks and rejected prototypes remain recorded in
 the linked reports.
 
@@ -150,7 +153,9 @@ need separate coverage.
 Full required warm coverage is **open**. The
 [material coverage audit](../benchmarks/WARM-COVERAGE.md) tracks remaining depths,
 layouts, resize directions/fallbacks, fresh Streams, retained owners and composed
-public operations. Bicubic remains unmatched. PNG RGB8, gray8 and gray-alpha8
+public operations. The newly covered RGBA8 bilinear upscale is **3.041x / upper
+3.403x**; slower packing and single-row trials are rejected. This larger gap is
+the next optimization priority. Bicubic remains unmatched. PNG RGB8, gray8 and gray-alpha8
 encoding preserves exact samples but exceeds the 5% IDAT-size gate by differences
 of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animation
 are deferred.

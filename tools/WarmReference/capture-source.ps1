@@ -10,7 +10,7 @@ try {
         if ($path -match '(^|/)(PLAN\.md|external|tmp|artifacts|bin|obj|BenchmarkDotNet\.Artifacts)(/|$)|\.pem$') {
             throw "Ignored or private path reached source inventory: $path"
         }
-        $item = Get-Item -LiteralPath $path
+        $item = Get-Item -LiteralPath $path -Force
         if ($item.LinkType) { throw "Source inventory requires a regular file: $path" }
         [ordered]@{ path = $path; bytes = $item.Length; sha256 = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant() }
     }

@@ -15,8 +15,11 @@ internal sealed class NativeWarmReference : IDisposable
     public JsonElement BuildIdentity { get; }
     private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
 
-    public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null, int? nativeQuality = null, string? jpegSampling = null, bool vp8Opaque = false)
+    public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null, int? nativeQuality = null, string? jpegSampling = null, bool vp8Opaque = false, int? resizeWidth = null, int? resizeHeight = null)
     {
+        if (resizeWidth.HasValue != resizeHeight.HasValue || resizeWidth.HasValue &&
+            (operation != "bilinear-resize" || resizeWidth < 256 || resizeHeight < 129 || resizeWidth > 32768 || resizeHeight > 32768))
+            throw new ArgumentException("Explicit resize dimensions require bounded bilinear output geometry.");
         if (vp8Opaque && operation != "vp8-decode") throw new ArgumentException("Opaque VP8 applies only to VP8 decoding.", nameof(vp8Opaque));
         if (jpegSampling is not (null or "444" or "420" or "422") || jpegSampling is not null && operation != "jpeg-encode")
             throw new ArgumentException("JPEG sampling applies only to the 444/420/422 encode worker.", nameof(jpegSampling));
@@ -56,7 +59,14 @@ internal sealed class NativeWarmReference : IDisposable
         else if (nativeQuality.HasValue) throw new ArgumentException("Native quality applies only to JPEG or VP8.", nameof(nativeQuality));
         if ((jpeg || webp) && depth == 16) start.ArgumentList.Add(expectedRaw ?? throw new ArgumentNullException(nameof(expectedRaw)));
         if (jpeg && jpegSampling is "420" or "422") start.ArgumentList.Add(jpegSampling);
+        if (resizeWidth.HasValue)
+        {
+            start.ArgumentList.Add(resizeWidth.Value.ToString(CultureInfo.InvariantCulture));
+            start.ArgumentList.Add(resizeHeight!.Value.ToString(CultureInfo.InvariantCulture));
+        }
         if (bilinear && depth == 16) start.ArgumentList.Add("--allow-alpha-rounding1");
+        var up8Compatibility = bilinear && depth == 8 && resizeWidth == 1027 && resizeHeight == 519;
+        if (up8Compatibility) start.ArgumentList.Add("--up8-alpha-compat");
         process = Process.Start(start) ?? throw new InvalidOperationException("Could not start native warm worker.");
         errors = process.StandardError.ReadToEndAsync();
         try
@@ -69,8 +79,8 @@ internal sealed class NativeWarmReference : IDisposable
                 || Ready.GetProperty("affinityCount").GetInt32() != 1 || Ready.GetProperty(codec ? "codecThreads" : "filterThreads").GetInt32() != 1
                 || Ready.GetProperty("threadType").GetInt32() != 0 || Ready.GetProperty("operation").GetString() != operation
                 || (codec && (Ready.GetProperty("activeThreadType").GetInt32() != 0 || !Ready.GetProperty("independentLiveOutputs").GetBoolean()))
-                || ((nearest || bilinear || crop) && ((depth is not (8 or 16)) || Ready.GetProperty("outputWidth").GetInt32() != 256
-                    || Ready.GetProperty("outputHeight").GetInt32() != 129 || !Ready.GetProperty("independentLiveOutputs").GetBoolean()))
+                || ((nearest || bilinear || crop) && ((depth is not (8 or 16)) || Ready.GetProperty("outputWidth").GetInt32() != (resizeWidth ?? 256)
+                    || Ready.GetProperty("outputHeight").GetInt32() != (resizeHeight ?? 129) || !Ready.GetProperty("independentLiveOutputs").GetBoolean()))
                 || (normal && (depth is not (8 or 16) || Ready.GetProperty("outputWidth").GetInt32() != 513
                     || Ready.GetProperty("outputHeight").GetInt32() != 259 || !Ready.GetProperty("independentLiveOutputs").GetBoolean()
                     || !Ready.GetProperty("ownedCopyTimed").GetBoolean() || !Ready.GetProperty("sharedNullView").GetBoolean()))
@@ -96,7 +106,8 @@ internal sealed class NativeWarmReference : IDisposable
                     || !Ready.GetProperty("ownedCopyTimed").GetBoolean()))
                 || (bilinear && (Ready.GetProperty("kernel").GetString() != "triangle" || Ready.GetProperty("alphaMode").GetString() != "straight"
                     || !Ready.GetProperty("premultipliedAlphaTimed").GetBoolean() || !Ready.GetProperty("encodedSampleSpace").GetBoolean()
-                    || Ready.GetProperty("alphaTolerance1").GetBoolean() != (depth == 16)))
+                    || Ready.GetProperty("alphaTolerance1").GetBoolean() != (depth == 16 || up8Compatibility)
+                    || Ready.GetProperty("zeroAlphaNormalizationTimed").GetBoolean() != up8Compatibility))
                 || (jpeg && (Ready.GetProperty("conversionThreads").GetInt32() != 1 || Ready.GetProperty("qscale").GetInt32() != nativeQuality
                     || Ready.GetProperty("backgroundRgb").GetInt32() != 0x204060 || Ready.GetProperty("sampling").GetString() != (jpegSampling ?? "444")
                     || !Ready.GetProperty("colorConversionTimed").GetBoolean() || !Ready.GetProperty("flatteningTimed").GetBoolean()
@@ -191,10 +202,10 @@ internal sealed class NativeWarmReference : IDisposable
         var value = Read();
         var verified = Ready.GetProperty("operation").GetString() == "bilinear-resize"
             ? value.GetProperty("matched").GetBoolean()
-                && (Ready.GetProperty("depth").GetInt32() == 8 ? value.GetProperty("alphaExact").GetBoolean()
-                    : Ready.GetProperty("alphaTolerance1").GetBoolean()
-                        && value.GetProperty("alphaMaximum").GetInt32() is >= 0 and <= 1
-                        && value.GetProperty("alphaMeanSquared").GetDouble() is >= 0 and <= 0.0625)
+                && (Ready.GetProperty("alphaTolerance1").GetBoolean()
+                    ? value.GetProperty("alphaMaximum").GetInt32() is >= 0 and <= 1
+                        && value.GetProperty("alphaMeanSquared").GetDouble() is >= 0 and <= 0.0625
+                    : value.GetProperty("alphaExact").GetBoolean())
             : value.GetProperty("exact").GetBoolean();
         if (value.GetProperty("state").GetString() != "checked" || !verified
             || !value.GetProperty("sourceUnchanged").GetBoolean())

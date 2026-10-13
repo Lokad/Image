@@ -49,7 +49,7 @@ typedef struct {
     AVFilterContext *input, *output;
     AVFrame *source, *result;
     uint8_t *original, *reference;
-    int allow_alpha_rounding1, alpha_maximum;
+    int allow_alpha_rounding1, normalize_zero_alpha, alpha_maximum;
     uint64_t alpha_squared;
     int width, height, depth, row_bytes, output_width, output_height, output_row_bytes, cpu;
     uint64_t completed, observed;
@@ -65,6 +65,16 @@ static void apply(Work *work)
         || work->result->buf[0]->buffer == work->source->buf[0]->buffer
         || work->result->linesize[0] < work->output_row_bytes)
         fail("Result is not an independent owned RGBA raster.");
+    if (work->normalize_zero_alpha) {
+        /* Explicit Up8 compatibility: quantization can leave nonzero RGB
+         * under zero alpha. Writable output acquisition and clearing are timed. */
+        require(av_frame_make_writable(work->result), "Acquire writable output");
+        for (int y=0;y<work->output_height;y++) {
+            uint8_t *row=work->result->data[0]+(size_t)y*work->result->linesize[0];
+            for (int x=0;x<work->output_width;x++,row+=4)
+                if (!row[3]) row[0]=row[1]=row[2]=0;
+        }
+    }
     work->observed += work->result->data[0][0];
     work->completed++;
 }
@@ -74,8 +84,9 @@ static void check_source(Work *work)
     for (int y=0;y<work->height;y++)
         if (memcmp(work->source->data[0]+(size_t)y*work->source->linesize[0],work->original+(size_t)y*work->row_bytes,(size_t)work->row_bytes)) fail("Source was changed.");
 }
-/* Independent validation only: exact integer triangle weights. The source is
- * always reduced to floor(size/2), so eight positions cover each axis support.
+/* Independent validation only: exact integer triangle weights. Output is at
+ * least floor(size/2), so eight positions cover each axis support, including
+ * upsampling, whose support stays at one input pixel on either side.
  * These reference pixels are never used by the timed filter operation. */
 static unsigned sample(const uint8_t *p, int depth)
 {
@@ -99,11 +110,11 @@ static void make_reference(Work *work)
         __uint128_t values[4]={0},sum=0;
         int sample_bytes=work->depth/8,pixel_bytes=4*sample_bytes;
         for(int sy=fy-3;sy<=fy+4;sy++) {
-            int64_t wy=2*work->height-llabs((int64_t)2*work->output_height*sy-cy);
+            int64_t wy=(int64_t)2*(work->height>work->output_height?work->height:work->output_height)-llabs((int64_t)2*work->output_height*sy-cy);
             if(wy<=0)continue;
             int iy=sy<0?0:sy>=work->height?work->height-1:sy;
             for(int sx=fx-3;sx<=fx+4;sx++) {
-                int64_t wx=2*work->width-llabs((int64_t)2*work->output_width*sx-cx);
+                int64_t wx=(int64_t)2*(work->width>work->output_width?work->width:work->output_width)-llabs((int64_t)2*work->output_width*sx-cx);
                 if(wx<=0)continue;
                 int ix=sx<0?0:sx>=work->width?work->width-1:sx;
                 const uint8_t *p=work->original+(size_t)iy*work->row_bytes+ix*pixel_bytes;
@@ -166,17 +177,29 @@ static void check_and_write(Work *work,const char *path)
 
 int main(int argc, char **argv)
 {
-    if ((argc != 7 && argc != 8) || strcmp(argv[1], "bilinear-resize"))
-        fail("Usage: ffmpeg-bilinear-warm bilinear-resize INPUT_RAW WIDTH HEIGHT DEPTH OUTPUT_RAW [--allow-alpha-rounding1]");
+    if ((argc < 7 || argc > 10) || strcmp(argv[1], "bilinear-resize"))
+        fail("Usage: ffmpeg-bilinear-warm bilinear-resize INPUT_RAW WIDTH HEIGHT DEPTH OUTPUT_RAW [OUTPUT_WIDTH OUTPUT_HEIGHT] [--allow-alpha-rounding1|--up8-alpha-compat]");
     av_log_set_level(AV_LOG_ERROR);
     Work work = {0}; work.cpu = affinity_cpu();
     work.width = number(argv[3]); work.height = number(argv[4]); work.depth = number(argv[5]);
     if ((work.depth != 8 && work.depth != 16) || work.width < 2 || work.height < 2) fail("Use RGBA8/RGBA16 dimensions at least two.");
     work.output_width=work.width/2;work.output_height=work.height/2;work.output_row_bytes=work.output_width*(work.depth/8)*4;
-    if(argc==8) {
-        if(work.depth!=16 || strcmp(argv[7],"--allow-alpha-rounding1"))fail("Alpha tolerance is explicit and RGBA16-only.");
-        work.allow_alpha_rounding1=1;
+    int option=7;
+    if(argc>=9) {
+        work.output_width=number(argv[option++]);work.output_height=number(argv[option++]);
+        if(work.output_width<work.width/2 || work.output_height<work.height/2)fail("Output is below the admitted validation support.");
+        work.output_row_bytes=work.output_width*(work.depth/8)*4;
     }
+    if(argc>option) {
+        if(work.depth==16 && !strcmp(argv[option],"--allow-alpha-rounding1"))
+            work.allow_alpha_rounding1=1;
+        else if(work.depth==8 && work.width==513 && work.height==259 &&
+            work.output_width==1027 && work.output_height==519 && !strcmp(argv[option],"--up8-alpha-compat")) {
+            work.allow_alpha_rounding1=1;work.normalize_zero_alpha=1;
+        }
+        else fail("Alpha rounding option is RGBA16-only; Up8 compatibility requires the approved geometry.");
+    }
+    if((size_t)work.output_row_bytes*work.output_height>512U*1024U*1024U)fail("Reference output exceeds 512 MiB.");
     work.row_bytes = work.width * (work.depth / 8) * 4;
     size_t bytes = (size_t)work.row_bytes * work.height;
     if (bytes > 512U * 1024U * 1024U) fail("Reference input exceeds 512 MiB.");
@@ -217,8 +240,8 @@ int main(int argc, char **argv)
     if (work.graph->nb_threads != 1 || work.graph->thread_type != 0) fail("Graph threading differs.");
     make_reference(&work);
     check_ownership(&work);check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"bilinear-resize\",\"width\":%d,\"height\":%d,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"filterThreads\":1,\"threadType\":0,\"outputWidth\":%d,\"outputHeight\":%d,\"kernel\":\"triangle\",\"alphaMode\":\"straight\",\"premultipliedAlphaTimed\":true,\"encodedSampleSpace\":true,\"independentLiveOutputs\":true,\"alphaTolerance1\":%s,\"initialCompletedOperations\":%" PRIu64 ",\"inputStride\":%d,\"ffmpegVersion\":\"%s\",\"avfilterVersion\":%u,\"avutilVersion\":%u}\n",
-           work.width, work.height, work.depth, work.cpu, work.output_width,work.output_height,work.allow_alpha_rounding1?"true":"false",work.completed,work.source->linesize[0],
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"bilinear-resize\",\"width\":%d,\"height\":%d,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"filterThreads\":1,\"threadType\":0,\"outputWidth\":%d,\"outputHeight\":%d,\"kernel\":\"triangle\",\"alphaMode\":\"straight\",\"premultipliedAlphaTimed\":true,\"encodedSampleSpace\":true,\"independentLiveOutputs\":true,\"alphaTolerance1\":%s,\"zeroAlphaNormalizationTimed\":%s,\"initialCompletedOperations\":%" PRIu64 ",\"inputStride\":%d,\"ffmpegVersion\":\"%s\",\"avfilterVersion\":%u,\"avutilVersion\":%u}\n",
+           work.width, work.height, work.depth, work.cpu, work.output_width,work.output_height,work.allow_alpha_rounding1?"true":"false",work.normalize_zero_alpha?"true":"false",work.completed,work.source->linesize[0],
            av_version_info(), avfilter_version(), avutil_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
