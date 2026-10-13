@@ -82,6 +82,7 @@ def render():
         row('PNG RGB16, None', 'warm-pngrgb16-current-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-CURRENT.md', True),
         row('PNG gray8, None', 'warm-pnggray8-current-evidence.json', ['observations', -1], 'WARM-PNG-GRAY8-CURRENT.md', True),
         row('PNG gray8 + tRNS key127, None', 'warm-pnggray8trns-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY8-TRANSPARENCY.md', True),
+        row('PNG gray16 + tRNS key32639, None', 'warm-pnggray16trns-evidence.json', ['observations', -1], 'WARM-PNG-GRAY16-TRANSPARENCY.md', True),
         row('PNG gray-alpha8, None', 'warm-pnggrayalpha8-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA8-ROW.md', True),
         row('PNG RGB8, None', 'warm-pngrgb8-row-evidence.json', ['observations', -1], 'WARM-PNG-RGB8-ROW.md', True),
         row('PNG gray16, None', 'warm-pnggray16-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY16-ROW.md', True),
@@ -259,6 +260,11 @@ and exact frozen input. The
 1.823x with 15,024 B/op. JPEG420's earlier upper-bound gap remains open.
 Stop tuning confirmed pairs. Other profiles, ownership boundaries and the full
 required scope remain open; earlier failures and rejected experiments stay recorded.
+
+The [gray16 transparency check](../benchmarks/WARM-PNG-GRAY16-TRANSPARENCY.md)
+independently confirms 1.722x / upper 1.755x with 10,960 B/op and unchanged
+production. Full 16-bit samples, alpha and hidden RGB are exact; the prior gray8
+fixture is unchanged. RGB transparency and other material coverage remain open.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),
