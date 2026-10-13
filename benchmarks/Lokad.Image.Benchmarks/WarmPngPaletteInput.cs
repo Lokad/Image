@@ -7,12 +7,12 @@ internal static class WarmPngPaletteInput
 {
     internal static void Project(Span<byte> pixels, int depth = 8)
     {
-        if (depth is not (4 or 8)) throw new ArgumentOutOfRangeException(nameof(depth));
+        if (depth is not (1 or 2 or 4 or 8)) throw new ArgumentOutOfRangeException(nameof(depth));
         if (pixels.Length != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4)
             throw new ArgumentException("Expected the existing RGBA8 raster.");
         for (var i = 0; i < pixels.Length; i += 4)
         {
-            var index = depth == 4 ? (byte)((pixels[i] >> 4) * 17) : pixels[i];
+            var index = (byte)((pixels[i] >> (8 - depth)) * (255 / ((1 << depth) - 1)));
             pixels[i] = index;
             pixels[i + 1] = (byte)(255 - index);
             pixels[i + 2] = unchecked((byte)(index * 73 + 19));
@@ -22,7 +22,7 @@ internal static class WarmPngPaletteInput
 
     internal static byte[] Build(ReadOnlySpan<byte> pixels, int depth = 8)
     {
-        if (depth is not (4 or 8)) throw new ArgumentOutOfRangeException(nameof(depth));
+        if (depth is not (1 or 2 or 4 or 8)) throw new ArgumentOutOfRangeException(nameof(depth));
         const int width = HorizontalFlipInput.Width, height = HorizontalFlipInput.Height;
         if (pixels.Length != width * height * 4) throw new ArgumentException("Expected the projected RGBA8 raster.");
         using var compressed = new MemoryStream(); var row = new byte[(width * depth + 7) / 8];
@@ -39,8 +39,10 @@ internal static class WarmPngPaletteInput
                     if (depth == 8) row[x] = index;
                     else
                     {
-                        if (index % 17 != 0) throw new ArgumentException("Packed palette projection differs.");
-                        row[x / 2] |= (byte)((index / 17) << (x % 2 == 0 ? 4 : 0));
+                        var step = 255 / ((1 << depth) - 1);
+                        if (index % step != 0) throw new ArgumentException("Packed palette projection differs.");
+                        var bit = x * depth;
+                        row[bit / 8] |= (byte)((index / step) << (8 - depth - bit % 8));
                     }
                 }
                 zlib.WriteByte(0); zlib.Write(row);
@@ -49,7 +51,7 @@ internal static class WarmPngPaletteInput
         var entries = 1 << depth; var palette = new byte[entries * 3]; var alpha = new byte[entries];
         for (var i = 0; i < entries; i++)
         {
-            var value = depth == 4 ? i * 17 : i;
+            var value = i * (255 / (entries - 1));
             palette[i * 3] = (byte)value; palette[i * 3 + 1] = (byte)(255 - value);
             palette[i * 3 + 2] = unchecked((byte)(value * 73 + 19)); alpha[i] = (byte)value;
         }

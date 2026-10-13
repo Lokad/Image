@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/4 and palette4/8 None confirmed | Packed gray2 and palette1/2; other filter implementations |
+| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/4 and palette2/4/8 None confirmed | Packed gray2 and palette1; other filter implementations; partial palette/alpha paths |
 | PNG encode | RGBA8/16, level 6/None | RGB and gray projections; compression policies with materially different work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
@@ -149,3 +149,14 @@ this fixed pair. JPEG420's earlier upper-bound gap remains open. Packed palette2
 is a useful next material screen: its dense expansion still follows the scalar
 path, distinct from the confirmed palette4/8 SIMD kernels. Reuse the original
 RGBA8 raster and add one fixed projection, without a shape/quality/image matrix.
+
+The [packed palette2 round](WARM-PNG-PALETTE2-ROW.md) measured a 3.388x scalar gap
+and targets one dense expansion primitive. Safe sixteen-pixel SSE2/SSSE3 expansion
+reduces mean 76.7%; independent confirmation is 0.774x / upper 0.789x and 9,208 B/op
+unchanged. All 12 actuals retained; both guards pass. Full both-OS Release/live and
+same-package/all-three-example checks pass. Stop tuning this fixed pair. Partial
+palettes/alpha and other CPUs keep scalar behavior and distinct performance scope.
+The fixed original-raster projection adds no original image; palette4/8 bytes stay
+unchanged. Initial native-worker whitelist rejection is retained without timing.
+JPEG420's upper gap stays open. Packed palette1 remains scalar and is the next
+useful one-pair screen before more small tuning of near-parity cases.

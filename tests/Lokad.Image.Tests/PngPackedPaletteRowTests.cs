@@ -13,6 +13,32 @@ public sealed class PngPackedPaletteRowTests
         foreach (var width in new[] { 17, 513 })
         foreach (var alpha in new[] { 0, 1 })
             yield return new object[] { depth, width, alpha };
+        foreach (var width in new[] { 17, 513 })
+        foreach (var alpha in new[] { 2, 3 })
+            yield return new object[] { 2, width, alpha };
+    }
+
+    [Fact]
+    public void PartialPalette2RejectsInvalidIndexAfterAValidPrefixInAVectorWidthRow()
+    {
+        const int width = 17;
+        var input = new byte[(width * 2 + 7) / 8]; input[2] = 0xc0;
+        var output = Enumerable.Repeat((byte)0xa5, width * 4).ToArray();
+        var error = Assert.Throws<ImageDataException>(() => PngCodec.CopyPackedPaletteRow(input, output, width, 2,
+            new byte[] { 11, 22, 33, 44, 55, 66, 77, 88, 99 }, new byte[] { 0 }, default));
+        Assert.Equal("PNG palette index out of range.", error.Message);
+        for (var x = 0; x < 8; x++) Assert.Equal(new byte[] { 11, 22, 33, 0 }, output.AsSpan(x * 4, 4).ToArray());
+        Assert.All(output.Skip(8 * 4), value => Assert.Equal((byte)0xa5, value));
+    }
+
+    [Theory]
+    [InlineData(16)] [InlineData(17)] [InlineData(4097)]
+    public void FullPalette2ChecksCancellationBeforeVectorOutput(int width)
+    {
+        var output = Enumerable.Repeat((byte)0xa5, width * 4).ToArray();
+        Assert.Throws<OperationCanceledException>(() => PngCodec.CopyPackedPaletteRow(
+            new byte[(width * 2 + 7) / 8], output, width, 2, new byte[12], new byte[4], new CancellationToken(true)));
+        Assert.All(output, value => Assert.Equal((byte)0xa5, value));
     }
 
     [Theory]
