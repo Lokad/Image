@@ -10,6 +10,9 @@
 #include <string.h>
 #include <time.h>
 #include <libavcodec/avcodec.h>
+#include <libavfilter/avfilter.h>
+#include <libavfilter/buffersink.h>
+#include <libavfilter/buffersrc.h>
 #include <libavutil/avutil.h>
 #include <libavutil/frame.h>
 #include <libavutil/opt.h>
@@ -63,7 +66,7 @@ static AVCodecContext *context(int encode, int width, int height, int depth, int
     value->max_pixels = (int64_t)(width + 255) * (height + 64);
     if (encode) {
         value->width = width; value->height = height; value->time_base = (AVRational){1,1};
-        value->pix_fmt = encode_color == 0 ? AV_PIX_FMT_GRAY8
+        value->pix_fmt = encode_color == 0 ? (depth == 8 ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_GRAY16BE)
             : encode_color == 2 ? (depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE)
             : depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64BE;
         value->gop_size = 1;
@@ -105,15 +108,41 @@ typedef struct {
     AVFrame *source, *prepared, *decoded, *converted;
     AVPacket *input, *packet;
     struct SwsContext *conversion;
+    AVFilterGraph *gray_graph;
+    AVFilterContext *gray_input, *gray_output;
     uint8_t *original, *encoded;
     size_t raw_bytes, encoded_bytes;
     int encode, encode_rgb, encode_gray, width, height, depth, row_bytes, cpu, stride, output_bytes, rgb, gray, gray_alpha, palette, mono, coded_depth;
     uint64_t completed, observed;
 } Work;
+static void gray16_graph(Work *work)
+{
+    work->gray_graph = avfilter_graph_alloc(); if (!work->gray_graph) fail("Allocate gray16 filter graph failed.");
+    work->gray_graph->nb_threads = 1; work->gray_graph->thread_type = 0;
+    char arguments[256];
+    snprintf(arguments, sizeof(arguments), "video_size=%dx%d:pix_fmt=%d:time_base=1/1:pixel_aspect=1/1",
+        work->width, work->height, AV_PIX_FMT_RGBA64LE);
+    AVFilterContext *extract, *endian, *format;
+    require(avfilter_graph_create_filter(&work->gray_input, avfilter_get_by_name("buffer"), "input", arguments, NULL, work->gray_graph), "Create gray16 source");
+    require(avfilter_graph_create_filter(&extract, avfilter_get_by_name("extractplanes"), "gray16_red", "planes=r", NULL, work->gray_graph), "Create gray16 extraction");
+    require(avfilter_graph_create_filter(&endian, avfilter_get_by_name("scale"), "gray16_endian", "w=iw:h=ih:flags=neighbor+bitexact:threads=1", NULL, work->gray_graph), "Create gray16 endian conversion");
+    require(avfilter_graph_create_filter(&format, avfilter_get_by_name("format"), "gray16_format", "pix_fmts=gray16be", NULL, work->gray_graph), "Create gray16 format");
+    require(avfilter_graph_create_filter(&work->gray_output, avfilter_get_by_name("buffersink"), "output", NULL, NULL, work->gray_graph), "Create gray16 sink");
+    require(avfilter_link(work->gray_input, 0, extract, 0), "Link gray16 extraction");
+    require(avfilter_link(extract, 0, endian, 0), "Link gray16 endian conversion");
+    require(avfilter_link(endian, 0, format, 0), "Link gray16 format");
+    require(avfilter_link(format, 0, work->gray_output, 0), "Link gray16 sink");
+    require(avfilter_graph_config(work->gray_graph, NULL), "Configure gray16 graph");
+    int64_t threads; require(av_opt_get_int(endian->priv, "threads", AV_OPT_SEARCH_CHILDREN, &threads), "Read gray16 conversion threads");
+    if (threads != 1 || work->gray_graph->nb_threads != 1 || work->gray_graph->thread_type != 0) fail("Gray16 graph threading differs.");
+}
 static AVFrame *result_frame(Work *work) { return work->depth == 16 || work->gray || work->gray_alpha || work->rgb || work->palette ? work->converted : work->decoded; }
 static void release(Work *work)
 {
-    if (work->encode) av_packet_unref(work->packet);
+    if (work->encode) {
+        av_packet_unref(work->packet);
+        if (work->gray_graph) av_frame_unref(work->prepared);
+    }
     else { av_frame_unref(work->decoded); av_frame_unref(work->converted); }
 }
 static void check_frame(const AVFrame *value, const Work *work, int big_endian)
@@ -134,13 +163,21 @@ static void apply(Work *work)
 {
     if (work->encode) {
         AVFrame *input = work->source;
-        if (work->encode_rgb || work->encode_gray) {
+        if (work->gray_graph) {
+            work->source->pts = (int64_t)work->completed;
+            require(av_buffersrc_add_frame_flags(work->gray_input, work->source, AV_BUFFERSRC_FLAG_KEEP_REF), "Submit gray16 source");
+            require(av_buffersink_get_frame(work->gray_output, work->prepared), "Receive owned gray16 pixels");
+            if (work->prepared->format != AV_PIX_FMT_GRAY16BE || work->prepared->width != work->width
+                || work->prepared->height != work->height || !work->prepared->buf[0]
+                || work->prepared->linesize[0] < work->width * 2) fail("Gray16 converted frame differs.");
+            input = work->prepared;
+        } else if (work->encode_rgb || work->encode_gray) {
             int rows = sws_scale(work->conversion, (const uint8_t * const *)work->source->data, work->source->linesize,
                 0, work->height, work->prepared->data, work->prepared->linesize);
             if (rows != work->height) fail("PNG encode conversion row count differs.");
             input = work->prepared;
         }
-        if (work->depth == 16 && !work->encode_rgb) { swap_samples(work->source, work->prepared, work->width, work->height); input = work->prepared; }
+        if (work->depth == 16 && !work->encode_rgb && !work->encode_gray) { swap_samples(work->source, work->prepared, work->width, work->height); input = work->prepared; }
         input->pts = (int64_t)work->completed;
         input->pict_type = AV_PICTURE_TYPE_I;
         require(avcodec_send_frame(work->codec, input), "Submit PNG source");
@@ -180,13 +217,18 @@ static void check_packet(Work *work, const AVPacket *packet)
     require(avcodec_send_packet(decoder, packet), "Check encoded PNG");
     require(avcodec_receive_frame(decoder, decoded), "Check PNG roundtrip");
     if (work->encode_gray) {
-        if (decoded->width != work->width || decoded->height != work->height || decoded->format != AV_PIX_FMT_GRAY8
-            || !decoded->buf[0] || decoded->linesize[0] < work->width) fail("Gray PNG roundtrip geometry/ownership differs.");
+        int sample_bytes = work->depth / 8;
+        int format = work->depth == 8 ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_GRAY16BE;
+        if (decoded->width != work->width || decoded->height != work->height || decoded->format != format
+            || !decoded->buf[0] || decoded->linesize[0] < work->width * sample_bytes) fail("Gray PNG roundtrip geometry/ownership differs.");
         for (int y = 0; y < work->height; y++) {
             const uint8_t *row = decoded->data[0] + (size_t)y * decoded->linesize[0];
             const uint8_t *expected = work->original + (size_t)y * work->row_bytes;
-            for (int x = 0; x < work->width; x++)
-                if (row[x] != expected[x * 4] || expected[x * 4 + 3] != 255) fail("Gray PNG roundtrip samples differ.");
+            for (int x = 0; x < work->width; x++) {
+                for (int i = 0; i < sample_bytes; i++)
+                    if (row[x * sample_bytes + i] != expected[x * 4 * sample_bytes + (sample_bytes == 2 ? i ^ 1 : i)]
+                        || expected[(x * 4 + 3) * sample_bytes + i] != 255) fail("Gray PNG roundtrip samples differ.");
+            }
         }
     } else if (work->encode_rgb) {
         int sample_bytes = work->depth / 8;
@@ -257,7 +299,6 @@ int main(int argc, char **argv)
     av_log_set_level(AV_LOG_ERROR);
     work.width = number(argv[3]); work.height = number(argv[4]); work.depth = number(argv[5]);
     if (work.depth != 8 && work.depth != 16) fail("Depth must be 8 or 16.");
-    if (work.encode_gray && work.depth != 8) fail("Gray encode reference requires opaque RGBA8 input.");
     work.row_bytes = work.width * work.depth / 8 * 4; work.raw_bytes = (size_t)work.row_bytes * work.height;
     if (work.raw_bytes > 512U * 1024U * 1024U) fail("Reference raster exceeds 512 MiB.");
     size_t original_bytes;
@@ -271,34 +312,41 @@ int main(int argc, char **argv)
         work.source = frame(work.width, work.height, work.depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE);
         for (int y = 0; y < work.height; y++) memcpy(work.source->data[0] + (size_t)y * work.source->linesize[0],
             work.original + (size_t)y * work.row_bytes, (size_t)work.row_bytes);
-        if (work.depth == 16 && !work.encode_rgb) work.prepared = frame(work.width, work.height, AV_PIX_FMT_RGBA64BE);
+        if (work.depth == 16 && !work.encode_rgb && !work.encode_gray) work.prepared = frame(work.width, work.height, AV_PIX_FMT_RGBA64BE);
         if (work.encode_rgb || work.encode_gray) {
             int sample_bytes = work.depth / 8;
             for (size_t i = 3U * sample_bytes; i < work.raw_bytes; i += 4U * sample_bytes)
                 for (int j = 0; j < sample_bytes; j++)
                     if (work.original[i+j] != 255) fail("RGB encode input requires opaque pixels.");
             if (work.encode_gray)
-                for (size_t i = 0; i < work.raw_bytes; i += 4)
-                    if (work.original[i] != work.original[i+1] || work.original[i] != work.original[i+2])
+                for (size_t i = 0; i < work.raw_bytes; i += 4U * sample_bytes)
+                    if (memcmp(work.original+i, work.original+i+sample_bytes, (size_t)sample_bytes)
+                        || memcmp(work.original+i, work.original+i+2*sample_bytes, (size_t)sample_bytes))
                         fail("Gray encode input requires equal RGB samples.");
-            enum AVPixelFormat output_format = work.encode_gray ? AV_PIX_FMT_GRAY8 : work.depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE;
-            work.prepared = frame(work.width, work.height, output_format);
-            work.conversion = sws_alloc_context(); if (!work.conversion) fail("Allocate RGB encode conversion failed.");
-            require(av_opt_set_int(work.conversion, "srcw", work.width, 0), "RGB encode source width");
-            require(av_opt_set_int(work.conversion, "srch", work.height, 0), "RGB encode source height");
-            require(av_opt_set_int(work.conversion, "dstw", work.width, 0), "RGB encode output width");
-            require(av_opt_set_int(work.conversion, "dsth", work.height, 0), "RGB encode output height");
-            require(av_opt_set_int(work.conversion, "src_format", work.depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE, 0), "RGB encode source format");
-            require(av_opt_set_int(work.conversion, "dst_format", output_format, 0), "PNG encode output format");
-            if (work.encode_gray) {
-                require(av_opt_set_int(work.conversion, "src_range", 1, 0), "Gray encode source range");
-                require(av_opt_set_int(work.conversion, "dst_range", 1, 0), "Gray encode output range");
+            enum AVPixelFormat output_format = work.encode_gray ? (work.depth == 8 ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_GRAY16BE)
+                : work.depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE;
+            if (work.encode_gray && work.depth == 16) {
+                work.prepared = av_frame_alloc(); if (!work.prepared) fail("Allocate gray16 frame wrapper failed.");
+                gray16_graph(&work);
+            } else {
+                work.prepared = frame(work.width, work.height, output_format);
+                work.conversion = sws_alloc_context(); if (!work.conversion) fail("Allocate RGB encode conversion failed.");
+                require(av_opt_set_int(work.conversion, "srcw", work.width, 0), "RGB encode source width");
+                require(av_opt_set_int(work.conversion, "srch", work.height, 0), "RGB encode source height");
+                require(av_opt_set_int(work.conversion, "dstw", work.width, 0), "RGB encode output width");
+                require(av_opt_set_int(work.conversion, "dsth", work.height, 0), "RGB encode output height");
+                require(av_opt_set_int(work.conversion, "src_format", work.depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE, 0), "RGB encode source format");
+                require(av_opt_set_int(work.conversion, "dst_format", output_format, 0), "PNG encode output format");
+                if (work.encode_gray) {
+                    require(av_opt_set_int(work.conversion, "src_range", 1, 0), "Gray encode source range");
+                    require(av_opt_set_int(work.conversion, "dst_range", 1, 0), "Gray encode output range");
+                }
+                require(av_opt_set_int(work.conversion, "sws_flags", SWS_POINT | SWS_BITEXACT, 0), "RGB encode conversion policy");
+                require(av_opt_set_int(work.conversion, "threads", 1, 0), "RGB encode conversion thread count");
+                require(sws_init_context(work.conversion, NULL, NULL), "Initialize RGB encode conversion");
+                int64_t threads; require(av_opt_get_int(work.conversion, "threads", 0, &threads), "Read RGB encode conversion threads");
+                if (threads != 1) fail("RGB encode conversion threading differs.");
             }
-            require(av_opt_set_int(work.conversion, "sws_flags", SWS_POINT | SWS_BITEXACT, 0), "RGB encode conversion policy");
-            require(av_opt_set_int(work.conversion, "threads", 1, 0), "RGB encode conversion thread count");
-            require(sws_init_context(work.conversion, NULL, NULL), "Initialize RGB encode conversion");
-            int64_t threads; require(av_opt_get_int(work.conversion, "threads", 0, &threads), "Read RGB encode conversion threads");
-            if (threads != 1) fail("RGB encode conversion threading differs.");
         }
     } else {
         work.encoded = read_file(argv[2], &work.encoded_bytes);
@@ -335,9 +383,9 @@ int main(int argc, char **argv)
         memcpy(work.input->data, work.encoded, work.encoded_bytes);
     }
     check_independent_owners(&work); check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":%d,\"codedDepth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"compressionLevel\":%d,\"filter\":%d,\"colorType\":%d,\"conversionThreads\":%d,\"rgbExpansionTimed\":%s,\"rgbPackingTimed\":%s,\"grayExpansionTimed\":%s,\"grayPackingTimed\":%s,\"grayAlphaExpansionTimed\":%s,\"paletteExpansionTimed\":%s,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":%d,\"codedDepth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"compressionLevel\":%d,\"filter\":%d,\"colorType\":%d,\"conversionThreads\":%d,\"rgbExpansionTimed\":%s,\"rgbPackingTimed\":%s,\"grayExpansionTimed\":%s,\"grayPackingTimed\":%s,\"grayPlaneExtractionTimed\":%s,\"grayFilterOutputAllocationTimed\":%s,\"grayAlphaExpansionTimed\":%s,\"paletteExpansionTimed\":%s,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
         argv[1], work.width, work.height, work.depth, work.encode ? work.depth : work.coded_depth, work.cpu, work.encode ? 6 : -1, work.encode ? 0 : -1,
-        work.encode_gray ? 0 : work.encode_rgb ? 2 : work.palette ? 3 : work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6, work.encode_gray || work.encode_rgb || work.rgb || work.gray || work.gray_alpha || work.palette ? 1 : 0, work.rgb ? "true" : "false", work.encode_rgb ? "true" : "false", work.gray ? "true" : "false", work.encode_gray ? "true" : "false", work.gray_alpha ? "true" : "false", work.palette ? "true" : "false", work.output_bytes, work.completed, av_version_info(), avcodec_version(), avutil_version()); fflush(stdout);
+        work.encode_gray ? 0 : work.encode_rgb ? 2 : work.palette ? 3 : work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6, work.encode_gray || work.encode_rgb || work.rgb || work.gray || work.gray_alpha || work.palette ? 1 : 0, work.rgb ? "true" : "false", work.encode_rgb ? "true" : "false", work.gray ? "true" : "false", work.encode_gray ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_alpha ? "true" : "false", work.palette ? "true" : "false", work.output_bytes, work.completed, av_version_info(), avcodec_version(), avutil_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;
@@ -356,5 +404,5 @@ int main(int argc, char **argv)
     if (ferror(stdin)) fail("Protocol read failed.");
     av_frame_free(&work.source); av_frame_free(&work.prepared); av_frame_free(&work.decoded); av_frame_free(&work.converted);
     av_packet_free(&work.input); av_packet_free(&work.packet); avcodec_free_context(&work.codec);
-    sws_freeContext(work.conversion); free(work.original); free(work.encoded); return 0;
+    sws_freeContext(work.conversion); avfilter_graph_free(&work.gray_graph); free(work.original); free(work.encoded); return 0;
 }

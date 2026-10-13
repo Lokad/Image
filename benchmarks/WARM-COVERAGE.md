@@ -10,7 +10,7 @@ round, at most three, with correctness established before timing.
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
 | PNG decode | RGBA8 all five filters; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None confirmed | Other material depths/layouts; partial palette/alpha paths |
-| PNG encode | RGBA8/16 and RGB16, level 6/None confirmed | RGB8 and gray8 exact pixels/scanlines, unscored compression-size mismatches; other gray projections and materially different compression work |
+| PNG encode | RGBA8/16, RGB16 and gray16, level 6/None confirmed | RGB8 and gray8 exact pixels/scanlines, unscored compression-size mismatches; gray-alpha projections and materially different compression work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
 | WebP | VP8 with alpha decode/encode; VP8L native and managed inputs; exact VP8L backend encode | Material opaque/alpha alternatives and full 16-bit source normalization |
@@ -233,3 +233,13 @@ remains unscored, with no timing or allocation claim. Production is unchanged,
 full verification reused, and eight positive/two negative native controls pass.
 Gray8 and RGB8 encode comparisons, other material cases and JPEG420's bound stay
 open; confirmed fixed pairs remain stopped.
+
+The [PNG gray16 encode check](WARM-PNG-GRAY16-ENCODE.md) independently confirms
+1.150x / upper 1.156x with 1,051,455 B/op. Both quietness guards pass; all 12
+actuals are retained. Ordinary native conversion changed words by up to 253 and
+remains unscored. FFmpeg's exact red-plane extraction/endian conversion provides
+the matched reference, including intermediate ownership within every operation.
+The original grayscale projection, exact normal/scalar CLI, source/owners and
+level-6/None size gate pass. Production is unchanged and full verification reused.
+Stop tuning this fixed pair; gray-alpha encoding projections, RGB8/gray8 comparison
+policies, JPEG420's bound and the full required scope remain open.
