@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16, None/Paeth; RGBA8 Up; RGBA16 Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None confirmed | Sub/Average filter implementations; other material layouts; partial palette/alpha paths |
+| PNG decode | RGBA8/16, None/Paeth; RGBA8 Up/Sub; RGBA16 Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None confirmed | Average filter implementation; other material layouts; partial palette/alpha paths |
 | PNG encode | RGBA8/16, level 6/None | RGB and gray projections; compression policies with materially different work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
@@ -188,3 +188,10 @@ image was added. Descriptive errata clarify packed palette1/2 and gray2 recipe t
 outside their original immutable observations; timing/allocation/pixel hashes stay
 unchanged. Sub RGBA8 is the next distinct material screen; JPEG420's upper-bound
 gap and the complete required scope remain open.
+
+The [PNG Sub RGBA8 check](WARM-PNG-SUB8-BASELINE.md) independently confirms 1.772x /
+upper 1.780x with 12,976 B/op. Both guards pass; all 12 actuals are retained.
+Production/package/native worker unchanged, full validation reused; stop timing/
+tuning this fixed pair. Original RGBA8 and frozen Up/Paeth bytes remain exact; no
+original image was added. Average RGBA8 is the next distinct reconstruction screen;
+JPEG420's upper-bound gap and the full required material scope remain open.
