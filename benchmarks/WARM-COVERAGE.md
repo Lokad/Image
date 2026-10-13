@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16, None/Paeth; RGBA8 Up/Sub; RGBA16 Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None confirmed | Average filter implementation; other material layouts; partial palette/alpha paths |
+| PNG decode | RGBA8 all five filters; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None confirmed | Other material depths/layouts; partial palette/alpha paths |
 | PNG encode | RGBA8/16, level 6/None | RGB and gray projections; compression policies with materially different work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
@@ -195,3 +195,12 @@ Production/package/native worker unchanged, full validation reused; stop timing/
 tuning this fixed pair. Original RGBA8 and frozen Up/Paeth bytes remain exact; no
 original image was added. Average RGBA8 is the next distinct reconstruction screen;
 JPEG420's upper-bound gap and the full required material scope remain open.
+
+The [PNG Average RGBA8 check](WARM-PNG-AVERAGE8-BASELINE.md) independently confirms
+1.704x / upper 1.743x with 12,976 B/op. Both guards pass; all 12 actuals retained.
+Production/package/native worker unchanged, full validation reused; stop timing/
+tuning this fixed pair. The original raster and frozen Sub/Up/Paeth bytes remain
+exact; no original image was added. All five filter types have confirmed RGBA8
+cases, with other material layouts still open. RGB8 PNG encoding is the next useful
+one-pair screen, reusing the existing opaque RGB projection. JPEG420's upper-bound
+gap and the full required scope remain open.

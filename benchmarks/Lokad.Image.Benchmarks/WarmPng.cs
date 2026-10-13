@@ -8,7 +8,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray4, DecodePalette4, DecodePalette2, DecodePalette1, DecodeGray2, DecodeUp8, DecodeSub8 }
+public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray4, DecodePalette4, DecodePalette2, DecodePalette1, DecodeGray2, DecodeUp8, DecodeSub8, DecodeAverage8 }
 
 [MemoryDiagnoser]
 public class WarmPng
@@ -29,7 +29,7 @@ public class WarmPng
         var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
         var result = selection is null ? new[] { WarmPngCase.Decode8 } : selection.Split(',')
             .Select(value => Enum.TryParse<WarmPngCase>(value, out var parsed) && Enum.IsDefined(parsed)
-                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeUp8, DecodeSub8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray2, DecodeGray4, DecodePalette1, DecodePalette2 or DecodePalette4.")).ToArray();
+                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeUp8, DecodeSub8, DecodeAverage8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray2, DecodeGray4, DecodePalette1, DecodePalette2 or DecodePalette4.")).ToArray();
         if (result.Length is < 1 or > 3 || result.Distinct().Count() != result.Length)
             throw new ArgumentException("Choose one to three distinct PNG cases.");
         return result;
@@ -47,7 +47,8 @@ public class WarmPng
     private bool Paeth => Case is WarmPngCase.DecodePaeth16 or WarmPngCase.DecodePaeth8;
     private bool Up => Case == WarmPngCase.DecodeUp8;
     private bool Sub => Case == WarmPngCase.DecodeSub8;
-    private int Filter => Paeth ? 4 : Up ? 2 : Sub ? 1 : 0;
+    private bool Average => Case == WarmPngCase.DecodeAverage8;
+    private int Filter => Paeth ? 4 : Up ? 2 : Sub ? 1 : Average ? 3 : 0;
     private bool Prepared => Interlaced || Paeth;
 
     [GlobalSetup]
@@ -98,6 +99,7 @@ public class WarmPng
             }
             else if (Up) encoded = WarmPngUpInput.Build(pixels);
             else if (Sub) encoded = WarmPngSubInput.Build(pixels);
+            else if (Average) encoded = WarmPngAverageInput.Build(pixels);
             else if (Mono) encoded = WarmPngMonoInput.Build(pixels, CodedDepth);
             else if (Palette) encoded = WarmPngPaletteInput.Build(pixels, CodedDepth);
             else using (var output = new MemoryStream())
@@ -105,9 +107,9 @@ public class WarmPng
                 ImageCodec.EncodePng(source, output, encodeOptions); encoded = output.ToArray();
             }
             ValidatePng(encoded); ValidateManaged();
-            if (Rgb || Gray || GrayAlpha || Palette || Up || Sub)
+            if (Rgb || Gray || GrayAlpha || Palette || Up || Sub || Average)
             {
-                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", Up ? "png-up-8" : Sub ? "png-sub-8" : Mono ? "png-gray" + CodedDepth : Palette ? "png-palette" + CodedDepth : GrayAlpha ? "png-gray-alpha" + Depth : Gray ? "png-gray" + Depth : "png-rgb" + Depth);
+                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", Up ? "png-up-8" : Sub ? "png-sub-8" : Average ? "png-average-8" : Mono ? "png-gray" + CodedDepth : Palette ? "png-palette" + CodedDepth : GrayAlpha ? "png-gray-alpha" + Depth : Gray ? "png-gray" + Depth : "png-rgb" + Depth);
                 Directory.CreateDirectory(directory);
                 foreach (var (name, bytes) in new[] { ("input.png", encoded), ("expected.raw", pixels) })
                 {
@@ -264,6 +266,8 @@ public class WarmPng
                     }
                     else if (Up && y > 0) prediction = pixels[(y - 1) * source.Stride + x * bytesPerPixel + i];
                     else if (Sub && x > 0) prediction = pixels[y * source.Stride + (x - 1) * bytesPerPixel + i];
+                    else if (Average) prediction = ((x == 0 ? 0 : pixels[y * source.Stride + (x - 1) * bytesPerPixel + i])
+                        + (y == 0 ? 0 : pixels[(y - 1) * source.Stride + x * bytesPerPixel + i])) / 2;
                     if (row[(x - startX) / stepX * bytesPerPixel + i] != unchecked((byte)(original - prediction)))
                         throw new InvalidOperationException("PNG source/pass samples differ.");
                 }
@@ -318,6 +322,7 @@ public class WarmPng
                 compression = Paeth ? $"Authored noninterlaced PNG RGBA{Depth}; every row Paeth; BCL Optimal level 6; identical resident encoded input"
                     : Up ? "Authored noninterlaced PNG RGBA8; every row Up; BCL Optimal level 6; identical resident encoded input"
                     : Sub ? "Authored noninterlaced PNG RGBA8; every row Sub; BCL Optimal level 6; identical resident encoded input"
+                    : Average ? "Authored noninterlaced PNG RGBA8; every row Average; BCL Optimal level 6; identical resident encoded input"
                     : Interlaced ? "Authored PNG Adam7 RGBA16; BCL Optimal level 6; filter None; identical resident encoded input"
                     : $"BCL Optimal (zlib default level 6) / FFmpeg level 6; filter None; noninterlaced {(Mono ? "packed gray" + CodedDepth + ", opaque" : Palette ? $"palette{CodedDepth}, {1 << CodedDepth} entries and full tRNS" : GrayAlpha ? "gray-alpha" : Gray ? "gray" : Rgb ? "RGB" : "RGBA")}",
                 managedIdatBytes = IdatBytes(encoded), nativeIdatBytes = Encode ? IdatBytes(File.ReadAllBytes(state.NativeOutput)) : IdatBytes(encoded),
