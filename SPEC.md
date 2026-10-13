@@ -64,9 +64,10 @@ per operation, reusing them across output rows. This optional geometry workspace
 is admitted conservatively and leaves 4 KiB for exact tiny-alpha arithmetic.
 Wide support or tight memory limits retain direct evaluation with the same tap
 order, binary64 arithmetic and pixels. Geometry is not cached across calls.
-RGBA8 bicubic downsampling on AVX-512F/DQ and AVX2 may reuse unrounded horizontal
+RGBA8/16 bicubic downsampling on AVX-512F/DQ and AVX2 may reuse unrounded horizontal
 intermediates in sixteen operation-local rows, with up to sixteen taps per axis.
-Source premultiplication is exact integer arithmetic. Conservative rounding
+Source premultiplication is exact unsigned integer arithmetic, including the
+full UInt16 product range. Conservative sample-depth-specific rounding
 guards retain the original binary64 order and exact tiny-alpha handling near
 ambiguous samples. Optional workspace is `716*outputWidth + 32*sourceWidth + 128`
 bytes, admitted before allocation and released on every exit, leaving 4 KiB for

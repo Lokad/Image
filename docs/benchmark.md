@@ -109,7 +109,8 @@ timing comparison; compression efficiency parity is not established.
 | [Bilinear resize RGBA16†](../benchmarks/WARM-BILINEAR16-REGISTER.md) | 784.03 | 418.41 | 1.874 / 1.908 | 290,118 | Confirmed |
 | [Bilinear upscale RGBA8†](../benchmarks/WARM-BILINEAR-UP8-BATCH.md) | 3,797.55 | 2,152.25 | 1.764 / 1.787 | 2,235,599 | Confirmed |
 | [Bilinear upscale RGBA16†](../benchmarks/WARM-BILINEAR-UP16-ROWS.md) | 2,550.27 | 1,916.08 | 1.331 / 1.416 | 4,498,974 | Confirmed |
-| [Bicubic resize RGBA8§](../benchmarks/WARM-BICUBIC-RGBA8-ROWS.md) | 650.72 | 418.66 | 1.554 / 1.593 | 332,178 | Confirmed |
+| [Bicubic resize RGBA8§](../benchmarks/WARM-BICUBIC-RGBA16-ROWS.md) | 711.85 | 415.44 | 1.713 / 1.728 | 332,177 | Confirmed |
+| [Bicubic resize RGBA16§](../benchmarks/WARM-BICUBIC-RGBA16-ROWS.md) | 745.92 | 567.95 | 1.313 / 1.320 | 464,342 | Confirmed |
 | [Crop RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 2.34 | 2.27 | 1.033 / 1.039 | 96 | Confirmed |
 | [Crop RGBA16](../benchmarks/WARM-CROP-COPY.md) | 4.11 | 4.15 | 0.991 / 1.003 | 96 | Confirmed |
 | [Clone RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 9.82 | 7.19 | 1.366 / 1.390 | 96 | Confirmed |
@@ -144,12 +145,13 @@ PSNR gap is 0.00365 dB within the unchanged 0.25 dB band; alpha is exact.
 Managed output is 471,436 bytes versus 98,590 bytes. Quality-matched timing is
 confirmed; compression efficiency parity is not established.
 
-§ Bicubic RGBA8 uses **zimg, FFmpeg's zscale backend**, with timed four-pixel
+§ Bicubic RGBA8/16 uses **zimg, FFmpeg's zscale backend**, with timed four-pixel
 clamped edge padding (4.697% additional input area), complete source/output
 packing, filtering and independent output allocation/release. The explicit
 native-only RGB/alpha maximum-1 / RMSE-0.25 bounds preserve exact managed pixels.
-Scalar backend pixels are exact; normal SIMD differs by one RGB and one alpha
-sample. This comparison is distinct from the unmatched ordinary FFmpeg CLI.
+RGBA8 scalar backend pixels are exact; normal SIMD differs by one RGB and one
+alpha sample. RGBA16 normal/scalar results both stay within those bounds. This
+comparison is distinct from the unmatched ordinary FFmpeg CLI.
 
 Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
 diagnostics or raw GC allocated bytes / operation count (rounded up, including
@@ -166,9 +168,10 @@ layouts, resize directions/fallbacks, fresh Streams, retained owners and compose
 public operations. RGBA8 bilinear upscaling now confirms **1.764x / upper 1.787x**
 after a four-pixel kernel cuts its baseline mean 41.8%. Stop tuning that pair;
 RGBA16 upscaling also confirms **1.331x / upper 1.416x** with horizontal row reuse,
-cutting its baseline mean 52.4%. Bicubic RGBA8 now confirms **1.554x / upper 1.593x**
-against the explicitly adjusted scaler backend, cutting its baseline mean 93.0%.
-Other material paths, including bicubic RGBA16, remain open.
+cutting its baseline mean 52.4%. Bicubic RGBA16 now confirms **1.313x / upper 1.320x**
+against the explicitly adjusted scaler backend, cutting its baseline mean 91.1%.
+RGBA8 on the same new build confirms **1.713x / upper 1.728x**. Other material
+paths remain open.
 PNG RGB8, gray8 and gray-alpha8
 encoding preserves exact samples but exceeds the 5% IDAT-size gate by differences
 of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animation

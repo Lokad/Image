@@ -5,16 +5,20 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
-/// <summary>Separable RGBA8 cubic filtering with bounded, operation-local row reuse.</summary>
+/// <summary>Separable RGBA8/16 cubic filtering with bounded, operation-local row reuse.</summary>
 internal static class CachedBicubicResize
 {
     internal static bool TryApply(ImageBuffer source, ImageBuffer result, double scaleX, double scaleY,
         long tapsX, long tapsY, long rowWork, OperationContext context)
     {
-        if (source.BitDepth != 8 || result.Width >= source.Width || result.Height >= source.Height
+        if (source.BitDepth is not (8 or 16) || result.Width >= source.Width || result.Height >= source.Height
             || result.Width < 2 || tapsX > 16 || tapsY > 16 || !Avx512F.IsSupported || !Avx512DQ.IsSupported || !Avx2.IsSupported || !Sse41.IsSupported)
             return false;
         var width=result.Width;
+        var wide16=source.BitDepth==16;
+        var sampleBytes=wide16?2:1;
+        var maximum=wide16?65535d:255d;
+        var alphaMargin=wide16?1e-4:1e-6;
         var elements=(long)width*81+(long)source.Width*4;
         var indexElements=(long)width*17;
         var bytes=elements*sizeof(double)+indexElements*sizeof(int)+128;
@@ -67,19 +71,25 @@ internal static class CachedBicubicResize
                     var sx=0;
                     for(;sx+1<source.Width;sx+=2)
                     {
-                        var pixels=Vector128.CreateScalar(BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(sx*4,8))).AsByte();
-                        var channels=Avx2.ConvertToVector256Int32(pixels);
+                        var channels=wide16
+                            ?Avx2.ConvertToVector256Int32(MemoryMarshal.Read<Vector128<ushort>>(row.Slice(sx*8,16)))
+                            :Avx2.ConvertToVector256Int32(Vector128.CreateScalar(BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(sx*4,8))).AsByte());
                         var factors=Avx2.Blend(Avx2.Shuffle(channels,255),Vector256.Create(1),136);
-                        var values=Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(channels,factors));
+                        // UInt16 products can exceed Int32.MaxValue. Convert the
+                        // unsigned low products directly; every product fits
+                        // UInt32 and remains exact in binary64.
+                        var values=Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(channels,factors).AsUInt32());
                         MemoryMarshal.Write(MemoryMarshal.AsBytes(decoded.Slice(sx*4,8)),in values);
                     }
                     for(;sx<source.Width;sx++)
                     {
-                        var pixel=BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(sx*4,4));
-                        var channels=Sse41.ConvertToVector128Int32(Vector128.CreateScalar(pixel).AsByte());
-                        var a=(int)(pixel>>24);
+                        var pixel=wide16?BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(sx*8,8)):BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(sx*4,4));
+                        var channels=wide16?Sse41.ConvertToVector128Int32(Vector128.CreateScalar(pixel).AsUInt16())
+                            :Sse41.ConvertToVector128Int32(Vector128.CreateScalar((uint)pixel).AsByte());
+                        var a=(int)(wide16?pixel>>48:pixel>>24);
                         var premult=Sse41.MultiplyLow(channels,Vector128.Create(a,a,a,1));
-                        var values=Avx.ConvertToVector256Double(premult);
+                        var values=wide16?Avx512F.ConvertToVector512Double(Vector256.Create(premult.AsUInt32(),Vector128<uint>.Zero)).GetLower()
+                            :Avx.ConvertToVector256Double(premult);
                         MemoryMarshal.Write(MemoryMarshal.AsBytes(decoded.Slice(sx*4,4)),in values);
                     }
                     var cached=storage.AsSpan(rows[t],width*4);
@@ -113,7 +123,7 @@ internal static class CachedBicubicResize
                         MemoryMarshal.Write(MemoryMarshal.AsBytes(cached.Slice(x*4,4)),in sum);
                     }
                 }
-                var destination=result.GetRow8(y);
+                var destination=result.Pixels.Slice(y*result.Stride,result.Stride);
                 for(var x=0;x+1<width;x+=2)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
@@ -126,8 +136,11 @@ internal static class CachedBicubicResize
                     // At most 16 taps per axis, each bounded by one in magnitude.
                     // 2^-40*256 bounds both accumulation orders' absolute error
                     // per unit sample, including products and normalization sums.
-                    // With normalization >= .5 and rounded alpha >= 1, margins
-                    // 1e-6 (alpha) and 1e-4 (color) cover every byte threshold.
+                    // With normalization >= .5 and rounded alpha >= 1, byte
+                    // margins 1e-6 (alpha) and 1e-4 (color) cover thresholds.
+                    // Word alpha uses 1e-4; color error is below 2.0001/alphaSum
+                    // at every threshold in [0,65535]. A reciprocal of the lower
+                    // power of two conservatively bounds that quotient.
                     // Tiny alpha and ambiguous quantization retain the original
                     // binary64 order and exact tiny-alpha arithmetic.
                     // Positive alpha and finite, bounded integer samples make
@@ -136,22 +149,33 @@ internal static class CachedBicubicResize
                     var fractional=Avx512F.Subtract(values,Avx512F.RoundScale(values,1));
                     var delta=Avx512F.Subtract(fractional,Vector512.Create(.5));
                     var distance=Avx512F.AndNot(Vector512.Create(long.MinValue),delta.AsInt64()).AsDouble();
-                    var margins=Vector512.Create(1e-4,1e-4,1e-4,1e-6,1e-4,1e-4,1e-4,1e-6);
+                    var colorMargin0=wide16?2.0001*ReciprocalLowerPower(a0):1e-4;
+                    var colorMargin1=wide16?2.0001*ReciprocalLowerPower(a1):1e-4;
+                    var margins=Vector512.Create(colorMargin0,colorMargin0,colorMargin0,alphaMargin,
+                        colorMargin1,colorMargin1,colorMargin1,alphaMargin);
                     var inRange=Avx512F.And(Avx512F.CompareGreaterThanOrEqual(values,Vector512<double>.Zero).AsInt64(),
-                        Avx512F.CompareLessThanOrEqual(values,Vector512.Create(255d)).AsInt64());
+                        Avx512F.CompareLessThanOrEqual(values,Vector512.Create(maximum)).AsInt64());
                     var ambiguous=Avx512F.And(inRange,Avx512F.CompareLessThanOrEqual(distance,margins).AsInt64());
-                    if(n0<.5 || n1<.5 || !(values.GetElement(3)>=1.000001 && values.GetElement(7)>=1.000001)
+                    if(n0<.5 || n1<.5 || !(values.GetElement(3)>=1+alphaMargin && values.GetElement(7)>=1+alphaMargin)
                         || Vector512.ExtractMostSignificantBits(ambiguous)!=0)
                     {
                         Original(source,result,x,y,weights,offsets,counts,vertical[..count],first,context);
                         Original(source,result,x+1,y,weights,offsets,counts,vertical[..count],first,context);
                         continue;
                     }
-                    var clipped=Avx512F.Min(Vector512.Create(255d),Avx512F.Max(Vector512<double>.Zero,values));
+                    var clipped=Avx512F.Min(Vector512.Create(maximum),Avx512F.Max(Vector512<double>.Zero,values));
                     var ints=Avx512F.ConvertToVector256Int32WithTruncation(Avx512F.RoundScale(clipped,0));
-                    var shorts=Sse2.PackSignedSaturate(ints.GetLower(),ints.GetUpper());
-                    var packed=Sse2.PackUnsignedSaturate(shorts,Vector128<short>.Zero).AsUInt64().GetElement(0);
-                    BinaryPrimitives.WriteUInt64LittleEndian(destination.Slice(x*4,8),packed);
+                    if(wide16)
+                    {
+                        var packed=Sse41.PackUnsignedSaturate(ints.GetLower(),ints.GetUpper());
+                        MemoryMarshal.Write(destination.Slice(x*8,16),in packed);
+                    }
+                    else
+                    {
+                        var shorts=Sse2.PackSignedSaturate(ints.GetLower(),ints.GetUpper());
+                        var packed=Sse2.PackUnsignedSaturate(shorts,Vector128<short>.Zero).AsUInt64().GetElement(0);
+                        BinaryPrimitives.WriteUInt64LittleEndian(destination.Slice(x*4,8),packed);
+                    }
                 }
                 if((width&1)!=0)Original(source,result,width-1,y,weights,offsets,counts,vertical[..count],first,context);
             }
@@ -159,25 +183,44 @@ internal static class CachedBicubicResize
         }
         finally {context.Release(bytes);}
     }
+    private static double ReciprocalLowerPower(double value)
+    {
+        var exponent=(int)((BitConverter.DoubleToUInt64Bits(value)>>52)&2047);
+        return BitConverter.UInt64BitsToDouble((ulong)(2046-exponent)<<52);
+    }
     private static void Original(ImageBuffer source,ImageBuffer result,int x,int y,ReadOnlySpan<double> weights,
         ReadOnlySpan<int> offsets,ReadOnlySpan<int> counts,ReadOnlySpan<double> vertical,int firstY,OperationContext context)
     {
-        double r=0,g=0,b=0,a=0,n=0;
+        double r=0,g=0,b=0,a=0,n=0;var wide16=source.BitDepth==16;var maximum=wide16?65535:255;
         for(var ty=0;ty<vertical.Length;ty++)
         {
             context.Cancellation.ThrowIfCancellationRequested();var wy=vertical[ty];if(wy==0)continue;
-            var row=source.GetRow8(Math.Clamp(firstY+ty,0,source.Height-1));
+            var sy=Math.Clamp(firstY+ty,0,source.Height-1);
+            ReadOnlySpan<byte> row8=wide16?default:source.GetRow8(sy);
+            ReadOnlySpan<ushort> row16=wide16?source.GetRow16(sy):default;
             for(var tx=0;tx<counts[x];tx++)
             {
-                var w=wy*weights[x*16+tx];if(w==0)continue;var offset=offsets[x*16+tx];var alpha=row[offset+3];
-                r+=w*alpha*row[offset];g+=w*alpha*row[offset+1];b+=w*alpha*row[offset+2];a+=w*alpha;n+=w;
+                var w=wy*weights[x*16+tx];if(w==0)continue;var offset=offsets[x*16+tx];
+                var alpha=wide16?row16[offset+3]:row8[offset+3];
+                var red=wide16?row16[offset]:row8[offset];var green=wide16?row16[offset+1]:row8[offset+1];var blue=wide16?row16[offset+2]:row8[offset+2];
+                r+=w*alpha*red;g+=w*alpha*green;b+=w*alpha*blue;a+=w*alpha;n+=w;
             }
         }
         var normalized=a/n;
-        var rounded=normalized>0 && normalized<1?ResizeAlpha.Round(source,x,y,result.Width,result.Height,ResizeFilter.Bicubic,context):Round(normalized);
-        var color=rounded>0 && a>0;var destination=result.GetRow8(y);
-        destination[x*4]=(byte)Round(color?r/a:0);destination[x*4+1]=(byte)Round(color?g/a:0);
-        destination[x*4+2]=(byte)Round(color?b/a:0);destination[x*4+3]=(byte)rounded;
+        var rounded=normalized>0 && normalized<1?ResizeAlpha.Round(source,x,y,result.Width,result.Height,ResizeFilter.Bicubic,context):Round(normalized,maximum);
+        var color=rounded>0 && a>0;
+        if(wide16)
+        {
+            var destination=result.GetRow16(y);
+            destination[x*4]=(ushort)Round(color?r/a:0,maximum);destination[x*4+1]=(ushort)Round(color?g/a:0,maximum);
+            destination[x*4+2]=(ushort)Round(color?b/a:0,maximum);destination[x*4+3]=(ushort)rounded;
+        }
+        else
+        {
+            var destination=result.GetRow8(y);
+            destination[x*4]=(byte)Round(color?r/a:0,maximum);destination[x*4+1]=(byte)Round(color?g/a:0,maximum);
+            destination[x*4+2]=(byte)Round(color?b/a:0,maximum);destination[x*4+3]=(byte)rounded;
+        }
     }
-    private static int Round(double value)=>(int)Math.Clamp(Math.Round(value,MidpointRounding.AwayFromZero),0,255);
+    private static int Round(double value,int maximum)=>(int)Math.Clamp(Math.Round(value,MidpointRounding.AwayFromZero),0,maximum);
 }

@@ -1,19 +1,21 @@
 """Correctness-only controls on the existing original RGBA8 raster."""
-import argparse,hashlib,json,math,os,subprocess,tempfile
+import argparse,hashlib,json,math,os,struct,subprocess,tempfile
 from pathlib import Path
 parser=argparse.ArgumentParser()
 parser.add_argument('--cpu',type=int,default=0)
+parser.add_argument('--depth',type=int,choices=(8,16),default=8)
 args=parser.parse_args()
 root=Path(__file__).resolve().parents[2]
-worker=root/'external/warm-reference/zimg-bicubic-warm'
-source=root/'artifacts/warm-reference/webp-decode/source.rgba'
-reference=root/'tmp/bicubic8-edge-reference.rgba'
+worker=root/('external/warm-reference/zimg-bicubic16-warm' if args.depth==16 else 'external/warm-reference/zimg-bicubic-warm')
+source=root/('artifacts/warm-reference/bilinear16-audit/input.rgba64le' if args.depth==16 else 'artifacts/warm-reference/webp-decode/source.rgba')
+reference=root/('artifacts/warm-reference/bicubic16/rational.rgba64le' if args.depth==16 else 'tmp/bicubic8-edge-reference.rgba')
 pixels=source.read_bytes();expected=reference.read_bytes()
-assert hashlib.sha256(pixels).hexdigest()=='70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80'
-assert hashlib.sha256(expected).hexdigest()=='656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8'
+assert hashlib.sha256(pixels).hexdigest()==('3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9' if args.depth==16 else '70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80')
+assert len(expected)==256*129*4*(args.depth//8)
+if args.depth==8:assert hashlib.sha256(expected).hexdigest()=='656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8'
 with tempfile.TemporaryDirectory(prefix='lokad-image-bicubic-') as name:
     folder=Path(name);output=folder/'output.rgba'
-    base=[str(worker),'bicubic-resize',str(source),'513','259','8',str(output),str(reference)]
+    base=[str(worker),'bicubic-resize',str(source),'513','259',str(args.depth),str(output),str(reference)]
     def run(arguments,protocol='check\nquit\n',cpus=None):
         return subprocess.run(['taskset','-c',str(args.cpu) if cpus is None else cpus,*arguments],
             input=protocol,capture_output=True,text=True,timeout=30)
@@ -24,16 +26,18 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-bicubic-') as name:
         ready,sample,check=[json.loads(line) for line in good.stdout.splitlines()]
         assert ready['operation']=='bicubic-resize' and ready['filterThreads']==1 and ready['threadType']==0
         assert ready['affinityCount']==1 and ready['cpu']==args.cpu and ready['independentLiveOutputs']
-        assert (ready['outputWidth'],ready['outputHeight'],ready['depth'])==(256,129,8)
+        assert (ready['outputWidth'],ready['outputHeight'],ready['depth'])==(256,129,args.depth)
         assert ready['haloPixels']==4 and ready['haloAndPackingTimed'] and ready['outputAllocationAndRepackingTimed']
         assert sample['operations']==1 and sample['completedOperations']==ready['initialCompletedOperations']+1
-        assert sample['outputStride']==1024 and check['matched'] and check['sourceUnchanged']
+        assert sample['outputStride']==1024*(args.depth//8) and check['matched'] and check['sourceUnchanged']
         actual=output.read_bytes();assert len(actual)==len(expected)
-        rgb=[actual[i+c]-expected[i+c] for i in range(0,len(actual),4) for c in range(3)]
-        alpha=[actual[i+3]-expected[i+3] for i in range(0,len(actual),4)]
+        samples=struct.unpack('<'+str(len(actual)//2)+'H',actual) if args.depth==16 else actual
+        references=struct.unpack('<'+str(len(expected)//2)+'H',expected) if args.depth==16 else expected
+        rgb=[samples[i+c]-references[i+c] for i in range(0,len(samples),4) for c in range(3)]
+        alpha=[samples[i+3]-references[i+3] for i in range(0,len(samples),4)]
         assert max(map(abs,rgb))<=1 and sum(d*d for d in rgb)/len(rgb)<=.0625
         assert max(map(abs,alpha))<=1 and sum(d*d for d in alpha)/len(alpha)<=.0625
-        assert all(actual[i+3] or not any(actual[i:i+3]) for i in range(0,len(actual),4))
+        assert all(samples[i+3] or not any(samples[i:i+3]) for i in range(0,len(samples),4))
         modes.append(dict(mode=mode,outputSha256=hashlib.sha256(actual).hexdigest(),rgbMaximum=max(map(abs,rgb)),
             rgbRmse=math.sqrt(sum(d*d for d in rgb)/len(rgb)),alphaMaximum=max(map(abs,alpha)),
             alphaRmse=math.sqrt(sum(d*d for d in alpha)/len(alpha)),alphaDifferentPixels=sum(d!=0 for d in alpha)))
@@ -44,7 +48,7 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-bicubic-') as name:
         assert result.returncode!=0 and result.stderr,label
         controls.append(label)
     reject('missing reference',base[:-1])
-    for label,index,value in [('operation',1,'hflip'),('geometry',3,'512'),('precision',5,'16')]:
+    for label,index,value in [('operation',1,'hflip'),('geometry',3,'512'),('precision',5,'12')]:
         values=base.copy();values[index]=value;reject(label,values)
     reject('unknown dispatch',base+['--bad'])
     for label,data in [('truncated input',pixels[:-1]),('extra input',pixels+b'\0')]:
@@ -56,8 +60,8 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-bicubic-') as name:
     allowed=sorted(os.sched_getaffinity(0));assert len(allowed)>=2
     reject('multiple CPUs',base,cpus=','.join(map(str,allowed[:2])))
     record=dict(schemaVersion=1,project='Lokad.Image',correctnessOnly=True,noTimingClaim=True,complete=True,
-        cpu=args.cpu,depth=8,sourceSha256=hashlib.sha256(pixels).hexdigest(),referenceSha256=hashlib.sha256(expected).hexdigest(),
+        cpu=args.cpu,depth=args.depth,sourceSha256=hashlib.sha256(pixels).hexdigest(),referenceSha256=hashlib.sha256(expected).hexdigest(),
         extraSourceRasters=0,sourceUnchanged=True,independentLiveOutputs=True,nativeOperationCountersExact=True,
         normalScalarBounded=True,modes=modes,controls=controls,workerSha256=hashlib.sha256(worker.read_bytes()).hexdigest())
-    (root/'artifacts/warm-reference/bicubic-controls.json').write_text(json.dumps(record,indent=2)+'\n')
+    (root/('artifacts/warm-reference/bicubic16-controls.json' if args.depth==16 else 'artifacts/warm-reference/bicubic-controls.json')).write_text(json.dumps(record,indent=2)+'\n')
     print(json.dumps(record))

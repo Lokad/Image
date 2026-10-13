@@ -1,3 +1,4 @@
+using System.Buffers.Binary;
 using System.Diagnostics;
 using System.Runtime;
 using System.Runtime.InteropServices;
@@ -6,7 +7,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmBicubicCase { Down8 }
+public enum WarmBicubicCase { Down8, Down16 }
 
 /// <summary>Complete bicubic resize with an explicitly adjusted FFmpeg scaler backend.</summary>
 [MemoryDiagnoser]
@@ -17,7 +18,8 @@ public class WarmBicubicResize
     public static WarmBicubicCase[] SelectedCases() => Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES") switch
     {
         null or "Down8" => [WarmBicubicCase.Down8],
-        _ => throw new ArgumentException("Choose the single bicubic case Down8.")
+        "Down16" => [WarmBicubicCase.Down16],
+        _ => throw new ArgumentException("Choose one bicubic case: Down8 or Down16.")
     };
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
@@ -30,12 +32,13 @@ public class WarmBicubicResize
     private double nativeRgbRmse, nativeAlphaRmse;
     private int nativeRgbMaximum, nativeAlphaMaximum;
     private const int Width=256, Height=129;
+    private int Depth => Case == WarmBicubicCase.Down16 ? 16 : 8;
 
     [GlobalSetup]
     public void Setup()
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Use the dedicated Linux VM.");
-        if (Case != WarmBicubicCase.Down8) throw new ArgumentOutOfRangeException(nameof(Case));
+        if (Case is not (WarmBicubicCase.Down8 or WarmBicubicCase.Down16)) throw new ArgumentOutOfRangeException(nameof(Case));
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -49,17 +52,23 @@ public class WarmBicubicResize
         {
             using (var manifest = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/benchmark-source.json"))))
                 sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = manifest.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = manifest.RootElement.GetProperty("sourceRevision").GetString() });
-            input = HorizontalFlipInput.Create(8);
-            expected = ExactResizeReference.Resize(input, 513, 259, 8, Width, Height, ResizeFilter.Bicubic);
-            source = JpegBenchmarkCase.Buffer(input, 513, 259, 8);
+            input = HorizontalFlipInput.Create(Depth);
+            expected = ExactResizeReference.Resize(input, 513, 259, Depth, Width, Height, ResizeFilter.Bicubic);
+            source = JpegBenchmarkCase.Buffer(input, 513, 259, Depth);
             File.WriteAllBytes(state.Input, input);
             var rationalPath = Path.Combine(state.DirectoryPath, "rational.rgba");
             File.WriteAllBytes(rationalPath, expected);
+            if (Depth == 16)
+            {
+                var controls = Path.Combine(state.Root, "artifacts/warm-reference/bicubic16");
+                Directory.CreateDirectory(controls);
+                File.WriteAllBytes(Path.Combine(controls, "rational.rgba64le"), expected);
+            }
             ValidateManaged();
-            native = new NativeWarmReference(state, 8, cpu, "bicubic-resize", expectedRaw: rationalPath);
+            native = new NativeWarmReference(state, Depth, cpu, "bicubic-resize", expectedRaw: rationalPath);
             nativePixels = File.ReadAllBytes(state.NativeOutput);
             RequireBounded(nativePixels, expected, out nativeRgbMaximum, out nativeRgbRmse, out nativeAlphaMaximum, out nativeAlphaRmse);
-            using (var scalar = new NativeWarmReference(state, 8, cpu, "bicubic-resize", expectedRaw: rationalPath, bicubicScalar: true))
+            using (var scalar = new NativeWarmReference(state, Depth, cpu, "bicubic-resize", expectedRaw: rationalPath, bicubicScalar: true))
             {
                 var scalarPixels = File.ReadAllBytes(state.NativeOutput);
                 RequireBounded(scalarPixels, expected, out _, out _, out _, out _);
@@ -76,23 +85,28 @@ public class WarmBicubicResize
     {
         using var first = ImageTransforms.Resize(source, Width, Height, ResizeFilter.Bicubic);
         using var second = ImageTransforms.Resize(source, Width, Height, ResizeFilter.Bicubic);
-        if ((first.Width, first.Height, first.BitDepth, first.Orientation) != (Width, Height, 8, ImageOrientation.Normal)
+        if ((first.Width, first.Height, first.BitDepth, first.Orientation) != (Width, Height, Depth, ImageOrientation.Normal)
             || !OriginalPixels.Bytes(first).AsSpan().SequenceEqual(expected) || !OriginalPixels.Bytes(second).AsSpan().SequenceEqual(expected))
             throw new InvalidOperationException("Bicubic output differs from the exact rational reference.");
-        first.GetRow8(0)[0] ^= 255;
+        if (Depth == 8) first.GetRow8(0)[0] ^= 255;
+        else first.GetRow16(0)[0] ^= 65535;
         if (!OriginalPixels.Bytes(second).AsSpan().SequenceEqual(expected) || !OriginalPixels.Bytes(source).AsSpan().SequenceEqual(input))
             throw new InvalidOperationException("Bicubic outputs alias or source changed.");
     }
-    private static void RequireBounded(byte[] actual, byte[] reference, out int rgbMaximum, out double rgbRmse, out int alphaMaximum, out double alphaRmse)
+    private void RequireBounded(byte[] actual, byte[] reference, out int rgbMaximum, out double rgbRmse, out int alphaMaximum, out double alphaRmse)
     {
-        if (actual.Length != reference.Length || actual.Length != Width * Height * 4) throw new InvalidOperationException("Bicubic output length differs.");
+        var sampleBytes = Depth / 8;
+        if (actual.Length != reference.Length || actual.Length != Width * Height * 4 * sampleBytes) throw new InvalidOperationException("Bicubic output length differs.");
         rgbMaximum=alphaMaximum=0; long rgbSquare=0, alphaSquare=0;
-        for (var i=0;i<actual.Length;i+=4)
+        for (var i=0;i<actual.Length;i+=4*sampleBytes)
         {
-            if (actual[i+3]==0 && (actual[i]!=0 || actual[i+1]!=0 || actual[i+2]!=0)) throw new InvalidOperationException("Native zero-alpha RGB differs.");
+            var alpha = sampleBytes == 1 ? actual[i+3] : BinaryPrimitives.ReadUInt16LittleEndian(actual.AsSpan(i+6,2));
+            if (alpha==0 && actual.AsSpan(i,3*sampleBytes).ContainsAnyExcept((byte)0)) throw new InvalidOperationException("Native zero-alpha RGB differs.");
             for (var c=0;c<4;c++)
             {
-                var error=Math.Abs(actual[i+c]-reference[i+c]);
+                var av = sampleBytes == 1 ? actual[i+c] : BinaryPrimitives.ReadUInt16LittleEndian(actual.AsSpan(i+c*2,2));
+                var rv = sampleBytes == 1 ? reference[i+c] : BinaryPrimitives.ReadUInt16LittleEndian(reference.AsSpan(i+c*2,2));
+                var error=Math.Abs(av-rv);
                 if (c==3) { alphaMaximum=Math.Max(alphaMaximum,error);alphaSquare+=(long)error*error; }
                 else { rgbMaximum=Math.Max(rgbMaximum,error);rgbSquare+=(long)error*error; }
             }
@@ -122,7 +136,7 @@ public class WarmBicubicResize
             File.WriteAllText(path,JsonSerializer.Serialize(new
             {
                 schemaVersion=1,name=nameof(WarmBicubicResize),caseId=Case.ToString(),smoke,
-                runId=Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"),width=513,height=259,depth=8,
+                runId=Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"),width=513,height=259,depth=Depth,
                 outputWidth=Width,outputHeight=Height,cpu,managedAffinityCount=1,processorCount=Environment.ProcessorCount,
                 serverGc=GCSettings.IsServerGC,gcConfiguration=GC.GetConfigurationVariables(),runtime=RuntimeInformation.FrameworkDescription,
                 platform=RuntimeInformation.RuntimeIdentifier,sourceIdentity,
@@ -133,7 +147,7 @@ public class WarmBicubicResize
                 librarySha256=JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256=JpegBenchmarkCase.HashFile(typeof(WarmBicubicResize).Assembly.Location),
                 nativeBuild=native.BuildIdentity,nativeReady=native.Ready,nativeBefore=before,nativeAfter=after,
-                boundary="One resident original 513x259 RGBA8 raster to independently owned 256x129 bicubic output. Complete public Resize, admission, allocation/materialization/disposal. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+                boundary=$"One resident original 513x259 RGBA{Depth} raster to independently owned 256x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
             },new JsonSerializerOptions {WriteIndented=true})+"\n");
         }
         finally {native?.Dispose();source?.Dispose();state?.Dispose();ready=false;}
