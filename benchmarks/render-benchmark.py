@@ -122,7 +122,7 @@ def render():
         row('JPEG 4:4:4, matched quality', 'warm-jpegencode-quiet-evidence.json', ['observations', -1], 'WARM-JPEG-ENCODE-QUIET.md', True),
         row('JPEG 4:4:4 from RGBA16, full normalization', 'warm-jpeg16-component-row-evidence.json', ['observations', -1], 'WARM-JPEG16-COMPONENT-ROW.md', True),
         row('JPEG 4:2:2, matched quality', 'warm-jpeg422encode-evidence.json', ['observations', -1], 'WARM-JPEG422-ENCODE.md', True),
-        row('JPEG 4:2:0, matched quality', 'warm-jpeg420-chroma-row-evidence.json', ['observations', -1], 'WARM-JPEG420-CHROMA-ROW.md'),
+        row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg4208-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG420-RGBA8-ADAPTIVE.md'),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG-ADAPTIVE-HUFFMAN.md', True),
         row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
         row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8encode16-evidence.json', ['observations', -1], 'WARM-VP8-RGBA16-ENCODE.md', True),
@@ -258,7 +258,7 @@ full tests and the same actual package pass on both OSes. The
 independently confirms 1.159x / upper 1.168x with 12,976 B/op, unchanged production
 and exact frozen input. The
 [RGB16 check](../benchmarks/WARM-PNG-RGB16-CURRENT.md) is confirmed at 1.819x / upper
-1.823x with 15,024 B/op. JPEG420's earlier upper-bound gap remains open.
+1.823x with 15,024 B/op. JPEG420 RGBA8's upper-bound gap remains open.
 Stop tuning confirmed pairs. Other profiles, ownership boundaries and the full
 required scope remain open; earlier failures and rejected experiments stay recorded.
 
@@ -280,7 +280,10 @@ retain the restored 2.046x baseline and three rejected dispatch trials. The
 1.888x / upper 1.931x with 297,772 B/op, reducing the baseline mean 7.8% and
 allocations 43.5%. Packet size falls 49.9% with exact coefficients/pixels. Final
 admission checks, full tests and the same actual package pass on both OSes.
-Stop tuning this pair; JPEG420 RGBA8 and shared encoder revalidation remain open.
+Stop tuning this pair. The [RGBA8 shared-encoder repeat](../benchmarks/WARM-JPEG420-RGBA8-ADAPTIVE.md)
+averages 1.977x / upper 2.014x with 297,772 B/op, allocations down 43.5%.
+Its independent quiet upper remains above two; retain this open result without
+repeating unchanged timing. Other shared JPEG encoder cases need revalidation.
 
 The [adaptive JPEG Huffman prototype](../benchmarks/JPEG-HUFFMAN-PROTOTYPE.md)
 cuts one existing packet by 49.9% while preserving every coefficient and pixel
