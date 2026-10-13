@@ -59,9 +59,9 @@ typedef struct {
     AVCodecContext *codec;
     AVFrame *rgba, *bgra;
     AVPacket *packet;
-    uint8_t *original, *expected;
+    uint8_t *original, *expected, *normalized_expected;
     size_t raw_bytes;
-    int width, height, cpu, quality, output_bytes, expected_bytes;
+    int width, height, depth, cpu, quality, output_bytes, expected_bytes;
     uint64_t completed, observed;
 } Work;
 static void complete_webp(const Work *work, const AVPacket *packet)
@@ -89,6 +89,19 @@ static void apply(Work *work)
 {
     /* Resident original RGBA is repacked on every operation. The scratch BGRA
      * frame/context/wrapper is reused; no converted pixels or bytes are cached. */
+    if (work->depth == 16) {
+        const int channels[4] = {2,1,0,3};
+        for (int y = 0; y < work->height; y++) {
+            const uint8_t *source = work->rgba->data[0] + (size_t)y * work->rgba->linesize[0];
+            uint8_t *target = work->bgra->data[0] + (size_t)y * work->bgra->linesize[0];
+            for (int x = 0; x < work->width; x++)
+                for (int c = 0; c < 4; c++) {
+                    const uint8_t *word = source + (size_t)x*8 + channels[c]*2;
+                    unsigned value = (unsigned)word[0] | (unsigned)word[1] << 8;
+                    target[x*4+c] = (uint8_t)((value+128)/257);
+                }
+        }
+    } else
     for (int y = 0; y < work->height; y++) {
         const uint8_t *source = work->rgba->data[0] + (size_t)y * work->rgba->linesize[0];
         uint8_t *target = work->bgra->data[0] + (size_t)y * work->bgra->linesize[0];
@@ -108,7 +121,16 @@ static void check_source(const Work *work)
 {
     for (int y = 0; y < work->height; y++)
         if (memcmp(work->rgba->data[0] + (size_t)y * work->rgba->linesize[0],
-                   work->original + (size_t)y * work->width*4, (size_t)work->width*4)) fail("Source changed.");
+                   work->original + (size_t)y * work->width*4*(work->depth/8), (size_t)work->width*4*(work->depth/8))) fail("Source changed.");
+    if (work->normalized_expected) {
+        const int channels[4] = {2,1,0,3};
+        for (int y = 0; y < work->height; y++)
+            for (int x = 0; x < work->width; x++)
+                for (int c = 0; c < 4; c++)
+                    if (work->bgra->data[0][(size_t)y*work->bgra->linesize[0]+x*4+c]
+                        != work->normalized_expected[((size_t)y*work->width+x)*4+channels[c]])
+                        fail("Full-source normalized reference differs.");
+    }
 }
 static void check_packet(const Work *work, const AVPacket *packet)
 {
@@ -122,16 +144,17 @@ static void write_packet(const Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if (argc != 8 || strcmp(argv[1], "webp-encode")) fail("Usage: ffmpeg-webp-warm webp-encode INPUT WIDTH HEIGHT 8 OUTPUT QUALITY");
+    if ((argc != 8 && argc != 9) || strcmp(argv[1], "webp-encode")) fail("Usage: ffmpeg-webp-warm webp-encode INPUT WIDTH HEIGHT 8|16 OUTPUT QUALITY [NORMALIZED-RGBA8 when depth16]");
     Work work = {0}; work.cpu = affinity_cpu();
-    work.width = number(argv[3]); work.height = number(argv[4]); work.quality = number(argv[7]);
-    if (number(argv[5]) != 8 || work.quality > 100) fail("WebP requires depth 8 and quality 1..100.");
-    work.raw_bytes = (size_t)work.width * work.height * 4;
+    work.width = number(argv[3]); work.height = number(argv[4]); work.quality = number(argv[7]); work.depth = number(argv[5]);
+    if ((work.depth != 8 && work.depth != 16) || work.quality > 100 || argc != 8+(work.depth==16)) fail("WebP requires depth 8/16, the matching reference for depth16 and quality 1..100.");
+    work.raw_bytes = (size_t)work.width * work.height * 4 * (work.depth/8);
     if (work.raw_bytes > 512U*1024U*1024U) fail("Reference raster exceeds 512 MiB.");
     av_log_set_level(AV_LOG_ERROR); work.original = read_file(argv[2], work.raw_bytes);
-    work.rgba = frame(work.width, work.height, AV_PIX_FMT_RGBA); work.bgra = frame(work.width, work.height, AV_PIX_FMT_BGRA);
+    if (work.depth == 16) work.normalized_expected = read_file(argv[8], (size_t)work.width * work.height * 4);
+    work.rgba = frame(work.width, work.height, work.depth == 16 ? AV_PIX_FMT_RGBA64LE : AV_PIX_FMT_RGBA); work.bgra = frame(work.width, work.height, AV_PIX_FMT_BGRA);
     for (int y = 0; y < work.height; y++) memcpy(work.rgba->data[0] + (size_t)y*work.rgba->linesize[0],
-        work.original + (size_t)y*work.width*4, (size_t)work.width*4);
+        work.original + (size_t)y*work.width*4*(work.depth/8), (size_t)work.width*4*(work.depth/8));
     const AVCodec *codec = avcodec_find_encoder_by_name("libwebp"); if (!codec) fail("Pinned still WebP encoder missing.");
     work.codec = avcodec_alloc_context3(codec); if (!work.codec) fail("Allocate codec failed.");
     work.codec->thread_count = 1; work.codec->thread_type = 0; work.codec->compression_level = 4;
@@ -152,8 +175,8 @@ int main(int argc, char **argv)
     if (held->buf->buffer == work.packet->buf->buffer) fail("Live packets alias.");
     check_packet(&work, held); check_packet(&work, work.packet); av_packet_free(&held); av_packet_unref(work.packet);
     apply(&work); check_packet(&work, work.packet); check_source(&work); write_packet(&work, argv[6]); av_packet_unref(work.packet);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"webp-encode\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"quality\":%d,\"effort\":4,\"lossless\":false,\"inputFormat\":\"BGRA\",\"repackingTimed\":true,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"bitstreamDeterministic\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u}\n",
-        work.width, work.height, work.cpu, work.quality, work.output_bytes, work.completed, av_version_info(), avcodec_version()); fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"webp-encode\",\"width\":%d,\"height\":%d,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"quality\":%d,\"effort\":4,\"lossless\":false,\"inputFormat\":\"BGRA\",\"repackingTimed\":true,\"fullSourceNormalizationTimed\":%s,\"normalizedReferenceExact\":%s,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"bitstreamDeterministic\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u}\n",
+        work.width, work.height, work.depth, work.cpu, work.quality, work.depth == 16 ? "true" : "false", work.depth == 16 ? "true" : "false", work.output_bytes, work.completed, av_version_info(), avcodec_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;
@@ -172,5 +195,5 @@ int main(int argc, char **argv)
     }
     if (ferror(stdin)) fail("Protocol read failed.");
     av_packet_free(&work.packet); av_frame_free(&work.rgba); av_frame_free(&work.bgra);
-    avcodec_free_context(&work.codec); free(work.original); free(work.expected); return 0;
+    avcodec_free_context(&work.codec); free(work.original); free(work.expected); free(work.normalized_expected); return 0;
 }

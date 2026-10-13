@@ -528,6 +528,13 @@ reject fourteen invalid requests/arguments/affinities. Native binaries, static
 archives and identities remain ignored. Measurement requires the quiet VM and
 the same one-CPU, GC/JIT, bracketing and repeat policy as the other warm families.
 
+`--prepare-warm-webp16 0` / `-WarmFamily Webp -WarmCases Encode16` select the
+original RGBA16 VP8 input. Native quality 75 and managed quality 100, effort 4,
+retain the original source-error and exact-alpha gates. All four channels are
+normalized with `(sample+128)/257` inside every operation. The original adapter
+validates normalized RGBA against its integer reference before Ready and after
+measurement. See the [RGBA16 VP8 report](../../benchmarks/WARM-VP8-RGBA16-ENCODE.md).
+
 ## Still VP8L WebP encode
 
 `WarmWebpLossless/Encode8` uses **libwebp exact=1 (FFmpeg encoder backend)** as

@@ -49,11 +49,11 @@ internal sealed class NativeWarmReference : IDisposable
         if (operation is "png-decode" or "png-adam7-decode") start.ArgumentList.Add(expectedRaw ?? throw new ArgumentNullException(nameof(expectedRaw)));
         if (jpeg || webp)
         {
-            if ((jpeg && depth is not (8 or 16)) || (webp && depth != 8) || !nativeQuality.HasValue || nativeQuality < 1 || nativeQuality > (webp ? 100 : 31)) throw new ArgumentOutOfRangeException(nameof(nativeQuality));
+            if ((jpeg && depth is not (8 or 16)) || (webp && (depth is not (8 or 16) || webpLossless && depth != 8)) || !nativeQuality.HasValue || nativeQuality < 1 || nativeQuality > (webp ? 100 : 31)) throw new ArgumentOutOfRangeException(nameof(nativeQuality));
             start.ArgumentList.Add(nativeQuality.Value.ToString(CultureInfo.InvariantCulture));
         }
         else if (nativeQuality.HasValue) throw new ArgumentException("Native quality applies only to JPEG or VP8.", nameof(nativeQuality));
-        if (jpeg && depth == 16) start.ArgumentList.Add(expectedRaw ?? throw new ArgumentNullException(nameof(expectedRaw)));
+        if ((jpeg || operation == "webp-encode") && depth == 16) start.ArgumentList.Add(expectedRaw ?? throw new ArgumentNullException(nameof(expectedRaw)));
         if (jpeg && jpegSampling is "420" or "422") start.ArgumentList.Add(jpegSampling);
         if (bilinear && depth == 16) start.ArgumentList.Add("--allow-alpha-rounding1");
         process = Process.Start(start) ?? throw new InvalidOperationException("Could not start native warm worker.");
@@ -105,7 +105,9 @@ internal sealed class NativeWarmReference : IDisposable
                 || (webp && (Ready.GetProperty("conversionThreads").GetInt32() != 1 || Ready.GetProperty("quality").GetInt32() != nativeQuality
                     || Ready.GetProperty("effort").GetInt32() != 4 || Ready.GetProperty("lossless").GetBoolean() != webpLossless
                     || Ready.GetProperty("inputFormat").GetString() != "BGRA" || !Ready.GetProperty("repackingTimed").GetBoolean()
-                    || !Ready.GetProperty("bitstreamDeterministic").GetBoolean()))
+                    || !Ready.GetProperty("bitstreamDeterministic").GetBoolean()
+                    || (operation == "webp-encode" && (Ready.GetProperty("fullSourceNormalizationTimed").GetBoolean() != (depth == 16)
+                        || depth == 16 && !Ready.GetProperty("normalizedReferenceExact").GetBoolean()))))
                 || (webpLossless && (!Ready.GetProperty("exactRgb").GetBoolean() || !Ready.GetProperty("inputImportAllocationTimed").GetBoolean()))
                 || (jpegDecode && (depth != 8 || Ready.GetProperty("conversionThreads").GetInt32() != 1
                     || Ready.GetProperty("decoder").GetString() != "mjpeg" || Ready.GetProperty("sampling").GetString() != (operation == "jpeg420-decode" ? "420" : operation == "jpeg422-decode" ? "422" : operation == "jpeg-gray-decode" ? "gray" : "444")
