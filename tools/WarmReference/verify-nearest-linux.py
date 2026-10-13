@@ -5,11 +5,15 @@ from pathlib import Path
 parser = argparse.ArgumentParser()
 parser.add_argument('--cpu', type=int, default=0)
 parser.add_argument('--depth', type=int, choices=(8,16), default=8)
-parser.add_argument('--up8', action='store_true')
+upscale = parser.add_mutually_exclusive_group()
+upscale.add_argument('--up8', action='store_true')
+upscale.add_argument('--up16', action='store_true')
 args = parser.parse_args()
 if args.up8 and args.depth != 8:
     parser.error('--up8 requires depth 8')
-width, height = (1027, 519) if args.up8 else (256, 129)
+if args.up16 and args.depth != 16:
+    parser.error('--up16 requires depth 16')
+width, height = (1027, 519) if args.up8 or args.up16 else (256, 129)
 root = Path(__file__).resolve().parents[2]
 worker = root/'external/warm-reference/ffmpeg-nearest-warm'
 source = root/('artifacts/warm-reference/bilinear16-audit/input.rgba64le' if args.depth == 16
@@ -30,7 +34,7 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-nearest-') as name:
     folder = Path(name)
     output = folder/'output.rgba'
     base = [str(worker), 'nearest-resize', str(source), '513', '259', str(args.depth), str(output)]
-    if args.up8:
+    if args.up8 or args.up16:
         base += [str(width), str(height)]
     def run(arguments, protocol='check\nquit\n', cpus=None):
         return subprocess.run(['taskset', '-c', str(args.cpu) if cpus is None else cpus, *arguments],
@@ -73,7 +77,8 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-nearest-') as name:
         alphaExact=True, hiddenRgbExact=True, independentLiveOutputs=True,
         nativeOperationCountersExact=True, sourceUnchanged=True, controls=controls,
         workerSha256=hashlib.sha256(worker.read_bytes()).hexdigest())
-    destination = root/('artifacts/warm-reference/nearest-up8-controls.json' if args.up8 else
+    destination = root/('artifacts/warm-reference/nearest-up16-controls.json' if args.up16 else
+                       'artifacts/warm-reference/nearest-up8-controls.json' if args.up8 else
                        'artifacts/warm-reference/nearest16-controls.json' if args.depth == 16
                        else 'artifacts/warm-reference/nearest-controls.json')
     destination.write_text(json.dumps(record,indent=2)+'\n')

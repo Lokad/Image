@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmNearestCase { Down8, Down16, Up8 }
+public enum WarmNearestCase { Down8, Down16, Up8, Up16 }
 
 /// <summary>One complete nearest resize on the existing original raster.</summary>
 [MemoryDiagnoser]
@@ -22,8 +22,9 @@ public class WarmNearestResize
     private JsonElement sourceIdentity;
     private bool smoke, ready;
     private int cpu, sampleCount, depth;
-    private int Width => Case == WarmNearestCase.Up8 ? 1027 : 256;
-    private int Height => Case == WarmNearestCase.Up8 ? 519 : 129;
+    private bool Upscale => Case is WarmNearestCase.Up8 or WarmNearestCase.Up16;
+    private int Width => Upscale ? 1027 : 256;
+    private int Height => Upscale ? 519 : 129;
 
     public static WarmNearestCase[] SelectedCases()
         => Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES") switch
@@ -31,14 +32,15 @@ public class WarmNearestResize
             null or "Down8" => [WarmNearestCase.Down8],
             "Down16" => [WarmNearestCase.Down16],
             "Up8" => [WarmNearestCase.Up8],
-            _ => throw new ArgumentException("Choose one nearest case: Down8, Down16 or Up8.")
+            "Up16" => [WarmNearestCase.Up16],
+            _ => throw new ArgumentException("Choose one nearest case: Down8, Down16, Up8 or Up16.")
         };
 
     [GlobalSetup]
     public void Setup()
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Use the dedicated Linux VM.");
-        depth = Case switch { WarmNearestCase.Down8 or WarmNearestCase.Up8 => 8, WarmNearestCase.Down16 => 16, _ => throw new ArgumentOutOfRangeException(nameof(Case)) };
+        depth = Case switch { WarmNearestCase.Down8 or WarmNearestCase.Up8 => 8, WarmNearestCase.Down16 or WarmNearestCase.Up16 => 16, _ => throw new ArgumentOutOfRangeException(nameof(Case)) };
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -58,8 +60,8 @@ public class WarmNearestResize
             File.WriteAllBytes(state.Input, input);
             ValidateManaged();
             native = new NativeWarmReference(state, depth, cpu, "nearest-resize",
-                resizeWidth: Case == WarmNearestCase.Up8 ? Width : null,
-                resizeHeight: Case == WarmNearestCase.Up8 ? Height : null);
+                resizeWidth: Upscale ? Width : null,
+                resizeHeight: Upscale ? Height : null);
             RequireNativeOutput();
             var arguments = ResizeOracle.NearestArguments(513, 259, Width, Height, depth).ToList();
             arguments.RemoveRange(arguments.IndexOf("-cpuflags"), 2);
