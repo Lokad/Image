@@ -86,6 +86,7 @@ def render():
         row('PNG gray16, None', 'warm-pnggray16-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY16-ROW.md', True),
         row('PNG gray-alpha16, None', 'warm-pnggrayalpha16-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ROW.md', True),
         row('PNG palette8 + tRNS, None', 'warm-pngpalette-simd-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE-SIMD.md', True),
+        row('PNG palette8 + two-entry tRNS, None', 'warm-pngpal8a2-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE8-PARTIAL-ALPHA.md', True),
         row('PNG palette4 + tRNS → RGBA8, None', 'warm-pngdecode-reuse-evidence.json', ['cases', 'palette4', 'observations', -1], 'WARM-PNG-DECODE-REUSE.md', True),
         row('PNG palette2 + tRNS → RGBA8, None', 'warm-pngpalette2-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE2-ROW.md', True),
         row('PNG palette1 + tRNS → RGBA8, None', 'warm-pngpalette1-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE1-ROW.md', True),

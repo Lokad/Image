@@ -48,6 +48,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG gray16, None](../benchmarks/WARM-PNG-GRAY16-ROW.md) | 1,743.26 | 960.42 | 1.815 / 1.837 | 1,331,046 | Confirmed |
 | [PNG gray-alpha16, None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ROW.md) | 3,195.37 | 1,798.83 | 1.776 / 1.785 | 1,573,649 | Confirmed |
 | [PNG palette8 + tRNS, None](../benchmarks/WARM-PNG-PALETTE-SIMD.md) | 553.32 | 362.52 | 1.526 / 1.543 | 10,976 | Confirmed |
+| [PNG palette8 + two-entry tRNS, None](../benchmarks/WARM-PNG-PALETTE8-PARTIAL-ALPHA.md) | 709.94 | 363.54 | 1.953 / 1.967 | 10,728 | Confirmed |
 | [PNG palette4 + tRNS → RGBA8, None](../benchmarks/WARM-PNG-DECODE-REUSE.md) | 214.75 | 136.64 | 1.572 / 1.617 | 13,656 | Confirmed |
 | [PNG palette2 + tRNS → RGBA8, None](../benchmarks/WARM-PNG-PALETTE2-ROW.md) | 76.33 | 98.66 | 0.774 / 0.789 | 9,208 | Confirmed |
 | [PNG palette1 + tRNS → RGBA8, None](../benchmarks/WARM-PNG-PALETTE1-ROW.md) | 61.91 | 86.80 | 0.713 / 0.723 | 9,072 | Confirmed |
