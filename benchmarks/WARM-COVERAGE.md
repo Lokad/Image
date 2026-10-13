@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8 tRNS confirmed | Other material depths/layouts; RGB16 transparency or shorter palettes |
+| PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed | Other material depths/layouts, shorter palettes or distinct public boundaries |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level 6/None; RGBA8 NoCompression/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x and 4:2:2 confirmed 1.821x / upper 1.862x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x and 4:2:0 confirmed 1.888x / upper 1.931x; adaptive 4:2:0 RGBA8 quiet repeat 1.977x / upper 2.014x, open | RGBA8 4:2:0 upper bound; grayscale, constrained fallback and other material normalization layouts |
@@ -395,3 +395,13 @@ fails before any actual iteration, remains unscored, and is frozen before the
 same child completes the quiet confirmation. Both guards and all method/flag
 proofs pass; unchanged-package validation is reused. Stop tuning this pair;
 JPEG420 RGBA8's upper and the remaining material scope remain open.
+
+The [RGB16 tRNS row round](WARM-PNG-RGB16-TRANSPARENCY.md) exposes a 2.117x
+generic mapping gap and reduces the screened mean 40.8%. One full-word triplet
+primitive independently confirms 1.272x / upper 1.302x with unchanged 15,056 B/op.
+Two transparent pixels retain hidden RGB; 169 upper-byte collisions stay opaque.
+Native endian conversion/output ownership is timed, with no colorspace conversion.
+The original failed post-run I/O guard remains unscored; the unchanged child
+passes a quiet repeat after pending writes are flushed outside timing. Full
+tests and the same actual package pass on both OSes. Stop tuning this pair;
+material opaque WebP paths and the remaining required scope stay open.

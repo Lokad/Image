@@ -251,6 +251,14 @@ internal static class PngCodec
                         var offset = (startY + y * stepY) * result.Stride + startX * 8;
                         CopyRgb16Row(row, result.Pixels.Slice(offset, width * 8), context.Cancellation);
                     }
+                    else if (header.ColorType == 2 && header.Depth == 16 && stepX == 1 && header.Transparency.Length == 6)
+                    {
+                        var offset = (startY + y * stepY) * result.Stride + startX * 8;
+                        CopyRgb16TransparentRow(row, result.Pixels.Slice(offset, width * 8),
+                            BinaryPrimitives.ReadUInt16BigEndian(header.Transparency),
+                            BinaryPrimitives.ReadUInt16BigEndian(header.Transparency.AsSpan(2)),
+                            BinaryPrimitives.ReadUInt16BigEndian(header.Transparency.AsSpan(4)), context.Cancellation);
+                    }
                     else if (header.ColorType == 2 && header.Depth == 8 && stepX == 1 && header.Transparency.Length == 0)
                     {
                         var offset = (startY + y * stepY) * result.Stride + startX * 4;
@@ -863,6 +871,45 @@ internal static class PngCodec
             samples[x * 4 + 1] = BinaryPrimitives.ReadUInt16BigEndian(input[2..]);
             samples[x * 4 + 2] = BinaryPrimitives.ReadUInt16BigEndian(input[4..]);
             samples[x * 4 + 3] = ushort.MaxValue;
+        }
+    }
+
+    internal static void CopyRgb16TransparentRow(ReadOnlySpan<byte> row, Span<byte> destination,
+        ushort redKey, ushort greenKey, ushort blueKey, CancellationToken cancellation)
+    {
+        // PNG 7.3/11.3.2.1: retain every RGB16 sample, comparing the full triplet.
+        // Byte shuffling converts BE RGB to native LE RGB with initially zero alpha.
+        var pixels = row.Length / 6; var x = 0;
+        if (Avx2.IsSupported && BitConverter.IsLittleEndian)
+        {
+            var shuffle = Vector256.Create(
+                (byte)1, 0, 3, 2, 5, 4, 128, 128, 7, 6, 9, 8, 11, 10, 128, 128,
+                5, 4, 7, 6, 9, 8, 128, 128, 11, 10, 13, 12, 15, 14, 128, 128);
+            var opaque = Vector256.Create(0xffff000000000000UL);
+            var key = Vector256.Create((ulong)redKey | (ulong)greenKey << 16 | (ulong)blueKey << 32);
+            for (; x <= pixels - 4; x += 4)
+            {
+                if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+                var input = row[(x * 6)..];
+                var first = MemoryMarshal.Read<ulong>(input);
+                var middle = MemoryMarshal.Read<ulong>(input[8..]);
+                var last = MemoryMarshal.Read<ulong>(input[16..]);
+                var packed = Vector256.Create(first, middle, middle, last).AsByte();
+                var rgb = Avx2.Shuffle(packed, shuffle).AsUInt64();
+                var alpha = Avx2.AndNot(Avx2.CompareEqual(rgb, key), opaque);
+                (rgb | alpha).AsByte().CopyTo(destination[(x * 8)..]);
+            }
+        }
+        var samples = MemoryMarshal.Cast<byte, ushort>(destination);
+        for (; x < pixels; x++)
+        {
+            if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+            var input = row[(x * 6)..];
+            var red = BinaryPrimitives.ReadUInt16BigEndian(input);
+            var green = BinaryPrimitives.ReadUInt16BigEndian(input[2..]);
+            var blue = BinaryPrimitives.ReadUInt16BigEndian(input[4..]);
+            samples[x * 4] = red; samples[x * 4 + 1] = green; samples[x * 4 + 2] = blue;
+            samples[x * 4 + 3] = red == redKey && green == greenKey && blue == blueKey ? (ushort)0 : ushort.MaxValue;
         }
     }
 
