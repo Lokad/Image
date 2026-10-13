@@ -426,4 +426,12 @@ The [arithmetic-window correctness prototype](VP8-WINDOW-PROTOTYPE.md) passes
 opaque/alpha samples and held owners. Production remains unchanged; no timing
 claim is made. The private state adds at most 32 bytes across eight partitions.
 Fixed admission, one-primitive integration and complete-operation VM measurement
-remain open.
+were left open by that correctness-only round.
+
+The [wider-window integration](VP8-WINDOW-REJECTED.md) subsequently measures
+2.052x / upper 2.115x with unchanged 760,548 B/op, slower than the retained
+9.505-ms baseline. Both guards and focused normal/scalar checks on both OSes
+pass, but the candidate is rejected without a twelve-actual repetition.
+Production and tests are restored; all 630 fresh/actual bodies and flags match
+the validated package. No reader gain is accepted. Opaque VP8's baseline upper
+and JPEG420 RGBA8 remain open; cover a remaining material workload next.

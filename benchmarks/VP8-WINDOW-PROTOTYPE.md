@@ -39,6 +39,7 @@ this is a different representation, with no speed established yet.
 
 The [numeric evidence](vp8-window-prototype-evidence.json) records all four
 identical proofs, source hashes and the frozen prototype/source/package archive.
-Next, integrate one safe primitive and measure the complete warm operation on
-the dedicated quiet VM. Opaque VP8, JPEG420 RGBA8's upper-bound gap and the rest
-of the required material contract remain open.
+The subsequent [integration screen](VP8-WINDOW-REJECTED.md) is slower and rejected;
+production is restored. These correctness results remain useful as a reference,
+with no accepted performance gain. Opaque VP8, JPEG420 RGBA8's upper-bound gap
+and the rest of the required material contract remain open.
