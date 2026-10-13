@@ -611,7 +611,35 @@ internal static class PngCodec
         // PNG sections 7.3/11.2.2/11.3.2.1: packed indices are MSB-first,
         // select RGB triples, and default to opaque beyond the tRNS entries.
         var x = 0; var mask = (1 << depth) - 1; var colors = palette.Length / 3;
-        if (depth == 2 && pixels >= 16 && colors == 4 && transparency.Length is 0 or 4 && Ssse3.IsSupported)
+        if (depth == 1 && pixels >= 16 && colors == 2 && transparency.Length is 0 or 2 && Ssse3.IsSupported)
+        {
+            var red = Vector128.CreateScalar((ushort)(palette[0] | palette[3] << 8)).AsByte();
+            var green = Vector128.CreateScalar((ushort)(palette[1] | palette[4] << 8)).AsByte();
+            var blue = Vector128.CreateScalar((ushort)(palette[2] | palette[5] << 8)).AsByte();
+            var alpha = transparency.Length == 0 ? Vector128.Create((byte)255)
+                : Vector128.CreateScalar(BinaryPrimitives.ReadUInt16LittleEndian(transparency)).AsByte();
+            // Repeat each of two packed bytes over eight lanes, then test its
+            // MSB-first bits. Complete two-entry palettes make every index valid.
+            var repeat = Vector128.Create((byte)0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1);
+            var bits = Vector128.Create((byte)128, 64, 32, 16, 8, 4, 2, 1, 128, 64, 32, 16, 8, 4, 2, 1);
+            var one = Vector128.Create((byte)1);
+            for (; x <= pixels - 16; x += 16)
+            {
+                if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+                var packed = Vector128.CreateScalar(BinaryPrimitives.ReadUInt16LittleEndian(row[(x / 8)..])).AsByte();
+                var selected = Ssse3.Shuffle(packed, repeat) & bits;
+                var indices = Sse2.AndNot(Sse2.CompareEqual(selected, Vector128<byte>.Zero), one);
+                var r = Ssse3.Shuffle(red, indices); var g = Ssse3.Shuffle(green, indices);
+                var b = Ssse3.Shuffle(blue, indices); var a = Ssse3.Shuffle(alpha, indices);
+                var rgLow = Sse2.UnpackLow(r, g).AsUInt16(); var baLow = Sse2.UnpackLow(b, a).AsUInt16();
+                var rgHigh = Sse2.UnpackHigh(r, g).AsUInt16(); var baHigh = Sse2.UnpackHigh(b, a).AsUInt16();
+                Sse2.UnpackLow(rgLow, baLow).AsByte().CopyTo(destination.Slice(x * 4, 16));
+                Sse2.UnpackHigh(rgLow, baLow).AsByte().CopyTo(destination.Slice(x * 4 + 16, 16));
+                Sse2.UnpackLow(rgHigh, baHigh).AsByte().CopyTo(destination.Slice(x * 4 + 32, 16));
+                Sse2.UnpackHigh(rgHigh, baHigh).AsByte().CopyTo(destination.Slice(x * 4 + 48, 16));
+            }
+        }
+        else if (depth == 2 && pixels >= 16 && colors == 4 && transparency.Length is 0 or 4 && Ssse3.IsSupported)
         {
             // Four complete RGB triples become four-entry register lookups.
             // Every two-bit index is valid; partial palettes/alpha keep scalar

@@ -19,6 +19,43 @@ public sealed class PngPackedPaletteRowTests
     }
 
     [Fact]
+    public void FullPalette1RetainsArbitraryAlphaAndUnrelatedChannelsAcrossTheVectorTail()
+    {
+        const int width = 17;
+        byte[] input = [0x81, 0x7e, 0xa5]; byte[] palette = [11, 29, 251, 173, 71, 5]; byte[] alpha = [7, 193];
+        var output = new byte[width * 4];
+        PngCodec.CopyPackedPaletteRow(input, output, width, 1, palette, alpha, default);
+        for (var x = 0; x < width; x++)
+        {
+            var index = input[x / 8] >> (7 - x % 8) & 1;
+            Assert.Equal(palette.AsSpan(index * 3, 3).ToArray(), output.AsSpan(x * 4, 3).ToArray());
+            Assert.Equal(alpha[index], output[x * 4 + 3]);
+        }
+    }
+
+    [Fact]
+    public void PartialPalette1RejectsInvalidIndexAfterAValidPrefixInAVectorWidthRow()
+    {
+        const int width = 17;
+        byte[] input = [0, 0x40, 0]; var output = Enumerable.Repeat((byte)0xa5, width * 4).ToArray();
+        var error = Assert.Throws<ImageDataException>(() => PngCodec.CopyPackedPaletteRow(input, output, width, 1,
+            new byte[] { 11, 22, 33 }, new byte[] { 0 }, default));
+        Assert.Equal("PNG palette index out of range.", error.Message);
+        for (var x = 0; x < 9; x++) Assert.Equal(new byte[] { 11, 22, 33, 0 }, output.AsSpan(x * 4, 4).ToArray());
+        Assert.All(output.Skip(9 * 4), value => Assert.Equal((byte)0xa5, value));
+    }
+
+    [Theory]
+    [InlineData(16)] [InlineData(17)] [InlineData(4097)]
+    public void FullPalette1ChecksCancellationBeforeVectorOutput(int width)
+    {
+        var output = Enumerable.Repeat((byte)0xa5, width * 4).ToArray();
+        Assert.Throws<OperationCanceledException>(() => PngCodec.CopyPackedPaletteRow(
+            new byte[(width + 7) / 8], output, width, 1, new byte[6], new byte[2], new CancellationToken(true)));
+        Assert.All(output, value => Assert.Equal((byte)0xa5, value));
+    }
+
+    [Fact]
     public void PartialPalette2RejectsInvalidIndexAfterAValidPrefixInAVectorWidthRow()
     {
         const int width = 17;

@@ -84,6 +84,7 @@ def render():
         row('PNG palette8 + tRNS, None', 'warm-pngpalette-simd-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE-SIMD.md', True),
         row('PNG palette4 + tRNS → RGBA8, None', 'warm-pngdecode-reuse-evidence.json', ['cases', 'palette4', 'observations', -1], 'WARM-PNG-DECODE-REUSE.md', True),
         row('PNG palette2 + tRNS → RGBA8, None', 'warm-pngpalette2-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE2-ROW.md', True),
+        row('PNG palette1 + tRNS → RGBA8, None', 'warm-pngpalette1-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE1-ROW.md', True),
         row('PNG opaque gray1 → RGBA8, None', 'warm-pnggray1-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-ROW.md', True),
         row('PNG opaque gray4 → RGBA8, None', 'warm-pnggray4-reuse-evidence.json', ['observations', -1], 'WARM-PNG-GRAY4-REUSE.md', True),
         row('JPEG baseline gray', 'warm-jpegac-fused-evidence.json', ['regressionControl', 'observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
@@ -204,9 +205,9 @@ timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-The latest [palette2 SIMD expansion](../benchmarks/WARM-PNG-PALETTE2-ROW.md) reduces
-decode screen mean 76.7%, from 3.388x to 0.781x. Its independent confirmation is
-0.774x / upper 0.789x with 9,208 B/op unchanged. The
+The latest [palette1 SIMD expansion](../benchmarks/WARM-PNG-PALETTE1-ROW.md) reduces
+decode screen mean 80.9%, from 3.739x to 0.713x. Its independent confirmation is
+0.713x / upper 0.723x with 9,072 B/op unchanged. The
 [RGB16 check](../benchmarks/WARM-PNG-RGB16-CURRENT.md) is confirmed at 1.819x / upper
 1.823x with 15,024 B/op. JPEG420's earlier upper-bound gap remains open.
 Stop tuning confirmed pairs. Other profiles, ownership boundaries and the full

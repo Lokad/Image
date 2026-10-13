@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/4 and palette2/4/8 None confirmed | Packed gray2 and palette1; other filter implementations; partial palette/alpha paths |
+| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/4 and palette1/2/4/8 None confirmed | Packed gray2; other filter implementations; partial palette/alpha paths |
 | PNG encode | RGBA8/16, level 6/None | RGB and gray projections; compression policies with materially different work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
@@ -160,3 +160,13 @@ The fixed original-raster projection adds no original image; palette4/8 bytes st
 unchanged. Initial native-worker whitelist rejection is retained without timing.
 JPEG420's upper gap stays open. Packed palette1 remains scalar and is the next
 useful one-pair screen before more small tuning of near-parity cases.
+
+The [packed palette1 round](WARM-PNG-PALETTE1-ROW.md) measures a 3.739x scalar gap
+and improves one dense expansion primitive. Safe sixteen-pixel SSE2/SSSE3 expansion
+reduces decode mean 80.9%; independent confirmation is 0.713x / upper 0.723x and
+9,072 B/op unchanged. Both guards pass; all 12 actuals are retained. Full both-OS
+Release/live tests and same-package/all-three-example checks pass. Stop tuning
+this fixed pair. The original-raster projection adds no original image; palette2/4/8
+bytes and the generic native PAL8 worker remain unchanged. Partial palette/alpha,
+other CPUs and public ownership boundaries remain distinct. JPEG420's upper gap
+stays open; packed gray2 is the next one-pair material screen.
