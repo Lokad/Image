@@ -123,7 +123,7 @@ def render():
         row('JPEG 4:4:4 from RGBA16, full normalization', 'warm-jpeg16-component-row-evidence.json', ['observations', -1], 'WARM-JPEG16-COMPONENT-ROW.md', True),
         row('JPEG 4:2:2, matched quality', 'warm-jpeg422encode-evidence.json', ['observations', -1], 'WARM-JPEG422-ENCODE.md', True),
         row('JPEG 4:2:0, matched quality', 'warm-jpeg420-chroma-row-evidence.json', ['observations', -1], 'WARM-JPEG420-CHROMA-ROW.md'),
-        row('JPEG 4:2:0 from RGBA16, full normalization', 'warm-jpeg42016-chroma-row-evidence.json', ['observations', -1], 'WARM-JPEG42016-CHROMA-ROW.md'),
+        row('JPEG 4:2:0 from RGBA16, full normalization', 'warm-jpeg42016-entropy-rejected-evidence.json', ['observations', 0], 'WARM-JPEG42016-ENTROPY-REJECTED.md'),
         row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
         row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8encode16-evidence.json', ['observations', -1], 'WARM-VP8-RGBA16-ENCODE.md', True),
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
@@ -273,6 +273,13 @@ reduces the screened mean 59.9%, from 3.524x to an independently confirmed
 preserves hidden RGB, work and cancellation. Full tests and the same actual
 package pass on both OSes. RGB16 transparency and other material coverage remain
 open.
+
+The [JPEG420 RGBA16 entropy checks](../benchmarks/WARM-JPEG42016-ENTROPY-REJECTED.md)
+retain the validated encoder at 2.046x / upper 3.240x with 527,306 B/op. Inlining,
+cached byte dispatch and symbol batching provide insufficient headroom or no
+useful gain; all three are discarded. Exact original production is restored
+and JPEG420 remains open. The next investigation targets Huffman coding rather
+than further stream dispatch changes.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

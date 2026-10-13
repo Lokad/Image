@@ -12,7 +12,7 @@ round, at most three, with correctness established before timing.
 | PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8 tRNS confirmed | Other material depths/layouts; RGB16 transparency or shorter palettes |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level 6/None; RGBA8 NoCompression/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
-| JPEG encode | RGBA8 to 4:4:4 and 4:2:2; RGBA16 to 4:4:4 confirmed; 4:2:0 RGBA8 upper above 2x; 4:2:0 RGBA16 screen improved 42.9%, mean still above 2x | Both 4:2:0 gaps; grayscale and other material normalization layouts |
+| JPEG encode | RGBA8 to 4:4:4 and 4:2:2; RGBA16 to 4:4:4 confirmed; 4:2:0 RGBA8 upper above 2x; restored 4:2:0 RGBA16 screen 2.046x after three rejected entropy/output trials | Both 4:2:0 gaps; larger Huffman coding investigation, grayscale and other material normalization layouts |
 | WebP | VP8 with alpha decode/encode; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Material opaque/alpha alternatives and distinct public boundaries |
 | Resize | Nearest/bilinear at both depths, fixed downsample | Bicubic at both depths; upsample/wide-support paths; tight-memory fallback |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes | Retained live output owners versus released-storage reuse |
@@ -344,3 +344,10 @@ Native alpha expansion occurs inside decoding into already owned RGBA; no
 redundant conversion is timed. Exact original RGB, hidden RGB, prior native
 controls, both guards, full tests and the same actual package pass on both OSes.
 Stop tuning this pair; JPEG420 gaps and the required scope remain open.
+
+The [JPEG420 RGBA16 entropy investigation](WARM-JPEG42016-ENTROPY-REJECTED.md)
+retains a fresh 2.046x / upper 3.240x baseline with 527,306 B/op. Inlining,
+cached byte dispatch and batched symbols do not establish useful headroom and
+are discarded without twelve-actual repetitions. All original production is
+restored, with fresh both-OS method/flag proofs against the validated package.
+Investigate a larger Huffman coding change next; both JPEG420 gaps remain open.
