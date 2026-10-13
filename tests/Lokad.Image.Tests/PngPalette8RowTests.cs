@@ -20,6 +20,8 @@ public sealed class PngPalette8RowTests
     [InlineData(16, 256)] [InlineData(17, 256)] [InlineData(256, 256)] [InlineData(513, 256)]
     [InlineData(4095, 256)] [InlineData(4096, 256)] [InlineData(4097, 256)]
     [InlineData(256, 0)] [InlineData(256, 17)]
+    [InlineData(255, 256)] [InlineData(257, 256)] [InlineData(1025, 256)]
+    [InlineData(513, 0)] [InlineData(513, 255)]
     public void PreservesAllIndicesChannelsAndPartialAlphaWithUnalignedGuards(int width, int alphaEntries)
     {
         var input = new byte[width + 2];
@@ -38,6 +40,27 @@ public sealed class PngPalette8RowTests
         Assert.Equal(original, input); Assert.Equal(originalPalette, palette); Assert.Equal(originalAlpha, alpha);
         Assert.All(output.Take(5), value => Assert.Equal((byte)0xa5, value));
         Assert.All(output.Skip(width * 4 + 5), value => Assert.Equal((byte)0xa5, value));
+    }
+
+    [Fact]
+    public void FullPaletteHandlesMixedIndicesAndUnrelatedChannels()
+    {
+        const int width = 513;
+        var row = new byte[width]; var palette = new byte[768]; var alpha = new byte[256];
+        for (var i = 0; i < 256; i++)
+        {
+            palette[i * 3] = unchecked((byte)(i * 37 + 41));
+            palette[i * 3 + 1] = unchecked((byte)(i * i + 17));
+            palette[i * 3 + 2] = (byte)(i ^ 0xb6); alpha[i] = unchecked((byte)(i * 101));
+        }
+        for (var x = 0; x < width; x++) row[x] = unchecked((byte)(x * 173 + 127));
+        var output = new byte[width * 4];
+        PngCodec.CopyPalette8Row(row, output, palette, alpha, default);
+        for (var x = 0; x < width; x++)
+        {
+            Assert.Equal(palette.AsSpan(row[x] * 3, 3).ToArray(), output.AsSpan(x * 4, 3).ToArray());
+            Assert.Equal(alpha[row[x]], output[x * 4 + 3]);
+        }
     }
 
     [Fact]

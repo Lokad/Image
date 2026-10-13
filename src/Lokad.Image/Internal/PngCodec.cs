@@ -1,5 +1,6 @@
 using System.Buffers.Binary;
 using System.IO.Compression;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -501,6 +502,12 @@ internal static class PngCodec
         // PNG sections 7.3/11.2.2/11.3.2.1: indices select RGB triples. Missing
         // tRNS entries are opaque; zero alpha preserves the palette's hidden RGB.
         var colors = palette.Length / 3;
+        if (colors == 256 && row.Length >= 256 && transparency.Length is 0 or 256
+            && Avx512Vbmi.IsSupported && Avx512BW.IsSupported)
+        {
+            CopyFullPalette8Row(row, destination, palette, transparency, cancellation);
+            return;
+        }
         for (var x = 0; x < row.Length; x++)
         {
             if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
@@ -512,6 +519,91 @@ internal static class PngCodec
             BinaryPrimitives.WriteUInt32LittleEndian(destination[(x * 4)..], rgba);
         }
     }
+
+    private static void CopyFullPalette8Row(ReadOnlySpan<byte> row, Span<byte> destination,
+        ReadOnlySpan<byte> palette, ReadOnlySpan<byte> transparency, CancellationToken cancellation)
+    {
+        cancellation.ThrowIfCancellationRequested();
+        // For each group of 64 RGB triples, component offsets are 3*i+c.
+        // Select directly from the existing palette into registers: no expanded
+        // table or additional image workspace is needed. All byte indices are
+        // valid only for the complete 256-entry palette admitted by the caller.
+        var indices = Vector512.Create<byte>([
+            0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45,
+            48, 51, 54, 57, 60, 63, 66, 69, 72, 75, 78, 81, 84, 87, 90, 93,
+            96, 99, 102, 105, 108, 111, 114, 117, 120, 123, 126, 129, 132, 135, 138, 141,
+            144, 147, 150, 153, 156, 159, 162, 165, 168, 171, 174, 177, 180, 183, 186, 189]);
+        ReadPaletteGroup(palette[..192], indices, out var r0, out var g0, out var b0);
+        ReadPaletteGroup(palette.Slice(192, 192), indices, out var r1, out var g1, out var b1);
+        ReadPaletteGroup(palette.Slice(384, 192), indices, out var r2, out var g2, out var b2);
+        ReadPaletteGroup(palette.Slice(576, 192), indices, out var r3, out var g3, out var b3);
+        var opaque = Vector512.Create((byte)255);
+        var a0 = transparency.Length == 0 ? opaque : Vector512.Create(transparency[..64]);
+        var a1 = transparency.Length == 0 ? opaque : Vector512.Create(transparency.Slice(64, 64));
+        var a2 = transparency.Length == 0 ? opaque : Vector512.Create(transparency.Slice(128, 64));
+        var a3 = transparency.Length == 0 ? opaque : Vector512.Create(transparency.Slice(192, 64));
+        var x = 0;
+        for (; x <= row.Length - 64; x += 64)
+        {
+            if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+            var packed = Vector512.Create(row.Slice(x, 64));
+            var high = Vector512.LessThan(packed.AsSByte(), Vector512<sbyte>.Zero).AsByte();
+            var r = LookupPaletteChannel(packed, high, r0, r1, r2, r3);
+            var g = LookupPaletteChannel(packed, high, g0, g1, g2, g3);
+            var b = LookupPaletteChannel(packed, high, b0, b1, b2, b3);
+            var a = LookupPaletteChannel(packed, high, a0, a1, a2, a3);
+            var rgLow = Avx512BW.UnpackLow(r, g).AsUInt16();
+            var rgHigh = Avx512BW.UnpackHigh(r, g).AsUInt16();
+            var baLow = Avx512BW.UnpackLow(b, a).AsUInt16();
+            var baHigh = Avx512BW.UnpackHigh(b, a).AsUInt16();
+            var first = Avx512BW.UnpackLow(rgLow, baLow).AsUInt32();
+            var second = Avx512BW.UnpackHigh(rgLow, baLow).AsUInt32();
+            var third = Avx512BW.UnpackLow(rgHigh, baHigh).AsUInt32();
+            var fourth = Avx512BW.UnpackHigh(rgHigh, baHigh).AsUInt32();
+            // Unpack operates within 128-bit lanes. Transpose the four lane
+            // groups back into consecutive runs of 16 complete RGBA pixels.
+            var even12 = Avx512F.Shuffle4x128(first, second, 0x88);
+            var even34 = Avx512F.Shuffle4x128(third, fourth, 0x88);
+            var odd12 = Avx512F.Shuffle4x128(first, second, 0xdd);
+            var odd34 = Avx512F.Shuffle4x128(third, fourth, 0xdd);
+            Avx512F.Shuffle4x128(even12, even34, 0x88).AsByte().CopyTo(destination.Slice(x * 4, 64));
+            Avx512F.Shuffle4x128(odd12, odd34, 0x88).AsByte().CopyTo(destination.Slice(x * 4 + 64, 64));
+            Avx512F.Shuffle4x128(even12, even34, 0xdd).AsByte().CopyTo(destination.Slice(x * 4 + 128, 64));
+            Avx512F.Shuffle4x128(odd12, odd34, 0xdd).AsByte().CopyTo(destination.Slice(x * 4 + 192, 64));
+        }
+        for (; x < row.Length; x++)
+        {
+            if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+            var index = row[x]; var rgb = palette.Slice(index * 3, 3);
+            var alpha = transparency.Length == 0 ? (byte)255 : transparency[index];
+            var rgba = (uint)BinaryPrimitives.ReadUInt16LittleEndian(rgb) | (uint)rgb[2] << 16 | (uint)alpha << 24;
+            BinaryPrimitives.WriteUInt32LittleEndian(destination[(x * 4)..], rgba);
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void ReadPaletteGroup(ReadOnlySpan<byte> palette, Vector512<byte> indices,
+        out Vector512<byte> red, out Vector512<byte> green, out Vector512<byte> blue)
+    {
+        var first = Vector512.Create(palette[..64]);
+        var middle = Vector512.Create(palette.Slice(64, 64));
+        var last = Vector512.Create(palette.Slice(128, 64));
+        red = SelectPaletteComponent(first, middle, last, indices);
+        green = SelectPaletteComponent(first, middle, last, indices + Vector512.Create((byte)1));
+        blue = SelectPaletteComponent(first, middle, last, indices + Vector512.Create((byte)2));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector512<byte> SelectPaletteComponent(Vector512<byte> first, Vector512<byte> middle,
+        Vector512<byte> last, Vector512<byte> indices)
+        => Vector512.ConditionalSelect(Vector512.LessThan(indices.AsSByte(), Vector512<sbyte>.Zero).AsByte(),
+            Avx512Vbmi.PermuteVar64x8(last, indices), Avx512Vbmi.PermuteVar64x8x2(first, indices, middle));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector512<byte> LookupPaletteChannel(Vector512<byte> indices, Vector512<byte> high,
+        Vector512<byte> first, Vector512<byte> second, Vector512<byte> third, Vector512<byte> fourth)
+        => Vector512.ConditionalSelect(high, Avx512Vbmi.PermuteVar64x8x2(third, indices, fourth),
+            Avx512Vbmi.PermuteVar64x8x2(first, indices, second));
 
     internal static void CopyPackedPaletteRow(ReadOnlySpan<byte> row, Span<byte> destination, int pixels, int depth,
         ReadOnlySpan<byte> palette, ReadOnlySpan<byte> transparency, CancellationToken cancellation)

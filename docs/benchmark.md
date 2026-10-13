@@ -43,7 +43,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGB8, None](../benchmarks/WARM-PNG-RGB8-ROW.md) | 2,139.12 | 1,510.62 | 1.416 / 1.440 | 727,305 | Confirmed |
 | [PNG gray16, None](../benchmarks/WARM-PNG-GRAY16-ROW.md) | 1,743.26 | 960.42 | 1.815 / 1.837 | 1,331,046 | Confirmed |
 | [PNG gray-alpha16, None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ROW.md) | 3,195.37 | 1,798.83 | 1.776 / 1.785 | 1,573,649 | Confirmed |
-| [PNG palette8 + tRNS, None](../benchmarks/WARM-PNG-INFLATE-BUFFER.md) | 737.54 | 363.65 | 2.028 / 2.446 | 10,976 | Above 2x / open |
+| [PNG palette8 + tRNS, None](../benchmarks/WARM-PNG-PALETTE-SIMD.md) | 553.32 | 362.52 | 1.526 / 1.543 | 10,976 | Confirmed |
 | [PNG palette4 + tRNS → RGBA8, None](../benchmarks/WARM-PNG-DECODE-REUSE.md) | 214.75 | 136.64 | 1.572 / 1.617 | 13,656 | Confirmed |
 | [PNG opaque gray1 → RGBA8, None](../benchmarks/WARM-PNG-GRAY1-ROW.md) | 299.69 | 305.79 | 0.980 / 1.001 | 537,700 | Confirmed |
 | [PNG opaque gray4 → RGBA8, None](../benchmarks/WARM-PNG-GRAY4-REUSE.md) | 220.61 | 146.67 | 1.504 / 1.532 | 13,544 | Confirmed |
@@ -129,10 +129,10 @@ timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-The latest [gray8 check](../benchmarks/WARM-PNG-GRAY8-CURRENT.md) confirms
-1.563x / upper 1.580x with 9,904 B/op, using unchanged shared PNG improvements.
-Production/package validation is reused. [Buffered palette8](../benchmarks/WARM-PNG-INFLATE-BUFFER.md)
-remains open at 2.028x / upper 2.446x; RGB16 and JPEG420 retain earlier open results.
+The latest [palette8 SIMD expansion](../benchmarks/WARM-PNG-PALETTE-SIMD.md) reduces
+managed screen mean 24.5% and independently confirms 1.526x / upper 1.543x with
+10,976 B/op. [Gray8](../benchmarks/WARM-PNG-GRAY8-CURRENT.md) is also confirmed at
+1.563x / upper 1.580x with 9,904 B/op. RGB16 and JPEG420 retain earlier open results.
 Stop tuning confirmed pairs. Other profiles, ownership boundaries and the full
 required scope remain open; earlier failures and rejected experiments stay recorded.
 
