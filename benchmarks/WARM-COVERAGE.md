@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16, None/Paeth; RGBA16 Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None confirmed | Other filter implementations; partial palette/alpha paths |
+| PNG decode | RGBA8/16, None/Paeth; RGBA8 Up; RGBA16 Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None confirmed | Sub/Average filter implementations; other material layouts; partial palette/alpha paths |
 | PNG encode | RGBA8/16, level 6/None | RGB and gray projections; compression policies with materially different work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
@@ -179,3 +179,12 @@ was added. The development gray-depth whitelist was extended with the same timed
 native conversion/output boundary. JPEG420's upper-bound gap and full material
 unknowns remain open. PNG Up RGBA8 is the next useful screen: its reconstruction
 still follows the generic scalar filter loop, distinct from None and Paeth.
+
+The [PNG Up RGBA8 check](WARM-PNG-UP8-BASELINE.md) independently confirms 1.756x /
+upper 1.764x and 12,976 B/op. Both guards pass; all 12 actuals remain retained.
+Production/package/native worker unchanged, full validation reused; stop timing/
+tuning this pair. Original RGBA8 and frozen Paeth8/16 bytes remain exact; no original
+image was added. Descriptive errata clarify packed palette1/2 and gray2 recipe text
+outside their original immutable observations; timing/allocation/pixel hashes stay
+unchanged. Sub RGBA8 is the next distinct material screen; JPEG420's upper-bound
+gap and the complete required scope remain open.

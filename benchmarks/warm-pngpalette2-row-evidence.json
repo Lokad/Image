@@ -2270,5 +2270,11 @@
     "candidateWholePackedRowNativeBytes": 1816,
     "baselineHasPerPixelBitOffsetShiftPaletteAssemblyAndBoundsChecks": true,
     "candidateTwoBitSixteenPixelPathExecutes": true
+  },
+  "receiptRasterRecipeErratum": {
+    "correctedRasterRecipe": "Original RGBA8 red top2bits: j=red>>6,i=j*85; palette R=i,G=255-i,B=(73*i+19)%256,A=i,4 entries; depth2 indices MSB-first,unused low bits zero.",
+    "reason": "Original receipt prose assumed other coded depths. Exact input/raster hashes,pixels,reported timing and allocation samples remain valid; original raw receipts are retained unchanged. Future WarmPng receipts use the general depth-aware quantizer description.",
+    "originalObservationsCanonicalSha256": "533763f1b9556dcc0514c744a477c6f0450d2573b141b469b2c65bb1bfee1b79",
+    "originalObservationsUnchanged": true
   }
 }

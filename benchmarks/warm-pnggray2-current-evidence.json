@@ -1716,5 +1716,11 @@
     "noLiveDotnet": true
   },
   "nativeWorkerChange": "Development-only gray whitelist admits legal1/2/4; generic GRAY8 unpack/conversion/owned-output timed boundary unchanged. No production native dependency.",
-  "newOriginalPerformanceImages": 0
+  "newOriginalPerformanceImages": 0,
+  "receiptRasterRecipeErratum": {
+    "correctedRasterRecipe": "Original RGBA8 red top2bits: gray=(red>>6)*85,RGB=gray,A=255; depth2 samples MSB-first,unused low bits zero.",
+    "reason": "Original receipt prose assumed other coded depths. Exact input/raster hashes,pixels,reported timing and allocation samples remain valid; original raw receipts are retained unchanged. Future WarmPng receipts use the general depth-aware quantizer description.",
+    "originalObservationsCanonicalSha256": "5b179d833d7bd8ab043d70b2d504c30d39045668508e645194bebaba4e291607",
+    "originalObservationsUnchanged": true
+  }
 }

@@ -8,7 +8,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray4, DecodePalette4, DecodePalette2, DecodePalette1, DecodeGray2 }
+public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray4, DecodePalette4, DecodePalette2, DecodePalette1, DecodeGray2, DecodeUp8 }
 
 [MemoryDiagnoser]
 public class WarmPng
@@ -29,7 +29,7 @@ public class WarmPng
         var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
         var result = selection is null ? new[] { WarmPngCase.Decode8 } : selection.Split(',')
             .Select(value => Enum.TryParse<WarmPngCase>(value, out var parsed) && Enum.IsDefined(parsed)
-                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray2, DecodeGray4, DecodePalette1, DecodePalette2 or DecodePalette4.")).ToArray();
+                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeUp8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray2, DecodeGray4, DecodePalette1, DecodePalette2 or DecodePalette4.")).ToArray();
         if (result.Length is < 1 or > 3 || result.Distinct().Count() != result.Length)
             throw new ArgumentException("Choose one to three distinct PNG cases.");
         return result;
@@ -45,6 +45,8 @@ public class WarmPng
     private bool Encode => Case is WarmPngCase.Encode8 or WarmPngCase.Encode16;
     private bool Interlaced => Case == WarmPngCase.DecodeAdam7_16;
     private bool Paeth => Case is WarmPngCase.DecodePaeth16 or WarmPngCase.DecodePaeth8;
+    private bool Up => Case == WarmPngCase.DecodeUp8;
+    private int Filter => Paeth ? 4 : Up ? 2 : 0;
     private bool Prepared => Interlaced || Paeth;
 
     [GlobalSetup]
@@ -93,6 +95,7 @@ public class WarmPng
                     || !File.ReadAllBytes(Path.Combine(directory, "expected.raw")).AsSpan().SequenceEqual(pixels))
                     throw new InvalidOperationException("Prepared PNG input/raster differs.");
             }
+            else if (Up) encoded = WarmPngUpInput.Build(pixels);
             else if (Mono) encoded = WarmPngMonoInput.Build(pixels, CodedDepth);
             else if (Palette) encoded = WarmPngPaletteInput.Build(pixels, CodedDepth);
             else using (var output = new MemoryStream())
@@ -100,9 +103,9 @@ public class WarmPng
                 ImageCodec.EncodePng(source, output, encodeOptions); encoded = output.ToArray();
             }
             ValidatePng(encoded); ValidateManaged();
-            if (Rgb || Gray || GrayAlpha || Palette)
+            if (Rgb || Gray || GrayAlpha || Palette || Up)
             {
-                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", Mono ? "png-gray" + CodedDepth : Palette ? "png-palette" + CodedDepth : GrayAlpha ? "png-gray-alpha" + Depth : Gray ? "png-gray" + Depth : "png-rgb" + Depth);
+                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", Up ? "png-up-8" : Mono ? "png-gray" + CodedDepth : Palette ? "png-palette" + CodedDepth : GrayAlpha ? "png-gray-alpha" + Depth : Gray ? "png-gray" + Depth : "png-rgb" + Depth);
                 Directory.CreateDirectory(directory);
                 foreach (var (name, bytes) in new[] { ("input.png", encoded), ("expected.raw", pixels) })
                 {
@@ -231,7 +234,7 @@ public class WarmPng
             var row = new byte[packed ? (passWidth * CodedDepth + 7) / 8 : passWidth * bytesPerPixel];
             for (var y = startY; y < source.Height; y += stepY)
             {
-                if (inflater.ReadByte() != (Paeth ? 4 : 0)) throw new InvalidOperationException("PNG row filter differs from the fixed profile.");
+                if (inflater.ReadByte() != Filter) throw new InvalidOperationException("PNG row filter differs from the fixed profile.");
                 inflater.ReadExactly(row);
                 if (packed)
                 {
@@ -257,6 +260,7 @@ public class WarmPng
                         int ByteAt(int rowY, int byteX) => rowY < 0 || byteX < 0 ? 0 : pixels[rowY * source.Stride + (Depth == 16 ? byteX ^ 1 : byteX)];
                         prediction = WarmPngPaethInput.Predict(ByteAt(y, offset - bytesPerPixel), ByteAt(y - 1, offset), ByteAt(y - 1, offset - bytesPerPixel));
                     }
+                    else if (Up && y > 0) prediction = pixels[(y - 1) * source.Stride + x * bytesPerPixel + i];
                     if (row[(x - startX) / stepX * bytesPerPixel + i] != unchecked((byte)(original - prediction)))
                         throw new InvalidOperationException("PNG source/pass samples differ.");
                 }
@@ -301,14 +305,15 @@ public class WarmPng
                 nativeOutputSha256 = JpegBenchmarkCase.HashFile(state.NativeOutput),
                 interlace = Interlaced ? 1 : 0,
                 colorType = ColorType, codedDepth = CodedDepth,
-                rasterRecipe = Mono ? $"Existing original RGBA8 raster; gray is {(CodedDepth == 1 ? "255 when red>=128, otherwise 0" : "(red>>4)*17")}; RGB equal gray, alpha 255. Packed MSB-first, unused low bits zero. No additional original image."
-                    : Palette ? $"Existing original RGBA8 raster; {(CodedDepth == 4 ? "index j=red>>4, i=j*17, packed MSB-first, unused low bits zero" : "red is index i")}; original {1 << CodedDepth}-entry palette R=i,G=255-i,B=(73*i+19)%256,A=i. Includes nonzero hidden RGB at i=0. No additional original image."
+                rasterRecipe = Mono ? $"Existing original RGBA8 raster; gray=(red>>{8 - CodedDepth})*{255 / ((1 << CodedDepth) - 1)}; RGB equal gray, alpha 255. Packed MSB-first, unused low bits zero. No additional original image."
+                    : Palette ? $"Existing original RGBA8 raster; index j=red>>{8 - CodedDepth}, i=j*{255 / ((1 << CodedDepth) - 1)}, coded MSB-first with unused low bits zero; original {1 << CodedDepth}-entry palette R=i,G=255-i,B=(73*i+19)%256,A=i. Includes nonzero hidden RGB at i=0. No additional original image."
                     : GrayAlpha ? $"Existing original RGBA{Depth} raster; red retained as gray, green/blue set to red, alpha unchanged including hidden RGB. No additional original image."
                     : Gray ? $"Existing original RGBA{Depth} raster; red retained as gray, green/blue set to red, alpha set to {(Depth == 16 ? 65535 : 255)}. No additional original image."
                     : Rgb ? $"Existing original RGBA{Depth} raster; RGB unchanged, alpha set to {(Depth == 16 ? 65535 : 255)} for RGB PNG. No additional original image." : "Existing original RGBA raster, all samples unchanged.",
                 originalRasterSha256 = JpegBenchmarkCase.Hash(HorizontalFlipInput.Create(Depth)),
-                filter = Paeth ? 4 : 0,
+                filter = Filter,
                 compression = Paeth ? $"Authored noninterlaced PNG RGBA{Depth}; every row Paeth; BCL Optimal level 6; identical resident encoded input"
+                    : Up ? "Authored noninterlaced PNG RGBA8; every row Up; BCL Optimal level 6; identical resident encoded input"
                     : Interlaced ? "Authored PNG Adam7 RGBA16; BCL Optimal level 6; filter None; identical resident encoded input"
                     : $"BCL Optimal (zlib default level 6) / FFmpeg level 6; filter None; noninterlaced {(Mono ? "packed gray" + CodedDepth + ", opaque" : Palette ? $"palette{CodedDepth}, {1 << CodedDepth} entries and full tRNS" : GrayAlpha ? "gray-alpha" : Gray ? "gray" : Rgb ? "RGB" : "RGBA")}",
                 managedIdatBytes = IdatBytes(encoded), nativeIdatBytes = Encode ? IdatBytes(File.ReadAllBytes(state.NativeOutput)) : IdatBytes(encoded),

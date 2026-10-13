@@ -35,6 +35,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA8, None](../benchmarks/WARM-PNG8-DECODE-QUIET.md) | 2,961.21 | 1,516.02 | 1.953 / 1.995 | 755,274 | Confirmed |
 | [PNG RGBA16, None](../benchmarks/WARM-PNG-LITERAL-RUN.md) | 5,740.60 | 2,931.33 | 1.958 / 1.968 | 2,032,864 | Confirmed |
 | [PNG RGBA8, Paeth](../benchmarks/WARM-PAETH-FOUR-CHANNEL.md) | 5,099.55 | 2,925.24 | 1.743 / 1.842 | 881,892 | Confirmed |
+| [PNG RGBA8, Up](../benchmarks/WARM-PNG-UP8-BASELINE.md) | 2,644.01 | 1,505.93 | 1.756 / 1.764 | 12,976 | Confirmed |
 | [PNG RGBA16, Paeth](../benchmarks/WARM-PAETH-VECTOR.md) | 8,778.54 | 5,671.15 | 1.548 / 1.607 | 1,844,468 | Confirmed |
 | [PNG RGBA16, Adam7](../benchmarks/WARM-PNG-SCATTER.md) | 6,567.82 | 3,984.54 | 1.648 / 1.700 | 2,024,532 | Confirmed |
 | [PNG RGB16, None](../benchmarks/WARM-PNG-RGB16-CURRENT.md) | 4,020.98 | 2,210.00 | 1.819 / 1.823 | 15,024 | Confirmed |
@@ -132,10 +133,10 @@ timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-The latest [gray2 check](../benchmarks/WARM-PNG-GRAY2-CURRENT.md) independently
-confirms 0.756x / upper 0.783x with 9,136 B/op using unchanged production. The
-[palette1 SIMD expansion](../benchmarks/WARM-PNG-PALETTE1-ROW.md) is confirmed at
-0.713x / upper 0.723x with 9,072 B/op. The
+The latest [PNG Up RGBA8 check](../benchmarks/WARM-PNG-UP8-BASELINE.md) independently
+confirms 1.756x / upper 1.764x with 12,976 B/op using unchanged production. The
+[gray2 check](../benchmarks/WARM-PNG-GRAY2-CURRENT.md) is confirmed at 0.756x / upper
+0.783x with 9,136 B/op. The
 [RGB16 check](../benchmarks/WARM-PNG-RGB16-CURRENT.md) is confirmed at 1.819x / upper
 1.823x with 15,024 B/op. JPEG420's earlier upper-bound gap remains open.
 Stop tuning confirmed pairs. Other profiles, ownership boundaries and the full

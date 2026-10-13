@@ -73,6 +73,7 @@ def render():
         row('PNG RGBA8, None', 'warm-png8decode-quiet-evidence.json', ['observations', -1], 'WARM-PNG8-DECODE-QUIET.md', True),
         row('PNG RGBA16, None', 'warm-pngliteralrun-evidence.json', ['observations', -1], 'WARM-PNG-LITERAL-RUN.md', True),
         row('PNG RGBA8, Paeth', 'warm-paeth4-evidence.json', ['observations', -1], 'WARM-PAETH-FOUR-CHANNEL.md', True),
+        row('PNG RGBA8, Up', 'warm-pngup8-baseline-evidence.json', ['observations', -1], 'WARM-PNG-UP8-BASELINE.md', True),
         row('PNG RGBA16, Paeth', 'warm-paethvector-evidence.json', ['observations', -1], 'WARM-PAETH-VECTOR.md', True),
         row('PNG RGBA16, Adam7', 'warm-pngscatter-evidence.json', ['observations', -1], 'WARM-PNG-SCATTER.md', True),
         row('PNG RGB16, None', 'warm-pngrgb16-current-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-CURRENT.md', True),
@@ -206,10 +207,10 @@ timing. GIF and
 animation are deferred. No averages establish the uniform ≤2× target.
 Historical horizontal-flip launches and their bounds remain in the earlier report.
 
-The latest [gray2 check](../benchmarks/WARM-PNG-GRAY2-CURRENT.md) independently
-confirms 0.756x / upper 0.783x with 9,136 B/op using unchanged production. The
-[palette1 SIMD expansion](../benchmarks/WARM-PNG-PALETTE1-ROW.md) is confirmed at
-0.713x / upper 0.723x with 9,072 B/op. The
+The latest [PNG Up RGBA8 check](../benchmarks/WARM-PNG-UP8-BASELINE.md) independently
+confirms 1.756x / upper 1.764x with 12,976 B/op using unchanged production. The
+[gray2 check](../benchmarks/WARM-PNG-GRAY2-CURRENT.md) is confirmed at 0.756x / upper
+0.783x with 9,136 B/op. The
 [RGB16 check](../benchmarks/WARM-PNG-RGB16-CURRENT.md) is confirmed at 1.819x / upper
 1.823x with 15,024 B/op. JPEG420's earlier upper-bound gap remains open.
 Stop tuning confirmed pairs. Other profiles, ownership boundaries and the full
