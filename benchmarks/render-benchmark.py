@@ -111,6 +111,7 @@ def render():
         row('PNG RGB16, level 6 / None', 'warm-pngrgb16encode-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-ENCODE.md', True),
         pending('PNG gray8, level 6 / None', 'WARM-PNG-GRAY8-ENCODE-BOUNDARY.md', 'Compression-size gate failed; no timing'),
         row('PNG gray16, level 6 / None', 'warm-pnggray16encode-evidence.json', ['observations', -1], 'WARM-PNG-GRAY16-ENCODE.md', True),
+        pending('PNG gray-alpha8, level 6 / None', 'WARM-PNG-GRAY-ALPHA8-ENCODE-BOUNDARY.md', 'Compression-size gate failed; no timing'),
         row('JPEG 4:4:4, matched quality', 'warm-jpegencode-quiet-evidence.json', ['observations', -1], 'WARM-JPEG-ENCODE-QUIET.md', True),
         row('JPEG 4:2:0, matched quality', 'warm-jpeg420-chroma-row-evidence.json', ['observations', -1], 'WARM-JPEG420-CHROMA-ROW.md'),
         row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
@@ -228,6 +229,10 @@ The [gray16 encode check](../benchmarks/WARM-PNG-GRAY16-ENCODE.md) independently
 confirms 1.150x / upper 1.156x with 1,051,455 B/op. Its native baseline uses exact
 red-plane extraction and includes conversion/intermediate ownership within each
 operation. Production is unchanged.
+The [gray-alpha8 encode check](../benchmarks/WARM-PNG-GRAY-ALPHA8-ENCODE-BOUNDARY.md)
+preserves every sample with explicit timed lossless storage packing before the
+native PNG encoder, but remains unscored: IDAT sizes differ by 5.17%; batching
+saves only 61 bytes. Native colorspace conversion's alpha rounding is rejected.
 Other material layouts and encoding projections remain open. The
 [RGB16 check](../benchmarks/WARM-PNG-RGB16-CURRENT.md) is confirmed at 1.819x / upper
 1.823x with 15,024 B/op. JPEG420's earlier upper-bound gap remains open.

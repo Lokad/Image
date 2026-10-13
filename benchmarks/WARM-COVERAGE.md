@@ -10,7 +10,7 @@ round, at most three, with correctness established before timing.
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
 | PNG decode | RGBA8 all five filters; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None confirmed | Other material depths/layouts; partial palette/alpha paths |
-| PNG encode | RGBA8/16, RGB16 and gray16, level 6/None confirmed | RGB8 and gray8 exact pixels/scanlines, unscored compression-size mismatches; gray-alpha projections and materially different compression work |
+| PNG encode | RGBA8/16, RGB16 and gray16, level 6/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; gray-alpha16 and materially different compression work |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | RGBA8 to 4:4:4, matched quality; 4:2:0 repeat mean below 2x, upper remains above | 4:2:0 upper-bound gap; 4:2:2, grayscale, full 16-bit source normalization |
 | WebP | VP8 with alpha decode/encode; VP8L native and managed inputs; exact VP8L backend encode | Material opaque/alpha alternatives and full 16-bit source normalization |
@@ -243,3 +243,12 @@ The original grayscale projection, exact normal/scalar CLI, source/owners and
 level-6/None size gate pass. Production is unchanged and full verification reused.
 Stop tuning this fixed pair; gray-alpha encoding projections, RGB8/gray8 comparison
 policies, JPEG420's bound and the full required scope remain open.
+
+The [gray-alpha8 encode boundary](WARM-PNG-GRAY-ALPHA8-ENCODE-BOUNDARY.md) preserves
+original alpha and 279 hidden-RGB pixels using exact storage packing inside the
+native operation before FFmpeg PNG encoding. Both colorspace conversion attempts
+fail exactness and stay unscored. The matched pixel/scanline case fails the
+existing size gate: 126,485 versus 119,940 IDAT bytes, 5.17%. Batching saves only
+61 bytes. No timing/allocations are scored; production is unchanged and prior
+verification reused after method/flag identity checks. The comparison and full
+required material scope remain open.

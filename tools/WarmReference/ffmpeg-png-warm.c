@@ -67,6 +67,7 @@ static AVCodecContext *context(int encode, int width, int height, int depth, int
     if (encode) {
         value->width = width; value->height = height; value->time_base = (AVRational){1,1};
         value->pix_fmt = encode_color == 0 ? (depth == 8 ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_GRAY16BE)
+            : encode_color == 4 ? AV_PIX_FMT_YA8
             : encode_color == 2 ? (depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE)
             : depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64BE;
         value->gop_size = 1;
@@ -103,6 +104,14 @@ static void swap_samples(const AVFrame *input, AVFrame *output, int width, int h
         for (int i = 0; i < width * 8; i += 2) { target[i] = source[i+1]; target[i+1] = source[i]; }
     }
 }
+static void pack_gray_alpha8(const AVFrame *input, AVFrame *output, int width, int height)
+{
+    for (int y = 0; y < height; y++) {
+        const uint8_t *source = input->data[0] + (size_t)y * input->linesize[0];
+        uint8_t *target = output->data[0] + (size_t)y * output->linesize[0];
+        for (int x = 0; x < width; x++) { target[x*2] = source[x*4]; target[x*2+1] = source[x*4+3]; }
+    }
+}
 typedef struct {
     AVCodecContext *codec;
     AVFrame *source, *prepared, *decoded, *converted;
@@ -112,7 +121,7 @@ typedef struct {
     AVFilterContext *gray_input, *gray_output;
     uint8_t *original, *encoded;
     size_t raw_bytes, encoded_bytes;
-    int encode, encode_rgb, encode_gray, width, height, depth, row_bytes, cpu, stride, output_bytes, rgb, gray, gray_alpha, palette, mono, coded_depth;
+    int encode, encode_rgb, encode_gray, encode_gray_alpha, width, height, depth, row_bytes, cpu, stride, output_bytes, rgb, gray, gray_alpha, palette, mono, coded_depth;
     uint64_t completed, observed;
 } Work;
 static void gray16_graph(Work *work)
@@ -171,6 +180,9 @@ static void apply(Work *work)
                 || work->prepared->height != work->height || !work->prepared->buf[0]
                 || work->prepared->linesize[0] < work->width * 2) fail("Gray16 converted frame differs.");
             input = work->prepared;
+        } else if (work->encode_gray_alpha) {
+            pack_gray_alpha8(work->source, work->prepared, work->width, work->height);
+            input = work->prepared;
         } else if (work->encode_rgb || work->encode_gray) {
             int rows = sws_scale(work->conversion, (const uint8_t * const *)work->source->data, work->source->linesize,
                 0, work->height, work->prepared->data, work->prepared->linesize);
@@ -211,12 +223,21 @@ static void apply(Work *work)
 }
 static void check_packet(Work *work, const AVPacket *packet)
 {
-    check_profile(packet->data, (size_t)packet->size, work->width, work->height, work->depth, 0, work->encode_gray ? 0 : work->encode_rgb ? 2 : 6);
+    check_profile(packet->data, (size_t)packet->size, work->width, work->height, work->depth, 0, work->encode_gray_alpha ? 4 : work->encode_gray ? 0 : work->encode_rgb ? 2 : 6);
     AVCodecContext *decoder = context(0, work->width, work->height, work->depth, 0);
     AVFrame *decoded = av_frame_alloc(); if (!decoded) fail("Check frame allocation failed.");
     require(avcodec_send_packet(decoder, packet), "Check encoded PNG");
     require(avcodec_receive_frame(decoder, decoded), "Check PNG roundtrip");
-    if (work->encode_gray) {
+    if (work->encode_gray_alpha) {
+        if (decoded->width != work->width || decoded->height != work->height || decoded->format != AV_PIX_FMT_YA8
+            || !decoded->buf[0] || decoded->linesize[0] < work->width * 2) fail("Gray-alpha PNG roundtrip geometry/ownership differs.");
+        for (int y = 0; y < work->height; y++) {
+            const uint8_t *row = decoded->data[0] + (size_t)y * decoded->linesize[0];
+            const uint8_t *expected = work->original + (size_t)y * work->row_bytes;
+            for (int x = 0; x < work->width; x++)
+                if (row[x*2] != expected[x*4] || row[x*2+1] != expected[x*4+3]) fail("Gray-alpha PNG roundtrip samples differ.");
+        }
+    } else if (work->encode_gray) {
         int sample_bytes = work->depth / 8;
         int format = work->depth == 8 ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_GRAY16BE;
         if (decoded->width != work->width || decoded->height != work->height || decoded->format != format
@@ -289,22 +310,24 @@ static void check_and_write(Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if (argc < 7 || (strcmp(argv[1], "png-encode") && strcmp(argv[1], "png-rgb-encode") && strcmp(argv[1], "png-gray-encode") && strcmp(argv[1], "png-decode") && strcmp(argv[1], "png-adam7-decode")))
-        fail("Usage: ffmpeg-png-warm png-encode|png-rgb-encode|png-gray-encode|png-decode|png-adam7-decode INPUT WIDTH HEIGHT DEPTH OUTPUT [EXPECTED_RAW]");
+    if (argc < 7 || (strcmp(argv[1], "png-encode") && strcmp(argv[1], "png-rgb-encode") && strcmp(argv[1], "png-gray-encode") && strcmp(argv[1], "png-gray-alpha-encode") && strcmp(argv[1], "png-decode") && strcmp(argv[1], "png-adam7-decode")))
+        fail("Usage: ffmpeg-png-warm png-encode|png-rgb-encode|png-gray-encode|png-gray-alpha-encode|png-decode|png-adam7-decode INPUT WIDTH HEIGHT DEPTH OUTPUT [EXPECTED_RAW]");
     Work work = {0}; work.encode_rgb = !strcmp(argv[1], "png-rgb-encode"); work.encode_gray = !strcmp(argv[1], "png-gray-encode");
-    work.encode = !strcmp(argv[1], "png-encode") || work.encode_rgb || work.encode_gray; work.cpu = affinity_cpu();
+    work.encode_gray_alpha = !strcmp(argv[1], "png-gray-alpha-encode");
+    work.encode = !strcmp(argv[1], "png-encode") || work.encode_rgb || work.encode_gray || work.encode_gray_alpha; work.cpu = affinity_cpu();
     int interlace = !strcmp(argv[1], "png-adam7-decode");
     if (argc != (work.encode ? 7 : 8)) fail("PNG argument count differs.");
     uint16_t endian = 1; if (*(uint8_t *)&endian != 1) fail("This reference requires a little-endian host.");
     av_log_set_level(AV_LOG_ERROR);
     work.width = number(argv[3]); work.height = number(argv[4]); work.depth = number(argv[5]);
     if (work.depth != 8 && work.depth != 16) fail("Depth must be 8 or 16.");
+    if (work.encode_gray_alpha && work.depth != 8) fail("Gray-alpha encode reference requires RGBA8 input.");
     work.row_bytes = work.width * work.depth / 8 * 4; work.raw_bytes = (size_t)work.row_bytes * work.height;
     if (work.raw_bytes > 512U * 1024U * 1024U) fail("Reference raster exceeds 512 MiB.");
     size_t original_bytes;
     work.original = read_file(work.encode ? argv[2] : argv[7], &original_bytes);
     if (original_bytes != work.raw_bytes) fail("Original raster size differs.");
-    work.codec = context(work.encode, work.width, work.height, work.depth, work.encode_gray ? 0 : work.encode_rgb ? 2 : 6);
+    work.codec = context(work.encode, work.width, work.height, work.depth, work.encode_gray_alpha ? 4 : work.encode_gray ? 0 : work.encode_rgb ? 2 : 6);
     work.packet = av_packet_alloc(); work.input = av_packet_alloc();
     work.decoded = av_frame_alloc(); work.converted = av_frame_alloc();
     if (!work.packet || !work.input || !work.decoded || !work.converted) fail("Allocate wrappers failed.");
@@ -313,19 +336,22 @@ int main(int argc, char **argv)
         for (int y = 0; y < work.height; y++) memcpy(work.source->data[0] + (size_t)y * work.source->linesize[0],
             work.original + (size_t)y * work.row_bytes, (size_t)work.row_bytes);
         if (work.depth == 16 && !work.encode_rgb && !work.encode_gray) work.prepared = frame(work.width, work.height, AV_PIX_FMT_RGBA64BE);
-        if (work.encode_rgb || work.encode_gray) {
+        if (work.encode_rgb || work.encode_gray || work.encode_gray_alpha) {
             int sample_bytes = work.depth / 8;
-            for (size_t i = 3U * sample_bytes; i < work.raw_bytes; i += 4U * sample_bytes)
-                for (int j = 0; j < sample_bytes; j++)
-                    if (work.original[i+j] != 255) fail("RGB encode input requires opaque pixels.");
-            if (work.encode_gray)
+            if (!work.encode_gray_alpha)
+                for (size_t i = 3U * sample_bytes; i < work.raw_bytes; i += 4U * sample_bytes)
+                    for (int j = 0; j < sample_bytes; j++)
+                        if (work.original[i+j] != 255) fail("RGB encode input requires opaque pixels.");
+            if (work.encode_gray || work.encode_gray_alpha)
                 for (size_t i = 0; i < work.raw_bytes; i += 4U * sample_bytes)
                     if (memcmp(work.original+i, work.original+i+sample_bytes, (size_t)sample_bytes)
                         || memcmp(work.original+i, work.original+i+2*sample_bytes, (size_t)sample_bytes))
                         fail("Gray encode input requires equal RGB samples.");
-            enum AVPixelFormat output_format = work.encode_gray ? (work.depth == 8 ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_GRAY16BE)
+            enum AVPixelFormat output_format = work.encode_gray_alpha ? AV_PIX_FMT_YA8 : work.encode_gray ? (work.depth == 8 ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_GRAY16BE)
                 : work.depth == 8 ? AV_PIX_FMT_RGB24 : AV_PIX_FMT_RGB48BE;
-            if (work.encode_gray && work.depth == 16) {
+            if (work.encode_gray_alpha) {
+                work.prepared = frame(work.width, work.height, AV_PIX_FMT_YA8);
+            } else if (work.encode_gray && work.depth == 16) {
                 work.prepared = av_frame_alloc(); if (!work.prepared) fail("Allocate gray16 frame wrapper failed.");
                 gray16_graph(&work);
             } else {
@@ -337,7 +363,7 @@ int main(int argc, char **argv)
                 require(av_opt_set_int(work.conversion, "dsth", work.height, 0), "RGB encode output height");
                 require(av_opt_set_int(work.conversion, "src_format", work.depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE, 0), "RGB encode source format");
                 require(av_opt_set_int(work.conversion, "dst_format", output_format, 0), "PNG encode output format");
-                if (work.encode_gray) {
+                if (work.encode_gray || work.encode_gray_alpha) {
                     require(av_opt_set_int(work.conversion, "src_range", 1, 0), "Gray encode source range");
                     require(av_opt_set_int(work.conversion, "dst_range", 1, 0), "Gray encode output range");
                 }
@@ -383,9 +409,9 @@ int main(int argc, char **argv)
         memcpy(work.input->data, work.encoded, work.encoded_bytes);
     }
     check_independent_owners(&work); check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":%d,\"codedDepth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"compressionLevel\":%d,\"filter\":%d,\"colorType\":%d,\"conversionThreads\":%d,\"rgbExpansionTimed\":%s,\"rgbPackingTimed\":%s,\"grayExpansionTimed\":%s,\"grayPackingTimed\":%s,\"grayPlaneExtractionTimed\":%s,\"grayFilterOutputAllocationTimed\":%s,\"grayAlphaExpansionTimed\":%s,\"paletteExpansionTimed\":%s,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":%d,\"codedDepth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"compressionLevel\":%d,\"filter\":%d,\"colorType\":%d,\"conversionThreads\":%d,\"rgbExpansionTimed\":%s,\"rgbPackingTimed\":%s,\"grayExpansionTimed\":%s,\"grayPackingTimed\":%s,\"grayPlaneExtractionTimed\":%s,\"grayFilterOutputAllocationTimed\":%s,\"grayAlphaExpansionTimed\":%s,\"grayAlphaPackingTimed\":%s,\"grayAlphaStoragePackingTimed\":%s,\"paletteExpansionTimed\":%s,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
         argv[1], work.width, work.height, work.depth, work.encode ? work.depth : work.coded_depth, work.cpu, work.encode ? 6 : -1, work.encode ? 0 : -1,
-        work.encode_gray ? 0 : work.encode_rgb ? 2 : work.palette ? 3 : work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6, work.encode_gray || work.encode_rgb || work.rgb || work.gray || work.gray_alpha || work.palette ? 1 : 0, work.rgb ? "true" : "false", work.encode_rgb ? "true" : "false", work.gray ? "true" : "false", work.encode_gray ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_alpha ? "true" : "false", work.palette ? "true" : "false", work.output_bytes, work.completed, av_version_info(), avcodec_version(), avutil_version()); fflush(stdout);
+        work.encode_gray_alpha ? 4 : work.encode_gray ? 0 : work.encode_rgb ? 2 : work.palette ? 3 : work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6, work.encode_gray || work.encode_rgb || work.rgb || work.gray || work.gray_alpha || work.palette ? 1 : 0, work.rgb ? "true" : "false", work.encode_rgb ? "true" : "false", work.gray ? "true" : "false", work.encode_gray ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_alpha ? "true" : "false", work.encode_gray_alpha ? "true" : "false", work.encode_gray_alpha ? "true" : "false", work.palette ? "true" : "false", work.output_bytes, work.completed, av_version_info(), avcodec_version(), avutil_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;

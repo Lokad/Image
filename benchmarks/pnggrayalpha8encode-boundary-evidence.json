@@ -1,0 +1,1061 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "case": "WarmPng/EncodeGrayAlpha8",
+  "correctnessOnly": true,
+  "noTimingClaim": true,
+  "requiredCaseOpen": true,
+  "productionChanged": false,
+  "totalRetainedPerformanceRasters": 2,
+  "geometry": {
+    "width": 513,
+    "height": 259,
+    "depth": 8,
+    "codedDepth": 8,
+    "colorType": 4,
+    "filter": 0,
+    "interlace": 0
+  },
+  "originalRasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+  "inputRasterSha256": "a2a2e4edd7a51693352b26525a6e8bf96bb9d74047c8ffc7b207f11881bc0e5e",
+  "managedEncodedSha256": "0bfdcc9aa57f0b6009a3ca31b1ab200d2d1bb59c1395495afaad584c5f6e630d",
+  "rasterRecipe": "Frozen original grayscale RGBA8 projection: RGB all original red, original alpha unchanged. Includes279 zero-alpha pixels with nonzero hidden RGB. No additional original image.",
+  "boundary": "Complete warm grayscale RGBA8 with original alpha/hidden RGB to independently owned gray-alpha8 PNG. Managed fresh MemoryStream creation/growth/public EncodePng/disposal. Original adapter packs red/alpha losslessly into reused YA8 frame inside every operation on pinned CPU, then FFmpeg PNG encode and independent owned packet acquisition/release; source, frame, context and wrappers reused. Timed native input remains RGBA8. Normal/scalar CLI independently encodes identical canonical YA8 bytes for untimed validation. Both filter None and level6. Startup, I/O, IPC, hashes and validation excluded.",
+  "compression": {
+    "managedLevel": 6,
+    "nativeLevel": 6,
+    "managedIdatBytes": 126485,
+    "nativeIdatBytes": 119940,
+    "sizeDifferenceFraction": 0.05174526623710322,
+    "maximumSizeDifferenceFraction": 0.05,
+    "sizeGatePassed": false,
+    "filteredScanlinesExact": true,
+    "filteredScanlinesSha256": "55a386f3b75b3c6c62e47a210ffe198464ba9035661e54d8600011ce680b2cbb",
+    "pythonZlibVersion": "1.3",
+    "pythonLevel6IdatBytes": 119940
+  },
+  "compressionPartitionAudit": {
+    "noTiming": true,
+    "runtime": "10.0.8",
+    "filteredScanlinesSha256": "55a386f3b75b3c6c62e47a210ffe198464ba9035661e54d8600011ce680b2cbb",
+    "rows": [
+      {
+        "separateRowWrites": false,
+        "idatBytes": 126424,
+        "compressedSha256": "48154a48a837d8d2163b0e55feca40840f07ea49a28dca29c4ca0b8785a9f7fa"
+      },
+      {
+        "separateRowWrites": true,
+        "idatBytes": 126485,
+        "compressedSha256": "92d710d7871d6036b5b48b92deb78f1cd5bf5fb833e38ed4efe4d346a5f99f19"
+      }
+    ]
+  },
+  "nativeControls": {
+    "correctnessOnly": true,
+    "noTimingClaim": true,
+    "originalAlphaValuesRetained": true,
+    "zeroAlphaHiddenRgbPixels": 279,
+    "controls": [
+      {
+        "operation": "png-encode",
+        "depth": 8,
+        "allSamplesAndOwnersExact": true,
+        "ready": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "png-encode",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "codedDepth": 8,
+          "cpu": 0,
+          "affinityCount": 1,
+          "codecThreads": 1,
+          "threadType": 0,
+          "activeThreadType": 0,
+          "compressionLevel": 6,
+          "filter": 0,
+          "colorType": 6,
+          "conversionThreads": 0,
+          "rgbExpansionTimed": false,
+          "rgbPackingTimed": false,
+          "grayExpansionTimed": false,
+          "grayPackingTimed": false,
+          "grayPlaneExtractionTimed": false,
+          "grayFilterOutputAllocationTimed": false,
+          "grayAlphaExpansionTimed": false,
+          "grayAlphaPackingTimed": false,
+          "grayAlphaStoragePackingTimed": false,
+          "paletteExpansionTimed": false,
+          "outputBytes": 173698,
+          "initialCompletedOperations": 3,
+          "independentLiveOutputs": true,
+          "ffmpegVersion": "n8.1",
+          "avcodecVersion": 4070500,
+          "avutilVersion": 3938916
+        }
+      },
+      {
+        "operation": "png-rgb-encode",
+        "depth": 8,
+        "allSamplesAndOwnersExact": true,
+        "ready": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "png-rgb-encode",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "codedDepth": 8,
+          "cpu": 0,
+          "affinityCount": 1,
+          "codecThreads": 1,
+          "threadType": 0,
+          "activeThreadType": 0,
+          "compressionLevel": 6,
+          "filter": 0,
+          "colorType": 2,
+          "conversionThreads": 1,
+          "rgbExpansionTimed": false,
+          "rgbPackingTimed": true,
+          "grayExpansionTimed": false,
+          "grayPackingTimed": false,
+          "grayPlaneExtractionTimed": false,
+          "grayFilterOutputAllocationTimed": false,
+          "grayAlphaExpansionTimed": false,
+          "grayAlphaPackingTimed": false,
+          "grayAlphaStoragePackingTimed": false,
+          "paletteExpansionTimed": false,
+          "outputBytes": 168729,
+          "initialCompletedOperations": 3,
+          "independentLiveOutputs": true,
+          "ffmpegVersion": "n8.1",
+          "avcodecVersion": 4070500,
+          "avutilVersion": 3938916
+        },
+        "managedIdatBytes": 191758,
+        "nativeIdatBytes": 168159,
+        "filteredScanlinesExact": true
+      },
+      {
+        "operation": "png-decode",
+        "depth": 8,
+        "allSamplesAndOwnersExact": true,
+        "ready": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "png-decode",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "codedDepth": 8,
+          "cpu": 0,
+          "affinityCount": 1,
+          "codecThreads": 1,
+          "threadType": 0,
+          "activeThreadType": 0,
+          "compressionLevel": -1,
+          "filter": -1,
+          "colorType": 2,
+          "conversionThreads": 1,
+          "rgbExpansionTimed": true,
+          "rgbPackingTimed": false,
+          "grayExpansionTimed": false,
+          "grayPackingTimed": false,
+          "grayPlaneExtractionTimed": false,
+          "grayFilterOutputAllocationTimed": false,
+          "grayAlphaExpansionTimed": false,
+          "grayAlphaPackingTimed": false,
+          "grayAlphaStoragePackingTimed": false,
+          "paletteExpansionTimed": false,
+          "outputBytes": 531468,
+          "initialCompletedOperations": 3,
+          "independentLiveOutputs": true,
+          "ffmpegVersion": "n8.1",
+          "avcodecVersion": 4070500,
+          "avutilVersion": 3938916
+        }
+      },
+      {
+        "operation": "png-encode",
+        "depth": 16,
+        "allSamplesAndOwnersExact": true,
+        "ready": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "png-encode",
+          "width": 513,
+          "height": 259,
+          "depth": 16,
+          "codedDepth": 16,
+          "cpu": 0,
+          "affinityCount": 1,
+          "codecThreads": 1,
+          "threadType": 0,
+          "activeThreadType": 0,
+          "compressionLevel": 6,
+          "filter": 0,
+          "colorType": 6,
+          "conversionThreads": 0,
+          "rgbExpansionTimed": false,
+          "rgbPackingTimed": false,
+          "grayExpansionTimed": false,
+          "grayPackingTimed": false,
+          "grayPlaneExtractionTimed": false,
+          "grayFilterOutputAllocationTimed": false,
+          "grayAlphaExpansionTimed": false,
+          "grayAlphaPackingTimed": false,
+          "grayAlphaStoragePackingTimed": false,
+          "paletteExpansionTimed": false,
+          "outputBytes": 867029,
+          "initialCompletedOperations": 3,
+          "independentLiveOutputs": true,
+          "ffmpegVersion": "n8.1",
+          "avcodecVersion": 4070500,
+          "avutilVersion": 3938916
+        }
+      },
+      {
+        "operation": "png-rgb-encode",
+        "depth": 16,
+        "allSamplesAndOwnersExact": true,
+        "ready": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "png-rgb-encode",
+          "width": 513,
+          "height": 259,
+          "depth": 16,
+          "codedDepth": 16,
+          "cpu": 0,
+          "affinityCount": 1,
+          "codecThreads": 1,
+          "threadType": 0,
+          "activeThreadType": 0,
+          "compressionLevel": 6,
+          "filter": 0,
+          "colorType": 2,
+          "conversionThreads": 1,
+          "rgbExpansionTimed": false,
+          "rgbPackingTimed": true,
+          "grayExpansionTimed": false,
+          "grayPackingTimed": false,
+          "grayPlaneExtractionTimed": false,
+          "grayFilterOutputAllocationTimed": false,
+          "grayAlphaExpansionTimed": false,
+          "grayAlphaPackingTimed": false,
+          "grayAlphaStoragePackingTimed": false,
+          "paletteExpansionTimed": false,
+          "outputBytes": 739472,
+          "initialCompletedOperations": 3,
+          "independentLiveOutputs": true,
+          "ffmpegVersion": "n8.1",
+          "avcodecVersion": 4070500,
+          "avutilVersion": 3938916
+        },
+        "managedIdatBytes": 737237,
+        "nativeIdatBytes": 737246,
+        "filteredScanlinesExact": true
+      },
+      {
+        "operation": "png-decode",
+        "depth": 16,
+        "allSamplesAndOwnersExact": true,
+        "ready": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "png-decode",
+          "width": 513,
+          "height": 259,
+          "depth": 16,
+          "codedDepth": 16,
+          "cpu": 0,
+          "affinityCount": 1,
+          "codecThreads": 1,
+          "threadType": 0,
+          "activeThreadType": 0,
+          "compressionLevel": -1,
+          "filter": -1,
+          "colorType": 2,
+          "conversionThreads": 1,
+          "rgbExpansionTimed": true,
+          "rgbPackingTimed": false,
+          "grayExpansionTimed": false,
+          "grayPackingTimed": false,
+          "grayPlaneExtractionTimed": false,
+          "grayFilterOutputAllocationTimed": false,
+          "grayAlphaExpansionTimed": false,
+          "grayAlphaPackingTimed": false,
+          "grayAlphaStoragePackingTimed": false,
+          "paletteExpansionTimed": false,
+          "outputBytes": 1062936,
+          "initialCompletedOperations": 3,
+          "independentLiveOutputs": true,
+          "ffmpegVersion": "n8.1",
+          "avcodecVersion": 4070500,
+          "avutilVersion": 3938916
+        }
+      },
+      {
+        "operation": "png-gray-encode",
+        "depth": 8,
+        "allSamplesAndOwnersExact": true,
+        "ready": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "png-gray-encode",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "codedDepth": 8,
+          "cpu": 0,
+          "affinityCount": 1,
+          "codecThreads": 1,
+          "threadType": 0,
+          "activeThreadType": 0,
+          "compressionLevel": 6,
+          "filter": 0,
+          "colorType": 0,
+          "conversionThreads": 1,
+          "rgbExpansionTimed": false,
+          "rgbPackingTimed": false,
+          "grayExpansionTimed": false,
+          "grayPackingTimed": true,
+          "grayPlaneExtractionTimed": false,
+          "grayFilterOutputAllocationTimed": false,
+          "grayAlphaExpansionTimed": false,
+          "grayAlphaPackingTimed": false,
+          "grayAlphaStoragePackingTimed": false,
+          "paletteExpansionTimed": false,
+          "outputBytes": 72586,
+          "initialCompletedOperations": 3,
+          "independentLiveOutputs": true,
+          "ffmpegVersion": "n8.1",
+          "avcodecVersion": 4070500,
+          "avutilVersion": 3938916
+        },
+        "managedIdatBytes": 86745,
+        "nativeIdatBytes": 72304,
+        "filteredScanlinesExact": true
+      },
+      {
+        "operation": "png-decode",
+        "depth": 8,
+        "allSamplesAndOwnersExact": true,
+        "ready": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "png-decode",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "codedDepth": 8,
+          "cpu": 0,
+          "affinityCount": 1,
+          "codecThreads": 1,
+          "threadType": 0,
+          "activeThreadType": 0,
+          "compressionLevel": -1,
+          "filter": -1,
+          "colorType": 0,
+          "conversionThreads": 1,
+          "rgbExpansionTimed": false,
+          "rgbPackingTimed": false,
+          "grayExpansionTimed": true,
+          "grayPackingTimed": false,
+          "grayPlaneExtractionTimed": false,
+          "grayFilterOutputAllocationTimed": false,
+          "grayAlphaExpansionTimed": false,
+          "grayAlphaPackingTimed": false,
+          "grayAlphaStoragePackingTimed": false,
+          "paletteExpansionTimed": false,
+          "outputBytes": 531468,
+          "initialCompletedOperations": 3,
+          "independentLiveOutputs": true,
+          "ffmpegVersion": "n8.1",
+          "avcodecVersion": 4070500,
+          "avutilVersion": 3938916
+        }
+      },
+      {
+        "operation": "png-gray-encode",
+        "depth": 16,
+        "allSamplesAndOwnersExact": true,
+        "ready": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "png-gray-encode",
+          "width": 513,
+          "height": 259,
+          "depth": 16,
+          "codedDepth": 16,
+          "cpu": 0,
+          "affinityCount": 1,
+          "codecThreads": 1,
+          "threadType": 0,
+          "activeThreadType": 0,
+          "compressionLevel": 6,
+          "filter": 0,
+          "colorType": 0,
+          "conversionThreads": 1,
+          "rgbExpansionTimed": false,
+          "rgbPackingTimed": false,
+          "grayExpansionTimed": false,
+          "grayPackingTimed": true,
+          "grayPlaneExtractionTimed": true,
+          "grayFilterOutputAllocationTimed": true,
+          "grayAlphaExpansionTimed": false,
+          "grayAlphaPackingTimed": false,
+          "grayAlphaStoragePackingTimed": false,
+          "paletteExpansionTimed": false,
+          "outputBytes": 265433,
+          "initialCompletedOperations": 3,
+          "independentLiveOutputs": true,
+          "ffmpegVersion": "n8.1",
+          "avcodecVersion": 4070500,
+          "avutilVersion": 3938916
+        },
+        "managedIdatBytes": 264834,
+        "nativeIdatBytes": 264587,
+        "filteredScanlinesExact": true
+      },
+      {
+        "operation": "png-decode",
+        "depth": 16,
+        "allSamplesAndOwnersExact": true,
+        "ready": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "png-decode",
+          "width": 513,
+          "height": 259,
+          "depth": 16,
+          "codedDepth": 16,
+          "cpu": 0,
+          "affinityCount": 1,
+          "codecThreads": 1,
+          "threadType": 0,
+          "activeThreadType": 0,
+          "compressionLevel": -1,
+          "filter": -1,
+          "colorType": 0,
+          "conversionThreads": 1,
+          "rgbExpansionTimed": false,
+          "rgbPackingTimed": false,
+          "grayExpansionTimed": true,
+          "grayPackingTimed": false,
+          "grayPlaneExtractionTimed": false,
+          "grayFilterOutputAllocationTimed": false,
+          "grayAlphaExpansionTimed": false,
+          "grayAlphaPackingTimed": false,
+          "grayAlphaStoragePackingTimed": false,
+          "paletteExpansionTimed": false,
+          "outputBytes": 1062936,
+          "initialCompletedOperations": 3,
+          "independentLiveOutputs": true,
+          "ffmpegVersion": "n8.1",
+          "avcodecVersion": 4070500,
+          "avutilVersion": 3938916
+        }
+      },
+      {
+        "operation": "png-gray-alpha-encode",
+        "depth": 8,
+        "allSamplesAndOwnersExact": true,
+        "ready": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "png-gray-alpha-encode",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "codedDepth": 8,
+          "cpu": 0,
+          "affinityCount": 1,
+          "codecThreads": 1,
+          "threadType": 0,
+          "activeThreadType": 0,
+          "compressionLevel": 6,
+          "filter": 0,
+          "colorType": 4,
+          "conversionThreads": 0,
+          "rgbExpansionTimed": false,
+          "rgbPackingTimed": false,
+          "grayExpansionTimed": false,
+          "grayPackingTimed": false,
+          "grayPlaneExtractionTimed": false,
+          "grayFilterOutputAllocationTimed": false,
+          "grayAlphaExpansionTimed": false,
+          "grayAlphaPackingTimed": true,
+          "grayAlphaStoragePackingTimed": true,
+          "paletteExpansionTimed": false,
+          "outputBytes": 120366,
+          "initialCompletedOperations": 3,
+          "independentLiveOutputs": true,
+          "ffmpegVersion": "n8.1",
+          "avcodecVersion": 4070500,
+          "avutilVersion": 3938916
+        },
+        "managedIdatBytes": 126485,
+        "nativeIdatBytes": 119940,
+        "filteredScanlinesExact": true
+      },
+      {
+        "operation": "png-decode",
+        "depth": 8,
+        "allSamplesAndOwnersExact": true,
+        "ready": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "png-decode",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "codedDepth": 8,
+          "cpu": 0,
+          "affinityCount": 1,
+          "codecThreads": 1,
+          "threadType": 0,
+          "activeThreadType": 0,
+          "compressionLevel": -1,
+          "filter": -1,
+          "colorType": 4,
+          "conversionThreads": 1,
+          "rgbExpansionTimed": false,
+          "rgbPackingTimed": false,
+          "grayExpansionTimed": false,
+          "grayPackingTimed": false,
+          "grayPlaneExtractionTimed": false,
+          "grayFilterOutputAllocationTimed": false,
+          "grayAlphaExpansionTimed": true,
+          "grayAlphaPackingTimed": false,
+          "grayAlphaStoragePackingTimed": false,
+          "paletteExpansionTimed": false,
+          "outputBytes": 531468,
+          "initialCompletedOperations": 3,
+          "independentLiveOutputs": true,
+          "ffmpegVersion": "n8.1",
+          "avcodecVersion": 4070500,
+          "avutilVersion": 3938916
+        }
+      },
+      {
+        "control": "Reject nonneutral RGB",
+        "depth": 8,
+        "rejectedBeforeReady": true,
+        "noTimingClaim": true
+      },
+      {
+        "control": "Reject nonopaque input",
+        "depth": 8,
+        "rejectedBeforeReady": true,
+        "noTimingClaim": true
+      },
+      {
+        "control": "Reject nonneutral RGB",
+        "depth": 16,
+        "rejectedBeforeReady": true,
+        "noTimingClaim": true
+      },
+      {
+        "control": "Reject nonopaque input",
+        "depth": 16,
+        "rejectedBeforeReady": true,
+        "noTimingClaim": true
+      },
+      {
+        "control": "Reject nonneutral gray-alpha RGB",
+        "rejectedBeforeReady": true,
+        "noTimingClaim": true
+      }
+    ]
+  },
+  "normalScalarCanonicalYa8Cli": [
+    {
+      "scalar": false,
+      "encodedSha256": "eefb49b94adbd654b38b4e33edc8aac89fdfd9273a8124a1fbf7884ee8789fb5",
+      "encodedBytes": 120366,
+      "idatBytes": 119940,
+      "allFilteredScanlinesExact": true
+    },
+    {
+      "scalar": true,
+      "encodedSha256": "eefb49b94adbd654b38b4e33edc8aac89fdfd9273a8124a1fbf7884ee8789fb5",
+      "encodedBytes": 120366,
+      "idatBytes": 119940,
+      "allFilteredScanlinesExact": true
+    }
+  ],
+  "nativeReady": {
+    "schemaVersion": 1,
+    "state": "ready",
+    "operation": "png-gray-alpha-encode",
+    "width": 513,
+    "height": 259,
+    "depth": 8,
+    "codedDepth": 8,
+    "cpu": 0,
+    "affinityCount": 1,
+    "codecThreads": 1,
+    "threadType": 0,
+    "activeThreadType": 0,
+    "compressionLevel": 6,
+    "filter": 0,
+    "colorType": 4,
+    "conversionThreads": 0,
+    "rgbExpansionTimed": false,
+    "rgbPackingTimed": false,
+    "grayExpansionTimed": false,
+    "grayPackingTimed": false,
+    "grayPlaneExtractionTimed": false,
+    "grayFilterOutputAllocationTimed": false,
+    "grayAlphaExpansionTimed": false,
+    "grayAlphaPackingTimed": true,
+    "grayAlphaStoragePackingTimed": true,
+    "paletteExpansionTimed": false,
+    "outputBytes": 120366,
+    "initialCompletedOperations": 3,
+    "independentLiveOutputs": true,
+    "ffmpegVersion": "n8.1",
+    "avcodecVersion": 4070500,
+    "avutilVersion": 3938916
+  },
+  "nativeBuild": {
+    "schemaVersion": 1,
+    "project": "Lokad.Image",
+    "purpose": "Original development-only warm PNG FFmpeg worker",
+    "sourceSha256": "5130dac80376aead985a38a5e1e93d63795b938e2e06c6323f6c92a1f762a02b",
+    "buildScriptSha256": "8d13f8aa6f71f9b80fde29be46aa87d4eab2cb724d738b776827d63b85ef14bf",
+    "workerSha256": "7e373c5e66005e477aa0b49a1181d2f55b4254217ee357d1086d082400ddb159",
+    "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "flags": [
+      "-std=c11",
+      "-O3",
+      "-Wall",
+      "-Wextra",
+      "-Werror"
+    ],
+    "staticArchives": {
+      "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+      "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+      "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+      "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+      "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+      "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+      "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+      "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+      "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+      "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+      "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+      "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+    },
+    "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+  },
+  "unscoredConversions": {
+    "rawArchive": {
+      "sha256": "17b1db3d8466b1c79a7d10f3374c7890c56040ba6df6b81a15ed01a7935aa6a6",
+      "files": 34,
+      "source": "ec6741e2f8da09399914eae2d20caaa3806fade8141e6b7253b2b47ea7b7d206",
+      "noTimingClaim": true,
+      "priorChildIdentities": {
+        "Lokad.Image.dll": "02bf080d9337ac4dcb2a99bd958e1a1052c9801027d072bfbfff6272e91fbacd",
+        "Lokad.Image.Benchmarks.dll": "48f25a492adf34147420e7d04d68e4cb3cd0a59d2594b1cad97dcaa2ad27a99d",
+        "Lokad.Image.Benchmarks-WarmShort-1.dll": "adf4d6b01df9603ed09e7a6c6f7cc5ca2b29ce203222069acf09531719fea9fd",
+        "Lokad.Image.Benchmarks-WarmShort-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f"
+      },
+      "noNewBenchmarkChildPrepared": true,
+      "reason": "Native YA8 conversion changes alpha by one at66083 pixels; gray/hidden RGB exact. A16-bit intermediate also changes gray. No new child prepared or scored timing."
+    },
+    "ordinaryConversion": {
+      "correctnessOnly": true,
+      "noTimingClaim": true,
+      "rows": [
+        {
+          "operation": "Native warm reference",
+          "exitCode": 1,
+          "stderr": "Gray-alpha PNG roundtrip samples differ.\n",
+          "stdout": ""
+        },
+        {
+          "operation": "normal CLI",
+          "grayMaximum": 0,
+          "alphaMaximum": 1,
+          "grayDifferentSamples": 0,
+          "alphaDifferentSamples": 66083,
+          "hiddenRgbPixels": 279,
+          "hiddenRgbDifferentPixels": 0,
+          "examples": [
+            {
+              "x": 3,
+              "y": 0,
+              "expected": [
+                144,
+                163
+              ],
+              "actual": [
+                144,
+                164
+              ]
+            },
+            {
+              "x": 4,
+              "y": 0,
+              "expected": [
+                192,
+                211
+              ],
+              "actual": [
+                192,
+                212
+              ]
+            },
+            {
+              "x": 8,
+              "y": 0,
+              "expected": [
+                129,
+                148
+              ],
+              "actual": [
+                129,
+                149
+              ]
+            },
+            {
+              "x": 9,
+              "y": 0,
+              "expected": [
+                177,
+                196
+              ],
+              "actual": [
+                177,
+                197
+              ]
+            },
+            {
+              "x": 10,
+              "y": 0,
+              "expected": [
+                225,
+                244
+              ],
+              "actual": [
+                225,
+                245
+              ]
+            },
+            {
+              "x": 13,
+              "y": 0,
+              "expected": [
+                115,
+                133
+              ],
+              "actual": [
+                115,
+                134
+              ]
+            }
+          ],
+          "encodedSha256": "b5ddc238c3771ab61e78426dd7efe45bea713e6f02e6518abdd14ed3a6a184e5",
+          "idatBytes": 119782
+        },
+        {
+          "operation": "scalar CLI",
+          "grayMaximum": 0,
+          "alphaMaximum": 1,
+          "grayDifferentSamples": 0,
+          "alphaDifferentSamples": 66083,
+          "hiddenRgbPixels": 279,
+          "hiddenRgbDifferentPixels": 0,
+          "examples": [
+            {
+              "x": 3,
+              "y": 0,
+              "expected": [
+                144,
+                163
+              ],
+              "actual": [
+                144,
+                164
+              ]
+            },
+            {
+              "x": 4,
+              "y": 0,
+              "expected": [
+                192,
+                211
+              ],
+              "actual": [
+                192,
+                212
+              ]
+            },
+            {
+              "x": 8,
+              "y": 0,
+              "expected": [
+                129,
+                148
+              ],
+              "actual": [
+                129,
+                149
+              ]
+            },
+            {
+              "x": 9,
+              "y": 0,
+              "expected": [
+                177,
+                196
+              ],
+              "actual": [
+                177,
+                197
+              ]
+            },
+            {
+              "x": 10,
+              "y": 0,
+              "expected": [
+                225,
+                244
+              ],
+              "actual": [
+                225,
+                245
+              ]
+            },
+            {
+              "x": 13,
+              "y": 0,
+              "expected": [
+                115,
+                133
+              ],
+              "actual": [
+                115,
+                134
+              ]
+            }
+          ],
+          "encodedSha256": "b5ddc238c3771ab61e78426dd7efe45bea713e6f02e6518abdd14ed3a6a184e5",
+          "idatBytes": 119782
+        }
+      ]
+    },
+    "precisionIntermediate": {
+      "correctnessOnly": true,
+      "noTimingClaim": true,
+      "rows": [
+        {
+          "operation": "normal CLI",
+          "grayMaximum": 1,
+          "alphaMaximum": 1,
+          "grayDifferentSamples": 65089,
+          "alphaDifferentSamples": 66083,
+          "hiddenRgbPixels": 279,
+          "hiddenRgbDifferentPixels": 278,
+          "examples": [
+            {
+              "x": 3,
+              "y": 0,
+              "expected": [
+                144,
+                163
+              ],
+              "actual": [
+                145,
+                164
+              ]
+            },
+            {
+              "x": 4,
+              "y": 0,
+              "expected": [
+                192,
+                211
+              ],
+              "actual": [
+                193,
+                212
+              ]
+            },
+            {
+              "x": 5,
+              "y": 0,
+              "expected": [
+                240,
+                4
+              ],
+              "actual": [
+                241,
+                4
+              ]
+            },
+            {
+              "x": 8,
+              "y": 0,
+              "expected": [
+                129,
+                148
+              ],
+              "actual": [
+                129,
+                149
+              ]
+            },
+            {
+              "x": 9,
+              "y": 0,
+              "expected": [
+                177,
+                196
+              ],
+              "actual": [
+                178,
+                197
+              ]
+            },
+            {
+              "x": 10,
+              "y": 0,
+              "expected": [
+                225,
+                244
+              ],
+              "actual": [
+                226,
+                245
+              ]
+            }
+          ],
+          "encodedSha256": "d1c544c42872a91615295b06df87d6b066bddc8abbd18657a72c25ad49dcb45c",
+          "idatBytes": 119581
+        },
+        {
+          "operation": "scalar CLI",
+          "grayMaximum": 1,
+          "alphaMaximum": 1,
+          "grayDifferentSamples": 65089,
+          "alphaDifferentSamples": 66083,
+          "hiddenRgbPixels": 279,
+          "hiddenRgbDifferentPixels": 278,
+          "examples": [
+            {
+              "x": 3,
+              "y": 0,
+              "expected": [
+                144,
+                163
+              ],
+              "actual": [
+                145,
+                164
+              ]
+            },
+            {
+              "x": 4,
+              "y": 0,
+              "expected": [
+                192,
+                211
+              ],
+              "actual": [
+                193,
+                212
+              ]
+            },
+            {
+              "x": 5,
+              "y": 0,
+              "expected": [
+                240,
+                4
+              ],
+              "actual": [
+                241,
+                4
+              ]
+            },
+            {
+              "x": 8,
+              "y": 0,
+              "expected": [
+                129,
+                148
+              ],
+              "actual": [
+                129,
+                149
+              ]
+            },
+            {
+              "x": 9,
+              "y": 0,
+              "expected": [
+                177,
+                196
+              ],
+              "actual": [
+                178,
+                197
+              ]
+            },
+            {
+              "x": 10,
+              "y": 0,
+              "expected": [
+                225,
+                244
+              ],
+              "actual": [
+                226,
+                245
+              ]
+            }
+          ],
+          "encodedSha256": "d1c544c42872a91615295b06df87d6b066bddc8abbd18657a72c25ad49dcb45c",
+          "idatBytes": 119581
+        }
+      ]
+    },
+    "noPixelToleranceIntroduced": true
+  },
+  "source": {
+    "sourceRevision": "835c7a9eca75cdfc2ad2be2e2e677d1ae3210381",
+    "sourceSha256": "0896fdbcd4722d5f15667a09b78e7263fe07995feefe76cdcf817f6043f35678",
+    "ownedFiles": 1689
+  },
+  "actualChildIdentities": {
+    "Lokad.Image.dll": "0e071e550e0139685130f2c9e345d4ac57e927ac69a8f6d25eb29fdf0b5783e5",
+    "Lokad.Image.Benchmarks.dll": "97ed259059d25040b21989e956ac8ce3060b4b8b7609649d10b769cec08c6114",
+    "Lokad.Image.Benchmarks-WarmShort-1.dll": "6b7f85ccf68a89e4d7de2b8e2c3c7c32cdf0fb3aeaf0abe457269929cdc1fbe9",
+    "Lokad.Image.Benchmarks-WarmShort-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f"
+  },
+  "rawArchive": {
+    "sha256": "54e6b6c8a56432284872325a9acbcd1b78f737014b27e100bc480fff5ab29a08",
+    "files": 65
+  },
+  "allFreshChildMethodsAndFlagsMatch": true,
+  "preparationResult": "Existing 5% IDAT-size gate failed during correctness preparation; child exited 255 before scored samples.",
+  "managedAllocations": null,
+  "nativeAllocations": null,
+  "uniformWarmParityComplete": false,
+  "validationReuse": {
+    "productionMethodCount": 595,
+    "productionMethodBodyAndFlagsSha256": "86c16f717e7eea0dc37870ac178f123dfa66d40dfa5880a8d750c619b4d4044d",
+    "sameActualPackageSha256": "3ea1055c199f08cec13b5f63053e91f0a4a3c92939b05304b5901b44648ed1f3",
+    "releaseTestsPerOs": 2682,
+    "packageUsageExamplesPerOs": 3,
+    "windowsAndLinuxPassedPreviously": true,
+    "noFullQaRerunForUnchangedProduction": true
+  },
+  "nextAction": "Resolve compression comparison before timing this pair. Batching saves only61 bytes and does not clear the existing5% gate. Other material cases and JPEG420 conservative bound remain open; confirmed fixed pairs stay stopped."
+}
