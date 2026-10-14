@@ -7,7 +7,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmBicubicCase { Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8, Wide16, Horizontal8, Horizontal16, Down64x32_8, Down64x32_16, Vertical8, Vertical16, HorizontalUp8, HorizontalUp16, VerticalUp8, VerticalUp16, Down32x16_8, Down32x16_16, Down16x8_8, Down16x8_16, TightDown8 }
+public enum WarmBicubicCase { Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8, Wide16, Horizontal8, Horizontal16, Down64x32_8, Down64x32_16, Vertical8, Vertical16, HorizontalUp8, HorizontalUp16, VerticalUp8, VerticalUp16, Down32x16_8, Down32x16_16, Down16x8_8, Down16x8_16, TightDown8, TightDown16 }
 
 /// <summary>Complete bicubic resize with an explicitly adjusted FFmpeg scaler backend.</summary>
 [MemoryDiagnoser]
@@ -42,7 +42,8 @@ public class WarmBicubicResize
         "Down16x8_8" => [WarmBicubicCase.Down16x8_8],
         "Down16x8_16" => [WarmBicubicCase.Down16x8_16],
         "TightDown8" => [WarmBicubicCase.TightDown8],
-        _ => throw new ArgumentException("Choose one bicubic case: Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8, Wide16, Horizontal8, Horizontal16 , Down64x32_8 Down64x32_16 , Vertical8 , Vertical16, HorizontalUp8, HorizontalUp16, VerticalUp8, VerticalUp16, Down32x16_8, Down32x16_16, Down16x8_8, Down16x8_16 or TightDown8.")
+        "TightDown16" => [WarmBicubicCase.TightDown16],
+        _ => throw new ArgumentException("Choose one bicubic case: Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8, Wide16, Horizontal8, Horizontal16 , Down64x32_8 Down64x32_16 , Vertical8 , Vertical16, HorizontalUp8, HorizontalUp16, VerticalUp8, VerticalUp16, Down32x16_8, Down32x16_16, Down16x8_8, Down16x8_16, TightDown8 or TightDown16.")
     };
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
@@ -59,13 +60,13 @@ public class WarmBicubicResize
     private bool ExplicitGeometry => Upscale || Case is WarmBicubicCase.Mixed8 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 or WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 or WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 or WarmBicubicCase.Vertical8 or WarmBicubicCase.Vertical16 or WarmBicubicCase.HorizontalUp8 or WarmBicubicCase.HorizontalUp16 or WarmBicubicCase.VerticalUp8 or WarmBicubicCase.VerticalUp16 or WarmBicubicCase.Down32x16_8 or WarmBicubicCase.Down32x16_16 or WarmBicubicCase.Down16x8_8 or WarmBicubicCase.Down16x8_16;
     private int Width => Case is WarmBicubicCase.Down16x8_8 or WarmBicubicCase.Down16x8_16 ? 16 : Case is WarmBicubicCase.Down32x16_8 or WarmBicubicCase.Down32x16_16 ? 32 : Case is WarmBicubicCase.Vertical8 or WarmBicubicCase.Vertical16 or WarmBicubicCase.VerticalUp8 or WarmBicubicCase.VerticalUp16 ? 513 : Case is WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 ? 64 : Case is WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 ? 128 : Case is WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 ? 256 : ExplicitGeometry ? 1027 : 256;
     private int Height => Case is WarmBicubicCase.Down16x8_8 or WarmBicubicCase.Down16x8_16 ? 8 : Case is WarmBicubicCase.Down32x16_8 or WarmBicubicCase.Down32x16_16 ? 16 : Case is WarmBicubicCase.VerticalUp8 or WarmBicubicCase.VerticalUp16 ? 519 : Case is WarmBicubicCase.HorizontalUp8 or WarmBicubicCase.HorizontalUp16 ? 259 : Case is WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 ? 32 : Case is WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 ? 259 : Case is WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 ? 64 : Upscale || Case is WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 ? 519 : 129;
-    private int Depth => Case is WarmBicubicCase.Down16 or WarmBicubicCase.Up16 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide16 or WarmBicubicCase.Horizontal16 or WarmBicubicCase.Down64x32_16 or WarmBicubicCase.Vertical16 or WarmBicubicCase.HorizontalUp16 or WarmBicubicCase.VerticalUp16 or WarmBicubicCase.Down32x16_16 or WarmBicubicCase.Down16x8_16 ? 16 : 8;
+    private int Depth => Case is WarmBicubicCase.Down16 or WarmBicubicCase.Up16 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide16 or WarmBicubicCase.Horizontal16 or WarmBicubicCase.Down64x32_16 or WarmBicubicCase.Vertical16 or WarmBicubicCase.HorizontalUp16 or WarmBicubicCase.VerticalUp16 or WarmBicubicCase.Down32x16_16 or WarmBicubicCase.Down16x8_16 or WarmBicubicCase.TightDown16 ? 16 : 8;
 
     [GlobalSetup]
     public void Setup()
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Use the dedicated Linux VM.");
-        if (Case is not (WarmBicubicCase.Down8 or WarmBicubicCase.Down16 or WarmBicubicCase.Up8 or WarmBicubicCase.Up16 or WarmBicubicCase.Mixed8 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 or WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 or WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 or WarmBicubicCase.Vertical8 or WarmBicubicCase.Vertical16 or WarmBicubicCase.HorizontalUp8 or WarmBicubicCase.HorizontalUp16 or WarmBicubicCase.VerticalUp8 or WarmBicubicCase.VerticalUp16 or WarmBicubicCase.Down32x16_8 or WarmBicubicCase.Down32x16_16 or WarmBicubicCase.Down16x8_8 or WarmBicubicCase.Down16x8_16 or WarmBicubicCase.TightDown8)) throw new ArgumentOutOfRangeException(nameof(Case));
+        if (Case is not (WarmBicubicCase.Down8 or WarmBicubicCase.Down16 or WarmBicubicCase.Up8 or WarmBicubicCase.Up16 or WarmBicubicCase.Mixed8 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 or WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 or WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 or WarmBicubicCase.Vertical8 or WarmBicubicCase.Vertical16 or WarmBicubicCase.HorizontalUp8 or WarmBicubicCase.HorizontalUp16 or WarmBicubicCase.VerticalUp8 or WarmBicubicCase.VerticalUp16 or WarmBicubicCase.Down32x16_8 or WarmBicubicCase.Down32x16_16 or WarmBicubicCase.Down16x8_8 or WarmBicubicCase.Down16x8_16 or WarmBicubicCase.TightDown8 or WarmBicubicCase.TightDown16)) throw new ArgumentOutOfRangeException(nameof(Case));
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -80,8 +81,8 @@ public class WarmBicubicResize
             using (var manifest = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/benchmark-source.json"))))
                 sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = manifest.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = manifest.RootElement.GetProperty("sourceRevision").GetString() });
             input = HorizontalFlipInput.Create(Depth);
-            operationLimits = Case == WarmBicubicCase.TightDown8
-                ? new ImageLimits { MaxWorkingBytes = input.Length + (long)Width * Height * 4 + 4096 } : null;
+            operationLimits = Case is WarmBicubicCase.TightDown8 or WarmBicubicCase.TightDown16
+                ? new ImageLimits { MaxWorkingBytes = input.Length + (long)Width * Height * 4 * (Depth / 8) + 4096 } : null;
             expected = ExactResizeReference.Resize(input, 513, 259, Depth, Width, Height, ResizeFilter.Bicubic);
             source = JpegBenchmarkCase.Buffer(input, 513, 259, Depth);
             if(Case is WarmBicubicCase.Horizontal8 or WarmBicubicCase.Vertical8)

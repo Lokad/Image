@@ -131,8 +131,18 @@ budget, with exact unsigned byte premultiplication and separate multiply/add.
 Uncertain rounding, small normalization or tiny alpha returns to the complete
 original-order operation after the stack frame and admission unwind. Speculative
 strips leave work accounting untouched; success charges the complete original tap
-cost. Every sample remains exact, with bounded cancellation. Other depths,
-directions, supports and smaller budgets retain the existing paths.
+cost. Every sample remains exact, with bounded cancellation. Other directions,
+supports and smaller budgets retain the existing paths.
+RGBA16 reduction may use a separate word specialization of the same six-column,
+ten-row strip strategy, with the same 4-KiB admission and fixed arrays. Full
+UInt16 premultiplication produces unsigned 32-bit products converted exactly to
+binary64. The error budget scales with 65535, including squared color products.
+Uncertain ordinary-alpha word pixels may replay the original tap order locally;
+paired replay requires normalization at least 0.5 and computed normalized alpha
+at least two. Any exact tiny-alpha calculation instead declines the complete
+strip operation, releasing its frame and charge before original replay needs
+scratch. Odd word tails likewise use original-order evaluation. The byte kernel
+is separate and remains unchanged; work, precision and owner contracts are retained.
 When both supports are short, a byte/UInt16-specialized kernel captures local
 buffer views and prepares vertical weights/row offsets in bounded stack storage.
 It retains the same per-pixel tap order, alpha handling and per-row work charges,
