@@ -324,9 +324,10 @@ a timed final scan replays original color arithmetic and exact rational alpha,
 including additional work. No marker escapes; other geometry, budgets and
 hardware retain prior paths. No heap workspace, persistent state or output
 cache is introduced.
-RGBA16 width reduction combined with height enlargement may use a separate
+RGBA16 width reduction combined with preserved or enlarged height may use a separate
 horizontal-first fallback when horizontal support is at most ten taps and
-vertical support at most five. Eight output columns reuse five filtered source
+vertical support at most five. The existing row cache remains preferred when
+admitted. Eight output columns reuse five filtered source
 rows; 32 decoded source-column slots and the other fixed arrays occupy 3,440
 bytes within a 4-KiB admission. Full unsigned word products widen exactly to
 unrounded binary64. The `2^-40*16^2` quotient bounds and guarded packing retain

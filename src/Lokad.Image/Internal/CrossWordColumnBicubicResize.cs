@@ -6,7 +6,7 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
-/// <summary>Eight-column strips reuse filtered rows while reducing width and enlarging height.</summary>
+/// <summary>Eight-column strips reuse filtered rows while reducing width and preserving or enlarging height.</summary>
 internal static class CrossWordColumnBicubicResize
 {
     private const int WorkspaceBytes = 4096;
@@ -14,7 +14,7 @@ internal static class CrossWordColumnBicubicResize
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
         double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context)
     {
-        if (source.BitDepth != 16 || result.Width >= source.Width || result.Height <= source.Height
+        if (source.BitDepth != 16 || result.Width >= source.Width || result.Height < source.Height
             || tapsX > 10 || tapsY > 5
             || !Avx512F.IsSupported || !Avx2.IsSupported || !Avx.IsSupported || !Sse41.IsSupported
             || context.RemainingWorkingBytes < WorkspaceBytes) return false;
