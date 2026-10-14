@@ -165,6 +165,12 @@ public static class ImageTransforms
             result.Orientation = source.Orientation;
             return result;
         }
+        if (filter == ResizeFilter.Bicubic && ColumnBicubicResize.TryApply(source, result,
+            scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context))
+        {
+            result.Orientation = source.Orientation;
+            return result;
+        }
         double[]? horizontalWeights = null;
         int[]? horizontalOffsets = null;
         int[]? horizontalCounts = null;

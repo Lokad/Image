@@ -1,0 +1,62 @@
+using System.Security.Cryptography;
+using Lokad.Image.Tooling;
+
+namespace Lokad.Image.PublicApi.Tests;
+
+public sealed class ColumnBicubicResizeTests
+{
+    [Theory]
+    [InlineData(2047)] [InlineData(2048)] [InlineData(4095)] [InlineData(4096)]
+    public void BoundedWorkspaceKeepsFrozenPixelsWorkAndIndependentOwners(int scratch)
+    {
+        using var source = OriginalPixels.Buffer(513, 259, 8);
+        source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
+        var input = OriginalPixels.Bytes(source);
+        const long work = 256L * 129 * 10 * 10 * 4;
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 256L * 129 * 4 + scratch, MaxWork = work };
+        using var first = ImageTransforms.Resize(source, 256, 129, ResizeFilter.Bicubic, limits);
+        using var second = ImageTransforms.Resize(source, 256, 129, ResizeFilter.Bicubic, limits);
+        var expected = OriginalPixels.Bytes(first);
+        // Original independently authored performance raster; frozen original
+        // direct output also matches the independent rational reference exactly.
+        Assert.Equal("656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+            Convert.ToHexString(SHA256.HashData(expected)).ToLowerInvariant());
+        Assert.Equal(expected, OriginalPixels.Bytes(second));
+        first.GetRow8(0)[0] ^= 255;
+        Assert.Equal(expected, OriginalPixels.Bytes(second));
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 256, 129, ResizeFilter.Bicubic,
+            limits with { MaxWork = work - 1 }));
+        Assert.Throws<OperationCanceledException>(() => ImageTransforms.Resize(source, 256, 129, ResizeFilter.Bicubic,
+            limits, new CancellationToken(true)));
+        source.GetRow8(258)[512 * 4 + 3] ^= 255;
+        using var changed = ImageTransforms.Resize(source, 256, 129, ResizeFilter.Bicubic, limits);
+        using var normal = ImageTransforms.Resize(source, 256, 129, ResizeFilter.Bicubic);
+        Assert.Equal(OriginalPixels.Bytes(normal), OriginalPixels.Bytes(changed));
+        Assert.NotEqual(expected, OriginalPixels.Bytes(changed));
+        Assert.Equal(expected, OriginalPixels.Bytes(second));
+    }
+
+    [Theory]
+    [InlineData(33, 17, 16, 8, false)] [InlineData(37, 19, 15, 7, false)]
+    [InlineData(19, 17, 9, 35, false)] [InlineData(17, 19, 35, 9, false)]
+    [InlineData(17, 9, 35, 19, false)] [InlineData(61, 39, 18, 11, false)]
+    [InlineData(35, 21, 17, 9, false)] [InlineData(51, 35, 23, 16, false)]
+    [InlineData(33, 17, 16, 8, true)] [InlineData(17, 11, 35, 23, true)]
+    [InlineData(17, 11, 9, 5, true)] [InlineData(19, 17, 9, 35, true)]
+    public void ColumnsAndWholeRowFallbackKeepNegativeTinyAndHiddenAlphaExact(
+        int sourceWidth, int sourceHeight, int width, int height, bool tiny)
+    {
+        using var source = OriginalPixels.Buffer(sourceWidth, sourceHeight, 8);
+        if (tiny)
+            for (var y = 0; y < sourceHeight; y++)
+            for (var x = 0; x < sourceWidth; x++)
+                source.GetRow8(y)[x * 4 + 3] = (byte)((x + y) % 7 == 0 ? 255 : (x + y) % 3 == 0 ? 1 : 0);
+        var input = OriginalPixels.Bytes(source);
+        using var normal = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic);
+        using var bounded = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic,
+            new ImageLimits { MaxWorkingBytes = input.Length + (long)width * height * 4 + 4096 });
+        Assert.Equal(OriginalPixels.Bytes(normal), OriginalPixels.Bytes(bounded));
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+    }
+}

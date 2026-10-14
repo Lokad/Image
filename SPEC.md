@@ -121,6 +121,18 @@ ambiguous samples. Optional workspace is `716*outputWidth + 32*sourceWidth + 128
 bytes, admitted before allocation and released on every exit, leaving 4 KiB for
 tiny-alpha arithmetic. Tight budgets, unsupported hardware and other directions
 retain the previous path; work charges and bounded cancellation are preserved.
+When the full row cache cannot be admitted, RGBA8 reduction on both axes may
+reuse six-column strips and at most ten rows/taps per axis on AVX512F/AVX2/AVX/SSE4.1
+hardware. This optional path admits 4 KiB before its fixed stack workspace
+(3,640 bytes of arrays); it adds no heap workspace or persistent state. A bounded
+source window is decoded once per reused row. Two independent output accumulators
+and paired quotient guards use the same conservative `2^-40*16^2` absolute-error
+budget, with exact unsigned byte premultiplication and separate multiply/add.
+Uncertain rounding, small normalization or tiny alpha returns to the complete
+original-order operation after the stack frame and admission unwind. Speculative
+strips leave work accounting untouched; success charges the complete original tap
+cost. Every sample remains exact, with bounded cancellation. Other depths,
+directions, supports and smaller budgets retain the existing paths.
 When both supports are short, a byte/UInt16-specialized kernel captures local
 buffer views and prepares vertical weights/row offsets in bounded stack storage.
 It retains the same per-pixel tap order, alpha handling and per-row work charges,
