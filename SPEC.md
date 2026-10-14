@@ -169,6 +169,17 @@ source coordinates remain Int32 and checked before narrowing. Paired samples
 widen exactly to binary64 and preserve each original tap order. The conservative
 `2^-40*36^2` error budget, uncertainty/tiny-alpha unwind, complete work and bounded
 cancellation remain. Other supports/windows/hardware retain existing paths.
+RGBA16 reduction above twenty and up to thirty-four taps per axis may use a
+separate two-column/thirty-four-row strip cache. Its 4-KiB admission covers
+4,044 bytes of fixed arrays. Full-range premultiplication products (at most
+4294836225) remain UInt32 and widen unsigned to binary64 without quantization.
+Checked relative source-window offsets fit UInt16; absolute coordinates remain
+Int32. The `2^-40*34^2` error budget scales with 65535 and its square. Paired
+and single word outputs retain quotient/rounding guards and unsigned packing;
+uncertain ordinary-alpha samples replay the original tap order under the same
+normalization/alpha guards. Tiny alpha unwinds the frame and admission before
+exact scratch is needed. Complete work, bounded cancellation and independent
+owners remain; existing byte and smaller-support word kernels are unchanged.
 When both supports are short, a byte/UInt16-specialized kernel captures local
 buffer views and prepares vertical weights/row offsets in bounded stack storage.
 It retains the same per-pixel tap order, alpha handling and per-row work charges,

@@ -170,7 +170,8 @@ public static class ImageTransforms
                 || WideColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
                 || PackedColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
             : WordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || WideWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)))
+                || WideWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                || PackedWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)))
         {
             result.Orientation = source.Orientation;
             return result;
