@@ -144,6 +144,7 @@ timing comparison; compression efficiency parity is not established.
 | [Bicubic RGBA16, width up / height down / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-MIXED16.md) | 1,642.70 | 840.48 | 1.954 / 1.980 | 1,060,419 | Confirmed |
 | [Bicubic RGBA8, width up / height down / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-MIXED8.md) | 1,636.25 | 862.74 | 1.897 / 1.907 | 530,370 | Confirmed |
 | [Bicubic RGBA16, width down / height up / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-CROSS16.md) | 1,285.60 | 812.91 | 1.581 / 1.587 | 1,063,477 | Confirmed |
+| [Bicubic RGBA8, width down / height up / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-CROSS8.md) | 1,268.02 | 842.90 | 1.504 / 1.526 | 531,910 | Confirmed |
 | [Bicubic height reduction, unchanged width RGBA8§](../benchmarks/WARM-BICUBIC-VERTICAL16-IDENTITY.md) | 761.11 | 571.64 | 1.331 / 1.345 | 648,992 | Confirmed |
 | [Bicubic height reduction, unchanged width RGBA16§](../benchmarks/WARM-BICUBIC-VERTICAL16-IDENTITY.md) | 832.27 | 577.53 | 1.441 / 1.480 | 913,737 | Confirmed |
 | [Bicubic height enlargement, unchanged width RGBA8§](../benchmarks/WARM-BICUBIC-VERTICAL-UP8-ROWS.md) | 2,213.62 | 1,730.56 | 1.279 / 1.286 | 1,664,240 | Confirmed |

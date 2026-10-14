@@ -281,6 +281,15 @@ exact tiny-alpha scratch. Each complete operation charges the original tap
 work; cancellation, source and independent owner contracts remain. Other
 directions/supports/hardware and smaller budgets retain prior paths. No heap
 workspace, persistent state or output cache is introduced.
+RGBA8 may use a separate horizontal-first fallback for the same width-reduction/
+height-enlargement supports and 3,440-byte fixed arrays within 4-KiB admission.
+Exact byte products widen to unrounded binary64; the `2^-40*16^2` guards use
+alpha margin 1e-6 and color margin `1e-4 / lower-power-of-two(alphaSum)`.
+Uncertainty replays the original tap order. Tiny alpha uses a private deferred
+marker, then a noninlined frame unwind and timed exact replay with additional
+work and the full scratch allowance. No marker is returned. Other geometry,
+hardware and budgets retain prior paths; no heap workspace, persistent state
+or output cache is introduced.
 When both supports are short, a byte/UInt16-specialized kernel captures local
 buffer views and prepares vertical weights/row offsets in bounded stack storage.
 It retains the same per-pixel tap order, alpha handling and per-row work charges,
