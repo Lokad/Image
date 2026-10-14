@@ -296,7 +296,9 @@ workspace, persistent state or output cache is introduced. Existing word and
 smaller-support byte kernels remain unchanged.
 RGBA16 width enlargement combined with height reduction may prefer vertical-first
 filtering when horizontal support is at most five taps and vertical support at
-most ten. Four output rows reuse five source-column slots; 2,016 bytes of fixed
+most ten. The same path may preserve width while reducing height when the existing
+vertical row cache cannot fit; that cache remains preferred when feasible.
+Four output rows reuse five source-column slots; 2,016 bytes of fixed
 arrays fit an admitted 4-KiB workspace. Exact unsigned word products and unrounded
 binary64 vertical results feed horizontal filtering without pixel quantization.
 The original coefficient values and each pass's tap order remain; uncertainty

@@ -14,10 +14,17 @@ internal static class MixedWordColumnBicubicResize
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
         double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context)
     {
-        if (source.BitDepth != 16 || result.Width <= source.Width || result.Height >= source.Height
+        if (source.BitDepth != 16 || result.Width < source.Width || result.Height >= source.Height
             || tapsX > 5 || tapsY > 10
             || !Avx512F.IsSupported || !Avx2.IsSupported || !Avx.IsSupported || !Sse41.IsSupported
             || context.RemainingWorkingBytes < WorkspaceBytes) return false;
+        // Preserve the faster existing vertical row cache when it fits. For an
+        // unchanged width it needs 85 doubles and 17 ints per column, 128 bytes
+        // of array allowance, and the separate exact-alpha scratch reservation.
+        if (result.Width == source.Width && source.Width >= 2 && Avx512DQ.IsSupported
+            && 85L * source.Width <= Array.MaxLength
+            && context.RemainingWorkingBytes >= 85L * source.Width * sizeof(double)
+                + 17L * source.Width * sizeof(int) + 128 + ResizeAlpha.ScratchBytes) return false;
         context.Reserve(WorkspaceBytes);
         try
         {
@@ -65,7 +72,7 @@ internal static class MixedWordColumnBicubicResize
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
                     var center = (x + .5) * source.Width / result.Width - .5;
-                    // Enlargement fixes scaleX at one, so this keeps exactly the
+                    // A preserved or enlarged width fixes scaleX at one, keeping the
                     // original binary64 coefficient values without a division.
                     var first = (int)Math.Ceiling(center - 2);
                     var count = (int)Math.Floor(center + 2) - first + 1;
