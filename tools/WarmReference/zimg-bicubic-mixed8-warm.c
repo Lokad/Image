@@ -34,7 +34,18 @@ typedef uint16_t Sample;
 #ifndef LOKAD_IMAGE_REVERSE_MIXED
 #define LOKAD_IMAGE_REVERSE_MIXED 0
 #endif
-#if LOKAD_IMAGE_REVERSE_MIXED
+#ifndef LOKAD_IMAGE_WIDE_DOWNSAMPLE
+#define LOKAD_IMAGE_WIDE_DOWNSAMPLE 0
+#endif
+#if LOKAD_IMAGE_WIDE_DOWNSAMPLE
+#undef WORKER_NAME
+#define WORKER_NAME "zimg-bicubic-wide8-warm"
+#define TARGET_WIDTH 128
+#define TARGET_HEIGHT 64
+#define WIDTH_ARG "128"
+#define HEIGHT_ARG "64"
+#define TARGET_HALO 8
+#elif LOKAD_IMAGE_REVERSE_MIXED
 #undef WORKER_NAME
 #if LOKAD_IMAGE_SAMPLE_DEPTH == 16
 #define WORKER_NAME "zimg-bicubic-cross16-warm"
@@ -52,7 +63,11 @@ typedef uint16_t Sample;
 #define HEIGHT_ARG "129"
 #endif
 
-enum { WIDTH=513, HEIGHT=259, OUTPUT_WIDTH=TARGET_WIDTH, OUTPUT_HEIGHT=TARGET_HEIGHT, HALO=4,
+#ifndef TARGET_HALO
+#define TARGET_HALO 4
+#endif
+
+enum { WIDTH=513, HEIGHT=259, OUTPUT_WIDTH=TARGET_WIDTH, OUTPUT_HEIGHT=TARGET_HEIGHT, HALO=TARGET_HALO,
        PADDED_WIDTH=WIDTH+2*HALO, PADDED_HEIGHT=HEIGHT+2*HALO,
        SAMPLE_BYTES=sizeof(Sample),
        INPUT_STRIDE=(PADDED_WIDTH*SAMPLE_BYTES+63)&~63, OUTPUT_STRIDE=(OUTPUT_WIDTH*4+63)&~63,
@@ -185,7 +200,7 @@ int main(int argc,char **argv) {
     uint8_t *first=apply(&w),*second=apply(&w);verify(&w,first);verify(&w,second);
     if(first==second||memcmp(first,second,OUTPUT_BYTES))fail("Outputs alias or differ.");
     first[0]^=255;verify(&w,second);free(first);free(second);check_and_write(&w,argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"bicubic-resize\",\"width\":513,\"height\":259,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"filterThreads\":1,\"threadType\":0,\"outputWidth\":%d,\"outputHeight\":%d,\"independentLiveOutputs\":true,\"initialCompletedOperations\":%" PRIu64 ",\"inputStride\":%d,\"backend\":\"zimg (FFmpeg zscale backend)\",\"scalar\":%s,\"haloPixels\":4,\"haloAndPackingTimed\":true,\"outputAllocationAndRepackingTimed\":true,\"alphaTolerance1\":true,\"premultipliedFloatOutput\":true,\"unpremultiplicationAndQuantizationTimed\":true,\"scratchBytes\":%zu,\"nativeOutputPixelAllocationBytes\":%d}\n",LOKAD_IMAGE_SAMPLE_DEPTH,w.cpu,OUTPUT_WIDTH,OUTPUT_HEIGHT,w.completed,INPUT_PIXEL_STRIDE,w.scalar?"true":"false",w.scratch_bytes,OUTPUT_STRIDE*OUTPUT_HEIGHT*4+OUTPUT_BYTES);fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"bicubic-resize\",\"width\":513,\"height\":259,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"filterThreads\":1,\"threadType\":0,\"outputWidth\":%d,\"outputHeight\":%d,\"independentLiveOutputs\":true,\"initialCompletedOperations\":%" PRIu64 ",\"inputStride\":%d,\"backend\":\"zimg (FFmpeg zscale backend)\",\"scalar\":%s,\"haloPixels\":%d,\"haloAndPackingTimed\":true,\"outputAllocationAndRepackingTimed\":true,\"alphaTolerance1\":true,\"premultipliedFloatOutput\":true,\"unpremultiplicationAndQuantizationTimed\":true,\"scratchBytes\":%zu,\"nativeOutputPixelAllocationBytes\":%d}\n",LOKAD_IMAGE_SAMPLE_DEPTH,w.cpu,OUTPUT_WIDTH,OUTPUT_HEIGHT,w.completed,INPUT_PIXEL_STRIDE,w.scalar?"true":"false",HALO,w.scratch_bytes,OUTPUT_STRIDE*OUTPUT_HEIGHT*4+OUTPUT_BYTES);fflush(stdout);
     char line[128];
     while(fgets(line,sizeof(line),stdin)) {
         if(!strcmp(line,"quit\n"))break;

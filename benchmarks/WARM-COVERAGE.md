@@ -14,7 +14,7 @@ round, at most three, with correctness established before timing.
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x and 4:2:2 confirmed 1.821x / upper 1.862x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x and 4:2:0 confirmed 1.888x / upper 1.931x; adaptive 4:2:0 RGBA8 quiet repeat 1.977x / upper 2.014x, open | RGBA8 4:2:0 upper bound; grayscale, constrained fallback and other material normalization layouts |
 | WebP | VP8 with alpha decode/encode; opaque VP8 decode quiet repeat 1.983x / upper 2.004x, open; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Opaque VP8 upper bound; other material opaque/alpha alternatives and distinct public boundaries |
-| Resize | Nearest/bilinear at both depths, fixed downsample; nearest upscale RGBA8 confirmed 0.929x / upper 0.955x and RGBA16 confirmed 1.051x / upper 1.095x; bilinear upscale RGBA8 confirmed 1.764x / upper 1.787x and RGBA16 confirmed 1.331x / upper 1.416x; bicubic downsample RGBA8 confirmed 1.713x / upper 1.728x and RGBA16 confirmed 1.313x / upper 1.320x; bicubic upscale RGBA8 confirmed 1.553x / upper 1.578x and RGBA16 confirmed 1.505x / upper 1.516x; width enlargement / height reduction confirmed RGBA8 1.848x / upper 1.867x and RGBA16 1.924x / upper 1.975x and width reduction / height enlargement confirmed RGBA8 1.190x / upper 1.206x and RGBA16 1.285x / upper 1.297x against the explicitly adjusted FFmpeg scaler backend | Single-axis and wide-support paths; tight-memory fallback |
+| Resize | Nearest/bilinear at both depths, fixed downsample; nearest upscale RGBA8 confirmed 0.929x / upper 0.955x and RGBA16 confirmed 1.051x / upper 1.095x; bilinear upscale RGBA8 confirmed 1.764x / upper 1.787x and RGBA16 confirmed 1.331x / upper 1.416x; bicubic downsample RGBA8 confirmed 1.713x / upper 1.728x and RGBA16 confirmed 1.313x / upper 1.320x; bicubic upscale RGBA8 confirmed 1.553x / upper 1.578x and RGBA16 confirmed 1.505x / upper 1.516x; width enlargement / height reduction confirmed RGBA8 1.848x / upper 1.867x and RGBA16 1.924x / upper 1.975x and width reduction / height enlargement confirmed RGBA8 1.190x / upper 1.206x and RGBA16 1.285x / upper 1.297x and RGBA8 wider-support 128x64 confirmed 1.631x / upper 1.642x against the explicitly adjusted FFmpeg scaler backend | Single-axis resizing, word/wider support and tight-memory fallback |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes | Retained live output owners versus released-storage reuse |
 | Public boundaries | Resident encoded span to owned output; complete single operations | Fresh Stream decoding and decode/orient/crop/fit compositions |
 
@@ -492,3 +492,13 @@ Two quiet regression screens remain below two. Full both-platform tests and the
 same actual package pass once. Stop this fixed pair; single-axis resizing, wider
 support, tight budgets and remaining material required/current-source coverage
 stay open.
+
+The [wider-support RGBA8 row round](WARM-BICUBIC-WIDE8-ROWS.md) reduces a 26.954x
+fallback gap by 94.0%, independently confirming 1.631x / upper 1.642x at
+231,227 B/op. A bounded thirty-two-row/tap byte kernel preserves exact rational
+pixels through conservative wider guards and original-order/tiny-alpha fallback.
+The explicit native eight-pixel halo is timed, adding 9.489% input area; quality
+bounds stay unchanged. Setup refusals remain unscored. Two quiet existing-path
+regression screens stay below two. Full both-platform tests and the same actual
+package pass once. Stop this pair; wider word support, larger kernels, single-axis
+resizing, tight budgets and remaining required/current-source coverage stay open.

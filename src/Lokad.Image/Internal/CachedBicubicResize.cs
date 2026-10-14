@@ -11,6 +11,8 @@ internal static class CachedBicubicResize
     internal static bool TryApply(ImageBuffer source, ImageBuffer result, double scaleX, double scaleY,
         long tapsX, long tapsY, long rowWork, OperationContext context)
     {
+        if(source.BitDepth==8 && (tapsX>16 || tapsY>16))
+            return WideCachedBicubicResize.TryApply(source,result,scaleX,scaleY,tapsX,tapsY,rowWork,context);
         var upsample=result.Width>source.Width && result.Height>source.Height;
         var mixed=result.Width>source.Width && result.Height<source.Height
             || result.Width<source.Width && result.Height>source.Height;

@@ -117,6 +117,7 @@ timing comparison; compression efficiency parity is not established.
 | [Bicubic mixed-axis RGBA16§](../benchmarks/WARM-BICUBIC-MIXED16-ROWS.md) | 1,636.58 | 850.53 | 1.924 / 1.975 | 1,813,110 | Confirmed |
 | [Bicubic width reduction / height enlargement RGBA8§](../benchmarks/WARM-BICUBIC-CROSS8-ROWS.md) | 984.18 | 827.04 | 1.190 / 1.206 | 731,753 | Confirmed |
 | [Bicubic width reduction / height enlargement RGBA16§](../benchmarks/WARM-BICUBIC-CROSS16-ROWS.md) | 1,044.98 | 813.15 | 1.285 / 1.297 | 1,263,255 | Confirmed |
+| [Bicubic RGBA8, 128×64 / wider support§](../benchmarks/WARM-BICUBIC-WIDE8-ROWS.md) | 588.69 | 360.96 | 1.631 / 1.642 | 231,227 | Confirmed |
 | [Crop RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 2.34 | 2.27 | 1.033 / 1.039 | 96 | Confirmed |
 | [Crop RGBA16](../benchmarks/WARM-CROP-COPY.md) | 4.11 | 4.15 | 0.991 / 1.003 | 96 | Confirmed |
 | [Clone RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 9.82 | 7.19 | 1.366 / 1.390 | 96 | Confirmed |
@@ -152,13 +153,14 @@ Managed output is 471,436 bytes versus 98,590 bytes. Quality-matched timing is
 confirmed; compression efficiency parity is not established.
 
 § Bicubic RGBA8/16 uses **zimg, FFmpeg's zscale backend**, with timed four-pixel
-clamped edge padding (4.697% additional input area), complete source/output
+clamped edge padding (4.697% additional input area); wider-support RGBA8 uses
+eight pixels (9.489%). Both include complete source/output
 packing, filtering and independent output allocation/release. The explicit
 native-only RGB/alpha maximum-1 / RMSE-0.25 bounds preserve exact managed pixels.
-RGBA8 downsample scalar pixels are exact; normal SIMD differs by one RGB and one
+RGBA8 256×129 downsample scalar pixels are exact; normal SIMD differs by one RGB and one
 alpha sample. Enlargement and mixed-axis scalar results are bounded too. RGBA16 normal/scalar results both stay within those bounds. This
 comparison is distinct from the unmatched ordinary FFmpeg CLI.
-Bicubic enlargement and mixed-axis resize use premultiplied float output and timed straight-RGBA
+Bicubic enlargement, mixed-axis resize and wider-support downsampling use premultiplied float output and timed straight-RGBA
 unpremultiplication/quantization, preserving unclamped alpha for the color ratio
 and clearing RGB when rounded alpha is zero. Its packing uses equivalent bounded
 quantization; the slower general-purpose-math comparison remains superseded.
@@ -190,6 +192,8 @@ RGBA8 bicubic width reduction with height enlargement confirms **1.190x / upper
 1.206x**, cutting a 21.910x baseline by 94.6%.
 RGBA16 in that direction confirms **1.285x / upper 1.297x**, cutting a 23.838x
 baseline by 94.7%.
+Wider-support RGBA8 downsampling to 128×64 confirms **1.631x / upper 1.642x**,
+cutting a 26.954x baseline by 94.0% with bounded thirty-two-row reuse.
 PNG RGB8, gray8 and gray-alpha8
 encoding preserves exact samples but exceeds the 5% IDAT-size gate by differences
 of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animation
