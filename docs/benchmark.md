@@ -152,6 +152,7 @@ timing comparison; compression efficiency parity is not established.
 | [Bicubic RGBA16, 2×2 / generated support beyond 544 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-2X2-RGBA16.md) | 1,039.52 | 2,217.15 | 0.469 / 0.493 | 154 | Confirmed |
 | [Bicubic RGBA16, 2×9 / bounded row blocks / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-2X9-RGBA16.md) | 1,535.71 | 1,255.51 | 1.223 / 1.275 | 266 | Confirmed |
 | [Bicubic RGBA16, 4×9 / packed row blocks / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-4X9-RGBA16.md) | 800.20 | 778.15 | 1.028 / 1.031 | 409 | Confirmed |
+| [Bicubic RGBA16, 8×17 / full-coefficient row blocks / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-8X17-RGBA16.md) | 516.33 | 530.91 | 0.973 / 0.981 | 1,209 | Confirmed |
 | [Bicubic RGBA8, 4×9 / packed row blocks / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-4X9-RGBA8.md) | 814.23 | 674.14 | 1.208 / 1.212 | 265 | Confirmed |
 | [Bicubic RGBA8, 2×9 / bounded row blocks / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-2X9-RGBA8.md) | 1,355.20 | 1,017.22 | 1.332 / 1.341 | 194 | Confirmed |
 | [Bicubic RGBA8, 2×2 / generated support beyond 544 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-2X2-RGBA8.md) | 1,040.64 | 1,690.30 | 0.616 / 0.634 | 138 | Confirmed |
@@ -198,7 +199,7 @@ clamped edge padding (4.697% additional input area); wider-support RGBA8/16 uses
 eight pixels (9.489%); the 64×32 byte/word cases use sixteen (19.364%);
 the 2×2 and 2×9 byte/word cases use 512 pixels (1384.169%);
 the 4×2 and 4×9 byte/word cases use 256 pixels (494.787%);
-the 8×4 byte/word cases use 128 pixels (198.069%);
+the 8×4 byte/word and 8×17 word cases use 128 pixels (198.069%);
 the 32×16 byte/word cases use thirty-two (40.269%); the 16×8 byte/word cases use
 sixty-four (86.703%). All include complete source/output
 packing, filtering and independent output allocation/release. The explicit
