@@ -529,3 +529,15 @@ but the independent repeat supplies the published result. One quiet byte
 regression screen passes at 1.520x before full both-platform qualification and
 the same actual package checks. Stop this pair; other single-axis directions,
 tight budgets and remaining material required/current-source parity stay open.
+
+The [RGBA8 support-beyond-thirty-two round](WARM-BICUBIC-64X32-RGBA8.md) reduces
+a 24.783x gap by 92.7%, independently confirming 1.811x / upper 1.820x at
+205,880 B/op. A bounded sixty-four-row byte cache and per-pixel uncertainty guards
+avoid repeated horizontal filtering and redundant original-order evaluation.
+Every guard and rational pixel remains exact. The initial cache and vectorized
+fallback remain above two and receive no twelve-sample/full qualification.
+One six-second profile identifies the substantial fallback cost. Native padding
+is explicit and timed: sixteen pixels, 19.364% extra input area. Two quiet byte/
+word regression screens pass before full both-platform qualification and the
+same actual package checks. Stop this pair; wider word support, single-axis
+directions, tight budgets and remaining material current-source parity stay open.

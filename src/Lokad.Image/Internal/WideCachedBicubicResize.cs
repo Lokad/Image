@@ -5,24 +5,26 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
-/// <summary>RGBA8/16 downsampling with up to 32 taps and bounded operation-local row reuse.</summary>
+/// <summary>RGBA8/16 downsampling with bounded operation-local row reuse.</summary>
 internal static class WideCachedBicubicResize
 {
     internal static bool TryApply(ImageBuffer source, ImageBuffer result, double scaleX, double scaleY,
         long tapsX, long tapsY, long rowWork, OperationContext context)
     {
+        var capacity=source.BitDepth==8 && (tapsX>32 || tapsY>32)?64:32;
         if(source.BitDepth is not (8 or 16) || result.Width>=source.Width || result.Height>=source.Height
-            || result.Width<2 || tapsX>32 || tapsY>32
+            || result.Width<2 || tapsX>capacity || tapsY>capacity
             || !Avx512F.IsSupported || !Avx512DQ.IsSupported || !Avx2.IsSupported || !Sse41.IsSupported)
             return false;
         var width=result.Width;
         var wide16=source.BitDepth==16;
         var maximum=wide16?65535d:255d;
-        var alphaMargin=wide16?1e-3:1e-5;
+        var alphaMargin=wide16?1e-3:capacity==64?1e-4:1e-5;
+        var byteColorMargin=capacity==64?4e-3:1e-3;
         var cacheWidth=(long)width;
-        var elements=cacheWidth*128+(long)width*33+(long)source.Width*4;
-        var indexElements=(long)width*33;
-        var bytes=elements*sizeof(double)+indexElements*sizeof(int)+256;
+        var elements=cacheWidth*(capacity*4)+(long)width*(capacity+1)+(long)source.Width*4;
+        var indexElements=(long)width*(capacity+1);
+        var bytes=elements*sizeof(double)+indexElements*sizeof(int)+capacity*8;
         if (elements>Array.MaxLength || indexElements>Array.MaxLength || bytes>context.RemainingWorkingBytes-ResizeAlpha.ScratchBytes)
             return false;
         context.Reserve(bytes);
@@ -30,12 +32,12 @@ internal static class WideCachedBicubicResize
         {
             var storage=new double[(int)elements];
             var geometry=new int[(int)indexElements];
-            var cacheElements=(int)(cacheWidth*128);
-            var weights=storage.AsSpan(cacheElements,width*32);
-            var normalizers=storage.AsSpan(cacheElements+width*32,width);
-            var decoded=storage.AsSpan(cacheElements+width*33,source.Width*4);
-            var offsets=geometry.AsSpan(0,width*32);
-            var counts=geometry.AsSpan(width*32,width);
+            var cacheElements=(int)(cacheWidth*(capacity*4));
+            var weights=storage.AsSpan(cacheElements,width*capacity);
+            var normalizers=storage.AsSpan(cacheElements+width*capacity,width);
+            var decoded=storage.AsSpan(cacheElements+width*(capacity+1),source.Width*4);
+            var offsets=geometry.AsSpan(0,width*capacity);
+            var counts=geometry.AsSpan(width*capacity,width);
             for(var x=0;x<width;x++)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
@@ -46,13 +48,13 @@ internal static class WideCachedBicubicResize
                 for(var t=0;t<count;t++)
                 {
                     var w=ImageTransforms.Kernel((first+t-center)/scaleX,ResizeFilter.Bicubic);
-                    weights[x*32+t]=w;normalizers[x]+=w;
-                    offsets[x*32+t]=Math.Clamp(first+t,0,source.Width-1)*4;
+                    weights[x*capacity+t]=w;normalizers[x]+=w;
+                    offsets[x*capacity+t]=Math.Clamp(first+t,0,source.Width-1)*4;
                 }
             }
-            Span<int> rowIds=stackalloc int[32];rowIds.Fill(-1);
-            Span<int> rows=stackalloc int[32];
-            Span<double> vertical=stackalloc double[32];
+            Span<int> rowIds=stackalloc int[capacity];rowIds.Fill(-1);
+            Span<int> rows=stackalloc int[capacity];
+            Span<double> vertical=stackalloc double[capacity];
             var input=source.Pixels;
             for(var y=0;y<result.Height;y++)
             {
@@ -66,7 +68,7 @@ internal static class WideCachedBicubicResize
                     var w=ImageTransforms.Kernel((first+t-center)/scaleY,ResizeFilter.Bicubic);
                     vertical[t]=w;normalizerY+=w;
                     var sy=Math.Clamp(first+t,0,source.Height-1);
-                    var slot=sy&31;rows[t]=(int)(slot*cacheWidth*4);
+                    var slot=sy&(capacity-1);rows[t]=(int)(slot*cacheWidth*4);
                     if(rowIds[slot]==sy)continue;
                     rowIds[slot]=sy;
                     var row=input.Slice(sy*source.Stride,source.Stride);
@@ -104,10 +106,10 @@ internal static class WideCachedBicubicResize
                         var n=Math.Max(counts[x],counts[x+1]);
                         for(var tx=0;tx<n;tx++)
                         {
-                            var p0=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets[x*32+tx],4)));
-                            var p1=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets[(x+1)*32+tx],4)));
-                            sum0=Avx.Add(sum0,Avx.Multiply(p0,Vector256.Create(weights[x*32+tx])));
-                            sum1=Avx.Add(sum1,Avx.Multiply(p1,Vector256.Create(weights[(x+1)*32+tx])));
+                            var p0=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets[x*capacity+tx],4)));
+                            var p1=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets[(x+1)*capacity+tx],4)));
+                            sum0=Avx.Add(sum0,Avx.Multiply(p0,Vector256.Create(weights[x*capacity+tx])));
+                            sum1=Avx.Add(sum1,Avx.Multiply(p1,Vector256.Create(weights[(x+1)*capacity+tx])));
                         }
                         MemoryMarshal.Write(MemoryMarshal.AsBytes(cached.Slice(x*4,4)),in sum0);
                         MemoryMarshal.Write(MemoryMarshal.AsBytes(cached.Slice((x+1)*4,4)),in sum1);
@@ -116,7 +118,7 @@ internal static class WideCachedBicubicResize
                     {
                         var sum=Vector256<double>.Zero;
                         for(var tx=0;tx<counts[x];tx++)
-                            sum=Avx.Add(sum,Avx.Multiply(MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets[x*32+tx],4))),Vector256.Create(weights[x*32+tx])));
+                            sum=Avx.Add(sum,Avx.Multiply(MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets[x*capacity+tx],4))),Vector256.Create(weights[x*capacity+tx])));
                         MemoryMarshal.Write(MemoryMarshal.AsBytes(cached.Slice(x*4,4)),in sum);
                     }
                 }
@@ -130,10 +132,11 @@ internal static class WideCachedBicubicResize
                     var n0=normalizers[x]*normalizerY;var n1=normalizers[x+1]*normalizerY;
                     var a0=sum.GetElement(3);var a1=sum.GetElement(7);
                     var values=Avx512F.Divide(sum,Vector512.Create(Vector256.Create(a0,a0,a0,n0),Vector256.Create(a1,a1,a1,n1)));
-                    // At most 32 taps per axis, each bounded by one. The
-                    // 2^-40*1024 absolute-error bound per unit sample covers
+                    // At most capacity taps per axis, each bounded by one. The
+                    // 2^-40*capacity^2 absolute-error bound per unit sample covers
                     // both accumulation orders. With normalization >= .5 and
-                    // alpha >= 1, byte alpha/color margins are 1e-5/1e-3.
+                    // alpha >= 1, 32-tap byte alpha/color margins are 1e-5/1e-3;
+                    // 64-tap byte margins are 1e-4/4e-3. Words retain 32 taps.
                     // Word alpha uses 1e-3. Its color quotient error is below
                     // 8.01/alphaSum; a reciprocal of the lower power of two
                     // conservatively bounds it. Margins >= .25 retain original
@@ -143,18 +146,34 @@ internal static class WideCachedBicubicResize
                     var distance=Avx512F.AndNot(Vector512.Create(long.MinValue),delta.AsInt64()).AsDouble();
                     var exponent0=(int)((BitConverter.DoubleToUInt64Bits(a0)>>52)&2047);
                     var exponent1=(int)((BitConverter.DoubleToUInt64Bits(a1)>>52)&2047);
-                    var colorMargin0=wide16?8.01*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent0)<<52):1e-3;
-                    var colorMargin1=wide16?8.01*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent1)<<52):1e-3;
+                    var colorMargin0=wide16?8.01*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent0)<<52):byteColorMargin;
+                    var colorMargin1=wide16?8.01*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent1)<<52):byteColorMargin;
                     var margins=Vector512.Create(colorMargin0,colorMargin0,colorMargin0,alphaMargin,
                         colorMargin1,colorMargin1,colorMargin1,alphaMargin);
                     var inRange=Avx512F.And(Avx512F.CompareGreaterThanOrEqual(values,Vector512<double>.Zero).AsInt64(),
                         Avx512F.CompareLessThanOrEqual(values,Vector512.Create(maximum)).AsInt64());
                     var ambiguous=Avx512F.And(inRange,Avx512F.CompareLessThanOrEqual(distance,margins).AsInt64());
-                    if(colorMargin0>=.25 || colorMargin1>=.25 || n0<.5 || n1<.5 || !(values.GetElement(3)>=1+alphaMargin && values.GetElement(7)>=1+alphaMargin)
-                        || Vector512.ExtractMostSignificantBits(ambiguous)!=0)
+                    var ambiguousMask=Vector512.ExtractMostSignificantBits(ambiguous);
+                    if(capacity==64)
                     {
-                        Original(source,result,x,y,weights,offsets,counts,vertical[..count],first,context);
-                        Original(source,result,x+1,y,weights,offsets,counts,vertical[..count],first,context);
+                        // Preserve all original guards independently: uncertainty
+                        // in one pixel does not require reevaluating its neighbor.
+                        var original0=colorMargin0>=.25 || n0<.5 || !(values.GetElement(3)>=1+alphaMargin) || (ambiguousMask&15)!=0;
+                        var original1=colorMargin1>=.25 || n1<.5 || !(values.GetElement(7)>=1+alphaMargin) || (ambiguousMask&240)!=0;
+                        if(original0 || original1)
+                        {
+                            if(original0)Original(source,result,x,y,weights,offsets,counts,vertical[..count],first,capacity,context);
+                            else WriteByte(destination,x,values.GetLower());
+                            if(original1)Original(source,result,x+1,y,weights,offsets,counts,vertical[..count],first,capacity,context);
+                            else WriteByte(destination,x+1,values.GetUpper());
+                            continue;
+                        }
+                    }
+                    if(colorMargin0>=.25 || colorMargin1>=.25 || n0<.5 || n1<.5 || !(values.GetElement(3)>=1+alphaMargin && values.GetElement(7)>=1+alphaMargin)
+                        || ambiguousMask!=0)
+                    {
+                        Original(source,result,x,y,weights,offsets,counts,vertical[..count],first,capacity,context);
+                        Original(source,result,x+1,y,weights,offsets,counts,vertical[..count],first,capacity,context);
                         continue;
                     }
                     var clipped=Avx512F.Min(Vector512.Create(maximum),Avx512F.Max(Vector512<double>.Zero,values));
@@ -171,14 +190,14 @@ internal static class WideCachedBicubicResize
                         BinaryPrimitives.WriteUInt64LittleEndian(destination.Slice(x*4,8),packed);
                     }
                 }
-                if((width&1)!=0)Original(source,result,width-1,y,weights,offsets,counts,vertical[..count],first,context);
+                if((width&1)!=0)Original(source,result,width-1,y,weights,offsets,counts,vertical[..count],first,capacity,context);
             }
             return true;
         }
         finally {context.Release(bytes);}
     }
     private static void Original(ImageBuffer source,ImageBuffer result,int x,int y,ReadOnlySpan<double> weights,
-        ReadOnlySpan<int> offsets,ReadOnlySpan<int> counts,ReadOnlySpan<double> vertical,int firstY,OperationContext context)
+        ReadOnlySpan<int> offsets,ReadOnlySpan<int> counts,ReadOnlySpan<double> vertical,int firstY,int capacity,OperationContext context)
     {
         double r=0,g=0,b=0,a=0,n=0;var wide16=source.BitDepth==16;var maximum=wide16?65535:255;
         for(var ty=0;ty<vertical.Length;ty++)
@@ -189,7 +208,7 @@ internal static class WideCachedBicubicResize
             ReadOnlySpan<ushort> row16=wide16?source.GetRow16(sy):default;
             for(var tx=0;tx<counts[x];tx++)
             {
-                var w=wy*weights[x*32+tx];if(w==0)continue;var offset=offsets[x*32+tx];
+                var w=wy*weights[x*capacity+tx];if(w==0)continue;var offset=offsets[x*capacity+tx];
                 var alpha=wide16?row16[offset+3]:row8[offset+3];
                 var red=wide16?row16[offset]:row8[offset];var green=wide16?row16[offset+1]:row8[offset+1];var blue=wide16?row16[offset+2]:row8[offset+2];
                 r+=w*alpha*red;g+=w*alpha*green;b+=w*alpha*blue;a+=w*alpha;n+=w;
@@ -210,6 +229,14 @@ internal static class WideCachedBicubicResize
             destination[x*4]=(byte)Round(color?r/a:0,maximum);destination[x*4+1]=(byte)Round(color?g/a:0,maximum);
             destination[x*4+2]=(byte)Round(color?b/a:0,maximum);destination[x*4+3]=(byte)rounded;
         }
+    }
+    private static void WriteByte(Span<byte> destination,int x,Vector256<double> values)
+    {
+        var clipped=Avx.Min(Vector256.Create(255d),Avx.Max(Vector256<double>.Zero,values));
+        var ints=Avx.ConvertToVector128Int32WithTruncation(Avx.RoundToNearestInteger(clipped));
+        var shorts=Sse2.PackSignedSaturate(ints,Vector128<int>.Zero);
+        var packed=Sse2.PackUnsignedSaturate(shorts,Vector128<short>.Zero).AsUInt32().GetElement(0);
+        BinaryPrimitives.WriteUInt32LittleEndian(destination.Slice(x*4,4),packed);
     }
     private static int Round(double value,int maximum)=>(int)Math.Clamp(Math.Round(value,MidpointRounding.AwayFromZero),0,maximum);
 }
