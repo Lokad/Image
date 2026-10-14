@@ -63,6 +63,20 @@ internal static class ExactResizeReference
         return output;
     }
 
+    /// <summary>Certify an exact alpha half without using production arithmetic.</summary>
+    public static bool AlphaIsHalf(byte[] source, int sourceWidth, int sourceHeight, int depth,
+        int width, int height, int x, int y, ResizeFilter filter)
+    {
+        var horizontal=Weights(sourceWidth,width,filter)[x];
+        var vertical=Weights(sourceHeight,height,filter)[y];
+        var sampleBytes=depth/8;BigInteger numerator=0;
+        foreach(var (sx,wx) in horizontal.Taps)
+        foreach(var (sy,wy) in vertical.Taps)
+            numerator+=(BigInteger)wx*wy*Read(source,((sy*sourceWidth+sx)*4+3)*sampleBytes,depth);
+        var denominator=(BigInteger)horizontal.Sum*vertical.Sum;
+        return numerator>0 && denominator>0 && 2*(numerator%denominator)==denominator;
+    }
+
     private sealed record Axis((int Index, long Weight)[] Taps, long Sum);
 
     private static Axis[] Weights(int source, int target, ResizeFilter filter)

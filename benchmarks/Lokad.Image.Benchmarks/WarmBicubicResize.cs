@@ -7,7 +7,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmBicubicCase { Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8, Wide16 }
+public enum WarmBicubicCase { Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8, Wide16, Horizontal8 }
 
 /// <summary>Complete bicubic resize with an explicitly adjusted FFmpeg scaler backend.</summary>
 [MemoryDiagnoser]
@@ -27,7 +27,8 @@ public class WarmBicubicResize
         "Cross16" => [WarmBicubicCase.Cross16],
         "Wide8" => [WarmBicubicCase.Wide8],
         "Wide16" => [WarmBicubicCase.Wide16],
-        _ => throw new ArgumentException("Choose one bicubic case: Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8 or Wide16.")
+        "Horizontal8" => [WarmBicubicCase.Horizontal8],
+        _ => throw new ArgumentException("Choose one bicubic case: Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8, Wide16 or Horizontal8.")
     };
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
@@ -40,16 +41,16 @@ public class WarmBicubicResize
     private double nativeRgbRmse, nativeAlphaRmse;
     private int nativeRgbMaximum, nativeAlphaMaximum;
     private bool Upscale => Case is WarmBicubicCase.Up8 or WarmBicubicCase.Up16;
-    private bool ExplicitGeometry => Upscale || Case is WarmBicubicCase.Mixed8 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16;
-    private int Width => Case is WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 ? 128 : Case is WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 ? 256 : ExplicitGeometry ? 1027 : 256;
-    private int Height => Case is WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 ? 64 : Upscale || Case is WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 ? 519 : 129;
+    private bool ExplicitGeometry => Upscale || Case is WarmBicubicCase.Mixed8 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 or WarmBicubicCase.Horizontal8;
+    private int Width => Case is WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 ? 128 : Case is WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Horizontal8 ? 256 : ExplicitGeometry ? 1027 : 256;
+    private int Height => Case == WarmBicubicCase.Horizontal8 ? 259 : Case is WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 ? 64 : Upscale || Case is WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 ? 519 : 129;
     private int Depth => Case is WarmBicubicCase.Down16 or WarmBicubicCase.Up16 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide16 ? 16 : 8;
 
     [GlobalSetup]
     public void Setup()
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Use the dedicated Linux VM.");
-        if (Case is not (WarmBicubicCase.Down8 or WarmBicubicCase.Down16 or WarmBicubicCase.Up8 or WarmBicubicCase.Up16 or WarmBicubicCase.Mixed8 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16)) throw new ArgumentOutOfRangeException(nameof(Case));
+        if (Case is not (WarmBicubicCase.Down8 or WarmBicubicCase.Down16 or WarmBicubicCase.Up8 or WarmBicubicCase.Up16 or WarmBicubicCase.Mixed8 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 or WarmBicubicCase.Horizontal8)) throw new ArgumentOutOfRangeException(nameof(Case));
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -66,12 +67,31 @@ public class WarmBicubicResize
             input = HorizontalFlipInput.Create(Depth);
             expected = ExactResizeReference.Resize(input, 513, 259, Depth, Width, Height, ResizeFilter.Bicubic);
             source = JpegBenchmarkCase.Buffer(input, 513, 259, Depth);
+            if(Case==WarmBicubicCase.Horizontal8)
+            {
+                // SPEC.md retains binary64 rounding at exact rational halves.
+                // Pin the qualified direct output, certifying every exception
+                // independently, so a candidate must preserve every byte.
+                using var direct=ImageTransforms.Resize(source,Width,Height,ResizeFilter.Bicubic,
+                    new ImageLimits { MaxWorkingBytes=input.Length+(long)Width*Height*4+4096 });
+                var original=OriginalPixels.Bytes(direct);var halves=0;
+                for(var i=0;i<original.Length;i++)if(original[i]!=expected[i])
+                {
+                    if(i%4!=3 || original[i]+1!=expected[i]
+                        || !ExactResizeReference.AlphaIsHalf(input,513,259,Depth,Width,Height,i/4%Width,i/4/Width,ResizeFilter.Bicubic))
+                        throw new InvalidOperationException("Horizontal reference differs outside an exact alpha half.");
+                    halves++;
+                }
+                if(halves!=6 || JpegBenchmarkCase.Hash(original)!="a5d2e75dbc30006f845c8a69061e096ded94ed06248e50350ec2c18456606a20")
+                    throw new InvalidOperationException("Qualified horizontal pixels changed.");
+                expected=original;
+            }
             File.WriteAllBytes(state.Input, input);
             var rationalPath = Path.Combine(state.DirectoryPath, "rational.rgba");
             File.WriteAllBytes(rationalPath, expected);
             if (Depth == 16 || ExplicitGeometry)
             {
-                var controls = Path.Combine(state.Root, "artifacts/warm-reference", Case == WarmBicubicCase.Wide16 ? "bicubic-wide16" : Case == WarmBicubicCase.Wide8 ? "bicubic-wide8" : Case == WarmBicubicCase.Cross16 ? "bicubic-cross16" : Case == WarmBicubicCase.Cross8 ? "bicubic-cross8" : Case == WarmBicubicCase.Mixed16 ? "bicubic-mixed16" : Case == WarmBicubicCase.Mixed8 ? "bicubic-mixed8" : Upscale ? Depth == 16 ? "bicubic-up16" : "bicubic-up8" : "bicubic16");
+                var controls = Path.Combine(state.Root, "artifacts/warm-reference", Case == WarmBicubicCase.Horizontal8 ? "bicubic-horizontal8" : Case == WarmBicubicCase.Wide16 ? "bicubic-wide16" : Case == WarmBicubicCase.Wide8 ? "bicubic-wide8" : Case == WarmBicubicCase.Cross16 ? "bicubic-cross16" : Case == WarmBicubicCase.Cross8 ? "bicubic-cross8" : Case == WarmBicubicCase.Mixed16 ? "bicubic-mixed16" : Case == WarmBicubicCase.Mixed8 ? "bicubic-mixed8" : Upscale ? Depth == 16 ? "bicubic-up16" : "bicubic-up8" : "bicubic16");
                 Directory.CreateDirectory(controls);
                 File.WriteAllBytes(Path.Combine(controls, Depth == 16 ? "rational.rgba64le" : "rational.rgba"), expected);
             }
@@ -152,13 +172,16 @@ public class WarmBicubicResize
                 serverGc=GCSettings.IsServerGC,gcConfiguration=GC.GetConfigurationVariables(),runtime=RuntimeInformation.FrameworkDescription,
                 platform=RuntimeInformation.RuntimeIdentifier,sourceIdentity,
                 inputSha256=JpegBenchmarkCase.Hash(input),outputSha256=JpegBenchmarkCase.Hash(expected),nativeOutputSha256=JpegBenchmarkCase.Hash(nativePixels),
-                managedRationalReferenceExact=true,nativeRgbMaximum,nativeRgbRmse,nativeAlphaMaximum,nativeAlphaRmse,
+                managedRationalReferenceExact=Case!=WarmBicubicCase.Horizontal8,
+                managedQualifiedOriginalPixelsExact=true,
+                certifiedExactRationalAlphaHalves=Case==WarmBicubicCase.Horizontal8?6:0,
+                nativeRgbMaximum,nativeRgbRmse,nativeAlphaMaximum,nativeAlphaRmse,
                 nativeNormalScalarBounded=true, nativePremultipliedFloatOutput=ExplicitGeometry,nativePixelsDeterministic=true,nativeZeroAlphaRgbZero=true,
                 sourceUnchanged=true,independentOwnedOutput=true,nativeExitCode=0,
                 librarySha256=JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256=JpegBenchmarkCase.HashFile(typeof(WarmBicubicResize).Assembly.Location),
                 nativeBuild=native.BuildIdentity,nativeReady=native.Ready,nativeBefore=before,nativeAfter=after,
-                boundary=$"One resident original 513x259 RGBA{Depth} raster to independently owned {Width}x{Height} bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, {(Case is WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 ? "eight-pixel clamped halo (9.489% input-area increase)" : "four-pixel clamped halo (4.697% input-area increase)")}, filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+                boundary=$"One resident original 513x259 RGBA{Depth} raster to independently owned {Width}x{Height} bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, {(Case is WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 ? "eight-pixel clamped halo (9.489% input-area increase)" : "four-pixel clamped halo (4.697% input-area increase)")}, filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. {(Case==WarmBicubicCase.Horizontal8 ? "Managed exact qualified original pixels; six independently certified exact rational alpha halves retain SPEC binary64 rounding" : "Managed exact rational pixels")}; explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
             },new JsonSerializerOptions {WriteIndented=true})+"\n");
         }
         finally {native?.Dispose();source?.Dispose();state?.Dispose();ready=false;}

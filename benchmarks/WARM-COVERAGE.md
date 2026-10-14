@@ -511,3 +511,12 @@ fallback. Native halo and complete operation boundaries stay explicit and timed.
 Two quiet regression screens stay below two. Windows and Linux each pass 2,847
 tests and the same actual package checks once. Stop this pair; larger kernels,
 single-axis resizing, tight budgets and required current-source parity stay open.
+
+The [RGBA8 horizontal-only row round](WARM-BICUBIC-HORIZONTAL8-ROWS.md) reduces a
+7.306x gap by 79.0%, independently confirming 1.535x / upper 1.558x at
+465,375 B/op. One admission change reuses the existing sixteen-row kernel for
+width reduction with unchanged height. Frozen qualified pixels remain byte-exact;
+six independently certified exact alpha halves retain SPEC.md's binary64 rounding.
+One quiet shared-path screen passes before full both-platform qualification and
+the same actual package checks. Stop this pair; other single-axis directions and
+depths, tight budgets and remaining material current-source parity stay open.

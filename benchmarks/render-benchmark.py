@@ -150,6 +150,7 @@ def render():
         row('Bicubic width reduction / height enlargement RGBA16§', 'warm-bicubiccross16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-CROSS16-ROWS.md', True),
         row('Bicubic RGBA8, 128×64 / wider support§', 'warm-bicubicwide8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-WIDE8-ROWS.md', True),
         row('Bicubic RGBA16, 128×64 / wider support§', 'warm-bicubicwide16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-WIDE16-ROWS.md', True),
+        row('Bicubic width reduction, unchanged height RGBA8§', 'warm-bicubichorizontal8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL8-ROWS.md', True),
         row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
         row('Clone RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'clone8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
@@ -235,10 +236,13 @@ native-only RGB/alpha maximum-1 / RMSE-0.25 bounds preserve exact managed pixels
 RGBA8 256×129 downsample scalar pixels are exact; normal SIMD differs by one RGB and one
 alpha sample. Enlargement and mixed-axis scalar results are bounded too. RGBA16 normal/scalar results both stay within those bounds. This
 comparison is distinct from the unmatched ordinary FFmpeg CLI.
-Bicubic enlargement, mixed-axis resize and wider-support downsampling use premultiplied float output and timed straight-RGBA
+Bicubic enlargement, mixed-axis resize, wider-support downsampling and single-axis width reduction use premultiplied float output and timed straight-RGBA
 unpremultiplication/quantization, preserving unclamped alpha for the color ratio
 and clearing RGB when rounded alpha is zero. Its packing uses equivalent bounded
 quantization; the slower general-purpose-math comparison remains superseded.
+The single-axis RGBA8 case preserves frozen original binary64 pixels exactly;
+six independently certified exact rational alpha halves retain the rounding
+already permitted by SPEC.md. No managed pixel tolerance is added.
 
 Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
 diagnostics or raw GC allocated bytes / operation count (rounded up, including

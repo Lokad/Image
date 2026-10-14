@@ -37,7 +37,20 @@ typedef uint16_t Sample;
 #ifndef LOKAD_IMAGE_WIDE_DOWNSAMPLE
 #define LOKAD_IMAGE_WIDE_DOWNSAMPLE 0
 #endif
-#if LOKAD_IMAGE_WIDE_DOWNSAMPLE
+#ifndef LOKAD_IMAGE_HORIZONTAL_ONLY
+#define LOKAD_IMAGE_HORIZONTAL_ONLY 0
+#endif
+#if LOKAD_IMAGE_HORIZONTAL_ONLY
+#if LOKAD_IMAGE_SAMPLE_DEPTH != 8
+#error Horizontal case requires byte input
+#endif
+#undef WORKER_NAME
+#define WORKER_NAME "zimg-bicubic-horizontal8-warm"
+#define TARGET_WIDTH 256
+#define TARGET_HEIGHT 259
+#define WIDTH_ARG "256"
+#define HEIGHT_ARG "259"
+#elif LOKAD_IMAGE_WIDE_DOWNSAMPLE
 #undef WORKER_NAME
 #if LOKAD_IMAGE_SAMPLE_DEPTH == 16
 #define WORKER_NAME "zimg-bicubic-wide16-warm"

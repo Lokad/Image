@@ -110,7 +110,11 @@ internal static class WarmBenchmarks
                                 && value.GetProperty("hiddenRgbExact").GetBoolean()
                                 && value.GetProperty("nativeCliNormalScalarPixelsExact").GetBoolean()
                                 && value.GetProperty("bitstreamSyntaxVerified").GetBoolean()))
-                        : family == "Bicubic" ? value.GetProperty("managedRationalReferenceExact").GetBoolean()
+                        : family == "Bicubic" ? (value.GetProperty("managedRationalReferenceExact").GetBoolean()
+                            || caseId=="Horizontal8" && depth==8
+                                && value.GetProperty("managedQualifiedOriginalPixelsExact").GetBoolean()
+                                && value.GetProperty("certifiedExactRationalAlphaHalves").GetInt32()==6
+                                && value.GetProperty("outputSha256").GetString()=="a5d2e75dbc30006f845c8a69061e096ded94ed06248e50350ec2c18456606a20")
                             && value.GetProperty("nativeNormalScalarBounded").GetBoolean()
                             && value.GetProperty("nativeZeroAlphaRgbZero").GetBoolean() && value.GetProperty("nativePixelsDeterministic").GetBoolean()
                             && value.GetProperty("nativeRgbMaximum").GetInt32() is >= 0 and <= 1 && value.GetProperty("nativeRgbRmse").GetDouble() is >= 0 and <= 0.25
