@@ -11,17 +11,17 @@ internal static class WideCachedBicubicResize
     internal static bool TryApply(ImageBuffer source, ImageBuffer result, double scaleX, double scaleY,
         long tapsX, long tapsY, long rowWork, OperationContext context)
     {
-        var capacity=tapsX>32 || tapsY>32?64:32;
+        var capacity=tapsX>64 || tapsY>64?128:tapsX>32 || tapsY>32?64:32;
         if(source.BitDepth is not (8 or 16) || result.Width>=source.Width || result.Height>=source.Height
-            || result.Width<2 || tapsX>capacity || tapsY>capacity
+            || result.Width<2 || tapsX>capacity || tapsY>capacity || source.BitDepth==16 && capacity>64
             || !Avx512F.IsSupported || !Avx512DQ.IsSupported || !Avx2.IsSupported || !Sse41.IsSupported)
             return false;
         var width=result.Width;
         var wide16=source.BitDepth==16;
         var maximum=wide16?65535d:255d;
-        var alphaMargin=wide16?capacity==64?4e-3:1e-3:capacity==64?1e-4:1e-5;
+        var alphaMargin=wide16?capacity==64?4e-3:1e-3:capacity==128?4e-4:capacity==64?1e-4:1e-5;
         var wordColorBound=capacity==64?32.04:8.01;
-        var byteColorMargin=capacity==64?4e-3:1e-3;
+        var byteColorMargin=capacity==128?16e-3:capacity==64?4e-3:1e-3;
         var cacheWidth=(long)width;
         var elements=cacheWidth*(capacity*4)+(long)width*(capacity+1)+(long)source.Width*4;
         var indexElements=(long)width*(capacity+1);
@@ -137,7 +137,8 @@ internal static class WideCachedBicubicResize
                     // 2^-40*capacity^2 absolute-error bound per unit sample covers
                     // both accumulation orders. With normalization >= .5 and
                     // alpha >= 1, 32-tap byte alpha/color margins are 1e-5/1e-3;
-                    // 64-tap byte margins are 1e-4/4e-3. Word alpha uses
+                    // 64-tap byte margins are 1e-4/4e-3; 128-tap byte margins
+                    // are 4e-4/16e-3. Word alpha uses
                     // 1e-3/4e-3 for 32/64 taps; the color quotient error is below
                     // 8.01/alphaSum or 32.04/alphaSum. A reciprocal of the lower power of two
                     // conservatively bounds it. Margins >= .25 retain original
@@ -149,13 +150,23 @@ internal static class WideCachedBicubicResize
                     var exponent1=(int)((BitConverter.DoubleToUInt64Bits(a1)>>52)&2047);
                     var colorMargin0=wide16?wordColorBound*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent0)<<52):byteColorMargin;
                     var colorMargin1=wide16?wordColorBound*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent1)<<52):byteColorMargin;
-                    var margins=Vector512.Create(colorMargin0,colorMargin0,colorMargin0,alphaMargin,
-                        colorMargin1,colorMargin1,colorMargin1,alphaMargin);
+                    var alphaMargin0=alphaMargin;var alphaMargin1=alphaMargin;
+                    if(capacity==128)
+                    {
+                        // Apply the same absolute accumulation-error bound to
+                        // each actual quotient. Wide kernels have large positive
+                        // normalizers and alpha sums; the worst-case fixed margin
+                        // otherwise sends many certain pixels to direct evaluation.
+                        (colorMargin0,alphaMargin0)=ByteQuotientMargins(values.GetLower(),a0,n0);
+                        (colorMargin1,alphaMargin1)=ByteQuotientMargins(values.GetUpper(),a1,n1);
+                    }
+                    var margins=Vector512.Create(colorMargin0,colorMargin0,colorMargin0,alphaMargin0,
+                        colorMargin1,colorMargin1,colorMargin1,alphaMargin1);
                     var inRange=Avx512F.And(Avx512F.CompareGreaterThanOrEqual(values,Vector512<double>.Zero).AsInt64(),
                         Avx512F.CompareLessThanOrEqual(values,Vector512.Create(maximum)).AsInt64());
                     var ambiguous=Avx512F.And(inRange,Avx512F.CompareLessThanOrEqual(distance,margins).AsInt64());
                     var ambiguousMask=Vector512.ExtractMostSignificantBits(ambiguous);
-                    if(capacity==64)
+                    if(capacity>=64)
                     {
                         // Preserve all original guards independently: uncertainty
                         // in one pixel does not require reevaluating its neighbor.
@@ -199,6 +210,21 @@ internal static class WideCachedBicubicResize
         }
         finally {context.Release(bytes);}
     }
+    private static (double Color,double Alpha) ByteQuotientMargins(Vector256<double> values,double alphaSum,double normalizer)
+    {
+        const double unitError=1d/(1L<<40)*128*128;
+        const double alphaError=unitError*255;
+        const double colorError=alphaError*255;
+        if(!(alphaSum>alphaError && normalizer>unitError))return (.25,.25);
+        var colorMagnitude=Math.Max(Math.Abs(values.GetElement(0)),
+            Math.Max(Math.Abs(values.GetElement(1)),Math.Abs(values.GetElement(2))));
+        // For C/A, |delta(C/A)| <= (EC + |C/A| EA)/(A-EA).
+        // For A/N, use (EA + |A/N| EN)/(N-EN). Doubling also
+        // covers the rounding of this positive bound calculation.
+        return (2*(colorError+colorMagnitude*alphaError)/(alphaSum-alphaError),
+            2*(alphaError+Math.Abs(values.GetElement(3))*unitError)/(normalizer-unitError));
+    }
+
     private static void Original(ImageBuffer source,ImageBuffer result,int x,int y,ReadOnlySpan<double> weights,
         ReadOnlySpan<int> offsets,ReadOnlySpan<int> counts,ReadOnlySpan<double> vertical,int firstY,int capacity,OperationContext context)
     {

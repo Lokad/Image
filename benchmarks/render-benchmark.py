@@ -156,6 +156,7 @@ def render():
         row('Bicubic width enlargement, unchanged height RGBA16§', 'warm-bicubichorizontalup16-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL-UP16.md', True),
         row('Bicubic RGBA8, 64×32 / support beyond 32§', 'warm-bicubic64x32-8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-64X32-RGBA8.md', True),
         row('Bicubic RGBA16, 64×32 / support beyond 32§', 'warm-bicubic64x32-16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-64X32-RGBA16.md', True),
+        row('Bicubic RGBA8, 32×16 / support beyond 64§', 'warm-bicubic32x16-8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-32X16-RGBA8.md', True),
         row('Bicubic height reduction, unchanged width RGBA8§', 'warm-bicubicvertical16-rows-evidence.json', ['byteRegressionControl', 'observations', -1], 'WARM-BICUBIC-VERTICAL16-IDENTITY.md', True),
         row('Bicubic height reduction, unchanged width RGBA16§', 'warm-bicubicvertical16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-VERTICAL16-IDENTITY.md', True),
         row('Bicubic height enlargement, unchanged width RGBA8§', 'warm-bicubicverticalup8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-VERTICAL-UP8-ROWS.md', True),
@@ -238,7 +239,8 @@ confirmed; compression efficiency parity is not established.
 
 § Bicubic RGBA8/16 uses **zimg, FFmpeg's zscale backend**, with timed four-pixel
 clamped edge padding (4.697% additional input area); wider-support RGBA8/16 uses
-eight pixels (9.489%); the 64×32 byte/word cases use sixteen (19.364%). All include complete source/output
+eight pixels (9.489%); the 64×32 byte/word cases use sixteen (19.364%);
+the 32×16 byte case uses thirty-two (40.269%). All include complete source/output
 packing, filtering and independent output allocation/release. The explicit
 native-only RGB/alpha maximum-1 / RMSE-0.25 bounds preserve exact managed pixels.
 RGBA8 256×129 downsample scalar pixels are exact; normal SIMD differs by one RGB and one

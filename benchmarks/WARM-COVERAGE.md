@@ -14,7 +14,7 @@ round, at most three, with correctness established before timing.
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x and 4:2:2 confirmed 1.821x / upper 1.862x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x and 4:2:0 confirmed 1.888x / upper 1.931x; adaptive 4:2:0 RGBA8 quiet repeat 1.977x / upper 2.014x, open | RGBA8 4:2:0 upper bound; grayscale, constrained fallback and other material normalization layouts |
 | WebP | VP8 with alpha decode/encode; opaque VP8 decode quiet repeat 1.983x / upper 2.004x, open; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Opaque VP8 upper bound; other material opaque/alpha alternatives and distinct public boundaries |
-| Resize | Nearest/bilinear downsample and enlargement at both depths; bicubic downsample, enlargement on both axes, both mixed-axis directions and 128×64 / 64×32 wider supports at both depths; horizontal reduction/enlargement and vertical reduction at both depths; vertical enlargement RGBA8 confirmed | Vertical enlargement RGBA16, support beyond sixty-four taps, tight-memory fallback and other materially distinct shapes |
+| Resize | Nearest/bilinear downsample and enlargement at both depths; bicubic downsample, enlargement on both axes, both mixed-axis directions and 128×64 / 64×32 wider supports at both depths; horizontal reduction/enlargement and vertical reduction at both depths; vertical enlargement RGBA8 and 32×16 support beyond sixty-four taps RGBA8 confirmed | Vertical enlargement RGBA16, word support beyond sixty-four taps, byte support beyond 128 taps, tight-memory fallback and other materially distinct shapes |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes | Retained live output owners versus released-storage reuse |
 | Public boundaries | Resident encoded span to owned output; complete single operations | Fresh Stream decoding and decode/orient/crop/fit compositions |
 
@@ -562,6 +562,17 @@ rounding. One quiet horizontal regression screen passes at 1.512x before full
 both-platform qualification and the same actual package checks. Stop this pair;
 other single-axis directions/depths, tight budgets, larger supports and remaining
 required/current-source parity stay open.
+
+The [RGBA8 support-beyond-sixty-four round](WARM-BICUBIC-32X16-RGBA8.md) reduces a
+22.139x gap by 94.7%, independently confirming 1.183x / upper 1.192x at
+199,354 B/op. Bounded 128-row reuse and the existing absolute-error budget applied
+to actual quotient denominators preserve every rational pixel while avoiding
+unnecessary direct evaluation. The fixed-margin trial remains 2.954x and receives
+no twelve/full qualification. Native padding is explicit and timed: thirty-two
+pixels, 40.269% extra input area; both modes are exact on this raster. One quiet
+64-tap regression screen passes before full both-platform/same actual package
+qualification. Stop this pair; wider word support, tight budgets and remaining
+material required/current-source parity stay open.
 
 The [shared vertical identity-filter round](WARM-BICUBIC-VERTICAL16-IDENTITY.md)
 reduces a 10.099x RGBA16 gap by 85.7%, independently confirming 1.441x / upper
