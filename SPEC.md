@@ -160,6 +160,15 @@ normalization is at least 0.5 and computed normalized alpha is at least two.
 Tiny-alpha evaluation instead unwinds the complete strip operation before
 original replay needs exact scratch. Source, ownership, work and precision remain;
 existing byte and short-support word kernels stay separate and unchanged.
+RGBA8 reduction above twenty and up to thirty-six taps per axis may use a
+separate two-column/thirty-six-row strip cache. Its 4-KiB admission covers
+3,992 bytes of fixed arrays. Exact byte premultiplication products (at most
+65025) and alpha fit UInt16; this compact source-window storage introduces no
+pixel quantization. Relative window offsets also fit UInt16, while absolute
+source coordinates remain Int32 and checked before narrowing. Paired samples
+widen exactly to binary64 and preserve each original tap order. The conservative
+`2^-40*36^2` error budget, uncertainty/tiny-alpha unwind, complete work and bounded
+cancellation remain. Other supports/windows/hardware retain existing paths.
 When both supports are short, a byte/UInt16-specialized kernel captures local
 buffer views and prepares vertical weights/row offsets in bounded stack storage.
 It retains the same per-pixel tap order, alpha handling and per-row work charges,
