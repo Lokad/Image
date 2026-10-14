@@ -149,6 +149,7 @@ timing comparison; compression efficiency parity is not established.
 | [Bicubic RGBA8, 8×4 / support beyond 256 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-8X4-RGBA8.md) | 505.31 | 637.83 | 0.792 / 0.803 | 249 | Confirmed |
 | [Bicubic RGBA16, 4×2 / packed support beyond 304 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-4X2-RGBA16.md) | 637.19 | 1,247.45 | 0.511 / 0.518 | 185 | Confirmed |
 | [Bicubic RGBA8, 4×2 / packed support beyond 304 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-4X2-RGBA8.md) | 665.48 | 1,098.32 | 0.606 / 0.618 | 153 | Confirmed |
+| [Bicubic RGBA16, 2×2 / generated support beyond 544 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-2X2-RGBA16.md) | 1,039.52 | 2,217.15 | 0.469 / 0.493 | 154 | Confirmed |
 | [Bicubic height reduction, unchanged width RGBA8§](../benchmarks/WARM-BICUBIC-VERTICAL16-IDENTITY.md) | 761.11 | 571.64 | 1.331 / 1.345 | 648,992 | Confirmed |
 | [Bicubic height reduction, unchanged width RGBA16§](../benchmarks/WARM-BICUBIC-VERTICAL16-IDENTITY.md) | 832.27 | 577.53 | 1.441 / 1.480 | 913,737 | Confirmed |
 | [Bicubic height enlargement, unchanged width RGBA8§](../benchmarks/WARM-BICUBIC-VERTICAL-UP8-ROWS.md) | 2,213.62 | 1,730.56 | 1.279 / 1.286 | 1,664,240 | Confirmed |
@@ -190,6 +191,7 @@ confirmed; compression efficiency parity is not established.
 § Bicubic RGBA8/16 uses **zimg, FFmpeg's zscale backend**, with timed four-pixel
 clamped edge padding (4.697% additional input area); wider-support RGBA8/16 uses
 eight pixels (9.489%); the 64×32 byte/word cases use sixteen (19.364%);
+the 2×2 word case uses 512 pixels (1384.169%);
 the 4×2 byte/word cases use 256 pixels (494.787%);
 the 8×4 byte/word cases use 128 pixels (198.069%);
 the 32×16 byte/word cases use thirty-two (40.269%); the 16×8 byte/word cases use

@@ -246,6 +246,22 @@ unwinds before exact scratch. Certified rational halves retain original rounding
 with complete work, cancellation, source and independent owner contracts.
 No heap/full-support/output cache is added; other geometry, hardware and budgets
 retain prior paths.
+RGBA16 reductions exceeding 544 taps on either axis, with at most eight output
+rows, may use a separate generated-coefficient streaming fallback. It stores no
+coefficient table; eight-lane SIMD evaluates the original binary64 Catmull-Rom
+operations on demand. A preparatory scan checks every generated coefficient bit
+against the original scalar kernel and computes normalization/L1 sums; any
+mismatch declines the path. Fixed arrays occupy 512 bytes within 4-KiB admission.
+For admitted horizontal/vertical tap bounds `Nx/Ny` and original coefficient
+L1 sums `Lx/Ly`, the unit error bound is
+`Nx*Ny/2^40*max(1,Lx*Ly/1024)`; the path requires `Nx*Ny <= 2^40`.
+It conservatively covers original and separable arithmetic with no coefficient
+storage loss. Quotient/quarter-margin guards retain original tap-order replay
+for uncertainty; tiny alpha unwinds before exact scratch. Horizontal preparation
+and filtering check cancellation every 256 taps. Full unsigned products, checked
+loads, complete work, absolute coordinates and independent owners remain.
+No heap/full-support/output cache is added; other directions, heights, hardware
+and budgets retain prior paths.
 RGBA16 enlargement on both axes may use a separate eight-column/five-row strip
 cache when the full row cache cannot be admitted. Its optional 4-KiB admission
 covers 2,416 bytes of fixed arrays. A bounded source window is decoded once per

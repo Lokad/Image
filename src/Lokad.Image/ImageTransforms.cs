@@ -192,6 +192,7 @@ public static class ImageTransforms
                 || DeepWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
                 || StreamingWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
                 || PackedStreamingWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                || GeneratedWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
                 || EnlargingWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
                 || CrossWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)))
         {
