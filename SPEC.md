@@ -220,6 +220,17 @@ guards use the same `2^-40*256^2` budget. Original tap order and separate clampe
 edge contributions, guarded ordinary replay, complete tiny-alpha unwind, work,
 cancellation and owner contracts remain. Existing word and smaller-support byte
 kernels stay separate and unchanged; no heap workspace or output cache is added.
+RGBA16 enlargement on both axes may use a separate eight-column/five-row strip
+cache when the full row cache cannot be admitted. Its optional 4-KiB admission
+covers 2,416 bytes of fixed arrays. A bounded source window is decoded once per
+reused row; exact unsigned word products widen to binary64 without quantization.
+Each horizontal/vertical accumulation retains tap order. Paired and single word
+outputs use the conservative `2^-40*16^2` budget and depth-scaled quotient guards.
+Uncertain ordinary or negative-alpha samples replay the original order locally;
+tiny alpha instead unwinds the complete strip operation before exact scratch.
+Complete work, bounded cancellation and independent owners remain. No heap
+workspace or persistent state is added; existing byte and reduction kernels stay
+unchanged. Other directions, hardware and smaller budgets retain prior paths.
 When both supports are short, a byte/UInt16-specialized kernel captures local
 buffer views and prepares vertical weights/row offsets in bounded stack storage.
 It retains the same per-pixel tap order, alpha handling and per-row work charges,
