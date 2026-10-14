@@ -183,6 +183,7 @@ def render():
         row('Bicubic RGBA16, 2×2 / generated support beyond 544 / input+output+4 KiB limit§', 'warm-bicubictight2x2word-generated-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-2X2-RGBA16.md', True),
         row('Bicubic RGBA16, 2×9 / bounded row blocks / input+output+4 KiB limit§', 'warm-bicubictight2x9word-generated-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-2X9-RGBA16.md', True),
         row('Bicubic RGBA16, 4×9 / packed row blocks / input+output+4 KiB limit§', 'warm-bicubictight4x9word-generated-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-4X9-RGBA16.md', True),
+        row('Bicubic RGBA8, 4×9 / packed row blocks / input+output+4 KiB limit§', 'warm-bicubictight4x9byte-generated-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-4X9-RGBA8.md', True),
         row('Bicubic RGBA8, 2×9 / bounded row blocks / input+output+4 KiB limit§', 'warm-bicubictight2x9byte-generated-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-2X9-RGBA8.md', True),
         row('Bicubic RGBA8, 2×2 / generated support beyond 544 / input+output+4 KiB limit§', 'warm-bicubictight2x2byte-generated-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-2X2-RGBA8.md', True),
         row('Bicubic height reduction, unchanged width RGBA8§', 'warm-bicubicvertical16-rows-evidence.json', ['byteRegressionControl', 'observations', -1], 'WARM-BICUBIC-VERTICAL16-IDENTITY.md', True),
@@ -270,7 +271,7 @@ confirmed; compression efficiency parity is not established.
 clamped edge padding (4.697% additional input area); wider-support RGBA8/16 uses
 eight pixels (9.489%); the 64×32 byte/word cases use sixteen (19.364%);
 the 2×2 and 2×9 byte/word cases use 512 pixels (1384.169%);
-the 4×2 byte/word and 4×9 word cases use 256 pixels (494.787%);
+the 4×2 and 4×9 byte/word cases use 256 pixels (494.787%);
 the 8×4 byte/word cases use 128 pixels (198.069%);
 the 32×16 byte/word cases use thirty-two (40.269%); the 16×8 byte/word cases use
 sixty-four (86.703%). All include complete source/output

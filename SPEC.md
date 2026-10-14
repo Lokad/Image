@@ -240,7 +240,8 @@ cancellation and independent owners remain. No heap/full-support/output cache
 is introduced; other directions, supports, heights, hardware and smaller budgets
 retain prior paths.
 RGBA8 may use a separate packed-coefficient streaming fallback for the same
-above-304/up-to-544 support and eight-row bounds. Its 3,776-byte fixed arrays,
+above-304/up-to-544 support. It also handles any reduction height in blocks of
+at most eight output rows, reusing the same bounded arrays. Its 3,776-byte fixed arrays,
 six-byte coefficients, measured discarded error and L1-scaled arithmetic bound
 match the word strategy, with byte-scaled quotient guards and exact byte products.
 Uncertainty recomputes original full coefficients and tap order; tiny alpha
