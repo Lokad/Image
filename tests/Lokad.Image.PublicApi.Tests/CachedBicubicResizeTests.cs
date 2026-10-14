@@ -40,15 +40,18 @@ public sealed class CachedBicubicResizeTests
     [InlineData(8,513,9,1027,19)]
     [InlineData(16,513,9,1027,19)]
     [InlineData(8,17,19,35,9)]
+    [InlineData(16,17,19,35,9)]
     [InlineData(8,67,27,135,13)]
+    [InlineData(16,67,27,135,13)]
     [InlineData(8,513,19,1027,9)]
+    [InlineData(16,513,19,1027,9)]
     public void SeparableRowsMatchOriginalOrderAtCacheAdmissionBoundary(int depth,int sourceWidth,int sourceHeight,int width,int height)
     {
         using var source=OriginalPixels.Buffer(sourceWidth,sourceHeight,depth);
         var input=OriginalPixels.Bytes(source);
         var baselinePeak=input.Length+(long)width*height*4*(depth/8)+4096;
         var workspace=716L*width+32L*sourceWidth+128;
-        if(depth==8 && width>sourceWidth && height<sourceHeight)workspace+=(width&1)*512;
+        if(width>sourceWidth && height<sourceHeight)workspace+=(width&1)*512;
         using var direct=ImageTransforms.Resize(source,width,height,ResizeFilter.Bicubic,
             new ImageLimits {MaxWorkingBytes=baselinePeak});
         var expected=OriginalPixels.Bytes(direct);
@@ -79,6 +82,8 @@ public sealed class CachedBicubicResizeTests
     [InlineData(16,true,false)]
     [InlineData(8,false,true)]
     [InlineData(8,true,true)]
+    [InlineData(16,false,true)]
+    [InlineData(16,true,true)]
     public void NegativeLobesAndTinyAlphaRetainOriginalQuantization(int depth,bool transparent,bool mixed)
     {
         using var source=ImageBuffer.Create(17,11,depth);

@@ -60,11 +60,11 @@ def row(label, name, path, report, confirmed=False):
 
 
 def pending(label, report, status):
-    return f'| [{label}](../benchmarks/{report}) | â€” | â€” | â€” | â€” | {status} |'
+    return f'| [{label}](../benchmarks/{report}) | — | — | — | — | {status} |'
 
 
 def table(rows):
-    return '\n'.join(['| Operation / fixed profile | Lokad Âµs | FFmpeg Âµs | Ratio / upper | Lokad allocated B/op | Status |',
+    return '\n'.join(['| Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |',
                       '| --- | ---: | ---: | ---: | ---: | --- |', *rows])
 
 
@@ -91,12 +91,12 @@ def render():
         row('PNG gray-alpha16, None', 'warm-pnggrayalpha16-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ROW.md', True),
         row('PNG palette8 + tRNS, None', 'warm-pngpalette-simd-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE-SIMD.md', True),
         row('PNG palette8 + two-entry tRNS, None', 'warm-pngpal8a2-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE8-PARTIAL-ALPHA.md', True),
-        row('PNG palette4 + tRNS â†’ RGBA8, None', 'warm-pngdecode-reuse-evidence.json', ['cases', 'palette4', 'observations', -1], 'WARM-PNG-DECODE-REUSE.md', True),
-        row('PNG palette2 + tRNS â†’ RGBA8, None', 'warm-pngpalette2-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE2-ROW.md', True),
-        row('PNG palette1 + tRNS â†’ RGBA8, None', 'warm-pngpalette1-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE1-ROW.md', True),
-        row('PNG opaque gray1 â†’ RGBA8, None', 'warm-pnggray1-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-ROW.md', True),
-        row('PNG opaque gray2 â†’ RGBA8, None', 'warm-pnggray2-current-evidence.json', ['observations', -1], 'WARM-PNG-GRAY2-CURRENT.md', True),
-        row('PNG opaque gray4 â†’ RGBA8, None', 'warm-pnggray4-reuse-evidence.json', ['observations', -1], 'WARM-PNG-GRAY4-REUSE.md', True),
+        row('PNG palette4 + tRNS → RGBA8, None', 'warm-pngdecode-reuse-evidence.json', ['cases', 'palette4', 'observations', -1], 'WARM-PNG-DECODE-REUSE.md', True),
+        row('PNG palette2 + tRNS → RGBA8, None', 'warm-pngpalette2-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE2-ROW.md', True),
+        row('PNG palette1 + tRNS → RGBA8, None', 'warm-pngpalette1-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE1-ROW.md', True),
+        row('PNG opaque gray1 → RGBA8, None', 'warm-pnggray1-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-ROW.md', True),
+        row('PNG opaque gray2 → RGBA8, None', 'warm-pnggray2-current-evidence.json', ['observations', -1], 'WARM-PNG-GRAY2-CURRENT.md', True),
+        row('PNG opaque gray4 → RGBA8, None', 'warm-pnggray4-reuse-evidence.json', ['observations', -1], 'WARM-PNG-GRAY4-REUSE.md', True),
         row('JPEG baseline gray', 'warm-jpegac-fused-evidence.json', ['regressionControl', 'observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
         row('JPEG baseline 4:2:0', 'warm-jpeg420-bulk-evidence.json', ['observations', -1], 'WARM-JPEG420-BULK.md', True),
         row('JPEG baseline 4:2:2', 'warm-coverage-quiet-evidence.json', ['cases', 'jpeg422', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
@@ -126,8 +126,8 @@ def render():
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg4228-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA8-ADAPTIVE.md', True),
         row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg4208-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG420-RGBA8-ADAPTIVE.md'),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG-ADAPTIVE-HUFFMAN.md', True),
-        row('WebP VP8 + alphaâ€¡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
-        row('WebP VP8 + alpha from RGBA16â€¡', 'warm-vp8encode16-evidence.json', ['observations', -1], 'WARM-VP8-RGBA16-ENCODE.md', True),
+        row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
+        row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8encode16-evidence.json', ['observations', -1], 'WARM-VP8-RGBA16-ENCODE.md', True),
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8lencode16-evidence.json', ['observations', -1], 'WARM-VP8L-RGBA16-ENCODE.md', True),
     ]
@@ -137,14 +137,15 @@ def render():
         row('Nearest upscale RGBA16', 'warm-nearestup16-evidence.json', ['observations', -1], 'WARM-NEAREST-UP16.md', True),
         row('Nearest resize RGBA16', 'warm-prepared-confirm-evidence.json', ['observations', -1], 'WARM-PREPARED-CONFIRM.md', True),
         row('Bilinear resize RGBA8', 'warm-bilinear8-quiet-evidence.json', ['observations', -1], 'WARM-BILINEAR8-QUIET.md', True),
-        row('Bilinear resize RGBA16â€ ', 'warm-bilinear16-register-evidence.json', ['observations', -1], 'WARM-BILINEAR16-REGISTER.md', True),
-        row('Bilinear upscale RGBA8â€ ', 'warm-bilinearup8-batch-evidence.json', ['observations', -1], 'WARM-BILINEAR-UP8-BATCH.md', True),
-        row('Bilinear upscale RGBA16â€ ', 'warm-bilinearup16-rows-evidence.json', ['observations', -1], 'WARM-BILINEAR-UP16-ROWS.md', True),
-        row('Bicubic resize RGBA8Â§', 'warm-bicubic16-rows-evidence.json', ['byteRegressionControl', 'observations', -1], 'WARM-BICUBIC-RGBA16-ROWS.md', True),
-        row('Bicubic resize RGBA16Â§', 'warm-bicubic16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-RGBA16-ROWS.md', True),
-        row('Bicubic upscale RGBA8Â§', 'warm-bicubicup8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-UP8-ROWS.md', True),
-        row('Bicubic upscale RGBA16Â§', 'warm-bicubicup16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-UP16-ROWS.md', True),
-        row('Bicubic mixed-axis RGBA8Â§', 'warm-bicubicmixed8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-MIXED8-ROWS.md', True),
+        row('Bilinear resize RGBA16†', 'warm-bilinear16-register-evidence.json', ['observations', -1], 'WARM-BILINEAR16-REGISTER.md', True),
+        row('Bilinear upscale RGBA8†', 'warm-bilinearup8-batch-evidence.json', ['observations', -1], 'WARM-BILINEAR-UP8-BATCH.md', True),
+        row('Bilinear upscale RGBA16†', 'warm-bilinearup16-rows-evidence.json', ['observations', -1], 'WARM-BILINEAR-UP16-ROWS.md', True),
+        row('Bicubic resize RGBA8§', 'warm-bicubic16-rows-evidence.json', ['byteRegressionControl', 'observations', -1], 'WARM-BICUBIC-RGBA16-ROWS.md', True),
+        row('Bicubic resize RGBA16§', 'warm-bicubic16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-RGBA16-ROWS.md', True),
+        row('Bicubic upscale RGBA8§', 'warm-bicubicup8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-UP8-ROWS.md', True),
+        row('Bicubic upscale RGBA16§', 'warm-bicubicup16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-UP16-ROWS.md', True),
+        row('Bicubic mixed-axis RGBA8§', 'warm-bicubicmixed16-rows-evidence.json', ['byteRegressionControl', 'observations', -1], 'WARM-BICUBIC-MIXED16-ROWS.md', True),
+        row('Bicubic mixed-axis RGBA16§', 'warm-bicubicmixed16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-MIXED16-ROWS.md', True),
         row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
         row('Clone RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'clone8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
@@ -171,10 +172,10 @@ def render():
 Updated 2026-10-14. Latest retained warm measurements on the dedicated AMD EPYC
 9V45 VM: Ubuntu 24.04.4, .NET 10.0.8 / SDK 10.0.204, FFmpeg n8.1
 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread, normal SIMD,
-tiering off, workstation nonconcurrent GC. Two original 513Ã—259 RGBA8/16 rasters,
+tiering off, workstation nonconcurrent GC. Two original 513×259 RGBA8/16 rasters,
 with documented projections for other pixel formats;
-downsample/crop outputs are 256Ã—129, upscale outputs are 1027Ã—519,
-and quarter turns/transposes are 259Ã—513.
+downsample/crop outputs are 256×129, upscale outputs are 1027×519,
+and quarter turns/transposes are 259×513.
 
 Times cover complete public operations and independent output acquisition/release,
 including admission, conversion and disposal. Native wrappers/contexts are reused;
@@ -186,7 +187,7 @@ at those sources, not a simultaneous rerun of the current HEAD.
 Ratio = Lokad.Image / the faster FFmpeg pre/post mean; lower is faster. Upper is
 the retained conservative confidence bound, taking the larger filtered/all-actual
 bound where available. **Confirmed** requires an independent quiet repeat and
-upper â‰¤2. Failed guards remain failures. Full required warm coverage is **open**.
+upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
 Recent confirmations use `exclusive-vm-idle-v2`: live job checks and
 five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
 Earlier receipts retain their original load guard and its failures.
@@ -209,7 +210,7 @@ timing comparison; compression efficiency parity is not established.
 
 {table(edits)}
 
-â€  RGBA16 bilinear and the explicit RGBA8 upscale allow native-only alpha maximum
+† RGBA16 bilinear and the explicit RGBA8 upscale allow native-only alpha maximum
 error 1 / RMSE <=0.25, alongside the same RGB bound. Up8 also includes writable
 output acquisition and zero-alpha RGB clearing inside native timing. Managed
 pixels remain exact against the rational reference; Down8 native alpha stays
@@ -217,12 +218,12 @@ exact. The RGBA16 independent confirmation clears 2x with both guards passing.
 Earlier failed screens/prechecks and rejected prototypes remain recorded in
 the linked reports.
 
-â€¡ VP8 encode fixes native quality 75 / managed quality 100 at effort 4. Source
+‡ VP8 encode fixes native quality 75 / managed quality 100 at effort 4. Source
 PSNR gap is 0.00365 dB within the unchanged 0.25 dB band; alpha is exact.
 Managed output is 471,436 bytes versus 98,590 bytes. Quality-matched timing is
 confirmed; compression efficiency parity is not established.
 
-Â§ Bicubic RGBA8/16 uses **zimg, FFmpeg's zscale backend**, with timed four-pixel
+§ Bicubic RGBA8/16 uses **zimg, FFmpeg's zscale backend**, with timed four-pixel
 clamped edge padding (4.697% additional input area), complete source/output
 packing, filtering and independent output allocation/release. The explicit
 native-only RGB/alpha maximum-1 / RMSE-0.25 bounds preserve exact managed pixels.
@@ -254,8 +255,9 @@ against the explicitly adjusted scaler backend, cutting its baseline mean 91.1%.
 RGBA8 on the same new build confirms **1.713x / upper 1.728x**. Other material
 paths remain open. Bicubic RGBA16 enlargement confirms **1.505x / upper 1.516x**,
 cutting its baseline mean 64.1% while retaining exact managed pixels.
-RGBA8 bicubic width enlargement with height reduction confirms **1.945x / upper
-1.978x**, cutting a newly exposed 19.938x baseline by 90.3%.
+For bicubic width enlargement with height reduction, the same final build
+confirms RGBA16 **1.924x / upper 1.975x**, cutting a 20.419x baseline by 90.6%,
+and RGBA8 **1.848x / upper 1.867x** with unchanged allocations.
 PNG RGB8, gray8 and gray-alpha8
 encoding preserves exact samples but exceeds the 5% IDAT-size gate by differences
 of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animation

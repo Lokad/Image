@@ -12,18 +12,39 @@
 #include <time.h>
 #include <zimg.h>
 
+#ifndef LOKAD_IMAGE_SAMPLE_DEPTH
+#define LOKAD_IMAGE_SAMPLE_DEPTH 8
+#endif
+#if LOKAD_IMAGE_SAMPLE_DEPTH == 8
+typedef uint8_t Sample;
+#define SAMPLE_MAXIMUM 255
+#define SAMPLE_PIXEL_TYPE ZIMG_PIXEL_BYTE
+#define DEPTH_ARG "8"
+#define WORKER_NAME "zimg-bicubic-mixed8-warm"
+#elif LOKAD_IMAGE_SAMPLE_DEPTH == 16
+typedef uint16_t Sample;
+#define SAMPLE_MAXIMUM 65535
+#define SAMPLE_PIXEL_TYPE ZIMG_PIXEL_WORD
+#define DEPTH_ARG "16"
+#define WORKER_NAME "zimg-bicubic-mixed16-warm"
+#else
+#error Unsupported sample depth
+#endif
+
 enum { WIDTH=513, HEIGHT=259, OUTPUT_WIDTH=1027, OUTPUT_HEIGHT=129, HALO=4,
        PADDED_WIDTH=WIDTH+2*HALO, PADDED_HEIGHT=HEIGHT+2*HALO,
-       INPUT_STRIDE=(PADDED_WIDTH+63)&~63, OUTPUT_STRIDE=(OUTPUT_WIDTH*4+63)&~63,
-       INPUT_BYTES=WIDTH*HEIGHT*4, OUTPUT_BYTES=OUTPUT_WIDTH*OUTPUT_HEIGHT*4 };
+       SAMPLE_BYTES=sizeof(Sample),
+       INPUT_STRIDE=(PADDED_WIDTH*SAMPLE_BYTES+63)&~63, OUTPUT_STRIDE=(OUTPUT_WIDTH*4+63)&~63,
+       INPUT_PIXEL_STRIDE=WIDTH*4*SAMPLE_BYTES, OUTPUT_PIXEL_STRIDE=OUTPUT_WIDTH*4*SAMPLE_BYTES,
+       INPUT_BYTES=WIDTH*HEIGHT*4*SAMPLE_BYTES, OUTPUT_BYTES=OUTPUT_WIDTH*OUTPUT_HEIGHT*4*SAMPLE_BYTES };
 static void fail(const char *s) { fprintf(stderr,"%s\n",s);exit(1); }
 static void check(int code) { if(code) {char s[1024];zimg_get_last_error(s,sizeof(s));fail(s);} }
 /* All graph samples are finite. Clamp first, then round nonnegative samples
  * away from zero, avoiding general-purpose libm calls per packed sample. */
-static uint8_t quantize(double value) {
-    if(value>=255)return 255;
+static Sample quantize(double value) {
+    if(value>=SAMPLE_MAXIMUM)return SAMPLE_MAXIMUM;
     if(value<=0)return 0;
-    return (uint8_t)(value+.5);
+    return (Sample)(value+.5);
 }
 static void *aligned(size_t n) {void *p=NULL;if(posix_memalign(&p,64,n?n:64))fail("Allocation failed");return p;}
 static int affinity_cpu(void) {
@@ -58,9 +79,9 @@ static uint8_t *apply(Work *w) {
     const size_t plane_bytes=(size_t)INPUT_STRIDE*PADDED_HEIGHT;
     for(int y=0;y<PADDED_HEIGHT;y++) {
         int sy=y-HALO;if(sy<0)sy=0;if(sy>=HEIGHT)sy=HEIGHT-1;
-        const uint8_t *row=w->raw+(size_t)sy*WIDTH*4;
-        uint8_t *r=w->input_storage+(size_t)y*INPUT_STRIDE;
-        uint8_t *g=r+plane_bytes,*b=g+plane_bytes,*a=b+plane_bytes;
+        const Sample *row=(const Sample *)w->raw+(size_t)sy*WIDTH*4;
+        Sample *r=(Sample *)(w->input_storage+(size_t)y*INPUT_STRIDE);
+        Sample *g=r+plane_bytes/SAMPLE_BYTES,*b=g+plane_bytes/SAMPLE_BYTES,*a=b+plane_bytes/SAMPLE_BYTES;
         for(int x=0;x<WIDTH;x++) {
             r[x+HALO]=row[x*4];g[x+HALO]=row[x*4+1];b[x+HALO]=row[x*4+2];a[x+HALO]=row[x*4+3];
         }
@@ -82,13 +103,13 @@ static uint8_t *apply(Work *w) {
     for(int y=0;y<OUTPUT_HEIGHT;y++) {
         const float *r=(const float *)(planes+(size_t)y*OUTPUT_STRIDE);
         const float *g=r+output_plane_bytes/4,*b=g+output_plane_bytes/4,*a=b+output_plane_bytes/4;
-        uint8_t *row=packed+(size_t)y*OUTPUT_WIDTH*4;
+        Sample *row=(Sample *)packed+(size_t)y*OUTPUT_WIDTH*4;
         for(int x=0;x<OUTPUT_WIDTH;x++) {
-            int alpha=quantize((double)a[x]*255);
-            row[x*4+3]=(uint8_t)alpha;
-            row[x*4]=alpha&&a[x]>0?quantize((double)r[x]/a[x]*255):0;
-            row[x*4+1]=alpha&&a[x]>0?quantize((double)g[x]/a[x]*255):0;
-            row[x*4+2]=alpha&&a[x]>0?quantize((double)b[x]/a[x]*255):0;
+            int alpha=quantize((double)a[x]*SAMPLE_MAXIMUM);
+            row[x*4+3]=(Sample)alpha;
+            row[x*4]=alpha&&a[x]>0?quantize((double)r[x]/a[x]*SAMPLE_MAXIMUM):0;
+            row[x*4+1]=alpha&&a[x]>0?quantize((double)g[x]/a[x]*SAMPLE_MAXIMUM):0;
+            row[x*4+2]=alpha&&a[x]>0?quantize((double)b[x]/a[x]*SAMPLE_MAXIMUM):0;
         }
     }
     free(planes);w->observed+=packed[0];w->completed++;return packed;
@@ -96,11 +117,12 @@ static uint8_t *apply(Work *w) {
 typedef struct {int rgb_max,alpha_max;uint64_t rgb_square,alpha_square;} Difference;
 static Difference verify(Work *w,const uint8_t *p) {
     Difference d={0};
-    for(int i=0;i<OUTPUT_BYTES;i+=4) {
-        if(!p[i+3]&&(p[i]||p[i+1]||p[i+2]))fail("Nonzero RGB under zero alpha.");
+    const Sample *samples=(const Sample *)p,*expected=(const Sample *)w->expected;
+    for(int i=0;i<OUTPUT_BYTES/SAMPLE_BYTES;i+=4) {
+        if(!samples[i+3]&&(samples[i]||samples[i+1]||samples[i+2]))fail("Nonzero RGB under zero alpha.");
 
         for(int c=0;c<4;c++) {
-            int error=(int)p[i+c]-w->expected[i+c];if(error<0)error=-error;
+            int error=(int)samples[i+c]-expected[i+c];if(error<0)error=-error;
             if(c==3) {if(error>d.alpha_max)d.alpha_max=error;d.alpha_square+=(uint64_t)error*error;}
             else {if(error>d.rgb_max)d.rgb_max=error;d.rgb_square+=(uint64_t)error*error;}
         }
@@ -117,13 +139,13 @@ static Difference check_and_write(Work *w,const char *path) {
 }
 int main(int argc,char **argv) {
     if((argc!=10&&argc!=11)||strcmp(argv[1],"bicubic-resize")||strcmp(argv[3],"513")
-        ||strcmp(argv[4],"259")||strcmp(argv[5],"8")||strcmp(argv[8],"1027")||strcmp(argv[9],"129")||(argc==11&&strcmp(argv[10],"--scalar")))
-        fail("Usage: zimg-bicubic-mixed8-warm bicubic-resize INPUT_RAW 513 259 8 OUTPUT_RAW EXPECTED_RAW 1027 129 [--scalar]");
+        ||strcmp(argv[4],"259")||strcmp(argv[5],DEPTH_ARG)||strcmp(argv[8],"1027")||strcmp(argv[9],"129")||(argc==11&&strcmp(argv[10],"--scalar")))
+        fail("Usage: " WORKER_NAME " bicubic-resize INPUT_RAW 513 259 " DEPTH_ARG " OUTPUT_RAW EXPECTED_RAW 1027 129 [--scalar]");
     Work w={0};w.cpu=affinity_cpu();w.scalar=argc==11;
     w.raw=read_exact(argv[2],INPUT_BYTES);w.backup=malloc(INPUT_BYTES);if(!w.backup)fail("Backup allocation failed.");
     memcpy(w.backup,w.raw,INPUT_BYTES);w.expected=read_exact(argv[7],OUTPUT_BYTES);
     zimg_image_format src,dst;zimg_image_format_default(&src,ZIMG_API_VERSION);zimg_image_format_default(&dst,ZIMG_API_VERSION);
-    src.width=PADDED_WIDTH;src.height=PADDED_HEIGHT;src.pixel_type=ZIMG_PIXEL_BYTE;src.depth=8;
+    src.width=PADDED_WIDTH;src.height=PADDED_HEIGHT;src.pixel_type=SAMPLE_PIXEL_TYPE;src.depth=LOKAD_IMAGE_SAMPLE_DEPTH;
     src.pixel_range=ZIMG_RANGE_FULL;src.color_family=ZIMG_COLOR_RGB;src.matrix_coefficients=ZIMG_MATRIX_RGB;
     src.transfer_characteristics=ZIMG_TRANSFER_LINEAR;src.alpha=ZIMG_ALPHA_STRAIGHT;
     src.active_region.left=HALO;src.active_region.top=HALO;src.active_region.width=WIDTH;src.active_region.height=HEIGHT;
@@ -142,7 +164,7 @@ int main(int argc,char **argv) {
     uint8_t *first=apply(&w),*second=apply(&w);verify(&w,first);verify(&w,second);
     if(first==second||memcmp(first,second,OUTPUT_BYTES))fail("Outputs alias or differ.");
     first[0]^=255;verify(&w,second);free(first);free(second);check_and_write(&w,argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"bicubic-resize\",\"width\":513,\"height\":259,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"filterThreads\":1,\"threadType\":0,\"outputWidth\":1027,\"outputHeight\":129,\"independentLiveOutputs\":true,\"initialCompletedOperations\":%" PRIu64 ",\"inputStride\":2052,\"backend\":\"zimg (FFmpeg zscale backend)\",\"scalar\":%s,\"haloPixels\":4,\"haloAndPackingTimed\":true,\"outputAllocationAndRepackingTimed\":true,\"alphaTolerance1\":true,\"premultipliedFloatOutput\":true,\"unpremultiplicationAndQuantizationTimed\":true,\"scratchBytes\":%zu,\"nativeOutputPixelAllocationBytes\":%d}\n",w.cpu,w.completed,w.scalar?"true":"false",w.scratch_bytes,OUTPUT_STRIDE*OUTPUT_HEIGHT*4+OUTPUT_BYTES);fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"bicubic-resize\",\"width\":513,\"height\":259,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"filterThreads\":1,\"threadType\":0,\"outputWidth\":1027,\"outputHeight\":129,\"independentLiveOutputs\":true,\"initialCompletedOperations\":%" PRIu64 ",\"inputStride\":%d,\"backend\":\"zimg (FFmpeg zscale backend)\",\"scalar\":%s,\"haloPixels\":4,\"haloAndPackingTimed\":true,\"outputAllocationAndRepackingTimed\":true,\"alphaTolerance1\":true,\"premultipliedFloatOutput\":true,\"unpremultiplicationAndQuantizationTimed\":true,\"scratchBytes\":%zu,\"nativeOutputPixelAllocationBytes\":%d}\n",LOKAD_IMAGE_SAMPLE_DEPTH,w.cpu,w.completed,INPUT_PIXEL_STRIDE,w.scalar?"true":"false",w.scratch_bytes,OUTPUT_STRIDE*OUTPUT_HEIGHT*4+OUTPUT_BYTES);fflush(stdout);
     char line[128];
     while(fgets(line,sizeof(line),stdin)) {
         if(!strcmp(line,"quit\n"))break;
@@ -154,7 +176,7 @@ int main(int argc,char **argv) {
         if(sscanf(line,"sample %" SCNu64 " %c",&count,&extra)!=1||!count||count>UINT64_C(10000000))fail("Invalid bounded sample request.");
         uint64_t before=w.completed,start=now_ns();for(uint64_t i=0;i<count;i++)free(apply(&w));uint64_t elapsed=now_ns()-start;
         if(sched_getcpu()!=w.cpu||affinity_cpu()!=w.cpu||w.completed-before!=count)fail("Sample CPU/work count differs.");
-        printf("{\"state\":\"sample\",\"operations\":%" PRIu64 ",\"elapsedNanoseconds\":%" PRIu64 ",\"completedOperations\":%" PRIu64 ",\"observed\":%" PRIu64 ",\"outputStride\":4108,\"cpu\":%d}\n",count,elapsed,w.completed,w.observed,w.cpu);fflush(stdout);
+        printf("{\"state\":\"sample\",\"operations\":%" PRIu64 ",\"elapsedNanoseconds\":%" PRIu64 ",\"completedOperations\":%" PRIu64 ",\"observed\":%" PRIu64 ",\"outputStride\":%d,\"cpu\":%d}\n",count,elapsed,w.completed,w.observed,OUTPUT_PIXEL_STRIDE,w.cpu);fflush(stdout);
     }
     if(ferror(stdin))fail("Protocol read failed.");
     free(w.scratch);free(w.input_storage);free(w.expected);free(w.backup);free(w.raw);zimg_filter_graph_free(w.graph);return 0;

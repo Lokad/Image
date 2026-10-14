@@ -12,8 +12,8 @@ internal static class CachedBicubicResize
         long tapsX, long tapsY, long rowWork, OperationContext context)
     {
         var upsample=result.Width>source.Width && result.Height>source.Height;
-        var byteMixed=source.BitDepth==8 && result.Width>source.Width && result.Height<source.Height;
-        if (source.BitDepth is not (8 or 16) || !upsample && !byteMixed && (result.Width>=source.Width || result.Height>=source.Height)
+        var mixed= result.Width>source.Width && result.Height<source.Height;
+        if (source.BitDepth is not (8 or 16) || !upsample && !mixed && (result.Width>=source.Width || result.Height>=source.Height)
             || result.Width < 2 || tapsX > 16 || tapsY > 16 || !Avx512F.IsSupported || !Avx512DQ.IsSupported || !Avx2.IsSupported || !Sse41.IsSupported)
             return false;
         var width=result.Width;
@@ -21,7 +21,7 @@ internal static class CachedBicubicResize
         var sampleBytes=wide16?2:1;
         var maximum=wide16?65535d:255d;
         var alphaMargin=wide16?1e-4:1e-6;
-        var cacheWidth=(long)width+(byteMixed?(width&1):0);
+        var cacheWidth=(long)width+(mixed?(width&1):0);
         var elements=cacheWidth*64+(long)width*17+(long)source.Width*4;
         var indexElements=(long)width*17;
         var bytes=elements*sizeof(double)+indexElements*sizeof(int)+128;
@@ -103,18 +103,41 @@ internal static class CachedBicubicResize
                         context.Cancellation.ThrowIfCancellationRequested();
                         var sum0=Vector256<double>.Zero;
                         var sum1=Vector256<double>.Zero;
-                        var n=Math.Max(counts[x],counts[x+1]);
-                        for(var tx=0;tx<n;tx++)
+                        var base0=x*16;var base1=(x+1)*16;
+                        var first0=offsets[base0];var first1=offsets[base1];
+                        if(mixed && counts[x]==4 && counts[x+1]==4
+                            && first1==first0+4 && first1<=decoded.Length-16)
                         {
-                            var p0=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets[x*16+tx],4)));
-                            var p1=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets[(x+1)*16+tx],4)));
-                            var w0=Vector256.Create(weights[x*16+tx]);
-                            var w1=Vector256.Create(weights[(x+1)*16+tx]);
-                            // Keep independent accumulators: constructing a wide
-                            // vector from variable halves causes stack traffic
-                            // on current JITs inside this repeated support loop.
-                            sum0=Avx.Add(sum0,Avx.Multiply(p0,w0));
-                            sum1=Avx.Add(sum1,Avx.Multiply(p1,w1));
+                            // Interior adjacent four-tap outputs share three
+                            // source vectors. Keep each accumulation in tap order.
+                            var p0=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(first0,4)));
+                            var p1=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(first1,4)));
+                            var p2=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(first1+4,4)));
+                            var p3=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(first1+8,4)));
+                            var p4=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(first1+12,4)));
+                            sum0=Avx.Add(sum0,Avx.Multiply(p0,Vector256.Create(weights[base0])));
+                            sum1=Avx.Add(sum1,Avx.Multiply(p1,Vector256.Create(weights[base1])));
+                            sum0=Avx.Add(sum0,Avx.Multiply(p1,Vector256.Create(weights[base0+1])));
+                            sum1=Avx.Add(sum1,Avx.Multiply(p2,Vector256.Create(weights[base1+1])));
+                            sum0=Avx.Add(sum0,Avx.Multiply(p2,Vector256.Create(weights[base0+2])));
+                            sum1=Avx.Add(sum1,Avx.Multiply(p3,Vector256.Create(weights[base1+2])));
+                            sum0=Avx.Add(sum0,Avx.Multiply(p3,Vector256.Create(weights[base0+3])));
+                            sum1=Avx.Add(sum1,Avx.Multiply(p4,Vector256.Create(weights[base1+3])));
+                        }
+                        else
+                        {
+                            var n=Math.Max(counts[x],counts[x+1]);
+                            for(var tx=0;tx<n;tx++)
+                            {
+                                var p0=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets[base0+tx],4)));
+                                var p1=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets[base1+tx],4)));
+                                var w0=Vector256.Create(weights[base0+tx]);
+                                var w1=Vector256.Create(weights[base1+tx]);
+                                // Independent accumulators avoid variable-half
+                                // wide-vector construction and its stack traffic.
+                                sum0=Avx.Add(sum0,Avx.Multiply(p0,w0));
+                                sum1=Avx.Add(sum1,Avx.Multiply(p1,w1));
+                            }
                         }
                         MemoryMarshal.Write(MemoryMarshal.AsBytes(cached.Slice(x*4,4)),in sum0);
                         MemoryMarshal.Write(MemoryMarshal.AsBytes(cached.Slice((x+1)*4,4)),in sum1);
@@ -128,11 +151,13 @@ internal static class CachedBicubicResize
                     }
                 }
                 var destination=result.Pixels.Slice(y*result.Stride,result.Stride);
-                if(byteMixed)
+                if(mixed)
                 {
-                    WriteMixedByteRow(source,result,y,
-                        MemoryMarshal.Cast<double,Vector512<double>>(storage.AsSpan(0,cacheElements)),
-                        rows[..count],vertical[..count],normalizers,normalizerY,weights,offsets,counts,first,context);
+                    var vectors=MemoryMarshal.Cast<double,Vector512<double>>(storage.AsSpan(0,cacheElements));
+                    if(wide16)WriteMixedWordRow(source,result,y,vectors,rows[..count],vertical[..count],
+                        normalizers,normalizerY,weights,offsets,counts,first,context);
+                    else WriteMixedByteRow(source,result,y,vectors,rows[..count],vertical[..count],
+                        normalizers,normalizerY,weights,offsets,counts,first,context);
                     if((width&1)!=0)Original(source,result,width-1,y,weights,offsets,counts,vertical[..count],first,context);
                     continue;
                 }
@@ -229,6 +254,47 @@ internal static class CachedBicubicResize
             var shorts=Sse2.PackSignedSaturate(ints.GetLower(),ints.GetUpper());
             var packed=Sse2.PackUnsignedSaturate(shorts,Vector128<short>.Zero).AsUInt64().GetElement(0);
             BinaryPrimitives.WriteUInt64LittleEndian(destination.Slice(x*4,8),packed);
+        }
+    }
+    private static void WriteMixedWordRow(ImageBuffer source,ImageBuffer result,int y,
+        ReadOnlySpan<Vector512<double>> cached,ReadOnlySpan<int> rows,ReadOnlySpan<double> vertical,
+        ReadOnlySpan<double> normalizers,double normalizerY,ReadOnlySpan<double> weights,
+        ReadOnlySpan<int> offsets,ReadOnlySpan<int> counts,int firstY,OperationContext context)
+    {
+        var destination=result.Pixels.Slice(y*result.Stride,result.Stride);
+        for(var x=0;x+1<result.Width;x+=2)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var sum=Vector512<double>.Zero;
+            for(var t=0;t<vertical.Length;t++)
+                sum=Avx512F.Add(sum,Avx512F.Multiply(cached[(rows[t]>>3)+(x>>1)],Vector512.Create(vertical[t])));
+            var n0=normalizers[x]*normalizerY;var n1=normalizers[x+1]*normalizerY;
+            var a0=sum.GetElement(3);var a1=sum.GetElement(7);
+            var values=Avx512F.Divide(sum,Vector512.Create(Vector256.Create(a0,a0,a0,n0),Vector256.Create(a1,a1,a1,n1)));
+            var fractional=Avx512F.Subtract(values,Avx512F.RoundScale(values,1));
+            var delta=Avx512F.Subtract(fractional,Vector512.Create(.5));
+            var distance=Avx512F.AndNot(Vector512.Create(long.MinValue),delta.AsInt64()).AsDouble();
+            // Keep the same power-of-two bounds without calls that spill
+            // live vectors in this per-pair precision check.
+            var exponent0=(int)((BitConverter.DoubleToUInt64Bits(a0)>>52)&2047);
+            var exponent1=(int)((BitConverter.DoubleToUInt64Bits(a1)>>52)&2047);
+            var margin0=2.0001*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent0)<<52);
+            var margin1=2.0001*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent1)<<52);
+            var margins=Vector512.Create(margin0,margin0,margin0,1e-4,margin1,margin1,margin1,1e-4);
+            var inRange=Avx512F.And(Avx512F.CompareGreaterThanOrEqual(values,Vector512<double>.Zero).AsInt64(),
+                Avx512F.CompareLessThanOrEqual(values,Vector512.Create(65535d)).AsInt64());
+            var ambiguous=Avx512F.And(inRange,Avx512F.CompareLessThanOrEqual(distance,margins).AsInt64());
+            if(n0<.5 || n1<.5 || !(values.GetElement(3)>=1+1e-4 && values.GetElement(7)>=1+1e-4)
+                || Vector512.ExtractMostSignificantBits(ambiguous)!=0)
+            {
+                Original(source,result,x,y,weights,offsets,counts,vertical,firstY,context);
+                Original(source,result,x+1,y,weights,offsets,counts,vertical,firstY,context);
+                continue;
+            }
+            var clipped=Avx512F.Min(Vector512.Create(65535d),Avx512F.Max(Vector512<double>.Zero,values));
+            var ints=Avx512F.ConvertToVector256Int32WithTruncation(Avx512F.RoundScale(clipped,0));
+            var packed=Sse41.PackUnsignedSaturate(ints.GetLower(),ints.GetUpper());
+            MemoryMarshal.Write(destination.Slice(x*8,16),in packed);
         }
     }
     private static double ReciprocalLowerPower(double value)
