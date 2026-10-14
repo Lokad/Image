@@ -13,14 +13,14 @@ internal static class WideCachedBicubicResize
     {
         var capacity=tapsX>64 || tapsY>64?128:tapsX>32 || tapsY>32?64:32;
         if(source.BitDepth is not (8 or 16) || result.Width>=source.Width || result.Height>=source.Height
-            || result.Width<2 || tapsX>capacity || tapsY>capacity || source.BitDepth==16 && capacity>64
+            || result.Width<2 || tapsX>capacity || tapsY>capacity
             || !Avx512F.IsSupported || !Avx512DQ.IsSupported || !Avx2.IsSupported || !Sse41.IsSupported)
             return false;
         var width=result.Width;
         var wide16=source.BitDepth==16;
         var maximum=wide16?65535d:255d;
-        var alphaMargin=wide16?capacity==64?4e-3:1e-3:capacity==128?4e-4:capacity==64?1e-4:1e-5;
-        var wordColorBound=capacity==64?32.04:8.01;
+        var alphaMargin=wide16?capacity==128?16e-3:capacity==64?4e-3:1e-3:capacity==128?4e-4:capacity==64?1e-4:1e-5;
+        var wordColorBound=capacity==128?128.16:capacity==64?32.04:8.01;
         var byteColorMargin=capacity==128?16e-3:capacity==64?4e-3:1e-3;
         var cacheWidth=(long)width;
         var elements=cacheWidth*(capacity*4)+(long)width*(capacity+1)+(long)source.Width*4;
@@ -157,8 +157,8 @@ internal static class WideCachedBicubicResize
                         // each actual quotient. Wide kernels have large positive
                         // normalizers and alpha sums; the worst-case fixed margin
                         // otherwise sends many certain pixels to direct evaluation.
-                        (colorMargin0,alphaMargin0)=ByteQuotientMargins(values.GetLower(),a0,n0);
-                        (colorMargin1,alphaMargin1)=ByteQuotientMargins(values.GetUpper(),a1,n1);
+                        (colorMargin0,alphaMargin0)=QuotientMargins(values.GetLower(),a0,n0,maximum);
+                        (colorMargin1,alphaMargin1)=QuotientMargins(values.GetUpper(),a1,n1,maximum);
                     }
                     var margins=Vector512.Create(colorMargin0,colorMargin0,colorMargin0,alphaMargin0,
                         colorMargin1,colorMargin1,colorMargin1,alphaMargin1);
@@ -210,11 +210,11 @@ internal static class WideCachedBicubicResize
         }
         finally {context.Release(bytes);}
     }
-    private static (double Color,double Alpha) ByteQuotientMargins(Vector256<double> values,double alphaSum,double normalizer)
+    private static (double Color,double Alpha) QuotientMargins(Vector256<double> values,double alphaSum,double normalizer,double maximum)
     {
         const double unitError=1d/(1L<<40)*128*128;
-        const double alphaError=unitError*255;
-        const double colorError=alphaError*255;
+        var alphaError=unitError*maximum;
+        var colorError=alphaError*maximum;
         if(!(alphaSum>alphaError && normalizer>unitError))return (.25,.25);
         var colorMagnitude=Math.Max(Math.Abs(values.GetElement(0)),
             Math.Max(Math.Abs(values.GetElement(1)),Math.Abs(values.GetElement(2))));

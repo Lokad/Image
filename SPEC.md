@@ -93,7 +93,7 @@ evaluation, including clamped out-of-range samples. Each byte or word pixel
 independently selects original-order evaluation when its guards are uncertain;
 its neighbor retains depth-specific fast packing when every guard passes.
 Managed pixels stay exact. Larger support and tight budgets retain direct evaluation.
-RGBA8 supports exceeding sixty-four taps may use at most 128 operation-local
+RGBA8/16 supports exceeding sixty-four taps may use at most 128 operation-local
 rows/taps, with workspace `5644*outputWidth + 32*sourceWidth + 1024` bytes and
 the same 4 KiB allowance. The `2^-40*128^2` per-unit absolute-error budget bounds
 unrounded alpha, premultiplied color and normalization. For each pixel, quotient
@@ -101,7 +101,8 @@ error is bounded by `(EC + abs(C/A)*EA)/(A-EA)` for color and
 `(EA + abs(A/N)*EN)/(N-EN)` for alpha; the margins are doubled to cover their
 own rounding. Nonpositive lower denominators, uncertain rounding, the existing
 normalizer/tiny-alpha guards and tight budgets retain original evaluation.
-UInt16 support beyond sixty-four taps remains on the previous path.
+Bounds use the full sample maximum (255 or 65535), including exact unsigned
+premultiplied word products. Larger support retains the previous path.
 RGBA8/16 may also reuse these rows when one axis grows while the other shrinks.
 That path pads odd cache-row widths by one pixel (512 additional workspace
 bytes across sixteen rows), allowing safe indexing of cached two-pixel vectors.

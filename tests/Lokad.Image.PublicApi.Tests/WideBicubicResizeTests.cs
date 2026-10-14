@@ -30,6 +30,11 @@ public sealed class WideBicubicResizeTests
     [InlineData(8,149,113,5,4)]
     [InlineData(8,513,65,32,3)]
     [InlineData(8,101,83,5,4)]
+    [InlineData(16,53,37,2,2)]
+    [InlineData(16,99,81,5,4)]
+    [InlineData(16,149,113,5,4)]
+    [InlineData(16,513,65,32,3)]
+    [InlineData(16,101,83,5,4)]
     public void WideRowsMatchDirectEvaluationAtAdmissionBoundary(int depth,int sourceWidth,int sourceHeight,int width,int height)
     {
         using var source=OriginalPixels.Buffer(sourceWidth,sourceHeight,depth);
@@ -70,6 +75,8 @@ public sealed class WideBicubicResizeTests
     [InlineData(16,true,4,3)]
     [InlineData(8,false,2,2)]
     [InlineData(8,true,2,2)]
+    [InlineData(16,false,2,2)]
+    [InlineData(16,true,2,2)]
     public void WiderNegativeLobesAndTinyAlphaKeepExactPixels(int depth,bool transparent,int width,int height)
     {
         using var source=ImageBuffer.Create(53,37,depth);
