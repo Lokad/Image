@@ -213,11 +213,11 @@ ordinary-alpha pixels may replay the original order; tiny alpha unwinds before
 exact scratch. Complete work, bounded cancellation and independent owners remain.
 No heap workspace, full support cache or output cache is added. Other heights,
 supports, directions, hardware and budgets retain the existing paths.
-RGBA8 reduction with support above seventy-two and at most 256 taps per axis
+RGBA8 reduction with support above seventy-two and at most 304 taps per axis
 and at most sixteen output rows may use a separate
-byte streaming specialization, with the same 4-KiB admission and 3,456 bytes of
+byte streaming specialization, with the same 4-KiB admission and 3,936 bytes of
 fixed arrays. Exact byte products widen to binary64, and byte-depth quotient
-guards use the same `2^-40*256^2` budget. Original tap order and separate clamped
+guards use the same `2^-40*304^2` budget. Original tap order and separate clamped
 edge contributions, guarded ordinary replay, complete tiny-alpha unwind, work,
 cancellation and owner contracts remain. Existing word and smaller-support byte
 kernels stay separate and unchanged; no heap workspace or output cache is added.
