@@ -14,7 +14,7 @@ round, at most three, with correctness established before timing.
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x and 4:2:2 confirmed 1.821x / upper 1.862x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x and 4:2:0 confirmed 1.888x / upper 1.931x; adaptive 4:2:0 RGBA8 quiet repeat 1.977x / upper 2.014x, open | RGBA8 4:2:0 upper bound; grayscale, constrained fallback and other material normalization layouts |
 | WebP | VP8 with alpha decode/encode; opaque VP8 decode quiet repeat 1.983x / upper 2.004x, open; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Opaque VP8 upper bound; other material opaque/alpha alternatives and distinct public boundaries |
-| Resize | Nearest/bilinear at both depths, fixed downsample; nearest upscale RGBA8 confirmed 0.929x / upper 0.955x and RGBA16 confirmed 1.051x / upper 1.095x; bilinear upscale RGBA8 confirmed 1.764x / upper 1.787x and RGBA16 confirmed 1.331x / upper 1.416x; bicubic downsample RGBA8 confirmed 1.713x / upper 1.728x and RGBA16 confirmed 1.313x / upper 1.320x; bicubic upscale RGBA8 confirmed 1.553x / upper 1.578x against the explicitly adjusted FFmpeg scaler backend | Bicubic RGBA16 upsample/mixed scaling; other wide-support paths; tight-memory fallback |
+| Resize | Nearest/bilinear at both depths, fixed downsample; nearest upscale RGBA8 confirmed 0.929x / upper 0.955x and RGBA16 confirmed 1.051x / upper 1.095x; bilinear upscale RGBA8 confirmed 1.764x / upper 1.787x and RGBA16 confirmed 1.331x / upper 1.416x; bicubic downsample RGBA8 confirmed 1.713x / upper 1.728x and RGBA16 confirmed 1.313x / upper 1.320x; bicubic upscale RGBA8 confirmed 1.553x / upper 1.578x and RGBA16 confirmed 1.505x / upper 1.516x against the explicitly adjusted FFmpeg scaler backend | Mixed-axis scaling; other wide-support paths; tight-memory fallback |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes | Retained live output owners versus released-storage reuse |
 | Public boundaries | Resident encoded span to owned output; complete single operations | Fresh Stream decoding and decode/orient/crop/fit compositions |
 
@@ -447,3 +447,11 @@ gap and reduces its baseline mean 52.4%, independently confirming 1.331x / upper
 1.416x with 4,498,974 B/op. Full precision, original pixels, resource fallbacks,
 full tests and the same actual package pass on both OSes. Stop tuning this fixed
 pair; remaining material coverage and final-source parity remain open.
+
+The [RGBA16 bicubic enlargement round](WARM-BICUBIC-UP16-ROWS.md) reduces a
+4.154x baseline to independently confirmed 1.505x / upper 1.516x, with
+5,016,578 B/op. The existing row cache now admits word enlargement on both axes;
+managed rational pixels stay exact and both native modes satisfy the explicit
+scaler bounds. Full both-platform tests and the same actual package pass once.
+Stop tuning this fixed pair; mixed-axis, wide-support and public boundaries
+remain open.

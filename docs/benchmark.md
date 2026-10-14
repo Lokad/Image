@@ -1,11 +1,11 @@
 # Lokad.Image benchmark state
 
-Updated 2026-10-13. Latest retained warm measurements on the dedicated AMD EPYC
+Updated 2026-10-14. Latest retained warm measurements on the dedicated AMD EPYC
 9V45 VM: Ubuntu 24.04.4, .NET 10.0.8 / SDK 10.0.204, FFmpeg n8.1
 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread, normal SIMD,
 tiering off, workstation nonconcurrent GC. Two original 513×259 RGBA8/16 rasters,
 with documented projections for other pixel formats;
-downsample/crop outputs are 256×129, the bilinear upscale is 1027×519,
+downsample/crop outputs are 256×129, upscale outputs are 1027×519,
 and quarter turns/transposes are 259×513.
 
 Times cover complete public operations and independent output acquisition/release,
@@ -112,6 +112,7 @@ timing comparison; compression efficiency parity is not established.
 | [Bicubic resize RGBA8§](../benchmarks/WARM-BICUBIC-RGBA16-ROWS.md) | 711.85 | 415.44 | 1.713 / 1.728 | 332,177 | Confirmed |
 | [Bicubic resize RGBA16§](../benchmarks/WARM-BICUBIC-RGBA16-ROWS.md) | 745.92 | 567.95 | 1.313 / 1.320 | 464,342 | Confirmed |
 | [Bicubic upscale RGBA8§](../benchmarks/WARM-BICUBIC-UP8-ROWS.md) | 4,721.50 | 3,041.03 | 1.553 / 1.578 | 3,244,622 | Confirmed |
+| [Bicubic upscale RGBA16§](../benchmarks/WARM-BICUBIC-UP16-ROWS.md) | 4,317.42 | 2,869.21 | 1.505 / 1.516 | 5,016,578 | Confirmed |
 | [Crop RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 2.34 | 2.27 | 1.033 / 1.039 | 96 | Confirmed |
 | [Crop RGBA16](../benchmarks/WARM-CROP-COPY.md) | 4.11 | 4.15 | 0.991 / 1.003 | 96 | Confirmed |
 | [Clone RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 9.82 | 7.19 | 1.366 / 1.390 | 96 | Confirmed |
@@ -176,7 +177,8 @@ RGBA16 upscaling also confirms **1.331x / upper 1.416x** with horizontal row reu
 cutting its baseline mean 52.4%. Bicubic RGBA16 now confirms **1.313x / upper 1.320x**
 against the explicitly adjusted scaler backend, cutting its baseline mean 91.1%.
 RGBA8 on the same new build confirms **1.713x / upper 1.728x**. Other material
-paths remain open.
+paths remain open. Bicubic RGBA16 enlargement confirms **1.505x / upper 1.516x**,
+cutting its baseline mean 64.1% while retaining exact managed pixels.
 PNG RGB8, gray8 and gray-alpha8
 encoding preserves exact samples but exceeds the 5% IDAT-size gate by differences
 of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animation

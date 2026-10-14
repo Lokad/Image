@@ -64,7 +64,7 @@ per operation, reusing them across output rows. This optional geometry workspace
 is admitted conservatively and leaves 4 KiB for exact tiny-alpha arithmetic.
 Wide support or tight memory limits retain direct evaluation with the same tap
 order, binary64 arithmetic and pixels. Geometry is not cached across calls.
-RGBA8/16 bicubic downsampling and RGBA8 enlargement on both axes, on
+RGBA8/16 bicubic downsampling and enlargement on both axes, on
 AVX-512F/DQ and AVX2, may reuse unrounded horizontal
 intermediates in sixteen operation-local rows, with up to sixteen taps per axis.
 Source premultiplication is exact unsigned integer arithmetic, including the

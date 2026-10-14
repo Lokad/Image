@@ -4,21 +4,25 @@ from pathlib import Path
 parser=argparse.ArgumentParser()
 parser.add_argument('--cpu',type=int,default=0)
 parser.add_argument('--depth',type=int,choices=(8,16),default=8)
-parser.add_argument('--up8',action='store_true')
+up=parser.add_mutually_exclusive_group()
+up.add_argument('--up8',action='store_true')
+up.add_argument('--up16',action='store_true')
 args=parser.parse_args()
 if args.up8 and args.depth!=8:parser.error('--up8 requires depth 8')
-width,height=(1027,519) if args.up8 else (256,129)
+if args.up16 and args.depth!=16:parser.error('--up16 requires depth 16')
+upsample=args.up8 or args.up16
+width,height=(1027,519) if upsample else (256,129)
 root=Path(__file__).resolve().parents[2]
-worker=root/('external/warm-reference/zimg-bicubic-up8-warm' if args.up8 else 'external/warm-reference/zimg-bicubic16-warm' if args.depth==16 else 'external/warm-reference/zimg-bicubic-warm')
+worker=root/('external/warm-reference/zimg-bicubic-up16-warm' if args.up16 else 'external/warm-reference/zimg-bicubic-up8-warm' if args.up8 else 'external/warm-reference/zimg-bicubic16-warm' if args.depth==16 else 'external/warm-reference/zimg-bicubic-warm')
 source=root/('artifacts/warm-reference/bilinear16-audit/input.rgba64le' if args.depth==16 else 'artifacts/warm-reference/webp-decode/source.rgba')
-reference=root/('artifacts/warm-reference/bicubic-up8/rational.rgba' if args.up8 else 'artifacts/warm-reference/bicubic16/rational.rgba64le' if args.depth==16 else 'tmp/bicubic8-edge-reference.rgba')
+reference=root/('artifacts/warm-reference/bicubic-up16/rational.rgba64le' if args.up16 else 'artifacts/warm-reference/bicubic-up8/rational.rgba' if args.up8 else 'artifacts/warm-reference/bicubic16/rational.rgba64le' if args.depth==16 else 'tmp/bicubic8-edge-reference.rgba')
 pixels=source.read_bytes();expected=reference.read_bytes()
 assert hashlib.sha256(pixels).hexdigest()==('3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9' if args.depth==16 else '70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80')
 assert len(expected)==width*height*4*(args.depth//8)
 if args.depth==8:assert hashlib.sha256(expected).hexdigest()==('08cde71ddb8b20be884c7ba812cec349f9302b21a348b79d3614bfda19805b94' if args.up8 else '656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8')
 with tempfile.TemporaryDirectory(prefix='lokad-image-bicubic-') as name:
     folder=Path(name);output=folder/'output.rgba'
-    base=[str(worker),'bicubic-resize',str(source),'513','259',str(args.depth),str(output),str(reference)]+([str(width),str(height)] if args.up8 else [])
+    base=[str(worker),'bicubic-resize',str(source),'513','259',str(args.depth),str(output),str(reference)]+([str(width),str(height)] if upsample else [])
     def run(arguments,protocol='check\nquit\n',cpus=None):
         return subprocess.run(['taskset','-c',str(args.cpu) if cpus is None else cpus,*arguments],
             input=protocol,capture_output=True,text=True,timeout=30)
@@ -66,5 +70,5 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-bicubic-') as name:
         cpu=args.cpu,depth=args.depth,sourceSha256=hashlib.sha256(pixels).hexdigest(),referenceSha256=hashlib.sha256(expected).hexdigest(),
         extraSourceRasters=0,sourceUnchanged=True,independentLiveOutputs=True,nativeOperationCountersExact=True,
         normalScalarBounded=True,modes=modes,controls=controls,workerSha256=hashlib.sha256(worker.read_bytes()).hexdigest())
-    (root/('artifacts/warm-reference/bicubic-up8-controls.json' if args.up8 else 'artifacts/warm-reference/bicubic16-controls.json' if args.depth==16 else 'artifacts/warm-reference/bicubic-controls.json')).write_text(json.dumps(record,indent=2)+'\n')
+    (root/('artifacts/warm-reference/bicubic-up16-controls.json' if args.up16 else 'artifacts/warm-reference/bicubic-up8-controls.json' if args.up8 else 'artifacts/warm-reference/bicubic16-controls.json' if args.depth==16 else 'artifacts/warm-reference/bicubic-controls.json')).write_text(json.dumps(record,indent=2)+'\n')
     print(json.dumps(record))
