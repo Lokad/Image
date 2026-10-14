@@ -127,7 +127,14 @@ internal static class WarmBenchmarks
                                 && value.GetProperty("outputSha256").GetString()=="705c36dd72e49076298952566b7e68b7922cb649c45d4dbf4cf68d9c6cd2887d")
                             && value.GetProperty("nativeNormalScalarBounded").GetBoolean()
                             && value.GetProperty("nativeZeroAlphaRgbZero").GetBoolean() && value.GetProperty("nativePixelsDeterministic").GetBoolean()
-                            && value.GetProperty("nativeRgbMaximum").GetInt32() is >= 0 and <= 1 && value.GetProperty("nativeRgbRmse").GetDouble() is >= 0 and <= 0.25
+                            && (value.GetProperty("nativeRgbMaximum").GetInt32() is >= 0 and <= 1
+                                || caseId=="VerticalUp16" && depth==16
+                                    && value.GetProperty("outputWidth").GetInt32()==513 && value.GetProperty("outputHeight").GetInt32()==519
+                                    && value.GetProperty("nativeLowAlphaRgbBounded").GetBoolean()
+                                    && value.GetProperty("nativeLowAlphaRgbReferenceMaximum").GetInt32()==16
+                                    && value.GetProperty("nativeLowAlphaRgbErrorMaximum").GetInt32()==2
+                                    && value.GetProperty("nativeRgbMaximum").GetInt32() is >= 0 and <= 2)
+                            && value.GetProperty("nativeRgbRmse").GetDouble() is >= 0 and <= 0.25
                             && value.GetProperty("nativeAlphaMaximum").GetInt32() is >= 0 and <= 1 && value.GetProperty("nativeAlphaRmse").GetDouble() is >= 0 and <= 0.25
                         : family == "Bilinear" ? value.GetProperty("managedRationalReferenceExact").GetBoolean()
                             && (depth == 8 ? value.GetProperty("nativeAlphaExact").GetBoolean()

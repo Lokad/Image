@@ -123,6 +123,16 @@ typedef uint16_t Sample;
 #define TARGET_HALO 4
 #endif
 
+#if LOKAD_IMAGE_VERTICAL_ONLY == 2 && LOKAD_IMAGE_SAMPLE_DEPTH == 16
+#define LOW_ALPHA_RGB_ALLOWED "true"
+#define LOW_ALPHA_RGB_REFERENCE_MAXIMUM 16
+#define LOW_ALPHA_RGB_ERROR_MAXIMUM 2
+#else
+#define LOW_ALPHA_RGB_ALLOWED "false"
+#define LOW_ALPHA_RGB_REFERENCE_MAXIMUM 0
+#define LOW_ALPHA_RGB_ERROR_MAXIMUM 1
+#endif
+
 enum { WIDTH=513, HEIGHT=259, OUTPUT_WIDTH=TARGET_WIDTH, OUTPUT_HEIGHT=TARGET_HEIGHT, HALO=TARGET_HALO,
        PADDED_WIDTH=WIDTH+2*HALO, PADDED_HEIGHT=HEIGHT+2*HALO,
        SAMPLE_BYTES=sizeof(Sample),
@@ -216,10 +226,15 @@ static Difference verify(Work *w,const uint8_t *p) {
         for(int c=0;c<4;c++) {
             int error=(int)samples[i+c]-expected[i+c];if(error<0)error=-error;
             if(c==3) {if(error>d.alpha_max)d.alpha_max=error;d.alpha_square+=(uint64_t)error*error;}
-            else {if(error>d.rgb_max)d.rgb_max=error;d.rgb_square+=(uint64_t)error*error;}
+            else {
+                int allowed=expected[i+3]<=LOW_ALPHA_RGB_REFERENCE_MAXIMUM?LOW_ALPHA_RGB_ERROR_MAXIMUM:1;
+                if(error>allowed)fail("Bicubic RGB comparison bound exceeded.");
+                if(error>d.rgb_max)d.rgb_max=error;
+                d.rgb_square+=(uint64_t)error*error;
+            }
         }
     }
-    if(d.rgb_max>1||d.alpha_max>1||d.rgb_square*16>(uint64_t)OUTPUT_WIDTH*OUTPUT_HEIGHT*3
+    if(d.rgb_max>LOW_ALPHA_RGB_ERROR_MAXIMUM||d.alpha_max>1||d.rgb_square*16>(uint64_t)OUTPUT_WIDTH*OUTPUT_HEIGHT*3
         ||d.alpha_square*16>(uint64_t)OUTPUT_WIDTH*OUTPUT_HEIGHT)fail("Bicubic comparison bounds exceeded.");
     if(memcmp(w->raw,w->backup,INPUT_BYTES))fail("Source changed.");
     return d;
@@ -256,7 +271,7 @@ int main(int argc,char **argv) {
     uint8_t *first=apply(&w),*second=apply(&w);verify(&w,first);verify(&w,second);
     if(first==second||memcmp(first,second,OUTPUT_BYTES))fail("Outputs alias or differ.");
     first[0]^=255;verify(&w,second);free(first);free(second);check_and_write(&w,argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"bicubic-resize\",\"width\":513,\"height\":259,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"filterThreads\":1,\"threadType\":0,\"outputWidth\":%d,\"outputHeight\":%d,\"independentLiveOutputs\":true,\"initialCompletedOperations\":%" PRIu64 ",\"inputStride\":%d,\"backend\":\"zimg (FFmpeg zscale backend)\",\"scalar\":%s,\"haloPixels\":%d,\"haloAndPackingTimed\":true,\"outputAllocationAndRepackingTimed\":true,\"alphaTolerance1\":true,\"premultipliedFloatOutput\":true,\"unpremultiplicationAndQuantizationTimed\":true,\"scratchBytes\":%zu,\"nativeOutputPixelAllocationBytes\":%d}\n",LOKAD_IMAGE_SAMPLE_DEPTH,w.cpu,OUTPUT_WIDTH,OUTPUT_HEIGHT,w.completed,INPUT_PIXEL_STRIDE,w.scalar?"true":"false",HALO,w.scratch_bytes,OUTPUT_STRIDE*OUTPUT_HEIGHT*4+OUTPUT_BYTES);fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"bicubic-resize\",\"width\":513,\"height\":259,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"filterThreads\":1,\"threadType\":0,\"outputWidth\":%d,\"outputHeight\":%d,\"independentLiveOutputs\":true,\"initialCompletedOperations\":%" PRIu64 ",\"inputStride\":%d,\"backend\":\"zimg (FFmpeg zscale backend)\",\"scalar\":%s,\"haloPixels\":%d,\"haloAndPackingTimed\":true,\"outputAllocationAndRepackingTimed\":true,\"alphaTolerance1\":true,\"premultipliedFloatOutput\":true,\"unpremultiplicationAndQuantizationTimed\":true,\"lowAlphaRgbAllowance\":%s,\"lowAlphaRgbReferenceMaximum\":%d,\"lowAlphaRgbErrorMaximum\":%d,\"scratchBytes\":%zu,\"nativeOutputPixelAllocationBytes\":%d}\n",LOKAD_IMAGE_SAMPLE_DEPTH,w.cpu,OUTPUT_WIDTH,OUTPUT_HEIGHT,w.completed,INPUT_PIXEL_STRIDE,w.scalar?"true":"false",HALO,LOW_ALPHA_RGB_ALLOWED,LOW_ALPHA_RGB_REFERENCE_MAXIMUM,LOW_ALPHA_RGB_ERROR_MAXIMUM,w.scratch_bytes,OUTPUT_STRIDE*OUTPUT_HEIGHT*4+OUTPUT_BYTES);fflush(stdout);
     char line[128];
     while(fgets(line,sizeof(line),stdin)) {
         if(!strcmp(line,"quit\n"))break;

@@ -160,6 +160,7 @@ def render():
         row('Bicubic height reduction, unchanged width RGBA8§', 'warm-bicubicvertical16-rows-evidence.json', ['byteRegressionControl', 'observations', -1], 'WARM-BICUBIC-VERTICAL16-IDENTITY.md', True),
         row('Bicubic height reduction, unchanged width RGBA16§', 'warm-bicubicvertical16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-VERTICAL16-IDENTITY.md', True),
         row('Bicubic height enlargement, unchanged width RGBA8§', 'warm-bicubicverticalup8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-VERTICAL-UP8-ROWS.md', True),
+        row('Bicubic height enlargement, unchanged width RGBA16§', 'warm-bicubicverticalup16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-VERTICAL-UP16-ROWS.md', True),
         row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
         row('Clone RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'clone8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
@@ -246,6 +247,11 @@ native-only RGB/alpha maximum-1 / RMSE-0.25 bounds preserve exact managed pixels
 RGBA8 256×129 downsample scalar pixels are exact; normal SIMD differs by one RGB and one
 alpha sample. Enlargement and mixed-axis scalar results are bounded too. RGBA16 normal/scalar results both stay within those bounds. This
 comparison is distinct from the unmatched ordinary FFmpeg CLI.
+For RGBA16 height enlargement with unchanged width only, the approved native RGB
+bound is two samples where reference alpha is at most sixteen, one elsewhere.
+RGB/alpha RMSE ≤0.25 and alpha maximum one remain unchanged; managed pixels are
+exact. Negative controls reject errors outside this scope. The original strict
+refusal and rejected conversion diagnostic remain unscored.
 Bicubic enlargement, mixed-axis resize, wider-support downsampling and single-axis reduction use premultiplied float output and timed straight-RGBA
 unpremultiplication/quantization, preserving unclamped alpha for the color ratio
 and clearing RGB when rounded alpha is zero. Its packing uses equivalent bounded

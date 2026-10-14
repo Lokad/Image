@@ -160,18 +160,21 @@ public class WarmBicubicResize
         for (var i=0;i<actual.Length;i+=4*sampleBytes)
         {
             var alpha = sampleBytes == 1 ? actual[i+3] : BinaryPrimitives.ReadUInt16LittleEndian(actual.AsSpan(i+6,2));
+            var referenceAlpha = sampleBytes == 1 ? reference[i+3] : BinaryPrimitives.ReadUInt16LittleEndian(reference.AsSpan(i+6,2));
             if (alpha==0 && actual.AsSpan(i,3*sampleBytes).ContainsAnyExcept((byte)0)) throw new InvalidOperationException("Native zero-alpha RGB differs.");
             for (var c=0;c<4;c++)
             {
                 var av = sampleBytes == 1 ? actual[i+c] : BinaryPrimitives.ReadUInt16LittleEndian(actual.AsSpan(i+c*2,2));
                 var rv = sampleBytes == 1 ? reference[i+c] : BinaryPrimitives.ReadUInt16LittleEndian(reference.AsSpan(i+c*2,2));
                 var error=Math.Abs(av-rv);
+                var rgbBound=Case==WarmBicubicCase.VerticalUp16 && referenceAlpha<=16?2:1;
+                if(c<3 && error>rgbBound)throw new InvalidOperationException("Native bicubic RGB pixel bound exceeded.");
                 if (c==3) { alphaMaximum=Math.Max(alphaMaximum,error);alphaSquare+=(long)error*error; }
                 else { rgbMaximum=Math.Max(rgbMaximum,error);rgbSquare+=(long)error*error; }
             }
         }
         rgbRmse=Math.Sqrt((double)rgbSquare/(Width*Height*3));alphaRmse=Math.Sqrt((double)alphaSquare/(Width*Height));
-        if (rgbMaximum>1 || alphaMaximum>1 || rgbRmse>0.25 || alphaRmse>0.25) throw new InvalidOperationException("Native bicubic pixel bounds exceeded.");
+        if (rgbMaximum>(Case==WarmBicubicCase.VerticalUp16?2:1) || alphaMaximum>1 || rgbRmse>0.25 || alphaRmse>0.25) throw new InvalidOperationException("Native bicubic pixel bounds exceeded.");
     }
     private void RequireNativeOutput()
     {
@@ -205,12 +208,15 @@ public class WarmBicubicResize
                 certifiedExactRationalAlphaHalves=Case==WarmBicubicCase.Vertical8?25:Case==WarmBicubicCase.Horizontal8?6:0,
                 certifiedExactRationalRgbHalves=Case==WarmBicubicCase.VerticalUp8?1:0,
                 nativeRgbMaximum,nativeRgbRmse,nativeAlphaMaximum,nativeAlphaRmse,
+                nativeLowAlphaRgbBounded=Case==WarmBicubicCase.VerticalUp16,
+                nativeLowAlphaRgbReferenceMaximum=Case==WarmBicubicCase.VerticalUp16?16:0,
+                nativeLowAlphaRgbErrorMaximum=Case==WarmBicubicCase.VerticalUp16?2:1,
                 nativeNormalScalarBounded=true, nativePremultipliedFloatOutput=ExplicitGeometry,nativePixelsDeterministic=true,nativeZeroAlphaRgbZero=true,
                 sourceUnchanged=true,independentOwnedOutput=true,nativeExitCode=0,
                 librarySha256=JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256=JpegBenchmarkCase.HashFile(typeof(WarmBicubicResize).Assembly.Location),
                 nativeBuild=native.BuildIdentity,nativeReady=native.Ready,nativeBefore=before,nativeAfter=after,
-                boundary=$"One resident original 513x259 RGBA{Depth} raster to independently owned {Width}x{Height} bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, {(Case==WarmBicubicCase.Down32x16_8 ? "thirty-two-pixel clamped halo (40.269% input-area increase)" : Case is WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 ? "sixteen-pixel clamped halo (19.364% input-area increase)" : Case is WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 ? "eight-pixel clamped halo (9.489% input-area increase)" : "four-pixel clamped halo (4.697% input-area increase)")}, filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. {(Case is WarmBicubicCase.Horizontal8 or WarmBicubicCase.Vertical8 or WarmBicubicCase.VerticalUp8 ? "Managed exact qualified original pixels; independently certified exact rational sample halves retain SPEC binary64 rounding" : "Managed exact rational pixels")}; explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
+                boundary=$"One resident original 513x259 RGBA{Depth} raster to independently owned {Width}x{Height} bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, {(Case==WarmBicubicCase.Down32x16_8 ? "thirty-two-pixel clamped halo (40.269% input-area increase)" : Case is WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 ? "sixteen-pixel clamped halo (19.364% input-area increase)" : Case is WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 ? "eight-pixel clamped halo (9.489% input-area increase)" : "four-pixel clamped halo (4.697% input-area increase)")}, filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. {(Case is WarmBicubicCase.Horizontal8 or WarmBicubicCase.Vertical8 or WarmBicubicCase.VerticalUp8 ? "Managed exact qualified original pixels; independently certified exact rational sample halves retain SPEC binary64 rounding" : "Managed exact rational pixels")}; {(Case==WarmBicubicCase.VerticalUp16 ? "Explicitly approved native-only RGBmaximum2 ONLY where referencealpha<=16, RGBmaximum1 elsewhere, alpha maximum1, RGB/alpha RMSE0.25" : "Explicitly approved native-only RGB/alpha maximum1/RMSE0.25")}; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured."
             },new JsonSerializerOptions {WriteIndented=true})+"\n");
         }
         finally {native?.Dispose();source?.Dispose();state?.Dispose();ready=false;}

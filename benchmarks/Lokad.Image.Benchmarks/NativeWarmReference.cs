@@ -98,6 +98,7 @@ internal sealed class NativeWarmReference : IDisposable
                 || ((nearest || bilinear || bicubic || crop) && ((depth is not (8 or 16)) || Ready.GetProperty("outputWidth").GetInt32() != (resizeWidth ?? 256)
                     || Ready.GetProperty("outputHeight").GetInt32() != (resizeHeight ?? 129) || !Ready.GetProperty("independentLiveOutputs").GetBoolean()))
                 || ((bicubicUpsample || bicubicMixed || bicubicCross || bicubicWide || bicubicHorizontal || bicubicBeyond32 || bicubicVertical || bicubicHorizontalUp || bicubicVerticalUp || bicubicBeyond64) && (!Ready.GetProperty("premultipliedFloatOutput").GetBoolean() || !Ready.GetProperty("unpremultiplicationAndQuantizationTimed").GetBoolean()))
+                || (bicubicVerticalUp && depth==16 && (!Ready.GetProperty("lowAlphaRgbAllowance").GetBoolean() || Ready.GetProperty("lowAlphaRgbReferenceMaximum").GetInt32()!=16 || Ready.GetProperty("lowAlphaRgbErrorMaximum").GetInt32()!=2))
                 || (bicubic && (depth is not (8 or 16) || Ready.GetProperty("scalar").GetBoolean() != bicubicScalar
                     || Ready.GetProperty("haloPixels").GetInt32() != (bicubicBeyond64 ? 32 : bicubicBeyond32 ? 16 : bicubicWide ? 8 : 4) || !Ready.GetProperty("haloAndPackingTimed").GetBoolean()
                     || !Ready.GetProperty("outputAllocationAndRepackingTimed").GetBoolean() || !Ready.GetProperty("alphaTolerance1").GetBoolean()

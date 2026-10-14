@@ -51,6 +51,7 @@ assert len(expected)==width*height*4*(args.depth//8)
 if args.horizontal_up8:assert args.depth==8 and hashlib.sha256(expected).hexdigest()=='ef9e67095fcbc4a0d9a4fb2591577e9141a188e6b6323a44073cfd2ea41b7724'
 if args.horizontal_up16:assert args.depth==16 and hashlib.sha256(expected).hexdigest()=='12073f9f1f3c8aa21fd50826350ec72021c8252923f9f52055302cb811405a35'
 if args.vertical_up8:assert args.depth==8 and hashlib.sha256(expected).hexdigest()=='705c36dd72e49076298952566b7e68b7922cb649c45d4dbf4cf68d9c6cd2887d'
+if args.vertical_up16:assert args.depth==16 and hashlib.sha256(expected).hexdigest()=='c9f1c8cc6a1a0bbfc4f8b5de0bfabc79484c81d5aa062a3b2630a81fba0f6676'
 if args.down32x16_8:assert args.depth==8 and hashlib.sha256(expected).hexdigest()=='3ec9c663c4051ce2f14b6a84acf4f21cf4c495c4017200f50f469de1f4b6132d'
 if args.vertical16:assert args.depth==16 and hashlib.sha256(expected).hexdigest()=='275a5c3d38d7ba7e6a1ca713fb69fd2ceaf665c18db8269f0bcc1d3e58dcd6fd'
 if args.vertical8:assert args.depth==8 and hashlib.sha256(expected).hexdigest()=='56ff0d8276c6427bb3ad49e8d3af6ad26cfb99b27db697580471ac273fcd7697'
@@ -87,7 +88,8 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-bicubic-') as name:
         references=struct.unpack('<'+str(len(expected)//2)+'H',expected) if args.depth==16 else expected
         rgb=[samples[i+c]-references[i+c] for i in range(0,len(samples),4) for c in range(3)]
         alpha=[samples[i+3]-references[i+3] for i in range(0,len(samples),4)]
-        assert max(map(abs,rgb))<=1 and sum(d*d for d in rgb)/len(rgb)<=.0625
+        assert all(abs(samples[i+c]-references[i+c])<=(2 if args.vertical_up16 and references[i+3]<=16 else 1) for i in range(0,len(samples),4) for c in range(3))
+        assert sum(d*d for d in rgb)/len(rgb)<=.0625
         assert max(map(abs,alpha))<=1 and sum(d*d for d in alpha)/len(alpha)<=.0625
         assert all(samples[i+3] or not any(samples[i:i+3]) for i in range(0,len(samples),4))
         modes.append(dict(mode=mode,outputSha256=hashlib.sha256(actual).hexdigest(),rgbMaximum=max(map(abs,rgb)),
@@ -105,6 +107,13 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-bicubic-') as name:
     reject('unknown dispatch',base+['--bad'])
     for label,data in [('truncated input',pixels[:-1]),('extra input',pixels+b'\0')]:
         path=folder/(label+'.raw');path.write_bytes(data);values=base.copy();values[2]=str(path);reject(label,values)
+    if args.vertical_up16:
+        native=struct.unpack('<'+str(len(actual)//2)+'H',actual)
+        for label,pixel,bound in [('RGB error3 at low alpha',131043,3),('RGB error2 above alpha16',next(i//4 for i in range(0,len(references),4) if references[i+3]>16 and native[i]==references[i] and native[i]<=65532),2)]:
+            broken=bytearray(expected);sample=native[pixel*4]
+            struct.pack_into('<H',broken,pixel*8,sample-bound if sample>=bound else sample+bound)
+            bad=folder/(label+'.rgba64le');bad.write_bytes(broken)
+            values=base.copy();values[7]=str(bad);reject(label,values)
     bad=folder/'wrong-reference.rgba';bad.write_bytes(bytes(len(expected)))
     values=base.copy();values[7]=str(bad);reject('comparison bounds',values)
     for command in ('sample 0','sample 10000001','sample 1 extra','invalid'):

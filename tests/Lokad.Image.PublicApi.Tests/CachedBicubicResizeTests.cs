@@ -81,6 +81,11 @@ public sealed class CachedBicubicResizeTests
     [InlineData(8,513,9,513,19)]
     [InlineData(8,19,17,19,35)]
     [InlineData(8,61,19,61,39)]
+    [InlineData(16,17,9,17,19)]
+    [InlineData(16,67,13,67,27)]
+    [InlineData(16,513,9,513,19)]
+    [InlineData(16,19,17,19,35)]
+    [InlineData(16,61,19,61,39)]
     public void SeparableRowsMatchOriginalOrderAtCacheAdmissionBoundary(int depth,int sourceWidth,int sourceHeight,int width,int height)
     {
         using var source=OriginalPixels.Buffer(sourceWidth,sourceHeight,depth);
@@ -136,6 +141,8 @@ public sealed class CachedBicubicResizeTests
     [InlineData(8,true,5)]
     [InlineData(8,false,6)]
     [InlineData(8,true,6)]
+    [InlineData(16,false,6)]
+    [InlineData(16,true,6)]
     public void NegativeLobesAndTinyAlphaRetainOriginalQuantization(int depth,bool transparent,int mixed)
     {
         using var source=ImageBuffer.Create(17,11,depth);

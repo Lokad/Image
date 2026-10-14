@@ -76,7 +76,7 @@ Interior adjacent four-tap outputs may reuse five source vectors instead of eigh
 retaining each output's original tap and multiply/add order.
 RGBA8/16 height reduction with unchanged width may use these same bounded rows.
 Its integer horizontal centers have weights 0,0,1,0,0; copying decoded exact
-products into the cache preserves every unrounded intermediate. RGBA8 height
+products into the cache preserves every unrounded intermediate. RGBA8/16 height
 enlargement with unchanged width may use the same identity copy and sixteen-row
 cache. Cancellation checks every two copied pixels, work charges, precision guards,
 memory admission and direct fallback remain unchanged.
