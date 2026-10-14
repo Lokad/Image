@@ -11,7 +11,7 @@ internal static class WideCachedBicubicResize
     internal static bool TryApply(ImageBuffer source, ImageBuffer result, double scaleX, double scaleY,
         long tapsX, long tapsY, long rowWork, OperationContext context)
     {
-        var capacity=source.BitDepth==8 && (tapsX>32 || tapsY>32)?64:32;
+        var capacity=tapsX>32 || tapsY>32?64:32;
         if(source.BitDepth is not (8 or 16) || result.Width>=source.Width || result.Height>=source.Height
             || result.Width<2 || tapsX>capacity || tapsY>capacity
             || !Avx512F.IsSupported || !Avx512DQ.IsSupported || !Avx2.IsSupported || !Sse41.IsSupported)
@@ -19,7 +19,8 @@ internal static class WideCachedBicubicResize
         var width=result.Width;
         var wide16=source.BitDepth==16;
         var maximum=wide16?65535d:255d;
-        var alphaMargin=wide16?1e-3:capacity==64?1e-4:1e-5;
+        var alphaMargin=wide16?capacity==64?4e-3:1e-3:capacity==64?1e-4:1e-5;
+        var wordColorBound=capacity==64?32.04:8.01;
         var byteColorMargin=capacity==64?4e-3:1e-3;
         var cacheWidth=(long)width;
         var elements=cacheWidth*(capacity*4)+(long)width*(capacity+1)+(long)source.Width*4;
@@ -136,9 +137,9 @@ internal static class WideCachedBicubicResize
                     // 2^-40*capacity^2 absolute-error bound per unit sample covers
                     // both accumulation orders. With normalization >= .5 and
                     // alpha >= 1, 32-tap byte alpha/color margins are 1e-5/1e-3;
-                    // 64-tap byte margins are 1e-4/4e-3. Words retain 32 taps.
-                    // Word alpha uses 1e-3. Its color quotient error is below
-                    // 8.01/alphaSum; a reciprocal of the lower power of two
+                    // 64-tap byte margins are 1e-4/4e-3. Word alpha uses
+                    // 1e-3/4e-3 for 32/64 taps; the color quotient error is below
+                    // 8.01/alphaSum or 32.04/alphaSum. A reciprocal of the lower power of two
                     // conservatively bounds it. Margins >= .25 retain original
                     // evaluation, also protecting clamped out-of-range samples.
                     var fractional=Avx512F.Subtract(values,Avx512F.RoundScale(values,1));
@@ -146,8 +147,8 @@ internal static class WideCachedBicubicResize
                     var distance=Avx512F.AndNot(Vector512.Create(long.MinValue),delta.AsInt64()).AsDouble();
                     var exponent0=(int)((BitConverter.DoubleToUInt64Bits(a0)>>52)&2047);
                     var exponent1=(int)((BitConverter.DoubleToUInt64Bits(a1)>>52)&2047);
-                    var colorMargin0=wide16?8.01*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent0)<<52):byteColorMargin;
-                    var colorMargin1=wide16?8.01*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent1)<<52):byteColorMargin;
+                    var colorMargin0=wide16?wordColorBound*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent0)<<52):byteColorMargin;
+                    var colorMargin1=wide16?wordColorBound*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent1)<<52):byteColorMargin;
                     var margins=Vector512.Create(colorMargin0,colorMargin0,colorMargin0,alphaMargin,
                         colorMargin1,colorMargin1,colorMargin1,alphaMargin);
                     var inRange=Avx512F.And(Avx512F.CompareGreaterThanOrEqual(values,Vector512<double>.Zero).AsInt64(),
@@ -163,8 +164,10 @@ internal static class WideCachedBicubicResize
                         if(original0 || original1)
                         {
                             if(original0)Original(source,result,x,y,weights,offsets,counts,vertical[..count],first,capacity,context);
+                            else if(wide16)WriteWord(destination,x,values.GetLower());
                             else WriteByte(destination,x,values.GetLower());
                             if(original1)Original(source,result,x+1,y,weights,offsets,counts,vertical[..count],first,capacity,context);
+                            else if(wide16)WriteWord(destination,x+1,values.GetUpper());
                             else WriteByte(destination,x+1,values.GetUpper());
                             continue;
                         }
@@ -237,6 +240,13 @@ internal static class WideCachedBicubicResize
         var shorts=Sse2.PackSignedSaturate(ints,Vector128<int>.Zero);
         var packed=Sse2.PackUnsignedSaturate(shorts,Vector128<short>.Zero).AsUInt32().GetElement(0);
         BinaryPrimitives.WriteUInt32LittleEndian(destination.Slice(x*4,4),packed);
+    }
+    private static void WriteWord(Span<byte> destination,int x,Vector256<double> values)
+    {
+        var clipped=Avx.Min(Vector256.Create(65535d),Avx.Max(Vector256<double>.Zero,values));
+        var ints=Avx.ConvertToVector128Int32WithTruncation(Avx.RoundToNearestInteger(clipped));
+        var packed=Sse41.PackUnsignedSaturate(ints,Vector128<int>.Zero).AsUInt64().GetElement(0);
+        BinaryPrimitives.WriteUInt64LittleEndian(destination.Slice(x*8,8),packed);
     }
     private static int Round(double value,int maximum)=>(int)Math.Clamp(Math.Round(value,MidpointRounding.AwayFromZero),0,maximum);
 }

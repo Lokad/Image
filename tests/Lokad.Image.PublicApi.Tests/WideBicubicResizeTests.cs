@@ -16,16 +16,21 @@ public sealed class WideBicubicResizeTests
     [InlineData(8,67,51,8,7)]
     [InlineData(16,67,51,8,7)]
     [InlineData(8,99,83,9,7)]
+    [InlineData(16,99,83,9,7)]
     [InlineData(8,513,65,64,7)]
+    [InlineData(16,513,65,64,7)]
     [InlineData(8,53,41,5,3)]
+    [InlineData(16,53,41,5,3)]
     [InlineData(8,99,81,6,5)]
+    [InlineData(16,99,81,6,5)]
     [InlineData(8,101,83,7,6)]
+    [InlineData(16,101,83,7,6)]
     public void WideRowsMatchDirectEvaluationAtAdmissionBoundary(int depth,int sourceWidth,int sourceHeight,int width,int height)
     {
         using var source=OriginalPixels.Buffer(sourceWidth,sourceHeight,depth);
         var input=OriginalPixels.Bytes(source);
         var baselinePeak=input.Length+(long)width*height*4*(depth/8)+4096;
-        var beyond32=depth==8 && (Math.Ceiling(4d*sourceWidth/width)+1>32 || Math.Ceiling(4d*sourceHeight/height)+1>32);
+        var beyond32=Math.Ceiling(4d*sourceWidth/width)+1>32 || Math.Ceiling(4d*sourceHeight/height)+1>32;
         var workspace=beyond32?2828L*width+32L*sourceWidth+512:1420L*width+32L*sourceWidth+256;
         using var direct=ImageTransforms.Resize(source,width,height,ResizeFilter.Bicubic,
             new ImageLimits {MaxWorkingBytes=baselinePeak});
@@ -55,6 +60,8 @@ public sealed class WideBicubicResizeTests
     [InlineData(16,true,12,8)]
     [InlineData(8,false,4,3)]
     [InlineData(8,true,4,3)]
+    [InlineData(16,false,4,3)]
+    [InlineData(16,true,4,3)]
     public void WiderNegativeLobesAndTinyAlphaKeepExactPixels(int depth,bool transparent,int width,int height)
     {
         using var source=ImageBuffer.Create(53,37,depth);

@@ -541,3 +541,14 @@ is explicit and timed: sixteen pixels, 19.364% extra input area. Two quiet byte/
 word regression screens pass before full both-platform qualification and the
 same actual package checks. Stop this pair; wider word support, single-axis
 directions, tight budgets and remaining material current-source parity stay open.
+
+The [RGBA16 support-beyond-thirty-two round](WARM-BICUBIC-64X32-RGBA16.md) reduces
+a 23.466x gap by 94.1%, independently confirming 1.387x / upper 1.414x at
+214,071 B/op. One word extension reuses the sixty-four-row cache with wider
+conservative word bounds and unsigned certain-neighbor packing. Every managed
+sample matches the rational reference; original/tiny-alpha fallback remains exact.
+The native adapter's existing word macro reuses the same timed sixteen-pixel halo
+and complete workload boundary. Two quiet byte/word regression screens pass before
+full both-platform qualification and the same actual package checks. Stop this
+pair; other single-axis directions, larger supports, tight budgets and remaining
+material required/current-source parity stay open.

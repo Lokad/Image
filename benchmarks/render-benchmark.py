@@ -153,6 +153,7 @@ def render():
         row('Bicubic width reduction, unchanged height RGBA8§', 'warm-bicubichorizontal8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL8-ROWS.md', True),
         row('Bicubic width reduction, unchanged height RGBA16§', 'warm-bicubichorizontal16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL16-ROWS.md', True),
         row('Bicubic RGBA8, 64×32 / support beyond 32§', 'warm-bicubic64x32-8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-64X32-RGBA8.md', True),
+        row('Bicubic RGBA16, 64×32 / support beyond 32§', 'warm-bicubic64x32-16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-64X32-RGBA16.md', True),
         row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
         row('Clone RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'clone8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
@@ -232,7 +233,7 @@ confirmed; compression efficiency parity is not established.
 
 § Bicubic RGBA8/16 uses **zimg, FFmpeg's zscale backend**, with timed four-pixel
 clamped edge padding (4.697% additional input area); wider-support RGBA8/16 uses
-eight pixels (9.489%); the 64×32 byte case uses sixteen (19.364%). All include complete source/output
+eight pixels (9.489%); the 64×32 byte/word cases use sixteen (19.364%). All include complete source/output
 packing, filtering and independent output allocation/release. The explicit
 native-only RGB/alpha maximum-1 / RMSE-0.25 bounds preserve exact managed pixels.
 RGBA8 256×129 downsample scalar pixels are exact; normal SIMD differs by one RGB and one

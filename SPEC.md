@@ -73,12 +73,15 @@ rounding, with the same workspace admission and direct fallback.
 RGBA8/16 downsampling with wider support may use thirty-two operation-local rows
 and up to thirty-two taps per axis. Its optional workspace is
 1420*outputWidth + 32*sourceWidth + 256 bytes, with 4 KiB retained for exact
-low-alpha handling. RGBA8 may use sixty-four rows/taps for support exceeding
+low-alpha handling. RGBA8/16 may use sixty-four rows/taps for support exceeding
 thirty-two taps. That workspace is 2828*outputWidth + 32*sourceWidth + 512 bytes,
 with the same 4 KiB allowance. Conservative byte alpha/color margins widen to
-1e-4/4e-3 using the 2^-40*4096 per-unit absolute-error bound. Each byte pixel
+1e-4/4e-3 using the 2^-40*4096 per-unit absolute-error bound. Words use an alpha
+margin of 4e-3 and a color quotient bound of 32.04/alphaSum, conservatively
+computed from the lower power of two. Margins at least 0.25 retain original
+evaluation, including clamped out-of-range samples. Each byte or word pixel
 independently selects original-order evaluation when its guards are uncertain;
-its neighbor retains fast packing when every guard passes.
+its neighbor retains depth-specific fast packing when every guard passes.
 Managed pixels stay exact. Larger support and tight budgets retain direct evaluation.
 RGBA8/16 may also reuse these rows when one axis grows while the other shrinks.
 That path pads odd cache-row widths by one pixel (512 additional workspace
