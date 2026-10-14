@@ -118,7 +118,13 @@ internal static class WarmBenchmarks
                             || caseId=="Vertical8" && depth==8
                                 && value.GetProperty("managedQualifiedOriginalPixelsExact").GetBoolean()
                                 && value.GetProperty("certifiedExactRationalAlphaHalves").GetInt32()==25
-                                && value.GetProperty("outputSha256").GetString()=="56ff0d8276c6427bb3ad49e8d3af6ad26cfb99b27db697580471ac273fcd7697")
+                                && value.GetProperty("outputSha256").GetString()=="56ff0d8276c6427bb3ad49e8d3af6ad26cfb99b27db697580471ac273fcd7697"
+                            || caseId=="VerticalUp8" && depth==8
+                                && value.GetProperty("outputWidth").GetInt32()==513 && value.GetProperty("outputHeight").GetInt32()==519
+                                && value.GetProperty("managedQualifiedOriginalPixelsExact").GetBoolean()
+                                && value.GetProperty("certifiedExactRationalAlphaHalves").GetInt32()==0
+                                && value.GetProperty("certifiedExactRationalRgbHalves").GetInt32()==1
+                                && value.GetProperty("outputSha256").GetString()=="705c36dd72e49076298952566b7e68b7922cb649c45d4dbf4cf68d9c6cd2887d")
                             && value.GetProperty("nativeNormalScalarBounded").GetBoolean()
                             && value.GetProperty("nativeZeroAlphaRgbZero").GetBoolean() && value.GetProperty("nativePixelsDeterministic").GetBoolean()
                             && value.GetProperty("nativeRgbMaximum").GetInt32() is >= 0 and <= 1 && value.GetProperty("nativeRgbRmse").GetDouble() is >= 0 and <= 0.25

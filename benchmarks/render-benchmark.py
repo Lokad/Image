@@ -158,6 +158,7 @@ def render():
         row('Bicubic RGBA16, 64×32 / support beyond 32§', 'warm-bicubic64x32-16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-64X32-RGBA16.md', True),
         row('Bicubic height reduction, unchanged width RGBA8§', 'warm-bicubicvertical16-rows-evidence.json', ['byteRegressionControl', 'observations', -1], 'WARM-BICUBIC-VERTICAL16-IDENTITY.md', True),
         row('Bicubic height reduction, unchanged width RGBA16§', 'warm-bicubicvertical16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-VERTICAL16-IDENTITY.md', True),
+        row('Bicubic height enlargement, unchanged width RGBA8§', 'warm-bicubicverticalup8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-VERTICAL-UP8-ROWS.md', True),
         row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
         row('Clone RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'clone8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
@@ -249,7 +250,8 @@ and clearing RGB when rounded alpha is zero. Its packing uses equivalent bounded
 quantization; the slower general-purpose-math comparison remains superseded.
 The horizontal/vertical RGBA8 cases preserve frozen original binary64 pixels exactly;
 six/twenty-five independently certified exact rational alpha halves retain the rounding
-already permitted by SPEC.md. No managed pixel tolerance is added.
+already permitted by SPEC.md. Vertical RGBA8 enlargement likewise preserves its
+one independently certified exact rational blue half. No managed pixel tolerance is added.
 
 Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
 diagnostics or raw GC allocated bytes / operation count (rounded up, including

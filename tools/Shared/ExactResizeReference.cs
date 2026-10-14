@@ -77,6 +77,27 @@ internal static class ExactResizeReference
         return numerator>0 && denominator>0 && 2*(numerator%denominator)==denominator;
     }
 
+    /// <summary>Certify an exact filtered sample half, including unpremultiplied RGB.</summary>
+    public static bool SampleIsHalf(byte[] source, int sourceWidth, int sourceHeight, int depth,
+        int width, int height, int x, int y, int channel, ResizeFilter filter)
+    {
+        if(channel is <0 or >3)throw new ArgumentOutOfRangeException(nameof(channel));
+        var horizontal=Weights(sourceWidth,width,filter)[x];
+        var vertical=Weights(sourceHeight,height,filter)[y];
+        var sampleBytes=depth/8;BigInteger numerator=0,alphaNumerator=0;
+        foreach(var (sx,wx) in horizontal.Taps)
+        foreach(var (sy,wy) in vertical.Taps)
+        {
+            var offset=((sy*sourceWidth+sx)*4)*sampleBytes;
+            var alpha=Read(source,offset+3*sampleBytes,depth);
+            var weight=(BigInteger)wx*wy;
+            alphaNumerator+=weight*alpha;
+            numerator+=channel==3?weight*alpha:weight*alpha*Read(source,offset+channel*sampleBytes,depth);
+        }
+        var denominator=channel==3?(BigInteger)horizontal.Sum*vertical.Sum:alphaNumerator;
+        return numerator>0 && denominator>0 && 2*(numerator%denominator)==denominator;
+    }
+
     private sealed record Axis((int Index, long Weight)[] Taps, long Sum);
 
     private static Axis[] Weights(int source, int target, ResizeFilter filter)

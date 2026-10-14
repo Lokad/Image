@@ -19,7 +19,8 @@ internal static class CachedBicubicResize
         var horizontalDown=source.BitDepth is (8 or 16) && result.Width<source.Width && result.Height==source.Height;
         var verticalDown=source.BitDepth is (8 or 16) && result.Width==source.Width && result.Height<source.Height;
         var horizontalUp=source.BitDepth==8 && result.Width>source.Width && result.Height==source.Height;
-        if (source.BitDepth is not (8 or 16) || !upsample && !mixed && !horizontalDown && !verticalDown && !horizontalUp && (result.Width>=source.Width || result.Height>=source.Height)
+        var verticalUp=source.BitDepth==8 && result.Width==source.Width && result.Height>source.Height;
+        if (source.BitDepth is not (8 or 16) || !upsample && !mixed && !horizontalDown && !verticalDown && !horizontalUp && !verticalUp && (result.Width>=source.Width || result.Height>=source.Height)
             || result.Width < 2 || tapsX > 16 || tapsY > 16 || !Avx512F.IsSupported || !Avx512DQ.IsSupported || !Avx2.IsSupported || !Sse41.IsSupported)
             return false;
         var width=result.Width;
@@ -103,7 +104,7 @@ internal static class CachedBicubicResize
                         MemoryMarshal.Write(MemoryMarshal.AsBytes(decoded.Slice(sx*4,4)),in values);
                     }
                     var cached=storage.AsSpan(rows[t],width*4);
-                    if(verticalDown)
+                    if(verticalDown || verticalUp)
                     {
                         // Unchanged width has integer centers and horizontal
                         // weights 0,0,1,0,0. The decoded products are exact;
