@@ -151,6 +151,15 @@ stored as one checked wide vector; fixed strip offsets and a common-tap prefix
 remove repeated indexing/count branches without changing either accumulation's
 tap order. Bounds, uncertainty, tiny-alpha replay, complete work and cancellation
 remain active. Unsupported supports/windows and smaller budgets keep prior paths.
+The same wider-support strip strategy has a separate RGBA16 specialization,
+retaining 4-KiB admission and 4,056 bytes of fixed arrays. Full unsigned word
+products convert exactly to binary64; quotient bounds scale with 65535 and its
+square. Paired and single word outputs use guarded unsigned packing. Uncertain
+ordinary-alpha pixels may replay their original tap order locally when
+normalization is at least 0.5 and computed normalized alpha is at least two.
+Tiny-alpha evaluation instead unwinds the complete strip operation before
+original replay needs exact scratch. Source, ownership, work and precision remain;
+existing byte and short-support word kernels stay separate and unchanged.
 When both supports are short, a byte/UInt16-specialized kernel captures local
 buffer views and prepares vertical weights/row offsets in bounded stack storage.
 It retains the same per-pixel tap order, alpha handling and per-row work charges,

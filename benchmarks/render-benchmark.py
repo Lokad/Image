@@ -163,6 +163,7 @@ def render():
         row('Bicubic RGBA8, 256×129 / input+output+4 KiB limit§', 'warm-bicubictight16-strips-evidence.json', ['byteRegressionControl', 'observations', -1], 'WARM-BICUBIC-TIGHT16-STRIPS.md', True),
         row('Bicubic RGBA16, 256×129 / input+output+4 KiB limit§', 'warm-bicubictight16-strips-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT16-STRIPS.md', True),
         row('Bicubic RGBA8, 128×64 / input+output+4 KiB limit§', 'warm-bicubictightwide8-strips-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-WIDE8-STRIPS.md', True),
+        row('Bicubic RGBA16, 128×64 / input+output+4 KiB limit§', 'warm-bicubictightwide16-strips-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-WIDE16-STRIPS.md', True),
         row('Bicubic height reduction, unchanged width RGBA8§', 'warm-bicubicvertical16-rows-evidence.json', ['byteRegressionControl', 'observations', -1], 'WARM-BICUBIC-VERTICAL16-IDENTITY.md', True),
         row('Bicubic height reduction, unchanged width RGBA16§', 'warm-bicubicvertical16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-VERTICAL16-IDENTITY.md', True),
         row('Bicubic height enlargement, unchanged width RGBA8§', 'warm-bicubicverticalup8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-VERTICAL-UP8-ROWS.md', True),
