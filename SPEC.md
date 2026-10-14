@@ -247,9 +247,9 @@ with complete work, cancellation, source and independent owner contracts.
 No heap/full-support/output cache is added; other geometry, hardware and budgets
 retain prior paths.
 RGBA8/16 reductions exceeding 544 taps on either axis may use separate
-generated-coefficient streaming fallbacks. RGBA8 admits at most eight output rows;
-RGBA16 processes any reduction height in blocks of at most eight output rows,
-reusing the same bounded arrays for each block. Each output retains its complete
+generated-coefficient streaming fallbacks. Each processes any reduction height in
+blocks of at most eight output rows, reusing the same bounded arrays for each
+block. Each output retains its complete
 original tap order and normalization; no intermediate pixel is stored. It stores no
 coefficient table; eight-lane SIMD evaluates the original binary64 Catmull-Rom
 operations on demand. A preparatory scan checks every generated coefficient bit
