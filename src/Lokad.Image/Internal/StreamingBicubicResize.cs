@@ -9,14 +9,14 @@ namespace Lokad.Image.Internal;
 internal static class StreamingBicubicResize
 {
     private const int Capacity = 304;
-    private const int MaximumOutputRows = 16;
+    private const int OutputRowsPerBlock = 16;
     private const int WorkspaceBytes = 4096;
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
         double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context)
     {
         if (source.BitDepth != 8 || result.Width >= source.Width || result.Height >= source.Height
-            || result.Height > MaximumOutputRows || tapsX > Capacity || tapsY > Capacity
+            || tapsX > Capacity || tapsY > Capacity
             || tapsX <= 72 && tapsY <= 72
             || !Avx512F.IsSupported || !Avx2.IsSupported || !Avx.IsSupported || !Sse41.IsSupported
             || context.RemainingWorkingBytes < WorkspaceBytes) return false;
@@ -27,18 +27,11 @@ internal static class StreamingBicubicResize
             // is retained, including repeated clamped edge rows.
             Span<double> weights = stackalloc double[Capacity];
             Span<ushort> offsets = stackalloc ushort[Capacity];
-            Span<Vector256<double>> totals = stackalloc Vector256<double>[MaximumOutputRows];
-            Span<double> centers = stackalloc double[MaximumOutputRows];
-            Span<int> first = stackalloc int[MaximumOutputRows];
-            Span<int> last = stackalloc int[MaximumOutputRows];
-            Span<double> normalizers = stackalloc double[MaximumOutputRows];
-            var height = result.Height;
-            for (var y = 0; y < height; y++)
-            {
-                centers[y] = (y + .5) * source.Height / height - .5;
-                first[y] = (int)Math.Ceiling(centers[y] - 2 * scaleY);
-                last[y] = (int)Math.Floor(centers[y] + 2 * scaleY);
-            }
+            Span<Vector256<double>> totals = stackalloc Vector256<double>[OutputRowsPerBlock];
+            Span<double> centers = stackalloc double[OutputRowsPerBlock];
+            Span<int> first = stackalloc int[OutputRowsPerBlock];
+            Span<int> last = stackalloc int[OutputRowsPerBlock];
+            Span<double> normalizers = stackalloc double[OutputRowsPerBlock];
             var input = source.Pixels;
             var stride = source.Stride;
             for (var x = 0; x < result.Width; x++)
@@ -58,39 +51,51 @@ internal static class StreamingBicubicResize
                     offsets[t] = (ushort)relative;
                 }
                 var sourceCount = offsets[countX - 1] + 1;
-                totals.Clear(); normalizers.Clear();
-                var previousRow = -1;
-                var horizontal = Vector256<double>.Zero;
-                // Unclamped coordinates are visited in increasing order. Each
-                // output receives exactly its original vertical taps, including
-                // separate contributions from duplicated clamped edge samples.
-                for (var coordinate = first[0]; coordinate <= last[height - 1]; coordinate++)
+                // Reuse the same bounded arrays across output-row blocks.
+                // Each output keeps original global coordinates and full tap order.
+                for (var blockStart = 0; blockStart < result.Height; blockStart += OutputRowsPerBlock)
                 {
-                    context.Cancellation.ThrowIfCancellationRequested();
-                    var sy = Math.Clamp(coordinate, 0, source.Height - 1);
-                    if (sy != previousRow)
+                    var height = Math.Min(OutputRowsPerBlock, result.Height - blockStart);
+                    for (var y = 0; y < height; y++)
                     {
-                        previousRow = sy;
-                        var row = input.Slice(sy * stride + sourceFirst * 4, sourceCount * 4);
-                        horizontal = FilterRow(row, weights[..countX], offsets[..countX]);
+                        centers[y] = (blockStart + y + .5) * source.Height / result.Height - .5;
+                        first[y] = (int)Math.Ceiling(centers[y] - 2 * scaleY);
+                        last[y] = (int)Math.Floor(centers[y] + 2 * scaleY);
+                    }
+                    totals.Clear(); normalizers.Clear();
+                    var previousRow = -1;
+                    var horizontal = Vector256<double>.Zero;
+                    // Unclamped coordinates are visited in increasing order. Each
+                    // output receives exactly its original vertical taps, including
+                    // separate contributions from duplicated clamped edge samples.
+                    for (var coordinate = first[0]; coordinate <= last[height - 1]; coordinate++)
+                    {
+                        context.Cancellation.ThrowIfCancellationRequested();
+                        var sy = Math.Clamp(coordinate, 0, source.Height - 1);
+                        if (sy != previousRow)
+                        {
+                            previousRow = sy;
+                            var row = input.Slice(sy * stride + sourceFirst * 4, sourceCount * 4);
+                            horizontal = FilterRow(row, weights[..countX], offsets[..countX]);
+                        }
+                        for (var y = 0; y < height; y++)
+                        {
+                            if (coordinate < first[y] || coordinate > last[y]) continue;
+                            var w = ImageTransforms.Kernel((coordinate - centers[y]) / scaleY, ResizeFilter.Bicubic);
+                            normalizers[y] += w;
+                            totals[y] = Avx.Add(totals[y], Avx.Multiply(horizontal, Vector256.Create(w)));
+                        }
                     }
                     for (var y = 0; y < height; y++)
                     {
-                        if (coordinate < first[y] || coordinate > last[y]) continue;
-                        var w = ImageTransforms.Kernel((coordinate - centers[y]) / scaleY, ResizeFilter.Bicubic);
-                        normalizers[y] += w;
-                        totals[y] = Avx.Add(totals[y], Avx.Multiply(horizontal, Vector256.Create(w)));
-                    }
-                }
-                for (var y = 0; y < height; y++)
-                {
-                    context.Cancellation.ThrowIfCancellationRequested();
-                    var normalizer = normalizerX * normalizers[y];
-                    if (!TryWrite(totals[y], normalizer, result.Pixels.Slice(y * result.Stride + x * 4, 4)))
-                    {
-                        if (!(normalizer >= .5 && totals[y].GetElement(3) / normalizer >= 2)
-                            || !OriginalByte(source, result, x, y, weights[..countX], offsets[..countX],
-                                sourceFirst, centers[y], first[y], last[y], scaleY, context)) return false;
+                        context.Cancellation.ThrowIfCancellationRequested();
+                        var normalizer = normalizerX * normalizers[y];
+                        if (!TryWrite(totals[y], normalizer, result.Pixels.Slice((blockStart + y) * result.Stride + x * 4, 4)))
+                        {
+                            if (!(normalizer >= .5 && totals[y].GetElement(3) / normalizer >= 2)
+                                || !OriginalByte(source, result, x, blockStart + y, weights[..countX], offsets[..countX],
+                                    sourceFirst, centers[y], first[y], last[y], scaleY, context)) return false;
+                        }
                     }
                 }
             }
