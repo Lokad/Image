@@ -571,8 +571,16 @@ budget scales with capacity. Fourteen byte/word cases qualify larger capacities;
 every measured rational pixel stays exact. The explicit timed halo is sixty-four
 pixels, 86.703% extra input area; both native modes are exact here. One quiet word
 regression passes before full both-platform/same actual package qualification.
-Stop this pair; word timing at that shape, larger supports, tight budgets and
+Stop this pair; larger supports, tight budgets and
 remaining material required/current-source parity stay open.
+
+The [unchanged-production RGBA16 16×8 check](WARM-BICUBIC-16X8-RGBA16.md)
+independently confirms 0.952x / upper 0.958x at 202,229 B/op. Every rational managed
+sample remains exact; normal/scalar native maximum-one and RMSE bounds pass with
+the same timed sixty-four-pixel halo. Screen and repeat reuse the qualified
+production assembly. Full both-platform/actual-package qualification is reused;
+no production optimization, repeat suite or profile is needed. Stop this pair;
+tight budgets, larger/unmatched supports and remaining material coverage stay open.
 
 The [RGBA16 vertical-only enlargement round](WARM-BICUBIC-VERTICAL-UP16-ROWS.md)
 reduces a 2.743x gap by 53.3%, independently confirming 1.288x / upper 1.297x at
