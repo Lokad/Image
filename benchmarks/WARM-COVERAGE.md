@@ -552,3 +552,13 @@ and complete workload boundary. Two quiet byte/word regression screens pass befo
 full both-platform qualification and the same actual package checks. Stop this
 pair; other single-axis directions, larger supports, tight budgets and remaining
 material required/current-source parity stay open.
+
+The [RGBA8 vertical-only row round](WARM-BICUBIC-VERTICAL8-ROWS.md) reduces a
+10.018x gap by 80.6%, independently confirming 1.941x / upper 1.956x at
+648,991 B/op. One admission change reuses the existing sixteen-row cache for
+height reduction with unchanged width. Frozen qualified pixels remain byte-exact;
+twenty-five independently certified alpha halves retain SPEC.md's binary64
+rounding. One quiet horizontal regression screen passes at 1.512x before full
+both-platform qualification and the same actual package checks. Stop this pair;
+other single-axis directions/depths, tight budgets, larger supports and remaining
+required/current-source parity stay open.

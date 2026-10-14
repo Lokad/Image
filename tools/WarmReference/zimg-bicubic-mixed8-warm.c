@@ -40,7 +40,17 @@ typedef uint16_t Sample;
 #ifndef LOKAD_IMAGE_HORIZONTAL_ONLY
 #define LOKAD_IMAGE_HORIZONTAL_ONLY 0
 #endif
-#if LOKAD_IMAGE_HORIZONTAL_ONLY
+#ifndef LOKAD_IMAGE_VERTICAL_ONLY
+#define LOKAD_IMAGE_VERTICAL_ONLY 0
+#endif
+#if LOKAD_IMAGE_VERTICAL_ONLY
+#undef WORKER_NAME
+#define WORKER_NAME "zimg-bicubic-vertical" DEPTH_ARG "-warm"
+#define TARGET_WIDTH 513
+#define TARGET_HEIGHT 129
+#define WIDTH_ARG "513"
+#define HEIGHT_ARG "129"
+#elif LOKAD_IMAGE_HORIZONTAL_ONLY
 #undef WORKER_NAME
 #if LOKAD_IMAGE_SAMPLE_DEPTH == 16
 #define WORKER_NAME "zimg-bicubic-horizontal16-warm"

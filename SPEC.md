@@ -70,6 +70,8 @@ intermediates in sixteen operation-local rows, with up to sixteen taps per axis.
 RGBA8/16 width reduction with unchanged height may use the same bounded rows;
 its conservative guards preserve original binary64 pixels, including exact-half
 rounding, with the same workspace admission and direct fallback.
+RGBA8 height reduction with unchanged width may use these same bounded rows,
+preserving the same arithmetic, guards and direct fallback.
 RGBA8/16 downsampling with wider support may use thirty-two operation-local rows
 and up to thirty-two taps per axis. Its optional workspace is
 1420*outputWidth + 32*sourceWidth + 256 bytes, with 4 KiB retained for exact

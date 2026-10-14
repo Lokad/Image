@@ -61,6 +61,11 @@ public sealed class CachedBicubicResizeTests
     [InlineData(16,513,9,256,9)]
     [InlineData(8,67,13,33,13)]
     [InlineData(16,67,13,33,13)]
+    [InlineData(8,33,17,33,8)]
+    [InlineData(8,37,19,37,7)]
+    [InlineData(8,61,39,61,11)]
+    [InlineData(8,513,19,513,9)]
+    [InlineData(8,67,27,67,13)]
     public void SeparableRowsMatchOriginalOrderAtCacheAdmissionBoundary(int depth,int sourceWidth,int sourceHeight,int width,int height)
     {
         using var source=OriginalPixels.Buffer(sourceWidth,sourceHeight,depth);
@@ -108,6 +113,8 @@ public sealed class CachedBicubicResizeTests
     [InlineData(8,true,3)]
     [InlineData(16,false,3)]
     [InlineData(16,true,3)]
+    [InlineData(8,false,4)]
+    [InlineData(8,true,4)]
     public void NegativeLobesAndTinyAlphaRetainOriginalQuantization(int depth,bool transparent,int mixed)
     {
         using var source=ImageBuffer.Create(17,11,depth);
@@ -132,7 +139,7 @@ public sealed class CachedBicubicResizeTests
                 }
             }
         }
-        var width=mixed==1?35:7;var height=mixed==2?23:mixed==3?11:5;
+        var width=mixed==1?35:mixed==4?17:7;var height=mixed==2?23:mixed==3?11:5;
         using var expected=ImageTransforms.Resize(source,width,height,ResizeFilter.Bicubic,
             new ImageLimits {MaxWorkingBytes=(long)source.Stride*source.Height+width*height*4*(depth/8)+4096});
         using var actual=ImageTransforms.Resize(source,width,height,ResizeFilter.Bicubic);

@@ -123,6 +123,7 @@ timing comparison; compression efficiency parity is not established.
 | [Bicubic width reduction, unchanged height RGBA16§](../benchmarks/WARM-BICUBIC-HORIZONTAL16-ROWS.md) | 1,040.82 | 566.53 | 1.837 / 1.853 | 730,683 | Confirmed |
 | [Bicubic RGBA8, 64×32 / support beyond 32§](../benchmarks/WARM-BICUBIC-64X32-RGBA8.md) | 637.23 | 351.87 | 1.811 / 1.820 | 205,880 | Confirmed |
 | [Bicubic RGBA16, 64×32 / support beyond 32§](../benchmarks/WARM-BICUBIC-64X32-RGBA16.md) | 523.91 | 377.79 | 1.387 / 1.414 | 214,071 | Confirmed |
+| [Bicubic height reduction, unchanged width RGBA8§](../benchmarks/WARM-BICUBIC-VERTICAL8-ROWS.md) | 1,107.44 | 570.63 | 1.941 / 1.956 | 648,991 | Confirmed |
 | [Crop RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 2.34 | 2.27 | 1.033 / 1.039 | 96 | Confirmed |
 | [Crop RGBA16](../benchmarks/WARM-CROP-COPY.md) | 4.11 | 4.15 | 0.991 / 1.003 | 96 | Confirmed |
 | [Clone RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 9.82 | 7.19 | 1.366 / 1.390 | 96 | Confirmed |
@@ -165,12 +166,12 @@ native-only RGB/alpha maximum-1 / RMSE-0.25 bounds preserve exact managed pixels
 RGBA8 256×129 downsample scalar pixels are exact; normal SIMD differs by one RGB and one
 alpha sample. Enlargement and mixed-axis scalar results are bounded too. RGBA16 normal/scalar results both stay within those bounds. This
 comparison is distinct from the unmatched ordinary FFmpeg CLI.
-Bicubic enlargement, mixed-axis resize, wider-support downsampling and single-axis width reduction use premultiplied float output and timed straight-RGBA
+Bicubic enlargement, mixed-axis resize, wider-support downsampling and single-axis reduction use premultiplied float output and timed straight-RGBA
 unpremultiplication/quantization, preserving unclamped alpha for the color ratio
 and clearing RGB when rounded alpha is zero. Its packing uses equivalent bounded
 quantization; the slower general-purpose-math comparison remains superseded.
-The single-axis RGBA8 case preserves frozen original binary64 pixels exactly;
-six independently certified exact rational alpha halves retain the rounding
+The horizontal/vertical RGBA8 cases preserve frozen original binary64 pixels exactly;
+six/twenty-five independently certified exact rational alpha halves retain the rounding
 already permitted by SPEC.md. No managed pixel tolerance is added.
 
 Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
