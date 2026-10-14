@@ -102,7 +102,15 @@ error is bounded by `(EC + abs(C/A)*EA)/(A-EA)` for color and
 own rounding. Nonpositive lower denominators, uncertain rounding, the existing
 normalizer/tiny-alpha guards and tight budgets retain original evaluation.
 Bounds use the full sample maximum (255 or 65535), including exact unsigned
-premultiplied word products. Larger support retains the previous path.
+premultiplied word products. Additional support uses the bounded path below.
+Supports above 128 may select the next power-of-two capacity, bounded at 2048
+rows/taps, with the same `2^-40*capacity^2` error budget and quotient guards.
+For these larger capacities, row identifiers, row offsets and vertical weights
+occupy admitted portions of the existing managed arrays instead of larger stack
+tables. Workspace is `(44*capacity+12)*outputWidth + 32*sourceWidth + 16*capacity`
+bytes, with the same 4 KiB allowance. Memory admission precedes allocation;
+support above 2048, insufficient memory and unsupported hardware retain direct
+evaluation. Geometry, tap order, work charges, cancellation and pixels remain.
 RGBA8/16 may also reuse these rows when one axis grows while the other shrinks.
 That path pads odd cache-row widths by one pixel (512 additional workspace
 bytes across sixteen rows), allowing safe indexing of cached two-pixel vectors.

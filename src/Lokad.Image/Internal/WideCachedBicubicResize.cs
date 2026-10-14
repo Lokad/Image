@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -11,7 +12,10 @@ internal static class WideCachedBicubicResize
     internal static bool TryApply(ImageBuffer source, ImageBuffer result, double scaleX, double scaleY,
         long tapsX, long tapsY, long rowWork, OperationContext context)
     {
-        var capacity=tapsX>64 || tapsY>64?128:tapsX>32 || tapsY>32?64:32;
+        var support=Math.Max(tapsX,tapsY);
+        if(support>2048)return false;
+        var capacity=support>128?(int)BitOperations.RoundUpToPowerOf2((uint)support):support>64?128:support>32?64:32;
+        var heapMetadata=capacity>128;
         if(source.BitDepth is not (8 or 16) || result.Width>=source.Width || result.Height>=source.Height
             || result.Width<2 || tapsX>capacity || tapsY>capacity
             || !Avx512F.IsSupported || !Avx512DQ.IsSupported || !Avx2.IsSupported || !Sse41.IsSupported)
@@ -19,13 +23,16 @@ internal static class WideCachedBicubicResize
         var width=result.Width;
         var wide16=source.BitDepth==16;
         var maximum=wide16?65535d:255d;
-        var alphaMargin=wide16?capacity==128?16e-3:capacity==64?4e-3:1e-3:capacity==128?4e-4:capacity==64?1e-4:1e-5;
-        var wordColorBound=capacity==128?128.16:capacity==64?32.04:8.01;
-        var byteColorMargin=capacity==128?16e-3:capacity==64?4e-3:1e-3;
+        var alphaMargin=wide16?capacity>=128?16e-3:capacity==64?4e-3:1e-3:capacity>=128?4e-4:capacity==64?1e-4:1e-5;
+        var wordColorBound=capacity>=128?128.16:capacity==64?32.04:8.01;
+        var byteColorMargin=capacity>=128?16e-3:capacity==64?4e-3:1e-3;
+        var unitError=1d/(1L<<40)*capacity*capacity;
         var cacheWidth=(long)width;
-        var elements=cacheWidth*(capacity*4)+(long)width*(capacity+1)+(long)source.Width*4;
-        var indexElements=(long)width*(capacity+1);
-        var bytes=elements*sizeof(double)+indexElements*sizeof(int)+capacity*8;
+        var dataElements=cacheWidth*(capacity*4)+(long)width*(capacity+1)+(long)source.Width*4;
+        var geometryElements=(long)width*(capacity+1);
+        var elements=dataElements+(heapMetadata?capacity:0);
+        var indexElements=geometryElements+(heapMetadata?2*capacity:0);
+        var bytes=elements*sizeof(double)+indexElements*sizeof(int)+(heapMetadata?0:capacity*8);
         if (elements>Array.MaxLength || indexElements>Array.MaxLength || bytes>context.RemainingWorkingBytes-ResizeAlpha.ScratchBytes)
             return false;
         context.Reserve(bytes);
@@ -53,9 +60,9 @@ internal static class WideCachedBicubicResize
                     offsets[x*capacity+t]=Math.Clamp(first+t,0,source.Width-1)*4;
                 }
             }
-            Span<int> rowIds=stackalloc int[capacity];rowIds.Fill(-1);
-            Span<int> rows=stackalloc int[capacity];
-            Span<double> vertical=stackalloc double[capacity];
+            Span<int> rowIds=heapMetadata?geometry.AsSpan((int)geometryElements,capacity):stackalloc int[capacity];rowIds.Fill(-1);
+            Span<int> rows=heapMetadata?geometry.AsSpan((int)geometryElements+capacity,capacity):stackalloc int[capacity];
+            Span<double> vertical=heapMetadata?storage.AsSpan((int)dataElements,capacity):stackalloc double[capacity];
             var input=source.Pixels;
             for(var y=0;y<result.Height;y++)
             {
@@ -151,14 +158,14 @@ internal static class WideCachedBicubicResize
                     var colorMargin0=wide16?wordColorBound*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent0)<<52):byteColorMargin;
                     var colorMargin1=wide16?wordColorBound*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent1)<<52):byteColorMargin;
                     var alphaMargin0=alphaMargin;var alphaMargin1=alphaMargin;
-                    if(capacity==128)
+                    if(capacity>=128)
                     {
                         // Apply the same absolute accumulation-error bound to
                         // each actual quotient. Wide kernels have large positive
                         // normalizers and alpha sums; the worst-case fixed margin
                         // otherwise sends many certain pixels to direct evaluation.
-                        (colorMargin0,alphaMargin0)=QuotientMargins(values.GetLower(),a0,n0,maximum);
-                        (colorMargin1,alphaMargin1)=QuotientMargins(values.GetUpper(),a1,n1,maximum);
+                        (colorMargin0,alphaMargin0)=QuotientMargins(values.GetLower(),a0,n0,maximum,unitError);
+                        (colorMargin1,alphaMargin1)=QuotientMargins(values.GetUpper(),a1,n1,maximum,unitError);
                     }
                     var margins=Vector512.Create(colorMargin0,colorMargin0,colorMargin0,alphaMargin0,
                         colorMargin1,colorMargin1,colorMargin1,alphaMargin1);
@@ -210,9 +217,8 @@ internal static class WideCachedBicubicResize
         }
         finally {context.Release(bytes);}
     }
-    private static (double Color,double Alpha) QuotientMargins(Vector256<double> values,double alphaSum,double normalizer,double maximum)
+    private static (double Color,double Alpha) QuotientMargins(Vector256<double> values,double alphaSum,double normalizer,double maximum,double unitError)
     {
-        const double unitError=1d/(1L<<40)*128*128;
         var alphaError=unitError*maximum;
         var colorError=alphaError*maximum;
         if(!(alphaSum>alphaError && normalizer>unitError))return (.25,.25);
