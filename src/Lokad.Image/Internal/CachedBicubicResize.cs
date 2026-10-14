@@ -12,7 +12,8 @@ internal static class CachedBicubicResize
         long tapsX, long tapsY, long rowWork, OperationContext context)
     {
         var upsample=result.Width>source.Width && result.Height>source.Height;
-        if (source.BitDepth is not (8 or 16) || !upsample && (result.Width>=source.Width || result.Height>=source.Height)
+        var byteMixed=source.BitDepth==8 && result.Width>source.Width && result.Height<source.Height;
+        if (source.BitDepth is not (8 or 16) || !upsample && !byteMixed && (result.Width>=source.Width || result.Height>=source.Height)
             || result.Width < 2 || tapsX > 16 || tapsY > 16 || !Avx512F.IsSupported || !Avx512DQ.IsSupported || !Avx2.IsSupported || !Sse41.IsSupported)
             return false;
         var width=result.Width;
@@ -20,7 +21,8 @@ internal static class CachedBicubicResize
         var sampleBytes=wide16?2:1;
         var maximum=wide16?65535d:255d;
         var alphaMargin=wide16?1e-4:1e-6;
-        var elements=(long)width*81+(long)source.Width*4;
+        var cacheWidth=(long)width+(byteMixed?(width&1):0);
+        var elements=cacheWidth*64+(long)width*17+(long)source.Width*4;
         var indexElements=(long)width*17;
         var bytes=elements*sizeof(double)+indexElements*sizeof(int)+128;
         if (elements>Array.MaxLength || indexElements>Array.MaxLength || bytes>context.RemainingWorkingBytes-ResizeAlpha.ScratchBytes)
@@ -30,9 +32,10 @@ internal static class CachedBicubicResize
         {
             var storage=new double[(int)elements];
             var geometry=new int[(int)indexElements];
-            var weights=storage.AsSpan(width*64,width*16);
-            var normalizers=storage.AsSpan(width*80,width);
-            var decoded=storage.AsSpan(width*81,source.Width*4);
+            var cacheElements=(int)(cacheWidth*64);
+            var weights=storage.AsSpan(cacheElements,width*16);
+            var normalizers=storage.AsSpan(cacheElements+width*16,width);
+            var decoded=storage.AsSpan(cacheElements+width*17,source.Width*4);
             var offsets=geometry.AsSpan(0,width*16);
             var counts=geometry.AsSpan(width*16,width);
             for(var x=0;x<width;x++)
@@ -65,7 +68,7 @@ internal static class CachedBicubicResize
                     var w=ImageTransforms.Kernel((first+t-center)/scaleY,ResizeFilter.Bicubic);
                     vertical[t]=w;normalizerY+=w;
                     var sy=Math.Clamp(first+t,0,source.Height-1);
-                    var slot=sy&15;rows[t]=slot*width*4;
+                    var slot=sy&15;rows[t]=(int)(slot*cacheWidth*4);
                     if(rowIds[slot]==sy)continue;
                     rowIds[slot]=sy;
                     var row=input.Slice(sy*source.Stride,source.Stride);
@@ -125,6 +128,14 @@ internal static class CachedBicubicResize
                     }
                 }
                 var destination=result.Pixels.Slice(y*result.Stride,result.Stride);
+                if(byteMixed)
+                {
+                    WriteMixedByteRow(source,result,y,
+                        MemoryMarshal.Cast<double,Vector512<double>>(storage.AsSpan(0,cacheElements)),
+                        rows[..count],vertical[..count],normalizers,normalizerY,weights,offsets,counts,first,context);
+                    if((width&1)!=0)Original(source,result,width-1,y,weights,offsets,counts,vertical[..count],first,context);
+                    continue;
+                }
                 for(var x=0;x+1<width;x+=2)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
@@ -183,6 +194,42 @@ internal static class CachedBicubicResize
             return true;
         }
         finally {context.Release(bytes);}
+    }
+    private static void WriteMixedByteRow(ImageBuffer source,ImageBuffer result,int y,
+        ReadOnlySpan<Vector512<double>> cached,ReadOnlySpan<int> rows,ReadOnlySpan<double> vertical,
+        ReadOnlySpan<double> normalizers,double normalizerY,ReadOnlySpan<double> weights,
+        ReadOnlySpan<int> offsets,ReadOnlySpan<int> counts,int firstY,OperationContext context)
+    {
+        var destination=result.GetRow8(y);
+        for(var x=0;x+1<result.Width;x+=2)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var sum=Vector512<double>.Zero;
+            for(var t=0;t<vertical.Length;t++)
+                sum=Avx512F.Add(sum,Avx512F.Multiply(cached[(rows[t]>>3)+(x>>1)],Vector512.Create(vertical[t])));
+            var n0=normalizers[x]*normalizerY;var n1=normalizers[x+1]*normalizerY;
+            var a0=sum.GetElement(3);var a1=sum.GetElement(7);
+            var values=Avx512F.Divide(sum,Vector512.Create(Vector256.Create(a0,a0,a0,n0),Vector256.Create(a1,a1,a1,n1)));
+            var fractional=Avx512F.Subtract(values,Avx512F.RoundScale(values,1));
+            var delta=Avx512F.Subtract(fractional,Vector512.Create(.5));
+            var distance=Avx512F.AndNot(Vector512.Create(long.MinValue),delta.AsInt64()).AsDouble();
+            var margins=Vector512.Create(1e-4,1e-4,1e-4,1e-6,1e-4,1e-4,1e-4,1e-6);
+            var inRange=Avx512F.And(Avx512F.CompareGreaterThanOrEqual(values,Vector512<double>.Zero).AsInt64(),
+                Avx512F.CompareLessThanOrEqual(values,Vector512.Create(255d)).AsInt64());
+            var ambiguous=Avx512F.And(inRange,Avx512F.CompareLessThanOrEqual(distance,margins).AsInt64());
+            if(n0<.5 || n1<.5 || !(values.GetElement(3)>=1+1e-6 && values.GetElement(7)>=1+1e-6)
+                || Vector512.ExtractMostSignificantBits(ambiguous)!=0)
+            {
+                Original(source,result,x,y,weights,offsets,counts,vertical,firstY,context);
+                Original(source,result,x+1,y,weights,offsets,counts,vertical,firstY,context);
+                continue;
+            }
+            var clipped=Avx512F.Min(Vector512.Create(255d),Avx512F.Max(Vector512<double>.Zero,values));
+            var ints=Avx512F.ConvertToVector256Int32WithTruncation(Avx512F.RoundScale(clipped,0));
+            var shorts=Sse2.PackSignedSaturate(ints.GetLower(),ints.GetUpper());
+            var packed=Sse2.PackUnsignedSaturate(shorts,Vector128<short>.Zero).AsUInt64().GetElement(0);
+            BinaryPrimitives.WriteUInt64LittleEndian(destination.Slice(x*4,8),packed);
+        }
     }
     private static double ReciprocalLowerPower(double value)
     {

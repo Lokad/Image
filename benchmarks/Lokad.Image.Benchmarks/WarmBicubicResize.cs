@@ -7,7 +7,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmBicubicCase { Down8, Down16, Up8, Up16 }
+public enum WarmBicubicCase { Down8, Down16, Up8, Up16, Mixed8 }
 
 /// <summary>Complete bicubic resize with an explicitly adjusted FFmpeg scaler backend.</summary>
 [MemoryDiagnoser]
@@ -21,7 +21,8 @@ public class WarmBicubicResize
         "Down16" => [WarmBicubicCase.Down16],
         "Up8" => [WarmBicubicCase.Up8],
         "Up16" => [WarmBicubicCase.Up16],
-        _ => throw new ArgumentException("Choose one bicubic case: Down8, Down16, Up8 or Up16.")
+        "Mixed8" => [WarmBicubicCase.Mixed8],
+        _ => throw new ArgumentException("Choose one bicubic case: Down8, Down16, Up8, Up16 or Mixed8.")
     };
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
@@ -34,7 +35,8 @@ public class WarmBicubicResize
     private double nativeRgbRmse, nativeAlphaRmse;
     private int nativeRgbMaximum, nativeAlphaMaximum;
     private bool Upscale => Case is WarmBicubicCase.Up8 or WarmBicubicCase.Up16;
-    private int Width => Upscale ? 1027 : 256;
+    private bool ExplicitGeometry => Upscale || Case == WarmBicubicCase.Mixed8;
+    private int Width => ExplicitGeometry ? 1027 : 256;
     private int Height => Upscale ? 519 : 129;
     private int Depth => Case is WarmBicubicCase.Down16 or WarmBicubicCase.Up16 ? 16 : 8;
 
@@ -42,7 +44,7 @@ public class WarmBicubicResize
     public void Setup()
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Use the dedicated Linux VM.");
-        if (Case is not (WarmBicubicCase.Down8 or WarmBicubicCase.Down16 or WarmBicubicCase.Up8 or WarmBicubicCase.Up16)) throw new ArgumentOutOfRangeException(nameof(Case));
+        if (Case is not (WarmBicubicCase.Down8 or WarmBicubicCase.Down16 or WarmBicubicCase.Up8 or WarmBicubicCase.Up16 or WarmBicubicCase.Mixed8)) throw new ArgumentOutOfRangeException(nameof(Case));
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -62,17 +64,17 @@ public class WarmBicubicResize
             File.WriteAllBytes(state.Input, input);
             var rationalPath = Path.Combine(state.DirectoryPath, "rational.rgba");
             File.WriteAllBytes(rationalPath, expected);
-            if (Depth == 16 || Upscale)
+            if (Depth == 16 || ExplicitGeometry)
             {
-                var controls = Path.Combine(state.Root, "artifacts/warm-reference", Upscale ? Depth == 16 ? "bicubic-up16" : "bicubic-up8" : "bicubic16");
+                var controls = Path.Combine(state.Root, "artifacts/warm-reference", Case == WarmBicubicCase.Mixed8 ? "bicubic-mixed8" : Upscale ? Depth == 16 ? "bicubic-up16" : "bicubic-up8" : "bicubic16");
                 Directory.CreateDirectory(controls);
                 File.WriteAllBytes(Path.Combine(controls, Depth == 16 ? "rational.rgba64le" : "rational.rgba"), expected);
             }
             ValidateManaged();
-            native = new NativeWarmReference(state, Depth, cpu, "bicubic-resize", expectedRaw: rationalPath, resizeWidth: Upscale ? Width : null, resizeHeight: Upscale ? Height : null);
+            native = new NativeWarmReference(state, Depth, cpu, "bicubic-resize", expectedRaw: rationalPath, resizeWidth: ExplicitGeometry ? Width : null, resizeHeight: ExplicitGeometry ? Height : null);
             nativePixels = File.ReadAllBytes(state.NativeOutput);
             RequireBounded(nativePixels, expected, out nativeRgbMaximum, out nativeRgbRmse, out nativeAlphaMaximum, out nativeAlphaRmse);
-            using (var scalar = new NativeWarmReference(state, Depth, cpu, "bicubic-resize", expectedRaw: rationalPath, bicubicScalar: true, resizeWidth: Upscale ? Width : null, resizeHeight: Upscale ? Height : null))
+            using (var scalar = new NativeWarmReference(state, Depth, cpu, "bicubic-resize", expectedRaw: rationalPath, bicubicScalar: true, resizeWidth: ExplicitGeometry ? Width : null, resizeHeight: ExplicitGeometry ? Height : null))
             {
                 var scalarPixels = File.ReadAllBytes(state.NativeOutput);
                 RequireBounded(scalarPixels, expected, out _, out _, out _, out _);
@@ -146,7 +148,7 @@ public class WarmBicubicResize
                 platform=RuntimeInformation.RuntimeIdentifier,sourceIdentity,
                 inputSha256=JpegBenchmarkCase.Hash(input),outputSha256=JpegBenchmarkCase.Hash(expected),nativeOutputSha256=JpegBenchmarkCase.Hash(nativePixels),
                 managedRationalReferenceExact=true,nativeRgbMaximum,nativeRgbRmse,nativeAlphaMaximum,nativeAlphaRmse,
-                nativeNormalScalarBounded=true, nativePremultipliedFloatOutput=Upscale,nativePixelsDeterministic=true,nativeZeroAlphaRgbZero=true,
+                nativeNormalScalarBounded=true, nativePremultipliedFloatOutput=ExplicitGeometry,nativePixelsDeterministic=true,nativeZeroAlphaRgbZero=true,
                 sourceUnchanged=true,independentOwnedOutput=true,nativeExitCode=0,
                 librarySha256=JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256=JpegBenchmarkCase.HashFile(typeof(WarmBicubicResize).Assembly.Location),
