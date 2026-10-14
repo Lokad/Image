@@ -258,6 +258,18 @@ before separate checked stores to the two output rows. Complete work,
 cancellation and independent owners remain. No heap workspace, persistent state
 or output cache is added; other directions/supports/hardware and smaller budgets
 retain prior paths.
+RGBA8 may prefer a separate vertical-first specialization for the same
+width-growth/height-reduction supports and 2,016-byte fixed arrays in 4-KiB
+admission. Exact byte products (at most 65,025) widen to unrounded binary64;
+the same `2^-40*16^2` bounds permit alpha margin 1e-6 and color margin
+`1e-4 / lower-power-of-two(alphaSum)`, retaining normalizer/alpha/quarter-margin
+guards and original-order replay for uncertainty. Tiny alpha is marked only in
+the private unfinished output, using the impossible completed zero-alpha/nonzero
+RGB combination. The noninlined frame returns and releases its workspace before
+a timed final scan replays original color arithmetic and exact rational alpha,
+including additional work. No marker escapes; other geometry, budgets and
+hardware retain prior paths. No heap workspace, persistent state or output
+cache is introduced.
 When both supports are short, a byte/UInt16-specialized kernel captures local
 buffer views and prepares vertical weights/row offsets in bounded stack storage.
 It retains the same per-pixel tap order, alpha handling and per-row work charges,

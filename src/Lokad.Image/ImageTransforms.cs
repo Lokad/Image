@@ -159,6 +159,12 @@ public static class ImageTransforms
         if (units > context.Limits.MaxWork) throw new ImageLimitException("Resize work limit exceeded.");
         var result = ImageBuffer.Allocate(width, height, source.BitDepth, context);
         var maximum = source.BitDepth == 8 ? 255 : 65535;
+        if (filter == ResizeFilter.Bicubic && MixedColumnBicubicResize.TryApply(source, result, scaleX, scaleY,
+            tapsX, tapsY, width * tapsX * tapsY * 4, context))
+        {
+            result.Orientation = source.Orientation;
+            return result;
+        }
         if (filter == ResizeFilter.Bicubic && MixedWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY,
             tapsX, tapsY, width * tapsX * tapsY * 4, context))
         {
