@@ -231,6 +231,19 @@ tiny alpha instead unwinds the complete strip operation before exact scratch.
 Complete work, bounded cancellation and independent owners remain. No heap
 workspace or persistent state is added; existing byte and reduction kernels stay
 unchanged. Other directions, hardware and smaller budgets retain prior paths.
+RGBA8 enlargement on both axes has a separate byte specialization of the
+eight-column/five-row cache, with the same 4-KiB admission and 2,416 bytes of
+fixed arrays. Exact byte products, original tap order and byte-depth quotient
+guards use the same `2^-40*16^2` budget. Ordinary/negative-alpha uncertainty
+replays locally. Tiny-alpha pixels are marked only in the private unfinished
+output and resolved after a non-inlined core frame returns and releases its
+admission. The marker cannot occur in completed resize pixels because zero alpha
+requires zero RGB. The timed final scan replays original color arithmetic and
+the existing exact rational alpha rounding, including its additional work charge,
+with the full 4-KiB scratch available. No marker reaches a returned image.
+Memory/work limits, cancellation and independent owners remain; no extra heap
+workspace, persistent state or output cache is introduced. Existing word and
+smaller-support byte kernels remain unchanged.
 When both supports are short, a byte/UInt16-specialized kernel captures local
 buffer views and prepares vertical weights/row offsets in bounded stack storage.
 It retains the same per-pixel tap order, alpha handling and per-row work charges,

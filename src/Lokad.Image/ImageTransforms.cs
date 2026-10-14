@@ -171,6 +171,7 @@ public static class ImageTransforms
                 || PackedColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
                 || DeepColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
                 || StreamingBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                || EnlargingColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
             : WordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
                 || WideWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
                 || PackedWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)

@@ -7,7 +7,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmBicubicCase { Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8, Wide16, Horizontal8, Horizontal16, Down64x32_8, Down64x32_16, Vertical8, Vertical16, HorizontalUp8, HorizontalUp16, VerticalUp8, VerticalUp16, Down32x16_8, Down32x16_16, Down16x8_8, Down16x8_16, TightDown8, TightDown16, TightWide8, TightWide16, Tight64x32_8, Tight64x32_16, Tight32x16_16, Tight32x16_8, Tight16x8_16, Tight16x8_8, TightUp16 }
+public enum WarmBicubicCase { Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8, Wide16, Horizontal8, Horizontal16, Down64x32_8, Down64x32_16, Vertical8, Vertical16, HorizontalUp8, HorizontalUp16, VerticalUp8, VerticalUp16, Down32x16_8, Down32x16_16, Down16x8_8, Down16x8_16, TightDown8, TightDown16, TightWide8, TightWide16, Tight64x32_8, Tight64x32_16, Tight32x16_16, Tight32x16_8, Tight16x8_16, Tight16x8_8, TightUp16, TightUp8 }
 
 /// <summary>Complete bicubic resize with an explicitly adjusted FFmpeg scaler backend.</summary>
 [MemoryDiagnoser]
@@ -52,7 +52,8 @@ public class WarmBicubicResize
         "Tight16x8_16" => [WarmBicubicCase.Tight16x8_16],
         "Tight16x8_8" => [WarmBicubicCase.Tight16x8_8],
         "TightUp16" => [WarmBicubicCase.TightUp16],
-        _ => throw new ArgumentException("Choose one bicubic case: Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8, Wide16, Horizontal8, Horizontal16 , Down64x32_8 Down64x32_16 , Vertical8 , Vertical16, HorizontalUp8, HorizontalUp16, VerticalUp8, VerticalUp16, Down32x16_8, Down32x16_16, Down16x8_8, Down16x8_16, TightDown8, TightDown16, TightWide8, TightWide16, Tight64x32_8, Tight64x32_16, Tight32x16_16, Tight32x16_8, Tight16x8_16, Tight16x8_8 or TightUp16.")
+        "TightUp8" => [WarmBicubicCase.TightUp8],
+        _ => throw new ArgumentException("Choose one bicubic case: Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8, Wide16, Horizontal8, Horizontal16 , Down64x32_8 Down64x32_16 , Vertical8 , Vertical16, HorizontalUp8, HorizontalUp16, VerticalUp8, VerticalUp16, Down32x16_8, Down32x16_16, Down16x8_8, Down16x8_16, TightDown8, TightDown16, TightWide8, TightWide16, Tight64x32_8, Tight64x32_16, Tight32x16_16, Tight32x16_8, Tight16x8_16, Tight16x8_8, TightUp16 or TightUp8.")
     };
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
@@ -65,7 +66,7 @@ public class WarmBicubicResize
     private int cpu, sampleCount;
     private double nativeRgbRmse, nativeAlphaRmse;
     private int nativeRgbMaximum, nativeAlphaMaximum;
-    private bool Upscale => Case is WarmBicubicCase.Up8 or WarmBicubicCase.Up16 or WarmBicubicCase.TightUp16;
+    private bool Upscale => Case is WarmBicubicCase.Up8 or WarmBicubicCase.Up16 or WarmBicubicCase.TightUp16 or WarmBicubicCase.TightUp8;
     private bool ExplicitGeometry => Upscale || Case is WarmBicubicCase.Mixed8 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 or WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 or WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 or WarmBicubicCase.Vertical8 or WarmBicubicCase.Vertical16 or WarmBicubicCase.HorizontalUp8 or WarmBicubicCase.HorizontalUp16 or WarmBicubicCase.VerticalUp8 or WarmBicubicCase.VerticalUp16 or WarmBicubicCase.Down32x16_8 or WarmBicubicCase.Down32x16_16 or WarmBicubicCase.Down16x8_8 or WarmBicubicCase.Down16x8_16 or WarmBicubicCase.TightWide8 or WarmBicubicCase.TightWide16 or WarmBicubicCase.Tight64x32_8 or WarmBicubicCase.Tight64x32_16 or WarmBicubicCase.Tight32x16_16 or WarmBicubicCase.Tight32x16_8 or WarmBicubicCase.Tight16x8_16 or WarmBicubicCase.Tight16x8_8;
     private int Width => Case is WarmBicubicCase.Down16x8_8 or WarmBicubicCase.Down16x8_16 or WarmBicubicCase.Tight16x8_16 or WarmBicubicCase.Tight16x8_8 ? 16 : Case is WarmBicubicCase.Down32x16_8 or WarmBicubicCase.Down32x16_16 or WarmBicubicCase.Tight32x16_16 or WarmBicubicCase.Tight32x16_8 ? 32 : Case is WarmBicubicCase.Vertical8 or WarmBicubicCase.Vertical16 or WarmBicubicCase.VerticalUp8 or WarmBicubicCase.VerticalUp16 ? 513 : Case is WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 or WarmBicubicCase.Tight64x32_8 or WarmBicubicCase.Tight64x32_16 ? 64 : Case is WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 or WarmBicubicCase.TightWide8 or WarmBicubicCase.TightWide16 ? 128 : Case is WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 ? 256 : ExplicitGeometry ? 1027 : 256;
     private int Height => Case is WarmBicubicCase.Down16x8_8 or WarmBicubicCase.Down16x8_16 or WarmBicubicCase.Tight16x8_16 or WarmBicubicCase.Tight16x8_8 ? 8 : Case is WarmBicubicCase.Down32x16_8 or WarmBicubicCase.Down32x16_16 or WarmBicubicCase.Tight32x16_16 or WarmBicubicCase.Tight32x16_8 ? 16 : Case is WarmBicubicCase.VerticalUp8 or WarmBicubicCase.VerticalUp16 ? 519 : Case is WarmBicubicCase.HorizontalUp8 or WarmBicubicCase.HorizontalUp16 ? 259 : Case is WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 or WarmBicubicCase.Tight64x32_8 or WarmBicubicCase.Tight64x32_16 ? 32 : Case is WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 ? 259 : Case is WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 or WarmBicubicCase.TightWide8 or WarmBicubicCase.TightWide16 ? 64 : Upscale || Case is WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 ? 519 : 129;
@@ -75,7 +76,7 @@ public class WarmBicubicResize
     public void Setup()
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Use the dedicated Linux VM.");
-        if (Case is not (WarmBicubicCase.Down8 or WarmBicubicCase.Down16 or WarmBicubicCase.Up8 or WarmBicubicCase.Up16 or WarmBicubicCase.Mixed8 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 or WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 or WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 or WarmBicubicCase.Vertical8 or WarmBicubicCase.Vertical16 or WarmBicubicCase.HorizontalUp8 or WarmBicubicCase.HorizontalUp16 or WarmBicubicCase.VerticalUp8 or WarmBicubicCase.VerticalUp16 or WarmBicubicCase.Down32x16_8 or WarmBicubicCase.Down32x16_16 or WarmBicubicCase.Down16x8_8 or WarmBicubicCase.Down16x8_16 or WarmBicubicCase.TightDown8 or WarmBicubicCase.TightDown16 or WarmBicubicCase.TightWide8 or WarmBicubicCase.TightWide16 or WarmBicubicCase.Tight64x32_8 or WarmBicubicCase.Tight64x32_16 or WarmBicubicCase.Tight32x16_16 or WarmBicubicCase.Tight32x16_8 or WarmBicubicCase.Tight16x8_16 or WarmBicubicCase.Tight16x8_8 or WarmBicubicCase.TightUp16)) throw new ArgumentOutOfRangeException(nameof(Case));
+        if (Case is not (WarmBicubicCase.Down8 or WarmBicubicCase.Down16 or WarmBicubicCase.Up8 or WarmBicubicCase.Up16 or WarmBicubicCase.Mixed8 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 or WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 or WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 or WarmBicubicCase.Vertical8 or WarmBicubicCase.Vertical16 or WarmBicubicCase.HorizontalUp8 or WarmBicubicCase.HorizontalUp16 or WarmBicubicCase.VerticalUp8 or WarmBicubicCase.VerticalUp16 or WarmBicubicCase.Down32x16_8 or WarmBicubicCase.Down32x16_16 or WarmBicubicCase.Down16x8_8 or WarmBicubicCase.Down16x8_16 or WarmBicubicCase.TightDown8 or WarmBicubicCase.TightDown16 or WarmBicubicCase.TightWide8 or WarmBicubicCase.TightWide16 or WarmBicubicCase.Tight64x32_8 or WarmBicubicCase.Tight64x32_16 or WarmBicubicCase.Tight32x16_16 or WarmBicubicCase.Tight32x16_8 or WarmBicubicCase.Tight16x8_16 or WarmBicubicCase.Tight16x8_8 or WarmBicubicCase.TightUp16 or WarmBicubicCase.TightUp8)) throw new ArgumentOutOfRangeException(nameof(Case));
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -90,7 +91,7 @@ public class WarmBicubicResize
             using (var manifest = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/benchmark-source.json"))))
                 sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = manifest.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = manifest.RootElement.GetProperty("sourceRevision").GetString() });
             input = HorizontalFlipInput.Create(Depth);
-            operationLimits = Case is WarmBicubicCase.TightDown8 or WarmBicubicCase.TightDown16 or WarmBicubicCase.TightWide8 or WarmBicubicCase.TightWide16 or WarmBicubicCase.Tight64x32_8 or WarmBicubicCase.Tight64x32_16 or WarmBicubicCase.Tight32x16_16 or WarmBicubicCase.Tight32x16_8 or WarmBicubicCase.Tight16x8_16 or WarmBicubicCase.Tight16x8_8 or WarmBicubicCase.TightUp16
+            operationLimits = Case is WarmBicubicCase.TightDown8 or WarmBicubicCase.TightDown16 or WarmBicubicCase.TightWide8 or WarmBicubicCase.TightWide16 or WarmBicubicCase.Tight64x32_8 or WarmBicubicCase.Tight64x32_16 or WarmBicubicCase.Tight32x16_16 or WarmBicubicCase.Tight32x16_8 or WarmBicubicCase.Tight16x8_16 or WarmBicubicCase.Tight16x8_8 or WarmBicubicCase.TightUp16 or WarmBicubicCase.TightUp8
                 ? new ImageLimits { MaxWorkingBytes = input.Length + (long)Width * Height * 4 * (Depth / 8) + 4096 } : null;
             if (Case == WarmBicubicCase.TightWide16 && operationLimits?.MaxWorkingBytes != 1132568)
                 throw new InvalidOperationException("The word wider-support benchmark requires its declared tight working limit.");
@@ -108,6 +109,8 @@ public class WarmBicubicResize
                 throw new InvalidOperationException("The byte 16x8 benchmark requires its declared geometry, depth and tight limit.");
             if (Case == WarmBicubicCase.TightUp16 && (Width != 1027 || Height != 519 || Depth != 16 || operationLimits?.MaxWorkingBytes != 5331136))
                 throw new InvalidOperationException("The word enlargement benchmark requires its declared geometry, depth and tight limit.");
+            if (Case == WarmBicubicCase.TightUp8 && (Width != 1027 || Height != 519 || Depth != 8 || operationLimits?.MaxWorkingBytes != 2667616))
+                throw new InvalidOperationException("The byte enlargement benchmark requires its declared geometry, depth and tight limit.");
             expected = ExactResizeReference.Resize(input, 513, 259, Depth, Width, Height, ResizeFilter.Bicubic);
             source = JpegBenchmarkCase.Buffer(input, 513, 259, Depth);
             if(Case is WarmBicubicCase.Horizontal8 or WarmBicubicCase.Vertical8)
