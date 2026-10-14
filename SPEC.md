@@ -67,7 +67,7 @@ order, binary64 arithmetic and pixels. Geometry is not cached across calls.
 RGBA8/16 bicubic downsampling and enlargement on both axes, on
 AVX-512F/DQ and AVX2, may reuse unrounded horizontal
 intermediates in sixteen operation-local rows, with up to sixteen taps per axis.
-RGBA8 width reduction with unchanged height may use the same bounded rows;
+RGBA8/16 width reduction with unchanged height may use the same bounded rows;
 its conservative guards preserve original binary64 pixels, including exact-half
 rounding, with the same workspace admission and direct fallback.
 RGBA8/16 downsampling with wider support may use thirty-two operation-local rows

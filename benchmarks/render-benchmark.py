@@ -151,6 +151,7 @@ def render():
         row('Bicubic RGBA8, 128×64 / wider support§', 'warm-bicubicwide8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-WIDE8-ROWS.md', True),
         row('Bicubic RGBA16, 128×64 / wider support§', 'warm-bicubicwide16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-WIDE16-ROWS.md', True),
         row('Bicubic width reduction, unchanged height RGBA8§', 'warm-bicubichorizontal8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL8-ROWS.md', True),
+        row('Bicubic width reduction, unchanged height RGBA16§', 'warm-bicubichorizontal16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL16-ROWS.md', True),
         row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
         row('Clone RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'clone8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),

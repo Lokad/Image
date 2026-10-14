@@ -520,3 +520,12 @@ six independently certified exact alpha halves retain SPEC.md's binary64 roundin
 One quiet shared-path screen passes before full both-platform qualification and
 the same actual package checks. Stop this pair; other single-axis directions and
 depths, tight budgets and remaining material current-source parity stay open.
+
+The [RGBA16 horizontal-only row round](WARM-BICUBIC-HORIZONTAL16-ROWS.md) reduces
+a 7.286x gap by 74.8%, independently confirming 1.837x / upper 1.853x at
+730,683 B/op. One admission change reuses the existing checked word cache;
+every sample matches the independent rational reference. The screen is faster,
+but the independent repeat supplies the published result. One quiet byte
+regression screen passes at 1.520x before full both-platform qualification and
+the same actual package checks. Stop this pair; other single-axis directions,
+tight budgets and remaining material required/current-source parity stay open.
