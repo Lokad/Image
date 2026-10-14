@@ -180,6 +180,17 @@ uncertain ordinary-alpha samples replay the original tap order under the same
 normalization/alpha guards. Tiny alpha unwinds the frame and admission before
 exact scratch is needed. Complete work, bounded cancellation and independent
 owners remain; existing byte and smaller-support word kernels are unchanged.
+RGBA16 reduction with support above thirty-four and at most seventy-two taps
+per axis may use a separate single-column row cache. Its 4-KiB admission covers
+4,032 bytes of fixed arrays. Each selected source row is horizontally filtered
+once per output column, without a decoded-source table or intermediate pixel
+quantization. Paired full-range unsigned word products widen exactly to binary64;
+separate additions preserve horizontal tap order. Checked relative offsets retain
+absolute Int32 coordinates. The `2^-40*72^2` budget and depth-scaled quotient
+guards preserve original pixels, with guarded local ordinary-alpha replay and
+complete tiny-alpha unwind before exact scratch. Work, bounded cancellation and
+owner contracts remain. Other supports, directions, hardware and smaller budgets
+retain the existing paths.
 When both supports are short, a byte/UInt16-specialized kernel captures local
 buffer views and prepares vertical weights/row offsets in bounded stack storage.
 It retains the same per-pixel tap order, alpha handling and per-row work charges,
