@@ -191,6 +191,15 @@ guards preserve original pixels, with guarded local ordinary-alpha replay and
 complete tiny-alpha unwind before exact scratch. Work, bounded cancellation and
 owner contracts remain. Other supports, directions, hardware and smaller budgets
 retain the existing paths.
+RGBA8 reduction above thirty-six and up to seventy-two taps per axis may use
+a separate byte specialization of that single-column row cache, with the same
+4-KiB admission and 4,032 bytes of fixed arrays. Exact byte premultiplication
+products are at most 65025 and widen to binary64 without quantization. Separate
+horizontal additions, checked relative offsets, the `2^-40*72^2` budget and
+byte-depth quotient/rounding guards preserve every original sample. Guarded
+ordinary-alpha replay and complete tiny-alpha unwind retain exact handling;
+complete work, bounded cancellation and independent owners remain unchanged.
+Existing word and smaller-support byte kernels stay separate and unchanged.
 When both supports are short, a byte/UInt16-specialized kernel captures local
 buffer views and prepares vertical weights/row offsets in bounded stack storage.
 It retains the same per-pixel tap order, alpha handling and per-row work charges,
