@@ -143,6 +143,14 @@ at least two. Any exact tiny-alpha calculation instead declines the complete
 strip operation, releasing its frame and charge before original replay needs
 scratch. Odd word tails likewise use original-order evaluation. The byte kernel
 is separate and remains unchanged; work, precision and owner contracts are retained.
+RGBA8 reduction with support above ten and at most twenty taps per axis may use
+a separate three-column/twenty-row strip cache on the same hardware. It admits
+4 KiB for 4,056 bytes of fixed arrays, retaining scalar coefficient preparation
+and the `2^-40*20^2` absolute-error budget. Adjacent exact decoded pixels may be
+stored as one checked wide vector; fixed strip offsets and a common-tap prefix
+remove repeated indexing/count branches without changing either accumulation's
+tap order. Bounds, uncertainty, tiny-alpha replay, complete work and cancellation
+remain active. Unsupported supports/windows and smaller budgets keep prior paths.
 When both supports are short, a byte/UInt16-specialized kernel captures local
 buffer views and prepares vertical weights/row offsets in bounded stack storage.
 It retains the same per-pixel tap order, alpha handling and per-row work charges,

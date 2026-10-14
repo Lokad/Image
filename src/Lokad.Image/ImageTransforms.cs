@@ -167,6 +167,7 @@ public static class ImageTransforms
         }
         if (filter == ResizeFilter.Bicubic && (source.BitDepth == 8
             ? ColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                || WideColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
             : WordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)))
         {
             result.Orientation = source.Orientation;
