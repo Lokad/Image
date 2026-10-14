@@ -583,3 +583,11 @@ horizontal-reduction regression screen passes before full both-platform tests
 and the same actual package qualification. Three pre-run guard refusals remain
 unscored. Stop this pair; other single-axis directions/depths, larger supports,
 tight budgets and remaining material required/current-source parity stay open.
+
+The [unchanged-production RGBA16 horizontal enlargement check](WARM-BICUBIC-HORIZONTAL-UP16.md)
+independently confirms 1.960x / upper 1.973x at 2,232,080 B/op. Only the existing
+benchmark's word selection changes; its complete native boundary and every
+rational managed pixel pass. The qualified library and full both-platform/actual
+package qualification are reused, avoiding an unnecessary production change,
+profile or repeat suite. Stop this pair; other single-axis directions, larger
+supports, tight budgets and remaining material current-source parity stay open.

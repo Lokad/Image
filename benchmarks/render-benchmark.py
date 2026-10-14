@@ -153,6 +153,7 @@ def render():
         row('Bicubic width reduction, unchanged height RGBA8§', 'warm-bicubichorizontal8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL8-ROWS.md', True),
         row('Bicubic width reduction, unchanged height RGBA16§', 'warm-bicubichorizontal16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL16-ROWS.md', True),
         row('Bicubic width enlargement, unchanged height RGBA8§', 'warm-bicubichorizontalup8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL-UP8-ROWS.md', True),
+        row('Bicubic width enlargement, unchanged height RGBA16§', 'warm-bicubichorizontalup16-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL-UP16.md', True),
         row('Bicubic RGBA8, 64×32 / support beyond 32§', 'warm-bicubic64x32-8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-64X32-RGBA8.md', True),
         row('Bicubic RGBA16, 64×32 / support beyond 32§', 'warm-bicubic64x32-16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-64X32-RGBA16.md', True),
         row('Bicubic height reduction, unchanged width RGBA8§', 'warm-bicubicvertical16-rows-evidence.json', ['byteRegressionControl', 'observations', -1], 'WARM-BICUBIC-VERTICAL16-IDENTITY.md', True),
