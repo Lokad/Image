@@ -502,3 +502,12 @@ bounds stay unchanged. Setup refusals remain unscored. Two quiet existing-path
 regression screens stay below two. Full both-platform tests and the same actual
 package pass once. Stop this pair; wider word support, larger kernels, single-axis
 resizing, tight budgets and remaining required/current-source coverage stay open.
+
+The [wider-support RGBA16 row round](WARM-BICUBIC-WIDE16-ROWS.md) reduces a 25.058x
+fallback gap by 94.2%, independently confirming 1.432x / upper 1.446x at
+263,988 B/op. The same bounded row kernel now handles exact unsigned word
+products and packing, with conservative word precision guards and original-order
+fallback. Native halo and complete operation boundaries stay explicit and timed.
+Two quiet regression screens stay below two. Windows and Linux each pass 2,847
+tests and the same actual package checks once. Stop this pair; larger kernels,
+single-axis resizing, tight budgets and required current-source parity stay open.

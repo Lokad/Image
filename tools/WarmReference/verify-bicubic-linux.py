@@ -12,6 +12,7 @@ up.add_argument('--mixed16',action='store_true')
 up.add_argument('--cross8',action='store_true')
 up.add_argument('--cross16',action='store_true')
 up.add_argument('--wide8',action='store_true')
+up.add_argument('--wide16',action='store_true')
 args=parser.parse_args()
 if args.up8 and args.depth!=8:parser.error('--up8 requires depth 8')
 if args.up16 and args.depth!=16:parser.error('--up16 requires depth 16')
@@ -20,15 +21,17 @@ if args.mixed16 and args.depth!=16:parser.error('--mixed16 requires depth 16')
 if args.cross8 and args.depth!=8:parser.error('--cross8 requires depth 8')
 if args.cross16 and args.depth!=16:parser.error('--cross16 requires depth 16')
 if args.wide8 and args.depth!=8:parser.error('--wide8 requires depth 8')
-upsample=args.up8 or args.up16 or args.mixed8 or args.mixed16 or args.cross8 or args.cross16 or args.wide8
-width,height=(128,64) if args.wide8 else (256,519) if args.cross8 or args.cross16 else (1027,129) if args.mixed8 or args.mixed16 else (1027,519) if upsample else (256,129)
+if args.wide16 and args.depth!=16:parser.error('--wide16 requires depth 16')
+upsample=args.up8 or args.up16 or args.mixed8 or args.mixed16 or args.cross8 or args.cross16 or args.wide8 or args.wide16
+width,height=(128,64) if args.wide8 or args.wide16 else (256,519) if args.cross8 or args.cross16 else (1027,129) if args.mixed8 or args.mixed16 else (1027,519) if upsample else (256,129)
 root=Path(__file__).resolve().parents[2]
-worker=root/('external/warm-reference/zimg-bicubic-wide8-warm' if args.wide8 else 'external/warm-reference/zimg-bicubic-cross16-warm' if args.cross16 else 'external/warm-reference/zimg-bicubic-cross8-warm' if args.cross8 else 'external/warm-reference/zimg-bicubic-mixed16-warm' if args.mixed16 else 'external/warm-reference/zimg-bicubic-mixed8-warm' if args.mixed8 else 'external/warm-reference/zimg-bicubic-up16-warm' if args.up16 else 'external/warm-reference/zimg-bicubic-up8-warm' if args.up8 else 'external/warm-reference/zimg-bicubic16-warm' if args.depth==16 else 'external/warm-reference/zimg-bicubic-warm')
+worker=root/('external/warm-reference/zimg-bicubic-wide16-warm' if args.wide16 else 'external/warm-reference/zimg-bicubic-wide8-warm' if args.wide8 else 'external/warm-reference/zimg-bicubic-cross16-warm' if args.cross16 else 'external/warm-reference/zimg-bicubic-cross8-warm' if args.cross8 else 'external/warm-reference/zimg-bicubic-mixed16-warm' if args.mixed16 else 'external/warm-reference/zimg-bicubic-mixed8-warm' if args.mixed8 else 'external/warm-reference/zimg-bicubic-up16-warm' if args.up16 else 'external/warm-reference/zimg-bicubic-up8-warm' if args.up8 else 'external/warm-reference/zimg-bicubic16-warm' if args.depth==16 else 'external/warm-reference/zimg-bicubic-warm')
 source=root/('artifacts/warm-reference/bilinear16-audit/input.rgba64le' if args.depth==16 else 'artifacts/warm-reference/webp-decode/source.rgba')
-reference=root/('artifacts/warm-reference/bicubic-wide8/rational.rgba' if args.wide8 else 'artifacts/warm-reference/bicubic-cross16/rational.rgba64le' if args.cross16 else 'artifacts/warm-reference/bicubic-cross8/rational.rgba' if args.cross8 else 'artifacts/warm-reference/bicubic-mixed16/rational.rgba64le' if args.mixed16 else 'artifacts/warm-reference/bicubic-mixed8/rational.rgba' if args.mixed8 else 'artifacts/warm-reference/bicubic-up16/rational.rgba64le' if args.up16 else 'artifacts/warm-reference/bicubic-up8/rational.rgba' if args.up8 else 'artifacts/warm-reference/bicubic16/rational.rgba64le' if args.depth==16 else 'tmp/bicubic8-edge-reference.rgba')
+reference=root/('artifacts/warm-reference/bicubic-wide16/rational.rgba64le' if args.wide16 else 'artifacts/warm-reference/bicubic-wide8/rational.rgba' if args.wide8 else 'artifacts/warm-reference/bicubic-cross16/rational.rgba64le' if args.cross16 else 'artifacts/warm-reference/bicubic-cross8/rational.rgba' if args.cross8 else 'artifacts/warm-reference/bicubic-mixed16/rational.rgba64le' if args.mixed16 else 'artifacts/warm-reference/bicubic-mixed8/rational.rgba' if args.mixed8 else 'artifacts/warm-reference/bicubic-up16/rational.rgba64le' if args.up16 else 'artifacts/warm-reference/bicubic-up8/rational.rgba' if args.up8 else 'artifacts/warm-reference/bicubic16/rational.rgba64le' if args.depth==16 else 'tmp/bicubic8-edge-reference.rgba')
 pixels=source.read_bytes();expected=reference.read_bytes()
 assert hashlib.sha256(pixels).hexdigest()==('3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9' if args.depth==16 else '70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80')
 assert len(expected)==width*height*4*(args.depth//8)
+if args.wide16:assert hashlib.sha256(expected).hexdigest()=='3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9'
 if args.wide8:assert hashlib.sha256(expected).hexdigest()=='5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71'
 if args.cross16:assert hashlib.sha256(expected).hexdigest()=='ee02e57ff550047bf5296fb5af51c9396005653a8d37c3e0032abcdbb6db0db1'
 if args.cross8:assert hashlib.sha256(expected).hexdigest()=='46b86650bc27febb8c0ed688a02591b660fe77b099c5b9e2ffe42a94e38cae5e'
@@ -49,7 +52,7 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-bicubic-') as name:
         assert ready['operation']=='bicubic-resize' and ready['filterThreads']==1 and ready['threadType']==0
         assert ready['affinityCount']==1 and ready['cpu']==args.cpu and ready['independentLiveOutputs']
         assert (ready['outputWidth'],ready['outputHeight'],ready['depth'])==(width,height,args.depth)
-        assert ready['haloPixels']==(8 if args.wide8 else 4) and ready['haloAndPackingTimed'] and ready['outputAllocationAndRepackingTimed']
+        assert ready['haloPixels']==(8 if args.wide8 or args.wide16 else 4) and ready['haloAndPackingTimed'] and ready['outputAllocationAndRepackingTimed']
         assert sample['operations']==1 and sample['completedOperations']==ready['initialCompletedOperations']+1
         assert sample['outputStride']==width*4*(args.depth//8) and check['matched'] and check['sourceUnchanged']
         actual=output.read_bytes();assert len(actual)==len(expected)
@@ -85,5 +88,5 @@ with tempfile.TemporaryDirectory(prefix='lokad-image-bicubic-') as name:
         cpu=args.cpu,depth=args.depth,sourceSha256=hashlib.sha256(pixels).hexdigest(),referenceSha256=hashlib.sha256(expected).hexdigest(),
         extraSourceRasters=0,sourceUnchanged=True,independentLiveOutputs=True,nativeOperationCountersExact=True,
         normalScalarBounded=True,modes=modes,controls=controls,workerSha256=hashlib.sha256(worker.read_bytes()).hexdigest())
-    (root/('artifacts/warm-reference/bicubic-wide8-controls.json' if args.wide8 else 'artifacts/warm-reference/bicubic-cross16-controls.json' if args.cross16 else 'artifacts/warm-reference/bicubic-cross8-controls.json' if args.cross8 else 'artifacts/warm-reference/bicubic-mixed16-controls.json' if args.mixed16 else 'artifacts/warm-reference/bicubic-mixed8-controls.json' if args.mixed8 else 'artifacts/warm-reference/bicubic-up16-controls.json' if args.up16 else 'artifacts/warm-reference/bicubic-up8-controls.json' if args.up8 else 'artifacts/warm-reference/bicubic16-controls.json' if args.depth==16 else 'artifacts/warm-reference/bicubic-controls.json')).write_text(json.dumps(record,indent=2)+'\n')
+    (root/('artifacts/warm-reference/bicubic-wide16-controls.json' if args.wide16 else 'artifacts/warm-reference/bicubic-wide8-controls.json' if args.wide8 else 'artifacts/warm-reference/bicubic-cross16-controls.json' if args.cross16 else 'artifacts/warm-reference/bicubic-cross8-controls.json' if args.cross8 else 'artifacts/warm-reference/bicubic-mixed16-controls.json' if args.mixed16 else 'artifacts/warm-reference/bicubic-mixed8-controls.json' if args.mixed8 else 'artifacts/warm-reference/bicubic-up16-controls.json' if args.up16 else 'artifacts/warm-reference/bicubic-up8-controls.json' if args.up8 else 'artifacts/warm-reference/bicubic16-controls.json' if args.depth==16 else 'artifacts/warm-reference/bicubic-controls.json')).write_text(json.dumps(record,indent=2)+'\n')
     print(json.dumps(record))

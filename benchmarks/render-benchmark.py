@@ -149,6 +149,7 @@ def render():
         row('Bicubic width reduction / height enlargement RGBA8§', 'warm-bicubiccross8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-CROSS8-ROWS.md', True),
         row('Bicubic width reduction / height enlargement RGBA16§', 'warm-bicubiccross16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-CROSS16-ROWS.md', True),
         row('Bicubic RGBA8, 128×64 / wider support§', 'warm-bicubicwide8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-WIDE8-ROWS.md', True),
+        row('Bicubic RGBA16, 128×64 / wider support§', 'warm-bicubicwide16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-WIDE16-ROWS.md', True),
         row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
         row('Clone RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'clone8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
@@ -227,7 +228,7 @@ Managed output is 471,436 bytes versus 98,590 bytes. Quality-matched timing is
 confirmed; compression efficiency parity is not established.
 
 § Bicubic RGBA8/16 uses **zimg, FFmpeg's zscale backend**, with timed four-pixel
-clamped edge padding (4.697% additional input area); wider-support RGBA8 uses
+clamped edge padding (4.697% additional input area); wider-support RGBA8/16 uses
 eight pixels (9.489%). Both include complete source/output
 packing, filtering and independent output allocation/release. The explicit
 native-only RGB/alpha maximum-1 / RMSE-0.25 bounds preserve exact managed pixels.
@@ -268,6 +269,8 @@ RGBA16 in that direction confirms **1.285x / upper 1.297x**, cutting a 23.838x
 baseline by 94.7%.
 Wider-support RGBA8 downsampling to 128×64 confirms **1.631x / upper 1.642x**,
 cutting a 26.954x baseline by 94.0% with bounded thirty-two-row reuse.
+RGBA16 at that shape confirms **1.432x / upper 1.446x**, cutting a 25.058x baseline
+by 94.2% with exact unsigned products and conservative word precision guards.
 PNG RGB8, gray8 and gray-alpha8
 encoding preserves exact samples but exceeds the 5% IDAT-size gate by differences
 of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animation
