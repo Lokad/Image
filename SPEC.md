@@ -246,7 +246,7 @@ unwinds before exact scratch. Certified rational halves retain original rounding
 with complete work, cancellation, source and independent owner contracts.
 No heap/full-support/output cache is added; other geometry, hardware and budgets
 retain prior paths.
-RGBA16 reductions exceeding 544 taps on either axis, with at most eight output
+RGBA8/16 reductions exceeding 544 taps on either axis, with at most eight output
 rows, may use a separate generated-coefficient streaming fallback. It stores no
 coefficient table; eight-lane SIMD evaluates the original binary64 Catmull-Rom
 operations on demand. A preparatory scan checks every generated coefficient bit
