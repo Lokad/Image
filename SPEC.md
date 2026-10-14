@@ -270,6 +270,17 @@ a timed final scan replays original color arithmetic and exact rational alpha,
 including additional work. No marker escapes; other geometry, budgets and
 hardware retain prior paths. No heap workspace, persistent state or output
 cache is introduced.
+RGBA16 width reduction combined with height enlargement may use a separate
+horizontal-first fallback when horizontal support is at most ten taps and
+vertical support at most five. Eight output columns reuse five filtered source
+rows; 32 decoded source-column slots and the other fixed arrays occupy 3,440
+bytes within a 4-KiB admission. Full unsigned word products widen exactly to
+unrounded binary64. The `2^-40*16^2` quotient bounds and guarded packing retain
+original-order replay for uncertain ordinary alpha and frame unwind before
+exact tiny-alpha scratch. Each complete operation charges the original tap
+work; cancellation, source and independent owner contracts remain. Other
+directions/supports/hardware and smaller budgets retain prior paths. No heap
+workspace, persistent state or output cache is introduced.
 When both supports are short, a byte/UInt16-specialized kernel captures local
 buffer views and prepares vertical weights/row offsets in bounded stack storage.
 It retains the same per-pixel tap order, alpha handling and per-row work charges,
