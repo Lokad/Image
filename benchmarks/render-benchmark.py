@@ -147,6 +147,7 @@ def render():
         row('Bicubic mixed-axis RGBA8§', 'warm-bicubicmixed16-rows-evidence.json', ['byteRegressionControl', 'observations', -1], 'WARM-BICUBIC-MIXED16-ROWS.md', True),
         row('Bicubic mixed-axis RGBA16§', 'warm-bicubicmixed16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-MIXED16-ROWS.md', True),
         row('Bicubic width reduction / height enlargement RGBA8§', 'warm-bicubiccross8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-CROSS8-ROWS.md', True),
+        row('Bicubic width reduction / height enlargement RGBA16§', 'warm-bicubiccross16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-CROSS16-ROWS.md', True),
         row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
         row('Crop RGBA16', 'warm-crop-copy-evidence.json', ['observations', -1], 'WARM-CROP-COPY.md', True),
         row('Clone RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'clone8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
@@ -261,6 +262,8 @@ confirms RGBA16 **1.924x / upper 1.975x**, cutting a 20.419x baseline by 90.6%,
 and RGBA8 **1.848x / upper 1.867x** with unchanged allocations.
 RGBA8 bicubic width reduction with height enlargement confirms **1.190x / upper
 1.206x**, cutting a 21.910x baseline by 94.6%.
+RGBA16 in that direction confirms **1.285x / upper 1.297x**, cutting a 23.838x
+baseline by 94.7%.
 PNG RGB8, gray8 and gray-alpha8
 encoding preserves exact samples but exceeds the 5% IDAT-size gate by differences
 of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animation

@@ -116,6 +116,7 @@ timing comparison; compression efficiency parity is not established.
 | [Bicubic mixed-axis RGBA8§](../benchmarks/WARM-BICUBIC-MIXED16-ROWS.md) | 1,570.03 | 849.57 | 1.848 / 1.867 | 1,283,063 | Confirmed |
 | [Bicubic mixed-axis RGBA16§](../benchmarks/WARM-BICUBIC-MIXED16-ROWS.md) | 1,636.58 | 850.53 | 1.924 / 1.975 | 1,813,110 | Confirmed |
 | [Bicubic width reduction / height enlargement RGBA8§](../benchmarks/WARM-BICUBIC-CROSS8-ROWS.md) | 984.18 | 827.04 | 1.190 / 1.206 | 731,753 | Confirmed |
+| [Bicubic width reduction / height enlargement RGBA16§](../benchmarks/WARM-BICUBIC-CROSS16-ROWS.md) | 1,044.98 | 813.15 | 1.285 / 1.297 | 1,263,255 | Confirmed |
 | [Crop RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 2.34 | 2.27 | 1.033 / 1.039 | 96 | Confirmed |
 | [Crop RGBA16](../benchmarks/WARM-CROP-COPY.md) | 4.11 | 4.15 | 0.991 / 1.003 | 96 | Confirmed |
 | [Clone RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 9.82 | 7.19 | 1.366 / 1.390 | 96 | Confirmed |
@@ -187,6 +188,8 @@ confirms RGBA16 **1.924x / upper 1.975x**, cutting a 20.419x baseline by 90.6%,
 and RGBA8 **1.848x / upper 1.867x** with unchanged allocations.
 RGBA8 bicubic width reduction with height enlargement confirms **1.190x / upper
 1.206x**, cutting a 21.910x baseline by 94.6%.
+RGBA16 in that direction confirms **1.285x / upper 1.297x**, cutting a 23.838x
+baseline by 94.7%.
 PNG RGB8, gray8 and gray-alpha8
 encoding preserves exact samples but exceeds the 5% IDAT-size gate by differences
 of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animation
