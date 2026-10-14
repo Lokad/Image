@@ -562,3 +562,14 @@ rounding. One quiet horizontal regression screen passes at 1.512x before full
 both-platform qualification and the same actual package checks. Stop this pair;
 other single-axis directions/depths, tight budgets, larger supports and remaining
 required/current-source parity stay open.
+
+The [shared vertical identity-filter round](WARM-BICUBIC-VERTICAL16-IDENTITY.md)
+reduces a 10.099x RGBA16 gap by 85.7%, independently confirming 1.441x / upper
+1.480x at 913,737 B/op. Word admission alone stays above two and receives no
+twelve/full qualification. Copying decoded exact products removes the identity
+horizontal filter at both depths without changing intermediates, guards, work,
+cancellation or fallback. On the same immutable final build, byte vertical resize
+also confirms 1.331x / upper 1.345x, 761.11 µs / 648,992 B/op, improving its
+previous confirmed mean 31.3%. Both pass before one full both-platform/package
+qualification. Stop both pairs; other single-axis directions, larger supports,
+tight budgets and remaining material current-source parity stay open.

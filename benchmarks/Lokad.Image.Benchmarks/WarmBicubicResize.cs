@@ -7,7 +7,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmBicubicCase { Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8, Wide16, Horizontal8, Horizontal16, Down64x32_8, Down64x32_16, Vertical8 }
+public enum WarmBicubicCase { Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8, Wide16, Horizontal8, Horizontal16, Down64x32_8, Down64x32_16, Vertical8, Vertical16 }
 
 /// <summary>Complete bicubic resize with an explicitly adjusted FFmpeg scaler backend.</summary>
 [MemoryDiagnoser]
@@ -32,7 +32,8 @@ public class WarmBicubicResize
         "Down64x32_8" => [WarmBicubicCase.Down64x32_8],
         "Down64x32_16" => [WarmBicubicCase.Down64x32_16],
         "Vertical8" => [WarmBicubicCase.Vertical8],
-        _ => throw new ArgumentException("Choose one bicubic case: Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8, Wide16, Horizontal8, Horizontal16 , Down64x32_8 Down64x32_16 or Vertical8.")
+        "Vertical16" => [WarmBicubicCase.Vertical16],
+        _ => throw new ArgumentException("Choose one bicubic case: Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8, Wide16, Horizontal8, Horizontal16 , Down64x32_8 Down64x32_16 , Vertical8 or Vertical16.")
     };
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
@@ -45,16 +46,16 @@ public class WarmBicubicResize
     private double nativeRgbRmse, nativeAlphaRmse;
     private int nativeRgbMaximum, nativeAlphaMaximum;
     private bool Upscale => Case is WarmBicubicCase.Up8 or WarmBicubicCase.Up16;
-    private bool ExplicitGeometry => Upscale || Case is WarmBicubicCase.Mixed8 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 or WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 or WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 or WarmBicubicCase.Vertical8;
-    private int Width => Case==WarmBicubicCase.Vertical8 ? 513 : Case is WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 ? 64 : Case is WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 ? 128 : Case is WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 ? 256 : ExplicitGeometry ? 1027 : 256;
+    private bool ExplicitGeometry => Upscale || Case is WarmBicubicCase.Mixed8 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 or WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 or WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 or WarmBicubicCase.Vertical8 or WarmBicubicCase.Vertical16;
+    private int Width => Case is WarmBicubicCase.Vertical8 or WarmBicubicCase.Vertical16 ? 513 : Case is WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 ? 64 : Case is WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 ? 128 : Case is WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 ? 256 : ExplicitGeometry ? 1027 : 256;
     private int Height => Case is WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 ? 32 : Case is WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 ? 259 : Case is WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 ? 64 : Upscale || Case is WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 ? 519 : 129;
-    private int Depth => Case is WarmBicubicCase.Down16 or WarmBicubicCase.Up16 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide16 or WarmBicubicCase.Horizontal16 or WarmBicubicCase.Down64x32_16 ? 16 : 8;
+    private int Depth => Case is WarmBicubicCase.Down16 or WarmBicubicCase.Up16 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide16 or WarmBicubicCase.Horizontal16 or WarmBicubicCase.Down64x32_16 or WarmBicubicCase.Vertical16 ? 16 : 8;
 
     [GlobalSetup]
     public void Setup()
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Use the dedicated Linux VM.");
-        if (Case is not (WarmBicubicCase.Down8 or WarmBicubicCase.Down16 or WarmBicubicCase.Up8 or WarmBicubicCase.Up16 or WarmBicubicCase.Mixed8 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 or WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 or WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 or WarmBicubicCase.Vertical8)) throw new ArgumentOutOfRangeException(nameof(Case));
+        if (Case is not (WarmBicubicCase.Down8 or WarmBicubicCase.Down16 or WarmBicubicCase.Up8 or WarmBicubicCase.Up16 or WarmBicubicCase.Mixed8 or WarmBicubicCase.Mixed16 or WarmBicubicCase.Cross8 or WarmBicubicCase.Cross16 or WarmBicubicCase.Wide8 or WarmBicubicCase.Wide16 or WarmBicubicCase.Horizontal8 or WarmBicubicCase.Horizontal16 or WarmBicubicCase.Down64x32_8 or WarmBicubicCase.Down64x32_16 or WarmBicubicCase.Vertical8 or WarmBicubicCase.Vertical16)) throw new ArgumentOutOfRangeException(nameof(Case));
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -95,7 +96,7 @@ public class WarmBicubicResize
             File.WriteAllBytes(rationalPath, expected);
             if (Depth == 16 || ExplicitGeometry)
             {
-                var controls = Path.Combine(state.Root, "artifacts/warm-reference", Case == WarmBicubicCase.Vertical8 ? "bicubic-vertical8" : Case == WarmBicubicCase.Down64x32_16 ? "bicubic-down64x32-16" : Case == WarmBicubicCase.Down64x32_8 ? "bicubic-down64x32-8" : Case == WarmBicubicCase.Horizontal16 ? "bicubic-horizontal16" : Case == WarmBicubicCase.Horizontal8 ? "bicubic-horizontal8" : Case == WarmBicubicCase.Wide16 ? "bicubic-wide16" : Case == WarmBicubicCase.Wide8 ? "bicubic-wide8" : Case == WarmBicubicCase.Cross16 ? "bicubic-cross16" : Case == WarmBicubicCase.Cross8 ? "bicubic-cross8" : Case == WarmBicubicCase.Mixed16 ? "bicubic-mixed16" : Case == WarmBicubicCase.Mixed8 ? "bicubic-mixed8" : Upscale ? Depth == 16 ? "bicubic-up16" : "bicubic-up8" : "bicubic16");
+                var controls = Path.Combine(state.Root, "artifacts/warm-reference", Case == WarmBicubicCase.Vertical16 ? "bicubic-vertical16" : Case == WarmBicubicCase.Vertical8 ? "bicubic-vertical8" : Case == WarmBicubicCase.Down64x32_16 ? "bicubic-down64x32-16" : Case == WarmBicubicCase.Down64x32_8 ? "bicubic-down64x32-8" : Case == WarmBicubicCase.Horizontal16 ? "bicubic-horizontal16" : Case == WarmBicubicCase.Horizontal8 ? "bicubic-horizontal8" : Case == WarmBicubicCase.Wide16 ? "bicubic-wide16" : Case == WarmBicubicCase.Wide8 ? "bicubic-wide8" : Case == WarmBicubicCase.Cross16 ? "bicubic-cross16" : Case == WarmBicubicCase.Cross8 ? "bicubic-cross8" : Case == WarmBicubicCase.Mixed16 ? "bicubic-mixed16" : Case == WarmBicubicCase.Mixed8 ? "bicubic-mixed8" : Upscale ? Depth == 16 ? "bicubic-up16" : "bicubic-up8" : "bicubic16");
                 Directory.CreateDirectory(controls);
                 File.WriteAllBytes(Path.Combine(controls, Depth == 16 ? "rational.rgba64le" : "rational.rgba"), expected);
             }

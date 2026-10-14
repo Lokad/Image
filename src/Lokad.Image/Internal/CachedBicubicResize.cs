@@ -17,7 +17,7 @@ internal static class CachedBicubicResize
         var mixed=result.Width>source.Width && result.Height<source.Height
             || result.Width<source.Width && result.Height>source.Height;
         var horizontalDown=source.BitDepth is (8 or 16) && result.Width<source.Width && result.Height==source.Height;
-        var verticalDown=source.BitDepth==8 && result.Width==source.Width && result.Height<source.Height;
+        var verticalDown=source.BitDepth is (8 or 16) && result.Width==source.Width && result.Height<source.Height;
         if (source.BitDepth is not (8 or 16) || !upsample && !mixed && !horizontalDown && !verticalDown && (result.Width>=source.Width || result.Height>=source.Height)
             || result.Width < 2 || tapsX > 16 || tapsY > 16 || !Avx512F.IsSupported || !Avx512DQ.IsSupported || !Avx2.IsSupported || !Sse41.IsSupported)
             return false;
@@ -102,6 +102,19 @@ internal static class CachedBicubicResize
                         MemoryMarshal.Write(MemoryMarshal.AsBytes(decoded.Slice(sx*4,4)),in values);
                     }
                     var cached=storage.AsSpan(rows[t],width*4);
+                    if(verticalDown)
+                    {
+                        // Unchanged width has integer centers and horizontal
+                        // weights 0,0,1,0,0. The decoded products are exact;
+                        // copying them preserves every unrounded intermediate.
+                        for(var offset=0;offset<decoded.Length;offset+=8)
+                        {
+                            context.Cancellation.ThrowIfCancellationRequested();
+                            var length=Math.Min(8,decoded.Length-offset);
+                            decoded.Slice(offset,length).CopyTo(cached.Slice(offset,length));
+                        }
+                        continue;
+                    }
                     var x=0;
                     for(;x+1<width;x+=2)
                     {

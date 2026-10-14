@@ -1,5 +1,11 @@
 # Warm RGBA8 bicubic height reduction with unchanged width
 
+The later [shared identity-filter round](WARM-BICUBIC-VERTICAL16-IDENTITY.md)
+supersedes this timing with **1.331× / upper 1.345×**, **761.11 µs / 648,992 B/op**
+on the same final build as the word confirmation. It cuts this confirmed mean
+31.3% while preserving every original byte. The original admission evidence below
+is retained.
+
 Independent quiet confirmation measures **1.941× FFmpeg's scaler backend**,
 conservative upper **1.956×**, at **1,107.44 µs** and **648,991 B/op**. All twelve
 actuals are retained, eleven selected, and both guards pass. The 5,705.04-µs /
