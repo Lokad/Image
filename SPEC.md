@@ -237,6 +237,15 @@ Clamped-edge order, full unsigned products, absolute coordinates, work,
 cancellation and independent owners remain. No heap/full-support/output cache
 is introduced; other directions, supports, heights, hardware and smaller budgets
 retain prior paths.
+RGBA8 may use a separate packed-coefficient streaming fallback for the same
+above-304/up-to-544 support and eight-row bounds. Its 3,776-byte fixed arrays,
+six-byte coefficients, measured discarded error and L1-scaled arithmetic bound
+match the word strategy, with byte-scaled quotient guards and exact byte products.
+Uncertainty recomputes original full coefficients and tap order; tiny alpha
+unwinds before exact scratch. Certified rational halves retain original rounding,
+with complete work, cancellation, source and independent owner contracts.
+No heap/full-support/output cache is added; other geometry, hardware and budgets
+retain prior paths.
 RGBA16 enlargement on both axes may use a separate eight-column/five-row strip
 cache when the full row cache cannot be admitted. Its optional 4-KiB admission
 covers 2,416 bytes of fixed arrays. A bounded source window is decoded once per
