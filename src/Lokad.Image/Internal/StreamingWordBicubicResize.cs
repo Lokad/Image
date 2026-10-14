@@ -8,7 +8,7 @@ namespace Lokad.Image.Internal;
 /// <summary>Streaming source rows feed a bounded set of output accumulators.</summary>
 internal static class StreamingWordBicubicResize
 {
-    private const int Capacity = 256;
+    private const int Capacity = 304;
     private const int MaximumOutputRows = 16;
     private const int WorkspaceBytes = 4096;
 
@@ -23,7 +23,7 @@ internal static class StreamingWordBicubicResize
         context.Reserve(WorkspaceBytes);
         try
         {
-            // Fixed arrays occupy 3,456 bytes. Only the last horizontal result
+            // Fixed arrays occupy 3,936 bytes. Only the last horizontal result
             // is retained, including repeated clamped edge rows.
             Span<double> weights = stackalloc double[Capacity];
             Span<ushort> offsets = stackalloc ushort[Capacity];
@@ -131,8 +131,8 @@ internal static class StreamingWordBicubicResize
 
     private static bool TryWrite(Vector256<double> sum, double normalizer, Span<byte> output)
     {
-        // 2^-40 * 256^2 covers the complete admitted support in both orders.
-        const double unitError = 256d * 256 / (1L << 40);
+        // 2^-40 * Capacity^2 covers the complete admitted support in both orders.
+        const double unitError = (double)Capacity * Capacity / (1L << 40);
         const double maximum = 65535d;
         const double alphaError = unitError * maximum;
         var alpha = sum.GetElement(3);

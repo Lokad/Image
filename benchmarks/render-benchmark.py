@@ -176,6 +176,7 @@ def render():
         row('Bicubic RGBA8, width up / height down / input+output+4 KiB limit§', 'warm-bicubictightmixed8-vertical-first-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-MIXED8.md', True),
         row('Bicubic RGBA16, width down / height up / input+output+4 KiB limit§', 'warm-bicubictightcross16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-CROSS16.md', True),
         row('Bicubic RGBA8, width down / height up / input+output+4 KiB limit§', 'warm-bicubictightcross8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-CROSS8.md', True),
+        row('Bicubic RGBA16, 8×4 / support beyond 256 / input+output+4 KiB limit§', 'warm-bicubictight8x4word-stream-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-8X4-RGBA16.md', True),
         row('Bicubic height reduction, unchanged width RGBA8§', 'warm-bicubicvertical16-rows-evidence.json', ['byteRegressionControl', 'observations', -1], 'WARM-BICUBIC-VERTICAL16-IDENTITY.md', True),
         row('Bicubic height reduction, unchanged width RGBA16§', 'warm-bicubicvertical16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-VERTICAL16-IDENTITY.md', True),
         row('Bicubic height enlargement, unchanged width RGBA8§', 'warm-bicubicverticalup8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-VERTICAL-UP8-ROWS.md', True),
@@ -260,6 +261,7 @@ confirmed; compression efficiency parity is not established.
 § Bicubic RGBA8/16 uses **zimg, FFmpeg's zscale backend**, with timed four-pixel
 clamped edge padding (4.697% additional input area); wider-support RGBA8/16 uses
 eight pixels (9.489%); the 64×32 byte/word cases use sixteen (19.364%);
+the 8×4 word case uses 128 pixels (198.069%);
 the 32×16 byte/word cases use thirty-two (40.269%); the 16×8 byte/word cases use
 sixty-four (86.703%). All include complete source/output
 packing, filtering and independent output allocation/release. The explicit
