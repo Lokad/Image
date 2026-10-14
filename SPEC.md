@@ -70,6 +70,10 @@ intermediates in sixteen operation-local rows, with up to sixteen taps per axis.
 RGBA8/16 width reduction with unchanged height may use the same bounded rows;
 its conservative guards preserve original binary64 pixels, including exact-half
 rounding, with the same workspace admission and direct fallback.
+RGBA8 width enlargement with unchanged height may also reuse these sixteen
+rows, preserving the existing arithmetic, guards, workspace and direct fallback.
+Interior adjacent four-tap outputs may reuse five source vectors instead of eight,
+retaining each output's original tap and multiply/add order.
 RGBA8/16 height reduction with unchanged width may use these same bounded rows.
 Its integer horizontal centers have weights 0,0,1,0,0; copying decoded exact
 products into the cache preserves every unrounded intermediate. Cancellation

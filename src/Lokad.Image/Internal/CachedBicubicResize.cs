@@ -18,7 +18,8 @@ internal static class CachedBicubicResize
             || result.Width<source.Width && result.Height>source.Height;
         var horizontalDown=source.BitDepth is (8 or 16) && result.Width<source.Width && result.Height==source.Height;
         var verticalDown=source.BitDepth is (8 or 16) && result.Width==source.Width && result.Height<source.Height;
-        if (source.BitDepth is not (8 or 16) || !upsample && !mixed && !horizontalDown && !verticalDown && (result.Width>=source.Width || result.Height>=source.Height)
+        var horizontalUp=source.BitDepth==8 && result.Width>source.Width && result.Height==source.Height;
+        if (source.BitDepth is not (8 or 16) || !upsample && !mixed && !horizontalDown && !verticalDown && !horizontalUp && (result.Width>=source.Width || result.Height>=source.Height)
             || result.Width < 2 || tapsX > 16 || tapsY > 16 || !Avx512F.IsSupported || !Avx512DQ.IsSupported || !Avx2.IsSupported || !Sse41.IsSupported)
             return false;
         var width=result.Width;
@@ -123,7 +124,7 @@ internal static class CachedBicubicResize
                         var sum1=Vector256<double>.Zero;
                         var base0=x*16;var base1=(x+1)*16;
                         var first0=offsets[base0];var first1=offsets[base1];
-                        if(mixed && counts[x]==4 && counts[x+1]==4
+                        if((mixed || horizontalUp) && counts[x]==4 && counts[x+1]==4
                             && first1==first0+4 && first1<=decoded.Length-16)
                         {
                             // Interior adjacent four-tap outputs share three

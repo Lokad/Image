@@ -573,3 +573,13 @@ also confirms 1.331x / upper 1.345x, 761.11 µs / 648,992 B/op, improving its
 previous confirmed mean 31.3%. Both pass before one full both-platform/package
 qualification. Stop both pairs; other single-axis directions, larger supports,
 tight budgets and remaining material current-source parity stay open.
+
+The [RGBA8 horizontal-only enlargement round](WARM-BICUBIC-HORIZONTAL-UP8-ROWS.md)
+reduces a 2.490x gap by 30.5%, independently confirming 1.727x / upper 1.742x at
+1,930,602 B/op. Admission alone has an independent upper above two; reusing five
+source vectors instead of eight for adjacent four-tap outputs supplies the accepted
+gain. Original tap order, guards and every rational pixel remain exact. One quiet
+horizontal-reduction regression screen passes before full both-platform tests
+and the same actual package qualification. Three pre-run guard refusals remain
+unscored. Stop this pair; other single-axis directions/depths, larger supports,
+tight budgets and remaining material required/current-source parity stay open.
