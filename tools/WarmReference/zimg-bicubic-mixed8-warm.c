@@ -31,7 +31,24 @@ typedef uint16_t Sample;
 #error Unsupported sample depth
 #endif
 
-enum { WIDTH=513, HEIGHT=259, OUTPUT_WIDTH=1027, OUTPUT_HEIGHT=129, HALO=4,
+#ifndef LOKAD_IMAGE_REVERSE_MIXED
+#define LOKAD_IMAGE_REVERSE_MIXED 0
+#endif
+#if LOKAD_IMAGE_REVERSE_MIXED
+#undef WORKER_NAME
+#define WORKER_NAME "zimg-bicubic-cross8-warm"
+#define TARGET_WIDTH 256
+#define TARGET_HEIGHT 519
+#define WIDTH_ARG "256"
+#define HEIGHT_ARG "519"
+#else
+#define TARGET_WIDTH 1027
+#define TARGET_HEIGHT 129
+#define WIDTH_ARG "1027"
+#define HEIGHT_ARG "129"
+#endif
+
+enum { WIDTH=513, HEIGHT=259, OUTPUT_WIDTH=TARGET_WIDTH, OUTPUT_HEIGHT=TARGET_HEIGHT, HALO=4,
        PADDED_WIDTH=WIDTH+2*HALO, PADDED_HEIGHT=HEIGHT+2*HALO,
        SAMPLE_BYTES=sizeof(Sample),
        INPUT_STRIDE=(PADDED_WIDTH*SAMPLE_BYTES+63)&~63, OUTPUT_STRIDE=(OUTPUT_WIDTH*4+63)&~63,
@@ -139,8 +156,8 @@ static Difference check_and_write(Work *w,const char *path) {
 }
 int main(int argc,char **argv) {
     if((argc!=10&&argc!=11)||strcmp(argv[1],"bicubic-resize")||strcmp(argv[3],"513")
-        ||strcmp(argv[4],"259")||strcmp(argv[5],DEPTH_ARG)||strcmp(argv[8],"1027")||strcmp(argv[9],"129")||(argc==11&&strcmp(argv[10],"--scalar")))
-        fail("Usage: " WORKER_NAME " bicubic-resize INPUT_RAW 513 259 " DEPTH_ARG " OUTPUT_RAW EXPECTED_RAW 1027 129 [--scalar]");
+        ||strcmp(argv[4],"259")||strcmp(argv[5],DEPTH_ARG)||strcmp(argv[8],WIDTH_ARG)||strcmp(argv[9],HEIGHT_ARG)||(argc==11&&strcmp(argv[10],"--scalar")))
+        fail("Usage: " WORKER_NAME " bicubic-resize INPUT_RAW 513 259 " DEPTH_ARG " OUTPUT_RAW EXPECTED_RAW " WIDTH_ARG " " HEIGHT_ARG " [--scalar]");
     Work w={0};w.cpu=affinity_cpu();w.scalar=argc==11;
     w.raw=read_exact(argv[2],INPUT_BYTES);w.backup=malloc(INPUT_BYTES);if(!w.backup)fail("Backup allocation failed.");
     memcpy(w.backup,w.raw,INPUT_BYTES);w.expected=read_exact(argv[7],OUTPUT_BYTES);
@@ -164,7 +181,7 @@ int main(int argc,char **argv) {
     uint8_t *first=apply(&w),*second=apply(&w);verify(&w,first);verify(&w,second);
     if(first==second||memcmp(first,second,OUTPUT_BYTES))fail("Outputs alias or differ.");
     first[0]^=255;verify(&w,second);free(first);free(second);check_and_write(&w,argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"bicubic-resize\",\"width\":513,\"height\":259,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"filterThreads\":1,\"threadType\":0,\"outputWidth\":1027,\"outputHeight\":129,\"independentLiveOutputs\":true,\"initialCompletedOperations\":%" PRIu64 ",\"inputStride\":%d,\"backend\":\"zimg (FFmpeg zscale backend)\",\"scalar\":%s,\"haloPixels\":4,\"haloAndPackingTimed\":true,\"outputAllocationAndRepackingTimed\":true,\"alphaTolerance1\":true,\"premultipliedFloatOutput\":true,\"unpremultiplicationAndQuantizationTimed\":true,\"scratchBytes\":%zu,\"nativeOutputPixelAllocationBytes\":%d}\n",LOKAD_IMAGE_SAMPLE_DEPTH,w.cpu,w.completed,INPUT_PIXEL_STRIDE,w.scalar?"true":"false",w.scratch_bytes,OUTPUT_STRIDE*OUTPUT_HEIGHT*4+OUTPUT_BYTES);fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"bicubic-resize\",\"width\":513,\"height\":259,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"filterThreads\":1,\"threadType\":0,\"outputWidth\":%d,\"outputHeight\":%d,\"independentLiveOutputs\":true,\"initialCompletedOperations\":%" PRIu64 ",\"inputStride\":%d,\"backend\":\"zimg (FFmpeg zscale backend)\",\"scalar\":%s,\"haloPixels\":4,\"haloAndPackingTimed\":true,\"outputAllocationAndRepackingTimed\":true,\"alphaTolerance1\":true,\"premultipliedFloatOutput\":true,\"unpremultiplicationAndQuantizationTimed\":true,\"scratchBytes\":%zu,\"nativeOutputPixelAllocationBytes\":%d}\n",LOKAD_IMAGE_SAMPLE_DEPTH,w.cpu,OUTPUT_WIDTH,OUTPUT_HEIGHT,w.completed,INPUT_PIXEL_STRIDE,w.scalar?"true":"false",w.scratch_bytes,OUTPUT_STRIDE*OUTPUT_HEIGHT*4+OUTPUT_BYTES);fflush(stdout);
     char line[128];
     while(fgets(line,sizeof(line),stdin)) {
         if(!strcmp(line,"quit\n"))break;

@@ -45,13 +45,16 @@ public sealed class CachedBicubicResizeTests
     [InlineData(16,67,27,135,13)]
     [InlineData(8,513,19,1027,9)]
     [InlineData(16,513,19,1027,9)]
+    [InlineData(8,19,17,9,35)]
+    [InlineData(8,67,13,33,27)]
+    [InlineData(8,513,9,255,19)]
     public void SeparableRowsMatchOriginalOrderAtCacheAdmissionBoundary(int depth,int sourceWidth,int sourceHeight,int width,int height)
     {
         using var source=OriginalPixels.Buffer(sourceWidth,sourceHeight,depth);
         var input=OriginalPixels.Bytes(source);
         var baselinePeak=input.Length+(long)width*height*4*(depth/8)+4096;
         var workspace=716L*width+32L*sourceWidth+128;
-        if(width>sourceWidth && height<sourceHeight)workspace+=(width&1)*512;
+        if(width>sourceWidth && height<sourceHeight || depth==8 && width<sourceWidth && height>sourceHeight)workspace+=(width&1)*512;
         using var direct=ImageTransforms.Resize(source,width,height,ResizeFilter.Bicubic,
             new ImageLimits {MaxWorkingBytes=baselinePeak});
         var expected=OriginalPixels.Bytes(direct);
@@ -76,15 +79,17 @@ public sealed class CachedBicubicResizeTests
     }
 
     [Theory]
-    [InlineData(8,false,false)]
-    [InlineData(16,false,false)]
-    [InlineData(8,true,false)]
-    [InlineData(16,true,false)]
-    [InlineData(8,false,true)]
-    [InlineData(8,true,true)]
-    [InlineData(16,false,true)]
-    [InlineData(16,true,true)]
-    public void NegativeLobesAndTinyAlphaRetainOriginalQuantization(int depth,bool transparent,bool mixed)
+    [InlineData(8,false,0)]
+    [InlineData(16,false,0)]
+    [InlineData(8,true,0)]
+    [InlineData(16,true,0)]
+    [InlineData(8,false,1)]
+    [InlineData(8,true,1)]
+    [InlineData(16,false,1)]
+    [InlineData(16,true,1)]
+    [InlineData(8,false,2)]
+    [InlineData(8,true,2)]
+    public void NegativeLobesAndTinyAlphaRetainOriginalQuantization(int depth,bool transparent,int mixed)
     {
         using var source=ImageBuffer.Create(17,11,depth);
         for(var y=0;y<source.Height;y++)
@@ -108,10 +113,10 @@ public sealed class CachedBicubicResizeTests
                 }
             }
         }
-        var width=mixed?35:7;
-        using var expected=ImageTransforms.Resize(source,width,5,ResizeFilter.Bicubic,
-            new ImageLimits {MaxWorkingBytes=(long)source.Stride*source.Height+width*5*4*(depth/8)+4096});
-        using var actual=ImageTransforms.Resize(source,width,5,ResizeFilter.Bicubic);
+        var width=mixed==1?35:7;var height=mixed==2?23:5;
+        using var expected=ImageTransforms.Resize(source,width,height,ResizeFilter.Bicubic,
+            new ImageLimits {MaxWorkingBytes=(long)source.Stride*source.Height+width*height*4*(depth/8)+4096});
+        using var actual=ImageTransforms.Resize(source,width,height,ResizeFilter.Bicubic);
         Assert.Equal(OriginalPixels.Bytes(expected),OriginalPixels.Bytes(actual));
     }
 }

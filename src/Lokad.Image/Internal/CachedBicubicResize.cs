@@ -12,7 +12,8 @@ internal static class CachedBicubicResize
         long tapsX, long tapsY, long rowWork, OperationContext context)
     {
         var upsample=result.Width>source.Width && result.Height>source.Height;
-        var mixed= result.Width>source.Width && result.Height<source.Height;
+        var mixed=result.Width>source.Width && result.Height<source.Height
+            || source.BitDepth==8 && result.Width<source.Width && result.Height>source.Height;
         if (source.BitDepth is not (8 or 16) || !upsample && !mixed && (result.Width>=source.Width || result.Height>=source.Height)
             || result.Width < 2 || tapsX > 16 || tapsY > 16 || !Avx512F.IsSupported || !Avx512DQ.IsSupported || !Avx2.IsSupported || !Sse41.IsSupported)
             return false;
