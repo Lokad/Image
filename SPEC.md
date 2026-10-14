@@ -221,6 +221,22 @@ guards use the same `2^-40*304^2` budget. Original tap order and separate clampe
 edge contributions, guarded ordinary replay, complete tiny-alpha unwind, work,
 cancellation and owner contracts remain. Existing word and smaller-support byte
 kernels stay separate and unchanged; no heap workspace or output cache is added.
+RGBA16 reductions beyond 304 and at most 544 taps per axis, with at most eight
+output rows, may use a separate packed-coefficient streaming fallback. Fixed
+arrays occupy 3,776 bytes within a 4-KiB admission. Each original binary64
+horizontal coefficient keeps its sign, exponent and 36 fraction bits in six
+bytes; the discarded absolute error is measured before filtering. Products and
+accumulators remain unrounded binary64. With horizontal/vertical coefficient
+L1 sums `Lx/Ly` and measured horizontal loss `Qx`, the absolute unit bound is
+`2^-40*544^2*max(1,Lx*Ly/1024) + 2*Qx*Ly`. It conservatively covers original
+and separable arithmetic plus coefficient storage loss. Quotient and quarter-
+margin guards force original full-coefficient tap-order replay whenever
+rounding is uncertain; tiny alpha unwinds before exact scratch. Returned pixels
+retain the contract, including independently certified rational-half behavior.
+Clamped-edge order, full unsigned products, absolute coordinates, work,
+cancellation and independent owners remain. No heap/full-support/output cache
+is introduced; other directions, supports, heights, hardware and smaller budgets
+retain prior paths.
 RGBA16 enlargement on both axes may use a separate eight-column/five-row strip
 cache when the full row cache cannot be admitted. Its optional 4-KiB admission
 covers 2,416 bytes of fixed arrays. A bounded source window is decoded once per
