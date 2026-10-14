@@ -312,7 +312,9 @@ or output cache is added; other directions/supports/hardware and smaller budgets
 retain prior paths.
 RGBA8 may prefer a separate vertical-first specialization for the same
 width-growth/height-reduction supports and 2,016-byte fixed arrays in 4-KiB
-admission. Exact byte products (at most 65,025) widen to unrounded binary64;
+admission. It may also preserve width when the existing vertical row cache is
+unavailable, retaining that faster cache when feasible. Exact byte products
+(at most 65,025) widen to unrounded binary64;
 the same `2^-40*16^2` bounds permit alpha margin 1e-6 and color margin
 `1e-4 / lower-power-of-two(alphaSum)`, retaining normalizer/alpha/quarter-margin
 guards and original-order replay for uncertainty. Tiny alpha is marked only in

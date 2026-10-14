@@ -115,7 +115,7 @@ internal static class WarmBenchmarks
                                 && value.GetProperty("managedQualifiedOriginalPixelsExact").GetBoolean()
                                 && value.GetProperty("certifiedExactRationalAlphaHalves").GetInt32()==6
                                 && value.GetProperty("outputSha256").GetString()=="a5d2e75dbc30006f845c8a69061e096ded94ed06248e50350ec2c18456606a20"
-                            || caseId=="Vertical8" && depth==8
+                            || (caseId=="Vertical8" || caseId=="TightVertical8") && depth==8
                                 && value.GetProperty("managedQualifiedOriginalPixelsExact").GetBoolean()
                                 && value.GetProperty("certifiedExactRationalAlphaHalves").GetInt32()==25
                                 && value.GetProperty("outputSha256").GetString()=="56ff0d8276c6427bb3ad49e8d3af6ad26cfb99b27db697580471ac273fcd7697"
