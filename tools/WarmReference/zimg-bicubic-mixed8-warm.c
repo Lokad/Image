@@ -75,7 +75,14 @@ typedef uint16_t Sample;
 #define HEIGHT_ARG "259"
 #elif LOKAD_IMAGE_WIDE_DOWNSAMPLE
 #undef WORKER_NAME
-#if LOKAD_IMAGE_WIDE_DOWNSAMPLE == 8
+#if LOKAD_IMAGE_WIDE_DOWNSAMPLE == 9
+#define WORKER_NAME "zimg-bicubic-down4x9-" DEPTH_ARG "-warm"
+#define TARGET_WIDTH 4
+#define TARGET_HEIGHT 9
+#define WIDTH_ARG "4"
+#define HEIGHT_ARG "9"
+#define TARGET_HALO 256
+#elif LOKAD_IMAGE_WIDE_DOWNSAMPLE == 8
 #define WORKER_NAME "zimg-bicubic-down2x9-" DEPTH_ARG "-warm"
 #define TARGET_WIDTH 2
 #define TARGET_HEIGHT 9

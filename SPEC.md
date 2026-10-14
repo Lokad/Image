@@ -221,8 +221,10 @@ guards use the same `2^-40*304^2` budget. Original tap order and separate clampe
 edge contributions, guarded ordinary replay, complete tiny-alpha unwind, work,
 cancellation and owner contracts remain. Existing word and smaller-support byte
 kernels stay separate and unchanged; no heap workspace or output cache is added.
-RGBA16 reductions beyond 304 and at most 544 taps per axis, with at most eight
-output rows, may use a separate packed-coefficient streaming fallback. Fixed
+RGBA16 reductions beyond 304 and at most 544 taps per axis may use a separate
+packed-coefficient streaming fallback. It handles any reduction height in blocks
+of at most eight output rows, preserving global output coordinates and each
+output's complete original tap order. The same bounded arrays are reused. Fixed
 arrays occupy 3,776 bytes within a 4-KiB admission. Each original binary64
 horizontal coefficient keeps its sign, exponent and 36 fraction bits in six
 bytes; the discarded absolute error is measured before filtering. Products and
