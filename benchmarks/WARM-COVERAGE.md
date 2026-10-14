@@ -14,7 +14,7 @@ round, at most three, with correctness established before timing.
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x and 4:2:2 confirmed 1.821x / upper 1.862x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x and 4:2:0 confirmed 1.888x / upper 1.931x; adaptive 4:2:0 RGBA8 quiet repeat 1.977x / upper 2.014x, open | RGBA8 4:2:0 upper bound; grayscale, constrained fallback and other material normalization layouts |
 | WebP | VP8 with alpha decode/encode; opaque VP8 decode quiet repeat 1.983x / upper 2.004x, open; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Opaque VP8 upper bound; other material opaque/alpha alternatives and distinct public boundaries |
-| Resize | Nearest/bilinear downsample and enlargement at both depths; bicubic downsample, enlargement on both axes, both mixed-axis directions and 128×64 / 64×32 wider supports at both depths; horizontal reduction/enlargement and vertical reduction at both depths; vertical enlargement, 32×16 and 16×8 adaptive support at both depths; RGBA8/16 256×129 and 128×64, plus RGBA8 64×32 with input+output+4 KiB limit confirmed | Word tight-memory timing beyond twenty taps, larger/unmatched supports, other tight-memory supports/directions and other materially distinct shapes |
+| Resize | Nearest/bilinear downsample and enlargement at both depths; bicubic downsample, enlargement on both axes, both mixed-axis directions and 128×64 / 64×32 wider supports at both depths; horizontal reduction/enlargement and vertical reduction at both depths; vertical enlargement, 32×16 and 16×8 adaptive support at both depths; RGBA8/16 256×129, 128×64, 64×32, 32×16 and 16×8 with input+output+4 KiB limit confirmed | Larger/unmatched supports, other tight-memory directions and other materially distinct shapes |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes | Retained live output owners versus released-storage reuse |
 | Public boundaries | Resident encoded span to owned output; complete single operations | Fresh Stream decoding and decode/orient/crop/fit compositions |
 
@@ -23,6 +23,15 @@ resize primitives after small geometry/metadata work. They need correctness
 controls and one relevant composed boundary, not a duplicate matrix of timings.
 Fresh Stream and retained-owner boundaries remain distinct from the reported
 resident-span/released-storage results.
+
+Tight-memory reduction is now confirmed at both depths through the existing
+16×8 workload. The [word streaming round](WARM-BICUBIC-TIGHT-16X8-RGBA16.md)
+confirms 0.964x / upper 0.984x at 1,145 B/op, and the
+[byte streaming round](WARM-BICUBIC-TIGHT-16X8-RGBA8.md) confirms 1.084x /
+upper 1.103x at 633 B/op. Both preserve exact pixels within the 4-KiB optional
+workspace, with unchanged smaller-support regression means checked before
+full qualification. Stop these fixed pairs. Other tight-memory directions,
+public boundaries and final current-source coverage remain open.
 
 The [tight-memory RGBA8 bicubic round](WARM-BICUBIC-TIGHT8-STRIPS.md) reduces a
 20.990x gap by 91.1%, independently confirming 1.878x / upper 1.895x at
