@@ -3,14 +3,25 @@ using System.Runtime.CompilerServices;
 
 namespace Lokad.Image.Internal;
 
-// Independently written framing walk, not an inflater. RFC 1950 section 2.2 and
+// Independently written framing walk. RFC 1950 section 2.2 and
 // RFC 1951 sections 3.1 and 3.2 define the bits, canonical trees and numeric ranges.
 // This establishes BFINAL, the exact checksum position and the bounded output
-// count before the BCL inflater runs. It never materializes decompressed bytes.
+// count before raster processing. An optional private output span materializes
+// the same symbols without a second Deflate walk; the original validator remains.
 internal static class ZlibFraming
 {
     public static int Validate(ReadOnlySpan<byte> data, long expectedBytes, OperationContext context)
+        => Walk(data, expectedBytes, context, default, out _);
+
+    public static int ValidateAndInflate(ReadOnlySpan<byte> data, Span<byte> destination,
+        OperationContext context, out bool completeTrees)
+        => Walk(data, destination.Length, context, destination, out completeTrees);
+
+    private static int Walk(ReadOnlySpan<byte> data, long expectedBytes, OperationContext context,
+        Span<byte> destination, out bool completeTrees)
     {
+        completeTrees = true;
+        var materialize = !destination.IsEmpty;
         if (data.Length < 6 || (data[0] & 15) != 8 || data[0] >> 4 > 7
             || ((data[0] << 8) + data[1]) % 31 != 0 || (data[1] & 32) != 0)
             throw new ImageDataException("Invalid PNG zlib header.");
@@ -33,7 +44,10 @@ internal static class ZlibFraming
                     reader.Align(); var length = reader.Read(16); var complement = reader.Read(16);
                     if ((length ^ complement) != 65535) throw new ImageDataException("Invalid PNG Deflate stored length.");
                     if (length > expectedBytes - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
-                    reader.SkipBytes(length); context.Work(length); output += length; continue;
+                    var start = reader.Position;
+                    reader.SkipBytes(length); context.Work(length);
+                    if (materialize) data.Slice(start, length).CopyTo(destination.Slice((int)output, length));
+                    output += length; continue;
                 }
                 if (type == 3) throw new ImageDataException("Invalid PNG Deflate block type.");
                 int literalCount, distanceCount;
@@ -51,6 +65,7 @@ internal static class ZlibFraming
                     ReadOnlySpan<int> order = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
                     for (var i = 0; i < codeCount; i++) codeLengths[order[i]] = reader.Read(3);
                     var codes = new Huffman(codeLengths, counts[..16], symbols[..19], context);
+                    completeTrees &= codes.Complete;
                     var position = 0; var total = literalCount + distanceCount;
                     while (position < total)
                     {
@@ -69,6 +84,10 @@ internal static class ZlibFraming
                 if (lengths[256] == 0) throw new ImageDataException("PNG Deflate block has no end code.");
                 var literals = new Huffman(lengths[..literalCount], counts.Slice(16, 16), symbols.Slice(19, 288), context);
                 var distances = new Huffman(lengths.Slice(literalCount, distanceCount), counts.Slice(32, 16), symbols.Slice(307, 32), context);
+                // Only complete trees certify the optional materialization path.
+                // Single/empty/incomplete alphabets retain BCL acceptance behavior.
+                completeTrees &= literals.Complete && distances.Complete;
+                materialize &= completeTrees;
                 BuildLiteralLookup(literals, literalLookup, context); BuildDistanceLookup(distances, distanceLookup, context);
                 // Only reader bit charges occur in this region. A noncancelable
                 // operation can check those exact charges locally, then publish
@@ -78,10 +97,12 @@ internal static class ZlibFraming
                 {
                     while (true)
                     {
-                        output += reader.ReadLiteralRun(literalLookup, expectedBytes - output);
+                        output += materialize
+                            ? reader.CopyLiteralRun(literalLookup, destination[(int)output..])
+                            : reader.ReadLiteralRun(literalLookup, expectedBytes - output);
                         var symbol = DecodeLiteral(ref reader, literals, literalLookup);
                         if (symbol == 256) break;
-                        int length;
+                        int length, distance = 0;
                         if (symbol < 256) length = 1;
                         else
                         {
@@ -95,7 +116,7 @@ internal static class ZlibFraming
                             }
                             var distanceSymbol = DecodeDistance(ref reader, distances, distanceLookup);
                             if (distanceSymbol > 29) throw new ImageDataException("Invalid PNG Deflate distance code.");
-                            var distance = distanceSymbol + 1;
+                            distance = distanceSymbol + 1;
                             if (distanceSymbol >= 4)
                             {
                                 var extra = distanceSymbol / 2 - 1;
@@ -104,6 +125,25 @@ internal static class ZlibFraming
                             if (distance > output || distance > window) throw new ImageDataException("PNG Deflate distance exceeds history or window.");
                         }
                         if (length > expectedBytes - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
+                        if (materialize)
+                        {
+                            var start = (int)output;
+                            if (symbol < 256) destination[start] = (byte)symbol;
+                            else if (distance == 1) destination.Slice(start, length).Fill(destination[start - 1]);
+                            else
+                            {
+                                // RFC 1951 history copies may overlap. First copy
+                                // available history, then double the valid prefix.
+                                var copied = Math.Min(length, distance);
+                                destination.Slice(start - distance, copied).CopyTo(destination.Slice(start, copied));
+                                while (copied < length)
+                                {
+                                    var count = Math.Min(copied, length - copied);
+                                    destination.Slice(start, count).CopyTo(destination.Slice(start + copied, count));
+                                    copied += count;
+                                }
+                            }
+                        }
                         output += length;
                     }
                 }
@@ -163,6 +203,28 @@ internal static class ZlibFraming
                 // and a tight atomic work charge to the original dispatcher.
                 if (length == 0 || entry >> 4 >= 256 || length > budget) break;
                 cached >>= length; bits -= length; budget -= length; count++;
+            }
+            buffer = cached; available = bits; position = offset; remainingWork = budget;
+            return count;
+        }
+
+        public int CopyLiteralRun(scoped ReadOnlySpan<ushort> lookup, scoped Span<byte> destination)
+        {
+            if (remainingWork < 0 || destination.IsEmpty) return 0;
+            var cached = buffer; var bits = available; var offset = position;
+            var budget = remainingWork; var count = 0;
+            while (count < destination.Length)
+            {
+                if (bits < 9)
+                {
+                    if (data.Length - offset < 4) break;
+                    cached |= (ulong)BinaryPrimitives.ReadUInt32LittleEndian(data.Slice(offset, 4)) << bits;
+                    offset += 4; bits += 32;
+                }
+                var entry = lookup[(int)(cached & 511)]; var length = entry & 15;
+                if (length == 0 || entry >> 4 >= 256 || length > budget) break;
+                destination[count++] = (byte)(entry >> 4);
+                cached >>= length; bits -= length; budget -= length;
             }
             buffer = cached; available = bits; position = offset; remainingWork = budget;
             return count;
@@ -233,6 +295,7 @@ internal static class ZlibFraming
         public readonly int Maximum;
         public readonly int FirstLongCode;
         public readonly int FirstLongSymbol;
+        public readonly bool Complete;
 
         public Huffman(ReadOnlySpan<int> lengths, Span<int> counts, Span<int> symbols, OperationContext context)
         {
@@ -247,6 +310,7 @@ internal static class ZlibFraming
                 // The next canonical depth starts at twice that position.
                 if (length == 9) FirstLongCode = 1024 - 2 * space;
             }
+            Complete = space == 0;
             // Incomplete trees are usable when every actual symbol has a code;
             // any unassigned path fails in Decode. Empty distances are legal for
             // literal-only dynamic blocks, and cannot decode a match.

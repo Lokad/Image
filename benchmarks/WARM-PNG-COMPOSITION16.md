@@ -1,6 +1,9 @@
 # RGBA16 PNG Stream, orientation, crop and fit
 
-This complete warm public composition remains **open**: the independent repeat
+The baseline below is superseded by [fused framing/inflation](WARM-PNG-FUSED-INFLATION.md),
+which confirms 1.216× / upper 1.231× with the same workload and exact pixels.
+
+At the baseline source this complete warm public composition remains **open**: the independent repeat
 measures **1.993× FFmpeg / conservative upper 2.022×**, at **5,879.77 µs** and
 **4,468,718 B/op**. All twelve actuals and both native brackets remain represented;
 every versioned quiet guard passes. A mean below two does not close the case.

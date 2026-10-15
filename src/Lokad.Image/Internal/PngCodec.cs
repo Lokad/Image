@@ -12,6 +12,7 @@ internal static class PngCodec
     // Separate from released pixels: a compressed input remains leased until
     // the inflater and its streams are disposed, even when output stays live.
     private static readonly PixelStoragePool compressedStorage = new(1024 * 1024);
+    private static readonly PixelStoragePool inflatedStorage = new();
     internal static ReadOnlySpan<byte> Signature => [137, 80, 78, 71, 13, 10, 26, 10];
     private sealed record Header(ImageInfo Info, int ColorType, int Depth, int Interlace,
         byte[] Palette, byte[] Transparency, int CompressedLength);
@@ -142,11 +143,53 @@ internal static class PngCodec
                     }
                 source += length + 12;
             }
-            var streamLength = ZlibFraming.Validate(compressed, FilteredLength(header), context);
-            // BCL inflater workspace is admitted until its streams are disposed.
-            context.Reserve(256 * 1024);
-            try { return DecodeRaster(header, compressed, streamLength, context); }
-            finally { context.Release(256 * 1024); }
+            var filteredLength = FilteredLength(header);
+            var rowBytes = ((long)header.Info.Width * Channels(header.ColorType) * header.Depth + 7) / 8;
+            var pixelBytes = (long)header.Info.Width * header.Info.Height * (header.Depth == 16 ? 8 : 4);
+            // Select before framing work. Keep the original workspace allowance
+            // and every subsequent row/result admission available. Tight budgets,
+            // cancellation and large/Adam7 inputs retain the original path.
+            var materialize = header.Interlace == 0 && !context.Cancellation.CanBeCanceled
+                && filteredLength <= PixelStoragePool.MaxRetainedBytes
+                && context.RemainingWorkingBytes >= filteredLength + 4096 + 256 * 1024L
+                    + pixelBytes + rowBytes * 2 + PngInflatedReader.BufferBytes;
+            byte[]? filtered = null;
+            var filteredBytes = materialize ? (int)filteredLength : 0;
+            if (materialize) context.Reserve(filteredBytes);
+            try
+            {
+                if (materialize) filtered = inflatedStorage.Rent(filteredBytes);
+                int streamLength;
+                var useFiltered = false;
+                if (filtered is not null)
+                {
+                    streamLength = ZlibFraming.ValidateAndInflate(compressed, filtered, context, out var completeTrees);
+                    if (completeTrees)
+                    {
+                        uint a = 1, b = 0;
+                        Adler32.Append(filtered, ref a, ref b);
+                        useFiltered = (b << 16 | a) == BinaryPrimitives.ReadUInt32BigEndian(compressed.AsSpan(streamLength - 4));
+                    }
+                    // An uncertain tree or invalid checksum must retain the BCL's
+                    // original errors and row/filter precedence, without recharging
+                    // the already completed framing walk.
+                    if (!useFiltered)
+                    {
+                        inflatedStorage.Return(filtered); filtered = null;
+                        context.Release(filteredBytes); filteredBytes = 0;
+                    }
+                }
+                else streamLength = ZlibFraming.Validate(compressed, filteredLength, context);
+                // BCL inflater workspace is admitted until its streams are disposed.
+                context.Reserve(256 * 1024);
+                try { return DecodeRaster(header, compressed, streamLength, context, useFiltered ? filtered : null); }
+                finally { context.Release(256 * 1024); }
+            }
+            finally
+            {
+                if (filtered is not null) inflatedStorage.Return(filtered);
+                context.Release(filteredBytes);
+            }
         }
         finally
         {
@@ -170,9 +213,9 @@ internal static class PngCodec
         }
     }
 
-    private static ImageBuffer DecodeRaster(Header header, byte[] compressed, int streamLength, OperationContext context)
+    private static ImageBuffer DecodeRaster(Header header, byte[] compressed, int streamLength, OperationContext context, byte[]? filtered = null)
     {
-        using var zlib = new PngInflatedReader(compressed, streamLength);
+        using var zlib = new PngInflatedReader(compressed, streamLength, filtered);
         var result = ImageBuffer.AllocateForOverwrite(header.Info.Width, header.Info.Height, header.Depth == 16 ? 16 : 8, context);
         result.Orientation = header.Info.Orientation;
         uint adlerA = 1, adlerB = 0;

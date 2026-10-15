@@ -33,6 +33,19 @@ Insufficient budgets keep original reads; the buffer remains admitted through
 inflater disposal. Speculative compressed-data failures resume the original
 read boundary from the already-delivered byte position.
 
+PNG may materialize at most 4 MiB of filtered data during its existing framing
+walk, for noninterlaced, noncancelable inputs only. Selection preflights that
+exact buffer plus framing scratch, the original 256 KiB allowance, result, both
+rows and optional 8 KiB read buffer before consuming framing work. A separate
+two-array cache retains at most 4 MiB of released exact-size filtered storage;
+live leases remain fully admitted and never alias pixels or compressed input.
+Only complete trees and a valid whole-stream Adler check enable direct row reads.
+Uncertain trees/checksums release this lease and retain original BCL reads using
+the already completed framing result. No framing work is charged twice. The
+original row checksum, filter/palette/work failure sequence and conservative
+inflater allowance remain. Tight/cancelable/large/Adam7 paths are unchanged;
+all optional storage is released before requested EXIF orientation.
+
 `MaxDimension` and `MaxPixels` constrain newly created buffers and codec input
 geometry. A transform can use an existing larger buffer to produce a smaller
 result under lower geometry limits; the supplied buffer still counts in
@@ -51,7 +64,7 @@ algorithm charges, separate from time, instructions or allocations.
 | Encoded span input | Entire supplied encoded input admitted before container/codec processing | Container and codec charges share the operation context | Public codec limit and malformed-input tests |
 | Encoded stream input | 8192-byte read scratch; old/new capacity checked during bounded growth; capacity/final-copy peak checked before parsing | Work/cancellation checked while buffering; caller stream remains open | `PngTests`, codec stream/limit tests |
 | Container/EXIF inspection | Dimensions and encoded item/metadata totals bounded; no decoded pixel plane; PNG palette/transparency copies admitted; valid IFD entry count exhaustion raises `ImageLimitException` | Container traversal, CRC and bounded IFD entry visits; unrelated entries/links never cause recursive parsing or allocation | Container/header, PNG framing and EXIF profile/admission tests at both TIFF byte orders |
-| PNG decode | Encoded input, concatenated IDAT, result and palette/transparency; fixed 4096-byte framing scratch and 256 KiB inflater allowance; current/previous pass rows admitted together | Exact decompressed length checked before inflation; bounded copy, checksum, unfilter/sample and framing checkpoints | `PngFramingTests` exact peak and one-byte-below checks; original format and native controls |
+| PNG decode | Encoded input, concatenated IDAT, result and palette/transparency; fixed 4096-byte framing scratch and 256 KiB inflater allowance; current/previous pass rows admitted together; optional filtered buffer at most 4 MiB admitted exactly after a full memory preflight | Exact framing/output length before row processing; optional private inflation shares original bit charges; bounded copy, checksum, unfilter/sample and framing checkpoints | `PngFramingTests` and `PngFusedInflationTests` exact peak/one-byte-below and error-order checks; `ZlibMaterializationTests` history, bounds, truncation and atomic-work reference comparisons; original format/native controls |
 | PNG encode | Supplied bytes, one packed row, 64 KiB IDAT buffer and 1 MiB BCL compressor allowance, admitted before the signature | Per-row charges, RGBA8 copy/RGBA16 endian packing checkpoints at most 4096 pixels apart, bounded encoded writes, final cancellation check | All 32 color/depth/compression profiles in `PngEncoderAdmissionTests`; exact word/channel/hidden-RGB and chunk-tail checks in `PngRgba16EncodePackingTests` |
 | JPEG decode | Encoded input; 1024-byte parser allowance; quantization/frozen component tables; 64-entry approximation arrays; padded MCU coefficient and sample planes; final RGBA8 result | Marker/segment and table visits; one unit per MCU, 64 per entropy block, one per raw bit-read call, one per Huffman code bit on both lookup/scalar paths, 4096 per IDCT block and 32 per output pixel | All sampling modes, baseline/progressive, tiny/padded geometry and combined orientation in `JpegAdmissionTests`; exact peak and one-byte-below checks |
 | JPEG table redefinition | Each new quantization table admits 128 bytes before releasing its predecessor; every Huffman definition keeps its charge for the operation (204 bytes plus symbols and 512-byte prefix lookup), including replaced/unused tables; tables containing nine/ten-bit codes also admit a 2048-byte lookup before allocation | Every table's 16 lengths visited with cancellation/work checks; 256 bounded prefix-construction units, plus 1024 only for the additional lookup; each decoded code retains its original bit-work charge; encoded segment/item limits remain active | Original repeated DQT/DHT controls and short/long-prefix memory/work boundaries, with unchanged pixels and scalar failure precedence |

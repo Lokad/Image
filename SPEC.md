@@ -450,7 +450,18 @@ PNG follows the [W3C specification](https://www.w3.org/TR/png/). Validate signat
 chunk lengths/names/order/CRCs, image geometry, transparency and decoded pixel
 count. An owned bounded Deflate framing walk validates final blocks, stored
 lengths, fixed/dynamic prefix trees, repeats, backward distances, the declared
-zlib window and the exact filtered-raster byte count before BCL inflation.
+zlib window and the exact filtered-raster byte count before row processing.
+For noninterlaced, noncancelable inputs with at most 4 MiB of filtered data,
+the same walk may also materialize bytes in a private, exactly admitted buffer.
+Selection first ensures that this buffer, framing scratch, the original inflater
+allowance, result, rows and optional read buffer all fit. Complete code trees
+and a valid Adler checksum are required before using those bytes; uncertain
+trees or checksums retain the original BCL row reader without repeating framing
+work. Tight budgets, cancellation, larger data and Adam7 retain the original path.
+The original bit/row work, error order, precision and pixel contracts are unchanged.
+Filtered buffers may reuse two released exact-size arrays with a combined 4 MiB
+idle ceiling, separate from pixel and compressed storage. Every delivered byte
+is materialized before use, and leases end before requested orientation.
 Concatenated IDAT bytes may reuse at most two released exact-size private arrays,
 whose combined idle bytes stay within 1 MiB independently of pixel storage.
 Every byte is copied before framing;
@@ -810,7 +821,9 @@ allocation policy, not a bound on total process RSS or .NET GC heap retention.
 Limits and cancellation are checked before allocation and within long loops.
 PNG encoding admits a 1 MiB BCL compression allowance, one packed row and a
 64 KiB IDAT buffer in addition to the supplied pixels, before writing its signature.
-PNG decoding retains its separate 256 KiB inflater allowance. Geometry limits
+PNG decoding retains its separate 256 KiB inflater allowance, including the
+optional managed-inflation path. Its additional filtered buffer is admitted
+exactly; insufficient room selects the original path. Geometry limits
 apply to new buffers and codec input; transforms count an existing larger source
 in working memory even when their result fits lower geometry limits. Exact
 mapping checks work/cancellation every 1024 output pixels, and cloning every

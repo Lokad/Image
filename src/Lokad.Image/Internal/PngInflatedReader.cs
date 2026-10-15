@@ -10,21 +10,24 @@ internal sealed class PngInflatedReader : IDisposable
     internal const int BufferBytes = 8192;
     private readonly byte[] compressed;
     private readonly int length;
-    private ZLibStream inflater;
+    private ZLibStream? inflater;
+    private readonly byte[]? materialized;
     private byte[]? buffer;
     private int position, count;
     private long consumed;
 
-    public PngInflatedReader(byte[] compressed, int length)
+    public PngInflatedReader(byte[] compressed, int length, byte[]? materialized = null)
     {
-        this.compressed = compressed; this.length = length; inflater = Open();
+        this.compressed = compressed; this.length = length; this.materialized = materialized;
+        if (materialized is null) inflater = Open();
     }
 
     private ZLibStream Open() => new(new MemoryStream(compressed, 0, length, false), CompressionMode.Decompress);
-    public void EnableBuffer() => buffer = new byte[BufferBytes];
+    public void EnableBuffer() { if (materialized is null) buffer = new byte[BufferBytes]; }
 
     public int ReadByte()
     {
+        if (materialized is not null) return position == materialized.Length ? -1 : materialized[position++];
         if (buffer is not null)
         {
             if (position == count)
@@ -35,11 +38,16 @@ internal sealed class PngInflatedReader : IDisposable
             }
             consumed++; return buffer![position++];
         }
-        var value = inflater.ReadByte(); if (value >= 0) consumed++; return value;
+        var value = inflater!.ReadByte(); if (value >= 0) consumed++; return value;
     }
 
     public int Read(Span<byte> destination)
     {
+        if (materialized is not null)
+        {
+            var size = Math.Min(destination.Length, materialized.Length - position);
+            materialized.AsSpan(position, size).CopyTo(destination); position += size; return size;
+        }
         if (buffer is not null)
         {
             if (position == count)
@@ -51,16 +59,16 @@ internal sealed class PngInflatedReader : IDisposable
             var size = Math.Min(destination.Length, count - position);
             buffer!.AsSpan(position, size).CopyTo(destination); position += size; consumed += size; return size;
         }
-        var read = inflater.Read(destination); consumed += read; return read;
+        var read = inflater!.Read(destination); consumed += read; return read;
     }
 
     private int Fill()
     {
-        try { position = 0; return count = inflater.Read(buffer); }
+        try { position = 0; return count = inflater!.Read(buffer); }
         catch (InvalidDataException)
         {
             var scratch = buffer!; buffer = null; position = count = 0;
-            inflater.Dispose(); inflater = Open();
+            inflater!.Dispose(); inflater = Open();
             var remaining = consumed;
             while (remaining > 0)
             {
@@ -72,5 +80,5 @@ internal sealed class PngInflatedReader : IDisposable
         }
     }
 
-    public void Dispose() => inflater.Dispose();
+    public void Dispose() => inflater?.Dispose();
 }

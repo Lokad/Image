@@ -74,12 +74,12 @@ def table(rows):
 def render():
     decodes = [
         row('PNG8 Stream, orient/crop/nearest fit', 'warm-png-composition8-evidence.json', ['observations', -1], 'WARM-PNG-COMPOSITION8.md', True),
-        row('PNG16 Stream, orient/crop/nearest fit', 'warm-png-composition16-evidence.json', ['observations', 1], 'WARM-PNG-COMPOSITION16.md'),
+        row('PNG16 Stream, orient/crop/nearest fit', 'warm-png-fused-evidence.json', ['observations', -1], 'WARM-PNG-FUSED-INFLATION.md', True),
         row('PNG RGBA8, fresh seekable Stream', 'warm-stream-png8-evidence.json', ['observations', -1], 'WARM-STREAM-PNG8.md', True),
         row('PNG RGBA16, fresh seekable Stream', 'warm-stream-png16-evidence.json', ['observations', -1], 'WARM-STREAM-PNG16.md', True),
         row('JPEG420 restart, fresh seekable Stream', 'warm-jpegstream-evidence.json', ['observations', -1], 'WARM-JPEG-STREAM.md', True),
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8stream-evidence.json', ['observations', -1], 'WARM-VP8-STREAM.md', True),
-        row('PNG RGBA8, None', 'warm-png8decode-quiet-evidence.json', ['observations', -1], 'WARM-PNG8-DECODE-QUIET.md', True),
+        row('PNG RGBA8, None', 'warm-png-fused-evidence.json', ['regressions', 0], 'WARM-PNG-FUSED-INFLATION.md', verification='Regression screen; prior confirmed'),
         row('PNG RGBA8, stored Deflate / None', 'warm-pngstore8decode-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-DECODE.md', True),
         row('PNG RGBA16, stored Deflate / None', 'warm-pngstored16-decode-evidence.json', ['observations', -1], 'WARM-PNG-STORED16-DECODE.md', True),
         row('PNG RGBA16, None', 'warm-pngliteralrun-evidence.json', ['observations', -1], 'WARM-PNG-LITERAL-RUN.md', True),
@@ -87,7 +87,7 @@ def render():
         row('PNG RGBA8, Up', 'warm-pngup8-baseline-evidence.json', ['observations', -1], 'WARM-PNG-UP8-BASELINE.md', True),
         row('PNG RGBA8, Sub', 'warm-pngsub8-baseline-evidence.json', ['observations', -1], 'WARM-PNG-SUB8-BASELINE.md', True),
         row('PNG RGBA8, Average', 'warm-pngaverage8-baseline-evidence.json', ['observations', -1], 'WARM-PNG-AVERAGE8-BASELINE.md', True),
-        row('PNG RGBA16, Paeth', 'warm-paethvector-evidence.json', ['observations', -1], 'WARM-PAETH-VECTOR.md', True),
+        row('PNG RGBA16, Paeth', 'warm-png-fused-evidence.json', ['regressions', 1], 'WARM-PNG-FUSED-INFLATION.md', verification='Regression screen; prior confirmed'),
         row('PNG RGBA16, Adam7', 'warm-pngscatter-evidence.json', ['observations', -1], 'WARM-PNG-SCATTER.md', True),
         row('PNG RGB16, None', 'warm-pngrgb16-current-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-CURRENT.md', True),
         row('PNG gray8, None', 'warm-pnggray8-current-evidence.json', ['observations', -1], 'WARM-PNG-GRAY8-CURRENT.md', True),
