@@ -1288,3 +1288,12 @@ fails the unchanged IDAT-size comparison gate and is unscored;
 existing `ffmpeg-png-warm` decoder. Complete BE-to-LE conversion and both native
 frame acquisitions/releases are timed; no new raster, compression setting or
 native worker is introduced.
+
+`PngCropFit16` uses the original `ffmpeg-png-composition16-warm.c` adapter, built
+with `build-png-composition16-linux.sh`. The public graph crops RGBA64BE, converts
+the selected region to RGBA64LE and point-samples four full-word planes to
+127×64. Fresh AVIO acquisition, packet copy, decode, graph/conversion and release
+are timed. Normal/scalar CLI results must match the independent integer reference
+exactly. The initial mixed-endian negotiation crash remains unscored; the
+[retained result](../../benchmarks/WARM-PNG-COMPOSITION16.md) is open above the
+conservative two-times bound.

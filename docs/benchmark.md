@@ -34,6 +34,7 @@ timing comparison; compression efficiency parity is not established.
 | Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | [PNG8 Stream, orient/crop/nearest fit](../benchmarks/WARM-PNG-COMPOSITION8.md) | 2,795.71 | 1,478.63 | 1.891 / 1.906 | 1,453,517 | Confirmed |
+| [PNG16 Stream, orient/crop/nearest fit](../benchmarks/WARM-PNG-COMPOSITION16.md) | 5,879.77 | 2,949.93 | 1.993 / 2.022 | 4,468,718 | Upper above 2x / open |
 | [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-STREAM-PNG8.md) | 2,655.37 | 1,392.55 | 1.907 / 1.916 | 756,605 | Confirmed |
 | [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-STREAM-PNG16.md) | 5,626.97 | 3,093.68 | 1.819 / 1.830 | 3,075,772 | Confirmed |
 | [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-STREAM.md) | 1,886.05 | 997.23 | 1.891 / 1.902 | 1,813,266 | Confirmed |
