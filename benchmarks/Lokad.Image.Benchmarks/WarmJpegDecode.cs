@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422 }
+public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart }
 
 internal sealed record WarmJpegFixedPreparation(int SchemaVersion, string Project, string Recipe,
     string RasterSha256, string NativeFile, int EncodedBytes, string EncodedSha256,
@@ -34,7 +34,7 @@ public class WarmJpegDecode
     private double scalarDecoderRmse;
     private JpegSampling Sampling => Case switch
     {
-        WarmJpegDecodeCase.NativeDecode420 or WarmJpegDecodeCase.Progressive420 => JpegSampling.YCbCr420,
+        WarmJpegDecodeCase.NativeDecode420 or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.NativeDecode420Restart => JpegSampling.YCbCr420,
         WarmJpegDecodeCase.NativeDecode422 or WarmJpegDecodeCase.Progressive422 => JpegSampling.YCbCr422,
         WarmJpegDecodeCase.OwnedDecodeGray or WarmJpegDecodeCase.ProgressiveGray => JpegSampling.Grayscale,
         _ => JpegSampling.YCbCr444
@@ -55,7 +55,8 @@ public class WarmJpegDecode
             "Progressive420" => [WarmJpegDecodeCase.Progressive420],
             "Progressive444" => [WarmJpegDecodeCase.Progressive444],
             "Progressive422" => [WarmJpegDecodeCase.Progressive422],
-            _ => throw new ArgumentException("Choose one warm JPEG decode case: Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444 or Progressive422.")
+            "NativeDecode420Restart" => [WarmJpegDecodeCase.NativeDecode420Restart],
+            _ => throw new ArgumentException("Choose one warm JPEG decode case: Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422 or NativeDecode420Restart.")
         };
     }
 
@@ -206,7 +207,29 @@ public class WarmJpegDecode
                 });
             rasterHash = JpegBenchmarkCase.Hash(HorizontalFlipInput.Create(8));
             string decodedHash;
-            if (Case is WarmJpegDecodeCase.NativeDecode420 or WarmJpegDecodeCase.NativeDecode422 or WarmJpegDecodeCase.OwnedDecodeGray or WarmJpegDecodeCase.ProgressiveGray or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.Progressive444 or WarmJpegDecodeCase.Progressive422)
+            if (Case == WarmJpegDecodeCase.NativeDecode420Restart)
+            {
+                var prepared = JsonSerializer.Deserialize<WarmJpegPreparation>(File.ReadAllText(Path.Combine(state.Root,
+                    "artifacts", "warm-reference", "jpeg420-restart33-adaptive-match.json")), EncoderQualityCalibration.Json)
+                    ?? throw new InvalidOperationException("Reuse the validated row-restart encode preparation.");
+                var anchor = JsonSerializer.Deserialize<WarmJpegPreparation>(File.ReadAllText(Path.Combine(state.Root,
+                    "artifacts", "warm-reference", "jpeg420-adaptive-match.json")), EncoderQualityCalibration.Json)
+                    ?? throw new InvalidOperationException("Original nonrestart anchor missing.");
+                encoded = File.ReadAllBytes(Path.Combine(state.Root, prepared.NativeFile));
+                decodedHash = prepared.Match.Native.PublicDecodedSha256;
+                if (prepared.SchemaVersion != 1 || prepared.Project != "Lokad.Image" || prepared.RasterSha256 != rasterHash
+                    || prepared.SourceDepth != 8 || prepared.NativeQuality != 5 || prepared.Sampling != "420"
+                    || prepared.NativeReady.GetProperty("restartInterval").GetInt32() != 33
+                    || prepared.NativeReady.GetProperty("restartMarkers").GetInt32() != 16
+                    || encoded.Length != prepared.Match.Native.EncodedBytes || JpegBenchmarkCase.Hash(encoded) != prepared.Match.Native.EncodedSha256
+                    || decodedHash != anchor.Match.Native.PublicDecodedSha256
+                    || prepared.Match.Native.NativeDecodedSha256 != anchor.Match.Native.NativeDecodedSha256
+                    || JpegBenchmarkCase.HashFile(state.Ffmpeg) != prepared.FfmpegSha256)
+                    throw new InvalidOperationException("Restart decode packet/source/anchor identity differs.");
+                WarmJpeg.ValidateRestartPacket(encoded); WarmJpeg.ValidateRestartNegativeControls(encoded);
+                inputOrigin = "prepared-native-fixed420-restart33";
+            }
+            else if (Case is WarmJpegDecodeCase.NativeDecode420 or WarmJpegDecodeCase.NativeDecode422 or WarmJpegDecodeCase.OwnedDecodeGray or WarmJpegDecodeCase.ProgressiveGray or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.Progressive444 or WarmJpegDecodeCase.Progressive422)
             {
                 var label = Sampling == JpegSampling.YCbCr420 ? "420" : Sampling == JpegSampling.YCbCr422 ? "422" : Sampling == JpegSampling.YCbCr444 ? "444" : "gray";
                 WarmJpegFixedPreparation prepared;
@@ -273,6 +296,7 @@ public class WarmJpegDecode
     }
     private void ValidateManaged()
     {
+        if (Case == WarmJpegDecodeCase.NativeDecode420Restart) WarmJpeg.ValidateRestartPacket(encoded);
         using var first = ImageCodec.Decode(encoded); using var second = ImageCodec.Decode(encoded);
         ValidateGeometry(first); ValidateGeometry(second);
         if (!OriginalPixels.Bytes(first).AsSpan().SequenceEqual(managedPixels) || !OriginalPixels.Bytes(second).AsSpan().SequenceEqual(managedPixels))
@@ -307,6 +331,8 @@ public class WarmJpegDecode
                 cpu, managedAffinityCount = 1, processorCount = Environment.ProcessorCount, serverGc = GCSettings.IsServerGC,
                 gcConfiguration = GC.GetConfigurationVariables(), runtime = RuntimeInformation.FrameworkDescription, platform = RuntimeInformation.RuntimeIdentifier,
                 sourceIdentity, inputOrigin, sampling, progressive = IsProgressive, inputBytes = encoded.Length,
+                restartInterval = Case == WarmJpegDecodeCase.NativeDecode420Restart ? 33 : 0,
+                restartMarkers = Case == WarmJpegDecodeCase.NativeDecode420Restart ? 16 : 0,
                 inputSha256 = JpegBenchmarkCase.Hash(encoded), rasterSha256 = rasterHash,
                 managedOutputBytes = managedPixels.Length, nativeOutputBytes = nativePixels.Length,
                 managedOutputSha256 = JpegBenchmarkCase.Hash(managedPixels), nativeOutputSha256 = JpegBenchmarkCase.Hash(nativePixels),

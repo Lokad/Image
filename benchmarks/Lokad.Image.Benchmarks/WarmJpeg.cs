@@ -268,7 +268,7 @@ public class WarmJpeg
         if (Restart) ValidateRestartPixels(state.Root, managedQuality, nativeQuality);
     }
 
-    private static (int Dri, int FirstRestart) ValidateRestartPacket(byte[] bytes)
+    internal static (int Dri, int FirstRestart) ValidateRestartPacket(byte[] bytes)
     {
         // Original bounded T.81 B.2 framing check, outside timed encoding.
         if (bytes.Length < 4 || bytes[0] != 255 || bytes[1] != 216) throw new InvalidOperationException("Restart JPEG SOI missing.");
@@ -302,7 +302,7 @@ public class WarmJpeg
         throw new InvalidOperationException("JPEG must contain DRI33 and sixteen sequenced row restart markers.");
     }
 
-    private static void ValidateRestartNegativeControls(byte[] bytes)
+    internal static void ValidateRestartNegativeControls(byte[] bytes)
     {
         var offsets = ValidateRestartPacket(bytes);
         foreach (var offset in new[] { offsets.Dri + 1, offsets.FirstRestart })

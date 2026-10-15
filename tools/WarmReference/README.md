@@ -1227,3 +1227,9 @@ DRI33 and sixteen RST markers. Two native logical slices use verified default
 serial executors with one thread; active threading fails validation. Quality69
 and qscale5 reuse the existing RGBA8 anchor, with identical per-encoder decoded
 pixels to the nonrestart pair. See the [admission round](../../benchmarks/WARM-JPEG-ADMITTED.md).
+
+Decode that same native packet with
+`-WarmFamily JpegDecode -WarmCases NativeDecode420Restart`. The existing JPEG decode worker is reused;
+framing, negative controls, frozen per-decoder nonrestart pixels and identical
+input bytes are checked outside timing. See the
+[decode result](../../benchmarks/WARM-JPEG-RESTART-DECODE.md).

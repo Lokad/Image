@@ -65,6 +65,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG opaque gray4 → RGBA8, None](../benchmarks/WARM-PNG-GRAY4-REUSE.md) | 220.61 | 146.67 | 1.504 / 1.532 | 13,544 | Confirmed |
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-AC-FUSED.md) | 1,267.57 | 682.73 | 1.857 / 1.880 | 1,221,545 | Confirmed |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG420-BULK.md) | 1,721.81 | 1,007.73 | 1.709 / 1.719 | 1,619,530 | Confirmed |
+| [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-JPEG-RESTART-DECODE.md) | 1,852.40 | 1,016.13 | 1.823 / 1.837 | 1,623,906 | Confirmed |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-COVERAGE-QUIET.md) | 2,087.01 | 1,336.37 | 1.562 / 1.567 | 1,978,646 | Confirmed |
 | [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-JPEG444-OWNED-QUIET.md) | 3,564.61 | 2,039.57 | 1.748 / 1.793 | 2,596,174 | Confirmed |
 | [JPEG baseline 4:4:4, native input](../benchmarks/WARM-JPEG-AC-FUSED.md) | 3,339.18 | 1,719.98 | 1.941 / 1.961 | 2,664,358 | Confirmed |
@@ -304,6 +305,8 @@ adaptive and fixed streaming regression means pass. Both OSes pass **3,298**
 Release tests, including **896** live comparisons, and the same actual package's
 consumer and three examples. Short regression screens retain their own bounds
 in the linked report and do not replace earlier independent certificates.
+Identical-input JPEG420 restart decoding confirms **1.823x / upper 1.837x**,
+at **1,623,906 B/op**, reusing the validated packet and qualified production.
 Remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove
 the uniform target. Linked reports retain superseded raw evidence, failed guards,
