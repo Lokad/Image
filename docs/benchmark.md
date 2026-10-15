@@ -1,6 +1,6 @@
 # Lokad.Image benchmark state
 
-Updated 2026-10-15. Latest retained warm measurements on the dedicated AMD EPYC
+Updated 2026-10-16. Latest retained warm measurements on the dedicated AMD EPYC
 9V45 VM: Ubuntu 24.04.4, .NET 10.0.8 / SDK 10.0.204, FFmpeg n8.1
 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread, normal SIMD,
 tiering off, workstation nonconcurrent GC. Two original 513×259 RGBA8/16 rasters,
@@ -47,7 +47,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA8, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-TIGHT-CANCELABLE8.md) | 2,559.30 | 1,371.11 | 1.867 / 1.873 | 4,800 | Confirmed |
 | [PNG RGBA8, stored Deflate / None](../benchmarks/WARM-PNG-STORED8-DECODE.md) | 157.30 | 135.76 | 1.159 / 1.168 | 12,976 | Confirmed |
 | [PNG RGBA16, stored Deflate / None](../benchmarks/WARM-PNG-STORED16-DECODE.md) | 472.57 | 309.99 | 1.524 / 1.556 | 1,080,706 | Confirmed |
-| [PNG RGBA16, None](../benchmarks/WARM-PNG-LITERAL-RUN.md) | 5,740.60 | 2,931.33 | 1.958 / 1.968 | 2,032,864 | Confirmed |
+| [PNG RGBA16, None](../benchmarks/WARM-CURRENT-PNG16-BICUBIC16.md) | 3,034.16 | 2,903.68 | 1.045 / 1.059 | 8,552 | Confirmed |
 | [PNG RGBA16, None / exact working limit](../benchmarks/WARM-PNG-DECODE-BOUNDARIES.md) | 5,214.71 | 2,870.48 | 1.817 / 1.821 | 8,896 | Confirmed |
 | [PNG RGBA16, None / live cancelable token](../benchmarks/WARM-PNG-COUNTING.md) | 4,518.51 | 2,873.34 | 1.573 / 1.583 | 8,552 | Confirmed |
 | [PNG RGBA16, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-COUNTING.md) | 5,265.78 | 2,871.10 | 1.834 / 1.852 | 8,896 | Confirmed |
@@ -138,7 +138,7 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG444-RGBA16-ADAPTIVE.md) | 6,767.17 | 3,851.77 | 1.757 / 1.790 | 556,280 | Confirmed |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG422-RGBA8-ADAPTIVE.md) | 4,277.49 | 2,349.58 | 1.821 / 1.862 | 294,110 | Confirmed |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG422-RGBA16.md) | 4,538.42 | 2,422.35 | 1.874 / 1.884 | 294,110 | Confirmed |
-| [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG420-CHROMA-PAIR.md) | 3,434.93 | 1,767.46 | 1.943 / 1.988 | 297,772 | Confirmed |
+| [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-AC-PLANNING.md) | 2,881.90 | 1,763.43 | 1.634 / 1.641 | 297,780 | Confirmed |
 | [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-AC-PLANNING.md) | 2,886.13 | 1,604.33 | 1.799 / 1.809 | 297,780 | Confirmed |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-GEOMETRIC.md) | 3,382.57 | 1,765.48 | 1.916 / 1.936 | 263,812 | Confirmed |
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-OCCUPANCY.md) | 3,057.46 | 1,835.63 | 1.666 / 1.973 | 263,820 | Regression screen; prior confirmed |
@@ -180,7 +180,7 @@ timing comparison; compression efficiency parity is not established.
 | [Bicubic width reduction, unchanged height RGBA8§](../benchmarks/WARM-BICUBIC-HORIZONTAL8-ROWS.md) | 858.24 | 559.04 | 1.535 / 1.558 | 465,375 | Confirmed |
 | [Bicubic width reduction, unchanged height RGBA16§](../benchmarks/WARM-BICUBIC-HORIZONTAL16-ROWS.md) | 1,040.82 | 566.53 | 1.837 / 1.853 | 730,683 | Confirmed |
 | [Bicubic width enlargement, unchanged height RGBA8§](../benchmarks/WARM-BICUBIC-HORIZONTAL-UP8-ROWS.md) | 2,594.78 | 1,502.85 | 1.727 / 1.742 | 1,930,602 | Confirmed |
-| [Bicubic width enlargement, unchanged height RGBA16§](../benchmarks/WARM-BICUBIC-HORIZONTAL-UP16.md) | 2,801.88 | 1,429.24 | 1.960 / 1.973 | 2,232,080 | Confirmed |
+| [Bicubic width enlargement, unchanged height RGBA16§](../benchmarks/WARM-CURRENT-PNG16-BICUBIC16.md) | 2,144.05 | 1,455.48 | 1.473 / 1.499 | 2,129,311 | Confirmed |
 | [Bicubic RGBA8, 64×32 / support beyond 32§](../benchmarks/WARM-BICUBIC-64X32-RGBA8.md) | 637.23 | 351.87 | 1.811 / 1.820 | 205,880 | Confirmed |
 | [Bicubic RGBA16, 64×32 / support beyond 32§](../benchmarks/WARM-BICUBIC-64X32-RGBA16.md) | 523.91 | 377.79 | 1.387 / 1.414 | 214,071 | Confirmed |
 | [Bicubic RGBA8, 32×16 / support beyond 64§](../benchmarks/WARM-BICUBIC-32X16-RGBA8.md) | 465.61 | 393.50 | 1.183 / 1.192 | 199,354 | Confirmed |
@@ -311,6 +311,14 @@ unchanged harness/native workers suffice. Twenty-one focused normal/scalar
 checks per OS, **3,483 Release tests per OS** including **898 live comparisons**,
 and the consumer/all three examples through the same actual Release package
 on Windows/Linux pass. No image, selector or settings grid is added.
+
+Three existing cases subsequently confirm on that same qualified immutable
+build: adaptive nonrestart JPEG420 at **1.634x / upper1.641x**, **297,780 B/op**;
+PNG16 None decode at **1.045x / upper1.059x**, **8,552 B/op**; and RGBA16 bicubic
+width enlargement at **1.473x / upper1.499x**, **2,129,311 B/op**. No production
+or harness rebuild, profile, new fixture or repeated qualification is needed.
+All twelve actuals and both quiet guards are retained for each. Earlier
+near-2x results and the bicubic pre-guard refusal remain in linked evidence.
 
 The preceding production round widens the local baseline JPEG AC bit
 cache, reducing a current-build **2.040x** RGB gap by **16.8%**, independently

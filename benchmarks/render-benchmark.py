@@ -87,7 +87,7 @@ def render():
         row('PNG RGBA8, None / exact limit + live cancelable token', 'warm-pngtightcancel8-evidence.json', ['observations', -1], 'WARM-PNG-TIGHT-CANCELABLE8.md', True),
         row('PNG RGBA8, stored Deflate / None', 'warm-pngstore8decode-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-DECODE.md', True),
         row('PNG RGBA16, stored Deflate / None', 'warm-pngstored16-decode-evidence.json', ['observations', -1], 'WARM-PNG-STORED16-DECODE.md', True),
-        row('PNG RGBA16, None', 'warm-pngliteralrun-evidence.json', ['observations', -1], 'WARM-PNG-LITERAL-RUN.md', True),
+        row('PNG RGBA16, None', 'warm-current-png16-bicubic16-evidence.json', ['cases', 'png16', -1], 'WARM-CURRENT-PNG16-BICUBIC16.md', True),
         row('PNG RGBA16, None / exact working limit', 'warm-png-boundaries-current-evidence.json', ['cases', 'wordExact', -1], 'WARM-PNG-DECODE-BOUNDARIES.md', True),
         row('PNG RGBA16, None / live cancelable token', 'warm-pngcountall-evidence.json', ['wordConfirmations', 1], 'WARM-PNG-COUNTING.md', True),
         row('PNG RGBA16, None / exact limit + live cancelable token', 'warm-pngcountall-evidence.json', ['wordConfirmations', 0], 'WARM-PNG-COUNTING.md', True),
@@ -175,7 +175,7 @@ def render():
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg44416-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG444-RGBA16-ADAPTIVE.md', True),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg4228-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA8-ADAPTIVE.md', True),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg42216-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA16.md', True),
-        row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg420pair-evidence.json', ['observations', -1], 'WARM-JPEG420-CHROMA-PAIR.md', True),
+        row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg-ac-planning-evidence.json', ['observations', 4], 'WARM-JPEG-AC-PLANNING.md', True),
         row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-ac-planning-evidence.json', ['observations', 2], 'WARM-JPEG-AC-PLANNING.md', True),
         row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-geometric-evidence.json', ['observations', -1], 'WARM-JPEG-FIXED-GEOMETRIC.md', True),
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg420cancel16-evidence.json', ['regressions', 1], 'WARM-JPEG-FIXED-OCCUPANCY.md', verification='Regression screen; prior confirmed'),
@@ -214,7 +214,7 @@ def render():
         row('Bicubic width reduction, unchanged height RGBA8§', 'warm-bicubichorizontal8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL8-ROWS.md', True),
         row('Bicubic width reduction, unchanged height RGBA16§', 'warm-bicubichorizontal16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL16-ROWS.md', True),
         row('Bicubic width enlargement, unchanged height RGBA8§', 'warm-bicubichorizontalup8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL-UP8-ROWS.md', True),
-        row('Bicubic width enlargement, unchanged height RGBA16§', 'warm-bicubichorizontalup16-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL-UP16.md', True),
+        row('Bicubic width enlargement, unchanged height RGBA16§', 'warm-current-png16-bicubic16-evidence.json', ['cases', 'horizontalUp16', -1], 'WARM-CURRENT-PNG16-BICUBIC16.md', True),
         row('Bicubic RGBA8, 64×32 / support beyond 32§', 'warm-bicubic64x32-8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-64X32-RGBA8.md', True),
         row('Bicubic RGBA16, 64×32 / support beyond 32§', 'warm-bicubic64x32-16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-64X32-RGBA16.md', True),
         row('Bicubic RGBA8, 32×16 / support beyond 64§', 'warm-bicubic32x16-8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-32X16-RGBA8.md', True),
@@ -284,7 +284,7 @@ def render():
     ]
     return f'''# Lokad.Image benchmark state
 
-Updated 2026-10-15. Latest retained warm measurements on the dedicated AMD EPYC
+Updated 2026-10-16. Latest retained warm measurements on the dedicated AMD EPYC
 9V45 VM: Ubuntu 24.04.4, .NET 10.0.8 / SDK 10.0.204, FFmpeg n8.1
 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread, normal SIMD,
 tiering off, workstation nonconcurrent GC. Two original 513×259 RGBA8/16 rasters,
@@ -388,6 +388,14 @@ unchanged harness/native workers suffice. Twenty-one focused normal/scalar
 checks per OS, **3,483 Release tests per OS** including **898 live comparisons**,
 and the consumer/all three examples through the same actual Release package
 on Windows/Linux pass. No image, selector or settings grid is added.
+
+Three existing cases subsequently confirm on that same qualified immutable
+build: adaptive nonrestart JPEG420 at **1.634x / upper1.641x**, **297,780 B/op**;
+PNG16 None decode at **1.045x / upper1.059x**, **8,552 B/op**; and RGBA16 bicubic
+width enlargement at **1.473x / upper1.499x**, **2,129,311 B/op**. No production
+or harness rebuild, profile, new fixture or repeated qualification is needed.
+All twelve actuals and both quiet guards are retained for each. Earlier
+near-2x results and the bicubic pre-guard refusal remain in linked evidence.
 
 The preceding production round widens the local baseline JPEG AC bit
 cache, reducing a current-build **2.040x** RGB gap by **16.8%**, independently

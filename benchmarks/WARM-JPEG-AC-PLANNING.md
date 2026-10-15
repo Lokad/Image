@@ -12,6 +12,7 @@ warm parity remains open.
 | Candidate three-actual screen | 2,927.25 | 1,619.20 | 1.808 / 2.209 | 297,780 | Screen |
 | Independent twelve-actual confirmation | 2,886.13 | 1,604.33 | 1.799 / 1.809 | 297,780 | Confirmed |
 | Nonrestart adaptive regression, three actuals | 2,878.80 | 1,764.69 | 1.631 / 1.803 | 297,780 | Mean passes |
+| Nonrestart independent twelve | 2,881.90 | 1,763.43 | 1.634 / 1.641 | 297,780 | Confirmed |
 
 The existing original 513×259 RGBA8 raster is encoded into a fresh MemoryStream,
 using adaptive Huffman tables, quality 69, background 0x204060 and restart 33 MCUs.
@@ -59,3 +60,10 @@ fixtures are unchanged. Full qualification refreshes only its required inputs.
 The [numeric evidence](warm-jpeg-ac-planning-evidence.json) preserves samples,
 allocations, guards, source/build identities and actual package qualification;
 the [previous admission report](WARM-JPEG-ADMITTED.md) retains earlier results.
+
+The nonrestart pair subsequently confirms independently on the same qualified
+core/harness/native worker, retaining twelve actuals and selecting ten. Both
+guards pass. This closes its earlier1.943× result without another optimization,
+production rebuild, profile or suite/package proof. The raw confirmation also
+retains the unchanged ordinary JPEG worker, matching the short regression's
+worker/source/build hashes. Stop both confirmed JPEG pairs.
