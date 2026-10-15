@@ -78,5 +78,658 @@
     "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
   },
   "qualification": "Unchanged production reuses warm-vp8-encode-evidence.json; no repeated full suites or package proof.",
-  "nextAction": "Retain this refusal. No scored timing or relaxed size gate; continue other material workloads."
+  "nextAction": "Retain this refusal. No scored timing or relaxed size gate; continue other material workloads.",
+  "compressionDiagnostic": {
+    "productionChanged": false,
+    "measured": false,
+    "allocationBytesPerOperation": null,
+    "productionStillFailsSizeGate": true,
+    "boundaryDiagnostic": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Correctness-only fixed-level PNG16 write-boundary diagnostic",
+      "productionChanged": false,
+      "measured": false,
+      "runtime": ".NET 10.0.8",
+      "platform": "linux-x64",
+      "librarySha256": "57fa3c420fa75ac656161291e004ac7032fa27aaa5a34719d2ba650abace1fee",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "color": 6,
+      "filter": "None",
+      "compression": "BCL Fastest level1 / original FFmpeg level1",
+      "sizeGateMaximum": 0.05,
+      "originalRastersAdded": 0,
+      "rasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "filteredBytes": 1063195,
+      "filteredSha256": "97a69e6a7505eb60a7e1281179fc608eb993ec21cd090c81cadee1a18532b6b3",
+      "originalManagedIdatBytes": 1023460,
+      "nativeIdatBytes": 965318,
+      "currentPublicPacketExact": true,
+      "originalChunkCrcsExact": true,
+      "nativeChunkCrcsExact": true,
+      "originalAndNativeFilteredSamplesExact": true,
+      "existingQualificationReusedFrom": "warm-jpegprogressive444cancel-evidence.json",
+      "boundaries": [
+        {
+          "mode": "split-filter-and-row",
+          "idatBytes": 1023460,
+          "sha256": "37991c6dad2164ec1d84575cd1fe3c96d39a41d2cd82efd8aeece00552b0fd82",
+          "originalIdatExact": true,
+          "filteredSamplesExact": true,
+          "compressionClass": 0,
+          "relativeIdatDifference": 0.05680925488050339,
+          "passesUnchangedSizeGate": false
+        },
+        {
+          "mode": "combined-row",
+          "idatBytes": 1023460,
+          "sha256": "37991c6dad2164ec1d84575cd1fe3c96d39a41d2cd82efd8aeece00552b0fd82",
+          "originalIdatExact": true,
+          "filteredSamplesExact": true,
+          "compressionClass": 0,
+          "relativeIdatDifference": 0.05680925488050339,
+          "passesUnchangedSizeGate": false
+        },
+        {
+          "mode": "one-contiguous-write",
+          "idatBytes": 1023460,
+          "sha256": "37991c6dad2164ec1d84575cd1fe3c96d39a41d2cd82efd8aeece00552b0fd82",
+          "originalIdatExact": true,
+          "filteredSamplesExact": true,
+          "compressionClass": 0,
+          "relativeIdatDifference": 0.05680925488050339,
+          "passesUnchangedSizeGate": false
+        }
+      ]
+    },
+    "independentDeflateInspection": {
+      "measured": false,
+      "productionChanged": false,
+      "formatReference": "https://www.rfc-editor.org/rfc/rfc1951#section-3.2",
+      "packets": [
+        {
+          "packet": "input.png",
+          "idatBytes": 1023460,
+          "blocks": [
+            {
+              "type": 1,
+              "filteredBytes": 1062934,
+              "compressedBits": 8185513,
+              "literals": 878045,
+              "matches": 32318
+            },
+            {
+              "type": 1,
+              "filteredBytes": 261,
+              "compressedBits": 2115,
+              "literals": 235,
+              "matches": 5
+            }
+          ],
+          "blockTypes": {
+            "1": 2
+          },
+          "literalTokens": 878280,
+          "matchTokens": 32323,
+          "decodedBytes": 1063195,
+          "decodedSha256": "97a69e6a7505eb60a7e1281179fc608eb993ec21cd090c81cadee1a18532b6b3",
+          "symbolBitsIncludingDynamicLengthSymbols": 7798202,
+          "extraBits": 389420,
+          "unboundedWholeStreamHuffmanCostBytesWithoutHeaders": 973950,
+          "validIndependentDeflateTraversal": true
+        },
+        {
+          "packet": "native-level1.png",
+          "idatBytes": 965318,
+          "blocks": [
+            {
+              "type": 2,
+              "filteredBytes": 16965,
+              "compressedBits": 133244,
+              "literals": 16254,
+              "matches": 129
+            },
+            {
+              "type": 2,
+              "filteredBytes": 18682,
+              "compressedBits": 139184,
+              "literals": 15885,
+              "matches": 498
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19531,
+              "compressedBits": 141379,
+              "literals": 15723,
+              "matches": 660
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19403,
+              "compressedBits": 141054,
+              "literals": 15746,
+              "matches": 637
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19423,
+              "compressedBits": 141270,
+              "literals": 15738,
+              "matches": 645
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19535,
+              "compressedBits": 141195,
+              "literals": 15744,
+              "matches": 639
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19340,
+              "compressedBits": 141141,
+              "literals": 15748,
+              "matches": 635
+            },
+            {
+              "type": 2,
+              "filteredBytes": 20494,
+              "compressedBits": 143854,
+              "literals": 15397,
+              "matches": 986
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19220,
+              "compressedBits": 140562,
+              "literals": 15785,
+              "matches": 598
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19178,
+              "compressedBits": 140754,
+              "literals": 15776,
+              "matches": 607
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19421,
+              "compressedBits": 141365,
+              "literals": 15725,
+              "matches": 658
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19343,
+              "compressedBits": 141016,
+              "literals": 15755,
+              "matches": 628
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19380,
+              "compressedBits": 140958,
+              "literals": 15756,
+              "matches": 627
+            },
+            {
+              "type": 2,
+              "filteredBytes": 20205,
+              "compressedBits": 142940,
+              "literals": 15588,
+              "matches": 795
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19508,
+              "compressedBits": 142061,
+              "literals": 15684,
+              "matches": 699
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19453,
+              "compressedBits": 141479,
+              "literals": 15727,
+              "matches": 656
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19202,
+              "compressedBits": 140921,
+              "literals": 15761,
+              "matches": 622
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19189,
+              "compressedBits": 140701,
+              "literals": 15780,
+              "matches": 603
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19540,
+              "compressedBits": 141577,
+              "literals": 15723,
+              "matches": 660
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19448,
+              "compressedBits": 141247,
+              "literals": 15736,
+              "matches": 647
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19344,
+              "compressedBits": 139093,
+              "literals": 15767,
+              "matches": 616
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19377,
+              "compressedBits": 141116,
+              "literals": 15736,
+              "matches": 647
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19256,
+              "compressedBits": 140829,
+              "literals": 15767,
+              "matches": 616
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19407,
+              "compressedBits": 141253,
+              "literals": 15736,
+              "matches": 647
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19359,
+              "compressedBits": 140795,
+              "literals": 15773,
+              "matches": 610
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19283,
+              "compressedBits": 140671,
+              "literals": 15771,
+              "matches": 612
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19296,
+              "compressedBits": 141300,
+              "literals": 15752,
+              "matches": 631
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19434,
+              "compressedBits": 141440,
+              "literals": 15732,
+              "matches": 651
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19451,
+              "compressedBits": 141334,
+              "literals": 15738,
+              "matches": 645
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19199,
+              "compressedBits": 140508,
+              "literals": 15792,
+              "matches": 591
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19459,
+              "compressedBits": 141251,
+              "literals": 15734,
+              "matches": 649
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19374,
+              "compressedBits": 141246,
+              "literals": 15741,
+              "matches": 642
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19452,
+              "compressedBits": 141345,
+              "literals": 15728,
+              "matches": 655
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19573,
+              "compressedBits": 142382,
+              "literals": 15696,
+              "matches": 687
+            },
+            {
+              "type": 2,
+              "filteredBytes": 21030,
+              "compressedBits": 144327,
+              "literals": 15427,
+              "matches": 956
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19110,
+              "compressedBits": 140455,
+              "literals": 15804,
+              "matches": 579
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19331,
+              "compressedBits": 141102,
+              "literals": 15756,
+              "matches": 627
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19308,
+              "compressedBits": 140832,
+              "literals": 15762,
+              "matches": 621
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19338,
+              "compressedBits": 141039,
+              "literals": 15751,
+              "matches": 632
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19335,
+              "compressedBits": 141052,
+              "literals": 15753,
+              "matches": 630
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19525,
+              "compressedBits": 141364,
+              "literals": 15726,
+              "matches": 657
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19327,
+              "compressedBits": 140973,
+              "literals": 15760,
+              "matches": 623
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19378,
+              "compressedBits": 141386,
+              "literals": 15721,
+              "matches": 662
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19359,
+              "compressedBits": 141193,
+              "literals": 15745,
+              "matches": 638
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19719,
+              "compressedBits": 142051,
+              "literals": 15668,
+              "matches": 715
+            },
+            {
+              "type": 2,
+              "filteredBytes": 20139,
+              "compressedBits": 143927,
+              "literals": 15524,
+              "matches": 859
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19313,
+              "compressedBits": 140976,
+              "literals": 15765,
+              "matches": 618
+            },
+            {
+              "type": 2,
+              "filteredBytes": 21195,
+              "compressedBits": 140261,
+              "literals": 15771,
+              "matches": 612
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19116,
+              "compressedBits": 140392,
+              "literals": 15793,
+              "matches": 590
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19211,
+              "compressedBits": 140620,
+              "literals": 15778,
+              "matches": 605
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19340,
+              "compressedBits": 141215,
+              "literals": 15745,
+              "matches": 638
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19249,
+              "compressedBits": 140955,
+              "literals": 15763,
+              "matches": 620
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19841,
+              "compressedBits": 142859,
+              "literals": 15580,
+              "matches": 803
+            },
+            {
+              "type": 2,
+              "filteredBytes": 19390,
+              "compressedBits": 141490,
+              "literals": 15713,
+              "matches": 670
+            },
+            {
+              "type": 2,
+              "filteredBytes": 13917,
+              "compressedBits": 101560,
+              "literals": 11429,
+              "matches": 435
+            }
+          ],
+          "blockTypes": {
+            "2": 55
+          },
+          "literalTokens": 861228,
+          "matchTokens": 35318,
+          "decodedBytes": 1063195,
+          "decodedSha256": "97a69e6a7505eb60a7e1281179fc608eb993ec21cd090c81cadee1a18532b6b3",
+          "symbolBitsIncludingDynamicLengthSymbols": 7286794,
+          "extraBits": 427793,
+          "unboundedWholeStreamHuffmanCostBytesWithoutHeaders": 964728,
+          "validIndependentDeflateTraversal": true
+        }
+      ]
+    },
+    "adaptiveEntropyPrototype": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "productionChanged": false,
+      "measured": false,
+      "prototypeOnly": true,
+      "originalRastersAdded": 0,
+      "algorithm": "Original RFC1951 adaptive Huffman entropy recoding of unchanged BCL level1 LZ77 tokens, one dynamic block; no matcher or level change.",
+      "baseline": {
+        "packet": "input.png",
+        "idatBytes": 1023460,
+        "blocks": [
+          {
+            "type": 1,
+            "filteredBytes": 1062934,
+            "compressedBits": 8185513,
+            "literals": 878045,
+            "matches": 32318
+          },
+          {
+            "type": 1,
+            "filteredBytes": 261,
+            "compressedBits": 2115,
+            "literals": 235,
+            "matches": 5
+          }
+        ],
+        "blockTypes": {
+          "1": 2
+        },
+        "literalTokens": 878280,
+        "matchTokens": 32323,
+        "decodedBytes": 1063195,
+        "decodedSha256": "97a69e6a7505eb60a7e1281179fc608eb993ec21cd090c81cadee1a18532b6b3",
+        "symbolBitsIncludingDynamicLengthSymbols": 7798202,
+        "extraBits": 389420,
+        "unboundedWholeStreamHuffmanCostBytesWithoutHeaders": 973950,
+        "validIndependentDeflateTraversal": true
+      },
+      "candidate": {
+        "packet": "adaptive-entropy-prototype.png",
+        "idatBytes": 974122,
+        "blocks": [
+          {
+            "type": 2,
+            "filteredBytes": 1063195,
+            "compressedBits": 7792923,
+            "literals": 878280,
+            "matches": 32323
+          }
+        ],
+        "blockTypes": {
+          "2": 1
+        },
+        "literalTokens": 878280,
+        "matchTokens": 32323,
+        "decodedBytes": 1063195,
+        "decodedSha256": "97a69e6a7505eb60a7e1281179fc608eb993ec21cd090c81cadee1a18532b6b3",
+        "symbolBitsIncludingDynamicLengthSymbols": 7403429,
+        "extraBits": 389420,
+        "unboundedWholeStreamHuffmanCostBytesWithoutHeaders": 973949,
+        "validIndependentDeflateTraversal": true
+      },
+      "literalCodeMaximum": 13,
+      "distanceCodeMaximum": 12,
+      "sameLiteralMatchAndDistanceSequence": true,
+      "tokenSha256": "8b48526c2e27c923db8bd277b12d787e2851d4b8aa5e83c506fd76216cdeb30a",
+      "prototypePacketSha256": "06550b36737527bec55ef1917698a08bfba1c88e6297126b310160438c02b104",
+      "prototypeIdatBytes": 974122,
+      "nativeIdatBytes": 965318,
+      "relativeIdatDifference": 0.009037882318641813,
+      "passesUnchangedSizeGate": true,
+      "filteredSamplesExact": true,
+      "headerCompressionClass": 0,
+      "productionIntegratedOrPerformanceQualified": false
+    },
+    "prototypeVerification": {
+      "measured": false,
+      "productionChanged": false,
+      "prototypeOnly": true,
+      "managedAndNativeNormalScalarExact": true,
+      "checks": [
+        {
+          "prototypeOnly": true,
+          "measured": false,
+          "librarySha256": "57fa3c420fa75ac656161291e004ac7032fa27aaa5a34719d2ba650abace1fee",
+          "packetSha256": "06550b36737527bec55ef1917698a08bfba1c88e6297126b310160438c02b104",
+          "exactWordsAlphaHiddenRgb": true,
+          "independentLiveOwners": true,
+          "sourceUnchanged": true,
+          "geometryExact": true,
+          "chunkCrcsExact": true,
+          "hardwareIntrinsicsDisabled": false
+        },
+        {
+          "subject": "Pinned FFmpeg normal/scalar CLI",
+          "mode": "normal",
+          "rawSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "exactWordsAlphaHiddenRgb": true
+        },
+        {
+          "prototypeOnly": true,
+          "measured": false,
+          "librarySha256": "57fa3c420fa75ac656161291e004ac7032fa27aaa5a34719d2ba650abace1fee",
+          "packetSha256": "06550b36737527bec55ef1917698a08bfba1c88e6297126b310160438c02b104",
+          "exactWordsAlphaHiddenRgb": true,
+          "independentLiveOwners": true,
+          "sourceUnchanged": true,
+          "geometryExact": true,
+          "chunkCrcsExact": true,
+          "hardwareIntrinsicsDisabled": true
+        },
+        {
+          "subject": "Pinned FFmpeg normal/scalar CLI",
+          "mode": "scalar",
+          "rawSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "exactWordsAlphaHiddenRgb": true
+        }
+      ]
+    },
+    "qualificationReuse": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "measured": false,
+      "productionChanged": false,
+      "productionInputsUnchanged": true,
+      "productionQualificationReusedFrom": "warm-jpegprogressive444cancel-evidence.json",
+      "productionLibrarySha256": "57fa3c420fa75ac656161291e004ac7032fa27aaa5a34719d2ba650abace1fee",
+      "sameActualQualifiedPackageSha256": "adae98df6c7d95dd27712ca51978809ab609295121b43bb5cf00ebbbad725d94",
+      "source": "35e6616794a6531e8580bf9b7789d95786ec625648b96663a4cb5173bfe5e103",
+      "sourceRevision": "3f3bb7f3788e81e5b80e9179d8dd5a0e7efaa44d",
+      "nativeCliVersion": "n8.1",
+      "nativeCliSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
+      "helperRebuiltOnlyForNewPrototypeValidation": true,
+      "actualHelperFiles": {
+        "Boundary.dll": "65931534a9f4ece663a8c5c3c4d04fb7756b16e500823a17d43fb5cb4ca0dedc",
+        "Boundary.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "Boundary.deps.json": "7d5c743ee094c96b9287f083dd68e95c71fcadecebd0db99cdf3449aeec86367",
+        "Lokad.Image.dll": "57fa3c420fa75ac656161291e004ac7032fa27aaa5a34719d2ba650abace1fee"
+      }
+    },
+    "formatReference": "https://www.rfc-editor.org/rfc/rfc1951#section-3.2.7",
+    "rawArchive": {
+      "file": "pngfast16-compression-diagnostic.tar.gz",
+      "sha256": "6dbea62babbed8dd24bf3575630e25a7f842e9b8a7a024c94b1076db5c67f834"
+    },
+    "nextAction": "Implement one independently authored safe C# fixed-to-dynamic entropy primitive with full resource/work/failure controls; no matcher/level/filter change, no gate relaxation. Production remains unscored until integration, correctness and comparative performance qualification pass."
+  }
 }

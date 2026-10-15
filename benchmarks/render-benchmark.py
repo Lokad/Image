@@ -355,6 +355,11 @@ Release tests, including **896** live comparisons, plus the same actual package'
 consumer and all three examples. Ordinary progressive and cancelable baseline
 JPEG rows show current short regression screens and retain prior confirmations.
 
+PNG16 Fastest remains unscored: write boundaries produce identical payloads.
+An independent entropy-only prototype preserves all literal/match tokens and
+passes the size gate at974,122 versus965,318 IDAT bytes; safe production integration
+and performance qualification remain open. See its linked refusal/diagnostic.
+
 PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples
 and the unchanged 5% IDAT-size gate; earlier level6/level6 refusals remain unscored.
 GIF and animation are deferred. Full required warm coverage remains **open**;
