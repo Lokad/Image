@@ -55,6 +55,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA8, Average](../benchmarks/WARM-PNG-AVERAGE8-BASELINE.md) | 3,137.74 | 1,841.23 | 1.704 / 1.743 | 12,976 | Confirmed |
 | [PNG RGBA16, Average](../benchmarks/WARM-PNG-AVERAGE16.md) | 5,894.17 | 4,384.37 | 1.344 / 1.357 | 8,552 | Confirmed |
 | [PNG RGBA16, Paeth](../benchmarks/WARM-PNG-SUB16.md) | 5,749.92 | 5,769.74 | 0.997 / 1.264 | 8,552 | Regression screen; prior confirmed |
+| [PNG RGB8, Paeth](../benchmarks/WARM-PNG-RGB8-PAETH.md) | 3,140.91 | 2,608.88 | 1.204 / 1.214 | 3,432 | Confirmed |
 | [PNG RGBA16, Adam7](../benchmarks/WARM-PNG-SCATTER.md) | 6,567.82 | 3,984.54 | 1.648 / 1.700 | 2,024,532 | Confirmed |
 | [PNG RGB16, None](../benchmarks/WARM-PNG-RGB16-CURRENT.md) | 4,020.98 | 2,210.00 | 1.819 / 1.823 | 15,024 | Confirmed |
 | [PNG gray8, None](../benchmarks/WARM-PNG-GRAY8-CURRENT.md) | 564.59 | 361.22 | 1.563 / 1.580 | 9,904 | Confirmed |

@@ -15,11 +15,12 @@ internal static class WarmPngPaethInput
         return a <= b && a <= c ? left : b <= c ? up : upperLeft;
     }
 
-    internal static byte[] Build(byte[] pixels, int depth = 16)
+    internal static byte[] Build(byte[] pixels, int depth = 16, bool rgb = false)
     {
         const int width = HorizontalFlipInput.Width, height = HorizontalFlipInput.Height;
-        var bytesPerPixel = depth / 8 * 4;
-        if (depth is not (8 or 16) || pixels.Length != width * height * bytesPerPixel)
+        var sourceBytesPerPixel = depth / 8 * 4;
+        var bytesPerPixel = depth / 8 * (rgb ? 3 : 4);
+        if (depth is not (8 or 16) || pixels.Length != width * height * sourceBytesPerPixel)
             throw new ArgumentException("Expected one original RGBA raster at the declared precision.");
         var previous = new byte[width * bytesPerPixel]; var row = new byte[width * bytesPerPixel]; var filtered = new byte[row.Length];
         using var compressed = new MemoryStream();
@@ -27,7 +28,9 @@ internal static class WarmPngPaethInput
         {
             for (var y = 0; y < height; y++)
             {
-                for (var i = 0; i < row.Length; i++) row[i] = pixels[y * row.Length + (depth == 16 ? i ^ 1 : i)];
+                for (var i = 0; i < row.Length; i++)
+                    row[i] = pixels[(y * width + i / bytesPerPixel) * sourceBytesPerPixel
+                        + (depth == 16 ? (i % bytesPerPixel) ^ 1 : i % bytesPerPixel)];
                 for (var i = 0; i < row.Length; i++)
                     filtered[i] = unchecked((byte)(row[i] - Predict(i >= bytesPerPixel ? row[i - bytesPerPixel] : 0,
                         previous[i], i >= bytesPerPixel ? previous[i - bytesPerPixel] : 0)));
@@ -36,7 +39,7 @@ internal static class WarmPngPaethInput
         }
         using var output = new MemoryStream(); output.Write(new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 });
         var header = new byte[13]; BinaryPrimitives.WriteInt32BigEndian(header, width);
-        BinaryPrimitives.WriteInt32BigEndian(header.AsSpan(4), height); header[8] = (byte)depth; header[9] = 6;
+        BinaryPrimitives.WriteInt32BigEndian(header.AsSpan(4), height); header[8] = (byte)depth; header[9] = rgb ? (byte)2 : (byte)6;
         WarmPngAdam7Input.Chunk(output, "IHDR"u8, header);
         WarmPngAdam7Input.Chunk(output, "IDAT"u8, compressed.ToArray()); WarmPngAdam7Input.Chunk(output, "IEND"u8, []);
         return output.ToArray();

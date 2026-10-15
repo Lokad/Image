@@ -1292,6 +1292,12 @@ bytewise modulo256, with a zero top boundary. Reuse the original word raster;
 preparation checks exact normal/scalar samples and two live owners.
 See the [word Up result](../../benchmarks/WARM-PNG-UP16.md).
 
+RGB8 Paeth decoding uses `-WarmFamily Png -WarmCases DecodeRgbPaeth8` and the
+unchanged PNG worker. Original authoring packs the existing opaque RGB8 projection,
+then applies Paeth with a three-byte stride and zero top/left boundaries. Complete
+decoding, channel expansion and independent output acquisition/release are timed.
+See the [RGB8 Paeth result](../../benchmarks/WARM-PNG-RGB8-PAETH.md).
+
 Streaming RGBA16 Fastest uses `-WarmFamily Png -WarmCases EncodeFast16` or
 `EncodeFastCancelable16`. Managed fast adaptive backend2/native backend1 are
 explicit; unchanged5% IDAT-size and exact full-word/alpha/hidden-RGB gates apply.
