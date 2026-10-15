@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart, StreamDecode420Restart, NativeDecodeCancelable8, ProgressiveCancelable444, DirectRgb444 }
+public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart, StreamDecode420Restart, NativeDecodeCancelable8, ProgressiveCancelable444, DirectRgb444, DirectRgb422 }
 
 internal sealed record WarmJpegFixedPreparation(int SchemaVersion, string Project, string Recipe,
     string RasterSha256, string NativeFile, int EncodedBytes, string EncodedSha256,
@@ -35,7 +35,7 @@ public class WarmJpegDecode
     private JpegSampling Sampling => Case switch
     {
         WarmJpegDecodeCase.NativeDecode420 or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.NativeDecode420Restart or WarmJpegDecodeCase.StreamDecode420Restart => JpegSampling.YCbCr420,
-        WarmJpegDecodeCase.NativeDecode422 or WarmJpegDecodeCase.Progressive422 => JpegSampling.YCbCr422,
+        WarmJpegDecodeCase.DirectRgb422 or WarmJpegDecodeCase.NativeDecode422 or WarmJpegDecodeCase.Progressive422 => JpegSampling.YCbCr422,
         WarmJpegDecodeCase.OwnedDecodeGray or WarmJpegDecodeCase.ProgressiveGray => JpegSampling.Grayscale,
         _ => JpegSampling.YCbCr444
     };
@@ -43,7 +43,8 @@ public class WarmJpegDecode
     private bool Cancelable => Case is WarmJpegDecodeCase.NativeDecodeCancelable8 or WarmJpegDecodeCase.ProgressiveCancelable444;
     private CancellationTokenSource? cancellationSource;
     private CancellationToken decodeCancellation;
-    private bool DirectRgb => Case == WarmJpegDecodeCase.DirectRgb444;
+    private bool DirectRgb422 => Case == WarmJpegDecodeCase.DirectRgb422;
+    private bool DirectRgb => DirectRgb422 || Case == WarmJpegDecodeCase.DirectRgb444;
     private bool StreamInput => Case == WarmJpegDecodeCase.StreamDecode420Restart;
     private bool Restart => Case is WarmJpegDecodeCase.NativeDecode420Restart or WarmJpegDecodeCase.StreamDecode420Restart;
 
@@ -55,6 +56,7 @@ public class WarmJpegDecode
             null or "Decode8" => [WarmJpegDecodeCase.Decode8],
             "NativeDecode8" => [WarmJpegDecodeCase.NativeDecode8],
             "DirectRgb444" => [WarmJpegDecodeCase.DirectRgb444],
+            "DirectRgb422" => [WarmJpegDecodeCase.DirectRgb422],
             "NativeDecodeCancelable8" => [WarmJpegDecodeCase.NativeDecodeCancelable8],
             "NativeDecode420" => [WarmJpegDecodeCase.NativeDecode420],
             "NativeDecode422" => [WarmJpegDecodeCase.NativeDecode422],
@@ -66,7 +68,7 @@ public class WarmJpegDecode
             "Progressive422" => [WarmJpegDecodeCase.Progressive422],
             "NativeDecode420Restart" => [WarmJpegDecodeCase.NativeDecode420Restart],
             "StreamDecode420Restart" => [WarmJpegDecodeCase.StreamDecode420Restart],
-            _ => throw new ArgumentException("Choose one warm JPEG decode case: DirectRgb444, Decode8, NativeDecode8, NativeDecodeCancelable8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, ProgressiveCancelable444, Progressive422, NativeDecode420Restart or StreamDecode420Restart.")
+            _ => throw new ArgumentException("Choose one warm JPEG decode case: DirectRgb422, DirectRgb444, Decode8, NativeDecode8, NativeDecodeCancelable8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, ProgressiveCancelable444, Progressive422, NativeDecode420Restart or StreamDecode420Restart.")
         };
     }
 
@@ -217,7 +219,17 @@ public class WarmJpegDecode
                 });
             rasterHash = JpegBenchmarkCase.Hash(HorizontalFlipInput.Create(8));
             string decodedHash;
-            if (DirectRgb)
+            if (DirectRgb422)
+            {
+                var prepared = JsonSerializer.Deserialize<WarmJpegFixedPreparation>(File.ReadAllText(Path.Combine(state.Root,
+                    "artifacts", "warm-reference", "jpeg-decode422.json")), EncoderQualityCalibration.Json)
+                    ?? throw new InvalidOperationException("Original native JPEG422 preparation missing.");
+                if (prepared.SchemaVersion != 1 || prepared.Project != "Lokad.Image" || prepared.RasterSha256 != rasterHash)
+                    throw new InvalidOperationException("Original JPEG422 raster identity differs.");
+                encoded = WarmJpegRgbInput.Build(File.ReadAllBytes(Path.Combine(state.Root, prepared.NativeFile)), rgb422: true);
+                decodedHash = WarmJpegRgbInput.Managed422Sha256; inputOrigin = "original-native-marker-only-direct-rgb422";
+            }
+            else if (DirectRgb)
             {
                 var prepared = JsonSerializer.Deserialize<WarmJpegPreparation>(File.ReadAllText(Path.Combine(state.Root, "artifacts", "warm-reference", "jpeg-match.json")), EncoderQualityCalibration.Json)
                     ?? throw new InvalidOperationException("Original native JPEG444 preparation missing.");
@@ -298,9 +310,9 @@ public class WarmJpegDecode
                 catch (OperationCanceledException exception) when (exception.CancellationToken == canceled.Token) { }
             }
             File.WriteAllBytes(state.Input, encoded);
-            native = new NativeWarmReference(state, 8, cpu, DirectRgb ? "jpeg-rgb-decode" : StreamInput ? "jpeg420-stream-decode" : Sampling == JpegSampling.YCbCr420 ? "jpeg420-decode" : Sampling == JpegSampling.YCbCr422 ? "jpeg422-decode" : Sampling == JpegSampling.Grayscale ? "jpeg-gray-decode" : "jpeg-decode");
+            native = new NativeWarmReference(state, 8, cpu, DirectRgb422 ? "jpeg-rgb422-decode" : DirectRgb ? "jpeg-rgb-decode" : StreamInput ? "jpeg420-stream-decode" : Sampling == JpegSampling.YCbCr420 ? "jpeg420-decode" : Sampling == JpegSampling.YCbCr422 ? "jpeg422-decode" : Sampling == JpegSampling.Grayscale ? "jpeg-gray-decode" : "jpeg-decode");
             nativePixels = File.ReadAllBytes(state.NativeOutput);
-            if (DirectRgb && JpegBenchmarkCase.Hash(nativePixels) != WarmJpegRgbInput.NativeSha256)
+            if (DirectRgb && JpegBenchmarkCase.Hash(nativePixels) != (DirectRgb422 ? WarmJpegRgbInput.Native422Sha256 : WarmJpegRgbInput.NativeSha256))
                 throw new InvalidOperationException("Frozen direct-RGB native samples changed.");
             using (var output = DecodeManaged()) { ValidateGeometry(output); managedPixels = OriginalPixels.Bytes(output); }
             if (JpegBenchmarkCase.Hash(managedPixels) != decodedHash)
@@ -308,15 +320,26 @@ public class WarmJpegDecode
             var difference = JpegQualityCorpus.Compare(nativePixels, managedPixels);
             decoderMaximum = difference.Maximum; decoderRmse = difference.Rmse;
             if (decoderMaximum > 4 || decoderRmse > 1.5) throw new InvalidOperationException("JPEG decoder agreement exceeds maximum 4/RMSE 1.5.");
+            if (DirectRgb422 && !native.Ready.GetProperty("rgbCenteredPhaseCorrectionTimed").GetBoolean())
+                throw new InvalidOperationException("Native RGB422 centered correction must be timed.");
             // Independently verify the adapter against the public CLI conversion,
             // outside timing and with normal native CPU dispatch.
             var oracle = JpegOracle.DecodeArguments(513, 259, Sampling).ToList();
             if (DirectRgb) oracle[oracle.IndexOf("-filter_complex") + 1] = "format=rgba";
             oracle.InsertRange(oracle.IndexOf("-i"), ["-threads:v", "1", "-thread_type:v", "0"]);
             oracle.InsertRange(oracle.IndexOf("-filter_complex"), ["-filter_complex_threads", "1"]);
-            (scalarDecoderMaximum, scalarDecoderRmse) = ValidateAgreement(OracleProcess.Run(state.Ffmpeg, oracle.ToArray(), encoded), managedPixels);
+            var scalarOracle = OracleProcess.Run(state.Ffmpeg, oracle.ToArray(), encoded);
+            if (DirectRgb422) scalarOracle = WarmJpegRgbInput.Center422(scalarOracle);
+            (scalarDecoderMaximum, scalarDecoderRmse) = ValidateAgreement(scalarOracle, managedPixels);
             oracle.RemoveRange(oracle.IndexOf("-cpuflags"), 2);
-            if (!OracleProcess.Run(state.Ffmpeg, oracle.ToArray(), encoded).AsSpan().SequenceEqual(nativePixels))
+            var normalOracle = OracleProcess.Run(state.Ffmpeg, oracle.ToArray(), encoded);
+            if (DirectRgb422)
+            {
+                if (JpegQualityCorpus.Compare(normalOracle, managedPixels).Maximum <= 4)
+                    throw new InvalidOperationException("RGB422 uncorrected native mismatch control no longer distinguishes the phase.");
+                normalOracle = WarmJpegRgbInput.Center422(normalOracle);
+            }
+            if (!normalOracle.AsSpan().SequenceEqual(nativePixels))
                 throw new InvalidOperationException("Native warm JPEG decoder differs from the pinned public CLI.");
             ValidateManaged(); before = native.Measure(smoke, sampleCount: sampleCount); ready = true;
         }
@@ -388,7 +411,8 @@ public class WarmJpegDecode
                 cancellationBoundary = Cancelable ? "Live cancelable token, never signaled; token/source setup/disposal outside timing. Native has no equivalent cancellation setting; complete decode/conversion/owned output release remain timed." : null,
                 sourceIdentity, inputOrigin, sampling, progressive = IsProgressive, inputBytes = encoded.Length,
                 directRgb = DirectRgb, markerOnlyInterpretation = DirectRgb,
-                directRgbSourcePacketSha256 = DirectRgb ? WarmJpegRgbInput.SourceSha256 : null,
+                directRgbSourcePacketSha256 = DirectRgb422 ? WarmJpegRgbInput.Source422Sha256 : DirectRgb ? WarmJpegRgbInput.SourceSha256 : null,
+                rgbCenteredPhaseCorrectionTimed = DirectRgb422, uncorrectedRgbPhaseNegativeControl = DirectRgb422,
                 restartInterval = Restart ? 33 : 0, restartMarkers = Restart ? 16 : 0,
                 freshSeekableStream = StreamInput, inputView = false, inputCopiesTimed = StreamInput, callerInputLifetimeChecked = StreamInput,
                 inputSha256 = JpegBenchmarkCase.Hash(encoded), rasterSha256 = rasterHash,
@@ -401,7 +425,7 @@ public class WarmJpegDecode
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmJpegDecode).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = (StreamInput ? "Fresh non-exposed seekable JPEG Stream with complete input acquisition, all buffering/copies and EOF checks to independent owned RGBA8. Native fresh AVIO and owned packet acquisition/release execute every operation. " : "Identical resident prepared 8-bit JPEG to independent owned RGBA8. ") + $"Public managed Decode, allocation and disposal; native software mjpeg decoder, per-operation state reset, {(DirectRgb ? "GBRP direct-plane packing" : "full-range BT.601 conversion")}, owned output allocation and release. For subsampled inputs, expand both ceil-sized chroma planes by their sampling factors and crop to the original grid inside every operation, including intermediate acquisition/release. Grayscale includes expanding owned decoded GRAY8 samples into independent RGBA8 inside every operation. Native context/conversion/input packet/frame wrappers reused; every call decodes and converts all pixels. Padded native rows are exposed without a gratuitous packing copy. Startup, I/O, IPC, generation, hashing, checks and tight-row file writes excluded. No encoder quality search or additional source raster. Decoder RGB maximum 4/RMSE 1.5, exact opaque alpha."
+                boundary = (StreamInput ? "Fresh non-exposed seekable JPEG Stream with complete input acquisition, all buffering/copies and EOF checks to independent owned RGBA8. Native fresh AVIO and owned packet acquisition/release execute every operation. " : "Identical resident prepared 8-bit JPEG to independent owned RGBA8. ") + $"Public managed Decode, allocation and disposal; native software mjpeg decoder, per-operation state reset, {(DirectRgb422 ? "GBRP packing followed by timed centered RGB422 phase correction from preserved even-position samples" : DirectRgb ? "GBRP direct-plane packing" : "full-range BT.601 conversion")}, owned output allocation and release. For subsampled inputs, expand both ceil-sized chroma planes by their sampling factors and crop to the original grid inside every operation, including intermediate acquisition/release. Grayscale includes expanding owned decoded GRAY8 samples into independent RGBA8 inside every operation. Native context/conversion/input packet/frame wrappers reused; every call decodes and converts all pixels. Padded native rows are exposed without a gratuitous packing copy. Startup, I/O, IPC, generation, hashing, checks and tight-row file writes excluded. No encoder quality search or additional source raster. Decoder RGB maximum 4/RMSE 1.5, exact opaque alpha."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
         }
         finally { native?.Dispose(); cancellationSource?.Dispose(); state?.Dispose(); ready = false; }

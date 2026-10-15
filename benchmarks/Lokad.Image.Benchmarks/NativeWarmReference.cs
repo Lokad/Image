@@ -25,7 +25,7 @@ internal sealed class NativeWarmReference : IDisposable
         if (vp8Opaque && operation != "vp8-decode") throw new ArgumentException("Opaque VP8 applies only to VP8 decoding.", nameof(vp8Opaque));
         if (jpegSampling is not (null or "444" or "420" or "422") || jpegSampling is not null && operation is not ("jpeg-encode" or "jpeg-restart-encode"))
             throw new ArgumentException("JPEG sampling applies only to the 444/420/422 encode worker.", nameof(jpegSampling));
-        if (operation is not ("hflip" or "hflip-retained2" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "png-encode" or "png-smallest16-encode" or "png-fast16-encode" or "png-store16-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "png-decode" or "png-stream-decode" or "png-stream16-decode" or "png-stream-crop-fit" or "png-stream16-crop-fit" or "png-adam7-decode" or "jpeg-encode" or "jpeg-restart-encode" or "jpeg-decode" or "jpeg420-stream-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode" or "jpeg-rgb-decode" or "webp-encode" or "webp-opaque-encode" or "webp-lossless-encode" or "webp-decode" or "webp-stream-decode" or "vp8-decode" or "vp8-stream-decode" or "nearest-resize" or "bilinear-resize" or "bicubic-resize")) throw new ArgumentOutOfRangeException(nameof(operation));
+        if (operation is not ("hflip" or "hflip-retained2" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "png-encode" or "png-smallest16-encode" or "png-fast16-encode" or "png-store16-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "png-decode" or "png-stream-decode" or "png-stream16-decode" or "png-stream-crop-fit" or "png-stream16-crop-fit" or "png-adam7-decode" or "jpeg-encode" or "jpeg-restart-encode" or "jpeg-decode" or "jpeg420-stream-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode" or "jpeg-rgb-decode" or "jpeg-rgb422-decode" or "webp-encode" or "webp-opaque-encode" or "webp-lossless-encode" or "webp-decode" or "webp-stream-decode" or "vp8-decode" or "vp8-stream-decode" or "nearest-resize" or "bilinear-resize" or "bicubic-resize")) throw new ArgumentOutOfRangeException(nameof(operation));
         var normal = operation == "normal-orient";
         var transverse = operation == "transverse";
         var transpose = operation == "transpose";
@@ -56,7 +56,7 @@ internal sealed class NativeWarmReference : IDisposable
         var bicubicHorizontal = bicubic && depth is (8 or 16) && resizeWidth == 256 && resizeHeight == 259;
         if (bicubic && resizeWidth.HasValue && !bicubicUpsample && !bicubicMixed && !bicubicCross && !bicubicWide && !bicubicHorizontal && !bicubicBeyond32 && !bicubicVertical && !bicubicHorizontalUp && !bicubicVerticalUp && !bicubicBeyond64 && !bicubicBeyond128 && !bicubicBeyond256 && !bicubicBeyond512 && !bicubicBeyond1024) throw new ArgumentException("Explicit bicubic geometry is limited to a selected fixed case.");
         if (bicubicScalar && !bicubic) throw new ArgumentException("Scalar backend applies only to the bicubic worker.");
-        var codec = operation is not ("hflip" or "hflip-retained2" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "nearest-resize" or "bilinear-resize" or "bicubic-resize"); var jpeg = operation is "jpeg-encode" or "jpeg-restart-encode"; var jpegDecode = operation is "jpeg-decode" or "jpeg420-stream-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode" or "jpeg-rgb-decode"; var webpLossless = operation == "webp-lossless-encode"; var webp = operation is "webp-encode" or "webp-opaque-encode" || webpLossless; var webpDecode = operation is "webp-decode" or "webp-stream-decode"; var vp8Decode = operation is "vp8-decode" or "vp8-stream-decode";
+        var codec = operation is not ("hflip" or "hflip-retained2" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "nearest-resize" or "bilinear-resize" or "bicubic-resize"); var jpeg = operation is "jpeg-encode" or "jpeg-restart-encode"; var jpegDecode = operation is "jpeg-decode" or "jpeg420-stream-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode" or "jpeg-rgb-decode" or "jpeg-rgb422-decode"; var webpLossless = operation == "webp-lossless-encode"; var webp = operation is "webp-encode" or "webp-opaque-encode" || webpLossless; var webpDecode = operation is "webp-decode" or "webp-stream-decode"; var vp8Decode = operation is "vp8-decode" or "vp8-stream-decode";
         var jpegRestart = operation == "jpeg-restart-encode";
         var pngStream16 = operation == "png-stream16-decode";
         var pngComposition16 = operation == "png-stream16-crop-fit";
@@ -101,7 +101,7 @@ internal sealed class NativeWarmReference : IDisposable
         try
         {
             Ready = Read();
-            if (operation == "jpeg-rgb-decode" && (!Ready.GetProperty("directRgb").GetBoolean() || Ready.GetProperty("decodedPixelFormat").GetString() != "gbrp"))
+            if (operation is ("jpeg-rgb-decode" or "jpeg-rgb422-decode") && (!Ready.GetProperty("directRgb").GetBoolean() || Ready.GetProperty("decodedPixelFormat").GetString() != "gbrp"))
                 throw new InvalidOperationException("Native direct-RGB JPEG format differs.");
             if (Ready.GetProperty("state").GetString() != "ready" || Ready.GetProperty("schemaVersion").GetInt32() != 1
                 || Ready.GetProperty("width").GetInt32() != HorizontalFlipInput.Width
@@ -175,7 +175,7 @@ internal sealed class NativeWarmReference : IDisposable
                         || depth == 16 && !Ready.GetProperty("normalizedReferenceExact").GetBoolean()))))
                 || (webpLossless && (!Ready.GetProperty("exactRgb").GetBoolean() || !Ready.GetProperty("inputImportAllocationTimed").GetBoolean()))
                 || (jpegDecode && (depth != 8 || Ready.GetProperty("conversionThreads").GetInt32() != 1
-                    || Ready.GetProperty("decoder").GetString() != "mjpeg" || Ready.GetProperty("sampling").GetString() != (operation is "jpeg420-decode" or "jpeg420-stream-decode" ? "420" : operation == "jpeg422-decode" ? "422" : operation == "jpeg-gray-decode" ? "gray" : "444")
+                    || Ready.GetProperty("decoder").GetString() != "mjpeg" || Ready.GetProperty("sampling").GetString() != (operation is "jpeg420-decode" or "jpeg420-stream-decode" ? "420" : operation is "jpeg422-decode" or "jpeg-rgb422-decode" ? "422" : operation == "jpeg-gray-decode" ? "gray" : "444")
                     || Ready.GetProperty("chromaExpansionTimed").GetBoolean() != (operation is "jpeg420-decode" or "jpeg420-stream-decode" or "jpeg422-decode")
                     || Ready.GetProperty("grayscale").GetBoolean() != (operation == "jpeg-gray-decode")
                     || Ready.GetProperty("chromaVerticalFactor").GetInt32() != (operation is "jpeg420-decode" or "jpeg420-stream-decode" ? 2 : 1)
@@ -224,7 +224,7 @@ internal sealed class NativeWarmReference : IDisposable
                 : sample.OutputStride < (Ready.GetProperty("operation").GetString() is "nearest-resize" or "bilinear-resize" or "bicubic-resize" or "crop" or "png-stream-crop-fit" or "png-stream16-crop-fit" ? Ready.GetProperty("outputWidth").GetInt32()
                     : Ready.GetProperty("operation").GetString() is "quarter-turn-cw" or "quarter-turn-ccw" or "transpose" or "transverse" ? 259 : HorizontalFlipInput.Width) * (Ready.GetProperty("depth").GetInt32() / 8) * 4)
             || (Ready.GetProperty("operation").GetString() is "png-stream-decode" or "png-stream16-decode" or "png-stream-crop-fit" or "png-stream16-crop-fit" && sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32())
-            || (Ready.GetProperty("operation").GetString() is "jpeg-decode" or "jpeg-rgb-decode" or "webp-decode" or "webp-stream-decode" or "vp8-decode" or "vp8-stream-decode" && sample.OutputBytes != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4))
+            || (Ready.GetProperty("operation").GetString() is "jpeg-decode" or "jpeg-rgb-decode" or "jpeg-rgb422-decode" or "webp-decode" or "webp-stream-decode" or "vp8-decode" or "vp8-stream-decode" && sample.OutputBytes != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4))
             throw new InvalidOperationException("Native sample counters/elapsed time/CPU differ.");
         completed += operations;
         return sample;

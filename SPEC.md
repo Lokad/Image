@@ -607,6 +607,11 @@ opaque RGBA directly, with AVX2 batches and an exact scalar tail. Equal sampling
 factors give zero interpolation fractions; no further rounding is needed. The
 original per-row work/cancellation admission is retained, with no new workspace.
 Subsampled direct RGB keeps the original interpolation and rounding.
+For horizontal 2:1 RGB sampling with full vertical resolution, centered coordinates
+are exact quarters. Rows use equivalent integer quarter weights, AVX2 batches
+and a scalar edge/tail path, preserving the original binary64 result and opaque
+alpha. Equal sampling-factor representations are supported. Existing per-row
+work/cancellation checks remain; no extra workspace or pixel cache is introduced.
 
 Baseline entropy traversal retains exact logical work charges in a local block
 budget, including cancelable operations. Completed charges are published on every

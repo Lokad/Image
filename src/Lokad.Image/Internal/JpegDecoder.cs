@@ -607,6 +607,10 @@ internal ref struct JpegDecoder
             if (fullResolutionRgb)
                 foreach (var component in components)
                     fullResolutionRgb &= component.H == maxH && component.V == maxV;
+            var horizontalRgb422 = components.Length == 3 && rgb
+                && components[0].H == maxH && components[0].V == maxV
+                && components[1].H * 2 == maxH && components[1].V == maxV
+                && components[2].H == components[1].H && components[2].V == maxV;
             var subsampledYcbcr = components.Length == 3 && !rgb
                 && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported
                 && components[0].H == maxH && components[0].V == maxV
@@ -623,6 +627,15 @@ internal ref struct JpegDecoder
                     RenderRgbRow(components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width),
                         components[1].Plane.AsSpan(y * components[1].BlockColumns * 8, info.Width),
                         components[2].Plane.AsSpan(y * components[2].BlockColumns * 8, info.Width), row);
+                    continue;
+                }
+                if (horizontalRgb422)
+                {
+                    // Centered 2:1 coordinates are exact quarters; vertical
+                    // coordinates are integral. Keep the same per-row work.
+                    RenderRgb422Row(components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width),
+                        components[1].Plane.AsSpan(y * components[1].BlockColumns * 8, components[1].SampleWidth),
+                        components[2].Plane.AsSpan(y * components[2].BlockColumns * 8, components[2].SampleWidth), row);
                     continue;
                 }
                 var x = 0;
@@ -724,6 +737,46 @@ internal ref struct JpegDecoder
     }
 
     private static byte Round(double value) => (byte)Math.Clamp(Math.Round(value, MidpointRounding.AwayFromZero), 0, 255);
+
+    internal static void RenderRgb422Row(ReadOnlySpan<byte> red, ReadOnlySpan<byte> green, ReadOnlySpan<byte> blue, Span<byte> rgba)
+    {
+        if (green.Length != (red.Length + 1L) / 2 || blue.Length != green.Length || rgba.Length != red.Length * 4L)
+            throw new ArgumentException("RGB422 planes and RGBA row lengths differ.");
+        var x = 0;
+        if (Avx2.IsSupported && Ssse3.IsSupported && green.Length >= 8)
+        {
+            rgba[0] = red[0]; rgba[1] = green[0]; rgba[2] = blue[0]; rgba[3] = 255;
+            rgba[4] = red[1]; rgba[5] = (byte)((3 * green[0] + green[1] + 2) >> 2);
+            rgba[6] = (byte)((3 * blue[0] + blue[1] + 2) >> 2); rgba[7] = 255;
+            x = 2;
+            // Four component samples supply eight output pixels. The neighbor
+            // alternates left/right; these are channel indices, not codec tables.
+            var centers = Vector128.Create((byte)1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0);
+            var neighbors = Vector128.Create((byte)0, 2, 1, 3, 2, 4, 3, 5, 0, 0, 0, 0, 0, 0, 0, 0);
+            for (; x <= red.Length - 8 && x / 2 <= green.Length - 7; x += 8)
+            {
+                var offset = x / 2 - 1;
+                var gs = Vector128.Create(Vector64.Create(green.Slice(offset, 8)), Vector64<byte>.Zero);
+                var bs = Vector128.Create(Vector64.Create(blue.Slice(offset, 8)), Vector64<byte>.Zero);
+                var gc = Avx2.ConvertToVector256Int32(Ssse3.Shuffle(gs, centers));
+                var bc = Avx2.ConvertToVector256Int32(Ssse3.Shuffle(bs, centers));
+                var g = Avx2.ShiftRightLogical(Avx2.Add(Avx2.Add(Avx2.Add(gc, Avx2.ShiftLeftLogical(gc, 1)),
+                    Avx2.ConvertToVector256Int32(Ssse3.Shuffle(gs, neighbors))), Vector256.Create(2)), 2).AsUInt32();
+                var b = Avx2.ShiftRightLogical(Avx2.Add(Avx2.Add(Avx2.Add(bc, Avx2.ShiftLeftLogical(bc, 1)),
+                    Avx2.ConvertToVector256Int32(Ssse3.Shuffle(bs, neighbors))), Vector256.Create(2)), 2).AsUInt32();
+                var r = WidenSamples8(red.Slice(x, 8)).AsUInt32();
+                Avx2.Or(Avx2.Or(r, Avx2.ShiftLeftLogical(g, 8)),
+                    Avx2.Or(Avx2.ShiftLeftLogical(b, 16), Vector256.Create(0xFF000000u))).AsByte().CopyTo(rgba.Slice(x * 4, 32));
+            }
+        }
+        for (; x < red.Length; x++)
+        {
+            var k = x / 2;
+            var neighbor = (x & 1) == 0 ? Math.Max(k - 1, 0) : Math.Min(k + 1, green.Length - 1);
+            rgba[x * 4] = red[x]; rgba[x * 4 + 1] = (byte)((3 * green[k] + green[neighbor] + 2) >> 2);
+            rgba[x * 4 + 2] = (byte)((3 * blue[k] + blue[neighbor] + 2) >> 2); rgba[x * 4 + 3] = 255;
+        }
+    }
 
     internal static void RenderRgbRow(ReadOnlySpan<byte> red, ReadOnlySpan<byte> green, ReadOnlySpan<byte> blue, Span<byte> rgba)
     {

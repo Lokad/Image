@@ -90,10 +90,11 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-AC-FUSED.md) | 1,267.57 | 682.73 | 1.857 / 1.880 | 1,221,545 | Confirmed |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG420-BULK.md) | 1,721.81 | 1,007.73 | 1.709 / 1.719 | 1,619,530 | Confirmed |
 | [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-JPEG-RESTART-DECODE.md) | 1,852.40 | 1,016.13 | 1.823 / 1.837 | 1,623,906 | Confirmed |
-| [JPEG baseline 4:2:2](../benchmarks/WARM-COVERAGE-QUIET.md) | 2,087.01 | 1,336.37 | 1.562 / 1.567 | 1,978,646 | Confirmed |
+| [JPEG baseline 4:2:2](../benchmarks/WARM-JPEG-RGB422-ROW.md) | 1,902.81 | 1,346.77 | 1.413 / 1.497 | 1,978,651 | Regression screen; prior confirmed |
 | [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-JPEG444-OWNED-QUIET.md) | 3,564.61 | 2,039.57 | 1.748 / 1.793 | 2,596,174 | Confirmed |
 | [JPEG baseline 4:4:4, native input](../benchmarks/WARM-JPEG-RGB-ROW.md) | 3,071.31 | 1,729.68 | 1.776 / 4.566 | 2,664,373 | Regression screen; prior confirmed |
-| [JPEG baseline direct RGB, full resolution](../benchmarks/WARM-JPEG-RGB-ROW.md) | 2,781.74 | 1,450.64 | 1.918 / 1.923 | 2,664,373 | Confirmed |
+| [JPEG baseline direct RGB, full resolution](../benchmarks/WARM-JPEG-RGB422-ROW.md) | 2,964.52 | 1,566.33 | 1.893 / 2.998 | 2,664,373 | Regression screen; prior confirmed |
+| [JPEG direct RGB 4:2:2, timed centered correction](../benchmarks/WARM-JPEG-RGB422-ROW.md) | 1,653.61 | 1,094.64 | 1.511 / 1.520 | 1,978,655 | Confirmed |
 | [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-JPEG-BASELINE-AC-RUN.md) | 3,048.96 | 1,722.47 | 1.770 / 1.797 | 2,664,373 | Confirmed |
 | [JPEG progressive gray](../benchmarks/WARM-JPEG-REFINEMENT.md) | 3,336.90 | 1,743.36 | 1.914 / 1.942 | 1,232,501 | Confirmed |
 | [JPEG progressive 4:2:0](../benchmarks/WARM-JPEG-PROGRESSIVE420.md) | 3,646.81 | 1,938.47 | 1.881 / 1.894 | 1,637,521 | Confirmed |
@@ -294,17 +295,20 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted coverage round confirms RGB16 Paeth decoding at
-**1.904x / upper1.928x**, with exact 16-bit RGB/opaque alpha and **6,504 B/op**.
-The original word raster's RGB projection is reused; every row uses Paeth with
-six-byte predictor stride. All twelve actuals are selected and retained.
-One harness build suffices. Production is unchanged: existing **3,457 Release
-tests per OS**, including **898 live comparisons**, and the same actual Release
-package's consumer plus all three examples on Windows/Linux are reused. No
-production/native rebuild, full suite, package proof, method audit or profile
-is repeated. Grayscale-alpha8 Paeth remains confirmed1.017x / upper1.068x at
-2,408 B/op. The short-palette production round retains its independent
-1.317x / upper1.327x confirmation and 43.9% managed-time reduction.
+The latest accepted production round specializes horizontal subsampled RGB JPEG
+rows, reducing a **4.081x** gap by **62.9%**, independently confirming
+**1.511x / upper1.520x** at **1,978,655 B/op**. Exact quarter weights, AVX2 batches
+and scalar edges/tails preserve the original managed pixels, admission and row
+work/cancellation without new workspace. The native baseline includes GBRP
+packing and the complete centered sampling-phase correction in every operation;
+its uncorrected output remains an untimed mismatch control. Both shared
+regression means pass before full **3,469-test-per-OS** qualification, including
+**898 live comparisons**, and the same actual Release package's consumer plus
+all three examples on Windows/Linux. No tolerance is widened.
+
+Recent unchanged-production coverage confirms RGB16 Paeth at1.904x /
+upper1.928x,6,504 B/op, and gray-alpha8 Paeth at1.017x / upper1.068x,2,408 B/op.
+Those rounds reuse the preceding immutable production qualification.
 
 The palette8/tRNS Adam7 pair now independently confirms **1.167x / upper1.177x**,
 with **4,960 B/op**, exact alpha/hidden RGB and both quiet guards passing.

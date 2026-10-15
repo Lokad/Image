@@ -9,10 +9,35 @@ internal static class WarmJpegRgbInput
     internal const string ManagedSha256 = "c66733fae2979ac6388499d415a7bc448fcc2765a5bdb578421de4c04e39c4c9";
     internal const string NativeSha256 = "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369";
 
-    internal static byte[] Build(byte[] source)
+    internal const string Source422Sha256 = "f0b28dd0edce8c7286099c9b4572d7fd8baf6290bcd7b4ff9134f1e699354828";
+    internal const string Input422Sha256 = "0894aa4975ec61d5a3723bb04ee4703a23313532097e5bc080823b623134b9c9";
+    internal const string Managed422Sha256 = "81d19ce7a8331b310ad4e6c1214d1a2b93c7ad8a09afa730ceda2e998355c0de";
+    internal const string Native422Sha256 = "5cd92d09be1dc007dc2a696153cf50a3340e93bf015affe7146c3e28af195517";
+
+    // Independent untimed CLI reference: immutable even-position samples and
+    // rational SPEC centered interpolation, separate from the in-place worker.
+    internal static byte[] Center422(ReadOnlySpan<byte> rgba)
     {
-        if (JpegBenchmarkCase.Hash(source) != SourceSha256)
-            throw new InvalidOperationException("Original native JPEG444 packet differs.");
+        const int width = 513, height = 259;
+        if (rgba.Length != width * height * 4) throw new ArgumentException("Expected one RGBA8 raster.");
+        var output = rgba.ToArray();
+        for (var y = 0; y < height; y++)
+        for (var x = 0; x < width; x++)
+        for (var c = 1; c <= 2; c++)
+        {
+            var k = x / 2; var odd = (x & 1) != 0;
+            var first = Math.Clamp(odd ? k : k - 1, 0, width / 2);
+            var second = Math.Clamp(odd ? k + 1 : k, 0, width / 2);
+            output[(y * width + x) * 4 + c] = (byte)(((odd ? 3 : 1) * rgba[(y * width + first * 2) * 4 + c]
+                + (odd ? 1 : 3) * rgba[(y * width + second * 2) * 4 + c] + 2) / 4);
+        }
+        return output;
+    }
+
+    internal static byte[] Build(byte[] source, bool rgb422 = false)
+    {
+        if (JpegBenchmarkCase.Hash(source) != (rgb422 ? Source422Sha256 : SourceSha256))
+            throw new InvalidOperationException("Original native JPEG RGB source packet differs.");
         using var output = new MemoryStream();
         output.Write(new byte[] { 255, 216, 255, 238, 0, 14, 65, 100, 111, 98, 101, 0, 100, 0, 0, 0, 0, 0 });
         var position = 2; var frame = false; var scan = false;
@@ -54,7 +79,7 @@ internal static class WarmJpegRgbInput
             if (scan) { output.Write(source.AsSpan(position)); break; }
         }
         var result = output.ToArray();
-        if (!scan || JpegBenchmarkCase.Hash(result) != InputSha256)
+        if (!scan || JpegBenchmarkCase.Hash(result) != (rgb422 ? Input422Sha256 : InputSha256))
             throw new InvalidOperationException("Marker-only RGB interpretation differs.");
         return result;
     }

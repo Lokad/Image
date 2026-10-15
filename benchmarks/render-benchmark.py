@@ -130,10 +130,11 @@ def render():
         row('JPEG baseline gray', 'warm-jpegac-fused-evidence.json', ['regressionControl', 'observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
         row('JPEG baseline 4:2:0', 'warm-jpeg420-bulk-evidence.json', ['observations', -1], 'WARM-JPEG420-BULK.md', True),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-jpeg-restartdecode-evidence.json', ['observations', -1], 'WARM-JPEG-RESTART-DECODE.md', True),
-        row('JPEG baseline 4:2:2', 'warm-coverage-quiet-evidence.json', ['cases', 'jpeg422', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
+        row('JPEG baseline 4:2:2', 'warm-jpeg-rgb422-row-evidence.json', ['observations', 4], 'WARM-JPEG-RGB422-ROW.md', verification='Regression screen; prior confirmed'),
         row('JPEG baseline 4:4:4, owned input', 'warm-jpeg444owned-quiet-evidence.json', ['observations', -1], 'WARM-JPEG444-OWNED-QUIET.md', True),
         row('JPEG baseline 4:4:4, native input', 'warm-jpeg-rgb-row-evidence.json', ['observations', 3], 'WARM-JPEG-RGB-ROW.md', verification='Regression screen; prior confirmed'),
-        row('JPEG baseline direct RGB, full resolution', 'warm-jpeg-rgb-row-evidence.json', ['observations', 2], 'WARM-JPEG-RGB-ROW.md', True),
+        row('JPEG baseline direct RGB, full resolution', 'warm-jpeg-rgb422-row-evidence.json', ['observations', 3], 'WARM-JPEG-RGB422-ROW.md', verification='Regression screen; prior confirmed'),
+        row('JPEG direct RGB 4:2:2, timed centered correction', 'warm-jpeg-rgb422-row-evidence.json', ['observations', 2], 'WARM-JPEG-RGB422-ROW.md', True),
         row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg-ac-run-evidence.json', ['cancelableConfirmations', -1], 'WARM-JPEG-BASELINE-AC-RUN.md', True),
         row('JPEG progressive gray', 'warm-jpegrefinement-evidence.json', ['observations', -1], 'WARM-JPEG-REFINEMENT.md', True),
         row('JPEG progressive 4:2:0', 'warm-jpegprogressive420-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE420.md', True),
@@ -371,17 +372,20 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted coverage round confirms RGB16 Paeth decoding at
-**1.904x / upper1.928x**, with exact 16-bit RGB/opaque alpha and **6,504 B/op**.
-The original word raster's RGB projection is reused; every row uses Paeth with
-six-byte predictor stride. All twelve actuals are selected and retained.
-One harness build suffices. Production is unchanged: existing **3,457 Release
-tests per OS**, including **898 live comparisons**, and the same actual Release
-package's consumer plus all three examples on Windows/Linux are reused. No
-production/native rebuild, full suite, package proof, method audit or profile
-is repeated. Grayscale-alpha8 Paeth remains confirmed1.017x / upper1.068x at
-2,408 B/op. The short-palette production round retains its independent
-1.317x / upper1.327x confirmation and 43.9% managed-time reduction.
+The latest accepted production round specializes horizontal subsampled RGB JPEG
+rows, reducing a **4.081x** gap by **62.9%**, independently confirming
+**1.511x / upper1.520x** at **1,978,655 B/op**. Exact quarter weights, AVX2 batches
+and scalar edges/tails preserve the original managed pixels, admission and row
+work/cancellation without new workspace. The native baseline includes GBRP
+packing and the complete centered sampling-phase correction in every operation;
+its uncorrected output remains an untimed mismatch control. Both shared
+regression means pass before full **3,469-test-per-OS** qualification, including
+**898 live comparisons**, and the same actual Release package's consumer plus
+all three examples on Windows/Linux. No tolerance is widened.
+
+Recent unchanged-production coverage confirms RGB16 Paeth at1.904x /
+upper1.928x,6,504 B/op, and gray-alpha8 Paeth at1.017x / upper1.068x,2,408 B/op.
+Those rounds reuse the preceding immutable production qualification.
 
 The palette8/tRNS Adam7 pair now independently confirms **1.167x / upper1.177x**,
 with **4,960 B/op**, exact alpha/hidden RGB and both quiet guards passing.

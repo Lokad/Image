@@ -57,7 +57,7 @@ typedef struct {
     AVPacket *input;
     uint8_t *encoded, *expected;
     size_t encoded_bytes, raw_bytes;
-    int width, height, cpu, row_bytes, stride, subsampled, gray, rgb;
+    int width, height, cpu, row_bytes, stride, subsampled, gray, rgb, rgb422;
     uint64_t completed, observed;
 } Work;
 static void initialize_conversion(Work *work)
@@ -100,6 +100,26 @@ static void release(Work *work)
     av_frame_unref(work->decoded); av_frame_unref(work->rgba);
     if (work->subsampled) { av_frame_unref(work->u); av_frame_unref(work->v); }
 }
+static void center_rgb422(Work *work)
+{
+    /* SPEC centered 2:1 sampling: the decoder's even RGB positions retain the
+     * original component samples. Reconstruct quarter weights after packing.
+     * Keep originals in locals before overwriting the owned output. */
+    for (int y = 0; y < work->height; y++) {
+        uint8_t *row = work->rgba->data[0] + (size_t)y*work->rgba->linesize[0];
+        for (int channel = 1; channel <= 2; channel++) {
+            unsigned previous = row[channel];
+            for (int x = 0; x < work->width; x += 2) {
+                unsigned current = row[x*4+channel];
+                unsigned next = x+2 < work->width ? row[(x+2)*4+channel] : current;
+                row[x*4+channel] = (uint8_t)((previous+3*current+2)/4);
+                if (x+1 < work->width)
+                    row[(x+1)*4+channel] = (uint8_t)((3*current+next+2)/4);
+                previous = current;
+            }
+        }
+    }
+}
 static void apply(Work *work)
 {
     // Reestablish independent still-image decoder state on every operation.
@@ -138,6 +158,7 @@ static void apply(Work *work)
     require(av_frame_get_buffer(work->rgba, 32), "Allocate independent RGBA output");
     if (sws_scale(work->conversion, planes, strides,
         0, work->height, work->rgba->data, work->rgba->linesize) != work->height) fail("Color conversion incomplete.");
+    if (work->rgb422) center_rgb422(work);
     work->stride = work->rgba->linesize[0];
     work->observed += work->rgba->data[0][work->row_bytes/2]; work->completed++;
 }
@@ -168,9 +189,10 @@ static void check_and_write(Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if (argc != 7 || (strcmp(argv[1], "jpeg-decode") && strcmp(argv[1], "jpeg420-decode") && strcmp(argv[1], "jpeg422-decode") && strcmp(argv[1], "jpeg-gray-decode") && strcmp(argv[1], "jpeg-rgb-decode"))) fail("Usage: ffmpeg-jpeg-decode-warm jpeg-decode|jpeg420-decode|jpeg422-decode|jpeg-gray-decode|jpeg-rgb-decode INPUT WIDTH HEIGHT 8 OUTPUT");
+    if (argc != 7 || (strcmp(argv[1], "jpeg-decode") && strcmp(argv[1], "jpeg420-decode") && strcmp(argv[1], "jpeg422-decode") && strcmp(argv[1], "jpeg-gray-decode") && strcmp(argv[1], "jpeg-rgb-decode") && strcmp(argv[1], "jpeg-rgb422-decode"))) fail("Usage: ffmpeg-jpeg-decode-warm jpeg-decode|jpeg420-decode|jpeg422-decode|jpeg-gray-decode|jpeg-rgb-decode|jpeg-rgb422-decode INPUT WIDTH HEIGHT 8 OUTPUT");
     Work work = {0}; work.cpu = affinity_cpu(); work.width = number(argv[3]); work.height = number(argv[4]);
-    work.gray=!strcmp(argv[1],"jpeg-gray-decode"); work.rgb=!strcmp(argv[1],"jpeg-rgb-decode");
+    work.rgb422=!strcmp(argv[1],"jpeg-rgb422-decode");
+    work.gray=!strcmp(argv[1],"jpeg-gray-decode"); work.rgb=work.rgb422 || !strcmp(argv[1],"jpeg-rgb-decode");
     work.subsampled=!strcmp(argv[1],"jpeg420-decode") ? 420 : !strcmp(argv[1],"jpeg422-decode") ? 422 : 0;
     if (number(argv[5]) != 8) fail("JPEG decode reference requires depth 8.");
     work.row_bytes = work.width*4; work.raw_bytes = (size_t)work.row_bytes*work.height;
@@ -198,8 +220,8 @@ int main(int argc, char **argv)
     check_frame(&work, held); check_frame(&work, work.rgba);
     held->data[0][0] ^= 255; check_frame(&work, work.rgba); av_frame_free(&held); release(&work);
     check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"decoder\":\"mjpeg\",\"sampling\":\"%s\",\"chromaExpansionTimed\":%s,\"chromaVerticalFactor\":%d,\"grayscale\":%s,\"directRgb\":%s,\"decodedPixelFormat\":\"%s\",\"colorConversionTimed\":true,\"stateResetTimed\":true,\"pixelsDeterministic\":true,\"outputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
-        argv[1],work.width, work.height, work.cpu, work.gray ? "gray" : work.subsampled==420 ? "420" : work.subsampled==422 ? "422" : "444", work.subsampled ? "true" : "false", work.subsampled==420 ? 2 : 1, work.gray ? "true" : "false", work.rgb ? "true" : "false", work.rgb ? "gbrp" : work.gray ? "gray8" : work.subsampled==420 ? "yuvj420p" : work.subsampled==422 ? "yuvj422p" : "yuvj444p", work.raw_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"decoder\":\"mjpeg\",\"sampling\":\"%s\",\"chromaExpansionTimed\":%s,\"chromaVerticalFactor\":%d,\"grayscale\":%s,\"directRgb\":%s,\"rgbCenteredPhaseCorrectionTimed\":%s,\"decodedPixelFormat\":\"%s\",\"colorConversionTimed\":true,\"stateResetTimed\":true,\"pixelsDeterministic\":true,\"outputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
+        argv[1],work.width, work.height, work.cpu, work.gray ? "gray" : work.subsampled==420 ? "420" : work.subsampled==422 || work.rgb422 ? "422" : "444", work.subsampled ? "true" : "false", work.subsampled==420 ? 2 : 1, work.gray ? "true" : "false", work.rgb ? "true" : "false", work.rgb422 ? "true" : "false", work.rgb ? "gbrp" : work.gray ? "gray8" : work.subsampled==420 ? "yuvj420p" : work.subsampled==422 ? "yuvj422p" : "yuvj444p", work.raw_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;
