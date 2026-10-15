@@ -1,6 +1,6 @@
 # Lokad.Image benchmark state
 
-Updated 2026-10-14. Latest retained warm measurements on the dedicated AMD EPYC
+Updated 2026-10-15. Latest retained warm measurements on the dedicated AMD EPYC
 9V45 VM: Ubuntu 24.04.4, .NET 10.0.8 / SDK 10.0.204, FFmpeg n8.1
 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread, normal SIMD,
 tiering off, workstation nonconcurrent GC. Two original 513×259 RGBA8/16 rasters,
@@ -33,6 +33,7 @@ timing comparison; compression efficiency parity is not established.
 
 | Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
+| [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-STREAM-PNG8.md) | 2,655.37 | 1,392.55 | 1.907 / 1.916 | 756,605 | Confirmed |
 | [PNG RGBA8, None](../benchmarks/WARM-PNG8-DECODE-QUIET.md) | 2,961.21 | 1,516.02 | 1.953 / 1.995 | 755,274 | Confirmed |
 | [PNG RGBA8, stored Deflate / None](../benchmarks/WARM-PNG-STORED8-DECODE.md) | 157.30 | 135.76 | 1.159 / 1.168 | 12,976 | Confirmed |
 | [PNG RGBA16, None](../benchmarks/WARM-PNG-LITERAL-RUN.md) | 5,740.60 | 2,931.33 | 1.958 / 1.968 | 2,032,864 | Confirmed |
@@ -235,7 +236,9 @@ one independently certified exact rational blue half. No managed pixel tolerance
 
 Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
 diagnostics or raw GC allocated bytes / operation count (rounded up, including
-harness overhead). Decoder timing uses resident encoded spans. Separate fresh
+harness overhead). Decoder rows use resident encoded spans unless labeled fresh Stream. The fresh
+seekable PNG8 row includes input acquisition and copies for both subjects; its
+[report](../benchmarks/WARM-STREAM-PNG8.md) defines the full boundary. Separate fresh
 public Stream controls measure Paeth8 **2,275,800**, Paeth16 **4,713,416**, and
 Adam7-16 **5,058,912 B/op**, identically on both OSes with normal/scalar code.
 These are distinct boundaries. FFmpeg allocation totals are **not measured**;

@@ -70,6 +70,7 @@ def table(rows):
 
 def render():
     decodes = [
+        row('PNG RGBA8, fresh seekable Stream', 'warm-stream-png8-evidence.json', ['observations', -1], 'WARM-STREAM-PNG8.md', True),
         row('PNG RGBA8, None', 'warm-png8decode-quiet-evidence.json', ['observations', -1], 'WARM-PNG8-DECODE-QUIET.md', True),
         row('PNG RGBA8, stored Deflate / None', 'warm-pngstore8decode-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-DECODE.md', True),
         row('PNG RGBA16, None', 'warm-pngliteralrun-evidence.json', ['observations', -1], 'WARM-PNG-LITERAL-RUN.md', True),
@@ -226,7 +227,7 @@ def render():
     ]
     return f'''# Lokad.Image benchmark state
 
-Updated 2026-10-14. Latest retained warm measurements on the dedicated AMD EPYC
+Updated 2026-10-15. Latest retained warm measurements on the dedicated AMD EPYC
 9V45 VM: Ubuntu 24.04.4, .NET 10.0.8 / SDK 10.0.204, FFmpeg n8.1
 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread, normal SIMD,
 tiering off, workstation nonconcurrent GC. Two original 513×259 RGBA8/16 rasters,
@@ -309,7 +310,9 @@ one independently certified exact rational blue half. No managed pixel tolerance
 
 Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
 diagnostics or raw GC allocated bytes / operation count (rounded up, including
-harness overhead). Decoder timing uses resident encoded spans. Separate fresh
+harness overhead). Decoder rows use resident encoded spans unless labeled fresh Stream. The fresh
+seekable PNG8 row includes input acquisition and copies for both subjects; its
+[report](../benchmarks/WARM-STREAM-PNG8.md) defines the full boundary. Separate fresh
 public Stream controls measure Paeth8 **2,275,800**, Paeth16 **4,713,416**, and
 Adam7-16 **5,058,912 B/op**, identically on both OSes with normal/scalar code.
 These are distinct boundaries. FFmpeg allocation totals are **not measured**;

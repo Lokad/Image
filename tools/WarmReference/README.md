@@ -1182,3 +1182,14 @@ The owned-output boundary and validation are identical to the plain-transpose
 reference above, with four-byte pixels. The [coverage round](../../benchmarks/WARM-TRANSPOSE8-PARITY.md)
 changes no production code and adds no raster or geometry. The independent
 repeat passes both quiet guards at 0.991x, upper 1.003x, certifying this fixed pair.
+
+
+Fresh seekable PNG8 Stream coverage uses `build-png-stream-linux.sh` and
+`-WarmFamily StreamDecode -WarmCases Png8`. Prepare once with the existing
+`-PrepareWarm` / `-PrepareWarmConfirm` switches, then reuse verified immutable
+children for the short screen and independent confirmation. The original adapter
+uses public AVIO acquisition into a fresh owned packet, an explicit EOF read,
+and complete owned PNG output, with one codec thread. Managed input is a fresh
+read-only non-exposed MemoryStream. Input reads/copies and input/output release
+are timed on both sides; fixture creation and validation remain outside timing.
+See the [fixed boundary and retained result](../../benchmarks/WARM-STREAM-PNG8.md).
