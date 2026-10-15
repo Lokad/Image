@@ -98,6 +98,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG-FAST16-RECODE.md) | 5,439.91 | 17,231.30 | 0.316 / 0.353 | 527,627 | Regression screen; prior confirmed |
 | [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED8-ENCODE.md) | 357.17 | 189.72 | 1.883 / 1.933 | 2,102,472 | Confirmed |
 | [PNG RGBA16, NoCompression / None](../benchmarks/WARM-PNG-STORED16-ENCODE.md) | 504.25 | 405.59 | 1.243 / 1.289 | 4,203,541 | Confirmed |
+| [PNG RGBA8, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-FAST8.md) | 3,077.83 | 4,351.79 | 0.707 / 0.712 | 527,669 | Confirmed |
 | [PNG RGBA16, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-FAST2.md) | 12,927.95 | 17,660.77 | 0.732 / 0.735 | 2,103,738 | Confirmed |
 | [PNG RGBA16, Fastest managed2/native1 / live cancelable token](../benchmarks/WARM-PNG-FAST2.md) | 12,932.71 | 17,700.33 | 0.731 / 0.747 | 2,103,647 | Confirmed |
 | [PNG RGBA16, Fastest managed2/native1 / forward-only output](../benchmarks/WARM-PNG-FAST-FORWARD16.md) | 13,628.70 | 17,677.29 | 0.771 / 0.805 | 2,103,770 | Confirmed |

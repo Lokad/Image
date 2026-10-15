@@ -322,7 +322,7 @@ static void check_and_write(Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if (argc != 7 || strcmp(argv[1], "png-fast16-encode")) fail("Usage: ffmpeg-png-fast16-warm png-fast16-encode INPUT WIDTH HEIGHT 16 OUTPUT");
+    if (argc != 7 || strcmp(argv[1], "png-fast16-encode")) fail("Usage: ffmpeg-png-fast16-warm png-fast16-encode INPUT WIDTH HEIGHT 8|16 OUTPUT");
     Work work = {0}; work.encode_rgb = !strcmp(argv[1], "png-rgb-encode"); work.encode_gray = !strcmp(argv[1], "png-gray-encode");
     work.encode_gray_alpha = !strcmp(argv[1], "png-gray-alpha-encode");
     work.encode_stored = !strcmp(argv[1], "png-store-encode");
@@ -332,7 +332,7 @@ int main(int argc, char **argv)
     uint16_t endian = 1; if (*(uint8_t *)&endian != 1) fail("This reference requires a little-endian host.");
     av_log_set_level(AV_LOG_ERROR);
     work.width = number(argv[3]); work.height = number(argv[4]); work.depth = number(argv[5]);
-    if (work.depth != 16) fail("Fastest PNG reference requires RGBA16 input.");
+    if (work.depth != 8 && work.depth != 16) fail("Fastest PNG reference requires RGBA8/16 input.");
     if (work.encode_stored && work.depth != 8) fail("Stored PNG encode reference requires RGBA8 input.");
     work.row_bytes = work.width * work.depth / 8 * 4; work.raw_bytes = (size_t)work.row_bytes * work.height;
     if (work.raw_bytes > 512U * 1024U * 1024U) fail("Reference raster exceeds 512 MiB.");

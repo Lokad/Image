@@ -1300,6 +1300,13 @@ and managed row packing/output work repeat every operation. The live token is
 never signaled and setup stays outside timing. See the
 [streaming result](../../benchmarks/WARM-PNG-FAST2.md).
 
+RGBA8 Fastest uses `-WarmFamily Png -WarmCases EncodeFast8`, the same explicit
+managed2/native1 policy and unchanged5% IDAT-size/exact-sample gates. The existing
+fast worker now admits its existing RGBA8 path; its legacy executable/protocol
+name remains `ffmpeg-png-fast16-warm` / `png-fast16-encode`. Depth is explicit in
+the protocol and receipt. No word conversion is performed or timed at byte depth.
+See the [byte Fastest result](../../benchmarks/WARM-PNG-FAST8.md).
+
 Forward-only RGBA16 Fastest output uses `-WarmFamily Png -WarmCases EncodeFastForward16`.
 The fresh caller wrapper exposes no length/position/seek and includes callback
 dispatch and disposal inside each operation; validation checks the frozen stock

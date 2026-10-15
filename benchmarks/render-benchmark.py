@@ -135,6 +135,7 @@ def render():
         row('PNG RGBA8, level 6 / None', 'warm-pngfast16-recode-evidence.json', ['regressions', 1], 'WARM-PNG-FAST16-RECODE.md', verification='Regression screen; prior confirmed'),
         row('PNG RGBA8, NoCompression / None', 'warm-pngstore8copy-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-ENCODE.md', True),
         row('PNG RGBA16, NoCompression / None', 'warm-pngstore16-encode-evidence.json', ['observations', -1], 'WARM-PNG-STORED16-ENCODE.md', True),
+        row('PNG RGBA8, Fastest managed2/native1 / None', 'warm-pngfast8-evidence.json', ['observations', -1], 'WARM-PNG-FAST8.md', True),
         row('PNG RGBA16, Fastest managed2/native1 / None', 'warm-pngfast2-evidence.json', ['stockObservations', -1], 'WARM-PNG-FAST2.md', True),
         row('PNG RGBA16, Fastest managed2/native1 / live cancelable token', 'warm-pngfast2-evidence.json', ['observations', -1], 'WARM-PNG-FAST2.md', True),
         row('PNG RGBA16, Fastest managed2/native1 / forward-only output', 'warm-pngfastforward16-evidence.json', ['observations', -1], 'WARM-PNG-FAST-FORWARD16.md', True),

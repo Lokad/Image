@@ -15,7 +15,7 @@ python3 - "$repo_root" "$output" "$prefix" <<'PY'
 import hashlib, json, pathlib, subprocess, sys
 root, output, prefix = map(pathlib.Path, sys.argv[1:])
 digest = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
-record = dict(schemaVersion=1, project='Lokad.Image', purpose='Original development-only warm Fastest RGBA16 PNG FFmpeg worker',
+record = dict(schemaVersion=1, project='Lokad.Image', purpose='Original development-only warm Fastest RGBA8/16 PNG FFmpeg worker',
     sourceSha256=digest(root/'tools/WarmReference/ffmpeg-png-fast16-warm.c'),
     buildScriptSha256=digest(root/'tools/WarmReference/build-png-fast16-linux.sh'),
     workerSha256=digest(output/'ffmpeg-png-fast16-warm'),
