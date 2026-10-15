@@ -25,7 +25,7 @@ internal static class WarmPngPaletteInput
     {
         if (depth is not (1 or 2 or 4 or 8)) throw new ArgumentOutOfRangeException(nameof(depth));
         if (partialAlpha && depth != 8) throw new ArgumentException("The short-alpha case requires palette8.");
-        if (interlaced && depth != 8) throw new ArgumentException("The Adam7 case requires palette8.");
+        if (interlaced && depth is not (4 or 8)) throw new ArgumentException("The Adam7 cases require palette4 or palette8.");
         if (shortPalette && (depth != 8 || partialAlpha || interlaced))
             throw new ArgumentException("The short palette case requires noninterlaced palette8 with full alpha.");
         const int width = HorizontalFlipInput.Width, height = HorizontalFlipInput.Height;

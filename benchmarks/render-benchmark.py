@@ -73,6 +73,7 @@ def table(rows):
 
 def render():
     decodes = [
+        row('PNG palette4/full tRNS Adam7', 'warm-png-palette4-adam7-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE4-ADAM7.md', True),
         row('PNG8 Stream, orient/crop/nearest fit', 'warm-png-composition8-evidence.json', ['observations', -1], 'WARM-PNG-COMPOSITION8.md', True),
         row('PNG16 Stream, orient/crop/nearest fit', 'warm-png-fused-evidence.json', ['observations', -1], 'WARM-PNG-FUSED-INFLATION.md', True),
         row('PNG RGBA8, fresh seekable Stream', 'warm-stream-png8-evidence.json', ['observations', -1], 'WARM-STREAM-PNG8.md', True),
@@ -398,6 +399,13 @@ adds one unchanged-production RGBA8 reduction, independently confirmed at
 backend. Managed/normal/scalar native samples are exact. Required rectangular
 halo/packing/filtering/quantization/ownership work is timed. Existing full
 qualification is reused; no production rebuild or profile is needed.
+
+The [packed palette4 Adam7 comparison](../benchmarks/WARM-PNG-PALETTE4-ADAM7.md)
+independently confirms **1.304x / upper 1.387x**, **2,592 B/op**, using the existing
+original sixteen-entry palette projection. Managed/normal/scalar native pixels,
+alpha and hidden RGB are exact. Complete packed decode, palette expansion,
+interlaced placement and output ownership are timed. Production qualification
+is reused; no production rebuild, profile or repeated package proof is needed.
 
 Recent unchanged-production coverage confirms RGB16 Paeth at1.904x /
 upper1.928x,6,504 B/op, and gray-alpha8 Paeth at1.017x / upper1.068x,2,408 B/op.

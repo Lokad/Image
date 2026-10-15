@@ -33,6 +33,7 @@ timing comparison; compression efficiency parity is not established.
 
 | Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
+| [PNG palette4/full tRNS Adam7](../benchmarks/WARM-PNG-PALETTE4-ADAM7.md) | 1,480.35 | 1,135.35 | 1.304 / 1.387 | 2,592 | Confirmed |
 | [PNG8 Stream, orient/crop/nearest fit](../benchmarks/WARM-PNG-COMPOSITION8.md) | 2,795.71 | 1,478.63 | 1.891 / 1.906 | 1,453,517 | Confirmed |
 | [PNG16 Stream, orient/crop/nearest fit](../benchmarks/WARM-PNG-FUSED-INFLATION.md) | 3,572.35 | 2,936.91 | 1.216 / 1.231 | 4,460,393 | Confirmed |
 | [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-STREAM-PNG8.md) | 2,655.37 | 1,392.55 | 1.907 / 1.916 | 756,605 | Confirmed |
@@ -321,6 +322,13 @@ adds one unchanged-production RGBA8 reduction, independently confirmed at
 backend. Managed/normal/scalar native samples are exact. Required rectangular
 halo/packing/filtering/quantization/ownership work is timed. Existing full
 qualification is reused; no production rebuild or profile is needed.
+
+The [packed palette4 Adam7 comparison](../benchmarks/WARM-PNG-PALETTE4-ADAM7.md)
+independently confirms **1.304x / upper 1.387x**, **2,592 B/op**, using the existing
+original sixteen-entry palette projection. Managed/normal/scalar native pixels,
+alpha and hidden RGB are exact. Complete packed decode, palette expansion,
+interlaced placement and output ownership are timed. Production qualification
+is reused; no production rebuild, profile or repeated package proof is needed.
 
 Recent unchanged-production coverage confirms RGB16 Paeth at1.904x /
 upper1.928x,6,504 B/op, and gray-alpha8 Paeth at1.017x / upper1.068x,2,408 B/op.
