@@ -1106,6 +1106,20 @@ internal static class PngCodec
                             source.GetRow8(y).Slice(x * 4, bytes).CopyTo(row.AsSpan(x * 4, bytes));
                         }
                     }
+                    else if (color == 6 && source.BitDepth == 16)
+                    {
+                        for (var x = 0; x < source.Width; x += 4096)
+                        {
+                            context.Cancellation.ThrowIfCancellationRequested();
+                            var samples = Math.Min(4096, source.Width - x) * 4;
+                            var input = source.GetRow16(y).Slice(x * 4, samples);
+                            var destination = MemoryMarshal.Cast<byte, ushort>(row.AsSpan(x * 8, samples * 2));
+                            // PNG stores full-word samples most significant byte first.
+                            // The span overload provides portable vectorized conversion.
+                            if (BitConverter.IsLittleEndian) BinaryPrimitives.ReverseEndianness(input, destination);
+                            else input.CopyTo(destination);
+                        }
+                    }
                     else
                     {
                         var position = 0;

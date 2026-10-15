@@ -896,3 +896,14 @@ raster and quality69/native5 pair, two benchmark inputs, unchanged qualified
 production/native worker and reused 3,308-test/same-package proof. No extra full
 suite, package or method audit repeats. Stop this fixed pair; remaining material
 public/current-source coverage stays open.
+
+[RGBA16 PNG without compression](WARM-PNG-STORED16-ENCODE.md) closes a **6.118×**
+gap at **1.243× / upper 1.289×**, with **4,203,541 B/op**. Bounded safe span
+endianness conversion cuts the baseline mean 79.6%, preserving encoded bytes,
+exact samples, work, admission and cancellation. The original word raster and
+equal stored IDAT sizes pass; compressed RGBA16 regression means pass before
+full qualification. Both OSes pass 3,318 Release tests (896 live), 49 focused
+normal/scalar checks and the consumer plus three examples through one actual
+package. Stop this pair. [Fastest RGBA16](WARM-PNG-FAST16-REFUSAL.md) remains
+unscored: its 5.681% payload difference exceeds the unchanged 5% gate. No timing
+is scored for that refusal; remaining material/current-source coverage stays open.

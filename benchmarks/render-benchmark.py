@@ -123,7 +123,9 @@ def render():
     encodes = [
         row('PNG RGBA8, level 6 / None', 'warm-png8encode-evidence.json', ['observations', -1], 'WARM-PNG8-ENCODE.md', True),
         row('PNG RGBA8, NoCompression / None', 'warm-pngstore8copy-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-ENCODE.md', True),
-        row('PNG RGBA16, level 6 / None', 'warm-png16-encode-crc-evidence.json', ['observations', -1], 'WARM-PNG16-ENCODE-CRC.md', True),
+        row('PNG RGBA16, NoCompression / None', 'warm-pngstore16-encode-evidence.json', ['observations', -1], 'WARM-PNG-STORED16-ENCODE.md', True),
+        pending('PNG RGBA16, Fastest / level1 / None', 'WARM-PNG-FAST16-REFUSAL.md', 'Unscored: IDAT-size gate failed'),
+        row('PNG RGBA16, level 6 / None', 'warm-pngstore16-encode-evidence.json', ['regressions', 0], 'WARM-PNG-STORED16-ENCODE.md', verification='Regression screen; prior confirmed'),
         row('PNG RGB8, Optimal managed9/native6 / None', 'warm-pngbyte-optimal-evidence.json', ['cases', 'rgb', 'confirm'], 'WARM-PNG-BYTE-OPTIMAL.md', True),
         row('PNG RGB16, level 6 / None', 'warm-pngrgb16encode-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-ENCODE.md', True),
         row('PNG gray8, Optimal managed9/native6 / None', 'warm-pngbyte-optimal-evidence.json', ['cases', 'gray', 'confirm'], 'WARM-PNG-BYTE-OPTIMAL.md', True),

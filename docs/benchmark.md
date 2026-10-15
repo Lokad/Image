@@ -86,7 +86,9 @@ timing comparison; compression efficiency parity is not established.
 | --- | ---: | ---: | ---: | ---: | --- |
 | [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG8-ENCODE.md) | 7,241.99 | 17,219.43 | 0.421 / 0.430 | 527,629 | Confirmed |
 | [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED8-ENCODE.md) | 357.17 | 189.72 | 1.883 / 1.933 | 2,102,472 | Confirmed |
-| [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG16-ENCODE-CRC.md) | 16,470.31 | 19,951.52 | 0.826 / 0.838 | 2,103,836 | Confirmed |
+| [PNG RGBA16, NoCompression / None](../benchmarks/WARM-PNG-STORED16-ENCODE.md) | 504.25 | 405.59 | 1.243 / 1.289 | 4,203,541 | Confirmed |
+| [PNG RGBA16, Fastest / level1 / None](../benchmarks/WARM-PNG-FAST16-REFUSAL.md) | — | — | — | — | Unscored: IDAT-size gate failed |
+| [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG-STORED16-ENCODE.md) | 14,544.25 | 20,072.37 | 0.725 / 0.756 | 2,103,776 | Regression screen; prior confirmed |
 | [PNG RGB8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 10,402.09 | 9,514.15 | 1.093 / 1.107 | 527,098 | Confirmed |
 | [PNG RGB16, level 6 / None](../benchmarks/WARM-PNG-RGB16-ENCODE.md) | 13,121.10 | 15,174.40 | 0.865 / 0.871 | 2,102,765 | Confirmed |
 | [PNG gray8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 3,540.72 | 1,964.99 | 1.802 / 1.818 | 263,664 | Confirmed |

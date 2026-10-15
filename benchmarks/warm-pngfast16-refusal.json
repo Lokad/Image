@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "case": "WarmPng/EncodeFast16",
+  "productionChanged": false,
+  "measured": false,
+  "allocationBytesPerOperation": null,
+  "status": "Unscored: IDAT-size comparison gate failed",
+  "source": {
+    "sourceSha256": "2167ec9cb425d939728dfc6ca6cb80c61196cbed7709f42dc9e8d9e15634182a",
+    "sourceRevision": "5ccce54d9150ba83af92b778c9a8bb5a0f74d3e7",
+    "files": 2042,
+    "fullInventoryRetainedInRawArchive": true
+  },
+  "declaredBackendLevels": {
+    "managed": 1,
+    "native": 1
+  },
+  "filter": "None",
+  "depth": 16,
+  "width": 513,
+  "height": 259,
+  "exactFilteredSamplesAndCrcs": true,
+  "sizeGateMaximum": 0.05,
+  "relativeIdatDifference": 0.05680925488050339,
+  "packets": [
+    {
+      "file": "input.png",
+      "sha256": "c253ff1239456363678c831b517b61a40e47ebc7757f89f876abf78da3a2e85c",
+      "encodedBytes": 1023697,
+      "idatBytes": 1023460,
+      "allFilteredSamplesExact": true,
+      "compressionClass": 0
+    },
+    {
+      "file": "native-level1.png",
+      "sha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "encodedBytes": 968216,
+      "idatBytes": 965318,
+      "allFilteredSamplesExact": true,
+      "compressionClass": 0
+    }
+  ],
+  "rawArchive": {
+    "file": "pngfast16-refusal.tar.gz",
+    "sha256": "5909eb10fd54b746b3b3037bc251c90a6fa437429cb81822dba57c3dcb1b7e03"
+  },
+  "nativeBuild": {
+    "schemaVersion": 1,
+    "project": "Lokad.Image",
+    "purpose": "Original development-only warm Fastest RGBA16 PNG FFmpeg worker",
+    "sourceSha256": "0949f6c5329d133a925b54f7afdb37873048699e836f96ab3633ea31cd002a4e",
+    "buildScriptSha256": "b504ef7be96b47a21c47002ff5a149a54ab744ba5deb6d61906f2c15ce34a19c",
+    "workerSha256": "dcaf58876d160577bf30add512203dcb65f5d00ee9fcbf1c84b59ac3bfe8971e",
+    "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "flags": [
+      "-std=c11",
+      "-O3",
+      "-Wall",
+      "-Wextra",
+      "-Werror"
+    ],
+    "staticArchives": {
+      "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+      "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+      "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+      "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+      "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+      "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+      "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+      "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+      "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+      "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+      "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+      "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+    },
+    "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+  },
+  "qualification": "Unchanged production reuses warm-vp8-encode-evidence.json; no repeated full suites or package proof.",
+  "nextAction": "Retain this refusal. No scored timing or relaxed size gate; continue other material workloads."
+}

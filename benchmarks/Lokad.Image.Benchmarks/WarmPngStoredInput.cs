@@ -4,13 +4,14 @@ using System.Buffers.Binary;
 // https://www.rfc-editor.org/rfc/rfc1951#section-3.2.4
 internal static class WarmPngStoredInput
 {
-    internal static void Validate(ReadOnlySpan<byte> zlib, ReadOnlySpan<byte> rgba)
+    internal static void Validate(ReadOnlySpan<byte> zlib, ReadOnlySpan<byte> rgba, int depth = 8)
     {
         if (zlib.Length < 11 || zlib[0] != 0x78 || (zlib[1] & 0xe0) != 0
             || ((zlib[0] << 8) | zlib[1]) % 31 != 0)
             throw new InvalidOperationException("Stored PNG zlib header differs.");
         var position = 2; var rawPosition = 0; var final = false;
-        const int rowBytes = HorizontalFlipInput.Width * 4;
+        if (depth is not (8 or 16)) throw new ArgumentOutOfRangeException(nameof(depth));
+        var rowBytes = HorizontalFlipInput.Width * 4 * (depth / 8);
         while (!final)
         {
             if (position + 5 > zlib.Length - 4 || (zlib[position] & 6) != 0)
@@ -25,7 +26,7 @@ internal static class WarmPngStoredInput
             {
                 var row = rawPosition / (rowBytes + 1); var column = rawPosition % (rowBytes + 1);
                 if (row >= HorizontalFlipInput.Height
-                    || value != (column == 0 ? 0 : rgba[row * rowBytes + column - 1]))
+                    || value != (column == 0 ? 0 : rgba[row * rowBytes + (depth == 16 ? (column - 1) ^ 1 : column - 1)]))
                     throw new InvalidOperationException("Stored Deflate scanlines differ.");
                 rawPosition++;
             }

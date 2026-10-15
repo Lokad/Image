@@ -478,10 +478,13 @@ existing selection. This is an implementation policy, not a promise of a
 particular numeric backend level or exact compressed bytes. Samples, filter,
 chunk bounds, admission, work and cancellation contracts are unchanged.
 
+RGBA16 encoding packs complete RGBA words into big-endian rows using safe span
+conversion in groups of at most 4096 pixels. Cancellation precedes each group;
+hidden RGB, alpha, encoded bytes, work and admitted storage remain unchanged.
 RGBA8 encoding copies complete RGBA rows in groups of at most 4096 pixels, with
 cancellation checked before each group. Encoded bytes, hidden RGB/alpha, work
 charges, memory admission and row workspace remain unchanged across compression
-policies. Other color types and 16-bit sample packing retain their validation.
+policies. Other color types retain their existing sample validation.
 
 The original corpus covers every legal static color/depth profile at both interlace
 settings, all five filters, packed padding, partial palette alpha and hidden RGB.

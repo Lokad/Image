@@ -1275,3 +1275,11 @@ the adaptive anchor's per-decoder pixels and source error; an original public
 libjpeg coefficient visitor verifies complete coefficient equality outside timing.
 Fresh wrapper/storage acquisition, growth and disposal are timed. See the
 [fallback result](../../benchmarks/WARM-JPEG444-FORWARD.md).
+
+The original `ffmpeg-png-fast16-warm.c` and `ffmpeg-png-store16-warm.c` adapters
+are restricted to RGBA16 encoding at levels 1 and 0 respectively. Build them with
+`build-png-fast16-linux.sh` or `build-png-store16-linux.sh`. Both time complete
+word-order conversion and independent encoded packet acquisition/release. Their
+separate identities preserve existing PNG workers. `EncodeFast16` currently
+fails the unchanged IDAT-size comparison gate and is unscored;
+`EncodeNoCompression16` requires stored-only Deflate and exact full-word samples.
