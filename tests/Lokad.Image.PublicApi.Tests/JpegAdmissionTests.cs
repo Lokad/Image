@@ -4,6 +4,21 @@ namespace Lokad.Image.PublicApi.Tests;
 
 public sealed class JpegAdmissionTests
 {
+    [Fact]
+    public void OriginalShortTableInputKeepsItsExactDecodeAdmission()
+    {
+        // Independently authored original fixed-width tables; the encoder's
+        // newer output must not silently replace this decoder workload.
+        var bytes = AuthoredJpeg.GrayscaleDcGrid(8, 8, progressive: false);
+        const long tableBytes = 2 * (204 + 512) + 12 + 176;
+        var peak = bytes.Length + 1024 + 128 + tableBytes + 256 + 128 + 320;
+        var options = new DecodeOptions { Limits = ImageLimits.Default with { MaxWorkingBytes = peak } };
+        using var result = ImageCodec.Decode(bytes, options);
+        Assert.All(OriginalPixels.Bytes(result).Chunk(4), p => Assert.Equal(new byte[] { 0, 0, 0, 255 }, p));
+        Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(bytes,
+            options with { Limits = options.Limits with { MaxWorkingBytes = peak - 1 } }));
+    }
+
     public static IEnumerable<object[]> DecodeProfiles()
     {
         foreach (var size in new[] { (1, 1), (32, 24) })
@@ -118,10 +133,10 @@ public sealed class JpegAdmissionTests
         var components = sampling == JpegSampling.Grayscale ? 1 : 3;
         var allPlanes = firstPlane + (components - 1) * mcus * 64;
         var quantization = progressive || components == 1 ? 128 : 256;
-        // Both original builders emit one DC/AC pair: 12 DC symbols and 162 or
-        // 176 AC symbols. Each table has three 17-element Int32 arrays and
-        // one 256-entry ushort prefix lookup, all admitted before allocation.
-        var tables = 2 * (204 + 512) + 12 + (progressive ? 176 : 162);
+        // One DC/AC pair: 12 DC symbols and 162 (current encoder) or 176
+        // (authored progressive) AC symbols. Both tables have short prefixes;
+        // geometric AC adds the existing 1024-entry ushort long-prefix lookup.
+        var tables = 2 * (204 + 512) + 12 + (progressive ? 176 : 162 + 2048);
         var state = 1024 + quantization + tables + components * (256 + 128);
         var coefficientPeak = allPlanes * 4 + firstPlane;
         var resultPeak = allPlanes + (long)width * height * 4 * (orient ? 2 : 1);

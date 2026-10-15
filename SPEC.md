@@ -582,10 +582,22 @@ information through color conversion, sampling and coefficient rounding. Huffman
 tables use independently implemented canonical coding. Large encodes to an
 ordinary MemoryStream with an explicit background, a noncancellable token and
 sufficient work/memory admission use per-image adaptive tables limited to 16
-bits. Other calls retain the original fixed-length tables. This selection does
+bits. Other calls use image-independent canonical AC codes derived from a
+geometric zero-run/amplitude-size model; DC codes remain four bits. The shared
+immutable AC table is constructed once, covers all 162 supported symbols and
+reserves the all-ones code, with a maximum length of 16. Its weights are
+`2^max(0,20-run-size)`, with EOB weighted `2^18` and ZRL weighted `2^4`.
+No image statistics or corpus-fitted constants select this table. This selection does
 not change quantized coefficients or decoded samples; encoded bytes may differ
 with stream, cancellation or resource options. Optional restart intervals count
 MCUs and reset DC predictors.
+The fixed policy deliberately supersedes the original eight-bit AC codes;
+historical quality reports remain unchanged and current decoded samples must
+match them exactly. Encoding retains the same source-plus-8192-byte admission
+and logical work/callback/failure ordering. Prevalidated canonical codewords skip
+repeated range validation; dynamic amplitudes retain their original checks.
+Decoding a new table with nine/ten-bit codes uses the existing additional 2 KiB
+prefix lookup; original short-table input admission is unchanged.
 The forward transform evaluates independent coefficients with safe AVX/AVX-512
 when available, preserving the frozen binary64 basis, separate multiplications
 and accumulation order. Other processors use the original scalar calculation.

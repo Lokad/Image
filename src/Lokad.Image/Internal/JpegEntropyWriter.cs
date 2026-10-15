@@ -22,6 +22,23 @@ internal sealed class JpegEntropyWriter(Stream output, OperationContext context)
     public void Signed(int value, int count)
         => Write(value < 0 ? value + ((1 << count) - 1) : value, count);
 
+    // Only immutable encoder tables supply these prevalidated code/length
+    // words. Dynamic amplitudes retain Write's argument checks. Keep each
+    // logical work charge and byte callback at its original position.
+    internal void WriteCodeword(uint word)
+    {
+        context.Work(1);
+        var count = (int)(word >> 16);
+        bits = bits << count | (word & 65535); available += count;
+        while (available >= 8)
+        {
+            available -= 8;
+            var next = (byte)(bits >> available);
+            output.WriteByte(next);
+            if (next == 255) output.WriteByte(0);
+        }
+    }
+
     public void Align()
     {
         if (available != 0) Write((1 << (8 - available)) - 1, 8 - available);

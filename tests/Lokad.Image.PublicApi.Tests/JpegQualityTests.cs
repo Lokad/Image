@@ -7,7 +7,7 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class JpegQualityTests
 {
     [Fact]
-    public void FrozenOriginalQualityReportRetainsFixedBitstreamsAndCurrentDecodedSamples()
+    public void FrozenOriginalQualityReportRetainsHistoricalEvidenceAndCurrentDecodedSamples()
     {
         var root = new DirectoryInfo(AppContext.BaseDirectory);
         while (root is not null && !File.Exists(Path.Combine(root.FullName, "Lokad.Image.slnx"))) root = root.Parent;
@@ -39,11 +39,12 @@ public sealed class JpegQualityTests
             Assert.Equal("Lokad.Image-quality-1..100", entry.GetProperty("settingKind").GetString());
             using var image = JpegQualityCorpus.Buffer(source, depth); using var encoded = new MemoryStream();
             var options = new JpegEncodeOptions { Sampling = sampling, Quality = setting, BackgroundRgb = background };
-            // The historical report records the original fixed tables. Keep its
-            // byte evidence immutable, while testing current entropy separately.
+            // The historical report's bytes describe the original eight-bit AC
+            // codes. Current fixed geometric coding deliberately changes those
+            // bytes; quantization, sampling and every decoded sample stay frozen.
             using var historicalToken = new CancellationTokenSource();
             ImageCodec.EncodeJpeg(image, encoded, options, historicalToken.Token);
-            var bytes = encoded.ToArray(); Assert.Equal(entry.GetProperty("encodedHash").GetString(), Hash(bytes)); Assert.Equal(entry.GetProperty("encodedBytes").GetInt32(), bytes.Length);
+            var bytes = encoded.ToArray();
             var header = JpegQualitySyntax.Read(bytes); Assert.Equal(entry.GetProperty("quantizationHash").GetString(), header.QuantizationHash);
             Assert.Equal(entry.GetProperty("codedSampling").GetString(), header.Sampling); Assert.Equal(sampling == JpegSampling.Grayscale ? 1 : 3, header.Components);
             using var decoded = ImageCodec.Decode(bytes); Assert.Equal(entry.GetProperty("managedDecodedHash").GetString(), Hash(OriginalPixels.Bytes(decoded)));

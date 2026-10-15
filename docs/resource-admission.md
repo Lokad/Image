@@ -7,6 +7,13 @@ process RSS, GC retention, runtime/JIT state, or additional buffers retained by
 the caller. Releasing admission ends an algorithm's use of storage; it does not
 force the .NET collector to reclaim that storage.
 
+JPEG's fixed AC codebook is shared immutable format state, derived once from an
+image-independent formula. Its one-time construction and retained code/length
+metadata are process-wide initialization, rather than per-image workspace. Fixed
+encoding still admits the source plus 8192 bytes before output. New geometric
+tables containing nine/ten-bit codes incur the decoder's existing additional
+2048-byte prefix charge; original short-table inputs retain their old boundary.
+
 Horizontal flips may reuse one released exact-size pixel array, with a global
 idle-storage ceiling of 4 MiB. It retains only released storage, never a larger
 array or a source/result owner. Every returned image is fully written, and

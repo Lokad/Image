@@ -40,18 +40,19 @@ public class WarmJpeg
         var recipe = horizontal ? Recipe444.Replace("4:4:4", "4:2:2") : subsampled ? Recipe444.Replace("4:4:4", "4:2:0") : Recipe444;
         var result = depth == 16 ? recipe.Replace("Create(8)", "Create(16)").Replace("RGBA8", "RGBA16")
             + " Full 16-bit alpha flattening and normalization to 8-bit use one rounding after blending, inside every operation." : recipe;
-        if (forwardOnly) result += " Fresh forward-only Stream wrapper over fresh owned MemoryStream storage; original fixed Huffman path.";
+        if (forwardOnly) result += " Fresh forward-only Stream wrapper over fresh owned MemoryStream storage; fixed geometric AC Huffman path.";
         return AdaptiveEntropy ? result + " Independently implemented adaptive Huffman coding, admitted private event workspace, same coefficients and quality anchor." : result;
     }
     private static bool AdaptiveEntropy => Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") switch
     {
         null => false,
         "adaptive-v1" => true,
+        "fixed-geometric-v1" => false,
         _ => throw new InvalidOperationException("Unknown JPEG entropy preparation policy.")
     };
     private static string MatchFile(bool subsampled, bool horizontal, int depth, bool forwardOnly = false)
     {
-        if (forwardOnly) return "jpeg420-stream-match.json";
+        if (forwardOnly) return "jpeg420-stream-geometric-match.json";
         var name = depth == 16 ? (subsampled ? "jpeg42016-match.json" : "jpeg16-match.json")
             : horizontal ? "jpeg422-match.json" : subsampled ? "jpeg420-match.json" : "jpeg-match.json";
         return AdaptiveEntropy ? name.Replace("-match.json", "-adaptive-match.json") : name;
@@ -85,7 +86,7 @@ public class WarmJpeg
             "Encode16" => [WarmJpegCase.Encode16],
             "Encode420_16" => [WarmJpegCase.Encode420_16],
             "Encode420Stream8" when !AdaptiveEntropy => [WarmJpegCase.Encode420Stream8],
-            _ => throw new ArgumentException("Choose one JPEG case: Encode8, Encode16, Encode420_8, Encode422_8, Encode420_16 or Encode420Stream8 (original fixed entropy only).")
+            _ => throw new ArgumentException("Choose one JPEG case: Encode8, Encode16, Encode420_8, Encode422_8, Encode420_16 or Encode420Stream8 (fixed-geometric-v1 policy).")
         };
     }
 
@@ -108,8 +109,8 @@ public class WarmJpeg
         if (subsampled && horizontal) throw new ArgumentException("Choose one JPEG subsampling layout.");
         if (depth is not (8 or 16) || depth == 16 && horizontal)
             throw new ArgumentException("The RGBA16 cases require 4:4:4 or 4:2:0 sampling.");
-        if (forwardOnly && (!subsampled || horizontal || depth != 8 || AdaptiveEntropy))
-            throw new ArgumentException("Forward-only preparation requires RGBA8 4:2:0 and original fixed entropy.");
+        if (forwardOnly && (!subsampled || horizontal || depth != 8 || Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") != "fixed-geometric-v1"))
+            throw new ArgumentException("Forward-only preparation requires RGBA8 4:2:0 and fixed-geometric-v1.");
         var fixedAnchor = subsampled || horizontal || depth == 16 || AdaptiveEntropy;
         var sampling = horizontal ? "422" : subsampled ? "420" : "444";
         if (fixedAnchor && nativeQscale != 5) throw new ArgumentException("The fixed JPEG anchor requires native qscale 5.");
@@ -185,7 +186,7 @@ public class WarmJpeg
     public void Setup()
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Warm native JPEG requires Linux.");
-        if (ForwardOnly && AdaptiveEntropy) throw new InvalidOperationException("Forward-only output retains the original fixed Huffman path.");
+        if (ForwardOnly && Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") != "fixed-geometric-v1") throw new InvalidOperationException("Forward-only output retains the fixed geometric AC Huffman path.");
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -308,7 +309,7 @@ public class WarmJpeg
                 managedEncodedSha256 = JpegBenchmarkCase.Hash(encoded), nativeOutputSha256 = JpegBenchmarkCase.HashFile(state.NativeOutput),
                 recipe = Recipe, sampling = DisplaySampling, qualityPolicy = prepared.QualityPolicy,
                 outputBoundary = ForwardOnly ? "Fresh forward-only Stream wrapper over fresh owned MemoryStream storage; wrapper creation/disposal and storage growth included; no seek/length/position access." : "Fresh MemoryStream",
-                backgroundRgb = Background, managedHuffman = AdaptiveEntropy ? "adaptive-v1" : "original-fixed", privateEntropyWorkspaceReused = AdaptiveEntropy, qualityMatched = true, fullSourceNormalizationTimed = Source16, normalizedReferenceExact = true, alphaExact = true, decoderAgreementWithinBounds = true,
+                backgroundRgb = Background, managedHuffman = AdaptiveEntropy ? "adaptive-v1" : "fixed-geometric-v1", privateEntropyWorkspaceReused = AdaptiveEntropy, qualityMatched = true, fullSourceNormalizationTimed = Source16, normalizedReferenceExact = true, alphaExact = true, decoderAgreementWithinBounds = true,
                 psnrGapDb = prepared.Match.PsnrGapDb, maximumPsnrGapDb = EncoderQualityCalibration.MaximumPsnrGapDb,
                 ownedEnumeratedSettings = prepared.OwnedSettings.Length, ownedEvaluationOrder = prepared.OwnedEvaluationOrder,
                 ownedSettings = prepared.OwnedSettings, managedQuality, nativeQuality,
@@ -316,7 +317,7 @@ public class WarmJpeg
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmJpeg).Assembly.Location), nativeBuild = native.BuildIdentity,
                 nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = $"Resident original RGBA{Depth} to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, {DisplaySampling} encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included{(ForwardOnly ? ", plus fresh forward-only Stream wrapper creation/disposal" : "")}; no redundant ToArray. Native optimal Huffman and managed {(AdaptiveEntropy ? "adaptive Huffman with histogram/cache work and private workspace reuse" : "fixed Huffman")} recorded. Quality matched by frozen <=0.25 dB RGB source-error band; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded."
+                boundary = $"Resident original RGBA{Depth} to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, {DisplaySampling} encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included{(ForwardOnly ? ", plus fresh forward-only Stream wrapper creation/disposal" : "")}; no redundant ToArray. Native optimal Huffman and managed {(AdaptiveEntropy ? "adaptive Huffman with histogram/cache work and private workspace reuse" : "fixed geometric AC Huffman")} recorded. Quality matched by frozen <=0.25 dB RGB source-error band; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded."
             }, new JsonSerializerOptions(EncoderQualityCalibration.Json) { PropertyNamingPolicy = null }) + "\n");
             Console.WriteLine("Validated warm JPEG pair: " + path);
         }

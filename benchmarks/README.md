@@ -1131,11 +1131,14 @@ requires no production change. The independent twelve-actual repeat passes both
 quiet guards at 0.991x, conservative upper 1.003x, certifying this fixed pair.
 No new image, shape or profile sweep is added; broader coverage remains open.
 
-The [forward-only JPEG screen](WARM-JPEG420-FORWARD-STREAM.md) exposes the original
-fixed-Huffman fallback at **2.098x / upper 2.370x**, **527,367 B/op**. A byte
-admission shortcut is rejected and qualified production restored. On the quiet
-VM, prepare exactly one quality anchor with `--prepare-warm-jpeg420-stream 0`,
-then select `-WarmFamily Jpeg -WarmCases Encode420Stream8` with the JPEG entropy
-environment override unset. Preparation preserves any existing anchor. This case
-includes fresh wrapper/storage creation, complete encoding and release; it adds
-no original raster and makes no compression efficiency parity claim.
+The [historical forward-only JPEG screen](WARM-JPEG420-FORWARD-STREAM.md) exposes
+the original fixed-width fallback at **2.098x / upper 2.370x**, **527,367 B/op**.
+Its rejected byte shortcut and original evidence remain retained.
+
+The [fixed geometric AC round](WARM-JPEG-FIXED-GEOMETRIC.md) closes forward-only
+JPEG420 RGBA8 at **1.916x / upper 1.936x**, **263,812 B/op**. Independent recoding
+preserves coefficients/amplitudes/pixels while reducing the packet 45% and
+allocation 50%. Set `LOKAD_IMAGE_JPEG_ENTROPY=fixed-geometric-v1`, prepare with
+`--prepare-warm-jpeg420-stream 0`, and select `Encode420Stream8`; its separate
+anchor preserves earlier evidence. Other fallback depths/layouts remain open. The same actual package consumer,
+three examples and 3,281 tests pass per OS.

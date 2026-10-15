@@ -27,12 +27,8 @@ internal static class JpegEncoder
         var columns = (image.Width + h * 8 - 1) / (h * 8); var rows = (image.Height + v * 8 - 1) / (v * 8);
         var luma = Quantization(options.Quality, false); var chroma = Quantization(options.Quality, true);
         var dcSymbols = Enumerable.Range(0, 12).Select(value => (byte)value).ToArray();
-        var acSymbols = new byte[162]; acSymbols[0] = 0;
-        for (var run = 0; run < 16; run++)
-        for (var size = 1; size <= 10; size++) acSymbols[1 + run * 10 + size - 1] = (byte)(run << 4 | size);
-        acSymbols[^1] = 0xF0;
-        var acCodes = new int[256]; Array.Fill(acCodes, -1);
-        for (var i = 0; i < acSymbols.Length; i++) acCodes[acSymbols[i]] = i;
+        var ac = FixedAc.Table;
+        var acWords = FixedAc.Words;
         var pixels = new byte[64]; var transformed = new double[64]; var predictors = new int[components];
         // The existing quantization destination fits in the admitted fixed
         // workspace. Keep it on the safe stack when passed to the SIMD helper.
@@ -51,7 +47,9 @@ internal static class JpegEncoder
             frame[8 + component * 3] = component == 0 ? (byte)0 : (byte)1;
         }
         Segment(output, 0xC0, frame);
-        WriteHuffman(output, 0, 4, dcSymbols); WriteHuffman(output, 0x10, 8, acSymbols);
+        WriteHuffman(output, 0, 4, dcSymbols);
+        var acPayload = new byte[17 + ac.Symbols.Length]; acPayload[0] = 0x10;
+        ac.Counts.CopyTo(acPayload, 1); ac.Symbols.CopyTo(acPayload, 17); Segment(output, 0xC4, acPayload);
         if (options.RestartInterval != 0)
         {
             Span<byte> interval = stackalloc byte[2]; BinaryPrimitives.WriteUInt16BigEndian(interval, (ushort)options.RestartInterval);
@@ -147,25 +145,32 @@ internal static class JpegEncoder
                         JpegTransform.Forward(pixels, transformed, context);
                         Quantize(transformed, q, quantized);
                     }
-                    var difference = quantized[0] - predictors[component]; predictors[component] = quantized[0];
-                    var category = Category(difference);
-                    if (category > 11) throw new ImageDataException("JPEG DC transform exceeds its coding range.");
-                    writer.Write(category, 4); writer.Signed(difference, category);
-                    var zeros = 0;
-                    for (var i = 1; i < 64; i++)
-                    {
-                        var value = quantized[JpegTransform.Zigzag[i]];
-                        if (value == 0) { zeros++; continue; }
-                        while (zeros >= 16) { writer.Write(acCodes[0xF0], 8); zeros -= 16; }
-                        category = Category(value);
-                        if (category > 10) throw new ImageDataException("JPEG AC transform exceeds its coding range.");
-                        writer.Write(acCodes[zeros << 4 | category], 8); writer.Signed(value, category); zeros = 0;
-                    }
-                    if (zeros != 0) writer.Write(acCodes[0], 8);
+                    WriteFixedBlock(quantized, ref predictors[component], writer, acWords);
                 }
             }
         }
         writer.Align(); context.Cancellation.ThrowIfCancellationRequested(); output.Write(new byte[] { 255, 217 });
+    }
+
+    private static void WriteFixedBlock(ReadOnlySpan<int> quantized, ref int predictor, JpegEntropyWriter writer, uint[] words)
+    {
+        var difference = quantized[0] - predictor; predictor = quantized[0];
+        var category = Category(difference);
+        if (category > 11) throw new ImageDataException("JPEG DC transform exceeds its coding range.");
+        writer.WriteCodeword((uint)(4 << 16 | category)); writer.Signed(difference, category);
+        var zeros = 0;
+        for (var i = 1; i < 64; i++)
+        {
+            var value = quantized[JpegTransform.Zigzag[i]];
+            if (value == 0) { zeros++; continue; }
+            while (zeros >= 16) { var word = words[0xF0]; writer.WriteCodeword(word); zeros -= 16; }
+            category = Category(value);
+            if (category > 10) throw new ImageDataException("JPEG AC transform exceeds its coding range.");
+            var symbol = zeros << 4 | category;
+            var codeword = words[symbol];
+            writer.WriteCodeword(codeword); writer.Signed(value, category); zeros = 0;
+        }
+        if (zeros != 0) { var word = words[0]; writer.WriteCodeword(word); }
     }
 
     private static bool CanUseAdaptive(ImageBuffer image, Stream output, JpegEncodeOptions options, OperationContext context)
@@ -801,6 +806,30 @@ internal static class JpegEncoder
     {
         var payload = new byte[17 + symbols.Length]; payload[0] = selector; payload[length] = (byte)symbols.Length;
         symbols.CopyTo(payload, 17); Segment(output, 0xC4, payload);
+    }
+
+    private static class FixedAc
+    {
+        internal static readonly JpegEncodingTable Table = Create();
+        internal static readonly uint[] Words = Pack();
+
+        private static uint[] Pack()
+        {
+            var words = new uint[256];
+            for (var symbol = 0; symbol < words.Length; symbol++) words[symbol] = (uint)(Table.Codes[symbol] | Table.Lengths[symbol] << 16);
+            return words;
+        }
+
+        private static JpegEncodingTable Create()
+        {
+            // Original, image-independent geometric model over T.81 AC symbols.
+            // Long zero runs and large amplitudes receive less weight. No
+            // image statistics, upstream implementation table or fitted corpus.
+            var weights = new long[256]; weights[0] = 1 << 18; weights[0xF0] = 1 << 4;
+            for (var run = 0; run < 16; run++)
+            for (var size = 1; size <= 10; size++) weights[run << 4 | size] = 1 << Math.Max(0, 20 - run - size);
+            return JpegHuffmanBuilder.Build(weights, new OperationContext(ImageLimits.Default, default));
+        }
     }
 
     internal static void Segment(Stream output, byte marker, ReadOnlySpan<byte> payload)
