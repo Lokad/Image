@@ -620,6 +620,11 @@ rows with safe SIMD. Unrounded binary64 component values accumulate in the
 original row/pixel order, average, then round once. RGBA16 taps use the same exact
 single-round normalization as the full-resolution row kernel. Edges and other
 hardware retain scalar sampling; no extra workspace or pixel cache is introduced.
+Adaptive RGBA8 4:2:0 encoding may share unpacking and alpha flattening between
+the two chroma components on AVX-512/AVX2. An optional, charged 64-byte stack
+block retains Cr while Cb is transformed; insufficient remaining admission
+keeps the original sampling path. Both paths preserve the original arithmetic,
+quantized coefficients, component order, work charges and encoded bytes.
 JPEG coefficient planes, Huffman tables, scans and transforms are charged against
 operation limits.
 Component coefficient storage is released after conversion to its sample plane;

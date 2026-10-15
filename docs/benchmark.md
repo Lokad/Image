@@ -90,7 +90,7 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG444-RGBA8-ADAPTIVE.md) | 6,705.88 | 3,783.34 | 1.772 / 1.818 | 559,384 | Confirmed |
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG444-RGBA16-ADAPTIVE.md) | 6,767.17 | 3,851.77 | 1.757 / 1.790 | 556,280 | Confirmed |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG422-RGBA8-ADAPTIVE.md) | 4,277.49 | 2,349.58 | 1.821 / 1.862 | 294,110 | Confirmed |
-| [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG420-RGBA8-ADAPTIVE.md) | 3,501.53 | 1,771.06 | 1.977 / 2.014 | 297,772 | Upper above 2x / open |
+| [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG420-CHROMA-PAIR.md) | 3,434.93 | 1,767.46 | 1.943 / 1.988 | 297,772 | Confirmed |
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-ADAPTIVE-HUFFMAN.md) | 3,481.14 | 1,843.98 | 1.888 / 1.931 | 297,772 | Confirmed |
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-ALPHAWEIGHTED.md) | 42,879.92 | 54,484.52 | 0.787 / 0.805 | 2,615,472 | Confirmed |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-RGBA16-ENCODE.md) | 43,362.07 | 53,579.62 | 0.809 / 0.819 | 2,615,472 | Confirmed |
@@ -261,12 +261,12 @@ Wider-support RGBA8 downsampling to 128×64 confirms **1.631x / upper 1.642x**,
 cutting a 26.954x baseline by 94.0% with bounded thirty-two-row reuse.
 RGBA16 at that shape confirms **1.432x / upper 1.446x**, cutting a 25.058x baseline
 by 94.2% with exact unsigned products and conservative word precision guards.
-PNG RGB8, gray8 and gray-alpha8
-encoding preserves exact samples but exceeds the 5% IDAT-size gate by differences
-of 12.31%, 16.65% and 5.17%; these cases receive no timing score. GIF and animation
-are deferred.
+PNG RGB8, gray8 and gray-alpha8 encoding confirms below 2x with exact samples
+and the unchanged 5% IDAT-size gate, using managed level 9 / FFmpeg level 6.
+Their earlier level6/level6 refusals remain unscored. GIF and animation are deferred.
 
-JPEG420 RGBA8's independent upper is **2.014x**, so that pair remains open.
+JPEG420 RGBA8 confirms **1.943x / upper 1.988x** after sharing chroma sampling,
+with unchanged exact packets and allocations.
 Opaque VP8 decoding also remains open at **1.983x / upper 2.004x**.
 Its [bulk normalization trial](../benchmarks/VP8-NORMALIZATION-REJECTED.md) is rejected;
 the tested production is restored.
