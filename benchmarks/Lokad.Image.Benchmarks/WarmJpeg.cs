@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegCase { Encode8, Encode420_8, Encode422_8, Encode16, Encode420_16, Encode420Stream8 }
+public enum WarmJpegCase { Encode8, Encode420_8, Encode422_8, Encode16, Encode420_16, Encode420Stream8, Encode420Stream16 }
 
 internal sealed record WarmJpegPreparation(int SchemaVersion, string Project, string GeneratedUtc, string Recipe,
     string RasterSha256, string ReferenceSha256, int NativeQuality, uint BackgroundRgb, string NativeFile, string ManagedFile,
@@ -20,12 +20,12 @@ public class WarmJpeg
     public static IEnumerable<WarmJpegCase> Cases => SelectedCases();
     [ParamsSource(nameof(Cases))] public WarmJpegCase Case { get; set; }
     private const uint Background = 0x204060;
-    private bool Source16 => Case is WarmJpegCase.Encode16 or WarmJpegCase.Encode420_16;
+    private bool Source16 => Case is WarmJpegCase.Encode16 or WarmJpegCase.Encode420_16 or WarmJpegCase.Encode420Stream16;
     private int Depth => Source16 ? 16 : 8;
     private bool FixedAnchor => Subsampled || Source16 || AdaptiveEntropy;
     private bool Horizontal => Case == WarmJpegCase.Encode422_8;
-    private bool ForwardOnly => Case == WarmJpegCase.Encode420Stream8;
-    private bool Subsampled => Case is WarmJpegCase.Encode420_8 or WarmJpegCase.Encode422_8 or WarmJpegCase.Encode420_16 or WarmJpegCase.Encode420Stream8;
+    private bool ForwardOnly => Case is WarmJpegCase.Encode420Stream8 or WarmJpegCase.Encode420Stream16;
+    private bool Subsampled => Case is WarmJpegCase.Encode420_8 or WarmJpegCase.Encode422_8 or WarmJpegCase.Encode420_16 or WarmJpegCase.Encode420Stream8 or WarmJpegCase.Encode420Stream16;
     private string NativeSampling => Horizontal ? "422" : Subsampled ? "420" : "444";
     private string DisplaySampling => Horizontal ? "4:2:2" : Subsampled ? "4:2:0" : "4:4:4";
     private string FixedPolicy => Source16 ? (Subsampled ? Fixed42016Policy : Fixed16Policy)
@@ -52,7 +52,7 @@ public class WarmJpeg
     };
     private static string MatchFile(bool subsampled, bool horizontal, int depth, bool forwardOnly = false)
     {
-        if (forwardOnly) return "jpeg420-stream-geometric-match.json";
+        if (forwardOnly) return depth == 16 ? "jpeg42016-stream-geometric-match.json" : "jpeg420-stream-geometric-match.json";
         var name = depth == 16 ? (subsampled ? "jpeg42016-match.json" : "jpeg16-match.json")
             : horizontal ? "jpeg422-match.json" : subsampled ? "jpeg420-match.json" : "jpeg-match.json";
         return AdaptiveEntropy ? name.Replace("-match.json", "-adaptive-match.json") : name;
@@ -86,7 +86,8 @@ public class WarmJpeg
             "Encode16" => [WarmJpegCase.Encode16],
             "Encode420_16" => [WarmJpegCase.Encode420_16],
             "Encode420Stream8" when !AdaptiveEntropy => [WarmJpegCase.Encode420Stream8],
-            _ => throw new ArgumentException("Choose one JPEG case: Encode8, Encode16, Encode420_8, Encode422_8, Encode420_16 or Encode420Stream8 (fixed-geometric-v1 policy).")
+            "Encode420Stream16" when !AdaptiveEntropy => [WarmJpegCase.Encode420Stream16],
+            _ => throw new ArgumentException("Choose one JPEG case: Encode8, Encode16, Encode420_8, Encode422_8, Encode420_16, Encode420Stream8 or Encode420Stream16 (fixed-geometric-v1 policy).")
         };
     }
 
@@ -109,8 +110,8 @@ public class WarmJpeg
         if (subsampled && horizontal) throw new ArgumentException("Choose one JPEG subsampling layout.");
         if (depth is not (8 or 16) || depth == 16 && horizontal)
             throw new ArgumentException("The RGBA16 cases require 4:4:4 or 4:2:0 sampling.");
-        if (forwardOnly && (!subsampled || horizontal || depth != 8 || Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") != "fixed-geometric-v1"))
-            throw new ArgumentException("Forward-only preparation requires RGBA8 4:2:0 and fixed-geometric-v1.");
+        if (forwardOnly && (!subsampled || horizontal || Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") != "fixed-geometric-v1"))
+            throw new ArgumentException("Forward-only preparation requires RGBA8/16 4:2:0 and fixed-geometric-v1.");
         var fixedAnchor = subsampled || horizontal || depth == 16 || AdaptiveEntropy;
         var sampling = horizontal ? "422" : subsampled ? "420" : "444";
         if (fixedAnchor && nativeQscale != 5) throw new ArgumentException("The fixed JPEG anchor requires native qscale 5.");

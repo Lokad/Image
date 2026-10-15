@@ -126,6 +126,7 @@ def render():
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg4228-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA8-ADAPTIVE.md', True),
         row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg420pair-evidence.json', ['observations', -1], 'WARM-JPEG420-CHROMA-PAIR.md', True),
         row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-geometric-evidence.json', ['observations', -1], 'WARM-JPEG-FIXED-GEOMETRIC.md', True),
+        row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-stream16-evidence.json', ['observations', -1], 'WARM-JPEG-FORWARD-RGBA16.md', True),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG-ADAPTIVE-HUFFMAN.md', True),
         row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
         row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8encode16-evidence.json', ['observations', -1], 'WARM-VP8-RGBA16-ENCODE.md', True),
@@ -344,6 +345,8 @@ JPEG420 RGBA8 confirms **1.943x / upper 1.988x** after sharing chroma sampling,
 with unchanged exact packets and allocations.
 Its forward-only output fallback confirms **1.916x / upper 1.936x** with
 geometric AC coding, exact coefficients/pixels and half the allocation.
+RGBA16 forward-only output confirms **1.948x / upper 1.954x**, including full
+word normalization and flattening, on the same qualified production.
 Opaque VP8 decoding also remains open at **1.983x / upper 2.004x**.
 Its [bulk normalization trial](../benchmarks/VP8-NORMALIZATION-REJECTED.md) is rejected;
 the tested production is restored.

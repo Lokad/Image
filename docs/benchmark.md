@@ -92,6 +92,7 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG422-RGBA8-ADAPTIVE.md) | 4,277.49 | 2,349.58 | 1.821 / 1.862 | 294,110 | Confirmed |
 | [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG420-CHROMA-PAIR.md) | 3,434.93 | 1,767.46 | 1.943 / 1.988 | 297,772 | Confirmed |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-GEOMETRIC.md) | 3,382.57 | 1,765.48 | 1.916 / 1.936 | 263,812 | Confirmed |
+| [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FORWARD-RGBA16.md) | 3,572.45 | 1,833.91 | 1.948 / 1.954 | 263,812 | Confirmed |
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-ADAPTIVE-HUFFMAN.md) | 3,481.14 | 1,843.98 | 1.888 / 1.931 | 297,772 | Confirmed |
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-ALPHAWEIGHTED.md) | 42,879.92 | 54,484.52 | 0.787 / 0.805 | 2,615,472 | Confirmed |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-RGBA16-ENCODE.md) | 43,362.07 | 53,579.62 | 0.809 / 0.819 | 2,615,472 | Confirmed |
@@ -270,6 +271,8 @@ JPEG420 RGBA8 confirms **1.943x / upper 1.988x** after sharing chroma sampling,
 with unchanged exact packets and allocations.
 Its forward-only output fallback confirms **1.916x / upper 1.936x** with
 geometric AC coding, exact coefficients/pixels and half the allocation.
+RGBA16 forward-only output confirms **1.948x / upper 1.954x**, including full
+word normalization and flattening, on the same qualified production.
 Opaque VP8 decoding also remains open at **1.983x / upper 2.004x**.
 Its [bulk normalization trial](../benchmarks/VP8-NORMALIZATION-REJECTED.md) is rejected;
 the tested production is restored.

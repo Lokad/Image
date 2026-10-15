@@ -1142,3 +1142,10 @@ allocation 50%. Set `LOKAD_IMAGE_JPEG_ENTROPY=fixed-geometric-v1`, prepare with
 `--prepare-warm-jpeg420-stream 0`, and select `Encode420Stream8`; its separate
 anchor preserves earlier evidence. Other fallback depths/layouts remain open. The same actual package consumer,
 three examples and 3,281 tests pass per OS.
+
+The [forward-only RGBA16 JPEG confirmation](WARM-JPEG-FORWARD-RGBA16.md) reaches
+**1.948x / upper 1.954x**, **263,812 B/op**, with complete word flattening and
+normalization. Production and its qualification are reused. With
+`LOKAD_IMAGE_JPEG_ENTROPY=fixed-geometric-v1`, prepare the separate anchor using
+`--prepare-warm-jpeg420-stream16 0`, then select `Encode420Stream16`. The existing
+two original performance rasters suffice; this adds no quality sweep.
