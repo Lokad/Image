@@ -161,6 +161,7 @@ timing comparison; compression efficiency parity is not established.
 | [Bilinear resize RGBA16†](../benchmarks/WARM-BILINEAR16-REGISTER.md) | 784.03 | 418.41 | 1.874 / 1.908 | 290,118 | Confirmed |
 | [Bilinear upscale RGBA8†](../benchmarks/WARM-BILINEAR-UP8-BATCH.md) | 3,797.55 | 2,152.25 | 1.764 / 1.787 | 2,235,599 | Confirmed |
 | [Bilinear upscale RGBA16†](../benchmarks/WARM-BILINEAR-UP16-ROWS.md) | 2,550.27 | 1,916.08 | 1.331 / 1.416 | 4,498,974 | Confirmed |
+| [RGBA8 bicubic, single-pixel reduction](../benchmarks/WARM-BICUBIC-SINGLE-PIXEL.md) | 1,045.31 | 4,897.54 | 0.213 / 0.227 | 130 | Confirmed |
 | [Bicubic resize RGBA8§](../benchmarks/WARM-BICUBIC-RGBA16-ROWS.md) | 711.85 | 415.44 | 1.713 / 1.728 | 332,177 | Confirmed |
 | [Bicubic resize RGBA16§](../benchmarks/WARM-BICUBIC-RGBA16-ROWS.md) | 745.92 | 567.95 | 1.313 / 1.320 | 464,342 | Confirmed |
 | [Bicubic upscale RGBA8§](../benchmarks/WARM-BICUBIC-UP8-ROWS.md) | 4,721.50 | 3,041.03 | 1.553 / 1.578 | 3,244,622 | Confirmed |
@@ -313,6 +314,13 @@ proofs. No input variants or repeated production/harness builds are added.
 The preceding RGB420/RGB422 rows retain their independent 1.638x/upper1.646x and
 1.511x/upper1.520x results with 70.6% and 62.9% less managed time respectively.
 Those measurements precede the current shared entropy primitive.
+
+The [single-pixel bicubic comparison](../benchmarks/WARM-BICUBIC-SINGLE-PIXEL.md)
+adds one unchanged-production RGBA8 reduction, independently confirmed at
+**0.213x / upper 0.227x**, **130 B/op**, against the labeled zimg/FFmpeg zscale
+backend. Managed/normal/scalar native samples are exact. Required rectangular
+halo/packing/filtering/quantization/ownership work is timed. Existing full
+qualification is reused; no production rebuild or profile is needed.
 
 Recent unchanged-production coverage confirms RGB16 Paeth at1.904x /
 upper1.928x,6,504 B/op, and gray-alpha8 Paeth at1.017x / upper1.068x,2,408 B/op.

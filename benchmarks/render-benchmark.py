@@ -195,6 +195,7 @@ def render():
         row('Bilinear resize RGBA16†', 'warm-bilinear16-register-evidence.json', ['observations', -1], 'WARM-BILINEAR16-REGISTER.md', True),
         row('Bilinear upscale RGBA8†', 'warm-bilinearup8-batch-evidence.json', ['observations', -1], 'WARM-BILINEAR-UP8-BATCH.md', True),
         row('Bilinear upscale RGBA16†', 'warm-bilinearup16-rows-evidence.json', ['observations', -1], 'WARM-BILINEAR-UP16-ROWS.md', True),
+        row('RGBA8 bicubic, single-pixel reduction', 'warm-bicubic-single-pixel-evidence.json', ['observations', -1], 'WARM-BICUBIC-SINGLE-PIXEL.md', True),
         row('Bicubic resize RGBA8§', 'warm-bicubic16-rows-evidence.json', ['byteRegressionControl', 'observations', -1], 'WARM-BICUBIC-RGBA16-ROWS.md', True),
         row('Bicubic resize RGBA16§', 'warm-bicubic16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-RGBA16-ROWS.md', True),
         row('Bicubic upscale RGBA8§', 'warm-bicubicup8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-UP8-ROWS.md', True),
@@ -390,6 +391,13 @@ proofs. No input variants or repeated production/harness builds are added.
 The preceding RGB420/RGB422 rows retain their independent 1.638x/upper1.646x and
 1.511x/upper1.520x results with 70.6% and 62.9% less managed time respectively.
 Those measurements precede the current shared entropy primitive.
+
+The [single-pixel bicubic comparison](../benchmarks/WARM-BICUBIC-SINGLE-PIXEL.md)
+adds one unchanged-production RGBA8 reduction, independently confirmed at
+**0.213x / upper 0.227x**, **130 B/op**, against the labeled zimg/FFmpeg zscale
+backend. Managed/normal/scalar native samples are exact. Required rectangular
+halo/packing/filtering/quantization/ownership work is timed. Existing full
+qualification is reused; no production rebuild or profile is needed.
 
 Recent unchanged-production coverage confirms RGB16 Paeth at1.904x /
 upper1.928x,6,504 B/op, and gray-alpha8 Paeth at1.017x / upper1.068x,2,408 B/op.

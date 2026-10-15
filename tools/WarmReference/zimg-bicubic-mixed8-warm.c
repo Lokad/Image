@@ -75,7 +75,17 @@ typedef uint16_t Sample;
 #define HEIGHT_ARG "259"
 #elif LOKAD_IMAGE_WIDE_DOWNSAMPLE
 #undef WORKER_NAME
-#if LOKAD_IMAGE_WIDE_DOWNSAMPLE == 10
+#if LOKAD_IMAGE_WIDE_DOWNSAMPLE == 11
+#define WORKER_NAME "zimg-bicubic-down1x1-8-warm"
+#define TARGET_WIDTH 1
+#define TARGET_HEIGHT 1
+#define WIDTH_ARG "1"
+#define HEIGHT_ARG "1"
+/* For this centered reduction, the original supports are [-770,1282]
+ * and [-389,647]. Do not materialize unused square-halo rows. */
+#define TARGET_HALO 770
+#define TARGET_VERTICAL_HALO 389
+#elif LOKAD_IMAGE_WIDE_DOWNSAMPLE == 10
 #define WORKER_NAME "zimg-bicubic-down8x17-" DEPTH_ARG "-warm"
 #define TARGET_WIDTH 8
 #define TARGET_HEIGHT 17
@@ -182,8 +192,12 @@ typedef uint16_t Sample;
 #define LOW_ALPHA_RGB_ERROR_MAXIMUM 1
 #endif
 
+#ifndef TARGET_VERTICAL_HALO
+#define TARGET_VERTICAL_HALO TARGET_HALO
+#endif
+
 enum { WIDTH=513, HEIGHT=259, OUTPUT_WIDTH=TARGET_WIDTH, OUTPUT_HEIGHT=TARGET_HEIGHT, HALO=TARGET_HALO,
-       PADDED_WIDTH=WIDTH+2*HALO, PADDED_HEIGHT=HEIGHT+2*HALO,
+       HALO_Y=TARGET_VERTICAL_HALO, PADDED_WIDTH=WIDTH+2*HALO, PADDED_HEIGHT=HEIGHT+2*HALO_Y,
        SAMPLE_BYTES=sizeof(Sample),
        INPUT_STRIDE=(PADDED_WIDTH*SAMPLE_BYTES+63)&~63, OUTPUT_STRIDE=(OUTPUT_WIDTH*4+63)&~63,
        INPUT_PIXEL_STRIDE=WIDTH*4*SAMPLE_BYTES, OUTPUT_PIXEL_STRIDE=OUTPUT_WIDTH*4*SAMPLE_BYTES,
@@ -229,7 +243,7 @@ typedef struct {
 static uint8_t *apply(Work *w) {
     const size_t plane_bytes=(size_t)INPUT_STRIDE*PADDED_HEIGHT;
     for(int y=0;y<PADDED_HEIGHT;y++) {
-        int sy=y-HALO;if(sy<0)sy=0;if(sy>=HEIGHT)sy=HEIGHT-1;
+        int sy=y-HALO_Y;if(sy<0)sy=0;if(sy>=HEIGHT)sy=HEIGHT-1;
         const Sample *row=(const Sample *)w->raw+(size_t)sy*WIDTH*4;
         Sample *r=(Sample *)(w->input_storage+(size_t)y*INPUT_STRIDE);
         Sample *g=r+plane_bytes/SAMPLE_BYTES,*b=g+plane_bytes/SAMPLE_BYTES,*a=b+plane_bytes/SAMPLE_BYTES;
@@ -304,7 +318,7 @@ int main(int argc,char **argv) {
     src.width=PADDED_WIDTH;src.height=PADDED_HEIGHT;src.pixel_type=SAMPLE_PIXEL_TYPE;src.depth=LOKAD_IMAGE_SAMPLE_DEPTH;
     src.pixel_range=ZIMG_RANGE_FULL;src.color_family=ZIMG_COLOR_RGB;src.matrix_coefficients=ZIMG_MATRIX_RGB;
     src.transfer_characteristics=ZIMG_TRANSFER_LINEAR;src.alpha=ZIMG_ALPHA_STRAIGHT;
-    src.active_region.left=HALO;src.active_region.top=HALO;src.active_region.width=WIDTH;src.active_region.height=HEIGHT;
+    src.active_region.left=HALO;src.active_region.top=HALO_Y;src.active_region.width=WIDTH;src.active_region.height=HEIGHT;
     dst.width=OUTPUT_WIDTH;dst.height=OUTPUT_HEIGHT;dst.pixel_type=ZIMG_PIXEL_FLOAT;dst.depth=32;
     dst.pixel_range=ZIMG_RANGE_FULL;dst.color_family=ZIMG_COLOR_RGB;dst.matrix_coefficients=ZIMG_MATRIX_RGB;
     dst.transfer_characteristics=ZIMG_TRANSFER_LINEAR;dst.alpha=ZIMG_ALPHA_PREMULTIPLIED;
@@ -320,7 +334,7 @@ int main(int argc,char **argv) {
     uint8_t *first=apply(&w),*second=apply(&w);verify(&w,first);verify(&w,second);
     if(first==second||memcmp(first,second,OUTPUT_BYTES))fail("Outputs alias or differ.");
     first[0]^=255;verify(&w,second);free(first);free(second);check_and_write(&w,argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"bicubic-resize\",\"width\":513,\"height\":259,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"filterThreads\":1,\"threadType\":0,\"outputWidth\":%d,\"outputHeight\":%d,\"independentLiveOutputs\":true,\"initialCompletedOperations\":%" PRIu64 ",\"inputStride\":%d,\"backend\":\"zimg (FFmpeg zscale backend)\",\"scalar\":%s,\"haloPixels\":%d,\"haloAndPackingTimed\":true,\"outputAllocationAndRepackingTimed\":true,\"alphaTolerance1\":true,\"premultipliedFloatOutput\":true,\"unpremultiplicationAndQuantizationTimed\":true,\"lowAlphaRgbAllowance\":%s,\"lowAlphaRgbReferenceMaximum\":%d,\"lowAlphaRgbErrorMaximum\":%d,\"scratchBytes\":%zu,\"nativeOutputPixelAllocationBytes\":%d}\n",LOKAD_IMAGE_SAMPLE_DEPTH,w.cpu,OUTPUT_WIDTH,OUTPUT_HEIGHT,w.completed,INPUT_PIXEL_STRIDE,w.scalar?"true":"false",HALO,LOW_ALPHA_RGB_ALLOWED,LOW_ALPHA_RGB_REFERENCE_MAXIMUM,LOW_ALPHA_RGB_ERROR_MAXIMUM,w.scratch_bytes,OUTPUT_STRIDE*OUTPUT_HEIGHT*4+OUTPUT_BYTES);fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"bicubic-resize\",\"width\":513,\"height\":259,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"filterThreads\":1,\"threadType\":0,\"outputWidth\":%d,\"outputHeight\":%d,\"independentLiveOutputs\":true,\"initialCompletedOperations\":%" PRIu64 ",\"inputStride\":%d,\"backend\":\"zimg (FFmpeg zscale backend)\",\"scalar\":%s,\"haloPixels\":%d,\"haloPixelsX\":%d,\"haloPixelsY\":%d,\"haloAndPackingTimed\":true,\"outputAllocationAndRepackingTimed\":true,\"alphaTolerance1\":true,\"premultipliedFloatOutput\":true,\"unpremultiplicationAndQuantizationTimed\":true,\"lowAlphaRgbAllowance\":%s,\"lowAlphaRgbReferenceMaximum\":%d,\"lowAlphaRgbErrorMaximum\":%d,\"scratchBytes\":%zu,\"nativeOutputPixelAllocationBytes\":%d}\n",LOKAD_IMAGE_SAMPLE_DEPTH,w.cpu,OUTPUT_WIDTH,OUTPUT_HEIGHT,w.completed,INPUT_PIXEL_STRIDE,w.scalar?"true":"false",HALO,HALO,HALO_Y,LOW_ALPHA_RGB_ALLOWED,LOW_ALPHA_RGB_REFERENCE_MAXIMUM,LOW_ALPHA_RGB_ERROR_MAXIMUM,w.scratch_bytes,OUTPUT_STRIDE*OUTPUT_HEIGHT*4+OUTPUT_BYTES);fflush(stdout);
     char line[128];
     while(fgets(line,sizeof(line),stdin)) {
         if(!strcmp(line,"quit\n"))break;
