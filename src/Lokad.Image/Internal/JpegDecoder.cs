@@ -279,6 +279,8 @@ internal ref struct JpegDecoder
             var k = 1;
             while (k <= 63)
             {
+                ac.ReadPlainBaselineAc(ref reader, block, ref k);
+                if (k > 63) return;
                 if (ac.TryReadBaselineAc(ref reader, 64 - k, out var fastSymbol, out var amplitude))
                 {
                     k += fastSymbol >> 4;

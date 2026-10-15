@@ -599,7 +599,9 @@ The [inverse rounding proof](docs/jpeg-inverse-rounding.md) defines the bound.
 
 Baseline entropy traversal retains exact logical work charges in a local block
 budget, including cancelable operations. Completed charges are published on every
-exit without another cancellation check. With a live token, consecutive ordinary
+exit without another cancellation check. Noncancelable blocks may also keep runs
+of ordinary short AC symbols in local reader state, preserving the existing atomic
+fused prefix/amplitude charge and original fallback state. With a live token, consecutive ordinary
 AC symbols may be decoded from safe two-byte lookahead using local reader state.
 Prefix and amplitude retain separate work admissions and cancellation checks.
 Unused whole bytes are returned before publishing the original reader position

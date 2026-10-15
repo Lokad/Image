@@ -165,6 +165,45 @@ public sealed class JpegBaselineBlockTests
     }
 
     [Fact]
+    public void ConsecutiveShortAcKeepsEveryBudgetTruncationAndCachedPhase()
+    {
+        var tables = Tables();
+        var payload = Dc(0) + string.Concat(Enumerable.Range(1, 63).Select(k => Ac(1) + ((k & 1) == 0 ? "1" : "0")));
+        for (var phase = 0; phase < 8; phase++)
+        {
+            var original = Stuff(new string('0', phase) + payload);
+            // Exhaust each budget on the full run, then each truncation with
+            // enough work. Avoid a redundant Cartesian product of both axes.
+            var cases = Enumerable.Range(63, 578).Select(work => (Length: original.Length, Work: work))
+                .Concat(Enumerable.Range(0, original.Length).Select(length => (Length: length, Work: 640)));
+            foreach (var item in cases)
+            {
+                var input = original.AsSpan(0, item.Length).ToArray();
+                var expected = Run(true); var actual = Run(false);
+                Assert.Equal(expected.Error, actual.Error); Assert.Equal(expected.Message, actual.Message);
+                Assert.Equal(expected.Position, actual.Position); Assert.Equal(expected.Remaining, actual.Remaining);
+                Assert.Equal(expected.Predictor, actual.Predictor); Assert.Equal(expected.Block, actual.Block);
+                Assert.Equal(original.AsSpan(0, item.Length).ToArray(), input);
+
+                (Type? Error, string? Message, int Position, long Remaining, int Predictor, int[] Block) Run(bool scalar)
+                {
+                    var context = Context(item.Work); var reader = new JpegEntropyReader(input, 0, context);
+                    var block = Enumerable.Repeat(12345, 64).ToArray(); var predictor = 17; Exception? error = null;
+                    try
+                    {
+                        if (phase != 0) reader.ReadBits(phase);
+                        if (scalar) ScalarBaseline(ref reader, block, ref predictor, tables.Dc, tables.Ac, context);
+                        else JpegDecoder.ReadBaselineBlock(ref reader, block, ref predictor, tables.Dc, tables.Ac, context);
+                        reader.Restart(0);
+                    }
+                    catch (Exception failure) when (failure is ImageDataException or ImageLimitException) { error = failure; }
+                    return (error?.GetType(), error?.Message, reader.Position, context.RemainingWork, predictor, block);
+                }
+            }
+        }
+    }
+
+    [Fact]
     public void AcPrefixAndAmplitudeRetainEveryBudgetTruncationAndPartialState()
     {
         var tables = Tables();

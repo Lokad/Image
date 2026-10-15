@@ -127,13 +127,13 @@ def render():
         row('JPEG baseline 4:2:0, row restart markers', 'warm-jpeg-restartdecode-evidence.json', ['observations', -1], 'WARM-JPEG-RESTART-DECODE.md', True),
         row('JPEG baseline 4:2:2', 'warm-coverage-quiet-evidence.json', ['cases', 'jpeg422', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
         row('JPEG baseline 4:4:4, owned input', 'warm-jpeg444owned-quiet-evidence.json', ['observations', -1], 'WARM-JPEG444-OWNED-QUIET.md', True),
-        row('JPEG baseline 4:4:4, native input', 'warm-jpeg444canceldecode-evidence.json', ['regressions', 0], 'WARM-JPEG-CANCELABLE-DECODE.md', verification='Regression screen; prior confirmed'),
-        row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpegprogressive444cancel-evidence.json', ['regressions', 1], 'WARM-JPEG-PROGRESSIVE-CANCELABLE444.md', verification='Regression screen; prior confirmed'),
+        row('JPEG baseline 4:4:4, native input', 'warm-jpeg-ac-run-evidence.json', ['observations', -1], 'WARM-JPEG-BASELINE-AC-RUN.md', True),
+        row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg-ac-run-evidence.json', ['cancelableConfirmations', -1], 'WARM-JPEG-BASELINE-AC-RUN.md', True),
         row('JPEG progressive gray', 'warm-jpegrefinement-evidence.json', ['observations', -1], 'WARM-JPEG-REFINEMENT.md', True),
         row('JPEG progressive 4:2:0', 'warm-jpegprogressive420-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE420.md', True),
         row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpegprogressive444cancel-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE-CANCELABLE444.md', True),
         row('JPEG progressive 4:2:2', 'warm-jpegprogressive422-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE422.md', True),
-        row('JPEG progressive 4:4:4', 'warm-jpegprogressive444cancel-evidence.json', ['regressions', 0], 'WARM-JPEG-PROGRESSIVE-CANCELABLE444.md', verification='Regression screen; prior confirmed'),
+        row('JPEG progressive 4:4:4', 'warm-jpeg-ac-run-evidence.json', ['progressiveConfirmations', -1], 'WARM-JPEG-BASELINE-AC-RUN.md', True),
         row('WebP VP8 + alpha', 'warm-vp8-filter8-evidence.json', ['alphaBearingControl', 'observations', -1], 'WARM-VP8-FILTER8.md', True),
         row('WebP VP8, opaque', 'warm-vp8-filter8-evidence.json', ['observations', -1], 'WARM-VP8-FILTER8.md', True),
         row('WebP VP8L, literal/run input', 'warm-vp8ldecode-quiet-evidence.json', ['observations', -1], 'WARM-VP8L-DECODE-QUIET.md', True),
@@ -362,16 +362,18 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round confirms the existing RGBA8 PNG Sub workload at
-**1.686x / upper 1.697x**, with **4,456 B/op** and exact pixels. The original
-packet, qualified core, harness and native worker are unchanged; all twelve
-confirmation actuals and both quiet guards pass. Existing **3,428 Release tests
-per OS**, including **898 live comparisons**, and the same actual package's
-consumer plus all three examples on Windows/Linux are reused. No production,
-harness or native rebuild, full suite, package proof, method audit or profile
-is repeated. An extra preparation execution after a private flag typo remains
-retained unscored and excluded from comparative statistics. Prior Sub and packed
-transparency results retain their own sources and evidence.
+The latest accepted round confirms ordinary native-input JPEG444 at **1.715x /
+upper 1.733x**, reducing managed time **18.6%**, at **2,664,373 B/op**. Safe local
+ordinary-AC runs preserve exact work, reader/partial-failure state and registered
+managed pixels. Native normal/scalar agreement remains RGB max3/RMSE0.227 within
+the unchanged max4/RMSE1.5 gate, with exact opaque alpha. The same build confirms
+live-token JPEG444 **1.770x / upper1.797x** and progressive JPEG444 **1.954x /
+upper1.960x**, with **2,664,373 / 2,682,364 B/op**. All twelve actuals and both
+guards are retained for every pair. Regression means pass before full **3,432
+Release tests per OS**, including **898 live comparisons**, and consumer plus all
+three examples through the same actual package on Windows/Linux. Only the SPEC
+description changes after measurement, before packaging; production inputs remain
+identical. Original above-two bounds and profile evidence stay linked.
 
 PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples
 and the unchanged 5% IDAT-size gate; earlier level6/level6 refusals remain unscored.

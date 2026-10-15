@@ -5,8 +5,8 @@ namespace Lokad.Image.Tests;
 public sealed class JpegCancelableWorkTests
 {
     [Theory]
-    [InlineData(9)] [InlineData(10)]
-    public void LongAcCodesKeepEveryCachedPhaseBudgetAndTruncation(int codeLength)
+    [InlineData(9, true)] [InlineData(10, true)] [InlineData(9, false)] [InlineData(10, false)]
+    public void LongAcCodesKeepEveryCachedPhaseBudgetAndTruncation(int codeLength, bool cancelable)
     {
         var lengths = new byte[16]; lengths[codeLength - 1] = 1;
         for (var size = 1; size <= 10; size++)
@@ -36,7 +36,7 @@ public sealed class JpegCancelableWorkTests
                     (Type? Error, string? Message, int Position, long Remaining, int Value, int Tail) Run(bool fused)
                     {
                         using var cancellation = new CancellationTokenSource();
-                        var context = new OperationContext(ImageLimits.Default with { MaxWork = budget + 1 }, cancellation.Token);
+                        var context = new OperationContext(ImageLimits.Default with { MaxWork = budget + 1 }, cancelable ? cancellation.Token : default);
                         context.Work(1); // Include an exhausted, but validly configured, parent budget.
                         var reader = new JpegEntropyReader(input, 0, context); var value = 0; var tail = 0; Exception? error = null;
                         if (fused) reader.BeginLocalWork();
@@ -44,7 +44,11 @@ public sealed class JpegCancelableWorkTests
                         {
                             if (offset != 0) reader.ReadBits(offset);
                             var coefficient = 63; Span<int> block = stackalloc int[64];
-                            if (fused) table.ReadPlainCancelableAc(ref reader, block, ref coefficient);
+                            if (fused)
+                            {
+                                if (cancelable) table.ReadPlainCancelableAc(ref reader, block, ref coefficient);
+                                else table.ReadPlainBaselineAc(ref reader, block, ref coefficient);
+                            }
                             if (fused && coefficient == 64) value = block[JpegTransform.Zigzag[63]];
                             else
                             {
@@ -61,8 +65,9 @@ public sealed class JpegCancelableWorkTests
         }
     }
 
-    [Fact]
-    public void EveryRawBytePairKeepsUnfusedStuffingMarkerAndPendingBitState()
+    [Theory]
+    [InlineData(true)] [InlineData(false)]
+    public void EveryRawBytePairKeepsUnfusedStuffingMarkerAndPendingBitState(bool cancelable)
     {
         var lengths = new byte[16]; lengths[0] = 1;
         var table = new JpegHuffman(lengths, new byte[] { 0x01 }, new OperationContext(ImageLimits.Default, default));
@@ -77,14 +82,18 @@ public sealed class JpegCancelableWorkTests
         (Type? Error, string? Message, int Position, long Remaining, int Value, int Tail) Run(bool fused)
         {
             using var cancellation = new CancellationTokenSource();
-            var context = new OperationContext(ImageLimits.Default with { MaxWork = 12 }, cancellation.Token);
+            var context = new OperationContext(ImageLimits.Default with { MaxWork = 12 }, cancelable ? cancellation.Token : default);
             var reader = new JpegEntropyReader(data, 0, context); var value = 0; var tail = 0; Exception? error = null;
             if (fused) reader.BeginLocalWork();
             try
             {
                 reader.ReadBits(7); // One cached zero bit is the one-bit AC code.
                 var coefficient = 63; Span<int> block = stackalloc int[64];
-                if (fused) table.ReadPlainCancelableAc(ref reader, block, ref coefficient);
+                if (fused)
+                {
+                    if (cancelable) table.ReadPlainCancelableAc(ref reader, block, ref coefficient);
+                    else table.ReadPlainBaselineAc(ref reader, block, ref coefficient);
+                }
                 if (fused && coefficient == 64) value = block[JpegTransform.Zigzag[63]];
                 else
                 {

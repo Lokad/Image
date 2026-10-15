@@ -87,13 +87,13 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-JPEG-RESTART-DECODE.md) | 1,852.40 | 1,016.13 | 1.823 / 1.837 | 1,623,906 | Confirmed |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-COVERAGE-QUIET.md) | 2,087.01 | 1,336.37 | 1.562 / 1.567 | 1,978,646 | Confirmed |
 | [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-JPEG444-OWNED-QUIET.md) | 3,564.61 | 2,039.57 | 1.748 / 1.793 | 2,596,174 | Confirmed |
-| [JPEG baseline 4:4:4, native input](../benchmarks/WARM-JPEG-CANCELABLE-DECODE.md) | 3,357.60 | 1,719.85 | 1.952 / 2.216 | 2,664,358 | Regression screen; prior confirmed |
-| [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-JPEG-PROGRESSIVE-CANCELABLE444.md) | 3,158.79 | 1,770.53 | 1.784 / 5.685 | 2,664,358 | Regression screen; prior confirmed |
+| [JPEG baseline 4:4:4, native input](../benchmarks/WARM-JPEG-BASELINE-AC-RUN.md) | 2,953.89 | 1,722.64 | 1.715 / 1.733 | 2,664,373 | Confirmed |
+| [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-JPEG-BASELINE-AC-RUN.md) | 3,048.96 | 1,722.47 | 1.770 / 1.797 | 2,664,373 | Confirmed |
 | [JPEG progressive gray](../benchmarks/WARM-JPEG-REFINEMENT.md) | 3,336.90 | 1,743.36 | 1.914 / 1.942 | 1,232,501 | Confirmed |
 | [JPEG progressive 4:2:0](../benchmarks/WARM-JPEG-PROGRESSIVE420.md) | 3,646.81 | 1,938.47 | 1.881 / 1.894 | 1,637,521 | Confirmed |
 | [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-PROGRESSIVE-CANCELABLE444.md) | 6,453.37 | 3,335.92 | 1.935 / 1.940 | 2,682,364 | Confirmed |
 | [JPEG progressive 4:2:2](../benchmarks/WARM-JPEG-PROGRESSIVE422.md) | 3,882.57 | 2,210.07 | 1.757 / 1.781 | 1,996,661 | Confirmed |
-| [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-PROGRESSIVE-CANCELABLE444.md) | 6,280.26 | 3,334.35 | 1.884 / 1.975 | 2,682,364 | Regression screen; prior confirmed |
+| [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-BASELINE-AC-RUN.md) | 6,515.45 | 3,334.14 | 1.954 / 1.960 | 2,682,364 | Confirmed |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8-FILTER8.md) | 10,777.02 | 5,977.48 | 1.803 / 1.819 | 1,966,616 | Confirmed |
 | [WebP VP8, opaque](../benchmarks/WARM-VP8-FILTER8.md) | 8,649.43 | 4,797.64 | 1.803 / 1.808 | 760,548 | Confirmed |
 | [WebP VP8L, literal/run input](../benchmarks/WARM-VP8L-DECODE-QUIET.md) | 3,948.44 | 2,332.84 | 1.693 / 1.732 | 1,074,301 | Confirmed |
@@ -285,16 +285,18 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round confirms the existing RGBA8 PNG Sub workload at
-**1.686x / upper 1.697x**, with **4,456 B/op** and exact pixels. The original
-packet, qualified core, harness and native worker are unchanged; all twelve
-confirmation actuals and both quiet guards pass. Existing **3,428 Release tests
-per OS**, including **898 live comparisons**, and the same actual package's
-consumer plus all three examples on Windows/Linux are reused. No production,
-harness or native rebuild, full suite, package proof, method audit or profile
-is repeated. An extra preparation execution after a private flag typo remains
-retained unscored and excluded from comparative statistics. Prior Sub and packed
-transparency results retain their own sources and evidence.
+The latest accepted round confirms ordinary native-input JPEG444 at **1.715x /
+upper 1.733x**, reducing managed time **18.6%**, at **2,664,373 B/op**. Safe local
+ordinary-AC runs preserve exact work, reader/partial-failure state and registered
+managed pixels. Native normal/scalar agreement remains RGB max3/RMSE0.227 within
+the unchanged max4/RMSE1.5 gate, with exact opaque alpha. The same build confirms
+live-token JPEG444 **1.770x / upper1.797x** and progressive JPEG444 **1.954x /
+upper1.960x**, with **2,664,373 / 2,682,364 B/op**. All twelve actuals and both
+guards are retained for every pair. Regression means pass before full **3,432
+Release tests per OS**, including **898 live comparisons**, and consumer plus all
+three examples through the same actual package on Windows/Linux. Only the SPEC
+description changes after measurement, before packaging; production inputs remain
+identical. Original above-two bounds and profile evidence stay linked.
 
 PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples
 and the unchanged 5% IDAT-size gate; earlier level6/level6 refusals remain unscored.
