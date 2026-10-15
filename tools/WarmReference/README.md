@@ -1323,6 +1323,12 @@ production/harness build. All three receive independent twelve-actual confirmati
 reuse existing short screens only when their actual production/harness match.
 Fixtures, native worker, exact limits and token policies remain unchanged.
 
+`DecodeCancelable8` checks default-budget RGBA8 decoding with a live token;
+`DecodeTight16` checks noncancelable RGBA16 decoding at its exact memory limit.
+Reuse the original frozen packets and generic worker, with normal/scalar exact
+samples and caller/admission controls outside timing. See the
+[boundary confirmations](../../benchmarks/WARM-PNG-DECODE-BOUNDARIES.md).
+
 Streaming RGBA16 Fastest uses `-WarmFamily Png -WarmCases EncodeFast16` or
 `EncodeFastCancelable16`. Managed fast adaptive backend2/native backend1 are
 explicit; unchanged5% IDAT-size and exact full-word/alpha/hidden-RGB gates apply.

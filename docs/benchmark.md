@@ -41,12 +41,13 @@ timing comparison; compression efficiency parity is not established.
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-STREAM.md) | 10,914.60 | 5,979.52 | 1.825 / 1.833 | 2,327,699 | Confirmed |
 | [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-VP8L-STREAM.md) | 5,549.36 | 3,026.08 | 1.834 / 1.851 | 1,924,876 | Confirmed |
 | [PNG RGBA8, None](../benchmarks/WARM-PNG-TIGHT-CANCELABLE8.md) | 2,034.33 | 1,368.65 | 1.486 / 1.705 | 4,456 | Regression screen; prior confirmed |
+| [PNG RGBA8, None / live cancelable token](../benchmarks/WARM-PNG-DECODE-BOUNDARIES.md) | 1,929.15 | 1,370.88 | 1.407 / 1.469 | 4,456 | Confirmed |
 | [PNG RGBA8, None / exact working limit](../benchmarks/WARM-PNG-COUNTING.md) | 2,605.93 | 1,430.84 | 1.821 / 1.950 | 4,800 | Confirmed |
 | [PNG RGBA8, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-TIGHT-CANCELABLE8.md) | 2,559.30 | 1,371.11 | 1.867 / 1.873 | 4,800 | Confirmed |
 | [PNG RGBA8, stored Deflate / None](../benchmarks/WARM-PNG-STORED8-DECODE.md) | 157.30 | 135.76 | 1.159 / 1.168 | 12,976 | Confirmed |
 | [PNG RGBA16, stored Deflate / None](../benchmarks/WARM-PNG-STORED16-DECODE.md) | 472.57 | 309.99 | 1.524 / 1.556 | 1,080,706 | Confirmed |
 | [PNG RGBA16, None](../benchmarks/WARM-PNG-LITERAL-RUN.md) | 5,740.60 | 2,931.33 | 1.958 / 1.968 | 2,032,864 | Confirmed |
-| [PNG RGBA16, None / exact working limit](../benchmarks/WARM-PNG-TIGHT-CANCELABLE16.md) | 5,478.54 | 3,023.38 | 1.812 / 4.109 | 8,896 | Regression screen; prior confirmed |
+| [PNG RGBA16, None / exact working limit](../benchmarks/WARM-PNG-DECODE-BOUNDARIES.md) | 5,214.71 | 2,870.48 | 1.817 / 1.821 | 8,896 | Confirmed |
 | [PNG RGBA16, None / live cancelable token](../benchmarks/WARM-PNG-COUNTING.md) | 4,518.51 | 2,873.34 | 1.573 / 1.583 | 8,552 | Confirmed |
 | [PNG RGBA16, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-COUNTING.md) | 5,265.78 | 2,871.10 | 1.834 / 1.852 | 8,896 | Confirmed |
 | [PNG RGBA8, Paeth](../benchmarks/WARM-PAETH-FOUR-CHANNEL.md) | 5,099.55 | 2,925.24 | 1.743 / 1.842 | 881,892 | Confirmed |
