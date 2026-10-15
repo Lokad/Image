@@ -1363,8 +1363,9 @@ The original `ffmpeg-png-fast16-warm.c` and `ffmpeg-png-store16-warm.c` adapters
 are restricted to RGBA16 encoding at levels 1 and 0 respectively. Build them with
 `build-png-fast16-linux.sh` or `build-png-store16-linux.sh`. Both time complete
 word-order conversion and independent encoded packet acquisition/release. Their
-separate identities preserve existing PNG workers. `EncodeFast16` currently
-fails the unchanged IDAT-size comparison gate and is unscored;
+separate identities preserve existing PNG workers. `EncodeFast16` uses the current streaming managed2/native1 policy,
+with exact full-word pixels and the unchanged 5% IDAT-size gate; see the
+[confirmed result](../../benchmarks/WARM-PNG-FAST2.md).
 `EncodeNoCompression16` requires stored-only Deflate and exact full-word samples.
 
 `DecodeNoCompression16` reuses the frozen stored-Deflate RGBA16 packet and the
@@ -1386,6 +1387,17 @@ worker, with the managed limit fixed to input + IDAT + output + 256 KiB + two
 rows. Exact pixels and one-byte-below rejection are checked before timing. The
 optional whole-filter/8 KiB output buffers cannot fit; native complete decode and
 word conversion remain timed, with no native caller-admission setting.
+
+`WarmPng.DecodeGray1Transparency` reuses the binary gray projection with tRNS key1.
+The existing SPEC correction runs FFmpeg `colorkey=white:similarity=0.01:blend=0`
+after full MONOBLACK-to-owned-RGBA conversion. Conversion, buffer transfer,
+in-place filtering and output release are timed; all codec/conversion/filter
+work uses one thread. Raw decoder alpha failures remain unscored. The native
+adapter accepts `LOKAD_IMAGE_WARM_NATIVE_SCALAR=1` for correctness-only checks;
+its ready receipt records actual CPU flags, and the timing harness rejects scalar
+mode. Normal/scalar worker and CLI output must preserve every RGBA sample,
+including white RGB under zero alpha. See the
+[confirmed comparison](../../benchmarks/WARM-PNG-GRAY1-TRANSPARENCY.md).
 
 `WarmPng.DecodeCancelable16` reuses that original word PNG and decoder worker,
 with default limits and a live cancelable token that is never signaled during

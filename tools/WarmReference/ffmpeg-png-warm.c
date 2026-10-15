@@ -14,6 +14,7 @@
 #include <libavfilter/buffersink.h>
 #include <libavfilter/buffersrc.h>
 #include <libavutil/avutil.h>
+#include <libavutil/cpu.h>
 #include <libavutil/frame.h>
 #include <libavutil/opt.h>
 #include <libavutil/pixfmt.h>
@@ -125,6 +126,10 @@ typedef struct {
     struct SwsContext *conversion;
     AVFilterGraph *gray_graph;
     AVFilterContext *gray_input, *gray_output;
+    AVFilterGraph *key_graph;
+    AVFilterContext *key_input, *key_output;
+    AVFrame *keyed;
+    int packed_key_filter;
     uint8_t *original, *encoded;
     size_t raw_bytes, encoded_bytes;
     int encode, encode_stored, encode_rgb, encode_gray, encode_gray_alpha, width, height, depth, row_bytes, cpu, stride, output_bytes, rgb, gray, gray_alpha, palette, mono, coded_depth, gray_transparency, rgb_transparency;
@@ -151,14 +156,34 @@ static void gray16_graph(Work *work)
     int64_t threads; require(av_opt_get_int(endian->priv, "threads", AV_OPT_SEARCH_CHILDREN, &threads), "Read gray16 conversion threads");
     if (threads != 1 || work->gray_graph->nb_threads != 1 || work->gray_graph->thread_type != 0) fail("Gray16 graph threading differs.");
 }
-static AVFrame *result_frame(Work *work) { return work->depth == 16 || work->gray || work->gray_alpha || (work->rgb && !work->rgb_transparency) || work->palette ? work->converted : work->decoded; }
+static void packed_key_graph(Work *work)
+{
+    /* Existing SPEC reference correction, scoped here to binary gray1/key1.
+     * RGBA expansion is already performed by the one-thread swscale context. */
+    work->key_graph = avfilter_graph_alloc(); if (!work->key_graph) fail("Allocate packed transparency graph failed.");
+    work->key_graph->nb_threads = 1; work->key_graph->thread_type = 0;
+    char arguments[256];
+    snprintf(arguments, sizeof(arguments), "video_size=%dx%d:pix_fmt=%d:time_base=1/1:pixel_aspect=1/1",
+        work->width, work->height, AV_PIX_FMT_RGBA);
+    AVFilterContext *key;
+    require(avfilter_graph_create_filter(&work->key_input, avfilter_get_by_name("buffer"), "input", arguments, NULL, work->key_graph), "Create packed transparency source");
+    require(avfilter_graph_create_filter(&key, avfilter_get_by_name("colorkey"), "transparent_white", "color=white:similarity=0.01:blend=0", NULL, work->key_graph), "Create packed transparency filter");
+    require(avfilter_graph_create_filter(&work->key_output, avfilter_get_by_name("buffersink"), "output", NULL, NULL, work->key_graph), "Create packed transparency sink");
+    require(avfilter_link(work->key_input, 0, key, 0), "Link packed transparency filter");
+    require(avfilter_link(key, 0, work->key_output, 0), "Link packed transparency output");
+    require(avfilter_graph_config(work->key_graph, NULL), "Configure packed transparency graph");
+    if (work->key_graph->nb_threads != 1 || work->key_graph->thread_type != 0
+        || av_buffersink_get_format(work->key_output) != AV_PIX_FMT_RGBA) fail("Packed transparency graph boundary differs.");
+    work->keyed = av_frame_alloc(); if (!work->keyed) fail("Allocate packed transparency frame wrapper failed.");
+}
+static AVFrame *result_frame(Work *work) { return work->packed_key_filter ? work->keyed : work->depth == 16 || work->gray || work->gray_alpha || (work->rgb && !work->rgb_transparency) || work->palette ? work->converted : work->decoded; }
 static void release(Work *work)
 {
     if (work->encode) {
         av_packet_unref(work->packet);
         if (work->gray_graph) av_frame_unref(work->prepared);
     }
-    else { av_frame_unref(work->decoded); av_frame_unref(work->converted); }
+    else { av_frame_unref(work->decoded); av_frame_unref(work->converted); if (work->keyed) av_frame_unref(work->keyed); }
 }
 static void check_frame(const AVFrame *value, const Work *work, int big_endian)
 {
@@ -220,6 +245,16 @@ static void apply(Work *work)
                     0, work->height, work->converted->data, work->converted->linesize);
                 if (rows != work->height) fail("PNG conversion row count differs.");
             } else swap_samples(work->decoded, work->converted, work->width, work->height);
+        }
+        if (work->packed_key_filter) {
+            work->converted->pts = (int64_t)work->completed;
+            // Transfer the owned conversion buffer; permit in-place filtering
+            // rather than introducing an unnecessary reference/copy.
+            require(av_buffersrc_add_frame_flags(work->key_input, work->converted, 0), "Submit owned packed transparency pixels");
+            require(av_buffersink_get_frame(work->key_output, work->keyed), "Receive owned packed transparency pixels");
+            if (work->keyed->width != work->width || work->keyed->height != work->height
+                || work->keyed->format != AV_PIX_FMT_RGBA || !work->keyed->buf[0]
+                || work->keyed->linesize[0] < work->row_bytes) fail("Packed transparency output differs.");
         }
         AVFrame *output = result_frame(work);
         work->output_bytes = (int)work->raw_bytes; work->stride = output->linesize[0];
@@ -325,6 +360,8 @@ int main(int argc, char **argv)
     if (argc < 7 || (strcmp(argv[1], "png-encode") && strcmp(argv[1], "png-store-encode") && strcmp(argv[1], "png-rgb-encode") && strcmp(argv[1], "png-gray-encode") && strcmp(argv[1], "png-gray-alpha-encode") && strcmp(argv[1], "png-decode") && strcmp(argv[1], "png-adam7-decode")))
         fail("Usage: ffmpeg-png-warm png-encode|png-store-encode|png-rgb-encode|png-gray-encode|png-gray-alpha-encode|png-decode|png-adam7-decode INPUT WIDTH HEIGHT DEPTH OUTPUT [EXPECTED_RAW]");
     Work work = {0}; work.encode_rgb = !strcmp(argv[1], "png-rgb-encode"); work.encode_gray = !strcmp(argv[1], "png-gray-encode");
+    const char *scalar = getenv("LOKAD_IMAGE_WARM_NATIVE_SCALAR");
+    if (scalar) { if (strcmp(scalar, "1")) fail("Scalar verification flag must be 1."); av_force_cpu_flags(0); }
     work.encode_gray_alpha = !strcmp(argv[1], "png-gray-alpha-encode");
     work.encode_stored = !strcmp(argv[1], "png-store-encode");
     work.encode = !strcmp(argv[1], "png-encode") || work.encode_stored || work.encode_rgb || work.encode_gray || work.encode_gray_alpha; work.cpu = affinity_cpu();
@@ -401,11 +438,10 @@ int main(int argc, char **argv)
                 if ((uint64_t)length+12 > work.encoded_bytes-offset) fail("PNG chunk exceeds input.");
                 if (!memcmp(work.encoded+offset+4,"tRNS",4)) {
                     if (length != 2 || work.gray_transparency) fail("Gray tRNS worker requires one two-byte key.");
-                    /* The pinned decoder rejects gray1 tRNS and compares expanded
-                     * gray2/4 samples to the unscaled key. Admit only the exact
-                     * gray2/key0 packed case verified against normal/scalar CLI. */
-                    if (work.coded_depth < 8 && (work.coded_depth != 2 || work.encoded[offset+8] || work.encoded[offset+9]))
-                        fail("Packed gray tRNS reference currently admits only gray2/key0.");
+                    if (work.coded_depth == 1 && !work.encoded[offset+8] && work.encoded[offset+9] == 1)
+                        work.packed_key_filter = 1;
+                    else if (work.coded_depth < 8 && (work.coded_depth != 2 || work.encoded[offset+8] || work.encoded[offset+9]))
+                        fail("Packed tRNS reference admits gray2/key0 or filtered gray1/key1 only.");
                     work.gray_transparency = 1;
                 }
                 offset += (size_t)length+12;
@@ -446,14 +482,15 @@ int main(int argc, char **argv)
             int64_t threads; require(av_opt_get_int(work.conversion, "threads", 0, &threads), "Read conversion threads");
             if (threads != 1) fail("Conversion threading differs.");
         }
+        if (work.packed_key_filter) packed_key_graph(&work);
         require(av_new_packet(work.input, (int)work.encoded_bytes), "Allocate encoded input with decoder padding");
         work.input->flags |= AV_PKT_FLAG_KEY;
         memcpy(work.input->data, work.encoded, work.encoded_bytes);
     }
     check_independent_owners(&work); check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":%d,\"codedDepth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"compressionLevel\":%d,\"filter\":%d,\"colorType\":%d,\"conversionThreads\":%d,\"rgbExpansionTimed\":%s,\"rgbTransparencyExpansionTimed\":%s,\"rgbPackingTimed\":%s,\"grayExpansionTimed\":%s,\"grayTransparencyExpansionTimed\":%s,\"grayPackingTimed\":%s,\"grayPlaneExtractionTimed\":%s,\"grayFilterOutputAllocationTimed\":%s,\"grayAlphaExpansionTimed\":%s,\"grayAlphaPackingTimed\":%s,\"grayAlphaStoragePackingTimed\":%s,\"paletteExpansionTimed\":%s,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":%d,\"codedDepth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"compressionLevel\":%d,\"filter\":%d,\"colorType\":%d,\"conversionThreads\":%d,\"rgbExpansionTimed\":%s,\"rgbTransparencyExpansionTimed\":%s,\"rgbPackingTimed\":%s,\"grayExpansionTimed\":%s,\"grayTransparencyExpansionTimed\":%s,\"grayPackingTimed\":%s,\"grayPlaneExtractionTimed\":%s,\"grayFilterOutputAllocationTimed\":%s,\"grayAlphaExpansionTimed\":%s,\"grayAlphaPackingTimed\":%s,\"grayAlphaStoragePackingTimed\":%s,\"paletteExpansionTimed\":%s,\"packedTransparencyFilterTimed\":%s,\"filterThreads\":%d,\"scalarMode\":%s,\"cpuFlags\":%d,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
         argv[1], work.width, work.height, work.depth, work.encode ? work.depth : work.coded_depth, work.cpu, work.encode ? (work.encode_stored ? 0 : 6) : -1, work.encode ? 0 : -1,
-        work.encode_gray_alpha ? 4 : work.encode_gray ? 0 : work.encode_rgb ? 2 : work.palette ? 3 : work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6, work.encode_gray || work.encode_rgb || (work.rgb && !work.rgb_transparency) || work.gray || work.gray_alpha || work.palette ? 1 : 0, work.rgb && !work.rgb_transparency ? "true" : "false", work.rgb_transparency ? "true" : "false", work.encode_rgb ? "true" : "false", work.gray ? "true" : "false", work.gray_transparency ? "true" : "false", work.encode_gray ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_alpha ? "true" : "false", work.encode_gray_alpha ? "true" : "false", work.encode_gray_alpha ? "true" : "false", work.palette ? "true" : "false", work.output_bytes, work.completed, av_version_info(), avcodec_version(), avutil_version()); fflush(stdout);
+        work.encode_gray_alpha ? 4 : work.encode_gray ? 0 : work.encode_rgb ? 2 : work.palette ? 3 : work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6, work.encode_gray || work.encode_rgb || (work.rgb && !work.rgb_transparency) || work.gray || work.gray_alpha || work.palette ? 1 : 0, work.rgb && !work.rgb_transparency ? "true" : "false", work.rgb_transparency ? "true" : "false", work.encode_rgb ? "true" : "false", work.gray ? "true" : "false", work.gray_transparency ? "true" : "false", work.encode_gray ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_alpha ? "true" : "false", work.encode_gray_alpha ? "true" : "false", work.encode_gray_alpha ? "true" : "false", work.palette ? "true" : "false", work.packed_key_filter ? "true" : "false", work.key_graph || work.gray_graph ? 1 : 0, scalar ? "true" : "false", av_get_cpu_flags(), work.output_bytes, work.completed, av_version_info(), avcodec_version(), avutil_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;
@@ -471,6 +508,7 @@ int main(int argc, char **argv)
     }
     if (ferror(stdin)) fail("Protocol read failed.");
     av_frame_free(&work.source); av_frame_free(&work.prepared); av_frame_free(&work.decoded); av_frame_free(&work.converted);
+    av_frame_free(&work.keyed); avfilter_graph_free(&work.key_graph);
     av_packet_free(&work.input); av_packet_free(&work.packet); avcodec_free_context(&work.codec);
     sws_freeContext(work.conversion); avfilter_graph_free(&work.gray_graph); free(work.original); free(work.encoded); return 0;
 }

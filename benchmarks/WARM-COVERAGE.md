@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16 all five filters and stored Deflate/None; RGB8 Paeth confirmed1.204x / upper1.214x; RGBA16 Adam7 and packed gray1 Adam7 confirmed1.018x / upper1.032x, plus exact working-memory boundary at both depths (RGBA8 confirmed1.821x / upper1.950x, RGBA16 confirmed1.817x / upper1.821x), live-cancelable RGBA8 default/exact limit confirmed1.407x / upper1.469x and1.867x / upper1.873x and RGBA16 default/exact limit confirmed1.573x / upper1.583x and1.834x / upper1.852x; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed; packed gray2/key0 confirmed0.144x / upper0.145x, raw gray1/key1 and gray2/key1 native alpha refusals unscored | Other material depths/layouts, shorter palettes or distinct public boundaries |
+| PNG decode | RGBA8/16 all five filters and stored Deflate/None; RGB8 Paeth confirmed1.204x / upper1.214x; RGBA16 Adam7 and packed gray1 Adam7 confirmed1.018x / upper1.032x, plus exact working-memory boundary at both depths (RGBA8 confirmed1.821x / upper1.950x, RGBA16 confirmed1.817x / upper1.821x), live-cancelable RGBA8 default/exact limit confirmed1.407x / upper1.469x and1.867x / upper1.873x and RGBA16 default/exact limit confirmed1.573x / upper1.583x and1.834x / upper1.852x; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed; packed gray2/key0 confirmed0.144x / upper0.145x and gray1/key1 with timed exact native colorkey confirmed0.094x / upper0.098x, raw gray1/key1 and gray2/key1 native alpha refusals unscored | Other material depths/layouts, shorter palettes or distinct public boundaries |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level6/None; byte RGB/gray/gray-alpha Optimal managed9/native6 with unchanged5% size gate confirmed; RGBA8/16 NoCompression/None confirmed; Fastest RGBA8 managed2/native1 stock output confirmed 0.707x / upper 0.712x; Fastest RGBA16 managed2/native1 stock output confirmed 0.732x / upper 0.735x and live cancelable output confirmed 0.731x / upper 0.747x, forward-only output confirmed 0.771x / upper 0.805x with streaming adaptive compression | Other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4; baseline 4:2:0 with row restart markers confirmed 1.823x / upper 1.837x | Other materially different supported layouts/public boundaries |
 | JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x, 4:2:2 confirmed 1.821x / upper 1.862x and 4:2:0 confirmed 1.943x / upper 1.988x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x, 4:2:2 confirmed 1.874x / upper 1.884x and 4:2:0 confirmed 1.888x / upper 1.931x; live-cancelable RGBA16 4:2:0 confirmed 1.651x / upper 1.663x and RGBA8 4:4:4 prior confirmed with current regression; forward-only RGBA8 4:4:4 confirmed 1.754x / upper 1.765x and 4:2:0 confirmed 1.916x / upper 1.936x and RGBA16 4:2:0 confirmed 1.948x / upper 1.954x; adaptive RGBA8 row restarts confirmed 1.958x / upper 1.973x | Other material fallback layouts, grayscale and distinct public boundaries |
@@ -1134,3 +1134,12 @@ regression passes before full3,428-tests-per-OS/live/same actual package
 qualification. Raw gray1/key1 and gray2/key1 native alpha failures remain unscored;
 the existing SPEC color-key correction remains available for their timing.
 Stop the confirmed pair; full material/current-source coverage remains open.
+
+The [one-bit transparency comparison](WARM-PNG-GRAY1-TRANSPARENCY.md) confirms
+0.094x / upper0.098x at520 B/op on the same qualified production. Full native
+MONOBLACK-to-owned-RGBA conversion, existing exact SPEC color-key correction,
+buffer transfer/filtering and release are timed on one thread. Actual adapter
+normal/scalar and CLI samples, including hidden RGB255, are exact. All12actuals
+and both guards pass. Only two benchmark inputs/native adapter change; existing
+3,428-tests-per-OS/live/same actual package qualification is reused without
+production rebuild or repeated proofs. Stop this pair; remaining coverage stays open.

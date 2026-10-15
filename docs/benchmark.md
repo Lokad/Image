@@ -77,6 +77,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG palette2 + tRNS → RGBA8, None](../benchmarks/WARM-PNG-PALETTE2-ROW.md) | 76.33 | 98.66 | 0.774 / 0.789 | 9,208 | Confirmed |
 | [PNG palette1 + tRNS → RGBA8, None](../benchmarks/WARM-PNG-PALETTE1-ROW.md) | 61.91 | 86.80 | 0.713 / 0.723 | 9,072 | Confirmed |
 | [PNG opaque gray1 → RGBA8, None](../benchmarks/WARM-PNG-GRAY1-ROW.md) | 299.69 | 305.79 | 0.980 / 1.001 | 537,700 | Confirmed |
+| [PNG gray1 + tRNS key1 → RGBA8, exact timed FFmpeg color-key](../benchmarks/WARM-PNG-GRAY1-TRANSPARENCY.md) | 64.68 | 684.86 | 0.094 / 0.098 | 520 | Confirmed |
 | [PNG gray2 + tRNS key0 → RGBA8, None](../benchmarks/WARM-PNG-PACKED-TRANSPARENCY.md) | 71.49 | 497.90 | 0.144 / 0.145 | 648 | Confirmed |
 | [PNG gray1/key1 and gray2/key1, unfiltered native](../benchmarks/WARM-PNG-PACKED-TRANSPARENCY.md) | — | — | — | — | Unscored: native alpha differs |
 | [PNG opaque gray2 → RGBA8, None](../benchmarks/WARM-PNG-GRAY2-CURRENT.md) | 83.19 | 110.11 | 0.756 / 0.783 | 9,136 | Confirmed |
@@ -284,16 +285,17 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round removes a packed grayscale PNG transparency gap:
-**4.813x → 0.144x / upper 0.145x**, with unchanged **648 B/op**. Direct safe
-packed-row expansion preserves full unscaled tRNS key comparison, hidden RGB,
-cancellation and admission. The original gray2 projection/key0 is exact through
-unfiltered FFmpeg; gray1/key1 and gray2/key1 raw alpha refusals remain unscored.
-The existing SPEC color-key correction is available for separate nonzero-key
-reference timings. The opaque regression mean passes. Full **3,428 Release tests
-per OS**, including **898 live comparisons**, and the same actual package's
-consumer plus all three examples on Windows/Linux pass. All twelve confirmation
-actuals, both guards, profile, refusals and qualification remain retained.
+The latest accepted round confirms one-bit PNG transparency at **0.094x /
+upper 0.098x**, with **520 B/op**. The original black/white projection/key1
+preserves nonzero hidden RGB exactly. The reference times full FFmpeg decoding,
+MONOBLACK-to-owned-RGBA conversion and the existing SPEC color-key correction,
+with owned-buffer transfer for in-place filtering and complete release. Native
+normal/scalar adapter and CLI samples are exact; raw decoder alpha failures
+remain unscored. All twelve actuals and both guards pass. Production is unchanged:
+existing **3,428 Release tests per OS**, including **898 live comparisons**, and
+the same actual package's consumer plus all three examples on Windows/Linux are
+reused. No production rebuild, full suite, package proof, method audit or profile
+is repeated. The preceding gray2/key0 round's 97% gain remains separately confirmed.
 
 PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples
 and the unchanged 5% IDAT-size gate; earlier level6/level6 refusals remain unscored.

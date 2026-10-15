@@ -17,7 +17,7 @@ internal static class WarmPngMonoInput
         }
     }
 
-    internal static byte[] Build(ReadOnlySpan<byte> pixels, int depth = 1, bool transparentZero = false)
+    internal static byte[] Build(ReadOnlySpan<byte> pixels, int depth = 1, ushort? transparentKey = null)
     {
         if (depth is not (1 or 2 or 4)) throw new ArgumentOutOfRangeException(nameof(depth));
         const int width = HorizontalFlipInput.Width, height = HorizontalFlipInput.Height;
@@ -33,7 +33,7 @@ internal static class WarmPngMonoInput
                 {
                     var offset = (y * width + x) * 4; var gray = pixels[offset];
                     if (gray % scale != 0 || pixels[offset + 1] != gray || pixels[offset + 2] != gray
-                        || pixels[offset + 3] != (transparentZero && gray == 0 ? 0 : 255)) throw new ArgumentException("Packed gray projection differs.");
+                        || pixels[offset + 3] != (transparentKey.HasValue && gray / scale == transparentKey.Value ? 0 : 255)) throw new ArgumentException("Packed gray projection differs.");
                     row[x * depth / 8] |= (byte)((gray / scale) << (8 - depth - x * depth % 8));
                 }
                 zlib.WriteByte(0); zlib.Write(row);
@@ -43,7 +43,11 @@ internal static class WarmPngMonoInput
         var header = new byte[13]; BinaryPrimitives.WriteInt32BigEndian(header, width);
         BinaryPrimitives.WriteInt32BigEndian(header.AsSpan(4), height); header[8] = (byte)depth;
         WarmPngAdam7Input.Chunk(output, "IHDR"u8, header);
-        if (transparentZero) WarmPngAdam7Input.Chunk(output, "tRNS"u8, new byte[2]);
+        if (transparentKey is ushort key)
+        {
+            var transparency = new byte[2]; BinaryPrimitives.WriteUInt16BigEndian(transparency, key);
+            WarmPngAdam7Input.Chunk(output, "tRNS"u8, transparency);
+        }
         WarmPngAdam7Input.Chunk(output, "IDAT"u8, compressed.ToArray()); WarmPngAdam7Input.Chunk(output, "IEND"u8, []);
         return output.ToArray();
     }
