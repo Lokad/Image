@@ -109,8 +109,8 @@ def render():
         row('JPEG progressive 4:2:0', 'warm-jpegprogressive420-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE420.md', True),
         row('JPEG progressive 4:2:2', 'warm-jpegprogressive422-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE422.md', True),
         row('JPEG progressive 4:4:4', 'warm-jpegmask-evidence.json', ['observations', -1], 'WARM-JPEG-MASK.md', True),
-        row('WebP VP8 + alpha', 'warm-vp8decode-quiet-evidence.json', ['observations', -1], 'WARM-VP8-DECODE-QUIET.md', True),
-        row('WebP VP8, opaque', 'warm-vp8opaque-decode-evidence.json', ['observations', -1], 'WARM-VP8-OPAQUE-DECODE.md'),
+        row('WebP VP8 + alpha', 'warm-vp8-filter8-evidence.json', ['alphaBearingControl', 'observations', -1], 'WARM-VP8-FILTER8.md', True),
+        row('WebP VP8, opaque', 'warm-vp8-filter8-evidence.json', ['observations', -1], 'WARM-VP8-FILTER8.md', True),
         row('WebP VP8L, literal/run input', 'warm-vp8ldecode-quiet-evidence.json', ['observations', -1], 'WARM-VP8L-DECODE-QUIET.md', True),
         row('WebP VP8L, native input', 'warm-vp8l-canonical-evidence.json', ['observations', -1], 'WARM-VP8L-CANONICAL.md', True),
     ]
@@ -359,17 +359,13 @@ word normalization and flattening, on the same qualified production.
 Two-live-output RGBA8 flips confirm **1.447x / upper 1.484x**, at **128 B/image**,
 after bounded two-array reuse halves managed elapsed time. Both subjects retain
 two complete outputs before release; counters consistently normalize per image.
-Opaque VP8 decoding also remains open at **1.983x / upper 2.004x**.
-Its [bulk normalization trial](../benchmarks/VP8-NORMALIZATION-REJECTED.md) is rejected;
-the tested production is restored.
-Its [correctness prototype](../benchmarks/VP8-WINDOW-PROTOTYPE.md) passes 5.42 million
-reference checks per OS/mode and preserves both frozen pixel profiles. The
-[wider-window integration](../benchmarks/VP8-WINDOW-REJECTED.md) is also rejected:
-2.052x / upper 2.115x, unchanged 760,548 B/op. Production is restored;
-no arithmetic-reader speed gain is accepted.
-The [token-local reader trial](../benchmarks/VP8-TOKEN-LOCAL-REJECTED.md) is also
-rejected after a flat/slower three-actual screen; the qualified production DLL
-and source inventory are restored without a longer repeat or redundant full proof.
+Opaque VP8 decoding now confirms **1.803x / upper 1.808x**, closing its previous
+upper-2.004x gap. An eight-pixel integer loop-filter kernel reduces the retained
+managed mean **8.8%**, preserving exact pixels and allocations. Alpha-bearing
+VP8 independently confirms **1.803x / upper 1.819x** on the same qualified build.
+Earlier [bulk normalization](../benchmarks/VP8-NORMALIZATION-REJECTED.md),
+[wider-window](../benchmarks/VP8-WINDOW-REJECTED.md) and
+[token-local](../benchmarks/VP8-TOKEN-LOCAL-REJECTED.md) reader trials remain rejected.
 JPEG444/422 RGBA8 and JPEG444/420 RGBA16 are confirmed with adaptive Huffman
 coding; remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove

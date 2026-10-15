@@ -1,5 +1,9 @@
 # Warm opaque VP8 decoding
 
+The [eight-pixel filter round](WARM-VP8-FILTER8.md) supersedes this historical
+baseline and confirms1.803x / upper1.808x. Original samples and refusals below
+remain retained.
+
 Opaque VP8 decoding averages **1.983× FFmpeg**, conservative upper **2.004×**,
 at **9,504.58 µs** with **760,548 managed bytes allocated per operation**. Both
 quietness guards pass; all twelve actuals are retained. This fixed pair remains

@@ -688,7 +688,10 @@ per side.
 
 VP8 key-frame decoding implements arithmetic partitions, segmentation, all ten
 subblock and four large-block prediction modes, coefficient contexts, integer
-DCT/Walsh inversion and normal/simple loop filtering. Zero frame-level filter
+DCT/Walsh inversion and normal/simple loop filtering. Fully bounded horizontal
+lines use eight-pixel integer word vectors when available, preserving scalar
+thresholds, signed clamps, strong/weak rounding and work charges exactly. Other
+lines retain the scalar path. Zero frame-level filter
 strength disables the entire filtering stage, including positive segment,
 reference and mode adjustments. A nonzero frame level permits the per-macroblock
 adjusted strength, clamped to 0..63. Versions 0..3 are accepted;
