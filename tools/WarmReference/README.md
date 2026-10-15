@@ -1298,6 +1298,13 @@ then applies Paeth with a three-byte stride and zero top/left boundaries. Comple
 decoding, channel expansion and independent output acquisition/release are timed.
 See the [RGB8 Paeth result](../../benchmarks/WARM-PNG-RGB8-PAETH.md).
 
+Packed gray1 Adam7 decoding uses `-WarmFamily Png -WarmCases DecodeGray1Adam7`.
+Reuse the existing black/white projection; original authoring packs each of the
+seven specified passes MSB first with zero padding and filter None. The generic
+PNG adapter admits this profile through its existing MONOBLACK conversion path.
+All pass pixels/padding, native normal/scalar output and live owners are checked.
+See the [gray1 Adam7 result](../../benchmarks/WARM-PNG-GRAY1-ADAM7.md).
+
 Streaming RGBA16 Fastest uses `-WarmFamily Png -WarmCases EncodeFast16` or
 `EncodeFastCancelable16`. Managed fast adaptive backend2/native backend1 are
 explicit; unchanged5% IDAT-size and exact full-word/alpha/hidden-RGB gates apply.

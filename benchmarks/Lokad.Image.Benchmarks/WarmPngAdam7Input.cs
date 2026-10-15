@@ -58,6 +58,34 @@ internal static class WarmPngAdam7Input
         }
     }
 
+    internal static byte[] BuildGray1(byte[] pixels)
+    {
+        const int width = HorizontalFlipInput.Width, height = HorizontalFlipInput.Height;
+        if (pixels.Length != width * height * 4) throw new ArgumentException("Expected the existing projected RGBA8 raster.");
+        using var compressed = new MemoryStream();
+        using (var zlib = new ZLibStream(compressed, CompressionLevel.Optimal, leaveOpen: true))
+        {
+            foreach (var (startX, startY, stepX, stepY) in Passes)
+            {
+                var passWidth = (width - startX + stepX - 1) / stepX;
+                var row = new byte[(passWidth + 7) / 8];
+                for (var y = startY; y < height; y += stepY)
+                {
+                    row.AsSpan().Clear();
+                    for (var i = 0; i < passWidth; i++)
+                        if (pixels[(y * width + startX + i * stepX) * 4] == 255)
+                            row[i / 8] |= (byte)(1 << (7 - i % 8));
+                    zlib.WriteByte(0); zlib.Write(row);
+                }
+            }
+        }
+        using var output = new MemoryStream(); output.Write(new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 });
+        var header = new byte[13]; BinaryPrimitives.WriteInt32BigEndian(header, width);
+        BinaryPrimitives.WriteInt32BigEndian(header.AsSpan(4), height); header[8] = 1; header[12] = 1;
+        Chunk(output, "IHDR"u8, header); Chunk(output, "IDAT"u8, compressed.ToArray()); Chunk(output, "IEND"u8, []);
+        return output.ToArray();
+    }
+
     internal static void Prepare()
     {
         using var state = new JpegBenchmarkCase();

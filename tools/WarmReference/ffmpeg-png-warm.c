@@ -423,7 +423,7 @@ int main(int argc, char **argv)
         if (work.gray && work.coded_depth >= 8 && work.coded_depth != work.depth) fail("Gray coded/output precision differs.");
         if (work.mono && work.depth != 8) fail("Packed gray1 requires RGBA8 output.");
         if (work.rgb && interlace) fail("RGB decode requires noninterlaced RGB8/16.");
-        if (work.gray && interlace) fail("Gray decode requires noninterlaced gray8/16.");
+        if (work.gray && interlace && !work.mono) fail("Interlaced gray decode reference currently admits gray1 only.");
         if (work.gray_alpha && interlace) fail("Gray-alpha decode requires noninterlaced gray-alpha8/16.");
         if (work.palette && (work.depth != 8 || (work.coded_depth != 1 && work.coded_depth != 2 && work.coded_depth != 4 && work.coded_depth != 8) || interlace)) fail("Palette decode requires noninterlaced palette1/2/4/8 to RGBA8.");
         check_profile(work.encoded, work.encoded_bytes, work.width, work.height, work.gray || work.palette ? work.coded_depth : work.depth, interlace, work.palette ? 3 : work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6);

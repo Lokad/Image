@@ -97,6 +97,7 @@ def render():
         row('PNG RGBA16, Paeth', 'warm-pngsub16-evidence.json', ['regressions', 1], 'WARM-PNG-SUB16.md', verification='Regression screen; prior confirmed'),
         row('PNG RGB8, Paeth', 'warm-pngrgbpaeth8-evidence.json', ['observations', -1], 'WARM-PNG-RGB8-PAETH.md', True),
         row('PNG RGBA16, Adam7', 'warm-pngscatter-evidence.json', ['observations', -1], 'WARM-PNG-SCATTER.md', True),
+        row('PNG gray1 → RGBA8, Adam7', 'warm-pnggray1adam7-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-ADAM7.md', True),
         row('PNG RGB16, None', 'warm-pngrgb16-current-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-CURRENT.md', True),
         row('PNG gray8, None', 'warm-pnggray8-current-evidence.json', ['observations', -1], 'WARM-PNG-GRAY8-CURRENT.md', True),
         row('PNG gray8 + tRNS key127, None', 'warm-pnggray8trns-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY8-TRANSPARENCY.md', True),
