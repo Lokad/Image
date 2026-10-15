@@ -2,6 +2,12 @@ using BenchmarkDotNet.Running;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
+if (args.SequenceEqual(["--prepare-warm-vp8-simple"]))
+{
+    WarmVp8Decode.PrepareSimpleOpaque();
+    return;
+}
+
 if (args.SequenceEqual(["--prepare-warm-png-paeth-8"]))
 {
     WarmPngPaethInput.Prepare(8);

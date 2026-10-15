@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmVp8DecodeCase { Native8, Opaque8, StreamNative8, OpaqueCancelable8 }
+public enum WarmVp8DecodeCase { Native8, Opaque8, StreamNative8, OpaqueCancelable8, SimpleOpaque8 }
 
 [MemoryDiagnoser]
 public class WarmVp8Decode
@@ -25,7 +25,9 @@ public class WarmVp8Decode
     private QualityError agreement = null!;
     private bool smoke, ready;
     private int cpu, sampleCount;
-    private bool Opaque => Case is WarmVp8DecodeCase.Opaque8 or WarmVp8DecodeCase.OpaqueCancelable8;
+    private bool Opaque => Case is WarmVp8DecodeCase.Opaque8 or WarmVp8DecodeCase.OpaqueCancelable8 or WarmVp8DecodeCase.SimpleOpaque8;
+    private bool Simple => Case == WarmVp8DecodeCase.SimpleOpaque8;
+    private JsonElement? simpleFilterInspection;
     private bool Cancelable => Case == WarmVp8DecodeCase.OpaqueCancelable8;
     private CancellationTokenSource? cancellationSource;
     private CancellationToken decodeCancellation;
@@ -41,8 +43,9 @@ public class WarmVp8Decode
             null or "Native8" => [WarmVp8DecodeCase.Native8],
             "Opaque8" => [WarmVp8DecodeCase.Opaque8],
             "OpaqueCancelable8" => [WarmVp8DecodeCase.OpaqueCancelable8],
+            "SimpleOpaque8" => [WarmVp8DecodeCase.SimpleOpaque8],
             "StreamNative8" => [WarmVp8DecodeCase.StreamNative8],
-            _ => throw new ArgumentException("Choose one warm VP8 decode case: Native8, Opaque8, OpaqueCancelable8 or StreamNative8.")
+            _ => throw new ArgumentException("Choose one warm VP8 decode case: Native8, Opaque8, OpaqueCancelable8, SimpleOpaque8 or StreamNative8.")
         };
     }
 
@@ -54,6 +57,45 @@ public class WarmVp8Decode
         var flags = arguments.IndexOf("-cpuflags"); arguments.RemoveRange(flags, 2);
         arguments.InsertRange(arguments.IndexOf("-f"), ["-threads:v", "1", "-thread_type:v", "0"]);
         return arguments.ToArray();
+    }
+
+    public static void PrepareSimpleOpaque()
+    {
+        using var state = new JpegBenchmarkCase();
+        var path = Path.Combine(state.Root, "artifacts/warm-reference/vp8-simple-opaque-match.json");
+        if (File.Exists(path)) throw new InvalidOperationException("Preserve the existing simple-filter anchors before replacing preparation.");
+        using var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "artifacts/warm-reference/vp8-simple-opaque/native-preparation.json")));
+        var record = document.RootElement;
+        if (!record.GetProperty("deterministicRepeatExact").GetBoolean()
+            || !record.GetProperty("simpleFilterInspection").GetProperty("simpleFilter").GetBoolean()
+            || record.GetProperty("simpleFilterInspection").GetProperty("minimumEffectiveFilterLevel").GetInt32() <= 0)
+            throw new InvalidOperationException("The prepared packet must exercise nonzero simple filtering.");
+        var encoded = File.ReadAllBytes(Path.Combine(state.Root, record.GetProperty("inputFile").GetString()!));
+        var pixels = HorizontalFlipInput.Create(8);
+        if (JpegBenchmarkCase.Hash(pixels) != RasterHash) throw new InvalidOperationException("Original raster differs.");
+        for (var i = 3; i < pixels.Length; i += 4) pixels[i] = 255;
+        if (JpegBenchmarkCase.Hash(encoded) != record.GetProperty("inputSha256").GetString()
+            || JpegBenchmarkCase.Hash(pixels) != record.GetProperty("rasterSha256").GetString())
+            throw new InvalidOperationException("Prepared input identities differ.");
+        var audit = new WarmVp8Decode { Case = WarmVp8DecodeCase.SimpleOpaque8, pixels = pixels };
+        audit.expectedNative = OracleProcess.Run(state.Ffmpeg, audit.DecodeArguments(), encoded);
+        audit.ValidateAlpha(audit.expectedNative);
+        if (!OracleProcess.Run(state.Ffmpeg, ["-cpuflags", "0", .. audit.DecodeArguments()], encoded).AsSpan().SequenceEqual(audit.expectedNative))
+            throw new InvalidOperationException("Normal/scalar simple-filter CLI pixels differ.");
+        using var first = ImageCodec.Decode(encoded); using var second = ImageCodec.Decode(encoded);
+        audit.expectedManagedHash = JpegBenchmarkCase.Hash(OriginalPixels.Bytes(first));
+        audit.ValidatePixels(first); audit.ValidatePixels(second); first.GetRow8(0)[0] ^= 255; audit.ValidatePixels(second);
+        if (!File.ReadAllBytes(Path.Combine(state.Root, record.GetProperty("inputFile").GetString()!)).AsSpan().SequenceEqual(encoded))
+            throw new InvalidOperationException("Encoded source changed.");
+        var frozen = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(record.GetRawText())!;
+        frozen["managedOutputSha256"] = JsonSerializer.SerializeToElement(audit.expectedManagedHash);
+        frozen["nativeOutputSha256"] = JsonSerializer.SerializeToElement(JpegBenchmarkCase.Hash(audit.expectedNative));
+        frozen["anchorLibrarySha256"] = JsonSerializer.SerializeToElement(JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location));
+        frozen["nativeCliNormalScalarPixelsExact"] = JsonSerializer.SerializeToElement(true);
+        frozen["decoderMaximum"] = JsonSerializer.SerializeToElement(audit.agreement.Maximum);
+        frozen["decoderRmse"] = JsonSerializer.SerializeToElement(audit.agreement.RgbRmse);
+        File.WriteAllText(path, JsonSerializer.Serialize(frozen, new JsonSerializerOptions { WriteIndented = true }) + "\n");
+        Console.WriteLine(JsonSerializer.Serialize(new { prepared = true, inputSha256 = JpegBenchmarkCase.Hash(encoded), managedOutputSha256 = audit.expectedManagedHash, decoderMaximum = audit.agreement.Maximum, decoderRmse = audit.agreement.RgbRmse }));
     }
 
     [GlobalSetup]
@@ -75,7 +117,7 @@ public class WarmVp8Decode
                 sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = manifest.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = manifest.RootElement.GetProperty("sourceRevision").GetString() });
             if (Opaque)
             {
-                using var prepared = JsonDocument.Parse(File.ReadAllText(Path.Combine(state.Root, "artifacts", "warm-reference", "vp8-opaque-match.json")));
+                using var prepared = JsonDocument.Parse(File.ReadAllText(Path.Combine(state.Root, "artifacts", "warm-reference", Simple ? "vp8-simple-opaque-match.json" : "vp8-opaque-match.json")));
                 var receipt = prepared.RootElement;
                 pixels = HorizontalFlipInput.Create(8);
                 if (JpegBenchmarkCase.Hash(pixels) != RasterHash) throw new InvalidOperationException("Original opaque projection source differs.");
@@ -91,6 +133,14 @@ public class WarmVp8Decode
                     || JpegBenchmarkCase.Hash(encoded) != receipt.GetProperty("inputSha256").GetString()
                     || encoded.Length != receipt.GetProperty("inputBytes").GetInt32() || !encoded.AsSpan(12, 4).SequenceEqual("VP8 "u8))
                     throw new InvalidOperationException("Frozen opaque native VP8 input identity differs.");
+                if (Simple)
+                {
+                    simpleFilterInspection = receipt.GetProperty("simpleFilterInspection").Clone();
+                    if (!simpleFilterInspection.Value.GetProperty("simpleFilter").GetBoolean()
+                        || simpleFilterInspection.Value.GetProperty("minimumEffectiveFilterLevel").GetInt32() <= 0
+                        || !receipt.GetProperty("deterministicRepeatExact").GetBoolean())
+                        throw new InvalidOperationException("The frozen packet must exercise nonzero simple filtering.");
+                }
             }
             else
             {
@@ -112,7 +162,7 @@ public class WarmVp8Decode
             if (Opaque && info.HasAlpha) throw new InvalidOperationException("Opaque VP8 must not carry an alpha chunk.");
             expectedNative = OracleProcess.Run(state.Ffmpeg, DecodeArguments(), encoded);
             if (JpegBenchmarkCase.Hash(expectedNative) != expectedNativeHash) throw new InvalidOperationException("Pinned CLI VP8 pixels differ.");
-            if ((StreamInput || Cancelable) && !OracleProcess.Run(state.Ffmpeg, ["-cpuflags", "0", .. DecodeArguments()], encoded).AsSpan().SequenceEqual(expectedNative))
+            if ((StreamInput || Cancelable || Simple) && !OracleProcess.Run(state.Ffmpeg, ["-cpuflags", "0", .. DecodeArguments()], encoded).AsSpan().SequenceEqual(expectedNative))
                 throw new InvalidOperationException("Scalar CLI VP8 Stream anchor differs.");
             ValidateAlpha(expectedNative); File.WriteAllBytes(state.Input, encoded);
             if (Cancelable)
@@ -211,13 +261,14 @@ public class WarmVp8Decode
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), width = 513, height = 259, depth = 8,
                 cpu, managedAffinityCount = 1, processorCount = Environment.ProcessorCount, serverGc = GCSettings.IsServerGC,
                 gcConfiguration = GC.GetConfigurationVariables(), runtime = RuntimeInformation.FrameworkDescription, platform = RuntimeInformation.RuntimeIdentifier,
-                sourceIdentity, inputOrigin = "prepared-native-75", codec = "VP8", sampling = "4:2:0",
+                sourceIdentity, inputOrigin = Simple ? "prepared-native-simple-filter-75" : "prepared-native-75", codec = "VP8", sampling = "4:2:0",
+                simpleFilter = Simple, simpleFilterInspection,
                 inputBytes = encoded.Length, inputSha256 = JpegBenchmarkCase.Hash(encoded), rasterSha256 = JpegBenchmarkCase.Hash(pixels),
                 managedOutputBytes = pixels.Length, nativeOutputBytes = pixels.Length, managedOutputSha256 = expectedManagedHash, nativeOutputSha256 = expectedNativeHash,
                 opaque = Opaque, originalRasterSha256 = RasterHash, rasterRecipe = Opaque ? "Existing original RGBA8 RGB bytes unchanged; alpha set to255. No additional original image." : "Original RGBA8 including exact alpha and hidden RGB unchanged.",
                 alphaExact = true, nativeCliPixelsExact = true, decoderAgreementWithinBounds = true,
                 freshSeekableStream = StreamInput, inputView = false, inputCopiesTimed = StreamInput,
-                callerInputLifetimeChecked = StreamInput, scalarCliPixelsExact = StreamInput || Cancelable,
+                callerInputLifetimeChecked = StreamInput, scalarCliPixelsExact = StreamInput || Cancelable || Simple,
                 cancellationCanBeCanceled = decodeCancellation.CanBeCanceled,
                 cancellationRequested = decodeCancellation.IsCancellationRequested,
                 alreadyCanceledRejected = Cancelable ? alreadyCanceledRejected : (bool?)null,

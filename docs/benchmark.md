@@ -104,6 +104,7 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG progressive 4:2:2](../benchmarks/WARM-JPEG-PROGRESSIVE422.md) | 3,882.57 | 2,210.07 | 1.757 / 1.781 | 1,996,661 | Confirmed |
 | [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-AC-CACHE.md) | 6,282.99 | 3,348.11 | 1.877 / 1.896 | 2,682,364 | Confirmed |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8-FILTER8.md) | 10,777.02 | 5,977.48 | 1.803 / 1.819 | 1,966,616 | Confirmed |
+| [WebP VP8 opaque, simple luma filter](../benchmarks/WARM-VP8-SIMPLE-FILTER.md) | 8,538.31 | 4,889.76 | 1.746 / 1.765 | 760,548 | Confirmed |
 | [WebP VP8 opaque, live cancelable token](../benchmarks/WARM-VP8-CANCELABLE.md) | 8,789.89 | 4,783.31 | 1.838 / 1.843 | 760,548 | Confirmed |
 | [WebP VP8, opaque](../benchmarks/WARM-VP8-FILTER8.md) | 8,649.43 | 4,797.64 | 1.803 / 1.808 | 760,548 | Confirmed |
 | [WebP VP8L, literal/run input](../benchmarks/WARM-VP8L-DECODE-QUIET.md) | 3,948.44 | 2,332.84 | 1.693 / 1.732 | 1,074,301 | Confirmed |
@@ -345,6 +346,14 @@ qualified managed pixels, opaque alpha and unchanged decoder bounds. Existing
 frozen input, pre-cancellation/token identity, normal/scalar CLI and independent
 owners are checked; token setup/disposal is outside timing. One harness build,
 no production/native rebuild/profile or repeated qualification is required.
+
+The [VP8 simple-filter comparison](../benchmarks/WARM-VP8-SIMPLE-FILTER.md)
+independently confirms **1.746x / upper 1.765x**, **760,548 B/op**. One original
+packet on the existing opacity projection independently verifies coded/effective
+simple filtering at level8. Managed pixels/alpha, normal/scalar CLI anchors and
+unchanged native agreement bounds pass. FFmpeg's decoder remains the baseline;
+libwebp only authors the untimed fixture. Existing production qualification is
+reused without a production/native decoder rebuild, profile or repeated proof.
 
 Recent unchanged-production coverage confirms RGB16 Paeth at1.904x /
 upper1.928x,6,504 B/op, and gray-alpha8 Paeth at1.017x / upper1.068x,2,408 B/op.
