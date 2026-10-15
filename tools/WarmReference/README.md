@@ -1318,3 +1318,12 @@ normal/scalar words, owners, exact admission and already-canceled rejection are
 checked before timing. The original native worker and complete decode/conversion/
 output-release boundary are unchanged. See the
 [constrained cancelable result](../../benchmarks/WARM-PNG-TIGHT-CANCELABLE16.md).
+
+`WarmJpeg.Encode444Cancelable8` uses `LOKAD_IMAGE_JPEG_ENTROPY=fixed-geometric-v1`
+and the existing frozen forward-only JPEG444 anchor without re-preparation. It
+requires every encoded byte and registered decoder pixel/source error to remain
+identical. A live token is never signaled during timing; token/source lifecycle
+is excluded, while complete flatten/conversion/encode/fresh output release is
+included. Already-canceled rejection must leave the output empty. Native exposes
+no equivalent cancellation setting. See the
+[confirmed result](../../benchmarks/WARM-JPEG444-CANCELABLE.md).

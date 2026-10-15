@@ -139,6 +139,7 @@ def render():
         row('PNG gray-alpha16, level 6 / None', 'warm-pnggrayalpha16encode-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ENCODE.md', True),
         row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-jpeg4448-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG444-RGBA8-ADAPTIVE.md', True),
         row('JPEG 4:4:4, forward-only output / geometric AC Huffman', 'warm-jpeg444stream-evidence.json', ['observations', -1], 'WARM-JPEG444-FORWARD.md', True),
+        row('JPEG 4:4:4, live cancelable token / geometric AC Huffman', 'warm-jpeg444cancel-evidence.json', ['observations', -1], 'WARM-JPEG444-CANCELABLE.md', True),
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg44416-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG444-RGBA16-ADAPTIVE.md', True),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg4228-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA8-ADAPTIVE.md', True),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg42216-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA16.md', True),

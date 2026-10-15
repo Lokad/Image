@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegCase { Encode8, Encode420_8, Encode422_8, Encode16, Encode420_16, Encode420Stream8, Encode420Stream16, Encode422_16, Encode420Restart8, Encode444Stream8 }
+public enum WarmJpegCase { Encode8, Encode420_8, Encode422_8, Encode16, Encode420_16, Encode420Stream8, Encode420Stream16, Encode422_16, Encode420Restart8, Encode444Stream8, Encode444Cancelable8 }
 
 internal sealed record WarmJpegPreparation(int SchemaVersion, string Project, string GeneratedUtc, string Recipe,
     string RasterSha256, string ReferenceSha256, int NativeQuality, uint BackgroundRgb, string NativeFile, string ManagedFile,
@@ -22,7 +22,8 @@ public class WarmJpeg
     private const uint Background = 0x204060;
     private bool Source16 => Case is WarmJpegCase.Encode422_16 or WarmJpegCase.Encode16 or WarmJpegCase.Encode420_16 or WarmJpegCase.Encode420Stream16;
     private int Depth => Source16 ? 16 : 8;
-    private bool FixedAnchor => ForwardOnly || Subsampled || Source16 || AdaptiveEntropy;
+    private bool Cancelable => Case == WarmJpegCase.Encode444Cancelable8;
+    private bool FixedAnchor => Cancelable || ForwardOnly || Subsampled || Source16 || AdaptiveEntropy;
     private bool Horizontal => Case is WarmJpegCase.Encode422_8 or WarmJpegCase.Encode422_16;
     private bool Restart => Case == WarmJpegCase.Encode420Restart8;
     private bool ForwardOnly => Case is WarmJpegCase.Encode420Stream8 or WarmJpegCase.Encode420Stream16 or WarmJpegCase.Encode444Stream8;
@@ -60,7 +61,8 @@ public class WarmJpeg
             : horizontal ? "jpeg422-match.json" : subsampled ? "jpeg420-match.json" : "jpeg-match.json";
         return AdaptiveEntropy ? name.Replace("-match.json", "-adaptive-match.json") : name;
     }
-    private string Recipe => RecipeFor(Subsampled, Horizontal, Depth, ForwardOnly, Restart);
+    private string Recipe => RecipeFor(Subsampled, Horizontal, Depth, ForwardOnly, Restart)
+        + (Cancelable ? " Live cancelable token, never signaled; stock MemoryStream; fixed geometric Huffman fallback. Token/source setup and disposal outside timing." : "");
     private const string FixedRestartPolicy = "fixed-anchor-v1: native qscale5 / managed quality69 / 4:2:0 / restart interval33; serial native slices; one owned evaluation; no quality sweep";
     private const string Fixed444Policy = "fixed-anchor-v1: native qscale 5 / managed quality 69 / 4:4:4; previously matched anchor; one owned evaluation; no quality sweep";
     private const string Fixed420Policy = "fixed-anchor-v1: native qscale 5 / managed quality 69 / 4:2:0; one owned evaluation; no quality sweep";
@@ -79,6 +81,8 @@ public class WarmJpeg
     private bool smoke, ready;
     private int cpu, sampleCount;
     private JpegEncodeOptions options = null!;
+    private CancellationTokenSource? cancellationSource;
+    private CancellationToken encodeCancellation;
 
     public static WarmJpegCase[] SelectedCases()
     {
@@ -95,7 +99,8 @@ public class WarmJpeg
             "Encode420Stream8" when !AdaptiveEntropy => [WarmJpegCase.Encode420Stream8],
             "Encode420Stream16" when !AdaptiveEntropy => [WarmJpegCase.Encode420Stream16],
             "Encode444Stream8" when !AdaptiveEntropy => [WarmJpegCase.Encode444Stream8],
-            _ => throw new ArgumentException("Choose one JPEG case: Encode8, Encode16, Encode420_8, Encode422_8, Encode422_16, Encode420Restart8 (adaptive-v1), Encode420_16, Encode420Stream8, Encode420Stream16 or Encode444Stream8 (fixed-geometric-v1 policy).")
+            "Encode444Cancelable8" when !AdaptiveEntropy => [WarmJpegCase.Encode444Cancelable8],
+            _ => throw new ArgumentException("Choose one JPEG case: Encode8, Encode16, Encode420_8, Encode422_8, Encode422_16, Encode420Restart8 (adaptive-v1), Encode420_16, Encode420Stream8, Encode420Stream16 or Encode444Stream8/Encode444Cancelable8 (fixed-geometric-v1 policy).")
         };
     }
 
@@ -204,7 +209,7 @@ public class WarmJpeg
     public void Setup()
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Warm native JPEG requires Linux.");
-        if (ForwardOnly && Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") != "fixed-geometric-v1") throw new InvalidOperationException("Forward-only output retains the fixed geometric AC Huffman path.");
+        if ((ForwardOnly || Cancelable) && Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") != "fixed-geometric-v1") throw new InvalidOperationException("Forward-only output retains the fixed geometric AC Huffman path.");
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -216,10 +221,13 @@ public class WarmJpeg
         state = new JpegBenchmarkCase();
         try
         {
-            var path = Path.Combine(state.Root, "artifacts", "warm-reference", MatchFile(Subsampled, Horizontal, Depth, ForwardOnly, Restart));
+            // Reuse the frozen, qualified forward-only packet as a data anchor.
+            // The new token boundary must reproduce every encoded byte.
+            var path = Path.Combine(state.Root, "artifacts", "warm-reference",
+                MatchFile(Subsampled, Horizontal, Depth, ForwardOnly || Cancelable, Restart));
             prepared = JsonSerializer.Deserialize<WarmJpegPreparation>(File.ReadAllText(path), EncoderQualityCalibration.Json)
                 ?? throw new InvalidOperationException("Missing warm JPEG preparation; run --prepare-warm-jpeg first.");
-            if (prepared.SchemaVersion != 1 || prepared.Project != "Lokad.Image" || prepared.Recipe != Recipe || prepared.BackgroundRgb != Background || prepared.SourceDepth != Depth
+            if (prepared.SchemaVersion != 1 || prepared.Project != "Lokad.Image" || prepared.Recipe != (Cancelable ? RecipeFor(false, false, 8, forwardOnly: true) : Recipe) || prepared.BackgroundRgb != Background || prepared.SourceDepth != Depth
                 || !prepared.Match.Matched || prepared.Match.PsnrGapDb is not (>= 0 and <= EncoderQualityCalibration.MaximumPsnrGapDb)
                 || (!FixedAnchor && prepared.OwnedSettings.Length is < 5 or > EncoderQualityCalibration.MaximumOwnedSettings)
                 || (FixedAnchor && (prepared.Sampling != NativeSampling || prepared.QualityPolicy != FixedPolicy
@@ -244,14 +252,29 @@ public class WarmJpeg
                 || JpegBenchmarkCase.HashFile(state.NativeOutput) != prepared.Match.Native.EncodedSha256
                 || JpegBenchmarkCase.HashFile(Path.Combine(state.Root, prepared.NativeFile)) != prepared.Match.Native.EncodedSha256)
                 throw new InvalidOperationException("Prepared JPEG bitstreams changed.");
+            if (Cancelable)
+            {
+                cancellationSource = new CancellationTokenSource(); encodeCancellation = cancellationSource.Token;
+                using var canceled = new CancellationTokenSource(); using var rejected = new MemoryStream();
+                canceled.Cancel();
+                try
+                {
+                    ImageCodec.EncodeJpeg(source, rejected, options, canceled.Token);
+                    throw new InvalidOperationException("JPEG accepted an already-canceled token.");
+                }
+                catch (OperationCanceledException exception) when (exception.CancellationToken == canceled.Token) { }
+                if (rejected.Length != 0) throw new InvalidOperationException("Canceled JPEG wrote output.");
+            }
             ValidateManaged(); ValidateQuality();
             before = native.Measure(smoke, sampleCount: sampleCount); ready = true;
         }
-        catch { native?.Dispose(); source?.Dispose(); state.Dispose(); throw; }
+        catch { native?.Dispose(); source?.Dispose(); cancellationSource?.Dispose(); state.Dispose(); throw; }
     }
 
     private void ValidateManaged()
     {
+        if (Cancelable && (!encodeCancellation.CanBeCanceled || encodeCancellation.IsCancellationRequested))
+            throw new InvalidOperationException("Warm JPEG requires a live, never-signaled cancelable token.");
         using var first = new MemoryStream(); using var second = new MemoryStream();
         EncodeManaged(first); EncodeManaged(second);
         if (ReferenceEquals(first.GetBuffer(), second.GetBuffer()) || !first.ToArray().AsSpan().SequenceEqual(encoded)
@@ -268,7 +291,7 @@ public class WarmJpeg
             || !EncoderQualityCalibration.Match(nativeQuality, [managedQuality]).Matched)
             throw new InvalidOperationException("Warm JPEG source/decoder quality changed; prepare this pair again.");
         if (Restart) ValidateRestartPixels(state.Root, managedQuality, nativeQuality);
-        if (Case == WarmJpegCase.Encode444Stream8) ValidateForward444Pixels(state.Root, managedQuality, nativeQuality);
+        if (Case == WarmJpegCase.Encode444Stream8 || Cancelable) ValidateForward444Pixels(state.Root, managedQuality, nativeQuality);
     }
 
     private static void ValidateForward444Pixels(string root, QualitySample managed, QualitySample native)
@@ -355,9 +378,9 @@ public class WarmJpeg
         if (ForwardOnly)
         {
             using var stream = new ForwardOnlyOutput(output);
-            ImageCodec.EncodeJpeg(source, stream, options);
+            ImageCodec.EncodeJpeg(source, stream, options, encodeCancellation);
         }
-        else ImageCodec.EncodeJpeg(source, output, options);
+        else ImageCodec.EncodeJpeg(source, output, options, encodeCancellation);
     }
 
     // Own the wrapper per operation; the caller retains the backing storage.
@@ -403,6 +426,11 @@ public class WarmJpeg
                 recipe = Recipe, sampling = DisplaySampling, restartInterval = Restart ? 33 : 0, restartMarkers = Restart ? 16 : 0,
                 serialRestartFramingValidated = Restart, qualityPolicy = prepared.QualityPolicy,
                 outputBoundary = ForwardOnly ? "Fresh forward-only Stream wrapper over fresh owned MemoryStream storage; wrapper creation/disposal and storage growth included; no seek/length/position access." : "Fresh MemoryStream",
+                cancellationCanBeCanceled = encodeCancellation.CanBeCanceled, cancellationRequested = encodeCancellation.IsCancellationRequested,
+                alreadyCanceledRejectedWithoutOutput = Cancelable ? true : (bool?)null,
+                frozenForwardOnlyPacketExact = Cancelable ? true : (bool?)null,
+                coefficientAnchorEvidence = Cancelable ? "warm-jpeg444stream-evidence.json" : null,
+                cancellationBoundary = Cancelable ? "Live cancelable token, never signaled; token/source setup/disposal outside timing. Native has no equivalent cancellation setting; complete flatten/conversion/encode/owned output release remain timed." : null,
                 backgroundRgb = Background, managedHuffman = AdaptiveEntropy ? "adaptive-v1" : "fixed-geometric-v1", privateEntropyWorkspaceReused = AdaptiveEntropy, qualityMatched = true, fullSourceNormalizationTimed = Source16, normalizedReferenceExact = true, alphaExact = true, decoderAgreementWithinBounds = true,
                 psnrGapDb = prepared.Match.PsnrGapDb, maximumPsnrGapDb = EncoderQualityCalibration.MaximumPsnrGapDb,
                 ownedEnumeratedSettings = prepared.OwnedSettings.Length, ownedEvaluationOrder = prepared.OwnedEvaluationOrder,
@@ -415,6 +443,6 @@ public class WarmJpeg
             }, new JsonSerializerOptions(EncoderQualityCalibration.Json) { PropertyNamingPolicy = null }) + "\n");
             Console.WriteLine("Validated warm JPEG pair: " + path);
         }
-        finally { native?.Dispose(); source?.Dispose(); state?.Dispose(); ready = false; }
+        finally { native?.Dispose(); source?.Dispose(); cancellationSource?.Dispose(); state?.Dispose(); ready = false; }
     }
 }
