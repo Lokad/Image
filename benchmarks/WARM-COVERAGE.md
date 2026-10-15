@@ -16,7 +16,7 @@ round, at most three, with correctness established before timing.
 | WebP | VP8 with alpha decode/encode; opaque VP8 encode confirmed RGBA8 1.892x / upper 1.918x and RGBA16 1.908x / upper 1.922x with current alpha8/16 regression screens; opaque VP8 decode confirmed 1.803x / upper 1.808x and alpha VP8 confirmed 1.803x / upper 1.819x; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Other material depth/alpha alternatives and distinct public boundaries |
 | Resize | Nearest/bilinear downsample and enlargement at both depths; bicubic downsample, enlargement on both axes, both mixed-axis directions and 128×64 / 64×32 wider supports at both depths; horizontal reduction/enlargement and vertical reduction at both depths; vertical enlargement, 32×16 and 16×8 adaptive support at both depths; RGBA8/16 256×129, 128×64, 64×32, 32×16 and 16×8 reduction, plus RGBA8/16 both-axis enlargement and RGBA8/16 width enlargement/height reduction plus RGBA8/16 width reduction/height enlargement and RGBA8/16 8×4 beyond 256 taps plus RGBA8/16 4×2 packed support beyond 304 taps and RGBA8/16 2×2 generated support beyond 544 taps plus RGBA8/16 2×9 bounded row blocks and RGBA8/16 4×9 packed row blocks plus RGBA8/16 8×17 full-coefficient row blocks and RGBA8/16 vertical reduction with unchanged width plus RGBA8/16 horizontal reduction with unchanged height and RGBA8/16 vertical enlargement with unchanged width plus RGBA8/16 horizontal enlargement with unchanged height, with input+output+4 KiB limit confirmed | Larger/unmatched supports and other materially distinct shapes |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes; RGBA8 horizontal flip with two simultaneously live outputs confirmed 1.447x / upper 1.484x per image | Other materially distinct retained/composed public boundaries |
-| Public boundaries | Resident encoded span to owned output; complete single operations; fresh seekable non-exposed PNG8 Stream decode confirmed 1.907x / upper 1.916x and PNG16 confirmed 1.819x / upper 1.830x; fresh JPEG420 restart Stream confirmed 1.891x / upper 1.902x; PNG8 Stream/normal-orient/centered-crop/nearest-fit composition confirmed 1.891x / upper 1.906x | Other material fresh input/depth and composed boundaries |
+| Public boundaries | Resident encoded span to owned output; complete single operations; fresh seekable non-exposed PNG8 Stream decode confirmed 1.907x / upper 1.916x and PNG16 confirmed 1.819x / upper 1.830x; fresh JPEG420 restart Stream confirmed 1.891x / upper 1.902x and VP8/ALPH Stream confirmed 1.825x / upper 1.833x; PNG8 Stream/normal-orient/centered-crop/nearest-fit composition confirmed 1.891x / upper 1.906x | Other material fresh input/depth and composed boundaries |
 
 Centered/clamped crop, AutoOrient and ResizeToFit route to the measured copy or
 resize primitives after small geometry/metadata work. They need correctness
@@ -876,3 +876,13 @@ pass; normal/scalar native agreement retains the unchangedbound. Everyquietguard
 passes, all twelveactuals remain in theupper. Production3308tests/OS and sameactual
 package proof are reused. Stop this fixedpair; remaining material/current-source
 coverage stays open.
+
+[Fresh VP8/ALPH Stream decoding](WARM-VP8-STREAM.md) confirms
+**1.825x / upper 1.833x**, at **2,327,699 B/op**. Both subjects time complete
+input acquisition, buffering/copies/EOF, decode/state reset, alpha/chroma/color
+passes and input/output release. Frozen resident input/pixels, exact alpha,
+hidden RGB, caller lifetime and two independent outputs pass. Normal/scalar CLI
+pixels are exact; every quiet guard passes and all twelve actuals remain
+represented. Existing 3,308 tests per OS and the same actual package proof are
+reused without rebuilding or repeating full suites, package proofs or method
+audits. Stop this pair; remaining material public/current-source coverage stays open.

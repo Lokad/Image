@@ -77,6 +77,7 @@ def render():
         row('PNG RGBA8, fresh seekable Stream', 'warm-stream-png8-evidence.json', ['observations', -1], 'WARM-STREAM-PNG8.md', True),
         row('PNG RGBA16, fresh seekable Stream', 'warm-stream-png16-evidence.json', ['observations', -1], 'WARM-STREAM-PNG16.md', True),
         row('JPEG420 restart, fresh seekable Stream', 'warm-jpegstream-evidence.json', ['observations', -1], 'WARM-JPEG-STREAM.md', True),
+        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8stream-evidence.json', ['observations', -1], 'WARM-VP8-STREAM.md', True),
         row('PNG RGBA8, None', 'warm-png8decode-quiet-evidence.json', ['observations', -1], 'WARM-PNG8-DECODE-QUIET.md', True),
         row('PNG RGBA8, stored Deflate / None', 'warm-pngstore8decode-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-DECODE.md', True),
         row('PNG RGBA16, None', 'warm-pngliteralrun-evidence.json', ['observations', -1], 'WARM-PNG-LITERAL-RUN.md', True),
@@ -401,6 +402,10 @@ Fresh seekable JPEG420 Stream decoding confirms **1.891x / upper 1.902x**,
 at **1,813,266 B/op**. Complete acquisition, all buffering/copies, EOF checks,
 decoding/conversion and owned output release are timed on both subjects;
 the existing restart packet and qualified production are reused.
+Fresh VP8/ALPH Stream decoding confirms **1.825x / upper 1.833x**, at
+**2,327,699 B/op**, with complete acquisition/copies, alpha/chroma/color passes
+and input/output release timed. Its input and per-decoder pixels equal the
+resident anchor; unchanged qualified production and package proofs are reused.
 Remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove
 the uniform target. Linked reports retain superseded raw evidence, failed guards,

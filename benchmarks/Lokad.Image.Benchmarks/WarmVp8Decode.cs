@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmVp8DecodeCase { Native8, Opaque8 }
+public enum WarmVp8DecodeCase { Native8, Opaque8, StreamNative8 }
 
 [MemoryDiagnoser]
 public class WarmVp8Decode
@@ -26,6 +26,7 @@ public class WarmVp8Decode
     private bool smoke, ready;
     private int cpu, sampleCount;
     private bool Opaque => Case == WarmVp8DecodeCase.Opaque8;
+    private bool StreamInput => Case == WarmVp8DecodeCase.StreamNative8;
     private string expectedManagedHash = ManagedHash, expectedNativeHash = NativeHash;
 
     public static WarmVp8DecodeCase[] SelectedCases()
@@ -35,7 +36,8 @@ public class WarmVp8Decode
         {
             null or "Native8" => [WarmVp8DecodeCase.Native8],
             "Opaque8" => [WarmVp8DecodeCase.Opaque8],
-            _ => throw new ArgumentException("Choose one warm VP8 decode case: Native8 or Opaque8.")
+            "StreamNative8" => [WarmVp8DecodeCase.StreamNative8],
+            _ => throw new ArgumentException("Choose one warm VP8 decode case: Native8, Opaque8 or StreamNative8.")
         };
     }
 
@@ -105,8 +107,10 @@ public class WarmVp8Decode
             if (Opaque && info.HasAlpha) throw new InvalidOperationException("Opaque VP8 must not carry an alpha chunk.");
             expectedNative = OracleProcess.Run(state.Ffmpeg, DecodeArguments(), encoded);
             if (JpegBenchmarkCase.Hash(expectedNative) != expectedNativeHash) throw new InvalidOperationException("Pinned CLI VP8 pixels differ.");
+            if (StreamInput && !OracleProcess.Run(state.Ffmpeg, ["-cpuflags", "0", .. DecodeArguments()], encoded).AsSpan().SequenceEqual(expectedNative))
+                throw new InvalidOperationException("Scalar CLI VP8 Stream anchor differs.");
             ValidateAlpha(expectedNative); File.WriteAllBytes(state.Input, encoded);
-            native = new NativeWarmReference(state, 8, cpu, "vp8-decode", vp8Opaque: Opaque); ValidateNative();
+            native = new NativeWarmReference(state, 8, cpu, StreamInput ? "vp8-stream-decode" : "vp8-decode", vp8Opaque: Opaque); ValidateNative();
             ValidateManaged(); before = native.Measure(smoke, sampleCount: sampleCount); ready = true;
         }
         catch { native?.Dispose(); state.Dispose(); throw; }
@@ -141,15 +145,30 @@ public class WarmVp8Decode
     }
     private void ValidateManaged()
     {
-        using var first = ImageCodec.Decode(encoded); using var second = ImageCodec.Decode(encoded);
+        using var first = DecodeManaged(); using var second = DecodeManaged();
         ValidatePixels(first); ValidatePixels(second); first.GetRow8(0)[0] ^= 255; ValidatePixels(second);
         if (!File.ReadAllBytes(state.Input).AsSpan().SequenceEqual(encoded)) throw new InvalidOperationException("Resident VP8 source changed.");
+        if (StreamInput)
+        {
+            using var caller = new MemoryStream(encoded, writable: false);
+            if (caller.TryGetBuffer(out _)) throw new InvalidOperationException("VP8 input must not expose its buffer.");
+            using var output = ImageCodec.Decode(caller); ValidatePixels(output);
+            if (!caller.CanRead || caller.Position != caller.Length || caller.ReadByte() != -1)
+                throw new InvalidOperationException("VP8 caller lifetime or complete input reading differs.");
+        }
+    }
+
+    private ImageBuffer DecodeManaged()
+    {
+        if (!StreamInput) return ImageCodec.Decode(encoded);
+        using var input = new MemoryStream(encoded, writable: false);
+        return ImageCodec.Decode(input);
     }
 
     [Benchmark]
     public int Managed()
     {
-        using var result = ImageCodec.Decode(encoded);
+        using var result = DecodeManaged();
         return result.Stride * result.Height ^ result.GetRow8(0)[513 * 2];
     }
 
@@ -176,11 +195,15 @@ public class WarmVp8Decode
                 managedOutputBytes = pixels.Length, nativeOutputBytes = pixels.Length, managedOutputSha256 = expectedManagedHash, nativeOutputSha256 = expectedNativeHash,
                 opaque = Opaque, originalRasterSha256 = RasterHash, rasterRecipe = Opaque ? "Existing original RGBA8 RGB bytes unchanged; alpha set to255. No additional original image." : "Original RGBA8 including exact alpha and hidden RGB unchanged.",
                 alphaExact = true, nativeCliPixelsExact = true, decoderAgreementWithinBounds = true,
+                freshSeekableStream = StreamInput, inputView = false, inputCopiesTimed = StreamInput,
+                callerInputLifetimeChecked = StreamInput, scalarCliPixelsExact = StreamInput,
                 decoderMaximum = agreement.Maximum, decoderRmse = agreement.RgbRmse, decoderSumSquared = agreement.SumSquared,
                 sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmVp8Decode).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = Opaque
+                boundary = StreamInput
+                    ? "Fresh non-exposed seekable VP8/ALPH Stream to independent owned RGBA8. Complete default managed input buffering/copies and EOF reading, full public Decode/disposal. Native fresh AVIO/owned packet acquisition, complete reading/EOF, software webp state reset/decode, centered chroma expansion, limited BT601 through RGBA16/no-dither reduction, exact alpha merge and all input/scratch/output acquisition/release timed. Decoder/conversion/frame/packet wrappers reused; every call reacquires input and decodes/converts all pixels. No demux, exposed input-buffer shortcut, output cache or redundant packing. One CPU/codec/conversion thread, normal SIMD. Startup/I/O/IPC/generation/hashing/validation excluded. Existing frozen input and exact per-decoder pixel anchors reused; no encoding or quality search."
+                    : Opaque
                     ? "Identical resident frozen opaque VP8 keyframe input to independent owned RGBA8. Complete public managed Decode/disposal; native software webp decode/state reset, centered bilinear chroma expansion, limited BT601 conversion through RGBA16, no-dither RGBA8 reduction and real scratch/output allocation/release. One codec/conversion thread, normal SIMD. Opaque alpha255 comes from RGB conversion, with no alpha-plane merge. Contexts and packet/frame wrappers reused; every call decodes/converts all pixels. Padded rows exposed directly. Startup/I/O/IPC/hashing/checks/encoding excluded. One opacity projection of the existing original raster; no quality enumeration. Identical-input decode requires no matched encode quality."
                     : "Identical resident frozen VP8/ALPH input to independent owned RGBA8. Complete public managed Decode and disposal; native software webp decode, state reset, centered bilinear chroma expansion, limited BT.601 conversion through RGBA16, RGBA8 reduction, exact alpha merge and scratch/output allocation/release. One codec/conversion thread, normal SIMD. Native contexts and packet/frame wrappers reused; every call decodes and converts every pixel. Padded output rows exposed without a packing copy. Startup, I/O, IPC, hashing, validation and encoding excluded. One existing raster/input; no regeneration or quality enumeration. Decode does not require a matched encoder quality. Only this native keyframe/alpha profile is measured."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");

@@ -1258,3 +1258,11 @@ packet and checks EOF each operation, with no demux stage; managed public
 `Decode(Stream)` uses a fresh non-exposed MemoryStream. Complete reading/copies,
 decode/chroma conversion and input/output release are timed. See the
 [complete stream result](../../benchmarks/WARM-JPEG-STREAM.md).
+
+Fresh VP8/ALPH input uses `build-vp8-stream-linux.sh` and
+`-WarmFamily Vp8Decode -WarmCases StreamNative8`. Reuse the existing native75
+packet. Fresh AVIO/owned packet acquisition and EOF checks repeat inside the
+native operation; managed default `Decode(Stream)` includes all buffering/copies.
+The original conversion/alpha pipeline and resident workers are preserved.
+Normal/scalar CLI pixels, frozen output samples and caller lifetime are checked
+outside timing. See the [stream result](../../benchmarks/WARM-VP8-STREAM.md).
