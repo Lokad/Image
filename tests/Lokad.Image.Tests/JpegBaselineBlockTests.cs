@@ -180,19 +180,22 @@ public sealed class JpegBaselineBlockTests
             for (var work = 63; work <= 130; work++)
             {
                 var input = original.AsSpan(0, length).ToArray();
-                var fast = Decode(input, work, false); var checkedSymbols = Decode(input, work, true);
-                Assert.Equal(checkedSymbols.Error, fast.Error);
-                Assert.Equal(checkedSymbols.Message, fast.Message);
-                Assert.Equal(checkedSymbols.Position, fast.Position);
-                Assert.Equal(checkedSymbols.RemainingWork, fast.RemainingWork);
-                Assert.Equal(checkedSymbols.Predictor, fast.Predictor);
-                Assert.Equal(checkedSymbols.Block, fast.Block);
-                Assert.Equal(original.AsSpan(0, length).ToArray(), input);
+                var checkedSymbols = Decode(input, work, true, scalar: true);
+                foreach (var fast in new[] { Decode(input, work, false), Decode(input, work, true) })
+                {
+                    Assert.Equal(checkedSymbols.Error, fast.Error);
+                    Assert.Equal(checkedSymbols.Message, fast.Message);
+                    Assert.Equal(checkedSymbols.Position, fast.Position);
+                    Assert.Equal(checkedSymbols.RemainingWork, fast.RemainingWork);
+                    Assert.Equal(checkedSymbols.Predictor, fast.Predictor);
+                    Assert.Equal(checkedSymbols.Block, fast.Block);
+                    Assert.Equal(original.AsSpan(0, length).ToArray(), input);
+                }
             }
         }
 
         (Type? Error, string? Message, int Position, long RemainingWork, int Predictor, int[] Block)
-            Decode(byte[] input, long work, bool cancelable)
+            Decode(byte[] input, long work, bool cancelable, bool scalar = false)
         {
             using var cancellation = new CancellationTokenSource();
             var context = new OperationContext(ImageLimits.Default with { MaxWork = work }, cancelable ? cancellation.Token : default);
@@ -201,11 +204,40 @@ public sealed class JpegBaselineBlockTests
             Exception? error = null;
             try
             {
-                JpegDecoder.ReadBaselineBlock(ref reader, block, ref predictor, tables.Dc, tables.Ac, context);
+                if (scalar) ScalarBaseline(ref reader, block, ref predictor, tables.Dc, tables.Ac, context);
+                else JpegDecoder.ReadBaselineBlock(ref reader, block, ref predictor, tables.Dc, tables.Ac, context);
                 reader.Restart(0);
             }
             catch (Exception failure) when (failure is ImageDataException or ImageLimitException) { error = failure; }
             return (error?.GetType(), error?.Message, reader.Position, context.RemainingWork, predictor, block);
+        }
+    }
+
+    // Original unfused traversal with immediate parent charges, independently
+    // retaining symbol/amplitude and syntax failure order. No local-work scope.
+    private static void ScalarBaseline(ref JpegEntropyReader reader, Span<int> block, ref int predictor,
+        JpegHuffman dc, JpegHuffman ac, OperationContext context)
+    {
+        context.Work(64);
+        var category = dc.Read(ref reader);
+        if (category > 11) throw new ImageDataException("Invalid JPEG DC coefficient category.");
+        var next = (long)predictor + reader.ReadSigned(category);
+        if (next is < -32768 or > 32767) throw new ImageDataException("JPEG DC predictor is out of range.");
+        predictor = (int)next; block[0] = predictor;
+        var k = 1;
+        while (k <= 63)
+        {
+            var symbol = ac.Read(ref reader); var run = symbol >> 4; var size = symbol & 15;
+            if (size == 0)
+            {
+                if (run == 15) { k += 16; if (k > 64) throw new ImageDataException("JPEG zero run exceeds band."); continue; }
+                if (run != 0) throw new ImageDataException("Invalid baseline JPEG end-of-block symbol.");
+                return;
+            }
+            if (size > 10) throw new ImageDataException("Invalid JPEG AC coefficient category.");
+            k += run;
+            if (k > 63) throw new ImageDataException("JPEG coefficient run exceeds band.");
+            block[JpegTransform.Zigzag[k++]] = reader.ReadSigned(size);
         }
     }
     private static string Dc(int size) => Convert.ToString(size, 2).PadLeft(4, '0');

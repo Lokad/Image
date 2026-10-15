@@ -22,6 +22,17 @@ scan; no heap workspace is added. DC, ZRL/EOB, amplitude, work, quota, callback
 and cancellation/failure ordering remain unchanged. The scalar traversal remains
 the fallback and independent reference in `JpegFixedOccupancyTests`.
 
+Baseline JPEG decoding retains entropy work locally for one block, including
+cancelable calls, then commits completed charges on every exit without checking
+cancellation again. Ordinary cancelable AC runs keep the bit cache, input position
+and coefficient index local. Safe two-byte lookahead returns unused whole bytes;
+prefix and amplitude keep their separate cancellation/work admissions. Marker,
+stuffing, long-code, syntax and constrained paths retain scalar traversal and its
+exact partial state. No table or heap workspace is added. `JpegBaselineBlockTests`
+compares against an independent scalar block traversal; `JpegCancelableWorkTests`
+covers all raw byte pairs, cached phases, truncation, budgets and completed charges
+when cancellation interrupts a scope.
+
 Complete-overwrite image operations may reuse two released exact-size pixel
 arrays, with a combined global idle-storage ceiling of 4 MiB. A short lock
 protects both slots and their byte ceiling; a size miss discards idle entries.

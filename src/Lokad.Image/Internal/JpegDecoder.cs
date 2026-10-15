@@ -271,6 +271,11 @@ internal ref struct JpegDecoder
             var nextPredictor = (long)predictor + reader.ReadSigned(category);
             if (nextPredictor is < -32768 or > 32767) throw new ImageDataException("JPEG DC predictor is out of range.");
             predictor = (int)nextPredictor; block[0] = predictor;
+            if (context.Cancellation.CanBeCanceled)
+            {
+                ReadCancelableBaselineAc(ref reader, block, ac);
+                return;
+            }
             var k = 1;
             while (k <= 63)
             {
@@ -294,6 +299,27 @@ internal ref struct JpegDecoder
             }
         }
         finally { reader.EndLocalWork(); }
+    }
+
+    private static void ReadCancelableBaselineAc(ref JpegEntropyReader reader, Span<int> block, JpegHuffman ac)
+    {
+        var k = 1;
+        while (k <= 63)
+        {
+            ac.ReadPlainCancelableAc(ref reader, block, ref k);
+            if (k > 63) return;
+            var symbol = ac.Read(ref reader); var run = symbol >> 4; var size = symbol & 15;
+            if (size == 0)
+            {
+                if (run == 15) { k += 16; if (k > 64) throw new ImageDataException("JPEG zero run exceeds band."); continue; }
+                if (run != 0) throw new ImageDataException("Invalid baseline JPEG end-of-block symbol.");
+                return;
+            }
+            if (size > 10) throw new ImageDataException("Invalid JPEG AC coefficient category.");
+            k += run;
+            if (k > 63) throw new ImageDataException("JPEG coefficient run exceeds band.");
+            block[JpegTransform.Zigzag[k++]] = reader.ReadSigned(size);
+        }
     }
 
     private void ReadBlock(ref JpegEntropyReader reader, Span<int> block, Component component,

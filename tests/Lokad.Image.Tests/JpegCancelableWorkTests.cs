@@ -1,0 +1,117 @@
+using Lokad.Image.Internal;
+
+namespace Lokad.Image.Tests;
+
+public sealed class JpegCancelableWorkTests
+{
+    [Theory]
+    [InlineData(9)] [InlineData(10)]
+    public void LongAcCodesKeepEveryCachedPhaseBudgetAndTruncation(int codeLength)
+    {
+        var lengths = new byte[16]; lengths[codeLength - 1] = 1;
+        for (var size = 1; size <= 10; size++)
+        {
+            var table = new JpegHuffman(lengths, new byte[] { (byte)size }, new OperationContext(ImageLimits.Default, default));
+            for (var offset = 0; offset < 8; offset++)
+            foreach (var positive in new[] { false, true })
+            {
+                // The only canonical code is zero at the requested length.
+                // Original amplitude endpoints, tail and all-one padding.
+                var text = new string('1', offset) + new string('0', codeLength)
+                    + new string(positive ? '1' : '0', size) + "101";
+                text = text.PadRight((text.Length + 7) / 8 * 8, '1');
+                var bytes = new List<byte>();
+                for (var index = 0; index < text.Length; index += 8)
+                {
+                    var next = Convert.ToByte(text.Substring(index, 8), 2); bytes.Add(next);
+                    if (next == 255) bytes.Add(0);
+                }
+                bytes.AddRange([255, 0xD0]); var full = bytes.ToArray();
+                for (var length = 0; length <= full.Length; length++)
+                for (var budget = 0; budget <= codeLength + 4; budget++)
+                {
+                    var input = full.AsSpan(0, length).ToArray();
+                    Assert.Equal(Run(false), Run(true));
+
+                    (Type? Error, string? Message, int Position, long Remaining, int Value, int Tail) Run(bool fused)
+                    {
+                        using var cancellation = new CancellationTokenSource();
+                        var context = new OperationContext(ImageLimits.Default with { MaxWork = budget + 1 }, cancellation.Token);
+                        context.Work(1); // Include an exhausted, but validly configured, parent budget.
+                        var reader = new JpegEntropyReader(input, 0, context); var value = 0; var tail = 0; Exception? error = null;
+                        if (fused) reader.BeginLocalWork();
+                        try
+                        {
+                            if (offset != 0) reader.ReadBits(offset);
+                            var coefficient = 63; Span<int> block = stackalloc int[64];
+                            if (fused) table.ReadPlainCancelableAc(ref reader, block, ref coefficient);
+                            if (fused && coefficient == 64) value = block[JpegTransform.Zigzag[63]];
+                            else
+                            {
+                                var symbol = table.Read(ref reader); value = reader.ReadSigned(symbol & 15);
+                            }
+                            tail = reader.ReadBits(3); reader.Restart(0);
+                        }
+                        catch (Exception failure) when (failure is ImageDataException or ImageLimitException) { error = failure; }
+                        finally { if (fused) reader.EndLocalWork(); }
+                        return (error?.GetType(), error?.Message, reader.Position, context.RemainingWork, value, tail);
+                    }
+                }
+            }
+        }
+    }
+
+    [Fact]
+    public void EveryRawBytePairKeepsUnfusedStuffingMarkerAndPendingBitState()
+    {
+        var lengths = new byte[16]; lengths[0] = 1;
+        var table = new JpegHuffman(lengths, new byte[] { 0x01 }, new OperationContext(ImageLimits.Default, default));
+        byte[] data = [0, 0, 0, 0xFF, 0xD0];
+        for (var pair = 0; pair <= ushort.MaxValue; pair++)
+        {
+            data[1] = (byte)(pair >> 8); data[2] = (byte)pair;
+            var reference = Run(false); var actual = Run(true);
+            Assert.Equal(reference, actual);
+        }
+
+        (Type? Error, string? Message, int Position, long Remaining, int Value, int Tail) Run(bool fused)
+        {
+            using var cancellation = new CancellationTokenSource();
+            var context = new OperationContext(ImageLimits.Default with { MaxWork = 12 }, cancellation.Token);
+            var reader = new JpegEntropyReader(data, 0, context); var value = 0; var tail = 0; Exception? error = null;
+            if (fused) reader.BeginLocalWork();
+            try
+            {
+                reader.ReadBits(7); // One cached zero bit is the one-bit AC code.
+                var coefficient = 63; Span<int> block = stackalloc int[64];
+                if (fused) table.ReadPlainCancelableAc(ref reader, block, ref coefficient);
+                if (fused && coefficient == 64) value = block[JpegTransform.Zigzag[63]];
+                else
+                {
+                    var symbol = table.Read(ref reader); value = reader.ReadSigned(symbol & 15);
+                }
+                tail = reader.ReadBits(6); tail = tail * 4 + reader.ReadBits(2);
+            }
+            catch (Exception failure) when (failure is ImageDataException or ImageLimitException) { error = failure; }
+            finally { if (fused) reader.EndLocalWork(); }
+            return (error?.GetType(), error?.Message, reader.Position, context.RemainingWork, value, tail);
+        }
+    }
+
+    [Theory]
+    [InlineData(2L)] [InlineData(100L)] [InlineData(long.MaxValue)]
+    public void CancellationKeepsCompletedChargesAndEndsTheScopeWithoutAnExtraCheck(long budget)
+    {
+        using var cancellation = new CancellationTokenSource();
+        var context = new OperationContext(ImageLimits.Default with { MaxWork = budget }, cancellation.Token);
+        var reader = new JpegEntropyReader(new byte[] { 0xA5, 0xFF, 0xD9 }, 0, context);
+        reader.BeginLocalWork();
+        Assert.Equal(5, reader.ReadBits(3)); Assert.Equal(0, reader.ReadBits(2));
+        cancellation.Cancel();
+        try { reader.ReadBits(1); Assert.Fail("Cancellation must precede even an exhausted work budget."); }
+        catch (OperationCanceledException exception) { Assert.Equal(cancellation.Token, exception.CancellationToken); }
+        reader.EndLocalWork();
+        Assert.Equal(budget - 2, context.RemainingWork); Assert.Equal(1, reader.Position);
+        reader.EndLocalWork(); Assert.Equal(budget - 2, context.RemainingWork);
+    }
+}

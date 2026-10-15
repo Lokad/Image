@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart, StreamDecode420Restart }
+public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart, StreamDecode420Restart, NativeDecodeCancelable8 }
 
 internal sealed record WarmJpegFixedPreparation(int SchemaVersion, string Project, string Recipe,
     string RasterSha256, string NativeFile, int EncodedBytes, string EncodedSha256,
@@ -40,6 +40,9 @@ public class WarmJpegDecode
         _ => JpegSampling.YCbCr444
     };
     private bool IsProgressive => Case is WarmJpegDecodeCase.ProgressiveGray or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.Progressive444 or WarmJpegDecodeCase.Progressive422;
+    private bool Cancelable => Case == WarmJpegDecodeCase.NativeDecodeCancelable8;
+    private CancellationTokenSource? cancellationSource;
+    private CancellationToken decodeCancellation;
     private bool StreamInput => Case == WarmJpegDecodeCase.StreamDecode420Restart;
     private bool Restart => Case is WarmJpegDecodeCase.NativeDecode420Restart or WarmJpegDecodeCase.StreamDecode420Restart;
 
@@ -50,6 +53,7 @@ public class WarmJpegDecode
         {
             null or "Decode8" => [WarmJpegDecodeCase.Decode8],
             "NativeDecode8" => [WarmJpegDecodeCase.NativeDecode8],
+            "NativeDecodeCancelable8" => [WarmJpegDecodeCase.NativeDecodeCancelable8],
             "NativeDecode420" => [WarmJpegDecodeCase.NativeDecode420],
             "NativeDecode422" => [WarmJpegDecodeCase.NativeDecode422],
             "OwnedDecodeGray" => [WarmJpegDecodeCase.OwnedDecodeGray],
@@ -59,7 +63,7 @@ public class WarmJpegDecode
             "Progressive422" => [WarmJpegDecodeCase.Progressive422],
             "NativeDecode420Restart" => [WarmJpegDecodeCase.NativeDecode420Restart],
             "StreamDecode420Restart" => [WarmJpegDecodeCase.StreamDecode420Restart],
-            _ => throw new ArgumentException("Choose one warm JPEG decode case: Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart or StreamDecode420Restart.")
+            _ => throw new ArgumentException("Choose one warm JPEG decode case: Decode8, NativeDecode8, NativeDecodeCancelable8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart or StreamDecode420Restart.")
         };
     }
 
@@ -269,6 +273,18 @@ public class WarmJpegDecode
             var info = ImageCodec.Identify(encoded);
             if ((info.Format, info.Width, info.Height, info.BitDepth) != (ImageFormat.Jpeg, 513, 259, 8))
                 throw new InvalidOperationException("JPEG decode input geometry differs.");
+            if (Cancelable)
+            {
+                if (inputOrigin != "prepared-native") throw new InvalidOperationException("Cancelable JPEG must reuse native input.");
+                cancellationSource = new CancellationTokenSource(); decodeCancellation = cancellationSource.Token;
+                using var canceled = new CancellationTokenSource(); canceled.Cancel();
+                try
+                {
+                    using var rejected = ImageCodec.Decode(encoded, cancellationToken: canceled.Token);
+                    throw new InvalidOperationException("JPEG accepted an already-canceled token.");
+                }
+                catch (OperationCanceledException exception) when (exception.CancellationToken == canceled.Token) { }
+            }
             File.WriteAllBytes(state.Input, encoded);
             native = new NativeWarmReference(state, 8, cpu, StreamInput ? "jpeg420-stream-decode" : Sampling == JpegSampling.YCbCr420 ? "jpeg420-decode" : Sampling == JpegSampling.YCbCr422 ? "jpeg422-decode" : Sampling == JpegSampling.Grayscale ? "jpeg-gray-decode" : "jpeg-decode");
             nativePixels = File.ReadAllBytes(state.NativeOutput);
@@ -289,7 +305,7 @@ public class WarmJpegDecode
                 throw new InvalidOperationException("Native warm JPEG decoder differs from the pinned public CLI.");
             ValidateManaged(); before = native.Measure(smoke, sampleCount: sampleCount); ready = true;
         }
-        catch { native?.Dispose(); state.Dispose(); throw; }
+        catch { native?.Dispose(); cancellationSource?.Dispose(); state.Dispose(); throw; }
     }
 
     private static void ValidateGeometry(ImageBuffer value)
@@ -299,6 +315,8 @@ public class WarmJpegDecode
     }
     private void ValidateManaged()
     {
+        if (Cancelable && (!decodeCancellation.CanBeCanceled || decodeCancellation.IsCancellationRequested))
+            throw new InvalidOperationException("Warm JPEG requires a live, never-signaled cancelable token.");
         if (Restart) WarmJpeg.ValidateRestartPacket(encoded);
         using var first = DecodeManaged(); using var second = DecodeManaged();
         ValidateGeometry(first); ValidateGeometry(second);
@@ -320,9 +338,9 @@ public class WarmJpegDecode
 
     private ImageBuffer DecodeManaged()
     {
-        if (!StreamInput) return ImageCodec.Decode(encoded);
+        if (!StreamInput) return ImageCodec.Decode(encoded, cancellationToken: decodeCancellation);
         using var input = new MemoryStream(encoded, writable: false);
-        return ImageCodec.Decode(input);
+        return ImageCodec.Decode(input, cancellationToken: decodeCancellation);
     }
 
     [Benchmark]
@@ -349,6 +367,10 @@ public class WarmJpegDecode
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), width = 513, height = 259, depth = 8,
                 cpu, managedAffinityCount = 1, processorCount = Environment.ProcessorCount, serverGc = GCSettings.IsServerGC,
                 gcConfiguration = GC.GetConfigurationVariables(), runtime = RuntimeInformation.FrameworkDescription, platform = RuntimeInformation.RuntimeIdentifier,
+                cancellationCanBeCanceled = decodeCancellation.CanBeCanceled, cancellationRequested = decodeCancellation.IsCancellationRequested,
+                alreadyCanceledRejected = Cancelable ? true : (bool?)null,
+                inputAnchorCase = Cancelable ? "NativeDecode8" : null,
+                cancellationBoundary = Cancelable ? "Live cancelable token, never signaled; token/source setup/disposal outside timing. Native has no equivalent cancellation setting; complete decode/conversion/owned output release remain timed." : null,
                 sourceIdentity, inputOrigin, sampling, progressive = IsProgressive, inputBytes = encoded.Length,
                 restartInterval = Restart ? 33 : 0, restartMarkers = Restart ? 16 : 0,
                 freshSeekableStream = StreamInput, inputView = false, inputCopiesTimed = StreamInput, callerInputLifetimeChecked = StreamInput,
@@ -365,6 +387,6 @@ public class WarmJpegDecode
                 boundary = (StreamInput ? "Fresh non-exposed seekable JPEG Stream with complete input acquisition, all buffering/copies and EOF checks to independent owned RGBA8. Native fresh AVIO and owned packet acquisition/release execute every operation. " : "Identical resident prepared 8-bit JPEG to independent owned RGBA8. ") + "Public managed Decode, allocation and disposal; native software mjpeg decoder, per-operation state reset, full-range BT.601 conversion, owned output allocation and release. For subsampled inputs, expand both ceil-sized chroma planes by their sampling factors and crop to the original grid inside every operation, including intermediate acquisition/release. Grayscale includes expanding owned decoded GRAY8 samples into independent RGBA8 inside every operation. Native context/conversion/input packet/frame wrappers reused; every call decodes and converts all pixels. Padded native rows are exposed without a gratuitous packing copy. Startup, I/O, IPC, generation, hashing, checks and tight-row file writes excluded. No encoder quality search or additional source raster. Decoder RGB maximum 4/RMSE 1.5, exact opaque alpha."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
         }
-        finally { native?.Dispose(); state?.Dispose(); ready = false; }
+        finally { native?.Dispose(); cancellationSource?.Dispose(); state?.Dispose(); ready = false; }
     }
 }

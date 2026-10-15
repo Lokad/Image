@@ -16,7 +16,7 @@ internal ref struct JpegEntropyReader
     public JpegEntropyReader(ReadOnlySpan<byte> data, int start, OperationContext context)
     {
         if ((uint)start > (uint)data.Length) throw new ArgumentOutOfRangeException(nameof(start));
-        this.data = data; this.context = context; position = start; bits = 0; available = 0; remainingWork = -1; initialWork = 0;
+        this.data = data; this.context = context; position = start; bits = 0; available = 0; remainingWork = -1; initialWork = -1;
     }
 
     internal void BeginLocalWork()
@@ -24,20 +24,32 @@ internal ref struct JpegEntropyReader
         // Baseline block traversal makes no other parent-context charges in
         // this scope. Keep each exact entropy admission locally, then publish
         // successful charges before any further parent work, on every exit.
-        // Cancellable readers retain their original per-call context checks.
-        if (!context.Cancellation.CanBeCanceled) initialWork = remainingWork = context.RemainingWork;
+        // A cancelable budget is complemented, retaining the original hot
+        // noncancelable branch. Negative initialWork means no local scope;
+        // a zero remaining budget still has an unambiguous representation.
+        initialWork = context.RemainingWork;
+        remainingWork = context.Cancellation.CanBeCanceled ? ~initialWork : initialWork;
     }
 
     internal void EndLocalWork()
     {
-        if (remainingWork < 0) return;
-        context.Work(initialWork - remainingWork); remainingWork = -1;
+        if (initialWork < 0) return;
+        var remaining = remainingWork < 0 ? ~remainingWork : remainingWork;
+        // Do not add a cancellation check while publishing completed work:
+        // it would lose earlier charges or replace the original exception.
+        context.CommitAdmittedWork(initialWork - remaining);
+        remainingWork = initialWork = -1;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void Work(int units)
     {
-        if (remainingWork < 0) { context.Work(units); return; }
+        if (remainingWork < 0)
+        {
+            if (initialWork < 0) { context.Work(units); return; }
+            if (!TryCancelableWork(units)) throw new ImageLimitException("Computational work limit exceeded.");
+            return;
+        }
         if (units < 0 || units > remainingWork) throw new ImageLimitException("Computational work limit exceeded.");
         remainingWork -= units;
     }
@@ -45,9 +57,18 @@ internal ref struct JpegEntropyReader
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool TryWork(int units)
     {
-        if (remainingWork < 0) return context.TryWork(units);
+        if (remainingWork < 0) return initialWork < 0 ? context.TryWork(units) : TryCancelableWork(units);
         if (units < 0 || units > remainingWork) return false;
         remainingWork -= units; return true;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private bool TryCancelableWork(int units)
+    {
+        context.Cancellation.ThrowIfCancellationRequested();
+        var budget = ~remainingWork;
+        if (units < 0 || units > budget) return false;
+        remainingWork = ~(budget - units); return true;
     }
 
     public int ReadBits(int count)
@@ -168,6 +189,49 @@ internal ref struct JpegEntropyReader
         var threshold = 1 << (size - 1);
         value = amplitude + (((amplitude - threshold) >> 31) & (1 - (threshold << 1)));
         symbol = token; return true;
+    }
+
+    internal void ReadPlainCancelableAc(ReadOnlySpan<ushort> shortCodes, scoped Span<int> block, ref int coefficient)
+    {
+        var localBits = bits; var localAvailable = available; var localPosition = position;
+        var budget = ~remainingWork; var cancellation = context.Cancellation; var k = coefficient;
+        try
+        {
+            while (k <= 63 && data.Length - localPosition >= 2)
+            {
+                var pair = System.Buffers.Binary.BinaryPrimitives.ReadUInt16BigEndian(data.Slice(localPosition, 2));
+                // Stuffing, markers, long codes and syntax failures use the
+                // original traversal, without speculative state changes.
+                if ((unchecked((uint)(~pair - 0x0101)) & pair & 0x8080) != 0) return;
+                var cached = localBits << 16 | pair; var cachedCount = localAvailable + 16;
+                var packed = shortCodes[(int)((cached >> (cachedCount - 8)) & 255)]; var count = packed & 15;
+                var token = packed >> 4; var size = token & 15; var run = token >> 4;
+                if (count == 0 || size is < 1 or > 10 || run >= 64 - k || count + size > cachedCount) return;
+                cancellation.ThrowIfCancellationRequested();
+                if (count > budget) return;
+                budget -= count;
+                // Admit and expose the prefix before the separate amplitude
+                // checkpoint. The finally preserves it on cancellation/limit.
+                if (cancellation.IsCancellationRequested || budget == 0)
+                {
+                    var prefixBytes = (count + 7 - localAvailable) >> 3;
+                    localBits = cached >> ((2 - prefixBytes) * 8);
+                    localAvailable += prefixBytes * 8 - count; localPosition += prefixBytes;
+                    cancellation.ThrowIfCancellationRequested();
+                    throw new ImageLimitException("Computational work limit exceeded.");
+                }
+                budget--;
+                var pending = cachedCount - count - size;
+                localBits = cached >> (pending & ~7); localAvailable = pending & 7; localPosition += 2 - (pending >> 3);
+                var amplitude = (int)((cached >> pending) & ((1u << size) - 1)); var threshold = 1 << (size - 1);
+                k += run;
+                block[JpegTransform.Zigzag[k++]] = amplitude + (((amplitude - threshold) >> 31) & (1 - (threshold << 1)));
+            }
+        }
+        finally
+        {
+            bits = localBits; available = localAvailable; position = localPosition; remainingWork = ~budget; coefficient = k;
+        }
     }
 
     internal bool TryReadLongHuffman(ReadOnlySpan<ushort> longCodes, out int symbol)

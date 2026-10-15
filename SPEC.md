@@ -585,6 +585,16 @@ rounding certificate proves the original byte. Uncertain rows and extreme blocks
 use the original direct evaluation; other processors retain that evaluation.
 The [inverse rounding proof](docs/jpeg-inverse-rounding.md) defines the bound.
 
+Baseline entropy traversal retains exact logical work charges in a local block
+budget, including cancelable operations. Completed charges are published on every
+exit without another cancellation check. With a live token, consecutive ordinary
+AC symbols may be decoded from safe two-byte lookahead using local reader state.
+Prefix and amplitude retain separate work admissions and cancellation checks.
+Unused whole bytes are returned before publishing the original reader position
+and pending bits. Stuffed bytes, markers, incomplete/long codes, syntax failures
+and tight budgets retain the original traversal and partial-failure state. No
+additional table or heap workspace is introduced.
+
 Progressive scans retain coefficients in spectral order. After all scans and
 component DC progression are validated, reconstruction reuses the already
 admitted approximation array to map each block to natural order. On AVX2/BMI2,

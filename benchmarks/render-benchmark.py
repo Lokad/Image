@@ -115,11 +115,12 @@ def render():
         row('JPEG baseline 4:2:0, row restart markers', 'warm-jpeg-restartdecode-evidence.json', ['observations', -1], 'WARM-JPEG-RESTART-DECODE.md', True),
         row('JPEG baseline 4:2:2', 'warm-coverage-quiet-evidence.json', ['cases', 'jpeg422', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
         row('JPEG baseline 4:4:4, owned input', 'warm-jpeg444owned-quiet-evidence.json', ['observations', -1], 'WARM-JPEG444-OWNED-QUIET.md', True),
-        row('JPEG baseline 4:4:4, native input', 'warm-jpegac-fused-evidence.json', ['observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
+        row('JPEG baseline 4:4:4, native input', 'warm-jpeg444canceldecode-evidence.json', ['regressions', 0], 'WARM-JPEG-CANCELABLE-DECODE.md', verification='Regression screen; prior confirmed'),
+        row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg444canceldecode-evidence.json', ['observations', -1], 'WARM-JPEG-CANCELABLE-DECODE.md', True),
         row('JPEG progressive gray', 'warm-jpegrefinement-evidence.json', ['observations', -1], 'WARM-JPEG-REFINEMENT.md', True),
         row('JPEG progressive 4:2:0', 'warm-jpegprogressive420-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE420.md', True),
         row('JPEG progressive 4:2:2', 'warm-jpegprogressive422-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE422.md', True),
-        row('JPEG progressive 4:4:4', 'warm-jpegmask-evidence.json', ['observations', -1], 'WARM-JPEG-MASK.md', True),
+        row('JPEG progressive 4:4:4', 'warm-jpeg444canceldecode-evidence.json', ['regressions', 1], 'WARM-JPEG-CANCELABLE-DECODE.md', verification='Regression screen; prior confirmed'),
         row('WebP VP8 + alpha', 'warm-vp8-filter8-evidence.json', ['alphaBearingControl', 'observations', -1], 'WARM-VP8-FILTER8.md', True),
         row('WebP VP8, opaque', 'warm-vp8-filter8-evidence.json', ['observations', -1], 'WARM-VP8-FILTER8.md', True),
         row('WebP VP8L, literal/run input', 'warm-vp8ldecode-quiet-evidence.json', ['observations', -1], 'WARM-VP8L-DECODE-QUIET.md', True),
@@ -345,85 +346,20 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-Full required warm coverage is **open**. The
-[material coverage audit](../benchmarks/WARM-COVERAGE.md) tracks remaining depths,
-layouts, resize directions/fallbacks, fresh Streams, retained owners and composed
-public operations. RGBA8 bilinear upscaling now confirms **1.764x / upper 1.787x**
-after a four-pixel kernel cuts its baseline mean 41.8%. Stop tuning that pair;
-RGBA16 upscaling also confirms **1.331x / upper 1.416x** with horizontal row reuse,
-cutting its baseline mean 52.4%. Bicubic RGBA16 now confirms **1.313x / upper 1.320x**
-against the explicitly adjusted scaler backend, cutting its baseline mean 91.1%.
-RGBA8 on the same new build confirms **1.713x / upper 1.728x**. Other material
-paths remain open. Bicubic RGBA16 enlargement confirms **1.505x / upper 1.516x**,
-cutting its baseline mean 64.1% while retaining exact managed pixels.
-For bicubic width enlargement with height reduction, the same final build
-confirms RGBA16 **1.924x / upper 1.975x**, cutting a 20.419x baseline by 90.6%,
-and RGBA8 **1.848x / upper 1.867x** with unchanged allocations.
-RGBA8 bicubic width reduction with height enlargement confirms **1.190x / upper
-1.206x**, cutting a 21.910x baseline by 94.6%.
-RGBA16 in that direction confirms **1.285x / upper 1.297x**, cutting a 23.838x
-baseline by 94.7%.
-Wider-support RGBA8 downsampling to 128×64 confirms **1.631x / upper 1.642x**,
-cutting a 26.954x baseline by 94.0% with bounded thirty-two-row reuse.
-RGBA16 at that shape confirms **1.432x / upper 1.446x**, cutting a 25.058x baseline
-by 94.2% with exact unsigned products and conservative word precision guards.
-PNG RGB8, gray8 and gray-alpha8 encoding confirms below 2x with exact samples
-and the unchanged 5% IDAT-size gate, using managed level 9 / FFmpeg level 6.
-Their earlier level6/level6 refusals remain unscored. GIF and animation are deferred.
+The latest accepted round cuts complete live-cancelable JPEG444 decoding by
+**26.0%**, confirming **1.767x / upper 1.780x** at **2,664,373 B/op**. Exact managed
+pixels and separate prefix/amplitude cancellation/work checks remain unchanged.
+Both OSes pass **3,349** Release tests, including **896** live comparisons, plus
+the same actual package's consumer and all three examples. Ordinary/progressive
+JPEG rows show current short regression screens and retain prior confirmations.
 
-JPEG420 RGBA8 confirms **1.943x / upper 1.988x** after sharing chroma sampling,
-with unchanged exact packets and allocations.
-Its forward-only output fallback confirms **1.916x / upper 1.936x** with
-geometric AC coding, exact coefficients/pixels and half the allocation.
-RGBA16 forward-only output confirms **1.948x / upper 1.954x**, including full
-word normalization and flattening, on the same qualified production.
-Two-live-output RGBA8 flips confirm **1.447x / upper 1.484x**, at **128 B/image**,
-after bounded two-array reuse halves managed elapsed time. Both subjects retain
-two complete outputs before release; counters consistently normalize per image.
-Opaque VP8 decoding now confirms **1.803x / upper 1.808x**, closing its previous
-upper-2.004x gap. An eight-pixel integer loop-filter kernel reduces the retained
-managed mean **8.8%**, preserving exact pixels and allocations. Alpha-bearing
-VP8 independently confirms **1.803x / upper 1.819x** on the same qualified build.
-Earlier [bulk normalization](../benchmarks/VP8-NORMALIZATION-REJECTED.md),
-[wider-window](../benchmarks/VP8-WINDOW-REJECTED.md) and
-[token-local](../benchmarks/VP8-TOKEN-LOCAL-REJECTED.md) reader trials remain rejected.
-JPEG444/422 RGBA8 and JPEG444/422/420 RGBA16 are confirmed with adaptive Huffman
-coding; RGBA16 4:2:2 confirms **1.874x / upper 1.884x** with full normalization.
-JPEG420 with row restart markers confirms **1.958x / upper 1.973x**, at
-**297,780 B/op**, after whole-packet admission removes repeated entropy byte
-checks. Its retained mean falls **8.0%** with identical packets; nonrestart
-adaptive and fixed streaming regression means pass. Both OSes pass **3,298**
-Release tests, including **896** live comparisons, and the same actual package's
-consumer and three examples. Short regression screens retain their own bounds
-in the linked report and do not replace earlier independent certificates.
-Identical-input JPEG420 restart decoding confirms **1.823x / upper 1.837x**,
-at **1,623,906 B/op**, reusing the validated packet and qualified production.
-Opaque VP8 encoding closes a **2.718x** gap at **1.892x / upper 1.918x**,
-with identical packets and **2,536,203 B/op**. Packing arithmetic output,
-compiling the existing tree paths and inlining emission reduce elapsed time
-**30.1%**. Current alpha8/16 regression screens measure **0.563x / 0.568x**;
-their rows explicitly distinguish short screens from the earlier independent
-confirmations. Both OSes pass **3,308** Release tests and the same actual package.
-Opaque RGBA16 VP8 encoding independently confirms **1.908x / upper 1.922x**,
-at **2,535,736 B/op**, including complete word normalization/repacking. Its
-normalized raster, packets and quality samples equal the opaque byte anchor;
-unchanged qualified production and package proofs are reused.
-Fresh seekable JPEG420 Stream decoding confirms **1.891x / upper 1.902x**,
-at **1,813,266 B/op**. Complete acquisition, all buffering/copies, EOF checks,
-decoding/conversion and owned output release are timed on both subjects;
-the existing restart packet and qualified production are reused.
-Fresh VP8/ALPH Stream decoding confirms **1.825x / upper 1.833x**, at
-**2,327,699 B/op**, with complete acquisition/copies, alpha/chroma/color passes
-and input/output release timed. Its input and per-decoder pixels equal the
-resident anchor; unchanged qualified production and package proofs are reused.
-Forward-only JPEG444 encoding confirms **1.754x / upper 1.765x**, at
-**526,051 B/op**, using the existing geometric Huffman fallback. Full independent
-coefficient dumps, per-decoder pixels and source errors equal the qualified
-adaptive anchor; unchanged production and native worker proofs are reused.
-Remaining material codec layouts and public boundaries still need coverage.
-Stop tuning confirmed pairs; no averages or rolling older-source results prove
-the uniform target. Linked reports retain superseded raw evidence, failed guards,
-rejected experiments, correctness controls and exact package/source identities.
+PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples
+and the unchanged 5% IDAT-size gate; earlier level6/level6 refusals remain unscored.
+GIF and animation are deferred. Full required warm coverage remains **open**;
+the [material coverage audit](../benchmarks/WARM-COVERAGE.md) tracks remaining
+layouts and public boundaries. Stop confirmed pairs; rolling older-source results
+do not prove uniform current-source parity. Linked reports preserve superseded
+evidence, failed guards, rejected trials and exact package/source qualification.
 
 Maintain this summary whenever a performance round is accepted: update the
 corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),

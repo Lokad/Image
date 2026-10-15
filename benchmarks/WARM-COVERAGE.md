@@ -981,3 +981,13 @@ callbacks and failure state stay exact. Nine scalar-reference controls preserve
 sparse/dense/signed and quota/cancellation cases. Both shared regression means
 pass before full Windows/Linux/live/same actual package qualification. Stop this
 pair; other material boundaries and final current-source coverage remain open.
+
+The [cancelable native-input JPEG444 decode round](WARM-JPEG-CANCELABLE-DECODE.md)
+reduces a 2.383x gap by26.0%, independently confirming1.767x / upper1.780x
+at2,664,373 managed B/op. Consecutive ordinary AC values use local reader/index
+state and exact block accounting, preserving separate prefix/amplitude checks,
+original pending bits, work and failure state. Ordinary/progressive JPEG shared
+regression means pass before full3,349-test-per-OS/live/same actual package
+qualification. Failed means, conservative bounds and launcher attempts remain
+retained. Stop this fixed pair; other material boundaries and final current-source
+coverage remain open.

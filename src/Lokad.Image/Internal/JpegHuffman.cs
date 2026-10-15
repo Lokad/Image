@@ -69,6 +69,9 @@ internal sealed class JpegHuffman
     internal bool TryReadBaselineAc(ref JpegEntropyReader reader, int remainingCoefficients, out int symbol, out int value)
         => reader.TryReadBaselineAc(shortCodes, remainingCoefficients, out symbol, out value);
 
+    internal void ReadPlainCancelableAc(ref JpegEntropyReader reader, scoped Span<int> block, ref int coefficient)
+        => reader.ReadPlainCancelableAc(shortCodes, block, ref coefficient);
+
     // Keep canonical traversal out of the common short-code wrapper so the
     // caller can inline that wrapper without its cold loop and saved registers.
     private int ReadLong(ref JpegEntropyReader reader)
