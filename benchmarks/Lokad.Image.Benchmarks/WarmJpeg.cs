@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegCase { Encode8, Encode420_8, Encode422_8, Encode16, Encode420_16, Encode420Stream8, Encode420Stream16 }
+public enum WarmJpegCase { Encode8, Encode420_8, Encode422_8, Encode16, Encode420_16, Encode420Stream8, Encode420Stream16, Encode422_16 }
 
 internal sealed record WarmJpegPreparation(int SchemaVersion, string Project, string GeneratedUtc, string Recipe,
     string RasterSha256, string ReferenceSha256, int NativeQuality, uint BackgroundRgb, string NativeFile, string ManagedFile,
@@ -20,15 +20,15 @@ public class WarmJpeg
     public static IEnumerable<WarmJpegCase> Cases => SelectedCases();
     [ParamsSource(nameof(Cases))] public WarmJpegCase Case { get; set; }
     private const uint Background = 0x204060;
-    private bool Source16 => Case is WarmJpegCase.Encode16 or WarmJpegCase.Encode420_16 or WarmJpegCase.Encode420Stream16;
+    private bool Source16 => Case is WarmJpegCase.Encode422_16 or WarmJpegCase.Encode16 or WarmJpegCase.Encode420_16 or WarmJpegCase.Encode420Stream16;
     private int Depth => Source16 ? 16 : 8;
     private bool FixedAnchor => Subsampled || Source16 || AdaptiveEntropy;
-    private bool Horizontal => Case == WarmJpegCase.Encode422_8;
+    private bool Horizontal => Case is WarmJpegCase.Encode422_8 or WarmJpegCase.Encode422_16;
     private bool ForwardOnly => Case is WarmJpegCase.Encode420Stream8 or WarmJpegCase.Encode420Stream16;
-    private bool Subsampled => Case is WarmJpegCase.Encode420_8 or WarmJpegCase.Encode422_8 or WarmJpegCase.Encode420_16 or WarmJpegCase.Encode420Stream8 or WarmJpegCase.Encode420Stream16;
+    private bool Subsampled => Case is WarmJpegCase.Encode422_16 or WarmJpegCase.Encode420_8 or WarmJpegCase.Encode422_8 or WarmJpegCase.Encode420_16 or WarmJpegCase.Encode420Stream8 or WarmJpegCase.Encode420Stream16;
     private string NativeSampling => Horizontal ? "422" : Subsampled ? "420" : "444";
     private string DisplaySampling => Horizontal ? "4:2:2" : Subsampled ? "4:2:0" : "4:4:4";
-    private string FixedPolicy => Source16 ? (Subsampled ? Fixed42016Policy : Fixed16Policy)
+    private string FixedPolicy => Source16 ? (Horizontal ? Fixed42216Policy : Subsampled ? Fixed42016Policy : Fixed16Policy)
         : Horizontal ? Fixed422Policy : Subsampled ? Fixed420Policy : Fixed444Policy;
     private int FixedQuality => Horizontal ? 65 : 69;
     private EncoderQualityProfile TargetProfile => ProfileFor(Subsampled, Horizontal, Depth);
@@ -53,7 +53,7 @@ public class WarmJpeg
     private static string MatchFile(bool subsampled, bool horizontal, int depth, bool forwardOnly = false)
     {
         if (forwardOnly) return depth == 16 ? "jpeg42016-stream-geometric-match.json" : "jpeg420-stream-geometric-match.json";
-        var name = depth == 16 ? (subsampled ? "jpeg42016-match.json" : "jpeg16-match.json")
+        var name = depth == 16 ? (horizontal ? "jpeg42216-match.json" : subsampled ? "jpeg42016-match.json" : "jpeg16-match.json")
             : horizontal ? "jpeg422-match.json" : subsampled ? "jpeg420-match.json" : "jpeg-match.json";
         return AdaptiveEntropy ? name.Replace("-match.json", "-adaptive-match.json") : name;
     }
@@ -62,6 +62,7 @@ public class WarmJpeg
     private const string Fixed420Policy = "fixed-anchor-v1: native qscale 5 / managed quality 69 / 4:2:0; one owned evaluation; no quality sweep";
     private const string Fixed422Policy = "fixed-anchor-v1: native qscale 5 / managed quality 65 / 4:2:2; one owned evaluation; no quality sweep";
     private const string Fixed16Policy = "fixed-anchor-v1: native qscale 5 / managed quality 69 / RGBA16 to 4:4:4; one owned evaluation; no quality sweep";
+    private const string Fixed42216Policy = "fixed-anchor-v1: native qscale 5 / managed quality 65 / RGBA16 to 4:2:2; one owned evaluation; no quality sweep";
     private const string Fixed42016Policy = "fixed-anchor-v1: native qscale 5 / managed quality 69 / RGBA16 to 4:2:0; one owned evaluation; no quality sweep";
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
@@ -85,9 +86,10 @@ public class WarmJpeg
             "Encode422_8" => [WarmJpegCase.Encode422_8],
             "Encode16" => [WarmJpegCase.Encode16],
             "Encode420_16" => [WarmJpegCase.Encode420_16],
+            "Encode422_16" => [WarmJpegCase.Encode422_16],
             "Encode420Stream8" when !AdaptiveEntropy => [WarmJpegCase.Encode420Stream8],
             "Encode420Stream16" when !AdaptiveEntropy => [WarmJpegCase.Encode420Stream16],
-            _ => throw new ArgumentException("Choose one JPEG case: Encode8, Encode16, Encode420_8, Encode422_8, Encode420_16, Encode420Stream8 or Encode420Stream16 (fixed-geometric-v1 policy).")
+            _ => throw new ArgumentException("Choose one JPEG case: Encode8, Encode16, Encode420_8, Encode422_8, Encode422_16, Encode420_16, Encode420Stream8 or Encode420Stream16 (fixed-geometric-v1 policy).")
         };
     }
 
@@ -108,8 +110,8 @@ public class WarmJpeg
         if (!OperatingSystem.IsLinux() || cpu is < 0 or > 62 || nativeQscale is < 1 or > 31)
             throw new ArgumentException("JPEG preparation requires Linux, one allowed CPU and qscale 1..31.");
         if (subsampled && horizontal) throw new ArgumentException("Choose one JPEG subsampling layout.");
-        if (depth is not (8 or 16) || depth == 16 && horizontal)
-            throw new ArgumentException("The RGBA16 cases require 4:4:4 or 4:2:0 sampling.");
+        if (depth is not (8 or 16))
+            throw new ArgumentException("JPEG source depth must be 8 or16.");
         if (forwardOnly && (!subsampled || horizontal || Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") != "fixed-geometric-v1"))
             throw new ArgumentException("Forward-only preparation requires RGBA8/16 4:2:0 and fixed-geometric-v1.");
         var fixedAnchor = subsampled || horizontal || depth == 16 || AdaptiveEntropy;
@@ -153,7 +155,7 @@ public class WarmJpeg
                 Path.GetRelativePath(state.Root, nativeFile), Path.GetRelativePath(state.Root, managedFile), match, owned, order.ToArray(), SourceIdentity(state.Root),
                 JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), JpegBenchmarkCase.HashFile(typeof(WarmJpeg).Assembly.Location),
                 JpegBenchmarkCase.HashFile(state.Ffmpeg), native.BuildIdentity, native.Ready,
-                sampling, depth == 16 ? (subsampled ? Fixed42016Policy : Fixed16Policy)
+                sampling, depth == 16 ? (horizontal ? Fixed42216Policy : subsampled ? Fixed42016Policy : Fixed16Policy)
                     : horizontal ? Fixed422Policy : subsampled ? Fixed420Policy
                     : AdaptiveEntropy ? Fixed444Policy : EncoderQualityCalibration.OwnedQualityPolicy, depth);
             var path = Path.Combine(state.Root, "artifacts", "warm-reference", MatchFile(subsampled, horizontal, depth, forwardOnly));

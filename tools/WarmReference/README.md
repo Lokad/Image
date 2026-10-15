@@ -1210,3 +1210,11 @@ raster and frozen PNG, fresh AVIO acquisition and owned input packet, complete
 PNG decoding, fresh owned RGBA64LE output and timed full BE-to-LE conversion.
 All samples and two-live-output independence are exact. Existing eight-bit
 workers are preserved. See the [retained result](../../benchmarks/WARM-STREAM-PNG16.md).
+
+
+RGBA16 JPEG422 uses `--prepare-warm-jpeg42216 0` with
+`LOKAD_IMAGE_JPEG_ENTROPY=adaptive-v1`, then
+`-WarmFamily Jpeg -WarmCases Encode422_16`. It reuses the existing native worker
+and original word raster. Prepare only the fixed native qscale5/managed quality65
+anchor, enforce the unchanged0.25dB source band, and time complete normalization
+and flattening. See the [retained result](../../benchmarks/WARM-JPEG422-RGBA16.md).

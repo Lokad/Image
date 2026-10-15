@@ -93,10 +93,12 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG444-RGBA8-ADAPTIVE.md) | 6,705.88 | 3,783.34 | 1.772 / 1.818 | 559,384 | Confirmed |
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG444-RGBA16-ADAPTIVE.md) | 6,767.17 | 3,851.77 | 1.757 / 1.790 | 556,280 | Confirmed |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG422-RGBA8-ADAPTIVE.md) | 4,277.49 | 2,349.58 | 1.821 / 1.862 | 294,110 | Confirmed |
+| [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG422-RGBA16.md) | 4,538.42 | 2,422.35 | 1.874 / 1.884 | 294,110 | Confirmed |
 | [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG420-CHROMA-PAIR.md) | 3,434.93 | 1,767.46 | 1.943 / 1.988 | 297,772 | Confirmed |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-GEOMETRIC.md) | 3,382.57 | 1,765.48 | 1.916 / 1.936 | 263,812 | Confirmed |
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FORWARD-RGBA16.md) | 3,572.45 | 1,833.91 | 1.948 / 1.954 | 263,812 | Confirmed |
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-ADAPTIVE-HUFFMAN.md) | 3,481.14 | 1,843.98 | 1.888 / 1.931 | 297,772 | Confirmed |
+| [JPEG grayscale, single component](../benchmarks/WARM-COVERAGE.md) | — | — | — | — | Unscored: native baseline unavailable |
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-ALPHAWEIGHTED.md) | 42,879.92 | 54,484.52 | 0.787 / 0.805 | 2,615,472 | Confirmed |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-RGBA16-ENCODE.md) | 43,362.07 | 53,579.62 | 0.809 / 0.819 | 2,615,472 | Confirmed |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-ENCODE-EXACT.md) | 7,363.30 | 121,587.95 | 0.061 / 0.063 | 2,100,170 | Confirmed |
@@ -292,8 +294,9 @@ VP8 independently confirms **1.803x / upper 1.819x** on the same qualified build
 Earlier [bulk normalization](../benchmarks/VP8-NORMALIZATION-REJECTED.md),
 [wider-window](../benchmarks/VP8-WINDOW-REJECTED.md) and
 [token-local](../benchmarks/VP8-TOKEN-LOCAL-REJECTED.md) reader trials remain rejected.
-JPEG444/422 RGBA8 and JPEG444/420 RGBA16 are confirmed with adaptive Huffman
-coding; remaining material codec layouts and public boundaries still need coverage.
+JPEG444/422 RGBA8 and JPEG444/422/420 RGBA16 are confirmed with adaptive Huffman
+coding; RGBA16 4:2:2 confirms **1.874x / upper 1.884x** with full normalization.
+Remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove
 the uniform target. Linked reports retain superseded raw evidence, failed guards,
 rejected experiments, correctness controls and exact package/source identities.

@@ -127,10 +127,12 @@ def render():
         row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-jpeg4448-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG444-RGBA8-ADAPTIVE.md', True),
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg44416-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG444-RGBA16-ADAPTIVE.md', True),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg4228-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA8-ADAPTIVE.md', True),
+        row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg42216-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA16.md', True),
         row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg420pair-evidence.json', ['observations', -1], 'WARM-JPEG420-CHROMA-PAIR.md', True),
         row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-geometric-evidence.json', ['observations', -1], 'WARM-JPEG-FIXED-GEOMETRIC.md', True),
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-stream16-evidence.json', ['observations', -1], 'WARM-JPEG-FORWARD-RGBA16.md', True),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG-ADAPTIVE-HUFFMAN.md', True),
+        pending('JPEG grayscale, single component', 'WARM-COVERAGE.md', 'Unscored: native baseline unavailable'),
         row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
         row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8encode16-evidence.json', ['observations', -1], 'WARM-VP8-RGBA16-ENCODE.md', True),
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
@@ -366,8 +368,9 @@ VP8 independently confirms **1.803x / upper 1.819x** on the same qualified build
 Earlier [bulk normalization](../benchmarks/VP8-NORMALIZATION-REJECTED.md),
 [wider-window](../benchmarks/VP8-WINDOW-REJECTED.md) and
 [token-local](../benchmarks/VP8-TOKEN-LOCAL-REJECTED.md) reader trials remain rejected.
-JPEG444/422 RGBA8 and JPEG444/420 RGBA16 are confirmed with adaptive Huffman
-coding; remaining material codec layouts and public boundaries still need coverage.
+JPEG444/422 RGBA8 and JPEG444/422/420 RGBA16 are confirmed with adaptive Huffman
+coding; RGBA16 4:2:2 confirms **1.874x / upper 1.884x** with full normalization.
+Remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove
 the uniform target. Linked reports retain superseded raw evidence, failed guards,
 rejected experiments, correctness controls and exact package/source identities.
