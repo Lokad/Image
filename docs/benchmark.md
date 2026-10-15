@@ -121,6 +121,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA16, Fastest managed2/native1 / live cancelable token](../benchmarks/WARM-PNG-FAST2.md) | 12,932.71 | 17,700.33 | 0.731 / 0.747 | 2,103,647 | Confirmed |
 | [PNG RGBA16, Fastest managed2/native1 / forward-only output](../benchmarks/WARM-PNG-FAST-FORWARD16.md) | 13,628.70 | 17,677.29 | 0.771 / 0.805 | 2,103,770 | Confirmed |
 | [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG-FAST2.md) | 14,680.33 | 20,089.60 | 0.731 / 0.887 | 2,103,624 | Regression screen; prior confirmed |
+| [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-PNG-SMALLEST8.md) | 14,469.30 | 17,319.86 | 0.835 / 0.841 | 527,564 | Confirmed |
 | [PNG RGBA16, SmallestSize managed9/native9 / None](../benchmarks/WARM-PNG-SMALLEST16.md) | 19,689.04 | 20,296.44 | 0.970 / 0.985 | 2,103,522 | Confirmed |
 | [PNG RGB8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 10,402.09 | 9,514.15 | 1.093 / 1.107 | 527,098 | Confirmed |
 | [PNG RGB16, level 6 / None](../benchmarks/WARM-PNG-RGB16-ENCODE.md) | 13,121.10 | 15,174.40 | 0.865 / 0.871 | 2,102,765 | Confirmed |
@@ -329,6 +330,13 @@ original sixteen-entry palette projection. Managed/normal/scalar native pixels,
 alpha and hidden RGB are exact. Complete packed decode, palette expansion,
 interlaced placement and output ownership are timed. Production qualification
 is reused; no production rebuild, profile or repeated package proof is needed.
+
+The [RGBA8 SmallestSize comparison](../benchmarks/WARM-PNG-SMALLEST8.md)
+independently confirms **0.835x / upper 0.841x**, **527,564 B/op**, with numeric
+levels9/9, exact RGBA and the unchanged5% IDAT-size gate (209,314/210,283 bytes).
+Production and package qualification are reused without a production rebuild,
+profile or repeated proofs. The measured binaries remain immutable; a word-only
+receipt-prose correction after measurement needs no repeat.
 
 Recent unchanged-production coverage confirms RGB16 Paeth at1.904x /
 upper1.928x,6,504 B/op, and gray-alpha8 Paeth at1.017x / upper1.068x,2,408 B/op.

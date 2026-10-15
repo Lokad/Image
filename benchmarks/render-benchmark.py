@@ -158,6 +158,7 @@ def render():
         row('PNG RGBA16, Fastest managed2/native1 / live cancelable token', 'warm-pngfast2-evidence.json', ['observations', -1], 'WARM-PNG-FAST2.md', True),
         row('PNG RGBA16, Fastest managed2/native1 / forward-only output', 'warm-pngfastforward16-evidence.json', ['observations', -1], 'WARM-PNG-FAST-FORWARD16.md', True),
         row('PNG RGBA16, level 6 / None', 'warm-pngfast2-evidence.json', ['regressions', 0], 'WARM-PNG-FAST2.md', verification='Regression screen; prior confirmed'),
+        row('PNG RGBA8, SmallestSize9 / native9', 'warm-png-smallest8-evidence.json', ['observations', -1], 'WARM-PNG-SMALLEST8.md', True),
         row('PNG RGBA16, SmallestSize managed9/native9 / None', 'warm-png-smallest16-evidence.json', ['observations', -1], 'WARM-PNG-SMALLEST16.md', True),
         row('PNG RGB8, Optimal managed9/native6 / None', 'warm-pngbyte-optimal-evidence.json', ['cases', 'rgb', 'confirm'], 'WARM-PNG-BYTE-OPTIMAL.md', True),
         row('PNG RGB16, level 6 / None', 'warm-pngrgb16encode-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-ENCODE.md', True),
@@ -406,6 +407,13 @@ original sixteen-entry palette projection. Managed/normal/scalar native pixels,
 alpha and hidden RGB are exact. Complete packed decode, palette expansion,
 interlaced placement and output ownership are timed. Production qualification
 is reused; no production rebuild, profile or repeated package proof is needed.
+
+The [RGBA8 SmallestSize comparison](../benchmarks/WARM-PNG-SMALLEST8.md)
+independently confirms **0.835x / upper 0.841x**, **527,564 B/op**, with numeric
+levels9/9, exact RGBA and the unchanged5% IDAT-size gate (209,314/210,283 bytes).
+Production and package qualification are reused without a production rebuild,
+profile or repeated proofs. The measured binaries remain immutable; a word-only
+receipt-prose correction after measurement needs no repeat.
 
 Recent unchanged-production coverage confirms RGB16 Paeth at1.904x /
 upper1.928x,6,504 B/op, and gray-alpha8 Paeth at1.017x / upper1.068x,2,408 B/op.

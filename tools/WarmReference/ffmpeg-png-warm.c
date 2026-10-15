@@ -363,13 +363,13 @@ static void check_and_write(Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if (argc < 7 || (strcmp(argv[1], "png-encode") && strcmp(argv[1], "png-smallest16-encode") && strcmp(argv[1], "png-store-encode") && strcmp(argv[1], "png-rgb-encode") && strcmp(argv[1], "png-gray-encode") && strcmp(argv[1], "png-gray-alpha-encode") && strcmp(argv[1], "png-decode") && strcmp(argv[1], "png-adam7-decode")))
-        fail("Usage: ffmpeg-png-warm png-encode|png-smallest16-encode|png-store-encode|png-rgb-encode|png-gray-encode|png-gray-alpha-encode|png-decode|png-adam7-decode INPUT WIDTH HEIGHT DEPTH OUTPUT [EXPECTED_RAW]");
+    if (argc < 7 || (strcmp(argv[1], "png-encode") && strcmp(argv[1], "png-smallest8-encode") && strcmp(argv[1], "png-smallest16-encode") && strcmp(argv[1], "png-store-encode") && strcmp(argv[1], "png-rgb-encode") && strcmp(argv[1], "png-gray-encode") && strcmp(argv[1], "png-gray-alpha-encode") && strcmp(argv[1], "png-decode") && strcmp(argv[1], "png-adam7-decode")))
+        fail("Usage: ffmpeg-png-warm png-encode|png-smallest8-encode|png-smallest16-encode|png-store-encode|png-rgb-encode|png-gray-encode|png-gray-alpha-encode|png-decode|png-adam7-decode INPUT WIDTH HEIGHT DEPTH OUTPUT [EXPECTED_RAW]");
     Work work = {0}; work.encode_rgb = !strcmp(argv[1], "png-rgb-encode"); work.encode_gray = !strcmp(argv[1], "png-gray-encode");
     const char *scalar = getenv("LOKAD_IMAGE_WARM_NATIVE_SCALAR");
     if (scalar) { if (strcmp(scalar, "1")) fail("Scalar verification flag must be 1."); av_force_cpu_flags(0); }
     work.encode_gray_alpha = !strcmp(argv[1], "png-gray-alpha-encode");
-    work.encode_smallest = !strcmp(argv[1], "png-smallest16-encode");
+    work.encode_smallest = !strcmp(argv[1], "png-smallest8-encode") || !strcmp(argv[1], "png-smallest16-encode");
     work.encode_stored = !strcmp(argv[1], "png-store-encode");
     work.encode = !strcmp(argv[1], "png-encode") || work.encode_smallest || work.encode_stored || work.encode_rgb || work.encode_gray || work.encode_gray_alpha; work.cpu = affinity_cpu();
     int interlace = !strcmp(argv[1], "png-adam7-decode");
@@ -378,7 +378,7 @@ int main(int argc, char **argv)
     av_log_set_level(AV_LOG_ERROR);
     work.width = number(argv[3]); work.height = number(argv[4]); work.depth = number(argv[5]);
     if (work.depth != 8 && work.depth != 16) fail("Depth must be 8 or 16.");
-    if (work.encode_smallest && work.depth != 16) fail("SmallestSize reference requires RGBA16 input.");
+    if (work.encode_smallest && work.depth != (!strcmp(argv[1], "png-smallest8-encode") ? 8 : 16)) fail("SmallestSize reference requires its declared RGBA8/16 input.");
     if (work.encode_stored && work.depth != 8) fail("Stored PNG encode reference requires RGBA8 input.");
     work.row_bytes = work.width * work.depth / 8 * 4; work.raw_bytes = (size_t)work.row_bytes * work.height;
     if (work.raw_bytes > 512U * 1024U * 1024U) fail("Reference raster exceeds 512 MiB.");
