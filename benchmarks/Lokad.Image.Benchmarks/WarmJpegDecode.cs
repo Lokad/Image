@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart, StreamDecode420Restart, NativeDecodeCancelable8 }
+public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart, StreamDecode420Restart, NativeDecodeCancelable8, ProgressiveCancelable444 }
 
 internal sealed record WarmJpegFixedPreparation(int SchemaVersion, string Project, string Recipe,
     string RasterSha256, string NativeFile, int EncodedBytes, string EncodedSha256,
@@ -39,8 +39,8 @@ public class WarmJpegDecode
         WarmJpegDecodeCase.OwnedDecodeGray or WarmJpegDecodeCase.ProgressiveGray => JpegSampling.Grayscale,
         _ => JpegSampling.YCbCr444
     };
-    private bool IsProgressive => Case is WarmJpegDecodeCase.ProgressiveGray or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.Progressive444 or WarmJpegDecodeCase.Progressive422;
-    private bool Cancelable => Case == WarmJpegDecodeCase.NativeDecodeCancelable8;
+    private bool IsProgressive => Case is WarmJpegDecodeCase.ProgressiveCancelable444 or WarmJpegDecodeCase.ProgressiveGray or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.Progressive444 or WarmJpegDecodeCase.Progressive422;
+    private bool Cancelable => Case is WarmJpegDecodeCase.NativeDecodeCancelable8 or WarmJpegDecodeCase.ProgressiveCancelable444;
     private CancellationTokenSource? cancellationSource;
     private CancellationToken decodeCancellation;
     private bool StreamInput => Case == WarmJpegDecodeCase.StreamDecode420Restart;
@@ -60,10 +60,11 @@ public class WarmJpegDecode
             "ProgressiveGray" => [WarmJpegDecodeCase.ProgressiveGray],
             "Progressive420" => [WarmJpegDecodeCase.Progressive420],
             "Progressive444" => [WarmJpegDecodeCase.Progressive444],
+            "ProgressiveCancelable444" => [WarmJpegDecodeCase.ProgressiveCancelable444],
             "Progressive422" => [WarmJpegDecodeCase.Progressive422],
             "NativeDecode420Restart" => [WarmJpegDecodeCase.NativeDecode420Restart],
             "StreamDecode420Restart" => [WarmJpegDecodeCase.StreamDecode420Restart],
-            _ => throw new ArgumentException("Choose one warm JPEG decode case: Decode8, NativeDecode8, NativeDecodeCancelable8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart or StreamDecode420Restart.")
+            _ => throw new ArgumentException("Choose one warm JPEG decode case: Decode8, NativeDecode8, NativeDecodeCancelable8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, ProgressiveCancelable444, Progressive422, NativeDecode420Restart or StreamDecode420Restart.")
         };
     }
 
@@ -236,7 +237,7 @@ public class WarmJpegDecode
                 WarmJpeg.ValidateRestartPacket(encoded); WarmJpeg.ValidateRestartNegativeControls(encoded);
                 inputOrigin = "prepared-native-fixed420-restart33";
             }
-            else if (Case is WarmJpegDecodeCase.NativeDecode420 or WarmJpegDecodeCase.NativeDecode422 or WarmJpegDecodeCase.OwnedDecodeGray or WarmJpegDecodeCase.ProgressiveGray or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.Progressive444 or WarmJpegDecodeCase.Progressive422)
+            else if (Case is WarmJpegDecodeCase.NativeDecode420 or WarmJpegDecodeCase.NativeDecode422 or WarmJpegDecodeCase.OwnedDecodeGray or WarmJpegDecodeCase.ProgressiveGray or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.Progressive444 or WarmJpegDecodeCase.ProgressiveCancelable444 or WarmJpegDecodeCase.Progressive422)
             {
                 var label = Sampling == JpegSampling.YCbCr420 ? "420" : Sampling == JpegSampling.YCbCr422 ? "422" : Sampling == JpegSampling.YCbCr444 ? "444" : "gray";
                 WarmJpegFixedPreparation prepared;
@@ -275,7 +276,7 @@ public class WarmJpegDecode
                 throw new InvalidOperationException("JPEG decode input geometry differs.");
             if (Cancelable)
             {
-                if (inputOrigin != "prepared-native") throw new InvalidOperationException("Cancelable JPEG must reuse native input.");
+                if (inputOrigin != (IsProgressive ? "lossless-progressive-native-444" : "prepared-native")) throw new InvalidOperationException("Cancelable JPEG must reuse its native input anchor.");
                 cancellationSource = new CancellationTokenSource(); decodeCancellation = cancellationSource.Token;
                 using var canceled = new CancellationTokenSource(); canceled.Cancel();
                 try
@@ -369,7 +370,7 @@ public class WarmJpegDecode
                 gcConfiguration = GC.GetConfigurationVariables(), runtime = RuntimeInformation.FrameworkDescription, platform = RuntimeInformation.RuntimeIdentifier,
                 cancellationCanBeCanceled = decodeCancellation.CanBeCanceled, cancellationRequested = decodeCancellation.IsCancellationRequested,
                 alreadyCanceledRejected = Cancelable ? true : (bool?)null,
-                inputAnchorCase = Cancelable ? "NativeDecode8" : null,
+                inputAnchorCase = Cancelable ? (IsProgressive ? "Progressive444" : "NativeDecode8") : null,
                 cancellationBoundary = Cancelable ? "Live cancelable token, never signaled; token/source setup/disposal outside timing. Native has no equivalent cancellation setting; complete decode/conversion/owned output release remain timed." : null,
                 sourceIdentity, inputOrigin, sampling, progressive = IsProgressive, inputBytes = encoded.Length,
                 restartInterval = Restart ? 33 : 0, restartMarkers = Restart ? 16 : 0,

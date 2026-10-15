@@ -76,11 +76,12 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG baseline 4:2:2](../benchmarks/WARM-COVERAGE-QUIET.md) | 2,087.01 | 1,336.37 | 1.562 / 1.567 | 1,978,646 | Confirmed |
 | [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-JPEG444-OWNED-QUIET.md) | 3,564.61 | 2,039.57 | 1.748 / 1.793 | 2,596,174 | Confirmed |
 | [JPEG baseline 4:4:4, native input](../benchmarks/WARM-JPEG-CANCELABLE-DECODE.md) | 3,357.60 | 1,719.85 | 1.952 / 2.216 | 2,664,358 | Regression screen; prior confirmed |
-| [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-JPEG-CANCELABLE-DECODE.md) | 3,046.63 | 1,723.88 | 1.767 / 1.780 | 2,664,373 | Confirmed |
+| [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-JPEG-PROGRESSIVE-CANCELABLE444.md) | 3,158.79 | 1,770.53 | 1.784 / 5.685 | 2,664,358 | Regression screen; prior confirmed |
 | [JPEG progressive gray](../benchmarks/WARM-JPEG-REFINEMENT.md) | 3,336.90 | 1,743.36 | 1.914 / 1.942 | 1,232,501 | Confirmed |
 | [JPEG progressive 4:2:0](../benchmarks/WARM-JPEG-PROGRESSIVE420.md) | 3,646.81 | 1,938.47 | 1.881 / 1.894 | 1,637,521 | Confirmed |
+| [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-PROGRESSIVE-CANCELABLE444.md) | 6,453.37 | 3,335.92 | 1.935 / 1.940 | 2,682,364 | Confirmed |
 | [JPEG progressive 4:2:2](../benchmarks/WARM-JPEG-PROGRESSIVE422.md) | 3,882.57 | 2,210.07 | 1.757 / 1.781 | 1,996,661 | Confirmed |
-| [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-CANCELABLE-DECODE.md) | 6,341.69 | 3,328.96 | 1.905 / 2.188 | 2,682,364 | Regression screen; prior confirmed |
+| [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-PROGRESSIVE-CANCELABLE444.md) | 6,280.26 | 3,334.35 | 1.884 / 1.975 | 2,682,364 | Regression screen; prior confirmed |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8-FILTER8.md) | 10,777.02 | 5,977.48 | 1.803 / 1.819 | 1,966,616 | Confirmed |
 | [WebP VP8, opaque](../benchmarks/WARM-VP8-FILTER8.md) | 8,649.43 | 4,797.64 | 1.803 / 1.808 | 760,548 | Confirmed |
 | [WebP VP8L, literal/run input](../benchmarks/WARM-VP8L-DECODE-QUIET.md) | 3,948.44 | 2,332.84 | 1.693 / 1.732 | 1,074,301 | Confirmed |
@@ -269,11 +270,12 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round cuts complete live-cancelable JPEG444 decoding by
-**26.0%**, confirming **1.767x / upper 1.780x** at **2,664,373 B/op**. Exact managed
-pixels and separate prefix/amplitude cancellation/work checks remain unchanged.
-Both OSes pass **3,349** Release tests, including **896** live comparisons, plus
-the same actual package's consumer and all three examples. Ordinary/progressive
+The latest accepted round confirms complete live-cancelable progressive JPEG444
+decoding at **1.935x / upper 1.940x**, with unchanged **2,682,364 B/op**. Selecting
+the original per-bit correction loop once removes repeated impossible batch setup,
+preserving exact pixels and every work/cancellation check. Both OSes pass **3,349**
+Release tests, including **896** live comparisons, plus the same actual package's
+consumer and all three examples. Ordinary progressive and cancelable baseline
 JPEG rows show current short regression screens and retain prior confirmations.
 
 PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples

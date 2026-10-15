@@ -12,6 +12,7 @@ internal ref struct JpegEntropyReader
     private int available;
     private long remainingWork, initialWork;
     public int Position => position;
+    internal bool HasCancelableToken => context.Cancellation.CanBeCanceled;
 
     public JpegEntropyReader(ReadOnlySpan<byte> data, int start, OperationContext context)
     {

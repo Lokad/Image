@@ -480,6 +480,17 @@ internal ref struct JpegDecoder
 
     internal static void RefineMaskedBits(ref JpegEntropyReader reader, Span<int> block, ulong positions, int increment)
     {
+        // A cancelable reader always refuses grouped correction reads. Select
+        // the original bit loop once instead of repeating batch setup per bit.
+        if (!Bmi2.X64.IsSupported || reader.HasCancelableToken)
+        {
+            while (positions != 0)
+            {
+                ref var value = ref block[BitOperations.TrailingZeroCount(positions)];
+                Refine(ref reader, ref value, increment); positions &= positions - 1;
+            }
+            return;
+        }
         while (positions != 0)
         {
             var count = Math.Min(16, BitOperations.PopCount(positions));

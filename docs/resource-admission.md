@@ -33,6 +33,13 @@ compares against an independent scalar block traversal; `JpegCancelableWorkTests
 covers all raw byte pairs, cached phases, truncation, budgets and completed charges
 when cancellation interrupts a scope.
 
+Masked progressive JPEG correction selects its existing per-bit loop once for
+cancelable readers and processors without BMI2. It avoids preparing a batch that
+cannot be admitted while retaining each original read, work/cancellation check
+and partial coefficient update. Tables, allocation and admission are unchanged;
+`JpegMaskedRefinementTests` compares dense signed masks and scoped/unscoped
+partial failures against independent bitwise traversal.
+
 Complete-overwrite image operations may reuse two released exact-size pixel
 arrays, with a combined global idle-storage ceiling of 4 MiB. A short lock
 protects both slots and their byte ceiling; a size miss discards idle entries.

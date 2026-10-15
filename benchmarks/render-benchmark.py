@@ -116,11 +116,12 @@ def render():
         row('JPEG baseline 4:2:2', 'warm-coverage-quiet-evidence.json', ['cases', 'jpeg422', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
         row('JPEG baseline 4:4:4, owned input', 'warm-jpeg444owned-quiet-evidence.json', ['observations', -1], 'WARM-JPEG444-OWNED-QUIET.md', True),
         row('JPEG baseline 4:4:4, native input', 'warm-jpeg444canceldecode-evidence.json', ['regressions', 0], 'WARM-JPEG-CANCELABLE-DECODE.md', verification='Regression screen; prior confirmed'),
-        row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg444canceldecode-evidence.json', ['observations', -1], 'WARM-JPEG-CANCELABLE-DECODE.md', True),
+        row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpegprogressive444cancel-evidence.json', ['regressions', 1], 'WARM-JPEG-PROGRESSIVE-CANCELABLE444.md', verification='Regression screen; prior confirmed'),
         row('JPEG progressive gray', 'warm-jpegrefinement-evidence.json', ['observations', -1], 'WARM-JPEG-REFINEMENT.md', True),
         row('JPEG progressive 4:2:0', 'warm-jpegprogressive420-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE420.md', True),
+        row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpegprogressive444cancel-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE-CANCELABLE444.md', True),
         row('JPEG progressive 4:2:2', 'warm-jpegprogressive422-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE422.md', True),
-        row('JPEG progressive 4:4:4', 'warm-jpeg444canceldecode-evidence.json', ['regressions', 1], 'WARM-JPEG-CANCELABLE-DECODE.md', verification='Regression screen; prior confirmed'),
+        row('JPEG progressive 4:4:4', 'warm-jpegprogressive444cancel-evidence.json', ['regressions', 0], 'WARM-JPEG-PROGRESSIVE-CANCELABLE444.md', verification='Regression screen; prior confirmed'),
         row('WebP VP8 + alpha', 'warm-vp8-filter8-evidence.json', ['alphaBearingControl', 'observations', -1], 'WARM-VP8-FILTER8.md', True),
         row('WebP VP8, opaque', 'warm-vp8-filter8-evidence.json', ['observations', -1], 'WARM-VP8-FILTER8.md', True),
         row('WebP VP8L, literal/run input', 'warm-vp8ldecode-quiet-evidence.json', ['observations', -1], 'WARM-VP8L-DECODE-QUIET.md', True),
@@ -346,11 +347,12 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round cuts complete live-cancelable JPEG444 decoding by
-**26.0%**, confirming **1.767x / upper 1.780x** at **2,664,373 B/op**. Exact managed
-pixels and separate prefix/amplitude cancellation/work checks remain unchanged.
-Both OSes pass **3,349** Release tests, including **896** live comparisons, plus
-the same actual package's consumer and all three examples. Ordinary/progressive
+The latest accepted round confirms complete live-cancelable progressive JPEG444
+decoding at **1.935x / upper 1.940x**, with unchanged **2,682,364 B/op**. Selecting
+the original per-bit correction loop once removes repeated impossible batch setup,
+preserving exact pixels and every work/cancellation check. Both OSes pass **3,349**
+Release tests, including **896** live comparisons, plus the same actual package's
+consumer and all three examples. Ordinary progressive and cancelable baseline
 JPEG rows show current short regression screens and retain prior confirmations.
 
 PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples

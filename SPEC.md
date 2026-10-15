@@ -604,6 +604,10 @@ runs count only zero positions; grouped bits visit nonzero positions in spectral
 order while preserving insertion boundaries and signs. Each correction retains its original
 logical work charge. Cancellable tokens, incomplete entropy, tight work budgets
 and unsupported hardware retain scalar correction reads and failure precedence.
+Cancelable readers and processors without BMI2 select the per-bit masked
+correction loop once, avoiding repeated batch setup. Original bit reads, work,
+cancellation checkpoints and partial coefficient updates remain unchanged; no
+additional table or heap workspace is introduced.
 
 The JPEG encoder emits baseline Huffman JFIF with selectable grayscale, 4:4:4,
 4:2:2 or 4:2:0 sampling (default 4:2:0). Grayscale explicitly converts RGB to

@@ -991,3 +991,11 @@ regression means pass before full3,349-test-per-OS/live/same actual package
 qualification. Failed means, conservative bounds and launcher attempts remain
 retained. Stop this fixed pair; other material boundaries and final current-source
 coverage remain open.
+
+The [progressive cancelable JPEG444 round](WARM-JPEG-PROGRESSIVE-CANCELABLE444.md)
+closes a2.008x gap at1.935x / upper1.940x, with unchanged2,682,364 managed B/op.
+The existing per-bit masked correction loop is selected once when batching cannot
+succeed, preserving every bit read, work/cancellation check and partial update.
+Local progressive accounting was slower and remains rejected. Both shared
+regression means pass before full3,349-test-per-OS/live/same actual package
+qualification. Stop this fixed pair; full material/current-source parity stays open.
