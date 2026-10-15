@@ -180,7 +180,7 @@ def render():
         row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-geometric-evidence.json', ['observations', -1], 'WARM-JPEG-FIXED-GEOMETRIC.md', True),
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg420cancel16-evidence.json', ['regressions', 1], 'WARM-JPEG-FIXED-OCCUPANCY.md', verification='Regression screen; prior confirmed'),
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg420cancel16-evidence.json', ['observations', -1], 'WARM-JPEG-FIXED-OCCUPANCY.md', True),
-        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG-ADAPTIVE-HUFFMAN.md', True),
+        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-ac-planning-evidence.json', ['observations', 6], 'WARM-JPEG-AC-PLANNING.md', True),
         pending('JPEG grayscale, single component', 'WARM-COVERAGE.md', 'Unscored: native baseline unavailable'),
         row('WebP VP8, opaque‡', 'warm-vp8-encode-evidence.json', ['observations', -1], 'WARM-VP8-OPAQUE-ENCODE.md', True),
         row('WebP VP8, opaque from RGBA16‡', 'warm-vp8opaque16-evidence.json', ['observations', -1], 'WARM-VP8-OPAQUE-RGBA16.md', True),
@@ -396,6 +396,10 @@ width enlargement at **1.473x / upper1.499x**, **2,129,311 B/op**. No production
 or harness rebuild, profile, new fixture or repeated qualification is needed.
 All twelve actuals and both quiet guards are retained for each. Earlier
 near-2x results and the bicubic pre-guard refusal remain in linked evidence.
+The existing adaptive JPEG420 RGBA16 source pair subsequently confirms at
+**1.682x / upper1.697x**, **297,780 B/op**, including complete full-word alpha
+flattening/normalization. It reuses the same qualified core/harness/native worker
+and frozen packet, with no new selector, fixture, profile or repeated proofs.
 
 The preceding production round widens the local baseline JPEG AC bit
 cache, reducing a current-build **2.040x** RGB gap by **16.8%**, independently

@@ -13,6 +13,8 @@ warm parity remains open.
 | Independent twelve-actual confirmation | 2,886.13 | 1,604.33 | 1.799 / 1.809 | 297,780 | Confirmed |
 | Nonrestart adaptive regression, three actuals | 2,878.80 | 1,764.69 | 1.631 / 1.803 | 297,780 | Mean passes |
 | Nonrestart independent twelve | 2,881.90 | 1,763.43 | 1.634 / 1.641 | 297,780 | Confirmed |
+| RGBA16 source, three-actual screen | 3,039.42 | 1,841.93 | 1.650 / 1.793 | 297,780 | Screen |
+| RGBA16 source, independent twelve | 3,098.92 | 1,842.05 | 1.682 / 1.697 | 297,780 | Confirmed |
 
 The existing original 513×259 RGBA8 raster is encoded into a fresh MemoryStream,
 using adaptive Huffman tables, quality 69, background 0x204060 and restart 33 MCUs.
@@ -66,4 +68,14 @@ core/harness/native worker, retaining twelve actuals and selecting ten. Both
 guards pass. This closes its earlier1.943× result without another optimization,
 production rebuild, profile or suite/package proof. The raw confirmation also
 retains the unchanged ordinary JPEG worker, matching the short regression's
-worker/source/build hashes. Stop both confirmed JPEG pairs.
+worker/source/build hashes.
+
+The existing RGBA16 4:2:0 pair also confirms on the same qualified build, retaining
+twelve actuals and selecting eleven, with both guards passing. Complete full-word
+alpha flattening and normalization to byte samples are timed on both subjects.
+The original word raster and frozen quality69/native5 anchor are unchanged;
+the complete 74,056-byte managed packet remains SHA-256
+`ab163b4b8897668c5a2a4a4ac0869fabbe00704213e414943b1f5a33991b905d`.
+This is one existing word-source case, with no new selector, fixture, grid,
+production/harness/native rebuild, profile or repeated qualification. Stop all
+three confirmed JPEG pairs.

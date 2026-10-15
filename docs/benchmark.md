@@ -143,7 +143,7 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-GEOMETRIC.md) | 3,382.57 | 1,765.48 | 1.916 / 1.936 | 263,812 | Confirmed |
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-OCCUPANCY.md) | 3,057.46 | 1,835.63 | 1.666 / 1.973 | 263,820 | Regression screen; prior confirmed |
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-OCCUPANCY.md) | 3,031.41 | 1,835.85 | 1.651 / 1.663 | 263,788 | Confirmed |
-| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-ADAPTIVE-HUFFMAN.md) | 3,481.14 | 1,843.98 | 1.888 / 1.931 | 297,772 | Confirmed |
+| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-AC-PLANNING.md) | 3,098.92 | 1,842.05 | 1.682 / 1.697 | 297,780 | Confirmed |
 | [JPEG grayscale, single component](../benchmarks/WARM-COVERAGE.md) | — | — | — | — | Unscored: native baseline unavailable |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-OPAQUE-ENCODE.md) | 29,381.20 | 15,527.63 | 1.892 / 1.918 | 2,536,203 | Confirmed |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-OPAQUE-RGBA16.md) | 29,778.24 | 15,604.01 | 1.908 / 1.922 | 2,535,736 | Confirmed |
@@ -319,6 +319,10 @@ width enlargement at **1.473x / upper1.499x**, **2,129,311 B/op**. No production
 or harness rebuild, profile, new fixture or repeated qualification is needed.
 All twelve actuals and both quiet guards are retained for each. Earlier
 near-2x results and the bicubic pre-guard refusal remain in linked evidence.
+The existing adaptive JPEG420 RGBA16 source pair subsequently confirms at
+**1.682x / upper1.697x**, **297,780 B/op**, including complete full-word alpha
+flattening/normalization. It reuses the same qualified core/harness/native worker
+and frozen packet, with no new selector, fixture, profile or repeated proofs.
 
 The preceding production round widens the local baseline JPEG AC bit
 cache, reducing a current-build **2.040x** RGB gap by **16.8%**, independently
