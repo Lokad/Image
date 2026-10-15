@@ -291,6 +291,9 @@ reference checks per OS/mode and preserves both frozen pixel profiles. The
 [wider-window integration](../benchmarks/VP8-WINDOW-REJECTED.md) is also rejected:
 2.052x / upper 2.115x, unchanged 760,548 B/op. Production is restored;
 no arithmetic-reader speed gain is accepted.
+The [token-local reader trial](../benchmarks/VP8-TOKEN-LOCAL-REJECTED.md) is also
+rejected after a flat/slower three-actual screen; the qualified production DLL
+and source inventory are restored without a longer repeat or redundant full proof.
 JPEG444/422 RGBA8 and JPEG444/420 RGBA16 are confirmed with adaptive Huffman
 coding; remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove
