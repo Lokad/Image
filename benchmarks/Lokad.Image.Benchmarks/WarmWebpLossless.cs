@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmWebpLosslessCase { Encode8, Encode16 }
+public enum WarmWebpLosslessCase { Encode8, Encode16, EncodeOpaque8 }
 
 /// <summary>One complete VP8L encode on the existing original RGBA8/16 rasters.</summary>
 [MemoryDiagnoser]
@@ -15,12 +15,14 @@ public class WarmWebpLossless
     public static IEnumerable<WarmWebpLosslessCase> Cases => SelectedCases();
     [ParamsSource(nameof(Cases))] public WarmWebpLosslessCase Case { get; set; }
     private int Depth => Case == WarmWebpLosslessCase.Encode16 ? 16 : 8;
+    private bool Opaque => Case == WarmWebpLosslessCase.EncodeOpaque8;
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
     private ImageBuffer source = null!;
     private byte[] pixels = [], reference = [], managedEncoded = [], nativeEncoded = [];
     private NativeWarmSample[] before = [];
     private JsonElement sourceIdentity;
+    private string originalRasterSha256 = "";
     private bool smoke, ready;
     private int cpu, sampleCount;
     private readonly WebpEncodeOptions options = new() { Lossless = true, Effort = 4 };
@@ -30,7 +32,8 @@ public class WarmWebpLossless
         {
             null or "Encode8" => [WarmWebpLosslessCase.Encode8],
             "Encode16" => [WarmWebpLosslessCase.Encode16],
-            _ => throw new ArgumentException("Choose one lossless WebP encode case: Encode8 or Encode16.")
+            "EncodeOpaque8" => [WarmWebpLosslessCase.EncodeOpaque8],
+            _ => throw new ArgumentException("Choose one lossless WebP encode case: Encode8, Encode16 or EncodeOpaque8.")
         };
 
     private static byte[] Normalize16(byte[] pixels)
@@ -79,9 +82,12 @@ public class WarmWebpLossless
             using (var manifest = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/benchmark-source.json"))))
                 sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = manifest.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = manifest.RootElement.GetProperty("sourceRevision").GetString() });
             pixels = HorizontalFlipInput.Create(Depth);
-            reference = Depth == 8 ? pixels : Normalize16(pixels);
-            if (JpegBenchmarkCase.Hash(pixels) != (Depth == 8 ? "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80" : "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9"))
+            originalRasterSha256 = JpegBenchmarkCase.Hash(pixels);
+            if (originalRasterSha256 != (Depth == 8 ? "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80" : "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9"))
                 throw new InvalidOperationException("Original raster differs.");
+            if (Opaque)
+                for (var i = 3; i < pixels.Length; i += 4) pixels[i] = 255;
+            reference = Depth == 8 ? pixels : Normalize16(pixels);
             source = JpegBenchmarkCase.Buffer(pixels, 513, 259, Depth); File.WriteAllBytes(state.Input, pixels);
             ValidateManaged();
             native = new NativeWarmReference(state, Depth, cpu, "webp-lossless-encode", expectedRaw: Depth == 16 ? NormalizedInput(state.Root) : null, nativeQuality: 75);
@@ -167,6 +173,8 @@ public class WarmWebpLossless
                 cpu, managedAffinityCount = 1, processorCount = Environment.ProcessorCount, serverGc = GCSettings.IsServerGC,
                 gcConfiguration = GC.GetConfigurationVariables(), runtime = RuntimeInformation.FrameworkDescription, platform = RuntimeInformation.RuntimeIdentifier,
                 sourceIdentity, codec = "VP8L", lossless = true, effort = 4, nativeCompressionQuality = 75, nativeExactRgb = true, baselineBackend = "libwebp exact=1 (FFmpeg encoder backend)",
+                originalRasterSha256, sourceOpaque = Opaque,
+                rasterRecipe = Opaque ? "Existing original RGBA8 RGB unchanged; alpha set to255. One explicit opacity projection, no new original raster or setting grid." : "Existing original RGBA raster unchanged.",
                 inputSha256 = JpegBenchmarkCase.Hash(pixels), rasterSha256 = JpegBenchmarkCase.Hash(pixels), referenceSha256 = JpegBenchmarkCase.Hash(reference),
                 fullSourceNormalizationTimed = Depth == 16, normalizedReferenceExact = true,
                 managedOutputBytes = managedEncoded.Length, nativeOutputBytes = nativeEncoded.Length,
@@ -176,8 +184,19 @@ public class WarmWebpLossless
                 sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmWebpLossless).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = $"One resident original 513x259 RGBA{Depth} raster to complete independently owned VP8L. Public managed EncodeWebp, admission, fresh MemoryStream creation/growth and disposal; no redundant ToArray. Native libwebp exact=1 (FFmpeg encoder backend), lossless1, effort4, quality75 fixed compression control; Full channel normalization and RGBA-to-BGRA full-frame repacking inside every call, fresh pixel import/allocation, encode and independently owned packet acquisition/release. Codec/input/frame/packet wrappers and BGRA workspace reused; every pixel reprocessed. Exact RGBA/alpha/hidden RGB required. Equal pixels do not imply equal compression ratios; output sizes recorded. Startup, I/O, IPC, preparation, hashing and validation excluded. One CPU/codec/conversion thread, normal SIMD. No source/quality/effort/profile enumeration."
+                boundary = $"One resident original 513x259 RGBA{Depth} raster{(Opaque ? " with RGB unchanged and alpha255" : "")} to complete independently owned VP8L. Public managed EncodeWebp, admission, fresh MemoryStream creation/growth and disposal; no redundant ToArray. Native libwebp exact=1 (FFmpeg encoder backend), lossless1, effort4, quality75 fixed compression control; Full channel normalization and RGBA-to-BGRA full-frame repacking inside every call, fresh pixel import/allocation, encode and independently owned packet acquisition/release. Codec/input/frame/packet wrappers and BGRA workspace reused; every pixel reprocessed. Exact RGBA/alpha/hidden RGB required. Equal pixels do not imply equal compression ratios; output sizes recorded. Startup, I/O, IPC, preparation, hashing and validation excluded. One CPU/codec/conversion thread, normal SIMD. No source/quality/effort/profile enumeration."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
+            if (Opaque)
+            {
+                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", "webp-lossless-opaque8");
+                Directory.CreateDirectory(directory);
+                var input = Path.Combine(directory, "source.rgba");
+                if (File.Exists(input) && !File.ReadAllBytes(input).AsSpan().SequenceEqual(pixels))
+                    throw new InvalidOperationException("Frozen opaque source differs.");
+                File.WriteAllBytes(input, pixels);
+                File.WriteAllBytes(Path.Combine(directory, "managed.webp"), managedEncoded);
+                File.WriteAllBytes(Path.Combine(directory, "native.webp"), nativeEncoded);
+            }
         }
         finally { native?.Dispose(); source?.Dispose(); state?.Dispose(); ready = false; }
     }

@@ -175,6 +175,7 @@ def render():
         row('WebP VP8 + alpha‡', 'warm-vp8-encode-evidence.json', ['regressionControls', 0], 'WARM-VP8-OPAQUE-ENCODE.md', verification='Regression screen; prior confirmed'),
         row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8-encode-evidence.json', ['regressionControls', 1], 'WARM-VP8-OPAQUE-ENCODE.md', verification='Regression screen; prior confirmed'),
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
+        row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-opaque8-evidence.json', ['observations', -1], 'WARM-VP8L-OPAQUE8.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8lencode16-evidence.json', ['observations', -1], 'WARM-VP8L-RGBA16-ENCODE.md', True),
     ]
     edits = [
@@ -365,18 +366,18 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round confirms native-input VP8L decode with a live,
-never-signaled token at **1.906x / upper 1.919x**, with **1,216,180 B/op** and
-exact RGBA/alpha/hidden RGB. The original raster and frozen native packet are
-reused; token/source setup/disposal is excluded, while all public decoding and
-native state reset/conversion/owned output release remain timed. Pre-canceled
-rejection and token identity pass. All twelve actuals and both quiet guards pass
-on one immutable core/harness. Production is unchanged: existing **3,432 Release
-tests per OS**, including **898 live comparisons**, and the same actual package's
-consumer plus all three examples on Windows/Linux are reused. No production/native
-rebuild, full suite, package proof, method audit or profile is repeated.
+The latest accepted round confirms opaque-byte VP8L encoding at **0.102x /
+upper 0.103x** the explicitly approved **libwebp exact=1 (FFmpeg encoder backend)**,
+with **2,100,170 B/op**. Original RGB is unchanged and alpha becomes255; both
+packets decode to exact projected pixels. Managed/native output sizes are
+**533,100/121,896 bytes**: timing does not establish compression efficiency parity.
+All twelve actuals and both quiet guards pass on one immutable core/harness/native
+worker. Production is unchanged: existing **3,432 Release tests per OS**, including
+**898 live comparisons**, and the same actual package's consumer plus all three
+examples on Windows/Linux are reused. One harness build suffices; no production/
+native rebuild, full suite, package proof, method audit or profile is repeated.
 
-The subsequent palette8/tRNS Adam7 coverage check screens at **1.303x**, with
+The palette8/tRNS Adam7 coverage check screens at **1.303x**, with
 **4,960 B/op**, but remains **unconfirmed**. Its independent native baseline slows
 over sixfold despite identical inputs/binaries. The favorable ratio is unscored;
 bounded native-only and monitored diagnostics return to normal timing without

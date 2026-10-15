@@ -24,6 +24,14 @@ controls and one relevant composed boundary, not a duplicate matrix of timings.
 Fresh Stream boundaries remain distinct from resident-span results. The retained-two
 RGBA8 flip has its own complete two-owner boundary, normalized per image.
 
+The [opaque VP8L encode round](WARM-VP8L-OPAQUE8.md) independently confirms
+0.102x / upper0.103x against libwebp exact=1 (FFmpeg encoder backend), at
+2,100,170 B/op. It reuses original byte RGB with alpha255 and fixed effort4.
+Both packets decode exactly; managed/native sizes533,100/121,896 bytes do not
+establish compression efficiency parity. One harness build suffices and existing
+production qualification is reused. Stop this fixed pair; material unmatched
+layouts and public boundaries remain open.
+
 The [palette8/tRNS Adam7 screen](WARM-PNG-PALETTE8-ADAM7.md) measures 1.303x,
 upper2.651x, at 4,960 B/op, with exact analytical and normal/scalar native RGBA.
 Its independent confirmation remains open: native timing slows over sixfold on
