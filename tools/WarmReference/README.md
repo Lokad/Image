@@ -1281,6 +1281,11 @@ earlier in each big-endian row. Reuse the unchanged PNG native worker and frozen
 `png-sub-16` artifact; preparation checks exact normal/scalar samples and owners.
 See the [stride-eight reconstruction result](../../benchmarks/WARM-PNG-SUB16.md).
 
+RGBA16 Average decoding uses `-WarmFamily Png -WarmCases DecodeAverage16`, with
+the unchanged PNG worker. Original authoring subtracts floor((left+up)/2) using
+full big-endian words and an eight-byte pixel stride; sums retain nine bits.
+See the [word Average result](../../benchmarks/WARM-PNG-AVERAGE16.md).
+
 Forward-only JPEG444 uses `LOKAD_IMAGE_JPEG_ENTROPY=fixed-geometric-v1`,
 `--prepare-warm-jpeg444-stream 0`, then
 `-WarmFamily Jpeg -WarmCases Encode444Stream8`. The existing JPEG native worker

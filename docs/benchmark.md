@@ -52,6 +52,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA8, Sub](../benchmarks/WARM-PNG-SUB16.md) | 1,328.83 | 673.42 | 1.973 / 2.211 | 4,456 | Regression screen; prior confirmed |
 | [PNG RGBA16, Sub](../benchmarks/WARM-PNG-SUB16.md) | 357.99 | 743.02 | 0.482 / 0.493 | 8,552 | Confirmed |
 | [PNG RGBA8, Average](../benchmarks/WARM-PNG-AVERAGE8-BASELINE.md) | 3,137.74 | 1,841.23 | 1.704 / 1.743 | 12,976 | Confirmed |
+| [PNG RGBA16, Average](../benchmarks/WARM-PNG-AVERAGE16.md) | 5,894.17 | 4,384.37 | 1.344 / 1.357 | 8,552 | Confirmed |
 | [PNG RGBA16, Paeth](../benchmarks/WARM-PNG-SUB16.md) | 5,749.92 | 5,769.74 | 0.997 / 1.264 | 8,552 | Regression screen; prior confirmed |
 | [PNG RGBA16, Adam7](../benchmarks/WARM-PNG-SCATTER.md) | 6,567.82 | 3,984.54 | 1.648 / 1.700 | 2,024,532 | Confirmed |
 | [PNG RGB16, None](../benchmarks/WARM-PNG-RGB16-CURRENT.md) | 4,020.98 | 2,210.00 | 1.819 / 1.823 | 15,024 | Confirmed |
@@ -272,14 +273,15 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round reduces complete PNG16 Sub decoding by **76.5%**,
-from2.052x to **0.482x / upper 0.493x**, at unchanged **8,552 B/op**. Safe Vector128
-byte-prefix sums preserve exact words, alpha/hidden RGB, cancellation and failure
-state. Both OSes pass **3,383** Release tests, including **898** live comparisons,
-plus the same actual package's consumer and all three examples. Byte-Sub and
-word-Paeth rows show current regression screens and retain prior confirmations.
-The initial Windows default-tiering writer-allocation failure is retained in the
-linked report; its focused retry and full stable-JIT qualification pass.
+The latest accepted round confirms complete PNG16 Average decoding at
+**1.344x / upper 1.357x**, with **8,552 B/op** and exact words/alpha/hidden RGB.
+Production and the native worker are unchanged. Existing **3,383** Release tests
+per OS, including **898** live comparisons, and the same actual package's consumer
+plus all three examples are reused. No production rebuild, profile or full
+qualification repeat is needed. The prior PNG16 Sub improvement remains confirmed
+at0.482x / upper0.493x; byte-Sub and word-Paeth retain their current regression
+screens and prior confirmations. Its linked report preserves the initial Windows
+allocation failure and subsequent focused/full stable-JIT passes.
 PNG16 Fastest remains confirmed at0.787x / upper0.791x after safe entropy recoding;
 its caller/cancelable/constrained policies need separate coverage. Ordinary PNG8/16
 rows show current short regression screens and retain prior confirmations.
