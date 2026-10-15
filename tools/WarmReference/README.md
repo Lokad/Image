@@ -1294,6 +1294,12 @@ and managed row packing/output work repeat every operation. The live token is
 never signaled and setup stays outside timing. See the
 [streaming result](../../benchmarks/WARM-PNG-FAST2.md).
 
+Forward-only RGBA16 Fastest output uses `-WarmFamily Png -WarmCases EncodeFastForward16`.
+The fresh caller wrapper exposes no length/position/seek and includes callback
+dispatch and disposal inside each operation; validation checks the frozen stock
+packet exactly. Reuse current production/native binaries and qualification.
+See the [forward-only result](../../benchmarks/WARM-PNG-FAST-FORWARD16.md).
+
 Forward-only JPEG444 uses `LOKAD_IMAGE_JPEG_ENTROPY=fixed-geometric-v1`,
 `--prepare-warm-jpeg444-stream 0`, then
 `-WarmFamily Jpeg -WarmCases Encode444Stream8`. The existing JPEG native worker

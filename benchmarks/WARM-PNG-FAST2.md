@@ -32,7 +32,8 @@ admitted tight budgets use the same packet policy. Source/row/64KiB IDAT/1MiB BC
 admission, logical row work, grouped cancellation and caller lifetime remain.
 Tests preserve quota/failure prefixes relative to the selected packet policy,
 caller exception identity, nonexpandable output and cancellation from callbacks.
-Forward-only output is pixel/packet-correct; its separate timing remains open.
+Forward-only output is pixel/packet-correct; the subsequent
+[caller-output round](WARM-PNG-FAST-FORWARD16.md) confirms0.771x / upper0.805x.
 
 Both subjects time complete original pixels to independent PNG output: endian
 packing, compression, CRCs, output acquisition and release. Native wrappers and
@@ -59,3 +60,8 @@ immutable production/harness is reused throughout scored runs and qualification.
 The [original refusal](WARM-PNG-FAST16-REFUSAL.md) and
 [retired recoder](WARM-PNG-FAST16-RECODE.md) remain historical evidence. Stop these
 two confirmed pairs; remaining material boundaries and unmatched policies stay open.
+
+Receipt-text erratum: the legacy generic boundary sentence “Both level1” was
+incorrect for this policy. Explicit numeric fields and preparation validation
+already enforce managed2/native1, as stated throughout this report. Raw receipts
+and their hashes remain unchanged; subsequent harness text is corrected.
