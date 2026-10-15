@@ -2,7 +2,7 @@ using System.Buffers.Binary;
 using System.IO.Compression;
 
 // Original fixture authoring, PNG sections 7/9/11, https://www.w3.org/TR/png-3/.
-// One existing raster projected to packed opaque gray1/2/4; no geometry/effort sweep.
+// One existing raster projected to packed gray1/2/4; no geometry/effort sweep.
 internal static class WarmPngMonoInput
 {
     internal static void Project(Span<byte> pixels, int depth = 1)
@@ -17,11 +17,11 @@ internal static class WarmPngMonoInput
         }
     }
 
-    internal static byte[] Build(ReadOnlySpan<byte> pixels, int depth = 1)
+    internal static byte[] Build(ReadOnlySpan<byte> pixels, int depth = 1, bool transparentZero = false)
     {
         if (depth is not (1 or 2 or 4)) throw new ArgumentOutOfRangeException(nameof(depth));
         const int width = HorizontalFlipInput.Width, height = HorizontalFlipInput.Height;
-        if (pixels.Length != width * height * 4) throw new ArgumentException("Expected projected opaque gray pixels.");
+        if (pixels.Length != width * height * 4) throw new ArgumentException("Expected projected gray pixels.");
         var maximum = (1 << depth) - 1; var scale = 255 / maximum;
         using var compressed = new MemoryStream(); var row = new byte[(width * depth + 7) / 8];
         using (var zlib = new ZLibStream(compressed, CompressionLevel.Optimal, leaveOpen: true))
@@ -33,7 +33,7 @@ internal static class WarmPngMonoInput
                 {
                     var offset = (y * width + x) * 4; var gray = pixels[offset];
                     if (gray % scale != 0 || pixels[offset + 1] != gray || pixels[offset + 2] != gray
-                        || pixels[offset + 3] != 255) throw new ArgumentException("Packed gray projection differs.");
+                        || pixels[offset + 3] != (transparentZero && gray == 0 ? 0 : 255)) throw new ArgumentException("Packed gray projection differs.");
                     row[x * depth / 8] |= (byte)((gray / scale) << (8 - depth - x * depth % 8));
                 }
                 zlib.WriteByte(0); zlib.Write(row);
@@ -43,6 +43,7 @@ internal static class WarmPngMonoInput
         var header = new byte[13]; BinaryPrimitives.WriteInt32BigEndian(header, width);
         BinaryPrimitives.WriteInt32BigEndian(header.AsSpan(4), height); header[8] = (byte)depth;
         WarmPngAdam7Input.Chunk(output, "IHDR"u8, header);
+        if (transparentZero) WarmPngAdam7Input.Chunk(output, "tRNS"u8, new byte[2]);
         WarmPngAdam7Input.Chunk(output, "IDAT"u8, compressed.ToArray()); WarmPngAdam7Input.Chunk(output, "IEND"u8, []);
         return output.ToArray();
     }

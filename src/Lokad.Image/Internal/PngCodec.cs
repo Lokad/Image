@@ -321,6 +321,12 @@ internal static class PngCodec
                         var offset = (startY + y * stepY) * result.Stride + startX * 4;
                         CopyPackedGrayRow(row, result.Pixels.Slice(offset, width * 4), width, header.Depth, context.Cancellation);
                     }
+                    else if (header.ColorType == 0 && header.Depth < 8 && stepX == 1 && header.Transparency.Length == 2)
+                    {
+                        var offset = (startY + y * stepY) * result.Stride + startX * 4;
+                        CopyPackedGrayTransparentRow(row, result.Pixels.Slice(offset, width * 4), width, header.Depth,
+                            BinaryPrimitives.ReadUInt16BigEndian(header.Transparency), context.Cancellation);
+                    }
                     else if (header.ColorType == 0 && header.Depth == 8 && stepX == 1 && header.Transparency.Length == 0)
                     {
                         var offset = (startY + y * stepY) * result.Stride + startX * 4;
@@ -450,6 +456,39 @@ internal static class PngCodec
             if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
             var sample = Sample(row, x, depth); var gray = (uint)sample * (255 / maximum);
             BinaryPrimitives.WriteUInt32LittleEndian(destination[(x * 4)..], gray * 0x00010101u | 0xff000000u);
+        }
+    }
+
+    internal static void CopyPackedGrayTransparentRow(ReadOnlySpan<byte> row, Span<byte> destination,
+        int pixels, int depth, ushort transparentKey, CancellationToken cancellation)
+    {
+        // PNG sections 7.3/11.3.2.1: compare the unscaled packed sample to the
+        // complete two-byte key. Out-of-range keys never match; retain hidden RGB.
+        var maximum = (1u << depth) - 1; var x = 0;
+        if (Avx2.IsSupported && BitConverter.IsLittleEndian)
+        {
+            var shifts = Avx2.MultiplyLow(Vector256.Create(7u, 6, 5, 4, 3, 2, 1, 0), Vector256.Create((uint)depth));
+            var mask = Vector256.Create(maximum);
+            var replicate = Vector256.Create(255 / maximum * 0x00010101u);
+            var opaque = Vector256.Create(0xff000000u);
+            var key = Vector256.Create((uint)transparentKey);
+            for (; x <= pixels - 8; x += 8)
+            {
+                if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+                var input = row[(x * depth / 8)..];
+                var packed = depth == 1 ? input[0] : depth == 2 ? BinaryPrimitives.ReadUInt16BigEndian(input)
+                    : BinaryPrimitives.ReadUInt32BigEndian(input);
+                var samples = Avx2.ShiftRightLogicalVariable(Vector256.Create(packed), shifts) & mask;
+                var alpha = Avx2.AndNot(Avx2.CompareEqual(samples, key), opaque);
+                (Avx2.MultiplyLow(samples, replicate) | alpha).AsByte().CopyTo(destination[(x * 4)..]);
+            }
+        }
+        for (; x < pixels; x++)
+        {
+            if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+            var sample = Sample(row, x, depth); var gray = (uint)sample * (255 / maximum);
+            var alpha = sample == transparentKey ? 0u : 0xff000000u;
+            BinaryPrimitives.WriteUInt32LittleEndian(destination[(x * 4)..], gray * 0x00010101u | alpha);
         }
     }
 

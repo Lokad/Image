@@ -117,6 +117,8 @@ def render():
         row('PNG palette2 + tRNS → RGBA8, None', 'warm-pngpalette2-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE2-ROW.md', True),
         row('PNG palette1 + tRNS → RGBA8, None', 'warm-pngpalette1-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE1-ROW.md', True),
         row('PNG opaque gray1 → RGBA8, None', 'warm-pnggray1-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-ROW.md', True),
+        row('PNG gray2 + tRNS key0 → RGBA8, None', 'warm-png-packed-transparency-evidence.json', ['observations', -1], 'WARM-PNG-PACKED-TRANSPARENCY.md', True),
+        pending('PNG gray1/key1 and gray2/key1, unfiltered native', 'WARM-PNG-PACKED-TRANSPARENCY.md', 'Unscored: native alpha differs'),
         row('PNG opaque gray2 → RGBA8, None', 'warm-pnggray2-current-evidence.json', ['observations', -1], 'WARM-PNG-GRAY2-CURRENT.md', True),
         row('PNG opaque gray4 → RGBA8, None', 'warm-pnggray4-reuse-evidence.json', ['observations', -1], 'WARM-PNG-GRAY4-REUSE.md', True),
         row('JPEG baseline gray', 'warm-jpegac-fused-evidence.json', ['regressionControl', 'observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
@@ -359,16 +361,16 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round confirms forward-only PNG16 Fastest output at
-**0.771x / upper 0.805x**, with **2,103,770 B/op**. Fresh wrapper/callback/output
-lifetime and all codec work are timed; the complete packet equals stock output.
-Managed BCL level2/native level1 are explicit, with exact pixels and the unchanged
-5% IDAT-size gate. Production/native workers are unchanged: existing **3,373**
-Release tests per OS, including **898** live comparisons, and the same actual
-package's consumer plus all three examples are reused. Stock/live-cancelable
-Fastest retain their separate confirmations; other PNG rows retain current
-regression screens and prior confirmations. Historical refusals/recoder results,
-preparation failures and descriptive errata remain linked.
+The latest accepted round removes a packed grayscale PNG transparency gap:
+**4.813x → 0.144x / upper 0.145x**, with unchanged **648 B/op**. Direct safe
+packed-row expansion preserves full unscaled tRNS key comparison, hidden RGB,
+cancellation and admission. The original gray2 projection/key0 is exact through
+unfiltered FFmpeg; gray1/key1 and gray2/key1 raw alpha refusals remain unscored.
+The existing SPEC color-key correction is available for separate nonzero-key
+reference timings. The opaque regression mean passes. Full **3,428 Release tests
+per OS**, including **898 live comparisons**, and the same actual package's
+consumer plus all three examples on Windows/Linux pass. All twelve confirmation
+actuals, both guards, profile, refusals and qualification remain retained.
 
 PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples
 and the unchanged 5% IDAT-size gate; earlier level6/level6 refusals remain unscored.

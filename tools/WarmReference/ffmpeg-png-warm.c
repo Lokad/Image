@@ -400,7 +400,12 @@ int main(int argc, char **argv)
                 uint32_t length = big32(work.encoded+offset);
                 if ((uint64_t)length+12 > work.encoded_bytes-offset) fail("PNG chunk exceeds input.");
                 if (!memcmp(work.encoded+offset+4,"tRNS",4)) {
-                    if (length != 2 || work.gray_transparency || work.coded_depth < 8) fail("Gray tRNS worker requires one two-byte key and gray8/16.");
+                    if (length != 2 || work.gray_transparency) fail("Gray tRNS worker requires one two-byte key.");
+                    /* The pinned decoder rejects gray1 tRNS and compares expanded
+                     * gray2/4 samples to the unscaled key. Admit only the exact
+                     * gray2/key0 packed case verified against normal/scalar CLI. */
+                    if (work.coded_depth < 8 && (work.coded_depth != 2 || work.encoded[offset+8] || work.encoded[offset+9]))
+                        fail("Packed gray tRNS reference currently admits only gray2/key0.");
                     work.gray_transparency = 1;
                 }
                 offset += (size_t)length+12;
