@@ -1283,3 +1283,8 @@ word-order conversion and independent encoded packet acquisition/release. Their
 separate identities preserve existing PNG workers. `EncodeFast16` currently
 fails the unchanged IDAT-size comparison gate and is unscored;
 `EncodeNoCompression16` requires stored-only Deflate and exact full-word samples.
+
+`DecodeNoCompression16` reuses the frozen stored-Deflate RGBA16 packet and the
+existing `ffmpeg-png-warm` decoder. Complete BE-to-LE conversion and both native
+frame acquisitions/releases are timed; no new raster, compression setting or
+native worker is introduced.
