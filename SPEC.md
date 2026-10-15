@@ -620,6 +620,12 @@ historical quality reports remain unchanged and current decoded samples must
 match them exactly. Encoding retains the same source-plus-8192-byte admission
 and logical work/callback/failure ordering. Prevalidated canonical codewords skip
 repeated range validation; dynamic amplitudes retain their original checks.
+On AVX2/BMI2 x64, fixed-block emission builds a nonzero occupancy mask with eight
+row comparisons and bit deposits into the standard zigzag positions. It visits
+only nonzero AC coefficients, retaining ZRL/EOB, amplitudes, ordered work charges,
+callbacks and partial-failure state exactly. Eight row masks are generated from
+the independent zigzag construction; they are shared format state, not image
+storage. Other processors retain the scalar traversal. No workspace is added.
 Decoding a new table with nine/ten-bit codes uses the existing additional 2 KiB
 prefix lookup; original short-table input admission is unchanged.
 The forward transform evaluates independent coefficients with safe AVX/AVX-512

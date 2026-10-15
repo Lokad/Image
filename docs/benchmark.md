@@ -102,14 +102,15 @@ timing comparison; compression efficiency parity is not established.
 | [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ENCODE.md) | 9,316.78 | 10,318.59 | 0.903 / 0.915 | 1,052,368 | Confirmed |
 | [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG444-RGBA8-ADAPTIVE.md) | 6,705.88 | 3,783.34 | 1.772 / 1.818 | 559,384 | Confirmed |
 | [JPEG 4:4:4, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG444-FORWARD.md) | 6,613.11 | 3,770.32 | 1.754 / 1.765 | 526,051 | Confirmed |
-| [JPEG 4:4:4, live cancelable token / geometric AC Huffman](../benchmarks/WARM-JPEG444-CANCELABLE.md) | 6,899.40 | 3,793.93 | 1.819 / 1.879 | 526,019 | Confirmed |
+| [JPEG 4:4:4, live cancelable token / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-OCCUPANCY.md) | 5,635.05 | 3,766.56 | 1.496 / 1.700 | 526,075 | Regression screen; prior confirmed |
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG444-RGBA16-ADAPTIVE.md) | 6,767.17 | 3,851.77 | 1.757 / 1.790 | 556,280 | Confirmed |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG422-RGBA8-ADAPTIVE.md) | 4,277.49 | 2,349.58 | 1.821 / 1.862 | 294,110 | Confirmed |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG422-RGBA16.md) | 4,538.42 | 2,422.35 | 1.874 / 1.884 | 294,110 | Confirmed |
 | [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG420-CHROMA-PAIR.md) | 3,434.93 | 1,767.46 | 1.943 / 1.988 | 297,772 | Confirmed |
 | [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-ADMITTED.md) | 3,157.50 | 1,612.58 | 1.958 / 1.973 | 297,780 | Confirmed |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-GEOMETRIC.md) | 3,382.57 | 1,765.48 | 1.916 / 1.936 | 263,812 | Confirmed |
-| [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FORWARD-RGBA16.md) | 3,572.45 | 1,833.91 | 1.948 / 1.954 | 263,812 | Confirmed |
+| [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-OCCUPANCY.md) | 3,057.46 | 1,835.63 | 1.666 / 1.973 | 263,820 | Regression screen; prior confirmed |
+| [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-OCCUPANCY.md) | 3,031.41 | 1,835.85 | 1.651 / 1.663 | 263,788 | Confirmed |
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-ADAPTIVE-HUFFMAN.md) | 3,481.14 | 1,843.98 | 1.888 / 1.931 | 297,772 | Confirmed |
 | [JPEG grayscale, single component](../benchmarks/WARM-COVERAGE.md) | — | — | — | — | Unscored: native baseline unavailable |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-OPAQUE-ENCODE.md) | 29,381.20 | 15,527.63 | 1.892 / 1.918 | 2,536,203 | Confirmed |

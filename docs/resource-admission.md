@@ -14,6 +14,14 @@ encoding still admits the source plus 8192 bytes before output. New geometric
 tables containing nine/ten-bit codes incur the decoder's existing additional
 2048-byte prefix charge; original short-table inputs retain their old boundary.
 
+Fixed JPEG emission on AVX2/BMI2 x64 may enumerate only nonzero coefficients from
+an occupancy bitmap. Eight shared 64-bit row masks are generated from the
+independent zigzag construction and are format metadata, not per-image storage.
+Eight safe vector comparisons and bit deposits replace the scalar coefficient
+scan; no heap workspace is added. DC, ZRL/EOB, amplitude, work, quota, callback
+and cancellation/failure ordering remain unchanged. The scalar traversal remains
+the fallback and independent reference in `JpegFixedOccupancyTests`.
+
 Complete-overwrite image operations may reuse two released exact-size pixel
 arrays, with a combined global idle-storage ceiling of 4 MiB. A short lock
 protects both slots and their byte ceiling; a size miss discards idle entries.

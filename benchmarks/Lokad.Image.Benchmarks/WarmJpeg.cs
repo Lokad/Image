@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegCase { Encode8, Encode420_8, Encode422_8, Encode16, Encode420_16, Encode420Stream8, Encode420Stream16, Encode422_16, Encode420Restart8, Encode444Stream8, Encode444Cancelable8 }
+public enum WarmJpegCase { Encode8, Encode420_8, Encode422_8, Encode16, Encode420_16, Encode420Stream8, Encode420Stream16, Encode422_16, Encode420Restart8, Encode444Stream8, Encode444Cancelable8, Encode420Cancelable16 }
 
 internal sealed record WarmJpegPreparation(int SchemaVersion, string Project, string GeneratedUtc, string Recipe,
     string RasterSha256, string ReferenceSha256, int NativeQuality, uint BackgroundRgb, string NativeFile, string ManagedFile,
@@ -20,14 +20,14 @@ public class WarmJpeg
     public static IEnumerable<WarmJpegCase> Cases => SelectedCases();
     [ParamsSource(nameof(Cases))] public WarmJpegCase Case { get; set; }
     private const uint Background = 0x204060;
-    private bool Source16 => Case is WarmJpegCase.Encode422_16 or WarmJpegCase.Encode16 or WarmJpegCase.Encode420_16 or WarmJpegCase.Encode420Stream16;
+    private bool Source16 => Case is WarmJpegCase.Encode420Cancelable16 or WarmJpegCase.Encode422_16 or WarmJpegCase.Encode16 or WarmJpegCase.Encode420_16 or WarmJpegCase.Encode420Stream16;
     private int Depth => Source16 ? 16 : 8;
-    private bool Cancelable => Case == WarmJpegCase.Encode444Cancelable8;
+    private bool Cancelable => Case is WarmJpegCase.Encode444Cancelable8 or WarmJpegCase.Encode420Cancelable16;
     private bool FixedAnchor => Cancelable || ForwardOnly || Subsampled || Source16 || AdaptiveEntropy;
     private bool Horizontal => Case is WarmJpegCase.Encode422_8 or WarmJpegCase.Encode422_16;
     private bool Restart => Case == WarmJpegCase.Encode420Restart8;
     private bool ForwardOnly => Case is WarmJpegCase.Encode420Stream8 or WarmJpegCase.Encode420Stream16 or WarmJpegCase.Encode444Stream8;
-    private bool Subsampled => Case is WarmJpegCase.Encode420Restart8 or WarmJpegCase.Encode422_16 or WarmJpegCase.Encode420_8 or WarmJpegCase.Encode422_8 or WarmJpegCase.Encode420_16 or WarmJpegCase.Encode420Stream8 or WarmJpegCase.Encode420Stream16;
+    private bool Subsampled => Case is WarmJpegCase.Encode420Cancelable16 or WarmJpegCase.Encode420Restart8 or WarmJpegCase.Encode422_16 or WarmJpegCase.Encode420_8 or WarmJpegCase.Encode422_8 or WarmJpegCase.Encode420_16 or WarmJpegCase.Encode420Stream8 or WarmJpegCase.Encode420Stream16;
     private string NativeSampling => Horizontal ? "422" : Subsampled ? "420" : "444";
     private string DisplaySampling => Horizontal ? "4:2:2" : Subsampled ? "4:2:0" : "4:4:4";
     private string FixedPolicy => Restart ? FixedRestartPolicy : Source16 ? (Horizontal ? Fixed42216Policy : Subsampled ? Fixed42016Policy : Fixed16Policy)
@@ -100,7 +100,8 @@ public class WarmJpeg
             "Encode420Stream16" when !AdaptiveEntropy => [WarmJpegCase.Encode420Stream16],
             "Encode444Stream8" when !AdaptiveEntropy => [WarmJpegCase.Encode444Stream8],
             "Encode444Cancelable8" when !AdaptiveEntropy => [WarmJpegCase.Encode444Cancelable8],
-            _ => throw new ArgumentException("Choose one JPEG case: Encode8, Encode16, Encode420_8, Encode422_8, Encode422_16, Encode420Restart8 (adaptive-v1), Encode420_16, Encode420Stream8, Encode420Stream16 or Encode444Stream8/Encode444Cancelable8 (fixed-geometric-v1 policy).")
+            "Encode420Cancelable16" when !AdaptiveEntropy => [WarmJpegCase.Encode420Cancelable16],
+            _ => throw new ArgumentException("Choose one JPEG case: Encode8, Encode16, Encode420_8, Encode422_8, Encode422_16, Encode420Restart8 (adaptive-v1), Encode420_16, Encode420Stream8, Encode420Stream16 or Encode444Stream8/Encode444Cancelable8/Encode420Cancelable16 (fixed-geometric-v1 policy).")
         };
     }
 
@@ -209,7 +210,7 @@ public class WarmJpeg
     public void Setup()
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Warm native JPEG requires Linux.");
-        if ((ForwardOnly || Cancelable) && Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") != "fixed-geometric-v1") throw new InvalidOperationException("Forward-only output retains the fixed geometric AC Huffman path.");
+        if ((ForwardOnly || Cancelable) && Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") != "fixed-geometric-v1") throw new InvalidOperationException("The selected output boundary requires the fixed geometric AC Huffman policy.");
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -227,7 +228,7 @@ public class WarmJpeg
                 MatchFile(Subsampled, Horizontal, Depth, ForwardOnly || Cancelable, Restart));
             prepared = JsonSerializer.Deserialize<WarmJpegPreparation>(File.ReadAllText(path), EncoderQualityCalibration.Json)
                 ?? throw new InvalidOperationException("Missing warm JPEG preparation; run --prepare-warm-jpeg first.");
-            if (prepared.SchemaVersion != 1 || prepared.Project != "Lokad.Image" || prepared.Recipe != (Cancelable ? RecipeFor(false, false, 8, forwardOnly: true) : Recipe) || prepared.BackgroundRgb != Background || prepared.SourceDepth != Depth
+            if (prepared.SchemaVersion != 1 || prepared.Project != "Lokad.Image" || prepared.Recipe != (Cancelable ? RecipeFor(Subsampled, Horizontal, Depth, forwardOnly: true) : Recipe) || prepared.BackgroundRgb != Background || prepared.SourceDepth != Depth
                 || !prepared.Match.Matched || prepared.Match.PsnrGapDb is not (>= 0 and <= EncoderQualityCalibration.MaximumPsnrGapDb)
                 || (!FixedAnchor && prepared.OwnedSettings.Length is < 5 or > EncoderQualityCalibration.MaximumOwnedSettings)
                 || (FixedAnchor && (prepared.Sampling != NativeSampling || prepared.QualityPolicy != FixedPolicy
@@ -291,7 +292,7 @@ public class WarmJpeg
             || !EncoderQualityCalibration.Match(nativeQuality, [managedQuality]).Matched)
             throw new InvalidOperationException("Warm JPEG source/decoder quality changed; prepare this pair again.");
         if (Restart) ValidateRestartPixels(state.Root, managedQuality, nativeQuality);
-        if (Case == WarmJpegCase.Encode444Stream8 || Cancelable) ValidateForward444Pixels(state.Root, managedQuality, nativeQuality);
+        if (Case is WarmJpegCase.Encode444Stream8 or WarmJpegCase.Encode444Cancelable8) ValidateForward444Pixels(state.Root, managedQuality, nativeQuality);
     }
 
     private static void ValidateForward444Pixels(string root, QualitySample managed, QualitySample native)
@@ -429,7 +430,7 @@ public class WarmJpeg
                 cancellationCanBeCanceled = encodeCancellation.CanBeCanceled, cancellationRequested = encodeCancellation.IsCancellationRequested,
                 alreadyCanceledRejectedWithoutOutput = Cancelable ? true : (bool?)null,
                 frozenForwardOnlyPacketExact = Cancelable ? true : (bool?)null,
-                coefficientAnchorEvidence = Cancelable ? "warm-jpeg444stream-evidence.json" : null,
+                coefficientAnchorEvidence = Cancelable ? Source16 ? "warm-jpeg-stream16-evidence.json" : "warm-jpeg444stream-evidence.json" : null,
                 cancellationBoundary = Cancelable ? "Live cancelable token, never signaled; token/source setup/disposal outside timing. Native has no equivalent cancellation setting; complete flatten/conversion/encode/owned output release remain timed." : null,
                 backgroundRgb = Background, managedHuffman = AdaptiveEntropy ? "adaptive-v1" : "fixed-geometric-v1", privateEntropyWorkspaceReused = AdaptiveEntropy, qualityMatched = true, fullSourceNormalizationTimed = Source16, normalizedReferenceExact = true, alphaExact = true, decoderAgreementWithinBounds = true,
                 psnrGapDb = prepared.Match.PsnrGapDb, maximumPsnrGapDb = EncoderQualityCalibration.MaximumPsnrGapDb,

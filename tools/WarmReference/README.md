@@ -1327,3 +1327,11 @@ is excluded, while complete flatten/conversion/encode/fresh output release is
 included. Already-canceled rejection must leave the output empty. Native exposes
 no equivalent cancellation setting. See the
 [confirmed result](../../benchmarks/WARM-JPEG444-CANCELABLE.md).
+
+`WarmJpeg.Encode420Cancelable16` reuses the frozen word forward-only anchor and
+native JPEG worker with `fixed-geometric-v1`. Source word alpha normalization is
+timed on both subjects. Token/source setup/disposal is outside timing; a live
+token is never signaled. Every managed packet byte, registered decoder pixel and
+source error must equal the existing anchor; no quality sweep is repeated.
+Native exposes no cancellation setting. See the
+[fixed entropy result](../../benchmarks/WARM-JPEG-FIXED-OCCUPANCY.md).

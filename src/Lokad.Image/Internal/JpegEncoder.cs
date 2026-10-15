@@ -152,12 +152,41 @@ internal static class JpegEncoder
         writer.Align(); context.Cancellation.ThrowIfCancellationRequested(); output.Write(new byte[] { 255, 217 });
     }
 
-    private static void WriteFixedBlock(ReadOnlySpan<int> quantized, ref int predictor, JpegEntropyWriter writer, uint[] words)
+    internal static void WriteFixedBlock(ReadOnlySpan<int> quantized, ref int predictor, JpegEntropyWriter writer, uint[] words)
     {
         var difference = quantized[0] - predictor; predictor = quantized[0];
         var category = Category(difference);
         if (category > 11) throw new ImageDataException("JPEG DC transform exceeds its coding range.");
         writer.WriteCodeword((uint)(4 << 16 | category)); writer.Signed(difference, category);
+        if (Avx2.IsSupported && Bmi2.X64.IsSupported)
+        {
+            // T.81's zigzag visits each raster row in increasing column order.
+            // Deposit its eight nonzero flags into their scan positions. This
+            // skips zero coefficients without gathering or reordering samples.
+            ulong occupied = 0;
+            var masks = FixedScanMasks.Rows;
+            for (var row = 0; row < 8; row++)
+            {
+                var values = Vector256.Create(quantized.Slice(row * 8, 8));
+                var nonzero = ~Vector256.ExtractMostSignificantBits(Vector256.Equals(values, Vector256<int>.Zero)) & 255;
+                occupied |= Bmi2.X64.ParallelBitDeposit(nonzero, masks[row]);
+            }
+            occupied &= ~1UL; // DC was emitted above.
+            var previous = 0;
+            while (occupied != 0)
+            {
+                var index = BitOperations.TrailingZeroCount(occupied);
+                var zerosBefore = index - previous - 1;
+                while (zerosBefore >= 16) { writer.WriteCodeword(words[0xF0]); zerosBefore -= 16; }
+                var value = quantized[JpegTransform.Zigzag[index]];
+                category = Category(value);
+                if (category > 10) throw new ImageDataException("JPEG AC transform exceeds its coding range.");
+                writer.WriteCodeword(words[zerosBefore << 4 | category]); writer.Signed(value, category);
+                previous = index; occupied &= occupied - 1;
+            }
+            if (previous != 63) writer.WriteCodeword(words[0]);
+            return;
+        }
         var zeros = 0;
         for (var i = 1; i < 64; i++)
         {
@@ -171,6 +200,19 @@ internal static class JpegEncoder
             writer.WriteCodeword(codeword); writer.Signed(value, category); zeros = 0;
         }
         if (zeros != 0) { var word = words[0]; writer.WriteCodeword(word); }
+    }
+
+    private static class FixedScanMasks
+    {
+        // Generated from the independently constructed T.81 zigzag, not an
+        // implementation table. Eight format constants, no per-image storage.
+        internal static readonly ulong[] Rows = Build();
+        private static ulong[] Build()
+        {
+            var rows = new ulong[8];
+            for (var scan = 0; scan < 64; scan++) rows[JpegTransform.Zigzag[scan] / 8] |= 1UL << scan;
+            return rows;
+        }
     }
 
     private static bool CanUseAdaptive(ImageBuffer image, Stream output, JpegEncodeOptions options, OperationContext context)
