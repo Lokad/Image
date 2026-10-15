@@ -35,6 +35,7 @@ timing comparison; compression efficiency parity is not established.
 | --- | ---: | ---: | ---: | ---: | --- |
 | [PNG8 Stream, orient/crop/nearest fit](../benchmarks/WARM-PNG-COMPOSITION8.md) | 2,795.71 | 1,478.63 | 1.891 / 1.906 | 1,453,517 | Confirmed |
 | [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-STREAM-PNG8.md) | 2,655.37 | 1,392.55 | 1.907 / 1.916 | 756,605 | Confirmed |
+| [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-STREAM-PNG16.md) | 5,626.97 | 3,093.68 | 1.819 / 1.830 | 3,075,772 | Confirmed |
 | [PNG RGBA8, None](../benchmarks/WARM-PNG8-DECODE-QUIET.md) | 2,961.21 | 1,516.02 | 1.953 / 1.995 | 755,274 | Confirmed |
 | [PNG RGBA8, stored Deflate / None](../benchmarks/WARM-PNG-STORED8-DECODE.md) | 157.30 | 135.76 | 1.159 / 1.168 | 12,976 | Confirmed |
 | [PNG RGBA16, None](../benchmarks/WARM-PNG-LITERAL-RUN.md) | 5,740.60 | 2,931.33 | 1.958 / 1.968 | 2,032,864 | Confirmed |
@@ -238,8 +239,9 @@ one independently certified exact rational blue half. No managed pixel tolerance
 Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
 diagnostics or raw GC allocated bytes / operation count (rounded up, including
 harness overhead). Decoder rows use resident encoded spans unless labeled fresh Stream. The fresh
-seekable PNG8 row includes input acquisition and copies for both subjects; its
-[report](../benchmarks/WARM-STREAM-PNG8.md) defines the full boundary. Separate fresh
+seekable PNG rows include input acquisition and copies for both subjects; their
+linked reports define the full boundaries, including timed native PNG16 endian
+conversion and fresh owned native-endian output. Separate fresh
 public Stream controls measure Paeth8 **2,275,800**, Paeth16 **4,713,416**, and
 Adam7-16 **5,058,912 B/op**, identically on both OSes with normal/scalar code.
 These are distinct boundaries. FFmpeg allocation totals are **not measured**;

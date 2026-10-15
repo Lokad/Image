@@ -16,7 +16,7 @@ round, at most three, with correctness established before timing.
 | WebP | VP8 with alpha decode/encode; opaque VP8 decode quiet repeat 1.983x / upper 2.004x, open; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Opaque VP8 upper bound; other material opaque/alpha alternatives and distinct public boundaries |
 | Resize | Nearest/bilinear downsample and enlargement at both depths; bicubic downsample, enlargement on both axes, both mixed-axis directions and 128×64 / 64×32 wider supports at both depths; horizontal reduction/enlargement and vertical reduction at both depths; vertical enlargement, 32×16 and 16×8 adaptive support at both depths; RGBA8/16 256×129, 128×64, 64×32, 32×16 and 16×8 reduction, plus RGBA8/16 both-axis enlargement and RGBA8/16 width enlargement/height reduction plus RGBA8/16 width reduction/height enlargement and RGBA8/16 8×4 beyond 256 taps plus RGBA8/16 4×2 packed support beyond 304 taps and RGBA8/16 2×2 generated support beyond 544 taps plus RGBA8/16 2×9 bounded row blocks and RGBA8/16 4×9 packed row blocks plus RGBA8/16 8×17 full-coefficient row blocks and RGBA8/16 vertical reduction with unchanged width plus RGBA8/16 horizontal reduction with unchanged height and RGBA8/16 vertical enlargement with unchanged width plus RGBA8/16 horizontal enlargement with unchanged height, with input+output+4 KiB limit confirmed | Larger/unmatched supports and other materially distinct shapes |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes; RGBA8 horizontal flip with two simultaneously live outputs confirmed 1.447x / upper 1.484x per image | Other materially distinct retained/composed public boundaries |
-| Public boundaries | Resident encoded span to owned output; complete single operations; fresh seekable non-exposed PNG8 Stream decode confirmed 1.907x / upper 1.916x; PNG8 Stream/normal-orient/centered-crop/nearest-fit composition confirmed 1.891x / upper 1.906x | Other material fresh input/depth and composed boundaries |
+| Public boundaries | Resident encoded span to owned output; complete single operations; fresh seekable non-exposed PNG8 Stream decode confirmed 1.907x / upper 1.916x and PNG16 confirmed 1.819x / upper 1.830x; PNG8 Stream/normal-orient/centered-crop/nearest-fit composition confirmed 1.891x / upper 1.906x | Other material fresh input/depth and composed boundaries |
 
 Centered/clamped crop, AutoOrient and ResizeToFit route to the measured copy or
 resize primitives after small geometry/metadata work. They need correctness
@@ -789,3 +789,12 @@ original raster and encoded input are unchanged, so existing qualification is
 reused. Initial guard/protocol refusals remain unscored. Stop this fixed pair;
 other material public input/depth boundaries and uniform current-source coverage
 remain open.
+
+
+[Fresh seekable PNG16 Stream decoding](WARM-STREAM-PNG16.md) independently
+confirms **1.819x / upper 1.830x**, at **3,075,772 B/op**. Fresh input acquisition,
+all copies, complete decode, native BE-to-LE conversion and independent output
+release are timed. Every 16-bit sample, alpha/hidden RGB, caller-stream lifetime
+and two-owner independence pass. Existing raster/input and qualified production
+are reused, with no full/package/method-audit repeats. Stop this fixed pair;
+other material paths and final current-source uniform coverage remain open.

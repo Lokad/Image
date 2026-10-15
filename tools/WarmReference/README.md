@@ -1202,3 +1202,11 @@ The public native graph times every crop/sampling/conversion pass and may use
 intermediate views; managed public calls materialize their intermediate owners.
 Both subjects acquire fresh input and return independent owned final pixels.
 See the [boundary and retained result](../../benchmarks/WARM-PNG-COMPOSITION8.md).
+
+
+The fresh seekable word case is `-WarmFamily StreamDecode -WarmCases Png16`,
+built with `build-png-stream16-linux.sh`. It uses the existing original RGBA16
+raster and frozen PNG, fresh AVIO acquisition and owned input packet, complete
+PNG decoding, fresh owned RGBA64LE output and timed full BE-to-LE conversion.
+All samples and two-live-output independence are exact. Existing eight-bit
+workers are preserved. See the [retained result](../../benchmarks/WARM-STREAM-PNG16.md).

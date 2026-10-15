@@ -72,6 +72,7 @@ def render():
     decodes = [
         row('PNG8 Stream, orient/crop/nearest fit', 'warm-png-composition8-evidence.json', ['observations', -1], 'WARM-PNG-COMPOSITION8.md', True),
         row('PNG RGBA8, fresh seekable Stream', 'warm-stream-png8-evidence.json', ['observations', -1], 'WARM-STREAM-PNG8.md', True),
+        row('PNG RGBA16, fresh seekable Stream', 'warm-stream-png16-evidence.json', ['observations', -1], 'WARM-STREAM-PNG16.md', True),
         row('PNG RGBA8, None', 'warm-png8decode-quiet-evidence.json', ['observations', -1], 'WARM-PNG8-DECODE-QUIET.md', True),
         row('PNG RGBA8, stored Deflate / None', 'warm-pngstore8decode-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-DECODE.md', True),
         row('PNG RGBA16, None', 'warm-pngliteralrun-evidence.json', ['observations', -1], 'WARM-PNG-LITERAL-RUN.md', True),
@@ -312,8 +313,9 @@ one independently certified exact rational blue half. No managed pixel tolerance
 Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
 diagnostics or raw GC allocated bytes / operation count (rounded up, including
 harness overhead). Decoder rows use resident encoded spans unless labeled fresh Stream. The fresh
-seekable PNG8 row includes input acquisition and copies for both subjects; its
-[report](../benchmarks/WARM-STREAM-PNG8.md) defines the full boundary. Separate fresh
+seekable PNG rows include input acquisition and copies for both subjects; their
+linked reports define the full boundaries, including timed native PNG16 endian
+conversion and fresh owned native-endian output. Separate fresh
 public Stream controls measure Paeth8 **2,275,800**, Paeth16 **4,713,416**, and
 Adam7-16 **5,058,912 B/op**, identically on both OSes with normal/scalar code.
 These are distinct boundaries. FFmpeg allocation totals are **not measured**;
