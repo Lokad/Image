@@ -103,7 +103,7 @@ def render():
         row('PNG gray-alpha8, Paeth', 'warm-png-gray-alpha8-paeth-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA8-PAETH.md', True),
         row('PNG RGBA16, Adam7', 'warm-pngscatter-evidence.json', ['observations', -1], 'WARM-PNG-SCATTER.md', True),
         row('PNG gray1 → RGBA8, Adam7', 'warm-pnggray1adam7-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-ADAM7.md', True),
-        row('PNG palette8 + tRNS, Adam7', 'warm-png-palette8-adam7-evidence.json', ['observations', 0], 'WARM-PNG-PALETTE8-ADAM7.md', verification='Screen only; native confirmation unstable'),
+        row('PNG palette8 + tRNS, Adam7', 'warm-png-palette8-adam7-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE8-ADAM7.md', True),
         row('PNG RGB16, None', 'warm-pngrgb16-current-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-CURRENT.md', True),
         row('PNG gray8, None', 'warm-pnggray8-current-evidence.json', ['observations', -1], 'WARM-PNG-GRAY8-CURRENT.md', True),
         row('PNG gray8 + tRNS key127, None', 'warm-pnggray8trns-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY8-TRANSPARENCY.md', True),
@@ -382,12 +382,12 @@ production/native rebuild, full suite, package proof, method audit or profile
 is repeated. The short-palette production round retains its independent
 1.317x / upper1.327x confirmation and 43.9% managed-time reduction.
 
-The palette8/tRNS Adam7 coverage check screens at **1.303x**, with
-**4,960 B/op**, but remains **unconfirmed**. Its independent native baseline slows
-over sixfold despite identical inputs/binaries. The favorable ratio is unscored;
-bounded native-only and monitored diagnostics return to normal timing without
-explaining the anomaly. All pixels, alpha/hidden RGB and quiet guards pass.
-Production qualification is reused; no production tuning follows this screen.
+The palette8/tRNS Adam7 pair now independently confirms **1.167x / upper1.177x**,
+with **4,960 B/op**, exact alpha/hidden RGB and both quiet guards passing.
+Optional native process-CPU telemetry accompanies unchanged wall timing; CPU/wall
+ratios0.99727–0.99915 show no substantial descheduling in the new observations.
+The historical sixfold native slowdown remains unexplained and unscored.
+One worker/harness build suffices; current production qualification is reused.
 
 PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples
 and the unchanged 5% IDAT-size gate; earlier level6/level6 refusals remain unscored.

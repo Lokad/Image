@@ -38,6 +38,12 @@ static uint64_t now_ns(void)
     if (clock_gettime(CLOCK_MONOTONIC, &value)) fail("Monotonic clock failed.");
     return (uint64_t)value.tv_sec * UINT64_C(1000000000) + (uint64_t)value.tv_nsec;
 }
+static uint64_t process_cpu_ns(void)
+{
+    struct timespec value;
+    if (clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &value)) fail("Process CPU clock failed.");
+    return (uint64_t)value.tv_sec * UINT64_C(1000000000) + (uint64_t)value.tv_nsec;
+}
 static int affinity_cpu(void)
 {
     cpu_set_t mask;
@@ -501,12 +507,13 @@ int main(int argc, char **argv)
         }
         uint64_t count; char extra;
         if (sscanf(line, "sample %" SCNu64 " %c", &count, &extra) != 1 || !count || count > UINT64_C(10000000)) fail("Invalid bounded sample request.");
-        uint64_t completed = work.completed, start = now_ns();
+        uint64_t completed = work.completed, cpu_start = process_cpu_ns(), start = now_ns();
         for (uint64_t i = 0; i < count; i++) { apply(&work); release(&work); }
         uint64_t elapsed = now_ns() - start;
+        uint64_t cpu_elapsed = process_cpu_ns() - cpu_start;
         if (sched_getcpu() != work.cpu || affinity_cpu() != work.cpu || work.completed - completed != count) fail("Sample CPU/count differs.");
-        printf("{\"state\":\"sample\",\"operations\":%" PRIu64 ",\"elapsedNanoseconds\":%" PRIu64 ",\"completedOperations\":%" PRIu64 ",\"observed\":%" PRIu64 ",\"outputStride\":%d,\"outputBytes\":%d,\"cpu\":%d}\n",
-            count, elapsed, work.completed, work.observed, work.stride, work.output_bytes, work.cpu); fflush(stdout);
+        printf("{\"state\":\"sample\",\"operations\":%" PRIu64 ",\"elapsedNanoseconds\":%" PRIu64 ",\"cpuElapsedNanoseconds\":%" PRIu64 ",\"completedOperations\":%" PRIu64 ",\"observed\":%" PRIu64 ",\"outputStride\":%d,\"outputBytes\":%d,\"cpu\":%d}\n",
+            count, elapsed, cpu_elapsed, work.completed, work.observed, work.stride, work.output_bytes, work.cpu); fflush(stdout);
     }
     if (ferror(stdin)) fail("Protocol read failed.");
     av_frame_free(&work.source); av_frame_free(&work.prepared); av_frame_free(&work.decoded); av_frame_free(&work.converted);

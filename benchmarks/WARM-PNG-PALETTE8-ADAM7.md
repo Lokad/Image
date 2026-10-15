@@ -1,14 +1,16 @@
 # Palette8 Adam7 decoding
 
-The short screen measures **1.303× FFmpeg**, at **4,960 managed B/op**.
-This pair remains **unconfirmed**: the independent run has an unexplained native
-timing anomaly. Production is unchanged; no speedup is claimed.
+Current production independently confirms **1.167× FFmpeg / upper1.177×**,
+at **4,960 managed B/op**, with exact pixels. The earlier native anomaly remains
+unexplained and unscored. Production is unchanged; no speedup is claimed.
 
 | Observation | Lokad.Image µs | FFmpeg µs | Ratio / upper | Managed B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Three actuals | 1,838.89 | 1,410.80 | 1.303 / 2.651 | 4,960 | Screen only |
-| Independent twelve actuals | 1,750.60 | 8,900.36 | — | 4,960 | Unscored: native timing anomaly |
-| Twelve actuals with process monitoring | 1,708.25 | 1,462.48 | — | 4,960 | Diagnostic only |
+| Original three actuals | 1,838.89 | 1,410.80 | 1.303 / 2.651 | 4,960 | Superseded screen |
+| Original independent twelve | 1,750.60 | 8,900.36 | — | 4,960 | Unscored native anomaly |
+| Original twelve with process monitoring | 1,708.25 | 1,462.48 | — | 4,960 | Diagnostic only |
+| Current three actuals, CPU telemetry | 1,705.50 | 1,346.10 | 1.267 / 1.370 | 4,960 | Quiet screen |
+| Current independent twelve, same build | 1,710.03 | 1,465.40 | 1.167 / 1.177 | 4,960 | Confirmed |
 
 The existing original 513×259 byte raster and palette projection are reused:
 index `i` is original red, palette RGB is `(i,255-i,(73*i+19)%256)`, and the full
@@ -37,8 +39,8 @@ input, production DLL, harness and native binary hashes. Its favorable ratio is
 not accepted. Two bounded native-only processes return to approximately 1.34 ms
 with matching wall and CPU time; a parent/child CPU diagnostic also returns to
 normal timing. That monitored run is retained as a diagnostic, not substituted
-for a clean confirmation. The cause remains unresolved; no repeated confirmation
-or production tuning follows this investigation.
+for a clean confirmation. The cause remains unresolved; those original observations retain their original
+status and are not used for the current confirmation.
 
 Initial preparation correctly refused to overwrite the frozen noninterlaced
 palette packet. A separate Adam7 directory fixes the collision; the refusal is
@@ -50,6 +52,22 @@ consumer plus all three examples on Windows/Linux are reused from the
 [JPEG qualification](WARM-JPEG-BASELINE-AC-RUN.md). No production rebuild, full
 suite, package proof or method audit is repeated.
 
-[Numeric evidence](warm-png-palette8-adam7-evidence.json) retains every actual,
-allocation, guard, identity, refusal and diagnostic. Leave this pair open;
-prioritize a materially different workload before further tuning here.
+A bounded follow-up adds optional process-CPU nanoseconds to the existing native
+sample receipt. CPU-clock reads surround the unchanged wall-timed decode/release
+loop; published ratios still use wall time. This distinguishes native computation
+from descheduling if the anomaly recurs. Other workers may omit the field.
+One native-worker build and one harness build suffice. New short and independent
+observations on current production retain all actuals, including twelve in the
+confirmation (eleven selected), with exact normal/scalar pixels and both quiet
+guards passing. Native CPU/wall ratios range from0.99727 to0.99915; the old
+sixfold anomaly does not recur. This does not establish its historical cause.
+
+The current immutable production qualification is **3,457 Release tests per OS**,
+including **898 live comparisons**, and the same actual Release package's consumer
+and all three examples on Windows/Linux from the
+[short-palette round](WARM-PNG-SHORT-PALETTE.md). It is reused without a production
+rebuild, full-suite/package repeat, method audit or profile.
+
+[Numeric evidence](warm-png-palette8-adam7-evidence.json) retains original and
+current actuals, allocation, guards, source/build/native identities, refused
+preparation and CPU telemetry. Stop this confirmed pair; full coverage stays open.

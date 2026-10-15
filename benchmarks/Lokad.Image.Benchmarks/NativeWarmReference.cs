@@ -218,6 +218,7 @@ internal sealed class NativeWarmReference : IDisposable
         var sample = response.Deserialize<NativeWarmSample>(Options) ?? throw new InvalidOperationException("Missing native sample.");
         if (sample.State != "sample" || sample.Operations != operations || sample.CompletedOperations != completed + operations
             || sample.ElapsedNanoseconds <= 0 || !double.IsFinite(sample.ElapsedNanoseconds)
+            || (sample.CpuElapsedNanoseconds is { } cpuElapsed && (cpuElapsed <= 0 || !double.IsFinite(cpuElapsed)))
             || sample.Cpu != Ready.GetProperty("cpu").GetInt32()
             || (Ready.GetProperty("operation").GetString() is "png-encode" or "png-smallest16-encode" or "png-fast16-encode" or "png-store16-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "jpeg-encode" or "jpeg-restart-encode" or "webp-encode" or "webp-opaque-encode" or "webp-lossless-encode" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
                 : sample.OutputStride < (Ready.GetProperty("operation").GetString() is "nearest-resize" or "bilinear-resize" or "bicubic-resize" or "crop" or "png-stream-crop-fit" or "png-stream16-crop-fit" ? Ready.GetProperty("outputWidth").GetInt32()
@@ -287,7 +288,8 @@ internal sealed class NativeWarmReference : IDisposable
 }
 
 internal sealed record NativeWarmSample(string State, long Operations, double ElapsedNanoseconds,
-    long CompletedOperations, ulong Observed, int OutputStride, int Cpu, int OutputBytes = 0)
+    long CompletedOperations, ulong Observed, int OutputStride, int Cpu, int OutputBytes = 0,
+    double? CpuElapsedNanoseconds = null)
 {
     public double NanosecondsPerOperation => ElapsedNanoseconds / Operations;
 }

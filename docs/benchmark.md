@@ -63,7 +63,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG gray-alpha8, Paeth](../benchmarks/WARM-PNG-GRAY-ALPHA8-PAETH.md) | 2,051.11 | 2,016.66 | 1.017 / 1.068 | 2,408 | Confirmed |
 | [PNG RGBA16, Adam7](../benchmarks/WARM-PNG-SCATTER.md) | 6,567.82 | 3,984.54 | 1.648 / 1.700 | 2,024,532 | Confirmed |
 | [PNG gray1 → RGBA8, Adam7](../benchmarks/WARM-PNG-GRAY1-ADAM7.md) | 1,265.54 | 1,243.33 | 1.018 / 1.032 | 1,424 | Confirmed |
-| [PNG palette8 + tRNS, Adam7](../benchmarks/WARM-PNG-PALETTE8-ADAM7.md) | 1,838.89 | 1,410.80 | 1.303 / 2.651 | 4,960 | Screen only; native confirmation unstable |
+| [PNG palette8 + tRNS, Adam7](../benchmarks/WARM-PNG-PALETTE8-ADAM7.md) | 1,710.03 | 1,465.40 | 1.167 / 1.177 | 4,960 | Confirmed |
 | [PNG RGB16, None](../benchmarks/WARM-PNG-RGB16-CURRENT.md) | 4,020.98 | 2,210.00 | 1.819 / 1.823 | 15,024 | Confirmed |
 | [PNG gray8, None](../benchmarks/WARM-PNG-GRAY8-CURRENT.md) | 564.59 | 361.22 | 1.563 / 1.580 | 9,904 | Confirmed |
 | [PNG gray8 + tRNS key127, None](../benchmarks/WARM-PNG-GRAY8-TRANSPARENCY.md) | 563.19 | 762.11 | 0.739 / 0.761 | 9,936 | Confirmed |
@@ -305,12 +305,12 @@ production/native rebuild, full suite, package proof, method audit or profile
 is repeated. The short-palette production round retains its independent
 1.317x / upper1.327x confirmation and 43.9% managed-time reduction.
 
-The palette8/tRNS Adam7 coverage check screens at **1.303x**, with
-**4,960 B/op**, but remains **unconfirmed**. Its independent native baseline slows
-over sixfold despite identical inputs/binaries. The favorable ratio is unscored;
-bounded native-only and monitored diagnostics return to normal timing without
-explaining the anomaly. All pixels, alpha/hidden RGB and quiet guards pass.
-Production qualification is reused; no production tuning follows this screen.
+The palette8/tRNS Adam7 pair now independently confirms **1.167x / upper1.177x**,
+with **4,960 B/op**, exact alpha/hidden RGB and both quiet guards passing.
+Optional native process-CPU telemetry accompanies unchanged wall timing; CPU/wall
+ratios0.99727–0.99915 show no substantial descheduling in the new observations.
+The historical sixfold native slowdown remains unexplained and unscored.
+One worker/harness build suffices; current production qualification is reused.
 
 PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples
 and the unchanged 5% IDAT-size gate; earlier level6/level6 refusals remain unscored.
