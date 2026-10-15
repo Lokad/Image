@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmVp8DecodeCase { Native8, Opaque8, StreamNative8 }
+public enum WarmVp8DecodeCase { Native8, Opaque8, StreamNative8, OpaqueCancelable8 }
 
 [MemoryDiagnoser]
 public class WarmVp8Decode
@@ -25,7 +25,11 @@ public class WarmVp8Decode
     private QualityError agreement = null!;
     private bool smoke, ready;
     private int cpu, sampleCount;
-    private bool Opaque => Case == WarmVp8DecodeCase.Opaque8;
+    private bool Opaque => Case is WarmVp8DecodeCase.Opaque8 or WarmVp8DecodeCase.OpaqueCancelable8;
+    private bool Cancelable => Case == WarmVp8DecodeCase.OpaqueCancelable8;
+    private CancellationTokenSource? cancellationSource;
+    private CancellationToken decodeCancellation;
+    private bool alreadyCanceledRejected;
     private bool StreamInput => Case == WarmVp8DecodeCase.StreamNative8;
     private string expectedManagedHash = ManagedHash, expectedNativeHash = NativeHash;
 
@@ -36,8 +40,9 @@ public class WarmVp8Decode
         {
             null or "Native8" => [WarmVp8DecodeCase.Native8],
             "Opaque8" => [WarmVp8DecodeCase.Opaque8],
+            "OpaqueCancelable8" => [WarmVp8DecodeCase.OpaqueCancelable8],
             "StreamNative8" => [WarmVp8DecodeCase.StreamNative8],
-            _ => throw new ArgumentException("Choose one warm VP8 decode case: Native8, Opaque8 or StreamNative8.")
+            _ => throw new ArgumentException("Choose one warm VP8 decode case: Native8, Opaque8, OpaqueCancelable8 or StreamNative8.")
         };
     }
 
@@ -107,13 +112,27 @@ public class WarmVp8Decode
             if (Opaque && info.HasAlpha) throw new InvalidOperationException("Opaque VP8 must not carry an alpha chunk.");
             expectedNative = OracleProcess.Run(state.Ffmpeg, DecodeArguments(), encoded);
             if (JpegBenchmarkCase.Hash(expectedNative) != expectedNativeHash) throw new InvalidOperationException("Pinned CLI VP8 pixels differ.");
-            if (StreamInput && !OracleProcess.Run(state.Ffmpeg, ["-cpuflags", "0", .. DecodeArguments()], encoded).AsSpan().SequenceEqual(expectedNative))
+            if ((StreamInput || Cancelable) && !OracleProcess.Run(state.Ffmpeg, ["-cpuflags", "0", .. DecodeArguments()], encoded).AsSpan().SequenceEqual(expectedNative))
                 throw new InvalidOperationException("Scalar CLI VP8 Stream anchor differs.");
             ValidateAlpha(expectedNative); File.WriteAllBytes(state.Input, encoded);
+            if (Cancelable)
+            {
+                cancellationSource = new CancellationTokenSource(); decodeCancellation = cancellationSource.Token;
+                using var canceled = new CancellationTokenSource(); canceled.Cancel();
+                try
+                {
+                    using var rejected = ImageCodec.Decode(encoded, cancellationToken: canceled.Token);
+                    throw new InvalidOperationException("VP8 accepted an already-canceled token.");
+                }
+                catch (OperationCanceledException error) when (error.CancellationToken == canceled.Token)
+                {
+                    alreadyCanceledRejected = true;
+                }
+            }
             native = new NativeWarmReference(state, 8, cpu, StreamInput ? "vp8-stream-decode" : "vp8-decode", vp8Opaque: Opaque); ValidateNative();
             ValidateManaged(); before = native.Measure(smoke, sampleCount: sampleCount); ready = true;
         }
-        catch { native?.Dispose(); state.Dispose(); throw; }
+        catch { native?.Dispose(); cancellationSource?.Dispose(); state.Dispose(); throw; }
     }
 
     private void ValidateAlpha(byte[] value)
@@ -145,6 +164,8 @@ public class WarmVp8Decode
     }
     private void ValidateManaged()
     {
+        if (Cancelable && (!decodeCancellation.CanBeCanceled || decodeCancellation.IsCancellationRequested || !alreadyCanceledRejected))
+            throw new InvalidOperationException("VP8 requires a live, never-signaled token and pre-cancellation rejection.");
         using var first = DecodeManaged(); using var second = DecodeManaged();
         ValidatePixels(first); ValidatePixels(second); first.GetRow8(0)[0] ^= 255; ValidatePixels(second);
         if (!File.ReadAllBytes(state.Input).AsSpan().SequenceEqual(encoded)) throw new InvalidOperationException("Resident VP8 source changed.");
@@ -160,7 +181,7 @@ public class WarmVp8Decode
 
     private ImageBuffer DecodeManaged()
     {
-        if (!StreamInput) return ImageCodec.Decode(encoded);
+        if (!StreamInput) return ImageCodec.Decode(encoded, cancellationToken: decodeCancellation);
         using var input = new MemoryStream(encoded, writable: false);
         return ImageCodec.Decode(input);
     }
@@ -196,7 +217,11 @@ public class WarmVp8Decode
                 opaque = Opaque, originalRasterSha256 = RasterHash, rasterRecipe = Opaque ? "Existing original RGBA8 RGB bytes unchanged; alpha set to255. No additional original image." : "Original RGBA8 including exact alpha and hidden RGB unchanged.",
                 alphaExact = true, nativeCliPixelsExact = true, decoderAgreementWithinBounds = true,
                 freshSeekableStream = StreamInput, inputView = false, inputCopiesTimed = StreamInput,
-                callerInputLifetimeChecked = StreamInput, scalarCliPixelsExact = StreamInput,
+                callerInputLifetimeChecked = StreamInput, scalarCliPixelsExact = StreamInput || Cancelable,
+                cancellationCanBeCanceled = decodeCancellation.CanBeCanceled,
+                cancellationRequested = decodeCancellation.IsCancellationRequested,
+                alreadyCanceledRejected = Cancelable ? alreadyCanceledRejected : (bool?)null,
+                cancellationBoundary = Cancelable ? "One live never-signaled token supplied to every timed public Decode; token creation/disposal excluded. Pre-cancellation/token identity checked outside timing." : null,
                 decoderMaximum = agreement.Maximum, decoderRmse = agreement.RgbRmse, decoderSumSquared = agreement.SumSquared,
                 sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmVp8Decode).Assembly.Location),
@@ -208,6 +233,6 @@ public class WarmVp8Decode
                     : "Identical resident frozen VP8/ALPH input to independent owned RGBA8. Complete public managed Decode and disposal; native software webp decode, state reset, centered bilinear chroma expansion, limited BT.601 conversion through RGBA16, RGBA8 reduction, exact alpha merge and scratch/output allocation/release. One codec/conversion thread, normal SIMD. Native contexts and packet/frame wrappers reused; every call decodes and converts every pixel. Padded output rows exposed without a packing copy. Startup, I/O, IPC, hashing, validation and encoding excluded. One existing raster/input; no regeneration or quality enumeration. Decode does not require a matched encoder quality. Only this native keyframe/alpha profile is measured."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
         }
-        finally { native?.Dispose(); state?.Dispose(); ready = false; }
+        finally { native?.Dispose(); cancellationSource?.Dispose(); state?.Dispose(); ready = false; }
     }
 }

@@ -144,6 +144,7 @@ def render():
         row('JPEG progressive 4:2:2', 'warm-jpegprogressive422-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE422.md', True),
         row('JPEG progressive 4:4:4', 'warm-jpeg-ac-cache-evidence.json', ['observations', 7], 'WARM-JPEG-AC-CACHE.md', True),
         row('WebP VP8 + alpha', 'warm-vp8-filter8-evidence.json', ['alphaBearingControl', 'observations', -1], 'WARM-VP8-FILTER8.md', True),
+        row('WebP VP8 opaque, live cancelable token', 'warm-vp8-cancelable-evidence.json', ['observations', -1], 'WARM-VP8-CANCELABLE.md', True),
         row('WebP VP8, opaque', 'warm-vp8-filter8-evidence.json', ['observations', -1], 'WARM-VP8-FILTER8.md', True),
         row('WebP VP8L, literal/run input', 'warm-vp8ldecode-quiet-evidence.json', ['observations', -1], 'WARM-VP8L-DECODE-QUIET.md', True),
         row('WebP VP8L, native input', 'warm-vp8l-canonical-evidence.json', ['observations', -1], 'WARM-VP8L-CANONICAL.md', True),
@@ -414,6 +415,13 @@ levels9/9, exact RGBA and the unchanged5% IDAT-size gate (209,314/210,283 bytes)
 Production and package qualification are reused without a production rebuild,
 profile or repeated proofs. The measured binaries remain immutable; a word-only
 receipt-prose correction after measurement needs no repeat.
+
+The [live-token opaque VP8 comparison](../benchmarks/WARM-VP8-CANCELABLE.md)
+independently confirms **1.838x / upper 1.843x**, **760,548 B/op**, with exact
+qualified managed pixels, opaque alpha and unchanged decoder bounds. Existing
+frozen input, pre-cancellation/token identity, normal/scalar CLI and independent
+owners are checked; token setup/disposal is outside timing. One harness build,
+no production/native rebuild/profile or repeated qualification is required.
 
 Recent unchanged-production coverage confirms RGB16 Paeth at1.904x /
 upper1.928x,6,504 B/op, and gray-alpha8 Paeth at1.017x / upper1.068x,2,408 B/op.
