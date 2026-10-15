@@ -131,6 +131,7 @@ def render():
         row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-pngbyte-optimal-evidence.json', ['cases', 'alpha', 'confirm'], 'WARM-PNG-BYTE-OPTIMAL.md', True),
         row('PNG gray-alpha16, level 6 / None', 'warm-pnggrayalpha16encode-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ENCODE.md', True),
         row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-jpeg4448-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG444-RGBA8-ADAPTIVE.md', True),
+        row('JPEG 4:4:4, forward-only output / geometric AC Huffman', 'warm-jpeg444stream-evidence.json', ['observations', -1], 'WARM-JPEG444-FORWARD.md', True),
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg44416-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG444-RGBA16-ADAPTIVE.md', True),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg4228-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA8-ADAPTIVE.md', True),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg42216-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA16.md', True),
@@ -406,6 +407,10 @@ Fresh VP8/ALPH Stream decoding confirms **1.825x / upper 1.833x**, at
 **2,327,699 B/op**, with complete acquisition/copies, alpha/chroma/color passes
 and input/output release timed. Its input and per-decoder pixels equal the
 resident anchor; unchanged qualified production and package proofs are reused.
+Forward-only JPEG444 encoding confirms **1.754x / upper 1.765x**, at
+**526,051 B/op**, using the existing geometric Huffman fallback. Full independent
+coefficient dumps, per-decoder pixels and source errors equal the qualified
+adaptive anchor; unchanged production and native worker proofs are reused.
 Remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove
 the uniform target. Linked reports retain superseded raw evidence, failed guards,

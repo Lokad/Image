@@ -94,6 +94,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 5,924.76 | 4,311.86 | 1.374 / 1.382 | 264,179 | Confirmed |
 | [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ENCODE.md) | 9,316.78 | 10,318.59 | 0.903 / 0.915 | 1,052,368 | Confirmed |
 | [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG444-RGBA8-ADAPTIVE.md) | 6,705.88 | 3,783.34 | 1.772 / 1.818 | 559,384 | Confirmed |
+| [JPEG 4:4:4, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG444-FORWARD.md) | 6,613.11 | 3,770.32 | 1.754 / 1.765 | 526,051 | Confirmed |
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG444-RGBA16-ADAPTIVE.md) | 6,767.17 | 3,851.77 | 1.757 / 1.790 | 556,280 | Confirmed |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG422-RGBA8-ADAPTIVE.md) | 4,277.49 | 2,349.58 | 1.821 / 1.862 | 294,110 | Confirmed |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG422-RGBA16.md) | 4,538.42 | 2,422.35 | 1.874 / 1.884 | 294,110 | Confirmed |
@@ -329,6 +330,10 @@ Fresh VP8/ALPH Stream decoding confirms **1.825x / upper 1.833x**, at
 **2,327,699 B/op**, with complete acquisition/copies, alpha/chroma/color passes
 and input/output release timed. Its input and per-decoder pixels equal the
 resident anchor; unchanged qualified production and package proofs are reused.
+Forward-only JPEG444 encoding confirms **1.754x / upper 1.765x**, at
+**526,051 B/op**, using the existing geometric Huffman fallback. Full independent
+coefficient dumps, per-decoder pixels and source errors equal the qualified
+adaptive anchor; unchanged production and native worker proofs are reused.
 Remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove
 the uniform target. Linked reports retain superseded raw evidence, failed guards,

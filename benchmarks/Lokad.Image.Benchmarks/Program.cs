@@ -388,6 +388,12 @@ if (args.Length == 2 && args[0] == "--prepare-warm-jpeg420-stream16")
     return;
 }
 
+if (args.Length == 2 && args[0] == "--prepare-warm-jpeg444-stream")
+{
+    WarmJpeg.Prepare(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture), forwardOnly: true);
+    return;
+}
+
 if (args.Length == 2 && args[0] == "--prepare-warm-jpeg420-stream")
 {
     WarmJpeg.Prepare(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture), subsampled: true, forwardOnly: true);

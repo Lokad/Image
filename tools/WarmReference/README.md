@@ -1266,3 +1266,12 @@ native operation; managed default `Decode(Stream)` includes all buffering/copies
 The original conversion/alpha pipeline and resident workers are preserved.
 Normal/scalar CLI pixels, frozen output samples and caller lifetime are checked
 outside timing. See the [stream result](../../benchmarks/WARM-VP8-STREAM.md).
+
+Forward-only JPEG444 uses `LOKAD_IMAGE_JPEG_ENTROPY=fixed-geometric-v1`,
+`--prepare-warm-jpeg444-stream 0`, then
+`-WarmFamily Jpeg -WarmCases Encode444Stream8`. The existing JPEG native worker
+and original raster are reused at managed69/native qscale5. Preparation retains
+the adaptive anchor's per-decoder pixels and source error; an original public
+libjpeg coefficient visitor verifies complete coefficient equality outside timing.
+Fresh wrapper/storage acquisition, growth and disposal are timed. See the
+[fallback result](../../benchmarks/WARM-JPEG444-FORWARD.md).

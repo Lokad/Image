@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegCase { Encode8, Encode420_8, Encode422_8, Encode16, Encode420_16, Encode420Stream8, Encode420Stream16, Encode422_16, Encode420Restart8 }
+public enum WarmJpegCase { Encode8, Encode420_8, Encode422_8, Encode16, Encode420_16, Encode420Stream8, Encode420Stream16, Encode422_16, Encode420Restart8, Encode444Stream8 }
 
 internal sealed record WarmJpegPreparation(int SchemaVersion, string Project, string GeneratedUtc, string Recipe,
     string RasterSha256, string ReferenceSha256, int NativeQuality, uint BackgroundRgb, string NativeFile, string ManagedFile,
@@ -22,10 +22,10 @@ public class WarmJpeg
     private const uint Background = 0x204060;
     private bool Source16 => Case is WarmJpegCase.Encode422_16 or WarmJpegCase.Encode16 or WarmJpegCase.Encode420_16 or WarmJpegCase.Encode420Stream16;
     private int Depth => Source16 ? 16 : 8;
-    private bool FixedAnchor => Subsampled || Source16 || AdaptiveEntropy;
+    private bool FixedAnchor => ForwardOnly || Subsampled || Source16 || AdaptiveEntropy;
     private bool Horizontal => Case is WarmJpegCase.Encode422_8 or WarmJpegCase.Encode422_16;
     private bool Restart => Case == WarmJpegCase.Encode420Restart8;
-    private bool ForwardOnly => Case is WarmJpegCase.Encode420Stream8 or WarmJpegCase.Encode420Stream16;
+    private bool ForwardOnly => Case is WarmJpegCase.Encode420Stream8 or WarmJpegCase.Encode420Stream16 or WarmJpegCase.Encode444Stream8;
     private bool Subsampled => Case is WarmJpegCase.Encode420Restart8 or WarmJpegCase.Encode422_16 or WarmJpegCase.Encode420_8 or WarmJpegCase.Encode422_8 or WarmJpegCase.Encode420_16 or WarmJpegCase.Encode420Stream8 or WarmJpegCase.Encode420Stream16;
     private string NativeSampling => Horizontal ? "422" : Subsampled ? "420" : "444";
     private string DisplaySampling => Horizontal ? "4:2:2" : Subsampled ? "4:2:0" : "4:4:4";
@@ -55,7 +55,7 @@ public class WarmJpeg
     private static string MatchFile(bool subsampled, bool horizontal, int depth, bool forwardOnly = false, bool restartRows = false)
     {
         if (restartRows) return "jpeg420-restart33-adaptive-match.json";
-        if (forwardOnly) return depth == 16 ? "jpeg42016-stream-geometric-match.json" : "jpeg420-stream-geometric-match.json";
+        if (forwardOnly) return !subsampled ? "jpeg444-stream-geometric-match.json" : depth == 16 ? "jpeg42016-stream-geometric-match.json" : "jpeg420-stream-geometric-match.json";
         var name = depth == 16 ? (horizontal ? "jpeg42216-match.json" : subsampled ? "jpeg42016-match.json" : "jpeg16-match.json")
             : horizontal ? "jpeg422-match.json" : subsampled ? "jpeg420-match.json" : "jpeg-match.json";
         return AdaptiveEntropy ? name.Replace("-match.json", "-adaptive-match.json") : name;
@@ -94,7 +94,8 @@ public class WarmJpeg
             "Encode420Restart8" when AdaptiveEntropy => [WarmJpegCase.Encode420Restart8],
             "Encode420Stream8" when !AdaptiveEntropy => [WarmJpegCase.Encode420Stream8],
             "Encode420Stream16" when !AdaptiveEntropy => [WarmJpegCase.Encode420Stream16],
-            _ => throw new ArgumentException("Choose one JPEG case: Encode8, Encode16, Encode420_8, Encode422_8, Encode422_16, Encode420Restart8 (adaptive-v1), Encode420_16, Encode420Stream8 or Encode420Stream16 (fixed-geometric-v1 policy).")
+            "Encode444Stream8" when !AdaptiveEntropy => [WarmJpegCase.Encode444Stream8],
+            _ => throw new ArgumentException("Choose one JPEG case: Encode8, Encode16, Encode420_8, Encode422_8, Encode422_16, Encode420Restart8 (adaptive-v1), Encode420_16, Encode420Stream8, Encode420Stream16 or Encode444Stream8 (fixed-geometric-v1 policy).")
         };
     }
 
@@ -117,11 +118,11 @@ public class WarmJpeg
         if (subsampled && horizontal) throw new ArgumentException("Choose one JPEG subsampling layout.");
         if (depth is not (8 or 16))
             throw new ArgumentException("JPEG source depth must be 8 or16.");
-        if (forwardOnly && (!subsampled || horizontal || Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") != "fixed-geometric-v1"))
-            throw new ArgumentException("Forward-only preparation requires RGBA8/16 4:2:0 and fixed-geometric-v1.");
+        if (forwardOnly && (horizontal || !subsampled && depth != 8 || Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") != "fixed-geometric-v1"))
+            throw new ArgumentException("Forward-only preparation requires RGBA8 4:4:4 or RGBA8/16 4:2:0 with fixed-geometric-v1.");
         if (restartRows && (depth != 8 || !subsampled || horizontal || forwardOnly || !AdaptiveEntropy))
             throw new ArgumentException("Row-restart preparation requires adaptive RGBA8 4:2:0.");
-        var fixedAnchor = subsampled || horizontal || depth == 16 || AdaptiveEntropy;
+        var fixedAnchor = forwardOnly || subsampled || horizontal || depth == 16 || AdaptiveEntropy;
         var sampling = horizontal ? "422" : subsampled ? "420" : "444";
         if (fixedAnchor && nativeQscale != 5) throw new ArgumentException("The fixed JPEG anchor requires native qscale 5.");
         using var process = Process.GetCurrentProcess(); var oldAffinity = process.ProcessorAffinity;
@@ -149,6 +150,7 @@ public class WarmJpeg
             }
             var owned = fixedAnchor ? new[] { Sample(horizontal ? 65 : 69) } : EncoderQualityCalibration.SampleOwned([nativeSample], Sample);
             var match = EncoderQualityCalibration.Match(nativeSample, owned);
+            if (forwardOnly && !subsampled) ValidateForward444Pixels(state.Root, match.ClosestOwned, nativeSample);
             if (restartRows)
             {
                 ValidateRestartPacket(nativeBytes); ValidateRestartPacket(files[match.ClosestOwned.Setting]);
@@ -170,7 +172,7 @@ public class WarmJpeg
                 JpegBenchmarkCase.HashFile(state.Ffmpeg), native.BuildIdentity, native.Ready,
                 sampling, restartRows ? FixedRestartPolicy : depth == 16 ? (horizontal ? Fixed42216Policy : subsampled ? Fixed42016Policy : Fixed16Policy)
                     : horizontal ? Fixed422Policy : subsampled ? Fixed420Policy
-                    : AdaptiveEntropy ? Fixed444Policy : EncoderQualityCalibration.OwnedQualityPolicy, depth);
+                    : fixedAnchor ? Fixed444Policy : EncoderQualityCalibration.OwnedQualityPolicy, depth);
             var path = Path.Combine(state.Root, "artifacts", "warm-reference", MatchFile(subsampled, horizontal, depth, forwardOnly, restartRows));
             if ((AdaptiveEntropy || forwardOnly) && File.Exists(path)) throw new InvalidOperationException("Preserve the existing preparation before replacing it.");
             File.WriteAllText(path, JsonSerializer.Serialize(record, EncoderQualityCalibration.Json) + "\n");
@@ -266,6 +268,21 @@ public class WarmJpeg
             || !EncoderQualityCalibration.Match(nativeQuality, [managedQuality]).Matched)
             throw new InvalidOperationException("Warm JPEG source/decoder quality changed; prepare this pair again.");
         if (Restart) ValidateRestartPixels(state.Root, managedQuality, nativeQuality);
+        if (Case == WarmJpegCase.Encode444Stream8) ValidateForward444Pixels(state.Root, managedQuality, nativeQuality);
+    }
+
+    private static void ValidateForward444Pixels(string root, QualitySample managed, QualitySample native)
+    {
+        var anchor = JsonSerializer.Deserialize<WarmJpegPreparation>(File.ReadAllText(Path.Combine(root,
+            "artifacts", "warm-reference", "jpeg-adaptive-match.json")), EncoderQualityCalibration.Json)
+            ?? throw new InvalidOperationException("Qualified adaptive JPEG444 anchor missing.");
+        if (managed.Setting != 69 || native.Setting != 5
+            || managed.SourceError != anchor.Match.ClosestOwned.SourceError || native.SourceError != anchor.Match.Native.SourceError
+            || managed.PublicDecodedSha256 != anchor.Match.ClosestOwned.PublicDecodedSha256
+            || managed.NativeDecodedSha256 != anchor.Match.ClosestOwned.NativeDecodedSha256
+            || native.PublicDecodedSha256 != anchor.Match.Native.PublicDecodedSha256
+            || native.NativeDecodedSha256 != anchor.Match.Native.NativeDecodedSha256)
+            throw new InvalidOperationException("JPEG444 fallback changed the qualified per-encoder pixels or source quality.");
     }
 
     internal static (int Dri, int FirstRestart) ValidateRestartPacket(byte[] bytes)
