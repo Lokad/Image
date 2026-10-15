@@ -611,6 +611,10 @@ internal ref struct JpegDecoder
                 && components[0].H == maxH && components[0].V == maxV
                 && components[1].H * 2 == maxH && components[1].V == maxV
                 && components[2].H == components[1].H && components[2].V == maxV;
+            var subsampledRgb420 = components.Length == 3 && rgb
+                && components[0].H == maxH && components[0].V == maxV
+                && components[1].H * 2 == maxH && components[1].V * 2 == maxV
+                && components[2].H == components[1].H && components[2].V == components[1].V;
             var subsampledYcbcr = components.Length == 3 && !rgb
                 && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported
                 && components[0].H == maxH && components[0].V == maxV
@@ -636,6 +640,20 @@ internal ref struct JpegDecoder
                     RenderRgb422Row(components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width),
                         components[1].Plane.AsSpan(y * components[1].BlockColumns * 8, components[1].SampleWidth),
                         components[2].Plane.AsSpan(y * components[2].BlockColumns * 8, components[2].SampleWidth), row);
+                    continue;
+                }
+                if (subsampledRgb420)
+                {
+                    var half = y / 2; var odd = (y & 1) != 0;
+                    var top = Math.Max(odd ? half : half - 1, 0);
+                    var bottom = Math.Min(odd ? half + 1 : half, components[1].SampleHeight - 1);
+                    var green = components[1]; var blue = components[2];
+                    RenderRgb420Row(components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width),
+                        green.Plane.AsSpan(top * green.BlockColumns * 8, green.SampleWidth),
+                        green.Plane.AsSpan(bottom * green.BlockColumns * 8, green.SampleWidth),
+                        blue.Plane.AsSpan(top * blue.BlockColumns * 8, blue.SampleWidth),
+                        blue.Plane.AsSpan(bottom * blue.BlockColumns * 8, blue.SampleWidth),
+                        odd ? 3 : 1, row);
                     continue;
                 }
                 var x = 0;
@@ -737,6 +755,56 @@ internal ref struct JpegDecoder
     }
 
     private static byte Round(double value) => (byte)Math.Clamp(Math.Round(value, MidpointRounding.AwayFromZero), 0, 255);
+
+    internal static void RenderRgb420Row(ReadOnlySpan<byte> red, ReadOnlySpan<byte> greenTop, ReadOnlySpan<byte> greenBottom,
+        ReadOnlySpan<byte> blueTop, ReadOnlySpan<byte> blueBottom, int topWeight, Span<byte> rgba)
+    {
+        if (greenTop.Length != (red.Length + 1L) / 2 || greenBottom.Length != greenTop.Length
+            || blueTop.Length != greenTop.Length || blueBottom.Length != greenTop.Length
+            || topWeight is not (1 or 3) || rgba.Length != red.Length * 4L)
+            throw new ArgumentException("RGB420 planes, quarter weights and RGBA row lengths differ.");
+        var x = 0;
+        for (; x < Math.Min(2, red.Length); x++)
+        {
+            var neighbor = Math.Min(x, greenTop.Length - 1);
+            rgba[x * 4] = red[x];
+            rgba[x * 4 + 1] = Channel(greenTop, greenBottom, 0, neighbor, topWeight);
+            rgba[x * 4 + 2] = Channel(blueTop, blueBottom, 0, neighbor, topWeight); rgba[x * 4 + 3] = 255;
+        }
+        if (Avx2.IsSupported)
+        {
+            var centers = Vector256.Create(1, 1, 2, 2, 3, 3, 4, 4);
+            var neighbors = Vector256.Create(0, 2, 1, 3, 2, 4, 3, 5);
+            var upperWeight = Vector256.Create(topWeight); var lowerWeight = Vector256.Create(4 - topWeight);
+            for (; x <= red.Length - 8 && x / 2 <= greenTop.Length - 7; x += 8)
+            {
+                var offset = x / 2 - 1;
+                // Preserve fractional vertical samples until the one final
+                // rounding. Centered 2x2 interpolation has denominator sixteen.
+                var gv = Avx2.Add(Avx2.MultiplyLow(WidenSamples8(greenTop.Slice(offset, 8)), upperWeight),
+                    Avx2.MultiplyLow(WidenSamples8(greenBottom.Slice(offset, 8)), lowerWeight));
+                var bv = Avx2.Add(Avx2.MultiplyLow(WidenSamples8(blueTop.Slice(offset, 8)), upperWeight),
+                    Avx2.MultiplyLow(WidenSamples8(blueBottom.Slice(offset, 8)), lowerWeight));
+                var gc = Avx2.PermuteVar8x32(gv, centers); var bc = Avx2.PermuteVar8x32(bv, centers);
+                var g = Avx2.ShiftRightLogical(Avx2.Add(Avx2.Add(Avx2.Add(gc, Avx2.ShiftLeftLogical(gc, 1)),
+                    Avx2.PermuteVar8x32(gv, neighbors)), Vector256.Create(8)), 4).AsUInt32();
+                var b = Avx2.ShiftRightLogical(Avx2.Add(Avx2.Add(Avx2.Add(bc, Avx2.ShiftLeftLogical(bc, 1)),
+                    Avx2.PermuteVar8x32(bv, neighbors)), Vector256.Create(8)), 4).AsUInt32();
+                var r = WidenSamples8(red.Slice(x, 8)).AsUInt32();
+                Avx2.Or(Avx2.Or(r, Avx2.ShiftLeftLogical(g, 8)),
+                    Avx2.Or(Avx2.ShiftLeftLogical(b, 16), Vector256.Create(0xFF000000u))).AsByte().CopyTo(rgba.Slice(x * 4, 32));
+            }
+        }
+        for (; x < red.Length; x++)
+        {
+            var k = x / 2;
+            var neighbor = (x & 1) == 0 ? Math.Max(k - 1, 0) : Math.Min(k + 1, greenTop.Length - 1);
+            rgba[x * 4] = red[x]; rgba[x * 4 + 1] = Channel(greenTop, greenBottom, k, neighbor, topWeight);
+            rgba[x * 4 + 2] = Channel(blueTop, blueBottom, k, neighbor, topWeight); rgba[x * 4 + 3] = 255;
+        }
+        static byte Channel(ReadOnlySpan<byte> top, ReadOnlySpan<byte> bottom, int k, int neighbor, int weight)
+            => (byte)((weight * (3 * top[k] + top[neighbor]) + (4 - weight) * (3 * bottom[k] + bottom[neighbor]) + 8) >> 4);
+    }
 
     internal static void RenderRgb422Row(ReadOnlySpan<byte> red, ReadOnlySpan<byte> green, ReadOnlySpan<byte> blue, Span<byte> rgba)
     {

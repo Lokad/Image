@@ -57,7 +57,7 @@ typedef struct {
     AVPacket *input;
     uint8_t *encoded, *expected;
     size_t encoded_bytes, raw_bytes;
-    int width, height, cpu, row_bytes, stride, subsampled, gray, rgb, rgb422;
+    int width, height, cpu, row_bytes, stride, subsampled, gray, rgb, rgb422, rgb420;
     uint64_t completed, observed;
 } Work;
 static void initialize_conversion(Work *work)
@@ -127,7 +127,7 @@ static void apply(Work *work)
     require(avcodec_send_packet(work->codec, work->input), "Submit complete JPEG");
     require(avcodec_receive_frame(work->codec, work->decoded), "Receive JPEG pixels");
     AVFrame *decoded = work->decoded;
-    if (decoded->width != work->width || decoded->height != work->height || decoded->format != (work->rgb ? AV_PIX_FMT_GBRP : work->gray ? AV_PIX_FMT_GRAY8 : work->subsampled==420 ? AV_PIX_FMT_YUVJ420P : work->subsampled==422 ? AV_PIX_FMT_YUVJ422P : AV_PIX_FMT_YUVJ444P)
+    if (decoded->width != work->width || decoded->height != work->height || decoded->format != (work->rgb && !work->rgb420 ? AV_PIX_FMT_GBRP : work->gray ? AV_PIX_FMT_GRAY8 : work->subsampled==420 ? AV_PIX_FMT_YUVJ420P : work->subsampled==422 ? AV_PIX_FMT_YUVJ422P : AV_PIX_FMT_YUVJ444P)
         // The software decoder can leave GRAY8 and RGB range untagged. GBRP
         // stores direct full-range channels; its RGB packing applies no YUV matrix.
         || (decoded->color_range != AVCOL_RANGE_JPEG && (!(work->gray || work->rgb) || decoded->color_range != AVCOL_RANGE_UNSPECIFIED))
@@ -153,6 +153,14 @@ static void apply(Work *work)
         // at odd dimensions without a redundant full-frame packing copy.
         planes[1]=work->u->data[0]; planes[2]=work->v->data[0];
         strides[1]=work->u->linesize[0]; strides[2]=work->v->linesize[0];
+    }
+    if (work->rgb420) {
+        /* The software decoder exposes RGB420's coded components as YUVJ420P.
+         * Their bytes represent R/G/B, so form the GBRP view after the timed
+         * centered expansion. No YCbCr matrix applies to this interpretation. */
+        const uint8_t *red = planes[0]; int red_stride = strides[0];
+        planes[0] = planes[1]; planes[1] = planes[2]; planes[2] = red;
+        strides[0] = strides[1]; strides[1] = strides[2]; strides[2] = red_stride;
     }
     work->rgba->width = work->width; work->rgba->height = work->height; work->rgba->format = AV_PIX_FMT_RGBA;
     require(av_frame_get_buffer(work->rgba, 32), "Allocate independent RGBA output");
@@ -189,11 +197,12 @@ static void check_and_write(Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if (argc != 7 || (strcmp(argv[1], "jpeg-decode") && strcmp(argv[1], "jpeg420-decode") && strcmp(argv[1], "jpeg422-decode") && strcmp(argv[1], "jpeg-gray-decode") && strcmp(argv[1], "jpeg-rgb-decode") && strcmp(argv[1], "jpeg-rgb422-decode"))) fail("Usage: ffmpeg-jpeg-decode-warm jpeg-decode|jpeg420-decode|jpeg422-decode|jpeg-gray-decode|jpeg-rgb-decode|jpeg-rgb422-decode INPUT WIDTH HEIGHT 8 OUTPUT");
+    if (argc != 7 || (strcmp(argv[1], "jpeg-decode") && strcmp(argv[1], "jpeg420-decode") && strcmp(argv[1], "jpeg422-decode") && strcmp(argv[1], "jpeg-gray-decode") && strcmp(argv[1], "jpeg-rgb-decode") && strcmp(argv[1], "jpeg-rgb422-decode") && strcmp(argv[1], "jpeg-rgb420-decode"))) fail("Usage: ffmpeg-jpeg-decode-warm jpeg-decode|jpeg420-decode|jpeg422-decode|jpeg-gray-decode|jpeg-rgb-decode|jpeg-rgb422-decode|jpeg-rgb420-decode INPUT WIDTH HEIGHT 8 OUTPUT");
     Work work = {0}; work.cpu = affinity_cpu(); work.width = number(argv[3]); work.height = number(argv[4]);
     work.rgb422=!strcmp(argv[1],"jpeg-rgb422-decode");
-    work.gray=!strcmp(argv[1],"jpeg-gray-decode"); work.rgb=work.rgb422 || !strcmp(argv[1],"jpeg-rgb-decode");
-    work.subsampled=!strcmp(argv[1],"jpeg420-decode") ? 420 : !strcmp(argv[1],"jpeg422-decode") ? 422 : 0;
+    work.rgb420=!strcmp(argv[1],"jpeg-rgb420-decode");
+    work.gray=!strcmp(argv[1],"jpeg-gray-decode"); work.rgb=work.rgb420 || work.rgb422 || !strcmp(argv[1],"jpeg-rgb-decode");
+    work.subsampled=work.rgb420 || !strcmp(argv[1],"jpeg420-decode") ? 420 : !strcmp(argv[1],"jpeg422-decode") ? 422 : 0;
     if (number(argv[5]) != 8) fail("JPEG decode reference requires depth 8.");
     work.row_bytes = work.width*4; work.raw_bytes = (size_t)work.row_bytes*work.height;
     if (work.raw_bytes > 512U*1024U*1024U) fail("Reference output exceeds 512 MiB.");
@@ -220,8 +229,8 @@ int main(int argc, char **argv)
     check_frame(&work, held); check_frame(&work, work.rgba);
     held->data[0][0] ^= 255; check_frame(&work, work.rgba); av_frame_free(&held); release(&work);
     check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"decoder\":\"mjpeg\",\"sampling\":\"%s\",\"chromaExpansionTimed\":%s,\"chromaVerticalFactor\":%d,\"grayscale\":%s,\"directRgb\":%s,\"rgbCenteredPhaseCorrectionTimed\":%s,\"decodedPixelFormat\":\"%s\",\"colorConversionTimed\":true,\"stateResetTimed\":true,\"pixelsDeterministic\":true,\"outputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
-        argv[1],work.width, work.height, work.cpu, work.gray ? "gray" : work.subsampled==420 ? "420" : work.subsampled==422 || work.rgb422 ? "422" : "444", work.subsampled ? "true" : "false", work.subsampled==420 ? 2 : 1, work.gray ? "true" : "false", work.rgb ? "true" : "false", work.rgb422 ? "true" : "false", work.rgb ? "gbrp" : work.gray ? "gray8" : work.subsampled==420 ? "yuvj420p" : work.subsampled==422 ? "yuvj422p" : "yuvj444p", work.raw_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"decoder\":\"mjpeg\",\"sampling\":\"%s\",\"chromaExpansionTimed\":%s,\"chromaVerticalFactor\":%d,\"grayscale\":%s,\"directRgb\":%s,\"rgbCenteredPhaseCorrectionTimed\":%s,\"rgbComponentPlaneInterpretationTimed\":%s,\"decodedPixelFormat\":\"%s\",\"colorConversionTimed\":true,\"stateResetTimed\":true,\"pixelsDeterministic\":true,\"outputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
+        argv[1],work.width, work.height, work.cpu, work.gray ? "gray" : work.subsampled==420 ? "420" : work.subsampled==422 || work.rgb422 ? "422" : "444", work.subsampled ? "true" : "false", work.subsampled==420 ? 2 : 1, work.gray ? "true" : "false", work.rgb ? "true" : "false", work.rgb422 ? "true" : "false", work.rgb420 ? "true" : "false", work.rgb420 ? "yuvj420p" : work.rgb ? "gbrp" : work.gray ? "gray8" : work.subsampled==420 ? "yuvj420p" : work.subsampled==422 ? "yuvj422p" : "yuvj444p", work.raw_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;

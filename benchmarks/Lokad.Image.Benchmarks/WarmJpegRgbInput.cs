@@ -14,6 +14,15 @@ internal static class WarmJpegRgbInput
     internal const string Managed422Sha256 = "81d19ce7a8331b310ad4e6c1214d1a2b93c7ad8a09afa730ceda2e998355c0de";
     internal const string Native422Sha256 = "5cd92d09be1dc007dc2a696153cf50a3340e93bf015affe7146c3e28af195517";
 
+    internal const string Source420Sha256 = "ccca91bcdaddc90c7aecf62d07cdc629c09c27e607c955cfcc97a7bf91caaf08";
+    internal const string Input420Sha256 = "26e897ecf53f5eb6ea45e6bb881c2168e989dddd5a62c7449268e0c1feeb34e5";
+    internal const string Managed420Sha256 = "08cabc07ee3df6ec835cf11a99d50c535449663f6a7f0e53bf4215ebac74b361";
+    internal const string Native420Sha256 = "e3a693f838f7e27c2764ac61a18db1dc82c4e881e4c4d24479e2f7dcbae325ca";
+    internal const string Oracle420Filter = "extractplanes=y+u+v[r][g][b];"
+        + "[g]scale=iw*2:ih*2:flags=bilinear+accurate_rnd,crop=513:259,setsar=1[ge];"
+        + "[b]scale=iw*2:ih*2:flags=bilinear+accurate_rnd,crop=513:259,setsar=1[be];"
+        + "[r]setsar=1[re];[ge][be][re]mergeplanes=0x001020:format=gbrp,format=rgba";
+
     // Independent untimed CLI reference: immutable even-position samples and
     // rational SPEC centered interpolation, separate from the in-place worker.
     internal static byte[] Center422(ReadOnlySpan<byte> rgba)
@@ -34,9 +43,10 @@ internal static class WarmJpegRgbInput
         return output;
     }
 
-    internal static byte[] Build(byte[] source, bool rgb422 = false)
+    internal static byte[] Build(byte[] source, bool rgb422 = false, bool rgb420 = false)
     {
-        if (JpegBenchmarkCase.Hash(source) != (rgb422 ? Source422Sha256 : SourceSha256))
+        if (rgb422 && rgb420) throw new ArgumentException("Choose one RGB sampling interpretation.");
+        if (JpegBenchmarkCase.Hash(source) != (rgb420 ? Source420Sha256 : rgb422 ? Source422Sha256 : SourceSha256))
             throw new InvalidOperationException("Original native JPEG RGB source packet differs.");
         using var output = new MemoryStream();
         output.Write(new byte[] { 255, 216, 255, 238, 0, 14, 65, 100, 111, 98, 101, 0, 100, 0, 0, 0, 0, 0 });
@@ -79,7 +89,7 @@ internal static class WarmJpegRgbInput
             if (scan) { output.Write(source.AsSpan(position)); break; }
         }
         var result = output.ToArray();
-        if (!scan || JpegBenchmarkCase.Hash(result) != (rgb422 ? Input422Sha256 : InputSha256))
+        if (!scan || JpegBenchmarkCase.Hash(result) != (rgb420 ? Input420Sha256 : rgb422 ? Input422Sha256 : InputSha256))
             throw new InvalidOperationException("Marker-only RGB interpretation differs.");
         return result;
     }

@@ -612,6 +612,11 @@ are exact quarters. Rows use equivalent integer quarter weights, AVX2 batches
 and a scalar edge/tail path, preserving the original binary64 result and opaque
 alpha. Equal sampling-factor representations are supported. Existing per-row
 work/cancellation checks remain; no extra workspace or pixel cache is introduced.
+For direct RGB with horizontal and vertical 2:1 sampling, rows combine two
+component rows with exact sixteenth weights and one final rounding. AVX2 batches
+and scalar edges/tails retain the original binary64 pixels, clamped borders and
+opaque alpha without quantizing intermediate rows or adding workspace. Existing
+row work/cancellation checks and equivalent sampling factors remain unchanged.
 
 Baseline entropy traversal retains exact logical work charges in a local block
 budget, including cancelable operations. Completed charges are published on every
