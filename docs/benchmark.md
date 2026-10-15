@@ -53,7 +53,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA8, Paeth](../benchmarks/WARM-PAETH-FOUR-CHANNEL.md) | 5,099.55 | 2,925.24 | 1.743 / 1.842 | 881,892 | Confirmed |
 | [PNG RGBA8, Up](../benchmarks/WARM-PNG-UP8-BASELINE.md) | 2,644.01 | 1,505.93 | 1.756 / 1.764 | 12,976 | Confirmed |
 | [PNG RGBA16, Up](../benchmarks/WARM-PNG-UP16.md) | 3,473.99 | 1,883.52 | 1.844 / 1.864 | 8,552 | Confirmed |
-| [PNG RGBA8, Sub](../benchmarks/WARM-PNG-SUB16.md) | 1,328.83 | 673.42 | 1.973 / 2.211 | 4,456 | Regression screen; prior confirmed |
+| [PNG RGBA8, Sub](../benchmarks/WARM-PNG-SUB8-CURRENT.md) | 1,179.60 | 699.60 | 1.686 / 1.697 | 4,456 | Confirmed |
 | [PNG RGBA16, Sub](../benchmarks/WARM-PNG-SUB16.md) | 357.99 | 743.02 | 0.482 / 0.493 | 8,552 | Confirmed |
 | [PNG RGBA8, Average](../benchmarks/WARM-PNG-AVERAGE8-BASELINE.md) | 3,137.74 | 1,841.23 | 1.704 / 1.743 | 12,976 | Confirmed |
 | [PNG RGBA16, Average](../benchmarks/WARM-PNG-AVERAGE16.md) | 5,894.17 | 4,384.37 | 1.344 / 1.357 | 8,552 | Confirmed |
@@ -285,17 +285,16 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round confirms one-bit PNG transparency at **0.094x /
-upper 0.098x**, with **520 B/op**. The original black/white projection/key1
-preserves nonzero hidden RGB exactly. The reference times full FFmpeg decoding,
-MONOBLACK-to-owned-RGBA conversion and the existing SPEC color-key correction,
-with owned-buffer transfer for in-place filtering and complete release. Native
-normal/scalar adapter and CLI samples are exact; raw decoder alpha failures
-remain unscored. All twelve actuals and both guards pass. Production is unchanged:
-existing **3,428 Release tests per OS**, including **898 live comparisons**, and
-the same actual package's consumer plus all three examples on Windows/Linux are
-reused. No production rebuild, full suite, package proof, method audit or profile
-is repeated. The preceding gray2/key0 round's 97% gain remains separately confirmed.
+The latest accepted round confirms the existing RGBA8 PNG Sub workload at
+**1.686x / upper 1.697x**, with **4,456 B/op** and exact pixels. The original
+packet, qualified core, harness and native worker are unchanged; all twelve
+confirmation actuals and both quiet guards pass. Existing **3,428 Release tests
+per OS**, including **898 live comparisons**, and the same actual package's
+consumer plus all three examples on Windows/Linux are reused. No production,
+harness or native rebuild, full suite, package proof, method audit or profile
+is repeated. An extra preparation execution after a private flag typo remains
+retained unscored and excluded from comparative statistics. Prior Sub and packed
+transparency results retain their own sources and evidence.
 
 PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples
 and the unchanged 5% IDAT-size gate; earlier level6/level6 refusals remain unscored.
