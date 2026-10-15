@@ -91,6 +91,7 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG444-RGBA16-ADAPTIVE.md) | 6,767.17 | 3,851.77 | 1.757 / 1.790 | 556,280 | Confirmed |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG422-RGBA8-ADAPTIVE.md) | 4,277.49 | 2,349.58 | 1.821 / 1.862 | 294,110 | Confirmed |
 | [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG420-CHROMA-PAIR.md) | 3,434.93 | 1,767.46 | 1.943 / 1.988 | 297,772 | Confirmed |
+| [JPEG 4:2:0, forward-only output / fixed Huffman](../benchmarks/WARM-JPEG420-FORWARD-STREAM.md) | 3,703.74 | 1,765.72 | 2.098 / 2.370 | 527,367 | Above 2x / open |
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-ADAPTIVE-HUFFMAN.md) | 3,481.14 | 1,843.98 | 1.888 / 1.931 | 297,772 | Confirmed |
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-ALPHAWEIGHTED.md) | 42,879.92 | 54,484.52 | 0.787 / 0.805 | 2,615,472 | Confirmed |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-RGBA16-ENCODE.md) | 43,362.07 | 53,579.62 | 0.809 / 0.819 | 2,615,472 | Confirmed |
@@ -267,6 +268,8 @@ Their earlier level6/level6 refusals remain unscored. GIF and animation are defe
 
 JPEG420 RGBA8 confirms **1.943x / upper 1.988x** after sharing chroma sampling,
 with unchanged exact packets and allocations.
+Its forward-only output fallback screens **2.098x / upper 2.370x** and remains
+open; a byte-admission shortcut is rejected and production is restored.
 Opaque VP8 decoding also remains open at **1.983x / upper 2.004x**.
 Its [bulk normalization trial](../benchmarks/VP8-NORMALIZATION-REJECTED.md) is rejected;
 the tested production is restored.

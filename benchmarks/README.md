@@ -1130,3 +1130,12 @@ second retained original raster. Its [RGBA8 coverage round](WARM-TRANSPOSE8-PARI
 requires no production change. The independent twelve-actual repeat passes both
 quiet guards at 0.991x, conservative upper 1.003x, certifying this fixed pair.
 No new image, shape or profile sweep is added; broader coverage remains open.
+
+The [forward-only JPEG screen](WARM-JPEG420-FORWARD-STREAM.md) exposes the original
+fixed-Huffman fallback at **2.098x / upper 2.370x**, **527,367 B/op**. A byte
+admission shortcut is rejected and qualified production restored. On the quiet
+VM, prepare exactly one quality anchor with `--prepare-warm-jpeg420-stream 0`,
+then select `-WarmFamily Jpeg -WarmCases Encode420Stream8` with the JPEG entropy
+environment override unset. Preparation preserves any existing anchor. This case
+includes fresh wrapper/storage creation, complete encoding and release; it adds
+no original raster and makes no compression efficiency parity claim.

@@ -125,6 +125,7 @@ def render():
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg44416-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG444-RGBA16-ADAPTIVE.md', True),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg4228-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA8-ADAPTIVE.md', True),
         row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg420pair-evidence.json', ['observations', -1], 'WARM-JPEG420-CHROMA-PAIR.md', True),
+        row('JPEG 4:2:0, forward-only output / fixed Huffman', 'warm-jpeg420stream-evidence.json', ['observations', -1], 'WARM-JPEG420-FORWARD-STREAM.md'),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG-ADAPTIVE-HUFFMAN.md', True),
         row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
         row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8encode16-evidence.json', ['observations', -1], 'WARM-VP8-RGBA16-ENCODE.md', True),
@@ -341,6 +342,8 @@ Their earlier level6/level6 refusals remain unscored. GIF and animation are defe
 
 JPEG420 RGBA8 confirms **1.943x / upper 1.988x** after sharing chroma sampling,
 with unchanged exact packets and allocations.
+Its forward-only output fallback screens **2.098x / upper 2.370x** and remains
+open; a byte-admission shortcut is rejected and production is restored.
 Opaque VP8 decoding also remains open at **1.983x / upper 2.004x**.
 Its [bulk normalization trial](../benchmarks/VP8-NORMALIZATION-REJECTED.md) is rejected;
 the tested production is restored.
