@@ -6,15 +6,31 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
-/// <summary>Eight-column strips reuse source rows within an admitted stack workspace.</summary>
+/// <summary>Eight-column strips reuse rows for one-axis or two-axis enlargement within an admitted workspace.</summary>
 internal static class EnlargingWordColumnBicubicResize
 {
     private const int WorkspaceBytes = 4096;
 
+    // A completed resize clears RGB under zero alpha, so this temporary marker
+    // cannot collide with a completed pixel. The result is private until return.
+    private const ulong DeferredPixel = 0x0000FFFFFFFFFFFF;
+
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
         double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context)
     {
-        if (source.BitDepth != 16 || result.Width <= source.Width || result.Height <= source.Height
+        if (!TryApplyCore(source, result, scaleX, scaleY, tapsX, tapsY, rowWork, context, out var deferred)) return false;
+        if (deferred) ReplayTiny(source, result, scaleX, scaleY, context);
+        return true;
+    }
+
+    // Exact tiny-alpha scratch is acquired only after this stack frame returns.
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static bool TryApplyCore(ImageBuffer source, ImageBuffer result,
+        double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context, out bool deferred)
+    {
+        deferred = false;
+        if (source.BitDepth != 16 || result.Width < source.Width || result.Height < source.Height
+            || result.Width == source.Width && result.Height == source.Height
             || tapsX > 5 || tapsY > 5
             || !Avx512F.IsSupported || !Avx2.IsSupported || !Avx.IsSupported || !Sse41.IsSupported
             || context.RemainingWorkingBytes < WorkspaceBytes) return false;
@@ -120,9 +136,9 @@ internal static class EnlargingWordColumnBicubicResize
                         {
                             if (!(n0 >= .5 && n1 >= .5)
                                 || !OriginalWord(source, result, tile + outputX, y, weights.Slice(outputX * 5, counts[outputX]),
-                                    offsets.Slice(outputX * 5, counts[outputX]), sourceFirst, vertical[..count], first, context)
+                                    offsets.Slice(outputX * 5, counts[outputX]), sourceFirst, vertical[..count], first, context, ref deferred)
                                 || !OriginalWord(source, result, tile + outputX + 1, y, weights.Slice((outputX + 1) * 5, counts[outputX + 1]),
-                                    offsets.Slice((outputX + 1) * 5, counts[outputX + 1]), sourceFirst, vertical[..count], first, context)) return false;
+                                    offsets.Slice((outputX + 1) * 5, counts[outputX + 1]), sourceFirst, vertical[..count], first, context, ref deferred)) return false;
                         }
                     }
                     for (var x = outputX; x < length; x++)
@@ -135,7 +151,7 @@ internal static class EnlargingWordColumnBicubicResize
                         {
                             if (!(normalizer >= .5)
                                 || !OriginalWord(source, result, tile + x, y, weights.Slice(x * 5, counts[x]),
-                                    offsets.Slice(x * 5, counts[x]), sourceFirst, vertical[..count], first, context)) return false;
+                                    offsets.Slice(x * 5, counts[x]), sourceFirst, vertical[..count], first, context, ref deferred)) return false;
                         }
                     }
                 }
@@ -209,7 +225,7 @@ internal static class EnlargingWordColumnBicubicResize
 
     private static bool OriginalWord(ImageBuffer source, ImageBuffer result, int x, int y,
         ReadOnlySpan<double> weights, ReadOnlySpan<int> offsets, int sourceFirst,
-        ReadOnlySpan<double> vertical, int firstY, OperationContext context)
+        ReadOnlySpan<double> vertical, int firstY, OperationContext context, ref bool deferred)
     {
         double red = 0, green = 0, blue = 0, alphaSum = 0, normalizer = 0;
         for (var ty = 0; ty < vertical.Length; ty++)
@@ -229,7 +245,12 @@ internal static class EnlargingWordColumnBicubicResize
         var normalized = alphaSum / normalizer;
         // Exact tiny-alpha arithmetic needs the complete 4-KiB allowance.
         // Decline while this frame is live; the caller replays after it unwinds.
-        if (normalized > 0 && normalized < 1) return false;
+        if (normalized > 0 && normalized < 1)
+        {
+            BinaryPrimitives.WriteUInt64LittleEndian(result.Pixels.Slice(y * result.Stride + x * 8, 8), DeferredPixel);
+            deferred = true;
+            return true;
+        }
         var aOut = RoundWord(normalized);
         var color = aOut > 0 && alphaSum > 0;
         var destination = result.GetRow16(y).Slice(x * 4, 4);
@@ -238,6 +259,49 @@ internal static class EnlargingWordColumnBicubicResize
         destination[2] = RoundWord(color ? blue / alphaSum : 0);
         destination[3] = aOut;
         return true;
+    }
+
+    private static void ReplayTiny(ImageBuffer source, ImageBuffer result, double scaleX, double scaleY, OperationContext context)
+    {
+        for (var y = 0; y < result.Height; y++)
+        {
+            var destination = result.GetRow16(y);
+            for (var x = 0; x < result.Width; x++)
+            {
+                if ((x & 255) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                if (BinaryPrimitives.ReadUInt64LittleEndian(MemoryMarshal.AsBytes(destination.Slice(x * 4, 4))) != DeferredPixel) continue;
+                var centerX = (x + .5) * source.Width / result.Width - .5;
+                var centerY = (y + .5) * source.Height / result.Height - .5;
+                var firstX = (int)Math.Ceiling(centerX - 2 * scaleX);
+                var lastX = (int)Math.Floor(centerX + 2 * scaleX);
+                var firstY = (int)Math.Ceiling(centerY - 2 * scaleY);
+                var lastY = (int)Math.Floor(centerY + 2 * scaleY);
+                double red = 0, green = 0, blue = 0, alphaSum = 0;
+                for (var sy = firstY; sy <= lastY; sy++)
+                {
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    var wy = ImageTransforms.Kernel((sy - centerY) / scaleY, ResizeFilter.Bicubic);
+                    if (wy == 0) continue;
+                    var row = source.GetRow16(Math.Clamp(sy, 0, source.Height - 1));
+                    for (var sx = firstX; sx <= lastX; sx++)
+                    {
+                        var w = wy * ImageTransforms.Kernel((sx - centerX) / scaleX, ResizeFilter.Bicubic);
+                        if (w == 0) continue;
+                        var offset = Math.Clamp(sx, 0, source.Width - 1) * 4;
+                        var a = row[offset + 3];
+                        red += w * a * row[offset]; green += w * a * row[offset + 1]; blue += w * a * row[offset + 2];
+                        alphaSum += w * a;
+                    }
+                }
+                var rounded = ResizeAlpha.Round(source, x, y, result.Width, result.Height, ResizeFilter.Bicubic, context);
+                var color = rounded > 0 && alphaSum > 0;
+                var pixel = destination.Slice(x * 4, 4);
+                pixel[0] = RoundWord(color ? red / alphaSum : 0);
+                pixel[1] = RoundWord(color ? green / alphaSum : 0);
+                pixel[2] = RoundWord(color ? blue / alphaSum : 0);
+                pixel[3] = (ushort)rounded;
+            }
+        }
     }
 
     private static ushort RoundWord(double value)

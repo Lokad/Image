@@ -270,14 +270,17 @@ and filtering check cancellation every 256 taps. Full unsigned products, checked
 loads, complete work, absolute coordinates and independent owners remain.
 No heap/full-support/output cache is added; other directions, heights, hardware
 and budgets retain prior paths.
-RGBA16 enlargement on both axes may use a separate eight-column/five-row strip
+RGBA16 enlargement on one or both axes may use a separate eight-column/five-row strip
 cache when the full row cache cannot be admitted. Its optional 4-KiB admission
 covers 2,416 bytes of fixed arrays. A bounded source window is decoded once per
 reused row; exact unsigned word products widen to binary64 without quantization.
 Each horizontal/vertical accumulation retains tap order. Paired and single word
 outputs use the conservative `2^-40*16^2` budget and depth-scaled quotient guards.
 Uncertain ordinary or negative-alpha samples replay the original order locally;
-tiny alpha instead unwinds the complete strip operation before exact scratch.
+tiny-alpha pixels use an impossible completed-pixel marker in the private output.
+After the non-inlined strip frame returns and releases its admission, a timed
+scan replays only marked pixels with original color arithmetic and exact rational
+alpha scratch, charging its additional work. No marker reaches a returned image.
 Complete work, bounded cancellation and independent owners remain. No heap
 workspace or persistent state is added; existing byte and reduction kernels stay
 unchanged. Other directions, hardware and smaller budgets retain prior paths.

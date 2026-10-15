@@ -128,7 +128,7 @@ internal static class WarmBenchmarks
                             && value.GetProperty("nativeNormalScalarBounded").GetBoolean()
                             && value.GetProperty("nativeZeroAlphaRgbZero").GetBoolean() && value.GetProperty("nativePixelsDeterministic").GetBoolean()
                             && (value.GetProperty("nativeRgbMaximum").GetInt32() is >= 0 and <= 1
-                                || caseId=="VerticalUp16" && depth==16
+                                || (caseId=="VerticalUp16" || caseId=="TightVerticalUp16") && depth==16
                                     && value.GetProperty("outputWidth").GetInt32()==513 && value.GetProperty("outputHeight").GetInt32()==519
                                     && value.GetProperty("nativeLowAlphaRgbBounded").GetBoolean()
                                     && value.GetProperty("nativeLowAlphaRgbReferenceMaximum").GetInt32()==16
