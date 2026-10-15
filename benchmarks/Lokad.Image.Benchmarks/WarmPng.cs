@@ -48,6 +48,8 @@ public class WarmPng
     private int ColorType => Palette ? 3 : GrayAlpha ? 4 : Gray ? 0 : Rgb ? 2 : 6;
     private bool NoCompression => Case is WarmPngCase.EncodeNoCompression8 or WarmPngCase.DecodeNoCompression8;
     private int EncoderLevel => NoCompression ? 0 : 6;
+    private bool MatchedByteEncoding => Encode && Depth == 8 && ColorType is 0 or 2 or 4;
+    private int ManagedEncoderLevel => MatchedByteEncoding ? 9 : EncoderLevel;
     private bool Encode => Case is WarmPngCase.EncodeNoCompression8 or WarmPngCase.EncodeGrayAlpha16 or WarmPngCase.EncodeGrayAlpha8 or WarmPngCase.Encode8 or WarmPngCase.Encode16 or WarmPngCase.EncodeRgb8 or WarmPngCase.EncodeRgb16 or WarmPngCase.EncodeGray8 or WarmPngCase.EncodeGray16;
     private bool Interlaced => Case == WarmPngCase.DecodeAdam7_16;
     private bool Paeth => Case is WarmPngCase.DecodePaeth16 or WarmPngCase.DecodePaeth8;
@@ -120,6 +122,16 @@ public class WarmPng
             else if (Average) encoded = WarmPngAverageInput.Build(pixels);
             else if (Mono) encoded = WarmPngMonoInput.Build(pixels, CodedDepth);
             else if (Palette) encoded = WarmPngPaletteInput.Build(pixels, CodedDepth, PartialAlpha);
+            else if (Case is WarmPngCase.DecodeRgb8 or WarmPngCase.DecodeGray8 or WarmPngCase.DecodeGrayAlpha8)
+            {
+                // Decoder workload bytes remain frozen when encoder policy changes.
+                var name = Rgb ? "png-rgb8" : GrayAlpha ? "png-gray-alpha8" : "png-gray8";
+                encoded = File.ReadAllBytes(Path.Combine(state.Root, "artifacts", "warm-reference", name, "input.png"));
+                var expectedHash = Rgb ? "ad3af25e172e383b77969917599c4a66cea2581dd64b0cd13f0610ac54816855"
+                    : GrayAlpha ? "0bfdcc9aa57f0b6009a3ca31b1ab200d2d1bb59c1395495afaad584c5f6e630d"
+                    : "8990a1cb03abac292d32deb02a97003b17b7b8347afe02e8370194de01bbc235";
+                if (JpegBenchmarkCase.Hash(encoded) != expectedHash) throw new InvalidOperationException("Frozen byte PNG decoder input changed.");
+            }
             else using (var output = new MemoryStream())
             {
                 ImageCodec.EncodePng(source, output, encodeOptions); encoded = output.ToArray();
@@ -128,6 +140,7 @@ public class WarmPng
             if (NoCompression || Rgb || Gray || GrayAlpha || Palette || Up || Sub || Average)
             {
                 var directory = Path.Combine(state.Root, "artifacts", "warm-reference", RgbTransparency ? "png-rgb" + Depth + "-trns" : GrayTransparency ? Depth == 16 ? "png-gray16-trns32639" : "png-gray8-trns127" : NoCompression ? "png-store-8" : Up ? "png-up-8" : Sub ? "png-sub-8" : Average ? "png-average-8" : Mono ? "png-gray" + CodedDepth : PartialAlpha ? "png-palette8-alpha2" : Palette ? "png-palette" + CodedDepth : GrayAlpha ? "png-gray-alpha" + Depth : Gray ? "png-gray" + Depth : "png-rgb" + Depth);
+                if (MatchedByteEncoding) directory += "-optimal9";
                 Directory.CreateDirectory(directory);
                 foreach (var (name, bytes) in new[] { ("input.png", encoded), ("expected.raw", pixels) })
                 {
@@ -237,7 +250,7 @@ public class WarmPng
         {
             ValidatePng(output);
             using var decoded = ImageCodec.Decode(output); ValidatePixels(decoded);
-            // Pin the same level/filter and retain size evidence. A large payload
+            // Pin declared backend levels/filter and retain size evidence. A large payload
             // discrepancy is a preparation mismatch rather than a scored speed win.
             var nativeIdat = IdatBytes(output); var managedIdat = IdatBytes(encoded);
             if (Math.Abs(nativeIdat - (double)managedIdat) / Math.Max(nativeIdat, managedIdat) > 0.05)
@@ -426,8 +439,9 @@ public class WarmPng
                     : Sub ? "Authored noninterlaced PNG RGBA8; every row Sub; BCL Optimal level 6; identical resident encoded input"
                     : Average ? "Authored noninterlaced PNG RGBA8; every row Average; BCL Optimal level 6; identical resident encoded input"
                     : Interlaced ? "Authored PNG Adam7 RGBA16; BCL Optimal level 6; filter None; identical resident encoded input"
+                    : MatchedByteEncoding ? "Lokad.Image Optimal uses BCL level9 / FFmpeg level6; exact samples and unchanged5% IDAT-size gate; filter None; noninterlaced"
                     : $"BCL Optimal (zlib default level 6) / FFmpeg level 6; filter None; noninterlaced {(Mono ? "packed gray" + CodedDepth + ", opaque" : Palette ? $"palette{CodedDepth}, {1 << CodedDepth} entries and {(PartialAlpha ? "two-entry" : "full")} tRNS" : GrayAlpha ? "gray-alpha" : Gray ? Depth == 16 ? "gray16be" : "gray" : Rgb ? "RGB" : "RGBA")}",
-                encoderLevel = Encode ? EncoderLevel : (int?)null, storedDeflateBlocksExact = NoCompression,
+                encoderLevel = Encode ? EncoderLevel : (int?)null, managedEncoderLevel = Encode ? ManagedEncoderLevel : (int?)null, nativeEncoderLevel = Encode ? EncoderLevel : (int?)null, storedDeflateBlocksExact = NoCompression,
                 grayTransparencyKey = GrayTransparency ? (int?)GrayTransparencyKey : null,
                 grayTransparencyBytes = GrayTransparency ? (int?)2 : null,
                 rgbTransparencyKey = RgbTransparency ? WarmPngRgbTransparencyInput.KeySamples(Depth).ToArray() : null, rgbTransparencyBytes = RgbTransparency ? (int?)6 : null,
@@ -455,11 +469,11 @@ public class WarmPng
                     : NoCompression
                     ? "Warm original RGBA8 to complete owned PNG: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray. Native codec/source/packet wrappers reused; real independent owned packet acquisition/encode/release included. Both NoCompression/level0/filter None/color6, only stored Deflate blocks, exact full RGBA samples. IPC/file IO/hashes/validation excluded."
                     : Encode && GrayAlpha
-                    ? $"Warm grayscale RGBA{Depth} input with original alpha and hidden RGB to complete owned gray-alpha{Depth} PNG: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray. Original adapter losslessly packs RGBA{Depth} red/alpha{(Depth == 16 ? " with LE-to-BE word conversion" : "")} into {(Depth == 16 ? "YA16BE" : "YA8")} on the pinned CPU inside every operation, into a reused prepared frame, then calls the FFmpeg PNG encoder; no native colorspace conversion; source/context/wrappers reused, real independent owned packet acquisition/encode/release included. Both level6/filter None/color4. Equal RGB fixed and independently validated; original alpha retained. Normal/scalar CLI encodes the identical canonical {(Depth == 16 ? "YA16BE" : "YA8")} bytes for untimed validation; native timed input stays {(Depth == 16 ? "RGBA64LE" : "RGBA8")}. IPC/file IO/hashes/validation excluded."
+                    ? $"Warm grayscale RGBA{Depth} input with original alpha and hidden RGB to complete owned gray-alpha{Depth} PNG: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray. Original adapter losslessly packs RGBA{Depth} red/alpha{(Depth == 16 ? " with LE-to-BE word conversion" : "")} into {(Depth == 16 ? "YA16BE" : "YA8")} on the pinned CPU inside every operation, into a reused prepared frame, then calls the FFmpeg PNG encoder; no native colorspace conversion; source/context/wrappers reused, real independent owned packet acquisition/encode/release included. Managed level{ManagedEncoderLevel}/FFmpeg level{EncoderLevel}/filter None/color4. Equal RGB fixed and independently validated; original alpha retained. Normal/scalar CLI encodes the identical canonical {(Depth == 16 ? "YA16BE" : "YA8")} bytes for untimed validation; native timed input stays {(Depth == 16 ? "RGBA64LE" : "RGBA8")}. IPC/file IO/hashes/validation excluded."
                     : Encode && Gray
-                    ? $"Warm opaque grayscale RGBA{Depth} input to complete owned gray{Depth} PNG: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray. Native one-thread {(Depth == 16 ? "FFmpeg extractplanes red and GRAY16LE-to-GRAY16BE conversion with owned intermediate acquisition/release" : "full-range RGBA-to-GRAY8 conversion into a reused prepared frame")} runs inside every encode operation; source/context/frame wrappers reused; codec/packet wrappers reused, real independent owned packet acquisition/encode/release included. Both level6/filter None/color0. Equal RGB and opacity fixed and independently validated. IPC/file IO/hashes/validation excluded."
+                    ? $"Warm opaque grayscale RGBA{Depth} input to complete owned gray{Depth} PNG: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray. Native one-thread {(Depth == 16 ? "FFmpeg extractplanes red and GRAY16LE-to-GRAY16BE conversion with owned intermediate acquisition/release" : "full-range RGBA-to-GRAY8 conversion into a reused prepared frame")} runs inside every encode operation; source/context/frame wrappers reused; codec/packet wrappers reused, real independent owned packet acquisition/encode/release included. Managed level{ManagedEncoderLevel}/FFmpeg level{EncoderLevel}/filter None/color0. Equal RGB and opacity fixed and independently validated. IPC/file IO/hashes/validation excluded."
                     : Encode && Rgb
-                    ? $"Warm opaque RGBA{Depth} input to complete owned RGB{Depth} PNG: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray. Native one-thread {(Depth == 16 ? "RGBA64LE-to-RGB48BE" : "RGBA-to-RGB24")} conversion runs inside every encode operation into a reused prepared frame; codec/packet wrappers reused, real independent owned packet acquisition/encode/release included. Both level6/filter None/color2. Opacity fixed and independently validated. IPC/file IO/hashes/validation excluded."
+                    ? $"Warm opaque RGBA{Depth} input to complete owned RGB{Depth} PNG: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray. Native one-thread {(Depth == 16 ? "RGBA64LE-to-RGB48BE" : "RGBA-to-RGB24")} conversion runs inside every encode operation into a reused prepared frame; codec/packet wrappers reused, real independent owned packet acquisition/encode/release included. Managed level{ManagedEncoderLevel}/FFmpeg level{EncoderLevel}/filter None/color2. Opacity fixed and independently validated. IPC/file IO/hashes/validation excluded."
                     : Encode
                     ? "Warm RGBA input to complete owned PNG: fresh managed MemoryStream (creation, growth, encode and disposal included; no redundant ToArray); native codec context/packet wrapper reused, real independently owned packet acquisition, encode and release included. Both level 6/filter None. For RGBA16, native LE-to-BE full-frame sample conversion runs inside every operation, using a reused prepared frame; managed conversion/row storage is included in public EncodePng. IPC, file IO, hashes and validation excluded."
                     : "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE, RGB48BE-to-RGBA64LE, GRAY16BE-to-RGBA64LE, YA16BE-to-RGBA64LE, RGB24-to-RGBA, GRAY8-to-RGBA, MONOBLACK-to-RGBA, YA8-to-RGBA or PAL8-to-RGBA FFmpeg conversion and second output allocation included natively; direct RGBA8 requires no conversion. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded."

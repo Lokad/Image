@@ -465,6 +465,14 @@ filter None, splits IDAT output into bounded chunks, and strips metadata. Select
 gray requires equal RGB channels; selecting a format without alpha requires
 opaque pixels. No implicit grayscale conversion or alpha removal occurs.
 
+The default `Optimal` compression policy uses the BCL's smallest-size search
+for 8-bit gray, RGB and gray-alpha output, avoiding the weaker compression of
+the runtime's default search on these layouts. Other formats and explicitly
+selected `Fastest`, `NoCompression` or `SmallestSize` policies retain their
+existing selection. This is an implementation policy, not a promise of a
+particular numeric backend level or exact compressed bytes. Samples, filter,
+chunk bounds, admission, work and cancellation contracts are unchanged.
+
 RGBA8 encoding copies complete RGBA rows in groups of at most 4096 pixels, with
 cancellation checked before each group. Encoded bytes, hidden RGB/alpha, work
 charges, memory admission and row workspace remain unchanged across compression

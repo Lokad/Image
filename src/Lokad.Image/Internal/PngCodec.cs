@@ -1083,9 +1083,16 @@ internal static class PngCodec
         BinaryPrimitives.WriteInt32BigEndian(header[4..], source.Height);
         header[8] = (byte)source.BitDepth; header[9] = (byte)color; header[10] = 0; header[11] = 0; header[12] = 0;
         WriteChunk(output, "IHDR"u8, header);
+        // Optimal is a library policy, rather than a fixed zlib level. Byte
+        // gray/RGB/gray-alpha need the BCL's deeper match search to retain
+        // comparable compression. Other formats and explicit settings retain
+        // their existing compressor selection.
+        var compression = options.Compression == CompressionLevel.Optimal
+            && source.BitDepth == 8 && color is 0 or 2 or 4
+            ? CompressionLevel.SmallestSize : options.Compression;
         using (var chunks = new IdatWriter(output))
         {
-            using (var zlib = new ZLibStream(chunks, options.Compression, true))
+            using (var zlib = new ZLibStream(chunks, compression, true))
             {
                 for (var y = 0; y < source.Height; y++)
                 {

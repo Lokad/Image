@@ -10,7 +10,7 @@ round, at most three, with correctness established before timing.
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
 | PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed | Other material depths/layouts, shorter palettes or distinct public boundaries |
-| PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level 6/None; RGBA8 NoCompression/None confirmed | RGB8, gray8 and gray-alpha8 exact samples, unscored compression-size mismatches; other materially different compression work/public boundaries |
+| PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level6/None; byte RGB/gray/gray-alpha Optimal managed9/native6 with unchanged5% size gate confirmed; RGBA8 NoCompression/None confirmed | Other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x and 4:2:2 confirmed 1.821x / upper 1.862x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x and 4:2:0 confirmed 1.888x / upper 1.931x; adaptive 4:2:0 RGBA8 quiet repeat 1.977x / upper 2.014x, open | RGBA8 4:2:0 upper bound; grayscale, constrained fallback and other material normalization layouts |
 | WebP | VP8 with alpha decode/encode; opaque VP8 decode quiet repeat 1.983x / upper 2.004x, open; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Opaque VP8 upper bound; other material opaque/alpha alternatives and distinct public boundaries |
@@ -749,3 +749,14 @@ RGBA8 at1.783x / upper1.795x and RGBA16 at1.773x / upper1.783x, resolving their
 recent unconfirmed short bounds. Three workloads, unchanged harness, no new
 original raster/profile or comparison adjustment. Stop all three confirmed pairs;
 remaining material codec/public/current-source coverage stays open.
+
+The [byte PNG Optimal encoder round](WARM-PNG-BYTE-OPTIMAL.md) closes the three
+previous size-gate refusals without relaxing them. Public Optimal selects BCL9
+for byte gray/RGB/gray-alpha; FFmpeg remains6 and actual levels are labeled.
+Independent confirmations are gray1.802x / upper1.818x at263,664 B/op,
+RGB1.093x / upper1.107x at527,098 B/op, and gray-alpha1.374x / upper1.382x
+at264,179 B/op. Exact samples, filterNone and the5% IDAT gate remain. Decoder
+fixture bytes stay pinned and three untimed controls pass. One encoder policy,
+three existing workloads, two original rasters, shared immutable drivers.
+Original same-level failures/audits remain retained and unscored. Stop these
+three confirmed pairs; other material codec/public/current-source coverage stays open.

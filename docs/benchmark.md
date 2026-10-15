@@ -81,11 +81,11 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG8-ENCODE.md) | 7,241.99 | 17,219.43 | 0.421 / 0.430 | 527,629 | Confirmed |
 | [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED8-ENCODE.md) | 357.17 | 189.72 | 1.883 / 1.933 | 2,102,472 | Confirmed |
 | [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG16-ENCODE-CRC.md) | 16,470.31 | 19,951.52 | 0.826 / 0.838 | 2,103,836 | Confirmed |
-| [PNG RGB8, level 6 / None](../benchmarks/WARM-PNG-RGB8-ENCODE-BOUNDARY.md) | — | — | — | — | Compression-size gate failed; no timing |
+| [PNG RGB8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 10,402.09 | 9,514.15 | 1.093 / 1.107 | 527,098 | Confirmed |
 | [PNG RGB16, level 6 / None](../benchmarks/WARM-PNG-RGB16-ENCODE.md) | 13,121.10 | 15,174.40 | 0.865 / 0.871 | 2,102,765 | Confirmed |
-| [PNG gray8, level 6 / None](../benchmarks/WARM-PNG-GRAY8-ENCODE-BOUNDARY.md) | — | — | — | — | Compression-size gate failed; no timing |
+| [PNG gray8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 3,540.72 | 1,964.99 | 1.802 / 1.818 | 263,664 | Confirmed |
 | [PNG gray16, level 6 / None](../benchmarks/WARM-PNG-GRAY16-ENCODE.md) | 5,667.73 | 4,927.46 | 1.150 / 1.156 | 1,051,455 | Confirmed |
-| [PNG gray-alpha8, level 6 / None](../benchmarks/WARM-PNG-GRAY-ALPHA8-ENCODE-BOUNDARY.md) | — | — | — | — | Compression-size gate failed; no timing |
+| [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 5,924.76 | 4,311.86 | 1.374 / 1.382 | 264,179 | Confirmed |
 | [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ENCODE.md) | 9,316.78 | 10,318.59 | 0.903 / 0.915 | 1,052,368 | Confirmed |
 | [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG444-RGBA8-ADAPTIVE.md) | 6,705.88 | 3,783.34 | 1.772 / 1.818 | 559,384 | Confirmed |
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG444-RGBA16-ADAPTIVE.md) | 6,767.17 | 3,851.77 | 1.757 / 1.790 | 556,280 | Confirmed |
