@@ -1218,3 +1218,12 @@ RGBA16 JPEG422 uses `--prepare-warm-jpeg42216 0` with
 and original word raster. Prepare only the fixed native qscale5/managed quality65
 anchor, enforce the unchanged0.25dB source band, and time complete normalization
 and flattening. See the [retained result](../../benchmarks/WARM-JPEG422-RGBA16.md).
+
+Row-restart JPEG420 uses the original `ffmpeg-jpeg-restart-warm.c` adapter,
+`bash tools/WarmReference/build-jpeg-restart-linux.sh`,
+`--prepare-warm-jpeg420-restart 0` with `LOKAD_IMAGE_JPEG_ENTROPY=adaptive-v1`,
+then `-WarmFamily Jpeg -WarmCases Encode420Restart8`. Both packets must have
+DRI33 and sixteen RST markers. Two native logical slices use verified default
+serial executors with one thread; active threading fails validation. Quality69
+and qscale5 reuse the existing RGBA8 anchor, with identical per-encoder decoded
+pixels to the nonrestart pair. See the [admission round](../../benchmarks/WARM-JPEG-ADMITTED.md).

@@ -95,6 +95,7 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG422-RGBA8-ADAPTIVE.md) | 4,277.49 | 2,349.58 | 1.821 / 1.862 | 294,110 | Confirmed |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG422-RGBA16.md) | 4,538.42 | 2,422.35 | 1.874 / 1.884 | 294,110 | Confirmed |
 | [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG420-CHROMA-PAIR.md) | 3,434.93 | 1,767.46 | 1.943 / 1.988 | 297,772 | Confirmed |
+| [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-ADMITTED.md) | 3,157.50 | 1,612.58 | 1.958 / 1.973 | 297,780 | Confirmed |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-GEOMETRIC.md) | 3,382.57 | 1,765.48 | 1.916 / 1.936 | 263,812 | Confirmed |
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FORWARD-RGBA16.md) | 3,572.45 | 1,833.91 | 1.948 / 1.954 | 263,812 | Confirmed |
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-ADAPTIVE-HUFFMAN.md) | 3,481.14 | 1,843.98 | 1.888 / 1.931 | 297,772 | Confirmed |
@@ -296,6 +297,13 @@ Earlier [bulk normalization](../benchmarks/VP8-NORMALIZATION-REJECTED.md),
 [token-local](../benchmarks/VP8-TOKEN-LOCAL-REJECTED.md) reader trials remain rejected.
 JPEG444/422 RGBA8 and JPEG444/422/420 RGBA16 are confirmed with adaptive Huffman
 coding; RGBA16 4:2:2 confirms **1.874x / upper 1.884x** with full normalization.
+JPEG420 with row restart markers confirms **1.958x / upper 1.973x**, at
+**297,780 B/op**, after whole-packet admission removes repeated entropy byte
+checks. Its retained mean falls **8.0%** with identical packets; nonrestart
+adaptive and fixed streaming regression means pass. Both OSes pass **3,298**
+Release tests, including **896** live comparisons, and the same actual package's
+consumer and three examples. Short regression screens retain their own bounds
+in the linked report and do not replace earlier independent certificates.
 Remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove
 the uniform target. Linked reports retain superseded raw evidence, failed guards,

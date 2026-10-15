@@ -620,6 +620,11 @@ recomputes its events. Admission includes its full capacity and a 64 KiB table/
 scratch allowance. Histogram traversal and table construction charge work.
 Lower output quotas retain adaptive coding and enforce every write; combined
 symbol writes apply only when conservative output and work bounds are satisfied.
+When the whole packet's conservative bound fits the output quota, a
+noncancellable stock `MemoryStream` may emit adaptive entropy bytes directly
+through the bounded writer. Byte stuffing, restart framing, work charges and
+partial-write failures remain identical. Caller stream subclasses, cancellable
+operations and tighter quotas retain the original per-write checks.
 
 JPEG requires opaque input or an explicit `BackgroundRgb` packed as 0xRRGGBB.
 Alpha flattening operates in encoded sample space before 16-to-8-bit conversion,

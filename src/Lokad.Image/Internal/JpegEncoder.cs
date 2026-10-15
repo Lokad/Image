@@ -367,12 +367,12 @@ internal static class JpegEncoder
             var scan = new byte[4 + components * 2]; scan[0] = (byte)components;
             for (var c = 0; c < components; c++) { scan[1 + c * 2] = (byte)(c + 1); scan[2 + c * 2] = c == 0 ? (byte)0 : (byte)17; }
             scan[2 + components * 2] = 63; Segment(output, 0xDA, scan);
-            var writer = new JpegEntropyWriter(output, context); var restart = 0;
             var combineWords = (long)context.Limits.MaxOutputBytes >= blockCount * 432L + 2048;
+            var writer = new JpegEntropyWriter(output, context, combineWords ? blockCount * 432L + 2048 : 0); var restart = 0;
             for (var i = 0; i < eventCount; i++)
             {
                 var entry = cache[i];
-                if ((entry & (1u << 24)) != 0) { writer.Restart(restart++); continue; }
+                if ((entry & (1u << 24)) != 0) { writer.RestartAdmitted(restart++); continue; }
                 var tableIndex = (int)(entry >> 30); var symbol = (int)(entry >> 16 & 255); var count = (int)(entry >> 26 & 15);
                 var table = tables[tableIndex]!; var length = table.Lengths[symbol];
                 var hasAmplitude = tableIndex < 2 || count != 0;
@@ -382,15 +382,15 @@ internal static class JpegEncoder
                     // and output capacity on a noncancellable stock stream.
                     // Append one complete symbol without extra per-symbol guards.
                     context.Work(1);
-                    writer.Write(table.Codes[symbol] << count | (int)(entry & 65535), length + count);
+                    writer.WriteAdmitted(table.Codes[symbol] << count | (int)(entry & 65535), length + count);
                 }
                 else
                 {
-                    writer.Write(table.Codes[symbol], length);
-                    if (hasAmplitude) writer.Write((int)(entry & 65535), count);
+                    writer.WriteAdmitted(table.Codes[symbol], length);
+                    if (hasAmplitude) writer.WriteAdmitted((int)(entry & 65535), count);
                 }
             }
-            writer.Align(); context.Cancellation.ThrowIfCancellationRequested(); output.Write(new byte[] { 255, 217 });
+            writer.AlignAdmitted(); context.Cancellation.ThrowIfCancellationRequested(); output.Write(new byte[] { 255, 217 });
         }
         finally
         {

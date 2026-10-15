@@ -12,7 +12,7 @@ round, at most three, with correctness established before timing.
 | PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed | Other material depths/layouts, shorter palettes or distinct public boundaries |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level6/None; byte RGB/gray/gray-alpha Optimal managed9/native6 with unchanged5% size gate confirmed; RGBA8 NoCompression/None confirmed | Other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
-| JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x, 4:2:2 confirmed 1.821x / upper 1.862x and 4:2:0 confirmed 1.943x / upper 1.988x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x, 4:2:2 confirmed 1.874x / upper 1.884x and 4:2:0 confirmed 1.888x / upper 1.931x; forward-only RGBA8 4:2:0 confirmed 1.916x / upper 1.936x and RGBA16 4:2:0 confirmed 1.948x / upper 1.954x | Other material fallback layouts, grayscale and distinct public boundaries |
+| JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x, 4:2:2 confirmed 1.821x / upper 1.862x and 4:2:0 confirmed 1.943x / upper 1.988x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x, 4:2:2 confirmed 1.874x / upper 1.884x and 4:2:0 confirmed 1.888x / upper 1.931x; forward-only RGBA8 4:2:0 confirmed 1.916x / upper 1.936x and RGBA16 4:2:0 confirmed 1.948x / upper 1.954x; adaptive RGBA8 row restarts confirmed 1.958x / upper 1.973x | Other material fallback layouts, grayscale and distinct public boundaries |
 | WebP | VP8 with alpha decode/encode; opaque VP8 decode confirmed 1.803x / upper 1.808x and alpha VP8 confirmed 1.803x / upper 1.819x; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Other material opaque/alpha alternatives and distinct public boundaries |
 | Resize | Nearest/bilinear downsample and enlargement at both depths; bicubic downsample, enlargement on both axes, both mixed-axis directions and 128×64 / 64×32 wider supports at both depths; horizontal reduction/enlargement and vertical reduction at both depths; vertical enlargement, 32×16 and 16×8 adaptive support at both depths; RGBA8/16 256×129, 128×64, 64×32, 32×16 and 16×8 reduction, plus RGBA8/16 both-axis enlargement and RGBA8/16 width enlargement/height reduction plus RGBA8/16 width reduction/height enlargement and RGBA8/16 8×4 beyond 256 taps plus RGBA8/16 4×2 packed support beyond 304 taps and RGBA8/16 2×2 generated support beyond 544 taps plus RGBA8/16 2×9 bounded row blocks and RGBA8/16 4×9 packed row blocks plus RGBA8/16 8×17 full-coefficient row blocks and RGBA8/16 vertical reduction with unchanged width plus RGBA8/16 horizontal reduction with unchanged height and RGBA8/16 vertical enlargement with unchanged width plus RGBA8/16 horizontal enlargement with unchanged height, with input+output+4 KiB limit confirmed | Larger/unmatched supports and other materially distinct shapes |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes; RGBA8 horizontal flip with two simultaneously live outputs confirmed 1.447x / upper 1.484x per image | Other materially distinct retained/composed public boundaries |
@@ -826,3 +826,13 @@ and its [frame header writes at least three components](https://github.com/FFmpe
 That output does not match Lokad.Image's single-component grayscale contract.
 A comparable native reference must be defined before timing this branch;
 three-component output must not silently stand in for it.
+
+[JPEG row restart encoding](WARM-JPEG-ADMITTED.md) closes a2.128x gap at
+**1.958x / upper1.973x**, with **297,780 B/op** and identical packets. Whole-packet
+admission removes repeated entropy byte checks only on eligible stock streams;
+original writes, work and failure behavior remain. Matched DRI33 and sixteen
+RST markers use a verified serial native executor. Nonrestart adaptive and
+fixed streaming RGBA16 regression means pass before full qualification.
+Both OSes pass3,298Release tests(896live) and consumer+threeexamples through the
+same actual package. Stop this confirmed pair; other material/current-source
+coverage stays open.

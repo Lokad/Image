@@ -352,6 +352,12 @@ if (args.Length == 2 && args[0] == "--prepare-warm-jpeg16")
     return;
 }
 
+if (args.Length == 2 && args[0] == "--prepare-warm-jpeg420-restart")
+{
+    WarmJpeg.Prepare(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture), subsampled: true, restartRows: true);
+    return;
+}
+
 if (args.Length == 2 && args[0] == "--prepare-warm-jpeg42216")
 {
     WarmJpeg.Prepare(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture), horizontal: true, depth: 16);
