@@ -81,6 +81,7 @@ def render():
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8stream-evidence.json', ['observations', -1], 'WARM-VP8-STREAM.md', True),
         row('WebP VP8L, fresh seekable Stream', 'warm-vp8lstream-evidence.json', ['observations', -1], 'WARM-VP8L-STREAM.md', True),
         row('PNG RGBA8, None', 'warm-png-cancelable16-evidence.json', ['regressions', 0], 'WARM-PNG-CANCELABLE16.md', verification='Regression screen; prior confirmed'),
+        row('PNG RGBA8, None / exact working limit', 'warm-pngtight8-evidence.json', ['observations', -1], 'WARM-PNG-TIGHT8.md', True),
         row('PNG RGBA8, stored Deflate / None', 'warm-pngstore8decode-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-DECODE.md', True),
         row('PNG RGBA16, stored Deflate / None', 'warm-pngstored16-decode-evidence.json', ['observations', -1], 'WARM-PNG-STORED16-DECODE.md', True),
         row('PNG RGBA16, None', 'warm-pngliteralrun-evidence.json', ['observations', -1], 'WARM-PNG-LITERAL-RUN.md', True),

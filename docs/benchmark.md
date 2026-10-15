@@ -41,6 +41,7 @@ timing comparison; compression efficiency parity is not established.
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-STREAM.md) | 10,914.60 | 5,979.52 | 1.825 / 1.833 | 2,327,699 | Confirmed |
 | [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-VP8L-STREAM.md) | 5,549.36 | 3,026.08 | 1.834 / 1.851 | 1,924,876 | Confirmed |
 | [PNG RGBA8, None](../benchmarks/WARM-PNG-CANCELABLE16.md) | 1,936.77 | 1,372.72 | 1.411 / 1.465 | 4,456 | Regression screen; prior confirmed |
+| [PNG RGBA8, None / exact working limit](../benchmarks/WARM-PNG-TIGHT8.md) | 2,691.69 | 1,370.50 | 1.964 / 1.972 | 4,800 | Confirmed |
 | [PNG RGBA8, stored Deflate / None](../benchmarks/WARM-PNG-STORED8-DECODE.md) | 157.30 | 135.76 | 1.159 / 1.168 | 12,976 | Confirmed |
 | [PNG RGBA16, stored Deflate / None](../benchmarks/WARM-PNG-STORED16-DECODE.md) | 472.57 | 309.99 | 1.524 / 1.556 | 1,080,706 | Confirmed |
 | [PNG RGBA16, None](../benchmarks/WARM-PNG-LITERAL-RUN.md) | 5,740.60 | 2,931.33 | 1.958 / 1.968 | 2,032,864 | Confirmed |

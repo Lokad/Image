@@ -1305,6 +1305,12 @@ PNG adapter admits this profile through its existing MONOBLACK conversion path.
 All pass pixels/padding, native normal/scalar output and live owners are checked.
 See the [gray1 Adam7 result](../../benchmarks/WARM-PNG-GRAY1-ADAM7.md).
 
+Exact-memory RGBA8 decoding uses `-WarmFamily Png -WarmCases DecodeTight8`.
+Reuse the frozen original None/Optimal PNG and generic worker. The managed limit
+is encoded+IDAT+output+256KiB inflater allowance+two rows; optional whole-filter
+and8KiB buffers cannot fit. Validate one-byte-below refusal outside timing.
+See the [exact-memory byte result](../../benchmarks/WARM-PNG-TIGHT8.md).
+
 Streaming RGBA16 Fastest uses `-WarmFamily Png -WarmCases EncodeFast16` or
 `EncodeFastCancelable16`. Managed fast adaptive backend2/native backend1 are
 explicit; unchanged5% IDAT-size and exact full-word/alpha/hidden-RGB gates apply.
