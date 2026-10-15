@@ -337,7 +337,8 @@ work; cancellation, source and independent owner contracts remain. Other
 directions/supports/hardware and smaller budgets retain prior paths. No heap
 workspace, persistent state or output cache is introduced.
 RGBA8 may use a separate horizontal-first fallback for the same width-reduction/
-height-enlargement supports and 3,440-byte fixed arrays within 4-KiB admission.
+height-preservation-or-enlargement supports and 3,440-byte fixed arrays within
+4-KiB admission. The existing row cache remains preferred when admitted.
 Exact byte products widen to unrounded binary64; the `2^-40*16^2` guards use
 alpha margin 1e-6 and color margin `1e-4 / lower-power-of-two(alphaSum)`.
 Uncertainty replays the original tap order. Tiny alpha uses a private deferred

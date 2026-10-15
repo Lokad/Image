@@ -193,6 +193,7 @@ def render():
         row('Bicubic height reduction, unchanged width RGBA16§', 'warm-bicubictightvertical16-cachepref-evidence.json', ['defaultMemoryConfirmation'], 'WARM-BICUBIC-TIGHT-VERTICAL16.md', True),
         row('Bicubic height reduction, unchanged width RGBA16 / input+output+4 KiB limit§', 'warm-bicubictightvertical16-cachepref-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-VERTICAL16.md', True),
         row('Bicubic width reduction, unchanged height RGBA16 / input+output+4 KiB limit§', 'warm-bicubictighthorizontal16-cross-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-HORIZONTAL16.md', True),
+        row('Bicubic width reduction, unchanged height RGBA8 / input+output+4 KiB limit§', 'warm-bicubictighthorizontal8-cross-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-HORIZONTAL8.md', True),
         row('Bicubic height enlargement, unchanged width RGBA8§', 'warm-bicubicverticalup8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-VERTICAL-UP8-ROWS.md', True),
         row('Bicubic height enlargement, unchanged width RGBA16§', 'warm-bicubicverticalup16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-VERTICAL-UP16-ROWS.md', True),
         row('Crop RGBA8', 'warm-cropclone8-flip16-evidence.json', ['cases', 'crop8', 'observations', -1], 'WARM-CROPCLONE8-FLIP16.md', True),
