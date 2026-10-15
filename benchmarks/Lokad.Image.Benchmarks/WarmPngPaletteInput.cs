@@ -21,11 +21,13 @@ internal static class WarmPngPaletteInput
         }
     }
 
-    internal static byte[] Build(ReadOnlySpan<byte> pixels, int depth = 8, bool partialAlpha = false, bool interlaced = false)
+    internal static byte[] Build(ReadOnlySpan<byte> pixels, int depth = 8, bool partialAlpha = false, bool interlaced = false, bool shortPalette = false)
     {
         if (depth is not (1 or 2 or 4 or 8)) throw new ArgumentOutOfRangeException(nameof(depth));
         if (partialAlpha && depth != 8) throw new ArgumentException("The short-alpha case requires palette8.");
         if (interlaced && depth != 8) throw new ArgumentException("The Adam7 case requires palette8.");
+        if (shortPalette && (depth != 8 || partialAlpha || interlaced))
+            throw new ArgumentException("The short palette case requires noninterlaced palette8 with full alpha.");
         const int width = HorizontalFlipInput.Width, height = HorizontalFlipInput.Height;
         if (pixels.Length != width * height * 4) throw new ArgumentException("Expected the projected RGBA8 raster.");
         using var compressed = new MemoryStream();
@@ -43,7 +45,11 @@ internal static class WarmPngPaletteInput
                         var offset = (y * width + startX + x * stepX) * 4; var index = pixels[offset];
                         if (pixels[offset + 1] != 255 - index || pixels[offset + 2] != unchecked((byte)(index * 73 + 19))
                             || pixels[offset + 3] != (partialAlpha && index >= 2 ? 255 : index)) throw new ArgumentException("Palette projection differs.");
-                        if (depth == 8) row[x] = index;
+                        if (depth == 8)
+                        {
+                            if (shortPalette && index % 17 != 0) throw new ArgumentException("Short palette projection differs.");
+                            row[x] = shortPalette ? (byte)(index / 17) : index;
+                        }
                         else
                         {
                             var step = 255 / ((1 << depth) - 1);
@@ -56,7 +62,7 @@ internal static class WarmPngPaletteInput
                 }
             }
         }
-        var entries = 1 << depth; var palette = new byte[entries * 3]; var alpha = new byte[entries];
+        var entries = shortPalette ? 16 : 1 << depth; var palette = new byte[entries * 3]; var alpha = new byte[entries];
         for (var i = 0; i < entries; i++)
         {
             var value = i * (255 / (entries - 1));

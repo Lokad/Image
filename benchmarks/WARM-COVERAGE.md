@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16 all five filters and stored Deflate/None; current RGBA8 Sub confirmed1.686x / upper1.697x; RGB8 Paeth confirmed1.204x / upper1.214x; RGBA16 Adam7 and packed gray1 Adam7 confirmed1.018x / upper1.032x, plus exact working-memory boundary at both depths (RGBA8 confirmed1.821x / upper1.950x, RGBA16 confirmed1.817x / upper1.821x), live-cancelable RGBA8 default/exact limit confirmed1.407x / upper1.469x and1.867x / upper1.873x and RGBA16 default/exact limit confirmed1.573x / upper1.583x and1.834x / upper1.852x; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed; packed gray2/key0 confirmed0.144x / upper0.145x and gray1/key1 with timed exact native colorkey confirmed0.094x / upper0.098x, raw gray1/key1 and gray2/key1 native alpha refusals unscored | Other material depths/layouts, shorter palettes or distinct public boundaries |
+| PNG decode | RGBA8/16 all five filters and stored Deflate/None; current RGBA8 Sub confirmed1.686x / upper1.697x; RGB8 Paeth confirmed1.204x / upper1.214x; RGBA16 Adam7 and packed gray1 Adam7 confirmed1.018x / upper1.032x, plus exact working-memory boundary at both depths (RGBA8 confirmed1.821x / upper1.950x, RGBA16 confirmed1.817x / upper1.821x), live-cancelable RGBA8 default/exact limit confirmed1.407x / upper1.469x and1.867x / upper1.873x and RGBA16 default/exact limit confirmed1.573x / upper1.583x and1.834x / upper1.852x; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; byte-indexed sixteen-entry/full-tRNS palette confirmed1.317x/upper1.327x; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed; packed gray2/key0 confirmed0.144x / upper0.145x and gray1/key1 with timed exact native colorkey confirmed0.094x / upper0.098x, raw gray1/key1 and gray2/key1 native alpha refusals unscored | Other material depths/layouts, shorter palettes or distinct public boundaries |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level6/None; byte RGB/gray/gray-alpha Optimal managed9/native6 with unchanged5% size gate confirmed; RGBA8/16 NoCompression/None confirmed; RGBA16 SmallestSize managed9/native9 confirmed0.970x / upper0.985x with unchanged5% size gate; Fastest RGBA8 managed2/native1 stock output confirmed 0.707x / upper 0.712x; Fastest RGBA16 managed2/native1 stock output confirmed 0.732x / upper 0.735x and live cancelable output confirmed 0.731x / upper 0.747x, forward-only output confirmed 0.771x / upper 0.805x with streaming adaptive compression | Other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4; full-resolution direct RGB confirmed1.918x/upper1.923x; current native-input ordinary/live-token/progressive444 independently confirmed1.715x/upper1.733x,1.770x/upper1.797x,1.954x/upper1.960x; baseline 4:2:0 with row restart markers confirmed 1.823x / upper 1.837x | Other materially different supported layouts/public boundaries |
 | JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x, 4:2:2 confirmed 1.821x / upper 1.862x and 4:2:0 confirmed 1.943x / upper 1.988x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x, 4:2:2 confirmed 1.874x / upper 1.884x and 4:2:0 confirmed 1.888x / upper 1.931x; live-cancelable RGBA16 4:2:0 confirmed 1.651x / upper 1.663x and RGBA8 4:4:4 prior confirmed with current regression; forward-only RGBA8 4:4:4 confirmed 1.754x / upper 1.765x and 4:2:0 confirmed 1.916x / upper 1.936x and RGBA16 4:2:0 confirmed 1.948x / upper 1.954x; adaptive RGBA8 row restarts confirmed 1.958x / upper 1.973x | Other material fallback layouts, grayscale and distinct public boundaries |
@@ -23,6 +23,16 @@ resize primitives after small geometry/metadata work. They need correctness
 controls and one relevant composed boundary, not a duplicate matrix of timings.
 Fresh Stream boundaries remain distinct from resident-span results. The retained-two
 RGBA8 flip has its own complete two-owner boundary, normalized per image.
+
+The [short-palette PNG round](WARM-PNG-SHORT-PALETTE.md) lowers its 2.340x gap
+with 43.9% less managed time, independently confirming1.317x / upper1.327x at
+unchanged1,496 B/op. The existing palette4 projection uses byte indices and
+sixteen entries/full tRNS. Channel-vector lookup supports palettes up to sixteen
+entries without padded storage, preserving first-invalid prefixes, alpha/hidden
+RGB, cancellation/work/admission and scalar behavior. Full-palette and partial-
+alpha regression means pass before one full 3,457-tests-per-OS/live/same-package
+qualification. All twelve actuals and guards pass. Stop this pair; other material
+layouts, unmatched references and unconfirmed coverage remain open.
 
 The [direct-RGB JPEG row round](WARM-JPEG-RGB-ROW.md) reduces its 2.824x gap by
 35.3% in managed time, independently confirming1.918x / upper1.923x at

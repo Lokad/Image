@@ -72,8 +72,9 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGB16 + tRNS key(12347,35806,59265), None](../benchmarks/WARM-PNG-RGB16-TRANSPARENCY.md) | 4,033.48 | 3,170.09 | 1.272 / 1.302 | 15,056 | Confirmed |
 | [PNG gray16, None](../benchmarks/WARM-PNG-GRAY16-ROW.md) | 1,743.26 | 960.42 | 1.815 / 1.837 | 1,331,046 | Confirmed |
 | [PNG gray-alpha16, None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ROW.md) | 3,195.37 | 1,798.83 | 1.776 / 1.785 | 1,573,649 | Confirmed |
-| [PNG palette8 + tRNS, None](../benchmarks/WARM-PNG-PALETTE-SIMD.md) | 553.32 | 362.52 | 1.526 / 1.543 | 10,976 | Confirmed |
-| [PNG palette8 + two-entry tRNS, None](../benchmarks/WARM-PNG-PALETTE8-PARTIAL-ALPHA.md) | 709.94 | 363.54 | 1.953 / 1.967 | 10,728 | Confirmed |
+| [PNG byte indices / sixteen-entry palette + tRNS, None](../benchmarks/WARM-PNG-SHORT-PALETTE.md) | 144.22 | 109.47 | 1.317 / 1.327 | 1,496 | Confirmed |
+| [PNG palette8 + tRNS, None](../benchmarks/WARM-PNG-SHORT-PALETTE.md) | 361.40 | 393.12 | 0.919 / 2.354 | 2,456 | Regression screen; prior confirmed |
+| [PNG palette8 + two-entry tRNS, None](../benchmarks/WARM-PNG-SHORT-PALETTE.md) | 534.90 | 364.33 | 1.468 / 1.646 | 2,208 | Regression screen; prior confirmed |
 | [PNG palette4 + tRNS → RGBA8, None](../benchmarks/WARM-PNG-DECODE-REUSE.md) | 214.75 | 136.64 | 1.572 / 1.617 | 13,656 | Confirmed |
 | [PNG palette2 + tRNS → RGBA8, None](../benchmarks/WARM-PNG-PALETTE2-ROW.md) | 76.33 | 98.66 | 0.774 / 0.789 | 9,208 | Confirmed |
 | [PNG palette1 + tRNS → RGBA8, None](../benchmarks/WARM-PNG-PALETTE1-ROW.md) | 61.91 | 86.80 | 0.713 / 0.723 | 9,072 | Confirmed |
@@ -290,17 +291,18 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted production round reduces direct-RGB JPEG decoding from
-**2.824x** to **1.918x / upper 1.923x**, with **35.3% less managed time** and
-**2,664,373 B/op**. Direct full-resolution planes pack already-rounded bytes
-with AVX2 and an exact scalar path, preserving frozen pixels, row work/
-cancellation admission and workspace. One profile identifies the redundant
-rounding/interpolation work. All twelve actuals and quiet guards pass on the
-same candidate core/harness/native worker. Baseline/progressive YCbCr regression
-means pass before full **3,439 Release tests per OS**, including **898 live
-comparisons**, plus the consumer and all three examples through the **same actual
-Release package** on Windows/Linux. One substantial primitive is changed;
-no whole-library method audit or repeated full/package qualification is performed.
+The latest accepted production round lowers byte-indexed PNG decoding with a
+sixteen-entry palette from **2.340x** to **1.317x / upper 1.327x**, with **43.9%
+less managed time** and unchanged **1,496 B/op**. Channel-vector lookup for
+palettes up to sixteen entries preserves exact samples, first-invalid prefixes,
+partial alpha/hidden RGB, cancellation/work/admission and scalar behavior without
+padded palette storage. One profile identifies 68.6% in expansion. All twelve
+actuals and quiet guards pass on the same candidate core/harness/native worker.
+Full-palette and partial-alpha regression means pass before **3,457 Release tests
+per OS**, including **898 live comparisons**, plus the consumer and all three
+examples through the **same actual Release package** on Windows/Linux. The native
+binary is reused; one successful harness build and one production candidate build
+suffice. No whole-library method audit or repeated full/package proof is performed.
 
 The palette8/tRNS Adam7 coverage check screens at **1.303x**, with
 **4,960 B/op**, but remains **unconfirmed**. Its independent native baseline slows

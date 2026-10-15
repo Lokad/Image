@@ -566,6 +566,11 @@ qualify; sparse mapping stays unchanged. No workspace/admission change is
 introduced and cancellation is checked at most every 4096 pixels.
 Dense palette8 rows expand directly from the existing RGB palette/tRNS storage
 into RGBA8, preserving hidden RGB and defaulting missing alpha entries to 255.
+Palettes of up to sixteen entries can form channel vectors for SSSE3 byte
+shuffles. A group with any invalid index resumes scalar traversal before its
+first store, preserving the original valid prefix and cancellation/error order.
+Absent/partial alpha and scalar tails remain exact; no padded palette storage is
+introduced. Larger palettes retain their existing expansion paths.
 Each palette index is validated before its output pixel is written. Dense Adam7
 passes qualify; sparse mapping stays unchanged. Dense packed palette1/2/4 rows
 also expand directly. Full 16-entry palette4 rows with absent/full tRNS use bounded
