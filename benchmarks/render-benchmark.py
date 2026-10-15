@@ -76,6 +76,7 @@ def render():
         row('PNG8 Stream, orient/crop/nearest fit', 'warm-png-composition8-evidence.json', ['observations', -1], 'WARM-PNG-COMPOSITION8.md', True),
         row('PNG RGBA8, fresh seekable Stream', 'warm-stream-png8-evidence.json', ['observations', -1], 'WARM-STREAM-PNG8.md', True),
         row('PNG RGBA16, fresh seekable Stream', 'warm-stream-png16-evidence.json', ['observations', -1], 'WARM-STREAM-PNG16.md', True),
+        row('JPEG420 restart, fresh seekable Stream', 'warm-jpegstream-evidence.json', ['observations', -1], 'WARM-JPEG-STREAM.md', True),
         row('PNG RGBA8, None', 'warm-png8decode-quiet-evidence.json', ['observations', -1], 'WARM-PNG8-DECODE-QUIET.md', True),
         row('PNG RGBA8, stored Deflate / None', 'warm-pngstore8decode-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-DECODE.md', True),
         row('PNG RGBA16, None', 'warm-pngliteralrun-evidence.json', ['observations', -1], 'WARM-PNG-LITERAL-RUN.md', True),
@@ -396,6 +397,10 @@ Opaque RGBA16 VP8 encoding independently confirms **1.908x / upper 1.922x**,
 at **2,535,736 B/op**, including complete word normalization/repacking. Its
 normalized raster, packets and quality samples equal the opaque byte anchor;
 unchanged qualified production and package proofs are reused.
+Fresh seekable JPEG420 Stream decoding confirms **1.891x / upper 1.902x**,
+at **1,813,266 B/op**. Complete acquisition, all buffering/copies, EOF checks,
+decoding/conversion and owned output release are timed on both subjects;
+the existing restart packet and qualified production are reused.
 Remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove
 the uniform target. Linked reports retain superseded raw evidence, failed guards,

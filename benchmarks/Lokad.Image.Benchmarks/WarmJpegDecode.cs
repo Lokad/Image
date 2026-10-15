@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart }
+public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart, StreamDecode420Restart }
 
 internal sealed record WarmJpegFixedPreparation(int SchemaVersion, string Project, string Recipe,
     string RasterSha256, string NativeFile, int EncodedBytes, string EncodedSha256,
@@ -34,12 +34,14 @@ public class WarmJpegDecode
     private double scalarDecoderRmse;
     private JpegSampling Sampling => Case switch
     {
-        WarmJpegDecodeCase.NativeDecode420 or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.NativeDecode420Restart => JpegSampling.YCbCr420,
+        WarmJpegDecodeCase.NativeDecode420 or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.NativeDecode420Restart or WarmJpegDecodeCase.StreamDecode420Restart => JpegSampling.YCbCr420,
         WarmJpegDecodeCase.NativeDecode422 or WarmJpegDecodeCase.Progressive422 => JpegSampling.YCbCr422,
         WarmJpegDecodeCase.OwnedDecodeGray or WarmJpegDecodeCase.ProgressiveGray => JpegSampling.Grayscale,
         _ => JpegSampling.YCbCr444
     };
     private bool IsProgressive => Case is WarmJpegDecodeCase.ProgressiveGray or WarmJpegDecodeCase.Progressive420 or WarmJpegDecodeCase.Progressive444 or WarmJpegDecodeCase.Progressive422;
+    private bool StreamInput => Case == WarmJpegDecodeCase.StreamDecode420Restart;
+    private bool Restart => Case is WarmJpegDecodeCase.NativeDecode420Restart or WarmJpegDecodeCase.StreamDecode420Restart;
 
     public static WarmJpegDecodeCase[] SelectedCases()
     {
@@ -56,7 +58,8 @@ public class WarmJpegDecode
             "Progressive444" => [WarmJpegDecodeCase.Progressive444],
             "Progressive422" => [WarmJpegDecodeCase.Progressive422],
             "NativeDecode420Restart" => [WarmJpegDecodeCase.NativeDecode420Restart],
-            _ => throw new ArgumentException("Choose one warm JPEG decode case: Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422 or NativeDecode420Restart.")
+            "StreamDecode420Restart" => [WarmJpegDecodeCase.StreamDecode420Restart],
+            _ => throw new ArgumentException("Choose one warm JPEG decode case: Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart or StreamDecode420Restart.")
         };
     }
 
@@ -207,7 +210,7 @@ public class WarmJpegDecode
                 });
             rasterHash = JpegBenchmarkCase.Hash(HorizontalFlipInput.Create(8));
             string decodedHash;
-            if (Case == WarmJpegDecodeCase.NativeDecode420Restart)
+            if (Restart)
             {
                 var prepared = JsonSerializer.Deserialize<WarmJpegPreparation>(File.ReadAllText(Path.Combine(state.Root,
                     "artifacts", "warm-reference", "jpeg420-restart33-adaptive-match.json")), EncoderQualityCalibration.Json)
@@ -267,9 +270,9 @@ public class WarmJpegDecode
             if ((info.Format, info.Width, info.Height, info.BitDepth) != (ImageFormat.Jpeg, 513, 259, 8))
                 throw new InvalidOperationException("JPEG decode input geometry differs.");
             File.WriteAllBytes(state.Input, encoded);
-            native = new NativeWarmReference(state, 8, cpu, Sampling == JpegSampling.YCbCr420 ? "jpeg420-decode" : Sampling == JpegSampling.YCbCr422 ? "jpeg422-decode" : Sampling == JpegSampling.Grayscale ? "jpeg-gray-decode" : "jpeg-decode");
+            native = new NativeWarmReference(state, 8, cpu, StreamInput ? "jpeg420-stream-decode" : Sampling == JpegSampling.YCbCr420 ? "jpeg420-decode" : Sampling == JpegSampling.YCbCr422 ? "jpeg422-decode" : Sampling == JpegSampling.Grayscale ? "jpeg-gray-decode" : "jpeg-decode");
             nativePixels = File.ReadAllBytes(state.NativeOutput);
-            using (var output = ImageCodec.Decode(encoded)) { ValidateGeometry(output); managedPixels = OriginalPixels.Bytes(output); }
+            using (var output = DecodeManaged()) { ValidateGeometry(output); managedPixels = OriginalPixels.Bytes(output); }
             if (JpegBenchmarkCase.Hash(managedPixels) != decodedHash)
                 throw new InvalidOperationException("Prepared JPEG decoded pixels changed.");
             var difference = JpegQualityCorpus.Compare(nativePixels, managedPixels);
@@ -296,20 +299,36 @@ public class WarmJpegDecode
     }
     private void ValidateManaged()
     {
-        if (Case == WarmJpegDecodeCase.NativeDecode420Restart) WarmJpeg.ValidateRestartPacket(encoded);
-        using var first = ImageCodec.Decode(encoded); using var second = ImageCodec.Decode(encoded);
+        if (Restart) WarmJpeg.ValidateRestartPacket(encoded);
+        using var first = DecodeManaged(); using var second = DecodeManaged();
         ValidateGeometry(first); ValidateGeometry(second);
         if (!OriginalPixels.Bytes(first).AsSpan().SequenceEqual(managedPixels) || !OriginalPixels.Bytes(second).AsSpan().SequenceEqual(managedPixels))
             throw new InvalidOperationException("Repeated managed JPEG pixels differ.");
         first.GetRow8(0)[0] ^= 255;
         if (!OriginalPixels.Bytes(second).AsSpan().SequenceEqual(managedPixels) || !File.ReadAllBytes(state.Input).AsSpan().SequenceEqual(encoded))
             throw new InvalidOperationException("Managed JPEG outputs alias or encoded source changed.");
+        if (StreamInput)
+        {
+            using var caller = new MemoryStream(encoded, writable: false);
+            if (caller.TryGetBuffer(out _)) throw new InvalidOperationException("Fresh JPEG input must not expose its buffer.");
+            using var decoded = ImageCodec.Decode(caller);
+            if (!caller.CanRead || caller.Position != caller.Length || caller.ReadByte() != -1
+                || !OriginalPixels.Bytes(decoded).AsSpan().SequenceEqual(managedPixels))
+                throw new InvalidOperationException("JPEG Stream pixels, complete reading or caller lifetime differ.");
+        }
+    }
+
+    private ImageBuffer DecodeManaged()
+    {
+        if (!StreamInput) return ImageCodec.Decode(encoded);
+        using var input = new MemoryStream(encoded, writable: false);
+        return ImageCodec.Decode(input);
     }
 
     [Benchmark]
     public int Managed()
     {
-        using var result = ImageCodec.Decode(encoded);
+        using var result = DecodeManaged();
         return result.Stride * result.Height ^ result.GetRow8(0)[513 * 2];
     }
 
@@ -331,8 +350,8 @@ public class WarmJpegDecode
                 cpu, managedAffinityCount = 1, processorCount = Environment.ProcessorCount, serverGc = GCSettings.IsServerGC,
                 gcConfiguration = GC.GetConfigurationVariables(), runtime = RuntimeInformation.FrameworkDescription, platform = RuntimeInformation.RuntimeIdentifier,
                 sourceIdentity, inputOrigin, sampling, progressive = IsProgressive, inputBytes = encoded.Length,
-                restartInterval = Case == WarmJpegDecodeCase.NativeDecode420Restart ? 33 : 0,
-                restartMarkers = Case == WarmJpegDecodeCase.NativeDecode420Restart ? 16 : 0,
+                restartInterval = Restart ? 33 : 0, restartMarkers = Restart ? 16 : 0,
+                freshSeekableStream = StreamInput, inputView = false, inputCopiesTimed = StreamInput, callerInputLifetimeChecked = StreamInput,
                 inputSha256 = JpegBenchmarkCase.Hash(encoded), rasterSha256 = rasterHash,
                 managedOutputBytes = managedPixels.Length, nativeOutputBytes = nativePixels.Length,
                 managedOutputSha256 = JpegBenchmarkCase.Hash(managedPixels), nativeOutputSha256 = JpegBenchmarkCase.Hash(nativePixels),
@@ -343,7 +362,7 @@ public class WarmJpegDecode
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmJpegDecode).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = "Identical resident prepared 8-bit JPEG to independent owned RGBA8. Public managed Decode, allocation and disposal; native software mjpeg decoder, per-operation state reset, full-range BT.601 conversion, owned output allocation and release. For subsampled inputs, expand both ceil-sized chroma planes by their sampling factors and crop to the original grid inside every operation, including intermediate acquisition/release. Grayscale includes expanding owned decoded GRAY8 samples into independent RGBA8 inside every operation. Native context/conversion/input packet/frame wrappers reused; every call decodes and converts all pixels. Padded native rows are exposed without a gratuitous packing copy. Startup, I/O, IPC, generation, hashing, checks and tight-row file writes excluded. No encoder quality search or additional source raster. Decoder RGB maximum 4/RMSE 1.5, exact opaque alpha."
+                boundary = (StreamInput ? "Fresh non-exposed seekable JPEG Stream with complete input acquisition, all buffering/copies and EOF checks to independent owned RGBA8. Native fresh AVIO and owned packet acquisition/release execute every operation. " : "Identical resident prepared 8-bit JPEG to independent owned RGBA8. ") + "Public managed Decode, allocation and disposal; native software mjpeg decoder, per-operation state reset, full-range BT.601 conversion, owned output allocation and release. For subsampled inputs, expand both ceil-sized chroma planes by their sampling factors and crop to the original grid inside every operation, including intermediate acquisition/release. Grayscale includes expanding owned decoded GRAY8 samples into independent RGBA8 inside every operation. Native context/conversion/input packet/frame wrappers reused; every call decodes and converts all pixels. Padded native rows are exposed without a gratuitous packing copy. Startup, I/O, IPC, generation, hashing, checks and tight-row file writes excluded. No encoder quality search or additional source raster. Decoder RGB maximum 4/RMSE 1.5, exact opaque alpha."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
         }
         finally { native?.Dispose(); state?.Dispose(); ready = false; }

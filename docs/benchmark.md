@@ -36,6 +36,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG8 Stream, orient/crop/nearest fit](../benchmarks/WARM-PNG-COMPOSITION8.md) | 2,795.71 | 1,478.63 | 1.891 / 1.906 | 1,453,517 | Confirmed |
 | [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-STREAM-PNG8.md) | 2,655.37 | 1,392.55 | 1.907 / 1.916 | 756,605 | Confirmed |
 | [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-STREAM-PNG16.md) | 5,626.97 | 3,093.68 | 1.819 / 1.830 | 3,075,772 | Confirmed |
+| [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-STREAM.md) | 1,886.05 | 997.23 | 1.891 / 1.902 | 1,813,266 | Confirmed |
 | [PNG RGBA8, None](../benchmarks/WARM-PNG8-DECODE-QUIET.md) | 2,961.21 | 1,516.02 | 1.953 / 1.995 | 755,274 | Confirmed |
 | [PNG RGBA8, stored Deflate / None](../benchmarks/WARM-PNG-STORED8-DECODE.md) | 157.30 | 135.76 | 1.159 / 1.168 | 12,976 | Confirmed |
 | [PNG RGBA16, None](../benchmarks/WARM-PNG-LITERAL-RUN.md) | 5,740.60 | 2,931.33 | 1.958 / 1.968 | 2,032,864 | Confirmed |
@@ -319,6 +320,10 @@ Opaque RGBA16 VP8 encoding independently confirms **1.908x / upper 1.922x**,
 at **2,535,736 B/op**, including complete word normalization/repacking. Its
 normalized raster, packets and quality samples equal the opaque byte anchor;
 unchanged qualified production and package proofs are reused.
+Fresh seekable JPEG420 Stream decoding confirms **1.891x / upper 1.902x**,
+at **1,813,266 B/op**. Complete acquisition, all buffering/copies, EOF checks,
+decoding/conversion and owned output release are timed on both subjects;
+the existing restart packet and qualified production are reused.
 Remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove
 the uniform target. Linked reports retain superseded raw evidence, failed guards,

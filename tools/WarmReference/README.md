@@ -1250,3 +1250,11 @@ repacking repeat inside both timed encoders. The byte/alpha workers and
 preparations are preserved; every native normalized sample is checked against
 the exact integer reference. See the
 [word-source result](../../benchmarks/WARM-VP8-OPAQUE-RGBA16.md).
+
+Fresh JPEG420 input uses `build-jpeg-stream-linux.sh` and
+`-WarmFamily JpegDecode -WarmCases StreamDecode420Restart`. Reuse the existing
+validated row-restart packet. Native fresh AVIO reads it into a newly owned
+packet and checks EOF each operation, with no demux stage; managed public
+`Decode(Stream)` uses a fresh non-exposed MemoryStream. Complete reading/copies,
+decode/chroma conversion and input/output release are timed. See the
+[complete stream result](../../benchmarks/WARM-JPEG-STREAM.md).
