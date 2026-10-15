@@ -99,6 +99,7 @@ def render():
         row('PNG RGBA16, Average', 'warm-pngaverage16-evidence.json', ['observations', -1], 'WARM-PNG-AVERAGE16.md', True),
         row('PNG RGBA16, Paeth', 'warm-pngsub16-evidence.json', ['regressions', 1], 'WARM-PNG-SUB16.md', verification='Regression screen; prior confirmed'),
         row('PNG RGB8, Paeth', 'warm-pngrgbpaeth8-evidence.json', ['observations', -1], 'WARM-PNG-RGB8-PAETH.md', True),
+        row('PNG RGB16, Paeth', 'warm-png-rgb16-paeth-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-PAETH.md', True),
         row('PNG gray8, Paeth', 'warm-png-gray8-paeth-evidence.json', ['observations', -1], 'WARM-PNG-GRAY8-PAETH.md', True),
         row('PNG gray-alpha8, Paeth', 'warm-png-gray-alpha8-paeth-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA8-PAETH.md', True),
         row('PNG RGBA16, Adam7', 'warm-pngscatter-evidence.json', ['observations', -1], 'WARM-PNG-SCATTER.md', True),
@@ -370,16 +371,16 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted coverage round confirms grayscale-alpha8 Paeth decoding at
-**1.017x / upper 1.068x**, with exact alpha/hidden RGB and **2,408 B/op**.
-The original red/alpha projection is reused; every row uses Paeth.
-All twelve actuals and quiet guards pass on the same core/harness/native worker.
-An untimed validator refusal was corrected before measurement; two harness
-builds were necessary. Production is unchanged: existing **3,457 Release tests
-per OS**, including **898 live comparisons**, and the same actual Release
+The latest accepted coverage round confirms RGB16 Paeth decoding at
+**1.904x / upper1.928x**, with exact 16-bit RGB/opaque alpha and **6,504 B/op**.
+The original word raster's RGB projection is reused; every row uses Paeth with
+six-byte predictor stride. All twelve actuals are selected and retained.
+One harness build suffices. Production is unchanged: existing **3,457 Release
+tests per OS**, including **898 live comparisons**, and the same actual Release
 package's consumer plus all three examples on Windows/Linux are reused. No
 production/native rebuild, full suite, package proof, method audit or profile
-is repeated. The short-palette production round retains its independent
+is repeated. Grayscale-alpha8 Paeth remains confirmed1.017x / upper1.068x at
+2,408 B/op. The short-palette production round retains its independent
 1.317x / upper1.327x confirmation and 43.9% managed-time reduction.
 
 The palette8/tRNS Adam7 pair now independently confirms **1.167x / upper1.177x**,
