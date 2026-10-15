@@ -21,33 +21,39 @@ internal static class WarmPngPaletteInput
         }
     }
 
-    internal static byte[] Build(ReadOnlySpan<byte> pixels, int depth = 8, bool partialAlpha = false)
+    internal static byte[] Build(ReadOnlySpan<byte> pixels, int depth = 8, bool partialAlpha = false, bool interlaced = false)
     {
         if (depth is not (1 or 2 or 4 or 8)) throw new ArgumentOutOfRangeException(nameof(depth));
         if (partialAlpha && depth != 8) throw new ArgumentException("The short-alpha case requires palette8.");
+        if (interlaced && depth != 8) throw new ArgumentException("The Adam7 case requires palette8.");
         const int width = HorizontalFlipInput.Width, height = HorizontalFlipInput.Height;
         if (pixels.Length != width * height * 4) throw new ArgumentException("Expected the projected RGBA8 raster.");
-        using var compressed = new MemoryStream(); var row = new byte[(width * depth + 7) / 8];
+        using var compressed = new MemoryStream();
         using (var zlib = new ZLibStream(compressed, CompressionLevel.Optimal, leaveOpen: true))
         {
-            for (var y = 0; y < height; y++)
+            foreach (var (startX, startY, stepX, stepY) in interlaced ? WarmPngAdam7Input.Passes : [(0, 0, 1, 1)])
             {
-                row.AsSpan().Clear();
-                for (var x = 0; x < width; x++)
+                var passWidth = (width - startX + stepX - 1) / stepX;
+                var row = new byte[(passWidth * depth + 7) / 8];
+                for (var y = startY; y < height; y += stepY)
                 {
-                    var offset = (y * width + x) * 4; var index = pixels[offset];
-                    if (pixels[offset + 1] != 255 - index || pixels[offset + 2] != unchecked((byte)(index * 73 + 19))
-                        || pixels[offset + 3] != (partialAlpha && index >= 2 ? 255 : index)) throw new ArgumentException("Palette projection differs.");
-                    if (depth == 8) row[x] = index;
-                    else
+                    row.AsSpan().Clear();
+                    for (var x = 0; x < passWidth; x++)
                     {
-                        var step = 255 / ((1 << depth) - 1);
-                        if (index % step != 0) throw new ArgumentException("Packed palette projection differs.");
-                        var bit = x * depth;
-                        row[bit / 8] |= (byte)((index / step) << (8 - depth - bit % 8));
+                        var offset = (y * width + startX + x * stepX) * 4; var index = pixels[offset];
+                        if (pixels[offset + 1] != 255 - index || pixels[offset + 2] != unchecked((byte)(index * 73 + 19))
+                            || pixels[offset + 3] != (partialAlpha && index >= 2 ? 255 : index)) throw new ArgumentException("Palette projection differs.");
+                        if (depth == 8) row[x] = index;
+                        else
+                        {
+                            var step = 255 / ((1 << depth) - 1);
+                            if (index % step != 0) throw new ArgumentException("Packed palette projection differs.");
+                            var bit = x * depth;
+                            row[bit / 8] |= (byte)((index / step) << (8 - depth - bit % 8));
+                        }
                     }
+                    zlib.WriteByte(0); zlib.Write(row);
                 }
-                zlib.WriteByte(0); zlib.Write(row);
             }
         }
         var entries = 1 << depth; var palette = new byte[entries * 3]; var alpha = new byte[entries];
@@ -60,6 +66,7 @@ internal static class WarmPngPaletteInput
         using var output = new MemoryStream(); output.Write(new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 });
         var header = new byte[13]; BinaryPrimitives.WriteInt32BigEndian(header, width);
         BinaryPrimitives.WriteInt32BigEndian(header.AsSpan(4), height); header[8] = (byte)depth; header[9] = 3;
+        header[12] = interlaced ? (byte)1 : (byte)0;
         WarmPngAdam7Input.Chunk(output, "IHDR"u8, header);
         WarmPngAdam7Input.Chunk(output, "PLTE"u8, palette); WarmPngAdam7Input.Chunk(output, "tRNS"u8, partialAlpha ? alpha.AsSpan(0, 2) : alpha);
         WarmPngAdam7Input.Chunk(output, "IDAT"u8, compressed.ToArray()); WarmPngAdam7Input.Chunk(output, "IEND"u8, []);

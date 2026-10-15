@@ -8,7 +8,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray4, DecodePalette4, DecodePalette2, DecodePalette1, DecodeGray2, DecodeUp8, DecodeSub8, DecodeAverage8, EncodeRgb8, EncodeRgb16, EncodeGray8, EncodeGray16, EncodeGrayAlpha8, EncodeGrayAlpha16, EncodeNoCompression8, DecodeNoCompression8, DecodePalette8PartialAlpha, DecodeGray8Transparency, DecodeGray16Transparency, DecodeRgb8Transparency, DecodeRgb16Transparency, EncodeFast16, EncodeNoCompression16, DecodeNoCompression16, DecodeTight16, DecodeCancelable16, DecodeTightCancelable16, DecodeSub16, DecodeAverage16, EncodeFastCancelable16, EncodeFastForward16, DecodeUp16, EncodeFast8, DecodeRgbPaeth8, DecodeGray1Adam7, DecodeTight8, DecodeTightCancelable8, DecodeCancelable8, DecodeGray2Transparency, DecodeGray1Transparency, EncodeSmallest16 }
+public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray4, DecodePalette4, DecodePalette2, DecodePalette1, DecodeGray2, DecodeUp8, DecodeSub8, DecodeAverage8, EncodeRgb8, EncodeRgb16, EncodeGray8, EncodeGray16, EncodeGrayAlpha8, EncodeGrayAlpha16, EncodeNoCompression8, DecodeNoCompression8, DecodePalette8PartialAlpha, DecodeGray8Transparency, DecodeGray16Transparency, DecodeRgb8Transparency, DecodeRgb16Transparency, EncodeFast16, EncodeNoCompression16, DecodeNoCompression16, DecodeTight16, DecodeCancelable16, DecodeTightCancelable16, DecodeSub16, DecodeAverage16, EncodeFastCancelable16, EncodeFastForward16, DecodeUp16, EncodeFast8, DecodeRgbPaeth8, DecodeGray1Adam7, DecodeTight8, DecodeTightCancelable8, DecodeCancelable8, DecodeGray2Transparency, DecodeGray1Transparency, EncodeSmallest16, DecodePalette8Adam7 }
 
 [MemoryDiagnoser]
 public class WarmPng
@@ -35,7 +35,7 @@ public class WarmPng
         var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
         var result = selection is null ? new[] { WarmPngCase.Decode8 } : selection.Split(',')
             .Select(value => Enum.TryParse<WarmPngCase>(value, out var parsed) && Enum.IsDefined(parsed)
-                ? parsed : throw new ArgumentException("Choose EncodeSmallest16, DecodeGray1Transparency, DecodeGray2Transparency, DecodeCancelable8, DecodeTightCancelable8, DecodeTight8, DecodeGray1Adam7, DecodeRgbPaeth8, EncodeFast8, DecodeUp16, EncodeFastForward16, EncodeFastCancelable16, DecodeAverage16, DecodeSub16, DecodeTightCancelable16, DecodeCancelable16, DecodeTight16, DecodeNoCompression16, EncodeNoCompression16, EncodeFast16, Encode8, Encode16, EncodeRgb8, EncodeRgb16, EncodeGray8, EncodeGray16, EncodeGrayAlpha8, EncodeGrayAlpha16, EncodeNoCompression8, DecodeNoCompression8, DecodePalette8PartialAlpha, DecodeGray8Transparency, DecodeGray16Transparency, DecodeRgb8Transparency, DecodeRgb16Transparency, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeUp8, DecodeSub8, DecodeAverage8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray2, DecodeGray4, DecodePalette1, DecodePalette2 or DecodePalette4.")).ToArray();
+                ? parsed : throw new ArgumentException("Choose DecodePalette8Adam7, EncodeSmallest16, DecodeGray1Transparency, DecodeGray2Transparency, DecodeCancelable8, DecodeTightCancelable8, DecodeTight8, DecodeGray1Adam7, DecodeRgbPaeth8, EncodeFast8, DecodeUp16, EncodeFastForward16, EncodeFastCancelable16, DecodeAverage16, DecodeSub16, DecodeTightCancelable16, DecodeCancelable16, DecodeTight16, DecodeNoCompression16, EncodeNoCompression16, EncodeFast16, Encode8, Encode16, EncodeRgb8, EncodeRgb16, EncodeGray8, EncodeGray16, EncodeGrayAlpha8, EncodeGrayAlpha16, EncodeNoCompression8, DecodeNoCompression8, DecodePalette8PartialAlpha, DecodeGray8Transparency, DecodeGray16Transparency, DecodeRgb8Transparency, DecodeRgb16Transparency, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeUp8, DecodeSub8, DecodeAverage8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray2, DecodeGray4, DecodePalette1, DecodePalette2 or DecodePalette4.")).ToArray();
         if (result.Length is < 1 or > 3 || result.Distinct().Count() != result.Length)
             throw new ArgumentException("Choose one to three distinct PNG cases.");
         return result;
@@ -52,7 +52,7 @@ public class WarmPng
     private bool Gray => Case is WarmPngCase.DecodeGray1Transparency or WarmPngCase.DecodeGray2Transparency or WarmPngCase.DecodeGray1Adam7 or WarmPngCase.DecodeGray16Transparency or WarmPngCase.DecodeGray8Transparency or WarmPngCase.DecodeGray8 or WarmPngCase.DecodeGray16 or WarmPngCase.DecodeGray1 or WarmPngCase.DecodeGray2 or WarmPngCase.DecodeGray4 or WarmPngCase.EncodeGray8 or WarmPngCase.EncodeGray16;
     private bool GrayAlpha => Case is WarmPngCase.DecodeGrayAlpha8 or WarmPngCase.DecodeGrayAlpha16 or WarmPngCase.EncodeGrayAlpha8 or WarmPngCase.EncodeGrayAlpha16;
     private bool PartialAlpha => Case == WarmPngCase.DecodePalette8PartialAlpha;
-    private bool Palette => Case is WarmPngCase.DecodePalette8PartialAlpha or WarmPngCase.DecodePalette8 or WarmPngCase.DecodePalette4 or WarmPngCase.DecodePalette2 or WarmPngCase.DecodePalette1;
+    private bool Palette => Case is WarmPngCase.DecodePalette8Adam7 or WarmPngCase.DecodePalette8PartialAlpha or WarmPngCase.DecodePalette8 or WarmPngCase.DecodePalette4 or WarmPngCase.DecodePalette2 or WarmPngCase.DecodePalette1;
     private int ColorType => Palette ? 3 : GrayAlpha ? 4 : Gray ? 0 : Rgb ? 2 : 6;
     private bool NoCompression => Case is WarmPngCase.DecodeNoCompression16 or WarmPngCase.EncodeNoCompression16 or WarmPngCase.EncodeNoCompression8 or WarmPngCase.DecodeNoCompression8;
     private bool Smallest => Case == WarmPngCase.EncodeSmallest16;
@@ -66,13 +66,13 @@ public class WarmPng
     private bool MatchedByteEncoding => Encode && Depth == 8 && ColorType is 0 or 2 or 4;
     private int ManagedEncoderLevel => Fastest ? 2 : MatchedByteEncoding ? 9 : EncoderLevel;
     private bool Encode => Case is WarmPngCase.EncodeSmallest16 or WarmPngCase.EncodeFast8 or WarmPngCase.EncodeFastForward16 or WarmPngCase.EncodeFastCancelable16 or WarmPngCase.EncodeNoCompression16 or WarmPngCase.EncodeFast16 or WarmPngCase.EncodeNoCompression8 or WarmPngCase.EncodeGrayAlpha16 or WarmPngCase.EncodeGrayAlpha8 or WarmPngCase.Encode8 or WarmPngCase.Encode16 or WarmPngCase.EncodeRgb8 or WarmPngCase.EncodeRgb16 or WarmPngCase.EncodeGray8 or WarmPngCase.EncodeGray16;
-    private bool Interlaced => Case is WarmPngCase.DecodeAdam7_16 or WarmPngCase.DecodeGray1Adam7;
+    private bool Interlaced => Case is WarmPngCase.DecodePalette8Adam7 or WarmPngCase.DecodeAdam7_16 or WarmPngCase.DecodeGray1Adam7;
     private bool Paeth => Case is WarmPngCase.DecodeRgbPaeth8 or WarmPngCase.DecodePaeth16 or WarmPngCase.DecodePaeth8;
     private bool Up => Case is WarmPngCase.DecodeUp8 or WarmPngCase.DecodeUp16;
     private bool Sub => Case is WarmPngCase.DecodeSub8 or WarmPngCase.DecodeSub16;
     private bool Average => Case is WarmPngCase.DecodeAverage8 or WarmPngCase.DecodeAverage16;
     private int Filter => Paeth ? 4 : Up ? 2 : Sub ? 1 : Average ? 3 : 0;
-    private bool Prepared => (Interlaced && !Mono) || (Paeth && !Rgb);
+    private bool Prepared => (Interlaced && !Mono && !Palette) || (Paeth && !Rgb);
 
     [GlobalSetup]
     public void Setup()
@@ -129,6 +129,7 @@ public class WarmPng
                     || !File.ReadAllBytes(Path.Combine(directory, "expected.raw")).AsSpan().SequenceEqual(pixels))
                     throw new InvalidOperationException("Frozen stored PNG input differs.");
             }
+            else if (Interlaced && Palette) encoded = WarmPngPaletteInput.Build(pixels, interlaced: true);
             else if (Interlaced && Mono) encoded = WarmPngAdam7Input.BuildGray1(pixels);
             else if (Paeth && Rgb) encoded = WarmPngPaethInput.Build(pixels, Depth, rgb: true);
             else if (Prepared)
@@ -198,6 +199,7 @@ public class WarmPng
             if (Cancelable || Tight || Smallest || Fastest || NoCompression || Rgb || Gray || GrayAlpha || Palette || Up || Sub || Average)
             {
                 var directory = Path.Combine(state.Root, "artifacts", "warm-reference", Tight && Cancelable ? "png-tight-cancel" + Depth : Cancelable ? "png-cancel" + Depth : Tight ? "png-tight" + Depth : Smallest ? "png-smallest16" : Fastest ? FastDirectory : Interlaced && Mono ? "png-gray1-adam7" : Paeth && Rgb ? "png-rgb8-paeth" : RgbTransparency ? "png-rgb" + Depth + "-trns" : MonoTransparency ? "png-gray" + CodedDepth + "-trns" + GrayTransparencyKey : GrayTransparency ? Depth == 16 ? "png-gray16-trns32639" : "png-gray8-trns127" : NoCompression ? "png-store-" + Depth : Up ? "png-up-" + Depth : Sub ? "png-sub-" + Depth : Average ? "png-average-" + Depth : Mono ? "png-gray" + CodedDepth : PartialAlpha ? "png-palette8-alpha2" : Palette ? "png-palette" + CodedDepth : GrayAlpha ? "png-gray-alpha" + Depth : Gray ? "png-gray" + Depth : "png-rgb" + Depth);
+                if (Interlaced && Palette) directory += "-adam7";
                 if (MatchedByteEncoding) directory += "-optimal9";
                 Directory.CreateDirectory(directory);
                 foreach (var (name, bytes) in new[] { ("input.png", encoded), ("expected.raw", pixels) })
@@ -546,7 +548,7 @@ public class WarmPng
                     : Up ? $"Authored noninterlaced PNG RGBA{Depth}; every row Up; BCL Optimal level 6; identical resident encoded input"
                     : Sub ? $"Authored noninterlaced PNG RGBA{Depth}; every row Sub; BCL Optimal level 6; identical resident encoded input"
                     : Average ? $"Authored noninterlaced PNG RGBA{Depth}; every row Average; BCL Optimal level 6; identical resident encoded input"
-                    : Interlaced ? Mono ? "Authored PNG Adam7 gray1; original byte raster black/white projection, zero pass padding; BCL Optimal level6; filter None; identical resident encoded input" : "Authored PNG Adam7 RGBA16; BCL Optimal level 6; filter None; identical resident encoded input"
+                    : Interlaced ? Palette ? "Authored PNG Adam7 palette8; existing byte raster palette256/full tRNS projection; BCL Optimal level6; filter None; identical resident encoded input" : Mono ? "Authored PNG Adam7 gray1; original byte raster black/white projection, zero pass padding; BCL Optimal level6; filter None; identical resident encoded input" : "Authored PNG Adam7 RGBA16; BCL Optimal level 6; filter None; identical resident encoded input"
                     : MatchedByteEncoding ? "Lokad.Image Optimal uses BCL level9 / FFmpeg level6; exact samples and unchanged5% IDAT-size gate; filter None; noninterlaced"
                     : $"BCL Optimal (zlib default level 6) / FFmpeg level 6; filter None; noninterlaced {(Mono ? "packed gray" + CodedDepth + ", opaque" : Palette ? $"palette{CodedDepth}, {1 << CodedDepth} entries and {(PartialAlpha ? "two-entry" : "full")} tRNS" : GrayAlpha ? "gray-alpha" : Gray ? Depth == 16 ? "gray16be" : "gray" : Rgb ? "RGB" : "RGBA")}",
                 encoderLevel = Encode ? EncoderLevel : (int?)null, managedEncoderLevel = Encode ? ManagedEncoderLevel : (int?)null, nativeEncoderLevel = Encode ? EncoderLevel : (int?)null, storedDeflateBlocksExact = NoCompression,

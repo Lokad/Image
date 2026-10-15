@@ -24,6 +24,14 @@ controls and one relevant composed boundary, not a duplicate matrix of timings.
 Fresh Stream boundaries remain distinct from resident-span results. The retained-two
 RGBA8 flip has its own complete two-owner boundary, normalized per image.
 
+The [palette8/tRNS Adam7 screen](WARM-PNG-PALETTE8-ADAM7.md) measures 1.303x,
+upper2.651x, at 4,960 B/op, with exact analytical and normal/scalar native RGBA.
+Its independent confirmation remains open: native timing slows over sixfold on
+identical inputs/binaries. The favorable ratio is unscored. Bounded native-only
+and monitored diagnostics return to normal timing; the cause is unresolved.
+All actuals/guards/refusal evidence are retained, and unchanged production
+qualification is reused. No production optimization is justified by this screen.
+
 Tight-memory reduction is now confirmed at both depths through the existing
 16×8 workload. The [word streaming round](WARM-BICUBIC-TIGHT-16X8-RGBA16.md)
 confirms 0.964x / upper 0.984x at 1,145 B/op, and the
