@@ -1149,3 +1149,13 @@ normalization. Production and its qualification are reused. With
 `LOKAD_IMAGE_JPEG_ENTROPY=fixed-geometric-v1`, prepare the separate anchor using
 `--prepare-warm-jpeg420-stream16 0`, then select `Encode420Stream16`. The existing
 two original performance rasters suffice; this adds no quality sweep.
+
+The [retained-two flip round](WARM-RETAINED-FLIP.md) closes a 2.899x gap at
+**1.447x / upper 1.484x**, **128 B/image** instead of 266,009. Both subjects hold
+two complete independent outputs before release, with every sample normalized
+per image. Two exact-size idle slots retain the original combined 4 MiB pixel and
+1 MiB IDAT ceilings. Select `-WarmFamily RetainedFlip -WarmCases Rgba8`; build its
+separate original native adapter with `tools/WarmReference/build-hflip-retained2-linux.sh`.
+Use `ProduceReferenceAssembly=false` during child preparation to select verified
+compiled assemblies. Single-output flip and PNG decode regression means pass;
+3,289 tests and the same actual package consumer/three examples pass per OS.

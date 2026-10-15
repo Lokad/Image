@@ -134,6 +134,7 @@ def render():
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8lencode16-evidence.json', ['observations', -1], 'WARM-VP8L-RGBA16-ENCODE.md', True),
     ]
     edits = [
+        row('Horizontal flip RGBA8, two live outputs / per image', 'warm-retained-pool2-evidence.json', ['observations', -1], 'WARM-RETAINED-FLIP.md', True),
         row('Nearest resize RGBA8', 'warm-coverage-quiet-evidence.json', ['cases', 'nearest8', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
         row('Nearest upscale RGBA8', 'warm-nearestup8-evidence.json', ['observations', -1], 'WARM-NEAREST-UP8.md', True),
         row('Nearest upscale RGBA16', 'warm-nearestup16-evidence.json', ['observations', -1], 'WARM-NEAREST-UP16.md', True),
@@ -347,6 +348,9 @@ Its forward-only output fallback confirms **1.916x / upper 1.936x** with
 geometric AC coding, exact coefficients/pixels and half the allocation.
 RGBA16 forward-only output confirms **1.948x / upper 1.954x**, including full
 word normalization and flattening, on the same qualified production.
+Two-live-output RGBA8 flips confirm **1.447x / upper 1.484x**, at **128 B/image**,
+after bounded two-array reuse halves managed elapsed time. Both subjects retain
+two complete outputs before release; counters consistently normalize per image.
 Opaque VP8 decoding also remains open at **1.983x / upper 2.004x**.
 Its [bulk normalization trial](../benchmarks/VP8-NORMALIZATION-REJECTED.md) is rejected;
 the tested production is restored.

@@ -32,6 +32,10 @@ crop and rotation/flip storage may be reused by a later result. Complete-overwri
 operations reconstruct every output sample before publishing their owner and
 dispose private results on failure. Live buffers never share their pixel
 storage. New `ImageBuffer.Create` buffers are zero initialized.
+Released pixel storage may retain at most two exact-size arrays, with their
+combined idle bytes capped at 4 MiB. Only released leases are eligible; active
+owners never share storage. An unmatched size discards idle entries. Retention
+does not change input/result byte admission, and oversized arrays are not cached.
 
 Transforms return new owned buffers and preserve precision and source pixels.
 Outstanding raw orientation is retained until `AutoOrient` or decode with
@@ -447,8 +451,9 @@ chunk lengths/names/order/CRCs, image geometry, transparency and decoded pixel
 count. An owned bounded Deflate framing walk validates final blocks, stored
 lengths, fixed/dynamic prefix trees, repeats, backward distances, the declared
 zlib window and the exact filtered-raster byte count before BCL inflation.
-Concatenated IDAT bytes may reuse one released exact-size private array, retained
-up to 1 MiB independently of pixel storage. Every byte is copied before framing;
+Concatenated IDAT bytes may reuse at most two released exact-size private arrays,
+whose combined idle bytes stay within 1 MiB independently of pixel storage.
+Every byte is copied before framing;
 the lease ends after the inflater and streams are disposed, including failures.
 Input admission remains exact and live leases never share storage.
 Noninterlaced, noncancelable decoding may admit 8 KiB of buffered BCL output when

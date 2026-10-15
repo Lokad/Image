@@ -34,13 +34,41 @@ public sealed class PixelStoragePoolTests
     }
 
     [Fact]
-    public void AtMostOneIdleArrayIsRetained()
+    public void AtMostTwoIdleArraysAreRetained()
     {
         var pool = new PixelStoragePool();
-        var first = pool.Rent(16); var second = pool.Rent(16);
-        pool.Return(first); pool.Return(second);
+        var first = pool.Rent(16); var second = pool.Rent(16); var third = pool.Rent(16);
+        pool.Return(first); pool.Return(second); pool.Return(third);
         Assert.Same(first, pool.Rent(16));
-        Assert.NotSame(second, pool.Rent(16));
+        Assert.Same(second, pool.Rent(16));
+        Assert.NotSame(third, pool.Rent(16));
+    }
+
+    [Theory]
+    [InlineData(16, 16, 32, true)]
+    [InlineData(17, 15, 32, true)]
+    [InlineData(24, 24, 32, false)]
+    [InlineData(32, 1, 32, false)]
+    [InlineData(1, 1, 0, false)]
+    public void CombinedIdleBytesRespectTheOriginalCeiling(int firstLength, int secondLength, int ceiling, bool keepsBoth)
+    {
+        var pool = new PixelStoragePool(ceiling);
+        var first = pool.Rent(firstLength); var second = pool.Rent(secondLength);
+        pool.Return(first); pool.Return(second);
+        var firstLease = pool.Rent(firstLength); var secondLease = pool.Rent(secondLength);
+        Assert.Equal(firstLength, firstLease.Length); Assert.Equal(secondLength, secondLease.Length);
+        Assert.NotSame(firstLease, secondLease);
+        Assert.Equal(firstLength <= ceiling, ReferenceEquals(first, firstLease));
+        Assert.Equal(keepsBoth, ReferenceEquals(second, secondLease));
+    }
+
+    [Fact]
+    public void DuplicateIdleReturnCannotCreateTwoLiveLeasesOfOneArray()
+    {
+        var pool = new PixelStoragePool(); var buffer = pool.Rent(16);
+        pool.Return(buffer); pool.Return(buffer);
+        var first = pool.Rent(16); var second = pool.Rent(16);
+        Assert.Same(buffer, first); Assert.NotSame(first, second);
     }
 
     [Fact]

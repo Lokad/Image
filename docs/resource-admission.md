@@ -14,15 +14,17 @@ encoding still admits the source plus 8192 bytes before output. New geometric
 tables containing nine/ten-bit codes incur the decoder's existing additional
 2048-byte prefix charge; original short-table inputs retain their old boundary.
 
-Horizontal flips may reuse one released exact-size pixel array, with a global
-idle-storage ceiling of 4 MiB. It retains only released storage, never a larger
+Complete-overwrite image operations may reuse two released exact-size pixel
+arrays, with a combined global idle-storage ceiling of 4 MiB. A short lock
+protects both slots and their byte ceiling; a size miss discards idle entries.
+It retains only released storage, never a larger
 array or a source/result owner. Every returned image is fully written, and
 simultaneously live buffers have separate storage. Results keep their exact
 byte admission charge; pooled capacity is never rounded up. Failed private
 results release their lease. Idle cache storage is outside per-operation
 admission, as is GC retention; the fixed ceiling bounds the cache separately.
-PNG decode has a separate one-array cache for concatenated IDAT bytes, capped at
-1 MiB. Exact-size leases are fully copied before framing and returned after all
+PNG decode has a separate two-array cache for concatenated IDAT bytes, with a
+combined 1 MiB ceiling. Exact-size leases are fully copied before framing and returned after all
 inflater streams are disposed, including failure exits. Larger inputs remain
 uncached. Active input/result byte admission and error ordering are unchanged.
 Noninterlaced, noncancelable PNG output buffering admits a separate 8 KiB only

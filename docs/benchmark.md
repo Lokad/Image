@@ -103,6 +103,7 @@ timing comparison; compression efficiency parity is not established.
 
 | Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
+| [Horizontal flip RGBA8, two live outputs / per image](../benchmarks/WARM-RETAINED-FLIP.md) | 13.26 | 9.16 | 1.447 / 1.484 | 128 | Confirmed |
 | [Nearest resize RGBA8](../benchmarks/WARM-COVERAGE-QUIET.md) | 58.67 | 252.66 | 0.232 / 0.241 | 132,294 | Confirmed |
 | [Nearest upscale RGBA8](../benchmarks/WARM-NEAREST-UP8.md) | 935.05 | 1,006.00 | 0.929 / 0.955 | 2,133,091 | Confirmed |
 | [Nearest upscale RGBA16](../benchmarks/WARM-NEAREST-UP16.md) | 1,071.13 | 1,019.06 | 1.051 / 1.095 | 4,265,431 | Confirmed |
@@ -273,6 +274,9 @@ Its forward-only output fallback confirms **1.916x / upper 1.936x** with
 geometric AC coding, exact coefficients/pixels and half the allocation.
 RGBA16 forward-only output confirms **1.948x / upper 1.954x**, including full
 word normalization and flattening, on the same qualified production.
+Two-live-output RGBA8 flips confirm **1.447x / upper 1.484x**, at **128 B/image**,
+after bounded two-array reuse halves managed elapsed time. Both subjects retain
+two complete outputs before release; counters consistently normalize per image.
 Opaque VP8 decoding also remains open at **1.983x / upper 2.004x**.
 Its [bulk normalization trial](../benchmarks/VP8-NORMALIZATION-REJECTED.md) is rejected;
 the tested production is restored.
