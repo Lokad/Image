@@ -70,6 +70,7 @@ def table(rows):
 
 def render():
     decodes = [
+        row('PNG8 Stream, orient/crop/nearest fit', 'warm-png-composition8-evidence.json', ['observations', -1], 'WARM-PNG-COMPOSITION8.md', True),
         row('PNG RGBA8, fresh seekable Stream', 'warm-stream-png8-evidence.json', ['observations', -1], 'WARM-STREAM-PNG8.md', True),
         row('PNG RGBA8, None', 'warm-png8decode-quiet-evidence.json', ['observations', -1], 'WARM-PNG8-DECODE-QUIET.md', True),
         row('PNG RGBA8, stored Deflate / None', 'warm-pngstore8decode-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-DECODE.md', True),
@@ -316,7 +317,9 @@ seekable PNG8 row includes input acquisition and copies for both subjects; its
 public Stream controls measure Paeth8 **2,275,800**, Paeth16 **4,713,416**, and
 Adam7-16 **5,058,912 B/op**, identically on both OSes with normal/scalar code.
 These are distinct boundaries. FFmpeg allocation totals are **not measured**;
-they must not be interpreted as zero. Retained owners and cold allocation patterns
+they must not be interpreted as zero. The composed PNG8 Stream/orient/crop/fit
+row includes every managed intermediate and the complete native filter graph;
+its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
 Full required warm coverage is **open**. The

@@ -1193,3 +1193,12 @@ and complete owned PNG output, with one codec thread. Managed input is a fresh
 read-only non-exposed MemoryStream. Input reads/copies and input/output release
 are timed on both sides; fixture creation and validation remain outside timing.
 See the [fixed boundary and retained result](../../benchmarks/WARM-STREAM-PNG8.md).
+
+
+The composed case is `-WarmFamily StreamDecode -WarmCases PngCropFit8`, built
+with `build-png-composition-linux.sh`. It reuses the same original PNG8 input,
+then normal AutoOrient, centered256x129 crop and nearest fit128x64 (output127x64).
+The public native graph times every crop/sampling/conversion pass and may use
+intermediate views; managed public calls materialize their intermediate owners.
+Both subjects acquire fresh input and return independent owned final pixels.
+See the [boundary and retained result](../../benchmarks/WARM-PNG-COMPOSITION8.md).

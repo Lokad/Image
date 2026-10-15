@@ -33,6 +33,7 @@ timing comparison; compression efficiency parity is not established.
 
 | Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
+| [PNG8 Stream, orient/crop/nearest fit](../benchmarks/WARM-PNG-COMPOSITION8.md) | 2,795.71 | 1,478.63 | 1.891 / 1.906 | 1,453,517 | Confirmed |
 | [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-STREAM-PNG8.md) | 2,655.37 | 1,392.55 | 1.907 / 1.916 | 756,605 | Confirmed |
 | [PNG RGBA8, None](../benchmarks/WARM-PNG8-DECODE-QUIET.md) | 2,961.21 | 1,516.02 | 1.953 / 1.995 | 755,274 | Confirmed |
 | [PNG RGBA8, stored Deflate / None](../benchmarks/WARM-PNG-STORED8-DECODE.md) | 157.30 | 135.76 | 1.159 / 1.168 | 12,976 | Confirmed |
@@ -242,7 +243,9 @@ seekable PNG8 row includes input acquisition and copies for both subjects; its
 public Stream controls measure Paeth8 **2,275,800**, Paeth16 **4,713,416**, and
 Adam7-16 **5,058,912 B/op**, identically on both OSes with normal/scalar code.
 These are distinct boundaries. FFmpeg allocation totals are **not measured**;
-they must not be interpreted as zero. Retained owners and cold allocation patterns
+they must not be interpreted as zero. The composed PNG8 Stream/orient/crop/fit
+row includes every managed intermediate and the complete native filter graph;
+its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
 Full required warm coverage is **open**. The

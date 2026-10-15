@@ -7,7 +7,7 @@ using Lokad.Image;
 using Lokad.Image.Tooling;
 
 /// <summary>Warm single-CPU operation; native elapsed samples are measured inside its worker.</summary>
-public enum StreamDecodeCase { Png8 }
+public enum StreamDecodeCase { Png8, PngCropFit8 }
 
 [MemoryDiagnoser]
 public class WarmStreamDecode
@@ -15,10 +15,14 @@ public class WarmStreamDecode
     public static IEnumerable<StreamDecodeCase> Cases => SelectedCases();
     [ParamsSource(nameof(Cases))] public StreamDecodeCase Case { get; set; }
     private const int Depth = 8;
+    private bool Compose => Case == StreamDecodeCase.PngCropFit8;
+    private int OutputWidth => Compose ? 127 : HorizontalFlipInput.Width;
+    private int OutputHeight => Compose ? 64 : HorizontalFlipInput.Height;
     public static StreamDecodeCase[] SelectedCases() => Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES") switch
     {
         null or "Png8" => [StreamDecodeCase.Png8],
-        _ => throw new ArgumentException("Choose the single fresh Stream PNG decode case: Png8.")
+        "PngCropFit8" => [StreamDecodeCase.PngCropFit8],
+        _ => throw new ArgumentException("Choose one fresh Stream case: Png8 or PngCropFit8.")
     };
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
@@ -35,7 +39,7 @@ public class WarmStreamDecode
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Warm FFmpeg reference measurements require Linux.");
         ready = false;
-        if (Case != StreamDecodeCase.Png8) throw new ArgumentOutOfRangeException(nameof(Case));
+        if (Case is not (StreamDecodeCase.Png8 or StreamDecodeCase.PngCropFit8)) throw new ArgumentOutOfRangeException(nameof(Case));
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -58,7 +62,7 @@ public class WarmStreamDecode
                     sourceRevision = manifest.RootElement.GetProperty("sourceRevision").GetString()
                 });
             input = HorizontalFlipInput.Create(Depth);
-            expected = input;
+            expected = Compose ? ExpectedComposition(input) : input;
             using (var source = JpegBenchmarkCase.Buffer(input, HorizontalFlipInput.Width, HorizontalFlipInput.Height, Depth))
             using (var output = new MemoryStream())
             {
@@ -69,7 +73,7 @@ public class WarmStreamDecode
             File.WriteAllBytes(state.Input, encoded);
             File.WriteAllBytes(Path.Combine(state.DirectoryPath, "expected.raw"), expected);
             ValidateManaged();
-            native = new NativeWarmReference(state, Depth, cpu, "png-stream-decode", Path.Combine(state.DirectoryPath, "expected.raw"));
+            native = new NativeWarmReference(state, Depth, cpu, Compose ? "png-stream-crop-fit" : "png-stream-decode", Path.Combine(state.DirectoryPath, "expected.raw"));
             RequireNativeOutput();
             before = native.Measure(smoke, sampleCount: sampleCount);
             ready = true;
@@ -83,7 +87,9 @@ public class WarmStreamDecode
         using var secondStream = new MemoryStream(encoded, writable: false);
         if (firstStream.TryGetBuffer(out _) || secondStream.TryGetBuffer(out _))
             throw new InvalidOperationException("The input buffer must not be exposed by the stream.");
-        using var first = ImageCodec.Decode(firstStream); using var second = ImageCodec.Decode(secondStream);
+        using var first = DecodeAndTransform(firstStream); using var second = DecodeAndTransform(secondStream);
+        if (first.Width != OutputWidth || first.Height != OutputHeight || first.Orientation != ImageOrientation.Normal)
+            throw new InvalidOperationException("Output geometry/orientation differs.");
         if (!OriginalPixels.Bytes(first).AsSpan().SequenceEqual(expected) || !OriginalPixels.Bytes(second).AsSpan().SequenceEqual(expected))
             throw new InvalidOperationException("Stream decode pixels differ.");
         first.GetRow8(0)[0] ^= 255;
@@ -94,18 +100,41 @@ public class WarmStreamDecode
             throw new InvalidOperationException("Stream input changed.");
     }
 
+    private ImageBuffer DecodeAndTransform(Stream stream)
+    {
+        if (!Compose) return ImageCodec.Decode(stream);
+        using var decoded = ImageCodec.Decode(stream);
+        using var oriented = ImageTransforms.AutoOrient(decoded);
+        using var cropped = ImageTransforms.CropCentered(oriented, 256, 129);
+        return ImageTransforms.ResizeToFit(cropped, 128, 64, allowUpscaling: false, ResizeFilter.Nearest);
+    }
+
+    private static byte[] ExpectedComposition(byte[] original)
+    {
+        // Centered crop starts at (128,65); fit ratio is 64/129, width rounds to127.
+        var result = new byte[127 * 64 * 4];
+        for (var y = 0; y < 64; y++)
+        for (var x = 0; x < 127; x++)
+        {
+            var sx = 128 + (int)(((long)2 * x + 1) * 256 / (2 * 127));
+            var sy = 65 + (int)(((long)2 * y + 1) * 129 / (2 * 64));
+            original.AsSpan((sy * 513 + sx) * 4, 4).CopyTo(result.AsSpan((y * 127 + x) * 4, 4));
+        }
+        return result;
+    }
+
     private void RequireNativeOutput()
     {
         var bytes = File.ReadAllBytes(state.NativeOutput);
         if (!bytes.AsSpan().SequenceEqual(expected))
-            throw new InvalidOperationException("Native pixels differ from independent forward placement.");
+            throw new InvalidOperationException("Native pixels differ from the independent coordinate reference.");
     }
 
     [Benchmark]
     public int Managed()
     {
         using var stream = new MemoryStream(encoded, writable: false);
-        using var result = ImageCodec.Decode(stream);
+        using var result = DecodeAndTransform(stream);
         return result.GetRow8(0)[0] + result.Stride * result.Height;
 
     }
@@ -139,10 +168,13 @@ public class WarmStreamDecode
                 nativeExitCode = 0, librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmStreamDecode).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready,
+                composed = Compose, outputWidth = OutputWidth, outputHeight = OutputHeight,
+                orientation = "Normal", cropWidth = Compose ? 256 : 0, cropHeight = Compose ? 129 : 0,
+                fitMaxWidth = Compose ? 128 : 0, fitMaxHeight = Compose ? 64 : 0,
                 freshSeekableStream = true, publicBufferExposed = false, inputCopyTimed = true,
                 inputConsumedToEnd = true, callerStreamLeftOpen = true,
                 nativeBefore = before, nativeAfter = after,
-                boundary = "Fresh read-only seekable in-memory Stream with non-exposed backing buffer to complete independently owned PNG8 RGBA pixels. Managed MemoryStream creation, complete public Decode(Stream) reads/buffering/copies, full decode and input/output disposal included. Native fresh public AVIO context and 8192-byte scratch, length query, complete av_get_packet acquisition into fresh owned padded packet, EOF check, full PNG decode and release included; no prepared input view. Native codec/frame/packet wrapper reused, payload reacquired every operation. Original encoded source is resident; no file/network IO, IPC, startup, validation or hashing timed. Exact alpha/hidden RGB/source and two-live-output independence checked outside timing."
+                boundary = (Compose ? "Composed Decode(Stream), AutoOrient(Normal), CropCentered(256,129), ResizeToFit(128,64,false,Nearest) gives 127x64. All managed intermediate owners are materialized and released. Native equivalent single-thread crop/point graph may retain intermediate views; final output is independently owned. Complete graph and pixel conversions are timed. " : "") + "Fresh read-only seekable in-memory Stream with non-exposed backing buffer to complete independently owned PNG8 RGBA pixels. Managed MemoryStream creation, complete public Decode(Stream) reads/buffering/copies, full decode and input/output disposal included. Native fresh public AVIO context and 8192-byte scratch, length query, complete av_get_packet acquisition into fresh owned padded packet, EOF check, full PNG decode and release included; no prepared input view. Native codec/frame/packet wrapper reused, payload reacquired every operation. Original encoded source is resident; no file/network IO, IPC, startup, validation or hashing timed. Exact alpha/hidden RGB/source and two-live-output independence checked outside timing."
 
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
             Console.WriteLine("Validated warm memory pair; untimed evidence: " + path);
