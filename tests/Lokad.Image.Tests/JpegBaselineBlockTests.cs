@@ -252,6 +252,53 @@ public sealed class JpegBaselineBlockTests
         }
     }
 
+    [Fact]
+    public void LookaheadReturnsPendingBitsAcrossBlocksAndEveryByteTruncation()
+    {
+        var tables = Tables(); var dense = Dc(3) + Signed(7, 3);
+        for (var k = 1; k <= 63; k++)
+        {
+            var size = 1 + k % 10; var threshold = 1 << (size - 1);
+            var amplitude = threshold + (k * 37 & (threshold - 1));
+            dense += Ac((byte)size) + Signed((k & 1) == 0 ? amplitude : -amplitude, size);
+        }
+        var sparse = Dc(1) + Signed(-1, 1) + Ac(0x31) + Signed(1, 1) + Ac(0);
+        for (var phase = 0; phase < 8; phase++)
+        {
+            var original = Stuff(new string('0', phase) + dense + sparse + dense + "101");
+            for (var length = 0; length <= original.Length; length++)
+            {
+                var input = original.AsSpan(0, length).ToArray();
+                var expected = Run(true); var actual = Run(false);
+                Assert.Equal(expected.Error, actual.Error); Assert.Equal(expected.Message, actual.Message);
+                Assert.Equal(expected.Position, actual.Position); Assert.Equal(expected.Remaining, actual.Remaining);
+                Assert.Equal(expected.Predictor, actual.Predictor); Assert.Equal(expected.Tail, actual.Tail);
+                Assert.Equal(expected.Blocks.Count, actual.Blocks.Count);
+                for (var i = 0; i < expected.Blocks.Count; i++) Assert.Equal(expected.Blocks[i], actual.Blocks[i]);
+                Assert.Equal(original.AsSpan(0, length).ToArray(), input);
+
+                (Type? Error, string? Message, int Position, long Remaining, int Predictor, int Tail, List<int[]> Blocks) Run(bool scalar)
+                {
+                    var context = Context(100000); var reader = new JpegEntropyReader(input, 0, context);
+                    var predictor = 17; var tail = -1; var blocks = new List<int[]>(); Exception? error = null;
+                    try
+                    {
+                        if (phase != 0) reader.ReadBits(phase);
+                        for (var i = 0; i < 3; i++)
+                        {
+                            var block = Enumerable.Repeat(12345, 64).ToArray(); blocks.Add(block);
+                            if (scalar) ScalarBaseline(ref reader, block, ref predictor, tables.Dc, tables.Ac, context);
+                            else JpegDecoder.ReadBaselineBlock(ref reader, block, ref predictor, tables.Dc, tables.Ac, context);
+                        }
+                        tail = reader.ReadBits(3); reader.Restart(0);
+                    }
+                    catch (Exception failure) when (failure is ImageDataException or ImageLimitException) { error = failure; }
+                    return (error?.GetType(), error?.Message, reader.Position, context.RemainingWork, predictor, tail, blocks);
+                }
+            }
+        }
+    }
+
     // Original unfused traversal with immediate parent charges, independently
     // retaining symbol/amplitude and syntax failure order. No local-work scope.
     private static void ScalarBaseline(ref JpegEntropyReader reader, Span<int> block, ref int predictor,

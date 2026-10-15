@@ -11,18 +11,31 @@ round, at most three, with correctness established before timing.
 | --- | --- | --- |
 | PNG decode | RGBA8/16 all five filters and stored Deflate/None; current RGBA8 Sub confirmed1.686x / upper1.697x; RGB8 Paeth confirmed1.204x / upper1.214x; RGB16 Paeth confirmed1.904x/upper1.928x; grayscale8 Paeth confirmed1.008x/upper1.014x; grayscale-alpha8 Paeth confirmed1.017x/upper1.068x; RGBA16 Adam7 and packed gray1 Adam7 confirmed1.018x / upper1.032x, plus exact working-memory boundary at both depths (RGBA8 confirmed1.821x / upper1.950x, RGBA16 confirmed1.817x / upper1.821x), live-cancelable RGBA8 default/exact limit confirmed1.407x / upper1.469x and1.867x / upper1.873x and RGBA16 default/exact limit confirmed1.573x / upper1.583x and1.834x / upper1.852x; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; byte-indexed sixteen-entry/full-tRNS palette confirmed1.317x/upper1.327x; palette8/full-tRNS Adam7 confirmed1.167x/upper1.177x with native wall/CPU agreement; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed; packed gray2/key0 confirmed0.144x / upper0.145x and gray1/key1 with timed exact native colorkey confirmed0.094x / upper0.098x, raw gray1/key1 and gray2/key1 native alpha refusals unscored | Other material depths/layouts, shorter palettes or distinct public boundaries |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level6/None; byte RGB/gray/gray-alpha Optimal managed9/native6 with unchanged5% size gate confirmed; RGBA8/16 NoCompression/None confirmed; RGBA16 SmallestSize managed9/native9 confirmed0.970x / upper0.985x with unchanged5% size gate; Fastest RGBA8 managed2/native1 stock output confirmed 0.707x / upper 0.712x; Fastest RGBA16 managed2/native1 stock output confirmed 0.732x / upper 0.735x and live cancelable output confirmed 0.731x / upper 0.747x, forward-only output confirmed 0.771x / upper 0.805x with streaming adaptive compression | Other materially different compression work/public boundaries |
-| JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4; full-resolution direct RGB confirmed1.918x/upper1.923x; horizontal subsampled direct RGB422 confirmed1.511x/upper1.520x with timed native phase correction; two-dimensional direct RGB420 confirmed1.638x/upper1.646x with timed component-plane interpretation/expansion/packing; current native-input ordinary/live-token/progressive444 independently confirmed1.715x/upper1.733x,1.770x/upper1.797x,1.954x/upper1.960x; baseline 4:2:0 with row restart markers confirmed 1.823x / upper 1.837x | Other materially different supported layouts/public boundaries |
+| JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4; full-resolution direct RGB now confirmed 1.695x/upper 1.709x; current progressive 4:4:4 confirmed 1.877x/upper 1.896x; horizontal subsampled direct RGB422 confirmed1.511x/upper1.520x with timed native phase correction; two-dimensional direct RGB420 confirmed1.638x/upper1.646x with timed component-plane interpretation/expansion/packing; current native-input ordinary/live-token/progressive 4:4:4 independently confirmed1.715x/upper1.733x,1.770x/upper1.797x,1.954x/upper1.960x; baseline 4:2:0 with row restart markers confirmed 1.823x / upper 1.837x | Other materially different supported layouts/public boundaries |
 | JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x, 4:2:2 confirmed 1.821x / upper 1.862x and 4:2:0 confirmed 1.943x / upper 1.988x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x, 4:2:2 confirmed 1.874x / upper 1.884x and 4:2:0 confirmed 1.888x / upper 1.931x; live-cancelable RGBA16 4:2:0 confirmed 1.651x / upper 1.663x and RGBA8 4:4:4 prior confirmed with current regression; forward-only RGBA8 4:4:4 confirmed 1.754x / upper 1.765x and 4:2:0 confirmed 1.916x / upper 1.936x and RGBA16 4:2:0 confirmed 1.948x / upper 1.954x; adaptive RGBA8 row restarts confirmed 1.958x / upper 1.973x | Other material fallback layouts, grayscale and distinct public boundaries |
 | WebP | VP8 with alpha decode/encode; opaque VP8 encode confirmed RGBA8 1.892x / upper 1.918x and RGBA16 1.908x / upper 1.922x with current alpha8/16 regression screens; opaque VP8 decode confirmed 1.803x / upper 1.808x and alpha VP8 confirmed 1.803x / upper 1.819x; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode; native-input VP8L live-token decode confirmed1.906x / upper1.919x | Other material depth/alpha alternatives and distinct public boundaries |
 | Resize | Nearest/bilinear downsample and enlargement at both depths; bicubic downsample, enlargement on both axes, both mixed-axis directions and 128×64 / 64×32 wider supports at both depths; horizontal reduction/enlargement and vertical reduction at both depths; vertical enlargement, 32×16 and 16×8 adaptive support at both depths; RGBA8/16 256×129, 128×64, 64×32, 32×16 and 16×8 reduction, plus RGBA8/16 both-axis enlargement and RGBA8/16 width enlargement/height reduction plus RGBA8/16 width reduction/height enlargement and RGBA8/16 8×4 beyond 256 taps plus RGBA8/16 4×2 packed support beyond 304 taps and RGBA8/16 2×2 generated support beyond 544 taps plus RGBA8/16 2×9 bounded row blocks and RGBA8/16 4×9 packed row blocks plus RGBA8/16 8×17 full-coefficient row blocks and RGBA8/16 vertical reduction with unchanged width plus RGBA8/16 horizontal reduction with unchanged height and RGBA8/16 vertical enlargement with unchanged width plus RGBA8/16 horizontal enlargement with unchanged height, with input+output+4 KiB limit confirmed | Larger/unmatched supports and other materially distinct shapes |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes; RGBA8 horizontal flip with two simultaneously live outputs confirmed 1.447x / upper 1.484x per image | Other materially distinct retained/composed public boundaries |
-| Public boundaries | Resident encoded span to owned output; complete single operations; fresh seekable non-exposed PNG8 Stream decode confirmed 1.907x / upper 1.916x and PNG16 confirmed 1.819x / upper 1.830x; fresh JPEG420 restart Stream confirmed 1.891x / upper 1.902x and VP8/ALPH Stream confirmed 1.825x / upper 1.833x and VP8L Stream confirmed 1.834x / upper 1.851x; PNG8 Stream/normal-orient/centered-crop/nearest-fit composition confirmed 1.891x / upper 1.906x | RGBA16 PNG Stream/orient/crop/nearest-fit confirmed1.216× / upper1.231× after fused framing/inflation; other material fresh input/depth and composed boundaries |
+| Public boundaries | Resident encoded span to owned output; complete single operations; fresh seekable non-exposed PNG8 Stream decode confirmed 1.907x / upper 1.916x and PNG16 confirmed 1.819x / upper 1.830x; fresh JPEG420 restart Stream now confirmed 1.632x/upper 1.673x and VP8/ALPH Stream confirmed 1.825x / upper 1.833x and VP8L Stream confirmed 1.834x / upper 1.851x; PNG8 Stream/normal-orient/centered-crop/nearest-fit composition confirmed 1.891x / upper 1.906x | RGBA16 PNG Stream/orient/crop/nearest-fit confirmed1.216× / upper1.231× after fused framing/inflation; other material fresh input/depth and composed boundaries |
 
 Centered/clamped crop, AutoOrient and ResizeToFit route to the measured copy or
 resize primitives after small geometry/metadata work. They need correctness
 controls and one relevant composed boundary, not a duplicate matrix of timings.
 Fresh Stream boundaries remain distinct from resident-span results. The retained-two
 RGBA8 flip has its own complete two-owner boundary, normalized per image.
+
+The [wider JPEG AC cache](WARM-JPEG-AC-CACHE.md) closes a current-build
+RGB gap at 1.695x / upper 1.709x, 16.8% less managed time, 2,664,366 B/op.
+Four-byte ordinary lookahead is reused across short coefficients, returning
+unused whole bytes on exit with exact pending bits, partial writes and work/
+error ordering. The original fallback and cancelable path remain. One profile
+and candidate build suffice. Both regression means precede full qualification: 3,483 tests per OS,
+live comparisons and the same actual package on both systems. On that same immutable build, progressive 4:4:4
+independently confirms 1.877x/upper 1.896x and fresh Stream 1.632x/upper 1.673x.
+No forward-only timing duplicate is added: the shared public Stream buffering
+loop has no seekability branch. Native Stream source validation moves outside
+timing while retaining the check. Stop these pairs; remaining material coverage
+and unmatched grayscale encoding stay open.
 
 The [two-dimensional subsampled RGB JPEG round](WARM-JPEG-RGB420-ROW.md)
 lowers its5.563x gap by70.6%, independently confirming1.638x / upper1.646x at
@@ -31,7 +44,7 @@ scalar clamped edges/tails preserve original binary64 pixels and row work/
 cancellation without new workspace. Complete native component-plane RGB
 interpretation, centered2x2 expansion/crop and GBRP packing/allocation are timed.
 Ordinary native YCbCr conversion remains an untimed mismatch control; the
-max4/RMSE1.5 decoder gate is unchanged. Both shared regression means pass before
+max 4 / RMSE 1.5 decoder gate is unchanged. Both shared regression means pass before
 3,482-tests-per-OS/live/same-actual-package qualification.
 Stop this confirmed pair; remaining material public boundaries stay open.
 
@@ -41,7 +54,7 @@ its4.081x gap by62.9%, independently confirming1.511x / upper1.520x at
 binary64 pixels, scalar edges/tails, admission and row work/cancellation, without
 new workspace. Full native decode/GBRP packing and centered-phase correction
 are timed. Uncorrected native output remains an untimed mismatch control;
-the max4/RMSE1.5 decoder gate is unchanged. Both shared regression means pass
+the max 4 / RMSE 1.5 decoder gate is unchanged. Both shared regression means pass
 before3,469-tests-per-OS/live/same-actual-package qualification.
 Stop this confirmed pair; other material layouts and full coverage stay open.
 
@@ -1238,7 +1251,7 @@ The [ordinary JPEG AC-run round](WARM-JPEG-BASELINE-AC-RUN.md) closes the curren
 ordinary444 upper2.041x at1.715x / upper1.733x,18.6% less managed time and
 2,664,373 B/op. Safe noncancelable local runs preserve every bit/work/error and
 registered output, without new heap workspace. The same immutable build confirms
-existing live-token444 at1.770x / upper1.797x and progressive444 at1.954x /
+existing live-token444 at1.770x / upper1.797x and progressive 4:4:4 at1.954x /
 upper1.960x. Only three existing workload types and one original byte raster are
 used. All12actuals and both guards pass for each. Shared regression means precede
 full3,432-tests-per-OS/live/same actual package qualification. Stop all three pairs;

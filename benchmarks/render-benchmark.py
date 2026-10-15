@@ -77,7 +77,7 @@ def render():
         row('PNG16 Stream, orient/crop/nearest fit', 'warm-png-fused-evidence.json', ['observations', -1], 'WARM-PNG-FUSED-INFLATION.md', True),
         row('PNG RGBA8, fresh seekable Stream', 'warm-stream-png8-evidence.json', ['observations', -1], 'WARM-STREAM-PNG8.md', True),
         row('PNG RGBA16, fresh seekable Stream', 'warm-stream-png16-evidence.json', ['observations', -1], 'WARM-STREAM-PNG16.md', True),
-        row('JPEG420 restart, fresh seekable Stream', 'warm-jpegstream-evidence.json', ['observations', -1], 'WARM-JPEG-STREAM.md', True),
+        row('JPEG420 restart, fresh seekable Stream', 'warm-jpeg-ac-cache-evidence.json', ['observations', 8], 'WARM-JPEG-AC-CACHE.md', True),
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8stream-evidence.json', ['observations', -1], 'WARM-VP8-STREAM.md', True),
         row('WebP VP8L, fresh seekable Stream', 'warm-vp8lstream-evidence.json', ['observations', -1], 'WARM-VP8L-STREAM.md', True),
         row('PNG RGBA8, None', 'warm-pngtightcancel8-evidence.json', ['regressions', 1], 'WARM-PNG-TIGHT-CANCELABLE8.md', verification='Regression screen; prior confirmed'),
@@ -133,7 +133,7 @@ def render():
         row('JPEG baseline 4:2:2', 'warm-jpeg-rgb422-row-evidence.json', ['observations', 4], 'WARM-JPEG-RGB422-ROW.md', verification='Regression screen; prior confirmed'),
         row('JPEG baseline 4:4:4, owned input', 'warm-jpeg444owned-quiet-evidence.json', ['observations', -1], 'WARM-JPEG444-OWNED-QUIET.md', True),
         row('JPEG baseline 4:4:4, native input', 'warm-jpeg-rgb-row-evidence.json', ['observations', 3], 'WARM-JPEG-RGB-ROW.md', verification='Regression screen; prior confirmed'),
-        row('JPEG baseline direct RGB, full resolution', 'warm-jpeg-rgb422-row-evidence.json', ['observations', 3], 'WARM-JPEG-RGB422-ROW.md', verification='Regression screen; prior confirmed'),
+        row('JPEG baseline direct RGB, full resolution', 'warm-jpeg-ac-cache-evidence.json', ['observations', 2], 'WARM-JPEG-AC-CACHE.md', True),
         row('JPEG direct RGB 4:2:2, timed centered correction', 'warm-jpeg-rgb420-row-evidence.json', ['observations', 3], 'WARM-JPEG-RGB420-ROW.md', verification='Regression screen; prior confirmed'),
         row('JPEG direct RGB 4:2:0, timed component-plane interpretation', 'warm-jpeg-rgb420-row-evidence.json', ['observations', 2], 'WARM-JPEG-RGB420-ROW.md', True),
         row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg-ac-run-evidence.json', ['cancelableConfirmations', -1], 'WARM-JPEG-BASELINE-AC-RUN.md', True),
@@ -141,7 +141,7 @@ def render():
         row('JPEG progressive 4:2:0', 'warm-jpegprogressive420-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE420.md', True),
         row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpegprogressive444cancel-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE-CANCELABLE444.md', True),
         row('JPEG progressive 4:2:2', 'warm-jpegprogressive422-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE422.md', True),
-        row('JPEG progressive 4:4:4', 'warm-jpeg-rgb-row-evidence.json', ['observations', 4], 'WARM-JPEG-RGB-ROW.md', verification='Regression screen; prior confirmed'),
+        row('JPEG progressive 4:4:4', 'warm-jpeg-ac-cache-evidence.json', ['observations', 7], 'WARM-JPEG-AC-CACHE.md', True),
         row('WebP VP8 + alpha', 'warm-vp8-filter8-evidence.json', ['alphaBearingControl', 'observations', -1], 'WARM-VP8-FILTER8.md', True),
         row('WebP VP8, opaque', 'warm-vp8-filter8-evidence.json', ['observations', -1], 'WARM-VP8-FILTER8.md', True),
         row('WebP VP8L, literal/run input', 'warm-vp8ldecode-quiet-evidence.json', ['observations', -1], 'WARM-VP8L-DECODE-QUIET.md', True),
@@ -373,19 +373,23 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted production round specializes two-dimensional subsampled RGB
-JPEG rows, reducing a **5.563x** gap by **70.6%**, independently confirming
-**1.638x / upper1.646x** at **1,619,540 B/op**. Exact sixteenth weights retain
-one final rounding, with AVX2 batches and scalar clamped edges/tails. Original
-managed pixels, admission and row work/cancellation are unchanged; no workspace
-is added. The native baseline times component-plane RGB interpretation, centered
-2x2 expansion/crop and GBRP packing, including both intermediate allocations.
-Ordinary native YCbCr conversion remains an untimed mismatch control.
-Both regression means pass before full **3,482-test-per-OS** qualification,
-including **898 live comparisons**, and the same actual Release package's
-consumer plus all three examples on Windows/Linux. No tolerance is widened.
-The preceding horizontal RGB422 round retains its independent1.511x /
-upper1.520x confirmation and62.9% managed-time reduction.
+The latest accepted production round widens the local baseline JPEG AC bit
+cache, reducing a current-build **2.040x** RGB gap by **16.8%**, independently
+confirming **1.695x / upper 1.709x** at **2,664,366 B/op**. Four checked ordinary
+bytes supply several short coefficients per refill. Logical byte/bit state,
+partial coefficients, work/error ordering and the original fallback remain
+exact; no heap workspace is added. The same qualified build independently
+confirms progressive 4:4:4 at **1.877x / upper 1.896x**, **2,682,364 B/op**, and fresh
+JPEG Stream at **1.632x / upper 1.673x**, **1,813,266 B/op**.
+The Stream worker now performs source-preservation validation outside timing.
+Both regression means precede full **3,483-test-per-OS** qualification, including
+**898 live comparisons**, and the same actual Release package's consumer plus
+all three examples on Windows/Linux. Additional confirmations reuse those
+proofs. No input variants or repeated production/harness builds are added.
+
+The preceding RGB420/RGB422 rows retain their independent 1.638x/upper1.646x and
+1.511x/upper1.520x results with 70.6% and 62.9% less managed time respectively.
+Those measurements precede the current shared entropy primitive.
 
 Recent unchanged-production coverage confirms RGB16 Paeth at1.904x /
 upper1.928x,6,504 B/op, and gray-alpha8 Paeth at1.017x / upper1.068x,2,408 B/op.

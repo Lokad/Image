@@ -622,7 +622,13 @@ Baseline entropy traversal retains exact logical work charges in a local block
 budget, including cancelable operations. Completed charges are published on every
 exit without another cancellation check. Noncancelable blocks may also keep runs
 of ordinary short AC symbols in local reader state, preserving the existing atomic
-fused prefix/amplitude charge and original fallback state. With a live token, consecutive ordinary
+fused prefix/amplitude charge and original fallback state.
+Noncancelable runs may refill a local 64-bit cache with four ordinary bytes and
+reuse its lookahead across symbols. Only bytes required by completed symbols
+are committed; unused whole bytes are returned before every exit. Stuffing,
+markers, long/invalid codes, short tails and tight work budgets use the original
+fallback with exact logical bits, partial coefficients and work/error ordering.
+With a live token, consecutive ordinary
 AC symbols may be decoded from safe two-byte lookahead using local reader state.
 Prefix and amplitude retain separate work admissions and cancellation checks.
 Unused whole bytes are returned before publishing the original reader position

@@ -37,7 +37,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG16 Stream, orient/crop/nearest fit](../benchmarks/WARM-PNG-FUSED-INFLATION.md) | 3,572.35 | 2,936.91 | 1.216 / 1.231 | 4,460,393 | Confirmed |
 | [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-STREAM-PNG8.md) | 2,655.37 | 1,392.55 | 1.907 / 1.916 | 756,605 | Confirmed |
 | [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-STREAM-PNG16.md) | 5,626.97 | 3,093.68 | 1.819 / 1.830 | 3,075,772 | Confirmed |
-| [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-STREAM.md) | 1,886.05 | 997.23 | 1.891 / 1.902 | 1,813,266 | Confirmed |
+| [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-AC-CACHE.md) | 1,627.42 | 997.29 | 1.632 / 1.673 | 1,813,266 | Confirmed |
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-STREAM.md) | 10,914.60 | 5,979.52 | 1.825 / 1.833 | 2,327,699 | Confirmed |
 | [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-VP8L-STREAM.md) | 5,549.36 | 3,026.08 | 1.834 / 1.851 | 1,924,876 | Confirmed |
 | [PNG RGBA8, None](../benchmarks/WARM-PNG-TIGHT-CANCELABLE8.md) | 2,034.33 | 1,368.65 | 1.486 / 1.705 | 4,456 | Regression screen; prior confirmed |
@@ -93,7 +93,7 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG baseline 4:2:2](../benchmarks/WARM-JPEG-RGB422-ROW.md) | 1,902.81 | 1,346.77 | 1.413 / 1.497 | 1,978,651 | Regression screen; prior confirmed |
 | [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-JPEG444-OWNED-QUIET.md) | 3,564.61 | 2,039.57 | 1.748 / 1.793 | 2,596,174 | Confirmed |
 | [JPEG baseline 4:4:4, native input](../benchmarks/WARM-JPEG-RGB-ROW.md) | 3,071.31 | 1,729.68 | 1.776 / 4.566 | 2,664,373 | Regression screen; prior confirmed |
-| [JPEG baseline direct RGB, full resolution](../benchmarks/WARM-JPEG-RGB422-ROW.md) | 2,964.52 | 1,566.33 | 1.893 / 2.998 | 2,664,373 | Regression screen; prior confirmed |
+| [JPEG baseline direct RGB, full resolution](../benchmarks/WARM-JPEG-AC-CACHE.md) | 2,460.96 | 1,451.53 | 1.695 / 1.709 | 2,664,366 | Confirmed |
 | [JPEG direct RGB 4:2:2, timed centered correction](../benchmarks/WARM-JPEG-RGB420-ROW.md) | 1,646.35 | 1,095.09 | 1.503 / 1.570 | 1,978,655 | Regression screen; prior confirmed |
 | [JPEG direct RGB 4:2:0, timed component-plane interpretation](../benchmarks/WARM-JPEG-RGB420-ROW.md) | 1,220.97 | 745.27 | 1.638 / 1.646 | 1,619,540 | Confirmed |
 | [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-JPEG-BASELINE-AC-RUN.md) | 3,048.96 | 1,722.47 | 1.770 / 1.797 | 2,664,373 | Confirmed |
@@ -101,7 +101,7 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG progressive 4:2:0](../benchmarks/WARM-JPEG-PROGRESSIVE420.md) | 3,646.81 | 1,938.47 | 1.881 / 1.894 | 1,637,521 | Confirmed |
 | [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-PROGRESSIVE-CANCELABLE444.md) | 6,453.37 | 3,335.92 | 1.935 / 1.940 | 2,682,364 | Confirmed |
 | [JPEG progressive 4:2:2](../benchmarks/WARM-JPEG-PROGRESSIVE422.md) | 3,882.57 | 2,210.07 | 1.757 / 1.781 | 1,996,661 | Confirmed |
-| [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-RGB-ROW.md) | 6,447.09 | 3,345.92 | 1.927 / 1.993 | 2,682,364 | Regression screen; prior confirmed |
+| [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-AC-CACHE.md) | 6,282.99 | 3,348.11 | 1.877 / 1.896 | 2,682,364 | Confirmed |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8-FILTER8.md) | 10,777.02 | 5,977.48 | 1.803 / 1.819 | 1,966,616 | Confirmed |
 | [WebP VP8, opaque](../benchmarks/WARM-VP8-FILTER8.md) | 8,649.43 | 4,797.64 | 1.803 / 1.808 | 760,548 | Confirmed |
 | [WebP VP8L, literal/run input](../benchmarks/WARM-VP8L-DECODE-QUIET.md) | 3,948.44 | 2,332.84 | 1.693 / 1.732 | 1,074,301 | Confirmed |
@@ -296,19 +296,23 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted production round specializes two-dimensional subsampled RGB
-JPEG rows, reducing a **5.563x** gap by **70.6%**, independently confirming
-**1.638x / upper1.646x** at **1,619,540 B/op**. Exact sixteenth weights retain
-one final rounding, with AVX2 batches and scalar clamped edges/tails. Original
-managed pixels, admission and row work/cancellation are unchanged; no workspace
-is added. The native baseline times component-plane RGB interpretation, centered
-2x2 expansion/crop and GBRP packing, including both intermediate allocations.
-Ordinary native YCbCr conversion remains an untimed mismatch control.
-Both regression means pass before full **3,482-test-per-OS** qualification,
-including **898 live comparisons**, and the same actual Release package's
-consumer plus all three examples on Windows/Linux. No tolerance is widened.
-The preceding horizontal RGB422 round retains its independent1.511x /
-upper1.520x confirmation and62.9% managed-time reduction.
+The latest accepted production round widens the local baseline JPEG AC bit
+cache, reducing a current-build **2.040x** RGB gap by **16.8%**, independently
+confirming **1.695x / upper 1.709x** at **2,664,366 B/op**. Four checked ordinary
+bytes supply several short coefficients per refill. Logical byte/bit state,
+partial coefficients, work/error ordering and the original fallback remain
+exact; no heap workspace is added. The same qualified build independently
+confirms progressive 4:4:4 at **1.877x / upper 1.896x**, **2,682,364 B/op**, and fresh
+JPEG Stream at **1.632x / upper 1.673x**, **1,813,266 B/op**.
+The Stream worker now performs source-preservation validation outside timing.
+Both regression means precede full **3,483-test-per-OS** qualification, including
+**898 live comparisons**, and the same actual Release package's consumer plus
+all three examples on Windows/Linux. Additional confirmations reuse those
+proofs. No input variants or repeated production/harness builds are added.
+
+The preceding RGB420/RGB422 rows retain their independent 1.638x/upper1.646x and
+1.511x/upper1.520x results with 70.6% and 62.9% less managed time respectively.
+Those measurements precede the current shared entropy primitive.
 
 Recent unchanged-production coverage confirms RGB16 Paeth at1.904x /
 upper1.928x,6,504 B/op, and gray-alpha8 Paeth at1.017x / upper1.068x,2,408 B/op.

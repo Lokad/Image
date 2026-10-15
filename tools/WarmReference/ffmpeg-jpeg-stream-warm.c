@@ -135,7 +135,6 @@ static void apply(Work *work)
     require(av_get_packet(io, work->input, (int)length), "Read fresh owned input packet");
     uint8_t extra;
     int end = avio_read(io, &extra, 1);
-    if (memcmp(work->encoded, work->original_encoded, work->encoded_bytes)) fail("Resident encoded source changed.");
     if (work->input->size != length || input.position != length || end != AVERROR_EOF || !avio_feof(io)
         || !work->input->buf || work->input->data == work->encoded) fail("Stream acquisition differs.");
     av_freep(&io->buffer); avio_context_free(&io);
@@ -177,6 +176,7 @@ static void apply(Work *work)
 }
 static void check_source(const Work *work)
 {
+    if (memcmp(work->encoded, work->original_encoded, work->encoded_bytes)) fail("Resident encoded source changed.");
     if (work->input->size != (int)work->encoded_bytes || memcmp(work->input->data, work->encoded, work->encoded_bytes))
         fail("Encoded source changed.");
 }
