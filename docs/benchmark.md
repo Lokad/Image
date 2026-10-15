@@ -107,6 +107,7 @@ timing comparison; compression efficiency parity is not established.
 | [WebP VP8 opaque, simple luma filter](../benchmarks/WARM-VP8-SIMPLE-FILTER.md) | 8,538.31 | 4,889.76 | 1.746 / 1.765 | 760,548 | Confirmed |
 | [WebP VP8 opaque, live cancelable token](../benchmarks/WARM-VP8-CANCELABLE.md) | 8,789.89 | 4,783.31 | 1.838 / 1.843 | 760,548 | Confirmed |
 | [WebP VP8, opaque](../benchmarks/WARM-VP8-FILTER8.md) | 8,649.43 | 4,797.64 | 1.803 / 1.808 | 760,548 | Confirmed |
+| [WebP VP8L, sixteen-color indexed input](../benchmarks/WARM-VP8L-INDEXED16.md) | 825.07 | 543.26 | 1.519 / 1.550 | 1,351,961 | Confirmed |
 | [WebP VP8L, literal/run input](../benchmarks/WARM-VP8L-DECODE-QUIET.md) | 3,948.44 | 2,332.84 | 1.693 / 1.732 | 1,074,301 | Confirmed |
 | [WebP VP8L, native input](../benchmarks/WARM-VP8L-CANONICAL.md) | 5,703.55 | 3,023.03 | 1.887 / 1.904 | 1,216,180 | Confirmed |
 | [WebP VP8L, native input / live cancelable token](../benchmarks/WARM-VP8L-CANCELABLE.md) | 5,757.19 | 3,020.47 | 1.906 / 1.919 | 1,216,180 | Confirmed |
@@ -354,6 +355,14 @@ simple filtering at level8. Managed pixels/alpha, normal/scalar CLI anchors and
 unchanged native agreement bounds pass. FFmpeg's decoder remains the baseline;
 libwebp only authors the untimed fixture. Existing production qualification is
 reused without a production/native decoder rebuild, profile or repeated proof.
+
+The [indexed VP8L comparison](../benchmarks/WARM-VP8L-INDEXED16.md) independently
+confirms **1.519x / upper 1.550x**, **1,351,961 B/op**, with exact RGBA/hidden RGB
+through managed and normal/scalar native decoders. One 11,810-byte type3/sixteen-
+entry packet reuses the existing PNG palette projection and exact=1 author.
+FFmpeg's decoder remains the baseline; all inverse expansion/packing/ownership
+is timed. Existing production/native builds and qualification are reused, with
+one harness build and no profile or repeated proofs.
 
 Recent unchanged-production coverage confirms RGB16 Paeth at1.904x /
 upper1.928x,6,504 B/op, and gray-alpha8 Paeth at1.017x / upper1.068x,2,408 B/op.

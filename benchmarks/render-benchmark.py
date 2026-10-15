@@ -147,6 +147,7 @@ def render():
         row('WebP VP8 opaque, simple luma filter', 'warm-vp8-simple-filter-evidence.json', ['observations', -1], 'WARM-VP8-SIMPLE-FILTER.md', True),
         row('WebP VP8 opaque, live cancelable token', 'warm-vp8-cancelable-evidence.json', ['observations', -1], 'WARM-VP8-CANCELABLE.md', True),
         row('WebP VP8, opaque', 'warm-vp8-filter8-evidence.json', ['observations', -1], 'WARM-VP8-FILTER8.md', True),
+        row('WebP VP8L, sixteen-color indexed input', 'warm-vp8l-indexed16-evidence.json', ['observations', -1], 'WARM-VP8L-INDEXED16.md', True),
         row('WebP VP8L, literal/run input', 'warm-vp8ldecode-quiet-evidence.json', ['observations', -1], 'WARM-VP8L-DECODE-QUIET.md', True),
         row('WebP VP8L, native input', 'warm-vp8l-canonical-evidence.json', ['observations', -1], 'WARM-VP8L-CANONICAL.md', True),
         row('WebP VP8L, native input / live cancelable token', 'warm-vp8l-cancelable-evidence.json', ['observations', -1], 'WARM-VP8L-CANCELABLE.md', True),
@@ -431,6 +432,14 @@ simple filtering at level8. Managed pixels/alpha, normal/scalar CLI anchors and
 unchanged native agreement bounds pass. FFmpeg's decoder remains the baseline;
 libwebp only authors the untimed fixture. Existing production qualification is
 reused without a production/native decoder rebuild, profile or repeated proof.
+
+The [indexed VP8L comparison](../benchmarks/WARM-VP8L-INDEXED16.md) independently
+confirms **1.519x / upper 1.550x**, **1,351,961 B/op**, with exact RGBA/hidden RGB
+through managed and normal/scalar native decoders. One 11,810-byte type3/sixteen-
+entry packet reuses the existing PNG palette projection and exact=1 author.
+FFmpeg's decoder remains the baseline; all inverse expansion/packing/ownership
+is timed. Existing production/native builds and qualification are reused, with
+one harness build and no profile or repeated proofs.
 
 Recent unchanged-production coverage confirms RGB16 Paeth at1.904x /
 upper1.928x,6,504 B/op, and gray-alpha8 Paeth at1.017x / upper1.068x,2,408 B/op.

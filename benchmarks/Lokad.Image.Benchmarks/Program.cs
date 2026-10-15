@@ -309,6 +309,12 @@ if (args.Length == 2 && args[0] == "--prepare-warm-webp-decode")
     return;
 }
 
+if (args.Length == 2 && args[0] == "--prepare-warm-webp-indexed")
+{
+    WarmWebpDecode.PrepareIndexed(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture));
+    return;
+}
+
 if (args.Length == 2 && args[0] == "--prepare-warm-jpeg-progressive-gray")
 {
     WarmJpegDecode.PrepareProgressiveGray(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture));
