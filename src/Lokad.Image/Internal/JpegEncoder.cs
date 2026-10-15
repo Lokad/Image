@@ -366,18 +366,7 @@ internal static class JpegEncoder
                         if (category > 11) throw new ImageDataException("JPEG DC transform exceeds its coding range.");
                         frequencies[group][category]++;
                         cache[eventCount++] = PackEntropyEvent(group, category, difference, category);
-                        var zeros = 0;
-                        for (var i = 1; i < 64; i++)
-                        {
-                            var value = quantized[JpegTransform.Zigzag[i]];
-                            if (value == 0) { zeros++; continue; }
-                            while (zeros >= 16) { frequencies[group + 2][240]++; cache[eventCount++] = PackEntropyEvent(group + 2, 240, 0, 0); zeros -= 16; }
-                            category = Category(value);
-                            if (category > 10) throw new ImageDataException("JPEG AC transform exceeds its coding range.");
-                            frequencies[group + 2][zeros << 4 | category]++;
-                        cache[eventCount++] = PackEntropyEvent(group + 2, zeros << 4 | category, value, category); zeros = 0;
-                        }
-                        if (zeros != 0) { frequencies[group + 2][0]++; cache[eventCount++] = PackEntropyEvent(group + 2, 0, 0, 0); }
+                        eventCount = AppendAdaptiveAc(quantized, frequencies[group + 2], cache, eventCount, group + 2);
                     }
                 }
             }
@@ -439,6 +428,32 @@ internal static class JpegEncoder
             if (pairedChroma) context.Release(64);
             if (cache.Length <= MaximumRetainedEvents) adaptiveEvents = cache;
         }
+    }
+
+    // Keep T.81 F.1.2.2 run planning separate from sampling and transforms.
+    // Its histogram, scan order and event cursor then stay local to this loop.
+    // Work was charged for the whole block before entering; range checks still
+    // occur after preceding zero-run events, in the original traversal order.
+    private static int AppendAdaptiveAc(ReadOnlySpan<int> quantized, long[] frequencies, uint[] events, int eventCount, int table)
+    {
+        var order = JpegTransform.Zigzag;
+        var zeros = 0;
+        for (var i = 1; i < 64; i++)
+        {
+            var value = quantized[order[i]];
+            if (value == 0) { zeros++; continue; }
+            while (zeros >= 16)
+            {
+                frequencies[240]++; events[eventCount++] = PackEntropyEvent(table, 240, 0, 0); zeros -= 16;
+            }
+            var category = Category(value);
+            if (category > 10) throw new ImageDataException("JPEG AC transform exceeds its coding range.");
+            var symbol = zeros << 4 | category;
+            frequencies[symbol]++;
+            events[eventCount++] = PackEntropyEvent(table, symbol, value, category); zeros = 0;
+        }
+        if (zeros != 0) { frequencies[0]++; events[eventCount++] = PackEntropyEvent(table, 0, 0, 0); }
+        return eventCount;
     }
 
     private static uint PackEntropyEvent(int table, int symbol, int value, int count)

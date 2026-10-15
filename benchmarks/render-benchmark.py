@@ -176,7 +176,7 @@ def render():
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg4228-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA8-ADAPTIVE.md', True),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg42216-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA16.md', True),
         row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg420pair-evidence.json', ['observations', -1], 'WARM-JPEG420-CHROMA-PAIR.md', True),
-        row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-admitted-evidence.json', ['observations', -1], 'WARM-JPEG-ADMITTED.md', True),
+        row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-ac-planning-evidence.json', ['observations', 2], 'WARM-JPEG-AC-PLANNING.md', True),
         row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-geometric-evidence.json', ['observations', -1], 'WARM-JPEG-FIXED-GEOMETRIC.md', True),
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg420cancel16-evidence.json', ['regressions', 1], 'WARM-JPEG-FIXED-OCCUPANCY.md', verification='Regression screen; prior confirmed'),
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg420cancel16-evidence.json', ['observations', -1], 'WARM-JPEG-FIXED-OCCUPANCY.md', True),
@@ -379,7 +379,17 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted production round widens the local baseline JPEG AC bit
+The latest accepted production round isolates adaptive JPEG AC event planning
+from sampling/transforms. Row-restart encoding improves from **2.001x** to
+independently confirmed **1.799x / upper1.809x**, **10.4% less managed time**,
+with unchanged **297,780 B/op** and exact whole packets. The nonrestart
+regression mean is1.631x. One six-second profile, one changed core build and
+unchanged harness/native workers suffice. Twenty-one focused normal/scalar
+checks per OS, **3,483 Release tests per OS** including **898 live comparisons**,
+and the consumer/all three examples through the same actual Release package
+on Windows/Linux pass. No image, selector or settings grid is added.
+
+The preceding production round widens the local baseline JPEG AC bit
 cache, reducing a current-build **2.040x** RGB gap by **16.8%**, independently
 confirming **1.695x / upper 1.709x** at **2,664,366 B/op**. Four checked ordinary
 bytes supply several short coefficients per refill. Logical byte/bit state,

@@ -139,7 +139,7 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG422-RGBA8-ADAPTIVE.md) | 4,277.49 | 2,349.58 | 1.821 / 1.862 | 294,110 | Confirmed |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG422-RGBA16.md) | 4,538.42 | 2,422.35 | 1.874 / 1.884 | 294,110 | Confirmed |
 | [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG420-CHROMA-PAIR.md) | 3,434.93 | 1,767.46 | 1.943 / 1.988 | 297,772 | Confirmed |
-| [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-ADMITTED.md) | 3,157.50 | 1,612.58 | 1.958 / 1.973 | 297,780 | Confirmed |
+| [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-AC-PLANNING.md) | 2,886.13 | 1,604.33 | 1.799 / 1.809 | 297,780 | Confirmed |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-GEOMETRIC.md) | 3,382.57 | 1,765.48 | 1.916 / 1.936 | 263,812 | Confirmed |
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-OCCUPANCY.md) | 3,057.46 | 1,835.63 | 1.666 / 1.973 | 263,820 | Regression screen; prior confirmed |
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-OCCUPANCY.md) | 3,031.41 | 1,835.85 | 1.651 / 1.663 | 263,788 | Confirmed |
@@ -302,7 +302,17 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted production round widens the local baseline JPEG AC bit
+The latest accepted production round isolates adaptive JPEG AC event planning
+from sampling/transforms. Row-restart encoding improves from **2.001x** to
+independently confirmed **1.799x / upper1.809x**, **10.4% less managed time**,
+with unchanged **297,780 B/op** and exact whole packets. The nonrestart
+regression mean is1.631x. One six-second profile, one changed core build and
+unchanged harness/native workers suffice. Twenty-one focused normal/scalar
+checks per OS, **3,483 Release tests per OS** including **898 live comparisons**,
+and the consumer/all three examples through the same actual Release package
+on Windows/Linux pass. No image, selector or settings grid is added.
+
+The preceding production round widens the local baseline JPEG AC bit
 cache, reducing a current-build **2.040x** RGB gap by **16.8%**, independently
 confirming **1.695x / upper 1.709x** at **2,664,366 B/op**. Four checked ordinary
 bytes supply several short coefficients per refill. Logical byte/bit state,
