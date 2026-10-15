@@ -1,6 +1,9 @@
+using System.Numerics;
+using System.Runtime.CompilerServices;
+
 namespace Lokad.Image.Internal;
 
-/// <summary>Owned bit-at-a-time interval encoder derived from RFC 6386 section 7.2.</summary>
+/// <summary>Owned interval encoder derived from RFC 6386 section 7.2.</summary>
 internal sealed class Vp8BooleanWriter(OperationContext context, int maximum) : IDisposable
 {
     private byte[] buffer = [];
@@ -9,6 +12,7 @@ internal sealed class Vp8BooleanWriter(OperationContext context, int maximum) : 
 
     public ReadOnlySpan<byte> Bytes => finished ? buffer.AsSpan(0, position) : throw new InvalidOperationException();
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Write(int bit, int probability = 128)
     {
         if (finished) throw new InvalidOperationException("Arithmetic partition is finished.");
@@ -21,10 +25,38 @@ internal sealed class Vp8BooleanWriter(OperationContext context, int maximum) : 
             bottom += boundary; range -= boundary;
             if (bottom >= 256) { bottom -= 256; Carry(); }
         }
-        while (range < 128)
+        var shift = BitOperations.LeadingZeroCount((uint)range) - 24;
+        if (shift == 0) return;
+        var nextUsed = used + shift;
+        if (used != 0 && nextUsed <= 8)
         {
-            Append(bottom >> 7); bottom = bottom * 2 & 255; range *= 2;
+            // RFC 6386 7.2 normalization emits at most seven bits. Pack them
+            // together when no allocation/admission checkpoint is crossed.
+            buffer[position - 1] |= (byte)((bottom >> (8 - shift)) << (8 - nextUsed));
+            used = nextUsed & 7;
         }
+        else if (position < buffer.Length)
+        {
+            var bits = bottom >> (8 - shift);
+            if (used == 0) { buffer[position++] = (byte)(bits << (8 - shift)); used = shift; }
+            else
+            {
+                var remaining = nextUsed - 8;
+                buffer[position - 1] |= (byte)(bits >> remaining);
+                buffer[position++] = (byte)(bits << (8 - remaining)); used = remaining;
+            }
+        }
+        else
+        {
+            // Growth/output/work failures retain the original bit sequence,
+            // including every partially written byte and interval update.
+            while (range < 128)
+            {
+                Append(bottom >> 7); bottom = bottom * 2 & 255; range *= 2;
+            }
+            return;
+        }
+        bottom = bottom << shift & 255; range <<= shift;
     }
 
     public void Literal(int value, int count)
@@ -43,6 +75,30 @@ internal sealed class Vp8BooleanWriter(OperationContext context, int maximum) : 
         {
             var branch = path >> bit & 1; Write(branch, probabilities[node / 2]); node = tree[node + branch];
         }
+    }
+
+    internal void Codeword(ulong path, ReadOnlySpan<byte> probabilities)
+    {
+        // Five bits per step: even tree-node index plus branch. The terminal
+        // one is outside those steps; paths are derived from our format trees.
+        while (path != 1)
+        {
+            var step = (int)(path & 31);
+            Write(step & 1, probabilities[step >> 1]); path >>= 5;
+        }
+    }
+
+    internal static ulong[] CompileTree(ReadOnlySpan<sbyte> tree, int leaves)
+    {
+        var paths = new ulong[leaves]; Compile(tree, paths, 0, 0, 0); return paths;
+    }
+
+    private static void Compile(ReadOnlySpan<sbyte> tree, Span<ulong> paths, int node, ulong path, int depth)
+    {
+        if (node < 0) { paths[-node - 1] = path | 1ul << (5 * depth); return; }
+        if (node > 30 || depth >= 12) throw new InvalidOperationException("VP8 encoder tree exceeds its bounded codeword.");
+        Compile(tree, paths, tree[node], path | (ulong)node << (5 * depth), depth + 1);
+        Compile(tree, paths, tree[node + 1], path | (ulong)(node + 1) << (5 * depth), depth + 1);
     }
 
     private static bool Find(ReadOnlySpan<sbyte> tree, int node, int token, int path, int depth, ref int result, ref int count)

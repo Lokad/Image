@@ -19,7 +19,7 @@ def select(value, path):
     return value
 
 
-def row(label, name, path, report, confirmed=False):
+def row(label, name, path, report, confirmed=False, verification=None):
     evidence = read(name)
     observation = select(evidence, path)
     if 'quietnessBefore' not in observation and 'quietness' not in observation and len(path) >= 2 and path[-2] == 'cases':
@@ -47,6 +47,9 @@ def row(label, name, path, report, confirmed=False):
     status = 'Confirmed' if confirmed else ('Above 2x / open' if quiet and ratio > 2 else ('Quiet certification open' if quiet is None else ('Quiet repeat open' if quiet else 'Quiet guard failed / open')))
     if not confirmed and quiet and evidence.get('independentQuietRepeatCompleted') and upper > 2:
         status = 'Upper above 2x / open'
+    if verification:
+        assert not confirmed and quiet and ratio <= 2
+        status = verification
     memory = observation.get('managedMemory')
     if memory:
         allocated = memory['BytesAllocatedPerOperation']
@@ -135,8 +138,9 @@ def render():
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-stream16-evidence.json', ['observations', -1], 'WARM-JPEG-FORWARD-RGBA16.md', True),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG-ADAPTIVE-HUFFMAN.md', True),
         pending('JPEG grayscale, single component', 'WARM-COVERAGE.md', 'Unscored: native baseline unavailable'),
-        row('WebP VP8 + alpha‡', 'warm-vp8-alphaweighted-evidence.json', ['observations', -1], 'WARM-VP8-ALPHAWEIGHTED.md', True),
-        row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8encode16-evidence.json', ['observations', -1], 'WARM-VP8-RGBA16-ENCODE.md', True),
+        row('WebP VP8, opaque‡', 'warm-vp8-encode-evidence.json', ['observations', -1], 'WARM-VP8-OPAQUE-ENCODE.md', True),
+        row('WebP VP8 + alpha‡', 'warm-vp8-encode-evidence.json', ['regressionControls', 0], 'WARM-VP8-OPAQUE-ENCODE.md', verification='Regression screen; prior confirmed'),
+        row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8-encode-evidence.json', ['regressionControls', 1], 'WARM-VP8-OPAQUE-ENCODE.md', verification='Regression screen; prior confirmed'),
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8lencode16-evidence.json', ['observations', -1], 'WARM-VP8L-RGBA16-ENCODE.md', True),
     ]
@@ -381,6 +385,12 @@ consumer and three examples. Short regression screens retain their own bounds
 in the linked report and do not replace earlier independent certificates.
 Identical-input JPEG420 restart decoding confirms **1.823x / upper 1.837x**,
 at **1,623,906 B/op**, reusing the validated packet and qualified production.
+Opaque VP8 encoding closes a **2.718x** gap at **1.892x / upper 1.918x**,
+with identical packets and **2,536,203 B/op**. Packing arithmetic output,
+compiling the existing tree paths and inlining emission reduce elapsed time
+**30.1%**. Current alpha8/16 regression screens measure **0.563x / 0.568x**;
+their rows explicitly distinguish short screens from the earlier independent
+confirmations. Both OSes pass **3,308** Release tests and the same actual package.
 Remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove
 the uniform target. Linked reports retain superseded raw evidence, failed guards,

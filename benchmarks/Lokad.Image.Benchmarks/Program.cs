@@ -272,6 +272,12 @@ if (args.SequenceEqual(["--validate-warm-webp-controls"]))
     return;
 }
 
+if (args.Length == 2 && args[0] == "--prepare-warm-webp-opaque")
+{
+    WarmWebp.Prepare(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture), opaque: true);
+    return;
+}
+
 if (args.Length == 2 && args[0] == "--prepare-warm-webp16")
 {
     WarmWebp.Prepare(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture), depth: 16);

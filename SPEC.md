@@ -770,6 +770,11 @@ smaller output or lower final RGB error. Compression efficiency is not yet
 optimized. Two bounded arithmetic partitions are staged for nonseekable output;
 the first partition has the format's 19-bit length bound. Working memory includes
 source/reconstructed planes, mode/context arrays, alpha and partition growth.
+Arithmetic normalization packs at most seven emitted bits together only within
+already admitted partition capacity; growth and constrained failures retain the
+original bit sequence. Immutable leaf paths are derived once from the encoder's
+format trees, preserving each ordered probability and bit/carry work charge.
+Encoded bytes, prediction choices, coefficients and partial failures are unchanged.
 Original quality/size evidence and its limits are recorded in
 [tests/Quality](tests/Quality/README.md).
 

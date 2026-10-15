@@ -1233,3 +1233,12 @@ Decode that same native packet with
 framing, negative controls, frozen per-decoder nonrestart pixels and identical
 input bytes are checked outside timing. See the
 [decode result](../../benchmarks/WARM-JPEG-RESTART-DECODE.md).
+
+Opaque VP8 encoding uses `build-webp-opaque-linux.sh`, then
+`--prepare-warm-webp-opaque 0` and `-WarmFamily Webp -WarmCases EncodeOpaque8`.
+The distinct original adapter preserves the existing alpha worker. It accepts
+one still VP8 chunk without alpha/animation/metadata, reuses the original raster's
+opacity projection and enforces the existing0.25dB source band at managed100 /
+native75, both effort4. Whole-raster RGB is the opaque metric; alpha-bearing
+cases retain their declared premultiplied metric. See the
+[complete encode round](../../benchmarks/WARM-VP8-OPAQUE-ENCODE.md).

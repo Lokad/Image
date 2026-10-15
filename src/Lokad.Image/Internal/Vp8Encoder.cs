@@ -10,6 +10,8 @@ internal static class Vp8Encoder
     private static ReadOnlySpan<sbyte> TokenTree => [-12, 2, -1, 4, -2, 6, 8, 12, -3, 10, -4, -5, 14, 16, -6, -7, 18, 20, -8, -9, -10, -11];
     private static ReadOnlySpan<byte> Bands => [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
     private static ReadOnlySpan<byte> Zigzag => [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
+    private static readonly ulong[] ModePaths = Vp8BooleanWriter.CompileTree(ModeTree, 10);
+    private static readonly ulong[] TokenPaths = Vp8BooleanWriter.CompileTree(TokenTree, 12);
 
     public static void Encode(ImageBuffer image, Stream output, WebpEncodeOptions options, OperationContext context)
     {
@@ -196,11 +198,12 @@ internal static class Vp8Encoder
         for (var c = 0; c <= Math.Min(last + 1, 15); c++)
         {
             var p = Vp8Tables.CoefficientProbabilities.Slice(((plane * 8 + Bands[c]) * 3 + predictor) * 11, 11);
-            if (c > last) { writer.Tree(TokenTree, p, 11); break; }
+            if (c > last) { writer.Codeword(TokenPaths[11], p); break; }
             var value = coefficients[Zigzag[c]]; var magnitude = Math.Abs((int)value);
             var category = magnitude < 5 ? -1 : magnitude < 7 ? 0 : magnitude < 11 ? 1 : magnitude < 19 ? 2
                 : magnitude < 35 ? 3 : magnitude < 67 ? 4 : 5;
-            writer.Tree(TokenTree, p, category < 0 ? magnitude : category + 5, previousZero ? 2 : 0);
+            var path = TokenPaths[category < 0 ? magnitude : category + 5];
+            writer.Codeword(previousZero ? path >> 5 : path, p);
             if (category >= 0) Category(writer, category, magnitude);
             if (magnitude != 0) writer.Write(value < 0 ? 1 : 0);
             predictor = Math.Min(magnitude, 2); previousZero = magnitude == 0;
@@ -240,7 +243,7 @@ internal static class Vp8Encoder
                     for (var bx = 0; bx < 4; bx++)
                     {
                         var p = (above[mx * 4 + bx] * 10 + left[by]) * 9; var mode = modes[index * 16 + by * 4 + bx];
-                        writer.Tree(ModeTree, Vp8Tables.BlockModeProbabilities.Slice(p, 9), mode);
+                        writer.Codeword(ModePaths[mode], Vp8Tables.BlockModeProbabilities.Slice(p, 9));
                         above[mx * 4 + bx] = left[by] = mode;
                     }
                 var uv = chroma[index]; writer.Write(uv == 0 ? 0 : 1, 142);
