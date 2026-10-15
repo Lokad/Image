@@ -147,9 +147,10 @@ internal static class PngCodec
             var rowBytes = ((long)header.Info.Width * Channels(header.ColorType) * header.Depth + 7) / 8;
             var pixelBytes = (long)header.Info.Width * header.Info.Height * (header.Depth == 16 ? 8 : 4);
             // Select before framing work. Keep the original workspace allowance
-            // and every subsequent row/result admission available. Tight budgets,
-            // cancellation and large/Adam7 inputs retain the original path.
-            var materialize = header.Interlace == 0 && !context.Cancellation.CanBeCanceled
+            // and every subsequent row/result admission available. Tight budgets
+            // and large/Adam7 inputs retain the original path. Cancelable framing
+            // keeps its original per-symbol cancellation and work checks.
+            var materialize = header.Interlace == 0
                 && filteredLength <= PixelStoragePool.MaxRetainedBytes
                 && context.RemainingWorkingBytes >= filteredLength + 4096 + 256 * 1024L
                     + pixelBytes + rowBytes * 2 + PngInflatedReader.BufferBytes;
@@ -167,7 +168,7 @@ internal static class PngCodec
                     if (completeTrees)
                     {
                         uint a = 1, b = 0;
-                        Adler32.Append(filtered, ref a, ref b);
+                        Adler32.Append(filtered, ref a, ref b, context.Cancellation);
                         useFiltered = (b << 16 | a) == BinaryPrimitives.ReadUInt32BigEndian(compressed.AsSpan(streamLength - 4));
                     }
                     // An uncertain tree or invalid checksum must retain the BCL's

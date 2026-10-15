@@ -39,16 +39,17 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-STREAM-PNG16.md) | 5,626.97 | 3,093.68 | 1.819 / 1.830 | 3,075,772 | Confirmed |
 | [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-STREAM.md) | 1,886.05 | 997.23 | 1.891 / 1.902 | 1,813,266 | Confirmed |
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-STREAM.md) | 10,914.60 | 5,979.52 | 1.825 / 1.833 | 2,327,699 | Confirmed |
-| [PNG RGBA8, None](../benchmarks/WARM-PNG-FUSED-INFLATION.md) | 1,991.21 | 1,368.86 | 1.455 / 2.779 | 4,456 | Regression screen; prior confirmed |
+| [PNG RGBA8, None](../benchmarks/WARM-PNG-CANCELABLE16.md) | 1,936.77 | 1,372.72 | 1.411 / 1.465 | 4,456 | Regression screen; prior confirmed |
 | [PNG RGBA8, stored Deflate / None](../benchmarks/WARM-PNG-STORED8-DECODE.md) | 157.30 | 135.76 | 1.159 / 1.168 | 12,976 | Confirmed |
 | [PNG RGBA16, stored Deflate / None](../benchmarks/WARM-PNG-STORED16-DECODE.md) | 472.57 | 309.99 | 1.524 / 1.556 | 1,080,706 | Confirmed |
 | [PNG RGBA16, None](../benchmarks/WARM-PNG-LITERAL-RUN.md) | 5,740.60 | 2,931.33 | 1.958 / 1.968 | 2,032,864 | Confirmed |
 | [PNG RGBA16, None / exact working limit](../benchmarks/WARM-PNG-TIGHT16.md) | 5,290.75 | 2,885.39 | 1.834 / 1.852 | 8,896 | Confirmed |
+| [PNG RGBA16, None / live cancelable token](../benchmarks/WARM-PNG-CANCELABLE16.md) | 5,454.37 | 2,876.96 | 1.896 / 1.909 | 8,552 | Confirmed |
 | [PNG RGBA8, Paeth](../benchmarks/WARM-PAETH-FOUR-CHANNEL.md) | 5,099.55 | 2,925.24 | 1.743 / 1.842 | 881,892 | Confirmed |
 | [PNG RGBA8, Up](../benchmarks/WARM-PNG-UP8-BASELINE.md) | 2,644.01 | 1,505.93 | 1.756 / 1.764 | 12,976 | Confirmed |
 | [PNG RGBA8, Sub](../benchmarks/WARM-PNG-SUB8-BASELINE.md) | 1,209.60 | 682.52 | 1.772 / 1.780 | 12,976 | Confirmed |
 | [PNG RGBA8, Average](../benchmarks/WARM-PNG-AVERAGE8-BASELINE.md) | 3,137.74 | 1,841.23 | 1.704 / 1.743 | 12,976 | Confirmed |
-| [PNG RGBA16, Paeth](../benchmarks/WARM-PNG-FUSED-INFLATION.md) | 5,747.13 | 5,462.45 | 1.052 / 1.327 | 8,552 | Regression screen; prior confirmed |
+| [PNG RGBA16, Paeth](../benchmarks/WARM-PNG-CANCELABLE16.md) | 5,636.77 | 5,483.15 | 1.028 / 2.884 | 8,552 | Regression screen; prior confirmed |
 | [PNG RGBA16, Adam7](../benchmarks/WARM-PNG-SCATTER.md) | 6,567.82 | 3,984.54 | 1.648 / 1.700 | 2,024,532 | Confirmed |
 | [PNG RGB16, None](../benchmarks/WARM-PNG-RGB16-CURRENT.md) | 4,020.98 | 2,210.00 | 1.819 / 1.823 | 15,024 | Confirmed |
 | [PNG gray8, None](../benchmarks/WARM-PNG-GRAY8-CURRENT.md) | 564.59 | 361.22 | 1.563 / 1.580 | 9,904 | Confirmed |

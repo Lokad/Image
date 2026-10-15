@@ -34,7 +34,7 @@ inflater disposal. Speculative compressed-data failures resume the original
 read boundary from the already-delivered byte position.
 
 PNG may materialize at most 4 MiB of filtered data during its existing framing
-walk, for noninterlaced, noncancelable inputs only. Selection preflights that
+walk, for noninterlaced inputs only. Selection preflights that
 exact buffer plus framing scratch, the original 256 KiB allowance, result, both
 rows and optional 8 KiB read buffer before consuming framing work. A separate
 two-array cache retains at most 4 MiB of released exact-size filtered storage;
@@ -43,7 +43,9 @@ Only complete trees and a valid whole-stream Adler check enable direct row reads
 Uncertain trees/checksums release this lease and retain original BCL reads using
 the already completed framing result. No framing work is charged twice. The
 original row checksum, filter/palette/work failure sequence and conservative
-inflater allowance remain. Tight/cancelable/large/Adam7 paths are unchanged;
+inflater allowance remain. Cancelable framing keeps per-symbol checks and immediate
+work charges, with whole-buffer checksum cancellation every 4096 bytes.
+Tight/large/Adam7 paths are unchanged;
 all optional storage is released before requested EXIF orientation.
 
 `MaxDimension` and `MaxPixels` constrain newly created buffers and codec input

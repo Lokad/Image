@@ -451,13 +451,15 @@ chunk lengths/names/order/CRCs, image geometry, transparency and decoded pixel
 count. An owned bounded Deflate framing walk validates final blocks, stored
 lengths, fixed/dynamic prefix trees, repeats, backward distances, the declared
 zlib window and the exact filtered-raster byte count before row processing.
-For noninterlaced, noncancelable inputs with at most 4 MiB of filtered data,
+For noninterlaced inputs with at most 4 MiB of filtered data,
 the same walk may also materialize bytes in a private, exactly admitted buffer.
 Selection first ensures that this buffer, framing scratch, the original inflater
 allowance, result, rows and optional read buffer all fit. Complete code trees
 and a valid Adler checksum are required before using those bytes; uncertain
 trees or checksums retain the original BCL row reader without repeating framing
-work. Tight budgets, cancellation, larger data and Adam7 retain the original path.
+work. Cancelable framing retains its per-symbol cancellation checks and immediate
+work charges; the private whole-stream checksum checks cancellation every 4096
+bytes. Tight budgets, larger data and Adam7 retain the original path.
 The original bit/row work, error order, precision and pixel contracts are unchanged.
 Filtered buffers may reuse two released exact-size arrays with a combined 4 MiB
 idle ceiling, separate from pixel and compressed storage. Every delivered byte

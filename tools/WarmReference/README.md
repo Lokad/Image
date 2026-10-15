@@ -1295,11 +1295,19 @@ the selected region to RGBA64LE and point-samples four full-word planes to
 127×64. Fresh AVIO acquisition, packet copy, decode, graph/conversion and release
 are timed. Normal/scalar CLI results must match the independent integer reference
 exactly. The initial mixed-endian negotiation crash remains unscored; the
-[retained result](../../benchmarks/WARM-PNG-COMPOSITION16.md) is open above the
-conservative two-times bound.
+[original result](../../benchmarks/WARM-PNG-COMPOSITION16.md) is superseded by
+the [confirmed fused-inflation round](../../benchmarks/WARM-PNG-FUSED-INFLATION.md).
 
 `WarmPng.DecodeTight16` reuses the original word PNG and existing PNG decoder
 worker, with the managed limit fixed to input + IDAT + output + 256 KiB + two
 rows. Exact pixels and one-byte-below rejection are checked before timing. The
 optional whole-filter/8 KiB output buffers cannot fit; native complete decode and
 word conversion remain timed, with no native caller-admission setting.
+
+`WarmPng.DecodeCancelable16` reuses that original word PNG and decoder worker,
+with default limits and a live cancelable token that is never signaled during
+measurement. Token/source creation and disposal are outside timing; already-canceled
+rejection and exact normal/scalar pixels are checked during setup. Native has no
+equivalent cancellation setting. Complete public decoding, endian conversion and
+owned output release remain timed. See the
+[confirmed result](../../benchmarks/WARM-PNG-CANCELABLE16.md).

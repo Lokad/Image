@@ -142,8 +142,9 @@ public sealed class ZlibFramingTests
         bits.Align(); byte[] encoded = [0x78, 0x01, .. bits.Bytes(), 0, 0, 0, 0];
         var original = encoded.ToArray();
         using var cancellation = new CancellationTokenSource();
-        // Compare admission and format failure precedence against the cancelable
-        // per-symbol path, at every bit budget through the literal run and EOB.
+        // Compare both counting loops with cancelable materialization, whose
+        // CopyLiteralRun remains disabled and dispatches every symbol separately.
+        // Check every bit budget through the literal run and EOB.
         foreach (var expected in new[] { 0L, 19, 39, 40, 41 })
         for (var extra = 0; extra <= 348; extra++)
         {
@@ -155,6 +156,16 @@ public sealed class ZlibFramingTests
             Assert.Equal(second?.GetType(), first?.GetType());
             Assert.Equal(second?.Message, first?.Message);
             Assert.Equal(checkedSymbols.RemainingWork, direct.RemainingWork);
+            if (expected > 0)
+            {
+                var perSymbol = new OperationContext(limits, cancellation.Token);
+                var output = new byte[(int)expected];
+                var reference = Record.Exception(() => ZlibFraming.ValidateAndInflate(encoded, output, perSymbol, out _));
+                Assert.Equal(reference?.GetType(), first?.GetType());
+                Assert.Equal(reference?.Message, first?.Message);
+                Assert.Equal(perSymbol.RemainingWork, direct.RemainingWork);
+                Assert.Equal(perSymbol.RemainingWorkingBytes, direct.RemainingWorkingBytes);
+            }
             direct.Reserve(4096); direct.Release(4096);
             checkedSymbols.Reserve(4096); checkedSymbols.Release(4096);
         }
