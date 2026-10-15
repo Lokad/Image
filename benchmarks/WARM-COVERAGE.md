@@ -14,9 +14,9 @@ round, at most three, with correctness established before timing.
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4; baseline 4:2:0 with row restart markers confirmed 1.823x / upper 1.837x | Other materially different supported layouts/public boundaries |
 | JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x, 4:2:2 confirmed 1.821x / upper 1.862x and 4:2:0 confirmed 1.943x / upper 1.988x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x, 4:2:2 confirmed 1.874x / upper 1.884x and 4:2:0 confirmed 1.888x / upper 1.931x; live-cancelable RGBA16 4:2:0 confirmed 1.651x / upper 1.663x and RGBA8 4:4:4 prior confirmed with current regression; forward-only RGBA8 4:4:4 confirmed 1.754x / upper 1.765x and 4:2:0 confirmed 1.916x / upper 1.936x and RGBA16 4:2:0 confirmed 1.948x / upper 1.954x; adaptive RGBA8 row restarts confirmed 1.958x / upper 1.973x | Other material fallback layouts, grayscale and distinct public boundaries |
 | WebP | VP8 with alpha decode/encode; opaque VP8 encode confirmed RGBA8 1.892x / upper 1.918x and RGBA16 1.908x / upper 1.922x with current alpha8/16 regression screens; opaque VP8 decode confirmed 1.803x / upper 1.808x and alpha VP8 confirmed 1.803x / upper 1.819x; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Other material depth/alpha alternatives and distinct public boundaries |
-| Resize | Nearest/bilinear downsample and enlargement at both depths; bicubic downsample, enlargement on both axes, both mixed-axis directions and 128×64 / 64×32 wider supports at both depths; horizontal reduction/enlargement and vertical reduction at both depths; vertical enlargement, 32×16 and 16×8 adaptive support at both depths; RGBA8/16 256×129, 128×64, 64×32, 32×16 and 16×8 reduction, plus RGBA8/16 both-axis enlargement and RGBA8/16 width enlargement/height reduction plus RGBA8/16 width reduction/height enlargement and RGBA8/16 8×4 beyond 256 taps plus RGBA8/16 4×2 packed support beyond 304 taps and RGBA8/16 2×2 generated support beyond 544 taps plus RGBA8/16 2×9 bounded row blocks and RGBA8/16 4×9 packed row blocks plus RGBA8/16 8×17 full-coefficient row blocks and RGBA8/16 vertical reduction with unchanged width plus RGBA8/16 horizontal reduction with unchanged height and RGBA8/16 vertical enlargement with unchanged width plus RGBA8/16 horizontal enlargement with unchanged height, with input+output+4 KiB limit confirmed | Larger/unmatched supports and other materially distinct shapes |
+| Resize | Nearest/bilinear downsample and enlargement at both depths; bicubic downsample, enlargement on both axes, both mixed-axis directions and 128Ã—64 / 64Ã—32 wider supports at both depths; horizontal reduction/enlargement and vertical reduction at both depths; vertical enlargement, 32Ã—16 and 16Ã—8 adaptive support at both depths; RGBA8/16 256Ã—129, 128Ã—64, 64Ã—32, 32Ã—16 and 16Ã—8 reduction, plus RGBA8/16 both-axis enlargement and RGBA8/16 width enlargement/height reduction plus RGBA8/16 width reduction/height enlargement and RGBA8/16 8Ã—4 beyond 256 taps plus RGBA8/16 4Ã—2 packed support beyond 304 taps and RGBA8/16 2Ã—2 generated support beyond 544 taps plus RGBA8/16 2Ã—9 bounded row blocks and RGBA8/16 4Ã—9 packed row blocks plus RGBA8/16 8Ã—17 full-coefficient row blocks and RGBA8/16 vertical reduction with unchanged width plus RGBA8/16 horizontal reduction with unchanged height and RGBA8/16 vertical enlargement with unchanged width plus RGBA8/16 horizontal enlargement with unchanged height, with input+output+4 KiB limit confirmed | Larger/unmatched supports and other materially distinct shapes |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes; RGBA8 horizontal flip with two simultaneously live outputs confirmed 1.447x / upper 1.484x per image | Other materially distinct retained/composed public boundaries |
-| Public boundaries | Resident encoded span to owned output; complete single operations; fresh seekable non-exposed PNG8 Stream decode confirmed 1.907x / upper 1.916x and PNG16 confirmed 1.819x / upper 1.830x; fresh JPEG420 restart Stream confirmed 1.891x / upper 1.902x and VP8/ALPH Stream confirmed 1.825x / upper 1.833x; PNG8 Stream/normal-orient/centered-crop/nearest-fit composition confirmed 1.891x / upper 1.906x | RGBA16 PNG Stream/orient/crop/nearest-fit confirmed1.216× / upper1.231× after fused framing/inflation; other material fresh input/depth and composed boundaries |
+| Public boundaries | Resident encoded span to owned output; complete single operations; fresh seekable non-exposed PNG8 Stream decode confirmed 1.907x / upper 1.916x and PNG16 confirmed 1.819x / upper 1.830x; fresh JPEG420 restart Stream confirmed 1.891x / upper 1.902x and VP8/ALPH Stream confirmed 1.825x / upper 1.833x and VP8L Stream confirmed 1.834x / upper 1.851x; PNG8 Stream/normal-orient/centered-crop/nearest-fit composition confirmed 1.891x / upper 1.906x | RGBA16 PNG Stream/orient/crop/nearest-fit confirmed1.216Ã— / upper1.231Ã— after fused framing/inflation; other material fresh input/depth and composed boundaries |
 
 Centered/clamped crop, AutoOrient and ResizeToFit route to the measured copy or
 resize primitives after small geometry/metadata work. They need correctness
@@ -25,7 +25,7 @@ Fresh Stream boundaries remain distinct from resident-span results. The retained
 RGBA8 flip has its own complete two-owner boundary, normalized per image.
 
 Tight-memory reduction is now confirmed at both depths through the existing
-16×8 workload. The [word streaming round](WARM-BICUBIC-TIGHT-16X8-RGBA16.md)
+16Ã—8 workload. The [word streaming round](WARM-BICUBIC-TIGHT-16X8-RGBA16.md)
 confirms 0.964x / upper 0.984x at 1,145 B/op, and the
 [byte streaming round](WARM-BICUBIC-TIGHT-16X8-RGBA8.md) confirms 1.084x /
 upper 1.103x at 633 B/op. Both preserve exact pixels within the 4-KiB optional
@@ -633,7 +633,7 @@ regression passes before full both-platform/same actual package qualification.
 Stop this pair; larger supports, tight budgets and
 remaining material required/current-source parity stay open.
 
-The [unchanged-production RGBA16 16×8 check](WARM-BICUBIC-16X8-RGBA16.md)
+The [unchanged-production RGBA16 16Ã—8 check](WARM-BICUBIC-16X8-RGBA16.md)
 independently confirms 0.952x / upper 0.958x at 202,229 B/op. Every rational managed
 sample remains exact; normal/scalar native maximum-one and RMSE bounds pass with
 the same timed sixty-four-pixel halo. Screen and repeat reuse the qualified
@@ -679,7 +679,7 @@ reduces a 10.099x RGBA16 gap by 85.7%, independently confirming 1.441x / upper
 twelve/full qualification. Copying decoded exact products removes the identity
 horizontal filter at both depths without changing intermediates, guards, work,
 cancellation or fallback. On the same immutable final build, byte vertical resize
-also confirms 1.331x / upper 1.345x, 761.11 µs / 648,992 B/op, improving its
+also confirms 1.331x / upper 1.345x, 761.11 Âµs / 648,992 B/op, improving its
 previous confirmed mean 31.3%. Both pass before one full both-platform/package
 qualification. Stop both pairs; other single-axis directions, larger supports,
 tight budgets and remaining material current-source parity stay open.
@@ -897,19 +897,19 @@ production/native worker and reused 3,308-test/same-package proof. No extra full
 suite, package or method audit repeats. Stop this fixed pair; remaining material
 public/current-source coverage stays open.
 
-[RGBA16 PNG without compression](WARM-PNG-STORED16-ENCODE.md) closes a **6.118×**
-gap at **1.243× / upper 1.289×**, with **4,203,541 B/op**. Bounded safe span
+[RGBA16 PNG without compression](WARM-PNG-STORED16-ENCODE.md) closes a **6.118Ã—**
+gap at **1.243Ã— / upper 1.289Ã—**, with **4,203,541 B/op**. Bounded safe span
 endianness conversion cuts the baseline mean 79.6%, preserving encoded bytes,
 exact samples, work, admission and cancellation. The original word raster and
 equal stored IDAT sizes pass; compressed RGBA16 regression means pass before
 full qualification. Both OSes pass 3,318 Release tests (896 live), 49 focused
 normal/scalar checks and the consumer plus three examples through one actual
-package. Stop this pair. [Fastest RGBA16](WARM-PNG-FAST16-REFUSAL.md) remains
-unscored: its 5.681% payload difference exceeds the unchanged 5% gate. No timing
+package. Stop this pair. At that checkpoint, [Fastest RGBA16](WARM-PNG-FAST16-REFUSAL.md)
+was unscored: its 5.681% payload difference exceeded the unchanged 5% gate. No timing
 is scored for that refusal; remaining material/current-source coverage stays open.
 
 [Stored-Deflate RGBA16 decoding](WARM-PNG-STORED16-DECODE.md) confirms
-**1.524× / upper 1.556×**, at **1,080,706 B/op**, using the same frozen packet
+**1.524Ã— / upper 1.556Ã—**, at **1,080,706 B/op**, using the same frozen packet
 and original word raster as the encoding round. Exact full samples, alpha, hidden
 RGB, source/owner independence, normal/scalar native pixels and both quiet guards
 pass. Native word conversion and both frame acquisitions/releases are timed. All
@@ -918,7 +918,7 @@ production/native worker and 3,318-test/same-package evidence are reused. Stop
 this pair; other material public/current-source coverage remains open.
 
 The earlier [RGBA16 PNG Stream/orient/crop/fit baseline](WARM-PNG-COMPOSITION16.md) was **open**
-at **1.993× / upper 2.022×**, **4,468,718 B/op**. Exact selected words, independent
+at **1.993Ã— / upper 2.022Ã—**, **4,468,718 B/op**. Exact selected words, independent
 coordinates, normal/scalar native agreement, caller/source/owners and all quiet
 guards pass. A six-second profile identifies BCL inflation (43.1%) plus the
 managed literal walk (37.7%). Four-literal batching has no convincing material
@@ -927,7 +927,7 @@ restored exactly. Prioritize one substantial framing/inflation primitive; no new
 image, shape grid or tolerance. Existing 3,318-test/same-package proof is reused.
 
 [Fused PNG framing/inflation](WARM-PNG-FUSED-INFLATION.md) closes the RGBA16
-Stream/orient/crop/fit gap at **1.216× / upper 1.231×**, **4,460,393 B/op**,
+Stream/orient/crop/fit gap at **1.216Ã— / upper 1.231Ã—**, **4,460,393 B/op**,
 cutting the baseline mean 39.2%. One safe managed walk materializes eligible
 filtered bytes while preserving original work, exact samples, failure order and
 constrained/cancelable/large/Adam7 fallbacks. Existing input/reference/native
@@ -938,7 +938,7 @@ examples through one actual package. Stop this fixed pair. Other material public
 and current-source coverage remains open.
 
 [RGBA16 PNG at the exact working boundary](WARM-PNG-TIGHT16.md) confirms
-**1.834× / upper 1.852×**, **8,896 B/op**, with a **3,254,193-byte** managed
+**1.834Ã— / upper 1.852Ã—**, **8,896 B/op**, with a **3,254,193-byte** managed
 limit. Exact full samples, normal/scalar native agreement, source/owners and
 one-byte-below rejection pass. This covers the distinct original BCL/unbuffered
 fallback; both optional decode buffers cannot fit. All twelve actuals and both
@@ -1008,3 +1008,12 @@ Ordinary word/byte PNG regression means pass before full3,371-test-per-OS/live/
 same actual package qualification. Only the original two rasters and three
 workloads are used. Stop this pair; caller/cancelable/constrained policies and
 full material/current-source warm parity remain open.
+
+The [fresh VP8L Stream round](WARM-VP8L-STREAM.md) independently confirms
+1.834x / upper1.851x at1,924,876 managed B/op. Both subjects time complete fresh
+input acquisition/reads/copies, decode/reset/ARGB-to-RGBA conversion and owned
+input/output release. Exact RGBA, alpha/hidden RGB, EOF/caller lifetime and two
+independent owners pass. Only one existing frozen packet/raster is reused.
+Production is unchanged: existing3,371-tests-per-OS/live/same actual package
+qualification is reused without rebuilds, suites or method audits. Stop this
+fixed pair; other material boundaries and unmatched policies remain open.

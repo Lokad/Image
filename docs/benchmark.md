@@ -39,6 +39,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-STREAM-PNG16.md) | 5,626.97 | 3,093.68 | 1.819 / 1.830 | 3,075,772 | Confirmed |
 | [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-STREAM.md) | 1,886.05 | 997.23 | 1.891 / 1.902 | 1,813,266 | Confirmed |
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-STREAM.md) | 10,914.60 | 5,979.52 | 1.825 / 1.833 | 2,327,699 | Confirmed |
+| [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-VP8L-STREAM.md) | 5,549.36 | 3,026.08 | 1.834 / 1.851 | 1,924,876 | Confirmed |
 | [PNG RGBA8, None](../benchmarks/WARM-PNG-CANCELABLE16.md) | 1,936.77 | 1,372.72 | 1.411 / 1.465 | 4,456 | Regression screen; prior confirmed |
 | [PNG RGBA8, stored Deflate / None](../benchmarks/WARM-PNG-STORED8-DECODE.md) | 157.30 | 135.76 | 1.159 / 1.168 | 12,976 | Confirmed |
 | [PNG RGBA16, stored Deflate / None](../benchmarks/WARM-PNG-STORED16-DECODE.md) | 472.57 | 309.99 | 1.524 / 1.556 | 1,080,706 | Confirmed |
@@ -270,14 +271,15 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round confirms complete PNG16 Fastest encoding at
-**0.787x / upper 0.791x**, with **5,478,765 B/op**. Independent safe Deflate entropy
-recoding preserves every literal/match token and exact pixels. IDAT is974,122
-versus965,318 native bytes, within the unchanged5% size gate; the historical
-refusal remains unscored. Both OSes pass **3,371** Release tests, including
-**898** live comparisons, plus the same actual package's consumer and all three
-examples. Ordinary PNG8/16 rows show current short regression screens and retain
-prior confirmations. Caller/cancelable/constrained policies need separate coverage.
+The latest accepted round confirms complete fresh-stream VP8L decoding at
+**1.834x / upper 1.851x**, with **1,924,876 B/op** and exact RGBA. All input reads,
+buffering/copies, conversion and input/output release are timed on both subjects.
+Production is unchanged; the existing **3,371** Release tests per OS, including
+**898** live comparisons, and same actual package's consumer plus all three
+examples are reused. No production rebuild or qualification repeat is needed.
+PNG16 Fastest remains confirmed at0.787x / upper0.791x after safe entropy recoding;
+its caller/cancelable/constrained policies need separate coverage. Ordinary PNG8/16
+rows show current short regression screens and retain prior confirmations.
 
 PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples
 and the unchanged 5% IDAT-size gate; earlier level6/level6 refusals remain unscored.

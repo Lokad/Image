@@ -11,8 +11,10 @@
 #include <string.h>
 #include <time.h>
 #include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
 #include <libavutil/avutil.h>
 #include <libavutil/frame.h>
+#include <libavutil/mem.h>
 #include <libavutil/opt.h>
 #include <libswscale/swscale.h>
 
@@ -59,6 +61,26 @@ static uint8_t *read_file(const char *path, size_t *size)
         || data[20] != 0x2f || data[24] >> 5) fail("Complete version-zero VP8L chunk required.");
     *size = (size_t)length; return data;
 }
+typedef struct { const uint8_t *data; int64_t length, position; } MemoryInput;
+static int read_memory(void *opaque, uint8_t *buffer, int count)
+{
+    MemoryInput *input = opaque;
+    if (input->position == input->length) return AVERROR_EOF;
+    int64_t remaining = input->length - input->position;
+    if (count > 8192) count = 8192;
+    if (count > remaining) count = (int)remaining;
+    memcpy(buffer, input->data + input->position, (size_t)count); input->position += count;
+    return count;
+}
+static int64_t seek_memory(void *opaque, int64_t offset, int whence)
+{
+    MemoryInput *input = opaque;
+    if (whence == AVSEEK_SIZE) return input->length;
+    whence &= ~AVSEEK_FORCE;
+    int64_t origin = whence == SEEK_SET ? 0 : whence == SEEK_CUR ? input->position : whence == SEEK_END ? input->length : -1;
+    if (origin < 0 || offset < -origin || offset > input->length - origin) return AVERROR(EINVAL);
+    input->position = origin + offset; return input->position;
+}
 typedef struct {
     AVCodecContext *codec;
     struct SwsContext *conversion;
@@ -66,7 +88,7 @@ typedef struct {
     AVPacket *input;
     uint8_t *encoded, *expected;
     size_t encoded_bytes, raw_bytes;
-    int width, height, cpu, row_bytes, stride;
+    int width, height, cpu, row_bytes, stride, stream;
     uint64_t completed, observed;
 } Work;
 static void initialize_conversion(Work *work)
@@ -84,9 +106,27 @@ static void initialize_conversion(Work *work)
     int64_t threads; require(av_opt_get_int(work->conversion, "threads", 0, &threads), "Read conversion threads");
     if (threads != 1) fail("Conversion threading differs.");
 }
-static void release(Work *work) { av_frame_unref(work->decoded); av_frame_unref(work->rgba); }
+static void release(Work *work)
+{
+    av_frame_unref(work->decoded); av_frame_unref(work->rgba);
+    if (work->stream) av_packet_unref(work->input);
+}
 static void apply(Work *work)
 {
+    if (work->stream) {
+        MemoryInput input = { work->encoded, (int64_t)work->encoded_bytes, 0 };
+        uint8_t *scratch = av_malloc(8192); if (!scratch) fail("Allocate stream scratch failed.");
+        AVIOContext *io = avio_alloc_context(scratch, 8192, 0, &input, read_memory, NULL, seek_memory);
+        if (!io) fail("Allocate fresh stream context failed.");
+        int64_t length = avio_size(io);
+        if (length != (int64_t)work->encoded_bytes || length > INT32_MAX) fail("Stream length differs.");
+        require(av_get_packet(io, work->input, (int)length), "Read fresh owned input packet");
+        uint8_t extra; int end = avio_read(io, &extra, 1);
+        if (work->input->size != length || input.position != length || end != AVERROR_EOF || !avio_feof(io)
+            || !work->input->buf || work->input->data == work->encoded) fail("Stream acquisition differs.");
+        av_freep(&io->buffer); avio_context_free(&io);
+        work->input->flags |= AV_PKT_FLAG_KEY;
+    }
     // Reestablish independent still-image decoder state on every operation.
     avcodec_flush_buffers(work->codec);
     require(avcodec_send_packet(work->codec, work->input), "Submit complete VP8L");
@@ -127,8 +167,9 @@ static void check_and_write(Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if (argc != 7 || strcmp(argv[1], "webp-decode")) fail("Usage: ffmpeg-webp-decode-warm webp-decode INPUT WIDTH HEIGHT 8 OUTPUT");
+    if (argc != 7 || (strcmp(argv[1], "webp-decode") && strcmp(argv[1], "webp-stream-decode"))) fail("Usage: ffmpeg-webp-decode-warm webp[-stream]-decode INPUT WIDTH HEIGHT 8 OUTPUT");
     Work work = {0}; work.cpu = affinity_cpu(); work.width = number(argv[3]); work.height = number(argv[4]);
+    work.stream = !strcmp(argv[1], "webp-stream-decode");
     if (number(argv[5]) != 8) fail("VP8L decode reference requires depth 8.");
     work.row_bytes = work.width*4; work.raw_bytes = (size_t)work.row_bytes*work.height;
     if (work.raw_bytes > 512U*1024U*1024U) fail("Reference output exceeds 512 MiB.");
@@ -142,8 +183,10 @@ int main(int argc, char **argv)
     if (work.codec->thread_count != 1 || work.codec->thread_type != 0 || work.codec->active_thread_type != 0) fail("Codec threading differs.");
     work.input = av_packet_alloc(); work.decoded = av_frame_alloc(); work.rgba = av_frame_alloc();
     if (!work.input || !work.decoded || !work.rgba) fail("Allocate packet/frame wrappers failed.");
-    require(av_new_packet(work.input, (int)work.encoded_bytes), "Allocate padded resident input");
-    memcpy(work.input->data, work.encoded, work.encoded_bytes); work.input->flags |= AV_PKT_FLAG_KEY;
+    if (!work.stream) {
+        require(av_new_packet(work.input, (int)work.encoded_bytes), "Allocate padded resident input");
+        memcpy(work.input->data, work.encoded, work.encoded_bytes); work.input->flags |= AV_PKT_FLAG_KEY;
+    }
     initialize_conversion(&work); apply(&work);
     work.expected = malloc(work.raw_bytes); if (!work.expected) fail("Allocate untimed validation pixels failed.");
     for (int y = 0; y < work.height; y++) memcpy(work.expected + (size_t)y*work.row_bytes,
@@ -154,8 +197,9 @@ int main(int argc, char **argv)
     check_frame(&work, held); check_frame(&work, work.rgba);
     held->data[0][0] ^= 255; check_frame(&work, work.rgba); av_frame_free(&held); release(&work);
     check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"webp-decode\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"decoder\":\"webp\",\"inputFormat\":\"ARGB\",\"lossless\":true,\"colorConversionTimed\":true,\"stateResetTimed\":true,\"pixelsDeterministic\":true,\"outputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
-        work.width, work.height, work.cpu, work.raw_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
+    const char *fresh = work.stream ? "true" : "false";
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"decoder\":\"webp\",\"inputFormat\":\"ARGB\",\"lossless\":true,\"colorConversionTimed\":true,\"stateResetTimed\":true,\"pixelsDeterministic\":true,\"outputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u,\"freshSeekableStream\":%s,\"inputCopyTimed\":%s,\"inputLengthQueryTimed\":%s,\"inputView\":%s,\"eofChecked\":%s}\n",
+        argv[1], work.width, work.height, work.cpu, work.raw_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version(), fresh, fresh, fresh, work.stream ? "false" : "true", fresh); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;

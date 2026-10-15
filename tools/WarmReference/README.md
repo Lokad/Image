@@ -1267,6 +1267,14 @@ The original conversion/alpha pipeline and resident workers are preserved.
 Normal/scalar CLI pixels, frozen output samples and caller lifetime are checked
 outside timing. See the [stream result](../../benchmarks/WARM-VP8-STREAM.md).
 
+Fresh VP8L input uses `build-webp-decode-linux.sh` and
+`-WarmFamily WebpDecode -WarmCases StreamNativeLossless8`. Reuse the frozen exact
+native VP8L packet. Managed public `Decode(Stream)` includes all buffering/copies;
+native fresh AVIO acquires a new owned padded packet and checks EOF, with complete
+decode/reset/ARGB-to-RGBA conversion and input/output release timed. Normal/scalar
+exact RGBA, caller lifetime and two independent outputs are checked outside timing.
+See the [VP8L stream result](../../benchmarks/WARM-VP8L-STREAM.md).
+
 Forward-only JPEG444 uses `LOKAD_IMAGE_JPEG_ENTROPY=fixed-geometric-v1`,
 `--prepare-warm-jpeg444-stream 0`, then
 `-WarmFamily Jpeg -WarmCases Encode444Stream8`. The existing JPEG native worker
