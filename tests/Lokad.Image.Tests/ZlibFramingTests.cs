@@ -4,6 +4,46 @@ namespace Lokad.Image.Tests;
 
 public sealed class ZlibFramingTests
 {
+    [Fact]
+    public void LocalBitChargesPublishAcrossFixedAndStoredBlocksAndEveryBudget()
+    {
+        // Independent RFC1951 grammar: fixed A, stored000, fixed A + length3/
+        // distance1. Fixed setup costs9380, stored setup36; bit costs stay exact.
+        var bits = new BitWriter(); bits.Number(0, 1); bits.Number(1, 2);
+        bits.Code(48 + 65, 8); bits.Code(0, 7);
+        bits.StoredZeros(3);
+        bits.Number(1, 1); bits.Number(1, 2);
+        bits.Code(48 + 65, 8); bits.Code(1, 7); bits.Code(0, 5); bits.Code(0, 7); bits.Align();
+        byte[] encoded = [0x78, 0x01, .. bits.Bytes(), 0x04, 0x9a, 0x01, 0x46];
+        byte[] expected = [65, 0, 0, 0, 65, 65, 65, 65];
+        const int prior = 11, total = 9380 + 8 + 7 + 36 + 3 + 9380 + 8 + 7 + 5 + 7;
+        using var cancellation = new CancellationTokenSource();
+        for (var work = prior; work <= prior + total + 1; work++)
+        {
+            var limits = ImageLimits.Default with { MaxWork = work, MaxWorkingBytes = 4096 };
+            var plain = new OperationContext(limits, default); plain.Work(prior);
+            var live = new OperationContext(limits, cancellation.Token); live.Work(prior);
+            var materialized = new OperationContext(limits, cancellation.Token); materialized.Work(prior);
+            var output = new byte[expected.Length];
+            var first = Record.Exception(() => ZlibFraming.Validate(encoded, expected.Length, plain));
+            var second = Record.Exception(() => ZlibFraming.Validate(encoded, expected.Length, live));
+            var third = Record.Exception(() => ZlibFraming.ValidateAndInflate(encoded, output, materialized, out _));
+            Assert.Equal(first?.GetType(), second?.GetType()); Assert.Equal(first?.Message, second?.Message);
+            Assert.Equal(first?.GetType(), third?.GetType()); Assert.Equal(first?.Message, third?.Message);
+            Assert.Equal(plain.RemainingWork, live.RemainingWork); Assert.Equal(plain.RemainingWork, materialized.RemainingWork);
+            Assert.Equal(4096, live.RemainingWorkingBytes); Assert.Equal(4096, materialized.RemainingWorkingBytes);
+            if (work < prior + total) Assert.IsType<ImageLimitException>(first);
+            else
+            {
+                Assert.Null(first); Assert.Equal(expected, output);
+                Assert.Equal(work - prior - total, live.RemainingWork);
+            }
+        }
+        using var inflater = new System.IO.Compression.ZLibStream(new MemoryStream(encoded), System.IO.Compression.CompressionMode.Decompress);
+        var inflated = new byte[expected.Length]; inflater.ReadExactly(inflated);
+        Assert.Equal(expected, inflated); Assert.Equal(-1, inflater.ReadByte());
+    }
+
     [Theory]
     [InlineData(false)] [InlineData(true)]
     public void LongLiteralCodesRetainWholePrefixAdmissionAndIncompletePathErrors(bool shortLiteral)

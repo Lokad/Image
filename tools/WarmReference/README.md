@@ -1311,6 +1311,12 @@ is encoded+IDAT+output+256KiB inflater allowance+two rows; optional whole-filter
 and8KiB buffers cannot fit. Validate one-byte-below refusal outside timing.
 See the [exact-memory byte result](../../benchmarks/WARM-PNG-TIGHT8.md).
 
+The live-cancelable exact-memory byte case is `-WarmFamily Png -WarmCases
+DecodeTightCancelable8`. Reuse the same frozen packet/raster, limit and generic
+worker. The token stays unsignaled during timing; pre-canceled rejection/token
+identity and one-byte-below admission are checked outside it. See the
+[cancelable byte result](../../benchmarks/WARM-PNG-TIGHT-CANCELABLE8.md).
+
 Streaming RGBA16 Fastest uses `-WarmFamily Png -WarmCases EncodeFast16` or
 `EncodeFastCancelable16`. Managed fast adaptive backend2/native backend1 are
 explicit; unchanged5% IDAT-size and exact full-word/alpha/hidden-RGB gates apply.

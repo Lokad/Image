@@ -8,7 +8,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray4, DecodePalette4, DecodePalette2, DecodePalette1, DecodeGray2, DecodeUp8, DecodeSub8, DecodeAverage8, EncodeRgb8, EncodeRgb16, EncodeGray8, EncodeGray16, EncodeGrayAlpha8, EncodeGrayAlpha16, EncodeNoCompression8, DecodeNoCompression8, DecodePalette8PartialAlpha, DecodeGray8Transparency, DecodeGray16Transparency, DecodeRgb8Transparency, DecodeRgb16Transparency, EncodeFast16, EncodeNoCompression16, DecodeNoCompression16, DecodeTight16, DecodeCancelable16, DecodeTightCancelable16, DecodeSub16, DecodeAverage16, EncodeFastCancelable16, EncodeFastForward16, DecodeUp16, EncodeFast8, DecodeRgbPaeth8, DecodeGray1Adam7, DecodeTight8 }
+public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray4, DecodePalette4, DecodePalette2, DecodePalette1, DecodeGray2, DecodeUp8, DecodeSub8, DecodeAverage8, EncodeRgb8, EncodeRgb16, EncodeGray8, EncodeGray16, EncodeGrayAlpha8, EncodeGrayAlpha16, EncodeNoCompression8, DecodeNoCompression8, DecodePalette8PartialAlpha, DecodeGray8Transparency, DecodeGray16Transparency, DecodeRgb8Transparency, DecodeRgb16Transparency, EncodeFast16, EncodeNoCompression16, DecodeNoCompression16, DecodeTight16, DecodeCancelable16, DecodeTightCancelable16, DecodeSub16, DecodeAverage16, EncodeFastCancelable16, EncodeFastForward16, DecodeUp16, EncodeFast8, DecodeRgbPaeth8, DecodeGray1Adam7, DecodeTight8, DecodeTightCancelable8 }
 
 [MemoryDiagnoser]
 public class WarmPng
@@ -27,15 +27,15 @@ public class WarmPng
     private long tightWorkingBytes;
     private CancellationTokenSource? cancellationSource;
     private CancellationToken decodeCancellation;
-    private bool Cancelable => Case is WarmPngCase.DecodeCancelable16 or WarmPngCase.DecodeTightCancelable16;
-    private bool Tight => Case is WarmPngCase.DecodeTight8 or WarmPngCase.DecodeTight16 or WarmPngCase.DecodeTightCancelable16;
+    private bool Cancelable => Case is WarmPngCase.DecodeTightCancelable8 or WarmPngCase.DecodeCancelable16 or WarmPngCase.DecodeTightCancelable16;
+    private bool Tight => Case is WarmPngCase.DecodeTightCancelable8 or WarmPngCase.DecodeTight8 or WarmPngCase.DecodeTight16 or WarmPngCase.DecodeTightCancelable16;
     private PngEncodeOptions encodeOptions => new() { ColorType = GrayAlpha ? PngColorType.GrayscaleAlpha : Gray ? PngColorType.Grayscale : Rgb ? PngColorType.Rgb : PngColorType.Rgba, Compression = Fastest ? CompressionLevel.Fastest : NoCompression ? CompressionLevel.NoCompression : CompressionLevel.Optimal };
     public static WarmPngCase[] SelectedCases()
     {
         var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
         var result = selection is null ? new[] { WarmPngCase.Decode8 } : selection.Split(',')
             .Select(value => Enum.TryParse<WarmPngCase>(value, out var parsed) && Enum.IsDefined(parsed)
-                ? parsed : throw new ArgumentException("Choose DecodeTight8, DecodeGray1Adam7, DecodeRgbPaeth8, EncodeFast8, DecodeUp16, EncodeFastForward16, EncodeFastCancelable16, DecodeAverage16, DecodeSub16, DecodeTightCancelable16, DecodeCancelable16, DecodeTight16, DecodeNoCompression16, EncodeNoCompression16, EncodeFast16, Encode8, Encode16, EncodeRgb8, EncodeRgb16, EncodeGray8, EncodeGray16, EncodeGrayAlpha8, EncodeGrayAlpha16, EncodeNoCompression8, DecodeNoCompression8, DecodePalette8PartialAlpha, DecodeGray8Transparency, DecodeGray16Transparency, DecodeRgb8Transparency, DecodeRgb16Transparency, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeUp8, DecodeSub8, DecodeAverage8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray2, DecodeGray4, DecodePalette1, DecodePalette2 or DecodePalette4.")).ToArray();
+                ? parsed : throw new ArgumentException("Choose DecodeTightCancelable8, DecodeTight8, DecodeGray1Adam7, DecodeRgbPaeth8, EncodeFast8, DecodeUp16, EncodeFastForward16, EncodeFastCancelable16, DecodeAverage16, DecodeSub16, DecodeTightCancelable16, DecodeCancelable16, DecodeTight16, DecodeNoCompression16, EncodeNoCompression16, EncodeFast16, Encode8, Encode16, EncodeRgb8, EncodeRgb16, EncodeGray8, EncodeGray16, EncodeGrayAlpha8, EncodeGrayAlpha16, EncodeNoCompression8, DecodeNoCompression8, DecodePalette8PartialAlpha, DecodeGray8Transparency, DecodeGray16Transparency, DecodeRgb8Transparency, DecodeRgb16Transparency, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeUp8, DecodeSub8, DecodeAverage8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray2, DecodeGray4, DecodePalette1, DecodePalette2 or DecodePalette4.")).ToArray();
         if (result.Length is < 1 or > 3 || result.Distinct().Count() != result.Length)
             throw new ArgumentException("Choose one to three distinct PNG cases.");
         return result;
@@ -158,8 +158,8 @@ public class WarmPng
             }
             if (Cancelable)
             {
-                if (JpegBenchmarkCase.Hash(encoded) != "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8")
-                    throw new InvalidOperationException("Frozen original word PNG changed.");
+                if (JpegBenchmarkCase.Hash(encoded) != (Depth == 8 ? "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f" : "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8"))
+                    throw new InvalidOperationException("Frozen original PNG changed.");
                 cancellationSource = new CancellationTokenSource();
                 decodeCancellation = cancellationSource.Token;
                 using var canceled = new CancellationTokenSource();
@@ -190,7 +190,7 @@ public class WarmPng
             ValidatePng(encoded); ValidateManaged();
             if (Cancelable || Tight || Fastest || NoCompression || Rgb || Gray || GrayAlpha || Palette || Up || Sub || Average)
             {
-                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", Tight && Cancelable ? "png-tight-cancel16" : Cancelable ? "png-cancel16" : Tight ? "png-tight" + Depth : Fastest ? FastDirectory : Interlaced && Mono ? "png-gray1-adam7" : Paeth && Rgb ? "png-rgb8-paeth" : RgbTransparency ? "png-rgb" + Depth + "-trns" : GrayTransparency ? Depth == 16 ? "png-gray16-trns32639" : "png-gray8-trns127" : NoCompression ? "png-store-" + Depth : Up ? "png-up-" + Depth : Sub ? "png-sub-" + Depth : Average ? "png-average-" + Depth : Mono ? "png-gray" + CodedDepth : PartialAlpha ? "png-palette8-alpha2" : Palette ? "png-palette" + CodedDepth : GrayAlpha ? "png-gray-alpha" + Depth : Gray ? "png-gray" + Depth : "png-rgb" + Depth);
+                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", Tight && Cancelable ? "png-tight-cancel" + Depth : Cancelable ? "png-cancel16" : Tight ? "png-tight" + Depth : Fastest ? FastDirectory : Interlaced && Mono ? "png-gray1-adam7" : Paeth && Rgb ? "png-rgb8-paeth" : RgbTransparency ? "png-rgb" + Depth + "-trns" : GrayTransparency ? Depth == 16 ? "png-gray16-trns32639" : "png-gray8-trns127" : NoCompression ? "png-store-" + Depth : Up ? "png-up-" + Depth : Sub ? "png-sub-" + Depth : Average ? "png-average-" + Depth : Mono ? "png-gray" + CodedDepth : PartialAlpha ? "png-palette8-alpha2" : Palette ? "png-palette" + CodedDepth : GrayAlpha ? "png-gray-alpha" + Depth : Gray ? "png-gray" + Depth : "png-rgb" + Depth);
                 if (MatchedByteEncoding) directory += "-optimal9";
                 Directory.CreateDirectory(directory);
                 foreach (var (name, bytes) in new[] { ("input.png", encoded), ("expected.raw", pixels) })

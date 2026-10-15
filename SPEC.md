@@ -458,9 +458,11 @@ allowance, result, rows and optional read buffer all fit. Complete code trees
 and a valid Adler checksum are required before using those bytes; uncertain
 trees or checksums retain the original BCL row reader without repeating framing
 work. Cancelable framing retains both per-symbol cancellation checks and exact
-prefix-bit charges. Eligible literal counting keeps admitted charges locally,
-commits them before returning, and leaves cancellation, insufficient budgets and
-format errors to the original dispatcher. Completed work survives cancellation.
+prefix-bit charges. Inside each compressed block, the reader admits exact bit
+charges against a saved remaining budget and publishes completed work on every
+exit without a new cancellation poll. Cancelable counting uses a separate loop
+from materialized-output dispatch, retaining the same literal, length, distance,
+truncation and atomic-charge checks. Completed work survives cancellation.
 The private whole-stream checksum checks cancellation every 4096 bytes.
 Tight budgets, larger data and Adam7 retain the original inflation path.
 The original bit/row work, error order, precision and pixel contracts are unchanged.
