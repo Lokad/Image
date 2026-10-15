@@ -102,6 +102,7 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-ADAPTIVE-HUFFMAN.md) | 3,481.14 | 1,843.98 | 1.888 / 1.931 | 297,772 | Confirmed |
 | [JPEG grayscale, single component](../benchmarks/WARM-COVERAGE.md) | — | — | — | — | Unscored: native baseline unavailable |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-OPAQUE-ENCODE.md) | 29,381.20 | 15,527.63 | 1.892 / 1.918 | 2,536,203 | Confirmed |
+| [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-OPAQUE-RGBA16.md) | 29,778.24 | 15,604.01 | 1.908 / 1.922 | 2,535,736 | Confirmed |
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-OPAQUE-ENCODE.md) | 30,157.65 | 53,549.54 | 0.563 / 0.655 | 2,615,939 | Regression screen; prior confirmed |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-OPAQUE-ENCODE.md) | 30,644.46 | 53,908.23 | 0.568 / 0.598 | 2,615,472 | Regression screen; prior confirmed |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-ENCODE-EXACT.md) | 7,363.30 | 121,587.95 | 0.061 / 0.063 | 2,100,170 | Confirmed |
@@ -314,6 +315,10 @@ compiling the existing tree paths and inlining emission reduce elapsed time
 **30.1%**. Current alpha8/16 regression screens measure **0.563x / 0.568x**;
 their rows explicitly distinguish short screens from the earlier independent
 confirmations. Both OSes pass **3,308** Release tests and the same actual package.
+Opaque RGBA16 VP8 encoding independently confirms **1.908x / upper 1.922x**,
+at **2,535,736 B/op**, including complete word normalization/repacking. Its
+normalized raster, packets and quality samples equal the opaque byte anchor;
+unchanged qualified production and package proofs are reused.
 Remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove
 the uniform target. Linked reports retain superseded raw evidence, failed guards,

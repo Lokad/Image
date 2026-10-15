@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmWebpCase { Encode8, Encode16, EncodeOpaque8 }
+public enum WarmWebpCase { Encode8, Encode16, EncodeOpaque8, EncodeOpaque16 }
 
 internal sealed record WarmWebpPreparation(int SchemaVersion, string Project, string GeneratedUtc, string Recipe,
     string RasterSha256, string ReferenceSha256, int NativeQuality, string NativeFile, string ManagedFile,
@@ -18,14 +18,16 @@ public class WarmWebp
 {
     public static IEnumerable<WarmWebpCase> Cases => SelectedCases();
     [ParamsSource(nameof(Cases))] public WarmWebpCase Case { get; set; }
-    private int Depth => Case == WarmWebpCase.Encode16 ? 16 : 8;
-    private bool Opaque => Case == WarmWebpCase.EncodeOpaque8;
+    private int Depth => Case is WarmWebpCase.Encode16 or WarmWebpCase.EncodeOpaque16 ? 16 : 8;
+    private bool Opaque => Case is WarmWebpCase.EncodeOpaque8 or WarmWebpCase.EncodeOpaque16;
     private EncoderQualityProfile TargetProfile => ProfileFor(Depth, Opaque);
     private static EncoderQualityProfile ProfileFor(int depth, bool opaque = false) => new(513, depth, QualityEncoder.Vp8, QualityPattern.Asymmetric, opaque ? QualityAlpha.Opaque : QualityAlpha.Gradient);
     private const string Recipe8 = "HorizontalFlipInput.Create(8): original 513x259 asymmetric RGBA8, phase zero, alpha zero at both first-row ends, hidden RGB unchanged. VP8 target is 8-bit 4:2:0 with exact source alpha; effort 4 on both subjects. No extra source raster.";
     private string Recipe => RecipeFor(Depth, Opaque);
     private static string RecipeFor(int depth, bool opaque = false) => opaque
-        ? "Existing original 513x259 RGBA8 RGB bytes unchanged; alpha set to255. Opaque VP8 4:2:0, effort4, whole-raster RGB source quality; no alpha-plane encoding or extra original raster."
+        ? depth == 16
+            ? "Existing original 513x259 RGBA16 RGB words unchanged; alpha set to65535. Opaque VP8 4:2:0, effort4, whole-raster RGB source quality; full channel normalization (sample+128)/257 and repacking inside every operation. No alpha-plane encoding or extra original raster."
+            : "Existing original 513x259 RGBA8 RGB bytes unchanged; alpha set to255. Opaque VP8 4:2:0, effort4, whole-raster RGB source quality; no alpha-plane encoding or extra original raster."
         : depth == 16
         ? Recipe8.Replace("Create(8)", "Create(16)").Replace("RGBA8", "RGBA16").Replace("exact source alpha", "exact normalized alpha")
             + " Full channel normalization (sample+128)/257 and repacking execute inside every operation." : Recipe8;
@@ -49,7 +51,8 @@ public class WarmWebp
             null or "Encode8" => [WarmWebpCase.Encode8],
             "Encode16" => [WarmWebpCase.Encode16],
             "EncodeOpaque8" => [WarmWebpCase.EncodeOpaque8],
-            _ => throw new ArgumentException("Choose one VP8 case: Encode8, Encode16 or EncodeOpaque8.")
+            "EncodeOpaque16" => [WarmWebpCase.EncodeOpaque16],
+            _ => throw new ArgumentException("Choose one VP8 case: Encode8, Encode16, EncodeOpaque8 or EncodeOpaque16.")
         };
     }
 
@@ -76,7 +79,7 @@ public class WarmWebp
         if (record.SchemaVersion != 1 || record.Project != "Lokad.Image" || record.Recipe != RecipeFor(depth, opaque) || record.SourceDepth != depth || record.SourceOpaque != opaque || depth is not (8 or 16)
             || record.NativeQuality is < 1 or > 100 || record.NativeQuality != record.Match.Native.Setting
             || !record.Match.Matched || record.Match.PsnrGapDb is not (>= 0 and <= EncoderQualityCalibration.MaximumPsnrGapDb)
-            || !allowedPolicy || (depth == 16 || opaque) && record.QualityPolicy != "fixed-anchor-v1" || opaque && depth != 8
+            || !allowedPolicy || (depth == 16 || opaque) && record.QualityPolicy != "fixed-anchor-v1"
             || record.OwnedEvaluationOrder.Length != record.OwnedSettings.Length
             || record.OwnedEvaluationOrder.Distinct().Count() != record.OwnedSettings.Length
             || !record.OwnedEvaluationOrder.Order().SequenceEqual(record.OwnedSettings.Select(sample => sample.Setting).Order())
@@ -110,6 +113,13 @@ public class WarmWebp
         var opaqueOwned = fixedOwned with { SourceError = fixedOwned.SourceError with { Scale = 1 } };
         var fixedOpaque = fixedRecord with { SourceOpaque = true, Recipe = RecipeFor(8, true), Match = EncoderQualityCalibration.Match(opaqueNative, [opaqueOwned]), OwnedSettings = [opaqueOwned] };
         ValidatePreparation(fixedOpaque, 8, true);
+        var opaque16 = fixedOpaque with { SourceDepth = 16, Recipe = RecipeFor(16, true) };
+        ValidatePreparation(opaque16, 16, true);
+        foreach (var invalid in new[] { opaque16 with { SourceDepth = 8 }, opaque16 with { Recipe = fixedOpaque.Recipe }, opaque16 with { SourceOpaque = false } })
+        {
+            try { ValidatePreparation(invalid, 16, true); } catch (InvalidOperationException) { continue; }
+            throw new InvalidOperationException("Opaque RGBA16 VP8 gate accepted invalid depth/recipe metadata.");
+        }
         foreach (var invalid in new[] { fixedOpaque with { SourceOpaque = false }, fixedOpaque with { Recipe = Recipe8 }, fixedOpaque with { Match = fixedRecord.Match, OwnedSettings = fixedRecord.OwnedSettings } })
         {
             try { ValidatePreparation(invalid, 8, true); } catch (InvalidOperationException) { continue; }
@@ -150,7 +160,7 @@ public class WarmWebp
     // selected bitstreams again without repeating quality enumeration.
     public static void Prepare(int cpu, int nativeQuality = 75, int depth = 8, bool opaque = false)
     {
-        if (!OperatingSystem.IsLinux() || cpu is < 0 or > 62 || nativeQuality != 75 || depth is not (8 or 16) || opaque && depth != 8)
+        if (!OperatingSystem.IsLinux() || cpu is < 0 or > 62 || nativeQuality != 75 || depth is not (8 or 16))
             throw new ArgumentException("The fixed VP8 pair requires Linux, one allowed CPU, native quality 75 and owned quality 100.");
         using var process = Process.GetCurrentProcess(); var oldAffinity = process.ProcessorAffinity;
         process.ProcessorAffinity = new IntPtr(1L << cpu);
@@ -162,7 +172,7 @@ public class WarmWebp
             var reference = Normalize(pixels, depth);
             using var source = JpegBenchmarkCase.Buffer(pixels, 513, 259, depth);
             File.WriteAllBytes(state.Input, pixels);
-            using var native = new NativeWarmReference(state, depth, cpu, opaque ? "webp-opaque-encode" : "webp-encode", expectedRaw: NormalizedInput(state.Root, pixels, reference, depth), nativeQuality: nativeQuality);
+            using var native = new NativeWarmReference(state, depth, cpu, opaque ? "webp-opaque-encode" : "webp-encode", expectedRaw: NormalizedInput(state.Root, pixels, reference, depth, opaque), nativeQuality: nativeQuality);
             var nativeBytes = File.ReadAllBytes(state.NativeOutput);
             var nativeSample = EncoderQualityCalibration.Validate(nativeBytes, reference, ProfileFor(depth, opaque), nativeQuality, state.Ffmpeg);
             using var output = new MemoryStream();
@@ -183,7 +193,7 @@ public class WarmWebp
                 Path.GetRelativePath(state.Root, nativeFile), Path.GetRelativePath(state.Root, managedFile), match, owned, [100], SourceIdentity(state.Root),
                 JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), JpegBenchmarkCase.HashFile(typeof(WarmWebp).Assembly.Location),
                 JpegBenchmarkCase.HashFile(state.Ffmpeg), native.BuildIdentity, native.Ready, "fixed-anchor-v1", depth, opaque);
-            var path = Path.Combine(state.Root, "artifacts", "warm-reference", opaque ? "webp-opaque-match.json" : depth == 16 ? "webp16-match.json" : "webp-match.json");
+            var path = Path.Combine(state.Root, "artifacts", "warm-reference", opaque ? depth == 16 ? "webp-opaque16-match.json" : "webp-opaque-match.json" : depth == 16 ? "webp16-match.json" : "webp-match.json");
             File.WriteAllText(path, JsonSerializer.Serialize(record, EncoderQualityCalibration.Json) + "\n");
             Console.WriteLine($"Prepared one warm VP8 pair: native quality {nativeQuality}, owned quality {match.ClosestOwned.Setting}, gap {match.PsnrGapDb:F4} dB, matched={match.Matched}; {owned.Length} owned settings, one source raster. {path}");
         }
@@ -193,7 +203,12 @@ public class WarmWebp
     private static byte[] CreatePixels(int depth, bool opaque)
     {
         var result = HorizontalFlipInput.Create(depth);
-        if (opaque) for (var i = 3; i < result.Length; i += 4) result[i] = 255;
+        if (opaque)
+            for (var i = depth == 16 ? 6 : 3; i < result.Length; i += depth == 16 ? 8 : 4)
+            {
+                result[i] = 255;
+                if (depth == 16) result[i + 1] = 255;
+            }
         return result;
     }
 
@@ -206,10 +221,10 @@ public class WarmWebp
         return result;
     }
 
-    private static string? NormalizedInput(string root, byte[] pixels, byte[] reference, int depth)
+    private static string? NormalizedInput(string root, byte[] pixels, byte[] reference, int depth, bool opaque = false)
     {
         if (depth != 16) return null;
-        var directory = Path.Combine(root, "artifacts", "warm-reference", "webp16-input"); Directory.CreateDirectory(directory);
+        var directory = Path.Combine(root, "artifacts", "warm-reference", opaque ? "webp-opaque16-input" : "webp16-input"); Directory.CreateDirectory(directory);
         Save("source.rgba", pixels); Save("normalized.rgba", reference);
         return Path.Combine(directory, "normalized.rgba");
         void Save(string name, byte[] bytes)
@@ -238,7 +253,7 @@ public class WarmWebp
         state = new JpegBenchmarkCase(".webp");
         try
         {
-            var path = Path.Combine(state.Root, "artifacts", "warm-reference", Opaque ? "webp-opaque-match.json" : Depth == 16 ? "webp16-match.json" : "webp-match.json");
+            var path = Path.Combine(state.Root, "artifacts", "warm-reference", Opaque ? Depth == 16 ? "webp-opaque16-match.json" : "webp-opaque-match.json" : Depth == 16 ? "webp16-match.json" : "webp-match.json");
             prepared = JsonSerializer.Deserialize<WarmWebpPreparation>(File.ReadAllText(path), EncoderQualityCalibration.Json)
                 ?? throw new InvalidOperationException("Missing warm VP8 preparation; run --prepare-warm-webp first.");
             ValidatePreparation(prepared, Depth, Opaque);
@@ -249,7 +264,7 @@ public class WarmWebp
                 throw new InvalidOperationException("Warm VP8 input/reference/oracle identity changed; prepare only this pair again.");
             options = new() { Lossless = false, Quality = prepared.Match.ClosestOwned.Setting, Effort = 4 };
             source = JpegBenchmarkCase.Buffer(pixels, 513, 259, Depth); File.WriteAllBytes(state.Input, pixels);
-            native = new NativeWarmReference(state, Depth, cpu, Opaque ? "webp-opaque-encode" : "webp-encode", expectedRaw: NormalizedInput(state.Root, pixels, reference, Depth), nativeQuality: prepared.NativeQuality);
+            native = new NativeWarmReference(state, Depth, cpu, Opaque ? "webp-opaque-encode" : "webp-encode", expectedRaw: NormalizedInput(state.Root, pixels, reference, Depth, Opaque), nativeQuality: prepared.NativeQuality);
             if (native.BuildIdentity.GetProperty("workerSha256").GetString() != prepared.NativeBuild.GetProperty("workerSha256").GetString())
                 throw new InvalidOperationException("Native VP8 worker changed; prepare this pair again.");
             encoded = File.ReadAllBytes(Path.Combine(state.Root, prepared.ManagedFile));

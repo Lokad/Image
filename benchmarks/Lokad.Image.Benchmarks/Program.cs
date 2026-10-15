@@ -278,6 +278,12 @@ if (args.Length == 2 && args[0] == "--prepare-warm-webp-opaque")
     return;
 }
 
+if (args.Length == 2 && args[0] == "--prepare-warm-webp-opaque16")
+{
+    WarmWebp.Prepare(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture), depth: 16, opaque: true);
+    return;
+}
+
 if (args.Length == 2 && args[0] == "--prepare-warm-webp16")
 {
     WarmWebp.Prepare(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture), depth: 16);

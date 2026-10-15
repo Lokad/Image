@@ -139,6 +139,7 @@ def render():
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG-ADAPTIVE-HUFFMAN.md', True),
         pending('JPEG grayscale, single component', 'WARM-COVERAGE.md', 'Unscored: native baseline unavailable'),
         row('WebP VP8, opaque‡', 'warm-vp8-encode-evidence.json', ['observations', -1], 'WARM-VP8-OPAQUE-ENCODE.md', True),
+        row('WebP VP8, opaque from RGBA16‡', 'warm-vp8opaque16-evidence.json', ['observations', -1], 'WARM-VP8-OPAQUE-RGBA16.md', True),
         row('WebP VP8 + alpha‡', 'warm-vp8-encode-evidence.json', ['regressionControls', 0], 'WARM-VP8-OPAQUE-ENCODE.md', verification='Regression screen; prior confirmed'),
         row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8-encode-evidence.json', ['regressionControls', 1], 'WARM-VP8-OPAQUE-ENCODE.md', verification='Regression screen; prior confirmed'),
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
@@ -391,6 +392,10 @@ compiling the existing tree paths and inlining emission reduce elapsed time
 **30.1%**. Current alpha8/16 regression screens measure **0.563x / 0.568x**;
 their rows explicitly distinguish short screens from the earlier independent
 confirmations. Both OSes pass **3,308** Release tests and the same actual package.
+Opaque RGBA16 VP8 encoding independently confirms **1.908x / upper 1.922x**,
+at **2,535,736 B/op**, including complete word normalization/repacking. Its
+normalized raster, packets and quality samples equal the opaque byte anchor;
+unchanged qualified production and package proofs are reused.
 Remaining material codec layouts and public boundaries still need coverage.
 Stop tuning confirmed pairs; no averages or rolling older-source results prove
 the uniform target. Linked reports retain superseded raw evidence, failed guards,

@@ -1242,3 +1242,11 @@ opacity projection and enforces the existing0.25dB source band at managed100 /
 native75, both effort4. Whole-raster RGB is the opaque metric; alpha-bearing
 cases retain their declared premultiplied metric. See the
 [complete encode round](../../benchmarks/WARM-VP8-OPAQUE-ENCODE.md).
+
+Opaque RGBA16 uses the separate `build-webp-opaque16-linux.sh` adapter,
+`--prepare-warm-webp-opaque16 0`, and
+`-WarmFamily Webp -WarmCases EncodeOpaque16`. Full word normalization and
+repacking repeat inside both timed encoders. The byte/alpha workers and
+preparations are preserved; every native normalized sample is checked against
+the exact integer reference. See the
+[word-source result](../../benchmarks/WARM-VP8-OPAQUE-RGBA16.md).
