@@ -89,6 +89,7 @@ def render():
         row('PNG RGBA16, None / exact limit + live cancelable token', 'warm-png-tight-cancelable16-evidence.json', ['observations', -1], 'WARM-PNG-TIGHT-CANCELABLE16.md', True),
         row('PNG RGBA8, Paeth', 'warm-paeth4-evidence.json', ['observations', -1], 'WARM-PAETH-FOUR-CHANNEL.md', True),
         row('PNG RGBA8, Up', 'warm-pngup8-baseline-evidence.json', ['observations', -1], 'WARM-PNG-UP8-BASELINE.md', True),
+        row('PNG RGBA16, Up', 'warm-pngup16-evidence.json', ['observations', -1], 'WARM-PNG-UP16.md', True),
         row('PNG RGBA8, Sub', 'warm-pngsub16-evidence.json', ['regressions', 0], 'WARM-PNG-SUB16.md', verification='Regression screen; prior confirmed'),
         row('PNG RGBA16, Sub', 'warm-pngsub16-evidence.json', ['observations', -1], 'WARM-PNG-SUB16.md', True),
         row('PNG RGBA8, Average', 'warm-pngaverage8-baseline-evidence.json', ['observations', -1], 'WARM-PNG-AVERAGE8-BASELINE.md', True),

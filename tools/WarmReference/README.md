@@ -1286,6 +1286,12 @@ the unchanged PNG worker. Original authoring subtracts floor((left+up)/2) using
 full big-endian words and an eight-byte pixel stride; sums retain nine bits.
 See the [word Average result](../../benchmarks/WARM-PNG-AVERAGE16.md).
 
+RGBA16 Up decoding uses `-WarmFamily Png -WarmCases DecodeUp16`, with the
+unchanged PNG worker. Original authoring subtracts the previous big-endian row
+bytewise modulo256, with a zero top boundary. Reuse the original word raster;
+preparation checks exact normal/scalar samples and two live owners.
+See the [word Up result](../../benchmarks/WARM-PNG-UP16.md).
+
 Streaming RGBA16 Fastest uses `-WarmFamily Png -WarmCases EncodeFast16` or
 `EncodeFastCancelable16`. Managed fast adaptive backend2/native backend1 are
 explicit; unchanged5% IDAT-size and exact full-word/alpha/hidden-RGB gates apply.
