@@ -98,6 +98,7 @@ timing comparison; compression efficiency parity is not established.
 | [WebP VP8, opaque](../benchmarks/WARM-VP8-FILTER8.md) | 8,649.43 | 4,797.64 | 1.803 / 1.808 | 760,548 | Confirmed |
 | [WebP VP8L, literal/run input](../benchmarks/WARM-VP8L-DECODE-QUIET.md) | 3,948.44 | 2,332.84 | 1.693 / 1.732 | 1,074,301 | Confirmed |
 | [WebP VP8L, native input](../benchmarks/WARM-VP8L-CANONICAL.md) | 5,703.55 | 3,023.03 | 1.887 / 1.904 | 1,216,180 | Confirmed |
+| [WebP VP8L, native input / live cancelable token](../benchmarks/WARM-VP8L-CANCELABLE.md) | 5,757.19 | 3,020.47 | 1.906 / 1.919 | 1,216,180 | Confirmed |
 
 **Encode**
 
@@ -286,17 +287,16 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round confirms RGBA16 PNG SmallestSize at **0.970x /
-upper 0.985x**, with **2,103,522 B/op**. Managed/native numeric levels9/9 preserve
-all words/alpha/hidden RGB. IDAT payloads960,425/960,316 differ0.011%, within the
-unchanged5% gate. Full packing/conversion/encoding/output release is timed. The
-final screen and independent repeat share an immutable core/harness; all twelve
-actuals and both guards are retained. A worker-schema compatibility fix also
-passes exact-output smoke for the existing Fastest and stored modes; a rejected
-stale-child smoke remains unscored. Production is unchanged: existing **3,432
-Release tests per OS**, including **898 live comparisons**, and the same actual
-package's consumer plus all three examples on Windows/Linux are reused. No
-production rebuild, full suite, package proof, method audit or profile is repeated.
+The latest accepted round confirms native-input VP8L decode with a live,
+never-signaled token at **1.906x / upper 1.919x**, with **1,216,180 B/op** and
+exact RGBA/alpha/hidden RGB. The original raster and frozen native packet are
+reused; token/source setup/disposal is excluded, while all public decoding and
+native state reset/conversion/owned output release remain timed. Pre-canceled
+rejection and token identity pass. All twelve actuals and both quiet guards pass
+on one immutable core/harness. Production is unchanged: existing **3,432 Release
+tests per OS**, including **898 live comparisons**, and the same actual package's
+consumer plus all three examples on Windows/Linux are reused. No production/native
+rebuild, full suite, package proof, method audit or profile is repeated.
 
 PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples
 and the unchanged 5% IDAT-size gate; earlier level6/level6 refusals remain unscored.

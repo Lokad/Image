@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmWebpDecodeCase { Lossless8, NativeLossless8, StreamNativeLossless8 }
+public enum WarmWebpDecodeCase { Lossless8, NativeLossless8, StreamNativeLossless8, NativeLosslessCancelable8 }
 
 [MemoryDiagnoser]
 public class WarmWebpDecode
@@ -23,6 +23,9 @@ public class WarmWebpDecode
     private JsonElement sourceIdentity;
     private bool smoke, ready;
     private int cpu, sampleCount;
+    private CancellationTokenSource? cancellationSource;
+    private CancellationToken decodeCancellation;
+    private bool Cancelable => Case == WarmWebpDecodeCase.NativeLosslessCancelable8;
     private bool StreamInput => Case == WarmWebpDecodeCase.StreamNativeLossless8;
     private bool NativeInput => Case != WarmWebpDecodeCase.Lossless8;
 
@@ -33,8 +36,9 @@ public class WarmWebpDecode
         {
             null or "Lossless8" => [WarmWebpDecodeCase.Lossless8],
             "NativeLossless8" => [WarmWebpDecodeCase.NativeLossless8],
+            "NativeLosslessCancelable8" => [WarmWebpDecodeCase.NativeLosslessCancelable8],
             "StreamNativeLossless8" => [WarmWebpDecodeCase.StreamNativeLossless8],
-            _ => throw new ArgumentException("Choose one warm WebP decode case: Lossless8, NativeLossless8 or StreamNativeLossless8.")
+            _ => throw new ArgumentException("Choose one warm WebP decode case: Lossless8, NativeLossless8, NativeLosslessCancelable8 or StreamNativeLossless8.")
         };
     }
 
@@ -123,13 +127,24 @@ public class WarmWebpDecode
                 || !File.ReadAllBytes(Path.Combine(state.Root, prepared.RasterFile)).AsSpan().SequenceEqual(pixels))
                 throw new InvalidOperationException("Frozen VP8L preparation identity differs.");
             ValidateInput(encoded, nativeInput); File.WriteAllBytes(state.Input, encoded);
+            if (Cancelable)
+            {
+                cancellationSource = new CancellationTokenSource(); decodeCancellation = cancellationSource.Token;
+                using var canceled = new CancellationTokenSource(); canceled.Cancel();
+                try
+                {
+                    using var rejected = ImageCodec.Decode(encoded, cancellationToken: canceled.Token);
+                    throw new InvalidOperationException("VP8L accepted an already-canceled token.");
+                }
+                catch (OperationCanceledException error) when (error.CancellationToken == canceled.Token) { }
+            }
             native = new NativeWarmReference(state, 8, cpu, StreamInput ? "webp-stream-decode" : "webp-decode"); ValidateNative();
             foreach (var scalar in new[] { false, true })
                 if (!OracleProcess.Run(state.Ffmpeg, DecodeArguments(scalar), encoded).AsSpan().SequenceEqual(pixels))
                     throw new InvalidOperationException("Native VP8L output differs from the pinned normal/scalar public CLI.");
             ValidateManaged(); before = native.Measure(smoke, sampleCount: sampleCount); ready = true;
         }
-        catch { native?.Dispose(); state.Dispose(); throw; }
+        catch { native?.Dispose(); cancellationSource?.Dispose(); state.Dispose(); throw; }
     }
 
     private void ValidateNative()
@@ -141,8 +156,8 @@ public class WarmWebpDecode
         using var firstStream = new MemoryStream(encoded, writable: false);
         using var secondStream = new MemoryStream(encoded, writable: false);
         if (firstStream.TryGetBuffer(out _) || secondStream.TryGetBuffer(out _)) throw new InvalidOperationException("Stream backing buffer is exposed.");
-        using var first = StreamInput ? ImageCodec.Decode(firstStream) : ImageCodec.Decode(encoded);
-        using var second = StreamInput ? ImageCodec.Decode(secondStream) : ImageCodec.Decode(encoded);
+        using var first = StreamInput ? ImageCodec.Decode(firstStream) : ImageCodec.Decode(encoded, cancellationToken: decodeCancellation);
+        using var second = StreamInput ? ImageCodec.Decode(secondStream) : ImageCodec.Decode(encoded, cancellationToken: decodeCancellation);
         ValidatePixels(first, pixels); ValidatePixels(second, pixels); first.GetRow8(0)[0] ^= 255; ValidatePixels(second, pixels);
         if (StreamInput && (!firstStream.CanRead || !secondStream.CanRead || firstStream.Position != encoded.Length || secondStream.Position != encoded.Length))
             throw new InvalidOperationException("Stream lifetime or complete consumption differs.");
@@ -158,7 +173,7 @@ public class WarmWebpDecode
             using var decoded = ImageCodec.Decode(stream);
             return decoded.Stride * decoded.Height ^ decoded.GetRow8(0)[513 * 2];
         }
-        using var result = ImageCodec.Decode(encoded);
+        using var result = ImageCodec.Decode(encoded, cancellationToken: decodeCancellation);
         return result.Stride * result.Height ^ result.GetRow8(0)[513 * 2];
     }
 
@@ -178,6 +193,8 @@ public class WarmWebpDecode
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), width = 513, height = 259, depth = 8,
                 cpu, managedAffinityCount = 1, processorCount = Environment.ProcessorCount, serverGc = GCSettings.IsServerGC,
                 gcConfiguration = GC.GetConfigurationVariables(), runtime = RuntimeInformation.FrameworkDescription, platform = RuntimeInformation.RuntimeIdentifier,
+                cancellationCanBeCanceled = decodeCancellation.CanBeCanceled, cancellationRequested = decodeCancellation.IsCancellationRequested,
+                alreadyCanceledRejected = Cancelable ? true : (bool?)null, inputAnchorCase = Cancelable ? "NativeLossless8" : null,
                 sourceIdentity, preparation = prepared, inputOrigin = NativeInput ? "prepared-native-exact-lossless" : "prepared-owned-lossless", codec = "VP8L",
                 inputBytes = encoded.Length, inputSha256 = JpegBenchmarkCase.Hash(encoded), rasterSha256 = JpegBenchmarkCase.Hash(pixels),
                 managedOutputBytes = pixels.Length, nativeOutputBytes = pixels.Length, managedOutputSha256 = JpegBenchmarkCase.Hash(pixels), nativeOutputSha256 = JpegBenchmarkCase.HashFile(state.NativeOutput),
@@ -190,9 +207,10 @@ public class WarmWebpDecode
                 boundary = (StreamInput ? "Fresh read-only seekable MemoryStream with non-exposed buffer; complete public Decode(Stream) input reads, buffering, copies, stream creation/disposal and output release timed. Native fresh AVIO context/8192-byte scratch, length query, complete acquisition into a fresh padded owned packet, EOF check and input/scratch release timed; no prepared input view. " : "Identical resident frozen VP8L input. ")
                     + "Independent owned RGBA8. Complete public managed Decode, output acquisition/disposal; native software webp decode, state reset, ARGB-to-RGBA conversion, owned output allocation/release. Native codec/conversion contexts and packet/frame wrappers reused; every call decodes and converts every pixel. Padded native rows exposed without an extra packing copy. Startup, I/O, IPC, generation/encoding, hashing and validation excluded. Exact original RGBA, alpha and hidden RGB. One existing raster; no quality enumeration. "
                     + (NativeInput ? "This one frozen exact native encoder input exercises adaptive coding; no profile/strategy sweep." : "Only this literal/run VP8L profile is measured.")
+                    + (Cancelable ? " Live cancelable token, never signaled; token/source creation and disposal outside timing. Native has no equivalent cancellation setting; complete decode/conversion/owned output release remain timed." : "")
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
         }
-        finally { native?.Dispose(); state?.Dispose(); ready = false; }
+        finally { native?.Dispose(); cancellationSource?.Dispose(); state?.Dispose(); ready = false; }
     }
 }
 
