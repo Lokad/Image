@@ -6,7 +6,7 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
-/// <summary>Eight-column strips reuse source rows within an admitted stack workspace.</summary>
+/// <summary>Eight-column strips reuse rows for one-axis or two-axis enlargement within an admitted workspace.</summary>
 internal static class EnlargingColumnBicubicResize
 {
     private const int WorkspaceBytes = 4096;
@@ -29,7 +29,8 @@ internal static class EnlargingColumnBicubicResize
         double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context, out bool deferred)
     {
         deferred = false;
-        if (source.BitDepth != 8 || result.Width <= source.Width || result.Height <= source.Height
+        if (source.BitDepth != 8 || result.Width < source.Width || result.Height < source.Height
+            || result.Width == source.Width && result.Height == source.Height
             || tapsX > 5 || tapsY > 5
             || !Avx512F.IsSupported || !Avx2.IsSupported || !Avx.IsSupported || !Sse41.IsSupported
             || context.RemainingWorkingBytes < WorkspaceBytes) return false;

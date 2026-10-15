@@ -284,7 +284,7 @@ alpha scratch, charging its additional work. No marker reaches a returned image.
 Complete work, bounded cancellation and independent owners remain. No heap
 workspace or persistent state is added; existing byte and reduction kernels stay
 unchanged. Other directions, hardware and smaller budgets retain prior paths.
-RGBA8 enlargement on both axes has a separate byte specialization of the
+RGBA8 enlargement on one or both axes has a separate byte specialization of the
 eight-column/five-row cache, with the same 4-KiB admission and 2,416 bytes of
 fixed arrays. Exact byte products, original tap order and byte-depth quotient
 guards use the same `2^-40*16^2` budget. Ordinary/negative-alpha uncertainty

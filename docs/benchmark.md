@@ -164,6 +164,7 @@ timing comparison; compression efficiency parity is not established.
 | [Bicubic width reduction, unchanged height RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL16.md) | 848.00 | 564.36 | 1.503 / 1.510 | 530,858 | Confirmed |
 | [Bicubic width reduction, unchanged height RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL8.md) | 811.19 | 573.66 | 1.414 / 1.425 | 265,502 | Confirmed |
 | [Bicubic height enlargement, unchanged width RGBA8§](../benchmarks/WARM-BICUBIC-VERTICAL-UP8-ROWS.md) | 2,213.62 | 1,730.56 | 1.279 / 1.286 | 1,664,240 | Confirmed |
+| [Bicubic height enlargement, unchanged width RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-VERTICAL-UP8.md) | 3,034.06 | 1,735.79 | 1.748 / 1.764 | 1,280,402 | Confirmed |
 | [Bicubic height enlargement, unchanged width RGBA16§](../benchmarks/WARM-BICUBIC-VERTICAL-UP16-ROWS.md) | 2,131.66 | 1,655.60 | 1.288 / 1.297 | 2,516,605 | Confirmed |
 | [Bicubic height enlargement, unchanged width RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-VERTICAL-UP16.md) | 2,688.28 | 1,661.27 | 1.618 / 1.636 | 2,133,096 | Confirmed |
 | [Crop RGBA8](../benchmarks/WARM-CROPCLONE8-FLIP16.md) | 2.34 | 2.27 | 1.033 / 1.039 | 96 | Confirmed |

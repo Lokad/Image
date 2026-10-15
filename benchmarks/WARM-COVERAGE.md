@@ -14,7 +14,7 @@ round, at most three, with correctness established before timing.
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4 | Distinct restart handling or unusual supported layouts if they dominate work |
 | JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x and 4:2:2 confirmed 1.821x / upper 1.862x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x and 4:2:0 confirmed 1.888x / upper 1.931x; adaptive 4:2:0 RGBA8 quiet repeat 1.977x / upper 2.014x, open | RGBA8 4:2:0 upper bound; grayscale, constrained fallback and other material normalization layouts |
 | WebP | VP8 with alpha decode/encode; opaque VP8 decode quiet repeat 1.983x / upper 2.004x, open; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Opaque VP8 upper bound; other material opaque/alpha alternatives and distinct public boundaries |
-| Resize | Nearest/bilinear downsample and enlargement at both depths; bicubic downsample, enlargement on both axes, both mixed-axis directions and 128×64 / 64×32 wider supports at both depths; horizontal reduction/enlargement and vertical reduction at both depths; vertical enlargement, 32×16 and 16×8 adaptive support at both depths; RGBA8/16 256×129, 128×64, 64×32, 32×16 and 16×8 reduction, plus RGBA8/16 both-axis enlargement and RGBA8/16 width enlargement/height reduction plus RGBA8/16 width reduction/height enlargement and RGBA8/16 8×4 beyond 256 taps plus RGBA8/16 4×2 packed support beyond 304 taps and RGBA8/16 2×2 generated support beyond 544 taps plus RGBA8/16 2×9 bounded row blocks and RGBA8/16 4×9 packed row blocks plus RGBA8/16 8×17 full-coefficient row blocks and RGBA8/16 vertical reduction with unchanged width plus RGBA8/16 horizontal reduction with unchanged height and RGBA16 vertical enlargement with unchanged width, with input+output+4 KiB limit confirmed | Larger/unmatched supports, other tight-memory directions and other materially distinct shapes |
+| Resize | Nearest/bilinear downsample and enlargement at both depths; bicubic downsample, enlargement on both axes, both mixed-axis directions and 128×64 / 64×32 wider supports at both depths; horizontal reduction/enlargement and vertical reduction at both depths; vertical enlargement, 32×16 and 16×8 adaptive support at both depths; RGBA8/16 256×129, 128×64, 64×32, 32×16 and 16×8 reduction, plus RGBA8/16 both-axis enlargement and RGBA8/16 width enlargement/height reduction plus RGBA8/16 width reduction/height enlargement and RGBA8/16 8×4 beyond 256 taps plus RGBA8/16 4×2 packed support beyond 304 taps and RGBA8/16 2×2 generated support beyond 544 taps plus RGBA8/16 2×9 bounded row blocks and RGBA8/16 4×9 packed row blocks plus RGBA8/16 8×17 full-coefficient row blocks and RGBA8/16 vertical reduction with unchanged width plus RGBA8/16 horizontal reduction with unchanged height and RGBA8/16 vertical enlargement with unchanged width, with input+output+4 KiB limit confirmed | Larger/unmatched supports, other tight-memory directions and other materially distinct shapes |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes | Retained live output owners versus released-storage reuse |
 | Public boundaries | Resident encoded span to owned output; complete single operations | Fresh Stream decoding and decode/orient/crop/fit compositions |
 
@@ -721,3 +721,12 @@ The approved native low-alpha RGB2 exception stays scoped to the exact vertical
 RGBA16 geometry. Admission-only replay, registration and test-setup failures
 remain retained and unscored. Stop this pair; other material tight-memory
 boundaries and current-source uniform parity remain open.
+
+The [tight RGBA8 vertical enlargement round](WARM-BICUBIC-TIGHT-VERTICAL-UP8.md)
+reduces an 11.445x gap by84.8%, confirming1.748x / upper1.764x at1,280,402 B/op.
+One strip primitive admits identity axes while retaining its arithmetic, guards,
+2416-byte fixed arrays and deferred exact tiny-alpha replay. Every original byte
+stays exact, including one certified rational blue half. The existing both-axis
+tight enlargement regression mean passes; its three-sample upper2.011x is a
+screen, not new independent certification. No new raster/profile or comparison
+adjustment. Stop this pair; other material coverage and uniform parity stay open.
