@@ -82,6 +82,44 @@ public sealed class EnlargingColumnBicubicResizeTests
     }
 
     [Theory]
+    [InlineData(4095)] [InlineData(4096)]
+    public void IdentityHeightEnlargementKeepsFrozenPixelsAdmissionWorkAndIndependentOwners(int scratch)
+    {
+        using var source = OriginalPixels.Buffer(513, 259, 8);
+        source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
+        var input = OriginalPixels.Bytes(source);
+        const long work = 1027L * 259 * 5 * 5 * 4;
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 1027L * 259 * 4 + scratch, MaxWork = work + 10_000_000 };
+        if (scratch < 4096)
+        {
+            Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 1027, 259, ResizeFilter.Bicubic, limits));
+            Assert.Equal(input, OriginalPixels.Bytes(source));
+            return;
+        }
+        using var first = ImageTransforms.Resize(source, 1027, 259, ResizeFilter.Bicubic, limits);
+        using var second = ImageTransforms.Resize(source, 1027, 259, ResizeFilter.Bicubic, limits);
+        var expected = OriginalPixels.Bytes(first);
+        // The same authored raster and frozen direct output as the horizontal enlargement
+        // benchmark; the independent rational reference is exact on this input.
+        Assert.Equal("ef9e67095fcbc4a0d9a4fb2591577e9141a188e6b6323a44073cfd2ea41b7724",
+            Convert.ToHexString(SHA256.HashData(expected)).ToLowerInvariant());
+        Assert.Equal(expected, OriginalPixels.Bytes(second));
+        first.GetRow8(0)[0] ^= 255;
+        Assert.Equal(expected, OriginalPixels.Bytes(second));
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 1027, 259, ResizeFilter.Bicubic,
+            limits with { MaxWork = work - 1 }));
+        Assert.Throws<OperationCanceledException>(() => ImageTransforms.Resize(source, 1027, 259, ResizeFilter.Bicubic,
+            limits, new CancellationToken(true)));
+        source.GetRow8(258)[512 * 4 + 3] ^= 255;
+        using var changed = ImageTransforms.Resize(source, 1027, 259, ResizeFilter.Bicubic, limits);
+        using var normal = ImageTransforms.Resize(source, 1027, 259, ResizeFilter.Bicubic);
+        Assert.Equal(OriginalPixels.Bytes(normal), OriginalPixels.Bytes(changed));
+        Assert.NotEqual(expected, OriginalPixels.Bytes(changed));
+        Assert.Equal(expected, OriginalPixels.Bytes(second));
+    }
+
+    [Theory]
     [InlineData(1, 7, 1, 15, false)] [InlineData(9, 1, 19, 1, false)]
     [InlineData(9, 7, 9, 15, false)] [InlineData(11, 7, 23, 7, false)]
     [InlineData(9, 7, 9, 15, true)] [InlineData(11, 7, 23, 7, true)]

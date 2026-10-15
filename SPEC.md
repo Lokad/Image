@@ -290,8 +290,10 @@ unchanged. Other directions, hardware and smaller budgets retain prior paths.
 RGBA8 enlargement on one or both axes has a separate byte specialization of the
 eight-column/five-row cache, with the same 4-KiB admission and 2,416 bytes of
 fixed arrays. Exact byte products, original tap order and byte-depth quotient
-guards use the same `2^-40*16^2` budget. Ordinary/negative-alpha uncertainty
-replays locally. Tiny-alpha pixels are marked only in the private unfinished
+guards use the same `2^-40*16^2` budget. The same original-coordinate equality
+check may omit zero-weight vertical rows when height is unchanged. Ordinary or
+negative-alpha uncertainty replays locally. Tiny-alpha pixels are marked only
+in the private unfinished
 output and resolved after a non-inlined core frame returns and releases its
 admission. The marker cannot occur in completed resize pixels because zero alpha
 requires zero RGB. The timed final scan replays original color arithmetic and
