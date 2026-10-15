@@ -488,6 +488,26 @@ public sealed class ZlibFramingTests
     }
 
     [Fact]
+    public void AdmittedPrefixChargesSurviveCancellationWithoutAdmittingNewWork()
+    {
+        using var cancellation = new CancellationTokenSource();
+        var context = new OperationContext(ImageLimits.Default with { MaxWork = 31 }, cancellation.Token);
+        context.Work(5);
+        // A private loop has admitted seventeen units before a later check
+        // observes cancellation. Its cleanup must retain those successful units.
+        cancellation.Cancel();
+        Assert.Throws<OperationCanceledException>(() => cancellation.Token.ThrowIfCancellationRequested());
+        context.CommitAdmittedWork(17);
+        Assert.Equal(9, context.RemainingWork);
+        Assert.Throws<OperationCanceledException>(() => context.Work(1));
+        Assert.Throws<ImageLimitException>(() => context.CommitAdmittedWork(10));
+        Assert.Throws<ImageLimitException>(() => context.CommitAdmittedWork(-1));
+        Assert.Equal(9, context.RemainingWork);
+        context.CommitAdmittedWork(9);
+        Assert.Equal(0, context.RemainingWork);
+    }
+
+    [Fact]
     public void FramingChecksCancellationOnAnAlreadyCreatedContext()
     {
         using var cancellation = new CancellationTokenSource();

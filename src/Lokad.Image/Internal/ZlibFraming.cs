@@ -185,8 +185,10 @@ internal static class ZlibFraming
             // Framing needs only the output count for literal bytes. Walk their
             // RFC 1951 prefixes together, keeping the bit cache in locals rather
             // than re-entering the length/distance dispatcher for each byte.
-            // Cancelable operations retain the original per-symbol checks.
-            if (remainingWork < 0 || maximum <= 0) return 0;
+            // Cancelable operations retain both per-symbol cancellation checks
+            // and exact atomic bit charges in their separate local loop.
+            if (maximum <= 0) return 0;
+            if (remainingWork < 0) return ReadCancelableLiteralRun(lookup, maximum);
             var cached = buffer; var bits = available; var offset = position;
             var budget = remainingWork; long count = 0;
             while (count < maximum)
@@ -205,6 +207,34 @@ internal static class ZlibFraming
                 cached >>= length; bits -= length; budget -= length; count++;
             }
             buffer = cached; available = bits; position = offset; remainingWork = budget;
+            return count;
+        }
+
+        private long ReadCancelableLiteralRun(scoped ReadOnlySpan<ushort> lookup, long maximum)
+        {
+            var cached = buffer; var bits = available; var offset = position;
+            var cancellation = context.Cancellation;
+            var initial = context.RemainingWork; var budget = initial; long count = 0;
+            while (count < maximum)
+            {
+                // Poll at the original Peek/Work boundaries. On cancellation,
+                // a short tail or an insufficient atomic charge, commit the
+                // preceding literals and let the original dispatcher fail.
+                // No parent work changes and no format error throws here.
+                if (cancellation.IsCancellationRequested) break;
+                if (bits < 9)
+                {
+                    if (data.Length - offset < 4) break;
+                    cached |= (ulong)BinaryPrimitives.ReadUInt32LittleEndian(data.Slice(offset, 4)) << bits;
+                    offset += 4; bits += 32;
+                }
+                var entry = lookup[(int)(cached & 511)]; var length = entry & 15;
+                if (length == 0 || entry >> 4 >= 256) break;
+                if (cancellation.IsCancellationRequested || length > budget) break;
+                budget -= length; cached >>= length; bits -= length; count++;
+            }
+            buffer = cached; available = bits; position = offset;
+            context.CommitAdmittedWork(initial - budget);
             return count;
         }
 

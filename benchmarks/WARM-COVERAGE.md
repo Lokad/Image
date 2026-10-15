@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7 and stored Deflate/None, plus exact working-memory boundary and live-cancelable RGBA16; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed | Other material depths/layouts, shorter palettes or distinct public boundaries |
+| PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7 and stored Deflate/None, plus exact working-memory boundary and live-cancelable RGBA16 at default/exact working limits; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed | Other material depths/layouts, shorter palettes or distinct public boundaries |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level6/None; byte RGB/gray/gray-alpha Optimal managed9/native6 with unchanged5% size gate confirmed; RGBA8/16 NoCompression/None confirmed; Fastest RGBA16 size refusal unscored | Other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4; baseline 4:2:0 with row restart markers confirmed 1.823x / upper 1.837x | Other materially different supported layouts/public boundaries |
 | JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x, 4:2:2 confirmed 1.821x / upper 1.862x and 4:2:0 confirmed 1.943x / upper 1.988x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x, 4:2:2 confirmed 1.874x / upper 1.884x and 4:2:0 confirmed 1.888x / upper 1.931x; forward-only RGBA8 4:4:4 confirmed 1.754x / upper 1.765x and 4:2:0 confirmed 1.916x / upper 1.936x and RGBA16 4:2:0 confirmed 1.948x / upper 1.954x; adaptive RGBA8 row restarts confirmed 1.958x / upper 1.973x | Other material fallback layouts, grayscale and distinct public boundaries |
@@ -954,3 +954,12 @@ literal-loop trial is reverted without a longer repeat or full qualification.
 PNG8 None and PNG16 Paeth regression means pass before full both-platform/live/
 same actual package qualification. Stop this pair; constrained cancelable
 fallbacks and other material/current-source coverage remain open.
+
+The [constrained cancelable RGBA16 PNG round](WARM-PNG-TIGHT-CANCELABLE16.md)
+reduces a 2.466x gap by 23.1%, independently confirming 1.897x / upper 1.914x
+at 8,896 B/op. Local literal-bit accounting retains both per-symbol cancellation
+polls, exact atomic work and original error dispatch; completed charges survive
+cancellation. The exact3,254,193-byte limit still excludes optional whole-filter/
+read buffering. Two shared-path regression means pass before full Windows/Linux/
+live/same actual package qualification. Stop this pair; other material public
+boundaries and current-source coverage remain open.

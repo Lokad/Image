@@ -39,6 +39,17 @@ internal sealed class OperationContext
         work += units;
     }
 
+    // Publish charges already admitted by an exclusive loop against its saved
+    // remaining budget. Each charge must check cancellation before consumption.
+    // Cleanup must also publish completed work after cancellation, without a
+    // new cancellation check discarding charges or replacing the original error.
+    public void CommitAdmittedWork(long units)
+    {
+        if (units < 0 || units > Limits.MaxWork - work)
+            throw new ImageLimitException("Computational work limit exceeded.");
+        work += units;
+    }
+
     // An entropy code may admit its full logical bit cost together. When the
     // budget is too tight, its caller retains the original one-bit sequence so
     // partial consumption and format/limit failure precedence stay unchanged.

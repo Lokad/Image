@@ -457,9 +457,12 @@ Selection first ensures that this buffer, framing scratch, the original inflater
 allowance, result, rows and optional read buffer all fit. Complete code trees
 and a valid Adler checksum are required before using those bytes; uncertain
 trees or checksums retain the original BCL row reader without repeating framing
-work. Cancelable framing retains its per-symbol cancellation checks and immediate
-work charges; the private whole-stream checksum checks cancellation every 4096
-bytes. Tight budgets, larger data and Adam7 retain the original path.
+work. Cancelable framing retains both per-symbol cancellation checks and exact
+prefix-bit charges. Eligible literal counting keeps admitted charges locally,
+commits them before returning, and leaves cancellation, insufficient budgets and
+format errors to the original dispatcher. Completed work survives cancellation.
+The private whole-stream checksum checks cancellation every 4096 bytes.
+Tight budgets, larger data and Adam7 retain the original inflation path.
 The original bit/row work, error order, precision and pixel contracts are unchanged.
 Filtered buffers may reuse two released exact-size arrays with a combined 4 MiB
 idle ceiling, separate from pixel and compressed storage. Every delivered byte

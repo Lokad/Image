@@ -43,8 +43,8 @@ Only complete trees and a valid whole-stream Adler check enable direct row reads
 Uncertain trees/checksums release this lease and retain original BCL reads using
 the already completed framing result. No framing work is charged twice. The
 original row checksum, filter/palette/work failure sequence and conservative
-inflater allowance remain. Cancelable framing keeps per-symbol checks and immediate
-work charges, with whole-buffer checksum cancellation every 4096 bytes.
+inflater allowance remain. Cancelable framing keeps both per-symbol checks and
+exact prefix-bit charges, with whole-buffer checksum cancellation every 4096 bytes.
 Tight/large/Adam7 paths are unchanged;
 all optional storage is released before requested EXIF orientation.
 
@@ -92,6 +92,14 @@ Stored blocks build neither lookup. Actual prefix bits keep their exact work cha
 including long-code and unassigned-prefix fallback; cancellation is checked
 for each decoded symbol. Alignment returns complete unread lookahead bytes
 before stored payloads or the checksum.
+
+Cancelable literal counting polls before refill and before admitting each prefix.
+Successful bit charges accumulate against the operation's saved remaining budget;
+no other parent work occurs in this loop. Before returning, it commits those
+charges without checking cancellation again. Cancellation, short tails, short
+budgets and other symbols return to the original dispatcher, which retains their
+errors and atomic admission order. Completed charges are preserved on cancellation;
+no heap workspace or relaxed cancellation interval is introduced.
 
 PNG Adler accumulation uses chunks of at most 4096 bytes. Normalized initial
 sums bound the largest intermediate `b` to 2408052720, below `uint.MaxValue`,

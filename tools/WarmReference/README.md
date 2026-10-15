@@ -1311,3 +1311,10 @@ rejection and exact normal/scalar pixels are checked during setup. Native has no
 equivalent cancellation setting. Complete public decoding, endian conversion and
 owned output release remain timed. See the
 [confirmed result](../../benchmarks/WARM-PNG-CANCELABLE16.md).
+
+`WarmPng.DecodeTightCancelable16` combines the same live token and exact original
+working-memory boundary. Both optional inflation/read buffers remain excluded;
+normal/scalar words, owners, exact admission and already-canceled rejection are
+checked before timing. The original native worker and complete decode/conversion/
+output-release boundary are unchanged. See the
+[constrained cancelable result](../../benchmarks/WARM-PNG-TIGHT-CANCELABLE16.md).

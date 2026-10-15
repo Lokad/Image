@@ -43,8 +43,9 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA8, stored Deflate / None](../benchmarks/WARM-PNG-STORED8-DECODE.md) | 157.30 | 135.76 | 1.159 / 1.168 | 12,976 | Confirmed |
 | [PNG RGBA16, stored Deflate / None](../benchmarks/WARM-PNG-STORED16-DECODE.md) | 472.57 | 309.99 | 1.524 / 1.556 | 1,080,706 | Confirmed |
 | [PNG RGBA16, None](../benchmarks/WARM-PNG-LITERAL-RUN.md) | 5,740.60 | 2,931.33 | 1.958 / 1.968 | 2,032,864 | Confirmed |
-| [PNG RGBA16, None / exact working limit](../benchmarks/WARM-PNG-TIGHT16.md) | 5,290.75 | 2,885.39 | 1.834 / 1.852 | 8,896 | Confirmed |
-| [PNG RGBA16, None / live cancelable token](../benchmarks/WARM-PNG-CANCELABLE16.md) | 5,454.37 | 2,876.96 | 1.896 / 1.909 | 8,552 | Confirmed |
+| [PNG RGBA16, None / exact working limit](../benchmarks/WARM-PNG-TIGHT-CANCELABLE16.md) | 5,478.54 | 3,023.38 | 1.812 / 4.109 | 8,896 | Regression screen; prior confirmed |
+| [PNG RGBA16, None / live cancelable token](../benchmarks/WARM-PNG-TIGHT-CANCELABLE16.md) | 5,498.39 | 2,880.23 | 1.909 / 2.010 | 8,552 | Regression screen; prior confirmed |
+| [PNG RGBA16, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-TIGHT-CANCELABLE16.md) | 5,459.12 | 2,877.85 | 1.897 / 1.914 | 8,896 | Confirmed |
 | [PNG RGBA8, Paeth](../benchmarks/WARM-PAETH-FOUR-CHANNEL.md) | 5,099.55 | 2,925.24 | 1.743 / 1.842 | 881,892 | Confirmed |
 | [PNG RGBA8, Up](../benchmarks/WARM-PNG-UP8-BASELINE.md) | 2,644.01 | 1,505.93 | 1.756 / 1.764 | 12,976 | Confirmed |
 | [PNG RGBA8, Sub](../benchmarks/WARM-PNG-SUB8-BASELINE.md) | 1,209.60 | 682.52 | 1.772 / 1.780 | 12,976 | Confirmed |
