@@ -460,7 +460,7 @@ trees or checksums retain the original BCL row reader without repeating framing
 work. Cancelable framing retains both per-symbol cancellation checks and exact
 prefix-bit charges. Inside each compressed block, the reader admits exact bit
 charges against a saved remaining budget and publishes completed work on every
-exit without a new cancellation poll. Cancelable counting uses a separate loop
+exit without a new cancellation poll. Count-only framing uses a separate loop
 from materialized-output dispatch, retaining the same literal, length, distance,
 truncation and atomic-charge checks. Completed work survives cancellation.
 The private whole-stream checksum checks cancellation every 4096 bytes.

@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16 all five filters and stored Deflate/None; RGB8 Paeth confirmed1.204x / upper1.214x; RGBA16 Adam7 and packed gray1 Adam7 confirmed1.018x / upper1.032x, plus exact working-memory boundary at both depths (RGBA8 prior confirmed with current regression), live-cancelable RGBA8 at exact limit confirmed1.867x / upper1.873x and RGBA16 at default/exact working limits; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed | Other material depths/layouts, shorter palettes or distinct public boundaries |
+| PNG decode | RGBA8/16 all five filters and stored Deflate/None; RGB8 Paeth confirmed1.204x / upper1.214x; RGBA16 Adam7 and packed gray1 Adam7 confirmed1.018x / upper1.032x, plus exact working-memory boundary at both depths (RGBA8 confirmed1.821x / upper1.950x), live-cancelable RGBA8 at exact limit confirmed1.867x / upper1.873x and RGBA16 default/exact limit confirmed1.573x / upper1.583x and1.834x / upper1.852x; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed | Other material depths/layouts, shorter palettes or distinct public boundaries |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level6/None; byte RGB/gray/gray-alpha Optimal managed9/native6 with unchanged5% size gate confirmed; RGBA8/16 NoCompression/None confirmed; Fastest RGBA8 managed2/native1 stock output confirmed 0.707x / upper 0.712x; Fastest RGBA16 managed2/native1 stock output confirmed 0.732x / upper 0.735x and live cancelable output confirmed 0.731x / upper 0.747x, forward-only output confirmed 0.771x / upper 0.805x with streaming adaptive compression | Other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4; baseline 4:2:0 with row restart markers confirmed 1.823x / upper 1.837x | Other materially different supported layouts/public boundaries |
 | JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x, 4:2:2 confirmed 1.821x / upper 1.862x and 4:2:0 confirmed 1.943x / upper 1.988x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x, 4:2:2 confirmed 1.874x / upper 1.884x and 4:2:0 confirmed 1.888x / upper 1.931x; live-cancelable RGBA16 4:2:0 confirmed 1.651x / upper 1.663x and RGBA8 4:4:4 prior confirmed with current regression; forward-only RGBA8 4:4:4 confirmed 1.754x / upper 1.765x and 4:2:0 confirmed 1.916x / upper 1.936x and RGBA16 4:2:0 confirmed 1.948x / upper 1.954x; adaptive RGBA8 row restarts confirmed 1.958x / upper 1.973x | Other material fallback layouts, grayscale and distinct public boundaries |
@@ -1107,3 +1107,12 @@ rejected at2.153x. Both shared regression means pass before full3,374-test-per-O
 live/same actual package qualification. All twelve final actuals are retained and
 both quiet guards pass. Stop this fixed pair; word/current-source confirmation,
 the exact-limit regression's short upper and other material boundaries remain open.
+
+The [shared counting round](WARM-PNG-COUNTING.md) closes the RGBA8 exact-limit
+upper of2.083x at1.821x / upper1.950x, with unchanged4,800 managed B/op. The same
+counting loop now covers both token policies. RGBA16 live cancellation independently
+confirms1.834x / upper1.852x at the exact limit and1.573x / upper1.583x at the default
+budget, with8,896/8,552 B/op. Exact samples, work, cancellation and admission remain
+unchanged. All regression means pass before full3,374-test-per-OS/live/same actual
+package qualification; all three pairs receive independent12 on the frozen build.
+Stop these confirmed pairs; remaining material and unmatched coverage stays open.

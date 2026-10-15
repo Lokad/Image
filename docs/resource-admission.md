@@ -80,7 +80,7 @@ inflater allowance remain. Cancelable framing keeps both per-symbol checks and
 exact prefix-bit charges, with whole-buffer checksum cancellation every 4096 bytes.
 The compressed-block reader keeps its remaining work locally and publishes all
 completed charges on every exit without a new cancellation check. A separate
-cancelable counting loop retains the same token and failure boundaries without
+counting loop for cancelable and noncancelable inputs retains the same token and failure boundaries without
 materialized-output dispatch. Tight/large/Adam7 retain their original BCL inflation
 and storage paths;
 all optional storage is released before requested EXIF orientation.

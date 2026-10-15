@@ -95,9 +95,9 @@ internal static class ZlibFraming
                 reader.BeginLocalWork();
                 try
                 {
-                    if (!materialize && context.Cancellation.CanBeCanceled)
+                    if (!materialize)
                     {
-                        output = CountCancelableBlock(ref reader, literals, distances, literalLookup, distanceLookup,
+                        output = CountBlock(ref reader, literals, distances, literalLookup, distanceLookup,
                             output, expectedBytes, window);
                         continue;
                     }
@@ -163,7 +163,7 @@ internal static class ZlibFraming
         finally { context.Release(4096); }
     }
 
-    private static long CountCancelableBlock(scoped ref Bits reader, scoped Huffman literals, scoped Huffman distances,
+    private static long CountBlock(scoped ref Bits reader, scoped Huffman literals, scoped Huffman distances,
         scoped ReadOnlySpan<ushort> literalLookup, scoped ReadOnlySpan<ushort> distanceLookup,
         long output, long expectedBytes, int window)
     {

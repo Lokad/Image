@@ -1317,6 +1317,12 @@ worker. The token stays unsignaled during timing; pre-canceled rejection/token
 identity and one-byte-below admission are checked outside it. See the
 [cancelable byte result](../../benchmarks/WARM-PNG-TIGHT-CANCELABLE8.md).
 
+The [shared counting round](../../benchmarks/WARM-PNG-COUNTING.md) reuses
+`DecodeTight8`, `DecodeTightCancelable16` and `DecodeCancelable16` on one frozen
+production/harness build. All three receive independent twelve-actual confirmation;
+reuse existing short screens only when their actual production/harness match.
+Fixtures, native worker, exact limits and token policies remain unchanged.
+
 Streaming RGBA16 Fastest uses `-WarmFamily Png -WarmCases EncodeFast16` or
 `EncodeFastCancelable16`. Managed fast adaptive backend2/native backend1 are
 explicit; unchanged5% IDAT-size and exact full-word/alpha/hidden-RGB gates apply.
