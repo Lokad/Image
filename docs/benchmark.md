@@ -59,6 +59,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA16, Average](../benchmarks/WARM-PNG-AVERAGE16.md) | 5,894.17 | 4,384.37 | 1.344 / 1.357 | 8,552 | Confirmed |
 | [PNG RGBA16, Paeth](../benchmarks/WARM-PNG-SUB16.md) | 5,749.92 | 5,769.74 | 0.997 / 1.264 | 8,552 | Regression screen; prior confirmed |
 | [PNG RGB8, Paeth](../benchmarks/WARM-PNG-RGB8-PAETH.md) | 3,140.91 | 2,608.88 | 1.204 / 1.214 | 3,432 | Confirmed |
+| [PNG gray8, Paeth](../benchmarks/WARM-PNG-GRAY8-PAETH.md) | 1,038.34 | 1,029.60 | 1.008 / 1.014 | 1,384 | Confirmed |
 | [PNG RGBA16, Adam7](../benchmarks/WARM-PNG-SCATTER.md) | 6,567.82 | 3,984.54 | 1.648 / 1.700 | 2,024,532 | Confirmed |
 | [PNG gray1 → RGBA8, Adam7](../benchmarks/WARM-PNG-GRAY1-ADAM7.md) | 1,265.54 | 1,243.33 | 1.018 / 1.032 | 1,424 | Confirmed |
 | [PNG palette8 + tRNS, Adam7](../benchmarks/WARM-PNG-PALETTE8-ADAM7.md) | 1,838.89 | 1,410.80 | 1.303 / 2.651 | 4,960 | Screen only; native confirmation unstable |
@@ -291,18 +292,16 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted production round lowers byte-indexed PNG decoding with a
-sixteen-entry palette from **2.340x** to **1.317x / upper 1.327x**, with **43.9%
-less managed time** and unchanged **1,496 B/op**. Channel-vector lookup for
-palettes up to sixteen entries preserves exact samples, first-invalid prefixes,
-partial alpha/hidden RGB, cancellation/work/admission and scalar behavior without
-padded palette storage. One profile identifies 68.6% in expansion. All twelve
-actuals and quiet guards pass on the same candidate core/harness/native worker.
-Full-palette and partial-alpha regression means pass before **3,457 Release tests
-per OS**, including **898 live comparisons**, plus the consumer and all three
-examples through the **same actual Release package** on Windows/Linux. The native
-binary is reused; one successful harness build and one production candidate build
-suffice. No whole-library method audit or repeated full/package proof is performed.
+The latest accepted coverage round confirms grayscale8 Paeth decoding at
+**1.008x / upper 1.014x**, with exact projected RGB/opaque alpha and **1,384 B/op**.
+The existing original red-channel projection is reused; every row uses Paeth.
+All twelve actuals and quiet guards pass on the same core/harness/native worker.
+One harness build suffices. Production is unchanged: existing **3,457 Release
+tests per OS**, including **898 live comparisons**, and the same actual Release
+package's consumer plus all three examples on Windows/Linux are reused. No
+production/native rebuild, full suite, package proof, method audit or profile
+is repeated. The preceding short-palette production round retains its independent
+1.317x / upper1.327x confirmation and 43.9% managed-time reduction.
 
 The palette8/tRNS Adam7 coverage check screens at **1.303x**, with
 **4,960 B/op**, but remains **unconfirmed**. Its independent native baseline slows
