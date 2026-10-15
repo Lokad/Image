@@ -60,6 +60,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA16, Paeth](../benchmarks/WARM-PNG-SUB16.md) | 5,749.92 | 5,769.74 | 0.997 / 1.264 | 8,552 | Regression screen; prior confirmed |
 | [PNG RGB8, Paeth](../benchmarks/WARM-PNG-RGB8-PAETH.md) | 3,140.91 | 2,608.88 | 1.204 / 1.214 | 3,432 | Confirmed |
 | [PNG gray8, Paeth](../benchmarks/WARM-PNG-GRAY8-PAETH.md) | 1,038.34 | 1,029.60 | 1.008 / 1.014 | 1,384 | Confirmed |
+| [PNG gray-alpha8, Paeth](../benchmarks/WARM-PNG-GRAY-ALPHA8-PAETH.md) | 2,051.11 | 2,016.66 | 1.017 / 1.068 | 2,408 | Confirmed |
 | [PNG RGBA16, Adam7](../benchmarks/WARM-PNG-SCATTER.md) | 6,567.82 | 3,984.54 | 1.648 / 1.700 | 2,024,532 | Confirmed |
 | [PNG gray1 → RGBA8, Adam7](../benchmarks/WARM-PNG-GRAY1-ADAM7.md) | 1,265.54 | 1,243.33 | 1.018 / 1.032 | 1,424 | Confirmed |
 | [PNG palette8 + tRNS, Adam7](../benchmarks/WARM-PNG-PALETTE8-ADAM7.md) | 1,838.89 | 1,410.80 | 1.303 / 2.651 | 4,960 | Screen only; native confirmation unstable |
@@ -292,15 +293,16 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted coverage round confirms grayscale8 Paeth decoding at
-**1.008x / upper 1.014x**, with exact projected RGB/opaque alpha and **1,384 B/op**.
-The existing original red-channel projection is reused; every row uses Paeth.
+The latest accepted coverage round confirms grayscale-alpha8 Paeth decoding at
+**1.017x / upper 1.068x**, with exact alpha/hidden RGB and **2,408 B/op**.
+The original red/alpha projection is reused; every row uses Paeth.
 All twelve actuals and quiet guards pass on the same core/harness/native worker.
-One harness build suffices. Production is unchanged: existing **3,457 Release
-tests per OS**, including **898 live comparisons**, and the same actual Release
+An untimed validator refusal was corrected before measurement; two harness
+builds were necessary. Production is unchanged: existing **3,457 Release tests
+per OS**, including **898 live comparisons**, and the same actual Release
 package's consumer plus all three examples on Windows/Linux are reused. No
 production/native rebuild, full suite, package proof, method audit or profile
-is repeated. The preceding short-palette production round retains its independent
+is repeated. The short-palette production round retains its independent
 1.317x / upper1.327x confirmation and 43.9% managed-time reduction.
 
 The palette8/tRNS Adam7 coverage check screens at **1.303x**, with
