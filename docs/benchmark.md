@@ -111,6 +111,7 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA16, Fastest managed2/native1 / live cancelable token](../benchmarks/WARM-PNG-FAST2.md) | 12,932.71 | 17,700.33 | 0.731 / 0.747 | 2,103,647 | Confirmed |
 | [PNG RGBA16, Fastest managed2/native1 / forward-only output](../benchmarks/WARM-PNG-FAST-FORWARD16.md) | 13,628.70 | 17,677.29 | 0.771 / 0.805 | 2,103,770 | Confirmed |
 | [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG-FAST2.md) | 14,680.33 | 20,089.60 | 0.731 / 0.887 | 2,103,624 | Regression screen; prior confirmed |
+| [PNG RGBA16, SmallestSize managed9/native9 / None](../benchmarks/WARM-PNG-SMALLEST16.md) | 19,689.04 | 20,296.44 | 0.970 / 0.985 | 2,103,522 | Confirmed |
 | [PNG RGB8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 10,402.09 | 9,514.15 | 1.093 / 1.107 | 527,098 | Confirmed |
 | [PNG RGB16, level 6 / None](../benchmarks/WARM-PNG-RGB16-ENCODE.md) | 13,121.10 | 15,174.40 | 0.865 / 0.871 | 2,102,765 | Confirmed |
 | [PNG gray8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 3,540.72 | 1,964.99 | 1.802 / 1.818 | 263,664 | Confirmed |
@@ -285,18 +286,17 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round confirms ordinary native-input JPEG444 at **1.715x /
-upper 1.733x**, reducing managed time **18.6%**, at **2,664,373 B/op**. Safe local
-ordinary-AC runs preserve exact work, reader/partial-failure state and registered
-managed pixels. Native normal/scalar agreement remains RGB max3/RMSE0.227 within
-the unchanged max4/RMSE1.5 gate, with exact opaque alpha. The same build confirms
-live-token JPEG444 **1.770x / upper1.797x** and progressive JPEG444 **1.954x /
-upper1.960x**, with **2,664,373 / 2,682,364 B/op**. All twelve actuals and both
-guards are retained for every pair. Regression means pass before full **3,432
-Release tests per OS**, including **898 live comparisons**, and consumer plus all
-three examples through the same actual package on Windows/Linux. Only the SPEC
-description changes after measurement, before packaging; production inputs remain
-identical. Original above-two bounds and profile evidence stay linked.
+The latest accepted round confirms RGBA16 PNG SmallestSize at **0.970x /
+upper 0.985x**, with **2,103,522 B/op**. Managed/native numeric levels9/9 preserve
+all words/alpha/hidden RGB. IDAT payloads960,425/960,316 differ0.011%, within the
+unchanged5% gate. Full packing/conversion/encoding/output release is timed. The
+final screen and independent repeat share an immutable core/harness; all twelve
+actuals and both guards are retained. A worker-schema compatibility fix also
+passes exact-output smoke for the existing Fastest and stored modes; a rejected
+stale-child smoke remains unscored. Production is unchanged: existing **3,432
+Release tests per OS**, including **898 live comparisons**, and the same actual
+package's consumer plus all three examples on Windows/Linux are reused. No
+production rebuild, full suite, package proof, method audit or profile is repeated.
 
 PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples
 and the unchanged 5% IDAT-size gate; earlier level6/level6 refusals remain unscored.

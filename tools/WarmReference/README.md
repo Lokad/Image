@@ -1388,6 +1388,16 @@ rows. Exact pixels and one-byte-below rejection are checked before timing. The
 optional whole-filter/8 KiB output buffers cannot fit; native complete decode and
 word conversion remain timed, with no native caller-admission setting.
 
+`WarmPng.EncodeSmallest16` uses managed SmallestSize/FFmpeg numeric level9, the
+original RGBA16 raster and filter None. The scoped `png-smallest16-encode`
+operation includes full endian conversion, owned packet acquisition and release;
+exact words/alpha/hidden RGB and the unchanged 5% IDAT-size gate precede timing.
+See the [confirmed result](../../benchmarks/WARM-PNG-SMALLEST16.md).
+New generic-worker readiness fields apply only to that worker; separate Fastest/
+stored workers keep their existing schemas. When disabling project-reference
+builds, preload and verify current production/harness DLLs in **every** cached
+child, including WarmDry. A stale child is not a valid smoke or performance proof.
+
 `WarmPng.DecodeGray1Transparency` reuses the binary gray projection with tRNS key1.
 The existing SPEC correction runs FFmpeg `colorkey=white:similarity=0.01:blend=0`
 after full MONOBLACK-to-owned-RGBA conversion. Conversion, buffer transfer,
