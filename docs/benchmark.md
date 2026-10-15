@@ -97,8 +97,9 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG-FAST16-RECODE.md) | 5,439.91 | 17,231.30 | 0.316 / 0.353 | 527,627 | Regression screen; prior confirmed |
 | [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED8-ENCODE.md) | 357.17 | 189.72 | 1.883 / 1.933 | 2,102,472 | Confirmed |
 | [PNG RGBA16, NoCompression / None](../benchmarks/WARM-PNG-STORED16-ENCODE.md) | 504.25 | 405.59 | 1.243 / 1.289 | 4,203,541 | Confirmed |
-| [PNG RGBA16, Fastest / level1 / None](../benchmarks/WARM-PNG-FAST16-RECODE.md) | 13,911.38 | 17,666.27 | 0.787 / 0.791 | 5,478,765 | Confirmed |
-| [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG-FAST16-RECODE.md) | 14,704.00 | 20,081.83 | 0.732 / 0.769 | 2,103,624 | Regression screen; prior confirmed |
+| [PNG RGBA16, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-FAST2.md) | 12,927.95 | 17,660.77 | 0.732 / 0.735 | 2,103,738 | Confirmed |
+| [PNG RGBA16, Fastest managed2/native1 / live cancelable token](../benchmarks/WARM-PNG-FAST2.md) | 12,932.71 | 17,700.33 | 0.731 / 0.747 | 2,103,647 | Confirmed |
+| [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG-FAST2.md) | 14,680.33 | 20,089.60 | 0.731 / 0.887 | 2,103,624 | Regression screen; prior confirmed |
 | [PNG RGB8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 10,402.09 | 9,514.15 | 1.093 / 1.107 | 527,098 | Confirmed |
 | [PNG RGB16, level 6 / None](../benchmarks/WARM-PNG-RGB16-ENCODE.md) | 13,121.10 | 15,174.40 | 0.865 / 0.871 | 2,102,765 | Confirmed |
 | [PNG gray8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 3,540.72 | 1,964.99 | 1.802 / 1.818 | 263,664 | Confirmed |
@@ -273,18 +274,17 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round confirms complete PNG16 Average decoding at
-**1.344x / upper 1.357x**, with **8,552 B/op** and exact words/alpha/hidden RGB.
-Production and the native worker are unchanged. Existing **3,383** Release tests
-per OS, including **898** live comparisons, and the same actual package's consumer
-plus all three examples are reused. No production rebuild, profile or full
-qualification repeat is needed. The prior PNG16 Sub improvement remains confirmed
-at0.482x / upper0.493x; byte-Sub and word-Paeth retain their current regression
-screens and prior confirmations. Its linked report preserves the initial Windows
-allocation failure and subsequent focused/full stable-JIT passes.
-PNG16 Fastest remains confirmed at0.787x / upper0.791x after safe entropy recoding;
-its caller/cancelable/constrained policies need separate coverage. Ordinary PNG8/16
-rows show current short regression screens and retain prior confirmations.
+The latest accepted round confirms streaming PNG16 Fastest encoding at
+**0.731x / upper 0.747x** with a live cancelable token and **0.732x / upper 0.735x**
+on stock output, at **2,103,647 / 2,103,738 B/op**. Managed BCL level2/native level1
+are explicit. IDAT is962,820 versus965,318 bytes, within the unchanged5% gate;
+pixels/alpha/hidden RGB remain exact. Whole-payload staging and the independent
+recoder are removed. Both OSes pass **3,373** Release tests, including **898** live
+comparisons, and the same actual package's consumer plus all three examples.
+Forward-only caller timing remains open; stream/resource correctness alone is
+not a separate timing certificate. Ordinary PNG8/16 retain their current
+regression screens and prior confirmations. Historical refusals/recoder results
+and preparation failures remain linked and unscored where originally unscored.
 
 PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples
 and the unchanged 5% IDAT-size gate; earlier level6/level6 refusals remain unscored.

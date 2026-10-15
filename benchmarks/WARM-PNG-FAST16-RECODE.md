@@ -1,5 +1,9 @@
 # PNG RGBA16 Fastest entropy recoding
 
+Historical implementation, retired by the subsequently qualified
+[streaming fast-backend round](WARM-PNG-FAST2.md). Its original results below remain
+valid for the retained source and workload; they are not current backend figures.
+
 The complete warm RGBA16 Fastest encode is independently confirmed at **0.787x
 FFmpeg / conservative upper 0.791x**, with **5,478,765 managed B/op**. The original
 size-gate refusal is resolved: IDAT decreases from 1,023,460 to **974,122 bytes**,

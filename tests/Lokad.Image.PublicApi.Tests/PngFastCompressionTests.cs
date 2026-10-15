@@ -4,18 +4,17 @@ using Lokad.Image.Tooling;
 
 namespace Lokad.Image.PublicApi.Tests;
 
-public sealed class PngAdaptiveEntropyTests
+public sealed class PngFastCompressionTests
 {
     [Theory]
     [InlineData(8)] [InlineData(16)]
-    public void AdaptiveEncodingKeepsEverySampleAndFastClass(int depth)
+    public void FastSearchKeepsEverySampleAcrossLiveTokenAndStockOutput(int depth)
     {
         using var source = OriginalPixels.Buffer(513, 259, depth); var original = OriginalPixels.Bytes(source);
         using var live = new CancellationTokenSource();
         var legacy = Encode(source, token: live.Token); var candidate = Encode(source);
-        Assert.True(candidate.Length <= legacy.Length);
-        if (depth == 16) Assert.True(candidate.Length < legacy.Length);
-        Assert.Equal(0, Idat(candidate)[1] >> 6);
+        Assert.Equal(legacy, candidate);
+        Assert.Equal(1, Idat(candidate)[1] >> 6);
         using var first = ImageCodec.Decode(candidate); using var second = ImageCodec.Decode(candidate);
         Assert.Equal(original, OriginalPixels.Bytes(first)); Assert.Equal(original, OriginalPixels.Bytes(second));
         if (depth == 8) first.GetRow8(0)[0] ^= 255;
@@ -24,17 +23,15 @@ public sealed class PngAdaptiveEntropyTests
     }
 
     [Fact]
-    public void ExactOptionalMemoryAndWorkBoundariesSelectWithoutChangingLegacyAdmission()
+    public void ExactBaseMemoryAndRowWorkAdmitTheSamePacketWithoutOptionalWorkspace()
     {
         using var source = OriginalPixels.Buffer(513, 259, 16); using var live = new CancellationTokenSource();
         var legacy = Encode(source, token: live.Token); var adapted = Encode(source);
-        var rowBytes = 513 * 8; var filtered = (rowBytes + 1L) * 259; var capacity = filtered * 2 + 65536;
+        var rowBytes = 513 * 8;
         var oldPeak = 513L * 259 * 8 + rowBytes + 65536 + 1024 * 1024;
-        var peak = oldPeak + 2 * capacity + 32768; var work = rowBytes * 259L * 8 + capacity * 16 + 131072;
-        Assert.Equal(adapted, Encode(source, ImageLimits.Default with { MaxWorkingBytes = peak, MaxWork = work }));
-        Assert.Equal(legacy, Encode(source, ImageLimits.Default with { MaxWorkingBytes = peak - 1 }));
-        Assert.Equal(legacy, Encode(source, ImageLimits.Default with { MaxWork = work - 1 }));
-        Assert.Equal(legacy, Encode(source, ImageLimits.Default with { MaxWorkingBytes = oldPeak }));
+        var work = rowBytes * 259L * 8;
+        Assert.Equal(legacy, adapted);
+        Assert.Equal(adapted, Encode(source, ImageLimits.Default with { MaxWorkingBytes = oldPeak, MaxWork = work }));
         using var rejected = new MemoryStream();
         Assert.Throws<ImageLimitException>(() => ImageCodec.EncodePng(source, rejected, Options(ImageLimits.Default with { MaxWorkingBytes = oldPeak - 1 })));
         Assert.Equal(0, rejected.Length);
@@ -79,6 +76,26 @@ public sealed class PngAdaptiveEntropyTests
         Assert.Equal(reference.Writes, actual.Writes); Assert.Equal(reference.ToArray(), actual.ToArray());
     }
 
+    [Fact]
+    public void ForwardOnlyOutputUsesTheSamePacketAndLeavesCallerOpen()
+    {
+        using var source = OriginalPixels.Buffer(513, 259, 16); var expected = Encode(source);
+        using var output = new MemoryStream(); using var forward = new ForwardOnlyOutput(output);
+        using var live = new CancellationTokenSource();
+        ImageCodec.EncodePng(source, forward, Options(), live.Token);
+        Assert.Equal(expected, output.ToArray()); Assert.True(output.CanWrite);
+    }
+
+    [Fact]
+    public void CancellationFromAnOutputCallbackPreservesTheTokenAndPublishedPrefix()
+    {
+        using var source = OriginalPixels.Buffer(513, 259, 16); var expected = Encode(source);
+        using var cancellation = new CancellationTokenSource(); using var output = new CancelingOutput(cancellation);
+        var error = Assert.Throws<OperationCanceledException>(() => ImageCodec.EncodePng(source, output, Options(), cancellation.Token));
+        Assert.Equal(cancellation.Token, error.CancellationToken); Assert.Equal(10, output.Writes);
+        Assert.Equal(expected.AsSpan(0, checked((int)output.Length)).ToArray(), output.ToArray()); Assert.True(output.CanWrite);
+    }
+
     private static PngEncodeOptions Options(ImageLimits? limits = null) => new() { Compression = CompressionLevel.Fastest, Limits = limits ?? ImageLimits.Default };
     private static byte[] Encode(ImageBuffer source, ImageLimits? limits = null, CancellationToken token = default)
     {
@@ -104,5 +121,27 @@ public sealed class PngAdaptiveEntropyTests
             Writes.Add(data.Length); base.Write(data);
             if (Writes.Count == 10) throw Failure;
         }
+    }
+    private sealed class CancelingOutput(CancellationTokenSource cancellation) : MemoryStream
+    {
+        internal int Writes;
+        public override void Write(ReadOnlySpan<byte> data)
+        {
+            base.Write(data); if (++Writes == 10) cancellation.Cancel();
+        }
+    }
+    private sealed class ForwardOnlyOutput(MemoryStream target) : Stream
+    {
+        public override bool CanRead => false;
+        public override bool CanSeek => false;
+        public override bool CanWrite => true;
+        public override long Length => throw new NotSupportedException();
+        public override long Position { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+        public override void Write(ReadOnlySpan<byte> data) => target.Write(data);
+        public override void Write(byte[] data, int offset, int count) => target.Write(data, offset, count);
+        public override void Flush() => target.Flush();
+        public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
     }
 }

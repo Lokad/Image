@@ -1286,6 +1286,14 @@ the unchanged PNG worker. Original authoring subtracts floor((left+up)/2) using
 full big-endian words and an eight-byte pixel stride; sums retain nine bits.
 See the [word Average result](../../benchmarks/WARM-PNG-AVERAGE16.md).
 
+Streaming RGBA16 Fastest uses `-WarmFamily Png -WarmCases EncodeFast16` or
+`EncodeFastCancelable16`. Managed fast adaptive backend2/native backend1 are
+explicit; unchanged5% IDAT-size and exact full-word/alpha/hidden-RGB gates apply.
+Reuse the original word raster and unchanged fast16 worker. Native conversion
+and managed row packing/output work repeat every operation. The live token is
+never signaled and setup stays outside timing. See the
+[streaming result](../../benchmarks/WARM-PNG-FAST2.md).
+
 Forward-only JPEG444 uses `LOKAD_IMAGE_JPEG_ENTROPY=fixed-geometric-v1`,
 `--prepare-warm-jpeg444-stream 0`, then
 `-WarmFamily Jpeg -WarmCases Encode444Stream8`. The existing JPEG native worker

@@ -8,7 +8,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray4, DecodePalette4, DecodePalette2, DecodePalette1, DecodeGray2, DecodeUp8, DecodeSub8, DecodeAverage8, EncodeRgb8, EncodeRgb16, EncodeGray8, EncodeGray16, EncodeGrayAlpha8, EncodeGrayAlpha16, EncodeNoCompression8, DecodeNoCompression8, DecodePalette8PartialAlpha, DecodeGray8Transparency, DecodeGray16Transparency, DecodeRgb8Transparency, DecodeRgb16Transparency, EncodeFast16, EncodeNoCompression16, DecodeNoCompression16, DecodeTight16, DecodeCancelable16, DecodeTightCancelable16, DecodeSub16, DecodeAverage16 }
+public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray4, DecodePalette4, DecodePalette2, DecodePalette1, DecodeGray2, DecodeUp8, DecodeSub8, DecodeAverage8, EncodeRgb8, EncodeRgb16, EncodeGray8, EncodeGray16, EncodeGrayAlpha8, EncodeGrayAlpha16, EncodeNoCompression8, DecodeNoCompression8, DecodePalette8PartialAlpha, DecodeGray8Transparency, DecodeGray16Transparency, DecodeRgb8Transparency, DecodeRgb16Transparency, EncodeFast16, EncodeNoCompression16, DecodeNoCompression16, DecodeTight16, DecodeCancelable16, DecodeTightCancelable16, DecodeSub16, DecodeAverage16, EncodeFastCancelable16 }
 
 [MemoryDiagnoser]
 public class WarmPng
@@ -35,12 +35,12 @@ public class WarmPng
         var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
         var result = selection is null ? new[] { WarmPngCase.Decode8 } : selection.Split(',')
             .Select(value => Enum.TryParse<WarmPngCase>(value, out var parsed) && Enum.IsDefined(parsed)
-                ? parsed : throw new ArgumentException("Choose DecodeAverage16, DecodeSub16, DecodeTightCancelable16, DecodeCancelable16, DecodeTight16, DecodeNoCompression16, EncodeNoCompression16, EncodeFast16, Encode8, Encode16, EncodeRgb8, EncodeRgb16, EncodeGray8, EncodeGray16, EncodeGrayAlpha8, EncodeGrayAlpha16, EncodeNoCompression8, DecodeNoCompression8, DecodePalette8PartialAlpha, DecodeGray8Transparency, DecodeGray16Transparency, DecodeRgb8Transparency, DecodeRgb16Transparency, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeUp8, DecodeSub8, DecodeAverage8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray2, DecodeGray4, DecodePalette1, DecodePalette2 or DecodePalette4.")).ToArray();
+                ? parsed : throw new ArgumentException("Choose EncodeFastCancelable16, DecodeAverage16, DecodeSub16, DecodeTightCancelable16, DecodeCancelable16, DecodeTight16, DecodeNoCompression16, EncodeNoCompression16, EncodeFast16, Encode8, Encode16, EncodeRgb8, EncodeRgb16, EncodeGray8, EncodeGray16, EncodeGrayAlpha8, EncodeGrayAlpha16, EncodeNoCompression8, DecodeNoCompression8, DecodePalette8PartialAlpha, DecodeGray8Transparency, DecodeGray16Transparency, DecodeRgb8Transparency, DecodeRgb16Transparency, Decode8, Decode16, DecodeAdam7_16, DecodePaeth16, DecodePaeth8, DecodeUp8, DecodeSub8, DecodeAverage8, DecodeRgb16, DecodeGray8, DecodeGrayAlpha8, DecodeRgb8, DecodeGray16, DecodeGrayAlpha16, DecodePalette8, DecodeGray1, DecodeGray2, DecodeGray4, DecodePalette1, DecodePalette2 or DecodePalette4.")).ToArray();
         if (result.Length is < 1 or > 3 || result.Distinct().Count() != result.Length)
             throw new ArgumentException("Choose one to three distinct PNG cases.");
         return result;
     }
-    private int Depth => Case is WarmPngCase.DecodeAverage16 or WarmPngCase.DecodeSub16 or WarmPngCase.DecodeTightCancelable16 or WarmPngCase.DecodeCancelable16 or WarmPngCase.DecodeTight16 or WarmPngCase.DecodeNoCompression16 or WarmPngCase.EncodeNoCompression16 or WarmPngCase.EncodeFast16 or WarmPngCase.DecodeRgb16Transparency or WarmPngCase.DecodeGray16Transparency or WarmPngCase.EncodeGrayAlpha16 or WarmPngCase.EncodeGray16 or WarmPngCase.Decode16 or WarmPngCase.Encode16 or WarmPngCase.EncodeRgb16 or WarmPngCase.DecodeAdam7_16 or WarmPngCase.DecodePaeth16 or WarmPngCase.DecodeRgb16 or WarmPngCase.DecodeGray16 or WarmPngCase.DecodeGrayAlpha16 ? 16 : 8;
+    private int Depth => Case is WarmPngCase.EncodeFastCancelable16 or WarmPngCase.DecodeAverage16 or WarmPngCase.DecodeSub16 or WarmPngCase.DecodeTightCancelable16 or WarmPngCase.DecodeCancelable16 or WarmPngCase.DecodeTight16 or WarmPngCase.DecodeNoCompression16 or WarmPngCase.EncodeNoCompression16 or WarmPngCase.EncodeFast16 or WarmPngCase.DecodeRgb16Transparency or WarmPngCase.DecodeGray16Transparency or WarmPngCase.EncodeGrayAlpha16 or WarmPngCase.EncodeGray16 or WarmPngCase.Decode16 or WarmPngCase.Encode16 or WarmPngCase.EncodeRgb16 or WarmPngCase.DecodeAdam7_16 or WarmPngCase.DecodePaeth16 or WarmPngCase.DecodeRgb16 or WarmPngCase.DecodeGray16 or WarmPngCase.DecodeGrayAlpha16 ? 16 : 8;
     private bool RgbTransparency => Case is WarmPngCase.DecodeRgb8Transparency or WarmPngCase.DecodeRgb16Transparency;
     private bool Rgb => Case is WarmPngCase.DecodeRgb16Transparency or WarmPngCase.DecodeRgb8Transparency or WarmPngCase.DecodeRgb16 or WarmPngCase.DecodeRgb8 or WarmPngCase.EncodeRgb8 or WarmPngCase.EncodeRgb16;
     private bool Mono => Case is WarmPngCase.DecodeGray1 or WarmPngCase.DecodeGray2 or WarmPngCase.DecodeGray4;
@@ -53,11 +53,13 @@ public class WarmPng
     private bool Palette => Case is WarmPngCase.DecodePalette8PartialAlpha or WarmPngCase.DecodePalette8 or WarmPngCase.DecodePalette4 or WarmPngCase.DecodePalette2 or WarmPngCase.DecodePalette1;
     private int ColorType => Palette ? 3 : GrayAlpha ? 4 : Gray ? 0 : Rgb ? 2 : 6;
     private bool NoCompression => Case is WarmPngCase.DecodeNoCompression16 or WarmPngCase.EncodeNoCompression16 or WarmPngCase.EncodeNoCompression8 or WarmPngCase.DecodeNoCompression8;
-    private bool Fastest => Case == WarmPngCase.EncodeFast16;
+    private bool Fastest => Case is WarmPngCase.EncodeFast16 or WarmPngCase.EncodeFastCancelable16;
+    private bool EncodeCancelable => Case == WarmPngCase.EncodeFastCancelable16;
+    private CancellationToken EncodeCancellation => EncodeCancelable ? decodeCancellation : default;
     private int EncoderLevel => Fastest ? 1 : NoCompression ? 0 : 6;
     private bool MatchedByteEncoding => Encode && Depth == 8 && ColorType is 0 or 2 or 4;
-    private int ManagedEncoderLevel => MatchedByteEncoding ? 9 : EncoderLevel;
-    private bool Encode => Case is WarmPngCase.EncodeNoCompression16 or WarmPngCase.EncodeFast16 or WarmPngCase.EncodeNoCompression8 or WarmPngCase.EncodeGrayAlpha16 or WarmPngCase.EncodeGrayAlpha8 or WarmPngCase.Encode8 or WarmPngCase.Encode16 or WarmPngCase.EncodeRgb8 or WarmPngCase.EncodeRgb16 or WarmPngCase.EncodeGray8 or WarmPngCase.EncodeGray16;
+    private int ManagedEncoderLevel => Fastest ? 2 : MatchedByteEncoding ? 9 : EncoderLevel;
+    private bool Encode => Case is WarmPngCase.EncodeFastCancelable16 or WarmPngCase.EncodeNoCompression16 or WarmPngCase.EncodeFast16 or WarmPngCase.EncodeNoCompression8 or WarmPngCase.EncodeGrayAlpha16 or WarmPngCase.EncodeGrayAlpha8 or WarmPngCase.Encode8 or WarmPngCase.Encode16 or WarmPngCase.EncodeRgb8 or WarmPngCase.EncodeRgb16 or WarmPngCase.EncodeGray8 or WarmPngCase.EncodeGray16;
     private bool Interlaced => Case == WarmPngCase.DecodeAdam7_16;
     private bool Paeth => Case is WarmPngCase.DecodePaeth16 or WarmPngCase.DecodePaeth8;
     private bool Up => Case == WarmPngCase.DecodeUp8;
@@ -104,6 +106,13 @@ public class WarmPng
             if (GrayTransparency) WarmPngGrayTransparencyInput.Project(pixels, Depth);
             if (RgbTransparency) WarmPngRgbTransparencyInput.Project(pixels, Depth);
             source = JpegBenchmarkCase.Buffer(pixels, HorizontalFlipInput.Width, HorizontalFlipInput.Height, Depth);
+            if (EncodeCancelable)
+            {
+                cancellationSource = new CancellationTokenSource(); decodeCancellation = cancellationSource.Token;
+                using var canceled = new CancellationTokenSource(); canceled.Cancel(); using var rejected = new MemoryStream();
+                try { ImageCodec.EncodePng(source, rejected, encodeOptions, canceled.Token); throw new InvalidOperationException("PNG accepted a pre-canceled encode token."); }
+                catch (OperationCanceledException error) when (error.CancellationToken == canceled.Token && rejected.Length == 0) { }
+            }
             if (NoCompression && !Encode)
             {
                 var directory = Path.Combine(state.Root, "artifacts", "warm-reference", "png-store-" + Depth);
@@ -141,7 +150,7 @@ public class WarmPng
             }
             else using (var output = new MemoryStream())
             {
-                ImageCodec.EncodePng(source, output, encodeOptions); encoded = output.ToArray();
+                ImageCodec.EncodePng(source, output, encodeOptions, EncodeCancellation); encoded = output.ToArray();
             }
             if (Cancelable)
             {
@@ -175,7 +184,7 @@ public class WarmPng
             ValidatePng(encoded); ValidateManaged();
             if (Cancelable || Tight || Fastest || NoCompression || Rgb || Gray || GrayAlpha || Palette || Up || Sub || Average)
             {
-                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", Tight && Cancelable ? "png-tight-cancel16" : Cancelable ? "png-cancel16" : Tight ? "png-tight16" : Fastest ? "png-fast16-adaptive" : RgbTransparency ? "png-rgb" + Depth + "-trns" : GrayTransparency ? Depth == 16 ? "png-gray16-trns32639" : "png-gray8-trns127" : NoCompression ? "png-store-" + Depth : Up ? "png-up-8" : Sub ? "png-sub-" + Depth : Average ? "png-average-" + Depth : Mono ? "png-gray" + CodedDepth : PartialAlpha ? "png-palette8-alpha2" : Palette ? "png-palette" + CodedDepth : GrayAlpha ? "png-gray-alpha" + Depth : Gray ? "png-gray" + Depth : "png-rgb" + Depth);
+                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", Tight && Cancelable ? "png-tight-cancel16" : Cancelable ? "png-cancel16" : Tight ? "png-tight16" : Fastest ? "png-fast16-fast2" + (EncodeCancelable ? "-cancel" : "") : RgbTransparency ? "png-rgb" + Depth + "-trns" : GrayTransparency ? Depth == 16 ? "png-gray16-trns32639" : "png-gray8-trns127" : NoCompression ? "png-store-" + Depth : Up ? "png-up-8" : Sub ? "png-sub-" + Depth : Average ? "png-average-" + Depth : Mono ? "png-gray" + CodedDepth : PartialAlpha ? "png-palette8-alpha2" : Palette ? "png-palette" + CodedDepth : GrayAlpha ? "png-gray-alpha" + Depth : Gray ? "png-gray" + Depth : "png-rgb" + Depth);
                 if (MatchedByteEncoding) directory += "-optimal9";
                 Directory.CreateDirectory(directory);
                 foreach (var (name, bytes) in new[] { ("input.png", encoded), ("expected.raw", pixels) })
@@ -211,7 +220,7 @@ public class WarmPng
             ValidateNative();
             if (Fastest)
             {
-                var file = Path.Combine(state.Root, "artifacts", "warm-reference", "png-fast16-adaptive", "native.png");
+                var file = Path.Combine(state.Root, "artifacts", "warm-reference", "png-fast16-fast2" + (EncodeCancelable ? "-cancel" : ""), "native.png");
                 var bytes = File.ReadAllBytes(state.NativeOutput);
                 if (File.Exists(file))
                 {
@@ -251,11 +260,11 @@ public class WarmPng
                     }
                 }
                 var scalar = OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), oracleInput);
-                ValidatePng(scalar);
+                ValidatePng(scalar, nativePacket: true);
                 using (var decoded = ImageCodec.Decode(scalar)) ValidatePixels(decoded);
                 arguments.RemoveRange(arguments.IndexOf("-cpuflags"), 2);
                 var normal = OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), oracleInput);
-                ValidatePng(normal);
+                ValidatePng(normal, nativePacket: true);
                 using (var decoded = ImageCodec.Decode(normal)) ValidatePixels(decoded);
             }
             before = native.Measure(smoke, sampleCount: sampleCount);
@@ -272,12 +281,12 @@ public class WarmPng
     }
     private void ValidateManaged()
     {
-        if (Cancelable && (!decodeCancellation.CanBeCanceled || decodeCancellation.IsCancellationRequested))
-            throw new InvalidOperationException("Warm decode requires a live, never-signaled cancelable token.");
+        if ((Cancelable || EncodeCancelable) && (!decodeCancellation.CanBeCanceled || decodeCancellation.IsCancellationRequested))
+            throw new InvalidOperationException("Warm operation requires a live, never-signaled cancelable token.");
         if (Encode)
         {
             using var first = new MemoryStream(); using var second = new MemoryStream();
-            ImageCodec.EncodePng(source, first, encodeOptions); ImageCodec.EncodePng(source, second, encodeOptions);
+            ImageCodec.EncodePng(source, first, encodeOptions, EncodeCancellation); ImageCodec.EncodePng(source, second, encodeOptions, EncodeCancellation);
             if (ReferenceEquals(first.GetBuffer(), second.GetBuffer()) || !first.ToArray().AsSpan().SequenceEqual(encoded)
                 || !second.ToArray().AsSpan().SequenceEqual(encoded)) throw new InvalidOperationException("Managed PNG results are not independent/deterministic.");
             managedOutputBytes = checked((int)first.Length);
@@ -296,7 +305,7 @@ public class WarmPng
         var output = File.ReadAllBytes(state.NativeOutput); nativeOutputBytes = output.Length;
         if (Encode)
         {
-            ValidatePng(output);
+            ValidatePng(output, nativePacket: true);
             using var decoded = ImageCodec.Decode(output); ValidatePixels(decoded);
             // Pin declared backend levels/filter and retain size evidence. A large payload
             // discrepancy is a preparation mismatch rather than a scored speed win.
@@ -317,7 +326,7 @@ public class WarmPng
         }
         return total;
     }
-    private void ValidatePng(byte[] bytes)
+    private void ValidatePng(byte[] bytes, bool nativePacket = false)
     {
         var info = ImageCodec.Identify(bytes);
         if (info.Format != ImageFormat.Png || info.Width != source.Width || info.Height != source.Height || info.BitDepth != CodedDepth
@@ -329,7 +338,7 @@ public class WarmPng
             if (bytes.AsSpan(position + 4, 4).SequenceEqual("IDAT"u8)) compressed.Write(bytes.AsSpan(position + 8, length));
             position = checked(position + length + 12);
         }
-        if (Fastest && (compressed.Length < 2 || compressed.GetBuffer()[1] >> 6 != 0)) throw new InvalidOperationException("PNG Fastest header does not declare the fast compression class.");
+        if (Fastest && (compressed.Length < 2 || compressed.GetBuffer()[1] >> 6 != (nativePacket ? 0 : 1))) throw new InvalidOperationException("PNG Fastest header differs from the declared numeric backend class.");
         if (NoCompression) WarmPngStoredInput.Validate(compressed.ToArray(), pixels, Depth);
         if (GrayTransparency)
         {
@@ -435,7 +444,7 @@ public class WarmPng
     {
         if (Encode)
         {
-            using var output = new MemoryStream(); ImageCodec.EncodePng(source, output, encodeOptions);
+            using var output = new MemoryStream(); ImageCodec.EncodePng(source, output, encodeOptions, EncodeCancellation);
             return checked((int)output.Length) ^ output.GetBuffer()[checked((int)output.Length) / 2];
         }
         using var result = ImageCodec.Decode(encoded, decodeOptions, decodeCancellation);
@@ -482,7 +491,7 @@ public class WarmPng
                     : RgbTransparency ? "Authored RGB8 PNG; filter None, noninterlaced, six-byte tRNS key(48,139,231); BCL Optimal level6; identical resident encoded input"
                     : GrayTransparency && Depth == 16 ? "Authored gray16BE PNG; filter None, noninterlaced, tRNS two-byte key0x7f7f; BCL Optimal level6; identical resident encoded input"
                     : GrayTransparency ? "Authored gray8 PNG; filter None, noninterlaced, tRNS two-byte key127; BCL Optimal level6; identical resident encoded input"
-                    : Fastest ? "BCL Fastest level1 with eligible independent fixed-to-dynamic Huffman recoding / FFmpeg level1; complete staging/recoding/output timed; exact full RGBA16, filter None, unchanged5% IDAT-size gate"
+                    : Fastest ? "BCL streaming fast adaptive level2 / FFmpeg fast level1; complete row packing/compression/output timed; exact full RGBA16, filter None, unchanged5% IDAT-size gate"
                     : NoCompression ? "BCL NoCompression / FFmpeg level0; stored Deflate only, filter None, noninterlaced RGBA" + Depth
                     : Paeth ? $"Authored noninterlaced PNG RGBA{Depth}; every row Paeth; BCL Optimal level 6; identical resident encoded input"
                     : Up ? "Authored noninterlaced PNG RGBA8; every row Up; BCL Optimal level 6; identical resident encoded input"
@@ -499,9 +508,9 @@ public class WarmPng
                 paletteEntries = Palette ? (1 << CodedDepth) : (int?)null, transparencyEntries = Palette ? (PartialAlpha ? 2 : 1 << CodedDepth) : (int?)null,
                 cancellationCanBeCanceled = decodeCancellation.CanBeCanceled,
                 cancellationRequested = decodeCancellation.IsCancellationRequested,
-                alreadyCanceledRejected = Cancelable ? true : (bool?)null,
-                cancellationBoundary = Cancelable
-                    ? "Live cancelable token, never signaled; token/source setup and disposal outside timing. Native backend has no equivalent cancellation setting; complete decode, full sample conversion and owned output release remain timed."
+                alreadyCanceledRejected = Cancelable || EncodeCancelable ? true : (bool?)null,
+                cancellationBoundary = Cancelable || EncodeCancelable
+                    ? "Live cancelable token, never signaled; token/source setup and disposal outside timing. Native backend has no equivalent cancellation setting; complete codec operation, full sample conversion and owned output release remain timed."
                     : null,
                 tightWorkingBytes = Tight ? tightWorkingBytes : (long?)null,
                 tightWorkingBoundaryExact = Tight ? true : (bool?)null,

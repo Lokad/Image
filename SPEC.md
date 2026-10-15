@@ -489,37 +489,28 @@ opaque pixels. No implicit grayscale conversion or alpha removal occurs.
 The default `Optimal` compression policy uses the BCL's smallest-size search
 for 8-bit gray, RGB and gray-alpha output, avoiding the weaker compression of
 the runtime's default search on these layouts. Other formats and explicitly
-selected `Fastest`, `NoCompression` or `SmallestSize` policies retain their
-backend selection. This is an implementation policy, not a promise of a
+selected `NoCompression` or `SmallestSize` retain their backend selection;
+RGBA `Fastest` follows the policy below. This is an implementation policy, not a promise of a
 particular numeric backend level or exact compressed bytes. Samples, filter and
 chunk bounds are unchanged.
 
-Eligible RGBA `Fastest` output may independently recode fixed Deflate Huffman
-blocks into one smaller dynamic block, preserving every literal, length,
-distance, extra bit and the zlib header/checksum. Match finding and backend level
-stay unchanged. Canonical lengths are limited to15 bits; unsupported streams,
-overlong trees and nonsaving results retain the BCL payload. A shared1 KiB fixed
-prefix table is generated from RFC1951 format lengths; each image's histogram
-and adaptive codes are recomputed. No output is cached.
-Selection requires a noncancelable stock `MemoryStream`, 64 KiB..4 MiB of
-filtered input and sufficient complete workspace, work and output bounds. With
-filtered size F, capacity C=2F+65536, additional admitted workspace is2C+32768.
-The preflight includes original row work plus16C+131072 units. A completed recode
-charges eight units per actual compressed byte in each of two passes, plus131072
-table units; early refusal charges only its admitted passes. Stock output
-capacity is prepared for C bytes plus bounded chunk framing. Nonexpandable
-buffers that cannot fit, caller streams, cancelable operations and tighter
-budgets retain original incremental processing and failure state. Lossless
-encoded bytes can therefore differ with stream/cancellation/resource options;
-decoded samples remain exact.
+RGBA `Fastest` uses the BCL's streaming fast adaptive compressor at numeric
+backend level2, rather than numeric level1's fixed-tree quick compressor. The
+policy applies identically to stock/caller streams, live cancelable operations
+and admitted tight budgets. Other color types retain their existing selection.
+The zlib compression-class flag is1 for this fast backend; numeric backend levels
+and encoded bytes are implementation choices, not a stable compressed-byte
+contract. Full samples, filter None, IDAT chunk bounds, grouped cancellation,
+logical row work and base memory admission remain unchanged. The library adds no whole-payload
+staging, independent entropy recoding, per-image Huffman tables or output cache
+outside the BCL compressor. Historical level1 recoding output remains losslessly decodable.
 
 RGBA16 encoding packs complete RGBA words into big-endian rows using safe span
-conversion in groups of at most 4096 pixels. Cancellation precedes each group;
-hidden RGB, alpha, encoded bytes, work and admitted storage remain unchanged.
-RGBA8 encoding copies complete RGBA rows in groups of at most 4096 pixels, with
-cancellation checked before each group. Encoded bytes, hidden RGB/alpha, work
-charges, memory admission and row workspace remain unchanged across compression
-policies. Other color types retain their existing sample validation.
+conversion in groups of at most 4096 pixels. RGBA8 copies complete rows in the
+same bounded pixel groups. Cancellation precedes each group; packing preserves
+full samples/hidden RGB/alpha, logical row work and admitted row storage under
+every compression policy. The selected compressor determines lossless encoded
+bytes. Other color types retain their existing sample validation.
 
 The original corpus covers every legal static color/depth profile at both interlace
 settings, all five filters, packed padding, partial palette alpha and hidden RGB.

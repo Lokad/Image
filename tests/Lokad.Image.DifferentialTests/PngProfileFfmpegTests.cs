@@ -7,7 +7,7 @@ public sealed class PngProfileFfmpegTests
 {
     [Theory]
     [InlineData(8)] [InlineData(16)]
-    public void AdaptiveFastestOutputHasExactNativeWordsAndHiddenRgb(int depth)
+    public void StreamingFastestOutputHasExactNativeWordsAndHiddenRgb(int depth)
     {
         using var source = OriginalPixels.Buffer(513, 259, depth); using var output = new MemoryStream();
         ImageCodec.EncodePng(source, output, new PngEncodeOptions { Compression = CompressionLevel.Fastest });
