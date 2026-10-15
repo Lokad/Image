@@ -603,6 +603,10 @@ internal ref struct JpegDecoder
             if (fullResolutionYcbcr)
                 foreach (var component in components)
                     fullResolutionYcbcr &= component.H == maxH && component.V == maxV;
+            var fullResolutionRgb = components.Length == 3 && rgb;
+            if (fullResolutionRgb)
+                foreach (var component in components)
+                    fullResolutionRgb &= component.H == maxH && component.V == maxV;
             var subsampledYcbcr = components.Length == 3 && !rgb
                 && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported
                 && components[0].H == maxH && components[0].V == maxV
@@ -612,6 +616,15 @@ internal ref struct JpegDecoder
             {
                 context.Work(info.Width * 32L);
                 var row = result.GetRow8(y);
+                if (fullResolutionRgb)
+                {
+                    // IDCT already rounded/clipped these full-resolution bytes.
+                    // Centered interpolation has zero fractions and Round is exact.
+                    RenderRgbRow(components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width),
+                        components[1].Plane.AsSpan(y * components[1].BlockColumns * 8, info.Width),
+                        components[2].Plane.AsSpan(y * components[2].BlockColumns * 8, info.Width), row);
+                    continue;
+                }
                 var x = 0;
                 var subsampledEnd = 2;
                 if (components.Length == 1)
@@ -711,6 +724,25 @@ internal ref struct JpegDecoder
     }
 
     private static byte Round(double value) => (byte)Math.Clamp(Math.Round(value, MidpointRounding.AwayFromZero), 0, 255);
+
+    internal static void RenderRgbRow(ReadOnlySpan<byte> red, ReadOnlySpan<byte> green, ReadOnlySpan<byte> blue, Span<byte> rgba)
+    {
+        if (green.Length != red.Length || blue.Length != red.Length || rgba.Length != red.Length * 4L)
+            throw new ArgumentException("RGB planes and RGBA row lengths differ.");
+        var x = 0;
+        if (Avx2.IsSupported)
+            for (; x <= red.Length - 8; x += 8)
+            {
+                var r = WidenSamples8(red.Slice(x, 8)).AsUInt32();
+                var g = Avx2.ShiftLeftLogical(WidenSamples8(green.Slice(x, 8)).AsUInt32(), 8);
+                var b = Avx2.ShiftLeftLogical(WidenSamples8(blue.Slice(x, 8)).AsUInt32(), 16);
+                Avx2.Or(Avx2.Or(r, g), Avx2.Or(b, Vector256.Create(0xFF000000u))).AsByte().CopyTo(rgba.Slice(x * 4, 32));
+            }
+        for (; x < red.Length; x++)
+        {
+            rgba[x * 4] = red[x]; rgba[x * 4 + 1] = green[x]; rgba[x * 4 + 2] = blue[x]; rgba[x * 4 + 3] = 255;
+        }
+    }
 
     internal static void RenderYcbcrRow8(ReadOnlySpan<byte> first, ReadOnlySpan<byte> second, ReadOnlySpan<byte> third,
         Span<byte> rgba, Span<byte> scratch)

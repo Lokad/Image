@@ -57,7 +57,7 @@ typedef struct {
     AVPacket *input;
     uint8_t *encoded, *expected;
     size_t encoded_bytes, raw_bytes;
-    int width, height, cpu, row_bytes, stride, subsampled, gray;
+    int width, height, cpu, row_bytes, stride, subsampled, gray, rgb;
     uint64_t completed, observed;
 } Work;
 static void initialize_conversion(Work *work)
@@ -67,15 +67,15 @@ static void initialize_conversion(Work *work)
     require(av_opt_set_int(work->conversion, "srch", work->height, 0), "Set source height");
     require(av_opt_set_int(work->conversion, "dstw", work->width, 0), "Set target width");
     require(av_opt_set_int(work->conversion, "dsth", work->height, 0), "Set target height");
-    require(av_opt_set_int(work->conversion, "src_format", work->gray ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_YUVJ444P, 0), "Set source format");
+    require(av_opt_set_int(work->conversion, "src_format", work->rgb ? AV_PIX_FMT_GBRP : work->gray ? AV_PIX_FMT_GRAY8 : AV_PIX_FMT_YUVJ444P, 0), "Set source format");
     require(av_opt_set_int(work->conversion, "dst_format", AV_PIX_FMT_RGBA, 0), "Set target format");
-    require(av_opt_set_int(work->conversion, "sws_flags", SWS_BILINEAR|SWS_ACCURATE_RND|SWS_FULL_CHR_H_INT, 0), "Set conversion flags");
+    require(av_opt_set_int(work->conversion, "sws_flags", work->rgb ? SWS_POINT|SWS_BITEXACT : SWS_BILINEAR|SWS_ACCURATE_RND|SWS_FULL_CHR_H_INT, 0), "Set conversion flags");
     require(av_opt_set_int(work->conversion, "src_h_chr_pos", 0, 0), "Set horizontal chroma position");
     require(av_opt_set_int(work->conversion, "src_v_chr_pos", 0, 0), "Set vertical chroma position");
     require(av_opt_set_int(work->conversion, "threads", 1, 0), "Set conversion threads");
     require(sws_init_context(work->conversion, NULL, NULL), "Initialize conversion");
     const int *matrix = sws_getCoefficients(SWS_CS_ITU601);
-    require(sws_setColorspaceDetails(work->conversion, matrix, 1, matrix, 1, 0, 1<<16, 1<<16), "Set full-range BT.601");
+    if (!work->rgb) require(sws_setColorspaceDetails(work->conversion, matrix, 1, matrix, 1, 0, 1<<16, 1<<16), "Set full-range BT.601");
     int64_t threads; require(av_opt_get_int(work->conversion, "threads", 0, &threads), "Read conversion threads");
     if (threads != 1) fail("Conversion threading differs.");
     if (work->subsampled) {
@@ -107,11 +107,15 @@ static void apply(Work *work)
     require(avcodec_send_packet(work->codec, work->input), "Submit complete JPEG");
     require(avcodec_receive_frame(work->codec, work->decoded), "Receive JPEG pixels");
     AVFrame *decoded = work->decoded;
-    if (decoded->width != work->width || decoded->height != work->height || decoded->format != (work->gray ? AV_PIX_FMT_GRAY8 : work->subsampled==420 ? AV_PIX_FMT_YUVJ420P : work->subsampled==422 ? AV_PIX_FMT_YUVJ422P : AV_PIX_FMT_YUVJ444P)
-        // The software decoder leaves one-component GRAY8 range untagged.
-        // The declared JPEG interpretation and conversion context are full range.
-        || (decoded->color_range != AVCOL_RANGE_JPEG && (!work->gray || decoded->color_range != AVCOL_RANGE_UNSPECIFIED))
-        || !decoded->buf[0]) fail("Expected owned full-range JPEG pixels at the declared sampling.");
+    if (decoded->width != work->width || decoded->height != work->height || decoded->format != (work->rgb ? AV_PIX_FMT_GBRP : work->gray ? AV_PIX_FMT_GRAY8 : work->subsampled==420 ? AV_PIX_FMT_YUVJ420P : work->subsampled==422 ? AV_PIX_FMT_YUVJ422P : AV_PIX_FMT_YUVJ444P)
+        // The software decoder can leave GRAY8 and RGB range untagged. GBRP
+        // stores direct full-range channels; its RGB packing applies no YUV matrix.
+        || (decoded->color_range != AVCOL_RANGE_JPEG && (!(work->gray || work->rgb) || decoded->color_range != AVCOL_RANGE_UNSPECIFIED))
+        || !decoded->buf[0]) {
+        fprintf(stderr, "Decoded geometry=%dx%d format=%d range=%d rgb=%d gray=%d owned=%d\n",
+            decoded->width, decoded->height, decoded->format, decoded->color_range, work->rgb, work->gray, decoded->buf[0] != NULL);
+        fail("Expected owned full-range JPEG pixels at the declared sampling.");
+    }
     const uint8_t *planes[4]={decoded->data[0],decoded->data[1],decoded->data[2],NULL};
     int strides[4]={decoded->linesize[0],decoded->linesize[1],decoded->linesize[2],0};
     if (work->subsampled) {
@@ -164,9 +168,9 @@ static void check_and_write(Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if (argc != 7 || (strcmp(argv[1], "jpeg-decode") && strcmp(argv[1], "jpeg420-decode") && strcmp(argv[1], "jpeg422-decode") && strcmp(argv[1], "jpeg-gray-decode"))) fail("Usage: ffmpeg-jpeg-decode-warm jpeg-decode|jpeg420-decode|jpeg422-decode|jpeg-gray-decode INPUT WIDTH HEIGHT 8 OUTPUT");
+    if (argc != 7 || (strcmp(argv[1], "jpeg-decode") && strcmp(argv[1], "jpeg420-decode") && strcmp(argv[1], "jpeg422-decode") && strcmp(argv[1], "jpeg-gray-decode") && strcmp(argv[1], "jpeg-rgb-decode"))) fail("Usage: ffmpeg-jpeg-decode-warm jpeg-decode|jpeg420-decode|jpeg422-decode|jpeg-gray-decode|jpeg-rgb-decode INPUT WIDTH HEIGHT 8 OUTPUT");
     Work work = {0}; work.cpu = affinity_cpu(); work.width = number(argv[3]); work.height = number(argv[4]);
-    work.gray=!strcmp(argv[1],"jpeg-gray-decode");
+    work.gray=!strcmp(argv[1],"jpeg-gray-decode"); work.rgb=!strcmp(argv[1],"jpeg-rgb-decode");
     work.subsampled=!strcmp(argv[1],"jpeg420-decode") ? 420 : !strcmp(argv[1],"jpeg422-decode") ? 422 : 0;
     if (number(argv[5]) != 8) fail("JPEG decode reference requires depth 8.");
     work.row_bytes = work.width*4; work.raw_bytes = (size_t)work.row_bytes*work.height;
@@ -194,8 +198,8 @@ int main(int argc, char **argv)
     check_frame(&work, held); check_frame(&work, work.rgba);
     held->data[0][0] ^= 255; check_frame(&work, work.rgba); av_frame_free(&held); release(&work);
     check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"decoder\":\"mjpeg\",\"sampling\":\"%s\",\"chromaExpansionTimed\":%s,\"chromaVerticalFactor\":%d,\"grayscale\":%s,\"colorConversionTimed\":true,\"stateResetTimed\":true,\"pixelsDeterministic\":true,\"outputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
-        argv[1],work.width, work.height, work.cpu, work.gray ? "gray" : work.subsampled==420 ? "420" : work.subsampled==422 ? "422" : "444", work.subsampled ? "true" : "false", work.subsampled==420 ? 2 : 1, work.gray ? "true" : "false", work.raw_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"decoder\":\"mjpeg\",\"sampling\":\"%s\",\"chromaExpansionTimed\":%s,\"chromaVerticalFactor\":%d,\"grayscale\":%s,\"directRgb\":%s,\"decodedPixelFormat\":\"%s\",\"colorConversionTimed\":true,\"stateResetTimed\":true,\"pixelsDeterministic\":true,\"outputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"swscaleVersion\":%u}\n",
+        argv[1],work.width, work.height, work.cpu, work.gray ? "gray" : work.subsampled==420 ? "420" : work.subsampled==422 ? "422" : "444", work.subsampled ? "true" : "false", work.subsampled==420 ? 2 : 1, work.gray ? "true" : "false", work.rgb ? "true" : "false", work.rgb ? "gbrp" : work.gray ? "gray8" : work.subsampled==420 ? "yuvj420p" : work.subsampled==422 ? "yuvj422p" : "yuvj444p", work.raw_bytes, work.completed, av_version_info(), avcodec_version(), swscale_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;

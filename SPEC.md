@@ -597,6 +597,12 @@ rounding certificate proves the original byte. Uncertain rows and extreme blocks
 use the original direct evaluation; other processors retain that evaluation.
 The [inverse rounding proof](docs/jpeg-inverse-rounding.md) defines the bound.
 
+Full-resolution direct RGB planes pack their already rounded/clipped bytes into
+opaque RGBA directly, with AVX2 batches and an exact scalar tail. Equal sampling
+factors give zero interpolation fractions; no further rounding is needed. The
+original per-row work/cancellation admission is retained, with no new workspace.
+Subsampled direct RGB keeps the original interpolation and rounding.
+
 Baseline entropy traversal retains exact logical work charges in a local block
 budget, including cancelable operations. Completed charges are published on every
 exit without another cancellation check. Noncancelable blocks may also keep runs

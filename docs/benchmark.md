@@ -88,13 +88,14 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-JPEG-RESTART-DECODE.md) | 1,852.40 | 1,016.13 | 1.823 / 1.837 | 1,623,906 | Confirmed |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-COVERAGE-QUIET.md) | 2,087.01 | 1,336.37 | 1.562 / 1.567 | 1,978,646 | Confirmed |
 | [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-JPEG444-OWNED-QUIET.md) | 3,564.61 | 2,039.57 | 1.748 / 1.793 | 2,596,174 | Confirmed |
-| [JPEG baseline 4:4:4, native input](../benchmarks/WARM-JPEG-BASELINE-AC-RUN.md) | 2,953.89 | 1,722.64 | 1.715 / 1.733 | 2,664,373 | Confirmed |
+| [JPEG baseline 4:4:4, native input](../benchmarks/WARM-JPEG-RGB-ROW.md) | 3,071.31 | 1,729.68 | 1.776 / 4.566 | 2,664,373 | Regression screen; prior confirmed |
+| [JPEG baseline direct RGB, full resolution](../benchmarks/WARM-JPEG-RGB-ROW.md) | 2,781.74 | 1,450.64 | 1.918 / 1.923 | 2,664,373 | Confirmed |
 | [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-JPEG-BASELINE-AC-RUN.md) | 3,048.96 | 1,722.47 | 1.770 / 1.797 | 2,664,373 | Confirmed |
 | [JPEG progressive gray](../benchmarks/WARM-JPEG-REFINEMENT.md) | 3,336.90 | 1,743.36 | 1.914 / 1.942 | 1,232,501 | Confirmed |
 | [JPEG progressive 4:2:0](../benchmarks/WARM-JPEG-PROGRESSIVE420.md) | 3,646.81 | 1,938.47 | 1.881 / 1.894 | 1,637,521 | Confirmed |
 | [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-PROGRESSIVE-CANCELABLE444.md) | 6,453.37 | 3,335.92 | 1.935 / 1.940 | 2,682,364 | Confirmed |
 | [JPEG progressive 4:2:2](../benchmarks/WARM-JPEG-PROGRESSIVE422.md) | 3,882.57 | 2,210.07 | 1.757 / 1.781 | 1,996,661 | Confirmed |
-| [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-BASELINE-AC-RUN.md) | 6,515.45 | 3,334.14 | 1.954 / 1.960 | 2,682,364 | Confirmed |
+| [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-RGB-ROW.md) | 6,447.09 | 3,345.92 | 1.927 / 1.993 | 2,682,364 | Regression screen; prior confirmed |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8-FILTER8.md) | 10,777.02 | 5,977.48 | 1.803 / 1.819 | 1,966,616 | Confirmed |
 | [WebP VP8, opaque](../benchmarks/WARM-VP8-FILTER8.md) | 8,649.43 | 4,797.64 | 1.803 / 1.808 | 760,548 | Confirmed |
 | [WebP VP8L, literal/run input](../benchmarks/WARM-VP8L-DECODE-QUIET.md) | 3,948.44 | 2,332.84 | 1.693 / 1.732 | 1,074,301 | Confirmed |
@@ -289,16 +290,17 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round confirms opaque-byte VP8L encoding at **0.102x /
-upper 0.103x** the explicitly approved **libwebp exact=1 (FFmpeg encoder backend)**,
-with **2,100,170 B/op**. Original RGB is unchanged and alpha becomes255; both
-packets decode to exact projected pixels. Managed/native output sizes are
-**533,100/121,896 bytes**: timing does not establish compression efficiency parity.
-All twelve actuals and both quiet guards pass on one immutable core/harness/native
-worker. Production is unchanged: existing **3,432 Release tests per OS**, including
-**898 live comparisons**, and the same actual package's consumer plus all three
-examples on Windows/Linux are reused. One harness build suffices; no production/
-native rebuild, full suite, package proof, method audit or profile is repeated.
+The latest accepted production round reduces direct-RGB JPEG decoding from
+**2.824x** to **1.918x / upper 1.923x**, with **35.3% less managed time** and
+**2,664,373 B/op**. Direct full-resolution planes pack already-rounded bytes
+with AVX2 and an exact scalar path, preserving frozen pixels, row work/
+cancellation admission and workspace. One profile identifies the redundant
+rounding/interpolation work. All twelve actuals and quiet guards pass on the
+same candidate core/harness/native worker. Baseline/progressive YCbCr regression
+means pass before full **3,439 Release tests per OS**, including **898 live
+comparisons**, plus the consumer and all three examples through the **same actual
+Release package** on Windows/Linux. One substantial primitive is changed;
+no whole-library method audit or repeated full/package qualification is performed.
 
 The palette8/tRNS Adam7 coverage check screens at **1.303x**, with
 **4,960 B/op**, but remains **unconfirmed**. Its independent native baseline slows

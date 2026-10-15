@@ -128,13 +128,14 @@ def render():
         row('JPEG baseline 4:2:0, row restart markers', 'warm-jpeg-restartdecode-evidence.json', ['observations', -1], 'WARM-JPEG-RESTART-DECODE.md', True),
         row('JPEG baseline 4:2:2', 'warm-coverage-quiet-evidence.json', ['cases', 'jpeg422', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
         row('JPEG baseline 4:4:4, owned input', 'warm-jpeg444owned-quiet-evidence.json', ['observations', -1], 'WARM-JPEG444-OWNED-QUIET.md', True),
-        row('JPEG baseline 4:4:4, native input', 'warm-jpeg-ac-run-evidence.json', ['observations', -1], 'WARM-JPEG-BASELINE-AC-RUN.md', True),
+        row('JPEG baseline 4:4:4, native input', 'warm-jpeg-rgb-row-evidence.json', ['observations', 3], 'WARM-JPEG-RGB-ROW.md', verification='Regression screen; prior confirmed'),
+        row('JPEG baseline direct RGB, full resolution', 'warm-jpeg-rgb-row-evidence.json', ['observations', 2], 'WARM-JPEG-RGB-ROW.md', True),
         row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg-ac-run-evidence.json', ['cancelableConfirmations', -1], 'WARM-JPEG-BASELINE-AC-RUN.md', True),
         row('JPEG progressive gray', 'warm-jpegrefinement-evidence.json', ['observations', -1], 'WARM-JPEG-REFINEMENT.md', True),
         row('JPEG progressive 4:2:0', 'warm-jpegprogressive420-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE420.md', True),
         row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpegprogressive444cancel-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE-CANCELABLE444.md', True),
         row('JPEG progressive 4:2:2', 'warm-jpegprogressive422-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE422.md', True),
-        row('JPEG progressive 4:4:4', 'warm-jpeg-ac-run-evidence.json', ['progressiveConfirmations', -1], 'WARM-JPEG-BASELINE-AC-RUN.md', True),
+        row('JPEG progressive 4:4:4', 'warm-jpeg-rgb-row-evidence.json', ['observations', 4], 'WARM-JPEG-RGB-ROW.md', verification='Regression screen; prior confirmed'),
         row('WebP VP8 + alpha', 'warm-vp8-filter8-evidence.json', ['alphaBearingControl', 'observations', -1], 'WARM-VP8-FILTER8.md', True),
         row('WebP VP8, opaque', 'warm-vp8-filter8-evidence.json', ['observations', -1], 'WARM-VP8-FILTER8.md', True),
         row('WebP VP8L, literal/run input', 'warm-vp8ldecode-quiet-evidence.json', ['observations', -1], 'WARM-VP8L-DECODE-QUIET.md', True),
@@ -366,16 +367,17 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round confirms opaque-byte VP8L encoding at **0.102x /
-upper 0.103x** the explicitly approved **libwebp exact=1 (FFmpeg encoder backend)**,
-with **2,100,170 B/op**. Original RGB is unchanged and alpha becomes255; both
-packets decode to exact projected pixels. Managed/native output sizes are
-**533,100/121,896 bytes**: timing does not establish compression efficiency parity.
-All twelve actuals and both quiet guards pass on one immutable core/harness/native
-worker. Production is unchanged: existing **3,432 Release tests per OS**, including
-**898 live comparisons**, and the same actual package's consumer plus all three
-examples on Windows/Linux are reused. One harness build suffices; no production/
-native rebuild, full suite, package proof, method audit or profile is repeated.
+The latest accepted production round reduces direct-RGB JPEG decoding from
+**2.824x** to **1.918x / upper 1.923x**, with **35.3% less managed time** and
+**2,664,373 B/op**. Direct full-resolution planes pack already-rounded bytes
+with AVX2 and an exact scalar path, preserving frozen pixels, row work/
+cancellation admission and workspace. One profile identifies the redundant
+rounding/interpolation work. All twelve actuals and quiet guards pass on the
+same candidate core/harness/native worker. Baseline/progressive YCbCr regression
+means pass before full **3,439 Release tests per OS**, including **898 live
+comparisons**, plus the consumer and all three examples through the **same actual
+Release package** on Windows/Linux. One substantial primitive is changed;
+no whole-library method audit or repeated full/package qualification is performed.
 
 The palette8/tRNS Adam7 coverage check screens at **1.303x**, with
 **4,960 B/op**, but remains **unconfirmed**. Its independent native baseline slows
