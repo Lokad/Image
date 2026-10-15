@@ -1297,3 +1297,9 @@ are timed. Normal/scalar CLI results must match the independent integer referenc
 exactly. The initial mixed-endian negotiation crash remains unscored; the
 [retained result](../../benchmarks/WARM-PNG-COMPOSITION16.md) is open above the
 conservative two-times bound.
+
+`WarmPng.DecodeTight16` reuses the original word PNG and existing PNG decoder
+worker, with the managed limit fixed to input + IDAT + output + 256 KiB + two
+rows. Exact pixels and one-byte-below rejection are checked before timing. The
+optional whole-filter/8 KiB output buffers cannot fit; native complete decode and
+word conversion remain timed, with no native caller-admission setting.

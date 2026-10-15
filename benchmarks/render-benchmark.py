@@ -83,6 +83,7 @@ def render():
         row('PNG RGBA8, stored Deflate / None', 'warm-pngstore8decode-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-DECODE.md', True),
         row('PNG RGBA16, stored Deflate / None', 'warm-pngstored16-decode-evidence.json', ['observations', -1], 'WARM-PNG-STORED16-DECODE.md', True),
         row('PNG RGBA16, None', 'warm-pngliteralrun-evidence.json', ['observations', -1], 'WARM-PNG-LITERAL-RUN.md', True),
+        row('PNG RGBA16, None / exact working limit', 'warm-png-tight16-evidence.json', ['observations', -1], 'WARM-PNG-TIGHT16.md', True),
         row('PNG RGBA8, Paeth', 'warm-paeth4-evidence.json', ['observations', -1], 'WARM-PAETH-FOUR-CHANNEL.md', True),
         row('PNG RGBA8, Up', 'warm-pngup8-baseline-evidence.json', ['observations', -1], 'WARM-PNG-UP8-BASELINE.md', True),
         row('PNG RGBA8, Sub', 'warm-pngsub8-baseline-evidence.json', ['observations', -1], 'WARM-PNG-SUB8-BASELINE.md', True),
