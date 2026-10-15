@@ -49,9 +49,10 @@ timing comparison; compression efficiency parity is not established.
 | [PNG RGBA16, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-TIGHT-CANCELABLE16.md) | 5,459.12 | 2,877.85 | 1.897 / 1.914 | 8,896 | Confirmed |
 | [PNG RGBA8, Paeth](../benchmarks/WARM-PAETH-FOUR-CHANNEL.md) | 5,099.55 | 2,925.24 | 1.743 / 1.842 | 881,892 | Confirmed |
 | [PNG RGBA8, Up](../benchmarks/WARM-PNG-UP8-BASELINE.md) | 2,644.01 | 1,505.93 | 1.756 / 1.764 | 12,976 | Confirmed |
-| [PNG RGBA8, Sub](../benchmarks/WARM-PNG-SUB8-BASELINE.md) | 1,209.60 | 682.52 | 1.772 / 1.780 | 12,976 | Confirmed |
+| [PNG RGBA8, Sub](../benchmarks/WARM-PNG-SUB16.md) | 1,328.83 | 673.42 | 1.973 / 2.211 | 4,456 | Regression screen; prior confirmed |
+| [PNG RGBA16, Sub](../benchmarks/WARM-PNG-SUB16.md) | 357.99 | 743.02 | 0.482 / 0.493 | 8,552 | Confirmed |
 | [PNG RGBA8, Average](../benchmarks/WARM-PNG-AVERAGE8-BASELINE.md) | 3,137.74 | 1,841.23 | 1.704 / 1.743 | 12,976 | Confirmed |
-| [PNG RGBA16, Paeth](../benchmarks/WARM-PNG-CANCELABLE16.md) | 5,636.77 | 5,483.15 | 1.028 / 2.884 | 8,552 | Regression screen; prior confirmed |
+| [PNG RGBA16, Paeth](../benchmarks/WARM-PNG-SUB16.md) | 5,749.92 | 5,769.74 | 0.997 / 1.264 | 8,552 | Regression screen; prior confirmed |
 | [PNG RGBA16, Adam7](../benchmarks/WARM-PNG-SCATTER.md) | 6,567.82 | 3,984.54 | 1.648 / 1.700 | 2,024,532 | Confirmed |
 | [PNG RGB16, None](../benchmarks/WARM-PNG-RGB16-CURRENT.md) | 4,020.98 | 2,210.00 | 1.819 / 1.823 | 15,024 | Confirmed |
 | [PNG gray8, None](../benchmarks/WARM-PNG-GRAY8-CURRENT.md) | 564.59 | 361.22 | 1.563 / 1.580 | 9,904 | Confirmed |
@@ -271,12 +272,14 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round confirms complete fresh-stream VP8L decoding at
-**1.834x / upper 1.851x**, with **1,924,876 B/op** and exact RGBA. All input reads,
-buffering/copies, conversion and input/output release are timed on both subjects.
-Production is unchanged; the existing **3,371** Release tests per OS, including
-**898** live comparisons, and same actual package's consumer plus all three
-examples are reused. No production rebuild or qualification repeat is needed.
+The latest accepted round reduces complete PNG16 Sub decoding by **76.5%**,
+from2.052x to **0.482x / upper 0.493x**, at unchanged **8,552 B/op**. Safe Vector128
+byte-prefix sums preserve exact words, alpha/hidden RGB, cancellation and failure
+state. Both OSes pass **3,383** Release tests, including **898** live comparisons,
+plus the same actual package's consumer and all three examples. Byte-Sub and
+word-Paeth rows show current regression screens and retain prior confirmations.
+The initial Windows default-tiering writer-allocation failure is retained in the
+linked report; its focused retry and full stable-JIT qualification pass.
 PNG16 Fastest remains confirmed at0.787x / upper0.791x after safe entropy recoding;
 its caller/cancelable/constrained policies need separate coverage. Ordinary PNG8/16
 rows show current short regression screens and retain prior confirmations.

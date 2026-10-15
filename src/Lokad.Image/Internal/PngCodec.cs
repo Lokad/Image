@@ -975,6 +975,10 @@ internal static class PngCodec
             // PNG section 9.2: None stores the original bytes without prediction.
             cancellation.ThrowIfCancellationRequested(); return;
         }
+        if (filter == 1 && stride == 8 && Vector128.IsHardwareAccelerated && previous.Length >= row.Length)
+        {
+            UnfilterSub8(row, cancellation); return;
+        }
         if (filter == 4 && (stride == 8 || stride == 4) && Vector128.IsHardwareAccelerated
             && previous.Length >= row.Length && !((ReadOnlySpan<byte>)row).Overlaps(previous))
         {
@@ -994,6 +998,28 @@ internal static class PngCodec
                 _ => throw new ImageDataException("Invalid PNG filter.")
             };
             row[i] = unchecked((byte)(row[i] + prediction));
+        }
+    }
+
+    private static void UnfilterSub8(Span<byte> row, CancellationToken cancellation)
+    {
+        // PNG 9.2: eight independent byte sums, modulo256. Each vector contains
+        // two pixels; the upper pixel first adds the lower, then both add carry.
+        var shift = Vector128.Create((byte)255, 255, 255, 255, 255, 255, 255, 255, 0, 1, 2, 3, 4, 5, 6, 7);
+        var repeat = Vector128.Create((byte)8, 9, 10, 11, 12, 13, 14, 15, 8, 9, 10, 11, 12, 13, 14, 15);
+        var carry = Vector128<byte>.Zero; var i = 0;
+        for (; i <= row.Length - 16; i += 16)
+        {
+            if ((i & 65535) == 0) cancellation.ThrowIfCancellationRequested();
+            var value = Vector128.LoadUnsafe(ref MemoryMarshal.GetReference(row), (nuint)i);
+            value = value + Vector128.Shuffle(value, shift) + carry;
+            value.StoreUnsafe(ref MemoryMarshal.GetReference(row), (nuint)i);
+            carry = Vector128.Shuffle(value, repeat);
+        }
+        for (; i < row.Length; i++)
+        {
+            if ((i & 65535) == 0) cancellation.ThrowIfCancellationRequested();
+            row[i] = unchecked((byte)(row[i] + (i >= 8 ? row[i - 8] : 0)));
         }
     }
 

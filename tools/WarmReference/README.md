@@ -1275,6 +1275,12 @@ decode/reset/ARGB-to-RGBA conversion and input/output release timed. Normal/scal
 exact RGBA, caller lifetime and two independent outputs are checked outside timing.
 See the [VP8L stream result](../../benchmarks/WARM-VP8L-STREAM.md).
 
+RGBA16 Sub decoding uses `-WarmFamily Png -WarmCases DecodeSub16`. Its original
+authoring helper preserves full words while subtracting the byte eight positions
+earlier in each big-endian row. Reuse the unchanged PNG native worker and frozen
+`png-sub-16` artifact; preparation checks exact normal/scalar samples and owners.
+See the [stride-eight reconstruction result](../../benchmarks/WARM-PNG-SUB16.md).
+
 Forward-only JPEG444 uses `LOKAD_IMAGE_JPEG_ENTROPY=fixed-geometric-v1`,
 `--prepare-warm-jpeg444-stream 0`, then
 `-WarmFamily Jpeg -WarmCases Encode444Stream8`. The existing JPEG native worker

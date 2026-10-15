@@ -9,7 +9,7 @@ round, at most three, with correctness established before timing.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7 and stored Deflate/None, plus exact working-memory boundary and live-cancelable RGBA16 at default/exact working limits; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed | Other material depths/layouts, shorter palettes or distinct public boundaries |
+| PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Sub/Paeth/Adam7 and stored Deflate/None, plus exact working-memory boundary and live-cancelable RGBA16 at default/exact working limits; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed | Other material depths/layouts, shorter palettes or distinct public boundaries |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level6/None; byte RGB/gray/gray-alpha Optimal managed9/native6 with unchanged5% size gate confirmed; RGBA8/16 NoCompression/None confirmed; Fastest RGBA16 confirmed 0.787x / upper 0.791x after safe entropy recoding | Other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4; baseline 4:2:0 with row restart markers confirmed 1.823x / upper 1.837x | Other materially different supported layouts/public boundaries |
 | JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x, 4:2:2 confirmed 1.821x / upper 1.862x and 4:2:0 confirmed 1.943x / upper 1.988x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x, 4:2:2 confirmed 1.874x / upper 1.884x and 4:2:0 confirmed 1.888x / upper 1.931x; live-cancelable RGBA16 4:2:0 confirmed 1.651x / upper 1.663x and RGBA8 4:4:4 prior confirmed with current regression; forward-only RGBA8 4:4:4 confirmed 1.754x / upper 1.765x and 4:2:0 confirmed 1.916x / upper 1.936x and RGBA16 4:2:0 confirmed 1.948x / upper 1.954x; adaptive RGBA8 row restarts confirmed 1.958x / upper 1.973x | Other material fallback layouts, grayscale and distinct public boundaries |
@@ -1017,3 +1017,15 @@ independent owners pass. Only one existing frozen packet/raster is reused.
 Production is unchanged: existing3,371-tests-per-OS/live/same actual package
 qualification is reused without rebuilds, suites or method audits. Stop this
 fixed pair; other material boundaries and unmatched policies remain open.
+
+The [RGBA16 Sub round](WARM-PNG-SUB16.md) reduces a2.052x screen by76.5%,
+independently confirming0.482x / upper0.493x at unchanged8,552 managed B/op.
+One six-second profile places81.7% in reconstruction; safe stride-eight byte
+prefix sums preserve exact words, cancellation and original failure state.
+Both regression means pass before full3,383-tests-per-OS/live/same actual package
+qualification. Only the original two rasters and three workload types are used.
+The proposed forward-only Stream timing was avoided: ImageCodec.ReadInput already
+uses only sequential reads and ignores length/seekability for all streams;
+existing tests exercise throwing metadata, admission and caller lifetime. This
+code-path observation establishes no separate native nonseekable timing. Stop
+the confirmed Sub pair; other material workloads and unmatched policies stay open.
