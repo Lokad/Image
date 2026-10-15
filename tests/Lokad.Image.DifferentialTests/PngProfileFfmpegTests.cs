@@ -5,6 +5,20 @@ namespace Lokad.Image.DifferentialTests;
 
 public sealed class PngProfileFfmpegTests
 {
+    [Theory]
+    [InlineData(8)] [InlineData(16)]
+    public void AdaptiveFastestOutputHasExactNativeWordsAndHiddenRgb(int depth)
+    {
+        using var source = OriginalPixels.Buffer(513, 259, depth); using var output = new MemoryStream();
+        ImageCodec.EncodePng(source, output, new PngEncodeOptions { Compression = CompressionLevel.Fastest });
+        var encoded = output.ToArray(); var expected = OriginalPixels.Bytes(source);
+        Assert.Equal(expected, PngOracle.Decode(encoded, depth));
+        var normal = PngOracle.DecodeArguments(depth, encoded).ToList();
+        normal.RemoveRange(normal.IndexOf("-cpuflags"), 2);
+        Assert.Equal(expected, OracleProcess.Run(OracleProcess.Ffmpeg, normal.ToArray(), encoded));
+        using var decoded = ImageCodec.Decode(encoded); Assert.Equal(expected, OriginalPixels.Bytes(decoded));
+    }
+
     public static IEnumerable<object[]> Profiles() => AuthoredPng.Cases().Select(frame => new object[] { frame.Name });
 
     [Theory]

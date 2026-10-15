@@ -33,6 +33,22 @@ internal sealed class LimitedWriteStream(Stream output, int maximum, Cancellatio
     internal bool SupportsAdmittedJpegBytes(long worstEncodedBytes)
         => worstEncodedBytes > 0 && worstEncodedBytes <= maximum && SupportsAdaptiveJpeg(worstEncodedBytes);
 
+    internal bool TryPrepareBufferedPng(long remainingBound)
+    {
+        if (remainingBound <= 0 || remainingBound > maximum - written || !SupportsAdaptiveJpeg(remainingBound)) return false;
+        var memory = (MemoryStream)output;
+        var required = (int)(memory.Position + remainingBound);
+        if (required > Array.MaxLength) return false;
+        if (memory.Capacity < required)
+        {
+            // A nonexpandable caller buffer retains its original incremental
+            // failure sequence. A writable stock stream has no callbacks.
+            try { memory.Capacity = required; }
+            catch (NotSupportedException) { return false; }
+        }
+        return true;
+    }
+
     // The adaptive JPEG caller has admitted the whole packet's upper bound.
     // Stock MemoryStream has no callbacks; keep one-byte writes and update the
     // counter only after success, including nonexpandable-stream failures.

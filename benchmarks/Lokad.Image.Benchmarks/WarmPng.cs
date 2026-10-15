@@ -175,7 +175,7 @@ public class WarmPng
             ValidatePng(encoded); ValidateManaged();
             if (Cancelable || Tight || Fastest || NoCompression || Rgb || Gray || GrayAlpha || Palette || Up || Sub || Average)
             {
-                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", Tight && Cancelable ? "png-tight-cancel16" : Cancelable ? "png-cancel16" : Tight ? "png-tight16" : Fastest ? "png-fast16" : RgbTransparency ? "png-rgb" + Depth + "-trns" : GrayTransparency ? Depth == 16 ? "png-gray16-trns32639" : "png-gray8-trns127" : NoCompression ? "png-store-" + Depth : Up ? "png-up-8" : Sub ? "png-sub-8" : Average ? "png-average-8" : Mono ? "png-gray" + CodedDepth : PartialAlpha ? "png-palette8-alpha2" : Palette ? "png-palette" + CodedDepth : GrayAlpha ? "png-gray-alpha" + Depth : Gray ? "png-gray" + Depth : "png-rgb" + Depth);
+                var directory = Path.Combine(state.Root, "artifacts", "warm-reference", Tight && Cancelable ? "png-tight-cancel16" : Cancelable ? "png-cancel16" : Tight ? "png-tight16" : Fastest ? "png-fast16-adaptive" : RgbTransparency ? "png-rgb" + Depth + "-trns" : GrayTransparency ? Depth == 16 ? "png-gray16-trns32639" : "png-gray8-trns127" : NoCompression ? "png-store-" + Depth : Up ? "png-up-8" : Sub ? "png-sub-8" : Average ? "png-average-8" : Mono ? "png-gray" + CodedDepth : PartialAlpha ? "png-palette8-alpha2" : Palette ? "png-palette" + CodedDepth : GrayAlpha ? "png-gray-alpha" + Depth : Gray ? "png-gray" + Depth : "png-rgb" + Depth);
                 if (MatchedByteEncoding) directory += "-optimal9";
                 Directory.CreateDirectory(directory);
                 foreach (var (name, bytes) in new[] { ("input.png", encoded), ("expected.raw", pixels) })
@@ -211,7 +211,7 @@ public class WarmPng
             ValidateNative();
             if (Fastest)
             {
-                var file = Path.Combine(state.Root, "artifacts", "warm-reference", "png-fast16", "native.png");
+                var file = Path.Combine(state.Root, "artifacts", "warm-reference", "png-fast16-adaptive", "native.png");
                 var bytes = File.ReadAllBytes(state.NativeOutput);
                 if (File.Exists(file))
                 {
@@ -482,7 +482,7 @@ public class WarmPng
                     : RgbTransparency ? "Authored RGB8 PNG; filter None, noninterlaced, six-byte tRNS key(48,139,231); BCL Optimal level6; identical resident encoded input"
                     : GrayTransparency && Depth == 16 ? "Authored gray16BE PNG; filter None, noninterlaced, tRNS two-byte key0x7f7f; BCL Optimal level6; identical resident encoded input"
                     : GrayTransparency ? "Authored gray8 PNG; filter None, noninterlaced, tRNS two-byte key127; BCL Optimal level6; identical resident encoded input"
-                    : Fastest ? "BCL Fastest level1 / FFmpeg level1; exact full RGBA16, filter None, unchanged5% IDAT-size gate"
+                    : Fastest ? "BCL Fastest level1 with eligible independent fixed-to-dynamic Huffman recoding / FFmpeg level1; complete staging/recoding/output timed; exact full RGBA16, filter None, unchanged5% IDAT-size gate"
                     : NoCompression ? "BCL NoCompression / FFmpeg level0; stored Deflate only, filter None, noninterlaced RGBA" + Depth
                     : Paeth ? $"Authored noninterlaced PNG RGBA{Depth}; every row Paeth; BCL Optimal level 6; identical resident encoded input"
                     : Up ? "Authored noninterlaced PNG RGBA8; every row Up; BCL Optimal level 6; identical resident encoded input"

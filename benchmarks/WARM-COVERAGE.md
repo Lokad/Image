@@ -10,7 +10,7 @@ round, at most three, with correctness established before timing.
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
 | PNG decode | RGBA8 all five filters and stored Deflate/None; RGBA16 None/Paeth/Adam7 and stored Deflate/None, plus exact working-memory boundary and live-cancelable RGBA16 at default/exact working limits; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed | Other material depths/layouts, shorter palettes or distinct public boundaries |
-| PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level6/None; byte RGB/gray/gray-alpha Optimal managed9/native6 with unchanged5% size gate confirmed; RGBA8/16 NoCompression/None confirmed; Fastest RGBA16 size refusal unscored | Other materially different compression work/public boundaries |
+| PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level6/None; byte RGB/gray/gray-alpha Optimal managed9/native6 with unchanged5% size gate confirmed; RGBA8/16 NoCompression/None confirmed; Fastest RGBA16 confirmed 0.787x / upper 0.791x after safe entropy recoding | Other materially different compression work/public boundaries |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4; baseline 4:2:0 with row restart markers confirmed 1.823x / upper 1.837x | Other materially different supported layouts/public boundaries |
 | JPEG encode | Adaptive RGBA8 4:4:4 confirmed 1.772x / upper 1.818x, 4:2:2 confirmed 1.821x / upper 1.862x and 4:2:0 confirmed 1.943x / upper 1.988x; adaptive RGBA16 4:4:4 confirmed 1.757x / upper 1.790x, 4:2:2 confirmed 1.874x / upper 1.884x and 4:2:0 confirmed 1.888x / upper 1.931x; live-cancelable RGBA16 4:2:0 confirmed 1.651x / upper 1.663x and RGBA8 4:4:4 prior confirmed with current regression; forward-only RGBA8 4:4:4 confirmed 1.754x / upper 1.765x and 4:2:0 confirmed 1.916x / upper 1.936x and RGBA16 4:2:0 confirmed 1.948x / upper 1.954x; adaptive RGBA8 row restarts confirmed 1.958x / upper 1.973x | Other material fallback layouts, grayscale and distinct public boundaries |
 | WebP | VP8 with alpha decode/encode; opaque VP8 encode confirmed RGBA8 1.892x / upper 1.918x and RGBA16 1.908x / upper 1.922x with current alpha8/16 regression screens; opaque VP8 decode confirmed 1.803x / upper 1.808x and alpha VP8 confirmed 1.803x / upper 1.819x; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs; exact VP8L backend encode | Other material depth/alpha alternatives and distinct public boundaries |
@@ -999,3 +999,12 @@ succeed, preserving every bit read, work/cancellation check and partial update.
 Local progressive accounting was slower and remains rejected. Both shared
 regression means pass before full3,349-test-per-OS/live/same actual package
 qualification. Stop this fixed pair; full material/current-source parity stays open.
+
+The [RGBA16 Fastest PNG entropy round](WARM-PNG-FAST16-RECODE.md) resolves its
+unscored size refusal and independently confirms 0.787x / upper 0.791x at
+5,478,765 managed B/op. Two safe scans preserve every literal/match token while
+IDAT becomes974,122 versus965,318 native bytes, within the unchanged5% gate.
+Ordinary word/byte PNG regression means pass before full3,371-test-per-OS/live/
+same actual package qualification. Only the original two rasters and three
+workloads are used. Stop this pair; caller/cancelable/constrained policies and
+full material/current-source warm parity remain open.

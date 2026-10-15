@@ -128,11 +128,11 @@ def render():
         row('WebP VP8L, native input', 'warm-vp8l-canonical-evidence.json', ['observations', -1], 'WARM-VP8L-CANONICAL.md', True),
     ]
     encodes = [
-        row('PNG RGBA8, level 6 / None', 'warm-png8encode-evidence.json', ['observations', -1], 'WARM-PNG8-ENCODE.md', True),
+        row('PNG RGBA8, level 6 / None', 'warm-pngfast16-recode-evidence.json', ['regressions', 1], 'WARM-PNG-FAST16-RECODE.md', verification='Regression screen; prior confirmed'),
         row('PNG RGBA8, NoCompression / None', 'warm-pngstore8copy-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-ENCODE.md', True),
         row('PNG RGBA16, NoCompression / None', 'warm-pngstore16-encode-evidence.json', ['observations', -1], 'WARM-PNG-STORED16-ENCODE.md', True),
-        pending('PNG RGBA16, Fastest / level1 / None', 'WARM-PNG-FAST16-REFUSAL.md', 'Unscored: IDAT-size gate failed'),
-        row('PNG RGBA16, level 6 / None', 'warm-pngstore16-encode-evidence.json', ['regressions', 0], 'WARM-PNG-STORED16-ENCODE.md', verification='Regression screen; prior confirmed'),
+        row('PNG RGBA16, Fastest / level1 / None', 'warm-pngfast16-recode-evidence.json', ['observations', -1], 'WARM-PNG-FAST16-RECODE.md', True),
+        row('PNG RGBA16, level 6 / None', 'warm-pngfast16-recode-evidence.json', ['regressions', 0], 'WARM-PNG-FAST16-RECODE.md', verification='Regression screen; prior confirmed'),
         row('PNG RGB8, Optimal managed9/native6 / None', 'warm-pngbyte-optimal-evidence.json', ['cases', 'rgb', 'confirm'], 'WARM-PNG-BYTE-OPTIMAL.md', True),
         row('PNG RGB16, level 6 / None', 'warm-pngrgb16encode-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-ENCODE.md', True),
         row('PNG gray8, Optimal managed9/native6 / None', 'warm-pngbyte-optimal-evidence.json', ['cases', 'gray', 'confirm'], 'WARM-PNG-BYTE-OPTIMAL.md', True),
@@ -347,18 +347,14 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round confirms complete live-cancelable progressive JPEG444
-decoding at **1.935x / upper 1.940x**, with unchanged **2,682,364 B/op**. Selecting
-the original per-bit correction loop once removes repeated impossible batch setup,
-preserving exact pixels and every work/cancellation check. Both OSes pass **3,349**
-Release tests, including **896** live comparisons, plus the same actual package's
-consumer and all three examples. Ordinary progressive and cancelable baseline
-JPEG rows show current short regression screens and retain prior confirmations.
-
-PNG16 Fastest remains unscored: write boundaries produce identical payloads.
-An independent entropy-only prototype preserves all literal/match tokens and
-passes the size gate at974,122 versus965,318 IDAT bytes; safe production integration
-and performance qualification remain open. See its linked refusal/diagnostic.
+The latest accepted round confirms complete PNG16 Fastest encoding at
+**0.787x / upper 0.791x**, with **5,478,765 B/op**. Independent safe Deflate entropy
+recoding preserves every literal/match token and exact pixels. IDAT is974,122
+versus965,318 native bytes, within the unchanged5% size gate; the historical
+refusal remains unscored. Both OSes pass **3,371** Release tests, including
+**898** live comparisons, plus the same actual package's consumer and all three
+examples. Ordinary PNG8/16 rows show current short regression screens and retain
+prior confirmations. Caller/cancelable/constrained policies need separate coverage.
 
 PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples
 and the unchanged 5% IDAT-size gate; earlier level6/level6 refusals remain unscored.

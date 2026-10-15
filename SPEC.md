@@ -490,9 +490,28 @@ The default `Optimal` compression policy uses the BCL's smallest-size search
 for 8-bit gray, RGB and gray-alpha output, avoiding the weaker compression of
 the runtime's default search on these layouts. Other formats and explicitly
 selected `Fastest`, `NoCompression` or `SmallestSize` policies retain their
-existing selection. This is an implementation policy, not a promise of a
-particular numeric backend level or exact compressed bytes. Samples, filter,
-chunk bounds, admission, work and cancellation contracts are unchanged.
+backend selection. This is an implementation policy, not a promise of a
+particular numeric backend level or exact compressed bytes. Samples, filter and
+chunk bounds are unchanged.
+
+Eligible RGBA `Fastest` output may independently recode fixed Deflate Huffman
+blocks into one smaller dynamic block, preserving every literal, length,
+distance, extra bit and the zlib header/checksum. Match finding and backend level
+stay unchanged. Canonical lengths are limited to15 bits; unsupported streams,
+overlong trees and nonsaving results retain the BCL payload. A shared1 KiB fixed
+prefix table is generated from RFC1951 format lengths; each image's histogram
+and adaptive codes are recomputed. No output is cached.
+Selection requires a noncancelable stock `MemoryStream`, 64 KiB..4 MiB of
+filtered input and sufficient complete workspace, work and output bounds. With
+filtered size F, capacity C=2F+65536, additional admitted workspace is2C+32768.
+The preflight includes original row work plus16C+131072 units. A completed recode
+charges eight units per actual compressed byte in each of two passes, plus131072
+table units; early refusal charges only its admitted passes. Stock output
+capacity is prepared for C bytes plus bounded chunk framing. Nonexpandable
+buffers that cannot fit, caller streams, cancelable operations and tighter
+budgets retain original incremental processing and failure state. Lossless
+encoded bytes can therefore differ with stream/cancellation/resource options;
+decoded samples remain exact.
 
 RGBA16 encoding packs complete RGBA words into big-endian rows using safe span
 conversion in groups of at most 4096 pixels. Cancellation precedes each group;

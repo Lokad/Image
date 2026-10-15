@@ -1,5 +1,9 @@
 # PNG RGBA16 Fastest comparison refusal
 
+Historical refusal, resolved by the subsequently qualified
+[safe entropy-recoding round](WARM-PNG-FAST16-RECODE.md). The original results below
+remain unscored; they are not performance measurements of the accepted output.
+
 The original 513×259 RGBA16 raster encoded with managed `Fastest` and FFmpeg
 `compression_level=1`, filter None, failed the existing 5% IDAT-size gate during
 preparation. Managed IDAT contains 1,023,460 bytes; native contains 965,318 bytes:
@@ -42,10 +46,9 @@ decoder paths and both normal/scalar pinned FFmpeg decoders preserve every word,
 alpha and hidden-RGB sample. Geometry, chunk CRCs, source and live-owner independence
 also pass.
 
-This prototype is not production-integrated or performance-qualified. Current
-Lokad.Image output still fails the original size gate, and the row remains
-unscored. The numeric refusal now includes the bounded diagnostic, exact token/
-packet hashes, actual decoder qualification reuse and ignored raw archive. Next:
-one safe C# entropy-recoding primitive with full admission/work/failure controls,
-followed by equivalent complete-operation comparisons; no compression-level sweep
-or broader fixture set.
+At this diagnostic checkpoint the prototype was not production-integrated or
+performance-qualified, and the original output still failed the size gate. The
+numeric refusal retains the bounded diagnostic, exact token/packet hashes,
+decoder qualification reuse and ignored raw archive. The linked subsequent round
+implements and qualifies one safe C# entropy-recoding primitive, without a
+compression-level sweep or broader fixture set.

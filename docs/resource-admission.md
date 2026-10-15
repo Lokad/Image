@@ -7,6 +7,25 @@ process RSS, GC retention, runtime/JIT state, or additional buffers retained by
 the caller. Releasing admission ends an algorithm's use of storage; it does not
 force the .NET collector to reclaim that storage.
 
+PNG `Fastest` RGBA encoding may retain a private BCL compressed stream and recode
+its fixed Huffman tokens into a smaller dynamic block. For filtered bytes F in
+64 KiB..4 MiB, C=2F+65536 bounds staging capacity. The optional path admits2C+32768
+additional bytes alongside the original source/row/64 KiB IDAT/1 MiB BCL charges,
+before allocating staging, a candidate buffer and bounded tree scratch. It uses
+two passes over compressed bytes, without a token array. One shared1 KiB fixed
+prefix lookup is generated from RFC1951 lengths as process-wide format metadata.
+Selection preflights original row work plus16C+131072 units and a whole output
+bound including chunk framing. Successful recoding charges16N+131072 for actual
+compressed size N. Shorter refusals retain only their admitted pass/table costs.
+Only noncancelable stock `MemoryStream` qualifies; its complete output capacity
+is prepared before buffering. Caller streams, nonexpandable insufficient buffers
+and constrained/cancelable calls retain original checks, callbacks and partial
+failures. Staging overflow falls back to unchanged streaming bytes. Unsupported
+blocks, overlong trees or nonsaving results also retain BCL bytes. Tests compare
+every length/distance, singleton/empty alphabets, truncation, exact budgets and
+partial failure state; eligible byte/word outputs have live normal/scalar FFmpeg
+controls. Encoded bytes may vary by eligibility; pixels/alpha/hidden RGB do not.
+
 JPEG's fixed AC codebook is shared immutable format state, derived once from an
 image-independent formula. Its one-time construction and retained code/length
 metadata are process-wide initialization, rather than per-image workspace. Fixed

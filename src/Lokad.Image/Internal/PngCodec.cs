@@ -1136,59 +1136,84 @@ internal static class PngCodec
             ? CompressionLevel.SmallestSize : options.Compression;
         using (var chunks = new IdatWriter(output))
         {
-            using (var zlib = new ZLibStream(chunks, compression, true))
+            PngDeflateStage? stage = null; long extraBytes = 0;
+            var filtered = (rowBytes + 1L) * source.Height;
+            if (compression == CompressionLevel.Fastest && color == 6 && !context.Cancellation.CanBeCanceled
+                && filtered is >= 65536 and <= 4 * 1024 * 1024 && output is LimitedWriteStream bounded)
             {
-                for (var y = 0; y < source.Height; y++)
+                var capacity = (int)(filtered * 2 + 65536);
+                var remainingOutput = capacity + ((capacity + 65535L) / 65536) * 12 + 12;
+                var workspace = capacity * 2L + ZlibFixedReencoder.WorkspaceBytes;
+                var work = (long)rowBytes * source.Height * 8 + ZlibFixedReencoder.RequiredWork(capacity);
+                if (workspace <= context.RemainingWorkingBytes && work <= context.RemainingWork
+                    && bounded.TryPrepareBufferedPng(remainingOutput))
                 {
-                    context.Work(rowBytes * 8L);
-                    if (color == 6 && source.BitDepth == 8)
-                    {
-                        for (var x = 0; x < source.Width; x += 4096)
-                        {
-                            context.Cancellation.ThrowIfCancellationRequested();
-                            var bytes = Math.Min(4096, source.Width - x) * 4;
-                            source.GetRow8(y).Slice(x * 4, bytes).CopyTo(row.AsSpan(x * 4, bytes));
-                        }
-                    }
-                    else if (color == 6 && source.BitDepth == 16)
-                    {
-                        for (var x = 0; x < source.Width; x += 4096)
-                        {
-                            context.Cancellation.ThrowIfCancellationRequested();
-                            var samples = Math.Min(4096, source.Width - x) * 4;
-                            var input = source.GetRow16(y).Slice(x * 4, samples);
-                            var destination = MemoryMarshal.Cast<byte, ushort>(row.AsSpan(x * 8, samples * 2));
-                            // PNG stores full-word samples most significant byte first.
-                            // The span overload provides portable vectorized conversion.
-                            if (BitConverter.IsLittleEndian) BinaryPrimitives.ReverseEndianness(input, destination);
-                            else input.CopyTo(destination);
-                        }
-                    }
-                    else
-                    {
-                        var position = 0;
-                        for (var x = 0; x < source.Width; x++)
-                        {
-                            if ((x & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested();
-                            var r = source.Sample(x, y, 0); var g = source.Sample(x, y, 1); var b = source.Sample(x, y, 2);
-                            var a = source.Sample(x, y, 3);
-                            var maximum = source.BitDepth == 8 ? 255 : 65535;
-                            if ((color is 0 or 4) && (r != g || r != b))
-                                throw new ArgumentException("Grayscale encoding requires equal RGB channels.", nameof(source));
-                            if ((color is 0 or 2) && a != maximum)
-                                throw new ArgumentException("Encoding without alpha requires opaque pixels.", nameof(source));
-                            WriteSample(row, ref position, r, source.BitDepth);
-                            if (color is 2 or 6)
-                            {
-                                WriteSample(row, ref position, g, source.BitDepth);
-                                WriteSample(row, ref position, b, source.BitDepth);
-                            }
-                            if (color is 4 or 6) WriteSample(row, ref position, a, source.BitDepth);
-                        }
-                    }
-                    zlib.WriteByte(0); // Correctness-first encoder: PNG filter None.
-                    zlib.Write(row);
+                    context.Reserve(workspace); extraBytes = workspace;
+                    stage = new PngDeflateStage(chunks, capacity);
                 }
+            }
+            try
+            {
+                using (var zlib = new ZLibStream(stage is null ? chunks : stage, compression, true))
+                {
+                    for (var y = 0; y < source.Height; y++)
+                    {
+                        context.Work(rowBytes * 8L);
+                        if (color == 6 && source.BitDepth == 8)
+                        {
+                            for (var x = 0; x < source.Width; x += 4096)
+                            {
+                                context.Cancellation.ThrowIfCancellationRequested();
+                                var bytes = Math.Min(4096, source.Width - x) * 4;
+                                source.GetRow8(y).Slice(x * 4, bytes).CopyTo(row.AsSpan(x * 4, bytes));
+                            }
+                        }
+                        else if (color == 6 && source.BitDepth == 16)
+                        {
+                            for (var x = 0; x < source.Width; x += 4096)
+                            {
+                                context.Cancellation.ThrowIfCancellationRequested();
+                                var samples = Math.Min(4096, source.Width - x) * 4;
+                                var input = source.GetRow16(y).Slice(x * 4, samples);
+                                var destination = MemoryMarshal.Cast<byte, ushort>(row.AsSpan(x * 8, samples * 2));
+                                // PNG stores full-word samples most significant byte first.
+                                // The span overload provides portable vectorized conversion.
+                                if (BitConverter.IsLittleEndian) BinaryPrimitives.ReverseEndianness(input, destination);
+                                else input.CopyTo(destination);
+                            }
+                        }
+                        else
+                        {
+                            var position = 0;
+                            for (var x = 0; x < source.Width; x++)
+                            {
+                                if ((x & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                                var r = source.Sample(x, y, 0); var g = source.Sample(x, y, 1); var b = source.Sample(x, y, 2);
+                                var a = source.Sample(x, y, 3);
+                                var maximum = source.BitDepth == 8 ? 255 : 65535;
+                                if ((color is 0 or 4) && (r != g || r != b))
+                                    throw new ArgumentException("Grayscale encoding requires equal RGB channels.", nameof(source));
+                                if ((color is 0 or 2) && a != maximum)
+                                    throw new ArgumentException("Encoding without alpha requires opaque pixels.", nameof(source));
+                                WriteSample(row, ref position, r, source.BitDepth);
+                                if (color is 2 or 6)
+                                {
+                                    WriteSample(row, ref position, g, source.BitDepth);
+                                    WriteSample(row, ref position, b, source.BitDepth);
+                                }
+                                if (color is 4 or 6) WriteSample(row, ref position, a, source.BitDepth);
+                            }
+                        }
+                        zlib.WriteByte(0); // Correctness-first encoder: PNG filter None.
+                        zlib.Write(row);
+                    }
+                }
+                stage?.Complete(context, (int)filtered);
+            }
+            finally
+            {
+                stage?.Dispose();
+                if (extraBytes != 0) context.Release(extraBytes);
             }
         }
         context.Cancellation.ThrowIfCancellationRequested();
@@ -1216,6 +1241,49 @@ internal static class PngCodec
         crc ^= value;
         for (var i = 0; i < 8; i++) crc = (crc >> 1) ^ ((crc & 1) == 0 ? 0 : 0xEDB88320u);
         return crc;
+    }
+
+    private sealed class PngDeflateStage(Stream sink, int capacity) : Stream
+    {
+        private byte[] buffer = new byte[capacity];
+        private int count;
+        private bool passthrough, completed;
+        public override bool CanRead => false;
+        public override bool CanSeek => false;
+        public override bool CanWrite => true;
+        public override long Length => throw new NotSupportedException();
+        public override long Position { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+        public override void Write(ReadOnlySpan<byte> data)
+        {
+            if (passthrough) { sink.Write(data); return; }
+            if (data.Length > buffer.Length - count)
+            {
+                passthrough = true; sink.Write(buffer.AsSpan(0, count)); count = 0;
+                sink.Write(data); return;
+            }
+            data.CopyTo(buffer.AsSpan(count)); count += data.Length;
+        }
+        public override void Write(byte[] data, int offset, int count) => Write(data.AsSpan(offset, count));
+        internal void Complete(OperationContext context, int decodedBytes)
+        {
+            if (passthrough) { completed = true; return; }
+            var original = buffer.AsSpan(0, count);
+            var recoded = new byte[count];
+            var changed = ZlibFixedReencoder.TryRecode(original, recoded, decodedBytes, context, out var size);
+            completed = true;
+            sink.Write(changed ? recoded.AsSpan(0, size) : original);
+        }
+        public override void Flush() { if (passthrough) sink.Flush(); }
+        protected override void Dispose(bool disposing)
+        {
+            // On an interrupted compression, publish precisely the original
+            // compressed prefix before the surrounding IDAT writer disposes.
+            if (disposing && !completed && !passthrough) { completed = true; sink.Write(buffer.AsSpan(0, count)); }
+            buffer = []; base.Dispose(disposing);
+        }
+        public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
     }
 
     private sealed class IdatWriter(Stream output) : Stream

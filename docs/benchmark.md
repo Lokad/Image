@@ -91,11 +91,11 @@ timing comparison; compression efficiency parity is not established.
 
 | Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG8-ENCODE.md) | 7,241.99 | 17,219.43 | 0.421 / 0.430 | 527,629 | Confirmed |
+| [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG-FAST16-RECODE.md) | 5,439.91 | 17,231.30 | 0.316 / 0.353 | 527,627 | Regression screen; prior confirmed |
 | [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED8-ENCODE.md) | 357.17 | 189.72 | 1.883 / 1.933 | 2,102,472 | Confirmed |
 | [PNG RGBA16, NoCompression / None](../benchmarks/WARM-PNG-STORED16-ENCODE.md) | 504.25 | 405.59 | 1.243 / 1.289 | 4,203,541 | Confirmed |
-| [PNG RGBA16, Fastest / level1 / None](../benchmarks/WARM-PNG-FAST16-REFUSAL.md) | — | — | — | — | Unscored: IDAT-size gate failed |
-| [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG-STORED16-ENCODE.md) | 14,544.25 | 20,072.37 | 0.725 / 0.756 | 2,103,776 | Regression screen; prior confirmed |
+| [PNG RGBA16, Fastest / level1 / None](../benchmarks/WARM-PNG-FAST16-RECODE.md) | 13,911.38 | 17,666.27 | 0.787 / 0.791 | 5,478,765 | Confirmed |
+| [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG-FAST16-RECODE.md) | 14,704.00 | 20,081.83 | 0.732 / 0.769 | 2,103,624 | Regression screen; prior confirmed |
 | [PNG RGB8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 10,402.09 | 9,514.15 | 1.093 / 1.107 | 527,098 | Confirmed |
 | [PNG RGB16, level 6 / None](../benchmarks/WARM-PNG-RGB16-ENCODE.md) | 13,121.10 | 15,174.40 | 0.865 / 0.871 | 2,102,765 | Confirmed |
 | [PNG gray8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 3,540.72 | 1,964.99 | 1.802 / 1.818 | 263,664 | Confirmed |
@@ -270,18 +270,14 @@ row includes every managed intermediate and the complete native filter graph;
 its output is 127x64. Other retained-owner and cold allocation patterns
 need separate coverage.
 
-The latest accepted round confirms complete live-cancelable progressive JPEG444
-decoding at **1.935x / upper 1.940x**, with unchanged **2,682,364 B/op**. Selecting
-the original per-bit correction loop once removes repeated impossible batch setup,
-preserving exact pixels and every work/cancellation check. Both OSes pass **3,349**
-Release tests, including **896** live comparisons, plus the same actual package's
-consumer and all three examples. Ordinary progressive and cancelable baseline
-JPEG rows show current short regression screens and retain prior confirmations.
-
-PNG16 Fastest remains unscored: write boundaries produce identical payloads.
-An independent entropy-only prototype preserves all literal/match tokens and
-passes the size gate at974,122 versus965,318 IDAT bytes; safe production integration
-and performance qualification remain open. See its linked refusal/diagnostic.
+The latest accepted round confirms complete PNG16 Fastest encoding at
+**0.787x / upper 0.791x**, with **5,478,765 B/op**. Independent safe Deflate entropy
+recoding preserves every literal/match token and exact pixels. IDAT is974,122
+versus965,318 native bytes, within the unchanged5% size gate; the historical
+refusal remains unscored. Both OSes pass **3,371** Release tests, including
+**898** live comparisons, plus the same actual package's consumer and all three
+examples. Ordinary PNG8/16 rows show current short regression screens and retain
+prior confirmations. Caller/cancelable/constrained policies need separate coverage.
 
 PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples
 and the unchanged 5% IDAT-size gate; earlier level6/level6 refusals remain unscored.
