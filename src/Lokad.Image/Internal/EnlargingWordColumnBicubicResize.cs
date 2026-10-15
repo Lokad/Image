@@ -50,6 +50,7 @@ internal static class EnlargingWordColumnBicubicResize
             Span<int> rows = stackalloc int[5];
             var input = source.Pixels;
             var stride = source.Stride;
+            var identityHeight = result.Height == source.Height;
             for (var tile = 0; tile < result.Width; tile += 8)
             {
                 var length = Math.Min(8, result.Width - tile);
@@ -79,13 +80,19 @@ internal static class EnlargingWordColumnBicubicResize
                 for (var y = 0; y < result.Height; y++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
+                    // Integer centers on an unchanged axis have the exact
+                    // cardinal kernel [0, 0, 1, 0, 0]. Omit zero-weight rows;
+                    // admission and work still charge the original support.
                     var center = (y + .5) * source.Height / result.Height - .5;
-                    var first = (int)Math.Ceiling(center - 2 * scaleY);
-                    var count = (int)Math.Floor(center + 2 * scaleY) - first + 1;
+                    // Retain original coordinate rounding even if callers raise
+                    // dimension limits beyond exact binary64 products.
+                    var identityRow = identityHeight && center == y;
+                    var first = identityRow ? y : (int)Math.Ceiling(center - 2 * scaleY);
+                    var count = identityRow ? 1 : (int)Math.Floor(center + 2 * scaleY) - first + 1;
                     double normalizerY = 0;
                     for (var t = 0; t < count; t++)
                     {
-                        var wy = ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bicubic);
+                        var wy = identityRow ? 1 : ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bicubic);
                         vertical[t] = wy; normalizerY += wy;
                         var sy = Math.Clamp(first + t, 0, source.Height - 1);
                         var slot = sy % 5; rows[t] = slot * 8;

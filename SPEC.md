@@ -276,6 +276,9 @@ covers 2,416 bytes of fixed arrays. A bounded source window is decoded once per
 reused row; exact unsigned word products widen to binary64 without quantization.
 Each horizontal/vertical accumulation retains tap order. Paired and single word
 outputs use the conservative `2^-40*16^2` budget and depth-scaled quotient guards.
+When height is unchanged and the original binary64 center is exactly integral,
+the cardinal vertical kernel has one unit tap; zero-weight source rows may be
+omitted. Original coordinate evaluation, full support admission and work remain.
 Uncertain ordinary or negative-alpha samples replay the original order locally;
 tiny-alpha pixels use an impossible completed-pixel marker in the private output.
 After the non-inlined strip frame returns and releases its admission, a timed
