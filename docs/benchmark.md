@@ -181,6 +181,12 @@ full packet ownership and the unchanged5% IDAT-size gate pass.
 sizes and allocations. Production/harness/native builds and qualification repeat
 counts are zero; stop these cases and retain other valid confirmed settings.
 
+The named alpha-bearing VP8 follow-up is closed: **Encode16 0.576x / upper0.581x**, **Encode8 0.569x / upper0.573x**. The unchanged fixed quality pair,
+exact alpha, full normalization/ownership and decoder bounds pass.
+[Current report](../benchmarks/WARM-CURRENT-VP8-ENCODE.md) includes allocations and
+471,436/98,590-byte packets; no compression-efficiency parity is claimed.
+Prepared quality records/packets and production qualification are reused.
+
 **Encode**
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
@@ -216,8 +222,8 @@ counts are zero; stop these cases and retain other valid confirmed settings.
 | [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAYSCALE.md) | 1,958.56 | 1,411.27 | 1.388 / 1.398 | 154,893 | Confirmed |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-OPAQUE-ENCODE.md) | 29,381.20 | 15,527.63 | 1.892 / 1.918 | 2,536,203 | Confirmed |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-OPAQUE-RGBA16.md) | 29,778.24 | 15,604.01 | 1.908 / 1.922 | 2,535,736 | Confirmed |
-| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-OPAQUE-ENCODE.md) | 30,157.65 | 53,549.54 | 0.563 / 0.655 | 2,615,939 | Regression screen; prior confirmed |
-| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-OPAQUE-ENCODE.md) | 30,644.46 | 53,908.23 | 0.568 / 0.598 | 2,615,472 | Regression screen; prior confirmed |
+| [WebP VP8 + alpha‡](../benchmarks/WARM-CURRENT-VP8-ENCODE.md) | 30,390.89 | 53,447.22 | 0.569 / 0.573 | 2,615,939 | Confirmed |
+| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-CURRENT-VP8-ENCODE.md) | 30,755.98 | 53,436.98 | 0.576 / 0.581 | 2,615,472 | Confirmed |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-ENCODE-EXACT.md) | 7,363.30 | 121,587.95 | 0.061 / 0.063 | 2,100,170 | Confirmed |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-OPAQUE8.md) | 7,195.24 | 70,637.23 | 0.102 / 0.103 | 2,100,170 | Confirmed |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-RGBA16-ENCODE.md) | 7,928.11 | 121,282.99 | 0.065 / 0.066 | 2,100,119 | Confirmed |

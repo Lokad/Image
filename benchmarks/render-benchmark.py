@@ -184,8 +184,8 @@ def render():
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-grayscale-evidence.json', ['observations', -1], 'WARM-JPEG-GRAYSCALE.md', True),
         row('WebP VP8, opaque‡', 'warm-vp8-encode-evidence.json', ['observations', -1], 'WARM-VP8-OPAQUE-ENCODE.md', True),
         row('WebP VP8, opaque from RGBA16‡', 'warm-vp8opaque16-evidence.json', ['observations', -1], 'WARM-VP8-OPAQUE-RGBA16.md', True),
-        row('WebP VP8 + alpha‡', 'warm-vp8-encode-evidence.json', ['regressionControls', 0], 'WARM-VP8-OPAQUE-ENCODE.md', verification='Regression screen; prior confirmed'),
-        row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8-encode-evidence.json', ['regressionControls', 1], 'WARM-VP8-OPAQUE-ENCODE.md', verification='Regression screen; prior confirmed'),
+        row('WebP VP8 + alpha‡', 'warm-current-vp8-encode-evidence.json', ['cases', 'Encode8', -1], 'WARM-CURRENT-VP8-ENCODE.md', True),
+        row('WebP VP8 + alpha from RGBA16‡', 'warm-current-vp8-encode-evidence.json', ['cases', 'Encode16', -1], 'WARM-CURRENT-VP8-ENCODE.md', True),
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-opaque8-evidence.json', ['observations', -1], 'WARM-VP8L-OPAQUE8.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8lencode16-evidence.json', ['observations', -1], 'WARM-VP8L-RGBA16-ENCODE.md', True),
@@ -385,6 +385,12 @@ full packet ownership and the unchanged5% IDAT-size gate pass.
 [Current report](../benchmarks/WARM-CURRENT-PNG-ENCODE.md) includes compressed
 sizes and allocations. Production/harness/native builds and qualification repeat
 counts are zero; stop these cases and retain other valid confirmed settings.
+
+The named alpha-bearing VP8 follow-up is closed: **Encode16 0.576x / upper0.581x**, **Encode8 0.569x / upper0.573x**. The unchanged fixed quality pair,
+exact alpha, full normalization/ownership and decoder bounds pass.
+[Current report](../benchmarks/WARM-CURRENT-VP8-ENCODE.md) includes allocations and
+471,436/98,590-byte packets; no compression-efficiency parity is claimed.
+Prepared quality records/packets and production qualification are reused.
 
 **Encode**
 

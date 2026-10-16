@@ -46,14 +46,12 @@ public class WarmWebp
     public static WarmWebpCase[] SelectedCases()
     {
         var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
-        return selection switch
-        {
-            null or "Encode8" => [WarmWebpCase.Encode8],
-            "Encode16" => [WarmWebpCase.Encode16],
-            "EncodeOpaque8" => [WarmWebpCase.EncodeOpaque8],
-            "EncodeOpaque16" => [WarmWebpCase.EncodeOpaque16],
-            _ => throw new ArgumentException("Choose one VP8 case: Encode8, Encode16, EncodeOpaque8 or EncodeOpaque16.")
-        };
+        var result = selection is null ? new[] { WarmWebpCase.Encode8 } : selection.Split(',')
+            .Select(value => Enum.TryParse<WarmWebpCase>(value, out var parsed) && Enum.IsDefined(parsed)
+                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, EncodeOpaque8 or EncodeOpaque16.")).ToArray();
+        if (result.Length is < 1 or > 3 || result.Distinct().Count() != result.Length)
+            throw new ArgumentException("Choose one to three distinct VP8 cases.");
+        return result;
     }
 
     private static JsonElement SourceIdentity(string root)
