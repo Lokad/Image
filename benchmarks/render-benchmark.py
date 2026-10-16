@@ -197,9 +197,9 @@ def render():
         row('Nearest upscale RGBA16', 'warm-nearestup16-evidence.json', ['observations', -1], 'WARM-NEAREST-UP16.md', True),
         row('Nearest resize RGBA16', 'warm-prepared-confirm-evidence.json', ['observations', -1], 'WARM-PREPARED-CONFIRM.md', True),
         row('Bilinear resize RGBA8', 'warm-bilinear8-quiet-evidence.json', ['observations', -1], 'WARM-BILINEAR8-QUIET.md', True),
-        row('Bilinear resize RGBA16†', 'warm-bilinear16-register-evidence.json', ['observations', -1], 'WARM-BILINEAR16-REGISTER.md', True),
-        row('Bilinear upscale RGBA8†', 'warm-bilinearup8-batch-evidence.json', ['observations', -1], 'WARM-BILINEAR-UP8-BATCH.md', True),
-        row('Bilinear upscale RGBA16†', 'warm-bilinearup16-rows-evidence.json', ['observations', -1], 'WARM-BILINEAR-UP16-ROWS.md', True),
+        row('Bilinear resize RGBA16†', 'warm-current-bilinear-evidence.json', ['cases', 'Down16', -1], 'WARM-CURRENT-BILINEAR.md', True),
+        row('Bilinear upscale RGBA8†', 'warm-current-bilinear-evidence.json', ['cases', 'Up8', -1], 'WARM-CURRENT-BILINEAR.md', True),
+        row('Bilinear upscale RGBA16†', 'warm-current-bilinear-evidence.json', ['cases', 'Up16', -1], 'WARM-CURRENT-BILINEAR.md', True),
         row('RGBA8 bicubic, single-pixel reduction', 'warm-bicubic-single-pixel-evidence.json', ['observations', -1], 'WARM-BICUBIC-SINGLE-PIXEL.md', True),
         row('Bicubic resize RGBA8§', 'warm-bicubic16-rows-evidence.json', ['byteRegressionControl', 'observations', -1], 'WARM-BICUBIC-RGBA16-ROWS.md', True),
         row('Bicubic resize RGBA16§', 'warm-bicubic16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-RGBA16-ROWS.md', True),
@@ -330,10 +330,12 @@ this does not certify every current path. Warm identification-only coverage is
 still missing: the existing inspection benchmark includes startup and I/O.
 See [material coverage](../benchmarks/WARM-COVERAGE.md) for scope and exclusions.
 
-The first current-path reconciliation confirms **RGBA8 bilinear downsampling**
-at **1.698x / upper1.704x**, **157,957 B/op**, on the existing qualified core.
-Exact managed rational pixels, native RGB bounds and exact native alpha pass.
-No production optimization, rebuild or repeated qualification was needed.
+All **four existing bilinear cases** now have independent confirmation on the
+current qualified core. Their conservative uppers range from 1.382x to 1.892x;
+the tables retain exact ratios and allocations. Exact managed rational pixels,
+native RGB bounds and the approved scoped alpha policies pass. No production
+optimization, rebuild or repeated qualification was needed. Stop these cases;
+the finite remaining coverage checklist stays open.
 
 **Decode**
 
