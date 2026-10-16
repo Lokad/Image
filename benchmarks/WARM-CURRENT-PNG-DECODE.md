@@ -1,10 +1,9 @@
 # Current PNG decode confirmations
 
-9 of the 25 named PNG decode cases awaiting current-path evidence independently
+11 of the 25 named PNG decode cases awaiting current-path evidence independently
 confirm within the 2x warm single-CPU target on the qualified production DLL.
 Older full-operation timings preceded shared overwrite-pool and fused framing/
-inflation changes. These measurements resolve that uncertainty; no optimization
-is needed. Stop confirmed pairs; full required warm coverage remains open.
+inflation changes. Stop confirmed pairs; full required warm coverage remains open.
 
 | Existing case | PNG color / depth / filter | Lokad.Image µs | FFmpeg µs | Ratio / upper | Managed B/op | Actual / selected |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
@@ -17,6 +16,8 @@ is needed. Stop confirmed pairs; full required warm coverage remains open.
 | DecodeAverage8 | 6 / 8 / 3 | 2,380.32 | 1,850.31 | 1.286 / 1.298 | 4,456 | 12 / 10 |
 | DecodePalette4 | 3 / 4 / 0 | 109.81 | 140.53 | 0.781 / 0.799 | 984 | 12 / 12 |
 | DecodeGray8 | 0 / 8 / 0 | 357.47 | 363.27 | 0.984 / 0.993 | 1,384 | 12 / 11 |
+| DecodeGray4 | 0 / 4 / 0 | 116.09 | 169.54 | 0.685 / 0.698 | 872 | 12 / 11 |
+| Decode8 | 6 / 8 / 0 | 1,904.89 | 1,392.72 | 1.368 / 1.371 | 4,456 | 12 / 12 |
 
 Each operation decodes the identical resident original 513x259 PNG into an
 independently owned RGBA buffer. Managed public Decode, admission, container/
@@ -66,4 +67,6 @@ profile is introduced. The [numeric evidence](warm-current-png-decode-evidence.j
 retains all samples, quiet guards, allocations, exact identities and qualification
 reuse. Each result certifies its named fixed input/public boundary.
 
-Remaining named cases, largest retained ratios first: DecodeNoCompression16, DecodeGray4, Decode8, DecodePalette8PartialAlpha, DecodeRgb8Transparency, DecodeRgb8, DecodeGrayAlpha8, DecodeRgb16Transparency, DecodeNoCompression8, DecodePaeth16, DecodeGray1, DecodePalette8, DecodePalette2, DecodeGray2, DecodeGray8Transparency, DecodePalette1.
+Remaining named cases, largest retained ratios first: DecodePalette8PartialAlpha, DecodeRgb8Transparency, DecodeRgb8, DecodeGrayAlpha8, DecodeRgb16Transparency, DecodeNoCompression8, DecodePaeth16, DecodeGray1, DecodePalette8, DecodePalette2, DecodeGray2, DecodeGray8Transparency, DecodePalette1.
+
+**Demonstrated gap: DecodeNoCompression16.** The retained three-actual current-code screen measures 659.32µs versus FFmpeg 297.10µs, 2.219x (screen upper 2.614x), 1,072,108B/op. Both quiet guards and exact-pixel/ownership gates pass. This is an open screen, not a confirmation. Its compressed input exceeds the private one-MiB retention ceiling and is allocated each call; test that bounded storage primitive first. No independent twelve is spent on this failing screen.

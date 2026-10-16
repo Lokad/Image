@@ -81,12 +81,12 @@ def render():
         row('JPEG420 restart, fresh seekable Stream', 'warm-jpeg-ac-cache-evidence.json', ['observations', 8], 'WARM-JPEG-AC-CACHE.md', True),
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8stream-evidence.json', ['observations', -1], 'WARM-VP8-STREAM.md', True),
         row('WebP VP8L, fresh seekable Stream', 'warm-vp8lstream-evidence.json', ['observations', -1], 'WARM-VP8L-STREAM.md', True),
-        row('PNG RGBA8, None', 'warm-pngtightcancel8-evidence.json', ['regressions', 1], 'WARM-PNG-TIGHT-CANCELABLE8.md', verification='Regression screen; prior confirmed'),
+        row('PNG RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGBA8, None / live cancelable token', 'warm-png-boundaries-current-evidence.json', ['cases', 'byteDefault', -1], 'WARM-PNG-DECODE-BOUNDARIES.md', True),
         row('PNG RGBA8, None / exact working limit', 'warm-pngcountall-evidence.json', ['observations', -1], 'WARM-PNG-COUNTING.md', True),
         row('PNG RGBA8, None / exact limit + live cancelable token', 'warm-pngtightcancel8-evidence.json', ['observations', -1], 'WARM-PNG-TIGHT-CANCELABLE8.md', True),
         row('PNG RGBA8, stored Deflate / None', 'warm-pngstore8decode-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-DECODE.md', True),
-        row('PNG RGBA16, stored Deflate / None', 'warm-pngstored16-decode-evidence.json', ['observations', -1], 'WARM-PNG-STORED16-DECODE.md', True),
+        row('PNG RGBA16, stored Deflate / None', 'warm-current-png-decode-evidence.json', ['demonstratedGaps', 'DecodeNoCompression16', -1], 'WARM-CURRENT-PNG-DECODE.md'),
         row('PNG RGBA16, None', 'warm-current-png16-bicubic16-evidence.json', ['cases', 'png16', -1], 'WARM-CURRENT-PNG16-BICUBIC16.md', True),
         row('PNG RGBA16, None / exact working limit', 'warm-png-boundaries-current-evidence.json', ['cases', 'wordExact', -1], 'WARM-PNG-DECODE-BOUNDARIES.md', True),
         row('PNG RGBA16, None / live cancelable token', 'warm-pngcountall-evidence.json', ['wordConfirmations', 1], 'WARM-PNG-COUNTING.md', True),
@@ -127,7 +127,7 @@ def render():
         row('PNG gray2 + tRNS key0 → RGBA8, None', 'warm-png-packed-transparency-evidence.json', ['observations', -1], 'WARM-PNG-PACKED-TRANSPARENCY.md', True),
         pending('PNG gray1/key1 and gray2/key1, unfiltered native', 'WARM-PNG-PACKED-TRANSPARENCY.md', 'Unscored: native alpha differs'),
         row('PNG opaque gray2 → RGBA8, None', 'warm-pnggray2-current-evidence.json', ['observations', -1], 'WARM-PNG-GRAY2-CURRENT.md', True),
-        row('PNG opaque gray4 → RGBA8, None', 'warm-pnggray4-reuse-evidence.json', ['observations', -1], 'WARM-PNG-GRAY4-REUSE.md', True),
+        row('PNG opaque gray4 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('JPEG baseline gray', 'warm-current-jpeg-decode-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
         row('JPEG baseline 4:2:0', 'warm-current-jpeg-decode-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-current-jpeg-decode-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
@@ -353,11 +353,14 @@ pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-PROGRESSIVE.md) includes
 allocations and unchanged-build/qualification reuse. Stop these cases and the
 already confirmed444/live-token444 pairs; remaining material coverage is open.
 
-Current PNG decode reconciliation: **9/25 named affected cases** independently
+Current PNG decode reconciliation: **11/25 named affected cases** independently
 confirm on the qualified core, worst upper **1.458x**. Exact RGBA/alpha/hidden
 RGB and complete output ownership pass. [Current report](../benchmarks/WARM-CURRENT-PNG-DECODE.md)
 includes allocations and remaining cases. Shared three-case drivers preserve
 sequential short/independent confirmation jobs without production rebuilds.
+Stored RGBA16 is now a demonstrated **2.219x open screen**, prioritized before
+remaining uncertain cases; its private compressed-input retention is the first
+bounded optimization candidate.
 
 **Decode**
 
