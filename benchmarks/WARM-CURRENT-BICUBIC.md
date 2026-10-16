@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Twenty-five of the existing 61 named bicubic cases have valid current-path evidence.
+Twenty-eight of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -234,3 +234,19 @@ an equal halo constant alias and untimed ready metadata; removing those yields
 identical complete timed source. No build, statistical job or qualification
 repeat. Stop this case. Next reconcile existing TightWide8 and Wide8; the full
 finite checklist and identification coverage remain open.
+
+The existing128x64 wide cases independently confirm: TightWide8 1.687x/upper1.701x at32,889B/op; Wide8 1.534x/upper1.540x at231,229B/op; Wide16 1.212x/upper1.218x at263,991B/op.
+Their actual archived dispatchers predate the mixed-axis rejection calls now
+executed before the selected paths. Default Wide8/Wide16 also exercise the
+edited paired-tap row-cache loop; these current measurements resolve both
+uncertainties. TightWide8 retains its bounded column fallback. Exact rational/
+frozen pixels, unchanged native bounds, source and full ownership pass.
+
+All short means precede independent twelve-actual confirmations. Every actual
+and both quiet guards are retained; selected/all-actual confidence passes. The
+same qualified production/harness and original two rasters are reused. Two
+selected native adapters are refreshed from changed owned source with identical
+compiler/flags/scaler and frozen outputs; two shared drivers serve six jobs.
+Zero production/harness builds or repeated qualification. Stop all three.
+Five already named wide-cache cases still need current-loop evidence. Next
+reconcile TightVerticalUp16 and Tight64x32_16; full coverage remains open.
