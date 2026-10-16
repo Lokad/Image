@@ -9,10 +9,12 @@ the passing pair. No production optimization is needed for the confirmed cases.
 | --- | ---: | ---: | ---: | ---: |
 | Clone RGBA8 | 9.50 / 7.95 | 1.195 / 1.209 | 96 | 12 / 11 |
 | Horizontal flip RGBA8 | 11.64 / 9.52 | 1.223 / 1.235 | 128 | 12 / 10 |
+| Normal orientation RGBA8 | 9.29 / 7.63 | 1.217 / 1.254 | 128 | 12 / 10 |
+| Normal orientation RGBA16 | 18.58 / 16.70 | 1.112 / 1.132 | 128 | 12 / 10 |
 | Clone RGBA16 | 19.06 / 17.02 | 1.120 / 1.141 | 96 | 12 / 11 |
 | Horizontal flip RGBA16 | 21.83 / 27.03 | 0.807 / 0.811 | 128 | 12 / 12 |
 
-4/20 named single-owner cases currently have independent confirmations.
+6/20 named single-owner cases currently have independent confirmations.
 The separately confirmed two-live-output flip is reused and is outside this
 single-owner count. The two original 513x259 byte/word rasters, fixed crop and
 permutation geometries, native workers and exact output hashes are unchanged.

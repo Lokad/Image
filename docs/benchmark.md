@@ -306,8 +306,8 @@ Prepared quality records/packets and production qualification are reused.
 | [Crop RGBA16](../benchmarks/WARM-CROP-COPY.md) | 4.11 | 4.15 | 0.991 / 1.003 | 96 | Confirmed |
 | [Clone RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 9.50 | 7.95 | 1.195 / 1.209 | 96 | Confirmed |
 | [Clone RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 19.06 | 17.02 | 1.120 / 1.141 | 96 | Confirmed |
-| [Normal orientation RGBA8](../benchmarks/WARM-COPIES8-QUIET.md) | 9.92 | 7.98 | 1.243 / 1.296 | 128 | Confirmed |
-| [Normal orientation RGBA16](../benchmarks/WARM-FLIP-ORIENTATION-QUIET.md) | 18.01 | 16.59 | 1.086 / 1.102 | 128 | Confirmed |
+| [Normal orientation RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 9.29 | 7.63 | 1.217 / 1.254 | 128 | Confirmed |
+| [Normal orientation RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 18.58 | 16.70 | 1.112 / 1.132 | 128 | Confirmed |
 | [Vertical flip RGBA8](../benchmarks/WARM-FLIPTURN8-FRESH.md) | 9.02 | 8.28 | 1.090 / 1.110 | 128 | Confirmed |
 | [Vertical flip RGBA16](../benchmarks/WARM-DIRECTIONS16-QUIET.md) | 17.16 | 17.57 | 0.977 / 0.983 | 128 | Confirmed |
 | [Horizontal flip RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 11.64 | 9.52 | 1.223 / 1.235 | 128 | Confirmed |
