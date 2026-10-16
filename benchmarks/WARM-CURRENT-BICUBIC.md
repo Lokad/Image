@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Eighteen of the existing 61 named bicubic cases have valid current-path evidence.
+Nineteen of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -156,3 +156,21 @@ both quiet guards pass. The already refreshed horizontal-word worker from the
 tight case serves the identical native geometry. Zero production/harness/native
 builds or repeated qualification; two selection drivers. Stop this case. Next
 reconcile the two existing64x32 byte paths, without a new image or shape grid.
+
+Tight64x32_8 independently confirms1.718x/upper1.743x at8,313B/op after a
+passing1.747x screen. Its old dispatcher also predated the mixed entry calls.
+Exact rational/frozen pixels, unchanged native bounds, tight working limit,
+independent owners, all twelve actuals and both guards pass. One selected
+adapter refresh retains the same compiler, flags and scaler archive; no
+production/harness build or qualification repeat. Two shared selection drivers.
+Stop this case.
+
+Default-limit Down64x32_8 remains open: its valid three-actual screen is2.121x/
+upper2.361x at205,882B/op. This is not an independent passing confirmation.
+The original failed metadata-only postcheck is retained: the template expected
+halo4 while this pre-existing baseline uses16. Revalidating the original receipt,
+binaries and both guards against frozen16 corrects that check without retiming.
+No pixel, quality or workload boundary changed. A six-second diagnostic profile
+locates81% in the wide row-cache method, chiefly its horizontal accumulation and
+indexed loads;18% is the exact original-pixel fallback. The next bounded
+experiment targets this cache primitive only. No new case or image is added.
