@@ -63,6 +63,12 @@ Exact frozen pixels, existing native agreement bounds and complete output
 ownership pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-DECODE.md)
 states the fixed inputs and remaining cases. No production rebuild or retuning.
 
+Current progressive JPEG reconciliation confirms the three named gray/420/422
+pairs, worst upper **1.960x**. Exact frozen pixels and unchanged native bounds
+pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-PROGRESSIVE.md) includes
+allocations and unchanged-build/qualification reuse. Stop these cases and the
+already confirmed444/live-token444 pairs; remaining material coverage is open.
+
 **Decode**
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
@@ -132,10 +138,10 @@ states the fixed inputs and remaining cases. No production rebuild or retuning.
 | [JPEG direct RGB 4:2:2, timed centered correction](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 1,495.61 | 1,092.79 | 1.369 / 1.375 | 1,978,658 | Confirmed |
 | [JPEG direct RGB 4:2:0, timed component-plane interpretation](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 1,131.19 | 742.22 | 1.524 / 1.532 | 1,619,540 | Confirmed |
 | [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-JPEG-BASELINE-AC-RUN.md) | 3,048.96 | 1,722.47 | 1.770 / 1.797 | 2,664,373 | Confirmed |
-| [JPEG progressive gray](../benchmarks/WARM-JPEG-REFINEMENT.md) | 3,336.90 | 1,743.36 | 1.914 / 1.942 | 1,232,501 | Confirmed |
-| [JPEG progressive 4:2:0](../benchmarks/WARM-JPEG-PROGRESSIVE420.md) | 3,646.81 | 1,938.47 | 1.881 / 1.894 | 1,637,521 | Confirmed |
+| [JPEG progressive gray](../benchmarks/WARM-CURRENT-JPEG-PROGRESSIVE.md) | 3,343.59 | 1,709.58 | 1.956 / 1.960 | 1,232,501 | Confirmed |
+| [JPEG progressive 4:2:0](../benchmarks/WARM-CURRENT-JPEG-PROGRESSIVE.md) | 3,187.59 | 1,952.50 | 1.633 / 1.650 | 1,637,521 | Confirmed |
 | [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-PROGRESSIVE-CANCELABLE444.md) | 6,453.37 | 3,335.92 | 1.935 / 1.940 | 2,682,364 | Confirmed |
-| [JPEG progressive 4:2:2](../benchmarks/WARM-JPEG-PROGRESSIVE422.md) | 3,882.57 | 2,210.07 | 1.757 / 1.781 | 1,996,661 | Confirmed |
+| [JPEG progressive 4:2:2](../benchmarks/WARM-CURRENT-JPEG-PROGRESSIVE.md) | 3,913.19 | 2,244.21 | 1.744 / 1.752 | 1,996,661 | Confirmed |
 | [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-AC-CACHE.md) | 6,282.99 | 3,348.11 | 1.877 / 1.896 | 2,682,364 | Confirmed |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8-FILTER8.md) | 10,777.02 | 5,977.48 | 1.803 / 1.819 | 1,966,616 | Confirmed |
 | [WebP VP8 opaque, simple luma filter](../benchmarks/WARM-VP8-SIMPLE-FILTER.md) | 8,538.31 | 4,889.76 | 1.746 / 1.765 | 760,548 | Confirmed |

@@ -138,10 +138,10 @@ def render():
         row('JPEG direct RGB 4:2:2, timed centered correction', 'warm-current-jpeg-decode-evidence.json', ['cases', 'DirectRgb422', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
         row('JPEG direct RGB 4:2:0, timed component-plane interpretation', 'warm-current-jpeg-decode-evidence.json', ['cases', 'DirectRgb420', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
         row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg-ac-run-evidence.json', ['cancelableConfirmations', -1], 'WARM-JPEG-BASELINE-AC-RUN.md', True),
-        row('JPEG progressive gray', 'warm-jpegrefinement-evidence.json', ['observations', -1], 'WARM-JPEG-REFINEMENT.md', True),
-        row('JPEG progressive 4:2:0', 'warm-jpegprogressive420-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE420.md', True),
+        row('JPEG progressive gray', 'warm-current-jpeg-progressive-evidence.json', ['cases', 'ProgressiveGray', -1], 'WARM-CURRENT-JPEG-PROGRESSIVE.md', True),
+        row('JPEG progressive 4:2:0', 'warm-current-jpeg-progressive-evidence.json', ['cases', 'Progressive420', -1], 'WARM-CURRENT-JPEG-PROGRESSIVE.md', True),
         row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpegprogressive444cancel-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE-CANCELABLE444.md', True),
-        row('JPEG progressive 4:2:2', 'warm-jpegprogressive422-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE422.md', True),
+        row('JPEG progressive 4:2:2', 'warm-current-jpeg-progressive-evidence.json', ['cases', 'Progressive422', -1], 'WARM-CURRENT-JPEG-PROGRESSIVE.md', True),
         row('JPEG progressive 4:4:4', 'warm-jpeg-ac-cache-evidence.json', ['observations', 7], 'WARM-JPEG-AC-CACHE.md', True),
         row('WebP VP8 + alpha', 'warm-vp8-filter8-evidence.json', ['alphaBearingControl', 'observations', -1], 'WARM-VP8-FILTER8.md', True),
         row('WebP VP8 opaque, simple luma filter', 'warm-vp8-simple-filter-evidence.json', ['observations', -1], 'WARM-VP8-SIMPLE-FILTER.md', True),
@@ -346,6 +346,12 @@ independently confirm on the qualified core, worst upper **1.626x**.
 Exact frozen pixels, existing native agreement bounds and complete output
 ownership pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-DECODE.md)
 states the fixed inputs and remaining cases. No production rebuild or retuning.
+
+Current progressive JPEG reconciliation confirms the three named gray/420/422
+pairs, worst upper **1.960x**. Exact frozen pixels and unchanged native bounds
+pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-PROGRESSIVE.md) includes
+allocations and unchanged-build/qualification reuse. Stop these cases and the
+already confirmed444/live-token444 pairs; remaining material coverage is open.
 
 **Decode**
 
