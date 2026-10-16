@@ -120,7 +120,7 @@ B11 twenty existing single-owner exact edits after the shared pool change.
 
 Current B11 single-owner exact edits: [20/20 named cases](WARM-CURRENT-EXACT-EDITS.md) independently confirm on unchanged qualified production, with exact pixels/full ownership, all twelve actuals and both guards. Zero production/harness/native builds or repeated qualification. Stop confirmed cases; B11 is closed. B12 bicubic reconciliation and C01-C04 Identify stay open.
 
-Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): fifty-four of61 named
+Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): fifty-seven of61 named
 cases are stopped. Three late enlargement proofs reuse actual source/native
 identities; current HorizontalUp16/single-pixel proofs remain stopped. Ordinary
 Mixed16/Mixed8 independently confirm on unchanged qualified production at1.912x/
@@ -155,6 +155,19 @@ before its independent twelve-actual job; all actuals and both quiet guards are
 retained. Same qualified production/harness and original rasters throughout.
 The byte16x8 worker is reused; two word adapters are refreshed with the same
 compiler, flags and scaler and frozen outputs. Two shared drivers serve six jobs;
+zero production/harness builds or repeated qualification. Stop all three.
+
+Three existing default-cache/streaming cases independently confirm: Down16x8_16 0.889x / upper 0.893x, 202,231 B/op; Tight8x4_8 0.765x / upper 0.772x, 249 B/op; Tight8x4_16 0.643x / upper 0.651x, 377 B/op.
+The default word16x8 case executes the edited paired-tap wide-cache loop and
+mixed rejection calls; all eight existing paths affected by that production
+change now have current evidence. Both tight8x4 selected streaming kernels
+moved row-block preparation inside each output column and removed the executed
+height predicate; later uncalled dispatch additions alone are not invalidators.
+Exact rational/frozen pixels, strict native RGB/alpha maximum1 and RMSE0.25,
+limits and full ownership pass. Every short mean precedes independent twelve;
+all actuals and both quiet guards are retained on the same qualified build.
+The word16x8 worker is reused; two8x4 adapters are refreshed with unchanged
+compiler, flags, scaler and frozen outputs. Two shared drivers serve six jobs;
 zero production/harness builds or repeated qualification. Stop all three.
 
 Remaining named B12 helper/dispatch cases and C01-C04 stay open; no grid is added.
