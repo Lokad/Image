@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Forty of the existing 61 named bicubic cases have valid current-path evidence.
+Forty-three of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -323,3 +323,18 @@ adapter is refreshed from changed owned source with unchanged compiler/flags/
 scaler and frozen outputs. Two shared drivers serve six jobs. Zero production/
 harness builds or repeated qualification. Stop all three. Three named wide-cache
 paths and the remaining finite checklist stay open; next Tight32x16_16/Down16x8_8.
+
+The next three existing support cases independently confirm: Tight32x16_16 1.383x/upper1.394x at4,217B/op; Down16x8_8 0.803x/upper0.809x at201,728B/op; Down32x16_16 1.105x/upper1.110x at201,398B/op.
+Their actual archived dispatchers lack the mixed-axis rejection calls now
+executed before selected paths. Both default cases also execute the edited
+wide-cache paired-tap loop. Current complete timings resolve these uncertainties.
+
+Exact rational/frozen pixels, unchanged maximum1/RMSE0.25 native bounds, source,
+working limits and independent ownership pass. Each short mean precedes its
+independent twelve-actual confirmation; every actual and both quiet guards are
+retained, with selected/all confidence. Same qualified production/harness and
+two original rasters. Two selected adapters are refreshed from changed owned
+source with identical compiler/flags/scaler and frozen outputs; two shared
+drivers serve six jobs. Zero production/harness builds or repeated qualification.
+Stop all three. Only Down16x8_16 remains among the edited wide-cache paths;
+the remaining finite checklist stays open. Next Tight2x9_8 and VerticalUp16.
