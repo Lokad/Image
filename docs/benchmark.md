@@ -81,6 +81,12 @@ storage reuse halves decode time. Exact pixels, both quiet guards, all twelve
 actuals and fresh Windows/Linux differential/same-package qualification pass.
 Unchanged smaller-input confirmations remain valid; other named coverage is open.
 
+The named Adam7 follow-up is closed: **RGBA16 1.377x / upper1.381x** and
+**packed gray1 1.314x / upper1.320x** independently confirm on unchanged production
+inputs. [Current evidence](../benchmarks/WARM-CURRENT-PNG-ADAM7.md) records exact
+pixels, allocations, all twelve actuals and both guards. Later palette4/8 proofs
+are reused; no production rebuild or repeated qualification.
+
 **Decode**
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
@@ -115,8 +121,8 @@ Unchanged smaller-input confirmations remain valid; other named coverage is open
 | [PNG RGB16, Paeth](../benchmarks/WARM-PNG-RGB16-PAETH.md) | 8,510.46 | 4,469.96 | 1.904 / 1.928 | 6,504 | Confirmed |
 | [PNG gray8, Paeth](../benchmarks/WARM-PNG-GRAY8-PAETH.md) | 1,038.34 | 1,029.60 | 1.008 / 1.014 | 1,384 | Confirmed |
 | [PNG gray-alpha8, Paeth](../benchmarks/WARM-PNG-GRAY-ALPHA8-PAETH.md) | 2,051.11 | 2,016.66 | 1.017 / 1.068 | 2,408 | Confirmed |
-| [PNG RGBA16, Adam7](../benchmarks/WARM-PNG-SCATTER.md) | 6,567.82 | 3,984.54 | 1.648 / 1.700 | 2,024,532 | Confirmed |
-| [PNG gray1 → RGBA8, Adam7](../benchmarks/WARM-PNG-GRAY1-ADAM7.md) | 1,265.54 | 1,243.33 | 1.018 / 1.032 | 1,424 | Confirmed |
+| [PNG RGBA16, Adam7](../benchmarks/WARM-CURRENT-PNG-ADAM7.md) | 5,393.13 | 3,917.00 | 1.377 / 1.381 | 23,600 | Confirmed |
+| [PNG gray1 → RGBA8, Adam7](../benchmarks/WARM-CURRENT-PNG-ADAM7.md) | 1,512.17 | 1,150.81 | 1.314 / 1.320 | 1,424 | Confirmed |
 | [PNG palette8 + tRNS, Adam7](../benchmarks/WARM-PNG-PALETTE8-ADAM7.md) | 1,710.03 | 1,465.40 | 1.167 / 1.177 | 4,960 | Confirmed |
 | [PNG RGB16, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 2,297.09 | 2,227.02 | 1.031 / 1.034 | 6,504 | Confirmed |
 | [PNG gray8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 357.47 | 363.27 | 0.984 / 0.993 | 1,384 | Confirmed |

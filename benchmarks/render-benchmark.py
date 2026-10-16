@@ -103,8 +103,8 @@ def render():
         row('PNG RGB16, Paeth', 'warm-png-rgb16-paeth-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-PAETH.md', True),
         row('PNG gray8, Paeth', 'warm-png-gray8-paeth-evidence.json', ['observations', -1], 'WARM-PNG-GRAY8-PAETH.md', True),
         row('PNG gray-alpha8, Paeth', 'warm-png-gray-alpha8-paeth-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA8-PAETH.md', True),
-        row('PNG RGBA16, Adam7', 'warm-pngscatter-evidence.json', ['observations', -1], 'WARM-PNG-SCATTER.md', True),
-        row('PNG gray1 → RGBA8, Adam7', 'warm-pnggray1adam7-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-ADAM7.md', True),
+        row('PNG RGBA16, Adam7', 'warm-current-png-adam7-evidence.json', ['cases', 'DecodeAdam7_16', -1], 'WARM-CURRENT-PNG-ADAM7.md', True),
+        row('PNG gray1 → RGBA8, Adam7', 'warm-current-png-adam7-evidence.json', ['cases', 'DecodeGray1Adam7', -1], 'WARM-CURRENT-PNG-ADAM7.md', True),
         row('PNG palette8 + tRNS, Adam7', 'warm-png-palette8-adam7-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE8-ADAM7.md', True),
         row('PNG RGB16, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeRgb16', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG gray8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
@@ -364,6 +364,12 @@ The demonstrated stored RGBA16 gap is resolved: **2.219x → 1.090x**, upper
 storage reuse halves decode time. Exact pixels, both quiet guards, all twelve
 actuals and fresh Windows/Linux differential/same-package qualification pass.
 Unchanged smaller-input confirmations remain valid; other named coverage is open.
+
+The named Adam7 follow-up is closed: **RGBA16 1.377x / upper1.381x** and
+**packed gray1 1.314x / upper1.320x** independently confirm on unchanged production
+inputs. [Current evidence](../benchmarks/WARM-CURRENT-PNG-ADAM7.md) records exact
+pixels, allocations, all twelve actuals and both guards. Later palette4/8 proofs
+are reused; no production rebuild or repeated qualification.
 
 **Decode**
 
