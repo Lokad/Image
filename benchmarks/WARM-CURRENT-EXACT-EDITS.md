@@ -12,13 +12,15 @@ the passing pair. No production optimization is needed for the confirmed cases.
 | Normal orientation RGBA8 | 9.29 / 7.63 | 1.217 / 1.254 | 128 | 12 / 10 |
 | Counterclockwise quarter turn RGBA16 | 49.42 / 45.49 | 1.086 / 1.103 | 128 | 12 / 11 |
 | Half turn RGBA8 | 11.25 / 11.32 | 0.994 / 1.021 | 128 | 12 / 11 |
+| Transpose RGBA16 | 48.17 / 44.86 | 1.074 / 1.114 | 128 | 12 / 12 |
 | Normal orientation RGBA16 | 18.58 / 16.70 | 1.112 / 1.132 | 128 | 12 / 10 |
 | Clone RGBA16 | 19.06 / 17.02 | 1.120 / 1.141 | 96 | 12 / 11 |
 | Counterclockwise quarter turn RGBA8 | 38.11 / 37.49 | 1.016 / 1.030 | 128 | 12 / 11 |
+| Transpose RGBA8 | 38.05 / 38.28 | 0.994 / 1.004 | 128 | 12 / 11 |
 | Horizontal flip RGBA16 | 21.83 / 27.03 | 0.807 / 0.811 | 128 | 12 / 12 |
 | Half turn RGBA16 | 18.59 / 21.86 | 0.850 / 0.874 | 128 | 12 / 10 |
 
-10/20 named single-owner cases currently have independent confirmations.
+12/20 named single-owner cases currently have independent confirmations.
 The separately confirmed two-live-output flip is reused and is outside this
 single-owner count. The two original 513x259 byte/word rasters, fixed crop and
 permutation geometries, native workers and exact output hashes are unchanged.
