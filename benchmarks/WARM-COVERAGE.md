@@ -120,7 +120,7 @@ B11 twenty existing single-owner exact edits after the shared pool change.
 
 Current B11 single-owner exact edits: [20/20 named cases](WARM-CURRENT-EXACT-EDITS.md) independently confirm on unchanged qualified production, with exact pixels/full ownership, all twelve actuals and both guards. Zero production/harness/native builds or repeated qualification. Stop confirmed cases; B11 is closed. B12 bicubic reconciliation and C01-C04 Identify stay open.
 
-Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): twenty of61 named
+Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): twenty-two of61 named
 cases are stopped. Three late enlargement proofs reuse actual source/native
 identities; current HorizontalUp16/single-pixel proofs remain stopped. Ordinary
 Mixed16/Mixed8 independently confirm on unchanged qualified production at1.912x/
@@ -134,6 +134,7 @@ TightHorizontal16 independently confirms1.447x/upper1.459x; TightHorizontal8 reu
 The two existing tight256x129 byte/word column-filter cases also independently confirm with unchanged native baselines, exact rational/frozen pixels, limits, full owners, all12/bothguards and zero rebuilds or repeated qualification.
 Default-limit Horizontal16 independently confirms1.539x/upper1.552x after newly executed mixed-reject calls invalidated its earlier timing. All12/bothguards/exact pixels/native bounds/full owners pass; zero production/harness/native rebuilds or repeated qualification. Stop this case.
 Tight64x32_8 independently confirms1.718x/upper1.743x and stops. Default Down64x32_8 improved from its valid2.121x screen to independent1.662x/upper1.668x at205,881B/op after hoisting safe weight/index views outside the horizontal tap loop;21.6% less managed time. All12/bothguards/exact pixels/native bounds/full owners pass. Fresh3,483-tests/OS qualification and the same actual package consumer/all three examples pass on both OS. Stop it; the nineteen unaffected bicubic proofs remain valid. Seven already named wide-cache cases require current-loop evidence.
+TightVerticalUp8 and HorizontalUp8 independently confirm1.726x/upper1.737x and1.739x/upper1.751x respectively. Existing exact pixel/certified-half/native-bound/ownership/quiet gates pass on the same qualified production; zero production/harness rebuilds or repeated qualification. Stop both.
 Remaining named B12 helper/dispatch cases and C01-C04 stay open; no grid is added.
 
 | Primitive group | Retained coverage | Remaining material work |

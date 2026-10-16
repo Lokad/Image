@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Twenty of the existing 61 named bicubic cases have valid current-path evidence.
+Twenty-two of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -196,3 +196,18 @@ loop also serves the seven already named open Wide8/Wide16, Down64x32_16,
 Down32x16_8/16 and Down16x8_8/16 cases; their older timings need current-loop
 evidence. This identifies the exact invalidation without reopening passing
 unaffected paths. Full61-case reconciliation and identification coverage stay open.
+
+The two named byte-axis enlargements also independently confirm: tight vertical
+1.726x/upper1.737x at1,280,402B/op; default horizontal1.739x/upper1.751x at
+1,930,602B/op. The tight vertical dispatcher already matched, but newly executed
+identity-height predicates in its selected helper invalidated the old complete
+timing. The horizontal result predated the mixed-reject dispatch calls.
+
+Both short means pass before independent twelve-actual confirmations. Frozen
+qualified binary64 pixels and the existing one certified exact rational RGB half
+are retained for vertical; horizontal remains exact rational. Original native
+bounds, limits, source/independent owners, all actuals and both guards pass. Same
+qualified production and benchmark assembly; two selected adapters refreshed for
+changed owned source with unchanged compiler/flags/scaler and output hashes.
+Two shared selection drivers serve four jobs. Zero production/harness builds or
+repeated qualification. Stop both cases; continue the finite named checklist.
