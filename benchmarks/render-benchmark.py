@@ -98,7 +98,7 @@ def render():
         row('PNG RGBA16, Sub', 'warm-pngsub16-evidence.json', ['observations', -1], 'WARM-PNG-SUB16.md', True),
         row('PNG RGBA8, Average', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeAverage8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGBA16, Average', 'warm-pngaverage16-evidence.json', ['observations', -1], 'WARM-PNG-AVERAGE16.md', True),
-        row('PNG RGBA16, Paeth', 'warm-pngsub16-evidence.json', ['regressions', 1], 'WARM-PNG-SUB16.md', verification='Regression screen; prior confirmed'),
+        row('PNG RGBA16, Paeth', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePaeth16', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGB8, Paeth', 'warm-pngrgbpaeth8-evidence.json', ['observations', -1], 'WARM-PNG-RGB8-PAETH.md', True),
         row('PNG RGB16, Paeth', 'warm-png-rgb16-paeth-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-PAETH.md', True),
         row('PNG gray8, Paeth', 'warm-png-gray8-paeth-evidence.json', ['observations', -1], 'WARM-PNG-GRAY8-PAETH.md', True),
@@ -117,12 +117,12 @@ def render():
         row('PNG gray16, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray16', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG gray-alpha16, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGrayAlpha16', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG byte indices / sixteen-entry palette + tRNS, None', 'warm-png-short-palette-evidence.json', ['observations', 2], 'WARM-PNG-SHORT-PALETTE.md', True),
-        row('PNG palette8 + tRNS, None', 'warm-png-short-palette-evidence.json', ['observations', 3], 'WARM-PNG-SHORT-PALETTE.md', verification='Regression screen; prior confirmed'),
+        row('PNG palette8 + tRNS, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG palette8 + two-entry tRNS, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette8PartialAlpha', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG palette4 + tRNS → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG palette2 + tRNS → RGBA8, None', 'warm-pngpalette2-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE2-ROW.md', True),
         row('PNG palette1 + tRNS → RGBA8, None', 'warm-pngpalette1-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE1-ROW.md', True),
-        row('PNG opaque gray1 → RGBA8, None', 'warm-pnggray1-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-ROW.md', True),
+        row('PNG opaque gray1 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray1', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG gray1 + tRNS key1 → RGBA8, exact timed FFmpeg color-key', 'warm-png-gray1-transparency-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-TRANSPARENCY.md', True),
         row('PNG gray2 + tRNS key0 → RGBA8, None', 'warm-png-packed-transparency-evidence.json', ['observations', -1], 'WARM-PNG-PACKED-TRANSPARENCY.md', True),
         pending('PNG gray1/key1 and gray2/key1, unfiltered native', 'WARM-PNG-PACKED-TRANSPARENCY.md', 'Unscored: native alpha differs'),
@@ -353,7 +353,7 @@ pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-PROGRESSIVE.md) includes
 allocations and unchanged-build/qualification reuse. Stop these cases and the
 already confirmed444/live-token444 pairs; remaining material coverage is open.
 
-Current PNG decode reconciliation: **18/25 named affected cases** independently
+Current PNG decode reconciliation: **21/25 named affected cases** independently
 confirm for current production paths, worst upper **1.494x**. Exact RGBA/alpha/hidden
 RGB and complete output ownership pass. [Current report](../benchmarks/WARM-CURRENT-PNG-DECODE.md)
 includes allocations and remaining cases. Shared three-case drivers preserve
