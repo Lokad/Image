@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Twenty-two of the existing 61 named bicubic cases have valid current-path evidence.
+Twenty-five of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -211,3 +211,26 @@ qualified production and benchmark assembly; two selected adapters refreshed for
 changed owned source with unchanged compiler/flags/scaler and output hashes.
 Two shared selection drivers serve four jobs. Zero production/harness builds or
 repeated qualification. Stop both cases; continue the finite named checklist.
+
+Default256x129 reductions independently confirm on the same qualified production:
+Down8 1.690x/upper1.697x at332,177B/op and Down16 1.309x/upper1.319x at464,342B/op.
+Their actual archived dispatcher lacked the mixed-axis rejection calls that now
+precede the narrow cache. This is distinct from the recently edited wide loop,
+which these fixed tap counts bypass. Short means pass before twelve-actual
+confirmations; all actuals, both guards, exact rational/frozen pixels, unchanged
+native bounds and full ownership pass. Original integer-output native baselines
+are retained. Zero production/harness/native builds or repeated qualification;
+two shared selection drivers serve four jobs. Stop both.
+
+TightHorizontalUp16 reuses1.606x/upper1.614x at2,129,311B/op without new timing.
+One comparison of35 scoped resize/build inputs finds the actual dispatcher,
+selected word cardinal helper and preceding executed helper entries unchanged.
+Only unused context code and uncalled byte/wide helper bodies differ. Frozen
+exact pixels, approved native bounds, full owners, all twelve actuals and both
+guards remain valid. The original approved reference worker is hash-verified in
+the retained raw archive; the later default-case worker is not substituted.
+The scaler archive is unchanged. Adapter changes add only an unselected mode,
+an equal halo constant alias and untimed ready metadata; removing those yields
+identical complete timed source. No build, statistical job or qualification
+repeat. Stop this case. Next reconcile existing TightWide8 and Wide8; the full
+finite checklist and identification coverage remain open.
