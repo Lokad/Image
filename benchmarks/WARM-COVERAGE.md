@@ -120,7 +120,7 @@ B11 twenty existing single-owner exact edits after the shared pool change.
 
 Current B11 single-owner exact edits: [20/20 named cases](WARM-CURRENT-EXACT-EDITS.md) independently confirm on unchanged qualified production, with exact pixels/full ownership, all twelve actuals and both guards. Zero production/harness/native builds or repeated qualification. Stop confirmed cases; B11 is closed. B12 bicubic reconciliation and C01-C04 Identify stay open.
 
-Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): fifteen of61 named
+Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): seventeen of61 named
 cases are stopped. Three late enlargement proofs reuse actual source/native
 identities; current HorizontalUp16/single-pixel proofs remain stopped. Ordinary
 Mixed16/Mixed8 independently confirm on unchanged qualified production at1.912x/
@@ -131,6 +131,7 @@ selected adapter refreshes; no production rebuild or repeated qualification.
 The two named tight mixed-axis cases also independently confirm with zero new builds or repeated qualification; all exact/bounded pixels, full ownership, all12 and both guards pass.
 Four existing default/tight vertical reductions also reuse valid current-path proofs: executed source inputs match; only unused context code and unreachable byte-helper clauses differ. Pinned native workers/scaler are unchanged. No builds, measurements or repeated qualification.
 TightHorizontal16 independently confirms1.447x/upper1.459x; TightHorizontal8 reuses1.414x/upper1.425x after proving unchanged executed wrapper/reject and selected cross paths. Exact pixels/native bounds/full ownership/all12/bothguards pass; no production rebuild or repeated qualification.
+The two existing tight256x129 byte/word column-filter cases also independently confirm with unchanged native baselines, exact rational/frozen pixels, limits, full owners, all12/bothguards and zero rebuilds or repeated qualification.
 Remaining named B12 helper/dispatch cases and C01-C04 stay open; no grid is added.
 
 | Primitive group | Retained coverage | Remaining material work |

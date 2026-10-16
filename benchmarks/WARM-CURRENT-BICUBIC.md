@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Fifteen of the existing 61 named bicubic cases have valid current-path evidence.
+Seventeen of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -132,3 +132,16 @@ unused. Frozen binary64 pixels, including the existing6 independently certified
 exact rational alpha halves, native bounds, owners, all twelve actuals and guards
 remain valid. The native worker/identity/scaler are byte-identical on the VM.
 Zero byte-case builds or timing repeats. No new original raster or shape grid.
+
+The two existing tight256x129 reductions independently confirm on current
+production: TightDown8 1.880x/upper1.904x at132,295B/op; TightDown16 1.434x/upper1.445x at264,469B/op.
+The selected bounded column filters are unchanged, but new rejected mixed-axis
+calls precede them, so the old complete-operation proofs needed reconciliation.
+Original byte/word rasters and frozen managed/native hashes, exact rational
+pixels, unchanged maximum1/RMSE0.25 native bounds, working limits and independent
+owners pass. The same approved integer-output scaler workers retain full timed
+packing/halo/filtering/materialization/release; no float-path substitution.
+Short means precede independent twelve-actual confirmations; all actuals and
+both quiet guards pass, with selected/all confidence. Zero production/harness/
+native rebuilds or repeated qualification; two shared selection drivers serve
+the four jobs. No profile, new image or shape grid. Stop both confirmed pairs.
