@@ -8,9 +8,11 @@ the passing pair. No production optimization is needed for the confirmed cases.
 | Existing fixed case | Lokad.Image / FFmpeg µs | Ratio / upper | Managed B/op | Actual / selected |
 | --- | ---: | ---: | ---: | ---: |
 | Clone RGBA8 | 9.50 / 7.95 | 1.195 / 1.209 | 96 | 12 / 11 |
+| Horizontal flip RGBA8 | 11.64 / 9.52 | 1.223 / 1.235 | 128 | 12 / 10 |
 | Clone RGBA16 | 19.06 / 17.02 | 1.120 / 1.141 | 96 | 12 / 11 |
+| Horizontal flip RGBA16 | 21.83 / 27.03 | 0.807 / 0.811 | 128 | 12 / 12 |
 
-2/20 named single-owner cases currently have independent confirmations.
+4/20 named single-owner cases currently have independent confirmations.
 The separately confirmed two-live-output flip is reused and is outside this
 single-owner count. The two original 513x259 byte/word rasters, fixed crop and
 permutation geometries, native workers and exact output hashes are unchanged.
@@ -35,12 +37,16 @@ harness costs; native allocations are unmeasured. Startup, IPC, I/O, generation,
 hashing and correctness checks are outside measured intervals.
 
 Zero production, harness or native rebuilds are needed. Existing single-case
-selectors require two selection drivers per case; unchanged cached children,
+selectors require two selection drivers per case; horizontal flip shares its
+two existing dual-depth drivers. Unchanged cached children,
 including WarmDry, receive the verified production/harness assemblies. Existing
 qualification remains valid: 3,483 Release tests per OS including 898 live
 comparisons, plus the consumer and all three examples through the same actual
 Release package on Windows/Linux. No repeated qualification, profile or
-whole-library method audit.
+whole-library method audit. Horizontal flip reuses its existing exact normal/
+scalar CLI controls against the same input/output hashes and unchanged native
+worker; current full managed/native exact-pixel and ownership checks still run
+before/after every measurement.
 
 The first clone8 screen's private postcheck expected the decoder-style output
 byte count. This older filter worker reports zero in that optional sample field,

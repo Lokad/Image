@@ -118,7 +118,7 @@ guards pass. Prepared binaries/fixtures and qualification are reused without
 rebuilds. Newer native/indexed/cancelable/Stream proofs remain stopped. Next:
 B11 twenty existing single-owner exact edits after the shared pool change.
 
-Current B11 single-owner exact edits: [2/20 named cases](WARM-CURRENT-EXACT-EDITS.md) independently confirm on unchanged qualified production, with exact pixels/full ownership, all twelve actuals and both guards. Zero production/harness/native builds or repeated qualification. Stop confirmed cases; remaining named B11 edits, B12 bicubic reconciliation and C01-C04 Identify stay open.
+Current B11 single-owner exact edits: [4/20 named cases](WARM-CURRENT-EXACT-EDITS.md) independently confirm on unchanged qualified production, with exact pixels/full ownership, all twelve actuals and both guards. Zero production/harness/native builds or repeated qualification. Stop confirmed cases; remaining named B11 edits, B12 bicubic reconciliation and C01-C04 Identify stay open.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
