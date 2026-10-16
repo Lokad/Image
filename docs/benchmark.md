@@ -175,18 +175,24 @@ word-composition proof and production/package qualification are reused.
 | [WebP VP8L, native input](../benchmarks/WARM-VP8L-CANONICAL.md) | 5,703.55 | 3,023.03 | 1.887 / 1.904 | 1,216,180 | Confirmed |
 | [WebP VP8L, native input / live cancelable token](../benchmarks/WARM-VP8L-CANCELABLE.md) | 5,757.19 | 3,020.47 | 1.906 / 1.919 | 1,216,180 | Confirmed |
 
+The named RGBA PNG encode follow-up is closed: **Encode16 0.745x / upper0.763x**, **Encode8 0.314x / upper0.316x**. Exact samples,
+full packet ownership and the unchanged5% IDAT-size gate pass.
+[Current report](../benchmarks/WARM-CURRENT-PNG-ENCODE.md) includes compressed
+sizes and allocations. Production/harness/native builds and qualification repeat
+counts are zero; stop these cases and retain other valid confirmed settings.
+
 **Encode**
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG-FAST16-RECODE.md) | 5,439.91 | 17,231.30 | 0.316 / 0.353 | 527,627 | Regression screen; prior confirmed |
+| [PNG RGBA8, level 6 / None](../benchmarks/WARM-CURRENT-PNG-ENCODE.md) | 5,425.94 | 17,261.40 | 0.314 / 0.316 | 527,627 | Confirmed |
 | [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED8-ENCODE.md) | 357.17 | 189.72 | 1.883 / 1.933 | 2,102,472 | Confirmed |
 | [PNG RGBA16, NoCompression / None](../benchmarks/WARM-PNG-STORED16-ENCODE.md) | 504.25 | 405.59 | 1.243 / 1.289 | 4,203,541 | Confirmed |
 | [PNG RGBA8, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-FAST8.md) | 3,077.83 | 4,351.79 | 0.707 / 0.712 | 527,669 | Confirmed |
 | [PNG RGBA16, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-FAST2.md) | 12,927.95 | 17,660.77 | 0.732 / 0.735 | 2,103,738 | Confirmed |
 | [PNG RGBA16, Fastest managed2/native1 / live cancelable token](../benchmarks/WARM-PNG-FAST2.md) | 12,932.71 | 17,700.33 | 0.731 / 0.747 | 2,103,647 | Confirmed |
 | [PNG RGBA16, Fastest managed2/native1 / forward-only output](../benchmarks/WARM-PNG-FAST-FORWARD16.md) | 13,628.70 | 17,677.29 | 0.771 / 0.805 | 2,103,770 | Confirmed |
-| [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG-FAST2.md) | 14,680.33 | 20,089.60 | 0.731 / 0.887 | 2,103,624 | Regression screen; prior confirmed |
+| [PNG RGBA16, level 6 / None](../benchmarks/WARM-CURRENT-PNG-ENCODE.md) | 14,974.15 | 20,089.84 | 0.745 / 0.763 | 2,103,624 | Confirmed |
 | [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-PNG-SMALLEST8.md) | 14,469.30 | 17,319.86 | 0.835 / 0.841 | 527,564 | Confirmed |
 | [PNG RGBA16, SmallestSize managed9/native9 / None](../benchmarks/WARM-PNG-SMALLEST16.md) | 19,689.04 | 20,296.44 | 0.970 / 0.985 | 2,103,522 | Confirmed |
 | [PNG RGB8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 10,402.09 | 9,514.15 | 1.093 / 1.107 | 527,098 | Confirmed |

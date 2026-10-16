@@ -153,14 +153,14 @@ def render():
         row('WebP VP8L, native input / live cancelable token', 'warm-vp8l-cancelable-evidence.json', ['observations', -1], 'WARM-VP8L-CANCELABLE.md', True),
     ]
     encodes = [
-        row('PNG RGBA8, level 6 / None', 'warm-pngfast16-recode-evidence.json', ['regressions', 1], 'WARM-PNG-FAST16-RECODE.md', verification='Regression screen; prior confirmed'),
+        row('PNG RGBA8, level 6 / None', 'warm-current-png-encode-evidence.json', ['cases', 'Encode8', -1], 'WARM-CURRENT-PNG-ENCODE.md', True),
         row('PNG RGBA8, NoCompression / None', 'warm-pngstore8copy-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-ENCODE.md', True),
         row('PNG RGBA16, NoCompression / None', 'warm-pngstore16-encode-evidence.json', ['observations', -1], 'WARM-PNG-STORED16-ENCODE.md', True),
         row('PNG RGBA8, Fastest managed2/native1 / None', 'warm-pngfast8-evidence.json', ['observations', -1], 'WARM-PNG-FAST8.md', True),
         row('PNG RGBA16, Fastest managed2/native1 / None', 'warm-pngfast2-evidence.json', ['stockObservations', -1], 'WARM-PNG-FAST2.md', True),
         row('PNG RGBA16, Fastest managed2/native1 / live cancelable token', 'warm-pngfast2-evidence.json', ['observations', -1], 'WARM-PNG-FAST2.md', True),
         row('PNG RGBA16, Fastest managed2/native1 / forward-only output', 'warm-pngfastforward16-evidence.json', ['observations', -1], 'WARM-PNG-FAST-FORWARD16.md', True),
-        row('PNG RGBA16, level 6 / None', 'warm-pngfast2-evidence.json', ['regressions', 0], 'WARM-PNG-FAST2.md', verification='Regression screen; prior confirmed'),
+        row('PNG RGBA16, level 6 / None', 'warm-current-png-encode-evidence.json', ['cases', 'Encode16', -1], 'WARM-CURRENT-PNG-ENCODE.md', True),
         row('PNG RGBA8, SmallestSize9 / native9', 'warm-png-smallest8-evidence.json', ['observations', -1], 'WARM-PNG-SMALLEST8.md', True),
         row('PNG RGBA16, SmallestSize managed9/native9 / None', 'warm-png-smallest16-evidence.json', ['observations', -1], 'WARM-PNG-SMALLEST16.md', True),
         row('PNG RGB8, Optimal managed9/native6 / None', 'warm-pngbyte-optimal-evidence.json', ['cases', 'rgb', 'confirm'], 'WARM-PNG-BYTE-OPTIMAL.md', True),
@@ -379,6 +379,12 @@ word-composition proof and production/package qualification are reused.
 **Decode**
 
 {table(decodes)}
+
+The named RGBA PNG encode follow-up is closed: **Encode16 0.745x / upper0.763x**, **Encode8 0.314x / upper0.316x**. Exact samples,
+full packet ownership and the unchanged5% IDAT-size gate pass.
+[Current report](../benchmarks/WARM-CURRENT-PNG-ENCODE.md) includes compressed
+sizes and allocations. Production/harness/native builds and qualification repeat
+counts are zero; stop these cases and retain other valid confirmed settings.
 
 **Encode**
 
