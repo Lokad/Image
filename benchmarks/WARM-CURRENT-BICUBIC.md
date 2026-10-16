@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Thirty-seven of the existing 61 named bicubic cases have valid current-path evidence.
+Forty of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -305,3 +305,21 @@ adapter is refreshed from changed owned source with identical compiler/flags/
 scaler and frozen outputs. Two shared drivers serve six jobs. Zero production/
 harness builds or repeated qualification. Stop all three. Next TightCross8 and
 TightWide16; the remaining finite checklist and three wide-cache paths stay open.
+
+The existing byte cross and tight word-wide cases independently confirm: TightCross8 1.502x/upper1.513x at531,910B/op; TightWide16 1.462x/upper1.479x at65,658B/op; Cross8 1.180x/upper1.184x at731,753B/op.
+TightCross8's actual archived dispatcher already had both mixed-axis entries.
+Its uncertainty instead comes from the later packed-streaming and generated
+rejection calls now executed before the selected cross filter. The cross
+filter's changed height comparison is equivalent for the frozen strict
+enlargement and does not alone invalidate it. Default Cross8 and TightWide16
+predate the mixed-axis entry calls. Current complete timings resolve all three.
+
+Exact rational/frozen pixels, unchanged maximum1/RMSE0.25 native bounds, source,
+working limits and independent ownership pass. Short means precede independent
+twelve-actual confirmations; every actual and both quiet guards are retained,
+with selected/all confidence. Same qualified production/harness and original
+two rasters. The existing word-wide worker is reused; only the byte cross
+adapter is refreshed from changed owned source with unchanged compiler/flags/
+scaler and frozen outputs. Two shared drivers serve six jobs. Zero production/
+harness builds or repeated qualification. Stop all three. Three named wide-cache
+paths and the remaining finite checklist stay open; next Tight32x16_16/Down16x8_8.

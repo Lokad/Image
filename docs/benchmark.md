@@ -21,7 +21,7 @@ bound where available. **Confirmed** requires an independent quiet repeat and
 upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
 Current-path reconciliation closes all twenty named exact edits;
 [bicubic reconciliation](../benchmarks/WARM-CURRENT-BICUBIC.md) covers
-37/61 named cases, including reused unchanged paths.
+40/61 named cases, including reused unchanged paths.
 Recent confirmations use `exclusive-vm-idle-v2`: live job checks and
 five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
 Earlier receipts retain their original load guard and its failures.
@@ -251,7 +251,7 @@ Prepared quality records/packets and production qualification are reused.
 | [Bicubic upscale RGBA16§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 4,386.11 | 2,867.06 | 1.530 / 1.542 | 5,016,578 | Confirmed |
 | [Bicubic mixed-axis RGBA8§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,600.47 | 864.39 | 1.852 / 1.872 | 530,370 | Confirmed |
 | [Bicubic mixed-axis RGBA16§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,627.26 | 851.20 | 1.912 / 1.964 | 1,060,419 | Confirmed |
-| [Bicubic width reduction / height enlargement RGBA8§](../benchmarks/WARM-BICUBIC-CROSS8-ROWS.md) | 984.18 | 827.04 | 1.190 / 1.206 | 731,753 | Confirmed |
+| [Bicubic width reduction / height enlargement RGBA8§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 984.99 | 834.48 | 1.180 / 1.184 | 731,753 | Confirmed |
 | [Bicubic width reduction / height enlargement RGBA16§](../benchmarks/WARM-BICUBIC-CROSS16-ROWS.md) | 1,044.98 | 813.15 | 1.285 / 1.297 | 1,263,255 | Confirmed |
 | [Bicubic RGBA8, 128×64 / wider support§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 531.73 | 346.74 | 1.534 / 1.540 | 231,229 | Confirmed |
 | [Bicubic RGBA16, 128×64 / wider support§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 504.51 | 416.18 | 1.212 / 1.218 | 263,991 | Confirmed |
@@ -268,7 +268,7 @@ Prepared quality records/packets and production qualification are reused.
 | [Bicubic RGBA8, 256×129 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 783.42 | 416.72 | 1.880 / 1.904 | 132,295 | Confirmed |
 | [Bicubic RGBA16, 256×129 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 818.75 | 570.81 | 1.434 / 1.445 | 264,469 | Confirmed |
 | [Bicubic RGBA8, 128×64 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 588.84 | 349.09 | 1.687 / 1.701 | 32,889 | Confirmed |
-| [Bicubic RGBA16, 128×64 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-WIDE16-STRIPS.md) | 602.40 | 414.67 | 1.453 / 1.470 | 65,658 | Confirmed |
+| [Bicubic RGBA16, 128×64 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 606.16 | 414.59 | 1.462 / 1.479 | 65,658 | Confirmed |
 | [Bicubic RGBA8, 64×32 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 640.57 | 372.93 | 1.718 / 1.743 | 8,313 | Confirmed |
 | [Bicubic RGBA16, 64×32 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 611.50 | 383.62 | 1.594 / 1.608 | 16,505 | Confirmed |
 | [Bicubic RGBA16, 32×16 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-32X16-RGBA16.md) | 571.07 | 413.56 | 1.381 / 1.403 | 4,217 | Confirmed |
@@ -280,7 +280,7 @@ Prepared quality records/packets and production qualification are reused.
 | [Bicubic RGBA16, width up / height down / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,644.19 | 848.47 | 1.938 / 1.957 | 1,060,419 | Confirmed |
 | [Bicubic RGBA8, width up / height down / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,617.87 | 860.30 | 1.881 / 1.901 | 530,370 | Confirmed |
 | [Bicubic RGBA16, width down / height up / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,298.90 | 825.27 | 1.574 / 1.579 | 1,063,477 | Confirmed |
-| [Bicubic RGBA8, width down / height up / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-CROSS8.md) | 1,268.02 | 842.90 | 1.504 / 1.526 | 531,910 | Confirmed |
+| [Bicubic RGBA8, width down / height up / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,249.21 | 831.82 | 1.502 / 1.513 | 531,910 | Confirmed |
 | [Bicubic RGBA16, 8×4 / support beyond 256 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-8X4-RGBA16.md) | 439.90 | 692.95 | 0.635 / 0.642 | 377 | Confirmed |
 | [Bicubic RGBA8, 8×4 / support beyond 256 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-8X4-RGBA8.md) | 505.31 | 637.83 | 0.792 / 0.803 | 249 | Confirmed |
 | [Bicubic RGBA16, 4×2 / packed support beyond 304 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-4X2-RGBA16.md) | 637.19 | 1,247.45 | 0.511 / 0.518 | 185 | Confirmed |
