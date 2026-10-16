@@ -57,8 +57,12 @@ projection**, fresh projection payload/descriptor ownership and zero pixel decod
 [Exact scope and qualification](../benchmarks/WARM-JPEG-IDENTIFY.md) record3,535
 tests per OS and the same package consumer/all three examples on both OS.
 Only JPEG Identify changed; the decoder preflight and PNG Identify remain
-unchanged. Resident WebP Identify and fresh PNG Identify Stream remain open.
-See [material coverage](../benchmarks/WARM-COVERAGE.md).
+unchanged. [Resident WebP Identify](../benchmarks/WARM-WEBP-IDENTIFY.md) also
+confirms **0.0040x / upper0.0045x at88 B/op** using the public FFmpeg WebP parser
+plus original full RIFF/EXIF validation, including required parser buffering/EOF
+flush and fresh descriptor ownership. Production is unchanged; existing full
+qualification is reused. Only fresh PNG Identify Stream remains open on the
+finite [material checklist](../benchmarks/WARM-COVERAGE.md).
 
 All **four existing bilinear cases** now have independent confirmation on the
 current qualified core. Their conservative uppers range from 1.382x to 1.892x;
@@ -112,6 +116,7 @@ word-composition proof and production/package qualification are reused.
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
+| [WebP Identify, resident span (parser)](../benchmarks/WARM-WEBP-IDENTIFY.md) | 0.02 | 4.54 | 0.004 / 0.004 | 88 | Confirmed |
 | [JPEG Identify, resident span‖](../benchmarks/WARM-JPEG-IDENTIFY.md) | 2.23 | 1.21 | 1.840 / 1.860 | 88 | Confirmed |
 | [PNG Identify, resident span¶](../benchmarks/WARM-PNG-IDENTIFY.md) | 16.09 | 13.04 | 1.234 / 1.238 | 88 | Confirmed |
 | [PNG palette4/full tRNS Adam7](../benchmarks/WARM-PNG-PALETTE4-ADAM7.md) | 1,480.35 | 1,135.35 | 1.304 / 1.387 | 2,592 | Confirmed |

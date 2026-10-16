@@ -1490,3 +1490,12 @@ annotation is historical, with approval recorded separately in benchmark policy.
 The production library remains safe managed code, dependency-free and free of
 native bindings. `build-libjpeg-gray-linux.sh` reproduces the reference; it is
 unnecessary when the verified prepared binary is available.
+
+Resident WebP Identify uses `build-webp-identify-linux.sh` and
+`verify-webp-identify-linux.py`. The explicitly labeled reference is the public
+FFmpeg WebP parser plus an original complete RIFF/VP8X/VP8L/VP8/EXIF compatibility
+scan and fresh owned AVCodecParameters descriptor. Its mandatory parser input
+buffering and EOF flush are timed. The decoder has no lossless metadata-only
+skip path, so no pixel decoder is used. One existing deterministic packet and
+21 same-packet structural/metadata/opaque-payload controls establish equivalence;
+startup, preparation and control validation stay outside timing.

@@ -97,7 +97,7 @@ internal static class WarmBenchmarks
                     var depth = value.GetProperty("depth").GetInt32();
                     var outputVerified = family == "Identify"
                         ? value.GetProperty("descriptorExact").GetBoolean() && value.GetProperty("directSpanControlsExact").GetBoolean()
-                            && value.GetProperty(caseId == "Jpeg8" ? "opaqueEntropyAcceptedWithoutPixelDecode" : "invalidDeflateAcceptedWithoutPixelDecode").GetBoolean() && value.GetProperty("changedMetadataObserved").GetBoolean()
+                            && value.GetProperty(caseId == "Webp8" ? "opaquePayloadAcceptedWithoutPixelDecode" : caseId == "Jpeg8" ? "opaqueEntropyAcceptedWithoutPixelDecode" : "invalidDeflateAcceptedWithoutPixelDecode").GetBoolean() && value.GetProperty("changedMetadataObserved").GetBoolean()
                             && value.GetProperty("preparedEquivalentBoundaryControls").GetInt32() == 21
                         : family is "Jpeg" or "Webp"
                         ? value.GetProperty("qualityMatched").GetBoolean() && value.GetProperty("alphaExact").GetBoolean()

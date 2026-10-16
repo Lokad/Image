@@ -6,9 +6,9 @@ using System.Text.Json;
 using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 
-public enum WarmIdentifyCase { Png8, Jpeg8 }
+public enum WarmIdentifyCase { Png8, Jpeg8, Webp8 }
 
-/// <summary>Complete resident PNG/JPEG inspection without pixel decoding.</summary>
+/// <summary>Complete resident PNG/JPEG/WebP inspection without pixel decoding.</summary>
 [MemoryDiagnoser]
 public class WarmIdentify
 {
@@ -24,9 +24,11 @@ public class WarmIdentify
     private bool smoke, ready;
     private static readonly ImageInfo PngExpected = new(ImageFormat.Png, 513, 259, 8, true, ImageOrientation.Normal);
     private static readonly ImageInfo JpegExpected = new(ImageFormat.Jpeg, 513, 259, 8, false, ImageOrientation.Normal);
+    private static readonly ImageInfo WebpExpected = new(ImageFormat.WebP, 513, 259, 8, true, ImageOrientation.Normal);
+    private bool Webp => Case == WarmIdentifyCase.Webp8;
     private bool Jpeg => Case == WarmIdentifyCase.Jpeg8;
-    private ImageInfo Expected => Jpeg ? JpegExpected : PngExpected;
-    private string InputHash => Jpeg ? "ccca91bcdaddc90c7aecf62d07cdc629c09c27e607c955cfcc97a7bf91caaf08"
+    private ImageInfo Expected => Webp ? WebpExpected : Jpeg ? JpegExpected : PngExpected;
+    private string InputHash => Webp ? "a4ed2454404ca6c5798450fff0cfc502fd44a592c284b77e7861128b0c53927f" : Jpeg ? "ccca91bcdaddc90c7aecf62d07cdc629c09c27e607c955cfcc97a7bf91caaf08"
         : "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f";
 
     public static WarmIdentifyCase[] SelectedCases()
@@ -34,14 +36,15 @@ public class WarmIdentify
         {
             null or "Png8" => [WarmIdentifyCase.Png8],
             "Jpeg8" => [WarmIdentifyCase.Jpeg8],
-            _ => throw new ArgumentException("Choose one existing resident Identify boundary: Png8 or Jpeg8.")
+            "Webp8" => [WarmIdentifyCase.Webp8],
+            _ => throw new ArgumentException("Choose one existing resident Identify boundary: Png8, Jpeg8 or Webp8.")
         };
 
     [GlobalSetup]
     public void Setup()
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Use the dedicated Linux VM.");
-        if (Case is not (WarmIdentifyCase.Png8 or WarmIdentifyCase.Jpeg8)) throw new ArgumentOutOfRangeException(nameof(Case));
+        if (Case is not (WarmIdentifyCase.Png8 or WarmIdentifyCase.Jpeg8 or WarmIdentifyCase.Webp8)) throw new ArgumentOutOfRangeException(nameof(Case));
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -55,7 +58,7 @@ public class WarmIdentify
         {
             using (var manifest = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp", "benchmark-source.json"))))
                 sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = manifest.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = manifest.RootElement.GetProperty("sourceRevision").GetString() });
-            encoded = File.ReadAllBytes(Path.Combine(state.Root, "artifacts", "warm-reference", Jpeg ? "jpeg-decode420" : "png-cancel8", Jpeg ? "native.jpg" : "input.png"));
+            encoded = File.ReadAllBytes(Path.Combine(state.Root, "artifacts", "warm-reference", Webp ? "webp-decode" : Jpeg ? "jpeg-decode420" : "png-cancel8", Webp ? "input.webp" : Jpeg ? "native.jpg" : "input.png"));
             if (JpegBenchmarkCase.Hash(encoded) != InputHash) throw new InvalidOperationException("Existing original encoded packet changed.");
             descriptor = Bytes(Expected);
             ValidateManaged();
@@ -74,26 +77,27 @@ public class WarmIdentify
 
     private void RequirePreparationProof()
     {
-        var bytes = File.ReadAllBytes(Path.Combine(state.Root, "tmp", Jpeg ? "c02-jpeg-identify-controls" : "c01-png-identify-controls", "proof.json"));
+        var bytes = File.ReadAllBytes(Path.Combine(state.Root, "tmp", Webp ? "c03-webp-identify-controls" : Jpeg ? "c02-jpeg-identify-controls" : "c01-png-identify-controls", "proof.json"));
         proofHash = JpegBenchmarkCase.Hash(bytes);
         using var document = JsonDocument.Parse(bytes); proof = document.RootElement.Clone();
         if (proof.GetProperty("timing").GetBoolean() || proof.GetProperty("inputSha256").GetString() != InputHash
             || proof.GetProperty("librarySha256").GetString() != JpegBenchmarkCase.HashFile(typeof(ImageCodec).Assembly.Location)
             || !proof.GetProperty("equivalentMetadataAndValidation").GetBoolean()
-            || !proof.GetProperty(Jpeg ? "opaqueEntropyAcceptedWithoutPixelDecode" : "invalidDeflateAcceptedWithoutPixelDecode").GetBoolean()
+            || !proof.GetProperty(Webp ? "opaquePayloadAcceptedWithoutPixelDecode" : Jpeg ? "opaqueEntropyAcceptedWithoutPixelDecode" : "invalidDeflateAcceptedWithoutPixelDecode").GetBoolean()
             || !proof.GetProperty("changedMetadataObserved").GetBoolean() || !proof.GetProperty("nativeLiveDescriptorsIndependent").GetBoolean())
             throw new InvalidOperationException("Missing current equivalent-boundary prerequisite.");
         var controls = proof.GetProperty("controls").EnumerateArray().ToArray();
         if (controls.Length != 21 || controls.Select(c => c.GetProperty("name").GetString()).Distinct().Count() != 21
             || controls.Any(c => !c.GetProperty("managedAndNativeAgree").GetBoolean())
-            || !controls.Single(c => c.GetProperty("name").GetString() == (Jpeg ? "opaque-entropy-not-decoded" : "invalid-deflate-valid-crc")).GetProperty("accepted").GetBoolean()
+            || !controls.Single(c => c.GetProperty("name").GetString() == (Webp ? "opaque-payload-not-decoded" : Jpeg ? "opaque-entropy-not-decoded" : "invalid-deflate-valid-crc")).GetProperty("accepted").GetBoolean()
             || !controls.Single(c => c.GetProperty("name").GetString() == "changed-metadata-width").GetProperty("accepted").GetBoolean()
-            || controls.Single(c => c.GetProperty("name").GetString() == (Jpeg ? "missing-eoi" : "idat-crc")).GetProperty("accepted").GetBoolean())
+            || controls.Single(c => c.GetProperty("name").GetString() == (Webp ? "invalid-riff-length" : Jpeg ? "missing-eoi" : "idat-crc")).GetProperty("accepted").GetBoolean())
             throw new InvalidOperationException("Prepared boundary controls are incomplete.");
     }
 
     private void ValidateManaged()
     {
+        if (Webp) { ValidateManagedWebp(); return; }
         if (Jpeg) { ValidateManagedJpeg(); return; }
         var first = ImageCodec.Identify(encoded); var second = ImageCodec.Identify(encoded);
         if (first != Expected || second != Expected || ReferenceEquals(first, second))
@@ -154,6 +158,33 @@ public class WarmIdentify
         catch (OperationCanceledException error) when (error.CancellationToken == canceled.Token) { }
         if (JpegBenchmarkCase.Hash(encoded) != InputHash) throw new InvalidOperationException("JPEG source changed.");
     }
+    private void ValidateManagedWebp()
+    {
+        var first = ImageCodec.Identify(encoded); var second = ImageCodec.Identify(encoded);
+        if (first != Expected || second != Expected || ReferenceEquals(first, second))
+            throw new InvalidOperationException("WebP descriptors differ or share ownership.");
+        var changed = encoded.ToArray(); var bits = BinaryPrimitives.ReadUInt32LittleEndian(changed.AsSpan(21));
+        BinaryPrimitives.WriteUInt32LittleEndian(changed.AsSpan(21), (bits & ~0x3fffu) | 513u);
+        if (ImageCodec.Identify(changed) != (Expected with { Width = 514 }) || first != Expected || second != Expected)
+            throw new InvalidOperationException("WebP metadata is cached or aliases source.");
+        var opaque = new byte[26]; encoded.AsSpan(0, 25).CopyTo(opaque);
+        BinaryPrimitives.WriteUInt32LittleEndian(opaque.AsSpan(4), 18);
+        BinaryPrimitives.WriteUInt32LittleEndian(opaque.AsSpan(16), 5);
+        if (ImageCodec.Identify(opaque) != Expected) throw new InvalidOperationException("Identify decoded VP8L entropy.");
+        Reject(encoded.AsSpan(0, encoded.Length - 1));
+        var trailing = new byte[encoded.Length + 1]; encoded.CopyTo(trailing, 0); Reject(trailing);
+        var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = encoded.Length };
+        if (ImageCodec.Identify(encoded, exact) != Expected) throw new InvalidOperationException("WebP input/working admission differs.");
+        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = encoded.Length - 1 }, exact with { MaxWork = 1 } })
+        {
+            try { ImageCodec.Identify(encoded, limits); throw new InvalidOperationException("WebP Identify accepted insufficient limits."); }
+            catch (ImageLimitException) { }
+        }
+        using var canceled = new CancellationTokenSource(); canceled.Cancel();
+        try { ImageCodec.Identify(encoded, cancellationToken: canceled.Token); throw new InvalidOperationException("WebP Identify accepted cancellation."); }
+        catch (OperationCanceledException error) when (error.CancellationToken == canceled.Token) { }
+        if (JpegBenchmarkCase.Hash(encoded) != InputHash) throw new InvalidOperationException("WebP source changed.");
+    }
     private static void Reject(ReadOnlySpan<byte> input)
     {
         try { ImageCodec.Identify(input); throw new InvalidOperationException("Identify accepted an invalid PNG."); }
@@ -204,10 +235,10 @@ public class WarmIdentify
                 sourceIdentity, nativeSampleTargetMilliseconds = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_NATIVE_SAMPLE_MS") ?? "200",
                 inputBytes = encoded.Length, inputSha256 = InputHash, outputSha256 = JpegBenchmarkCase.Hash(descriptor), descriptor = Expected,
                 descriptorExact = true, directSpanControlsExact = true, preparedEquivalentBoundaryControls = 21, preparedProofSha256 = proofHash,
-                invalidDeflateAcceptedWithoutPixelDecode = !Jpeg, opaqueEntropyAcceptedWithoutPixelDecode = Jpeg, changedMetadataObserved = true, sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
+                invalidDeflateAcceptedWithoutPixelDecode = !Jpeg && !Webp, opaquePayloadAcceptedWithoutPixelDecode = Webp, opaqueEntropyAcceptedWithoutPixelDecode = Jpeg, changedMetadataObserved = true, sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageCodec).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmIdentify).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = Jpeg ? "One resident frozen 52093-byte original JPEG420 (513x259) to a fresh independently owned ImageInfo. Complete public span Identify, default/input/work/working admission, full original marker/scan-header/entropy-stuffing/EXIF/EOI+EOF structural validation; no coefficient/pixel decoding. FFmpeg MJPEG discard-all metadata extraction with original complete structural/EXIF scan and TIMED canonical17-byte SOF2 grayscale metadata-header projection. Projection removes stronger DQT/sampling/encoded-size checks intentionally outside Identify; all six original metadata fields remain exact. Fresh projection payload, native decoder reset/header submission, owned AVCodecParameters extraction/materialization/release timed; codec/frame/packet wrappers and original input reused, descriptor never cached. Pixel buffer callback rejects every request (zero allowed). Twenty-one same-packet controls plus direct span owner/changedwidth/opaque-entropy/limits/cancellation gates. Only this existing resident packet/default scope is timed; startup, IPC, I/O, hashing/preparation/validation excluded, one CPU, normal SIMD, no concurrency."
+                boundary = Webp ? "One resident original frozen533100-byte WebP VP8L (513x259) to a fresh independently owned ImageInfo; complete public span Identify/default admission, full RIFF/chunk/padding/VP8X/VP8L/VP8/feature/EXIF validation, no entropy/pixel decode. FFmpeg public WebP parser with original full structural/metadata compatibility scan; required parser buffered acquisition/EOF flush and fresh AVCodecParameters ownership/release timed. Input/parser/context reused; no descriptor cache. Twenty-one same-packet controls and direct span owner/changedwidth/opaque-payload/limits/cancellation gates. Only this existing resident packet/default scope timed; startup, IPC, I/O, hashing/preparation/validation excluded, one CPU/normal SIMD/no concurrency." : Jpeg ? "One resident frozen 52093-byte original JPEG420 (513x259) to a fresh independently owned ImageInfo. Complete public span Identify, default/input/work/working admission, full original marker/scan-header/entropy-stuffing/EXIF/EOI+EOF structural validation; no coefficient/pixel decoding. FFmpeg MJPEG discard-all metadata extraction with original complete structural/EXIF scan and TIMED canonical17-byte SOF2 grayscale metadata-header projection. Projection removes stronger DQT/sampling/encoded-size checks intentionally outside Identify; all six original metadata fields remain exact. Fresh projection payload, native decoder reset/header submission, owned AVCodecParameters extraction/materialization/release timed; codec/frame/packet wrappers and original input reused, descriptor never cached. Pixel buffer callback rejects every request (zero allowed). Twenty-one same-packet controls plus direct span owner/changedwidth/opaque-entropy/limits/cancellation gates. Only this existing resident packet/default scope is timed; startup, IPC, I/O, hashing/preparation/validation excluded, one CPU, normal SIMD, no concurrency."
                     : "One resident frozen 218775-byte original RGBA8 PNG (513x259) to a fresh independently owned ImageInfo. Complete public span Identify, input/default-limit admission, full chunk scan/CRC, required metadata validation and descriptor construction. FFmpeg public PNG parser/CRC with original timed structural/metadata compatibility adapter and fresh AVCodecParameters acquisition/materialization/release; no pixel decoder or inflation on either side. Parser/context/input reused, descriptor never cached. All six metadata fields exact; native live descriptor independence and 21 same-packet controls including invalid Deflate/valid CRC, changed width, orientation6, CRC, truncation, ordering, IEND/EOF and limits. Direct managed span controls also cover exact input/working/work limits and cancellation. Only this resident PNG boundary is measured. Startup, IPC, I/O, generation/hashing/validation excluded; one CPU, normal SIMD, no concurrency."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
         }

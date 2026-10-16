@@ -73,6 +73,7 @@ def table(rows):
 
 def render():
     decodes = [
+        row('WebP Identify, resident span (parser)', 'warm-webp-identify-evidence.json', ['observations', -1], 'WARM-WEBP-IDENTIFY.md', True),
         row('JPEG Identify, resident span‖', 'warm-jpeg-identify-evidence.json', ['observations', -1], 'WARM-JPEG-IDENTIFY.md', True),
         row('PNG Identify, resident span¶', 'warm-png-identify-evidence.json', ['observations', -1], 'WARM-PNG-IDENTIFY.md', True),
         row('PNG palette4/full tRNS Adam7', 'warm-png-palette4-adam7-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE4-ADAM7.md', True),
@@ -343,8 +344,12 @@ projection**, fresh projection payload/descriptor ownership and zero pixel decod
 [Exact scope and qualification](../benchmarks/WARM-JPEG-IDENTIFY.md) record3,535
 tests per OS and the same package consumer/all three examples on both OS.
 Only JPEG Identify changed; the decoder preflight and PNG Identify remain
-unchanged. Resident WebP Identify and fresh PNG Identify Stream remain open.
-See [material coverage](../benchmarks/WARM-COVERAGE.md).
+unchanged. [Resident WebP Identify](../benchmarks/WARM-WEBP-IDENTIFY.md) also
+confirms **0.0040x / upper0.0045x at88 B/op** using the public FFmpeg WebP parser
+plus original full RIFF/EXIF validation, including required parser buffering/EOF
+flush and fresh descriptor ownership. Production is unchanged; existing full
+qualification is reused. Only fresh PNG Identify Stream remains open on the
+finite [material checklist](../benchmarks/WARM-COVERAGE.md).
 
 All **four existing bilinear cases** now have independent confirmation on the
 current qualified core. Their conservative uppers range from 1.382x to 1.892x;
