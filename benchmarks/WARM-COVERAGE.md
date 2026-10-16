@@ -120,7 +120,7 @@ B11 twenty existing single-owner exact edits after the shared pool change.
 
 Current B11 single-owner exact edits: [20/20 named cases](WARM-CURRENT-EXACT-EDITS.md) independently confirm on unchanged qualified production, with exact pixels/full ownership, all twelve actuals and both guards. Zero production/harness/native builds or repeated qualification. Stop confirmed cases; B11 is closed. B12 bicubic reconciliation and C01-C04 Identify stay open.
 
-Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): twenty-eight of61 named
+Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): thirty-one of61 named
 cases are stopped. Three late enlargement proofs reuse actual source/native
 identities; current HorizontalUp16/single-pixel proofs remain stopped. Ordinary
 Mixed16/Mixed8 independently confirm on unchanged qualified production at1.912x/
@@ -137,6 +137,7 @@ Tight64x32_8 independently confirms1.718x/upper1.743x and stops. Default Down64x
 TightVerticalUp8 and HorizontalUp8 independently confirm1.726x/upper1.737x and1.739x/upper1.751x respectively. Existing exact pixel/certified-half/native-bound/ownership/quiet gates pass on the same qualified production; zero production/harness rebuilds or repeated qualification. Stop both.
 Default Down8/Down16 independently confirm1.690x/upper1.697x and1.309x/upper1.319x, retaining the integer-output native baselines. TightHorizontalUp16 reuses1.606x/upper1.614x after actual scoped-input comparison; only unused context and uncalled byte/wide bodies differ. The original approved reference worker remains pinned in the raw archive. All12/bothguards/exact pixels/native bounds/full owners pass. Zero production rebuilds or repeated qualification. Stop all three.
 Existing128x64 wide cases now independently confirm: TightWide8 1.687x/upper1.701x at32,889B/op; Wide8 1.534x/upper1.540x at231,229B/op; Wide16 1.212x/upper1.218x at263,991B/op. Exact pixels/native bounds/full owners/all12/bothguards pass on the same qualified production. Zero production/harness builds or repeated qualification; stop all three. Five named wide-cache cases remain affected by the edited loop.
+Three existing word paths independently confirm: TightVerticalUp16 1.630x/upper1.647x at2,133,096B/op; Tight64x32_16 1.594x/upper1.608x at16,505B/op; Down64x32_16 1.338x/upper1.351x at214,071B/op. Exact pixels, approved vertical low-alpha RGB scope, strict reduction bounds, full owners, all12 and both guards pass. Same qualified build; zero production/harness builds or repeated qualification. Stop all three. Four named wide-cache paths remain affected.
 Remaining named B12 helper/dispatch cases and C01-C04 stay open; no grid is added.
 
 | Primitive group | Retained coverage | Remaining material work |

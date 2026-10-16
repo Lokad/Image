@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Twenty-eight of the existing 61 named bicubic cases have valid current-path evidence.
+Thirty-one of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -250,3 +250,22 @@ compiler/flags/scaler and frozen outputs; two shared drivers serve six jobs.
 Zero production/harness builds or repeated qualification. Stop all three.
 Five already named wide-cache cases still need current-loop evidence. Next
 reconcile TightVerticalUp16 and Tight64x32_16; full coverage remains open.
+
+The next three existing word cases independently confirm: TightVerticalUp16 1.630x/upper1.647x at2,133,096B/op; Tight64x32_16 1.594x/upper1.608x at16,505B/op; Down64x32_16 1.338x/upper1.351x at214,071B/op.
+The tight vertical helper acquired executed identity-height predicates after its
+older confirmation. Both64x32 dispatchers predate the mixed-axis rejection calls;
+the default case also exercises the edited wide tap loop. Current measurements
+resolve these complete-operation uncertainties without a production change.
+
+Managed pixels remain exact rational and match frozen outputs. The existing
+vertical-word native RGB allowance remains2 only where reference alpha<=16,
+1 elsewhere; alpha stays within1 and RGB/alpha RMSE within0.25. Both reductions
+keep the unchanged maximum1/RMSE0.25 bounds. Source, limits and independent output
+ownership pass. Every short mean passes before its independent twelve actuals;
+all actuals and both guards are retained, with selected/all confidence.
+
+Same qualified production/harness and original rasters. Two selected adapters
+are refreshed from changed owned source with identical compiler/flags/scaler and
+frozen outputs; two shared drivers serve six jobs. Zero production/harness builds
+or repeated qualification. Stop all three. Four already named wide-cache paths
+and the remaining finite checklist stay open; next TightCross16 and Tight32x16_8.
