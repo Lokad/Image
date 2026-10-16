@@ -75,13 +75,13 @@ harness/native rebuild, profile or repeated qualification. Existing newer444
 and live-token444 proofs are reused. All named JPEG pixel cases now stop;
 standalone identification remains a distinct unmeasured boundary.
 
-Current PNG decode reconciliation: [6/25 named affected cases](WARM-CURRENT-PNG-DECODE.md)
+Current PNG decode reconciliation: [9/25 named affected cases](WARM-CURRENT-PNG-DECODE.md)
 independently confirm on the unchanged qualified core, worst upper1.458x.
 Exact samples/alpha/hidden RGB, normal/scalar native pixels, complete ownership,
 all twelve actuals and both quiet guards pass. Stop confirmed pairs. The first
 word RGB/gray/gray-alpha group shares one driver per sampling length, sequential
 execution and existing qualified production/harness/native binaries. No profile
-or repeated qualification. Next named candidates: DecodeAverage8, DecodePalette4, DecodeGray8.
+or repeated qualification. Next named candidates: DecodeNoCompression16, DecodeGray4, Decode8.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |

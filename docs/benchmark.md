@@ -69,7 +69,7 @@ pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-PROGRESSIVE.md) includes
 allocations and unchanged-build/qualification reuse. Stop these cases and the
 already confirmed444/live-token444 pairs; remaining material coverage is open.
 
-Current PNG decode reconciliation: **6/25 named affected cases** independently
+Current PNG decode reconciliation: **9/25 named affected cases** independently
 confirm on the qualified core, worst upper **1.458x**. Exact RGBA/alpha/hidden
 RGB and complete output ownership pass. [Current report](../benchmarks/WARM-CURRENT-PNG-DECODE.md)
 includes allocations and remaining cases. Shared three-case drivers preserve
@@ -102,7 +102,7 @@ sequential short/independent confirmation jobs without production rebuilds.
 | [PNG RGBA16, Up](../benchmarks/WARM-PNG-UP16.md) | 3,473.99 | 1,883.52 | 1.844 / 1.864 | 8,552 | Confirmed |
 | [PNG RGBA8, Sub](../benchmarks/WARM-PNG-SUB8-CURRENT.md) | 1,179.60 | 699.60 | 1.686 / 1.697 | 4,456 | Confirmed |
 | [PNG RGBA16, Sub](../benchmarks/WARM-PNG-SUB16.md) | 357.99 | 743.02 | 0.482 / 0.493 | 8,552 | Confirmed |
-| [PNG RGBA8, Average](../benchmarks/WARM-PNG-AVERAGE8-BASELINE.md) | 3,137.74 | 1,841.23 | 1.704 / 1.743 | 12,976 | Confirmed |
+| [PNG RGBA8, Average](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 2,380.32 | 1,850.31 | 1.286 / 1.298 | 4,456 | Confirmed |
 | [PNG RGBA16, Average](../benchmarks/WARM-PNG-AVERAGE16.md) | 5,894.17 | 4,384.37 | 1.344 / 1.357 | 8,552 | Confirmed |
 | [PNG RGBA16, Paeth](../benchmarks/WARM-PNG-SUB16.md) | 5,749.92 | 5,769.74 | 0.997 / 1.264 | 8,552 | Regression screen; prior confirmed |
 | [PNG RGB8, Paeth](../benchmarks/WARM-PNG-RGB8-PAETH.md) | 3,140.91 | 2,608.88 | 1.204 / 1.214 | 3,432 | Confirmed |
@@ -113,7 +113,7 @@ sequential short/independent confirmation jobs without production rebuilds.
 | [PNG gray1 → RGBA8, Adam7](../benchmarks/WARM-PNG-GRAY1-ADAM7.md) | 1,265.54 | 1,243.33 | 1.018 / 1.032 | 1,424 | Confirmed |
 | [PNG palette8 + tRNS, Adam7](../benchmarks/WARM-PNG-PALETTE8-ADAM7.md) | 1,710.03 | 1,465.40 | 1.167 / 1.177 | 4,960 | Confirmed |
 | [PNG RGB16, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 2,297.09 | 2,227.02 | 1.031 / 1.034 | 6,504 | Confirmed |
-| [PNG gray8, None](../benchmarks/WARM-PNG-GRAY8-CURRENT.md) | 564.59 | 361.22 | 1.563 / 1.580 | 9,904 | Confirmed |
+| [PNG gray8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 357.47 | 363.27 | 0.984 / 0.993 | 1,384 | Confirmed |
 | [PNG gray8 + tRNS key127, None](../benchmarks/WARM-PNG-GRAY8-TRANSPARENCY.md) | 563.19 | 762.11 | 0.739 / 0.761 | 9,936 | Confirmed |
 | [PNG gray16 + tRNS key32639, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 2,970.49 | 2,055.01 | 1.445 / 1.450 | 2,440 | Confirmed |
 | [PNG gray-alpha8, None](../benchmarks/WARM-PNG-GRAY-ALPHA8-ROW.md) | 1,574.21 | 1,147.07 | 1.372 / 1.409 | 661,014 | Confirmed |
@@ -125,7 +125,7 @@ sequential short/independent confirmation jobs without production rebuilds.
 | [PNG byte indices / sixteen-entry palette + tRNS, None](../benchmarks/WARM-PNG-SHORT-PALETTE.md) | 144.22 | 109.47 | 1.317 / 1.327 | 1,496 | Confirmed |
 | [PNG palette8 + tRNS, None](../benchmarks/WARM-PNG-SHORT-PALETTE.md) | 361.40 | 393.12 | 0.919 / 2.354 | 2,456 | Regression screen; prior confirmed |
 | [PNG palette8 + two-entry tRNS, None](../benchmarks/WARM-PNG-SHORT-PALETTE.md) | 534.90 | 364.33 | 1.468 / 1.646 | 2,208 | Regression screen; prior confirmed |
-| [PNG palette4 + tRNS → RGBA8, None](../benchmarks/WARM-PNG-DECODE-REUSE.md) | 214.75 | 136.64 | 1.572 / 1.617 | 13,656 | Confirmed |
+| [PNG palette4 + tRNS → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 109.81 | 140.53 | 0.781 / 0.799 | 984 | Confirmed |
 | [PNG palette2 + tRNS → RGBA8, None](../benchmarks/WARM-PNG-PALETTE2-ROW.md) | 76.33 | 98.66 | 0.774 / 0.789 | 9,208 | Confirmed |
 | [PNG palette1 + tRNS → RGBA8, None](../benchmarks/WARM-PNG-PALETTE1-ROW.md) | 61.91 | 86.80 | 0.713 / 0.723 | 9,072 | Confirmed |
 | [PNG opaque gray1 → RGBA8, None](../benchmarks/WARM-PNG-GRAY1-ROW.md) | 299.69 | 305.79 | 0.980 / 1.001 | 537,700 | Confirmed |
