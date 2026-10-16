@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Seventeen of the existing 61 named bicubic cases have valid current-path evidence.
+Eighteen of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -145,3 +145,14 @@ Short means precede independent twelve-actual confirmations; all actuals and
 both quiet guards pass, with selected/all confidence. Zero production/harness/
 native rebuilds or repeated qualification; two shared selection drivers serve
 the four jobs. No profile, new image or shape grid. Stop both confirmed pairs.
+
+Default-limit Horizontal16 independently confirms1.539x/upper1.552x at730,690B/op,
+after a1.537x short screen. The actual archived dispatcher lacked the two
+mixed-axis entry calls that now reject before its row cache; this invalidated
+the old complete-operation timing. The current complete operation preserves
+exact rational/frozen pixels, approved native bounds and independent ownership.
+All twelve actuals are retained; selected and all-actual confidence bounds and
+both quiet guards pass. The already refreshed horizontal-word worker from the
+tight case serves the identical native geometry. Zero production/harness/native
+builds or repeated qualification; two selection drivers. Stop this case. Next
+reconcile the two existing64x32 byte paths, without a new image or shape grid.

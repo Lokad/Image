@@ -212,7 +212,7 @@ def render():
         row('Bicubic RGBA8, 128×64 / wider support§', 'warm-bicubicwide8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-WIDE8-ROWS.md', True),
         row('Bicubic RGBA16, 128×64 / wider support§', 'warm-bicubicwide16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-WIDE16-ROWS.md', True),
         row('Bicubic width reduction, unchanged height RGBA8§', 'warm-bicubichorizontal8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL8-ROWS.md', True),
-        row('Bicubic width reduction, unchanged height RGBA16§', 'warm-bicubichorizontal16-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL16-ROWS.md', True),
+        row('Bicubic width reduction, unchanged height RGBA16§', 'warm-current-bicubic-evidence.json', ['cases', 'Horizontal16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic width enlargement, unchanged height RGBA8§', 'warm-bicubichorizontalup8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-HORIZONTAL-UP8-ROWS.md', True),
         row('Bicubic width enlargement, unchanged height RGBA16§', 'warm-current-png16-bicubic16-evidence.json', ['cases', 'horizontalUp16', -1], 'WARM-CURRENT-PNG16-BICUBIC16.md', True),
         row('Bicubic RGBA8, 64×32 / support beyond 32§', 'warm-bicubic64x32-8-rows-evidence.json', ['observations', -1], 'WARM-BICUBIC-64X32-RGBA8.md', True),
