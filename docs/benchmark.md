@@ -44,8 +44,14 @@ safe managed code with no dependency or native binding.
 Remaining current-production work is a finite set of named changed-path
 confirmations and distinct unmeasured public boundaries. Historical confirmations
 remain valid at their recorded sources; reuse requires unchanged relevant paths.
-Warm identification-only coverage is missing because the existing inspection
-benchmark includes startup and I/O. See [material coverage](../benchmarks/WARM-COVERAGE.md).
+Resident PNG identification confirms **1.234x / upper1.238x at88 B/op**.
+¶Its reference is **FFmpeg's public PNG parser/CRC plus an original timed
+structural/metadata adapter**, with full CRC/EOF and fresh owned descriptor
+acquisition/release, no pixel decode. [Exact scope and qualification](../benchmarks/WARM-PNG-IDENTIFY.md)
+record3,517 tests per OS and the same actual package consumer/all three examples
+on Windows/Linux. Only PNG Identify changed; stopped pixel/edit/resize paths
+reuse their unchanged evidence. Resident JPEG/WebP Identify and fresh PNG
+Identify Stream remain open. See [material coverage](../benchmarks/WARM-COVERAGE.md).
 
 All **four existing bilinear cases** now have independent confirmation on the
 current qualified core. Their conservative uppers range from 1.382x to 1.892x;
@@ -99,6 +105,7 @@ word-composition proof and production/package qualification are reused.
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
+| [PNG Identify, resident span¶](../benchmarks/WARM-PNG-IDENTIFY.md) | 16.09 | 13.04 | 1.234 / 1.238 | 88 | Confirmed |
 | [PNG palette4/full tRNS Adam7](../benchmarks/WARM-PNG-PALETTE4-ADAM7.md) | 1,480.35 | 1,135.35 | 1.304 / 1.387 | 2,592 | Confirmed |
 | [PNG8 Stream, orient/crop/nearest fit](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 2,129.50 | 1,473.35 | 1.445 / 1.454 | 1,445,000 | Confirmed |
 | [PNG16 Stream, orient/crop/nearest fit](../benchmarks/WARM-PNG-FUSED-INFLATION.md) | 3,572.35 | 2,936.91 | 1.216 / 1.231 | 4,460,393 | Confirmed |

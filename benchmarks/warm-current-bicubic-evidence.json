@@ -82651,8 +82651,8 @@
       "noRepeatedQualification": true
     }
   },
-  "nextAction": "All61 named bicubic cases stop. B01-B15 current-path confirmation checklist is closed. Next C01 resident PNG Identify: first establish equivalent FFmpeg public-API validation/metadata/owned descriptor boundaries; no new raster or grid. Full required warm objective remains open for C01-C04.",
-  "currentQualifiedLinuxDllSha256": "1624549cbcc70b448512a1ed6dfc6ea4bff1dc433762e260dae4fab68bd3f7a1",
+  "nextAction": "All61 B12 stopped. C01 PNG resident Identify confirmed after isolated metadata CRC/scanner optimization and full qualification. Continue C02/C03 resident JPEG/WebP Identify, then C04 fresh PNG Identify Stream; equivalent boundaries first, no new grid.",
+  "currentQualifiedLinuxDllSha256": "0eb01e5c03c15c396e4a50e558fe745ede311aae0a278312af30ce4b7af56430",
   "nativeMixedRefresh": {
     "Mixed16": {
       "before": {
@@ -84985,5 +84985,54 @@
       },
       "reason": "Only the selected original adapter worker is refreshed from changed owned adapter source; same compiler/flags/zimg archive, approved backend and full operation. Pixel/hash gates remain frozen."
     }
+  },
+  "bicubicRoundQualifiedLinuxDllSha256": "1624549cbcc70b448512a1ed6dfc6ea4bff1dc433762e260dae4fab68bd3f7a1",
+  "latestProductionQualification": {
+    "status": "passed",
+    "releaseTestsPerOs": 3517,
+    "fullSuiteBreakdown": {
+      "internal": 1233,
+      "publicApi": 1386,
+      "liveDifferential": 898
+    },
+    "qualifiedLinuxDllSha256": "0eb01e5c03c15c396e4a50e558fe745ede311aae0a278312af30ce4b7af56430",
+    "windowsPackageDllSha256": "6eb009d62dd78e9fc3b4d0cab1db62e24cfe66d548a9dd0581582d86b9c5db5c",
+    "packageSha256": "a61e3e2e42c7c9d7ab67de2da4c9b9478d810af4474a493b958ebd8edb6ffa22",
+    "consumerAndAllThreeExamplesThroughSameActualPackageBothOs": true,
+    "productionInputsIdenticalToMeasuredBuild": true,
+    "qualificationOnlyChangesFromMeasuredSnapshot": [],
+    "measuredSourceSha256": "dccfb66d4e23717aa8b5e50e156fd44e160169b11b60b6286e1a499f21245d60",
+    "qualifiedSourceSha256": "dccfb66d4e23717aa8b5e50e156fd44e160169b11b60b6286e1a499f21245d60",
+    "rawArchive": {
+      "file": "c01-identify-fold4-qualification.tar.gz",
+      "sha256": "618e85997ed2c1d63860c6504a4de428af203ddcb72209302070d66a9a82827e"
+    }
+  },
+  "subsequentPngIdentifyChange": {
+    "evidence": "warm-png-identify-evidence.json",
+    "onlyPngIdentifyAffected": true,
+    "reconciliation": {
+      "changedProductionInputs": {
+        "src/Lokad.Image/Internal/PngCodec.cs": {
+          "before": "3ff14b79ec34335936d15c6fff6c7f8ebac221541445a7b66ff8dd18ea36ba4c",
+          "after": "62399e11aaa2248a7a80f3a23fa87936d121b635d7329cfe3dfa7fa5bea7917a"
+        },
+        "src/Lokad.Image/Internal/PngIdentificationCrc32.cs": {
+          "before": null,
+          "after": "9586e195c23dd341a0e5f20e184c0c5f376f55174ae3de86d52311ed7e0b0e81"
+        },
+        "src/Lokad.Image/Internal/PngIdentifier.cs": {
+          "before": null,
+          "after": "38894ebfef64671bcd142d58d055ec47a1d3b0d05ef325cd0dee04eb7f376585"
+        }
+      },
+      "existingPngCodecOnlyChangesIdentifyForwarder": true,
+      "affectedMaterialPaths": [
+        "C01 resident PNG Identify",
+        "C04 fresh PNG Identify Stream (unmeasured)"
+      ],
+      "unchanged": "PngCodec pixel Scan/encode and Crc32.Compute/ComputeChunk retain identical bodies. All other production input hashes match. Stopped B01-B15 paths do not execute PNG Identify; reuse existing confirmations without retiming them."
+    },
+    "reason": "All bicubic and other stopped pixel/edit/resize executed production inputs and workers remain unchanged. Reuse confirmations at their pinned inputs; current full package qualification also passes."
   }
 }

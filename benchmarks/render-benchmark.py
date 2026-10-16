@@ -73,6 +73,7 @@ def table(rows):
 
 def render():
     decodes = [
+        row('PNG Identify, resident span¶', 'warm-png-identify-evidence.json', ['observations', -1], 'WARM-PNG-IDENTIFY.md', True),
         row('PNG palette4/full tRNS Adam7', 'warm-png-palette4-adam7-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE4-ADAM7.md', True),
         row('PNG8 Stream, orient/crop/nearest fit', 'warm-current-png-stream-evidence.json', ['cases', 'PngCropFit8', -1], 'WARM-CURRENT-PNG-STREAM.md', True),
         row('PNG16 Stream, orient/crop/nearest fit', 'warm-png-fused-evidence.json', ['observations', -1], 'WARM-PNG-FUSED-INFLATION.md', True),
@@ -328,8 +329,14 @@ safe managed code with no dependency or native binding.
 Remaining current-production work is a finite set of named changed-path
 confirmations and distinct unmeasured public boundaries. Historical confirmations
 remain valid at their recorded sources; reuse requires unchanged relevant paths.
-Warm identification-only coverage is missing because the existing inspection
-benchmark includes startup and I/O. See [material coverage](../benchmarks/WARM-COVERAGE.md).
+Resident PNG identification confirms **1.234x / upper1.238x at88 B/op**.
+¶Its reference is **FFmpeg's public PNG parser/CRC plus an original timed
+structural/metadata adapter**, with full CRC/EOF and fresh owned descriptor
+acquisition/release, no pixel decode. [Exact scope and qualification](../benchmarks/WARM-PNG-IDENTIFY.md)
+record3,517 tests per OS and the same actual package consumer/all three examples
+on Windows/Linux. Only PNG Identify changed; stopped pixel/edit/resize paths
+reuse their unchanged evidence. Resident JPEG/WebP Identify and fresh PNG
+Identify Stream remain open. See [material coverage](../benchmarks/WARM-COVERAGE.md).
 
 All **four existing bilinear cases** now have independent confirmation on the
 current qualified core. Their conservative uppers range from 1.382x to 1.892x;

@@ -438,3 +438,5 @@ including explicitly reused unchanged proofs. No bicubic case or grid is added.
 B01-B15 reconciliation is closed. Full required warm coverage remains open for
 the four named Identify boundaries C01-C04; equivalent public-API validation,
 metadata and descriptor ownership must be established before timing them.
+
+The subsequent [PNG Identify change](WARM-PNG-IDENTIFY.md) affects only resident/Stream PNG inspection. Pixel Scan/shared CRC, editing and every resize operation retain their executed bodies and native workers; all61 bicubic proofs remain valid. New full3,517-tests/OS and the same actual package consumer/all three examples pass on Windows/Linux. No bicubic retiming or retuning.

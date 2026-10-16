@@ -1,5 +1,25 @@
 # Warm FFmpeg reference
 
+Resident PNG identification uses `build-png-identify-linux.sh` and the original
+`ffmpeg-png-identify-warm.c` adapter. The reference is explicitly **FFmpeg's
+public PNG parser and CRC APIs with a timed structural/metadata compatibility
+adapter**, returning a fresh owned `AVCodecParameters` descriptor. The parser
+alone supplies neither CRC validation nor complete metadata; discard-all PNG
+decoding still inflates IDAT and is a different operation. Both sides scan and
+validate the entire input, including CRC, ordering, EXIF orientation and EOF,
+without pixel decoding. Descriptor acquisition, materialization and release
+remain timed; parser/context/input storage is reused.
+
+Run `python3 tools/WarmReference/verify-png-identify-linux.py` once for changed
+relevant inputs before selecting `-WarmFamily Identify -WarmCases Png8`. Its 21
+controls mutate the existing original PNG, including invalid Deflate with valid
+CRC, changed dimensions, EXIF, bad CRCs, truncation, ordering and trailing bytes.
+The prepared proof is tied to the managed DLL, worker and exact packet; reuse it
+while those paths remain unchanged. The warm harness additionally checks the
+resident span, independent descriptors, exact input/working/work limits and
+cancellation. Only the original 513×259 RGBA8 packet is timed; no format grid is
+added. These native tools never enter the production package.
+
 Lossy VP8 warm preparation uses `fixed-anchor-v1`: native quality 75, managed
 quality 100, effort 4, the existing original RGBA8 raster and the unchanged
 0.25 dB source-PSNR band. Prepare exactly one owned setting; no quality sweep.

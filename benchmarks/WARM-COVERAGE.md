@@ -17,13 +17,16 @@ incompatibility, not a measured managed performance gap; approved compatible
 transparency cases are confirmed. The [grayscale evidence](warm-jpeg-grayscale-evidence.json)
 retains the bounded audit and all fourteen prior-confirmation witnesses.
 
-One named coverage gap is warm identification-only `ImageCodec.Identify`.
-Existing `IdentifyInvocation` includes startup, file I/O and captured stdout;
-it cannot establish resident header-inspection parity. Its reference must
-establish equivalent structural/checksum validation and an independently
-owned descriptor before timing one existing PNG fixture. No extra raster or
-shape/depth/filter/quality grid is justified. Full current-production coverage
-remains open.
+The named C01 resident PNG Identify boundary is [closed](WARM-PNG-IDENTIFY.md):
+1.234x/upper1.238x,88B/op, exact metadata/validation/ownership, all twelve actuals
+and both guards. Its prior2.797x gap is resolved by a metadata-only CRC/scanner
+primitive. New full3,517-tests/OS and the same actual package consumer/all three
+examples pass on both OS. Only PNG Identify paths changed; stopped B01-B15
+operation bodies and native workers are unchanged. C02 resident JPEG Identify,
+C03 resident WebP Identify and C04 fresh Stream PNG Identify remain open, with
+equivalent validation/metadata/descriptor ownership required before timing.
+Existing IdentifyInvocation includes startup/I/O and does not fill those gaps.
+No extra original raster or shape/depth/filter/quality grid is justified.
 
 The current-production checklist is finite: the existing named numerical rows
 at this checkpoint, reconciled by executed algorithm/public boundary, plus four
@@ -120,96 +123,23 @@ B11 twenty existing single-owner exact edits after the shared pool change.
 
 Current B11 single-owner exact edits: [20/20 named cases](WARM-CURRENT-EXACT-EDITS.md) independently confirm on unchanged qualified production, with exact pixels/full ownership, all twelve actuals and both guards. Zero production/harness/native builds or repeated qualification. Stop confirmed cases; B11 is closed. B12 bicubic reconciliation and C01-C04 Identify stay open.
 
-Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): all61 named
-cases are stopped. Three late enlargement proofs reuse actual source/native
-identities; current HorizontalUp16/single-pixel proofs remain stopped. Ordinary
-Mixed16/Mixed8 independently confirm on unchanged qualified production at1.912x/
-upper1.964x and1.852x/upper1.872x respectively.
-Exact frozen pixels, approved native bounds, full ownership, all twelve actuals
-and both guards pass. One selector-only harness build, two shared drivers and two
-selected adapter refreshes; no production rebuild or repeated qualification.
-The two named tight mixed-axis cases also independently confirm with zero new builds or repeated qualification; all exact/bounded pixels, full ownership, all12 and both guards pass.
-Four existing default/tight vertical reductions also reuse valid current-path proofs: executed source inputs match; only unused context code and unreachable byte-helper clauses differ. Pinned native workers/scaler are unchanged. No builds, measurements or repeated qualification.
-TightHorizontal16 independently confirms1.447x/upper1.459x; TightHorizontal8 reuses1.414x/upper1.425x after proving unchanged executed wrapper/reject and selected cross paths. Exact pixels/native bounds/full ownership/all12/bothguards pass; no production rebuild or repeated qualification.
-The two existing tight256x129 byte/word column-filter cases also independently confirm with unchanged native baselines, exact rational/frozen pixels, limits, full owners, all12/bothguards and zero rebuilds or repeated qualification.
-Default-limit Horizontal16 independently confirms1.539x/upper1.552x after newly executed mixed-reject calls invalidated its earlier timing. All12/bothguards/exact pixels/native bounds/full owners pass; zero production/harness/native rebuilds or repeated qualification. Stop this case.
-Tight64x32_8 independently confirms1.718x/upper1.743x and stops. Default Down64x32_8 improved from its valid2.121x screen to independent1.662x/upper1.668x at205,881B/op after hoisting safe weight/index views outside the horizontal tap loop;21.6% less managed time. All12/bothguards/exact pixels/native bounds/full owners pass. Fresh3,483-tests/OS qualification and the same actual package consumer/all three examples pass on both OS. Stop it; the nineteen unaffected bicubic proofs remain valid. Seven already named wide-cache cases require current-loop evidence.
-TightVerticalUp8 and HorizontalUp8 independently confirm1.726x/upper1.737x and1.739x/upper1.751x respectively. Existing exact pixel/certified-half/native-bound/ownership/quiet gates pass on the same qualified production; zero production/harness rebuilds or repeated qualification. Stop both.
-Default Down8/Down16 independently confirm1.690x/upper1.697x and1.309x/upper1.319x, retaining the integer-output native baselines. TightHorizontalUp16 reuses1.606x/upper1.614x after actual scoped-input comparison; only unused context and uncalled byte/wide bodies differ. The original approved reference worker remains pinned in the raw archive. All12/bothguards/exact pixels/native bounds/full owners pass. Zero production rebuilds or repeated qualification. Stop all three.
-Existing128x64 wide cases now independently confirm: TightWide8 1.687x/upper1.701x at32,889B/op; Wide8 1.534x/upper1.540x at231,229B/op; Wide16 1.212x/upper1.218x at263,991B/op. Exact pixels/native bounds/full owners/all12/bothguards pass on the same qualified production. Zero production/harness builds or repeated qualification; stop all three. Five named wide-cache cases remain affected by the edited loop.
-Three existing word paths independently confirm: TightVerticalUp16 1.630x/upper1.647x at2,133,096B/op; Tight64x32_16 1.594x/upper1.608x at16,505B/op; Down64x32_16 1.338x/upper1.351x at214,071B/op. Exact pixels, approved vertical low-alpha RGB scope, strict reduction bounds, full owners, all12 and both guards pass. Same qualified build; zero production/harness builds or repeated qualification. Stop all three. Four named wide-cache paths remain affected.
-Three existing cross/32x16 paths independently confirm: TightCross16 1.574x/upper1.579x at1,063,477B/op; Tight32x16_8 1.575x/upper1.580x at2,169B/op; Down32x16_8 1.204x/upper1.208x at199,355B/op. Exact pixels, unchanged native bounds, full owners, all12 and both guards pass on the same qualified build. Zero production/harness builds or repeated qualification; stop all three. Three named wide-cache paths remain affected.
-Existing Up8/Horizontal8/Up16 independently confirm: Up8 1.555x/upper1.569x at3,244,622B/op; Horizontal8 1.465x/upper1.475x at465,375B/op; Up16 1.530x/upper1.542x at5,016,578B/op. Upscale exact rational pixels, horizontal frozen binary64/six certified alpha halves, unchanged native bounds, full owners, all12 and both guards pass. Same qualified build and unchanged upscale workers; zero production/harness builds or repeated qualification. Stop all three.
-Existing TightCross8/TightWide16/Cross8 independently confirm: TightCross8 1.502x/upper1.513x at531,910B/op; TightWide16 1.462x/upper1.479x at65,658B/op; Cross8 1.180x/upper1.184x at731,753B/op. Exact pixels, unchanged native bounds, source/limits/full owners, all12 and both guards pass. Same qualified build and reused word-wide worker; zero production/harness builds or repeated qualification. Stop all three.
-Three existing support paths independently confirm: Tight32x16_16 1.383x/upper1.394x at4,217B/op; Down16x8_8 0.803x/upper0.809x at201,728B/op; Down32x16_16 1.105x/upper1.110x at201,398B/op. Exact pixels, unchanged native bounds, source/limits/full owners, all12 and both guards pass on the same qualified build. Zero production/harness builds or repeated qualification; stop all three. Only Down16x8_16 remains among the edited wide-cache paths.
-Existing tiny/vertical cases independently confirm: Tight2x9_8 1.274x/upper1.286x at194B/op; VerticalUp16 1.260x/upper1.270x at2,516,605B/op; VerticalUp8 1.274x/upper1.282x at1,664,240B/op. Exact rational or qualified binary64/certified-half pixels, approved scoped native bounds, source/limits/full owners, all12 and both guards pass. Same qualified build; both vertical workers reused, zero production/harness builds or repeated qualification. Stop all three.
-Cross/block cases independently confirm: Cross16 1.268x/upper1.275x at1,263,255B/op; Tight2x9_16 1.146x/upper1.180x at266B/op; Tight4x9_8 1.484x/upper1.488x at266B/op. Two8x17 proofs reuse unchanged executed kernels/guards and original workers/scaler: Tight8x17_8 1.089x/upper1.100x at665B/op; Tight8x17_16 0.973x/upper0.981x at1,209B/op. Exact pixels, native bounds, full owners, all12/bothguards pass; zero new timing for the reused pair. Same qualified production, no repeated qualification; stop all five.
-The three existing streaming/block cases independently confirm: Tight16x8_8 1.084x / upper 1.090x, 633 B/op; Tight4x9_16 1.025x / upper 1.030x, 409 B/op; Tight16x8_16 0.984x / upper 0.995x, 1,145 B/op.
-The 16x8 selected streaming kernels changed capacity, workspace and per-column
-row-block preparation; their older dispatchers also lack the two mixed rejection
-calls. The 4x9 word kernel and dispatcher are unchanged, but the earlier streaming
-rejection removed an executed height test. Current complete timings resolve
-these uncertainties. Exact rational/frozen pixels, strict native RGB/alpha
-maximum1 and RMSE0.25, limits and full ownership pass. Every short mean is read
-before its independent twelve-actual job; all actuals and both quiet guards are
-retained. Same qualified production/harness and original rasters throughout.
-The byte16x8 worker is reused; two word adapters are refreshed with the same
-compiler, flags and scaler and frozen outputs. Two shared drivers serve six jobs;
-zero production/harness builds or repeated qualification. Stop all three.
-
-Three existing default-cache/streaming cases independently confirm: Down16x8_16 0.889x / upper 0.893x, 202,231 B/op; Tight8x4_8 0.765x / upper 0.772x, 249 B/op; Tight8x4_16 0.643x / upper 0.651x, 377 B/op.
-The default word16x8 case executes the edited paired-tap wide-cache loop and
-mixed rejection calls; all eight existing paths affected by that production
-change now have current evidence. Both tight8x4 selected streaming kernels
-moved row-block preparation inside each output column and removed the executed
-height predicate; later uncalled dispatch additions alone are not invalidators.
-Exact rational/frozen pixels, strict native RGB/alpha maximum1 and RMSE0.25,
-limits and full ownership pass. Every short mean precedes independent twelve;
-all actuals and both quiet guards are retained on the same qualified build.
-The word16x8 worker is reused; two8x4 adapters are refreshed with unchanged
-compiler, flags, scaler and frozen outputs. Two shared drivers serve six jobs;
-zero production/harness builds or repeated qualification. Stop all three.
-
-Three existing tiny packed/generated cases independently confirm: Tight2x2_8 0.718x / upper 0.745x, 138 B/op; Tight4x2_8 0.691x / upper 0.695x, 153 B/op; Tight4x2_16 0.506x / upper 0.509x, 185 B/op.
-The selected generated-byte and packed byte/word kernels changed whole-height
-setup to per-column row blocks and removed executed height predicates. Earlier
-streaming/packed rejection paths also changed. Actual measured source hashes
-establish these invalidations; parent revisions alone do not establish reuse.
-Exact rational/frozen pixels, strict native RGB/alpha maximum1 and RMSE0.25,
-limits and full ownership pass. Short means precede independent twelve;
-all actuals and both quiet guards are retained on the same qualified build.
-Three selected adapters are refreshed with the same compiler, flags and scaler
-and frozen outputs; two shared drivers serve six jobs. Zero production/harness
-builds or repeated qualification. Stop all three. Only Tight2x2_16 remains in B12.
-
-The final existing word2x2 generated case independently confirms 0.458x / upper 0.487x, 154 B/op.
-Its selected kernel changed whole-height preparation into per-column row blocks
-and removed the executed height predicate; preceding rejection predicates also
-changed. Current complete timing resolves the uncertainty. Exact rational/frozen
-pixels, strict native RGB/alpha maximum1 and RMSE0.25, limits/full ownership,
-all twelve actuals and both quiet guards pass. The short mean precedes independent
-twelve on the same qualified production/harness. One selected adapter refresh
-uses the same compiler/flags/scaler/frozen outputs; two one-case drivers serve
-two jobs. Zero production/harness builds or repeated qualification. Stop it.
-
-All61 fixed bicubic selectors now have valid current-path passing evidence,
-including explicitly reused unchanged proofs. No bicubic case or grid is added.
-B01-B15 reconciliation is closed. Full required warm coverage remains open for
-the four named Identify boundaries C01-C04; equivalent public-API validation,
-metadata and descriptor ownership must be established before timing them.
-
-All named B12 cases are stopped; C01-C04 remain open.
+Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): all61 fixed
+selectors have valid current-path passing evidence, including explicit reuse of
+unchanged executed paths. All eight edited wide-cache cases are closed. Stop
+these pairs. The subsequent PNG Identify change does not execute in bicubic,
+nearest, bilinear, exact edits or pixel codecs; no retiming is needed. The new
+C01 proof records the precise three changed production inputs and qualifications.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
-| PNG decode | RGBA8/16 all five filters and stored Deflate/None; current RGBA16 None independently confirmed1.045x/upper1.059x at8,552B/op; current RGBA8 Sub confirmed1.686x / upper1.697x; RGB8 Paeth confirmed1.204x / upper1.214x; RGB16 Paeth confirmed1.904x/upper1.928x; grayscale8 Paeth confirmed1.008x/upper1.014x; grayscale-alpha8 Paeth confirmed1.017x/upper1.068x; current RGBA16 Adam7 confirmed1.377x/upper1.381x and packed gray1 Adam7 confirmed1.314x/upper1.320x, plus exact working-memory boundary at both depths (RGBA8 confirmed1.821x / upper1.950x, RGBA16 confirmed1.817x / upper1.821x), live-cancelable RGBA8 default/exact limit confirmed1.407x / upper1.469x and1.867x / upper1.873x and RGBA16 default/exact limit confirmed1.573x / upper1.583x and1.834x / upper1.852x; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; byte-indexed sixteen-entry/full-tRNS palette confirmed1.317x/upper1.327x; packed palette4/full-tRNS Adam7 confirmed 1.304x / upper 1.387x; palette8/full-tRNS Adam7 confirmed1.167x/upper1.177x with native wall/CPU agreement; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed; packed gray2/key0 confirmed0.144x / upper0.145x and gray1/key1 with timed exact native colorkey confirmed0.094x / upper0.098x, raw gray1/key1 and gray2/key1 native alpha refusals unscored | B05 all25 fixed cases and B06 named Adam7 paths closed; unchanged later proofs reused. B07 PNG Stream/composition is closed; C01/C04 standalone Identify remains open. |
+| PNG decode | RGBA8/16 all five filters and stored Deflate/None; current RGBA16 None independently confirmed1.045x/upper1.059x at8,552B/op; current RGBA8 Sub confirmed1.686x / upper1.697x; RGB8 Paeth confirmed1.204x / upper1.214x; RGB16 Paeth confirmed1.904x/upper1.928x; grayscale8 Paeth confirmed1.008x/upper1.014x; grayscale-alpha8 Paeth confirmed1.017x/upper1.068x; current RGBA16 Adam7 confirmed1.377x/upper1.381x and packed gray1 Adam7 confirmed1.314x/upper1.320x, plus exact working-memory boundary at both depths (RGBA8 confirmed1.821x / upper1.950x, RGBA16 confirmed1.817x / upper1.821x), live-cancelable RGBA8 default/exact limit confirmed1.407x / upper1.469x and1.867x / upper1.873x and RGBA16 default/exact limit confirmed1.573x / upper1.583x and1.834x / upper1.852x; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; byte-indexed sixteen-entry/full-tRNS palette confirmed1.317x/upper1.327x; packed palette4/full-tRNS Adam7 confirmed 1.304x / upper 1.387x; palette8/full-tRNS Adam7 confirmed1.167x/upper1.177x with native wall/CPU agreement; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed; packed gray2/key0 confirmed0.144x / upper0.145x and gray1/key1 with timed exact native colorkey confirmed0.094x / upper0.098x, raw gray1/key1 and gray2/key1 native alpha refusals unscored | B05 all25 fixed cases and B06 named Adam7 paths closed; unchanged later proofs reused. B07 PNG Stream/composition is closed; C01 closed; C04 standalone Stream Identify remains open. |
 | PNG encode | RGBA8/16, RGB16, gray16 and gray-alpha16 level6/None; byte RGB/gray/gray-alpha Optimal managed9/native6 with unchanged5% size gate confirmed; RGBA8/16 NoCompression/None confirmed; RGBA8 SmallestSize managed9/native9 confirmed 0.835x / upper 0.841x and RGBA16 SmallestSize managed9/native9 confirmed0.970x / upper0.985x with unchanged5% size gate; Fastest RGBA8 managed2/native1 stock output confirmed 0.707x / upper 0.712x; Fastest RGBA16 managed2/native1 stock output confirmed 0.732x / upper 0.735x and live cancelable output confirmed 0.731x / upper 0.747x, forward-only output confirmed 0.771x / upper 0.805x with streaming adaptive compression | B08 closed: current independent RGBA8/16 level6 confirmations pass. Retain unchanged confirmed color-model/compression paths; no new settings grid. |
 | JPEG decode | Baseline/progressive gray, 4:2:0, 4:2:2, 4:4:4; full-resolution direct RGB now confirmed 1.695x/upper 1.709x; current progressive 4:4:4 confirmed 1.877x/upper 1.896x; horizontal subsampled direct RGB422 confirmed1.511x/upper1.520x with timed native phase correction; two-dimensional direct RGB420 confirmed1.638x/upper1.646x with timed component-plane interpretation/expansion/packing; current native-input ordinary/live-token/progressive 4:4:4 independently confirmed1.715x/upper1.733x,1.770x/upper1.797x,1.954x/upper1.960x; baseline 4:2:0 with row restart markers confirmed 1.823x / upper 1.837x | All eight affected ordinary and the three named progressive cases have current-code confirmations; unchanged444/live-token444/Stream proofs reused. Standalone Identify remains in the finite public-boundary work. |
 | JPEG encode | Adaptive RGBA8 4:4:4 current confirmed1.578x/upper1.585x, 4:2:2 confirmed 1.821x / upper 1.862x and 4:2:0 current-build confirmed1.634x/upper1.641x; Adaptive RGBA16 4:4:4 current confirmed1.546x/upper1.552x, 4:2:2 confirmed 1.874x / upper 1.884x and 4:2:0 current-build confirmed1.682x/upper1.697x; live-cancelable RGBA16 4:2:0 confirmed 1.651x / upper 1.663x and RGBA8 4:4:4 prior confirmed with current regression; forward-only RGBA8 4:4:4 confirmed 1.754x / upper 1.765x and 4:2:0 confirmed 1.916x / upper 1.936x and RGBA16 4:2:0 confirmed 1.948x / upper 1.954x; adaptive RGBA8 row restarts confirmed1.799x/upper1.809x and current nonrestart4:2:0 confirmed1.634x/upper1.641x | All four affected adaptive444/422 byte/word cases independently confirm on current code; current420/restart/grayscale and unchanged geometric fallback paths stop |
 | WebP | VP8 with alpha decode/encode; opaque VP8 encode confirmed RGBA8 1.892x / upper 1.918x and RGBA16 1.908x / upper 1.922x with current alpha8/16 independent confirmations0.569x/upper0.573x and0.576x/upper0.581x; opaque VP8 decode confirmed 1.803x / upper 1.808x, plus live-token opaque decode confirmed 1.838x / upper 1.843x and simple luma-filter opaque decode confirmed 1.746x / upper 1.765x and alpha VP8 confirmed 1.803x / upper 1.819x; RGBA16 VP8/VP8L encode with full normalization; VP8L native and managed inputs, plus sixteen-color type3 indexed decode confirmed 1.519x / upper 1.550x; exact VP8L backend encode; native-input VP8L live-token decode confirmed1.906x / upper1.919x | B09 alpha8/16 VP8 encode and B10 literal/run VP8L decode closed; current literal/run1.618x/upper1.625x. Retain unchanged opaque encode and native/indexed/live-token/Stream decode proofs. |
-| Resize | Nearest/bilinear downsample and enlargement at both depths; bicubic downsample, enlargement on both axes, both mixed-axis directions and 128×64 / 64×32 wider supports at both depths; horizontal reduction/enlargement and vertical reduction at both depths; vertical enlargement, 32×16 and 16×8 adaptive support at both depths; RGBA8/16 256×129, 128×64, 64×32, 32×16 and 16×8 reduction, plus RGBA8/16 both-axis enlargement and RGBA8/16 width enlargement/height reduction plus RGBA8/16 width reduction/height enlargement and RGBA8/16 8×4 beyond 256 taps plus RGBA8/16 4×2 packed support beyond 304 taps and RGBA8/16 2×2 generated support beyond 544 taps plus RGBA8/16 2×9 bounded row blocks and RGBA8/16 4×9 packed row blocks plus RGBA8/16 8×17 full-coefficient row blocks and RGBA8/16 vertical reduction with unchanged width plus RGBA8/16 horizontal reduction with unchanged height and RGBA8/16 vertical enlargement with unchanged width plus RGBA8/16 horizontal enlargement with unchanged height, with input+output+4 KiB limit confirmed; default-limit RGBA8 single-pixel reduction independently confirmed 0.213x / upper 0.227x and current RGBA16 width enlargement independently confirmed1.473x/upper1.499x at2,129,311B/op | All four existing bilinear cases independently confirmed on current code; reconcile selected-helper/dispatch reuse for the61 existing bicubic selectors; nearest early dispatch is unchanged |
+| Resize | Nearest/bilinear downsample and enlargement at both depths; bicubic downsample, enlargement on both axes, both mixed-axis directions and 128×64 / 64×32 wider supports at both depths; horizontal reduction/enlargement and vertical reduction at both depths; vertical enlargement, 32×16 and 16×8 adaptive support at both depths; RGBA8/16 256×129, 128×64, 64×32, 32×16 and 16×8 reduction, plus RGBA8/16 both-axis enlargement and RGBA8/16 width enlargement/height reduction plus RGBA8/16 width reduction/height enlargement and RGBA8/16 8×4 beyond 256 taps plus RGBA8/16 4×2 packed support beyond 304 taps and RGBA8/16 2×2 generated support beyond 544 taps plus RGBA8/16 2×9 bounded row blocks and RGBA8/16 4×9 packed row blocks plus RGBA8/16 8×17 full-coefficient row blocks and RGBA8/16 vertical reduction with unchanged width plus RGBA8/16 horizontal reduction with unchanged height and RGBA8/16 vertical enlargement with unchanged width plus RGBA8/16 horizontal enlargement with unchanged height, with input+output+4 KiB limit confirmed; default-limit RGBA8 single-pixel reduction independently confirmed 0.213x / upper 0.227x and current RGBA16 width enlargement independently confirmed1.473x/upper1.499x at2,129,311B/op | All four existing bilinear cases independently confirmed on current code; all61 existing bicubic selectors closed/stopped; nearest early dispatch is unchanged |
 | Exact edits | Both depths and every orientation/permutation, fixed shapes; RGBA8 horizontal flip with two simultaneously live outputs confirmed 1.447x / upper 1.484x per image | B11 closed: all20 existing single-owner byte/word cases independently confirmed after the shared output-pool change; stop every pair; retained-two byte flip remains confirmed |
-| Public boundaries | Resident encoded span to owned output; complete single operations; current fresh seekable non-exposed PNG8 Stream decode confirmed1.428x/upper1.441x and PNG16 confirmed1.136x/upper1.146x; fresh JPEG420 restart Stream now confirmed 1.632x/upper 1.673x and VP8/ALPH Stream confirmed 1.825x / upper 1.833x and VP8L Stream confirmed 1.834x / upper 1.851x; current PNG8 Stream/normal-orient/centered-crop/nearest-fit composition confirmed1.445x/upper1.454x | B07 closed: PNG8/16 Stream and byte composition independently confirmed; word composition fusion proof reused. Unmeasured: resident Identify for PNG/JPEG/WebP and one fresh PNG Identify Stream, with equivalent validation first |
+| Public boundaries | Resident encoded span to owned output; complete single operations; current fresh seekable non-exposed PNG8 Stream decode confirmed1.428x/upper1.441x and PNG16 confirmed1.136x/upper1.146x; fresh JPEG420 restart Stream now confirmed 1.632x/upper 1.673x and VP8/ALPH Stream confirmed 1.825x / upper 1.833x and VP8L Stream confirmed 1.834x / upper 1.851x; current PNG8 Stream/normal-orient/centered-crop/nearest-fit composition confirmed1.445x/upper1.454x | B07 closed: PNG8/16 Stream and byte composition independently confirmed; word composition fusion proof reused. C01 resident PNG Identify closed; unmeasured resident JPEG/WebP Identify and fresh PNG Identify Stream, equivalent validation first |
 
 Centered/clamped crop, AutoOrient and ResizeToFit route to the measured copy or
 resize primitives after small geometry/metadata work. They need correctness

@@ -20,7 +20,7 @@ internal static class PngCodec
     private sealed record Header(ImageInfo Info, int ColorType, int Depth, int Interlace,
         byte[] Palette, byte[] Transparency, int CompressedLength);
 
-    public static ImageInfo Identify(ReadOnlySpan<byte> data, OperationContext context) => Scan(data, context).Info;
+    public static ImageInfo Identify(ReadOnlySpan<byte> data, OperationContext context) => PngIdentifier.Identify(data, context);
 
     private static Header Scan(ReadOnlySpan<byte> data, OperationContext context)
     {
