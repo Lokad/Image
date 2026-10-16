@@ -1,6 +1,6 @@
 # Current PNG decode confirmations
 
-3 of the 25 named PNG decode cases awaiting current-path evidence independently
+6 of the 25 named PNG decode cases awaiting current-path evidence independently
 confirm within the 2x warm single-CPU target on the qualified production DLL.
 Older full-operation timings preceded shared overwrite-pool and fused framing/
 inflation changes. These measurements resolve that uncertainty; no optimization
@@ -11,6 +11,9 @@ is needed. Stop confirmed pairs; full required warm coverage remains open.
 | DecodeRgb16 | 2 / 16 / 0 | 2,297.09 | 2,227.02 | 1.031 / 1.034 | 6,504 | 12 / 12 |
 | DecodeGray16 | 0 / 16 / 0 | 714.81 | 957.95 | 0.746 / 0.751 | 2,408 | 12 / 12 |
 | DecodeGrayAlpha16 | 4 / 16 / 0 | 1,563.09 | 1,795.59 | 0.871 / 0.874 | 4,456 | 12 / 11 |
+| DecodeUp8 | 6 / 8 / 2 | 2,209.03 | 1,518.35 | 1.455 / 1.458 | 4,456 | 12 / 12 |
+| DecodePaeth8 | 6 / 8 / 4 | 3,230.00 | 2,843.71 | 1.136 / 1.140 | 4,456 | 12 / 12 |
+| DecodeGray16Transparency | 0 / 16 / 0 | 2,970.49 | 2,055.01 | 1.445 / 1.450 | 2,440 | 12 / 12 |
 
 Each operation decodes the identical resident original 513x259 PNG into an
 independently owned RGBA buffer. Managed public Decode, admission, container/
@@ -60,4 +63,4 @@ profile is introduced. The [numeric evidence](warm-current-png-decode-evidence.j
 retains all samples, quiet guards, allocations, exact identities and qualification
 reuse. Each result certifies its named fixed input/public boundary.
 
-Remaining named cases, largest retained ratios first: DecodeUp8, DecodePaeth8, DecodeGray16Transparency, DecodeAverage8, DecodePalette4, DecodeGray8, DecodeNoCompression16, DecodeGray4, Decode8, DecodePalette8PartialAlpha, DecodeRgb8Transparency, DecodeRgb8, DecodeGrayAlpha8, DecodeRgb16Transparency, DecodeNoCompression8, DecodePaeth16, DecodeGray1, DecodePalette8, DecodePalette2, DecodeGray2, DecodeGray8Transparency, DecodePalette1.
+Remaining named cases, largest retained ratios first: DecodeAverage8, DecodePalette4, DecodeGray8, DecodeNoCompression16, DecodeGray4, Decode8, DecodePalette8PartialAlpha, DecodeRgb8Transparency, DecodeRgb8, DecodeGrayAlpha8, DecodeRgb16Transparency, DecodeNoCompression8, DecodePaeth16, DecodeGray1, DecodePalette8, DecodePalette2, DecodeGray2, DecodeGray8Transparency, DecodePalette1.
