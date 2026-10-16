@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Thirty-one of the existing 61 named bicubic cases have valid current-path evidence.
+Thirty-four of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -269,3 +269,21 @@ are refreshed from changed owned source with identical compiler/flags/scaler and
 frozen outputs; two shared drivers serve six jobs. Zero production/harness builds
 or repeated qualification. Stop all three. Four already named wide-cache paths
 and the remaining finite checklist stay open; next TightCross16 and Tight32x16_8.
+
+The next three named cross/32x16 cases independently confirm: TightCross16 1.574x/upper1.579x at1,063,477B/op; Tight32x16_8 1.575x/upper1.580x at2,169B/op; Down32x16_8 1.204x/upper1.208x at199,355B/op.
+TightCross16's old word-enlarger had no wrapper/Core call; the new rejection
+call executes before its selected cross filter. The cross filter's changed
+height comparison is equivalent for the frozen strict enlargement and does not
+alone invalidate it. Both32x16 dispatchers predate the mixed-axis rejection
+calls, while the default case also executes the edited wide-cache tap loop.
+Current complete-operation measurements resolve these uncertainties.
+
+Exact rational/frozen pixels, unchanged maximum1/RMSE0.25 native bounds, source,
+working limits and full independent ownership pass. Short means precede each
+independent twelve-actual confirmation; every actual and both quiet guards are
+retained, with selected/all confidence. Same qualified production/harness and
+original two rasters. Two selected adapters are refreshed from changed owned
+source with identical compiler/flags/scaler and frozen outputs; two shared
+drivers serve six jobs. Zero production/harness builds or repeated qualification.
+Stop all three. Three named wide-cache paths and the remaining finite checklist
+stay open; next reconcile Up8 and the next largest retained named cases.
