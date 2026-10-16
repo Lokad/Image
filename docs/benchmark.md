@@ -171,7 +171,7 @@ word-composition proof and production/package qualification are reused.
 | [WebP VP8 opaque, live cancelable token](../benchmarks/WARM-VP8-CANCELABLE.md) | 8,789.89 | 4,783.31 | 1.838 / 1.843 | 760,548 | Confirmed |
 | [WebP VP8, opaque](../benchmarks/WARM-VP8-FILTER8.md) | 8,649.43 | 4,797.64 | 1.803 / 1.808 | 760,548 | Confirmed |
 | [WebP VP8L, sixteen-color indexed input](../benchmarks/WARM-VP8L-INDEXED16.md) | 825.07 | 543.26 | 1.519 / 1.550 | 1,351,961 | Confirmed |
-| [WebP VP8L, literal/run input](../benchmarks/WARM-VP8L-DECODE-QUIET.md) | 3,948.44 | 2,332.84 | 1.693 / 1.732 | 1,074,301 | Confirmed |
+| [WebP VP8L, literal/run input](../benchmarks/WARM-CURRENT-VP8L-LITERAL.md) | 3,479.66 | 2,150.57 | 1.618 / 1.625 | 1,074,301 | Confirmed |
 | [WebP VP8L, native input](../benchmarks/WARM-VP8L-CANONICAL.md) | 5,703.55 | 3,023.03 | 1.887 / 1.904 | 1,216,180 | Confirmed |
 | [WebP VP8L, native input / live cancelable token](../benchmarks/WARM-VP8L-CANCELABLE.md) | 5,757.19 | 3,020.47 | 1.906 / 1.919 | 1,216,180 | Confirmed |
 

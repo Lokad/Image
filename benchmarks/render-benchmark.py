@@ -148,7 +148,7 @@ def render():
         row('WebP VP8 opaque, live cancelable token', 'warm-vp8-cancelable-evidence.json', ['observations', -1], 'WARM-VP8-CANCELABLE.md', True),
         row('WebP VP8, opaque', 'warm-vp8-filter8-evidence.json', ['observations', -1], 'WARM-VP8-FILTER8.md', True),
         row('WebP VP8L, sixteen-color indexed input', 'warm-vp8l-indexed16-evidence.json', ['observations', -1], 'WARM-VP8L-INDEXED16.md', True),
-        row('WebP VP8L, literal/run input', 'warm-vp8ldecode-quiet-evidence.json', ['observations', -1], 'WARM-VP8L-DECODE-QUIET.md', True),
+        row('WebP VP8L, literal/run input', 'warm-current-vp8l-literal-evidence.json', ['observations', -1], 'WARM-CURRENT-VP8L-LITERAL.md', True),
         row('WebP VP8L, native input', 'warm-vp8l-canonical-evidence.json', ['observations', -1], 'WARM-VP8L-CANONICAL.md', True),
         row('WebP VP8L, native input / live cancelable token', 'warm-vp8l-cancelable-evidence.json', ['observations', -1], 'WARM-VP8L-CANCELABLE.md', True),
     ]
