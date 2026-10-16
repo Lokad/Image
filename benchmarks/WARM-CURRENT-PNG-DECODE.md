@@ -1,6 +1,6 @@
 # Current PNG decode confirmations
 
-15 of the 25 named PNG decode cases awaiting current-path evidence independently
+18 of the 25 named PNG decode cases awaiting current-path evidence independently
 confirm within the 2x warm single-CPU target for current production paths.
 Older full-operation timings preceded shared overwrite-pool and fused framing/
 inflation changes. Stop confirmed pairs; full required warm coverage remains open.
@@ -22,6 +22,9 @@ inflation changes. Stop confirmed pairs; full required warm coverage remains ope
 | DecodePalette8PartialAlpha | 3 / 8 / 0 | 540.03 | 363.49 | 1.486 / 1.494 | 2,208 | 12 / 12 |
 | DecodeRgb8Transparency | 2 / 8 / 0 | 1,281.05 | 1,282.56 | 0.999 / 1.001 | 3,464 | 12 / 12 |
 | DecodeRgb8 | 2 / 8 / 0 | 1,293.31 | 1,523.89 | 0.849 / 0.853 | 3,432 | 12 / 12 |
+| DecodeGrayAlpha8 | 4 / 8 / 0 | 845.98 | 1,156.04 | 0.732 / 0.733 | 2,408 | 12 / 12 |
+| DecodeRgb16Transparency | 2 / 16 / 0 | 2,316.17 | 3,182.24 | 0.728 / 0.732 | 6,536 | 12 / 12 |
+| DecodeNoCompression8 | 6 / 8 / 0 | 150.38 | 136.49 | 1.102 / 1.114 | 4,456 | 12 / 11 |
 
 Each operation decodes the identical resident original 513x259 PNG into an
 independently owned RGBA buffer. Managed public Decode, admission, container/
@@ -92,4 +95,4 @@ their confirmations. Other codecs/editing/encoding are unaffected. Existing
 uncertain cases remain open for their earlier named invalidators. The numeric
 evidence retains the original failing screen and fresh qualification archive.
 
-Remaining named cases, largest retained ratios first: DecodeGrayAlpha8, DecodeRgb16Transparency, DecodeNoCompression8, DecodePaeth16, DecodeGray1, DecodePalette8, DecodePalette2, DecodeGray2, DecodeGray8Transparency, DecodePalette1.
+Remaining named cases, largest retained ratios first: DecodePaeth16, DecodeGray1, DecodePalette8, DecodePalette2, DecodeGray2, DecodeGray8Transparency, DecodePalette1.
