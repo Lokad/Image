@@ -108,7 +108,7 @@ def render():
         row('PNG palette8 + tRNS, Adam7', 'warm-png-palette8-adam7-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE8-ADAM7.md', True),
         row('PNG RGB16, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeRgb16', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG gray8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('PNG gray8 + tRNS key127, None', 'warm-pnggray8trns-row-evidence.json', ['observations', -1], 'WARM-PNG-GRAY8-TRANSPARENCY.md', True),
+        row('PNG gray8 + tRNS key127, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray8Transparency', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG gray16 + tRNS key32639, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray16Transparency', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG gray-alpha8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGrayAlpha8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGB8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeRgb8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
@@ -120,13 +120,13 @@ def render():
         row('PNG palette8 + tRNS, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG palette8 + two-entry tRNS, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette8PartialAlpha', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG palette4 + tRNS → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('PNG palette2 + tRNS → RGBA8, None', 'warm-pngpalette2-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE2-ROW.md', True),
+        row('PNG palette2 + tRNS → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette2', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG palette1 + tRNS → RGBA8, None', 'warm-pngpalette1-row-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE1-ROW.md', True),
         row('PNG opaque gray1 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray1', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG gray1 + tRNS key1 → RGBA8, exact timed FFmpeg color-key', 'warm-png-gray1-transparency-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-TRANSPARENCY.md', True),
         row('PNG gray2 + tRNS key0 → RGBA8, None', 'warm-png-packed-transparency-evidence.json', ['observations', -1], 'WARM-PNG-PACKED-TRANSPARENCY.md', True),
         pending('PNG gray1/key1 and gray2/key1, unfiltered native', 'WARM-PNG-PACKED-TRANSPARENCY.md', 'Unscored: native alpha differs'),
-        row('PNG opaque gray2 → RGBA8, None', 'warm-pnggray2-current-evidence.json', ['observations', -1], 'WARM-PNG-GRAY2-CURRENT.md', True),
+        row('PNG opaque gray2 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray2', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG opaque gray4 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('JPEG baseline gray', 'warm-current-jpeg-decode-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
         row('JPEG baseline 4:2:0', 'warm-current-jpeg-decode-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
@@ -353,7 +353,7 @@ pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-PROGRESSIVE.md) includes
 allocations and unchanged-build/qualification reuse. Stop these cases and the
 already confirmed444/live-token444 pairs; remaining material coverage is open.
 
-Current PNG decode reconciliation: **21/25 named affected cases** independently
+Current PNG decode reconciliation: **24/25 named affected cases** independently
 confirm for current production paths, worst upper **1.494x**. Exact RGBA/alpha/hidden
 RGB and complete output ownership pass. [Current report](../benchmarks/WARM-CURRENT-PNG-DECODE.md)
 includes allocations and remaining cases. Shared three-case drivers preserve

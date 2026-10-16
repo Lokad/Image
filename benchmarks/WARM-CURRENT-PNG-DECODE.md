@@ -1,6 +1,6 @@
 # Current PNG decode confirmations
 
-21 of the 25 named PNG decode cases awaiting current-path evidence independently
+24 of the 25 named PNG decode cases awaiting current-path evidence independently
 confirm within the 2x warm single-CPU target for current production paths.
 Older full-operation timings preceded shared overwrite-pool and fused framing/
 inflation changes. Stop confirmed pairs; full required warm coverage remains open.
@@ -28,6 +28,9 @@ inflation changes. Stop confirmed pairs; full required warm coverage remains ope
 | DecodePaeth16 | 6 / 16 / 4 | 5,401.14 | 5,511.74 | 0.980 / 0.990 | 8,552 | 12 / 12 |
 | DecodeGray1 | 0 / 1 / 0 | 59.11 | 303.42 | 0.195 / 0.199 | 488 | 12 / 12 |
 | DecodePalette8 | 3 / 8 / 0 | 349.92 | 364.06 | 0.961 / 0.970 | 2,456 | 12 / 12 |
+| DecodePalette2 | 3 / 2 / 0 | 66.42 | 97.53 | 0.681 / 0.686 | 688 | 12 / 11 |
+| DecodeGray2 | 0 / 2 / 0 | 71.73 | 106.38 | 0.674 / 0.679 | 616 | 12 / 11 |
+| DecodeGray8Transparency | 0 / 8 / 0 | 357.50 | 758.36 | 0.471 / 0.474 | 1,416 | 12 / 11 |
 
 Each operation decodes the identical resident original 513x259 PNG into an
 independently owned RGBA buffer. Managed public Decode, admission, container/
@@ -98,4 +101,6 @@ their confirmations. Other codecs/editing/encoding are unaffected. Existing
 uncertain cases remain open for their earlier named invalidators. The numeric
 evidence retains the original failing screen and fresh qualification archive.
 
-Remaining named cases, largest retained ratios first: DecodePalette2, DecodeGray2, DecodeGray8Transparency, DecodePalette1.
+A palette2 pre-run admission attempt was refused at 3.96% I/O wait, above the unchanged 1% ceiling. No benchmark started. Its guard/controller record is retained in the accepted short archive. The same prepared build was retried with unchanged thresholds; both guards pass for the scored screen and independent confirmation. No refused timing is scored.
+
+Remaining named cases, largest retained ratios first: DecodePalette1.
