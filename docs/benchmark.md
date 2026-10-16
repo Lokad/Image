@@ -57,7 +57,7 @@ Exact frozen packets and source-quality gates pass; full normalization and fresh
 output ownership are timed. [Current report](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md)
 also records compressed sizes. No production optimization or rebuild is needed.
 
-Current ordinary JPEG decode reconciliation: **3/8 named affected cases**
+Current ordinary JPEG decode reconciliation: **6/8 named affected cases**
 independently confirm on the qualified core, worst upper **1.626x**.
 Exact frozen pixels, existing native agreement bounds and complete output
 ownership pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-DECODE.md)
@@ -123,14 +123,14 @@ states the fixed inputs and remaining cases. No production rebuild or retuning.
 | [PNG opaque gray2 → RGBA8, None](../benchmarks/WARM-PNG-GRAY2-CURRENT.md) | 83.19 | 110.11 | 0.756 / 0.783 | 9,136 | Confirmed |
 | [PNG opaque gray4 → RGBA8, None](../benchmarks/WARM-PNG-GRAY4-REUSE.md) | 220.61 | 146.67 | 1.504 / 1.532 | 13,544 | Confirmed |
 | [JPEG baseline gray](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 937.68 | 681.99 | 1.375 / 1.391 | 1,221,556 | Confirmed |
-| [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG-RGB420-ROW.md) | 1,642.77 | 1,064.99 | 1.543 / 2.312 | 1,619,530 | Regression screen; prior confirmed |
+| [JPEG baseline 4:2:0](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 1,455.95 | 1,009.28 | 1.443 / 1.449 | 1,619,530 | Confirmed |
 | [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 1,640.44 | 1,013.53 | 1.619 / 1.626 | 1,623,906 | Confirmed |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-JPEG-RGB422-ROW.md) | 1,902.81 | 1,346.77 | 1.413 / 1.497 | 1,978,651 | Regression screen; prior confirmed |
-| [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-JPEG444-OWNED-QUIET.md) | 3,564.61 | 2,039.57 | 1.748 / 1.793 | 2,596,174 | Confirmed |
+| [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 2,622.85 | 1,896.19 | 1.383 / 1.390 | 2,596,169 | Confirmed |
 | [JPEG baseline 4:4:4, native input](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 2,648.65 | 1,718.17 | 1.542 / 1.549 | 2,664,373 | Confirmed |
 | [JPEG baseline direct RGB, full resolution](../benchmarks/WARM-JPEG-AC-CACHE.md) | 2,460.96 | 1,451.53 | 1.695 / 1.709 | 2,664,366 | Confirmed |
 | [JPEG direct RGB 4:2:2, timed centered correction](../benchmarks/WARM-JPEG-RGB420-ROW.md) | 1,646.35 | 1,095.09 | 1.503 / 1.570 | 1,978,655 | Regression screen; prior confirmed |
-| [JPEG direct RGB 4:2:0, timed component-plane interpretation](../benchmarks/WARM-JPEG-RGB420-ROW.md) | 1,220.97 | 745.27 | 1.638 / 1.646 | 1,619,540 | Confirmed |
+| [JPEG direct RGB 4:2:0, timed component-plane interpretation](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 1,131.19 | 742.22 | 1.524 / 1.532 | 1,619,540 | Confirmed |
 | [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-JPEG-BASELINE-AC-RUN.md) | 3,048.96 | 1,722.47 | 1.770 / 1.797 | 2,664,373 | Confirmed |
 | [JPEG progressive gray](../benchmarks/WARM-JPEG-REFINEMENT.md) | 3,336.90 | 1,743.36 | 1.914 / 1.942 | 1,232,501 | Confirmed |
 | [JPEG progressive 4:2:0](../benchmarks/WARM-JPEG-PROGRESSIVE420.md) | 3,646.81 | 1,938.47 | 1.881 / 1.894 | 1,637,521 | Confirmed |

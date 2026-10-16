@@ -129,14 +129,14 @@ def render():
         row('PNG opaque gray2 → RGBA8, None', 'warm-pnggray2-current-evidence.json', ['observations', -1], 'WARM-PNG-GRAY2-CURRENT.md', True),
         row('PNG opaque gray4 → RGBA8, None', 'warm-pnggray4-reuse-evidence.json', ['observations', -1], 'WARM-PNG-GRAY4-REUSE.md', True),
         row('JPEG baseline gray', 'warm-current-jpeg-decode-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
-        row('JPEG baseline 4:2:0', 'warm-jpeg-rgb420-row-evidence.json', ['observations', 4], 'WARM-JPEG-RGB420-ROW.md', verification='Regression screen; prior confirmed'),
+        row('JPEG baseline 4:2:0', 'warm-current-jpeg-decode-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-current-jpeg-decode-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
         row('JPEG baseline 4:2:2', 'warm-jpeg-rgb422-row-evidence.json', ['observations', 4], 'WARM-JPEG-RGB422-ROW.md', verification='Regression screen; prior confirmed'),
-        row('JPEG baseline 4:4:4, owned input', 'warm-jpeg444owned-quiet-evidence.json', ['observations', -1], 'WARM-JPEG444-OWNED-QUIET.md', True),
+        row('JPEG baseline 4:4:4, owned input', 'warm-current-jpeg-decode-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
         row('JPEG baseline 4:4:4, native input', 'warm-current-jpeg-decode-evidence.json', ['cases', 'NativeDecode8', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
         row('JPEG baseline direct RGB, full resolution', 'warm-jpeg-ac-cache-evidence.json', ['observations', 2], 'WARM-JPEG-AC-CACHE.md', True),
         row('JPEG direct RGB 4:2:2, timed centered correction', 'warm-jpeg-rgb420-row-evidence.json', ['observations', 3], 'WARM-JPEG-RGB420-ROW.md', verification='Regression screen; prior confirmed'),
-        row('JPEG direct RGB 4:2:0, timed component-plane interpretation', 'warm-jpeg-rgb420-row-evidence.json', ['observations', 2], 'WARM-JPEG-RGB420-ROW.md', True),
+        row('JPEG direct RGB 4:2:0, timed component-plane interpretation', 'warm-current-jpeg-decode-evidence.json', ['cases', 'DirectRgb420', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
         row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg-ac-run-evidence.json', ['cancelableConfirmations', -1], 'WARM-JPEG-BASELINE-AC-RUN.md', True),
         row('JPEG progressive gray', 'warm-jpegrefinement-evidence.json', ['observations', -1], 'WARM-JPEG-REFINEMENT.md', True),
         row('JPEG progressive 4:2:0', 'warm-jpegprogressive420-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE420.md', True),
@@ -341,7 +341,7 @@ Exact frozen packets and source-quality gates pass; full normalization and fresh
 output ownership are timed. [Current report](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md)
 also records compressed sizes. No production optimization or rebuild is needed.
 
-Current ordinary JPEG decode reconciliation: **3/8 named affected cases**
+Current ordinary JPEG decode reconciliation: **6/8 named affected cases**
 independently confirm on the qualified core, worst upper **1.626x**.
 Exact frozen pixels, existing native agreement bounds and complete output
 ownership pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-DECODE.md)

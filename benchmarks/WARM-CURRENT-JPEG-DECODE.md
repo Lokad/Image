@@ -1,6 +1,6 @@
 # Current ordinary JPEG decode confirmations
 
-3 of the eight named ordinary baseline decode cases independently confirm
+6 of the eight named ordinary baseline decode cases independently confirm
 within the 2x warm single-CPU target on the qualified production DLL. This
 resolves older evidence invalidated by the AC loop/lookahead changes `bc73f41`
 and `a65b7f6`. No production optimization is needed. Stop the confirmed pairs;
@@ -11,6 +11,9 @@ full required warm coverage remains open.
 | OwnedDecodeGray | 147,825 | 937.68 | 681.99 | 1.375 / 1.391 | 1,221,556 | 12 / 12 |
 | NativeDecode420Restart | 58,012 | 1,640.44 | 1,013.53 | 1.619 / 1.626 | 1,623,906 | 12 / 12 |
 | NativeDecode8 | 133,041 | 2,648.65 | 1,718.17 | 1.542 / 1.549 | 2,664,373 | 12 / 11 |
+| Decode8 | 324,002 | 2,622.85 | 1,896.19 | 1.383 / 1.390 | 2,596,169 | 12 / 12 |
+| DirectRgb420 | 52,109 | 1,131.19 | 742.22 | 1.524 / 1.532 | 1,619,540 | 12 / 11 |
+| NativeDecode420 | 52,093 | 1,455.95 | 1,009.28 | 1.443 / 1.449 | 1,619,530 | 12 / 12 |
 
 Every operation decodes the same resident original 513x259 encoded JPEG into an
 independently owned RGBA8 buffer. Managed public Decode, admission, all parsing/
@@ -51,4 +54,4 @@ recorded source. The [numeric evidence](warm-current-jpeg-decode-evidence.json)
 retains all samples, guards, exact identities, allocations and qualification
 reuse. Each row certifies only its named fixed input/public boundary.
 
-Remaining named ordinary cases: Decode8, DirectRgb420, NativeDecode420, DirectRgb422, NativeDecode422.
+Remaining named ordinary cases: DirectRgb422, NativeDecode422.
