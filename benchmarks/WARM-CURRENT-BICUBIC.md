@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Forty-six of the existing 61 named bicubic cases have valid current-path evidence.
+Fifty-one of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -357,3 +357,30 @@ two original rasters. Both vertical reference workers are reused; only the tiny
 adapter is refreshed from changed owned source with identical compiler/flags/
 scaler and frozen outputs. Two shared drivers serve six jobs. Zero production/
 harness builds or repeated qualification. Stop all three; full coverage stays open.
+
+The next cross/block cases independently confirm: Cross16 1.268x/upper1.275x at1,263,255B/op; Tight2x9_16 1.146x/upper1.180x at266B/op; Tight4x9_8 1.484x/upper1.488x at266B/op.
+Cross16 predates the mixed-axis rejection calls. The two tiny cases retain their
+selected generated-word/packed-byte math, but earlier streaming helpers removed
+executed height tests. Current complete timings resolve these uncertainties.
+Exact rational/frozen pixels, maximum1/RMSE0.25 native bounds, source, limits and
+full ownership pass. Short means precede independent twelve actuals; every
+actual and both quiet guards are retained, with selected/all confidence. Same
+qualified production/harness and original rasters. The cross worker is reused;
+two tiny adapters are refreshed with identical compiler/flags/scaler and frozen
+outputs. Two shared drivers serve six jobs; no production/harness build or
+repeated qualification. Stop all three.
+
+The two existing8x17 proofs also reuse unchanged paths: Tight8x17_8 1.089x/upper1.100x at665B/op; Tight8x17_16 0.973x/upper0.981x at1,209B/op.
+The saved comparison of35 scoped inputs per snapshot establishes unchanged
+selected streaming kernels, dispatcher and prior column entries. Mixed entries
+retain their wrapper/prelude and reject at the same first depth test or strict
+width8<513 test, before changed preference clauses. The wide-cache entry prefix
+is unchanged and rejects before the edited loop: even minimum cache storage
+exceeds the fixed4KiB remainder. Changed byte-only bodies are unselected for
+word input; later cross/enlargement helpers are uncalled after streaming succeeds.
+The context addition is unused. Both original workers/identities and scaler
+archive are byte-identical on the VM; excluding an unselected mode, equal halo
+alias and untimed ready metadata yields identical timed adapter source. Exact
+pixels, native bounds, full owners, all twelve actuals and both guards remain
+valid. Zero new jobs/builds/qualification for these two; stop them. The finite
+checklist remains open; continue the remaining ten named bicubic cases.
