@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Nineteen of the existing 61 named bicubic cases have valid current-path evidence.
+Twenty of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -165,12 +165,34 @@ adapter refresh retains the same compiler, flags and scaler archive; no
 production/harness build or qualification repeat. Two shared selection drivers.
 Stop this case.
 
-Default-limit Down64x32_8 remains open: its valid three-actual screen is2.121x/
+Default-limit Down64x32_8 initially screened above target: its valid three-actual control is2.121x/
 upper2.361x at205,882B/op. This is not an independent passing confirmation.
 The original failed metadata-only postcheck is retained: the template expected
 halo4 while this pre-existing baseline uses16. Revalidating the original receipt,
 binaries and both guards against frozen16 corrects that check without retiming.
 No pixel, quality or workload boundary changed. A six-second diagnostic profile
 locates81% in the wide row-cache method, chiefly its horizontal accumulation and
-indexed loads;18% is the exact original-pixel fallback. The next bounded
-experiment targets this cache primitive only. No new case or image is added.
+indexed loads;18% is the exact original-pixel fallback. The bounded experiment targets this cache primitive only. No new case or image is added.
+
+The accepted row-cache change hoists each paired column's weight and index views
+out of the inner tap loop. Zero-initialized padding, safe bounds, sample order,
+exact fallback, cancellation and admission remain unchanged. Down64x32_8 now
+independently confirms1.662x/upper1.668x,611.55us at205,881B/op:21.6% less managed
+time than its preceding valid780.00us screen. Short1.654x precedes twelve actuals;
+all actuals, both guards, exact rational/frozen pixels, native bounds and full
+ownership pass. The same native worker and both prepared selection drivers are
+reused through the experiment. One production build and benchmark recompilation
+against that assembly; benchmark source unchanged.
+
+Fresh qualification passes3,483 Release tests per OS, including898 live FFmpeg
+comparisons per OS, and the same actual dependency-free Release package's
+consumer and all three examples on Windows and Linux. The new qualification is
+retained in the evidence. No new raster, grid or baseline adjustment.
+
+Stop Down64x32_8. The other nineteen stopped bicubic cases select mixed or narrow
+helpers, or reject this wide helper before the edited loop; entry guards and
+other production files are unchanged, so their proofs remain valid. The edited
+loop also serves the seven already named open Wide8/Wide16, Down64x32_16,
+Down32x16_8/16 and Down16x8_8/16 cases; their older timings need current-loop
+evidence. This identifies the exact invalidation without reopening passing
+unaffected paths. Full61-case reconciliation and identification coverage stay open.

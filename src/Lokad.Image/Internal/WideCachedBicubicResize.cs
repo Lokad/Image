@@ -112,12 +112,19 @@ internal static class WideCachedBicubicResize
                         var sum0=Vector256<double>.Zero;
                         var sum1=Vector256<double>.Zero;
                         var n=Math.Max(counts[x],counts[x+1]);
+                        // Fix the column views once. Both views include the
+                        // zero-initialized padding up to the larger tap count,
+                        // preserving the accumulation order for unequal counts.
+                        var weights0=weights.Slice(x*capacity,n);
+                        var weights1=weights.Slice((x+1)*capacity,n);
+                        var offsets0=offsets.Slice(x*capacity,n);
+                        var offsets1=offsets.Slice((x+1)*capacity,n);
                         for(var tx=0;tx<n;tx++)
                         {
-                            var p0=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets[x*capacity+tx],4)));
-                            var p1=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets[(x+1)*capacity+tx],4)));
-                            sum0=Avx.Add(sum0,Avx.Multiply(p0,Vector256.Create(weights[x*capacity+tx])));
-                            sum1=Avx.Add(sum1,Avx.Multiply(p1,Vector256.Create(weights[(x+1)*capacity+tx])));
+                            var p0=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets0[tx],4)));
+                            var p1=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets1[tx],4)));
+                            sum0=Avx.Add(sum0,Avx.Multiply(p0,Vector256.Create(weights0[tx])));
+                            sum1=Avx.Add(sum1,Avx.Multiply(p1,Vector256.Create(weights1[tx])));
                         }
                         MemoryMarshal.Write(MemoryMarshal.AsBytes(cached.Slice(x*4,4)),in sum0);
                         MemoryMarshal.Write(MemoryMarshal.AsBytes(cached.Slice((x+1)*4,4)),in sum1);
