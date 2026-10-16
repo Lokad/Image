@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Seven of the existing 61 named bicubic cases have valid current-path evidence.
+Nine of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -77,3 +77,21 @@ new original raster, profile, whole-library audit or repeated suite/package proo
 Stop both ordinary Mixed cases. B12 remains open for the other named helper/
 dispatch uncertainties; reuse valid unchanged proofs before scheduling another
 measurement. Identification boundaries and the full warm objective remain open.
+
+The existing tight-limit mixed-axis byte/word cases also independently confirm.
+Their entry preference guards changed in d3ab2b4/b228c29 after the old proofs;
+unchanged hot loops alone did not certify the complete operation.
+
+| Input+output+4 KiB limit, 1027x129 output | Lokad.Image / backend µs | Ratio / upper | Managed B/op | Actual / selected |
+| --- | ---: | ---: | ---: | ---: |
+| TightMixed16 | 1,644.19 / 848.47 | 1.938 / 1.957 | 1,060,419 | 12 / 12 |
+| TightMixed8 | 1,617.87 / 860.30 | 1.881 / 1.901 | 530,370 | 12 / 12 |
+
+The original frozen managed/native pixels, exact rational output, approved
+maximum1/RMSE0.25 native bounds, working limit, complete ownership, all twelve
+actuals and both quiet guards pass. These two cases reuse the same qualified
+production DLL, selector harness and already-refreshed native workers with zero
+rebuilds or repeated qualification. Two shared drivers serve the four short/
+confirmation jobs; means are read before confirmations. No profile, new image,
+shape grid or pixel/quality/baseline change. Stop both pairs. Next: reconcile the
+existing vertical-reduction proofs, reusing unchanged selected paths.
