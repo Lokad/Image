@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Forty-three of the existing 61 named bicubic cases have valid current-path evidence.
+Forty-six of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -338,3 +338,22 @@ source with identical compiler/flags/scaler and frozen outputs; two shared
 drivers serve six jobs. Zero production/harness builds or repeated qualification.
 Stop all three. Only Down16x8_16 remains among the edited wide-cache paths;
 the remaining finite checklist stays open. Next Tight2x9_8 and VerticalUp16.
+
+The existing tiny-output and vertical-enlargement cases independently confirm: Tight2x9_8 1.274x/upper1.286x at194B/op; VerticalUp16 1.260x/upper1.270x at2,516,605B/op; VerticalUp8 1.274x/upper1.282x at1,664,240B/op.
+Tight2x9_8's selected generated math and dispatcher are unchanged, but earlier
+streaming/packed-streaming helpers removed executed height tests. This changes
+its full rejection sequence even though the same filter remains selected.
+Both vertical cases predate the mixed-axis rejection calls. Current complete
+measurements resolve these uncertainties without a production optimization.
+
+Tiny/word pixels remain exact rational. VerticalUp8 preserves frozen binary64
+pixels and its one independently certified exact rational RGB half. The approved
+word-vertical native RGB allowance stays2 only where reference alpha<=16,1
+elsewhere, alpha within1 and RGB/alpha RMSE within0.25; the byte cases retain
+maximum1/RMSE0.25. Source, limits and full independent ownership pass. Every short
+mean precedes its independent twelve actuals; all actuals and both guards are
+retained, with selected/all confidence. Same qualified production/harness and
+two original rasters. Both vertical reference workers are reused; only the tiny
+adapter is refreshed from changed owned source with identical compiler/flags/
+scaler and frozen outputs. Two shared drivers serve six jobs. Zero production/
+harness builds or repeated qualification. Stop all three; full coverage stays open.

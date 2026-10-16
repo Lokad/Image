@@ -21,7 +21,7 @@ bound where available. **Confirmed** requires an independent quiet repeat and
 upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
 Current-path reconciliation closes all twenty named exact edits;
 [bicubic reconciliation](../benchmarks/WARM-CURRENT-BICUBIC.md) covers
-43/61 named cases, including reused unchanged paths.
+46/61 named cases, including reused unchanged paths.
 Recent confirmations use `exclusive-vm-idle-v2`: live job checks and
 five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
 Earlier receipts retain their original load guard and its failures.
@@ -291,7 +291,7 @@ Prepared quality records/packets and production qualification are reused.
 | [Bicubic RGBA16, 8×17 / full-coefficient row blocks / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-8X17-RGBA16.md) | 516.33 | 530.91 | 0.973 / 0.981 | 1,209 | Confirmed |
 | [Bicubic RGBA8, 8×17 / full-coefficient row blocks / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-8X17-RGBA8.md) | 538.78 | 494.65 | 1.089 / 1.100 | 665 | Confirmed |
 | [Bicubic RGBA8, 4×9 / packed row blocks / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-4X9-RGBA8.md) | 814.23 | 674.14 | 1.208 / 1.212 | 265 | Confirmed |
-| [Bicubic RGBA8, 2×9 / bounded row blocks / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-2X9-RGBA8.md) | 1,355.20 | 1,017.22 | 1.332 / 1.341 | 194 | Confirmed |
+| [Bicubic RGBA8, 2×9 / bounded row blocks / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,337.80 | 1,050.39 | 1.274 / 1.286 | 194 | Confirmed |
 | [Bicubic RGBA8, 2×2 / generated support beyond 544 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-2X2-RGBA8.md) | 1,040.64 | 1,690.30 | 0.616 / 0.634 | 138 | Confirmed |
 | [Bicubic height reduction, unchanged width RGBA8§](../benchmarks/WARM-BICUBIC-TIGHT-VERTICAL8.md) | 756.93 | 588.11 | 1.287 / 1.301 | 648,992 | Confirmed |
 | [Bicubic height reduction, unchanged width RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-VERTICAL8.md) | 1,063.64 | 583.82 | 1.822 / 1.838 | 264,995 | Confirmed |
@@ -299,9 +299,9 @@ Prepared quality records/packets and production qualification are reused.
 | [Bicubic height reduction, unchanged width RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-VERTICAL16.md) | 1,059.29 | 584.28 | 1.813 / 1.823 | 529,838 | Confirmed |
 | [Bicubic width reduction, unchanged height RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 838.73 | 579.56 | 1.447 / 1.459 | 530,858 | Confirmed |
 | [Bicubic width reduction, unchanged height RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL8.md) | 811.19 | 573.66 | 1.414 / 1.425 | 265,502 | Confirmed |
-| [Bicubic height enlargement, unchanged width RGBA8§](../benchmarks/WARM-BICUBIC-VERTICAL-UP8-ROWS.md) | 2,213.62 | 1,730.56 | 1.279 / 1.286 | 1,664,240 | Confirmed |
+| [Bicubic height enlargement, unchanged width RGBA8§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 2,206.63 | 1,732.64 | 1.274 / 1.282 | 1,664,240 | Confirmed |
 | [Bicubic height enlargement, unchanged width RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 3,003.25 | 1,739.69 | 1.726 / 1.737 | 1,280,402 | Confirmed |
-| [Bicubic height enlargement, unchanged width RGBA16§](../benchmarks/WARM-BICUBIC-VERTICAL-UP16-ROWS.md) | 2,131.66 | 1,655.60 | 1.288 / 1.297 | 2,516,605 | Confirmed |
+| [Bicubic height enlargement, unchanged width RGBA16§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 2,108.79 | 1,674.17 | 1.260 / 1.270 | 2,516,605 | Confirmed |
 | [Bicubic height enlargement, unchanged width RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 2,719.36 | 1,667.94 | 1.630 / 1.647 | 2,133,096 | Confirmed |
 | [Bicubic width enlargement, unchanged height RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL-UP16.md) | 2,313.25 | 1,440.17 | 1.606 / 1.614 | 2,129,311 | Confirmed |
 | [Bicubic width enlargement, unchanged height RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL-UP8.md) | 2,387.65 | 1,508.44 | 1.583 / 1.591 | 1,178,425 | Confirmed |
