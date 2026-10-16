@@ -320,8 +320,8 @@ Prepared quality records/packets and production qualification are reused.
 | [Counterclockwise quarter turn RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 49.42 | 45.49 | 1.086 / 1.103 | 128 | Confirmed |
 | [Transpose RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 38.05 | 38.28 | 0.994 / 1.004 | 128 | Confirmed |
 | [Transpose RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 48.17 | 44.86 | 1.074 / 1.114 | 128 | Confirmed |
-| [Mirrored transpose RGBA16](../benchmarks/WARM-DIRECTIONS16-QUIET.md) | 44.93 | 42.63 | 1.054 / 1.085 | 128 | Confirmed |
-| [Mirrored transpose RGBA8](../benchmarks/WARM-DIRECTIONS8-QUIET.md) | 36.59 | 37.98 | 0.964 / 0.991 | 128 | Confirmed |
+| [Mirrored transpose RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 44.34 | 43.25 | 1.025 / 1.064 | 128 | Confirmed |
+| [Mirrored transpose RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 39.10 | 38.54 | 1.015 / 1.041 | 128 | Confirmed |
 
 † RGBA16 bilinear and the explicit RGBA8 upscale allow native-only alpha maximum
 error 1 / RMSE <=0.25, alongside the same RGB bound. Up8 also includes writable

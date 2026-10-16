@@ -279,8 +279,8 @@ def render():
         row('Counterclockwise quarter turn RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'Counterclockwise16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
         row('Transpose RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'Transpose8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
         row('Transpose RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'Transpose16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
-        row('Mirrored transpose RGBA16', 'warm-directions16-quiet-evidence.json', ['cases', 'mirror16', 'observations', -1], 'WARM-DIRECTIONS16-QUIET.md', True),
-        row('Mirrored transpose RGBA8', 'warm-directions8-quiet-evidence.json', ['cases', 'transverse', 'observations', -1], 'WARM-DIRECTIONS8-QUIET.md', True),
+        row('Mirrored transpose RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'Transverse16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
+        row('Mirrored transpose RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'Transverse8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
     ]
     return f'''# Lokad.Image benchmark state
 
