@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Thirteen of the existing 61 named bicubic cases have valid current-path evidence.
+Fifteen of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -113,3 +113,22 @@ independently certified exact rational alpha halves; no managed tolerance is
 added. Word rational pixels, original native bounds, ownership, all twelve actuals
 and both guards remain valid. Zero builds, statistical jobs or qualification
 repeats. Stop all four; next reconcile the named tight horizontal reductions.
+
+Tight horizontal reduction now stops at both depths. TightHorizontal16 independently
+confirms1.447x/upper1.459x at530,858B/op, after a passing1.452x screen. The
+enlargement helper had acquired an executed wrapper/core call before rejecting
+width reduction, so unchanged cross-filter loops did not certify its old complete
+timing. Exact rational/frozen pixels, approved native bounds, working limit,
+owners, all twelve actuals and both guards pass. Same qualified production and
+harness; one selected adapter refresh for changed source and two single-case
+drivers. No production/harness rebuild, profile or repeated qualification.
+
+TightHorizontal8 reuses1.414x/upper1.425x at265,502B/op. Its existing byte wrapper/
+core prefix is identical. Width256 is strictly less than source513, so both the
+old<= and current< checks perform the same comparisons and reject before the
+changed enlargement logic. The word branch is unselected, and the selected
+cross-helper/dispatcher match the actual archived inputs. The context addition is
+unused. Frozen binary64 pixels, including the existing6 independently certified
+exact rational alpha halves, native bounds, owners, all twelve actuals and guards
+remain valid. The native worker/identity/scaler are byte-identical on the VM.
+Zero byte-case builds or timing repeats. No new original raster or shape grid.
