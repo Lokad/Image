@@ -75,6 +75,14 @@ harness/native rebuild, profile or repeated qualification. Existing newer444
 and live-token444 proofs are reused. All named JPEG pixel cases now stop;
 standalone identification remains a distinct unmeasured boundary.
 
+Current PNG decode reconciliation: [3/25 named affected cases](WARM-CURRENT-PNG-DECODE.md)
+independently confirm on the unchanged qualified core, worst upper1.034x.
+Exact samples/alpha/hidden RGB, normal/scalar native pixels, complete ownership,
+all twelve actuals and both quiet guards pass. Stop confirmed pairs. The first
+word RGB/gray/gray-alpha group shares one driver per sampling length, sequential
+execution and existing qualified production/harness/native binaries. No profile
+or repeated qualification. Next named candidates: DecodeUp8, DecodePaeth8, DecodeGray16Transparency.
+
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
 | PNG decode | RGBA8/16 all five filters and stored Deflate/None; current RGBA16 None independently confirmed1.045x/upper1.059x at8,552B/op; current RGBA8 Sub confirmed1.686x / upper1.697x; RGB8 Paeth confirmed1.204x / upper1.214x; RGB16 Paeth confirmed1.904x/upper1.928x; grayscale8 Paeth confirmed1.008x/upper1.014x; grayscale-alpha8 Paeth confirmed1.017x/upper1.068x; RGBA16 Adam7 and packed gray1 Adam7 confirmed1.018x / upper1.032x, plus exact working-memory boundary at both depths (RGBA8 confirmed1.821x / upper1.950x, RGBA16 confirmed1.817x / upper1.821x), live-cancelable RGBA8 default/exact limit confirmed1.407x / upper1.469x and1.867x / upper1.873x and RGBA16 default/exact limit confirmed1.573x / upper1.583x and1.834x / upper1.852x; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; byte-indexed sixteen-entry/full-tRNS palette confirmed1.317x/upper1.327x; packed palette4/full-tRNS Adam7 confirmed 1.304x / upper 1.387x; palette8/full-tRNS Adam7 confirmed1.167x/upper1.177x with native wall/CPU agreement; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed; packed gray2/key0 confirmed0.144x / upper0.145x and gray1/key1 with timed exact native colorkey confirmed0.094x / upper0.098x, raw gray1/key1 and gray2/key1 native alpha refusals unscored | Reconcile existing Decode8/Paeth8/Up8/Average8, stored Deflate, earlier RGB/gray/gray-alpha/palette/transparency rows and RGBA16/gray1 Adam7 after shared inflation/counting changes; reuse the later unchanged-path confirmations |

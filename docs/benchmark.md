@@ -69,6 +69,12 @@ pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-PROGRESSIVE.md) includes
 allocations and unchanged-build/qualification reuse. Stop these cases and the
 already confirmed444/live-token444 pairs; remaining material coverage is open.
 
+Current PNG decode reconciliation: **3/25 named affected cases** independently
+confirm on the qualified core, worst upper **1.034x**. Exact RGBA/alpha/hidden
+RGB and complete output ownership pass. [Current report](../benchmarks/WARM-CURRENT-PNG-DECODE.md)
+includes allocations and remaining cases. Shared three-case drivers preserve
+sequential short/independent confirmation jobs without production rebuilds.
+
 **Decode**
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
@@ -106,7 +112,7 @@ already confirmed444/live-token444 pairs; remaining material coverage is open.
 | [PNG RGBA16, Adam7](../benchmarks/WARM-PNG-SCATTER.md) | 6,567.82 | 3,984.54 | 1.648 / 1.700 | 2,024,532 | Confirmed |
 | [PNG gray1 → RGBA8, Adam7](../benchmarks/WARM-PNG-GRAY1-ADAM7.md) | 1,265.54 | 1,243.33 | 1.018 / 1.032 | 1,424 | Confirmed |
 | [PNG palette8 + tRNS, Adam7](../benchmarks/WARM-PNG-PALETTE8-ADAM7.md) | 1,710.03 | 1,465.40 | 1.167 / 1.177 | 4,960 | Confirmed |
-| [PNG RGB16, None](../benchmarks/WARM-PNG-RGB16-CURRENT.md) | 4,020.98 | 2,210.00 | 1.819 / 1.823 | 15,024 | Confirmed |
+| [PNG RGB16, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 2,297.09 | 2,227.02 | 1.031 / 1.034 | 6,504 | Confirmed |
 | [PNG gray8, None](../benchmarks/WARM-PNG-GRAY8-CURRENT.md) | 564.59 | 361.22 | 1.563 / 1.580 | 9,904 | Confirmed |
 | [PNG gray8 + tRNS key127, None](../benchmarks/WARM-PNG-GRAY8-TRANSPARENCY.md) | 563.19 | 762.11 | 0.739 / 0.761 | 9,936 | Confirmed |
 | [PNG gray16 + tRNS key32639, None](../benchmarks/WARM-PNG-GRAY16-TRANSPARENCY.md) | 3,501.16 | 2,033.36 | 1.722 / 1.755 | 10,960 | Confirmed |
@@ -114,8 +120,8 @@ already confirmed444/live-token444 pairs; remaining material coverage is open.
 | [PNG RGB8, None](../benchmarks/WARM-PNG-RGB8-ROW.md) | 2,139.12 | 1,510.62 | 1.416 / 1.440 | 727,305 | Confirmed |
 | [PNG RGB8 + tRNS key(48,139,231), None](../benchmarks/WARM-PNG-RGB8-TRANSPARENCY.md) | 1,779.35 | 1,255.63 | 1.417 / 1.439 | 11,984 | Confirmed |
 | [PNG RGB16 + tRNS key(12347,35806,59265), None](../benchmarks/WARM-PNG-RGB16-TRANSPARENCY.md) | 4,033.48 | 3,170.09 | 1.272 / 1.302 | 15,056 | Confirmed |
-| [PNG gray16, None](../benchmarks/WARM-PNG-GRAY16-ROW.md) | 1,743.26 | 960.42 | 1.815 / 1.837 | 1,331,046 | Confirmed |
-| [PNG gray-alpha16, None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ROW.md) | 3,195.37 | 1,798.83 | 1.776 / 1.785 | 1,573,649 | Confirmed |
+| [PNG gray16, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 714.81 | 957.95 | 0.746 / 0.751 | 2,408 | Confirmed |
+| [PNG gray-alpha16, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,563.09 | 1,795.59 | 0.871 / 0.874 | 4,456 | Confirmed |
 | [PNG byte indices / sixteen-entry palette + tRNS, None](../benchmarks/WARM-PNG-SHORT-PALETTE.md) | 144.22 | 109.47 | 1.317 / 1.327 | 1,496 | Confirmed |
 | [PNG palette8 + tRNS, None](../benchmarks/WARM-PNG-SHORT-PALETTE.md) | 361.40 | 393.12 | 0.919 / 2.354 | 2,456 | Regression screen; prior confirmed |
 | [PNG palette8 + two-entry tRNS, None](../benchmarks/WARM-PNG-SHORT-PALETTE.md) | 534.90 | 364.33 | 1.468 / 1.646 | 2,208 | Regression screen; prior confirmed |
