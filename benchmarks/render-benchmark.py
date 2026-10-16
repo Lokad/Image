@@ -169,12 +169,12 @@ def render():
         row('PNG gray16, level 6 / None', 'warm-pnggray16encode-evidence.json', ['observations', -1], 'WARM-PNG-GRAY16-ENCODE.md', True),
         row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-pngbyte-optimal-evidence.json', ['cases', 'alpha', 'confirm'], 'WARM-PNG-BYTE-OPTIMAL.md', True),
         row('PNG gray-alpha16, level 6 / None', 'warm-pnggrayalpha16encode-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ENCODE.md', True),
-        row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-jpeg4448-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG444-RGBA8-ADAPTIVE.md', True),
+        row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode8', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
         row('JPEG 4:4:4, forward-only output / geometric AC Huffman', 'warm-jpeg444stream-evidence.json', ['observations', -1], 'WARM-JPEG444-FORWARD.md', True),
         row('JPEG 4:4:4, live cancelable token / geometric AC Huffman', 'warm-jpeg420cancel16-evidence.json', ['regressions', 0], 'WARM-JPEG-FIXED-OCCUPANCY.md', verification='Regression screen; prior confirmed'),
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg44416-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG444-RGBA16-ADAPTIVE.md', True),
-        row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg4228-adaptive-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA8-ADAPTIVE.md', True),
-        row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg42216-evidence.json', ['observations', -1], 'WARM-JPEG422-RGBA16.md', True),
+        row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
+        row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
         row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg-ac-planning-evidence.json', ['observations', 4], 'WARM-JPEG-AC-PLANNING.md', True),
         row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-ac-planning-evidence.json', ['observations', 2], 'WARM-JPEG-AC-PLANNING.md', True),
         row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-geometric-evidence.json', ['observations', -1], 'WARM-JPEG-FIXED-GEOMETRIC.md', True),
@@ -336,6 +336,12 @@ the tables retain exact ratios and allocations. Exact managed rational pixels,
 native RGB bounds and the approved scoped alpha policies pass. No production
 optimization, rebuild or repeated qualification was needed. Stop these cases;
 the finite remaining coverage checklist stays open.
+
+Current adaptive JPEG reconciliation: **3 affected 444/422 byte/word pairs**
+independently confirm on the same qualified core, worst upper **1.639x**.
+Exact frozen packets and source-quality gates pass; full normalization and fresh
+output ownership are timed. [Current report](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md)
+also records compressed sizes. No production optimization or rebuild is needed.
 
 **Decode**
 
