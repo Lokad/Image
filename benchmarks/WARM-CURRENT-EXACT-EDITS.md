@@ -21,12 +21,14 @@ the passing pair. No production optimization is needed for the confirmed cases.
 | Counterclockwise quarter turn RGBA8 | 38.11 / 37.49 | 1.016 / 1.030 | 128 | 12 / 11 |
 | Transpose RGBA8 | 38.05 / 38.28 | 0.994 / 1.004 | 128 | 12 / 11 |
 | Crop RGBA16 | 4.11 / 4.30 | 0.955 / 0.963 | 96 | 12 / 11 |
+| Clockwise quarter turn RGBA16 | 43.89 / 43.93 | 0.999 / 1.045 | 128 | 12 / 12 |
 | Horizontal flip RGBA16 | 21.83 / 27.03 | 0.807 / 0.811 | 128 | 12 / 12 |
 | Vertical flip RGBA16 | 17.68 / 17.39 | 1.017 / 1.036 | 128 | 12 / 11 |
+| Clockwise quarter turn RGBA8 | 40.77 / 37.31 | 1.093 / 1.126 | 128 | 12 / 12 |
 | Mirrored transpose RGBA8 | 39.10 / 38.54 | 1.015 / 1.041 | 128 | 12 / 12 |
 | Half turn RGBA16 | 18.59 / 21.86 | 0.850 / 0.874 | 128 | 12 / 10 |
 
-18/20 named single-owner cases currently have independent confirmations.
+20/20 named single-owner cases currently have independent confirmations.
 The separately confirmed two-live-output flip is reused and is outside this
 single-owner count. The two original 513x259 byte/word rasters, fixed crop and
 permutation geometries, native workers and exact output hashes are unchanged.
@@ -77,6 +79,5 @@ is reused. The rejected attempt is excluded from every passing timing claim.
 
 [Numeric evidence](warm-current-exact-edits-evidence.json) retains the current
 samples, allocations, guards, original witnesses, output/native/binary identities,
-postcheck correction and reused qualification. Stop confirmed pairs. Outstanding
-named single-owner edits, bicubic reconciliation and identification boundaries
+postcheck correction and reused qualification. Stop confirmed pairs. B11 is closed. Bicubic reconciliation and identification boundaries
 remain open; these results do not establish uniform required warm parity.
