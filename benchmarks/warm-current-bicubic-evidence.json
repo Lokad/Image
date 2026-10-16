@@ -5,7 +5,7 @@
   "uniformWarmParityComplete": false,
   "totalRetainedPerformanceRasters": 2,
   "totalNamedB12Cases": 61,
-  "confirmedNamedB12Cases": 9,
+  "confirmedNamedB12Cases": 13,
   "cases": {
     "TightHorizontalUp8": {
       "evidence": "warm-bicubictighthorizontalup8-cardinal-evidence.json",
@@ -7246,6 +7246,330 @@
           "certifiedThisPair": true
         }
       ]
+    },
+    "Vertical8": {
+      "evidence": "warm-bicubictightvertical8-cachepref-evidence.json",
+      "evidenceSha256": "bbbb41e5658d698d9b905af069af17fa38567a4e6d054618adf022fdb3d578f9",
+      "path": [
+        "defaultMemoryConfirmation"
+      ],
+      "case": "WarmBicubicResize/Vertical8",
+      "meanRatio": 1.2870637947217505,
+      "conservativeRatioUpper": 1.3012489927434896,
+      "allocatedBytes": 648992,
+      "allTwelveActualsRetained": true,
+      "bothQuietGuardsPassed": true,
+      "rawArchive": {
+        "file": "bicubictightvertical8-cachepref-control-confirm.tar.gz",
+        "sha256": "08e8060504c8b1de818bf03b0434c0b8e227fc776ee91ee8779c6221d3d43d7c"
+      },
+      "originalReceiptSha256": "9d90ade9bc0f63e17b337702c5c3836610027234f8de5fe98338efff9d349f07",
+      "measuredSource": {
+        "sourceSha256": "ebc0c302d3faf90d3ae16a5288c543717e19efe38081d166e410a70c5846dd7a",
+        "files": 1959,
+        "sourceRevision": "d3ab2b436d402de90adb36c3b6e5eff82f40e47b",
+        "verifiedAllFileBytes": true
+      },
+      "measuredLinuxDllSha256": "cf2247e80edb59717f7684b9bd6971a1a863fdb1a9adfe7275a9e88f999b5cfc",
+      "relevantInputs": {
+        "src/Lokad.Image/ImageTransforms.cs": {
+          "measuredSha256": "beb5801418c8895d83e84fae0ffa20a49f0626ebfe948a0166cc048684c2adb8",
+          "currentSha256": "beb5801418c8895d83e84fae0ffa20a49f0626ebfe948a0166cc048684c2adb8"
+        },
+        "src/Lokad.Image/ImageBuffer.cs": {
+          "measuredSha256": "f2cbe315d0049ea30fc03abfd8d46b8b4b927378f536241200e675b66ba73a75",
+          "currentSha256": "f2cbe315d0049ea30fc03abfd8d46b8b4b927378f536241200e675b66ba73a75"
+        },
+        "src/Lokad.Image/ImageLimits.cs": {
+          "measuredSha256": "e35e86fba9ce3f6a7113620a848e15566d0c45ff992dc6721f5e5362e9dfb1d7",
+          "currentSha256": "e35e86fba9ce3f6a7113620a848e15566d0c45ff992dc6721f5e5362e9dfb1d7"
+        },
+        "src/Lokad.Image/Internal/OperationContext.cs": {
+          "measuredSha256": "326aaba19c57ece9edb055aca05924a18840002b6b4066ef18705929c7f96174",
+          "currentSha256": "71d75899c1e974056d137d083efd15a7dbd188e1efaaf3718cd71f27872ba1b2"
+        },
+        "src/Lokad.Image/Internal/MixedColumnBicubicResize.cs": {
+          "measuredSha256": "879ce36bf9217a18551c3494821171864275e4078a4a1270c7958ad1b2edc466",
+          "currentSha256": "879ce36bf9217a18551c3494821171864275e4078a4a1270c7958ad1b2edc466"
+        },
+        "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": {
+          "measuredSha256": "d27f0efed676946a88f149bfb25124af39b1f3ee38e16a14c81dfdb796238b52",
+          "currentSha256": "d27f0efed676946a88f149bfb25124af39b1f3ee38e16a14c81dfdb796238b52"
+        },
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": {
+          "measuredSha256": "59f34c2e052a72a6003a4c51f23cf9766220322d243f30ae7923e02dfd63ea11",
+          "currentSha256": "59f34c2e052a72a6003a4c51f23cf9766220322d243f30ae7923e02dfd63ea11"
+        },
+        "src/Lokad.Image/Internal/ResizeAlpha.cs": {
+          "measuredSha256": "a31472d71dcf1724bc155ea30ad44375e3de74c9e9ec09ffa8e6040187a87b08",
+          "currentSha256": "a31472d71dcf1724bc155ea30ad44375e3de74c9e9ec09ffa8e6040187a87b08"
+        },
+        "src/Lokad.Image/Internal/ResizeSampling.cs": {
+          "measuredSha256": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b",
+          "currentSha256": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b"
+        },
+        "Directory.Build.props": {
+          "measuredSha256": "0057d68e3a7ff27fc24e9abd1649c11ffbfef3b448ad906fbd27b69f6903a173",
+          "currentSha256": "0057d68e3a7ff27fc24e9abd1649c11ffbfef3b448ad906fbd27b69f6903a173"
+        },
+        "global.json": {
+          "measuredSha256": "10bfc156a855e0793806480c82415e9aca2b5f63407d844961bcb6fd5d065fb2",
+          "currentSha256": "10bfc156a855e0793806480c82415e9aca2b5f63407d844961bcb6fd5d065fb2"
+        },
+        "src/Lokad.Image/Lokad.Image.csproj": {
+          "measuredSha256": "cbea6f1fe3ab13ead38f689bfedb83a294e590fa4d017c421ae66cb02654641d",
+          "currentSha256": "cbea6f1fe3ab13ead38f689bfedb83a294e590fa4d017c421ae66cb02654641d"
+        }
+      },
+      "onlyRelevantSourceDifferences": {
+        "src/Lokad.Image/Internal/OperationContext.cs": "Only unused CommitAdmittedWork and comments added; fields and all executed context methods unchanged."
+      },
+      "byteContract": "Frozen qualified binary64 pixels, including the existing25 independently certified exact rational alpha halves; no managed tolerance.",
+      "reason": "Actual complete Resize dispatcher, allocated buffer, limits, selected word/mixed/cache paths, alpha/sampling and build inputs unchanged. Context addition is unused; the changed byte-helper clauses are never reached by word inputs. Native original complete-operation reference and confidence remain pinned. No timing/build/qualification repeat."
+    },
+    "TightVertical8": {
+      "evidence": "warm-bicubictightvertical8-cachepref-evidence.json",
+      "evidenceSha256": "bbbb41e5658d698d9b905af069af17fa38567a4e6d054618adf022fdb3d578f9",
+      "path": [
+        "observations",
+        -1
+      ],
+      "case": "WarmBicubicResize/TightVertical8",
+      "meanRatio": 1.8218507781705162,
+      "conservativeRatioUpper": 1.838131040290457,
+      "allocatedBytes": 264995,
+      "allTwelveActualsRetained": true,
+      "bothQuietGuardsPassed": true,
+      "rawArchive": {
+        "file": "bicubictightvertical8-cachepref-confirm.tar.gz",
+        "sha256": "0a64f4a2078d1d9e97c3b90dc475fb06df16a8a7a39a0c8b914197c963fdc5a5"
+      },
+      "originalReceiptSha256": "6019990715b10f93fd6ee133136e0ab5444fa5385d697c97251787503d38c2ae",
+      "measuredSource": {
+        "sourceSha256": "ebc0c302d3faf90d3ae16a5288c543717e19efe38081d166e410a70c5846dd7a",
+        "files": 1959,
+        "sourceRevision": "d3ab2b436d402de90adb36c3b6e5eff82f40e47b",
+        "verifiedAllFileBytes": true
+      },
+      "measuredLinuxDllSha256": "cf2247e80edb59717f7684b9bd6971a1a863fdb1a9adfe7275a9e88f999b5cfc",
+      "relevantInputs": {
+        "src/Lokad.Image/ImageTransforms.cs": {
+          "measuredSha256": "beb5801418c8895d83e84fae0ffa20a49f0626ebfe948a0166cc048684c2adb8",
+          "currentSha256": "beb5801418c8895d83e84fae0ffa20a49f0626ebfe948a0166cc048684c2adb8"
+        },
+        "src/Lokad.Image/ImageBuffer.cs": {
+          "measuredSha256": "f2cbe315d0049ea30fc03abfd8d46b8b4b927378f536241200e675b66ba73a75",
+          "currentSha256": "f2cbe315d0049ea30fc03abfd8d46b8b4b927378f536241200e675b66ba73a75"
+        },
+        "src/Lokad.Image/ImageLimits.cs": {
+          "measuredSha256": "e35e86fba9ce3f6a7113620a848e15566d0c45ff992dc6721f5e5362e9dfb1d7",
+          "currentSha256": "e35e86fba9ce3f6a7113620a848e15566d0c45ff992dc6721f5e5362e9dfb1d7"
+        },
+        "src/Lokad.Image/Internal/OperationContext.cs": {
+          "measuredSha256": "326aaba19c57ece9edb055aca05924a18840002b6b4066ef18705929c7f96174",
+          "currentSha256": "71d75899c1e974056d137d083efd15a7dbd188e1efaaf3718cd71f27872ba1b2"
+        },
+        "src/Lokad.Image/Internal/MixedColumnBicubicResize.cs": {
+          "measuredSha256": "879ce36bf9217a18551c3494821171864275e4078a4a1270c7958ad1b2edc466",
+          "currentSha256": "879ce36bf9217a18551c3494821171864275e4078a4a1270c7958ad1b2edc466"
+        },
+        "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": {
+          "measuredSha256": "d27f0efed676946a88f149bfb25124af39b1f3ee38e16a14c81dfdb796238b52",
+          "currentSha256": "d27f0efed676946a88f149bfb25124af39b1f3ee38e16a14c81dfdb796238b52"
+        },
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": {
+          "measuredSha256": "59f34c2e052a72a6003a4c51f23cf9766220322d243f30ae7923e02dfd63ea11",
+          "currentSha256": "59f34c2e052a72a6003a4c51f23cf9766220322d243f30ae7923e02dfd63ea11"
+        },
+        "src/Lokad.Image/Internal/ResizeAlpha.cs": {
+          "measuredSha256": "a31472d71dcf1724bc155ea30ad44375e3de74c9e9ec09ffa8e6040187a87b08",
+          "currentSha256": "a31472d71dcf1724bc155ea30ad44375e3de74c9e9ec09ffa8e6040187a87b08"
+        },
+        "src/Lokad.Image/Internal/ResizeSampling.cs": {
+          "measuredSha256": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b",
+          "currentSha256": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b"
+        },
+        "Directory.Build.props": {
+          "measuredSha256": "0057d68e3a7ff27fc24e9abd1649c11ffbfef3b448ad906fbd27b69f6903a173",
+          "currentSha256": "0057d68e3a7ff27fc24e9abd1649c11ffbfef3b448ad906fbd27b69f6903a173"
+        },
+        "global.json": {
+          "measuredSha256": "10bfc156a855e0793806480c82415e9aca2b5f63407d844961bcb6fd5d065fb2",
+          "currentSha256": "10bfc156a855e0793806480c82415e9aca2b5f63407d844961bcb6fd5d065fb2"
+        },
+        "src/Lokad.Image/Lokad.Image.csproj": {
+          "measuredSha256": "cbea6f1fe3ab13ead38f689bfedb83a294e590fa4d017c421ae66cb02654641d",
+          "currentSha256": "cbea6f1fe3ab13ead38f689bfedb83a294e590fa4d017c421ae66cb02654641d"
+        }
+      },
+      "onlyRelevantSourceDifferences": {
+        "src/Lokad.Image/Internal/OperationContext.cs": "Only unused CommitAdmittedWork and comments added; fields and all executed context methods unchanged."
+      },
+      "byteContract": "Frozen qualified binary64 pixels, including the existing25 independently certified exact rational alpha halves; no managed tolerance.",
+      "reason": "Actual complete Resize dispatcher, allocated buffer, limits, selected word/mixed/cache paths, alpha/sampling and build inputs unchanged. Context addition is unused; the changed byte-helper clauses are never reached by word inputs. Native original complete-operation reference and confidence remain pinned. No timing/build/qualification repeat."
+    },
+    "Vertical16": {
+      "evidence": "warm-bicubictightvertical16-cachepref-evidence.json",
+      "evidenceSha256": "84b45dce4f857a7b1c429e7276d49ce132facdb2e0a14b33e791c5eeb483cde0",
+      "path": [
+        "defaultMemoryConfirmation"
+      ],
+      "case": "WarmBicubicResize/Vertical16",
+      "meanRatio": 1.4230705834297213,
+      "conservativeRatioUpper": 1.427953728709578,
+      "allocatedBytes": 913737,
+      "allTwelveActualsRetained": true,
+      "bothQuietGuardsPassed": true,
+      "rawArchive": {
+        "file": "bicubictightvertical16-cachepref-control-confirm.tar.gz",
+        "sha256": "b917e1bd3b4ce94b5a9850b111f73acf1723600d9e1c03e52b3a810e17052a6f"
+      },
+      "originalReceiptSha256": "f5f9735bc970a72339a661965003e806f6ff74ed126f5c83d34c56e4cc849a5f",
+      "measuredSource": {
+        "sourceSha256": "c9fbac2166cd8019402272b89789033bf14cbc3f7f2db91114a0dc5ede7fab10",
+        "files": 1957,
+        "sourceRevision": "c3380926b165749f56926d743be3802b9f41a7f7",
+        "verifiedAllFileBytes": true
+      },
+      "measuredLinuxDllSha256": "17ba2f85ac1e5716df4a10207286cb67863a3a6fd9c2fb4c1b46f2c02a36f0ff",
+      "relevantInputs": {
+        "src/Lokad.Image/ImageTransforms.cs": {
+          "measuredSha256": "beb5801418c8895d83e84fae0ffa20a49f0626ebfe948a0166cc048684c2adb8",
+          "currentSha256": "beb5801418c8895d83e84fae0ffa20a49f0626ebfe948a0166cc048684c2adb8"
+        },
+        "src/Lokad.Image/ImageBuffer.cs": {
+          "measuredSha256": "f2cbe315d0049ea30fc03abfd8d46b8b4b927378f536241200e675b66ba73a75",
+          "currentSha256": "f2cbe315d0049ea30fc03abfd8d46b8b4b927378f536241200e675b66ba73a75"
+        },
+        "src/Lokad.Image/ImageLimits.cs": {
+          "measuredSha256": "e35e86fba9ce3f6a7113620a848e15566d0c45ff992dc6721f5e5362e9dfb1d7",
+          "currentSha256": "e35e86fba9ce3f6a7113620a848e15566d0c45ff992dc6721f5e5362e9dfb1d7"
+        },
+        "src/Lokad.Image/Internal/OperationContext.cs": {
+          "measuredSha256": "326aaba19c57ece9edb055aca05924a18840002b6b4066ef18705929c7f96174",
+          "currentSha256": "71d75899c1e974056d137d083efd15a7dbd188e1efaaf3718cd71f27872ba1b2"
+        },
+        "src/Lokad.Image/Internal/MixedColumnBicubicResize.cs": {
+          "measuredSha256": "0578ea07d0a0ecb9884e2131b734841dcced56f81ca87a6201e5452e8a5e51bf",
+          "currentSha256": "879ce36bf9217a18551c3494821171864275e4078a4a1270c7958ad1b2edc466"
+        },
+        "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": {
+          "measuredSha256": "d27f0efed676946a88f149bfb25124af39b1f3ee38e16a14c81dfdb796238b52",
+          "currentSha256": "d27f0efed676946a88f149bfb25124af39b1f3ee38e16a14c81dfdb796238b52"
+        },
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": {
+          "measuredSha256": "59f34c2e052a72a6003a4c51f23cf9766220322d243f30ae7923e02dfd63ea11",
+          "currentSha256": "59f34c2e052a72a6003a4c51f23cf9766220322d243f30ae7923e02dfd63ea11"
+        },
+        "src/Lokad.Image/Internal/ResizeAlpha.cs": {
+          "measuredSha256": "a31472d71dcf1724bc155ea30ad44375e3de74c9e9ec09ffa8e6040187a87b08",
+          "currentSha256": "a31472d71dcf1724bc155ea30ad44375e3de74c9e9ec09ffa8e6040187a87b08"
+        },
+        "src/Lokad.Image/Internal/ResizeSampling.cs": {
+          "measuredSha256": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b",
+          "currentSha256": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b"
+        },
+        "Directory.Build.props": {
+          "measuredSha256": "0057d68e3a7ff27fc24e9abd1649c11ffbfef3b448ad906fbd27b69f6903a173",
+          "currentSha256": "0057d68e3a7ff27fc24e9abd1649c11ffbfef3b448ad906fbd27b69f6903a173"
+        },
+        "global.json": {
+          "measuredSha256": "10bfc156a855e0793806480c82415e9aca2b5f63407d844961bcb6fd5d065fb2",
+          "currentSha256": "10bfc156a855e0793806480c82415e9aca2b5f63407d844961bcb6fd5d065fb2"
+        },
+        "src/Lokad.Image/Lokad.Image.csproj": {
+          "measuredSha256": "cbea6f1fe3ab13ead38f689bfedb83a294e590fa4d017c421ae66cb02654641d",
+          "currentSha256": "cbea6f1fe3ab13ead38f689bfedb83a294e590fa4d017c421ae66cb02654641d"
+        }
+      },
+      "onlyRelevantSourceDifferences": {
+        "src/Lokad.Image/Internal/OperationContext.cs": "Only unused CommitAdmittedWork and comments added; fields and all executed context methods unchanged.",
+        "src/Lokad.Image/Internal/MixedColumnBicubicResize.cs": "Word input rejects this byte helper at the unchanged first short-circuit depth test. Every changed width clause/preference predicate is unreachable. Whole remaining wrapper/core/loop source matches after removing only those unreachable changes and their comment."
+      },
+      "byteContract": "Exact frozen/rational RGBA16 pixels.",
+      "reason": "Actual complete Resize dispatcher, allocated buffer, limits, selected word/mixed/cache paths, alpha/sampling and build inputs unchanged. Context addition is unused; the changed byte-helper clauses are never reached by word inputs. Native original complete-operation reference and confidence remain pinned. No timing/build/qualification repeat."
+    },
+    "TightVertical16": {
+      "evidence": "warm-bicubictightvertical16-cachepref-evidence.json",
+      "evidenceSha256": "84b45dce4f857a7b1c429e7276d49ce132facdb2e0a14b33e791c5eeb483cde0",
+      "path": [
+        "observations",
+        -1
+      ],
+      "case": "WarmBicubicResize/TightVertical16",
+      "meanRatio": 1.8129731296021059,
+      "conservativeRatioUpper": 1.8225516527637458,
+      "allocatedBytes": 529838,
+      "allTwelveActualsRetained": true,
+      "bothQuietGuardsPassed": true,
+      "rawArchive": {
+        "file": "bicubictightvertical16-cachepref-confirm.tar.gz",
+        "sha256": "d854084ad99dcf8d3c0b4549bffbae5a0c8144b8ef084b819b092547c7c1d83f"
+      },
+      "originalReceiptSha256": "53a3f761a1e275e0bf9027238b9c80fcf6b3b61ab543caae395b9dd759689404",
+      "measuredSource": {
+        "sourceSha256": "c9fbac2166cd8019402272b89789033bf14cbc3f7f2db91114a0dc5ede7fab10",
+        "files": 1957,
+        "sourceRevision": "c3380926b165749f56926d743be3802b9f41a7f7",
+        "verifiedAllFileBytes": true
+      },
+      "measuredLinuxDllSha256": "17ba2f85ac1e5716df4a10207286cb67863a3a6fd9c2fb4c1b46f2c02a36f0ff",
+      "relevantInputs": {
+        "src/Lokad.Image/ImageTransforms.cs": {
+          "measuredSha256": "beb5801418c8895d83e84fae0ffa20a49f0626ebfe948a0166cc048684c2adb8",
+          "currentSha256": "beb5801418c8895d83e84fae0ffa20a49f0626ebfe948a0166cc048684c2adb8"
+        },
+        "src/Lokad.Image/ImageBuffer.cs": {
+          "measuredSha256": "f2cbe315d0049ea30fc03abfd8d46b8b4b927378f536241200e675b66ba73a75",
+          "currentSha256": "f2cbe315d0049ea30fc03abfd8d46b8b4b927378f536241200e675b66ba73a75"
+        },
+        "src/Lokad.Image/ImageLimits.cs": {
+          "measuredSha256": "e35e86fba9ce3f6a7113620a848e15566d0c45ff992dc6721f5e5362e9dfb1d7",
+          "currentSha256": "e35e86fba9ce3f6a7113620a848e15566d0c45ff992dc6721f5e5362e9dfb1d7"
+        },
+        "src/Lokad.Image/Internal/OperationContext.cs": {
+          "measuredSha256": "326aaba19c57ece9edb055aca05924a18840002b6b4066ef18705929c7f96174",
+          "currentSha256": "71d75899c1e974056d137d083efd15a7dbd188e1efaaf3718cd71f27872ba1b2"
+        },
+        "src/Lokad.Image/Internal/MixedColumnBicubicResize.cs": {
+          "measuredSha256": "0578ea07d0a0ecb9884e2131b734841dcced56f81ca87a6201e5452e8a5e51bf",
+          "currentSha256": "879ce36bf9217a18551c3494821171864275e4078a4a1270c7958ad1b2edc466"
+        },
+        "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": {
+          "measuredSha256": "d27f0efed676946a88f149bfb25124af39b1f3ee38e16a14c81dfdb796238b52",
+          "currentSha256": "d27f0efed676946a88f149bfb25124af39b1f3ee38e16a14c81dfdb796238b52"
+        },
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": {
+          "measuredSha256": "59f34c2e052a72a6003a4c51f23cf9766220322d243f30ae7923e02dfd63ea11",
+          "currentSha256": "59f34c2e052a72a6003a4c51f23cf9766220322d243f30ae7923e02dfd63ea11"
+        },
+        "src/Lokad.Image/Internal/ResizeAlpha.cs": {
+          "measuredSha256": "a31472d71dcf1724bc155ea30ad44375e3de74c9e9ec09ffa8e6040187a87b08",
+          "currentSha256": "a31472d71dcf1724bc155ea30ad44375e3de74c9e9ec09ffa8e6040187a87b08"
+        },
+        "src/Lokad.Image/Internal/ResizeSampling.cs": {
+          "measuredSha256": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b",
+          "currentSha256": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b"
+        },
+        "Directory.Build.props": {
+          "measuredSha256": "0057d68e3a7ff27fc24e9abd1649c11ffbfef3b448ad906fbd27b69f6903a173",
+          "currentSha256": "0057d68e3a7ff27fc24e9abd1649c11ffbfef3b448ad906fbd27b69f6903a173"
+        },
+        "global.json": {
+          "measuredSha256": "10bfc156a855e0793806480c82415e9aca2b5f63407d844961bcb6fd5d065fb2",
+          "currentSha256": "10bfc156a855e0793806480c82415e9aca2b5f63407d844961bcb6fd5d065fb2"
+        },
+        "src/Lokad.Image/Lokad.Image.csproj": {
+          "measuredSha256": "cbea6f1fe3ab13ead38f689bfedb83a294e590fa4d017c421ae66cb02654641d",
+          "currentSha256": "cbea6f1fe3ab13ead38f689bfedb83a294e590fa4d017c421ae66cb02654641d"
+        }
+      },
+      "onlyRelevantSourceDifferences": {
+        "src/Lokad.Image/Internal/OperationContext.cs": "Only unused CommitAdmittedWork and comments added; fields and all executed context methods unchanged.",
+        "src/Lokad.Image/Internal/MixedColumnBicubicResize.cs": "Word input rejects this byte helper at the unchanged first short-circuit depth test. Every changed width clause/preference predicate is unreachable. Whole remaining wrapper/core/loop source matches after removing only those unreachable changes and their comment."
+      },
+      "byteContract": "Exact frozen/rational RGBA16 pixels.",
+      "reason": "Actual complete Resize dispatcher, allocated buffer, limits, selected word/mixed/cache paths, alpha/sampling and build inputs unchanged. Context addition is unused; the changed byte-helper clauses are never reached by word inputs. Native original complete-operation reference and confidence remain pinned. No timing/build/qualification repeat."
     }
   },
   "previouslyConfirmedCurrentPaths": {
@@ -7306,6 +7630,32 @@
         }
       },
       "currentVmWorkerIdentityAndScalerArchiveVerifiedUnchanged": true
+    },
+    "Vertical8": {
+      "identity": "bicubic-vertical8-identity.json",
+      "worker": "zimg-bicubic-vertical8-warm",
+      "build": {
+        "sourceSha256": "e5ed69e0ce9aeb9112dcc863c675d564da45b1b685a36c2204e02e5772ab5199",
+        "buildScriptSha256": "bad7d1a7d4a81dfec29d30910d06835e79e1cd3b66e9896470fde1cc2659f159",
+        "workerSha256": "9f8746115abab9cce85b7a94806b7b58871da6ca1b76065000b1fdb8ea1ed239",
+        "staticArchives": {
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        }
+      },
+      "currentVmWorkerIdentityAndScalerArchiveVerifiedUnchanged": true
+    },
+    "Vertical16": {
+      "identity": "bicubic-vertical16-identity.json",
+      "worker": "zimg-bicubic-vertical16-warm",
+      "build": {
+        "sourceSha256": "e5ed69e0ce9aeb9112dcc863c675d564da45b1b685a36c2204e02e5772ab5199",
+        "buildScriptSha256": "59cc2200708144cf40efbf39ead58b0e229dba81a07ac1b4517ddf4bdbae3012",
+        "workerSha256": "31d9b404c528531ade76f2374b99b26fe676fd96587080030c47c2a27ccef085",
+        "staticArchives": {
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        }
+      },
+      "currentVmWorkerIdentityAndScalerArchiveVerifiedUnchanged": true
     }
   },
   "qualificationReused": {
@@ -7360,9 +7710,20 @@
       "shortMeanFirstThenIndependentTwelve": true,
       "noNewOriginalRasterOrShapeGrid": true,
       "noRepeatedQualification": true
+    },
+    "verticalReuseRound": {
+      "productionBuilds": 0,
+      "harnessBuilds": 0,
+      "nativeBuilds": 0,
+      "statisticalJobs": 0,
+      "newOriginalRasters": 0,
+      "onlyExecutedPipelineInputsCompared": 12,
+      "wordRejectsByteHelperBeforeChangedClauses": true,
+      "allActualsAndBothGuardsReused": true,
+      "noRepeatedQualificationOrWholeLibraryMethodAudit": true
     }
   },
-  "nextAction": "Stop confirmed current Mixed cases. Continue remaining named B12 helper/dispatch evidence reconciliation; reuse unchanged paths and resolve uncertain measurements before optimizing. C01-C04 and the full objective remain open.",
+  "nextAction": "Stop the four current vertical reduction cases. Next reconcile existing TightHorizontal16/TightHorizontal8 selected cross-helper and dispatcher inputs before scheduling any measurement. Remaining named B12 cases and C01-C04 keep the full finite objective open.",
   "currentQualifiedLinuxDllSha256": "86471b3617a06d353d33993baa16715b5df1c99241026fcfe878a382f39b5408",
   "nativeMixedRefresh": {
     "Mixed16": {

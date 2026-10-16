@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Nine of the existing 61 named bicubic cases have valid current-path evidence.
+Thirteen of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -95,3 +95,21 @@ rebuilds or repeated qualification. Two shared drivers serve the four short/
 confirmation jobs; means are read before confirmations. No profile, new image,
 shape grid or pixel/quality/baseline change. Stop both pairs. Next: reconcile the
 existing vertical-reduction proofs, reusing unchanged selected paths.
+
+The four existing height-reduction cases also reuse valid current-path evidence:
+Vertical8/Vertical16 at1.287x/upper1.301x and1.423x/upper1.428x, plus
+TightVertical8/TightVertical16 at1.822x/upper1.838x and1.813x/upper1.823x.
+Their allocation figures remain in the generated summary; no new timing result.
+
+Actual archived inventories match the complete Resize dispatcher, allocated
+buffer, limits, selected word/mixed/cache bodies, alpha/sampling and build inputs.
+Only the unused context method was added. Word cases reject the modified byte
+helper at its unchanged first short-circuit depth test; every changed width
+clause/preference predicate is unreachable, and the remaining helper source
+matches. Thus these changes do not alter their executed paths. The original
+pinned native workers/identities and scaler archive are byte-identical on the VM.
+The byte cases preserve frozen qualified binary64 pixels and the existing25
+independently certified exact rational alpha halves; no managed tolerance is
+added. Word rational pixels, original native bounds, ownership, all twelve actuals
+and both guards remain valid. Zero builds, statistical jobs or qualification
+repeats. Stop all four; next reconcile the named tight horizontal reductions.

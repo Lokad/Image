@@ -120,7 +120,7 @@ B11 twenty existing single-owner exact edits after the shared pool change.
 
 Current B11 single-owner exact edits: [20/20 named cases](WARM-CURRENT-EXACT-EDITS.md) independently confirm on unchanged qualified production, with exact pixels/full ownership, all twelve actuals and both guards. Zero production/harness/native builds or repeated qualification. Stop confirmed cases; B11 is closed. B12 bicubic reconciliation and C01-C04 Identify stay open.
 
-Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): nine of61 named
+Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): thirteen of61 named
 cases are stopped. Three late enlargement proofs reuse actual source/native
 identities; current HorizontalUp16/single-pixel proofs remain stopped. Ordinary
 Mixed16/Mixed8 independently confirm on unchanged qualified production at1.912x/
@@ -129,6 +129,7 @@ Exact frozen pixels, approved native bounds, full ownership, all twelve actuals
 and both guards pass. One selector-only harness build, two shared drivers and two
 selected adapter refreshes; no production rebuild or repeated qualification.
 The two named tight mixed-axis cases also independently confirm with zero new builds or repeated qualification; all exact/bounded pixels, full ownership, all12 and both guards pass.
+Four existing default/tight vertical reductions also reuse valid current-path proofs: executed source inputs match; only unused context code and unreachable byte-helper clauses differ. Pinned native workers/scaler are unchanged. No builds, measurements or repeated qualification.
 Remaining named B12 helper/dispatch cases and C01-C04 stay open; no grid is added.
 
 | Primitive group | Retained coverage | Remaining material work |
