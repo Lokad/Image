@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Thirty-four of the existing 61 named bicubic cases have valid current-path evidence.
+Thirty-seven of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -287,3 +287,21 @@ source with identical compiler/flags/scaler and frozen outputs; two shared
 drivers serve six jobs. Zero production/harness builds or repeated qualification.
 Stop all three. Three named wide-cache paths and the remaining finite checklist
 stay open; next reconcile Up8 and the next largest retained named cases.
+
+The existing upscales and horizontal byte reduction independently confirm: Up8 1.555x/upper1.569x at3,244,622B/op; Horizontal8 1.465x/upper1.475x at465,375B/op; Up16 1.530x/upper1.542x at5,016,578B/op.
+Their actual archived dispatcher lacks the mixed-axis rejection calls now
+executed before their selected narrow caches. The edited wide loop is uncalled
+for these frozen tap counts. Current complete operations resolve the uncertainty.
+
+Upscales remain exact rational. Horizontal8 preserves frozen qualified binary64
+pixels and its existing six independently certified exact rational alpha halves;
+no managed tolerance is added. Native maximum1/RMSE0.25, source and independent
+ownership pass. Short means precede independent twelve-actual confirmations;
+every actual and both quiet guards are retained, with selected/all confidence.
+
+Same qualified production/harness and two original rasters. Both standalone
+upscale reference workers are reused unchanged; only the selected horizontal
+adapter is refreshed from changed owned source with identical compiler/flags/
+scaler and frozen outputs. Two shared drivers serve six jobs. Zero production/
+harness builds or repeated qualification. Stop all three. Next TightCross8 and
+TightWide16; the remaining finite checklist and three wide-cache paths stay open.
