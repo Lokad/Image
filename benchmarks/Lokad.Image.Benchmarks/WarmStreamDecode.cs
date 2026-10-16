@@ -19,14 +19,16 @@ public class WarmStreamDecode
     private bool Compose => Case is StreamDecodeCase.PngCropFit8 or StreamDecodeCase.PngCropFit16;
     private int OutputWidth => Compose ? 127 : HorizontalFlipInput.Width;
     private int OutputHeight => Compose ? 64 : HorizontalFlipInput.Height;
-    public static StreamDecodeCase[] SelectedCases() => Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES") switch
+    public static StreamDecodeCase[] SelectedCases()
     {
-        null or "Png8" => [StreamDecodeCase.Png8],
-        "PngCropFit8" => [StreamDecodeCase.PngCropFit8],
-        "Png16" => [StreamDecodeCase.Png16],
-        "PngCropFit16" => [StreamDecodeCase.PngCropFit16],
-        _ => throw new ArgumentException("Choose one fresh Stream case: Png8, Png16, PngCropFit8 or PngCropFit16.")
-    };
+        var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
+        var result = selection is null ? new[] { StreamDecodeCase.Png8 } : selection.Split(',')
+            .Select(value => Enum.TryParse<StreamDecodeCase>(value, out var parsed) && Enum.IsDefined(parsed)
+                ? parsed : throw new ArgumentException("Choose Png8, Png16, PngCropFit8 or PngCropFit16.")).ToArray();
+        if (result.Length is < 1 or > 3 || result.Distinct().Count() != result.Length)
+            throw new ArgumentException("Choose one to three distinct fresh Stream cases.");
+        return result;
+    }
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
     private byte[] encoded = [];

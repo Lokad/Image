@@ -74,10 +74,10 @@ def table(rows):
 def render():
     decodes = [
         row('PNG palette4/full tRNS Adam7', 'warm-png-palette4-adam7-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE4-ADAM7.md', True),
-        row('PNG8 Stream, orient/crop/nearest fit', 'warm-png-composition8-evidence.json', ['observations', -1], 'WARM-PNG-COMPOSITION8.md', True),
+        row('PNG8 Stream, orient/crop/nearest fit', 'warm-current-png-stream-evidence.json', ['cases', 'PngCropFit8', -1], 'WARM-CURRENT-PNG-STREAM.md', True),
         row('PNG16 Stream, orient/crop/nearest fit', 'warm-png-fused-evidence.json', ['observations', -1], 'WARM-PNG-FUSED-INFLATION.md', True),
-        row('PNG RGBA8, fresh seekable Stream', 'warm-stream-png8-evidence.json', ['observations', -1], 'WARM-STREAM-PNG8.md', True),
-        row('PNG RGBA16, fresh seekable Stream', 'warm-stream-png16-evidence.json', ['observations', -1], 'WARM-STREAM-PNG16.md', True),
+        row('PNG RGBA8, fresh seekable Stream', 'warm-current-png-stream-evidence.json', ['cases', 'Png8', -1], 'WARM-CURRENT-PNG-STREAM.md', True),
+        row('PNG RGBA16, fresh seekable Stream', 'warm-current-png-stream-evidence.json', ['cases', 'Png16', -1], 'WARM-CURRENT-PNG-STREAM.md', True),
         row('JPEG420 restart, fresh seekable Stream', 'warm-jpeg-ac-cache-evidence.json', ['observations', 8], 'WARM-JPEG-AC-CACHE.md', True),
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8stream-evidence.json', ['observations', -1], 'WARM-VP8-STREAM.md', True),
         row('WebP VP8L, fresh seekable Stream', 'warm-vp8lstream-evidence.json', ['observations', -1], 'WARM-VP8L-STREAM.md', True),
@@ -370,6 +370,11 @@ The named Adam7 follow-up is closed: **RGBA16 1.377x / upper1.381x** and
 inputs. [Current evidence](../benchmarks/WARM-CURRENT-PNG-ADAM7.md) records exact
 pixels, allocations, all twelve actuals and both guards. Later palette4/8 proofs
 are reused; no production rebuild or repeated qualification.
+
+The named PNG Stream follow-up is closed: **Png8 1.428x / upper1.441x**, **PngCropFit8 1.445x / upper1.454x**, **Png16 1.136x / upper1.146x**. Full input copying,
+decode/conversion/composition and ownership boundaries remain timed.
+[Current report](../benchmarks/WARM-CURRENT-PNG-STREAM.md) includes allocations;
+word-composition proof and production/package qualification are reused.
 
 **Decode**
 
