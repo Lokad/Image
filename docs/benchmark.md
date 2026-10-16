@@ -312,8 +312,8 @@ Prepared quality records/packets and production qualification are reused.
 | [Vertical flip RGBA16](../benchmarks/WARM-DIRECTIONS16-QUIET.md) | 17.16 | 17.57 | 0.977 / 0.983 | 128 | Confirmed |
 | [Horizontal flip RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 11.64 | 9.52 | 1.223 / 1.235 | 128 | Confirmed |
 | [Horizontal flip RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 21.83 | 27.03 | 0.807 / 0.811 | 128 | Confirmed |
-| [Half turn RGBA8](../benchmarks/WARM-FLIPTURN8-FRESH.md) | 12.47 | 11.34 | 1.100 / 1.118 | 128 | Confirmed |
-| [Half turn RGBA16](../benchmarks/WARM-HALFTURN-PIXELS.md) | 20.78 | 22.28 | 0.933 / 0.967 | 128 | Confirmed |
+| [Half turn RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 11.25 | 11.32 | 0.994 / 1.021 | 128 | Confirmed |
+| [Half turn RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 18.59 | 21.86 | 0.850 / 0.874 | 128 | Confirmed |
 | [Clockwise quarter turn RGBA8](../benchmarks/WARM-DIRECTIONS8-QUIET.md) | 36.86 | 37.89 | 0.973 / 0.990 | 128 | Confirmed |
 | [Clockwise quarter turn RGBA16](../benchmarks/WARM-CLOCKWISE-TILES.md) | 43.69 | 44.12 | 0.990 / 1.013 | 128 | Confirmed |
 | [Counterclockwise quarter turn RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 38.11 | 37.49 | 1.016 / 1.030 | 128 | Confirmed |
