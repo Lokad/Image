@@ -470,7 +470,7 @@ Filtered buffers may reuse two released exact-size arrays with a combined 4 MiB
 idle ceiling, separate from pixel and compressed storage. Every delivered byte
 is materialized before use, and leases end before requested orientation.
 Concatenated IDAT bytes may reuse at most two released exact-size private arrays,
-whose combined idle bytes stay within 1 MiB independently of pixel storage.
+whose combined idle bytes stay within 4 MiB independently of pixel storage.
 Every byte is copied before framing;
 the lease ends after the inflater and streams are disposed, including failures.
 Input admission remains exact and live leases never share storage.

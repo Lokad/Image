@@ -1,7 +1,7 @@
 # Current PNG decode confirmations
 
-11 of the 25 named PNG decode cases awaiting current-path evidence independently
-confirm within the 2x warm single-CPU target on the qualified production DLL.
+12 of the 25 named PNG decode cases awaiting current-path evidence independently
+confirm within the 2x warm single-CPU target for current production paths.
 Older full-operation timings preceded shared overwrite-pool and fused framing/
 inflation changes. Stop confirmed pairs; full required warm coverage remains open.
 
@@ -18,6 +18,7 @@ inflation changes. Stop confirmed pairs; full required warm coverage remains ope
 | DecodeGray8 | 0 / 8 / 0 | 357.47 | 363.27 | 0.984 / 0.993 | 1,384 | 12 / 11 |
 | DecodeGray4 | 0 / 4 / 0 | 116.09 | 169.54 | 0.685 / 0.698 | 872 | 12 / 11 |
 | Decode8 | 6 / 8 / 0 | 1,904.89 | 1,392.72 | 1.368 / 1.371 | 4,456 | 12 / 12 |
+| DecodeNoCompression16 | 6 / 16 / 0 | 322.73 | 296.18 | 1.090 / 1.096 | 8,552 | 12 / 11 |
 
 Each operation decodes the identical resident original 513x259 PNG into an
 independently owned RGBA buffer. Managed public Decode, admission, container/
@@ -59,14 +60,33 @@ The original refused controller record is retained. Packet/pixel hashes, actual
 depth/color/filter/interlace, binaries, raw timings, ownership checks and both
 quiet guards revalidate unchanged. No replacement timing run is used.
 
-Production/package inputs remain unchanged from the existing
-[qualification](WARM-JPEG-AC-PLANNING.md): 3,483 Release tests per OS including live
-comparisons and the same actual package's consumer/all three examples on both
-Windows/Linux. No full-suite/package repeat, whole-library method audit or
-profile is introduced. The [numeric evidence](warm-current-png-decode-evidence.json)
+The [numeric evidence](warm-current-png-decode-evidence.json)
 retains all samples, quiet guards, allocations, exact identities and qualification
 reuse. Each result certifies its named fixed input/public boundary.
 
-Remaining named cases, largest retained ratios first: DecodePalette8PartialAlpha, DecodeRgb8Transparency, DecodeRgb8, DecodeGrayAlpha8, DecodeRgb16Transparency, DecodeNoCompression8, DecodePaeth16, DecodeGray1, DecodePalette8, DecodePalette2, DecodeGray2, DecodeGray8Transparency, DecodePalette1.
+The stored RGBA16 current-code screen demonstrated 2.219x
+and 1,072,108B/op. Its 1,063,366-byte concatenated IDAT exceeded
+the private one-MiB input cache ceiling, allocating on every decode. Raising
+that independent cache to the existing four-MiB pool default halves decode
+time (659.32 → 322.73µs), independently confirmed
+at 1.090x / upper1.096x and
+8,552B/op. At most two released exact-size arrays fit within
+the combined four-MiB idle ceiling; active lease bytes, checksum/framing/work,
+failure order and independent live owners remain unchanged. Startup is excluded.
 
-**Demonstrated gap: DecodeNoCompression16.** The retained three-actual current-code screen measures 659.32µs versus FFmpeg 297.10µs, 2.219x (screen upper 2.614x), 1,072,108B/op. Both quiet guards and exact-pixel/ownership gates pass. This is an open screen, not a confirmation. Its compressed input exceeds the private one-MiB retention ceiling and is allocated each call; test that bounded storage primitive first. No independent twelve is spent on this failing screen.
+One production build serves both sampling lengths; the existing verified drivers,
+benchmark harness, native worker and packets are reused without rebuilding them.
+All twelve confirmation actuals are retained. Fresh qualification passes 3,483
+Release tests per OS (1,199 internal, 1,386 public, 898 live differential), plus
+the consumer and all three examples through the same actual Release package on
+Windows/Linux. The package remains safe managed and dependency-free.
+
+Only stored16 among the 51 existing PNG decode/composition rows crosses the old
+ceiling: exact IDAT sizes or whole-packet upper bounds establish this without
+a method audit or new workload. The earlier eleven PNG cases remain below
+one MiB and use the same selected algorithms and exact lease behavior; reuse
+their confirmations. Other codecs/editing/encoding are unaffected. Existing
+uncertain cases remain open for their earlier named invalidators. The numeric
+evidence retains the original failing screen and fresh qualification archive.
+
+Remaining named cases, largest retained ratios first: DecodePalette8PartialAlpha, DecodeRgb8Transparency, DecodeRgb8, DecodeGrayAlpha8, DecodeRgb16Transparency, DecodeNoCompression8, DecodePaeth16, DecodeGray1, DecodePalette8, DecodePalette2, DecodeGray2, DecodeGray8Transparency, DecodePalette1.

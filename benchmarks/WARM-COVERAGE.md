@@ -75,14 +75,16 @@ harness/native rebuild, profile or repeated qualification. Existing newer444
 and live-token444 proofs are reused. All named JPEG pixel cases now stop;
 standalone identification remains a distinct unmeasured boundary.
 
-Current PNG decode reconciliation: [11/25 named affected cases](WARM-CURRENT-PNG-DECODE.md)
-independently confirm on the unchanged qualified core, worst upper1.458x.
+Current PNG decode reconciliation: [12/25 named affected cases](WARM-CURRENT-PNG-DECODE.md)
+independently confirm for current production paths, reusing unchanged proofs;
+worst upper1.458x.
 Exact samples/alpha/hidden RGB, normal/scalar native pixels, complete ownership,
 all twelve actuals and both quiet guards pass. Stop confirmed pairs. The first
 word RGB/gray/gray-alpha group shares one driver per sampling length, sequential
 execution and existing qualified production/harness/native binaries. No profile
-or repeated qualification. Stored RGBA16 is a demonstrated2.219x open gap;
-prioritize its compressed-input allocation before remaining uncertain cases:
+or repeated qualification for unchanged inputs. Stored RGBA16's demonstrated
+gap is resolved by bounded input reuse: 1.090x / upper1.096x, 8,552B/op;
+fresh full differential/package qualification passes both OS. Next uncertain:
 DecodePalette8PartialAlpha, DecodeRgb8Transparency, DecodeRgb8.
 
 | Primitive group | Retained coverage | Remaining material work |

@@ -69,14 +69,17 @@ pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-PROGRESSIVE.md) includes
 allocations and unchanged-build/qualification reuse. Stop these cases and the
 already confirmed444/live-token444 pairs; remaining material coverage is open.
 
-Current PNG decode reconciliation: **11/25 named affected cases** independently
-confirm on the qualified core, worst upper **1.458x**. Exact RGBA/alpha/hidden
+Current PNG decode reconciliation: **12/25 named affected cases** independently
+confirm for current production paths, worst upper **1.458x**. Exact RGBA/alpha/hidden
 RGB and complete output ownership pass. [Current report](../benchmarks/WARM-CURRENT-PNG-DECODE.md)
 includes allocations and remaining cases. Shared three-case drivers preserve
 sequential short/independent confirmation jobs without production rebuilds.
-Stored RGBA16 is now a demonstrated **2.219x open screen**, prioritized before
-remaining uncertain cases; its private compressed-input retention is the first
-bounded optimization candidate.
+
+The demonstrated stored RGBA16 gap is resolved: **2.219x → 1.090x**, upper
+**1.096x**; allocation falls **1,072,108 → 8,552B/op**. Bounded private IDAT
+storage reuse halves decode time. Exact pixels, both quiet guards, all twelve
+actuals and fresh Windows/Linux differential/same-package qualification pass.
+Unchanged smaller-input confirmations remain valid; other named coverage is open.
 
 **Decode**
 
@@ -95,7 +98,7 @@ bounded optimization candidate.
 | [PNG RGBA8, None / exact working limit](../benchmarks/WARM-PNG-COUNTING.md) | 2,605.93 | 1,430.84 | 1.821 / 1.950 | 4,800 | Confirmed |
 | [PNG RGBA8, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-TIGHT-CANCELABLE8.md) | 2,559.30 | 1,371.11 | 1.867 / 1.873 | 4,800 | Confirmed |
 | [PNG RGBA8, stored Deflate / None](../benchmarks/WARM-PNG-STORED8-DECODE.md) | 157.30 | 135.76 | 1.159 / 1.168 | 12,976 | Confirmed |
-| [PNG RGBA16, stored Deflate / None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 659.32 | 297.10 | 2.219 / 2.614 | 1,072,108 | Above 2x / open |
+| [PNG RGBA16, stored Deflate / None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 322.73 | 296.18 | 1.090 / 1.096 | 8,552 | Confirmed |
 | [PNG RGBA16, None](../benchmarks/WARM-CURRENT-PNG16-BICUBIC16.md) | 3,034.16 | 2,903.68 | 1.045 / 1.059 | 8,552 | Confirmed |
 | [PNG RGBA16, None / exact working limit](../benchmarks/WARM-PNG-DECODE-BOUNDARIES.md) | 5,214.71 | 2,870.48 | 1.817 / 1.821 | 8,896 | Confirmed |
 | [PNG RGBA16, None / live cancelable token](../benchmarks/WARM-PNG-COUNTING.md) | 4,518.51 | 2,873.34 | 1.573 / 1.583 | 8,552 | Confirmed |

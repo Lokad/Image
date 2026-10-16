@@ -11,7 +11,10 @@ internal static class PngCodec
 {
     // Separate from released pixels: a compressed input remains leased until
     // the inflater and its streams are disposed, even when output stays live.
-    private static readonly PixelStoragePool compressedStorage = new(1024 * 1024);
+    // Use the same bounded idle capacity as inflated/pixel storage. Stored
+    // Deflate input can be slightly larger than its raster; it still needs a
+    // complete private lease and the same per-operation byte admission.
+    private static readonly PixelStoragePool compressedStorage = new();
     private static readonly PixelStoragePool inflatedStorage = new();
     internal static ReadOnlySpan<byte> Signature => [137, 80, 78, 71, 13, 10, 26, 10];
     private sealed record Header(ImageInfo Info, int ColorType, int Depth, int Interlace,

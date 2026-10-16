@@ -57,7 +57,7 @@ byte admission charge; pooled capacity is never rounded up. Failed private
 results release their lease. Idle cache storage is outside per-operation
 admission, as is GC retention; the fixed ceiling bounds the cache separately.
 PNG decode has a separate two-array cache for concatenated IDAT bytes, with a
-combined 1 MiB ceiling. Exact-size leases are fully copied before framing and returned after all
+combined 4 MiB ceiling. Exact-size leases are fully copied before framing and returned after all
 inflater streams are disposed, including failure exits. Larger inputs remain
 uncached. Active input/result byte admission and error ordering are unchanged.
 Noninterlaced, noncancelable PNG output buffering admits a separate 8 KiB only

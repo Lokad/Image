@@ -86,7 +86,7 @@ def render():
         row('PNG RGBA8, None / exact working limit', 'warm-pngcountall-evidence.json', ['observations', -1], 'WARM-PNG-COUNTING.md', True),
         row('PNG RGBA8, None / exact limit + live cancelable token', 'warm-pngtightcancel8-evidence.json', ['observations', -1], 'WARM-PNG-TIGHT-CANCELABLE8.md', True),
         row('PNG RGBA8, stored Deflate / None', 'warm-pngstore8decode-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-DECODE.md', True),
-        row('PNG RGBA16, stored Deflate / None', 'warm-current-png-decode-evidence.json', ['demonstratedGaps', 'DecodeNoCompression16', -1], 'WARM-CURRENT-PNG-DECODE.md'),
+        row('PNG RGBA16, stored Deflate / None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeNoCompression16', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGBA16, None', 'warm-current-png16-bicubic16-evidence.json', ['cases', 'png16', -1], 'WARM-CURRENT-PNG16-BICUBIC16.md', True),
         row('PNG RGBA16, None / exact working limit', 'warm-png-boundaries-current-evidence.json', ['cases', 'wordExact', -1], 'WARM-PNG-DECODE-BOUNDARIES.md', True),
         row('PNG RGBA16, None / live cancelable token', 'warm-pngcountall-evidence.json', ['wordConfirmations', 1], 'WARM-PNG-COUNTING.md', True),
@@ -353,14 +353,17 @@ pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-PROGRESSIVE.md) includes
 allocations and unchanged-build/qualification reuse. Stop these cases and the
 already confirmed444/live-token444 pairs; remaining material coverage is open.
 
-Current PNG decode reconciliation: **11/25 named affected cases** independently
-confirm on the qualified core, worst upper **1.458x**. Exact RGBA/alpha/hidden
+Current PNG decode reconciliation: **12/25 named affected cases** independently
+confirm for current production paths, worst upper **1.458x**. Exact RGBA/alpha/hidden
 RGB and complete output ownership pass. [Current report](../benchmarks/WARM-CURRENT-PNG-DECODE.md)
 includes allocations and remaining cases. Shared three-case drivers preserve
 sequential short/independent confirmation jobs without production rebuilds.
-Stored RGBA16 is now a demonstrated **2.219x open screen**, prioritized before
-remaining uncertain cases; its private compressed-input retention is the first
-bounded optimization candidate.
+
+The demonstrated stored RGBA16 gap is resolved: **2.219x → 1.090x**, upper
+**1.096x**; allocation falls **1,072,108 → 8,552B/op**. Bounded private IDAT
+storage reuse halves decode time. Exact pixels, both quiet guards, all twelve
+actuals and fresh Windows/Linux differential/same-package qualification pass.
+Unchanged smaller-input confirmations remain valid; other named coverage is open.
 
 **Decode**
 
