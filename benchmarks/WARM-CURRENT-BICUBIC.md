@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Five of the existing 61 named bicubic cases have valid current-path evidence.
+Seven of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -35,11 +35,45 @@ pixel/quality adjustment is introduced.
 [Reuse evidence](warm-current-bicubic-evidence.json) pins original observations,
 archives, receipts, relevant source hashes, native identities and current
 qualification. The existing 3,483 Release tests per OS, 898 live comparisons and
-same actual package consumer/all three examples remain applicable. Zero
-production/harness/native builds, statistical jobs or repeated qualification.
+same actual package consumer/all three examples remain applicable. That reuse
+round required zero builds, statistical jobs or repeated qualification.
 
-B12 remains open. Next are ordinary Mixed16/Mixed8: the later vertical-first
-helpers precede the old row cache and change their selected algorithm. Resolve
-that uncertainty before assuming a performance gap. Reconcile the other named
-cases individually, reusing unchanged paths. Identification boundaries and the
-full required warm objective remain open.
+The ordinary Mixed16/Mixed8 uncertainties now independently confirm after the
+vertical-first helpers replaced their old non-tight row-cache selection:
+
+| Default limit, 1027x129 output | Lokad.Image / backend µs | Ratio / upper | Managed B/op | Actual / selected |
+| --- | ---: | ---: | ---: | ---: |
+| Mixed16 | 1,627.26 / 851.20 | 1.912 / 1.964 | 1,060,419 | 12 / 11 |
+| Mixed8 | 1,600.47 / 864.39 | 1.852 / 1.872 | 530,370 | 12 / 10 |
+
+The same byte/word rasters and frozen managed/native output hashes pass exact
+rational pixels, source preservation and independent-owner checks. Approved
+native RGB/alpha maximum1 and RMSE0.25 remain unchanged. Full deinterleaving,
+four-pixel clamped halo, premultiplied float filtering, independent planar/packed
+output acquisition, unpremultiplication, quantization, zero-alpha clearing and
+release remain timed. This is the labeled FFmpeg scaler backend, zimg.
+
+Three-actual screens and independent twelve-actual confirmations retain every
+actual and pass both versioned quiet guards. Conservative uppers include selected/
+all-actual intervals against the faster native bracket's lower confidence bound.
+Sequential Release uses CPU0, one filter thread, normal SIMD, tiering disabled and
+workstation nonconcurrent GC. Managed allocations include harness costs; native
+allocation totals are unmeasured. Startup, IPC, I/O and validation are excluded.
+
+The word screen was borderline2.007x. Its twelve-actual job had already launched
+before that mean was read; the retained independent proof passes1.912x/upper1.964x
+and is reused without another repeat or optimization. Later screen means are
+read before launching longer jobs. This workflow exception changes no gate.
+
+Only benchmark selector parsing changes: one-to-three distinct existing names,
+same default and all61 enum cases. Source prefix/suffix prove Setup and the timed
+operation unchanged. One harness build and two shared selection drivers serve
+all four jobs; verified assemblies preload every cached child including WarmDry.
+Two selected native workers refresh changed original adapter source using the
+same compiler/flags/scaler archive; frozen native pixels and complete boundaries
+remain unchanged. Production/package qualification is reused without a rebuild,
+new original raster, profile, whole-library audit or repeated suite/package proof.
+
+Stop both ordinary Mixed cases. B12 remains open for the other named helper/
+dispatch uncertainties; reuse valid unchanged proofs before scheduling another
+measurement. Identification boundaries and the full warm objective remain open.

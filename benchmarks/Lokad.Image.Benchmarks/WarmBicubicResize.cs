@@ -15,71 +15,23 @@ public class WarmBicubicResize
 {
     public static IEnumerable<WarmBicubicCase> Cases => SelectedCases();
     [ParamsSource(nameof(Cases))] public WarmBicubicCase Case { get; set; }
-    public static WarmBicubicCase[] SelectedCases() => Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES") switch
+    public static WarmBicubicCase[] SelectedCases()
     {
-        null or "Down8" => [WarmBicubicCase.Down8],
-        "Down1x1_8" => [WarmBicubicCase.Down1x1_8],
-        "Down16" => [WarmBicubicCase.Down16],
-        "Up8" => [WarmBicubicCase.Up8],
-        "Up16" => [WarmBicubicCase.Up16],
-        "Mixed8" => [WarmBicubicCase.Mixed8],
-        "Mixed16" => [WarmBicubicCase.Mixed16],
-        "Cross8" => [WarmBicubicCase.Cross8],
-        "Cross16" => [WarmBicubicCase.Cross16],
-        "Wide8" => [WarmBicubicCase.Wide8],
-        "Wide16" => [WarmBicubicCase.Wide16],
-        "Horizontal8" => [WarmBicubicCase.Horizontal8],
-        "TightHorizontal8" => [WarmBicubicCase.TightHorizontal8],
-        "Horizontal16" => [WarmBicubicCase.Horizontal16],
-        "TightHorizontal16" => [WarmBicubicCase.TightHorizontal16],
-        "Down64x32_8" => [WarmBicubicCase.Down64x32_8],
-        "Down64x32_16" => [WarmBicubicCase.Down64x32_16],
-        "Vertical8" => [WarmBicubicCase.Vertical8],
-        "TightVertical8" => [WarmBicubicCase.TightVertical8],
-        "Vertical16" => [WarmBicubicCase.Vertical16],
-        "TightVertical16" => [WarmBicubicCase.TightVertical16],
-        "HorizontalUp8" => [WarmBicubicCase.HorizontalUp8],
-        "HorizontalUp16" => [WarmBicubicCase.HorizontalUp16],
-        "TightHorizontalUp16" => [WarmBicubicCase.TightHorizontalUp16],
-        "TightHorizontalUp8" => [WarmBicubicCase.TightHorizontalUp8],
-        "VerticalUp8" => [WarmBicubicCase.VerticalUp8],
-        "TightVerticalUp8" => [WarmBicubicCase.TightVerticalUp8],
-        "VerticalUp16" => [WarmBicubicCase.VerticalUp16],
-        "TightVerticalUp16" => [WarmBicubicCase.TightVerticalUp16],
-        "Down32x16_8" => [WarmBicubicCase.Down32x16_8],
-        "Down32x16_16" => [WarmBicubicCase.Down32x16_16],
-        "Down16x8_8" => [WarmBicubicCase.Down16x8_8],
-        "Down16x8_16" => [WarmBicubicCase.Down16x8_16],
-        "TightDown8" => [WarmBicubicCase.TightDown8],
-        "TightDown16" => [WarmBicubicCase.TightDown16],
-        "TightWide8" => [WarmBicubicCase.TightWide8],
-        "TightWide16" => [WarmBicubicCase.TightWide16],
-        "Tight64x32_8" => [WarmBicubicCase.Tight64x32_8],
-        "Tight64x32_16" => [WarmBicubicCase.Tight64x32_16],
-        "Tight32x16_16" => [WarmBicubicCase.Tight32x16_16],
-        "Tight32x16_8" => [WarmBicubicCase.Tight32x16_8],
-        "Tight16x8_16" => [WarmBicubicCase.Tight16x8_16],
-        "Tight16x8_8" => [WarmBicubicCase.Tight16x8_8],
-        "TightUp16" => [WarmBicubicCase.TightUp16],
-        "TightUp8" => [WarmBicubicCase.TightUp8],
-        "TightMixed16" => [WarmBicubicCase.TightMixed16],
-        "TightMixed8" => [WarmBicubicCase.TightMixed8],
-        "TightCross16" => [WarmBicubicCase.TightCross16],
-        "TightCross8" => [WarmBicubicCase.TightCross8],
-        "Tight8x4_16" => [WarmBicubicCase.Tight8x4_16],
-        "Tight8x4_8" => [WarmBicubicCase.Tight8x4_8],
-        "Tight4x2_16" => [WarmBicubicCase.Tight4x2_16],
-        "Tight4x2_8" => [WarmBicubicCase.Tight4x2_8],
-        "Tight2x2_16" => [WarmBicubicCase.Tight2x2_16],
-        "Tight2x2_8" => [WarmBicubicCase.Tight2x2_8],
-        "Tight2x9_16" => [WarmBicubicCase.Tight2x9_16],
-        "Tight2x9_8" => [WarmBicubicCase.Tight2x9_8],
-        "Tight4x9_16" => [WarmBicubicCase.Tight4x9_16],
-        "Tight4x9_8" => [WarmBicubicCase.Tight4x9_8],
-        "Tight8x17_16" => [WarmBicubicCase.Tight8x17_16],
-        "Tight8x17_8" => [WarmBicubicCase.Tight8x17_8],
-        _ => throw new ArgumentException("Choose one bicubic case: Down1x1_8, Down8, Down16, Up8, Up16, Mixed8, Mixed16, Cross8, Cross16, Wide8, Wide16, Horizontal8, Horizontal16 , Down64x32_8 Down64x32_16 , Vertical8 , Vertical16, HorizontalUp8, HorizontalUp16, VerticalUp8, VerticalUp16, Down32x16_8, Down32x16_16, Down16x8_8, Down16x8_16, TightDown8, TightDown16, TightWide8, TightWide16, Tight64x32_8, Tight64x32_16, Tight32x16_16, Tight32x16_8, Tight16x8_16, Tight16x8_8, TightUp16, TightUp8 or TightMixed16 or TightMixed8 or TightCross16 or TightCross8 or Tight8x4_16 or Tight8x4_8 or Tight4x2_16 or Tight4x2_8 or Tight2x2_16 or Tight2x2_8 or Tight2x9_16 or Tight2x9_8 or Tight4x9_16 or Tight4x9_8 or Tight8x17_16 or Tight8x17_8 or TightVertical16 or TightVertical8 or TightHorizontal16 or TightHorizontal8 or TightVerticalUp16 or TightVerticalUp8 or TightHorizontalUp16 or TightHorizontalUp8.")
-    };
+        var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
+        if (selection is null) return [WarmBicubicCase.Down8];
+        var names = selection.Split(',');
+        if (names.Length is < 1 or > 3) throw new ArgumentException("Choose one to three distinct bicubic cases.");
+        var cases = new WarmBicubicCase[names.Length];
+        for (var i = 0; i < names.Length; i++)
+        {
+            if (!Enum.TryParse<WarmBicubicCase>(names[i], out var value)
+                || !Enum.IsDefined(value) || value.ToString() != names[i])
+                throw new ArgumentException("Choose named bicubic cases.");
+            cases[i] = value;
+        }
+        if (cases.Distinct().Count() != cases.Length) throw new ArgumentException("Choose distinct bicubic cases.");
+        return cases;
+    }
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
     private ImageBuffer source = null!;

@@ -21,7 +21,7 @@ bound where available. **Confirmed** requires an independent quiet repeat and
 upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
 Current-path reconciliation closes all twenty named exact edits;
 [bicubic reconciliation](../benchmarks/WARM-CURRENT-BICUBIC.md) covers
-5/61 named cases, including reused unchanged paths.
+7/61 named cases, including reused unchanged paths.
 Recent confirmations use `exclusive-vm-idle-v2`: live job checks and
 five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
 Earlier receipts retain their original load guard and its failures.
@@ -249,8 +249,8 @@ Prepared quality records/packets and production qualification are reused.
 | [Bicubic resize RGBA16§](../benchmarks/WARM-BICUBIC-RGBA16-ROWS.md) | 745.92 | 567.95 | 1.313 / 1.320 | 464,342 | Confirmed |
 | [Bicubic upscale RGBA8§](../benchmarks/WARM-BICUBIC-UP8-ROWS.md) | 4,721.50 | 3,041.03 | 1.553 / 1.578 | 3,244,622 | Confirmed |
 | [Bicubic upscale RGBA16§](../benchmarks/WARM-BICUBIC-UP16-ROWS.md) | 4,317.42 | 2,869.21 | 1.505 / 1.516 | 5,016,578 | Confirmed |
-| [Bicubic mixed-axis RGBA8§](../benchmarks/WARM-BICUBIC-MIXED16-ROWS.md) | 1,570.03 | 849.57 | 1.848 / 1.867 | 1,283,063 | Confirmed |
-| [Bicubic mixed-axis RGBA16§](../benchmarks/WARM-BICUBIC-MIXED16-ROWS.md) | 1,636.58 | 850.53 | 1.924 / 1.975 | 1,813,110 | Confirmed |
+| [Bicubic mixed-axis RGBA8§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,600.47 | 864.39 | 1.852 / 1.872 | 530,370 | Confirmed |
+| [Bicubic mixed-axis RGBA16§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,627.26 | 851.20 | 1.912 / 1.964 | 1,060,419 | Confirmed |
 | [Bicubic width reduction / height enlargement RGBA8§](../benchmarks/WARM-BICUBIC-CROSS8-ROWS.md) | 984.18 | 827.04 | 1.190 / 1.206 | 731,753 | Confirmed |
 | [Bicubic width reduction / height enlargement RGBA16§](../benchmarks/WARM-BICUBIC-CROSS16-ROWS.md) | 1,044.98 | 813.15 | 1.285 / 1.297 | 1,263,255 | Confirmed |
 | [Bicubic RGBA8, 128×64 / wider support§](../benchmarks/WARM-BICUBIC-WIDE8-ROWS.md) | 588.69 | 360.96 | 1.631 / 1.642 | 231,227 | Confirmed |
