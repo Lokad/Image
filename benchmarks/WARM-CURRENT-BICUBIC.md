@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Sixty of the existing 61 named bicubic cases have valid current-path evidence.
+All 61 existing named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -422,3 +422,19 @@ all actuals and both quiet guards are retained on the same qualified build.
 Three selected adapters are refreshed with the same compiler, flags and scaler
 and frozen outputs; two shared drivers serve six jobs. Zero production/harness
 builds or repeated qualification. Stop all three. Only Tight2x2_16 remains in B12.
+
+The final existing word2x2 generated case independently confirms 0.458x / upper 0.487x, 154 B/op.
+Its selected kernel changed whole-height preparation into per-column row blocks
+and removed the executed height predicate; preceding rejection predicates also
+changed. Current complete timing resolves the uncertainty. Exact rational/frozen
+pixels, strict native RGB/alpha maximum1 and RMSE0.25, limits/full ownership,
+all twelve actuals and both quiet guards pass. The short mean precedes independent
+twelve on the same qualified production/harness. One selected adapter refresh
+uses the same compiler/flags/scaler/frozen outputs; two one-case drivers serve
+two jobs. Zero production/harness builds or repeated qualification. Stop it.
+
+All61 fixed bicubic selectors now have valid current-path passing evidence,
+including explicitly reused unchanged proofs. No bicubic case or grid is added.
+B01-B15 reconciliation is closed. Full required warm coverage remains open for
+the four named Identify boundaries C01-C04; equivalent public-API validation,
+metadata and descriptor ownership must be established before timing them.

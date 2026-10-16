@@ -120,7 +120,7 @@ B11 twenty existing single-owner exact edits after the shared pool change.
 
 Current B11 single-owner exact edits: [20/20 named cases](WARM-CURRENT-EXACT-EDITS.md) independently confirm on unchanged qualified production, with exact pixels/full ownership, all twelve actuals and both guards. Zero production/harness/native builds or repeated qualification. Stop confirmed cases; B11 is closed. B12 bicubic reconciliation and C01-C04 Identify stay open.
 
-Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): sixty of61 named
+Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): all61 named
 cases are stopped. Three late enlargement proofs reuse actual source/native
 identities; current HorizontalUp16/single-pixel proofs remain stopped. Ordinary
 Mixed16/Mixed8 independently confirm on unchanged qualified production at1.912x/
@@ -182,7 +182,23 @@ Three selected adapters are refreshed with the same compiler, flags and scaler
 and frozen outputs; two shared drivers serve six jobs. Zero production/harness
 builds or repeated qualification. Stop all three. Only Tight2x2_16 remains in B12.
 
-Remaining named B12 helper/dispatch cases and C01-C04 stay open; no grid is added.
+The final existing word2x2 generated case independently confirms 0.458x / upper 0.487x, 154 B/op.
+Its selected kernel changed whole-height preparation into per-column row blocks
+and removed the executed height predicate; preceding rejection predicates also
+changed. Current complete timing resolves the uncertainty. Exact rational/frozen
+pixels, strict native RGB/alpha maximum1 and RMSE0.25, limits/full ownership,
+all twelve actuals and both quiet guards pass. The short mean precedes independent
+twelve on the same qualified production/harness. One selected adapter refresh
+uses the same compiler/flags/scaler/frozen outputs; two one-case drivers serve
+two jobs. Zero production/harness builds or repeated qualification. Stop it.
+
+All61 fixed bicubic selectors now have valid current-path passing evidence,
+including explicitly reused unchanged proofs. No bicubic case or grid is added.
+B01-B15 reconciliation is closed. Full required warm coverage remains open for
+the four named Identify boundaries C01-C04; equivalent public-API validation,
+metadata and descriptor ownership must be established before timing them.
+
+All named B12 cases are stopped; C01-C04 remain open.
 
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
