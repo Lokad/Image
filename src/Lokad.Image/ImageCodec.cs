@@ -54,8 +54,8 @@ public static class ImageCodec
     {
         limits ??= ImageLimits.Default;
         var context = new OperationContext(limits, cancellationToken);
-        var data = ReadInput(input, context);
-        return IdentifyCore(data, context);
+        using var data = IdentificationInput.Read(input, context);
+        return IdentifyCore(data.Span, context);
     }
 
     public static ImageBuffer Decode(Stream input, DecodeOptions? options = null, CancellationToken cancellationToken = default)

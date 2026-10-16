@@ -1,121 +1,47 @@
 # Lokad.Image benchmark state
 
-Updated 2026-10-16. Latest retained warm measurements on the dedicated AMD EPYC
-9V45 VM: Ubuntu 24.04.4, .NET 10.0.8 / SDK 10.0.204, FFmpeg n8.1
-(`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread, normal SIMD,
-tiering off, workstation nonconcurrent GC. Two original 513×259 RGBA8/16 rasters,
-with documented projections for other pixel formats;
-downsample/crop outputs are 256×129, upscale outputs are 1027×519,
-and quarter turns/transposes are 259×513.
+Updated 2026-10-16. The finite [material checklist](../benchmarks/WARM-COVERAGE.md)
+is **closed**: every named required path has an independent quiet upper ≤2x,
+or explicitly reconciled reuse of unchanged executed paths. All61 bicubic cases,
+20 exact edits, four bilinear cases and C01-C04 metadata boundaries are closed.
+This states the tested fixed scope; it does not extrapolate to arbitrary images,
+settings, sizes or hardware.
 
-Times cover complete public operations and independent output acquisition/release,
-including admission, conversion and disposal. Native wrappers/contexts are reused;
-managed editing and PNG decode may reuse released pixel storage. No output is cached. Startup,
-I/O, IPC, fixture preparation and validation are excluded. Each linked report
-declares the exact workload, input and measured source; these are rolling results
-at those sources, not a simultaneous rerun of the current HEAD.
+Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
+FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,
+normal SIMD, tiering off, nonconcurrent workstation GC. Inputs are the two original
+513×259 RGBA8/16 rasters and documented projections; exact case dimensions and
+policies are in linked reports. No image or settings grid was added.
 
-Ratio = Lokad.Image / the faster reference pre/post mean; lower is faster. Upper is
-the retained conservative confidence bound, taking the larger filtered/all-actual
-bound where available. **Confirmed** requires an independent quiet repeat and
-upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
-Current-path reconciliation closes all twenty named exact edits;
-[bicubic reconciliation](../benchmarks/WARM-CURRENT-BICUBIC.md) covers
-61/61 named cases, including reused unchanged paths.
-Recent confirmations use `exclusive-vm-idle-v2`: live job checks and
-five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
-Earlier receipts retain their original load guard and its failures.
+Times include complete public operations, admission, conversion, fresh independent
+output ownership and disposal. Native contexts may be reused; managed private
+storage may be reused after release. No decoded output or descriptor is cached.
+Fresh Stream rows include source-wrapper/input acquisition, reads/copies/EOF and
+release. Startup, I/O, IPC, preparation/hashing and validation are excluded.
 
-*VP8L encode uses **libwebp exact=1 (FFmpeg encoder backend)** through its public
-API. The public FFmpeg encoder changes hidden RGB and exposes no exact option.
-Both subjects preserve every decoded RGBA sample, but compression differs:
-Lokad.Image emits 533,100 bytes versus 183,812 bytes. This is an exact-pixel
-timing comparison; compression efficiency parity is not established.
+Ratio = Lokad.Image / faster native pre/post mean; lower is faster. Upper retains
+the larger selected/all-actual confidence bound against the faster native bracket's
+lower bound. Confirmed requires an independent passing quiet repeat. Recent jobs
+retain all12 actuals and both5s `exclusive-vm-idle-v2` guards. Earlier records
+retain their original protocol and failures. **B/op** is managed allocation from
+BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
+**unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
+path reconciliation makes the retained evidence applicable to current production.
 
-Single-component grayscale JPEG encoding uses **SIMD-enabled standalone
-libjpeg-turbo3.1.4.1** as an approved tooling-only reference exception; FFmpeg's
-MJPEG encoder emits three components. It confirms **1.388x / upper1.398x** at
-**154,893 B/op**, including normalization and fresh output ownership/release.
-Compressed sizes are **58,823 / 58,910 bytes**, managed/reference; the source-
-quality gap is **0.000033dB**, within the existing0.25dB gate. Prepared fixtures,
-worker and qualified production DLL are reused. The production library remains
-safe managed code with no dependency or native binding.
+Latest production round: [fresh PNG Identify Stream](../benchmarks/WARM-PNG-STREAM-IDENTIFY.md)
+**7.863x →1.445x / upper1.459x**, **184 B/op**,81.6% less managed time.
+Private input reuse removes large-array churn while preserving admission/read/work/
+failure semantics. Only Identify(Stream) acquisition changes; decoder input,
+resident metadata, pixel codecs, editing and resize paths retain their proofs.
+Fresh **3,546 Release tests per OS** (1,262 internal+1,386 public+898 live FFmpeg),
+and the consumer/all three examples through the **same actual Release package on
+Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10.
 
-Remaining current-production work is a finite set of named changed-path
-confirmations and distinct unmeasured public boundaries. Historical confirmations
-remain valid at their recorded sources; reuse requires unchanged relevant paths.
-Resident PNG identification confirms **1.234x / upper1.238x at88 B/op**.
-¶Its reference is **FFmpeg's public PNG parser/CRC plus an original timed
-structural/metadata adapter**, with full CRC/EOF and fresh owned descriptor
-acquisition/release, no pixel decode. [Exact scope and qualification](../benchmarks/WARM-PNG-IDENTIFY.md)
-record3,517 tests per OS and the same actual package consumer/all three examples
-on Windows/Linux. Only PNG Identify changed; stopped pixel/edit/resize paths
-reuse their unchanged evidence. ‖Resident JPEG identification confirms **1.840x / upper1.860x at88 B/op**,
-reducing its prior33.725x gap. Its reference is **FFmpeg MJPEG discard-all with
-an original full structural/EXIF scan and timed canonical SOF2 metadata-header
-projection**, fresh projection payload/descriptor ownership and zero pixel decode.
-[Exact scope and qualification](../benchmarks/WARM-JPEG-IDENTIFY.md) record3,535
-tests per OS and the same package consumer/all three examples on both OS.
-Only JPEG Identify changed; the decoder preflight and PNG Identify remain
-unchanged. [Resident WebP Identify](../benchmarks/WARM-WEBP-IDENTIFY.md) also
-confirms **0.0040x / upper0.0045x at88 B/op** using the public FFmpeg WebP parser
-plus original full RIFF/EXIF validation, including required parser buffering/EOF
-flush and fresh descriptor ownership. Production is unchanged; existing full
-qualification is reused. Only fresh PNG Identify Stream remains open on the
-finite [material checklist](../benchmarks/WARM-COVERAGE.md).
-
-All **four existing bilinear cases** now have independent confirmation on the
-current qualified core. Their conservative uppers range from 1.382x to 1.892x;
-the tables retain exact ratios and allocations. Exact managed rational pixels,
-native RGB bounds and the approved scoped alpha policies pass. No production
-optimization, rebuild or repeated qualification was needed. Stop these cases;
-the finite remaining coverage checklist stays open.
-
-Current adaptive JPEG reconciliation: **4 affected 444/422 byte/word pairs**
-independently confirm on the same qualified core, worst upper **1.639x**.
-Exact frozen packets and source-quality gates pass; full normalization and fresh
-output ownership are timed. [Current report](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md)
-also records compressed sizes. No production optimization or rebuild is needed.
-
-Current ordinary JPEG decode reconciliation: **8/8 named affected cases**
-independently confirm on the qualified core, worst upper **1.626x**.
-Exact frozen pixels, existing native agreement bounds and complete output
-ownership pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-DECODE.md)
-states the fixed inputs and remaining cases. No production rebuild or retuning.
-
-Current progressive JPEG reconciliation confirms the three named gray/420/422
-pairs, worst upper **1.960x**. Exact frozen pixels and unchanged native bounds
-pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-PROGRESSIVE.md) includes
-allocations and unchanged-build/qualification reuse. Stop these cases and the
-already confirmed444/live-token444 pairs; remaining material coverage is open.
-
-Current PNG decode reconciliation: **25/25 named affected cases** independently
-confirm for current production paths, worst upper **1.494x**. Exact RGBA/alpha/hidden
-RGB and complete output ownership pass. [Current report](../benchmarks/WARM-CURRENT-PNG-DECODE.md)
-includes allocations and remaining cases. Shared three-case drivers preserve
-sequential short/independent confirmation jobs without production rebuilds.
-
-The demonstrated stored RGBA16 gap is resolved: **2.219x → 1.090x**, upper
-**1.096x**; allocation falls **1,072,108 → 8,552B/op**. Bounded private IDAT
-storage reuse halves decode time. Exact pixels, both quiet guards, all twelve
-actuals and fresh Windows/Linux differential/same-package qualification pass.
-Unchanged smaller-input confirmations remain valid; other named coverage is open.
-
-The named Adam7 follow-up is closed: **RGBA16 1.377x / upper1.381x** and
-**packed gray1 1.314x / upper1.320x** independently confirm on unchanged production
-inputs. [Current evidence](../benchmarks/WARM-CURRENT-PNG-ADAM7.md) records exact
-pixels, allocations, all twelve actuals and both guards. Later palette4/8 proofs
-are reused; no production rebuild or repeated qualification.
-
-The named PNG Stream follow-up is closed: **Png8 1.428x / upper1.441x**, **PngCropFit8 1.445x / upper1.454x**, **Png16 1.136x / upper1.146x**. Full input copying,
-decode/conversion/composition and ownership boundaries remain timed.
-[Current report](../benchmarks/WARM-CURRENT-PNG-STREAM.md) includes allocations;
-word-composition proof and production/package qualification are reused.
-
-**Decode**
+**Decode and metadata**
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
+| [PNG Identify, fresh Stream¶](../benchmarks/WARM-PNG-STREAM-IDENTIFY.md) | 22.94 | 15.87 | 1.445 / 1.459 | 184 | Confirmed |
 | [WebP Identify, resident span (parser)](../benchmarks/WARM-WEBP-IDENTIFY.md) | 0.02 | 4.54 | 0.004 / 0.004 | 88 | Confirmed |
 | [JPEG Identify, resident span‖](../benchmarks/WARM-JPEG-IDENTIFY.md) | 2.23 | 1.21 | 1.840 / 1.860 | 88 | Confirmed |
 | [PNG Identify, resident span¶](../benchmarks/WARM-PNG-IDENTIFY.md) | 16.09 | 13.04 | 1.234 / 1.238 | 88 | Confirmed |
@@ -197,18 +123,6 @@ word-composition proof and production/package qualification are reused.
 | [WebP VP8L, literal/run input](../benchmarks/WARM-CURRENT-VP8L-LITERAL.md) | 3,479.66 | 2,150.57 | 1.618 / 1.625 | 1,074,301 | Confirmed |
 | [WebP VP8L, native input](../benchmarks/WARM-VP8L-CANONICAL.md) | 5,703.55 | 3,023.03 | 1.887 / 1.904 | 1,216,180 | Confirmed |
 | [WebP VP8L, native input / live cancelable token](../benchmarks/WARM-VP8L-CANCELABLE.md) | 5,757.19 | 3,020.47 | 1.906 / 1.919 | 1,216,180 | Confirmed |
-
-The named RGBA PNG encode follow-up is closed: **Encode16 0.745x / upper0.763x**, **Encode8 0.314x / upper0.316x**. Exact samples,
-full packet ownership and the unchanged5% IDAT-size gate pass.
-[Current report](../benchmarks/WARM-CURRENT-PNG-ENCODE.md) includes compressed
-sizes and allocations. Production/harness/native builds and qualification repeat
-counts are zero; stop these cases and retain other valid confirmed settings.
-
-The named alpha-bearing VP8 follow-up is closed: **Encode16 0.576x / upper0.581x**, **Encode8 0.569x / upper0.573x**. The unchanged fixed quality pair,
-exact alpha, full normalization/ownership and decoder bounds pass.
-[Current report](../benchmarks/WARM-CURRENT-VP8-ENCODE.md) includes allocations and
-471,436/98,590-byte packets; no compression-efficiency parity is claimed.
-Prepared quality records/packets and production qualification are reused.
 
 **Encode**
 
@@ -346,166 +260,49 @@ Prepared quality records/packets and production qualification are reused.
 | [Mirrored transpose RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 44.34 | 43.25 | 1.025 / 1.064 | 128 | Confirmed |
 | [Mirrored transpose RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 39.10 | 38.54 | 1.015 / 1.041 | 128 | Confirmed |
 
-† RGBA16 bilinear and the explicit RGBA8 upscale allow native-only alpha maximum
-error 1 / RMSE <=0.25, alongside the same RGB bound. Up8 also includes writable
-output acquisition and zero-alpha RGB clearing inside native timing. Managed
-pixels remain exact against the rational reference; Down8 native alpha stays
-exact. The RGBA16 independent confirmation clears 2x with both guards passing.
-Earlier failed screens/prechecks and rejected prototypes remain recorded in
-the linked reports.
+* VP8L encode uses **libwebp exact=1, FFmpeg's encoder backend**, through its public
+API: the FFmpeg encoder does not expose hidden-RGB preservation. Decoded RGBA is
+exact; managed/native packets are533,100/183,812 B. Compression-efficiency parity
+is not established. Single-component grayscale JPEG uses approved benchmark-only
+**SIMD libjpeg-turbo3.1.4.1**, since FFmpeg emits three components:1.388x/upper1.398x,
+154,893 B/op,58,823/58,910 B compressed; source-PSNR gap0.000033dB. Complete
+normalization and output ownership are timed.
 
-‡ VP8 encode fixes native quality 75 / managed quality 100 at effort 4. Source
-PSNR gap is 0.00365 dB within the unchanged 0.25 dB band; alpha is exact.
-Managed output is 471,436 bytes versus 98,590 bytes. Quality-matched timing is
-confirmed; compression efficiency parity is not established.
+‡ VP8 encode freezes managed/native quality100/75, effort4; its PSNR gap0.00365dB
+passes the unchanged0.25dB gate, with exact alpha. Packets471,436/98,590 B do not
+establish compression-efficiency parity. JPEG lossy comparisons preserve their
+frozen source-quality-matched settings and0.25dB band; sizes remain in linked reports.
 
-§ Bicubic RGBA8/16 uses **zimg, FFmpeg's zscale backend**, with timed four-pixel
-clamped edge padding (4.697% additional input area); wider-support RGBA8/16 uses
-eight pixels (9.489%); the 64×32 byte/word cases use sixteen (19.364%);
-the 2×2 and 2×9 byte/word cases use 512 pixels (1384.169%);
-the 4×2 and 4×9 byte/word cases use 256 pixels (494.787%);
-the 8×4 and 8×17 byte/word cases use 128 pixels (198.069%);
-the 32×16 byte/word cases use thirty-two (40.269%); the 16×8 byte/word cases use
-sixty-four (86.703%). All include complete source/output
-packing, filtering and independent output allocation/release. The explicit
-native-only RGB/alpha maximum-1 / RMSE-0.25 bounds preserve exact managed pixels.
-RGBA8 256×129 downsample scalar pixels are exact; normal SIMD differs by one RGB and one
-alpha sample. Enlargement and mixed-axis scalar results are bounded too. RGBA16 normal/scalar results both stay within those bounds. This
-comparison is distinct from the unmatched ordinary FFmpeg CLI.
-For RGBA16 height enlargement with unchanged width only, the approved native RGB
-bound is two samples where reference alpha is at most sixteen, one elsewhere.
-RGB/alpha RMSE ≤0.25 and alpha maximum one remain unchanged; managed pixels are
-exact. Negative controls reject errors outside this scope. The original strict
-refusal and rejected conversion diagnostic remain unscored.
-Bicubic enlargement, mixed-axis resize, wider-support downsampling and single-axis reduction use premultiplied float output and timed straight-RGBA
-unpremultiplication/quantization, preserving unclamped alpha for the color ratio
-and clearing RGB when rounded alpha is zero. Its packing uses equivalent bounded
-quantization; the slower general-purpose-math comparison remains superseded.
-The horizontal/vertical RGBA8 cases preserve frozen original binary64 pixels exactly;
-six/twenty-five independently certified exact rational alpha halves retain the rounding
-already permitted by SPEC.md. Vertical RGBA8 enlargement likewise preserves its
-one independently certified exact rational blue half. No managed pixel tolerance is added.
+¶ PNG Identify references use the public FFmpeg PNG parser/CRC plus original
+complete structural/EXIF validation and owned descriptors, without inflation;
+the Stream reference also times fresh AVIO/scratch/input/EOF and release.
+‖ JPEG Identify uses FFmpeg MJPEG discard-all, original complete structural/EXIF
+validation and a timed17-byte canonical SOF2 metadata projection, fresh packet/
+descriptor ownership and reset, with zero pixel-buffer requests. WebP Identify
+uses the public FFmpeg WebP parser plus original complete RIFF/EXIF validation,
+including mandatory parser buffering/EOF flush and descriptor ownership. Its
+0.0040x/upper0.0045x is specific to this metadata boundary and parser copy cost.
+All six managed metadata fields remain exact.
 
-Allocations are managed bytes per timed operation, from BenchmarkDotNet memory
-diagnostics or raw GC allocated bytes / operation count (rounded up, including
-harness overhead). Decoder rows use resident encoded spans unless labeled fresh Stream. The fresh
-seekable PNG rows include input acquisition and copies for both subjects; their
-linked reports define the full boundaries, including timed native PNG16 endian
-conversion and fresh owned native-endian output. Separate fresh
-public Stream controls measure Paeth8 **2,275,800**, Paeth16 **4,713,416**, and
-Adam7-16 **5,058,912 B/op**, identically on both OSes with normal/scalar code.
-These are distinct boundaries. FFmpeg allocation totals are **not measured**;
-they must not be interpreted as zero. The composed PNG8 Stream/orient/crop/fit
-row includes every managed intermediate and the complete native filter graph;
-its output is 127x64. Other retained-owner and cold allocation patterns
-need separate coverage.
+† RGBA16 bilinear and explicit RGBA8 upscale allow native-only alpha max1/RMSE≤0.25;
+Up8 times zero-alpha RGB clearing. Managed pixels remain exact; Down8 alpha is exact.
+§ Bicubic uses **zimg, FFmpeg's zscale backend**, with all required clamped halo,
+packing, premultiplied float filtering, unpremultiplication/quantization, zero-alpha
+RGB clearing and independent owners timed. Native RGB/alpha max1 and both RMSE≤0.25;
+only RGBA16 513×259→513×519 permits native RGB≤2 where reference alpha≤16,≤1
+elsewhere, retaining alpha≤1/both RMSE≤0.25. Managed frozen pixels and independently
+certified rational-half cases remain exact. Linked reports specify every halo
+and scope control; no managed tolerance is introduced.
 
-The latest accepted production round isolates adaptive JPEG AC event planning
-from sampling/transforms. Row-restart encoding improves from **2.001x** to
-independently confirmed **1.799x / upper1.809x**, **10.4% less managed time**,
-with unchanged **297,780 B/op** and exact whole packets. The nonrestart
-regression mean is1.631x. One six-second profile, one changed core build and
-unchanged harness/native workers suffice. Twenty-one focused normal/scalar
-checks per OS, **3,483 Release tests per OS** including **898 live comparisons**,
-and the consumer/all three examples through the same actual Release package
-on Windows/Linux pass. No image, selector or settings grid is added.
+PNG byte RGB/gray/gray-alpha Optimal uses managed9/native6; RGBA Fastest uses2/1,
+SmallestSize9/9, with exact samples and the unchanged5% IDAT-size gate. Packed-gray
+transparency uses the approved exact timed native color-key correction. Raw
+incompatible baselines/refusals remain unscored; approved equivalent replacements
+are confirmed. GIF/animation, startup, concurrency and arbitrary profiles are
+outside this still-image fixed warm scope.
 
-Three existing cases subsequently confirm on that same qualified immutable
-build: adaptive nonrestart JPEG420 at **1.634x / upper1.641x**, **297,780 B/op**;
-PNG16 None decode at **1.045x / upper1.059x**, **8,552 B/op**; and RGBA16 bicubic
-width enlargement at **1.473x / upper1.499x**, **2,129,311 B/op**. No production
-or harness rebuild, profile, new fixture or repeated qualification is needed.
-All twelve actuals and both quiet guards are retained for each. Earlier
-near-2x results and the bicubic pre-guard refusal remain in linked evidence.
-The existing adaptive JPEG420 RGBA16 source pair subsequently confirms at
-**1.682x / upper1.697x**, **297,780 B/op**, including complete full-word alpha
-flattening/normalization. It reuses the same qualified core/harness/native worker
-and frozen packet, with no new selector, fixture, profile or repeated proofs.
-
-The preceding production round widens the local baseline JPEG AC bit
-cache, reducing a current-build **2.040x** RGB gap by **16.8%**, independently
-confirming **1.695x / upper 1.709x** at **2,664,366 B/op**. Four checked ordinary
-bytes supply several short coefficients per refill. Logical byte/bit state,
-partial coefficients, work/error ordering and the original fallback remain
-exact; no heap workspace is added. The same qualified build independently
-confirms progressive 4:4:4 at **1.877x / upper 1.896x**, **2,682,364 B/op**, and fresh
-JPEG Stream at **1.632x / upper 1.673x**, **1,813,266 B/op**.
-The Stream worker now performs source-preservation validation outside timing.
-Both regression means precede full **3,483-test-per-OS** qualification, including
-**898 live comparisons**, and the same actual Release package's consumer plus
-all three examples on Windows/Linux. Additional confirmations reuse those
-proofs. No input variants or repeated production/harness builds are added.
-
-The preceding RGB420/RGB422 rows retain their independent 1.638x/upper1.646x and
-1.511x/upper1.520x results with 70.6% and 62.9% less managed time respectively.
-Those measurements precede the current shared entropy primitive.
-
-The [single-pixel bicubic comparison](../benchmarks/WARM-BICUBIC-SINGLE-PIXEL.md)
-adds one unchanged-production RGBA8 reduction, independently confirmed at
-**0.213x / upper 0.227x**, **130 B/op**, against the labeled zimg/FFmpeg zscale
-backend. Managed/normal/scalar native samples are exact. Required rectangular
-halo/packing/filtering/quantization/ownership work is timed. Existing full
-qualification is reused; no production rebuild or profile is needed.
-
-The [packed palette4 Adam7 comparison](../benchmarks/WARM-PNG-PALETTE4-ADAM7.md)
-independently confirms **1.304x / upper 1.387x**, **2,592 B/op**, using the existing
-original sixteen-entry palette projection. Managed/normal/scalar native pixels,
-alpha and hidden RGB are exact. Complete packed decode, palette expansion,
-interlaced placement and output ownership are timed. Production qualification
-is reused; no production rebuild, profile or repeated package proof is needed.
-
-The [RGBA8 SmallestSize comparison](../benchmarks/WARM-PNG-SMALLEST8.md)
-independently confirms **0.835x / upper 0.841x**, **527,564 B/op**, with numeric
-levels9/9, exact RGBA and the unchanged5% IDAT-size gate (209,314/210,283 bytes).
-Production and package qualification are reused without a production rebuild,
-profile or repeated proofs. The measured binaries remain immutable; a word-only
-receipt-prose correction after measurement needs no repeat.
-
-The [live-token opaque VP8 comparison](../benchmarks/WARM-VP8-CANCELABLE.md)
-independently confirms **1.838x / upper 1.843x**, **760,548 B/op**, with exact
-qualified managed pixels, opaque alpha and unchanged decoder bounds. Existing
-frozen input, pre-cancellation/token identity, normal/scalar CLI and independent
-owners are checked; token setup/disposal is outside timing. One harness build,
-no production/native rebuild/profile or repeated qualification is required.
-
-The [VP8 simple-filter comparison](../benchmarks/WARM-VP8-SIMPLE-FILTER.md)
-independently confirms **1.746x / upper 1.765x**, **760,548 B/op**. One original
-packet on the existing opacity projection independently verifies coded/effective
-simple filtering at level8. Managed pixels/alpha, normal/scalar CLI anchors and
-unchanged native agreement bounds pass. FFmpeg's decoder remains the baseline;
-libwebp only authors the untimed fixture. Existing production qualification is
-reused without a production/native decoder rebuild, profile or repeated proof.
-
-The [indexed VP8L comparison](../benchmarks/WARM-VP8L-INDEXED16.md) independently
-confirms **1.519x / upper 1.550x**, **1,351,961 B/op**, with exact RGBA/hidden RGB
-through managed and normal/scalar native decoders. One 11,810-byte type3/sixteen-
-entry packet reuses the existing PNG palette projection and exact=1 author.
-FFmpeg's decoder remains the baseline; all inverse expansion/packing/ownership
-is timed. Existing production/native builds and qualification are reused, with
-one harness build and no profile or repeated proofs.
-
-Recent unchanged-production coverage confirms RGB16 Paeth at1.904x /
-upper1.928x,6,504 B/op, and gray-alpha8 Paeth at1.017x / upper1.068x,2,408 B/op.
-Those rounds reuse the preceding immutable production qualification.
-
-The palette8/tRNS Adam7 pair now independently confirms **1.167x / upper1.177x**,
-with **4,960 B/op**, exact alpha/hidden RGB and both quiet guards passing.
-Optional native process-CPU telemetry accompanies unchanged wall timing; CPU/wall
-ratios0.99727–0.99915 show no substantial descheduling in the new observations.
-The historical sixfold native slowdown remains unexplained and unscored.
-One worker/harness build suffices; current production qualification is reused.
-
-PNG RGB8/gray8/gray-alpha8 encoding uses managed level9/native6 with exact samples
-and the unchanged 5% IDAT-size gate; earlier level6/level6 refusals remain unscored.
-GIF and animation are deferred. Full required warm coverage remains **open**;
-the [material coverage audit](../benchmarks/WARM-COVERAGE.md) tracks remaining
-layouts and public boundaries. Stop confirmed pairs; rolling older-source results
-do not prove uniform current-source parity. Linked reports preserve superseded
-evidence, failed guards, rejected trials and exact package/source qualification.
-
-Maintain this summary whenever a performance round is accepted: update the
-corresponding evidence selection in [the renderer](../benchmarks/render-benchmark.py),
-regenerate with `python benchmarks/render-benchmark.py`, and run it with `--check`.
-Preserve superseded raw evidence and failed runs in their linked reports. Add a
-new row only for material coverage; prioritize the largest remaining gap one
-primitive at a time. See the [measurement recipe](../tools/WarmReference/README.md).
+Maintain the selected evidence in [the renderer](../benchmarks/render-benchmark.py),
+regenerate with `python benchmarks/render-benchmark.py`, then run `--check`.
+Preserve raw evidence, failures, controls and package/source qualification.
+Stop passing cases. Add a later case only when evidence identifies a distinct
+required algorithm or public boundary omitted from the finite checklist.

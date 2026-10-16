@@ -1499,3 +1499,11 @@ buffering and EOF flush are timed. The decoder has no lossless metadata-only
 skip path, so no pixel decoder is used. One existing deterministic packet and
 21 same-packet structural/metadata/opaque-payload controls establish equivalence;
 startup, preparation and control validation stay outside timing.
+
+Fresh PNG Stream Identify uses `build-png-stream-identify-linux.sh`,
+`verify-png-stream-identify-linux.py` and the separate `StreamIdentify` benchmark
+family. It reuses the resident packet/parser/CRC boundary while timing fresh
+custom AVIO/scratch/input acquisition, length query, full reads/EOF and release,
+plus independent descriptors. Managed times a fresh non-exposed seekable
+MemoryStream, complete public buffering/Identify and wrapper disposal. The
+caller remains open during Identify. No second Stream format/depth matrix.

@@ -15,12 +15,13 @@ internal sealed class NativeWarmReference : IDisposable
     public JsonElement BuildIdentity { get; }
     private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
 
-    public NativeWarmReference(JpegBenchmarkCase state, int cpu, Lokad.Image.ImageInfo expected)
+    public NativeWarmReference(JpegBenchmarkCase state, int cpu, Lokad.Image.ImageInfo expected, bool stream = false)
     {
         var jpeg = expected.Format == Lokad.Image.ImageFormat.Jpeg;
         var webp = expected.Format == Lokad.Image.ImageFormat.WebP;
         if (!jpeg && !webp && expected.Format != Lokad.Image.ImageFormat.Png) throw new ArgumentException("PNG/JPEG/WebP Identify only.", nameof(expected));
-        var kind = webp ? "webp" : jpeg ? "jpeg" : "png";
+        if (stream && expected.Format != Lokad.Image.ImageFormat.Png) throw new ArgumentException("Fresh Stream Identify uses the existing PNG only.", nameof(stream));
+        var kind = stream ? "png-stream" : webp ? "webp" : jpeg ? "jpeg" : "png";
         Executable = Path.Combine(state.Root, "external", "warm-reference", "ffmpeg-" + kind + "-identify-warm");
         using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "external", "warm-reference", kind + "-identify-identity.json"))))
             BuildIdentity = document.RootElement.Clone();
@@ -44,6 +45,7 @@ internal sealed class NativeWarmReference : IDisposable
                 || Ready.GetProperty("codecThreads").GetInt32() != 1 || Ready.GetProperty("threadType").GetInt32() != 0
                 || Ready.GetProperty("activeThreadType").GetInt32() != 0 || Ready.GetProperty("outputBytes").GetInt32() != 24
                 || Ready.GetProperty("pixelDecode").GetBoolean() || Ready.GetProperty("scalarMode").GetBoolean()
+                || (stream && (Ready.GetProperty("inputView").GetBoolean() || new[] { "freshSeekableStream", "inputCopyTimed", "inputLengthQueryTimed", "eofChecked", "callerSourceLeftOpen", "streamAcquisitionAndReleaseTimed" }.Any(key => !Ready.GetProperty(key).GetBoolean())))
                 || (jpeg && (Ready.GetProperty("pixelBufferRequests").GetInt32() != 0 || Ready.GetProperty("canonicalHeaderBytes").GetInt32() != 17))
                 || (webp ? new[] { "publicParserTimed", "fullStructureTimed", "parserEofFlushTimed", "parserRequiredInputBufferingTimed", "structureMetadataTimed", "descriptorAcquisitionAndReleaseTimed", "independentLiveOutputs" }
                     : jpeg ? new[] { "fullStructureTimed", "canonicalHeaderProjectionTimed", "discardAllHeaderExtractionTimed", "decoderStateResetTimed", "structureMetadataTimed", "descriptorAcquisitionAndReleaseTimed", "independentLiveOutputs" }
@@ -300,7 +302,7 @@ internal sealed class NativeWarmReference : IDisposable
             || sample.ElapsedNanoseconds <= 0 || !double.IsFinite(sample.ElapsedNanoseconds)
             || (sample.CpuElapsedNanoseconds is { } cpuElapsed && (cpuElapsed <= 0 || !double.IsFinite(cpuElapsed)))
             || sample.Cpu != Ready.GetProperty("cpu").GetInt32()
-            || (Ready.GetProperty("operation").GetString() is "png-encode" or "png-smallest8-encode" or "png-smallest16-encode" or "png-fast16-encode" or "png-store16-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "jpeg-encode" or "jpeg-gray-encode" or "jpeg-restart-encode" or "webp-encode" or "webp-opaque-encode" or "webp-lossless-encode" or "png-identify" or "jpeg-identify" or "webp-identify" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
+            || (Ready.GetProperty("operation").GetString() is "png-encode" or "png-smallest8-encode" or "png-smallest16-encode" or "png-fast16-encode" or "png-store16-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "jpeg-encode" or "jpeg-gray-encode" or "jpeg-restart-encode" or "webp-encode" or "webp-opaque-encode" or "webp-lossless-encode" or "png-identify" or "jpeg-identify" or "webp-identify" or "png-stream-identify" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
                 : sample.OutputStride < (Ready.GetProperty("operation").GetString() is "nearest-resize" or "bilinear-resize" or "bicubic-resize" or "crop" or "png-stream-crop-fit" or "png-stream16-crop-fit" ? Ready.GetProperty("outputWidth").GetInt32()
                     : Ready.GetProperty("operation").GetString() is "quarter-turn-cw" or "quarter-turn-ccw" or "transpose" or "transverse" ? 259 : HorizontalFlipInput.Width) * (Ready.GetProperty("depth").GetInt32() / 8) * 4)
             || (Ready.GetProperty("operation").GetString() is "png-stream-decode" or "png-stream16-decode" or "png-stream-crop-fit" or "png-stream16-crop-fit" && sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32())

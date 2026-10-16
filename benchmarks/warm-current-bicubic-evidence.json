@@ -82651,8 +82651,8 @@
       "noRepeatedQualification": true
     }
   },
-  "nextAction": "B01-B15 and C01/C02 stopped. Continue C03 resident WebP Identify then C04 fresh PNG Identify Stream, equivalent boundaries first; no new grid.",
-  "currentQualifiedLinuxDllSha256": "611bf5964d26bcaf18c1b06cf2235b5da128f26e8d1180d0556bbb3080bbcadf",
+  "nextAction": "All B01-B15/C01-C04 finite material paths are closed, with explicit unchanged-path reuse. Stop confirmed cases; later additions require evidence of a distinct omitted required path.",
+  "currentQualifiedLinuxDllSha256": "1ebc526a0fb72cfaaddc9e138634bdf362610fc8ad2d36b302297133015f74b6",
   "nativeMixedRefresh": {
     "Mixed16": {
       "before": {
@@ -84989,23 +84989,23 @@
   "bicubicRoundQualifiedLinuxDllSha256": "1624549cbcc70b448512a1ed6dfc6ea4bff1dc433762e260dae4fab68bd3f7a1",
   "latestProductionQualification": {
     "status": "passed",
-    "releaseTestsPerOs": 3535,
+    "releaseTestsPerOs": 3546,
     "fullSuiteBreakdown": {
-      "internal": 1251,
+      "internal": 1262,
       "publicApi": 1386,
       "liveDifferential": 898
     },
-    "qualifiedLinuxDllSha256": "611bf5964d26bcaf18c1b06cf2235b5da128f26e8d1180d0556bbb3080bbcadf",
-    "windowsPackageDllSha256": "d9688f303e198c510e012ae9718455a20ae648b8d385de219e6693ad26b00960",
-    "packageSha256": "ee78faf8e40a4692f9fc5be34cffe80c9d101ec3c7b4f04b5d08615c7cd2744e",
+    "qualifiedLinuxDllSha256": "1ebc526a0fb72cfaaddc9e138634bdf362610fc8ad2d36b302297133015f74b6",
+    "windowsPackageDllSha256": "bceb27eb28d6959ad83a0b88b14fc2bdfd4cb872b86ef564932f85251273994f",
+    "packageSha256": "76a73aa198c07a4cd5cf749d5436dba48be344f1046dc6987f7fa5e2117aa938",
     "consumerAndAllThreeExamplesThroughSameActualPackageBothOs": true,
     "productionInputsIdenticalToMeasuredBuild": true,
     "qualificationOnlyChangesFromMeasuredSnapshot": [],
-    "measuredSourceSha256": "35b102efc80d99218b17fe64897a0f06497147fa18d09fde20165aef4a20912e",
-    "qualifiedSourceSha256": "35b102efc80d99218b17fe64897a0f06497147fa18d09fde20165aef4a20912e",
+    "measuredSourceSha256": "0a36876fa4d648fb35a8f851d158d7170c88388c8191cfa96283b36542892263",
+    "qualifiedSourceSha256": "0a36876fa4d648fb35a8f851d158d7170c88388c8191cfa96283b36542892263",
     "rawArchive": {
-      "file": "c02-jpeg-identify-vector-qualification.tar.gz",
-      "sha256": "52edb055ab6117884af3d69a07ff7a5653d8773710630eb682e2491d8d23a63c"
+      "file": "c04-identify-input-exact-qualification.tar.gz",
+      "sha256": "e13aed0428895e20b16317b49b25b999c045c409dee4af0074031572f227aadf"
     }
   },
   "subsequentPngIdentifyChange": {
@@ -85056,5 +85056,27 @@
       "unchanged": "ContainerHeaders.Jpeg and JpegDecoder pixel preflight retain identical bodies. PNG/WebP Identify branches and all other production input hashes match. Reuse C01 and B01-B15 confirmations at their pinned inputs without retiming."
     },
     "reason": "Only public JPEG Identify dispatch/scanner changes; existing pixel decoder preflight, PNG Identify, edits and resize paths do not execute it. Keep all61 stopped with their pinned evidence."
+  },
+  "subsequentIdentifyStreamChange": {
+    "evidence": "warm-png-stream-identify-evidence.json",
+    "reconciliation": {
+      "changedProductionInputs": {
+        "src/Lokad.Image/ImageCodec.cs": {
+          "before": "ff341a9d26178cbd6a1828b4522b0411b2b52a2700912dc8fac57ea3617fe7bc",
+          "after": "67b14dcc0f6bdf00203b89ca549d61a524d4f270e084908dde2c1da13ee28554"
+        },
+        "src/Lokad.Image/Internal/IdentificationInput.cs": {
+          "before": null,
+          "after": "3ab7452095c682e3ae1ec3a0a3ef47ca53717989a0c113a151edb95b555c9b87"
+        }
+      },
+      "existingImageCodecOnlyChangesIdentifyStreamAcquisition": true,
+      "affectedMaterialPaths": [
+        "C04 fresh Stream Identify input acquisition"
+      ],
+      "otherAffectedPublicEntries": "All PNG/JPEG/WebP Identify(Stream) calls share the same generic bounded input reader. The named PNG representative measures this complete common boundary; all three resident container algorithms are separately confirmed as C01-C03. No additional format/depth Stream grid.",
+      "unchanged": "Original private ImageCodec.ReadInput and Decode(Stream), all resident Identify bodies, PNG/JPEG/WebP pixel codecs, edits and resizes retain their executed bodies and other production input hashes. Reuse C01-C03 and B01-B15 confirmations at pinned inputs; do not retime those paths."
+    },
+    "reason": "Only Identify(Stream) input acquisition changes. Pixel Decode(Stream) retains the original reader, and all resize methods/dispatches retain their bytes. Keep all61 bicubic cases stopped."
   }
 }

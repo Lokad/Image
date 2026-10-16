@@ -926,7 +926,13 @@ standard argument exceptions. Programming errors are not translated into corrupt
 input errors. Mutable buffers require caller synchronization; independent calls
 share no mutable operation settings.
 
-Supplied streams remain open. Nonseekable input uses bounded buffering. Stream
+Supplied streams remain open. Nonseekable input uses bounded buffering. Identification
+may reuse private fully written input storage and inspect its acquired prefix
+without an extra exact-length copy. Retention is bounded to one array per
+power-of-two bucket up to4 MiB (less than8 MiB total); live calls never share a
+lease. Original bounded-growth admission, read/work/cancellation and failure
+ordering remain unchanged; the source is read through EOF and never exposed as
+a borrowed input view. Stream
 encoding can leave partial output on failure: callers needing atomic publication
 must stage output themselves. No filesystem or process capabilities are used by
 production code.
