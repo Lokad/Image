@@ -1,0 +1,623 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "uniformWarmParityComplete": false,
+  "totalRetainedPerformanceRasters": 2,
+  "totalNamedB12Cases": 61,
+  "confirmedNamedB12Cases": 5,
+  "cases": {
+    "TightHorizontalUp8": {
+      "evidence": "warm-bicubictighthorizontalup8-cardinal-evidence.json",
+      "evidenceSha256": "d223e9a38cc8a585af63270f4d3f6ffb0414e616ec890a2ca8929cf3c442b197",
+      "path": [
+        "observations",
+        -1
+      ],
+      "case": "WarmBicubicResize/TightHorizontalUp8",
+      "meanRatio": 1.5828651599206596,
+      "conservativeRatioUpper": 1.5911265028354484,
+      "allTwelveActualsRetained": true,
+      "bothQuietGuardsPassed": true,
+      "measuredSource": {
+        "sourceSha256": "3eadcbb90911510c103f695959641729aeeeddf3923b59f2c9bcd526f225212b",
+        "files": 1971,
+        "sourceRevision": "a85792176d55a28811c4baf53777da8beda0ee56",
+        "verifiedAllFileBytes": true
+      },
+      "measuredLinuxDllSha256": "f59cc09004e62a8b01ceb97ef753ccae3aaab6aad6d7e50a2debec5fc5a42956",
+      "relevantInputs": {
+        "Directory.Build.props": {
+          "measuredSha256": "0057d68e3a7ff27fc24e9abd1649c11ffbfef3b448ad906fbd27b69f6903a173",
+          "currentSha256": "0057d68e3a7ff27fc24e9abd1649c11ffbfef3b448ad906fbd27b69f6903a173"
+        },
+        "global.json": {
+          "measuredSha256": "10bfc156a855e0793806480c82415e9aca2b5f63407d844961bcb6fd5d065fb2",
+          "currentSha256": "10bfc156a855e0793806480c82415e9aca2b5f63407d844961bcb6fd5d065fb2"
+        },
+        "src/Lokad.Image/ImageBuffer.cs": {
+          "measuredSha256": "f2cbe315d0049ea30fc03abfd8d46b8b4b927378f536241200e675b66ba73a75",
+          "currentSha256": "f2cbe315d0049ea30fc03abfd8d46b8b4b927378f536241200e675b66ba73a75"
+        },
+        "src/Lokad.Image/ImageInfo.cs": {
+          "measuredSha256": "c5d1123575a0952fd27eb83b54357e6ae330f026ce23c51e49245fb0bd4b218a",
+          "currentSha256": "c5d1123575a0952fd27eb83b54357e6ae330f026ce23c51e49245fb0bd4b218a"
+        },
+        "src/Lokad.Image/ImageLimits.cs": {
+          "measuredSha256": "e35e86fba9ce3f6a7113620a848e15566d0c45ff992dc6721f5e5362e9dfb1d7",
+          "currentSha256": "e35e86fba9ce3f6a7113620a848e15566d0c45ff992dc6721f5e5362e9dfb1d7"
+        },
+        "src/Lokad.Image/ImageTransforms.cs": {
+          "measuredSha256": "beb5801418c8895d83e84fae0ffa20a49f0626ebfe948a0166cc048684c2adb8",
+          "currentSha256": "beb5801418c8895d83e84fae0ffa20a49f0626ebfe948a0166cc048684c2adb8"
+        },
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": {
+          "measuredSha256": "59f34c2e052a72a6003a4c51f23cf9766220322d243f30ae7923e02dfd63ea11",
+          "currentSha256": "59f34c2e052a72a6003a4c51f23cf9766220322d243f30ae7923e02dfd63ea11"
+        },
+        "src/Lokad.Image/Internal/ColumnBicubicResize.cs": {
+          "measuredSha256": "3268ec2369fb2f9fc887698f342332ed9f0be86ec058e8ad7bbdc2ae1bad2100",
+          "currentSha256": "3268ec2369fb2f9fc887698f342332ed9f0be86ec058e8ad7bbdc2ae1bad2100"
+        },
+        "src/Lokad.Image/Internal/CrossColumnBicubicResize.cs": {
+          "measuredSha256": "fe47dc5761c60efd6dbecabaff7f736186a6e5632c82832f1b587fd7ec857d0b",
+          "currentSha256": "fe47dc5761c60efd6dbecabaff7f736186a6e5632c82832f1b587fd7ec857d0b"
+        },
+        "src/Lokad.Image/Internal/CrossWordColumnBicubicResize.cs": {
+          "measuredSha256": "1653b1ffbf91eb6ac4d9160bc94dfcd8f560ceac5ba115c9a469e0af9d76c3cd",
+          "currentSha256": "1653b1ffbf91eb6ac4d9160bc94dfcd8f560ceac5ba115c9a469e0af9d76c3cd"
+        },
+        "src/Lokad.Image/Internal/DeepColumnBicubicResize.cs": {
+          "measuredSha256": "3ca96207817e8b2e221e728c6b317098c1556dd0834bce42dee43ea8d7d6a91c",
+          "currentSha256": "3ca96207817e8b2e221e728c6b317098c1556dd0834bce42dee43ea8d7d6a91c"
+        },
+        "src/Lokad.Image/Internal/DeepWordColumnBicubicResize.cs": {
+          "measuredSha256": "4f3d503e7729ad1fe303a2bc4b2679dc879fbfbae2422943202ca9c8f4c76f10",
+          "currentSha256": "4f3d503e7729ad1fe303a2bc4b2679dc879fbfbae2422943202ca9c8f4c76f10"
+        },
+        "src/Lokad.Image/Internal/EnlargingColumnBicubicResize.cs": {
+          "measuredSha256": "2bb10cab9f92ce611a6b66544d180c7016a85a75b4bc0d2df9aba51b92a4d83c",
+          "currentSha256": "2bb10cab9f92ce611a6b66544d180c7016a85a75b4bc0d2df9aba51b92a4d83c"
+        },
+        "src/Lokad.Image/Internal/EnlargingWordColumnBicubicResize.cs": {
+          "measuredSha256": "a6e1b901fbd8051f901357907ff0c70ea9260f41a8ea6dfa39c7236cd0768597",
+          "currentSha256": "a6e1b901fbd8051f901357907ff0c70ea9260f41a8ea6dfa39c7236cd0768597"
+        },
+        "src/Lokad.Image/Internal/GeneratedBicubicResize.cs": {
+          "measuredSha256": "cda7d652fc38de31848be4589aa8e8be7da3dd7fac0e5549f809a1e46cbd3dc0",
+          "currentSha256": "cda7d652fc38de31848be4589aa8e8be7da3dd7fac0e5549f809a1e46cbd3dc0"
+        },
+        "src/Lokad.Image/Internal/GeneratedWordBicubicResize.cs": {
+          "measuredSha256": "f5aa6f3b92e50eb2908413dbea455a9486a3bd2a95efb856497f18613eab9a24",
+          "currentSha256": "f5aa6f3b92e50eb2908413dbea455a9486a3bd2a95efb856497f18613eab9a24"
+        },
+        "src/Lokad.Image/Internal/MixedColumnBicubicResize.cs": {
+          "measuredSha256": "879ce36bf9217a18551c3494821171864275e4078a4a1270c7958ad1b2edc466",
+          "currentSha256": "879ce36bf9217a18551c3494821171864275e4078a4a1270c7958ad1b2edc466"
+        },
+        "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": {
+          "measuredSha256": "d27f0efed676946a88f149bfb25124af39b1f3ee38e16a14c81dfdb796238b52",
+          "currentSha256": "d27f0efed676946a88f149bfb25124af39b1f3ee38e16a14c81dfdb796238b52"
+        },
+        "src/Lokad.Image/Internal/NearestResize.cs": {
+          "measuredSha256": "21535dfe618612de2926c52333c4131379ccbea61b4b9fd683792acaf0772cc8",
+          "currentSha256": "21535dfe618612de2926c52333c4131379ccbea61b4b9fd683792acaf0772cc8"
+        },
+        "src/Lokad.Image/Internal/OperationContext.cs": {
+          "measuredSha256": "326aaba19c57ece9edb055aca05924a18840002b6b4066ef18705929c7f96174",
+          "currentSha256": "71d75899c1e974056d137d083efd15a7dbd188e1efaaf3718cd71f27872ba1b2"
+        },
+        "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": {
+          "measuredSha256": "99cd955640af69b5fc1a3e471767639a6057e9dfa18618870eaa1f8e6e897c2e",
+          "currentSha256": "99cd955640af69b5fc1a3e471767639a6057e9dfa18618870eaa1f8e6e897c2e"
+        },
+        "src/Lokad.Image/Internal/PackedStreamingBicubicResize.cs": {
+          "measuredSha256": "77d1f2eae92ba5d73788d3a55f6223d87fc4d49c302228472995f269c459cd4e",
+          "currentSha256": "77d1f2eae92ba5d73788d3a55f6223d87fc4d49c302228472995f269c459cd4e"
+        },
+        "src/Lokad.Image/Internal/PackedStreamingWordBicubicResize.cs": {
+          "measuredSha256": "6339f66ab4b983f42ac21bc73233fe64b44f557a79331a82ffbc292731e1cffd",
+          "currentSha256": "6339f66ab4b983f42ac21bc73233fe64b44f557a79331a82ffbc292731e1cffd"
+        },
+        "src/Lokad.Image/Internal/PackedWordColumnBicubicResize.cs": {
+          "measuredSha256": "b2ff8469e7215a7af52f115d26922f4cf325b4574ee1c0b36f2a4ede39a86c24",
+          "currentSha256": "b2ff8469e7215a7af52f115d26922f4cf325b4574ee1c0b36f2a4ede39a86c24"
+        },
+        "src/Lokad.Image/Internal/PairedResize.cs": {
+          "measuredSha256": "39b7271ed9bf31535432377f58d5883aa72a898d882ac8e399b946db0364c27d",
+          "currentSha256": "39b7271ed9bf31535432377f58d5883aa72a898d882ac8e399b946db0364c27d"
+        },
+        "src/Lokad.Image/Internal/PreparedResize.cs": {
+          "measuredSha256": "51df192f1b3c56f645e0710eb958bba25f73514a8aec221980b0c2385f9972c5",
+          "currentSha256": "51df192f1b3c56f645e0710eb958bba25f73514a8aec221980b0c2385f9972c5"
+        },
+        "src/Lokad.Image/Internal/ResizeAlpha.cs": {
+          "measuredSha256": "a31472d71dcf1724bc155ea30ad44375e3de74c9e9ec09ffa8e6040187a87b08",
+          "currentSha256": "a31472d71dcf1724bc155ea30ad44375e3de74c9e9ec09ffa8e6040187a87b08"
+        },
+        "src/Lokad.Image/Internal/ResizeSampling.cs": {
+          "measuredSha256": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b",
+          "currentSha256": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b"
+        },
+        "src/Lokad.Image/Internal/StreamingBicubicResize.cs": {
+          "measuredSha256": "01537fc86c98c97ad467808c86edd1d10ade77c19fb25247dbda46f5becf7803",
+          "currentSha256": "01537fc86c98c97ad467808c86edd1d10ade77c19fb25247dbda46f5becf7803"
+        },
+        "src/Lokad.Image/Internal/StreamingWordBicubicResize.cs": {
+          "measuredSha256": "9f9dbc3fd27b12b7c626598e4c5e2c2dd7b0392aba2c70df972871225bad9ecf",
+          "currentSha256": "9f9dbc3fd27b12b7c626598e4c5e2c2dd7b0392aba2c70df972871225bad9ecf"
+        },
+        "src/Lokad.Image/Internal/WideCachedBicubicResize.cs": {
+          "measuredSha256": "e79d224b5365c668721a620e036549cd815de4b261382c9580d45f3e7ea305ef",
+          "currentSha256": "e79d224b5365c668721a620e036549cd815de4b261382c9580d45f3e7ea305ef"
+        },
+        "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": {
+          "measuredSha256": "11082881387602efcc83597ff50c3da235f6657c5846fe27a8844200fde7026b",
+          "currentSha256": "11082881387602efcc83597ff50c3da235f6657c5846fe27a8844200fde7026b"
+        },
+        "src/Lokad.Image/Internal/WideWordColumnBicubicResize.cs": {
+          "measuredSha256": "5a60da6c4347fbd77df810bac47525be2d2e81770eb4a12826e12a575afe7a20",
+          "currentSha256": "5a60da6c4347fbd77df810bac47525be2d2e81770eb4a12826e12a575afe7a20"
+        },
+        "src/Lokad.Image/Internal/WordColumnBicubicResize.cs": {
+          "measuredSha256": "505af69eac0a4b4dfbfa584b3d71041a44918db17edd3cf085365e0eb382c94d",
+          "currentSha256": "505af69eac0a4b4dfbfa584b3d71041a44918db17edd3cf085365e0eb382c94d"
+        },
+        "src/Lokad.Image/Lokad.Image.csproj": {
+          "measuredSha256": "cbea6f1fe3ab13ead38f689bfedb83a294e590fa4d017c421ae66cb02654641d",
+          "currentSha256": "cbea6f1fe3ab13ead38f689bfedb83a294e590fa4d017c421ae66cb02654641d"
+        }
+      },
+      "onlyRelevantSourceDifferences": {
+        "src/Lokad.Image/Internal/OperationContext.cs": "Only CommitAdmittedWork and its comments were added; resizing never calls this method. Existing fields and every executed context method are unchanged."
+      },
+      "nativeAdapterReconciliation": {
+        "source": "tools/WarmReference/zimg-bicubic-mixed8-warm.c",
+        "measuredSourceSha256": "e5ed69e0ce9aeb9112dcc863c675d564da45b1b685a36c2204e02e5772ab5199",
+        "currentSourceSha256": "c372f31d68131d5596b743f73eb951bbbbb509c74024beadd0d0990509c097c4",
+        "reason": "387c382 adds unselected compile-time 1x1 mode11; existing horizontal mode2 has HALO_Y equal to HALO. Replacing that identical constant alias and excluding the untimed ready printf yields byte-identical remaining adapter source. Packing, complete filtering, quantization, acquisition/release and measurement loop are unchanged. The original pinned worker/reference proof remains valid."
+      },
+      "rawArchive": {
+        "file": "bicubictighthorizontalup8-cardinal-confirm.tar.gz",
+        "sha256": "d383d57fb975e3c5866d770ca370187981fb0eb2e970c0e8395a2987d18eccdf"
+      },
+      "originalReceiptSha256": "1dedcfe04e1c8b117af87f717a9da26cf1f3b53fa00ba5c4d8d65a2a312cf5d6",
+      "reason": "All resize/selected-helper/common-dispatch, allocated-buffer, limit, geometry and build inputs match the actual archived source inventory. The only context addition, when present, is unused. Ordinary Resize allocation does not lease overwrite storage. Frozen full operations, exact pixels, approved native bounds, owners, all actuals and quiet confidence are reused. No timing repeat."
+    },
+    "TightUp8": {
+      "evidence": "warm-bicubictighthorizontalup8-cardinal-evidence.json",
+      "evidenceSha256": "d223e9a38cc8a585af63270f4d3f6ffb0414e616ec890a2ca8929cf3c442b197",
+      "path": [
+        "twoAxisByteConfirmation"
+      ],
+      "case": "WarmBicubicResize/TightUp8",
+      "meanRatio": 1.7831790694590863,
+      "conservativeRatioUpper": 1.7948454547387624,
+      "allTwelveActualsRetained": true,
+      "bothQuietGuardsPassed": true,
+      "measuredSource": {
+        "sourceSha256": "3eadcbb90911510c103f695959641729aeeeddf3923b59f2c9bcd526f225212b",
+        "files": 1971,
+        "sourceRevision": "a85792176d55a28811c4baf53777da8beda0ee56",
+        "verifiedAllFileBytes": true
+      },
+      "measuredLinuxDllSha256": "f59cc09004e62a8b01ceb97ef753ccae3aaab6aad6d7e50a2debec5fc5a42956",
+      "relevantInputs": {
+        "Directory.Build.props": {
+          "measuredSha256": "0057d68e3a7ff27fc24e9abd1649c11ffbfef3b448ad906fbd27b69f6903a173",
+          "currentSha256": "0057d68e3a7ff27fc24e9abd1649c11ffbfef3b448ad906fbd27b69f6903a173"
+        },
+        "global.json": {
+          "measuredSha256": "10bfc156a855e0793806480c82415e9aca2b5f63407d844961bcb6fd5d065fb2",
+          "currentSha256": "10bfc156a855e0793806480c82415e9aca2b5f63407d844961bcb6fd5d065fb2"
+        },
+        "src/Lokad.Image/ImageBuffer.cs": {
+          "measuredSha256": "f2cbe315d0049ea30fc03abfd8d46b8b4b927378f536241200e675b66ba73a75",
+          "currentSha256": "f2cbe315d0049ea30fc03abfd8d46b8b4b927378f536241200e675b66ba73a75"
+        },
+        "src/Lokad.Image/ImageInfo.cs": {
+          "measuredSha256": "c5d1123575a0952fd27eb83b54357e6ae330f026ce23c51e49245fb0bd4b218a",
+          "currentSha256": "c5d1123575a0952fd27eb83b54357e6ae330f026ce23c51e49245fb0bd4b218a"
+        },
+        "src/Lokad.Image/ImageLimits.cs": {
+          "measuredSha256": "e35e86fba9ce3f6a7113620a848e15566d0c45ff992dc6721f5e5362e9dfb1d7",
+          "currentSha256": "e35e86fba9ce3f6a7113620a848e15566d0c45ff992dc6721f5e5362e9dfb1d7"
+        },
+        "src/Lokad.Image/ImageTransforms.cs": {
+          "measuredSha256": "beb5801418c8895d83e84fae0ffa20a49f0626ebfe948a0166cc048684c2adb8",
+          "currentSha256": "beb5801418c8895d83e84fae0ffa20a49f0626ebfe948a0166cc048684c2adb8"
+        },
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": {
+          "measuredSha256": "59f34c2e052a72a6003a4c51f23cf9766220322d243f30ae7923e02dfd63ea11",
+          "currentSha256": "59f34c2e052a72a6003a4c51f23cf9766220322d243f30ae7923e02dfd63ea11"
+        },
+        "src/Lokad.Image/Internal/ColumnBicubicResize.cs": {
+          "measuredSha256": "3268ec2369fb2f9fc887698f342332ed9f0be86ec058e8ad7bbdc2ae1bad2100",
+          "currentSha256": "3268ec2369fb2f9fc887698f342332ed9f0be86ec058e8ad7bbdc2ae1bad2100"
+        },
+        "src/Lokad.Image/Internal/CrossColumnBicubicResize.cs": {
+          "measuredSha256": "fe47dc5761c60efd6dbecabaff7f736186a6e5632c82832f1b587fd7ec857d0b",
+          "currentSha256": "fe47dc5761c60efd6dbecabaff7f736186a6e5632c82832f1b587fd7ec857d0b"
+        },
+        "src/Lokad.Image/Internal/CrossWordColumnBicubicResize.cs": {
+          "measuredSha256": "1653b1ffbf91eb6ac4d9160bc94dfcd8f560ceac5ba115c9a469e0af9d76c3cd",
+          "currentSha256": "1653b1ffbf91eb6ac4d9160bc94dfcd8f560ceac5ba115c9a469e0af9d76c3cd"
+        },
+        "src/Lokad.Image/Internal/DeepColumnBicubicResize.cs": {
+          "measuredSha256": "3ca96207817e8b2e221e728c6b317098c1556dd0834bce42dee43ea8d7d6a91c",
+          "currentSha256": "3ca96207817e8b2e221e728c6b317098c1556dd0834bce42dee43ea8d7d6a91c"
+        },
+        "src/Lokad.Image/Internal/DeepWordColumnBicubicResize.cs": {
+          "measuredSha256": "4f3d503e7729ad1fe303a2bc4b2679dc879fbfbae2422943202ca9c8f4c76f10",
+          "currentSha256": "4f3d503e7729ad1fe303a2bc4b2679dc879fbfbae2422943202ca9c8f4c76f10"
+        },
+        "src/Lokad.Image/Internal/EnlargingColumnBicubicResize.cs": {
+          "measuredSha256": "2bb10cab9f92ce611a6b66544d180c7016a85a75b4bc0d2df9aba51b92a4d83c",
+          "currentSha256": "2bb10cab9f92ce611a6b66544d180c7016a85a75b4bc0d2df9aba51b92a4d83c"
+        },
+        "src/Lokad.Image/Internal/EnlargingWordColumnBicubicResize.cs": {
+          "measuredSha256": "a6e1b901fbd8051f901357907ff0c70ea9260f41a8ea6dfa39c7236cd0768597",
+          "currentSha256": "a6e1b901fbd8051f901357907ff0c70ea9260f41a8ea6dfa39c7236cd0768597"
+        },
+        "src/Lokad.Image/Internal/GeneratedBicubicResize.cs": {
+          "measuredSha256": "cda7d652fc38de31848be4589aa8e8be7da3dd7fac0e5549f809a1e46cbd3dc0",
+          "currentSha256": "cda7d652fc38de31848be4589aa8e8be7da3dd7fac0e5549f809a1e46cbd3dc0"
+        },
+        "src/Lokad.Image/Internal/GeneratedWordBicubicResize.cs": {
+          "measuredSha256": "f5aa6f3b92e50eb2908413dbea455a9486a3bd2a95efb856497f18613eab9a24",
+          "currentSha256": "f5aa6f3b92e50eb2908413dbea455a9486a3bd2a95efb856497f18613eab9a24"
+        },
+        "src/Lokad.Image/Internal/MixedColumnBicubicResize.cs": {
+          "measuredSha256": "879ce36bf9217a18551c3494821171864275e4078a4a1270c7958ad1b2edc466",
+          "currentSha256": "879ce36bf9217a18551c3494821171864275e4078a4a1270c7958ad1b2edc466"
+        },
+        "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": {
+          "measuredSha256": "d27f0efed676946a88f149bfb25124af39b1f3ee38e16a14c81dfdb796238b52",
+          "currentSha256": "d27f0efed676946a88f149bfb25124af39b1f3ee38e16a14c81dfdb796238b52"
+        },
+        "src/Lokad.Image/Internal/NearestResize.cs": {
+          "measuredSha256": "21535dfe618612de2926c52333c4131379ccbea61b4b9fd683792acaf0772cc8",
+          "currentSha256": "21535dfe618612de2926c52333c4131379ccbea61b4b9fd683792acaf0772cc8"
+        },
+        "src/Lokad.Image/Internal/OperationContext.cs": {
+          "measuredSha256": "326aaba19c57ece9edb055aca05924a18840002b6b4066ef18705929c7f96174",
+          "currentSha256": "71d75899c1e974056d137d083efd15a7dbd188e1efaaf3718cd71f27872ba1b2"
+        },
+        "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": {
+          "measuredSha256": "99cd955640af69b5fc1a3e471767639a6057e9dfa18618870eaa1f8e6e897c2e",
+          "currentSha256": "99cd955640af69b5fc1a3e471767639a6057e9dfa18618870eaa1f8e6e897c2e"
+        },
+        "src/Lokad.Image/Internal/PackedStreamingBicubicResize.cs": {
+          "measuredSha256": "77d1f2eae92ba5d73788d3a55f6223d87fc4d49c302228472995f269c459cd4e",
+          "currentSha256": "77d1f2eae92ba5d73788d3a55f6223d87fc4d49c302228472995f269c459cd4e"
+        },
+        "src/Lokad.Image/Internal/PackedStreamingWordBicubicResize.cs": {
+          "measuredSha256": "6339f66ab4b983f42ac21bc73233fe64b44f557a79331a82ffbc292731e1cffd",
+          "currentSha256": "6339f66ab4b983f42ac21bc73233fe64b44f557a79331a82ffbc292731e1cffd"
+        },
+        "src/Lokad.Image/Internal/PackedWordColumnBicubicResize.cs": {
+          "measuredSha256": "b2ff8469e7215a7af52f115d26922f4cf325b4574ee1c0b36f2a4ede39a86c24",
+          "currentSha256": "b2ff8469e7215a7af52f115d26922f4cf325b4574ee1c0b36f2a4ede39a86c24"
+        },
+        "src/Lokad.Image/Internal/PairedResize.cs": {
+          "measuredSha256": "39b7271ed9bf31535432377f58d5883aa72a898d882ac8e399b946db0364c27d",
+          "currentSha256": "39b7271ed9bf31535432377f58d5883aa72a898d882ac8e399b946db0364c27d"
+        },
+        "src/Lokad.Image/Internal/PreparedResize.cs": {
+          "measuredSha256": "51df192f1b3c56f645e0710eb958bba25f73514a8aec221980b0c2385f9972c5",
+          "currentSha256": "51df192f1b3c56f645e0710eb958bba25f73514a8aec221980b0c2385f9972c5"
+        },
+        "src/Lokad.Image/Internal/ResizeAlpha.cs": {
+          "measuredSha256": "a31472d71dcf1724bc155ea30ad44375e3de74c9e9ec09ffa8e6040187a87b08",
+          "currentSha256": "a31472d71dcf1724bc155ea30ad44375e3de74c9e9ec09ffa8e6040187a87b08"
+        },
+        "src/Lokad.Image/Internal/ResizeSampling.cs": {
+          "measuredSha256": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b",
+          "currentSha256": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b"
+        },
+        "src/Lokad.Image/Internal/StreamingBicubicResize.cs": {
+          "measuredSha256": "01537fc86c98c97ad467808c86edd1d10ade77c19fb25247dbda46f5becf7803",
+          "currentSha256": "01537fc86c98c97ad467808c86edd1d10ade77c19fb25247dbda46f5becf7803"
+        },
+        "src/Lokad.Image/Internal/StreamingWordBicubicResize.cs": {
+          "measuredSha256": "9f9dbc3fd27b12b7c626598e4c5e2c2dd7b0392aba2c70df972871225bad9ecf",
+          "currentSha256": "9f9dbc3fd27b12b7c626598e4c5e2c2dd7b0392aba2c70df972871225bad9ecf"
+        },
+        "src/Lokad.Image/Internal/WideCachedBicubicResize.cs": {
+          "measuredSha256": "e79d224b5365c668721a620e036549cd815de4b261382c9580d45f3e7ea305ef",
+          "currentSha256": "e79d224b5365c668721a620e036549cd815de4b261382c9580d45f3e7ea305ef"
+        },
+        "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": {
+          "measuredSha256": "11082881387602efcc83597ff50c3da235f6657c5846fe27a8844200fde7026b",
+          "currentSha256": "11082881387602efcc83597ff50c3da235f6657c5846fe27a8844200fde7026b"
+        },
+        "src/Lokad.Image/Internal/WideWordColumnBicubicResize.cs": {
+          "measuredSha256": "5a60da6c4347fbd77df810bac47525be2d2e81770eb4a12826e12a575afe7a20",
+          "currentSha256": "5a60da6c4347fbd77df810bac47525be2d2e81770eb4a12826e12a575afe7a20"
+        },
+        "src/Lokad.Image/Internal/WordColumnBicubicResize.cs": {
+          "measuredSha256": "505af69eac0a4b4dfbfa584b3d71041a44918db17edd3cf085365e0eb382c94d",
+          "currentSha256": "505af69eac0a4b4dfbfa584b3d71041a44918db17edd3cf085365e0eb382c94d"
+        },
+        "src/Lokad.Image/Lokad.Image.csproj": {
+          "measuredSha256": "cbea6f1fe3ab13ead38f689bfedb83a294e590fa4d017c421ae66cb02654641d",
+          "currentSha256": "cbea6f1fe3ab13ead38f689bfedb83a294e590fa4d017c421ae66cb02654641d"
+        }
+      },
+      "onlyRelevantSourceDifferences": {
+        "src/Lokad.Image/Internal/OperationContext.cs": "Only CommitAdmittedWork and its comments were added; resizing never calls this method. Existing fields and every executed context method are unchanged."
+      },
+      "nativeAdapterReconciliation": null,
+      "rawArchive": {
+        "file": "bicubictighthorizontalup8-cardinal-control-confirm.tar.gz",
+        "sha256": "95b9f9432288bf0ed34301d2881c45ddd75dcea2f0a8693307db648d4ce432fa"
+      },
+      "originalReceiptSha256": "61d36d0be9035323a4f6688aa03a90ce437aa3096ed48bc9ce7d1970e6a8bed0",
+      "reason": "All resize/selected-helper/common-dispatch, allocated-buffer, limit, geometry and build inputs match the actual archived source inventory. The only context addition, when present, is unused. Ordinary Resize allocation does not lease overwrite storage. Frozen full operations, exact pixels, approved native bounds, owners, all actuals and quiet confidence are reused. No timing repeat."
+    },
+    "TightUp16": {
+      "evidence": "warm-bicubictighthorizontalup8-cardinal-evidence.json",
+      "evidenceSha256": "d223e9a38cc8a585af63270f4d3f6ffb0414e616ec890a2ca8929cf3c442b197",
+      "path": [
+        "twoAxisWordConfirmation"
+      ],
+      "case": "WarmBicubicResize/TightUp16",
+      "meanRatio": 1.7734173600726666,
+      "conservativeRatioUpper": 1.782941242360003,
+      "allTwelveActualsRetained": true,
+      "bothQuietGuardsPassed": true,
+      "measuredSource": {
+        "sourceSha256": "3eadcbb90911510c103f695959641729aeeeddf3923b59f2c9bcd526f225212b",
+        "files": 1971,
+        "sourceRevision": "a85792176d55a28811c4baf53777da8beda0ee56",
+        "verifiedAllFileBytes": true
+      },
+      "measuredLinuxDllSha256": "f59cc09004e62a8b01ceb97ef753ccae3aaab6aad6d7e50a2debec5fc5a42956",
+      "relevantInputs": {
+        "Directory.Build.props": {
+          "measuredSha256": "0057d68e3a7ff27fc24e9abd1649c11ffbfef3b448ad906fbd27b69f6903a173",
+          "currentSha256": "0057d68e3a7ff27fc24e9abd1649c11ffbfef3b448ad906fbd27b69f6903a173"
+        },
+        "global.json": {
+          "measuredSha256": "10bfc156a855e0793806480c82415e9aca2b5f63407d844961bcb6fd5d065fb2",
+          "currentSha256": "10bfc156a855e0793806480c82415e9aca2b5f63407d844961bcb6fd5d065fb2"
+        },
+        "src/Lokad.Image/ImageBuffer.cs": {
+          "measuredSha256": "f2cbe315d0049ea30fc03abfd8d46b8b4b927378f536241200e675b66ba73a75",
+          "currentSha256": "f2cbe315d0049ea30fc03abfd8d46b8b4b927378f536241200e675b66ba73a75"
+        },
+        "src/Lokad.Image/ImageInfo.cs": {
+          "measuredSha256": "c5d1123575a0952fd27eb83b54357e6ae330f026ce23c51e49245fb0bd4b218a",
+          "currentSha256": "c5d1123575a0952fd27eb83b54357e6ae330f026ce23c51e49245fb0bd4b218a"
+        },
+        "src/Lokad.Image/ImageLimits.cs": {
+          "measuredSha256": "e35e86fba9ce3f6a7113620a848e15566d0c45ff992dc6721f5e5362e9dfb1d7",
+          "currentSha256": "e35e86fba9ce3f6a7113620a848e15566d0c45ff992dc6721f5e5362e9dfb1d7"
+        },
+        "src/Lokad.Image/ImageTransforms.cs": {
+          "measuredSha256": "beb5801418c8895d83e84fae0ffa20a49f0626ebfe948a0166cc048684c2adb8",
+          "currentSha256": "beb5801418c8895d83e84fae0ffa20a49f0626ebfe948a0166cc048684c2adb8"
+        },
+        "src/Lokad.Image/Internal/CachedBicubicResize.cs": {
+          "measuredSha256": "59f34c2e052a72a6003a4c51f23cf9766220322d243f30ae7923e02dfd63ea11",
+          "currentSha256": "59f34c2e052a72a6003a4c51f23cf9766220322d243f30ae7923e02dfd63ea11"
+        },
+        "src/Lokad.Image/Internal/ColumnBicubicResize.cs": {
+          "measuredSha256": "3268ec2369fb2f9fc887698f342332ed9f0be86ec058e8ad7bbdc2ae1bad2100",
+          "currentSha256": "3268ec2369fb2f9fc887698f342332ed9f0be86ec058e8ad7bbdc2ae1bad2100"
+        },
+        "src/Lokad.Image/Internal/CrossColumnBicubicResize.cs": {
+          "measuredSha256": "fe47dc5761c60efd6dbecabaff7f736186a6e5632c82832f1b587fd7ec857d0b",
+          "currentSha256": "fe47dc5761c60efd6dbecabaff7f736186a6e5632c82832f1b587fd7ec857d0b"
+        },
+        "src/Lokad.Image/Internal/CrossWordColumnBicubicResize.cs": {
+          "measuredSha256": "1653b1ffbf91eb6ac4d9160bc94dfcd8f560ceac5ba115c9a469e0af9d76c3cd",
+          "currentSha256": "1653b1ffbf91eb6ac4d9160bc94dfcd8f560ceac5ba115c9a469e0af9d76c3cd"
+        },
+        "src/Lokad.Image/Internal/DeepColumnBicubicResize.cs": {
+          "measuredSha256": "3ca96207817e8b2e221e728c6b317098c1556dd0834bce42dee43ea8d7d6a91c",
+          "currentSha256": "3ca96207817e8b2e221e728c6b317098c1556dd0834bce42dee43ea8d7d6a91c"
+        },
+        "src/Lokad.Image/Internal/DeepWordColumnBicubicResize.cs": {
+          "measuredSha256": "4f3d503e7729ad1fe303a2bc4b2679dc879fbfbae2422943202ca9c8f4c76f10",
+          "currentSha256": "4f3d503e7729ad1fe303a2bc4b2679dc879fbfbae2422943202ca9c8f4c76f10"
+        },
+        "src/Lokad.Image/Internal/EnlargingColumnBicubicResize.cs": {
+          "measuredSha256": "2bb10cab9f92ce611a6b66544d180c7016a85a75b4bc0d2df9aba51b92a4d83c",
+          "currentSha256": "2bb10cab9f92ce611a6b66544d180c7016a85a75b4bc0d2df9aba51b92a4d83c"
+        },
+        "src/Lokad.Image/Internal/EnlargingWordColumnBicubicResize.cs": {
+          "measuredSha256": "a6e1b901fbd8051f901357907ff0c70ea9260f41a8ea6dfa39c7236cd0768597",
+          "currentSha256": "a6e1b901fbd8051f901357907ff0c70ea9260f41a8ea6dfa39c7236cd0768597"
+        },
+        "src/Lokad.Image/Internal/GeneratedBicubicResize.cs": {
+          "measuredSha256": "cda7d652fc38de31848be4589aa8e8be7da3dd7fac0e5549f809a1e46cbd3dc0",
+          "currentSha256": "cda7d652fc38de31848be4589aa8e8be7da3dd7fac0e5549f809a1e46cbd3dc0"
+        },
+        "src/Lokad.Image/Internal/GeneratedWordBicubicResize.cs": {
+          "measuredSha256": "f5aa6f3b92e50eb2908413dbea455a9486a3bd2a95efb856497f18613eab9a24",
+          "currentSha256": "f5aa6f3b92e50eb2908413dbea455a9486a3bd2a95efb856497f18613eab9a24"
+        },
+        "src/Lokad.Image/Internal/MixedColumnBicubicResize.cs": {
+          "measuredSha256": "879ce36bf9217a18551c3494821171864275e4078a4a1270c7958ad1b2edc466",
+          "currentSha256": "879ce36bf9217a18551c3494821171864275e4078a4a1270c7958ad1b2edc466"
+        },
+        "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": {
+          "measuredSha256": "d27f0efed676946a88f149bfb25124af39b1f3ee38e16a14c81dfdb796238b52",
+          "currentSha256": "d27f0efed676946a88f149bfb25124af39b1f3ee38e16a14c81dfdb796238b52"
+        },
+        "src/Lokad.Image/Internal/NearestResize.cs": {
+          "measuredSha256": "21535dfe618612de2926c52333c4131379ccbea61b4b9fd683792acaf0772cc8",
+          "currentSha256": "21535dfe618612de2926c52333c4131379ccbea61b4b9fd683792acaf0772cc8"
+        },
+        "src/Lokad.Image/Internal/OperationContext.cs": {
+          "measuredSha256": "326aaba19c57ece9edb055aca05924a18840002b6b4066ef18705929c7f96174",
+          "currentSha256": "71d75899c1e974056d137d083efd15a7dbd188e1efaaf3718cd71f27872ba1b2"
+        },
+        "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": {
+          "measuredSha256": "99cd955640af69b5fc1a3e471767639a6057e9dfa18618870eaa1f8e6e897c2e",
+          "currentSha256": "99cd955640af69b5fc1a3e471767639a6057e9dfa18618870eaa1f8e6e897c2e"
+        },
+        "src/Lokad.Image/Internal/PackedStreamingBicubicResize.cs": {
+          "measuredSha256": "77d1f2eae92ba5d73788d3a55f6223d87fc4d49c302228472995f269c459cd4e",
+          "currentSha256": "77d1f2eae92ba5d73788d3a55f6223d87fc4d49c302228472995f269c459cd4e"
+        },
+        "src/Lokad.Image/Internal/PackedStreamingWordBicubicResize.cs": {
+          "measuredSha256": "6339f66ab4b983f42ac21bc73233fe64b44f557a79331a82ffbc292731e1cffd",
+          "currentSha256": "6339f66ab4b983f42ac21bc73233fe64b44f557a79331a82ffbc292731e1cffd"
+        },
+        "src/Lokad.Image/Internal/PackedWordColumnBicubicResize.cs": {
+          "measuredSha256": "b2ff8469e7215a7af52f115d26922f4cf325b4574ee1c0b36f2a4ede39a86c24",
+          "currentSha256": "b2ff8469e7215a7af52f115d26922f4cf325b4574ee1c0b36f2a4ede39a86c24"
+        },
+        "src/Lokad.Image/Internal/PairedResize.cs": {
+          "measuredSha256": "39b7271ed9bf31535432377f58d5883aa72a898d882ac8e399b946db0364c27d",
+          "currentSha256": "39b7271ed9bf31535432377f58d5883aa72a898d882ac8e399b946db0364c27d"
+        },
+        "src/Lokad.Image/Internal/PreparedResize.cs": {
+          "measuredSha256": "51df192f1b3c56f645e0710eb958bba25f73514a8aec221980b0c2385f9972c5",
+          "currentSha256": "51df192f1b3c56f645e0710eb958bba25f73514a8aec221980b0c2385f9972c5"
+        },
+        "src/Lokad.Image/Internal/ResizeAlpha.cs": {
+          "measuredSha256": "a31472d71dcf1724bc155ea30ad44375e3de74c9e9ec09ffa8e6040187a87b08",
+          "currentSha256": "a31472d71dcf1724bc155ea30ad44375e3de74c9e9ec09ffa8e6040187a87b08"
+        },
+        "src/Lokad.Image/Internal/ResizeSampling.cs": {
+          "measuredSha256": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b",
+          "currentSha256": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b"
+        },
+        "src/Lokad.Image/Internal/StreamingBicubicResize.cs": {
+          "measuredSha256": "01537fc86c98c97ad467808c86edd1d10ade77c19fb25247dbda46f5becf7803",
+          "currentSha256": "01537fc86c98c97ad467808c86edd1d10ade77c19fb25247dbda46f5becf7803"
+        },
+        "src/Lokad.Image/Internal/StreamingWordBicubicResize.cs": {
+          "measuredSha256": "9f9dbc3fd27b12b7c626598e4c5e2c2dd7b0392aba2c70df972871225bad9ecf",
+          "currentSha256": "9f9dbc3fd27b12b7c626598e4c5e2c2dd7b0392aba2c70df972871225bad9ecf"
+        },
+        "src/Lokad.Image/Internal/WideCachedBicubicResize.cs": {
+          "measuredSha256": "e79d224b5365c668721a620e036549cd815de4b261382c9580d45f3e7ea305ef",
+          "currentSha256": "e79d224b5365c668721a620e036549cd815de4b261382c9580d45f3e7ea305ef"
+        },
+        "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": {
+          "measuredSha256": "11082881387602efcc83597ff50c3da235f6657c5846fe27a8844200fde7026b",
+          "currentSha256": "11082881387602efcc83597ff50c3da235f6657c5846fe27a8844200fde7026b"
+        },
+        "src/Lokad.Image/Internal/WideWordColumnBicubicResize.cs": {
+          "measuredSha256": "5a60da6c4347fbd77df810bac47525be2d2e81770eb4a12826e12a575afe7a20",
+          "currentSha256": "5a60da6c4347fbd77df810bac47525be2d2e81770eb4a12826e12a575afe7a20"
+        },
+        "src/Lokad.Image/Internal/WordColumnBicubicResize.cs": {
+          "measuredSha256": "505af69eac0a4b4dfbfa584b3d71041a44918db17edd3cf085365e0eb382c94d",
+          "currentSha256": "505af69eac0a4b4dfbfa584b3d71041a44918db17edd3cf085365e0eb382c94d"
+        },
+        "src/Lokad.Image/Lokad.Image.csproj": {
+          "measuredSha256": "cbea6f1fe3ab13ead38f689bfedb83a294e590fa4d017c421ae66cb02654641d",
+          "currentSha256": "cbea6f1fe3ab13ead38f689bfedb83a294e590fa4d017c421ae66cb02654641d"
+        }
+      },
+      "onlyRelevantSourceDifferences": {
+        "src/Lokad.Image/Internal/OperationContext.cs": "Only CommitAdmittedWork and its comments were added; resizing never calls this method. Existing fields and every executed context method are unchanged."
+      },
+      "nativeAdapterReconciliation": null,
+      "rawArchive": {
+        "file": "bicubictighthorizontalup8-cardinal-word-control-confirm.tar.gz",
+        "sha256": "32a71a3708a6b849a9d314e795abb6bb1445c54bf3ffdabda1a4cdaa5b5c3d6e"
+      },
+      "originalReceiptSha256": "b634949387b4624bda27696624245de1290ade64bb7e49ff194abf66701ed001",
+      "reason": "All resize/selected-helper/common-dispatch, allocated-buffer, limit, geometry and build inputs match the actual archived source inventory. The only context addition, when present, is unused. Ordinary Resize allocation does not lease overwrite storage. Frozen full operations, exact pixels, approved native bounds, owners, all actuals and quiet confidence are reused. No timing repeat."
+    }
+  },
+  "previouslyConfirmedCurrentPaths": {
+    "HorizontalUp16": {
+      "evidence": "warm-current-png16-bicubic16-evidence.json",
+      "path": [
+        "cases",
+        "horizontalUp16",
+        -1
+      ],
+      "reason": "Previously established current production-path proof; stopped by the finite audit. No repeated source/method audit or timing."
+    },
+    "Down1x1_8": {
+      "evidence": "warm-bicubic-single-pixel-evidence.json",
+      "path": [
+        "observations",
+        -1
+      ],
+      "reason": "Previously established current production-path proof; stopped by the finite audit. No repeated source/method audit or timing."
+    }
+  },
+  "referencePins": {
+    "TightHorizontalUp8": {
+      "identity": "bicubic-horizontal-up8-identity.json",
+      "worker": "zimg-bicubic-horizontal-up8-warm",
+      "build": {
+        "sourceSha256": "e5ed69e0ce9aeb9112dcc863c675d564da45b1b685a36c2204e02e5772ab5199",
+        "buildScriptSha256": "5ee5b904de0e90fc8a047d89e2488d0405128bdc00c93da663f0b0140f73bc88",
+        "workerSha256": "5766194ae2cadd9c2d739fd4b8a805226a6650f4ab646817e0c3ca5a720c5852",
+        "staticArchives": {
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        }
+      },
+      "currentVmWorkerIdentityAndScalerArchiveVerifiedUnchanged": true
+    },
+    "TightUp8": {
+      "identity": "bicubic-up8-identity.json",
+      "worker": "zimg-bicubic-up8-warm",
+      "build": {
+        "sourceSha256": "c2b4564627397c1bc8c9e319c458241e378ee00584290d6033480437c2e111c3",
+        "buildScriptSha256": "1f1a9516e3a2889a38281e2f93959839116abef0c2a6dc0c75eb8fc7043656b8",
+        "workerSha256": "38e0a60ff597a069bde51d6ba46633174f926a7b80eb8e21dade72304f3a24f8",
+        "staticArchives": {
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        }
+      },
+      "currentVmWorkerIdentityAndScalerArchiveVerifiedUnchanged": true
+    },
+    "TightUp16": {
+      "identity": "bicubic-up16-identity.json",
+      "worker": "zimg-bicubic-up16-warm",
+      "build": {
+        "sourceSha256": "b230f38aede98aaeb6d4f991ba2141e35b05eef97fc7b23e34c22eb079ebb354",
+        "buildScriptSha256": "2c3af01d11dbf51bc9326055a9210fab727cd99057cacbbf389cb4ea807767ce",
+        "workerSha256": "fb1638b2af26958cdb64803a7cdf6b796b577e65fff48c9daa8738094ac200fa",
+        "staticArchives": {
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        }
+      },
+      "currentVmWorkerIdentityAndScalerArchiveVerifiedUnchanged": true
+    }
+  },
+  "qualificationReused": {
+    "status": "passed",
+    "releaseTestsPerOs": 3483,
+    "fullSuiteBreakdown": {
+      "internal": 1199,
+      "publicApi": 1386,
+      "liveDifferential": 898
+    },
+    "qualifiedLinuxDllSha256": "86471b3617a06d353d33993baa16715b5df1c99241026fcfe878a382f39b5408",
+    "windowsPackageDllSha256": "859e9aca53ae1ec05b10bf055022b4bda58dd9a0cf6062819154271a8145c6b9",
+    "packageSha256": "476691862731852b05aae194a0eabb0705cd8b1292baf5954691aaf234b7877e",
+    "consumerAndAllThreeExamplesThroughSameActualPackageBothOs": true,
+    "productionInputsIdenticalToMeasuredBuild": true,
+    "qualificationOnlyChangesFromMeasuredSnapshot": [
+      "SPEC.md",
+      "docs/resource-admission.md"
+    ],
+    "measuredSourceSha256": "7fe6b9e15058ebabc883b85b8377a1257cc93bc7df63ef040e95386475e15f5b",
+    "qualifiedSourceSha256": "3467f023cab0b6a03d04a85590a4d245b5881acf9e10f0572d678d668a44f04e",
+    "rawArchive": {
+      "file": "png-input-pool-qualification.tar.gz",
+      "sha256": "339e350e50ee93d15ce3ef6df3d1bda3b0cf7bb78fb77ce46955f902e8441ec8"
+    }
+  },
+  "workflow": {
+    "newProductionHarnessOrNativeBuilds": 0,
+    "newStatisticalJobs": 0,
+    "newOriginalRasters": 0,
+    "noRepeatedQualificationOrWholeLibraryMethodAudit": true,
+    "oneBoundedRelevantSourceComparison": true
+  },
+  "nextAction": "Resolve the remaining named B12 selected-helper/dispatch uncertainties before assuming a gap. In particular 6a8a0b5/9bd20df place bounded vertical-first mixed-axis helpers before the old row cache; ordinary Mixed16/Mixed8 need current full-operation confirmation. No shape/depth/filter grid is added. C01-C04 remain open.",
+  "currentQualifiedLinuxDllSha256": "86471b3617a06d353d33993baa16715b5df1c99241026fcfe878a382f39b5408"
+}

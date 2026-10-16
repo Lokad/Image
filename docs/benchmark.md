@@ -19,6 +19,9 @@ Ratio = Lokad.Image / the faster reference pre/post mean; lower is faster. Upper
 the retained conservative confidence bound, taking the larger filtered/all-actual
 bound where available. **Confirmed** requires an independent quiet repeat and
 upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
+Current-path reconciliation closes all twenty named exact edits;
+[bicubic reconciliation](../benchmarks/WARM-CURRENT-BICUBIC.md) covers
+5/61 named cases, including reused unchanged paths.
 Recent confirmations use `exclusive-vm-idle-v2`: live job checks and
 five-second aggregate/CPU0 idle samples; historical load is diagnostic only.
 Earlier receipts retain their original load guard and its failures.

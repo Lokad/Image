@@ -120,6 +120,14 @@ B11 twenty existing single-owner exact edits after the shared pool change.
 
 Current B11 single-owner exact edits: [20/20 named cases](WARM-CURRENT-EXACT-EDITS.md) independently confirm on unchanged qualified production, with exact pixels/full ownership, all twelve actuals and both guards. Zero production/harness/native builds or repeated qualification. Stop confirmed cases; B11 is closed. B12 bicubic reconciliation and C01-C04 Identify stay open.
 
+Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): five of61 named
+cases are stopped. Three late enlargement confirmations reuse actual archived
+resize/helper/buffer/limit/build inputs and unchanged native workers/scaler;
+the only context addition is unused. No new timing, build or qualification.
+Current HorizontalUp16/single-pixel proofs remain stopped. Next: ordinary
+Mixed16/Mixed8 after the vertical-first helpers changed selection before the old
+row cache. Remaining named B12 paths and C01-C04 stay open; no grid is added.
+
 | Primitive group | Retained coverage | Remaining material work |
 | --- | --- | --- |
 | PNG decode | RGBA8/16 all five filters and stored Deflate/None; current RGBA16 None independently confirmed1.045x/upper1.059x at8,552B/op; current RGBA8 Sub confirmed1.686x / upper1.697x; RGB8 Paeth confirmed1.204x / upper1.214x; RGB16 Paeth confirmed1.904x/upper1.928x; grayscale8 Paeth confirmed1.008x/upper1.014x; grayscale-alpha8 Paeth confirmed1.017x/upper1.068x; current RGBA16 Adam7 confirmed1.377x/upper1.381x and packed gray1 Adam7 confirmed1.314x/upper1.320x, plus exact working-memory boundary at both depths (RGBA8 confirmed1.821x / upper1.950x, RGBA16 confirmed1.817x / upper1.821x), live-cancelable RGBA8 default/exact limit confirmed1.407x / upper1.469x and1.867x / upper1.873x and RGBA16 default/exact limit confirmed1.573x / upper1.583x and1.834x / upper1.852x; RGB8/16, gray8/16, gray-alpha8/16 and opaque gray1/2/4 and palette1/2/4/8 None; byte-indexed sixteen-entry/full-tRNS palette confirmed1.317x/upper1.327x; packed palette4/full-tRNS Adam7 confirmed 1.304x / upper 1.387x; palette8/full-tRNS Adam7 confirmed1.167x/upper1.177x with native wall/CPU agreement; palette8 two-entry tRNS, gray8/16 tRNS and RGB8/16 tRNS confirmed; packed gray2/key0 confirmed0.144x / upper0.145x and gray1/key1 with timed exact native colorkey confirmed0.094x / upper0.098x, raw gray1/key1 and gray2/key1 native alpha refusals unscored | B05 all25 fixed cases and B06 named Adam7 paths closed; unchanged later proofs reused. B07 PNG Stream/composition is closed; C01/C04 standalone Identify remains open. |
