@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Fifty-seven of the existing 61 named bicubic cases have valid current-path evidence.
+Sixty of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -410,3 +410,15 @@ all actuals and both quiet guards are retained on the same qualified build.
 The word16x8 worker is reused; two8x4 adapters are refreshed with unchanged
 compiler, flags, scaler and frozen outputs. Two shared drivers serve six jobs;
 zero production/harness builds or repeated qualification. Stop all three.
+
+Three existing tiny packed/generated cases independently confirm: Tight2x2_8 0.718x / upper 0.745x, 138 B/op; Tight4x2_8 0.691x / upper 0.695x, 153 B/op; Tight4x2_16 0.506x / upper 0.509x, 185 B/op.
+The selected generated-byte and packed byte/word kernels changed whole-height
+setup to per-column row blocks and removed executed height predicates. Earlier
+streaming/packed rejection paths also changed. Actual measured source hashes
+establish these invalidations; parent revisions alone do not establish reuse.
+Exact rational/frozen pixels, strict native RGB/alpha maximum1 and RMSE0.25,
+limits and full ownership pass. Short means precede independent twelve;
+all actuals and both quiet guards are retained on the same qualified build.
+Three selected adapters are refreshed with the same compiler, flags and scaler
+and frozen outputs; two shared drivers serve six jobs. Zero production/harness
+builds or repeated qualification. Stop all three. Only Tight2x2_16 remains in B12.

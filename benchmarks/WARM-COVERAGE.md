@@ -120,7 +120,7 @@ B11 twenty existing single-owner exact edits after the shared pool change.
 
 Current B11 single-owner exact edits: [20/20 named cases](WARM-CURRENT-EXACT-EDITS.md) independently confirm on unchanged qualified production, with exact pixels/full ownership, all twelve actuals and both guards. Zero production/harness/native builds or repeated qualification. Stop confirmed cases; B11 is closed. B12 bicubic reconciliation and C01-C04 Identify stay open.
 
-Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): fifty-seven of61 named
+Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): sixty of61 named
 cases are stopped. Three late enlargement proofs reuse actual source/native
 identities; current HorizontalUp16/single-pixel proofs remain stopped. Ordinary
 Mixed16/Mixed8 independently confirm on unchanged qualified production at1.912x/
@@ -169,6 +169,18 @@ all actuals and both quiet guards are retained on the same qualified build.
 The word16x8 worker is reused; two8x4 adapters are refreshed with unchanged
 compiler, flags, scaler and frozen outputs. Two shared drivers serve six jobs;
 zero production/harness builds or repeated qualification. Stop all three.
+
+Three existing tiny packed/generated cases independently confirm: Tight2x2_8 0.718x / upper 0.745x, 138 B/op; Tight4x2_8 0.691x / upper 0.695x, 153 B/op; Tight4x2_16 0.506x / upper 0.509x, 185 B/op.
+The selected generated-byte and packed byte/word kernels changed whole-height
+setup to per-column row blocks and removed executed height predicates. Earlier
+streaming/packed rejection paths also changed. Actual measured source hashes
+establish these invalidations; parent revisions alone do not establish reuse.
+Exact rational/frozen pixels, strict native RGB/alpha maximum1 and RMSE0.25,
+limits and full ownership pass. Short means precede independent twelve;
+all actuals and both quiet guards are retained on the same qualified build.
+Three selected adapters are refreshed with the same compiler, flags and scaler
+and frozen outputs; two shared drivers serve six jobs. Zero production/harness
+builds or repeated qualification. Stop all three. Only Tight2x2_16 remains in B12.
 
 Remaining named B12 helper/dispatch cases and C01-C04 stay open; no grid is added.
 
