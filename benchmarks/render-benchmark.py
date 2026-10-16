@@ -128,12 +128,12 @@ def render():
         pending('PNG gray1/key1 and gray2/key1, unfiltered native', 'WARM-PNG-PACKED-TRANSPARENCY.md', 'Unscored: native alpha differs'),
         row('PNG opaque gray2 → RGBA8, None', 'warm-pnggray2-current-evidence.json', ['observations', -1], 'WARM-PNG-GRAY2-CURRENT.md', True),
         row('PNG opaque gray4 → RGBA8, None', 'warm-pnggray4-reuse-evidence.json', ['observations', -1], 'WARM-PNG-GRAY4-REUSE.md', True),
-        row('JPEG baseline gray', 'warm-jpegac-fused-evidence.json', ['regressionControl', 'observations', -1], 'WARM-JPEG-AC-FUSED.md', True),
+        row('JPEG baseline gray', 'warm-current-jpeg-decode-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
         row('JPEG baseline 4:2:0', 'warm-jpeg-rgb420-row-evidence.json', ['observations', 4], 'WARM-JPEG-RGB420-ROW.md', verification='Regression screen; prior confirmed'),
-        row('JPEG baseline 4:2:0, row restart markers', 'warm-jpeg-restartdecode-evidence.json', ['observations', -1], 'WARM-JPEG-RESTART-DECODE.md', True),
+        row('JPEG baseline 4:2:0, row restart markers', 'warm-current-jpeg-decode-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
         row('JPEG baseline 4:2:2', 'warm-jpeg-rgb422-row-evidence.json', ['observations', 4], 'WARM-JPEG-RGB422-ROW.md', verification='Regression screen; prior confirmed'),
         row('JPEG baseline 4:4:4, owned input', 'warm-jpeg444owned-quiet-evidence.json', ['observations', -1], 'WARM-JPEG444-OWNED-QUIET.md', True),
-        row('JPEG baseline 4:4:4, native input', 'warm-jpeg-rgb-row-evidence.json', ['observations', 3], 'WARM-JPEG-RGB-ROW.md', verification='Regression screen; prior confirmed'),
+        row('JPEG baseline 4:4:4, native input', 'warm-current-jpeg-decode-evidence.json', ['cases', 'NativeDecode8', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
         row('JPEG baseline direct RGB, full resolution', 'warm-jpeg-ac-cache-evidence.json', ['observations', 2], 'WARM-JPEG-AC-CACHE.md', True),
         row('JPEG direct RGB 4:2:2, timed centered correction', 'warm-jpeg-rgb420-row-evidence.json', ['observations', 3], 'WARM-JPEG-RGB420-ROW.md', verification='Regression screen; prior confirmed'),
         row('JPEG direct RGB 4:2:0, timed component-plane interpretation', 'warm-jpeg-rgb420-row-evidence.json', ['observations', 2], 'WARM-JPEG-RGB420-ROW.md', True),
@@ -322,13 +322,11 @@ quality gap is **0.000033dB**, within the existing0.25dB gate. Prepared fixtures
 worker and qualified production DLL are reused. The production library remains
 safe managed code with no dependency or native binding.
 
-A bounded reconciliation finds **203 numerical rows**, including **189 selected
-independent confirmations** and **14 latest regression screens with verified
-earlier fixed-pair confirmations**. No measured mean or selected confirmed upper
-exceeds two. Evidence remains tied to its recorded production path and protocol;
-this does not certify every current path. Warm identification-only coverage is
-still missing: the existing inspection benchmark includes startup and I/O.
-See [material coverage](../benchmarks/WARM-COVERAGE.md) for scope and exclusions.
+Remaining current-production work is a finite set of named changed-path
+confirmations and distinct unmeasured public boundaries. Historical confirmations
+remain valid at their recorded sources; reuse requires unchanged relevant paths.
+Warm identification-only coverage is missing because the existing inspection
+benchmark includes startup and I/O. See [material coverage](../benchmarks/WARM-COVERAGE.md).
 
 All **four existing bilinear cases** now have independent confirmation on the
 current qualified core. Their conservative uppers range from 1.382x to 1.892x;
@@ -342,6 +340,12 @@ independently confirm on the same qualified core, worst upper **1.639x**.
 Exact frozen packets and source-quality gates pass; full normalization and fresh
 output ownership are timed. [Current report](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md)
 also records compressed sizes. No production optimization or rebuild is needed.
+
+Current ordinary JPEG decode reconciliation: **3/8 named affected cases**
+independently confirm on the qualified core, worst upper **1.626x**.
+Exact frozen pixels, existing native agreement bounds and complete output
+ownership pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-DECODE.md)
+states the fixed inputs and remaining cases. No production rebuild or retuning.
 
 **Decode**
 

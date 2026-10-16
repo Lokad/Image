@@ -38,13 +38,11 @@ quality gap is **0.000033dB**, within the existing0.25dB gate. Prepared fixtures
 worker and qualified production DLL are reused. The production library remains
 safe managed code with no dependency or native binding.
 
-A bounded reconciliation finds **203 numerical rows**, including **189 selected
-independent confirmations** and **14 latest regression screens with verified
-earlier fixed-pair confirmations**. No measured mean or selected confirmed upper
-exceeds two. Evidence remains tied to its recorded production path and protocol;
-this does not certify every current path. Warm identification-only coverage is
-still missing: the existing inspection benchmark includes startup and I/O.
-See [material coverage](../benchmarks/WARM-COVERAGE.md) for scope and exclusions.
+Remaining current-production work is a finite set of named changed-path
+confirmations and distinct unmeasured public boundaries. Historical confirmations
+remain valid at their recorded sources; reuse requires unchanged relevant paths.
+Warm identification-only coverage is missing because the existing inspection
+benchmark includes startup and I/O. See [material coverage](../benchmarks/WARM-COVERAGE.md).
 
 All **four existing bilinear cases** now have independent confirmation on the
 current qualified core. Their conservative uppers range from 1.382x to 1.892x;
@@ -58,6 +56,12 @@ independently confirm on the same qualified core, worst upper **1.639x**.
 Exact frozen packets and source-quality gates pass; full normalization and fresh
 output ownership are timed. [Current report](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md)
 also records compressed sizes. No production optimization or rebuild is needed.
+
+Current ordinary JPEG decode reconciliation: **3/8 named affected cases**
+independently confirm on the qualified core, worst upper **1.626x**.
+Exact frozen pixels, existing native agreement bounds and complete output
+ownership pass. [Current report](../benchmarks/WARM-CURRENT-JPEG-DECODE.md)
+states the fixed inputs and remaining cases. No production rebuild or retuning.
 
 **Decode**
 
@@ -118,12 +122,12 @@ also records compressed sizes. No production optimization or rebuild is needed.
 | [PNG gray1/key1 and gray2/key1, unfiltered native](../benchmarks/WARM-PNG-PACKED-TRANSPARENCY.md) | — | — | — | — | Unscored: native alpha differs |
 | [PNG opaque gray2 → RGBA8, None](../benchmarks/WARM-PNG-GRAY2-CURRENT.md) | 83.19 | 110.11 | 0.756 / 0.783 | 9,136 | Confirmed |
 | [PNG opaque gray4 → RGBA8, None](../benchmarks/WARM-PNG-GRAY4-REUSE.md) | 220.61 | 146.67 | 1.504 / 1.532 | 13,544 | Confirmed |
-| [JPEG baseline gray](../benchmarks/WARM-JPEG-AC-FUSED.md) | 1,267.57 | 682.73 | 1.857 / 1.880 | 1,221,545 | Confirmed |
+| [JPEG baseline gray](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 937.68 | 681.99 | 1.375 / 1.391 | 1,221,556 | Confirmed |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG-RGB420-ROW.md) | 1,642.77 | 1,064.99 | 1.543 / 2.312 | 1,619,530 | Regression screen; prior confirmed |
-| [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-JPEG-RESTART-DECODE.md) | 1,852.40 | 1,016.13 | 1.823 / 1.837 | 1,623,906 | Confirmed |
+| [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 1,640.44 | 1,013.53 | 1.619 / 1.626 | 1,623,906 | Confirmed |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-JPEG-RGB422-ROW.md) | 1,902.81 | 1,346.77 | 1.413 / 1.497 | 1,978,651 | Regression screen; prior confirmed |
 | [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-JPEG444-OWNED-QUIET.md) | 3,564.61 | 2,039.57 | 1.748 / 1.793 | 2,596,174 | Confirmed |
-| [JPEG baseline 4:4:4, native input](../benchmarks/WARM-JPEG-RGB-ROW.md) | 3,071.31 | 1,729.68 | 1.776 / 4.566 | 2,664,373 | Regression screen; prior confirmed |
+| [JPEG baseline 4:4:4, native input](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 2,648.65 | 1,718.17 | 1.542 / 1.549 | 2,664,373 | Confirmed |
 | [JPEG baseline direct RGB, full resolution](../benchmarks/WARM-JPEG-AC-CACHE.md) | 2,460.96 | 1,451.53 | 1.695 / 1.709 | 2,664,366 | Confirmed |
 | [JPEG direct RGB 4:2:2, timed centered correction](../benchmarks/WARM-JPEG-RGB420-ROW.md) | 1,646.35 | 1,095.09 | 1.503 / 1.570 | 1,978,655 | Regression screen; prior confirmed |
 | [JPEG direct RGB 4:2:0, timed component-plane interpretation](../benchmarks/WARM-JPEG-RGB420-ROW.md) | 1,220.97 | 745.27 | 1.638 / 1.646 | 1,619,540 | Confirmed |
