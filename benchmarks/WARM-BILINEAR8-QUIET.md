@@ -1,21 +1,26 @@
 # Warm bilinear RGBA8: independent quiet confirmation
 
 Complete public bilinear resize independently confirms at
-1.938x FFmpeg, conservative upper
-1.958x. Both idle guards pass. This fixed pair
-clears 2x; full required warm coverage remains open. Production is unchanged.
+1.698x FFmpeg, conservative upper
+1.704x. Both idle guards pass. This fixed pair
+clears 2x on the current qualified production DLL; full required warm coverage
+remains open. The 2026-10-16 round resolves uncertainty after shared Resize
+dispatch changes. No production optimization is needed or introduced.
 
 | Run | Managed mean (microseconds) | Worst native bracket ratio | Conservative upper | Quiet guards |
 | --- | ---: | ---: | ---: | --- |
 | Coverage screen | 731.43 | 1.94663x | 3.40636x | Pass |
 | Independent quiet coverage confirmation | 729.12 | 1.93765x | 1.95828x | Pass |
+| current-bilinear8-short | 660.95 | 1.70712x | 1.87117x | Pass |
+| current-bilinear8-confirm | 656.29 | 1.69774x | 1.70408x | Pass |
 
 One existing original 513x259 RGBA8 raster is resized to 256x129. Managed
 samples match the independent exact rational reference. Native alpha matches
 exactly, zero-alpha RGB is zero, and the unchanged RGB maximum <=1/RMSE <=0.25
 bound passes. Input, managed/native output hashes, native CLI/deterministic
 pixels, source and independent owners are unchanged. No image, geometry,
-filter or strategy enumeration. RGBA16 remains a separate open case.
+filter or strategy enumeration. The other three existing bilinear cases are
+reconciled separately; this result certifies only the stated byte downsample.
 
 Managed timing includes public Resize, geometry preparation, admission,
 allocation/materialization and disposal. The native public FFmpeg graph includes
@@ -34,14 +39,20 @@ only. Preparation/smoke checks occur outside timing. The earlier
 
 The independent repeat retains 12 actual / 11
 filtered measurements and 12 native samples per bracket. Its upper uses the
-larger filtered/all-actual bound. Managed allocation is **157,955 B/op**,
+larger filtered/all-actual bound. Managed allocation is **157,957 B/op**,
 raw GC bytes / operations rounded up, including harness overhead. Native
-allocation totals are unmeasured. Retained owners/cold allocation need separate coverage.
+allocation totals are unmeasured. This is a single-result warm operation.
 
-Both timing children match all 566 production method bodies/flags in the same
-accepted Release package. Preceding 2,387 tests and 90 scalar framing controls
-per OS, plus same-package/all-three-example checks on both OSes, remain
-applicable: no production or benchmark implementation changed.
+Both current timing children use the same verified production, benchmark and
+native worker binaries; only cached selection drivers change. Production,
+harness and native rebuild counts are zero. The existing
+[qualification](WARM-JPEG-AC-PLANNING.md), 3,483 Release tests per OS including
+live FFmpeg comparisons and the same actual package's consumer plus all three
+examples on Windows/Linux, remains valid because production/package inputs
+are unchanged. No full suite, package proof or whole-library method audit is
+repeated. Older rows and their original package/method proofs remain historical
+evidence at their recorded builds. The current source/core/child identities,
+unchanged pixel hashes and reused qualification are recorded separately.
 [Numeric evidence](warm-bilinear8-quiet-evidence.json) retains measurements,
 receipts, source/input/output/child/package identities, guards and immutable
 raw archive digests. Regenerate with `python benchmarks/render-warm-bilinear8-quiet.py`;

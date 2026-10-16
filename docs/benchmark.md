@@ -46,6 +46,11 @@ this does not certify every current path. Warm identification-only coverage is
 still missing: the existing inspection benchmark includes startup and I/O.
 See [material coverage](../benchmarks/WARM-COVERAGE.md) for scope and exclusions.
 
+The first current-path reconciliation confirms **RGBA8 bilinear downsampling**
+at **1.698x / upper1.704x**, **157,957 B/op**, on the existing qualified core.
+Exact managed rational pixels, native RGB bounds and exact native alpha pass.
+No production optimization, rebuild or repeated qualification was needed.
+
 **Decode**
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
@@ -179,7 +184,7 @@ See [material coverage](../benchmarks/WARM-COVERAGE.md) for scope and exclusions
 | [Nearest upscale RGBA8](../benchmarks/WARM-NEAREST-UP8.md) | 935.05 | 1,006.00 | 0.929 / 0.955 | 2,133,091 | Confirmed |
 | [Nearest upscale RGBA16](../benchmarks/WARM-NEAREST-UP16.md) | 1,071.13 | 1,019.06 | 1.051 / 1.095 | 4,265,431 | Confirmed |
 | [Nearest resize RGBA16](../benchmarks/WARM-PREPARED-CONFIRM.md) | 105.69 | 170.58 | 0.620 / 0.629 | 264,466 | Confirmed |
-| [Bilinear resize RGBA8](../benchmarks/WARM-BILINEAR8-QUIET.md) | 729.12 | 376.29 | 1.938 / 1.958 | 157,955 | Confirmed |
+| [Bilinear resize RGBA8](../benchmarks/WARM-BILINEAR8-QUIET.md) | 656.29 | 386.57 | 1.698 / 1.704 | 157,957 | Confirmed |
 | [Bilinear resize RGBA16†](../benchmarks/WARM-BILINEAR16-REGISTER.md) | 784.03 | 418.41 | 1.874 / 1.908 | 290,118 | Confirmed |
 | [Bilinear upscale RGBA8†](../benchmarks/WARM-BILINEAR-UP8-BATCH.md) | 3,797.55 | 2,152.25 | 1.764 / 1.787 | 2,235,599 | Confirmed |
 | [Bilinear upscale RGBA16†](../benchmarks/WARM-BILINEAR-UP16-ROWS.md) | 2,550.27 | 1,916.08 | 1.331 / 1.416 | 4,498,974 | Confirmed |

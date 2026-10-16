@@ -330,6 +330,11 @@ this does not certify every current path. Warm identification-only coverage is
 still missing: the existing inspection benchmark includes startup and I/O.
 See [material coverage](../benchmarks/WARM-COVERAGE.md) for scope and exclusions.
 
+The first current-path reconciliation confirms **RGBA8 bilinear downsampling**
+at **1.698x / upper1.704x**, **157,957 B/op**, on the existing qualified core.
+Exact managed rational pixels, native RGB bounds and exact native alpha pass.
+No production optimization, rebuild or repeated qualification was needed.
+
 **Decode**
 
 {table(decodes)}

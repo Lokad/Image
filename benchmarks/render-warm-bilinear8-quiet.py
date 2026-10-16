@@ -2,8 +2,10 @@
 import json,math,re,sys
 from pathlib import Path
 r=Path(__file__).resolve().parents[1]
-e=json.loads((r/'benchmarks/warm-bilinear8-quiet-evidence.json').read_text());last=e['observations'][-1]
-assert e['independentQuietConfirmationThisPair'] and e['all566TimedMethodsAndFlagsMatchSameActualPackage']
+e=json.loads((r/'benchmarks/warm-bilinear8-quiet-evidence.json').read_text(encoding='utf-8'));last=e['observations'][-1]
+current=e['currentProductionConfirmation']
+assert e['independentQuietConfirmationThisPair'] and current['noOptimizationNeeded']
+assert last['receipt']['librarySha256']==current['qualificationReused']['qualifiedLinuxDllSha256']
 assert last['conservativeRatioUpper']<=2 and len(last['managed']['actual'])==12
 assert all(g['passed'] and g['protocol']=='exclusive-vm-idle-v2' for g in last['quietness'].values())
 gc=re.fullmatch(r'// GC:\s+\d+\s+\d+\s+\d+\s+(\d+)\s+(\d+)',last['managed']['rawGc']);allocation=math.ceil(int(gc[1])/int(gc[2]))
@@ -13,7 +15,9 @@ text=f'''# Warm bilinear RGBA8: independent quiet confirmation
 Complete public bilinear resize independently confirms at
 {last['worstBracketRatio']:.3f}x FFmpeg, conservative upper
 {last['conservativeRatioUpper']:.3f}x. Both idle guards pass. This fixed pair
-clears 2x; full required warm coverage remains open. Production is unchanged.
+clears 2x on the current qualified production DLL; full required warm coverage
+remains open. The 2026-10-16 round resolves uncertainty after shared Resize
+dispatch changes. No production optimization is needed or introduced.
 
 | Run | Managed mean (microseconds) | Worst native bracket ratio | Conservative upper | Quiet guards |
 | --- | ---: | ---: | ---: | --- |
@@ -24,7 +28,8 @@ samples match the independent exact rational reference. Native alpha matches
 exactly, zero-alpha RGB is zero, and the unchanged RGB maximum <=1/RMSE <=0.25
 bound passes. Input, managed/native output hashes, native CLI/deterministic
 pixels, source and independent owners are unchanged. No image, geometry,
-filter or strategy enumeration. RGBA16 remains a separate open case.
+filter or strategy enumeration. The other three existing bilinear cases are
+reconciled separately; this result certifies only the stated byte downsample.
 
 Managed timing includes public Resize, geometry preparation, admission,
 allocation/materialization and disposal. The native public FFmpeg graph includes
@@ -45,12 +50,18 @@ The independent repeat retains 12 actual / {last['managed']['statistics']['N']}
 filtered measurements and 12 native samples per bracket. Its upper uses the
 larger filtered/all-actual bound. Managed allocation is **{allocation:,} B/op**,
 raw GC bytes / operations rounded up, including harness overhead. Native
-allocation totals are unmeasured. Retained owners/cold allocation need separate coverage.
+allocation totals are unmeasured. This is a single-result warm operation.
 
-Both timing children match all 566 production method bodies/flags in the same
-accepted Release package. Preceding 2,387 tests and 90 scalar framing controls
-per OS, plus same-package/all-three-example checks on both OSes, remain
-applicable: no production or benchmark implementation changed.
+Both current timing children use the same verified production, benchmark and
+native worker binaries; only cached selection drivers change. Production,
+harness and native rebuild counts are zero. The existing
+[qualification](WARM-JPEG-AC-PLANNING.md), 3,483 Release tests per OS including
+live FFmpeg comparisons and the same actual package's consumer plus all three
+examples on Windows/Linux, remains valid because production/package inputs
+are unchanged. No full suite, package proof or whole-library method audit is
+repeated. Older rows and their original package/method proofs remain historical
+evidence at their recorded builds. The current source/core/child identities,
+unchanged pixel hashes and reused qualification are recorded separately.
 [Numeric evidence](warm-bilinear8-quiet-evidence.json) retains measurements,
 receipts, source/input/output/child/package identities, guards and immutable
 raw archive digests. Regenerate with `python benchmarks/render-warm-bilinear8-quiet.py`;
