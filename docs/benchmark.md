@@ -53,7 +53,7 @@ native RGB bounds and the approved scoped alpha policies pass. No production
 optimization, rebuild or repeated qualification was needed. Stop these cases;
 the finite remaining coverage checklist stays open.
 
-Current adaptive JPEG reconciliation: **3 affected 444/422 byte/word pairs**
+Current adaptive JPEG reconciliation: **4 affected 444/422 byte/word pairs**
 independently confirm on the same qualified core, worst upper **1.639x**.
 Exact frozen packets and source-quality gates pass; full normalization and fresh
 output ownership are timed. [Current report](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md)
@@ -165,7 +165,7 @@ also records compressed sizes. No production optimization or rebuild is needed.
 | [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md) | 5,957.29 | 3,776.02 | 1.578 / 1.585 | 559,429 | Confirmed |
 | [JPEG 4:4:4, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG444-FORWARD.md) | 6,613.11 | 3,770.32 | 1.754 / 1.765 | 526,051 | Confirmed |
 | [JPEG 4:4:4, live cancelable token / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-OCCUPANCY.md) | 5,635.05 | 3,766.56 | 1.496 / 1.700 | 526,075 | Regression screen; prior confirmed |
-| [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG444-RGBA16-ADAPTIVE.md) | 6,767.17 | 3,851.77 | 1.757 / 1.790 | 556,280 | Confirmed |
+| [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md) | 5,955.85 | 3,852.95 | 1.546 / 1.552 | 556,286 | Confirmed |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md) | 3,824.38 | 2,344.76 | 1.631 / 1.639 | 294,116 | Confirmed |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md) | 3,816.67 | 2,425.80 | 1.573 / 1.588 | 294,116 | Confirmed |
 | [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-AC-PLANNING.md) | 2,881.90 | 1,763.43 | 1.634 / 1.641 | 297,780 | Confirmed |

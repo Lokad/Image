@@ -1,6 +1,6 @@
 # Current adaptive JPEG confirmations
 
-3 existing adaptive JPEG workloads independently confirm within the 2x warm
+4 existing adaptive JPEG workloads independently confirm within the 2x warm
 single-CPU target on the qualified production DLL. This resolves older
 confirmations invalidated by the shared AC event-planning change `10ccb31`.
 No production optimization is needed in this round. Stop the confirmed pairs;
@@ -11,6 +11,7 @@ full required warm coverage remains open.
 | RGBA16 / 4:2:2 | 3,816.67 | 2,425.80 | 1.573 / 1.588 | 294,116 | 90,253 / 71,210 | 12 / 11 |
 | RGBA8 / 4:2:2 | 3,824.38 | 2,344.76 | 1.631 / 1.639 | 294,116 | 90,214 / 71,168 | 12 / 10 |
 | RGBA8 / 4:4:4 | 5,957.29 | 3,776.02 | 1.578 / 1.585 | 559,429 | 158,812 / 133,041 | 12 / 11 |
+| RGBA16 / 4:4:4 | 5,955.85 | 3,852.95 | 1.546 / 1.552 | 556,286 | 158,827 / 133,043 | 12 / 11 |
 
 Every operation starts with one existing original 513x259 RGBA8/16 raster and
 returns a freshly owned complete JPEG packet. Alpha flattening onto RGB 0x204060,
@@ -58,5 +59,6 @@ retains all samples, guards, allocations, sizes, identities, the scoped private
 validator correction and qualification reuse. Older measurements remain
 historical at their recorded builds.
 
-The remaining affected adaptive pair is RGBA16 / JPEG4:4:4; resolve that named
-case on the same production build before any new coverage or optimization.
+All four affected adaptive444/422 byte/word cases are now stopped. Continue
+the finite checklist with ordinary baseline JPEG decode confirmations after
+the changed AC loop/lookahead, one named existing case at a time.
