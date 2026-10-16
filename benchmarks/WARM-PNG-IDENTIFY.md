@@ -41,5 +41,7 @@ retains the incomplete archive and original timings/guards; no timing rerun.
 
 [Numeric evidence](warm-png-identify-evidence.json) records binaries, raw archives,
 all confidence bounds, controls, exact source invalidation and package proof.
-Full required warm coverage stays open for C02 JPEG Identify, C03 WebP Identify
-and C04 the same PNG through a fresh Stream. No image or settings grid is added.
+C02 JPEG Identify is now separately confirmed; full required warm coverage stays
+open for C03 WebP Identify and C04 the same PNG through a fresh Stream. No image or settings grid is added.
+
+The subsequent JPEG Identify change only replaces its public JPEG dispatch and scanner; the PNG branch/CRC and native worker remain unchanged. Reuse this confirmation. Current3,535-tests/OS and the same actual package consumer/all three examples also pass on both OS.

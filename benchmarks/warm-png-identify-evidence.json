@@ -2525,5 +2525,48 @@
     "bothQuietGuardsPassed": true,
     "archivalCorrection": "One private stable control-directory name was incorrectly replaced in the candidate retainer. Incomplete archive retained; original terminal timing/receipts/guards/binaries revalidated and archived after correcting the path. No timing rerun."
   },
-  "nextAction": "Stop C01. Continue C02 resident JPEG Identify, then C03 resident WebP Identify and C04 same-PNG fresh Stream Identify after equivalent boundaries; B01-B15 remain stopped. Full required warm objective open."
+  "nextAction": "Stop C01 and C02. Continue only C03 resident WebP Identify and C04 fresh PNG Identify Stream, equivalent boundaries first; full objective open.",
+  "subsequentJpegIdentifyChange": {
+    "evidence": "warm-jpeg-identify-evidence.json",
+    "pngIdentifyExecutedPathUnchanged": true,
+    "reconciliation": {
+      "changedProductionInputs": {
+        "src/Lokad.Image/ImageCodec.cs": {
+          "before": "d4581e2c317032e524f033a6be8760712271c275b05a4b06947d04ee08608121",
+          "after": "ff341a9d26178cbd6a1828b4522b0411b2b52a2700912dc8fac57ea3617fe7bc"
+        },
+        "src/Lokad.Image/Internal/JpegIdentifier.cs": {
+          "before": null,
+          "after": "dca76d86213e3d4b0a4da17cd86bf28d0103eecdd568d1e613287592b5612906"
+        }
+      },
+      "existingImageCodecOnlyChangesJpegIdentifyForwarder": true,
+      "affectedMaterialPaths": [
+        "C02 resident JPEG Identify"
+      ],
+      "otherAffectedPublicEntry": "JPEG Identify(Stream) shares this metadata scanner; the finite C04 representative covers the common fresh Stream/input boundary without adding a format grid.",
+      "unchanged": "ContainerHeaders.Jpeg and JpegDecoder pixel preflight retain identical bodies. PNG/WebP Identify branches and all other production input hashes match. Reuse C01 and B01-B15 confirmations at their pinned inputs without retiming."
+    },
+    "currentFullQualification": {
+      "status": "passed",
+      "releaseTestsPerOs": 3535,
+      "fullSuiteBreakdown": {
+        "internal": 1251,
+        "publicApi": 1386,
+        "liveDifferential": 898
+      },
+      "qualifiedLinuxDllSha256": "611bf5964d26bcaf18c1b06cf2235b5da128f26e8d1180d0556bbb3080bbcadf",
+      "windowsPackageDllSha256": "d9688f303e198c510e012ae9718455a20ae648b8d385de219e6693ad26b00960",
+      "packageSha256": "ee78faf8e40a4692f9fc5be34cffe80c9d101ec3c7b4f04b5d08615c7cd2744e",
+      "consumerAndAllThreeExamplesThroughSameActualPackageBothOs": true,
+      "productionInputsIdenticalToMeasuredBuild": true,
+      "qualificationOnlyChangesFromMeasuredSnapshot": [],
+      "measuredSourceSha256": "35b102efc80d99218b17fe64897a0f06497147fa18d09fde20165aef4a20912e",
+      "qualifiedSourceSha256": "35b102efc80d99218b17fe64897a0f06497147fa18d09fde20165aef4a20912e",
+      "rawArchive": {
+        "file": "c02-jpeg-identify-vector-qualification.tar.gz",
+        "sha256": "52edb055ab6117884af3d69a07ff7a5653d8773710630eb682e2491d8d23a63c"
+      }
+    }
+  }
 }

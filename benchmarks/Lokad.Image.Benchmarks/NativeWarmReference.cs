@@ -17,23 +17,25 @@ internal sealed class NativeWarmReference : IDisposable
 
     public NativeWarmReference(JpegBenchmarkCase state, int cpu, Lokad.Image.ImageInfo expected)
     {
-        if (expected.Format != Lokad.Image.ImageFormat.Png) throw new ArgumentException("PNG Identify only.", nameof(expected));
-        Executable = Path.Combine(state.Root, "external", "warm-reference", "ffmpeg-png-identify-warm");
-        using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "external", "warm-reference", "png-identify-identity.json"))))
+        var jpeg = expected.Format == Lokad.Image.ImageFormat.Jpeg;
+        if (!jpeg && expected.Format != Lokad.Image.ImageFormat.Png) throw new ArgumentException("PNG/JPEG Identify only.", nameof(expected));
+        var kind = jpeg ? "jpeg" : "png";
+        Executable = Path.Combine(state.Root, "external", "warm-reference", "ffmpeg-" + kind + "-identify-warm");
+        using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "external", "warm-reference", kind + "-identify-identity.json"))))
             BuildIdentity = document.RootElement.Clone();
         if (BuildIdentity.GetProperty("workerSha256").GetString() != JpegBenchmarkCase.HashFile(Executable)
-            || BuildIdentity.GetProperty("sourceSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", "ffmpeg-png-identify-warm.c"))
-            || BuildIdentity.GetProperty("buildScriptSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", "build-png-identify-linux.sh")))
-            throw new InvalidOperationException("PNG Identify worker/source/build identity differs.");
+            || BuildIdentity.GetProperty("sourceSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", "ffmpeg-" + kind + "-identify-warm.c"))
+            || BuildIdentity.GetProperty("buildScriptSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", "build-" + kind + "-identify-linux.sh")))
+            throw new InvalidOperationException("PNG/JPEG Identify worker/source/build identity differs.");
         var start = new ProcessStartInfo(Executable) { RedirectStandardInput = true, RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false };
-        foreach (var argument in new[] { "png-identify", state.Input, state.NativeOutput }) start.ArgumentList.Add(argument);
-        process = Process.Start(start) ?? throw new InvalidOperationException("Could not start PNG Identify reference.");
+        foreach (var argument in new[] { kind + "-identify", state.Input, state.NativeOutput }) start.ArgumentList.Add(argument);
+        process = Process.Start(start) ?? throw new InvalidOperationException("Could not start PNG/JPEG Identify reference.");
         errors = process.StandardError.ReadToEndAsync();
         try
         {
             Ready = Read();
             if (Ready.GetProperty("state").GetString() != "ready" || Ready.GetProperty("schemaVersion").GetInt32() != 1
-                || Ready.GetProperty("operation").GetString() != "png-identify"
+                || Ready.GetProperty("operation").GetString() != kind + "-identify"
                 || Ready.GetProperty("width").GetInt32() != expected.Width || Ready.GetProperty("height").GetInt32() != expected.Height
                 || Ready.GetProperty("depth").GetInt32() != expected.BitDepth || Ready.GetProperty("hasAlpha").GetBoolean() != expected.HasAlpha
                 || Ready.GetProperty("orientation").GetInt32() != (int)expected.Orientation
@@ -41,9 +43,11 @@ internal sealed class NativeWarmReference : IDisposable
                 || Ready.GetProperty("codecThreads").GetInt32() != 1 || Ready.GetProperty("threadType").GetInt32() != 0
                 || Ready.GetProperty("activeThreadType").GetInt32() != 0 || Ready.GetProperty("outputBytes").GetInt32() != 24
                 || Ready.GetProperty("pixelDecode").GetBoolean() || Ready.GetProperty("scalarMode").GetBoolean()
-                || new[] { "publicParserTimed", "fullCrcTimed", "structureMetadataTimed", "descriptorAcquisitionAndReleaseTimed", "independentLiveOutputs" }
+                || (jpeg && (Ready.GetProperty("pixelBufferRequests").GetInt32() != 0 || Ready.GetProperty("canonicalHeaderBytes").GetInt32() != 17))
+                || (jpeg ? new[] { "fullStructureTimed", "canonicalHeaderProjectionTimed", "discardAllHeaderExtractionTimed", "decoderStateResetTimed", "structureMetadataTimed", "descriptorAcquisitionAndReleaseTimed", "independentLiveOutputs" }
+                    : new[] { "publicParserTimed", "fullCrcTimed", "structureMetadataTimed", "descriptorAcquisitionAndReleaseTimed", "independentLiveOutputs" })
                     .Any(key => !Ready.GetProperty(key).GetBoolean()))
-                throw new InvalidOperationException("PNG Identify metadata/validation/ownership/CPU boundary differs.");
+                throw new InvalidOperationException("PNG/JPEG Identify metadata/validation/ownership/CPU boundary differs.");
             completed = Ready.GetProperty("initialCompletedOperations").GetInt64();
         }
         catch { Dispose(); throw; }
@@ -294,7 +298,7 @@ internal sealed class NativeWarmReference : IDisposable
             || sample.ElapsedNanoseconds <= 0 || !double.IsFinite(sample.ElapsedNanoseconds)
             || (sample.CpuElapsedNanoseconds is { } cpuElapsed && (cpuElapsed <= 0 || !double.IsFinite(cpuElapsed)))
             || sample.Cpu != Ready.GetProperty("cpu").GetInt32()
-            || (Ready.GetProperty("operation").GetString() is "png-encode" or "png-smallest8-encode" or "png-smallest16-encode" or "png-fast16-encode" or "png-store16-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "jpeg-encode" or "jpeg-gray-encode" or "jpeg-restart-encode" or "webp-encode" or "webp-opaque-encode" or "webp-lossless-encode" or "png-identify" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
+            || (Ready.GetProperty("operation").GetString() is "png-encode" or "png-smallest8-encode" or "png-smallest16-encode" or "png-fast16-encode" or "png-store16-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "jpeg-encode" or "jpeg-gray-encode" or "jpeg-restart-encode" or "webp-encode" or "webp-opaque-encode" or "webp-lossless-encode" or "png-identify" or "jpeg-identify" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
                 : sample.OutputStride < (Ready.GetProperty("operation").GetString() is "nearest-resize" or "bilinear-resize" or "bicubic-resize" or "crop" or "png-stream-crop-fit" or "png-stream16-crop-fit" ? Ready.GetProperty("outputWidth").GetInt32()
                     : Ready.GetProperty("operation").GetString() is "quarter-turn-cw" or "quarter-turn-ccw" or "transpose" or "transverse" ? 259 : HorizontalFlipInput.Width) * (Ready.GetProperty("depth").GetInt32() / 8) * 4)
             || (Ready.GetProperty("operation").GetString() is "png-stream-decode" or "png-stream16-decode" or "png-stream-crop-fit" or "png-stream16-crop-fit" && sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32())

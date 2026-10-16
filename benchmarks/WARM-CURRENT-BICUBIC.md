@@ -440,3 +440,5 @@ the four named Identify boundaries C01-C04; equivalent public-API validation,
 metadata and descriptor ownership must be established before timing them.
 
 The subsequent [PNG Identify change](WARM-PNG-IDENTIFY.md) affects only resident/Stream PNG inspection. Pixel Scan/shared CRC, editing and every resize operation retain their executed bodies and native workers; all61 bicubic proofs remain valid. New full3,517-tests/OS and the same actual package consumer/all three examples pass on Windows/Linux. No bicubic retiming or retuning.
+
+The subsequent [JPEG Identify change](WARM-JPEG-IDENTIFY.md) leaves pixel decoder preflight, PNG inspection, edits and resizes unchanged. Keep all61 bicubic proofs stopped; new full3,535-tests/OS and same actual package consumer/all three examples pass on both OS. No bicubic retiming.

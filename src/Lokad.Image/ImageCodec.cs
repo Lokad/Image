@@ -15,7 +15,7 @@ public static class ImageCodec
     private static ImageInfo IdentifyCore(ReadOnlySpan<byte> input, OperationContext context)
     {
         if (input.StartsWith(PngCodec.Signature)) return PngCodec.Identify(input, context);
-        if (input.StartsWith(new byte[] { 255, 216 })) return ContainerHeaders.Jpeg(input, context);
+        if (input.StartsWith(new byte[] { 255, 216 })) return JpegIdentifier.Identify(input, context);
         if (input.StartsWith("RIFF"u8)) return ContainerHeaders.WebP(input, context);
         throw new UnsupportedImageException("Expected a still PNG, JPEG or WebP image.");
     }

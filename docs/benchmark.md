@@ -50,8 +50,15 @@ structural/metadata adapter**, with full CRC/EOF and fresh owned descriptor
 acquisition/release, no pixel decode. [Exact scope and qualification](../benchmarks/WARM-PNG-IDENTIFY.md)
 record3,517 tests per OS and the same actual package consumer/all three examples
 on Windows/Linux. Only PNG Identify changed; stopped pixel/edit/resize paths
-reuse their unchanged evidence. Resident JPEG/WebP Identify and fresh PNG
-Identify Stream remain open. See [material coverage](../benchmarks/WARM-COVERAGE.md).
+reuse their unchanged evidence. ‖Resident JPEG identification confirms **1.840x / upper1.860x at88 B/op**,
+reducing its prior33.725x gap. Its reference is **FFmpeg MJPEG discard-all with
+an original full structural/EXIF scan and timed canonical SOF2 metadata-header
+projection**, fresh projection payload/descriptor ownership and zero pixel decode.
+[Exact scope and qualification](../benchmarks/WARM-JPEG-IDENTIFY.md) record3,535
+tests per OS and the same package consumer/all three examples on both OS.
+Only JPEG Identify changed; the decoder preflight and PNG Identify remain
+unchanged. Resident WebP Identify and fresh PNG Identify Stream remain open.
+See [material coverage](../benchmarks/WARM-COVERAGE.md).
 
 All **four existing bilinear cases** now have independent confirmation on the
 current qualified core. Their conservative uppers range from 1.382x to 1.892x;
@@ -105,6 +112,7 @@ word-composition proof and production/package qualification are reused.
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
+| [JPEG Identify, resident span‖](../benchmarks/WARM-JPEG-IDENTIFY.md) | 2.23 | 1.21 | 1.840 / 1.860 | 88 | Confirmed |
 | [PNG Identify, resident span¶](../benchmarks/WARM-PNG-IDENTIFY.md) | 16.09 | 13.04 | 1.234 / 1.238 | 88 | Confirmed |
 | [PNG palette4/full tRNS Adam7](../benchmarks/WARM-PNG-PALETTE4-ADAM7.md) | 1,480.35 | 1,135.35 | 1.304 / 1.387 | 2,592 | Confirmed |
 | [PNG8 Stream, orient/crop/nearest fit](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 2,129.50 | 1,473.35 | 1.445 / 1.454 | 1,445,000 | Confirmed |

@@ -1,5 +1,22 @@
 # Warm FFmpeg reference
 
+Resident JPEG identification uses `build-jpeg-identify-linux.sh` and
+`verify-jpeg-identify-linux.py` before selecting `Identify/Jpeg8`. Its reference
+is **FFmpeg MJPEG discard-all metadata extraction with an original complete
+structural/EXIF scan and timed canonical SOF2 header projection**. A direct
+header decode applies stronger quantizer/sampling/compressed-size checks than
+structural Identify. The projection preserves all six metadata fields in a
+17-byte grayscale8 metadata header after validating the entire original packet,
+including scan headers, stuffing, EXIF and EOI/EOF. Original image pixels,
+quantizers and sampling are never rewritten in the production library.
+Projection payload acquisition, codec reset/header extraction, fresh descriptor
+materialization and release are timed; context/frame/packet wrappers are reused.
+The pixel-buffer callback rejects every request. Twenty-one same-packet controls
+cover opaque entropy, ignored quantizer/sampling details, metadata changes,
+multiple scans and malformed structure. No decoder coefficient/pixel work is
+substituted for metadata inspection, and no additional timed image is generated.
+
+
 Resident PNG identification uses `build-png-identify-linux.sh` and the original
 `ffmpeg-png-identify-warm.c` adapter. The reference is explicitly **FFmpeg's
 public PNG parser and CRC APIs with a timed structural/metadata compatibility
