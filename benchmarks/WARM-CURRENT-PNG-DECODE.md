@@ -1,6 +1,6 @@
 # Current PNG decode confirmations
 
-24 of the 25 named PNG decode cases awaiting current-path evidence independently
+25 of the 25 named PNG decode cases awaiting current-path evidence independently
 confirm within the 2x warm single-CPU target for current production paths.
 Older full-operation timings preceded shared overwrite-pool and fused framing/
 inflation changes. Stop confirmed pairs; full required warm coverage remains open.
@@ -31,6 +31,7 @@ inflation changes. Stop confirmed pairs; full required warm coverage remains ope
 | DecodePalette2 | 3 / 2 / 0 | 66.42 | 97.53 | 0.681 / 0.686 | 688 | 12 / 11 |
 | DecodeGray2 | 0 / 2 / 0 | 71.73 | 106.38 | 0.674 / 0.679 | 616 | 12 / 11 |
 | DecodeGray8Transparency | 0 / 8 / 0 | 357.50 | 758.36 | 0.471 / 0.474 | 1,416 | 12 / 11 |
+| DecodePalette1 | 3 / 1 / 0 | 54.06 | 88.92 | 0.608 / 0.611 | 552 | 12 / 12 |
 
 Each operation decodes the identical resident original 513x259 PNG into an
 independently owned RGBA buffer. Managed public Decode, admission, container/
@@ -103,4 +104,4 @@ evidence retains the original failing screen and fresh qualification archive.
 
 A palette2 pre-run admission attempt was refused at 3.96% I/O wait, above the unchanged 1% ceiling. No benchmark started. Its guard/controller record is retained in the accepted short archive. The same prepared build was retried with unchanged thresholds; both guards pass for the scored screen and independent confirmation. No refused timing is scored.
 
-Remaining named cases, largest retained ratios first: DecodePalette1.
+All 25 named B05 cases are confirmed and stopped. Continue the finite checklist.
