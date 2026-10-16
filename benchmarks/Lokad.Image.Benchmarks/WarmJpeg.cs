@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegCase { Encode8, Encode420_8, Encode422_8, Encode16, Encode420_16, Encode420Stream8, Encode420Stream16, Encode422_16, Encode420Restart8, Encode444Stream8, Encode444Cancelable8, Encode420Cancelable16 }
+public enum WarmJpegCase { Encode8, Encode420_8, Encode422_8, Encode16, Encode420_16, Encode420Stream8, Encode420Stream16, Encode422_16, Encode420Restart8, Encode444Stream8, Encode444Cancelable8, Encode420Cancelable16, EncodeGray8 }
 
 internal sealed record WarmJpegPreparation(int SchemaVersion, string Project, string GeneratedUtc, string Recipe,
     string RasterSha256, string ReferenceSha256, int NativeQuality, uint BackgroundRgb, string NativeFile, string ManagedFile,
@@ -83,6 +83,7 @@ public class WarmJpeg
     private JpegEncodeOptions options = null!;
     private CancellationTokenSource? cancellationSource;
     private CancellationToken encodeCancellation;
+    private WarmGrayscaleJpeg? grayscale;
 
     public static WarmJpegCase[] SelectedCases()
     {
@@ -90,6 +91,7 @@ public class WarmJpeg
         return selection switch
         {
             null or "Encode8" => [WarmJpegCase.Encode8],
+            "EncodeGray8" when AdaptiveEntropy => [WarmJpegCase.EncodeGray8],
             "Encode420_8" => [WarmJpegCase.Encode420_8],
             "Encode422_8" => [WarmJpegCase.Encode422_8],
             "Encode16" => [WarmJpegCase.Encode16],
@@ -219,6 +221,10 @@ public class WarmJpeg
             || GCSettings.IsServerGC || Environment.GetEnvironmentVariable("DOTNET_TieredCompilation") != "0"
             || !GC.GetConfigurationVariables().TryGetValue("ConcurrentGC", out var concurrent) || Convert.ToBoolean(concurrent))
             throw new InvalidOperationException("JPEG worker requires one CPU, optimized JIT and non-concurrent workstation GC.");
+        if (Case == WarmJpegCase.EncodeGray8)
+        {
+            grayscale = new WarmGrayscaleJpeg(); grayscale.Setup(cpu, smoke, sampleCount); return;
+        }
         state = new JpegBenchmarkCase();
         try
         {
@@ -370,6 +376,7 @@ public class WarmJpeg
     [Benchmark]
     public int Managed()
     {
+        if (grayscale is not null) return grayscale.Apply();
         using var output = new MemoryStream(); EncodeManaged(output);
         return checked((int)output.Length) ^ output.GetBuffer()[checked((int)output.Length) / 2];
     }
@@ -405,6 +412,7 @@ public class WarmJpeg
     [GlobalCleanup]
     public void Cleanup()
     {
+        if (grayscale is not null) { grayscale.Cleanup(); return; }
         try
         {
             if (!ready) return;

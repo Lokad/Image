@@ -1440,3 +1440,16 @@ token is never signaled. Every managed packet byte, registered decoder pixel and
 source error must equal the existing anchor; no quality sweep is repeated.
 Native exposes no cancellation setting. See the
 [fixed entropy result](../../benchmarks/WARM-JPEG-FIXED-OCCUPANCY.md).
+
+`WarmJpeg.EncodeGray8` uses **SIMD-enabled standalone libjpeg-turbo 3.1.4.1** as
+the approved reference for single-component grayscale JPEG encoding. This
+exception applies only to benchmark tooling: FFmpeg's MJPEG encoder emits three
+components. Both subjects include alpha flattening on0x204060, BT.601 grayscale
+normalization, encoding with the same owned mathematical quality69 quantizers,
+optimal/adaptive Huffman coding and fresh output ownership/release. The existing
+0.25dB quality gate and max4/RMSE1.5 decoder gate remain unchanged. Prepared
+original fixtures and the verified SIMD worker are reused; its raw preapproval
+annotation is historical, with approval recorded separately in benchmark policy.
+The production library remains safe managed code, dependency-free and free of
+native bindings. `build-libjpeg-gray-linux.sh` reproduces the reference; it is
+unnecessary when the verified prepared binary is available.

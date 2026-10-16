@@ -23,6 +23,9 @@ BenchmarkDotNet smoke runs verify execution and output correctness. Performance
 measurement and tuning require the dedicated quiet VM supplied by the project
 owner. Run benchmarks sequentially in Release, use FFmpeg baselines with
 equivalent workload boundaries, and do not publish local timing numbers.
+Single-component grayscale JPEG encoding uses the explicitly labeled SIMD-enabled
+libjpeg-turbo reference as an approved benchmark-tooling exception; production
+remains safe managed code with no dependencies or native bindings.
 Use the versioned idle/process guard in `tools/WarmReference/capture-vm-environment.py`.
 VM use is exclusive; do not wait for historical load average to decay after our own work.
 Maintain `docs/benchmark.md` after every accepted performance round. Keep at most

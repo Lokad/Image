@@ -253,7 +253,7 @@ internal static class EncoderQualityCalibration
         ? WebpOracle.DecodeArguments(profile.Width, profile.Height, profile.HasAlpha)
         : JpegOracle.DecodeArguments(profile.Width, profile.Height, Sampling(profile.Encoder));
 
-    public static QualitySample Validate(byte[] encoded, byte[] reference, EncoderQualityProfile profile, int setting, string ffmpeg)
+    public static QualitySample Validate(byte[] encoded, byte[] reference, EncoderQualityProfile profile, int setting, string ffmpeg, JpegSampling? jpegSampling = null)
     {
         var info = ImageCodec.Identify(encoded);
         var format = profile.Encoder == QualityEncoder.Vp8 ? ImageFormat.WebP : ImageFormat.Jpeg;
@@ -263,11 +263,12 @@ internal static class EncoderQualityCalibration
         if (format == ImageFormat.Jpeg)
         {
             var header = JpegQualitySyntax.Read(encoded);
-            if (!JpegBenchmarkCase.MatchesSampling(header, Sampling(profile.Encoder))) throw new InvalidOperationException("Quality JPEG sampling ratios differ.");
+            if (!JpegBenchmarkCase.MatchesSampling(header, jpegSampling ?? Sampling(profile.Encoder))) throw new InvalidOperationException("Quality JPEG sampling ratios differ.");
             sampling = header.Sampling;
         }
         else RequireVp8(encoded);
-        var native = OracleProcess.Run(ffmpeg, DecodeArguments(profile), encoded);
+        var native = OracleProcess.Run(ffmpeg, jpegSampling.HasValue
+            ? JpegOracle.DecodeArguments(profile.Width, profile.Height, jpegSampling.Value) : DecodeArguments(profile), encoded);
         using var image = ImageCodec.Decode(encoded); var decoded = OriginalPixels.Bytes(image);
         if ((image.Width, image.Height, image.BitDepth) != (profile.Width, profile.Height, 8)) throw new InvalidOperationException("Quality public decoded geometry differs.");
         var agreement = Error(native, decoded);

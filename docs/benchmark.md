@@ -15,7 +15,7 @@ I/O, IPC, fixture preparation and validation are excluded. Each linked report
 declares the exact workload, input and measured source; these are rolling results
 at those sources, not a simultaneous rerun of the current HEAD.
 
-Ratio = Lokad.Image / the faster FFmpeg pre/post mean; lower is faster. Upper is
+Ratio = Lokad.Image / the faster reference pre/post mean; lower is faster. Upper is
 the retained conservative confidence bound, taking the larger filtered/all-actual
 bound where available. **Confirmed** requires an independent quiet repeat and
 upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
@@ -29,9 +29,26 @@ Both subjects preserve every decoded RGBA sample, but compression differs:
 Lokad.Image emits 533,100 bytes versus 183,812 bytes. This is an exact-pixel
 timing comparison; compression efficiency parity is not established.
 
+Single-component grayscale JPEG encoding uses **SIMD-enabled standalone
+libjpeg-turbo3.1.4.1** as an approved tooling-only reference exception; FFmpeg's
+MJPEG encoder emits three components. It confirms **1.388x / upper1.398x** at
+**154,893 B/op**, including normalization and fresh output ownership/release.
+Compressed sizes are **58,823 / 58,910 bytes**, managed/reference; the source-
+quality gap is **0.000033dB**, within the existing0.25dB gate. Prepared fixtures,
+worker and qualified production DLL are reused. The production library remains
+safe managed code with no dependency or native binding.
+
+A bounded reconciliation finds **203 numerical rows**, including **189 selected
+independent confirmations** and **14 latest regression screens with verified
+earlier fixed-pair confirmations**. No measured mean or selected confirmed upper
+exceeds two. Evidence remains tied to its recorded production path and protocol;
+this does not certify every current path. Warm identification-only coverage is
+still missing: the existing inspection benchmark includes startup and I/O.
+See [material coverage](../benchmarks/WARM-COVERAGE.md) for scope and exclusions.
+
 **Decode**
 
-| Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |
+| Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | [PNG palette4/full tRNS Adam7](../benchmarks/WARM-PNG-PALETTE4-ADAM7.md) | 1,480.35 | 1,135.35 | 1.304 / 1.387 | 2,592 | Confirmed |
 | [PNG8 Stream, orient/crop/nearest fit](../benchmarks/WARM-PNG-COMPOSITION8.md) | 2,795.71 | 1,478.63 | 1.891 / 1.906 | 1,453,517 | Confirmed |
@@ -114,7 +131,7 @@ timing comparison; compression efficiency parity is not established.
 
 **Encode**
 
-| Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |
+| Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG-FAST16-RECODE.md) | 5,439.91 | 17,231.30 | 0.316 / 0.353 | 527,627 | Regression screen; prior confirmed |
 | [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED8-ENCODE.md) | 357.17 | 189.72 | 1.883 / 1.933 | 2,102,472 | Confirmed |
@@ -144,7 +161,7 @@ timing comparison; compression efficiency parity is not established.
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-OCCUPANCY.md) | 3,057.46 | 1,835.63 | 1.666 / 1.973 | 263,820 | Regression screen; prior confirmed |
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-OCCUPANCY.md) | 3,031.41 | 1,835.85 | 1.651 / 1.663 | 263,788 | Confirmed |
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-AC-PLANNING.md) | 3,098.92 | 1,842.05 | 1.682 / 1.697 | 297,780 | Confirmed |
-| [JPEG grayscale, single component](../benchmarks/WARM-COVERAGE.md) | — | — | — | — | Unscored: native baseline unavailable |
+| [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAYSCALE.md) | 1,958.56 | 1,411.27 | 1.388 / 1.398 | 154,893 | Confirmed |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-OPAQUE-ENCODE.md) | 29,381.20 | 15,527.63 | 1.892 / 1.918 | 2,536,203 | Confirmed |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-OPAQUE-RGBA16.md) | 29,778.24 | 15,604.01 | 1.908 / 1.922 | 2,535,736 | Confirmed |
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-OPAQUE-ENCODE.md) | 30,157.65 | 53,549.54 | 0.563 / 0.655 | 2,615,939 | Regression screen; prior confirmed |
@@ -155,7 +172,7 @@ timing comparison; compression efficiency parity is not established.
 
 **Editing**
 
-| Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |
+| Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | [Horizontal flip RGBA8, two live outputs / per image](../benchmarks/WARM-RETAINED-FLIP.md) | 13.26 | 9.16 | 1.447 / 1.484 | 128 | Confirmed |
 | [Nearest resize RGBA8](../benchmarks/WARM-COVERAGE-QUIET.md) | 58.67 | 252.66 | 0.232 / 0.241 | 132,294 | Confirmed |

@@ -15,6 +15,44 @@ internal sealed class NativeWarmReference : IDisposable
     public JsonElement BuildIdentity { get; }
     private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
 
+    // The single-component encoder is an explicit tooling-only baseline
+    // exception. Reuse the prepared SIMD worker, including its historical
+    // preapproval annotation; benchmark policy records the accepted reference.
+    public NativeWarmReference(JpegBenchmarkCase state, int cpu, string expectedGray)
+    {
+        Executable = Path.Combine(state.Root, "external", "warm-reference", "libjpeg-gray-warm-candidate");
+        using (var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(state.Root, "external", "warm-reference", "libjpeg-gray-identity.json"))))
+            BuildIdentity = document.RootElement.Clone();
+        if (!BuildIdentity.GetProperty("simdEnabled").GetBoolean()
+            || BuildIdentity.GetProperty("revision").GetString() != "9217719d3a58633923b096af4c1d50d304768a64"
+            || BuildIdentity.GetProperty("workerSha256").GetString() != JpegBenchmarkCase.HashFile(Executable)
+            || BuildIdentity.GetProperty("sourceSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", "libjpeg-gray-warm-candidate.c"))
+            || BuildIdentity.GetProperty("buildScriptSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", "build-libjpeg-gray-linux.sh")))
+            throw new InvalidOperationException("Grayscale reference SIMD/source/build identity differs.");
+        var start = new ProcessStartInfo(Executable) { RedirectStandardInput = true, RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false };
+        foreach (var key in start.Environment.Keys.Where(key => key.StartsWith("JSIMD_FORCE", StringComparison.Ordinal)).ToArray())
+            start.Environment.Remove(key);
+        foreach (var argument in new[] { "jpeg-gray-encode", state.Input, "513", "259", "8", state.NativeOutput, "69", expectedGray })
+            start.ArgumentList.Add(argument);
+        process = Process.Start(start) ?? throw new InvalidOperationException("Could not start grayscale reference.");
+        errors = process.StandardError.ReadToEndAsync();
+        try
+        {
+            Ready = Read();
+            if (Ready.GetProperty("state").GetString() != "ready" || Ready.GetProperty("schemaVersion").GetInt32() != 1
+                || Ready.GetProperty("operation").GetString() != "jpeg-gray-encode" || Ready.GetProperty("version").GetString() != "3.1.4.1"
+                || Ready.GetProperty("width").GetInt32() != 513 || Ready.GetProperty("height").GetInt32() != 259
+                || Ready.GetProperty("depth").GetInt32() != 8 || Ready.GetProperty("components").GetInt32() != 1
+                || Ready.GetProperty("sampling").GetString() != "gray" || Ready.GetProperty("quality").GetInt32() != 69
+                || Ready.GetProperty("cpu").GetInt32() != cpu || Ready.GetProperty("affinityCount").GetInt32() != 1
+                || Ready.GetProperty("codecThreads").GetInt32() != 1 || Ready.GetProperty("conversionThreads").GetInt32() != 1
+                || new[] { "ownedMathematicalQuantizers", "optimizeHuffman", "flatteningTimed", "colorConversionTimed", "normalizedReferenceExact", "outputAcquisitionAndReleaseTimed", "independentLiveOutputs", "bitstreamDeterministic" }.Any(key => !Ready.GetProperty(key).GetBoolean()))
+                throw new InvalidOperationException("Grayscale reference workload/CPU contract differs.");
+            completed = Ready.GetProperty("initialCompletedOperations").GetInt64();
+        }
+        catch { Dispose(); throw; }
+    }
+
     public NativeWarmReference(JpegBenchmarkCase state, int depth, int cpu, string operation = "hflip", string? expectedRaw = null, int? nativeQuality = null, string? jpegSampling = null, bool vp8Opaque = false, int? resizeWidth = null, int? resizeHeight = null, bool bicubicScalar = false)
     {
         if (resizeWidth.HasValue != resizeHeight.HasValue || resizeWidth.HasValue &&
@@ -222,7 +260,7 @@ internal sealed class NativeWarmReference : IDisposable
             || sample.ElapsedNanoseconds <= 0 || !double.IsFinite(sample.ElapsedNanoseconds)
             || (sample.CpuElapsedNanoseconds is { } cpuElapsed && (cpuElapsed <= 0 || !double.IsFinite(cpuElapsed)))
             || sample.Cpu != Ready.GetProperty("cpu").GetInt32()
-            || (Ready.GetProperty("operation").GetString() is "png-encode" or "png-smallest8-encode" or "png-smallest16-encode" or "png-fast16-encode" or "png-store16-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "jpeg-encode" or "jpeg-restart-encode" or "webp-encode" or "webp-opaque-encode" or "webp-lossless-encode" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
+            || (Ready.GetProperty("operation").GetString() is "png-encode" or "png-smallest8-encode" or "png-smallest16-encode" or "png-fast16-encode" or "png-store16-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "jpeg-encode" or "jpeg-gray-encode" or "jpeg-restart-encode" or "webp-encode" or "webp-opaque-encode" or "webp-lossless-encode" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
                 : sample.OutputStride < (Ready.GetProperty("operation").GetString() is "nearest-resize" or "bilinear-resize" or "bicubic-resize" or "crop" or "png-stream-crop-fit" or "png-stream16-crop-fit" ? Ready.GetProperty("outputWidth").GetInt32()
                     : Ready.GetProperty("operation").GetString() is "quarter-turn-cw" or "quarter-turn-ccw" or "transpose" or "transverse" ? 259 : HorizontalFlipInput.Width) * (Ready.GetProperty("depth").GetInt32() / 8) * 4)
             || (Ready.GetProperty("operation").GetString() is "png-stream-decode" or "png-stream16-decode" or "png-stream-crop-fit" or "png-stream16-crop-fit" && sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32())

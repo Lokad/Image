@@ -67,7 +67,7 @@ def pending(label, report, status):
 
 
 def table(rows):
-    return '\n'.join(['| Operation / fixed profile | Lokad µs | FFmpeg µs | Ratio / upper | Lokad allocated B/op | Status |',
+    return '\n'.join(['| Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |',
                       '| --- | ---: | ---: | ---: | ---: | --- |', *rows])
 
 
@@ -181,7 +181,7 @@ def render():
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg420cancel16-evidence.json', ['regressions', 1], 'WARM-JPEG-FIXED-OCCUPANCY.md', verification='Regression screen; prior confirmed'),
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg420cancel16-evidence.json', ['observations', -1], 'WARM-JPEG-FIXED-OCCUPANCY.md', True),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-ac-planning-evidence.json', ['observations', 6], 'WARM-JPEG-AC-PLANNING.md', True),
-        pending('JPEG grayscale, single component', 'WARM-COVERAGE.md', 'Unscored: native baseline unavailable'),
+        row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-grayscale-evidence.json', ['observations', -1], 'WARM-JPEG-GRAYSCALE.md', True),
         row('WebP VP8, opaque‡', 'warm-vp8-encode-evidence.json', ['observations', -1], 'WARM-VP8-OPAQUE-ENCODE.md', True),
         row('WebP VP8, opaque from RGBA16‡', 'warm-vp8opaque16-evidence.json', ['observations', -1], 'WARM-VP8-OPAQUE-RGBA16.md', True),
         row('WebP VP8 + alpha‡', 'warm-vp8-encode-evidence.json', ['regressionControls', 0], 'WARM-VP8-OPAQUE-ENCODE.md', verification='Regression screen; prior confirmed'),
@@ -299,7 +299,7 @@ I/O, IPC, fixture preparation and validation are excluded. Each linked report
 declares the exact workload, input and measured source; these are rolling results
 at those sources, not a simultaneous rerun of the current HEAD.
 
-Ratio = Lokad.Image / the faster FFmpeg pre/post mean; lower is faster. Upper is
+Ratio = Lokad.Image / the faster reference pre/post mean; lower is faster. Upper is
 the retained conservative confidence bound, taking the larger filtered/all-actual
 bound where available. **Confirmed** requires an independent quiet repeat and
 upper ≤2. Failed guards remain failures. Full required warm coverage is **open**.
@@ -312,6 +312,23 @@ API. The public FFmpeg encoder changes hidden RGB and exposes no exact option.
 Both subjects preserve every decoded RGBA sample, but compression differs:
 Lokad.Image emits 533,100 bytes versus 183,812 bytes. This is an exact-pixel
 timing comparison; compression efficiency parity is not established.
+
+Single-component grayscale JPEG encoding uses **SIMD-enabled standalone
+libjpeg-turbo3.1.4.1** as an approved tooling-only reference exception; FFmpeg's
+MJPEG encoder emits three components. It confirms **1.388x / upper1.398x** at
+**154,893 B/op**, including normalization and fresh output ownership/release.
+Compressed sizes are **58,823 / 58,910 bytes**, managed/reference; the source-
+quality gap is **0.000033dB**, within the existing0.25dB gate. Prepared fixtures,
+worker and qualified production DLL are reused. The production library remains
+safe managed code with no dependency or native binding.
+
+A bounded reconciliation finds **203 numerical rows**, including **189 selected
+independent confirmations** and **14 latest regression screens with verified
+earlier fixed-pair confirmations**. No measured mean or selected confirmed upper
+exceeds two. Evidence remains tied to its recorded production path and protocol;
+this does not certify every current path. Warm identification-only coverage is
+still missing: the existing inspection benchmark includes startup and I/O.
+See [material coverage](../benchmarks/WARM-COVERAGE.md) for scope and exclusions.
 
 **Decode**
 
