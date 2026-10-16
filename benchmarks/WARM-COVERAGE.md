@@ -120,7 +120,7 @@ B11 twenty existing single-owner exact edits after the shared pool change.
 
 Current B11 single-owner exact edits: [20/20 named cases](WARM-CURRENT-EXACT-EDITS.md) independently confirm on unchanged qualified production, with exact pixels/full ownership, all twelve actuals and both guards. Zero production/harness/native builds or repeated qualification. Stop confirmed cases; B11 is closed. B12 bicubic reconciliation and C01-C04 Identify stay open.
 
-Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): fifty-one of61 named
+Current B12 [bicubic reconciliation](WARM-CURRENT-BICUBIC.md): fifty-four of61 named
 cases are stopped. Three late enlargement proofs reuse actual source/native
 identities; current HorizontalUp16/single-pixel proofs remain stopped. Ordinary
 Mixed16/Mixed8 independently confirm on unchanged qualified production at1.912x/
@@ -144,6 +144,19 @@ Existing TightCross8/TightWide16/Cross8 independently confirm: TightCross8 1.502
 Three existing support paths independently confirm: Tight32x16_16 1.383x/upper1.394x at4,217B/op; Down16x8_8 0.803x/upper0.809x at201,728B/op; Down32x16_16 1.105x/upper1.110x at201,398B/op. Exact pixels, unchanged native bounds, source/limits/full owners, all12 and both guards pass on the same qualified build. Zero production/harness builds or repeated qualification; stop all three. Only Down16x8_16 remains among the edited wide-cache paths.
 Existing tiny/vertical cases independently confirm: Tight2x9_8 1.274x/upper1.286x at194B/op; VerticalUp16 1.260x/upper1.270x at2,516,605B/op; VerticalUp8 1.274x/upper1.282x at1,664,240B/op. Exact rational or qualified binary64/certified-half pixels, approved scoped native bounds, source/limits/full owners, all12 and both guards pass. Same qualified build; both vertical workers reused, zero production/harness builds or repeated qualification. Stop all three.
 Cross/block cases independently confirm: Cross16 1.268x/upper1.275x at1,263,255B/op; Tight2x9_16 1.146x/upper1.180x at266B/op; Tight4x9_8 1.484x/upper1.488x at266B/op. Two8x17 proofs reuse unchanged executed kernels/guards and original workers/scaler: Tight8x17_8 1.089x/upper1.100x at665B/op; Tight8x17_16 0.973x/upper0.981x at1,209B/op. Exact pixels, native bounds, full owners, all12/bothguards pass; zero new timing for the reused pair. Same qualified production, no repeated qualification; stop all five.
+The three existing streaming/block cases independently confirm: Tight16x8_8 1.084x / upper 1.090x, 633 B/op; Tight4x9_16 1.025x / upper 1.030x, 409 B/op; Tight16x8_16 0.984x / upper 0.995x, 1,145 B/op.
+The 16x8 selected streaming kernels changed capacity, workspace and per-column
+row-block preparation; their older dispatchers also lack the two mixed rejection
+calls. The 4x9 word kernel and dispatcher are unchanged, but the earlier streaming
+rejection removed an executed height test. Current complete timings resolve
+these uncertainties. Exact rational/frozen pixels, strict native RGB/alpha
+maximum1 and RMSE0.25, limits and full ownership pass. Every short mean is read
+before its independent twelve-actual job; all actuals and both quiet guards are
+retained. Same qualified production/harness and original rasters throughout.
+The byte16x8 worker is reused; two word adapters are refreshed with the same
+compiler, flags and scaler and frozen outputs. Two shared drivers serve six jobs;
+zero production/harness builds or repeated qualification. Stop all three.
+
 Remaining named B12 helper/dispatch cases and C01-C04 stay open; no grid is added.
 
 | Primitive group | Retained coverage | Remaining material work |

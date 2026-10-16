@@ -1,6 +1,6 @@
 # Current bicubic evidence reconciliation
 
-Fifty-one of the existing 61 named bicubic cases have valid current-path evidence.
+Fifty-four of the existing 61 named bicubic cases have valid current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 
@@ -384,3 +384,16 @@ alias and untimed ready metadata yields identical timed adapter source. Exact
 pixels, native bounds, full owners, all twelve actuals and both guards remain
 valid. Zero new jobs/builds/qualification for these two; stop them. The finite
 checklist remains open; continue the remaining ten named bicubic cases.
+
+The three existing streaming/block cases independently confirm: Tight16x8_8 1.084x / upper 1.090x, 633 B/op; Tight4x9_16 1.025x / upper 1.030x, 409 B/op; Tight16x8_16 0.984x / upper 0.995x, 1,145 B/op.
+The 16x8 selected streaming kernels changed capacity, workspace and per-column
+row-block preparation; their older dispatchers also lack the two mixed rejection
+calls. The 4x9 word kernel and dispatcher are unchanged, but the earlier streaming
+rejection removed an executed height test. Current complete timings resolve
+these uncertainties. Exact rational/frozen pixels, strict native RGB/alpha
+maximum1 and RMSE0.25, limits and full ownership pass. Every short mean is read
+before its independent twelve-actual job; all actuals and both quiet guards are
+retained. Same qualified production/harness and original rasters throughout.
+The byte16x8 worker is reused; two word adapters are refreshed with the same
+compiler, flags and scaler and frozen outputs. Two shared drivers serve six jobs;
+zero production/harness builds or repeated qualification. Stop all three.
