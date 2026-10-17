@@ -203,7 +203,7 @@ def render():
         row('Nearest resize RGBA16', 'warm-prepared-confirm-evidence.json', ['observations', -1], 'WARM-PREPARED-CONFIRM.md', True),
         row('Bilinear resize RGBA8', 'warm-bilinear8-quiet-evidence.json', ['observations', -1], 'WARM-BILINEAR8-QUIET.md', True),
         row('Bilinear resize RGBA16†', 'warm-bilinear-word-cache-evidence.json', ['observations', -1], 'WARM-BILINEAR-WORD-CACHE.md', verification='Gap (short; qualified)'),
-        row('Bilinear upscale RGBA8†', 'warm-current-bilinear-evidence.json', ['cases', 'Up8', -1], 'WARM-CURRENT-BILINEAR.md', True),
+        row('Bilinear upscale RGBA8†', 'warm-bilinear-byte-factorization-evidence.json', ['cases', 'Up8', -1], 'WARM-BILINEAR-BYTE-FACTORIZATION.md', verification='Gap (short; qualified)'),
         row('Bilinear upscale RGBA16†', 'warm-current-bilinear-evidence.json', ['cases', 'Up16', -1], 'WARM-CURRENT-BILINEAR.md', True),
         row('RGBA8 bicubic, single-pixel reduction', 'warm-bicubic-single-pixel-evidence.json', ['observations', -1], 'WARM-BICUBIC-SINGLE-PIXEL.md', True),
         row('Bicubic resize RGBA8§', 'warm-current-bicubic-evidence.json', ['cases', 'Down8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
@@ -324,15 +324,15 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [wider bicubic enlargement strips](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md)
-reduces the seven affected resize times 8.3–17.8%, with exact pixels and the same
-4-KiB workspace admission. All seven remain qualified short parity gaps;
-no routine long confirmation was run. All 200 other comparisons and 58 passing
-proofs are reused. Previous [VP8L lookup](../benchmarks/WARM-VP8L-BORROWED-GREEN.md)
-retains its seven qualified short gaps. Passing cases are stopped.
-The 207 rows select 164 independent confirmations and 43 qualified short screens.
-Fresh **3,656 Release cases per OS** (1,348 internal +1,410 public +898 live FFmpeg),
-plus 163 scalar enlargement/reference controls, pass. The consumer and all
+Latest production round: [exact byte bilinear factorization](../benchmarks/WARM-BILINEAR-BYTE-FACTORIZATION.md)
+reduces RGBA8 enlargement time 16.8%, preserving exact sums, pixels and allocation.
+Its 1.456× mean remains a qualified short gap; no routine long confirmation was
+run. All 206 other comparisons and 58 passing proofs are reused. Previous
+[bicubic strips](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) retain seven
+qualified short improvements. Passing cases are stopped.
+The 207 rows select 163 independent confirmations and 44 qualified short screens.
+Fresh **3,659 Release cases per OS** (1,349 internal +1,412 public +898 live FFmpeg),
+plus 132 scalar bilinear/reference controls, pass. The consumer and all
 three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.

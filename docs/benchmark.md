@@ -31,15 +31,15 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [wider bicubic enlargement strips](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md)
-reduces the seven affected resize times 8.3–17.8%, with exact pixels and the same
-4-KiB workspace admission. All seven remain qualified short parity gaps;
-no routine long confirmation was run. All 200 other comparisons and 58 passing
-proofs are reused. Previous [VP8L lookup](../benchmarks/WARM-VP8L-BORROWED-GREEN.md)
-retains its seven qualified short gaps. Passing cases are stopped.
-The 207 rows select 164 independent confirmations and 43 qualified short screens.
-Fresh **3,656 Release cases per OS** (1,348 internal +1,410 public +898 live FFmpeg),
-plus 163 scalar enlargement/reference controls, pass. The consumer and all
+Latest production round: [exact byte bilinear factorization](../benchmarks/WARM-BILINEAR-BYTE-FACTORIZATION.md)
+reduces RGBA8 enlargement time 16.8%, preserving exact sums, pixels and allocation.
+Its 1.456× mean remains a qualified short gap; no routine long confirmation was
+run. All 206 other comparisons and 58 passing proofs are reused. Previous
+[bicubic strips](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) retain seven
+qualified short improvements. Passing cases are stopped.
+The 207 rows select 163 independent confirmations and 44 qualified short screens.
+Fresh **3,659 Release cases per OS** (1,349 internal +1,412 public +898 live FFmpeg),
+plus 132 scalar bilinear/reference controls, pass. The consumer and all
 three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
@@ -183,7 +183,7 @@ managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 | [Nearest resize RGBA16](../benchmarks/WARM-PREPARED-CONFIRM.md) | 105.69 | 170.58 | 0.620 / 0.629 | 264,466 | Parity confirmed |
 | [Bilinear resize RGBA8](../benchmarks/WARM-BILINEAR8-QUIET.md) | 656.29 | 386.57 | 1.698 / 1.704 | 157,957 | Gap (independent) |
 | [Bilinear resize RGBA16†](../benchmarks/WARM-BILINEAR-WORD-CACHE.md) | 534.35 | 418.51 | 1.277 / 1.336 | 290,127 | Gap (short; qualified) |
-| [Bilinear upscale RGBA8†](../benchmarks/WARM-CURRENT-BILINEAR.md) | 3,774.00 | 2,150.06 | 1.755 / 1.762 | 2,235,599 | Gap (independent) |
+| [Bilinear upscale RGBA8†](../benchmarks/WARM-BILINEAR-BYTE-FACTORIZATION.md) | 3,138.47 | 2,155.65 | 1.456 / 1.549 | 2,235,599 | Gap (short; qualified) |
 | [Bilinear upscale RGBA16†](../benchmarks/WARM-CURRENT-BILINEAR.md) | 2,563.23 | 1,869.40 | 1.371 / 1.382 | 4,498,974 | Gap (independent) |
 | [RGBA8 bicubic, single-pixel reduction](../benchmarks/WARM-BICUBIC-SINGLE-PIXEL.md) | 1,045.31 | 4,897.54 | 0.213 / 0.227 | 130 | Parity confirmed |
 | [Bicubic resize RGBA8§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 707.44 | 418.58 | 1.690 / 1.697 | 332,177 | Gap (independent) |

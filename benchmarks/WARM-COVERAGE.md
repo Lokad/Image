@@ -13,18 +13,19 @@ record which comparisons they replace. Only confirmed <=1x paths are stopped
 for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,164 select independent
-confirmations. Forty-three select qualified screens after changed production: six
+unscored native-alpha incompatibility. Of those numeric rows,163 select independent
+confirmations. Forty-four select qualified screens after changed production: six
 paired-column byte/word bicubic cases, byte bicubic TightDown8, word bilinear
 Down16, live-token progressive444, five fixed JPEG encodes, two opaque VP8 encodes,
 two PNG Paeth dispatch controls and three PNG encodes after chunk checksum folding, and eight adaptive JPEG encodes
 (420 byte/word/restart33,422 byte/word,444 byte/word and gray8) after nonzero planning,
 plus five VP8L decodes and two compressed-alpha VP8 decodes after borrowed lookup,
-and seven byte/word enlargement boundaries after wider strips.
+and seven byte/word enlargement boundaries after wider strips, plus byte
+bilinear Up8 after exact integer factorization.
 RGB16 Paeth now
 has an independent passing proof. Both affected alpha VP8 encodes have independent
 passing confirmations after their shared source conversion changed.
-The forty-three short screens remain gaps; older independent timings are explicitly
+The forty-four short screens remain gaps; older independent timings are explicitly
 superseded. The two
 former short-regression witnesses are now historical after changed AC emission.
 The unscored raw PNG transparency reference is replaced by approved exact timed
@@ -40,7 +41,7 @@ established before this audit and were reconciled, not expanded.
 
 | Item | Named fixed scope and reason | Current evidence / state |
 | --- | --- | --- |
-| B01 | Bilinear Down8/16,Up8/16: shared resize dispatch and byte/word alpha-aware filtering | [Previous phase closed](WARM-CURRENT-BILINEAR.md); [Down16 improved](WARM-BILINEAR-WORD-CACHE.md), still a <=1x gap |
+| B01 | Bilinear Down8/16,Up8/16: shared resize dispatch and byte/word alpha-aware filtering | [Previous phase closed](WARM-CURRENT-BILINEAR.md); [Down16](WARM-BILINEAR-WORD-CACHE.md) and [Up8](WARM-BILINEAR-BYTE-FACTORIZATION.md) improved, still <=1x gaps |
 | B02 | JPEG adaptive Encode8/16,Encode422_8/16: changed AC planner at444/422 and both input depths | [All four closed](WARM-CURRENT-JPEG-ADAPTIVE.md) |
 | B03 | JPEG Decode8,NativeDecode8,NativeDecode420/422,OwnedDecodeGray,NativeDecode420Restart,DirectRgb422/420: changed ordinary AC loop plus distinct component renderers | [All eight closed](WARM-CURRENT-JPEG-DECODE.md) |
 | B04 | JPEG ProgressiveGray/420/422 plus ordinary/live-token444: masked refinement and its guarded fused readers | [Four ordinary proofs reused](WARM-JPEG-REFINEMENT-FUSED.md); [live-token444 improved](WARM-JPEG-CANCELABLE-REFINEMENT.md), still a <=1x gap |
@@ -67,7 +68,16 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [enlargement-strip reconciliation](warm-bicubic-enlargement-strips-evidence.json)
+The latest [byte bilinear reconciliation](warm-bilinear-byte-factorization-evidence.json)
+replaces exactly Up8 with a qualified short gap after 16.8% less managed time.
+Exact integer factorization preserves every final sum, original rounding and
+admission. Only byte bilinear enlargement on both axes executes the changed
+helper. Other206 comparisons/all58 passing proofs retain their paths. Full3659
+Release tests/OS,132 scalar bilinear/reference checks/OS and the same actual
+package consumer/all3 examples bothOS pass. Reference, quality and complete
+operation boundaries are unchanged; no new performance input or settings grid.
+
+The preceding [enlargement-strip reconciliation](warm-bicubic-enlargement-strips-evidence.json)
 replaces exactly seven timings: tight both-axis/horizontal/vertical byte and word,
 plus default horizontal word. All are qualified short gaps after8.3–17.8% less
 managed time. Only existing strip capacities change; reversing them recovers both

@@ -402,6 +402,10 @@ sums remain below 2^47 under output-array admission. Near a quantization boundar
 or tiny alpha, the original binary64 calculation and exact-alpha work/memory
 checks remain active, preserving established pixels and rounding. Other filters,
 mixed scaling and unsupported hardware retain their existing paths.
+For output widths through 16,512, horizontal premultiplied sums fit signed
+32-bit integers and may be factored before widening for the vertical weights.
+Integer distributivity preserves every final sum; wider outputs retain the
+original four-tap arithmetic. Workspace, work charges and rounding are unchanged.
 
 RGBA16 bilinear enlargement may use the same four-output strategy with exact
 64-bit horizontal intermediates, reusing at most four operation-local rows.

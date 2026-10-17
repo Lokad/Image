@@ -20,6 +20,10 @@ internal static class BilinearUpsample
         var stride = source.Width * 4;
         var dx = 2L * width;
         var dy = 2L * height;
+        // Horizontal premultiplied sums fit Int32 at these widths. Factoring
+        // before widening preserves every integer lane, with four rather than
+        // eight wide multiplies per group. Larger outputs retain the old path.
+        var factorHorizontal = dx <= int.MaxValue / 65025;
         // Output array admission bounds 4*width*height below Int32.MaxValue.
         // Integer premultiplied sums are consequently below 2^47, exactly
         // representable in binary64. No intermediate pixel rounding occurs.
@@ -55,14 +59,33 @@ internal static class BilinearUpsample
                 var r2 = offsets[at + 21]; var r3 = offsets[at + 29];
                 var first = Vector512<long>.Zero;
                 var second = Vector512<long>.Zero;
-                Tap(ref first, ref second, Gather(input, row0, l0, l1, l2, l3),
-                    w0 * wy0, w1 * wy0, w2 * wy0, w3 * wy0);
-                Tap(ref first, ref second, Gather(input, row0, r0, r1, r2, r3),
-                    f0 * wy0, f1 * wy0, f2 * wy0, f3 * wy0);
-                Tap(ref first, ref second, Gather(input, row1, l0, l1, l2, l3),
-                    w0 * fy, w1 * fy, w2 * fy, w3 * fy);
-                Tap(ref first, ref second, Gather(input, row1, r0, r1, r2, r3),
-                    f0 * fy, f1 * fy, f2 * fy, f3 * fy);
+                if (factorHorizontal)
+                {
+                    var leftWeights = Vector512.Create(w0, w0, w0, w0, w1, w1, w1, w1,
+                        w2, w2, w2, w2, w3, w3, w3, w3);
+                    var rightWeights = Vector512.Create(f0, f0, f0, f0, f1, f1, f1, f1,
+                        f2, f2, f2, f2, f3, f3, f3, f3);
+                    var top = Horizontal(Gather(input, row0, l0, l1, l2, l3),
+                        Gather(input, row0, r0, r1, r2, r3), leftWeights, rightWeights);
+                    var bottom = Horizontal(Gather(input, row1, l0, l1, l2, l3),
+                        Gather(input, row1, r0, r1, r2, r3), leftWeights, rightWeights);
+                    var topWeight = Vector512.Create((long)wy0); var bottomWeight = Vector512.Create((long)fy);
+                    first = Avx512F.Add(Avx512DQ.MultiplyLow(Avx512F.ConvertToVector512Int64(top.GetLower()), topWeight),
+                        Avx512DQ.MultiplyLow(Avx512F.ConvertToVector512Int64(bottom.GetLower()), bottomWeight));
+                    second = Avx512F.Add(Avx512DQ.MultiplyLow(Avx512F.ConvertToVector512Int64(top.GetUpper()), topWeight),
+                        Avx512DQ.MultiplyLow(Avx512F.ConvertToVector512Int64(bottom.GetUpper()), bottomWeight));
+                }
+                else
+                {
+                    Tap(ref first, ref second, Gather(input, row0, l0, l1, l2, l3),
+                        w0 * wy0, w1 * wy0, w2 * wy0, w3 * wy0);
+                    Tap(ref first, ref second, Gather(input, row0, r0, r1, r2, r3),
+                        f0 * wy0, f1 * wy0, f2 * wy0, f3 * wy0);
+                    Tap(ref first, ref second, Gather(input, row1, l0, l1, l2, l3),
+                        w0 * fy, w1 * fy, w2 * fy, w3 * fy);
+                    Tap(ref first, ref second, Gather(input, row1, r0, r1, r2, r3),
+                        f0 * fy, f1 * fy, f2 * fy, f3 * fy);
+                }
                 var sums01 = Avx512DQ.ConvertToVector512Double(first);
                 var sums23 = Avx512DQ.ConvertToVector512Double(second);
                 var a0 = sums01.GetElement(3); var a1 = sums01.GetElement(7);
@@ -119,6 +142,24 @@ internal static class BilinearUpsample
             Vector512.Create((long)w0, w0, w0, w0, w1, w1, w1, w1)));
         second = Avx512F.Add(second, Avx512DQ.MultiplyLow(Avx512F.ConvertToVector512Int64(premultiplied.GetUpper()),
             Vector512.Create((long)w2, w2, w2, w2, w3, w3, w3, w3)));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector512<int> Horizontal(Vector128<uint> left, Vector128<uint> right,
+        Vector512<int> leftWeights, Vector512<int> rightWeights)
+        => Avx512F.Add(Avx512F.MultiplyLow(Premultiply(left), leftWeights),
+            Avx512F.MultiplyLow(Premultiply(right), rightWeights));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector512<int> Premultiply(Vector128<uint> pixels)
+    {
+        var samples = Avx512F.ConvertToVector512Int32(pixels.AsByte());
+        var alphas = Avx512F.PermuteVar16x32(samples,
+            Vector512.Create(3, 3, 3, 3, 7, 7, 7, 7, 11, 11, 11, 11, 15, 15, 15, 15));
+        var colors = Avx512F.Or(Avx512F.And(samples,
+            Vector512.Create(-1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0)),
+            Vector512.Create(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1));
+        return Avx512F.MultiplyLow(colors, alphas);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

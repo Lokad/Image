@@ -11,6 +11,8 @@
   see the [benchmark state](docs/benchmark.md).
 - Faster RGBA16 bilinear reduction through bounded row reuse, preserving exact
   pixels, resource admission and cancellation.
+- Faster RGBA8 bilinear enlargement through exact integer factorization,
+  preserving pixels, working memory and rounding.
 - Faster RGBA8/16 bicubic filtering through bounded row/column reuse and wider
   enlargement strips, preserving exact pixels and output ownership.
 - Faster adaptive JPEG event planning and fixed-Huffman emission with unchanged
