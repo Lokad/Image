@@ -96,7 +96,7 @@ def render():
         row('PNG RGBA16, None / exact working limit', 'warm-png-boundaries-current-evidence.json', ['cases', 'wordExact', -1], 'WARM-PNG-DECODE-BOUNDARIES.md', True),
         row('PNG RGBA16, None / live cancelable token', 'warm-pngcountall-evidence.json', ['wordConfirmations', 1], 'WARM-PNG-COUNTING.md', True),
         row('PNG RGBA16, None / exact limit + live cancelable token', 'warm-pngcountall-evidence.json', ['wordConfirmations', 0], 'WARM-PNG-COUNTING.md', True),
-        row('PNG RGBA8, Paeth', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePaeth8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
+        row('PNG RGBA8, Paeth', 'warm-paeth-six-channel-evidence.json', ['cases', 'DecodePaeth8', -1], 'WARM-PAETH-SIX-CHANNEL.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, Up', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeUp8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGBA16, Up', 'warm-pngup16-evidence.json', ['observations', -1], 'WARM-PNG-UP16.md', True),
         row('PNG RGBA8, Sub', 'warm-png-sub8-current-evidence.json', ['observations', -1], 'WARM-PNG-SUB8-CURRENT.md', True),
@@ -104,8 +104,8 @@ def render():
         row('PNG RGBA8, Average', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeAverage8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGBA16, Average', 'warm-pngaverage16-evidence.json', ['observations', -1], 'WARM-PNG-AVERAGE16.md', True),
         row('PNG RGBA16, Paeth', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePaeth16', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('PNG RGB8, Paeth', 'warm-pngrgbpaeth8-evidence.json', ['observations', -1], 'WARM-PNG-RGB8-PAETH.md', True),
-        row('PNG RGB16, Paeth', 'warm-png-rgb16-paeth-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-PAETH.md', True),
+        row('PNG RGB8, Paeth', 'warm-paeth-six-channel-evidence.json', ['cases', 'DecodeRgbPaeth8', -1], 'WARM-PAETH-SIX-CHANNEL.md', verification='Gap (short; qualified)'),
+        row('PNG RGB16, Paeth', 'warm-paeth-six-channel-evidence.json', ['cases', 'DecodeRgbPaeth16', -1], 'WARM-PAETH-SIX-CHANNEL.md', True),
         row('PNG gray8, Paeth', 'warm-png-gray8-paeth-evidence.json', ['observations', -1], 'WARM-PNG-GRAY8-PAETH.md', True),
         row('PNG gray-alpha8, Paeth', 'warm-png-gray-alpha8-paeth-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA8-PAETH.md', True),
         row('PNG RGBA16, Adam7', 'warm-current-png-adam7-evidence.json', ['cases', 'DecodeAdam7_16', -1], 'WARM-CURRENT-PNG-ADAM7.md', True),
@@ -324,18 +324,21 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [VP8 source conversion](../benchmarks/WARM-VP8-SOURCE-VIEWS.md)
-reduces complete encode times by about12–14%, preserving exact packets,
-normalization, alpha and work charges. The two opaque cases have qualified short
-screens at1.661/1.685x; both affected alpha cases independently reconfirm parity
-at0.489/0.493x. The other203 comparisons retain their executed paths, including
-the previous [19–20% forward JPEG gain](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md),
+Latest production round: [six-byte Paeth SIMD](../benchmarks/WARM-PAETH-SIX-CHANNEL.md)
+brings RGB16 PNG decode to independent parity at0.959x/upper0.969x, about half
+the prior decode time, with unchanged6,504B/op. Exact samples, ties, work and
+memory admission are retained. RGBA8/RGB8 dispatch controls remain measured gaps;
+the other204 comparisons reuse applicable proofs, including previous
+[12–14% VP8 encode gains](../benchmarks/WARM-VP8-SOURCE-VIEWS.md),
+[19–20% forward JPEG gains](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md),
 [10.6% live-token JPEG decode gain](../benchmarks/WARM-JPEG-CANCELABLE-REFINEMENT.md),
 [24–27% bicubic gain](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) and
 [ordinary progressive JPEG gain](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md).
-Fresh **3,606 Release tests per OS** (1,318 internal +1,390 public +898 live FFmpeg),
+Fresh **3,619 Release cases per OS** (1,331 internal +1,390 public +898 live FFmpeg),
 and the consumer/all three examples through the **same actual Release package on
 Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10.
+Linux retained one external FFmpeg timeout; its isolated40-case nearest-resize
+retry passed on the same build. All41 scalar PNG predictor controls pass per OS.
 
 **Decode and metadata**
 

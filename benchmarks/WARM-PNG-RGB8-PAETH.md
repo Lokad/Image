@@ -1,5 +1,7 @@
 # RGB8 Paeth decoding
 
+The current RGB8 Paeth dispatch control is recorded in [six-byte SIMD reconstruction](WARM-PAETH-SIX-CHANNEL.md); its scalar kernel is unchanged. The retained timing below is historical.
+
 Complete RGB8 Paeth decoding independently confirms **1.204x FFmpeg /
 conservative upper 1.214x**, at **3,432 managed B/op**. Original RGB and opaque
 alpha are exact. Production is unchanged; no speedup is claimed.

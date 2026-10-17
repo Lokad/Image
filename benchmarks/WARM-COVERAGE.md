@@ -1,7 +1,7 @@
 # Material warm coverage
 
-Updated 2026-10-17. The current **<=1x warm parity objective is open**: 51 named
-numeric cases already have independent upper<=1, 152 means exceed1, and four
+Updated 2026-10-17. The current **<=1x warm parity objective is open**: 52 named
+numeric cases already have independent upper<=1, 151 means exceed1, and four
 means<=1 have upper>1. Reuse passing paths and prioritize the largest current
 gaps; do not add a new input or settings grid. The [current summary](../docs/benchmark.md)
 distinguishes parity, measured gaps and confidence-open cases.
@@ -13,10 +13,11 @@ record which comparisons they replace. Only confirmed <=1x paths are stopped
 for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,196 select independent
-confirmations. Eleven select qualified screens after changed production: three
+unscored native-alpha incompatibility. Of those numeric rows,194 select independent
+confirmations. Thirteen select qualified screens after changed production: three
 paired-column bicubic cases, live-token progressive444, five fixed JPEG encodes
-and two opaque VP8 encodes. Both affected alpha VP8 encodes have new independent
+and two opaque VP8 encodes, plus two PNG Paeth dispatch controls. RGB16 Paeth now
+has an independent passing proof. Both affected alpha VP8 encodes have independent
 passing confirmations after their shared source conversion changed.
 They remain gaps; older independent timings are explicitly superseded. The two
 former short-regression witnesses are now historical after changed AC emission.
@@ -45,7 +46,7 @@ established before this audit and were reconciled, not expanded.
 | B10 | VP8L Lossless8 literal/run input: changed entropy/run path | [Closed](WARM-CURRENT-VP8L-LITERAL.md) |
 | B11 | Clone,crop,normal orientation,horizontal/vertical flip,half turn,CW/CCW,transpose,transverse at both depths: shared output-pool acquisition | [All20 closed](WARM-CURRENT-EXACT-EDITS.md); retained-two flip unchanged |
 | B12 | The61 named bicubic selectors: changed dispatch/helper/guard paths, default/tight scratch, byte/word and established support widths | [Previous phase closed](WARM-CURRENT-BICUBIC.md); [three affected word paths improved](WARM-BICUBIC-PAIRED-COLUMNS.md), still <=1x gaps |
-| B13 | Existing PNG stored/Paeth/predictor,RGB/gray/gray-alpha8/16,packed gray1/2/4,palette1/2/4/8,tRNS,Adam7 and frozen compression-mode rows | Unchanged later independent confirmations reused; precise selectors/allocations in the [summary](../docs/benchmark.md) |
+| B13 | Existing PNG stored/Paeth/predictor,RGB/gray/gray-alpha8/16,packed gray1/2/4,palette1/2/4/8,tRNS,Adam7 and frozen compression-mode rows | [RGB16 Paeth parity confirmed](WARM-PAETH-SIX-CHANNEL.md); other applicable proofs reused; precise selectors/allocations in the [summary](../docs/benchmark.md) |
 | B14 | JPEG4208/16,restart,gray and geometric live-token/forward output; VP8 ordinary/simple/alpha/live-token/Stream and opaque8/16 encode; VP8L native/indexed/live-token/Stream and exact backend encodes | [VP8 source views](WARM-VP8-SOURCE-VIEWS.md) improve four encodes; [fixed JPEG encodes](WARM-JPEG-FIXED-AC-FUSION.md) and other unchanged proofs reused |
 | B15 | Nearest Down8/16,Up8/16: unchanged early dispatch/integer kernels and allocation path | Existing independent proofs reused |
 | C01 | PNG resident Identify: full container/CRC/EXIF without inflation, fresh descriptor; decode/cold timings do not cover it | [Closed](WARM-PNG-IDENTIFY.md),1.234x/upper1.238x,88B/op |
@@ -60,7 +61,13 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [VP8 source reconciliation](warm-vp8-source-views-evidence.json)
+The latest [six-byte Paeth reconciliation](warm-paeth-six-channel-evidence.json)
+adds one SIMD reconstruction kernel: RGB16 independently passes at0.959x/upper0.969x.
+RGBA8/RGB8 dispatch controls have qualified short screens; their kernels remain
+unchanged. The other204 comparisons, including all51 earlier passing proofs,
+are reused. The stopped passing RGBA16 Paeth first branch is unchanged.
+
+The prior [VP8 source reconciliation](warm-vp8-source-views-evidence.json)
 changes only source conversion/sample access for four existing encode selectors.
 Opaque8/16 are qualified screens at1.661/1.685x; alpha8/16 independently reconfirm
 passing upper<=1. The other203 comparisons, including49 passing proofs, retain
@@ -96,7 +103,7 @@ Stream acquisition and other codecs retain their executed source paths and proof
 the later three resize changes are recorded above.
 The [preceding Stream reconciliation](warm-png-stream-identify-evidence.json)
 still applies; its common acquisition boundary is represented once, with three
-separate resident parsers. Current 3,606 Release tests per OS and consumer/all
+separate resident parsers. Current 3,619 Release cases per OS and consumer/all
 three examples through the same actual Release package on Windows/Linux pass.
 
 The original audit at349fedd reconciled203 numeric rows and fourteen historical

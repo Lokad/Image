@@ -1,5 +1,7 @@
 # Current PNG decode confirmations
 
+The RGBA8 Paeth row is superseded by the qualified dispatch control in [six-byte SIMD reconstruction](WARM-PAETH-SIX-CHANNEL.md). Other selected rows retain their applicable evidence.
+
 25 of the 25 named PNG decode cases awaiting current-path evidence independently
 confirm within the 2x warm single-CPU target for current production paths.
 Older full-operation timings preceded shared overwrite-pool and fused framing/

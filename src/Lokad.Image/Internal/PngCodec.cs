@@ -1058,11 +1058,12 @@ internal static class PngCodec
         {
             UnfilterSub8(row, cancellation); return;
         }
-        if (filter == 4 && (stride == 8 || stride == 4) && Vector128.IsHardwareAccelerated
+        if (filter == 4 && (stride == 8 || stride == 4 || stride == 6) && Vector128.IsHardwareAccelerated
             && previous.Length >= row.Length && !((ReadOnlySpan<byte>)row).Overlaps(previous))
         {
             if (stride == 8) UnfilterPaeth8(row, previous, cancellation);
-            else UnfilterPaeth4(row, previous, cancellation);
+            else if (stride == 4) UnfilterPaeth4(row, previous, cancellation);
+            else UnfilterPaeth6(row, previous, cancellation);
             return;
         }
         for (var i = 0; i < row.Length; i++)
@@ -1161,6 +1162,41 @@ internal static class PngCodec
             if ((offset & 65535) == 0) cancellation.ThrowIfCancellationRequested();
             row[offset] = unchecked((byte)(row[offset] + Paeth(offset >= 4 ? row[offset - 4] : 0,
                 previous[offset], offset >= 4 ? previous[offset - 4] : 0)));
+        }
+    }
+
+    private static void UnfilterPaeth6(Span<byte> row, ReadOnlySpan<byte> previous, CancellationToken cancellation)
+    {
+        // PNG 9.4: RGB16 has six independent byte recurrences. The two extra
+        // loaded lanes never affect them, and only six decoded bytes are stored.
+        var left = Vector128<short>.Zero; var upperLeft = Vector128<short>.Zero;
+        var byteMask = Vector128.Create((ushort)255);
+        var offset = 0; long nextCheck = 0;
+        for (; offset <= row.Length - 8; offset += 6)
+        {
+            if (offset >= nextCheck)
+            {
+                cancellation.ThrowIfCancellationRequested(); nextCheck = (long)offset + 65532;
+            }
+            var up = Vector128.WidenLower(Vector128.Create(MemoryMarshal.Read<ulong>(previous[offset..]), 0UL).AsByte()).AsInt16();
+            var delta = Vector128.WidenLower(Vector128.Create(MemoryMarshal.Read<ulong>(row[offset..]), 0UL).AsByte()).AsInt16();
+            var a = Vector128.Abs(up - upperLeft);
+            var b = Vector128.Abs(left - upperLeft);
+            var c = Vector128.Abs(left + up - upperLeft - upperLeft);
+            var chooseLeft = Vector128.LessThanOrEqual(a, b) & Vector128.LessThanOrEqual(a, c);
+            var prediction = Vector128.ConditionalSelect(chooseLeft, left,
+                Vector128.ConditionalSelect(Vector128.LessThanOrEqual(b, c), up, upperLeft));
+            left = ((prediction + delta).AsUInt16() & byteMask).AsInt16();
+            var packed = Vector128.Narrow(left.AsUInt16(), Vector128<ushort>.Zero);
+            var first = packed.AsUInt32().GetElement(0); var last = packed.AsUInt16().GetElement(2);
+            MemoryMarshal.Write(row[offset..], in first); MemoryMarshal.Write(row[(offset + 4)..], in last);
+            upperLeft = up;
+        }
+        for (; offset < row.Length; offset++)
+        {
+            if ((offset & 65535) == 0) cancellation.ThrowIfCancellationRequested();
+            row[offset] = unchecked((byte)(row[offset] + Paeth(offset >= 6 ? row[offset - 6] : 0,
+                previous[offset], offset >= 6 ? previous[offset - 6] : 0)));
         }
     }
 

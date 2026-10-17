@@ -1,5 +1,7 @@
 # RGB16 Paeth decoding
 
+The current RGB16 Paeth timing is superseded by [six-byte SIMD reconstruction](WARM-PAETH-SIX-CHANNEL.md), which independently confirms parity. The retained measurements below are historical.
+
 Complete RGB16 PNG decoding independently confirms **1.904× FFmpeg /
 upper1.928×**, at **6,504 managed B/op**. Every 16-bit pixel is exact.
 Production is unchanged; no speedup is claimed.

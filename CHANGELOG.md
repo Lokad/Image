@@ -10,6 +10,7 @@
 - Faster fixed-Huffman JPEG emission with unchanged packets, work and stream
   callback/failure behavior.
 - Faster VP8 source conversion with unchanged packets, alpha and resource charges.
+- Faster RGB16 PNG Paeth decoding through safe SIMD, preserving exact pixels and limits.
 
 ## 0.1.0 — 2026-10-17
 

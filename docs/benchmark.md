@@ -1,8 +1,8 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-17. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 207 numeric rows contain **51 confirmed parity
-cases, 152 measured gaps and 4 confidence-open cases**. The earlier
+conservative upper ≤1x**. The 207 numeric rows contain **52 confirmed parity
+cases, 151 measured gaps and 4 confidence-open cases**. The earlier
 ≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
@@ -31,18 +31,21 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [VP8 source conversion](../benchmarks/WARM-VP8-SOURCE-VIEWS.md)
-reduces complete encode times by about12–14%, preserving exact packets,
-normalization, alpha and work charges. The two opaque cases have qualified short
-screens at1.661/1.685x; both affected alpha cases independently reconfirm parity
-at0.489/0.493x. The other203 comparisons retain their executed paths, including
-the previous [19–20% forward JPEG gain](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md),
+Latest production round: [six-byte Paeth SIMD](../benchmarks/WARM-PAETH-SIX-CHANNEL.md)
+brings RGB16 PNG decode to independent parity at0.959x/upper0.969x, about half
+the prior decode time, with unchanged6,504B/op. Exact samples, ties, work and
+memory admission are retained. RGBA8/RGB8 dispatch controls remain measured gaps;
+the other204 comparisons reuse applicable proofs, including previous
+[12–14% VP8 encode gains](../benchmarks/WARM-VP8-SOURCE-VIEWS.md),
+[19–20% forward JPEG gains](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md),
 [10.6% live-token JPEG decode gain](../benchmarks/WARM-JPEG-CANCELABLE-REFINEMENT.md),
 [24–27% bicubic gain](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) and
 [ordinary progressive JPEG gain](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md).
-Fresh **3,606 Release tests per OS** (1,318 internal +1,390 public +898 live FFmpeg),
+Fresh **3,619 Release cases per OS** (1,331 internal +1,390 public +898 live FFmpeg),
 and the consumer/all three examples through the **same actual Release package on
 Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10.
+Linux retained one external FFmpeg timeout; its isolated40-case nearest-resize
+retry passed on the same build. All41 scalar PNG predictor controls pass per OS.
 
 **Decode and metadata**
 
@@ -70,7 +73,7 @@ Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10
 | [PNG RGBA16, None / exact working limit](../benchmarks/WARM-PNG-DECODE-BOUNDARIES.md) | 5,214.71 | 2,870.48 | 1.817 / 1.821 | 8,896 | Gap (independent) |
 | [PNG RGBA16, None / live cancelable token](../benchmarks/WARM-PNG-COUNTING.md) | 4,518.51 | 2,873.34 | 1.573 / 1.583 | 8,552 | Gap (independent) |
 | [PNG RGBA16, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-COUNTING.md) | 5,265.78 | 2,871.10 | 1.834 / 1.852 | 8,896 | Gap (independent) |
-| [PNG RGBA8, Paeth](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 3,230.00 | 2,843.71 | 1.136 / 1.140 | 4,456 | Gap (independent) |
+| [PNG RGBA8, Paeth](../benchmarks/WARM-PAETH-SIX-CHANNEL.md) | 3,149.31 | 2,847.74 | 1.106 / 1.128 | 4,456 | Gap (short; qualified) |
 | [PNG RGBA8, Up](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 2,209.03 | 1,518.35 | 1.455 / 1.458 | 4,456 | Gap (independent) |
 | [PNG RGBA16, Up](../benchmarks/WARM-PNG-UP16.md) | 3,473.99 | 1,883.52 | 1.844 / 1.864 | 8,552 | Gap (independent) |
 | [PNG RGBA8, Sub](../benchmarks/WARM-PNG-SUB8-CURRENT.md) | 1,179.60 | 699.60 | 1.686 / 1.697 | 4,456 | Gap (independent) |
@@ -78,8 +81,8 @@ Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10
 | [PNG RGBA8, Average](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 2,380.32 | 1,850.31 | 1.286 / 1.298 | 4,456 | Gap (independent) |
 | [PNG RGBA16, Average](../benchmarks/WARM-PNG-AVERAGE16.md) | 5,894.17 | 4,384.37 | 1.344 / 1.357 | 8,552 | Gap (independent) |
 | [PNG RGBA16, Paeth](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 5,401.14 | 5,511.74 | 0.980 / 0.990 | 8,552 | Parity confirmed |
-| [PNG RGB8, Paeth](../benchmarks/WARM-PNG-RGB8-PAETH.md) | 3,140.91 | 2,608.88 | 1.204 / 1.214 | 3,432 | Gap (independent) |
-| [PNG RGB16, Paeth](../benchmarks/WARM-PNG-RGB16-PAETH.md) | 8,510.46 | 4,469.96 | 1.904 / 1.928 | 6,504 | Gap (independent) |
+| [PNG RGB8, Paeth](../benchmarks/WARM-PAETH-SIX-CHANNEL.md) | 3,140.69 | 2,632.59 | 1.193 / 1.241 | 3,432 | Gap (short; qualified) |
+| [PNG RGB16, Paeth](../benchmarks/WARM-PAETH-SIX-CHANNEL.md) | 4,290.59 | 4,472.22 | 0.959 / 0.969 | 6,504 | Parity confirmed |
 | [PNG gray8, Paeth](../benchmarks/WARM-PNG-GRAY8-PAETH.md) | 1,038.34 | 1,029.60 | 1.008 / 1.014 | 1,384 | Gap (independent) |
 | [PNG gray-alpha8, Paeth](../benchmarks/WARM-PNG-GRAY-ALPHA8-PAETH.md) | 2,051.11 | 2,016.66 | 1.017 / 1.068 | 2,408 | Gap (independent) |
 | [PNG RGBA16, Adam7](../benchmarks/WARM-CURRENT-PNG-ADAM7.md) | 5,393.13 | 3,917.00 | 1.377 / 1.381 | 23,600 | Gap (independent) |

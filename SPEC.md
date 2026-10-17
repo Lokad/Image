@@ -541,6 +541,11 @@ through byte shuffles; scalar tails and other hardware preserve full samples.
 This also covers dense Adam7 passes. Sparse passes and transparency retain their
 existing mapping. Work and memory admission are unchanged; expansion checks
 cancellation at most every 4096 pixels and adds no workspace.
+RGB16 Paeth reconstruction uses six independent byte lanes with safe Vector128
+dispatch. Loads stay within both rows and SIMD stores change only six bytes.
+Scalar tails, overlapping/short previous rows and other hardware retain the
+original recurrence, tie order and modulo256 arithmetic. Cancellation is checked
+within64KiB; work and memory admission are unchanged.
 Dense gray8 rows without tRNS expand directly to equal RGB samples and opaque
 alpha. Bounded AVX2 groups process eight samples; tails and other hardware use
 scalar expansion. Dense Adam7 passes also qualify; sparse paths, work and memory
