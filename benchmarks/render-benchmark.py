@@ -175,16 +175,16 @@ def render():
         row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-pngbyte-optimal-evidence.json', ['cases', 'alpha', 'confirm'], 'WARM-PNG-BYTE-OPTIMAL.md', True),
         row('PNG gray-alpha16, level 6 / None', 'warm-pnggrayalpha16encode-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ENCODE.md', True),
         row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode8', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
-        row('JPEG 4:4:4, forward-only output / geometric AC Huffman', 'warm-jpeg444stream-evidence.json', ['observations', -1], 'WARM-JPEG444-FORWARD.md', True),
-        row('JPEG 4:4:4, live cancelable token / geometric AC Huffman', 'warm-jpeg420cancel16-evidence.json', ['regressions', 0], 'WARM-JPEG-FIXED-OCCUPANCY.md', verification='Gap; prior independent proof'),
+        row('JPEG 4:4:4, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode444Stream8', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:4:4, live cancelable token / geometric AC Huffman', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode444Cancelable8', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode16', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
         row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg-ac-planning-evidence.json', ['observations', 4], 'WARM-JPEG-AC-PLANNING.md', True),
         row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-ac-planning-evidence.json', ['observations', 2], 'WARM-JPEG-AC-PLANNING.md', True),
-        row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-geometric-evidence.json', ['observations', -1], 'WARM-JPEG-FIXED-GEOMETRIC.md', True),
-        row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg420cancel16-evidence.json', ['regressions', 1], 'WARM-JPEG-FIXED-OCCUPANCY.md', verification='Gap; prior independent proof'),
-        row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg420cancel16-evidence.json', ['observations', -1], 'WARM-JPEG-FIXED-OCCUPANCY.md', True),
+        row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode420Stream8', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode420Stream16', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-ac-planning-evidence.json', ['observations', 6], 'WARM-JPEG-AC-PLANNING.md', True),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-grayscale-evidence.json', ['observations', -1], 'WARM-JPEG-GRAYSCALE.md', True),
         row('WebP VP8, opaque‡', 'warm-vp8-encode-evidence.json', ['observations', -1], 'WARM-VP8-OPAQUE-ENCODE.md', True),
@@ -324,14 +324,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [cancelable progressive JPEG refinement](../benchmarks/WARM-JPEG-CANCELABLE-REFINEMENT.md)
-reduces the live-token444 complete decode by 10.6%, retaining every original
-per-bit cancellation check, immediate updates and exact work/failure state.
-Its qualified short screen remains1.726x/upper1.798x; parity stays open.
+Latest production round: [fixed JPEG AC emission](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md)
+reduces byte forward-only encode times by about19–20%, preserving exact packets,
+work, ordered callbacks and partial-failure state. All five affected selectors
+have qualified short screens at1.399–1.548x; parity stays open. Linked evidence
+reports unchanged managed/native packet sizes and source-quality checks.
 All other paths reuse their valid proofs, including the previous
+[10.6% live-token JPEG decode gain](../benchmarks/WARM-JPEG-CANCELABLE-REFINEMENT.md),
 [24–27% bicubic gain](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) and
 [ordinary progressive JPEG gain](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md).
-Fresh **3,594 Release tests per OS** (1,306 internal +1,390 public +898 live FFmpeg),
+Fresh **3,596 Release tests per OS** (1,308 internal +1,390 public +898 live FFmpeg),
 and the consumer/all three examples through the **same actual Release package on
 Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10.
 

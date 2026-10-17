@@ -1,5 +1,9 @@
 # JPEG fallback: geometric AC coding
 
+The [fixed AC fusion round](WARM-JPEG-FIXED-AC-FUSION.md) supersedes the fixed
+encoder timings below. Frozen packets/quality anchors and unaffected adaptive
+controls remain applicable; earlier results retain their historical status.
+
 The complete forward-only RGBA8 encode confirms **1.916× FFmpeg / conservative
 upper 1.936×**, with **263,812 allocated B/op**. The original screen was 2.098×
 at 527,367 B/op. The packet shrinks **45%**, allocation falls **50%**, and every

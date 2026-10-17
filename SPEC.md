@@ -310,8 +310,10 @@ RGBA16 width enlargement combined with height reduction may prefer vertical-firs
 filtering when horizontal support is at most five taps and vertical support at
 most ten. The same path may preserve width while reducing height when the existing
 vertical row cache cannot fit; that cache remains preferred when feasible.
-Four output rows reuse five source-column slots; 2,016 bytes of fixed
-arrays fit an admitted 4-KiB workspace. Exact unsigned word products and unrounded
+Up to eight output rows reuse six source-column slots, decoding and filtering
+adjacent columns together. Checked source-row offsets fit bytes; 3,972 bytes of
+fixed arrays fit the unchanged admitted 4-KiB workspace. Scales above 2.125 retain
+four-row bands. Exact unsigned word products and unrounded
 binary64 vertical results feed horizontal filtering without pixel quantization.
 The original coefficient values and each pass's tap order remain; uncertainty
 replays the original horizontal-within-vertical order. The established
@@ -645,10 +647,15 @@ runs count only zero positions; grouped bits visit nonzero positions in spectral
 order while preserving insertion boundaries and signs. Each correction retains its original
 logical work charge. Cancellable tokens, incomplete entropy, tight work budgets
 and unsupported hardware retain scalar correction reads and failure precedence.
-Cancelable readers and processors without BMI2 select the per-bit masked
-correction loop once, avoiding repeated batch setup. Original bit reads, work,
-cancellation checkpoints and partial coefficient updates remain unchanged; no
-additional table or heap workspace is introduced.
+With AVX2/BMI2, no active local-work scope and at least 2,048 remaining work
+units, whole AC refinement blocks may retain cursor, bit cache and work locally;
+each block costs less than that bound. Noncancelable correction fields retain
+safe grouped reads. Live-token blocks preserve every original Huffman, sign/EOB
+and per-correction-bit cancellation check and immediate coefficient update.
+Canonical/marker tails publish prior work before using the original reader.
+Every exit publishes exact reader/work state without replacing the original
+failure. Tighter budgets and unsupported hardware retain the preceding masked
+or scalar traversal. No additional table or heap workspace is introduced.
 
 The JPEG encoder emits baseline Huffman JFIF with selectable grayscale, 4:4:4,
 4:2:2 or 4:2:0 sampling (default 4:2:0). Grayscale explicitly converts RGB to
@@ -674,13 +681,19 @@ The fixed policy deliberately supersedes the original eight-bit AC codes;
 historical quality reports remain unchanged and current decoded samples must
 match them exactly. Encoding retains the same source-plus-8192-byte admission
 and logical work/callback/failure ordering. Prevalidated canonical codewords skip
-repeated range validation; dynamic amplitudes retain their original checks.
+repeated range validation; general amplitude entry points retain their checks.
 On AVX2/BMI2 x64, fixed-block emission builds a nonzero occupancy mask with eight
 row comparisons and bit deposits into the standard zigzag positions. It visits
 only nonzero AC coefficients, retaining ZRL/EOB, amplitudes, ordered work charges,
 callbacks and partial-failure state exactly. Eight row masks are generated from
 the independent zigzag construction; they are shared format state, not image
 storage. Other processors retain the scalar traversal. No workspace is added.
+The fixed AC traversal may fuse bit emission, retaining bit state locally and
+publishing it on every exit. Each code/amplitude still charges work and checks
+cancellation at its original position; byte callbacks, stuffing, quotas and
+partial-failure state remain exact. Amplitudes derived from the already-validated
+category fit the original range check by construction. No heap workspace or
+additional admission is needed.
 Decoding a new table with nine/ten-bit codes uses the existing additional 2 KiB
 prefix lookup; original short-table input admission is unchanged.
 The forward transform evaluates independent coefficients with safe AVX/AVX-512

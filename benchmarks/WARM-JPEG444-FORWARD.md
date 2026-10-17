@@ -1,5 +1,8 @@
 # JPEG444 encoding through forward-only output
 
+The [fixed AC fusion round](WARM-JPEG-FIXED-AC-FUSION.md) supersedes this forward
+encoder timing, preserving the same frozen packet, quality and complete boundary.
+
 Complete RGBA8 JPEG444 encoding through a forward-only Stream independently
 confirms **1.754x FFmpeg / conservative upper 1.765x**, at **526,051 managed
 allocated B/op**. Production is unchanged; uniform current-source coverage

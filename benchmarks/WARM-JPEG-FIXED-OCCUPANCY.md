@@ -1,5 +1,9 @@
 # Fixed JPEG entropy emission with nonzero occupancy
 
+The [fixed AC fusion round](WARM-JPEG-FIXED-AC-FUSION.md) replaces the three fixed
+encoder timings below, including the two previous short regression witnesses.
+Earlier independent results remain historical; their hot traversal has changed.
+
 Complete cancelable RGBA16 JPEG420 encoding improves **19.1%**, from **2.006×**
 FFmpeg to independently confirmed **1.651× / upper 1.663×**, at **3,031.41 µs**
 and unchanged **263,788 B/op**. All twelve actuals are retained, including one

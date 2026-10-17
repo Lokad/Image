@@ -172,19 +172,7 @@ internal static class JpegEncoder
                 occupied |= Bmi2.X64.ParallelBitDeposit(nonzero, masks[row]);
             }
             occupied &= ~1UL; // DC was emitted above.
-            var previous = 0;
-            while (occupied != 0)
-            {
-                var index = BitOperations.TrailingZeroCount(occupied);
-                var zerosBefore = index - previous - 1;
-                while (zerosBefore >= 16) { writer.WriteCodeword(words[0xF0]); zerosBefore -= 16; }
-                var value = quantized[JpegTransform.Zigzag[index]];
-                category = Category(value);
-                if (category > 10) throw new ImageDataException("JPEG AC transform exceeds its coding range.");
-                writer.WriteCodeword(words[zerosBefore << 4 | category]); writer.Signed(value, category);
-                previous = index; occupied &= occupied - 1;
-            }
-            if (previous != 63) writer.WriteCodeword(words[0]);
+            writer.WriteFixedAc(quantized, occupied, words);
             return;
         }
         var zeros = 0;

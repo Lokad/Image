@@ -7,6 +7,8 @@
   see the [benchmark state](docs/benchmark.md).
 - Faster RGBA16 bicubic column filtering within the same scratch limit,
   preserving exact pixels and output ownership.
+- Faster fixed-Huffman JPEG emission with unchanged packets, work and stream
+  callback/failure behavior.
 
 ## 0.1.0 — 2026-10-17
 

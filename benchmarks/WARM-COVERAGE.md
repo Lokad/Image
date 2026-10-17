@@ -13,14 +13,11 @@ record which comparisons they replace. Only confirmed <=1x paths are stopped
 for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,201 select independent
-confirmations. Four select qualified screens after changed production: three
-paired-column bicubic cases and live-token progressive444. They remain gaps;
-their older independent timings were explicitly superseded.
-Two select later short regressions while retaining their unchanged
-independent witnesses: `Encode444Cancelable8`1.819x/upper1.879x and
-`Encode420Stream16`1.948x/upper1.954x. The [bounded audit](warm-jpeg-grayscale-evidence.json)
-records their exact sources, twelve actuals/both guards and selected proof paths.
+unscored native-alpha incompatibility. Of those numeric rows,198 select independent
+confirmations. Nine select qualified screens after changed production: three
+paired-column bicubic cases, live-token progressive444 and five fixed JPEG encodes.
+They remain gaps; older independent timings are explicitly superseded. The two
+former short-regression witnesses are now historical after changed AC emission.
 The unscored raw PNG transparency reference is replaced by approved exact timed
 color-key comparisons; it is not an unresolved managed gap.
 
@@ -47,7 +44,7 @@ established before this audit and were reconciled, not expanded.
 | B11 | Clone,crop,normal orientation,horizontal/vertical flip,half turn,CW/CCW,transpose,transverse at both depths: shared output-pool acquisition | [All20 closed](WARM-CURRENT-EXACT-EDITS.md); retained-two flip unchanged |
 | B12 | The61 named bicubic selectors: changed dispatch/helper/guard paths, default/tight scratch, byte/word and established support widths | [Previous phase closed](WARM-CURRENT-BICUBIC.md); [three affected word paths improved](WARM-BICUBIC-PAIRED-COLUMNS.md), still <=1x gaps |
 | B13 | Existing PNG stored/Paeth/predictor,RGB/gray/gray-alpha8/16,packed gray1/2/4,palette1/2/4/8,tRNS,Adam7 and frozen compression-mode rows | Unchanged later independent confirmations reused; precise selectors/allocations in the [summary](../docs/benchmark.md) |
-| B14 | JPEG4208/16,restart,gray and geometric live-token/forward output; VP8 ordinary/simple/alpha/live-token/Stream and opaque8/16 encode; VP8L native/indexed/live-token/Stream and exact backend encodes | Unchanged later confirmations reused; approved [gray reference](WARM-JPEG-GRAYSCALE.md) and prior witnesses retained |
+| B14 | JPEG4208/16,restart,gray and geometric live-token/forward output; VP8 ordinary/simple/alpha/live-token/Stream and opaque8/16 encode; VP8L native/indexed/live-token/Stream and exact backend encodes | [Five fixed JPEG encodes improved](WARM-JPEG-FIXED-AC-FUSION.md); other confirmations and approved [gray reference](WARM-JPEG-GRAYSCALE.md) reused |
 | B15 | Nearest Down8/16,Up8/16: unchanged early dispatch/integer kernels and allocation path | Existing independent proofs reused |
 | C01 | PNG resident Identify: full container/CRC/EXIF without inflation, fresh descriptor; decode/cold timings do not cover it | [Closed](WARM-PNG-IDENTIFY.md),1.234x/upper1.238x,88B/op |
 | C02 | JPEG resident Identify: complete marker/scan/stuffing/EXIF/EOI scan without entropy/pixels | [Closed](WARM-JPEG-IDENTIFY.md),1.840x/upper1.860x,88B/op |
@@ -61,19 +58,27 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [cancelable refinement reconciliation](warm-jpeg-cancelable-refinement-evidence.json)
+The latest [fixed AC reconciliation](warm-jpeg-fixed-ac-fusion-evidence.json)
+changes the selected fixed writer traversal while preserving exact packets,
+ordered work/callbacks, cancellation, quotas and partial state. Forward4208/16,
+forward4448 and live-token4448/42016 have current qualified short screens at
+1.399–1.548x; no independent parity confirmation is claimed. Adaptive coding,
+general writer methods/fields, scalar fallback and all other codecs/edits retain
+their paths. The other202 comparisons and all51 passing proofs remain applicable.
+
+The preceding [cancelable refinement reconciliation](warm-jpeg-cancelable-refinement-evidence.json)
 adds one post-fast-path live-token dispatch and a guarded block reader/helper/
 wrapper. Previous methods and fields are unchanged. Only ProgressiveCancelable444
 replaces its old timing: the qualified short screen is1.726x/upper1.798x, with
 per-bit cancellation, immediate updates and exact work/failure state retained.
-All206 other comparisons, including all51 passing proofs, retain applicable paths.
+Ordinary progressive paths remain unchanged; subsequent encoder updates are above.
 
 The preceding [paired-column reconciliation](warm-bicubic-paired-columns-evidence.json)
 changes only the admitted word column-filter body and its checked row-offset
 storage. Mixed16, TightMixed16 and TightVertical16 have fresh qualified quiet
 screens; no independent parity confirmation is claimed while their means remain
-1.307–1.462x. The other204 comparisons, including all51 passing parity proofs,
-retain applicable executed paths. No new case or raster was added.
+1.307–1.462x. Other resize paths retain applicable proofs. No new case or raster
+was added.
 
 The preceding [fused refinement reconciliation](warm-jpeg-refinement-fused-evidence.json)
 changes ReadBlock's refinement dispatch and adds a guarded reader plus small
@@ -83,7 +88,7 @@ Stream acquisition and other codecs retain their executed source paths and proof
 the later three resize changes are recorded above.
 The [preceding Stream reconciliation](warm-png-stream-identify-evidence.json)
 still applies; its common acquisition boundary is represented once, with three
-separate resident parsers. Current 3,594 Release tests per OS and consumer/all
+separate resident parsers. Current 3,596 Release tests per OS and consumer/all
 three examples through the same actual Release package on Windows/Linux pass.
 
 The original audit at349fedd reconciled203 numeric rows and fourteen historical
