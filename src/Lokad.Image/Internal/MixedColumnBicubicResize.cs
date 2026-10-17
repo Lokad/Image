@@ -42,24 +42,27 @@ internal static class MixedColumnBicubicResize
         context.Reserve(WorkspaceBytes);
         try
         {
-            // These fixed arrays occupy 2,016 bytes. Intermediate values remain
+            // These fixed arrays occupy 3,972 bytes; row offsets are bounded below24.
+            // Intermediate values remain
             // unrounded; the frame returns before exact tiny-alpha scratch.
-            Span<Vector256<double>> cache = stackalloc Vector256<double>[5 * 4];
-            Span<int> columnIds = stackalloc int[5];
-            Span<Vector256<double>> decoded = stackalloc Vector256<double>[24];
-            Span<double> vertical = stackalloc double[4 * 10];
-            Span<int> rowOffsets = stackalloc int[4 * 10];
-            Span<int> counts = stackalloc int[4];
-            Span<double> normalizers = stackalloc double[4];
+            Span<Vector256<double>> cache = stackalloc Vector256<double>[6 * 8];
+            Span<int> columnIds = stackalloc int[6];
+            Span<Vector512<double>> decoded = stackalloc Vector512<double>[24];
+            Span<double> vertical = stackalloc double[8 * 10];
+            Span<byte> rowOffsets = stackalloc byte[8 * 10];
+            Span<int> counts = stackalloc int[8];
+            Span<double> normalizers = stackalloc double[8];
             Span<double> horizontal = stackalloc double[5];
             Span<int> columns = stackalloc int[5];
             var input = source.Pixels;
             var inputStride = source.Stride;
             var output = result.Pixels;
             var outputStride = result.Stride;
-            for (var tileY = 0; tileY < result.Height; tileY += 4)
+            // Larger vertical scales retain four-row bands within24 source rows.
+            var bandRows = scaleY <= 2.125 ? 8 : 4;
+            for (var tileY = 0; tileY < result.Height; tileY += bandRows)
             {
-                var length = Math.Min(4, result.Height - tileY);
+                var length = Math.Min(bandRows, result.Height - tileY);
                 var firstCenter = (tileY + .5) * source.Height / result.Height - .5;
                 var sourceFirst = Math.Clamp((int)Math.Ceiling(firstCenter - 2 * scaleY), 0, source.Height - 1);
                 for (var y = 0; y < length; y++)
@@ -76,7 +79,7 @@ internal static class MixedColumnBicubicResize
                         vertical[y * 10 + t] = w; normalizer += w;
                         var relative = Math.Clamp(first + t, 0, source.Height - 1) - sourceFirst;
                         if ((uint)relative >= 24) return false;
-                        rowOffsets[y * 10 + t] = relative;
+                        rowOffsets[y * 10 + t] = (byte)relative;
                     }
                     normalizers[y] = normalizer;
                 }
@@ -96,35 +99,33 @@ internal static class MixedColumnBicubicResize
                         var w = ImageTransforms.Kernel(first + t - center, ResizeFilter.Bicubic);
                         horizontal[t] = w; normalizerX += w;
                         var sx = Math.Clamp(first + t, 0, source.Width - 1);
-                        var slot = sx % 5; columns[t] = slot * 4;
+                        var slot = sx % 6; columns[t] = slot * 8;
                         if (columnIds[slot] == sx) continue;
                         columnIds[slot] = sx;
-                        var sy = 0;
-                        for (; sy + 1 < sourceCount; sy += 2)
+                        // Pair adjacent columns, retaining each vertical tap's order.
+                        // Six slots hold five active taps and one prefetched column.
+                        var paired = sx + 1 < source.Width;
+                        var nextSlot = (slot + 1) % 6;
+                        if (paired) columnIds[nextSlot] = sx + 1;
+                        for (var sy = 0; sy < sourceCount; sy++)
                         {
-                            var p0 = BinaryPrimitives.ReadUInt32LittleEndian(input.Slice((sourceFirst + sy) * inputStride + sx * 4, 4));
-                            var p1 = BinaryPrimitives.ReadUInt32LittleEndian(input.Slice((sourceFirst + sy + 1) * inputStride + sx * 4, 4));
-                            var samples = Avx2.ConvertToVector256Int32(Vector128.CreateScalar(p0 | ((ulong)p1 << 32)).AsByte());
+                            var offset = (sourceFirst + sy) * inputStride + sx * 4;
+                            var packed = paired
+                                ? BinaryPrimitives.ReadUInt64LittleEndian(input.Slice(offset, 8))
+                                : BinaryPrimitives.ReadUInt32LittleEndian(input.Slice(offset, 4));
+                            var samples = Avx2.ConvertToVector256Int32(Vector128.CreateScalar(packed).AsByte());
                             var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
-                            var products = Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors));
-                            decoded[sy] = products.GetLower(); decoded[sy + 1] = products.GetUpper();
-                        }
-                        if (sy < sourceCount)
-                        {
-                            var packed = BinaryPrimitives.ReadUInt32LittleEndian(input.Slice((sourceFirst + sy) * inputStride + sx * 4, 4));
-                            var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(packed).AsByte());
-                            var alpha = (int)(packed >> 24);
-                            var products = Sse41.MultiplyLow(samples, Vector128.Create(alpha, alpha, alpha, 1));
-                            decoded[sy] = Avx512F.ConvertToVector512Double(Vector256.Create(products, Vector128<int>.Zero)).GetLower();
+                            decoded[sy] = Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors));
                         }
                         for (var y = 0; y < length; y++)
                         {
                             var weights = vertical.Slice(y * 10, counts[y]);
                             var offsets = rowOffsets.Slice(y * 10, counts[y]);
-                            var sum = Vector256<double>.Zero;
+                            var sum = Vector512<double>.Zero;
                             for (var ty = 0; ty < weights.Length; ty++)
-                                sum = Avx.Add(sum, Avx.Multiply(decoded[offsets[ty]], Vector256.Create(weights[ty])));
-                            cache[slot * 4 + y] = sum;
+                                sum = Avx512F.Add(sum, Avx512F.Multiply(decoded[offsets[ty]], Vector512.Create(weights[ty])));
+                            cache[slot * 8 + y] = sum.GetLower();
+                            if (paired) cache[nextSlot * 8 + y] = sum.GetUpper();
                         }
                     }
                     var outputY = 0;
@@ -233,7 +234,7 @@ internal static class MixedColumnBicubicResize
     }
 
     private static bool OriginalByte(ImageBuffer source, ImageBuffer result, int x, int y,
-        double centerX, int firstX, ReadOnlySpan<double> vertical, ReadOnlySpan<int> rows,
+        double centerX, int firstX, ReadOnlySpan<double> vertical, ReadOnlySpan<byte> rows,
         int sourceFirst, OperationContext context, ref bool deferred)
     {
         var lastX = (int)Math.Floor(centerX + 2);

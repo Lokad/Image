@@ -13,13 +13,14 @@ record which comparisons they replace. Only confirmed <=1x paths are stopped
 for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,194 select independent
-confirmations. Thirteen select qualified screens after changed production: three
-paired-column bicubic cases, live-token progressive444, five fixed JPEG encodes
-and two opaque VP8 encodes, plus two PNG Paeth dispatch controls. RGB16 Paeth now
+unscored native-alpha incompatibility. Of those numeric rows,191 select independent
+confirmations. Sixteen select qualified screens after changed production: six
+paired-column byte/word bicubic cases, live-token progressive444, five fixed JPEG
+encodes, two opaque VP8 encodes and two PNG Paeth dispatch controls. RGB16 Paeth now
 has an independent passing proof. Both affected alpha VP8 encodes have independent
 passing confirmations after their shared source conversion changed.
-They remain gaps; older independent timings are explicitly superseded. The two
+The sixteen short screens remain gaps; older independent timings are explicitly
+superseded. The two
 former short-regression witnesses are now historical after changed AC emission.
 The unscored raw PNG transparency reference is replaced by approved exact timed
 color-key comparisons; it is not an unresolved managed gap.
@@ -45,7 +46,7 @@ established before this audit and were reconciled, not expanded.
 | B09 | VP8 Encode8/16 with alpha: changed output writer and word normalization | [Both closed](WARM-CURRENT-VP8-ENCODE.md) |
 | B10 | VP8L Lossless8 literal/run input: changed entropy/run path | [Closed](WARM-CURRENT-VP8L-LITERAL.md) |
 | B11 | Clone,crop,normal orientation,horizontal/vertical flip,half turn,CW/CCW,transpose,transverse at both depths: shared output-pool acquisition | [All20 closed](WARM-CURRENT-EXACT-EDITS.md); retained-two flip unchanged |
-| B12 | The61 named bicubic selectors: changed dispatch/helper/guard paths, default/tight scratch, byte/word and established support widths | [Previous phase closed](WARM-CURRENT-BICUBIC.md); [three affected word paths improved](WARM-BICUBIC-PAIRED-COLUMNS.md), still <=1x gaps |
+| B12 | The61 named bicubic selectors: changed dispatch/helper/guard paths, default/tight scratch, byte/word and established support widths | [Previous phase closed](WARM-CURRENT-BICUBIC.md); [word](WARM-BICUBIC-PAIRED-COLUMNS.md) and [byte](WARM-BICUBIC-BYTE-PAIRED.md) paired-column paths improved, still <=1x gaps |
 | B13 | Existing PNG stored/Paeth/predictor,RGB/gray/gray-alpha8/16,packed gray1/2/4,palette1/2/4/8,tRNS,Adam7 and frozen compression-mode rows | [RGB16 Paeth parity confirmed](WARM-PAETH-SIX-CHANNEL.md); other applicable proofs reused; precise selectors/allocations in the [summary](../docs/benchmark.md) |
 | B14 | JPEG4208/16,restart,gray and geometric live-token/forward output; VP8 ordinary/simple/alpha/live-token/Stream and opaque8/16 encode; VP8L native/indexed/live-token/Stream and exact backend encodes | [VP8 source views](WARM-VP8-SOURCE-VIEWS.md) improve four encodes; [fixed JPEG encodes](WARM-JPEG-FIXED-AC-FUSION.md) and other unchanged proofs reused |
 | B15 | Nearest Down8/16,Up8/16: unchanged early dispatch/integer kernels and allocation path | Existing independent proofs reused |

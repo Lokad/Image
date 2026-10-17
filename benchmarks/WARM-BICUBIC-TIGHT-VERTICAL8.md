@@ -1,5 +1,10 @@
 # Warm RGBA8 vertical bicubic with an unchanged width
 
+The [byte paired-column round](WARM-BICUBIC-BYTE-PAIRED.md) supersedes the
+tight-memory timing below with a qualified short screen. The default-memory
+row-cache confirmation remains applicable and is reused. Older measurements
+and implementation details below describe their original production build.
+
 Tight-memory 513×259→513×129 bicubic independently confirms **1.822× FFmpeg's
 scaler backend**, conservative upper **1.838×**, at **1,063.64 µs / 264,995 B/op**.
 All twelve actuals are retained and selected; both guards pass. The direct baseline

@@ -325,8 +325,10 @@ cancellation and independent owners remain. No heap workspace, persistent state
 or output cache is added; other directions/supports/hardware and smaller budgets
 retain prior paths.
 RGBA8 may prefer a separate vertical-first specialization for the same
-width-growth/height-reduction supports and 2,016-byte fixed arrays in 4-KiB
-admission. It may also preserve width when the existing vertical row cache is
+width-growth/height-reduction supports. Up to eight output rows reuse six
+source-column slots, decoding and filtering adjacent columns together; scales
+above 2.125 retain four-row bands. Checked source-row offsets fit bytes, and
+3,972-byte fixed arrays fit the unchanged 4-KiB admission. It may also preserve width when the existing vertical row cache is
 unavailable, retaining that faster cache when feasible. Exact byte products
 (at most 65,025) widen to unrounded binary64;
 the same `2^-40*16^2` bounds permit alpha margin 1e-6 and color margin

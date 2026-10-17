@@ -210,7 +210,7 @@ def render():
         row('Bicubic resize RGBA16§', 'warm-current-bicubic-evidence.json', ['cases', 'Down16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic upscale RGBA8§', 'warm-current-bicubic-evidence.json', ['cases', 'Up8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic upscale RGBA16§', 'warm-current-bicubic-evidence.json', ['cases', 'Up16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic mixed-axis RGBA8§', 'warm-current-bicubic-evidence.json', ['cases', 'Mixed8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic mixed-axis RGBA8§', 'warm-bicubic-byte-paired-evidence.json', ['cases', 'Mixed8', -1], 'WARM-BICUBIC-BYTE-PAIRED.md', verification='Gap (short; qualified)'),
         row('Bicubic mixed-axis RGBA16§', 'warm-bicubic-paired-columns-evidence.json', ['cases', 'Mixed16', -1], 'WARM-BICUBIC-PAIRED-COLUMNS.md', verification='Gap (short; qualified)'),
         row('Bicubic width reduction / height enlargement RGBA8§', 'warm-current-bicubic-evidence.json', ['cases', 'Cross8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic width reduction / height enlargement RGBA16§', 'warm-current-bicubic-evidence.json', ['cases', 'Cross16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
@@ -239,7 +239,7 @@ def render():
         row('Bicubic RGBA16 enlargement / input+output+4 KiB limit§', 'warm-bicubictighthorizontalup8-cardinal-evidence.json', ['twoAxisWordConfirmation'], 'WARM-BICUBIC-TIGHT-HORIZONTAL-UP8.md', True),
         row('Bicubic RGBA8 enlargement / input+output+4 KiB limit§', 'warm-bicubictighthorizontalup8-cardinal-evidence.json', ['twoAxisByteConfirmation'], 'WARM-BICUBIC-TIGHT-HORIZONTAL-UP8.md', True),
         row('Bicubic RGBA16, width up / height down / input+output+4 KiB limit§', 'warm-bicubic-paired-columns-evidence.json', ['cases', 'TightMixed16', -1], 'WARM-BICUBIC-PAIRED-COLUMNS.md', verification='Gap (short; qualified)'),
-        row('Bicubic RGBA8, width up / height down / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'TightMixed8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA8, width up / height down / input+output+4 KiB limit§', 'warm-bicubic-byte-paired-evidence.json', ['cases', 'TightMixed8', -1], 'WARM-BICUBIC-BYTE-PAIRED.md', verification='Gap (short; qualified)'),
         row('Bicubic RGBA16, width down / height up / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'TightCross16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic RGBA8, width down / height up / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'TightCross8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic RGBA16, 8×4 / support beyond 256 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight8x4_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
@@ -255,7 +255,7 @@ def render():
         row('Bicubic RGBA8, 2×9 / bounded row blocks / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight2x9_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic RGBA8, 2×2 / generated support beyond 544 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight2x2_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic height reduction, unchanged width RGBA8§', 'warm-bicubictightvertical8-cachepref-evidence.json', ['defaultMemoryConfirmation'], 'WARM-BICUBIC-TIGHT-VERTICAL8.md', True),
-        row('Bicubic height reduction, unchanged width RGBA8 / input+output+4 KiB limit§', 'warm-bicubictightvertical8-cachepref-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-VERTICAL8.md', True),
+        row('Bicubic height reduction, unchanged width RGBA8 / input+output+4 KiB limit§', 'warm-bicubic-byte-paired-evidence.json', ['cases', 'TightVertical8', -1], 'WARM-BICUBIC-BYTE-PAIRED.md', verification='Gap (short; qualified)'),
         row('Bicubic height reduction, unchanged width RGBA16§', 'warm-bicubictightvertical16-cachepref-evidence.json', ['defaultMemoryConfirmation'], 'WARM-BICUBIC-TIGHT-VERTICAL16.md', True),
         row('Bicubic height reduction, unchanged width RGBA16 / input+output+4 KiB limit§', 'warm-bicubic-paired-columns-evidence.json', ['cases', 'TightVertical16', -1], 'WARM-BICUBIC-PAIRED-COLUMNS.md', verification='Gap (short; qualified)'),
         row('Bicubic width reduction, unchanged height RGBA16 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'TightHorizontal16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
@@ -324,21 +324,17 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [six-byte Paeth SIMD](../benchmarks/WARM-PAETH-SIX-CHANNEL.md)
-brings RGB16 PNG decode to independent parity at0.959x/upper0.969x, about half
-the prior decode time, with unchanged6,504B/op. Exact samples, ties, work and
-memory admission are retained. RGBA8/RGB8 dispatch controls remain measured gaps;
-the other204 comparisons reuse applicable proofs, including previous
-[12–14% VP8 encode gains](../benchmarks/WARM-VP8-SOURCE-VIEWS.md),
-[19–20% forward JPEG gains](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md),
-[10.6% live-token JPEG decode gain](../benchmarks/WARM-JPEG-CANCELABLE-REFINEMENT.md),
-[24–27% bicubic gain](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) and
-[ordinary progressive JPEG gain](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md).
-Fresh **3,619 Release cases per OS** (1,331 internal +1,390 public +898 live FFmpeg),
-and the consumer/all three examples through the **same actual Release package on
-Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10.
-Linux retained one external FFmpeg timeout; its isolated40-case nearest-resize
-retry passed on the same build. All41 scalar PNG predictor controls pass per OS.
+Latest production round: [byte bicubic paired columns](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md)
+reduces three affected resize times by26–32%, with exact pixels and unchanged
+4KiB scratch admission. Their1.230–1.374x short means remain parity gaps;
+all204 other comparisons, including52 passing proofs, are reused. The previous
+[six-byte Paeth round](../benchmarks/WARM-PAETH-SIX-CHANNEL.md) brought RGB16 PNG
+decode to independent parity at0.959x/upper0.969x with6,504B/op.
+The207 rows select191 independent confirmations and16 qualified short screens.
+Fresh **3,623 Release cases per OS** (1,331 internal +1,394 public +898 live FFmpeg),
+plus43 scalar mixed-axis resize controls, pass. The consumer/all three examples
+pass through the **same actual Release package on Windows/Linux**. Production
+remains safe managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 
 **Decode and metadata**
 

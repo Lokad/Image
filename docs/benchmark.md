@@ -31,21 +31,17 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [six-byte Paeth SIMD](../benchmarks/WARM-PAETH-SIX-CHANNEL.md)
-brings RGB16 PNG decode to independent parity at0.959x/upper0.969x, about half
-the prior decode time, with unchanged6,504B/op. Exact samples, ties, work and
-memory admission are retained. RGBA8/RGB8 dispatch controls remain measured gaps;
-the other204 comparisons reuse applicable proofs, including previous
-[12–14% VP8 encode gains](../benchmarks/WARM-VP8-SOURCE-VIEWS.md),
-[19–20% forward JPEG gains](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md),
-[10.6% live-token JPEG decode gain](../benchmarks/WARM-JPEG-CANCELABLE-REFINEMENT.md),
-[24–27% bicubic gain](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) and
-[ordinary progressive JPEG gain](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md).
-Fresh **3,619 Release cases per OS** (1,331 internal +1,390 public +898 live FFmpeg),
-and the consumer/all three examples through the **same actual Release package on
-Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10.
-Linux retained one external FFmpeg timeout; its isolated40-case nearest-resize
-retry passed on the same build. All41 scalar PNG predictor controls pass per OS.
+Latest production round: [byte bicubic paired columns](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md)
+reduces three affected resize times by26–32%, with exact pixels and unchanged
+4KiB scratch admission. Their1.230–1.374x short means remain parity gaps;
+all204 other comparisons, including52 passing proofs, are reused. The previous
+[six-byte Paeth round](../benchmarks/WARM-PAETH-SIX-CHANNEL.md) brought RGB16 PNG
+decode to independent parity at0.959x/upper0.969x with6,504B/op.
+The207 rows select191 independent confirmations and16 qualified short screens.
+Fresh **3,623 Release cases per OS** (1,331 internal +1,394 public +898 live FFmpeg),
+plus43 scalar mixed-axis resize controls, pass. The consumer/all three examples
+pass through the **same actual Release package on Windows/Linux**. Production
+remains safe managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 
 **Decode and metadata**
 
@@ -193,7 +189,7 @@ retry passed on the same build. All41 scalar PNG predictor controls pass per OS.
 | [Bicubic resize RGBA16§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 747.22 | 571.05 | 1.309 / 1.319 | 464,342 | Gap (independent) |
 | [Bicubic upscale RGBA8§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 4,738.18 | 3,047.46 | 1.555 / 1.569 | 3,244,622 | Gap (independent) |
 | [Bicubic upscale RGBA16§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 4,386.11 | 2,867.06 | 1.530 / 1.542 | 5,016,578 | Gap (independent) |
-| [Bicubic mixed-axis RGBA8§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,600.47 | 864.39 | 1.852 / 1.872 | 530,370 | Gap (independent) |
+| [Bicubic mixed-axis RGBA8§](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) | 1,135.34 | 868.67 | 1.307 / 1.473 | 530,385 | Gap (short; qualified) |
 | [Bicubic mixed-axis RGBA16§](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) | 1,237.22 | 846.01 | 1.462 / 1.883 | 1,060,429 | Gap (short; qualified) |
 | [Bicubic width reduction / height enlargement RGBA8§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 984.99 | 834.48 | 1.180 / 1.184 | 731,753 | Gap (independent) |
 | [Bicubic width reduction / height enlargement RGBA16§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,045.67 | 824.89 | 1.268 / 1.275 | 1,263,255 | Gap (independent) |
@@ -222,7 +218,7 @@ retry passed on the same build. All41 scalar PNG predictor controls pass per OS.
 | [Bicubic RGBA16 enlargement / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL-UP8.md) | 5,097.69 | 2,874.50 | 1.773 / 1.783 | 4,264,616 | Gap (independent) |
 | [Bicubic RGBA8 enlargement / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL-UP8.md) | 5,412.68 | 3,035.41 | 1.783 / 1.795 | 2,493,057 | Gap (independent) |
 | [Bicubic RGBA16, width up / height down / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) | 1,197.19 | 853.79 | 1.402 / 1.555 | 1,060,439 | Gap (short; qualified) |
-| [Bicubic RGBA8, width up / height down / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,617.87 | 860.30 | 1.881 / 1.901 | 530,370 | Gap (independent) |
+| [Bicubic RGBA8, width up / height down / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) | 1,192.42 | 868.12 | 1.374 / 1.571 | 530,385 | Gap (short; qualified) |
 | [Bicubic RGBA16, width down / height up / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,298.90 | 825.27 | 1.574 / 1.579 | 1,063,477 | Gap (independent) |
 | [Bicubic RGBA8, width down / height up / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,249.21 | 831.82 | 1.502 / 1.513 | 531,910 | Gap (independent) |
 | [Bicubic RGBA16, 8×4 / support beyond 256 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 445.77 | 693.80 | 0.643 / 0.651 | 377 | Parity confirmed |
@@ -238,7 +234,7 @@ retry passed on the same build. All41 scalar PNG predictor controls pass per OS.
 | [Bicubic RGBA8, 2×9 / bounded row blocks / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,337.80 | 1,050.39 | 1.274 / 1.286 | 194 | Gap (independent) |
 | [Bicubic RGBA8, 2×2 / generated support beyond 544 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,173.66 | 1,633.74 | 0.718 / 0.745 | 138 | Parity confirmed |
 | [Bicubic height reduction, unchanged width RGBA8§](../benchmarks/WARM-BICUBIC-TIGHT-VERTICAL8.md) | 756.93 | 588.11 | 1.287 / 1.301 | 648,992 | Gap (independent) |
-| [Bicubic height reduction, unchanged width RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-VERTICAL8.md) | 1,063.64 | 583.82 | 1.822 / 1.838 | 264,995 | Gap (independent) |
+| [Bicubic height reduction, unchanged width RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) | 725.00 | 589.64 | 1.230 / 1.378 | 265,003 | Gap (short; qualified) |
 | [Bicubic height reduction, unchanged width RGBA16§](../benchmarks/WARM-BICUBIC-TIGHT-VERTICAL16.md) | 832.49 | 585.00 | 1.423 / 1.428 | 913,737 | Gap (independent) |
 | [Bicubic height reduction, unchanged width RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) | 770.52 | 589.55 | 1.307 / 1.361 | 529,847 | Gap (short; qualified) |
 | [Bicubic width reduction, unchanged height RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 838.73 | 579.56 | 1.447 / 1.459 | 530,858 | Gap (independent) |

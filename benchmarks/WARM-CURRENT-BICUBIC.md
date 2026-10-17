@@ -3,7 +3,9 @@
 The [paired-column round](WARM-BICUBIC-PAIRED-COLUMNS.md) supersedes the three
 Mixed16, TightMixed16 and TightVertical16 timings below with qualified short
 screens. Their paths changed; the old independent results remain historical.
-The other 58 comparisons retain applicable unchanged-path proofs. The current
+The [byte paired-column round](WARM-BICUBIC-BYTE-PAIRED.md) also supersedes
+Mixed8, TightMixed8 and TightVertical8 with qualified short screens. The other
+55 comparisons retain applicable unchanged-path proofs. The current
 strict <=1x objective remains open; historical stopped/closed labels refer to
 the completed <=2x phase.
 
