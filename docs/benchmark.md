@@ -1,8 +1,8 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-17. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 207 numeric rows contain **52 confirmed parity
-cases, 151 measured gaps and 4 confidence-open cases**. The earlier
+conservative upper ≤1x**. The 207 numeric rows contain **54 confirmed parity
+cases, 149 measured gaps and 4 confidence-open cases**. The earlier
 ≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
@@ -31,19 +31,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [PNG chunk checksum folding](../benchmarks/WARM-PNG-CHUNK-CRC.md)
-reduces stored RGBA8 encoding by 13.1% and stored RGBA16 by 14.5% against its
-contemporaneous accepted-build control. Their 1.624x/1.664x short means remain
-gaps. All 16 affected encodes were refreshed; ten independently reconfirm parity.
-The 191 other comparisons, including 42 passing proofs, are reused.
-Previous [byte bicubic strips](../benchmarks/WARM-BICUBIC-BYTE-STRIPS.md),
-[word bilinear row reuse](../benchmarks/WARM-BILINEAR-WORD-CACHE.md) and
-[byte bicubic paired columns](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) retain
-16.5%, 31.8% and 26–32% gains. [Six-byte Paeth SIMD](../benchmarks/WARM-PAETH-SIX-CHANNEL.md)
-brought RGB16 PNG decode to independent parity at 0.959x/upper 0.969x with 6,504 B/op.
+Latest production round: [PNG Up SIMD](../benchmarks/WARM-PNG-UP-SIMD.md)
+reduces RGBA8/16 Up decode time by 32.8%/45.2%. Both independently pass parity
+at 0.984x/upper 0.989x and 0.995x/upper 0.997x, with exact samples and unchanged
+allocations. Reuse all 205 other comparisons, including 52 prior passing proofs.
+Previous [PNG chunk folding](../benchmarks/WARM-PNG-CHUNK-CRC.md) retains
+13.1%/14.5% stored-encode gains and ten refreshed passing encodes. Other accepted
+gains remain in their linked evidence; stopped passing cases are not retuned.
 The 207 rows select 183 independent confirmations and 24 qualified short screens.
-Fresh **3,639 Release cases per OS** (1,337 internal +1,404 public +898 live FFmpeg),
-plus 83 scalar CRC and 49 scalar public PNG controls, pass. The consumer and all
+Fresh **3,642 Release cases per OS** (1,340 internal +1,404 public +898 live FFmpeg),
+plus five scalar Up and 127 scalar public PNG controls, pass. The consumer and all
 three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
@@ -75,8 +72,8 @@ managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 | [PNG RGBA16, None / live cancelable token](../benchmarks/WARM-PNG-COUNTING.md) | 4,518.51 | 2,873.34 | 1.573 / 1.583 | 8,552 | Gap (independent) |
 | [PNG RGBA16, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-COUNTING.md) | 5,265.78 | 2,871.10 | 1.834 / 1.852 | 8,896 | Gap (independent) |
 | [PNG RGBA8, Paeth](../benchmarks/WARM-PAETH-SIX-CHANNEL.md) | 3,149.31 | 2,847.74 | 1.106 / 1.128 | 4,456 | Gap (short; qualified) |
-| [PNG RGBA8, Up](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 2,209.03 | 1,518.35 | 1.455 / 1.458 | 4,456 | Gap (independent) |
-| [PNG RGBA16, Up](../benchmarks/WARM-PNG-UP16.md) | 3,473.99 | 1,883.52 | 1.844 / 1.864 | 8,552 | Gap (independent) |
+| [PNG RGBA8, Up](../benchmarks/WARM-PNG-UP-SIMD.md) | 1,484.65 | 1,509.16 | 0.984 / 0.989 | 4,456 | Parity confirmed |
+| [PNG RGBA16, Up](../benchmarks/WARM-PNG-UP-SIMD.md) | 1,902.38 | 1,911.94 | 0.995 / 0.997 | 8,552 | Parity confirmed |
 | [PNG RGBA8, Sub](../benchmarks/WARM-PNG-SUB8-CURRENT.md) | 1,179.60 | 699.60 | 1.686 / 1.697 | 4,456 | Gap (independent) |
 | [PNG RGBA16, Sub](../benchmarks/WARM-PNG-SUB16.md) | 357.99 | 743.02 | 0.482 / 0.493 | 8,552 | Parity confirmed |
 | [PNG RGBA8, Average](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 2,380.32 | 1,850.31 | 1.286 / 1.298 | 4,456 | Gap (independent) |

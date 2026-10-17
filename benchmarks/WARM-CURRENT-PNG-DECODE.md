@@ -1,5 +1,8 @@
 # Current PNG decode confirmations
 
+Historical checkpoint. Its RGBA8 Up timing is superseded by the
+[Up SIMD round](WARM-PNG-UP-SIMD.md); other unchanged-path proofs remain applicable.
+
 The RGBA8 Paeth row is superseded by the qualified dispatch control in [six-byte SIMD reconstruction](WARM-PAETH-SIX-CHANNEL.md). Other selected rows retain their applicable evidence.
 
 25 of the 25 named PNG decode cases awaiting current-path evidence independently

@@ -492,6 +492,10 @@ the chunk-type CRC seeds the payload, residues combine in order, and the final
 original chunk path. Chunk bytes, scalar tails, write sequence, admission and
 cancellation remain unchanged; no per-operation workspace is added. Decode and
 metadata checksum entry points keep their original arithmetic and polling.
+PNG Up reconstruction may add nonoverlapping byte rows with safe 512/256/128-bit
+SIMD and scalar tails, independently modulo256 at either precision. Original
+64 KiB cancellation boundaries remain; overlapping rows and unsupported hardware
+retain scalar behavior. No workspace, admission or work charge is added.
 Tight budgets, larger data and Adam7 retain the original inflation path.
 The original bit/row work, error order, precision and pixel contracts are unchanged.
 Filtered buffers may reuse two released exact-size arrays with a combined 4 MiB

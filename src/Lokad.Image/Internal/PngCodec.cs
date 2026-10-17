@@ -1054,6 +1054,11 @@ internal static class PngCodec
             // PNG section 9.2: None stores the original bytes without prediction.
             cancellation.ThrowIfCancellationRequested(); return;
         }
+        if (filter == 2 && Vector128.IsHardwareAccelerated && previous.Length >= row.Length
+            && !((ReadOnlySpan<byte>)row).Overlaps(previous))
+        {
+            UnfilterUp(row, previous, cancellation); return;
+        }
         if (filter == 1 && stride == 8 && Vector128.IsHardwareAccelerated && previous.Length >= row.Length)
         {
             UnfilterSub8(row, cancellation); return;
@@ -1078,6 +1083,41 @@ internal static class PngCodec
                 _ => throw new ImageDataException("Invalid PNG filter.")
             };
             row[i] = unchecked((byte)(row[i] + prediction));
+        }
+    }
+
+    private static void UnfilterUp(Span<byte> row, ReadOnlySpan<byte> previous, CancellationToken cancellation)
+    {
+        // PNG section 9.3: independent byte sums modulo256 at every precision.
+        // Vector widths divide65536, retaining the original cancellation points.
+        var i = 0;
+        if (Vector512.IsHardwareAccelerated)
+            for (; i <= row.Length - 64; i += 64)
+            {
+                if ((i & 65535) == 0) cancellation.ThrowIfCancellationRequested();
+                var value = Vector512.LoadUnsafe(ref MemoryMarshal.GetReference(row), (nuint)i)
+                    + Vector512.LoadUnsafe(ref MemoryMarshal.GetReference(previous), (nuint)i);
+                value.StoreUnsafe(ref MemoryMarshal.GetReference(row), (nuint)i);
+            }
+        if (Vector256.IsHardwareAccelerated)
+            for (; i <= row.Length - 32; i += 32)
+            {
+                if ((i & 65535) == 0) cancellation.ThrowIfCancellationRequested();
+                var value = Vector256.LoadUnsafe(ref MemoryMarshal.GetReference(row), (nuint)i)
+                    + Vector256.LoadUnsafe(ref MemoryMarshal.GetReference(previous), (nuint)i);
+                value.StoreUnsafe(ref MemoryMarshal.GetReference(row), (nuint)i);
+            }
+        for (; i <= row.Length - 16; i += 16)
+        {
+            if ((i & 65535) == 0) cancellation.ThrowIfCancellationRequested();
+            var value = Vector128.LoadUnsafe(ref MemoryMarshal.GetReference(row), (nuint)i)
+                + Vector128.LoadUnsafe(ref MemoryMarshal.GetReference(previous), (nuint)i);
+            value.StoreUnsafe(ref MemoryMarshal.GetReference(row), (nuint)i);
+        }
+        for (; i < row.Length; i++)
+        {
+            if ((i & 65535) == 0) cancellation.ThrowIfCancellationRequested();
+            row[i] = unchecked((byte)(row[i] + previous[i]));
         }
     }
 

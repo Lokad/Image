@@ -1,5 +1,8 @@
 # PNG16 Up reconstruction
 
+Historical checkpoint. Its RGBA16 Up timings are superseded by the
+[Up SIMD round](WARM-PNG-UP-SIMD.md); other unchanged-path proofs remain applicable.
+
 Complete RGBA16 Up decoding independently confirms **1.844x FFmpeg /
 conservative upper 1.864x**, at **8,552 managed B/op**. Full words, alpha and
 hidden RGB remain exact. Production is unchanged; no speedup is claimed.

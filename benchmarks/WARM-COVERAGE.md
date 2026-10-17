@@ -1,7 +1,7 @@
 # Material warm coverage
 
-Updated 2026-10-17. The current **<=1x warm parity objective is open**: 52 named
-numeric cases already have independent upper<=1, 151 means exceed1, and four
+Updated 2026-10-17. The current **<=1x warm parity objective is open**: 54 named
+numeric cases already have independent upper<=1, 149 means exceed1, and four
 means<=1 have upper>1. Reuse passing paths and prioritize the largest current
 gaps; do not add a new input or settings grid. The [current summary](../docs/benchmark.md)
 distinguishes parity, measured gaps and confidence-open cases.
@@ -49,7 +49,7 @@ established before this audit and were reconciled, not expanded.
 | B10 | VP8L Lossless8 literal/run input: changed entropy/run path | [Closed](WARM-CURRENT-VP8L-LITERAL.md) |
 | B11 | Clone,crop,normal orientation,horizontal/vertical flip,half turn,CW/CCW,transpose,transverse at both depths: shared output-pool acquisition | [All20 closed](WARM-CURRENT-EXACT-EDITS.md); retained-two flip unchanged |
 | B12 | The61 named bicubic selectors: changed dispatch/helper/guard paths, default/tight scratch, byte/word and established support widths | [Previous phase closed](WARM-CURRENT-BICUBIC.md); [word](WARM-BICUBIC-PAIRED-COLUMNS.md) and [byte](WARM-BICUBIC-BYTE-PAIRED.md) paired columns plus [byte strips](WARM-BICUBIC-BYTE-STRIPS.md) improved, still <=1x gaps |
-| B13 | Existing PNG stored/Paeth/predictor,RGB/gray/gray-alpha8/16,packed gray1/2/4,palette1/2/4/8,tRNS,Adam7 and frozen compression-mode rows | [RGB16 Paeth parity confirmed](WARM-PAETH-SIX-CHANNEL.md); other applicable proofs reused; precise selectors/allocations in the [summary](../docs/benchmark.md) |
+| B13 | Existing PNG stored/Paeth/predictor,RGB/gray/gray-alpha8/16,packed gray1/2/4,palette1/2/4/8,tRNS,Adam7 and frozen compression-mode rows | [Up8/16](WARM-PNG-UP-SIMD.md) and [RGB16 Paeth](WARM-PAETH-SIX-CHANNEL.md) parity confirmed; other applicable proofs reused; precise selectors/allocations in the [summary](../docs/benchmark.md) |
 | B14 | JPEG4208/16,restart,gray and geometric live-token/forward output; VP8 ordinary/simple/alpha/live-token/Stream and opaque8/16 encode; VP8L native/indexed/live-token/Stream and exact backend encodes | [VP8 source views](WARM-VP8-SOURCE-VIEWS.md) improve four encodes; [fixed JPEG encodes](WARM-JPEG-FIXED-AC-FUSION.md) and other unchanged proofs reused |
 | B15 | Nearest Down8/16,Up8/16: unchanged early dispatch/integer kernels and allocation path | Existing independent proofs reused |
 | C01 | PNG resident Identify: full container/CRC/EXIF without inflation, fresh descriptor; decode/cold timings do not cover it | [Closed](WARM-PNG-IDENTIFY.md),1.234x/upper1.238x,88B/op |
@@ -64,7 +64,15 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [PNG chunk checksum reconciliation](warm-png-chunk-crc-evidence.json)
+The latest [PNG Up reconciliation](warm-png-up-simd-evidence.json) changes only
+filter2 dispatch and a safe SIMD row helper. DecodeUp8/16 independently pass
+at0.984x/upper0.989x and0.995x/upper0.997x. The entire predecessor PngCodec file
+is restored by removing that dispatch/helper; all205 other comparisons and52
+prior passing proofs remain applicable. No admission/work/allocation or quality
+change. Current3642 Release cases/OS, five scalar Up and127 scalar public PNG
+controls/OS and the same actual package consumer/all3 examples bothOS pass.
+
+The preceding [PNG chunk checksum reconciliation](warm-png-chunk-crc-evidence.json)
 affects exactly16 existing PNG encode selectors. Ten independently reconfirm
 upper<=1; six retain qualified short gaps. Stored8/16 means are1.624/1.664x;
 the word gain uses a contemporaneous accepted-build control because its old

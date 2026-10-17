@@ -97,8 +97,8 @@ def render():
         row('PNG RGBA16, None / live cancelable token', 'warm-pngcountall-evidence.json', ['wordConfirmations', 1], 'WARM-PNG-COUNTING.md', True),
         row('PNG RGBA16, None / exact limit + live cancelable token', 'warm-pngcountall-evidence.json', ['wordConfirmations', 0], 'WARM-PNG-COUNTING.md', True),
         row('PNG RGBA8, Paeth', 'warm-paeth-six-channel-evidence.json', ['cases', 'DecodePaeth8', -1], 'WARM-PAETH-SIX-CHANNEL.md', verification='Gap (short; qualified)'),
-        row('PNG RGBA8, Up', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeUp8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('PNG RGBA16, Up', 'warm-pngup16-evidence.json', ['observations', -1], 'WARM-PNG-UP16.md', True),
+        row('PNG RGBA8, Up', 'warm-png-up-simd-evidence.json', ['cases', 'DecodeUp8', -1], 'WARM-PNG-UP-SIMD.md', True),
+        row('PNG RGBA16, Up', 'warm-png-up-simd-evidence.json', ['cases', 'DecodeUp16', -1], 'WARM-PNG-UP-SIMD.md', True),
         row('PNG RGBA8, Sub', 'warm-png-sub8-current-evidence.json', ['observations', -1], 'WARM-PNG-SUB8-CURRENT.md', True),
         row('PNG RGBA16, Sub', 'warm-pngsub16-evidence.json', ['observations', -1], 'WARM-PNG-SUB16.md', True),
         row('PNG RGBA8, Average', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeAverage8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
@@ -324,19 +324,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [PNG chunk checksum folding](../benchmarks/WARM-PNG-CHUNK-CRC.md)
-reduces stored RGBA8 encoding by 13.1% and stored RGBA16 by 14.5% against its
-contemporaneous accepted-build control. Their 1.624x/1.664x short means remain
-gaps. All 16 affected encodes were refreshed; ten independently reconfirm parity.
-The 191 other comparisons, including 42 passing proofs, are reused.
-Previous [byte bicubic strips](../benchmarks/WARM-BICUBIC-BYTE-STRIPS.md),
-[word bilinear row reuse](../benchmarks/WARM-BILINEAR-WORD-CACHE.md) and
-[byte bicubic paired columns](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) retain
-16.5%, 31.8% and 26–32% gains. [Six-byte Paeth SIMD](../benchmarks/WARM-PAETH-SIX-CHANNEL.md)
-brought RGB16 PNG decode to independent parity at 0.959x/upper 0.969x with 6,504 B/op.
+Latest production round: [PNG Up SIMD](../benchmarks/WARM-PNG-UP-SIMD.md)
+reduces RGBA8/16 Up decode time by 32.8%/45.2%. Both independently pass parity
+at 0.984x/upper 0.989x and 0.995x/upper 0.997x, with exact samples and unchanged
+allocations. Reuse all 205 other comparisons, including 52 prior passing proofs.
+Previous [PNG chunk folding](../benchmarks/WARM-PNG-CHUNK-CRC.md) retains
+13.1%/14.5% stored-encode gains and ten refreshed passing encodes. Other accepted
+gains remain in their linked evidence; stopped passing cases are not retuned.
 The 207 rows select 183 independent confirmations and 24 qualified short screens.
-Fresh **3,639 Release cases per OS** (1,337 internal +1,404 public +898 live FFmpeg),
-plus 83 scalar CRC and 49 scalar public PNG controls, pass. The consumer and all
+Fresh **3,642 Release cases per OS** (1,340 internal +1,404 public +898 live FFmpeg),
+plus five scalar Up and 127 scalar public PNG controls, pass. The consumer and all
 three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
