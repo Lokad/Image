@@ -174,19 +174,19 @@ def render():
         row('PNG gray16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGray16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Gap (short; qualified)'),
         row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeGrayAlpha8', -1], 'WARM-PNG-BYTE-PACKING.md', True),
         row('PNG gray-alpha16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGrayAlpha16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
-        row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode8', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
+        row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-jpeg-adaptive-ac-evidence.json', ['cases', 'Encode8', -1], 'WARM-JPEG-ADAPTIVE-AC.md', verification='Gap (short; qualified)'),
         row('JPEG 4:4:4, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode444Stream8', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
         row('JPEG 4:4:4, live cancelable token / geometric AC Huffman', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode444Cancelable8', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode16', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
-        row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
-        row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
-        row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg-ac-planning-evidence.json', ['observations', 4], 'WARM-JPEG-AC-PLANNING.md', True),
-        row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-ac-planning-evidence.json', ['observations', 2], 'WARM-JPEG-AC-PLANNING.md', True),
+        row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-adaptive-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-ADAPTIVE-AC.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-adaptive-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-ADAPTIVE-AC.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-adaptive-ac-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-JPEG-ADAPTIVE-AC.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg-adaptive-ac-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-ADAPTIVE-AC.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-adaptive-ac-evidence.json', ['cases', 'Encode420Restart8', -1], 'WARM-JPEG-ADAPTIVE-AC.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode420Stream8', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode420Stream16', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-ac-planning-evidence.json', ['observations', 6], 'WARM-JPEG-AC-PLANNING.md', True),
-        row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-grayscale-evidence.json', ['observations', -1], 'WARM-JPEG-GRAYSCALE.md', True),
+        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-adaptive-ac-evidence.json', ['cases', 'Encode420_16', -1], 'WARM-JPEG-ADAPTIVE-AC.md', verification='Gap (short; qualified)'),
+        row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-adaptive-ac-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-JPEG-ADAPTIVE-AC.md', verification='Gap (short; qualified)'),
         row('WebP VP8, opaque‡', 'warm-vp8-source-views-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8-SOURCE-VIEWS.md', verification='Gap (short; qualified)'),
         row('WebP VP8, opaque from RGBA16‡', 'warm-vp8-source-views-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-SOURCE-VIEWS.md', verification='Gap (short; qualified)'),
         row('WebP VP8 + alpha‡', 'warm-vp8-source-views-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8-SOURCE-VIEWS.md', True),
@@ -324,16 +324,15 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [JPEG entropy scanning](../benchmarks/WARM-JPEG-ENTROPY.md)
-cuts resident Identify time 72.9%, reaching 0.499x / upper0.506x with unchanged
-88 B/op. Full structural validation and the approved timed FFmpeg metadata
-projection remain fixed. All 206 other comparisons and 57 prior passing proofs
-are reused. Previous [PNG byte packing](../benchmarks/WARM-PNG-BYTE-PACKING.md)
-retains three passing encodes; [Up SIMD](../benchmarks/WARM-PNG-UP-SIMD.md)
-retains two passing decodes. Passing cases are stopped.
-The 207 rows select 186 independent confirmations and 21 qualified short screens.
-Fresh **3,648 Release cases per OS** (1,342 internal +1,408 public +898 live FFmpeg),
-plus 20 scalar JPEG scanner controls, pass. The consumer and all
+Latest production round: [adaptive JPEG AC planning](../benchmarks/WARM-JPEG-ADAPTIVE-AC.md)
+reduces the eight affected encode times 9.9–14.8%, with unchanged packets,
+quality and allocations. All eight remain qualified short parity gaps;
+no routine long confirmation was run. All 199 other comparisons and 58 passing
+proofs are reused. Previous [JPEG inspection](../benchmarks/WARM-JPEG-ENTROPY.md)
+retains its independent 0.499x / upper0.506x result. Passing cases are stopped.
+The 207 rows select 178 independent confirmations and 29 qualified short screens.
+Fresh **3,650 Release cases per OS** (1,344 internal +1,408 public +898 live FFmpeg),
+plus 20 scalar adaptive JPEG controls, pass. The consumer and all
 three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
@@ -354,7 +353,7 @@ managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 API: the FFmpeg encoder does not expose hidden-RGB preservation. Decoded RGBA is
 exact; managed/native packets are533,100/183,812 B. Compression-efficiency parity
 is not established. Single-component grayscale JPEG uses approved benchmark-only
-**SIMD libjpeg-turbo3.1.4.1**, since FFmpeg emits three components:1.388x/upper1.398x,
+**SIMD libjpeg-turbo3.1.4.1**, since FFmpeg emits three components; its current qualified short is shown above,
 154,893 B/op,58,823/58,910 B compressed; source-PSNR gap0.000033dB. Complete
 normalization and output ownership are timed.
 

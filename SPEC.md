@@ -756,6 +756,9 @@ restart positions. Separate luma/chroma tables reserve the all-ones code. The
 buffer is private, leased per thread, and retained only up to 4 MiB; every encode
 recomputes its events. Admission includes its full capacity and a 64 KiB table/
 scratch allowance. Histogram traversal and table construction charge work.
+AC planning may reuse the fixed encoder's safe AVX2/BMI2 scan occupancy to visit
+only nonzero coefficients. Events, histograms and range-error order stay exact;
+other hardware retains scalar traversal, with no additional workspace/admission.
 Lower output quotas retain adaptive coding and enforce every write; combined
 symbol writes apply only when conservative output and work bounds are satisfied.
 When the whole packet's conservative bound fits the output quota, a

@@ -1,5 +1,9 @@
 # Local JPEG AC event planning
 
+Historical timing checkpoint: its adaptive encode rows are superseded by
+[nonzero AC planning](WARM-JPEG-ADAPTIVE-AC.md). The original packet, quality,
+approved reference and complete operation boundaries remain unchanged.
+
 Adaptive JPEG420 encoding with row restart markers now independently confirms
 **1.799× FFmpeg / conservative upper 1.809×**, with **297,780 allocated B/op**.
 Isolating one hot primitive reduces managed time **10.4%** from the current-build

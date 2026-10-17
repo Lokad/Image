@@ -31,16 +31,15 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [JPEG entropy scanning](../benchmarks/WARM-JPEG-ENTROPY.md)
-cuts resident Identify time 72.9%, reaching 0.499x / upper0.506x with unchanged
-88 B/op. Full structural validation and the approved timed FFmpeg metadata
-projection remain fixed. All 206 other comparisons and 57 prior passing proofs
-are reused. Previous [PNG byte packing](../benchmarks/WARM-PNG-BYTE-PACKING.md)
-retains three passing encodes; [Up SIMD](../benchmarks/WARM-PNG-UP-SIMD.md)
-retains two passing decodes. Passing cases are stopped.
-The 207 rows select 186 independent confirmations and 21 qualified short screens.
-Fresh **3,648 Release cases per OS** (1,342 internal +1,408 public +898 live FFmpeg),
-plus 20 scalar JPEG scanner controls, pass. The consumer and all
+Latest production round: [adaptive JPEG AC planning](../benchmarks/WARM-JPEG-ADAPTIVE-AC.md)
+reduces the eight affected encode times 9.9–14.8%, with unchanged packets,
+quality and allocations. All eight remain qualified short parity gaps;
+no routine long confirmation was run. All 199 other comparisons and 58 passing
+proofs are reused. Previous [JPEG inspection](../benchmarks/WARM-JPEG-ENTROPY.md)
+retains its independent 0.499x / upper0.506x result. Passing cases are stopped.
+The 207 rows select 178 independent confirmations and 29 qualified short screens.
+Fresh **3,650 Release cases per OS** (1,344 internal +1,408 public +898 live FFmpeg),
+plus 20 scalar adaptive JPEG controls, pass. The consumer and all
 three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
@@ -152,19 +151,19 @@ managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 | [PNG gray16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 5,762.37 | 4,913.26 | 1.173 / 1.246 | 1,051,421 | Gap (short; qualified) |
 | [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 4,174.10 | 4,289.79 | 0.973 / 0.980 | 264,179 | Parity confirmed |
 | [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 9,426.43 | 10,150.04 | 0.929 / 0.933 | 1,052,317 | Parity confirmed |
-| [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md) | 5,957.29 | 3,776.02 | 1.578 / 1.585 | 559,429 | Gap (independent) |
+| [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-ADAPTIVE-AC.md) | 5,075.94 | 3,775.22 | 1.345 / 1.503 | 559,429 | Gap (short; qualified) |
 | [JPEG 4:4:4, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md) | 5,276.99 | 3,773.28 | 1.399 / 1.521 | 526,107 | Gap (short; qualified) |
 | [JPEG 4:4:4, live cancelable token / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md) | 5,356.88 | 3,779.19 | 1.417 / 1.531 | 526,075 | Gap (short; qualified) |
-| [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md) | 5,955.85 | 3,852.95 | 1.546 / 1.552 | 556,286 | Gap (independent) |
-| [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md) | 3,824.38 | 2,344.76 | 1.631 / 1.639 | 294,116 | Gap (independent) |
-| [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md) | 3,816.67 | 2,425.80 | 1.573 / 1.588 | 294,116 | Gap (independent) |
-| [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-AC-PLANNING.md) | 2,881.90 | 1,763.43 | 1.634 / 1.641 | 297,780 | Gap (independent) |
-| [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-AC-PLANNING.md) | 2,886.13 | 1,604.33 | 1.799 / 1.809 | 297,780 | Gap (independent) |
+| [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-ADAPTIVE-AC.md) | 5,111.29 | 3,849.14 | 1.328 / 1.435 | 556,286 | Gap (short; qualified) |
+| [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-ADAPTIVE-AC.md) | 3,257.61 | 2,350.81 | 1.386 / 1.513 | 294,116 | Gap (short; qualified) |
+| [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-ADAPTIVE-AC.md) | 3,353.32 | 2,425.65 | 1.382 / 1.500 | 294,116 | Gap (short; qualified) |
+| [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-ADAPTIVE-AC.md) | 2,556.72 | 1,765.50 | 1.448 / 1.581 | 297,780 | Gap (short; qualified) |
+| [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-ADAPTIVE-AC.md) | 2,552.02 | 1,610.91 | 1.584 / 1.769 | 297,780 | Gap (short; qualified) |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md) | 2,733.19 | 1,765.36 | 1.548 / 1.705 | 263,843 | Gap (short; qualified) |
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md) | 2,808.87 | 1,839.95 | 1.527 / 1.641 | 263,820 | Gap (short; qualified) |
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md) | 2,840.65 | 1,837.08 | 1.546 / 1.661 | 263,788 | Gap (short; qualified) |
-| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-AC-PLANNING.md) | 3,098.92 | 1,842.05 | 1.682 / 1.697 | 297,780 | Gap (independent) |
-| [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAYSCALE.md) | 1,958.56 | 1,411.27 | 1.388 / 1.398 | 154,893 | Gap (independent) |
+| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-ADAPTIVE-AC.md) | 2,748.91 | 1,832.39 | 1.500 / 1.610 | 297,780 | Gap (short; qualified) |
+| [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-ADAPTIVE-AC.md) | 1,764.82 | 1,410.26 | 1.251 / 1.358 | 154,893 | Gap (short; qualified) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-SOURCE-VIEWS.md) | 25,741.07 | 15,496.34 | 1.661 / 1.744 | 2,536,348 | Gap (short; qualified) |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-SOURCE-VIEWS.md) | 26,263.39 | 15,587.43 | 1.685 / 1.768 | 2,535,940 | Gap (short; qualified) |
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-SOURCE-VIEWS.md) | 26,291.83 | 53,737.54 | 0.489 / 0.492 | 2,616,084 | Parity confirmed |
@@ -272,7 +271,7 @@ managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 API: the FFmpeg encoder does not expose hidden-RGB preservation. Decoded RGBA is
 exact; managed/native packets are533,100/183,812 B. Compression-efficiency parity
 is not established. Single-component grayscale JPEG uses approved benchmark-only
-**SIMD libjpeg-turbo3.1.4.1**, since FFmpeg emits three components:1.388x/upper1.398x,
+**SIMD libjpeg-turbo3.1.4.1**, since FFmpeg emits three components; its current qualified short is shown above,
 154,893 B/op,58,823/58,910 B compressed; source-PSNR gap0.000033dB. Complete
 normalization and output ownership are timed.
 

@@ -1,5 +1,9 @@
 # Current adaptive JPEG confirmations
 
+Historical timing checkpoint: its adaptive encode rows are superseded by
+[nonzero AC planning](WARM-JPEG-ADAPTIVE-AC.md). The original packet, quality,
+approved reference and complete operation boundaries remain unchanged.
+
 4 existing adaptive JPEG workloads independently confirm within the 2x warm
 single-CPU target on the qualified production DLL. This resolves older
 confirmations invalidated by the shared AC event-planning change `10ccb31`.

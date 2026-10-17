@@ -11,8 +11,8 @@
   pixels, resource admission and cancellation.
 - Faster RGBA8/16 bicubic filtering through bounded row and column reuse,
   preserving exact pixels and output ownership.
-- Faster fixed-Huffman JPEG emission with unchanged packets, work and stream
-  callback/failure behavior.
+- Faster adaptive JPEG event planning and fixed-Huffman emission with unchanged
+  packets, work and stream callback/failure behavior.
 - Faster VP8 source conversion with unchanged packets, alpha and resource charges.
 - Faster PNG chunk checksums, byte packing, Up filtering and RGB16 Paeth decoding,
   preserving exact packets, samples and limits.

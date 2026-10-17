@@ -425,6 +425,39 @@ internal static class JpegEncoder
     private static int AppendAdaptiveAc(ReadOnlySpan<int> quantized, long[] frequencies, uint[] events, int eventCount, int table)
     {
         var order = JpegTransform.Zigzag;
+        if (Avx2.IsSupported && Bmi2.X64.IsSupported)
+        {
+            // Reuse the fixed encoder's T.81 scan occupancy: skip zero runs
+            // while retaining histogram/event order, including range failures.
+            ulong occupied = 0;
+            var masks = FixedScanMasks.Rows;
+            for (var row = 0; row < 8; row++)
+            {
+                var values = Vector256.Create(quantized.Slice(row * 8, 8));
+                var nonzero = ~Vector256.ExtractMostSignificantBits(Vector256.Equals(values, Vector256<int>.Zero)) & 255;
+                occupied |= Bmi2.X64.ParallelBitDeposit(nonzero, masks[row]);
+            }
+            occupied &= ~1UL;
+            var previous = 0;
+            while (occupied != 0)
+            {
+                var scan = BitOperations.TrailingZeroCount(occupied);
+                var value = quantized[order[scan]];
+                var run = scan - previous - 1;
+                while (run >= 16)
+                {
+                    frequencies[240]++; events[eventCount++] = PackEntropyEvent(table, 240, 0, 0); run -= 16;
+                }
+                var category = Category(value);
+                if (category > 10) throw new ImageDataException("JPEG AC transform exceeds its coding range.");
+                var symbol = run << 4 | category;
+                frequencies[symbol]++;
+                events[eventCount++] = PackEntropyEvent(table, symbol, value, category);
+                previous = scan; occupied &= occupied - 1;
+            }
+            if (previous != 63) { frequencies[0]++; events[eventCount++] = PackEntropyEvent(table, 0, 0, 0); }
+            return eventCount;
+        }
         var zeros = 0;
         for (var i = 1; i < 64; i++)
         {

@@ -1,5 +1,9 @@
 # Single-component grayscale JPEG encoding
 
+Historical timing checkpoint: its adaptive encode rows are superseded by
+[nonzero AC planning](WARM-JPEG-ADAPTIVE-AC.md). The original packet, quality,
+approved reference and complete operation boundaries remain unchanged.
+
 Lokad.Image independently confirms **1.388× SIMD-enabled standalone libjpeg-turbo**,
 conservative upper **1.398×**, at **154,893 allocated B/op**. This is the approved
 grayscale benchmark-tooling exception: FFmpeg's MJPEG encoder emits three
