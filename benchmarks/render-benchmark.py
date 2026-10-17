@@ -187,10 +187,10 @@ def render():
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-ac-planning-evidence.json', ['observations', 6], 'WARM-JPEG-AC-PLANNING.md', True),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-grayscale-evidence.json', ['observations', -1], 'WARM-JPEG-GRAYSCALE.md', True),
-        row('WebP VP8, opaque‡', 'warm-vp8-encode-evidence.json', ['observations', -1], 'WARM-VP8-OPAQUE-ENCODE.md', True),
-        row('WebP VP8, opaque from RGBA16‡', 'warm-vp8opaque16-evidence.json', ['observations', -1], 'WARM-VP8-OPAQUE-RGBA16.md', True),
-        row('WebP VP8 + alpha‡', 'warm-current-vp8-encode-evidence.json', ['cases', 'Encode8', -1], 'WARM-CURRENT-VP8-ENCODE.md', True),
-        row('WebP VP8 + alpha from RGBA16‡', 'warm-current-vp8-encode-evidence.json', ['cases', 'Encode16', -1], 'WARM-CURRENT-VP8-ENCODE.md', True),
+        row('WebP VP8, opaque‡', 'warm-vp8-source-views-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8-SOURCE-VIEWS.md', verification='Gap (short; qualified)'),
+        row('WebP VP8, opaque from RGBA16‡', 'warm-vp8-source-views-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-SOURCE-VIEWS.md', verification='Gap (short; qualified)'),
+        row('WebP VP8 + alpha‡', 'warm-vp8-source-views-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8-SOURCE-VIEWS.md', True),
+        row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8-source-views-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8-SOURCE-VIEWS.md', True),
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-opaque8-evidence.json', ['observations', -1], 'WARM-VP8L-OPAQUE8.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8lencode16-evidence.json', ['observations', -1], 'WARM-VP8L-RGBA16-ENCODE.md', True),
@@ -324,16 +324,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [fixed JPEG AC emission](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md)
-reduces byte forward-only encode times by about19–20%, preserving exact packets,
-work, ordered callbacks and partial-failure state. All five affected selectors
-have qualified short screens at1.399–1.548x; parity stays open. Linked evidence
-reports unchanged managed/native packet sizes and source-quality checks.
-All other paths reuse their valid proofs, including the previous
+Latest production round: [VP8 source conversion](../benchmarks/WARM-VP8-SOURCE-VIEWS.md)
+reduces complete encode times by about12–14%, preserving exact packets,
+normalization, alpha and work charges. The two opaque cases have qualified short
+screens at1.661/1.685x; both affected alpha cases independently reconfirm parity
+at0.489/0.493x. The other203 comparisons retain their executed paths, including
+the previous [19–20% forward JPEG gain](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md),
 [10.6% live-token JPEG decode gain](../benchmarks/WARM-JPEG-CANCELABLE-REFINEMENT.md),
 [24–27% bicubic gain](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) and
 [ordinary progressive JPEG gain](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md).
-Fresh **3,596 Release tests per OS** (1,308 internal +1,390 public +898 live FFmpeg),
+Fresh **3,606 Release tests per OS** (1,318 internal +1,390 public +898 live FFmpeg),
 and the consumer/all three examples through the **same actual Release package on
 Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10.
 
@@ -357,9 +357,10 @@ is not established. Single-component grayscale JPEG uses approved benchmark-only
 154,893 B/op,58,823/58,910 B compressed; source-PSNR gap0.000033dB. Complete
 normalization and output ownership are timed.
 
-‡ VP8 encode freezes managed/native quality100/75, effort4; its PSNR gap0.00365dB
-passes the unchanged0.25dB gate, with exact alpha. Packets471,436/98,590 B do not
-establish compression-efficiency parity. JPEG lossy comparisons preserve their
+‡ VP8 encode freezes managed/native quality100/75, effort4, and passes the
+unchanged0.25dB source-quality gate with exact alpha. Managed/native packets are
+333,580/72,380 B for opaque inputs and471,436/98,590 B with alpha; compression-
+efficiency parity is not established. JPEG lossy comparisons preserve their
 frozen source-quality-matched settings and0.25dB band; sizes remain in linked reports.
 
 ¶ PNG Identify references use the public FFmpeg PNG parser/CRC plus original

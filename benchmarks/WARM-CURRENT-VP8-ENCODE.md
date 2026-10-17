@@ -1,5 +1,7 @@
 # Current alpha-bearing VP8 encode evidence
 
+Current production measurements are superseded by [VP8 source conversion](WARM-VP8-SOURCE-VIEWS.md). The retained results below are historical; the source-view change invalidates the four VP8 encode timings, with both alpha paths independently reconfirmed.
+
 The two named RGBA8/16 alpha-bearing VP8 encode cases independently confirm on
 current production paths. Their earlier independent proofs preceded the Boolean
 output-writer change; latest short controls did not independently confirm that

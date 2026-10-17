@@ -31,16 +31,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [fixed JPEG AC emission](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md)
-reduces byte forward-only encode times by about19–20%, preserving exact packets,
-work, ordered callbacks and partial-failure state. All five affected selectors
-have qualified short screens at1.399–1.548x; parity stays open. Linked evidence
-reports unchanged managed/native packet sizes and source-quality checks.
-All other paths reuse their valid proofs, including the previous
+Latest production round: [VP8 source conversion](../benchmarks/WARM-VP8-SOURCE-VIEWS.md)
+reduces complete encode times by about12–14%, preserving exact packets,
+normalization, alpha and work charges. The two opaque cases have qualified short
+screens at1.661/1.685x; both affected alpha cases independently reconfirm parity
+at0.489/0.493x. The other203 comparisons retain their executed paths, including
+the previous [19–20% forward JPEG gain](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md),
 [10.6% live-token JPEG decode gain](../benchmarks/WARM-JPEG-CANCELABLE-REFINEMENT.md),
 [24–27% bicubic gain](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) and
 [ordinary progressive JPEG gain](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md).
-Fresh **3,596 Release tests per OS** (1,308 internal +1,390 public +898 live FFmpeg),
+Fresh **3,606 Release tests per OS** (1,318 internal +1,390 public +898 live FFmpeg),
 and the consumer/all three examples through the **same actual Release package on
 Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10.
 
@@ -164,10 +164,10 @@ Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md) | 2,840.65 | 1,837.08 | 1.546 / 1.661 | 263,788 | Gap (short; qualified) |
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-AC-PLANNING.md) | 3,098.92 | 1,842.05 | 1.682 / 1.697 | 297,780 | Gap (independent) |
 | [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAYSCALE.md) | 1,958.56 | 1,411.27 | 1.388 / 1.398 | 154,893 | Gap (independent) |
-| [WebP VP8, opaque‡](../benchmarks/WARM-VP8-OPAQUE-ENCODE.md) | 29,381.20 | 15,527.63 | 1.892 / 1.918 | 2,536,203 | Gap (independent) |
-| [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-OPAQUE-RGBA16.md) | 29,778.24 | 15,604.01 | 1.908 / 1.922 | 2,535,736 | Gap (independent) |
-| [WebP VP8 + alpha‡](../benchmarks/WARM-CURRENT-VP8-ENCODE.md) | 30,390.89 | 53,447.22 | 0.569 / 0.573 | 2,615,939 | Parity confirmed |
-| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-CURRENT-VP8-ENCODE.md) | 30,755.98 | 53,436.98 | 0.576 / 0.581 | 2,615,472 | Parity confirmed |
+| [WebP VP8, opaque‡](../benchmarks/WARM-VP8-SOURCE-VIEWS.md) | 25,741.07 | 15,496.34 | 1.661 / 1.744 | 2,536,348 | Gap (short; qualified) |
+| [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-SOURCE-VIEWS.md) | 26,263.39 | 15,587.43 | 1.685 / 1.768 | 2,535,940 | Gap (short; qualified) |
+| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-SOURCE-VIEWS.md) | 26,291.83 | 53,737.54 | 0.489 / 0.492 | 2,616,084 | Parity confirmed |
+| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-SOURCE-VIEWS.md) | 26,552.66 | 53,811.05 | 0.493 / 0.495 | 2,615,472 | Parity confirmed |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-ENCODE-EXACT.md) | 7,363.30 | 121,587.95 | 0.061 / 0.063 | 2,100,170 | Parity confirmed |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-OPAQUE8.md) | 7,195.24 | 70,637.23 | 0.102 / 0.103 | 2,100,170 | Parity confirmed |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-RGBA16-ENCODE.md) | 7,928.11 | 121,282.99 | 0.065 / 0.066 | 2,100,119 | Parity confirmed |
@@ -275,9 +275,10 @@ is not established. Single-component grayscale JPEG uses approved benchmark-only
 154,893 B/op,58,823/58,910 B compressed; source-PSNR gap0.000033dB. Complete
 normalization and output ownership are timed.
 
-‡ VP8 encode freezes managed/native quality100/75, effort4; its PSNR gap0.00365dB
-passes the unchanged0.25dB gate, with exact alpha. Packets471,436/98,590 B do not
-establish compression-efficiency parity. JPEG lossy comparisons preserve their
+‡ VP8 encode freezes managed/native quality100/75, effort4, and passes the
+unchanged0.25dB source-quality gate with exact alpha. Managed/native packets are
+333,580/72,380 B for opaque inputs and471,436/98,590 B with alpha; compression-
+efficiency parity is not established. JPEG lossy comparisons preserve their
 frozen source-quality-matched settings and0.25dB band; sizes remain in linked reports.
 
 ¶ PNG Identify references use the public FFmpeg PNG parser/CRC plus original

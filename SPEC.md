@@ -850,6 +850,9 @@ cells keep the same result. Luma and exact normalized alpha are unchanged.
 Odd and padded edges
 extend the last source pixel. Alpha is normalized once and preserved exactly in
 a raw unfiltered ALPH chunk. Optional metadata is stripped.
+Source conversion uses bounded views of the existing pixel storage, without a
+normalized-raster allocation. The first row work check precedes storage access;
+all row charges, matrix evaluation order and alpha-weighted rounding are retained.
 
 The first VP8 encoder uses B_PRED luma, one token partition, fixed entropy models
 and no loop filter. Prediction search minimizes source-plane squared error;

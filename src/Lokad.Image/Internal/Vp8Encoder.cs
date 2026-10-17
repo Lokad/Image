@@ -1,4 +1,6 @@
 using System.Buffers.Binary;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace Lokad.Image.Internal;
 
@@ -71,11 +73,17 @@ internal static class Vp8Encoder
         var stride = (image.Width + 15) / 16 * 16; var height = (image.Height + 15) / 16 * 16;
         var length = checked(stride * height); context.Reserve(length * 3L / 2 + 128);
         var result = new Vp8Planes(image.Width, image.Height, stride, new byte[length], new byte[length / 4], new byte[length / 4]);
+        // The first logical row charge still precedes access to source storage.
+        context.Work(image.Width * 4L);
+        ReadOnlySpan<byte> pixels = image.Pixels;
+        var words = MemoryMarshal.Cast<byte, ushort>(pixels);
+        var byteDepth = image.BitDepth == 8; var width = image.Width; var sourceHeight = image.Height;
+        var sourceStride = width * 4;
         var transparent = false;
         for (var y = 0; y < image.Height; y++)
         {
-            context.Work(image.Width * 4L);
-            for (var x = 0; x < image.Width; x++) transparent |= Sample(image, x, y, 3) != 255;
+            if (y != 0) context.Work(image.Width * 4L);
+            for (var x = 0; x < width; x++) transparent |= Sample(pixels, words, byteDepth, y * sourceStride + x * 4 + 3) != 255;
         }
         alpha = null;
         if (transparent)
@@ -85,15 +93,19 @@ internal static class Vp8Encoder
             for (var y = 0; y < image.Height; y++)
             {
                 context.Work(image.Width * 4L);
-                for (var x = 0; x < image.Width; x++) alpha[y * image.Width + x] = (byte)Sample(image, x, y, 3);
+                for (var x = 0; x < width; x++) alpha[y * width + x] = (byte)Sample(pixels, words, byteDepth, y * sourceStride + x * 4 + 3);
             }
         }
         for (var y = 0; y < height; y++)
         {
             context.Work(stride * 32L);
+            var sourceRow = Math.Min(y, sourceHeight - 1) * sourceStride;
             for (var x = 0; x < stride; x++)
             {
-                var r = Sample(image, x, y, 0); var g = Sample(image, x, y, 1); var b = Sample(image, x, y, 2);
+                var index = sourceRow + Math.Min(x, width - 1) * 4;
+                var r = Sample(pixels, words, byteDepth, index);
+                var g = Sample(pixels, words, byteDepth, index + 1);
+                var b = Sample(pixels, words, byteDepth, index + 2);
                 result.Y[y * stride + x] = Round(16 + 219.0 / 255 * (.299 * r + .587 * g + .114 * b));
             }
         }
@@ -106,9 +118,12 @@ internal static class Vp8Encoder
                 for (var dy = 0; dy < 2; dy++)
                     for (var dx = 0; dx < 2; dx++)
                     {
-                        var sx = x * 2 + dx; var sy = y * 2 + dy;
-                        var red = Sample(image, sx, sy, 0); var green = Sample(image, sx, sy, 1); var blue = Sample(image, sx, sy, 2);
-                        var a = Sample(image, sx, sy, 3);
+                        var sx = Math.Min(x * 2 + dx, width - 1); var sy = Math.Min(y * 2 + dy, sourceHeight - 1);
+                        var index = sy * sourceStride + sx * 4;
+                        var red = Sample(pixels, words, byteDepth, index);
+                        var green = Sample(pixels, words, byteDepth, index + 1);
+                        var blue = Sample(pixels, words, byteDepth, index + 2);
+                        var a = Sample(pixels, words, byteDepth, index + 3);
                         r += red / 4.0; g += green / 4.0; b += blue / 4.0;
                         alphaSum += a; redSum += a * red; greenSum += a * green; blueSum += a * blue;
                     }
@@ -123,11 +138,9 @@ internal static class Vp8Encoder
         return result;
     }
 
-    private static int Sample(ImageBuffer image, int x, int y, int channel)
-    {
-        var value = image.Sample(Math.Min(x, image.Width - 1), Math.Min(y, image.Height - 1), channel);
-        return image.BitDepth == 8 ? value : (value + 128) / 257;
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static int Sample(ReadOnlySpan<byte> pixels, ReadOnlySpan<ushort> words, bool byteDepth, int index)
+        => byteDepth ? pixels[index] : (words[index] + 128) / 257;
 
     private static byte Round(double value) => (byte)Math.Clamp((int)Math.Floor(value + .5), 0, 255);
 

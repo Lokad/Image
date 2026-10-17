@@ -1,5 +1,7 @@
 # Opaque VP8 encoding
 
+Current production measurements are superseded by [VP8 source conversion](WARM-VP8-SOURCE-VIEWS.md). The retained results below are historical; the source-view change invalidates the four VP8 encode timings, with both alpha paths independently reconfirmed.
+
 Complete opaque VP8 encoding now independently confirms **1.892x FFmpeg /
 conservative upper 1.918x**, down from **2.718x**, with identical encoded bytes.
 Managed elapsed time falls **30.1%**; measured allocation is **2,536,203 B/op**.

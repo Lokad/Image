@@ -1,5 +1,7 @@
 # Opaque VP8 encoding from RGBA16
 
+Current production measurements are superseded by [VP8 source conversion](WARM-VP8-SOURCE-VIEWS.md). The retained results below are historical; the source-view change invalidates the four VP8 encode timings, with both alpha paths independently reconfirmed.
+
 Complete word-source encoding independently confirms **1.908x FFmpeg /
 conservative upper 1.922x**, at **2,535,736 managed allocated B/op**.
 Production is unchanged; uniform current-source coverage remains open.
