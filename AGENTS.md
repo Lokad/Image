@@ -32,5 +32,10 @@ Maintain `docs/benchmark.md` after every accepted performance round. Keep at mos
 three tables, include allocations and verification status, and check the generated
 summary with `python benchmarks/render-benchmark.py --check`.
 
+Keep the checkout, including ignored artifacts, below 5,000,000,000 bytes.
+Preserve release packages and cited raw evidence; prune redundant extractions,
+stale generated consumers and unreferenced experiment outputs before accumulating
+more artifacts. Reinstallable tool caches may be removed; keep reference sources.
+
 The local PLAN.md is ignored. Durable requirements belong in tracked documents
 and tests. Keep all public files exclusively about Lokad.Image.
