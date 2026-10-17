@@ -1,7 +1,7 @@
 # Material warm coverage
 
-Updated 2026-10-17. The current **<=1x warm parity objective is open**: 54 named
-numeric cases already have independent upper<=1, 149 means exceed1, and four
+Updated 2026-10-17. The current **<=1x warm parity objective is open**: 57 named
+numeric cases already have independent upper<=1, 146 means exceed1, and four
 means<=1 have upper>1. Reuse passing paths and prioritize the largest current
 gaps; do not add a new input or settings grid. The [current summary](../docs/benchmark.md)
 distinguishes parity, measured gaps and confidence-open cases.
@@ -13,15 +13,15 @@ record which comparisons they replace. Only confirmed <=1x paths are stopped
 for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,183 select independent
-confirmations. Twenty-four select qualified screens after changed production: six
+unscored native-alpha incompatibility. Of those numeric rows,186 select independent
+confirmations. Twenty-one select qualified screens after changed production: six
 paired-column byte/word bicubic cases, byte bicubic TightDown8, word bilinear
 Down16, live-token progressive444, five fixed JPEG encodes, two opaque VP8 encodes,
-two PNG Paeth dispatch controls and six PNG encodes after chunk checksum folding.
+two PNG Paeth dispatch controls and three PNG encodes after chunk checksum folding.
 RGB16 Paeth now
 has an independent passing proof. Both affected alpha VP8 encodes have independent
 passing confirmations after their shared source conversion changed.
-The twenty-four short screens remain gaps; older independent timings are explicitly
+The twenty-one short screens remain gaps; older independent timings are explicitly
 superseded. The two
 former short-regression witnesses are now historical after changed AC emission.
 The unscored raw PNG transparency reference is replaced by approved exact timed
@@ -64,7 +64,15 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [PNG Up reconciliation](warm-png-up-simd-evidence.json) changes only
+The latest [byte packing reconciliation](warm-png-byte-packing-evidence.json)
+replaces exactly gray8/RGB8/gray-alpha8 encode timings; all three independently
+pass upper<=1 with exact packets and frozen Optimal9/native6/5% IDAT policy.
+The entire predecessor PngCodec file is restored by removing one dispatch and
+two packing helpers. All204 other comparisons and54 prior passing proofs remain
+applicable. Current3646 Release cases/OS,36 scalar packing/admission controls/OS
+and the same actual package consumer/all3 examples bothOS pass. No case was added.
+
+The preceding [PNG Up reconciliation](warm-png-up-simd-evidence.json) changes only
 filter2 dispatch and a safe SIMD row helper. DecodeUp8/16 independently pass
 at0.984x/upper0.989x and0.995x/upper0.997x. The entire predecessor PngCodec file
 is restored by removing that dispatch/helper; all205 other comparisons and52

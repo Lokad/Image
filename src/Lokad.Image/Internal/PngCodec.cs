@@ -1350,6 +1350,10 @@ internal static class PngCodec
                             else input.CopyTo(destination);
                         }
                     }
+                    else if (source.BitDepth == 8 && color is 0 or 2 or 4)
+                    {
+                        PackByteRow(source, y, row, color, context.Cancellation);
+                    }
                     else
                     {
                         var position = 0;
@@ -1379,6 +1383,79 @@ internal static class PngCodec
         }
         context.Cancellation.ThrowIfCancellationRequested();
         WriteChunk(output, "IEND"u8, []);
+    }
+
+    private static void PackByteRow(ImageBuffer source, int y, Span<byte> row, int color, CancellationToken cancellation)
+    {
+        // PNG sections 7.3/11.2.1: preserve the selected channel bytes exactly.
+        // Acquire one bounded source span after each original pixel checkpoint,
+        // retaining RGB-before-opacity validation and the first failing pixel.
+        var position = 0;
+        for (var x = 0; x < source.Width; x += 4096)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            var count = Math.Min(4096, source.Width - x);
+            var input = source.GetRow8(y).Slice(x * 4, count * 4);
+            var i = PackByteVectors(input, row[position..], color);
+            position += i / 4 * (color == 2 ? 3 : color == 4 ? 2 : 1);
+            for (; i < input.Length; i += 4)
+            {
+                var r = input[i]; var g = input[i + 1]; var b = input[i + 2]; var a = input[i + 3];
+                if ((color is 0 or 4) && (r != g || r != b))
+                    throw new ArgumentException("Grayscale encoding requires equal RGB channels.", nameof(source));
+                if ((color is 0 or 2) && a != 255)
+                    throw new ArgumentException("Encoding without alpha requires opaque pixels.", nameof(source));
+                row[position++] = r;
+                if (color == 2) { row[position++] = g; row[position++] = b; }
+                if (color == 4) row[position++] = a;
+            }
+        }
+    }
+
+    private static int PackByteVectors(ReadOnlySpan<byte> input, Span<byte> output, int color)
+    {
+        if (!Avx512F.IsSupported || !Avx512BW.IsSupported || !Avx512Vbmi.IsSupported || input.Length < 64) return 0;
+        // Each group contains16 RGBA pixels. Select their PNG channel order;
+        // unused output lanes are discarded. The scalar tail owns invalid groups,
+        // preserving the first pixel's RGB-before-opacity failure ordering.
+        var indices = color == 0 ? Vector512.Create<byte>([
+            0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+            : color == 2 ? Vector512.Create<byte>([
+                0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16, 17, 18, 20,
+                21, 22, 24, 25, 26, 28, 29, 30, 32, 33, 34, 36, 37, 38, 40, 41,
+                42, 44, 45, 46, 48, 49, 50, 52, 53, 54, 56, 57, 58, 60, 61, 62,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+            : Vector512.Create<byte>([
+                0, 3, 4, 7, 8, 11, 12, 15, 16, 19, 20, 23, 24, 27, 28, 31,
+                32, 35, 36, 39, 40, 43, 44, 47, 48, 51, 52, 55, 56, 59, 60, 63,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        var mask = Vector512.Create(255u); var i = 0; var position = 0;
+        for (; i <= input.Length - 64; i += 64)
+        {
+            var value = Vector512.LoadUnsafe(ref MemoryMarshal.GetReference(input), (nuint)i);
+            var pixels = value.AsUInt32(); var red = pixels & mask;
+            if ((color is 0 or 4) && (!Vector512.EqualsAll(red, Avx512F.ShiftRightLogical(pixels, 8) & mask)
+                || !Vector512.EqualsAll(red, Avx512F.ShiftRightLogical(pixels, 16) & mask))) break;
+            if ((color is 0 or 2) && !Vector512.EqualsAll(Avx512F.ShiftRightLogical(pixels, 24), mask)) break;
+            var packed = Avx512Vbmi.PermuteVar64x8(value, indices);
+            if (color == 0)
+            {
+                packed.GetLower().GetLower().StoreUnsafe(ref MemoryMarshal.GetReference(output), (nuint)position); position += 16;
+            }
+            else
+            {
+                packed.GetLower().StoreUnsafe(ref MemoryMarshal.GetReference(output), (nuint)position); position += 32;
+                if (color == 2)
+                {
+                    packed.GetUpper().GetLower().StoreUnsafe(ref MemoryMarshal.GetReference(output), (nuint)position); position += 16;
+                }
+            }
+        }
+        return i;
     }
 
     private static void WriteSample(Span<byte> row, ref int position, int sample, int depth)

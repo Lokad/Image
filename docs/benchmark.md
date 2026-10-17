@@ -1,8 +1,8 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-17. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 207 numeric rows contain **54 confirmed parity
-cases, 149 measured gaps and 4 confidence-open cases**. The earlier
+conservative upper ≤1x**. The 207 numeric rows contain **57 confirmed parity
+cases, 146 measured gaps and 4 confidence-open cases**. The earlier
 ≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
@@ -31,16 +31,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [PNG Up SIMD](../benchmarks/WARM-PNG-UP-SIMD.md)
-reduces RGBA8/16 Up decode time by 32.8%/45.2%. Both independently pass parity
-at 0.984x/upper 0.989x and 0.995x/upper 0.997x, with exact samples and unchanged
-allocations. Reuse all 205 other comparisons, including 52 prior passing proofs.
-Previous [PNG chunk folding](../benchmarks/WARM-PNG-CHUNK-CRC.md) retains
-13.1%/14.5% stored-encode gains and ten refreshed passing encodes. Other accepted
-gains remain in their linked evidence; stopped passing cases are not retuned.
-The 207 rows select 183 independent confirmations and 24 qualified short screens.
-Fresh **3,642 Release cases per OS** (1,340 internal +1,404 public +898 live FFmpeg),
-plus five scalar Up and 127 scalar public PNG controls, pass. The consumer and all
+Latest production round: [PNG byte packing](../benchmarks/WARM-PNG-BYTE-PACKING.md)
+brings gray8/RGB8/gray-alpha8 encoding to independently confirmed parity, with
+47.3%/16.6%/29.3% less managed time. Exact packets, the 5% IDAT-size gate and
+complete conversion/owned-output boundaries remain fixed. All 204 other comparisons,
+including 54 prior passing proofs, are reused. Previous [Up SIMD](../benchmarks/WARM-PNG-UP-SIMD.md)
+retains 32.8%/45.2% decode gains and two passing cases; [chunk folding](../benchmarks/WARM-PNG-CHUNK-CRC.md)
+retains its stored-encode gains. Passing cases are stopped.
+The 207 rows select 186 independent confirmations and 21 qualified short screens.
+Fresh **3,646 Release cases per OS** (1,340 internal +1,408 public +898 live FFmpeg),
+plus 36 scalar byte-packing/admission controls, pass. The consumer and all
 three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
@@ -146,11 +146,11 @@ managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 | [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 14,604.45 | 20,095.18 | 0.727 / 0.731 | 2,103,624 | Parity confirmed |
 | [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 14,486.25 | 17,324.40 | 0.836 / 0.843 | 527,564 | Parity confirmed |
 | [PNG RGBA16, SmallestSize managed9/native9 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 19,610.01 | 20,110.26 | 0.975 / 0.980 | 2,103,522 | Parity confirmed |
-| [PNG RGB8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 10,442.38 | 9,493.05 | 1.100 / 1.165 | 527,032 | Gap (short; qualified) |
+| [PNG RGB8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 8,712.51 | 9,507.55 | 0.916 / 0.922 | 527,032 | Parity confirmed |
 | [PNG RGB16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 13,163.23 | 15,313.53 | 0.860 / 0.863 | 2,102,732 | Parity confirmed |
-| [PNG gray8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 3,547.97 | 1,940.70 | 1.828 / 2.025 | 263,664 | Gap (short; qualified) |
+| [PNG gray8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 1,871.37 | 1,934.46 | 0.967 / 0.974 | 263,699 | Parity confirmed |
 | [PNG gray16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 5,762.37 | 4,913.26 | 1.173 / 1.246 | 1,051,421 | Gap (short; qualified) |
-| [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 5,907.01 | 4,295.19 | 1.375 / 1.966 | 264,179 | Gap (short; qualified) |
+| [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 4,174.10 | 4,289.79 | 0.973 / 0.980 | 264,179 | Parity confirmed |
 | [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 9,426.43 | 10,150.04 | 0.929 / 0.933 | 1,052,317 | Parity confirmed |
 | [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md) | 5,957.29 | 3,776.02 | 1.578 / 1.585 | 559,429 | Gap (independent) |
 | [JPEG 4:4:4, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md) | 5,276.99 | 3,773.28 | 1.399 / 1.521 | 526,107 | Gap (short; qualified) |

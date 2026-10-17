@@ -168,11 +168,11 @@ def render():
         row('PNG RGBA16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'Encode16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
         row('PNG RGBA8, SmallestSize9 / native9', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeSmallest8', -1], 'WARM-PNG-CHUNK-CRC.md', True),
         row('PNG RGBA16, SmallestSize managed9/native9 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeSmallest16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
-        row('PNG RGB8, Optimal managed9/native6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeRgb8', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Gap (short; qualified)'),
+        row('PNG RGB8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeRgb8', -1], 'WARM-PNG-BYTE-PACKING.md', True),
         row('PNG RGB16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeRgb16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
-        row('PNG gray8, Optimal managed9/native6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Gap (short; qualified)'),
+        row('PNG gray8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-PNG-BYTE-PACKING.md', True),
         row('PNG gray16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGray16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Gap (short; qualified)'),
-        row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGrayAlpha8', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Gap (short; qualified)'),
+        row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeGrayAlpha8', -1], 'WARM-PNG-BYTE-PACKING.md', True),
         row('PNG gray-alpha16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGrayAlpha16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
         row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode8', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
         row('JPEG 4:4:4, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode444Stream8', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
@@ -324,16 +324,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [PNG Up SIMD](../benchmarks/WARM-PNG-UP-SIMD.md)
-reduces RGBA8/16 Up decode time by 32.8%/45.2%. Both independently pass parity
-at 0.984x/upper 0.989x and 0.995x/upper 0.997x, with exact samples and unchanged
-allocations. Reuse all 205 other comparisons, including 52 prior passing proofs.
-Previous [PNG chunk folding](../benchmarks/WARM-PNG-CHUNK-CRC.md) retains
-13.1%/14.5% stored-encode gains and ten refreshed passing encodes. Other accepted
-gains remain in their linked evidence; stopped passing cases are not retuned.
-The 207 rows select 183 independent confirmations and 24 qualified short screens.
-Fresh **3,642 Release cases per OS** (1,340 internal +1,404 public +898 live FFmpeg),
-plus five scalar Up and 127 scalar public PNG controls, pass. The consumer and all
+Latest production round: [PNG byte packing](../benchmarks/WARM-PNG-BYTE-PACKING.md)
+brings gray8/RGB8/gray-alpha8 encoding to independently confirmed parity, with
+47.3%/16.6%/29.3% less managed time. Exact packets, the 5% IDAT-size gate and
+complete conversion/owned-output boundaries remain fixed. All 204 other comparisons,
+including 54 prior passing proofs, are reused. Previous [Up SIMD](../benchmarks/WARM-PNG-UP-SIMD.md)
+retains 32.8%/45.2% decode gains and two passing cases; [chunk folding](../benchmarks/WARM-PNG-CHUNK-CRC.md)
+retains its stored-encode gains. Passing cases are stopped.
+The 207 rows select 186 independent confirmations and 21 qualified short screens.
+Fresh **3,646 Release cases per OS** (1,340 internal +1,408 public +898 live FFmpeg),
+plus 36 scalar byte-packing/admission controls, pass. The consumer and all
 three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.

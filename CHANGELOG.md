@@ -12,8 +12,8 @@
 - Faster fixed-Huffman JPEG emission with unchanged packets, work and stream
   callback/failure behavior.
 - Faster VP8 source conversion with unchanged packets, alpha and resource charges.
-- Faster PNG chunk checksums, Up filtering and RGB16 Paeth decoding, preserving exact packets,
-  samples and limits.
+- Faster PNG chunk checksums, byte packing, Up filtering and RGB16 Paeth decoding,
+  preserving exact packets, samples and limits.
 
 ## 0.1.0 — 2026-10-17
 

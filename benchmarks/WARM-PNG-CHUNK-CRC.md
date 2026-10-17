@@ -1,5 +1,9 @@
 # PNG chunk checksum folding
 
+Historical checkpoint for gray8/RGB8/gray-alpha8 encoding: those three timings
+are superseded by [byte packing](WARM-PNG-BYTE-PACKING.md). The other 13 encode
+comparisons retain their unchanged paths and applicable evidence.
+
 Updated 2026-10-17. Stored RGBA8 encoding is **13.1% faster** than its retained
 357.17 µs predecessor; stored RGBA16 is **14.5% faster** than the current accepted
 build control. Both remain warm single-CPU parity gaps. All 16 existing affected

@@ -492,6 +492,11 @@ the chunk-type CRC seeds the payload, residues combine in order, and the final
 original chunk path. Chunk bytes, scalar tails, write sequence, admission and
 cancellation remain unchanged; no per-operation workspace is added. Decode and
 metadata checksum entry points keep their original arithmetic and polling.
+Byte grayscale/RGB/grayscale-alpha encoding may pack bounded RGBA row spans
+after each original 4,096-pixel cancellation checkpoint. Supported AVX-512
+hardware selects complete groups of 16 pixels; invalid groups retain scalar
+RGB-before-opacity validation and the first failing pixel. Channel bytes,
+compression, writes, work and admission remain unchanged, with no new workspace.
 PNG Up reconstruction may add nonoverlapping byte rows with safe 512/256/128-bit
 SIMD and scalar tails, independently modulo256 at either precision. Original
 64 KiB cancellation boundaries remain; overlapping rows and unsupported hardware
