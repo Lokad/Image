@@ -31,13 +31,14 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [paired-column RGBA16 bicubic filtering](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md)
-reduces the three affected complete-operation times by 24–27%, with no added heap
-arrays and the same 4 KiB scratch reservation. Their short-screen ratios remain
-1.307–1.462; parity stays open. Exact pixels, quantization, work/admission,
-output ownership and approved native bounds hold. All other paths reuse their
-valid proofs, including the preceding [progressive JPEG gain](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md).
-Fresh **3,580 Release tests per OS** (1,292 internal +1,390 public +898 live FFmpeg),
+Latest production round: [cancelable progressive JPEG refinement](../benchmarks/WARM-JPEG-CANCELABLE-REFINEMENT.md)
+reduces the live-token444 complete decode by 10.6%, retaining every original
+per-bit cancellation check, immediate updates and exact work/failure state.
+Its qualified short screen remains1.726x/upper1.798x; parity stays open.
+All other paths reuse their valid proofs, including the previous
+[24–27% bicubic gain](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) and
+[ordinary progressive JPEG gain](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md).
+Fresh **3,594 Release tests per OS** (1,306 internal +1,390 public +898 live FFmpeg),
 and the consumer/all three examples through the **same actual Release package on
 Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10.
 
@@ -116,7 +117,7 @@ Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10
 | [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-JPEG-BASELINE-AC-RUN.md) | 3,048.96 | 1,722.47 | 1.770 / 1.797 | 2,664,373 | Gap (independent) |
 | [JPEG progressive gray](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md) | 2,665.76 | 1,715.98 | 1.553 / 1.557 | 1,232,526 | Gap (independent) |
 | [JPEG progressive 4:2:0](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md) | 2,671.13 | 1,954.79 | 1.366 / 1.371 | 1,637,526 | Gap (independent) |
-| [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md) | 6,477.56 | 3,352.81 | 1.932 / 1.939 | 2,682,364 | Gap (independent) |
+| [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-CANCELABLE-REFINEMENT.md) | 5,791.94 | 3,354.98 | 1.726 / 1.798 | 2,682,364 | Gap (short; qualified) |
 | [JPEG progressive 4:2:2](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md) | 3,283.57 | 2,241.02 | 1.465 / 1.471 | 1,996,661 | Gap (independent) |
 | [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md) | 5,312.60 | 3,355.07 | 1.583 / 1.589 | 2,682,364 | Gap (independent) |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8-FILTER8.md) | 10,777.02 | 5,977.48 | 1.803 / 1.819 | 1,966,616 | Gap (independent) |

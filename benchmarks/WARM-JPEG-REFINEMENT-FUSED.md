@@ -1,5 +1,10 @@
 # Fused progressive JPEG refinement
 
+The later [cancelable refinement round](WARM-JPEG-CANCELABLE-REFINEMENT.md)
+supersedes only the live-token444 timing below with a qualified short screen.
+The four ordinary progressive comparisons retain their applicable independent
+proofs. The results below describe this earlier round.
+
 Grayscale warm decode falls from 3,343.59 to 2,665.76 microseconds, **20.3% less
 managed time**. The 420/422 and ordinary444 cases improve about 15–16%; the
 live-token fallback remains about 1.93x. This is a qualified intermediate gain:

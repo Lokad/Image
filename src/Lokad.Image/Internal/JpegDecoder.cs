@@ -369,6 +369,7 @@ internal ref struct JpegDecoder
         // Successive-approximation AC decoding: existing nonzero coefficients
         // consume correction bits while run counts count only zero coefficients.
         if (ac!.TryReadRefinementBlock(ref reader, block, ss, se, al, ref eobRun)) return;
+        if (reader.HasCancelableToken && ac.TryReadCancelableRefinementBlock(ref reader, block, ss, se, al, ref eobRun)) return;
         if (Avx2.IsSupported && Bmi2.X64.IsSupported)
         {
             ReadMaskedRefinement(ref reader, block, ac!, ss, se, al, ref eobRun);

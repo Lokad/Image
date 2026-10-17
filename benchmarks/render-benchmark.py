@@ -145,7 +145,7 @@ def render():
         row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg-ac-run-evidence.json', ['cancelableConfirmations', -1], 'WARM-JPEG-BASELINE-AC-RUN.md', True),
         row('JPEG progressive gray', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'ProgressiveGray', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
         row('JPEG progressive 4:2:0', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'Progressive420', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
-        row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
+        row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpeg-cancelable-refinement-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-JPEG-CANCELABLE-REFINEMENT.md', verification='Gap (short; qualified)'),
         row('JPEG progressive 4:2:2', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'Progressive422', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
         row('JPEG progressive 4:4:4', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'Progressive444', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
         row('WebP VP8 + alpha', 'warm-vp8-filter8-evidence.json', ['alphaBearingControl', 'observations', -1], 'WARM-VP8-FILTER8.md', True),
@@ -324,13 +324,14 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [paired-column RGBA16 bicubic filtering](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md)
-reduces the three affected complete-operation times by 24–27%, with no added heap
-arrays and the same 4 KiB scratch reservation. Their short-screen ratios remain
-1.307–1.462; parity stays open. Exact pixels, quantization, work/admission,
-output ownership and approved native bounds hold. All other paths reuse their
-valid proofs, including the preceding [progressive JPEG gain](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md).
-Fresh **3,580 Release tests per OS** (1,292 internal +1,390 public +898 live FFmpeg),
+Latest production round: [cancelable progressive JPEG refinement](../benchmarks/WARM-JPEG-CANCELABLE-REFINEMENT.md)
+reduces the live-token444 complete decode by 10.6%, retaining every original
+per-bit cancellation check, immediate updates and exact work/failure state.
+Its qualified short screen remains1.726x/upper1.798x; parity stays open.
+All other paths reuse their valid proofs, including the previous
+[24–27% bicubic gain](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) and
+[ordinary progressive JPEG gain](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md).
+Fresh **3,594 Release tests per OS** (1,306 internal +1,390 public +898 live FFmpeg),
 and the consumer/all three examples through the **same actual Release package on
 Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10.
 

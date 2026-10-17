@@ -13,9 +13,10 @@ record which comparisons they replace. Only confirmed <=1x paths are stopped
 for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,202 select independent
-confirmations. Three select the latest qualified paired-column screens and remain
-gaps; their older independent timings were invalidated by changed production.
+unscored native-alpha incompatibility. Of those numeric rows,201 select independent
+confirmations. Four select qualified screens after changed production: three
+paired-column bicubic cases and live-token progressive444. They remain gaps;
+their older independent timings were explicitly superseded.
 Two select later short regressions while retaining their unchanged
 independent witnesses: `Encode444Cancelable8`1.819x/upper1.879x and
 `Encode420Stream16`1.948x/upper1.954x. The [bounded audit](warm-jpeg-grayscale-evidence.json)
@@ -36,7 +37,7 @@ established before this audit and were reconciled, not expanded.
 | B01 | Bilinear Down8/16,Up8/16: shared resize dispatch and byte/word alpha-aware filtering | [All four closed](WARM-CURRENT-BILINEAR.md) |
 | B02 | JPEG adaptive Encode8/16,Encode422_8/16: changed AC planner at444/422 and both input depths | [All four closed](WARM-CURRENT-JPEG-ADAPTIVE.md) |
 | B03 | JPEG Decode8,NativeDecode8,NativeDecode420/422,OwnedDecodeGray,NativeDecode420Restart,DirectRgb422/420: changed ordinary AC loop plus distinct component renderers | [All eight closed](WARM-CURRENT-JPEG-DECODE.md) |
-| B04 | JPEG ProgressiveGray/420/422 plus ordinary/live-token444: masked refinement and its guarded fused reader | [All five current-path comparisons](WARM-JPEG-REFINEMENT-FUSED.md); <=1x gaps remain |
+| B04 | JPEG ProgressiveGray/420/422 plus ordinary/live-token444: masked refinement and its guarded fused readers | [Four ordinary proofs reused](WARM-JPEG-REFINEMENT-FUSED.md); [live-token444 improved](WARM-JPEG-CANCELABLE-REFINEMENT.md), still a <=1x gap |
 | B05 | The25 named PNG decode selectors in the linked report: byte/word predictors, expansion and input-pool changes | [All25 closed](WARM-CURRENT-PNG-DECODE.md) |
 | B06 | PNG DecodeAdam7_16,DecodeGray1Adam7: interlaced placement on changed shared framing; later palette4/8 cases reuse their own proofs | [Closed](WARM-CURRENT-PNG-ADAM7.md) |
 | B07 | Png8/16,PngCropFit8/16: complete fresh input, orientation/crop/fit and intermediate ownership | [Closed](WARM-CURRENT-PNG-STREAM.md), with word fusion proof reused |
@@ -60,7 +61,14 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [paired-column reconciliation](warm-bicubic-paired-columns-evidence.json)
+The latest [cancelable refinement reconciliation](warm-jpeg-cancelable-refinement-evidence.json)
+adds one post-fast-path live-token dispatch and a guarded block reader/helper/
+wrapper. Previous methods and fields are unchanged. Only ProgressiveCancelable444
+replaces its old timing: the qualified short screen is1.726x/upper1.798x, with
+per-bit cancellation, immediate updates and exact work/failure state retained.
+All206 other comparisons, including all51 passing proofs, retain applicable paths.
+
+The preceding [paired-column reconciliation](warm-bicubic-paired-columns-evidence.json)
 changes only the admitted word column-filter body and its checked row-offset
 storage. Mixed16, TightMixed16 and TightVertical16 have fresh qualified quiet
 screens; no independent parity confirmation is claimed while their means remain
@@ -75,7 +83,7 @@ Stream acquisition and other codecs retain their executed source paths and proof
 the later three resize changes are recorded above.
 The [preceding Stream reconciliation](warm-png-stream-identify-evidence.json)
 still applies; its common acquisition boundary is represented once, with three
-separate resident parsers. Current 3,580 Release tests per OS and consumer/all
+separate resident parsers. Current 3,594 Release tests per OS and consumer/all
 three examples through the same actual Release package on Windows/Linux pass.
 
 The original audit at349fedd reconciled203 numeric rows and fourteen historical
