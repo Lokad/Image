@@ -116,12 +116,27 @@ internal ref struct WebpLosslessDecoder
             tables[group * 5 + 4] = ReadHuffman(40);
         }
         var pixels = Allocate(imageWidth, imageHeight); var position = 0;
+        var scratchStart = 0; var lookupEntries = (long)groups * 4096;
+        if (lookupEntries <= pixels.Length / 2)
+        {
+            for (var group = 0; group < groups; group++)
+            {
+                var green = tables[group * 5];
+                if (!green.CanBuildWideGreen) continue;
+                context.Cancellation.ThrowIfCancellationRequested();
+                scratchStart = pixels.Length - (int)lookupEntries;
+                green.BuildWideGreen(pixels.AsSpan(scratchStart + group * 4096, 4096));
+            }
+        }
         while (position < pixels.Length)
         {
             context.Work(1);
             var group = entropy.Length == 0 ? 0 : (int)((entropy[(position / imageWidth >> entropyBits) * entropyWidth
                 + (position % imageWidth >> entropyBits)] >> 8) & 65535);
-            var start = group * 5; var symbol = tables[start].Read(ref reader);
+            var start = group * 5;
+            var symbol = position < scratchStart && tables[start].CanBuildWideGreen
+                && reader.TryReadWideGreen(pixels.AsSpan(scratchStart + group * 4096, 4096), out var wideSymbol)
+                ? wideSymbol : tables[start].Read(ref reader);
             if (symbol < 256)
             {
                 var red = tables[start + 1].Read(ref reader); var blue = tables[start + 2].Read(ref reader);

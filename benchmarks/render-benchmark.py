@@ -84,8 +84,8 @@ def render():
         row('PNG RGBA8, fresh seekable Stream', 'warm-current-png-stream-evidence.json', ['cases', 'Png8', -1], 'WARM-CURRENT-PNG-STREAM.md', True),
         row('PNG RGBA16, fresh seekable Stream', 'warm-current-png-stream-evidence.json', ['cases', 'Png16', -1], 'WARM-CURRENT-PNG-STREAM.md', True),
         row('JPEG420 restart, fresh seekable Stream', 'warm-jpeg-ac-cache-evidence.json', ['observations', 8], 'WARM-JPEG-AC-CACHE.md', True),
-        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8stream-evidence.json', ['observations', -1], 'WARM-VP8-STREAM.md', True),
-        row('WebP VP8L, fresh seekable Stream', 'warm-vp8lstream-evidence.json', ['observations', -1], 'WARM-VP8L-STREAM.md', True),
+        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8l-borrowed-green-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-VP8L-BORROWED-GREEN.md', verification='Gap (short; qualified)'),
+        row('WebP VP8L, fresh seekable Stream', 'warm-vp8l-borrowed-green-evidence.json', ['cases', 'StreamNativeLossless8', -1], 'WARM-VP8L-BORROWED-GREEN.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGBA8, None / live cancelable token', 'warm-png-boundaries-current-evidence.json', ['cases', 'byteDefault', -1], 'WARM-PNG-DECODE-BOUNDARIES.md', True),
         row('PNG RGBA8, None / exact working limit', 'warm-pngcountall-evidence.json', ['observations', -1], 'WARM-PNG-COUNTING.md', True),
@@ -148,14 +148,14 @@ def render():
         row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpeg-cancelable-refinement-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-JPEG-CANCELABLE-REFINEMENT.md', verification='Gap (short; qualified)'),
         row('JPEG progressive 4:2:2', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'Progressive422', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
         row('JPEG progressive 4:4:4', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'Progressive444', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
-        row('WebP VP8 + alpha', 'warm-vp8-filter8-evidence.json', ['alphaBearingControl', 'observations', -1], 'WARM-VP8-FILTER8.md', True),
+        row('WebP VP8 + alpha', 'warm-vp8l-borrowed-green-evidence.json', ['cases', 'Native8', -1], 'WARM-VP8L-BORROWED-GREEN.md', verification='Gap (short; qualified)'),
         row('WebP VP8 opaque, simple luma filter', 'warm-vp8-simple-filter-evidence.json', ['observations', -1], 'WARM-VP8-SIMPLE-FILTER.md', True),
         row('WebP VP8 opaque, live cancelable token', 'warm-vp8-cancelable-evidence.json', ['observations', -1], 'WARM-VP8-CANCELABLE.md', True),
         row('WebP VP8, opaque', 'warm-vp8-filter8-evidence.json', ['observations', -1], 'WARM-VP8-FILTER8.md', True),
-        row('WebP VP8L, sixteen-color indexed input', 'warm-vp8l-indexed16-evidence.json', ['observations', -1], 'WARM-VP8L-INDEXED16.md', True),
-        row('WebP VP8L, literal/run input', 'warm-current-vp8l-literal-evidence.json', ['observations', -1], 'WARM-CURRENT-VP8L-LITERAL.md', True),
-        row('WebP VP8L, native input', 'warm-vp8l-canonical-evidence.json', ['observations', -1], 'WARM-VP8L-CANONICAL.md', True),
-        row('WebP VP8L, native input / live cancelable token', 'warm-vp8l-cancelable-evidence.json', ['observations', -1], 'WARM-VP8L-CANCELABLE.md', True),
+        row('WebP VP8L, sixteen-color indexed input', 'warm-vp8l-borrowed-green-evidence.json', ['cases', 'IndexedNative16Colors8', -1], 'WARM-VP8L-BORROWED-GREEN.md', verification='Gap (short; qualified)'),
+        row('WebP VP8L, literal/run input', 'warm-vp8l-borrowed-green-evidence.json', ['cases', 'Lossless8', -1], 'WARM-VP8L-BORROWED-GREEN.md', verification='Gap (short; qualified)'),
+        row('WebP VP8L, native input', 'warm-vp8l-borrowed-green-evidence.json', ['cases', 'NativeLossless8', -1], 'WARM-VP8L-BORROWED-GREEN.md', verification='Gap (short; qualified)'),
+        row('WebP VP8L, native input / live cancelable token', 'warm-vp8l-borrowed-green-evidence.json', ['cases', 'NativeLosslessCancelable8', -1], 'WARM-VP8L-BORROWED-GREEN.md', verification='Gap (short; qualified)'),
     ]
     encodes = [
         row('PNG RGBA8, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'Encode8', -1], 'WARM-PNG-CHUNK-CRC.md', True),
@@ -293,7 +293,7 @@ def render():
     gap_count = sum(' | Gap' in value for value in all_rows)
     return f'''# Lokad.Image benchmark state
 
-Updated 2026-10-17. The current goal is **warm single-CPU parity: independent
+Updated 2026-10-18. The current goal is **warm single-CPU parity: independent
 conservative upper ≤1x**. The 207 numeric rows contain **{parity_count} confirmed parity
 cases, {gap_count} measured gaps and {confidence_count} confidence-open cases**. The earlier
 ≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
@@ -324,15 +324,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [adaptive JPEG AC planning](../benchmarks/WARM-JPEG-ADAPTIVE-AC.md)
-reduces the eight affected encode times 9.9–14.8%, with unchanged packets,
-quality and allocations. All eight remain qualified short parity gaps;
-no routine long confirmation was run. All 199 other comparisons and 58 passing
-proofs are reused. Previous [JPEG inspection](../benchmarks/WARM-JPEG-ENTROPY.md)
-retains its independent 0.499x / upper0.506x result. Passing cases are stopped.
-The 207 rows select 178 independent confirmations and 29 qualified short screens.
-Fresh **3,650 Release cases per OS** (1,344 internal +1,408 public +898 live FFmpeg),
-plus 20 scalar adaptive JPEG controls, pass. The consumer and all
+Latest production round: [borrowed VP8L lookup](../benchmarks/WARM-VP8L-BORROWED-GREEN.md)
+reduces native-input lossless decode times 13.5–13.7%, indexed input 3.9%;
+literal/run is 2.1% above its preceding mean and alpha controls are roughly flat.
+All seven remain qualified short gaps; no routine long confirmation was run.
+All 200 other comparisons and 58 passing proofs are reused. Previous
+[adaptive JPEG AC planning](../benchmarks/WARM-JPEG-ADAPTIVE-AC.md) retains its
+eight qualified short gaps. Passing cases are stopped.
+The 207 rows select 171 independent confirmations and 36 qualified short screens.
+Fresh **3,654 Release cases per OS** (1,348 internal +1,408 public +898 live FFmpeg),
+plus 43 scalar Huffman/lookup controls, pass. The consumer and all
 three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.

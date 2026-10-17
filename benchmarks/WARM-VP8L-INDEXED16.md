@@ -1,5 +1,8 @@
 # Indexed VP8L decoding
 
+Historical timing checkpoint: [borrowed VP8L lookup](WARM-VP8L-BORROWED-GREEN.md)
+records the current qualified short measurement. Its selected decode timing is superseded; original packets and boundaries remain.
+
 Complete sixteen-color VP8L decode independently confirms **1.519× FFmpeg /
 upper 1.550×**, at **1,351,961 managed B/op**. Production is unchanged.
 

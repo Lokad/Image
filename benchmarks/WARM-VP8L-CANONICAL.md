@@ -1,5 +1,8 @@
 # Warm native-input VP8L decode: canonical lookup
 
+Historical timing checkpoint: [borrowed VP8L lookup](WARM-VP8L-BORROWED-GREEN.md)
+records the current qualified short measurement. Its selected decode timing is superseded; original packets and boundaries remain.
+
 Complete public VP8L decode independently confirms at
 1.887x FFmpeg, conservative upper
 1.904x. Both idle guards pass. This native-input

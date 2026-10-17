@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Faster cache-coded lossless WebP decoding with unchanged pixels, working
+  memory, work limits and cancellation.
 - Faster JPEG metadata inspection through bounded entropy scanning, preserving
   complete validation, resource charges and cancellation.
 - Faster progressive JPEG refinement, including live cancelable decoding,

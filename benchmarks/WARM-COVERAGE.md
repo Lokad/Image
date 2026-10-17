@@ -1,6 +1,6 @@
 # Material warm coverage
 
-Updated 2026-10-17. The current **<=1x warm parity objective is open**: 58 named
+Updated 2026-10-18. The current **<=1x warm parity objective is open**: 58 named
 numeric cases already have independent upper<=1, 145 means exceed1, and four
 means<=1 have upper>1. Reuse passing paths and prioritize the largest current
 gaps; do not add a new input or settings grid. The [current summary](../docs/benchmark.md)
@@ -13,16 +13,17 @@ record which comparisons they replace. Only confirmed <=1x paths are stopped
 for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,178 select independent
-confirmations. Twenty-nine select qualified screens after changed production: six
+unscored native-alpha incompatibility. Of those numeric rows,171 select independent
+confirmations. Thirty-six select qualified screens after changed production: six
 paired-column byte/word bicubic cases, byte bicubic TightDown8, word bilinear
 Down16, live-token progressive444, five fixed JPEG encodes, two opaque VP8 encodes,
 two PNG Paeth dispatch controls and three PNG encodes after chunk checksum folding, and eight adaptive JPEG encodes
-(420 byte/word/restart33,422 byte/word,444 byte/word and gray8) after nonzero planning.
+(420 byte/word/restart33,422 byte/word,444 byte/word and gray8) after nonzero planning,
+plus five VP8L decodes and two compressed-alpha VP8 decodes after borrowed lookup.
 RGB16 Paeth now
 has an independent passing proof. Both affected alpha VP8 encodes have independent
 passing confirmations after their shared source conversion changed.
-The twenty-nine short screens remain gaps; older independent timings are explicitly
+The thirty-six short screens remain gaps; older independent timings are explicitly
 superseded. The two
 former short-regression witnesses are now historical after changed AC emission.
 The unscored raw PNG transparency reference is replaced by approved exact timed
@@ -65,7 +66,19 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [adaptive JPEG reconciliation](warm-jpeg-adaptive-ac-evidence.json)
+The latest [VP8L lookup reconciliation](warm-vp8l-borrowed-green-evidence.json)
+replaces exactly seven decode timings with qualified short gaps: native VP8L
+ordinary/live-token/Stream, literal/run, indexed16 and compressed-alpha VP8
+ordinary/Stream. Native lossless improves13.5–13.7%; literal/run's mean is2.1%
+above its preceding result and alpha controls are roughly flat. Original private
+pixel tail scratch and stable grouping add no allocation/reservation/work.
+All three predecessor files are recovered by removing only this primitive.
+All200 other comparisons/all58 passing proofs retain their paths. Full3654
+Release tests/OS,43 scalar Huffman/lookup checks/OS and the same actual package
+consumer/all3 examples bothOS pass. Original validator refusals were reconciled
+without repeating completed timings; no baseline/tolerance/boundary changed.
+
+The preceding [adaptive JPEG reconciliation](warm-jpeg-adaptive-ac-evidence.json)
 replaces all eight affected encode timings with qualified short gaps,9.9–14.8%
 less managed time. One optional occupancy branch changes AC planning; removing
 it restores the entire predecessor JpegEncoder file. All199 other comparisons

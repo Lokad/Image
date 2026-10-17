@@ -1,5 +1,8 @@
 # Eight-pixel VP8 loop filtering
 
+Historical timing checkpoint: [borrowed VP8L lookup](WARM-VP8L-BORROWED-GREEN.md)
+records the current qualified short measurement. Only its compressed-alpha control timing is superseded; opaque VP8 stays unchanged.
+
 Opaque VP8 independently confirms **1.803x FFmpeg / conservative upper 1.808x**,
 closing its previous upper-2.004x gap. The complete managed decode mean falls
 **8.8%** against the retained baseline, with unchanged **760,548 B/op** and exact

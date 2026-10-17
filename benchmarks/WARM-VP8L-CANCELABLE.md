@@ -1,5 +1,8 @@
 # VP8L decoding with a live token
 
+Historical timing checkpoint: [borrowed VP8L lookup](WARM-VP8L-BORROWED-GREEN.md)
+records the current qualified short measurement. Its selected decode timing is superseded; original packets and boundaries remain.
+
 Complete resident-input VP8L decoding with a live, never-signaled cancellation
 token independently confirms **1.906× FFmpeg / upper 1.919×**, at **1,216,180
 managed B/op**. Every decoded RGBA byte, including nonzero hidden RGB, is exact.

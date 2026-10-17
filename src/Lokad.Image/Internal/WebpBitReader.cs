@@ -79,4 +79,23 @@ internal ref struct WebpBitReader
         }
         return false;
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal bool TryReadWideGreen(ReadOnlySpan<uint> codes, out int symbol)
+    {
+        symbol = 0;
+        var candidateBits = bits; var candidateAvailable = available; var candidatePosition = position;
+        while (true)
+        {
+            var packed = codes[(int)candidateBits & 4095]; var count = (int)(packed & 15);
+            if (count != 0 && count <= candidateAvailable)
+            {
+                if (!context.TryWork(count)) return false;
+                bits = candidateBits >> count; available = candidateAvailable - count; position = candidatePosition;
+                symbol = (int)(packed >> 4); return true;
+            }
+            if (candidateAvailable >= 12 || candidatePosition == data.Length) return false;
+            candidateBits |= (ulong)data[candidatePosition++] << candidateAvailable; candidateAvailable += 8;
+        }
+    }
 }

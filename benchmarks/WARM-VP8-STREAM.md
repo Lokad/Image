@@ -1,5 +1,8 @@
 # Fresh VP8 Stream decoding
 
+Historical timing checkpoint: [borrowed VP8L lookup](WARM-VP8L-BORROWED-GREEN.md)
+records the current qualified short measurement. Its selected decode timing is superseded; original packets and boundaries remain.
+
 Complete VP8-with-alpha stream decoding independently confirms **1.825x FFmpeg /
 conservative upper 1.833x**, at **2,327,699 managed allocated B/op**.
 Production is unchanged; uniform current-source coverage remains open.

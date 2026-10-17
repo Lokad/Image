@@ -48,10 +48,13 @@ internal sealed class WebpHuffman
         for (var length = 1; length <= 15; length++)
         {
             firstCode[length] = code; counts[length] = histogram[length]; firstSymbol[length] = offset;
-            for (var i = 0; i < lengths.Length; i++)
-                if (lengths[i] == length) symbols[offset++] = (ushort)i;
             code = (code + histogram[length]) << 1;
+            histogram[length] = offset; offset += counts[length];
         }
+        // Stable grouping in one pass replaces fifteen alphabet scans. Reuse
+        // the admitted histogram scratch; metadata and logical charges stay exact.
+        for (var i = 0; i < lengths.Length; i++)
+            if (lengths[i] != 0) symbols[histogram[lengths[i]]++] = (ushort)i;
         if (entries == 0) return;
         shortCodes = new int[entries];
         // Original canonical entries from the encoded lengths (RFC 9649,
@@ -81,5 +84,28 @@ internal sealed class WebpHuffman
             if ((uint)index < (uint)counts[length]) return symbols[firstSymbol[length] + index];
         }
         throw new ImageDataException("Invalid VP8L prefix code.");
+    }
+
+    internal bool CanBuildWideGreen => symbols.Length >= 768;
+
+    // The caller supplies a fresh zeroed slice of private, unwritten pixels.
+    // For T>=768 and alphabet N>=T, <=6*T+4168 reversal/store iterations fit
+    // the14*N scan iterations saved above. No extra work or storage is charged.
+    internal void BuildWideGreen(Span<uint> lookup)
+    {
+        if (!CanBuildWideGreen || lookup.Length != 4096) throw new ArgumentException("Invalid VP8L green lookup workspace.");
+        for (var length = 1; length <= 12; length++)
+        for (var index = 0; index < counts[length]; index += 2)
+        {
+            var value = (firstCode[length] + index) >> 1; var reversed = 0;
+            for (var bit = 1; bit < length; bit++) { reversed = reversed * 2 + (value & 1); value >>= 1; }
+            var low = (uint)(symbols[firstSymbol[length] + index] << 4 | length);
+            var high = index + 1 < counts[length] ? (uint)(symbols[firstSymbol[length] + index + 1] << 4 | length) : 0;
+            for (var prefix = reversed; prefix < lookup.Length; prefix += 1 << length)
+            {
+                lookup[prefix] = low;
+                if (high != 0) lookup[prefix + (1 << (length - 1))] = high;
+            }
+        }
     }
 }

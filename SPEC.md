@@ -828,7 +828,13 @@ Canonical Huffman lookup may resolve an entire symbol using local bit-reader
 state and the existing tables. It charges the same logical bit reads and consumes
 no byte beyond the symbol. Tight work budgets and truncated inputs retain the
 per-bit path, partial consumption and original error precedence. Table admission
-and zero-bit single leaves are unchanged; no additional lookup storage is used.
+and zero-bit single leaves are unchanged. Large green-code trees can use a
+12-bit lookup borrowed from the freshly zeroed, unwritten tail of their private
+pixel array. Decoding stops using that lookup before the write cursor reaches
+it, including after a backward reference crosses the boundary; every borrowed
+word is overwritten before output is published. Stable one-pass code grouping
+funds bounded lookup construction within the original logical work charge.
+No additional allocation, working-memory reservation or output owner is added.
 Output is RGBA8; VP8L dimensions are at most 16384
 per side.
 

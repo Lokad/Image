@@ -1,5 +1,8 @@
 # Current literal/run VP8L decode evidence
 
+Historical timing checkpoint: [borrowed VP8L lookup](WARM-VP8L-BORROWED-GREEN.md)
+records the current qualified short measurement. Its selected decode timing is superseded; original packets and boundaries remain.
+
 The existing `WarmWebpDecode/Lossless8` case independently confirms after the
 shared canonical Huffman lookup changed. Stop this pair. Newer native-input,
 indexed, cancelable and Stream confirmations remain valid and are reused.
