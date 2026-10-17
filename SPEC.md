@@ -43,6 +43,11 @@ Outstanding raw orientation is retained until `AutoOrient` or decode with
 dimensions are separately exposed by `ImageInfo`. Identification validates
 container structure and checksums, but does not validate all compressed pixels.
 
+JPEG inspection validates the complete marker/scan-header, stuffing, EXIF and
+EOI/EOF structure without decoding entropy symbols. Noncancelable inspection
+may batch ordinary and stuffed bytes within an admitted 4 KiB raw span; logical
+work, validation order and the cancelable scan's polling remain unchanged.
+
 ## Geometry and resizing
 
 Coordinates are integer pixel coordinates, with top-left origin. Strict crop

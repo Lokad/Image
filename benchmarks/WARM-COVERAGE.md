@@ -1,7 +1,7 @@
 # Material warm coverage
 
-Updated 2026-10-17. The current **<=1x warm parity objective is open**: 57 named
-numeric cases already have independent upper<=1, 146 means exceed1, and four
+Updated 2026-10-17. The current **<=1x warm parity objective is open**: 58 named
+numeric cases already have independent upper<=1, 145 means exceed1, and four
 means<=1 have upper>1. Reuse passing paths and prioritize the largest current
 gaps; do not add a new input or settings grid. The [current summary](../docs/benchmark.md)
 distinguishes parity, measured gaps and confidence-open cases.
@@ -53,7 +53,7 @@ established before this audit and were reconciled, not expanded.
 | B14 | JPEG4208/16,restart,gray and geometric live-token/forward output; VP8 ordinary/simple/alpha/live-token/Stream and opaque8/16 encode; VP8L native/indexed/live-token/Stream and exact backend encodes | [VP8 source views](WARM-VP8-SOURCE-VIEWS.md) improve four encodes; [fixed JPEG encodes](WARM-JPEG-FIXED-AC-FUSION.md) and other unchanged proofs reused |
 | B15 | Nearest Down8/16,Up8/16: unchanged early dispatch/integer kernels and allocation path | Existing independent proofs reused |
 | C01 | PNG resident Identify: full container/CRC/EXIF without inflation, fresh descriptor; decode/cold timings do not cover it | [Closed](WARM-PNG-IDENTIFY.md),1.234x/upper1.238x,88B/op |
-| C02 | JPEG resident Identify: complete marker/scan/stuffing/EXIF/EOI scan without entropy/pixels | [Closed](WARM-JPEG-IDENTIFY.md),1.840x/upper1.860x,88B/op |
+| C02 | JPEG resident Identify: complete marker/scan/stuffing/EXIF/EOI scan without entropy/pixels | [Parity confirmed](WARM-JPEG-ENTROPY.md),0.499x/upper0.506x,88B/op |
 | C03 | WebP resident Identify: distinct RIFF/feature/header/EXIF algorithm, one existing VP8L packet | [Closed](WARM-WEBP-IDENTIFY.md),0.0040x/upper0.0045x,88B/op,explicit FFmpeg parser reference |
 | C04 | Fresh non-exposed seekable Stream Identify on the same C01 PNG: fast metadata boundary exposes input acquisition/read/EOF/ownership costs | [Closed](WARM-PNG-STREAM-IDENTIFY.md),1.445x/upper1.459x,184B/op |
 
@@ -64,7 +64,16 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [byte packing reconciliation](warm-png-byte-packing-evidence.json)
+The latest [JPEG scanner reconciliation](warm-jpeg-entropy-evidence.json)
+replaces only resident JPEG Identify:0.499x/upper0.506x,72.9% less managed time.
+One noncancelable branch/helper batches admitted entropy/stuffing; removing it
+and three imports restores the entire predecessor JpegIdentifier file. All206
+other comparisons and57 prior passing proofs retain their executed paths.
+Full3648 Release tests/OS,20 scalar scanner checks/OS and the same actual package
+consumer/all3 examples bothOS pass. The approved reference and all21 equivalent-
+boundary controls remain unchanged. No case was added.
+
+The preceding [byte packing reconciliation](warm-png-byte-packing-evidence.json)
 replaces exactly gray8/RGB8/gray-alpha8 encode timings; all three independently
 pass upper<=1 with exact packets and frozen Optimal9/native6/5% IDAT policy.
 The entire predecessor PngCodec file is restored by removing one dispatch and

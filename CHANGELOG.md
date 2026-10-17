@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Faster JPEG metadata inspection through bounded entropy scanning, preserving
+  complete validation, resource charges and cancellation.
 - Faster progressive JPEG refinement, including live cancelable decoding,
   with unchanged pixels, resource limits and cancellation behavior;
   see the [benchmark state](docs/benchmark.md).

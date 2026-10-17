@@ -1,4 +1,7 @@
 using System.Buffers.Binary;
+using System.Numerics;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
 
 namespace Lokad.Image.Internal;
 
@@ -25,6 +28,12 @@ internal static class JpegIdentifier
                 var count = (int)Math.Min(context.RemainingWork, Math.Min(4096, data.Length - position));
                 if (count != 0)
                 {
+                    if (!context.Cancellation.CanBeCanceled)
+                    {
+                        var consumed = EntropyRun(data.Slice(position, count), out var work);
+                        context.CommitAdmittedWork(work); position += consumed;
+                        continue;
+                    }
                     var nextMarker = data.Slice(position, count).IndexOf((byte)255);
                     var plain = nextMarker < 0 ? count : nextMarker;
                     context.CommitAdmittedWork(plain); position += plain;
@@ -86,6 +95,45 @@ internal static class JpegIdentifier
             }
         }
         throw new ImageDataException("JPEG is missing EOI.");
+    }
+
+    private static int EntropyRun(ReadOnlySpan<byte> data, out int work)
+    {
+        // T.81 B.1.1.5: FF00 is one opaque entropy byte; only FF is charged.
+        // The caller admits the entire bounded raw span without cancellation.
+        // Leave every actual marker and any uncertain final FF to the parser.
+        var position = 0; work = 0;
+        if (Vector512.IsHardwareAccelerated)
+        {
+            var ff = Vector512.Create((byte)255);
+            for (; position <= data.Length - 64;)
+            {
+                var value = Vector512.LoadUnsafe(ref MemoryMarshal.GetReference(data), (nuint)position);
+                var markers = Vector512.ExtractMostSignificantBits(Vector512.Equals(value, ff));
+                if (markers == 0) { position += 64; work += 64; continue; }
+                var zeros = Vector512.ExtractMostSignificantBits(Vector512.Equals(value, Vector512<byte>.Zero));
+                var actual = markers & ~(zeros >> 1);
+                var cross = (markers >> 63) != 0 && position + 64 < data.Length && data[position + 64] == 0;
+                if (cross) actual &= 0x7fffffffffffffff;
+                if (actual != 0)
+                {
+                    var plain = BitOperations.TrailingZeroCount(actual);
+                    work += plain - BitOperations.PopCount(markers & ((1UL << plain) - 1));
+                    return position + plain;
+                }
+                var consumed = cross ? 65 : 64;
+                work += consumed - BitOperations.PopCount(markers); position += consumed;
+            }
+        }
+        while (position < data.Length)
+        {
+            var next = data[position..].IndexOf((byte)255);
+            if (next < 0) { work += data.Length - position; return data.Length; }
+            work += next; position += next;
+            if (position == data.Length - 1 || data[position + 1] != 0) return position;
+            position += 2; work++;
+        }
+        return position;
     }
 
 }

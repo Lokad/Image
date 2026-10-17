@@ -1,5 +1,9 @@
 # Warm resident JPEG identification
 
+Historical checkpoint: current timing is superseded by
+[bounded entropy scanning](WARM-JPEG-ENTROPY.md). The approved reference,
+packet, complete operation boundary and correctness policy remain unchanged.
+
 Independent quiet confirmation measures **1.840x**, conservative upper
 **1.860x**, at **2.23 us /88 B/op** against **1.21 us**.
 All twelve actuals and both five-second quiet guards pass. The original valid

@@ -1,8 +1,8 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-17. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 207 numeric rows contain **57 confirmed parity
-cases, 146 measured gaps and 4 confidence-open cases**. The earlier
+conservative upper ≤1x**. The 207 numeric rows contain **58 confirmed parity
+cases, 145 measured gaps and 4 confidence-open cases**. The earlier
 ≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
@@ -31,16 +31,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [PNG byte packing](../benchmarks/WARM-PNG-BYTE-PACKING.md)
-brings gray8/RGB8/gray-alpha8 encoding to independently confirmed parity, with
-47.3%/16.6%/29.3% less managed time. Exact packets, the 5% IDAT-size gate and
-complete conversion/owned-output boundaries remain fixed. All 204 other comparisons,
-including 54 prior passing proofs, are reused. Previous [Up SIMD](../benchmarks/WARM-PNG-UP-SIMD.md)
-retains 32.8%/45.2% decode gains and two passing cases; [chunk folding](../benchmarks/WARM-PNG-CHUNK-CRC.md)
-retains its stored-encode gains. Passing cases are stopped.
+Latest production round: [JPEG entropy scanning](../benchmarks/WARM-JPEG-ENTROPY.md)
+cuts resident Identify time 72.9%, reaching 0.499x / upper0.506x with unchanged
+88 B/op. Full structural validation and the approved timed FFmpeg metadata
+projection remain fixed. All 206 other comparisons and 57 prior passing proofs
+are reused. Previous [PNG byte packing](../benchmarks/WARM-PNG-BYTE-PACKING.md)
+retains three passing encodes; [Up SIMD](../benchmarks/WARM-PNG-UP-SIMD.md)
+retains two passing decodes. Passing cases are stopped.
 The 207 rows select 186 independent confirmations and 21 qualified short screens.
-Fresh **3,646 Release cases per OS** (1,340 internal +1,408 public +898 live FFmpeg),
-plus 36 scalar byte-packing/admission controls, pass. The consumer and all
+Fresh **3,648 Release cases per OS** (1,342 internal +1,408 public +898 live FFmpeg),
+plus 20 scalar JPEG scanner controls, pass. The consumer and all
 three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
@@ -51,7 +51,7 @@ managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 | --- | ---: | ---: | ---: | ---: | --- |
 | [PNG Identify, fresh Stream¶](../benchmarks/WARM-PNG-STREAM-IDENTIFY.md) | 22.94 | 15.87 | 1.445 / 1.459 | 184 | Gap (independent) |
 | [WebP Identify, resident span (parser)](../benchmarks/WARM-WEBP-IDENTIFY.md) | 0.02 | 4.54 | 0.004 / 0.004 | 88 | Parity confirmed |
-| [JPEG Identify, resident span‖](../benchmarks/WARM-JPEG-IDENTIFY.md) | 2.23 | 1.21 | 1.840 / 1.860 | 88 | Gap (independent) |
+| [JPEG Identify, resident span‖](../benchmarks/WARM-JPEG-ENTROPY.md) | 0.60 | 1.21 | 0.499 / 0.506 | 88 | Parity confirmed |
 | [PNG Identify, resident span¶](../benchmarks/WARM-PNG-IDENTIFY.md) | 16.09 | 13.04 | 1.234 / 1.238 | 88 | Gap (independent) |
 | [PNG palette4/full tRNS Adam7](../benchmarks/WARM-PNG-PALETTE4-ADAM7.md) | 1,480.35 | 1,135.35 | 1.304 / 1.387 | 2,592 | Gap (independent) |
 | [PNG8 Stream, orient/crop/nearest fit](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 2,129.50 | 1,473.35 | 1.445 / 1.454 | 1,445,000 | Gap (independent) |

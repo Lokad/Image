@@ -76,7 +76,7 @@ def render():
     decodes = [
         row('PNG Identify, fresh Stream¶', 'warm-png-stream-identify-evidence.json', ['observations', -1], 'WARM-PNG-STREAM-IDENTIFY.md', True),
         row('WebP Identify, resident span (parser)', 'warm-webp-identify-evidence.json', ['observations', -1], 'WARM-WEBP-IDENTIFY.md', True),
-        row('JPEG Identify, resident span‖', 'warm-jpeg-identify-evidence.json', ['observations', -1], 'WARM-JPEG-IDENTIFY.md', True),
+        row('JPEG Identify, resident span‖', 'warm-jpeg-entropy-evidence.json', ['observations', -1], 'WARM-JPEG-ENTROPY.md', True),
         row('PNG Identify, resident span¶', 'warm-png-identify-evidence.json', ['observations', -1], 'WARM-PNG-IDENTIFY.md', True),
         row('PNG palette4/full tRNS Adam7', 'warm-png-palette4-adam7-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE4-ADAM7.md', True),
         row('PNG8 Stream, orient/crop/nearest fit', 'warm-current-png-stream-evidence.json', ['cases', 'PngCropFit8', -1], 'WARM-CURRENT-PNG-STREAM.md', True),
@@ -324,16 +324,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [PNG byte packing](../benchmarks/WARM-PNG-BYTE-PACKING.md)
-brings gray8/RGB8/gray-alpha8 encoding to independently confirmed parity, with
-47.3%/16.6%/29.3% less managed time. Exact packets, the 5% IDAT-size gate and
-complete conversion/owned-output boundaries remain fixed. All 204 other comparisons,
-including 54 prior passing proofs, are reused. Previous [Up SIMD](../benchmarks/WARM-PNG-UP-SIMD.md)
-retains 32.8%/45.2% decode gains and two passing cases; [chunk folding](../benchmarks/WARM-PNG-CHUNK-CRC.md)
-retains its stored-encode gains. Passing cases are stopped.
+Latest production round: [JPEG entropy scanning](../benchmarks/WARM-JPEG-ENTROPY.md)
+cuts resident Identify time 72.9%, reaching 0.499x / upper0.506x with unchanged
+88 B/op. Full structural validation and the approved timed FFmpeg metadata
+projection remain fixed. All 206 other comparisons and 57 prior passing proofs
+are reused. Previous [PNG byte packing](../benchmarks/WARM-PNG-BYTE-PACKING.md)
+retains three passing encodes; [Up SIMD](../benchmarks/WARM-PNG-UP-SIMD.md)
+retains two passing decodes. Passing cases are stopped.
 The 207 rows select 186 independent confirmations and 21 qualified short screens.
-Fresh **3,646 Release cases per OS** (1,340 internal +1,408 public +898 live FFmpeg),
-plus 36 scalar byte-packing/admission controls, pass. The consumer and all
+Fresh **3,648 Release cases per OS** (1,342 internal +1,408 public +898 live FFmpeg),
+plus 20 scalar JPEG scanner controls, pass. The consumer and all
 three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
