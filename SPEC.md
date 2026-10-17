@@ -679,8 +679,8 @@ reuse its lookahead across symbols. Only bytes required by completed symbols
 are committed; unused whole bytes are returned before every exit. Stuffing,
 markers, long/invalid codes, short tails and tight work budgets use the original
 fallback with exact logical bits, partial coefficients and work/error ordering.
-With a live token, consecutive ordinary
-AC symbols may be decoded from safe two-byte lookahead using local reader state.
+With a live token, consecutive ordinary AC symbols may reuse a local 64-bit
+cache, safely refilled with four ordinary bytes at a time.
 Prefix and amplitude retain separate work admissions and cancellation checks.
 Unused whole bytes are returned before publishing the original reader position
 and pending bits. Stuffed bytes, markers, incomplete/long codes, syntax failures

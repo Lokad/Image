@@ -552,44 +552,48 @@ internal ref struct JpegEntropyReader
 
     internal void ReadPlainCancelableAc(ReadOnlySpan<ushort> shortCodes, scoped Span<int> block, ref int coefficient)
     {
-        var localBits = bits; var localAvailable = available; var localPosition = position;
+        ulong localBits = bits; var localAvailable = available; var localPosition = position;
         var budget = ~remainingWork; var cancellation = context.Cancellation; var k = coefficient;
         try
         {
-            while (k <= 63 && data.Length - localPosition >= 2)
+            while (k <= 63)
             {
-                var pair = System.Buffers.Binary.BinaryPrimitives.ReadUInt16BigEndian(data.Slice(localPosition, 2));
-                // Stuffing, markers, long codes and syntax failures use the
-                // original traversal, without speculative state changes.
-                if ((unchecked((uint)(~pair - 0x0101)) & pair & 0x8080) != 0) return;
-                var cached = localBits << 16 | pair; var cachedCount = localAvailable + 16;
-                var packed = shortCodes[(int)((cached >> (cachedCount - 8)) & 255)]; var count = packed & 15;
+                // At most eight prefix and ten amplitude bits are needed.
+                // Keep ordinary lookahead across symbols; every exit returns
+                // unused whole bytes before publishing the reader state.
+                if (localAvailable < 18)
+                {
+                    if (data.Length - localPosition < 4) return;
+                    var word = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(data.Slice(localPosition, 4));
+                    if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) != 0) return;
+                    localBits = localBits << 32 | word; localAvailable += 32; localPosition += 4;
+                }
+                var packed = shortCodes[(int)((localBits >> (localAvailable - 8)) & 255)]; var count = packed & 15;
                 var token = packed >> 4; var size = token & 15; var run = token >> 4;
-                if (count == 0 || size is < 1 or > 10 || run >= 64 - k || count + size > cachedCount) return;
+                if (count == 0 || size is < 1 or > 10 || run >= 64 - k) return;
                 cancellation.ThrowIfCancellationRequested();
                 if (count > budget) return;
                 budget -= count;
+                localAvailable -= count;
                 // Admit and expose the prefix before the separate amplitude
                 // checkpoint. The finally preserves it on cancellation/limit.
                 if (cancellation.IsCancellationRequested || budget == 0)
                 {
-                    var prefixBytes = (count + 7 - localAvailable) >> 3;
-                    localBits = cached >> ((2 - prefixBytes) * 8);
-                    localAvailable += prefixBytes * 8 - count; localPosition += prefixBytes;
                     cancellation.ThrowIfCancellationRequested();
                     throw new ImageLimitException("Computational work limit exceeded.");
                 }
                 budget--;
-                var pending = cachedCount - count - size;
-                localBits = cached >> (pending & ~7); localAvailable = pending & 7; localPosition += 2 - (pending >> 3);
-                var amplitude = (int)((cached >> pending) & ((1u << size) - 1)); var threshold = 1 << (size - 1);
+                localAvailable -= size;
+                var amplitude = (int)((localBits >> localAvailable) & ((1u << size) - 1)); var threshold = 1 << (size - 1);
                 k += run;
                 block[JpegTransform.Zigzag[k++]] = amplitude + (((amplitude - threshold) >> 31) & (1 - (threshold << 1)));
             }
         }
         finally
         {
-            bits = localBits; available = localAvailable; position = localPosition; remainingWork = ~budget; coefficient = k;
+            var wholeBytes = localAvailable >> 3;
+            bits = unchecked((uint)(localBits >> (wholeBytes * 8))); available = localAvailable & 7;
+            position = localPosition - wholeBytes; remainingWork = ~budget; coefficient = k;
         }
     }
 

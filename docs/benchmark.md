@@ -31,15 +31,15 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [exact byte bilinear factorization](../benchmarks/WARM-BILINEAR-BYTE-FACTORIZATION.md)
-reduces RGBA8 enlargement time 16.8%, preserving exact sums, pixels and allocation.
-Its 1.456× mean remains a qualified short gap; no routine long confirmation was
-run. All 206 other comparisons and 58 passing proofs are reused. Previous
-[bicubic strips](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) retain seven
-qualified short improvements. Passing cases are stopped.
-The 207 rows select 163 independent confirmations and 44 qualified short screens.
-Fresh **3,659 Release cases per OS** (1,349 internal +1,412 public +898 live FFmpeg),
-plus 132 scalar bilinear/reference controls, pass. The consumer and all
+Latest production round: [cancelable JPEG AC cache](../benchmarks/WARM-JPEG-CANCELABLE-AC-CACHE.md)
+reduces live-token baseline444 decode time 9.3%, preserving exact pixels, work
+charges and allocation. Its 1.610× mean remains a qualified short gap; no routine
+long confirmation was run. All 206 other comparisons and 58 passing proofs are
+reused. Previous [byte bilinear factorization](../benchmarks/WARM-BILINEAR-BYTE-FACTORIZATION.md)
+retains its qualified short improvement. Passing cases are stopped.
+The 207 rows select 162 independent confirmations and 45 qualified short screens.
+Fresh **3,662 Release cases per OS** (1,352 internal +1,412 public +898 live FFmpeg),
+plus 96 scalar JPEG boundary/public controls, pass. The consumer and all
 three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
@@ -116,7 +116,7 @@ managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 | [JPEG baseline direct RGB, full resolution](../benchmarks/WARM-JPEG-AC-CACHE.md) | 2,460.96 | 1,451.53 | 1.695 / 1.709 | 2,664,366 | Gap (independent) |
 | [JPEG direct RGB 4:2:2, timed centered correction](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 1,495.61 | 1,092.79 | 1.369 / 1.375 | 1,978,658 | Gap (independent) |
 | [JPEG direct RGB 4:2:0, timed component-plane interpretation](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 1,131.19 | 742.22 | 1.524 / 1.532 | 1,619,540 | Gap (independent) |
-| [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-JPEG-BASELINE-AC-RUN.md) | 3,048.96 | 1,722.47 | 1.770 / 1.797 | 2,664,373 | Gap (independent) |
+| [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-JPEG-CANCELABLE-AC-CACHE.md) | 2,765.05 | 1,717.88 | 1.610 / 1.664 | 2,664,373 | Gap (short; qualified) |
 | [JPEG progressive gray](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md) | 2,665.76 | 1,715.98 | 1.553 / 1.557 | 1,232,526 | Gap (independent) |
 | [JPEG progressive 4:2:0](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md) | 2,671.13 | 1,954.79 | 1.366 / 1.371 | 1,637,526 | Gap (independent) |
 | [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-CANCELABLE-REFINEMENT.md) | 5,791.94 | 3,354.98 | 1.726 / 1.798 | 2,682,364 | Gap (short; qualified) |

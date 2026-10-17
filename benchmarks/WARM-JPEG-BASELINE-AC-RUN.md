@@ -1,5 +1,10 @@
 # JPEG baseline AC runs
 
+Historical ≤2x checkpoint. Its live-token baseline444 timing is superseded by
+[bounded AC cache reuse](WARM-JPEG-CANCELABLE-AC-CACHE.md), a current qualified
+short gap under the ≤1x objective. Other selected paths retain their applicable
+evidence in the [current summary](../docs/benchmark.md).
+
 Ordinary native-input JPEG444 decoding now independently confirms **1.715× FFmpeg /
 upper 1.733×**, reducing managed time **18.6%** from the prior independent run.
 The same qualified build also confirms the existing live-token and progressive

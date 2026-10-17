@@ -164,8 +164,9 @@ public sealed class JpegBaselineBlockTests
         return (new JpegHuffman(dc, Enumerable.Range(0, 13).Select(i => (byte)i).ToArray(), Context()), new JpegHuffman(ac, AcSymbols, Context()));
     }
 
-    [Fact]
-    public void ConsecutiveShortAcKeepsEveryBudgetTruncationAndCachedPhase()
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void ConsecutiveShortAcKeepsEveryBudgetTruncationAndCachedPhase(bool cancelable)
     {
         var tables = Tables();
         var payload = Dc(0) + string.Concat(Enumerable.Range(1, 63).Select(k => Ac(1) + ((k & 1) == 0 ? "1" : "0")));
@@ -187,7 +188,10 @@ public sealed class JpegBaselineBlockTests
 
                 (Type? Error, string? Message, int Position, long Remaining, int Predictor, int[] Block) Run(bool scalar)
                 {
-                    var context = Context(item.Work); var reader = new JpegEntropyReader(input, 0, context);
+                    using var cancellation = new CancellationTokenSource();
+                    var context = new OperationContext(ImageLimits.Default with { MaxWork = item.Work },
+                        cancelable ? cancellation.Token : default);
+                    var reader = new JpegEntropyReader(input, 0, context);
                     var block = Enumerable.Repeat(12345, 64).ToArray(); var predictor = 17; Exception? error = null;
                     try
                     {
@@ -252,8 +256,9 @@ public sealed class JpegBaselineBlockTests
         }
     }
 
-    [Fact]
-    public void LookaheadReturnsPendingBitsAcrossBlocksAndEveryByteTruncation()
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void LookaheadReturnsPendingBitsAcrossBlocksAndEveryByteTruncation(bool cancelable)
     {
         var tables = Tables(); var dense = Dc(3) + Signed(7, 3);
         for (var k = 1; k <= 63; k++)
@@ -279,7 +284,10 @@ public sealed class JpegBaselineBlockTests
 
                 (Type? Error, string? Message, int Position, long Remaining, int Predictor, int Tail, List<int[]> Blocks) Run(bool scalar)
                 {
-                    var context = Context(100000); var reader = new JpegEntropyReader(input, 0, context);
+                    using var cancellation = new CancellationTokenSource();
+                    var context = new OperationContext(ImageLimits.Default with { MaxWork = 100000 },
+                        cancelable ? cancellation.Token : default);
+                    var reader = new JpegEntropyReader(input, 0, context);
                     var predictor = 17; var tail = -1; var blocks = new List<int[]>(); Exception? error = null;
                     try
                     {

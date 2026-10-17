@@ -4,6 +4,31 @@ namespace Lokad.Image.Tests;
 
 public sealed class JpegCancelableWorkTests
 {
+    [Fact]
+    public void CanceledAcLookaheadReturnsEveryPrefetchedByteBeforePrefixAdmission()
+    {
+        var lengths = new byte[16]; lengths[0] = 1;
+        var table = new JpegHuffman(lengths, new byte[] { 0x01 }, new OperationContext(ImageLimits.Default, default));
+        for (var phase = 0; phase < 8; phase++)
+        foreach (var work in new[] { 2L, 17L, long.MaxValue })
+        {
+            using var cancellation = new CancellationTokenSource();
+            var context = new OperationContext(ImageLimits.Default with { MaxWork = work }, cancellation.Token);
+            context.Work(1); // A completed parent charge survives the local scope.
+            var reader = new JpegEntropyReader(new byte[] { 0, 0, 0, 0, 0, 0xFF, 0xD0 }, 0, context);
+            reader.BeginLocalWork();
+            if (phase != 0) reader.ReadBits(phase);
+            cancellation.Cancel();
+            var block = Enumerable.Repeat(12345, 64).ToArray(); var coefficient = 1;
+            try { table.ReadPlainCancelableAc(ref reader, block, ref coefficient); Assert.Fail("Canceled lookahead must not admit the prefix."); }
+            catch (OperationCanceledException error) { Assert.Equal(cancellation.Token, error.CancellationToken); }
+            finally { reader.EndLocalWork(); }
+            Assert.Equal(phase == 0 ? 0 : 1, reader.Position); Assert.Equal(1, coefficient);
+            Assert.All(block, value => Assert.Equal(12345, value));
+            Assert.Equal(work - 1 - (phase == 0 ? 0 : 1), context.RemainingWork);
+        }
+    }
+
     [Theory]
     [InlineData(9, true)] [InlineData(10, true)] [InlineData(9, false)] [InlineData(10, false)]
     public void LongAcCodesKeepEveryCachedPhaseBudgetAndTruncation(int codeLength, bool cancelable)

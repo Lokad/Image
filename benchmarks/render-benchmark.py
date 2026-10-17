@@ -142,7 +142,7 @@ def render():
         row('JPEG baseline direct RGB, full resolution', 'warm-jpeg-ac-cache-evidence.json', ['observations', 2], 'WARM-JPEG-AC-CACHE.md', True),
         row('JPEG direct RGB 4:2:2, timed centered correction', 'warm-current-jpeg-decode-evidence.json', ['cases', 'DirectRgb422', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
         row('JPEG direct RGB 4:2:0, timed component-plane interpretation', 'warm-current-jpeg-decode-evidence.json', ['cases', 'DirectRgb420', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
-        row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg-ac-run-evidence.json', ['cancelableConfirmations', -1], 'WARM-JPEG-BASELINE-AC-RUN.md', True),
+        row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg-cancelable-ac-cache-evidence.json', ['cases', 'NativeDecodeCancelable8', -1], 'WARM-JPEG-CANCELABLE-AC-CACHE.md', verification='Gap (short; qualified)'),
         row('JPEG progressive gray', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'ProgressiveGray', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
         row('JPEG progressive 4:2:0', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'Progressive420', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
         row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpeg-cancelable-refinement-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-JPEG-CANCELABLE-REFINEMENT.md', verification='Gap (short; qualified)'),
@@ -324,15 +324,15 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [exact byte bilinear factorization](../benchmarks/WARM-BILINEAR-BYTE-FACTORIZATION.md)
-reduces RGBA8 enlargement time 16.8%, preserving exact sums, pixels and allocation.
-Its 1.456× mean remains a qualified short gap; no routine long confirmation was
-run. All 206 other comparisons and 58 passing proofs are reused. Previous
-[bicubic strips](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) retain seven
-qualified short improvements. Passing cases are stopped.
-The 207 rows select 163 independent confirmations and 44 qualified short screens.
-Fresh **3,659 Release cases per OS** (1,349 internal +1,412 public +898 live FFmpeg),
-plus 132 scalar bilinear/reference controls, pass. The consumer and all
+Latest production round: [cancelable JPEG AC cache](../benchmarks/WARM-JPEG-CANCELABLE-AC-CACHE.md)
+reduces live-token baseline444 decode time 9.3%, preserving exact pixels, work
+charges and allocation. Its 1.610× mean remains a qualified short gap; no routine
+long confirmation was run. All 206 other comparisons and 58 passing proofs are
+reused. Previous [byte bilinear factorization](../benchmarks/WARM-BILINEAR-BYTE-FACTORIZATION.md)
+retains its qualified short improvement. Passing cases are stopped.
+The 207 rows select 162 independent confirmations and 45 qualified short screens.
+Fresh **3,662 Release cases per OS** (1,352 internal +1,412 public +898 live FFmpeg),
+plus 96 scalar JPEG boundary/public controls, pass. The consumer and all
 three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.

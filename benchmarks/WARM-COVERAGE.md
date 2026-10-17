@@ -13,19 +13,20 @@ record which comparisons they replace. Only confirmed <=1x paths are stopped
 for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,163 select independent
-confirmations. Forty-four select qualified screens after changed production: six
+unscored native-alpha incompatibility. Of those numeric rows,162 select independent
+confirmations. Forty-five select qualified screens after changed production: six
 paired-column byte/word bicubic cases, byte bicubic TightDown8, word bilinear
 Down16, live-token progressive444, five fixed JPEG encodes, two opaque VP8 encodes,
 two PNG Paeth dispatch controls and three PNG encodes after chunk checksum folding, and eight adaptive JPEG encodes
 (420 byte/word/restart33,422 byte/word,444 byte/word and gray8) after nonzero planning,
 plus five VP8L decodes and two compressed-alpha VP8 decodes after borrowed lookup,
 and seven byte/word enlargement boundaries after wider strips, plus byte
-bilinear Up8 after exact integer factorization.
+bilinear Up8 after exact integer factorization and live-token baseline444 decode
+after bounded AC cache reuse.
 RGB16 Paeth now
 has an independent passing proof. Both affected alpha VP8 encodes have independent
 passing confirmations after their shared source conversion changed.
-The forty-four short screens remain gaps; older independent timings are explicitly
+The forty-five short screens remain gaps; older independent timings are explicitly
 superseded. The two
 former short-regression witnesses are now historical after changed AC emission.
 The unscored raw PNG transparency reference is replaced by approved exact timed
@@ -68,7 +69,17 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [byte bilinear reconciliation](warm-bilinear-byte-factorization-evidence.json)
+The latest [cancelable JPEG reconciliation](warm-jpeg-cancelable-ac-cache-evidence.json)
+replaces only NativeDecodeCancelable8 with a qualified short gap after 9.3% less
+managed time. One local cache method changes; prefix/amplitude work, cancellation
+and partial-state semantics remain exact. Other206 comparisons/all58 passing
+proofs retain their paths. Full3662 Release tests/OS,96 scalar JPEG checks/OS and
+the same actual package consumer/all3 examples bothOS pass. The current approved
+ordinary native444 worker is reused with original packet/output hashes and
+unchanged complete boundaries; direct-RGB mode additions do not apply here.
+No new performance image, selector or settings grid.
+
+The preceding [byte bilinear reconciliation](warm-bilinear-byte-factorization-evidence.json)
 replaces exactly Up8 with a qualified short gap after 16.8% less managed time.
 Exact integer factorization preserves every final sum, original rounding and
 admission. Only byte bilinear enlargement on both axes executes the changed

@@ -1,5 +1,10 @@
 # Cancelable JPEG444 entropy traversal
 
+Historical ≤2x checkpoint. Its live-token baseline444 timing is superseded by
+[bounded AC cache reuse](WARM-JPEG-CANCELABLE-AC-CACHE.md), a current qualified
+short gap under the ≤1x objective. Other selected paths retain their applicable
+evidence in the [current summary](../docs/benchmark.md).
+
 Complete warm decoding with a live, never-signaled token improves **26.0%**, from
 **2.383×** FFmpeg to independently confirmed **1.767× / upper 1.780×**, at
 **3,046.63 µs** and **2,664,373 managed B/op**. All twelve actuals are retained,
