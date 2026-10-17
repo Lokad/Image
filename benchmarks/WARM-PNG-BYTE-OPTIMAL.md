@@ -1,5 +1,9 @@
 # Warm byte PNG Optimal encoding
 
+Historical <=2x checkpoint. Its PNG encode timings are superseded by the current
+[chunk checksum round](WARM-PNG-CHUNK-CRC.md), which refreshes all16 affected
+selectors and distinguishes independent parity from qualified short gaps.
+
 The three previously unscored default byte PNG encodes now pass the **unchanged
 5% IDAT-size gate**, exact sample/hidden-RGB/owner checks, and independent quiet
 warm confirmation against **FFmpeg**. Each complete public encode uses a fresh

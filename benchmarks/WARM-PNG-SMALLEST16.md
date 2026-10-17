@@ -1,5 +1,9 @@
 # PNG16 SmallestSize encoding
 
+Historical <=2x checkpoint. Its PNG encode timings are superseded by the current
+[chunk checksum round](WARM-PNG-CHUNK-CRC.md), which refreshes all16 affected
+selectors and distinguishes independent parity from qualified short gaps.
+
 Complete RGBA16 SmallestSize encoding independently confirms **0.970× FFmpeg /
 upper 0.985×**, at **2,103,522 managed B/op**. Both backends use numeric level9;
 all words, alpha and hidden RGB remain exact. Production is unchanged.

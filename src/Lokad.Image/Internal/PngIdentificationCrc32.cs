@@ -6,7 +6,7 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
-/// <summary>Independent polynomial folds for the metadata-only PNG scan.</summary>
+/// <summary>Independent polynomial folds for PNG scans and chunk checksums.</summary>
 internal static class PngIdentificationCrc32
 {
     // PNG section 5.5: normal/reflected forms of the same CRC polynomial.
@@ -95,6 +95,37 @@ internal static class PngIdentificationCrc32
         result = ((result & 0x33333333) << 2) | ((result >> 2) & 0x33333333);
         result = ((result & 0x0f0f0f0f) << 4) | ((result >> 4) & 0x0f0f0f0f);
         return BinaryPrimitives.ReverseEndianness(result);
+    }
+
+    // The caller admits the required SIMD and at least 64 payload bytes.
+    // Continue the reflected type seed, then append the CRC's zero bits once.
+    internal static uint ComputeChunk(ReadOnlySpan<byte> type, ReadOnlySpan<byte> bytes)
+    {
+        var seed = ~Crc32.Compute(type);
+        seed = ((seed & 0x55555555) << 1) | ((seed >> 1) & 0x55555555);
+        seed = ((seed & 0x33333333) << 2) | ((seed >> 2) & 0x33333333);
+        seed = ((seed & 0x0f0f0f0f) << 4) | ((seed >> 4) & 0x0f0f0f0f);
+        seed = BinaryPrimitives.ReverseEndianness(seed);
+        var first = Sse2.Xor(Read(bytes), Vector128.Create(0UL, (ulong)seed << 32));
+        var second = Read(bytes.Slice(16, 16));
+        var third = Read(bytes.Slice(32, 16));
+        var fourth = Read(bytes.Slice(48, 16));
+        var i = 64;
+        for (; i <= bytes.Length - 64; i += 64)
+        {
+            first = Sse2.Xor(Fold(first, Fold512), Read(bytes.Slice(i, 16)));
+            second = Sse2.Xor(Fold(second, Fold512), Read(bytes.Slice(i + 16, 16)));
+            third = Sse2.Xor(Fold(third, Fold512), Read(bytes.Slice(i + 32, 16)));
+            fourth = Sse2.Xor(Fold(fourth, Fold512), Read(bytes.Slice(i + 48, 16)));
+        }
+        first = Sse2.Xor(Fold(first, Fold128), second);
+        first = Sse2.Xor(Fold(first, Fold128), third);
+        first = Sse2.Xor(Fold(first, Fold128), fourth);
+        for (; i <= bytes.Length - 16; i += 16)
+            first = Sse2.Xor(Fold(first, Fold128), Read(bytes.Slice(i, 16)));
+        var crc = Reduce(Fold(first, Append32));
+        for (; i < bytes.Length; i++) crc = TailTable[(crc ^ bytes[i]) & 255] ^ (crc >> 8);
+        return ~crc;
     }
 
     public static uint Compute(ReadOnlySpan<byte> bytes, CancellationToken cancellation = default)

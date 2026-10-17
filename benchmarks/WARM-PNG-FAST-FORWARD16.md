@@ -1,5 +1,9 @@
 # Forward-only RGBA16 Fastest output
 
+Historical <=2x checkpoint. Its PNG encode timings are superseded by the current
+[chunk checksum round](WARM-PNG-CHUNK-CRC.md), which refreshes all16 affected
+selectors and distinguishes independent parity from qualified short gaps.
+
 Complete forward-only RGBA16 Fastest encoding independently confirms **0.771x
 FFmpeg / conservative upper 0.805x**, with **2,103,770 managed B/op**. The complete
 packet is byte-for-byte identical to the frozen stock-output packet; full words,

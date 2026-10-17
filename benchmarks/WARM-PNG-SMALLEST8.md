@@ -1,5 +1,9 @@
 # PNG8 SmallestSize encoding
 
+Historical <=2x checkpoint. Its PNG encode timings are superseded by the current
+[chunk checksum round](WARM-PNG-CHUNK-CRC.md), which refreshes all16 affected
+selectors and distinguishes independent parity from qualified short gaps.
+
 Complete RGBA8 SmallestSize encoding independently confirms **0.835× FFmpeg /
 upper 0.841×**, at **527,564 managed B/op**. Production is unchanged.
 

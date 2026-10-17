@@ -158,22 +158,22 @@ def render():
         row('WebP VP8L, native input / live cancelable token', 'warm-vp8l-cancelable-evidence.json', ['observations', -1], 'WARM-VP8L-CANCELABLE.md', True),
     ]
     encodes = [
-        row('PNG RGBA8, level 6 / None', 'warm-current-png-encode-evidence.json', ['cases', 'Encode8', -1], 'WARM-CURRENT-PNG-ENCODE.md', True),
-        row('PNG RGBA8, NoCompression / None', 'warm-pngstore8copy-evidence.json', ['observations', -1], 'WARM-PNG-STORED8-ENCODE.md', True),
-        row('PNG RGBA16, NoCompression / None', 'warm-pngstore16-encode-evidence.json', ['observations', -1], 'WARM-PNG-STORED16-ENCODE.md', True),
-        row('PNG RGBA8, Fastest managed2/native1 / None', 'warm-pngfast8-evidence.json', ['observations', -1], 'WARM-PNG-FAST8.md', True),
-        row('PNG RGBA16, Fastest managed2/native1 / None', 'warm-pngfast2-evidence.json', ['stockObservations', -1], 'WARM-PNG-FAST2.md', True),
-        row('PNG RGBA16, Fastest managed2/native1 / live cancelable token', 'warm-pngfast2-evidence.json', ['observations', -1], 'WARM-PNG-FAST2.md', True),
-        row('PNG RGBA16, Fastest managed2/native1 / forward-only output', 'warm-pngfastforward16-evidence.json', ['observations', -1], 'WARM-PNG-FAST-FORWARD16.md', True),
-        row('PNG RGBA16, level 6 / None', 'warm-current-png-encode-evidence.json', ['cases', 'Encode16', -1], 'WARM-CURRENT-PNG-ENCODE.md', True),
-        row('PNG RGBA8, SmallestSize9 / native9', 'warm-png-smallest8-evidence.json', ['observations', -1], 'WARM-PNG-SMALLEST8.md', True),
-        row('PNG RGBA16, SmallestSize managed9/native9 / None', 'warm-png-smallest16-evidence.json', ['observations', -1], 'WARM-PNG-SMALLEST16.md', True),
-        row('PNG RGB8, Optimal managed9/native6 / None', 'warm-pngbyte-optimal-evidence.json', ['cases', 'rgb', 'confirm'], 'WARM-PNG-BYTE-OPTIMAL.md', True),
-        row('PNG RGB16, level 6 / None', 'warm-pngrgb16encode-evidence.json', ['observations', -1], 'WARM-PNG-RGB16-ENCODE.md', True),
-        row('PNG gray8, Optimal managed9/native6 / None', 'warm-pngbyte-optimal-evidence.json', ['cases', 'gray', 'confirm'], 'WARM-PNG-BYTE-OPTIMAL.md', True),
-        row('PNG gray16, level 6 / None', 'warm-pnggray16encode-evidence.json', ['observations', -1], 'WARM-PNG-GRAY16-ENCODE.md', True),
-        row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-pngbyte-optimal-evidence.json', ['cases', 'alpha', 'confirm'], 'WARM-PNG-BYTE-OPTIMAL.md', True),
-        row('PNG gray-alpha16, level 6 / None', 'warm-pnggrayalpha16encode-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ENCODE.md', True),
+        row('PNG RGBA8, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'Encode8', -1], 'WARM-PNG-CHUNK-CRC.md', True),
+        row('PNG RGBA8, NoCompression / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeNoCompression8', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Gap (short; qualified)'),
+        row('PNG RGBA16, NoCompression / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeNoCompression16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Gap (short; qualified)'),
+        row('PNG RGBA8, Fastest managed2/native1 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeFast8', -1], 'WARM-PNG-CHUNK-CRC.md', True),
+        row('PNG RGBA16, Fastest managed2/native1 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeFast16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
+        row('PNG RGBA16, Fastest managed2/native1 / live cancelable token', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeFastCancelable16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
+        row('PNG RGBA16, Fastest managed2/native1 / forward-only output', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeFastForward16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
+        row('PNG RGBA16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'Encode16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
+        row('PNG RGBA8, SmallestSize9 / native9', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeSmallest8', -1], 'WARM-PNG-CHUNK-CRC.md', True),
+        row('PNG RGBA16, SmallestSize managed9/native9 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeSmallest16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
+        row('PNG RGB8, Optimal managed9/native6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeRgb8', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Gap (short; qualified)'),
+        row('PNG RGB16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeRgb16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
+        row('PNG gray8, Optimal managed9/native6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Gap (short; qualified)'),
+        row('PNG gray16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGray16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Gap (short; qualified)'),
+        row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGrayAlpha8', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Gap (short; qualified)'),
+        row('PNG gray-alpha16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGrayAlpha16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
         row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode8', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
         row('JPEG 4:4:4, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode444Stream8', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
         row('JPEG 4:4:4, live cancelable token / geometric AC Huffman', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode444Cancelable8', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
@@ -324,16 +324,20 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [byte bicubic strip reuse](../benchmarks/WARM-BICUBIC-BYTE-STRIPS.md)
-reduces TightDown8 time by 16.5%, with exact pixels and unchanged 4 KiB scratch
-admission. Its 1.570x short mean remains a parity gap; all 206 other comparisons,
-including 52 passing proofs, are reused. Previous [word bilinear row reuse](../benchmarks/WARM-BILINEAR-WORD-CACHE.md)
-and [byte bicubic paired columns](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) retain
-31.8% and 26–32% gains. [Six-byte Paeth SIMD](../benchmarks/WARM-PAETH-SIX-CHANNEL.md)
+Latest production round: [PNG chunk checksum folding](../benchmarks/WARM-PNG-CHUNK-CRC.md)
+reduces stored RGBA8 encoding by 13.1% and stored RGBA16 by 14.5% against its
+contemporaneous accepted-build control. Their 1.624x/1.664x short means remain
+gaps. All 16 affected encodes were refreshed; ten independently reconfirm parity.
+The 191 other comparisons, including 42 passing proofs, are reused.
+Previous [byte bicubic strips](../benchmarks/WARM-BICUBIC-BYTE-STRIPS.md),
+[word bilinear row reuse](../benchmarks/WARM-BILINEAR-WORD-CACHE.md) and
+[byte bicubic paired columns](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) retain
+16.5%, 31.8% and 26–32% gains. [Six-byte Paeth SIMD](../benchmarks/WARM-PAETH-SIX-CHANNEL.md)
 brought RGB16 PNG decode to independent parity at 0.959x/upper 0.969x with 6,504 B/op.
-The 207 rows select 189 independent confirmations and 18 qualified short screens.
-Fresh **3,633 Release cases per OS** (1,331 internal +1,404 public +898 live FFmpeg),
-plus 149 scalar resize controls, pass. The consumer/all three examples pass through
+The 207 rows select 183 independent confirmations and 24 qualified short screens.
+Fresh **3,639 Release cases per OS** (1,337 internal +1,404 public +898 live FFmpeg),
+plus 83 scalar CRC and 49 scalar public PNG controls, pass. The consumer and all
+three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 

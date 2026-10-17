@@ -31,16 +31,20 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [byte bicubic strip reuse](../benchmarks/WARM-BICUBIC-BYTE-STRIPS.md)
-reduces TightDown8 time by 16.5%, with exact pixels and unchanged 4 KiB scratch
-admission. Its 1.570x short mean remains a parity gap; all 206 other comparisons,
-including 52 passing proofs, are reused. Previous [word bilinear row reuse](../benchmarks/WARM-BILINEAR-WORD-CACHE.md)
-and [byte bicubic paired columns](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) retain
-31.8% and 26–32% gains. [Six-byte Paeth SIMD](../benchmarks/WARM-PAETH-SIX-CHANNEL.md)
+Latest production round: [PNG chunk checksum folding](../benchmarks/WARM-PNG-CHUNK-CRC.md)
+reduces stored RGBA8 encoding by 13.1% and stored RGBA16 by 14.5% against its
+contemporaneous accepted-build control. Their 1.624x/1.664x short means remain
+gaps. All 16 affected encodes were refreshed; ten independently reconfirm parity.
+The 191 other comparisons, including 42 passing proofs, are reused.
+Previous [byte bicubic strips](../benchmarks/WARM-BICUBIC-BYTE-STRIPS.md),
+[word bilinear row reuse](../benchmarks/WARM-BILINEAR-WORD-CACHE.md) and
+[byte bicubic paired columns](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) retain
+16.5%, 31.8% and 26–32% gains. [Six-byte Paeth SIMD](../benchmarks/WARM-PAETH-SIX-CHANNEL.md)
 brought RGB16 PNG decode to independent parity at 0.959x/upper 0.969x with 6,504 B/op.
-The 207 rows select 189 independent confirmations and 18 qualified short screens.
-Fresh **3,633 Release cases per OS** (1,331 internal +1,404 public +898 live FFmpeg),
-plus 149 scalar resize controls, pass. The consumer/all three examples pass through
+The 207 rows select 183 independent confirmations and 24 qualified short screens.
+Fresh **3,639 Release cases per OS** (1,337 internal +1,404 public +898 live FFmpeg),
+plus 83 scalar CRC and 49 scalar public PNG controls, pass. The consumer and all
+three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 
@@ -135,22 +139,22 @@ managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| [PNG RGBA8, level 6 / None](../benchmarks/WARM-CURRENT-PNG-ENCODE.md) | 5,425.94 | 17,261.40 | 0.314 / 0.316 | 527,627 | Parity confirmed |
-| [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED8-ENCODE.md) | 357.17 | 189.72 | 1.883 / 1.933 | 2,102,472 | Gap (independent) |
-| [PNG RGBA16, NoCompression / None](../benchmarks/WARM-PNG-STORED16-ENCODE.md) | 504.25 | 405.59 | 1.243 / 1.289 | 4,203,541 | Gap (independent) |
-| [PNG RGBA8, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-FAST8.md) | 3,077.83 | 4,351.79 | 0.707 / 0.712 | 527,669 | Parity confirmed |
-| [PNG RGBA16, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-FAST2.md) | 12,927.95 | 17,660.77 | 0.732 / 0.735 | 2,103,738 | Parity confirmed |
-| [PNG RGBA16, Fastest managed2/native1 / live cancelable token](../benchmarks/WARM-PNG-FAST2.md) | 12,932.71 | 17,700.33 | 0.731 / 0.747 | 2,103,647 | Parity confirmed |
-| [PNG RGBA16, Fastest managed2/native1 / forward-only output](../benchmarks/WARM-PNG-FAST-FORWARD16.md) | 13,628.70 | 17,677.29 | 0.771 / 0.805 | 2,103,770 | Parity confirmed |
-| [PNG RGBA16, level 6 / None](../benchmarks/WARM-CURRENT-PNG-ENCODE.md) | 14,974.15 | 20,089.84 | 0.745 / 0.763 | 2,103,624 | Parity confirmed |
-| [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-PNG-SMALLEST8.md) | 14,469.30 | 17,319.86 | 0.835 / 0.841 | 527,564 | Parity confirmed |
-| [PNG RGBA16, SmallestSize managed9/native9 / None](../benchmarks/WARM-PNG-SMALLEST16.md) | 19,689.04 | 20,296.44 | 0.970 / 0.985 | 2,103,522 | Parity confirmed |
-| [PNG RGB8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 10,402.09 | 9,514.15 | 1.093 / 1.107 | 527,098 | Gap (independent) |
-| [PNG RGB16, level 6 / None](../benchmarks/WARM-PNG-RGB16-ENCODE.md) | 13,121.10 | 15,174.40 | 0.865 / 0.871 | 2,102,765 | Parity confirmed |
-| [PNG gray8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 3,540.72 | 1,964.99 | 1.802 / 1.818 | 263,664 | Gap (independent) |
-| [PNG gray16, level 6 / None](../benchmarks/WARM-PNG-GRAY16-ENCODE.md) | 5,667.73 | 4,927.46 | 1.150 / 1.156 | 1,051,455 | Gap (independent) |
-| [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-OPTIMAL.md) | 5,924.76 | 4,311.86 | 1.374 / 1.382 | 264,179 | Gap (independent) |
-| [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-GRAY-ALPHA16-ENCODE.md) | 9,316.78 | 10,318.59 | 0.903 / 0.915 | 1,052,368 | Parity confirmed |
+| [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 5,406.30 | 17,266.72 | 0.313 / 0.315 | 527,627 | Parity confirmed |
+| [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 310.52 | 191.23 | 1.624 / 1.854 | 2,102,474 | Gap (short; qualified) |
+| [PNG RGBA16, NoCompression / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 674.12 | 405.05 | 1.664 / 1.753 | 4,202,998 | Gap (short; qualified) |
+| [PNG RGBA8, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 3,053.16 | 4,355.98 | 0.701 / 0.704 | 527,694 | Parity confirmed |
+| [PNG RGBA16, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 13,289.83 | 17,822.40 | 0.746 / 0.776 | 2,103,738 | Parity confirmed |
+| [PNG RGBA16, Fastest managed2/native1 / live cancelable token](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 12,846.40 | 17,513.32 | 0.734 / 0.743 | 2,103,738 | Parity confirmed |
+| [PNG RGBA16, Fastest managed2/native1 / forward-only output](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 12,790.89 | 17,465.07 | 0.732 / 0.740 | 2,103,770 | Parity confirmed |
+| [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 14,604.45 | 20,095.18 | 0.727 / 0.731 | 2,103,624 | Parity confirmed |
+| [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 14,486.25 | 17,324.40 | 0.836 / 0.843 | 527,564 | Parity confirmed |
+| [PNG RGBA16, SmallestSize managed9/native9 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 19,610.01 | 20,110.26 | 0.975 / 0.980 | 2,103,522 | Parity confirmed |
+| [PNG RGB8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 10,442.38 | 9,493.05 | 1.100 / 1.165 | 527,032 | Gap (short; qualified) |
+| [PNG RGB16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 13,163.23 | 15,313.53 | 0.860 / 0.863 | 2,102,732 | Parity confirmed |
+| [PNG gray8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 3,547.97 | 1,940.70 | 1.828 / 2.025 | 263,664 | Gap (short; qualified) |
+| [PNG gray16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 5,762.37 | 4,913.26 | 1.173 / 1.246 | 1,051,421 | Gap (short; qualified) |
+| [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 5,907.01 | 4,295.19 | 1.375 / 1.966 | 264,179 | Gap (short; qualified) |
+| [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 9,426.43 | 10,150.04 | 0.929 / 0.933 | 1,052,317 | Parity confirmed |
 | [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-CURRENT-JPEG-ADAPTIVE.md) | 5,957.29 | 3,776.02 | 1.578 / 1.585 | 559,429 | Gap (independent) |
 | [JPEG 4:4:4, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md) | 5,276.99 | 3,773.28 | 1.399 / 1.521 | 526,107 | Gap (short; qualified) |
 | [JPEG 4:4:4, live cancelable token / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md) | 5,356.88 | 3,779.19 | 1.417 / 1.531 | 526,075 | Gap (short; qualified) |

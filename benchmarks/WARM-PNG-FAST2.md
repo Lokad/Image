@@ -1,5 +1,9 @@
 # Streaming RGBA16 Fastest encoding
 
+Historical <=2x checkpoint. Its PNG encode timings are superseded by the current
+[chunk checksum round](WARM-PNG-CHUNK-CRC.md), which refreshes all16 affected
+selectors and distinguishes independent parity from qualified short gaps.
+
 Complete live-cancelable RGBA16 Fastest encoding independently confirms **0.731x
 FFmpeg / conservative upper 0.747x**, at **2,103,647 managed B/op**. Stock output
 independently confirms **0.732x / upper 0.735x**, at **2,103,738 B/op**. Every word,

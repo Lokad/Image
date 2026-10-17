@@ -1,5 +1,9 @@
 # Warm PNG RGBA8 NoCompression encode
 
+Historical <=2x checkpoint. Its PNG encode timings are superseded by the current
+[chunk checksum round](WARM-PNG-CHUNK-CRC.md), which refreshes all16 affected
+selectors and distinguishes independent parity from qualified short gaps.
+
 Bulk RGBA8 row copies reduce the short-screen encode time by **83.7%**. The
 independent confirmation is **1.883× FFmpeg**, conservative upper **1.933×**, with
 **2,102,472 managed bytes allocated per operation**. Both quietness guards pass;

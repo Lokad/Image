@@ -1,5 +1,9 @@
 # RGBA8 Fastest PNG encoding
 
+Historical <=2x checkpoint. Its PNG encode timings are superseded by the current
+[chunk checksum round](WARM-PNG-CHUNK-CRC.md), which refreshes all16 affected
+selectors and distinguishes independent parity from qualified short gaps.
+
 Complete RGBA8 Fastest encoding independently confirms **0.707x FFmpeg /
 conservative upper 0.712x**, at **527,669 managed B/op**. Full RGBA, alpha and
 hidden RGB are exact. Production is unchanged; no speedup is claimed.

@@ -1,5 +1,9 @@
 # Current RGBA PNG encode confirmations
 
+Historical <=2x checkpoint. Its PNG encode timings are superseded by the current
+[chunk checksum round](WARM-PNG-CHUNK-CRC.md), which refreshes all16 affected
+selectors and distinguishes independent parity from qualified short gaps.
+
 The two named Optimal/level6 RGBA8/16 encode cases independently confirm on
 current production paths. Their older full-operation confirmations preceded
 the row-packing changes; later short regression screens were not current

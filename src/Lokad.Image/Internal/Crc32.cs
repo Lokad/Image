@@ -137,6 +137,8 @@ internal static class Crc32
     }
     public static uint ComputeChunk(ReadOnlySpan<byte> type, ReadOnlySpan<byte> bytes)
     {
+        if (Pclmulqdq.IsSupported && Ssse3.IsSupported && Sse2.IsSupported && bytes.Length >= 64)
+            return PngIdentificationCrc32.ComputeChunk(type, bytes);
         var crc = uint.MaxValue;
         // Continue one reflected PNG polynomial state across type and payload.
         // This avoids copying them into a temporary contiguous chunk buffer.

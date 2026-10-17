@@ -125,6 +125,24 @@ public sealed class Crc32Tests
         }
     }
 
+    [Theory]
+    [InlineData(16)] [InlineData(32)] [InlineData(48)]
+    [InlineData(64)] [InlineData(80)] [InlineData(128)]
+    public void ChunkPolynomialPermutationsPreserveEveryByteAtEveryVectorPosition(int length)
+    {
+        var payload = new byte[length + 15];
+        var joined = new byte[length + 4];
+        "IDAT"u8.CopyTo(joined);
+        for (var value = 0; value < 256; value++)
+        for (var position = 0; position < length; position++)
+        {
+            payload[position + 7] = (byte)value;
+            joined[position + 4] = (byte)value;
+            Assert.Equal(Bitwise(joined), Crc32.ComputeChunk("IDAT"u8, payload.AsSpan(7, length)));
+            payload[position + 7] = joined[position + 4] = 0;
+        }
+    }
+
     private static uint Bitwise(ReadOnlySpan<byte> bytes)
     {
         // Independent literal PNG polynomial recurrence, with no production tables.

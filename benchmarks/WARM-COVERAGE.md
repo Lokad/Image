@@ -13,14 +13,15 @@ record which comparisons they replace. Only confirmed <=1x paths are stopped
 for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,189 select independent
-confirmations. Eighteen select qualified screens after changed production: six
+unscored native-alpha incompatibility. Of those numeric rows,183 select independent
+confirmations. Twenty-four select qualified screens after changed production: six
 paired-column byte/word bicubic cases, byte bicubic TightDown8, word bilinear
-Down16, live-token progressive444, five fixed JPEG encodes, two opaque VP8 encodes
-and two PNG Paeth dispatch controls. RGB16 Paeth now
+Down16, live-token progressive444, five fixed JPEG encodes, two opaque VP8 encodes,
+two PNG Paeth dispatch controls and six PNG encodes after chunk checksum folding.
+RGB16 Paeth now
 has an independent passing proof. Both affected alpha VP8 encodes have independent
 passing confirmations after their shared source conversion changed.
-The eighteen short screens remain gaps; older independent timings are explicitly
+The twenty-four short screens remain gaps; older independent timings are explicitly
 superseded. The two
 former short-regression witnesses are now historical after changed AC emission.
 The unscored raw PNG transparency reference is replaced by approved exact timed
@@ -63,7 +64,18 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [six-byte Paeth reconciliation](warm-paeth-six-channel-evidence.json)
+The latest [PNG chunk checksum reconciliation](warm-png-chunk-crc-evidence.json)
+affects exactly16 existing PNG encode selectors. Ten independently reconfirm
+upper<=1; six retain qualified short gaps. Stored8/16 means are1.624/1.664x;
+the word gain uses a contemporaneous accepted-build control because its old
+504.25us result was not reproduced. All packets/settings/quality/ownership gates
+remain frozen. The other191 comparisons, including42 passing proofs, retain
+unchanged executed paths. Decode/metadata Compute and its old helpers are
+byte-identical. Current3,639 Release cases/OS,83 scalar CRC and49 scalar public
+PNG controls/OS and the same actual package consumer/all three examples on
+Windows/Linux pass. No material case or input was added.
+
+The preceding [six-byte Paeth reconciliation](warm-paeth-six-channel-evidence.json)
 adds one SIMD reconstruction kernel: RGB16 independently passes at0.959x/upper0.969x.
 RGBA8/RGB8 dispatch controls have qualified short screens; their kernels remain
 unchanged. The other204 comparisons, including all51 earlier passing proofs,
@@ -105,7 +117,7 @@ Stream acquisition and other codecs retain their executed source paths and proof
 the later three resize changes are recorded above.
 The [preceding Stream reconciliation](warm-png-stream-identify-evidence.json)
 still applies; its common acquisition boundary is represented once, with three
-separate resident parsers. Current 3,619 Release cases per OS and consumer/all
+separate resident parsers. At that checkpoint, 3,619 Release cases per OS and consumer/all
 three examples through the same actual Release package on Windows/Linux pass.
 
 The original audit at349fedd reconciled203 numeric rows and fourteen historical

@@ -1,5 +1,9 @@
 # RGBA16 PNG encoding without compression
 
+Historical <=2x checkpoint. Its PNG encode timings are superseded by the current
+[chunk checksum round](WARM-PNG-CHUNK-CRC.md), which refreshes all16 affected
+selectors and distinguishes independent parity from qualified short gaps.
+
 Complete warm public RGBA16 `NoCompression` encoding confirms **1.243× FFmpeg /
 upper 1.289×**, at **504.25 µs** and **4,203,541 B/op**. Replacing per-channel
 sample access with bounded, safe span endianness conversion cuts the baseline

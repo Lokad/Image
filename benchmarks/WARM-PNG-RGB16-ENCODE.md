@@ -1,5 +1,9 @@
 # Warm PNG RGB16 encode
 
+Historical <=2x checkpoint. Its PNG encode timings are superseded by the current
+[chunk checksum round](WARM-PNG-CHUNK-CRC.md), which refreshes all16 affected
+selectors and distinguishes independent parity from qualified short gaps.
+
 RGB16 PNG encoding independently confirms **0.865× FFmpeg**, with conservative
 upper **0.871×** and **2,102,765 managed bytes allocated per operation**. The
 independent repeat averages 13,121.10 µs; all 12 actual results are retained and

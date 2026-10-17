@@ -484,6 +484,14 @@ exit without a new cancellation poll. Count-only framing uses a separate loop
 from materialized-output dispatch, retaining the same literal, length, distance,
 truncation and atomic-charge checks. Completed work survives cancellation.
 The private whole-stream checksum checks cancellation every 4096 bytes.
+PNG encoding may fold chunk payloads of at least 64 bytes through four
+independent polynomial residues on supported PCLMUL/SSSE3 hardware. The existing
+normal PNG polynomial powers and generated bit-order permutations are reused;
+the chunk-type CRC seeds the payload, residues combine in order, and the final
+32 zero bits are appended once. Smaller payloads and other hardware retain the
+original chunk path. Chunk bytes, scalar tails, write sequence, admission and
+cancellation remain unchanged; no per-operation workspace is added. Decode and
+metadata checksum entry points keep their original arithmetic and polling.
 Tight budgets, larger data and Adam7 retain the original inflation path.
 The original bit/row work, error order, precision and pixel contracts are unchanged.
 Filtered buffers may reuse two released exact-size arrays with a combined 4 MiB
