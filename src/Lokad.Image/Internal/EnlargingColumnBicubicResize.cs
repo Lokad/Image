@@ -6,7 +6,7 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
-/// <summary>Eight-column strips reuse rows for one-axis or two-axis enlargement within an admitted workspace.</summary>
+/// <summary>Fourteen-column strips reuse rows for one-axis or two-axis enlargement within an admitted workspace.</summary>
 internal static class EnlargingColumnBicubicResize
 {
     private const int WorkspaceBytes = 4096;
@@ -37,23 +37,23 @@ internal static class EnlargingColumnBicubicResize
         context.Reserve(WorkspaceBytes);
         try
         {
-            // Fixed arrays occupy 2,416 bytes within the admitted charge. This
+            // Fixed arrays occupy 4,000 bytes within the admitted charge. This
             // frame unwinds before direct replay can need tiny-alpha scratch.
-            Span<Vector256<double>> cache = stackalloc Vector256<double>[5 * 8];
+            Span<Vector256<double>> cache = stackalloc Vector256<double>[5 * 14];
             Span<int> rowIds = stackalloc int[5];
-            Span<Vector256<double>> decoded = stackalloc Vector256<double>[15];
-            Span<double> weights = stackalloc double[8 * 5];
-            Span<int> offsets = stackalloc int[8 * 5];
-            Span<int> counts = stackalloc int[8];
-            Span<double> normalizers = stackalloc double[8];
+            Span<Vector256<double>> decoded = stackalloc Vector256<double>[21];
+            Span<double> weights = stackalloc double[14 * 5];
+            Span<int> offsets = stackalloc int[14 * 5];
+            Span<int> counts = stackalloc int[14];
+            Span<double> normalizers = stackalloc double[14];
             Span<double> vertical = stackalloc double[5];
             Span<int> rows = stackalloc int[5];
             var input = source.Pixels;
             var stride = source.Stride;
             var identityHeight = result.Height == source.Height;
-            for (var tile = 0; tile < result.Width; tile += 8)
+            for (var tile = 0; tile < result.Width; tile += 14)
             {
-                var length = Math.Min(8, result.Width - tile);
+                var length = Math.Min(14, result.Width - tile);
                 for (var x = 0; x < length; x++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
@@ -95,7 +95,7 @@ internal static class EnlargingColumnBicubicResize
                         var wy = identityRow ? 1 : ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bicubic);
                         vertical[t] = wy; normalizerY += wy;
                         var sy = Math.Clamp(first + t, 0, source.Height - 1);
-                        var slot = sy % 5; rows[t] = slot * 8;
+                        var slot = sy % 5; rows[t] = slot * 14;
                         if (rowIds[slot] == sy) continue;
                         rowIds[slot] = sy;
                         var row = input.Slice(sy * stride + sourceFirst * 4, sourceCount * 4);
@@ -124,7 +124,7 @@ internal static class EnlargingColumnBicubicResize
                             var sum = Vector256<double>.Zero;
                             for (var tx = 0; tx < tapWeights.Length; tx++)
                                 sum = Avx.Add(sum, Avx.Multiply(decoded[tapOffsets[tx]], Vector256.Create(tapWeights[tx])));
-                            cache[slot * 8 + x] = sum;
+                            cache[slot * 14 + x] = sum;
                         }
                     }
                     var destination = result.Pixels.Slice(y * result.Stride, result.Stride);

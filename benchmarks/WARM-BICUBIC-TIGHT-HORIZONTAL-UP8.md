@@ -1,5 +1,8 @@
 # Tight-memory RGBA8 horizontal bicubic enlargement
 
+Historical timing checkpoint: [wider enlargement strips](WARM-BICUBIC-ENLARGEMENT-STRIPS.md)
+records seven current qualified short results. Its affected enlargement timings and source/qualification checkpoints are historical; other selected paths retain their applicable evidence.
+
 The original **513×259 → 1027×259 RGBA8** workload falls from **2.064×**
 to an independently confirmed **1.583×** against **zimg, FFmpeg's zscale
 backend**: **2,387.65 µs / upper 1.591× / 1,178,425 B/op**, a **23.4%**

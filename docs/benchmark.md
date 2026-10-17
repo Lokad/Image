@@ -31,16 +31,15 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [borrowed VP8L lookup](../benchmarks/WARM-VP8L-BORROWED-GREEN.md)
-reduces native-input lossless decode times 13.5–13.7%, indexed input 3.9%;
-literal/run is 2.1% above its preceding mean and alpha controls are roughly flat.
-All seven remain qualified short gaps; no routine long confirmation was run.
-All 200 other comparisons and 58 passing proofs are reused. Previous
-[adaptive JPEG AC planning](../benchmarks/WARM-JPEG-ADAPTIVE-AC.md) retains its
-eight qualified short gaps. Passing cases are stopped.
-The 207 rows select 171 independent confirmations and 36 qualified short screens.
-Fresh **3,654 Release cases per OS** (1,348 internal +1,408 public +898 live FFmpeg),
-plus 43 scalar Huffman/lookup controls, pass. The consumer and all
+Latest production round: [wider bicubic enlargement strips](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md)
+reduces the seven affected resize times 8.3–17.8%, with exact pixels and the same
+4-KiB workspace admission. All seven remain qualified short parity gaps;
+no routine long confirmation was run. All 200 other comparisons and 58 passing
+proofs are reused. Previous [VP8L lookup](../benchmarks/WARM-VP8L-BORROWED-GREEN.md)
+retains its seven qualified short gaps. Passing cases are stopped.
+The 207 rows select 164 independent confirmations and 43 qualified short screens.
+Fresh **3,656 Release cases per OS** (1,348 internal +1,410 public +898 live FFmpeg),
+plus 163 scalar enlargement/reference controls, pass. The consumer and all
 three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
@@ -200,7 +199,7 @@ managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 | [Bicubic width reduction, unchanged height RGBA8§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 838.04 | 572.02 | 1.465 / 1.475 | 465,375 | Gap (independent) |
 | [Bicubic width reduction, unchanged height RGBA16§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 895.59 | 581.76 | 1.539 / 1.552 | 730,690 | Gap (independent) |
 | [Bicubic width enlargement, unchanged height RGBA8§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 2,642.83 | 1,520.09 | 1.739 / 1.751 | 1,930,602 | Gap (independent) |
-| [Bicubic width enlargement, unchanged height RGBA16§](../benchmarks/WARM-CURRENT-PNG16-BICUBIC16.md) | 2,144.05 | 1,455.48 | 1.473 / 1.499 | 2,129,311 | Gap (independent) |
+| [Bicubic width enlargement, unchanged height RGBA16§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 1,965.91 | 1,460.21 | 1.346 / 1.467 | 2,129,333 | Gap (short; qualified) |
 | [Bicubic RGBA8, 64×32 / support beyond 32§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 611.55 | 367.91 | 1.662 / 1.668 | 205,881 | Gap (independent) |
 | [Bicubic RGBA16, 64×32 / support beyond 32§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 522.57 | 390.56 | 1.338 / 1.351 | 214,071 | Gap (independent) |
 | [Bicubic RGBA8, 32×16 / support beyond 64§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 452.57 | 375.86 | 1.204 / 1.208 | 199,355 | Gap (independent) |
@@ -217,8 +216,8 @@ managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 | [Bicubic RGBA8, 32×16 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 591.45 | 375.61 | 1.575 / 1.580 | 2,169 | Gap (independent) |
 | [Bicubic RGBA16, 16×8 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 487.53 | 495.21 | 0.984 / 0.995 | 1,145 | Parity confirmed |
 | [Bicubic RGBA8, 16×8 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 489.92 | 451.81 | 1.084 / 1.090 | 633 | Gap (independent) |
-| [Bicubic RGBA16 enlargement / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL-UP8.md) | 5,097.69 | 2,874.50 | 1.773 / 1.783 | 4,264,616 | Gap (independent) |
-| [Bicubic RGBA8 enlargement / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL-UP8.md) | 5,412.68 | 3,035.41 | 1.783 / 1.795 | 2,493,057 | Gap (independent) |
+| [Bicubic RGBA16 enlargement / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 4,188.86 | 2,870.82 | 1.459 / 1.637 | 4,264,616 | Gap (short; qualified) |
+| [Bicubic RGBA8 enlargement / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 4,766.98 | 3,042.21 | 1.567 / 1.693 | 2,493,057 | Gap (short; qualified) |
 | [Bicubic RGBA16, width up / height down / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) | 1,197.19 | 853.79 | 1.402 / 1.555 | 1,060,439 | Gap (short; qualified) |
 | [Bicubic RGBA8, width up / height down / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) | 1,192.42 | 868.12 | 1.374 / 1.571 | 530,385 | Gap (short; qualified) |
 | [Bicubic RGBA16, width down / height up / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,298.90 | 825.27 | 1.574 / 1.579 | 1,063,477 | Gap (independent) |
@@ -242,11 +241,11 @@ managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 | [Bicubic width reduction, unchanged height RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 838.73 | 579.56 | 1.447 / 1.459 | 530,858 | Gap (independent) |
 | [Bicubic width reduction, unchanged height RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL8.md) | 811.19 | 573.66 | 1.414 / 1.425 | 265,502 | Gap (independent) |
 | [Bicubic height enlargement, unchanged width RGBA8§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 2,206.63 | 1,732.64 | 1.274 / 1.282 | 1,664,240 | Gap (independent) |
-| [Bicubic height enlargement, unchanged width RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 3,003.25 | 1,739.69 | 1.726 / 1.737 | 1,280,402 | Gap (independent) |
+| [Bicubic height enlargement, unchanged width RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 2,614.86 | 1,744.07 | 1.499 / 1.722 | 1,280,402 | Gap (short; qualified) |
 | [Bicubic height enlargement, unchanged width RGBA16§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 2,108.79 | 1,674.17 | 1.260 / 1.270 | 2,516,605 | Gap (independent) |
-| [Bicubic height enlargement, unchanged width RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 2,719.36 | 1,667.94 | 1.630 / 1.647 | 2,133,096 | Gap (independent) |
-| [Bicubic width enlargement, unchanged height RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL-UP16.md) | 2,313.25 | 1,440.17 | 1.606 / 1.614 | 2,129,311 | Gap (independent) |
-| [Bicubic width enlargement, unchanged height RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL-UP8.md) | 2,387.65 | 1,508.44 | 1.583 / 1.591 | 1,178,425 | Gap (independent) |
+| [Bicubic height enlargement, unchanged width RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 2,286.62 | 1,672.40 | 1.367 / 1.438 | 2,133,103 | Gap (short; qualified) |
+| [Bicubic width enlargement, unchanged height RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 1,920.59 | 1,453.02 | 1.322 / 1.373 | 2,129,333 | Gap (short; qualified) |
+| [Bicubic width enlargement, unchanged height RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 2,125.43 | 1,509.12 | 1.408 / 1.529 | 1,178,425 | Gap (short; qualified) |
 | [Crop RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 2.37 | 2.27 | 1.042 / 1.053 | 96 | Gap (independent) |
 | [Crop RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 4.11 | 4.30 | 0.955 / 0.963 | 96 | Parity confirmed |
 | [Clone RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 9.50 | 7.95 | 1.195 / 1.209 | 96 | Gap (independent) |

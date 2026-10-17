@@ -13,17 +13,18 @@ record which comparisons they replace. Only confirmed <=1x paths are stopped
 for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,171 select independent
-confirmations. Thirty-six select qualified screens after changed production: six
+unscored native-alpha incompatibility. Of those numeric rows,164 select independent
+confirmations. Forty-three select qualified screens after changed production: six
 paired-column byte/word bicubic cases, byte bicubic TightDown8, word bilinear
 Down16, live-token progressive444, five fixed JPEG encodes, two opaque VP8 encodes,
 two PNG Paeth dispatch controls and three PNG encodes after chunk checksum folding, and eight adaptive JPEG encodes
 (420 byte/word/restart33,422 byte/word,444 byte/word and gray8) after nonzero planning,
-plus five VP8L decodes and two compressed-alpha VP8 decodes after borrowed lookup.
+plus five VP8L decodes and two compressed-alpha VP8 decodes after borrowed lookup,
+and seven byte/word enlargement boundaries after wider strips.
 RGB16 Paeth now
 has an independent passing proof. Both affected alpha VP8 encodes have independent
 passing confirmations after their shared source conversion changed.
-The thirty-six short screens remain gaps; older independent timings are explicitly
+The forty-three short screens remain gaps; older independent timings are explicitly
 superseded. The two
 former short-regression witnesses are now historical after changed AC emission.
 The unscored raw PNG transparency reference is replaced by approved exact timed
@@ -66,7 +67,18 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [VP8L lookup reconciliation](warm-vp8l-borrowed-green-evidence.json)
+The latest [enlargement-strip reconciliation](warm-bicubic-enlargement-strips-evidence.json)
+replaces exactly seven timings: tight both-axis/horizontal/vertical byte and word,
+plus default horizontal word. All are qualified short gaps after8.3–17.8% less
+managed time. Only existing strip capacities change; reversing them recovers both
+entire predecessor files. Fixed arrays4000B remain within4096B admission; all
+arithmetic, work, source/owner and exact-pixel/approved native gates are unchanged.
+All200 other comparisons/all58 passing proofs retain their paths. Full3656
+Release tests/OS,163 scalar resize controls/OS and the same actual package
+consumer/all3 examples bothOS pass. Native horizontal identity reuse follows the
+existing source proof; no reference build, new baseline policy or timing repeat.
+
+The preceding [VP8L lookup reconciliation](warm-vp8l-borrowed-green-evidence.json)
 replaces exactly seven decode timings with qualified short gaps: native VP8L
 ordinary/live-token/Stream, literal/run, indexed16 and compressed-alpha VP8
 ordinary/Stream. Native lossless improves13.5–13.7%; literal/run's mean is2.1%

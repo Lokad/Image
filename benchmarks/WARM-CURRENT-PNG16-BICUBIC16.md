@@ -1,5 +1,8 @@
 # Current-build PNG16 decode and horizontal bicubic enlargement
 
+Historical timing checkpoint: [wider enlargement strips](WARM-BICUBIC-ENLARGEMENT-STRIPS.md)
+records seven current qualified short results. Only its horizontal word enlargement timing is superseded; PNG16 and other resize paths remain applicable.
+
 Two existing workloads independently confirm on the qualified build: PNG16
 decode at **1.045× FFmpeg / upper 1.059×**, and RGBA16 horizontal bicubic
 enlargement at **1.473× the FFmpeg scaler backend / upper 1.499×**. Exact managed

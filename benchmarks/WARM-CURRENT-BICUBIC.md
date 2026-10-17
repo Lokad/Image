@@ -1,5 +1,8 @@
 # Current bicubic evidence reconciliation
 
+Historical timing checkpoint: [wider enlargement strips](WARM-BICUBIC-ENLARGEMENT-STRIPS.md)
+records seven current qualified short results. Its affected enlargement timings and source/qualification checkpoints are historical; other selected paths retain their applicable evidence.
+
 The [paired-column round](WARM-BICUBIC-PAIRED-COLUMNS.md) supersedes the three
 Mixed16, TightMixed16 and TightVertical16 timings below with qualified short
 screens. Their paths changed; the old independent results remain historical.

@@ -283,9 +283,9 @@ and filtering check cancellation every 256 taps. Full unsigned products, checked
 loads, complete work, absolute coordinates and independent owners remain.
 No heap/full-support/output cache is added; other directions, heights, hardware
 and budgets retain prior paths.
-RGBA16 enlargement on one or both axes may use a separate eight-column/five-row strip
+RGBA16 enlargement on one or both axes may use a separate fourteen-column/five-row strip
 cache when the full row cache cannot be admitted. Its optional 4-KiB admission
-covers 2,416 bytes of fixed arrays. A bounded source window is decoded once per
+covers 4,000 bytes of fixed arrays. At most 21 source pixels are decoded once per
 reused row; exact unsigned word products widen to binary64 without quantization.
 Each horizontal/vertical accumulation retains tap order. Paired and single word
 outputs use the conservative `2^-40*16^2` budget and depth-scaled quotient guards.
@@ -301,7 +301,7 @@ Complete work, bounded cancellation and independent owners remain. No heap
 workspace or persistent state is added; existing byte and reduction kernels stay
 unchanged. Other directions, hardware and smaller budgets retain prior paths.
 RGBA8 enlargement on one or both axes has a separate byte specialization of the
-eight-column/five-row cache, with the same 4-KiB admission and 2,416 bytes of
+fourteen-column/five-row cache, with the same 4-KiB admission and 4,000 bytes of
 fixed arrays. Exact byte products, original tap order and byte-depth quotient
 guards use the same `2^-40*16^2` budget. The same original-coordinate equality
 check may omit zero-weight vertical rows when height is unchanged. Ordinary or
