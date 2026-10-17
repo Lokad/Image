@@ -50,7 +50,7 @@ def row(label, name, path, report, confirmed=False, verification=None):
         status = 'Quiet certification open' if quiet is None else ('Quiet repeat open' if quiet else 'Quiet guard failed / open')
     if verification:
         assert not confirmed and quiet
-        status = 'Gap; prior independent proof' if ratio > 1 else verification
+        status = verification
     memory = observation.get('managedMemory')
     if memory:
         allocated = memory['BytesAllocatedPerOperation']
@@ -176,14 +176,14 @@ def render():
         row('PNG gray-alpha16, level 6 / None', 'warm-pnggrayalpha16encode-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA16-ENCODE.md', True),
         row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode8', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
         row('JPEG 4:4:4, forward-only output / geometric AC Huffman', 'warm-jpeg444stream-evidence.json', ['observations', -1], 'WARM-JPEG444-FORWARD.md', True),
-        row('JPEG 4:4:4, live cancelable token / geometric AC Huffman', 'warm-jpeg420cancel16-evidence.json', ['regressions', 0], 'WARM-JPEG-FIXED-OCCUPANCY.md', verification='Regression screen; prior confirmed'),
+        row('JPEG 4:4:4, live cancelable token / geometric AC Huffman', 'warm-jpeg420cancel16-evidence.json', ['regressions', 0], 'WARM-JPEG-FIXED-OCCUPANCY.md', verification='Gap; prior independent proof'),
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode16', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-current-jpeg-adaptive-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-CURRENT-JPEG-ADAPTIVE.md', True),
         row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg-ac-planning-evidence.json', ['observations', 4], 'WARM-JPEG-AC-PLANNING.md', True),
         row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-ac-planning-evidence.json', ['observations', 2], 'WARM-JPEG-AC-PLANNING.md', True),
         row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-geometric-evidence.json', ['observations', -1], 'WARM-JPEG-FIXED-GEOMETRIC.md', True),
-        row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg420cancel16-evidence.json', ['regressions', 1], 'WARM-JPEG-FIXED-OCCUPANCY.md', verification='Regression screen; prior confirmed'),
+        row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg420cancel16-evidence.json', ['regressions', 1], 'WARM-JPEG-FIXED-OCCUPANCY.md', verification='Gap; prior independent proof'),
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg420cancel16-evidence.json', ['observations', -1], 'WARM-JPEG-FIXED-OCCUPANCY.md', True),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-ac-planning-evidence.json', ['observations', 6], 'WARM-JPEG-AC-PLANNING.md', True),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-grayscale-evidence.json', ['observations', -1], 'WARM-JPEG-GRAYSCALE.md', True),
@@ -211,7 +211,7 @@ def render():
         row('Bicubic upscale RGBA8§', 'warm-current-bicubic-evidence.json', ['cases', 'Up8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic upscale RGBA16§', 'warm-current-bicubic-evidence.json', ['cases', 'Up16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic mixed-axis RGBA8§', 'warm-current-bicubic-evidence.json', ['cases', 'Mixed8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic mixed-axis RGBA16§', 'warm-current-bicubic-evidence.json', ['cases', 'Mixed16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic mixed-axis RGBA16§', 'warm-bicubic-paired-columns-evidence.json', ['cases', 'Mixed16', -1], 'WARM-BICUBIC-PAIRED-COLUMNS.md', verification='Gap (short; qualified)'),
         row('Bicubic width reduction / height enlargement RGBA8§', 'warm-current-bicubic-evidence.json', ['cases', 'Cross8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic width reduction / height enlargement RGBA16§', 'warm-current-bicubic-evidence.json', ['cases', 'Cross16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic RGBA8, 128×64 / wider support§', 'warm-current-bicubic-evidence.json', ['cases', 'Wide8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
@@ -238,7 +238,7 @@ def render():
         row('Bicubic RGBA8, 16×8 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight16x8_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic RGBA16 enlargement / input+output+4 KiB limit§', 'warm-bicubictighthorizontalup8-cardinal-evidence.json', ['twoAxisWordConfirmation'], 'WARM-BICUBIC-TIGHT-HORIZONTAL-UP8.md', True),
         row('Bicubic RGBA8 enlargement / input+output+4 KiB limit§', 'warm-bicubictighthorizontalup8-cardinal-evidence.json', ['twoAxisByteConfirmation'], 'WARM-BICUBIC-TIGHT-HORIZONTAL-UP8.md', True),
-        row('Bicubic RGBA16, width up / height down / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'TightMixed16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA16, width up / height down / input+output+4 KiB limit§', 'warm-bicubic-paired-columns-evidence.json', ['cases', 'TightMixed16', -1], 'WARM-BICUBIC-PAIRED-COLUMNS.md', verification='Gap (short; qualified)'),
         row('Bicubic RGBA8, width up / height down / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'TightMixed8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic RGBA16, width down / height up / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'TightCross16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic RGBA8, width down / height up / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'TightCross8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
@@ -257,7 +257,7 @@ def render():
         row('Bicubic height reduction, unchanged width RGBA8§', 'warm-bicubictightvertical8-cachepref-evidence.json', ['defaultMemoryConfirmation'], 'WARM-BICUBIC-TIGHT-VERTICAL8.md', True),
         row('Bicubic height reduction, unchanged width RGBA8 / input+output+4 KiB limit§', 'warm-bicubictightvertical8-cachepref-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-VERTICAL8.md', True),
         row('Bicubic height reduction, unchanged width RGBA16§', 'warm-bicubictightvertical16-cachepref-evidence.json', ['defaultMemoryConfirmation'], 'WARM-BICUBIC-TIGHT-VERTICAL16.md', True),
-        row('Bicubic height reduction, unchanged width RGBA16 / input+output+4 KiB limit§', 'warm-bicubictightvertical16-cachepref-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-VERTICAL16.md', True),
+        row('Bicubic height reduction, unchanged width RGBA16 / input+output+4 KiB limit§', 'warm-bicubic-paired-columns-evidence.json', ['cases', 'TightVertical16', -1], 'WARM-BICUBIC-PAIRED-COLUMNS.md', verification='Gap (short; qualified)'),
         row('Bicubic width reduction, unchanged height RGBA16 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'TightHorizontal16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic width reduction, unchanged height RGBA8 / input+output+4 KiB limit§', 'warm-bicubictighthorizontal8-cross-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-HORIZONTAL8.md', True),
         row('Bicubic height enlargement, unchanged width RGBA8§', 'warm-current-bicubic-evidence.json', ['cases', 'VerticalUp8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
@@ -296,8 +296,8 @@ def render():
 Updated 2026-10-17. The current goal is **warm single-CPU parity: independent
 conservative upper ≤1x**. The 207 numeric rows contain **{parity_count} confirmed parity
 cases, {gap_count} measured gaps and {confidence_count} confidence-open cases**. The earlier
-≤2x objective remains qualified through current evidence or explicit unchanged-
-path reuse. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
+≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
+short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
 sizes or hardware. Stop cases already confirmed at ≤1x.
 
@@ -317,19 +317,20 @@ Ratio = Lokad.Image / faster native pre/post mean; lower is faster. Upper retain
 the larger selected/all-actual confidence bound against the faster native bracket's
 lower bound. Parity confirmed requires an independent quiet repeat with upper≤1;
 a mean≤1 with upper>1 stays confidence-open. Gap rows exceed the new target.
-Recent jobs retain all 12 actuals and both 5s `exclusive-vm-idle-v2` guards. Earlier records
+Independent jobs retain all 12 actuals; explicitly labeled short screens retain
+all three. Both retain 5s `exclusive-vm-idle-v2` guards. Earlier records
 retain their original protocol and failures. **B/op** is managed allocation from
 BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [fused progressive JPEG refinement](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md)
-reduces grayscale time about 20%, with substantial 420/422 gains and no added
-production heap storage; packet/output ownership is preserved. This is an
-intermediate gain; parity remains open.
-Frozen pixels, exact work/failure behavior and existing native bounds hold.
-Other codec, metadata, edit and resize paths retain their unchanged proofs.
-Fresh **3,576 Release tests per OS** (1,292 internal +1,386 public +898 live FFmpeg),
+Latest production round: [paired-column RGBA16 bicubic filtering](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md)
+reduces the three affected complete-operation times by 24–27%, with no added heap
+arrays and the same 4 KiB scratch reservation. Their short-screen ratios remain
+1.307–1.462; parity stays open. Exact pixels, quantization, work/admission,
+output ownership and approved native bounds hold. All other paths reuse their
+valid proofs, including the preceding [progressive JPEG gain](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md).
+Fresh **3,580 Release tests per OS** (1,292 internal +1,390 public +898 live FFmpeg),
 and the consumer/all three examples through the **same actual Release package on
 Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10.
 

@@ -6,16 +6,17 @@ means<=1 have upper>1. Reuse passing paths and prioritize the largest current
 gaps; do not add a new input or settings grid. The [current summary](../docs/benchmark.md)
 distinguishes parity, measured gaps and confidence-open cases.
 
-The finite material checklist's **previous <=2x phase remains closed**. Every named
-required path below has valid independent quiet evidence with conservative upper
-≤2x, or an explicit reuse proof for unchanged executed production paths. There
-are no outstanding demonstrated gaps, uncertain current-path confirmations or
-unmeasured named required boundaries in that previous phase. Only confirmed
-<=1x paths are stopped for the current objective.
+The finite material checklist's **previous <=2x phase was completed for 0.1.0**.
+Every named required path then had independent quiet evidence with conservative
+upper ≤2x or an explicit unchanged-path reuse proof. Subsequent qualified changes
+record which comparisons they replace. Only confirmed <=1x paths are stopped
+for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,205 select independent
-confirmations; two select later short regressions while retaining their unchanged
+unscored native-alpha incompatibility. Of those numeric rows,202 select independent
+confirmations. Three select the latest qualified paired-column screens and remain
+gaps; their older independent timings were invalidated by changed production.
+Two select later short regressions while retaining their unchanged
 independent witnesses: `Encode444Cancelable8`1.819x/upper1.879x and
 `Encode420Stream16`1.948x/upper1.954x. The [bounded audit](warm-jpeg-grayscale-evidence.json)
 records their exact sources, twelve actuals/both guards and selected proof paths.
@@ -43,7 +44,7 @@ established before this audit and were reconciled, not expanded.
 | B09 | VP8 Encode8/16 with alpha: changed output writer and word normalization | [Both closed](WARM-CURRENT-VP8-ENCODE.md) |
 | B10 | VP8L Lossless8 literal/run input: changed entropy/run path | [Closed](WARM-CURRENT-VP8L-LITERAL.md) |
 | B11 | Clone,crop,normal orientation,horizontal/vertical flip,half turn,CW/CCW,transpose,transverse at both depths: shared output-pool acquisition | [All20 closed](WARM-CURRENT-EXACT-EDITS.md); retained-two flip unchanged |
-| B12 | The61 named bicubic selectors: changed dispatch/helper/guard paths, default/tight scratch, byte/word and established support widths | [All61 closed](WARM-CURRENT-BICUBIC.md), with exact executed-path reuse |
+| B12 | The61 named bicubic selectors: changed dispatch/helper/guard paths, default/tight scratch, byte/word and established support widths | [Previous phase closed](WARM-CURRENT-BICUBIC.md); [three affected word paths improved](WARM-BICUBIC-PAIRED-COLUMNS.md), still <=1x gaps |
 | B13 | Existing PNG stored/Paeth/predictor,RGB/gray/gray-alpha8/16,packed gray1/2/4,palette1/2/4/8,tRNS,Adam7 and frozen compression-mode rows | Unchanged later independent confirmations reused; precise selectors/allocations in the [summary](../docs/benchmark.md) |
 | B14 | JPEG4208/16,restart,gray and geometric live-token/forward output; VP8 ordinary/simple/alpha/live-token/Stream and opaque8/16 encode; VP8L native/indexed/live-token/Stream and exact backend encodes | Unchanged later confirmations reused; approved [gray reference](WARM-JPEG-GRAYSCALE.md) and prior witnesses retained |
 | B15 | Nearest Down8/16,Up8/16: unchanged early dispatch/integer kernels and allocation path | Existing independent proofs reused |
@@ -59,15 +60,22 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [fused refinement reconciliation](warm-jpeg-refinement-fused-evidence.json)
+The latest [paired-column reconciliation](warm-bicubic-paired-columns-evidence.json)
+changes only the admitted word column-filter body and its checked row-offset
+storage. Mixed16, TightMixed16 and TightVertical16 have fresh qualified quiet
+screens; no independent parity confirmation is claimed while their means remain
+1.307–1.462x. The other204 comparisons, including all51 passing parity proofs,
+retain applicable executed paths. No new case or raster was added.
+
+The preceding [fused refinement reconciliation](warm-jpeg-refinement-fused-evidence.json)
 changes ReadBlock's refinement dispatch and adds a guarded reader plus small
 helpers. All five affected progressive selectors have fresh independent
 comparisons. Existing fallback methods, baseline JPEG, encoders, metadata,
-Stream acquisition, other codecs and every edit/resize retain their executed
-source paths and proofs. This preserves all 51 already passing <=1x cases.
+Stream acquisition and other codecs retain their executed source paths and proofs;
+the later three resize changes are recorded above.
 The [preceding Stream reconciliation](warm-png-stream-identify-evidence.json)
 still applies; its common acquisition boundary is represented once, with three
-separate resident parsers. Current 3,576 Release tests per OS and consumer/all
+separate resident parsers. Current 3,580 Release tests per OS and consumer/all
 three examples through the same actual Release package on Windows/Linux pass.
 
 The original audit at349fedd reconciled203 numeric rows and fourteen historical

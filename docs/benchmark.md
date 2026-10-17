@@ -3,8 +3,8 @@
 Updated 2026-10-17. The current goal is **warm single-CPU parity: independent
 conservative upper ≤1x**. The 207 numeric rows contain **51 confirmed parity
 cases, 152 measured gaps and 4 confidence-open cases**. The earlier
-≤2x objective remains qualified through current evidence or explicit unchanged-
-path reuse. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
+≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
+short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
 sizes or hardware. Stop cases already confirmed at ≤1x.
 
@@ -24,19 +24,20 @@ Ratio = Lokad.Image / faster native pre/post mean; lower is faster. Upper retain
 the larger selected/all-actual confidence bound against the faster native bracket's
 lower bound. Parity confirmed requires an independent quiet repeat with upper≤1;
 a mean≤1 with upper>1 stays confidence-open. Gap rows exceed the new target.
-Recent jobs retain all 12 actuals and both 5s `exclusive-vm-idle-v2` guards. Earlier records
+Independent jobs retain all 12 actuals; explicitly labeled short screens retain
+all three. Both retain 5s `exclusive-vm-idle-v2` guards. Earlier records
 retain their original protocol and failures. **B/op** is managed allocation from
 BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [fused progressive JPEG refinement](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md)
-reduces grayscale time about 20%, with substantial 420/422 gains and no added
-production heap storage; packet/output ownership is preserved. This is an
-intermediate gain; parity remains open.
-Frozen pixels, exact work/failure behavior and existing native bounds hold.
-Other codec, metadata, edit and resize paths retain their unchanged proofs.
-Fresh **3,576 Release tests per OS** (1,292 internal +1,386 public +898 live FFmpeg),
+Latest production round: [paired-column RGBA16 bicubic filtering](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md)
+reduces the three affected complete-operation times by 24–27%, with no added heap
+arrays and the same 4 KiB scratch reservation. Their short-screen ratios remain
+1.307–1.462; parity stays open. Exact pixels, quantization, work/admission,
+output ownership and approved native bounds hold. All other paths reuse their
+valid proofs, including the preceding [progressive JPEG gain](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md).
+Fresh **3,580 Release tests per OS** (1,292 internal +1,390 public +898 live FFmpeg),
 and the consumer/all three examples through the **same actual Release package on
 Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10.
 
@@ -187,7 +188,7 @@ Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10
 | [Bicubic upscale RGBA8§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 4,738.18 | 3,047.46 | 1.555 / 1.569 | 3,244,622 | Gap (independent) |
 | [Bicubic upscale RGBA16§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 4,386.11 | 2,867.06 | 1.530 / 1.542 | 5,016,578 | Gap (independent) |
 | [Bicubic mixed-axis RGBA8§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,600.47 | 864.39 | 1.852 / 1.872 | 530,370 | Gap (independent) |
-| [Bicubic mixed-axis RGBA16§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,627.26 | 851.20 | 1.912 / 1.964 | 1,060,419 | Gap (independent) |
+| [Bicubic mixed-axis RGBA16§](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) | 1,237.22 | 846.01 | 1.462 / 1.883 | 1,060,429 | Gap (short; qualified) |
 | [Bicubic width reduction / height enlargement RGBA8§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 984.99 | 834.48 | 1.180 / 1.184 | 731,753 | Gap (independent) |
 | [Bicubic width reduction / height enlargement RGBA16§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,045.67 | 824.89 | 1.268 / 1.275 | 1,263,255 | Gap (independent) |
 | [Bicubic RGBA8, 128×64 / wider support§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 531.73 | 346.74 | 1.534 / 1.540 | 231,229 | Gap (independent) |
@@ -214,7 +215,7 @@ Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10
 | [Bicubic RGBA8, 16×8 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 489.92 | 451.81 | 1.084 / 1.090 | 633 | Gap (independent) |
 | [Bicubic RGBA16 enlargement / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL-UP8.md) | 5,097.69 | 2,874.50 | 1.773 / 1.783 | 4,264,616 | Gap (independent) |
 | [Bicubic RGBA8 enlargement / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL-UP8.md) | 5,412.68 | 3,035.41 | 1.783 / 1.795 | 2,493,057 | Gap (independent) |
-| [Bicubic RGBA16, width up / height down / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,644.19 | 848.47 | 1.938 / 1.957 | 1,060,419 | Gap (independent) |
+| [Bicubic RGBA16, width up / height down / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) | 1,197.19 | 853.79 | 1.402 / 1.555 | 1,060,439 | Gap (short; qualified) |
 | [Bicubic RGBA8, width up / height down / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,617.87 | 860.30 | 1.881 / 1.901 | 530,370 | Gap (independent) |
 | [Bicubic RGBA16, width down / height up / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,298.90 | 825.27 | 1.574 / 1.579 | 1,063,477 | Gap (independent) |
 | [Bicubic RGBA8, width down / height up / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,249.21 | 831.82 | 1.502 / 1.513 | 531,910 | Gap (independent) |
@@ -233,7 +234,7 @@ Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10
 | [Bicubic height reduction, unchanged width RGBA8§](../benchmarks/WARM-BICUBIC-TIGHT-VERTICAL8.md) | 756.93 | 588.11 | 1.287 / 1.301 | 648,992 | Gap (independent) |
 | [Bicubic height reduction, unchanged width RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-VERTICAL8.md) | 1,063.64 | 583.82 | 1.822 / 1.838 | 264,995 | Gap (independent) |
 | [Bicubic height reduction, unchanged width RGBA16§](../benchmarks/WARM-BICUBIC-TIGHT-VERTICAL16.md) | 832.49 | 585.00 | 1.423 / 1.428 | 913,737 | Gap (independent) |
-| [Bicubic height reduction, unchanged width RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-VERTICAL16.md) | 1,059.29 | 584.28 | 1.813 / 1.823 | 529,838 | Gap (independent) |
+| [Bicubic height reduction, unchanged width RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) | 770.52 | 589.55 | 1.307 / 1.361 | 529,847 | Gap (short; qualified) |
 | [Bicubic width reduction, unchanged height RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 838.73 | 579.56 | 1.447 / 1.459 | 530,858 | Gap (independent) |
 | [Bicubic width reduction, unchanged height RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL8.md) | 811.19 | 573.66 | 1.414 / 1.425 | 265,502 | Gap (independent) |
 | [Bicubic height enlargement, unchanged width RGBA8§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 2,206.63 | 1,732.64 | 1.274 / 1.282 | 1,664,240 | Gap (independent) |

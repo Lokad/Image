@@ -1,6 +1,13 @@
 # Current bicubic evidence reconciliation
 
-All 61 existing named bicubic cases have valid current-path evidence.
+The [paired-column round](WARM-BICUBIC-PAIRED-COLUMNS.md) supersedes the three
+Mixed16, TightMixed16 and TightVertical16 timings below with qualified short
+screens. Their paths changed; the old independent results remain historical.
+The other 58 comparisons retain applicable unchanged-path proofs. The current
+strict <=1x objective remains open; historical stopped/closed labels refer to
+the completed <=2x phase.
+
+At completion of the previous phase, all 61 named cases had current-path evidence.
 The current horizontal RGBA16 enlargement and single-pixel RGBA8 reduction remain
 stopped. Three more confirmations are reused without new timings:
 

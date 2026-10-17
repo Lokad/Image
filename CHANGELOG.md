@@ -4,6 +4,8 @@
 
 - Faster progressive JPEG refinement with unchanged pixels, resource limits
   and cancellation behavior; see the [benchmark state](docs/benchmark.md).
+- Faster RGBA16 bicubic column filtering within the same scratch limit,
+  preserving exact pixels and output ownership.
 
 ## 0.1.0 — 2026-10-17
 

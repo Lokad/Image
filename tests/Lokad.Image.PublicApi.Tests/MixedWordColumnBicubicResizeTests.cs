@@ -6,6 +6,28 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class MixedWordColumnBicubicResizeTests
 {
     [Theory]
+    [InlineData(17, 35, 51, 17)]
+    [InlineData(17, 17, 51, 8)]
+    [InlineData(17, 9, 51, 4)]
+    [InlineData(1, 17, 3, 8)]
+    public void AdjacentColumnsKeepCacheWrapAndBandBoundaryPixels(int sourceWidth, int sourceHeight, int width, int height)
+    {
+        using var source = OriginalPixels.Buffer(sourceWidth, sourceHeight, 16);
+        source.GetRow16(0)[3] = 0;
+        var input = OriginalPixels.Bytes(source);
+        var bytes = input.Length + (long)width * height * 8;
+        // One byte below admission retains the previously qualified path.
+        // Integer horizontal centers exercise all five taps and circular wrap;
+        // the heights straddle the eight-row band and its scale guard.
+        using var expected = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic,
+            new ImageLimits { MaxWorkingBytes = bytes + 4095 });
+        using var actual = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic,
+            new ImageLimits { MaxWorkingBytes = bytes + 4096 });
+        Assert.Equal(OriginalPixels.Bytes(expected), OriginalPixels.Bytes(actual));
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+    }
+
+    [Theory]
     [InlineData(4095)] [InlineData(4096)]
     public void WiderStripsKeepFrozenPixelsAdmissionWorkAndIndependentOwners(int scratch)
     {
