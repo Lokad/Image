@@ -6,6 +6,25 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class ColumnBicubicResizeTests
 {
     [Theory]
+    [InlineData(65, 35, 29, 16)]
+    [InlineData(72, 35, 32, 16)]
+    [InlineData(65, 36, 29, 16)]
+    [InlineData(17, 19, 8, 9)]
+    public void WiderStripsKeepCacheWrapOffsetsAndScaleBoundaryPixels(int sourceWidth, int sourceHeight, int width, int height)
+    {
+        using var source = OriginalPixels.Buffer(sourceWidth, sourceHeight, 8);
+        source.GetRow8(0)[3] = 0;
+        var input = OriginalPixels.Bytes(source);
+        var bytes = input.Length + (long)width * height * 4;
+        using var expected = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic,
+            new ImageLimits { MaxWorkingBytes = bytes + 4095 });
+        using var actual = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic,
+            new ImageLimits { MaxWorkingBytes = bytes + 4096 });
+        Assert.Equal(OriginalPixels.Bytes(expected), OriginalPixels.Bytes(actual));
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+    }
+
+    [Theory]
     [InlineData(8, 2047)] [InlineData(8, 2048)] [InlineData(8, 4095)] [InlineData(8, 4096)]
     [InlineData(16, 2047)] [InlineData(16, 2048)] [InlineData(16, 4095)] [InlineData(16, 4096)]
     public void BoundedWorkspaceKeepsFrozenPixelsWorkAndIndependentOwners(int depth, int scratch)

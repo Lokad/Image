@@ -126,19 +126,23 @@ bytes, admitted before allocation and released on every exit, leaving 4 KiB for
 tiny-alpha arithmetic. Tight budgets, unsupported hardware and other directions
 retain the previous path; work charges and bounded cancellation are preserved.
 When the full row cache cannot be admitted, RGBA8 reduction on both axes may
-reuse six-column strips and at most ten rows/taps per axis on AVX512F/AVX2/AVX/SSE4.1
-hardware. This optional path admits 4 KiB before its fixed stack workspace
-(3,640 bytes of arrays); it adds no heap workspace or persistent state. A bounded
-source window is decoded once per reused row. Two independent output accumulators
-and paired quotient guards use the same conservative `2^-40*16^2` absolute-error
-budget, with exact unsigned byte premultiplication and separate multiply/add.
+reuse up to eight-column strips and at most ten rows/taps per axis on
+AVX512F/AVX2/AVX/SSE4.1 hardware. Below vertical scale 2.25, nine row slots hold
+an eight-column strip; larger scales retain six columns and ten slots. This
+optional path admits 4 KiB before its fixed stack workspace (4,080 bytes of
+arrays); it adds no heap workspace or persistent state. Checked byte offsets
+address at most 25 decoded source pixels per reused row. Adjacent horizontal
+accumulators share 512-bit lanes, retaining each column's original tap order
+and separate multiply/add; unmatched taps stay in their original half. Paired
+quotient guards retain the conservative `2^-40*16^2` absolute-error budget and
+exact unsigned byte premultiplication.
 Uncertain rounding, small normalization or tiny alpha returns to the complete
 original-order operation after the stack frame and admission unwind. Speculative
 strips leave work accounting untouched; success charges the complete original tap
 cost. Every sample remains exact, with bounded cancellation. Other directions,
 supports and smaller budgets retain the existing paths.
 RGBA16 reduction may use a separate word specialization of the same six-column,
-ten-row strip strategy, with the same 4-KiB admission and fixed arrays. Full
+ten-row strip strategy, with the same 4-KiB admission and 3,640-byte fixed arrays. Full
 UInt16 premultiplication produces unsigned 32-bit products converted exactly to
 binary64. The error budget scales with 65535, including squared color products.
 Uncertain ordinary-alpha word pixels may replay the original tap order locally;

@@ -31,15 +31,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [word bilinear row reuse](../benchmarks/WARM-BILINEAR-WORD-CACHE.md)
-reduces Down16 time by31.8%, with exact pixels, bounded scratch and no new heap
-workspace. Its1.277x short mean remains a parity gap; all206 other comparisons,
-including52 passing proofs, are reused. Previous [byte bicubic paired columns](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md)
-reduced three times by26–32%; [six-byte Paeth SIMD](../benchmarks/WARM-PAETH-SIX-CHANNEL.md)
-brought RGB16 PNG decode to independent parity at0.959x/upper0.969x with6,504B/op.
-The207 rows select190 independent confirmations and17 qualified short screens.
-Fresh **3,629 Release cases per OS** (1,331 internal +1,400 public +898 live FFmpeg),
-plus136 scalar resize controls, pass. The consumer/all three examples pass through
+Latest production round: [byte bicubic strip reuse](../benchmarks/WARM-BICUBIC-BYTE-STRIPS.md)
+reduces TightDown8 time by 16.5%, with exact pixels and unchanged 4 KiB scratch
+admission. Its 1.570x short mean remains a parity gap; all 206 other comparisons,
+including 52 passing proofs, are reused. Previous [word bilinear row reuse](../benchmarks/WARM-BILINEAR-WORD-CACHE.md)
+and [byte bicubic paired columns](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) retain
+31.8% and 26–32% gains. [Six-byte Paeth SIMD](../benchmarks/WARM-PAETH-SIX-CHANNEL.md)
+brought RGB16 PNG decode to independent parity at 0.959x/upper 0.969x with 6,504 B/op.
+The 207 rows select 189 independent confirmations and 18 qualified short screens.
+Fresh **3,633 Release cases per OS** (1,331 internal +1,404 public +898 live FFmpeg),
+plus 149 scalar resize controls, pass. The consumer/all three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 
@@ -205,7 +206,7 @@ managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 | [Bicubic RGBA16, 32×16 / support beyond 64§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 455.52 | 412.28 | 1.105 / 1.110 | 201,398 | Gap (independent) |
 | [Bicubic RGBA8, 16×8 / adaptive support beyond 128§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 363.20 | 452.30 | 0.803 / 0.809 | 201,728 | Parity confirmed |
 | [Bicubic RGBA16, 16×8 / adaptive support beyond 128§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 441.93 | 496.89 | 0.889 / 0.893 | 202,231 | Parity confirmed |
-| [Bicubic RGBA8, 256×129 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 783.42 | 416.72 | 1.880 / 1.904 | 132,295 | Gap (independent) |
+| [Bicubic RGBA8, 256×129 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-BYTE-STRIPS.md) | 654.01 | 416.59 | 1.570 / 1.660 | 132,293 | Gap (short; qualified) |
 | [Bicubic RGBA16, 256×129 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 818.75 | 570.81 | 1.434 / 1.445 | 264,469 | Gap (independent) |
 | [Bicubic RGBA8, 128×64 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 588.84 | 349.09 | 1.687 / 1.701 | 32,889 | Gap (independent) |
 | [Bicubic RGBA16, 128×64 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 606.16 | 414.59 | 1.462 / 1.479 | 65,658 | Gap (independent) |

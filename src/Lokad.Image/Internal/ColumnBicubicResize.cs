@@ -6,7 +6,7 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
-/// <summary>Six-column strips reuse source rows within an admitted stack workspace.</summary>
+/// <summary>Bounded column strips reuse source rows within an admitted stack workspace.</summary>
 internal static class ColumnBicubicResize
 {
     private const int WorkspaceBytes = 4096;
@@ -21,21 +21,27 @@ internal static class ColumnBicubicResize
         context.Reserve(WorkspaceBytes);
         try
         {
-            // Fixed arrays occupy 3,640 bytes within the admitted charge. This
+            // Fixed arrays occupy 4,080 bytes within the admitted charge. This
             // frame unwinds before direct replay can need tiny-alpha scratch.
-            Span<Vector256<double>> cache = stackalloc Vector256<double>[10 * 6];
+            Span<Vector256<double>> cache = stackalloc Vector256<double>[9 * 8];
             Span<int> rowIds = stackalloc int[10];
-            Span<Vector256<double>> decoded = stackalloc Vector256<double>[24];
-            Span<double> weights = stackalloc double[6 * 10];
-            Span<int> offsets = stackalloc int[6 * 10];
-            Span<int> counts = stackalloc int[6];
-            Span<double> normalizers = stackalloc double[6];
+            Span<Vector256<double>> decoded = stackalloc Vector256<double>[25];
+            Span<double> weights = stackalloc double[8 * 10];
+            Span<byte> offsets = stackalloc byte[8 * 10];
+            Span<int> counts = stackalloc int[8];
+            Span<double> normalizers = stackalloc double[8];
             Span<double> vertical = stackalloc double[10];
             Span<int> rows = stackalloc int[10];
             var input = source.Pixels;
-            for (var tile = 0; tile < result.Width; tile += 6)
+            // Below this scale, nine slots hold every active vertical tap.
+            // Larger supports retain six-column strips with ten row slots.
+            var rowSlots = scaleY < 2.25 ? 9 : 10;
+            var stripColumns = rowSlots == 9 ? 8 : 6;
+            for (var tile = 0; tile < result.Width; tile += stripColumns)
             {
-                var length = Math.Min(6, result.Width - tile);
+                var length = Math.Min(stripColumns, result.Width - tile);
+                var firstCenter = (tile + .5) * source.Width / result.Width - .5;
+                var sourceFirst = Math.Clamp((int)Math.Ceiling(firstCenter - 2 * scaleX), 0, source.Width - 1);
                 for (var x = 0; x < length; x++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
@@ -48,16 +54,13 @@ internal static class ColumnBicubicResize
                     {
                         var w = ImageTransforms.Kernel((first + t - center) / scaleX, ResizeFilter.Bicubic);
                         weights[x * 10 + t] = w; normalizer += w;
-                        offsets[x * 10 + t] = Math.Clamp(first + t, 0, source.Width - 1);
+                        var relative = Math.Clamp(first + t, 0, source.Width - 1) - sourceFirst;
+                        if ((uint)relative >= 25) return false;
+                        offsets[x * 10 + t] = (byte)relative;
                     }
                     normalizers[x] = normalizer;
                 }
-                var sourceFirst = offsets[0];
-                var sourceLast = offsets[(length - 1) * 10 + counts[length - 1] - 1];
-                var sourceCount = sourceLast - sourceFirst + 1;
-                if (sourceCount > decoded.Length) return false;
-                for (var x = 0; x < length; x++)
-                    for (var t = 0; t < counts[x]; t++) offsets[x * 10 + t] -= sourceFirst;
+                var sourceCount = offsets[(length - 1) * 10 + counts[length - 1] - 1] + 1;
                 rowIds.Fill(-1);
                 for (var y = 0; y < result.Height; y++)
                 {
@@ -65,13 +68,14 @@ internal static class ColumnBicubicResize
                     var center = (y + .5) * source.Height / result.Height - .5;
                     var first = (int)Math.Ceiling(center - 2 * scaleY);
                     var count = (int)Math.Floor(center + 2 * scaleY) - first + 1;
+                    if (count > rowSlots) return false;
                     double normalizerY = 0;
                     for (var t = 0; t < count; t++)
                     {
                         var wy = ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bicubic);
                         vertical[t] = wy; normalizerY += wy;
                         var sy = Math.Clamp(first + t, 0, source.Height - 1);
-                        var slot = sy % 10; rows[t] = slot * 6;
+                        var slot = sy % rowSlots; rows[t] = slot * stripColumns;
                         if (rowIds[slot] == sy) continue;
                         rowIds[slot] = sy;
                         var row = input.Slice(sy * source.Stride + sourceFirst * 4, sourceCount * 4);
@@ -94,24 +98,33 @@ internal static class ColumnBicubicResize
                         var x = 0;
                         for (; x + 1 < length; x += 2)
                         {
-                            var sum0 = Vector256<double>.Zero;
-                            var sum1 = Vector256<double>.Zero;
                             var count0 = counts[x]; var count1 = counts[x + 1];
-                            for (var tx = 0; tx < Math.Max(count0, count1); tx++)
+                            var offsets0 = offsets.Slice(x * 10, count0);
+                            var offsets1 = offsets.Slice((x + 1) * 10, count1);
+                            var weights0 = weights.Slice(x * 10, count0);
+                            var weights1 = weights.Slice((x + 1) * 10, count1);
+                            var shared = Math.Min(count0, count1);
+                            var sum = Vector512<double>.Zero;
+                            for (var tx = 0; tx < shared; tx++)
                             {
-                                if (tx < count0)
-                                    sum0 = Avx.Add(sum0, Avx.Multiply(decoded[offsets[x * 10 + tx]], Vector256.Create(weights[x * 10 + tx])));
-                                if (tx < count1)
-                                    sum1 = Avx.Add(sum1, Avx.Multiply(decoded[offsets[(x + 1) * 10 + tx]], Vector256.Create(weights[(x + 1) * 10 + tx])));
+                                // Each half retains its column's original tap order.
+                                var samples = Avx512F.InsertVector256(decoded[offsets0[tx]].ToVector512Unsafe(), decoded[offsets1[tx]], 1);
+                                var coefficients = Avx512F.InsertVector256(Vector512.Create(weights0[tx]), Vector256.Create(weights1[tx]), 1);
+                                sum = Avx512F.Add(sum, Avx512F.Multiply(samples, coefficients));
                             }
-                            cache[slot * 6 + x] = sum0; cache[slot * 6 + x + 1] = sum1;
+                            var sum0 = sum.GetLower(); var sum1 = sum.GetUpper();
+                            for (var tx = shared; tx < count0; tx++)
+                                sum0 = Avx.Add(sum0, Avx.Multiply(decoded[offsets0[tx]], Vector256.Create(weights0[tx])));
+                            for (var tx = shared; tx < count1; tx++)
+                                sum1 = Avx.Add(sum1, Avx.Multiply(decoded[offsets1[tx]], Vector256.Create(weights1[tx])));
+                            cache[slot * stripColumns + x] = sum0; cache[slot * stripColumns + x + 1] = sum1;
                         }
                         if (x < length)
                         {
                             var sum = Vector256<double>.Zero;
                             for (var tx = 0; tx < counts[x]; tx++)
                                 sum = Avx.Add(sum, Avx.Multiply(decoded[offsets[x * 10 + tx]], Vector256.Create(weights[x * 10 + tx])));
-                            cache[slot * 6 + x] = sum;
+                            cache[slot * stripColumns + x] = sum;
                         }
                     }
                     var destination = result.GetRow8(y);
