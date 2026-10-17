@@ -1,5 +1,6 @@
 using System.Buffers.Binary;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
@@ -367,6 +368,7 @@ internal ref struct JpegDecoder
 
         // Successive-approximation AC decoding: existing nonzero coefficients
         // consume correction bits while run counts count only zero coefficients.
+        if (ac!.TryReadRefinementBlock(ref reader, block, ss, se, al, ref eobRun)) return;
         if (Avx2.IsSupported && Bmi2.X64.IsSupported)
         {
             ReadMaskedRefinement(ref reader, block, ac!, ss, se, al, ref eobRun);
@@ -428,6 +430,22 @@ internal ref struct JpegDecoder
     {
         if (reader.ReadBits(1) != 0 && (Math.Abs(value) & increment) == 0)
             value += value > 0 ? increment : -increment;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static void ApplyCorrection(ref int value, int increment)
+    {
+        // T.81 G.1.2 updates signed magnitudes. Integer masks retain both the
+        // already-refined bit check and the original treatment of zero, while
+        // avoiding data-dependent branches on the coefficient's sign.
+        var sign = value >> 31;
+        var magnitude = (value ^ sign) - sign;
+        if (magnitude < 0) _ = Math.Abs(value); // preserve Int32.MinValue's failure
+        if ((magnitude & increment) == 0)
+        {
+            var nonPositive = (value - 1) >> 31;
+            value += (increment ^ nonPositive) - nonPositive;
+        }
     }
 
     private static void ReadMaskedRefinement(ref JpegEntropyReader reader, Span<int> block,

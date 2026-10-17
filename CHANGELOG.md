@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Faster progressive JPEG refinement with unchanged pixels, resource limits
+  and cancellation behavior; see the [benchmark state](docs/benchmark.md).
+
 ## 0.1.0 — 2026-10-17
 
 Initial release of the safe, dependency-free .NET 10 library, published on

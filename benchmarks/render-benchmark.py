@@ -42,14 +42,15 @@ def row(label, name, path, report, confirmed=False, verification=None):
     else:
         quiet = None  # Older grouped evidence has no guards attached to each observation.
     if confirmed:
-        assert quiet and upper <= 2
+        assert quiet
         assert evidence.get('independentQuietConfirmationThisPair') or observation.get('certifiedThisPair')
-    status = 'Confirmed' if confirmed else ('Above 2x / open' if quiet and ratio > 2 else ('Quiet certification open' if quiet is None else ('Quiet repeat open' if quiet else 'Quiet guard failed / open')))
-    if not confirmed and quiet and evidence.get('independentQuietRepeatCompleted') and upper > 2:
-        status = 'Upper above 2x / open'
+    if confirmed:
+        status = 'Parity confirmed' if upper <= 1 else ('Confidence open' if ratio <= 1 else 'Gap (independent)')
+    else:
+        status = 'Quiet certification open' if quiet is None else ('Quiet repeat open' if quiet else 'Quiet guard failed / open')
     if verification:
-        assert not confirmed and quiet and ratio <= 2
-        status = verification
+        assert not confirmed and quiet
+        status = 'Gap; prior independent proof' if ratio > 1 else verification
     memory = observation.get('managedMemory')
     if memory:
         allocated = memory['BytesAllocatedPerOperation']
@@ -142,11 +143,11 @@ def render():
         row('JPEG direct RGB 4:2:2, timed centered correction', 'warm-current-jpeg-decode-evidence.json', ['cases', 'DirectRgb422', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
         row('JPEG direct RGB 4:2:0, timed component-plane interpretation', 'warm-current-jpeg-decode-evidence.json', ['cases', 'DirectRgb420', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
         row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg-ac-run-evidence.json', ['cancelableConfirmations', -1], 'WARM-JPEG-BASELINE-AC-RUN.md', True),
-        row('JPEG progressive gray', 'warm-current-jpeg-progressive-evidence.json', ['cases', 'ProgressiveGray', -1], 'WARM-CURRENT-JPEG-PROGRESSIVE.md', True),
-        row('JPEG progressive 4:2:0', 'warm-current-jpeg-progressive-evidence.json', ['cases', 'Progressive420', -1], 'WARM-CURRENT-JPEG-PROGRESSIVE.md', True),
-        row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpegprogressive444cancel-evidence.json', ['observations', -1], 'WARM-JPEG-PROGRESSIVE-CANCELABLE444.md', True),
-        row('JPEG progressive 4:2:2', 'warm-current-jpeg-progressive-evidence.json', ['cases', 'Progressive422', -1], 'WARM-CURRENT-JPEG-PROGRESSIVE.md', True),
-        row('JPEG progressive 4:4:4', 'warm-jpeg-ac-cache-evidence.json', ['observations', 7], 'WARM-JPEG-AC-CACHE.md', True),
+        row('JPEG progressive gray', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'ProgressiveGray', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
+        row('JPEG progressive 4:2:0', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'Progressive420', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
+        row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
+        row('JPEG progressive 4:2:2', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'Progressive422', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
+        row('JPEG progressive 4:4:4', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'Progressive444', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
         row('WebP VP8 + alpha', 'warm-vp8-filter8-evidence.json', ['alphaBearingControl', 'observations', -1], 'WARM-VP8-FILTER8.md', True),
         row('WebP VP8 opaque, simple luma filter', 'warm-vp8-simple-filter-evidence.json', ['observations', -1], 'WARM-VP8-SIMPLE-FILTER.md', True),
         row('WebP VP8 opaque, live cancelable token', 'warm-vp8-cancelable-evidence.json', ['observations', -1], 'WARM-VP8-CANCELABLE.md', True),
@@ -286,14 +287,19 @@ def render():
         row('Mirrored transpose RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'Transverse16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
         row('Mirrored transpose RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'Transverse8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
     ]
+    all_rows = decodes + encodes + edits
+    parity_count = sum(' | Parity confirmed |' in value for value in all_rows)
+    confidence_count = sum(' | Confidence open |' in value for value in all_rows)
+    gap_count = sum(' | Gap' in value for value in all_rows)
     return f'''# Lokad.Image benchmark state
 
-Updated 2026-10-16. The finite [material checklist](../benchmarks/WARM-COVERAGE.md)
-is **closed**: every named required path has an independent quiet upper ≤2x,
-or explicitly reconciled reuse of unchanged executed paths. All61 bicubic cases,
-20 exact edits, four bilinear cases and C01-C04 metadata boundaries are closed.
-This states the tested fixed scope; it does not extrapolate to arbitrary images,
-settings, sizes or hardware.
+Updated 2026-10-17. The current goal is **warm single-CPU parity: independent
+conservative upper ≤1x**. The 207 numeric rows contain **{parity_count} confirmed parity
+cases, {gap_count} measured gaps and {confidence_count} confidence-open cases**. The earlier
+≤2x objective remains qualified through current evidence or explicit unchanged-
+path reuse. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
+fixed inputs remain; results do not extrapolate to other images, settings,
+sizes or hardware. Stop cases already confirmed at ≤1x.
 
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
 FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,
@@ -309,19 +315,21 @@ release. Startup, I/O, IPC, preparation/hashing and validation are excluded.
 
 Ratio = Lokad.Image / faster native pre/post mean; lower is faster. Upper retains
 the larger selected/all-actual confidence bound against the faster native bracket's
-lower bound. Confirmed requires an independent passing quiet repeat. Recent jobs
-retain all12 actuals and both5s `exclusive-vm-idle-v2` guards. Earlier records
+lower bound. Parity confirmed requires an independent quiet repeat with upper≤1;
+a mean≤1 with upper>1 stays confidence-open. Gap rows exceed the new target.
+Recent jobs retain all 12 actuals and both 5s `exclusive-vm-idle-v2` guards. Earlier records
 retain their original protocol and failures. **B/op** is managed allocation from
 BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [fresh PNG Identify Stream](../benchmarks/WARM-PNG-STREAM-IDENTIFY.md)
-**7.863x →1.445x / upper1.459x**, **184 B/op**,81.6% less managed time.
-Private input reuse removes large-array churn while preserving admission/read/work/
-failure semantics. Only Identify(Stream) acquisition changes; decoder input,
-resident metadata, pixel codecs, editing and resize paths retain their proofs.
-Fresh **3,546 Release tests per OS** (1,262 internal+1,386 public+898 live FFmpeg),
+Latest production round: [fused progressive JPEG refinement](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md)
+reduces grayscale time about 20%, with substantial 420/422 gains and no added
+production heap storage; packet/output ownership is preserved. This is an
+intermediate gain; parity remains open.
+Frozen pixels, exact work/failure behavior and existing native bounds hold.
+Other codec, metadata, edit and resize paths retain their unchanged proofs.
+Fresh **3,576 Release tests per OS** (1,292 internal +1,386 public +898 live FFmpeg),
 and the consumer/all three examples through the **same actual Release package on
 Windows/Linux**, pass. Production remains safe managed dependency-free C#/.NET10.
 
@@ -381,7 +389,7 @@ outside this still-image fixed warm scope.
 Maintain the selected evidence in [the renderer](../benchmarks/render-benchmark.py),
 regenerate with `python benchmarks/render-benchmark.py`, then run `--check`.
 Preserve raw evidence, failures, controls and package/source qualification.
-Stop passing cases. Add a later case only when evidence identifies a distinct
+Stop independently confirmed ≤1x cases. Add a later case only when evidence identifies a distinct
 required algorithm or public boundary omitted from the finite checklist.
 '''
 

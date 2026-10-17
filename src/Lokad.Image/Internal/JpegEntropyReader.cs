@@ -1,4 +1,7 @@
 using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+using System.Numerics;
 
 namespace Lokad.Image.Internal;
 
@@ -122,6 +125,189 @@ internal ref struct JpegEntropyReader
         if (!TryWork(count)) return false;
         bits = candidateBits; available = candidateAvailable - count; position = candidatePosition;
         value = (int)((bits >> available) & ((1u << count) - 1)); return true;
+    }
+
+    internal bool TryReadRefinementBlock(ReadOnlySpan<ushort> shortCodes, JpegHuffman ac,
+        Span<int> block, int start, int end, int low, ref int eobRun)
+    {
+        // T.81 G.1.2 visits at most 63 coefficients. Even 64 sixteen-bit
+        // Huffman codes, signs, corrections and an EOB field cost <2048 units.
+        // Tight budgets and live cancellation retain the preceding traversal.
+        if (initialWork >= 0 || context.Cancellation.CanBeCanceled || context.RemainingWork < 2048
+            || !Avx2.IsSupported || !Bmi2.X64.IsSupported
+            || block.Length != 64 || start < 1 || start > end || end > 63 || low is < 0 or > 13)
+            return false;
+        var input = data;
+        var cursor = position; var cache = bits; var pending = available;
+        var work = 0; var index = start; var increment = 1 << low;
+        ulong nonzero = 0;
+        for (var offset = 0; offset < 64; offset += 8)
+        {
+            var values = Vector256.Create(block.Slice(offset, 8));
+            var zeros = (uint)Avx.MoveMask(
+                Avx2.CompareEqual(values, Vector256<int>.Zero).AsSingle());
+            nonzero |= (ulong)(~zeros & 255) << offset;
+        }
+        var bandEnd = end == 63 ? ulong.MaxValue : (1UL << (end + 1)) - 1;
+        try
+        {
+            while (index <= end)
+            {
+                var finish = eobRun > 0;
+                var run = 0; var inserted = 0; var stop = end + 1;
+                ulong correctionPositions, zeroPrefix = 0;
+                if (!finish)
+                {
+                    // Complete short prefixes commit only their required byte.
+                    // Canonical/marker tails retain the existing Huffman reader.
+                    var candidateCache = cache; var candidatePending = pending; var candidateCursor = cursor;
+                    var prefix = (int)((cache & ((1u << pending) - 1)) << (8 - pending));
+                    var packed = shortCodes[prefix]; var length = packed & 15;
+                    if (length == 0 || length > candidatePending)
+                    {
+                        if (candidateCursor < input.Length)
+                        {
+                            var next = input[candidateCursor++];
+                            if (next != 255 || (candidateCursor < input.Length && input[candidateCursor++] == 0))
+                            {
+                                candidateCache = candidateCache << 8 | next; candidatePending += 8;
+                                prefix = (int)((candidateCache >> (candidatePending - 8)) & 255);
+                                packed = shortCodes[prefix]; length = packed & 15;
+                            }
+                            else length = 0;
+                        }
+                        else length = 0;
+                    }
+                    int symbol;
+                    if (length != 0 && length <= candidatePending)
+                    {
+                        work += length; cache = candidateCache; pending = candidatePending - length;
+                        cursor = candidateCursor; symbol = packed >> 4;
+                    }
+                    else
+                    {
+                        bits = cache; available = pending; position = cursor;
+                        context.CommitAdmittedWork(work); work = 0;
+                        try { symbol = ac.Read(ref this); }
+                        finally { cache = bits; pending = available; cursor = position; }
+                    }
+                    run = symbol >> 4; var size = symbol & 15;
+                    if (size != 0)
+                    {
+                        if (size != 1) throw new ImageDataException("Invalid JPEG refinement symbol.");
+                        inserted = ReadRefinementBits(input, ref cursor, ref cache, ref pending, 1, ref work) == 0 ? -increment : increment;
+                    }
+                    else if (run != 15)
+                    {
+                        eobRun = (1 << run) + ReadRefinementBits(input, ref cursor, ref cache, ref pending, run, ref work);
+                        finish = true;
+                    }
+                    else run = 16;
+                }
+                var remaining = bandEnd & (ulong.MaxValue << index);
+                if (finish) correctionPositions = nonzero & remaining;
+                else
+                {
+                    var zeros = ~nonzero & remaining;
+                    var target = Bmi2.X64.ParallelBitDeposit(1UL << (inserted != 0 ? run : run - 1), zeros);
+                    stop = target == 0 ? end + 1 : BitOperations.TrailingZeroCount(target) + (inserted != 0 ? 0 : 1);
+                    var prefix = (stop == 64 ? ulong.MaxValue : (1UL << stop) - 1) & remaining;
+                    zeroPrefix = zeros & prefix;
+                    correctionPositions = nonzero & prefix;
+                }
+                while (correctionPositions != 0)
+                {
+                    var remainingCount = BitOperations.PopCount(correctionPositions);
+                    var count = Math.Min(16, remainingCount);
+                    var selected = remainingCount <= 16 ? correctionPositions
+                        : Bmi2.X64.ParallelBitDeposit((1UL << count) - 1, correctionPositions);
+                    if (!TryReadRefinementField(input, ref cursor, ref cache, ref pending, count, out var rawField))
+                    {
+                        // A marker/truncation inside the field retains every
+                        // preceding correction and per-bit work charge.
+                        for (var scalar = selected; scalar != 0; scalar &= scalar - 1)
+                            if (ReadRefinementBits(input, ref cursor, ref cache, ref pending, 1, ref work) != 0)
+                                JpegDecoder.ApplyCorrection(ref block[BitOperations.TrailingZeroCount(scalar)], increment);
+                        correctionPositions &= ~selected;
+                        continue;
+                    }
+                    work += count;
+                    var field = (uint)rawField;
+                    if (field != 0)
+                    {
+                        uint reversed;
+                        if (count <= 4)
+                        {
+                            // Nibble v contains the reversal of v's four bits.
+                            // This immediate is generated by that bit geometry.
+                            reversed = (uint)((0xF7B3D591E6A2C480UL >> ((int)field * 4)) & 15) >> (4 - count);
+                        }
+                        else
+                        {
+                            reversed = field << (16 - count);
+                            reversed = ((reversed & 0x5555u) << 1) | ((reversed >> 1) & 0x5555u);
+                            reversed = ((reversed & 0x3333u) << 2) | ((reversed >> 2) & 0x3333u);
+                            reversed = ((reversed & 0x0F0Fu) << 4) | ((reversed >> 4) & 0x0F0Fu);
+                            reversed = ((reversed & 255u) << 8) | (reversed >> 8);
+                        }
+                        var corrections = Bmi2.X64.ParallelBitDeposit(reversed, selected);
+                        while (corrections != 0)
+                        {
+                            ref var value = ref block[BitOperations.TrailingZeroCount(corrections)];
+                            JpegDecoder.ApplyCorrection(ref value, increment);
+                            corrections &= corrections - 1;
+                        }
+                    }
+                    correctionPositions &= ~selected;
+                }
+                if (finish) { eobRun--; return true; }
+                run -= BitOperations.PopCount(zeroPrefix); index = stop;
+                if (run != 0 || (inserted != 0 && index > end))
+                    throw new ImageDataException("JPEG refinement run exceeds band.");
+                if (inserted != 0) { block[index] = inserted; nonzero |= 1UL << index; index++; }
+            }
+            return true;
+        }
+        finally
+        {
+            bits = cache; available = pending; position = cursor;
+            context.CommitAdmittedWork(work);
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool TryReadRefinementField(ReadOnlySpan<byte> input, ref int cursor,
+        ref uint cache, ref int pending, int count, out int value)
+    {
+        value = 0;
+        var candidateCursor = cursor; var candidateCache = cache; var candidatePending = pending;
+        while (candidatePending < count)
+        {
+            if (candidateCursor >= input.Length) return false;
+            var next = input[candidateCursor++];
+            if (next == 255 && (candidateCursor >= input.Length || input[candidateCursor++] != 0)) return false;
+            candidateCache = candidateCache << 8 | next; candidatePending += 8;
+        }
+        pending = candidatePending - count; cache = candidateCache; cursor = candidateCursor;
+        value = (int)((cache >> pending) & ((1u << count) - 1));
+        return true;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static int ReadRefinementBits(ReadOnlySpan<byte> input, ref int cursor,
+        ref uint cache, ref int pending, int count, ref int work)
+    {
+        work++;
+        while (pending < count)
+        {
+            if (cursor >= input.Length) throw new ImageDataException("Truncated JPEG entropy data.");
+            var next = input[cursor++];
+            if (next == 255 && (cursor >= input.Length || input[cursor++] != 0))
+                throw new ImageDataException("Unexpected marker in JPEG entropy data.");
+            cache = cache << 8 | next; pending += 8;
+        }
+        pending -= count;
+        return (int)((cache >> pending) & ((1u << count) - 1));
     }
 
     internal bool TryReadHuffman(ReadOnlySpan<ushort> shortCodes, out int symbol)

@@ -1,10 +1,17 @@
 # Material warm coverage
 
-The finite material checklist is **closed**, updated2026-10-16. Every named
+Updated 2026-10-17. The current **<=1x warm parity objective is open**: 51 named
+numeric cases already have independent upper<=1, 152 means exceed1, and four
+means<=1 have upper>1. Reuse passing paths and prioritize the largest current
+gaps; do not add a new input or settings grid. The [current summary](../docs/benchmark.md)
+distinguishes parity, measured gaps and confidence-open cases.
+
+The finite material checklist's **previous <=2x phase remains closed**. Every named
 required path below has valid independent quiet evidence with conservative upper
 ≤2x, or an explicit reuse proof for unchanged executed production paths. There
 are no outstanding demonstrated gaps, uncertain current-path confirmations or
-unmeasured named required boundaries. Stop confirmed cases.
+unmeasured named required boundaries in that previous phase. Only confirmed
+<=1x paths are stopped for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
 unscored native-alpha incompatibility. Of those numeric rows,205 select independent
@@ -28,7 +35,7 @@ established before this audit and were reconciled, not expanded.
 | B01 | Bilinear Down8/16,Up8/16: shared resize dispatch and byte/word alpha-aware filtering | [All four closed](WARM-CURRENT-BILINEAR.md) |
 | B02 | JPEG adaptive Encode8/16,Encode422_8/16: changed AC planner at444/422 and both input depths | [All four closed](WARM-CURRENT-JPEG-ADAPTIVE.md) |
 | B03 | JPEG Decode8,NativeDecode8,NativeDecode420/422,OwnedDecodeGray,NativeDecode420Restart,DirectRgb422/420: changed ordinary AC loop plus distinct component renderers | [All eight closed](WARM-CURRENT-JPEG-DECODE.md) |
-| B04 | JPEG ProgressiveGray/420/422: masked refinement and selected422 predicate | [All three closed](WARM-CURRENT-JPEG-PROGRESSIVE.md); later444/live-token proofs reused |
+| B04 | JPEG ProgressiveGray/420/422 plus ordinary/live-token444: masked refinement and its guarded fused reader | [All five current-path comparisons](WARM-JPEG-REFINEMENT-FUSED.md); <=1x gaps remain |
 | B05 | The25 named PNG decode selectors in the linked report: byte/word predictors, expansion and input-pool changes | [All25 closed](WARM-CURRENT-PNG-DECODE.md) |
 | B06 | PNG DecodeAdam7_16,DecodeGray1Adam7: interlaced placement on changed shared framing; later palette4/8 cases reuse their own proofs | [Closed](WARM-CURRENT-PNG-ADAM7.md) |
 | B07 | Png8/16,PngCropFit8/16: complete fresh input, orientation/crop/fit and intermediate ownership | [Closed](WARM-CURRENT-PNG-STREAM.md), with word fusion proof reused |
@@ -52,13 +59,15 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [source reconciliation](warm-png-stream-identify-evidence.json) proves
-that only Identify(Stream)'s acquisition and its new private helper change.
-Original decoder ReadInput, resident container parsers, pixel codecs, all edits
-and resizing keep their executed bodies; other production input hashes match.
-This preserves B01-B15/C01-C03. Generic Stream acquisition is represented once;
-three resident container algorithms have separate evidence. No second format/
-depth Stream grid is needed. Current3,546 Release tests per OS and consumer/all
+The latest [fused refinement reconciliation](warm-jpeg-refinement-fused-evidence.json)
+changes ReadBlock's refinement dispatch and adds a guarded reader plus small
+helpers. All five affected progressive selectors have fresh independent
+comparisons. Existing fallback methods, baseline JPEG, encoders, metadata,
+Stream acquisition, other codecs and every edit/resize retain their executed
+source paths and proofs. This preserves all 51 already passing <=1x cases.
+The [preceding Stream reconciliation](warm-png-stream-identify-evidence.json)
+still applies; its common acquisition boundary is represented once, with three
+separate resident parsers. Current 3,576 Release tests per OS and consumer/all
 three examples through the same actual Release package on Windows/Linux pass.
 
 The original audit at349fedd reconciled203 numeric rows and fourteen historical

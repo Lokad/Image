@@ -4,6 +4,8 @@ The maintained [benchmark state](../docs/benchmark.md) summarizes current warm
 ratios, allocations and verification status in three tables. Update it after each
 accepted performance round with `python benchmarks/render-benchmark.py`, then
 verify with `--check`. The reports below preserve the detailed evidence and history.
+Warm parity now targets an independent upper ≤1x; older reports retain their
+original targets and checkpoint conclusions.
 
 The [VP8L decode confirmation](WARM-VP8L-DECODE-QUIET.md) reaches 1.693x FFmpeg,
 conservative upper 1.732x, with exact RGBA/alpha/hidden RGB and both idle guards
