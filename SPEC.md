@@ -403,6 +403,18 @@ sums below 2^62. A conservative precision bound covers final binary64 conversion
 with original rounding near ambiguous boundaries. Intermediates are never rounded
 to pixels or reused across operations, and admission is released on every exit.
 
+RGBA16 bilinear reduction on both axes may use a separable six-column row
+cache when each scale is at most 2.5 and the required SIMD is available.
+Its 3,640 bytes of fixed arrays fit an optional 4-KiB reservation after existing
+horizontal geometry. Exact unsigned premultiplication and unrounded binary64
+intermediates use the established `2^-40*16^2` word error bounds; guarded output
+pairs replay original tap order near rounding boundaries. Tiny alpha declines
+the specialization, releases its frame and reservation, then uses the existing
+exact-alpha path. A successful pass charges the complete original tap cost;
+declined speculative work leaves that charge to the original path. Cancellation,
+independent outputs and tighter-budget fallbacks remain. No heap workspace,
+persistent state or output cache is added.
+
 An original development-only reference uses exact integer kernel weights and
 `BigInteger` separable accumulation, with no production resize helpers. Public
 tests cover both depths, transparent/opaque rasters, up/down/mixed scaling,

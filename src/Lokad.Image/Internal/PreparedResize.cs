@@ -28,6 +28,8 @@ internal static class PreparedResize
             && result.Width > source.Width && result.Height > source.Height
             && BilinearUpsample16.TryApply(source, result, horizontalWeights, horizontalOffsets,
                 horizontalCounts, rowWork, context)) return;
+        if (paired && typeof(T) == typeof(ushort) && filter == ResizeFilter.Bilinear
+            && BilinearDownsample16.TryApply(source, result, scaleY, rowWork, context)) return;
         ReadOnlySpan<byte> packedInput = packed8 || paired ? MemoryMarshal.Cast<T, byte>(input) : default;
         var output = MemoryMarshal.Cast<byte, T>(result.Pixels);
         Span<byte> pairedOutput = paired ? MemoryMarshal.Cast<T, byte>(output) : default;

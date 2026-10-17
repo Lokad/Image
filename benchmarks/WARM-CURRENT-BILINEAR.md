@@ -1,5 +1,10 @@
 # Current bilinear confirmations
 
+The current goal is independent upper≤1x. The [word row-reuse round](WARM-BILINEAR-WORD-CACHE.md)
+supersedes Down16 below with a qualified short screen; Down8/Up8/Up16 retain
+their existing paths and evidence. Historical closed/stopped labels below refer
+to the completed ≤2x phase.
+
 All four existing bilinear workloads independently pass the 2x warm single-CPU
 target on the same qualified production DLL. This resolves uncertainty from
 edits to the shared public Resize dispatcher. No production optimization is

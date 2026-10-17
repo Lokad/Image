@@ -13,13 +13,14 @@ record which comparisons they replace. Only confirmed <=1x paths are stopped
 for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,191 select independent
-confirmations. Sixteen select qualified screens after changed production: six
-paired-column byte/word bicubic cases, live-token progressive444, five fixed JPEG
-encodes, two opaque VP8 encodes and two PNG Paeth dispatch controls. RGB16 Paeth now
+unscored native-alpha incompatibility. Of those numeric rows,190 select independent
+confirmations. Seventeen select qualified screens after changed production: six
+paired-column byte/word bicubic cases, word bilinear Down16, live-token
+progressive444, five fixed JPEG encodes, two opaque VP8 encodes and two PNG Paeth
+dispatch controls. RGB16 Paeth now
 has an independent passing proof. Both affected alpha VP8 encodes have independent
 passing confirmations after their shared source conversion changed.
-The sixteen short screens remain gaps; older independent timings are explicitly
+The seventeen short screens remain gaps; older independent timings are explicitly
 superseded. The two
 former short-regression witnesses are now historical after changed AC emission.
 The unscored raw PNG transparency reference is replaced by approved exact timed
@@ -35,7 +36,7 @@ established before this audit and were reconciled, not expanded.
 
 | Item | Named fixed scope and reason | Current evidence / state |
 | --- | --- | --- |
-| B01 | Bilinear Down8/16,Up8/16: shared resize dispatch and byte/word alpha-aware filtering | [All four closed](WARM-CURRENT-BILINEAR.md) |
+| B01 | Bilinear Down8/16,Up8/16: shared resize dispatch and byte/word alpha-aware filtering | [Previous phase closed](WARM-CURRENT-BILINEAR.md); [Down16 improved](WARM-BILINEAR-WORD-CACHE.md), still a <=1x gap |
 | B02 | JPEG adaptive Encode8/16,Encode422_8/16: changed AC planner at444/422 and both input depths | [All four closed](WARM-CURRENT-JPEG-ADAPTIVE.md) |
 | B03 | JPEG Decode8,NativeDecode8,NativeDecode420/422,OwnedDecodeGray,NativeDecode420Restart,DirectRgb422/420: changed ordinary AC loop plus distinct component renderers | [All eight closed](WARM-CURRENT-JPEG-DECODE.md) |
 | B04 | JPEG ProgressiveGray/420/422 plus ordinary/live-token444: masked refinement and its guarded fused readers | [Four ordinary proofs reused](WARM-JPEG-REFINEMENT-FUSED.md); [live-token444 improved](WARM-JPEG-CANCELABLE-REFINEMENT.md), still a <=1x gap |
