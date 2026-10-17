@@ -1,8 +1,9 @@
 # Changelog
 
-## 0.1.0 — upcoming
+## 0.1.0 — 2026-10-17
 
-Initial release of the safe, dependency-free .NET 10 library.
+Initial release of the safe, dependency-free .NET 10 library, published on
+[NuGet](https://www.nuget.org/packages/Lokad.Image/0.1.0).
 
 - PNG encode/decode, baseline JPEG encode/decode, progressive JPEG decode,
   and lossy/lossless WebP with alpha and exact lossless hidden RGB.
