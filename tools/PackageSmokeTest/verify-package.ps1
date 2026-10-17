@@ -20,13 +20,16 @@ try {
         $reader = [IO.StreamReader]::new($nuspec.Open())
         try { [xml]$metadata = $reader.ReadToEnd() } finally { $reader.Dispose() }
         if ($metadata.SelectNodes("//*[local-name()='dependency']").Count -ne 0) { throw 'Package contains NuGet dependencies.' }
+        if ($metadata.SelectSingleNode("//*[local-name()='metadata']/*[local-name()='icon']").InnerText -ne 'icon.png') {
+            throw 'Package icon metadata is missing or incorrect.'
+        }
         foreach ($entry in $archive.Entries) {
             if ($entry.FullName -match '(?i)(^|/)(external|tests|tools|benchmarks|runtimes)/|PLAN\.md|\.exe$|\.so$|\.dylib$') {
                 throw "Unexpected package content: $($entry.FullName)"
             }
         }
         if (-not ($archive.Entries.FullName -contains 'lib/net10.0/Lokad.Image.dll')) { throw 'Library DLL missing.' }
-        foreach ($document in @('README.md', 'SPEC.md', 'LICENSE.txt', 'docs/resource-admission.md', 'docs/jpeg-inverse-rounding.md', 'docs/jpeg-forward-quantization.md', 'docs/usage.md')) {
+        foreach ($document in @('README.md', 'SPEC.md', 'LICENSE.txt', 'icon.png', 'docs/resource-admission.md', 'docs/jpeg-inverse-rounding.md', 'docs/jpeg-forward-quantization.md', 'docs/usage.md')) {
             $entry = $archive.GetEntry($document)
             if ($null -eq $entry) { throw "Package document missing: $document" }
             $bytes = [IO.MemoryStream]::new()
