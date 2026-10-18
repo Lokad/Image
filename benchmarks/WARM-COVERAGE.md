@@ -8,6 +8,24 @@ The [three-table summary](../docs/benchmark.md) retains all 209 numeric rows:
 Reuse unchanged passing paths;
 do not add an image or settings grid.
 
+[Opaque alpha coding](WARM-VP8L-OPAQUE-ALPHA.md) reduces the existing VP8L opaque
+packet24.9% and allocations49.9%. Counting and opaque entropy changed, so the
+three existing `WarmWebpLossless/Encode8`, `EncodeOpaque8` and `Encode16` timings
+are replaced by fresh independent confirmations (upper0.0584/0.0905/0.0647).
+All other executed production paths are unchanged. Alpha-bearing output packets
+stay byte-identical, including the frozen literal/run decode input; native-input
+decoders and all lossy paths retain evidence. Shared/async lossless encoding is
+already named/unmeasured. The checklist/status counts remain unchanged.
+
+The round passes4,153 tests/OS,24 affected hardware-off checks/OS and the same
+actual package consumer/all three examples on Windows/Linux. ALPH admission
+controls now declare fixed full-alphabet entropy independently of production
+encoding; existing exact gates remain. No tracked image corpus was regenerated.
+The unchanged encoder-backend baseline, original inputs and prepared drivers are
+reused; no new workload, harness/native rebuild or settings grid. Stop all three
+confirmed cases until their production inputs change. Compression-efficiency
+work on representative photographic/text content remains open.
+
 Shared-budget codec entry points add two required, **unmeasured** representatives:
 `SharedBudgetDecode/PngRgba8Resident` reuses `WarmPng/Decode8` to cover complete
 decode and retained-budget owner disposal; `SharedBudgetEncode/Jpeg420Rgba8`

@@ -1,5 +1,8 @@
 # Original fixture corpus
 
+Compressed ALPH admission controls declare their own fixed full-alphabet entropy
+trees, keeping exact workspace boundaries independent of production encoder choices.
+
 TrueType controls are generated in tests by `tools/Shared/AuthoredTrueType.cs`:
 original rectangles, triangles, a quadratic contour and a two-component accent,
 with known advances, bounds and Unicode mappings. The table layout follows the

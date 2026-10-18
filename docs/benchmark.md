@@ -63,6 +63,12 @@ measure **1.145× / 155,007 B/op** for gray and **2.004× / 297,896 B/op** for R
 Both remain parity gaps; each includes necessary normalization and independent
 owned output. No long repeat or production change follows these clear mean gaps.
 
+[VP8L opaque alpha coding](../benchmarks/WARM-VP8L-OPAQUE-ALPHA.md) cuts the
+existing opaque packet **24.9%** to **400,262 B** and allocations **49.9%** to
+**1,051,213 B/op**. All three affected lossless encode operations independently
+reconfirm parity. Alpha-bearing packets remain byte-identical. Other paths reuse
+valid evidence. Photographic/text compression-efficiency work remains open.
+
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
 FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,
 normal SIMD, tiering off, nonconcurrent workstation GC. Inputs are the two original
@@ -229,9 +235,9 @@ Resolve the named JPEG uncertainties before optimization. Stop current passing p
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md) | 22,813.15 | 15,629.98 | 1.460 / 1.611 | 2,536,099 | Gap (short; qualified) |
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md) | 22,598.85 | 53,698.20 | 0.421 / 0.424 | 2,616,016 | Parity confirmed |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md) | 23,199.00 | 53,597.53 | 0.433 / 0.437 | 2,615,835 | Parity confirmed |
-| [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-ENCODE-EXACT.md) | 7,363.30 | 121,587.95 | 0.061 / 0.063 | 2,100,170 | Parity confirmed |
-| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-OPAQUE8.md) | 7,195.24 | 70,637.23 | 0.102 / 0.103 | 2,100,170 | Parity confirmed |
-| [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-RGBA16-ENCODE.md) | 7,928.11 | 121,282.99 | 0.065 / 0.066 | 2,100,119 | Parity confirmed |
+| [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-OPAQUE-ALPHA.md) | 7,045.64 | 122,788.28 | 0.057 / 0.058 | 2,100,170 | Parity confirmed |
+| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-OPAQUE-ALPHA.md) | 6,251.86 | 70,476.34 | 0.089 / 0.090 | 1,051,213 | Parity confirmed |
+| [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-OPAQUE-ALPHA.md) | 7,737.99 | 120,636.47 | 0.064 / 0.065 | 2,100,119 | Parity confirmed |
 
 **Editing**
 
@@ -330,7 +336,8 @@ Resolve the named JPEG uncertainties before optimization. Stop current passing p
 
 * VP8L encode uses **libwebp exact=1, FFmpeg's encoder backend**, through its public
 API: the FFmpeg encoder does not expose hidden-RGB preservation. Decoded RGBA is
-exact; managed/native packets are533,100/183,812 B. Compression-efficiency parity
+exact; alpha-bearing packets are533,100/183,812 B and opaque400,262/121,896 B
+(managed/native). Compression-efficiency parity
 is not established. Single-component grayscale JPEG uses approved benchmark-only
 **SIMD libjpeg-turbo3.1.4.1**, since FFmpeg emits three components; its current qualified short is shown above,
 154,893 B/op,58,823/58,910 B compressed; source-PSNR gap0.000033dB. Complete

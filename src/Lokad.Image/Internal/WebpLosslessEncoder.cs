@@ -52,27 +52,36 @@ internal static class WebpLosslessEncoder
         // Count first so nonseekable output needs no encoded-frame staging buffer.
         // The caller must synchronize mutable pixels across the two passes.
         using var counter = new CountStream(options.Limits.MaxOutputBytes);
-        var alpha = Payload(image, counter, options.Effort, false, green, literal, distance, context);
-        var payloadLength = counter.Count;
+        var alpha = Payload(image, counter, options.Effort, false, green, literal, distance, context,
+            omitAlpha: true, singletonAlpha: false, out var literals);
+        // Omitting eight alpha bits per literal preserves byte alignment. The
+        // normal single-leaf alpha header below adds exactly 232 bits (29 bytes)
+        // to the fixed header. Count is always a lower bound on the final size.
+        var singletonAlpha = !alpha && literals > 29;
+        var payloadLength = counter.Count + (singletonAlpha ? 29 : literals);
         if (payloadLength + 20L + (payloadLength & 1) > options.Limits.MaxOutputBytes)
             throw new ImageLimitException(ImageLimitKind.OutputBytes, "WebP encoded output limit exceeded.");
         Span<byte> header = stackalloc byte[20];
         "RIFF"u8.CopyTo(header); BinaryPrimitives.WriteInt32LittleEndian(header[4..], payloadLength + 12 + (payloadLength & 1));
         "WEBPVP8L"u8.CopyTo(header[8..]); BinaryPrimitives.WriteInt32LittleEndian(header[16..], payloadLength);
         output.Write(header);
-        Payload(image, output, options.Effort, alpha, green, literal, distance, context);
+        Payload(image, output, options.Effort, alpha, green, literal, distance, context,
+            omitAlpha: false, singletonAlpha, out _);
         if ((payloadLength & 1) != 0) output.WriteByte(0);
     }
 
     private static bool Payload(ImageBuffer image, Stream output, int effort, bool alphaHint,
-        Table green, Table literal, Table distance, OperationContext context)
+        Table green, Table literal, Table distance, OperationContext context,
+        bool omitAlpha, bool singletonAlpha, out int literals)
     {
         Span<byte> header = stackalloc byte[5]; header[0] = 0x2F;
         BinaryPrimitives.WriteUInt32LittleEndian(header[1..], (uint)(image.Width - 1) | (uint)(image.Height - 1) << 14 | (alphaHint ? 1u << 28 : 0));
         output.Write(header);
         var writer = new WebpBitWriter(output, context);
         writer.Write(0, 1); writer.Write(0, 1); writer.Write(0, 1); // No transforms, cache or spatial groups.
-        green.Header(writer); literal.Header(writer); literal.Header(writer); literal.Header(writer); distance.Header(writer);
+        green.Header(writer); literal.Header(writer); literal.Header(writer);
+        if (singletonAlpha) OpaqueAlphaHeader(writer); else literal.Header(writer);
+        distance.Header(writer); literals = 0;
         var count = image.Width * image.Height; var position = 0; uint previous = 0; var alpha = false;
         while (position < count)
         {
@@ -93,11 +102,24 @@ internal static class WebpLosslessEncoder
             else
             {
                 green.Symbol(writer, (int)(pixel >> 8 & 255)); literal.Symbol(writer, (int)(pixel >> 16 & 255));
-                literal.Symbol(writer, (int)(pixel & 255)); literal.Symbol(writer, (int)(pixel >> 24)); position++;
+                literal.Symbol(writer, (int)(pixel & 255));
+                if (omitAlpha || singletonAlpha) writer.Write(0, 0); // Retain the alpha-field work/cancellation check.
+                else literal.Symbol(writer, (int)(pixel >> 24));
+                position++; literals++;
             }
             previous = pixel;
         }
         writer.Finish(); return alpha;
+    }
+
+    private static void OpaqueAlphaHeader(WebpBitWriter writer)
+    {
+        // RFC 9649 section 3.7.2.1.2: normal code-length tree with symbols0/1.
+        // Only alpha255 has length1; using that single leaf consumes zero bits.
+        writer.Write(0, 1); writer.Write(0, 4); // Four code-length symbols:17,18,0,1.
+        writer.Write(0, 3); writer.Write(0, 3); writer.Write(1, 3); writer.Write(1, 3);
+        writer.Write(0, 1); // Full256-entry alpha alphabet.
+        for (var i = 0; i < 256; i++) writer.Write(i == 255 ? 1 : 0, 1);
     }
 
     private static uint Pixel(ImageBuffer image, int position, OperationContext context)

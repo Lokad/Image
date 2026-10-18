@@ -193,9 +193,9 @@ def render():
         row('WebP VP8, opaque from RGBA16‡', 'warm-vp8-prepared-prediction-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-PREPARED-PREDICTION.md', verification='Gap (short; qualified)'),
         row('WebP VP8 + alpha‡', 'warm-vp8-prepared-prediction-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8-PREPARED-PREDICTION.md', True),
         row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8-prepared-prediction-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8-PREPARED-PREDICTION.md', True),
-        row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
-        row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-opaque8-evidence.json', ['observations', -1], 'WARM-VP8L-OPAQUE8.md', True),
-        row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8lencode16-evidence.json', ['observations', -1], 'WARM-VP8L-RGBA16-ENCODE.md', True),
+        row('WebP VP8L, exact backend*', 'warm-vp8l-opaque-alpha-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-OPAQUE-ALPHA.md', True),
+        row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-opaque-alpha-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-OPAQUE-ALPHA.md', True),
+        row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-opaque-alpha-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-OPAQUE-ALPHA.md', True),
     ]
     edits = [
         row('Horizontal flip RGBA8, two live outputs / per image', 'warm-horizontal-flip512-evidence.json', ['cases', 'Rgba8', -1], 'WARM-HORIZONTAL-FLIP512.md', verification='Gap (short; qualified)'),
@@ -368,6 +368,12 @@ measure **1.145× / 155,007 B/op** for gray and **2.004× / 297,896 B/op** for R
 Both remain parity gaps; each includes necessary normalization and independent
 owned output. No long repeat or production change follows these clear mean gaps.
 
+[VP8L opaque alpha coding](../benchmarks/WARM-VP8L-OPAQUE-ALPHA.md) cuts the
+existing opaque packet **24.9%** to **400,262 B** and allocations **49.9%** to
+**1,051,213 B/op**. All three affected lossless encode operations independently
+reconfirm parity. Alpha-bearing packets remain byte-identical. Other paths reuse
+valid evidence. Photographic/text compression-efficiency work remains open.
+
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
 FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,
 normal SIMD, tiering off, nonconcurrent workstation GC. Inputs are the two original
@@ -422,7 +428,8 @@ Resolve the named JPEG uncertainties before optimization. Stop current passing p
 
 * VP8L encode uses **libwebp exact=1, FFmpeg's encoder backend**, through its public
 API: the FFmpeg encoder does not expose hidden-RGB preservation. Decoded RGBA is
-exact; managed/native packets are533,100/183,812 B. Compression-efficiency parity
+exact; alpha-bearing packets are533,100/183,812 B and opaque400,262/121,896 B
+(managed/native). Compression-efficiency parity
 is not established. Single-component grayscale JPEG uses approved benchmark-only
 **SIMD libjpeg-turbo3.1.4.1**, since FFmpeg emits three components; its current qualified short is shown above,
 154,893 B/op,58,823/58,910 B compressed; source-PSNR gap0.000033dB. Complete

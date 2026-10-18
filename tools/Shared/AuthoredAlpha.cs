@@ -33,20 +33,12 @@ internal static class AuthoredAlpha
         }
         if (compressed)
         {
-            using var residuals = ImageBuffer.Create(width, height, 8);
-            for (var y = 0; y < height; y++)
-            for (var x = 0; x < width; x++)
-            {
-                var row = residuals.GetRow8(y); row[x * 4 + 1] = alpha[y * width + x + 1]; row[x * 4 + 3] = 255;
-            }
-            using var encoded = new MemoryStream();
-            ImageCodec.EncodeWebp(residuals, encoded, new WebpEncodeOptions { Lossless = true, Effort = 0 });
-            var lossless = encoded.ToArray();
-            var payloadLength = BinaryPrimitives.ReadInt32LittleEndian(lossless.AsSpan(16));
             // RFC 9649 2.7.1.2: ALPH omits the five-byte VP8L signature/dimension header.
-            // The rest is the owned fixed full-alphabet entropy stream, without transforms.
-            alpha = new byte[payloadLength - 4]; alpha[0] = (byte)(1 | filter << 2);
-            lossless.AsSpan(25, payloadLength - 5).CopyTo(alpha.AsSpan(1));
+            // Pin full-alphabet trees for admission controls independently of the
+            // production encoder's compression choices; green carries alpha.
+            var entropy = AuthoredWebp.FixedAlphaResiduals(alpha.AsSpan(1));
+            alpha = new byte[entropy.Length + 1]; alpha[0] = (byte)(1 | filter << 2);
+            entropy.CopyTo(alpha, 1);
         }
         byte[]? pixels = null;
         for (var offset = 12; offset < opaqueWebp.Length;)

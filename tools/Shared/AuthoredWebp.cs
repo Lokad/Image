@@ -223,6 +223,34 @@ internal static class AuthoredWebp
         for (var i = 0; i < alphabet; i++) bits.Write(i < 256 ? 1 : 0, 1);
     }
 
+    // Original fixed full-alphabet ALPH control, not a production encoder call.
+    // RFC 9649 3.7.2.1: complete canonical trees and normal code-length coding.
+    internal static byte[] FixedAlphaResiduals(ReadOnlySpan<byte> residuals)
+    {
+        var bits = new Bits(); bits.Write(0, 1); bits.Write(0, 1); bits.Write(0, 1);
+        FixedTree(bits, 280); FixedTree(bits, 256); FixedTree(bits, 256); FixedTree(bits, 256); FixedTree(bits, 40);
+        foreach (var green in residuals)
+        {
+            // 232 eight-bit leaves, followed by48 nine-bit leaves, are complete.
+            bits.Write(Reverse(green < 232 ? green : green + 232, green < 232 ? 8 : 9), green < 232 ? 8 : 9);
+            bits.Write(0, 8); bits.Write(0, 8); bits.Write(255, 8);
+        }
+        return bits.Finish();
+    }
+
+    private static void FixedTree(Bits bits, int alphabet)
+    {
+        var lower = (int)Math.Floor(Math.Log2(alphabet));
+        var shortLeaves = (1 << (lower + 1)) - alphabet;
+        var upper = shortLeaves == alphabet ? lower : lower + 1;
+        ReadOnlySpan<byte> order = [17, 18, 0, 1, 2, 3, 4, 5, 16, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+        bits.Write(0, 1); bits.Write(15, 4); // All19 code-length positions; no minimum-header dependency.
+        foreach (var value in order) bits.Write(value == lower || value == upper ? 1 : 0, 3);
+        bits.Write(0, 1);
+        if (lower != upper)
+            for (var symbol = 0; symbol < alphabet; symbol++) bits.Write(symbol < shortLeaves ? 0 : 1, 1);
+    }
+
     private static int PaletteIndex(int x, int count, int packing) => x % (count + 1) & ((1 << (8 >> packing)) - 1);
     private static int Reverse(int value, int count)
     {

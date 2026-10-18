@@ -131,6 +131,13 @@ if (!exampleJpeg.ToArray().AsSpan().SequenceEqual(exampleJpegReference.ToArray()
 using var exampleWebp = new MemoryStream();
 ImageCodec.EncodeWebp(flipped, exampleWebp, new WebpEncodeOptions { Lossless = false, Quality = 85, Effort = 4 });
 using var exampleWebpPixels = ImageCodec.Decode(exampleWebp.ToArray());
+using var opaqueWebpSource = ImageBuffer.Create(33, 1, 8);
+for (var x = 0; x < 33; x++)
+    new byte[] { (byte)(x * 17), (byte)(x * 29), (byte)(x * 47), 255 }.CopyTo(opaqueWebpSource.GetRow8(0).Slice(x * 4, 4));
+using var opaqueWebp = new MemoryStream(); ImageCodec.EncodeWebp(opaqueWebpSource, opaqueWebp);
+using var opaqueWebpPixels = ImageCodec.Decode(opaqueWebp.ToArray());
+if (!opaqueWebpPixels.GetRow8(0).SequenceEqual(opaqueWebpSource.GetRow8(0)))
+    throw new Exception("Package opaque singleton-alpha WebP pixels differ.");
 if ((exampleWebpPixels.Width, exampleWebpPixels.Height, exampleWebpPixels.BitDepth) != (2, 1, 8) || !exampleWebp.CanWrite)
     throw new Exception("README WebP geometry, precision or stream ownership differs.");
 for (var x = 0; x < 2; x++)
