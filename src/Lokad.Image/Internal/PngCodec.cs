@@ -1100,6 +1100,10 @@ internal static class PngCodec
         {
             UnfilterSub8(row, cancellation); return;
         }
+        if (filter == 1 && stride == 4 && Vector128.IsHardwareAccelerated && previous.Length >= row.Length)
+        {
+            UnfilterSub4(row, cancellation); return;
+        }
         if (filter == 4 && (stride == 8 || stride == 4 || stride == 6) && Vector128.IsHardwareAccelerated
             && previous.Length >= row.Length && !((ReadOnlySpan<byte>)row).Overlaps(previous))
         {
@@ -1155,6 +1159,32 @@ internal static class PngCodec
         {
             if ((i & 65535) == 0) cancellation.ThrowIfCancellationRequested();
             row[i] = unchecked((byte)(row[i] + previous[i]));
+        }
+    }
+
+    private static void UnfilterSub4(Span<byte> row, CancellationToken cancellation)
+    {
+        // PNG section 9.2: four independent byte-prefix sums modulo256.
+        // Two doubling steps reconstruct four pixels, then add the preceding
+        // vector's final pixel to every pixel. No carries cross channels.
+        var shift4 = Vector128.Create((byte)255, 255, 255, 255, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+        var shift8 = Vector128.Create((byte)255, 255, 255, 255, 255, 255, 255, 255, 0, 1, 2, 3, 4, 5, 6, 7);
+        var repeat = Vector128.Create((byte)12, 13, 14, 15, 12, 13, 14, 15, 12, 13, 14, 15, 12, 13, 14, 15);
+        var carry = Vector128<byte>.Zero; var i = 0;
+        for (; i <= row.Length - 16; i += 16)
+        {
+            if ((i & 65535) == 0) cancellation.ThrowIfCancellationRequested();
+            var value = Vector128.LoadUnsafe(ref MemoryMarshal.GetReference(row), (nuint)i);
+            value += Vector128.Shuffle(value, shift4);
+            value += Vector128.Shuffle(value, shift8);
+            value += carry;
+            value.StoreUnsafe(ref MemoryMarshal.GetReference(row), (nuint)i);
+            carry = Vector128.Shuffle(value, repeat);
+        }
+        for (; i < row.Length; i++)
+        {
+            if ((i & 65535) == 0) cancellation.ThrowIfCancellationRequested();
+            row[i] = unchecked((byte)(row[i] + (i >= 4 ? row[i - 4] : 0)));
         }
     }
 

@@ -1,8 +1,8 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-18. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 207 numeric rows contain **58 confirmed parity
-cases, 145 measured gaps and 4 confidence-open cases**. The earlier
+conservative upper ≤1x**. The 207 numeric rows contain **59 confirmed parity
+cases, 144 measured gaps and 4 confidence-open cases**. The earlier
 ≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
@@ -31,19 +31,19 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [packed bicubic weight broadcasts](../benchmarks/WARM-BICUBIC-WEIGHT-BROADCAST.md)
-reduces the existing tight RGBA8 64×32 reduction time12.5%, to560.51µs /1.527x
-(upper1.797x), at8,313B/op. This is a qualified short gap. One vector-construction
-expression changes; exact pixels, arithmetic/order, cancellation/work, workspace
-and ownership remain identical. The unchanged wider-byte/word control means stay
-within1.6% of retained results. Other206 comparisons and all58 passing proofs
-retain their hot paths/evidence. No new performance raster, selector or settings
-grid; passing cases are stopped. The207 rows select144 independent confirmations
-and63 qualified short screens. Fresh **3,680 Release cases perOS** (1,359 internal
-+1,423 public +898 live FFmpeg), plus138 scalar resize controls, pass. The consumer
-and all three examples pass through the **same actual Release package on
-Windows/Linux**. Production remains safe managed dependency-free C#/.NET10.
-Unchanged qualification is reused.
+Latest production round: [four-byte PNG Sub prefixes](../benchmarks/WARM-PNG-SUB-PREFIX.md)
+cuts existing RGBA8 Sub decode time50.5%, to584.20µs /0.851x (upper0.855x), with
+4,456B/op and exact pixels. An independent twelve-actual confirmation closes
+this case. The new SIMD byte-prefix helper preserves memory/work admission,
+cancellation, partial failure and ownership. Word Sub/byte Paeth controls remain
+within1.2% of retained means. Other206 comparisons/all58 prior passing proofs
+remain applicable; now59named paths pass. No new performance raster, selector or
+settings grid. The207 rows still select144 independent confirmations and63
+qualified short screens. Fresh **3,692 Release cases perOS** (1,371internal
++1,423public+898liveFFmpeg), plus92scalar PNG controls, pass. The consumer and
+allthree examples pass through the **same actual Release package on Windows/Linux**.
+Production remains safe managed dependency-free .NET10. Unchanged qualification
+is reused; passing cases are stopped.
 
 **Decode and metadata**
 
@@ -74,7 +74,7 @@ Unchanged qualification is reused.
 | [PNG RGBA8, Paeth](../benchmarks/WARM-PAETH-SIX-CHANNEL.md) | 3,149.31 | 2,847.74 | 1.106 / 1.128 | 4,456 | Gap (short; qualified) |
 | [PNG RGBA8, Up](../benchmarks/WARM-PNG-UP-SIMD.md) | 1,484.65 | 1,509.16 | 0.984 / 0.989 | 4,456 | Parity confirmed |
 | [PNG RGBA16, Up](../benchmarks/WARM-PNG-UP-SIMD.md) | 1,902.38 | 1,911.94 | 0.995 / 0.997 | 8,552 | Parity confirmed |
-| [PNG RGBA8, Sub](../benchmarks/WARM-PNG-SUB8-CURRENT.md) | 1,179.60 | 699.60 | 1.686 / 1.697 | 4,456 | Gap (independent) |
+| [PNG RGBA8, Sub](../benchmarks/WARM-PNG-SUB-PREFIX.md) | 584.20 | 686.53 | 0.851 / 0.855 | 4,456 | Parity confirmed |
 | [PNG RGBA16, Sub](../benchmarks/WARM-PNG-SUB16.md) | 357.99 | 743.02 | 0.482 / 0.493 | 8,552 | Parity confirmed |
 | [PNG RGBA8, Average](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 2,380.32 | 1,850.31 | 1.286 / 1.298 | 4,456 | Gap (independent) |
 | [PNG RGBA16, Average](../benchmarks/WARM-PNG-AVERAGE16.md) | 5,894.17 | 4,384.37 | 1.344 / 1.357 | 8,552 | Gap (independent) |

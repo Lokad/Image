@@ -99,7 +99,7 @@ def render():
         row('PNG RGBA8, Paeth', 'warm-paeth-six-channel-evidence.json', ['cases', 'DecodePaeth8', -1], 'WARM-PAETH-SIX-CHANNEL.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, Up', 'warm-png-up-simd-evidence.json', ['cases', 'DecodeUp8', -1], 'WARM-PNG-UP-SIMD.md', True),
         row('PNG RGBA16, Up', 'warm-png-up-simd-evidence.json', ['cases', 'DecodeUp16', -1], 'WARM-PNG-UP-SIMD.md', True),
-        row('PNG RGBA8, Sub', 'warm-png-sub8-current-evidence.json', ['observations', -1], 'WARM-PNG-SUB8-CURRENT.md', True),
+        row('PNG RGBA8, Sub', 'warm-png-sub-prefix-evidence.json', ['cases', 'DecodeSub8', -1], 'WARM-PNG-SUB-PREFIX.md', True),
         row('PNG RGBA16, Sub', 'warm-pngsub16-evidence.json', ['observations', -1], 'WARM-PNG-SUB16.md', True),
         row('PNG RGBA8, Average', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeAverage8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGBA16, Average', 'warm-pngaverage16-evidence.json', ['observations', -1], 'WARM-PNG-AVERAGE16.md', True),
@@ -324,19 +324,19 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [packed bicubic weight broadcasts](../benchmarks/WARM-BICUBIC-WEIGHT-BROADCAST.md)
-reduces the existing tight RGBA8 64×32 reduction time12.5%, to560.51µs /1.527x
-(upper1.797x), at8,313B/op. This is a qualified short gap. One vector-construction
-expression changes; exact pixels, arithmetic/order, cancellation/work, workspace
-and ownership remain identical. The unchanged wider-byte/word control means stay
-within1.6% of retained results. Other206 comparisons and all58 passing proofs
-retain their hot paths/evidence. No new performance raster, selector or settings
-grid; passing cases are stopped. The207 rows select144 independent confirmations
-and63 qualified short screens. Fresh **3,680 Release cases perOS** (1,359 internal
-+1,423 public +898 live FFmpeg), plus138 scalar resize controls, pass. The consumer
-and all three examples pass through the **same actual Release package on
-Windows/Linux**. Production remains safe managed dependency-free C#/.NET10.
-Unchanged qualification is reused.
+Latest production round: [four-byte PNG Sub prefixes](../benchmarks/WARM-PNG-SUB-PREFIX.md)
+cuts existing RGBA8 Sub decode time50.5%, to584.20µs /0.851x (upper0.855x), with
+4,456B/op and exact pixels. An independent twelve-actual confirmation closes
+this case. The new SIMD byte-prefix helper preserves memory/work admission,
+cancellation, partial failure and ownership. Word Sub/byte Paeth controls remain
+within1.2% of retained means. Other206 comparisons/all58 prior passing proofs
+remain applicable; now59named paths pass. No new performance raster, selector or
+settings grid. The207 rows still select144 independent confirmations and63
+qualified short screens. Fresh **3,692 Release cases perOS** (1,371internal
++1,423public+898liveFFmpeg), plus92scalar PNG controls, pass. The consumer and
+allthree examples pass through the **same actual Release package on Windows/Linux**.
+Production remains safe managed dependency-free .NET10. Unchanged qualification
+is reused; passing cases are stopped.
 
 **Decode and metadata**
 
