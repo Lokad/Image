@@ -43,36 +43,48 @@ internal ref struct JpegDecoder
 
     public ImageBuffer Decode()
     {
-        while (position < data.Length)
+        try
         {
-            context.Work(1);
-            var marker = ReadMarker();
-            if (marker == 0xD9)
+            while (position < data.Length)
             {
-                if (!scanSeen) throw new ImageDataException("JPEG has no pixel scans.");
-                foreach (var component in components)
-                    if (component.Approximation[0] < 0) throw new ImageDataException("JPEG component is missing a DC scan.");
-                return Render();
+                context.Work(1);
+                var marker = ReadMarker();
+                if (marker == 0xD9)
+                {
+                    if (!scanSeen) throw new ImageDataException("JPEG has no pixel scans.");
+                    foreach (var component in components)
+                        if (component.Approximation[0] < 0) throw new ImageDataException("JPEG component is missing a DC scan.");
+                    return Render();
+                }
+                var payload = ReadSegment();
+                switch (marker)
+                {
+                    case 0xC0 or 0xC2: ReadFrame(payload, marker == 0xC2); break;
+                    case 0xDB: ReadQuantization(payload); break;
+                    case 0xC4: ReadHuffman(payload); break;
+                    case 0xDD:
+                        if (payload.Length != 2) throw new ImageDataException("Invalid JPEG restart interval.");
+                        restartInterval = BinaryPrimitives.ReadUInt16BigEndian(payload); break;
+                    case 0xDA: ReadScan(payload); scanSeen = true; break;
+                    case 0xEE when payload.StartsWith("Adobe"u8):
+                        if (payload.Length < 12) throw new ImageDataException("Truncated Adobe JPEG marker.");
+                        if (payload[11] > 1) throw new UnsupportedImageException("Unsupported JPEG Adobe color transform.");
+                        rgb = payload[11] == 0; break;
+                    case >= 0xE0 and <= 0xEF or 0xFE: break;
+                    default: throw new UnsupportedImageException("Unsupported JPEG control marker.");
+                }
             }
-            var payload = ReadSegment();
-            switch (marker)
+            throw new ImageDataException("JPEG is missing its end marker.");
+        }
+        finally
+        {
+            foreach(var component in components)
             {
-                case 0xC0 or 0xC2: ReadFrame(payload, marker == 0xC2); break;
-                case 0xDB: ReadQuantization(payload); break;
-                case 0xC4: ReadHuffman(payload); break;
-                case 0xDD:
-                    if (payload.Length != 2) throw new ImageDataException("Invalid JPEG restart interval.");
-                    restartInterval = BinaryPrimitives.ReadUInt16BigEndian(payload); break;
-                case 0xDA: ReadScan(payload); scanSeen = true; break;
-                case 0xEE when payload.StartsWith("Adobe"u8):
-                    if (payload.Length < 12) throw new ImageDataException("Truncated Adobe JPEG marker.");
-                    if (payload[11] > 1) throw new UnsupportedImageException("Unsupported JPEG Adobe color transform.");
-                    rgb = payload[11] == 0; break;
-                case >= 0xE0 and <= 0xEF or 0xFE: break;
-                default: throw new UnsupportedImageException("Unsupported JPEG control marker.");
+                if(component is null || component.Coefficients.Length==0)continue;
+                var storage=component.Coefficients;component.Coefficients=[];
+                JpegCoefficientPool.Shared.Return(storage);
             }
         }
-        throw new ImageDataException("JPEG is missing its end marker.");
     }
 
     private int ReadMarker()
@@ -138,7 +150,7 @@ internal ref struct JpegDecoder
             var countValues = (long)component.BlockColumns * component.BlockRows * 64;
             if (countValues > Array.MaxLength) throw new ImageLimitException("JPEG coefficient plane is too large.");
             context.Reserve(countValues * 4 + 64 * 4);
-            component.Coefficients = new int[(int)countValues];
+            component.Coefficients = JpegCoefficientPool.Shared.Rent((int)countValues);
             component.Approximation = new int[64]; Array.Fill(component.Approximation, -1);
         }
     }
@@ -612,7 +624,9 @@ internal ref struct JpegDecoder
                 for (var by = 0; by < 8; by++)
                     block.Slice(by * 8, 8).CopyTo(component.Plane.AsSpan((y * 8 + by) * component.BlockColumns * 8 + x * 8, 8));
             }
+            var storage=component.Coefficients;
             component.Coefficients = []; context.Release(length * 4L);
+            JpegCoefficientPool.Shared.Return(storage);
         }
         var result = ImageBuffer.Allocate(info.Width, info.Height, 8, context); result.Orientation = info.Orientation;
         try

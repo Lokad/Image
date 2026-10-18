@@ -83,7 +83,7 @@ def render():
         row('PNG16 Stream, orient/crop/nearest fit', 'warm-png-fused-evidence.json', ['observations', -1], 'WARM-PNG-FUSED-INFLATION.md', True),
         row('PNG RGBA8, fresh seekable Stream', 'warm-current-png-stream-evidence.json', ['cases', 'Png8', -1], 'WARM-CURRENT-PNG-STREAM.md', True),
         row('PNG RGBA16, fresh seekable Stream', 'warm-current-png-stream-evidence.json', ['cases', 'Png16', -1], 'WARM-CURRENT-PNG-STREAM.md', True),
-        row('JPEG420 restart, fresh seekable Stream', 'warm-jpeg-ac-cache-evidence.json', ['observations', 8], 'WARM-JPEG-AC-CACHE.md', True),
+        row('JPEG420 restart, fresh seekable Stream', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'StreamDecode420Restart', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8l-borrowed-green-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-VP8L-BORROWED-GREEN.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, fresh seekable Stream', 'warm-vp8l-borrowed-green-evidence.json', ['cases', 'StreamNativeLossless8', -1], 'WARM-VP8L-BORROWED-GREEN.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
@@ -133,21 +133,21 @@ def render():
         pending('PNG gray1/key1 and gray2/key1, unfiltered native', 'WARM-PNG-PACKED-TRANSPARENCY.md', 'Unscored: native alpha differs'),
         row('PNG opaque gray2 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray2', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG opaque gray4 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('JPEG baseline gray', 'warm-current-jpeg-decode-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
-        row('JPEG baseline 4:2:0', 'warm-current-jpeg-decode-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
-        row('JPEG baseline 4:2:0, row restart markers', 'warm-current-jpeg-decode-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
-        row('JPEG baseline 4:2:2', 'warm-current-jpeg-decode-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
-        row('JPEG baseline 4:4:4, owned input', 'warm-current-jpeg-decode-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
-        row('JPEG baseline 4:4:4, native input', 'warm-current-jpeg-decode-evidence.json', ['cases', 'NativeDecode8', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
-        row('JPEG baseline direct RGB, full resolution', 'warm-jpeg-ac-cache-evidence.json', ['observations', 2], 'WARM-JPEG-AC-CACHE.md', True),
-        row('JPEG direct RGB 4:2:2, timed centered correction', 'warm-current-jpeg-decode-evidence.json', ['cases', 'DirectRgb422', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
-        row('JPEG direct RGB 4:2:0, timed component-plane interpretation', 'warm-current-jpeg-decode-evidence.json', ['cases', 'DirectRgb420', -1], 'WARM-CURRENT-JPEG-DECODE.md', True),
-        row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg-cancelable-ac-cache-evidence.json', ['cases', 'NativeDecodeCancelable8', -1], 'WARM-JPEG-CANCELABLE-AC-CACHE.md', verification='Gap (short; qualified)'),
-        row('JPEG progressive gray', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'ProgressiveGray', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
-        row('JPEG progressive 4:2:0', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'Progressive420', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
-        row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpeg-refinement-lookahead-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-JPEG-REFINEMENT-LOOKAHEAD.md', verification='Gap (short; qualified)'),
-        row('JPEG progressive 4:2:2', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'Progressive422', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
-        row('JPEG progressive 4:4:4', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'Progressive444', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
+        row('JPEG baseline gray', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:2:0', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:2:0, row restart markers', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:2:2', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:4:4, owned input', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'Decode8', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:4:4, native input', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'NativeDecode8', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline direct RGB, full resolution', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'DirectRgb444', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG direct RGB 4:2:2, timed centered correction', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'DirectRgb422', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG direct RGB 4:2:0, timed component-plane interpretation', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'DirectRgb420', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'NativeDecodeCancelable8', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG progressive gray', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'ProgressiveGray', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG progressive 4:2:0', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'Progressive420', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG progressive 4:2:2', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'Progressive422', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG progressive 4:4:4', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'Progressive444', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
         row('WebP VP8 + alpha', 'warm-vp8l-borrowed-green-evidence.json', ['cases', 'Native8', -1], 'WARM-VP8L-BORROWED-GREEN.md', verification='Gap (short; qualified)'),
         row('WebP VP8 opaque, simple luma filter', 'warm-vp8-simple-filter-evidence.json', ['observations', -1], 'WARM-VP8-SIMPLE-FILTER.md', True),
         row('WebP VP8 opaque, live cancelable token', 'warm-vp8-cancelable-evidence.json', ['observations', -1], 'WARM-VP8-CANCELABLE.md', True),
@@ -324,17 +324,19 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [bicubic quotient bounds](../benchmarks/WARM-CURRENT-BICUBIC.md#sixty-four-tap-byte-quotient-bounds)
-cuts default RGBA8 64×32 resize time31.6%, from611.55 to418.52µs, at205,884B/op.
-It remains a qualified short gap:1.134x/upper1.215x. The existing certified
-quotient-error calculation avoids needless direct pixel recalculation; exact
-pixels, arithmetic order, workspace, ownership and limits remain unchanged.
-Both shared-method controls pass without regression. Other206 comparisons/all60
-prior passing proofs remain applicable. No new performance input/settings grid.
-The207 rows select144 independent confirmations and63qualified short screens.
-Fresh **3,707 Release cases perOS** (1,374internal+1,435public+898liveFFmpeg), plus
-209scalar resize controls, pass; unrelated scalar qualification is reused. The consumer
-and allthree examples pass through the **same actual Release package on Windows/Linux**.
+Latest production round: [JPEG coefficient reuse](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md)
+cuts full-resolution decode time10.4–12.8% and measured allocations63.7%, to
+966,317B/op. Across16 existing decode cases, allocation reductions are44.6–63.7%;
+timings remain qualified short gaps. The bounded private pool retains at most
+4MiB of idle coefficient storage; every lease is zeroed before complete decoding.
+Slower screens are retained, including the conservative4:2:2 result after one
+paired replay did not reproduce its initial slowdown. No new input/settings grid.
+Other191 comparisons/all60 prior passing proofs remain applicable. The207 rows
+select130 independent confirmations and77qualified short screens. Fresh
+**3,711 Release cases perOS** (1,377internal+1,436public+898liveFFmpeg), plus
+49scalar storage/admission controls, pass; unrelated scalar qualification is
+reused. The consumer and allthree examples pass through the **same actual Release
+package on Windows/Linux**.
 Production remains safe managed dependency-free .NET10. Stop the now60passing
 paths; the full parity objective remains open.
 

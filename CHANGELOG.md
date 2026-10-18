@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Lower JPEG decode allocations through bounded private coefficient reuse,
+  preserving exact pixels, resource admission and failure behavior.
 - Faster cache-coded lossless WebP decoding with unchanged pixels, working
   memory, work limits and cancellation.
 - Faster JPEG metadata inspection through bounded entropy scanning, preserving

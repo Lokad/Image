@@ -37,6 +37,11 @@ combined idle bytes capped at 4 MiB. Only released leases are eligible; active
 owners never share storage. An unmatched size discards idle entries. Retention
 does not change input/result byte admission, and oversized arrays are not cached.
 
+JPEG decoding may also retain three idle exact-size coefficient arrays, capped
+at 4 MiB combined. Every lease is fully zeroed before parsing and returned after
+its last use or a decode failure. Live decoders never share a lease. Original
+coefficient working-memory and work admission remain unchanged.
+
 Transforms return new owned buffers and preserve precision and source pixels.
 Outstanding raw orientation is retained until `AutoOrient` or decode with
 `ApplyOrientation=true` applies it and resets it to Normal. Coded and oriented

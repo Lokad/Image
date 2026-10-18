@@ -6,6 +6,12 @@ means<=1 have upper>1. Reuse passing paths and prioritize the largest current
 gaps; do not add a new input or settings grid. The [current summary](../docs/benchmark.md)
 distinguishes parity, measured gaps and confidence-open cases.
 
+[JPEG coefficient reuse](WARM-JPEG-COEFFICIENT-POOL.md) replaces exactly16 existing
+decode timings with qualified short gaps. Full-resolution gains reach10.4–12.8%
+with63.7% fewer measured allocations; smaller/slower screens and one bounded4:2:2
+baseline/candidate replay are retained. Other191 comparisons/all60 passing proofs
+remain applicable. No named case, input or settings grid was added.
+
 The finite material checklist's **previous <=2x phase was completed for 0.1.0**.
 Every named required path then had independent quiet evidence with conservative
 upper ≤2x or an explicit unchanged-path reuse proof. Subsequent qualified changes
@@ -13,8 +19,8 @@ record which comparisons they replace. Only confirmed <=1x paths are stopped
 for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,144 select independent
-confirmations. Sixty-three select qualified screens after changed production: six
+unscored native-alpha incompatibility. Of those numeric rows,130 select independent
+confirmations. Seventy-seven select qualified screens after changed production: six
 paired-column byte/word bicubic cases, byte bicubic TightDown8, word bilinear
 Down16, live-token progressive444, five fixed JPEG encodes, two opaque VP8 encodes,
 two PNG Paeth dispatch controls and two PNG encodes after chunk checksum folding plus storedRGBA8 after capacity reservation, and eight adaptive JPEG encodes
@@ -24,7 +30,8 @@ and seven byte/word enlargement boundaries after wider strips, plus byte
 bilinear Up8 after exact integer factorization and live-token baseline444 decode
 after bounded AC cache reuse, plus tight byte64×32 after packed weight broadcasts and the thirteen default full-row-cache bicubic
 comparisons after byte-row output specialization, plus default byte64×32 after
-certified quotient bounds. That round improves31.6% to1.134x/upper1.215x, retains
+certified quotient bounds, and fourteen previously independent JPEGdecode cases
+after coefficient reuse (two others already selected qualified screens). That round improves31.6% to1.134x/upper1.215x, retains
 206 other comparisons/all60 passing proofs, and adds no workload or image.
 VerticalUp8 now selects its
 first current independent confirmation; it remains a1.020x gap rather than a

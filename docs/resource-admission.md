@@ -73,6 +73,10 @@ partial output on failure; stage output when atomic publication is required.
 
 ## Validation
 
+JPEG coefficient reuse retains at most three idle exact-size arrays, totaling
+4 MiB. Leases are zeroed before parsing and returned on success or failure;
+the original live working-memory and work charges remain unchanged.
+
 Authored boundary tests cover exact admission and one-byte-below rejection,
 limited work, cancellation, malformed input, overlapping owners and unchanged
 sources. Windows/Linux correctness and live FFmpeg suites validate behavior;

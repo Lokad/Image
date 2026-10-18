@@ -31,17 +31,19 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [bicubic quotient bounds](../benchmarks/WARM-CURRENT-BICUBIC.md#sixty-four-tap-byte-quotient-bounds)
-cuts default RGBA8 64×32 resize time31.6%, from611.55 to418.52µs, at205,884B/op.
-It remains a qualified short gap:1.134x/upper1.215x. The existing certified
-quotient-error calculation avoids needless direct pixel recalculation; exact
-pixels, arithmetic order, workspace, ownership and limits remain unchanged.
-Both shared-method controls pass without regression. Other206 comparisons/all60
-prior passing proofs remain applicable. No new performance input/settings grid.
-The207 rows select144 independent confirmations and63qualified short screens.
-Fresh **3,707 Release cases perOS** (1,374internal+1,435public+898liveFFmpeg), plus
-209scalar resize controls, pass; unrelated scalar qualification is reused. The consumer
-and allthree examples pass through the **same actual Release package on Windows/Linux**.
+Latest production round: [JPEG coefficient reuse](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md)
+cuts full-resolution decode time10.4–12.8% and measured allocations63.7%, to
+966,317B/op. Across16 existing decode cases, allocation reductions are44.6–63.7%;
+timings remain qualified short gaps. The bounded private pool retains at most
+4MiB of idle coefficient storage; every lease is zeroed before complete decoding.
+Slower screens are retained, including the conservative4:2:2 result after one
+paired replay did not reproduce its initial slowdown. No new input/settings grid.
+Other191 comparisons/all60 prior passing proofs remain applicable. The207 rows
+select130 independent confirmations and77qualified short screens. Fresh
+**3,711 Release cases perOS** (1,377internal+1,436public+898liveFFmpeg), plus
+49scalar storage/admission controls, pass; unrelated scalar qualification is
+reused. The consumer and allthree examples pass through the **same actual Release
+package on Windows/Linux**.
 Production remains safe managed dependency-free .NET10. Stop the now60passing
 paths; the full parity objective remains open.
 
@@ -58,7 +60,7 @@ paths; the full parity objective remains open.
 | [PNG16 Stream, orient/crop/nearest fit](../benchmarks/WARM-PNG-FUSED-INFLATION.md) | 3,572.35 | 2,936.91 | 1.216 / 1.231 | 4,460,393 | Gap (independent) |
 | [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 1,982.59 | 1,388.00 | 1.428 / 1.441 | 748,088 | Gap (independent) |
 | [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 3,499.10 | 3,080.71 | 1.136 / 1.146 | 3,067,227 | Gap (independent) |
-| [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-AC-CACHE.md) | 1,627.42 | 997.29 | 1.632 / 1.673 | 1,813,266 | Gap (independent) |
+| [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 1,583.21 | 993.36 | 1.594 / 1.773 | 951,078 | Gap (short; qualified) |
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8L-BORROWED-GREEN.md) | 10,871.67 | 5,994.64 | 1.814 / 1.859 | 2,327,699 | Gap (short; qualified) |
 | [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-VP8L-BORROWED-GREEN.md) | 4,787.64 | 3,031.33 | 1.579 / 1.638 | 1,924,876 | Gap (short; qualified) |
 | [PNG RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,904.89 | 1,392.72 | 1.368 / 1.371 | 4,456 | Gap (independent) |
@@ -108,21 +110,21 @@ paths; the full parity objective remains open.
 | [PNG gray1/key1 and gray2/key1, unfiltered native](../benchmarks/WARM-PNG-PACKED-TRANSPARENCY.md) | — | — | — | — | Unscored: native alpha differs |
 | [PNG opaque gray2 → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 71.73 | 106.38 | 0.674 / 0.679 | 616 | Parity confirmed |
 | [PNG opaque gray4 → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 116.09 | 169.54 | 0.685 / 0.698 | 872 | Parity confirmed |
-| [JPEG baseline gray](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 937.68 | 681.99 | 1.375 / 1.391 | 1,221,556 | Gap (independent) |
-| [JPEG baseline 4:2:0](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 1,455.95 | 1,009.28 | 1.443 / 1.449 | 1,619,530 | Gap (independent) |
-| [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 1,640.44 | 1,013.53 | 1.619 / 1.626 | 1,623,906 | Gap (independent) |
-| [JPEG baseline 4:2:2](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 1,730.66 | 1,347.06 | 1.285 / 1.291 | 1,978,655 | Gap (independent) |
-| [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 2,622.85 | 1,896.19 | 1.383 / 1.390 | 2,596,169 | Gap (independent) |
-| [JPEG baseline 4:4:4, native input](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 2,648.65 | 1,718.17 | 1.542 / 1.549 | 2,664,373 | Gap (independent) |
-| [JPEG baseline direct RGB, full resolution](../benchmarks/WARM-JPEG-AC-CACHE.md) | 2,460.96 | 1,451.53 | 1.695 / 1.709 | 2,664,366 | Gap (independent) |
-| [JPEG direct RGB 4:2:2, timed centered correction](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 1,495.61 | 1,092.79 | 1.369 / 1.375 | 1,978,658 | Gap (independent) |
-| [JPEG direct RGB 4:2:0, timed component-plane interpretation](../benchmarks/WARM-CURRENT-JPEG-DECODE.md) | 1,131.19 | 742.22 | 1.524 / 1.532 | 1,619,540 | Gap (independent) |
-| [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-JPEG-CANCELABLE-AC-CACHE.md) | 2,765.05 | 1,717.88 | 1.610 / 1.664 | 2,664,373 | Gap (short; qualified) |
-| [JPEG progressive gray](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md) | 2,665.76 | 1,715.98 | 1.553 / 1.557 | 1,232,526 | Gap (independent) |
-| [JPEG progressive 4:2:0](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md) | 2,671.13 | 1,954.79 | 1.366 / 1.371 | 1,637,526 | Gap (independent) |
-| [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-REFINEMENT-LOOKAHEAD.md) | 5,206.53 | 3,354.93 | 1.552 / 1.731 | 2,682,364 | Gap (short; qualified) |
-| [JPEG progressive 4:2:2](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md) | 3,283.57 | 2,241.02 | 1.465 / 1.471 | 1,996,661 | Gap (independent) |
-| [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md) | 5,312.60 | 3,355.07 | 1.583 / 1.589 | 2,682,364 | Gap (independent) |
+| [JPEG baseline gray](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 978.38 | 683.31 | 1.432 / 1.479 | 672,186 | Gap (short; qualified) |
+| [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 1,413.41 | 1,011.48 | 1.397 / 1.476 | 757,343 | Gap (short; qualified) |
+| [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 1,569.26 | 1,015.25 | 1.546 / 1.681 | 761,718 | Gap (short; qualified) |
+| [JPEG baseline 4:2:2](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 1,881.70 | 1,350.64 | 1.393 / 1.576 | 829,141 | Gap (short; qualified) |
+| [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 2,470.91 | 1,899.87 | 1.301 / 1.386 | 948,036 | Gap (short; qualified) |
+| [JPEG baseline 4:4:4, native input](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 2,314.44 | 1,721.50 | 1.344 / 1.424 | 966,317 | Gap (short; qualified) |
+| [JPEG baseline direct RGB, full resolution](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 2,204.97 | 1,455.09 | 1.515 / 1.686 | 966,317 | Gap (short; qualified) |
+| [JPEG direct RGB 4:2:2, timed centered correction](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 1,472.32 | 1,095.97 | 1.343 / 1.462 | 829,148 | Gap (short; qualified) |
+| [JPEG direct RGB 4:2:0, timed component-plane interpretation](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 1,078.10 | 743.66 | 1.450 / 1.471 | 757,346 | Gap (short; qualified) |
+| [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 2,410.34 | 1,716.79 | 1.404 / 1.596 | 966,317 | Gap (short; qualified) |
+| [JPEG progressive gray](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 2,604.90 | 1,714.18 | 1.520 / 1.692 | 683,138 | Gap (short; qualified) |
+| [JPEG progressive 4:2:0](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 2,633.05 | 1,950.32 | 1.350 / 1.411 | 775,330 | Gap (short; qualified) |
+| [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 4,967.25 | 3,365.13 | 1.476 / 1.585 | 984,298 | Gap (short; qualified) |
+| [JPEG progressive 4:2:2](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 3,315.96 | 2,247.91 | 1.475 / 1.539 | 847,126 | Gap (short; qualified) |
+| [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 5,130.75 | 3,364.53 | 1.525 / 1.590 | 984,298 | Gap (short; qualified) |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8L-BORROWED-GREEN.md) | 10,801.06 | 5,965.33 | 1.811 / 1.925 | 1,966,616 | Gap (short; qualified) |
 | [WebP VP8 opaque, simple luma filter](../benchmarks/WARM-VP8-SIMPLE-FILTER.md) | 8,538.31 | 4,889.76 | 1.746 / 1.765 | 760,548 | Gap (independent) |
 | [WebP VP8 opaque, live cancelable token](../benchmarks/WARM-VP8-CANCELABLE.md) | 8,789.89 | 4,783.31 | 1.838 / 1.843 | 760,548 | Gap (independent) |

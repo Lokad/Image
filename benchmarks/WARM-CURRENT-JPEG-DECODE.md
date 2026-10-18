@@ -1,5 +1,9 @@
 # Current ordinary JPEG decode confirmations
 
+Historical timing note: [bounded coefficient reuse](WARM-JPEG-COEFFICIENT-POOL.md)
+replaces all16 selected JPEGdecode comparisons with current qualified short gaps.
+Other family proofs retain their applicable scope; the <=1x objective stays open.
+
 8 of the eight named ordinary baseline decode cases independently confirm
 within the 2x warm single-CPU target on the qualified production DLL. This
 resolves older evidence invalidated by the AC loop/lookahead changes `bc73f41`
