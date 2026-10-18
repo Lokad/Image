@@ -141,6 +141,105 @@ public sealed class WebpHuffmanTests
         Assert.Equal(0, longReader.Position);
     }
 
+    private static (uint? Channels,Exception? Error) ReadThree(WebpHuffman tree,ref WebpBitReader reader)
+    {
+        try
+        {
+            var red=tree.Read(ref reader);var blue=tree.Read(ref reader);var alpha=tree.Read(ref reader);
+            return ((uint)(alpha<<24|red<<16|blue),null);
+        }
+        catch(Exception error){return (null,error);}
+    }
+
+    [Fact]
+    public void ByteTripletsKeepEveryChannelPhaseExactBytesWorkAndFollowingFields()
+    {
+        var tree=new WebpHuffman(Enumerable.Repeat((byte)8,256).ToArray(),Context());
+        foreach(var red in new[]{0,1,127,128,254,255})
+        foreach(var blue in new[]{0,1,127,128,254,255})
+        foreach(var alpha in new[]{0,1,127,128,254,255})for(var phase=0;phase<8;phase++)
+        {
+            var suffix=string.Concat(Enumerable.Range(0,9).Select(bit=>(0x12d>>bit&1)==0?'0':'1'));
+            var input=Pack(new string('0',phase)+Convert.ToString(red,2).PadLeft(8,'0')
+                +Convert.ToString(blue,2).PadLeft(8,'0')+Convert.ToString(alpha,2).PadLeft(8,'0')+suffix);
+            var original=input.ToArray();var work=Context(26);var referenceWork=Context(26);
+            var reader=new WebpBitReader(input,work);var reference=new WebpBitReader(input,referenceWork);
+            reader.Read(phase);reference.Read(phase);
+            Assert.True(tree.TryReadByteChannels(tree,tree,ref reader,out var channels));
+            Assert.Equal((uint)(alpha<<24|red<<16|blue),channels);
+            var expected=ReadThree(tree,ref reference);Assert.Null(expected.Error);Assert.Equal(expected.Channels,channels);
+            Assert.Equal(reference.Position,reader.Position);Assert.Equal(referenceWork.RemainingWork,work.RemainingWork);
+            Assert.Equal(0x12d,reader.Read(9));Assert.Equal(0x12d,reference.Read(9));
+            Assert.Equal(0,work.RemainingWork);Assert.Equal(original,input);
+        }
+    }
+
+    [Fact]
+    public void ByteTripletRefusalRetainsShortInputPartialBudgetCancellationAndRecovery()
+    {
+        var tree=new WebpHuffman(Enumerable.Repeat((byte)8,256).ToArray(),Context());
+        var counter=typeof(OperationContext).GetField("work",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic)!;
+        for(var phase=0;phase<8;phase++)for(var length=0;length<=6;length++)
+        for(var budget=0;budget<=25;budget++)foreach(var live in new[]{0,1,2})
+        {
+            if(phase!=0 && length==0)continue;
+            var bytes=Pack(new string('0',phase)+"101001011101001100011110001100111111000000000000");
+            var input=bytes[..Math.Min(length,bytes.Length)];var original=input.ToArray();
+            using var cancellation=new CancellationTokenSource();
+            var work=new OperationContext(new ImageLimits {MaxWork=10000},live==0?default:cancellation.Token);
+            var referenceWork=new OperationContext(new ImageLimits {MaxWork=10000},live==0?default:cancellation.Token);
+            work.Work(9999-budget);referenceWork.Work(9999-budget);
+            var reader=new WebpBitReader(input,work);var reference=new WebpBitReader(input,referenceWork);
+            reader.Read(phase);reference.Read(phase);if(live==2)cancellation.Cancel();
+            var position=reader.Position;var remaining=work.RemainingWork;
+            var accepted=tree.TryReadByteChannels(tree,tree,ref reader,out var channels);
+            Assert.Equal(live==0 && budget>=24 && input.Length>=(phase+24+7)/8,accepted);
+            if(!accepted){Assert.Equal(position,reader.Position);Assert.Equal(remaining,work.RemainingWork);}
+            var expected=ReadThree(tree,ref reference);
+            var actual=accepted?((uint?)channels,(Exception?)null):ReadThree(tree,ref reader);
+            Assert.Equal(expected.Channels,actual.Item1);Assert.Equal(expected.Error?.GetType(),actual.Item2?.GetType());
+            Assert.Equal(expected.Error?.Message,actual.Item2?.Message);
+            Assert.Equal(reference.Position,reader.Position);Assert.Equal(referenceWork.RemainingWork,work.RemainingWork);
+            Assert.Equal(original,input);
+            if(live!=0)continue;
+            // Observe the remaining reservoir after a partial failure without
+            // adding a production diagnostic API or changing the reader fields.
+            counter.SetValue(work,0L);counter.SetValue(referenceWork,0L);
+            for(var bit=0;bit<64;bit++)
+            {
+                int? a=null,e=null;Exception? ae=null,ee=null;
+                try{a=reader.Read(1);}catch(Exception error){ae=error;}
+                try{e=reference.Read(1);}catch(Exception error){ee=error;}
+                Assert.Equal(e,a);Assert.Equal(ee?.GetType(),ae?.GetType());
+                Assert.Equal(reference.Position,reader.Position);Assert.Equal(referenceWork.RemainingWork,work.RemainingWork);
+                if(ee is not null)break;
+            }
+        }
+    }
+
+    [Fact]
+    public void ByteTripletEligibilityKeepsOriginalMemoryAndRejectsOtherTreeShapes()
+    {
+        var lengths=Enumerable.Repeat((byte)8,256).ToArray();
+        var memory=new OperationContext(new ImageLimits {MaxWorkingBytes=1888,MaxWork=6400},default);
+        var tree=new WebpHuffman(lengths,memory);Assert.Equal(1888,tree.MemoryBytes);
+        Assert.Equal(0,memory.RemainingWorkingBytes);Assert.Equal(0,memory.RemainingWork);
+        var single=new WebpHuffman(new byte[]{0,1},Context());
+        var mixed=new WebpHuffman(new byte[]{1,2,3,4,5,6,7,8,8},Context());
+        var larger=new byte[512];lengths.CopyTo(larger,1);
+        var nonByteAlphabet=new WebpHuffman(larger,Context());
+        foreach(var other in new[]{single,mixed,nonByteAlphabet})
+        {
+            var work=Context(24);var reader=new WebpBitReader(new byte[]{255,255,255},work);
+            Assert.False(other.TryReadByteChannels(tree,tree,ref reader,out _));
+            Assert.False(tree.TryReadByteChannels(other,tree,ref reader,out _));
+            Assert.False(tree.TryReadByteChannels(tree,other,ref reader,out _));
+            Assert.Equal(0,reader.Position);Assert.Equal(24,work.RemainingWork);
+        }
+        var empty=new WebpBitReader([],Context(0));
+        Assert.Equal(1,single.Read(ref empty));Assert.Equal(0,empty.Position);
+    }
+
     private static OperationContext Context(long work = long.MaxValue)
     {
         var context = new OperationContext(ImageLimits.Default with { MaxWork = Math.Max(1, work) }, default);

@@ -43,7 +43,10 @@ internal sealed class WebpHuffman
         MemoryBytes = 320 + total * 2 + (entries == 0 ? 0 : entries * sizeof(int) + 32);
         context.Reserve(MemoryBytes);
         if (entries != 0) context.Work(entries + 8L * total);
-        firstCode = new int[16]; counts = new int[16]; firstSymbol = new int[16]; symbols = new ushort[total]; single = -1;
+        firstCode = new int[16]; counts = new int[16]; firstSymbol = new int[16]; symbols = new ushort[total];
+        // A second negative sentinel describes a complete byte alphabet without
+        // growing the charged object. Ordinary reads treat both as non-single.
+        single = lengths.Length == 256 && total == 256 && maximum == 8 ? -2 : -1;
         var code = 0; var offset = 0;
         for (var length = 1; length <= 15; length++)
         {
@@ -84,6 +87,14 @@ internal sealed class WebpHuffman
             if ((uint)index < (uint)counts[length]) return symbols[firstSymbol[length] + index];
         }
         throw new ImageDataException("Invalid VP8L prefix code.");
+    }
+
+    internal bool TryReadByteChannels(WebpHuffman blue,WebpHuffman alpha,
+        ref WebpBitReader reader,out uint channels)
+    {
+        channels=0;
+        if(single!=-2 || blue.single!=-2 || alpha.single!=-2)return false;
+        return reader.TryReadByteChannels(shortCodes,blue.shortCodes,alpha.shortCodes,out channels);
     }
 
     internal bool CanBuildWideGreen => symbols.Length >= 768;

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Faster lossless WebP literal decoding through complete-byte channel fusion,
+  preserving exact pixels, resource limits and cancellation behavior.
 - Lower JPEG decode allocations through bounded private coefficient reuse,
   preserving exact pixels, resource admission and failure behavior.
 - Faster cache-coded lossless WebP decoding with unchanged pixels, working

@@ -31,21 +31,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [JPEG coefficient reuse](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md)
-cuts full-resolution decode time10.4–12.8% and measured allocations63.7%, to
-966,317B/op. Across16 existing decode cases, allocation reductions are44.6–63.7%;
-timings remain qualified short gaps. The bounded private pool retains at most
-4MiB of idle coefficient storage; every lease is zeroed before complete decoding.
-Slower screens are retained, including the conservative4:2:2 result after one
-paired replay did not reproduce its initial slowdown. No new input/settings grid.
-Other191 comparisons/all60 prior passing proofs remain applicable. The207 rows
-select130 independent confirmations and77qualified short screens. Fresh
-**3,711 Release cases perOS** (1,377internal+1,436public+898liveFFmpeg), plus
-49scalar storage/admission controls, pass; unrelated scalar qualification is
-reused. The consumer and allthree examples pass through the **same actual Release
-package on Windows/Linux**.
-Production remains safe managed dependency-free .NET10. Stop the now60passing
-paths; the full parity objective remains open.
+Latest production round: [complete-byte VP8L channels](../benchmarks/WARM-VP8L-BYTE-CHANNELS.md)
+cuts the literal/run decode time36.0%, to1.054x/upper1.094x, with no added
+allocation. All seven affected rows remain qualified short gaps; the slightly
+slower alpha Stream control is retained. Other200comparisons/all60passing proofs
+remain applicable. The207rows select130independent confirmations and77qualified
+short screens. Fresh **3,714 Release cases perOS** (1,380internal+1,436public+
+898liveFFmpeg), plus63internal+243public scalar controls, pass. Unrelated scalar
+proofs are reused. The consumer and allthree examples pass through the **same
+actual Release package on Windows/Linux**. Production remains safe managed
+dependency-free .NET10. Stop the60passing paths; full parity remains open.
 
 **Decode and metadata**
 
@@ -61,8 +56,8 @@ paths; the full parity objective remains open.
 | [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 1,982.59 | 1,388.00 | 1.428 / 1.441 | 748,088 | Gap (independent) |
 | [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 3,499.10 | 3,080.71 | 1.136 / 1.146 | 3,067,227 | Gap (independent) |
 | [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 1,583.21 | 993.36 | 1.594 / 1.773 | 951,078 | Gap (short; qualified) |
-| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8L-BORROWED-GREEN.md) | 10,871.67 | 5,994.64 | 1.814 / 1.859 | 2,327,699 | Gap (short; qualified) |
-| [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-VP8L-BORROWED-GREEN.md) | 4,787.64 | 3,031.33 | 1.579 / 1.638 | 1,924,876 | Gap (short; qualified) |
+| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8L-BYTE-CHANNELS.md) | 10,984.83 | 6,010.87 | 1.827 / 1.900 | 2,327,699 | Gap (short; qualified) |
+| [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-VP8L-BYTE-CHANNELS.md) | 4,691.23 | 3,030.05 | 1.548 / 1.670 | 1,924,876 | Gap (short; qualified) |
 | [PNG RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,904.89 | 1,392.72 | 1.368 / 1.371 | 4,456 | Gap (independent) |
 | [PNG RGBA8, None / live cancelable token](../benchmarks/WARM-PNG-DECODE-BOUNDARIES.md) | 1,929.15 | 1,370.88 | 1.407 / 1.469 | 4,456 | Gap (independent) |
 | [PNG RGBA8, None / exact working limit](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 2,028.73 | 1,395.91 | 1.453 / 1.597 | 68,200 | Gap (short; qualified) |
@@ -125,14 +120,14 @@ paths; the full parity objective remains open.
 | [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 4,967.25 | 3,365.13 | 1.476 / 1.585 | 984,298 | Gap (short; qualified) |
 | [JPEG progressive 4:2:2](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 3,315.96 | 2,247.91 | 1.475 / 1.539 | 847,126 | Gap (short; qualified) |
 | [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 5,130.75 | 3,364.53 | 1.525 / 1.590 | 984,298 | Gap (short; qualified) |
-| [WebP VP8 + alpha](../benchmarks/WARM-VP8L-BORROWED-GREEN.md) | 10,801.06 | 5,965.33 | 1.811 / 1.925 | 1,966,616 | Gap (short; qualified) |
+| [WebP VP8 + alpha](../benchmarks/WARM-VP8L-BYTE-CHANNELS.md) | 10,777.19 | 5,977.78 | 1.803 / 1.888 | 1,966,616 | Gap (short; qualified) |
 | [WebP VP8 opaque, simple luma filter](../benchmarks/WARM-VP8-SIMPLE-FILTER.md) | 8,538.31 | 4,889.76 | 1.746 / 1.765 | 760,548 | Gap (independent) |
 | [WebP VP8 opaque, live cancelable token](../benchmarks/WARM-VP8-CANCELABLE.md) | 8,789.89 | 4,783.31 | 1.838 / 1.843 | 760,548 | Gap (independent) |
 | [WebP VP8, opaque](../benchmarks/WARM-VP8-FILTER8.md) | 8,649.43 | 4,797.64 | 1.803 / 1.808 | 760,548 | Gap (independent) |
-| [WebP VP8L, sixteen-color indexed input](../benchmarks/WARM-VP8L-BORROWED-GREEN.md) | 793.06 | 543.37 | 1.460 / 1.701 | 1,351,972 | Gap (short; qualified) |
-| [WebP VP8L, literal/run input](../benchmarks/WARM-VP8L-BORROWED-GREEN.md) | 3,553.60 | 2,148.63 | 1.654 / 1.735 | 1,074,301 | Gap (short; qualified) |
-| [WebP VP8L, native input](../benchmarks/WARM-VP8L-BORROWED-GREEN.md) | 4,922.43 | 3,007.80 | 1.637 / 1.728 | 1,216,180 | Gap (short; qualified) |
-| [WebP VP8L, native input / live cancelable token](../benchmarks/WARM-VP8L-BORROWED-GREEN.md) | 4,980.60 | 3,030.56 | 1.643 / 1.707 | 1,216,180 | Gap (short; qualified) |
+| [WebP VP8L, sixteen-color indexed input](../benchmarks/WARM-VP8L-BYTE-CHANNELS.md) | 787.37 | 544.00 | 1.447 / 1.477 | 1,351,972 | Gap (short; qualified) |
+| [WebP VP8L, literal/run input](../benchmarks/WARM-VP8L-BYTE-CHANNELS.md) | 2,272.83 | 2,156.57 | 1.054 / 1.094 | 1,074,326 | Gap (short; qualified) |
+| [WebP VP8L, native input](../benchmarks/WARM-VP8L-BYTE-CHANNELS.md) | 4,897.39 | 3,019.50 | 1.622 / 1.713 | 1,216,180 | Gap (short; qualified) |
+| [WebP VP8L, native input / live cancelable token](../benchmarks/WARM-VP8L-BYTE-CHANNELS.md) | 4,918.99 | 3,024.90 | 1.626 / 1.801 | 1,216,180 | Gap (short; qualified) |
 
 **Encode**
 

@@ -139,9 +139,16 @@ internal ref struct WebpLosslessDecoder
                 ? wideSymbol : tables[start].Read(ref reader);
             if (symbol < 256)
             {
-                var red = tables[start + 1].Read(ref reader); var blue = tables[start + 2].Read(ref reader);
-                var alpha = tables[start + 3].Read(ref reader);
-                var pixel = (uint)(alpha << 24 | red << 16 | symbol << 8 | blue);
+                var redTree=tables[start+1];var blueTree=tables[start+2];var alphaTree=tables[start+3];
+                uint pixel;
+                if(redTree.TryReadByteChannels(blueTree,alphaTree,ref reader,out var channels))
+                    pixel=channels|((uint)symbol<<8);
+                else
+                {
+                    var red=redTree.Read(ref reader);var blue=blueTree.Read(ref reader);
+                    var alpha=alphaTree.Read(ref reader);
+                    pixel=(uint)(alpha<<24|red<<16|symbol<<8|blue);
+                }
                 pixels[position++] = pixel; Insert(cache, cacheBits, pixel);
             }
             else if (symbol < 280)

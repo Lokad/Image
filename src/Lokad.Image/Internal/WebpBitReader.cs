@@ -1,3 +1,4 @@
+using System.Buffers.Binary;
 using System.Runtime.CompilerServices;
 
 namespace Lokad.Image.Internal;
@@ -27,6 +28,37 @@ internal ref struct WebpBitReader
         }
         var value = (int)(bits & ((1ul << count) - 1));
         bits >>= count; available -= count; return value;
+    }
+
+    // Trusted complete eight-bit channel trees. On refusal the caller retains
+    // the original three reads, including every partial bit/work/EOF failure.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal bool TryReadByteChannels(ReadOnlySpan<int> red,ReadOnlySpan<int> blue,
+        ReadOnlySpan<int> alpha,out uint channels)
+    {
+        channels=0;
+        if(context.Cancellation.CanBeCanceled)return false;
+        var candidateBits=bits;var candidateAvailable=available;var candidatePosition=position;
+        if(candidateAvailable<=7 && data.Length-candidatePosition>=3)
+        {
+            // Exactly the three bytes required by these codes; never read a
+            // fourth byte for a wider load near the end of the chunk.
+            candidateBits|=(ulong)BinaryPrimitives.ReadUInt16LittleEndian(data.Slice(candidatePosition,2))<<candidateAvailable;
+            candidateBits|=(ulong)data[candidatePosition+2]<<(candidateAvailable+16);
+            candidatePosition+=3;candidateAvailable+=24;
+        }
+        else while(candidateAvailable<24)
+        {
+            if(candidatePosition==data.Length)return false;
+            candidateBits|=(ulong)data[candidatePosition++]<<candidateAvailable;candidateAvailable+=8;
+        }
+        if(!context.TryWork(24))return false;
+        var r=red[(int)candidateBits&255]>>4;
+        var b=blue[(int)(candidateBits>>8)&255]>>4;
+        var a=alpha[(int)(candidateBits>>16)&255]>>4;
+        channels=(uint)(a<<24|r<<16|b);
+        bits=candidateBits>>24;available=candidateAvailable-24;position=candidatePosition;
+        return true;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

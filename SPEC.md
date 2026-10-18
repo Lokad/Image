@@ -865,7 +865,12 @@ Canonical Huffman lookup may resolve an entire symbol using local bit-reader
 state and the existing tables. It charges the same logical bit reads and consumes
 no byte beyond the symbol. Tight work budgets and truncated inputs retain the
 per-bit path, partial consumption and original error precedence. Table admission
-and zero-bit single leaves are unchanged. Large green-code trees can use a
+and zero-bit single leaves are unchanged. With noncancelable tokens, three
+complete eight-bit red/blue/alpha trees may consume one locally staged triplet,
+charging the original 24 logical bit reads and reading only required bytes.
+Insufficient work/input and live tokens retain the original channel reads.
+The existing tables and object storage suffice; no allocation or admission is added.
+Large green-code trees can use a
 12-bit lookup borrowed from the freshly zeroed, unwritten tail of their private
 pixel array. Decoding stops using that lookup before the write cursor reaches
 it, including after a backward reference crosses the boundary; every borrowed
