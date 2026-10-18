@@ -108,6 +108,12 @@ orientation without constructing a pixel buffer. `ImageInfo.OrientedWidth` and
 `OrientedHeight` describe the displayed dimensions. Identification does not
 validate the complete compressed pixel payload. Decode performs that work.
 
+`IdentifyAsync(Stream)` and `DecodeAsync(Stream)` asynchronously acquire input
+through EOF, then run the same CPU validation/decoding. Both accept cancellation,
+leave input open and have corresponding `ImageBudget` methods. Keep the stream
+alive until completion and dispose returned image owners normally. Async input
+uses bounded encoded-input buffering; small-memory inspection is separate work.
+
 Malformed input raises `ImageDataException`, unsupported formats or profiles
 raise `UnsupportedImageException`, exhausted admission limits raise
 `ImageLimitException`, and cancellation raises `OperationCanceledException`.

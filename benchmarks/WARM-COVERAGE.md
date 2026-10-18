@@ -77,10 +77,24 @@ Five further **unmeasured** representatives cover the newly required algorithms:
 
 Baseline/progressive analytical and live FFmpeg compatibility checks cover these
 layouts; they are not performance confirmations. Reuse the existing source
-projections and fixed settings. The bounded checklist remains **218 named cases**:
-209 retained numeric rows plus nine unmeasured new operations. Do not add a
+projections and fixed settings. Including the two async boundaries below, the
+bounded checklist is **220 named cases**: 209 retained numeric rows plus eleven
+unmeasured new operations. Do not add a
 shape, depth or quality grid. Add cases only for a distinct required path omitted
 from this list, with its concrete reason.
+
+Async input adds exactly two **unmeasured** common front-end boundaries:
+`AsyncStreamIdentify/PngRgba8FreshNonSeekable` and
+`AsyncStreamDecode/PngRgba8FreshNonSeekable`. Both reuse the existing PNG8 input
+and full structural/pixel gates, adding actual async reads through EOF, fresh
+private input acquisition/growth/release and independent descriptor/pixel owners.
+They cover the shared async acquisition path and its two different complete
+public operations. Shared-budget awaits have correctness coverage; no new
+codec/depth/stream scheduling grid is added. Resolve equivalent native input
+delivery before timing. The known finite checklist is now **220 cases**: 209
+numeric rows plus eleven unmeasured operations. All existing evidence keeps its
+current status: original synchronous method bodies, field layouts, kernels and
+ownership paths are unchanged; the seventeen prior JPEG rows still need reconfirmation.
 
 Latest [wider RGBA8 horizontal reversal](WARM-HORIZONTAL-FLIP512.md) improves
 single-output flip **22.0%**, passing parity at **0.950× / upper 0.965×**. Two live

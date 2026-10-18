@@ -13,11 +13,16 @@ sizes or hardware. Stop cases already confirmed at ≤1x.
 
 Shared-budget entry points and direct JPEG sample decoding are implemented and
 correctness-qualified; their times and allocations are **unmeasured**. Together
-with new JPEG compatibility paths, the checklist names nine pending
+with new JPEG compatibility paths and async input, the checklist names eleven pending
 representatives using existing inputs. JPEG decode/inspection changed; their rows are explicitly prior
 production. Other codecs, JPEG encoding and image disposal remain unchanged.
 CMYK/YCCK and quarter-width JPEG compatibility paths are correctness-qualified
 but also await the named timing/allocation evidence.
+
+`IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
+input storage, complete validation and independent outputs; two named PNG8 front-end
+representatives remain unmeasured. Ordinary synchronous paths and their evidence
+are unchanged. Shared-budget reservation lifetime across awaits is correctness-tested.
 
 The [direct-sample JPEG quality check](../benchmarks/warm-jpeg-sample-quality-evidence.json)
 reproduces the frozen packets exactly: grayscale **58,823 / 58,910 bytes**

@@ -6,8 +6,9 @@ namespace Lokad.Image;
 /// <remarks>Codec calls reserve their full per-operation MaxWorkingBytes and MaxWork
 /// before executing. Completion returns unused work and temporary memory; decoded
 /// pixels remain charged until their BudgetedImage is disposed. Charges are logical
-/// admission, not GC heap or process RSS. Calls execute synchronously on one thread.</remarks>
-public sealed class ImageBudget
+/// admission, not GC heap or process RSS. CPU work is synchronous; asynchronous
+/// stream entry points retain their reservation across I/O awaits.</remarks>
+public sealed partial class ImageBudget
 {
     private readonly object gate = new();
     private long workingBytes, reservedWork, consumedWork;

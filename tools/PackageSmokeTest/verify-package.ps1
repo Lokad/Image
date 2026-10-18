@@ -194,6 +194,33 @@ if (jpegPixels.Width != 8 || jpegPixels.Height != 8 || jpegPixels.BitDepth != 8 
     throw new Exception("Package consumer JPEG contract differs.");
 for (var y = 0; y < 8; y++)
     if (!jpegPixels.GetRow8(y).SequenceEqual(opaque.GetRow8(y))) throw new Exception("Package consumer JPEG pixels differ.");
+VerifyAsyncInput(jpeg.ToArray()).GetAwaiter().GetResult();
+static async Task VerifyAsyncInput(byte[] packet)
+{
+    using var input = new MemoryStream(packet, writable: false);
+    if (await ImageCodec.IdentifyAsync(input) != ImageCodec.Identify(packet) || !input.CanRead)
+        throw new Exception("Package async Identify or input ownership differs.");
+    using var pixelsInput = new MemoryStream(packet, writable: false);
+    using var pixels = await ImageCodec.DecodeAsync(pixelsInput);
+    using var expected = ImageCodec.Decode(packet);
+    for (var y = 0; y < pixels.Height; y++)
+        if (!pixels.GetRow8(y).SequenceEqual(expected.GetRow8(y))) throw new Exception("Package async pixels differ.");
+    var limits = new ImageLimits { MaxWorkingBytes = 2 * 1024 * 1024, MaxWork = 2_000_000 };
+    var budget = new ImageBudget(limits.MaxWorkingBytes, 2 * limits.MaxWork);
+    using var budgetInfoInput = new MemoryStream(packet, writable: false);
+    if (await budget.IdentifyAsync(budgetInfoInput, limits) != ImageCodec.Identify(packet))
+        throw new Exception("Package async budget Identify differs.");
+    using var budgetInput = new MemoryStream(packet, writable: false);
+    using (var result = await budget.DecodeAsync(budgetInput, new() { Limits = limits }))
+    {
+        if (budget.RemainingWorkingBytes != limits.MaxWorkingBytes - result.Image.Width * result.Image.Height * 4L)
+            throw new Exception("Package async retained admission differs.");
+        for (var y = 0; y < result.Image.Height; y++)
+            if (!result.Image.GetRow8(y).SequenceEqual(expected.GetRow8(y))) throw new Exception("Package async budget pixels differ.");
+    }
+    if (budget.RemainingWorkingBytes != limits.MaxWorkingBytes || !pixelsInput.CanRead || !budgetInput.CanRead || !budgetInfoInput.CanRead)
+        throw new Exception("Package async lifetime/refund differs.");
+}
 var sharedLimits = new ImageLimits { MaxWorkingBytes = 2 * 1024 * 1024, MaxWork = 2_000_000 };
 var callerSamples = Enumerable.Repeat((byte)0xA7, 8 * 27).ToArray();
 var sampleInfo = ImageCodec.DecodeJpeg(jpeg.ToArray(), callerSamples, JpegSampleFormat.Rgb, 27);

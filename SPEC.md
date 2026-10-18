@@ -18,7 +18,7 @@ from required future functionality.
 | Resize | Implemented; hand-computed kernel and alpha cases | Exact dimensions, fit, nearest/bilinear/bicubic, alpha-aware filtering |
 | JPEG caller samples | Gray/RGB/CMYK decode and gray/RGB encode implemented in development | Caller-provided 8-bit samples without mandatory RGBA; explicit source color space/inversion, quality and sampling |
 | JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4×1) / 4:1:0 (4×2) sampling |
-| Stream extensions | Planned | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
+| Stream extensions | Async Identify/Decode input implemented in development; async output and small-memory inspection planned | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
 | Drawing/compositing | Planned | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
 | Text | Planned | Supplied TrueType fonts; size/style/color/position, wrapping, line spacing and layout bounds for overflow/fitting |
 | Failure details | Implemented in development | Typed exhausted-limit and unsupported-feature categories with recognized codec when known |
@@ -1114,7 +1114,28 @@ without an extra exact-length copy. Retention is bounded to one array per
 power-of-two bucket up to4 MiB (less than8 MiB total); live calls never share a
 lease. Original bounded-growth admission, read/work/cancellation and failure
 ordering remain unchanged; the source is read through EOF and never exposed as
-a borrowed input view. Stream
+a borrowed input view.
+
+`IdentifyAsync(Stream)` and `DecodeAsync(Stream)` use `ReadAsync(Memory<byte>,
+CancellationToken)` through EOF with `ConfigureAwait(false)`, then synchronous
+CPU parsing/decoding. They neither use `Task.Run` nor invoke synchronous reads,
+seek, length or position. Caller streams remain open. Identification keeps the
+complete existing structural/EXIF contract. Decode preserves the same samples,
+opt-in orientation and independent output ownership. Async input does not make
+large-image inspection constant-space: that separate boundary is still planned.
+
+The async reader admits an 8 KiB scratch array and actual old/new capacities
+during growth. Capacity is capped by `MaxInputBytes`; the acquired prefix is
+parsed directly without an exact-length final copy. The retained full capacity
+stays charged throughout parsing/decoding and is released with its private lease.
+One live operation owns each leased array; the same bounded idle input pool may
+be reused only after release. Shared-budget async entry points reserve before
+the first read and settle in `finally`, including across suspended I/O, failures
+and cancellation. Surviving `BudgetedImage` pixels retain their own admission.
+Limits, typed failures, cumulative consumed work and caller exceptions remain.
+Callers must keep the input stream alive until the returned ValueTask completes.
+
+Stream
 encoding can leave partial output on failure: callers needing atomic publication
 must stage output themselves. No filesystem or process capabilities are used by
 production code.

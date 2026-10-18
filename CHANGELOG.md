@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Asynchronous stream input for identification and decoding, including shared
+  budgets, cancellation and independent outputs without a final input copy.
 - CMYK/YCCK JPEG decoding, including caller CMYK samples and explicit inversion,
   plus JPEG 4:1:1/4:1:0 sampling layouts.
 - JPEG decoding/encoding with caller-owned grayscale/RGB samples and strides,

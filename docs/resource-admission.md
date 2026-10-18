@@ -83,6 +83,12 @@ conservative growth/final-copy admission. Its idle pool retains less than 8 MiB;
 live operations never share a lease. Pixel and codec storage can also be reused
 after release, as specified in [SPEC.md](../SPEC.md#pixels-and-ownership).
 
+`IdentifyAsync`/`DecodeAsync` use asynchronous reads through EOF, leaving input
+open. They admit 8 KiB scratch plus simultaneous growth capacities and retain
+the full input capacity during CPU parsing/decoding; no final input copy is made.
+Shared reservations span awaits and settle on every exit. Identification still
+validates the full container/EXIF structure; small-memory inspection is planned.
+
 Dispose image buffers and stop using their row spans before disposal. Transforms
 return independent owners. Mutable input buffers require caller synchronization.
 Limits and cancellation are checked during long loops and before associated

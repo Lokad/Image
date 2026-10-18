@@ -4,7 +4,7 @@ using System.Numerics;
 namespace Lokad.Image.Internal;
 
 /// <summary>Private, fully written input for metadata inspection; never exposed to a caller.</summary>
-internal sealed class IdentificationInput : IDisposable
+internal sealed partial class IdentificationInput : IDisposable
 {
     // One idle exact power-of-two array per BCL bucket, at most 8 MiB total.
     // Odd capacities and inputs beyond the ceiling are never retained.
@@ -14,6 +14,7 @@ internal sealed class IdentificationInput : IDisposable
     private readonly int length;
     private IdentificationInput(byte[] buffer, int length) { this.buffer = buffer; this.length = length; }
     public ReadOnlySpan<byte> Span => buffer.AsSpan(0, length);
+    internal int Capacity => buffer.Length;
 
     public static IdentificationInput Read(Stream input, OperationContext context)
     {
