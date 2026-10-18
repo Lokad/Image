@@ -13,8 +13,8 @@ record which comparisons they replace. Only confirmed <=1x paths are stopped
 for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,145 select independent
-confirmations. Sixty-two select qualified screens after changed production: six
+unscored native-alpha incompatibility. Of those numeric rows,144 select independent
+confirmations. Sixty-three select qualified screens after changed production: six
 paired-column byte/word bicubic cases, byte bicubic TightDown8, word bilinear
 Down16, live-token progressive444, five fixed JPEG encodes, two opaque VP8 encodes,
 two PNG Paeth dispatch controls and three PNG encodes after chunk checksum folding, and eight adaptive JPEG encodes
@@ -22,7 +22,7 @@ two PNG Paeth dispatch controls and three PNG encodes after chunk checksum foldi
 plus five VP8L decodes and two compressed-alpha VP8 decodes after borrowed lookup,
 and seven byte/word enlargement boundaries after wider strips, plus byte
 bilinear Up8 after exact integer factorization and live-token baseline444 decode
-after bounded AC cache reuse, plus the thirteen default full-row-cache bicubic
+after bounded AC cache reuse, plus tight byte64×32 after packed weight broadcasts and the thirteen default full-row-cache bicubic
 comparisons after byte-row output specialization. VerticalUp8 now selects its
 first current independent confirmation; it remains a1.020x gap rather than a
 short-screen witness.
@@ -35,8 +35,10 @@ That round reused203 comparisons/all58 passing proofs.
 [Byte bilinear Down8](WARM-BILINEAR-BYTE-ROW-CACHE.md) subsequently improves23.7%;
 that round reuses206 comparisons/all58 passing proofs.
 [Progressive444/live lookahead](WARM-JPEG-REFINEMENT-LOOKAHEAD.md) improves10.1%;
-this latest round likewise reuses206 comparisons/all58 passing proofs.
-The sixty-two short screens remain gaps; older independent timings are explicitly
+that round likewise reuses206 comparisons/all58 passing proofs.
+[Packed byte64×32 weight broadcasts](WARM-BICUBIC-WEIGHT-BROADCAST.md) improve12.5%;
+this latest round also reuses206 comparisons/all58 passing proofs.
+The sixty-three short screens remain gaps; older independent timings are explicitly
 superseded. The two
 former short-regression witnesses are now historical after changed AC emission.
 The unscored raw PNG transparency reference is replaced by approved exact timed
@@ -63,7 +65,7 @@ established before this audit and were reconciled, not expanded.
 | B09 | VP8 Encode8/16 with alpha: changed output writer and word normalization | [Both closed](WARM-CURRENT-VP8-ENCODE.md) |
 | B10 | VP8L Lossless8 literal/run input: changed entropy/run path | [Closed](WARM-CURRENT-VP8L-LITERAL.md) |
 | B11 | Clone,crop,normal orientation,horizontal/vertical flip,half turn,CW/CCW,transpose,transverse at both depths: shared output-pool acquisition | [All20 closed](WARM-CURRENT-EXACT-EDITS.md); retained-two flip unchanged |
-| B12 | The61 named bicubic selectors: changed dispatch/helper/guard paths, default/tight scratch, byte/word and established support widths | [Previous phase closed](WARM-CURRENT-BICUBIC.md); [word](WARM-BICUBIC-PAIRED-COLUMNS.md) and [byte](WARM-BICUBIC-BYTE-PAIRED.md) paired columns plus [byte strips](WARM-BICUBIC-BYTE-STRIPS.md) improved, still <=1x gaps |
+| B12 | The61 named bicubic selectors: changed dispatch/helper/guard paths, default/tight scratch, byte/word and established support widths | [Previous phase closed](WARM-CURRENT-BICUBIC.md); [word](WARM-BICUBIC-PAIRED-COLUMNS.md) and [byte](WARM-BICUBIC-BYTE-PAIRED.md) paired columns plus [byte strips](WARM-BICUBIC-BYTE-STRIPS.md) and [packed weights](WARM-BICUBIC-WEIGHT-BROADCAST.md) improved, still <=1x gaps |
 | B13 | Existing PNG stored/Paeth/predictor,RGB/gray/gray-alpha8/16,packed gray1/2/4,palette1/2/4/8,tRNS,Adam7 and frozen compression-mode rows; four named exact-limit RGBA8/16 ordinary/live-token boundaries | [Up8/16](WARM-PNG-UP-SIMD.md) and [RGB16 Paeth](WARM-PAETH-SIX-CHANNEL.md) parity confirmed; [tight RGBA streaming](WARM-PNG-STREAMING-ROWS.md) improves four gaps; other applicable proofs reused; precise selectors/allocations in the [summary](../docs/benchmark.md) |
 | B14 | JPEG4208/16,restart,gray and geometric live-token/forward output; VP8 ordinary/simple/alpha/live-token/Stream and opaque8/16 encode; VP8L native/indexed/live-token/Stream and exact backend encodes | [VP8 source views](WARM-VP8-SOURCE-VIEWS.md) improve four encodes; [fixed JPEG encodes](WARM-JPEG-FIXED-AC-FUSION.md) and other unchanged proofs reused |
 | B15 | Nearest Down8/16,Up8/16: unchanged early dispatch/integer kernels and allocation path | Existing independent proofs reused |
@@ -79,7 +81,17 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [live refinement reconciliation](warm-jpeg-refinement-lookahead-evidence.json)
+The latest [packed-weight reconciliation](warm-bicubic-weight-broadcast-evidence.json)
+replaces only Tight64x32_8 with a qualified short:12.5% less time,1.527x/upper1.797.
+One exact vector-construction expression changes in the >20/≤36tap byte packed
+core; all arithmetic/order, guards, workspace, work/cancellation and owners remain.
+Generic join first regressed78.7%; retained JIT evidence identifies a full-width
+stack dependency. Direct insert removes it, with no new profile or settings grid.
+Unchanged controls retain their selected evidence; other206 rows/all58 passes
+are reused. Full3680+138scalar/OS and the same actual package consumer/all3examples
+bothOS pass.144selected independent+63qualified short; full parity remains open.
+
+The preceding [live refinement reconciliation](warm-jpeg-refinement-lookahead-evidence.json)
 replaces only ProgressiveCancelable444:10.1% less time, still1.552x/upper1.731.
 Bounded ordinary lookahead retains original logical cursor, pending bits, per-bit
 cancellation/work and immediate updates on every exit. Original fused/scalar

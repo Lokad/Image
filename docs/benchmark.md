@@ -31,20 +31,19 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [progressive JPEG live-token lookahead](../benchmarks/WARM-JPEG-REFINEMENT-LOOKAHEAD.md)
-reduces the existing progressive444/live-token time 10.1%, to 5,206.53 µs /
-1.552x (upper 1.731x), at 2,682,364 B/op. This is a qualified short gap.
-Logical failure state, exact per-bit cancellation/work and immediate coefficient
-updates are preserved, without added heap workspace. Ordinary progressive444 and
-cancelable baseline444 control means stay within 0.9% of retained results.
-Other 206 comparisons and all 58 passing proofs retain their hot paths and
-evidence. No new performance raster, selector or settings grid; passing cases
-are stopped. The 207 rows select 145 independent confirmations and 62 qualified
-short screens. Fresh **3,680 Release cases per OS** (1,359 internal +1,423 public
-+898 live FFmpeg), plus 475 scalar JPEG controls, pass. The consumer and all
-three examples pass through the **same actual Release package on Windows/Linux**.
-Production remains safe managed dependency-free C#/.NET10. Unaffected
-qualification is reused.
+Latest production round: [packed bicubic weight broadcasts](../benchmarks/WARM-BICUBIC-WEIGHT-BROADCAST.md)
+reduces the existing tight RGBA8 64×32 reduction time12.5%, to560.51µs /1.527x
+(upper1.797x), at8,313B/op. This is a qualified short gap. One vector-construction
+expression changes; exact pixels, arithmetic/order, cancellation/work, workspace
+and ownership remain identical. The unchanged wider-byte/word control means stay
+within1.6% of retained results. Other206 comparisons and all58 passing proofs
+retain their hot paths/evidence. No new performance raster, selector or settings
+grid; passing cases are stopped. The207 rows select144 independent confirmations
+and63 qualified short screens. Fresh **3,680 Release cases perOS** (1,359 internal
++1,423 public +898 live FFmpeg), plus138 scalar resize controls, pass. The consumer
+and all three examples pass through the **same actual Release package on
+Windows/Linux**. Production remains safe managed dependency-free C#/.NET10.
+Unchanged qualification is reused.
 
 **Decode and metadata**
 
@@ -212,7 +211,7 @@ qualification is reused.
 | [Bicubic RGBA16, 256×129 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 818.75 | 570.81 | 1.434 / 1.445 | 264,469 | Gap (independent) |
 | [Bicubic RGBA8, 128×64 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 588.84 | 349.09 | 1.687 / 1.701 | 32,889 | Gap (independent) |
 | [Bicubic RGBA16, 128×64 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 606.16 | 414.59 | 1.462 / 1.479 | 65,658 | Gap (independent) |
-| [Bicubic RGBA8, 64×32 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 640.57 | 372.93 | 1.718 / 1.743 | 8,313 | Gap (independent) |
+| [Bicubic RGBA8, 64×32 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-WEIGHT-BROADCAST.md) | 560.51 | 367.05 | 1.527 / 1.797 | 8,313 | Gap (short; qualified) |
 | [Bicubic RGBA16, 64×32 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 611.50 | 383.62 | 1.594 / 1.608 | 16,505 | Gap (independent) |
 | [Bicubic RGBA16, 32×16 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 570.51 | 412.45 | 1.383 / 1.394 | 4,217 | Gap (independent) |
 | [Bicubic RGBA8, 32×16 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 591.45 | 375.61 | 1.575 / 1.580 | 2,169 | Gap (independent) |

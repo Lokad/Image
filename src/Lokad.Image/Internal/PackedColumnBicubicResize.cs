@@ -111,7 +111,7 @@ internal static class PackedColumnBicubicResize
                                 var samples = Avx2.ConvertToVector256Int32(Vector128.Create(p0, p1).AsUInt16());
                                 var values = Avx512F.ConvertToVector512Double(samples);
                                 var w0 = weights0[tx]; var w1 = weights1[tx];
-                                var coefficients = Vector512.Create(w0, w0, w0, w0, w1, w1, w1, w1);
+                                var coefficients = Avx512F.InsertVector256(Vector512.Create(w0), Vector256.Create(w1), 1);
                                 sum = Avx512F.Add(sum, Avx512F.Multiply(values, coefficients));
                             }
                             var sum0 = sum.GetLower(); var sum1 = sum.GetUpper();

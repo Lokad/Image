@@ -17,7 +17,7 @@
 - Faster RGBA8 bilinear enlargement through exact integer factorization,
   preserving pixels, working memory and rounding.
 - Faster RGBA8/16 bicubic filtering through bounded row/column reuse, wider
-  enlargement strips and specialized byte output, preserving exact
+  enlargement strips, packed weight broadcasts and specialized byte output, preserving exact
   pixels and output ownership.
 - Faster adaptive JPEG event planning and fixed-Huffman emission with unchanged
   packets, work and stream callback/failure behavior.
