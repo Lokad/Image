@@ -14,8 +14,9 @@ sizes or hardware. Stop cases already confirmed at ≤1x.
 
 Shared-budget entry points and direct JPEG sample decoding are implemented and
 correctness-qualified; their times and allocations are **unmeasured**. Together
-with JPEG compatibility, async I/O, inspection and drawing, the checklist names twenty-four pending
-representatives using existing inputs. Affected JPEG and fresh-Stream rows are
+with JPEG compatibility, async I/O, inspection, drawing and text layout, the checklist names
+twenty-seven pending representatives, with three original tiny font controls added
+to existing image inputs. Affected JPEG and fresh-Stream rows are
 explicitly prior production. Resident PNG/WebP, JPEG encoding, edits and image
 disposal remain unchanged.
 CMYK/YCCK and quarter-width JPEG compatibility paths are correctness-qualified
@@ -45,10 +46,12 @@ clipping and snapshot semantics for self-overlap without a full-frame copy. Six
 named fill/copy/composite cases remain unmeasured. Resolve equivalent native canvas
 delivery, state restoration and ownership before timing; no numeric status changed.
 
-Standalone TrueType loading and Unicode glyph metrics are correctness-qualified;
-pixel text layout/rendering remain pending. Font preparation will be outside future
-warm text operations, with the same immutable face reused on both sides. No font
-timing/allocation result or complete text support is claimed here.
+Supplied TrueType loading, outline decoding and pixel layout/measurement are
+correctness-qualified. Three named ordinary/packed/composite layout operations
+remain unmeasured; rendering remains pending. Prepare the same immutable face
+outside timing on both sides; complete layout includes needed geometry, positioned
+values, bounds and independent output ownership. Resolve equivalent font-backend
+scope first. Native glyph geometry checks supply no timing/allocation result.
 
 The [direct-sample JPEG quality check](../benchmarks/warm-jpeg-sample-quality-evidence.json)
 reproduces the frozen packets exactly: grayscale **58,823 / 58,910 bytes**

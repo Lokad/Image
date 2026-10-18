@@ -38,5 +38,6 @@ public enum UnsupportedImageFeature
     AlphaCoding,
     FontContainer,
     FontTable,
-    FontMapping
+    FontMapping,
+    FontOutline
 }

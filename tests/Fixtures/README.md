@@ -7,6 +7,14 @@ public [OpenType specification](https://learn.microsoft.com/en-us/typography/ope
 No external font bytes or outlines are included. These controls do not change
 the frozen image-corpus counts below.
 
+`dotnet run -c Release --project tools/Fixtures -- <output> --font-layout`
+generates three tiny original font controls and managed geometry records without
+regenerating images: ordinary Unicode/quadratic outlines, packed BMP contours and
+composite transforms/attachments. `tools/WarmReference/freetype-outline-check.c`
+checks unhinted font-unit glyph bounds/advances through FreeType's public API,
+using headers only from ignored `external/`. This is a development correctness
+check, not a text-performance baseline. Font binaries remain generated/ignored.
+
 These images originate from Lokad.Image's own deterministic `asymmetric-v1`
 pixel recipe in `tools/Shared/OriginalPixels.cs` and independently chosen T.81
 coefficient/scan cases in `tools/Shared/AuthoredJpeg.cs` and VP8L bitstreams in

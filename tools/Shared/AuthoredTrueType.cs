@@ -9,9 +9,11 @@ namespace Lokad.Image.Tooling;
 internal static class AuthoredTrueType
 {
     internal static byte[] Build(bool longLocations = true, bool unicode12 = true, bool glyphArray = true,
-        FontStyle style = FontStyle.Regular, bool shortMetrics = false)
+        FontStyle style = FontStyle.Regular, bool shortMetrics = false, IReadOnlyDictionary<int, byte[]>? glyphOverrides = null)
     {
-        var glyphs = new byte[8][];
+        var glyphCount = glyphOverrides is { Count: > 0 } ? Math.Max(8, glyphOverrides.Keys.Max() + 1) : 8;
+        var glyphs = new byte[glyphCount][];
+        for (var i = 8; i < glyphCount; i++) glyphs[i] = [];
         glyphs[0] = Simple([(0, 0, true), (0, 600, true), (400, 600, true), (400, 0, true)], style);
         glyphs[1] = [];
         glyphs[2] = Simple([(50, 0, true), (300, 700, true), (550, 0, true)], style);
@@ -20,14 +22,15 @@ internal static class AuthoredTrueType
         glyphs[6] = Simple([(200, 780, true), (200, 850, true), (400, 850, true), (400, 780, true)], style);
         glyphs[5] = Composite(glyphs[2], glyphs[6]);
         glyphs[7] = Simple([(100, 100, true), (100, 500, true), (500, 500, true), (500, 100, true)], style);
-        using var outline = new MemoryStream(); var offsets = new int[9];
+        if (glyphOverrides is not null) foreach (var (index, bytes) in glyphOverrides) glyphs[index] = bytes.ToArray();
+        using var outline = new MemoryStream(); var offsets = new int[glyphCount + 1];
         for (var i = 0; i < glyphs.Length; i++)
         {
             offsets[i] = (int)outline.Length; outline.Write(glyphs[i]);
             while (outline.Length % 4 != 0) outline.WriteByte(0);
         }
         offsets[^1] = (int)outline.Length;
-        var locations = new byte[9 * (longLocations ? 4 : 2)];
+        var locations = new byte[offsets.Length * (longLocations ? 4 : 2)];
         for (var i = 0; i < offsets.Length; i++)
             if (longLocations) W32(locations, i * 4, (uint)offsets[i]); else W16(locations, i * 2, offsets[i] / 2);
         var head = new byte[54]; W32(head, 0, 0x00010000); W32(head, 4, 0x00010000); W32(head, 12, 0x5F0F3CF5);
@@ -36,18 +39,26 @@ internal static class AuthoredTrueType
         W16(head, 36, nonempty.Min(g => I16(g, 2))); W16(head, 38, nonempty.Min(g => I16(g, 4)));
         W16(head, 40, nonempty.Max(g => I16(g, 6))); W16(head, 42, nonempty.Max(g => I16(g, 8)));
         var hhea = new byte[36]; W32(hhea, 0, 0x00010000); W16(hhea, 4, 800); W16(hhea, 6, -200); W16(hhea, 8, 200);
-        W16(hhea, 10, 660); W16(hhea, 18, 1); var metricCount = shortMetrics ? 3 : 8; W16(hhea, 34, metricCount);
-        var metrics = new byte[metricCount * 4 + (8 - metricCount) * 2];
+        W16(hhea, 10, 660); W16(hhea, 18, 1); var metricCount = shortMetrics ? 3 : glyphCount; W16(hhea, 34, metricCount);
+        var metrics = new byte[metricCount * 4 + (glyphCount - metricCount) * 2];
         int[] advances = [500, 300, 600, 600, 600, 600, 0, 600];
-        for (var i = 0; i < 8; i++)
+        for (var i = 0; i < glyphCount; i++)
         {
             var bearing = glyphs[i].Length == 0 ? 0 : I16(glyphs[i], 2);
-            var advance = (style & FontStyle.Bold) != 0 ? advances[i] * 11 / 10 : advances[i];
+            var nominal = i < advances.Length ? advances[i] : 600;
+            var advance = (style & FontStyle.Bold) != 0 ? nominal * 11 / 10 : nominal;
             if (i < metricCount) { W16(metrics, i * 4, advance); W16(metrics, i * 4 + 2, bearing); }
             else W16(metrics, metricCount * 4 + (i - metricCount) * 2, bearing);
         }
-        var maxp = new byte[32]; W32(maxp, 0, 0x00010000); W16(maxp, 4, 8); W16(maxp, 6, 4); W16(maxp, 8, 1);
-        W16(maxp, 10, 7); W16(maxp, 12, 2); W16(maxp, 14, 1); W16(maxp, 28, 2); W16(maxp, 30, 2);
+        var maxp = new byte[32]; W32(maxp, 0, 0x00010000); W16(maxp, 4, glyphCount); W16(maxp, 6, 4); W16(maxp, 8, 1);
+        W16(maxp, 10, 7); W16(maxp, 12, 2); W16(maxp, 14, 1); W16(maxp, 28, 2); W16(maxp, 30, 1);
+        if (glyphOverrides is not null)
+        {
+            var simple = glyphs.Where(g => g.Length >= 10 && I16(g, 0) > 0).ToArray();
+            W16(maxp, 6, simple.Length == 0 ? 0 : simple.Max(g => g.Length >= 10 + I16(g, 0) * 2 ? Math.Min(65535, BinaryPrimitives.ReadUInt16BigEndian(g.AsSpan(10 + (I16(g, 0) - 1) * 2)) + 1) : 0));
+            W16(maxp, 8, simple.Length == 0 ? 0 : simple.Max(g => I16(g, 0)));
+            W16(maxp, 10, 65535); W16(maxp, 12, 65535); W16(maxp, 28, 65535); W16(maxp, 30, 64);
+        }
         var os2 = new byte[96]; W16(os2, 0, 4); W16(os2, 2, 500); W16(os2, 4, (style & FontStyle.Bold) != 0 ? 700 : 400); W16(os2, 6, 5);
         W32(os2, 42, 1); "LKIM"u8.CopyTo(os2.AsSpan(58));
         W16(os2, 62, 128 | (style == FontStyle.Regular ? 64 : (style & FontStyle.Bold) != 0 ? 32 : 0) | ((style & FontStyle.Italic) != 0 ? 1 : 0));
@@ -85,6 +96,57 @@ internal static class AuthoredTrueType
         W16(result, 2, Math.Min(I16(first, 2), I16(accent, 2))); W16(result, 4, Math.Min(I16(first, 4), I16(accent, 4)));
         W16(result, 6, Math.Max(I16(first, 6), I16(accent, 6))); W16(result, 8, Math.Max(I16(first, 8), I16(accent, 8)));
         W16(result, 10, 35); W16(result, 12, 2); W16(result, 18, 3); W16(result, 20, 6); return result;
+    }
+
+    internal static byte[] Outline((int X, int Y, bool On)[][] contours, bool compact = true, byte[]? instructions = null)
+    {
+        var points = contours.SelectMany(c => c).ToArray(); var count = points.Length;
+        var header = new byte[10 + contours.Length * 2]; W16(header, 0, contours.Length);
+        if (count != 0)
+        { W16(header, 2, points.Min(p => p.X)); W16(header, 4, points.Min(p => p.Y)); W16(header, 6, points.Max(p => p.X)); W16(header, 8, points.Max(p => p.Y)); }
+        var end = -1; for (var i = 0; i < contours.Length; i++) { end += contours[i].Length; W16(header, 10 + i * 2, end); }
+        using var output = new MemoryStream(); output.Write(header);
+        var code = instructions ?? []; var length = new byte[2]; W16(length, 0, code.Length); output.Write(length); output.Write(code);
+        var flags = new byte[count]; using var xs = new MemoryStream(); using var ys = new MemoryStream(); int x = 0, y = 0;
+        void Delta(MemoryStream target, int value, int shortBit, int sameBit, ref byte flag)
+        {
+            if (compact && value == 0) flag |= (byte)sameBit;
+            else if (compact && value is >= -255 and <= 255)
+            { flag |= (byte)shortBit; if (value > 0) flag |= (byte)sameBit; target.WriteByte((byte)Math.Abs(value)); }
+            else { var bytes = new byte[2]; W16(bytes, 0, value); target.Write(bytes); }
+        }
+        for (var i = 0; i < count; i++)
+        {
+            flags[i] = points[i].On ? (byte)1 : (byte)0;
+            Delta(xs, points[i].X - x, 2, 16, ref flags[i]); Delta(ys, points[i].Y - y, 4, 32, ref flags[i]);
+            x = points[i].X; y = points[i].Y;
+        }
+        for (var i = 0; i < count;)
+        {
+            var copies = 1; while (compact && copies < 256 && i + copies < count && flags[i + copies] == flags[i]) copies++;
+            output.WriteByte((byte)(flags[i] | (copies > 1 ? 8 : 0))); if (copies > 1) output.WriteByte((byte)(copies - 1)); i += copies;
+        }
+        output.Write(xs.ToArray()); output.Write(ys.ToArray()); return output.ToArray();
+    }
+
+    internal readonly record struct Component(int Glyph, int A, int B, int Flags = 3,
+        short Xx = 16384, short Yx = 0, short Xy = 0, short Yy = 16384);
+    internal static byte[] Compound(Component[] components, int xmin = 0, int ymin = 0, int xmax = 1000, int ymax = 1000, byte[]? instructions = null)
+    {
+        using var output = new MemoryStream(); var header = new byte[10]; W16(header, 0, -1);
+        W16(header, 2, xmin); W16(header, 4, ymin); W16(header, 6, xmax); W16(header, 8, ymax); output.Write(header);
+        void Word(int value) { var bytes = new byte[2]; W16(bytes, 0, value); output.Write(bytes); }
+        for (var i = 0; i < components.Length; i++)
+        {
+            var p = components[i]; var flags = p.Flags | (i + 1 < components.Length ? 32 : 0) | (i == 0 && instructions is not null ? 256 : 0);
+            Word(flags); Word(p.Glyph);
+            if ((flags & 1) != 0) { Word(p.A); Word(p.B); } else { output.WriteByte(unchecked((byte)p.A)); output.WriteByte(unchecked((byte)p.B)); }
+            if ((flags & 8) != 0) Word(p.Xx);
+            else if ((flags & 64) != 0) { Word(p.Xx); Word(p.Yy); }
+            else if ((flags & 128) != 0) { Word(p.Xx); Word(p.Yx); Word(p.Xy); Word(p.Yy); }
+        }
+        if (instructions is not null) { Word(instructions.Length); output.Write(instructions); }
+        return output.ToArray();
     }
     private static byte[] Mapping(bool full, bool glyphArray)
     {
@@ -149,7 +211,19 @@ internal static class AuthoredTrueType
             return (int)BinaryPrimitives.ReadUInt32BigEndian(font.AsSpan(20 + i * 16));
         throw new ArgumentException("Missing authored table.", nameof(tag));
     }
-    internal static uint Checksum(byte[] bytes)
+    internal static void NormalizeChecksums(byte[] font)
+    {
+        var head = Offset(font, "head"); W32(font, head + 8, 0);
+        var count = BinaryPrimitives.ReadUInt16BigEndian(font.AsSpan(4));
+        for (var i = 0; i < count; i++)
+        {
+            var offset = (int)BinaryPrimitives.ReadUInt32BigEndian(font.AsSpan(20 + i * 16));
+            var length = (int)BinaryPrimitives.ReadUInt32BigEndian(font.AsSpan(24 + i * 16));
+            W32(font, 16 + i * 16, Checksum(font.AsSpan(offset, length)));
+        }
+        W32(font, head + 8, unchecked(0xB1B0AFBAu - Checksum(font)));
+    }
+    internal static uint Checksum(ReadOnlySpan<byte> bytes)
     {
         uint sum = 0;
         for (var i = 0; i < bytes.Length; i += 4)

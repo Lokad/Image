@@ -52,6 +52,7 @@ remain caller-managed. Existing `ImageCodec` entry points use per-operation limi
 | Exact edits / nearest resize | Supplied pixels plus an independent result; orientation may require a second full result |
 | Drawing / compositing | Each distinct supplied canvas/source once; no snapshot raster, including self-overlap |
 | TrueType face load / lookup | Load: caller input plus one owned copy and 256-byte descriptor; lookup: immutable font StorageBytes |
+| Text layout / measurement | Font, borrowed UTF-16 input, private placement/line capacities and decoded geometry; temporary component/flag/kerning storage and overlapping growth capacities, with no raster allocation |
 | Bilinear / bicubic resize | Source, result, admitted optional geometry/row caches, and 4 KiB for exact low-alpha rounding when needed; tight limits select the original bounded path |
 | Decode Stream input | 8 KiB scratch, simultaneous old/new growth capacities and actual retained capacity throughout decoding; no final full-input copy |
 | Synchronous Identify Stream input | 8 KiB scratch and conservative growth/final-copy admission; parses a private input prefix without the final copy |

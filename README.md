@@ -14,6 +14,8 @@ implemented, with no NuGet dependencies, unsafe code or native bindings.
   transpose and nearest/bilinear/bicubic resize; rectangle fill/copy and alpha compositing.
 - **Streams:** synchronous/asynchronous identification, decoding and encoding;
   fixed-workspace dimension/orientation inspection with `InspectHeaders`.
+- **Text (in development):** supplied TrueType faces, Unicode glyph layout,
+  wrapping and pixel bounds; rendering is still planned.
 
 GIF, animation, ICC color management and metadata round-tripping are deferred.
 [SPEC.md](SPEC.md) defines current support and planned still-image extensions,

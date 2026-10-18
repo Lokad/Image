@@ -6,6 +6,11 @@ using Lokad.Image.Tooling;
 
 var output = Path.GetFullPath(args.Length == 0 ? "tests/Fixtures" : args[0]);
 Directory.CreateDirectory(output);
+if (args.Length == 2 && args[1] == "--font-layout")
+{
+    FontFixtures.Generate(output);
+    return;
+}
 var executable = Environment.GetEnvironmentVariable("LOKAD_IMAGE_FFMPEG") ?? "external/tools/ffmpeg.exe";
 if (!File.Exists(executable)) throw new InvalidOperationException("Register the pinned oracle or set LOKAD_IMAGE_FFMPEG to its actual executable.");
 var executableHash = Hash(File.ReadAllBytes(executable));

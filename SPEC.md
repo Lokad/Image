@@ -20,7 +20,7 @@ from required future functionality.
 | JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4×1) / 4:1:0 (4×2) sampling |
 | Stream extensions | Async Identify/Decode/Encode and fixed-workspace InspectHeaders implemented in development | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
 | Drawing/compositing | Implemented in development | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
-| Text | TrueType face loading/Unicode glyph metrics implemented in development; layout/rendering planned | Supplied TrueType fonts; size/style/color/position, wrapping, line spacing and layout bounds for overflow/fitting |
+| Text | Supplied TrueType loading, outlines and pixel layout/measurement implemented in development; rendering planned | Supplied TrueType fonts; size/style/color/position, wrapping, line spacing and layout bounds for overflow/fitting |
 | Failure details | Implemented in development | Typed exhausted-limit and unsupported-feature categories with recognized codec when known |
 | Shared admission | Implemented in development | ImageBudget codec entry points and caller reservations; coarse per-operation reservation, cumulative charged work and independently retained BudgetedImage outputs |
 | Compression efficiency | Required ongoing work | WebP lossless sizes and lossy size/quality/time; JPEG comparisons at matched quality or size on representative photographs and text/diagrams |
@@ -141,18 +141,55 @@ comes from the supplied `head` flags. There is no synthetic styling or system-fo
 lookup. Returned metric values and the loaded face survive changes to caller input.
 
 Loading checks table ranges/order, selected character mappings, glyph locations
-and headers. It does not yet decode complete outlines, execute hint instructions
+and headers. It does not validate every outline, execute hint instructions
 or verify checksums. Font collections, CFF/WOFF and unsupported mapping/table
 profiles raise typed `FontContainer`, `FontMapping` or `FontTable` unsupported
 features, with no image format assigned. Malformed structure raises `ImageDataException`.
 The implementation follows public [OpenType table definitions](https://learn.microsoft.com/en-us/typography/opentype/spec/otff).
-Text layout, wrapping, measurement in pixels and rendering remain required work.
+Rendering remains required work; layout decodes and validates the outlines it uses.
 
 Input, working-memory, item and work limits plus cancellation apply. Load admits
 supplied input plus one owned copy and a coarse 256-byte descriptor allowance
 before allocation. `StorageBytes` reports retained bytes for caller reservations;
 subsequent lookups admit that font storage and charge bounded search/metric work.
 There is no mutable global font cache or per-lookup font copy.
+
+`TextLayout.Create(font, text, TextOptions)` returns immutable logical
+left-to-right layout in pixels. `FontSize` is pixels per em; style comes from the
+selected supplied face. Supported ordinary horizontal legacy `kern` format-zero
+tables are applied unless `Kerning` is false. There is no bidirectional reordering,
+GSUB/GPOS shaping, synthetic style, variation-axis selection or hint execution.
+Malformed UTF-16 is an argument error; missing scalars use glyph zero.
+
+`WrapWidth` defaults to infinity. Greedy wrapping drops separator spaces/tabs at
+automatic breaks, preserving explicit leading/trailing whitespace otherwise.
+Overlong words break between Unicode scalars; an individual glyph may overflow.
+Nonbreaking spaces are not separators. CRLF is one break; CR/LF and Unicode line/
+paragraph separators also break lines, including empty lines. Tabs advance to the
+next `TabSpaces` space-width stop. The first baseline is `Ascender * scale`;
+subsequent baselines advance by `(Ascender - Descender + max(0, LineGap)) * scale
+* LineSpacing`. Empty text has zero lines/bounds.
+
+`GetGlyph`/`GetLine` return value copies, with original UTF-16 source offsets for
+glyphs. `LayoutBounds` covers nominal line boxes and advances; `InkBounds` covers
+actual quadratic extrema, excluding spaces. `Bounds` is their union, preserving
+negative overhangs. `TextBounds.Translate` positions bounds, and `FitsInside`
+checks overflow. No scale-to-fit search or raster allocation is implicit.
+
+Outlines follow the public [glyf definition](https://learn.microsoft.com/en-us/typography/opentype/spec/glyf):
+packed/repeated flags, implied quadratic points, component transforms and point
+attachments, including phantom points. `USE_MY_METRICS` inherits component phantom
+metrics independently of its outline transform. Instructions are skipped; offsets
+are unhinted, with unscaled offsets when neither offset flag is present. Cycles
+are malformed; nesting beyond 64 glyph nodes raises typed `FontOutline` unsupported.
+Point/contour/component counts, coordinate reads and work are bounded.
+
+Layout owns private placements, lines and the needed decoded geometry; it retains
+the immutable face, not the source string. `StorageBytes` includes that face and
+coarse retained capacities for caller reservations. Admission includes borrowed
+UTF-16 input while preparing, temporary component/flag/kerning storage and old/new
+capacities during growth. Extent dimension/pixel limits apply without a hypothetical
+RGBA frame. Work/cancellation checks cover decoding, layout and curve bounds.
 
 ## Geometry and resizing
 

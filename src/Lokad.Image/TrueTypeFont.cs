@@ -146,7 +146,7 @@ public sealed partial class TrueTypeFont
     private uint Location(int index) => locationWidth == 2 ? (uint)U16(Span(loca)[(index * 2)..]) * 2 : U32(Span(loca)[(index * 4)..]);
     private static void Header(ReadOnlySpan<byte> glyph)
     {
-        if (glyph.Length < 10 || I16(glyph) < -1) throw new ImageDataException("Invalid glyph header.");
+        if (glyph.Length < 10) throw new ImageDataException("Invalid glyph header.");
         if (I16(glyph) != 0 && (I16(glyph[2..]) > I16(glyph[6..]) || I16(glyph[4..]) > I16(glyph[8..])))
             throw new ImageDataException("Invalid glyph bounds.");
     }

@@ -88,7 +88,7 @@ Five further **unmeasured** representatives cover the newly required algorithms:
 Baseline/progressive analytical and live FFmpeg compatibility checks cover these
 layouts; they are not performance confirmations. Reuse the existing source
 projections and fixed settings. Including the async boundaries below, the
-bounded checklist is **233 named cases**: 209 retained numeric rows plus twenty-four
+bounded checklist is **236 named cases**: 209 retained numeric rows plus twenty-seven
 unmeasured new operations. Do not add a
 shape, depth or quality grid. Add cases only for a distinct required path omitted
 from this list, with its concrete reason.
@@ -101,8 +101,8 @@ private input acquisition/growth/release and independent descriptor/pixel owners
 They cover the shared async acquisition path and its two different complete
 public operations. Shared-budget awaits have correctness coverage; no new
 codec/depth/stream scheduling grid is added. Resolve equivalent native input
-delivery before timing. The known finite checklist is now **233 cases**: 209
-numeric rows plus twenty-four unmeasured operations. All existing evidence keeps its
+delivery before timing. The known finite checklist is now **236 cases**: 209
+numeric rows plus twenty-seven unmeasured operations. All existing evidence keeps its
 current status: original synchronous method bodies, field layouts, kernels and
 ownership paths are unchanged by async acquisition. The subsequent synchronous
 decode change above requires reconfirming 23 prior rows.
@@ -121,8 +121,8 @@ Async output adds four **unmeasured** representatives, all on existing inputs:
 These cover distinct new staging/admission/delivery paths, without a codec,
 sampling, depth or scheduling grid. Resolve equivalent native destination
 acquisition/copies and output lifetime before timing. Shared-await correctness
-is separately qualified. The checklist is now **233 cases**: 209 numeric rows
-and twenty-four unmeasured operations. Existing numeric statuses are unchanged;
+is separately qualified. The checklist is now **236 cases**: 209 numeric rows
+and twenty-seven unmeasured operations. Existing numeric statuses are unchanged;
 original encoder bodies, state layouts and codec kernels are untouched. The later
 synchronous decode acquisition change affects only the seven operations above.
 
@@ -159,7 +159,27 @@ clips fill/independent copy/composite, with overlap shifted (1,1). No image/shap
 alpha grid. Resolve equivalent native in-place canvas delivery, state restoration,
 rounding and ownership before timing. Exact BigInteger and bounded native profile
 correctness checks are not performance confirmations. Existing paths/statuses are
-unchanged: 186 current rows, 23 prior rows, 24 named unmeasured boundaries.
+unchanged: 186 current rows, 23 prior rows. Including text below, there are 27
+named unmeasured boundaries.
+
+Text layout/measurement adds three **unmeasured** complete operations on original
+generated fonts, each exercising a distinct required outline/mapping path:
+
+- `TextLayout/OriginalUnicode`: cmap12, long loca, ordinary coordinate words,
+  quadratic extrema and a basic compound accent.
+- `TextLayout/PackedBmp`: cmap4, short loca, packed/repeated flags, implied
+  quadratic points and scaled component offsets.
+- `TextLayout/CompositeTransforms`: two-by-two matrices, point attachment and
+  inherited component metrics.
+
+Reuse the three tiny `--font-layout` controls and one fixed string
+`AV g Á\u0301 \uE000\nAV\tg AV`, size16, wrap64, line spacing1.25. Prepare the
+same immutable face outside timing on both sides; include complete layout,
+needed outline decoding, measurement, positioned values and independent output
+ownership. Resolve equivalent FFmpeg/font-backend scope before timing. The
+15-glyph native geometry check is correctness evidence only. No text timing or
+allocation claim, font/style/size grid, rasterization case or changed numeric
+status follows from this addition. Rendering remains required work.
 
 Latest [wider RGBA8 horizontal reversal](WARM-HORIZONTAL-FLIP512.md) improves
 single-output flip **22.0%**, passing parity at **0.950× / upper 0.965×**. Two live
@@ -422,7 +442,7 @@ Approved baselines, exact managed pixels, source-quality/size comparisons,
 complete operation owners and quiet-VM confidence requirements remain unchanged.
 Centered/clamped crop, AutoOrient and ResizeToFit use the named kernels after
 small geometry work; correctness/composition controls cover those aliases.
-The measured scope excludes GIF/animation, pending drawing/fonts, arbitrary profiles/
+The measured scope excludes GIF/animation, unmeasured drawing/text, arbitrary profiles/
 sizes/hardware, startup and concurrent throughput. Add a later case only when
 concrete evidence identifies a distinct omitted required algorithm or public
 boundary, with a named representative and reason. Do not expand settings grids

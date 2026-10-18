@@ -81,6 +81,13 @@ var font = TrueTypeFont.Load(fontInput); Array.Fill(fontInput, (byte)0xA7);
 if (font.Style != (FontStyle.Bold | FontStyle.Italic) || font.GetGlyphIndex(new System.Text.Rune(0x1F642)) != 7
     || font.GetGlyphMetrics(new System.Text.Rune('A')).AdvanceWidth != 660)
     throw new Exception("Package supplied TrueType ownership/Unicode/metrics differ.");
+var layoutFace = TrueTypeFont.Load(Lokad.Image.Tooling.AuthoredTrueType.Build());
+var textLayout = TextLayout.Create(layoutFace, "AV AVg", new TextOptions { FontSize = 10, WrapWidth = 12 });
+var curveLayout = TextLayout.Create(layoutFace, "g", new TextOptions { FontSize = 10 });
+if (textLayout.GlyphCount != 5 || textLayout.LineCount != 3 || Math.Abs(textLayout.LayoutBounds.Width - 11.2) > 1e-10
+    || textLayout.LayoutBounds.Height != 34 || textLayout.GetGlyph(2).SourceOffset != 3
+    || curveLayout.InkBounds != new TextBounds(0, 4, 6, 5))
+    throw new Exception("Package supplied TrueType layout/wrapping/quadratic bounds differ.");
 using var source = ImageBuffer.Create(2, 1, 16);
 new ushort[] { 12345, 1, 65534, 43210, 54321, 65534, 1, 12345 }.CopyTo(source.GetRow16(0));
 using var flipped = ImageTransforms.FlipHorizontal(source);
