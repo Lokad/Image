@@ -40,6 +40,14 @@ cover single-component samples and packed RGB conversion, without a settings gri
 These six named boundaries await elapsed/allocation evidence; their existing
 codec references do not provide measurements of the new public operations.
 
+The [current direct-sample quality check](warm-jpeg-sample-quality-evidence.json)
+reproduces both frozen managed packets exactly, using the same original gray/RGB
+projections. Gray:58,823/58,910 bytes and PSNR gap0.000033dB; RGB420:74,040/52,093
+bytes and gap0.106110dB. Both pass the existing0.25dB gate, decoder agreement,
+source preservation and independent-output checks. This proves reusable quality
+and size anchors; existing RGBA-normalizing workers do not establish equivalent
+raw-input timing. The two named time/allocation measurements remain open.
+
 JPEG compatibility changes shared frame/header parsing (one/three/four components),
 scan setup (four component slots), sampling validation (horizontal ratios up to
 four), Adobe marker handling and final decode dispatch. Therefore **all 17 existing

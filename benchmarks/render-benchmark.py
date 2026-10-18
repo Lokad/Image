@@ -320,6 +320,13 @@ production. Other codecs, JPEG encoding and image disposal remain unchanged.
 CMYK/YCCK and quarter-width JPEG compatibility paths are correctness-qualified
 but also await the named timing/allocation evidence.
 
+The [direct-sample JPEG quality check](../benchmarks/warm-jpeg-sample-quality-evidence.json)
+reproduces the frozen packets exactly: grayscale **58,823 / 58,910 bytes**
+(managed / SIMD libjpeg-turbo), RGB 4:2:0 **74,040 / 52,093 bytes** (managed / FFmpeg).
+Source PSNR gaps are **0.000033 / 0.106110 dB**, within the existing 0.25 dB gate;
+equal quality numbers are not the matching rule. This reuses size/quality evidence,
+not RGBA operation timings. Raw-sample elapsed time and allocations remain unmeasured.
+
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
 FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,
 normal SIMD, tiering off, nonconcurrent workstation GC. Inputs are the two original
