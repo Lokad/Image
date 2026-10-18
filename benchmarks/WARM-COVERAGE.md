@@ -1,63 +1,25 @@
 # Material warm coverage
 
-Updated 2026-10-18. The current **<=1x warm parity objective is open**: 60 named
-numeric cases already have independent upper<=1, 143 means exceed1, and four
-means<=1 have upper>1. Reuse passing paths and prioritize the largest current
-gaps; do not add a new input or settings grid. The [current summary](../docs/benchmark.md)
-distinguishes parity, measured gaps and confidence-open cases.
+Updated 2026-10-18. The **warm single-CPU parity objective remains open**:
+61 independent passes, 145 measured mean gaps and one confidence-open case across
+207 named rows. The [current three-table summary](../docs/benchmark.md) selects
+126 independent confirmations and81 qualified shorts. Reuse unchanged passing
+paths; do not add an image or settings grid.
 
-[JPEG coefficient reuse](WARM-JPEG-COEFFICIENT-POOL.md) replaces exactly16 existing
-decode timings with qualified short gaps. Full-resolution gains reach10.4–12.8%
-with63.7% fewer measured allocations; smaller/slower screens and one bounded4:2:2
-baseline/candidate replay are retained. Other191 comparisons/all60 passing proofs
-remain applicable. No named case, input or settings grid was added.
+Latest [packed word bicubic broadcasts](WARM-BICUBIC-WORD-BROADCAST.md) improve the
+existing tight-memory RGBA16 64×32 operation13.7%, at1.374x mean/2.313x short upper
+and16,505B/op. Exact pixels, arithmetic, workspace and complete boundaries remain.
+The short has wide native-bracket uncertainty; it does not establish parity.
+Other206comparisons/all61passes are reused. All3,722Release cases perOS and the
+same actual package consumer/allthree examples pass on Windows/Linux. Unchanged
+scalar guards/fallback reuse prior evidence. No long repeat or micro-variant grid.
 
-The finite material checklist's **previous <=2x phase was completed for 0.1.0**.
-Every named required path then had independent quiet evidence with conservative
-upper ≤2x or an explicit unchanged-path reuse proof. Subsequent qualified changes
-record which comparisons they replace. Only confirmed <=1x paths are stopped
-for the current objective.
-
-The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,130 select independent
-confirmations. Seventy-seven select qualified screens after changed production: six
-paired-column byte/word bicubic cases, byte bicubic TightDown8, word bilinear
-Down16, live-token progressive444, five fixed JPEG encodes, two opaque VP8 encodes,
-two PNG Paeth dispatch controls and two PNG encodes after chunk checksum folding plus storedRGBA8 after capacity reservation, and eight adaptive JPEG encodes
-(420 byte/word/restart33,422 byte/word,444 byte/word and gray8) after nonzero planning,
-plus five VP8L decodes and two compressed-alpha VP8 decodes after borrowed lookup,
-and seven byte/word enlargement boundaries after wider strips, plus byte
-bilinear Up8 after exact integer factorization and live-token baseline444 decode
-after bounded AC cache reuse, plus tight byte64×32 after packed weight broadcasts and the thirteen default full-row-cache bicubic
-comparisons after byte-row output specialization, plus default byte64×32 after
-certified quotient bounds, and fourteen previously independent JPEGdecode cases
-after coefficient reuse (two others already selected qualified screens). That round improves31.6% to1.134x/upper1.215x, retains
-206 other comparisons/all60 passing proofs, and adds no workload or image.
-VerticalUp8 now selects its
-first current independent confirmation; it remains a1.020x gap rather than a
-short-screen witness.
-RGB16 Paeth now
-has an independent passing proof. Both affected alpha VP8 encodes have independent
-passing confirmations after their shared source conversion changed.
-Four tight-limit PNG RGBA8/16 ordinary/live-token comparisons now select
-[bounded streaming screens](WARM-PNG-STREAMING-ROWS.md), with19.2–40.7% gains.
-That round reused203 comparisons/all58 passing proofs.
-[Byte bilinear Down8](WARM-BILINEAR-BYTE-ROW-CACHE.md) subsequently improves23.7%;
-that round reuses206 comparisons/all58 passing proofs.
-[Progressive444/live lookahead](WARM-JPEG-REFINEMENT-LOOKAHEAD.md) improves10.1%;
-that round likewise reuses206 comparisons/all58 passing proofs.
-[Packed byte64×32 weight broadcasts](WARM-BICUBIC-WEIGHT-BROADCAST.md) improve12.5%;
-that round also reuses206 comparisons/all58 passing proofs.
-[Four-byte PNG Sub prefixes](WARM-PNG-SUB-PREFIX.md) improve50.5% and independently
-confirm0.851x/upper0.855, reusing206other comparisons.
-[Stored PNG capacity](WARM-PNG-STORED-CAPACITY.md) cuts wordtime48.1%, confirms
-0.861x/upper0.870 and reduces allocation72.9%; byte improves21.0%/allocation71.3%
-but remains1.295x. Now60passes/143gaps/4confidence;other205comparisons reused.
-The sixty-two short screens remain gaps; older independent timings are explicitly
-superseded. The two
-former short-regression witnesses are now historical after changed AC emission.
-The unscored raw PNG transparency reference is replaced by approved exact timed
-color-key comparisons; it is not an unresolved managed gap.
+The finite checklist's **previous <=2x phase was completed for released0.1.0**.
+Its original independent evidence and unchanged-path proofs remain historical;
+subsequent production changes identify exactly which current rows they supersede.
+Only independent upper<=1 paths are stopped for the present objective. The coverage
+items below name required algorithms and public boundaries; links marked closed
+refer to that previous phase. Current results and allocations are in the summary.
 
 Scope is the existing two original513x259 RGBA8/16 rasters, documented projections
 and the named fixed selectors in the linked evidence/renderer. Required still
@@ -80,7 +42,7 @@ established before this audit and were reconciled, not expanded.
 | B09 | VP8 Encode8/16 with alpha: changed output writer and word normalization | [Both closed](WARM-CURRENT-VP8-ENCODE.md) |
 | B10 | VP8L Lossless8 literal/run input: changed entropy/run path | [Closed](WARM-CURRENT-VP8L-LITERAL.md) |
 | B11 | Clone,crop,normal orientation,horizontal/vertical flip,half turn,CW/CCW,transpose,transverse at both depths: shared output-pool acquisition | [All20 closed](WARM-CURRENT-EXACT-EDITS.md); retained-two flip unchanged |
-| B12 | The61 named bicubic selectors: changed dispatch/helper/guard paths, default/tight scratch, byte/word and established support widths | [Previous phase closed](WARM-CURRENT-BICUBIC.md); [word](WARM-BICUBIC-PAIRED-COLUMNS.md) and [byte](WARM-BICUBIC-BYTE-PAIRED.md) paired columns plus [byte strips](WARM-BICUBIC-BYTE-STRIPS.md) and [packed weights](WARM-BICUBIC-WEIGHT-BROADCAST.md) improved, still <=1x gaps |
+| B12 | The61 named bicubic selectors: changed dispatch/helper/guard paths, default/tight scratch, byte/word and established support widths | [Previous phase closed](WARM-CURRENT-BICUBIC.md); [word](WARM-BICUBIC-PAIRED-COLUMNS.md) and [byte](WARM-BICUBIC-BYTE-PAIRED.md) paired columns plus [byte strips](WARM-BICUBIC-BYTE-STRIPS.md) and [byte](WARM-BICUBIC-WEIGHT-BROADCAST.md) and [word](WARM-BICUBIC-WORD-BROADCAST.md) packed weights improved, still <=1x gaps |
 | B13 | Existing PNG stored/Paeth/predictor,RGB/gray/gray-alpha8/16,packed gray1/2/4,palette1/2/4/8,tRNS,Adam7 and frozen compression-mode rows; four named exact-limit RGBA8/16 ordinary/live-token boundaries | [Up8/16](WARM-PNG-UP-SIMD.md), [RGBA8 Sub](WARM-PNG-SUB-PREFIX.md), [stored RGBA16 encode](WARM-PNG-STORED-CAPACITY.md) and [RGB16 Paeth](WARM-PAETH-SIX-CHANNEL.md) parity confirmed; [tight RGBA streaming](WARM-PNG-STREAMING-ROWS.md) improves four gaps; other applicable proofs reused; precise selectors/allocations in the [summary](../docs/benchmark.md) |
 | B14 | JPEG4208/16,restart,gray and geometric live-token/forward output; VP8 ordinary/simple/alpha/live-token/Stream and opaque8/16 encode; VP8L native/indexed/live-token/Stream and exact backend encodes | [VP8 source views](WARM-VP8-SOURCE-VIEWS.md) improve four encodes; [fixed JPEG encodes](WARM-JPEG-FIXED-AC-FUSION.md) and other unchanged proofs reused |
 | B15 | Nearest Down8/16,Up8/16: unchanged early dispatch/integer kernels and allocation path | Existing independent proofs reused |
@@ -89,14 +51,14 @@ established before this audit and were reconciled, not expanded.
 | C03 | WebP resident Identify: distinct RIFF/feature/header/EXIF algorithm, one existing VP8L packet | [Closed](WARM-WEBP-IDENTIFY.md),0.0040x/upper0.0045x,88B/op,explicit FFmpeg parser reference |
 | C04 | Fresh non-exposed seekable Stream Identify on the same C01 PNG: fast metadata boundary exposes input acquisition/read/EOF/ownership costs | [Closed](WARM-PNG-STREAM-IDENTIFY.md),1.445x/upper1.459x,184B/op |
 
-Demonstrated audit gaps are resolved: stored16 PNG2.219x→1.090x, wide-cache
+Historical <=2x audit gaps were resolved: stored16 PNG2.219x→1.090x, wide-cache
 bicubic2.121x→passing current-path evidence, PNG Identify2.797x→1.234x,
 JPEG Identify33.725x→1.840x, and Stream Identify7.863x→1.445x. Each production
 round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [stored-capacity reconciliation](warm-png-stored-capacity-evidence.json)
+Historical [stored-capacity reconciliation](warm-png-stored-capacity-evidence.json)
 replaces only the two storedRGBA8/16 encodes: word independent0.861x/upper0.870,
 1,140,504B/op; byte1.295x/upper1.430,604,319B/op qualified short. Capacity allocation
 is inside the complete fresh-output operation; packets, packing, compression,
