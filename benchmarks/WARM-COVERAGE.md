@@ -1,10 +1,10 @@
 # Material warm coverage
 
 Updated 2026-10-18. The **warm single-CPU parity objective remains open**:
-63 independent passes, 126 measured mean gaps and one confidence-open case across
-190 current rows; 17 prior-production JPEG decode/inspection rows need reconfirmation.
-The [three-table summary](../docs/benchmark.md) retains all 207 numeric rows:
-122 current independent confirmations, 68 current qualified shorts and 17 prior rows.
+63 independent passes, 128 measured mean gaps and one confidence-open case across
+192 current rows; 17 prior-production JPEG decode/inspection rows need reconfirmation.
+The [three-table summary](../docs/benchmark.md) retains all 209 numeric rows:
+122 current independent confirmations, 70 current qualified shorts and 17 prior rows.
 Reuse unchanged passing paths;
 do not add an image or settings grid.
 
@@ -30,23 +30,27 @@ an RGBA frame. Packed rows, original inputs/settings and existing JPEG quality
 gates are fixed; padded rows and opt-in orientation have correctness coverage.
 JPEG sample decoding now also supports CMYK, as described below.
 
-Direct JPEG sample encoding adds two **unmeasured** representatives:
+Direct JPEG sample encoding adds two now **screened** representatives:
 `JpegSamplesEncode/GrayscaleResident` uses the fixed grayscale projection and the
 approved SIMD-enabled libjpeg-turbo reference; `JpegSamplesEncode/Rgb420Resident`
 uses the fixed opaque RGB projection and FFmpeg's 4:2:0 reference. Retain existing
 quality/size matching, with equivalent raw sample delivery, complete row
 normalization, streaming and independent encoded output ownership. The cases
 cover single-component samples and packed RGB conversion, without a settings grid.
-These six named boundaries await elapsed/allocation evidence; their existing
-codec references do not provide measurements of the new public operations.
+The four budget/decode boundaries above remain unmeasured. The [two direct sample
+encode screens](WARM-JPEG-SAMPLE-ENCODE.md) measure gray1.145x/upper1.363x,
+155,007B/op and RGB4202.004x/upper2.216x,297,896B/op. Both are mean gaps, so no long
+confirmation follows. Native raw-input adapters use the same pinned libraries
+and exact frozen packets; each operation includes necessary normalization/coding
+and fresh independent output ownership. Production and H4 qualification are reused.
 
 The [current direct-sample quality check](warm-jpeg-sample-quality-evidence.json)
 reproduces both frozen managed packets exactly, using the same original gray/RGB
 projections. Gray:58,823/58,910 bytes and PSNR gap0.000033dB; RGB420:74,040/52,093
 bytes and gap0.106110dB. Both pass the existing0.25dB gate, decoder agreement,
 source preservation and independent-output checks. This proves reusable quality
-and size anchors; existing RGBA-normalizing workers do not establish equivalent
-raw-input timing. The two named time/allocation measurements remain open.
+and size anchors. The new raw-input screens supply the distinct time/allocation
+evidence; existing RGBA operation timings were not substituted for these paths.
 
 JPEG compatibility changes shared frame/header parsing (one/three/four components),
 scan setup (four component slots), sampling validation (horizontal ratios up to
@@ -73,8 +77,8 @@ Five further **unmeasured** representatives cover the newly required algorithms:
 
 Baseline/progressive analytical and live FFmpeg compatibility checks cover these
 layouts; they are not performance confirmations. Reuse the existing source
-projections and fixed settings. The bounded checklist is now **218 named cases**:
-207 retained numeric rows plus eleven unmeasured new operations. Do not add a
+projections and fixed settings. The bounded checklist remains **218 named cases**:
+209 retained numeric rows plus nine unmeasured new operations. Do not add a
 shape, depth or quality grid. Add cases only for a distinct required path omitted
 from this list, with its concrete reason.
 

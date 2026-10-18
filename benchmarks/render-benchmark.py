@@ -187,6 +187,8 @@ def render():
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-JPEG-VECTOR-AC.md', True),
+        row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-sample-encode-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-JPEG-SAMPLE-ENCODE.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-sample-encode-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-SAMPLE-ENCODE.md', verification='Gap (short; qualified)'),
         row('WebP VP8, opaque‡', 'warm-vp8-prepared-prediction-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8-PREPARED-PREDICTION.md', verification='Gap (short; qualified)'),
         row('WebP VP8, opaque from RGBA16‡', 'warm-vp8-prepared-prediction-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-PREPARED-PREDICTION.md', verification='Gap (short; qualified)'),
         row('WebP VP8 + alpha‡', 'warm-vp8-prepared-prediction-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8-PREPARED-PREDICTION.md', True),
@@ -297,11 +299,11 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 207
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 209
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-18. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 207 retained numeric rows contain **{parity_count} current
+conservative upper ≤1x**. The 209 retained numeric rows contain **{parity_count} current
 parity confirmations, {gap_count} measured gaps and {confidence_count} confidence-open cases**;
 **{reconfirm_count} prior-production JPEG rows need reconfirmation** after the compatibility
 parser changes. Their old times/allocations are historical. Other paths reuse valid
@@ -311,11 +313,10 @@ short screens from independent confirmations. The finite [material checklist](..
 fixed inputs remain; results do not extrapolate to other images, settings,
 sizes or hardware. Stop cases already confirmed at ≤1x.
 
-Shared-budget entry points and direct JPEG grayscale/RGB sample codecs are
-implemented and correctness-qualified; their times and allocations are
-**unmeasured**. The checklist names eleven pending
-representatives using existing inputs. The 207 numeric rows do not cover these
-new boundaries. JPEG decode/inspection changed; their rows are explicitly prior
+Shared-budget entry points and direct JPEG sample decoding are implemented and
+correctness-qualified; their times and allocations are **unmeasured**. Together
+with new JPEG compatibility paths, the checklist names nine pending
+representatives using existing inputs. JPEG decode/inspection changed; their rows are explicitly prior
 production. Other codecs, JPEG encoding and image disposal remain unchanged.
 CMYK/YCCK and quarter-width JPEG compatibility paths are correctness-qualified
 but also await the named timing/allocation evidence.
@@ -324,8 +325,10 @@ The [direct-sample JPEG quality check](../benchmarks/warm-jpeg-sample-quality-ev
 reproduces the frozen packets exactly: grayscale **58,823 / 58,910 bytes**
 (managed / SIMD libjpeg-turbo), RGB 4:2:0 **74,040 / 52,093 bytes** (managed / FFmpeg).
 Source PSNR gaps are **0.000033 / 0.106110 dB**, within the existing 0.25 dB gate;
-equal quality numbers are not the matching rule. This reuses size/quality evidence,
-not RGBA operation timings. Raw-sample elapsed time and allocations remain unmeasured.
+equal quality numbers are not the matching rule. The [two raw-input screens](../benchmarks/WARM-JPEG-SAMPLE-ENCODE.md)
+measure **1.145× / 155,007 B/op** for gray and **2.004× / 297,896 B/op** for RGB420.
+Both remain parity gaps; each includes necessary normalization and independent
+owned output. No long repeat or production change follows these clear mean gaps.
 
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
 FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,

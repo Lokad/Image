@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Text.Json;
+using Lokad.Image;
 
 // Original development worker; no bindings or native assets enter Lokad.Image.
 internal sealed class NativeWarmReference : IDisposable
@@ -282,6 +283,36 @@ internal sealed class NativeWarmReference : IDisposable
         catch { Dispose(); throw; }
     }
 
+    public NativeWarmReference(JpegBenchmarkCase state, int cpu, JpegSampleFormat format, string frozenPacket)
+    {
+        var kind = format switch { JpegSampleFormat.Grayscale => "gray", JpegSampleFormat.Rgb => "rgb", _ => throw new ArgumentOutOfRangeException(nameof(format)) };
+        Executable = Path.Combine(state.Root, "external", "warm-reference", $"jpeg-samples-{kind}-warm");
+        using (var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(state.Root, "external", "warm-reference", $"jpeg-samples-{kind}-identity.json"))))
+            BuildIdentity = document.RootElement.Clone();
+        if (!BuildIdentity.GetProperty("simdEnabled").GetBoolean()
+            || BuildIdentity.GetProperty("workerSha256").GetString() != JpegBenchmarkCase.HashFile(Executable)
+            || BuildIdentity.GetProperty("sourceSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools/WarmReference/jpeg-samples-warm.c"))
+            || BuildIdentity.GetProperty("buildScriptSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools/WarmReference/build-jpeg-samples-linux.sh")))
+            throw new InvalidOperationException("Raw JPEG reference source/build identity differs.");
+        var start = new ProcessStartInfo(Executable) { RedirectStandardInput = true, RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false };
+        foreach (var key in start.Environment.Keys.Where(key => key.StartsWith("JSIMD_FORCE", StringComparison.Ordinal)).ToArray()) start.Environment.Remove(key);
+        foreach (var argument in new[] { "jpeg-samples-encode", state.Input, "513", "259", state.NativeOutput, frozenPacket }) start.ArgumentList.Add(argument);
+        process = Process.Start(start) ?? throw new InvalidOperationException("Could not start raw JPEG reference.");
+        errors = process.StandardError.ReadToEndAsync();
+        try
+        {
+            Ready = Read();
+            if (Ready.GetProperty("state").GetString() != "ready" || Ready.GetProperty("operation").GetString() != "jpeg-samples-encode"
+                || Ready.GetProperty("sampleFormat").GetString() != kind || Ready.GetProperty("width").GetInt32() != 513 || Ready.GetProperty("height").GetInt32() != 259
+                || Ready.GetProperty("cpu").GetInt32() != cpu || Ready.GetProperty("affinityCount").GetInt32() != 1
+                || Ready.GetProperty("codecThreads").GetInt32() != 1 || Ready.GetProperty("conversionThreads").GetInt32() != 1
+                || new[] { "rawInputBorrowed", "normalizationTimed", "outputAcquisitionAndReleaseTimed", "independentLiveOutputs", "frozenPacketExact" }.Any(key => !Ready.GetProperty(key).GetBoolean()))
+                throw new InvalidOperationException("Raw JPEG reference workload/thread/ownership differs.");
+            completed = Ready.GetProperty("initialCompletedOperations").GetInt64();
+        }
+        catch { Dispose(); throw; }
+    }
+
     private JsonElement Read()
     {
         var line = process.StandardOutput.ReadLineAsync().WaitAsync(TimeSpan.FromSeconds(30)).GetAwaiter().GetResult();
@@ -302,7 +333,7 @@ internal sealed class NativeWarmReference : IDisposable
             || sample.ElapsedNanoseconds <= 0 || !double.IsFinite(sample.ElapsedNanoseconds)
             || (sample.CpuElapsedNanoseconds is { } cpuElapsed && (cpuElapsed <= 0 || !double.IsFinite(cpuElapsed)))
             || sample.Cpu != Ready.GetProperty("cpu").GetInt32()
-            || (Ready.GetProperty("operation").GetString() is "png-encode" or "png-smallest8-encode" or "png-smallest16-encode" or "png-fast16-encode" or "png-store16-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "jpeg-encode" or "jpeg-gray-encode" or "jpeg-restart-encode" or "webp-encode" or "webp-opaque-encode" or "webp-lossless-encode" or "png-identify" or "jpeg-identify" or "webp-identify" or "png-stream-identify" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
+            || (Ready.GetProperty("operation").GetString() is "png-encode" or "png-smallest8-encode" or "png-smallest16-encode" or "png-fast16-encode" or "png-store16-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "jpeg-encode" or "jpeg-gray-encode" or "jpeg-restart-encode" or "jpeg-samples-encode" or "webp-encode" or "webp-opaque-encode" or "webp-lossless-encode" or "png-identify" or "jpeg-identify" or "webp-identify" or "png-stream-identify" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
                 : sample.OutputStride < (Ready.GetProperty("operation").GetString() is "nearest-resize" or "bilinear-resize" or "bicubic-resize" or "crop" or "png-stream-crop-fit" or "png-stream16-crop-fit" ? Ready.GetProperty("outputWidth").GetInt32()
                     : Ready.GetProperty("operation").GetString() is "quarter-turn-cw" or "quarter-turn-ccw" or "transpose" or "transverse" ? 259 : HorizontalFlipInput.Width) * (Ready.GetProperty("depth").GetInt32() / 8) * 4)
             || (Ready.GetProperty("operation").GetString() is "png-stream-decode" or "png-stream16-decode" or "png-stream-crop-fit" or "png-stream16-crop-fit" && sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32())

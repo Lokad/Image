@@ -1,8 +1,8 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-18. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 207 retained numeric rows contain **63 current
-parity confirmations, 126 measured gaps and 1 confidence-open cases**;
+conservative upper ≤1x**. The 209 retained numeric rows contain **63 current
+parity confirmations, 128 measured gaps and 1 confidence-open cases**;
 **17 prior-production JPEG rows need reconfirmation** after the compatibility
 parser changes. Their old times/allocations are historical. Other paths reuse valid
 evidence. The earlier
@@ -11,11 +11,10 @@ short screens from independent confirmations. The finite [material checklist](..
 fixed inputs remain; results do not extrapolate to other images, settings,
 sizes or hardware. Stop cases already confirmed at ≤1x.
 
-Shared-budget entry points and direct JPEG grayscale/RGB sample codecs are
-implemented and correctness-qualified; their times and allocations are
-**unmeasured**. The checklist names eleven pending
-representatives using existing inputs. The 207 numeric rows do not cover these
-new boundaries. JPEG decode/inspection changed; their rows are explicitly prior
+Shared-budget entry points and direct JPEG sample decoding are implemented and
+correctness-qualified; their times and allocations are **unmeasured**. Together
+with new JPEG compatibility paths, the checklist names nine pending
+representatives using existing inputs. JPEG decode/inspection changed; their rows are explicitly prior
 production. Other codecs, JPEG encoding and image disposal remain unchanged.
 CMYK/YCCK and quarter-width JPEG compatibility paths are correctness-qualified
 but also await the named timing/allocation evidence.
@@ -24,8 +23,10 @@ The [direct-sample JPEG quality check](../benchmarks/warm-jpeg-sample-quality-ev
 reproduces the frozen packets exactly: grayscale **58,823 / 58,910 bytes**
 (managed / SIMD libjpeg-turbo), RGB 4:2:0 **74,040 / 52,093 bytes** (managed / FFmpeg).
 Source PSNR gaps are **0.000033 / 0.106110 dB**, within the existing 0.25 dB gate;
-equal quality numbers are not the matching rule. This reuses size/quality evidence,
-not RGBA operation timings. Raw-sample elapsed time and allocations remain unmeasured.
+equal quality numbers are not the matching rule. The [two raw-input screens](../benchmarks/WARM-JPEG-SAMPLE-ENCODE.md)
+measure **1.145× / 155,007 B/op** for gray and **2.004× / 297,896 B/op** for RGB420.
+Both remain parity gaps; each includes necessary normalization and independent
+owned output. No long repeat or production change follows these clear mean gaps.
 
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
 FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,
@@ -63,7 +64,7 @@ Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDEN
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
 retains its1.012x mean gap/1.014x upper. Current totals are **63 passes /
-126 gaps / 1 confidence open / 17 prior JPEG rows**.
+128 gaps / 1 confidence open / 17 prior JPEG rows**.
 Every actual/outlier and both quiet guards remain; unchanged qualification is reused.
 Resolve the named JPEG uncertainties before optimization. Stop current passing paths.
 
@@ -187,6 +188,8 @@ Resolve the named JPEG uncertainties before optimization. Stop current passing p
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,444.30 | 1,841.37 | 1.327 / 1.443 | 263,787 | Gap (short; qualified) |
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,173.56 | 1,841.00 | 1.181 / 1.300 | 297,779 | Gap (short; qualified) |
 | [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 1,350.95 | 1,404.64 | 0.962 / 0.970 | 154,892 | Parity confirmed |
+| [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-SAMPLE-ENCODE.md) | 1,240.94 | 1,083.45 | 1.145 / 1.363 | 155,007 | Gap (short; qualified) |
+| [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-SAMPLE-ENCODE.md) | 3,162.12 | 1,577.78 | 2.004 / 2.216 | 297,896 | Gap (short; qualified) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md) | 22,212.16 | 15,539.04 | 1.429 / 1.538 | 2,536,280 | Gap (short; qualified) |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md) | 22,813.15 | 15,629.98 | 1.460 / 1.611 | 2,536,099 | Gap (short; qualified) |
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md) | 22,598.85 | 53,698.20 | 0.421 / 0.424 | 2,616,016 | Parity confirmed |

@@ -84,6 +84,7 @@ public class WarmJpeg
     private CancellationTokenSource? cancellationSource;
     private CancellationToken encodeCancellation;
     private WarmGrayscaleJpeg? grayscale;
+    private WarmJpegSamples? samples;
 
     public static WarmJpegCase[] SelectedCases()
     {
@@ -221,6 +222,10 @@ public class WarmJpeg
             || GCSettings.IsServerGC || Environment.GetEnvironmentVariable("DOTNET_TieredCompilation") != "0"
             || !GC.GetConfigurationVariables().TryGetValue("ConcurrentGC", out var concurrent) || Convert.ToBoolean(concurrent))
             throw new InvalidOperationException("JPEG worker requires one CPU, optimized JIT and non-concurrent workstation GC.");
+        if (Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_SAMPLE_INPUT") == "raw-v1")
+        {
+            samples = new WarmJpegSamples(Case); samples.Setup(cpu, smoke, sampleCount); return;
+        }
         if (Case == WarmJpegCase.EncodeGray8)
         {
             grayscale = new WarmGrayscaleJpeg(); grayscale.Setup(cpu, smoke, sampleCount); return;
@@ -376,6 +381,7 @@ public class WarmJpeg
     [Benchmark]
     public int Managed()
     {
+        if (samples is not null) return samples.Apply();
         if (grayscale is not null) return grayscale.Apply();
         using var output = new MemoryStream(); EncodeManaged(output);
         return checked((int)output.Length) ^ output.GetBuffer()[checked((int)output.Length) / 2];
@@ -412,6 +418,7 @@ public class WarmJpeg
     [GlobalCleanup]
     public void Cleanup()
     {
+        if (samples is not null) { samples.Cleanup(); return; }
         if (grayscale is not null) { grayscale.Cleanup(); return; }
         try
         {
