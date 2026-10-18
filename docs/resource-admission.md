@@ -89,6 +89,16 @@ the full input capacity during CPU parsing/decoding; no final input copy is made
 Shared reservations span awaits and settle on every exit. Identification still
 validates the full container/EXIF structure; small-memory inspection is planned.
 
+`EncodePng/Jpeg/WebpAsync` stage encoded bytes privately, then use caller
+`WriteAsync` in blocks up to 64 KiB. Charge actual staging capacity, 256 bytes
+of stream bookkeeping and 64 bytes per linked chunk, plus existing codec workspaces.
+JPEG retains adaptive coding with an admitted bounded stock-memory destination;
+resource/cancellable fallbacks remain. A separate private output pool retains at
+most two exact arrays totaling 4 MiB. Shared reservations remain held across writes.
+Unused tails are cleared before handing array-backed memory to callers. Work
+includes codec work, staging-copy, cleared-tail and delivery-attempt bytes. No final
+output copy is made before delivery; failures during delivery may leave a prefix.
+
 Dispose image buffers and stop using their row spans before disposal. Transforms
 return independent owners. Mutable input buffers require caller synchronization.
 Limits and cancellation are checked during long loops and before associated

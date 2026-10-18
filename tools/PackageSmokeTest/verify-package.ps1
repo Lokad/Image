@@ -195,6 +195,33 @@ if (jpegPixels.Width != 8 || jpegPixels.Height != 8 || jpegPixels.BitDepth != 8 
 for (var y = 0; y < 8; y++)
     if (!jpegPixels.GetRow8(y).SequenceEqual(opaque.GetRow8(y))) throw new Exception("Package consumer JPEG pixels differ.");
 VerifyAsyncInput(jpeg.ToArray()).GetAwaiter().GetResult();
+VerifyAsyncOutput(opaque).GetAwaiter().GetResult();
+static async Task VerifyAsyncOutput(ImageBuffer image)
+{
+    using var png = new MemoryStream(); await ImageCodec.EncodePngAsync(image, png);
+    using var pngExpected = new MemoryStream(); ImageCodec.EncodePng(image, pngExpected);
+    if (!png.ToArray().AsSpan().SequenceEqual(pngExpected.ToArray()) || !png.CanWrite)
+        throw new Exception("Package async PNG packet/ownership differs.");
+    using var jpegOutput = new MemoryStream(); var options = new JpegEncodeOptions { Quality = 69, BackgroundRgb = 0 };
+    await ImageCodec.EncodeJpegAsync(image, jpegOutput, options);
+    using var jpegExpected = new MemoryStream(); ImageCodec.EncodeJpeg(image, jpegExpected, options);
+    if (!jpegOutput.ToArray().AsSpan().SequenceEqual(jpegExpected.ToArray())) throw new Exception("Package async JPEG differs.");
+    var limits = new ImageLimits { MaxWorkingBytes = 2 * 1024 * 1024, MaxWork = 2_000_000 };
+    var budget = new ImageBudget(limits.MaxWorkingBytes, 4 * limits.MaxWork);
+    using var webp = new MemoryStream();
+    await budget.EncodeWebpAsync(image, webp, new() { Limits = limits, Lossless = true });
+    using var webpExpected = new MemoryStream(); ImageCodec.EncodeWebp(image, webpExpected, new() { Lossless = true });
+    var gray = new byte[image.Width * image.Height];
+    for (var y = 0; y < image.Height; y++) for (var x = 0; x < image.Width; x++) gray[y * image.Width + x] = image.GetRow8(y)[x * 4];
+    using var samples = new MemoryStream();
+    await budget.EncodeJpegAsync(gray.AsMemory(), image.Width, image.Height, JpegSampleFormat.Grayscale, samples,
+        options: new() { Limits = limits, Quality = 69 });
+    using var samplesExpected = new MemoryStream();
+    ImageCodec.EncodeJpeg(gray, image.Width, image.Height, JpegSampleFormat.Grayscale, samplesExpected, options: new() { Quality = 69 });
+    if (!webp.ToArray().AsSpan().SequenceEqual(webpExpected.ToArray()) || !samples.ToArray().AsSpan().SequenceEqual(samplesExpected.ToArray())
+        || budget.RemainingWorkingBytes != budget.MaxWorkingBytes || budget.ConsumedWork <= 0 || !webp.CanWrite || !samples.CanWrite)
+        throw new Exception("Package async output shared admission/packets/ownership differs.");
+}
 static async Task VerifyAsyncInput(byte[] packet)
 {
     using var input = new MemoryStream(packet, writable: false);

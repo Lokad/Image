@@ -12,7 +12,7 @@ implemented, with no NuGet dependencies, unsafe code or native bindings.
 - **WebP:** lossy VP8 and lossless VP8L, including alpha and lossless hidden RGB.
 - **Editing:** 8/16-bit RGBA, EXIF orientation, crop, flips, quarter turns,
   transpose and nearest/bilinear/bicubic resize.
-- **Streams:** synchronous I/O and asynchronous input with `IdentifyAsync`/`DecodeAsync`.
+- **Streams:** synchronous and asynchronous identification, decoding and encoding.
 
 GIF, animation, ICC color management and metadata round-tripping are deferred.
 [SPEC.md](SPEC.md) defines current support and planned still-image extensions,

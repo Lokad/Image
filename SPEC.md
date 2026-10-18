@@ -18,7 +18,7 @@ from required future functionality.
 | Resize | Implemented; hand-computed kernel and alpha cases | Exact dimensions, fit, nearest/bilinear/bicubic, alpha-aware filtering |
 | JPEG caller samples | Gray/RGB/CMYK decode and gray/RGB encode implemented in development | Caller-provided 8-bit samples without mandatory RGBA; explicit source color space/inversion, quality and sampling |
 | JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4×1) / 4:1:0 (4×2) sampling |
-| Stream extensions | Async Identify/Decode input implemented in development; async output and small-memory inspection planned | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
+| Stream extensions | Async Identify/Decode/Encode implemented in development; small-memory inspection planned | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
 | Drawing/compositing | Planned | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
 | Text | Planned | Supplied TrueType fonts; size/style/color/position, wrapping, line spacing and layout bounds for overflow/fitting |
 | Failure details | Implemented in development | Typed exhausted-limit and unsupported-feature categories with recognized codec when known |
@@ -1134,6 +1134,33 @@ the first read and settle in `finally`, including across suspended I/O, failures
 and cancellation. Surviving `BudgetedImage` pixels retain their own admission.
 Limits, typed failures, cumulative consumed work and caller exceptions remain.
 Callers must keep the input stream alive until the returned ValueTask completes.
+
+`EncodePngAsync`, `EncodeJpegAsync` and `EncodeWebpAsync` run CPU encoding into
+private admitted staging, then call `WriteAsync(ReadOnlyMemory<byte>, token)`
+in blocks of at most 64 KiB with `ConfigureAwait(false)`. No worker thread,
+concurrent codec, synchronous caller write/flush, seek or final `ToArray` copy is
+used. Caller streams stay open. Keep image/supplied samples stable and output
+alive until completion. The JPEG sample overload uses `ReadOnlyMemory<byte>`;
+it preserves positive strides, source ownership and direct gray/RGB processing
+without an RGBA frame. Corresponding `ImageBudget` methods retain reservations
+until delivery finishes and settle consumed work on every exit.
+
+Staging normally uses linked private chunks, each at most 64 KiB. Actual byte
+capacity plus coarse 256-byte stream and 64-byte per-chunk bookkeeping allowances
+count toward working memory. Chunk capacity also respects the remaining working
+and output allowance. JPEG can use a fixed stock MemoryStream backed by a private
+array, admitted alongside codec/event workspace, to retain the existing adaptive
+Huffman policy. Capacity is bounded by the existing stuffed-entropy upper bound
+and `MaxOutputBytes`; the original resource/cancellable fixed-coding fallback
+remains available. No existing synchronous encoder path is changed.
+
+Private output reuse retains at most two exact arrays totaling 4 MiB; active
+operations never share a lease and only fully written prefixes are delivered.
+Unused array tails are cleared before delivery, including when a caller recovers
+the backing array from ReadOnlyMemory. Codec work, staged-copy bytes, cleared-tail
+bytes and delivery-attempt bytes count toward `MaxWork`.
+Errors during staging leave caller output untouched. Delivery errors/cancellation
+may leave a written prefix; discard it when atomic publication is required.
 
 Stream
 encoding can leave partial output on failure: callers needing atomic publication

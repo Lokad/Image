@@ -114,6 +114,13 @@ leave input open and have corresponding `ImageBudget` methods. Keep the stream
 alive until completion and dispose returned image owners normally. Async input
 uses bounded encoded-input buffering; small-memory inspection is separate work.
 
+`EncodePngAsync`, `EncodeJpegAsync` and `EncodeWebpAsync` stage encoded bytes within
+working/output limits, then write asynchronously. They leave output open and
+have `ImageBudget` counterparts. The JPEG sample overload accepts borrowed
+`ReadOnlyMemory<byte>` gray/RGB samples with the same stride/quality controls.
+Keep source storage stable until completion. No final `ToArray` copy is needed;
+discard partial output after a write failure or cancellation.
+
 Malformed input raises `ImageDataException`, unsupported formats or profiles
 raise `UnsupportedImageException`, exhausted admission limits raise
 `ImageLimitException`, and cancellation raises `OperationCanceledException`.

@@ -77,8 +77,8 @@ Five further **unmeasured** representatives cover the newly required algorithms:
 
 Baseline/progressive analytical and live FFmpeg compatibility checks cover these
 layouts; they are not performance confirmations. Reuse the existing source
-projections and fixed settings. Including the two async boundaries below, the
-bounded checklist is **220 named cases**: 209 retained numeric rows plus eleven
+projections and fixed settings. Including the async boundaries below, the
+bounded checklist is **224 named cases**: 209 retained numeric rows plus fifteen
 unmeasured new operations. Do not add a
 shape, depth or quality grid. Add cases only for a distinct required path omitted
 from this list, with its concrete reason.
@@ -91,10 +91,28 @@ private input acquisition/growth/release and independent descriptor/pixel owners
 They cover the shared async acquisition path and its two different complete
 public operations. Shared-budget awaits have correctness coverage; no new
 codec/depth/stream scheduling grid is added. Resolve equivalent native input
-delivery before timing. The known finite checklist is now **220 cases**: 209
-numeric rows plus eleven unmeasured operations. All existing evidence keeps its
+delivery before timing. The known finite checklist is now **224 cases**: 209
+numeric rows plus fifteen unmeasured operations. All existing evidence keeps its
 current status: original synchronous method bodies, field layouts, kernels and
 ownership paths are unchanged; the seventeen prior JPEG rows still need reconfirmation.
+
+Async output adds four **unmeasured** representatives, all on existing inputs:
+
+- `AsyncStreamEncode/PngRgba8FreshNonSeekable`: batched chunk staging, complete
+  encode, asynchronous delivery and independent caller-owned output.
+- `AsyncStreamEncode/JpegRgba8FreshNonSeekable`: the distinct stock-memory adaptive
+  admission probe and bounded contiguous staging for the existing RGBA8 anchor.
+- `AsyncStreamEncode/JpegRgb420Samples`: direct borrowed RGB memory and the separate
+  sample/adaptive admission boundary, reusing the fixed RGB420 projection.
+- `AsyncStreamEncode/WebpLosslessRgba8FreshNonSeekable`: byte-at-a-time bit-writer
+  emission into staging, distinct from PNG's batched writes, with exact hidden RGB.
+
+These cover distinct new staging/admission/delivery paths, without a codec,
+sampling, depth or scheduling grid. Resolve equivalent native destination
+acquisition/copies and output lifetime before timing. Shared-await correctness
+is separately qualified. The checklist is now **224 cases**: 209 numeric rows
+and fifteen unmeasured operations. Existing numeric statuses are unchanged;
+original synchronous method bodies, state layouts and codec kernels are untouched.
 
 Latest [wider RGBA8 horizontal reversal](WARM-HORIZONTAL-FLIP512.md) improves
 single-output flip **22.0%**, passing parity at **0.950× / upper 0.965×**. Two live
