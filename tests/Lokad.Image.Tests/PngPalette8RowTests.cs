@@ -22,6 +22,10 @@ public sealed class PngPalette8RowTests
     [InlineData(256, 0)] [InlineData(256, 17)]
     [InlineData(255, 256)] [InlineData(257, 256)] [InlineData(1025, 256)]
     [InlineData(513, 0)] [InlineData(513, 255)]
+    [InlineData(513, 1)] [InlineData(513, 2)]
+    [InlineData(513, 63)] [InlineData(513, 64)] [InlineData(513, 65)]
+    [InlineData(513, 127)] [InlineData(513, 128)] [InlineData(513, 129)]
+    [InlineData(513, 191)] [InlineData(513, 192)] [InlineData(513, 193)]
     public void PreservesAllIndicesChannelsAndPartialAlphaWithUnalignedGuards(int width, int alphaEntries)
     {
         var input = new byte[width + 2];
@@ -73,6 +77,15 @@ public sealed class PngPalette8RowTests
         Assert.Equal("PNG palette index out of range.", error.Message);
         Assert.Equal(new byte[] { 11, 22, 33, 0, 44, 55, 66, 255 }, output[..8]);
         Assert.All(output.Skip(8), value => Assert.Equal((byte)0xa5, value));
+    }
+
+    [Fact]
+    public void PartialAlphaChecksCancellationBeforeVectorOutput()
+    {
+        var output = Enumerable.Repeat((byte)0xa5, 513 * 4).ToArray();
+        Assert.Throws<OperationCanceledException>(() => PngCodec.CopyPalette8Row(
+            new byte[513], output, Palette(), new byte[] { 0, 1 }, new CancellationToken(true)));
+        Assert.All(output, value => Assert.Equal((byte)0xa5, value));
     }
 
     [Theory]

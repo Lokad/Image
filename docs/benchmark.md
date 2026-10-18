@@ -1,8 +1,8 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-18. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 207 numeric rows contain **62 confirmed parity
-cases, 144 measured gaps and 1 confidence-open cases**. The earlier
+conservative upper ≤1x**. The 207 numeric rows contain **63 confirmed parity
+cases, 143 measured gaps and 1 confidence-open cases**. The earlier
 ≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
@@ -31,23 +31,23 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [parallel fixed JPEG fields](../benchmarks/WARM-JPEG-FIXED-FIELDS.md)
-improves five complete encodes **14.0–17.0%**, with unchanged packets, quality,
-allocations and byte callbacks. Every mean remains above parity; these are
-qualified shorts. Other 202 comparisons and all 62 passing proofs remain valid.
-Fresh **3,727 Release tests per OS** (1,392 internal + 1,437 public + 898 live
-FFmpeg), 33 affected checks per OS with AVX-512 disabled and the **same actual
-package consumer and all three examples on Windows and Linux** pass. Unaffected
-scalar qualification is reused. Production remains safe managed dependency-free
-.NET 10; 256 fixed stack bytes fit the existing 8 KiB encoder admission.
+Latest [PNG partial transparency expansion](../benchmarks/WARM-PNG-PARTIAL-ALPHA.md)
+improves its existing complete decode **33.3%** and independently passes parity:
+**0.984×**, conservative upper **0.992×**, unchanged pixels/hidden RGB and
+**2,208 B/op**. Other 206 comparisons and all 62 prior passing proofs remain valid.
+Fresh **3,739 Release tests per OS** (1,404 internal + 1,437 public + 898 live FFmpeg),
+119 affected checks/OS with AVX-512 disabled and the **same actual package consumer
+and all three examples on Windows/Linux** pass. Unaffected scalar qualification is
+reused. Production remains safe managed dependency-free .NET 10; no new table,
+heap/stack array, field, reservation or logical work charge.
 
 Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDENCE.md)
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
-retains its1.012x mean gap/1.014x upper. Current totals are**62passes/144gaps/1confidence**,
+retains its1.012x mean gap/1.014x upper. Current totals are**63passes/143gaps/1confidence**,
 with124independent selected confirmations+83qualified shorts. Every actual/outlier
 and both quiet guards remain; unchanged production/package qualification is reused.
-No builds, repeat-until-pass or small residual tuning. Stop the62passing paths.
+No builds, repeat-until-pass or small residual tuning. Stop the63passing paths.
 
 **Decode and metadata**
 
@@ -102,7 +102,7 @@ No builds, repeat-until-pass or small residual tuning. Stop the62passing paths.
 | [PNG gray-alpha16, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,563.09 | 1,795.59 | 0.871 / 0.874 | 4,456 | Parity confirmed |
 | [PNG byte indices / sixteen-entry palette + tRNS, None](../benchmarks/WARM-PNG-SHORT-PALETTE.md) | 144.22 | 109.47 | 1.317 / 1.327 | 1,496 | Gap (independent) |
 | [PNG palette8 + tRNS, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 349.92 | 364.06 | 0.961 / 0.970 | 2,456 | Parity confirmed |
-| [PNG palette8 + two-entry tRNS, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 540.03 | 363.49 | 1.486 / 1.494 | 2,208 | Gap (independent) |
+| [PNG palette8 + two-entry tRNS, None](../benchmarks/WARM-PNG-PARTIAL-ALPHA.md) | 360.10 | 365.80 | 0.984 / 0.992 | 2,208 | Parity confirmed |
 | [PNG palette4 + tRNS → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 109.81 | 140.53 | 0.781 / 0.799 | 984 | Parity confirmed |
 | [PNG palette2 + tRNS → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 66.42 | 97.53 | 0.681 / 0.686 | 688 | Parity confirmed |
 | [PNG palette1 + tRNS → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 54.06 | 88.92 | 0.608 / 0.611 | 552 | Parity confirmed |

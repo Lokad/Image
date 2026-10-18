@@ -1,24 +1,23 @@
 # Material warm coverage
 
 Updated 2026-10-18. The **warm single-CPU parity objective remains open**:
-62 independent passes, 144 measured mean gaps and one confidence-open case across
+63 independent passes, 143 measured mean gaps and one confidence-open case across
 207 named rows. The [three-table summary](../docs/benchmark.md) selects 124
 independent confirmations and 83 qualified shorts. Reuse unchanged passing paths;
 do not add an image or settings grid.
 
-Latest [parallel fixed JPEG fields](WARM-JPEG-FIXED-FIELDS.md) improve the
-five fixed-Huffman forward-only/live-token encodes by 14.0–17.0%. Packets, quality,
-allocations, byte callbacks and resource/failure behavior remain unchanged;
-256 fixed stack bytes fit the existing 8 KiB admission. All five remain qualified
-short gaps. Other 202 comparisons and all 62 passing proofs are reused.
-All 3,727 Release tests per OS, 33 affected checks per OS with AVX-512 disabled,
-and the same actual private package consumer and all three examples pass on
-Windows and Linux. No category, amplitude, width, table or inlining grid follows.
+Latest [partial PNG transparency expansion](WARM-PNG-PARTIAL-ALPHA.md) improves
+the existing palette8/two-entry tRNS complete decode **33.3%**, passing parity
+at **0.984× / upper 0.992×** with unchanged pixels, hidden RGB and 2,208 B/op.
+Register-only alpha completion adds no table, heap/stack array, reservation or
+work charge. Other 206 comparisons and all 62 prior passing proofs remain valid.
+All 3,739 Release tests/OS, 119 affected hardware-off checks/OS and the same actual
+private package consumer/all three examples pass on Windows/Linux. This path stops.
 
-Earlier [packed byte bicubic reduction](WARM-BICUBIC-PACKED-REDUCTION.md) retains
-its 19.2% gain; cancelable PNG materialization and certified JPEG reconstruction
-also retain their gains and qualification. Adaptive gray JPEG remains independently
-passing. Those executed paths remain unchanged.
+Earlier [fixed JPEG fields](WARM-JPEG-FIXED-FIELDS.md) retain 14.0–17.0% gains,
+[packed byte bicubic reduction](WARM-BICUBIC-PACKED-REDUCTION.md) retains 19.2%,
+and PNG block materialization/JPEG reconstruction retain their gains. Executed
+paths remain unchanged; no passing case is retuned or matrix expanded.
 
 The finite checklist's **previous <=2x phase was completed for released0.1.0**.
 Its original independent evidence and unchanged-path proofs remain historical;

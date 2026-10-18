@@ -34,8 +34,8 @@
   preparation, and faster fixed-Huffman emission, preserving packets, work, limits
   and stream callback/failure behavior.
 - Faster VP8 source conversion with unchanged packets, alpha and resource charges.
-- Faster PNG checksums, packing, Up/Sub filters and RGB16 Paeth decoding, with
-  fewer stored-PNG output allocations and unchanged packets, samples and limits.
+- Faster PNG checksums, packing, filters and palette expansion with partial
+  transparency, with fewer stored-PNG allocations and unchanged samples and limits.
 - Faster cancelable PNG materialization through separate block dispatch and
   bounded literal batching, alongside tight RGBA streaming inflation, preserving
   pixels, admission, work and failure ordering.

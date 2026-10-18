@@ -123,7 +123,7 @@ def render():
         row('PNG gray-alpha16, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGrayAlpha16', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG byte indices / sixteen-entry palette + tRNS, None', 'warm-png-short-palette-evidence.json', ['observations', 2], 'WARM-PNG-SHORT-PALETTE.md', True),
         row('PNG palette8 + tRNS, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('PNG palette8 + two-entry tRNS, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette8PartialAlpha', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
+        row('PNG palette8 + two-entry tRNS, None', 'warm-png-partial-alpha-evidence.json', ['cases', 'DecodePalette8PartialAlpha', -1], 'WARM-PNG-PARTIAL-ALPHA.md', True),
         row('PNG palette4 + tRNS → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG palette2 + tRNS → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette2', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG palette1 + tRNS → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette1', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
@@ -324,23 +324,23 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [parallel fixed JPEG fields](../benchmarks/WARM-JPEG-FIXED-FIELDS.md)
-improves five complete encodes **14.0–17.0%**, with unchanged packets, quality,
-allocations and byte callbacks. Every mean remains above parity; these are
-qualified shorts. Other 202 comparisons and all 62 passing proofs remain valid.
-Fresh **3,727 Release tests per OS** (1,392 internal + 1,437 public + 898 live
-FFmpeg), 33 affected checks per OS with AVX-512 disabled and the **same actual
-package consumer and all three examples on Windows and Linux** pass. Unaffected
-scalar qualification is reused. Production remains safe managed dependency-free
-.NET 10; 256 fixed stack bytes fit the existing 8 KiB encoder admission.
+Latest [PNG partial transparency expansion](../benchmarks/WARM-PNG-PARTIAL-ALPHA.md)
+improves its existing complete decode **33.3%** and independently passes parity:
+**0.984×**, conservative upper **0.992×**, unchanged pixels/hidden RGB and
+**2,208 B/op**. Other 206 comparisons and all 62 prior passing proofs remain valid.
+Fresh **3,739 Release tests per OS** (1,404 internal + 1,437 public + 898 live FFmpeg),
+119 affected checks/OS with AVX-512 disabled and the **same actual package consumer
+and all three examples on Windows/Linux** pass. Unaffected scalar qualification is
+reused. Production remains safe managed dependency-free .NET 10; no new table,
+heap/stack array, field, reservation or logical work charge.
 
 Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDENCE.md)
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
-retains its1.012x mean gap/1.014x upper. Current totals are**62passes/144gaps/1confidence**,
+retains its1.012x mean gap/1.014x upper. Current totals are**63passes/143gaps/1confidence**,
 with124independent selected confirmations+83qualified shorts. Every actual/outlier
 and both quiet guards remain; unchanged production/package qualification is reused.
-No builds, repeat-until-pass or small residual tuning. Stop the62passing paths.
+No builds, repeat-until-pass or small residual tuning. Stop the63passing paths.
 
 **Decode and metadata**
 
