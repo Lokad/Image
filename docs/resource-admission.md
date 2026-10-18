@@ -56,6 +56,7 @@ remain caller-managed. Existing `ImageCodec` entry points use per-operation limi
 | PNG decode | Encoded input, concatenated IDAT, result, pass rows/palette/transparency, 4 KiB framing scratch and 256 KiB inflater allowance; optional filtered storage is separately admitted |
 | PNG encode | Source, packed row, 64 KiB IDAT storage and 1 MiB BCL compression allowance, admitted before the signature |
 | JPEG decode | Encoded input, parser/tables, padded coefficient/sample planes and RGBA result; orientation is admitted in the same operation |
+| JPEG caller-sample decode | Supplied encoded/destination spans and the same parser/planes; orientation writes directly into caller storage without an RGBA frame |
 | JPEG encode | Source plus 8 KiB fixed workspace; eligible adaptive coding additionally admits event capacity and 64 KiB scratch |
 | VP8L decode / encode | Decode admits trees/cache/transform rasters and simultaneous conversion buffers; encode admits source plus 8 KiB fixed workspace and counts output before streaming |
 | VP8 decode / encode | Decode admits models/modes, padded YUV, alpha and RGBA phases; encode admits source/reconstruction planes, models, alpha and arithmetic-buffer capacity, including old/new growth overlap |

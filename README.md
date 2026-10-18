@@ -7,6 +7,7 @@ implemented, with no NuGet dependencies, unsafe code or native bindings.
   and Adam7; encode grayscale/RGB/grayscale-alpha/RGBA at 8 or 16 bits.
 - **JPEG:** baseline/progressive decode; baseline encode with grayscale,
   subsampling, restart markers and explicit alpha flattening.
+  Decode directly into caller-owned grayscale/RGB samples with `DecodeJpeg`.
 - **WebP:** lossy VP8 and lossless VP8L, including alpha and lossless hidden RGB.
 - **Editing:** 8/16-bit RGBA, EXIF orientation, crop, flips, quarter turns,
   transpose and nearest/bilinear/bicubic resize.

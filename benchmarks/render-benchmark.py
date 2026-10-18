@@ -301,8 +301,9 @@ short screens from independent confirmations. The finite [material checklist](..
 fixed inputs remain; results do not extrapolate to other images, settings,
 sizes or hardware. Stop cases already confirmed at ≤1x.
 
-Shared-budget entry points are implemented and correctness-qualified but their
-elapsed times and allocations are **unmeasured**. The checklist names two pending
+Shared-budget entry points and direct JPEG grayscale/RGB sample decoding are
+implemented and correctness-qualified; their times and allocations are
+**unmeasured**. The checklist names four pending
 representatives using existing inputs. Original codec entry points and image
 disposal remain unchanged; the 207 numeric rows do not cover these new boundaries.
 

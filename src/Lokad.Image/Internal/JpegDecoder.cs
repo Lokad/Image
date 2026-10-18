@@ -7,7 +7,7 @@ using System.Runtime.Intrinsics.X86;
 namespace Lokad.Image.Internal;
 
 /// <summary>Owned implementation of T.81 Annexes B, F and G for 8-bit Huffman JPEG.</summary>
-internal ref struct JpegDecoder
+internal ref partial struct JpegDecoder
 {
     private readonly ReadOnlySpan<byte> data;
     private readonly OperationContext context;

@@ -3,6 +3,21 @@ namespace Lokad.Image;
 /// <summary>JPEG encoder color and chroma-sampling profiles.</summary>
 public enum JpegSampling { Grayscale, YCbCr444, YCbCr422, YCbCr420 }
 
+/// <summary>Interleaved, 8-bit caller sample layouts.</summary>
+public enum JpegSampleFormat { Grayscale = 1, Rgb = 3 }
+
+/// <summary>Interpretation of encoded JPEG components before conversion to caller samples.</summary>
+public enum JpegColorSpace { Auto, Grayscale, Rgb, YCbCr }
+
+public sealed record JpegDecodeOptions
+{
+    public ImageLimits Limits { get; init; } = ImageLimits.Default;
+    /// <summary>Auto uses component count, Adobe declarations and RGB component IDs.</summary>
+    public JpegColorSpace SourceColorSpace { get; init; }
+    /// <summary>Opt in to EXIF reorientation while writing caller samples.</summary>
+    public bool ApplyOrientation { get; init; }
+}
+
 public sealed record JpegEncodeOptions
 {
     public ImageLimits Limits { get; init; } = ImageLimits.Default;

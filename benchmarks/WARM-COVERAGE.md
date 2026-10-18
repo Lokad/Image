@@ -17,6 +17,17 @@ state layout, kernels, allocations and ImageBuffer disposal are unchanged.
 Budgeted entry points have correctness/package qualification, pending separate
 quiet-VM elapsed/allocation evidence; existing parity claims do not cover them.
 
+Direct JPEG sample decoding adds two further **unmeasured** representatives:
+`JpegSamplesDecode/GrayscaleResident` reuses `WarmJpegDecode/OwnedDecodeGray`, and
+`JpegSamplesDecode/Rgb420Resident` reuses `WarmJpegDecode/NativeDecode420`.
+Each includes a fresh caller destination, complete decode and independent output
+lifetime, with equivalent native gray/RGB sample delivery. They exercise the
+distinct single-channel copy and three-channel color-writing boundaries without
+an RGBA frame. Packed rows, original inputs/settings and existing JPEG quality
+gates are fixed; padded rows and opt-in orientation have correctness coverage.
+All 207 original numeric rows remain applicable; four new named boundaries await
+timing/allocation evidence. Direct CMYK decode and caller-sample encode remain open.
+
 Latest [wider RGBA8 horizontal reversal](WARM-HORIZONTAL-FLIP512.md) improves
 single-output flip **22.0%**, passing parity at **0.950× / upper 0.965×**. Two live
 outputs improve **27.9%** but remain a qualified **1.053×** gap. Both retain

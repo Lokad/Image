@@ -16,7 +16,8 @@ from required future functionality.
 | WebP lossy encode | Implemented; original output independently decoded by FFmpeg | VP8 output with explicit quality/effort and transparency |
 | Exact edits | Implemented; hand-computed permutations and live FFmpeg checks | Crop, flips, quarter turns, transpose, all eight EXIF orientations |
 | Resize | Implemented; hand-computed kernel and alpha cases | Exact dimensions, fit, nearest/bilinear/bicubic, alpha-aware filtering |
-| JPEG extensions | Planned; not supported by the released package | CMYK/YCCK, 4:1:1/4:1:0; caller-provided gray/RGB/CMYK decode and gray/RGB encode samples without mandatory RGBA; explicit transforms/inversion, quality and sampling |
+| JPEG caller samples | Gray/RGB decode implemented in development; CMYK decode and gray/RGB encode planned | Caller-provided 8-bit samples without mandatory RGBA; explicit source color space/inversion, quality and sampling |
+| JPEG compatibility extensions | Planned; not supported by the released package | CMYK/YCCK and 4:1:1/4:1:0 sampling |
 | Stream extensions | Planned | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
 | Drawing/compositing | Planned | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
 | Text | Planned | Supplied TrueType fonts; size/style/color/position, wrapping, line spacing and layout bounds for overflow/fitting |
@@ -50,6 +51,20 @@ JPEG decoding may also retain three idle exact-size coefficient arrays, capped
 at 4 MiB combined. Every lease is fully zeroed before parsing and returned after
 its last use or a decode failure. Live decoders never share a lease. Original
 coefficient working-memory and work admission remain unchanged.
+
+`ImageCodec.DecodeJpeg` writes caller-owned interleaved 8-bit grayscale or RGB
+samples without an RGBA frame or encoded-input copy. Stride zero means packed;
+positive stride must cover a row. Padding/suffix bytes are untouched. The supplied
+input and complete destination spans count toward working admission and must not
+overlap. `ImageBudget.DecodeJpeg` uses the same operation, releasing codec
+admission on return; caller storage lifetimes can use an explicit reservation.
+Failures may leave a completed pixel prefix; no buffer ownership is transferred.
+`JpegDecodeOptions.SourceColorSpace` selects encoded Gray/RGB/YCbCr interpretation;
+Auto preserves component-count, Adobe and RGB-ID inference. RGB output uses the
+existing encoded-space color matrix and rounding. Grayscale takes decoded Y for
+YCbCr, repeats gray unchanged, or rounds `0.299 R + 0.587 G + 0.114 B` for RGB.
+EXIF reorientation is opt-in and writes directly to the oriented destination
+layout; returned dimensions/orientation describe those samples. ICC is not applied.
 
 Transforms return new owned buffers and preserve precision and source pixels.
 Outstanding raw orientation is retained until `AutoOrient` or decode with

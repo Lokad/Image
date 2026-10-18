@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- JPEG decoding directly into caller-owned grayscale/RGB samples, with strides,
+  explicit source color interpretation and opt-in orientation, without an RGBA frame.
 - Shared codec memory/work budgets, caller reservations and independently owned
   budgeted decode results, with typed shared-budget exhaustion.
 - Typed limit and unsupported-feature details on codec exceptions, preserving

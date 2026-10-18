@@ -51,6 +51,10 @@ public sealed class ImageBudget
         CancellationToken cancellationToken = default) => ImageCodec.DecodeWithBudget(input, this, options, cancellationToken);
     public BudgetedImage Decode(Stream input, DecodeOptions? options = null,
         CancellationToken cancellationToken = default) => ImageCodec.DecodeWithBudget(input, this, options, cancellationToken);
+    /// <summary>Decode into caller-owned samples; their lifetime remains caller-managed.</summary>
+    public ImageInfo DecodeJpeg(ReadOnlySpan<byte> input, Span<byte> destination, JpegSampleFormat format,
+        int stride = 0, JpegDecodeOptions? options = null, CancellationToken cancellationToken = default)
+        => ImageCodec.DecodeJpegSamples(input, destination, format, stride, options, cancellationToken, this);
     public void EncodePng(ImageBuffer image, Stream output, PngEncodeOptions? options = null,
         CancellationToken cancellationToken = default) => ImageCodec.EncodePngWithBudget(image, output, this, options, cancellationToken);
     public void EncodeJpeg(ImageBuffer image, Stream output, JpegEncodeOptions? options = null,

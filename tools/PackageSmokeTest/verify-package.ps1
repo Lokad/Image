@@ -174,6 +174,16 @@ if (jpegPixels.Width != 8 || jpegPixels.Height != 8 || jpegPixels.BitDepth != 8 
 for (var y = 0; y < 8; y++)
     if (!jpegPixels.GetRow8(y).SequenceEqual(opaque.GetRow8(y))) throw new Exception("Package consumer JPEG pixels differ.");
 var sharedLimits = new ImageLimits { MaxWorkingBytes = 2 * 1024 * 1024, MaxWork = 2_000_000 };
+var callerSamples = Enumerable.Repeat((byte)0xA7, 8 * 27).ToArray();
+var sampleInfo = ImageCodec.DecodeJpeg(jpeg.ToArray(), callerSamples, JpegSampleFormat.Rgb, 27);
+if ((sampleInfo.Width, sampleInfo.Height) != (8, 8))
+    throw new Exception("Package consumer JPEG sample dimensions differ.");
+for (var y = 0; y < 8; y++)
+{
+    if (callerSamples.AsSpan(y * 27, 24).IndexOfAnyExcept((byte)123) >= 0
+        || callerSamples.AsSpan(y * 27 + 24, 3).IndexOfAnyExcept((byte)0xA7) >= 0)
+        throw new Exception("Package consumer JPEG samples or padding differ.");
+}
 var shared = new ImageBudget(sharedLimits.MaxWorkingBytes + 256, sharedLimits.MaxWork * 2);
 using (shared.Reserve(256, 1))
 {
@@ -191,6 +201,11 @@ using (shared.Reserve(256, 1))
 if (shared.RemainingWorkingBytes != shared.MaxWorkingBytes || shared.ConsumedWork <= 1
     || shared.RemainingWork != shared.MaxWork - shared.ConsumedWork)
     throw new Exception("Package consumer shared admission did not settle.");
+var callerGray = new byte[64];
+shared.DecodeJpeg(jpeg.ToArray(), callerGray, JpegSampleFormat.Grayscale,
+    options: new JpegDecodeOptions { Limits = sharedLimits });
+if (callerGray.AsSpan().IndexOfAnyExcept((byte)123) >= 0 || shared.RemainingWorkingBytes != shared.MaxWorkingBytes)
+    throw new Exception("Package consumer caller-owned grayscale admission differs.");
 try
 {
     new ImageBudget(1, sharedLimits.MaxWork).Identify(jpeg.ToArray(), sharedLimits);
