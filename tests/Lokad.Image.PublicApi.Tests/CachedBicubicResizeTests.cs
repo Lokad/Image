@@ -5,6 +5,31 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class CachedBicubicResizeTests
 {
     [Fact]
+    public void HorizontalByteRowsKeepOddOffsetsOvershootTinyAlphaAndIndependentOwners()
+    {
+        using var source=OriginalPixels.Buffer(7,3,8);
+        for(var y=0;y<3;y++)for(var x=0;x<7;x++)
+        {
+            var pixel=source.GetRow8(y).Slice(x*4,4);
+            pixel[0]=(byte)((x&1)==0?255:0);pixel[1]=(byte)((x+y)%3==0?0:255);
+            pixel[2]=(byte)(x*31+y*17);pixel[3]=(byte)((x+y)%3==0?0:(x+y)%3==1?1:255);
+        }
+        var input=OriginalPixels.Bytes(source);
+        foreach(var width in new[]{14,15})
+        {
+            var directLimits=ImageLimits.Default with {MaxWorkingBytes=input.Length+(long)width*3*4+4095};
+            using var direct=ImageTransforms.Resize(source,width,3,ResizeFilter.Bicubic,directLimits);
+            var expected=OriginalPixels.Bytes(direct);
+            using var first=ImageTransforms.Resize(source,width,3,ResizeFilter.Bicubic);
+            using var second=ImageTransforms.Resize(source,width,3,ResizeFilter.Bicubic);
+            Assert.Equal(expected,OriginalPixels.Bytes(first));Assert.Equal(expected,OriginalPixels.Bytes(second));
+            first.GetRow8(1)[0]^=255;
+            Assert.Equal(expected,OriginalPixels.Bytes(second));Assert.Equal(expected,OriginalPixels.Bytes(direct));
+            Assert.Equal(input,OriginalPixels.Bytes(source));
+        }
+    }
+
+    [Fact]
     public void FullWordProductsAndPackingPreserveUpperUnsignedRange()
     {
         using var source=ImageBuffer.Create(3,3,16);

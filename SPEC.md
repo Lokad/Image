@@ -89,6 +89,10 @@ products into the cache preserves every unrounded intermediate. RGBA8/16 height
 enlargement with unchanged width may use the same identity copy and sixteen-row
 cache. Cancellation checks every two copied pixels, work charges, precision guards,
 memory admission and direct fallback remain unchanged.
+RGBA8 horizontal enlargement may emit cached rows in a separate byte-depth
+routine. Vertical tap order, sums, divisions, byte margins, clipping, packing
+and original-order replay stay identical. Odd cache-row widths require no
+padding or additional allocation; admission and cancellation remain unchanged.
 RGBA8/16 downsampling with wider support may use thirty-two operation-local rows
 and up to thirty-two taps per axis. Its optional workspace is
 1420*outputWidth + 32*sourceWidth + 256 bytes, with 4 KiB retained for exact

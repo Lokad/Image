@@ -1,5 +1,10 @@
 # Warm RGBA8 vertical bicubic with an unchanged width
 
+Historical timing note: [byte-row output specialization](WARM-BICUBIC-BYTE-ROW.md)
+replaces thirteen default full-row-cache comparisons with current qualified short
+gaps. Only the affected default-cache timings here are superseded; other selected
+paths retain their applicable evidence in the [current summary](../docs/benchmark.md).
+
 The [byte paired-column round](WARM-BICUBIC-BYTE-PAIRED.md) supersedes the
 tight-memory timing below with a qualified short screen. The default-memory
 row-cache confirmation remains applicable and is reused. Older measurements

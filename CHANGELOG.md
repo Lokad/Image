@@ -15,8 +15,9 @@
   pixels, resource admission and cancellation.
 - Faster RGBA8 bilinear enlargement through exact integer factorization,
   preserving pixels, working memory and rounding.
-- Faster RGBA8/16 bicubic filtering through bounded row/column reuse and wider
-  enlargement strips, preserving exact pixels and output ownership.
+- Faster RGBA8/16 bicubic filtering through bounded row/column reuse, wider
+  enlargement strips and specialized horizontal byte output, preserving exact
+  pixels and output ownership.
 - Faster adaptive JPEG event planning and fixed-Huffman emission with unchanged
   packets, work and stream callback/failure behavior.
 - Faster VP8 source conversion with unchanged packets, alpha and resource charges.

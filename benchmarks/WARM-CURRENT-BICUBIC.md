@@ -1,5 +1,10 @@
 # Current bicubic evidence reconciliation
 
+Historical timing note: [byte-row output specialization](WARM-BICUBIC-BYTE-ROW.md)
+replaces thirteen default full-row-cache comparisons with current qualified short
+gaps. Only the affected default-cache timings here are superseded; other selected
+paths retain their applicable evidence in the [current summary](../docs/benchmark.md).
+
 Historical timing checkpoint: [wider enlargement strips](WARM-BICUBIC-ENLARGEMENT-STRIPS.md)
 records seven current qualified short results. Its affected enlargement timings and source/qualification checkpoints are historical; other selected paths retain their applicable evidence.
 

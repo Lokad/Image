@@ -206,19 +206,19 @@ def render():
         row('Bilinear upscale RGBA8†', 'warm-bilinear-byte-factorization-evidence.json', ['cases', 'Up8', -1], 'WARM-BILINEAR-BYTE-FACTORIZATION.md', verification='Gap (short; qualified)'),
         row('Bilinear upscale RGBA16†', 'warm-current-bilinear-evidence.json', ['cases', 'Up16', -1], 'WARM-CURRENT-BILINEAR.md', True),
         row('RGBA8 bicubic, single-pixel reduction', 'warm-bicubic-single-pixel-evidence.json', ['observations', -1], 'WARM-BICUBIC-SINGLE-PIXEL.md', True),
-        row('Bicubic resize RGBA8§', 'warm-current-bicubic-evidence.json', ['cases', 'Down8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic resize RGBA16§', 'warm-current-bicubic-evidence.json', ['cases', 'Down16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic upscale RGBA8§', 'warm-current-bicubic-evidence.json', ['cases', 'Up8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic upscale RGBA16§', 'warm-current-bicubic-evidence.json', ['cases', 'Up16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic resize RGBA8§', 'warm-bicubic-byte-row-evidence.json', ['cases', 'Down8', -1], 'WARM-BICUBIC-BYTE-ROW.md', verification='Gap (short; qualified)'),
+        row('Bicubic resize RGBA16§', 'warm-bicubic-byte-row-evidence.json', ['cases', 'Down16', -1], 'WARM-BICUBIC-BYTE-ROW.md', verification='Gap (short; qualified)'),
+        row('Bicubic upscale RGBA8§', 'warm-bicubic-byte-row-evidence.json', ['cases', 'Up8', -1], 'WARM-BICUBIC-BYTE-ROW.md', verification='Gap (short; qualified)'),
+        row('Bicubic upscale RGBA16§', 'warm-bicubic-byte-row-evidence.json', ['cases', 'Up16', -1], 'WARM-BICUBIC-BYTE-ROW.md', verification='Gap (short; qualified)'),
         row('Bicubic mixed-axis RGBA8§', 'warm-bicubic-byte-paired-evidence.json', ['cases', 'Mixed8', -1], 'WARM-BICUBIC-BYTE-PAIRED.md', verification='Gap (short; qualified)'),
         row('Bicubic mixed-axis RGBA16§', 'warm-bicubic-paired-columns-evidence.json', ['cases', 'Mixed16', -1], 'WARM-BICUBIC-PAIRED-COLUMNS.md', verification='Gap (short; qualified)'),
-        row('Bicubic width reduction / height enlargement RGBA8§', 'warm-current-bicubic-evidence.json', ['cases', 'Cross8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic width reduction / height enlargement RGBA16§', 'warm-current-bicubic-evidence.json', ['cases', 'Cross16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic width reduction / height enlargement RGBA8§', 'warm-bicubic-byte-row-evidence.json', ['cases', 'Cross8', -1], 'WARM-BICUBIC-BYTE-ROW.md', verification='Gap (short; qualified)'),
+        row('Bicubic width reduction / height enlargement RGBA16§', 'warm-bicubic-byte-row-evidence.json', ['cases', 'Cross16', -1], 'WARM-BICUBIC-BYTE-ROW.md', verification='Gap (short; qualified)'),
         row('Bicubic RGBA8, 128×64 / wider support§', 'warm-current-bicubic-evidence.json', ['cases', 'Wide8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic RGBA16, 128×64 / wider support§', 'warm-current-bicubic-evidence.json', ['cases', 'Wide16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic width reduction, unchanged height RGBA8§', 'warm-current-bicubic-evidence.json', ['cases', 'Horizontal8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic width reduction, unchanged height RGBA16§', 'warm-current-bicubic-evidence.json', ['cases', 'Horizontal16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic width enlargement, unchanged height RGBA8§', 'warm-current-bicubic-evidence.json', ['cases', 'HorizontalUp8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic width reduction, unchanged height RGBA8§', 'warm-bicubic-byte-row-evidence.json', ['cases', 'Horizontal8', -1], 'WARM-BICUBIC-BYTE-ROW.md', verification='Gap (short; qualified)'),
+        row('Bicubic width reduction, unchanged height RGBA16§', 'warm-bicubic-byte-row-evidence.json', ['cases', 'Horizontal16', -1], 'WARM-BICUBIC-BYTE-ROW.md', verification='Gap (short; qualified)'),
+        row('Bicubic width enlargement, unchanged height RGBA8§', 'warm-bicubic-byte-row-evidence.json', ['cases', 'HorizontalUp8', -1], 'WARM-BICUBIC-BYTE-ROW.md', verification='Gap (short; qualified)'),
         row('Bicubic width enlargement, unchanged height RGBA16§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'HorizontalUp16', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
         row('Bicubic RGBA8, 64×32 / support beyond 32§', 'warm-current-bicubic-evidence.json', ['cases', 'Down64x32_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic RGBA16, 64×32 / support beyond 32§', 'warm-current-bicubic-evidence.json', ['cases', 'Down64x32_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
@@ -254,15 +254,15 @@ def render():
         row('Bicubic RGBA8, 4×9 / packed row blocks / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight4x9_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic RGBA8, 2×9 / bounded row blocks / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight2x9_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic RGBA8, 2×2 / generated support beyond 544 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight2x2_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic height reduction, unchanged width RGBA8§', 'warm-bicubictightvertical8-cachepref-evidence.json', ['defaultMemoryConfirmation'], 'WARM-BICUBIC-TIGHT-VERTICAL8.md', True),
+        row('Bicubic height reduction, unchanged width RGBA8§', 'warm-bicubic-byte-row-evidence.json', ['cases', 'Vertical8', -1], 'WARM-BICUBIC-BYTE-ROW.md', verification='Gap (short; qualified)'),
         row('Bicubic height reduction, unchanged width RGBA8 / input+output+4 KiB limit§', 'warm-bicubic-byte-paired-evidence.json', ['cases', 'TightVertical8', -1], 'WARM-BICUBIC-BYTE-PAIRED.md', verification='Gap (short; qualified)'),
-        row('Bicubic height reduction, unchanged width RGBA16§', 'warm-bicubictightvertical16-cachepref-evidence.json', ['defaultMemoryConfirmation'], 'WARM-BICUBIC-TIGHT-VERTICAL16.md', True),
+        row('Bicubic height reduction, unchanged width RGBA16§', 'warm-bicubic-byte-row-evidence.json', ['cases', 'Vertical16', -1], 'WARM-BICUBIC-BYTE-ROW.md', verification='Gap (short; qualified)'),
         row('Bicubic height reduction, unchanged width RGBA16 / input+output+4 KiB limit§', 'warm-bicubic-paired-columns-evidence.json', ['cases', 'TightVertical16', -1], 'WARM-BICUBIC-PAIRED-COLUMNS.md', verification='Gap (short; qualified)'),
         row('Bicubic width reduction, unchanged height RGBA16 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'TightHorizontal16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic width reduction, unchanged height RGBA8 / input+output+4 KiB limit§', 'warm-bicubictighthorizontal8-cross-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-HORIZONTAL8.md', True),
-        row('Bicubic height enlargement, unchanged width RGBA8§', 'warm-current-bicubic-evidence.json', ['cases', 'VerticalUp8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic height enlargement, unchanged width RGBA8§', 'warm-bicubic-byte-row-evidence.json', ['cases', 'VerticalUp8', -1], 'WARM-BICUBIC-BYTE-ROW.md', verification='Gap (short; qualified)'),
         row('Bicubic height enlargement, unchanged width RGBA8 / input+output+4 KiB limit§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'TightVerticalUp8', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
-        row('Bicubic height enlargement, unchanged width RGBA16§', 'warm-current-bicubic-evidence.json', ['cases', 'VerticalUp16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic height enlargement, unchanged width RGBA16§', 'warm-bicubic-byte-row-evidence.json', ['cases', 'VerticalUp16', -1], 'WARM-BICUBIC-BYTE-ROW.md', verification='Gap (short; qualified)'),
         row('Bicubic height enlargement, unchanged width RGBA16 / input+output+4 KiB limit§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'TightVerticalUp16', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
         row('Bicubic width enlargement, unchanged height RGBA16 / input+output+4 KiB limit§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'TightHorizontalUp16', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
         row('Bicubic width enlargement, unchanged height RGBA8 / input+output+4 KiB limit§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'TightHorizontalUp8', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
@@ -324,15 +324,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [cancelable JPEG AC cache](../benchmarks/WARM-JPEG-CANCELABLE-AC-CACHE.md)
-reduces live-token baseline444 decode time 9.3%, preserving exact pixels, work
-charges and allocation. Its 1.610× mean remains a qualified short gap; no routine
-long confirmation was run. All 206 other comparisons and 58 passing proofs are
-reused. Previous [byte bilinear factorization](../benchmarks/WARM-BILINEAR-BYTE-FACTORIZATION.md)
-retains its qualified short improvement. Passing cases are stopped.
-The 207 rows select 162 independent confirmations and 45 qualified short screens.
-Fresh **3,662 Release cases per OS** (1,352 internal +1,412 public +898 live FFmpeg),
-plus 96 scalar JPEG boundary/public controls, pass. The consumer and all
+Latest production round: [horizontal byte-row output](../benchmarks/WARM-BICUBIC-BYTE-ROW.md)
+reduces default RGBA8 horizontal enlargement time 16.4%, with exact pixels and
+unchanged allocation. All 13 affected cache comparisons remain qualified short
+gaps. Other 194 comparisons and all 58 passing proofs are reused. A suspicious
+vertical-byte control receives one frozen-predecessor check; its mean differs
+0.94% rather than the 4.14% difference from older evidence. No repeat-until-pass
+or routine long confirmation is run. Passing cases are stopped.
+The 207 rows select 149 independent confirmations and 58 qualified short screens.
+Fresh **3,663 Release cases per OS** (1,352 internal +1,413 public +898 live FFmpeg),
+plus 209 scalar cache/reference controls, pass. The consumer and all
 three examples pass through
 the **same actual Release package on Windows/Linux**. Production remains safe
 managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.

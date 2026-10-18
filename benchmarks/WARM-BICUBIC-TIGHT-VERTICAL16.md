@@ -1,5 +1,10 @@
 # Warm RGBA16 vertical bicubic with an unchanged width
 
+Historical timing note: [byte-row output specialization](WARM-BICUBIC-BYTE-ROW.md)
+replaces thirteen default full-row-cache comparisons with current qualified short
+gaps. Only the affected default-cache timings here are superseded; other selected
+paths retain their applicable evidence in the [current summary](../docs/benchmark.md).
+
 Tight-memory 513×259→513×129 bicubic independently confirms **1.813× FFmpeg's
 scaler backend**, conservative upper **1.823×**, at **1,059.29 µs / 529,838 B/op**.
 All twelve actuals are retained, eleven selected; both guards pass. The direct
