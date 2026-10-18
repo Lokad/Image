@@ -22,6 +22,35 @@ internal sealed class LimitedWriteStream(Stream output, int maximum, Cancellatio
         Span<byte> data = stackalloc byte[1]; data[0] = value; Write(data);
     }
     public override void Flush() => output.Flush();
+    internal void PrepareStoredPngCapacity(long filteredBytes)
+    {
+        // Capacity is caller-owned output storage, not codec workspace. Keep
+        // the original writes/counters and avoid geometric growth for a large
+        // stored PNG. Small packets fit the first IDAT write without this help.
+        if (filteredBytes < 65536 || filteredBytes > maximum - written
+            || cancellation.CanBeCanceled || output.GetType() != typeof(MemoryStream)) return;
+        // RFC1951 section3.2.4: at most one five-byte stored header per byte,
+        // plus a final empty block; RFC1950 adds its six-byte wrapper. Include
+        // PNG framing for every64KiB IDAT. This loose bound only selects the
+        // optional capacity path; every original output-quota check remains.
+        var worstZlib = filteredBytes * 6 + 11;
+        var worstPng = worstZlib + 45 + 12 * ((worstZlib + 65535) / 65536);
+        if (worstPng > maximum - written) return;
+        var memory = (MemoryStream)output;
+        if (!memory.CanSeek || !memory.CanWrite) return;
+        // A size estimate, not a new output/admission bound. Ordinary writes
+        // can still grow beyond it. Allow framing and modest stored overhead.
+        var estimate = filteredBytes + filteredBytes / 200 + 1024;
+        estimate += 45 + 12 * ((estimate + 65535) / 65536);
+        if (estimate > Array.MaxLength - memory.Position) return;
+        var capacity = (int)(memory.Position + estimate);
+        if (capacity <= memory.Capacity) return;
+        try { memory.Capacity = capacity; }
+        // Exact MemoryStream refuses growth of a fixed buffer without changing
+        // its state. Retain the original incremental write failure in that case.
+        catch (NotSupportedException) { }
+    }
+
     internal bool SupportsAdaptiveJpeg(long worstEncodedBytes)
     {
         // Plain MemoryStream has no caller callbacks; other streams retain the

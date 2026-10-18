@@ -1,8 +1,8 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-18. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 207 numeric rows contain **59 confirmed parity
-cases, 144 measured gaps and 4 confidence-open cases**. The earlier
+conservative upper ≤1x**. The 207 numeric rows contain **60 confirmed parity
+cases, 143 measured gaps and 4 confidence-open cases**. The earlier
 ≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
@@ -31,19 +31,19 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [four-byte PNG Sub prefixes](../benchmarks/WARM-PNG-SUB-PREFIX.md)
-cuts existing RGBA8 Sub decode time50.5%, to584.20µs /0.851x (upper0.855x), with
-4,456B/op and exact pixels. An independent twelve-actual confirmation closes
-this case. The new SIMD byte-prefix helper preserves memory/work admission,
-cancellation, partial failure and ownership. Word Sub/byte Paeth controls remain
-within1.2% of retained means. Other206 comparisons/all58 prior passing proofs
-remain applicable; now59named paths pass. No new performance raster, selector or
-settings grid. The207 rows still select144 independent confirmations and63
-qualified short screens. Fresh **3,692 Release cases perOS** (1,371internal
-+1,423public+898liveFFmpeg), plus92scalar PNG controls, pass. The consumer and
-allthree examples pass through the **same actual Release package on Windows/Linux**.
-Production remains safe managed dependency-free .NET10. Unchanged qualification
-is reused; passing cases are stopped.
+Latest production round: [stored PNG capacity](../benchmarks/WARM-PNG-STORED-CAPACITY.md)
+cuts RGBA16 encode time48.1%, to349.92µs /0.861x (upper0.870x), independently
+confirming parity. Allocation falls72.9% to1,140,504B/op. RGBA8 improves21.0%
+with71.3% less allocation, to604,319B/op, but remains a qualified short gap at
+1.295x/upper1.430x. Fresh output capacity allocation remains timed inside
+production; packets, checksums, workspace, writes, limits and ownership are
+unchanged. Other205 comparisons/all59 prior passes remain applicable. No new
+performance input/settings grid. The207 rows now select145 independent
+confirmations and62qualified short screens. Fresh **3,701 Release cases perOS**
+(1,374internal+1,429public+898liveFFmpeg), plus65scalar controls, pass. The consumer
+and allthree examples pass through the **same actual Release package on Windows/Linux**.
+Production remains safe managed dependency-free .NET10. Stop the now60passing
+paths; the full parity objective remains open.
 
 **Decode and metadata**
 
@@ -137,8 +137,8 @@ is reused; passing cases are stopped.
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 5,406.30 | 17,266.72 | 0.313 / 0.315 | 527,627 | Parity confirmed |
-| [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 310.52 | 191.23 | 1.624 / 1.854 | 2,102,474 | Gap (short; qualified) |
-| [PNG RGBA16, NoCompression / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 674.12 | 405.05 | 1.664 / 1.753 | 4,202,998 | Gap (short; qualified) |
+| [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED-CAPACITY.md) | 245.37 | 189.47 | 1.295 / 1.430 | 604,319 | Gap (short; qualified) |
+| [PNG RGBA16, NoCompression / None](../benchmarks/WARM-PNG-STORED-CAPACITY.md) | 349.92 | 406.43 | 0.861 / 0.870 | 1,140,504 | Parity confirmed |
 | [PNG RGBA8, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 3,053.16 | 4,355.98 | 0.701 / 0.704 | 527,694 | Parity confirmed |
 | [PNG RGBA16, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 13,289.83 | 17,822.40 | 0.746 / 0.776 | 2,103,738 | Parity confirmed |
 | [PNG RGBA16, Fastest managed2/native1 / live cancelable token](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 12,846.40 | 17,513.32 | 0.734 / 0.743 | 2,103,738 | Parity confirmed |

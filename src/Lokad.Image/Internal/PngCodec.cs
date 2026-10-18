@@ -1391,6 +1391,10 @@ internal static class PngCodec
                 ? new ZLibStream(chunks, new ZLibCompressionOptions { CompressionLevel = 2 }, true)
                 : new ZLibStream(chunks, compression, true))
             {
+                if (compression == CompressionLevel.NoCompression && color == 6
+                    && context.RemainingWork >= rowBytes * 8L * source.Height
+                    && output is LimitedWriteStream bounded)
+                    bounded.PrepareStoredPngCapacity((rowBytes + 1L) * source.Height);
                 for (var y = 0; y < source.Height; y++)
                 {
                     context.Work(rowBytes * 8L);

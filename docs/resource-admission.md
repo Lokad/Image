@@ -44,6 +44,10 @@ These are logical admission charges, including conservative BCL allowances,
 rather than measured native or managed allocation totals. Optional fast paths
 must fit their complete workspace before selection; fallback preserves pixels,
 work, cancellation and failure ordering.
+Caller-owned encoded output storage is separate from codec workspace;
+`MaxOutputBytes` limits actual writes. Eligible stored RGBA PNG encodes may
+reserve plain `MemoryStream` capacity after work/output preflight, preserving
+the original writes and limit checks.
 Tight noninterlaced PNG RGBA decoding can keep 64 KiB of raw history inside the
 existing inflater allowance; its original result/two-row peak stays unchanged.
 

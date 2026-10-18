@@ -1,7 +1,7 @@
 # Material warm coverage
 
-Updated 2026-10-18. The current **<=1x warm parity objective is open**: 59 named
-numeric cases already have independent upper<=1, 144 means exceed1, and four
+Updated 2026-10-18. The current **<=1x warm parity objective is open**: 60 named
+numeric cases already have independent upper<=1, 143 means exceed1, and four
 means<=1 have upper>1. Reuse passing paths and prioritize the largest current
 gaps; do not add a new input or settings grid. The [current summary](../docs/benchmark.md)
 distinguishes parity, measured gaps and confidence-open cases.
@@ -13,11 +13,11 @@ record which comparisons they replace. Only confirmed <=1x paths are stopped
 for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,144 select independent
-confirmations. Sixty-three select qualified screens after changed production: six
+unscored native-alpha incompatibility. Of those numeric rows,145 select independent
+confirmations. Sixty-two select qualified screens after changed production: six
 paired-column byte/word bicubic cases, byte bicubic TightDown8, word bilinear
 Down16, live-token progressive444, five fixed JPEG encodes, two opaque VP8 encodes,
-two PNG Paeth dispatch controls and three PNG encodes after chunk checksum folding, and eight adaptive JPEG encodes
+two PNG Paeth dispatch controls and two PNG encodes after chunk checksum folding plus storedRGBA8 after capacity reservation, and eight adaptive JPEG encodes
 (420 byte/word/restart33,422 byte/word,444 byte/word and gray8) after nonzero planning,
 plus five VP8L decodes and two compressed-alpha VP8 decodes after borrowed lookup,
 and seven byte/word enlargement boundaries after wider strips, plus byte
@@ -39,8 +39,11 @@ that round likewise reuses206 comparisons/all58 passing proofs.
 [Packed byte64×32 weight broadcasts](WARM-BICUBIC-WEIGHT-BROADCAST.md) improve12.5%;
 that round also reuses206 comparisons/all58 passing proofs.
 [Four-byte PNG Sub prefixes](WARM-PNG-SUB-PREFIX.md) improve50.5% and independently
-confirm0.851x/upper0.855:59passes/144gaps/4confidence now; other206comparisons reused.
-The sixty-three short screens remain gaps; older independent timings are explicitly
+confirm0.851x/upper0.855, reusing206other comparisons.
+[Stored PNG capacity](WARM-PNG-STORED-CAPACITY.md) cuts wordtime48.1%, confirms
+0.861x/upper0.870 and reduces allocation72.9%; byte improves21.0%/allocation71.3%
+but remains1.295x. Now60passes/143gaps/4confidence;other205comparisons reused.
+The sixty-two short screens remain gaps; older independent timings are explicitly
 superseded. The two
 former short-regression witnesses are now historical after changed AC emission.
 The unscored raw PNG transparency reference is replaced by approved exact timed
@@ -68,7 +71,7 @@ established before this audit and were reconciled, not expanded.
 | B10 | VP8L Lossless8 literal/run input: changed entropy/run path | [Closed](WARM-CURRENT-VP8L-LITERAL.md) |
 | B11 | Clone,crop,normal orientation,horizontal/vertical flip,half turn,CW/CCW,transpose,transverse at both depths: shared output-pool acquisition | [All20 closed](WARM-CURRENT-EXACT-EDITS.md); retained-two flip unchanged |
 | B12 | The61 named bicubic selectors: changed dispatch/helper/guard paths, default/tight scratch, byte/word and established support widths | [Previous phase closed](WARM-CURRENT-BICUBIC.md); [word](WARM-BICUBIC-PAIRED-COLUMNS.md) and [byte](WARM-BICUBIC-BYTE-PAIRED.md) paired columns plus [byte strips](WARM-BICUBIC-BYTE-STRIPS.md) and [packed weights](WARM-BICUBIC-WEIGHT-BROADCAST.md) improved, still <=1x gaps |
-| B13 | Existing PNG stored/Paeth/predictor,RGB/gray/gray-alpha8/16,packed gray1/2/4,palette1/2/4/8,tRNS,Adam7 and frozen compression-mode rows; four named exact-limit RGBA8/16 ordinary/live-token boundaries | [Up8/16](WARM-PNG-UP-SIMD.md), [RGBA8 Sub](WARM-PNG-SUB-PREFIX.md) and [RGB16 Paeth](WARM-PAETH-SIX-CHANNEL.md) parity confirmed; [tight RGBA streaming](WARM-PNG-STREAMING-ROWS.md) improves four gaps; other applicable proofs reused; precise selectors/allocations in the [summary](../docs/benchmark.md) |
+| B13 | Existing PNG stored/Paeth/predictor,RGB/gray/gray-alpha8/16,packed gray1/2/4,palette1/2/4/8,tRNS,Adam7 and frozen compression-mode rows; four named exact-limit RGBA8/16 ordinary/live-token boundaries | [Up8/16](WARM-PNG-UP-SIMD.md), [RGBA8 Sub](WARM-PNG-SUB-PREFIX.md), [stored RGBA16 encode](WARM-PNG-STORED-CAPACITY.md) and [RGB16 Paeth](WARM-PAETH-SIX-CHANNEL.md) parity confirmed; [tight RGBA streaming](WARM-PNG-STREAMING-ROWS.md) improves four gaps; other applicable proofs reused; precise selectors/allocations in the [summary](../docs/benchmark.md) |
 | B14 | JPEG4208/16,restart,gray and geometric live-token/forward output; VP8 ordinary/simple/alpha/live-token/Stream and opaque8/16 encode; VP8L native/indexed/live-token/Stream and exact backend encodes | [VP8 source views](WARM-VP8-SOURCE-VIEWS.md) improve four encodes; [fixed JPEG encodes](WARM-JPEG-FIXED-AC-FUSION.md) and other unchanged proofs reused |
 | B15 | Nearest Down8/16,Up8/16: unchanged early dispatch/integer kernels and allocation path | Existing independent proofs reused |
 | C01 | PNG resident Identify: full container/CRC/EXIF without inflation, fresh descriptor; decode/cold timings do not cover it | [Closed](WARM-PNG-IDENTIFY.md),1.234x/upper1.238x,88B/op |
@@ -83,7 +86,16 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [Sub-prefix reconciliation](warm-png-sub-prefix-evidence.json) replaces
+The latest [stored-capacity reconciliation](warm-png-stored-capacity-evidence.json)
+replaces only the two storedRGBA8/16 encodes: word independent0.861x/upper0.870,
+1,140,504B/op; byte1.295x/upper1.430,604,319B/op qualified short. Capacity allocation
+is inside the complete fresh-output operation; packets, packing, compression,
+checksums, work/working admission, writes/callbacks, limits and owners remain.
+Other205comparisons/all59previouspasses are reused. Full3701+65scalar/OS and the
+same actual package consumer/all3examples bothOS pass. No added case/grid.
+60passes/143gaps/4confidence;145selected independent+62short. Passing word stops.
+
+The preceding [Sub-prefix reconciliation](warm-png-sub-prefix-evidence.json) replaces
 only DecodeSub8:50.5% faster,independent0.851x/upper0.855,4456B/op. Stride4 Sub
 uses exact SIMD byte prefixes with unchanged resources/work,cancellation and
 partial-failure behavior. Other206 comparisons/all58 previous passes are reused;
