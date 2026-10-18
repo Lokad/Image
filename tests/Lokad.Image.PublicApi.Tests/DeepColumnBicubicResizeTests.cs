@@ -57,6 +57,30 @@ public sealed class DeepColumnBicubicResizeTests
         Assert.Equal(input, OriginalPixels.Bytes(source));
     }
     [Fact]
+    public void AlternatingReductionsKeepExactRationalPixelsWithNegativeLobesAndTinyAlpha()
+    {
+        foreach (var tiny in new[] { false, true })
+        {
+            using var source = ImageBuffer.Create(121, 61, 8);
+            for (var y = 0; y < source.Height; y++)
+            for (var x = 0; x < source.Width; x++)
+            {
+                var pixel = source.GetRow8(y).Slice(x * 4, 4);
+                pixel[0] = (byte)(((x + y) & 1) == 0 ? 255 : 0);
+                pixel[1] = (byte)((x * 73 + y * 19) & 255);
+                pixel[2] = (byte)(((x * 3 + y) & 3) == 0 ? 254 : 1);
+                pixel[3] = tiny ? (byte)((x + y) % 7 == 0 ? 255 : (x + y) % 3 == 0 ? 1 : 0)
+                    : (byte)((x + y) % 4 == 0 ? 0 : (x + y) % 4 == 1 ? 1 : 255);
+            }
+            var input = OriginalPixels.Bytes(source);
+            var expected = ExactResizeReference.Resize(input, 121, 61, 8, 7, 4, ResizeFilter.Bicubic);
+            using var actual = ImageTransforms.Resize(source, 7, 4, ResizeFilter.Bicubic,
+                new ImageLimits { MaxWorkingBytes = input.Length + 7 * 4 * 4 + 4096 });
+            Assert.Equal(expected, OriginalPixels.Bytes(actual)); Assert.Equal(input, OriginalPixels.Bytes(source));
+        }
+    }
+
+    [Fact]
     public void RelativePackedOffsetsKeepAbsoluteCoordinatesAboveUInt16()
     {
         using var source = ImageBuffer.Create(65537, 4, 8, new ImageLimits { MaxDimension = 70000 });

@@ -65,7 +65,7 @@ internal static class DeepColumnBicubicResize
                         if (rowIds[slot] == sy) continue;
                         rowIds[slot] = sy;
                         var row = input.Slice(sy * stride + sourceFirst * 4, sourceCount * 4);
-                        var sum = Vector256<double>.Zero;
+                        var partial = Vector512<double>.Zero;
                         var tx = 0;
                         for (; tx + 1 < countX; tx += 2)
                         {
@@ -75,12 +75,13 @@ internal static class DeepColumnBicubicResize
                             var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
                             var values = Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors).AsUInt32());
                             var w0 = weights[tx]; var w1 = weights[tx + 1];
-                            var products = Avx512F.Multiply(values, Vector512.Create(w0, w0, w0, w0, w1, w1, w1, w1));
-                            // Separate additions preserve the original horizontal
-                            // tap order even though two exact products widen together.
-                            sum = Avx.Add(sum, products.GetLower());
-                            sum = Avx.Add(sum, products.GetUpper());
+                            var products = Avx512F.Multiply(values, Avx512F.InsertVector256(Vector512.Create(w0), Vector256.Create(w1), 1));
+                            // Two independent tap streams shorten the dependency chain.
+                            // At most 37 dependent additions including the final fold
+                            // remain within the original 72-term rounding certificate.
+                            partial = Avx512F.Add(partial, products);
                         }
+                        var sum = Avx.Add(partial.GetLower(), partial.GetUpper());
                         if (tx < countX)
                         {
                             var packed = BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(offsets[tx] * 4, 4));

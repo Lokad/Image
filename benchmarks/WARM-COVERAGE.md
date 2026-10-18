@@ -2,22 +2,23 @@
 
 Updated 2026-10-18. The **warm single-CPU parity objective remains open**:
 62 independent passes, 144 measured mean gaps and one confidence-open case across
-207 named rows. The [three-table summary](../docs/benchmark.md) selects 125
-independent confirmations and 82 qualified shorts. Reuse unchanged passing paths;
+207 named rows. The [three-table summary](../docs/benchmark.md) selects 124
+independent confirmations and 83 qualified shorts. Reuse unchanged passing paths;
 do not add an image or settings grid.
 
-Latest [cancelable PNG materialization](WARM-PNG-CANCEL-BLOCKS.md) improves the
-two existing complete default-limit live-token decodes: RGBA16 by 32.1% and RGBA8
-by 10.2%. Samples, hidden RGB, admission, work, cancellation and ownership remain
-exact, with no new workspace. Both remain qualified short gaps. Other 205
-comparisons and all 62 passes are reused. All 3,725 Release tests per OS, 119
-affected hardware-off Zlib checks per OS and the same actual private package
-consumer and all three examples pass on Windows and Linux. No block, literal,
-threshold, width or inlining variants follow this primitive.
+Latest [packed byte bicubic reduction](WARM-BICUBIC-PACKED-REDUCTION.md) improves
+the existing RGBA8 32×16 tight-workspace operation by 19.2%, with exact pixels,
+unchanged resource behavior and no new workspace. Its 1.266× mean remains a
+qualified short gap. Other 206 comparisons and all 62 passing proofs are reused.
+All 3,726 Release tests per OS, 10 affected hardware-off checks per OS and the
+same actual private package consumer and all three examples pass on Windows and
+Linux. No constructor, reduction, width, inlining, precision or threshold grid
+follows this gain. The rejected generic-constructor intermediate is retained.
 
-The preceding [certified JPEG color reconstruction](WARM-JPEG-COLOR16.md) retains
-7.3–16.4% gains for six subsampled decodes; their paths and qualified evidence are
-unchanged. Earlier adaptive gray JPEG encoding remains independently passing.
+Earlier [cancelable PNG materialization](WARM-PNG-CANCEL-BLOCKS.md) retains 32.1%
+and 10.2% gains, and [certified JPEG color reconstruction](WARM-JPEG-COLOR16.md)
+retains 7.3–16.4% gains for six decodes. Their paths and qualification remain
+unchanged. Adaptive gray JPEG encoding remains independently passing.
 
 The finite checklist's **previous <=2x phase was completed for released0.1.0**.
 Its original independent evidence and unchanged-path proofs remain historical;

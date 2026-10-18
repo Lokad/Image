@@ -216,8 +216,10 @@ retain the existing paths.
 RGBA8 reduction above thirty-six and up to seventy-two taps per axis may use
 a separate byte specialization of that single-column row cache, with the same
 4-KiB admission and 4,032 bytes of fixed arrays. Exact byte premultiplication
-products are at most 65025 and widen to binary64 without quantization. Separate
-horizontal additions, checked relative offsets, the `2^-40*72^2` budget and
+products are at most 65025 and widen to binary64 without quantization. Paired
+products may accumulate in independent alternating-tap streams, folded once per
+row. At most 37 dependent additions per stream/fold remain within the original
+72-term error bound. Checked relative offsets, the `2^-40*72^2` budget and
 byte-depth quotient/rounding guards preserve every original sample. Guarded
 ordinary-alpha replay and complete tiny-alpha unwind retain exact handling;
 complete work, bounded cancellation and independent owners remain unchanged.
