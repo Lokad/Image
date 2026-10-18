@@ -88,7 +88,7 @@ Five further **unmeasured** representatives cover the newly required algorithms:
 Baseline/progressive analytical and live FFmpeg compatibility checks cover these
 layouts; they are not performance confirmations. Reuse the existing source
 projections and fixed settings. Including the async boundaries below, the
-bounded checklist is **236 named cases**: 209 retained numeric rows plus twenty-seven
+bounded checklist is **238 named cases**: 209 retained numeric rows plus twenty-nine
 unmeasured new operations. Do not add a
 shape, depth or quality grid. Add cases only for a distinct required path omitted
 from this list, with its concrete reason.
@@ -101,8 +101,8 @@ private input acquisition/growth/release and independent descriptor/pixel owners
 They cover the shared async acquisition path and its two different complete
 public operations. Shared-budget awaits have correctness coverage; no new
 codec/depth/stream scheduling grid is added. Resolve equivalent native input
-delivery before timing. The known finite checklist is now **236 cases**: 209
-numeric rows plus twenty-seven unmeasured operations. All existing evidence keeps its
+delivery before timing. The known finite checklist is now **238 cases**: 209
+numeric rows plus twenty-nine unmeasured operations. All existing evidence keeps its
 current status: original synchronous method bodies, field layouts, kernels and
 ownership paths are unchanged by async acquisition. The subsequent synchronous
 decode change above requires reconfirming 23 prior rows.
@@ -121,8 +121,8 @@ Async output adds four **unmeasured** representatives, all on existing inputs:
 These cover distinct new staging/admission/delivery paths, without a codec,
 sampling, depth or scheduling grid. Resolve equivalent native destination
 acquisition/copies and output lifetime before timing. Shared-await correctness
-is separately qualified. The checklist is now **236 cases**: 209 numeric rows
-and twenty-seven unmeasured operations. Existing numeric statuses are unchanged;
+is separately qualified. The checklist is now **238 cases**: 209 numeric rows
+and twenty-nine unmeasured operations. Existing numeric statuses are unchanged;
 original encoder bodies, state layouts and codec kernels are untouched. The later
 synchronous decode acquisition change affects only the seven operations above.
 
@@ -159,7 +159,7 @@ clips fill/independent copy/composite, with overlap shifted (1,1). No image/shap
 alpha grid. Resolve equivalent native in-place canvas delivery, state restoration,
 rounding and ownership before timing. Exact BigInteger and bounded native profile
 correctness checks are not performance confirmations. Existing paths/statuses are
-unchanged: 186 current rows, 23 prior rows. Including text below, there are 27
+unchanged: 186 current rows, 23 prior rows. Including text below, there are 29
 named unmeasured boundaries.
 
 Text layout/measurement adds three **unmeasured** complete operations on original
@@ -179,7 +179,18 @@ needed outline decoding, measurement, positioned values and independent output
 ownership. Resolve equivalent FFmpeg/font-backend scope before timing. The
 15-glyph native geometry check is correctness evidence only. No text timing or
 allocation claim, font/style/size grid, rasterization case or changed numeric
-status follows from this addition. Rendering remains required work.
+status follows from this addition.
+
+Rendering adds `TextRender/Rgba8Clipped` and `TextRender/Rgba16Clipped`, exercising
+distinct byte/word canvas sample writes and precision. Reuse the original font,
+fixed text/settings above, existing 513×259 canvases and position(-.25,1.5).
+Only immutable font preparation is outside timing. Include layout/needed geometry,
+coverage and complete in-place drawing with equivalent native canvas delivery,
+state restoration and output ownership; do not substitute a cached rendered mask.
+Both time and allocations are **unmeasured**. Analytical quadratic coverage checks
+and the separately recorded default FreeType raster differences are development
+correctness evidence; equivalent native quality/scope still needs resolution before
+timing. No existing native pixel allowance or numeric evidence changes.
 
 Latest [wider RGBA8 horizontal reversal](WARM-HORIZONTAL-FLIP512.md) improves
 single-output flip **22.0%**, passing parity at **0.950× / upper 0.965×**. Two live

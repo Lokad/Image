@@ -14,7 +14,7 @@ public readonly record struct RgbaColor(ushort R, ushort G, ushort B, ushort A =
 /// <remarks>No implicit orientation or color management. Callers synchronize pixel access.
 /// Limits/cancellation can leave completed chunks; validation and memory admission precede mutation.
 /// Existing buffers stay owned by callers and no full-frame temporary is allocated.</remarks>
-public static class ImageDrawing
+public static partial class ImageDrawing
 {
     /// <summary>Replace a rectangle with a straight RGBA color, including its alpha and hidden RGB.</summary>
     public static void FillRectangle(ImageBuffer canvas, int x, int y, int width, int height, RgbaColor color,

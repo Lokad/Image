@@ -88,6 +88,11 @@ if (textLayout.GlyphCount != 5 || textLayout.LineCount != 3 || Math.Abs(textLayo
     || textLayout.LayoutBounds.Height != 34 || textLayout.GetGlyph(2).SourceOffset != 3
     || curveLayout.InkBounds != new TextBounds(0, 4, 6, 5))
     throw new Exception("Package supplied TrueType layout/wrapping/quadratic bounds differ.");
+using var textCanvas = ImageBuffer.Create(10, 12, 16);
+ImageDrawing.DrawText(textCanvas, curveLayout, 1, 0, new RgbaColor(12345, 23456, 34567));
+if (textCanvas.GetRow16(6)[4 * 4] != 12345 || textCanvas.GetRow16(6)[4 * 4 + 3] != 65535
+    || textCanvas.GetRow16(0)[4 * 4 + 3] != 0)
+    throw new Exception("Package antialiased text pixels/precision differ.");
 using var source = ImageBuffer.Create(2, 1, 16);
 new ushort[] { 12345, 1, 65534, 43210, 54321, 65534, 1, 12345 }.CopyTo(source.GetRow16(0));
 using var flipped = ImageTransforms.FlipHorizontal(source);

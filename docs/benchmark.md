@@ -14,8 +14,8 @@ sizes or hardware. Stop cases already confirmed at ≤1x.
 
 Shared-budget entry points and direct JPEG sample decoding are implemented and
 correctness-qualified; their times and allocations are **unmeasured**. Together
-with JPEG compatibility, async I/O, inspection, drawing and text layout, the checklist names
-twenty-seven pending representatives, with three original tiny font controls added
+with JPEG compatibility, async I/O, inspection, drawing and text, the checklist names
+twenty-nine pending representatives, with three original tiny font controls added
 to existing image inputs. Affected JPEG and fresh-Stream rows are
 explicitly prior production. Resident PNG/WebP, JPEG encoding, edits and image
 disposal remain unchanged.
@@ -46,12 +46,13 @@ clipping and snapshot semantics for self-overlap without a full-frame copy. Six
 named fill/copy/composite cases remain unmeasured. Resolve equivalent native canvas
 delivery, state restoration and ownership before timing; no numeric status changed.
 
-Supplied TrueType loading, outline decoding and pixel layout/measurement are
-correctness-qualified. Three named ordinary/packed/composite layout operations
-remain unmeasured; rendering remains pending. Prepare the same immutable face
-outside timing on both sides; complete layout includes needed geometry, positioned
-values, bounds and independent output ownership. Resolve equivalent font-backend
-scope first. Native glyph geometry checks supply no timing/allocation result.
+Supplied TrueType loading, outlines, layout/measurement and 8/16-bit antialiased
+rendering are correctness-qualified. Three layout and two complete rendering
+operations remain unmeasured. Prepare the same immutable face outside timing on
+both sides; include needed geometry, positions, bounds and independent outputs.
+Rendering includes layout and complete canvas updates; no cached masks. Resolve
+equivalent font-backend quality/scope first. Analytical coverage and separately
+recorded default native raster differences supply no timing/allocation result.
 
 The [direct-sample JPEG quality check](../benchmarks/warm-jpeg-sample-quality-evidence.json)
 reproduces the frozen packets exactly: grayscale **58,823 / 58,910 bytes**

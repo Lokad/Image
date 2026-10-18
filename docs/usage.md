@@ -142,8 +142,9 @@ access to mutable images. No EXIF orientation is implicitly applied.
 pixel layout with `TextLayout.Create(font, text, new TextOptions { FontSize = 16,
 WrapWidth = 240, LineSpacing = 1.2 })`. `LayoutBounds`, `InkBounds` and their union
 `Bounds` support measurement; use `Bounds.Translate(x, y).FitsInside(width, height)`
-to check positioned overflow. Styles come from supplied faces; rendering is still
-planned. `StorageBytes` supports caller lifetime reservations. Logical left-to-right
+to check positioned overflow. Render with `ImageDrawing.DrawText(canvas, layout,
+x, y, RgbaColor.From8(20, 40, 60))`; destinations clip and preserve canvas precision.
+Styles come from supplied faces. `StorageBytes` supports caller lifetime reservations. Logical left-to-right
 layout has no full OpenType shaping; [SPEC.md](../SPEC.md#supplied-truetype-fonts)
 defines support, wrapping and admission.
 

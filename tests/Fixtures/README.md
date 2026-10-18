@@ -14,6 +14,13 @@ composite transforms/attachments. `tools/WarmReference/freetype-outline-check.c`
 checks unhinted font-unit glyph bounds/advances through FreeType's public API,
 using headers only from ignored `external/`. This is a development correctness
 check, not a text-performance baseline. Font binaries remain generated/ignored.
+`--font-render` also generates six small 8/16-bit coverage controls using those
+same fonts. `tools/WarmReference/check-font-coverage.py <output>` independently
+solves original quadratic equations and integrates horizontal spans at 4096
+ordinates per row; it does not use production flattening or polygon clipping.
+`freetype-render-check.c` records a separate default native grayscale comparison.
+Native curve subdivision/fixed-point differences remain explicit, with no new
+performance baseline or allowance for other pixel operations.
 
 These images originate from Lokad.Image's own deterministic `asymmetric-v1`
 pixel recipe in `tools/Shared/OriginalPixels.cs` and independently chosen T.81

@@ -6,9 +6,9 @@ using Lokad.Image.Tooling;
 
 var output = Path.GetFullPath(args.Length == 0 ? "tests/Fixtures" : args[0]);
 Directory.CreateDirectory(output);
-if (args.Length == 2 && args[1] == "--font-layout")
+if (args.Length == 2 && args[1] is "--font-layout" or "--font-render")
 {
-    FontFixtures.Generate(output);
+    FontFixtures.Generate(output, args[1] == "--font-render");
     return;
 }
 var executable = Environment.GetEnvironmentVariable("LOKAD_IMAGE_FFMPEG") ?? "external/tools/ffmpeg.exe";

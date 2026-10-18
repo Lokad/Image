@@ -20,7 +20,7 @@ from required future functionality.
 | JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4×1) / 4:1:0 (4×2) sampling |
 | Stream extensions | Async Identify/Decode/Encode and fixed-workspace InspectHeaders implemented in development | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
 | Drawing/compositing | Implemented in development | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
-| Text | Supplied TrueType loading, outlines and pixel layout/measurement implemented in development; rendering planned | Supplied TrueType fonts; size/style/color/position, wrapping, line spacing and layout bounds for overflow/fitting |
+| Text | Implemented in development: supplied TrueType loading, outlines, pixel layout/measurement and 8/16-bit antialiased rendering | Supplied TrueType fonts; size/style/color/position, wrapping, line spacing and layout bounds for overflow/fitting |
 | Failure details | Implemented in development | Typed exhausted-limit and unsupported-feature categories with recognized codec when known |
 | Shared admission | Implemented in development | ImageBudget codec entry points and caller reservations; coarse per-operation reservation, cumulative charged work and independently retained BudgetedImage outputs |
 | Compression efficiency | Required ongoing work | WebP lossless sizes and lossy size/quality/time; JPEG comparisons at matched quality or size on representative photographs and text/diagrams |
@@ -146,7 +146,7 @@ or verify checksums. Font collections, CFF/WOFF and unsupported mapping/table
 profiles raise typed `FontContainer`, `FontMapping` or `FontTable` unsupported
 features, with no image format assigned. Malformed structure raises `ImageDataException`.
 The implementation follows public [OpenType table definitions](https://learn.microsoft.com/en-us/typography/opentype/spec/otff).
-Rendering remains required work; layout decodes and validates the outlines it uses.
+Layout decodes and validates the outlines it uses.
 
 Input, working-memory, item and work limits plus cancellation apply. Load admits
 supplied input plus one owned copy and a coarse 256-byte descriptor allowance
@@ -190,6 +190,31 @@ coarse retained capacities for caller reservations. Admission includes borrowed
 UTF-16 input while preparing, temporary component/flag/kerning storage and old/new
 capacities during growth. Extent dimension/pixel limits apply without a hypothetical
 RGBA frame. Work/cancellation checks cover decoding, layout and curve bounds.
+
+`ImageDrawing.DrawText(canvas, layout, x, y, color)` renders a prepared layout in
+coded canvas coordinates. The position is a finite continuous pixel origin;
+destinations clip to the canvas. The layout/font stay immutable and reusable;
+canvas storage and surviving outputs remain caller-owned. No orientation, font
+lookup, gamma adjustment or full-frame copy is implicit.
+
+Rendering uses nonzero winding within each glyph, then source-over in layout
+order. Quadratics subdivide until midpoint deviation from the chord is at most
+1/1024 pixel per coordinate (maximum 24 subdivision levels). Linear trapezoids,
+split at vertices/intersections, integrate pixel coverage in binary64; coverage
+rounds to 0..65535. Sixteen-bit color and coverage multiply without intermediate
+alpha/depth rounding; exact rational straight-alpha blending rounds positive
+halves upward only at final canvas samples. Zero effective source alpha leaves
+all destination samples unchanged, including hidden RGB.
+
+Admission counts canvas/layout storage, prepared edges/events/crossings, one
+coverage row, a coarse 4 KiB frame/descriptor allowance and 1600-byte subdivision
+stack. Old/new capacities overlap during growth. Edge/event item limits, work,
+clipped geometry and cancellation apply. All argument/geometry/workspace admission
+precedes mutation; later work/cancellation may leave completed chunks (at most
+128 pixels each) in glyph, row and left-to-right order. No rendered glyph cache
+or whole-frame mask is retained. Different rasterizers' curve approximation and
+fixed-point scaling can produce different antialiasing; native development image
+checks are not pixel identity or warm performance claims.
 
 ## Geometry and resizing
 

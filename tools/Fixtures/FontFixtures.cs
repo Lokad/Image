@@ -6,7 +6,7 @@ using Lokad.Image.Tooling;
 
 internal static class FontFixtures
 {
-    internal static void Generate(string output)
+    internal static void Generate(string output, bool render = false)
     {
         var ordinary = AuthoredTrueType.Build();
         var components = AuthoredTrueType.Build(glyphOverrides: new Dictionary<int, byte[]>
@@ -42,7 +42,35 @@ internal static class FontFixtures
         }
         var assemblySha256 = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(typeof(TextLayout).Assembly.Location)));
         File.WriteAllText(Path.Combine(output, "managed.json"), JsonSerializer.Serialize(new { schemaVersion = 1, assemblySha256, fonts }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
+        if (render) Render(output, assemblySha256);
         Console.WriteLine("Generated three original font geometry controls; no image corpus changed.");
+    }
+
+    private static void Render(string output, string assemblySha256)
+    {
+        var rows = new List<object>();
+        foreach (var (name, file, code) in new[]
+        {
+            ("triangle", "original", 65), ("quadratic", "original", 103), ("accent", "original", 193),
+            ("implied", "packed", 65), ("metrics", "components", 193), ("matrix", "components", 0xE000)
+        })
+        {
+            var font = TrueTypeFont.Load(File.ReadAllBytes(Path.Combine(output, file + ".ttf")));
+            var layout = TextLayout.Create(font, new Rune(code).ToString(), new() { FontSize = 10, Kerning = false });
+            foreach (var depth in new[] { 8, 16 })
+            {
+                using var canvas = ImageBuffer.Create(20, 16, depth);
+                ImageDrawing.DrawText(canvas, layout, .25, .5, RgbaColor.From8(255, 255, 255));
+                var alpha = new byte[20 * 16 * (depth / 8)];
+                for (var y = 0; y < 16; y++)
+                for (var x = 0; x < 20; x++)
+                    if (depth == 8) alpha[y * 20 + x] = canvas.GetRow8(y)[x * 4 + 3];
+                    else System.Buffers.Binary.BinaryPrimitives.WriteUInt16LittleEndian(alpha.AsSpan((y * 20 + x) * 2), canvas.GetRow16(y)[x * 4 + 3]);
+                File.WriteAllBytes(Path.Combine(output, name + ".alpha" + depth), alpha);
+            }
+            rows.Add(new { name, font = file, codePoint = code, size = 10, width = 20, height = 16, x = .25, y = .5, baseline = layout.GetGlyph(0).BaselineY });
+        }
+        File.WriteAllText(Path.Combine(output, "managed-render.json"), JsonSerializer.Serialize(new { schemaVersion = 1, assemblySha256, rows }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
     }
 
     private static void Profile(byte[] bytes, int compositePoints, int compositeContours, int components)
