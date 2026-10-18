@@ -431,6 +431,13 @@ exact-alpha path. A successful pass charges the complete original tap cost;
 declined speculative work leaves that charge to the original path. Cancellation,
 independent outputs and tighter-budget fallbacks remain. No heap workspace,
 persistent state or output cache is added.
+RGBA8 reduction may use a separate byte specialization at the same scales and
+4-KiB admission. Exact signed-32-bit premultiplication precedes unrounded row
+reuse. Normalizers at least one and alpha above the tiny-alpha boundary permit
+conservative 1e-4 RGB / 1e-6 alpha rounding margins under the same error budget.
+Uncertain ordinary-alpha pixels replay the original tap order; tiny alpha
+unwinds before exact scratch. The word kernel and earlier enlargement paths
+remain unchanged; no heap workspace or persistent cache is added.
 
 An original development-only reference uses exact integer kernel weights and
 `BigInteger` separable accumulation, with no production resize helpers. Public

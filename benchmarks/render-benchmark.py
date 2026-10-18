@@ -201,7 +201,7 @@ def render():
         row('Nearest upscale RGBA8', 'warm-nearestup8-evidence.json', ['observations', -1], 'WARM-NEAREST-UP8.md', True),
         row('Nearest upscale RGBA16', 'warm-nearestup16-evidence.json', ['observations', -1], 'WARM-NEAREST-UP16.md', True),
         row('Nearest resize RGBA16', 'warm-prepared-confirm-evidence.json', ['observations', -1], 'WARM-PREPARED-CONFIRM.md', True),
-        row('Bilinear resize RGBA8', 'warm-bilinear8-quiet-evidence.json', ['observations', -1], 'WARM-BILINEAR8-QUIET.md', True),
+        row('Bilinear resize RGBA8', 'warm-bilinear-byte-row-cache-evidence.json', ['cases', 'Down8', -1], 'WARM-BILINEAR-BYTE-ROW-CACHE.md', verification='Gap (short; qualified)'),
         row('Bilinear resize RGBA16†', 'warm-bilinear-word-cache-evidence.json', ['observations', -1], 'WARM-BILINEAR-WORD-CACHE.md', verification='Gap (short; qualified)'),
         row('Bilinear upscale RGBA8†', 'warm-bilinear-byte-factorization-evidence.json', ['cases', 'Up8', -1], 'WARM-BILINEAR-BYTE-FACTORIZATION.md', verification='Gap (short; qualified)'),
         row('Bilinear upscale RGBA16†', 'warm-current-bilinear-evidence.json', ['cases', 'Up16', -1], 'WARM-CURRENT-BILINEAR.md', True),
@@ -324,19 +324,19 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [bounded PNG RGBA streaming](../benchmarks/WARM-PNG-STREAMING-ROWS.md)
-removes the second Deflate walk at the original working limit. Four byte/word,
-ordinary/live-token cases improve 19.2–40.7%, remaining 1.45–1.48x byte and
-1.07–1.08x word gaps in qualified short screens. Managed allocations are
-68,200/70,248 B/op; the original logical admission peak is unchanged. Two
-unchanged default controls show no material regression. Other 203 comparisons
+Latest production round: [byte bilinear row reuse](../benchmarks/WARM-BILINEAR-BYTE-ROW-CACHE.md)
+reduces the existing RGBA8 reduction time 23.7%, to 500.71 µs / 1.291x
+(upper 1.406x), at 157,960 B/op. This is a qualified short gap. No heap workspace
+or persistent cache is added. The unchanged word-reduction and byte-enlargement
+managed control means remain within 1.3% of retained results. Other 206 comparisons
 and all 58 passing proofs retain their hot paths and evidence. No new raster,
 selector, settings grid or profile; passing cases are stopped.
-The 207 rows select 146 independent confirmations and 61 qualified short screens.
-Fresh **3,672 Release cases per OS** (1,357 internal +1,417 public +898 live FFmpeg),
-plus 253 scalar Deflate/PNG controls, pass. The consumer and all three examples
-pass through the **same actual Release package on Windows/Linux**. Production
-remains safe managed dependency-free C#/.NET10. Unaffected qualification is reused.
+The 207 rows select 145 independent confirmations and 62 qualified short screens.
+Fresh **3,678 Release cases per OS** (1,357 internal +1,423 public +898 live FFmpeg),
+plus 132 scalar bilinear/reference controls, pass. The consumer and all three
+examples pass through the **same actual Release package on Windows/Linux**.
+Production remains safe managed dependency-free C#/.NET10. Unaffected
+qualification is reused.
 
 **Decode and metadata**
 

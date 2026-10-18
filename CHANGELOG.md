@@ -11,7 +11,7 @@
 - Faster progressive JPEG refinement, including live cancelable decoding,
   with unchanged pixels, resource limits and cancellation behavior;
   see the [benchmark state](docs/benchmark.md).
-- Faster RGBA16 bilinear reduction through bounded row reuse, preserving exact
+- Faster RGBA8/16 bilinear reduction through bounded row reuse, preserving exact
   pixels, resource admission and cancellation.
 - Faster RGBA8 bilinear enlargement through exact integer factorization,
   preserving pixels, working memory and rounding.

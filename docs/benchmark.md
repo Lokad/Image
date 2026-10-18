@@ -31,19 +31,19 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [bounded PNG RGBA streaming](../benchmarks/WARM-PNG-STREAMING-ROWS.md)
-removes the second Deflate walk at the original working limit. Four byte/word,
-ordinary/live-token cases improve 19.2–40.7%, remaining 1.45–1.48x byte and
-1.07–1.08x word gaps in qualified short screens. Managed allocations are
-68,200/70,248 B/op; the original logical admission peak is unchanged. Two
-unchanged default controls show no material regression. Other 203 comparisons
+Latest production round: [byte bilinear row reuse](../benchmarks/WARM-BILINEAR-BYTE-ROW-CACHE.md)
+reduces the existing RGBA8 reduction time 23.7%, to 500.71 µs / 1.291x
+(upper 1.406x), at 157,960 B/op. This is a qualified short gap. No heap workspace
+or persistent cache is added. The unchanged word-reduction and byte-enlargement
+managed control means remain within 1.3% of retained results. Other 206 comparisons
 and all 58 passing proofs retain their hot paths and evidence. No new raster,
 selector, settings grid or profile; passing cases are stopped.
-The 207 rows select 146 independent confirmations and 61 qualified short screens.
-Fresh **3,672 Release cases per OS** (1,357 internal +1,417 public +898 live FFmpeg),
-plus 253 scalar Deflate/PNG controls, pass. The consumer and all three examples
-pass through the **same actual Release package on Windows/Linux**. Production
-remains safe managed dependency-free C#/.NET10. Unaffected qualification is reused.
+The 207 rows select 145 independent confirmations and 62 qualified short screens.
+Fresh **3,678 Release cases per OS** (1,357 internal +1,423 public +898 live FFmpeg),
+plus 132 scalar bilinear/reference controls, pass. The consumer and all three
+examples pass through the **same actual Release package on Windows/Linux**.
+Production remains safe managed dependency-free C#/.NET10. Unaffected
+qualification is reused.
 
 **Decode and metadata**
 
@@ -182,7 +182,7 @@ remains safe managed dependency-free C#/.NET10. Unaffected qualification is reus
 | [Nearest upscale RGBA8](../benchmarks/WARM-NEAREST-UP8.md) | 935.05 | 1,006.00 | 0.929 / 0.955 | 2,133,091 | Parity confirmed |
 | [Nearest upscale RGBA16](../benchmarks/WARM-NEAREST-UP16.md) | 1,071.13 | 1,019.06 | 1.051 / 1.095 | 4,265,431 | Gap (independent) |
 | [Nearest resize RGBA16](../benchmarks/WARM-PREPARED-CONFIRM.md) | 105.69 | 170.58 | 0.620 / 0.629 | 264,466 | Parity confirmed |
-| [Bilinear resize RGBA8](../benchmarks/WARM-BILINEAR8-QUIET.md) | 656.29 | 386.57 | 1.698 / 1.704 | 157,957 | Gap (independent) |
+| [Bilinear resize RGBA8](../benchmarks/WARM-BILINEAR-BYTE-ROW-CACHE.md) | 500.71 | 387.70 | 1.291 / 1.406 | 157,960 | Gap (short; qualified) |
 | [Bilinear resize RGBA16†](../benchmarks/WARM-BILINEAR-WORD-CACHE.md) | 534.35 | 418.51 | 1.277 / 1.336 | 290,127 | Gap (short; qualified) |
 | [Bilinear upscale RGBA8†](../benchmarks/WARM-BILINEAR-BYTE-FACTORIZATION.md) | 3,138.47 | 2,155.65 | 1.456 / 1.549 | 2,235,599 | Gap (short; qualified) |
 | [Bilinear upscale RGBA16†](../benchmarks/WARM-CURRENT-BILINEAR.md) | 2,563.23 | 1,869.40 | 1.371 / 1.382 | 4,498,974 | Gap (independent) |
