@@ -220,7 +220,7 @@ def render():
         row('Bicubic width reduction, unchanged height RGBA16§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Horizontal16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
         row('Bicubic width enlargement, unchanged height RGBA8§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'HorizontalUp8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
         row('Bicubic width enlargement, unchanged height RGBA16§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'HorizontalUp16', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
-        row('Bicubic RGBA8, 64×32 / support beyond 32§', 'warm-current-bicubic-evidence.json', ['cases', 'Down64x32_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA8, 64×32 / support beyond 32§', 'warm-current-bicubic-evidence.json', ['cases', 'Down64x32_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', verification='Gap (short; qualified)'),
         row('Bicubic RGBA16, 64×32 / support beyond 32§', 'warm-current-bicubic-evidence.json', ['cases', 'Down64x32_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic RGBA8, 32×16 / support beyond 64§', 'warm-current-bicubic-evidence.json', ['cases', 'Down32x16_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
         row('Bicubic RGBA16, 32×16 / support beyond 64§', 'warm-current-bicubic-evidence.json', ['cases', 'Down32x16_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
@@ -324,16 +324,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [stored PNG capacity](../benchmarks/WARM-PNG-STORED-CAPACITY.md)
-cuts RGBA16 encode time48.1%, to349.92µs /0.861x (upper0.870x), independently
-confirming parity. Allocation falls72.9% to1,140,504B/op. RGBA8 improves21.0%
-with71.3% less allocation, to604,319B/op, but remains a qualified short gap at
-1.295x/upper1.430x. Fresh output capacity allocation remains timed inside
-production; packets, checksums, workspace, writes, limits and ownership are
-unchanged. Other205 comparisons/all59 prior passes remain applicable. No new
-performance input/settings grid. The207 rows now select145 independent
-confirmations and62qualified short screens. Fresh **3,701 Release cases perOS**
-(1,374internal+1,429public+898liveFFmpeg), plus65scalar controls, pass. The consumer
+Latest production round: [bicubic quotient bounds](../benchmarks/WARM-CURRENT-BICUBIC.md#sixty-four-tap-byte-quotient-bounds)
+cuts default RGBA8 64×32 resize time31.6%, from611.55 to418.52µs, at205,884B/op.
+It remains a qualified short gap:1.134x/upper1.215x. The existing certified
+quotient-error calculation avoids needless direct pixel recalculation; exact
+pixels, arithmetic order, workspace, ownership and limits remain unchanged.
+Both shared-method controls pass without regression. Other206 comparisons/all60
+prior passing proofs remain applicable. No new performance input/settings grid.
+The207 rows select144 independent confirmations and63qualified short screens.
+Fresh **3,707 Release cases perOS** (1,374internal+1,435public+898liveFFmpeg), plus
+209scalar resize controls, pass; unrelated scalar qualification is reused. The consumer
 and allthree examples pass through the **same actual Release package on Windows/Linux**.
 Production remains safe managed dependency-free .NET10. Stop the now60passing
 paths; the full parity objective remains open.

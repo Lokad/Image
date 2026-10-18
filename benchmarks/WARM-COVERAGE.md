@@ -13,8 +13,8 @@ record which comparisons they replace. Only confirmed <=1x paths are stopped
 for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,145 select independent
-confirmations. Sixty-two select qualified screens after changed production: six
+unscored native-alpha incompatibility. Of those numeric rows,144 select independent
+confirmations. Sixty-three select qualified screens after changed production: six
 paired-column byte/word bicubic cases, byte bicubic TightDown8, word bilinear
 Down16, live-token progressive444, five fixed JPEG encodes, two opaque VP8 encodes,
 two PNG Paeth dispatch controls and two PNG encodes after chunk checksum folding plus storedRGBA8 after capacity reservation, and eight adaptive JPEG encodes
@@ -23,7 +23,10 @@ plus five VP8L decodes and two compressed-alpha VP8 decodes after borrowed looku
 and seven byte/word enlargement boundaries after wider strips, plus byte
 bilinear Up8 after exact integer factorization and live-token baseline444 decode
 after bounded AC cache reuse, plus tight byte64×32 after packed weight broadcasts and the thirteen default full-row-cache bicubic
-comparisons after byte-row output specialization. VerticalUp8 now selects its
+comparisons after byte-row output specialization, plus default byte64×32 after
+certified quotient bounds. That round improves31.6% to1.134x/upper1.215x, retains
+206 other comparisons/all60 passing proofs, and adds no workload or image.
+VerticalUp8 now selects its
 first current independent confirmation; it remains a1.020x gap rather than a
 short-screen witness.
 RGB16 Paeth now

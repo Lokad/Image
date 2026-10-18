@@ -1,5 +1,10 @@
 # Current bicubic evidence reconciliation
 
+Latest: [64-tap byte quotient bounds](#sixty-four-tap-byte-quotient-bounds)
+replace default Down64x32_8 with a qualified short gap at1.134x/upper1.215x,
+31.6% faster. Its preceding independent1.662x result below is historical;
+other selected paths retain applicable evidence. The <=1x objective remains open.
+
 Historical timing note: [byte-row output specialization](WARM-BICUBIC-BYTE-ROW.md)
 replaces thirteen default full-row-cache comparisons with current qualified short
 gaps. Only the affected default-cache timings here are superseded; other selected
@@ -459,3 +464,44 @@ metadata and descriptor ownership must be established before timing them.
 The subsequent [PNG Identify change](WARM-PNG-IDENTIFY.md) affects only resident/Stream PNG inspection. Pixel Scan/shared CRC, editing and every resize operation retain their executed bodies and native workers; all61 bicubic proofs remain valid. New full3,517-tests/OS and the same actual package consumer/all three examples pass on Windows/Linux. No bicubic retiming or retuning.
 
 The subsequent [JPEG Identify change](WARM-JPEG-IDENTIFY.md) leaves pixel decoder preflight, PNG inspection, edits and resizes unchanged. Keep all61 bicubic proofs stopped; new full3,535-tests/OS and same actual package consumer/all three examples pass on both OS. No bicubic retiming.
+
+## Sixty-four-tap byte quotient bounds
+
+Default RGBA8 513×259→64×32 now uses the existing quotient-error calculation
+to certify rounding. Its former fixed color margin sent certain pixels through
+the original two-dimensional tap loop. The new bound avoids those replays;
+horizontal/vertical arithmetic, direct fallback, half handling, alpha, resource
+admission, work charges, cancellation and independent output remain unchanged.
+There is no extra allocation or output cache. For at most64 taps per axis,
+the existing absolute unit-error bound covers both accumulation orders; the
+quotient perturbation bounds retain direct evaluation wherever rounding could differ.
+
+The complete-operation three-actual screen is **418.52µs versus369.03µs**,
+**1.134x/upper1.215x**, **205,884B/op**:31.56% less managed time than611.55µs.
+This is a qualified improvement and an open parity gap. No routine twelve-actual
+confirmation was run while the mean remained above1. Both versioned quiet guards
+pass, all actuals are retained, and exact rational/frozen pixels, source
+preservation and independent-owner checks pass.
+
+Two neighboring shared-method controls pass: Wide8 at1.535x/upper1.891x,
+231,229B/op; word Down64x32_16 at1.180x/upper1.335x,214,070B/op. Their calculation
+and selection outcomes remain unchanged, so their existing independent proofs
+remain selected. Only default byte Down64x32_8 newly takes the quotient branch.
+The tight byte64×32 case refuses the unchanged cache admission and keeps its
+separate helper. Other206 numeric comparisons/all60 passing proofs remain valid.
+
+The original two rasters, native worker binaries/build pins, halo16 for64×32
+andhalo8 for128×64, normal/scalar comparisons and native RGB/alpha max1/RMSE0.25
+remain fixed. Full conversion, filtering, owned output, unpremultiplication,
+quantization and release remain timed. Historical profiles predate a changed hot
+loop; no current attribution claim, fresh profile, grid or driver build was needed.
+
+Qualification passes **3,707 Release tests per OS**:1,374 internal,1,435 public
+and898 live FFmpeg, plus209 scalar resize checks per OS. Six new public checks
+pin dyadic half ties, clamped edges, tiny/zero alpha, odd output and independent
+owners against direct evaluation. The same actual Release package's consumer
+and all three examples pass on Windows and Linux. One producer build per OS,
+three short jobs, zero harness/selector/native builds during measurement.
+The [numeric evidence](warm-current-bicubic-evidence.json) retains exact sources,
+raw archives, controls, uncertainty and qualification. Prior release artifacts
+remain unchanged. The finite207-case parity objective stays open.

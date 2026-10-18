@@ -165,12 +165,12 @@ internal static class WideCachedBicubicResize
                     var colorMargin0=wide16?wordColorBound*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent0)<<52):byteColorMargin;
                     var colorMargin1=wide16?wordColorBound*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent1)<<52):byteColorMargin;
                     var alphaMargin0=alphaMargin;var alphaMargin1=alphaMargin;
-                    if(capacity>=128)
+                    if(capacity>=128 || !wide16 && capacity==64)
                     {
                         // Apply the same absolute accumulation-error bound to
-                        // each actual quotient. Wide kernels have large positive
-                        // normalizers and alpha sums; the worst-case fixed margin
-                        // otherwise sends many certain pixels to direct evaluation.
+                        // each actual quotient, including 64-tap bytes. This avoids
+                        // direct two-dimensional replay when the fixed byte margin
+                        // is much wider than the certified quotient error.
                         (colorMargin0,alphaMargin0)=QuotientMargins(values.GetLower(),a0,n0,maximum,unitError);
                         (colorMargin1,alphaMargin1)=QuotientMargins(values.GetUpper(),a1,n1,maximum,unitError);
                     }

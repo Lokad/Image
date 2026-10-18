@@ -5,6 +5,42 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class WideBicubicResizeTests
 {
     [Theory]
+    [InlineData(8,6,0)]
+    [InlineData(8,6,1)]
+    [InlineData(8,6,127)]
+    [InlineData(8,6,255)]
+    [InlineData(7,5,127)]
+    [InlineData(7,5,255)]
+    public void SixtyFourTapByteBoundsKeepExactHalvesClampedEdgesAndOwners(int width,int height,byte alpha)
+    {
+        using var source=ImageBuffer.Create(64,48,8);
+        for(var y=0;y<source.Height;y++)for(var x=0;x<source.Width;x++)
+        {
+            var pixel=source.GetRow8(y).Slice(x*4,4);
+            pixel[0]=(byte)(10+(x&1));pixel[1]=(byte)(124+(y&1));
+            pixel[2]=(byte)(254+((x+y)&1));pixel[3]=alpha;
+        }
+        var input=OriginalPixels.Bytes(source);
+        var outputBytes=width*height*4;
+        using var direct=ImageTransforms.Resize(source,width,height,ResizeFilter.Bicubic,
+            new ImageLimits {MaxWorkingBytes=input.Length+outputBytes+4095});
+        var expected=OriginalPixels.Bytes(direct);
+        using var first=ImageTransforms.Resize(source,width,height,ResizeFilter.Bicubic);
+        using var second=ImageTransforms.Resize(source,width,height,ResizeFilter.Bicubic);
+        Assert.Equal(expected,OriginalPixels.Bytes(first));Assert.Equal(expected,OriginalPixels.Bytes(second));
+        first.GetRow8(0)[0]^=255;
+        Assert.Equal(expected,OriginalPixels.Bytes(second));Assert.Equal(input,OriginalPixels.Bytes(source));
+        if(alpha==0)Assert.All(expected,value=>Assert.Equal((byte)0,value));
+        if(width==8 && alpha>=127)
+        {
+            // Interior taps have dyadic weights and exactly half-integral
+            // colors. The original away-from-zero tie behavior is retained.
+            var pixel=second.GetRow8(2).Slice(3*4,4);
+            Assert.Equal(new byte[]{11,125,255,alpha},pixel.ToArray());
+        }
+    }
+
+    [Theory]
     [InlineData(8,53,37,12,8)]
     [InlineData(16,53,37,12,8)]
     [InlineData(8,99,83,17,13)]

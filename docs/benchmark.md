@@ -31,16 +31,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [stored PNG capacity](../benchmarks/WARM-PNG-STORED-CAPACITY.md)
-cuts RGBA16 encode time48.1%, to349.92µs /0.861x (upper0.870x), independently
-confirming parity. Allocation falls72.9% to1,140,504B/op. RGBA8 improves21.0%
-with71.3% less allocation, to604,319B/op, but remains a qualified short gap at
-1.295x/upper1.430x. Fresh output capacity allocation remains timed inside
-production; packets, checksums, workspace, writes, limits and ownership are
-unchanged. Other205 comparisons/all59 prior passes remain applicable. No new
-performance input/settings grid. The207 rows now select145 independent
-confirmations and62qualified short screens. Fresh **3,701 Release cases perOS**
-(1,374internal+1,429public+898liveFFmpeg), plus65scalar controls, pass. The consumer
+Latest production round: [bicubic quotient bounds](../benchmarks/WARM-CURRENT-BICUBIC.md#sixty-four-tap-byte-quotient-bounds)
+cuts default RGBA8 64×32 resize time31.6%, from611.55 to418.52µs, at205,884B/op.
+It remains a qualified short gap:1.134x/upper1.215x. The existing certified
+quotient-error calculation avoids needless direct pixel recalculation; exact
+pixels, arithmetic order, workspace, ownership and limits remain unchanged.
+Both shared-method controls pass without regression. Other206 comparisons/all60
+prior passing proofs remain applicable. No new performance input/settings grid.
+The207 rows select144 independent confirmations and63qualified short screens.
+Fresh **3,707 Release cases perOS** (1,374internal+1,435public+898liveFFmpeg), plus
+209scalar resize controls, pass; unrelated scalar qualification is reused. The consumer
 and allthree examples pass through the **same actual Release package on Windows/Linux**.
 Production remains safe managed dependency-free .NET10. Stop the now60passing
 paths; the full parity objective remains open.
@@ -201,7 +201,7 @@ paths; the full parity objective remains open.
 | [Bicubic width reduction, unchanged height RGBA16§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 866.64 | 579.18 | 1.496 / 1.646 | 730,691 | Gap (short; qualified) |
 | [Bicubic width enlargement, unchanged height RGBA8§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 2,211.79 | 1,516.35 | 1.459 / 1.596 | 1,930,617 | Gap (short; qualified) |
 | [Bicubic width enlargement, unchanged height RGBA16§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 1,965.91 | 1,460.21 | 1.346 / 1.467 | 2,129,333 | Gap (short; qualified) |
-| [Bicubic RGBA8, 64×32 / support beyond 32§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 611.55 | 367.91 | 1.662 / 1.668 | 205,881 | Gap (independent) |
+| [Bicubic RGBA8, 64×32 / support beyond 32§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 418.52 | 369.03 | 1.134 / 1.215 | 205,884 | Gap (short; qualified) |
 | [Bicubic RGBA16, 64×32 / support beyond 32§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 522.57 | 390.56 | 1.338 / 1.351 | 214,071 | Gap (independent) |
 | [Bicubic RGBA8, 32×16 / support beyond 64§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 452.57 | 375.86 | 1.204 / 1.208 | 199,355 | Gap (independent) |
 | [Bicubic RGBA16, 32×16 / support beyond 64§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 455.52 | 412.28 | 1.105 / 1.110 | 201,398 | Gap (independent) |
