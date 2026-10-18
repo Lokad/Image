@@ -4,6 +4,36 @@ namespace Lokad.Image;
 
 public static partial class ImageCodec
 {
+    /// <summary>Encode caller-owned, interleaved 8-bit grayscale or RGB samples.</summary>
+    /// <remarks>Grayscale input always produces one JPEG component. Sampling applies
+    /// to RGB input. Stride zero means packed; positive stride must cover a row.
+    /// The complete source span counts toward working admission. Source storage
+    /// must remain stable during the call; it is never retained or modified.
+    /// The output remains open and can contain partial bytes on failure.</remarks>
+    public static void EncodeJpeg(ReadOnlySpan<byte> samples, int width, int height,
+        JpegSampleFormat format, Stream output, int stride = 0, JpegEncodeOptions? options = null,
+        CancellationToken cancellationToken = default)
+        => EncodeJpegSamples(samples, width, height, format, output, stride, options, cancellationToken, null);
+
+    internal static void EncodeJpegSamples(ReadOnlySpan<byte> samples, int width, int height,
+        JpegSampleFormat format, Stream output, int stride, JpegEncodeOptions? options,
+        CancellationToken cancellationToken, ImageBudget? budget)
+    {
+        ArgumentNullException.ThrowIfNull(output);
+        options ??= new JpegEncodeOptions();
+        var context = new OperationContext(options.Limits, cancellationToken);
+        if (options.Quality is < 1 or > 100 || !Enum.IsDefined(options.Sampling)
+            || options.RestartInterval is < 0 or > 65535 || options.BackgroundRgb > 0xFFFFFF)
+            throw new ArgumentOutOfRangeException(nameof(options));
+        var source = new JpegSampleInput(samples, width, height, format, stride, context);
+        context.Reserve(samples.Length); context.Reserve(8192);
+        using var bounded = new LimitedWriteStream(output, options.Limits.MaxOutputBytes, cancellationToken);
+        if (budget is null) { JpegEncoder.EncodeSamples(source, bounded, options, context); return; }
+        var admission = budget.Begin(context.Limits);
+        try { JpegEncoder.EncodeSamples(source, bounded, options, context); }
+        finally { admission.Complete(context.ConsumedWork); }
+    }
+
     /// <summary>Decode JPEG into caller-owned 8-bit grayscale or RGB samples.</summary>
     /// <remarks>Stride zero means tightly packed; otherwise use a positive stride
     /// at least as large as one row. Padding and unused suffix bytes are untouched.

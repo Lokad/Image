@@ -59,6 +59,9 @@ public sealed class ImageBudget
         CancellationToken cancellationToken = default) => ImageCodec.EncodePngWithBudget(image, output, this, options, cancellationToken);
     public void EncodeJpeg(ImageBuffer image, Stream output, JpegEncodeOptions? options = null,
         CancellationToken cancellationToken = default) => ImageCodec.EncodeJpegWithBudget(image, output, this, options, cancellationToken);
+    public void EncodeJpeg(ReadOnlySpan<byte> samples, int width, int height, JpegSampleFormat format,
+        Stream output, int stride = 0, JpegEncodeOptions? options = null, CancellationToken cancellationToken = default)
+        => ImageCodec.EncodeJpegSamples(samples, width, height, format, output, stride, options, cancellationToken, this);
     public void EncodeWebp(ImageBuffer image, Stream output, WebpEncodeOptions? options = null,
         CancellationToken cancellationToken = default) => ImageCodec.EncodeWebpWithBudget(image, output, this, options, cancellationToken);
 

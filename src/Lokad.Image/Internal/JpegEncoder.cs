@@ -6,7 +6,7 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
-internal static class JpegEncoder
+internal static partial class JpegEncoder
 {
 
     public static void Encode(ImageBuffer image, Stream output, JpegEncodeOptions options, OperationContext context)

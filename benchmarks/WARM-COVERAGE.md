@@ -25,8 +25,17 @@ lifetime, with equivalent native gray/RGB sample delivery. They exercise the
 distinct single-channel copy and three-channel color-writing boundaries without
 an RGBA frame. Packed rows, original inputs/settings and existing JPEG quality
 gates are fixed; padded rows and opt-in orientation have correctness coverage.
-All 207 original numeric rows remain applicable; four new named boundaries await
-timing/allocation evidence. Direct CMYK decode and caller-sample encode remain open.
+All 207 original numeric rows remain applicable. Direct CMYK decode remains open.
+
+Direct JPEG sample encoding adds two **unmeasured** representatives:
+`JpegSamplesEncode/GrayscaleResident` uses the fixed grayscale projection and the
+approved SIMD-enabled libjpeg-turbo reference; `JpegSamplesEncode/Rgb420Resident`
+uses the fixed opaque RGB projection and FFmpeg's 4:2:0 reference. Retain existing
+quality/size matching, with equivalent raw sample delivery, complete row
+normalization, streaming and independent encoded output ownership. The cases
+cover single-component samples and packed RGB conversion, without a settings grid.
+Six new named boundaries now await elapsed/allocation evidence; their existing
+codec references do not provide measurements of the new public operations.
 
 Latest [wider RGBA8 horizontal reversal](WARM-HORIZONTAL-FLIP512.md) improves
 single-output flip **22.0%**, passing parity at **0.950× / upper 0.965×**. Two live

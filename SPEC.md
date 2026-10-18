@@ -16,7 +16,7 @@ from required future functionality.
 | WebP lossy encode | Implemented; original output independently decoded by FFmpeg | VP8 output with explicit quality/effort and transparency |
 | Exact edits | Implemented; hand-computed permutations and live FFmpeg checks | Crop, flips, quarter turns, transpose, all eight EXIF orientations |
 | Resize | Implemented; hand-computed kernel and alpha cases | Exact dimensions, fit, nearest/bilinear/bicubic, alpha-aware filtering |
-| JPEG caller samples | Gray/RGB decode implemented in development; CMYK decode and gray/RGB encode planned | Caller-provided 8-bit samples without mandatory RGBA; explicit source color space/inversion, quality and sampling |
+| JPEG caller samples | Gray/RGB decode/encode implemented in development; CMYK decode planned | Caller-provided 8-bit samples without mandatory RGBA; explicit source color space/inversion, quality and sampling |
 | JPEG compatibility extensions | Planned; not supported by the released package | CMYK/YCCK and 4:1:1/4:1:0 sampling |
 | Stream extensions | Planned | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
 | Drawing/compositing | Planned | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
@@ -65,6 +65,16 @@ existing encoded-space color matrix and rounding. Grayscale takes decoded Y for
 YCbCr, repeats gray unchanged, or rounds `0.299 R + 0.587 G + 0.114 B` for RGB.
 EXIF reorientation is opt-in and writes directly to the oriented destination
 layout; returned dimensions/orientation describe those samples. ICC is not applied.
+
+`ImageCodec.EncodeJpeg` and `ImageBudget.EncodeJpeg` also accept borrowed gray/RGB
+samples and positive or packed strides. Input is neither changed nor retained.
+Gray input always produces one component; RGB input uses `JpegEncodeOptions`
+quality, sampling and restart controls. Samples are opaque; a valid background
+does not change them. Normalization uses at most two sixteen-pixel RGB rows,
+never RGBA storage. Fixed/adaptive Huffman coding, quantization, stream limits
+and cancellation retain the established codec policies. Caller input and 8 KiB
+fixed workspace are admitted, with optional adaptive event storage separately
+admitted. Quality numbers remain specific to this encoder.
 
 Transforms return new owned buffers and preserve precision and source pixels.
 Outstanding raw orientation is retained until `AutoOrient` or decode with
