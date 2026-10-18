@@ -21,7 +21,7 @@ from required future functionality.
 | Drawing/compositing | Planned | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
 | Text | Planned | Supplied TrueType fonts; size/style/color/position, wrapping, line spacing and layout bounds for overflow/fitting |
 | Failure details | Implemented in development | Typed exhausted-limit and unsupported-feature categories with recognized codec when known |
-| Shared admission | Planned | Caller-shared coarse memory/work budgets |
+| Shared admission | Implemented in development | ImageBudget codec entry points and caller reservations; coarse per-operation reservation, cumulative charged work and independently retained BudgetedImage outputs |
 | Compression efficiency | Required ongoing work | WebP lossless sizes and lossy size/quality/time; JPEG comparisons at matched quality or size on representative photographs and text/diagrams |
 
 GIF, APNG and animated WebP are rejected. Arithmetic/lossless/12-bit JPEG,

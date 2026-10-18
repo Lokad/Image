@@ -173,6 +173,34 @@ if (jpegPixels.Width != 8 || jpegPixels.Height != 8 || jpegPixels.BitDepth != 8 
     throw new Exception("Package consumer JPEG contract differs.");
 for (var y = 0; y < 8; y++)
     if (!jpegPixels.GetRow8(y).SequenceEqual(opaque.GetRow8(y))) throw new Exception("Package consumer JPEG pixels differ.");
+var sharedLimits = new ImageLimits { MaxWorkingBytes = 2 * 1024 * 1024, MaxWork = 2_000_000 };
+var shared = new ImageBudget(sharedLimits.MaxWorkingBytes + 256, sharedLimits.MaxWork * 2);
+using (shared.Reserve(256, 1))
+{
+    using (var budgeted = shared.Decode(jpeg.ToArray(), new DecodeOptions { Limits = sharedLimits }))
+    {
+        if (shared.RemainingWorkingBytes != sharedLimits.MaxWorkingBytes - 8 * 8 * 4)
+            throw new Exception("Package consumer retained shared memory differs.");
+        for (var y = 0; y < 8; y++)
+            if (!budgeted.Image.GetRow8(y).SequenceEqual(opaque.GetRow8(y)))
+                throw new Exception("Package consumer budgeted pixels differ.");
+    }
+    if (shared.RemainingWorkingBytes != sharedLimits.MaxWorkingBytes)
+        throw new Exception("Package consumer budgeted disposal did not release pixels.");
+}
+if (shared.RemainingWorkingBytes != shared.MaxWorkingBytes || shared.ConsumedWork <= 1
+    || shared.RemainingWork != shared.MaxWork - shared.ConsumedWork)
+    throw new Exception("Package consumer shared admission did not settle.");
+try
+{
+    new ImageBudget(1, sharedLimits.MaxWork).Identify(jpeg.ToArray(), sharedLimits);
+    throw new Exception("Package consumer accepted exhausted shared memory.");
+}
+catch (ImageLimitException failure)
+{
+    if (failure.Limit != ImageLimitKind.WorkingBytes || failure.Scope != ImageLimitScope.SharedBudget)
+        throw new Exception("Package consumer shared limit category differs.");
+}
 // Independently authored TIFF IFD0: 63 unrelated inline LONG tags followed by
 // a SHORT orientation. Validate error classification through the actual package.
 var tiff = new byte[14 + 64*12]; tiff[0] = tiff[1] = (byte)'I';

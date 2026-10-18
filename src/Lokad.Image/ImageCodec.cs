@@ -3,7 +3,7 @@ using Lokad.Image.Internal;
 namespace Lokad.Image;
 
 /// <summary>Still-image inspection and codecs. Supplied streams remain open.</summary>
-public static class ImageCodec
+public static partial class ImageCodec
 {
     public static ImageInfo Identify(ReadOnlySpan<byte> input, ImageLimits? limits = null,
         CancellationToken cancellationToken = default)

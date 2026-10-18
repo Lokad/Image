@@ -11,6 +11,7 @@ internal sealed class OperationContext
 
     public long RemainingWork => Limits.MaxWork - work;
     public long RemainingWorkingBytes => Limits.MaxWorkingBytes - liveBytes;
+    internal long ConsumedWork => work;
 
     public OperationContext(ImageLimits limits, CancellationToken cancellation)
     {

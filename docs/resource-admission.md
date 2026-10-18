@@ -25,6 +25,26 @@ read a larger existing buffer to produce a smaller admitted result; that source
 still counts toward working memory. Work units are deterministic accounting,
 not CPU instructions or a time limit.
 
+## Shared budgets
+
+`ImageBudget` provides `Identify`, `Decode` and `EncodePng/Jpeg/Webp` entry points
+with the same codec options, pixels and stream ownership. Calls reserve the full
+configured `MaxWorkingBytes` and `MaxWork` atomically before codec execution.
+Choose per-operation limits that fit alongside other live reservations; this
+coarse admission can reject a call whose actual needs would have been smaller.
+Completion refunds temporary memory and unconsumed work, including on failure
+or cancellation. Charged work is cumulative across calls. Concurrent calls share
+the allowance safely; each codec operation itself uses one CPU thread.
+
+Decode returns a `BudgetedImage`. Use its `Image` and dispose the outer owner
+after all pixel uses; its retained pixel charge then ends. Each result owns its
+storage and reservation independently. Disposing `Image` directly leaves the
+reservation held until the outer owner is disposed or the image is collected.
+`Reserve(bytes, work)` lets caller-managed storage and work use the same budget;
+dispose that reservation after the storage's lifetime. Its explicit work charge
+is not refunded. Caller streams/output storage and later unbudgeted image copies
+remain caller-managed. Existing `ImageCodec` entry points use per-operation limits.
+
 ## What working memory includes
 
 | Operation | Main admitted storage |
@@ -72,6 +92,8 @@ the managed buffer-length ceiling. `UnsupportedImageException.Feature` identifie
 the unsupported feature and `Format` identifies the recognized codec when known.
 Legacy message-only constructors report `Unspecified`; library failures provide
 typed categories. These properties do not require exception-message parsing.
+`ImageLimitException.Scope` distinguishes per-operation exhaustion from shared
+budget exhaustion; shared failures report `WorkingBytes` or `Work` as the limit.
 Cancellation raises `OperationCanceledException` with the supplied token. Invalid
 public arguments use standard argument exceptions. Stream encoding can leave
 partial output on failure; stage output when atomic publication is required.

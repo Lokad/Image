@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Shared codec memory/work budgets, caller reservations and independently owned
+  budgeted decode results, with typed shared-budget exhaustion.
 - Typed limit and unsupported-feature details on codec exceptions, preserving
   existing exception types, messages and cancellation behavior.
 - Faster subsampled JPEG color reconstruction with certified exact rounding

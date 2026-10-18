@@ -31,9 +31,13 @@ public sealed class ImageLimitException : IOException
 {
     /// <summary>The exhausted limit. Unspecified is reserved for the legacy constructor.</summary>
     public ImageLimitKind Limit { get; }
+    /// <summary>Whether the exhausted allowance belongs to one operation or a shared budget.</summary>
+    public ImageLimitScope Scope { get; }
 
     public ImageLimitException(string message) : this(ImageLimitKind.Unspecified, message) { }
-    public ImageLimitException(ImageLimitKind limit, string message) : base(message) => Limit = limit;
+    public ImageLimitException(ImageLimitKind limit, string message) : this(limit, message, ImageLimitScope.Operation) { }
+    public ImageLimitException(ImageLimitKind limit, string message, ImageLimitScope scope)
+        : base(message) { Limit = limit; Scope = scope; }
 }
 
 public sealed class UnsupportedImageException : NotSupportedException

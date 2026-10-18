@@ -1,5 +1,8 @@
 namespace Lokad.Image;
 
+/// <summary>The owner of an exhausted resource allowance.</summary>
+public enum ImageLimitScope { Operation, SharedBudget }
+
 /// <summary>Admission categories reported by <see cref="ImageLimitException.Limit"/>.</summary>
 public enum ImageLimitKind
 {

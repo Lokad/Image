@@ -6,6 +6,17 @@ Updated 2026-10-18. The **warm single-CPU parity objective remains open**:
 independent confirmations and 84 qualified shorts. Reuse unchanged passing paths;
 do not add an image or settings grid.
 
+Shared-budget codec entry points add two required, **unmeasured** representatives:
+`SharedBudgetDecode/PngRgba8Resident` reuses `WarmPng/Decode8` to cover complete
+decode and retained-budget owner disposal; `SharedBudgetEncode/Jpeg420Rgba8`
+reuses `WarmJpeg/Encode420_8` to cover complete output streaming and work settlement.
+Reuse the existing inputs, settings, native references and quality gates. These
+cover the new common admission/ownership boundaries, not new codec algorithms.
+The 207 numeric rows retain their evidence: original codec entry points, operation
+state layout, kernels, allocations and ImageBuffer disposal are unchanged.
+Budgeted entry points have correctness/package qualification, pending separate
+quiet-VM elapsed/allocation evidence; existing parity claims do not cover them.
+
 Latest [wider RGBA8 horizontal reversal](WARM-HORIZONTAL-FLIP512.md) improves
 single-output flip **22.0%**, passing parity at **0.950× / upper 0.965×**. Two live
 outputs improve **27.9%** but remain a qualified **1.053×** gap. Both retain
@@ -266,7 +277,7 @@ Approved baselines, exact managed pixels, source-quality/size comparisons,
 complete operation owners and quiet-VM confidence requirements remain unchanged.
 Centered/clamped crop, AutoOrient and ResizeToFit use the named kernels after
 small geometry work; correctness/composition controls cover those aliases.
-The scope excludes deferred GIF/animation/drawing/fonts, arbitrary profiles/
+The measured scope excludes GIF/animation, pending drawing/fonts, arbitrary profiles/
 sizes/hardware, startup and concurrent throughput. Add a later case only when
 concrete evidence identifies a distinct omitted required algorithm or public
 boundary, with a named representative and reason. Do not expand settings grids

@@ -33,6 +33,7 @@ Dispose image buffers; supplied streams remain open. Operations support finite
 [resource limits](docs/resource-admission.md) and cancellation. PNG preserves
 precision; JPEG/WebP output is 8-bit. WebP defaults to lossless. For transparent
 JPEG input, set `JpegEncodeOptions.BackgroundRgb` explicitly.
+`ImageBudget` composes codec admission with a caller's shared memory/work budget.
 
 The [usage guide](docs/usage.md) covers encoding, cropping and 16-bit editing.
 The named warm single-CPU workloads meet the ≤2× target against explicitly labeled

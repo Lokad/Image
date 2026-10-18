@@ -301,6 +301,11 @@ short screens from independent confirmations. The finite [material checklist](..
 fixed inputs remain; results do not extrapolate to other images, settings,
 sizes or hardware. Stop cases already confirmed at ≤1x.
 
+Shared-budget entry points are implemented and correctness-qualified but their
+elapsed times and allocations are **unmeasured**. The checklist names two pending
+representatives using existing inputs. Original codec entry points and image
+disposal remain unchanged; the 207 numeric rows do not cover these new boundaries.
+
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
 FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,
 normal SIMD, tiering off, nonconcurrent workstation GC. Inputs are the two original
