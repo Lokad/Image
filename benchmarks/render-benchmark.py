@@ -187,10 +187,10 @@ def render():
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-adaptive-ac-evidence.json', ['cases', 'Encode420_16', -1], 'WARM-JPEG-ADAPTIVE-AC.md', verification='Gap (short; qualified)'),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-adaptive-ac-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-JPEG-ADAPTIVE-AC.md', verification='Gap (short; qualified)'),
-        row('WebP VP8, opaque‡', 'warm-vp8-source-views-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8-SOURCE-VIEWS.md', verification='Gap (short; qualified)'),
-        row('WebP VP8, opaque from RGBA16‡', 'warm-vp8-source-views-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-SOURCE-VIEWS.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 + alpha‡', 'warm-vp8-source-views-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8-SOURCE-VIEWS.md', True),
-        row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8-source-views-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8-SOURCE-VIEWS.md', True),
+        row('WebP VP8, opaque‡', 'warm-vp8-prepared-prediction-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8-PREPARED-PREDICTION.md', verification='Gap (short; qualified)'),
+        row('WebP VP8, opaque from RGBA16‡', 'warm-vp8-prepared-prediction-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-PREPARED-PREDICTION.md', verification='Gap (short; qualified)'),
+        row('WebP VP8 + alpha‡', 'warm-vp8-prepared-prediction-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8-PREPARED-PREDICTION.md', True),
+        row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8-prepared-prediction-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8-PREPARED-PREDICTION.md', True),
         row('WebP VP8L, exact backend*', 'warm-vp8lencode-exact-evidence.json', ['observations', -1], 'WARM-VP8L-ENCODE-EXACT.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-opaque8-evidence.json', ['observations', -1], 'WARM-VP8L-OPAQUE8.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8lencode16-evidence.json', ['observations', -1], 'WARM-VP8L-RGBA16-ENCODE.md', True),
@@ -324,16 +324,17 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [vertical VP8 SIMD filtering](../benchmarks/WARM-VP8-VERTICAL-FILTER.md)
-cuts the five affected decode times5.5-9.5%, with unchanged allocations. Live
-opaque is1.663x FFmpeg; allfive remain qualified short gaps. Other202comparisons/
-all60passing proofs remain applicable. The207rows now select127independent
-confirmations and80qualified shorts; three older independent gaps were replaced.
-Fresh **3,718 Release cases perOS** (1,384internal+1,436public+898liveFFmpeg), plus
-30internal+251public scalar controls, pass. Unrelated scalar proofs are reused.
-The consumer and allthree examples pass through the **same actual Release package
-on Windows/Linux**. Production stays safe managed dependency-free .NET10.
-Stop the60passing paths; the full parity objective remains open.
+Latest production round: [prepared VP8 encoder prediction](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md)
+cuts opaque encoding time13.1-13.7%, with unchanged packets and allocations;
+the two opaque cases remain1.429-1.460x short gaps. Both changed alpha paths
+independently re-confirm below parity (uppers.424/.438x), retaining all12actuals
+and the word outlier. Other203comparisons/58passing proofs remain applicable,
+including all5P57decode results. The207rows retain127independent confirmations+
+80qualified shorts. Fresh **3,720 Release cases perOS** (1,386internal+1,436public+
+898liveFFmpeg), plus32internal+147public scalar controls, pass; unaffected proofs
+are reused. The consumer and allthree examples pass through the **same actual
+Release package on Windows/Linux**. Production stays safe managed dependency-free
+.NET10. Stop the60passing paths; full parity remains open.
 
 **Decode and metadata**
 

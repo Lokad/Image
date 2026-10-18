@@ -148,13 +148,18 @@ internal static class Vp8Encoder
         int candidates, OperationContext context)
     {
         var best = 0; var score = long.MaxValue;
+        Span<int> prepared = stackalloc int[13]; var dc = 0;
         for (var mode = 0; mode < candidates; mode++)
         {
-            context.Work(192); Vp8Prediction.Small(reconstructed.Y, source.Stride, x, y, macroX, macroY, mode);
+            context.Work(192);
+            if (mode == 0) dc = Vp8Prediction.PrepareSmall(reconstructed.Y, source.Stride, x, y, macroX, macroY, prepared);
+            Vp8Prediction.SmallPrepared(reconstructed.Y, source.Stride, x, y, mode, prepared, dc);
             var error = Error(source.Y, reconstructed.Y, source.Stride, x, y, 4);
             if (error < score) { best = mode; score = error; }
         }
-        Vp8Prediction.Small(reconstructed.Y, source.Stride, x, y, macroX, macroY, best); return best;
+        if (candidates > 0) Vp8Prediction.SmallPrepared(reconstructed.Y, source.Stride, x, y, best, prepared, dc);
+        else Vp8Prediction.Small(reconstructed.Y, source.Stride, x, y, macroX, macroY, best);
+        return best;
     }
 
     private static int SelectChroma(Vp8Planes source, Vp8Planes reconstructed, int x, int y, int candidates, OperationContext context)

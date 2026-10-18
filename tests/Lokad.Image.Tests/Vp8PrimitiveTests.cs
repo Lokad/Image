@@ -5,6 +5,50 @@ namespace Lokad.Image.Tests;
 public sealed class Vp8PrimitiveTests
 {
     [Fact]
+    public void PreparedSmallPredictionMatchesEveryOriginalModeAndNeighborBoundary()
+    {
+        uint state = 0x58638619;
+        foreach (var stride in new[] { 16, 32, 48 })
+        for (var macroX = 0; macroX < stride; macroX += 16)
+        foreach (var macroY in new[] { 0, 16 })
+        for (var dx = 0; dx < 16; dx += 4) for (var dy = 0; dy < 16; dy += 4)
+        for (var pattern = 0; pattern < 3; pattern++)
+        {
+            var expected = new byte[stride * (macroY + 16)];
+            for (var i = 0; i < expected.Length; i++)
+            {
+                state = unchecked(1664525 * state + 1013904223);
+                expected[i] = pattern == 0 ? (byte)(state >> 24)
+                    : pattern == 1 ? (byte)((i & 1) == 0 ? 0 : 255) : (byte)(127 + i % 3);
+            }
+            var actual = expected.ToArray(); var prepared = new int[13]; var x = macroX + dx; var y = macroY + dy;
+            var dc = Vp8Prediction.PrepareSmall(actual, stride, x, y, macroX, macroY, prepared);
+            var unchanged = prepared.ToArray();
+            // Each candidate overwrites this block; the original gathers again.
+            // Shared samples must remain valid through the final chosen mode.
+            foreach (var mode in Enumerable.Range(0, 10).Concat(new[] { 3, 1, 0, 9 }))
+            {
+                Vp8Prediction.Small(expected, stride, x, y, macroX, macroY, mode);
+                Vp8Prediction.SmallPrepared(actual, stride, x, y, mode, prepared, dc);
+                Assert.Equal(expected, actual); Assert.Equal(unchanged, prepared);
+            }
+        }
+    }
+
+    [Fact]
+    public void PreparedSmallInvalidModePreservesOriginalErrorBeforeAnyWrite()
+    {
+        var plane = Enumerable.Repeat((byte)129, 256).ToArray(); var prepared = new int[13];
+        var dc = Vp8Prediction.PrepareSmall(plane, 16, 0, 0, 0, 0, prepared); var unchanged = plane.ToArray();
+        foreach (var mode in new[] { -1, 10 })
+        {
+            var expected = Assert.Throws<ImageDataException>(() => Vp8Prediction.Small(plane, 16, 0, 0, 0, 0, mode));
+            var actual = Assert.Throws<ImageDataException>(() => Vp8Prediction.SmallPrepared(plane, 16, 0, 0, mode, prepared, dc));
+            Assert.Equal(expected.Message, actual.Message); Assert.Equal(unchanged, plane);
+        }
+    }
+
+    [Fact]
     public void BooleanIntervalsHaveHandComputedBitsAndBoundedInput()
     {
         byte[] data = [192, 0, 0, 0]; var context = new OperationContext(ImageLimits.Default, default);

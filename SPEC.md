@@ -938,6 +938,10 @@ explicitly, without external fallbacks.
 `((100-quality)*127+49)/99` with integer division. Quality 100 is still lossy.
 Quantized coefficients round halves away from zero; the forward DC basis preserves
 exact constant-block half ties.
+Intra mode search prepares immutable neighboring samples once per luma block
+and emits complete 4x4 predictions. Candidate order, exact error scores, tie
+breaks, final mode writes and work/cancellation checkpoints remain unchanged.
+The bounded stack scratch adds no allocation or mandatory resource admission.
 Numeric qualities do not promise the same reconstruction or size as another
 encoder's quality settings. Limited-range BT.601 source conversion uses
 Y=16+(219/255)(0.299R+0.587G+0.114B),

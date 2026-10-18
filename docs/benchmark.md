@@ -31,16 +31,17 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [vertical VP8 SIMD filtering](../benchmarks/WARM-VP8-VERTICAL-FILTER.md)
-cuts the five affected decode times5.5-9.5%, with unchanged allocations. Live
-opaque is1.663x FFmpeg; allfive remain qualified short gaps. Other202comparisons/
-all60passing proofs remain applicable. The207rows now select127independent
-confirmations and80qualified shorts; three older independent gaps were replaced.
-Fresh **3,718 Release cases perOS** (1,384internal+1,436public+898liveFFmpeg), plus
-30internal+251public scalar controls, pass. Unrelated scalar proofs are reused.
-The consumer and allthree examples pass through the **same actual Release package
-on Windows/Linux**. Production stays safe managed dependency-free .NET10.
-Stop the60passing paths; the full parity objective remains open.
+Latest production round: [prepared VP8 encoder prediction](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md)
+cuts opaque encoding time13.1-13.7%, with unchanged packets and allocations;
+the two opaque cases remain1.429-1.460x short gaps. Both changed alpha paths
+independently re-confirm below parity (uppers.424/.438x), retaining all12actuals
+and the word outlier. Other203comparisons/58passing proofs remain applicable,
+including all5P57decode results. The207rows retain127independent confirmations+
+80qualified shorts. Fresh **3,720 Release cases perOS** (1,386internal+1,436public+
+898liveFFmpeg), plus32internal+147public scalar controls, pass; unaffected proofs
+are reused. The consumer and allthree examples pass through the **same actual
+Release package on Windows/Linux**. Production stays safe managed dependency-free
+.NET10. Stop the60passing paths; full parity remains open.
 
 **Decode and metadata**
 
@@ -162,10 +163,10 @@ Stop the60passing paths; the full parity objective remains open.
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md) | 2,840.65 | 1,837.08 | 1.546 / 1.661 | 263,788 | Gap (short; qualified) |
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-ADAPTIVE-AC.md) | 2,748.91 | 1,832.39 | 1.500 / 1.610 | 297,780 | Gap (short; qualified) |
 | [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-ADAPTIVE-AC.md) | 1,764.82 | 1,410.26 | 1.251 / 1.358 | 154,893 | Gap (short; qualified) |
-| [WebP VP8, opaque‡](../benchmarks/WARM-VP8-SOURCE-VIEWS.md) | 25,741.07 | 15,496.34 | 1.661 / 1.744 | 2,536,348 | Gap (short; qualified) |
-| [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-SOURCE-VIEWS.md) | 26,263.39 | 15,587.43 | 1.685 / 1.768 | 2,535,940 | Gap (short; qualified) |
-| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-SOURCE-VIEWS.md) | 26,291.83 | 53,737.54 | 0.489 / 0.492 | 2,616,084 | Parity confirmed |
-| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-SOURCE-VIEWS.md) | 26,552.66 | 53,811.05 | 0.493 / 0.495 | 2,615,472 | Parity confirmed |
+| [WebP VP8, opaque‡](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md) | 22,212.16 | 15,539.04 | 1.429 / 1.538 | 2,536,280 | Gap (short; qualified) |
+| [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md) | 22,813.15 | 15,629.98 | 1.460 / 1.611 | 2,536,099 | Gap (short; qualified) |
+| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md) | 22,598.85 | 53,698.20 | 0.421 / 0.424 | 2,616,016 | Parity confirmed |
+| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md) | 23,199.00 | 53,597.53 | 0.433 / 0.437 | 2,615,835 | Parity confirmed |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-ENCODE-EXACT.md) | 7,363.30 | 121,587.95 | 0.061 / 0.063 | 2,100,170 | Parity confirmed |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-OPAQUE8.md) | 7,195.24 | 70,637.23 | 0.102 / 0.103 | 2,100,170 | Parity confirmed |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-RGBA16-ENCODE.md) | 7,928.11 | 121,282.99 | 0.065 / 0.066 | 2,100,119 | Parity confirmed |
