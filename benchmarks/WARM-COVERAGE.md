@@ -1,12 +1,25 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-66 independent passes, 123 measured mean gaps and one confidence-open case across
+67 independent passes, 122 measured mean gaps and one confidence-open case across
 190 current rows; 23 prior-production rows need reconfirmation.
 The [three-table summary](../docs/benchmark.md) retains all 213 numeric rows:
-121 current independent observations, 69 current qualified shorts and 23 prior rows.
+122 current independent observations, 68 current qualified shorts and 23 prior rows.
 Reuse unchanged passing paths;
 do not add an image or settings grid.
+
+[Zero-error VP8 intra search](WARM-VP8-ZERO-ERROR.md) ends at the first exact
+prediction; no remaining squared error can be lower. Diagram encode improves
+10.8%, 6,442.53→5,744.66µs, independently confirming0.984x/upper0.991x and
+490,812B/op. All six affected packets and frozen quality/size anchors remain
+byte-identical. Precisely four existing WarmWebp encodes and two WarmCompression
+lossy cases receive fresh short screens; the four promising cases independently
+pass. Two original opaque cases remain1.423x/1.464x short gaps, without long
+repeats. No new workload, quality search, native/harness/driver build or profiling.
+All4,161 tests/OS,179 affected hardware-off checks/OS and the same actual Windows
+package consumer/all three examples pass on both OS. All other executed paths,
+including the five lossless encode proofs below, remain unchanged. Stops apply
+to the four current passing VP8 cases. Compressed-size efficiency remains open.
 
 [Previous-row references](WARM-VP8L-PREVIOUS-ROW.md) reduce the diagram's VP8L
 size31,072→15,120B (51.3%) and allocation67,720→34,928B/op (48.4%). The photograph
@@ -35,11 +48,11 @@ size, `DiagramLossless8` covers repeated flat regions and antialiased text,
 text edges and flat-region rate/distortion. These distinct required content
 families were absent from the procedural controls. No shape/depth/effort grid.
 All four measure complete output ownership and allocations with equivalent
-delivery. Three independently pass time parity; diagram VP8 is a qualified short
-gap (1.104x). Lossless sizes are now 2.394x/2.090x the exact native packets; VP8
+delivery. All four now independently pass time parity after the subsequent zero-error
+search change above. Lossless sizes are now 2.394x/2.090x the exact native packets; VP8
 sizes are 1.234x/1.262x at matched source quality. The preceding lossless change replaces only the five affected timing proofs;
 other production paths and qualification evidence are reused. Known scope is now242 named
-cases:213 numeric plus29 unmeasured. Stop the three new time-passing cases unless
+cases:213 numeric plus29 unmeasured. Stop these four time-passing cases unless
 their relevant production path changes; compression-size work remains required.
 
 Shared-budget codec entry points add two required, **unmeasured** representatives:

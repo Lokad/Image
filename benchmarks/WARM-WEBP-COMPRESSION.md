@@ -2,7 +2,8 @@
 
 The lossless measurements below are the original content baseline; the current
 [previous-row encoder results](WARM-VP8L-PREVIOUS-ROW.md) supersede those two rows.
-Both VP8 packets, quality anchors and timing rows remain current. The linked
+The [zero-error VP8 search round](WARM-VP8-ZERO-ERROR.md) replaces both VP8 timings;
+VP8 packets, sizes and quality anchors remain current. The linked
 quality file tracks the current lossless producer; the original full record and
 packets remain in the raw archive cited below.
 

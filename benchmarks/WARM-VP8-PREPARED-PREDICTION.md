@@ -1,5 +1,7 @@
 # Prepared VP8 encoder prediction
 
+Historical accepted round; [current zero-error search results](WARM-VP8-ZERO-ERROR.md) replace these four complete-operation timings. Prepared geometric prediction remains in use.
+
 Complete opaque VP8 encoding is **13.1-13.7% faster**, with unchanged packets,
 quality and allocations. RGBA16 improves from1.685x to1.460x FFmpeg; RGBA8 from
 1.661x to1.429x. Both remain qualified short gaps. The two affected alpha paths

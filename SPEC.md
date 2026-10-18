@@ -1125,8 +1125,10 @@ is introduced. Alpha-bearing sequences preserve all hidden RGB and alpha samples
 Quantized coefficients round halves away from zero; the forward DC basis preserves
 exact constant-block half ties.
 Intra mode search prepares immutable neighboring samples once per luma block
-and emits complete 4x4 predictions. Candidate order, exact error scores, tie
-breaks, final mode writes and work/cancellation checkpoints remain unchanged.
+and emits complete 4x4 predictions. Candidate order, exact error scores, ties
+and selected pixels are preserved. A zero-error prediction ends the search:
+later candidates cannot improve it, and the winning prediction is already written.
+Work/cancellation checks cover every performed trial; skipped trials consume no work.
 The bounded stack scratch adds no allocation or mandatory resource admission.
 Numeric qualities do not promise the same reconstruction or size as another
 encoder's quality settings. Limited-range BT.601 source conversion uses
@@ -1146,11 +1148,11 @@ all row charges, matrix evaluation order and alpha-weighted rounding are retaine
 
 The first VP8 encoder uses B_PRED luma, one token partition, fixed entropy models
 and no loop filter. Prediction search minimizes source-plane squared error;
-ties choose the first candidate. Effort 0..6 considers respectively 1, 2, 3, 4, 6,
+ties choose the first candidate. Effort 0..6 permits respectively up to 1, 2, 3, 4, 6,
 8 or 10 luma modes in format order (DC, true-motion, vertical, horizontal,
 left-down, right-down, vertical-right, vertical-left, horizontal-down,
 horizontal-up). Effort zero uses DC chroma; other settings consider all four
-chroma modes. Reconstruction for subsequent predictions uses the specified
+chroma modes, stopping at zero error. Reconstruction for subsequent predictions uses the specified
 integer inverse transform. Higher effort expands search; it does not guarantee
 smaller output or lower final RGB error. Compression efficiency is not yet
 optimized. Two bounded arithmetic partitions are staged for nonseekable output;

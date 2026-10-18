@@ -155,6 +155,9 @@ internal static class Vp8Encoder
             if (mode == 0) dc = Vp8Prediction.PrepareSmall(reconstructed.Y, source.Stride, x, y, macroX, macroY, prepared);
             Vp8Prediction.SmallPrepared(reconstructed.Y, source.Stride, x, y, mode, prepared, dc);
             var error = Error(source.Y, reconstructed.Y, source.Stride, x, y, 4);
+            // Squared error cannot improve on zero; equal scores keep the first
+            // mode. Its prediction is already present in the destination.
+            if (error == 0) return mode;
             if (error < score) { best = mode; score = error; }
         }
         if (candidates > 0) Vp8Prediction.SmallPrepared(reconstructed.Y, source.Stride, x, y, best, prepared, dc);
@@ -169,6 +172,7 @@ internal static class Vp8Encoder
         {
             context.Work(512); Vp8Prediction.Large(reconstructed.U, stride, x, y, 8, mode); Vp8Prediction.Large(reconstructed.V, stride, x, y, 8, mode);
             var error = Error(source.U, reconstructed.U, stride, x, y, 8) + Error(source.V, reconstructed.V, stride, x, y, 8);
+            if (error == 0) return mode;
             if (error < score) { best = mode; score = error; }
         }
         Vp8Prediction.Large(reconstructed.U, stride, x, y, 8, best); Vp8Prediction.Large(reconstructed.V, stride, x, y, 8, best); return best;
