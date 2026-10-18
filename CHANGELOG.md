@@ -23,6 +23,7 @@
   through bounded lookahead reuse with unchanged pixels, resource limits,
   logical failure state and cancellation behavior;
   see the [benchmark state](docs/benchmark.md).
+- Faster RGBA8 horizontal flips with unchanged pixels, owners and resource limits.
 - Faster RGBA8/16 bilinear reduction through bounded row reuse, preserving exact
   pixels, resource admission and cancellation.
 - Faster RGBA8 bilinear enlargement through exact integer factorization,

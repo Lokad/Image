@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
@@ -38,6 +39,10 @@ internal static class HorizontalFlip
             var input = source.Slice(source.Length - start - count, count);
             var output = destination.Slice(start, count);
             var x = 0;
+            if (Avx512F.IsSupported)
+                for (; x <= count - Vector512<uint>.Count; x += Vector512<uint>.Count)
+                    Avx512F.PermuteVar16x32(Vector512.Create(input.Slice(count - x - Vector512<uint>.Count, Vector512<uint>.Count)),
+                        Vector512.Create(15u, 14u, 13u, 12u, 11u, 10u, 9u, 8u, 7u, 6u, 5u, 4u, 3u, 2u, 1u, 0u)).CopyTo(output.Slice(x));
             if (Vector256.IsHardwareAccelerated)
                 for (; x <= count - Vector256<uint>.Count; x += Vector256<uint>.Count)
                     Vector256.Shuffle(Vector256.Create(input.Slice(count - x - Vector256<uint>.Count)),

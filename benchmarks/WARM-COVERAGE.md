@@ -1,23 +1,24 @@
 # Material warm coverage
 
 Updated 2026-10-18. The **warm single-CPU parity objective remains open**:
-63 independent passes, 143 measured mean gaps and one confidence-open case across
-207 named rows. The [three-table summary](../docs/benchmark.md) selects 124
-independent confirmations and 83 qualified shorts. Reuse unchanged passing paths;
+64 independent passes, 142 measured mean gaps and one confidence-open case across
+207 named rows. The [three-table summary](../docs/benchmark.md) selects 123
+independent confirmations and 84 qualified shorts. Reuse unchanged passing paths;
 do not add an image or settings grid.
 
-Latest [partial PNG transparency expansion](WARM-PNG-PARTIAL-ALPHA.md) improves
-the existing palette8/two-entry tRNS complete decode **33.3%**, passing parity
-at **0.984× / upper 0.992×** with unchanged pixels, hidden RGB and 2,208 B/op.
-Register-only alpha completion adds no table, heap/stack array, reservation or
-work charge. Other 206 comparisons and all 62 prior passing proofs remain valid.
-All 3,739 Release tests/OS, 119 affected hardware-off checks/OS and the same actual
-private package consumer/all three examples pass on Windows/Linux. This path stops.
+Latest [wider RGBA8 horizontal reversal](WARM-HORIZONTAL-FLIP512.md) improves
+single-output flip **22.0%**, passing parity at **0.950× / upper 0.965×**. Two live
+outputs improve **27.9%** but remain a qualified **1.053×** gap. Both retain
+**128 B/image**, exact pixels, hidden RGB and independent owners. The RGBA16
+passing kernel and original fallbacks remain unchanged; no new allocation or
+resource/work charge. Other 205 comparisons/all 63 prior passing proofs remain.
+All 3,739 Release tests/OS, 67 affected public hardware-off checks/OS and the same
+actual private package consumer/all three examples pass on Windows/Linux.
+The newly passing single-owner path stops; no width/unroll/inlining grid follows.
 
-Earlier [fixed JPEG fields](WARM-JPEG-FIXED-FIELDS.md) retain 14.0–17.0% gains,
-[packed byte bicubic reduction](WARM-BICUBIC-PACKED-REDUCTION.md) retains 19.2%,
-and PNG block materialization/JPEG reconstruction retain their gains. Executed
-paths remain unchanged; no passing case is retuned or matrix expanded.
+Earlier [partial PNG transparency](WARM-PNG-PARTIAL-ALPHA.md) retains its 33.3%
+gain and passing proof; fixed JPEG fields, packed bicubic reduction and PNG/JPEG
+reconstruction retain their measured gains. Those executed paths remain unchanged.
 
 The finite checklist's **previous <=2x phase was completed for released0.1.0**.
 Its original independent evidence and unchanged-path proofs remain historical;

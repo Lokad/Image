@@ -196,7 +196,7 @@ def render():
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8lencode16-evidence.json', ['observations', -1], 'WARM-VP8L-RGBA16-ENCODE.md', True),
     ]
     edits = [
-        row('Horizontal flip RGBA8, two live outputs / per image', 'warm-retained-pool2-evidence.json', ['observations', -1], 'WARM-RETAINED-FLIP.md', True),
+        row('Horizontal flip RGBA8, two live outputs / per image', 'warm-horizontal-flip512-evidence.json', ['cases', 'Rgba8', -1], 'WARM-HORIZONTAL-FLIP512.md', verification='Gap (short; qualified)'),
         row('Nearest resize RGBA8', 'warm-coverage-quiet-evidence.json', ['cases', 'nearest8', 'observations', -1], 'WARM-COVERAGE-QUIET.md', True),
         row('Nearest upscale RGBA8', 'warm-nearestup8-evidence.json', ['observations', -1], 'WARM-NEAREST-UP8.md', True),
         row('Nearest upscale RGBA16', 'warm-nearestup16-evidence.json', ['observations', -1], 'WARM-NEAREST-UP16.md', True),
@@ -274,7 +274,7 @@ def render():
         row('Normal orientation RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'NormalOrientation16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
         row('Vertical flip RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'VerticalFlip8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
         row('Vertical flip RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'VerticalFlip16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
-        row('Horizontal flip RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'HorizontalFlip8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
+        row('Horizontal flip RGBA8', 'warm-horizontal-flip512-evidence.json', ['cases', 'Depth8', -1], 'WARM-HORIZONTAL-FLIP512.md', True),
         row('Horizontal flip RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'HorizontalFlip16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
         row('Half turn RGBA8', 'warm-edit-confidence-evidence.json', ['cases', 'HalfTurn8', 'observations', -1], 'WARM-EDIT-CONFIDENCE.md', True),
         row('Half turn RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'HalfTurn16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
@@ -324,23 +324,22 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest [PNG partial transparency expansion](../benchmarks/WARM-PNG-PARTIAL-ALPHA.md)
-improves its existing complete decode **33.3%** and independently passes parity:
-**0.984×**, conservative upper **0.992×**, unchanged pixels/hidden RGB and
-**2,208 B/op**. Other 206 comparisons and all 62 prior passing proofs remain valid.
-Fresh **3,739 Release tests per OS** (1,404 internal + 1,437 public + 898 live FFmpeg),
-119 affected checks/OS with AVX-512 disabled and the **same actual package consumer
-and all three examples on Windows/Linux** pass. Unaffected scalar qualification is
-reused. Production remains safe managed dependency-free .NET 10; no new table,
-heap/stack array, field, reservation or logical work charge.
+Latest [wider RGBA8 horizontal reversal](../benchmarks/WARM-HORIZONTAL-FLIP512.md)
+improves the single-output flip **22.0%**, independently confirming **0.950× /
+upper 0.965×**. Two live outputs improve **27.9%** but remain a qualified **1.053×**
+gap. Both retain **128 B/image**. Other 205 comparisons and all 63 prior passing
+proofs remain valid. Fresh **3,739 Release tests per OS**, 67 affected public
+checks/OS with AVX-512 disabled and the **same actual package consumer/all three
+examples on Windows/Linux** pass. Production remains safe managed dependency-free
+.NET 10; original fallbacks, work/cancellation, admission and ownership remain.
 
 Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDENCE.md)
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
-retains its1.012x mean gap/1.014x upper. Current totals are**63passes/143gaps/1confidence**,
-with124independent selected confirmations+83qualified shorts. Every actual/outlier
+retains its1.012x mean gap/1.014x upper. Current totals are**64passes/142gaps/1confidence**,
+with123independent selected confirmations+84qualified shorts. Every actual/outlier
 and both quiet guards remain; unchanged production/package qualification is reused.
-No builds, repeat-until-pass or small residual tuning. Stop the63passing paths.
+No builds, repeat-until-pass or small residual tuning. Stop the64passing paths.
 
 **Decode and metadata**
 

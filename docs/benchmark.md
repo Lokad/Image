@@ -1,8 +1,8 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-18. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 207 numeric rows contain **63 confirmed parity
-cases, 143 measured gaps and 1 confidence-open cases**. The earlier
+conservative upper ≤1x**. The 207 numeric rows contain **64 confirmed parity
+cases, 142 measured gaps and 1 confidence-open cases**. The earlier
 ≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
@@ -31,23 +31,22 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest [PNG partial transparency expansion](../benchmarks/WARM-PNG-PARTIAL-ALPHA.md)
-improves its existing complete decode **33.3%** and independently passes parity:
-**0.984×**, conservative upper **0.992×**, unchanged pixels/hidden RGB and
-**2,208 B/op**. Other 206 comparisons and all 62 prior passing proofs remain valid.
-Fresh **3,739 Release tests per OS** (1,404 internal + 1,437 public + 898 live FFmpeg),
-119 affected checks/OS with AVX-512 disabled and the **same actual package consumer
-and all three examples on Windows/Linux** pass. Unaffected scalar qualification is
-reused. Production remains safe managed dependency-free .NET 10; no new table,
-heap/stack array, field, reservation or logical work charge.
+Latest [wider RGBA8 horizontal reversal](../benchmarks/WARM-HORIZONTAL-FLIP512.md)
+improves the single-output flip **22.0%**, independently confirming **0.950× /
+upper 0.965×**. Two live outputs improve **27.9%** but remain a qualified **1.053×**
+gap. Both retain **128 B/image**. Other 205 comparisons and all 63 prior passing
+proofs remain valid. Fresh **3,739 Release tests per OS**, 67 affected public
+checks/OS with AVX-512 disabled and the **same actual package consumer/all three
+examples on Windows/Linux** pass. Production remains safe managed dependency-free
+.NET 10; original fallbacks, work/cancellation, admission and ownership remain.
 
 Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDENCE.md)
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
-retains its1.012x mean gap/1.014x upper. Current totals are**63passes/143gaps/1confidence**,
-with124independent selected confirmations+83qualified shorts. Every actual/outlier
+retains its1.012x mean gap/1.014x upper. Current totals are**64passes/142gaps/1confidence**,
+with123independent selected confirmations+84qualified shorts. Every actual/outlier
 and both quiet guards remain; unchanged production/package qualification is reused.
-No builds, repeat-until-pass or small residual tuning. Stop the63passing paths.
+No builds, repeat-until-pass or small residual tuning. Stop the64passing paths.
 
 **Decode and metadata**
 
@@ -181,7 +180,7 @@ No builds, repeat-until-pass or small residual tuning. Stop the63passing paths.
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| [Horizontal flip RGBA8, two live outputs / per image](../benchmarks/WARM-RETAINED-FLIP.md) | 13.26 | 9.16 | 1.447 / 1.484 | 128 | Gap (independent) |
+| [Horizontal flip RGBA8, two live outputs / per image](../benchmarks/WARM-HORIZONTAL-FLIP512.md) | 9.56 | 9.08 | 1.053 / 1.142 | 128 | Gap (short; qualified) |
 | [Nearest resize RGBA8](../benchmarks/WARM-COVERAGE-QUIET.md) | 58.67 | 252.66 | 0.232 / 0.241 | 132,294 | Parity confirmed |
 | [Nearest upscale RGBA8](../benchmarks/WARM-NEAREST-UP8.md) | 935.05 | 1,006.00 | 0.929 / 0.955 | 2,133,091 | Parity confirmed |
 | [Nearest upscale RGBA16](../benchmarks/WARM-NEAREST-UP16.md) | 1,071.13 | 1,019.06 | 1.051 / 1.095 | 4,265,431 | Gap (independent) |
@@ -259,7 +258,7 @@ No builds, repeat-until-pass or small residual tuning. Stop the63passing paths.
 | [Normal orientation RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 18.58 | 16.70 | 1.112 / 1.132 | 128 | Gap (independent) |
 | [Vertical flip RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 9.28 | 8.37 | 1.108 / 1.124 | 128 | Gap (independent) |
 | [Vertical flip RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 17.68 | 17.39 | 1.017 / 1.036 | 128 | Gap (independent) |
-| [Horizontal flip RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 11.64 | 9.52 | 1.223 / 1.235 | 128 | Gap (independent) |
+| [Horizontal flip RGBA8](../benchmarks/WARM-HORIZONTAL-FLIP512.md) | 9.08 | 9.55 | 0.950 / 0.965 | 128 | Parity confirmed |
 | [Horizontal flip RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 21.83 | 27.03 | 0.807 / 0.811 | 128 | Parity confirmed |
 | [Half turn RGBA8](../benchmarks/WARM-EDIT-CONFIDENCE.md) | 11.47 | 11.42 | 1.004 / 1.024 | 128 | Gap (independent) |
 | [Half turn RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 18.59 | 21.86 | 0.850 / 0.874 | 128 | Parity confirmed |
