@@ -162,6 +162,15 @@ foreach (var filter in new[] { ResizeFilter.Bilinear, ResizeFilter.Bicubic })
             throw new Exception("Package consumer resize loses visible color at an exact half-alpha tie.");
 }
 using var originalPng = ImageCodec.Decode(File.ReadAllBytes(args[2]));
+using (var drawing = ImageBuffer.Create(3, 2, 16))
+using (var overlay = ImageBuffer.Create(1, 1, 8))
+{
+    ImageDrawing.FillRectangle(overlay, 0, 0, 1, 1, RgbaColor.From8(255, 0, 0, 128));
+    ImageDrawing.Composite(drawing, overlay, 1, 0);
+    ImageDrawing.CopyRegion(drawing, 1, 0, 1, 1, drawing, 2, 1);
+    if (!drawing.GetRow16(1).Slice(8, 4).SequenceEqual(new ushort[] { 65535, 0, 0, 32896 }))
+        throw new Exception("Package drawing color/alpha/overlap/precision differs.");
+}
 var originalPngExpected = File.ReadAllBytes(args[3]);
 if (originalPng.Width != 19 || originalPng.Height != 17 || originalPng.BitDepth != 16)
     throw new Exception("Package consumer authored PNG profile differs.");

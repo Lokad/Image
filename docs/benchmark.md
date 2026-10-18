@@ -14,7 +14,7 @@ sizes or hardware. Stop cases already confirmed at ≤1x.
 
 Shared-budget entry points and direct JPEG sample decoding are implemented and
 correctness-qualified; their times and allocations are **unmeasured**. Together
-with JPEG compatibility, async I/O and fixed-workspace inspection, the checklist names eighteen pending
+with JPEG compatibility, async I/O, inspection and drawing, the checklist names twenty-four pending
 representatives using existing inputs. Affected JPEG and fresh-Stream rows are
 explicitly prior production. Resident PNG/WebP, JPEG encoding, edits and image
 disposal remain unchanged.
@@ -39,6 +39,11 @@ inspection, including shared budgets. Three named PNG/JPEG/WebP header boundarie
 remain unmeasured; their distinct seek/scan grammars exclude PNG CRCs and compressed
 pixel validation. Resolve equivalent native header scope before timing. Existing
 full `Identify` checks and numeric evidence are unchanged.
+
+Drawing is correctness-qualified at 8/16 bits, including mixed-depth source-over,
+clipping and snapshot semantics for self-overlap without a full-frame copy. Six
+named fill/copy/composite cases remain unmeasured. Resolve equivalent native canvas
+delivery, state restoration and ownership before timing; no numeric status changed.
 
 The [direct-sample JPEG quality check](../benchmarks/warm-jpeg-sample-quality-evidence.json)
 reproduces the frozen packets exactly: grayscale **58,823 / 58,910 bytes**

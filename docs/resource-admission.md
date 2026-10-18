@@ -50,6 +50,7 @@ remain caller-managed. Existing `ImageCodec` entry points use per-operation limi
 | Operation | Main admitted storage |
 | --- | --- |
 | Exact edits / nearest resize | Supplied pixels plus an independent result; orientation may require a second full result |
+| Drawing / compositing | Each distinct supplied canvas/source once; no snapshot raster, including self-overlap |
 | Bilinear / bicubic resize | Source, result, admitted optional geometry/row caches, and 4 KiB for exact low-alpha rounding when needed; tight limits select the original bounded path |
 | Decode Stream input | 8 KiB scratch, simultaneous old/new growth capacities and actual retained capacity throughout decoding; no final full-input copy |
 | Synchronous Identify Stream input | 8 KiB scratch and conservative growth/final-copy admission; parses a private input prefix without the final copy |
@@ -69,6 +70,10 @@ These are logical admission charges, including conservative BCL allowances,
 rather than measured native or managed allocation totals. Optional fast paths
 must fit their complete workspace before selection; fallback preserves pixels,
 work, cancellation and failure ordering.
+Drawing applies geometry limits to the clipped affected rectangle. Copy/fill charge
+four work units per pixel in chunks up to 4096 pixels; compositing charges sixteen
+in chunks up to 256. Limits/cancellation can leave completed chunks in traversal
+order. Argument, geometry and memory validation precede mutation.
 Caller-owned encoded output storage is separate from codec workspace;
 `MaxOutputBytes` limits actual writes. Eligible stored RGBA PNG encodes may
 reserve plain `MemoryStream` capacity after work/output preflight, preserving

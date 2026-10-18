@@ -131,6 +131,13 @@ have `ImageBudget` counterparts. The JPEG sample overload accepts borrowed
 Keep source storage stable until completion. No final `ToArray` copy is needed;
 discard partial output after a write failure or cancellation.
 
+`ImageDrawing.FillRectangle`, `CopyRegion` and `Composite` mutate a canvas in coded
+coordinates with clipped destinations. Copy source rectangles must fit and depths
+must match; compositing accepts either source/canvas depth. `RgbaColor.From8` expands
+eight-bit colors exactly. Self-overlap is safe without a full-frame temporary.
+Mutations can leave completed chunks on cancellation/work exhaustion; synchronize
+access to mutable images. No EXIF orientation is implicitly applied.
+
 Malformed input raises `ImageDataException`, unsupported formats or profiles
 raise `UnsupportedImageException`, exhausted admission limits raise
 `ImageLimitException`, and cancellation raises `OperationCanceledException`.

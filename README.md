@@ -11,13 +11,13 @@ implemented, with no NuGet dependencies, unsafe code or native bindings.
   and gray/RGB encode samples.
 - **WebP:** lossy VP8 and lossless VP8L, including alpha and lossless hidden RGB.
 - **Editing:** 8/16-bit RGBA, EXIF orientation, crop, flips, quarter turns,
-  transpose and nearest/bilinear/bicubic resize.
+  transpose and nearest/bilinear/bicubic resize; rectangle fill/copy and alpha compositing.
 - **Streams:** synchronous/asynchronous identification, decoding and encoding;
   fixed-workspace dimension/orientation inspection with `InspectHeaders`.
 
 GIF, animation, ICC color management and metadata round-tripping are deferred.
 [SPEC.md](SPEC.md) defines current support and planned still-image extensions,
-including drawing and supplied-font text.
+including supplied-font text.
 
 ```powershell
 dotnet add package Lokad.Image --version 0.1.0

@@ -19,7 +19,7 @@ from required future functionality.
 | JPEG caller samples | Gray/RGB/CMYK decode and gray/RGB encode implemented in development | Caller-provided 8-bit samples without mandatory RGBA; explicit source color space/inversion, quality and sampling |
 | JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4×1) / 4:1:0 (4×2) sampling |
 | Stream extensions | Async Identify/Decode/Encode and fixed-workspace InspectHeaders implemented in development | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
-| Drawing/compositing | Planned | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
+| Drawing/compositing | Implemented in development | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
 | Text | Planned | Supplied TrueType fonts; size/style/color/position, wrapping, line spacing and layout bounds for overflow/fitting |
 | Failure details | Implemented in development | Typed exhausted-limit and unsupported-feature categories with recognized codec when known |
 | Shared admission | Implemented in development | ImageBudget codec entry points and caller reservations; coarse per-operation reservation, cumulative charged work and independently retained BudgetedImage outputs |
@@ -99,6 +99,35 @@ JPEG inspection validates the complete marker/scan-header, stuffing, EXIF and
 EOI/EOF structure without decoding entropy symbols. Noncancelable inspection
 may batch ordinary and stuffed bytes within an admitted 4 KiB raw span; logical
 work, validation order and the cancelable scan's polling remain unchanged.
+
+## Drawing and compositing
+
+`ImageDrawing` mutates caller-owned canvases in coded coordinates. It does not
+apply pending EXIF orientation or change dimensions, precision or orientation.
+Destination rectangles clip to the canvas. Negative extents are invalid; zero or
+fully clipped rectangles do nothing after argument/ownership/memory validation.
+Source rectangles for `CopyRegion` must fit, and exact copying requires matching
+depths. All four samples, including hidden RGB, are copied. `FillRectangle` replaces
+all four channels rather than blending. `RgbaColor` uses 16-bit straight samples;
+`From8` expands by 257 and eight-bit fills round `(sample + 128) / 257`.
+
+`Composite` implements [source-over](https://www.w3.org/TR/compositing-1/#porterduffcompositingoperators_srcover)
+in encoded sample space without ICC/linear-light conversion. Source and canvas may
+independently use 8 or 16 bits. Coverage is `a = as + ad*(1-as)` and straight color
+is `(Cs*as + Cd*ad*(1-as))/a`; integer rational arithmetic keeps coverage unrounded
+until final channels, rounding positive halves upward. Zero source alpha leaves
+every destination sample unchanged, including hidden RGB. Other samples round
+independently, including when tiny nonzero coverage rounds to zero alpha.
+
+Self-copy and self-compositing use the original source and destination samples,
+traversing rows/chunks/pixels in a safe order without a snapshot raster. Distinct
+source buffers remain unchanged. No buffer ownership transfers or full-frame
+temporary copies occur. Working admission counts each distinct supplied buffer
+once. Geometry limits apply to the clipped affected rectangle. Work charges four
+units per copied/filled pixel and sixteen per composited pixel, before chunks of
+at most 4096 or 256 pixels respectively. Cancellation/work exhaustion can leave
+completed chunks in traversal order; argument, geometry and memory failures occur
+before mutation. Callers synchronize mutable pixel access.
 
 ## Geometry and resizing
 
