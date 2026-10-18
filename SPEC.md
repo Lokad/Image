@@ -18,7 +18,7 @@ from required future functionality.
 | Resize | Implemented; hand-computed kernel and alpha cases | Exact dimensions, fit, nearest/bilinear/bicubic, alpha-aware filtering |
 | JPEG caller samples | Gray/RGB/CMYK decode and gray/RGB encode implemented in development | Caller-provided 8-bit samples without mandatory RGBA; explicit source color space/inversion, quality and sampling |
 | JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4×1) / 4:1:0 (4×2) sampling |
-| Stream extensions | Async Identify/Decode/Encode implemented in development; small-memory inspection planned | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
+| Stream extensions | Async Identify/Decode/Encode and fixed-workspace InspectHeaders implemented in development | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
 | Drawing/compositing | Planned | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
 | Text | Planned | Supplied TrueType fonts; size/style/color/position, wrapping, line spacing and layout bounds for overflow/fitting |
 | Failure details | Implemented in development | Typed exhausted-limit and unsupported-feature categories with recognized codec when known |
@@ -1121,8 +1121,29 @@ CancellationToken)` through EOF with `ConfigureAwait(false)`, then synchronous
 CPU parsing/decoding. They neither use `Task.Run` nor invoke synchronous reads,
 seek, length or position. Caller streams remain open. Identification keeps the
 complete existing structural/EXIF contract. Decode preserves the same samples,
-opt-in orientation and independent output ownership. Async input does not make
-large-image inspection constant-space: that separate boundary is still planned.
+opt-in orientation and independent output ownership. These methods buffer encoded
+input; use the separate header inspector for constant-space metadata acquisition.
+
+`InspectHeaders(Stream)` and `InspectHeadersAsync(Stream)`, also on `ImageBudget`,
+scan PNG/JPEG/WebP containers through EOF from the current position, leaving input
+open. They report the same dimension, precision, alpha and IFD0 orientation fields
+for supported headers using a fixed 8,448-byte working allowance: 8 KiB read scratch
+plus coarse header/parser state. No encoded-input, metadata-block or pixel-sized
+array is retained. EXIF entries are read individually without following thumbnails,
+other directories or external offsets. Opaque PNG/WebP payloads and metadata gaps
+are seeked when possible, otherwise drained. JPEG entropy is scanned for marker,
+stuffing and restart framing, including metadata following a scan.
+
+Inspection checks container lengths/order, supported dimension/profile fields,
+EXIF orientation and terminal EOF. It intentionally does not check PNG CRCs,
+JPEG coding tables/entropy symbols or WebP compressed pixels. Existing `Identify`
+keeps its fuller structural validation; `Decode` validates pixels. Configured
+dimension/pixel/input/metadata/item/work limits still apply. No hypothetical decoded
+RGBA array ceiling is imposed because inspection creates no raster. Large images
+may require raised dimension/pixel limits. Read-ahead and seeked bytes count toward
+input and work admission, along with container/EXIF items. Async inspection uses
+actual `ReadAsync` and synchronous seek where available, never synchronous reads
+or `Task.Run`. Shared reservations span awaits and settle on all exits.
 
 The async reader admits an 8 KiB scratch array and actual old/new capacities
 during growth. Capacity is capped by `MaxInputBytes`; the acquired prefix is

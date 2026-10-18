@@ -112,7 +112,13 @@ validate the complete compressed pixel payload. Decode performs that work.
 through EOF, then run the same CPU validation/decoding. Both accept cancellation,
 leave input open and have corresponding `ImageBudget` methods. Keep the stream
 alive until completion and dispose returned image owners normally. Async input
-uses bounded encoded-input buffering; small-memory inspection is separate work.
+uses bounded encoded-input buffering.
+
+`InspectHeaders(Stream)` and `InspectHeadersAsync(Stream)` obtain dimensions and
+orientation with fixed workspace, also through `ImageBudget`. They scan through
+EOF, seeking over opaque payloads when possible and otherwise draining them.
+PNG CRCs and compressed pixels are not validated; `Identify` retains its fuller
+container checks. Configured limits and cancellation still apply. Input stays open.
 
 `EncodePngAsync`, `EncodeJpegAsync` and `EncodeWebpAsync` stage encoded bytes within
 working/output limits, then write asynchronously. They leave output open and

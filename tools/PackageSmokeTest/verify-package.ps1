@@ -196,6 +196,18 @@ for (var y = 0; y < 8; y++)
     if (!jpegPixels.GetRow8(y).SequenceEqual(opaque.GetRow8(y))) throw new Exception("Package consumer JPEG pixels differ.");
 VerifyAsyncInput(jpeg.ToArray()).GetAwaiter().GetResult();
 VerifyAsyncOutput(opaque).GetAwaiter().GetResult();
+foreach (var packet in new[] { encoded.ToArray(), jpeg.ToArray(), exampleWebp.ToArray() })
+{
+    var expected = ImageCodec.Identify(packet);
+    var limits = new ImageLimits { MaxWorkingBytes = 8448, MaxWork = 1_000_000 };
+    using var headers = new MemoryStream(packet, writable: false);
+    if (ImageCodec.InspectHeaders(headers, limits) != expected || headers.Position != headers.Length || !headers.CanRead)
+        throw new Exception("Package fixed-workspace header inspection differs.");
+    headers.Position = 0;
+    var budget = new ImageBudget(limits.MaxWorkingBytes, limits.MaxWork);
+    if (budget.InspectHeadersAsync(headers, limits).GetAwaiter().GetResult() != expected || budget.RemainingWorkingBytes != 8448)
+        throw new Exception("Package async/shared header inspection differs.");
+}
 static async Task VerifyAsyncOutput(ImageBuffer image)
 {
     using var png = new MemoryStream(); await ImageCodec.EncodePngAsync(image, png);

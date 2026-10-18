@@ -78,7 +78,7 @@ Five further **unmeasured** representatives cover the newly required algorithms:
 Baseline/progressive analytical and live FFmpeg compatibility checks cover these
 layouts; they are not performance confirmations. Reuse the existing source
 projections and fixed settings. Including the async boundaries below, the
-bounded checklist is **224 named cases**: 209 retained numeric rows plus fifteen
+bounded checklist is **227 named cases**: 209 retained numeric rows plus eighteen
 unmeasured new operations. Do not add a
 shape, depth or quality grid. Add cases only for a distinct required path omitted
 from this list, with its concrete reason.
@@ -91,8 +91,8 @@ private input acquisition/growth/release and independent descriptor/pixel owners
 They cover the shared async acquisition path and its two different complete
 public operations. Shared-budget awaits have correctness coverage; no new
 codec/depth/stream scheduling grid is added. Resolve equivalent native input
-delivery before timing. The known finite checklist is now **224 cases**: 209
-numeric rows plus fifteen unmeasured operations. All existing evidence keeps its
+delivery before timing. The known finite checklist is now **227 cases**: 209
+numeric rows plus eighteen unmeasured operations. All existing evidence keeps its
 current status: original synchronous method bodies, field layouts, kernels and
 ownership paths are unchanged; the seventeen prior JPEG rows still need reconfirmation.
 
@@ -110,9 +110,25 @@ Async output adds four **unmeasured** representatives, all on existing inputs:
 These cover distinct new staging/admission/delivery paths, without a codec,
 sampling, depth or scheduling grid. Resolve equivalent native destination
 acquisition/copies and output lifetime before timing. Shared-await correctness
-is separately qualified. The checklist is now **224 cases**: 209 numeric rows
-and fifteen unmeasured operations. Existing numeric statuses are unchanged;
+is separately qualified. The checklist is now **227 cases**: 209 numeric rows
+and eighteen unmeasured operations. Existing numeric statuses are unchanged;
 original synchronous method bodies, state layouts and codec kernels are untouched.
+
+Fixed-workspace header inspection adds three **unmeasured** representatives using
+the existing encoded inputs, each for a distinct required container grammar:
+
+- `InspectHeaders/PngRgba8FreshSeekable`: chunk framing, dimensions/EXIF and skipped
+  opaque IDAT, including source acquisition and EOF; excludes PNG CRC/pixel checks.
+- `InspectHeaders/Jpeg420FreshStream`: full marker/stuffing/restart scan through
+  entropy and late metadata to EOF, without entropy-symbol decoding.
+- `InspectHeaders/WebpLosslessRgba8FreshSeekable`: RIFF framing, VP8L dimensions,
+  feature flags and metadata following skipped image data, through EOF.
+
+Use equivalent native header validation, input delivery and output ownership before
+timing; full `Identify` timings cannot substitute for these cheaper boundaries.
+Async scheduling/shared reservation variants have correctness coverage, without
+another timing grid. The new inspector uses independent methods and types; existing
+successful method bodies, state layouts and numeric evidence remain unchanged.
 
 Latest [wider RGBA8 horizontal reversal](WARM-HORIZONTAL-FLIP512.md) improves
 single-output flip **22.0%**, passing parity at **0.950× / upper 0.965×**. Two live

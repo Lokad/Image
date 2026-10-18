@@ -315,7 +315,7 @@ sizes or hardware. Stop cases already confirmed at ≤1x.
 
 Shared-budget entry points and direct JPEG sample decoding are implemented and
 correctness-qualified; their times and allocations are **unmeasured**. Together
-with new JPEG compatibility paths and async I/O, the checklist names fifteen pending
+with JPEG compatibility, async I/O and fixed-workspace inspection, the checklist names eighteen pending
 representatives using existing inputs. JPEG decode/inspection changed; their rows are explicitly prior
 production. Other codecs, JPEG encoding and image disposal remain unchanged.
 CMYK/YCCK and quarter-width JPEG compatibility paths are correctness-qualified
@@ -330,6 +330,12 @@ Async PNG/JPEG/WebP output, including direct JPEG samples, uses admitted private
 staging and real asynchronous writes, retaining JPEG adaptive coding when admitted.
 Four named staging/admission/delivery representatives remain unmeasured; no
 codec, shape or settings grid was added. Existing numeric statuses are unchanged.
+
+`InspectHeaders`/`InspectHeadersAsync` provide fixed-workspace dimensions/orientation
+inspection, including shared budgets. Three named PNG/JPEG/WebP header boundaries
+remain unmeasured; their distinct seek/scan grammars exclude PNG CRCs and compressed
+pixel validation. Resolve equivalent native header scope before timing. Existing
+full `Identify` checks and numeric evidence are unchanged.
 
 The [direct-sample JPEG quality check](../benchmarks/warm-jpeg-sample-quality-evidence.json)
 reproduces the frozen packets exactly: grayscale **58,823 / 58,910 bytes**

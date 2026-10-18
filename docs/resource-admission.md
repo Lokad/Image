@@ -27,7 +27,7 @@ not CPU instructions or a time limit.
 
 ## Shared budgets
 
-`ImageBudget` provides `Identify`, `Decode` and `EncodePng/Jpeg/Webp` entry points
+`ImageBudget` provides `Identify`, `InspectHeaders`, `Decode` and `EncodePng/Jpeg/Webp` entry points
 with the same codec options, pixels and stream ownership. Calls reserve the full
 configured `MaxWorkingBytes` and `MaxWork` atomically before codec execution.
 Choose per-operation limits that fit alongside other live reservations; this
@@ -53,6 +53,7 @@ remain caller-managed. Existing `ImageCodec` entry points use per-operation limi
 | Bilinear / bicubic resize | Source, result, admitted optional geometry/row caches, and 4 KiB for exact low-alpha rounding when needed; tight limits select the original bounded path |
 | Encoded Stream input | 8 KiB read scratch; old/new capacities during growth; conservative capacity + final-copy peak before parsing |
 | Container / EXIF inspection | Encoded input and bounded metadata/parser state; dimensions are checked without allocating a decoded image |
+| InspectHeaders / InspectHeadersAsync | Fixed 8,448-byte scratch/parser allowance; no whole-input, metadata-block or raster allocation |
 | PNG decode | Encoded input, concatenated IDAT, result, pass rows/palette/transparency, 4 KiB framing scratch and 256 KiB inflater allowance; optional filtered storage is separately admitted |
 | PNG encode | Source, packed row, 64 KiB IDAT storage and 1 MiB BCL compression allowance, admitted before the signature |
 | JPEG decode | Encoded input, parser/tables, padded coefficient/sample planes and RGBA result; orientation is admitted in the same operation |
@@ -87,7 +88,14 @@ after release, as specified in [SPEC.md](../SPEC.md#pixels-and-ownership).
 open. They admit 8 KiB scratch plus simultaneous growth capacities and retain
 the full input capacity during CPU parsing/decoding; no final input copy is made.
 Shared reservations span awaits and settle on every exit. Identification still
-validates the full container/EXIF structure; small-memory inspection is planned.
+validates the full container/EXIF structure.
+
+`InspectHeaders`/`InspectHeadersAsync` scan dimensions/orientation through EOF with
+fixed workspace. Seekable inputs can skip opaque payloads; other inputs are drained.
+Read-ahead and skipped bytes still consume input/work quotas. Dimension/pixel and
+metadata/item limits apply, without a hypothetical decoded-array ceiling. PNG CRCs
+and compressed pixels are outside this API's validation scope; use `Identify` for
+fuller container validation and `Decode` for pixels. Shared reservations span awaits.
 
 `EncodePng/Jpeg/WebpAsync` stage encoded bytes privately, then use caller
 `WriteAsync` in blocks up to 64 KiB. Charge actual staging capacity, 256 bytes
