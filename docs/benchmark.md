@@ -2,8 +2,8 @@
 
 Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
 conservative upper ≤1x**. The 214 retained numeric rows contain **67 current
-parity confirmations, 123 measured gaps and 1 confidence-open cases**;
-**23 prior-production rows need reconfirmation**: seventeen JPEG rows after
+parity confirmations, 124 measured gaps and 1 confidence-open cases**;
+**22 prior-production rows need reconfirmation**: sixteen remaining JPEG rows after
 compatibility changes and six additional PNG/WebP Stream rows after input-copy
 removal. Their old times/allocations are historical. Other paths reuse valid
 evidence. The earlier
@@ -11,6 +11,11 @@ evidence. The earlier
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
 sizes or hardware. Stop cases already confirmed at ≤1x.
+
+[Current grayscale JPEG decoding](../benchmarks/WARM-JPEG-GRAY-CURRENT.md)
+resolves one stale row: **1.426×**, **672,186B/op**, qualified short gap. Frozen
+pixels/reference/boundaries and the same qualified build are reused; no rebuild,
+long repeat or repeated package proof. Other prior JPEG/Stream rows remain open.
 
 Shared-budget entry points and direct JPEG sample decoding are implemented and
 correctness-qualified; their times and allocations are **unmeasured**. Together
@@ -27,7 +32,7 @@ input storage, complete validation and independent outputs; two named PNG8 front
 representatives remain unmeasured. Shared-budget reservation lifetime across awaits
 is correctness-tested. Synchronous Decode now avoids the final full-input copy,
 admitting actual retained capacity through decoding. Its seven existing Stream
-workloads need reconfirmation (one is already among the seventeen JPEG rows).
+workloads need reconfirmation (one is already among the sixteen remaining JPEG rows).
 Resident decoding, Identify and async-input methods retain their existing evidence.
 
 Async PNG/JPEG/WebP output, including direct JPEG samples, uses admitted private
@@ -121,7 +126,7 @@ Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDEN
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
 retains its1.012x mean gap/1.014x upper. Current totals are **67 passes /
-123 gaps / 1 confidence open / 23 prior-production rows**.
+124 gaps / 1 confidence open / 22 prior-production rows**.
 Every actual/outlier and both quiet guards remain; unchanged qualification is reused.
 Resolve the named JPEG uncertainties before optimization. Stop current passing paths.
 
@@ -188,7 +193,7 @@ Resolve the named JPEG uncertainties before optimization. Stop current passing p
 | [PNG gray1/key1 and gray2/key1, unfiltered native](../benchmarks/WARM-PNG-PACKED-TRANSPARENCY.md) | — | — | — | — | Unscored: native alpha differs |
 | [PNG opaque gray2 → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 71.73 | 106.38 | 0.674 / 0.679 | 616 | Parity confirmed |
 | [PNG opaque gray4 → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 116.09 | 169.54 | 0.685 / 0.698 | 872 | Parity confirmed |
-| [JPEG baseline gray](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 978.38 | 683.31 | 1.432 / 1.479 | 672,186 | Prior production; reconfirm |
+| [JPEG baseline gray](../benchmarks/WARM-JPEG-GRAY-CURRENT.md) | 973.44 | 682.79 | 1.426 / 1.459 | 672,186 | Gap (short; qualified) |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG-COLOR16.md) | 1,204.44 | 1,009.50 | 1.193 / 1.338 | 757,345 | Prior production; reconfirm |
 | [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-JPEG-COLOR16.md) | 1,366.40 | 1,014.67 | 1.347 / 1.490 | 761,720 | Prior production; reconfirm |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-JPEG-COLOR16.md) | 1,573.59 | 1,344.77 | 1.170 / 1.322 | 829,145 | Prior production; reconfirm |

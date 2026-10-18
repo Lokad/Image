@@ -1,11 +1,17 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-67 independent passes,123 measured mean gaps and one confidence-open case across
-191 current rows;23 prior-production rows need reconfirmation. The
+67 independent passes,124 measured mean gaps and one confidence-open case across
+192 current rows;22 prior-production rows need reconfirmation. The
 [three-table summary](../docs/benchmark.md) retains214 numeric rows:123 current
-independent observations,68 qualified shorts and23 prior rows. Reuse unchanged
+independent observations,69 qualified shorts and22 prior rows. Reuse unchanged
 passing paths; no image or settings grid.
+
+[Current JPEG reconciliation](WARM-JPEG-GRAY-CURRENT.md) replaces exactly the
+prior baseline-grayscale row with a current short1.426x gap,672,186B/op. Same
+frozen input/pixels/native boundary and qualified immutable build; no production,
+harness/native/selector build, synchronization, long repeat or package recheck.
+Sixteen JPEG plus six other Stream rows remain prior; other evidence is reused.
 
 [Bounded VP8 coefficient adaptation](WARM-VP8-ADAPTIVE-PROBABILITIES.md) changes
 exactly six existing default complete encode timings/packet sizes and adds
@@ -276,7 +282,7 @@ established before this audit and were reconciled, not expanded.
 | --- | --- | --- |
 | B01 | Bilinear Down8/16,Up8/16: shared resize dispatch and byte/word alpha-aware filtering | [Previous phase closed](WARM-CURRENT-BILINEAR.md); [Down8](WARM-BILINEAR-BYTE-ROW-CACHE.md), [Down16](WARM-BILINEAR-WORD-CACHE.md) and [Up8](WARM-BILINEAR-BYTE-FACTORIZATION.md) improved, still <=1x gaps |
 | B02 | JPEG adaptive Encode8/16,Encode422_8/16: changed AC planner at444/422 and both input depths | [All four closed](WARM-CURRENT-JPEG-ADAPTIVE.md) |
-| B03 | JPEG Decode8,NativeDecode8,NativeDecode420/422,OwnedDecodeGray,NativeDecode420Restart,DirectRgb422/420: changed ordinary AC loop plus distinct component renderers | [All eight closed](WARM-CURRENT-JPEG-DECODE.md) |
+| B03 | JPEG Decode8,NativeDecode8,NativeDecode420/422,OwnedDecodeGray,NativeDecode420Restart,DirectRgb422/420: changed ordinary AC loop plus distinct component renderers | [All eight closed](WARM-JPEG-GRAY-CURRENT.md) |
 | B04 | JPEG ProgressiveGray/420/422 plus ordinary/live-token444: masked refinement and its guarded fused readers | [Four ordinary proofs reused](WARM-JPEG-REFINEMENT-FUSED.md); [live-token444 improved again](WARM-JPEG-REFINEMENT-LOOKAHEAD.md), still a <=1x gap |
 | B05 | The25 named PNG decode selectors in the linked report: byte/word predictors, expansion and input-pool changes | [All25 closed](WARM-CURRENT-PNG-DECODE.md) |
 | B06 | PNG DecodeAdam7_16,DecodeGray1Adam7: interlaced placement on changed shared framing; later palette4/8 cases reuse their own proofs | [Closed](WARM-CURRENT-PNG-ADAM7.md) |

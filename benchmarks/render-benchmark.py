@@ -133,7 +133,7 @@ def render():
         pending('PNG gray1/key1 and gray2/key1, unfiltered native', 'WARM-PNG-PACKED-TRANSPARENCY.md', 'Unscored: native alpha differs'),
         row('PNG opaque gray2 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray2', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG opaque gray4 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('JPEG baseline gray', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline gray', 'warm-jpeg-gray-current-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-GRAY-CURRENT.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0', 'warm-jpeg-color16-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-COLOR16.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-jpeg-color16-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-JPEG-COLOR16.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:2', 'warm-jpeg-color16-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-JPEG-COLOR16.md', verification='Gap (short; qualified)'),
@@ -303,7 +303,7 @@ def render():
                        '| [PNG RGBA8, fresh seekable Stream]', '| [PNG RGBA16, fresh seekable Stream]',
                        '| [WebP VP8 + alpha, fresh seekable Stream]', '| [WebP VP8L, fresh seekable Stream]')
     decodes = [value.rsplit(' | ', 1)[0] + ' | Prior production; reconfirm |'
-               if value.startswith(('| [JPEG', *stream_prefixes)) else value for value in decodes]
+               if value.startswith(stream_prefixes) or (value.startswith('| [JPEG') and not value.startswith('| [JPEG baseline gray]')) else value for value in decodes]
     all_rows = decodes + encodes + edits
     parity_count = sum(' | Parity confirmed |' in value for value in all_rows)
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
@@ -315,7 +315,7 @@ def render():
 Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
 conservative upper ≤1x**. The 214 retained numeric rows contain **{parity_count} current
 parity confirmations, {gap_count} measured gaps and {confidence_count} confidence-open cases**;
-**{reconfirm_count} prior-production rows need reconfirmation**: seventeen JPEG rows after
+**{reconfirm_count} prior-production rows need reconfirmation**: sixteen remaining JPEG rows after
 compatibility changes and six additional PNG/WebP Stream rows after input-copy
 removal. Their old times/allocations are historical. Other paths reuse valid
 evidence. The earlier
@@ -323,6 +323,11 @@ evidence. The earlier
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
 sizes or hardware. Stop cases already confirmed at ≤1x.
+
+[Current grayscale JPEG decoding](../benchmarks/WARM-JPEG-GRAY-CURRENT.md)
+resolves one stale row: **1.426×**, **672,186B/op**, qualified short gap. Frozen
+pixels/reference/boundaries and the same qualified build are reused; no rebuild,
+long repeat or repeated package proof. Other prior JPEG/Stream rows remain open.
 
 Shared-budget entry points and direct JPEG sample decoding are implemented and
 correctness-qualified; their times and allocations are **unmeasured**. Together
@@ -339,7 +344,7 @@ input storage, complete validation and independent outputs; two named PNG8 front
 representatives remain unmeasured. Shared-budget reservation lifetime across awaits
 is correctness-tested. Synchronous Decode now avoids the final full-input copy,
 admitting actual retained capacity through decoding. Its seven existing Stream
-workloads need reconfirmation (one is already among the seventeen JPEG rows).
+workloads need reconfirmation (one is already among the sixteen remaining JPEG rows).
 Resident decoding, Identify and async-input methods retain their existing evidence.
 
 Async PNG/JPEG/WebP output, including direct JPEG samples, uses admitted private
