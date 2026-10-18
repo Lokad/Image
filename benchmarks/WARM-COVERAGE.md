@@ -1,18 +1,23 @@
 # Material warm coverage
 
 Updated 2026-10-18. The **warm single-CPU parity objective remains open**:
-61 independent passes, 145 measured mean gaps and one confidence-open case across
-207 named rows. The [current three-table summary](../docs/benchmark.md) selects
-126 independent confirmations and81 qualified shorts. Reuse unchanged passing
-paths; do not add an image or settings grid.
+62 independent passes,144 measured mean gaps and one confidence-open case across
+207 named rows. The [three-table summary](../docs/benchmark.md) selects127
+independent confirmations and80 qualified shorts. Reuse unchanged passing paths;
+do not add an image or settings grid.
 
-Latest [packed word bicubic broadcasts](WARM-BICUBIC-WORD-BROADCAST.md) improve the
-existing tight-memory RGBA16 64×32 operation13.7%, at1.374x mean/2.313x short upper
-and16,505B/op. Exact pixels, arithmetic, workspace and complete boundaries remain.
-The short has wide native-bracket uncertainty; it does not establish parity.
-Other206comparisons/all61passes are reused. All3,722Release cases perOS and the
-same actual package consumer/allthree examples pass on Windows/Linux. Unchanged
-scalar guards/fallback reuse prior evidence. No long repeat or micro-variant grid.
+Latest [parallel adaptive JPEG AC preparation](WARM-JPEG-VECTOR-AC.md) improves
+eight existing encodes20.8–23.5%, retaining exact packets, quality, allocation
+strategy and complete boundaries. Single-component gray independently passes
+0.962x mean/0.970x upper against the approved SIMDlibjpeg-turbo reference; stop.
+Seven qualified short gaps remain. Other199comparisons/all61priorpasses are reused.
+All3,722Release cases/OS and the same actual package consumer/allthree examples
+pass on Windows/Linux; unchanged scalar paths reuse prior20adaptive checks/OS.
+No SIMD lane, metadata, layout or inlining tuning grid follows this primitive.
+
+The preceding [packed word bicubic broadcasts](WARM-BICUBIC-WORD-BROADCAST.md)
+retain their13.7% gain,1.374x mean/2.313x short upper and16,505B/op. Their exact
+path is unchanged; the wide short bound still does not establish parity.
 
 The finite checklist's **previous <=2x phase was completed for released0.1.0**.
 Its original independent evidence and unchanged-path proofs remain historical;

@@ -424,6 +424,9 @@ internal static class JpegEncoder
     // occur after preceding zero-run events, in the original traversal order.
     private static int AppendAdaptiveAc(ReadOnlySpan<int> quantized, long[] frequencies, uint[] events, int eventCount, int table)
     {
+        if (Avx512F.IsSupported && Avx512CD.IsSupported && Bmi2.X64.IsSupported
+            && events.Length - eventCount >= 128)
+            return AppendPreparedAdaptiveAc(quantized, frequencies, events, eventCount, table);
         var order = JpegTransform.Zigzag;
         if (Avx2.IsSupported && Bmi2.X64.IsSupported)
         {
@@ -474,6 +477,53 @@ internal static class JpegEncoder
             events[eventCount++] = PackEntropyEvent(table, symbol, value, category); zeros = 0;
         }
         if (zeros != 0) { frequencies[0]++; events[eventCount++] = PackEntropyEvent(table, 0, 0, 0); }
+        return eventCount;
+    }
+
+    private static int AppendPreparedAdaptiveAc(ReadOnlySpan<int> quantized, long[] frequencies,
+        uint[] events, int eventCount, int table)
+    {
+        // Each AC event consumes at least one of63 scan positions. The caller
+        // admits128 free entries:64 prepared words cannot overlap appended events.
+        var scratch = events.AsSpan(events.Length - 64, 64);
+        var masks = FixedScanMasks.Rows; ulong occupied = 0;
+        for (var chunk = 0; chunk < 4; chunk++)
+        {
+            var values = Vector512.Create(quantized.Slice(chunk * 16, 16));
+            var categories = Vector512.Subtract(Vector512.Create(32u),
+                Avx512CD.LeadingZeroCount(Vector512.Abs(values).AsUInt32()));
+            var complements = Vector512.Subtract(Avx512F.ShiftLeftLogicalVariable(Vector512.Create(1u), categories), Vector512.Create(1u));
+            var amplitudes = Vector512.Add(values.AsUInt32(), Vector512.BitwiseAnd(complements,
+                Vector512.LessThan(values, Vector512<int>.Zero).AsUInt32()));
+            var prepared = Vector512.BitwiseOr(Vector512.ShiftLeft(categories, 26),
+                Vector512.BitwiseAnd(amplitudes, Vector512.Create(65535u)));
+            prepared.CopyTo(scratch.Slice(chunk * 16, 16));
+            var nonzero = ~Vector512.ExtractMostSignificantBits(Vector512.Equals(values, Vector512<int>.Zero)) & 65535u;
+            occupied |= Bmi2.X64.ParallelBitDeposit(nonzero & 255u, masks[chunk * 2]);
+            occupied |= Bmi2.X64.ParallelBitDeposit(nonzero >> 8, masks[chunk * 2 + 1]);
+        }
+        occupied &= ~1UL; var previous = 0; var order = JpegTransform.Zigzag;
+        while (occupied != 0)
+        {
+            var scan = BitOperations.TrailingZeroCount(occupied); var natural = order[scan];
+            var word = scratch[natural]; var category = (int)(word >> 26);
+            var run = scan - previous - 1;
+            while (run >= 16)
+            {
+                frequencies[240]++; events[eventCount++] = PackEntropyEvent(table, 240, 0, 0); run -= 16;
+            }
+            if (category > 10)
+            {
+                // Retain the original absolute-value overflow and range error
+                // after all preceding zero-run effects, not during vector prep.
+                _ = Category(quantized[natural]);
+                throw new ImageDataException("JPEG AC transform exceeds its coding range.");
+            }
+            var symbol = run << 4 | category; frequencies[symbol]++;
+            events[eventCount++] = (uint)table << 30 | (uint)symbol << 16 | word;
+            previous = scan; occupied &= occupied - 1;
+        }
+        if (previous != 63) { frequencies[0]++; events[eventCount++] = PackEntropyEvent(table, 0, 0, 0); }
         return eventCount;
     }
 

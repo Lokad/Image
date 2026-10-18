@@ -28,8 +28,9 @@
 - Faster RGBA8/16 bicubic filtering through bounded row/column reuse, wider
   enlargement strips, packed byte/word weight broadcasts, certified quotient bounds and
   specialized byte output, preserving exact pixels and output ownership.
-- Faster adaptive JPEG event planning and fixed-Huffman emission with unchanged
-  packets, work and stream callback/failure behavior.
+- Faster adaptive JPEG event planning through parallel integer category/amplitude
+  preparation, and faster fixed-Huffman emission, preserving packets, work, limits
+  and stream callback/failure behavior.
 - Faster VP8 source conversion with unchanged packets, alpha and resource charges.
 - Faster PNG checksums, packing, Up/Sub filters and RGB16 Paeth decoding, with
   fewer stored-PNG output allocations and unchanged packets, samples and limits.

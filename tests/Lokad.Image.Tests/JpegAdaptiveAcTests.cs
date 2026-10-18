@@ -44,16 +44,27 @@ public sealed class JpegAdaptiveAcTests
 
     private static void Compare(int[] block, int table)
     {
+        Compare(block, table, 80);
+        Compare(block, table, 256);
+    }
+
+    private static void Compare(int[] block, int table, int capacity)
+    {
         var original = block.ToArray();
         var expectedFrequencies = Enumerable.Range(0, 256).Select(n => (long)n * 3).ToArray();
         var actualFrequencies = expectedFrequencies.ToArray();
-        var expectedEvents = Enumerable.Repeat(0xdeadbeefu, 80).ToArray(); var actualEvents = expectedEvents.ToArray();
+        var expectedEvents = Enumerable.Repeat(0xdeadbeefu, capacity).ToArray(); var actualEvents = expectedEvents.ToArray();
         var expectedCount = -1; var actualCount = -1;
         var expectedError = Record.Exception(() => expectedCount = Scalar(block, expectedFrequencies, expectedEvents, 3, table));
         var actualError = Record.Exception(() => actualCount = Actual(block, actualFrequencies, actualEvents, 3, table));
         Assert.Equal(expectedError?.GetType(), actualError?.GetType()); Assert.Equal(expectedError?.Message, actualError?.Message);
         Assert.Equal(expectedCount, actualCount); Assert.Equal(expectedFrequencies, actualFrequencies);
-        Assert.Equal(expectedEvents, actualEvents); Assert.Equal(original, block);
+        // The large private event array may use its final64 unoccupied slots
+        // as admitted scratch. Every preceding byte and failure effect is fixed;
+        // short buffers retain the original whole-array equality check.
+        if (capacity == 80) Assert.Equal(expectedEvents, actualEvents);
+        else Assert.True(expectedEvents.AsSpan(0, capacity - 64).SequenceEqual(actualEvents.AsSpan(0, capacity - 64)));
+        Assert.Equal(original, block);
     }
 
     // Straightforward T.81 zero-run traversal, independent of occupancy masks.
