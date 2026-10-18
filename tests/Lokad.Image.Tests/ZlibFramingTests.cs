@@ -5,6 +5,37 @@ namespace Lokad.Image.Tests;
 public sealed class ZlibFramingTests
 {
     [Fact]
+    public void CancelableMaterializationKeepsIndependentFixedLiteralBudgetAndWrittenPrefix()
+    {
+        // Authored RFC1951 fixed codes: A has eight bits,144 has nine, EOB seven.
+        // The existing fixed-tree setup consumes9380 work; no production parser
+        // is used to derive the per-prefix oracle below.
+        var writer = new BitWriter(); writer.Number(1, 1); writer.Number(1, 2);
+        var raw = Enumerable.Range(0, 40).Select(i => (byte)((i & 1) == 0 ? 65 : 144)).ToArray();
+        foreach (var value in raw) writer.Code(value == 65 ? 113 : 400, value == 65 ? 8 : 9);
+        writer.Code(0, 7); writer.Align(); byte[] encoded = [0x78, 0x01, .. writer.Bytes(), 0, 0, 0, 0];
+        var original = encoded.ToArray();
+        using var cancellation = new CancellationTokenSource();
+        for (var extra = 0; extra <= 348; extra++)
+        {
+            var remaining = extra; var count = 0;
+            while (count < raw.Length && remaining >= (count % 2 == 0 ? 8 : 9))
+            { remaining -= count % 2 == 0 ? 8 : 9; count++; }
+            var complete = count == raw.Length && remaining >= 7;
+            if (complete) remaining -= 7;
+            var context = new OperationContext(ImageLimits.Default with { MaxWork = 9380 + extra, MaxWorkingBytes = 4096 }, cancellation.Token);
+            var output = Enumerable.Repeat((byte)165, raw.Length + 8).ToArray();
+            var error = Record.Exception(() => ZlibFraming.ValidateAndInflate(encoded, output.AsSpan(4, raw.Length), context, out _));
+            if (complete) Assert.Null(error); else Assert.IsType<ImageLimitException>(error);
+            Assert.Equal(remaining, context.RemainingWork); Assert.Equal(4096, context.RemainingWorkingBytes);
+            Assert.Equal(raw[..count], output.AsSpan(4, count).ToArray());
+            Assert.All(output[..4], value => Assert.Equal(165, value));
+            Assert.All(output[(4 + count)..], value => Assert.Equal(165, value));
+            Assert.Equal(original, encoded);
+        }
+    }
+
+    [Fact]
     public void LocalBitChargesPublishAcrossFixedAndStoredBlocksAndEveryBudget()
     {
         // Independent RFC1951 grammar: fixed A, stored000, fixed A + length3/
@@ -182,8 +213,8 @@ public sealed class ZlibFramingTests
         bits.Align(); byte[] encoded = [0x78, 0x01, .. bits.Bytes(), 0, 0, 0, 0];
         var original = encoded.ToArray();
         using var cancellation = new CancellationTokenSource();
-        // Compare both counting loops with cancelable materialization, whose
-        // CopyLiteralRun remains disabled and dispatches every symbol separately.
+        // Compare both counting loops with cancelable materialization.
+        // The separate fixed-literal oracle independently checks exact charges.
         // Check every bit budget through the literal run and EOB.
         foreach (var expected in new[] { 0L, 19, 39, 40, 41 })
         for (var extra = 0; extra <= 348; extra++)
@@ -245,6 +276,18 @@ public sealed class ZlibFramingTests
             Assert.Equal(second?.Message, first?.Message);
             Assert.Equal(checkedSymbols.RemainingWork, direct.RemainingWork);
             direct.Reserve(4096); direct.Release(4096);
+            if (expected > 0)
+            {
+                var materialized = new OperationContext(limits, cancellation.Token);
+                var output = Enumerable.Repeat((byte)165, (int)expected + 8).ToArray();
+                var error = Record.Exception(() => ZlibFraming.ValidateAndInflate(input, output.AsSpan(4, (int)expected), materialized, out _));
+                Assert.Equal(first?.GetType(), error?.GetType()); Assert.Equal(first?.Message, error?.Message);
+                Assert.Equal(direct.RemainingWork, materialized.RemainingWork);
+                Assert.Equal(direct.RemainingWorkingBytes, materialized.RemainingWorkingBytes);
+                Assert.All(output[..4], value => Assert.Equal(165, value));
+                Assert.All(output[((int)expected + 4)..], value => Assert.Equal(165, value));
+                if (error is null) Assert.All(output.AsSpan(4, (int)expected).ToArray(), value => Assert.Equal(65, value));
+            }
             checkedSymbols.Reserve(4096); checkedSymbols.Release(4096);
         }
     }

@@ -105,6 +105,12 @@ internal static class ZlibFraming
                             output, expectedBytes, window);
                         continue;
                     }
+                    if (context.Cancellation.CanBeCanceled)
+                    {
+                        output = InflateCancelableMaterializedBlock(ref reader, literals, distances, literalLookup,
+                            distanceLookup, destination, output, expectedBytes, window);
+                        continue;
+                    }
                     while (true)
                     {
                         output += materialize
@@ -257,6 +263,59 @@ internal static class ZlibFraming
             return checksum + 4;
         }
         finally { context.Release(4096); }
+    }
+
+    private static long InflateCancelableMaterializedBlock(scoped ref Bits reader, scoped Huffman literals, scoped Huffman distances,
+        scoped ReadOnlySpan<ushort> literalLookup, scoped ReadOnlySpan<ushort> distanceLookup, scoped Span<byte> destination,
+        long output, long expectedBytes, int window)
+    {
+        // Decode each symbol once. Only an admitted literal starts a batched
+        // literal run, avoiding another literal probe before every match.
+        while (true)
+        {
+            var symbol = DecodeLiteral(ref reader, literals, literalLookup);
+            if (symbol == 256) return output;
+            if (symbol < 256)
+            {
+                if (1 > expectedBytes - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
+                destination[(int)output++] = (byte)symbol;
+                output += reader.CopyStreamingLiteralRun(literalLookup, destination[(int)output..]);
+                continue;
+            }
+            if (symbol > 285) throw new ImageDataException("Invalid PNG Deflate length code.");
+            int length;
+            if (symbol < 265) length = symbol - 254;
+            else if (symbol == 285) length = 258;
+            else
+            {
+                var extra = (symbol - 265) / 4 + 1;
+                length = 3 + (1 << (extra + 2)) + ((symbol - 265) % 4 << extra) + reader.Read(extra);
+            }
+            var distanceSymbol = DecodeDistance(ref reader, distances, distanceLookup);
+            if (distanceSymbol > 29) throw new ImageDataException("Invalid PNG Deflate distance code.");
+            var distance = distanceSymbol + 1;
+            if (distanceSymbol >= 4)
+            {
+                var extra = distanceSymbol / 2 - 1;
+                distance = 1 + ((2 + (distanceSymbol & 1)) << extra) + reader.Read(extra);
+            }
+            if (distance > output || distance > window) throw new ImageDataException("PNG Deflate distance exceeds history or window.");
+            if (length > expectedBytes - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
+            var start = (int)output;
+            if (distance == 1) destination.Slice(start, length).Fill(destination[start - 1]);
+            else
+            {
+                var copied = Math.Min(length, distance);
+                destination.Slice(start - distance, copied).CopyTo(destination.Slice(start, copied));
+                while (copied < length)
+                {
+                    var count = Math.Min(copied, length - copied);
+                    destination.Slice(start, count).CopyTo(destination.Slice(start + copied, count));
+                    copied += count;
+                }
+            }
+            output += length;
+        }
     }
 
     private static long CountBlock(scoped ref Bits reader, scoped Huffman literals, scoped Huffman distances,

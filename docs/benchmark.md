@@ -31,20 +31,20 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [certified subsampled JPEG color reconstruction](../benchmarks/WARM-JPEG-COLOR16.md)
-improves six complete decodes **7.3–16.4%**, with exact pixels, unchanged resource
-admission and no new workspace. Every mean remains above parity; these are
-qualified shorts. Other 201 comparisons and all 62 passing proofs remain valid. Fresh
-**3,724 Release tests/OS** (1,390 internal + 1,436 public + 898 live FFmpeg), 26 focused
-hardware-off checks per OS and the **same actual package consumer and all three examples
-on Windows and Linux** pass. Unchanged scalar JPEG controls are reused. Production
-remains safe managed dependency-free .NET 10.
+Latest production round: [cancelable PNG materialization](../benchmarks/WARM-PNG-CANCEL-BLOCKS.md)
+improves complete RGBA16 decoding **32.1%** and RGBA8 decoding **10.2%**, with
+exact samples, unchanged admission and no new workspace. Both remain qualified
+short gaps. Other 205 comparisons and all 62 passing proofs remain valid.
+Fresh **3,725 Release tests per OS** (1,391 internal + 1,436 public + 898 live
+FFmpeg), 119 affected hardware-off Zlib checks per OS and the **same actual package
+consumer and all three examples on Windows and Linux** pass. Unaffected scalar
+qualification is reused. Production remains safe managed dependency-free .NET 10.
 
 Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDENCE.md)
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
 retains its1.012x mean gap/1.014x upper. Current totals are**62passes/144gaps/1confidence**,
-with127independent selected confirmations+80qualified shorts. Every actual/outlier
+with125independent selected confirmations+82qualified shorts. Every actual/outlier
 and both quiet guards remain; unchanged production/package qualification is reused.
 No builds, repeat-until-pass or small residual tuning. Stop the62passing paths.
 
@@ -65,14 +65,14 @@ No builds, repeat-until-pass or small residual tuning. Stop the62passing paths.
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 9,391.90 | 6,005.14 | 1.564 / 1.714 | 2,327,699 | Gap (short; qualified) |
 | [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 4,351.41 | 3,030.27 | 1.436 / 1.480 | 1,924,876 | Gap (short; qualified) |
 | [PNG RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,904.89 | 1,392.72 | 1.368 / 1.371 | 4,456 | Gap (independent) |
-| [PNG RGBA8, None / live cancelable token](../benchmarks/WARM-PNG-DECODE-BOUNDARIES.md) | 1,929.15 | 1,370.88 | 1.407 / 1.469 | 4,456 | Gap (independent) |
+| [PNG RGBA8, None / live cancelable token](../benchmarks/WARM-PNG-CANCEL-BLOCKS.md) | 1,732.37 | 1,390.42 | 1.246 / 1.320 | 4,456 | Gap (short; qualified) |
 | [PNG RGBA8, None / exact working limit](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 2,028.73 | 1,395.91 | 1.453 / 1.597 | 68,200 | Gap (short; qualified) |
 | [PNG RGBA8, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 2,067.97 | 1,397.05 | 1.480 / 1.826 | 68,200 | Gap (short; qualified) |
 | [PNG RGBA8, stored Deflate / None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 150.38 | 136.49 | 1.102 / 1.114 | 4,456 | Gap (independent) |
 | [PNG RGBA16, stored Deflate / None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 322.73 | 296.18 | 1.090 / 1.096 | 8,552 | Gap (independent) |
 | [PNG RGBA16, None](../benchmarks/WARM-CURRENT-PNG16-BICUBIC16.md) | 3,034.16 | 2,903.68 | 1.045 / 1.059 | 8,552 | Gap (independent) |
 | [PNG RGBA16, None / exact working limit](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 3,103.58 | 2,902.28 | 1.069 / 1.242 | 70,248 | Gap (short; qualified) |
-| [PNG RGBA16, None / live cancelable token](../benchmarks/WARM-PNG-COUNTING.md) | 4,518.51 | 2,873.34 | 1.573 / 1.583 | 8,552 | Gap (independent) |
+| [PNG RGBA16, None / live cancelable token](../benchmarks/WARM-PNG-CANCEL-BLOCKS.md) | 3,068.88 | 2,897.86 | 1.059 / 1.108 | 8,552 | Gap (short; qualified) |
 | [PNG RGBA16, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 3,120.43 | 2,904.38 | 1.074 / 1.145 | 70,248 | Gap (short; qualified) |
 | [PNG RGBA8, Paeth](../benchmarks/WARM-PAETH-SIX-CHANNEL.md) | 3,149.31 | 2,847.74 | 1.106 / 1.128 | 4,456 | Gap (short; qualified) |
 | [PNG RGBA8, Up](../benchmarks/WARM-PNG-UP-SIMD.md) | 1,484.65 | 1,509.16 | 0.984 / 0.989 | 4,456 | Parity confirmed |

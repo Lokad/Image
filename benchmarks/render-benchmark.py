@@ -87,14 +87,14 @@ def render():
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, fresh seekable Stream', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'StreamNativeLossless8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('PNG RGBA8, None / live cancelable token', 'warm-png-boundaries-current-evidence.json', ['cases', 'byteDefault', -1], 'WARM-PNG-DECODE-BOUNDARIES.md', True),
+        row('PNG RGBA8, None / live cancelable token', 'warm-png-cancel-blocks-evidence.json', ['cases', 'DecodeCancelable8', -1], 'WARM-PNG-CANCEL-BLOCKS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None / exact working limit', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTight8', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None / exact limit + live cancelable token', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTightCancelable8', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, stored Deflate / None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeNoCompression8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGBA16, stored Deflate / None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeNoCompression16', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGBA16, None', 'warm-current-png16-bicubic16-evidence.json', ['cases', 'png16', -1], 'WARM-CURRENT-PNG16-BICUBIC16.md', True),
         row('PNG RGBA16, None / exact working limit', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTight16', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
-        row('PNG RGBA16, None / live cancelable token', 'warm-pngcountall-evidence.json', ['wordConfirmations', 1], 'WARM-PNG-COUNTING.md', True),
+        row('PNG RGBA16, None / live cancelable token', 'warm-png-cancel-blocks-evidence.json', ['cases', 'DecodeCancelable16', -1], 'WARM-PNG-CANCEL-BLOCKS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA16, None / exact limit + live cancelable token', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTightCancelable16', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, Paeth', 'warm-paeth-six-channel-evidence.json', ['cases', 'DecodePaeth8', -1], 'WARM-PAETH-SIX-CHANNEL.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, Up', 'warm-png-up-simd-evidence.json', ['cases', 'DecodeUp8', -1], 'WARM-PNG-UP-SIMD.md', True),
@@ -324,20 +324,20 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [certified subsampled JPEG color reconstruction](../benchmarks/WARM-JPEG-COLOR16.md)
-improves six complete decodes **7.3–16.4%**, with exact pixels, unchanged resource
-admission and no new workspace. Every mean remains above parity; these are
-qualified shorts. Other 201 comparisons and all 62 passing proofs remain valid. Fresh
-**3,724 Release tests/OS** (1,390 internal + 1,436 public + 898 live FFmpeg), 26 focused
-hardware-off checks per OS and the **same actual package consumer and all three examples
-on Windows and Linux** pass. Unchanged scalar JPEG controls are reused. Production
-remains safe managed dependency-free .NET 10.
+Latest production round: [cancelable PNG materialization](../benchmarks/WARM-PNG-CANCEL-BLOCKS.md)
+improves complete RGBA16 decoding **32.1%** and RGBA8 decoding **10.2%**, with
+exact samples, unchanged admission and no new workspace. Both remain qualified
+short gaps. Other 205 comparisons and all 62 passing proofs remain valid.
+Fresh **3,725 Release tests per OS** (1,391 internal + 1,436 public + 898 live
+FFmpeg), 119 affected hardware-off Zlib checks per OS and the **same actual package
+consumer and all three examples on Windows and Linux** pass. Unaffected scalar
+qualification is reused. Production remains safe managed dependency-free .NET 10.
 
 Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDENCE.md)
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
 retains its1.012x mean gap/1.014x upper. Current totals are**62passes/144gaps/1confidence**,
-with127independent selected confirmations+80qualified shorts. Every actual/outlier
+with125independent selected confirmations+82qualified shorts. Every actual/outlier
 and both quiet guards remain; unchanged production/package qualification is reused.
 No builds, repeat-until-pass or small residual tuning. Stop the62passing paths.
 

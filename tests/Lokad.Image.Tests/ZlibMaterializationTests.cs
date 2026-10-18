@@ -11,6 +11,8 @@ public sealed class ZlibMaterializationTests
     [InlineData(257, 16, 0, 7)] [InlineData(32768, 29, 8191, 13)]
     public void OverlappingAndMaximumHistoryMatchBcl(int distance, int symbol, int extra, int extraBits)
     {
+        using var cancellation = new CancellationTokenSource();
+        foreach (var cancelable in new[] { false, true })
         foreach (var stored in new[] { false, true })
         {
             var seed = Enumerable.Range(0, distance).Select(i => (byte)(73 * i + 19)).ToArray();
@@ -26,7 +28,7 @@ public sealed class ZlibMaterializationTests
             bits.Code(197, 8); // Fixed length symbol 285: 258 bytes.
             bits.Code(symbol, 5); bits.Number(extra, extraBits); bits.Code(0, 7);
             var encoded = Envelope(bits, raw);
-            var context = new OperationContext(ImageLimits.Default, default);
+            var context = new OperationContext(ImageLimits.Default, cancelable ? cancellation.Token : default);
             var output = new byte[raw.Length];
             Assert.Equal(encoded.Length, ZlibFraming.ValidateAndInflate(encoded, output, context, out var complete));
             Assert.True(complete); Assert.Equal(raw, output); Assert.Equal(Inflate(encoded), output);
@@ -46,12 +48,13 @@ public sealed class ZlibMaterializationTests
         bits.Code(0, 7); var encoded = Envelope(bits, raw);
         using var cancellation = new CancellationTokenSource();
         var completeWork = 9380 + raw.Sum(value => value < 144 ? 8 : 9) + 7;
+        foreach (var cancelable in new[] { false, true })
         foreach (var expected in new[] { raw.Length - 1, raw.Length, raw.Length + 1 })
         for (var length = 0; length <= encoded.Length; length++)
         foreach (var work in new[] { 1, 9379, 9380, 9381, completeWork - 1, completeWork, completeWork + 1 })
         {
             var limits = ImageLimits.Default with { MaxWork = work, MaxWorkingBytes = 4096 };
-            var materialized = new OperationContext(limits, default);
+            var materialized = new OperationContext(limits, cancelable ? cancellation.Token : default);
             var perSymbol = new OperationContext(limits, cancellation.Token);
             var input = encoded[..length]; var output = Enumerable.Repeat((byte)165, expected + 16).ToArray();
             int firstEnd = -1, secondEnd = -1;
