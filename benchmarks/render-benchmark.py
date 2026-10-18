@@ -84,7 +84,7 @@ def render():
         row('PNG RGBA8, fresh seekable Stream', 'warm-current-png-stream-evidence.json', ['cases', 'Png8', -1], 'WARM-CURRENT-PNG-STREAM.md', True),
         row('PNG RGBA16, fresh seekable Stream', 'warm-current-png-stream-evidence.json', ['cases', 'Png16', -1], 'WARM-CURRENT-PNG-STREAM.md', True),
         row('JPEG420 restart, fresh seekable Stream', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'StreamDecode420Restart', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8l-byte-channels-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-VP8L-BYTE-CHANNELS.md', verification='Gap (short; qualified)'),
+        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8-vertical-filter-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-VP8-VERTICAL-FILTER.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, fresh seekable Stream', 'warm-vp8l-byte-channels-evidence.json', ['cases', 'StreamNativeLossless8', -1], 'WARM-VP8L-BYTE-CHANNELS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGBA8, None / live cancelable token', 'warm-png-boundaries-current-evidence.json', ['cases', 'byteDefault', -1], 'WARM-PNG-DECODE-BOUNDARIES.md', True),
@@ -148,10 +148,10 @@ def render():
         row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
         row('JPEG progressive 4:2:2', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'Progressive422', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
         row('JPEG progressive 4:4:4', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'Progressive444', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 + alpha', 'warm-vp8l-byte-channels-evidence.json', ['cases', 'Native8', -1], 'WARM-VP8L-BYTE-CHANNELS.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 opaque, simple luma filter', 'warm-vp8-simple-filter-evidence.json', ['observations', -1], 'WARM-VP8-SIMPLE-FILTER.md', True),
-        row('WebP VP8 opaque, live cancelable token', 'warm-vp8-cancelable-evidence.json', ['observations', -1], 'WARM-VP8-CANCELABLE.md', True),
-        row('WebP VP8, opaque', 'warm-vp8-filter8-evidence.json', ['observations', -1], 'WARM-VP8-FILTER8.md', True),
+        row('WebP VP8 + alpha', 'warm-vp8-vertical-filter-evidence.json', ['cases', 'Native8', -1], 'WARM-VP8-VERTICAL-FILTER.md', verification='Gap (short; qualified)'),
+        row('WebP VP8 opaque, simple luma filter', 'warm-vp8-vertical-filter-evidence.json', ['cases', 'SimpleOpaque8', -1], 'WARM-VP8-VERTICAL-FILTER.md', verification='Gap (short; qualified)'),
+        row('WebP VP8 opaque, live cancelable token', 'warm-vp8-vertical-filter-evidence.json', ['cases', 'OpaqueCancelable8', -1], 'WARM-VP8-VERTICAL-FILTER.md', verification='Gap (short; qualified)'),
+        row('WebP VP8, opaque', 'warm-vp8-vertical-filter-evidence.json', ['cases', 'Opaque8', -1], 'WARM-VP8-VERTICAL-FILTER.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, sixteen-color indexed input', 'warm-vp8l-byte-channels-evidence.json', ['cases', 'IndexedNative16Colors8', -1], 'WARM-VP8L-BYTE-CHANNELS.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, literal/run input', 'warm-vp8l-byte-channels-evidence.json', ['cases', 'Lossless8', -1], 'WARM-VP8L-BYTE-CHANNELS.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, native input', 'warm-vp8l-byte-channels-evidence.json', ['cases', 'NativeLossless8', -1], 'WARM-VP8L-BYTE-CHANNELS.md', verification='Gap (short; qualified)'),
@@ -324,16 +324,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [complete-byte VP8L channels](../benchmarks/WARM-VP8L-BYTE-CHANNELS.md)
-cuts the literal/run decode time36.0%, to1.054x/upper1.094x, with no added
-allocation. All seven affected rows remain qualified short gaps; the slightly
-slower alpha Stream control is retained. Other200comparisons/all60passing proofs
-remain applicable. The207rows select130independent confirmations and77qualified
-short screens. Fresh **3,714 Release cases perOS** (1,380internal+1,436public+
-898liveFFmpeg), plus63internal+243public scalar controls, pass. Unrelated scalar
-proofs are reused. The consumer and allthree examples pass through the **same
-actual Release package on Windows/Linux**. Production remains safe managed
-dependency-free .NET10. Stop the60passing paths; full parity remains open.
+Latest production round: [vertical VP8 SIMD filtering](../benchmarks/WARM-VP8-VERTICAL-FILTER.md)
+cuts the five affected decode times5.5-9.5%, with unchanged allocations. Live
+opaque is1.663x FFmpeg; allfive remain qualified short gaps. Other202comparisons/
+all60passing proofs remain applicable. The207rows now select127independent
+confirmations and80qualified shorts; three older independent gaps were replaced.
+Fresh **3,718 Release cases perOS** (1,384internal+1,436public+898liveFFmpeg), plus
+30internal+251public scalar controls, pass. Unrelated scalar proofs are reused.
+The consumer and allthree examples pass through the **same actual Release package
+on Windows/Linux**. Production stays safe managed dependency-free .NET10.
+Stop the60passing paths; the full parity objective remains open.
 
 **Decode and metadata**
 

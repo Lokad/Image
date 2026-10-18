@@ -58,6 +58,36 @@ public sealed class Vp8LoopFilterReferenceTests
         Assert.Equal(original, plane);
     }
 
+    [Theory]
+    [InlineData(8, 8, 0, 0)]
+    [InlineData(8, 24, 16, 0)]
+    [InlineData(16, 16, 0, 0)]
+    [InlineData(16, 32, 16, 16)]
+    public void VerticalTransposeKeepsMinimalRowsAndEveryNeighborExact(int size, int stride, int x, int y)
+    {
+        uint state = 0x275916b3;
+        for (var iteration = 0; iteration < 128; iteration++)
+        {
+            // End exactly at the last macroblock row; no readable padding.
+            var expected = new byte[stride * (y + size)];
+            for (var i = 0; i < expected.Length; i++)
+            {
+                state = unchecked(1664525 * state + 1013904223);
+                expected[i] = iteration % 4 == 0 ? (byte)(state >> 24)
+                    : (byte)Math.Clamp(123 + (i % stride >= x ? iteration % 13 : -iteration % 13)
+                        + (int)(state >> 24) % 5, 0, 255);
+            }
+            var actual = expected.ToArray(); var level = new[] { 1, 14, 15, 39, 40, 63 }[iteration % 6];
+            var sharpness = iteration % 8; var simple = (iteration & 1) != 0; var skip = (iteration & 2) != 0;
+            var context = new OperationContext(ImageLimits.Default, default);
+            Scalar(expected, stride, x, y, size, level, sharpness, simple, skip);
+            Vp8LoopFilter.Macroblock(actual, stride, x, y, size, level, sharpness, simple, skip, context);
+            Assert.Equal(expected, actual);
+            var edges = (x == 0 ? 0 : 1) + (y == 0 ? 0 : 1) + (skip ? 0 : 2 * (size / 4 - 1));
+            Assert.Equal(edges * size * 64L, ImageLimits.Default.MaxWork - context.RemainingWork);
+        }
+    }
+
     private static void Scalar(byte[] plane, int stride, int x, int y, int size, int level,
         int sharpness, bool simple, bool skip)
     {
