@@ -6,6 +6,11 @@ using Lokad.Image.Tooling;
 
 var output = Path.GetFullPath(args.Length == 0 ? "tests/Fixtures" : args[0]);
 Directory.CreateDirectory(output);
+if (args.Length == 3 && args[1] == "--compression-diagram")
+{
+    CompressionFixtures.Diagram(output, args[2]);
+    return;
+}
 if (args.Length == 2 && args[1] is "--font-layout" or "--font-render")
 {
     FontFixtures.Generate(output, args[1] == "--font-render");

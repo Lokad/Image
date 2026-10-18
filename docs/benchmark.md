@@ -1,8 +1,8 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-18. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 209 retained numeric rows contain **63 current
-parity confirmations, 122 measured gaps and 1 confidence-open cases**;
+conservative upper ≤1x**. The 213 retained numeric rows contain **66 current
+parity confirmations, 123 measured gaps and 1 confidence-open cases**;
 **23 prior-production rows need reconfirmation**: seventeen JPEG rows after
 compatibility changes and six additional PNG/WebP Stream rows after input-copy
 removal. Their old times/allocations are historical. Other paths reuse valid
@@ -67,13 +67,19 @@ owned output. No long repeat or production change follows these clear mean gaps.
 existing opaque packet **24.9%** to **400,262 B** and allocations **49.9%** to
 **1,051,213 B/op**. All three affected lossless encode operations independently
 reconfirm parity. Alpha-bearing packets remain byte-identical. Other paths reuse
-valid evidence. Photographic/text compression-efficiency work remains open.
+valid evidence. [Two fixed content controls](../benchmarks/WARM-WEBP-COMPRESSION.md)
+now add four complete encodes. VP8L photograph/diagram packets are **385,854 /
+160,032 B** and **31,072 / 7,234 B** (managed / backend). At matched VP8 source
+quality, packets are **21,826 / 17,688 B** and **8,958 / 7,100 B**; PSNR gaps
+**0.0194 / 0.2183 dB** pass the unchanged gate. Three operations independently
+confirm time parity; diagram VP8 remains a **1.104x** short gap. Allocations and
+confidence bounds are below. Compression-efficiency work remains open.
 
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
 FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,
 normal SIMD, tiering off, nonconcurrent workstation GC. Inputs are the two original
-513×259 RGBA8/16 rasters and documented projections; exact case dimensions and
-policies are in linked reports. No image or settings grid was added.
+513×259 RGBA8/16 rasters, the fixed photograph/text diagram pair and documented projections; exact case dimensions and
+policies are in linked reports. Only the two required content controls were added; no settings grid.
 
 Times include complete public operations, admission, conversion, fresh independent
 output ownership and disposal. Native contexts may be reused; managed private
@@ -104,8 +110,8 @@ examples on Windows/Linux** pass. Production remains safe managed dependency-fre
 Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDENCE.md)
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
-retains its1.012x mean gap/1.014x upper. Current totals are **63 passes /
-122 gaps / 1 confidence open / 23 prior JPEG rows**.
+retains its1.012x mean gap/1.014x upper. Current totals are **66 passes /
+123 gaps / 1 confidence open / 23 prior-production rows**.
 Every actual/outlier and both quiet guards remain; unchanged qualification is reused.
 Resolve the named JPEG uncertainties before optimization. Stop current passing paths.
 
@@ -238,6 +244,10 @@ Resolve the named JPEG uncertainties before optimization. Stop current passing p
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-OPAQUE-ALPHA.md) | 7,045.64 | 122,788.28 | 0.057 / 0.058 | 2,100,170 | Parity confirmed |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-OPAQUE-ALPHA.md) | 6,251.86 | 70,476.34 | 0.089 / 0.090 | 1,051,213 | Parity confirmed |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-OPAQUE-ALPHA.md) | 7,737.99 | 120,636.47 | 0.064 / 0.065 | 2,100,119 | Parity confirmed |
+| [WebP VP8L photograph RGBA8](../benchmarks/WARM-WEBP-COMPRESSION.md) | 6,347.64 | 83,747.05 | 0.076 / 0.077 | 1,051,162 | Parity confirmed |
+| [WebP VP8L text/diagram RGBA8](../benchmarks/WARM-WEBP-COMPRESSION.md) | 1,905.57 | 9,558.54 | 0.199 / 0.204 | 67,720 | Parity confirmed |
+| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-WEBP-COMPRESSION.md) | 7,531.53 | 9,729.98 | 0.774 / 0.783 | 541,256 | Parity confirmed |
+| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-WEBP-COMPRESSION.md) | 6,442.53 | 5,837.29 | 1.104 / 1.246 | 490,795 | Gap (short; qualified) |
 
 **Editing**
 

@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "scope": "Two fixed opaque RGBA8 compression controls; no size/depth/filter/effort grid; codec time and allocations unmeasured",
+  "sourceValidation": "Normal and scalar FFmpeg decode reproduce every declared RGBA sample",
+  "inputs": [
+    {
+      "name": "Photograph8",
+      "file": "photograph.png",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "opaque": true,
+      "pngSha256": "9bd97b1a6b8a08a9d012f06350458e95de46b8fef59dc1dc66e8f16b7a6d5055",
+      "rgbaSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "pngBytes": 239978,
+      "rgbaBytes": 531468
+    },
+    {
+      "name": "Diagram8",
+      "file": "diagram.png",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "opaque": true,
+      "pngSha256": "11bd7ef47f5bd2d65b2dec7dd724eb777cfd54d9abc75c365ef6e1237a415cff",
+      "rgbaSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "pngBytes": 15180,
+      "rgbaBytes": 531468
+    }
+  ],
+  "photograph": {
+    "title": "Grand Tetons",
+    "photographer": "Scott Horvath, USGS",
+    "sourcePage": "https://www.usgs.gov/media/images/grand-tetons",
+    "originalUrl": "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/thumbnails/image/IMG_2355.jpg",
+    "license": "CC0-1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "sourcePageSha256": "820583bc09d2522289f560e8c396f6dd3f770115e60d35902c0c08d388717c08",
+    "originalSha256": "a41830a2771e0142cb5b01a3d786dd6978a629d92f1b46ae77a8ef5955ff75da",
+    "normalization": {
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "opaque": true,
+      "filter": "scale=513:259:force_original_aspect_ratio=increase:flags=lanczos,crop=513:259,format=rgba",
+      "autoOrientation": false,
+      "optionalMetadataStripped": true,
+      "ffmpegSha256": "1a65d5b0b10d8d9a81d2824a3538046a40ed3607c906b335a166add87613f705",
+      "ffmpegVersion": "ffmpeg version 8.1-essentials_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers",
+      "pngSha256": "9bd97b1a6b8a08a9d012f06350458e95de46b8fef59dc1dc66e8f16b7a6d5055",
+      "rgbaSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "pngBytes": 239978,
+      "rgbaBytes": 531468
+    }
+  },
+  "diagram": {
+    "schemaVersion": 1,
+    "recipe": "original-text-diagram-v1",
+    "width": 513,
+    "height": 259,
+    "depth": 8,
+    "opaque": true,
+    "fontFileName": "arial.ttf",
+    "fontSha256": "b3658eadae55e682b5f69eb64c439c1ecc8f196c0bb8d4756d145d13bc86476a",
+    "fontStyle": "Regular",
+    "librarySha256": "92d81aa35b00845c3d9cdedfb74e3613865b0bd07df00aa2d4bbdd21956d46e9",
+    "pngSha256": "11bd7ef47f5bd2d65b2dec7dd724eb777cfd54d9abc75c365ef6e1237a415cff",
+    "rgbaSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+    "source": "Original rectangles, fixed data/labels and Lokad.Image supplied-font text; no font file included or required for fixture consumption"
+  }
+}

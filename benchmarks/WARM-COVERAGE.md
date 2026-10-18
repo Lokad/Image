@@ -1,10 +1,10 @@
 # Material warm coverage
 
 Updated 2026-10-18. The **warm single-CPU parity objective remains open**:
-63 independent passes, 122 measured mean gaps and one confidence-open case across
-186 current rows; 23 prior-production rows need reconfirmation.
-The [three-table summary](../docs/benchmark.md) retains all 209 numeric rows:
-118 current independent observations, 68 current qualified shorts and 23 prior rows.
+66 independent passes, 123 measured mean gaps and one confidence-open case across
+190 current rows; 23 prior-production rows need reconfirmation.
+The [three-table summary](../docs/benchmark.md) retains all 213 numeric rows:
+121 current independent observations, 69 current qualified shorts and 23 prior rows.
 Reuse unchanged passing paths;
 do not add an image or settings grid.
 
@@ -25,6 +25,21 @@ The unchanged encoder-backend baseline, original inputs and prepared drivers are
 reused; no new workload, harness/native rebuild or settings grid. Stop all three
 confirmed cases until their production inputs change. Compression-efficiency
 work on representative photographic/text content remains open.
+
+The [four content comparisons](WARM-WEBP-COMPRESSION.md) add exactly two fixed
+513×259 opaque RGBA8 inputs, with provenance in [their manifest](Fixtures/Compression/manifest.json):
+`WarmCompression/PhotographLossless8` covers photographic texture and lossless
+size, `DiagramLossless8` covers repeated flat regions and antialiased text,
+`PhotographLossy8` covers photographic rate/distortion, and `DiagramLossy8` covers
+text edges and flat-region rate/distortion. These distinct required content
+families were absent from the procedural controls. No shape/depth/effort grid.
+All four measure complete output ownership and allocations with equivalent
+delivery. Three independently pass time parity; diagram VP8 is a qualified short
+gap (1.104x). Lossless sizes remain 2.411x/4.295x the exact native packets; VP8
+sizes are 1.234x/1.262x at matched source quality. Production, existing timing and
+cross-platform/package qualification are unchanged. Known scope is now242 named
+cases:213 numeric plus29 unmeasured. Stop the three new time-passing cases unless
+their relevant production path changes; compression-size work remains required.
 
 Shared-budget codec entry points add two required, **unmeasured** representatives:
 `SharedBudgetDecode/PngRgba8Resident` reuses `WarmPng/Decode8` to cover complete
@@ -177,7 +192,7 @@ clips fill/independent copy/composite, with overlap shifted (1,1). No image/shap
 alpha grid. Resolve equivalent native in-place canvas delivery, state restoration,
 rounding and ownership before timing. Exact BigInteger and bounded native profile
 correctness checks are not performance confirmations. Existing paths/statuses are
-unchanged: 186 current rows, 23 prior rows. Including text below, there are 29
+unchanged: 190 current rows, 23 prior rows. Including text below, there are 29
 named unmeasured boundaries.
 
 Text layout/measurement adds three **unmeasured** complete operations on original

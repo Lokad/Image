@@ -289,6 +289,12 @@ def render():
         row('Mirrored transpose RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'Transverse16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
         row('Mirrored transpose RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'Transverse8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
     ]
+    encodes.extend([
+        row('WebP VP8L photograph RGBA8', 'warm-webp-compression-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-WEBP-COMPRESSION.md', True),
+        row('WebP VP8L text/diagram RGBA8', 'warm-webp-compression-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-WEBP-COMPRESSION.md', True),
+        row('WebP VP8 photograph RGBA8 / matched quality', 'warm-webp-compression-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-WEBP-COMPRESSION.md', True),
+        row('WebP VP8 text/diagram RGBA8 / matched quality', 'warm-webp-compression-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-WEBP-COMPRESSION.md', verification='Gap (short; qualified)'),
+    ])
     # H4 changes shared JPEG frame/scan/control paths and inspection headers.
     # Compatibility changed JPEG parsing; leased acquisition changed exactly
     # these six additional complete Stream operations. Preserve historical values.
@@ -302,11 +308,11 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 209
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 213
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-18. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 209 retained numeric rows contain **{parity_count} current
+conservative upper ≤1x**. The 213 retained numeric rows contain **{parity_count} current
 parity confirmations, {gap_count} measured gaps and {confidence_count} confidence-open cases**;
 **{reconfirm_count} prior-production rows need reconfirmation**: seventeen JPEG rows after
 compatibility changes and six additional PNG/WebP Stream rows after input-copy
@@ -372,13 +378,19 @@ owned output. No long repeat or production change follows these clear mean gaps.
 existing opaque packet **24.9%** to **400,262 B** and allocations **49.9%** to
 **1,051,213 B/op**. All three affected lossless encode operations independently
 reconfirm parity. Alpha-bearing packets remain byte-identical. Other paths reuse
-valid evidence. Photographic/text compression-efficiency work remains open.
+valid evidence. [Two fixed content controls](../benchmarks/WARM-WEBP-COMPRESSION.md)
+now add four complete encodes. VP8L photograph/diagram packets are **385,854 /
+160,032 B** and **31,072 / 7,234 B** (managed / backend). At matched VP8 source
+quality, packets are **21,826 / 17,688 B** and **8,958 / 7,100 B**; PSNR gaps
+**0.0194 / 0.2183 dB** pass the unchanged gate. Three operations independently
+confirm time parity; diagram VP8 remains a **1.104x** short gap. Allocations and
+confidence bounds are below. Compression-efficiency work remains open.
 
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
 FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,
 normal SIMD, tiering off, nonconcurrent workstation GC. Inputs are the two original
-513×259 RGBA8/16 rasters and documented projections; exact case dimensions and
-policies are in linked reports. No image or settings grid was added.
+513×259 RGBA8/16 rasters, the fixed photograph/text diagram pair and documented projections; exact case dimensions and
+policies are in linked reports. Only the two required content controls were added; no settings grid.
 
 Times include complete public operations, admission, conversion, fresh independent
 output ownership and disposal. Native contexts may be reused; managed private
@@ -410,7 +422,7 @@ Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDEN
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
 retains its1.012x mean gap/1.014x upper. Current totals are **{parity_count} passes /
-{gap_count} gaps / {confidence_count} confidence open / {reconfirm_count} prior JPEG rows**.
+{gap_count} gaps / {confidence_count} confidence open / {reconfirm_count} prior-production rows**.
 Every actual/outlier and both quiet guards remain; unchanged qualification is reused.
 Resolve the named JPEG uncertainties before optimization. Stop current passing paths.
 
