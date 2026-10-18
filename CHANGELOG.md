@@ -4,8 +4,8 @@
 
 - Faster VP8 encoding through prepared block prediction, preserving exact
   packets, mode selection, resource limits and cancellation.
-- Faster VP8 decoding through bounded vertical SIMD loop filtering, preserving
-  exact pixels, edge order, resource admission and cancellation.
+- Faster VP8 decoding through bounded vertical SIMD filtering and whole-block
+  prediction, preserving exact pixels, edge order, resource admission and cancellation.
 - Faster lossless WebP literal decoding through complete-byte channel fusion,
   preserving exact pixels, resource limits and cancellation behavior.
 - Lower JPEG decode allocations through bounded private coefficient reuse,

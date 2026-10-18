@@ -31,17 +31,16 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [prepared VP8 encoder prediction](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md)
-cuts opaque encoding time13.1-13.7%, with unchanged packets and allocations;
-the two opaque cases remain1.429-1.460x short gaps. Both changed alpha paths
-independently re-confirm below parity (uppers.424/.438x), retaining all12actuals
-and the word outlier. Other203comparisons/58passing proofs remain applicable,
-including all5P57decode results. The207rows retain127independent confirmations+
-80qualified shorts. Fresh **3,720 Release cases perOS** (1,386internal+1,436public+
-898liveFFmpeg), plus32internal+147public scalar controls, pass; unaffected proofs
-are reused. The consumer and allthree examples pass through the **same actual
-Release package on Windows/Linux**. Production stays safe managed dependency-free
-.NET10. Stop the60passing paths; full parity remains open.
+Latest production round: [complete VP8 block prediction](../benchmarks/WARM-VP8-BLOCK-PREDICTION.md)
+reuses already-qualified math at one decoder call site for2.5-4.8%less time,
+unchanged pixels and allocations. All5cases remain short gaps; liveopaque is1.586x.
+Other202comparisons/all60passing proofs remain valid, including all4P58encode
+results. The207rows retain127independent confirmations+80qualified shorts.
+Fresh **3,720 Release cases perOS** (1,386internal+1,436public+898liveFFmpeg), plus
+38internal+251public scalar controls, pass. Existing helper/oracle and unaffected
+proofs are reused. The consumer and allthree examples pass through the **same
+actual Release package on Windows/Linux**. Production stays safe managed
+dependency-free .NET10. Stop the60passing paths; full parity remains open.
 
 **Decode and metadata**
 
@@ -57,7 +56,7 @@ Release package on Windows/Linux**. Production stays safe managed dependency-fre
 | [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 1,982.59 | 1,388.00 | 1.428 / 1.441 | 748,088 | Gap (independent) |
 | [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 3,499.10 | 3,080.71 | 1.136 / 1.146 | 3,067,227 | Gap (independent) |
 | [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 1,583.21 | 993.36 | 1.594 / 1.773 | 951,078 | Gap (short; qualified) |
-| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-VERTICAL-FILTER.md) | 10,072.43 | 6,002.17 | 1.678 / 1.756 | 2,327,699 | Gap (short; qualified) |
+| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-BLOCK-PREDICTION.md) | 9,741.05 | 5,982.30 | 1.628 / 1.682 | 2,327,699 | Gap (short; qualified) |
 | [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-VP8L-BYTE-CHANNELS.md) | 4,691.23 | 3,030.05 | 1.548 / 1.670 | 1,924,876 | Gap (short; qualified) |
 | [PNG RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,904.89 | 1,392.72 | 1.368 / 1.371 | 4,456 | Gap (independent) |
 | [PNG RGBA8, None / live cancelable token](../benchmarks/WARM-PNG-DECODE-BOUNDARIES.md) | 1,929.15 | 1,370.88 | 1.407 / 1.469 | 4,456 | Gap (independent) |
@@ -121,10 +120,10 @@ Release package on Windows/Linux**. Production stays safe managed dependency-fre
 | [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 4,967.25 | 3,365.13 | 1.476 / 1.585 | 984,298 | Gap (short; qualified) |
 | [JPEG progressive 4:2:2](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 3,315.96 | 2,247.91 | 1.475 / 1.539 | 847,126 | Gap (short; qualified) |
 | [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 5,130.75 | 3,364.53 | 1.525 / 1.590 | 984,298 | Gap (short; qualified) |
-| [WebP VP8 + alpha](../benchmarks/WARM-VP8-VERTICAL-FILTER.md) | 9,896.30 | 5,966.36 | 1.659 / 1.690 | 1,966,616 | Gap (short; qualified) |
-| [WebP VP8 opaque, simple luma filter](../benchmarks/WARM-VP8-VERTICAL-FILTER.md) | 8,065.87 | 4,900.49 | 1.646 / 1.708 | 760,548 | Gap (short; qualified) |
-| [WebP VP8 opaque, live cancelable token](../benchmarks/WARM-VP8-VERTICAL-FILTER.md) | 7,993.36 | 4,805.60 | 1.663 / 1.725 | 760,548 | Gap (short; qualified) |
-| [WebP VP8, opaque](../benchmarks/WARM-VP8-VERTICAL-FILTER.md) | 7,827.85 | 4,794.82 | 1.633 / 1.679 | 760,548 | Gap (short; qualified) |
+| [WebP VP8 + alpha](../benchmarks/WARM-VP8-BLOCK-PREDICTION.md) | 9,647.14 | 5,967.97 | 1.616 / 1.841 | 1,966,616 | Gap (short; qualified) |
+| [WebP VP8 opaque, simple luma filter](../benchmarks/WARM-VP8-BLOCK-PREDICTION.md) | 7,807.89 | 4,893.93 | 1.595 / 1.621 | 760,548 | Gap (short; qualified) |
+| [WebP VP8 opaque, live cancelable token](../benchmarks/WARM-VP8-BLOCK-PREDICTION.md) | 7,613.64 | 4,801.66 | 1.586 / 1.664 | 760,548 | Gap (short; qualified) |
+| [WebP VP8, opaque](../benchmarks/WARM-VP8-BLOCK-PREDICTION.md) | 7,568.84 | 4,798.45 | 1.577 / 1.672 | 760,548 | Gap (short; qualified) |
 | [WebP VP8L, sixteen-color indexed input](../benchmarks/WARM-VP8L-BYTE-CHANNELS.md) | 787.37 | 544.00 | 1.447 / 1.477 | 1,351,972 | Gap (short; qualified) |
 | [WebP VP8L, literal/run input](../benchmarks/WARM-VP8L-BYTE-CHANNELS.md) | 2,272.83 | 2,156.57 | 1.054 / 1.094 | 1,074,326 | Gap (short; qualified) |
 | [WebP VP8L, native input](../benchmarks/WARM-VP8L-BYTE-CHANNELS.md) | 4,897.39 | 3,019.50 | 1.622 / 1.713 | 1,216,180 | Gap (short; qualified) |

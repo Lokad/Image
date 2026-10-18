@@ -136,6 +136,7 @@ internal ref struct Vp8Decoder
         var result = new Vp8Planes(width, height, stride, new byte[(int)lumaSize], new byte[(int)chromaSize], new byte[(int)chromaSize]);
         var aboveCoefficients = new byte[columns * 9]; Span<byte> leftCoefficients = stackalloc byte[9];
         Span<short> coefficients = stackalloc short[25 * 16];
+        Span<int> predictionSamples = stackalloc int[13];
         for (var my = 0; my < rows; my++)
         {
             leftCoefficients.Clear();
@@ -184,7 +185,11 @@ internal ref struct Vp8Decoder
                     var luma = b < 16; var local = luma ? b : (b - 16) % 4; var side = luma ? 4 : 2;
                     var bx = (luma ? x : x / 2) + local % side * 4; var by = (luma ? y : y / 2) + local / side * 4;
                     var plane = luma ? result.Y : b < 20 ? result.U : result.V; var pitch = luma ? stride : stride / 2;
-                    if (luma && !hasY2) Vp8Prediction.Small(plane, pitch, bx, by, x, y, modes[index * 16 + b]);
+                    if (luma && !hasY2)
+                    {
+                        var predictionDc = Vp8Prediction.PrepareSmall(plane, pitch, bx, by, x, y, predictionSamples);
+                        Vp8Prediction.SmallPrepared(plane, pitch, bx, by, modes[index * 16 + b], predictionSamples, predictionDc);
+                    }
                     var subblock = coefficients.Slice((b + 1) * 16, 16);
                     if (luma && hasY2) subblock[0] = coefficients[b];
                     Vp8Transforms.InverseDct(subblock);
