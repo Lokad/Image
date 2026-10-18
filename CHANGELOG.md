@@ -23,6 +23,8 @@
 - Faster VP8 source conversion with unchanged packets, alpha and resource charges.
 - Faster PNG chunk checksums, byte packing, Up filtering and RGB16 Paeth decoding,
   preserving exact packets, samples and limits.
+- Faster PNG RGBA decoding at tight working limits through bounded streaming
+  inflation, preserving pixels, admission, work and failure ordering.
 
 ## 0.1.0 — 2026-10-17
 

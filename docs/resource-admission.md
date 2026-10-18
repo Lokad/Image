@@ -44,6 +44,8 @@ These are logical admission charges, including conservative BCL allowances,
 rather than measured native or managed allocation totals. Optional fast paths
 must fit their complete workspace before selection; fallback preserves pixels,
 work, cancellation and failure ordering.
+Tight noninterlaced PNG RGBA decoding can keep 64 KiB of raw history inside the
+existing inflater allowance; its original result/two-row peak stays unchanged.
 
 ## Streams, ownership and failures
 

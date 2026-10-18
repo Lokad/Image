@@ -88,14 +88,14 @@ def render():
         row('WebP VP8L, fresh seekable Stream', 'warm-vp8l-borrowed-green-evidence.json', ['cases', 'StreamNativeLossless8', -1], 'WARM-VP8L-BORROWED-GREEN.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGBA8, None / live cancelable token', 'warm-png-boundaries-current-evidence.json', ['cases', 'byteDefault', -1], 'WARM-PNG-DECODE-BOUNDARIES.md', True),
-        row('PNG RGBA8, None / exact working limit', 'warm-pngcountall-evidence.json', ['observations', -1], 'WARM-PNG-COUNTING.md', True),
-        row('PNG RGBA8, None / exact limit + live cancelable token', 'warm-pngtightcancel8-evidence.json', ['observations', -1], 'WARM-PNG-TIGHT-CANCELABLE8.md', True),
+        row('PNG RGBA8, None / exact working limit', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTight8', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
+        row('PNG RGBA8, None / exact limit + live cancelable token', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTightCancelable8', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, stored Deflate / None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeNoCompression8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGBA16, stored Deflate / None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeNoCompression16', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGBA16, None', 'warm-current-png16-bicubic16-evidence.json', ['cases', 'png16', -1], 'WARM-CURRENT-PNG16-BICUBIC16.md', True),
-        row('PNG RGBA16, None / exact working limit', 'warm-png-boundaries-current-evidence.json', ['cases', 'wordExact', -1], 'WARM-PNG-DECODE-BOUNDARIES.md', True),
+        row('PNG RGBA16, None / exact working limit', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTight16', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA16, None / live cancelable token', 'warm-pngcountall-evidence.json', ['wordConfirmations', 1], 'WARM-PNG-COUNTING.md', True),
-        row('PNG RGBA16, None / exact limit + live cancelable token', 'warm-pngcountall-evidence.json', ['wordConfirmations', 0], 'WARM-PNG-COUNTING.md', True),
+        row('PNG RGBA16, None / exact limit + live cancelable token', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTightCancelable16', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, Paeth', 'warm-paeth-six-channel-evidence.json', ['cases', 'DecodePaeth8', -1], 'WARM-PAETH-SIX-CHANNEL.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, Up', 'warm-png-up-simd-evidence.json', ['cases', 'DecodeUp8', -1], 'WARM-PNG-UP-SIMD.md', True),
         row('PNG RGBA16, Up', 'warm-png-up-simd-evidence.json', ['cases', 'DecodeUp16', -1], 'WARM-PNG-UP-SIMD.md', True),
@@ -324,19 +324,19 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [general byte-row output](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md)
-extends the proven emitter to five remaining byte cache paths, reducing their
-managed times 11.6–20.8% with exact pixels and unchanged allocation/admission
-logic. Vertical byte enlargement receives one independent uncertainty check:
-1.020× / upper 1.024×, still a gap. Other 12 selected cache rows are qualified
-short gaps. Other 194 comparisons and all 58 passing proofs are reused. No new
-profile, raster or settings grid; passing cases are stopped.
-The 207 rows select 150 independent confirmations and 57 qualified short screens.
-Fresh **3,663 Release cases per OS** (1,352 internal +1,413 public +898 live FFmpeg),
-plus 209 scalar cache/reference controls, pass. The consumer and all
-three examples pass through
-the **same actual Release package on Windows/Linux**. Production remains safe
-managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
+Latest production round: [bounded PNG RGBA streaming](../benchmarks/WARM-PNG-STREAMING-ROWS.md)
+removes the second Deflate walk at the original working limit. Four byte/word,
+ordinary/live-token cases improve 19.2–40.7%, remaining 1.45–1.48x byte and
+1.07–1.08x word gaps in qualified short screens. Managed allocations are
+68,200/70,248 B/op; the original logical admission peak is unchanged. Two
+unchanged default controls show no material regression. Other 203 comparisons
+and all 58 passing proofs retain their hot paths and evidence. No new raster,
+selector, settings grid or profile; passing cases are stopped.
+The 207 rows select 146 independent confirmations and 61 qualified short screens.
+Fresh **3,672 Release cases per OS** (1,357 internal +1,417 public +898 live FFmpeg),
+plus 253 scalar Deflate/PNG controls, pass. The consumer and all three examples
+pass through the **same actual Release package on Windows/Linux**. Production
+remains safe managed dependency-free C#/.NET10. Unaffected qualification is reused.
 
 **Decode and metadata**
 

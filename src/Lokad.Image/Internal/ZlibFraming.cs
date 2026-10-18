@@ -17,6 +17,10 @@ internal static class ZlibFraming
         OperationContext context, out bool completeTrees)
         => Walk(data, destination.Length, context, destination, out completeTrees);
 
+    internal static int ValidateAndInflateRgba(ReadOnlySpan<byte> data, long expectedBytes,
+        OperationContext context, PngRgbaInflation destination, out bool completeTrees)
+        => WalkRgba(data, expectedBytes, context, destination, out completeTrees);
+
     private static int Walk(ReadOnlySpan<byte> data, long expectedBytes, OperationContext context,
         Span<byte> destination, out bool completeTrees)
     {
@@ -163,6 +167,98 @@ internal static class ZlibFraming
         finally { context.Release(4096); }
     }
 
+    private static int WalkRgba(ReadOnlySpan<byte> data, long expectedBytes, OperationContext context,
+        PngRgbaInflation destination, out bool completeTrees)
+    {
+        completeTrees = true;
+        if (data.Length < 6 || (data[0] & 15) != 8 || data[0] >> 4 > 7
+            || ((data[0] << 8) + data[1]) % 31 != 0 || (data[1] & 32) != 0)
+            throw new ImageDataException("Invalid PNG zlib header.");
+        var window = 1 << ((data[0] >> 4) + 8);
+        // Arrays, prefix lookup and nested constructor scratch total 4056 bytes,
+        // independent of declared dimensions or input.
+        context.Reserve(4096);
+        try
+        {
+            Span<int> lengths = stackalloc int[320]; Span<int> codeLengths = stackalloc int[19];
+            Span<int> counts = stackalloc int[48]; Span<int> symbols = stackalloc int[339];
+            Span<ushort> literalLookup = stackalloc ushort[512]; Span<ushort> distanceLookup = stackalloc ushort[32];
+            var reader = new Bits(data, context); reader.SkipBytes(2); long output = 0;
+            bool final;
+            do
+            {
+                context.Work(1); final = reader.Read(1) != 0; var type = reader.Read(2);
+                if (type == 0)
+                {
+                    reader.Align(); var length = reader.Read(16); var complement = reader.Read(16);
+                    if ((length ^ complement) != 65535) throw new ImageDataException("Invalid PNG Deflate stored length.");
+                    if (length > expectedBytes - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
+                    var start = reader.Position;
+                    reader.SkipBytes(length); context.Work(length);
+                    if (completeTrees) destination.Stored(data.Slice(start, length));
+                    output += length; continue;
+                }
+                if (type == 3) throw new ImageDataException("Invalid PNG Deflate block type.");
+                int literalCount, distanceCount;
+                if (type == 1)
+                {
+                    literalCount = 288; distanceCount = 32;
+                    for (var i = 0; i < 288; i++) lengths[i] = i < 144 ? 8 : i < 256 ? 9 : i < 280 ? 7 : 8;
+                    lengths[288..].Fill(5);
+                }
+                else
+                {
+                    literalCount = reader.Read(5) + 257; distanceCount = reader.Read(5) + 1; var codeCount = reader.Read(4) + 4;
+                    if (literalCount > 286) throw new ImageDataException("Invalid PNG Deflate literal alphabet.");
+                    codeLengths.Clear();
+                    ReadOnlySpan<int> order = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
+                    for (var i = 0; i < codeCount; i++) codeLengths[order[i]] = reader.Read(3);
+                    var codes = new Huffman(codeLengths, counts[..16], symbols[..19], context);
+                    completeTrees &= codes.Complete;
+                    var position = 0; var total = literalCount + distanceCount;
+                    while (position < total)
+                    {
+                        var symbol = Decode(ref reader, codes.Counts, codes.Symbols, codes.Maximum);
+                        if (symbol < 16) lengths[position++] = symbol;
+                        else
+                        {
+                            if (symbol == 16 && position == 0) throw new ImageDataException("Invalid PNG Deflate first code repeat.");
+                            var repeat = symbol == 16 ? reader.Read(2) + 3 : symbol == 17 ? reader.Read(3) + 3 : reader.Read(7) + 11;
+                            if (repeat > total - position) throw new ImageDataException("PNG Deflate code repeat exceeds alphabet.");
+                            var value = symbol == 16 ? lengths[position - 1] : 0;
+                            lengths.Slice(position, repeat).Fill(value); position += repeat; context.Work(repeat);
+                        }
+                    }
+                }
+                if (lengths[256] == 0) throw new ImageDataException("PNG Deflate block has no end code.");
+                var literals = new Huffman(lengths[..literalCount], counts.Slice(16, 16), symbols.Slice(19, 288), context);
+                var distances = new Huffman(lengths.Slice(literalCount, distanceCount), counts.Slice(32, 16), symbols.Slice(307, 32), context);
+                // Only complete trees certify the optional materialization path.
+                // Single/empty/incomplete alphabets retain BCL acceptance behavior.
+                completeTrees &= literals.Complete && distances.Complete;
+                BuildLiteralLookup(literals, literalLookup, context); BuildDistanceLookup(distances, distanceLookup, context);
+                // Only reader bit charges occur in this exclusive region.
+                // Keep exact charges locally, retaining every cancellation poll,
+                // and publish on every exit before further parent-context work.
+                reader.BeginLocalWork();
+                try
+                {
+                    output = completeTrees
+                        ? InflateStreamingBlock(ref reader, literals, distances, literalLookup, distanceLookup,
+                            output, expectedBytes, window, destination)
+                        : CountBlock(ref reader, literals, distances, literalLookup, distanceLookup,
+                            output, expectedBytes, window);
+                }
+                finally { reader.EndLocalWork(); }
+            } while (!final);
+            if (output != expectedBytes) throw new ImageDataException("Truncated PNG pixel data.");
+            reader.Align(); var checksum = reader.Position; reader.SkipBytes(4);
+            // PNG section 11.2.3 permits unused trailing bytes in the final IDAT.
+            return checksum + 4;
+        }
+        finally { context.Release(4096); }
+    }
+
     private static long CountBlock(scoped ref Bits reader, scoped Huffman literals, scoped Huffman distances,
         scoped ReadOnlySpan<ushort> literalLookup, scoped ReadOnlySpan<ushort> distanceLookup,
         long output, long expectedBytes, int window)
@@ -198,6 +294,50 @@ internal static class ZlibFraming
                 if (distance > output || distance > window) throw new ImageDataException("PNG Deflate distance exceeds history or window.");
             }
             if (length > expectedBytes - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
+            output += length;
+        }
+    }
+
+    private static long InflateStreamingBlock(scoped ref Bits reader, scoped Huffman literals, scoped Huffman distances,
+        scoped ReadOnlySpan<ushort> literalLookup, scoped ReadOnlySpan<ushort> distanceLookup,
+        long output, long expectedBytes, int window, PngRgbaInflation destination)
+    {
+        // Decode the same framing symbols and retain their exact charges. The
+        // rolling output only reconstructs private rows; it cannot publish a
+        // raster/filter/checksum decision before the complete framing walk.
+        while (true)
+        {
+            var writable = destination.Writable;
+            var count = reader.CopyStreamingLiteralRun(literalLookup,
+                writable[..(int)Math.Min(writable.Length, expectedBytes - output)]);
+            destination.Advance(count); output += count;
+            var symbol = DecodeLiteral(ref reader, literals, literalLookup);
+            if (symbol == 256) return output;
+            int length, distance = 0;
+            if (symbol < 256) length = 1;
+            else
+            {
+                if (symbol > 285) throw new ImageDataException("Invalid PNG Deflate length code.");
+                if (symbol < 265) length = symbol - 254;
+                else if (symbol == 285) length = 258;
+                else
+                {
+                    var extra = (symbol - 265) / 4 + 1;
+                    length = 3 + (1 << (extra + 2)) + ((symbol - 265) % 4 << extra) + reader.Read(extra);
+                }
+                var distanceSymbol = DecodeDistance(ref reader, distances, distanceLookup);
+                if (distanceSymbol > 29) throw new ImageDataException("Invalid PNG Deflate distance code.");
+                distance = distanceSymbol + 1;
+                if (distanceSymbol >= 4)
+                {
+                    var extra = distanceSymbol / 2 - 1;
+                    distance = 1 + ((2 + (distanceSymbol & 1)) << extra) + reader.Read(extra);
+                }
+                if (distance > output || distance > window) throw new ImageDataException("PNG Deflate distance exceeds history or window.");
+            }
+            if (length > expectedBytes - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
+            if (symbol < 256) destination.Literal((byte)symbol);
+            else destination.Match(length, distance);
             output += length;
         }
     }
@@ -283,6 +423,37 @@ internal static class ZlibFraming
                 if (length == 0 || entry >> 4 >= 256) break;
                 if (cancellation.IsCancellationRequested || length > budget) break;
                 budget -= length; cached >>= length; bits -= length; count++;
+            }
+            buffer = cached; available = bits; position = offset; remainingWork = budget;
+            return count;
+        }
+
+        public int CopyStreamingLiteralRun(scoped ReadOnlySpan<ushort> lookup, scoped Span<byte> destination)
+            => cancellation.CanBeCanceled ? CopyCancelableLiteralRun(lookup, destination) : CopyLiteralRun(lookup, destination);
+
+        private int CopyCancelableLiteralRun(scoped ReadOnlySpan<ushort> lookup, scoped Span<byte> destination)
+        {
+            var cached = buffer; var bits = available; var offset = position;
+            var cancellation = this.cancellation;
+            var budget = remainingWork; var count = 0;
+            while (count < destination.Length)
+            {
+                // Poll at the original Peek/Work boundaries. On cancellation,
+                // a short tail or an insufficient atomic charge, commit the
+                // preceding literals and let the original dispatcher fail.
+                // No parent work changes and no format error throws here.
+                if (cancellation.IsCancellationRequested) break;
+                if (bits < 9)
+                {
+                    if (data.Length - offset < 4) break;
+                    cached |= (ulong)BinaryPrimitives.ReadUInt32LittleEndian(data.Slice(offset, 4)) << bits;
+                    offset += 4; bits += 32;
+                }
+                var entry = lookup[(int)(cached & 511)]; var length = entry & 15;
+                if (length == 0 || entry >> 4 >= 256) break;
+                if (cancellation.IsCancellationRequested || length > budget) break;
+                destination[count++] = (byte)(entry >> 4);
+                budget -= length; cached >>= length; bits -= length;
             }
             buffer = cached; available = bits; position = offset; remainingWork = budget;
             return count;

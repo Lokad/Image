@@ -100,6 +100,121 @@ public sealed class ZlibMaterializationTests
         Assert.Equal(original, encoded);
     }
 
+    [Theory]
+    [InlineData(8)] [InlineData(16)]
+    public void RollingRgbaHistoryKeepsMaximumAndOverlappingDistancesAcrossSlides(int depth)
+    {
+        // Stored history followed by 300 maximum-length fixed matches crosses
+        // several 64-KiB slides. Construct None rows with nonzero history,
+        // independently expanding copies before removing filters/byte swapping.
+        const int seed = 65520, repetitions = 300;
+        foreach (var (distance, symbol, extra, extraBits) in new[]
+        {
+            (1, 0, 0, 0), (2, 1, 0, 0), (3, 2, 0, 0), (6, 4, 1, 1),
+            (64, 11, 15, 4), (257, 16, 0, 7), (32768, 29, 8191, 13)
+        })
+        foreach (var cancelable in new[] { false, true })
+        {
+            var rowBytes = 257 * (depth / 8) * 4; var rowLength = rowBytes + 1;
+            var matchEnd = seed + repetitions * 258;
+            var raw = new byte[(matchEnd + rowLength - 1) / rowLength * rowLength];
+            for (var i = 0; i < seed; i++) raw[i] = (byte)(73 * i + 19);
+            // Every future filter position constrains its independently traced
+            // seed ancestor. Other bytes keep a nonzero deterministic pattern.
+            for (var i = 0; i < matchEnd; i += rowLength)
+                raw[i < seed ? i : seed - distance + (i - seed) % distance] = 0;
+            for (var i = seed; i < matchEnd; i++) raw[i] = raw[i - distance];
+            var expected = new byte[raw.Length / rowLength * rowBytes];
+            for (var y = 0; y < raw.Length / rowLength; y++)
+            {
+                var source = raw.AsSpan(y * rowLength + 1, rowBytes);
+                source.CopyTo(expected.AsSpan(y * rowBytes));
+                if (depth == 16 && BitConverter.IsLittleEndian)
+                    for (var x = 0; x < rowBytes; x += 2)
+                        (expected[y * rowBytes + x], expected[y * rowBytes + x + 1]) =
+                            (expected[y * rowBytes + x + 1], expected[y * rowBytes + x]);
+            }
+            var bits = new Writer(); bits.Number(0, 3); bits.Align();
+            bits.Number(seed, 16); bits.Number(seed ^ 65535, 16);
+            foreach (var value in raw.AsSpan(0, seed)) bits.Number(value, 8);
+            bits.Number(1, 1); bits.Number(1, 2);
+            for (var i = 0; i < repetitions; i++)
+            {
+                bits.Code(197, 8); bits.Code(symbol, 5); bits.Number(extra, extraBits);
+            }
+            foreach (var value in raw.AsSpan(matchEnd)) bits.Literal(value);
+            bits.Code(0, 7); var encoded = Envelope(bits, raw);
+            using var cancellation = new CancellationTokenSource();
+            var token = cancelable ? cancellation.Token : default;
+            using var image = ImageBuffer.Create(257, raw.Length / rowLength, depth);
+            var output = new PngRgbaInflation(image);
+            var context = new OperationContext(ImageLimits.Default, token);
+            var counted = new OperationContext(ImageLimits.Default, token);
+            Assert.Equal(encoded.Length, ZlibFraming.ValidateAndInflateRgba(encoded, raw.Length, context, output, out var complete));
+            Assert.True(complete); Assert.True(output.Finish(System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(encoded.AsSpan(encoded.Length - 4))));
+            Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, raw.Length, counted));
+            Assert.Equal(counted.RemainingWork, context.RemainingWork);
+            Assert.Equal(counted.RemainingWorkingBytes, context.RemainingWorkingBytes);
+            output.DecodeRows(new OperationContext(ImageLimits.Default, token));
+            Assert.Equal(expected, image.Pixels.ToArray());
+            Assert.Equal(raw, Inflate(encoded));
+        }
+    }
+
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void RollingLiteralTruncationsPreserveOriginalChargesAndErrors(bool cancelable)
+    {
+        // Independent small fixed stream: every truncation and the nearby
+        // atomic bit budgets must agree with the unchanged counting path.
+        var raw = Enumerable.Range(0, 25).Select(i => (byte)(i % 5 == 0 ? 0 : i * 7)).ToArray();
+        var bits = new Writer(); bits.Number(1, 1); bits.Number(1, 2);
+        foreach (var value in raw) bits.Literal(value);
+        bits.Code(0, 7); var encoded = Envelope(bits, raw);
+        var full = 9380 + raw.Sum(value => value < 144 ? 8 : 9) + 7;
+        using var cancellation = new CancellationTokenSource();
+        var token = cancelable ? cancellation.Token : default;
+        foreach (var length in Enumerable.Range(0, encoded.Length + 1))
+        foreach (var work in new[] { 1, 9379, 9380, 9381, 9387, 9388, 9395, 9396, full - 8, full - 7, full - 1, full, full + 1 })
+        {
+            var limits = ImageLimits.Default with { MaxWork = work, MaxWorkingBytes = 4096 };
+            var context = new OperationContext(limits, token);
+            var counted = new OperationContext(limits, token);
+            using var image = ImageBuffer.Create(1, 5, 8);
+            var output = new PngRgbaInflation(image); var input = encoded[..length];
+            int end = -1, countedEnd = -1;
+            var actual = Record.Exception(() => end = ZlibFraming.ValidateAndInflateRgba(input, raw.Length, context, output, out _));
+            var expected = Record.Exception(() => countedEnd = ZlibFraming.Validate(input, raw.Length, counted));
+            Assert.Equal(expected?.GetType(), actual?.GetType()); Assert.Equal(expected?.Message, actual?.Message);
+            Assert.Equal(countedEnd, end); Assert.Equal(counted.RemainingWork, context.RemainingWork);
+            Assert.Equal(counted.RemainingWorkingBytes, context.RemainingWorkingBytes);
+        }
+    }
+
+    [Fact]
+    public void RollingRowsAdmitWorkBeforeEachPredictorOrByteConversion()
+    {
+        byte[] raw = [1, 1, 2, 3, 4, 5, 6, 7, 8, 2, 9, 10, 11, 12, 13, 14, 15, 16];
+        var bits = new Writer(); bits.Number(1, 1); bits.Number(1, 2);
+        foreach (var value in raw) bits.Literal(value);
+        bits.Code(0, 7); var encoded = Envelope(bits, raw);
+        const int rowWork = 8 * 6 + 2 * 4;
+        foreach (var work in new[] { rowWork - 1, rowWork })
+        {
+            using var image = ImageBuffer.Create(2, 2, 8);
+            var output = new PngRgbaInflation(image);
+            ZlibFraming.ValidateAndInflateRgba(encoded, raw.Length,
+                new OperationContext(ImageLimits.Default, default), output, out var complete);
+            Assert.True(complete); Assert.True(output.Finish(System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(encoded.AsSpan(encoded.Length - 4))));
+            var original = image.Pixels.ToArray();
+            var context = new OperationContext(ImageLimits.Default with { MaxWork = work }, default);
+            Assert.Throws<ImageLimitException>(() => output.DecodeRows(context));
+            Assert.Equal(work < rowWork ? work : 0, context.RemainingWork);
+            Assert.Equal(work < rowWork ? original[..8] : new byte[] { 1, 2, 3, 4, 6, 8, 10, 12 }, image.GetRow8(0).ToArray());
+            Assert.Equal(original[8..], image.GetRow8(1).ToArray());
+        }
+    }
+
     private static byte[] Inflate(byte[] encoded)
     {
         using var zlib = new ZLibStream(new MemoryStream(encoded), CompressionMode.Decompress);

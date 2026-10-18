@@ -483,7 +483,8 @@ PNG follows the [W3C specification](https://www.w3.org/TR/png/). Validate signat
 chunk lengths/names/order/CRCs, image geometry, transparency and decoded pixel
 count. An owned bounded Deflate framing walk validates final blocks, stored
 lengths, fixed/dynamic prefix trees, repeats, backward distances, the declared
-zlib window and the exact filtered-raster byte count before row processing.
+zlib window and the exact filtered-raster byte count before raster decisions
+are published.
 For noninterlaced inputs with at most 4 MiB of filtered data,
 the same walk may also materialize bytes in a private, exactly admitted buffer.
 Selection first ensures that this buffer, framing scratch, the original inflater
@@ -497,6 +498,17 @@ exit without a new cancellation poll. Count-only framing uses a separate loop
 from materialized-output dispatch, retaining the same literal, length, distance,
 truncation and atomic-charge checks. Completed work survives cancellation.
 The private whole-stream checksum checks cancellation every 4096 bytes.
+When full filtered storage cannot fit, noninterlaced RGBA8/16 may instead use a
+separate streaming framing walker. A 64 KiB sliding buffer retains 32 KiB of raw
+Deflate history; raw row payloads occupy only the private result, with at most
+64 KiB of row-filter bytes. Predictors and byte conversion run after each
+original row work charge. Taller inputs retain the original reader.
+Selection preserves the original
+result/two-row/256 KiB peak; framing scratch borrows 4 KiB of that allowance.
+Only complete framing, complete trees, valid filters and the Adler checksum
+permit row reconstruction and publication. Other outcomes
+replay the original BCL raster reader without repeating framing work. The
+original validator/materializer, bit charges and cancellation checks remain.
 PNG encoding may fold chunk payloads of at least 64 bytes through four
 independent polynomial residues on supported PCLMUL/SSSE3 hardware. The existing
 normal PNG polynomial powers and generated bit-order permutations are reused;
@@ -514,7 +526,8 @@ PNG Up reconstruction may add nonoverlapping byte rows with safe 512/256/128-bit
 SIMD and scalar tails, independently modulo256 at either precision. Original
 64 KiB cancellation boundaries remain; overlapping rows and unsupported hardware
 retain scalar behavior. No workspace, admission or work charge is added.
-Tight budgets, larger data and Adam7 retain the original inflation path.
+Other tight layouts and Adam7 retain the original reader when full filtered
+storage cannot fit.
 The original bit/row work, error order, precision and pixel contracts are unchanged.
 Filtered buffers may reuse two released exact-size arrays with a combined 4 MiB
 idle ceiling, separate from pixel and compressed storage. Every delivered byte
@@ -967,7 +980,8 @@ PNG encoding admits a 1 MiB BCL compression allowance, one packed row and a
 64 KiB IDAT buffer in addition to the supplied pixels, before writing its signature.
 PNG decoding retains its separate 256 KiB inflater allowance, including the
 optional managed-inflation path. Its additional filtered buffer is admitted
-exactly; insufficient room selects the original path. Geometry limits
+exactly; insufficient room selects bounded RGBA streaming or the original
+reader. Geometry limits
 apply to new buffers and codec input; transforms count an existing larger source
 in working memory even when their result fits lower geometry limits. Exact
 mapping checks work/cancellation every 1024 output pixels, and cloning every

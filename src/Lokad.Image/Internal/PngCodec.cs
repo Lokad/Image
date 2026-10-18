@@ -150,8 +150,9 @@ internal static class PngCodec
             var rowBytes = ((long)header.Info.Width * Channels(header.ColorType) * header.Depth + 7) / 8;
             var pixelBytes = (long)header.Info.Width * header.Info.Height * (header.Depth == 16 ? 8 : 4);
             // Select before framing work. Keep the original workspace allowance
-            // and every subsequent row/result admission available. Tight budgets
-            // and large/Adam7 inputs retain the original path. Cancelable framing
+            // and every subsequent row/result admission available. Tight RGBA
+            // can stream within the original workspace; other inputs retain
+            // the original reader. Cancelable framing
             // keeps its original per-symbol cancellation and work checks.
             var materialize = header.Interlace == 0
                 && filteredLength <= PixelStoragePool.MaxRetainedBytes
@@ -182,6 +183,42 @@ internal static class PngCodec
                         inflatedStorage.Return(filtered); filtered = null;
                         context.Release(filteredBytes); filteredBytes = 0;
                     }
+                }
+                else if (header.Interlace == 0 && header.ColorType == 6 && header.Info.Height <= PngRgbaInflation.MaxRows
+                    && context.RemainingWorkingBytes >= pixelBytes + rowBytes * 2 + 256 * 1024L)
+                {
+                    // Admit exactly the old result/rows/inflater peak. Its 4-KiB
+                    // framing scratch borrows from that inflater allowance until
+                    // framing completes, so no admission can fail earlier.
+                    const int workspace = 256 * 1024 - 4096;
+                    context.Reserve(workspace + rowBytes * 2);
+                    ImageBuffer? speculative = null;
+                    try
+                    {
+                        speculative = ImageBuffer.AllocateForOverwrite(header.Info.Width, header.Info.Height, header.Depth, context);
+                        var output = new PngRgbaInflation(speculative);
+                        streamLength = ZlibFraming.ValidateAndInflateRgba(compressed, filteredLength, context, output, out var completeTrees);
+                        if (completeTrees && output.Finish(BinaryPrimitives.ReadUInt32BigEndian(compressed.AsSpan(streamLength - 4))))
+                        {
+                            context.Reserve(4096);
+                            try
+                            {
+                                // Framing errors/work always precede row work.
+                                // Preserve the original per-row atomic charges.
+                                output.DecodeRows(context);
+                                speculative.Orientation = header.Info.Orientation;
+                                var result = speculative; speculative = null; return result;
+                            }
+                            finally { context.Release(4096); }
+                        }
+                    }
+                    finally
+                    {
+                        if (speculative is not null) { speculative.Dispose(); context.Release(pixelBytes); }
+                        context.Release(workspace + rowBytes * 2);
+                    }
+                    // Uncertain trees, filters and checksums replay only raster
+                    // reading, retaining BCL error precedence and exact charges.
                 }
                 else streamLength = ZlibFraming.Validate(compressed, filteredLength, context);
                 // BCL inflater workspace is admitted until its streams are disposed.

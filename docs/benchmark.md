@@ -31,19 +31,19 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [general byte-row output](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md)
-extends the proven emitter to five remaining byte cache paths, reducing their
-managed times 11.6–20.8% with exact pixels and unchanged allocation/admission
-logic. Vertical byte enlargement receives one independent uncertainty check:
-1.020× / upper 1.024×, still a gap. Other 12 selected cache rows are qualified
-short gaps. Other 194 comparisons and all 58 passing proofs are reused. No new
-profile, raster or settings grid; passing cases are stopped.
-The 207 rows select 150 independent confirmations and 57 qualified short screens.
-Fresh **3,663 Release cases per OS** (1,352 internal +1,413 public +898 live FFmpeg),
-plus 209 scalar cache/reference controls, pass. The consumer and all
-three examples pass through
-the **same actual Release package on Windows/Linux**. Production remains safe
-managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
+Latest production round: [bounded PNG RGBA streaming](../benchmarks/WARM-PNG-STREAMING-ROWS.md)
+removes the second Deflate walk at the original working limit. Four byte/word,
+ordinary/live-token cases improve 19.2–40.7%, remaining 1.45–1.48x byte and
+1.07–1.08x word gaps in qualified short screens. Managed allocations are
+68,200/70,248 B/op; the original logical admission peak is unchanged. Two
+unchanged default controls show no material regression. Other 203 comparisons
+and all 58 passing proofs retain their hot paths and evidence. No new raster,
+selector, settings grid or profile; passing cases are stopped.
+The 207 rows select 146 independent confirmations and 61 qualified short screens.
+Fresh **3,672 Release cases per OS** (1,357 internal +1,417 public +898 live FFmpeg),
+plus 253 scalar Deflate/PNG controls, pass. The consumer and all three examples
+pass through the **same actual Release package on Windows/Linux**. Production
+remains safe managed dependency-free C#/.NET10. Unaffected qualification is reused.
 
 **Decode and metadata**
 
@@ -63,14 +63,14 @@ managed dependency-free C#/.NET10. Unaffected scalar proofs are reused.
 | [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-VP8L-BORROWED-GREEN.md) | 4,787.64 | 3,031.33 | 1.579 / 1.638 | 1,924,876 | Gap (short; qualified) |
 | [PNG RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,904.89 | 1,392.72 | 1.368 / 1.371 | 4,456 | Gap (independent) |
 | [PNG RGBA8, None / live cancelable token](../benchmarks/WARM-PNG-DECODE-BOUNDARIES.md) | 1,929.15 | 1,370.88 | 1.407 / 1.469 | 4,456 | Gap (independent) |
-| [PNG RGBA8, None / exact working limit](../benchmarks/WARM-PNG-COUNTING.md) | 2,605.93 | 1,430.84 | 1.821 / 1.950 | 4,800 | Gap (independent) |
-| [PNG RGBA8, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-TIGHT-CANCELABLE8.md) | 2,559.30 | 1,371.11 | 1.867 / 1.873 | 4,800 | Gap (independent) |
+| [PNG RGBA8, None / exact working limit](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 2,028.73 | 1,395.91 | 1.453 / 1.597 | 68,200 | Gap (short; qualified) |
+| [PNG RGBA8, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 2,067.97 | 1,397.05 | 1.480 / 1.826 | 68,200 | Gap (short; qualified) |
 | [PNG RGBA8, stored Deflate / None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 150.38 | 136.49 | 1.102 / 1.114 | 4,456 | Gap (independent) |
 | [PNG RGBA16, stored Deflate / None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 322.73 | 296.18 | 1.090 / 1.096 | 8,552 | Gap (independent) |
 | [PNG RGBA16, None](../benchmarks/WARM-CURRENT-PNG16-BICUBIC16.md) | 3,034.16 | 2,903.68 | 1.045 / 1.059 | 8,552 | Gap (independent) |
-| [PNG RGBA16, None / exact working limit](../benchmarks/WARM-PNG-DECODE-BOUNDARIES.md) | 5,214.71 | 2,870.48 | 1.817 / 1.821 | 8,896 | Gap (independent) |
+| [PNG RGBA16, None / exact working limit](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 3,103.58 | 2,902.28 | 1.069 / 1.242 | 70,248 | Gap (short; qualified) |
 | [PNG RGBA16, None / live cancelable token](../benchmarks/WARM-PNG-COUNTING.md) | 4,518.51 | 2,873.34 | 1.573 / 1.583 | 8,552 | Gap (independent) |
-| [PNG RGBA16, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-COUNTING.md) | 5,265.78 | 2,871.10 | 1.834 / 1.852 | 8,896 | Gap (independent) |
+| [PNG RGBA16, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 3,120.43 | 2,904.38 | 1.074 / 1.145 | 70,248 | Gap (short; qualified) |
 | [PNG RGBA8, Paeth](../benchmarks/WARM-PAETH-SIX-CHANNEL.md) | 3,149.31 | 2,847.74 | 1.106 / 1.128 | 4,456 | Gap (short; qualified) |
 | [PNG RGBA8, Up](../benchmarks/WARM-PNG-UP-SIMD.md) | 1,484.65 | 1,509.16 | 0.984 / 0.989 | 4,456 | Parity confirmed |
 | [PNG RGBA16, Up](../benchmarks/WARM-PNG-UP-SIMD.md) | 1,902.38 | 1,911.94 | 0.995 / 0.997 | 8,552 | Parity confirmed |

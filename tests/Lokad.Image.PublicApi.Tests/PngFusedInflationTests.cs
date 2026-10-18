@@ -34,6 +34,55 @@ public sealed class PngFusedInflationTests
     }
 
     [Theory]
+    [InlineData(8)] [InlineData(16)]
+    public void RollingRgbaRowsPreserveAllFiltersByteOrderOwnersAndExactAdmission(int depth)
+    {
+        // Both independently authored encodings cross several history slides,
+        // split rows across slides, and exercise all five PNG row filters.
+        var frame = new AuthoredPng.Frame("rolling-rgba", 6, depth, 257, 139, false);
+        var raw = AuthoredPng.FilteredRows(frame);
+        foreach (var compressed in new[]
+        {
+            AuthoredPng.StoredZlib(raw),
+            AuthoredDeflate.Fixed(raw.Select(value => new AuthoredDeflate.Token(value)), raw)
+        })
+        {
+            var encoded = AuthoredPng.Wrap(frame, compressed); var original = encoded.ToArray();
+            var pixels = (long)frame.Width * frame.Height * (depth / 8) * 4;
+            var peak = encoded.Length + (long)compressed.Length + pixels + 256 * 1024 + frame.Width * (depth / 8) * 8;
+            var options = new DecodeOptions { Limits = new ImageLimits { MaxWorkingBytes = peak } };
+            using var cancellation = new CancellationTokenSource();
+            using var plain = ImageCodec.Decode(encoded, options);
+            using var live = ImageCodec.Decode(encoded, options, cancellation.Token);
+            Assert.Equal(AuthoredPng.Expected(frame), OriginalPixels.Bytes(plain));
+            Assert.Equal(AuthoredPng.Expected(frame), OriginalPixels.Bytes(live));
+            if (depth == 8) plain.GetRow8(0)[0] ^= 255; else plain.GetRow16(0)[0] ^= 65535;
+            Assert.Equal(AuthoredPng.Expected(frame), OriginalPixels.Bytes(live));
+            Assert.Equal(original, encoded);
+            Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(encoded,
+                options with { Limits = options.Limits with { MaxWorkingBytes = peak - 1 } }));
+            Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(encoded,
+                options with { Limits = options.Limits with { MaxWorkingBytes = peak - 1 } }, cancellation.Token));
+        }
+    }
+
+    [Theory]
+    [InlineData(65536)] [InlineData(65537)]
+    public void BoundedFilterStorageAndTallerFallbackKeepOriginalPeak(int height)
+    {
+        var frame = new AuthoredPng.Frame("rolling-height-boundary", 6, 8, 1, height, false);
+        var compressed = AuthoredPng.StoredZlib(AuthoredPng.FilteredRows(frame));
+        var encoded = AuthoredPng.Wrap(frame, compressed);
+        var peak = encoded.Length + (long)compressed.Length + height * 4L + 256 * 1024 + 8;
+        var options = new DecodeOptions { Limits = new ImageLimits { MaxDimension = height, MaxWorkingBytes = peak } };
+        using var liveToken = new CancellationTokenSource();
+        using var result = ImageCodec.Decode(encoded, options, liveToken.Token);
+        Assert.Equal(AuthoredPng.Expected(frame), OriginalPixels.Bytes(result));
+        Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(encoded,
+            options with { Limits = options.Limits with { MaxWorkingBytes = peak - 1 } }, liveToken.Token));
+    }
+
+    [Theory]
     [InlineData(0, false)] [InlineData(0, true)]
     [InlineData(16, false)] [InlineData(16, true)]
     public void FilterAndChecksumFailuresKeepTheOriginalWorkAndErrorOrder(int badRow, bool badChecksum)
@@ -51,8 +100,8 @@ public sealed class PngFusedInflationTests
             var first = Record.Exception(() => { using var value = ImageCodec.Decode(encoded, options); });
             var second = Record.Exception(() => { using var value = ImageCodec.Decode(encoded, options, cancellation.Token); });
             Assert.NotNull(first); Assert.Equal(second?.GetType(), first.GetType()); Assert.Equal(second?.Message, first.Message);
-            // The exact working boundary excludes materialization and remains an
-            // independent BCL decode path for filter/checksum failure ordering.
+            // Invalid rows/checksums at the exact boundary must replay the BCL
+            // path after framing, preserving filter/checksum failure ordering.
             var fallback = Record.Exception(() =>
             {
                 using var value = ImageCodec.Decode(encoded,
