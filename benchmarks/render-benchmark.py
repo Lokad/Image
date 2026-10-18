@@ -290,10 +290,13 @@ def render():
         row('Mirrored transpose RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'Transverse8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
     ]
     # H4 changes shared JPEG frame/scan/control paths and inspection headers.
-    # Preserve the exact old numbers, but do not treat old JPEG timings as
-    # current-code confirmations. Other codec/edit/encode paths remain applicable.
+    # Compatibility changed JPEG parsing; leased acquisition changed exactly
+    # these six additional complete Stream operations. Preserve historical values.
+    stream_prefixes = ('| [PNG8 Stream,', '| [PNG16 Stream,',
+                       '| [PNG RGBA8, fresh seekable Stream]', '| [PNG RGBA16, fresh seekable Stream]',
+                       '| [WebP VP8 + alpha, fresh seekable Stream]', '| [WebP VP8L, fresh seekable Stream]')
     decodes = [value.rsplit(' | ', 1)[0] + ' | Prior production; reconfirm |'
-               if value.startswith('| [JPEG') else value for value in decodes]
+               if value.startswith(('| [JPEG', *stream_prefixes)) else value for value in decodes]
     all_rows = decodes + encodes + edits
     parity_count = sum(' | Parity confirmed |' in value for value in all_rows)
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
@@ -305,8 +308,9 @@ def render():
 Updated 2026-10-18. The current goal is **warm single-CPU parity: independent
 conservative upper ≤1x**. The 209 retained numeric rows contain **{parity_count} current
 parity confirmations, {gap_count} measured gaps and {confidence_count} confidence-open cases**;
-**{reconfirm_count} prior-production JPEG rows need reconfirmation** after the compatibility
-parser changes. Their old times/allocations are historical. Other paths reuse valid
+**{reconfirm_count} prior-production rows need reconfirmation**: seventeen JPEG rows after
+compatibility changes and six additional PNG/WebP Stream rows after input-copy
+removal. Their old times/allocations are historical. Other paths reuse valid
 evidence. The earlier
 ≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
@@ -316,15 +320,19 @@ sizes or hardware. Stop cases already confirmed at ≤1x.
 Shared-budget entry points and direct JPEG sample decoding are implemented and
 correctness-qualified; their times and allocations are **unmeasured**. Together
 with JPEG compatibility, async I/O and fixed-workspace inspection, the checklist names eighteen pending
-representatives using existing inputs. JPEG decode/inspection changed; their rows are explicitly prior
-production. Other codecs, JPEG encoding and image disposal remain unchanged.
+representatives using existing inputs. Affected JPEG and fresh-Stream rows are
+explicitly prior production. Resident PNG/WebP, JPEG encoding, edits and image
+disposal remain unchanged.
 CMYK/YCCK and quarter-width JPEG compatibility paths are correctness-qualified
 but also await the named timing/allocation evidence.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end
-representatives remain unmeasured. Ordinary synchronous paths and their evidence
-are unchanged. Shared-budget reservation lifetime across awaits is correctness-tested.
+representatives remain unmeasured. Shared-budget reservation lifetime across awaits
+is correctness-tested. Synchronous Decode now avoids the final full-input copy,
+admitting actual retained capacity through decoding. Its seven existing Stream
+workloads need reconfirmation (one is already among the seventeen JPEG rows).
+Resident decoding, Identify and async-input methods retain their existing evidence.
 
 Async PNG/JPEG/WebP output, including direct JPEG samples, uses admitted private
 staging and real asynchronous writes, retaining JPEG adaptive coding when admitted.

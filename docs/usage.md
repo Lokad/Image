@@ -108,6 +108,10 @@ orientation without constructing a pixel buffer. `ImageInfo.OrientedWidth` and
 `OrientedHeight` describe the displayed dimensions. Identification does not
 validate the complete compressed pixel payload. Decode performs that work.
 
+`Decode(Stream)` reads through EOF into private storage and decodes its acquired
+prefix without a final encoded-input copy. Returned pixels own separate storage.
+Actual retained input capacity counts toward the working limit.
+
 `IdentifyAsync(Stream)` and `DecodeAsync(Stream)` asynchronously acquire input
 through EOF, then run the same CPU validation/decoding. Both accept cancellation,
 leave input open and have corresponding `ImageBudget` methods. Keep the stream

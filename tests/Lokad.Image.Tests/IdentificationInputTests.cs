@@ -1,16 +1,13 @@
-using System.Reflection;
 using Lokad.Image.Internal;
 
 namespace Lokad.Image.Tests;
 
 public sealed class IdentificationInputTests
 {
-    private static readonly MethodInfo Original = typeof(ImageCodec).GetMethod("ReadInput", BindingFlags.NonPublic | BindingFlags.Static)!;
-
     [Theory]
     [InlineData(0)] [InlineData(1)] [InlineData(255)] [InlineData(256)]
     [InlineData(8191)] [InlineData(8192)] [InlineData(8193)] [InlineData(218775)]
-    public void CompleteAcquisitionMatchesUnchangedDecoderInputAndNeverQueriesStreamMetadata(int length)
+    public void CompleteAcquisitionMatchesHistoricalIdentifyPolicyAndNeverQueriesStreamMetadata(int length)
     {
         foreach (var chunk in new[] { 3, 257, 8192 }) Compare(length, chunk, ImageLimits.Default);
     }
@@ -87,13 +84,48 @@ public sealed class IdentificationInputTests
         try
         {
             if (fast) { using var input = IdentificationInput.Read(reader, context); result = input.Span.ToArray(); }
-            else result = (byte[])Original.Invoke(null, [reader, context])!;
+            else result = LegacyInput(reader, context);
         }
-        catch (TargetInvocationException e) { error = e.InnerException; }
         catch (Exception e) { error = e; }
         Assert.True(reader.CanRead);
         return new(result, error?.GetType(), context.RemainingWork, context.RemainingWorkingBytes, reader.Reads, reader.Consumed,
             error is OperationCanceledException canceled && canceled.CancellationToken == cts.Token);
+    }
+    // Freeze our former reader as the historical synchronous Identify admission
+    // oracle. Decode now deliberately uses actual-capacity admission instead.
+    private static byte[] LegacyInput(Stream input, OperationContext context)
+    {
+        ArgumentNullException.ThrowIfNull(input);
+        var limits = context.Limits;
+        // Bounded growth also covers nonseekable streams. The exact-sized final copy
+        // and buffer capacity must both fit the working-memory allowance.
+        using var buffer = new MemoryStream();
+        context.Reserve(8192);
+        var scratch = new byte[8192];
+        while (true)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var read = input.Read(scratch);
+            if (read == 0) break;
+            if (read > limits.MaxInputBytes - buffer.Length) throw new ImageLimitException(ImageLimitKind.InputBytes, "Encoded input limit exceeded.");
+            var needed = buffer.Length + read;
+            var capacity = Math.Max(needed, Math.Max(256, buffer.Capacity * 2L));
+            if (needed > buffer.Capacity)
+            {
+                if (capacity + buffer.Capacity + scratch.Length > limits.MaxWorkingBytes || capacity > Array.MaxLength)
+                    throw new ImageLimitException(capacity + buffer.Capacity + scratch.Length > limits.MaxWorkingBytes
+                        ? ImageLimitKind.WorkingBytes : ImageLimitKind.BufferLength, "Stream buffering memory limit exceeded.");
+                buffer.Capacity = (int)capacity;
+            }
+            buffer.Write(scratch.AsSpan(0, read));
+            context.Work(read);
+        }
+        if (buffer.Capacity + buffer.Length + scratch.Length > limits.MaxWorkingBytes)
+            throw new ImageLimitException(ImageLimitKind.WorkingBytes, "Stream buffering memory limit exceeded.");
+        var result = buffer.ToArray();
+        context.Release(scratch.Length);
+        context.Reserve(result.Length);
+        return result;
     }
     private static byte[] Bytes(int length, int seed) => Enumerable.Range(0, length).Select(i => (byte)(i * 67 + seed)).ToArray();
     private sealed class Reader(byte[] bytes, int chunk, bool fail = false, CancellationTokenSource? cancel = null) : Stream

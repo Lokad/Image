@@ -2,9 +2,10 @@
 
 Updated 2026-10-18. The current goal is **warm single-CPU parity: independent
 conservative upper ≤1x**. The 209 retained numeric rows contain **63 current
-parity confirmations, 128 measured gaps and 1 confidence-open cases**;
-**17 prior-production JPEG rows need reconfirmation** after the compatibility
-parser changes. Their old times/allocations are historical. Other paths reuse valid
+parity confirmations, 122 measured gaps and 1 confidence-open cases**;
+**23 prior-production rows need reconfirmation**: seventeen JPEG rows after
+compatibility changes and six additional PNG/WebP Stream rows after input-copy
+removal. Their old times/allocations are historical. Other paths reuse valid
 evidence. The earlier
 ≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
@@ -14,15 +15,19 @@ sizes or hardware. Stop cases already confirmed at ≤1x.
 Shared-budget entry points and direct JPEG sample decoding are implemented and
 correctness-qualified; their times and allocations are **unmeasured**. Together
 with JPEG compatibility, async I/O and fixed-workspace inspection, the checklist names eighteen pending
-representatives using existing inputs. JPEG decode/inspection changed; their rows are explicitly prior
-production. Other codecs, JPEG encoding and image disposal remain unchanged.
+representatives using existing inputs. Affected JPEG and fresh-Stream rows are
+explicitly prior production. Resident PNG/WebP, JPEG encoding, edits and image
+disposal remain unchanged.
 CMYK/YCCK and quarter-width JPEG compatibility paths are correctness-qualified
 but also await the named timing/allocation evidence.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end
-representatives remain unmeasured. Ordinary synchronous paths and their evidence
-are unchanged. Shared-budget reservation lifetime across awaits is correctness-tested.
+representatives remain unmeasured. Shared-budget reservation lifetime across awaits
+is correctness-tested. Synchronous Decode now avoids the final full-input copy,
+admitting actual retained capacity through decoding. Its seven existing Stream
+workloads need reconfirmation (one is already among the seventeen JPEG rows).
+Resident decoding, Identify and async-input methods retain their existing evidence.
 
 Async PNG/JPEG/WebP output, including direct JPEG samples, uses admitted private
 staging and real asynchronous writes, retaining JPEG adaptive coding when admitted.
@@ -80,7 +85,7 @@ Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDEN
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
 retains its1.012x mean gap/1.014x upper. Current totals are **63 passes /
-128 gaps / 1 confidence open / 17 prior JPEG rows**.
+122 gaps / 1 confidence open / 23 prior JPEG rows**.
 Every actual/outlier and both quiet guards remain; unchanged qualification is reused.
 Resolve the named JPEG uncertainties before optimization. Stop current passing paths.
 
@@ -93,13 +98,13 @@ Resolve the named JPEG uncertainties before optimization. Stop current passing p
 | [JPEG Identify, resident span‖](../benchmarks/WARM-JPEG-ENTROPY.md) | 0.60 | 1.21 | 0.499 / 0.506 | 88 | Prior production; reconfirm |
 | [PNG Identify, resident span¶](../benchmarks/WARM-PNG-IDENTIFY.md) | 16.09 | 13.04 | 1.234 / 1.238 | 88 | Gap (independent) |
 | [PNG palette4/full tRNS Adam7](../benchmarks/WARM-PNG-PALETTE4-ADAM7.md) | 1,480.35 | 1,135.35 | 1.304 / 1.387 | 2,592 | Gap (independent) |
-| [PNG8 Stream, orient/crop/nearest fit](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 2,129.50 | 1,473.35 | 1.445 / 1.454 | 1,445,000 | Gap (independent) |
-| [PNG16 Stream, orient/crop/nearest fit](../benchmarks/WARM-PNG-FUSED-INFLATION.md) | 3,572.35 | 2,936.91 | 1.216 / 1.231 | 4,460,393 | Gap (independent) |
-| [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 1,982.59 | 1,388.00 | 1.428 / 1.441 | 748,088 | Gap (independent) |
-| [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 3,499.10 | 3,080.71 | 1.136 / 1.146 | 3,067,227 | Gap (independent) |
+| [PNG8 Stream, orient/crop/nearest fit](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 2,129.50 | 1,473.35 | 1.445 / 1.454 | 1,445,000 | Prior production; reconfirm |
+| [PNG16 Stream, orient/crop/nearest fit](../benchmarks/WARM-PNG-FUSED-INFLATION.md) | 3,572.35 | 2,936.91 | 1.216 / 1.231 | 4,460,393 | Prior production; reconfirm |
+| [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 1,982.59 | 1,388.00 | 1.428 / 1.441 | 748,088 | Prior production; reconfirm |
+| [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 3,499.10 | 3,080.71 | 1.136 / 1.146 | 3,067,227 | Prior production; reconfirm |
 | [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-COLOR16.md) | 1,370.98 | 993.98 | 1.379 / 1.694 | 951,080 | Prior production; reconfirm |
-| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 9,391.90 | 6,005.14 | 1.564 / 1.714 | 2,327,699 | Gap (short; qualified) |
-| [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 4,351.41 | 3,030.27 | 1.436 / 1.480 | 1,924,876 | Gap (short; qualified) |
+| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 9,391.90 | 6,005.14 | 1.564 / 1.714 | 2,327,699 | Prior production; reconfirm |
+| [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 4,351.41 | 3,030.27 | 1.436 / 1.480 | 1,924,876 | Prior production; reconfirm |
 | [PNG RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,904.89 | 1,392.72 | 1.368 / 1.371 | 4,456 | Gap (independent) |
 | [PNG RGBA8, None / live cancelable token](../benchmarks/WARM-PNG-CANCEL-BLOCKS.md) | 1,732.37 | 1,390.42 | 1.246 / 1.320 | 4,456 | Gap (short; qualified) |
 | [PNG RGBA8, None / exact working limit](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 2,028.73 | 1,395.91 | 1.453 / 1.597 | 68,200 | Gap (short; qualified) |

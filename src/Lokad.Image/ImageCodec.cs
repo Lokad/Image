@@ -62,8 +62,7 @@ public static partial class ImageCodec
     {
         options ??= new DecodeOptions();
         var context = new OperationContext(options.Limits, cancellationToken);
-        var data = ReadInput(input, context);
-        return DecodeCore(data, options, context);
+        return DecodeFromStream(input, options, context);
     }
 
     public static void EncodePng(ImageBuffer image, Stream output, PngEncodeOptions? options = null,
@@ -105,38 +104,10 @@ public static partial class ImageCodec
         else Vp8Encoder.Encode(image, bounded, options, context);
     }
 
-    private static byte[] ReadInput(Stream input, OperationContext context)
+    private static ImageBuffer DecodeFromStream(Stream input, DecodeOptions options, OperationContext context)
     {
-        ArgumentNullException.ThrowIfNull(input);
-        var limits = context.Limits;
-        // Bounded growth also covers nonseekable streams. The exact-sized final copy
-        // and buffer capacity must both fit the working-memory allowance.
-        using var buffer = new MemoryStream();
-        context.Reserve(8192);
-        var scratch = new byte[8192];
-        while (true)
-        {
-            context.Cancellation.ThrowIfCancellationRequested();
-            var read = input.Read(scratch);
-            if (read == 0) break;
-            if (read > limits.MaxInputBytes - buffer.Length) throw new ImageLimitException(ImageLimitKind.InputBytes, "Encoded input limit exceeded.");
-            var needed = buffer.Length + read;
-            var capacity = Math.Max(needed, Math.Max(256, buffer.Capacity * 2L));
-            if (needed > buffer.Capacity)
-            {
-                if (capacity + buffer.Capacity + scratch.Length > limits.MaxWorkingBytes || capacity > Array.MaxLength)
-                    throw new ImageLimitException(capacity + buffer.Capacity + scratch.Length > limits.MaxWorkingBytes
-                        ? ImageLimitKind.WorkingBytes : ImageLimitKind.BufferLength, "Stream buffering memory limit exceeded.");
-                buffer.Capacity = (int)capacity;
-            }
-            buffer.Write(scratch.AsSpan(0, read));
-            context.Work(read);
-        }
-        if (buffer.Capacity + buffer.Length + scratch.Length > limits.MaxWorkingBytes)
-            throw new ImageLimitException(ImageLimitKind.WorkingBytes, "Stream buffering memory limit exceeded.");
-        var result = buffer.ToArray();
-        context.Release(scratch.Length);
-        context.Reserve(result.Length);
-        return result;
+        using var data = IdentificationInput.ReadForDecode(input, context);
+        try { return DecodeCore(data.Span, options, context); }
+        finally { context.Release(data.Capacity); }
     }
 }

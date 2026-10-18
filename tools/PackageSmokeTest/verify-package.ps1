@@ -80,6 +80,12 @@ ImageCodec.EncodePng(flipped, encoded);
 using var decoded = ImageCodec.Decode(encoded.ToArray());
 if (decoded.BitDepth != 16 || !decoded.GetRow16(0).SequenceEqual(flipped.GetRow16(0)))
     throw new Exception("Exact package consumer pixels differ.");
+using (var packetInput = new MemoryStream(encoded.ToArray(), writable: false))
+using (var streamed = ImageCodec.Decode(packetInput))
+{
+    if (!streamed.GetRow16(0).SequenceEqual(flipped.GetRow16(0)) || !packetInput.CanRead || packetInput.Position != packetInput.Length)
+        throw new Exception("Package leased Stream decode pixels/ownership/EOF differ.");
+}
 // Exercise the README JPEG/WebP options through the isolated actual package.
 using var exampleJpeg = new MemoryStream();
 ImageCodec.EncodeJpeg(flipped, exampleJpeg, new JpegEncodeOptions { Quality = 85, BackgroundRgb = 0xFFFFFF });

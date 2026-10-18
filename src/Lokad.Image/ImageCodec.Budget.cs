@@ -46,7 +46,7 @@ public static partial class ImageCodec
         ArgumentNullException.ThrowIfNull(input);
         var admission = budget.Begin(context.Limits);
         BudgetedImage? result = null;
-        try { return result = BudgetedImage.Create(DecodeCore(ReadInput(input, context), options, context)); }
+        try { return result = BudgetedImage.Create(DecodeFromStream(input, options, context)); }
         finally { admission.Complete(context.ConsumedWork, result); }
     }
 

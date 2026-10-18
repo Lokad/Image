@@ -1,10 +1,10 @@
 # Material warm coverage
 
 Updated 2026-10-18. The **warm single-CPU parity objective remains open**:
-63 independent passes, 128 measured mean gaps and one confidence-open case across
-192 current rows; 17 prior-production JPEG decode/inspection rows need reconfirmation.
+63 independent passes, 122 measured mean gaps and one confidence-open case across
+186 current rows; 23 prior-production rows need reconfirmation.
 The [three-table summary](../docs/benchmark.md) retains all 209 numeric rows:
-122 current independent confirmations, 70 current qualified shorts and 17 prior rows.
+118 current independent observations, 68 current qualified shorts and 23 prior rows.
 Reuse unchanged passing paths;
 do not add an image or settings grid.
 
@@ -61,6 +61,16 @@ historical. Entropy/IDCT kernels are unchanged, but that alone does not prove th
 complete operation unchanged. JPEG encode, PNG/WebP and editing evidence is reused.
 Resolve these uncertainties before assuming optimization is needed.
 
+Synchronous Stream decode now leases its private input instead of making a final
+encoded-input copy, admitting actual retained capacity through decoding. This
+invalidates exactly seven existing complete operations: `Png8`, `Png16`,
+`PngCropFit8`, `PngCropFit16` (WarmStreamDecode), `StreamNative8` (WarmVp8Decode),
+`StreamNativeLossless8` (WarmWebpDecode), and `StreamDecode420Restart` (WarmJpegDecode).
+The last was already among the seventeen prior JPEG rows; six more rows are now
+prior production, for 23 total. Their historical allocations are also superseded.
+No new workload is needed. Resident codec paths, synchronous Identify, async input,
+encoding and editing remain unchanged. Reconfirm affected operations before tuning.
+
 Five further **unmeasured** representatives cover the newly required algorithms:
 
 - `JpegDecode/CmykAdobeResident`: four component planes, Adobe inversion and
@@ -94,7 +104,8 @@ codec/depth/stream scheduling grid is added. Resolve equivalent native input
 delivery before timing. The known finite checklist is now **227 cases**: 209
 numeric rows plus eighteen unmeasured operations. All existing evidence keeps its
 current status: original synchronous method bodies, field layouts, kernels and
-ownership paths are unchanged; the seventeen prior JPEG rows still need reconfirmation.
+ownership paths are unchanged by async acquisition. The subsequent synchronous
+decode change above requires reconfirming 23 prior rows.
 
 Async output adds four **unmeasured** representatives, all on existing inputs:
 
@@ -112,7 +123,8 @@ sampling, depth or scheduling grid. Resolve equivalent native destination
 acquisition/copies and output lifetime before timing. Shared-await correctness
 is separately qualified. The checklist is now **227 cases**: 209 numeric rows
 and eighteen unmeasured operations. Existing numeric statuses are unchanged;
-original synchronous method bodies, state layouts and codec kernels are untouched.
+original encoder bodies, state layouts and codec kernels are untouched. The later
+synchronous decode acquisition change affects only the seven operations above.
 
 Fixed-workspace header inspection adds three **unmeasured** representatives using
 the existing encoded inputs, each for a distinct required container grammar:
@@ -128,7 +140,8 @@ Use equivalent native header validation, input delivery and output ownership bef
 timing; full `Identify` timings cannot substitute for these cheaper boundaries.
 Async scheduling/shared reservation variants have correctness coverage, without
 another timing grid. The new inspector uses independent methods and types; existing
-successful method bodies, state layouts and numeric evidence remain unchanged.
+successful method bodies, state layouts and numeric evidence are unchanged by the
+inspector. The separate synchronous decode acquisition change is accounted above.
 
 Latest [wider RGBA8 horizontal reversal](WARM-HORIZONTAL-FLIP512.md) improves
 single-output flip **22.0%**, passing parity at **0.950× / upper 0.965×**. Two live

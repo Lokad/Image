@@ -1116,6 +1116,17 @@ lease. Original bounded-growth admission, read/work/cancellation and failure
 ordering remain unchanged; the source is read through EOF and never exposed as
 a borrowed input view.
 
+Synchronous `Decode(Stream)`, including `ImageBudget.Decode`, retains a private
+input lease through decoding instead of making a final exact-length encoded copy.
+Acquisition admits 8 KiB scratch and simultaneous old/new growth capacities;
+the actual retained capacity stays charged during decoding and is released on
+every exit. Capacity growth is capped by `MaxInputBytes`. Tight working budgets
+therefore account for retained capacity rather than only the acquired prefix.
+Pixels remain independently owned after input release, disposal or reuse.
+Input is read through EOF without querying length/position or borrowing an exposed
+caller array. Work charges acquired bytes in addition to the existing codec work.
+Existing synchronous `Identify` and async input policies are unchanged.
+
 `IdentifyAsync(Stream)` and `DecodeAsync(Stream)` use `ReadAsync(Memory<byte>,
 CancellationToken)` through EOF with `ConfigureAwait(false)`, then synchronous
 CPU parsing/decoding. They neither use `Task.Run` nor invoke synchronous reads,

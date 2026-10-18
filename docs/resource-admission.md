@@ -51,7 +51,8 @@ remain caller-managed. Existing `ImageCodec` entry points use per-operation limi
 | --- | --- |
 | Exact edits / nearest resize | Supplied pixels plus an independent result; orientation may require a second full result |
 | Bilinear / bicubic resize | Source, result, admitted optional geometry/row caches, and 4 KiB for exact low-alpha rounding when needed; tight limits select the original bounded path |
-| Encoded Stream input | 8 KiB read scratch; old/new capacities during growth; conservative capacity + final-copy peak before parsing |
+| Decode Stream input | 8 KiB scratch, simultaneous old/new growth capacities and actual retained capacity throughout decoding; no final full-input copy |
+| Synchronous Identify Stream input | 8 KiB scratch and conservative growth/final-copy admission; parses a private input prefix without the final copy |
 | Container / EXIF inspection | Encoded input and bounded metadata/parser state; dimensions are checked without allocating a decoded image |
 | InspectHeaders / InspectHeadersAsync | Fixed 8,448-byte scratch/parser allowance; no whole-input, metadata-block or raster allocation |
 | PNG decode | Encoded input, concatenated IDAT, result, pass rows/palette/transparency, 4 KiB framing scratch and 256 KiB inflater allowance; optional filtered storage is separately admitted |
@@ -83,6 +84,11 @@ prefix instead of making an extra exact-length copy, while preserving the same
 conservative growth/final-copy admission. Its idle pool retains less than 8 MiB;
 live operations never share a lease. Pixel and codec storage can also be reused
 after release, as specified in [SPEC.md](../SPEC.md#pixels-and-ownership).
+
+`Decode(Stream)` also parses a private input prefix without a final copy. Its actual
+retained capacity stays charged during decoding, with simultaneous capacities
+admitted during growth and capacity capped by `MaxInputBytes`. Pixel outputs remain
+independent after the input lease is released; shared admission retains only pixels.
 
 `IdentifyAsync`/`DecodeAsync` use asynchronous reads through EOF, leaving input
 open. They admit 8 KiB scratch plus simultaneous growth capacities and retain
