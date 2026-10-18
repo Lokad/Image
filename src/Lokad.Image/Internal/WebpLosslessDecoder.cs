@@ -1,3 +1,7 @@
+using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+
 namespace Lokad.Image.Internal;
 
 /// <summary>Independently implemented RFC 9649 section 3 VP8L decoding.</summary>
@@ -67,6 +71,7 @@ internal ref struct WebpLosslessDecoder
                 }
                 context.Release(pixels.Length * 4L + 32); pixels = expanded; codedWidth = transform.Width;
             }
+            else if (transform.Type == 0 && Sse2.IsSupported) ApplyPredictor(transform, pixels, codedWidth);
             else Apply(transform, pixels, codedWidth);
             context.Release(transform.Data.Length == 0 ? 0 : transform.Data.Length * 4L + 32);
             transform.Data = [];
@@ -276,6 +281,74 @@ internal ref struct WebpLosslessDecoder
                 }
             }
         }
+    }
+
+    private void ApplyPredictor(Transform transform, uint[] pixels, int imageWidth)
+    {
+        var tileWidth = Ceil(imageWidth, transform.Bits); var tileSize = 1 << transform.Bits;
+        for (var y = 0; y < height; y++)
+        {
+            context.Work(imageWidth * 32L);
+            var row = y * imageWidth;
+            if (y == 0)
+            {
+                for (var x = 0; x < imageWidth; x++)
+                    pixels[x] = Add(pixels[x], x == 0 ? 0xFF000000 : pixels[x - 1]);
+                continue;
+            }
+            pixels[row] = Add(pixels[row], pixels[row - imageWidth]);
+            for (var x = 1; x < imageWidth;)
+            {
+                var mode = (int)(transform.Data[(y >> transform.Bits) * tileWidth + (x >> transform.Bits)] >> 8) & 15;
+                var end = x + Math.Min(imageWidth - x, tileSize - (x & (tileSize - 1)));
+                for (; x < end; x++)
+                {
+                    var position = row + x;
+                    pixels[position] = PredictAndAdd(mode, pixels[position], pixels[position - 1], pixels[position - imageWidth],
+                        pixels[position - imageWidth - 1], pixels[x + 1 == imageWidth ? row : position - imageWidth + 1]);
+                }
+            }
+        }
+    }
+
+    internal static uint PredictAndAdd(int mode, uint residual, uint left, uint top, uint topLeft, uint topRight)
+    {
+        var l = Vector128.CreateScalar(left).AsByte(); var t = Vector128.CreateScalar(top).AsByte();
+        var tl = Vector128.CreateScalar(topLeft).AsByte(); var tr = Vector128.CreateScalar(topRight).AsByte();
+        var prediction = mode switch
+        {
+            0 => Vector128.CreateScalar(0xFF000000u).AsByte(), 1 => l, 2 => t, 3 => tr, 4 => tl,
+            5 => AverageFloor(AverageFloor(l, tr), t), 6 => AverageFloor(l, tl),
+            7 => AverageFloor(l, t), 8 => AverageFloor(tl, t), 9 => AverageFloor(t, tr),
+            10 => AverageFloor(AverageFloor(l, tl), AverageFloor(t, tr)),
+            11 => Sse2.SumAbsoluteDifferences(t, tl).AsUInt64().GetElement(0)
+                < Sse2.SumAbsoluteDifferences(l, tl).AsUInt64().GetElement(0) ? l : t,
+            12 => ClampChannels(l, t, tl, false),
+            13 => ClampChannels(AverageFloor(l, t), Vector128<byte>.Zero, tl, true),
+            _ => throw new ImageDataException("Invalid VP8L predictor.")
+        };
+        return Sse2.Add(Vector128.CreateScalar(residual).AsByte(), prediction).AsUInt32().GetElement(0);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector128<byte> AverageFloor(Vector128<byte> first, Vector128<byte> second)
+        => Sse2.Subtract(Sse2.Average(first, second), Sse2.And(Sse2.Xor(first, second), Vector128.Create((byte)1)));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector128<byte> ClampChannels(Vector128<byte> first, Vector128<byte> second,
+        Vector128<byte> previous, bool half)
+    {
+        var a = Sse2.UnpackLow(first, Vector128<byte>.Zero).AsInt16();
+        var c = Sse2.UnpackLow(previous, Vector128<byte>.Zero).AsInt16();
+        Vector128<short> value;
+        if (half)
+        {
+            var difference = Sse2.Subtract(a, c);
+            var bias = Sse2.And(Sse2.ShiftRightArithmetic(difference, 15), Vector128.Create((short)1));
+            value = Sse2.Add(a, Sse2.ShiftRightArithmetic(Sse2.Add(difference, bias), 1));
+        }
+        else value = Sse2.Subtract(Sse2.Add(a, Sse2.UnpackLow(second, Vector128<byte>.Zero).AsInt16()), c);
+        return Sse2.PackUnsignedSaturate(value, Vector128<short>.Zero);
     }
 
     internal static uint Predict(int mode, uint left, uint top, uint topLeft, uint topRight)
