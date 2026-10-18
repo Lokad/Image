@@ -20,7 +20,7 @@ from required future functionality.
 | JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4×1) / 4:1:0 (4×2) sampling |
 | Stream extensions | Async Identify/Decode/Encode and fixed-workspace InspectHeaders implemented in development | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
 | Drawing/compositing | Implemented in development | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
-| Text | Planned | Supplied TrueType fonts; size/style/color/position, wrapping, line spacing and layout bounds for overflow/fitting |
+| Text | TrueType face loading/Unicode glyph metrics implemented in development; layout/rendering planned | Supplied TrueType fonts; size/style/color/position, wrapping, line spacing and layout bounds for overflow/fitting |
 | Failure details | Implemented in development | Typed exhausted-limit and unsupported-feature categories with recognized codec when known |
 | Shared admission | Implemented in development | ImageBudget codec entry points and caller reservations; coarse per-operation reservation, cumulative charged work and independently retained BudgetedImage outputs |
 | Compression efficiency | Required ongoing work | WebP lossless sizes and lossy size/quality/time; JPEG comparisons at matched quality or size on representative photographs and text/diagrams |
@@ -128,6 +128,31 @@ units per copied/filled pixel and sixteen per composited pixel, before chunks of
 at most 4096 or 256 pixels respectively. Cancellation/work exhaustion can leave
 completed chunks in traversal order; argument, geometry and memory failures occur
 before mutation. Callers synchronize mutable pixel access.
+
+## Supplied TrueType fonts
+
+`TrueTypeFont.Load` copies a standalone TrueType face into immutable owned storage.
+It supports Unicode `cmap` formats 4/12 (preferring 12), short/long `loca` and
+horizontal metrics with repeated advances. Glyph zero represents absent characters.
+`GetGlyphIndex(Rune)` and `GetGlyphMetrics(Rune/int)` return unscaled font-unit
+values; glyph bounds enclose control points, with upward-positive font Y. Empty
+glyphs have zero bounds. Ascender/descender/line gap come from `hhea`; face style
+comes from the supplied `head` flags. There is no synthetic styling or system-font
+lookup. Returned metric values and the loaded face survive changes to caller input.
+
+Loading checks table ranges/order, selected character mappings, glyph locations
+and headers. It does not yet decode complete outlines, execute hint instructions
+or verify checksums. Font collections, CFF/WOFF and unsupported mapping/table
+profiles raise typed `FontContainer`, `FontMapping` or `FontTable` unsupported
+features, with no image format assigned. Malformed structure raises `ImageDataException`.
+The implementation follows public [OpenType table definitions](https://learn.microsoft.com/en-us/typography/opentype/spec/otff).
+Text layout, wrapping, measurement in pixels and rendering remain required work.
+
+Input, working-memory, item and work limits plus cancellation apply. Load admits
+supplied input plus one owned copy and a coarse 256-byte descriptor allowance
+before allocation. `StorageBytes` reports retained bytes for caller reservations;
+subsequent lookups admit that font storage and charge bounded search/metric work.
+There is no mutable global font cache or per-lookup font copy.
 
 ## Geometry and resizing
 

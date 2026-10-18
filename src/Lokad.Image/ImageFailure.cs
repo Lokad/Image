@@ -35,5 +35,8 @@ public enum UnsupportedImageFeature
     CriticalChunk,
     Version,
     ColorSpace,
-    AlphaCoding
+    AlphaCoding,
+    FontContainer,
+    FontTable,
+    FontMapping
 }

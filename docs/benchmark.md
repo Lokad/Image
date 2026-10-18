@@ -45,6 +45,11 @@ clipping and snapshot semantics for self-overlap without a full-frame copy. Six
 named fill/copy/composite cases remain unmeasured. Resolve equivalent native canvas
 delivery, state restoration and ownership before timing; no numeric status changed.
 
+Standalone TrueType loading and Unicode glyph metrics are correctness-qualified;
+pixel text layout/rendering remain pending. Font preparation will be outside future
+warm text operations, with the same immutable face reused on both sides. No font
+timing/allocation result or complete text support is claimed here.
+
 The [direct-sample JPEG quality check](../benchmarks/warm-jpeg-sample-quality-evidence.json)
 reproduces the frozen packets exactly: grayscale **58,823 / 58,910 bytes**
 (managed / SIMD libjpeg-turbo), RGB 4:2:0 **74,040 / 52,093 bytes** (managed / FFmpeg).

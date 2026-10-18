@@ -1,5 +1,12 @@
 # Original fixture corpus
 
+TrueType controls are generated in tests by `tools/Shared/AuthoredTrueType.cs`:
+original rectangles, triangles, a quadratic contour and a two-component accent,
+with known advances, bounds and Unicode mappings. The table layout follows the
+public [OpenType specification](https://learn.microsoft.com/en-us/typography/opentype/spec/otff).
+No external font bytes or outlines are included. These controls do not change
+the frozen image-corpus counts below.
+
 These images originate from Lokad.Image's own deterministic `asymmetric-v1`
 pixel recipe in `tools/Shared/OriginalPixels.cs` and independently chosen T.81
 coefficient/scan cases in `tools/Shared/AuthoredJpeg.cs` and VP8L bitstreams in

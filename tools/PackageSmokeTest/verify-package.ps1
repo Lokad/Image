@@ -56,7 +56,8 @@ try {
     $feedDirectory = Join-Path $consumer 'feed'
     New-Item -ItemType Directory -Path $feedDirectory -Force | Out-Null
     Copy-Item -LiteralPath $package -Destination (Join-Path $feedDirectory 'Lokad.Image.0.1.0.nupkg')
-    @'
+    $fontFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredTrueType.cs'))
+    @"
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework>
@@ -64,14 +65,22 @@ try {
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
   </PropertyGroup>
-  <ItemGroup><PackageReference Include="Lokad.Image" Version="0.1.0" /></ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Lokad.Image" Version="0.1.0" />
+    <Compile Include="$fontFixturePath" Link="AuthoredTrueType.cs" />
+  </ItemGroup>
 </Project>
-'@ | Set-Content -LiteralPath (Join-Path $consumer 'Consumer.csproj') -Encoding utf8
+"@ | Set-Content -LiteralPath (Join-Path $consumer 'Consumer.csproj') -Encoding utf8
     @'
 using Lokad.Image;
 if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(
     File.ReadAllBytes(typeof(ImageBuffer).Assembly.Location))).ToLowerInvariant() != args[4])
     throw new Exception("Package consumer loaded a different assembly.");
+var fontInput = Lokad.Image.Tooling.AuthoredTrueType.Build(style: FontStyle.Bold | FontStyle.Italic);
+var font = TrueTypeFont.Load(fontInput); Array.Fill(fontInput, (byte)0xA7);
+if (font.Style != (FontStyle.Bold | FontStyle.Italic) || font.GetGlyphIndex(new System.Text.Rune(0x1F642)) != 7
+    || font.GetGlyphMetrics(new System.Text.Rune('A')).AdvanceWidth != 660)
+    throw new Exception("Package supplied TrueType ownership/Unicode/metrics differ.");
 using var source = ImageBuffer.Create(2, 1, 16);
 new ushort[] { 12345, 1, 65534, 43210, 54321, 65534, 1, 12345 }.CopyTo(source.GetRow16(0));
 using var flipped = ImageTransforms.FlipHorizontal(source);

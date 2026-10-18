@@ -138,6 +138,11 @@ eight-bit colors exactly. Self-overlap is safe without a full-frame temporary.
 Mutations can leave completed chunks on cancellation/work exhaustion; synchronize
 access to mutable images. No EXIF orientation is implicitly applied.
 
+`TrueTypeFont.Load` owns a copy of a supplied standalone TrueType face. Its Unicode
+glyph lookup and unscaled metrics are available; pixel layout/rendering remain
+planned. Styles come from supplied faces. `StorageBytes` supports caller lifetime
+reservations. [SPEC.md](../SPEC.md#supplied-truetype-fonts) states the validation scope.
+
 Malformed input raises `ImageDataException`, unsupported formats or profiles
 raise `UnsupportedImageException`, exhausted admission limits raise
 `ImageLimitException`, and cancellation raises `OperationCanceledException`.
