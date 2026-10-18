@@ -13,8 +13,8 @@ record which comparisons they replace. Only confirmed <=1x paths are stopped
 for the current objective.
 
 The [three-table summary](../docs/benchmark.md) contains207 numeric rows plus one
-unscored native-alpha incompatibility. Of those numeric rows,149 select independent
-confirmations. Fifty-eight select qualified screens after changed production: six
+unscored native-alpha incompatibility. Of those numeric rows,150 select independent
+confirmations. Fifty-seven select qualified screens after changed production: six
 paired-column byte/word bicubic cases, byte bicubic TightDown8, word bilinear
 Down16, live-token progressive444, five fixed JPEG encodes, two opaque VP8 encodes,
 two PNG Paeth dispatch controls and three PNG encodes after chunk checksum folding, and eight adaptive JPEG encodes
@@ -23,11 +23,13 @@ plus five VP8L decodes and two compressed-alpha VP8 decodes after borrowed looku
 and seven byte/word enlargement boundaries after wider strips, plus byte
 bilinear Up8 after exact integer factorization and live-token baseline444 decode
 after bounded AC cache reuse, plus the thirteen default full-row-cache bicubic
-comparisons after horizontal byte-row output specialization.
+comparisons after byte-row output specialization. VerticalUp8 now selects its
+first current independent confirmation; it remains a1.020x gap rather than a
+short-screen witness.
 RGB16 Paeth now
 has an independent passing proof. Both affected alpha VP8 encodes have independent
 passing confirmations after their shared source conversion changed.
-The fifty-eight short screens remain gaps; older independent timings are explicitly
+The fifty-seven short screens remain gaps; older independent timings are explicitly
 superseded. The two
 former short-regression witnesses are now historical after changed AC emission.
 The unscored raw PNG transparency reference is replaced by approved exact timed
@@ -70,7 +72,17 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [byte-row reconciliation](warm-bicubic-byte-row-evidence.json) replaces
+The latest [general byte-row reconciliation](warm-bicubic-byte-emitter-evidence.json)
+replaces those same thirteen cache rows without new coverage. Five byte paths
+improve11.6–20.8%; one dispatch/depth predicate and private name change, with the
+entire emitter body unchanged. VerticalUp8's1.010x short warrants one independent
+uncertainty check:1.020x/upper1.024x, a gap. Other12 remain qualified short gaps;
+no unchanged repeat until pass. Other194 comparisons/all58 passing proofs retain
+paths. Full3663+209scalar/OS and the same actual package consumer/all3 examples
+bothOS pass. Native workers/gates and full boundaries are unchanged; no new
+profile, raster, selector build or settings grid.
+
+The preceding [byte-row reconciliation](warm-bicubic-byte-row-evidence.json) replaces
 exactly thirteen existing default-cache timings, conservatively including word
 and cross controls sharing the changed hot method. HorizontalUp8 improves16.4%;
 all remain qualified short gaps. One suspicious vertical control is checked once

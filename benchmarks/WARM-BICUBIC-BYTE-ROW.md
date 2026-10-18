@@ -1,5 +1,10 @@
 # Bicubic horizontal byte-row output
 
+Historical timing checkpoint: [general byte emission](WARM-BICUBIC-BYTE-EMITTER.md)
+now supplies the thirteen current cache comparisons, including an independent
+VerticalUp8 gap. The implementation/source proof below describes the earlier
+horizontal-only stage.
+
 Updated 2026-10-18. The existing default-budget RGBA8 horizontal enlargement is
 **16.4% faster**, with unchanged exact pixels and allocation. All thirteen current
 results remain **qualified three-actual warm parity gaps**. Every actual and both

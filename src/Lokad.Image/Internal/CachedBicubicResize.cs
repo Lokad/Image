@@ -181,9 +181,9 @@ internal static class CachedBicubicResize
                     if((width&1)!=0)Original(source,result,width-1,y,weights,offsets,counts,vertical[..count],first,context);
                     continue;
                 }
-                if(horizontalUp)
+                if(!wide16)
                 {
-                    WriteHorizontalByteRow(source,result,y,storage,rows[..count],vertical[..count],
+                    WriteByteRow(source,result,y,storage,rows[..count],vertical[..count],
                         normalizers,normalizerY,weights,offsets,counts,first,context);
                     if((width&1)!=0)Original(source,result,width-1,y,weights,offsets,counts,vertical[..count],first,context);
                     continue;
@@ -247,7 +247,7 @@ internal static class CachedBicubicResize
         }
         finally {context.Release(bytes);}
     }
-    private static void WriteHorizontalByteRow(ImageBuffer source,ImageBuffer result,int y,
+    private static void WriteByteRow(ImageBuffer source,ImageBuffer result,int y,
         ReadOnlySpan<double> cached,ReadOnlySpan<int> rows,ReadOnlySpan<double> vertical,
         ReadOnlySpan<double> normalizers,double normalizerY,ReadOnlySpan<double> weights,
         ReadOnlySpan<int> offsets,ReadOnlySpan<int> counts,int firstY,OperationContext context)
