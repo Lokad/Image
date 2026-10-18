@@ -20,7 +20,7 @@ internal static class PngIdentifier
         var orientation = ImageOrientation.Normal;
         while (position < data.Length)
         {
-            if (++items > context.Limits.MaxContainerItems) throw new ImageLimitException("PNG chunk count limit exceeded.");
+            if (++items > context.Limits.MaxContainerItems) throw new ImageLimitException(ImageLimitKind.ContainerItems, "PNG chunk count limit exceeded.");
             if (data.Length - position < 12) throw new ImageDataException("Truncated PNG chunk.");
             var lengthValue = BinaryPrimitives.ReadUInt32BigEndian(data[position..]);
             if (lengthValue > int.MaxValue || lengthValue > data.Length - position - 12)
@@ -92,12 +92,12 @@ internal static class PngIdentifier
                     color is 4 or 6 || transparencySeen, orientation);
             }
             else if (type.SequenceEqual("acTL"u8) || type.SequenceEqual("fcTL"u8) || type.SequenceEqual("fdAT"u8))
-                throw new UnsupportedImageException("Animated PNG is not supported.");
+                throw new UnsupportedImageException(UnsupportedImageFeature.Animation, "Animated PNG is not supported.", ImageFormat.Png);
             else
             {
-                if ((type[0] & 32) == 0) throw new UnsupportedImageException("Unknown critical PNG chunk.");
+                if ((type[0] & 32) == 0) throw new UnsupportedImageException(UnsupportedImageFeature.CriticalChunk, "Unknown critical PNG chunk.", ImageFormat.Png);
                 if (length > context.Limits.MaxMetadataBytes - metadataBytes)
-                    throw new ImageLimitException("PNG metadata limit exceeded.");
+                    throw new ImageLimitException(ImageLimitKind.MetadataBytes, "PNG metadata limit exceeded.");
                 metadataBytes += length;
                 if (type.SequenceEqual("eXIf"u8))
                 {

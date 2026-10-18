@@ -30,13 +30,14 @@ internal sealed class IdentificationInput : IDisposable
                 context.Cancellation.ThrowIfCancellationRequested();
                 var read = input.Read(scratch);
                 if (read == 0) break;
-                if (read > limits.MaxInputBytes - (long)length) throw new ImageLimitException("Encoded input limit exceeded.");
+                if (read > limits.MaxInputBytes - (long)length) throw new ImageLimitException(ImageLimitKind.InputBytes, "Encoded input limit exceeded.");
                 var needed = (long)length + read;
                 var capacity = Math.Max(needed, Math.Max(256, buffer.Length * 2L));
                 if (needed > buffer.Length)
                 {
                     if (capacity + buffer.Length + scratch.Length > limits.MaxWorkingBytes || capacity > Array.MaxLength)
-                        throw new ImageLimitException("Stream buffering memory limit exceeded.");
+                        throw new ImageLimitException(capacity + buffer.Length + scratch.Length > limits.MaxWorkingBytes
+                            ? ImageLimitKind.WorkingBytes : ImageLimitKind.BufferLength, "Stream buffering memory limit exceeded.");
                     var next = Rent((int)capacity);
                     buffer.AsSpan(0, length).CopyTo(next);
                     Return(buffer); buffer = next;
@@ -48,7 +49,7 @@ internal sealed class IdentificationInput : IDisposable
             // Keep the established admission and work/error ordering. Parsing the
             // fully acquired private prefix avoids the former exact-sized copy.
             if ((long)buffer.Length + length + scratch.Length > limits.MaxWorkingBytes)
-                throw new ImageLimitException("Stream buffering memory limit exceeded.");
+                throw new ImageLimitException(ImageLimitKind.WorkingBytes, "Stream buffering memory limit exceeded.");
             context.Release(scratch.Length);
             context.Reserve(length);
             var result = new IdentificationInput(buffer, length);

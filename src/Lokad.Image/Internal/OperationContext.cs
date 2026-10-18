@@ -24,7 +24,7 @@ internal sealed class OperationContext
     public void Reserve(long bytes)
     {
         if (bytes < 0 || bytes > Limits.MaxWorkingBytes - liveBytes)
-            throw new ImageLimitException("Working memory limit exceeded.");
+            throw new ImageLimitException(ImageLimitKind.WorkingBytes, "Working memory limit exceeded.");
         liveBytes += bytes;
     }
 
@@ -35,7 +35,7 @@ internal sealed class OperationContext
     {
         Cancellation.ThrowIfCancellationRequested();
         if (units < 0 || units > Limits.MaxWork - work)
-            throw new ImageLimitException("Computational work limit exceeded.");
+            throw new ImageLimitException(ImageLimitKind.Work, "Computational work limit exceeded.");
         work += units;
     }
 
@@ -46,7 +46,7 @@ internal sealed class OperationContext
     public void CommitAdmittedWork(long units)
     {
         if (units < 0 || units > Limits.MaxWork - work)
-            throw new ImageLimitException("Computational work limit exceeded.");
+            throw new ImageLimitException(ImageLimitKind.Work, "Computational work limit exceeded.");
         work += units;
     }
 
@@ -69,7 +69,10 @@ internal sealed class OperationContext
         var pixels = (long)width * height;
         if (width > Limits.MaxDimension || height > Limits.MaxDimension || pixels > Limits.MaxPixels
             || pixels > Array.MaxLength / ((bitDepth / 8) * 4))
-            throw new ImageLimitException("Image dimensions or pixel count exceed the configured limits.");
+            throw new ImageLimitException(width > Limits.MaxDimension || height > Limits.MaxDimension
+                ? ImageLimitKind.Dimension : pixels > Limits.MaxPixels
+                ? ImageLimitKind.PixelCount : ImageLimitKind.BufferLength,
+                "Image dimensions or pixel count exceed the configured limits.");
         return (int)(pixels * (bitDepth / 8) * 4);
     }
 }

@@ -18,7 +18,7 @@ internal static class ExifOrientation
         if (2L + count * 12L + 4 > directory.Length)
             throw new ImageDataException("Truncated EXIF directory.");
         if (count > context.Limits.MaxContainerItems)
-            throw new ImageLimitException("EXIF directory entry count limit exceeded.");
+            throw new ImageLimitException(ImageLimitKind.ContainerItems, "EXIF directory entry count limit exceeded.");
         var orientation = ImageOrientation.Normal;
         var found = false;
         for (var i = 0; i < count; i++)

@@ -67,6 +67,11 @@ large allocations. Optional optimizations preserve the original resource checks.
 
 Exhausted quotas raise `ImageLimitException`; malformed data raises
 `ImageDataException`; unsupported features raise `UnsupportedImageException`.
+`ImageLimitException.Limit` identifies the exhausted `ImageLimits` category or
+the managed buffer-length ceiling. `UnsupportedImageException.Feature` identifies
+the unsupported feature and `Format` identifies the recognized codec when known.
+Legacy message-only constructors report `Unspecified`; library failures provide
+typed categories. These properties do not require exception-message parsing.
 Cancellation raises `OperationCanceledException` with the supplied token. Invalid
 public arguments use standard argument exceptions. Stream encoding can leave
 partial output on failure; stage output when atomic publication is required.

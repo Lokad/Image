@@ -29,10 +29,21 @@ public sealed class ImageDataException : IOException
 
 public sealed class ImageLimitException : IOException
 {
-    public ImageLimitException(string message) : base(message) { }
+    /// <summary>The exhausted limit. Unspecified is reserved for the legacy constructor.</summary>
+    public ImageLimitKind Limit { get; }
+
+    public ImageLimitException(string message) : this(ImageLimitKind.Unspecified, message) { }
+    public ImageLimitException(ImageLimitKind limit, string message) : base(message) => Limit = limit;
 }
 
 public sealed class UnsupportedImageException : NotSupportedException
 {
-    public UnsupportedImageException(string message) : base(message) { }
+    /// <summary>The unsupported feature, without requiring message parsing.</summary>
+    public UnsupportedImageFeature Feature { get; }
+    /// <summary>The recognized format, or null when the format is unrecognized or unspecified.</summary>
+    public ImageFormat? Format { get; }
+
+    public UnsupportedImageException(string message) : this(UnsupportedImageFeature.Unspecified, message) { }
+    public UnsupportedImageException(UnsupportedImageFeature feature, string message, ImageFormat? format = null)
+        : base(message) { Feature = feature; Format = format; }
 }

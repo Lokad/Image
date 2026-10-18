@@ -68,10 +68,10 @@ internal ref struct JpegDecoder
                     case 0xDA: ReadScan(payload); scanSeen = true; break;
                     case 0xEE when payload.StartsWith("Adobe"u8):
                         if (payload.Length < 12) throw new ImageDataException("Truncated Adobe JPEG marker.");
-                        if (payload[11] > 1) throw new UnsupportedImageException("Unsupported JPEG Adobe color transform.");
+                        if (payload[11] > 1) throw new UnsupportedImageException(UnsupportedImageFeature.ColorTransform, "Unsupported JPEG Adobe color transform.", ImageFormat.Jpeg);
                         rgb = payload[11] == 0; break;
                     case >= 0xE0 and <= 0xEF or 0xFE: break;
-                    default: throw new UnsupportedImageException("Unsupported JPEG control marker.");
+                    default: throw new UnsupportedImageException(UnsupportedImageFeature.ControlMarker, "Unsupported JPEG control marker.", ImageFormat.Jpeg);
                 }
             }
             throw new ImageDataException("JPEG is missing its end marker.");
@@ -138,7 +138,7 @@ internal ref struct JpegDecoder
             || maxH / components[1].H is not (1 or 2)
             || maxV / components[1].V is not (1 or 2)
             || (maxH == components[1].H && maxV != components[1].V))
-            throw new UnsupportedImageException("Unsupported JPEG component sampling layout.");
+            throw new UnsupportedImageException(UnsupportedImageFeature.SamplingLayout, "Unsupported JPEG component sampling layout.", ImageFormat.Jpeg);
         if (count == 3 && components[0].Id == 'R' && components[1].Id == 'G' && components[2].Id == 'B') rgb = true;
         mcuColumns = (info.Width + 8 * maxH - 1) / (8 * maxH);
         mcuRows = (info.Height + 8 * maxV - 1) / (8 * maxV);
@@ -148,7 +148,7 @@ internal ref struct JpegDecoder
             component.SampleWidth = (info.Width * component.H + maxH - 1) / maxH;
             component.SampleHeight = (info.Height * component.V + maxV - 1) / maxV;
             var countValues = (long)component.BlockColumns * component.BlockRows * 64;
-            if (countValues > Array.MaxLength) throw new ImageLimitException("JPEG coefficient plane is too large.");
+            if (countValues > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "JPEG coefficient plane is too large.");
             context.Reserve(countValues * 4 + 64 * 4);
             component.Coefficients = JpegCoefficientPool.Shared.Rent((int)countValues);
             component.Approximation = new int[64]; Array.Fill(component.Approximation, -1);

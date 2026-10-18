@@ -45,7 +45,7 @@ internal static class JpegIdentifier
             if (position == data.Length) break;
             var marker = data[position++];
             if (scan && marker == 0) continue;
-            if (++items > context.Limits.MaxContainerItems) throw new ImageLimitException("JPEG marker count limit exceeded.");
+            if (++items > context.Limits.MaxContainerItems) throw new ImageLimitException(ImageLimitKind.ContainerItems, "JPEG marker count limit exceeded.");
             if (marker is >= 0xD0 and <= 0xD7)
             {
                 if (!scan) throw new ImageDataException("JPEG restart marker outside a scan.");
@@ -65,13 +65,13 @@ internal static class JpegIdentifier
             context.Work(length);
             if (marker is >= 0xC0 and <= 0xCF && marker is not (0xC4 or 0xC8 or 0xCC))
             {
-                if (marker is not (0xC0 or 0xC2)) throw new UnsupportedImageException("This JPEG coding profile is not supported.");
+                if (marker is not (0xC0 or 0xC2)) throw new UnsupportedImageException(UnsupportedImageFeature.CodingProfile, "This JPEG coding profile is not supported.", ImageFormat.Jpeg);
                 if (frame || payload.Length < 6) throw new ImageDataException("Invalid JPEG frame header.");
-                if (payload[0] != 8) throw new UnsupportedImageException("Only 8-bit JPEG is supported.");
+                if (payload[0] != 8) throw new UnsupportedImageException(UnsupportedImageFeature.BitDepth, "Only 8-bit JPEG is supported.", ImageFormat.Jpeg);
                 height = BinaryPrimitives.ReadUInt16BigEndian(payload[1..]);
                 width = BinaryPrimitives.ReadUInt16BigEndian(payload[3..]);
                 var components = payload[5];
-                if (components is not (1 or 3)) throw new UnsupportedImageException("JPEG component layout is not supported.");
+                if (components is not (1 or 3)) throw new UnsupportedImageException(UnsupportedImageFeature.ComponentLayout, "JPEG component layout is not supported.", ImageFormat.Jpeg);
                 if (payload.Length != 6 + components * 3 || width == 0 || height == 0)
                     throw new ImageDataException("Invalid JPEG frame dimensions or components.");
                 context.PixelBytes(width, height, 8); frame = true;
@@ -85,7 +85,7 @@ internal static class JpegIdentifier
             else if (marker is >= 0xE0 and <= 0xEF || marker == 0xFE)
             {
                 if (payload.Length > context.Limits.MaxMetadataBytes - metadata)
-                    throw new ImageLimitException("JPEG metadata limit exceeded.");
+                    throw new ImageLimitException(ImageLimitKind.MetadataBytes, "JPEG metadata limit exceeded.");
                 metadata += payload.Length;
                 if (marker == 0xE1 && payload.StartsWith("Exif\0\0"u8))
                 {

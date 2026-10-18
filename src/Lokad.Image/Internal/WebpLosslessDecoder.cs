@@ -239,7 +239,7 @@ internal ref struct WebpLosslessDecoder
     private uint[] Allocate(int imageWidth, int imageHeight)
     {
         var count = (long)imageWidth * imageHeight;
-        if (count <= 0 || count > Array.MaxLength / 4) throw new ImageLimitException("VP8L auxiliary raster is too large.");
+        if (count <= 0 || count > Array.MaxLength / 4) throw new ImageLimitException(ImageLimitKind.BufferLength, "VP8L auxiliary raster is too large.");
         context.Reserve(count * 4 + 32); return new uint[(int)count];
     }
 

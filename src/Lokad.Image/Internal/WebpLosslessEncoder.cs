@@ -46,7 +46,7 @@ internal static class WebpLosslessEncoder
     {
         if (options.Quality is < 1 or > 100 || options.Effort is < 0 or > 6) throw new ArgumentOutOfRangeException(nameof(options));
         context.PixelBytes(image.Width, image.Height, image.BitDepth);
-        if (image.Width > 16384 || image.Height > 16384) throw new ImageLimitException("VP8L dimensions exceed 16384.");
+        if (image.Width > 16384 || image.Height > 16384) throw new ImageLimitException(ImageLimitKind.Dimension, "VP8L dimensions exceed 16384.");
         context.Reserve(image.ByteLength); context.Reserve(8192);
         var green = new Table(280); var literal = new Table(256); var distance = new Table(40);
         // Count first so nonseekable output needs no encoded-frame staging buffer.
@@ -55,7 +55,7 @@ internal static class WebpLosslessEncoder
         var alpha = Payload(image, counter, options.Effort, false, green, literal, distance, context);
         var payloadLength = counter.Count;
         if (payloadLength + 20L + (payloadLength & 1) > options.Limits.MaxOutputBytes)
-            throw new ImageLimitException("WebP encoded output limit exceeded.");
+            throw new ImageLimitException(ImageLimitKind.OutputBytes, "WebP encoded output limit exceeded.");
         Span<byte> header = stackalloc byte[20];
         "RIFF"u8.CopyTo(header); BinaryPrimitives.WriteInt32LittleEndian(header[4..], payloadLength + 12 + (payloadLength & 1));
         "WEBPVP8L"u8.CopyTo(header[8..]); BinaryPrimitives.WriteInt32LittleEndian(header[16..], payloadLength);
@@ -136,12 +136,12 @@ internal static class WebpLosslessEncoder
         public override void Write(byte[] buffer, int offset, int count) => Write(buffer.AsSpan(offset, count));
         public override void Write(ReadOnlySpan<byte> buffer)
         {
-            if (buffer.Length > maximum - Count) throw new ImageLimitException("WebP encoded output limit exceeded.");
+            if (buffer.Length > maximum - Count) throw new ImageLimitException(ImageLimitKind.OutputBytes, "WebP encoded output limit exceeded.");
             Count += buffer.Length;
         }
         public override void WriteByte(byte value)
         {
-            if (Count == maximum) throw new ImageLimitException("WebP encoded output limit exceeded.");
+            if (Count == maximum) throw new ImageLimitException(ImageLimitKind.OutputBytes, "WebP encoded output limit exceeded.");
             Count++;
         }
         public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException();

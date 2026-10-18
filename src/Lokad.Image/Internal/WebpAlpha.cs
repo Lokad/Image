@@ -8,7 +8,7 @@ internal static class WebpAlpha
         if (payload.Length == 0) throw new ImageDataException("Missing WebP alpha header.");
         var compression = payload[0] & 3; var filter = payload[0] >> 2 & 3;
         var preprocessing = payload[0] >> 4 & 3;
-        if (compression > 1 || preprocessing > 1) throw new UnsupportedImageException("Unsupported WebP alpha coding.");
+        if (compression > 1 || preprocessing > 1) throw new UnsupportedImageException(UnsupportedImageFeature.AlphaCoding, "Unsupported WebP alpha coding.", ImageFormat.WebP);
         var count = width * height;
         context.Reserve(count + 32L); var alpha = new byte[count];
         if (compression == 0)

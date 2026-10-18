@@ -127,7 +127,7 @@ internal sealed class Vp8BooleanWriter(OperationContext context, int maximum) : 
     {
         if (used == 0)
         {
-            if (position == maximum || position == Array.MaxLength) throw new ImageLimitException("VP8 arithmetic partition exceeds its output limit.");
+            if (position == maximum || position == Array.MaxLength) throw new ImageLimitException(position == maximum ? ImageLimitKind.OutputBytes : ImageLimitKind.BufferLength, "VP8 arithmetic partition exceeds its output limit.");
             if (position == buffer.Length) Grow();
             buffer[position++] = 0;
         }

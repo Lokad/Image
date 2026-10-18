@@ -11,8 +11,9 @@ implemented, with no NuGet dependencies, unsafe code or native bindings.
 - **Editing:** 8/16-bit RGBA, EXIF orientation, crop, flips, quarter turns,
   transpose and nearest/bilinear/bicubic resize.
 
-GIF, animation, drawing/fonts, ICC color management and metadata round-tripping
-are deferred. [SPEC.md](SPEC.md) defines supported profiles and exact behavior.
+GIF, animation, ICC color management and metadata round-tripping are deferred.
+[SPEC.md](SPEC.md) defines current support and planned still-image extensions,
+including drawing and supplied-font text.
 
 ```powershell
 dotnet add package Lokad.Image --version 0.1.0

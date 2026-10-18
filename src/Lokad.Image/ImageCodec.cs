@@ -17,7 +17,7 @@ public static class ImageCodec
         if (input.StartsWith(PngCodec.Signature)) return PngCodec.Identify(input, context);
         if (input.StartsWith(new byte[] { 255, 216 })) return JpegIdentifier.Identify(input, context);
         if (input.StartsWith("RIFF"u8)) return ContainerHeaders.WebP(input, context);
-        throw new UnsupportedImageException("Expected a still PNG, JPEG or WebP image.");
+        throw new UnsupportedImageException(UnsupportedImageFeature.Format, "Expected a still PNG, JPEG or WebP image.");
     }
 
     public static ImageBuffer Decode(ReadOnlySpan<byte> input, DecodeOptions? options = null,
@@ -37,7 +37,7 @@ public static class ImageCodec
         else
         {
             var info = IdentifyCore(input, context);
-            throw new UnsupportedImageException($"{info.Format} pixel decoding is not implemented yet.");
+            throw new UnsupportedImageException(UnsupportedImageFeature.PixelDecoding, $"{info.Format} pixel decoding is not implemented yet.", info.Format);
         }
         if (!options.ApplyOrientation || result.Orientation == ImageOrientation.Normal) return result;
         try
@@ -79,7 +79,7 @@ public static class ImageCodec
     private static OperationContext InputContext(int length, ImageLimits? limits, CancellationToken cancellation)
     {
         var context = new OperationContext(limits ?? ImageLimits.Default, cancellation);
-        if (length > context.Limits.MaxInputBytes) throw new ImageLimitException("Encoded input limit exceeded.");
+        if (length > context.Limits.MaxInputBytes) throw new ImageLimitException(ImageLimitKind.InputBytes, "Encoded input limit exceeded.");
         context.Reserve(length);
         return context;
     }
@@ -119,20 +119,21 @@ public static class ImageCodec
             context.Cancellation.ThrowIfCancellationRequested();
             var read = input.Read(scratch);
             if (read == 0) break;
-            if (read > limits.MaxInputBytes - buffer.Length) throw new ImageLimitException("Encoded input limit exceeded.");
+            if (read > limits.MaxInputBytes - buffer.Length) throw new ImageLimitException(ImageLimitKind.InputBytes, "Encoded input limit exceeded.");
             var needed = buffer.Length + read;
             var capacity = Math.Max(needed, Math.Max(256, buffer.Capacity * 2L));
             if (needed > buffer.Capacity)
             {
                 if (capacity + buffer.Capacity + scratch.Length > limits.MaxWorkingBytes || capacity > Array.MaxLength)
-                    throw new ImageLimitException("Stream buffering memory limit exceeded.");
+                    throw new ImageLimitException(capacity + buffer.Capacity + scratch.Length > limits.MaxWorkingBytes
+                        ? ImageLimitKind.WorkingBytes : ImageLimitKind.BufferLength, "Stream buffering memory limit exceeded.");
                 buffer.Capacity = (int)capacity;
             }
             buffer.Write(scratch.AsSpan(0, read));
             context.Work(read);
         }
         if (buffer.Capacity + buffer.Length + scratch.Length > limits.MaxWorkingBytes)
-            throw new ImageLimitException("Stream buffering memory limit exceeded.");
+            throw new ImageLimitException(ImageLimitKind.WorkingBytes, "Stream buffering memory limit exceeded.");
         var result = buffer.ToArray();
         context.Release(scratch.Length);
         context.Reserve(result.Length);

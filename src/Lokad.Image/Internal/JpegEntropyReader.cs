@@ -51,10 +51,10 @@ internal ref struct JpegEntropyReader
         if (remainingWork < 0)
         {
             if (initialWork < 0) { context.Work(units); return; }
-            if (!TryCancelableWork(units)) throw new ImageLimitException("Computational work limit exceeded.");
+            if (!TryCancelableWork(units)) throw new ImageLimitException(ImageLimitKind.Work, "Computational work limit exceeded.");
             return;
         }
-        if (units < 0 || units > remainingWork) throw new ImageLimitException("Computational work limit exceeded.");
+        if (units < 0 || units > remainingWork) throw new ImageLimitException(ImageLimitKind.Work, "Computational work limit exceeded.");
         remainingWork -= units;
     }
 
@@ -741,7 +741,7 @@ internal ref struct JpegEntropyReader
                 if (cancellation.IsCancellationRequested || budget == 0)
                 {
                     cancellation.ThrowIfCancellationRequested();
-                    throw new ImageLimitException("Computational work limit exceeded.");
+                    throw new ImageLimitException(ImageLimitKind.Work, "Computational work limit exceeded.");
                 }
                 budget--;
                 localAvailable -= size;

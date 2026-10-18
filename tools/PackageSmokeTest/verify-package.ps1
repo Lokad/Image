@@ -122,9 +122,23 @@ try
     ImageCodec.EncodePng(flipped, rejectedPng, new PngEncodeOptions { Limits = pngLimits with { MaxWorkingBytes = pngLimits.MaxWorkingBytes - 1 } });
     throw new Exception("Package consumer PNG workspace limit was not enforced.");
 }
-catch (ImageLimitException) { }
+catch (ImageLimitException failure)
+{
+    if (failure.Limit != ImageLimitKind.WorkingBytes)
+        throw new Exception("Package consumer PNG limit category differs.");
+}
 if (rejectedPng.Length != 0 || !rejectedPng.CanWrite)
     throw new Exception("Package consumer PNG admission writes output or closes the caller's stream.");
+try
+{
+    ImageCodec.Identify("GIF89a"u8);
+    throw new Exception("Package consumer accepted an unsupported format.");
+}
+catch (UnsupportedImageException failure)
+{
+    if (failure.Feature != UnsupportedImageFeature.Format || failure.Format is not null)
+        throw new Exception("Package consumer unsupported-format category differs.");
+}
 using var tinyAlpha = ImageBuffer.Create(2, 1, 16);
 new ushort[] { 65535, 0, 0, 0, 0, 65535, 65535, 1 }.CopyTo(tinyAlpha.GetRow16(0));
 using var halfAlpha = ImageBuffer.Create(5, 2, 16);

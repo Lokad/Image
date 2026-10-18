@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Typed limit and unsupported-feature details on codec exceptions, preserving
+  existing exception types, messages and cancellation behavior.
 - Faster subsampled JPEG color reconstruction with certified exact rounding
   and the original binary64 fallback, preserving pixels and resource limits.
 - Faster VP8 encoding through prepared block prediction, preserving exact

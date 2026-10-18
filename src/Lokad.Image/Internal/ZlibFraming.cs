@@ -545,7 +545,7 @@ internal static class ZlibFraming
         {
             if (remainingWork < 0) { context.Work(count); return; }
             cancellation.ThrowIfCancellationRequested();
-            if (count < 0 || count > remainingWork) throw new ImageLimitException("Computational work limit exceeded.");
+            if (count < 0 || count > remainingWork) throw new ImageLimitException(ImageLimitKind.Work, "Computational work limit exceeded.");
             remainingWork -= count;
         }
 

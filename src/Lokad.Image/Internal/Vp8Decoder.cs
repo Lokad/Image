@@ -29,7 +29,7 @@ internal ref struct Vp8Decoder
         if (data.Length < 10 || (data[0] & 1) != 0 || !data.Slice(3, 3).SequenceEqual(new byte[] { 0x9D, 1, 0x2A }))
             throw new ImageDataException("Invalid VP8 key-frame header.");
         var version = data[0] >> 1 & 7;
-        if (version > 3) throw new UnsupportedImageException("Unsupported VP8 version.");
+        if (version > 3) throw new UnsupportedImageException(UnsupportedImageFeature.Version, "Unsupported VP8 version.", ImageFormat.WebP);
         if ((data[0] & 16) == 0) throw new ImageDataException("WebP requires a displayed VP8 frame.");
         var codedWidth = BinaryPrimitives.ReadUInt16LittleEndian(data[6..]);
         var codedHeight = BinaryPrimitives.ReadUInt16LittleEndian(data[8..]);
@@ -53,7 +53,7 @@ internal ref struct Vp8Decoder
 
     private void ReadHeader(int firstLength)
     {
-        if (Bit() != 0) throw new UnsupportedImageException("Unsupported VP8 color space.");
+        if (Bit() != 0) throw new UnsupportedImageException(UnsupportedImageFeature.ColorSpace, "Unsupported VP8 color space.", ImageFormat.WebP);
         Bit(); // The clamping hint does not change safe reconstruction.
         segmentation = Bit() != 0;
         if (segmentation)
@@ -131,7 +131,7 @@ internal ref struct Vp8Decoder
         }
         var stride = columns * 16; var planeHeight = rows * 16;
         var lumaSize = (long)stride * planeHeight; var chromaSize = lumaSize / 4;
-        if (lumaSize > Array.MaxLength) throw new ImageLimitException("VP8 reconstruction plane is too large.");
+        if (lumaSize > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "VP8 reconstruction plane is too large.");
         context.Reserve(lumaSize + chromaSize * 2 + 128);
         var result = new Vp8Planes(width, height, stride, new byte[(int)lumaSize], new byte[(int)chromaSize], new byte[(int)chromaSize]);
         var aboveCoefficients = new byte[columns * 9]; Span<byte> leftCoefficients = stackalloc byte[9];

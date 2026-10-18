@@ -11,7 +11,7 @@ internal sealed class LimitedWriteStream(Stream output, int maximum, Cancellatio
     public override void Write(ReadOnlySpan<byte> data)
     {
         cancellation.ThrowIfCancellationRequested();
-        if (data.Length > maximum - written) throw new ImageLimitException("Encoded output limit exceeded.");
+        if (data.Length > maximum - written) throw new ImageLimitException(ImageLimitKind.OutputBytes, "Encoded output limit exceeded.");
         output.Write(data); written += data.Length;
     }
     public override void Write(byte[] data, int offset, int count) => Write(data.AsSpan(offset, count));

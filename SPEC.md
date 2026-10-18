@@ -16,10 +16,19 @@ from required future functionality.
 | WebP lossy encode | Implemented; original output independently decoded by FFmpeg | VP8 output with explicit quality/effort and transparency |
 | Exact edits | Implemented; hand-computed permutations and live FFmpeg checks | Crop, flips, quarter turns, transpose, all eight EXIF orientations |
 | Resize | Implemented; hand-computed kernel and alpha cases | Exact dimensions, fit, nearest/bilinear/bicubic, alpha-aware filtering |
+| JPEG extensions | Planned; not supported by the released package | CMYK/YCCK, 4:1:1/4:1:0; caller-provided gray/RGB/CMYK decode and gray/RGB encode samples without mandatory RGBA; explicit transforms/inversion, quality and sampling |
+| Stream extensions | Planned | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
+| Drawing/compositing | Planned | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
+| Text | Planned | Supplied TrueType fonts; size/style/color/position, wrapping, line spacing and layout bounds for overflow/fitting |
+| Failure details | Implemented in development | Typed exhausted-limit and unsupported-feature categories with recognized codec when known |
+| Shared admission | Planned | Caller-shared coarse memory/work budgets |
+| Compression efficiency | Required ongoing work | WebP lossless sizes and lossy size/quality/time; JPEG comparisons at matched quality or size on representative photographs and text/diagrams |
 
-GIF, APNG and animated WebP are rejected. CMYK/YCCK, arithmetic/lossless/12-bit
-JPEG, progressive JPEG encoding, indexed/Adam7 PNG encoding, ICC color management,
-metadata round-tripping, drawing and font rendering are deferred.
+GIF, APNG and animated WebP are rejected. Arithmetic/lossless/12-bit JPEG,
+progressive JPEG encoding, indexed/Adam7 PNG encoding and metadata round-tripping
+are deferred. ICC conversion remains opt-in and is not currently implemented;
+EXIF reorientation is opt-in. Planned extensions preserve resource limits,
+cancellation, pixel precision, caller ownership and independent output lifetimes.
 
 ## Pixels and ownership
 

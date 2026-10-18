@@ -17,7 +17,7 @@ internal static class JpegEncoder
             || options.RestartInterval is < 0 or > 65535 || options.BackgroundRgb > 0xFFFFFF)
             throw new ArgumentOutOfRangeException(nameof(options));
         context.PixelBytes(image.Width, image.Height, image.BitDepth);
-        if (image.Width > 65535 || image.Height > 65535) throw new ImageLimitException("JPEG dimensions exceed 65535.");
+        if (image.Width > 65535 || image.Height > 65535) throw new ImageLimitException(ImageLimitKind.Dimension, "JPEG dimensions exceed 65535.");
         context.Reserve(image.ByteLength);
         // Fixed table/scratch allocation is admitted before any header is written.
         context.Reserve(8192);

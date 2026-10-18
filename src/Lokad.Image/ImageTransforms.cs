@@ -156,7 +156,7 @@ public static class ImageTransforms
         var tapsX = (long)Math.Ceiling(2 * radius * scaleX) + 1;
         var tapsY = (long)Math.Ceiling(2 * radius * scaleY) + 1;
         var units = (double)width * height * tapsX * tapsY * 4;
-        if (units > context.Limits.MaxWork) throw new ImageLimitException("Resize work limit exceeded.");
+        if (units > context.Limits.MaxWork) throw new ImageLimitException(ImageLimitKind.Work, "Resize work limit exceeded.");
         var result = ImageBuffer.Allocate(width, height, source.BitDepth, context);
         var maximum = source.BitDepth == 8 ? 255 : 65535;
         if (filter == ResizeFilter.Bicubic && MixedColumnBicubicResize.TryApply(source, result, scaleX, scaleY,

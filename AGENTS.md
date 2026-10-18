@@ -8,7 +8,11 @@ belong in the ignored `external/` directory and are never build inputs.
 `SPEC.md` defines the target contract and current support. Keep it and README
 accurate as features land. Required targets are still PNG/JPEG/WebP decode and
 encode, 8/16-bit editing, orientation, crop, resize, flips and quarter turns.
-GIF, animation and drawing/font rendering are deferred.
+Required extensions include supplied-TrueType text rendering/measurement, drawing
+and compositing, CMYK/YCCK and 4:1:1/4:1:0 JPEG, caller-owned JPEG sample buffers,
+async/bounded stream inspection, shared admission and structured failures, and
+improved WebP compression efficiency. Keep ICC conversion and EXIF reorientation
+opt-in. GIF and animation are deferred.
 
 Use `./test.ps1` for offline Release tests, and `./test.ps1 -Differential` for live
 FFmpeg comparisons. Missing FFmpeg must fail the differential suite explicitly.
