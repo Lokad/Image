@@ -1146,8 +1146,17 @@ Source conversion uses bounded views of the existing pixel storage, without a
 normalized-raster allocation. The first row work check precedes storage access;
 all row charges, matrix evaluation order and alpha-weighted rounding are retained.
 
-The first VP8 encoder uses B_PRED luma, one token partition, fixed entropy models
-and no loop filter. Prediction search minimizes source-plane squared error;
+The VP8 encoder uses B_PRED luma, one token partition and no loop filter.
+When optional memory/work admission permits, coefficient probabilities adapt to
+the first at most 64 macroblocks, including the cost of signaling updates.
+The prefix reuses private converted sample bytes for coefficient magnitudes,
+with two extra bits per sample for sign and the ninth magnitude bit; bounded
+auxiliary storage is at most 24,064 bytes. Prediction, quantization and
+reconstruction execute once. The remaining blocks use the selected model
+directly. This changes compressed bytes while preserving decoded pixels.
+Constrained budgets retain the original fixed coefficient model and its work
+behavior; adaptation adds no mandatory admission requirement.
+Prediction search minimizes source-plane squared error;
 ties choose the first candidate. Effort 0..6 permits respectively up to 1, 2, 3, 4, 6,
 8 or 10 luma modes in format order (DC, true-motion, vertical, horizontal,
 left-down, right-down, vertical-right, vertical-left, horizontal-down,
@@ -1162,7 +1171,8 @@ Arithmetic normalization packs at most seven emitted bits together only within
 already admitted partition capacity; growth and constrained failures retain the
 original bit sequence. Immutable leaf paths are derived once from the encoder's
 format trees, preserving each ordered probability and bit/carry work charge.
-Encoded bytes, prediction choices, coefficients and partial failures are unchanged.
+For each selected coefficient model, this emission preserves its encoded bytes,
+prediction choices, coefficients and partial failures.
 Original quality/size evidence and its limits are recorded in
 [tests/Quality](tests/Quality/README.md).
 

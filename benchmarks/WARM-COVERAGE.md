@@ -1,25 +1,28 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-67 independent passes, 122 measured mean gaps and one confidence-open case across
-190 current rows; 23 prior-production rows need reconfirmation.
-The [three-table summary](../docs/benchmark.md) retains all 213 numeric rows:
-122 current independent observations, 68 current qualified shorts and 23 prior rows.
-Reuse unchanged passing paths;
-do not add an image or settings grid.
+67 independent passes,123 measured mean gaps and one confidence-open case across
+191 current rows;23 prior-production rows need reconfirmation. The
+[three-table summary](../docs/benchmark.md) retains214 numeric rows:123 current
+independent observations,68 qualified shorts and23 prior rows. Reuse unchanged
+passing paths; no image or settings grid.
 
-[Zero-error VP8 intra search](WARM-VP8-ZERO-ERROR.md) ends at the first exact
-prediction; no remaining squared error can be lower. Diagram encode improves
-10.8%, 6,442.53→5,744.66µs, independently confirming0.984x/upper0.991x and
-490,812B/op. All six affected packets and frozen quality/size anchors remain
-byte-identical. Precisely four existing WarmWebp encodes and two WarmCompression
-lossy cases receive fresh short screens; the four promising cases independently
-pass. Two original opaque cases remain1.423x/1.464x short gaps, without long
-repeats. No new workload, quality search, native/harness/driver build or profiling.
-All4,161 tests/OS,179 affected hardware-off checks/OS and the same actual Windows
-package consumer/all three examples pass on both OS. All other executed paths,
-including the five lossless encode proofs below, remain unchanged. Stops apply
-to the four current passing VP8 cases. Compressed-size efficiency remains open.
+[Bounded VP8 coefficient adaptation](WARM-VP8-ADAPTIVE-PROBABILITIES.md) changes
+exactly six existing default complete encode timings/packet sizes and adds
+`WarmWebp/EncodeBudget8`: the existing alpha8 raster with MaxWork32,000,000,
+which declines optional adaptation and exercises the original fixed-model encoder.
+This distinct required caller-budget algorithm, not a new image/settings grid,
+has independent passing evidence and byte-exact old output. Opaque bytes shrink
+54.5%, allocations41.6%, time7.9–9.8%; both opaque cases remain1.320–1.323x short
+gaps. Alpha bytes shrink39.2%, time8.5–8.8%. Photograph/diagram packets shrink
+1.8%/7.5%, with1.6%/1.7% higher times. Diagram independently measures1.000208x/
+upper1.009341x, superseding its old pass. It remains open; no repeated unchanged
+measurement to force a pass. The other three default passing cases plus budget
+fallback independently pass. All81 actuals, guards, quality/ownership gates and
+identities are retained. Exactly4,167tests/OS,183affected intrinsics-disabled
+checks/OS and the same actual private package consumer/all3examples pass on
+both OS. Five lossless proofs and other unaffected paths remain current. Stop
+passing cases. Compression efficiency is improved; full parity remains open.
 
 [Previous-row references](WARM-VP8L-PREVIOUS-ROW.md) reduce the diagram's VP8L
 size31,072→15,120B (51.3%) and allocation67,720→34,928B/op (48.4%). The photograph
@@ -48,11 +51,11 @@ size, `DiagramLossless8` covers repeated flat regions and antialiased text,
 text edges and flat-region rate/distortion. These distinct required content
 families were absent from the procedural controls. No shape/depth/effort grid.
 All four measure complete output ownership and allocations with equivalent
-delivery. All four now independently pass time parity after the subsequent zero-error
-search change above. Lossless sizes are now 2.394x/2.090x the exact native packets; VP8
-sizes are 1.234x/1.262x at matched source quality. The preceding lossless change replaces only the five affected timing proofs;
-other production paths and qualification evidence are reused. Known scope is now242 named
-cases:213 numeric plus29 unmeasured. Stop these four time-passing cases unless
+delivery. The two lossless cases and photograph VP8 independently pass; the later
+bounded-model diagram result is the open comparison above. Lossless sizes are now 2.394x/2.090x the exact native packets; VP8
+sizes are 1.212x/1.167x at matched source quality. The preceding lossless change replaces only the five affected timing proofs;
+other production paths and qualification evidence are reused. Known scope is now243 named
+cases:214 numeric plus29 unmeasured. Stop these three time-passing cases unless
 their relevant production path changes; compression-size work remains required.
 
 Shared-budget codec entry points add two required, **unmeasured** representatives:

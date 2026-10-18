@@ -5,6 +5,21 @@ namespace Lokad.Image.DifferentialTests;
 public sealed class WebpFfmpegTests
 {
     [Theory] [InlineData(8)] [InlineData(16)]
+    public void AdaptiveVp8EntropyPreservesNormalAndScalarNativePixels(int depth)
+    {
+        using var source = OriginalPixels.Buffer(257, 129, depth);
+        var options = new WebpEncodeOptions { Lossless = false, Quality = 100, Effort = 4 };
+        using var adaptive = new MemoryStream(); using var fixedPacket = new MemoryStream();
+        ImageCodec.EncodeWebp(source, adaptive, options);
+        ImageCodec.EncodeWebp(source, fixedPacket, options with { Limits = new ImageLimits { MaxWorkingBytes = 1_000_000 } });
+        Assert.True(adaptive.Length < fixedPacket.Length);
+        Assert.Equal(ReferenceDecode(fixedPacket.ToArray()), ReferenceDecode(adaptive.ToArray()));
+        byte[] Normal(byte[] packet) => OracleProcess.Run(OracleProcess.Ffmpeg,
+            ["-v", "error", "-threads", "1", "-noautorotate", "-f", "image2pipe", "-i", "pipe:0", "-frames:v", "1", "-threads:v", "1", "-pix_fmt", "rgba", "-f", "rawvideo", "pipe:1"], packet);
+        Assert.Equal(Normal(fixedPacket.ToArray()), Normal(adaptive.ToArray()));
+    }
+
+    [Theory] [InlineData(8)] [InlineData(16)]
     public void RepeatedNonconstantRowsAndOverlappingReferencesInteroperateExactly(int depth)
     {
         using var row = OriginalPixels.Buffer(47, 1, depth);

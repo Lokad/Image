@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmWebpCase { Encode8, Encode16, EncodeOpaque8, EncodeOpaque16 }
+public enum WarmWebpCase { Encode8, Encode16, EncodeOpaque8, EncodeOpaque16, EncodeBudget8 }
 
 internal sealed record WarmWebpPreparation(int SchemaVersion, string Project, string GeneratedUtc, string Recipe,
     string RasterSha256, string ReferenceSha256, int NativeQuality, string NativeFile, string ManagedFile,
@@ -19,6 +19,7 @@ public class WarmWebp
     public static IEnumerable<WarmWebpCase> Cases => SelectedCases();
     [ParamsSource(nameof(Cases))] public WarmWebpCase Case { get; set; }
     private int Depth => Case is WarmWebpCase.Encode16 or WarmWebpCase.EncodeOpaque16 ? 16 : 8;
+    private bool FixedBudget => Case == WarmWebpCase.EncodeBudget8;
     private bool Opaque => Case is WarmWebpCase.EncodeOpaque8 or WarmWebpCase.EncodeOpaque16;
     private EncoderQualityProfile TargetProfile => ProfileFor(Depth, Opaque);
     private static EncoderQualityProfile ProfileFor(int depth, bool opaque = false) => new(513, depth, QualityEncoder.Vp8, QualityPattern.Asymmetric, opaque ? QualityAlpha.Opaque : QualityAlpha.Gradient);
@@ -48,7 +49,7 @@ public class WarmWebp
         var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
         var result = selection is null ? new[] { WarmWebpCase.Encode8 } : selection.Split(',')
             .Select(value => Enum.TryParse<WarmWebpCase>(value, out var parsed) && Enum.IsDefined(parsed)
-                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, EncodeOpaque8 or EncodeOpaque16.")).ToArray();
+                ? parsed : throw new ArgumentException("Choose Encode8, Encode16, EncodeOpaque8, EncodeOpaque16 or EncodeBudget8.")).ToArray();
         if (result.Length is < 1 or > 3 || result.Distinct().Count() != result.Length)
             throw new ArgumentException("Choose one to three distinct VP8 cases.");
         return result;
@@ -251,7 +252,7 @@ public class WarmWebp
         state = new JpegBenchmarkCase(".webp");
         try
         {
-            var path = Path.Combine(state.Root, "artifacts", "warm-reference", Opaque ? Depth == 16 ? "webp-opaque16-match.json" : "webp-opaque-match.json" : Depth == 16 ? "webp16-match.json" : "webp-match.json");
+            var path = Path.Combine(state.Root, "artifacts", "warm-reference", FixedBudget ? "webp-budget-match.json" : Opaque ? Depth == 16 ? "webp-opaque16-match.json" : "webp-opaque-match.json" : Depth == 16 ? "webp16-match.json" : "webp-match.json");
             prepared = JsonSerializer.Deserialize<WarmWebpPreparation>(File.ReadAllText(path), EncoderQualityCalibration.Json)
                 ?? throw new InvalidOperationException("Missing warm VP8 preparation; run --prepare-warm-webp first.");
             ValidatePreparation(prepared, Depth, Opaque);
@@ -260,7 +261,8 @@ public class WarmWebp
             if (JpegBenchmarkCase.Hash(pixels) != prepared.RasterSha256 || JpegBenchmarkCase.Hash(reference) != prepared.ReferenceSha256
                 || JpegBenchmarkCase.HashFile(state.Ffmpeg) != prepared.FfmpegSha256)
                 throw new InvalidOperationException("Warm VP8 input/reference/oracle identity changed; prepare only this pair again.");
-            options = new() { Lossless = false, Quality = prepared.Match.ClosestOwned.Setting, Effort = 4 };
+            options = new() { Lossless = false, Quality = prepared.Match.ClosestOwned.Setting, Effort = 4,
+                Limits = FixedBudget ? new ImageLimits { MaxWork = 32_000_000 } : ImageLimits.Default };
             source = JpegBenchmarkCase.Buffer(pixels, 513, 259, Depth); File.WriteAllBytes(state.Input, pixels);
             native = new NativeWarmReference(state, Depth, cpu, Opaque ? "webp-opaque-encode" : "webp-encode", expectedRaw: NormalizedInput(state.Root, pixels, reference, Depth, Opaque), nativeQuality: prepared.NativeQuality);
             if (native.BuildIdentity.GetProperty("workerSha256").GetString() != prepared.NativeBuild.GetProperty("workerSha256").GetString())
@@ -323,7 +325,8 @@ public class WarmWebp
                 inputSha256 = JpegBenchmarkCase.Hash(pixels), rasterSha256 = JpegBenchmarkCase.Hash(pixels), referenceSha256 = JpegBenchmarkCase.Hash(reference),
                 managedOutputBytes = encoded.Length, nativeOutputBytes = nativeQuality.EncodedBytes,
                 managedEncodedSha256 = JpegBenchmarkCase.Hash(encoded), nativeOutputSha256 = JpegBenchmarkCase.HashFile(state.NativeOutput),
-                recipe = Recipe, opaque = Opaque, sourceQualityMetric = TargetProfile.SourceMetric, sampling = "4:2:0", effort = 4, lossless = false, qualityMatched = true, fullSourceNormalizationTimed = Depth == 16, normalizedReferenceExact = true, alphaExact = true, decoderAgreementWithinBounds = true,
+                recipe = Recipe, opaque = Opaque,
+                entropyPolicy = FixedBudget ? "fixed coefficients: caller work budget declines optional adaptation" : "admitted bounded-prefix adaptive coefficients", maxWork = options.Limits.MaxWork, sourceQualityMetric = TargetProfile.SourceMetric, sampling = "4:2:0", effort = 4, lossless = false, qualityMatched = true, fullSourceNormalizationTimed = Depth == 16, normalizedReferenceExact = true, alphaExact = true, decoderAgreementWithinBounds = true,
                 psnrGapDb = prepared.Match.PsnrGapDb, maximumPsnrGapDb = EncoderQualityCalibration.MaximumPsnrGapDb,
                 ownedEnumeratedSettings = prepared.OwnedSettings.Length, ownedEvaluationOrder = prepared.OwnedEvaluationOrder,
                 ownedSettingsPolicy = prepared.QualityPolicy, qualityEnumerationPerformed = prepared.QualityPolicy != "fixed-anchor-v1",
@@ -332,7 +335,7 @@ public class WarmWebp
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmWebp).Assembly.Location), nativeBuild = native.BuildIdentity,
                 nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = $"Resident original RGBA{Depth} to complete independent VP8 WebP bytes with exact normalized alpha. Full source normalization and repacking included. Native codec/scratch/frame/packet wrappers reused; RGBA-to-BGRA repacking and complete encode execute every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Both effort settings fixed at 4; managed fixed entropy and native adaptive coding declared. {(Opaque ? "Opaque source: whole-raster RGB source-error matching, no alpha-plane encoding" : "Alpha-weighted RGB source-error matching before composite rounding")}, <=0.25 dB fixed band; unweighted decoder agreement includes hidden RGB. Fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded."
+                boundary = $"Resident original RGBA{Depth} to complete independent VP8 WebP bytes with exact normalized alpha. Full source normalization and repacking included. Native codec/scratch/frame/packet wrappers reused; RGBA-to-BGRA repacking and complete encode execute every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Both effort settings fixed at 4; managed admitted bounded-prefix adaptation (fixed coefficients when caller budget declines it) and native adaptive coding declared. {(Opaque ? "Opaque source: whole-raster RGB source-error matching, no alpha-plane encoding" : "Alpha-weighted RGB source-error matching before composite rounding")}, <=0.25 dB fixed band; unweighted decoder agreement includes hidden RGB. Fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded."
             }, new JsonSerializerOptions(EncoderQualityCalibration.Json) { PropertyNamingPolicy = null }) + "\n");
             Console.WriteLine("Validated warm VP8 pair: " + path);
         }

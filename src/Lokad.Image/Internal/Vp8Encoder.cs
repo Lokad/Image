@@ -4,8 +4,8 @@ using System.Runtime.InteropServices;
 
 namespace Lokad.Image.Internal;
 
-/// <summary>Owned VP8 key-frame encoder using independent intra search and fixed entropy models.</summary>
-internal static class Vp8Encoder
+/// <summary>Owned VP8 key-frame encoder with independent intra search and admitted entropy adaptation.</summary>
+internal static partial class Vp8Encoder
 {
     // RFC 6386 sections 11 and 13: leaves are represented here as -(token+1).
     private static ReadOnlySpan<sbyte> ModeTree => [-1, 2, -2, 4, -3, 6, 8, 12, -4, 10, -6, -7, -5, 14, -8, 16, -9, -10];
@@ -33,6 +33,7 @@ internal static class Vp8Encoder
         using var tokens = new Vp8BooleanWriter(context, options.Limits.MaxOutputBytes);
         Span<byte> left = stackalloc byte[8];
         ReadOnlySpan<byte> candidates = [1, 2, 3, 4, 6, 8, 10];
+        using var model = CoefficientModel.TryCreate(source, count, candidates[options.Effort], options.Effort == 0 ? 1 : 4, context);
         for (var my = 0; my < rows; my++)
         {
             left.Clear();
@@ -45,7 +46,7 @@ internal static class Vp8Encoder
                     var mode = SelectLuma(source, reconstructed, bx, by, x, y, candidates[options.Effort], context);
                     modes[index * 16 + b] = (byte)mode;
                     Block(source.Y, reconstructed.Y, source.Stride, bx, by, 3, q,
-                        tokens, above.AsSpan(mx * 8, 8), left, b % 4, b / 4, context);
+                        tokens, above.AsSpan(mx * 8, 8), left, b % 4, b / 4, context, model, index * 24 + b, 0);
                 }
                 var chromaMode = SelectChroma(source, reconstructed, x / 2, y / 2, options.Effort == 0 ? 1 : 4, context);
                 chromaModes[index] = (byte)chromaMode;
@@ -54,16 +55,17 @@ internal static class Vp8Encoder
                     var src = plane == 0 ? source.U : source.V; var dst = plane == 0 ? reconstructed.U : reconstructed.V;
                     for (var b = 0; b < 4; b++)
                         Block(src, dst, source.Stride / 2, x / 2 + b % 2 * 4, y / 2 + b / 2 * 4, 2, q,
-                            tokens, above.AsSpan(mx * 8, 8), left, 4 + plane * 2 + b % 2, 4 + plane * 2 + b / 2, context);
+                            tokens, above.AsSpan(mx * 8, 8), left, 4 + plane * 2 + b % 2, 4 + plane * 2 + b / 2, context,
+                            model, index * 24 + 16 + plane * 4 + b, source.Y.Length + plane * source.U.Length);
                 }
+                if (model is not null && !model.Ready && index + 1 == model.PrefixMacroblocks)
+                    model.CompletePrefix(source, tokens, columns, rows);
             }
         }
         tokens.Finish();
-        // Source and reconstruction are no longer used when the separate mode partition is built.
         context.Release(source.MemoryBytes + reconstructed.MemoryBytes);
-        using var header = new Vp8BooleanWriter(context, Math.Min(0x7FFFF, options.Limits.MaxOutputBytes));
-        Header(header, q, modes, chromaModes, columns, rows, context);
-        header.Finish();
+        using var header = BuildHeader(q, modes, chromaModes, columns, rows,
+            model is null ? Vp8Tables.CoefficientProbabilities : model.Probabilities, context);
         WriteContainer(image.Width, image.Height, alpha, header.Bytes, tokens.Bytes, output, context);
         context.Release(metadataBytes + 4096);
     }
@@ -191,7 +193,8 @@ internal static class Vp8Encoder
     }
 
     private static void Block(byte[] source, byte[] reconstructed, int stride, int x, int y, int plane, int q,
-        Vp8BooleanWriter writer, Span<byte> above, Span<byte> left, int a, int l, OperationContext context)
+        Vp8BooleanWriter writer, Span<byte> above, Span<byte> left, int a, int l, OperationContext context,
+        CoefficientModel? model, int block, int sampleOffset)
     {
         context.Work(512); Span<short> residual = stackalloc short[16]; Span<short> coefficients = stackalloc short[16];
         for (var dy = 0; dy < 4; dy++)
@@ -201,7 +204,10 @@ internal static class Vp8Encoder
             }
         var dc = (int)Vp8Tables.DcQuantizers[q]; if (plane == 2) dc = Math.Min(132, dc);
         var ac = Vp8Tables.AcQuantizers[q]; Vp8ForwardDct.Quantize(residual, coefficients, dc, ac);
-        var nonzero = Coefficients(writer, coefficients, plane, above[a] + left[l]); above[a] = left[l] = nonzero;
+        var nonzero = model is null ? Coefficients(writer, coefficients, plane, above[a] + left[l])
+            : model.Ready ? Coefficients(writer, coefficients, plane, above[a] + left[l], model.Probabilities)
+            : model.Record(source, stride, x, y, sampleOffset, block, coefficients, plane, above[a] + left[l]);
+        above[a] = left[l] = nonzero;
         for (var i = 0; i < 16; i++) coefficients[i] = checked((short)(coefficients[i] * (i == 0 ? dc : ac)));
         Vp8Transforms.InverseDct(coefficients);
         for (var dy = 0; dy < 4; dy++)
@@ -212,14 +218,18 @@ internal static class Vp8Encoder
             }
     }
 
-    private static byte Coefficients(Vp8BooleanWriter writer, ReadOnlySpan<short> coefficients, int plane, int predictor)
+    internal static byte Coefficients(Vp8BooleanWriter writer, ReadOnlySpan<short> coefficients, int plane, int predictor)
+        => Coefficients(writer, coefficients, plane, predictor, Vp8Tables.CoefficientProbabilities);
+
+    private static byte Coefficients(Vp8BooleanWriter writer, ReadOnlySpan<short> coefficients, int plane, int predictor,
+        ReadOnlySpan<byte> probabilities)
     {
         var last = 15;
         while (last >= 0 && coefficients[Zigzag[last]] == 0) last--;
         var previousZero = false;
         for (var c = 0; c <= Math.Min(last + 1, 15); c++)
         {
-            var p = Vp8Tables.CoefficientProbabilities.Slice(((plane * 8 + Bands[c]) * 3 + predictor) * 11, 11);
+            var p = probabilities.Slice(((plane * 8 + Bands[c]) * 3 + predictor) * 11, 11);
             if (c > last) { writer.Codeword(TokenPaths[11], p); break; }
             var value = coefficients[Zigzag[c]]; var magnitude = Math.Abs((int)value);
             var category = magnitude < 5 ? -1 : magnitude < 7 ? 0 : magnitude < 11 ? 1 : magnitude < 19 ? 2
@@ -245,14 +255,28 @@ internal static class Vp8Encoder
         for (var bit = 0; bit < p.Length; bit++) writer.Write(value >> (p.Length - 1 - bit) & 1, p[bit]);
     }
 
-    private static void Header(Vp8BooleanWriter writer, int q, byte[] modes, byte[] chroma, int columns, int rows, OperationContext context)
+    private static Vp8BooleanWriter BuildHeader(int q, byte[] modes, byte[] chroma, int columns, int rows,
+        ReadOnlySpan<byte> probabilities, OperationContext context)
+    {
+        var writer = new Vp8BooleanWriter(context, Math.Min(0x7FFFF, context.Limits.MaxOutputBytes));
+        try { Header(writer, q, modes, chroma, columns, rows, probabilities, context); writer.Finish(); return writer; }
+        catch { writer.Dispose(); throw; }
+    }
+
+    private static void Header(Vp8BooleanWriter writer, int q, byte[] modes, byte[] chroma, int columns, int rows,
+        ReadOnlySpan<byte> probabilities, OperationContext context)
     {
         writer.Write(0); writer.Write(0); writer.Write(0); // Color, clamp hint, segmentation.
         writer.Write(0); writer.Literal(0, 6); writer.Literal(0, 3); writer.Write(0); // No loop filtering or deltas.
         writer.Literal(0, 2); writer.Literal(q, 7); // One token partition.
         for (var i = 0; i < 5; i++) writer.Write(0);
         writer.Write(0); // Still-image entropy refresh has no following frame.
-        foreach (var probability in Vp8Tables.CoefficientUpdateProbabilities) writer.Write(0, probability);
+        for (var i = 0; i < probabilities.Length; i++)
+        {
+            var changed = probabilities[i] != Vp8Tables.CoefficientProbabilities[i];
+            writer.Write(changed ? 1 : 0, Vp8Tables.CoefficientUpdateProbabilities[i]);
+            if (changed) writer.Literal(probabilities[i], 8);
+        }
         writer.Write(0); // No coefficient-skip syntax.
         var above = new byte[columns * 4]; Span<byte> left = stackalloc byte[4];
         for (var my = 0; my < rows; my++)

@@ -189,10 +189,11 @@ def render():
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-JPEG-VECTOR-AC.md', True),
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-sample-encode-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-JPEG-SAMPLE-ENCODE.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-sample-encode-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-SAMPLE-ENCODE.md', verification='Gap (short; qualified)'),
-        row('WebP VP8, opaque‡', 'warm-vp8-zero-error-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8-ZERO-ERROR.md', verification='Gap (short; qualified)'),
-        row('WebP VP8, opaque from RGBA16‡', 'warm-vp8-zero-error-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-ZERO-ERROR.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 + alpha‡', 'warm-vp8-zero-error-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8-ZERO-ERROR.md', True),
-        row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8-zero-error-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8-ZERO-ERROR.md', True),
+        row('WebP VP8, opaque‡', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', verification='Gap (short; qualified)'),
+        row('WebP VP8, opaque from RGBA16‡', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', verification='Gap (short; qualified)'),
+        row('WebP VP8 + alpha‡', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
+        row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
+        row('WebP VP8 + alpha‡, caller work budget32M', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'EncodeBudget8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
         row('WebP VP8L, exact backend*', 'warm-vp8l-previous-row-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-PREVIOUS-ROW.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-previous-row-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-PREVIOUS-ROW.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-previous-row-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-PREVIOUS-ROW.md', True),
@@ -292,8 +293,8 @@ def render():
     encodes.extend([
         row('WebP VP8L photograph RGBA8', 'warm-vp8l-previous-row-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-PREVIOUS-ROW.md', True),
         row('WebP VP8L text/diagram RGBA8', 'warm-vp8l-previous-row-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-PREVIOUS-ROW.md', True),
-        row('WebP VP8 photograph RGBA8 / matched quality', 'warm-vp8-zero-error-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-ZERO-ERROR.md', True),
-        row('WebP VP8 text/diagram RGBA8 / matched quality', 'warm-vp8-zero-error-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-ZERO-ERROR.md', True),
+        row('WebP VP8 photograph RGBA8 / matched quality', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
+        row('WebP VP8 text/diagram RGBA8 / matched quality', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
     ])
     # H4 changes shared JPEG frame/scan/control paths and inspection headers.
     # Compatibility changed JPEG parsing; leased acquisition changed exactly
@@ -308,11 +309,11 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 213
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 214
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 213 retained numeric rows contain **{parity_count} current
+conservative upper ≤1x**. The 214 retained numeric rows contain **{parity_count} current
 parity confirmations, {gap_count} measured gaps and {confidence_count} confidence-open cases**;
 **{reconfirm_count} prior-production rows need reconfirmation**: seventeen JPEG rows after
 compatibility changes and six additional PNG/WebP Stream rows after input-copy
@@ -374,32 +375,27 @@ measure **1.145× / 155,007 B/op** for gray and **2.004× / 297,896 B/op** for R
 Both remain parity gaps; each includes necessary normalization and independent
 owned output. No long repeat or production change follows these clear mean gaps.
 
-[VP8L opaque alpha coding](../benchmarks/WARM-VP8L-OPAQUE-ALPHA.md) cuts the
-existing opaque packet **24.9%** to **400,262 B** and allocations **49.9%** to
-**1,051,213 B/op**. All three affected lossless encode operations independently
-reconfirm parity. Alpha-bearing packets remain byte-identical. Other paths reuse
-valid evidence. [Two fixed content controls](../benchmarks/WARM-WEBP-COMPRESSION.md)
-add four complete encodes. Current VP8L photograph/diagram packets are **383,154 /
-160,032 B** and **15,120 / 7,234 B** (managed / backend). At matched VP8 source
-quality, packets are **21,826 / 17,688 B** and **8,958 / 7,100 B**; PSNR gaps
-**0.0194 / 0.2183 dB** pass the unchanged gate. Three operations independently
-confirmed time parity at the initial baseline. [Zero-error VP8 search termination](../benchmarks/WARM-VP8-ZERO-ERROR.md)
-now improves diagram encode time **10.8%**, from6,442.53 to **5,744.66µs**, independently
-confirming **0.984x / upper0.991x** with **490,812 B/op**. Its packet remains
-8,958/7,100 B; all six affected packets and matched-quality anchors are unchanged.
-Four affected encodes independently pass; two original opaque cases remain short
-gaps at1.423x/1.464x. All other paths retain evidence. Allocations and bounds are below. [Previous-row VP8L references](../benchmarks/WARM-VP8L-PREVIOUS-ROW.md)
-cut diagram bytes **51.3%** and allocations **48.4%**. All five affected encodes
-independently pass time parity (upper **0.082–0.284x**). Search adds work: retained
-mean times increase about40–55% versus the prior rounds, while still below the
-reference. No extra source buffer, histogram or working-memory allowance is added.
-The round passes **4,161 tests/OS**, **30 affected hardware-off checks/OS** and the
-same actual Windows package consumer/all three examples on Windows/Linux.
-All five lossless proofs remain current after the subsequent VP8-only change.
-The VP8 round passes **4,161 tests/OS**, **179 affected hardware-off checks/OS**
-and the same actual package checks. Unchanged quality anchors are reused without
-retuning; only six affected timings are replaced. Lossy rate/distortion efficiency
-and the full parity objective remain open.
+[Bounded VP8 coefficient adaptation](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md)
+cuts original opaque bytes **54.5%**, allocations **41.6%**, and complete encode
+time **7.9–9.8%**; those cases remain **1.320–1.323×** short gaps. Alpha-bearing
+bytes fall **39.2%**, with time **8.5–8.8%** lower. Photograph/diagram packets are
+**21,432/17,688 B** and **8,288/7,100 B** (managed/reference), at unchanged frozen
+quality and exact old decoded pixels. Their times increase **1.6%/1.7%**; photo
+allocation rises3.2%, diagram falls0.2%. Diagram now has an independent
+**1.000208× / upper1.009341×** result, so its old parity proof is superseded.
+The other three default passing encodes and a new work-budget fallback independently
+pass. That fallback uses the existing alpha image,32M work units and the original
+471,436-byte fixed-model packet. No new image, quality tuning or settings grid.
+
+[Previous-row VP8L references](../benchmarks/WARM-VP8L-PREVIOUS-ROW.md) retain
+all five passing time proofs; current photograph/diagram packets are **383,154/
+160,032 B** and **15,120/7,234 B**. Diagram size fell51.3% and allocation48.4%;
+the search increased times40–55% versus earlier rounds, still below the reference.
+Only six default VP8 timings and their packet metadata changed; the one distinct
+caller-budget boundary adds a numeric row. The VP8 round passes **4,167 tests/OS**,
+**183 affected intrinsics-disabled checks/OS**, and the same actual private package
+consumer/all three examples on both OS. Unaffected evidence is reused. Compression
+efficiency has improved; the full warm parity objective remains open.
 
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
 FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,

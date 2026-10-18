@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "scope": "Two fixed content controls; current previous-row lossless packets, unchanged VP8 packets/quality anchors reused without retuning; no timing in this file",
+  "scope": "Two fixed content controls; unchanged previous-row lossless packets and frozen VP8 source/decoder quality. Current chosen VP8 bytes reflect bounded-prefix coefficient adaptation. Other quality-selection packet sizes/hashes are historical, from the labeled selection producer; no retuning or timing in this file.",
   "maximumOwnedSettings": 8,
-  "librarySha256": "31859b5843f07a9bbb86154b6f08abf160bfc92188962fed3c95253426a02eab",
-  "harnessSha256": "ff58e1b13bff857daeb74ea5bf2aaa128fdf2a539597543d532f0bde8145d2e3",
+  "librarySha256": "8b87655188e2a03679cd835b336067d0903d50ffc6c41c50e25f3988e99a33e1",
+  "harnessSha256": "da41b8796d2b250980c369cc17d1eed8dbd8b43712e77716c0423e62fd0eceba",
   "cases": [
     {
       "name": "Photograph8",
@@ -148,8 +148,8 @@
           },
           {
             "setting": 78,
-            "encodedBytes": 21826,
-            "encodedSha256": "53f1aaff7d6569bab9e18fbb1c8272b640bdaae58a7325c8f611d4484affb482",
+            "encodedBytes": 21432,
+            "encodedSha256": "835121142c110ebc9ff8ef111983ef16872180752da39699f20a28e6e55ebeda",
             "nativeDecodedSha256": "2577c3fad83782c3df8b9054bf50220527f9dd9ebd4e7d80e8780c6ed9d4b94c",
             "publicDecodedSha256": "7730878a75a9c689d882e6e01b0d44cf6ad5ed4971af877d0bfe94ebc2b32c7b",
             "codec": "VP8",
@@ -237,8 +237,8 @@
           },
           "closestOwned": {
             "setting": 78,
-            "encodedBytes": 21826,
-            "encodedSha256": "53f1aaff7d6569bab9e18fbb1c8272b640bdaae58a7325c8f611d4484affb482",
+            "encodedBytes": 21432,
+            "encodedSha256": "835121142c110ebc9ff8ef111983ef16872180752da39699f20a28e6e55ebeda",
             "nativeDecodedSha256": "2577c3fad83782c3df8b9054bf50220527f9dd9ebd4e7d80e8780c6ed9d4b94c",
             "publicDecodedSha256": "7730878a75a9c689d882e6e01b0d44cf6ad5ed4971af877d0bfe94ebc2b32c7b",
             "codec": "VP8",
@@ -387,8 +387,8 @@
           },
           {
             "setting": 75,
-            "encodedBytes": 8958,
-            "encodedSha256": "8676a6868ec5918615af5cde57d4d5738cf5b413945a5411d5448abde08b2b13",
+            "encodedBytes": 8288,
+            "encodedSha256": "1fabd2c64652a37540e499526416c7df914eb9f29f916d811870fe34e4650111",
             "nativeDecodedSha256": "998d5acc0589ba63c42f53ae26b9eb1096f8c4c7bef285b98b60cfe069237439",
             "publicDecodedSha256": "2d84ba188c3b613a779286fc118f922aac6fb5d940f5900384b3cffcaebde222",
             "codec": "VP8",
@@ -476,8 +476,8 @@
           },
           "closestOwned": {
             "setting": 75,
-            "encodedBytes": 8958,
-            "encodedSha256": "8676a6868ec5918615af5cde57d4d5738cf5b413945a5411d5448abde08b2b13",
+            "encodedBytes": 8288,
+            "encodedSha256": "1fabd2c64652a37540e499526416c7df914eb9f29f916d811870fe34e4650111",
             "nativeDecodedSha256": "998d5acc0589ba63c42f53ae26b9eb1096f8c4c7bef285b98b60cfe069237439",
             "publicDecodedSha256": "2d84ba188c3b613a779286fc118f922aac6fb5d940f5900384b3cffcaebde222",
             "codec": "VP8",
@@ -515,5 +515,7 @@
     }
   ],
   "project": "Lokad.Image",
-  "policy": "Existing bounded-v1 five seeds and at most three refinements; only two new content controls; native75/effort4; no timing or allocation claim"
+  "policy": "Existing bounded-v1 five seeds and at most three refinements; only two new content controls; native75/effort4; no timing or allocation claim",
+  "qualitySelectionEvidence": "warm-webp-compression-evidence.json",
+  "qualitySelectionHarnessSha256": "ff58e1b13bff857daeb74ea5bf2aaa128fdf2a539597543d532f0bde8145d2e3"
 }

@@ -2,10 +2,10 @@
 
 The lossless measurements below are the original content baseline; the current
 [previous-row encoder results](WARM-VP8L-PREVIOUS-ROW.md) supersede those two rows.
-The [zero-error VP8 search round](WARM-VP8-ZERO-ERROR.md) replaces both VP8 timings;
-VP8 packets, sizes and quality anchors remain current. The linked
-quality file tracks the current lossless producer; the original full record and
-packets remain in the raw archive cited below.
+The [bounded VP8 model](WARM-VP8-ADAPTIVE-PROBABILITIES.md) supersedes both VP8
+timings and packet sizes/hashes, preserving decoded pixels and source quality.
+The quality file labels unselected setting sizes as historical; the original
+full record and packets remain in the raw archive cited below.
 
 Two fixed 513×259 opaque RGBA8 inputs cover photographic texture and original
 text/diagram content; [provenance and hashes](Fixtures/Compression/manifest.json)

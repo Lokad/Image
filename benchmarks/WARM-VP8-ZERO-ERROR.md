@@ -1,5 +1,7 @@
 # VP8 search termination at zero error
 
+Historical accepted round. [Bounded coefficient adaptation](WARM-VP8-ADAPTIVE-PROBABILITIES.md) supersedes these six timings and packet sizes/hashes; zero-error search remains in use.
+
 The first prediction with exact zero squared error is optimal. Returning that
 mode preserves the existing earliest-tie rule and its already written prediction,
 while skipping later candidates and the redundant final rewrite. Diagram encode
