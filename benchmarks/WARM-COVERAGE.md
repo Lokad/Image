@@ -6,19 +6,19 @@ Updated 2026-10-18. The **warm single-CPU parity objective remains open**:
 independent confirmations and 83 qualified shorts. Reuse unchanged passing paths;
 do not add an image or settings grid.
 
-Latest [packed byte bicubic reduction](WARM-BICUBIC-PACKED-REDUCTION.md) improves
-the existing RGBA8 32×16 tight-workspace operation by 19.2%, with exact pixels,
-unchanged resource behavior and no new workspace. Its 1.266× mean remains a
-qualified short gap. Other 206 comparisons and all 62 passing proofs are reused.
-All 3,726 Release tests per OS, 10 affected hardware-off checks per OS and the
-same actual private package consumer and all three examples pass on Windows and
-Linux. No constructor, reduction, width, inlining, precision or threshold grid
-follows this gain. The rejected generic-constructor intermediate is retained.
+Latest [parallel fixed JPEG fields](WARM-JPEG-FIXED-FIELDS.md) improve the
+five fixed-Huffman forward-only/live-token encodes by 14.0–17.0%. Packets, quality,
+allocations, byte callbacks and resource/failure behavior remain unchanged;
+256 fixed stack bytes fit the existing 8 KiB admission. All five remain qualified
+short gaps. Other 202 comparisons and all 62 passing proofs are reused.
+All 3,727 Release tests per OS, 33 affected checks per OS with AVX-512 disabled,
+and the same actual private package consumer and all three examples pass on
+Windows and Linux. No category, amplitude, width, table or inlining grid follows.
 
-Earlier [cancelable PNG materialization](WARM-PNG-CANCEL-BLOCKS.md) retains 32.1%
-and 10.2% gains, and [certified JPEG color reconstruction](WARM-JPEG-COLOR16.md)
-retains 7.3–16.4% gains for six decodes. Their paths and qualification remain
-unchanged. Adaptive gray JPEG encoding remains independently passing.
+Earlier [packed byte bicubic reduction](WARM-BICUBIC-PACKED-REDUCTION.md) retains
+its 19.2% gain; cancelable PNG materialization and certified JPEG reconstruction
+also retain their gains and qualification. Adaptive gray JPEG remains independently
+passing. Those executed paths remain unchanged.
 
 The finite checklist's **previous <=2x phase was completed for released0.1.0**.
 Its original independent evidence and unchanged-path proofs remain historical;

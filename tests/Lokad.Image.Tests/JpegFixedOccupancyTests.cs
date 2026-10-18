@@ -21,6 +21,23 @@ public sealed class JpegFixedOccupancyTests
         }
     }
 
+    [Fact]
+    public void EveryAcMagnitudeKeepsScalarFieldsAcrossPreparedChunks()
+    {
+        for (var offset = 0; offset < 2046; offset += 63)
+        {
+            var block = new int[64]; block[0] = 7;
+            for (var scan = 1; scan < 64; scan++)
+            {
+                var ordinal = offset + scan - 1;
+                if (ordinal >= 2046) continue;
+                block[JpegTransform.Zigzag[scan]] = ordinal < 1023 ? ordinal + 1 : 1022 - ordinal;
+            }
+            Compare(block, 0, 512, 4096, 0);
+            Compare(block, 7, 512, 4096, 0);
+        }
+    }
+
     [Theory]
     [InlineData(false)] [InlineData(true)]
     public void RawMemoryStreamKeepsAllPendingBitsAndWork(bool cancelable)

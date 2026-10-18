@@ -175,16 +175,16 @@ def render():
         row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeGrayAlpha8', -1], 'WARM-PNG-BYTE-PACKING.md', True),
         row('PNG gray-alpha16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGrayAlpha16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
         row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:4:4, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode444Stream8', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:4:4, live cancelable token / geometric AC Huffman', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode444Cancelable8', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:4:4, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode444Stream8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:4:4, live cancelable token / geometric AC Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode444Cancelable8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Gap (short; qualified)'),
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420Restart8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode420Stream8', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode420Stream16', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-ac-fusion-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-AC-FUSION.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-JPEG-VECTOR-AC.md', True),
         row('WebP VP8, opaque‡', 'warm-vp8-prepared-prediction-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8-PREPARED-PREDICTION.md', verification='Gap (short; qualified)'),
@@ -324,14 +324,15 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [packed byte bicubic reduction](../benchmarks/WARM-BICUBIC-PACKED-REDUCTION.md)
-improves the existing tight-workspace RGBA8 32×16 operation **19.2%**, preserving
-exact pixels and resource bounds with no new workspace. Its **1.266×** mean remains
-a qualified short gap. Other 206 comparisons and all 62 passing proofs remain
-valid. Fresh **3,726 Release tests per OS** (1,391 internal + 1,437 public + 898 live
-FFmpeg), 10 affected hardware-off checks per OS and the **same actual package
-consumer and all three examples on Windows and Linux** pass. Unaffected scalar
-qualification is reused. Production remains safe managed dependency-free .NET 10.
+Latest production round: [parallel fixed JPEG fields](../benchmarks/WARM-JPEG-FIXED-FIELDS.md)
+improves five complete encodes **14.0–17.0%**, with unchanged packets, quality,
+allocations and byte callbacks. Every mean remains above parity; these are
+qualified shorts. Other 202 comparisons and all 62 passing proofs remain valid.
+Fresh **3,727 Release tests per OS** (1,392 internal + 1,437 public + 898 live
+FFmpeg), 33 affected checks per OS with AVX-512 disabled and the **same actual
+package consumer and all three examples on Windows and Linux** pass. Unaffected
+scalar qualification is reused. Production remains safe managed dependency-free
+.NET 10; 256 fixed stack bytes fit the existing 8 KiB encoder admission.
 
 Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDENCE.md)
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a

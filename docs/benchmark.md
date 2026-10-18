@@ -31,14 +31,15 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [packed byte bicubic reduction](../benchmarks/WARM-BICUBIC-PACKED-REDUCTION.md)
-improves the existing tight-workspace RGBA8 32×16 operation **19.2%**, preserving
-exact pixels and resource bounds with no new workspace. Its **1.266×** mean remains
-a qualified short gap. Other 206 comparisons and all 62 passing proofs remain
-valid. Fresh **3,726 Release tests per OS** (1,391 internal + 1,437 public + 898 live
-FFmpeg), 10 affected hardware-off checks per OS and the **same actual package
-consumer and all three examples on Windows and Linux** pass. Unaffected scalar
-qualification is reused. Production remains safe managed dependency-free .NET 10.
+Latest production round: [parallel fixed JPEG fields](../benchmarks/WARM-JPEG-FIXED-FIELDS.md)
+improves five complete encodes **14.0–17.0%**, with unchanged packets, quality,
+allocations and byte callbacks. Every mean remains above parity; these are
+qualified shorts. Other 202 comparisons and all 62 passing proofs remain valid.
+Fresh **3,727 Release tests per OS** (1,392 internal + 1,437 public + 898 live
+FFmpeg), 33 affected checks per OS with AVX-512 disabled and the **same actual
+package consumer and all three examples on Windows and Linux** pass. Unaffected
+scalar qualification is reused. Production remains safe managed dependency-free
+.NET 10; 256 fixed stack bytes fit the existing 8 KiB encoder admission.
 
 Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDENCE.md)
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
@@ -156,16 +157,16 @@ No builds, repeat-until-pass or small residual tuning. Stop the62passing paths.
 | [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 4,174.10 | 4,289.79 | 0.973 / 0.980 | 264,179 | Parity confirmed |
 | [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 9,426.43 | 10,150.04 | 0.929 / 0.933 | 1,052,317 | Parity confirmed |
 | [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,894.69 | 3,771.76 | 1.033 / 1.115 | 559,418 | Gap (short; qualified) |
-| [JPEG 4:4:4, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md) | 5,276.99 | 3,773.28 | 1.399 / 1.521 | 526,107 | Gap (short; qualified) |
-| [JPEG 4:4:4, live cancelable token / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md) | 5,356.88 | 3,779.19 | 1.417 / 1.531 | 526,075 | Gap (short; qualified) |
+| [JPEG 4:4:4, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 4,379.70 | 3,778.08 | 1.159 / 1.353 | 526,029 | Gap (short; qualified) |
+| [JPEG 4:4:4, live cancelable token / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 4,465.15 | 3,775.40 | 1.183 / 1.364 | 525,997 | Gap (short; qualified) |
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,980.90 | 3,855.74 | 1.032 / 1.135 | 556,284 | Gap (short; qualified) |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,579.93 | 2,354.66 | 1.096 / 1.227 | 294,116 | Gap (short; qualified) |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,633.91 | 2,421.91 | 1.088 / 1.220 | 294,116 | Gap (short; qualified) |
 | [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,022.21 | 1,766.91 | 1.144 / 1.247 | 297,781 | Gap (short; qualified) |
 | [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,019.53 | 1,611.25 | 1.253 / 1.455 | 297,781 | Gap (short; qualified) |
-| [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md) | 2,733.19 | 1,765.36 | 1.548 / 1.705 | 263,843 | Gap (short; qualified) |
-| [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md) | 2,808.87 | 1,839.95 | 1.527 / 1.641 | 263,820 | Gap (short; qualified) |
-| [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-AC-FUSION.md) | 2,840.65 | 1,837.08 | 1.546 / 1.661 | 263,788 | Gap (short; qualified) |
+| [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,310.38 | 1,769.17 | 1.306 / 1.488 | 263,819 | Gap (short; qualified) |
+| [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,393.98 | 1,839.60 | 1.301 / 1.415 | 263,819 | Gap (short; qualified) |
+| [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,444.30 | 1,841.37 | 1.327 / 1.443 | 263,787 | Gap (short; qualified) |
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,173.56 | 1,841.00 | 1.181 / 1.300 | 297,779 | Gap (short; qualified) |
 | [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 1,350.95 | 1,404.64 | 0.962 / 0.970 | 154,892 | Parity confirmed |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md) | 22,212.16 | 15,539.04 | 1.429 / 1.538 | 2,536,280 | Gap (short; qualified) |
