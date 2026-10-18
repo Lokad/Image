@@ -117,7 +117,7 @@ def render():
         row('PNG gray16 + tRNS key32639, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray16Transparency', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG gray-alpha8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGrayAlpha8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGB8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeRgb8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('PNG RGB8 + tRNS key(48,139,231), None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeRgb8Transparency', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
+        row('PNG RGB8 + tRNS key(48,139,231), None', 'warm-png-rgb-transparency-confirm-evidence.json', ['cases', 'DecodeRgb8Transparency', -1], 'WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md', True),
         row('PNG RGB16 + tRNS key(12347,35806,59265), None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeRgb16Transparency', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG gray16, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray16', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG gray-alpha16, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGrayAlpha16', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
@@ -334,6 +334,12 @@ plus65internal+243public selected scalar controls, pass. The consumer and allthr
 examples pass through the **same actual Release package on Windows/Linux**.
 Production remains safe managed dependency-free .NET10. Stop the60passing paths;
 full warm parity remains open.
+
+Latest measurement: [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
+independently confirms a small **1.012x gap / 1.014x upper**, replacing its
+earlier uncertain measurement. Other206comparisons/all60passing proofs remain.
+Current totals are60passes/144gaps/3confidence. The unchanged qualified producer
+and actual-package proof were reused; zero builds or repeated qualification.
 
 **Decode and metadata**
 

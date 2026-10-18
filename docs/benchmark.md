@@ -2,7 +2,7 @@
 
 Updated 2026-10-18. The current goal is **warm single-CPU parity: independent
 conservative upper ≤1x**. The 207 numeric rows contain **60 confirmed parity
-cases, 143 measured gaps and 4 confidence-open cases**. The earlier
+cases, 144 measured gaps and 3 confidence-open cases**. The earlier
 ≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
@@ -41,6 +41,12 @@ plus65internal+243public selected scalar controls, pass. The consumer and allthr
 examples pass through the **same actual Release package on Windows/Linux**.
 Production remains safe managed dependency-free .NET10. Stop the60passing paths;
 full warm parity remains open.
+
+Latest measurement: [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
+independently confirms a small **1.012x gap / 1.014x upper**, replacing its
+earlier uncertain measurement. Other206comparisons/all60passing proofs remain.
+Current totals are60passes/144gaps/3confidence. The unchanged qualified producer
+and actual-package proof were reused; zero builds or repeated qualification.
 
 **Decode and metadata**
 
@@ -89,7 +95,7 @@ full warm parity remains open.
 | [PNG gray16 + tRNS key32639, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 2,970.49 | 2,055.01 | 1.445 / 1.450 | 2,440 | Gap (independent) |
 | [PNG gray-alpha8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 845.98 | 1,156.04 | 0.732 / 0.733 | 2,408 | Parity confirmed |
 | [PNG RGB8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,293.31 | 1,523.89 | 0.849 / 0.853 | 3,432 | Parity confirmed |
-| [PNG RGB8 + tRNS key(48,139,231), None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,281.05 | 1,282.56 | 0.999 / 1.001 | 3,464 | Confidence open |
+| [PNG RGB8 + tRNS key(48,139,231), None](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md) | 1,302.04 | 1,286.75 | 1.012 / 1.014 | 3,464 | Gap (independent) |
 | [PNG RGB16 + tRNS key(12347,35806,59265), None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 2,316.17 | 3,182.24 | 0.728 / 0.732 | 6,536 | Parity confirmed |
 | [PNG gray16, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 714.81 | 957.95 | 0.746 / 0.751 | 2,408 | Parity confirmed |
 | [PNG gray-alpha16, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,563.09 | 1,795.59 | 0.871 / 0.874 | 4,456 | Parity confirmed |
