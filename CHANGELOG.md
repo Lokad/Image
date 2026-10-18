@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Faster subsampled JPEG color reconstruction with certified exact rounding
+  and the original binary64 fallback, preserving pixels and resource limits.
 - Faster VP8 encoding through prepared block prediction, preserving exact
   packets, mode selection, resource limits and cancellation.
 - Faster VP8 decoding through bounded vertical SIMD filtering and whole-block

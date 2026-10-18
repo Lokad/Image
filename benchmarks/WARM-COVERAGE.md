@@ -1,23 +1,23 @@
 # Material warm coverage
 
 Updated 2026-10-18. The **warm single-CPU parity objective remains open**:
-62 independent passes,144 measured mean gaps and one confidence-open case across
-207 named rows. The [three-table summary](../docs/benchmark.md) selects127
-independent confirmations and80 qualified shorts. Reuse unchanged passing paths;
+62 independent passes, 144 measured mean gaps and one confidence-open case across
+207 named rows. The [three-table summary](../docs/benchmark.md) selects 127
+independent confirmations and 80 qualified shorts. Reuse unchanged passing paths;
 do not add an image or settings grid.
 
-Latest [parallel adaptive JPEG AC preparation](WARM-JPEG-VECTOR-AC.md) improves
-eight existing encodes20.8–23.5%, retaining exact packets, quality, allocation
-strategy and complete boundaries. Single-component gray independently passes
-0.962x mean/0.970x upper against the approved SIMDlibjpeg-turbo reference; stop.
-Seven qualified short gaps remain. Other199comparisons/all61priorpasses are reused.
-All3,722Release cases/OS and the same actual package consumer/allthree examples
-pass on Windows/Linux; unchanged scalar paths reuse prior20adaptive checks/OS.
-No SIMD lane, metadata, layout or inlining tuning grid follows this primitive.
+Latest [certified subsampled JPEG color reconstruction](WARM-JPEG-COLOR16.md)
+improves six complete 4:2:0/4:2:2 baseline/progressive decodes 7.3–16.4%, preserving
+exact pixels, admission, cancellation and ownership with no new workspace.
+All six remain qualified short gaps. Other 201 comparisons and all 62 passes are reused.
+All 3,724 Release tests per OS, 26 focused hardware-off checks per OS and the same actual
+private package consumer and all three examples pass on Windows and Linux. Unchanged
+scalar JPEG controls and unaffected qualification are reused. No color lane,
+margin, layout or inlining tuning grid follows this primitive.
 
-The preceding [packed word bicubic broadcasts](WARM-BICUBIC-WORD-BROADCAST.md)
-retain their13.7% gain,1.374x mean/2.313x short upper and16,505B/op. Their exact
-path is unchanged; the wide short bound still does not establish parity.
+The preceding [parallel adaptive JPEG AC preparation](WARM-JPEG-VECTOR-AC.md)
+retains 20.8–23.5% encode gains; single-component gray independently passes
+0.962× mean/0.970× upper against the approved SIMD libjpeg-turbo reference; stop.
 
 The finite checklist's **previous <=2x phase was completed for released0.1.0**.
 Its original independent evidence and unchanged-path proofs remain historical;

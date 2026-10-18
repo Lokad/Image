@@ -83,7 +83,7 @@ def render():
         row('PNG16 Stream, orient/crop/nearest fit', 'warm-png-fused-evidence.json', ['observations', -1], 'WARM-PNG-FUSED-INFLATION.md', True),
         row('PNG RGBA8, fresh seekable Stream', 'warm-current-png-stream-evidence.json', ['cases', 'Png8', -1], 'WARM-CURRENT-PNG-STREAM.md', True),
         row('PNG RGBA16, fresh seekable Stream', 'warm-current-png-stream-evidence.json', ['cases', 'Png16', -1], 'WARM-CURRENT-PNG-STREAM.md', True),
-        row('JPEG420 restart, fresh seekable Stream', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'StreamDecode420Restart', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG420 restart, fresh seekable Stream', 'warm-jpeg-color16-evidence.json', ['cases', 'StreamDecode420Restart', -1], 'WARM-JPEG-COLOR16.md', verification='Gap (short; qualified)'),
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, fresh seekable Stream', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'StreamNativeLossless8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
@@ -134,9 +134,9 @@ def render():
         row('PNG opaque gray2 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray2', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG opaque gray4 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('JPEG baseline gray', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline 4:2:0', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline 4:2:0, row restart markers', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline 4:2:2', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:2:0', 'warm-jpeg-color16-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-COLOR16.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:2:0, row restart markers', 'warm-jpeg-color16-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-JPEG-COLOR16.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:2:2', 'warm-jpeg-color16-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-JPEG-COLOR16.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:4:4, owned input', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'Decode8', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:4:4, native input', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'NativeDecode8', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
         row('JPEG baseline direct RGB, full resolution', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'DirectRgb444', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
@@ -144,9 +144,9 @@ def render():
         row('JPEG direct RGB 4:2:0, timed component-plane interpretation', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'DirectRgb420', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'NativeDecodeCancelable8', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
         row('JPEG progressive gray', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'ProgressiveGray', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
-        row('JPEG progressive 4:2:0', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'Progressive420', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG progressive 4:2:0', 'warm-jpeg-color16-evidence.json', ['cases', 'Progressive420', -1], 'WARM-JPEG-COLOR16.md', verification='Gap (short; qualified)'),
         row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
-        row('JPEG progressive 4:2:2', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'Progressive422', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG progressive 4:2:2', 'warm-jpeg-color16-evidence.json', ['cases', 'Progressive422', -1], 'WARM-JPEG-COLOR16.md', verification='Gap (short; qualified)'),
         row('JPEG progressive 4:4:4', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'Progressive444', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
         row('WebP VP8 + alpha', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'Native8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
         row('WebP VP8 opaque, simple luma filter', 'warm-vp8-block-prediction-evidence.json', ['cases', 'SimpleOpaque8', -1], 'WARM-VP8-BLOCK-PREDICTION.md', verification='Gap (short; qualified)'),
@@ -324,14 +324,14 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [parallel adaptive JPEG AC preparation](../benchmarks/WARM-JPEG-VECTOR-AC.md)
-improves eight encodes **20.8–23.5%**, retaining exact packets/quality and the
-allocation strategy. **Grayscale independently passes0.970x upper** against the
-approved SIMDlibjpeg-turbo reference. Stopgray; seven qualified short gaps remain.
-Other199comparisons/all61priorpasses remain valid. Fresh **3,722 Release cases/OS**
-(1,388internal+1,436public+898liveFFmpeg) and the **same actual package consumer/
-allthree examples on Windows/Linux** pass. Unchanged scalar paths reuse prior
-20adaptive checks/OS. Production stays safe managed dependency-free.NET10.
+Latest production round: [certified subsampled JPEG color reconstruction](../benchmarks/WARM-JPEG-COLOR16.md)
+improves six complete decodes **7.3–16.4%**, with exact pixels, unchanged resource
+admission and no new workspace. Every mean remains above parity; these are
+qualified shorts. Other 201 comparisons and all 62 passing proofs remain valid. Fresh
+**3,724 Release tests/OS** (1,390 internal + 1,436 public + 898 live FFmpeg), 26 focused
+hardware-off checks per OS and the **same actual package consumer and all three examples
+on Windows and Linux** pass. Unchanged scalar JPEG controls are reused. Production
+remains safe managed dependency-free .NET 10.
 
 Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDENCE.md)
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a

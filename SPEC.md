@@ -682,6 +682,18 @@ rounding certificate proves the original byte. Uncertain rows and extreme blocks
 use the original direct evaluation; other processors retain that evaluation.
 The [inverse rounding proof](docs/jpeg-inverse-rounding.md) defines the bound.
 
+Subsampled YCbCr interiors may reconstruct sixteen pixels with exact integer
+sixteenth interpolation and a certified float color matrix. Chroma and luma are
+exact float inputs. Coefficient differences contribute less than `2^-16` each;
+at most four float operations contribute at most `2^-16` each, with intermediates
+below512 in magnitude. Including binary64 reference error, the absolute bound
+is less than `2^-13`. Clipping does not increase error. A block is accepted only
+when every channel lies farther than this bound from a rounding half; otherwise
+the original eight-pixel binary64 path writes the block. Opaque alpha, scalar
+edges/tails, source/owner, per-row work/cancellation and memory admission remain.
+No approximate decoded byte escapes the certificate or new workspace is added.
+
+
 Full-resolution direct RGB planes pack their already rounded/clipped bytes into
 opaque RGBA directly, with AVX2 batches and an exact scalar tail. Equal sampling
 factors give zero interpolation fractions; no further rounding is needed. The

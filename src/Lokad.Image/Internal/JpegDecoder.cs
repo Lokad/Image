@@ -732,7 +732,26 @@ internal ref struct JpegDecoder
                     var topWeight = (y & 1) == 0 ? 1 : 3;
                     // The first two pixels use the original scalar path below.
                     // Start SIMD at the next even pixel, then retain scalar tails.
-                    for (var start = 2; start <= info.Width - 8; start += 8)
+                    var start = 2;
+                    for (; start <= info.Width - 16; start += 16)
+                    {
+                        var column = start / 2 - 1;
+                        if (column > stride - 16 || column > chroma.SampleWidth - 10) break;
+                        var luma = components[0].Plane.AsSpan(y * components[0].BlockColumns * 8 + start, 16);
+                        var cbTop = chroma.Plane.AsSpan(y0 * stride + column, 16);
+                        var cbBottom = chroma.Plane.AsSpan(y1 * stride + column, 16);
+                        var crTop = components[2].Plane.AsSpan(y0 * stride + column, 16);
+                        var crBottom = components[2].Plane.AsSpan(y1 * stride + column, 16);
+                        var output = row.Slice(start * 4, 64);
+                        if (!TryRenderYcbcr420Row16(luma, cbTop, cbBottom, crTop, crBottom, topWeight, output))
+                        {
+                            RenderYcbcr420Row8(luma[..8], cbTop[..8], cbBottom[..8], crTop[..8], crBottom[..8], topWeight, output[..32], block[..24]);
+                            RenderYcbcr420Row8(luma.Slice(8, 8), cbTop.Slice(4, 8), cbBottom.Slice(4, 8),
+                                crTop.Slice(4, 8), crBottom.Slice(4, 8), topWeight, output.Slice(32, 32), block[..24]);
+                        }
+                        subsampledEnd = start + 16;
+                    }
+                    for (; start <= info.Width - 8; start += 8)
                     {
                         var column = start / 2 - 1;
                         if (column > stride - 8 || column > chroma.SampleWidth - 6) break;
@@ -932,6 +951,60 @@ internal ref struct JpegDecoder
 
     private static Vector256<int> WidenSamples8(ReadOnlySpan<byte> samples)
         => Avx2.ConvertToVector256Int32(Vector128.Create(Vector64.Create(samples), Vector64<byte>.Zero));
+
+    internal static bool TryRenderYcbcr420Row16(ReadOnlySpan<byte> luma, ReadOnlySpan<byte> cbTop, ReadOnlySpan<byte> cbBottom,
+        ReadOnlySpan<byte> crTop, ReadOnlySpan<byte> crBottom, int topWeight, Span<byte> rgba)
+    {
+        if (luma.Length != 16 || cbTop.Length != 16 || cbBottom.Length != 16 || crTop.Length != 16 || crBottom.Length != 16
+            || topWeight is not (1 or 3) || rgba.Length != 64)
+            throw new ArgumentException("JPEG color batches require sixteen samples, quarter weights and sixteen RGBA pixels.");
+        if (!Avx512F.IsSupported || !Avx512F.VL.IsSupported || !Avx2.IsSupported) return false;
+        var first = Avx512F.ConvertToVector512Single(Avx512F.ConvertToVector512Int32(Vector128.Create(luma)));
+        var cb = Interpolate420Row16(cbTop, cbBottom, topWeight);
+        var cr = Interpolate420Row16(crTop, crBottom, topWeight);
+        var red = Avx512F.Add(first, Avx512F.Multiply(Vector512.Create(1.402f), cr));
+        var green = Avx512F.Subtract(Avx512F.Subtract(first, Avx512F.Multiply(Vector512.Create(0.344136286f), cb)),
+            Avx512F.Multiply(Vector512.Create(0.714136286f), cr));
+        var blue = Avx512F.Add(first, Avx512F.Multiply(Vector512.Create(1.772f), cb));
+        if (!TryRoundColor16(red, out var r) || !TryRoundColor16(green, out var g) || !TryRoundColor16(blue, out var b)) return false;
+        var packed = Avx512F.Or(Avx512F.Or(r.AsUInt32(), Avx512F.ShiftLeftLogical(g.AsUInt32(), 8)),
+            Avx512F.Or(Avx512F.ShiftLeftLogical(b.AsUInt32(), 16), Vector512.Create(0xff000000u)));
+        packed.AsByte().CopyTo(rgba);
+        return true;
+    }
+
+    private static Vector512<float> Interpolate420Row16(ReadOnlySpan<byte> top, ReadOnlySpan<byte> bottom, int topWeight)
+    {
+        // T.81 centered quarter weights: integer regrouping is exact, as are
+        // conversion and power-of-two scaling of these twelve-bit numerators.
+        var upper = Avx512F.ConvertToVector512Int32(Vector128.Create(top));
+        var lower = Avx512F.ConvertToVector512Int32(Vector128.Create(bottom));
+        var vertical = Avx512F.Add(Avx512F.MultiplyLow(upper, Vector512.Create(topWeight)),
+            Avx512F.MultiplyLow(lower, Vector512.Create(4 - topWeight)));
+        var left = Avx512F.PermuteVar16x32(vertical, Vector512.Create(0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8));
+        var right = Avx512F.PermuteVar16x32(vertical, Vector512.Create(1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9));
+        var sum = Avx512F.Add(Avx512F.MultiplyLow(left, Vector512.Create(1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3)),
+            Avx512F.MultiplyLow(right, Vector512.Create(3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1)));
+        return Avx512F.Multiply(Avx512F.ConvertToVector512Single(Avx512F.Subtract(sum, Vector512.Create(2048))), Vector512.Create(1f / 16));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool TryRoundColor16(Vector512<float> samples, out Vector512<int> result)
+    {
+        // Each coefficient error contributes <2^-16, and at most four float
+        // operations each contribute <=2^-16. Against original binary64,
+        // 2^-14 + 2^-15 + 2^-40 <2^-13. Clip is nonexpansive; a half farther
+        // than that bound has the identical original away-from-zero byte.
+        var clipped = Avx512F.Min(Avx512F.Max(samples, Vector512<float>.Zero), Vector512.Create(255f));
+        var integral = Avx512F.RoundScale(clipped, 0x09);
+        var fraction = Avx512F.Subtract(clipped, integral);
+        var distance = Vector512.Abs(Avx512F.Subtract(fraction, Vector512.Create(.5f)));
+        if (Vector512.ExtractMostSignificantBits(Avx512F.CompareLessThanOrEqual(distance, Vector512.Create(1f / 8192))) != 0)
+        { result = default; return false; }
+        var increment = Avx512F.And(Avx512F.CompareGreaterThanOrEqual(fraction, Vector512.Create(.5f)).AsInt32(), Vector512.Create(1));
+        result = Avx512F.Add(Avx512F.ConvertToVector512Int32WithTruncation(integral), increment);
+        return true;
+    }
 
     internal static void RenderYcbcr420Row8(ReadOnlySpan<byte> luma, ReadOnlySpan<byte> cbTop, ReadOnlySpan<byte> cbBottom,
         ReadOnlySpan<byte> crTop, ReadOnlySpan<byte> crBottom, int topWeight, Span<byte> rgba, Span<byte> scratch)
