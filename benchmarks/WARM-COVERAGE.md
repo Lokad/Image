@@ -1,6 +1,6 @@
 # Material warm coverage
 
-Updated 2026-10-18. The **warm single-CPU parity objective remains open**:
+Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
 66 independent passes, 123 measured mean gaps and one confidence-open case across
 190 current rows; 23 prior-production rows need reconfirmation.
 The [three-table summary](../docs/benchmark.md) retains all 213 numeric rows:
@@ -8,23 +8,24 @@ The [three-table summary](../docs/benchmark.md) retains all 213 numeric rows:
 Reuse unchanged passing paths;
 do not add an image or settings grid.
 
-[Opaque alpha coding](WARM-VP8L-OPAQUE-ALPHA.md) reduces the existing VP8L opaque
-packet24.9% and allocations49.9%. Counting and opaque entropy changed, so the
-three existing `WarmWebpLossless/Encode8`, `EncodeOpaque8` and `Encode16` timings
-are replaced by fresh independent confirmations (upper0.0584/0.0905/0.0647).
-All other executed production paths are unchanged. Alpha-bearing output packets
-stay byte-identical, including the frozen literal/run decode input; native-input
-decoders and all lossy paths retain evidence. Shared/async lossless encoding is
-already named/unmeasured. The checklist/status counts remain unchanged.
+[Previous-row references](WARM-VP8L-PREVIOUS-ROW.md) reduce the diagram's VP8L
+size31,072→15,120B (51.3%) and allocation67,720→34,928B/op (48.4%). The photograph
+shrinks385,854→383,154B (0.7%). The changed lossless encoder invalidates precisely
+the three existing WarmWebpLossless encodes and two new WarmCompression lossless
+cases. All five have fresh independent passing evidence, conservative uppers
+0.0816/0.0995/0.1316/0.1132/0.2838. Stop them until affected. Additional matching
+work raises their prior-round mean times about40–55%; the tradeoff is explicit,
+with all five still faster than their reference. No extra workspace/frame copy.
 
-The round passes4,153 tests/OS,24 affected hardware-off checks/OS and the same
-actual package consumer/all three examples on Windows/Linux. ALPH admission
-controls now declare fixed full-alphabet entropy independently of production
-encoding; existing exact gates remain. No tracked image corpus was regenerated.
-The unchanged encoder-backend baseline, original inputs and prepared drivers are
-reused; no new workload, harness/native rebuild or settings grid. Stop all three
-confirmed cases until their production inputs change. Compression-efficiency
-work on representative photographic/text content remains open.
+All4,161 tests/OS,30 affected hardware-off checks/OS and the same actual Windows
+private package consumer/all three examples on Windows/Linux pass. Other codecs,
+decoding/Identify, editing, drawing and text production paths are unchanged.
+Existing literal/run decoder input packets also stay byte-identical. Lossy WebP
+packets reproduce frozen anchors exactly; no quality retuning or timing repeat.
+Shared/async lossless paths remain already named/unmeasured. No case/settings
+grid, native/harness/timing-driver rebuild or broad qualification repeat for
+unaffected production. Historical [opaque alpha coding](WARM-VP8L-OPAQUE-ALPHA.md)
+and its qualification remain archived. Counts are unchanged by this replacement.
 
 The [four content comparisons](WARM-WEBP-COMPRESSION.md) add exactly two fixed
 513×259 opaque RGBA8 inputs, with provenance in [their manifest](Fixtures/Compression/manifest.json):
@@ -35,9 +36,9 @@ text edges and flat-region rate/distortion. These distinct required content
 families were absent from the procedural controls. No shape/depth/effort grid.
 All four measure complete output ownership and allocations with equivalent
 delivery. Three independently pass time parity; diagram VP8 is a qualified short
-gap (1.104x). Lossless sizes remain 2.411x/4.295x the exact native packets; VP8
-sizes are 1.234x/1.262x at matched source quality. Production, existing timing and
-cross-platform/package qualification are unchanged. Known scope is now242 named
+gap (1.104x). Lossless sizes are now 2.394x/2.090x the exact native packets; VP8
+sizes are 1.234x/1.262x at matched source quality. The preceding lossless change replaces only the five affected timing proofs;
+other production paths and qualification evidence are reused. Known scope is now242 named
 cases:213 numeric plus29 unmeasured. Stop the three new time-passing cases unless
 their relevant production path changes; compression-size work remains required.
 

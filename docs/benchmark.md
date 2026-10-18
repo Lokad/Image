@@ -1,6 +1,6 @@
 # Lokad.Image benchmark state
 
-Updated 2026-10-18. The current goal is **warm single-CPU parity: independent
+Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
 conservative upper ≤1x**. The 213 retained numeric rows contain **66 current
 parity confirmations, 123 measured gaps and 1 confidence-open cases**;
 **23 prior-production rows need reconfirmation**: seventeen JPEG rows after
@@ -68,12 +68,20 @@ existing opaque packet **24.9%** to **400,262 B** and allocations **49.9%** to
 **1,051,213 B/op**. All three affected lossless encode operations independently
 reconfirm parity. Alpha-bearing packets remain byte-identical. Other paths reuse
 valid evidence. [Two fixed content controls](../benchmarks/WARM-WEBP-COMPRESSION.md)
-now add four complete encodes. VP8L photograph/diagram packets are **385,854 /
-160,032 B** and **31,072 / 7,234 B** (managed / backend). At matched VP8 source
+add four complete encodes. Current VP8L photograph/diagram packets are **383,154 /
+160,032 B** and **15,120 / 7,234 B** (managed / backend). At matched VP8 source
 quality, packets are **21,826 / 17,688 B** and **8,958 / 7,100 B**; PSNR gaps
 **0.0194 / 0.2183 dB** pass the unchanged gate. Three operations independently
 confirm time parity; diagram VP8 remains a **1.104x** short gap. Allocations and
-confidence bounds are below. Compression-efficiency work remains open.
+confidence bounds are below. [Previous-row VP8L references](../benchmarks/WARM-VP8L-PREVIOUS-ROW.md)
+cut diagram bytes **51.3%** and allocations **48.4%**. All five affected encodes
+independently pass time parity (upper **0.082–0.284x**). Search adds work: retained
+mean times increase about40–55% versus the prior rounds, while still below the
+reference. No extra source buffer, histogram or working-memory allowance is added.
+The round passes **4,161 tests/OS**, **30 affected hardware-off checks/OS** and the
+same actual Windows package consumer/all three examples on Windows/Linux.
+Unchanged VP8 quality anchors and timing evidence are reused. Compression
+efficiency and the full parity objective remain open.
 
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
 FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,
@@ -241,11 +249,11 @@ Resolve the named JPEG uncertainties before optimization. Stop current passing p
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md) | 22,813.15 | 15,629.98 | 1.460 / 1.611 | 2,536,099 | Gap (short; qualified) |
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md) | 22,598.85 | 53,698.20 | 0.421 / 0.424 | 2,616,016 | Parity confirmed |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-PREPARED-PREDICTION.md) | 23,199.00 | 53,597.53 | 0.433 / 0.437 | 2,615,835 | Parity confirmed |
-| [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-OPAQUE-ALPHA.md) | 7,045.64 | 122,788.28 | 0.057 / 0.058 | 2,100,170 | Parity confirmed |
-| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-OPAQUE-ALPHA.md) | 6,251.86 | 70,476.34 | 0.089 / 0.090 | 1,051,213 | Parity confirmed |
-| [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-OPAQUE-ALPHA.md) | 7,737.99 | 120,636.47 | 0.064 / 0.065 | 2,100,119 | Parity confirmed |
-| [WebP VP8L photograph RGBA8](../benchmarks/WARM-WEBP-COMPRESSION.md) | 6,347.64 | 83,747.05 | 0.076 / 0.077 | 1,051,162 | Parity confirmed |
-| [WebP VP8L text/diagram RGBA8](../benchmarks/WARM-WEBP-COMPRESSION.md) | 1,905.57 | 9,558.54 | 0.199 / 0.204 | 67,720 | Parity confirmed |
+| [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-PREVIOUS-ROW.md) | 9,878.57 | 122,155.83 | 0.081 / 0.082 | 2,100,170 | Parity confirmed |
+| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-PREVIOUS-ROW.md) | 9,198.47 | 70,847.86 | 0.130 / 0.132 | 1,051,213 | Parity confirmed |
+| [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-PREVIOUS-ROW.md) | 11,972.58 | 121,563.39 | 0.098 / 0.099 | 2,100,119 | Parity confirmed |
+| [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-PREVIOUS-ROW.md) | 9,279.32 | 82,847.01 | 0.112 / 0.113 | 1,051,162 | Parity confirmed |
+| [WebP VP8L text/diagram RGBA8](../benchmarks/WARM-VP8L-PREVIOUS-ROW.md) | 2,713.60 | 9,769.91 | 0.278 / 0.284 | 34,928 | Parity confirmed |
 | [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-WEBP-COMPRESSION.md) | 7,531.53 | 9,729.98 | 0.774 / 0.783 | 541,256 | Parity confirmed |
 | [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-WEBP-COMPRESSION.md) | 6,442.53 | 5,837.29 | 1.104 / 1.246 | 490,795 | Gap (short; qualified) |
 

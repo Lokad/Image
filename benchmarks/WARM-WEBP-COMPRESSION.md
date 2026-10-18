@@ -1,5 +1,11 @@
 # WebP compression controls
 
+The lossless measurements below are the original content baseline; the current
+[previous-row encoder results](WARM-VP8L-PREVIOUS-ROW.md) supersede those two rows.
+Both VP8 packets, quality anchors and timing rows remain current. The linked
+quality file tracks the current lossless producer; the original full record and
+packets remain in the raw archive cited below.
+
 Two fixed 513×259 opaque RGBA8 inputs cover photographic texture and original
 text/diagram content; [provenance and hashes](Fixtures/Compression/manifest.json)
 are frozen. No shape, depth, quality or effort grid was added. Both native workers,

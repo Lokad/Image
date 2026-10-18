@@ -4,6 +4,28 @@ namespace Lokad.Image.DifferentialTests;
 
 public sealed class WebpFfmpegTests
 {
+    [Theory] [InlineData(8)] [InlineData(16)]
+    public void RepeatedNonconstantRowsAndOverlappingReferencesInteroperateExactly(int depth)
+    {
+        using var row = OriginalPixels.Buffer(47, 1, depth);
+        using var source = ImageBuffer.Create(47, 101, depth);
+        for (var y = 0; y < source.Height; y++)
+        {
+            if (depth == 8) row.GetRow8(0).CopyTo(source.GetRow8(y));
+            else row.GetRow16(0).CopyTo(source.GetRow16(y));
+        }
+        // A nonrepeating last-row suffix interrupts the spatial copy.
+        if (depth == 8) source.GetRow8(100)[^4] ^= 127;
+        else source.GetRow16(100)[^4] ^= 32767;
+        using var output = new MemoryStream(); ImageCodec.EncodeWebp(source, output, new() { Effort = 6 });
+        var packet = output.ToArray(); using var actual = ImageCodec.Decode(packet);
+        var expected = depth == 8 ? OriginalPixels.Bytes(source) : OriginalPixels.Bytes(source).Chunk(2)
+            .Select(sample => (byte)((System.Buffers.Binary.BinaryPrimitives.ReadUInt16LittleEndian(sample) + 128) / 257)).ToArray();
+        Assert.Equal(expected, OriginalPixels.Bytes(actual)); Assert.Equal(expected, ReferenceDecode(packet));
+        Assert.Equal(expected, OracleProcess.Run(OracleProcess.Ffmpeg,
+            ["-v", "error", "-threads", "1", "-noautorotate", "-f", "image2pipe", "-i", "pipe:0", "-frames:v", "1", "-threads:v", "1", "-pix_fmt", "rgba", "-f", "rawvideo", "pipe:1"], packet));
+    }
+
     public static IEnumerable<object[]> EncodeProfiles()
     {
         foreach (var effort in new[] { 0, 1, 4, 6 })

@@ -2,7 +2,7 @@ using System.Buffers.Binary;
 
 namespace Lokad.Image.Internal;
 
-/// <summary>Owned VP8L literal and repeated-color-run encoder; no upstream code or tables.</summary>
+/// <summary>Owned VP8L literal, repeated-color and previous-row encoder; no upstream code or tables.</summary>
 internal static class WebpLosslessEncoder
 {
     private sealed class Table
@@ -86,18 +86,30 @@ internal static class WebpLosslessEncoder
         while (position < count)
         {
             var pixel = Pixel(image, position, context); alpha |= pixel >> 24 != 255;
-            var run = 1;
+            var run = 1; var fromAbove = false;
+            var maximum = Math.Min(64 << effort, count - position);
             if (effort != 0 && position != 0 && pixel == previous)
             {
-                var maximum = Math.Min(64 << effort, count - position);
                 while (run < maximum && Pixel(image, position + run, context) == pixel) run++;
+            }
+            if (effort != 0 && position >= image.Width && run < maximum)
+            {
+                // RFC 9649 section 3.6.2.2: a reference may span rows and overlap
+                // its destination. Read the resident source, with no row copy.
+                var length = 0;
+                while (length < maximum && Pixel(image, position + length, context)
+                    == Pixel(image, position - image.Width + length, context)) length++;
+                if (length > run) { run = length; fromAbove = true; }
             }
             if (run >= 2)
             {
                 Prefix(run, out var code, out var extra, out var bits);
                 green.Symbol(writer, 256 + code); writer.Write(extra, bits);
-                distance.Symbol(writer, 1); // Distance code 2: same-row neighbor one pixel behind.
+                // RFC 9649 section 3.6.2.2.1: code1 is one row above; code2 is
+                // one pixel behind. Both use the existing distance alphabet.
+                distance.Symbol(writer, fromAbove ? 0 : 1);
                 position += run;
+                if (fromAbove) pixel = Pixel(image, position - 1, context);
             }
             else
             {

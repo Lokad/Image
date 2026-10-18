@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "scope": "Two fixed content controls; untimed size/quality, existing bounded-v1 sampler and 0.25dB/decoder gates",
+  "scope": "Two fixed content controls; current previous-row lossless packets, unchanged VP8 packets/quality anchors reused without retuning; no timing in this file",
   "maximumOwnedSettings": 8,
-  "librarySha256": "dedef95a0ef131df54855ebb6b090e7d194c8f4646f28bb570a06f81898add79",
+  "librarySha256": "84cdfc050926bfdfc790825f5c9810187b4e87f49173d7fd1c92befb0e306da3",
   "harnessSha256": "ff58e1b13bff857daeb74ea5bf2aaa128fdf2a539597543d532f0bde8145d2e3",
   "cases": [
     {
@@ -12,9 +12,9 @@
       "depth": 8,
       "sourceSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
       "lossless": {
-        "managedBytes": 385854,
+        "managedBytes": 383154,
         "nativeBytes": 160032,
-        "managedSha256": "786830ceae825c3b415f5b24f587be44fd81af2ecdfc6617868c675d779d3fc3",
+        "managedSha256": "c9c953498b9dd39236a4b7ffc3a0cac836e720091760b1c7e5527ff5024b5658",
         "nativeSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
         "allPixelsExact": true,
         "normalScalarNativeExact": true
@@ -267,7 +267,8 @@
           "psnrGapDb": 0.019385285642992092,
           "matched": true,
           "exclusionReason": null
-        }
+        },
+        "reusedUnchangedAnchor": true
       },
       "sourceUnchanged": true,
       "independentOutputs": true,
@@ -280,9 +281,9 @@
       "depth": 8,
       "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
       "lossless": {
-        "managedBytes": 31072,
+        "managedBytes": 15120,
         "nativeBytes": 7234,
-        "managedSha256": "7d29367d99e723b2c740b88cbb7bc51e0e4801968cf9ffbcfde34a8416c7efb6",
+        "managedSha256": "96f45877ae52e80d05539c81130911fde76a12bc7c2ae24c6e1c986fa62cdb20",
         "nativeSha256": "399c218d2fd333724a3b9f77d8c53bd958f01483b314c496935b022d7a03e0bf",
         "allPixelsExact": true,
         "normalScalarNativeExact": true
@@ -505,7 +506,8 @@
           "psnrGapDb": 0.21825523479332448,
           "matched": true,
           "exclusionReason": null
-        }
+        },
+        "reusedUnchangedAnchor": true
       },
       "sourceUnchanged": true,
       "independentOutputs": true,

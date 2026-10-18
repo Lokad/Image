@@ -193,9 +193,9 @@ def render():
         row('WebP VP8, opaque from RGBA16‡', 'warm-vp8-prepared-prediction-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-PREPARED-PREDICTION.md', verification='Gap (short; qualified)'),
         row('WebP VP8 + alpha‡', 'warm-vp8-prepared-prediction-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8-PREPARED-PREDICTION.md', True),
         row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8-prepared-prediction-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8-PREPARED-PREDICTION.md', True),
-        row('WebP VP8L, exact backend*', 'warm-vp8l-opaque-alpha-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-OPAQUE-ALPHA.md', True),
-        row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-opaque-alpha-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-OPAQUE-ALPHA.md', True),
-        row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-opaque-alpha-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-OPAQUE-ALPHA.md', True),
+        row('WebP VP8L, exact backend*', 'warm-vp8l-previous-row-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-PREVIOUS-ROW.md', True),
+        row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-previous-row-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-PREVIOUS-ROW.md', True),
+        row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-previous-row-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-PREVIOUS-ROW.md', True),
     ]
     edits = [
         row('Horizontal flip RGBA8, two live outputs / per image', 'warm-horizontal-flip512-evidence.json', ['cases', 'Rgba8', -1], 'WARM-HORIZONTAL-FLIP512.md', verification='Gap (short; qualified)'),
@@ -290,8 +290,8 @@ def render():
         row('Mirrored transpose RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'Transverse8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
     ]
     encodes.extend([
-        row('WebP VP8L photograph RGBA8', 'warm-webp-compression-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-WEBP-COMPRESSION.md', True),
-        row('WebP VP8L text/diagram RGBA8', 'warm-webp-compression-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-WEBP-COMPRESSION.md', True),
+        row('WebP VP8L photograph RGBA8', 'warm-vp8l-previous-row-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-PREVIOUS-ROW.md', True),
+        row('WebP VP8L text/diagram RGBA8', 'warm-vp8l-previous-row-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-PREVIOUS-ROW.md', True),
         row('WebP VP8 photograph RGBA8 / matched quality', 'warm-webp-compression-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-WEBP-COMPRESSION.md', True),
         row('WebP VP8 text/diagram RGBA8 / matched quality', 'warm-webp-compression-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-WEBP-COMPRESSION.md', verification='Gap (short; qualified)'),
     ])
@@ -311,7 +311,7 @@ def render():
     assert parity_count + confidence_count + gap_count + reconfirm_count == 213
     return f'''# Lokad.Image benchmark state
 
-Updated 2026-10-18. The current goal is **warm single-CPU parity: independent
+Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
 conservative upper ≤1x**. The 213 retained numeric rows contain **{parity_count} current
 parity confirmations, {gap_count} measured gaps and {confidence_count} confidence-open cases**;
 **{reconfirm_count} prior-production rows need reconfirmation**: seventeen JPEG rows after
@@ -379,12 +379,20 @@ existing opaque packet **24.9%** to **400,262 B** and allocations **49.9%** to
 **1,051,213 B/op**. All three affected lossless encode operations independently
 reconfirm parity. Alpha-bearing packets remain byte-identical. Other paths reuse
 valid evidence. [Two fixed content controls](../benchmarks/WARM-WEBP-COMPRESSION.md)
-now add four complete encodes. VP8L photograph/diagram packets are **385,854 /
-160,032 B** and **31,072 / 7,234 B** (managed / backend). At matched VP8 source
+add four complete encodes. Current VP8L photograph/diagram packets are **383,154 /
+160,032 B** and **15,120 / 7,234 B** (managed / backend). At matched VP8 source
 quality, packets are **21,826 / 17,688 B** and **8,958 / 7,100 B**; PSNR gaps
 **0.0194 / 0.2183 dB** pass the unchanged gate. Three operations independently
 confirm time parity; diagram VP8 remains a **1.104x** short gap. Allocations and
-confidence bounds are below. Compression-efficiency work remains open.
+confidence bounds are below. [Previous-row VP8L references](../benchmarks/WARM-VP8L-PREVIOUS-ROW.md)
+cut diagram bytes **51.3%** and allocations **48.4%**. All five affected encodes
+independently pass time parity (upper **0.082–0.284x**). Search adds work: retained
+mean times increase about40–55% versus the prior rounds, while still below the
+reference. No extra source buffer, histogram or working-memory allowance is added.
+The round passes **4,161 tests/OS**, **30 affected hardware-off checks/OS** and the
+same actual Windows package consumer/all three examples on Windows/Linux.
+Unchanged VP8 quality anchors and timing evidence are reused. Compression
+efficiency and the full parity objective remain open.
 
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
 FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,

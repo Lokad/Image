@@ -1102,10 +1102,12 @@ boundaries. Empty partitions and inconsistent sizes are rejected.
 `EncodeWebp` defaults to lossless VP8L. RGBA16 input is normalized per channel
 with integer `(sample+128)/257`; RGBA8 samples are preserved exactly, including
 hidden RGB. The first encoder uses independently generated fixed canonical tables
-and repeated-color runs, without transforms, a color cache or general match search.
+and repeated-color/previous-row references, without transforms, a color cache or general match search.
 Opaque output uses a zero-bit alpha255 leaf when it saves payload bytes; other
 literal tables remain fixed. `Effort` accepts 0..6 (default 4): zero writes
-only literals; other settings permit repeated-color runs up to `64<<effort` pixels.
+only literals; other settings permit repeated-color or previous-row sequences up
+to `64<<effort` pixels. References may span rows and overlap their destinations;
+the encoder compares the resident normalized pixels without a row or frame copy.
 `Quality` accepts 1..100 but is ignored in lossless mode. VP8L payload length is counted before writing, so nonseekable output
 requires no encoded-frame staging buffer. Both passes charge work and require
 caller synchronization of mutable input pixels. Unsupported profiles fail
@@ -1115,7 +1117,7 @@ Counting omits whole-byte alpha fields and adds their exact size, or the 29-byte
 singleton-header difference, before output preflight. Both passes still check
 work/cancellation per alpha field, including zero-bit leaves. Source plus the
 existing 8 KiB workspace suffices; no histogram, extra source scan or frame copy
-is introduced. Alpha-bearing packets retain the original literal/run coding.
+is introduced. Alpha-bearing sequences preserve all hidden RGB and alpha samples.
 
 `Lossless=false` emits a VP8 key frame with 4:2:0 chroma, a mathematical forward
 4x4 DCT and the format's quantizers. `Quality` (default 85) maps to quantizer index

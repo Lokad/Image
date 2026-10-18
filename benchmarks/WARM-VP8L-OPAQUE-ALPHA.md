@@ -1,5 +1,7 @@
 # VP8L opaque alpha coding
 
+Historical accepted round; [current previous-row encode measurements](WARM-VP8L-PREVIOUS-ROW.md) replace these three timings. The alpha-coding size reduction remains applicable.
+
 Opaque lossless output shrinks **24.9%**, from 533,100 to **400,262 bytes** on the
 existing 513×259 opacity projection. Managed allocations fall from 2,100,170 to
 **1,051,213 B/op** (49.9%). Exact RGBA is preserved. All three affected complete
