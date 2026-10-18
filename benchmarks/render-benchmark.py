@@ -276,13 +276,13 @@ def render():
         row('Vertical flip RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'VerticalFlip16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
         row('Horizontal flip RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'HorizontalFlip8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
         row('Horizontal flip RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'HorizontalFlip16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
-        row('Half turn RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'HalfTurn8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
+        row('Half turn RGBA8', 'warm-edit-confidence-evidence.json', ['cases', 'HalfTurn8', 'observations', -1], 'WARM-EDIT-CONFIDENCE.md', True),
         row('Half turn RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'HalfTurn16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
         row('Clockwise quarter turn RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'Clockwise8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
-        row('Clockwise quarter turn RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'Clockwise16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
+        row('Clockwise quarter turn RGBA16', 'warm-edit-confidence-evidence.json', ['cases', 'Clockwise16', 'observations', -1], 'WARM-EDIT-CONFIDENCE.md', True),
         row('Counterclockwise quarter turn RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'Counterclockwise8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
         row('Counterclockwise quarter turn RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'Counterclockwise16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
-        row('Transpose RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'Transpose8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
+        row('Transpose RGBA8', 'warm-edit-confidence-evidence.json', ['cases', 'Transpose8', 'observations', -1], 'WARM-EDIT-CONFIDENCE.md', True),
         row('Transpose RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'Transpose16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
         row('Mirrored transpose RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'Transverse16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
         row('Mirrored transpose RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'Transverse8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
@@ -332,14 +332,16 @@ remain valid. The207rows retain127independent confirmations+80qualified shorts.
 Fresh **3,722 Release cases perOS** (1,388internal+1,436public+898liveFFmpeg),
 plus65internal+243public selected scalar controls, pass. The consumer and allthree
 examples pass through the **same actual Release package on Windows/Linux**.
-Production remains safe managed dependency-free .NET10. Stop the60passing paths;
+Production remains safe managed dependency-free .NET10. Preserve passing proofs;
 full warm parity remains open.
 
-Latest measurement: [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
-independently confirms a small **1.012x gap / 1.014x upper**, replacing its
-earlier uncertain measurement. Other206comparisons/all60passing proofs remain.
-Current totals are60passes/144gaps/3confidence. The unchanged qualified producer
-and actual-package proof were reused; zero builds or repeated qualification.
+Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDENCE.md)
+independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
+small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
+retains its1.012x mean gap/1.014x upper. Current totals are**61passes/145gaps/1confidence**,
+with127independent selected confirmations+80qualified shorts. Every actual/outlier
+and both quiet guards remain; unchanged production/package qualification is reused.
+No builds, repeat-until-pass or small residual tuning. Stop the61passing paths.
 
 **Decode and metadata**
 

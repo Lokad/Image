@@ -4,7 +4,7 @@ One independent quiet confirmation measures the existing RGB8+tRNS case at
 **1.012x FFmpeg**, conservative upper**1.014x**. It remains an open
 demonstrated gap, replacing the earlier0.999x/1.001x straddling measurement.
 
-| Existing case | Lokad / FFmpeg µs | Ratio / upper | Managed B/op | Actual / selected |
+| Existing case | Lokad / FFmpeg Âµs | Ratio / upper | Managed B/op | Actual / selected |
 | --- | ---: | ---: | ---: | ---: |
 | RGB8, tRNS key(48,139,231), None filter | 1,302.04 / 1,286.75 | 1.012 / 1.014 | 3,464 | 12 / 12 |
 

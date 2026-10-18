@@ -1,8 +1,8 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-18. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 207 numeric rows contain **60 confirmed parity
-cases, 144 measured gaps and 3 confidence-open cases**. The earlier
+conservative upper ≤1x**. The 207 numeric rows contain **61 confirmed parity
+cases, 145 measured gaps and 1 confidence-open cases**. The earlier
 ≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
@@ -39,14 +39,16 @@ remain valid. The207rows retain127independent confirmations+80qualified shorts.
 Fresh **3,722 Release cases perOS** (1,388internal+1,436public+898liveFFmpeg),
 plus65internal+243public selected scalar controls, pass. The consumer and allthree
 examples pass through the **same actual Release package on Windows/Linux**.
-Production remains safe managed dependency-free .NET10. Stop the60passing paths;
+Production remains safe managed dependency-free .NET10. Preserve passing proofs;
 full warm parity remains open.
 
-Latest measurement: [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
-independently confirms a small **1.012x gap / 1.014x upper**, replacing its
-earlier uncertain measurement. Other206comparisons/all60passing proofs remain.
-Current totals are60passes/144gaps/3confidence. The unchanged qualified producer
-and actual-package proof were reused; zero builds or repeated qualification.
+Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDENCE.md)
+independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
+small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
+retains its1.012x mean gap/1.014x upper. Current totals are**61passes/145gaps/1confidence**,
+with127independent selected confirmations+80qualified shorts. Every actual/outlier
+and both quiet guards remain; unchanged production/package qualification is reused.
+No builds, repeat-until-pass or small residual tuning. Stop the61passing paths.
 
 **Decode and metadata**
 
@@ -260,13 +262,13 @@ and actual-package proof were reused; zero builds or repeated qualification.
 | [Vertical flip RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 17.68 | 17.39 | 1.017 / 1.036 | 128 | Gap (independent) |
 | [Horizontal flip RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 11.64 | 9.52 | 1.223 / 1.235 | 128 | Gap (independent) |
 | [Horizontal flip RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 21.83 | 27.03 | 0.807 / 0.811 | 128 | Parity confirmed |
-| [Half turn RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 11.25 | 11.32 | 0.994 / 1.021 | 128 | Confidence open |
+| [Half turn RGBA8](../benchmarks/WARM-EDIT-CONFIDENCE.md) | 11.47 | 11.42 | 1.004 / 1.024 | 128 | Gap (independent) |
 | [Half turn RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 18.59 | 21.86 | 0.850 / 0.874 | 128 | Parity confirmed |
 | [Clockwise quarter turn RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 40.77 | 37.31 | 1.093 / 1.126 | 128 | Gap (independent) |
-| [Clockwise quarter turn RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 43.89 | 43.93 | 0.999 / 1.045 | 128 | Confidence open |
+| [Clockwise quarter turn RGBA16](../benchmarks/WARM-EDIT-CONFIDENCE.md) | 43.45 | 44.08 | 0.986 / 1.010 | 128 | Confidence open |
 | [Counterclockwise quarter turn RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 38.11 | 37.49 | 1.016 / 1.030 | 128 | Gap (independent) |
 | [Counterclockwise quarter turn RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 49.42 | 45.49 | 1.086 / 1.103 | 128 | Gap (independent) |
-| [Transpose RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 38.05 | 38.28 | 0.994 / 1.004 | 128 | Confidence open |
+| [Transpose RGBA8](../benchmarks/WARM-EDIT-CONFIDENCE.md) | 38.15 | 38.42 | 0.993 / 0.995 | 128 | Parity confirmed |
 | [Transpose RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 48.17 | 44.86 | 1.074 / 1.114 | 128 | Gap (independent) |
 | [Mirrored transpose RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 44.34 | 43.25 | 1.025 / 1.064 | 128 | Gap (independent) |
 | [Mirrored transpose RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 39.10 | 38.54 | 1.015 / 1.041 | 128 | Gap (independent) |

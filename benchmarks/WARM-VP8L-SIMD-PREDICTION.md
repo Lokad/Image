@@ -1,7 +1,7 @@
 # Fused lossless WebP inverse prediction
 
-Native-input VP8L decoding is **6.6–7.2% faster**; compressed-alpha VP8 is
-**3.6–3.9% faster**. Live lossless improves from1.626x to1.516x FFmpeg. These
+Native-input VP8L decoding is **6.6â€“7.2% faster**; compressed-alpha VP8 is
+**3.6â€“3.9% faster**. Live lossless improves from1.626x to1.516x FFmpeg. These
 are qualified three-actual improvements; all seven measured cases remain gaps.
 
 The inverse predictor computes all four channels and residual addition together
@@ -11,7 +11,7 @@ mode metadata is reused within its tile; pixels retain original dependency order
 borders and right-edge behavior. Original scalar helpers and fallback remain
 byte-identical. No field, table, heap, mandatory admission or work charge is added.
 
-| Existing decode | Lokad / FFmpeg µs | Ratio / upper | Managed B/op | Input B | Managed time improvement |
+| Existing decode | Lokad / FFmpeg Âµs | Ratio / upper | Managed B/op | Input B | Managed time improvement |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Native VP8L / live token | 4,573.29 / 3,016.50 | 1.516 / 1.579 | 1,216,180 | 183,812 | 7.03% |
 | Native VP8L | 4,576.04 / 3,022.99 | 1.514 / 1.615 | 1,216,180 | 183,812 | 6.56% |
