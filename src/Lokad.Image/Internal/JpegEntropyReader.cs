@@ -127,6 +127,167 @@ internal ref struct JpegEntropyReader
         value = (int)((bits >> available) & ((1u << count) - 1)); return true;
     }
 
+    internal bool TryReadBufferedCancelableRefinementBlock(ReadOnlySpan<ushort> shortCodes, JpegHuffman ac,
+        Span<int> block, int start, int end, int low, ref int eobRun)
+    {
+        // T.81 G.1.2 has the same <2048-unit bound as the original fused
+        // traversal. Keep speculative ordinary bytes separate from the logical
+        // cursor. Every fallible/cancellation path publishes before leaving;
+        // normal locals need no address-exposed ref helpers or enclosing EH.
+        if (initialWork >= 0 || !context.Cancellation.CanBeCanceled || context.RemainingWork < 2048
+            || !Avx2.IsSupported || !Bmi2.X64.IsSupported || shortCodes.Length != 256
+            || available is < 0 or > 7
+            || block.Length != 64 || start < 1 || start > end || end > 63 || low is < 0 or > 13)
+            return false;
+        var cancellation = context.Cancellation;
+        var input = data;
+        var cursor = position; ulong cache = bits; var pending = available;
+        var work = 0; var index = start; var increment = 1 << low;
+        ulong nonzero = 0;
+        for (var offset = 0; offset < 64; offset += 8)
+        {
+            var values = Vector256.Create(block.Slice(offset, 8));
+            var zeros = (uint)Avx.MoveMask(Avx2.CompareEqual(values, Vector256<int>.Zero).AsSingle());
+            nonzero |= (ulong)(~zeros & 255) << offset;
+        }
+        var bandEnd = end == 63 ? ulong.MaxValue : (1UL << (end + 1)) - 1;
+        while (index <= end)
+        {
+            var finish = eobRun > 0;
+            var run = 0; var inserted = 0; var stop = end + 1;
+            ulong correctionPositions, zeroPrefix = 0;
+            if (!finish)
+            {
+                // Ordinary lookahead is read-only and cannot surface a future
+                // marker or truncation. Return every unused whole byte when
+                // publishing; escaped/short tails use the original reader.
+                if (pending < 16 && input.Length - cursor >= 4)
+                {
+                    var word = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(input.Slice(cursor, 4));
+                    if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) == 0)
+                    { cache = cache << 32 | word; pending += 32; cursor += 4; }
+                }
+                var prefix = pending >= 8 ? (int)((cache >> (pending - 8)) & 255)
+                    : (int)((cache & ((1UL << pending) - 1)) << (8 - pending));
+                var packed = shortCodes[prefix]; var length = packed & 15; int symbol;
+                if (length is > 0 and <= 8 && length <= pending)
+                {
+                    if (cancellation.IsCancellationRequested)
+                    {
+                        PublishCancelableRefinementLookahead(cache, pending, cursor, work);
+                        cancellation.ThrowIfCancellationRequested();
+                    }
+                    work += length; pending -= length; symbol = packed >> 4;
+                }
+                else
+                {
+                    PublishCancelableRefinementLookahead(cache, pending, cursor, work); work = 0;
+                    symbol = ac.Read(ref this);
+                    cache = bits; pending = available; cursor = position;
+                }
+                run = symbol >> 4; var size = symbol & 15;
+                if (size != 0 && size != 1)
+                {
+                    PublishCancelableRefinementLookahead(cache, pending, cursor, work);
+                    throw new ImageDataException("Invalid JPEG refinement symbol.");
+                }
+                if (size != 0 || run != 15)
+                {
+                    var count = size != 0 ? 1 : run; int field;
+                    if (pending < count && input.Length - cursor >= 4)
+                    {
+                        var word = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(input.Slice(cursor, 4));
+                        if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) == 0)
+                        { cache = cache << 32 | word; pending += 32; cursor += 4; }
+                    }
+                    if (pending >= count)
+                    {
+                        if (cancellation.IsCancellationRequested)
+                        {
+                            PublishCancelableRefinementLookahead(cache, pending, cursor, work);
+                            cancellation.ThrowIfCancellationRequested();
+                        }
+                        work++; pending -= count; field = (int)((cache >> pending) & ((1u << count) - 1));
+                    }
+                    else
+                    {
+                        PublishCancelableRefinementLookahead(cache, pending, cursor, work); work = 0;
+                        field = ReadBits(count);
+                        cache = bits; pending = available; cursor = position;
+                    }
+                    if (size != 0) inserted = field == 0 ? -increment : increment;
+                    else { eobRun = (1 << run) + field; finish = true; }
+                }
+                else run = 16;
+            }
+            var remaining = bandEnd & (ulong.MaxValue << index);
+            if (finish) correctionPositions = nonzero & remaining;
+            else
+            {
+                var zeros = ~nonzero & remaining;
+                var target = Bmi2.X64.ParallelBitDeposit(1UL << (inserted != 0 ? run : run - 1), zeros);
+                stop = target == 0 ? end + 1 : BitOperations.TrailingZeroCount(target) + (inserted != 0 ? 0 : 1);
+                var prefix = (stop == 64 ? ulong.MaxValue : (1UL << stop) - 1) & remaining;
+                zeroPrefix = zeros & prefix; correctionPositions = nonzero & prefix;
+            }
+            while (correctionPositions != 0)
+            {
+                ref var value = ref block[BitOperations.TrailingZeroCount(correctionPositions)];
+                if (pending == 0 && input.Length - cursor >= 4)
+                {
+                    var word = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(input.Slice(cursor, 4));
+                    if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) == 0)
+                    { cache = cache << 32 | word; pending += 32; cursor += 4; }
+                }
+                int bit;
+                if (pending != 0)
+                {
+                    if (cancellation.IsCancellationRequested)
+                    {
+                        PublishCancelableRefinementLookahead(cache, pending, cursor, work);
+                        cancellation.ThrowIfCancellationRequested();
+                    }
+                    work++; bit = (int)((cache >> --pending) & 1);
+                }
+                else
+                {
+                    PublishCancelableRefinementLookahead(cache, pending, cursor, work); work = 0;
+                    bit = ReadBits(1);
+                    cache = bits; pending = available; cursor = position;
+                }
+                if (bit != 0)
+                {
+                    // ApplyCorrection can throw only for Int32.MinValue. Its
+                    // already-consumed correction bit must survive that error.
+                    if (value == int.MinValue) PublishCancelableRefinementLookahead(cache, pending, cursor, work);
+                    JpegDecoder.ApplyCorrection(ref value, increment);
+                }
+                correctionPositions &= correctionPositions - 1;
+            }
+            if (finish)
+            {
+                eobRun--; PublishCancelableRefinementLookahead(cache, pending, cursor, work); return true;
+            }
+            run -= BitOperations.PopCount(zeroPrefix); index = stop;
+            if (run != 0 || (inserted != 0 && index > end))
+            {
+                PublishCancelableRefinementLookahead(cache, pending, cursor, work);
+                throw new ImageDataException("JPEG refinement run exceeds band.");
+            }
+            if (inserted != 0) { block[index] = inserted; nonzero |= 1UL << index; index++; }
+        }
+        PublishCancelableRefinementLookahead(cache, pending, cursor, work); return true;
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private void PublishCancelableRefinementLookahead(ulong cache, int pending, int cursor, int work)
+    {
+        var wholeBytes = pending >> 3;
+        bits = unchecked((uint)(cache >> (wholeBytes * 8))); available = pending & 7;
+        position = cursor - wholeBytes;
+        context.CommitAdmittedWork(work);
+    }
+
     internal bool TryReadCancelableRefinementBlock(ReadOnlySpan<ushort> shortCodes, JpegHuffman ac,
         Span<int> block, int start, int end, int low, ref int eobRun)
     {

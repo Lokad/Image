@@ -71,7 +71,8 @@ internal sealed class JpegHuffman
 
     internal bool TryReadCancelableRefinementBlock(ref JpegEntropyReader reader, Span<int> block,
         int start, int end, int low, ref int eobRun)
-        => reader.TryReadCancelableRefinementBlock(shortCodes, this, block, start, end, low, ref eobRun);
+        => reader.TryReadBufferedCancelableRefinementBlock(shortCodes, this, block, start, end, low, ref eobRun)
+            || reader.TryReadCancelableRefinementBlock(shortCodes, this, block, start, end, low, ref eobRun);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal bool TryReadBaselineAc(ref JpegEntropyReader reader, int remainingCoefficients, out int symbol, out int value)

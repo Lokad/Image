@@ -725,7 +725,11 @@ units, whole AC refinement blocks may retain cursor, bit cache and work locally;
 each block costs less than that bound. Noncancelable correction fields retain
 safe grouped reads. Live-token blocks preserve every original Huffman, sign/EOB
 and per-correction-bit cancellation check and immediate coefficient update.
-Canonical/marker tails publish prior work before using the original reader.
+Live-token blocks may also refill four ordinary lookahead bytes at a time.
+Unused whole bytes are returned before publishing the logical cursor and pending
+bits. Stuffed bytes, markers and short tails publish prior state before using
+the original reader; cancellation and format/overflow failures publish completed
+work and partial coefficient changes at the original logical boundary.
 Every exit publishes exact reader/work state without replacing the original
 failure. Tighter budgets and unsupported hardware retain the preceding masked
 or scalar traversal. No additional table or heap workspace is introduced.

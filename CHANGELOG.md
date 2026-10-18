@@ -9,7 +9,8 @@
 - Faster cancelable baseline JPEG decoding through bounded AC lookahead reuse,
   preserving pixels, work charges and partial-failure state.
 - Faster progressive JPEG refinement, including live cancelable decoding,
-  with unchanged pixels, resource limits and cancellation behavior;
+  through bounded lookahead reuse with unchanged pixels, resource limits,
+  logical failure state and cancellation behavior;
   see the [benchmark state](docs/benchmark.md).
 - Faster RGBA8/16 bilinear reduction through bounded row reuse, preserving exact
   pixels, resource admission and cancellation.

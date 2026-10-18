@@ -145,7 +145,7 @@ def render():
         row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg-cancelable-ac-cache-evidence.json', ['cases', 'NativeDecodeCancelable8', -1], 'WARM-JPEG-CANCELABLE-AC-CACHE.md', verification='Gap (short; qualified)'),
         row('JPEG progressive gray', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'ProgressiveGray', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
         row('JPEG progressive 4:2:0', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'Progressive420', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
-        row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpeg-cancelable-refinement-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-JPEG-CANCELABLE-REFINEMENT.md', verification='Gap (short; qualified)'),
+        row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpeg-refinement-lookahead-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-JPEG-REFINEMENT-LOOKAHEAD.md', verification='Gap (short; qualified)'),
         row('JPEG progressive 4:2:2', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'Progressive422', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
         row('JPEG progressive 4:4:4', 'warm-jpeg-refinement-fused-evidence.json', ['cases', 'Progressive444', -1], 'WARM-JPEG-REFINEMENT-FUSED.md', True),
         row('WebP VP8 + alpha', 'warm-vp8l-borrowed-green-evidence.json', ['cases', 'Native8', -1], 'WARM-VP8L-BORROWED-GREEN.md', verification='Gap (short; qualified)'),
@@ -324,17 +324,18 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [byte bilinear row reuse](../benchmarks/WARM-BILINEAR-BYTE-ROW-CACHE.md)
-reduces the existing RGBA8 reduction time 23.7%, to 500.71 µs / 1.291x
-(upper 1.406x), at 157,960 B/op. This is a qualified short gap. No heap workspace
-or persistent cache is added. The unchanged word-reduction and byte-enlargement
-managed control means remain within 1.3% of retained results. Other 206 comparisons
-and all 58 passing proofs retain their hot paths and evidence. No new raster,
-selector, settings grid or profile; passing cases are stopped.
-The 207 rows select 145 independent confirmations and 62 qualified short screens.
-Fresh **3,678 Release cases per OS** (1,357 internal +1,423 public +898 live FFmpeg),
-plus 132 scalar bilinear/reference controls, pass. The consumer and all three
-examples pass through the **same actual Release package on Windows/Linux**.
+Latest production round: [progressive JPEG live-token lookahead](../benchmarks/WARM-JPEG-REFINEMENT-LOOKAHEAD.md)
+reduces the existing progressive444/live-token time 10.1%, to 5,206.53 µs /
+1.552x (upper 1.731x), at 2,682,364 B/op. This is a qualified short gap.
+Logical failure state, exact per-bit cancellation/work and immediate coefficient
+updates are preserved, without added heap workspace. Ordinary progressive444 and
+cancelable baseline444 control means stay within 0.9% of retained results.
+Other 206 comparisons and all 58 passing proofs retain their hot paths and
+evidence. No new performance raster, selector or settings grid; passing cases
+are stopped. The 207 rows select 145 independent confirmations and 62 qualified
+short screens. Fresh **3,680 Release cases per OS** (1,359 internal +1,423 public
++898 live FFmpeg), plus 475 scalar JPEG controls, pass. The consumer and all
+three examples pass through the **same actual Release package on Windows/Linux**.
 Production remains safe managed dependency-free C#/.NET10. Unaffected
 qualification is reused.
 

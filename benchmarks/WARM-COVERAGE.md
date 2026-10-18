@@ -33,7 +33,9 @@ Four tight-limit PNG RGBA8/16 ordinary/live-token comparisons now select
 [bounded streaming screens](WARM-PNG-STREAMING-ROWS.md), with19.2–40.7% gains.
 That round reused203 comparisons/all58 passing proofs.
 [Byte bilinear Down8](WARM-BILINEAR-BYTE-ROW-CACHE.md) subsequently improves23.7%;
-this latest round reuses206 comparisons/all58 passing proofs.
+that round reuses206 comparisons/all58 passing proofs.
+[Progressive444/live lookahead](WARM-JPEG-REFINEMENT-LOOKAHEAD.md) improves10.1%;
+this latest round likewise reuses206 comparisons/all58 passing proofs.
 The sixty-two short screens remain gaps; older independent timings are explicitly
 superseded. The two
 former short-regression witnesses are now historical after changed AC emission.
@@ -53,7 +55,7 @@ established before this audit and were reconciled, not expanded.
 | B01 | Bilinear Down8/16,Up8/16: shared resize dispatch and byte/word alpha-aware filtering | [Previous phase closed](WARM-CURRENT-BILINEAR.md); [Down8](WARM-BILINEAR-BYTE-ROW-CACHE.md), [Down16](WARM-BILINEAR-WORD-CACHE.md) and [Up8](WARM-BILINEAR-BYTE-FACTORIZATION.md) improved, still <=1x gaps |
 | B02 | JPEG adaptive Encode8/16,Encode422_8/16: changed AC planner at444/422 and both input depths | [All four closed](WARM-CURRENT-JPEG-ADAPTIVE.md) |
 | B03 | JPEG Decode8,NativeDecode8,NativeDecode420/422,OwnedDecodeGray,NativeDecode420Restart,DirectRgb422/420: changed ordinary AC loop plus distinct component renderers | [All eight closed](WARM-CURRENT-JPEG-DECODE.md) |
-| B04 | JPEG ProgressiveGray/420/422 plus ordinary/live-token444: masked refinement and its guarded fused readers | [Four ordinary proofs reused](WARM-JPEG-REFINEMENT-FUSED.md); [live-token444 improved](WARM-JPEG-CANCELABLE-REFINEMENT.md), still a <=1x gap |
+| B04 | JPEG ProgressiveGray/420/422 plus ordinary/live-token444: masked refinement and its guarded fused readers | [Four ordinary proofs reused](WARM-JPEG-REFINEMENT-FUSED.md); [live-token444 improved again](WARM-JPEG-REFINEMENT-LOOKAHEAD.md), still a <=1x gap |
 | B05 | The25 named PNG decode selectors in the linked report: byte/word predictors, expansion and input-pool changes | [All25 closed](WARM-CURRENT-PNG-DECODE.md) |
 | B06 | PNG DecodeAdam7_16,DecodeGray1Adam7: interlaced placement on changed shared framing; later palette4/8 cases reuse their own proofs | [Closed](WARM-CURRENT-PNG-ADAM7.md) |
 | B07 | Png8/16,PngCropFit8/16: complete fresh input, orientation/crop/fit and intermediate ownership | [Closed](WARM-CURRENT-PNG-STREAM.md), with word fusion proof reused |
@@ -77,7 +79,17 @@ round retains correctness/control evidence, short mean before confirmation,
 all actuals/quiet guards and full accepted-change qualification. Raw refusals,
 failed guards and superseded experiments remain in their original reports.
 
-The latest [general byte-row reconciliation](warm-bicubic-byte-emitter-evidence.json)
+The latest [live refinement reconciliation](warm-jpeg-refinement-lookahead-evidence.json)
+replaces only ProgressiveCancelable444:10.1% less time, still1.552x/upper1.731.
+Bounded ordinary lookahead retains original logical cursor, pending bits, per-bit
+cancellation/work and immediate updates on every exit. Original fused/scalar
+readers are untouched; two methods and one dispatch are added. Other206 rows and
+all58 passing proofs are reused; unchanged ordinary-progressive/baseline controls
+are within0.9%. Full3680+475scalar/OS and the same actual package consumer/all3
+examples bothOS pass. All three short jobs retain actuals/both quiet guards on one
+immutable producer/harness/selector/reference build. No new performance matrix.
+
+The preceding [general byte-row reconciliation](warm-bicubic-byte-emitter-evidence.json)
 replaces those same thirteen cache rows without new coverage. Five byte paths
 improve11.6–20.8%; one dispatch/depth predicate and private name change, with the
 entire emitter body unchanged. VerticalUp8's1.010x short warrants one independent

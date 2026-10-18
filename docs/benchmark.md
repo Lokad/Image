@@ -31,17 +31,18 @@ BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
 path reconciliation makes the retained evidence applicable to current production.
 
-Latest production round: [byte bilinear row reuse](../benchmarks/WARM-BILINEAR-BYTE-ROW-CACHE.md)
-reduces the existing RGBA8 reduction time 23.7%, to 500.71 µs / 1.291x
-(upper 1.406x), at 157,960 B/op. This is a qualified short gap. No heap workspace
-or persistent cache is added. The unchanged word-reduction and byte-enlargement
-managed control means remain within 1.3% of retained results. Other 206 comparisons
-and all 58 passing proofs retain their hot paths and evidence. No new raster,
-selector, settings grid or profile; passing cases are stopped.
-The 207 rows select 145 independent confirmations and 62 qualified short screens.
-Fresh **3,678 Release cases per OS** (1,357 internal +1,423 public +898 live FFmpeg),
-plus 132 scalar bilinear/reference controls, pass. The consumer and all three
-examples pass through the **same actual Release package on Windows/Linux**.
+Latest production round: [progressive JPEG live-token lookahead](../benchmarks/WARM-JPEG-REFINEMENT-LOOKAHEAD.md)
+reduces the existing progressive444/live-token time 10.1%, to 5,206.53 µs /
+1.552x (upper 1.731x), at 2,682,364 B/op. This is a qualified short gap.
+Logical failure state, exact per-bit cancellation/work and immediate coefficient
+updates are preserved, without added heap workspace. Ordinary progressive444 and
+cancelable baseline444 control means stay within 0.9% of retained results.
+Other 206 comparisons and all 58 passing proofs retain their hot paths and
+evidence. No new performance raster, selector or settings grid; passing cases
+are stopped. The 207 rows select 145 independent confirmations and 62 qualified
+short screens. Fresh **3,680 Release cases per OS** (1,359 internal +1,423 public
++898 live FFmpeg), plus 475 scalar JPEG controls, pass. The consumer and all
+three examples pass through the **same actual Release package on Windows/Linux**.
 Production remains safe managed dependency-free C#/.NET10. Unaffected
 qualification is reused.
 
@@ -120,7 +121,7 @@ qualification is reused.
 | [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-JPEG-CANCELABLE-AC-CACHE.md) | 2,765.05 | 1,717.88 | 1.610 / 1.664 | 2,664,373 | Gap (short; qualified) |
 | [JPEG progressive gray](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md) | 2,665.76 | 1,715.98 | 1.553 / 1.557 | 1,232,526 | Gap (independent) |
 | [JPEG progressive 4:2:0](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md) | 2,671.13 | 1,954.79 | 1.366 / 1.371 | 1,637,526 | Gap (independent) |
-| [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-CANCELABLE-REFINEMENT.md) | 5,791.94 | 3,354.98 | 1.726 / 1.798 | 2,682,364 | Gap (short; qualified) |
+| [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-REFINEMENT-LOOKAHEAD.md) | 5,206.53 | 3,354.93 | 1.552 / 1.731 | 2,682,364 | Gap (short; qualified) |
 | [JPEG progressive 4:2:2](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md) | 3,283.57 | 2,241.02 | 1.465 / 1.471 | 1,996,661 | Gap (independent) |
 | [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-REFINEMENT-FUSED.md) | 5,312.60 | 3,355.07 | 1.583 / 1.589 | 2,682,364 | Gap (independent) |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8L-BORROWED-GREEN.md) | 10,801.06 | 5,965.33 | 1.811 / 1.925 | 1,966,616 | Gap (short; qualified) |
