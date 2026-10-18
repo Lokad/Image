@@ -164,6 +164,27 @@ for (var sample = 0; sample < 19*4; sample++)
     if (originalPng.GetRow16(y)[sample] != System.Buffers.Binary.BinaryPrimitives.ReadUInt16LittleEndian(originalPngExpected.AsSpan((y*19*4+sample)*2)))
         throw new Exception("Package consumer authored PNG samples differ.");
 using var opaque = ImageBuffer.Create(8, 8, 8);
+// Original T.81 four-component stream: unit quantization, one-bit DC-zero/EOB
+// tables and four zero blocks. Every coded channel is analytically 128.
+using var cmykFixture = new MemoryStream(); cmykFixture.Write(new byte[] { 255, 216 });
+void CmykSegment(byte marker, byte[] payload)
+{
+    cmykFixture.Write(new byte[] { 255, marker, (byte)((payload.Length + 2) >> 8), (byte)(payload.Length + 2) });
+    cmykFixture.Write(payload);
+}
+CmykSegment(0xEE, new byte[] { 65, 100, 111, 98, 101, 0, 100, 0, 0, 0, 0, 0 });
+var cmykQuantization = new byte[65]; cmykQuantization.AsSpan(1).Fill(1); CmykSegment(0xDB, cmykQuantization);
+CmykSegment(0xC0, new byte[] { 8, 0, 1, 0, 2, 4, 1, 17, 0, 2, 17, 0, 3, 17, 0, 4, 17, 0 });
+var cmykTables = new byte[36]; cmykTables[1] = cmykTables[19] = 1; cmykTables[18] = 16; CmykSegment(0xC4, cmykTables);
+CmykSegment(0xDA, new byte[] { 4, 1, 0, 2, 0, 3, 0, 4, 0, 0, 63, 0 });
+cmykFixture.Write(new byte[] { 0, 255, 217 });
+var cmykBytes = cmykFixture.ToArray();
+using var cmykPixels = ImageCodec.Decode(cmykBytes);
+if (!cmykPixels.GetRow8(0).SequenceEqual(new byte[] { 64, 64, 64, 255, 64, 64, 64, 255 }))
+    throw new Exception("Package consumer CMYK color/black/alpha differs.");
+var cmykSamples = new byte[8]; ImageCodec.DecodeJpeg(cmykBytes, cmykSamples, JpegSampleFormat.Cmyk);
+if (cmykSamples.AsSpan().IndexOfAnyExcept((byte)127) >= 0)
+    throw new Exception("Package consumer CMYK inversion differs.");
 for (var y = 0; y < 8; y++)
 for (var x = 0; x < 8; x++) new byte[] { 123, 123, 123, 255 }.CopyTo(opaque.GetRow8(y)[(x*4)..]);
 using var jpeg = new MemoryStream();

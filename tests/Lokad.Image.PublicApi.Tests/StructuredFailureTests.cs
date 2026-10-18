@@ -96,7 +96,7 @@ public sealed class StructuredFailureTests
     [Theory]
     [InlineData(0xC1, 8, 1, UnsupportedImageFeature.CodingProfile)]
     [InlineData(0xC0, 12, 1, UnsupportedImageFeature.BitDepth)]
-    [InlineData(0xC0, 8, 4, UnsupportedImageFeature.ComponentLayout)]
+    [InlineData(0xC0, 8, 2, UnsupportedImageFeature.ComponentLayout)]
     public void JpegRejectionsExposeFeatureAndFormat(byte marker, byte precision, byte components,
         UnsupportedImageFeature feature)
     {

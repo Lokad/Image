@@ -13,6 +13,9 @@ internal readonly ref struct JpegSampleInput
         JpegSampleFormat format, int stride, OperationContext context)
     {
         if (!Enum.IsDefined(format)) throw new ArgumentOutOfRangeException(nameof(format));
+        if (format == JpegSampleFormat.Cmyk)
+            throw new UnsupportedImageException(UnsupportedImageFeature.ComponentLayout,
+                "JPEG sample encoding accepts grayscale or RGB input.", ImageFormat.Jpeg);
         ArgumentOutOfRangeException.ThrowIfNegative(stride);
         context.PixelBytes(width, height, 8);
         if (width > 65535 || height > 65535)

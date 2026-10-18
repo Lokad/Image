@@ -1,9 +1,11 @@
 # Material warm coverage
 
 Updated 2026-10-18. The **warm single-CPU parity objective remains open**:
-64 independent passes, 142 measured mean gaps and one confidence-open case across
-207 named rows. The [three-table summary](../docs/benchmark.md) selects 123
-independent confirmations and 84 qualified shorts. Reuse unchanged passing paths;
+63 independent passes, 126 measured mean gaps and one confidence-open case across
+190 current rows; 17 prior-production JPEG decode/inspection rows need reconfirmation.
+The [three-table summary](../docs/benchmark.md) retains all 207 numeric rows:
+122 current independent confirmations, 68 current qualified shorts and 17 prior rows.
+Reuse unchanged passing paths;
 do not add an image or settings grid.
 
 Shared-budget codec entry points add two required, **unmeasured** representatives:
@@ -12,8 +14,9 @@ decode and retained-budget owner disposal; `SharedBudgetEncode/Jpeg420Rgba8`
 reuses `WarmJpeg/Encode420_8` to cover complete output streaming and work settlement.
 Reuse the existing inputs, settings, native references and quality gates. These
 cover the new common admission/ownership boundaries, not new codec algorithms.
-The 207 numeric rows retain their evidence: original codec entry points, operation
-state layout, kernels, allocations and ImageBuffer disposal are unchanged.
+These admission additions leave original successful codec paths and ImageBuffer
+disposal unchanged. The later JPEG compatibility changes invalidate only the
+JPEG decode/inspection timings described below.
 Budgeted entry points have correctness/package qualification, pending separate
 quiet-VM elapsed/allocation evidence; existing parity claims do not cover them.
 
@@ -25,7 +28,7 @@ lifetime, with equivalent native gray/RGB sample delivery. They exercise the
 distinct single-channel copy and three-channel color-writing boundaries without
 an RGBA frame. Packed rows, original inputs/settings and existing JPEG quality
 gates are fixed; padded rows and opt-in orientation have correctness coverage.
-All 207 original numeric rows remain applicable. Direct CMYK decode remains open.
+JPEG sample decoding now also supports CMYK, as described below.
 
 Direct JPEG sample encoding adds two **unmeasured** representatives:
 `JpegSamplesEncode/GrayscaleResident` uses the fixed grayscale projection and the
@@ -34,15 +37,46 @@ uses the fixed opaque RGB projection and FFmpeg's 4:2:0 reference. Retain existi
 quality/size matching, with equivalent raw sample delivery, complete row
 normalization, streaming and independent encoded output ownership. The cases
 cover single-component samples and packed RGB conversion, without a settings grid.
-Six new named boundaries now await elapsed/allocation evidence; their existing
+These six named boundaries await elapsed/allocation evidence; their existing
 codec references do not provide measurements of the new public operations.
+
+JPEG compatibility changes shared frame/header parsing (one/three/four components),
+scan setup (four component slots), sampling validation (horizontal ratios up to
+four), Adobe marker handling and final decode dispatch. Therefore **all 17 existing
+JPEG decode/inspection rows** lose current-code timing validity, including the
+fresh-Stream restart case and resident Identify. Their exact old numbers remain
+historical. Entropy/IDCT kernels are unchanged, but that alone does not prove the
+complete operation unchanged. JPEG encode, PNG/WebP and editing evidence is reused.
+Resolve these uncertainties before assuming optimization is needed.
+
+Five further **unmeasured** representatives cover the newly required algorithms:
+
+- `JpegDecode/CmykAdobeResident`: four component planes, Adobe inversion and
+  complete owned RGBA conversion from an original CMYK projection.
+- `JpegDecode/Ycck420Resident`: subsampled color reconstruction, explicit matrix
+  transform and a full-resolution black plane, using the same original input.
+- `JpegSamplesDecode/CmykResident`: complete caller-owned canonical CMYK output;
+  establish an equivalent native raw-component delivery boundary before timing.
+  Native RGB output alone does not cover this operation.
+- `JpegDecode/411Resident`: quarter-width horizontal chroma reconstruction on the
+  existing RGB projection; confirm native sample-grid equivalence before timing.
+- `JpegDecode/410Resident`: quarter-width, half-height chroma (JPEG factors 4×2,
+  not video pixel format 4×4); confirm native sample-grid equivalence before timing.
+
+Baseline/progressive analytical and live FFmpeg compatibility checks cover these
+layouts; they are not performance confirmations. Reuse the existing source
+projections and fixed settings. The bounded checklist is now **218 named cases**:
+207 retained numeric rows plus eleven unmeasured new operations. Do not add a
+shape, depth or quality grid. Add cases only for a distinct required path omitted
+from this list, with its concrete reason.
 
 Latest [wider RGBA8 horizontal reversal](WARM-HORIZONTAL-FLIP512.md) improves
 single-output flip **22.0%**, passing parity at **0.950× / upper 0.965×**. Two live
 outputs improve **27.9%** but remain a qualified **1.053×** gap. Both retain
 **128 B/image**, exact pixels, hidden RGB and independent owners. The RGBA16
 passing kernel and original fallbacks remain unchanged; no new allocation or
-resource/work charge. Other 205 comparisons/all 63 prior passing proofs remain.
+resource/work charge. At that round, other 205 comparisons/all 63 prior passing
+proofs remained valid; the JPEG rows above now require reconfirmation.
 All 3,739 Release tests/OS, 67 affected public hardware-off checks/OS and the same
 actual private package consumer/all three examples pass on Windows/Linux.
 The newly passing single-owner path stops; no width/unroll/inlining grid follows.
@@ -84,7 +118,7 @@ established before this audit and were reconciled, not expanded.
 | B14 | JPEG4208/16,restart,gray and geometric live-token/forward output; VP8 ordinary/simple/alpha/live-token/Stream and opaque8/16 encode; VP8L native/indexed/live-token/Stream and exact backend encodes | [VP8 source views](WARM-VP8-SOURCE-VIEWS.md) improve four encodes; [fixed JPEG encodes](WARM-JPEG-FIXED-AC-FUSION.md) and other unchanged proofs reused |
 | B15 | Nearest Down8/16,Up8/16: unchanged early dispatch/integer kernels and allocation path | Existing independent proofs reused |
 | C01 | PNG resident Identify: full container/CRC/EXIF without inflation, fresh descriptor; decode/cold timings do not cover it | [Closed](WARM-PNG-IDENTIFY.md),1.234x/upper1.238x,88B/op |
-| C02 | JPEG resident Identify: complete marker/scan/stuffing/EXIF/EOI scan without entropy/pixels | [Parity confirmed](WARM-JPEG-ENTROPY.md),0.499x/upper0.506x,88B/op |
+| C02 | JPEG resident Identify: complete marker/scan/stuffing/EXIF/EOI scan without entropy/pixels | [Prior-production confirmation](WARM-JPEG-ENTROPY.md),0.499x/upper0.506x,88B/op; reconfirm after four-component header support |
 | C03 | WebP resident Identify: distinct RIFF/feature/header/EXIF algorithm, one existing VP8L packet | [Closed](WARM-WEBP-IDENTIFY.md),0.0040x/upper0.0045x,88B/op,explicit FFmpeg parser reference |
 | C04 | Fresh non-exposed seekable Stream Identify on the same C01 PNG: fast metadata boundary exposes input acquisition/read/EOF/ownership costs | [Closed](WARM-PNG-STREAM-IDENTIFY.md),1.445x/upper1.459x,184B/op |
 

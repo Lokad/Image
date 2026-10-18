@@ -287,15 +287,25 @@ def render():
         row('Mirrored transpose RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'Transverse16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
         row('Mirrored transpose RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'Transverse8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
     ]
+    # H4 changes shared JPEG frame/scan/control paths and inspection headers.
+    # Preserve the exact old numbers, but do not treat old JPEG timings as
+    # current-code confirmations. Other codec/edit/encode paths remain applicable.
+    decodes = [value.rsplit(' | ', 1)[0] + ' | Prior production; reconfirm |'
+               if value.startswith('| [JPEG') else value for value in decodes]
     all_rows = decodes + encodes + edits
     parity_count = sum(' | Parity confirmed |' in value for value in all_rows)
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
+    reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 207
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-18. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 207 numeric rows contain **{parity_count} confirmed parity
-cases, {gap_count} measured gaps and {confidence_count} confidence-open cases**. The earlier
+conservative upper ≤1x**. The 207 retained numeric rows contain **{parity_count} current
+parity confirmations, {gap_count} measured gaps and {confidence_count} confidence-open cases**;
+**{reconfirm_count} prior-production JPEG rows need reconfirmation** after the compatibility
+parser changes. Their old times/allocations are historical. Other paths reuse valid
+evidence. The earlier
 ≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
@@ -303,9 +313,12 @@ sizes or hardware. Stop cases already confirmed at ≤1x.
 
 Shared-budget entry points and direct JPEG grayscale/RGB sample codecs are
 implemented and correctness-qualified; their times and allocations are
-**unmeasured**. The checklist names six pending
-representatives using existing inputs. Original codec entry points and image
-disposal remain unchanged; the 207 numeric rows do not cover these new boundaries.
+**unmeasured**. The checklist names eleven pending
+representatives using existing inputs. The 207 numeric rows do not cover these
+new boundaries. JPEG decode/inspection changed; their rows are explicitly prior
+production. Other codecs, JPEG encoding and image disposal remain unchanged.
+CMYK/YCCK and quarter-width JPEG compatibility paths are correctness-qualified
+but also await the named timing/allocation evidence.
 
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
 FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,
@@ -327,14 +340,14 @@ Independent jobs retain all 12 actuals; explicitly labeled short screens retain
 all three. Both retain 5s `exclusive-vm-idle-v2` guards. Earlier records
 retain their original protocol and failures. **B/op** is managed allocation from
 BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
-**unmeasured**, not zero. Timings were collected across rounds; precise unchanged-
-path reconciliation makes the retained evidence applicable to current production.
+**unmeasured**, not zero. Timings were collected across rounds; unchanged-path
+reconciliation applies to rows without the prior-production label.
 
 Latest [wider RGBA8 horizontal reversal](../benchmarks/WARM-HORIZONTAL-FLIP512.md)
 improves the single-output flip **22.0%**, independently confirming **0.950× /
 upper 0.965×**. Two live outputs improve **27.9%** but remain a qualified **1.053×**
-gap. Both retain **128 B/image**. Other 205 comparisons and all 63 prior passing
-proofs remain valid. Fresh **3,739 Release tests per OS**, 67 affected public
+gap. Both retain **128 B/image**. At that performance round, other 205 comparisons
+and all 63 prior passing proofs remained valid. Its **3,739 Release tests per OS**, 67 affected public
 checks/OS with AVX-512 disabled and the **same actual package consumer/all three
 examples on Windows/Linux** pass. Production remains safe managed dependency-free
 .NET 10; original fallbacks, work/cancellation, admission and ownership remain.
@@ -342,10 +355,10 @@ examples on Windows/Linux** pass. Production remains safe managed dependency-fre
 Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDENCE.md)
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
-retains its1.012x mean gap/1.014x upper. Current totals are**64passes/142gaps/1confidence**,
-with123independent selected confirmations+84qualified shorts. Every actual/outlier
-and both quiet guards remain; unchanged production/package qualification is reused.
-No builds, repeat-until-pass or small residual tuning. Stop the64passing paths.
+retains its1.012x mean gap/1.014x upper. Current totals are **{parity_count} passes /
+{gap_count} gaps / {confidence_count} confidence open / {reconfirm_count} prior JPEG rows**.
+Every actual/outlier and both quiet guards remain; unchanged qualification is reused.
+Resolve the named JPEG uncertainties before optimization. Stop current passing paths.
 
 **Decode and metadata**
 

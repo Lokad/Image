@@ -43,6 +43,7 @@ internal ref partial struct JpegDecoder
 
     public ImageBuffer Decode()
     {
+        var adobeTransform = -1;
         try
         {
             while (position < data.Length)
@@ -54,6 +55,8 @@ internal ref partial struct JpegDecoder
                     if (!scanSeen) throw new ImageDataException("JPEG has no pixel scans.");
                     foreach (var component in components)
                         if (component.Approximation[0] < 0) throw new ImageDataException("JPEG component is missing a DC scan.");
+                    if (components.Length == 4) return RenderCmyk(adobeTransform);
+                    if (adobeTransform == 2) throw UnsupportedColorTransform();
                     return Render();
                 }
                 var payload = ReadSegment();
@@ -68,7 +71,8 @@ internal ref partial struct JpegDecoder
                     case 0xDA: ReadScan(payload); scanSeen = true; break;
                     case 0xEE when payload.StartsWith("Adobe"u8):
                         if (payload.Length < 12) throw new ImageDataException("Truncated Adobe JPEG marker.");
-                        if (payload[11] > 1) throw new UnsupportedImageException(UnsupportedImageFeature.ColorTransform, "Unsupported JPEG Adobe color transform.", ImageFormat.Jpeg);
+                        if (payload[11] > 2) throw UnsupportedColorTransform();
+                        adobeTransform = payload[11];
                         rgb = payload[11] == 0; break;
                     case >= 0xE0 and <= 0xEF or 0xFE: break;
                     default: throw new UnsupportedImageException(UnsupportedImageFeature.ControlMarker, "Unsupported JPEG control marker.", ImageFormat.Jpeg);
@@ -112,7 +116,7 @@ internal ref partial struct JpegDecoder
         if (frameSeen || payload.Length < 6) throw new ImageDataException("Invalid JPEG frame.");
         progressive = isProgressive; frameSeen = true;
         var count = payload[5];
-        if (count is not (1 or 3) || payload.Length != 6 + count * 3) throw new ImageDataException("Invalid JPEG components.");
+        if (count is not (1 or 3 or 4) || payload.Length != 6 + count * 3) throw new ImageDataException("Invalid JPEG components.");
         components = new Component[count];
         int totalBlocks = 0;
         for (var i = 0; i < count; i++)
@@ -132,12 +136,12 @@ internal ref partial struct JpegDecoder
             // factors do not change the single component's raster dimensions.
             components[0].H = 1; components[0].V = 1; maxH = 1; maxV = 1;
         }
-        else if (components[0].H != maxH || components[0].V != maxV
+        else if (count == 3 && (components[0].H != maxH || components[0].V != maxV
             || components[1].H != components[2].H || components[1].V != components[2].V
             || maxH % components[1].H != 0 || maxV % components[1].V != 0
-            || maxH / components[1].H is not (1 or 2)
+            || maxH / components[1].H is not (1 or 2 or 4)
             || maxV / components[1].V is not (1 or 2)
-            || (maxH == components[1].H && maxV != components[1].V))
+            || (maxH == components[1].H && maxV != components[1].V)))
             throw new UnsupportedImageException(UnsupportedImageFeature.SamplingLayout, "Unsupported JPEG component sampling layout.", ImageFormat.Jpeg);
         if (count == 3 && components[0].Id == 'R' && components[1].Id == 'G' && components[2].Id == 'B') rgb = true;
         mcuColumns = (info.Width + 8 * maxH - 1) / (8 * maxH);
@@ -195,10 +199,10 @@ internal ref partial struct JpegDecoder
 
     private void ReadScan(ReadOnlySpan<byte> payload)
     {
-        if (!frameSeen || payload.Length < 6 || payload[0] is < 1 or > 3 || payload.Length != 4 + payload[0] * 2)
+        if (!frameSeen || payload.Length < 6 || payload[0] is < 1 or > 4 || payload.Length != 4 + payload[0] * 2)
             throw new ImageDataException("Invalid JPEG scan selectors.");
         var count = payload[0];
-        Span<int> indexes = stackalloc int[3]; Span<int> dc = stackalloc int[3]; Span<int> ac = stackalloc int[3];
+        Span<int> indexes = stackalloc int[4]; Span<int> dc = stackalloc int[4]; Span<int> ac = stackalloc int[4];
         var ss = payload[1 + 2 * count]; var se = payload[2 + 2 * count];
         var ah = payload[3 + 2 * count] >> 4; var al = payload[3 + 2 * count] & 15;
         if (!progressive && (ss != 0 || se != 63 || ah != 0 || al != 0)) throw new ImageDataException("Invalid baseline JPEG scan parameters.");

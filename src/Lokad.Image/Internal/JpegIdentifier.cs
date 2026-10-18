@@ -71,7 +71,7 @@ internal static class JpegIdentifier
                 height = BinaryPrimitives.ReadUInt16BigEndian(payload[1..]);
                 width = BinaryPrimitives.ReadUInt16BigEndian(payload[3..]);
                 var components = payload[5];
-                if (components is not (1 or 3)) throw new UnsupportedImageException(UnsupportedImageFeature.ComponentLayout, "JPEG component layout is not supported.", ImageFormat.Jpeg);
+                if (components is not (1 or 3 or 4)) throw new UnsupportedImageException(UnsupportedImageFeature.ComponentLayout, "JPEG component layout is not supported.", ImageFormat.Jpeg);
                 if (payload.Length != 6 + components * 3 || width == 0 || height == 0)
                     throw new ImageDataException("Invalid JPEG frame dimensions or components.");
                 context.PixelBytes(width, height, 8); frame = true;

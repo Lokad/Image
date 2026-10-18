@@ -11,6 +11,7 @@ internal ref partial struct JpegDecoder
         var width = (int)orientation >= 5 ? info.Height : info.Width;
         var height = (int)orientation >= 5 ? info.Width : info.Height;
         var channels = (int)format;
+        var adobeTransform = -1;
         var rowBytes = (long)width * channels;
         if (rowBytes > int.MaxValue)
             throw new ImageLimitException(ImageLimitKind.BufferLength, "JPEG sample row is too large.");
@@ -33,14 +34,15 @@ internal ref partial struct JpegDecoder
                     if (!scanSeen) throw new ImageDataException("JPEG has no pixel scans.");
                     foreach (var component in components)
                         if (component.Approximation[0] < 0) throw new ImageDataException("JPEG component is missing a DC scan.");
-                    var source = options.SourceColorSpace == JpegColorSpace.Auto
-                        ? components.Length == 1 ? JpegColorSpace.Grayscale : rgb ? JpegColorSpace.Rgb : JpegColorSpace.YCbCr
-                        : options.SourceColorSpace;
-                    if (source == JpegColorSpace.Grayscale ? components.Length != 1 : components.Length != 3)
+                    var source = ResolveSampleColorSpace(options.SourceColorSpace, adobeTransform);
+                    var sourceComponents = source == JpegColorSpace.Grayscale ? 1 : source is JpegColorSpace.Cmyk or JpegColorSpace.Ycck ? 4 : 3;
+                    if (components.Length != sourceComponents || (format == JpegSampleFormat.Cmyk && sourceComponents != 4))
                         throw new UnsupportedImageException(UnsupportedImageFeature.ComponentLayout,
                             "JPEG components do not match the requested source color space.", ImageFormat.Jpeg);
                     MaterializeSamplePlanes();
-                    WriteSamples(destination, format, stride, source, orientation);
+                    if (sourceComponents == 4)
+                        WriteCmykSamples(destination, format, stride, source, ResolveCmykInversion(options.CmykInversion, adobeTransform), orientation);
+                    else WriteSamples(destination, format, stride, source, orientation);
                     return options.ApplyOrientation
                         ? info with { Width = width, Height = height, Orientation = ImageOrientation.Normal } : info;
                 }
@@ -56,8 +58,8 @@ internal ref partial struct JpegDecoder
                     case 0xDA: ReadScan(payload); scanSeen = true; break;
                     case 0xEE when payload.StartsWith("Adobe"u8):
                         if (payload.Length < 12) throw new ImageDataException("Truncated Adobe JPEG marker.");
-                        if (payload[11] > 1) throw new UnsupportedImageException(UnsupportedImageFeature.ColorTransform,
-                            "Unsupported JPEG Adobe color transform.", ImageFormat.Jpeg);
+                        if (payload[11] > 2) throw UnsupportedColorTransform();
+                        adobeTransform = payload[11];
                         rgb = payload[11] == 0; break;
                     case >= 0xE0 and <= 0xEF or 0xFE: break;
                     default: throw new UnsupportedImageException(UnsupportedImageFeature.ControlMarker,

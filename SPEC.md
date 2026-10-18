@@ -9,15 +9,15 @@ from required future functionality.
 | PNG decode | Implemented; full authored profile matrix with exact analytical and FFmpeg RGBA | All legal static color/depth combinations, palette/tRNS, five filters and Adam7 |
 | PNG encode | Implemented; exact round trips and live FFmpeg checks | Noninterlaced gray/RGB/gray-alpha/RGBA, 8/16-bit |
 | JPEG identify | Implemented; live and authored header checks | Bounded baseline/progressive 8-bit inspection and orientation |
-| JPEG pixels | Implemented; authored analytical cases, frozen FFmpeg expectations and live comparisons | Baseline/progressive grayscale/YCbCr decode, restart markers, common subsampling; baseline encode |
+| JPEG pixels | Implemented; authored analytical cases, frozen FFmpeg expectations and live comparisons | Baseline/progressive gray/RGB/YCbCr/CMYK/YCCK decode, restart markers and required sampling; baseline gray/YCbCr encode |
 | WebP identify | Implemented; live and authored header checks | Bounded simple/extended still-container inspection and orientation |
 | WebP lossless pixels | Implemented; exact frozen and live FFmpeg comparisons plus authored transform/entropy cases | VP8L decode/encode with transparency and hidden RGB |
 | WebP lossy decode | Implemented; exact frozen YUV/alpha reconstruction and bounded RGB comparisons | VP8 key frames with raw/compressed ALPH |
 | WebP lossy encode | Implemented; original output independently decoded by FFmpeg | VP8 output with explicit quality/effort and transparency |
 | Exact edits | Implemented; hand-computed permutations and live FFmpeg checks | Crop, flips, quarter turns, transpose, all eight EXIF orientations |
 | Resize | Implemented; hand-computed kernel and alpha cases | Exact dimensions, fit, nearest/bilinear/bicubic, alpha-aware filtering |
-| JPEG caller samples | Gray/RGB decode/encode implemented in development; CMYK decode planned | Caller-provided 8-bit samples without mandatory RGBA; explicit source color space/inversion, quality and sampling |
-| JPEG compatibility extensions | Planned; not supported by the released package | CMYK/YCCK and 4:1:1/4:1:0 sampling |
+| JPEG caller samples | Gray/RGB/CMYK decode and gray/RGB encode implemented in development | Caller-provided 8-bit samples without mandatory RGBA; explicit source color space/inversion, quality and sampling |
+| JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4×1) / 4:1:0 (4×2) sampling |
 | Stream extensions | Planned | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
 | Drawing/compositing | Planned | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
 | Text | Planned | Supplied TrueType fonts; size/style/color/position, wrapping, line spacing and layout bounds for overflow/fitting |
@@ -52,19 +52,32 @@ at 4 MiB combined. Every lease is fully zeroed before parsing and returned after
 its last use or a decode failure. Live decoders never share a lease. Original
 coefficient working-memory and work admission remain unchanged.
 
-`ImageCodec.DecodeJpeg` writes caller-owned interleaved 8-bit grayscale or RGB
+`ImageCodec.DecodeJpeg` writes caller-owned interleaved 8-bit grayscale, RGB or CMYK
 samples without an RGBA frame or encoded-input copy. Stride zero means packed;
 positive stride must cover a row. Padding/suffix bytes are untouched. The supplied
 input and complete destination spans count toward working admission and must not
 overlap. `ImageBudget.DecodeJpeg` uses the same operation, releasing codec
 admission on return; caller storage lifetimes can use an explicit reservation.
 Failures may leave a completed pixel prefix; no buffer ownership is transferred.
-`JpegDecodeOptions.SourceColorSpace` selects encoded Gray/RGB/YCbCr interpretation;
+`JpegDecodeOptions.SourceColorSpace` selects encoded Gray/RGB/YCbCr/CMYK/YCCK interpretation;
 Auto preserves component-count, Adobe and RGB-ID inference. RGB output uses the
 existing encoded-space color matrix and rounding. Grayscale takes decoded Y for
 YCbCr, repeats gray unchanged, or rounds `0.299 R + 0.587 G + 0.114 B` for RGB.
 EXIF reorientation is opt-in and writes directly to the oriented destination
 layout; returned dimensions/orientation describe those samples. ICC is not applied.
+
+Four-component Auto interprets Adobe APP14 transform 2 as YCCK and transform 0
+or an absent marker as CMYK. Transform 1 is unsupported for four components.
+Canonical CMYK samples use 0 for no ink and 255 for full ink. YCCK applies the
+owned inverse YCbCr matrix to `(255-C,255-M,255-Y)` while keeping K independent.
+`CmykInversion.Auto` then inverts all four values for Adobe transform 0/2, leaving
+untagged data unchanged; `None` and `Invert` override that convention explicitly.
+These defaults accommodate the [documented inversion ambiguity](https://raw.githubusercontent.com/libjpeg-turbo/libjpeg-turbo/main/doc/libjpeg.txt).
+RGB uses `(255-C)*(255-K)/255` per channel, with unrounded matrix/black arithmetic
+until the final clamp/round; grayscale weights those unrounded RGB values.
+This is a device-color approximation with no ICC processing. JPEG K is never
+alpha. CMYK output requires four encoded components; CMYK encoding is unsupported.
+Four-component frames use the existing sampling-factor and ten-block MCU bounds.
 
 `ImageCodec.EncodeJpeg` and `ImageBudget.EncodeJpeg` also accept borrowed gray/RGB
 samples and positive or packed strides. Input is neither changed nor retained.

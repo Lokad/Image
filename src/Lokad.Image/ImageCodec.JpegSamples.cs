@@ -34,7 +34,7 @@ public static partial class ImageCodec
         finally { admission.Complete(context.ConsumedWork); }
     }
 
-    /// <summary>Decode JPEG into caller-owned 8-bit grayscale or RGB samples.</summary>
+    /// <summary>Decode JPEG into caller-owned 8-bit grayscale, RGB or CMYK samples.</summary>
     /// <remarks>Stride zero means tightly packed; otherwise use a positive stride
     /// at least as large as one row. Padding and unused suffix bytes are untouched.
     /// Input and destination must not overlap. Failures can leave partial pixels.
@@ -53,6 +53,7 @@ public static partial class ImageCodec
         var context = InputContext(input.Length, options.Limits, cancellationToken);
         if (!Enum.IsDefined(format)) throw new ArgumentOutOfRangeException(nameof(format));
         if (!Enum.IsDefined(options.SourceColorSpace)) throw new ArgumentOutOfRangeException(nameof(options));
+        if (!Enum.IsDefined(options.CmykInversion)) throw new ArgumentOutOfRangeException(nameof(options));
         ArgumentOutOfRangeException.ThrowIfNegative(stride);
         if (input.Overlaps(destination)) throw new ArgumentException("JPEG input and destination must not overlap.", nameof(destination));
         if (input.Length < 2 || input[0] != 255 || input[1] != 216)

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- CMYK/YCCK JPEG decoding, including caller CMYK samples and explicit inversion,
+  plus JPEG 4:1:1/4:1:0 sampling layouts.
 - JPEG decoding/encoding with caller-owned grayscale/RGB samples and strides,
   explicit decode color interpretation/orientation and encode quality/sampling,
   without RGBA intermediates.
