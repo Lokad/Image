@@ -5,6 +5,33 @@ namespace Lokad.Image.Tests;
 public sealed class JpegSparseInverseTests
 {
     [Fact]
+    public void AxisMixturesKeepQualifiedPixelsInputsGuardsAndWork()
+    {
+        int[][] patterns = [[0, 1, 8], [0, 1, 2, 3, 8, 16, 24, 56],
+            [8, 16, 24, 32, 40, 48, 56], [0, 7, 8, 16, 24, 32, 40, 56]];
+        foreach (var pattern in patterns)
+        foreach (var q in new ushort[] { 1, 2, 255, 65535 })
+        for (var seed = 0; seed < 64; seed++)
+        {
+            var coefficients = new int[64]; var quantization = Enumerable.Repeat((ushort)1, 64).ToArray();
+            for (var i = 0; i < pattern.Length; i++)
+            {
+                var index = pattern[i]; coefficients[index] = (seed * 73 + i * 37) % 129 - 64;
+                quantization[index] = i % 2 == 0 ? q : (ushort)1;
+            }
+            if (pattern[0] == 0) coefficients[0] = seed % 3 == 0 ? 740 : seed % 3 == 1 ? -1020 : 0;
+            var originalCoefficients = coefficients.ToArray(); var originalQuantization = quantization.ToArray();
+            var expected = new byte[64]; var output = Enumerable.Repeat((byte)173, 66).ToArray();
+            JpegTransform.Inverse(coefficients, quantization, expected, new(ImageLimits.Default, default));
+            var context = new OperationContext(ImageLimits.Default, default);
+            Assert.True(JpegTransform.TryInverseSparse(coefficients, quantization, output.AsSpan(1, 64), context));
+            Assert.Equal(expected, output.AsSpan(1, 64).ToArray()); Assert.Equal(4096, context.ConsumedWork);
+            Assert.Equal(173, output[0]); Assert.Equal(173, output[^1]);
+            Assert.Equal(originalCoefficients, coefficients); Assert.Equal(originalQuantization, quantization);
+        }
+    }
+
+    [Fact]
     public void HorizontalSignedMixturesAndQuantizersKeepEveryQualifiedRowAndGuard()
     {
         var coefficients = new int[64]; var quantization = Enumerable.Repeat((ushort)1, 64).ToArray();
@@ -63,7 +90,7 @@ public sealed class JpegSparseInverseTests
     [Fact]
     public void MalformedCanceledAndLimitedCallsLeavePixelsUntouched()
     {
-        var coefficients = new int[64]; coefficients[1] = 4; var quantization = Enumerable.Repeat((ushort)1, 64).ToArray(); var output = Enumerable.Repeat((byte)173, 64).ToArray();
+        var coefficients = new int[64]; coefficients[1] = 4; coefficients[8] = 4; var quantization = Enumerable.Repeat((ushort)1, 64).ToArray(); var output = Enumerable.Repeat((byte)173, 64).ToArray();
         Assert.Throws<ArgumentException>(() => JpegTransform.TryInverseSparse(new int[63], quantization, output, new(ImageLimits.Default, default)));
         var limited = new OperationContext(ImageLimits.Default with { MaxWork = 4095 }, default);
         Assert.Equal(ImageLimitKind.Work, Assert.Throws<ImageLimitException>(() => JpegTransform.TryInverseSparse(coefficients, quantization, output, limited)).Limit);

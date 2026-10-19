@@ -37,8 +37,11 @@ uncertainty:805.26µs/1.829x/upper1.902,1,085,680B/op. Exact managed pixels,
 normal/scalar native quality and two-live-output independence pass. Production,
 worker, fixture and existing selector/harness are reused; no rebuild or package/
 full rerun. Only this existing row refreshes. Other226 older codec/edit rows keep
-their identified scopes. Next: one exact axis-cross sparse-IDCT feasibility audit,
-using the unchanged-method profile. All four Lanczos3 gaps remain required;
+their identified scopes. The [axis-cross trial](WARM-JPEG-AXIS-CROSS-TRIAL.md)
+regressed4.5% and is rejected, with production restored. Five freshly compiled
+sparse tests pass normally/scalar on both OS; current full/package evidence is
+reused. Next: the already-named asynchronous nonseekable PNG inspection boundary.
+All four Lanczos3 gaps remain required;
 finite254/231numeric/23untimed and all verification counts stay unchanged.
 
 A bounded audit of the accepted 0.2.0 additions identifies exactly three required

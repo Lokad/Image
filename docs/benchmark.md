@@ -25,8 +25,11 @@ resolves old ownership/admission uncertainty: **805.26µs / 1.829x**, upper1.902
 1,085,680B/op. Exact analytical pixels, normal/scalar native quality and independent
 owners pass. The current immutable build, worker, fixture and selector are reused;
 no production/harness/native/selector build or repeated package/full qualification.
-Only this row refreshes; the material gap persists. Next: assess one exact
-axis-cross sparse-IDCT strategy, using existing unchanged-method profile evidence.
+Only this row refreshes; the material gap persists. The subsequent
+[axis-cross sparse-IDCT trial](../benchmarks/WARM-JPEG-AXIS-CROSS-TRIAL.md) regressed
+4.5% and was rejected; exact pixels passed and production is restored. Five sparse
+tests pass normally/scalar on both OS. No numeric row or package proof is replaced.
+Next: resolve the named asynchronous nonseekable PNG inspection boundary.
 
 [Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
 **76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
