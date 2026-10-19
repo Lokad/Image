@@ -7,6 +7,12 @@ all222 current numeric rows; no prior-production row remains. The
 observations and96 qualified shorts.24named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
 
+[The bounded sparse-prefix trial](WARM-JPEG-SPARSE-PREFIX-TRIAL.md) was rejected:
+3.1% mean gain still left1.75x. The exact accepted source and producers are
+restored on both OS; all existing rows/qualification are reused. One current
+6sec profile and one3actual screen, no new case or full package rerun. Next
+resolve the already-listed YCCK420 delivery boundary before assuming a gap.
+
 [Identical horizontal JPEG rows](WARM-JPEG-HORIZONTAL-ROW.md) improve the one-AC
 CMYK mean10.0%,746.37→671.44us, at1.726x. DC/general remain1.395x/1.126x,
 about1.086MB/op. The new `JpegDecode/CmykAdobeSparse2DResident` selects the retained

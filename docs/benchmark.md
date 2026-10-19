@@ -48,6 +48,10 @@ work/admission/owners and native gates pass. All4,197tests/OS,61affected hardwar
 checks/OS and same actual private package consumer/all examples pass on both OS.
 Three rows refreshed, one added; all70passing paths retain evidence and stop.
 
+[A bounded exact sparse-prefix trial](../benchmarks/WARM-JPEG-SPARSE-PREFIX-TRIAL.md)
+was rejected as immaterial. Accepted production, current rows and qualification
+remain unchanged; no long repeat or package rerun. YCCK420 delivery is next.
+
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end
 representatives remain unmeasured. Shared-budget reservation lifetime across awaits
