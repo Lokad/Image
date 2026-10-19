@@ -2,6 +2,9 @@
 
 ## 0.2.0 — Unreleased
 
+- Faster exact Lanczos3 normalization through certified integer remainders,
+  preserving pixels, memory admission and cancellation.
+
 - Alpha-aware Lanczos3 resizing at 8/16 bits, with reduction antialiasing,
   clamped edges, aspect-preserving fit and cooperative-memory admission.
 

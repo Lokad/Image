@@ -35,6 +35,9 @@ readiness**. The [subsequent warm baseline](../benchmarks/WARM-LANCZOS3-BASELINE
 qualifies transparent native controls and measures the four required paths,
 all with material gaps. No timing was taken during this functional round. Existing filter kernels
 and defaults are unchanged; published 0.1.0 remains immutable.
+The subsequent [exact-quotient round](../benchmarks/WARM-LANCZOS3-QUOTIENT.md)
+reduces complete time25.0–39.1%, qualifies4431tests/30scalar checks per OS and
+preserves every original pixel; parity remains open.
 
 Retained SHA-256 identities:
 

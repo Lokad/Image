@@ -11,21 +11,24 @@ The finite scope is now **254 cases:231 numeric+23 unmeasured**. The existing
 codec/edit rows do not yet requalify 0.2.0 admission, disposal or governed storage.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
 required representatives using the same513×259 asymmetric RGBA rasters. Their
-[quiet screens](WARM-LANCZOS3-BASELINE.md) all expose material gaps:
+[exact-quotient screens](WARM-LANCZOS3-QUOTIENT.md) improve25.0–39.1%, still gaps:
 
 | Named case | Fixed output and reason | State |
 | --- | --- | --- |
-| LanczosReduce8 | 256×129; widened radius-three antialias support and byte output | Gap14.995x/upper15.681x |
-| LanczosReduce16 | 256×129; full word precision and alpha normalization | Gap14.640x/upper15.438x |
-| LanczosEnlarge8 | 1027×519; negative-lobe enlargement, byte saturation and tiny alpha | Gap18.230x/upper19.052x |
-| LanczosEnlarge16 | 1027×519; full word precision, overshoot and tiny-alpha normalization | Gap19.104x/upper19.532x |
+| LanczosReduce8 | 256×129; widened radius-three antialias support and byte output | Gap11.329x/upper12.268x |
+| LanczosReduce16 | 256×129; full word precision and alpha normalization | Gap10.636x/upper11.042x |
+| LanczosEnlarge8 | 1027×519; negative-lobe enlargement, byte saturation and tiny alpha | Gap11.863x/upper12.360x |
+| LanczosEnlarge16 | 1027×519; full word precision, overshoot and tiny-alpha normalization | Gap11.608x/upper12.572x |
 
 The clamped halo/active-region and premultiplied float-output reference is now
 qualified for all four, including normal/scalar checks and twelve rejection
 controls each. All normalization, ownership and disposal are timed with one CPU.
 No other rows, gates or performance evidence are replaced. Aspect-fit uses the
 same kernel after small geometry work; add a separate timing case only if that
-boundary is material. Prioritize exact final quotient calculation first.
+boundary is material. Exact quotient calculation is now25.0–39.1% faster, with
+4431tests/30scalar checks and the same actual private package consumer/examples
+passing on both OS. Only these four rows refresh. Prioritize a proven quotient
+interval that preserves exact fallback at uncertain rounding boundaries next.
 
 A bounded audit of the accepted 0.2.0 additions identifies exactly three required
 paths absent from the older checklist; these are not a shape/depth/settings grid:

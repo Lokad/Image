@@ -92,7 +92,21 @@ internal static class LanczosResize
     {
         if (numerator <= 0) return 0;
         if (numerator >= denominator * maximum) return maximum;
-        var (quotient, remainder) = Int128.DivRem(numerator, denominator);
-        return (int)(quotient + (remainder * 2 >= denominator ? 1 : 0));
+        // The image arithmetic fits 96 bits. Drop 32 low bits to cheaply
+        // estimate using UInt64; no discarded bit decides a pixel. Clamp the
+        // candidate so its product fits the already checked sample range, then
+        // certify its exact remainder. This also handles wider synthetic inputs.
+        var projectedDenominator = (ulong)(denominator >> 32);
+        if (projectedDenominator != 0)
+        {
+            var quotient = Math.Clamp((int)((double)(ulong)(numerator >> 32) / projectedDenominator), 0, maximum);
+            var remainder = numerator - denominator * quotient;
+            if (remainder < 0) { quotient--; remainder += denominator; }
+            else if (remainder >= denominator) { quotient++; remainder -= denominator; }
+            if (remainder >= 0 && remainder < denominator)
+                return quotient + (remainder * 2 >= denominator ? 1 : 0);
+        }
+        var (exact, rest) = Int128.DivRem(numerator, denominator);
+        return (int)(exact + (rest * 2 >= denominator ? 1 : 0));
     }
 }
