@@ -145,6 +145,7 @@ def render():
         row('JPEG YCCK420, full-resolution black', 'warm-jpeg-ycck-caller-simd-evidence.json', ['cases', 'Ycck420', -1], 'WARM-JPEG-YCCK-CALLER-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG YCCK420 → caller RGB24', 'warm-jpeg-ycck-caller-simd-evidence.json', ['cases', 'Ycck420CallerRgb', -1], 'WARM-JPEG-YCCK-CALLER-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG H4V1 / 4:1:1 → owned RGBA8', 'warm-jpeg-411-simd-evidence.json', ['cases', 'Decode411', -1], 'WARM-JPEG-411-SIMD.md', verification='Gap (short; qualified)'),
+        row('JPEG H4V2 / 4:1:0 → owned RGBA8', 'warm-jpeg-410-evidence.json', ['cases', 'Decode410', -1], 'WARM-JPEG-410.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0', 'warm-jpeg-411-simd-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-411-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
@@ -313,27 +314,27 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 226
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 227
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-19. Target: **warm single-CPU parity, independently confirmed
-conservative upper ≤1x**. The 226 current numeric rows contain **{parity_count} passes,
+conservative upper ≤1x**. The 227 current numeric rows contain **{parity_count} passes,
 {gap_count} gaps and {confidence_count} confidence-open case**. The finite
-[material checklist](../benchmarks/WARM-COVERAGE.md) has 247 named cases, 21 unmeasured.
+[material checklist](../benchmarks/WARM-COVERAGE.md) has 247 named cases, 20 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
-[Exact SIMD JPEG 4:1:1](../benchmarks/WARM-JPEG-411-SIMD.md) cuts complete time
-**82.6%**,3,527.46→613.09µs, reducing7.771x to **1.352x / upper1.587x**,
-**751,279B/op**. Exact pixels, centered native normalization and complete owned
-output boundaries remain unchanged. Two selector controls refresh;223other numeric
-rows and all70passing proofs are reused. No new image/settings grid or profile.
+[JPEG 4:1:0](../benchmarks/WARM-JPEG-410.md) reveals the largest current gap:
+**7.144x / upper7.585x**,3,427.72/479.78µs,**720,759B/op**. Exact managed pixels;
+native maximum1/RMSE0.136 stays inside the existing gate. FFmpeg includes original
+quarter-sample recovery, centered expansion, staging/conversion/compaction and
+fresh owned output release. All226 prior rows/70passes are reused. No new image
+or settings grid; the retained general-render profile guides the next primitive.
 
-Accepted qualification:4,210tests/97hardware-off checks per OS, plus the same
-actual private package consumer/all three examples on Windows/Linux. Released0.1.0
-stays immutable. Largest current gap:CMYK2D sparse1.812x; its prefix trial remains
-rejected.21unmeasured representatives cover JPEG410, async, header, drawing and
-supplied-font paths. Stop unchanged passes; optimize demonstrated material gaps.
+Production and qualification are unchanged:4,210tests/97hardware-off checks per OS,
+same actual private package consumer/all three examples on Windows/Linux.
+Released0.1.0 stays immutable.20unmeasured representatives cover async, header,
+drawing and supplied-font paths. Stop passes; optimize demonstrated material gaps.
 
 JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale
 (managed/SIMD libjpeg-turbo) and **74,040/52,093 B** RGB420 (managed/FFmpeg), with

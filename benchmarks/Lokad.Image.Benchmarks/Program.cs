@@ -2,6 +2,12 @@ using BenchmarkDotNet.Running;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
+if (args.SequenceEqual(["--prepare-warm-jpeg-410"]))
+{
+    WarmJpeg410Input.Prepare();
+    return;
+}
+
 if (args.SequenceEqual(["--prepare-warm-jpeg-411"]))
 {
     WarmJpeg411Input.Prepare();

@@ -5,10 +5,11 @@ internal sealed partial class NativeWarmReference
 {
     public NativeWarmReference(JpegBenchmarkCase state, int cpu, string operation, int expectedBytes)
     {
-        var quarterWidth = operation == "jpeg-411-decode";
+        var quarterHeight = operation == "jpeg-410-decode";
+        var quarterWidth = operation == "jpeg-411-decode" || quarterHeight;
         var rgb = operation == "jpeg-ycck-rgb-decode";
-        if (operation is not ("jpeg-cmyk-decode" or "jpeg-ycck-decode" or "jpeg-ycck-rgb-decode" or "jpeg-411-decode") || expectedBytes != 513 * 259 * (rgb ? 3 : 4)) throw new ArgumentOutOfRangeException(nameof(operation));
-        var ycck = operation is "jpeg-ycck-decode" or "jpeg-ycck-rgb-decode"; var kind = quarterWidth ? "411" : rgb ? "ycck-rgb" : ycck ? "ycck" : "cmyk";
+        if (operation is not ("jpeg-cmyk-decode" or "jpeg-ycck-decode" or "jpeg-ycck-rgb-decode" or "jpeg-411-decode" or "jpeg-410-decode") || expectedBytes != 513 * 259 * (rgb ? 3 : 4)) throw new ArgumentOutOfRangeException(nameof(operation));
+        var ycck = operation is "jpeg-ycck-decode" or "jpeg-ycck-rgb-decode"; var kind = quarterHeight ? "410" : quarterWidth ? "411" : rgb ? "ycck-rgb" : ycck ? "ycck" : "cmyk";
         Executable = Path.Combine(state.Root, $"external/warm-reference/ffmpeg-jpeg-{kind}-warm");
         using (var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(state.Root, $"external/warm-reference/jpeg-{kind}-identity.json")))) BuildIdentity = document.RootElement.Clone();
         if (BuildIdentity.GetProperty("workerSha256").GetString() != JpegBenchmarkCase.HashFile(Executable)
@@ -23,9 +24,10 @@ internal sealed partial class NativeWarmReference
             Ready = Read();
             if (Ready.GetProperty("schemaVersion").GetInt32() != 1 || Ready.GetProperty("state").GetString() != "ready" || Ready.GetProperty("operation").GetString() != operation
                 || Ready.GetProperty("width").GetInt32() != 513 || Ready.GetProperty("height").GetInt32() != 259 || Ready.GetProperty("depth").GetInt32() != 8
-                || Ready.GetProperty("decodedPixelFormat").GetString() != (quarterWidth ? "yuvj411p" : ycck ? "yuva444p" : "gbrap") || Ready.GetProperty("decoder").GetString() != "mjpeg" || (!quarterWidth && Ready.GetProperty("adobeTransform").GetInt32() != (ycck ? 2 : 0))
+                || Ready.GetProperty("decodedPixelFormat").GetString() != (quarterHeight ? "yuvj420p" : quarterWidth ? "yuvj411p" : ycck ? "yuva444p" : "gbrap") || Ready.GetProperty("decoder").GetString() != "mjpeg" || (!quarterWidth && Ready.GetProperty("adobeTransform").GetInt32() != (ycck ? 2 : 0))
                 || ((ycck || quarterWidth) && !Ready.GetProperty("explicitBt601FullRange").GetBoolean())
-                || (quarterWidth && (Ready.GetProperty("horizontalSampling").GetInt32() != 4 || Ready.GetProperty("verticalSampling").GetInt32() != 1 || Ready.GetProperty("centeredGridWidth").GetInt32() != 516 || !Ready.GetProperty("inPlaceCompactionTimed").GetBoolean()))
+                || (quarterHeight && new[] { "quarterSampleRecoveryTimed", "verticalInterpolationTimed", "chromaStagingAcquisitionAndReleaseTimed" }.Any(key => !Ready.GetProperty(key).GetBoolean()))
+                || (quarterWidth && (Ready.GetProperty("horizontalSampling").GetInt32() != 4 || Ready.GetProperty("verticalSampling").GetInt32() != (quarterHeight ? 2 : 1) || Ready.GetProperty("centeredGridWidth").GetInt32() != 516 || !Ready.GetProperty("inPlaceCompactionTimed").GetBoolean()))
                 || Ready.GetProperty("outputStride").GetInt32() != 513 * (rgb ? 3 : 4) || Ready.GetProperty("outputBytes").GetInt32() != expectedBytes
                 || (rgb ? Ready.GetProperty("outputHasAlpha").GetBoolean() : !Ready.GetProperty("opaqueAlpha").GetBoolean())
                 || Ready.GetProperty("cpu").GetInt32() != cpu || Ready.GetProperty("affinityCount").GetInt32() != 1 || Ready.GetProperty("codecThreads").GetInt32() != 1
