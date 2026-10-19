@@ -1,17 +1,25 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-67 independent passes,124 measured mean gaps and one confidence-open case across
-192 current rows;22 prior-production rows need reconfirmation. The
-[three-table summary](../docs/benchmark.md) retains214 numeric rows:123 current
-independent observations,69 qualified shorts and22 prior rows. Reuse unchanged
-passing paths; no image or settings grid.
+69 independent passes,144 measured mean gaps and one confidence-open case across
+all214 current numeric rows; no prior-production row remains. The
+[three-table summary](../docs/benchmark.md) contains125 current independent
+observations and89 qualified shorts.29named new boundaries are unmeasured.
+Reuse unchanged passing paths; no image or settings grid.
 
-[Current JPEG reconciliation](WARM-JPEG-GRAY-CURRENT.md) replaces exactly the
-prior baseline-grayscale row with a current short1.426x gap,672,186B/op. Same
-frozen input/pixels/native boundary and qualified immutable build; no production,
-harness/native/selector build, synchronization, long repeat or package recheck.
-Sixteen JPEG plus six other Stream rows remain prior; other evidence is reused.
+[Input reconciliation](WARM-INPUT-RECONCILIATION.md) refreshes the remaining22
+prior rows after shared JPEG parsing and final encoded-input copy removal.
+Fifteen JPEG pixel decodes remain1.118–1.546x short gaps; JPEG Identify independently
+passes0.488x/upper0.494,88B/op. Of six PNG/WebP Stream cases, RGBA16 PNG independently
+passes0.988x/upper0.991,8,648B/op; the other five remain1.139–1.562x short gaps.
+The preceding [baseline grayscale result](WARM-JPEG-GRAY-CURRENT.md) remains current
+and is reused. All90actuals/guards/quality/ownership checks remain. Exactly the same
+qualified immutable producer/harness, native workers, fixtures and timing drivers
+are reused; missing selectors were restored from exact retained archive members.
+Only the21 changed-path metadata controls were replayed; no production/harness/
+native/selector build, source synchronization, broad audit or package recheck.
+Full4,167tests/OS,183affected intrinsics-disabled checks/OS and same actual package
+consumer/all3examples on both OS remain valid. Stop the two newly passing paths.
 
 [Bounded VP8 coefficient adaptation](WARM-VP8-ADAPTIVE-PROBABILITIES.md) changes
 exactly six existing default complete encode timings/packet sizes and adds
@@ -110,22 +118,23 @@ evidence; existing RGBA operation timings were not substituted for these paths.
 
 JPEG compatibility changes shared frame/header parsing (one/three/four components),
 scan setup (four component slots), sampling validation (horizontal ratios up to
-four), Adobe marker handling and final decode dispatch. Therefore **all 17 existing
-JPEG decode/inspection rows** lose current-code timing validity, including the
-fresh-Stream restart case and resident Identify. Their exact old numbers remain
-historical. Entropy/IDCT kernels are unchanged, but that alone does not prove the
+four), Adobe marker handling and final decode dispatch. These changes originally invalidated **all17 existing
+JPEG decode/inspection rows**, including the
+fresh-Stream restart case and resident Identify. Their old numbers are historical; the current input reconciliation above
+replaces all17, without treating an unchanged IDCT kernel as complete-operation proof. Entropy/IDCT kernels are unchanged, but that alone does not prove the
 complete operation unchanged. JPEG encode, PNG/WebP and editing evidence is reused.
-Resolve these uncertainties before assuming optimization is needed.
+All17 affected rows now have current evidence in the reconciliation above.
 
 Synchronous Stream decode now leases its private input instead of making a final
 encoded-input copy, admitting actual retained capacity through decoding. This
-invalidates exactly seven existing complete operations: `Png8`, `Png16`,
+originally invalidated exactly seven existing complete operations: `Png8`, `Png16`,
 `PngCropFit8`, `PngCropFit16` (WarmStreamDecode), `StreamNative8` (WarmVp8Decode),
 `StreamNativeLossless8` (WarmWebpDecode), and `StreamDecode420Restart` (WarmJpegDecode).
-The last was already among the seventeen prior JPEG rows; six more rows are now
-prior production, for 23 total. Their historical allocations are also superseded.
+The last was already among the seventeen prior JPEG rows; six additional rows
+became prior production, for23 total. All23 are now current, including the
+preceding grayscale result; historical allocation counts are superseded.
 No new workload is needed. Resident codec paths, synchronous Identify, async input,
-encoding and editing remain unchanged. Reconfirm affected operations before tuning.
+encoding and editing remain unchanged. No unaffected operation was retimed.
 
 Five further **unmeasured** representatives cover the newly required algorithms:
 

@@ -76,16 +76,16 @@ def render():
     decodes = [
         row('PNG Identify, fresh Stream¶', 'warm-png-stream-identify-evidence.json', ['observations', -1], 'WARM-PNG-STREAM-IDENTIFY.md', True),
         row('WebP Identify, resident span (parser)', 'warm-webp-identify-evidence.json', ['observations', -1], 'WARM-WEBP-IDENTIFY.md', True),
-        row('JPEG Identify, resident span‖', 'warm-jpeg-entropy-evidence.json', ['observations', -1], 'WARM-JPEG-ENTROPY.md', True),
+        row('JPEG Identify, resident span‖', 'warm-input-reconciliation-evidence.json', ['cases', 'IdentifyJpeg8', -1], 'WARM-INPUT-RECONCILIATION.md', True),
         row('PNG Identify, resident span¶', 'warm-png-identify-evidence.json', ['observations', -1], 'WARM-PNG-IDENTIFY.md', True),
         row('PNG palette4/full tRNS Adam7', 'warm-png-palette4-adam7-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE4-ADAM7.md', True),
-        row('PNG8 Stream, orient/crop/nearest fit', 'warm-current-png-stream-evidence.json', ['cases', 'PngCropFit8', -1], 'WARM-CURRENT-PNG-STREAM.md', True),
-        row('PNG16 Stream, orient/crop/nearest fit', 'warm-png-fused-evidence.json', ['observations', -1], 'WARM-PNG-FUSED-INFLATION.md', True),
-        row('PNG RGBA8, fresh seekable Stream', 'warm-current-png-stream-evidence.json', ['cases', 'Png8', -1], 'WARM-CURRENT-PNG-STREAM.md', True),
-        row('PNG RGBA16, fresh seekable Stream', 'warm-current-png-stream-evidence.json', ['cases', 'Png16', -1], 'WARM-CURRENT-PNG-STREAM.md', True),
-        row('JPEG420 restart, fresh seekable Stream', 'warm-jpeg-color16-evidence.json', ['cases', 'StreamDecode420Restart', -1], 'WARM-JPEG-COLOR16.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
-        row('WebP VP8L, fresh seekable Stream', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'StreamNativeLossless8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
+        row('PNG8 Stream, orient/crop/nearest fit', 'warm-input-reconciliation-evidence.json', ['cases', 'PngCropFit8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('PNG16 Stream, orient/crop/nearest fit', 'warm-input-reconciliation-evidence.json', ['cases', 'PngCropFit16', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('PNG RGBA8, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'Png8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('PNG RGBA16, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'Png16', -1], 'WARM-INPUT-RECONCILIATION.md', True),
+        row('JPEG420 restart, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'StreamDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('WebP VP8L, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'StreamNativeLossless8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGBA8, None / live cancelable token', 'warm-png-cancel-blocks-evidence.json', ['cases', 'DecodeCancelable8', -1], 'WARM-PNG-CANCEL-BLOCKS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None / exact working limit', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTight8', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
@@ -134,20 +134,20 @@ def render():
         row('PNG opaque gray2 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray2', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG opaque gray4 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('JPEG baseline gray', 'warm-jpeg-gray-current-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-GRAY-CURRENT.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline 4:2:0', 'warm-jpeg-color16-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-COLOR16.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline 4:2:0, row restart markers', 'warm-jpeg-color16-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-JPEG-COLOR16.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline 4:2:2', 'warm-jpeg-color16-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-JPEG-COLOR16.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline 4:4:4, owned input', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'Decode8', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline 4:4:4, native input', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'NativeDecode8', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline direct RGB, full resolution', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'DirectRgb444', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
-        row('JPEG direct RGB 4:2:2, timed centered correction', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'DirectRgb422', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
-        row('JPEG direct RGB 4:2:0, timed component-plane interpretation', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'DirectRgb420', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'NativeDecodeCancelable8', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
-        row('JPEG progressive gray', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'ProgressiveGray', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
-        row('JPEG progressive 4:2:0', 'warm-jpeg-color16-evidence.json', ['cases', 'Progressive420', -1], 'WARM-JPEG-COLOR16.md', verification='Gap (short; qualified)'),
-        row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
-        row('JPEG progressive 4:2:2', 'warm-jpeg-color16-evidence.json', ['cases', 'Progressive422', -1], 'WARM-JPEG-COLOR16.md', verification='Gap (short; qualified)'),
-        row('JPEG progressive 4:4:4', 'warm-jpeg-coefficient-pool-evidence.json', ['cases', 'Progressive444', -1], 'WARM-JPEG-COEFFICIENT-POOL.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:2:0', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:2:0, row restart markers', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:4:4, owned input', 'warm-input-reconciliation-evidence.json', ['cases', 'Decode8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:4:4, native input', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline direct RGB, full resolution', 'warm-input-reconciliation-evidence.json', ['cases', 'DirectRgb444', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG direct RGB 4:2:2, timed centered correction', 'warm-input-reconciliation-evidence.json', ['cases', 'DirectRgb422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG direct RGB 4:2:0, timed component-plane interpretation', 'warm-input-reconciliation-evidence.json', ['cases', 'DirectRgb420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecodeCancelable8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG progressive gray', 'warm-input-reconciliation-evidence.json', ['cases', 'ProgressiveGray', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG progressive 4:2:0', 'warm-input-reconciliation-evidence.json', ['cases', 'Progressive420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG progressive 4:4:4 / live cancelable token', 'warm-input-reconciliation-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG progressive 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'Progressive422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG progressive 4:4:4', 'warm-input-reconciliation-evidence.json', ['cases', 'Progressive444', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('WebP VP8 + alpha', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'Native8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
         row('WebP VP8 opaque, simple luma filter', 'warm-vp8-block-prediction-evidence.json', ['cases', 'SimpleOpaque8', -1], 'WARM-VP8-BLOCK-PREDICTION.md', verification='Gap (short; qualified)'),
         row('WebP VP8 opaque, live cancelable token', 'warm-vp8-block-prediction-evidence.json', ['cases', 'OpaqueCancelable8', -1], 'WARM-VP8-BLOCK-PREDICTION.md', verification='Gap (short; qualified)'),
@@ -296,14 +296,6 @@ def render():
         row('WebP VP8 photograph RGBA8 / matched quality', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
         row('WebP VP8 text/diagram RGBA8 / matched quality', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
     ])
-    # H4 changes shared JPEG frame/scan/control paths and inspection headers.
-    # Compatibility changed JPEG parsing; leased acquisition changed exactly
-    # these six additional complete Stream operations. Preserve historical values.
-    stream_prefixes = ('| [PNG8 Stream,', '| [PNG16 Stream,',
-                       '| [PNG RGBA8, fresh seekable Stream]', '| [PNG RGBA16, fresh seekable Stream]',
-                       '| [WebP VP8 + alpha, fresh seekable Stream]', '| [WebP VP8L, fresh seekable Stream]')
-    decodes = [value.rsplit(' | ', 1)[0] + ' | Prior production; reconfirm |'
-               if value.startswith(stream_prefixes) or (value.startswith('| [JPEG') and not value.startswith('| [JPEG baseline gray]')) else value for value in decodes]
     all_rows = decodes + encodes + edits
     parity_count = sum(' | Parity confirmed |' in value for value in all_rows)
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
@@ -315,10 +307,11 @@ def render():
 Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
 conservative upper ≤1x**. The 214 retained numeric rows contain **{parity_count} current
 parity confirmations, {gap_count} measured gaps and {confidence_count} confidence-open cases**;
-**{reconfirm_count} prior-production rows need reconfirmation**: sixteen remaining JPEG rows after
-compatibility changes and six additional PNG/WebP Stream rows after input-copy
-removal. Their old times/allocations are historical. Other paths reuse valid
-evidence. The earlier
+all numeric rows have current evidence after the
+[input reconciliation](../benchmarks/WARM-INPUT-RECONCILIATION.md). Twenty-two prior
+rows were refreshed on the same qualified immutable build: JPEG Identify and
+RGBA16 PNG Stream independently pass; twenty other cases remain short gaps.
+The preceding baseline grayscale proof is reused. The earlier
 ≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
@@ -327,14 +320,13 @@ sizes or hardware. Stop cases already confirmed at ≤1x.
 [Current grayscale JPEG decoding](../benchmarks/WARM-JPEG-GRAY-CURRENT.md)
 resolves one stale row: **1.426×**, **672,186B/op**, qualified short gap. Frozen
 pixels/reference/boundaries and the same qualified build are reused; no rebuild,
-long repeat or repeated package proof. Other prior JPEG/Stream rows remain open.
+long repeat or repeated package proof. The later input reconciliation above refreshes all remaining prior rows.
 
 Shared-budget entry points and direct JPEG sample decoding are implemented and
 correctness-qualified; their times and allocations are **unmeasured**. Together
 with JPEG compatibility, async I/O, inspection, drawing and text, the checklist names
 twenty-nine pending representatives, with three original tiny font controls added
-to existing image inputs. Affected JPEG and fresh-Stream rows are
-explicitly prior production. Resident PNG/WebP, JPEG encoding, edits and image
+to existing image inputs. Existing JPEG and fresh-Stream rows now have current measurements. Resident PNG/WebP, JPEG encoding, edits and image
 disposal remain unchanged.
 CMYK/YCCK and quarter-width JPEG compatibility paths are correctness-qualified
 but also await the named timing/allocation evidence.
@@ -343,8 +335,8 @@ but also await the named timing/allocation evidence.
 input storage, complete validation and independent outputs; two named PNG8 front-end
 representatives remain unmeasured. Shared-budget reservation lifetime across awaits
 is correctness-tested. Synchronous Decode now avoids the final full-input copy,
-admitting actual retained capacity through decoding. Its seven existing Stream
-workloads need reconfirmation (one is already among the sixteen remaining JPEG rows).
+admitting actual retained capacity through decoding. All seven affected existing Stream
+workloads now have current evidence in the input reconciliation above.
 Resident decoding, Identify and async-input methods retain their existing evidence.
 
 Async PNG/JPEG/WebP output, including direct JPEG samples, uses admitted private
@@ -440,7 +432,7 @@ small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../ben
 retains its1.012x mean gap/1.014x upper. Current totals are **{parity_count} passes /
 {gap_count} gaps / {confidence_count} confidence open / {reconfirm_count} prior-production rows**.
 Every actual/outlier and both quiet guards remain; unchanged qualification is reused.
-Resolve the named JPEG uncertainties before optimization. Stop current passing paths.
+The29 named new boundaries remain unmeasured; stop current passing paths.
 
 **Decode and metadata**
 

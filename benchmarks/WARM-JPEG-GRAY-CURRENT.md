@@ -1,5 +1,7 @@
 # Current JPEG decode reconciliation
 
+This grayscale result remains current. The subsequent [input reconciliation](WARM-INPUT-RECONCILIATION.md) refreshes the other22 prior rows without rerunning grayscale.
+
 The baseline grayscale complete decode has a current qualified short result of
 **1.426×** FFmpeg, conservative upper**1.459×**, with
 **672,186 allocated B/op**. This resolves stale evidence after
@@ -29,7 +31,7 @@ No source synchronization, production/harness/native/selector rebuild or repeate
 package proof was needed. Full4,167tests/OS,183affected intrinsics-disabled checks
 and same actual private package consumer/all3examples on both OS remain valid.
 
-Exactly one of the17 prior JPEG rows becomes current;16JPEG and6additional
+At this checkpoint, exactly one of the17 prior JPEG rows became current;16JPEG and6additional
 Stream rows remain prior production. All other comparisons and29unmeasured
 checklist boundaries are unchanged. Full warm parity remains open.
 Raw both hosts: `h10a-measurements.tar.gz`

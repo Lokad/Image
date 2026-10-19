@@ -1,12 +1,13 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 214 retained numeric rows contain **67 current
-parity confirmations, 124 measured gaps and 1 confidence-open cases**;
-**22 prior-production rows need reconfirmation**: sixteen remaining JPEG rows after
-compatibility changes and six additional PNG/WebP Stream rows after input-copy
-removal. Their old times/allocations are historical. Other paths reuse valid
-evidence. The earlier
+conservative upper ≤1x**. The 214 retained numeric rows contain **69 current
+parity confirmations, 144 measured gaps and 1 confidence-open cases**;
+all numeric rows have current evidence after the
+[input reconciliation](../benchmarks/WARM-INPUT-RECONCILIATION.md). Twenty-two prior
+rows were refreshed on the same qualified immutable build: JPEG Identify and
+RGBA16 PNG Stream independently pass; twenty other cases remain short gaps.
+The preceding baseline grayscale proof is reused. The earlier
 ≤2x phase was completed for 0.1.0; subsequent qualified improvements distinguish
 short screens from independent confirmations. The finite [material checklist](../benchmarks/WARM-COVERAGE.md) and
 fixed inputs remain; results do not extrapolate to other images, settings,
@@ -15,14 +16,13 @@ sizes or hardware. Stop cases already confirmed at ≤1x.
 [Current grayscale JPEG decoding](../benchmarks/WARM-JPEG-GRAY-CURRENT.md)
 resolves one stale row: **1.426×**, **672,186B/op**, qualified short gap. Frozen
 pixels/reference/boundaries and the same qualified build are reused; no rebuild,
-long repeat or repeated package proof. Other prior JPEG/Stream rows remain open.
+long repeat or repeated package proof. The later input reconciliation above refreshes all remaining prior rows.
 
 Shared-budget entry points and direct JPEG sample decoding are implemented and
 correctness-qualified; their times and allocations are **unmeasured**. Together
 with JPEG compatibility, async I/O, inspection, drawing and text, the checklist names
 twenty-nine pending representatives, with three original tiny font controls added
-to existing image inputs. Affected JPEG and fresh-Stream rows are
-explicitly prior production. Resident PNG/WebP, JPEG encoding, edits and image
+to existing image inputs. Existing JPEG and fresh-Stream rows now have current measurements. Resident PNG/WebP, JPEG encoding, edits and image
 disposal remain unchanged.
 CMYK/YCCK and quarter-width JPEG compatibility paths are correctness-qualified
 but also await the named timing/allocation evidence.
@@ -31,8 +31,8 @@ but also await the named timing/allocation evidence.
 input storage, complete validation and independent outputs; two named PNG8 front-end
 representatives remain unmeasured. Shared-budget reservation lifetime across awaits
 is correctness-tested. Synchronous Decode now avoids the final full-input copy,
-admitting actual retained capacity through decoding. Its seven existing Stream
-workloads need reconfirmation (one is already among the sixteen remaining JPEG rows).
+admitting actual retained capacity through decoding. All seven affected existing Stream
+workloads now have current evidence in the input reconciliation above.
 Resident decoding, Identify and async-input methods retain their existing evidence.
 
 Async PNG/JPEG/WebP output, including direct JPEG samples, uses admitted private
@@ -125,10 +125,10 @@ examples on Windows/Linux** pass. Production remains safe managed dependency-fre
 Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDENCE.md)
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
-retains its1.012x mean gap/1.014x upper. Current totals are **67 passes /
-124 gaps / 1 confidence open / 22 prior-production rows**.
+retains its1.012x mean gap/1.014x upper. Current totals are **69 passes /
+144 gaps / 1 confidence open / 0 prior-production rows**.
 Every actual/outlier and both quiet guards remain; unchanged qualification is reused.
-Resolve the named JPEG uncertainties before optimization. Stop current passing paths.
+The29 named new boundaries remain unmeasured; stop current passing paths.
 
 **Decode and metadata**
 
@@ -136,16 +136,16 @@ Resolve the named JPEG uncertainties before optimization. Stop current passing p
 | --- | ---: | ---: | ---: | ---: | --- |
 | [PNG Identify, fresh Stream¶](../benchmarks/WARM-PNG-STREAM-IDENTIFY.md) | 22.94 | 15.87 | 1.445 / 1.459 | 184 | Gap (independent) |
 | [WebP Identify, resident span (parser)](../benchmarks/WARM-WEBP-IDENTIFY.md) | 0.02 | 4.54 | 0.004 / 0.004 | 88 | Parity confirmed |
-| [JPEG Identify, resident span‖](../benchmarks/WARM-JPEG-ENTROPY.md) | 0.60 | 1.21 | 0.499 / 0.506 | 88 | Prior production; reconfirm |
+| [JPEG Identify, resident span‖](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 0.59 | 1.21 | 0.488 / 0.494 | 88 | Parity confirmed |
 | [PNG Identify, resident span¶](../benchmarks/WARM-PNG-IDENTIFY.md) | 16.09 | 13.04 | 1.234 / 1.238 | 88 | Gap (independent) |
 | [PNG palette4/full tRNS Adam7](../benchmarks/WARM-PNG-PALETTE4-ADAM7.md) | 1,480.35 | 1,135.35 | 1.304 / 1.387 | 2,592 | Gap (independent) |
-| [PNG8 Stream, orient/crop/nearest fit](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 2,129.50 | 1,473.35 | 1.445 / 1.454 | 1,445,000 | Prior production; reconfirm |
-| [PNG16 Stream, orient/crop/nearest fit](../benchmarks/WARM-PNG-FUSED-INFLATION.md) | 3,572.35 | 2,936.91 | 1.216 / 1.231 | 4,460,393 | Prior production; reconfirm |
-| [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 1,982.59 | 1,388.00 | 1.428 / 1.441 | 748,088 | Prior production; reconfirm |
-| [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-CURRENT-PNG-STREAM.md) | 3,499.10 | 3,080.71 | 1.136 / 1.146 | 3,067,227 | Prior production; reconfirm |
-| [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-COLOR16.md) | 1,370.98 | 993.98 | 1.379 / 1.694 | 951,080 | Prior production; reconfirm |
-| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 9,391.90 | 6,005.14 | 1.564 / 1.714 | 2,327,699 | Prior production; reconfirm |
-| [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 4,351.41 | 3,030.27 | 1.436 / 1.480 | 1,924,876 | Prior production; reconfirm |
+| [PNG8 Stream, orient/crop/nearest fit](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,044.52 | 1,476.97 | 1.384 / 1.613 | 701,312 | Gap (short; qualified) |
+| [PNG16 Stream, orient/crop/nearest fit](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 3,355.49 | 2,946.76 | 1.139 / 1.213 | 1,401,314 | Gap (short; qualified) |
+| [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,918.97 | 1,393.95 | 1.377 / 1.583 | 4,552 | Gap (short; qualified) |
+| [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 3,054.27 | 3,091.94 | 0.988 / 0.991 | 8,648 | Parity confirmed |
+| [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,377.94 | 991.96 | 1.389 / 1.473 | 761,816 | Gap (short; qualified) |
+| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 9,381.96 | 6,007.84 | 1.562 / 1.793 | 1,966,712 | Gap (short; qualified) |
+| [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 4,320.01 | 3,018.37 | 1.431 / 1.494 | 1,216,276 | Gap (short; qualified) |
 | [PNG RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,904.89 | 1,392.72 | 1.368 / 1.371 | 4,456 | Gap (independent) |
 | [PNG RGBA8, None / live cancelable token](../benchmarks/WARM-PNG-CANCEL-BLOCKS.md) | 1,732.37 | 1,390.42 | 1.246 / 1.320 | 4,456 | Gap (short; qualified) |
 | [PNG RGBA8, None / exact working limit](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 2,028.73 | 1,395.91 | 1.453 / 1.597 | 68,200 | Gap (short; qualified) |
@@ -194,20 +194,20 @@ Resolve the named JPEG uncertainties before optimization. Stop current passing p
 | [PNG opaque gray2 → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 71.73 | 106.38 | 0.674 / 0.679 | 616 | Parity confirmed |
 | [PNG opaque gray4 → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 116.09 | 169.54 | 0.685 / 0.698 | 872 | Parity confirmed |
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-GRAY-CURRENT.md) | 973.44 | 682.79 | 1.426 / 1.459 | 672,186 | Gap (short; qualified) |
-| [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG-COLOR16.md) | 1,204.44 | 1,009.50 | 1.193 / 1.338 | 757,345 | Prior production; reconfirm |
-| [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-JPEG-COLOR16.md) | 1,366.40 | 1,014.67 | 1.347 / 1.490 | 761,720 | Prior production; reconfirm |
-| [JPEG baseline 4:2:2](../benchmarks/WARM-JPEG-COLOR16.md) | 1,573.59 | 1,344.77 | 1.170 / 1.322 | 829,145 | Prior production; reconfirm |
-| [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 2,470.91 | 1,899.87 | 1.301 / 1.386 | 948,036 | Prior production; reconfirm |
-| [JPEG baseline 4:4:4, native input](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 2,314.44 | 1,721.50 | 1.344 / 1.424 | 966,317 | Prior production; reconfirm |
-| [JPEG baseline direct RGB, full resolution](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 2,204.97 | 1,455.09 | 1.515 / 1.686 | 966,317 | Prior production; reconfirm |
-| [JPEG direct RGB 4:2:2, timed centered correction](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 1,472.32 | 1,095.97 | 1.343 / 1.462 | 829,148 | Prior production; reconfirm |
-| [JPEG direct RGB 4:2:0, timed component-plane interpretation](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 1,078.10 | 743.66 | 1.450 / 1.471 | 757,346 | Prior production; reconfirm |
-| [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 2,410.34 | 1,716.79 | 1.404 / 1.596 | 966,317 | Prior production; reconfirm |
-| [JPEG progressive gray](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 2,604.90 | 1,714.18 | 1.520 / 1.692 | 683,138 | Prior production; reconfirm |
-| [JPEG progressive 4:2:0](../benchmarks/WARM-JPEG-COLOR16.md) | 2,425.66 | 1,949.91 | 1.244 / 1.404 | 775,336 | Prior production; reconfirm |
-| [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 4,967.25 | 3,365.13 | 1.476 / 1.585 | 984,298 | Prior production; reconfirm |
-| [JPEG progressive 4:2:2](../benchmarks/WARM-JPEG-COLOR16.md) | 3,075.44 | 2,246.89 | 1.369 / 1.839 | 847,162 | Prior production; reconfirm |
-| [JPEG progressive 4:4:4](../benchmarks/WARM-JPEG-COEFFICIENT-POOL.md) | 5,130.75 | 3,364.53 | 1.525 / 1.590 | 984,298 | Prior production; reconfirm |
+| [JPEG baseline 4:2:0](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,202.77 | 1,008.96 | 1.192 / 1.315 | 757,345 | Gap (short; qualified) |
+| [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,378.07 | 1,014.38 | 1.359 / 1.446 | 761,720 | Gap (short; qualified) |
+| [JPEG baseline 4:2:2](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,510.49 | 1,351.29 | 1.118 / 1.263 | 829,148 | Gap (short; qualified) |
+| [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,522.16 | 1,902.72 | 1.326 / 1.431 | 948,023 | Gap (short; qualified) |
+| [JPEG baseline 4:4:4, native input](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,300.39 | 1,719.44 | 1.338 / 1.418 | 966,317 | Gap (short; qualified) |
+| [JPEG baseline direct RGB, full resolution](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,193.44 | 1,452.84 | 1.510 / 1.656 | 966,317 | Gap (short; qualified) |
+| [JPEG direct RGB 4:2:2, timed centered correction](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,472.21 | 1,094.02 | 1.346 / 1.509 | 829,148 | Gap (short; qualified) |
+| [JPEG direct RGB 4:2:0, timed component-plane interpretation](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,073.37 | 743.41 | 1.444 / 1.518 | 757,346 | Gap (short; qualified) |
+| [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,392.14 | 1,720.11 | 1.391 / 1.482 | 966,317 | Gap (short; qualified) |
+| [JPEG progressive gray](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,647.80 | 1,712.34 | 1.546 / 1.634 | 683,138 | Gap (short; qualified) |
+| [JPEG progressive 4:2:0](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,438.11 | 1,947.56 | 1.252 / 1.446 | 775,336 | Gap (short; qualified) |
+| [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 4,960.36 | 3,350.73 | 1.480 / 1.614 | 984,298 | Gap (short; qualified) |
+| [JPEG progressive 4:2:2](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 3,071.46 | 2,238.43 | 1.372 / 1.508 | 847,162 | Gap (short; qualified) |
+| [JPEG progressive 4:4:4](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 5,037.72 | 3,361.01 | 1.499 / 1.715 | 984,298 | Gap (short; qualified) |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 9,272.91 | 5,970.23 | 1.553 / 1.648 | 1,966,616 | Gap (short; qualified) |
 | [WebP VP8 opaque, simple luma filter](../benchmarks/WARM-VP8-BLOCK-PREDICTION.md) | 7,807.89 | 4,893.93 | 1.595 / 1.621 | 760,548 | Gap (short; qualified) |
 | [WebP VP8 opaque, live cancelable token](../benchmarks/WARM-VP8-BLOCK-PREDICTION.md) | 7,613.64 | 4,801.66 | 1.586 / 1.664 | 760,548 | Gap (short; qualified) |
