@@ -18,8 +18,15 @@ They remain **1.395–1.836x gaps** (uppers1.504–2.174),
 146,643–4,617,090B/op. Native quality, ownership and operation boundaries are unchanged.
 Qualification passes4,448tests/47scalar plus47AVX512F-off checks per OS, same actual
 package and all three examples. The earlier profile is retained as rationale;
-its fractions predate changed coefficient loops. Next: resolve current-code
-uncertainty for the existing CMYK sparse-2D JPEG control before optimization.
+its fractions predate changed coefficient loops.
+
+The [CMYK sparse-2D current-code check](../benchmarks/WARM-JPEG-CMYK-CURRENT.md)
+resolves old ownership/admission uncertainty: **805.26µs / 1.829x**, upper1.902,
+1,085,680B/op. Exact analytical pixels, normal/scalar native quality and independent
+owners pass. The current immutable build, worker, fixture and selector are reused;
+no production/harness/native/selector build or repeated package/full qualification.
+Only this row refreshes; the material gap persists. Next: assess one exact
+axis-cross sparse-IDCT strategy, using existing unchanged-method profile evidence.
 
 [Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
 **76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
@@ -29,8 +36,7 @@ passing proofs are reused. No new image/settings grid, profile or baseline chang
 
 JPEG-round qualification:4,212tests/99hardware-off checks per OS, same actual private
 package consumer/all three examples on Windows/Linux. Released0.1.0 stays immutable.
-Largest measured gap: Lanczos3 Reduce16 at1.836x, Reduce8 at1.829x;
-historical CMYK2D sparse1.812x needs a current-code check.
+Largest measured gaps: Lanczos3 Reduce16 at1.836x, Reduce8 and current CMYK2D sparse1.829x.
 23unmeasured representatives cover async, header, drawing, text and governed ownership.
 Stop passes; optimize demonstrated material gaps and resolve missing evidence.
 
@@ -137,7 +143,7 @@ reconciliation now covers every numeric row.
 | [JPEG Adobe CMYK, four full-resolution planes](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 525.44 | 377.75 | 1.391 / 1.473 | 1,085,667 | Gap (short; qualified) |
 | [JPEG Adobe CMYK, one AC control](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 674.71 | 389.55 | 1.732 / 1.783 | 1,085,662 | Gap (short; qualified) |
 | [JPEG Adobe CMYK, general transform control](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 3,463.08 | 3,110.84 | 1.113 / 1.197 | 1,085,522 | Gap (short; qualified) |
-| [JPEG Adobe CMYK, two-dimensional sparse control](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 792.76 | 437.47 | 1.812 / 1.869 | 1,085,656 | Gap (short; qualified) |
+| [JPEG Adobe CMYK, two-dimensional sparse control](../benchmarks/WARM-JPEG-CMYK-CURRENT.md) | 805.26 | 440.28 | 1.829 / 1.902 | 1,085,680 | Gap (short; qualified) |
 | [JPEG YCCK420, full-resolution black](../benchmarks/WARM-JPEG-YCCK-CALLER-SIMD.md) | 824.27 | 708.72 | 1.163 / 1.175 | 1,470,256 | Gap (short; qualified) |
 | [JPEG YCCK420 → caller RGB24](../benchmarks/WARM-JPEG-YCCK-CALLER-SIMD.md) | 898.47 | 603.97 | 1.488 / 1.550 | 1,337,490 | Gap (short; qualified) |
 | [JPEG H4V1 / 4:1:1 → owned RGBA8](../benchmarks/WARM-JPEG-410-SIMD.md) | 608.85 | 458.97 | 1.327 / 1.402 | 751,279 | Gap (short; qualified) |

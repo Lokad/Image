@@ -141,7 +141,7 @@ def render():
         row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobe', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeAc', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG Adobe CMYK, general transform control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeGeneral', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
-        row('JPEG Adobe CMYK, two-dimensional sparse control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeSparse2D', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, two-dimensional sparse control', 'warm-jpeg-cmyk-current-evidence.json', ['cases', 'CmykAdobeSparse2D', -1], 'WARM-JPEG-CMYK-CURRENT.md', verification='Gap (short; qualified)'),
         row('JPEG YCCK420, full-resolution black', 'warm-jpeg-ycck-caller-simd-evidence.json', ['cases', 'Ycck420', -1], 'WARM-JPEG-YCCK-CALLER-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG YCCK420 → caller RGB24', 'warm-jpeg-ycck-caller-simd-evidence.json', ['cases', 'Ycck420CallerRgb', -1], 'WARM-JPEG-YCCK-CALLER-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG H4V1 / 4:1:1 → owned RGBA8', 'warm-jpeg-410-simd-evidence.json', ['cases', 'Decode411', -1], 'WARM-JPEG-410-SIMD.md', verification='Gap (short; qualified)'),
@@ -341,8 +341,15 @@ They remain **1.395–1.836x gaps** (uppers1.504–2.174),
 146,643–4,617,090B/op. Native quality, ownership and operation boundaries are unchanged.
 Qualification passes4,448tests/47scalar plus47AVX512F-off checks per OS, same actual
 package and all three examples. The earlier profile is retained as rationale;
-its fractions predate changed coefficient loops. Next: resolve current-code
-uncertainty for the existing CMYK sparse-2D JPEG control before optimization.
+its fractions predate changed coefficient loops.
+
+The [CMYK sparse-2D current-code check](../benchmarks/WARM-JPEG-CMYK-CURRENT.md)
+resolves old ownership/admission uncertainty: **805.26µs / 1.829x**, upper1.902,
+1,085,680B/op. Exact analytical pixels, normal/scalar native quality and independent
+owners pass. The current immutable build, worker, fixture and selector are reused;
+no production/harness/native/selector build or repeated package/full qualification.
+Only this row refreshes; the material gap persists. Next: assess one exact
+axis-cross sparse-IDCT strategy, using existing unchanged-method profile evidence.
 
 [Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
 **76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
@@ -352,8 +359,7 @@ passing proofs are reused. No new image/settings grid, profile or baseline chang
 
 JPEG-round qualification:4,212tests/99hardware-off checks per OS, same actual private
 package consumer/all three examples on Windows/Linux. Released0.1.0 stays immutable.
-Largest measured gap: Lanczos3 Reduce16 at1.836x, Reduce8 at1.829x;
-historical CMYK2D sparse1.812x needs a current-code check.
+Largest measured gaps: Lanczos3 Reduce16 at1.836x, Reduce8 and current CMYK2D sparse1.829x.
 23unmeasured representatives cover async, header, drawing, text and governed ownership.
 Stop passes; optimize demonstrated material gaps and resolve missing evidence.
 

@@ -32,9 +32,14 @@ consumer/examples passing on both OS. All four rows refresh; other arithmetic,
 owners and boundaries remain unchanged. A constant-placement control was neutral;
 earlier3.9% word-product and2.1% slower row-storage trials stay parked/rejected.
 The earlier profile motivates the change; its fractions predate these loops.
-Next: current-code check of existing CMYK sparse-2D JPEG before optimization.
-Reuse its worker/selector/fixtures/gates; no checklist expansion or package/full
-rerun for unchanged production. All four Lanczos3 gaps remain required.
+The [current CMYK sparse-2D check](WARM-JPEG-CMYK-CURRENT.md) now resolves its old-code
+uncertainty:805.26µs/1.829x/upper1.902,1,085,680B/op. Exact managed pixels,
+normal/scalar native quality and two-live-output independence pass. Production,
+worker, fixture and existing selector/harness are reused; no rebuild or package/
+full rerun. Only this existing row refreshes. Other226 older codec/edit rows keep
+their identified scopes. Next: one exact axis-cross sparse-IDCT feasibility audit,
+using the unchanged-method profile. All four Lanczos3 gaps remain required;
+finite254/231numeric/23untimed and all verification counts stay unchanged.
 
 A bounded audit of the accepted 0.2.0 additions identifies exactly three required
 paths absent from the older checklist; these are not a shape/depth/settings grid:
