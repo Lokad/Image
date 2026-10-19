@@ -7,7 +7,17 @@ all225 current numeric rows; no prior-production row remains. The
 observations and99 qualified shorts.22named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
 
-[Caller YCCK420 RGB24](WARM-JPEG-YCCK-CALLER-RGB.md) now demonstrates the largest
+[Exact SIMD caller YCCK RGB](WARM-JPEG-YCCK-CALLER-SIMD.md) reduces time80.2%,
+4532.59→898.47us:1.488x/upper1.550x,1,337,490B/op. Shared ownedYCCK improves20.3%
+to1.163x; callerCMYK control1.592x. These three rows refresh after the caller
+selector/shared color body changed. All222others and70passing proofs retain evidence.
+Full4209tests/96hardware-off checks per OS and the SAME actual private Windows
+package consumer/examples pass on both OS. Same packet/native/CLI/harness/selectors,
+exact pixels/approved bounds/owners/work; no new image/settings grid or profile.
+Scope247=225numeric+22unmeasured,70passes/154mean gaps/one confidence-open.
+Current largest gap:CMYK2D sparse1.812x; its prefix trial remains rejected.
+
+[The first caller YCCK420 screen](WARM-JPEG-YCCK-CALLER-RGB.md) demonstrated the largest
 gap:7.504x/upper7.804x,4532.59/604.01us,1,337,431 B/op. The already-named retained
 caller matrix/black algorithm uses the existing packet/reference, with exact managed
 pixels, approved native bounds and equivalent fresh caller ownership. Direct native
@@ -240,9 +250,9 @@ Five representatives cover the required JPEG compatibility algorithms; CMYK, YCC
   separately named horizontal, 2D sparse and all63-AC controls above cover each
   retained transform algorithm.
 
-- `JpegDecode/Ycck420Resident` (**measured**1.463x gap): subsampled color
+- `JpegDecode/Ycck420Resident` (**measured**1.163x gap): subsampled color
   reconstruction, explicit matrix and full-resolution black, original varying input.
-- `JpegSamplesDecode/CmykResident` (**measured**1.590x gap): untagged full-resolution
+- `JpegSamplesDecode/CmykResident` (**measured**1.592x gap): untagged full-resolution
   canonical ink, all4raw native planes preserved and packed to fresh caller storage.
   Adobe inversion has correctness coverage; no RGBA intermediate.
 - `JpegDecode/411Resident`: quarter-width horizontal chroma reconstruction on the
@@ -251,7 +261,7 @@ Five representatives cover the required JPEG compatibility algorithms; CMYK, YCC
   not video pixel format 4×4); confirm native sample-grid equivalence before timing.
 
 The accepted full-resolution CMYK caller selector exposes one concrete omitted
-required path: `JpegSamplesDecode/Ycck420RgbResident` (**measured**7.504x gap). SourceYcck
+required path: `JpegSamplesDecode/Ycck420RgbResident` (**measured**1.488x gap). SourceYcck
 and outputRgb reject raw byte packing; the retained WriteCmykSamples path performs
 centered chroma expansion, binary64 matrix/inversion/black and directRGB24 stores.
 Neither owned-RGBA YCCK SIMD nor caller YCbCr420 RGB measures that complete public

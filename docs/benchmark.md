@@ -7,25 +7,19 @@ conservative upper ≤1x**. The 225 current numeric rows contain **70 passes,
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
-[Four-component materialization](../benchmarks/WARM-JPEG-FOUR-COMPONENT-PLANES.md)
-cuts caller CMYK time **47.7%**, 1,010.51→528.07µs: **1.590x / upper 1.736x**,
-**1,635,475 B/op**. Owned YCCK improves 9.0% to 1.463x / 1,470,252 B/op.
-Caller RGB420 independently confirms **0.962x / upper 0.966x**, 624,508 B/op;
-caller gray remains a 1.345x short gap. Exact managed pixels, approved native
-bounds and complete operation ownership are unchanged. Four rows refresh;
-220 other numeric rows and 69 unaffected passing proofs are reused.
+[Exact SIMD caller YCCK RGB](../benchmarks/WARM-JPEG-YCCK-CALLER-SIMD.md) cuts
+complete time **80.2%**, 4,532.59→898.47µs: **1.488x / upper 1.550x**,
+**1,337,490 B/op**. Shared owned YCCK improves20.3% to1.163x/1,470,256B/op;
+caller CMYK control remains1.592x. Exact managed pixels, approved native bounds,
+resource limits and complete independent output ownership stay unchanged.
+Three rows refresh;222other numeric rows and all70passing proofs are reused.
 
-Accepted qualification: 4,208 tests and 95 hardware-off checks per OS, plus the
-same actual private package consumer/all three examples on Windows/Linux.
-The released 0.1.0 package/tag stay immutable.
-
-[Caller YCCK420 RGB24](../benchmarks/WARM-JPEG-YCCK-CALLER-RGB.md) first measures
-**7.504x / upper 7.804x**, **4,532.59 / 604.01µs**, **1,337,431 B/op**. This is
-the new largest gap. Exact managed samples, approved native bounds and complete
-fresh caller ownership pass. Same existing packet, no new image/settings grid.
-Production and all224previous rows/qualification are reused. Async, header,
-drawing and text still have functional qualification but pending warm evidence.
-Stop all70passing paths;22named representatives remain unmeasured.
+Accepted qualification:4,209tests and96hardware-off checks per OS, plus the same
+actual private package consumer/all three examples on Windows/Linux. The released
+0.1.0 package/tag remain immutable. Current largest gap:CMYK2D sparse1.812x.
+The22unmeasured representatives include JPEG411/410, async, header, drawing and
+text boundaries; functional qualification does not supply warm timing evidence.
+Stop unchanged independently passing paths; no image/settings grid was added.
 
 JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale
 (managed/SIMD libjpeg-turbo) and **74,040/52,093 B** RGB420 (managed/FFmpeg), with
@@ -125,14 +119,14 @@ reconciliation now covers every numeric row.
 | [PNG opaque gray4 → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 116.09 | 169.54 | 0.685 / 0.698 | 872 | Parity confirmed |
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-GRAY-CURRENT.md) | 973.44 | 682.79 | 1.426 / 1.459 | 672,186 | Gap (short; qualified) |
 | [JPEG gray → caller GRAY8](../benchmarks/WARM-JPEG-FOUR-COMPONENT-PLANES.md) | 868.77 | 646.09 | 1.345 / 1.411 | 273,422 | Gap (short; qualified) |
-| [JPEG untagged → caller CMYK8](../benchmarks/WARM-JPEG-FOUR-COMPONENT-PLANES.md) | 528.07 | 332.14 | 1.590 / 1.736 | 1,635,475 | Gap (short; qualified) |
+| [JPEG untagged → caller CMYK8](../benchmarks/WARM-JPEG-YCCK-CALLER-SIMD.md) | 526.74 | 330.84 | 1.592 / 1.669 | 1,635,479 | Gap (short; qualified) |
 | [JPEG 4:2:0 → caller RGB24](../benchmarks/WARM-JPEG-FOUR-COMPONENT-PLANES.md) | 1,121.94 | 1,166.50 | 0.962 / 0.966 | 624,508 | Parity confirmed |
 | [JPEG Adobe CMYK, four full-resolution planes](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 525.44 | 377.75 | 1.391 / 1.473 | 1,085,667 | Gap (short; qualified) |
 | [JPEG Adobe CMYK, one AC control](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 674.71 | 389.55 | 1.732 / 1.783 | 1,085,662 | Gap (short; qualified) |
 | [JPEG Adobe CMYK, general transform control](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 3,463.08 | 3,110.84 | 1.113 / 1.197 | 1,085,522 | Gap (short; qualified) |
 | [JPEG Adobe CMYK, two-dimensional sparse control](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 792.76 | 437.47 | 1.812 / 1.869 | 1,085,656 | Gap (short; qualified) |
-| [JPEG YCCK420, full-resolution black](../benchmarks/WARM-JPEG-FOUR-COMPONENT-PLANES.md) | 1,033.62 | 706.68 | 1.463 / 1.539 | 1,470,252 | Gap (short; qualified) |
-| [JPEG YCCK420 → caller RGB24](../benchmarks/WARM-JPEG-YCCK-CALLER-RGB.md) | 4,532.59 | 604.01 | 7.504 / 7.804 | 1,337,431 | Gap (short; qualified) |
+| [JPEG YCCK420, full-resolution black](../benchmarks/WARM-JPEG-YCCK-CALLER-SIMD.md) | 824.27 | 708.72 | 1.163 / 1.175 | 1,470,256 | Gap (short; qualified) |
+| [JPEG YCCK420 → caller RGB24](../benchmarks/WARM-JPEG-YCCK-CALLER-SIMD.md) | 898.47 | 603.97 | 1.488 / 1.550 | 1,337,490 | Gap (short; qualified) |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,202.77 | 1,008.96 | 1.192 / 1.315 | 757,345 | Gap (short; qualified) |
 | [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,378.07 | 1,014.38 | 1.359 / 1.446 | 761,720 | Gap (short; qualified) |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,510.49 | 1,351.29 | 1.118 / 1.263 | 829,148 | Gap (short; qualified) |

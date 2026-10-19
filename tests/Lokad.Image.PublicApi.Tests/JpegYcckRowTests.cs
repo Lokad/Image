@@ -11,6 +11,9 @@ public sealed class JpegYcckRowTests
         byte[] basis = [17, 191, 250, 63];
         var packet = AuthoredJpegCompatibility.Create(width, height, basis, 2, 2, true, 2, progressive, restart: 1, vary: true);
         var unchanged = packet.ToArray(); using var first = ImageCodec.Decode(packet); using var survivor = ImageCodec.Decode(packet);
+        var stride = width * 3 + 7;
+        var caller = Enumerable.Repeat((byte)173, stride * height + 17).ToArray(); var callerSurvivor = caller.ToArray();
+        ImageCodec.DecodeJpeg(packet, caller, JpegSampleFormat.Rgb, stride); ImageCodec.DecodeJpeg(packet, callerSurvivor, JpegSampleFormat.Rgb, stride);
         double Sample(int component, int x, int y)
         {
             if (component is 0 or 3) return (basis[component] + x / 8 * 13 + y / 8 * 29) & 255;
@@ -29,11 +32,19 @@ public sealed class JpegYcckRowTests
             c = 255 - c; m = 255 - m; yellow = 255 - yellow;
             double[] colors = [c, m, yellow];
             for (var channel = 0; channel < 3; channel++)
-                Assert.Equal((byte)Math.Clamp(Math.Round((255 - colors[channel]) * (255 - k) / 255, MidpointRounding.AwayFromZero), 0, 255), first.GetRow8(y)[x * 4 + channel]);
+            {
+                var expectedSample = (byte)Math.Clamp(Math.Round((255 - colors[channel]) * (255 - k) / 255, MidpointRounding.AwayFromZero), 0, 255);
+                Assert.Equal(expectedSample, first.GetRow8(y)[x * 4 + channel]);
+                Assert.Equal(expectedSample, caller[y * stride + x * 3 + channel]); Assert.Equal(expectedSample, callerSurvivor[y * stride + x * 3 + channel]);
+            }
             Assert.Equal(255, first.GetRow8(y)[x * 4 + 3]);
         }
         var expected = OriginalPixels.Bytes(survivor); Assert.Equal(expected, OriginalPixels.Bytes(first));
         first.GetRow8(0)[0] ^= 255; first.Dispose(); Assert.Equal(expected, OriginalPixels.Bytes(survivor));
+        for (var y = 0; y < height; y++) Assert.All(caller.AsSpan(y * stride + width * 3, 7).ToArray(), b => Assert.Equal(173, b));
+        Assert.All(caller.AsSpan(stride * height).ToArray(), b => Assert.Equal(173, b));
+        var expectedCaller = callerSurvivor.ToArray(); Array.Clear(caller); Assert.Equal(expectedCaller, callerSurvivor);
         Assert.Equal(unchanged, packet); Array.Clear(packet); Assert.Equal(expected, OriginalPixels.Bytes(survivor));
+        Assert.Equal(expectedCaller, callerSurvivor);
     }
 }

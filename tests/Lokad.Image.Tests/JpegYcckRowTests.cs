@@ -4,11 +4,12 @@ namespace Lokad.Image.Tests;
 
 public sealed class JpegYcckRowTests
 {
-    [Fact]
-    public void FractionalChromaAndBlackKeepOriginalBinary64PixelsAndGuards()
+    [Theory]
+    [InlineData(3)] [InlineData(4)]
+    public void FractionalChromaAndBlackKeepOriginalBinary64PixelsAndGuards(int channels)
     {
         var random = new Random(74021); var planes = Enumerable.Range(0, 6).Select(_ => new byte[10]).ToArray();
-        var output = new byte[34]; var scratch = new byte[26];
+        var output = new byte[channels * 8 + 2]; var scratch = new byte[26];
         foreach (var topWeight in new[] { 1, 3 })
         for (var trial = 0; trial < 1024; trial++)
         {
@@ -19,8 +20,12 @@ public sealed class JpegYcckRowTests
             if (trial < 4)
                 for (var c = 2; c < 6; c++) Array.Fill(planes[c], (byte)(((trial + c) & 1) * 255));
             var before = planes.Select(p => p.ToArray()).ToArray(); Array.Fill(output, (byte)173); Array.Fill(scratch, (byte)197);
-            JpegDecoder.RenderYcck420Row8(planes[0].AsSpan(1, 8), planes[1].AsSpan(1, 8), planes[2].AsSpan(1, 8), planes[3].AsSpan(1, 8),
-                planes[4].AsSpan(1, 8), planes[5].AsSpan(1, 8), topWeight, output.AsSpan(1, 32), scratch.AsSpan(1, 24));
+            if (channels == 4)
+                JpegDecoder.RenderYcck420Row8(planes[0].AsSpan(1, 8), planes[1].AsSpan(1, 8), planes[2].AsSpan(1, 8), planes[3].AsSpan(1, 8),
+                    planes[4].AsSpan(1, 8), planes[5].AsSpan(1, 8), topWeight, output.AsSpan(1, 32), scratch.AsSpan(1, 24));
+            else
+                JpegDecoder.RenderYcck420Rgb8(planes[0].AsSpan(1, 8), planes[1].AsSpan(1, 8), planes[2].AsSpan(1, 8), planes[3].AsSpan(1, 8),
+                    planes[4].AsSpan(1, 8), planes[5].AsSpan(1, 8), topWeight, output.AsSpan(1, 24), scratch.AsSpan(1, 24));
             for (var x = 0; x < 8; x++)
             {
                 double Chroma(int component)
@@ -35,8 +40,8 @@ public sealed class JpegYcckRowTests
                 cyan = 255 - cyan; magenta = 255 - magenta; yellow = 255 - yellow; black = 255 - black;
                 double[] colors = [cyan, magenta, yellow];
                 for (var c = 0; c < 3; c++)
-                    Assert.Equal((byte)Math.Clamp(Math.Round((255 - colors[c]) * (255 - black) / 255, MidpointRounding.AwayFromZero), 0, 255), output[x * 4 + c + 1]);
-                Assert.Equal(255, output[x * 4 + 4]);
+                    Assert.Equal((byte)Math.Clamp(Math.Round((255 - colors[c]) * (255 - black) / 255, MidpointRounding.AwayFromZero), 0, 255), output[x * channels + c + 1]);
+                if (channels == 4) Assert.Equal(255, output[x * 4 + 4]);
             }
             for (var c = 0; c < 6; c++) Assert.Equal(before[c], planes[c]);
             Assert.Equal(173, output[0]); Assert.Equal(173, output[^1]); Assert.Equal(197, scratch[0]); Assert.Equal(197, scratch[^1]);
