@@ -329,7 +329,10 @@ The independent decimal/BigInteger oracle covers transparency, edges and cache
 eviction. Opaque live FFmpeg controls use explicit edge extension and radius
 three, maximum RGB error 1, RGB RMSE <=0.25 and exact alpha. That correctness
 graph generates surplus border output and is not a warm-performance baseline.
-Transparent native-reference and warm-performance qualification remain separate.
+The four warm cases on the two original rasters also have independently exact managed outputs
+and qualified transparent normal/scalar native controls (RGB/alpha maximum1,
+RMSE <=0.25). Their [warm screens](benchmarks/WARM-LANCZOS3-BASELINE.md) expose
+material gaps; performance parity remains unqualified.
 
 Filtering operates in encoded sample space with premultiplied-alpha accumulation,
 followed by unpremultiplication. Round halves away from zero and clamp to sample

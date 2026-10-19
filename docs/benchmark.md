@@ -1,18 +1,20 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-19. Target: **warm single-CPU parity, independently confirmed
-conservative upper ≤1x**. The 227 current numeric rows contain **70 passes,
-156 gaps and 1 confidence-open case**. The finite
-[material checklist](../benchmarks/WARM-COVERAGE.md) has 251 named cases, 24 unmeasured.
+conservative upper ≤1x**. The 231 numeric rows contain **70 passes,
+160 gaps and 1 confidence-open case**. The finite
+[material checklist](../benchmarks/WARM-COVERAGE.md) has 254 named cases, 23 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
 These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
-is separate: changed admission, disposal and governed storage paths have no warm
-timing claim yet. Earlier confirmations remain evidence for their identified builds.
-Lanczos3 adds four named unmeasured paths, reusing existing rasters; exact managed
-pixels and opaque native quality controls pass, without claiming warm parity.
+is separate. Earlier codec/edit rows do not yet requalify changed 0.2.0 admission,
+disposal or governed storage paths; confirmations retain their identified builds.
+The [four Lanczos3 screens](../benchmarks/WARM-LANCZOS3-BASELINE.md) expose
+**14.640–19.104x gaps** (uppers15.438–19.532),146,616–4,616,094B/op. Full managed
+pixels match the independent oracle on both OS; transparent native normal/scalar
+quality passes. The next primitive is exact final quotient calculation.
 
 [Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
 **76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
@@ -22,8 +24,8 @@ passing proofs are reused. No new image/settings grid, profile or baseline chang
 
 Last performance-round qualification:4,212tests/99hardware-off checks per OS, same actual private
 package consumer/all three examples on Windows/Linux. Released0.1.0 stays immutable.
-Largest current gap:CMYK2D sparse1.812x; its prefix trial remains rejected.
-24unmeasured representatives cover async, header, drawing, supplied-font and Lanczos3 paths.
+Largest measured gap: Lanczos3 Enlarge16 at19.104x; CMYK2D sparse remains1.812x.
+23unmeasured representatives cover async, header, drawing, text and governed ownership.
 Stop passes; optimize demonstrated material gaps and resolve missing evidence.
 
 JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale
@@ -300,6 +302,10 @@ reconciliation now covers every numeric row.
 | [Transpose RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 48.17 | 44.86 | 1.074 / 1.114 | 128 | Gap (independent) |
 | [Mirrored transpose RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 44.34 | 43.25 | 1.025 / 1.064 | 128 | Gap (independent) |
 | [Mirrored transpose RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 39.10 | 38.54 | 1.015 / 1.041 | 128 | Gap (independent) |
+| [Lanczos3 reduction RGBA8](../benchmarks/WARM-LANCZOS3-BASELINE.md) | 7,397.17 | 493.31 | 14.995 / 15.681 | 146,616 | Gap (short; qualified) |
+| [Lanczos3 reduction RGBA16](../benchmarks/WARM-LANCZOS3-BASELINE.md) | 7,412.73 | 506.33 | 14.640 / 15.438 | 146,616 | Gap (short; qualified) |
+| [Lanczos3 enlargement RGBA8](../benchmarks/WARM-LANCZOS3-BASELINE.md) | 74,429.21 | 4,082.73 | 18.230 / 19.052 | 351,966 | Gap (short; qualified) |
+| [Lanczos3 enlargement RGBA16](../benchmarks/WARM-LANCZOS3-BASELINE.md) | 74,799.35 | 3,915.33 | 19.104 / 19.532 | 4,616,094 | Gap (short; qualified) |
 
 * VP8L encode uses **libwebp exact=1, FFmpeg's encoder backend**, through its
 public API because FFmpeg does not expose hidden-RGB preservation. All decoded

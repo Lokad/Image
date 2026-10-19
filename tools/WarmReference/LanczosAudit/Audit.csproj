@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup Condition="'$(LokadImageAssembly)' == ''">
+    <ProjectReference Include="../../../src/Lokad.Image/Lokad.Image.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(LokadImageAssembly)' != ''">
+    <Reference Include="Lokad.Image"><HintPath>$(LokadImageAssembly)</HintPath></Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="../../Shared/LanczosReference.cs" Link="LanczosReference.cs" />
+    <Compile Include="../../Shared/OriginalPixels.cs" Link="OriginalPixels.cs" />
+  </ItemGroup>
+</Project>

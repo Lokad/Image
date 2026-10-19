@@ -50,6 +50,10 @@ internal static class LanczosReference
     {
         if (width == sourceWidth && height == sourceHeight) return source.ToArray();
         var horizontal = Axis(sourceWidth, width); var vertical = Axis(sourceHeight, height); var sample = depth / 8;
+        // Keep the independent two-dimensional BigInteger sum, visiting only
+        // nonzero taps so full benchmark rasters remain practical to qualify.
+        var columns = horizontal.Select(a => a.Select((weight, index) => (weight, index)).Where(t => t.weight != 0).ToArray()).ToArray();
+        var rows = vertical.Select(a => a.Select((weight, index) => (weight, index)).Where(t => t.weight != 0).ToArray()).ToArray();
         var result = new byte[width * height * sample * 4]; var maximum = depth == 8 ? 255 : 65535;
         int Read(int x, int y, int channel)
         {
@@ -60,11 +64,10 @@ internal static class LanczosReference
         for (var x = 0; x < width; x++)
         {
             var sums = new BigInteger[4];
-            for (var sy = 0; sy < sourceHeight; sy++)
-            for (var sx = 0; sx < sourceWidth; sx++)
+            foreach (var (wy, sy) in rows[y])
+            foreach (var (wx, sx) in columns[x])
             {
-                if (horizontal[x][sx] == 0 || vertical[y][sy] == 0) continue;
-                var weight = (BigInteger)horizontal[x][sx] * vertical[y][sy]; var a = Read(sx, sy, 3);
+                var weight = (BigInteger)wx * wy; var a = Read(sx, sy, 3);
                 for (var c = 0; c < 3; c++) sums[c] += weight * a * Read(sx, sy, c);
                 sums[3] += weight * a;
             }

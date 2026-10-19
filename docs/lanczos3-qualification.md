@@ -31,8 +31,9 @@ transparent overshoot requires the unclipped float-output adapter strategy.
 No quality bounds or exact managed pixels were relaxed.
 
 This is functional/memory evidence, **not performance parity or replacement
-readiness**. Four new warm cases remain unmeasured: 8/16-bit reduction/enlargement
-on the existing 513×259 rasters. No timing was taken. Existing filter kernels
+readiness**. The [subsequent warm baseline](../benchmarks/WARM-LANCZOS3-BASELINE.md)
+qualifies transparent native controls and measures the four required paths,
+all with material gaps. No timing was taken during this functional round. Existing filter kernels
 and defaults are unchanged; published 0.1.0 remains immutable.
 
 Retained SHA-256 identities:

@@ -1,5 +1,17 @@
 # Warm FFmpeg reference
 
+Lanczos3 uses `build-lanczos3-linux.sh` and `verify-lanczos3-linux.py` for exactly
+four 8/16-bit reduction/enlargement cases on the existing rasters. Prepare the
+independent managed reference once with `LanczosAudit`; then reuse its verified
+outputs. The adapter is explicitly zimg, FFmpeg's zscale backend, with radius3,
+a clamped halo/active region and unclipped premultiplied float output. Input
+normalization, halo, output allocation, unpremultiplication, quantization and
+release remain timed. Normal/scalar RGB/alpha max1 and RMSE≤.25 pass. The opaque
+CLI graph computes extra border output and is not a timing baseline. Select
+`-WarmFamily Lanczos3 -WarmCases Reduce8,Reduce16,Enlarge8,Enlarge16`; retain the
+generated child and inject verified immutable producer/harness assemblies before
+replay. Qualification is in [the baseline report](../../benchmarks/WARM-LANCZOS3-BASELINE.md).
+
 Resident JPEG identification uses `build-jpeg-identify-linux.sh` and
 `verify-jpeg-identify-linux.py` before selecting `Identify/Jpeg8`. Its reference
 is **FFmpeg MJPEG discard-all metadata extraction with an original complete

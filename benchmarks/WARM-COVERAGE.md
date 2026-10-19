@@ -1,30 +1,55 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-70 independent passes,156 measured mean gaps and one confidence-open case across
-all227 current numeric rows. The [three-table summary](../docs/benchmark.md)
-contains126 independent observations and101 qualified shorts.24named required
+70 independent passes,160 measured mean gaps and one confidence-open case across
+231 numeric rows. The [three-table summary](../docs/benchmark.md)
+contains126 independent observations and105 qualified shorts.23named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
-The finite scope is now **251 cases:227 numeric+24 unmeasured**. The existing
-227 rows retain their identified performance-qualified builds; 0.2.0 admission,
-disposal and governed storage changes have no current warm timing claim.
-[Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds exactly
-four required representatives using the same513×259 asymmetric RGBA rasters:
+The finite scope is now **254 cases:231 numeric+23 unmeasured**. The existing
+227 rows retain their identified performance-qualified builds; those earlier
+codec/edit rows do not yet requalify 0.2.0 admission, disposal or governed storage.
+[Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
+required representatives using the same513×259 asymmetric RGBA rasters. Their
+[quiet screens](WARM-LANCZOS3-BASELINE.md) all expose material gaps:
 
 | Named case | Fixed output and reason | State |
 | --- | --- | --- |
-| LanczosReduce8 | 256×129; widened radius-three antialias support and byte output | Unmeasured |
-| LanczosReduce16 | 256×129; full word precision and alpha normalization | Unmeasured |
-| LanczosEnlarge8 | 1027×519; negative-lobe enlargement, byte saturation and tiny alpha | Unmeasured |
-| LanczosEnlarge16 | 1027×519; full word precision, overshoot and tiny-alpha normalization | Unmeasured |
+| LanczosReduce8 | 256×129; widened radius-three antialias support and byte output | Gap14.995x/upper15.681x |
+| LanczosReduce16 | 256×129; full word precision and alpha normalization | Gap14.640x/upper15.438x |
+| LanczosEnlarge8 | 1027×519; negative-lobe enlargement, byte saturation and tiny alpha | Gap18.230x/upper19.052x |
+| LanczosEnlarge16 | 1027×519; full word precision, overshoot and tiny-alpha normalization | Gap19.104x/upper19.532x |
 
-Qualify the explicit clamped halo/active-region, premultiplied float-output
-reference before timing. Time all normalization, ownership and disposal with one
-CPU. The opaque CLI correctness graph computes surplus border output and is not
-an equivalent timing baseline. No existing rows, gates or performance evidence
-are replaced by this functional round. Aspect-fit uses the same kernel after
-small geometry work; add a separate timing case only if that boundary is material.
+The clamped halo/active-region and premultiplied float-output reference is now
+qualified for all four, including normal/scalar checks and twelve rejection
+controls each. All normalization, ownership and disposal are timed with one CPU.
+No other rows, gates or performance evidence are replaced. Aspect-fit uses the
+same kernel after small geometry work; add a separate timing case only if that
+boundary is material. Prioritize exact final quotient calculation first.
+
+A bounded audit of the accepted 0.2.0 additions identifies exactly three required
+paths absent from the older checklist; these are not a shape/depth/settings grid:
+
+- `TextLayout/OpenTypeArabicMarksDigits`: reuse the fixed `ArabicMarksDigits`
+  text/settings and licensed regular face from the twelve functional comparisons.
+  Arabic joining, bidi order, GSUB and mark positioning are distinct from the
+  three original legacy outline-layout controls below. Complete owned layout,
+  measurement and disposal; immutable font preparation excluded.
+- `TextFit/OpenTypeConstrained`: reuse `ConstrainedFit`, 96×30, maximum24,
+  minimum8, step.25 and the same face. The descending search performs30 candidate
+  layouts and selects16.75; cumulative work/admission and rejected-owner cleanup
+  are a new public boundary, absent from single-layout measurements.
+- `MemoryBudget/Png8Retained2`: two sequential decodes of the existing resident
+  PNG8 packet, one borrowed shared test-adapter root, with the first output alive
+  until the second completes. Include both complete admissions, materializations
+  and disposals. Governed uncached storage and independent retained reservations
+  differ from default pooling and the earlier `ImageBudget` quota.
+
+All three remain **unmeasured**; establish equivalent native font/admission
+adapters and quality/ownership gates before timing. They add no new image or
+font/settings grid. These additions keep the full objective explicit while the
+demonstrated Lanczos3 gaps take priority. Further additions require evidence of
+a distinct omitted required algorithm or public boundary.
 
 [Exact SIMD JPEG410](WARM-JPEG-410-SIMD.md) reduces complete time76.7%,
 3427.72→799.34us:1.669x/upper1.877x,720,810B/op. Exact1/32 chroma fractions,
