@@ -38,6 +38,10 @@ and defaults are unchanged; published 0.1.0 remains immutable.
 The subsequent [exact-quotient round](../benchmarks/WARM-LANCZOS3-QUOTIENT.md)
 reduces complete time25.0–39.1%, qualifies4431tests/30scalar checks per OS and
 preserves every original pixel; parity remains open.
+The following [rounding-interval round](../benchmarks/WARM-LANCZOS3-INTERVAL.md)
+saves another19.1–38.6%, qualifies4435tests/34scalar checks per OS and the same
+actual private package on both systems. All four original frames remain exact;
+the warm parity objective remains open.
 
 Retained SHA-256 identities:
 

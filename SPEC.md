@@ -325,8 +325,8 @@ rows, with separately admitted axis tables and one output-row accumulator.
 Both depths preserve hidden RGB on identity; other zero-rounded-alpha output
 has zero RGB. Limits/refusal/cancellation dispose temporary and unpublished
 result owners, while successful results retain independent shared-root charges.
-Final quotient calculation may use a projected estimate certified by its exact
-integer remainder, with exact division otherwise. This changes neither rounding
+Final quotient calculation may use a projected estimate certified by a bounded
+rounding interval or its exact integer remainder, with exact division otherwise. This changes neither rounding
 nor resource/cancellation behavior and introduces no approximate pixels.
 The independent decimal/BigInteger oracle covers transparency, edges and cache
 eviction. Opaque live FFmpeg controls use explicit edge extension and radius

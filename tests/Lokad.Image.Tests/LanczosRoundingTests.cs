@@ -55,4 +55,34 @@ public sealed class LanczosRoundingTests
             Check(7 * denominator + denominator / 2 + 1, denominator, maximum);
         }
     }
+
+    [Theory]
+    [InlineData(255)] [InlineData(65535)]
+    public void IntervalDomainAndRoundingMarginEndpointsMatchExactRationals(int maximum)
+    {
+        var unit = (Int128)1 << 32;
+        foreach (var d in new Int128[] { ((Int128)1 << 59) - 1, (Int128)1 << 59, ((Int128)1 << 59) + 1,
+            ((Int128)1 << 59) + unit - 1, ((Int128)1 << 60) - 1, ((Int128)1 << 79) + 1,
+            ((Int128)1 << 80) - 1, (Int128)1 << 80, ((Int128)1 << 80) + 1 })
+        foreach (var q in new[] { 0, 1, maximum / 3, maximum / 2, maximum - 1 })
+        foreach (var margin in new Int128[] { -d / 1024, 0, d / 1024 })
+        foreach (var delta in new[] { -1, 0, 1 })
+            Check(q * d + d / 2 + margin + delta, d, maximum);
+    }
+
+    [Theory]
+    [InlineData(255)] [InlineData(65535)]
+    public void ExtremeDiscardedLowBitsCannotChooseTheWrongRoundingBin(int maximum)
+    {
+        var unit = (Int128)1 << 32;
+        foreach (var d in new Int128[] { ((Int128)1 << 59) + unit - 1, ((Int128)1 << 60) + unit - 1, ((Int128)1 << 80) - 1 })
+        foreach (var q in new[] { 0, 1, maximum - 1 })
+        foreach (var margin in new Int128[] { -d / 1024, 0, d / 1024 })
+        foreach (var low in new Int128[] { 0, 1, unit - 1 })
+        {
+            var nearby = q * d + d / 2 + margin;
+            Check((nearby >> 32 << 32) + low, d, maximum);
+            Check(low, d, maximum); Check(maximum * d - low, d, maximum);
+        }
+    }
 }

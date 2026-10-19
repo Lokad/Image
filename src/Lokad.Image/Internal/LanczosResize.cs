@@ -99,7 +99,17 @@ internal static class LanczosResize
         var projectedDenominator = (ulong)(denominator >> 32);
         if (projectedDenominator != 0)
         {
-            var quotient = Math.Clamp((int)((double)(ulong)(numerator >> 32) / projectedDenominator), 0, maximum);
+            var estimate = (double)(ulong)(numerator >> 32) / projectedDenominator;
+            // In this domain, truncation contributes at most
+            // (maximum+1)/(2^27-1); binary64 conversion/division add <2^-34.
+            // Their sum is <2^-10. Accept only a complete rounding bin;
+            // uncertain half boundaries keep the exact remainder below.
+            if (maximum <= 65535 && denominator >= (Int128)1 << 59 && denominator < (Int128)1 << 80)
+            {
+                var rounded = (int)(estimate + .5);
+                if (Math.Abs(estimate - rounded) < .5 - 1d / 1024) return rounded;
+            }
+            var quotient = Math.Clamp((int)estimate, 0, maximum);
             var remainder = numerator - denominator * quotient;
             if (remainder < 0) { quotient--; remainder += denominator; }
             else if (remainder >= denominator) { quotient++; remainder -= denominator; }

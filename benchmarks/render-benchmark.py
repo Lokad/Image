@@ -310,10 +310,10 @@ def render():
         row('WebP VP8 text/diagram RGBA8 / matched quality', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
     ])
     edits.extend([
-        row('Lanczos3 reduction RGBA8', 'warm-lanczos3-quotient-evidence.json', ['cases', 'Reduce8', -1], 'WARM-LANCZOS3-QUOTIENT.md', verification='Gap (short; qualified)'),
-        row('Lanczos3 reduction RGBA16', 'warm-lanczos3-quotient-evidence.json', ['cases', 'Reduce16', -1], 'WARM-LANCZOS3-QUOTIENT.md', verification='Gap (short; qualified)'),
-        row('Lanczos3 enlargement RGBA8', 'warm-lanczos3-quotient-evidence.json', ['cases', 'Enlarge8', -1], 'WARM-LANCZOS3-QUOTIENT.md', verification='Gap (short; qualified)'),
-        row('Lanczos3 enlargement RGBA16', 'warm-lanczos3-quotient-evidence.json', ['cases', 'Enlarge16', -1], 'WARM-LANCZOS3-QUOTIENT.md', verification='Gap (short; qualified)'),
+        row('Lanczos3 reduction RGBA8', 'warm-lanczos3-interval-evidence.json', ['cases', 'Reduce8', -1], 'WARM-LANCZOS3-INTERVAL.md', verification='Gap (short; qualified)'),
+        row('Lanczos3 reduction RGBA16', 'warm-lanczos3-interval-evidence.json', ['cases', 'Reduce16', -1], 'WARM-LANCZOS3-INTERVAL.md', verification='Gap (short; qualified)'),
+        row('Lanczos3 enlargement RGBA8', 'warm-lanczos3-interval-evidence.json', ['cases', 'Enlarge8', -1], 'WARM-LANCZOS3-INTERVAL.md', verification='Gap (short; qualified)'),
+        row('Lanczos3 enlargement RGBA16', 'warm-lanczos3-interval-evidence.json', ['cases', 'Enlarge16', -1], 'WARM-LANCZOS3-INTERVAL.md', verification='Gap (short; qualified)'),
     ])
     all_rows = decodes + encodes + edits
     parity_count = sum(' | Parity confirmed |' in value for value in all_rows)
@@ -334,12 +334,12 @@ These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
 is separate. Earlier codec/edit rows do not yet requalify changed 0.2.0 admission,
 disposal or governed storage paths; confirmations retain their identified builds.
-The [exact Lanczos3 quotient primitive](../benchmarks/WARM-LANCZOS3-QUOTIENT.md)
-cuts complete time **25.0–39.1%**, leaving **10.636–11.863x gaps**
-(uppers11.042–12.572),146,614–4,616,094B/op. Full managed pixels remain exact;
+The [exact Lanczos3 rounding interval](../benchmarks/WARM-LANCZOS3-INTERVAL.md)
+cuts complete time **19.1–38.6%** from the preceding primitive, leaving **7.268–8.752x gaps**
+(uppers7.550–9.087),146,614–4,616,301B/op. Full managed pixels remain exact;
 native quality, ownership and all operation boundaries are unchanged. Qualification
-passes4,431tests/30scalar checks per OS, same actual private package and all three
-examples. Next: a certified quotient interval to avoid repeated wide remainders.
+passes4,435tests/34scalar checks per OS, same actual private package and all three
+examples. Next: investigate exact vectorized vertical accumulation on Reduce8.
 
 [Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
 **76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
@@ -349,7 +349,7 @@ passing proofs are reused. No new image/settings grid, profile or baseline chang
 
 Last performance-round qualification:4,212tests/99hardware-off checks per OS, same actual private
 package consumer/all three examples on Windows/Linux. Released0.1.0 stays immutable.
-Largest measured gap: Lanczos3 Enlarge8 at11.863x; CMYK2D sparse remains1.812x.
+Largest measured gap: Lanczos3 Reduce8 at8.752x; CMYK2D sparse remains1.812x.
 23unmeasured representatives cover async, header, drawing, text and governed ownership.
 Stop passes; optimize demonstrated material gaps and resolve missing evidence.
 
