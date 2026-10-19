@@ -54,6 +54,10 @@ The [exact SIMD horizontal round](../benchmarks/WARM-LANCZOS3-HORIZONTAL.md)
 saves another10.5–30.8%, qualifies4448tests/47scalar checks per OS and the same
 actual private package on both systems. Original frames, working storage,
 work and cancellation remain unchanged; warm parity stays open.
+The [AVX2 byte-product round](../benchmarks/WARM-LANCZOS3-BYTE-PRODUCTS.md)
+cuts Reduce8 another13.3%, qualifies4448tests/47scalar plus47AVX512F-off checks
+per OS and the same actual package on both systems. All original frames stay
+exact; storage, work and cancellation are unchanged. The paired trial is rejected.
 
 Retained SHA-256 identities:
 

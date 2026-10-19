@@ -141,6 +141,8 @@ internal static class LanczosResize
     {
         ReadOnlySpan<byte> input8 = default; ReadOnlySpan<ushort> input16 = default;
         if (source.BitDepth == 8) input8 = source.GetRow8(y); else input16 = source.GetRow16(y);
+        if (source.BitDepth == 8 && Avx2.IsSupported)
+        { Horizontal8(input8, plan, output, context); return; }
         for (var x = 0; x < plan.Windows.Length; x++)
         {
             var window = plan.Windows[x]; context.Work(window.Count * 4L);
@@ -178,6 +180,27 @@ internal static class LanczosResize
             output[destination + 2] = b; output[destination + 3] = alpha;
         }
     }
+    private static void Horizontal8(ReadOnlySpan<byte> input, LanczosPlan plan, Span<long> output, OperationContext context)
+    {
+        for (var x = 0; x < plan.Windows.Length; x++)
+        {
+            var window = plan.Windows[x]; context.Work(window.Count * 4L);
+            var sum = Vector256<long>.Zero;
+            for (var i = 0; i < window.Count; i++)
+            {
+                if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(MemoryMarshal.Read<uint>(input.Slice((window.First + i) * 4, 4))).AsByte());
+                var premultiplied = Sse41.MultiplyLow(Sse41.Insert(samples, 1, 3), Sse2.Shuffle(samples, 255));
+                // Byte products are <=65025, so signed32 operands suffice.
+                // Even lanes of the widened values give four exact Int64
+                // products; the axis bound keeps all prefixes below2^47.
+                var values = Avx2.ConvertToVector256Int64(premultiplied).AsInt32();
+                sum = Avx2.Add(sum, Avx2.Multiply(values, Vector256.Create(plan.Weights[window.Offset + i])));
+            }
+            sum.CopyTo(output.Slice(x * 4, 4));
+        }
+    }
+
     internal static int Round(Int128 numerator, Int128 denominator, int maximum)
     {
         if (numerator <= 0) return 0;
