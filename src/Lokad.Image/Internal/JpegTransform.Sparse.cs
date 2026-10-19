@@ -31,6 +31,11 @@ internal static partial class JpegTransform
         }
         if (BitOperations.PopCount(active) > 8) return false;
         context.Work(4096);
+        if ((active & ~255UL) == 0)
+        {
+            InverseHorizontalRow(coefficients, quantization, pixels, active);
+            return true;
+        }
         if (Avx512F.IsSupported && Avx512F.VL.IsSupported)
         {
             Vector512<double> sum0 = Vector512<double>.Zero, sum1 = Vector512<double>.Zero,

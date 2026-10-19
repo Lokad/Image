@@ -5,6 +5,28 @@ namespace Lokad.Image.Tests;
 public sealed class JpegSparseInverseTests
 {
     [Fact]
+    public void HorizontalSignedMixturesAndQuantizersKeepEveryQualifiedRowAndGuard()
+    {
+        var coefficients = new int[64]; var quantization = Enumerable.Repeat((ushort)1, 64).ToArray();
+        var expected = new byte[64]; var output = new byte[66];
+        foreach (var q in new ushort[] { 1, 2, 255, 65535 })
+        for (var seed = 0; seed < 64; seed++)
+        {
+            for (var u = 0; u < 8; u++)
+            {
+                coefficients[u] = (seed * 73 + u * 37) % 129 - 64;
+                quantization[u] = (ushort)(u % 2 == 0 ? q : 1);
+            }
+            coefficients[0] = seed % 2 == 0 ? 740 : -1020;
+            JpegTransform.Inverse(coefficients, quantization, expected, new(ImageLimits.Default, default));
+            Array.Fill(output, (byte)173); var context = new OperationContext(ImageLimits.Default, default);
+            Assert.True(JpegTransform.TryInverseSparse(coefficients, quantization, output.AsSpan(1, 64), context));
+            Assert.Equal(expected, output.AsSpan(1, 64).ToArray()); Assert.Equal(4096, context.ConsumedWork);
+            Assert.Equal(173, output[0]); Assert.Equal(173, output[^1]);
+        }
+    }
+
+    [Fact]
     public void EverySingleFrequencyAndSignedMixturesMatchTheQualifiedGeneralTransform()
     {
         var coefficients = new int[64]; var quantization = Enumerable.Repeat((ushort)1, 64).ToArray(); var expected = new byte[64]; var output = new byte[66];

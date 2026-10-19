@@ -1,22 +1,24 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-70 independent passes,150 measured mean gaps and one confidence-open case across
-all221 current numeric rows; no prior-production row remains. The
+70 independent passes,151 measured mean gaps and one confidence-open case across
+all222 current numeric rows; no prior-production row remains. The
 [three-table summary](../docs/benchmark.md) contains126 current independent
-observations and95 qualified shorts.24named new boundaries are unmeasured.
+observations and96 qualified shorts.24named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
 
-[Fourth CMYK coefficient-buffer reuse](WARM-JPEG-COEFFICIENT-REUSE.md) reduces
-allocations33.6%, about549KB/op, under the existing4MiB cap. Current DC/one-AC/
-general controls measure1.396x/1.921x/1.109x, at1,085,667/1,085,660/1,085,522B/op.
-All are short gaps; elapsed times are similar. Exact pixels, full work/admission,
-zeroing, source and owners pass. All4,196tests/OS,55affected hardware-off checks/OS
-and same actual Windows private package consumer/all three examples pass on both
-OS. Exactly these three rows change; all70passing paths retain evidence and stop.
-No new cases, native/harness/selector/fixture builds, profiles or long repeats.
-Scope stays245=221numeric+24pending. Original DC/one-AC/general spectral controls
-and their distinct-algorithm reasons are in [the preceding round](WARM-JPEG-CMYK-SPECTRA.md).
+[Identical horizontal JPEG rows](WARM-JPEG-HORIZONTAL-ROW.md) improve the one-AC
+CMYK mean10.0%,746.37→671.44us, at1.726x. DC/general remain1.395x/1.126x,
+about1.086MB/op. The new `JpegDecode/CmykAdobeSparse2DResident` selects the retained
+2D sparse algorithm after horizontal-row rejection. This is one concrete omitted
+algorithm: firsttwo AC=4 at(1,0)/(0,1), SAME projection/geometry/unit quantization.
+Analytical pixels and original native gates pass; its first short measures1.819x.
+No new shape/depth/filter/quality grid. Scope246=222numeric+24pending. All4,197tests/
+OS,61affected hardware-off checks/OS and same actual Windows private package
+consumer/all three examples pass on both OS. Three rows refreshed/one added;
+all70unaffected passing proofs stay stopped. One immutable producer/OS, one new
+control-harness build/OS, original native/selector/three fixtures reused; all12
+actuals/guards/brackets retained. No long confirmations above one or new profile.
 
 [Direct caller RGB420 sample writing](WARM-JPEG-CALLER-RGB420.md) removes the
 largest3.369x gap:71.3% less elapsed time, independently0.966x/upper0.971x,
@@ -101,8 +103,8 @@ All four measure complete output ownership and allocations with equivalent
 delivery. The two lossless cases and photograph VP8 independently pass; the later
 bounded-model diagram result is the open comparison above. Lossless sizes are now 2.394x/2.090x the exact native packets; VP8
 sizes are 1.212x/1.167x at matched source quality. The preceding lossless change replaces only the five affected timing proofs;
-other production paths and qualification evidence are reused. Known scope is now245 named
-cases:221 numeric plus24 unmeasured. Stop these three time-passing cases unless
+other production paths and qualification evidence are reused. Known scope is now246 named
+cases:222 numeric plus24 unmeasured. Stop these three time-passing cases unless
 their relevant production path changes; compression-size work remains required.
 
 The two [shared-budget codec boundaries](WARM-SHARED-BUDGET.md) are now measured:
@@ -177,9 +179,10 @@ encoding and editing remain unchanged. No unaffected operation was retimed.
 
 Five representatives cover the required JPEG compatibility algorithms; the CMYK DC/sparse/general controls have the current gaps above, four remain **unmeasured**:
 
-- `JpegDecode/CmykAdobeResident` (**measured**1.396x DC gap): four component planes, Adobe inversion and
+- `JpegDecode/CmykAdobeResident` (**measured**1.395x DC gap): four component planes, Adobe inversion and
   complete owned RGBA conversion from an original CMYK projection. The
-  separately named one-AC and all63-AC controls above cover sparse/general IDCT.
+  separately named horizontal, 2D sparse and all63-AC controls above cover each
+  retained transform algorithm.
 
 - `JpegDecode/Ycck420Resident`: subsampled color reconstruction, explicit matrix
   transform and a full-resolution black plane, using the same original input.

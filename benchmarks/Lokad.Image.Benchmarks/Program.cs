@@ -14,6 +14,12 @@ if (args.SequenceEqual(["--prepare-warm-jpeg-cmyk-ac"]))
     return;
 }
 
+if (args.SequenceEqual(["--prepare-warm-jpeg-cmyk-sparse2d"]))
+{
+    WarmJpegCmykInput.Prepare(twoDimensional: true);
+    return;
+}
+
 if (args.SequenceEqual(["--prepare-warm-jpeg-cmyk-general"]))
 {
     WarmJpegCmykInput.Prepare(general: true);

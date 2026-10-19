@@ -137,9 +137,10 @@ def render():
         row('JPEG baseline gray', 'warm-jpeg-gray-current-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-GRAY-CURRENT.md', verification='Gap (short; qualified)'),
         row('JPEG gray → caller GRAY8', 'warm-jpeg-caller-rgb420-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-CALLER-RGB420.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 → caller RGB24', 'warm-jpeg-caller-rgb420-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-CALLER-RGB420.md', True),
-        row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-coefficient-reuse-evidence.json', ['cases', 'CmykAdobe', -1], 'WARM-JPEG-COEFFICIENT-REUSE.md', verification='Gap (short; qualified)'),
-        row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-coefficient-reuse-evidence.json', ['cases', 'CmykAdobeAc', -1], 'WARM-JPEG-COEFFICIENT-REUSE.md', verification='Gap (short; qualified)'),
-        row('JPEG Adobe CMYK, general transform control', 'warm-jpeg-coefficient-reuse-evidence.json', ['cases', 'CmykAdobeGeneral', -1], 'WARM-JPEG-COEFFICIENT-REUSE.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-horizontal-row-evidence.json', ['cases', 'CmykAdobe', -1], 'WARM-JPEG-HORIZONTAL-ROW.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-horizontal-row-evidence.json', ['cases', 'CmykAdobeAc', -1], 'WARM-JPEG-HORIZONTAL-ROW.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, general transform control', 'warm-jpeg-horizontal-row-evidence.json', ['cases', 'CmykAdobeGeneral', -1], 'WARM-JPEG-HORIZONTAL-ROW.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, two-dimensional sparse control', 'warm-jpeg-horizontal-row-evidence.json', ['cases', 'CmykAdobeSparse2D', -1], 'WARM-JPEG-HORIZONTAL-ROW.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
@@ -308,11 +309,11 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 221
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 222
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 221 retained numeric rows contain **{parity_count} current
+conservative upper ≤1x**. The 222 retained numeric rows contain **{parity_count} current
 parity confirmations, {gap_count} measured gaps and {confidence_count} confidence-open cases**;
 all numeric rows have current evidence after the
 [input reconciliation](../benchmarks/WARM-INPUT-RECONCILIATION.md). Twenty-two prior
@@ -349,14 +350,15 @@ All4,176tests/OS,73affected hardware-disabled checks/OS and the same actual priv
 package consumer/all three examples pass on both OS. Exactly these two numeric
 rows change; prior passing paths retain evidence.24new boundaries remain.
 
-[Fourth CMYK coefficient-buffer reuse](../benchmarks/WARM-JPEG-COEFFICIENT-REUSE.md)
-reduces managed allocations **33.6%** to about **1,086KB/op**, within the same4MiB
-retention cap. Current DC/one-AC/general complete decode ratios are
-**1.396x /1.921x /1.109x**; short elapsed times are similar and remain gaps.
-Exact pixels, work/admission, zeroed leases and independent owners are unchanged.
-All4,196tests/OS,55affected hardware-off checks/OS and same actual private package
-consumer/all examples pass on both OS. Exactly three rows change; all70passes
-retain evidence and stop. Scope stays245finite cases,24unmeasured.
+[Identical horizontal JPEG rows](../benchmarks/WARM-JPEG-HORIZONTAL-ROW.md)
+reduce the one-AC CMYK mean **10.0%**,746.37→671.44µs, at **1.726x FFmpeg**.
+DC/general remain **1.395x/1.126x**, about **1,086KB/op** after fourth-buffer reuse.
+One new named2D sparse control rejects the shortcut and measures **1.819x**;
+it closes a concrete retained-algorithm omission, with the same original raster
+and settings. Scope **246finite cases**,24unmeasured. Exact pixels, original
+work/admission/owners and native gates pass. All4,197tests/OS,61affected hardware-off
+checks/OS and same actual private package consumer/all examples pass on both OS.
+Three rows refreshed, one added; all70passing paths retain evidence and stop.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end

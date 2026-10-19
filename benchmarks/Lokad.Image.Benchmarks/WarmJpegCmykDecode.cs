@@ -6,7 +6,8 @@ internal sealed class WarmJpegCmykDecode
 {
     private readonly bool nonzeroAc;
     private readonly bool general;
-    public WarmJpegCmykDecode(bool nonzeroAc = false, bool general = false) { this.nonzeroAc = nonzeroAc || general; this.general = general; }
+    private readonly bool twoDimensional;
+    public WarmJpegCmykDecode(bool nonzeroAc = false, bool general = false, bool twoDimensional = false) { this.nonzeroAc = nonzeroAc || general || twoDimensional; this.general = general; this.twoDimensional = twoDimensional; }
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
     private CmykJpegPreparation prepared = null!;
@@ -22,7 +23,7 @@ internal sealed class WarmJpegCmykDecode
         this.cpu = cpu; this.smoke = smoke; this.count = count; state = new JpegBenchmarkCase();
         try
         {
-            var directory = WarmJpegCmykInput.DirectoryPath(state.Root, nonzeroAc, general);
+            var directory = WarmJpegCmykInput.DirectoryPath(state.Root, nonzeroAc, general, twoDimensional);
             prepared = JsonSerializer.Deserialize<CmykJpegPreparation>(File.ReadAllText(Path.Combine(directory, "preparation.json")), EncoderQualityCalibration.Json) ?? throw new InvalidOperationException("Run --prepare-warm-jpeg-cmyk first.");
             input = File.ReadAllBytes(Path.Combine(directory, "input.jpg")); expected = File.ReadAllBytes(Path.Combine(directory, "expected.rgba"));
             if (prepared.Project != "Lokad.Image" || prepared.SchemaVersion != 1 || prepared.RasterSha256 != JpegBenchmarkCase.Hash(HorizontalFlipInput.Create(8))
@@ -88,7 +89,7 @@ internal sealed class WarmJpegCmykDecode
             var path = Path.Combine(state.Root, "artifacts/benchmark-validation", "WarmJpegDecode-" + Guid.NewGuid().ToString("N") + ".json"); Directory.CreateDirectory(Path.GetDirectoryName(path)!);
             File.WriteAllText(path, JsonSerializer.Serialize(new
             {
-                schemaVersion = 1, name = "WarmJpegDecode", caseId = general ? "CmykAdobeGeneral" : nonzeroAc ? "CmykAdobeAc" : "CmykAdobe", publicBoundary = general ? "JpegDecode/CmykAdobeGeneralResident" : nonzeroAc ? "JpegDecode/CmykAdobeAcResident" : "JpegDecode/CmykAdobeResident",
+                schemaVersion = 1, name = "WarmJpegDecode", caseId = general ? "CmykAdobeGeneral" : twoDimensional ? "CmykAdobeSparse2D" : nonzeroAc ? "CmykAdobeAc" : "CmykAdobe", publicBoundary = general ? "JpegDecode/CmykAdobeGeneralResident" : twoDimensional ? "JpegDecode/CmykAdobeSparse2DResident" : nonzeroAc ? "JpegDecode/CmykAdobeAcResident" : "JpegDecode/CmykAdobeResident",
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), smoke, cpu, width = 513, height = 259, depth = 8, sourceIdentity,
                 preparation = prepared, inputSha256 = prepared.EncodedSha256, rasterSha256 = prepared.RasterSha256, inputBytes = input.Length,
                 managedOutputBytes = expected.Length, nativeOutputBytes = nativePixels.Length, managedOutputSha256 = prepared.RgbaSha256, nativeOutputSha256 = JpegBenchmarkCase.Hash(nativePixels),
