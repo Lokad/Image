@@ -14,6 +14,7 @@ public class WarmStreamIdentify
 {
     public static IEnumerable<WarmStreamIdentifyCase> Cases => SelectedCases();
     [ParamsSource(nameof(Cases))] public WarmStreamIdentifyCase Case { get; set; }
+    private WarmAsyncPngIdentify? asyncInput;
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
     private byte[] encoded = [], descriptor = [];
@@ -45,6 +46,10 @@ public class WarmStreamIdentify
             || GCSettings.IsServerGC || Environment.GetEnvironmentVariable("DOTNET_TieredCompilation") != "0"
             || !GC.GetConfigurationVariables().TryGetValue("ConcurrentGC", out var concurrent) || Convert.ToBoolean(concurrent))
             throw new InvalidOperationException("Identify requires one CPU, optimized JIT and non-concurrent workstation GC.");
+        if (Environment.GetEnvironmentVariable("LOKAD_IMAGE_IDENTIFY_ASYNC_NONSEEKABLE") == "1")
+        {
+            asyncInput = new WarmAsyncPngIdentify(); asyncInput.Setup(cpu, smoke, sampleCount); return;
+        }
         state = new JpegBenchmarkCase();
         try
         {
@@ -159,6 +164,7 @@ public class WarmStreamIdentify
     [Benchmark]
     public ImageInfo Managed()
     {
+        if (asyncInput is not null) return asyncInput.Apply();
         using var input = new MemoryStream(encoded, writable: false);
         return ImageCodec.Identify(input);
     }
@@ -166,6 +172,7 @@ public class WarmStreamIdentify
     [GlobalCleanup]
     public void Cleanup()
     {
+        if (asyncInput is not null) { asyncInput.Cleanup(); return; }
         try
         {
             if (!ready) return;
