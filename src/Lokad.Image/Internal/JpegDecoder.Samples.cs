@@ -82,6 +82,9 @@ internal ref partial struct JpegDecoder
 
     private void MaterializeSamplePlanes()
     {
+        // Four-component decoding shares the exact DC/sparse/general walk.
+        // Allocation, block charges and coefficient release retain their order.
+        if (components.Length == 4) { MaterializeCmykPlanes(); return; }
         Span<byte> block = stackalloc byte[64];
         foreach (var component in components)
         {

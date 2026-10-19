@@ -135,14 +135,14 @@ def render():
         row('PNG opaque gray2 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray2', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG opaque gray4 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('JPEG baseline gray', 'warm-jpeg-gray-current-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-GRAY-CURRENT.md', verification='Gap (short; qualified)'),
-        row('JPEG gray → caller GRAY8', 'warm-jpeg-caller-rgb420-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-CALLER-RGB420.md', verification='Gap (short; qualified)'),
-        row('JPEG untagged → caller CMYK8', 'warm-jpeg-cmyk-packing-evidence.json', ['cases', 'CmykCaller', -1], 'WARM-JPEG-CMYK-PACKING.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0 → caller RGB24', 'warm-jpeg-caller-rgb420-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-CALLER-RGB420.md', True),
+        row('JPEG gray → caller GRAY8', 'warm-jpeg-four-component-planes-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-FOUR-COMPONENT-PLANES.md', verification='Gap (short; qualified)'),
+        row('JPEG untagged → caller CMYK8', 'warm-jpeg-four-component-planes-evidence.json', ['cases', 'CmykCaller', -1], 'WARM-JPEG-FOUR-COMPONENT-PLANES.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0 → caller RGB24', 'warm-jpeg-four-component-planes-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-FOUR-COMPONENT-PLANES.md', True),
         row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobe', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeAc', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG Adobe CMYK, general transform control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeGeneral', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG Adobe CMYK, two-dimensional sparse control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeSparse2D', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
-        row('JPEG YCCK420, full-resolution black', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'Ycck420', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
+        row('JPEG YCCK420, full-resolution black', 'warm-jpeg-four-component-planes-evidence.json', ['cases', 'Ycck420', -1], 'WARM-JPEG-FOUR-COMPONENT-PLANES.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
@@ -321,18 +321,21 @@ conservative upper ≤1x**. The 224 current numeric rows contain **{parity_count
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
-[Direct caller CMYK packing](../benchmarks/WARM-JPEG-CMYK-PACKING.md) cuts complete
-time **64.1%**, 2,817.13→1,010.51µs: **3.057x / upper 3.169x**, **1,635,459 B/op**.
-All four ink channels remain exact. Exactly this row changes; 223 other numeric
-rows and all 70 passing proofs are reused. Accepted qualification: 4,208 tests/OS,
-72 affected hardware-off checks/OS, same actual private package consumer/all three
-examples on Windows/Linux. The released 0.1.0 package/tag remain immutable.
+[Four-component materialization](../benchmarks/WARM-JPEG-FOUR-COMPONENT-PLANES.md)
+cuts caller CMYK time **47.7%**, 1,010.51→528.07µs: **1.590x / upper 1.736x**,
+**1,635,475 B/op**. Owned YCCK improves 9.0% to 1.463x / 1,470,252 B/op.
+Caller RGB420 independently confirms **0.962x / upper 0.966x**, 624,508 B/op;
+caller gray remains a 1.345x short gap. Exact managed pixels, approved native
+bounds and complete operation ownership are unchanged. Four rows refresh;
+220 other numeric rows and 69 unaffected passing proofs are reused.
 
-[YCCK420 owned decoding](../benchmarks/WARM-JPEG-YCCK-SIMD.md) retains its 76.1%
-gain at 1.604x. The retained caller YCCK→RGB matrix/black path is a newly named
-unmeasured control, using that same packet. Other pending async, header, drawing
-and text boundaries have functional qualification; their warm proof remains open.
-No image/settings grid was added. Stop unchanged independently passing cases.
+Accepted qualification: 4,208 tests and 95 hardware-off checks per OS, plus the
+same actual private package consumer/all three examples on Windows/Linux.
+The released 0.1.0 package/tag stay immutable. The largest current gap is CMYK
+2D sparse at 1.812x. The retained caller YCCK→RGB matrix/black path remains a
+named unmeasured control, using the existing packet. Async, header, drawing
+and text boundaries have functional qualification but pending warm evidence.
+Stop all 70 unchanged or newly reconfirmed passing cases; no settings grid.
 
 JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale
 (managed/SIMD libjpeg-turbo) and **74,040/52,093 B** RGB420 (managed/FFmpeg), with

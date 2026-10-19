@@ -7,7 +7,18 @@ all224 current numeric rows; no prior-production row remains. The
 observations and98 qualified shorts.23named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
 
-[Direct caller CMYK packing](WARM-JPEG-CMYK-PACKING.md) cuts elapsed time64.1%,
+[Four-component materialization](WARM-JPEG-FOUR-COMPONENT-PLANES.md) reduces caller
+CMYK time 47.7%, 1010.51→528.07us: 1.590x/upper1.736x, 1,635,475 B/op. Owned
+YCCK improves 9.0% to 1.463x. Caller RGB420 independently reconfirms at 0.962x/
+upper0.966x; gray remains a 1.345x short gap. Exactly these four numeric rows
+refresh after the common materializer selection; all 220 others and 69 unaffected
+passes retain evidence. Current totals stay 224 numeric/23 unmeasured, 70 passes/
+153 mean gaps/one confidence-open. Reuse frozen workers/fixtures/harness/selectors;
+one immutable producer per OS passes 4208 tests, 95 hardware-off checks and the same
+actual private package consumer/examples on both OS. Full objective remains open.
+Largest measured gap: CMYK 2D sparse 1.812x; its prefix trial stays rejected.
+
+[The preceding caller CMYK packing round](WARM-JPEG-CMYK-PACKING.md) cut elapsed time64.1%,
 2817.13→1010.51us:3.057x/upper3.169x,1,635,459B/op. Exact four-channel samples,
 work/admission/cancellation, source/padding and independent owners remain.
 Only that numeric row changes;223others and70passing proofs are reused. Full
@@ -220,9 +231,9 @@ Five representatives cover the required JPEG compatibility algorithms; CMYK, YCC
   separately named horizontal, 2D sparse and all63-AC controls above cover each
   retained transform algorithm.
 
-- `JpegDecode/Ycck420Resident` (**measured**1.604x gap): subsampled color
+- `JpegDecode/Ycck420Resident` (**measured**1.463x gap): subsampled color
   reconstruction, explicit matrix and full-resolution black, original varying input.
-- `JpegSamplesDecode/CmykResident` (**measured**8.522x gap): untagged full-resolution
+- `JpegSamplesDecode/CmykResident` (**measured**1.590x gap): untagged full-resolution
   canonical ink, all4raw native planes preserved and packed to fresh caller storage.
   Adobe inversion has correctness coverage; no RGBA intermediate.
 - `JpegDecode/411Resident`: quarter-width horizontal chroma reconstruction on the

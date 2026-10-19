@@ -2,9 +2,9 @@ namespace Lokad.Image.Internal;
 
 internal ref partial struct JpegDecoder
 {
-    // Keep the existing general materializer unchanged. Only owned full-
-    // resolution CMYK uses this sparse-aware walk; allocation, charges and
-    // pooled coefficient lifetimes retain the original component order.
+    // Owned CMYK and other four-component sample planes share this exact
+    // sparse-aware walk. Allocation, charges and pooled coefficient lifetimes
+    // retain the original component order, including subsampled YCCK planes.
     private void MaterializeCmykPlanes()
     {
         Span<byte> block = stackalloc byte[64];
