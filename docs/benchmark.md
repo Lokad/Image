@@ -11,16 +11,15 @@ These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
 is separate. Earlier codec/edit rows do not yet requalify changed 0.2.0 admission,
 disposal or governed storage paths; confirmations retain their identified builds.
-The [four-tap byte horizontal primitive](../benchmarks/WARM-LANCZOS3-BYTE-FOUR-TAP.md)
-cuts complete RGBA8 reduction time **16.7%**, enlargement **2.7%**, with exact pixels
-and no added scratch. Only two byte rows refresh; unchanged word rows retain their
-identified [four-tap build](../benchmarks/WARM-LANCZOS3-WORD-FOUR-TAP.md).
-Current four cases remain **1.437–1.965x gaps** (uppers1.523–2.223),
-146,637–4,617,090B/op. Native quality, ownership and operation boundaries are unchanged.
+The [packed-coefficient primitive](../benchmarks/WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md)
+improves all four complete Lanczos3 operations **2.8–7.2%**, with exact pixels
+and no added scratch. One immutable selected producer refreshes all four rows.
+They remain **1.395–1.836x gaps** (uppers1.504–2.174),
+146,643–4,617,090B/op. Native quality, ownership and operation boundaries are unchanged.
 Qualification passes4,448tests/47scalar plus47AVX512F-off checks per OS, same actual
-package and all three examples. A current Reduce8 diagnostic puts46.4% of CPU
-samples in horizontal filtering; next: packed coefficient loads/register permutations,
-with exact lane, poll/work and storage proof before implementation.
+package and all three examples. The earlier profile is retained as rationale;
+its fractions predate changed coefficient loops. Next: resolve current-code
+uncertainty for the existing CMYK sparse-2D JPEG control before optimization.
 
 [Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
 **76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
@@ -30,7 +29,8 @@ passing proofs are reused. No new image/settings grid, profile or baseline chang
 
 JPEG-round qualification:4,212tests/99hardware-off checks per OS, same actual private
 package consumer/all three examples on Windows/Linux. Released0.1.0 stays immutable.
-Largest measured gap: Lanczos3 Reduce8 at1.965x; Reduce16 is1.910x, CMYK2D sparse1.812x.
+Largest measured gap: Lanczos3 Reduce16 at1.836x, Reduce8 at1.829x;
+historical CMYK2D sparse1.812x needs a current-code check.
 23unmeasured representatives cover async, header, drawing, text and governed ownership.
 Stop passes; optimize demonstrated material gaps and resolve missing evidence.
 
@@ -308,10 +308,10 @@ reconciliation now covers every numeric row.
 | [Transpose RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 48.17 | 44.86 | 1.074 / 1.114 | 128 | Gap (independent) |
 | [Mirrored transpose RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 44.34 | 43.25 | 1.025 / 1.064 | 128 | Gap (independent) |
 | [Mirrored transpose RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 39.10 | 38.54 | 1.015 / 1.041 | 128 | Gap (independent) |
-| [Lanczos3 reduction RGBA8](../benchmarks/WARM-LANCZOS3-BYTE-FOUR-TAP.md) | 963.93 | 490.45 | 1.965 / 2.193 | 146,655 | Gap (short; qualified) |
-| [Lanczos3 reduction RGBA16](../benchmarks/WARM-LANCZOS3-WORD-FOUR-TAP.md) | 967.31 | 506.54 | 1.910 / 2.223 | 146,637 | Gap (short; qualified) |
-| [Lanczos3 enlargement RGBA8](../benchmarks/WARM-LANCZOS3-BYTE-FOUR-TAP.md) | 5,856.16 | 4,075.64 | 1.437 / 1.523 | 351,910 | Gap (short; qualified) |
-| [Lanczos3 enlargement RGBA16](../benchmarks/WARM-LANCZOS3-WORD-FOUR-TAP.md) | 6,851.27 | 3,924.00 | 1.746 / 1.852 | 4,617,090 | Gap (short; qualified) |
+| [Lanczos3 reduction RGBA8](../benchmarks/WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md) | 894.40 | 488.96 | 1.829 / 1.993 | 146,652 | Gap (short; qualified) |
+| [Lanczos3 reduction RGBA16](../benchmarks/WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md) | 931.20 | 507.17 | 1.836 / 2.174 | 146,643 | Gap (short; qualified) |
+| [Lanczos3 enlargement RGBA8](../benchmarks/WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md) | 5,671.76 | 4,066.82 | 1.395 / 1.504 | 351,910 | Gap (short; qualified) |
+| [Lanczos3 enlargement RGBA16](../benchmarks/WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md) | 6,661.47 | 3,928.07 | 1.696 / 1.806 | 4,617,090 | Gap (short; qualified) |
 
 * VP8L encode uses **libwebp exact=1, FFmpeg's encoder backend**, through its
 public API because FFmpeg does not expose hidden-RGB preservation. All decoded

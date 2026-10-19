@@ -71,6 +71,10 @@ The [four-tap byte round](../benchmarks/WARM-LANCZOS3-BYTE-FOUR-TAP.md) then sav
 16.7% on RGBA8 reduction and2.7% on enlargement, with the same qualification,
 exact frames and unchanged storage/work/owners. Only byte timing rows refresh;
 word helper paths retain their identified build evidence. Parity remains open.
+The [packed-coefficient round](../benchmarks/WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md)
+refreshes all four rows with2.8–7.2% lower complete time. Exact lanes, frames,
+owners and resource/cancellation behavior retain the same4448tests/47scalar/
+47AVX512F-off and actual-package qualification on both OS. No new storage.
 
 Retained SHA-256 identities:
 

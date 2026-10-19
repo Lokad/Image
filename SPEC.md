@@ -359,6 +359,9 @@ sums stay below 2^47. AVX512F can group four byte-depth taps from a bounded
 and recombination retain that same exact bound; the AVX2 tail remains. It uses
 the same admitted storage, work and polling; word filtering retains its existing
 unsigned-widened path.
+Four-tap horizontal groups may load four coefficients together, sign-extend
+them and replicate their lanes with register permutations. Coefficients, arithmetic
+order, work, cancellation and admitted storage remain unchanged.
 The independent decimal/BigInteger oracle covers transparency, edges and cache
 eviction. Opaque live FFmpeg controls use explicit edge extension and radius
 three, maximum RGB error 1, RGB RMSE <=0.25 and exact alpha. That correctness

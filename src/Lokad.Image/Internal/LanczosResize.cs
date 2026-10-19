@@ -186,6 +186,8 @@ internal static class LanczosResize
             Vector256.Create(-1, -1, -1, 0, -1, -1, -1, 0));
         var alphaOne = Vector512.Create(Vector256.Create(0, 0, 0, 1, 0, 0, 0, 1),
             Vector256.Create(0, 0, 0, 1, 0, 0, 0, 1));
+        var replicate01 = Vector512.Create(0L, 0, 0, 0, 1, 1, 1, 1);
+        var replicate23 = Vector512.Create(2L, 2, 2, 2, 3, 3, 3, 3);
         for (var x = 0; x < plan.Windows.Length; x++)
         {
             var window = plan.Windows[x]; context.Work(window.Count * 4L);
@@ -202,8 +204,11 @@ internal static class LanczosResize
                     var rgbOne = Avx512F.Or(Avx512F.And(samples, keepRgb), alphaOne);
                     var products = Avx512F.MultiplyLow(rgbOne, Avx512F.Shuffle(samples, 255)).AsUInt32();
                     var at = window.Offset + i;
-                    var weights01 = Vector512.Create(Vector256.Create((long)plan.Weights[at]), Vector256.Create((long)plan.Weights[at + 1]));
-                    var weights23 = Vector512.Create(Vector256.Create((long)plan.Weights[at + 2]), Vector256.Create((long)plan.Weights[at + 3]));
+                    // One bounded coefficient load, signed extension and exact
+                    // lane replication replace four scalar broadcasts.
+                    var coefficients = Avx512F.ConvertToVector512Int64(Vector256.Create(Vector128.Create(plan.Weights.AsSpan(at, 4)), Vector128<int>.Zero));
+                    var weights01 = Avx512F.PermuteVar8x64(coefficients, replicate01);
+                    var weights23 = Avx512F.PermuteVar8x64(coefficients, replicate23);
                     first = Avx512F.Add(first, Avx512DQ.MultiplyLow(Avx512F.ConvertToVector512Int64(products.GetLower()), weights01));
                     second = Avx512F.Add(second, Avx512DQ.MultiplyLow(Avx512F.ConvertToVector512Int64(products.GetUpper()), weights23));
                 }
@@ -227,6 +232,8 @@ internal static class LanczosResize
             Vector256.Create(-1, -1, -1, 0, -1, -1, -1, 0));
         var alphaOne = Vector512.Create(Vector256.Create(0, 0, 0, 1, 0, 0, 0, 1),
             Vector256.Create(0, 0, 0, 1, 0, 0, 0, 1));
+        var replicate01 = Vector512.Create(0L, 0, 0, 0, 1, 1, 1, 1);
+        var replicate23 = Vector512.Create(2L, 2, 2, 2, 3, 3, 3, 3);
         for (var x = 0; x < plan.Windows.Length; x++)
         {
             var window = plan.Windows[x]; context.Work(window.Count * 4L);
@@ -244,8 +251,9 @@ internal static class LanczosResize
                     var rgbOne = Avx512F.Or(Avx512F.And(samples, keepRgb), alphaOne);
                     var products = Avx512F.MultiplyLow(rgbOne, Avx512F.Shuffle(samples, 255)).AsUInt32();
                     var at = window.Offset + i;
-                    var weights01 = Vector512.Create(Vector256.Create((long)plan.Weights[at]), Vector256.Create((long)plan.Weights[at + 1])).AsInt32();
-                    var weights23 = Vector512.Create(Vector256.Create((long)plan.Weights[at + 2]), Vector256.Create((long)plan.Weights[at + 3])).AsInt32();
+                    var coefficients = Avx512F.ConvertToVector512Int64(Vector256.Create(Vector128.Create(plan.Weights.AsSpan(at, 4)), Vector128<int>.Zero));
+                    var weights01 = Avx512F.PermuteVar8x64(coefficients, replicate01).AsInt32();
+                    var weights23 = Avx512F.PermuteVar8x64(coefficients, replicate23).AsInt32();
                     first = Avx512F.Add(first, Avx512F.Multiply(Avx512F.ConvertToVector512Int64(products.GetLower()).AsInt32(), weights01));
                     second = Avx512F.Add(second, Avx512F.Multiply(Avx512F.ConvertToVector512Int64(products.GetUpper()).AsInt32(), weights23));
                 }

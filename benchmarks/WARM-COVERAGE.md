@@ -11,30 +11,30 @@ The finite scope is now **254 cases:231 numeric+23 unmeasured**. The existing
 codec/edit rows do not yet requalify 0.2.0 admission, disposal or governed storage.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
 required representatives using the same513×259 asymmetric RGBA rasters. Their
-[four-tap byte screens](WARM-LANCZOS3-BYTE-FOUR-TAP.md) improve reduction16.7% and
-enlargement2.7%; word rows reuse their unchanged
-[four-tap build](WARM-LANCZOS3-WORD-FOUR-TAP.md). All remain gaps:
+[packed-coefficient screens](WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md) improve all
+four operations2.8–7.2% on one immutable selected producer. All remain gaps:
 
 | Named case | Fixed output and reason | State |
 | --- | --- | --- |
-| LanczosReduce8 | 256×129; widened radius-three antialias support and byte output | Gap1.965x/upper2.193x |
-| LanczosReduce16 | 256×129; full word precision and alpha normalization | Gap1.910x/upper2.223x |
-| LanczosEnlarge8 | 1027×519; negative-lobe enlargement, byte saturation and tiny alpha | Gap1.437x/upper1.523x |
-| LanczosEnlarge16 | 1027×519; full word precision, overshoot and tiny-alpha normalization | Gap1.746x/upper1.852x |
+| LanczosReduce8 | 256×129; widened radius-three antialias support and byte output | Gap1.829x/upper1.993x |
+| LanczosReduce16 | 256×129; full word precision and alpha normalization | Gap1.836x/upper2.174x |
+| LanczosEnlarge8 | 1027×519; negative-lobe enlargement, byte saturation and tiny alpha | Gap1.395x/upper1.504x |
+| LanczosEnlarge16 | 1027×519; full word precision, overshoot and tiny-alpha normalization | Gap1.696x/upper1.806x |
 
 The clamped halo/active-region and premultiplied float-output reference is now
 qualified for all four, including normal/scalar checks and twelve rejection
 controls each. All normalization, ownership and disposal are timed with one CPU.
 No other rows, gates or performance evidence are replaced. Aspect-fit uses the
 same kernel after small geometry work; add a separate timing case only if that
-boundary is material. Four-tap byte horizontal groups use registers only,
+boundary is material. Packed coefficient loads and lane replication use registers only,
 with4448tests/47scalar and47AVX512F-off checks, the same actual private package
-consumer/examples passing on both OS. Only two byte rows refresh; word dispatch
-does not enter the changed byte helper. Other arithmetic/owners/boundaries remain
-unchanged. Earlier3.9% word-product and2.1% slower row-storage trials stay parked/
-rejected. A current Reduce8 diagnostic isolates horizontal filtering at46.4% of
-CPU samples. Next: packed coefficient loads/register permutations, with exact
-lane, memory/work/cancellation proofs before code. No checklist expansion.
+consumer/examples passing on both OS. All four rows refresh; other arithmetic,
+owners and boundaries remain unchanged. A constant-placement control was neutral;
+earlier3.9% word-product and2.1% slower row-storage trials stay parked/rejected.
+The earlier profile motivates the change; its fractions predate these loops.
+Next: current-code check of existing CMYK sparse-2D JPEG before optimization.
+Reuse its worker/selector/fixtures/gates; no checklist expansion or package/full
+rerun for unchanged production. All four Lanczos3 gaps remain required.
 
 A bounded audit of the accepted 0.2.0 additions identifies exactly three required
 paths absent from the older checklist; these are not a shape/depth/settings grid:
