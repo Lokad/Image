@@ -66,9 +66,13 @@ reproduces the frozen packets exactly: grayscale **58,823 / 58,910 bytes**
 (managed / SIMD libjpeg-turbo), RGB 4:2:0 **74,040 / 52,093 bytes** (managed / FFmpeg).
 Source PSNR gaps are **0.000033 / 0.106110 dB**, within the existing 0.25 dB gate;
 equal quality numbers are not the matching rule. The [two raw-input screens](../benchmarks/WARM-JPEG-SAMPLE-ENCODE.md)
-measure **1.145× / 155,007 B/op** for gray and **2.004× / 297,896 B/op** for RGB420.
-Both remain parity gaps; each includes necessary normalization and independent
-owned output. No long repeat or production change follows these clear mean gaps.
+initially measured1.145×gray and2.004×RGB420. [Fused MCU preparation](../benchmarks/WARM-JPEG-CALLER-MCU.md)
+now cuts RGB time **33.7%**, to **2,097.34µs /1.328× /297,894B/op**; its packet
+and quality remain exact. Gray control is **1.162× /155,007B/op**.
+Both remain qualified short parity gaps; each includes necessary normalization and independent
+owned output. No long repeat follows these clear gaps; the accepted MCU primitive passes4,169tests/OS,
+109affected intrinsics-disabled checks/OS and the same actual private package
+consumer/all3examples on both OS. Other evidence is reused.
 
 [Bounded VP8 coefficient adaptation](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md)
 cuts original opaque bytes **54.5%**, allocations **41.6%**, and complete encode
@@ -254,8 +258,8 @@ The27 named new boundaries remain unmeasured; stop current passing paths.
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,444.30 | 1,841.37 | 1.327 / 1.443 | 263,787 | Gap (short; qualified) |
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,173.56 | 1,841.00 | 1.181 / 1.300 | 297,779 | Gap (short; qualified) |
 | [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 1,350.95 | 1,404.64 | 0.962 / 0.970 | 154,892 | Parity confirmed |
-| [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-SAMPLE-ENCODE.md) | 1,240.94 | 1,083.45 | 1.145 / 1.363 | 155,007 | Gap (short; qualified) |
-| [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-SAMPLE-ENCODE.md) | 3,162.12 | 1,577.78 | 2.004 / 2.216 | 297,896 | Gap (short; qualified) |
+| [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-CALLER-MCU.md) | 1,252.22 | 1,077.49 | 1.162 / 1.422 | 155,007 | Gap (short; qualified) |
+| [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-CALLER-MCU.md) | 2,097.34 | 1,579.06 | 1.328 / 1.408 | 297,894 | Gap (short; qualified) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md) | 20,420.05 | 15,471.74 | 1.320 / 1.446 | 1,482,092 | Gap (short; qualified) |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md) | 20,641.94 | 15,607.33 | 1.323 / 1.375 | 1,481,928 | Gap (short; qualified) |
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md) | 20,670.47 | 53,317.03 | 0.388 / 0.391 | 2,109,290 | Parity confirmed |

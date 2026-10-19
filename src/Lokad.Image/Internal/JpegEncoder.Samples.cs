@@ -22,6 +22,11 @@ internal static partial class JpegEncoder
         var adaptive = !context.Cancellation.CanBeCanceled && blocks >= 256 && events <= Array.MaxLength
             && work <= context.RemainingWork && events * sizeof(uint) + 65536 <= context.RemainingWorkingBytes
             && output is LimitedWriteStream limited && limited.SupportsAdaptiveJpeg(blocks * 432 + 2048);
+        // Whole-operation work was admitted above and this path has no caller
+        // callbacks/cancellation. Its 384-byte MCU fits the admitted 8 KiB.
+        var prepareMcu = adaptive && source.Format == JpegSampleFormat.Rgb && h == 2 && v == 2
+            && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported && Ssse3.IsSupported;
+        Span<byte> preparedMcu = prepareMcu ? stackalloc byte[384] : default;
         var luma = Quantization(options.Quality, false); var chroma = Quantization(options.Quality, true);
         var pixels = new byte[64]; var transformed = new double[64]; var predictors = new int[components];
         Span<int> quantized = stackalloc int[64];
@@ -49,6 +54,7 @@ internal static partial class JpegEncoder
                     if (adaptive) cache![eventCount++] = 1u << 24; else writer!.Restart(restart++);
                     Array.Clear(predictors);
                 }
+                if (prepareMcu) SampleCaller420Mcu(source, mcu % columns * 16, mcu / columns * 16, preparedMcu);
                 for (var component = 0; component < components; component++)
                 {
                     var blockH = component == 0 ? h : 1; var blockV = component == 0 ? v : 1;
@@ -58,11 +64,17 @@ internal static partial class JpegEncoder
                     {
                         context.Work(64L * (component == 0 ? 1 : h * v) * 12);
                         var samplesX = component == 0 ? 1 : h; var samplesY = component == 0 ? 1 : v;
-                        SampleCallerBlock(source, mcu % columns * h * 8 + bx * 8,
-                            mcu / columns * v * 8 + by * 8, samplesX, samplesY, component, pixels);
-                        if (!JpegTransform.TryForwardQuantized(pixels, q, quantized, context))
+                        scoped ReadOnlySpan<byte> blockPixels;
+                        if (prepareMcu) blockPixels = preparedMcu.Slice((component == 0 ? by * 2 + bx : component + 3) * 64, 64);
+                        else
                         {
-                            JpegTransform.Forward(pixels, transformed, context); Quantize(transformed, q, quantized);
+                            SampleCallerBlock(source, mcu % columns * h * 8 + bx * 8,
+                                mcu / columns * v * 8 + by * 8, samplesX, samplesY, component, pixels);
+                            blockPixels = pixels;
+                        }
+                        if (!JpegTransform.TryForwardQuantized(blockPixels, q, quantized, context))
+                        {
+                            JpegTransform.Forward(blockPixels, transformed, context); Quantize(transformed, q, quantized);
                         }
                         if (!adaptive) { WriteFixedBlock(quantized, ref predictors[component], writer!, FixedAc.Words); continue; }
                         context.Work(64);

@@ -7,6 +7,17 @@ all216 current numeric rows; no prior-production row remains. The
 observations and91 qualified shorts.27named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
 
+[Caller-RGB MCU preparation](WARM-JPEG-CALLER-MCU.md) improves the largest known
+gap33.7%,3,162.12→2,097.34µs, retaining exact74,040/52,093-byte matched-quality
+packets. Current RGB short1.328x/upper1.408,297,894B/op; gray control1.162x,
+155,007B/op. Precisely the two caller-sample rows are replaced, no new case.
+Safe admitted384-byte MCU preparation shares packed RGB loads/channel extraction;
+old scalar/tight/callback/cancelable/non420 samplers remain. Source/precision/work/
+owners and normal/scalar native gates pass. All4,169tests/OS,109affected hardware-off
+checks/OS and same actual private package consumer/all3examples pass on both OS.
+RGBA/shared-budget JPEG encoding and all other executed paths retain evidence;
+all69passing cases stop until affected. Full216numeric/27pending scope remains.
+
 [Input reconciliation](WARM-INPUT-RECONCILIATION.md) refreshes the remaining22
 prior rows after shared JPEG parsing and final encoded-input copy removal.
 Fifteen JPEG pixel decodes remain1.118–1.546x short gaps; JPEG Identify independently
@@ -102,9 +113,8 @@ uses the fixed opaque RGB projection and FFmpeg's 4:2:0 reference. Retain existi
 quality/size matching, with equivalent raw sample delivery, complete row
 normalization, streaming and independent encoded output ownership. The cases
 cover single-component samples and packed RGB conversion, without a settings grid.
-The two direct-sample decode boundaries above remain unmeasured; the two shared-budget paths now have the qualified shorts above. The [two direct sample
-encode screens](WARM-JPEG-SAMPLE-ENCODE.md) measure gray1.145x/upper1.363x,
-155,007B/op and RGB4202.004x/upper2.216x,297,896B/op. Both are mean gaps, so no long
+The two direct-sample decode boundaries above remain unmeasured; the two shared-budget paths now have the qualified shorts above. The [current sample screens](WARM-JPEG-CALLER-MCU.md) measure gray1.162x/upper1.422x,
+155,007B/op and RGB4201.328x/upper1.408x,297,894B/op, after the33.7% RGB MCU win. Both are mean gaps, so no long
 confirmation follows. Native raw-input adapters use the same pinned libraries
 and exact frozen packets; each operation includes necessary normalization/coding
 and fresh independent output ownership. Production and H4 qualification are reused.

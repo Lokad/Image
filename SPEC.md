@@ -83,8 +83,13 @@ Four-component frames use the existing sampling-factor and ten-block MCU bounds.
 samples and positive or packed strides. Input is neither changed nor retained.
 Gray input always produces one component; RGB input uses `JpegEncodeOptions`
 quality, sampling and restart controls. Samples are opaque; a valid background
-does not change them. Normalization uses at most two sixteen-pixel RGB rows,
-never RGBA storage. Fixed/adaptive Huffman coding, quantization, stream limits
+does not change them. Normalization uses bounded RGB rows, never an RGBA frame.
+Admitted noncancelable adaptive RGB4:2:0 encoding can prepare one MCU with safe
+AVX-512 intrinsics: sixteen RGB rows are loaded once, sharing channel extraction
+for four luma blocks and two chroma blocks. Its384-byte result fits the existing
+8-KiB workspace. Binary64 matrix order, four-tap averaging, rounding and clamped
+edges are unchanged. Other sampling, scalar, tight-budget and callback/cancelable
+paths retain row normalization. Fixed/adaptive Huffman coding, quantization, stream limits
 and cancellation retain the established codec policies. Caller input and 8 KiB
 fixed workspace are admitted, with optional adaptive event storage separately
 admitted. Quality numbers remain specific to this encoder.

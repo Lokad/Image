@@ -1,5 +1,7 @@
 # Direct JPEG sample encoding
 
+Historical initial screens. [Fused MCU preparation](WARM-JPEG-CALLER-MCU.md) supersedes these two timings, retaining the exact packets and frozen quality.
+
 Two new complete public boundaries were screened on the dedicated quiet VM,
 using the existing original 513×259 gray/RGB projections and quality anchors.
 Both remain demonstrated warm single-CPU parity gaps; no long confirmation or

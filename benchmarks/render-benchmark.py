@@ -189,8 +189,8 @@ def render():
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-JPEG-VECTOR-AC.md', True),
-        row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-sample-encode-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-JPEG-SAMPLE-ENCODE.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-sample-encode-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-SAMPLE-ENCODE.md', verification='Gap (short; qualified)'),
+        row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-caller-mcu-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-JPEG-CALLER-MCU.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-caller-mcu-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-CALLER-MCU.md', verification='Gap (short; qualified)'),
         row('WebP VP8, opaque‡', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', verification='Gap (short; qualified)'),
         row('WebP VP8, opaque from RGBA16‡', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', verification='Gap (short; qualified)'),
         row('WebP VP8 + alpha‡', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
@@ -372,9 +372,13 @@ reproduces the frozen packets exactly: grayscale **58,823 / 58,910 bytes**
 (managed / SIMD libjpeg-turbo), RGB 4:2:0 **74,040 / 52,093 bytes** (managed / FFmpeg).
 Source PSNR gaps are **0.000033 / 0.106110 dB**, within the existing 0.25 dB gate;
 equal quality numbers are not the matching rule. The [two raw-input screens](../benchmarks/WARM-JPEG-SAMPLE-ENCODE.md)
-measure **1.145× / 155,007 B/op** for gray and **2.004× / 297,896 B/op** for RGB420.
-Both remain parity gaps; each includes necessary normalization and independent
-owned output. No long repeat or production change follows these clear mean gaps.
+initially measured1.145×gray and2.004×RGB420. [Fused MCU preparation](../benchmarks/WARM-JPEG-CALLER-MCU.md)
+now cuts RGB time **33.7%**, to **2,097.34µs /1.328× /297,894B/op**; its packet
+and quality remain exact. Gray control is **1.162× /155,007B/op**.
+Both remain qualified short parity gaps; each includes necessary normalization and independent
+owned output. No long repeat follows these clear gaps; the accepted MCU primitive passes4,169tests/OS,
+109affected intrinsics-disabled checks/OS and the same actual private package
+consumer/all3examples on both OS. Other evidence is reused.
 
 [Bounded VP8 coefficient adaptation](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md)
 cuts original opaque bytes **54.5%**, allocations **41.6%**, and complete encode
