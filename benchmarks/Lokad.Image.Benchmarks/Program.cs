@@ -2,6 +2,12 @@ using BenchmarkDotNet.Running;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
+if (args.Length == 2 && args[0] == "--probe-png-headers")
+{
+    WarmPngHeaders.Probe(args[1]);
+    return;
+}
+
 if (args.Length == 2 && args[0] == "--probe-async-webp-lossless-encode")
 {
     WarmAsyncWebpLosslessEncode.Probe(args[1]);

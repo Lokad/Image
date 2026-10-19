@@ -9,78 +9,29 @@ to the named fixed inputs/settings/hardware, without extrapolating to other prof
 
 These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
-is separate. Earlier codec/edit rows do not yet requalify changed 0.2.0 admission,
-disposal or governed storage paths; confirmations retain their identified builds.
-The [packed-coefficient primitive](../benchmarks/WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md)
-improves all four complete Lanczos3 operations **2.8–7.2%**, with exact pixels
-and no added scratch. One immutable selected producer refreshes all four rows.
-They remain **1.395–1.836x gaps** (uppers1.504–2.174),
-146,643–4,617,090B/op. Native quality, ownership and operation boundaries are unchanged.
-Qualification passes4,448tests/47scalar plus47AVX512F-off checks per OS, same actual
-package and all three examples. The earlier profile is retained as rationale;
-its fractions predate changed coefficient loops.
+is separate. **226 historical codec/edit rows do not yet requalify changed 0.2.0
+admission, disposal or governed storage.** Current CMYK, four Lanczos3, two async
+input and four async output rows identify their current producers. Production
+qualification remains 4,448 tests/OS, affected hardware-off checks, the same actual
+private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
-The [CMYK sparse-2D current-code check](../benchmarks/WARM-JPEG-CMYK-CURRENT.md)
-resolves old ownership/admission uncertainty: **805.26µs / 1.829x**, upper1.902,
-1,085,680B/op. Exact analytical pixels, normal/scalar native quality and independent
-owners pass. The current immutable build, worker, fixture and selector are reused;
-no production/harness/native/selector build or repeated package/full qualification.
-Only this row refreshes; the material gap persists. The subsequent
-[axis-cross sparse-IDCT trial](../benchmarks/WARM-JPEG-AXIS-CROSS-TRIAL.md) regressed
-4.5% and was rejected; exact pixels passed and production is restored. Five sparse
-tests pass normally/scalar on both OS. No numeric row or package proof is replaced.
-The [async nonseekable PNG inspection screen](../benchmarks/WARM-PNG-ASYNC-IDENTIFY.md)
-adds one already-named case: **24.10µs / 1.246x**, upper1.571, **8,408B/op**.
-All21 managed controls pass; unchanged normal/scalar native controls are reused.
-Both sides include fresh nonseekable source/private acquisition/growth/copies/EOF,
-full structural/CRC metadata and independent ownership/release. Current producer,
-harness, selector and worker are reused without builds or repeated package proof.
-The [async nonseekable PNG decode screen](../benchmarks/WARM-PNG-ASYNC-DECODE.md)
-adds the second named async input case: **2,049.34µs / 1.450x**, upper1.683,
-**12,784B/op**. All21 complete-image controls agree; normal/scalar worker and CLI
-pixels are exact. Both sides include full decode, structural/CRC validation and
-independent pixels. The native adapter rejects decoder error severity, including
-partial frames. Current production/full qualification is reused; one harness
-build/OS and two native builds establish the reference, with no selector rebuild.
-The [async nonseekable PNG encode pair](../benchmarks/WARM-PNG-ASYNC-ENCODE.md)
-independently passes at **5,397.36µs / 0.313x**, upper0.314, **658,560B/op**.
-Complete staging, actual output writes/growth, independent ownership and release
-are timed on both sides. Level6/filterNone, exact pixels/alpha/hidden RGB and the
-5% IDAT gate are unchanged. Total packets218,775/210,973B; IDAT218,682/210,283B.
-All12 confirmation actuals are retained, with the conservative all-actual bound.
-Same immutable producer, one tooling build/OS and one native build; full/package
-qualification is reused. Stop this case. The
-[async JPEG RGBA8 output screen](../benchmarks/WARM-JPEG-ASYNC-ENCODE.md) records
-**3,982.03µs / 1.034x**, upper1.158, **494,254B/op**. Full admission/probe/staging/
-normalization/encode/output ownership is timed. Packets158,812/133,041B and the
-frozen0.082440dB quality gap remain unchanged. Current quality samples revalidate
-once; setup/cleanup reuse exact hashes. No producer build or full/package repeat.
-The [async caller-RGB420 screen](../benchmarks/WARM-JPEG-ASYNC-SAMPLES.md) adds the
-separate sample-source boundary: **2,076.73µs / 1.276x**, upper1.430,
-**232,614B/op**. Both sides borrow RGB24 without an RGBA frame and include complete
-conversion/encode, adaptive staging and independent output delivery/release.
-Packets74,040/52,093B and the0.106110dB source-quality gap stay frozen. Quality
-samples revalidate once; shared ownership/cancel/failure controls and current
-production/package qualification are reused.
-The [async lossless WebP pair](../benchmarks/WARM-WEBP-ASYNC-ENCODE.md) independently
-passes at **11,286.87µs / 0.093x**, upper0.094, **2,494,170B/op** against approved
-libwebp exact=1 (FFmpeg encoder backend). Exact alpha/hidden RGB and frozen packets
-533,100/183,812B are preserved. Complete repack/import/encode, independent staging,
-actual output copies/growth and release are timed. All12 actuals retained, same
-immutable builds, both quiet guards. Stop this passing case; compression efficiency
-parity remains open. Next: the named header-inspection boundaries.
+Largest measured gaps: Lanczos3 Reduce16 at **1.836x**, Reduce8 and current sparse
+CMYK at **1.829x**. A [current Reduce16 diagnostic](../benchmarks/WARM-LANCZOS3-CURRENT-PROFILE.md)
+places 43.4% of samples in horizontal filtering; the next bounded experiment targets
+repeated premultiplication across overlapping windows. Profiling supplies no timing
+or allocation claim. Optimize demonstrated gaps; stop passing cases.
 
-[Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
-**76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
-**720,810B/op**. Managed pixels, native bounds and complete owned-output boundaries
-are preserved. The411 selector control refreshes;225other numeric rows and all70
-passing proofs are reused. No new image/settings grid, profile or baseline change.
+Complete async PNG and lossless WebP outputs independently pass. WebP uses approved
+libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compressed
+sizes **533,100/183,812 B**. Its passing timing does not establish compression parity.
+The two JPEG async-output cases remain short gaps; all timings/allocations follow.
 
-JPEG-round qualification:4,212tests/99hardware-off checks per OS, same actual private
-package consumer/all three examples on Windows/Linux. Released0.1.0 stays immutable.
-Largest measured gaps: Lanczos3 Reduce16 at1.836x, Reduce8 and current CMYK2D sparse1.829x.
-17unmeasured representatives cover header inspection, drawing, text and governed ownership.
-Stop passes; optimize demonstrated material gaps and resolve missing evidence.
+The 17 unmeasured representatives cover header inspection, drawing, text and shared
+ownership. [PNG fixed-workspace controls](../benchmarks/WARM-PNG-HEADERS-CONTROLS.md)
+agree on all 21 original cases, including deliberately opaque CRC/Deflate. Timing
+awaits the explicitly labeled bounded FFmpeg AVIO/descriptor adapter decision;
+complete-packet parsing would add whole-input buffering outside this boundary.
+Full warm parity and release readiness remain open.
 
 JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale
 (managed/SIMD libjpeg-turbo) and **74,040/52,093 B** RGB420 (managed/FFmpeg), with

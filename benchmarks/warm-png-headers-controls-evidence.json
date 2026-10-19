@@ -1,0 +1,387 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "caseId": "InspectHeaders/PngRgba8FreshSeekable",
+  "performanceMeasured": false,
+  "numericCoverageUnchanged": true,
+  "productionChanged": false,
+  "baselineStatus": "Reference choice pending explicit approval before timing",
+  "reference": "FFmpeg public AVIO/owned descriptor APIs with original bounded PNG header/EXIF adapter; excludes complete-packet parser, CRC and pixel decode",
+  "source": {
+    "sourceSha256": "684c1fbe9f4969bf2118b0bb87d68e0904a3765f58ff7164e5271af8425c6f1d",
+    "files": 2647
+  },
+  "controls": {
+    "schemaVersion": 1,
+    "project": "Lokad.Image",
+    "timing": false,
+    "librarySha256": "c12fbeebea4edb6b4959837183a4b12379756be3139bd46b5e3c1798ff97671d",
+    "benchmarkAssemblySha256": "4942844ea4220cbed663c60694a467a93fd64645c0a9a4938c1264391de61db5",
+    "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+    "inputBytes": 218775,
+    "nativeBuild": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Original development-only warm bounded PNG header inspection FFmpeg AVIO/descriptor API and original bounded header adapter",
+      "sourceSha256": "516c984c21143b8be9ba64ea1331f4a5019d56987b7e0f1738e2bda545675e9d",
+      "buildScriptSha256": "08e3efcf31ec7589e796ff02891dfad75334af2635c43114cf65aa16d44102dc",
+      "workerSha256": "6a6f3040f44dd8da760e696cfa47e3df1c4138dd157429c009fab3a5046f9185",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "staticArchives": {
+        "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+        "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+        "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+        "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+        "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+        "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+        "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+        "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+        "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+        "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+        "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+        "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+        "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+      },
+      "libraries": "-L{native-prefix}/lib -lavformat -lm -lavcodec -lm -lwebp -lsharpyuv -lavutil -lm -lz -latomic -pthread"
+    },
+    "controls": [
+      {
+        "name": "original",
+        "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+        "accepted": true,
+        "descriptor": [
+          0,
+          513,
+          259,
+          8,
+          1,
+          1
+        ],
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "invalid-deflate-valid-crc",
+        "inputSha256": "d4ce35b99fc0ff467fbae4086e52a28e3dba06cc7868a5b08f6d5142f6a0d5cd",
+        "accepted": true,
+        "descriptor": [
+          0,
+          513,
+          259,
+          8,
+          1,
+          1
+        ],
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "changed-metadata-width",
+        "inputSha256": "1f5dbc84e8519995a0128ce6d2fd2dacb4f30a8ccef975663c26d02ccf1727f6",
+        "accepted": true,
+        "descriptor": [
+          0,
+          514,
+          259,
+          8,
+          1,
+          1
+        ],
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "exif-orientation6",
+        "inputSha256": "e5146b75df384a33d8dca2c021f1b476ba6d61a13af5c9e75c613b17330ea7dd",
+        "accepted": true,
+        "descriptor": [
+          0,
+          513,
+          259,
+          8,
+          1,
+          6
+        ],
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "truncated",
+        "inputSha256": "5aaa7cf30144dc3a3ce51d786a2fa1cb32a930c426fb6af237306499e55981f1",
+        "accepted": false,
+        "descriptor": null,
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "missing-iend",
+        "inputSha256": "e256ace669044b9bfbb729656380bd725ddb5fecfab3e21d090f2575bd97ad57",
+        "accepted": false,
+        "descriptor": null,
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "trailing-byte",
+        "inputSha256": "bd40cda69bc5eab750c73bfb577b44a3038b67cf14cae2dfaf69ce4265a8bae8",
+        "accepted": false,
+        "descriptor": null,
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "duplicate-ihdr",
+        "inputSha256": "e6aab3f29894df171aa512d9282beb614e10d47fdfc68371eb31a22efe268b0c",
+        "accepted": false,
+        "descriptor": null,
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "duplicate-iend",
+        "inputSha256": "ac007b19acdfe29cf1f0601745461dfdc82f47c49b240c22cedb40e6667e430e",
+        "accepted": false,
+        "descriptor": null,
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "unknown-critical",
+        "inputSha256": "34107120330d62ec7da61707997d2ca648e5247dc9936764b221e043dd3b7798",
+        "accepted": false,
+        "descriptor": null,
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "nonletter-name",
+        "inputSha256": "9279a17e3d642813816c061ca85019941870f985b469f28169d5386760f7f33b",
+        "accepted": false,
+        "descriptor": null,
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "split-idat-order",
+        "inputSha256": "e9bbc172389c71253ed3d6bb8d9155180447099def539eafad151f372f5353c5",
+        "accepted": false,
+        "descriptor": null,
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "no-idat",
+        "inputSha256": "b96eec5aa3decc8dc1545e24a86586774ba60397f0c428a40f94e959045e584c",
+        "accepted": false,
+        "descriptor": null,
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "empty-idat",
+        "inputSha256": "13019851a943f90ed4eb380fe7cbaf0cc12b5f6e902fdf3f42bb44c572a9706e",
+        "accepted": false,
+        "descriptor": null,
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "animated-marker",
+        "inputSha256": "c8df7fbe306b22bdb435c105d457861a99f76d2ea63f3a48780a99b9a2378dde",
+        "accepted": false,
+        "descriptor": null,
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "rgba-trns",
+        "inputSha256": "126b4130507dd2815ce2f24ec1422f4900c181ef380de5378ada019c8ccf5461",
+        "accepted": false,
+        "descriptor": null,
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "duplicate-exif",
+        "inputSha256": "debb3090bab8f41cfff4fb6dfadc92e019a2e140f7a60db7928a13c845cae0ef",
+        "accepted": false,
+        "descriptor": null,
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "invalid-exif-value",
+        "inputSha256": "5795aefd07fe628b4d781e3551b04808519fd43af9e5786dffce7776d65c98ea",
+        "accepted": false,
+        "descriptor": null,
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "dimension-limit",
+        "inputSha256": "f6f405098f676c1bae245c5d53c410d830cb9a8a7088ea9dc724d1ec0ad14ddd",
+        "accepted": false,
+        "descriptor": null,
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "idat-crc",
+        "inputSha256": "8ade37eea4fdf8711b6c80f2a4a40ec65c81aebda6bbd20ea87859b7a7010a04",
+        "accepted": true,
+        "descriptor": [
+          0,
+          513,
+          259,
+          8,
+          1,
+          1
+        ],
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      },
+      {
+        "name": "iend-crc",
+        "inputSha256": "230e449e5d8dae90069249b7b0846426ec0f6d9845b50c8fcbe7db03120ef450",
+        "accepted": true,
+        "descriptor": [
+          0,
+          513,
+          259,
+          8,
+          1,
+          1
+        ],
+        "managedAndNativeAgree": true,
+        "normalScalarNativeAgree": true,
+        "fixedWorkspaceAndSourceLifetime": true
+      }
+    ],
+    "equivalentMetadataAndValidation": true,
+    "boundedSeekableDeliveryVerified": true,
+    "normalScalarNativeAgree": true,
+    "crcAndCompressedPixelsIntentionallyOpaque": true,
+    "sharedBudgetDeferredLifetimeEvidenceReusedForUnchangedProduction": true,
+    "scope": "Existing original PNG and21 deterministic structural/EXIF/CRC controls, adjusted only to the declared header contract: corrupted IDAT/IEND CRC accepted; no inflation. Fresh unexposed seekable source, actual fixed8192B reads/opaque seeks/EOF and independent descriptors. Complete public admission/limits/pre-and-mid-cancel and source/peer disposal checks. Native original bounded header adapter with FFmpeg public AVIO/descriptor APIs; no packet parser or whole-input buffer. Correctness only; baseline choice is pending explicit approval before timing."
+  },
+  "managedOriginal": {
+    "accepted": true,
+    "descriptor": {
+      "Format": 0,
+      "Width": 513,
+      "Height": 259,
+      "BitDepth": 8,
+      "HasAlpha": true,
+      "Orientation": 1,
+      "OrientedWidth": 513,
+      "OrientedHeight": 259
+    },
+    "error": null,
+    "Reads": 6,
+    "EofReads": 1,
+    "Seeks": 8,
+    "BytesRead": 32780,
+    "LargestRequest": 8192,
+    "callerOpen": true,
+    "librarySha256": "c12fbeebea4edb6b4959837183a4b12379756be3139bd46b5e3c1798ff97671d"
+  },
+  "nativeOriginal": {
+    "schemaVersion": 1,
+    "state": "ready",
+    "operation": "png-header-inspect",
+    "backend": "FFmpeg AVIO/owned descriptor APIs with original bounded header/EXIF adapter",
+    "width": 513,
+    "height": 259,
+    "depth": 8,
+    "hasAlpha": true,
+    "orientation": 1,
+    "cpu": 0,
+    "affinityCount": 1,
+    "codecThreads": 1,
+    "conversionThreads": 0,
+    "threadType": 0,
+    "activeThreadType": 0,
+    "outputBytes": 24,
+    "inputBytes": 218775,
+    "initialCompletedOperations": 3,
+    "independentLiveOutputs": true,
+    "freshSeekableStream": true,
+    "inputView": false,
+    "wholeInputCopy": false,
+    "scratchBytes": 8192,
+    "headerBytes": 32,
+    "eofChecked": true,
+    "callerSourceLeftOpen": true,
+    "streamAcquisitionAndReleaseTimed": true,
+    "publicParserTimed": false,
+    "fullCrcTimed": false,
+    "structureMetadataTimed": true,
+    "descriptorAcquisitionAndReleaseTimed": true,
+    "pixelDecode": false,
+    "opaqueSeekEnabled": true,
+    "readBytes": 46678,
+    "reads": 8,
+    "eofReads": 2,
+    "seekCalls": 3,
+    "lengthQueries": 1,
+    "scalarMode": false,
+    "ffmpegVersion": "n8.1"
+  },
+  "tooling": {
+    "productionBuilds": 0,
+    "harnessBuildsPerOs": 1,
+    "nativeBuilds": 1,
+    "selectorBuilds": 0,
+    "windowsHarnessSha256": "b8b6bcadc1731cd4fedad142644bd177d367cbe5a36a40b0eb3296eead8b8ed3",
+    "linuxHarnessSha256": "4942844ea4220cbed663c60694a467a93fd64645c0a9a4938c1264391de61db5",
+    "preparedIdentities": {
+      "Lokad.Image.dll": "c12fbeebea4edb6b4959837183a4b12379756be3139bd46b5e3c1798ff97671d",
+      "Lokad.Image.Benchmarks.dll": "4942844ea4220cbed663c60694a467a93fd64645c0a9a4938c1264391de61db5",
+      "Lokad.Image.Benchmarks-WarmShort-1.dll": "0075d31dbce00be8712baf02cfa8b40b1767007078e0048d7e98b4d7649c755b",
+      "Lokad.Image.Benchmarks-WarmShort-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "Lokad.Image.Benchmarks-WarmConfirm-1.dll": "ddae2cd023c6d6487e28f408d6c5b90b239fe3bcbc2998e2c314cff53b3614b6",
+      "Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f"
+    },
+    "windowsToolingArchiveSha256": "c09284982173cc14c7ec320e7bbce3c2e7dc78467a96eea7b3b8eb0380a2ac75"
+  },
+  "qualificationReused": {
+    "report": "WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md",
+    "productionUnchanged": true,
+    "fullReleaseTestsPerOs": 4448,
+    "actualPackageSha256": "12b32e1ce733c633ad2c7abdf1f803cf194b9d9507b77202be208c4bf409ccea",
+    "actualPackageConsumersAndThreeExamplesBothOs": true,
+    "allIntrinsicsOffAndAvx512FOffControlsPerOs": 47
+  },
+  "rawArchive": {
+    "file": "h17-controls-linux.tar.gz",
+    "sha256": "61b0d4fed828fec4f863ecac68ea23ad0b13897950ad98e3e64b8832baa757e4"
+  },
+  "nextAction": "Keep unmeasured until the explicitly labeled bounded reference is approved. Reuse these immutable builds/controls for one short screen, then independent confirmation only if promising. No input/settings grid."
+}

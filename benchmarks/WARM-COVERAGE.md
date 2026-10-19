@@ -84,6 +84,19 @@ proofs reused. Stop this passing case; compression efficiency parity remains ope
 All four Lanczos3 gaps remain required. Finite254/237numeric/17untimed; other236
 numeric observations retain their builds. Next: three named header boundaries below.
 
+[Fixed-workspace PNG controls](WARM-PNG-HEADERS-CONTROLS.md) now pass on the current
+producer and normal/scalar native adapter:21 original cases, fixed scratch,
+opaque payload seeking, EOF and independent descriptors. CRC/Deflate remain
+intentionally opaque. No timing: the explicitly labeled original bounded header
+adapter with FFmpeg AVIO/descriptor APIs awaits its reference decision; complete-
+packet parsing requires whole-input buffering. Numeric237/untimed17 is unchanged.
+A [completed current Reduce16 diagnostic](WARM-LANCZOS3-CURRENT-PROFILE.md) identifies
+horizontal filtering at43.4% of958 samples, vertical27.3%, Apply14.5%. These are
+sampling locations, not timing results. Next independent experiment: an admitted
+RGBA16 premultiplied source-row cache to avoid repeated work across overlapping
+windows, with exact sums, local/shared admission/cancellation/ownership preserved.
+One existing Reduce16 short first; no new image/settings grid or passing retune.
+
 A bounded audit of the accepted 0.2.0 additions identifies exactly three required
 paths absent from the older checklist; these are not a shape/depth/settings grid:
 
@@ -444,6 +457,8 @@ the existing encoded inputs, each for a distinct required container grammar:
 
 - `InspectHeaders/PngRgba8FreshSeekable`: chunk framing, dimensions/EXIF and skipped
   opaque IDAT, including source acquisition and EOF; excludes PNG CRC/pixel checks.
+  [21 controls pass](WARM-PNG-HEADERS-CONTROLS.md); bounded reference decision pending,
+  still unmeasured. Public complete-packet parser buffering is outside this contract.
 - `InspectHeaders/Jpeg420FreshStream`: full marker/stuffing/restart scan through
   entropy and late metadata to EOF, without entropy-symbol decoding.
 - `InspectHeaders/WebpLosslessRgba8FreshSeekable`: RIFF framing, VP8L dimensions,
