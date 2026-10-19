@@ -12,6 +12,7 @@ public enum StreamDecodeCase { Png8, PngCropFit8, Png16, PngCropFit16 }
 [MemoryDiagnoser]
 public class WarmStreamDecode
 {
+    private WarmAsyncPngDecode? asyncInput;
     public static IEnumerable<StreamDecodeCase> Cases => SelectedCases();
     [ParamsSource(nameof(Cases))] public StreamDecodeCase Case { get; set; }
     private int Depth => Case is StreamDecodeCase.Png16 or StreamDecodeCase.PngCropFit16 ? 16 : 8;
@@ -55,6 +56,11 @@ public class WarmStreamDecode
         var gc = GC.GetConfigurationVariables();
         if (!gc.TryGetValue("ConcurrentGC", out var concurrent) || Convert.ToBoolean(concurrent))
             throw new InvalidOperationException("Managed warm worker requires background GC disabled.");
+        if (Environment.GetEnvironmentVariable("LOKAD_IMAGE_DECODE_ASYNC_NONSEEKABLE") == "1")
+        {
+            if (Case != StreamDecodeCase.Png8) throw new ArgumentOutOfRangeException(nameof(Case));
+            asyncInput = new WarmAsyncPngDecode(); asyncInput.Setup(cpu, smoke, sampleCount); return;
+        }
         state = new JpegBenchmarkCase();
         try
         {
@@ -170,6 +176,7 @@ public class WarmStreamDecode
     [Benchmark]
     public int Managed()
     {
+        if (asyncInput is not null) return asyncInput.Apply();
         using var stream = new MemoryStream(encoded, writable: false);
         using var result = DecodeAndTransform(stream);
         return (Depth == 8 ? result.GetRow8(0)[0] : result.GetRow16(0)[0]) + result.Stride * result.Height;
@@ -179,6 +186,7 @@ public class WarmStreamDecode
     [GlobalCleanup]
     public void Cleanup()
     {
+        if (asyncInput is not null) { asyncInput.Cleanup(); return; }
         try
         {
             if (!ready) return;

@@ -1,14 +1,15 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-70 independent passes,161 measured mean gaps and one confidence-open case across
-232 numeric rows. The [three-table summary](../docs/benchmark.md)
-contains126 independent observations and106 qualified shorts.22named required
+70 independent passes,162 measured mean gaps and one confidence-open case across
+233 numeric rows. The [three-table summary](../docs/benchmark.md)
+contains126 independent observations and107 qualified shorts.21named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
-The finite scope is now **254 cases:232 numeric+22 unmeasured**. The existing
-227 rows retain their identified performance-qualified builds; those earlier
-codec/edit rows do not yet requalify 0.2.0 admission, disposal or governed storage.
+The finite scope is now **254 cases:233 numeric+21 unmeasured**. The remaining
+226 historical codec/edit rows retain their identified performance-qualified
+builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
+Current CMYK, four Lanczos3 and two async input rows are identified below.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
 required representatives using the same513×259 asymmetric RGBA rasters. Their
 [packed-coefficient screens](WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md) improve all
@@ -45,9 +46,15 @@ moves one already-named boundary to numeric:24.10µs/native19.34µs,
 1.246x/upper1.571,8,408B/op. All21 managed controls revalidate; unchanged normal/
 scalar native controls are reused. Complete equivalent input/metadata/EOF/owners
 pass, with no producer/harness/selector/native build or full/package rerun.
-Next: qualify the existing async nonseekable PNG decode boundary before timing.
+The [async nonseekable PNG decode screen](WARM-PNG-ASYNC-DECODE.md) adds the second
+already-named input boundary:2,049.34µs/native1,412.89µs,1.450x/upper1.683,
+12,784B/op. All21 complete-image controls agree; normal/scalar worker and CLI
+pixels are exact. The native reference includes the required structural/CRC
+adapter and rejects decoder error severity, including partial frames. One harness
+build/OS, two native builds, no producer/selector build or repeated package proof.
+Next: the existing async PNG encode/output boundary, with frozen size/quality gates.
 All four Lanczos3 gaps remain required;
-finite254/232numeric/22untimed; the other231 numeric observations remain unchanged.
+finite254/233numeric/21untimed; the other232 numeric observations remain unchanged.
 
 A bounded audit of the accepted 0.2.0 additions identifies exactly three required
 paths absent from the older checklist; these are not a shape/depth/settings grid:
@@ -369,8 +376,8 @@ shape, depth or quality grid. Add cases only for a distinct required path omitte
 from this list, with its concrete reason.
 
 Async input has exactly two named common front-end boundaries:
-`AsyncStreamIdentify/PngRgba8FreshNonSeekable` now has the qualified short gap
-above; `AsyncStreamDecode/PngRgba8FreshNonSeekable` remains **unmeasured**.
+`AsyncStreamIdentify/PngRgba8FreshNonSeekable` and
+`AsyncStreamDecode/PngRgba8FreshNonSeekable` now have qualified short gaps above.
 Both reuse the existing PNG8 input
 and full structural/pixel gates, adding actual async reads through EOF, fresh
 private input acquisition/growth/release and independent descriptor/pixel owners.

@@ -74,6 +74,7 @@ def table(rows):
 
 def render():
     decodes = [
+        row('PNG DecodeAsync, fresh nonseekable Stream', 'warm-png-async-decode-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-PNG-ASYNC-DECODE.md', verification='Gap (short; qualified)'),
         row('PNG IdentifyAsync, fresh nonseekable Stream¶', 'warm-png-async-identify-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-PNG-ASYNC-IDENTIFY.md', verification='Gap (short; qualified)'),
         row('PNG Identify, fresh Stream¶', 'warm-png-stream-identify-evidence.json', ['observations', -1], 'WARM-PNG-STREAM-IDENTIFY.md', True),
         row('WebP Identify, resident span (parser)', 'warm-webp-identify-evidence.json', ['observations', -1], 'WARM-WEBP-IDENTIFY.md', True),
@@ -321,13 +322,13 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 232
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 233
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-19. Target: **warm single-CPU parity, independently confirmed
-conservative upper ≤1x**. The 232 numeric rows contain **{parity_count} passes,
+conservative upper ≤1x**. The 233 numeric rows contain **{parity_count} passes,
 {gap_count} gaps and {confidence_count} confidence-open case**. The finite
-[material checklist](../benchmarks/WARM-COVERAGE.md) has 254 named cases, 22 unmeasured.
+[material checklist](../benchmarks/WARM-COVERAGE.md) has 254 named cases, 21 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
@@ -359,7 +360,14 @@ All21 managed controls pass; unchanged normal/scalar native controls are reused.
 Both sides include fresh nonseekable source/private acquisition/growth/copies/EOF,
 full structural/CRC metadata and independent ownership/release. Current producer,
 harness, selector and worker are reused without builds or repeated package proof.
-Next: establish equivalent input and exact pixels for the named async decode boundary.
+The [async nonseekable PNG decode screen](../benchmarks/WARM-PNG-ASYNC-DECODE.md)
+adds the second named async input case: **2,049.34µs / 1.450x**, upper1.683,
+**12,784B/op**. All21 complete-image controls agree; normal/scalar worker and CLI
+pixels are exact. Both sides include full decode, structural/CRC validation and
+independent pixels. The native adapter rejects decoder error severity, including
+partial frames. Current production/full qualification is reused; one harness
+build/OS and two native builds establish the reference, with no selector rebuild.
+Next: the named async PNG encode/output boundary, preserving existing size gates.
 
 [Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
 **76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
@@ -370,7 +378,7 @@ passing proofs are reused. No new image/settings grid, profile or baseline chang
 JPEG-round qualification:4,212tests/99hardware-off checks per OS, same actual private
 package consumer/all three examples on Windows/Linux. Released0.1.0 stays immutable.
 Largest measured gaps: Lanczos3 Reduce16 at1.836x, Reduce8 and current CMYK2D sparse1.829x.
-22unmeasured representatives cover async, header, drawing, text and governed ownership.
+21unmeasured representatives cover async, header, drawing, text and governed ownership.
 Stop passes; optimize demonstrated material gaps and resolve missing evidence.
 
 JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale
