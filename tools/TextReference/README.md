@@ -34,3 +34,10 @@ Unicode grapheme starts and excluding its nonrendered CR/LF placeholders. The
 renderer/measurement code-point association is checked before scoring. Raw records
 support investigating shaped-text differences. This is a bounded initial
 qualification set, not a claim of general script/font compatibility.
+
+For a producer containing the staged GSUB primitive, the correctness-only
+`--probe-substitution <repo-root>` mode applies composition to the existing
+combining-mark and Arabic controls. It exercises the actual internal parser
+through reflection in this tool, verifies borrowed/retained memory cleanup, and
+explicitly reports that joining, positioning and public layout integration remain
+incomplete. Production has no reflection-based shaping or reference dependency.

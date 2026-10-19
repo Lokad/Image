@@ -7,6 +7,9 @@ ignored `external/`; [provenance](../tools/TextReference/font-provenance.json)
 pins the release URL and bytes. The [comparison tool](../tools/TextReference/README.md)
 is separate from the solution and production package, and reports no timings.
 
+A [staged GSUB primitive](text-substitution-qualification.md) is now qualified
+internally. Public layout integration and the gaps below remain outstanding.
+
 Six controls pass: Latin kerning, multiline/empty CRLF, narrow long-word wrapping,
 line spacing, supplied bold and supplied italic. Glyph and grapheme-cluster
 sequences and line breaks agree exactly. Maximum glyph-position difference is

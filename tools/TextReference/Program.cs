@@ -12,6 +12,11 @@ using SixLabors.ImageSharp.Processing;
 using LOptions = Lokad.Image.TextOptions;
 using SOptions = SixLabors.Fonts.TextOptions;
 
+if (args.Length > 0 && args[0] == "--probe-substitution")
+{
+    SubstitutionProbe.Run(Path.GetFullPath(args[1])); return;
+}
+
 const int width = 384, height = 160;
 var root = args.Length > 0 ? Path.GetFullPath(args[0]) : Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../"));
 var fontPath = args.Length > 1 ? Path.GetFullPath(args[1]) : Path.Combine(root, "external/text-reference/fonts");
