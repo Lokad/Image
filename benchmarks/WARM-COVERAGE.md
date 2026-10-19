@@ -1,11 +1,20 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-70 independent passes,151 measured mean gaps and one confidence-open case across
-all222 current numeric rows; no prior-production row remains. The
+70 independent passes,152 measured mean gaps and one confidence-open case across
+all223 current numeric rows; no prior-production row remains. The
 [three-table summary](../docs/benchmark.md) contains126 current independent
-observations and96 qualified shorts.24named new boundaries are unmeasured.
+observations and97 qualified shorts.23named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
+
+[YCCK420 complete decoding](WARM-JPEG-YCCK420.md) now demonstrates the largest
+gap:6.733x/upper6.911x,4,761.24/707.13us,1,470,168B/op. It uses the already-named
+case and original varying projection, no new image/grid. Exact managed pixels,
+native CLI equality, independent owners and exact native phase model pass. The
+owner-approved native-only chroma-transition maximum16 keeps maximum4elsewhere,
+RMSE1.5 and exact alpha/managed pixels. Three actuals/both idle-v2/native brackets
+retained, no long repeat above one. All222prior rows and4,197test/61HWoff/package
+qualification are reused; production unchanged. Scope246=223numeric+23pending.
 
 [The bounded sparse-prefix trial](WARM-JPEG-SPARSE-PREFIX-TRIAL.md) was rejected:
 3.1% mean gain still left1.75x. The exact accepted source and producers are
@@ -110,7 +119,7 @@ delivery. The two lossless cases and photograph VP8 independently pass; the late
 bounded-model diagram result is the open comparison above. Lossless sizes are now 2.394x/2.090x the exact native packets; VP8
 sizes are 1.212x/1.167x at matched source quality. The preceding lossless change replaces only the five affected timing proofs;
 other production paths and qualification evidence are reused. Known scope is now246 named
-cases:222 numeric plus24 unmeasured. Stop these three time-passing cases unless
+cases:223 numeric plus23 unmeasured. Stop these three time-passing cases unless
 their relevant production path changes; compression-size work remains required.
 
 The two [shared-budget codec boundaries](WARM-SHARED-BUDGET.md) are now measured:
@@ -124,7 +133,7 @@ per-operation limits remain. Two live owners/packets, exact retained charges,
 surviving outputs, source stability and temporary-memory/work settlement pass.
 No new case/grid, native/production/selector build or repeated full package proof.
 Only benchmark harness inputs changed; existing executed production evidence stays
-valid.24new boundaries remain unmeasured. The original unbudgeted paths are reused.
+valid.23new boundaries remain unmeasured. The original unbudgeted paths are reused.
 
 Direct JPEG sample decoding has two named representatives, both currently
 measured in [the RGB420 writing round](WARM-JPEG-CALLER-RGB420.md).
@@ -183,15 +192,15 @@ preceding grayscale result; historical allocation counts are superseded.
 No new workload is needed. Resident codec paths, synchronous Identify, async input,
 encoding and editing remain unchanged. No unaffected operation was retimed.
 
-Five representatives cover the required JPEG compatibility algorithms; the CMYK DC/sparse/general controls have the current gaps above, four remain **unmeasured**:
+Five representatives cover the required JPEG compatibility algorithms; CMYK and YCCK have the current gaps above, three remain **unmeasured**:
 
 - `JpegDecode/CmykAdobeResident` (**measured**1.395x DC gap): four component planes, Adobe inversion and
   complete owned RGBA conversion from an original CMYK projection. The
   separately named horizontal, 2D sparse and all63-AC controls above cover each
   retained transform algorithm.
 
-- `JpegDecode/Ycck420Resident`: subsampled color reconstruction, explicit matrix
-  transform and a full-resolution black plane, using the same original input.
+- `JpegDecode/Ycck420Resident` (**measured**6.733x gap): subsampled color
+  reconstruction, explicit matrix and full-resolution black, original varying input.
 - `JpegSamplesDecode/CmykResident`: complete caller-owned canonical CMYK output;
   establish an equivalent native raw-component delivery boundary before timing.
   Native RGB output alone does not cover this operation.

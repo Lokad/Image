@@ -141,6 +141,7 @@ def render():
         row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-horizontal-row-evidence.json', ['cases', 'CmykAdobeAc', -1], 'WARM-JPEG-HORIZONTAL-ROW.md', verification='Gap (short; qualified)'),
         row('JPEG Adobe CMYK, general transform control', 'warm-jpeg-horizontal-row-evidence.json', ['cases', 'CmykAdobeGeneral', -1], 'WARM-JPEG-HORIZONTAL-ROW.md', verification='Gap (short; qualified)'),
         row('JPEG Adobe CMYK, two-dimensional sparse control', 'warm-jpeg-horizontal-row-evidence.json', ['cases', 'CmykAdobeSparse2D', -1], 'WARM-JPEG-HORIZONTAL-ROW.md', verification='Gap (short; qualified)'),
+        row('JPEG YCCK420, full-resolution black', 'warm-jpeg-ycck420-evidence.json', ['cases', 'Ycck420', -1], 'WARM-JPEG-YCCK420.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
@@ -309,11 +310,11 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 222
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 223
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 222 retained numeric rows contain **{parity_count} current
+conservative upper ≤1x**. The 223 retained numeric rows contain **{parity_count} current
 parity confirmations, {gap_count} measured gaps and {confidence_count} confidence-open cases**;
 all numeric rows have current evidence after the
 [input reconciliation](../benchmarks/WARM-INPUT-RECONCILIATION.md). Twenty-two prior
@@ -338,7 +339,7 @@ JPEG bytes stay **74,040/52,093**, with unchanged quality/alpha gates. Both rema
 gaps; no long repeat or production/package rebuild. A long-lived finite caller
 budget and its resident-input/source reservation are prepared outside timing.
 Direct sample decoding, JPEG compatibility, async I/O, inspection, drawing and
-text now account for **twenty-four pending representatives**, with no grid.
+text now account for **twenty-three pending representatives**, with no grid.
 Existing numeric evidence is reused where paths remain unchanged.
 
 [Caller RGB420 JPEG decoding](../benchmarks/WARM-JPEG-CALLER-RGB420.md) now
@@ -348,7 +349,7 @@ without an RGBA frame. Its gray rejection control remains a short gap at
 **1.326× /273,422B/op**. The same complete native operations and gates remain.
 All4,176tests/OS,73affected hardware-disabled checks/OS and the same actual private
 package consumer/all three examples pass on both OS. Exactly these two numeric
-rows change; prior passing paths retain evidence.24new boundaries remain.
+rows change; prior passing paths retain evidence.23new boundaries remain.
 
 [Identical horizontal JPEG rows](../benchmarks/WARM-JPEG-HORIZONTAL-ROW.md)
 reduce the one-AC CMYK mean **10.0%**,746.37→671.44µs, at **1.726x FFmpeg**.
@@ -362,7 +363,14 @@ Three rows refreshed, one added; all70passing paths retain evidence and stop.
 
 [A bounded exact sparse-prefix trial](../benchmarks/WARM-JPEG-SPARSE-PREFIX-TRIAL.md)
 was rejected as immaterial. Accepted production, current rows and qualification
-remain unchanged; no long repeat or package rerun. YCCK420 delivery is next.
+remain unchanged; no long repeat or package rerun.
+
+[YCCK420 complete decoding](../benchmarks/WARM-JPEG-YCCK420.md) now demonstrates
+the largest gap: **6.733x**, **4,761.24/707.13us**, **1,470,168B/op**. Exact managed
+pixels and complete native CLI/owner boundaries pass. The approved native-only
+chroma-transition bound is16, with4elsewhere/RMSE1.5 and exact alpha. Same fixed
+varying original projection; no new case/grid. Scope246cases,23unmeasured. All
+previous rows/qualification are reused; no producer build or package rerun.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end
