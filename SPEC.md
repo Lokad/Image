@@ -340,6 +340,11 @@ when both actual and estimated alpha exceed the guarded half-Q60 threshold.
 Only complete rounding bins are accepted; uncertain pixels retain the exact
 integer path. A separately certified zero-alpha shortcut clears all channels.
 This uses the same admitted scratch and preserves exact pixels at both depths.
+AVX512DQ/VL may also accumulate horizontal RGBA products in four Int64 lanes.
+Unsigned 32-bit premultiplied samples widen before signed weighting; the existing
+axis magnitude bound keeps every partial sum within Int64, including full RGBA16
+precision and negative weights. Each read covers exactly one pixel. Scalar
+fallback, admitted rows, work charges and cancellation boundaries are unchanged.
 The independent decimal/BigInteger oracle covers transparency, edges and cache
 eviction. Opaque live FFmpeg controls use explicit edge extension and radius
 three, maximum RGB error 1, RGB RMSE <=0.25 and exact alpha. That correctness

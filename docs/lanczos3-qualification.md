@@ -50,6 +50,10 @@ The [certified SIMD normalization round](../benchmarks/WARM-LANCZOS3-NORMALIZE.m
 saves another16.6–47.3%, qualifies4445tests/44scalar checks per OS and the same
 actual private package on both systems. All four original frames remain exact;
 admitted storage, work, cancellation and the parity objective are unchanged.
+The [exact SIMD horizontal round](../benchmarks/WARM-LANCZOS3-HORIZONTAL.md)
+saves another10.5–30.8%, qualifies4448tests/47scalar checks per OS and the same
+actual private package on both systems. Original frames, working storage,
+work and cancellation remain unchanged; warm parity stays open.
 
 Retained SHA-256 identities:
 

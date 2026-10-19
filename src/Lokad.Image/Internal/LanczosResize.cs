@@ -137,13 +137,32 @@ internal static class LanczosResize
         return ((Int128)limbs[sums.Length + index] << 32) + limbs[index];
     }
 
-    private static void Horizontal(ImageBuffer source, int y, LanczosPlan plan, Span<long> output, OperationContext context)
+    internal static void Horizontal(ImageBuffer source, int y, LanczosPlan plan, Span<long> output, OperationContext context)
     {
         ReadOnlySpan<byte> input8 = default; ReadOnlySpan<ushort> input16 = default;
         if (source.BitDepth == 8) input8 = source.GetRow8(y); else input16 = source.GetRow16(y);
         for (var x = 0; x < plan.Windows.Length; x++)
         {
             var window = plan.Windows[x]; context.Work(window.Count * 4L);
+            if (Avx2.IsSupported && Avx512DQ.VL.IsSupported)
+            {
+                // UInt32 premultiplied samples can exceed Int32 at 16 bits.
+                // Zero extension before signed64 weighting is essential. The
+                // axis magnitude bound keeps every partial sum inside Int64.
+                var sum = Vector256<long>.Zero;
+                for (var i = 0; i < window.Count; i++)
+                {
+                    if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                    var at = (window.First + i) * 4;
+                    var samples = source.BitDepth == 8
+                        ? Sse41.ConvertToVector128Int32(Vector128.CreateScalar(MemoryMarshal.Read<uint>(input8.Slice(at, 4))).AsByte())
+                        : Sse41.ConvertToVector128Int32(Vector128.CreateScalar(MemoryMarshal.Read<ulong>(MemoryMarshal.AsBytes(input16.Slice(at, 4)))).AsUInt16());
+                    var premultiplied = Sse41.MultiplyLow(Sse41.Insert(samples, 1, 3), Sse2.Shuffle(samples, 255)).AsUInt32();
+                    var weight = Vector256.Create((long)plan.Weights[window.Offset + i]);
+                    sum = Avx2.Add(sum, Avx512DQ.VL.MultiplyLow(Avx2.ConvertToVector256Int64(premultiplied), weight));
+                }
+                sum.CopyTo(output.Slice(x * 4, 4)); continue;
+            }
             long r = 0, g = 0, b = 0, alpha = 0;
             for (var i = 0; i < window.Count; i++)
             {
