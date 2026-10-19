@@ -1,11 +1,19 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-70 independent passes,154 measured mean gaps and one confidence-open case across
-all225 current numeric rows; no prior-production row remains. The
-[three-table summary](../docs/benchmark.md) contains126 current independent
-observations and99 qualified shorts.22named new boundaries are unmeasured.
-Reuse unchanged passing paths; no image or settings grid.
+70 independent passes,155 measured mean gaps and one confidence-open case across
+all226 current numeric rows. The [three-table summary](../docs/benchmark.md)
+contains126 independent observations and100 qualified shorts.21named required
+boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
+
+[JPEG411](WARM-JPEG-411.md), an already-named quarter-width chroma path, is now the
+largest demonstrated gap:7.771x/upper8.211x,3527.46/453.95us,751,223B/op. The same
+original projection yields exact managed/native RGBA. FFmpeg's complete operation
+includes explicit exact-grid centered normalization and in-place compaction;
+packet/valid planes/quality bounds are unchanged. One6sec profile locates90.0%
+in scalar interpolation/rounding/rendering. Next one exact SIMD row primitive.
+Production unchanged; all225 previous rows/70passes and4209/96HWoff/package proofs
+remain valid. No long repeat above one. Scope247=226numeric+21unmeasured.
 
 [Exact SIMD caller YCCK RGB](WARM-JPEG-YCCK-CALLER-SIMD.md) reduces time80.2%,
 4532.59→898.47us:1.488x/upper1.550x,1,337,490B/op. Shared ownedYCCK improves20.3%
@@ -255,7 +263,7 @@ Five representatives cover the required JPEG compatibility algorithms; CMYK, YCC
 - `JpegSamplesDecode/CmykResident` (**measured**1.592x gap): untagged full-resolution
   canonical ink, all4raw native planes preserved and packed to fresh caller storage.
   Adobe inversion has correctness coverage; no RGBA intermediate.
-- `JpegDecode/411Resident`: quarter-width horizontal chroma reconstruction on the
+- `JpegDecode/411Resident`: [measured7.771x gap](WARM-JPEG-411.md); quarter-width horizontal chroma reconstruction on the
   existing RGB projection; confirm native sample-grid equivalence before timing.
 - `JpegDecode/410Resident`: quarter-width, half-height chroma (JPEG factors 4×2,
   not video pixel format 4×4); confirm native sample-grid equivalence before timing.
