@@ -8,7 +8,8 @@ namespace Lokad.Image.Tooling;
 internal static class AuthoredJpegCompatibility
 {
     internal static byte[] Create(int width, int height, byte[] values, int h = 1, int v = 1,
-        bool blackFull = false, int? adobe = null, bool progressive = false, int restart = 0, bool vary = false)
+        bool blackFull = false, int? adobe = null, bool progressive = false, int restart = 0, bool vary = false,
+        Func<int, int, int, int>? blockSample = null)
     {
         using var output = new MemoryStream(); output.Write(new byte[] { 255, 216 });
         if (adobe is not null) Segment(0xEE, [65, 100, 111, 98, 101, 0, 100, 0, 0, 0, 0, (byte)adobe.Value]);
@@ -37,7 +38,9 @@ internal static class AuthoredJpegCompatibility
             for (var by = 0; by < vs[c]; by++)
             for (var bx = 0; bx < hs[c]; bx++)
             {
-                var sample = Sample(values[c], mcu % columns * hs[c] + bx, mcu / columns * vs[c] + by, vary);
+                var sample = blockSample is null ? Sample(values[c], mcu % columns * hs[c] + bx, mcu / columns * vs[c] + by, vary)
+                    : blockSample(c, mcu % columns * hs[c] + bx, mcu / columns * vs[c] + by);
+                if ((uint)sample > 255) throw new ArgumentOutOfRangeException(nameof(blockSample));
                 var coefficient = (sample - 128) * 8; bits.Dc(coefficient - predictors[c]); predictors[c] = coefficient;
                 if (!progressive) bits.Write(0, 1);
             }

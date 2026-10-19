@@ -2,6 +2,12 @@ using BenchmarkDotNet.Running;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
+if (args.SequenceEqual(["--prepare-warm-jpeg-cmyk"]))
+{
+    WarmJpegCmykInput.Prepare();
+    return;
+}
+
 if (args.SequenceEqual(["--prepare-warm-vp8-simple"]))
 {
     WarmVp8Decode.PrepareSimpleOpaque();

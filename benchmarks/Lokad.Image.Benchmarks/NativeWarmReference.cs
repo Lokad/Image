@@ -339,6 +339,7 @@ internal sealed partial class NativeWarmReference : IDisposable
                 : sample.OutputStride < (Ready.GetProperty("operation").GetString() is "nearest-resize" or "bilinear-resize" or "bicubic-resize" or "crop" or "png-stream-crop-fit" or "png-stream16-crop-fit" ? Ready.GetProperty("outputWidth").GetInt32()
                     : Ready.GetProperty("operation").GetString() is "quarter-turn-cw" or "quarter-turn-ccw" or "transpose" or "transverse" ? 259 : HorizontalFlipInput.Width) * (Ready.GetProperty("depth").GetInt32() / 8) * 4)
             || (Ready.GetProperty("operation").GetString() is "png-stream-decode" or "png-stream16-decode" or "png-stream-crop-fit" or "png-stream16-crop-fit" && sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32())
+            || (Ready.GetProperty("operation").GetString() == "jpeg-cmyk-decode" && sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32())
             || (Ready.GetProperty("operation").GetString() is "jpeg-decode" or "jpeg-rgb-decode" or "jpeg-rgb422-decode" or "jpeg-rgb420-decode" or "webp-decode" or "webp-stream-decode" or "vp8-decode" or "vp8-stream-decode" && sample.OutputBytes != HorizontalFlipInput.Width * HorizontalFlipInput.Height * 4))
             throw new InvalidOperationException("Native sample counters/elapsed time/CPU differ.");
         completed += operations;

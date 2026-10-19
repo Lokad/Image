@@ -1,11 +1,20 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-70 independent passes,147 measured mean gaps and one confidence-open case across
-all218 current numeric rows; no prior-production row remains. The
+70 independent passes,148 measured mean gaps and one confidence-open case across
+all219 current numeric rows; no prior-production row remains. The
 [three-table summary](../docs/benchmark.md) contains126 current independent
-observations and92 qualified shorts.25named new boundaries are unmeasured.
+observations and93 qualified shorts.24named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
+
+[Adobe CMYK decode](WARM-JPEG-CMYK-ADOBE.md) fills one missing representative:
+7.284x/upper7.565x,1,635,074B/op, complete531,468-byte RGBA. The original raster
+projects to an authored10,910-byte baseline DC-only four-full-plane Adobe0 packet.
+Exact analytical CMYK/RGB, normal/scalar native gates, native CLI delivery,
+opaque alpha and independent outputs pass. This is the new largest demonstrated
+gap; prioritize full-resolution CMYK conversion, not a long timing repeat.
+One tooling harness/native build, reused production/selector/qualification; no
+older proof is invalidated. Scope219numeric/24pending/243known;70passes stop.
 
 [Direct caller RGB420 sample writing](WARM-JPEG-CALLER-RGB420.md) removes the
 largest3.369x gap:71.3% less elapsed time, independently0.966x/upper0.971x,
@@ -15,7 +24,7 @@ change; all69existing passes stay valid and the new RGB pass stops. Exact pixels
 normal/scalar native gates, padding/source, limits/cancellation and independent
 survivors pass. All4,176tests/OS,73affected hardware-off checks/OS and same actual
 private Windows package consumer/all three examples pass on both OS. Scope stays
-243named cases:218numeric/25unmeasured;70passes/147gaps/one confidence-open.
+That round retained218numeric/25unmeasured; the CMYK row below makes219/24.
 Next largest measured gap is RGBA8 128x64 tight-memory bicubic1.687x.
 
 [Caller-RGB MCU preparation](WARM-JPEG-CALLER-MCU.md) improves the largest known
@@ -91,7 +100,7 @@ delivery. The two lossless cases and photograph VP8 independently pass; the late
 bounded-model diagram result is the open comparison above. Lossless sizes are now 2.394x/2.090x the exact native packets; VP8
 sizes are 1.212x/1.167x at matched source quality. The preceding lossless change replaces only the five affected timing proofs;
 other production paths and qualification evidence are reused. Known scope is now243 named
-cases:218 numeric plus25 unmeasured. Stop these three time-passing cases unless
+cases:219 numeric plus24 unmeasured. Stop these three time-passing cases unless
 their relevant production path changes; compression-size work remains required.
 
 The two [shared-budget codec boundaries](WARM-SHARED-BUDGET.md) are now measured:
@@ -105,7 +114,7 @@ per-operation limits remain. Two live owners/packets, exact retained charges,
 surviving outputs, source stability and temporary-memory/work settlement pass.
 No new case/grid, native/production/selector build or repeated full package proof.
 Only benchmark harness inputs changed; existing executed production evidence stays
-valid.25new boundaries remain unmeasured. The original unbudgeted paths are reused.
+valid.24new boundaries remain unmeasured. The original unbudgeted paths are reused.
 
 Direct JPEG sample decoding has two named representatives, both currently
 measured in [the RGB420 writing round](WARM-JPEG-CALLER-RGB420.md).
@@ -164,9 +173,9 @@ preceding grayscale result; historical allocation counts are superseded.
 No new workload is needed. Resident codec paths, synchronous Identify, async input,
 encoding and editing remain unchanged. No unaffected operation was retimed.
 
-Five further **unmeasured** representatives cover the newly required algorithms:
+Five representatives cover the required JPEG compatibility algorithms; the CMYK decode now has the measured gap above, four remain **unmeasured**:
 
-- `JpegDecode/CmykAdobeResident`: four component planes, Adobe inversion and
+- `JpegDecode/CmykAdobeResident` (**measured**7.284x gap): four component planes, Adobe inversion and
   complete owned RGBA conversion from an original CMYK projection.
 - `JpegDecode/Ycck420Resident`: subsampled color reconstruction, explicit matrix
   transform and a full-resolution black plane, using the same original input.
