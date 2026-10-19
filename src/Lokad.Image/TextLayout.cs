@@ -4,15 +4,22 @@ using Lokad.Image.Internal;
 
 namespace Lokad.Image;
 
-/// <summary>Pixel layout of logical left-to-right Unicode glyphs from a supplied face.</summary>
+public enum TextShaping { Legacy, OpenType }
+public enum TextDirection { Auto, LeftToRight, RightToLeft }
+public enum TextAlignment { Start, Center, End }
+
+/// <summary>Pixel layout options for a supplied face.</summary>
 public sealed record TextOptions
 {
     public double FontSize { get; init; } = 16;
     public double WrapWidth { get; init; } = double.PositiveInfinity;
     public double LineSpacing { get; init; } = 1;
     public int TabSpaces { get; init; } = 4;
-    /// <summary>Apply supported ordinary horizontal legacy kern tables; no OpenType shaping.</summary>
+    /// <summary>Apply horizontal kerning through the selected layout mode.</summary>
     public bool Kerning { get; init; } = true;
+    public TextShaping Shaping { get; init; }
+    public TextDirection Direction { get; init; }
+    public TextAlignment Alignment { get; init; }
     public ImageLimits Limits { get; init; } = ImageLimits.Default;
 }
 
@@ -35,13 +42,17 @@ public readonly record struct TextBounds(double X, double Y, double Width, doubl
 /// <summary>A positioned glyph; source offsets/lengths use the original UTF-16 string.</summary>
 public readonly record struct TextGlyph(int GlyphIndex, int SourceOffset, int SourceLength,
     int LineIndex, double X, double BaselineY, double AdvanceWidth);
-public readonly record struct TextLine(int FirstGlyph, int GlyphCount, double BaselineY, double AdvanceWidth);
+public readonly record struct TextLine(int FirstGlyph, int GlyphCount, double BaselineY, double AdvanceWidth)
+{
+    public TextDirection Direction { get; init; } = TextDirection.LeftToRight;
+}
 
 /// <summary>Immutable positioned glyphs and decoded outlines; independent of caller text storage.</summary>
 /// <remarks>Unhinted default-instance outlines. No instruction execution, device-grid
-/// fitting, bidirectional reordering, ligatures or GPOS shaping. Bounds use decoded
-/// curves, not untrusted declared glyph bounds. Source strings are not retained.</remarks>
-public sealed class TextLayout : IDisposable
+/// fitting or instruction execution. OpenType mode selects supported substitution,
+/// positioning and bidirectional layout; legacy mode preserves logical order.
+/// Bounds use decoded curves, not declared glyph bounds. Source strings are not retained.</remarks>
+public sealed partial class TextLayout : IDisposable
 {
     internal sealed record Shape(FontOutline Outline, double XMin, double YMin, double XMax, double YMax);
     internal struct Placement
@@ -94,9 +105,12 @@ public sealed class TextLayout : IDisposable
         ArgumentNullException.ThrowIfNull(font); ArgumentNullException.ThrowIfNull(text); options ??= new();
         font.EnsureAlive();
         if (!double.IsFinite(options.FontSize) || options.FontSize <= 0 || double.IsNaN(options.WrapWidth) || options.WrapWidth <= 0
-            || !double.IsFinite(options.LineSpacing) || options.LineSpacing <= 0 || options.TabSpaces < 1)
+            || !double.IsFinite(options.LineSpacing) || options.LineSpacing <= 0 || options.TabSpaces < 1
+            || !Enum.IsDefined(options.Shaping) || !Enum.IsDefined(options.Direction) || !Enum.IsDefined(options.Alignment))
             throw new ArgumentOutOfRangeException(nameof(options));
         var context = new OperationContext(options.Limits, cancellationToken);
+        if (options.Shaping == TextShaping.Legacy && options.Direction == TextDirection.RightToLeft)
+            throw new ArgumentException("Right-to-left direction requires OpenType shaping.", nameof(options));
         if (options.FontSize > context.Limits.MaxDimension) throw new ImageLimitException(ImageLimitKind.Dimension, "Font size exceeds the dimension limit.");
         var initial = context.RemainingWorkingBytes;
         context.ReserveBorrowed(font.StorageBytes); context.ReserveBorrowed(text.Length * 2L);
@@ -105,7 +119,9 @@ public sealed class TextLayout : IDisposable
         {
             context.Reserve(512);
             var count = Count(text, context); builder = new(font, options, context, count);
-            builder.Read(text); builder.Arrange(); builder.Measure();
+            if (options.Shaping == TextShaping.OpenType) { builder.ReadShaped(text); builder.ArrangeShaped(); }
+            else { builder.Read(text); builder.Arrange(); }
+            builder.AlignLines(); builder.Measure();
             builder.ReleasePreparation(); context.ReleaseBorrowed(text.Length * 2L);
             return new(font, options, builder, text.Length, initial - context.RemainingWorkingBytes) { storageOwner = context };
         }
@@ -144,7 +160,7 @@ public sealed class TextLayout : IDisposable
         return count;
     }
 
-    private sealed class Builder
+    private sealed partial class Builder
     {
         private readonly TrueTypeFont font;
         private readonly TextOptions options;
@@ -172,7 +188,7 @@ public sealed class TextLayout : IDisposable
             var bytes = 32 + count * 64L;
             if (bytes > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "Text glyph storage exceeds the managed limit.");
             context.Reserve(bytes); context.Reserve(256); Glyphs = new Placement[count];
-            if (count != 0 && options.Kerning) kerning = new(font, context);
+            if (count != 0 && options.Kerning && options.Shaping == TextShaping.Legacy) kerning = new(font, context);
         }
 
         private Shape Get(int glyph)
@@ -299,6 +315,6 @@ public sealed class TextLayout : IDisposable
                 throw new ImageLimitException(ImageLimitKind.Dimension, "Text extent exceeds the dimension limit.");
             if (width * height > context.Limits.MaxPixels) throw new ImageLimitException(ImageLimitKind.PixelCount, "Text extent exceeds the pixel limit.");
         }
-        internal void ReleasePreparation() { kerning?.Dispose(); kerning = null; }
+        internal void ReleasePreparation() { kerning?.Dispose(); kerning = null; shaped?.Dispose(); shaped = null; }
     }
 }

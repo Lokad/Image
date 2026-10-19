@@ -43,6 +43,11 @@ internal sealed class OpenTypePositioning : IDisposable
         if (table.Empty || !table.Select(script, language, feature, selected, required)) return false;
         ApplySelected(glyphs, mask, start, length); return true;
     }
+    internal bool HasFeature(uint script, uint language, uint feature)
+    {
+        ObjectDisposedException.ThrowIf(disposed, this);
+        return !table.Empty && (table.RequiredTag(script, language) == feature || table.Select(script, language, feature, selected));
+    }
     internal bool ApplyStandardFeatures(uint script, uint language, ShapingBuffer glyphs, bool kerning = true, int start = 0, int length = -1)
     {
         Check(glyphs, start, length);

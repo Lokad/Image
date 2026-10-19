@@ -9,7 +9,8 @@ namespace Lokad.Image.Tooling;
 internal static class AuthoredTrueType
 {
     internal static byte[] Build(bool longLocations = true, bool unicode12 = true, bool glyphArray = true,
-        FontStyle style = FontStyle.Regular, bool shortMetrics = false, IReadOnlyDictionary<int, byte[]>? glyphOverrides = null)
+        FontStyle style = FontStyle.Regular, bool shortMetrics = false, IReadOnlyDictionary<int, byte[]>? glyphOverrides = null,
+        IReadOnlyDictionary<string, byte[]>? tableOverrides = null)
     {
         var glyphCount = glyphOverrides is { Count: > 0 } ? Math.Max(8, glyphOverrides.Keys.Max() + 1) : 8;
         var glyphs = new byte[glyphCount][];
@@ -67,12 +68,24 @@ internal static class AuthoredTrueType
         var post = new byte[32]; W32(post, 0, 0x00030000); W16(post, 8, -100); W16(post, 10, 50);
         var kern = new byte[24]; W16(kern, 2, 1); W16(kern, 6, 20); W16(kern, 8, 1); W16(kern, 10, 1); W16(kern, 12, 6);
         W16(kern, 18, 2); W16(kern, 20, 3); W16(kern, 22, -80);
-        return Wrap(new SortedDictionary<string, byte[]>(StringComparer.Ordinal)
+        var tables = new SortedDictionary<string, byte[]>(StringComparer.Ordinal)
         {
             ["head"] = head, ["hhea"] = hhea, ["hmtx"] = metrics, ["maxp"] = maxp, ["loca"] = locations,
             ["glyf"] = outline.ToArray(), ["cmap"] = Mapping(unicode12, glyphArray), ["name"] = Names(style),
             ["OS/2"] = os2, ["post"] = post, ["kern"] = kern
-        });
+        };
+        if (tableOverrides is not null) foreach (var (tag, bytes) in tableOverrides) tables[tag] = bytes;
+        return Wrap(tables);
+    }
+
+    internal static byte[] ScalarMapping(params (int Scalar, int Glyph)[] mappings)
+    {
+        var sorted = mappings.OrderBy(p => p.Scalar).ToArray(); var result = new byte[28 + sorted.Length * 12];
+        W16(result, 2, 1); W16(result, 4, 3); W16(result, 6, 10); W32(result, 8, 12);
+        W16(result, 12, 12); W32(result, 16, (uint)(16 + sorted.Length * 12)); W32(result, 24, (uint)sorted.Length);
+        for (var i = 0; i < sorted.Length; i++)
+        { W32(result, 28 + i * 12, (uint)sorted[i].Scalar); W32(result, 32 + i * 12, (uint)sorted[i].Scalar); W32(result, 36 + i * 12, (uint)sorted[i].Glyph); }
+        return result;
     }
 
     private static byte[] Simple((int X, int Y, bool On)[] points, FontStyle style)

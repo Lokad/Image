@@ -76,6 +76,15 @@ internal sealed class ShapingBuffer : IDisposable
         glyphs.AsSpan(index + 1, Count - index - 1).CopyTo(glyphs.AsSpan(index));
         glyphs[--Count] = default;
     }
+    internal void RemoveKind(byte kind)
+    {
+        Check(); var write = 0;
+        for (var read = 0; read < Count; read++)
+        {
+            context.Work(1); if (glyphs[read].Kind != kind) glyphs[write++] = glyphs[read];
+        }
+        glyphs.AsSpan(write, Count - write).Clear(); Count = write;
+    }
     internal void RemoveComponents(ReadOnlySpan<int> indices)
     {
         Check();

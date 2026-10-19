@@ -11,6 +11,8 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using LOptions = Lokad.Image.TextOptions;
 using SOptions = SixLabors.Fonts.TextOptions;
+using TextAlignment = SixLabors.Fonts.TextAlignment;
+using TextDirection = SixLabors.Fonts.TextDirection;
 
 if (args.Length > 0 && args[0] is "--probe-substitution" or "--probe-positioning")
 {
@@ -59,7 +61,9 @@ try {
   var recorder=new Recorder(); new TextRenderer(recorder).RenderText(c.Text, options);
   TextMeasurer.TryMeasureCharacterAdvances(c.Text, options, out var advances);
   using var layout=TextLayout.Create(managedFonts[c.Face], c.Text, new LOptions {
-   FontSize=c.Size, WrapWidth=c.Wrap<0?double.PositiveInfinity:c.Wrap, LineSpacing=c.Spacing, Kerning=true });
+   FontSize=c.Size, WrapWidth=c.Wrap<0?double.PositiveInfinity:c.Wrap, LineSpacing=c.Spacing, Kerning=true,
+   Shaping=TextShaping.OpenType,Alignment=c.Alignment switch {
+    TextAlignment.Center=>Lokad.Image.TextAlignment.Center,TextAlignment.End=>Lokad.Image.TextAlignment.End,_=>Lokad.Image.TextAlignment.Start } });
   using var managed=ImageBuffer.Create(width,height,8);
   ImageDrawing.DrawText(managed,layout,8,8,RgbaColor.From8(20,40,60));
   using var reference=new Image<Rgba32>(width,height);
@@ -94,7 +98,7 @@ try {
   var meanAlpha=absolute/(double)Math.Max(1,union);var rmse=Math.Sqrt(squares/(double)Math.Max(1,union));
   var coverageError=Math.Abs(managedCoverage-referenceCoverage)/(double)Math.Max(1,referenceCoverage);
   var boundsError=lm.EdgeDifference(lr);
-  var missing=c.Alignment!=TextAlignment.Start?"alignment":c.Name=="ConstrainedFit"?"fit API":null;
+  var missing=c.Name=="ConstrainedFit"?"fit API":null;
   var pass=exactGlyphSequence&&exactSourceClusters&&positionError<=1.0/64&&layout.LineCount==TextMeasurer.CountLines(c.Text,options)
    &&meanAlpha<=8&&rmse<=16&&coverageError<=0.02&&boundsError<=1&&missing is null;
   observations.Add(new { c.Name,c.Text,c.Size,c.Wrap,c.Spacing,Alignment=c.Alignment.ToString(),Font=files[c.Face],

@@ -1,8 +1,8 @@
 # Staged OpenType substitution
 
-The internal GSUB primitive is qualified as a building block. Public text layout
-does not call it yet; shaping, positioning, bidirectional order and replacement
-qualification remain open.
+This records the internal GSUB checkpoint before public integration. The current
+[OpenType layout mode](text-shaping-qualification.md) uses this primitive;
+replacement qualification remains open.
 
 The implementation independently follows the public [GSUB](https://learn.microsoft.com/en-us/typography/opentype/spec/gsub),
 [layout common formats](https://learn.microsoft.com/en-us/typography/opentype/spec/chapter2)
@@ -41,6 +41,5 @@ Retained SHA-256 identities:
 - `p2b-qualified-windows.tar.gz`: `62f6f69f5441c26050c858d7ed95d8bfd14801e535692d460b09a51035a14a43`.
 - `p2b-qualified-linux.tar.gz`: `fd272d6dee7beccdd0e182efce2e2c6ca1d00840dfad2ec638175ebdeefefad5`.
 
-Published 0.1.0 is preserved. [GPOS attachment](text-positioning-qualification.md)
-is now qualified internally. Arabic/Bidi, public measurement/rendering integration
-and fitting remain outstanding.
+Published 0.1.0 is preserved. [Public shaping qualification](text-shaping-qualification.md)
+records subsequent integration; fitting remains outstanding.

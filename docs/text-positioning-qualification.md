@@ -1,8 +1,8 @@
 # Staged OpenType positioning
 
-The internal GPOS interpreter is qualified as a building block. Public text layout
-does not call it yet. Arabic joining, bidirectional order, public integration and
-replacement qualification remain open.
+This records the internal GPOS checkpoint before public integration. The current
+[OpenType layout mode](text-shaping-qualification.md) uses this interpreter;
+replacement qualification remains open.
 
 The implementation independently follows the public
 [GPOS specification](https://learn.microsoft.com/en-us/typography/opentype/spec/gpos).

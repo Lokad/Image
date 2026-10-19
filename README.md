@@ -14,9 +14,9 @@ implemented, with no NuGet dependencies, unsafe code or native bindings.
   transpose and nearest/bilinear/bicubic resize; rectangle fill/copy and alpha compositing.
 - **Streams:** synchronous/asynchronous identification, decoding and encoding;
   fixed-workspace dimension/orientation inspection with `InspectHeaders`.
-- **Text (in development):** supplied TrueType faces, logical left-to-right layout,
-  wrapping, pixel bounds and antialiased rendering on 8/16-bit canvases.
-  Bidirectional layout and Arabic/OpenType shaping are not yet supported.
+- **Text (in development):** supplied TrueType faces, wrapping, alignment, pixel
+  bounds and rendering on 8/16-bit canvases. Explicit OpenType mode adds Latin,
+  Hebrew and Arabic shaping with bidirectional layout; fitting remains pending.
 
 GIF, animation, ICC color management and metadata round-tripping are deferred.
 [SPEC.md](SPEC.md) defines current support and planned still-image extensions,

@@ -17,10 +17,11 @@ yet a claim of replacement readiness or performance parity for the expanded scop
 - `ImageBudget` remains a separate codec memory/work quota. It can be used with
   cooperative memory hooks; local `ImageLimits` and work limits still apply.
 
-Current text support is supplied-face logical left-to-right layout with legacy
-horizontal kerning, wrapping, bounds and unhinted rendering. Arabic/OpenType
-shaping, bidirectional layout, alignment and qualified constrained-area fitting
-remain pending. Lanczos3 is also pending; nearest/bilinear/bicubic are implemented.
+Text defaults to supplied-face logical layout with legacy kerning. Select
+`TextShaping.OpenType` for supported Latin/Hebrew/Arabic shaping and bidirectional
+layout; `Direction` and `Alignment` make paragraph flow and line alignment explicit.
+Unsupported font features fail with structured details. Constrained-area fitting
+and Lanczos3 remain pending; nearest/bilinear/bicubic are implemented.
 GIF/animation and ICC conversion remain deferred. EXIF reorientation is opt-in.
 Default option differences are accepted; select quality, sampling and orientation
 explicitly when their behavior matters. [SPEC.md](../SPEC.md) is authoritative;

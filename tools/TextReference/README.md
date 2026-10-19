@@ -23,6 +23,10 @@ to the supplied face metrics. Different default line boxes are not a production
 compatibility task. Raw outer advance rectangles are retained, including their
 different trailing-leading policy.
 
+The public comparison explicitly selects `TextShaping.OpenType` and maps line
+alignment by name. Eleven controls currently pass on Windows/Linux; constrained
+fitting stays a failure until the public fitting boundary is implemented.
+
 Require exact glyph/source-cluster sequences and line breaks, glyph positions
 within 1/64 pixel, and raster edges within one pixel. On the union of nonzero-
 alpha pixels (0..255), require mean absolute alpha error ≤8, RMSE ≤16 and total
@@ -53,4 +57,4 @@ staged direction/joining property constants against the pinned Unicode 17
 specification files in ignored `external/specifications/unicode-17.0.0/`. The
 generator records exact input hashes, independently combines normative facts,
 and is excluded from production builds. It does not import an upstream algorithm
-or test corpus. These primitives do not yet change public text layout.
+or test corpus. Public OpenType mode consumes these property constants.

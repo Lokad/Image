@@ -1,8 +1,8 @@
 # Staged direction and joining
 
-The internal direction and joining primitives are qualified building blocks.
-Public text layout still uses its existing logical order. Arabic shaping,
-measurement/rendering integration, alignment and fitting remain open.
+This records the internal direction/joining checkpoint before public integration.
+The current [OpenType layout mode](text-shaping-qualification.md) uses these
+primitives; fitting and replacement qualification remain open.
 
 The independently implemented paragraph resolver follows
 [Unicode 17 UAX #9 revision 51](https://www.unicode.org/reports/tr9/tr9-51.html):
@@ -51,5 +51,5 @@ Retained SHA-256 identities:
 - `p2d-qualified-windows.tar.gz`: `0f86668659782a79dc2f18181e3c90148181613793aefedb1fa8ca44f4d76880`.
 - `p2d-qualified-linux.tar.gz`: `bdb01006379ba1eccce1d0ddb494015d23cff72ceea3126d731cf11355519df0`.
 
-Published 0.1.0 and earlier evidence remain preserved. Existing public text paths
-are unchanged, so their six passing/six open comparison results remain applicable.
+Published 0.1.0 and earlier evidence remain preserved. Current OpenType comparison
+results are recorded in [text compatibility](text-compatibility.md).

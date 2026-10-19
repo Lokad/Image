@@ -5,6 +5,11 @@ namespace Lokad.Image;
 public sealed partial class TrueTypeFont
 {
     internal int MapForText(int scalar, OperationContext context) => Map(scalar, context);
+    internal ReadOnlyMemory<byte> TableForText(ReadOnlySpan<byte> tag, OperationContext context)
+    {
+        EnsureAlive(); var range = Find(tag, context);
+        return range is null ? ReadOnlyMemory<byte>.Empty : data.AsMemory(range.Value.Offset, range.Value.Length);
+    }
 
     internal FontOutline OutlineForText(int glyphIndex, OperationContext context)
     {

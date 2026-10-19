@@ -20,7 +20,7 @@ from required future functionality.
 | JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4×1) / 4:1:0 (4×2) sampling |
 | Stream extensions | Async Identify/Decode/Encode and fixed-workspace InspectHeaders implemented in development | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
 | Drawing/compositing | Implemented in development | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
-| Text | Supplied TrueType loading, logical-LTR layout and 8/16-bit rendering implemented in development; shaping/compatibility qualification pending | Supplied faces, alignment/style, wrapping/line spacing, reliable bounds/fitting, combining marks and bidirectional/shaped text including Arabic |
+| Text | Supplied TrueType, legacy/OpenType layout, Latin/Hebrew/Arabic shaping, alignment and 8/16-bit rendering in development; fitting and full compatibility qualification pending | Supplied faces, alignment/style, wrapping/line spacing, reliable bounds/fitting, combining marks and bidirectional/shaped text including Arabic |
 | Failure details | Implemented in development | Typed exhausted-limit and unsupported-feature categories with recognized codec when known |
 | Shared admission | Implemented in development | ImageBudget codec entry points and caller reservations; coarse per-operation reservation, cumulative charged work and independently retained BudgetedImage outputs |
 | Cooperative memory | Implemented in development; qualification ongoing | Borrowed host-independent shared-root hooks, pre-allocation capacity/peak admission and explicit retained-image/font/layout lifetime accounting across public operations |
@@ -199,21 +199,41 @@ before allocation. `StorageBytes` reports retained bytes for caller reservations
 subsequent lookups admit that font storage and charge bounded search/metric work.
 There is no mutable global font cache or per-lookup font copy.
 
-`TextLayout.Create(font, text, TextOptions)` returns immutable logical
-left-to-right layout in pixels. `FontSize` is pixels per em; style comes from the
-selected supplied face. Supported ordinary horizontal legacy `kern` format-zero
-tables are applied unless `Kerning` is false. There is no bidirectional reordering,
-GSUB/GPOS shaping, synthetic style, variation-axis selection or hint execution.
+`TextLayout.Create(font, text, TextOptions)` returns immutable layout in pixels.
+`FontSize` is pixels per em; style comes from the selected supplied face.
+The default `Shaping = TextShaping.Legacy` preserves logical left-to-right layout
+with ordinary horizontal legacy `kern` format-zero tables unless `Kerning` is
+false. `Shaping = TextShaping.OpenType` enables supported Latin, Hebrew and Arabic
+shaping and Unicode 17 bidirectional layout. `Direction` selects automatic,
+left-to-right or right-to-left paragraph direction; the latter requires OpenType
+mode. No synthetic style, variation-axis selection or hint execution is provided.
 Malformed UTF-16 is an argument error; missing scalars use glyph zero.
+
+OpenType mode uses the supplied face's default language system, with composition,
+localized forms, Arabic joining forms, required/contextual/standard ligatures and
+mark positioning. GSUB single/ligature/chained-context/extensions and GPOS
+single/pair/mark-base/mark-ligature/mark-mark/extensions are implemented. Selected
+cursive/contextual positioning, other lookup families and nonzero device/variation
+adjustments raise typed `FontTable` unsupported failures. Other scripts and missing
+required Arabic joining features are explicitly unsupported. Mirroring uses encoded
+partners or the font's supported `rtlm` substitutions; a mirrored glyph without
+either fails explicitly. There is no implicit font substitution or raster fallback.
 
 `WrapWidth` defaults to infinity. Greedy wrapping drops separator spaces/tabs at
 automatic breaks, preserving explicit leading/trailing whitespace otherwise.
-Overlong words break between Unicode scalars; an individual glyph may overflow.
+Overlong legacy words break between Unicode scalars. OpenType wrapping preserves
+grapheme/ligature clusters and reapplies positioning at final line boundaries;
+an individual unbreakable cluster may overflow.
 Nonbreaking spaces are not separators. CRLF is one break; CR/LF and Unicode line/
 paragraph separators also break lines, including empty lines. Tabs advance to the
 next `TabSpaces` space-width stop. The first baseline is `Ascender * scale`;
 subsequent baselines advance by `(Ascender - Descender + max(0, LineGap)) * scale
 * LineSpacing`. Empty text has zero lines/bounds.
+
+`Alignment` selects start, center or end within finite `WrapWidth`, or within the
+widest line when wrapping is unbounded. Start/end follow each OpenType paragraph's
+direction. `GetLine().Direction` reports that direction. Measurement and rendering
+consume the same retained placements and outlines.
 
 `GetGlyph`/`GetLine` return value copies, with original UTF-16 source offsets for
 glyphs. `LayoutBounds` covers nominal line boxes and advances; `InkBounds` covers

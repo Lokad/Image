@@ -63,6 +63,8 @@ try {
     $fontFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredTrueType.cs'))
     $memoryFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/TestMemoryBudget.cs'))
     $memoryConsumerPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/PackageSmokeTest/CooperativeMemoryConsumer.cs'))
+    $shapingFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredOpenType.cs'))
+    $shapingConsumerPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/PackageSmokeTest/TextShapingConsumer.cs'))
     @"
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
@@ -76,12 +78,15 @@ try {
     <Compile Include="$fontFixturePath" Link="AuthoredTrueType.cs" />
     <Compile Include="$memoryFixturePath" Link="TestMemoryBudget.cs" />
     <Compile Include="$memoryConsumerPath" Link="CooperativeMemoryConsumer.cs" />
+    <Compile Include="$shapingFixturePath" Link="AuthoredOpenType.cs" />
+    <Compile Include="$shapingConsumerPath" Link="TextShapingConsumer.cs" />
   </ItemGroup>
 </Project>
 "@ | Set-Content -LiteralPath (Join-Path $consumer 'Consumer.csproj') -Encoding utf8
     @'
 using Lokad.Image;
 await Lokad.Image.Tooling.CooperativeMemoryConsumer.Verify();
+Lokad.Image.Tooling.TextShapingConsumer.Verify();
 if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(
     File.ReadAllBytes(typeof(ImageBuffer).Assembly.Location))).ToLowerInvariant() != args[4])
     throw new Exception("Package consumer loaded a different assembly.");

@@ -50,6 +50,10 @@ internal sealed class OpenTypeSubstitution : IDisposable
         }
         return true;
     }
+    internal uint RequiredTag(uint script, uint language)
+    {
+        ObjectDisposedException.ThrowIf(disposed, this); return table.RequiredTag(script, language);
+    }
 
     private bool ApplyAt(int lookup, ShapingBuffer glyphs, int at, int inputEnd, int depth, out int next)
     {

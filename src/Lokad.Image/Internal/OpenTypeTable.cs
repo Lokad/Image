@@ -152,6 +152,23 @@ internal sealed class OpenTypeTable(ReadOnlyMemory<byte> data, int glyphCount, O
         return found;
     }
 
+    internal uint RequiredTag(uint script, uint language)
+    {
+        if (Empty) return 0;
+        var scripts = Offset16(0, 4); var features = Offset16(0, 6);
+        var scriptTable = Tagged(scripts, script);
+        if (scriptTable == 0) scriptTable = Tagged(scripts, Tag('D', 'F', 'L', 'T'));
+        if (scriptTable == 0) return 0;
+        var lang = language == 0 ? 0 : Tagged(scriptTable + 2, language, scriptTable);
+        if (lang == 0) lang = Offset16(scriptTable, scriptTable, optional: true);
+        if (lang == 0) return 0;
+        if (U16(lang) != 0) throw Bad("Invalid OpenType language-system lookup order.");
+        var count = Count(features, 6); var index = U16(lang + 2);
+        if (index == 0xFFFF) return 0;
+        if (index >= count) throw Bad("Invalid required OpenType feature index.");
+        return U32(features + 2 + index * 6);
+    }
+
     private void SelectFeature(int features, int featureCount, int index, Span<byte> selected)
     {
         if (index >= featureCount) throw Bad("Invalid required OpenType feature index.");
