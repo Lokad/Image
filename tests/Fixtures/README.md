@@ -1,5 +1,12 @@
 # Original fixture corpus
 
+Lanczos3 tests use authored deterministic pixels (the LCG recipe in
+`LanczosTests.cs`), constants and edge impulses, without imported image data.
+`tools/Shared/LanczosReference.cs` independently evaluates the analytic sinc
+kernel with decimal Taylor sine and exact BigInteger pixel accumulation.
+Live opaque radius-three comparisons reuse `asymmetric-v1`; their extended
+border enforces clamped edges without relaxing the pixel or native quality gates.
+
 Compressed ALPH admission controls declare their own fixed full-alphabet entropy
 trees, keeping exact workspace boundaries independent of production encoder choices.
 

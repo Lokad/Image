@@ -138,7 +138,8 @@ public sealed class ResizeReferenceTests
     public static IEnumerable<object[]> Profiles()
     {
         foreach (var depth in new[] { 8, 16 })
-        foreach (var filter in Enum.GetValues<ResizeFilter>())
+        // Polynomial/rational oracle. Lanczos has a separate sinc reference.
+        foreach (var filter in new[] { ResizeFilter.Nearest, ResizeFilter.Bilinear, ResizeFilter.Bicubic })
         foreach (var target in new[] { (5, 3), (19, 15), (4, 15), (1, 1), (9, 7) })
         foreach (var opaque in new[] { false, true }) yield return [depth, filter, target.Item1, target.Item2, opaque];
     }

@@ -2,6 +2,9 @@
 
 ## 0.2.0 — Unreleased
 
+- Alpha-aware Lanczos3 resizing at 8/16 bits, with reduction antialiasing,
+  clamped edges, aspect-preserving fit and cooperative-memory admission.
+
 - Explicit OpenType text layout for supported Latin/Hebrew/Arabic font tables,
   with bidirectional order, joining, ligatures, marks, alignment and finite-grid
   fitting with shared admission and cumulative work across trials.

@@ -2,7 +2,7 @@ using Lokad.Image.Internal;
 
 namespace Lokad.Image;
 
-public enum ResizeFilter { Nearest, Bilinear, Bicubic }
+public enum ResizeFilter { Nearest, Bilinear, Bicubic, Lanczos3 }
 public enum QuarterTurn { Clockwise90, Half, CounterClockwise90 }
 
 /// <summary>Transforms return independently owned buffers and retain the source precision.</summary>
@@ -153,6 +153,8 @@ public static class ImageTransforms
         if (width == source.Width && height == source.Height) return source.Clone(limits, cancellationToken);
         if (filter == ResizeFilter.Nearest)
             return NearestResize.Apply(source, width, height, context);
+        if (filter == ResizeFilter.Lanczos3)
+            return LanczosResize.Apply(source, width, height, context);
 
         var scaleX = Math.Max(1, (double)source.Width / width);
         var scaleY = Math.Max(1, (double)source.Height / height);

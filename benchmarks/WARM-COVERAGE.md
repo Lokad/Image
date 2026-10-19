@@ -3,8 +3,28 @@
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
 70 independent passes,156 measured mean gaps and one confidence-open case across
 all227 current numeric rows. The [three-table summary](../docs/benchmark.md)
-contains126 independent observations and101 qualified shorts.20named required
+contains126 independent observations and101 qualified shorts.24named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
+
+The finite scope is now **251 cases:227 numeric+24 unmeasured**. The existing
+227 rows retain their identified performance-qualified builds; 0.2.0 admission,
+disposal and governed storage changes have no current warm timing claim.
+[Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds exactly
+four required representatives using the same513×259 asymmetric RGBA rasters:
+
+| Named case | Fixed output and reason | State |
+| --- | --- | --- |
+| LanczosReduce8 | 256×129; widened radius-three antialias support and byte output | Unmeasured |
+| LanczosReduce16 | 256×129; full word precision and alpha normalization | Unmeasured |
+| LanczosEnlarge8 | 1027×519; negative-lobe enlargement, byte saturation and tiny alpha | Unmeasured |
+| LanczosEnlarge16 | 1027×519; full word precision, overshoot and tiny-alpha normalization | Unmeasured |
+
+Qualify the explicit clamped halo/active-region, premultiplied float-output
+reference before timing. Time all normalization, ownership and disposal with one
+CPU. The opaque CLI correctness graph computes surplus border output and is not
+an equivalent timing baseline. No existing rows, gates or performance evidence
+are replaced by this functional round. Aspect-fit uses the same kernel after
+small geometry work; add a separate timing case only if that boundary is material.
 
 [Exact SIMD JPEG410](WARM-JPEG-410-SIMD.md) reduces complete time76.7%,
 3427.72→799.34us:1.669x/upper1.877x,720,810B/op. Exact1/32 chroma fractions,

@@ -320,14 +320,16 @@ def render():
 Updated 2026-10-19. Target: **warm single-CPU parity, independently confirmed
 conservative upper ≤1x**. The 227 current numeric rows contain **{parity_count} passes,
 {gap_count} gaps and {confidence_count} confidence-open case**. The finite
-[material checklist](../benchmarks/WARM-COVERAGE.md) has 247 named cases, 20 unmeasured.
+[material checklist](../benchmarks/WARM-COVERAGE.md) has 251 named cases, 24 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
 These tables retain the last performance-qualified builds linked in each report.
-The 0.2.0 cooperative-memory changes are undergoing separate qualification;
-their changed admission, disposal and governed storage paths have no warm timing
-claim yet. Earlier confirmations remain evidence for their identified builds.
+The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
+is separate: changed admission, disposal and governed storage paths have no warm
+timing claim yet. Earlier confirmations remain evidence for their identified builds.
+Lanczos3 adds four named unmeasured paths, reusing existing rasters; exact managed
+pixels and opaque native quality controls pass, without claiming warm parity.
 
 [Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
 **76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
@@ -335,10 +337,10 @@ claim yet. Earlier confirmations remain evidence for their identified builds.
 are preserved. The411 selector control refreshes;225other numeric rows and all70
 passing proofs are reused. No new image/settings grid, profile or baseline change.
 
-Accepted qualification:4,212tests/99hardware-off checks per OS, same actual private
+Last performance-round qualification:4,212tests/99hardware-off checks per OS, same actual private
 package consumer/all three examples on Windows/Linux. Released0.1.0 stays immutable.
 Largest current gap:CMYK2D sparse1.812x; its prefix trial remains rejected.
-20unmeasured representatives cover async, header, drawing and supplied-font paths.
+24unmeasured representatives cover async, header, drawing, supplied-font and Lanczos3 paths.
 Stop passes; optimize demonstrated material gaps and resolve missing evidence.
 
 JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale

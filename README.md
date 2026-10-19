@@ -11,7 +11,7 @@ implemented, with no NuGet dependencies, unsafe code or native bindings.
   and gray/RGB encode samples.
 - **WebP:** lossy VP8 and lossless VP8L, including alpha and lossless hidden RGB.
 - **Editing:** 8/16-bit RGBA, EXIF orientation, crop, flips, quarter turns,
-  transpose and nearest/bilinear/bicubic resize; rectangle fill/copy and alpha compositing.
+  transpose and nearest/bilinear/bicubic/Lanczos3 resize; rectangle fill/copy and alpha compositing.
 - **Streams:** synchronous/asynchronous identification, decoding and encoding;
   fixed-workspace dimension/orientation inspection with `InspectHeaders`.
 - **Text (in development):** supplied TrueType faces, wrapping, alignment, pixel

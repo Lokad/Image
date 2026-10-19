@@ -31,5 +31,29 @@ internal static class CooperativeMemoryConsumer
         }
         catch (ImageLimitException e) when (e.Scope == ImageLimitScope.SharedBudget && e.Limit == ImageLimitKind.WorkingBytes) { }
         if (empty.Bytes != 0 || empty.IsDisposed) throw new Exception("Packaged refusal cleanup differs.");
+        foreach (var depth in new[] { 8, 16 })
+        {
+            var source = ImageBuffer.Create(3, 2, depth, limits);
+            for (var y = 0; y < source.Height; y++)
+            for (var x = 0; x < source.Width; x++)
+            for (var c = 0; c < 4; c++)
+                if (depth == 8) source.GetRow8(y)[x * 4 + c] = (byte)(37 + c * 43);
+                else source.GetRow16(y)[x * 4 + c] = (ushort)(12345 + c * 1234);
+            using var resized = ImageTransforms.ResizeToFit(source, 7, 7,
+                allowUpscaling: true, filter: ResizeFilter.Lanczos3, limits: limits);
+            var sourceBytes = 3 * 2 * 4 * (depth / 8); var resultBytes = 7 * 5 * 4 * (depth / 8);
+            if ((resized.Width, resized.Height, resized.BitDepth) != (7, 5, depth)
+                || budget.Bytes != sourceBytes + resultBytes)
+                throw new Exception("Packaged Lanczos3 fit/retained admission differs.");
+            source.Dispose();
+            if (budget.Bytes != resultBytes) throw new Exception("Packaged Lanczos3 lifetime depends on its source.");
+            for (var y = 0; y < resized.Height; y++)
+            for (var x = 0; x < resized.Width; x++)
+            for (var c = 0; c < 4; c++)
+                if ((depth == 8 ? resized.GetRow8(y)[x * 4 + c] : resized.GetRow16(y)[x * 4 + c])
+                    != (depth == 8 ? 37 + c * 43 : 12345 + c * 1234))
+                    throw new Exception("Packaged Lanczos3 samples differ.");
+        }
+        if (budget.Bytes != 0) throw new Exception("Packaged Lanczos3 retained storage was not released.");
     }
 }

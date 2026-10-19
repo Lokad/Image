@@ -12,7 +12,8 @@ internal static class ExactResizeReference
         var targetMaximum = filter == ResizeFilter.Nearest ? 8192 : 4096;
         if (sourceWidth is < 1 or > 4096 || sourceHeight is < 1 or > 4096
             || width < 1 || width > targetMaximum || height < 1 || height > targetMaximum || depth is not (8 or 16)
-            || !Enum.IsDefined(filter)) throw new ArgumentException("Unsupported development reference geometry.");
+            || filter is not (ResizeFilter.Nearest or ResizeFilter.Bilinear or ResizeFilter.Bicubic))
+            throw new ArgumentException("Unsupported polynomial reference geometry/filter; Lanczos3 has a separate reference.");
         var sampleBytes = depth / 8; var pixelBytes = 4 * sampleBytes;
         if (source.Length != checked(sourceWidth * sourceHeight * pixelBytes)) throw new ArgumentException("Source raster length differs.");
         if (width == sourceWidth && height == sourceHeight) return (byte[])source.Clone();

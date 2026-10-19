@@ -15,7 +15,7 @@ from required future functionality.
 | WebP lossy decode | Implemented; exact frozen YUV/alpha reconstruction and bounded RGB comparisons | VP8 key frames with raw/compressed ALPH |
 | WebP lossy encode | Implemented; original output independently decoded by FFmpeg | VP8 output with explicit quality/effort and transparency |
 | Exact edits | Implemented; hand-computed permutations and live FFmpeg checks | Crop, flips, quarter turns, transpose, all eight EXIF orientations |
-| Resize | Nearest/bilinear/bicubic implemented; Lanczos3 pending | Exact dimensions, aspect-preserving fit and alpha-aware nearest/bilinear/bicubic/Lanczos3 at 8/16 bits |
+| Resize | Nearest/bilinear/bicubic implemented; Lanczos3 implemented in development, performance qualification pending | Exact dimensions, aspect-preserving fit and alpha-aware nearest/bilinear/bicubic/Lanczos3 at 8/16 bits |
 | JPEG caller samples | Gray/RGB/CMYK decode and gray/RGB encode implemented in development | Caller-provided 8-bit samples without mandatory RGBA; explicit source color space/inversion, quality and sampling |
 | JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4×1) / 4:1:0 (4×2) sampling |
 | Stream extensions | Async Identify/Decode/Encode and fixed-workspace InspectHeaders implemented in development | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
@@ -311,6 +311,25 @@ on each axis using integer arithmetic. It preserves all four source samples,
 including RGB under zero alpha. Bilinear uses a triangle kernel;
 bicubic uses Catmull-Rom (Mitchell-Netravali B=0, C=0.5). Downsampling widens the
 kernel by the reduction ratio. Out-of-bounds samples extend the edge pixel.
+
+`Lanczos3` uses `sinc(x) * sinc(x/3)` within radius three, with `sinc(x) =
+sin(pi*x)/(pi*x)` and its continuous value at zero. It uses the same centers,
+reduction widening and clamped edges. Per-axis weights are coalesced onto source
+pixels and normalized in increasing source-index order. Cumulative normalized
+weights round to multiples of `2^-30`, with an exact final sum of one. Signed
+64-bit horizontal and 128-bit vertical accumulation retain all intermediate
+precision; final alpha divides by `2^60`, and colors divide by the unrounded
+alpha sum. Round halves away from zero, then saturate. These rules define pixels
+independently of SIMD availability. A bounded cache holds at most 64 horizontal
+rows, with separately admitted axis tables and one output-row accumulator.
+Both depths preserve hidden RGB on identity; other zero-rounded-alpha output
+has zero RGB. Limits/refusal/cancellation dispose temporary and unpublished
+result owners, while successful results retain independent shared-root charges.
+The independent decimal/BigInteger oracle covers transparency, edges and cache
+eviction. Opaque live FFmpeg controls use explicit edge extension and radius
+three, maximum RGB error 1, RGB RMSE <=0.25 and exact alpha. That correctness
+graph generates surplus border output and is not a warm-performance baseline.
+Transparent native-reference and warm-performance qualification remain separate.
 
 Filtering operates in encoded sample space with premultiplied-alpha accumulation,
 followed by unpremultiplication. Round halves away from zero and clamp to sample

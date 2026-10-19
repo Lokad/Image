@@ -128,7 +128,7 @@ public sealed class ResizeOracleTests
     public static IEnumerable<object[]> OpaqueDownsizeProfiles()
     {
         foreach (var pattern in new[] { "asymmetric-v1", "soft-gradient", "color-tiles" })
-        foreach (var filter in Enum.GetValues<ResizeFilter>()) yield return [pattern, filter];
+        foreach (var filter in new[] { ResizeFilter.Nearest, ResizeFilter.Bilinear, ResizeFilter.Bicubic }) yield return [pattern, filter];
     }
 
     [Theory]

@@ -22,8 +22,10 @@ Text defaults to supplied-face logical layout with legacy kerning. Select
 layout; `Direction` and `Alignment` make paragraph flow and line alignment explicit.
 Unsupported font features fail with structured details. `TextLayout.TryFit`
 returns an owned layout on a finite size grid; translate its bounds origin into
-the target area. Limits/refusal remain terminal across fitting trials. Lanczos3
-remains pending; nearest/bilinear/bicubic are implemented.
+the target area. Limits/refusal remain terminal across fitting trials.
+Select `ResizeFilter.Lanczos3` for radius-three antialiased composition resizing
+at either pixel depth. It shares existing centers, edge extension and alpha
+semantics; its warm-performance qualification remains pending.
 GIF/animation and ICC conversion remain deferred. EXIF reorientation is opt-in.
 Default option differences are accepted; select quality, sampling and orientation
 explicitly when their behavior matters. [SPEC.md](../SPEC.md) is authoritative;

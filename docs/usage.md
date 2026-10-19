@@ -16,7 +16,8 @@ using var input = File.OpenRead("input.png");
 using var image = ImageCodec.Decode(input, new DecodeOptions { ApplyOrientation = true });
 using var crop = ImageTransforms.CropCentered(image,
     Math.Min(256, image.Width), Math.Min(256, image.Height));
-using var thumbnail = ImageTransforms.ResizeToFit(crop, 128, 96, allowUpscaling: false);
+using var thumbnail = ImageTransforms.ResizeToFit(crop, 128, 96,
+    allowUpscaling: false, filter: ResizeFilter.Lanczos3);
 using var output = File.Create("thumbnail.png");
 ImageCodec.EncodePng(thumbnail, output);
 ```
@@ -24,7 +25,7 @@ ImageCodec.EncodePng(thumbnail, output);
 `Crop` takes a contained rectangle: `x`, `y`, `width`, `height`. `CropClamped`
 moves a requested rectangle inside the source; its width and height must already
 fit. `ResizeToFit` preserves aspect ratio. Choose `ResizeFilter.Nearest` when
-individual samples must be preserved. Bilinear and bicubic resizing filter
+individual samples must be preserved. Bilinear, bicubic and Lanczos3 resizing filter
 straight RGBA through premultiplied color, then return straight RGBA.
 
 ## Work with 16-bit pixels
