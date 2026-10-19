@@ -13,6 +13,7 @@ public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, 
 [MemoryDiagnoser]
 public partial class WarmPng
 {
+    private WarmAsyncPngEncode? asyncOutput;
     public static IEnumerable<WarmPngCase> Cases => SelectedCases();
     [ParamsSource(nameof(Cases))] public WarmPngCase Case { get; set; }
     private JpegBenchmarkCase state = null!;
@@ -88,6 +89,11 @@ public partial class WarmPng
             || GCSettings.IsServerGC || Environment.GetEnvironmentVariable("DOTNET_TieredCompilation") != "0"
             || !GC.GetConfigurationVariables().TryGetValue("ConcurrentGC", out var concurrent) || Convert.ToBoolean(concurrent))
             throw new InvalidOperationException("PNG worker requires one CPU, optimized JIT and non-concurrent workstation GC.");
+        if (Environment.GetEnvironmentVariable("LOKAD_IMAGE_ENCODE_ASYNC_NONSEEKABLE") == "1")
+        {
+            if (Case != WarmPngCase.Encode8) throw new ArgumentOutOfRangeException(nameof(Case));
+            asyncOutput = new WarmAsyncPngEncode(); asyncOutput.Setup(cpu, smoke, sampleCount); return;
+        }
         state = new JpegBenchmarkCase(Encode ? ".png" : "");
         try
         {
@@ -488,6 +494,7 @@ public partial class WarmPng
     [Benchmark]
     public int Managed()
     {
+        if (asyncOutput is not null) return asyncOutput.Apply();
         if (Encode)
         {
             using var output = new MemoryStream(); EncodeInto(output);
@@ -521,6 +528,7 @@ public partial class WarmPng
     [GlobalCleanup]
     public void Cleanup()
     {
+        if (asyncOutput is not null) { asyncOutput.Cleanup(); return; }
         try
         {
             if (!ready) return;

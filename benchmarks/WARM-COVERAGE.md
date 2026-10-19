@@ -1,15 +1,15 @@
 # Material warm coverage
 
-Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-70 independent passes,162 measured mean gaps and one confidence-open case across
-233 numeric rows. The [three-table summary](../docs/benchmark.md)
-contains126 independent observations and107 qualified shorts.21named required
+Updated 2026-10-20. The **warm single-CPU parity objective remains open**:
+71 independent passes,162 measured mean gaps and one confidence-open case across
+234 numeric rows. The [three-table summary](../docs/benchmark.md)
+contains127 independent observations and107 qualified shorts.20named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
-The finite scope is now **254 cases:233 numeric+21 unmeasured**. The remaining
+The finite scope is now **254 cases:234 numeric+20 unmeasured**. The remaining
 226 historical codec/edit rows retain their identified performance-qualified
 builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
-Current CMYK, four Lanczos3 and two async input rows are identified below.
+Current CMYK, four Lanczos3, two async input and one async output rows are identified below.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
 required representatives using the same513×259 asymmetric RGBA rasters. Their
 [packed-coefficient screens](WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md) improve all
@@ -52,9 +52,16 @@ already-named input boundary:2,049.34µs/native1,412.89µs,1.450x/upper1.683,
 pixels are exact. The native reference includes the required structural/CRC
 adapter and rejects decoder error severity, including partial frames. One harness
 build/OS, two native builds, no producer/selector build or repeated package proof.
-Next: the existing async PNG encode/output boundary, with frozen size/quality gates.
+The [async nonseekable PNG encode pair](WARM-PNG-ASYNC-ENCODE.md) independently
+passes at5,397.36µs/native17,268.11µs,0.313x/upper0.314,658,560B/op. Both sides
+include complete staging, output writes/growth, independent ownership and release.
+Same level6/filterNone, exact alpha/hidden RGB and5%IDAT gate; packets218,775/
+210,973B andIDAT218,682/210,283B. All12 actuals retained despite11 selected results;
+the conservative bound covers both. One immutable pair, one tooling build/OS,
+one native build, no producer/selector build or repeated package proof.
+Stop this passing case. Next: the existing async JPEG RGBA8 output boundary.
 All four Lanczos3 gaps remain required;
-finite254/233numeric/21untimed; the other232 numeric observations remain unchanged.
+finite254/234numeric/20untimed; the other233 numeric observations remain unchanged.
 
 A bounded audit of the accepted 0.2.0 additions identifies exactly three required
 paths absent from the older checklist; these are not a shape/depth/settings grid:
@@ -388,10 +395,11 @@ delivery before timing. These cases are already included in the finite total.
 Original synchronous methods and codec kernels are unchanged by async acquisition;
 the later synchronous input-copy change's23affected rows now have current evidence.
 
-Async output adds four **unmeasured** representatives, all on existing inputs:
+Async output has four representatives, all on existing inputs:
 
 - `AsyncStreamEncode/PngRgba8FreshNonSeekable`: batched chunk staging, complete
-  encode, asynchronous delivery and independent caller-owned output.
+  encode, asynchronous delivery and independent caller-owned output. Independently
+  passing pair above; stop unless affected production changes.
 - `AsyncStreamEncode/JpegRgba8FreshNonSeekable`: the distinct stock-memory adaptive
   admission probe and bounded contiguous staging for the existing RGBA8 anchor.
 - `AsyncStreamEncode/JpegRgb420Samples`: direct borrowed RGB memory and the separate
@@ -399,7 +407,7 @@ Async output adds four **unmeasured** representatives, all on existing inputs:
 - `AsyncStreamEncode/WebpLosslessRgba8FreshNonSeekable`: byte-at-a-time bit-writer
   emission into staging, distinct from PNG's batched writes, with exact hidden RGB.
 
-These cover distinct new staging/admission/delivery paths, without a codec,
+The other three remain **unmeasured**. These cover distinct staging/admission/delivery paths, without a codec,
 sampling, depth or scheduling grid. Resolve equivalent native destination
 acquisition/copies and output lifetime before timing. Shared-await correctness
 is separately qualified. These four cases are already included in the finite total.

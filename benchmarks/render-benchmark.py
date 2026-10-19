@@ -172,6 +172,7 @@ def render():
         row('WebP VP8L, native input / live cancelable token', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'NativeLosslessCancelable8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
     ]
     encodes = [
+        row('PNG EncodePngAsync, fresh nonseekable Stream / level6', 'warm-png-async-encode-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-PNG-ASYNC-ENCODE.md', True),
         row('PNG RGBA8, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'Encode8', -1], 'WARM-PNG-CHUNK-CRC.md', True),
         row('PNG RGBA8, NoCompression / None', 'warm-png-stored-capacity-evidence.json', ['cases', 'EncodeNoCompression8', -1], 'WARM-PNG-STORED-CAPACITY.md', verification='Gap (short; qualified)'),
         row('PNG RGBA16, NoCompression / None', 'warm-png-stored-capacity-evidence.json', ['cases', 'EncodeNoCompression16', -1], 'WARM-PNG-STORED-CAPACITY.md', True),
@@ -322,13 +323,13 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 233
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 234
     return f'''# Lokad.Image benchmark state
 
-Updated 2026-10-19. Target: **warm single-CPU parity, independently confirmed
-conservative upper ≤1x**. The 233 numeric rows contain **{parity_count} passes,
+Updated 2026-10-20. Target: **warm single-CPU parity, independently confirmed
+conservative upper ≤1x**. The 234 numeric rows contain **{parity_count} passes,
 {gap_count} gaps and {confidence_count} confidence-open case**. The finite
-[material checklist](../benchmarks/WARM-COVERAGE.md) has 254 named cases, 21 unmeasured.
+[material checklist](../benchmarks/WARM-COVERAGE.md) has 254 named cases, 20 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
@@ -367,7 +368,14 @@ pixels are exact. Both sides include full decode, structural/CRC validation and
 independent pixels. The native adapter rejects decoder error severity, including
 partial frames. Current production/full qualification is reused; one harness
 build/OS and two native builds establish the reference, with no selector rebuild.
-Next: the named async PNG encode/output boundary, preserving existing size gates.
+The [async nonseekable PNG encode pair](../benchmarks/WARM-PNG-ASYNC-ENCODE.md)
+independently passes at **5,397.36µs / 0.313x**, upper0.314, **658,560B/op**.
+Complete staging, actual output writes/growth, independent ownership and release
+are timed on both sides. Level6/filterNone, exact pixels/alpha/hidden RGB and the
+5% IDAT gate are unchanged. Total packets218,775/210,973B; IDAT218,682/210,283B.
+All12 confirmation actuals are retained, with the conservative all-actual bound.
+Same immutable producer, one tooling build/OS and one native build; full/package
+qualification is reused. Stop this case. Next: the named async JPEG RGBA8 output.
 
 [Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
 **76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
@@ -378,7 +386,7 @@ passing proofs are reused. No new image/settings grid, profile or baseline chang
 JPEG-round qualification:4,212tests/99hardware-off checks per OS, same actual private
 package consumer/all three examples on Windows/Linux. Released0.1.0 stays immutable.
 Largest measured gaps: Lanczos3 Reduce16 at1.836x, Reduce8 and current CMYK2D sparse1.829x.
-21unmeasured representatives cover async, header, drawing, text and governed ownership.
+20unmeasured representatives cover async, header, drawing, text and governed ownership.
 Stop passes; optimize demonstrated material gaps and resolve missing evidence.
 
 JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale

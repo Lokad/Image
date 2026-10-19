@@ -1,9 +1,9 @@
 # Lokad.Image benchmark state
 
-Updated 2026-10-19. Target: **warm single-CPU parity, independently confirmed
-conservative upper ≤1x**. The 233 numeric rows contain **70 passes,
+Updated 2026-10-20. Target: **warm single-CPU parity, independently confirmed
+conservative upper ≤1x**. The 234 numeric rows contain **71 passes,
 162 gaps and 1 confidence-open case**. The finite
-[material checklist](../benchmarks/WARM-COVERAGE.md) has 254 named cases, 21 unmeasured.
+[material checklist](../benchmarks/WARM-COVERAGE.md) has 254 named cases, 20 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
@@ -42,7 +42,14 @@ pixels are exact. Both sides include full decode, structural/CRC validation and
 independent pixels. The native adapter rejects decoder error severity, including
 partial frames. Current production/full qualification is reused; one harness
 build/OS and two native builds establish the reference, with no selector rebuild.
-Next: the named async PNG encode/output boundary, preserving existing size gates.
+The [async nonseekable PNG encode pair](../benchmarks/WARM-PNG-ASYNC-ENCODE.md)
+independently passes at **5,397.36µs / 0.313x**, upper0.314, **658,560B/op**.
+Complete staging, actual output writes/growth, independent ownership and release
+are timed on both sides. Level6/filterNone, exact pixels/alpha/hidden RGB and the
+5% IDAT gate are unchanged. Total packets218,775/210,973B; IDAT218,682/210,283B.
+All12 confirmation actuals are retained, with the conservative all-actual bound.
+Same immutable producer, one tooling build/OS and one native build; full/package
+qualification is reused. Stop this case. Next: the named async JPEG RGBA8 output.
 
 [Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
 **76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
@@ -53,7 +60,7 @@ passing proofs are reused. No new image/settings grid, profile or baseline chang
 JPEG-round qualification:4,212tests/99hardware-off checks per OS, same actual private
 package consumer/all three examples on Windows/Linux. Released0.1.0 stays immutable.
 Largest measured gaps: Lanczos3 Reduce16 at1.836x, Reduce8 and current CMYK2D sparse1.829x.
-21unmeasured representatives cover async, header, drawing, text and governed ownership.
+20unmeasured representatives cover async, header, drawing, text and governed ownership.
 Stop passes; optimize demonstrated material gaps and resolve missing evidence.
 
 JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale
@@ -193,6 +200,7 @@ reconciliation now covers every numeric row.
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
+| [PNG EncodePngAsync, fresh nonseekable Stream / level6](../benchmarks/WARM-PNG-ASYNC-ENCODE.md) | 5,397.36 | 17,268.11 | 0.313 / 0.314 | 658,560 | Parity confirmed |
 | [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 5,406.30 | 17,266.72 | 0.313 / 0.315 | 527,627 | Parity confirmed |
 | [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED-CAPACITY.md) | 245.37 | 189.47 | 1.295 / 1.430 | 604,319 | Gap (short; qualified) |
 | [PNG RGBA16, NoCompression / None](../benchmarks/WARM-PNG-STORED-CAPACITY.md) | 349.92 | 406.43 | 0.861 / 0.870 | 1,140,504 | Parity confirmed |
