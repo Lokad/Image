@@ -328,6 +328,11 @@ result owners, while successful results retain independent shared-root charges.
 Final quotient calculation may use a projected estimate certified by a bounded
 rounding interval or its exact integer remainder, with exact division otherwise. This changes neither rounding
 nor resource/cancellation behavior and introduces no approximate pixels.
+On AVX2, vertical accumulation splits each certified horizontal Int64 value into
+signed 32-bit limbs. The axis absolute-weight bound keeps either limb's every
+partial sum within 2^62; two Int64 planes reuse the admitted Int128 accumulator
+storage. Output recombination is exact. Other processors retain Int128 accumulation;
+work accounting and cancellation polling boundaries are unchanged.
 The independent decimal/BigInteger oracle covers transparency, edges and cache
 eviction. Opaque live FFmpeg controls use explicit edge extension and radius
 three, maximum RGB error 1, RGB RMSE <=0.25 and exact alpha. That correctness

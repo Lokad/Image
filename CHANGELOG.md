@@ -2,7 +2,7 @@
 
 ## 0.2.0 — Unreleased
 
-- Faster exact Lanczos3 normalization through certified rounding intervals and integer remainders,
+- Faster exact Lanczos3 normalization and SIMD vertical accumulation,
   preserving pixels, memory admission and cancellation.
 
 - Alpha-aware Lanczos3 resizing at 8/16 bits, with reduction antialiasing,

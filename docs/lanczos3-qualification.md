@@ -42,6 +42,10 @@ The following [rounding-interval round](../benchmarks/WARM-LANCZOS3-INTERVAL.md)
 saves another19.1–38.6%, qualifies4435tests/34scalar checks per OS and the same
 actual private package on both systems. All four original frames remain exact;
 the warm parity objective remains open.
+The [exact SIMD accumulation round](../benchmarks/WARM-LANCZOS3-SPLIT.md) saves
+another37.5–42.4%, qualifies4440tests/39scalar checks per OS and the same actual
+private package on both systems. Scratch, work and cancellation boundaries are
+unchanged; every original output remains exact. Warm parity remains open.
 
 Retained SHA-256 identities:
 

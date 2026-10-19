@@ -1,3 +1,8 @@
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+
 namespace Lokad.Image.Internal;
 
 // Separable, alpha-aware fixed-point resampling. No intermediate rounding:
@@ -33,8 +38,7 @@ internal static class LanczosResize
                         var row = rows.AsSpan(slot * (int)channels, (int)channels);
                         if (rowIds[slot] != sy) { Horizontal(source, sy, horizontal, row, context); rowIds[slot] = sy; }
                         context.Work(channels);
-                        for (var i = 0; i < sums.Length; i++)
-                        { if ((i & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested(); sums[i] += (Int128)row[i] * weight; }
+                        AccumulateVertical(row, sums, weight, context);
                     }
                     context.Work(channels);
                     Span<byte> destination8 = default; Span<ushort> destination16 = default;
@@ -42,11 +46,11 @@ internal static class LanczosResize
                     for (var x = 0; x < width; x++)
                     {
                         if ((x & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
-                        var at = x * 4; var alpha = sums[at + 3];
+                        var at = x * 4; var alpha = ReadSum(sums, at + 3);
                         var a = Round(alpha, (Int128)LanczosPlan.One * LanczosPlan.One, maximum);
-                        var r = a == 0 ? 0 : Round(sums[at], alpha, maximum);
-                        var g = a == 0 ? 0 : Round(sums[at + 1], alpha, maximum);
-                        var b = a == 0 ? 0 : Round(sums[at + 2], alpha, maximum);
+                        var r = a == 0 ? 0 : Round(ReadSum(sums, at), alpha, maximum);
+                        var g = a == 0 ? 0 : Round(ReadSum(sums, at + 1), alpha, maximum);
+                        var b = a == 0 ? 0 : Round(ReadSum(sums, at + 2), alpha, maximum);
                         if (source.BitDepth == 8)
                         {
                             destination8[at] = (byte)r; destination8[at + 1] = (byte)g;
@@ -64,6 +68,41 @@ internal static class LanczosResize
             catch { result.Dispose(); throw; }
         }
         finally { context.Release(bytes); }
+    }
+
+    internal static void AccumulateVertical(ReadOnlySpan<long> row, Span<Int128> sums, int weight, OperationContext context)
+    {
+        if (Avx2.IsSupported)
+        {
+            // Each plan has sum(abs(weights)) <= 2^31. Split row = hi*2^32+lo
+            // with signed Int32 limbs. The certified horizontal bound keeps hi
+            // in Int32 even at 16 bits; either limb's every partial sum fits
+            // Int64 (absolute value <= 2^62). Recombine exactly only at output.
+            // Two contiguous planes reuse the original 16 bytes per channel.
+            var limbs = MemoryMarshal.Cast<Int128, long>(sums);
+            var low = limbs[..sums.Length]; var high = limbs[sums.Length..];
+            var factor = Vector256.Create(weight);
+            for (var i = 0; i < sums.Length; i += 4)
+            {
+                if ((i & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                var value = Vector256.Create(row.Slice(i, 4));
+                var upper = Avx2.Add(Avx2.ShiftRightLogical(value.AsUInt64(), 32).AsInt32(),
+                    Avx2.ShiftRightLogical(value.AsUInt32(), 31).AsInt32());
+                Avx2.Add(Vector256.Create(low.Slice(i, 4)), Avx2.Multiply(value.AsInt32(), factor)).CopyTo(low.Slice(i, 4));
+                Avx2.Add(Vector256.Create(high.Slice(i, 4)), Avx2.Multiply(upper, factor)).CopyTo(high.Slice(i, 4));
+            }
+        }
+        else
+            for (var i = 0; i < sums.Length; i++)
+            { if ((i & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested(); sums[i] += (Int128)row[i] * weight; }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Int128 ReadSum(ReadOnlySpan<Int128> sums, int index)
+    {
+        if (!Avx2.IsSupported) return sums[index];
+        var limbs = MemoryMarshal.Cast<Int128, long>(sums);
+        return ((Int128)limbs[sums.Length + index] << 32) + limbs[index];
     }
 
     private static void Horizontal(ImageBuffer source, int y, LanczosPlan plan, Span<long> output, OperationContext context)

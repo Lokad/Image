@@ -11,12 +11,12 @@ These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
 is separate. Earlier codec/edit rows do not yet requalify changed 0.2.0 admission,
 disposal or governed storage paths; confirmations retain their identified builds.
-The [exact Lanczos3 rounding interval](../benchmarks/WARM-LANCZOS3-INTERVAL.md)
-cuts complete time **19.1–38.6%** from the preceding primitive, leaving **7.268–8.752x gaps**
-(uppers7.550–9.087),146,614–4,616,301B/op. Full managed pixels remain exact;
+The [exact SIMD Lanczos3 accumulation](../benchmarks/WARM-LANCZOS3-SPLIT.md)
+cuts complete time **37.5–42.4%** from the preceding primitive, leaving **4.180–5.468x gaps**
+(uppers4.470–6.536),146,612–4,616,716B/op. Full managed pixels remain exact;
 native quality, ownership and all operation boundaries are unchanged. Qualification
-passes4,435tests/34scalar checks per OS, same actual private package and all three
-examples. Next: investigate exact vectorized vertical accumulation on Reduce8.
+passes4,440tests/39scalar checks per OS, same actual private package and all three
+examples. Next: a bounded Reduce8 diagnostic to select the next dominant arithmetic.
 
 [Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
 **76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
@@ -26,7 +26,7 @@ passing proofs are reused. No new image/settings grid, profile or baseline chang
 
 Last performance-round qualification:4,212tests/99hardware-off checks per OS, same actual private
 package consumer/all three examples on Windows/Linux. Released0.1.0 stays immutable.
-Largest measured gap: Lanczos3 Reduce8 at8.752x; CMYK2D sparse remains1.812x.
+Largest measured gap: Lanczos3 Reduce8 at5.468x; CMYK2D sparse remains1.812x.
 23unmeasured representatives cover async, header, drawing, text and governed ownership.
 Stop passes; optimize demonstrated material gaps and resolve missing evidence.
 
@@ -304,10 +304,10 @@ reconciliation now covers every numeric row.
 | [Transpose RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 48.17 | 44.86 | 1.074 / 1.114 | 128 | Gap (independent) |
 | [Mirrored transpose RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 44.34 | 43.25 | 1.025 / 1.064 | 128 | Gap (independent) |
 | [Mirrored transpose RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 39.10 | 38.54 | 1.015 / 1.041 | 128 | Gap (independent) |
-| [Lanczos3 reduction RGBA8](../benchmarks/WARM-LANCZOS3-INTERVAL.md) | 4,303.48 | 491.71 | 8.752 / 9.087 | 146,614 | Gap (short; qualified) |
-| [Lanczos3 reduction RGBA16](../benchmarks/WARM-LANCZOS3-INTERVAL.md) | 4,350.34 | 507.61 | 8.570 / 8.980 | 146,614 | Gap (short; qualified) |
-| [Lanczos3 enlargement RGBA8](../benchmarks/WARM-LANCZOS3-INTERVAL.md) | 29,535.64 | 4,063.62 | 7.268 / 7.550 | 351,940 | Gap (short; qualified) |
-| [Lanczos3 enlargement RGBA16](../benchmarks/WARM-LANCZOS3-INTERVAL.md) | 30,398.20 | 3,945.75 | 7.704 / 8.058 | 4,616,301 | Gap (short; qualified) |
+| [Lanczos3 reduction RGBA8](../benchmarks/WARM-LANCZOS3-SPLIT.md) | 2,690.16 | 492.00 | 5.468 / 6.536 | 146,635 | Gap (short; qualified) |
+| [Lanczos3 reduction RGBA16](../benchmarks/WARM-LANCZOS3-SPLIT.md) | 2,713.33 | 507.50 | 5.346 / 5.726 | 146,612 | Gap (short; qualified) |
+| [Lanczos3 enlargement RGBA8](../benchmarks/WARM-LANCZOS3-SPLIT.md) | 16,998.78 | 4,066.65 | 4.180 / 4.470 | 351,925 | Gap (short; qualified) |
+| [Lanczos3 enlargement RGBA16](../benchmarks/WARM-LANCZOS3-SPLIT.md) | 17,909.37 | 3,942.46 | 4.543 / 4.705 | 4,616,716 | Gap (short; qualified) |
 
 * VP8L encode uses **libwebp exact=1, FFmpeg's encoder backend**, through its
 public API because FFmpeg does not expose hidden-RGB preservation. All decoded
