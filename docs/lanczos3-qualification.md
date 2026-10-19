@@ -58,6 +58,10 @@ The [AVX2 byte-product round](../benchmarks/WARM-LANCZOS3-BYTE-PRODUCTS.md)
 cuts Reduce8 another13.3%, qualifies4448tests/47scalar plus47AVX512F-off checks
 per OS and the same actual package on both systems. All original frames stay
 exact; storage, work and cancellation are unchanged. The paired trial is rejected.
+The [eight-channel vertical round](../benchmarks/WARM-LANCZOS3-WIDE-VERTICAL.md)
+saves another10.8–20.5%, with the same4448tests/47scalar/47AVX512F-off checks and
+actual package on both OS. Original frames, storage and work remain unchanged.
+The3.9% word-product trial is parked; parity stays open.
 
 Retained SHA-256 identities:
 

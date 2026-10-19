@@ -333,6 +333,10 @@ signed 32-bit limbs. The axis absolute-weight bound keeps either limb's every
 partial sum within 2^62; two Int64 planes reuse the admitted Int128 accumulator
 storage. Output recombination is exact. Other processors retain Int128 accumulation;
 work accounting and cancellation polling boundaries are unchanged.
+AVX512F can process eight independent channels per vertical vector with the
+same per-lane arithmetic order and bounds. A remaining four-channel group uses
+the accepted AVX2 path; scalar Int128 remains the fallback. The admitted planes
+and 4096-channel cancellation boundaries are unchanged.
 On AVX512DQ/VL, the certified limbs may normalize four channels together in
 binary64. Numerator and alpha conversion errors are bounded by 2^44 and 2^28;
 clipping, division and rounding-bin comparisons keep quotient error below 2^-10

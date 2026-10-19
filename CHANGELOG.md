@@ -5,6 +5,7 @@
 - Faster exact SIMD Lanczos3 normalization and separable accumulation,
   preserving pixels, memory admission and cancellation.
   Byte-depth horizontal products also run on AVX2 without AVX512DQ/VL.
+  AVX512F doubles vertical vector width while retaining exact accumulation.
 
 - Alpha-aware Lanczos3 resizing at 8/16 bits, with reduction antialiasing,
   clamped edges, aspect-preserving fit and cooperative-memory admission.

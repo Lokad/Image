@@ -113,8 +113,24 @@ internal static class LanczosResize
             // Two contiguous planes reuse the original 16 bytes per channel.
             var limbs = MemoryMarshal.Cast<Int128, long>(sums);
             var low = limbs[..sums.Length]; var high = limbs[sums.Length..];
+            var i = 0;
+            if (Avx512F.IsSupported && sums.Length >= 8)
+            {
+                // Eight independent channels retain the same per-lane order
+                // and prefix bounds; the four-channel tail remains below.
+                var factor512 = Vector512.Create(weight);
+                for (; i <= sums.Length - 8; i += 8)
+                {
+                    if ((i & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                    var value = Vector512.Create(row.Slice(i, 8));
+                    var upper = Avx512F.Add(Avx512F.ShiftRightLogical(value.AsUInt64(), 32).AsInt32(),
+                        Avx512F.ShiftRightLogical(value.AsUInt32(), 31).AsInt32());
+                    Avx512F.Add(Vector512.Create(low.Slice(i, 8)), Avx512F.Multiply(value.AsInt32(), factor512)).CopyTo(low.Slice(i, 8));
+                    Avx512F.Add(Vector512.Create(high.Slice(i, 8)), Avx512F.Multiply(upper, factor512)).CopyTo(high.Slice(i, 8));
+                }
+            }
             var factor = Vector256.Create(weight);
-            for (var i = 0; i < sums.Length; i += 4)
+            for (; i < sums.Length; i += 4)
             {
                 if ((i & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested();
                 var value = Vector256.Create(row.Slice(i, 4));
