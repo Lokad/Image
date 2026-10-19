@@ -1,0 +1,36 @@
+# Supplied-font comparison
+
+This standalone correctness tool is excluded from the solution and production
+package. It uses the pinned ImageSharp.Drawing 2.1.7, Fonts 2.1.3 and ImageSharp
+3.1.12 references; it makes no performance measurements. Upstream fonts/license
+stay in ignored `external/`, with their release URL and hashes in
+[font-provenance.json](font-provenance.json). No upstream assets are tracked.
+
+Prepare once, build against a verified immutable producer, then reuse that build:
+
+```powershell
+python tools/TextReference/prepare-fonts.py
+dotnet build tools/TextReference -c Release --tl:off -p:NuGetAudit=false -p:LokadImageAssembly=D:/path/to/frozen/Lokad.Image.dll
+dotnet tools/TextReference/bin/Release/net10.0/TextReference.dll D:/code/image > tmp/text-reference.json
+```
+
+The twelve fixed cases cover kerning, multiline/empty CRLF, narrow wrapping,
+line spacing, center/end alignment, supplied regular/bold/italic faces, combining
+marks, mixed Hebrew/Latin, Arabic marks/digits and constrained-area fitting.
+Each measures and renders with the same layout options. DPI72 and disabled
+hinting match pixel units; reference line advance/leading are explicitly matched
+to the supplied face metrics. Different default line boxes are not a production
+compatibility task. Raw outer advance rectangles are retained, including their
+different trailing-leading policy.
+
+Require exact glyph/source-cluster sequences and line breaks, glyph positions
+within 1/64 pixel, and raster edges within one pixel. On the union of nonzero-
+alpha pixels (0..255), require mean absolute alpha error ≤8, RMSE ≤16 and total
+coverage error ≤2%. These raster tolerances were set from the matched Latin,
+wrapping and supplied-style controls before accepting any complex-script case.
+Missing public boundaries remain failures. Source clusters are checked through
+the reference's public character-advance API, mapping managed scalar offsets to
+Unicode grapheme starts and excluding its nonrendered CR/LF placeholders. The
+renderer/measurement code-point association is checked before scoring. Raw records
+support investigating shaped-text differences. This is a bounded initial
+qualification set, not a claim of general script/font compatibility.
