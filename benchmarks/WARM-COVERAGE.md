@@ -1,10 +1,10 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-69 independent passes,147 measured mean gaps and one confidence-open case across
-all217 current numeric rows; no prior-production row remains. The
+69 independent passes,148 measured mean gaps and one confidence-open case across
+all218 current numeric rows; no prior-production row remains. The
 [three-table summary](../docs/benchmark.md) contains125 current independent
-observations and92 qualified shorts.26named new boundaries are unmeasured.
+observations and93 qualified shorts.25named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
 
 [Caller-RGB MCU preparation](WARM-JPEG-CALLER-MCU.md) improves the largest known
@@ -16,7 +16,7 @@ old scalar/tight/callback/cancelable/non420 samplers remain. Source/precision/wo
 owners and normal/scalar native gates pass. All4,169tests/OS,109affected hardware-off
 checks/OS and same actual private package consumer/all3examples pass on both OS.
 RGBA/shared-budget JPEG encoding and all other executed paths retain evidence;
-all69passing cases stop until affected. That round retained216numeric/27pending; the caller-gray row below makes217/26.
+all69passing cases stop until affected. That round retained216numeric/27pending; the caller-gray/RGB rows below make218/25.
 
 [Input reconciliation](WARM-INPUT-RECONCILIATION.md) refreshes the remaining22
 prior rows after shared JPEG parsing and final encoded-input copy removal.
@@ -80,7 +80,7 @@ delivery. The two lossless cases and photograph VP8 independently pass; the late
 bounded-model diagram result is the open comparison above. Lossless sizes are now 2.394x/2.090x the exact native packets; VP8
 sizes are 1.212x/1.167x at matched source quality. The preceding lossless change replaces only the five affected timing proofs;
 other production paths and qualification evidence are reused. Known scope is now243 named
-cases:217 numeric plus26 unmeasured. Stop these three time-passing cases unless
+cases:218 numeric plus25 unmeasured. Stop these three time-passing cases unless
 their relevant production path changes; compression-size work remains required.
 
 The two [shared-budget codec boundaries](WARM-SHARED-BUDGET.md) are now measured:
@@ -94,7 +94,7 @@ per-operation limits remain. Two live owners/packets, exact retained charges,
 surviving outputs, source stability and temporary-memory/work settlement pass.
 No new case/grid, native/production/selector build or repeated full package proof.
 Only benchmark harness inputs changed; existing executed production evidence stays
-valid.26new boundaries remain unmeasured. The original unbudgeted paths are reused.
+valid.25new boundaries remain unmeasured. The original unbudgeted paths are reused.
 
 Direct JPEG sample decoding has two named representatives.
 `JpegSamplesDecode/GrayscaleResident` reuses `WarmJpegDecode/OwnedDecodeGray`:
@@ -106,12 +106,18 @@ gates, native CLI delivery, padding/source and independent surviving owners pass
 One tooling harness/native build; production and compiled selector reused.
 No older evidence is invalidated; unchanged4,169tests/OS and actual package both
 OS remain qualified. No long repeat for this above-one mean.
-`JpegSamplesDecode/Rgb420Resident` remains **unmeasured**, reusing
-`WarmJpegDecode/NativeDecode420`: fresh packed caller RGB, complete color writing
-and independent output lifetime with equivalent native delivery. It exercises
-three-channel color normalization absent from the single-channel copy, without
-an RGBA frame. Packed rows, original input/settings and JPEG quality gates stay
-fixed; padded rows and opt-in orientation have correctness coverage.
+`JpegSamplesDecode/Rgb420Resident` now has a
+[qualified short](WARM-JPEG-RGB-SAMPLES-DECODE.md):3.369x,upper3.516x,
+624,454B/op, fresh398,601-byte RGB24 output on both sides. It reuses
+`WarmJpegDecode/NativeDecode420`'s original52,093-byte packet. Native software
+MJPEG includes zeroed destination allocation, centered2x2 chroma expansion/crop,
+full-range BT.601 packing and decoder/chroma/caller owner release. No RGBA frame.
+Exact qualified managed RGB projection, native CLI delivery, original normal/scalar
+decoder gates, source/padding and independent surviving outputs pass. All three
+actuals and both quiet guards pass. One harness/native compilation, reused original
+selector/production/qualification; no older evidence is invalidated. The largest
+demonstrated gap now prioritizes RGB sample writing before smaller gains. No long
+repeat for this above-one mean. Packed rows/input/settings/gates stay fixed.
 JPEG sample decoding also supports CMYK, as described below.
 
 Direct JPEG sample encoding adds two now **screened** representatives:
@@ -121,7 +127,7 @@ uses the fixed opaque RGB projection and FFmpeg's 4:2:0 reference. Retain existi
 quality/size matching, with equivalent raw sample delivery, complete row
 normalization, streaming and independent encoded output ownership. The cases
 cover single-component samples and packed RGB conversion, without a settings grid.
-The direct RGB sample decode above remains unmeasured; caller gray and both shared-budget paths have the qualified shorts above. The [current sample screens](WARM-JPEG-CALLER-MCU.md) measure gray1.162x/upper1.422x,
+Both direct-sample decode and shared-budget boundaries above have qualified shorts. The [current sample screens](WARM-JPEG-CALLER-MCU.md) measure gray1.162x/upper1.422x,
 155,007B/op and RGB4201.328x/upper1.408x,297,894B/op, after the33.7% RGB MCU win. Both are mean gaps, so no long
 confirmation follows. Native raw-input adapters use the same pinned libraries
 and exact frozen packets; each operation includes necessary normalization/coding
@@ -171,9 +177,8 @@ Five further **unmeasured** representatives cover the newly required algorithms:
 
 Baseline/progressive analytical and live FFmpeg compatibility checks cover these
 layouts; they are not performance confirmations. Reuse the existing source
-projections and fixed settings. Including the async boundaries below, the
-bounded checklist is **238 named cases**: 209 retained numeric rows plus twenty-nine
-unmeasured new operations. Do not add a
+projections and fixed settings. The current finite total is stated at the top;
+the named async boundaries below are already included. Do not add a
 shape, depth or quality grid. Add cases only for a distinct required path omitted
 from this list, with its concrete reason.
 
@@ -185,11 +190,9 @@ private input acquisition/growth/release and independent descriptor/pixel owners
 They cover the shared async acquisition path and its two different complete
 public operations. Shared-budget awaits have correctness coverage; no new
 codec/depth/stream scheduling grid is added. Resolve equivalent native input
-delivery before timing. The known finite checklist is now **238 cases**: 209
-numeric rows plus twenty-nine unmeasured operations. All existing evidence keeps its
-current status: original synchronous method bodies, field layouts, kernels and
-ownership paths are unchanged by async acquisition. The subsequent synchronous
-decode change above requires reconfirming 23 prior rows.
+delivery before timing. These cases are already included in the finite total.
+Original synchronous methods and codec kernels are unchanged by async acquisition;
+the later synchronous input-copy change's23affected rows now have current evidence.
 
 Async output adds four **unmeasured** representatives, all on existing inputs:
 
@@ -205,10 +208,9 @@ Async output adds four **unmeasured** representatives, all on existing inputs:
 These cover distinct new staging/admission/delivery paths, without a codec,
 sampling, depth or scheduling grid. Resolve equivalent native destination
 acquisition/copies and output lifetime before timing. Shared-await correctness
-is separately qualified. The checklist is now **238 cases**: 209 numeric rows
-and twenty-nine unmeasured operations. Existing numeric statuses are unchanged;
-original encoder bodies, state layouts and codec kernels are untouched. The later
-synchronous decode acquisition change affects only the seven operations above.
+is separately qualified. These four cases are already included in the finite total.
+Original encoder bodies/state/codec kernels are unchanged. Later synchronous input
+acquisition changes affect only the separately reconciled operations above.
 
 Fixed-workspace header inspection adds three **unmeasured** representatives using
 the existing encoded inputs, each for a distinct required container grammar:
