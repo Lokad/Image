@@ -6,14 +6,17 @@ all226 current numeric rows. The [three-table summary](../docs/benchmark.md)
 contains126 independent observations and100 qualified shorts.21named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
-[JPEG411](WARM-JPEG-411.md), an already-named quarter-width chroma path, is now the
-largest demonstrated gap:7.771x/upper8.211x,3527.46/453.95us,751,223B/op. The same
-original projection yields exact managed/native RGBA. FFmpeg's complete operation
-includes explicit exact-grid centered normalization and in-place compaction;
-packet/valid planes/quality bounds are unchanged. One6sec profile locates90.0%
-in scalar interpolation/rounding/rendering. Next one exact SIMD row primitive.
-Production unchanged; all225 previous rows/70passes and4209/96HWoff/package proofs
-remain valid. No long repeat above one. Scope247=226numeric+21unmeasured.
+[Exact SIMD JPEG411](WARM-JPEG-411-SIMD.md) cuts complete time82.6%,
+3527.46→613.09us, reducing7.771x to1.352x/upper1.587x,751,279B/op. Same original
+packet and exact managed/native pixels; unchanged centered reference and complete
+owned-output operation. One exact integer-eighth/SIMD/binary64 row primitive,
+scalar borders/tails/fallback, no work/admission/pool change. Only411 and two
+EOI selector rejection controls refresh;223other rows/70passes reuse evidence.
+Full4210tests/97HWoff checks per OS and the SAME actual Windows private package
+consumer/examples pass on both OS. No long above one, new profile or settings grid.
+Scope247=226numeric+21unmeasured stays70passes/155gaps/one confidence-open.
+Largest current gap:CMYK2D sparse1.812x; its prefix trial remains rejected.
+Next named missing case:JPEG410 H4V2; establish native equivalence before timing.
 
 [Exact SIMD caller YCCK RGB](WARM-JPEG-YCCK-CALLER-SIMD.md) reduces time80.2%,
 4532.59→898.47us:1.488x/upper1.550x,1,337,490B/op. Shared ownedYCCK improves20.3%
@@ -251,7 +254,7 @@ preceding grayscale result; historical allocation counts are superseded.
 No new workload is needed. Resident codec paths, synchronous Identify, async input,
 encoding and editing remain unchanged. No unaffected operation was retimed.
 
-Five representatives cover the required JPEG compatibility algorithms; CMYK, YCCK and caller CMYK have the current gaps above, two remain **unmeasured**:
+Five representatives cover the required JPEG compatibility algorithms; CMYK, YCCK, caller CMYK and411 have the current gaps above;410 remains **unmeasured**:
 
 - `JpegDecode/CmykAdobeResident` (**measured**1.391x DC gap): four component planes, Adobe inversion and
   complete owned RGBA conversion from an original CMYK projection. The
@@ -263,8 +266,8 @@ Five representatives cover the required JPEG compatibility algorithms; CMYK, YCC
 - `JpegSamplesDecode/CmykResident` (**measured**1.592x gap): untagged full-resolution
   canonical ink, all4raw native planes preserved and packed to fresh caller storage.
   Adobe inversion has correctness coverage; no RGBA intermediate.
-- `JpegDecode/411Resident`: [measured7.771x gap](WARM-JPEG-411.md); quarter-width horizontal chroma reconstruction on the
-  existing RGB projection; confirm native sample-grid equivalence before timing.
+- `JpegDecode/411Resident`: [measured1.352x gap](WARM-JPEG-411-SIMD.md); quarter-width horizontal chroma reconstruction on the
+  existing RGB projection; native sample-grid normalization and complete ownership verified.
 - `JpegDecode/410Resident`: quarter-width, half-height chroma (JPEG factors 4×2,
   not video pixel format 4×4); confirm native sample-grid equivalence before timing.
 

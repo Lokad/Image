@@ -26,6 +26,21 @@ public sealed class JpegCompatibilityBoundaryTests
             Assert.Equal(expected, owned.GetRow8(y).Slice(x * 4, 3).ToArray());
             Assert.Equal(expected, rgb.AsSpan((y * width + x) * 3, 3).ToArray()); Assert.Equal(255, owned.GetRow8(y)[x * 4 + 3]);
         }
+        var expectedBytes = OriginalPixels.Bytes(owned);
+        var budget = new ImageBudget(16 * 1024 * 1024, 1_000_000_000);
+        using (var survivor = budget.Decode(data, new() { Limits = new() { MaxWorkingBytes = budget.MaxWorkingBytes, MaxWork = budget.MaxWork } }))
+        {
+            owned.GetRow8(0)[0] ^= 255; owned.Dispose();
+            Assert.Equal(expectedBytes, OriginalPixels.Bytes(survivor.Image));
+            Assert.Equal(budget.MaxWorkingBytes - expectedBytes.Length, budget.RemainingWorkingBytes);
+        }
+        Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes);
+        var failure = Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(data,
+            new() { Limits = new() { MaxWork = budget.ConsumedWork - 1 } }));
+        Assert.Equal(ImageLimitKind.Work, failure.Limit);
+        using var cancellation = new CancellationTokenSource(); cancellation.Cancel();
+        var canceled = Assert.Throws<OperationCanceledException>(() => ImageCodec.Decode(data, cancellationToken: cancellation.Token));
+        Assert.Equal(cancellation.Token, canceled.CancellationToken);
         Assert.Equal(original, data);
     }
 

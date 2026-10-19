@@ -57,6 +57,7 @@ internal ref partial struct JpegDecoder
                         if (component.Approximation[0] < 0) throw new ImageDataException("JPEG component is missing a DC scan.");
                     if (components.Length == 4) return RenderCmyk(adobeTransform);
                     if (adobeTransform == 2) throw UnsupportedColorTransform();
+                    if (maxH == 4 && CanRenderYcbcr411()) return RenderYcbcr411();
                     return Render();
                 }
                 var payload = ReadSegment();

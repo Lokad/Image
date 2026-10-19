@@ -144,8 +144,8 @@ def render():
         row('JPEG Adobe CMYK, two-dimensional sparse control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeSparse2D', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG YCCK420, full-resolution black', 'warm-jpeg-ycck-caller-simd-evidence.json', ['cases', 'Ycck420', -1], 'WARM-JPEG-YCCK-CALLER-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG YCCK420 → caller RGB24', 'warm-jpeg-ycck-caller-simd-evidence.json', ['cases', 'Ycck420CallerRgb', -1], 'WARM-JPEG-YCCK-CALLER-SIMD.md', verification='Gap (short; qualified)'),
-        row('JPEG H4V1 / 4:1:1 → owned RGBA8', 'warm-jpeg-411-evidence.json', ['cases', 'Decode411', -1], 'WARM-JPEG-411.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline 4:2:0', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG H4V1 / 4:1:1 → owned RGBA8', 'warm-jpeg-411-simd-evidence.json', ['cases', 'Decode411', -1], 'WARM-JPEG-411-SIMD.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:2:0', 'warm-jpeg-411-simd-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-411-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:4:4, owned input', 'warm-input-reconciliation-evidence.json', ['cases', 'Decode8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
@@ -156,7 +156,7 @@ def render():
         row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecodeCancelable8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG progressive gray', 'warm-input-reconciliation-evidence.json', ['cases', 'ProgressiveGray', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG progressive 4:2:0', 'warm-input-reconciliation-evidence.json', ['cases', 'Progressive420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
-        row('JPEG progressive 4:4:4 / live cancelable token', 'warm-input-reconciliation-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpeg-411-simd-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-JPEG-411-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG progressive 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'Progressive422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG progressive 4:4:4', 'warm-input-reconciliation-evidence.json', ['cases', 'Progressive444', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('WebP VP8 + alpha', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'Native8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
@@ -323,18 +323,17 @@ conservative upper ≤1x**. The 226 current numeric rows contain **{parity_count
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
-[JPEG 4:1:1](../benchmarks/WARM-JPEG-411.md) exposes the largest current gap:
-**7.771x / upper8.211x**,3,527.46/453.95µs,**751,223B/op**. Both outputs are
-pixel-exact; FFmpeg uses explicit centered quarter-width grid normalization,
-including padding/conversion/in-place compaction inside the complete operation.
-One profile locates90.0% in scalar interpolation/rounding/rendering. No new image
-or settings grid; all225 prior rows and70passing proofs are reused.
+[Exact SIMD JPEG 4:1:1](../benchmarks/WARM-JPEG-411-SIMD.md) cuts complete time
+**82.6%**,3,527.46→613.09µs, reducing7.771x to **1.352x / upper1.587x**,
+**751,279B/op**. Exact pixels, centered native normalization and complete owned
+output boundaries remain unchanged. Two selector controls refresh;223other numeric
+rows and all70passing proofs are reused. No new image/settings grid or profile.
 
-Production and accepted qualification are unchanged:4,209tests/96hardware-off
-checks per OS, same actual private package consumer/all three examples on both OS.
-The released0.1.0 package/tag stay immutable.21unmeasured representatives cover
-JPEG410, async, header, drawing and supplied-font paths; they have no timing claim.
-Stop unchanged independently passing paths; optimize demonstrated material gaps.
+Accepted qualification:4,210tests/97hardware-off checks per OS, plus the same
+actual private package consumer/all three examples on Windows/Linux. Released0.1.0
+stays immutable. Largest current gap:CMYK2D sparse1.812x; its prefix trial remains
+rejected.21unmeasured representatives cover JPEG410, async, header, drawing and
+supplied-font paths. Stop unchanged passes; optimize demonstrated material gaps.
 
 JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale
 (managed/SIMD libjpeg-turbo) and **74,040/52,093 B** RGB420 (managed/FFmpeg), with

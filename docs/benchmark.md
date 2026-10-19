@@ -7,18 +7,17 @@ conservative upper ≤1x**. The 226 current numeric rows contain **70 passes,
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
-[JPEG 4:1:1](../benchmarks/WARM-JPEG-411.md) exposes the largest current gap:
-**7.771x / upper8.211x**,3,527.46/453.95µs,**751,223B/op**. Both outputs are
-pixel-exact; FFmpeg uses explicit centered quarter-width grid normalization,
-including padding/conversion/in-place compaction inside the complete operation.
-One profile locates90.0% in scalar interpolation/rounding/rendering. No new image
-or settings grid; all225 prior rows and70passing proofs are reused.
+[Exact SIMD JPEG 4:1:1](../benchmarks/WARM-JPEG-411-SIMD.md) cuts complete time
+**82.6%**,3,527.46→613.09µs, reducing7.771x to **1.352x / upper1.587x**,
+**751,279B/op**. Exact pixels, centered native normalization and complete owned
+output boundaries remain unchanged. Two selector controls refresh;223other numeric
+rows and all70passing proofs are reused. No new image/settings grid or profile.
 
-Production and accepted qualification are unchanged:4,209tests/96hardware-off
-checks per OS, same actual private package consumer/all three examples on both OS.
-The released0.1.0 package/tag stay immutable.21unmeasured representatives cover
-JPEG410, async, header, drawing and supplied-font paths; they have no timing claim.
-Stop unchanged independently passing paths; optimize demonstrated material gaps.
+Accepted qualification:4,210tests/97hardware-off checks per OS, plus the same
+actual private package consumer/all three examples on Windows/Linux. Released0.1.0
+stays immutable. Largest current gap:CMYK2D sparse1.812x; its prefix trial remains
+rejected.21unmeasured representatives cover JPEG410, async, header, drawing and
+supplied-font paths. Stop unchanged passes; optimize demonstrated material gaps.
 
 JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale
 (managed/SIMD libjpeg-turbo) and **74,040/52,093 B** RGB420 (managed/FFmpeg), with
@@ -126,8 +125,8 @@ reconciliation now covers every numeric row.
 | [JPEG Adobe CMYK, two-dimensional sparse control](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 792.76 | 437.47 | 1.812 / 1.869 | 1,085,656 | Gap (short; qualified) |
 | [JPEG YCCK420, full-resolution black](../benchmarks/WARM-JPEG-YCCK-CALLER-SIMD.md) | 824.27 | 708.72 | 1.163 / 1.175 | 1,470,256 | Gap (short; qualified) |
 | [JPEG YCCK420 → caller RGB24](../benchmarks/WARM-JPEG-YCCK-CALLER-SIMD.md) | 898.47 | 603.97 | 1.488 / 1.550 | 1,337,490 | Gap (short; qualified) |
-| [JPEG H4V1 / 4:1:1 → owned RGBA8](../benchmarks/WARM-JPEG-411.md) | 3,527.46 | 453.95 | 7.771 / 8.211 | 751,223 | Gap (short; qualified) |
-| [JPEG baseline 4:2:0](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,202.77 | 1,008.96 | 1.192 / 1.315 | 757,345 | Gap (short; qualified) |
+| [JPEG H4V1 / 4:1:1 → owned RGBA8](../benchmarks/WARM-JPEG-411-SIMD.md) | 613.09 | 453.46 | 1.352 / 1.587 | 751,279 | Gap (short; qualified) |
+| [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG-411-SIMD.md) | 1,210.66 | 1,011.13 | 1.197 / 1.308 | 757,345 | Gap (short; qualified) |
 | [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,378.07 | 1,014.38 | 1.359 / 1.446 | 761,720 | Gap (short; qualified) |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,510.49 | 1,351.29 | 1.118 / 1.263 | 829,148 | Gap (short; qualified) |
 | [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,522.16 | 1,902.72 | 1.326 / 1.431 | 948,023 | Gap (short; qualified) |
@@ -138,7 +137,7 @@ reconciliation now covers every numeric row.
 | [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,392.14 | 1,720.11 | 1.391 / 1.482 | 966,317 | Gap (short; qualified) |
 | [JPEG progressive gray](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,647.80 | 1,712.34 | 1.546 / 1.634 | 683,138 | Gap (short; qualified) |
 | [JPEG progressive 4:2:0](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,438.11 | 1,947.56 | 1.252 / 1.446 | 775,336 | Gap (short; qualified) |
-| [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 4,960.36 | 3,350.73 | 1.480 / 1.614 | 984,298 | Gap (short; qualified) |
+| [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-411-SIMD.md) | 5,069.78 | 3,349.49 | 1.514 / 1.611 | 984,298 | Gap (short; qualified) |
 | [JPEG progressive 4:2:2](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 3,071.46 | 2,238.43 | 1.372 / 1.508 | 847,162 | Gap (short; qualified) |
 | [JPEG progressive 4:4:4](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 5,037.72 | 3,361.01 | 1.499 / 1.715 | 984,298 | Gap (short; qualified) |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 9,272.91 | 5,970.23 | 1.553 / 1.648 | 1,966,616 | Gap (short; qualified) |
