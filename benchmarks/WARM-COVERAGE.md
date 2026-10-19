@@ -1,15 +1,15 @@
 # Material warm coverage
 
 Updated 2026-10-20. The **warm single-CPU parity objective remains open**:
-71 independent passes,162 measured mean gaps and one confidence-open case across
-234 numeric rows. The [three-table summary](../docs/benchmark.md)
-contains127 independent observations and107 qualified shorts.20named required
+71 independent passes,163 measured mean gaps and one confidence-open case across
+235 numeric rows. The [three-table summary](../docs/benchmark.md)
+contains127 independent observations and108 qualified shorts.19named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
-The finite scope is now **254 cases:234 numeric+20 unmeasured**. The remaining
+The finite scope is now **254 cases:235 numeric+19 unmeasured**. The remaining
 226 historical codec/edit rows retain their identified performance-qualified
 builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
-Current CMYK, four Lanczos3, two async input and one async output rows are identified below.
+Current CMYK, four Lanczos3, two async input and two async output rows are identified below.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
 required representatives using the same513×259 asymmetric RGBA rasters. Their
 [packed-coefficient screens](WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md) improve all
@@ -59,9 +59,16 @@ Same level6/filterNone, exact alpha/hidden RGB and5%IDAT gate; packets218,775/
 210,973B andIDAT218,682/210,283B. All12 actuals retained despite11 selected results;
 the conservative bound covers both. One immutable pair, one tooling build/OS,
 one native build, no producer/selector build or repeated package proof.
-Stop this passing case. Next: the existing async JPEG RGBA8 output boundary.
+Stop this passing case. The [async JPEG RGBA8 output screen](WARM-JPEG-ASYNC-ENCODE.md)
+records3,982.03µs/native3,849.79µs,1.034x/upper1.158,494,254B/op. Full adaptive
+admission probe, contiguous staging/tail clearing, normalization/encode and output
+delivery/ownership are included. Exact frozen packets158,812/133,041B preserve
+the0.082440dB source-quality gap. Current quality samples revalidate once; hashes
+reuse setup/cleanup and unchanged native scalar evidence. One tooling build/OS,
+one native build, no producer/selector build, calibration grid or full/package repeat.
+Next: the separately named async caller-RGB420 output boundary.
 All four Lanczos3 gaps remain required;
-finite254/234numeric/20untimed; the other233 numeric observations remain unchanged.
+finite254/235numeric/19untimed; the other234 numeric observations remain unchanged.
 
 A bounded audit of the accepted 0.2.0 additions identifies exactly three required
 paths absent from the older checklist; these are not a shape/depth/settings grid:
@@ -402,12 +409,13 @@ Async output has four representatives, all on existing inputs:
   passing pair above; stop unless affected production changes.
 - `AsyncStreamEncode/JpegRgba8FreshNonSeekable`: the distinct stock-memory adaptive
   admission probe and bounded contiguous staging for the existing RGBA8 anchor.
+  Qualified short gap above, with unchanged matched-quality packets.
 - `AsyncStreamEncode/JpegRgb420Samples`: direct borrowed RGB memory and the separate
   sample/adaptive admission boundary, reusing the fixed RGB420 projection.
 - `AsyncStreamEncode/WebpLosslessRgba8FreshNonSeekable`: byte-at-a-time bit-writer
   emission into staging, distinct from PNG's batched writes, with exact hidden RGB.
 
-The other three remain **unmeasured**. These cover distinct staging/admission/delivery paths, without a codec,
+The other two remain **unmeasured**. These cover distinct staging/admission/delivery paths, without a codec,
 sampling, depth or scheduling grid. Resolve equivalent native destination
 acquisition/copies and output lifetime before timing. Shared-await correctness
 is separately qualified. These four cases are already included in the finite total.

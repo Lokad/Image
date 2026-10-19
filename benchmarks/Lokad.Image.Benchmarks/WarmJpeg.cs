@@ -17,6 +17,7 @@ internal sealed record WarmJpegPreparation(int SchemaVersion, string Project, st
 [MemoryDiagnoser]
 public partial class WarmJpeg
 {
+    private WarmAsyncJpegEncode? asyncOutput;
     public static IEnumerable<WarmJpegCase> Cases => SelectedCases();
     [ParamsSource(nameof(Cases))] public WarmJpegCase Case { get; set; }
     private const uint Background = 0x204060;
@@ -226,6 +227,11 @@ public partial class WarmJpeg
             || GCSettings.IsServerGC || Environment.GetEnvironmentVariable("DOTNET_TieredCompilation") != "0"
             || !GC.GetConfigurationVariables().TryGetValue("ConcurrentGC", out var concurrent) || Convert.ToBoolean(concurrent))
             throw new InvalidOperationException("JPEG worker requires one CPU, optimized JIT and non-concurrent workstation GC.");
+        if (Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ASYNC_NONSEEKABLE") == "1")
+        {
+            if (Case != WarmJpegCase.Encode8) throw new ArgumentOutOfRangeException(nameof(Case));
+            asyncOutput = new WarmAsyncJpegEncode(); asyncOutput.Setup(cpu, smoke, sampleCount); return;
+        }
         if (Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_SAMPLE_INPUT") == "raw-v1")
         {
             samples = new WarmJpegSamples(Case); samples.Setup(cpu, smoke, sampleCount); return;
@@ -393,6 +399,7 @@ public partial class WarmJpeg
     [Benchmark]
     public int Managed()
     {
+        if (asyncOutput is not null) return asyncOutput.Apply();
         if (samples is not null) return samples.Apply();
         if (grayscale is not null) return grayscale.Apply();
         using var output = new MemoryStream(); EncodeManaged(output);
@@ -431,6 +438,7 @@ public partial class WarmJpeg
     [GlobalCleanup]
     public void Cleanup()
     {
+        if (asyncOutput is not null) { asyncOutput.Cleanup(); return; }
         if (samples is not null) { samples.Cleanup(); return; }
         if (grayscale is not null) { grayscale.Cleanup(); return; }
         try
