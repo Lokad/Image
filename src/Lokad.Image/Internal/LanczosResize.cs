@@ -46,11 +46,9 @@ internal static class LanczosResize
                     for (var x = 0; x < width; x++)
                     {
                         if ((x & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
-                        var at = x * 4; var alpha = ReadSum(sums, at + 3);
-                        var a = Round(alpha, (Int128)LanczosPlan.One * LanczosPlan.One, maximum);
-                        var r = a == 0 ? 0 : Round(ReadSum(sums, at), alpha, maximum);
-                        var g = a == 0 ? 0 : Round(ReadSum(sums, at + 1), alpha, maximum);
-                        var b = a == 0 ? 0 : Round(ReadSum(sums, at + 2), alpha, maximum);
+                        var at = x * 4; var pixel = Normalize(sums, at, maximum);
+                        var r = pixel.GetElement(0); var g = pixel.GetElement(1);
+                        var b = pixel.GetElement(2); var a = pixel.GetElement(3);
                         if (source.BitDepth == 8)
                         {
                             destination8[at] = (byte)r; destination8[at + 1] = (byte)g;
@@ -68,6 +66,40 @@ internal static class LanczosResize
             catch { result.Dispose(); throw; }
         }
         finally { context.Release(bytes); }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector128<int> Normalize(ReadOnlySpan<Int128> sums, int index, int maximum)
+    {
+        if (Avx2.IsSupported && Avx512DQ.VL.IsSupported)
+        {
+            var limbs = MemoryMarshal.Cast<Int128, long>(sums);
+            var low = Avx512DQ.VL.ConvertToVector256Double(Vector256.Create(limbs.Slice(index, 4)));
+            var high = Avx512DQ.VL.ConvertToVector256Double(Vector256.Create(limbs.Slice(sums.Length + index, 4)));
+            var value = Avx.Add(Avx.Multiply(high, Vector256.Create(4294967296d)), low);
+            var denominator = value.GetElement(3);
+            // Certified limb bounds give conversion/combination error <2^44
+            // for RGB and <2^28 for alpha. Below half Q60, all samples clear.
+            const double alphaError = 268435456d, half = 576460752303423488d;
+            if (denominator < half - alphaError) return Vector128<int>.Zero;
+            if (denominator >= half + alphaError)
+            {
+                var divisor = Vector256.Create(denominator, denominator, denominator, 1152921504606846976d);
+                var estimate = Avx.Min(Avx.Max(Avx.Divide(value, divisor), Vector256<double>.Zero), Vector256.Create((double)maximum));
+                var rounded = Avx.RoundToNearestInteger(estimate);
+                var distance = Avx.AndNot(Vector256.Create(-0d), Avx.Subtract(estimate, rounded));
+                // Clipping is Lipschitz in numerator and positive denominator.
+                // Including division/comparison errors, every clipped quotient
+                // differs by <2^-10. Uncertain bins retain exact arithmetic.
+                if (Avx.MoveMask(Avx.CompareLessThan(distance, Vector256.Create(.5 - 1d / 1024))) == 15)
+                    return Avx.ConvertToVector128Int32WithTruncation(rounded);
+            }
+        }
+        var alpha = ReadSum(sums, index + 3);
+        var a = Round(alpha, (Int128)LanczosPlan.One * LanczosPlan.One, maximum);
+        if (a == 0) return Vector128<int>.Zero;
+        return Vector128.Create(Round(ReadSum(sums, index), alpha, maximum),
+            Round(ReadSum(sums, index + 1), alpha, maximum), Round(ReadSum(sums, index + 2), alpha, maximum), a);
     }
 
     internal static void AccumulateVertical(ReadOnlySpan<long> row, Span<Int128> sums, int weight, OperationContext context)

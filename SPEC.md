@@ -333,6 +333,13 @@ signed 32-bit limbs. The axis absolute-weight bound keeps either limb's every
 partial sum within 2^62; two Int64 planes reuse the admitted Int128 accumulator
 storage. Output recombination is exact. Other processors retain Int128 accumulation;
 work accounting and cancellation polling boundaries are unchanged.
+On AVX512DQ/VL, the certified limbs may normalize four channels together in
+binary64. Numerator and alpha conversion errors are bounded by 2^44 and 2^28;
+clipping, division and rounding-bin comparisons keep quotient error below 2^-10
+when both actual and estimated alpha exceed the guarded half-Q60 threshold.
+Only complete rounding bins are accepted; uncertain pixels retain the exact
+integer path. A separately certified zero-alpha shortcut clears all channels.
+This uses the same admitted scratch and preserves exact pixels at both depths.
 The independent decimal/BigInteger oracle covers transparency, edges and cache
 eviction. Opaque live FFmpeg controls use explicit edge extension and radius
 three, maximum RGB error 1, RGB RMSE <=0.25 and exact alpha. That correctness

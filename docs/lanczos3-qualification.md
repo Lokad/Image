@@ -46,6 +46,10 @@ The [exact SIMD accumulation round](../benchmarks/WARM-LANCZOS3-SPLIT.md) saves
 another37.5–42.4%, qualifies4440tests/39scalar checks per OS and the same actual
 private package on both systems. Scratch, work and cancellation boundaries are
 unchanged; every original output remains exact. Warm parity remains open.
+The [certified SIMD normalization round](../benchmarks/WARM-LANCZOS3-NORMALIZE.md)
+saves another16.6–47.3%, qualifies4445tests/44scalar checks per OS and the same
+actual private package on both systems. All four original frames remain exact;
+admitted storage, work, cancellation and the parity objective are unchanged.
 
 Retained SHA-256 identities:
 

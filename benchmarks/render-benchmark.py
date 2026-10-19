@@ -310,10 +310,10 @@ def render():
         row('WebP VP8 text/diagram RGBA8 / matched quality', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
     ])
     edits.extend([
-        row('Lanczos3 reduction RGBA8', 'warm-lanczos3-split-evidence.json', ['cases', 'Reduce8', -1], 'WARM-LANCZOS3-SPLIT.md', verification='Gap (short; qualified)'),
-        row('Lanczos3 reduction RGBA16', 'warm-lanczos3-split-evidence.json', ['cases', 'Reduce16', -1], 'WARM-LANCZOS3-SPLIT.md', verification='Gap (short; qualified)'),
-        row('Lanczos3 enlargement RGBA8', 'warm-lanczos3-split-evidence.json', ['cases', 'Enlarge8', -1], 'WARM-LANCZOS3-SPLIT.md', verification='Gap (short; qualified)'),
-        row('Lanczos3 enlargement RGBA16', 'warm-lanczos3-split-evidence.json', ['cases', 'Enlarge16', -1], 'WARM-LANCZOS3-SPLIT.md', verification='Gap (short; qualified)'),
+        row('Lanczos3 reduction RGBA8', 'warm-lanczos3-normalize-evidence.json', ['cases', 'Reduce8', -1], 'WARM-LANCZOS3-NORMALIZE.md', verification='Gap (short; qualified)'),
+        row('Lanczos3 reduction RGBA16', 'warm-lanczos3-normalize-evidence.json', ['cases', 'Reduce16', -1], 'WARM-LANCZOS3-NORMALIZE.md', verification='Gap (short; qualified)'),
+        row('Lanczos3 enlargement RGBA8', 'warm-lanczos3-normalize-evidence.json', ['cases', 'Enlarge8', -1], 'WARM-LANCZOS3-NORMALIZE.md', verification='Gap (short; qualified)'),
+        row('Lanczos3 enlargement RGBA16', 'warm-lanczos3-normalize-evidence.json', ['cases', 'Enlarge16', -1], 'WARM-LANCZOS3-NORMALIZE.md', verification='Gap (short; qualified)'),
     ])
     all_rows = decodes + encodes + edits
     parity_count = sum(' | Parity confirmed |' in value for value in all_rows)
@@ -334,12 +334,12 @@ These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
 is separate. Earlier codec/edit rows do not yet requalify changed 0.2.0 admission,
 disposal or governed storage paths; confirmations retain their identified builds.
-The [exact SIMD Lanczos3 accumulation](../benchmarks/WARM-LANCZOS3-SPLIT.md)
-cuts complete time **37.5–42.4%** from the preceding primitive, leaving **4.180–5.468x gaps**
-(uppers4.470–6.536),146,612–4,616,716B/op. Full managed pixels remain exact;
+The [certified SIMD Lanczos3 normalization](../benchmarks/WARM-LANCZOS3-NORMALIZE.md)
+cuts complete time **16.6–47.3%** from the preceding primitive, leaving **2.200–4.551x gaps**
+(uppers2.356–5.010),146,611–4,617,090B/op. Full managed pixels remain exact;
 native quality, ownership and all operation boundaries are unchanged. Qualification
-passes4,440tests/39scalar checks per OS, same actual private package and all three
-examples. Next: a bounded Reduce8 diagnostic to select the next dominant arithmetic.
+passes4,445tests/44scalar checks per OS, same actual private package and all three
+examples. Next: screen exact SIMD horizontal products on Reduce8 after arithmetic certification.
 
 [Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
 **76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
@@ -347,9 +347,9 @@ examples. Next: a bounded Reduce8 diagnostic to select the next dominant arithme
 are preserved. The411 selector control refreshes;225other numeric rows and all70
 passing proofs are reused. No new image/settings grid, profile or baseline change.
 
-Last performance-round qualification:4,212tests/99hardware-off checks per OS, same actual private
+JPEG-round qualification:4,212tests/99hardware-off checks per OS, same actual private
 package consumer/all three examples on Windows/Linux. Released0.1.0 stays immutable.
-Largest measured gap: Lanczos3 Reduce8 at5.468x; CMYK2D sparse remains1.812x.
+Largest measured gap: Lanczos3 Reduce8 at4.551x; CMYK2D sparse remains1.812x.
 23unmeasured representatives cover async, header, drawing, text and governed ownership.
 Stop passes; optimize demonstrated material gaps and resolve missing evidence.
 
