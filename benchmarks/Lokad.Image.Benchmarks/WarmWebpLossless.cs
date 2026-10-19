@@ -25,6 +25,7 @@ public class WarmWebpLossless
     private string originalRasterSha256 = "";
     private bool smoke, ready;
     private int cpu, sampleCount;
+    private WarmAsyncWebpLosslessEncode? asyncEncode;
     private readonly WebpEncodeOptions options = new() { Lossless = true, Effort = 4 };
 
     public static WarmWebpLosslessCase[] SelectedCases()
@@ -76,6 +77,11 @@ public class WarmWebpLossless
             || Environment.GetEnvironmentVariable("DOTNET_TieredCompilation") != "0"
             || !GC.GetConfigurationVariables().TryGetValue("ConcurrentGC", out var concurrent) || Convert.ToBoolean(concurrent))
             throw new InvalidOperationException("Lossless WebP requires one CPU, optimized JIT and non-concurrent workstation GC.");
+        if (Environment.GetEnvironmentVariable("LOKAD_IMAGE_WEBP_ASYNC_NONSEEKABLE") == "1")
+        {
+            if (Case != WarmWebpLosslessCase.Encode8) throw new InvalidOperationException("Async output uses the existing RGBA8 case only.");
+            asyncEncode = new WarmAsyncWebpLosslessEncode(); asyncEncode.Setup(cpu, smoke, sampleCount); return;
+        }
         state = new JpegBenchmarkCase();
         try
         {
@@ -153,12 +159,14 @@ public class WarmWebpLossless
     [Benchmark]
     public int Managed()
     {
+        if (asyncEncode is not null) return asyncEncode.Apply();
         using var output = new MemoryStream(); ImageCodec.EncodeWebp(source, output, options);
         return checked((int)output.Length) ^ output.GetBuffer()[checked((int)output.Length) / 2];
     }
     [GlobalCleanup]
     public void Cleanup()
     {
+        if (asyncEncode is not null) { asyncEncode.Cleanup(); asyncEncode = null; return; }
         try
         {
             if (!ready) return;

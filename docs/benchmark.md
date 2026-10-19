@@ -1,9 +1,9 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-20. Target: **warm single-CPU parity, independently confirmed
-conservative upper ≤1x**. The 236 numeric rows contain **71 passes,
+conservative upper ≤1x**. The 237 numeric rows contain **72 passes,
 164 gaps and 1 confidence-open case**. The finite
-[material checklist](../benchmarks/WARM-COVERAGE.md) has 254 named cases, 18 unmeasured.
+[material checklist](../benchmarks/WARM-COVERAGE.md) has 254 named cases, 17 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
@@ -61,7 +61,14 @@ separate sample-source boundary: **2,076.73µs / 1.276x**, upper1.430,
 conversion/encode, adaptive staging and independent output delivery/release.
 Packets74,040/52,093B and the0.106110dB source-quality gap stay frozen. Quality
 samples revalidate once; shared ownership/cancel/failure controls and current
-production/package qualification are reused. Next: lossless WebP async output.
+production/package qualification are reused.
+The [async lossless WebP pair](../benchmarks/WARM-WEBP-ASYNC-ENCODE.md) independently
+passes at **11,286.87µs / 0.093x**, upper0.094, **2,494,170B/op** against approved
+libwebp exact=1 (FFmpeg encoder backend). Exact alpha/hidden RGB and frozen packets
+533,100/183,812B are preserved. Complete repack/import/encode, independent staging,
+actual output copies/growth and release are timed. All12 actuals retained, same
+immutable builds, both quiet guards. Stop this passing case; compression efficiency
+parity remains open. Next: the named header-inspection boundaries.
 
 [Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
 **76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
@@ -72,7 +79,7 @@ passing proofs are reused. No new image/settings grid, profile or baseline chang
 JPEG-round qualification:4,212tests/99hardware-off checks per OS, same actual private
 package consumer/all three examples on Windows/Linux. Released0.1.0 stays immutable.
 Largest measured gaps: Lanczos3 Reduce16 at1.836x, Reduce8 and current CMYK2D sparse1.829x.
-18unmeasured representatives cover async, header, drawing, text and governed ownership.
+17unmeasured representatives cover header inspection, drawing, text and governed ownership.
 Stop passes; optimize demonstrated material gaps and resolve missing evidence.
 
 JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale
@@ -212,6 +219,7 @@ reconciliation now covers every numeric row.
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
+| [WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream](../benchmarks/WARM-WEBP-ASYNC-ENCODE.md) | 11,286.87 | 121,728.04 | 0.093 / 0.094 | 2,494,170 | Parity confirmed |
 | [JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream](../benchmarks/WARM-JPEG-ASYNC-SAMPLES.md) | 2,076.73 | 1,628.02 | 1.276 / 1.430 | 232,614 | Gap (short; qualified) |
 | [JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality](../benchmarks/WARM-JPEG-ASYNC-ENCODE.md) | 3,982.03 | 3,849.79 | 1.034 / 1.158 | 494,254 | Gap (short; qualified) |
 | [PNG EncodePngAsync, fresh nonseekable Stream / level6](../benchmarks/WARM-PNG-ASYNC-ENCODE.md) | 5,397.36 | 17,268.11 | 0.313 / 0.314 | 658,560 | Parity confirmed |

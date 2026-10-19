@@ -1,15 +1,15 @@
 # Material warm coverage
 
 Updated 2026-10-20. The **warm single-CPU parity objective remains open**:
-71 independent passes,164 measured mean gaps and one confidence-open case across
-236 numeric rows. The [three-table summary](../docs/benchmark.md)
-contains127 independent observations and109 qualified shorts.18named required
+72 independent passes,164 measured mean gaps and one confidence-open case across
+237 numeric rows. The [three-table summary](../docs/benchmark.md)
+contains128 independent observations and109 qualified shorts.17named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
-The finite scope is now **254 cases:236 numeric+18 unmeasured**. The remaining
+The finite scope is now **254 cases:237 numeric+17 unmeasured**. The remaining
 226 historical codec/edit rows retain their identified performance-qualified
 builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
-Current CMYK, four Lanczos3, two async input and three async output rows are identified below.
+Current CMYK, four Lanczos3, two async input and four async output rows are identified below.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
 required representatives using the same513×259 asymmetric RGBA rasters. Their
 [packed-coefficient screens](WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md) improve all
@@ -73,9 +73,16 @@ admission/staging and independent caller-output delivery/release. Packets74,040/
 52,093B and the0.106110dB source-quality gap stay frozen; current quality samples
 revalidate once. Shared output/cancel/failure checks and full/package evidence
 are reused. No new grid, producer/selector build or long confirmation above one.
-Next: the remaining named lossless WebP async output boundary.
-All four Lanczos3 gaps remain required;
-finite254/236numeric/18untimed; the other235 numeric observations remain unchanged.
+The [async lossless WebP pair](WARM-WEBP-ASYNC-ENCODE.md) independently passes:
+11,286.87µs/native121,728.04µs,0.093x/upper0.094,2,494,170B/op, using the approved
+libwebp exact=1 (FFmpeg encoder backend). Exact alpha/hidden RGB, original packets
+533,100/183,812B, complete repack/import/encode/staging/output delivery/growth/
+ownership/release and shared cancel/failure controls pass. All12 actuals retained;
+first confirmation preguard launched no benchmark, fresh attempt passed both guards.
+One immutable build/OS and one native compiler build; producer/selector/full/package
+proofs reused. Stop this passing case; compression efficiency parity remains open.
+All four Lanczos3 gaps remain required. Finite254/237numeric/17untimed; other236
+numeric observations retain their builds. Next: three named header boundaries below.
 
 A bounded audit of the accepted 0.2.0 additions identifies exactly three required
 paths absent from the older checklist; these are not a shape/depth/settings grid:
@@ -422,8 +429,10 @@ Async output has four representatives, all on existing inputs:
   Qualified short gap above; exact frozen matched-quality packets.
 - `AsyncStreamEncode/WebpLosslessRgba8FreshNonSeekable`: byte-at-a-time bit-writer
   emission into staging, distinct from PNG's batched writes, with exact hidden RGB.
+  Independently passing pair above; stop unless affected production changes.
 
-Only the lossless WebP representative remains **unmeasured**. These cover distinct staging/admission/delivery paths, without a codec,
+All four now have current-code numeric evidence. These cover distinct
+staging/admission/delivery paths, without a codec,
 sampling, depth or scheduling grid. Resolve equivalent native destination
 acquisition/copies and output lifetime before timing. Shared-await correctness
 is separately qualified. These four cases are already included in the finite total.
