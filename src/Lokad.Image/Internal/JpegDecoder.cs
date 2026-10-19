@@ -88,7 +88,7 @@ internal ref partial struct JpegDecoder
             {
                 if(component is null || component.Coefficients.Length==0)continue;
                 var storage=component.Coefficients;component.Coefficients=[];
-                JpegCoefficientPool.Shared.Return(storage);
+                context.ReturnCoefficients(storage);
             }
         }
     }
@@ -156,7 +156,7 @@ internal ref partial struct JpegDecoder
             var countValues = (long)component.BlockColumns * component.BlockRows * 64;
             if (countValues > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "JPEG coefficient plane is too large.");
             context.Reserve(countValues * 4 + 64 * 4);
-            component.Coefficients = JpegCoefficientPool.Shared.Rent((int)countValues);
+            component.Coefficients = context.RentCoefficients((int)countValues);
             component.Approximation = new int[64]; Array.Fill(component.Approximation, -1);
         }
     }
@@ -632,7 +632,7 @@ internal ref partial struct JpegDecoder
             }
             var storage=component.Coefficients;
             component.Coefficients = []; context.Release(length * 4L);
-            JpegCoefficientPool.Shared.Return(storage);
+            context.ReturnCoefficients(storage);
         }
         var result = ImageBuffer.Allocate(info.Width, info.Height, 8, context); result.Orientation = info.Orientation;
         try

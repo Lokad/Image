@@ -14,6 +14,14 @@ async/bounded stream inspection, shared admission and structured failures, and
 improved WebP compression efficiency. Keep ICC conversion and EXIF reorientation
 opt-in. GIF and animation are deferred.
 
+Required qualification also covers caller-owned cooperative memory admission,
+supplied-font layout/shaping compatibility (including Arabic) and Lanczos3.
+Forward the borrowed ImageLimits.MemoryBudget root through nested work; reserve
+owned capacity before allocation and keep retained results charged until disposal.
+Admission refusal is terminal, without retry, waiting or a lower-memory fallback.
+Preserve independent local/work limits and await actual asynchronous users before
+releasing their storage. Published 0.1.0 is immutable; development targets 0.2.0.
+
 Use `./test.ps1` for offline Release tests, and `./test.ps1 -Differential` for live
 FFmpeg comparisons. Missing FFmpeg must fail the differential suite explicitly.
 Use `--tl:off` for dotnet output. Pack only with `-c Release` and verify the actual

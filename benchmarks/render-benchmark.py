@@ -324,6 +324,11 @@ conservative upper ≤1x**. The 227 current numeric rows contain **{parity_count
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
+These tables retain the last performance-qualified builds linked in each report.
+The 0.2.0 cooperative-memory changes are undergoing separate qualification;
+their changed admission, disposal and governed storage paths have no warm timing
+claim yet. Earlier confirmations remain evidence for their identified builds.
+
 [Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
 **76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
 **720,810B/op**. Managed pixels, native bounds and complete owned-output boundaries

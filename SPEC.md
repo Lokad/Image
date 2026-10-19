@@ -15,14 +15,15 @@ from required future functionality.
 | WebP lossy decode | Implemented; exact frozen YUV/alpha reconstruction and bounded RGB comparisons | VP8 key frames with raw/compressed ALPH |
 | WebP lossy encode | Implemented; original output independently decoded by FFmpeg | VP8 output with explicit quality/effort and transparency |
 | Exact edits | Implemented; hand-computed permutations and live FFmpeg checks | Crop, flips, quarter turns, transpose, all eight EXIF orientations |
-| Resize | Implemented; hand-computed kernel and alpha cases | Exact dimensions, fit, nearest/bilinear/bicubic, alpha-aware filtering |
+| Resize | Nearest/bilinear/bicubic implemented; Lanczos3 pending | Exact dimensions, aspect-preserving fit and alpha-aware nearest/bilinear/bicubic/Lanczos3 at 8/16 bits |
 | JPEG caller samples | Gray/RGB/CMYK decode and gray/RGB encode implemented in development | Caller-provided 8-bit samples without mandatory RGBA; explicit source color space/inversion, quality and sampling |
 | JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4×1) / 4:1:0 (4×2) sampling |
 | Stream extensions | Async Identify/Decode/Encode and fixed-workspace InspectHeaders implemented in development | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
 | Drawing/compositing | Implemented in development | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
-| Text | Implemented in development: supplied TrueType loading, outlines, pixel layout/measurement and 8/16-bit antialiased rendering | Supplied TrueType fonts; size/style/color/position, wrapping, line spacing and layout bounds for overflow/fitting |
+| Text | Supplied TrueType loading, logical-LTR layout and 8/16-bit rendering implemented in development; shaping/compatibility qualification pending | Supplied faces, alignment/style, wrapping/line spacing, reliable bounds/fitting, combining marks and bidirectional/shaped text including Arabic |
 | Failure details | Implemented in development | Typed exhausted-limit and unsupported-feature categories with recognized codec when known |
 | Shared admission | Implemented in development | ImageBudget codec entry points and caller reservations; coarse per-operation reservation, cumulative charged work and independently retained BudgetedImage outputs |
+| Cooperative memory | Implemented in development; qualification ongoing | Borrowed host-independent shared-root hooks, pre-allocation capacity/peak admission and explicit retained-image/font/layout lifetime accounting across public operations |
 | Compression efficiency | Required ongoing work | WebP lossless sizes and lossy size/quality/time; JPEG comparisons at matched quality or size on representative photographs and text/diagrams |
 
 GIF, APNG and animated WebP are rejected. Arithmetic/lossless/12-bit JPEG,
@@ -33,6 +34,44 @@ cancellation, pixel precision, caller ownership and independent output lifetimes
 
 ## Pixels and ownership
 
+Development targets package version 0.2.0; published 0.1.0 remains unchanged.
+Replacement qualification is pending cooperative-memory, text-layout/shaping,
+Lanczos3, packaged-consumer and warm-performance gates. Default option values
+do not establish compatibility requirements.
+
+### Cooperative memory admission
+
+Set `ImageLimits.MemoryBudget` to a caller-owned `IMemoryBudget` adapter and
+forward the same root through each operation's limits/options. The interfaces
+`IMemoryBudget`, `IMemoryScope` and `IMemoryReservation` introduce no governor
+implementation or dependency. Scopes share the root, start empty and refund
+their subtree on idempotent nonthrowing disposal. Admission is immediate and
+thread-safe; zero is valid, negative estimates throw, refusal changes nothing,
+and disposed owners reject admission/resizing. A reservation reports zero after
+its disposal or an ancestor's disposal. Callers serialize disposal with active
+users; disposing a scope does not cancel work or dispose runtime objects.
+
+Substantial owned capacity is reserved before allocation, including overlapping
+old/new storage during growth. Borrowed encoded input, sample buffers, images,
+fonts, layouts and output streams are not charged again; actual copies are.
+Local `ImageLimits` still count supplied inputs/results as before. Temporary
+execution owners refund on success/failure; images, fonts and layouts retain
+independent admission until their explicit `Dispose`. Prepared layout outlines
+remain usable after their source font is disposed. Stop all users before disposing
+these objects or a caller-owned ancestor. No refund relies on garbage collection.
+
+Governed operations select uncached pixel/coefficient/input/output storage before
+admission and never populate uncharged process-wide pools. Minor objects and
+fixed runtime storage are approximate; admission does not measure heap/RSS and
+callers must retain runtime/collection headroom. Asynchronous reservations remain
+live until actual reads/writes and cleanup complete, including after cancellation.
+Refusal throws `ImageLimitException` with `WorkingBytes`/`SharedBudget`, ends the
+operation and refunds relinquished storage. It never triggers a retry, wait,
+eviction or lower-memory fallback. Cancellation and actual allocation failure
+remain distinct. Existing work limits and `ImageBudget` quotas remain independent.
+
+### Pixel buffers
+
 `ImageBuffer` owns a tightly packed top-to-bottom RGBA byte array. Channels use
 straight alpha. `GetRow8` exposes byte samples; `GetRow16` exposes native-endian
 unsigned 16-bit samples. 8-bit images use four bytes/pixel, 16-bit images eight.
@@ -42,7 +81,7 @@ crop and rotation/flip storage may be reused by a later result. Complete-overwri
 operations reconstruct every output sample before publishing their owner and
 dispose private results on failure. Live buffers never share their pixel
 storage. New `ImageBuffer.Create` buffers are zero initialized.
-Released pixel storage may retain at most two exact-size arrays, with their
+Without cooperative admission, released pixel storage may retain at most two exact-size arrays, with their
 combined idle bytes capped at 4 MiB. Only released leases are eligible; active
 owners never share storage. An unmatched size discards idle entries. Retention
 does not change input/result byte admission, and oversized arrays are not cached.

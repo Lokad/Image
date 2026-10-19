@@ -29,7 +29,7 @@ internal ref partial struct JpegDecoder
                     block.Slice(by * 8, 8).CopyTo(component.Plane.AsSpan((y * 8 + by) * component.BlockColumns * 8 + x * 8, 8));
             }
             var storage = component.Coefficients; component.Coefficients = [];
-            context.Release(length * 4L); JpegCoefficientPool.Shared.Return(storage);
+            context.Release(length * 4L); context.ReturnCoefficients(storage);
         }
     }
 }

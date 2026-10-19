@@ -26,7 +26,7 @@ internal ref partial struct JpegDecoder
             fullResolution = components[c].H == maxH && components[c].V == maxV;
         if (fullResolution)
         {
-            JpegCoefficientPool.Shared.EnableFourthSlot();
+            if (!context.HasMemoryBudget) JpegCoefficientPool.Shared.EnableFourthSlot();
             MaterializeCmykPlanes();
         }
         else MaterializeSamplePlanes();

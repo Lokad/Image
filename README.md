@@ -14,8 +14,9 @@ implemented, with no NuGet dependencies, unsafe code or native bindings.
   transpose and nearest/bilinear/bicubic resize; rectangle fill/copy and alpha compositing.
 - **Streams:** synchronous/asynchronous identification, decoding and encoding;
   fixed-workspace dimension/orientation inspection with `InspectHeaders`.
-- **Text (in development):** supplied TrueType faces, Unicode layout, wrapping,
-  pixel bounds and antialiased rendering on 8/16-bit canvases.
+- **Text (in development):** supplied TrueType faces, logical left-to-right layout,
+  wrapping, pixel bounds and antialiased rendering on 8/16-bit canvases.
+  Bidirectional layout and Arabic/OpenType shaping are not yet supported.
 
 GIF, animation, ICC color management and metadata round-tripping are deferred.
 [SPEC.md](SPEC.md) defines current support and planned still-image extensions,
@@ -35,11 +36,12 @@ using var output = File.Create("thumbnail.png");
 ImageCodec.EncodePng(thumbnail, output);
 ```
 
-Dispose image buffers; supplied streams remain open. Operations support finite
+Dispose image buffers, fonts and prepared text layouts; supplied streams remain open. Operations support finite
 [resource limits](docs/resource-admission.md) and cancellation. PNG preserves
 precision; JPEG/WebP output is 8-bit. WebP defaults to lossless. For transparent
 JPEG input, set `JpegEncodeOptions.BackgroundRgb` explicitly.
-`ImageBudget` composes codec admission with a caller's shared memory/work budget.
+Development toward 0.2.0 adds caller-owned cooperative memory admission through
+`ImageLimits.MemoryBudget`. `ImageBudget` separately provides codec memory/work quotas.
 
 The [usage guide](docs/usage.md) covers encoding, cropping and 16-bit editing.
 The named warm single-CPU workloads meet the ≤2× target against explicitly labeled

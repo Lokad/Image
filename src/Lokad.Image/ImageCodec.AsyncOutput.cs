@@ -27,7 +27,7 @@ public static partial class ImageCodec
     {
         ArgumentNullException.ThrowIfNull(image); ArgumentNullException.ThrowIfNull(output);
         options ??= new PngEncodeOptions();
-        var context = new OperationContext(options.Limits, cancellationToken);
+        using var context = new OperationContext(options.Limits, cancellationToken);
         var admission = budget?.Begin(context.Limits);
         try
         {
@@ -44,7 +44,7 @@ public static partial class ImageCodec
     {
         ArgumentNullException.ThrowIfNull(image); ArgumentNullException.ThrowIfNull(output);
         options ??= new JpegEncodeOptions();
-        var context = new OperationContext(options.Limits, cancellationToken);
+        using var context = new OperationContext(options.Limits, cancellationToken);
         var admission = budget?.Begin(context.Limits);
         try
         {
@@ -61,7 +61,7 @@ public static partial class ImageCodec
     {
         ArgumentNullException.ThrowIfNull(image); ArgumentNullException.ThrowIfNull(output);
         options ??= new WebpEncodeOptions();
-        var context = new OperationContext(options.Limits, cancellationToken);
+        using var context = new OperationContext(options.Limits, cancellationToken);
         var admission = budget?.Begin(context.Limits);
         try
         {
@@ -79,7 +79,7 @@ public static partial class ImageCodec
     {
         ArgumentNullException.ThrowIfNull(output);
         options ??= new JpegEncodeOptions();
-        var context = new OperationContext(options.Limits, cancellationToken);
+        using var context = new OperationContext(options.Limits, cancellationToken);
         ImageBudget.OperationReservation? admission = null;
         EncodedOutput? staged = null;
         try
@@ -89,7 +89,7 @@ public static partial class ImageCodec
                     || options.RestartInterval is < 0 or > 65535 || options.BackgroundRgb > 0xFFFFFF)
                     throw new ArgumentOutOfRangeException(nameof(options));
                 var source = new JpegSampleInput(samples.Span, width, height, format, stride, context);
-                context.Reserve(samples.Length); context.Reserve(8192);
+                context.ReserveBorrowed(samples.Length); context.Reserve(8192);
                 admission = budget?.Begin(context.Limits);
                 staged = JpegEncoder.AsyncSampleOutput(source, options, context);
                 using var bounded = new LimitedWriteStream(staged.Target, context.Limits.MaxOutputBytes, cancellationToken);

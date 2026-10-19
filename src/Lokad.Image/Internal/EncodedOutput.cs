@@ -28,14 +28,14 @@ internal sealed class EncodedOutput : IDisposable
         byte[]? bytes = null;
         try
         {
-            bytes = storage.Rent(capacity);
+            bytes = context.RentPixels(storage, capacity);
             var memory = new MemoryStream(bytes, 0, capacity, writable: true, publiclyVisible: true);
             memory.SetLength(0);
             return new EncodedOutput(context) { memory = memory, contiguous = bytes };
         }
         catch
         {
-            if (bytes is not null) storage.Return(bytes);
+            if (bytes is not null) context.ReturnPixels(storage, bytes);
             context.Release((long)capacity + Overhead); throw;
         }
     }
@@ -75,7 +75,7 @@ internal sealed class EncodedOutput : IDisposable
     {
         var bytes = Interlocked.Exchange(ref contiguous, null);
         memory?.Dispose(); memory = null;
-        if (bytes is not null) { storage.Return(bytes); context.Release((long)bytes.Length + Overhead); }
+        if (bytes is not null) { context.ReturnPixels(storage, bytes); context.Release((long)bytes.Length + Overhead); }
         chunks?.Dispose(); chunks = null;
     }
 
@@ -112,10 +112,10 @@ internal sealed class EncodedOutput : IDisposable
                     context.Reserve(capacity + (long)overhead);
                     byte[]? bytes = null;
                     Chunk next;
-                    try { bytes = storage.Rent(capacity); next = new Chunk(bytes); }
+                    try { bytes = context.RentPixels(storage, capacity); next = new Chunk(bytes); }
                     catch
                     {
-                        if (bytes is not null) storage.Return(bytes);
+                        if (bytes is not null) context.ReturnPixels(storage, bytes);
                         context.Release(capacity + (long)overhead); throw;
                     }
                     if (tail is null) Head = next; else tail.Next = next;
@@ -137,7 +137,7 @@ internal sealed class EncodedOutput : IDisposable
                 if (Head is not null) context.Release(Overhead);
                 for (var chunk = Head; chunk is not null; chunk = chunk.Next)
                 {
-                    storage.Return(chunk.Bytes); context.Release(chunk.Bytes.Length + (long)NodeBytes);
+                    context.ReturnPixels(storage, chunk.Bytes); context.Release(chunk.Bytes.Length + (long)NodeBytes);
                 }
                 Head = tail = null;
             }

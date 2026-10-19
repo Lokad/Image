@@ -9,6 +9,8 @@ $snippets = [regex]::Matches($guide, '(?ms)^```csharp\r?\n(.*?)\r?\n```$')
 if ($snippets.Count -ne 3) { throw 'Expected the three runnable usage-guide examples.' }
 $cache = Join-Path $ConsumerDirectory 'packages'
 $config = Join-Path $ConsumerDirectory 'NuGet.Config'
+[xml]$consumerProject = Get-Content -LiteralPath (Join-Path $ConsumerDirectory 'Consumer.csproj') -Raw
+$packageVersion = ($consumerProject.Project.ItemGroup.PackageReference | Where-Object { $_.Include -eq 'Lokad.Image' }).Version
 
 $inputSetup = @'
 const int docWidth = 300, docHeight = 200;
@@ -97,7 +99,7 @@ for ($index = 0; $index -lt $snippets.Count; $index++) {
     $directory = Join-Path $ConsumerDirectory ('usage-example-' + ($index + 1))
     New-Item -ItemType Directory -Path $directory | Out-Null
     $project = Join-Path $directory 'Example.csproj'
-    @'
+    @"
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework>
@@ -105,9 +107,9 @@ for ($index = 0; $index -lt $snippets.Count; $index++) {
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
   </PropertyGroup>
-  <ItemGroup><PackageReference Include="Lokad.Image" Version="0.1.0" /></ItemGroup>
+  <ItemGroup><PackageReference Include="Lokad.Image" Version="$packageVersion" /></ItemGroup>
 </Project>
-'@ | Set-Content -LiteralPath $project -Encoding utf8
+"@ | Set-Content -LiteralPath $project -Encoding utf8
     $snippet = [regex]::Replace($snippets[$index].Groups[1].Value, '^using Lokad\.Image;\r?\n', '')
     $parts = @('using Lokad.Image;', 'using System.Security.Cryptography;')
     if ($index -ne 1) { $parts += $inputSetup }
@@ -120,7 +122,7 @@ for ($index = 0; $index -lt $snippets.Count; $index++) {
     if ($LASTEXITCODE -ne 0) { throw 'Usage example package-only restore failed.' }
     $assets = Get-Content -LiteralPath (Join-Path $directory 'obj/project.assets.json') -Raw | ConvertFrom-Json
     $libraries = @($assets.libraries.PSObject.Properties.Name)
-    if ($libraries.Count -ne 1 -or $libraries[0] -ne 'Lokad.Image/0.1.0') { throw 'Usage example package graph is not dependency-free.' }
+    if ($libraries.Count -ne 1 -or $libraries[0] -ne "Lokad.Image/$packageVersion") { throw 'Usage example package graph is not dependency-free.' }
     dotnet build $project -c Release --no-restore --tl:off --nologo -v minimal -m:1 -nr:false -p:UseSharedCompilation=false
     if ($LASTEXITCODE -ne 0) { throw 'Usage example Release build failed.' }
     Push-Location $directory

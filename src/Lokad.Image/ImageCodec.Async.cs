@@ -29,6 +29,7 @@ public static partial class ImageCodec
 
     private static async ValueTask<ImageInfo> IdentifyFromStreamAsync(Stream input, OperationContext context)
     {
+        using var execution = context;
         using var data = await IdentificationInput.ReadAsync(input, context).ConfigureAwait(false);
         try { return IdentifyCore(data.Span, context); }
         finally { context.Release(data.Capacity); }
@@ -36,6 +37,7 @@ public static partial class ImageCodec
 
     private static async ValueTask<ImageBuffer> DecodeFromStreamAsync(Stream input, DecodeOptions options, OperationContext context)
     {
+        using var execution = context;
         using var data = await IdentificationInput.ReadAsync(input, context).ConfigureAwait(false);
         try { return DecodeCore(data.Span, options, context); }
         finally { context.Release(data.Capacity); }
@@ -44,7 +46,7 @@ public static partial class ImageCodec
     internal static async ValueTask<ImageInfo> IdentifyWithBudgetAsync(Stream input, ImageBudget budget,
         ImageLimits? limits, CancellationToken cancellationToken)
     {
-        var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
+        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
         ArgumentNullException.ThrowIfNull(input);
         var admission = budget.Begin(context.Limits);
         try { return await IdentifyFromStreamAsync(input, context).ConfigureAwait(false); }
@@ -55,7 +57,7 @@ public static partial class ImageCodec
         DecodeOptions? options, CancellationToken cancellationToken)
     {
         options ??= new DecodeOptions();
-        var context = new OperationContext(options.Limits, cancellationToken);
+        using var context = new OperationContext(options.Limits, cancellationToken);
         ArgumentNullException.ThrowIfNull(input);
         var admission = budget.Begin(context.Limits);
         BudgetedImage? result = null;

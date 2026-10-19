@@ -129,7 +129,7 @@ internal static class PngCodec
     {
         var header = Scan(data, context);
         context.Reserve(header.CompressedLength);
-        var compressed = compressedStorage.Rent(header.CompressedLength);
+        var compressed = context.RentPixels(compressedStorage, header.CompressedLength);
         try
         {
             int source = 8, target = 0;
@@ -163,7 +163,7 @@ internal static class PngCodec
             if (materialize) context.Reserve(filteredBytes);
             try
             {
-                if (materialize) filtered = inflatedStorage.Rent(filteredBytes);
+                if (materialize) filtered = context.RentPixels(inflatedStorage, filteredBytes);
                 int streamLength;
                 var useFiltered = false;
                 if (filtered is not null)
@@ -180,7 +180,7 @@ internal static class PngCodec
                     // the already completed framing walk.
                     if (!useFiltered)
                     {
-                        inflatedStorage.Return(filtered); filtered = null;
+                        context.ReturnPixels(inflatedStorage, filtered); filtered = null;
                         context.Release(filteredBytes); filteredBytes = 0;
                     }
                 }
@@ -214,7 +214,7 @@ internal static class PngCodec
                     }
                     finally
                     {
-                        if (speculative is not null) { speculative.Dispose(); context.Release(pixelBytes); }
+                        if (speculative is not null) { speculative.Dispose(); context.ReleaseBorrowed(pixelBytes); }
                         context.Release(workspace + rowBytes * 2);
                     }
                     // Uncertain trees, filters and checksums replay only raster
@@ -228,13 +228,13 @@ internal static class PngCodec
             }
             finally
             {
-                if (filtered is not null) inflatedStorage.Return(filtered);
+                if (filtered is not null) context.ReturnPixels(inflatedStorage, filtered);
                 context.Release(filteredBytes);
             }
         }
         finally
         {
-            compressedStorage.Return(compressed);
+            context.ReturnPixels(compressedStorage, compressed);
             context.Release(header.CompressedLength + (long)header.Palette.Length + header.Transparency.Length);
         }
     }
@@ -302,7 +302,8 @@ internal static class PngCodec
                     && context.RemainingWork >= height * (rowBytes * 6L + width * 4L)
                     && context.RemainingWorkingBytes >= PngInflatedReader.BufferBytes)
                 {
-                    bufferedBytes = PngInflatedReader.BufferBytes; context.Reserve(bufferedBytes); zlib.EnableBuffer();
+                    context.Reserve(PngInflatedReader.BufferBytes);
+                    bufferedBytes = PngInflatedReader.BufferBytes; zlib.EnableBuffer();
                 }
                 for (var y = 0; y < height; y++)
                 {
@@ -1438,7 +1439,7 @@ internal static class PngCodec
         if (!Enum.IsDefined(options.ColorType) || !Enum.IsDefined(options.Compression))
             throw new ArgumentOutOfRangeException(nameof(options));
         context.PixelBytes(source.Width, source.Height, source.BitDepth);
-        context.Reserve(source.ByteLength);
+        context.ReserveBorrowed(source.ByteLength);
         var color = (int)options.ColorType;
         var rowBytes = source.Width * Channels(color) * (source.BitDepth / 8);
         // Fixed admission allowance for the BCL compressor and its managed IO

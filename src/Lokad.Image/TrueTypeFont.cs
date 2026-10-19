@@ -16,10 +16,12 @@ public readonly record struct FontGlyphMetrics(int GlyphIndex, int AdvanceWidth,
 /// <remarks>Unicode cmap formats 4/12 and short/long loca are supported. Font loading
 /// validates table ranges, selected mapping and glyph headers, not all outlines or
 /// checksums. No font instructions are executed. Caller input is copied once.</remarks>
-public sealed partial class TrueTypeFont
+public sealed partial class TrueTypeFont : IDisposable
 {
     private const int DescriptorBytes = 256;
-    private readonly byte[] data;
+    private byte[] data;
+    private OperationContext? storageOwner;
+    private bool disposed;
     private readonly int tableCount, metricCount, locationWidth, cmapFormat, mappingCount;
     private readonly TableRange glyf, loca, hmtx, cmap;
     private readonly record struct TableRange(int Offset, int Length);
@@ -36,28 +38,40 @@ public sealed partial class TrueTypeFont
     public static TrueTypeFont Load(ReadOnlySpan<byte> input, ImageLimits? limits = null, CancellationToken cancellationToken = default)
     {
         var context = InputContext(input.Length, limits, cancellationToken);
-        return new TrueTypeFont(input.ToArray(), context);
+        try
+        {
+            var font = new TrueTypeFont(input.ToArray(), context) { storageOwner = context };
+            return font;
+        }
+        catch { context.Dispose(); throw; }
     }
 
     internal static OperationContext InputContext(int length, ImageLimits? limits, CancellationToken cancellationToken)
     {
         var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        if (length > context.Limits.MaxInputBytes) throw new ImageLimitException(ImageLimitKind.InputBytes, "Font input limit exceeded.");
-        if (length > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "Owned font exceeds the managed array limit.");
-        context.Reserve(length);
-        context.Reserve(length + (long)DescriptorBytes);
-        context.Work(length);
-        return context;
+        try
+        {
+            if (length > context.Limits.MaxInputBytes) throw new ImageLimitException(ImageLimitKind.InputBytes, "Font input limit exceeded.");
+            if (length > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "Owned font exceeds the managed array limit.");
+            context.ReserveBorrowed(length);
+            context.Reserve(length + (long)DescriptorBytes);
+            context.Work(length);
+            return context;
+        }
+        catch { context.Dispose(); throw; }
     }
 
     /// <summary>Map a Unicode scalar to a glyph index, returning zero for an absent character.</summary>
     public int GetGlyphIndex(Rune character, ImageLimits? limits = null, CancellationToken cancellationToken = default)
-        => Map(character.Value, Context(limits, cancellationToken));
+    {
+        using var context = Context(limits, cancellationToken);
+        return Map(character.Value, context);
+    }
 
     /// <summary>Read a Unicode scalar's unscaled metrics, using glyph zero when absent.</summary>
     public FontGlyphMetrics GetGlyphMetrics(Rune character, ImageLimits? limits = null, CancellationToken cancellationToken = default)
     {
-        var context = Context(limits, cancellationToken);
+        using var context = Context(limits, cancellationToken);
         return Metrics(Map(character.Value, context), context);
     }
 
@@ -65,13 +79,26 @@ public sealed partial class TrueTypeFont
     public FontGlyphMetrics GetGlyphMetrics(int glyphIndex, ImageLimits? limits = null, CancellationToken cancellationToken = default)
     {
         if ((uint)glyphIndex >= GlyphCount) throw new ArgumentOutOfRangeException(nameof(glyphIndex));
-        return Metrics(glyphIndex, Context(limits, cancellationToken));
+        using var context = Context(limits, cancellationToken);
+        return Metrics(glyphIndex, context);
     }
 
     private OperationContext Context(ImageLimits? limits, CancellationToken cancellationToken)
     {
+        EnsureAlive();
         var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        context.Reserve(StorageBytes); return context;
+        context.ReserveBorrowed(StorageBytes); return context;
+    }
+
+    internal void EnsureAlive() => ObjectDisposedException.ThrowIf(disposed, this);
+
+    /// <summary>Release owned font storage and its admission. Synchronize with all font users.</summary>
+    /// <remarks>Previously prepared layouts own their decoded outlines independently.</remarks>
+    public void Dispose()
+    {
+        if (disposed) return;
+        disposed = true; data = [];
+        Interlocked.Exchange(ref storageOwner, null)?.Dispose();
     }
 
     // Format facts: Microsoft OpenType specifications otff/head/hhea/maxp/hmtx/loca/glyf.

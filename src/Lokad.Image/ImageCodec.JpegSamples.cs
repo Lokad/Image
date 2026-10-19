@@ -21,12 +21,12 @@ public static partial class ImageCodec
     {
         ArgumentNullException.ThrowIfNull(output);
         options ??= new JpegEncodeOptions();
-        var context = new OperationContext(options.Limits, cancellationToken);
+        using var context = new OperationContext(options.Limits, cancellationToken);
         if (options.Quality is < 1 or > 100 || !Enum.IsDefined(options.Sampling)
             || options.RestartInterval is < 0 or > 65535 || options.BackgroundRgb > 0xFFFFFF)
             throw new ArgumentOutOfRangeException(nameof(options));
         var source = new JpegSampleInput(samples, width, height, format, stride, context);
-        context.Reserve(samples.Length); context.Reserve(8192);
+        context.ReserveBorrowed(samples.Length); context.Reserve(8192);
         using var bounded = new LimitedWriteStream(output, options.Limits.MaxOutputBytes, cancellationToken);
         if (budget is null) { JpegEncoder.EncodeSamples(source, bounded, options, context); return; }
         var admission = budget.Begin(context.Limits);
@@ -50,7 +50,7 @@ public static partial class ImageCodec
         CancellationToken cancellationToken, ImageBudget? budget)
     {
         options ??= new JpegDecodeOptions();
-        var context = InputContext(input.Length, options.Limits, cancellationToken);
+        using var context = InputContext(input.Length, options.Limits, cancellationToken);
         if (!Enum.IsDefined(format)) throw new ArgumentOutOfRangeException(nameof(format));
         if (!Enum.IsDefined(options.SourceColorSpace)) throw new ArgumentOutOfRangeException(nameof(options));
         if (!Enum.IsDefined(options.CmykInversion)) throw new ArgumentOutOfRangeException(nameof(options));
@@ -60,7 +60,7 @@ public static partial class ImageCodec
             throw new UnsupportedImageException(UnsupportedImageFeature.Format, "Expected a JPEG image.");
         // The caller-supplied span counts toward the same live-memory allowance
         // as encoded input and codec workspace, including any supplied padding.
-        context.Reserve(destination.Length);
+        context.ReserveBorrowed(destination.Length);
         if (budget is null)
             return new JpegDecoder(input, context).DecodeSamples(destination, format, stride, options);
         var admission = budget.Begin(context.Limits);

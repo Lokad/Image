@@ -7,8 +7,8 @@ internal static class TransverseCopy
 {
     public static ImageBuffer Apply(ImageBuffer source, ImageLimits? limits, CancellationToken cancellationToken)
     {
-        var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        context.Reserve(source.ByteLength);
+        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
+        context.ReserveBorrowed(source.ByteLength);
         var result = ImageBuffer.AllocateForOverwrite(source.Height, source.Width, source.BitDepth, context);
         try
         {

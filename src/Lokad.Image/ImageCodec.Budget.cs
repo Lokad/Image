@@ -7,7 +7,7 @@ public static partial class ImageCodec
     internal static ImageInfo IdentifyWithBudget(ReadOnlySpan<byte> input, ImageBudget budget,
         ImageLimits? limits, CancellationToken cancellationToken)
     {
-        var context = InputContext(input.Length, limits, cancellationToken);
+        using var context = InputContext(input.Length, limits, cancellationToken);
         var admission = budget.Begin(context.Limits);
         try { return IdentifyCore(input, context); }
         finally { admission.Complete(context.ConsumedWork); }
@@ -16,7 +16,7 @@ public static partial class ImageCodec
     internal static ImageInfo IdentifyWithBudget(Stream input, ImageBudget budget,
         ImageLimits? limits, CancellationToken cancellationToken)
     {
-        var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
+        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
         ArgumentNullException.ThrowIfNull(input);
         var admission = budget.Begin(context.Limits);
         try
@@ -31,7 +31,7 @@ public static partial class ImageCodec
         DecodeOptions? options, CancellationToken cancellationToken)
     {
         options ??= new DecodeOptions();
-        var context = InputContext(input.Length, options.Limits, cancellationToken);
+        using var context = InputContext(input.Length, options.Limits, cancellationToken);
         var admission = budget.Begin(context.Limits);
         BudgetedImage? result = null;
         try { return result = BudgetedImage.Create(DecodeCore(input, options, context)); }
@@ -42,7 +42,7 @@ public static partial class ImageCodec
         DecodeOptions? options, CancellationToken cancellationToken)
     {
         options ??= new DecodeOptions();
-        var context = new OperationContext(options.Limits, cancellationToken);
+        using var context = new OperationContext(options.Limits, cancellationToken);
         ArgumentNullException.ThrowIfNull(input);
         var admission = budget.Begin(context.Limits);
         BudgetedImage? result = null;
@@ -55,7 +55,7 @@ public static partial class ImageCodec
     {
         ArgumentNullException.ThrowIfNull(image); ArgumentNullException.ThrowIfNull(output);
         options ??= new PngEncodeOptions();
-        var context = new OperationContext(options.Limits, cancellationToken);
+        using var context = new OperationContext(options.Limits, cancellationToken);
         var admission = budget.Begin(context.Limits);
         try
         {
@@ -70,7 +70,7 @@ public static partial class ImageCodec
     {
         ArgumentNullException.ThrowIfNull(image); ArgumentNullException.ThrowIfNull(output);
         options ??= new JpegEncodeOptions();
-        var context = new OperationContext(options.Limits, cancellationToken);
+        using var context = new OperationContext(options.Limits, cancellationToken);
         var admission = budget.Begin(context.Limits);
         try
         {
@@ -85,7 +85,7 @@ public static partial class ImageCodec
     {
         ArgumentNullException.ThrowIfNull(image); ArgumentNullException.ThrowIfNull(output);
         options ??= new WebpEncodeOptions();
-        var context = new OperationContext(options.Limits, cancellationToken);
+        using var context = new OperationContext(options.Limits, cancellationToken);
         var admission = budget.Begin(context.Limits);
         try
         {

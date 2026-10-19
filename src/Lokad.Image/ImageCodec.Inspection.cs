@@ -20,7 +20,7 @@ public static partial class ImageCodec
     internal static async ValueTask<ImageInfo> InspectHeadersCore(Stream input, ImageLimits? limits, CancellationToken cancellationToken,
         ImageBudget? budget, bool asynchronous)
     {
-        var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
+        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
         ArgumentNullException.ThrowIfNull(input);
         var admission = budget?.Begin(context.Limits);
         try

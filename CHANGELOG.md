@@ -1,6 +1,10 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 — Unreleased
+
+- Caller-owned `IMemoryBudget` hooks across codecs, inspection, editing and text;
+  live capacities and retained results stay charged until explicit disposal.
+  Fonts and prepared layouts now implement `IDisposable`.
 
 - Asynchronous PNG/JPEG/WebP output, including caller JPEG samples and shared
   budgets, with bounded staging and JPEG adaptive entropy when admitted.

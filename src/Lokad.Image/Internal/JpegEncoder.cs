@@ -18,7 +18,7 @@ internal static partial class JpegEncoder
             throw new ArgumentOutOfRangeException(nameof(options));
         context.PixelBytes(image.Width, image.Height, image.BitDepth);
         if (image.Width > 65535 || image.Height > 65535) throw new ImageLimitException(ImageLimitKind.Dimension, "JPEG dimensions exceed 65535.");
-        context.Reserve(image.ByteLength);
+        context.ReserveBorrowed(image.ByteLength);
         // Fixed table/scratch allocation is admitted before any header is written.
         context.Reserve(8192);
         var components = options.Sampling == JpegSampling.Grayscale ? 1 : 3;
@@ -232,7 +232,7 @@ internal static partial class JpegEncoder
     private static void EncodeAdaptive(ImageBuffer image, Stream output, JpegEncodeOptions options, OperationContext context)
     {
         context.PixelBytes(image.Width, image.Height, image.BitDepth);
-        context.Reserve(image.ByteLength); context.Reserve(8192);
+        context.ReserveBorrowed(image.ByteLength); context.Reserve(8192);
         var components = options.Sampling == JpegSampling.Grayscale ? 1 : 3;
         var h = options.Sampling is JpegSampling.YCbCr420 or JpegSampling.YCbCr422 ? 2 : 1;
         var v = options.Sampling == JpegSampling.YCbCr420 ? 2 : 1;

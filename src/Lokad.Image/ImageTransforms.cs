@@ -106,24 +106,28 @@ public static class ImageTransforms
     private static ImageBuffer Map(ImageBuffer source, int width, int height, Func<int, int, (int X, int Y)> map,
         ImageLimits? limits, CancellationToken cancellationToken)
     {
-        var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        context.Reserve(source.ByteLength);
+        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
+        context.ReserveBorrowed(source.ByteLength);
         var result = ImageBuffer.Allocate(width, height, source.BitDepth, context);
-        var bytesPerPixel = source.BitDepth / 8 * 4;
-        for (var y = 0; y < height; y++)
+        try
         {
-            for (var x = 0; x < width; x++)
+            var bytesPerPixel = source.BitDepth / 8 * 4;
+            for (var y = 0; y < height; y++)
             {
-                // A caller may raise MaxDimension beyond the default. Keep work
-                // admission and cancellation bounded within a long row as well.
-                if ((x & 1023) == 0) context.Work(Math.Min(1024, width - x) * 4L);
-                var (sx, sy) = map(x, y);
-                source.Pixels.Slice(sy * source.Stride + sx * bytesPerPixel, bytesPerPixel)
-                    .CopyTo(result.Pixels.Slice(y * result.Stride + x * bytesPerPixel, bytesPerPixel));
+                for (var x = 0; x < width; x++)
+                {
+                    // A caller may raise MaxDimension beyond the default. Keep work
+                    // admission and cancellation bounded within a long row as well.
+                    if ((x & 1023) == 0) context.Work(Math.Min(1024, width - x) * 4L);
+                    var (sx, sy) = map(x, y);
+                    source.Pixels.Slice(sy * source.Stride + sx * bytesPerPixel, bytesPerPixel)
+                        .CopyTo(result.Pixels.Slice(y * result.Stride + x * bytesPerPixel, bytesPerPixel));
+                }
             }
+            result.Orientation = source.Orientation;
+            return result;
         }
-        result.Orientation = source.Orientation;
-        return result;
+        catch { result.Dispose(); throw; }
     }
 
     public static ImageBuffer ResizeToFit(ImageBuffer source, int maxWidth, int maxHeight, bool allowUpscaling,
@@ -143,8 +147,8 @@ public static class ImageTransforms
     {
         ArgumentNullException.ThrowIfNull(source);
         if (!Enum.IsDefined(filter)) throw new ArgumentOutOfRangeException(nameof(filter));
-        var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        context.Reserve(source.ByteLength);
+        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
+        context.ReserveBorrowed(source.ByteLength);
         context.PixelBytes(width, height, source.BitDepth);
         if (width == source.Width && height == source.Height) return source.Clone(limits, cancellationToken);
         if (filter == ResizeFilter.Nearest)
@@ -158,210 +162,214 @@ public static class ImageTransforms
         var units = (double)width * height * tapsX * tapsY * 4;
         if (units > context.Limits.MaxWork) throw new ImageLimitException(ImageLimitKind.Work, "Resize work limit exceeded.");
         var result = ImageBuffer.Allocate(width, height, source.BitDepth, context);
-        var maximum = source.BitDepth == 8 ? 255 : 65535;
-        if (filter == ResizeFilter.Bicubic && MixedColumnBicubicResize.TryApply(source, result, scaleX, scaleY,
-            tapsX, tapsY, width * tapsX * tapsY * 4, context))
+        try
         {
-            result.Orientation = source.Orientation;
-            return result;
-        }
-        if (filter == ResizeFilter.Bicubic && MixedWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY,
-            tapsX, tapsY, width * tapsX * tapsY * 4, context))
-        {
-            result.Orientation = source.Orientation;
-            return result;
-        }
-        if (filter == ResizeFilter.Bicubic && CachedBicubicResize.TryApply(source, result, scaleX, scaleY,
-            tapsX, tapsY, width * tapsX * tapsY * 4, context))
-        {
-            result.Orientation = source.Orientation;
-            return result;
-        }
-        if (filter == ResizeFilter.Bicubic && (source.BitDepth == 8
-            ? ColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || WideColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || PackedColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || DeepColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || StreamingBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || PackedStreamingBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || GeneratedBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || EnlargingColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || CrossColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-            : WordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || WideWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || PackedWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || DeepWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || StreamingWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || PackedStreamingWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || GeneratedWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || EnlargingWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                || CrossWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)))
-        {
-            result.Orientation = source.Orientation;
-            return result;
-        }
-        double[]? horizontalWeights = null;
-        int[]? horizontalOffsets = null;
-        int[]? horizontalCounts = null;
-        var planElements = (long)width * 8;
-        var planBytes = planElements * (sizeof(double) + sizeof(int)) + (long)width * sizeof(int) + 3 * 64;
-        // Prepare short horizontal support once for all output rows. Leave room
-        // for exact tiny-alpha arithmetic; tight memory limits keep the direct path.
-        if (tapsX <= 8 && planElements <= Array.MaxLength
-            && planBytes <= context.Limits.MaxWorkingBytes - source.ByteLength - result.ByteLength - ResizeAlpha.ScratchBytes)
-        {
-            context.Reserve(planBytes);
-            horizontalWeights = new double[(int)planElements];
-            horizontalOffsets = new int[(int)planElements];
-            horizontalCounts = new int[width];
-            for (var x = 0; x < width; x++)
+            var maximum = source.BitDepth == 8 ? 255 : 65535;
+            if (filter == ResizeFilter.Bicubic && MixedColumnBicubicResize.TryApply(source, result, scaleX, scaleY,
+                tapsX, tapsY, width * tapsX * tapsY * 4, context))
             {
-                context.Cancellation.ThrowIfCancellationRequested();
-                var center = (x + 0.5) * source.Width / width - 0.5;
-                var first = (int)Math.Ceiling(center - radius * scaleX);
-                var last = (int)Math.Floor(center + radius * scaleX);
-                horizontalCounts[x] = last - first + 1;
-                for (var tap = 0; tap <= last - first; tap++)
-                {
-                    horizontalWeights[x * 8 + tap] = Kernel((first + tap - center) / scaleX, filter);
-                    horizontalOffsets[x * 8 + tap] = Math.Clamp(first + tap, 0, source.Width - 1) * 4;
-                }
-                if (filter == ResizeFilter.Bilinear
-                    && width > source.Width && height > source.Height)
-                {
-                    // Two-tap support leaves these existing geometry slots free.
-                    // Prepare the exact fractional numerator and bounded reads
-                    // once, instead of performing integer division per pixel.
-                    var numerator = (2L * x + 1) * source.Width - width;
-                    var cell = numerator < 0 ? -1 : (int)(numerator / (2L * width));
-                    horizontalOffsets[x * 8 + 3] = (int)(numerator - cell * (2L * width));
-                    horizontalOffsets[x * 8 + 4] = Math.Clamp(cell, 0, source.Width - 1) * 4;
-                    horizontalOffsets[x * 8 + 5] = Math.Clamp(cell + 1, 0, source.Width - 1) * 4;
-                }
+                result.Orientation = source.Orientation;
+                return result;
             }
-        }
-        if (horizontalWeights is not null && tapsY <= 8)
-        {
-            if (source.BitDepth == 8)
-                PreparedResize.Apply<byte>(source, result, horizontalWeights, horizontalOffsets,
-                    horizontalCounts, scaleY, radius, filter, width * tapsX * tapsY * 4, context);
-            else
-                PreparedResize.Apply<ushort>(source, result, horizontalWeights, horizontalOffsets,
-                    horizontalCounts, scaleY, radius, filter, width * tapsX * tapsY * 4, context);
-            result.Orientation = source.Orientation;
-            return result;
-        }
-        for (var y = 0; y < height; y++)
-        {
-            context.Work(width * tapsX * tapsY * 4);
-            Span<byte> destination8 = default;
-            Span<ushort> destination16 = default;
-            if (source.BitDepth == 8) destination8 = result.GetRow8(y);
-            else destination16 = result.GetRow16(y);
-            var cy = (y + 0.5) * source.Height / height - 0.5;
-            var firstY = (int)Math.Ceiling(cy - radius * scaleY);
-            var lastY = Math.Floor(cy + radius * scaleY);
-            // Reuse short vertical support across the output row without a
-            // heap workspace. Wider support retains direct evaluation.
-            var cachedY = lastY - firstY < 8;
-            var y0 = cachedY ? Kernel((firstY - cy) / scaleY, filter) : 0;
-            var y1 = cachedY && lastY - firstY >= 1 ? Kernel((firstY + 1 - cy) / scaleY, filter) : 0;
-            var y2 = cachedY && lastY - firstY >= 2 ? Kernel((firstY + 2 - cy) / scaleY, filter) : 0;
-            var y3 = cachedY && lastY - firstY >= 3 ? Kernel((firstY + 3 - cy) / scaleY, filter) : 0;
-            var y4 = cachedY && lastY - firstY >= 4 ? Kernel((firstY + 4 - cy) / scaleY, filter) : 0;
-            var y5 = cachedY && lastY - firstY >= 5 ? Kernel((firstY + 5 - cy) / scaleY, filter) : 0;
-            var y6 = cachedY && lastY - firstY >= 6 ? Kernel((firstY + 6 - cy) / scaleY, filter) : 0;
-            var y7 = cachedY && lastY - firstY >= 7 ? Kernel((firstY + 7 - cy) / scaleY, filter) : 0;
-            for (var x = 0; x < width; x++)
+            if (filter == ResizeFilter.Bicubic && MixedWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY,
+                tapsX, tapsY, width * tapsX * tapsY * 4, context))
             {
-                var planned = horizontalWeights is not null;
-                var cx = planned ? 0 : (x + 0.5) * source.Width / width - 0.5;
-                var firstX = planned ? 0 : (int)Math.Ceiling(cx - radius * scaleX);
-                var lastX = planned ? horizontalCounts![x] - 1 : (int)Math.Floor(cx + radius * scaleX);
-                // Reuse short horizontal support across vertical taps without
-                // a heap workspace. Wider support retains direct evaluation.
-                var cached = !planned && lastX - firstX < 8;
-                var w0 = cached ? Kernel((firstX - cx) / scaleX, filter) : 0;
-                var w1 = cached && lastX - firstX >= 1 ? Kernel((firstX + 1 - cx) / scaleX, filter) : 0;
-                var w2 = cached && lastX - firstX >= 2 ? Kernel((firstX + 2 - cx) / scaleX, filter) : 0;
-                var w3 = cached && lastX - firstX >= 3 ? Kernel((firstX + 3 - cx) / scaleX, filter) : 0;
-                var w4 = cached && lastX - firstX >= 4 ? Kernel((firstX + 4 - cx) / scaleX, filter) : 0;
-                var w5 = cached && lastX - firstX >= 5 ? Kernel((firstX + 5 - cx) / scaleX, filter) : 0;
-                var w6 = cached && lastX - firstX >= 6 ? Kernel((firstX + 6 - cx) / scaleX, filter) : 0;
-                var w7 = cached && lastX - firstX >= 7 ? Kernel((firstX + 7 - cx) / scaleX, filter) : 0;
-                double r = 0, g = 0, b = 0, alpha = 0, weightSum = 0;
-                for (var sy = firstY; sy <= lastY; sy++)
+                result.Orientation = source.Orientation;
+                return result;
+            }
+            if (filter == ResizeFilter.Bicubic && CachedBicubicResize.TryApply(source, result, scaleX, scaleY,
+                tapsX, tapsY, width * tapsX * tapsY * 4, context))
+            {
+                result.Orientation = source.Orientation;
+                return result;
+            }
+            if (filter == ResizeFilter.Bicubic && (source.BitDepth == 8
+                ? ColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                    || WideColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                    || PackedColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                    || DeepColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                    || StreamingBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                    || PackedStreamingBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                    || GeneratedBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                    || EnlargingColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                    || CrossColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                : WordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                    || WideWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                    || PackedWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                    || DeepWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                    || StreamingWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                    || PackedStreamingWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                    || GeneratedWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                    || EnlargingWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
+                    || CrossWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)))
+            {
+                result.Orientation = source.Orientation;
+                return result;
+            }
+            double[]? horizontalWeights = null;
+            int[]? horizontalOffsets = null;
+            int[]? horizontalCounts = null;
+            var planElements = (long)width * 8;
+            var planBytes = planElements * (sizeof(double) + sizeof(int)) + (long)width * sizeof(int) + 3 * 64;
+            // Prepare short horizontal support once for all output rows. Leave room
+            // for exact tiny-alpha arithmetic; tight memory limits keep the direct path.
+            if (tapsX <= 8 && planElements <= Array.MaxLength
+                && planBytes <= context.Limits.MaxWorkingBytes - source.ByteLength - result.ByteLength - ResizeAlpha.ScratchBytes)
+            {
+                context.Reserve(planBytes);
+                horizontalWeights = new double[(int)planElements];
+                horizontalOffsets = new int[(int)planElements];
+                horizontalCounts = new int[width];
+                for (var x = 0; x < width; x++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
-                    var wy = cachedY ? (sy - firstY) switch
+                    var center = (x + 0.5) * source.Width / width - 0.5;
+                    var first = (int)Math.Ceiling(center - radius * scaleX);
+                    var last = (int)Math.Floor(center + radius * scaleX);
+                    horizontalCounts[x] = last - first + 1;
+                    for (var tap = 0; tap <= last - first; tap++)
                     {
-                        0 => y0, 1 => y1, 2 => y2, 3 => y3,
-                        4 => y4, 5 => y5, 6 => y6, _ => y7
-                    } : Kernel((sy - cy) / scaleY, filter);
-                    if (wy == 0) continue;
-                    var iy = Math.Clamp(sy, 0, source.Height - 1);
-                    ReadOnlySpan<byte> row8 = default;
-                    ReadOnlySpan<ushort> row16 = default;
-                    if (source.BitDepth == 8) row8 = source.GetRow8(iy);
-                    else row16 = source.GetRow16(iy);
-                    for (var sx = firstX; sx <= lastX; sx++)
+                        horizontalWeights[x * 8 + tap] = Kernel((first + tap - center) / scaleX, filter);
+                        horizontalOffsets[x * 8 + tap] = Math.Clamp(first + tap, 0, source.Width - 1) * 4;
+                    }
+                    if (filter == ResizeFilter.Bilinear
+                        && width > source.Width && height > source.Height)
                     {
-                        var wx = planned ? horizontalWeights![x * 8 + sx] : cached ? (sx - firstX) switch
-                        {
-                            0 => w0, 1 => w1, 2 => w2, 3 => w3,
-                            4 => w4, 5 => w5, 6 => w6, _ => w7
-                        } : Kernel((sx - cx) / scaleX, filter);
-                        var weight = wy * wx;
-                        if (weight == 0) continue;
-                        var offset = planned ? horizontalOffsets![x * 8 + sx] : Math.Clamp(sx, 0, source.Width - 1) * 4;
-                        int a, red, green, blue;
-                        if (source.BitDepth == 8)
-                        {
-                            a = row8[offset + 3];
-                            red = row8[offset];
-                            green = row8[offset + 1];
-                            blue = row8[offset + 2];
-                        }
-                        else
-                        {
-                            a = row16[offset + 3];
-                            red = row16[offset];
-                            green = row16[offset + 1];
-                            blue = row16[offset + 2];
-                        }
-                        r += weight * a * red;
-                        g += weight * a * green;
-                        b += weight * a * blue;
-                        alpha += weight * a;
-                        weightSum += weight;
+                        // Two-tap support leaves these existing geometry slots free.
+                        // Prepare the exact fractional numerator and bounded reads
+                        // once, instead of performing integer division per pixel.
+                        var numerator = (2L * x + 1) * source.Width - width;
+                        var cell = numerator < 0 ? -1 : (int)(numerator / (2L * width));
+                        horizontalOffsets[x * 8 + 3] = (int)(numerator - cell * (2L * width));
+                        horizontalOffsets[x * 8 + 4] = Math.Clamp(cell, 0, source.Width - 1) * 4;
+                        horizontalOffsets[x * 8 + 5] = Math.Clamp(cell + 1, 0, source.Width - 1) * 4;
                     }
                 }
-                var normalizedAlpha = alpha / weightSum;
-                var roundedAlpha = normalizedAlpha > 0 && normalizedAlpha < 1
-                    ? ResizeAlpha.Round(source, x, y, width, height, filter, context)
-                    : Round(normalizedAlpha, maximum);
-                // Zero-alpha filtered output has no visible color. This also
-                // prevents tiny positive weight residue from exposing hidden RGB.
-                var hasColor = roundedAlpha > 0 && alpha > 0;
-                var destinationOffset = x * 4;
+            }
+            if (horizontalWeights is not null && tapsY <= 8)
+            {
                 if (source.BitDepth == 8)
-                {
-                    destination8[destinationOffset] = (byte)Round(hasColor ? r / alpha : 0, maximum);
-                    destination8[destinationOffset + 1] = (byte)Round(hasColor ? g / alpha : 0, maximum);
-                    destination8[destinationOffset + 2] = (byte)Round(hasColor ? b / alpha : 0, maximum);
-                    destination8[destinationOffset + 3] = (byte)roundedAlpha;
-                }
+                    PreparedResize.Apply<byte>(source, result, horizontalWeights, horizontalOffsets,
+                        horizontalCounts, scaleY, radius, filter, width * tapsX * tapsY * 4, context);
                 else
+                    PreparedResize.Apply<ushort>(source, result, horizontalWeights, horizontalOffsets,
+                        horizontalCounts, scaleY, radius, filter, width * tapsX * tapsY * 4, context);
+                result.Orientation = source.Orientation;
+                return result;
+            }
+            for (var y = 0; y < height; y++)
+            {
+                context.Work(width * tapsX * tapsY * 4);
+                Span<byte> destination8 = default;
+                Span<ushort> destination16 = default;
+                if (source.BitDepth == 8) destination8 = result.GetRow8(y);
+                else destination16 = result.GetRow16(y);
+                var cy = (y + 0.5) * source.Height / height - 0.5;
+                var firstY = (int)Math.Ceiling(cy - radius * scaleY);
+                var lastY = Math.Floor(cy + radius * scaleY);
+                // Reuse short vertical support across the output row without a
+                // heap workspace. Wider support retains direct evaluation.
+                var cachedY = lastY - firstY < 8;
+                var y0 = cachedY ? Kernel((firstY - cy) / scaleY, filter) : 0;
+                var y1 = cachedY && lastY - firstY >= 1 ? Kernel((firstY + 1 - cy) / scaleY, filter) : 0;
+                var y2 = cachedY && lastY - firstY >= 2 ? Kernel((firstY + 2 - cy) / scaleY, filter) : 0;
+                var y3 = cachedY && lastY - firstY >= 3 ? Kernel((firstY + 3 - cy) / scaleY, filter) : 0;
+                var y4 = cachedY && lastY - firstY >= 4 ? Kernel((firstY + 4 - cy) / scaleY, filter) : 0;
+                var y5 = cachedY && lastY - firstY >= 5 ? Kernel((firstY + 5 - cy) / scaleY, filter) : 0;
+                var y6 = cachedY && lastY - firstY >= 6 ? Kernel((firstY + 6 - cy) / scaleY, filter) : 0;
+                var y7 = cachedY && lastY - firstY >= 7 ? Kernel((firstY + 7 - cy) / scaleY, filter) : 0;
+                for (var x = 0; x < width; x++)
                 {
-                    destination16[destinationOffset] = (ushort)Round(hasColor ? r / alpha : 0, maximum);
-                    destination16[destinationOffset + 1] = (ushort)Round(hasColor ? g / alpha : 0, maximum);
-                    destination16[destinationOffset + 2] = (ushort)Round(hasColor ? b / alpha : 0, maximum);
-                    destination16[destinationOffset + 3] = (ushort)roundedAlpha;
+                    var planned = horizontalWeights is not null;
+                    var cx = planned ? 0 : (x + 0.5) * source.Width / width - 0.5;
+                    var firstX = planned ? 0 : (int)Math.Ceiling(cx - radius * scaleX);
+                    var lastX = planned ? horizontalCounts![x] - 1 : (int)Math.Floor(cx + radius * scaleX);
+                    // Reuse short horizontal support across vertical taps without
+                    // a heap workspace. Wider support retains direct evaluation.
+                    var cached = !planned && lastX - firstX < 8;
+                    var w0 = cached ? Kernel((firstX - cx) / scaleX, filter) : 0;
+                    var w1 = cached && lastX - firstX >= 1 ? Kernel((firstX + 1 - cx) / scaleX, filter) : 0;
+                    var w2 = cached && lastX - firstX >= 2 ? Kernel((firstX + 2 - cx) / scaleX, filter) : 0;
+                    var w3 = cached && lastX - firstX >= 3 ? Kernel((firstX + 3 - cx) / scaleX, filter) : 0;
+                    var w4 = cached && lastX - firstX >= 4 ? Kernel((firstX + 4 - cx) / scaleX, filter) : 0;
+                    var w5 = cached && lastX - firstX >= 5 ? Kernel((firstX + 5 - cx) / scaleX, filter) : 0;
+                    var w6 = cached && lastX - firstX >= 6 ? Kernel((firstX + 6 - cx) / scaleX, filter) : 0;
+                    var w7 = cached && lastX - firstX >= 7 ? Kernel((firstX + 7 - cx) / scaleX, filter) : 0;
+                    double r = 0, g = 0, b = 0, alpha = 0, weightSum = 0;
+                    for (var sy = firstY; sy <= lastY; sy++)
+                    {
+                        context.Cancellation.ThrowIfCancellationRequested();
+                        var wy = cachedY ? (sy - firstY) switch
+                        {
+                            0 => y0, 1 => y1, 2 => y2, 3 => y3,
+                            4 => y4, 5 => y5, 6 => y6, _ => y7
+                        } : Kernel((sy - cy) / scaleY, filter);
+                        if (wy == 0) continue;
+                        var iy = Math.Clamp(sy, 0, source.Height - 1);
+                        ReadOnlySpan<byte> row8 = default;
+                        ReadOnlySpan<ushort> row16 = default;
+                        if (source.BitDepth == 8) row8 = source.GetRow8(iy);
+                        else row16 = source.GetRow16(iy);
+                        for (var sx = firstX; sx <= lastX; sx++)
+                        {
+                            var wx = planned ? horizontalWeights![x * 8 + sx] : cached ? (sx - firstX) switch
+                            {
+                                0 => w0, 1 => w1, 2 => w2, 3 => w3,
+                                4 => w4, 5 => w5, 6 => w6, _ => w7
+                            } : Kernel((sx - cx) / scaleX, filter);
+                            var weight = wy * wx;
+                            if (weight == 0) continue;
+                            var offset = planned ? horizontalOffsets![x * 8 + sx] : Math.Clamp(sx, 0, source.Width - 1) * 4;
+                            int a, red, green, blue;
+                            if (source.BitDepth == 8)
+                            {
+                                a = row8[offset + 3];
+                                red = row8[offset];
+                                green = row8[offset + 1];
+                                blue = row8[offset + 2];
+                            }
+                            else
+                            {
+                                a = row16[offset + 3];
+                                red = row16[offset];
+                                green = row16[offset + 1];
+                                blue = row16[offset + 2];
+                            }
+                            r += weight * a * red;
+                            g += weight * a * green;
+                            b += weight * a * blue;
+                            alpha += weight * a;
+                            weightSum += weight;
+                        }
+                    }
+                    var normalizedAlpha = alpha / weightSum;
+                    var roundedAlpha = normalizedAlpha > 0 && normalizedAlpha < 1
+                        ? ResizeAlpha.Round(source, x, y, width, height, filter, context)
+                        : Round(normalizedAlpha, maximum);
+                    // Zero-alpha filtered output has no visible color. This also
+                    // prevents tiny positive weight residue from exposing hidden RGB.
+                    var hasColor = roundedAlpha > 0 && alpha > 0;
+                    var destinationOffset = x * 4;
+                    if (source.BitDepth == 8)
+                    {
+                        destination8[destinationOffset] = (byte)Round(hasColor ? r / alpha : 0, maximum);
+                        destination8[destinationOffset + 1] = (byte)Round(hasColor ? g / alpha : 0, maximum);
+                        destination8[destinationOffset + 2] = (byte)Round(hasColor ? b / alpha : 0, maximum);
+                        destination8[destinationOffset + 3] = (byte)roundedAlpha;
+                    }
+                    else
+                    {
+                        destination16[destinationOffset] = (ushort)Round(hasColor ? r / alpha : 0, maximum);
+                        destination16[destinationOffset + 1] = (ushort)Round(hasColor ? g / alpha : 0, maximum);
+                        destination16[destinationOffset + 2] = (ushort)Round(hasColor ? b / alpha : 0, maximum);
+                        destination16[destinationOffset + 3] = (ushort)roundedAlpha;
+                    }
                 }
             }
+            result.Orientation = source.Orientation;
+            return result;
         }
-        result.Orientation = source.Orientation;
-        return result;
+        catch { result.Dispose(); throw; }
     }
 
     private static int Round(double value, int maximum)

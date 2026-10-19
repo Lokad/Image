@@ -138,15 +138,26 @@ eight-bit colors exactly. Self-overlap is safe without a full-frame temporary.
 Mutations can leave completed chunks on cancellation/work exhaustion; synchronize
 access to mutable images. No EXIF orientation is implicitly applied.
 
-`TrueTypeFont.Load` owns a supplied standalone TrueType face. Create immutable
+`TrueTypeFont.Load` owns a supplied standalone TrueType face. Dispose fonts and
+`TextLayout` instances after their last user. Prepared outlines remain valid
+after font disposal. Create immutable
 pixel layout with `TextLayout.Create(font, text, new TextOptions { FontSize = 16,
 WrapWidth = 240, LineSpacing = 1.2 })`. `LayoutBounds`, `InkBounds` and their union
 `Bounds` support measurement; use `Bounds.Translate(x, y).FitsInside(width, height)`
 to check positioned overflow. Render with `ImageDrawing.DrawText(canvas, layout,
 x, y, RgbaColor.From8(20, 40, 60))`; destinations clip and preserve canvas precision.
-Styles come from supplied faces. `StorageBytes` supports caller lifetime reservations. Logical left-to-right
+Styles come from supplied faces. Logical left-to-right
 layout has no full OpenType shaping; [SPEC.md](../SPEC.md#supplied-truetype-fonts)
 defines support, wrapping and admission.
+
+For cooperative memory admission in 0.2.0 development, set
+`new ImageLimits { MemoryBudget = callerAdapter }` and pass these limits through
+codec/text options and editing calls. The adapter implements Lokad.Image's
+`IMemoryBudget`/`IMemoryScope`/`IMemoryReservation` interfaces against the caller's
+shared allowance. Keep it alive through all operations and retained objects;
+dispose only the scopes the caller owns. Results release their own charges on
+disposal. [Resource admission](resource-admission.md) defines borrowing, refusal,
+capacity estimates and asynchronous lifetimes.
 
 Malformed input raises `ImageDataException`, unsupported formats or profiles
 raise `UnsupportedImageException`, exhausted admission limits raise

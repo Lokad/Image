@@ -2,12 +2,15 @@ using System.Runtime.CompilerServices;
 
 namespace Lokad.Image.Internal;
 
-internal sealed class OperationContext
+internal sealed class OperationContext : IDisposable
 {
     public ImageLimits Limits { get; }
     public CancellationToken Cancellation { get; }
     private long liveBytes;
     private long work;
+    private IMemoryScope? memoryScope;
+    private IMemoryReservation? memory;
+    internal bool HasMemoryBudget => Limits.MemoryBudget is not null;
 
     public long RemainingWork => Limits.MaxWork - work;
     public long RemainingWorkingBytes => Limits.MaxWorkingBytes - liveBytes;
@@ -26,10 +29,55 @@ internal sealed class OperationContext
     {
         if (bytes < 0 || bytes > Limits.MaxWorkingBytes - liveBytes)
             throw new ImageLimitException(ImageLimitKind.WorkingBytes, "Working memory limit exceeded.");
+        if (Limits.MemoryBudget is { } budget)
+        {
+            memoryScope ??= budget.CreateScope();
+            if (memory is null)
+            {
+                if (!memoryScope.TryReserve(bytes, out memory)) throw MemoryAdmission.Refused();
+            }
+            else if (!memory.TryResize(checked(memory.Bytes + bytes))) throw MemoryAdmission.Refused();
+        }
         liveBytes += bytes;
     }
 
-    public void Release(long bytes) => liveBytes -= bytes;
+    // Borrowed input still counts toward the existing local limit, but its owner
+    // already accounts for storage at the shared root. Copies use Reserve instead.
+    internal void ReserveBorrowed(long bytes)
+    {
+        if (bytes < 0 || bytes > Limits.MaxWorkingBytes - liveBytes)
+            throw new ImageLimitException(ImageLimitKind.WorkingBytes, "Working memory limit exceeded.");
+        liveBytes += bytes;
+    }
+
+    internal void ReleaseBorrowed(long bytes) => liveBytes -= bytes;
+
+    public void Release(long bytes)
+    {
+        if (memory is not null && !memory.TryResize(memory.Bytes - bytes))
+            throw new InvalidOperationException("A shrinking memory reservation was refused.");
+        liveBytes -= bytes;
+    }
+
+    public void Dispose()
+    {
+        // The execution boundary has awaited every user before reaching here.
+        Interlocked.Exchange(ref memoryScope, null)?.Dispose();
+        memory = null;
+    }
+
+    internal byte[] RentPixels(PixelStoragePool pool, int length) => HasMemoryBudget
+        ? GC.AllocateUninitializedArray<byte>(length) : pool.Rent(length);
+    internal void ReturnPixels(PixelStoragePool pool, byte[] bytes)
+    {
+        if (!HasMemoryBudget) pool.Return(bytes);
+    }
+    internal int[] RentCoefficients(int length) => HasMemoryBudget
+        ? new int[length] : JpegCoefficientPool.Shared.Rent(length);
+    internal void ReturnCoefficients(int[] bytes)
+    {
+        if (!HasMemoryBudget) JpegCoefficientPool.Shared.Return(bytes);
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Work(long units)

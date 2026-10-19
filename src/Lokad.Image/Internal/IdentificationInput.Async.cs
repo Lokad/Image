@@ -31,24 +31,24 @@ internal sealed partial class IdentificationInput
                         throw new ImageLimitException(ImageLimitKind.BufferLength, "Stream buffering memory limit exceeded.");
                     context.Reserve(capacity);
                     byte[] next;
-                    try { next = Rent((int)capacity); }
+                    try { next = Rent((int)capacity, !context.HasMemoryBudget); }
                     catch { context.Release(capacity); throw; }
                     buffer.AsSpan(0, length).CopyTo(next);
-                    Return(buffer); context.Release(buffer.Length); buffer = next;
+                    Return(buffer, !context.HasMemoryBudget); context.Release(buffer.Length); buffer = next;
                 }
                 scratch.AsSpan(0, read).CopyTo(buffer.AsSpan(length));
                 length += read;
                 context.Work(read);
             }
             context.Cancellation.ThrowIfCancellationRequested();
-            var result = new IdentificationInput(buffer, length);
+            var result = new IdentificationInput(buffer, length, !context.HasMemoryBudget);
             buffer = [];
             return result;
         }
         finally
         {
             context.Release(scratchBytes + (long)buffer.Length);
-            Return(buffer);
+            Return(buffer, !context.HasMemoryBudget);
         }
     }
 }

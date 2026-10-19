@@ -13,9 +13,10 @@ public static partial class ImageDrawing
         ImageLimits? limits = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(canvas); ArgumentNullException.ThrowIfNull(layout);
+        layout.EnsureAlive();
         if (!double.IsFinite(x) || !double.IsFinite(y)) throw new ArgumentOutOfRangeException(nameof(x));
-        var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        context.Reserve(canvas.ByteLength); context.Reserve(layout.StorageBytes);
+        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
+        context.ReserveBorrowed(canvas.ByteLength); context.ReserveBorrowed(layout.StorageBytes);
         var bounds = layout.InkBounds.Translate(x, y);
         if (!double.IsFinite(bounds.Right) || !double.IsFinite(bounds.Bottom)) throw new ArgumentOutOfRangeException(nameof(x));
         var left = Math.Max(0, Math.Floor(bounds.X)); var top = Math.Max(0, Math.Floor(bounds.Y));

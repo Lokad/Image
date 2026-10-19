@@ -21,8 +21,8 @@ public static partial class ImageDrawing
         ImageLimits? limits = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(canvas); Extent(width, height);
-        var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        context.Reserve(canvas.ByteLength);
+        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
+        context.ReserveBorrowed(canvas.ByteLength);
         var region = Clip(canvas, 0, 0, x, y, width, height);
         if (region.Width == 0 || region.Height == 0) return;
         context.PixelBytes(region.Width, region.Height, canvas.BitDepth);
@@ -59,7 +59,7 @@ public static partial class ImageDrawing
         if (sourceX < 0 || sourceY < 0 || (long)sourceX + width > source.Width || (long)sourceY + height > source.Height)
             throw new ArgumentOutOfRangeException(nameof(sourceX), "Source rectangle must fit the source.");
         if (source.BitDepth != canvas.BitDepth) throw new ArgumentException("Exact copies require matching pixel depths.", nameof(canvas));
-        var context = Admit(canvas, source, limits, cancellationToken);
+        using var context = Admit(canvas, source, limits, cancellationToken);
         var region = Clip(canvas, sourceX, sourceY, x, y, width, height);
         if (region.Width == 0 || region.Height == 0) return;
         context.PixelBytes(region.Width, region.Height, canvas.BitDepth);
@@ -88,7 +88,7 @@ public static partial class ImageDrawing
         ImageLimits? limits = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(source); ArgumentNullException.ThrowIfNull(canvas);
-        var context = Admit(canvas, source, limits, cancellationToken);
+        using var context = Admit(canvas, source, limits, cancellationToken);
         var region = Clip(canvas, 0, 0, x, y, source.Width, source.Height);
         if (region.Width == 0 || region.Height == 0) return;
         context.PixelBytes(region.Width, region.Height, canvas.BitDepth);
@@ -128,8 +128,8 @@ public static partial class ImageDrawing
     private static OperationContext Admit(ImageBuffer canvas, ImageBuffer source, ImageLimits? limits, CancellationToken cancellationToken)
     {
         var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        context.Reserve(canvas.ByteLength);
-        if (!ReferenceEquals(canvas, source)) context.Reserve(source.ByteLength);
+        context.ReserveBorrowed(canvas.ByteLength);
+        if (!ReferenceEquals(canvas, source)) context.ReserveBorrowed(source.ByteLength);
         return context;
     }
 

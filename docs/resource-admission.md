@@ -1,5 +1,29 @@
 # Resource admission
 
+## Caller-owned cooperative memory (0.2.0 development)
+
+Set `ImageLimits.MemoryBudget` to an adapter implementing `IMemoryBudget` in
+`Lokad.Image`. Forward the same borrowed root in nested/concurrent operations;
+the package supplies no governor implementation or host dependency. Child scopes
+share its allowance. Zero is valid, negatives throw, refusal is immediate and
+leaves accounting unchanged, and disposed owners reject admission/resizing.
+Scope/reservation disposal is idempotent and nonthrowing; scope disposal refunds
+and invalidates descendants without canceling work or disposing runtime objects.
+
+Owned storage is admitted before allocation, including retained capacities and
+old/new replacement peaks. Caller inputs/budgets are borrowed; copies are charged
+separately. Dispose images, fonts and prepared layouts to release their charges
+promptly. Prepared outlines survive font disposal. Keep the supplied ancestor
+alive and synchronize its disposal with every operation and retained result.
+Async cancellation keeps storage charged until the actual I/O user finishes.
+Governed calls use uncached storage and do not populate unowned global pools.
+Minor allocations are approximate; keep headroom for runtime storage and delayed GC.
+
+Refusal raises `ImageLimitException` (`WorkingBytes`, `SharedBudget`), stops the
+operation and releases relinquished storage. It never waits, retries or selects
+a fallback after refusal. Cancellation and allocation failure remain distinct.
+Local limits and cumulative `ImageBudget` work quotas continue independently.
+
 `ImageLimits` bounds one operation's admitted buffers and algorithm work. It is
 not a process RSS, GC-heap, elapsed-time or global-cache quota. Supplied pixel or
 encoded buffers, results and live codec workspaces count toward admission;

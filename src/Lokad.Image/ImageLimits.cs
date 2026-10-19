@@ -12,6 +12,11 @@ public sealed record ImageLimits
     public int MaxMetadataBytes { get; init; } = 4 * 1024 * 1024;
     public int MaxContainerItems { get; init; } = 100_000;
     public long MaxWork { get; init; } = 2_000_000_000;
+    /// <summary>Optional borrowed admission root, shared with concurrent and nested work.</summary>
+    /// <remarks>Does not replace local limits or work accounting. Retained results
+    /// own admission until disposal; keep the supplied owner alive through all
+    /// operations and results. Caller-owned inputs are not charged again.</remarks>
+    public IMemoryBudget? MemoryBudget { get; init; }
 
     internal void Validate()
     {

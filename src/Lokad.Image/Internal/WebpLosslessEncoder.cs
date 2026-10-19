@@ -47,7 +47,7 @@ internal static class WebpLosslessEncoder
         if (options.Quality is < 1 or > 100 || options.Effort is < 0 or > 6) throw new ArgumentOutOfRangeException(nameof(options));
         context.PixelBytes(image.Width, image.Height, image.BitDepth);
         if (image.Width > 16384 || image.Height > 16384) throw new ImageLimitException(ImageLimitKind.Dimension, "VP8L dimensions exceed 16384.");
-        context.Reserve(image.ByteLength); context.Reserve(8192);
+        context.ReserveBorrowed(image.ByteLength); context.Reserve(8192);
         var green = new Table(280); var literal = new Table(256); var distance = new Table(40);
         // Count first so nonseekable output needs no encoded-frame staging buffer.
         // The caller must synchronize mutable pixels across the two passes.

@@ -11,6 +11,7 @@ public sealed class ImageBuffer : IDisposable
 {
     private byte[]? pixels;
     private readonly bool reusableStorage;
+    private IMemoryReservation? memoryOwner;
     public int Width { get; }
     public int Height { get; }
     public int BitDepth { get; }
@@ -19,24 +20,31 @@ public sealed class ImageBuffer : IDisposable
     internal int ByteLength => Pixels.Length;
     internal Span<byte> Pixels => pixels ?? throw new ObjectDisposedException(nameof(ImageBuffer));
 
-    private ImageBuffer(int width, int height, int bitDepth, byte[] data, bool reusableStorage = false)
+    private ImageBuffer(int width, int height, int bitDepth, byte[] data, bool reusableStorage = false,
+        IMemoryReservation? memoryOwner = null)
     {
         Width = width;
         Height = height;
         BitDepth = bitDepth;
         pixels = data;
         this.reusableStorage = reusableStorage;
+        this.memoryOwner = memoryOwner;
     }
 
     public static ImageBuffer Create(int width, int height, int bitDepth,
         ImageLimits? limits = null, CancellationToken cancellationToken = default)
-        => Allocate(width, height, bitDepth, new OperationContext(limits ?? ImageLimits.Default, cancellationToken));
+    {
+        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
+        return Allocate(width, height, bitDepth, context);
+    }
 
     internal static ImageBuffer Allocate(int width, int height, int bitDepth, OperationContext context)
     {
         var length = context.PixelBytes(width, height, bitDepth);
-        context.Reserve(length);
-        return new ImageBuffer(width, height, bitDepth, new byte[length]);
+        context.ReserveBorrowed(length);
+        var owner = MemoryAdmission.Own(context.Limits.MemoryBudget, length);
+        try { return new ImageBuffer(width, height, bitDepth, new byte[length], memoryOwner: owner); }
+        catch { owner?.Dispose(); throw; }
     }
 
     // Only complete-overwrite operations may publish these buffers. They must
@@ -44,8 +52,17 @@ public sealed class ImageBuffer : IDisposable
     internal static ImageBuffer AllocateForOverwrite(int width, int height, int bitDepth, OperationContext context)
     {
         var length = context.PixelBytes(width, height, bitDepth);
-        context.Reserve(length);
-        return new ImageBuffer(width, height, bitDepth, PixelStoragePool.Shared.Rent(length), reusableStorage: true);
+        context.ReserveBorrowed(length);
+        var owner = MemoryAdmission.Own(context.Limits.MemoryBudget, length);
+        try
+        {
+            // Governed calls never populate an unowned process-wide pool. This
+            // policy is selected before admission, not as recovery from refusal.
+            var reusable = !context.HasMemoryBudget;
+            var data = reusable ? PixelStoragePool.Shared.Rent(length) : GC.AllocateUninitializedArray<byte>(length);
+            return new ImageBuffer(width, height, bitDepth, data, reusable, owner);
+        }
+        catch { owner?.Dispose(); throw; }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -72,8 +89,8 @@ public sealed class ImageBuffer : IDisposable
 
     public ImageBuffer Clone(ImageLimits? limits = null, CancellationToken cancellationToken = default)
     {
-        var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        context.Reserve(ByteLength);
+        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
+        context.ReserveBorrowed(ByteLength);
         var result = AllocateForOverwrite(Width, Height, BitDepth, context);
         try
         {
@@ -106,5 +123,6 @@ public sealed class ImageBuffer : IDisposable
     {
         var data = Interlocked.Exchange(ref pixels, null);
         if (reusableStorage && data is not null) PixelStoragePool.Shared.Return(data);
+        Interlocked.Exchange(ref memoryOwner, null)?.Dispose();
     }
 }

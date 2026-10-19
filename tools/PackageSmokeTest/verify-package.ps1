@@ -12,13 +12,17 @@ try {
         if ($NoBuild) { $packArguments += @('--no-build', '--no-restore') }
         dotnet @packArguments
         if ($LASTEXITCODE -ne 0) { throw 'Release pack failed.' }
-        $package = Join-Path $repoRoot 'artifacts/nuget/Lokad.Image.0.1.0.nupkg'
+        [xml]$projectMetadata = Get-Content -LiteralPath (Join-Path $repoRoot 'src/Lokad.Image/Lokad.Image.csproj') -Raw
+        $projectVersion = $projectMetadata.Project.PropertyGroup.Version
+        $package = Join-Path $repoRoot "artifacts/nuget/Lokad.Image.$projectVersion.nupkg"
     }
     $archive = [IO.Compression.ZipFile]::OpenRead($package)
     try {
         $nuspec = $archive.Entries | Where-Object { $_.FullName.EndsWith('.nuspec') }
         $reader = [IO.StreamReader]::new($nuspec.Open())
         try { [xml]$metadata = $reader.ReadToEnd() } finally { $reader.Dispose() }
+        $packageVersion = $metadata.SelectSingleNode("//*[local-name()='metadata']/*[local-name()='version']").InnerText
+        if ($packageVersion -notmatch '^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$') { throw 'Invalid package version.' }
         if ($metadata.SelectNodes("//*[local-name()='dependency']").Count -ne 0) { throw 'Package contains NuGet dependencies.' }
         if ($metadata.SelectSingleNode("//*[local-name()='metadata']/*[local-name()='icon']").InnerText -ne 'icon.png') {
             throw 'Package icon metadata is missing or incorrect.'
@@ -29,7 +33,7 @@ try {
             }
         }
         if (-not ($archive.Entries.FullName -contains 'lib/net10.0/Lokad.Image.dll')) { throw 'Library DLL missing.' }
-        foreach ($document in @('README.md', 'SPEC.md', 'LICENSE.txt', 'icon.png', 'docs/resource-admission.md', 'docs/jpeg-inverse-rounding.md', 'docs/jpeg-forward-quantization.md', 'docs/usage.md')) {
+        foreach ($document in @('README.md', 'SPEC.md', 'LICENSE.txt', 'icon.png', 'docs/resource-admission.md', 'docs/jpeg-inverse-rounding.md', 'docs/jpeg-forward-quantization.md', 'docs/usage.md', 'docs/migration.md')) {
             $entry = $archive.GetEntry($document)
             if ($null -eq $entry) { throw "Package document missing: $document" }
             $bytes = [IO.MemoryStream]::new()
@@ -55,8 +59,10 @@ try {
     # version. Give NuGet a feed containing only the explicitly selected pack.
     $feedDirectory = Join-Path $consumer 'feed'
     New-Item -ItemType Directory -Path $feedDirectory -Force | Out-Null
-    Copy-Item -LiteralPath $package -Destination (Join-Path $feedDirectory 'Lokad.Image.0.1.0.nupkg')
+    Copy-Item -LiteralPath $package -Destination (Join-Path $feedDirectory "Lokad.Image.$packageVersion.nupkg")
     $fontFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredTrueType.cs'))
+    $memoryFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/TestMemoryBudget.cs'))
+    $memoryConsumerPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/PackageSmokeTest/CooperativeMemoryConsumer.cs'))
     @"
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
@@ -66,24 +72,27 @@ try {
     <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Lokad.Image" Version="0.1.0" />
+    <PackageReference Include="Lokad.Image" Version="$packageVersion" />
     <Compile Include="$fontFixturePath" Link="AuthoredTrueType.cs" />
+    <Compile Include="$memoryFixturePath" Link="TestMemoryBudget.cs" />
+    <Compile Include="$memoryConsumerPath" Link="CooperativeMemoryConsumer.cs" />
   </ItemGroup>
 </Project>
 "@ | Set-Content -LiteralPath (Join-Path $consumer 'Consumer.csproj') -Encoding utf8
     @'
 using Lokad.Image;
+await Lokad.Image.Tooling.CooperativeMemoryConsumer.Verify();
 if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(
     File.ReadAllBytes(typeof(ImageBuffer).Assembly.Location))).ToLowerInvariant() != args[4])
     throw new Exception("Package consumer loaded a different assembly.");
 var fontInput = Lokad.Image.Tooling.AuthoredTrueType.Build(style: FontStyle.Bold | FontStyle.Italic);
-var font = TrueTypeFont.Load(fontInput); Array.Fill(fontInput, (byte)0xA7);
+using var font = TrueTypeFont.Load(fontInput); Array.Fill(fontInput, (byte)0xA7);
 if (font.Style != (FontStyle.Bold | FontStyle.Italic) || font.GetGlyphIndex(new System.Text.Rune(0x1F642)) != 7
     || font.GetGlyphMetrics(new System.Text.Rune('A')).AdvanceWidth != 660)
     throw new Exception("Package supplied TrueType ownership/Unicode/metrics differ.");
-var layoutFace = TrueTypeFont.Load(Lokad.Image.Tooling.AuthoredTrueType.Build());
-var textLayout = TextLayout.Create(layoutFace, "AV AVg", new TextOptions { FontSize = 10, WrapWidth = 12 });
-var curveLayout = TextLayout.Create(layoutFace, "g", new TextOptions { FontSize = 10 });
+using var layoutFace = TrueTypeFont.Load(Lokad.Image.Tooling.AuthoredTrueType.Build());
+using var textLayout = TextLayout.Create(layoutFace, "AV AVg", new TextOptions { FontSize = 10, WrapWidth = 12 });
+using var curveLayout = TextLayout.Create(layoutFace, "g", new TextOptions { FontSize = 10 });
 if (textLayout.GlyphCount != 5 || textLayout.LineCount != 3 || Math.Abs(textLayout.LayoutBounds.Width - 11.2) > 1e-10
     || textLayout.LayoutBounds.Height != 34 || textLayout.GetGlyph(2).SourceOffset != 3
     || curveLayout.InkBounds != new TextBounds(0, 4, 6, 5))

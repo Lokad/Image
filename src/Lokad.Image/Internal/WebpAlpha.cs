@@ -25,7 +25,7 @@ internal static class WebpAlpha
                 var row = decoded.GetRow8(y);
                 for (var x = 0; x < width; x++) alpha[y * width + x] = row[x * 4 + 1];
             }
-            context.Release(decoded.ByteLength);
+            context.ReleaseBorrowed(decoded.ByteLength);
         }
         Unfilter(alpha, width, height, filter, context);
         return alpha;

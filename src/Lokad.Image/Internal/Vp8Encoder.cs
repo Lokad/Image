@@ -20,7 +20,7 @@ internal static partial class Vp8Encoder
         if (options.Quality is < 1 or > 100 || options.Effort is < 0 or > 6) throw new ArgumentOutOfRangeException(nameof(options));
         context.PixelBytes(image.Width, image.Height, image.BitDepth);
         if (image.Width > 16383 || image.Height > 16383) throw new ImageLimitException(ImageLimitKind.Dimension, "VP8 dimensions exceed 16383.");
-        context.Reserve(image.ByteLength + 4096L);
+        context.ReserveBorrowed(image.ByteLength); context.Reserve(4096);
         var source = Convert(image, context, out var alpha);
         var columns = source.Stride / 16; var rows = source.Y.Length / source.Stride / 16; var count = columns * rows;
         context.Reserve(source.MemoryBytes);

@@ -8,7 +8,7 @@ public static partial class ImageCodec
     public static ImageInfo Identify(ReadOnlySpan<byte> input, ImageLimits? limits = null,
         CancellationToken cancellationToken = default)
     {
-        var context = InputContext(input.Length, limits, cancellationToken);
+        using var context = InputContext(input.Length, limits, cancellationToken);
         return IdentifyCore(input, context);
     }
 
@@ -24,7 +24,7 @@ public static partial class ImageCodec
         CancellationToken cancellationToken = default)
     {
         options ??= new DecodeOptions();
-        var context = InputContext(input.Length, options.Limits, cancellationToken);
+        using var context = InputContext(input.Length, options.Limits, cancellationToken);
         return DecodeCore(input, options, context);
     }
 
@@ -43,7 +43,7 @@ public static partial class ImageCodec
         try
         {
             // Orientation is part of this decode's live-memory admission.
-            context.Reserve(result.ByteLength);
+            context.ReserveBorrowed(result.ByteLength);
             context.Work((long)result.Width * result.Height * 4);
             return ImageTransforms.AutoOrient(result, options.Limits, context.Cancellation);
         }
@@ -53,7 +53,7 @@ public static partial class ImageCodec
     public static ImageInfo Identify(Stream input, ImageLimits? limits = null, CancellationToken cancellationToken = default)
     {
         limits ??= ImageLimits.Default;
-        var context = new OperationContext(limits, cancellationToken);
+        using var context = new OperationContext(limits, cancellationToken);
         using var data = IdentificationInput.Read(input, context);
         return IdentifyCore(data.Span, context);
     }
@@ -61,7 +61,7 @@ public static partial class ImageCodec
     public static ImageBuffer Decode(Stream input, DecodeOptions? options = null, CancellationToken cancellationToken = default)
     {
         options ??= new DecodeOptions();
-        var context = new OperationContext(options.Limits, cancellationToken);
+        using var context = new OperationContext(options.Limits, cancellationToken);
         return DecodeFromStream(input, options, context);
     }
 
@@ -70,7 +70,7 @@ public static partial class ImageCodec
     {
         ArgumentNullException.ThrowIfNull(image); ArgumentNullException.ThrowIfNull(output);
         options ??= new PngEncodeOptions();
-        var context = new OperationContext(options.Limits, cancellationToken);
+        using var context = new OperationContext(options.Limits, cancellationToken);
         using var bounded = new LimitedWriteStream(output, options.Limits.MaxOutputBytes, cancellationToken);
         PngCodec.Encode(image, bounded, options, context);
     }
@@ -79,7 +79,7 @@ public static partial class ImageCodec
     {
         var context = new OperationContext(limits ?? ImageLimits.Default, cancellation);
         if (length > context.Limits.MaxInputBytes) throw new ImageLimitException(ImageLimitKind.InputBytes, "Encoded input limit exceeded.");
-        context.Reserve(length);
+        context.ReserveBorrowed(length);
         return context;
     }
 
@@ -88,7 +88,7 @@ public static partial class ImageCodec
     {
         ArgumentNullException.ThrowIfNull(image); ArgumentNullException.ThrowIfNull(output);
         options ??= new JpegEncodeOptions();
-        var context = new OperationContext(options.Limits, cancellationToken);
+        using var context = new OperationContext(options.Limits, cancellationToken);
         using var bounded = new LimitedWriteStream(output, options.Limits.MaxOutputBytes, cancellationToken);
         JpegEncoder.Encode(image, bounded, options, context);
     }
@@ -98,7 +98,7 @@ public static partial class ImageCodec
     {
         ArgumentNullException.ThrowIfNull(image); ArgumentNullException.ThrowIfNull(output);
         options ??= new WebpEncodeOptions();
-        var context = new OperationContext(options.Limits, cancellationToken);
+        using var context = new OperationContext(options.Limits, cancellationToken);
         using var bounded = new LimitedWriteStream(output, options.Limits.MaxOutputBytes, cancellationToken);
         if (options.Lossless) WebpLosslessEncoder.Encode(image, bounded, options, context);
         else Vp8Encoder.Encode(image, bounded, options, context);

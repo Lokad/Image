@@ -41,7 +41,7 @@ public readonly record struct TextLine(int FirstGlyph, int GlyphCount, double Ba
 /// <remarks>Unhinted default-instance outlines. No instruction execution, device-grid
 /// fitting, bidirectional reordering, ligatures or GPOS shaping. Bounds use decoded
 /// curves, not untrusted declared glyph bounds. Source strings are not retained.</remarks>
-public sealed class TextLayout
+public sealed class TextLayout : IDisposable
 {
     internal sealed record Shape(FontOutline Outline, double XMin, double YMin, double XMax, double YMax);
     internal struct Placement
@@ -51,9 +51,11 @@ public sealed class TextLayout
         internal double X, Y, Advance;
         internal byte Kind; // 0 word, 1 breakable separator, 2 tab, 3 newline.
     }
-    private readonly Placement[] glyphs;
-    private readonly TextLine[] lines;
+    private Placement[] glyphs;
+    private TextLine[] lines;
     private readonly Dictionary<int, Shape> outlines;
+    private OperationContext? storageOwner;
+    private bool disposed;
     public TrueTypeFont Font { get; }
     public double FontSize { get; }
     public double LineAdvance { get; }
@@ -64,7 +66,7 @@ public sealed class TextLayout
     public TextBounds InkBounds { get; }
     public TextBounds Bounds { get; }
     public long StorageBytes { get; }
-    internal ReadOnlySpan<Placement> Placements => glyphs.AsSpan(0, GlyphCount);
+    internal ReadOnlySpan<Placement> Placements { get { EnsureAlive(); return glyphs.AsSpan(0, GlyphCount); } }
 
     private TextLayout(TrueTypeFont font, TextOptions options, Builder b, int sourceLength, long storageBytes)
     {
@@ -75,11 +77,13 @@ public sealed class TextLayout
 
     public TextGlyph GetGlyph(int index)
     {
+        EnsureAlive();
         if ((uint)index >= GlyphCount) throw new ArgumentOutOfRangeException(nameof(index));
         var p = glyphs[index]; return new(p.GlyphIndex, p.SourceOffset, p.SourceLength, p.LineIndex, p.X, p.Y, p.Advance);
     }
     public TextLine GetLine(int index)
     {
+        EnsureAlive();
         if ((uint)index >= LineCount) throw new ArgumentOutOfRangeException(nameof(index));
         return lines[index];
     }
@@ -88,27 +92,41 @@ public sealed class TextLayout
     public static TextLayout Create(TrueTypeFont font, string text, TextOptions? options = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(font); ArgumentNullException.ThrowIfNull(text); options ??= new();
+        font.EnsureAlive();
         if (!double.IsFinite(options.FontSize) || options.FontSize <= 0 || double.IsNaN(options.WrapWidth) || options.WrapWidth <= 0
             || !double.IsFinite(options.LineSpacing) || options.LineSpacing <= 0 || options.TabSpaces < 1)
             throw new ArgumentOutOfRangeException(nameof(options));
         var context = new OperationContext(options.Limits, cancellationToken);
         if (options.FontSize > context.Limits.MaxDimension) throw new ImageLimitException(ImageLimitKind.Dimension, "Font size exceeds the dimension limit.");
         var initial = context.RemainingWorkingBytes;
-        context.Reserve(font.StorageBytes); context.Reserve(text.Length * 2L); context.Reserve(512);
+        context.ReserveBorrowed(font.StorageBytes); context.ReserveBorrowed(text.Length * 2L);
         Builder? builder = null;
         try
         {
+            context.Reserve(512);
             var count = Count(text, context); builder = new(font, options, context, count);
             builder.Read(text); builder.Arrange(); builder.Measure();
-            builder.ReleasePreparation(); context.Release(text.Length * 2L);
-            return new(font, options, builder, text.Length, initial - context.RemainingWorkingBytes);
+            builder.ReleasePreparation(); context.ReleaseBorrowed(text.Length * 2L);
+            return new(font, options, builder, text.Length, initial - context.RemainingWorkingBytes) { storageOwner = context };
         }
         catch
         {
             builder?.ReleasePreparation();
             if (builder is not null) foreach (var shape in builder.Shapes.Values) shape.Outline.Dispose();
-            context.Release(initial - context.RemainingWorkingBytes); throw;
+            context.Dispose(); throw;
         }
+    }
+
+    internal void EnsureAlive() => ObjectDisposedException.ThrowIf(disposed, this);
+
+    /// <summary>Release retained glyphs, outlines and admission. Synchronize with layout users.</summary>
+    public void Dispose()
+    {
+        if (disposed) return;
+        disposed = true;
+        foreach (var shape in outlines.Values) shape.Outline.Dispose();
+        outlines.Clear(); glyphs = []; lines = [];
+        Interlocked.Exchange(ref storageOwner, null)?.Dispose();
     }
 
     private static int Count(string text, OperationContext context)
