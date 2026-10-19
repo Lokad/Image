@@ -6,14 +6,16 @@ all227 current numeric rows. The [three-table summary](../docs/benchmark.md)
 contains126 independent observations and101 qualified shorts.20named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
-[JPEG410](WARM-JPEG-410.md), the named H4V2 boundary, exposes the largest current
-gap:7.144x/upper7.585x,3427.72/479.78us,720,759B/op. Exact managed pixels and
-original native quarter samples; centered native expansion gives maximum1/RMSE0.136,
-exact alpha inside unchanged bounds. Complete decode/recovery/staging/conversion/
-compaction/owned-output acquisition-release are timed. Production unchanged:
-all226 prior rows/70passes and4210tests/97HWoff/package proofs are reused.
-No new profile: original general Render/Interpolate/Round bodies match the retained
-411 trace. Next one quarter-width/half-height SIMD primitive. Scope247=227+20.
+[Exact SIMD JPEG410](WARM-JPEG-410-SIMD.md) reduces complete time76.7%,
+3427.72→799.34us:1.669x/upper1.877x,720,810B/op. Exact1/32 chroma fractions,
+binary64 matrix/final rounding and scalar borders/tails/fallback preserve pixels.
+Native maximum1/RMSE0.136/alpha and complete timed ownership stay unchanged.
+Only410 and the411 H4 selector control refresh;225other rows and70passes reuse
+evidence. Full4212tests/99HWoff per OS and the SAME actual private Windows package
+consumer/examples pass on both OS. No profile/tool/worker/selector/fixture rebuild,
+long above one or image/settings grid. Scope247=227numeric+20unmeasured remains
+70passes/156gaps/one confidence-open. Largest current gap:CMYK2D sparse1.812x,
+with its prefix trial still rejected. Next named missing boundary:async PNG Identify.
 
 [Exact SIMD JPEG411](WARM-JPEG-411-SIMD.md) cuts complete time82.6%,
 3527.46→613.09us, reducing7.771x to1.352x/upper1.587x,751,279B/op. Same original
@@ -275,9 +277,9 @@ Five representatives cover the required JPEG compatibility algorithms; all five 
 - `JpegSamplesDecode/CmykResident` (**measured**1.592x gap): untagged full-resolution
   canonical ink, all4raw native planes preserved and packed to fresh caller storage.
   Adobe inversion has correctness coverage; no RGBA intermediate.
-- `JpegDecode/411Resident`: [measured1.352x gap](WARM-JPEG-411-SIMD.md); quarter-width horizontal chroma reconstruction on the
+- `JpegDecode/411Resident`: [measured1.327x control gap](WARM-JPEG-410-SIMD.md); quarter-width horizontal chroma reconstruction on the
   existing RGB projection; native sample-grid normalization and complete ownership verified.
-- `JpegDecode/410Resident`: [measured7.144x gap](WARM-JPEG-410.md); quarter-width, half-height chroma
+- `JpegDecode/410Resident`: [measured1.669x gap](WARM-JPEG-410-SIMD.md); quarter-width, half-height chroma
   (JPEG factors4×2, not video4×4). Original native samples and centered normalization
   verified; complete owned-output boundary measured.
 

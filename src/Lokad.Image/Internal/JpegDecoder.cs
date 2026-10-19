@@ -58,6 +58,7 @@ internal ref partial struct JpegDecoder
                     if (components.Length == 4) return RenderCmyk(adobeTransform);
                     if (adobeTransform == 2) throw UnsupportedColorTransform();
                     if (maxH == 4 && CanRenderYcbcr411()) return RenderYcbcr411();
+                    if (maxH == 4 && CanRenderYcbcr410()) return RenderYcbcr410();
                     return Render();
                 }
                 var payload = ReadSegment();

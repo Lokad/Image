@@ -7,17 +7,17 @@ conservative upper ≤1x**. The 227 current numeric rows contain **70 passes,
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
-[JPEG 4:1:0](../benchmarks/WARM-JPEG-410.md) reveals the largest current gap:
-**7.144x / upper7.585x**,3,427.72/479.78µs,**720,759B/op**. Exact managed pixels;
-native maximum1/RMSE0.136 stays inside the existing gate. FFmpeg includes original
-quarter-sample recovery, centered expansion, staging/conversion/compaction and
-fresh owned output release. All226 prior rows/70passes are reused. No new image
-or settings grid; the retained general-render profile guides the next primitive.
+[Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
+**76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
+**720,810B/op**. Managed pixels, native bounds and complete owned-output boundaries
+are preserved. The411 selector control refreshes;225other numeric rows and all70
+passing proofs are reused. No new image/settings grid, profile or baseline change.
 
-Production and qualification are unchanged:4,210tests/97hardware-off checks per OS,
-same actual private package consumer/all three examples on Windows/Linux.
-Released0.1.0 stays immutable.20unmeasured representatives cover async, header,
-drawing and supplied-font paths. Stop passes; optimize demonstrated material gaps.
+Accepted qualification:4,212tests/99hardware-off checks per OS, same actual private
+package consumer/all three examples on Windows/Linux. Released0.1.0 stays immutable.
+Largest current gap:CMYK2D sparse1.812x; its prefix trial remains rejected.
+20unmeasured representatives cover async, header, drawing and supplied-font paths.
+Stop passes; optimize demonstrated material gaps and resolve missing evidence.
 
 JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale
 (managed/SIMD libjpeg-turbo) and **74,040/52,093 B** RGB420 (managed/FFmpeg), with
@@ -125,8 +125,8 @@ reconciliation now covers every numeric row.
 | [JPEG Adobe CMYK, two-dimensional sparse control](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 792.76 | 437.47 | 1.812 / 1.869 | 1,085,656 | Gap (short; qualified) |
 | [JPEG YCCK420, full-resolution black](../benchmarks/WARM-JPEG-YCCK-CALLER-SIMD.md) | 824.27 | 708.72 | 1.163 / 1.175 | 1,470,256 | Gap (short; qualified) |
 | [JPEG YCCK420 → caller RGB24](../benchmarks/WARM-JPEG-YCCK-CALLER-SIMD.md) | 898.47 | 603.97 | 1.488 / 1.550 | 1,337,490 | Gap (short; qualified) |
-| [JPEG H4V1 / 4:1:1 → owned RGBA8](../benchmarks/WARM-JPEG-411-SIMD.md) | 613.09 | 453.46 | 1.352 / 1.587 | 751,279 | Gap (short; qualified) |
-| [JPEG H4V2 / 4:1:0 → owned RGBA8](../benchmarks/WARM-JPEG-410.md) | 3,427.72 | 479.78 | 7.144 / 7.585 | 720,759 | Gap (short; qualified) |
+| [JPEG H4V1 / 4:1:1 → owned RGBA8](../benchmarks/WARM-JPEG-410-SIMD.md) | 608.85 | 458.97 | 1.327 / 1.402 | 751,279 | Gap (short; qualified) |
+| [JPEG H4V2 / 4:1:0 → owned RGBA8](../benchmarks/WARM-JPEG-410-SIMD.md) | 799.34 | 479.04 | 1.669 / 1.877 | 720,810 | Gap (short; qualified) |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG-411-SIMD.md) | 1,210.66 | 1,011.13 | 1.197 / 1.308 | 757,345 | Gap (short; qualified) |
 | [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,378.07 | 1,014.38 | 1.359 / 1.446 | 761,720 | Gap (short; qualified) |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,510.49 | 1,351.29 | 1.118 / 1.263 | 829,148 | Gap (short; qualified) |

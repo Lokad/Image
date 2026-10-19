@@ -144,8 +144,8 @@ def render():
         row('JPEG Adobe CMYK, two-dimensional sparse control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeSparse2D', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG YCCK420, full-resolution black', 'warm-jpeg-ycck-caller-simd-evidence.json', ['cases', 'Ycck420', -1], 'WARM-JPEG-YCCK-CALLER-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG YCCK420 → caller RGB24', 'warm-jpeg-ycck-caller-simd-evidence.json', ['cases', 'Ycck420CallerRgb', -1], 'WARM-JPEG-YCCK-CALLER-SIMD.md', verification='Gap (short; qualified)'),
-        row('JPEG H4V1 / 4:1:1 → owned RGBA8', 'warm-jpeg-411-simd-evidence.json', ['cases', 'Decode411', -1], 'WARM-JPEG-411-SIMD.md', verification='Gap (short; qualified)'),
-        row('JPEG H4V2 / 4:1:0 → owned RGBA8', 'warm-jpeg-410-evidence.json', ['cases', 'Decode410', -1], 'WARM-JPEG-410.md', verification='Gap (short; qualified)'),
+        row('JPEG H4V1 / 4:1:1 → owned RGBA8', 'warm-jpeg-410-simd-evidence.json', ['cases', 'Decode411', -1], 'WARM-JPEG-410-SIMD.md', verification='Gap (short; qualified)'),
+        row('JPEG H4V2 / 4:1:0 → owned RGBA8', 'warm-jpeg-410-simd-evidence.json', ['cases', 'Decode410', -1], 'WARM-JPEG-410-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0', 'warm-jpeg-411-simd-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-411-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
@@ -324,17 +324,17 @@ conservative upper ≤1x**. The 227 current numeric rows contain **{parity_count
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
-[JPEG 4:1:0](../benchmarks/WARM-JPEG-410.md) reveals the largest current gap:
-**7.144x / upper7.585x**,3,427.72/479.78µs,**720,759B/op**. Exact managed pixels;
-native maximum1/RMSE0.136 stays inside the existing gate. FFmpeg includes original
-quarter-sample recovery, centered expansion, staging/conversion/compaction and
-fresh owned output release. All226 prior rows/70passes are reused. No new image
-or settings grid; the retained general-render profile guides the next primitive.
+[Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
+**76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
+**720,810B/op**. Managed pixels, native bounds and complete owned-output boundaries
+are preserved. The411 selector control refreshes;225other numeric rows and all70
+passing proofs are reused. No new image/settings grid, profile or baseline change.
 
-Production and qualification are unchanged:4,210tests/97hardware-off checks per OS,
-same actual private package consumer/all three examples on Windows/Linux.
-Released0.1.0 stays immutable.20unmeasured representatives cover async, header,
-drawing and supplied-font paths. Stop passes; optimize demonstrated material gaps.
+Accepted qualification:4,212tests/99hardware-off checks per OS, same actual private
+package consumer/all three examples on Windows/Linux. Released0.1.0 stays immutable.
+Largest current gap:CMYK2D sparse1.812x; its prefix trial remains rejected.
+20unmeasured representatives cover async, header, drawing and supplied-font paths.
+Stop passes; optimize demonstrated material gaps and resolve missing evidence.
 
 JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale
 (managed/SIMD libjpeg-turbo) and **74,040/52,093 B** RGB420 (managed/FFmpeg), with
