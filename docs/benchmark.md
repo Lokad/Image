@@ -1,8 +1,8 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 214 retained numeric rows contain **69 current
-parity confirmations, 144 measured gaps and 1 confidence-open cases**;
+conservative upper ≤1x**. The 216 retained numeric rows contain **69 current
+parity confirmations, 146 measured gaps and 1 confidence-open cases**;
 all numeric rows have current evidence after the
 [input reconciliation](../benchmarks/WARM-INPUT-RECONCILIATION.md). Twenty-two prior
 rows were refreshed on the same qualified immutable build: JPEG Identify and
@@ -18,14 +18,16 @@ resolves one stale row: **1.426×**, **672,186B/op**, qualified short gap. Froze
 pixels/reference/boundaries and the same qualified build are reused; no rebuild,
 long repeat or repeated package proof. The later input reconciliation above refreshes all remaining prior rows.
 
-Shared-budget entry points and direct JPEG sample decoding are implemented and
-correctness-qualified; their times and allocations are **unmeasured**. Together
-with JPEG compatibility, async I/O, inspection, drawing and text, the checklist names
-twenty-nine pending representatives, with three original tiny font controls added
-to existing image inputs. Existing JPEG and fresh-Stream rows now have current measurements. Resident PNG/WebP, JPEG encoding, edits and image
-disposal remain unchanged.
-CMYK/YCCK and quarter-width JPEG compatibility paths are correctness-qualified
-but also await the named timing/allocation evidence.
+[Shared-budget codec boundaries](../benchmarks/WARM-SHARED-BUDGET.md) now have
+qualified shorts: PNG RGBA8 decode **1.439× /4,561B/op**, JPEG420 encode
+**1.145× /297,781B/op**. Public admission/actual-work settlement and independent
+owners are timed; PNG retained-pixel leases and disposal are included. Frozen
+JPEG bytes stay **74,040/52,093**, with unchanged quality/alpha gates. Both remain
+gaps; no long repeat or production/package rebuild. A long-lived finite caller
+budget and its resident-input/source reservation are prepared outside timing.
+Direct sample decoding, JPEG compatibility, async I/O, inspection, drawing and
+text now account for **twenty-seven pending representatives**, with no grid.
+Existing numeric evidence is reused where paths remain unchanged.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end
@@ -111,7 +113,7 @@ all three. Both retain 5s `exclusive-vm-idle-v2` guards. Earlier records
 retain their original protocol and failures. **B/op** is managed allocation from
 BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; unchanged-path
-reconciliation applies to rows without the prior-production label.
+reconciliation now covers every numeric row.
 
 Latest [wider RGBA8 horizontal reversal](../benchmarks/WARM-HORIZONTAL-FLIP512.md)
 improves the single-output flip **22.0%**, independently confirming **0.950× /
@@ -126,9 +128,9 @@ Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDEN
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
 retains its1.012x mean gap/1.014x upper. Current totals are **69 passes /
-144 gaps / 1 confidence open / 0 prior-production rows**.
+146 gaps / 1 confidence open / 0 prior-production rows**.
 Every actual/outlier and both quiet guards remain; unchanged qualification is reused.
-The29 named new boundaries remain unmeasured; stop current passing paths.
+The27 named new boundaries remain unmeasured; stop current passing paths.
 
 **Decode and metadata**
 
@@ -147,6 +149,7 @@ The29 named new boundaries remain unmeasured; stop current passing paths.
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 9,381.96 | 6,007.84 | 1.562 / 1.793 | 1,966,712 | Gap (short; qualified) |
 | [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 4,320.01 | 3,018.37 | 1.431 / 1.494 | 1,216,276 | Gap (short; qualified) |
 | [PNG RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,904.89 | 1,392.72 | 1.368 / 1.371 | 4,456 | Gap (independent) |
+| [PNG RGBA8, resident / shared budget](../benchmarks/WARM-SHARED-BUDGET.md) | 2,004.67 | 1,392.79 | 1.439 / 1.482 | 4,561 | Gap (short; qualified) |
 | [PNG RGBA8, None / live cancelable token](../benchmarks/WARM-PNG-CANCEL-BLOCKS.md) | 1,732.37 | 1,390.42 | 1.246 / 1.320 | 4,456 | Gap (short; qualified) |
 | [PNG RGBA8, None / exact working limit](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 2,028.73 | 1,395.91 | 1.453 / 1.597 | 68,200 | Gap (short; qualified) |
 | [PNG RGBA8, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 2,067.97 | 1,397.05 | 1.480 / 1.826 | 68,200 | Gap (short; qualified) |
@@ -244,6 +247,7 @@ The29 named new boundaries remain unmeasured; stop current passing paths.
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,579.93 | 2,354.66 | 1.096 / 1.227 | 294,116 | Gap (short; qualified) |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,633.91 | 2,421.91 | 1.088 / 1.220 | 294,116 | Gap (short; qualified) |
 | [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,022.21 | 1,766.91 | 1.144 / 1.247 | 297,781 | Gap (short; qualified) |
+| [JPEG 4:2:0, shared budget / matched quality](../benchmarks/WARM-SHARED-BUDGET.md) | 2,026.04 | 1,769.43 | 1.145 / 1.272 | 297,781 | Gap (short; qualified) |
 | [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,019.53 | 1,611.25 | 1.253 / 1.455 | 297,781 | Gap (short; qualified) |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,310.38 | 1,769.17 | 1.306 / 1.488 | 263,819 | Gap (short; qualified) |
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,393.98 | 1,839.60 | 1.301 / 1.415 | 263,819 | Gap (short; qualified) |

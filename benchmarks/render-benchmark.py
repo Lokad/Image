@@ -87,6 +87,7 @@ def render():
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'StreamNativeLossless8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
+        row('PNG RGBA8, resident / shared budget', 'warm-shared-budget-evidence.json', ['cases', 'PngBudgetDecode8', -1], 'WARM-SHARED-BUDGET.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None / live cancelable token', 'warm-png-cancel-blocks-evidence.json', ['cases', 'DecodeCancelable8', -1], 'WARM-PNG-CANCEL-BLOCKS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None / exact working limit', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTight8', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None / exact limit + live cancelable token', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTightCancelable8', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
@@ -181,6 +182,7 @@ def render():
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0, shared budget / matched quality', 'warm-shared-budget-evidence.json', ['cases', 'JpegBudgetEncode4208', -1], 'WARM-SHARED-BUDGET.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420Restart8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Gap (short; qualified)'),
@@ -301,11 +303,11 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 214
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 216
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 214 retained numeric rows contain **{parity_count} current
+conservative upper ≤1x**. The 216 retained numeric rows contain **{parity_count} current
 parity confirmations, {gap_count} measured gaps and {confidence_count} confidence-open cases**;
 all numeric rows have current evidence after the
 [input reconciliation](../benchmarks/WARM-INPUT-RECONCILIATION.md). Twenty-two prior
@@ -322,14 +324,16 @@ resolves one stale row: **1.426×**, **672,186B/op**, qualified short gap. Froze
 pixels/reference/boundaries and the same qualified build are reused; no rebuild,
 long repeat or repeated package proof. The later input reconciliation above refreshes all remaining prior rows.
 
-Shared-budget entry points and direct JPEG sample decoding are implemented and
-correctness-qualified; their times and allocations are **unmeasured**. Together
-with JPEG compatibility, async I/O, inspection, drawing and text, the checklist names
-twenty-nine pending representatives, with three original tiny font controls added
-to existing image inputs. Existing JPEG and fresh-Stream rows now have current measurements. Resident PNG/WebP, JPEG encoding, edits and image
-disposal remain unchanged.
-CMYK/YCCK and quarter-width JPEG compatibility paths are correctness-qualified
-but also await the named timing/allocation evidence.
+[Shared-budget codec boundaries](../benchmarks/WARM-SHARED-BUDGET.md) now have
+qualified shorts: PNG RGBA8 decode **1.439× /4,561B/op**, JPEG420 encode
+**1.145× /297,781B/op**. Public admission/actual-work settlement and independent
+owners are timed; PNG retained-pixel leases and disposal are included. Frozen
+JPEG bytes stay **74,040/52,093**, with unchanged quality/alpha gates. Both remain
+gaps; no long repeat or production/package rebuild. A long-lived finite caller
+budget and its resident-input/source reservation are prepared outside timing.
+Direct sample decoding, JPEG compatibility, async I/O, inspection, drawing and
+text now account for **twenty-seven pending representatives**, with no grid.
+Existing numeric evidence is reused where paths remain unchanged.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end
@@ -415,7 +419,7 @@ all three. Both retain 5s `exclusive-vm-idle-v2` guards. Earlier records
 retain their original protocol and failures. **B/op** is managed allocation from
 BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
 **unmeasured**, not zero. Timings were collected across rounds; unchanged-path
-reconciliation applies to rows without the prior-production label.
+reconciliation now covers every numeric row.
 
 Latest [wider RGBA8 horizontal reversal](../benchmarks/WARM-HORIZONTAL-FLIP512.md)
 improves the single-output flip **22.0%**, independently confirming **0.950× /
@@ -432,7 +436,7 @@ small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../ben
 retains its1.012x mean gap/1.014x upper. Current totals are **{parity_count} passes /
 {gap_count} gaps / {confidence_count} confidence open / {reconfirm_count} prior-production rows**.
 Every actual/outlier and both quiet guards remain; unchanged qualification is reused.
-The29 named new boundaries remain unmeasured; stop current passing paths.
+The27 named new boundaries remain unmeasured; stop current passing paths.
 
 **Decode and metadata**
 

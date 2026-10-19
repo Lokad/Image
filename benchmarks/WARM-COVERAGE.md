@@ -1,10 +1,10 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-69 independent passes,144 measured mean gaps and one confidence-open case across
-all214 current numeric rows; no prior-production row remains. The
+69 independent passes,146 measured mean gaps and one confidence-open case across
+all216 current numeric rows; no prior-production row remains. The
 [three-table summary](../docs/benchmark.md) contains125 current independent
-observations and89 qualified shorts.29named new boundaries are unmeasured.
+observations and91 qualified shorts.27named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
 
 [Input reconciliation](WARM-INPUT-RECONCILIATION.md) refreshes the remaining22
@@ -69,20 +69,21 @@ delivery. The two lossless cases and photograph VP8 independently pass; the late
 bounded-model diagram result is the open comparison above. Lossless sizes are now 2.394x/2.090x the exact native packets; VP8
 sizes are 1.212x/1.167x at matched source quality. The preceding lossless change replaces only the five affected timing proofs;
 other production paths and qualification evidence are reused. Known scope is now243 named
-cases:214 numeric plus29 unmeasured. Stop these three time-passing cases unless
+cases:216 numeric plus27 unmeasured. Stop these three time-passing cases unless
 their relevant production path changes; compression-size work remains required.
 
-Shared-budget codec entry points add two required, **unmeasured** representatives:
-`SharedBudgetDecode/PngRgba8Resident` reuses `WarmPng/Decode8` to cover complete
-decode and retained-budget owner disposal; `SharedBudgetEncode/Jpeg420Rgba8`
-reuses `WarmJpeg/Encode420_8` to cover complete output streaming and work settlement.
-Reuse the existing inputs, settings, native references and quality gates. These
-cover the new common admission/ownership boundaries, not new codec algorithms.
-These admission additions leave original successful codec paths and ImageBuffer
-disposal unchanged. The later JPEG compatibility changes invalidate only the
-JPEG decode/inspection timings described below.
-Budgeted entry points have correctness/package qualification, pending separate
-quiet-VM elapsed/allocation evidence; existing parity claims do not cover them.
+The two [shared-budget codec boundaries](WARM-SHARED-BUDGET.md) are now measured:
+`SharedBudgetDecode/PngRgba8Resident` reuses `WarmPng/Decode8`; complete public
+budgeted decode and retained-owner disposal measure1.439x,4,561B/op.
+`SharedBudgetEncode/Jpeg420Rgba8` reuses `WarmJpeg/Encode420_8`; complete output/
+work settlement measures1.145x,297,781B/op, unchanged74,040/52,093-byte packets.
+Both are qualified short gaps, not passing confirmations. One finite long-lived
+caller budget and source/input reservation are prepared outside timing; original
+per-operation limits remain. Two live owners/packets, exact retained charges,
+surviving outputs, source stability and temporary-memory/work settlement pass.
+No new case/grid, native/production/selector build or repeated full package proof.
+Only benchmark harness inputs changed; existing executed production evidence stays
+valid.27new boundaries remain unmeasured. The original unbudgeted paths are reused.
 
 Direct JPEG sample decoding adds two further **unmeasured** representatives:
 `JpegSamplesDecode/GrayscaleResident` reuses `WarmJpegDecode/OwnedDecodeGray`, and
@@ -101,7 +102,7 @@ uses the fixed opaque RGB projection and FFmpeg's 4:2:0 reference. Retain existi
 quality/size matching, with equivalent raw sample delivery, complete row
 normalization, streaming and independent encoded output ownership. The cases
 cover single-component samples and packed RGB conversion, without a settings grid.
-The four budget/decode boundaries above remain unmeasured. The [two direct sample
+The two direct-sample decode boundaries above remain unmeasured; the two shared-budget paths now have the qualified shorts above. The [two direct sample
 encode screens](WARM-JPEG-SAMPLE-ENCODE.md) measure gray1.145x/upper1.363x,
 155,007B/op and RGB4202.004x/upper2.216x,297,896B/op. Both are mean gaps, so no long
 confirmation follows. Native raw-input adapters use the same pinned libraries

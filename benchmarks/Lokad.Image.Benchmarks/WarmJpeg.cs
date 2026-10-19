@@ -15,7 +15,7 @@ internal sealed record WarmJpegPreparation(int SchemaVersion, string Project, st
     string? Sampling = null, string? QualityPolicy = null, int SourceDepth = 8);
 
 [MemoryDiagnoser]
-public class WarmJpeg
+public partial class WarmJpeg
 {
     public static IEnumerable<WarmJpegCase> Cases => SelectedCases();
     [ParamsSource(nameof(Cases))] public WarmJpegCase Case { get; set; }
@@ -213,6 +213,10 @@ public class WarmJpeg
     public void Setup()
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Warm native JPEG requires Linux.");
+        if (Environment.GetEnvironmentVariable("LOKAD_IMAGE_SHARED_BUDGET") is { } budgetSelection
+            && (budgetSelection != "1" || Case != WarmJpegCase.Encode420_8
+                || Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_SAMPLE_INPUT") is not null))
+            throw new InvalidOperationException("Shared JPEG measurement requires resident RGBA8 Encode420_8.");
         if ((ForwardOnly || Cancelable) && Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") != "fixed-geometric-v1") throw new InvalidOperationException("The selected output boundary requires the fixed geometric AC Huffman policy.");
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
@@ -256,6 +260,7 @@ public class WarmJpeg
                 throw new InvalidOperationException("Warm JPEG input/reference/oracle identity changed; prepare only this pair again.");
             options = new() { Quality = prepared.Match.ClosestOwned.Setting, Sampling = Horizontal ? JpegSampling.YCbCr422 : Subsampled ? JpegSampling.YCbCr420 : JpegSampling.YCbCr444, BackgroundRgb = Background, RestartInterval = Restart ? 33 : 0 };
             source = JpegBenchmarkCase.Buffer(pixels, 513, 259, Depth); File.WriteAllBytes(state.Input, pixels);
+            PrepareSharedBudget();
             native = new NativeWarmReference(state, Depth, cpu, Restart ? "jpeg-restart-encode" : "jpeg-encode", expectedRaw: NormalizedInput(state.Root, pixels, reference, Depth), nativeQuality: prepared.NativeQuality, jpegSampling: NativeSampling);
             if (native.BuildIdentity.GetProperty("workerSha256").GetString() != prepared.NativeBuild.GetProperty("workerSha256").GetString())
                 throw new InvalidOperationException("Native JPEG worker changed; prepare this pair again.");
@@ -277,10 +282,10 @@ public class WarmJpeg
                 catch (OperationCanceledException exception) when (exception.CancellationToken == canceled.Token) { }
                 if (rejected.Length != 0) throw new InvalidOperationException("Canceled JPEG wrote output.");
             }
-            ValidateManaged(); ValidateQuality();
+            ValidateManaged(); ValidateQuality(); ValidateSharedBudget();
             before = native.Measure(smoke, sampleCount: sampleCount); ready = true;
         }
-        catch { native?.Dispose(); source?.Dispose(); cancellationSource?.Dispose(); state.Dispose(); throw; }
+        catch { sharedCallerMemory?.Dispose(); native?.Dispose(); source?.Dispose(); cancellationSource?.Dispose(); state.Dispose(); throw; }
     }
 
     private void ValidateManaged()
@@ -292,6 +297,13 @@ public class WarmJpeg
         if (ReferenceEquals(first.GetBuffer(), second.GetBuffer()) || !first.ToArray().AsSpan().SequenceEqual(encoded)
             || !second.ToArray().AsSpan().SequenceEqual(encoded) || !OriginalPixels.Bytes(source).AsSpan().SequenceEqual(pixels))
             throw new InvalidOperationException("Warm JPEG output is not independent/deterministic or source changed.");
+        if (sharedBudget is not null)
+        {
+            first.GetBuffer()[0] ^= 255; first.Dispose();
+            if (!second.ToArray().AsSpan().SequenceEqual(encoded))
+                throw new InvalidOperationException("Shared JPEG surviving output aliases a released packet.");
+            ValidateSharedBudget();
+        }
     }
 
     private void ValidateQuality()
@@ -389,6 +401,7 @@ public class WarmJpeg
 
     private void EncodeManaged(MemoryStream output)
     {
+        if (sharedBudget is not null) { sharedBudget.EncodeJpeg(source, output, options, encodeCancellation); return; }
         if (ForwardOnly)
         {
             using var stream = new ForwardOnlyOutput(output);
@@ -423,7 +436,7 @@ public class WarmJpeg
         try
         {
             if (!ready) return;
-            ValidateManaged();
+            ValidateManaged(); ValidateSharedBudget();
             var after = native.Measure(smoke, before[0].Operations, sampleCount); native.Check(); ValidateQuality(); native.Stop();
             var path = Path.Combine(state.Root, "artifacts", "benchmark-validation", nameof(WarmJpeg) + "-" + Guid.NewGuid().ToString("N") + ".json");
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);
@@ -431,6 +444,9 @@ public class WarmJpeg
             {
                 schemaVersion = 1, name = nameof(WarmJpeg), caseId = Case.ToString(), smoke, nativeSampleCount = smoke ? 1 : sampleCount,
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"),
+                sharedBudget = sharedBudget is not null, sharedBudgetWorkConsumed = sharedBudget?.ConsumedWork,
+                sharedBudgetResidentInputBytes = sharedCallerBytes,
+                sharedBudgetTemporaryMemoryReturned = sharedBudget is not null,
                 width = source.Width, height = source.Height, depth = Depth, encodedDepth = 8, cpu, managedAffinityCount = 1,
                 processorCount = Environment.ProcessorCount, serverGc = GCSettings.IsServerGC, gcConfiguration = GC.GetConfigurationVariables(),
                 managedIntrinsics = new { avx = System.Runtime.Intrinsics.X86.Avx.IsSupported, avx512F = System.Runtime.Intrinsics.X86.Avx512F.IsSupported },
@@ -455,10 +471,10 @@ public class WarmJpeg
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmJpeg).Assembly.Location), nativeBuild = native.BuildIdentity,
                 nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = $"Resident original RGBA{Depth} to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, {DisplaySampling} encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included{(ForwardOnly ? ", plus fresh forward-only Stream wrapper creation/disposal" : "")}; no redundant ToArray. Native optimal Huffman and managed {(AdaptiveEntropy ? "adaptive Huffman with histogram/cache work and private workspace reuse" : "fixed geometric AC Huffman")} recorded. Quality matched by frozen <=0.25 dB RGB source-error band; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded."
+                boundary = SharedBudgetBoundary + $"Resident original RGBA{Depth} to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, {DisplaySampling} encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included{(ForwardOnly ? ", plus fresh forward-only Stream wrapper creation/disposal" : "")}; no redundant ToArray. Native optimal Huffman and managed {(AdaptiveEntropy ? "adaptive Huffman with histogram/cache work and private workspace reuse" : "fixed geometric AC Huffman")} recorded. Quality matched by frozen <=0.25 dB RGB source-error band; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded."
             }, new JsonSerializerOptions(EncoderQualityCalibration.Json) { PropertyNamingPolicy = null }) + "\n");
             Console.WriteLine("Validated warm JPEG pair: " + path);
         }
-        finally { native?.Dispose(); source?.Dispose(); cancellationSource?.Dispose(); state?.Dispose(); ready = false; }
+        finally { sharedCallerMemory?.Dispose(); native?.Dispose(); source?.Dispose(); cancellationSource?.Dispose(); state?.Dispose(); ready = false; }
     }
 }
