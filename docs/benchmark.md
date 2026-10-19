@@ -1,8 +1,8 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 223 retained numeric rows contain **70 current
-parity confirmations, 152 measured gaps and 1 confidence-open cases**;
+conservative upper ≤1x**. The 224 retained numeric rows contain **70 current
+parity confirmations, 153 measured gaps and 1 confidence-open cases**;
 all numeric rows have current evidence after the
 [input reconciliation](../benchmarks/WARM-INPUT-RECONCILIATION.md). Twenty-two prior
 rows were refreshed on the same qualified immutable build: JPEG Identify and
@@ -26,7 +26,7 @@ JPEG bytes stay **74,040/52,093**, with unchanged quality/alpha gates. Both rema
 gaps; no long repeat or production/package rebuild. A long-lived finite caller
 budget and its resident-input/source reservation are prepared outside timing.
 Direct sample decoding, JPEG compatibility, async I/O, inspection, drawing and
-text now account for **twenty-three pending representatives**, with no grid.
+text now account for **twenty-two pending representatives**, with no grid.
 Existing numeric evidence is reused where paths remain unchanged.
 
 [Caller RGB420 JPEG decoding](../benchmarks/WARM-JPEG-CALLER-RGB420.md) now
@@ -36,7 +36,7 @@ without an RGBA frame. Its gray rejection control remains a short gap at
 **1.326× /273,422B/op**. The same complete native operations and gates remain.
 All4,176tests/OS,73affected hardware-disabled checks/OS and the same actual private
 package consumer/all three examples pass on both OS. Exactly these two numeric
-rows change; prior passing paths retain evidence.23new boundaries remain.
+rows change; prior passing paths retain evidence.22new boundaries remain.
 
 [Identical horizontal JPEG rows](../benchmarks/WARM-JPEG-HORIZONTAL-ROW.md)
 reduce the one-AC CMYK mean **10.0%**,746.37→671.44µs, at **1.726x FFmpeg**.
@@ -60,6 +60,13 @@ all five remain short gaps. All4,202tests/OS,66affected hardware-off checks/OS
 and the same actual private package consumer/all three examples pass on both OS.
 Exactly five numeric rows change; all218other rows and70passing proofs are reused.
 Scope246cases,23unmeasured; no new image/grid. CMYK2D sparse is the largest gap.
+
+[Caller CMYK JPEG decoding](../benchmarks/WARM-JPEG-CALLER-CMYK.md) first measures
+**8.522x /upper8.986x**, **2,817.13/330.56µs**, **1,635,373B/op**. Raw four-channel
+ink samples match exactly, including black; complete fresh caller ownership and
+native normalization/release are timed. Same original untagged projection, no
+RGBA intermediate or new grid. Production/full qualification and all223prior
+rows are reused. Scope246cases,22unmeasured. This is now the largest known gap.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end
@@ -164,7 +171,7 @@ Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDEN
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
 retains its1.012x mean gap/1.014x upper. Current totals are **70 passes /
-152 gaps / 1 confidence open / 0 prior-production rows**.
+153 gaps / 1 confidence open / 0 prior-production rows**.
 Every actual/outlier and both quiet guards remain; unchanged qualification is reused.
 The24 named new boundaries remain unmeasured; stop current passing paths.
 
@@ -234,6 +241,7 @@ The24 named new boundaries remain unmeasured; stop current passing paths.
 | [PNG opaque gray4 → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 116.09 | 169.54 | 0.685 / 0.698 | 872 | Parity confirmed |
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-GRAY-CURRENT.md) | 973.44 | 682.79 | 1.426 / 1.459 | 672,186 | Gap (short; qualified) |
 | [JPEG gray → caller GRAY8](../benchmarks/WARM-JPEG-CALLER-RGB420.md) | 857.87 | 646.88 | 1.326 / 1.445 | 273,422 | Gap (short; qualified) |
+| [JPEG untagged → caller CMYK8](../benchmarks/WARM-JPEG-CALLER-CMYK.md) | 2,817.13 | 330.56 | 8.522 / 8.986 | 1,635,373 | Gap (short; qualified) |
 | [JPEG 4:2:0 → caller RGB24](../benchmarks/WARM-JPEG-CALLER-RGB420.md) | 1,121.95 | 1,161.53 | 0.966 / 0.971 | 624,508 | Parity confirmed |
 | [JPEG Adobe CMYK, four full-resolution planes](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 525.44 | 377.75 | 1.391 / 1.473 | 1,085,667 | Gap (short; qualified) |
 | [JPEG Adobe CMYK, one AC control](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 674.71 | 389.55 | 1.732 / 1.783 | 1,085,662 | Gap (short; qualified) |

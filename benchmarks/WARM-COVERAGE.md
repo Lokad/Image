@@ -1,11 +1,20 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-70 independent passes,152 measured mean gaps and one confidence-open case across
-all223 current numeric rows; no prior-production row remains. The
+70 independent passes,153 measured mean gaps and one confidence-open case across
+all224 current numeric rows; no prior-production row remains. The
 [three-table summary](../docs/benchmark.md) contains126 current independent
-observations and97 qualified shorts.23named new boundaries are unmeasured.
+observations and98 qualified shorts.22named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
+
+[Caller CMYK JPEG decoding](WARM-JPEG-CALLER-CMYK.md) now demonstrates the largest
+gap:8.522x/upper8.986x,2817.13/330.56us,1,635,373B/op. All four canonical ink
+channels and normal/scalar public CLI are exact, with varying black preserved.
+Complete fresh caller ownership/decode/packing/release are timed on one CPU.
+Untagged original projection, no RGBA/header patch/new image/settings grid.
+All223previous rows and full4202/66HWoff/package proof are reused; production
+unchanged. One named pending boundary becomes numeric, scope246=224+22.
+One6sec profile selects scalar sample packing as the next substantial primitive.
 
 [Exact SIMD YCCK420 rows](WARM-JPEG-YCCK-SIMD.md) reduce time76.1%,
 4,761.24→1,135.97us:1.604x/upper1.636x,1,470,246B/op. Exact original pixels,
@@ -193,7 +202,7 @@ preceding grayscale result; historical allocation counts are superseded.
 No new workload is needed. Resident codec paths, synchronous Identify, async input,
 encoding and editing remain unchanged. No unaffected operation was retimed.
 
-Five representatives cover the required JPEG compatibility algorithms; CMYK and YCCK have the current gaps above, three remain **unmeasured**:
+Five representatives cover the required JPEG compatibility algorithms; CMYK, YCCK and caller CMYK have the current gaps above, two remain **unmeasured**:
 
 - `JpegDecode/CmykAdobeResident` (**measured**1.391x DC gap): four component planes, Adobe inversion and
   complete owned RGBA conversion from an original CMYK projection. The
@@ -202,9 +211,9 @@ Five representatives cover the required JPEG compatibility algorithms; CMYK and 
 
 - `JpegDecode/Ycck420Resident` (**measured**1.604x gap): subsampled color
   reconstruction, explicit matrix and full-resolution black, original varying input.
-- `JpegSamplesDecode/CmykResident`: complete caller-owned canonical CMYK output;
-  establish an equivalent native raw-component delivery boundary before timing.
-  Native RGB output alone does not cover this operation.
+- `JpegSamplesDecode/CmykResident` (**measured**8.522x gap): untagged full-resolution
+  canonical ink, all4raw native planes preserved and packed to fresh caller storage.
+  Adobe inversion has correctness coverage; no RGBA intermediate.
 - `JpegDecode/411Resident`: quarter-width horizontal chroma reconstruction on the
   existing RGB projection; confirm native sample-grid equivalence before timing.
 - `JpegDecode/410Resident`: quarter-width, half-height chroma (JPEG factors 4×2,

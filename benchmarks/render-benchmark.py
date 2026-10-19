@@ -136,6 +136,7 @@ def render():
         row('PNG opaque gray4 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('JPEG baseline gray', 'warm-jpeg-gray-current-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-GRAY-CURRENT.md', verification='Gap (short; qualified)'),
         row('JPEG gray → caller GRAY8', 'warm-jpeg-caller-rgb420-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-CALLER-RGB420.md', verification='Gap (short; qualified)'),
+        row('JPEG untagged → caller CMYK8', 'warm-jpeg-caller-cmyk-evidence.json', ['cases', 'CmykCaller', -1], 'WARM-JPEG-CALLER-CMYK.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 → caller RGB24', 'warm-jpeg-caller-rgb420-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-CALLER-RGB420.md', True),
         row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobe', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeAc', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
@@ -310,11 +311,11 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 223
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 224
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 223 retained numeric rows contain **{parity_count} current
+conservative upper ≤1x**. The 224 retained numeric rows contain **{parity_count} current
 parity confirmations, {gap_count} measured gaps and {confidence_count} confidence-open cases**;
 all numeric rows have current evidence after the
 [input reconciliation](../benchmarks/WARM-INPUT-RECONCILIATION.md). Twenty-two prior
@@ -339,7 +340,7 @@ JPEG bytes stay **74,040/52,093**, with unchanged quality/alpha gates. Both rema
 gaps; no long repeat or production/package rebuild. A long-lived finite caller
 budget and its resident-input/source reservation are prepared outside timing.
 Direct sample decoding, JPEG compatibility, async I/O, inspection, drawing and
-text now account for **twenty-three pending representatives**, with no grid.
+text now account for **twenty-two pending representatives**, with no grid.
 Existing numeric evidence is reused where paths remain unchanged.
 
 [Caller RGB420 JPEG decoding](../benchmarks/WARM-JPEG-CALLER-RGB420.md) now
@@ -349,7 +350,7 @@ without an RGBA frame. Its gray rejection control remains a short gap at
 **1.326× /273,422B/op**. The same complete native operations and gates remain.
 All4,176tests/OS,73affected hardware-disabled checks/OS and the same actual private
 package consumer/all three examples pass on both OS. Exactly these two numeric
-rows change; prior passing paths retain evidence.23new boundaries remain.
+rows change; prior passing paths retain evidence.22new boundaries remain.
 
 [Identical horizontal JPEG rows](../benchmarks/WARM-JPEG-HORIZONTAL-ROW.md)
 reduce the one-AC CMYK mean **10.0%**,746.37→671.44µs, at **1.726x FFmpeg**.
@@ -373,6 +374,13 @@ all five remain short gaps. All4,202tests/OS,66affected hardware-off checks/OS
 and the same actual private package consumer/all three examples pass on both OS.
 Exactly five numeric rows change; all218other rows and70passing proofs are reused.
 Scope246cases,23unmeasured; no new image/grid. CMYK2D sparse is the largest gap.
+
+[Caller CMYK JPEG decoding](../benchmarks/WARM-JPEG-CALLER-CMYK.md) first measures
+**8.522x /upper8.986x**, **2,817.13/330.56µs**, **1,635,373B/op**. Raw four-channel
+ink samples match exactly, including black; complete fresh caller ownership and
+native normalization/release are timed. Same original untagged projection, no
+RGBA intermediate or new grid. Production/full qualification and all223prior
+rows are reused. Scope246cases,22unmeasured. This is now the largest known gap.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end
