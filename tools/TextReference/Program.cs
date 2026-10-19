@@ -12,9 +12,9 @@ using SixLabors.ImageSharp.Processing;
 using LOptions = Lokad.Image.TextOptions;
 using SOptions = SixLabors.Fonts.TextOptions;
 
-if (args.Length > 0 && args[0] == "--probe-substitution")
+if (args.Length > 0 && args[0] is "--probe-substitution" or "--probe-positioning")
 {
-    SubstitutionProbe.Run(Path.GetFullPath(args[1])); return;
+    SubstitutionProbe.Run(Path.GetFullPath(args[1]), args[0] == "--probe-positioning"); return;
 }
 
 const int width = 384, height = 160;

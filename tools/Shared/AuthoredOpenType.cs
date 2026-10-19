@@ -122,5 +122,36 @@ internal static class AuthoredOpenType
         }
         return Attach(Words(1, 2, 0, 0, 0, 0, 0), children.ToArray());
     }
+    internal static byte[] Positioning(Lookup[] lookups, Feature[] features)
+        => Substitution(lookups, features);
+    internal static byte[] SinglePosition(int glyph, int format, params int[] values)
+        => Attach(Words([1, 0, format, .. values]), (2, Coverage(glyph)));
+    internal static byte[] SinglePositionArray(int[] glyphs, int valueFormat, params int[][] values)
+        => Attach(Words([2, 0, valueFormat, values.Length, .. values.SelectMany(v => v)]), (2, Coverage(glyphs)));
+    internal static byte[] PairPosition(int first, int firstFormat, int secondFormat, params (int Second, int[] FirstValue, int[] SecondValue)[] pairs)
+    {
+        var set = Words([pairs.Length, .. pairs.SelectMany(p => new[] { p.Second }.Concat(p.FirstValue).Concat(p.SecondValue))]);
+        return Attach(Words(1, 0, firstFormat, secondFormat, 1, 0), (2, Coverage(first)), (10, set));
+    }
+    internal static byte[] ClassPairPosition(int first, byte[] firstClasses, byte[] secondClasses,
+        int firstCount, int secondCount, int firstFormat, int secondFormat, params int[][] values)
+        => Attach(Words([2, 0, firstFormat, secondFormat, 0, 0, firstCount, secondCount, .. values.SelectMany(v => v)]),
+            (2, Coverage(first)), (8, firstClasses), (10, secondClasses));
+    internal static byte[] Anchor(int x, int y, int format = 1)
+        => format switch { 2 => Words(2, x, y, 3), 3 => Words(3, x, y, 0, 0), _ => Words(format, x, y) };
+    internal static byte[] MarkPosition(int parent, int mark, byte[]? parentAnchor, byte[] markAnchor, int markClass = 0, int classCount = 1)
+    {
+        var marks = Attach(Words(1, markClass, 0), (4, markAnchor));
+        var header = Words([1, .. new int[classCount]]);
+        var parents = parentAnchor is null ? header : Attach(header, (2 + markClass * 2, parentAnchor));
+        return Attach(Words(1, 0, 0, classCount, 0, 0), (2, Coverage(mark)), (4, Coverage(parent)), (8, marks), (10, parents));
+    }
+    internal static byte[] LigatureMarkPosition(int ligature, int mark, byte[] markAnchor, params byte[][] componentAnchors)
+    {
+        var marks = Attach(Words(1, 0, 0), (4, markAnchor));
+        var attach = Attach(Words([componentAnchors.Length, .. new int[componentAnchors.Length]]), componentAnchors.Select((a, i) => (2 + i * 2, a)).ToArray());
+        var ligatures = Attach(Words(1, 0), (2, attach));
+        return Attach(Words(1, 0, 0, 1, 0, 0), (2, Coverage(mark)), (4, Coverage(ligature)), (8, marks), (10, ligatures));
+    }
     internal static void Write(byte[] bytes, int offset, int value) => BinaryPrimitives.WriteUInt16BigEndian(bytes.AsSpan(offset), unchecked((ushort)value));
 }

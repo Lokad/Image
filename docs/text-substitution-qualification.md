@@ -41,5 +41,6 @@ Retained SHA-256 identities:
 - `p2b-qualified-windows.tar.gz`: `62f6f69f5441c26050c858d7ed95d8bfd14801e535692d460b09a51035a14a43`.
 - `p2b-qualified-linux.tar.gz`: `fd272d6dee7beccdd0e182efce2e2c6ca1d00840dfad2ec638175ebdeefefad5`.
 
-Published 0.1.0 is preserved. The next step is GPOS attachment and the Arabic/Bidi
-pipeline, followed by integration into measurement/rendering and fitting.
+Published 0.1.0 is preserved. [GPOS attachment](text-positioning-qualification.md)
+is now qualified internally. Arabic/Bidi, public measurement/rendering integration
+and fitting remain outstanding.

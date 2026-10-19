@@ -69,8 +69,10 @@ internal sealed class TestMemoryBudget : IMemoryScope
             {
                 owner.Check(); ObjectDisposedException.ThrowIf(disposed, this); owner.root.attempts++;
                 if (owner.Refused(bytes, value)) return false;
-                owner.root.used += bytes - value; value = bytes;
-                owner.root.peak = Math.Max(owner.root.peak, owner.root.used); return true;
+                var previous = value; owner.root.used += bytes - value; value = bytes;
+                owner.root.peak = Math.Max(owner.root.peak, owner.root.used);
+                if (bytes > previous) owner.root.Admitted?.Invoke(owner.root.used);
+                return true;
             }
         }
         public void Dispose()

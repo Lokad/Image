@@ -41,3 +41,9 @@ combining-mark and Arabic controls. It exercises the actual internal parser
 through reflection in this tool, verifies borrowed/retained memory cleanup, and
 explicitly reports that joining, positioning and public layout integration remain
 incomplete. Production has no reflection-based shaping or reference dependency.
+
+`--probe-positioning <repo-root>` additionally exercises staged GPOS on the same
+combining-mark and Latin-kerning controls, recording glyph origins and advances.
+It verifies admission cleanup and reports that public layout integration and
+complete shaping remain unavailable. It does not time operations or qualify
+Arabic layout or rasterization.

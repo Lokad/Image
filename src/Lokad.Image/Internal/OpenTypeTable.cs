@@ -124,9 +124,9 @@ internal sealed class OpenTypeTable(ReadOnlyMemory<byte> data, int glyphCount, O
 
     // Select only the requested script/language's features, never all features
     // sharing a tag in the global list. Lookup-list order controls execution.
-    internal bool Select(uint script, uint language, uint feature, Span<byte> selected, bool required = false)
+    internal bool Select(uint script, uint language, uint feature, Span<byte> selected, bool required = false, bool append = false)
     {
-        selected.Clear();
+        if (!append) selected.Clear();
         var scripts = Offset16(0, 4); var features = Offset16(0, 6);
         var scriptTable = Tagged(scripts, script);
         if (scriptTable == 0) scriptTable = Tagged(scripts, Tag('D', 'F', 'L', 'T'));

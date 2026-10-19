@@ -12,7 +12,7 @@ using Lokad.Image.Tooling;
 internal static class SubstitutionProbe
 {
     private const BindingFlags Instance = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-    internal static void Run(string root)
+    internal static void Run(string root, bool positioning = false)
     {
         var path = Path.Combine(root, "external/text-reference/fonts/DejaVuSans.ttf");
         var expected = JsonDocument.Parse(File.ReadAllText(Path.Combine(root, "tools/TextReference/font-provenance.json")))
@@ -29,11 +29,9 @@ internal static class SubstitutionProbe
             {
                 var fontData = (byte[])typeof(TrueTypeFont).GetField("data", Instance)!.GetValue(font)!;
                 var baseline = budget.Bytes;
-                foreach (var (name, text, script) in new[]
-                {
-                    ("CombiningMarks", "A\u0301 g\u0301", "latn"),
-                    ("ArabicCompositionOnly", "\u0627\u0644\u0633\u064E\u0651\u0644\u064E\u0627\u0645\u064F 123 \u0639\u0644\u064A\u0643\u0645", "arab")
-                })
+                var cases = new[] { ("CombiningMarks", "A\u0301 g\u0301", "latn"), positioning ? ("LatinKerning", "AV To", "latn")
+                    : ("ArabicCompositionOnly", "\u0627\u0644\u0633\u064E\u0651\u0644\u064E\u0627\u0645\u064F 123 \u0639\u0644\u064A\u0643\u0645", "arab") };
+                foreach (var (name, text, script) in cases)
                 {
                     var runes = text.EnumerateRunes().ToArray();
                     var context = New("OperationContext", limits, CancellationToken.None);
@@ -55,8 +53,33 @@ internal static class SubstitutionProbe
                             using (var engine = (IDisposable)New("OpenTypeSubstitution", Table(fontData, "GSUB"), Table(fontData, "GDEF"), font.GlyphCount, context))
                             {
                                 Call(engine, "ApplyFeature", Tag(script), 0u, Tag("ccmp"), buffer, 0u, 0, -1, false);
-                                observations.Add(new { Name = name, Before = before, After = Values(buffer),
-                                    CompleteShaping = false, Remaining = "GPOS attachment, joining forms, ligatures and bidirectional ordering" });
+                                object? positions = null;
+                                if (positioning)
+                                {
+                                    var values = Records(buffer);
+                                    foreach (var glyph in values)
+                                    {
+                                        var metrics = font.GetGlyphMetrics(Get<int>(glyph, "Glyph"), limits);
+                                        Set(glyph, "Advance", (double)metrics.AdvanceWidth); Set(glyph, "OriginX", (double)(metrics.XMin - metrics.LeftSideBearing));
+                                    }
+                                    Store(buffer, values);
+                                    using var gpos = (IDisposable)New("OpenTypePositioning", Table(fontData, "GPOS"), Table(fontData, "GDEF"), font.GlyphCount, context);
+                                    Call(gpos, "ApplyStandardFeatures", Tag(script), 0u, buffer, true, 0, -1);
+                                    Call(gpos, "ResolveAttachments", buffer, false, 0, -1);
+                                    double pen = 0; var placed = new List<object>();
+                                    foreach (var glyph in Records(buffer))
+                                    {
+                                        var index = Get<int>(glyph, "Glyph"); var metrics = font.GetGlyphMetrics(index, limits);
+                                        var scale = 18.0 / font.UnitsPerEm;
+                                        placed.Add(new { GlyphId = index, X = (pen + Get<double>(glyph, "OffsetX") + metrics.LeftSideBearing) * scale,
+                                            Y = (font.Ascender - Get<double>(glyph, "OffsetY") - metrics.YMax) * scale,
+                                            Advance = Get<double>(glyph, "Advance") * scale });
+                                        pen += Get<double>(glyph, "Advance");
+                                    }
+                                    positions = placed;
+                                }
+                                observations.Add(new { Name = name, Before = before, After = Values(buffer), Positions = positions,
+                                    CompleteShaping = false, Remaining = "Public integration, Arabic joining/ligatures and bidirectional ordering" });
                             }
                         }
                     }
@@ -67,7 +90,7 @@ internal static class SubstitutionProbe
             Console.WriteLine(JsonSerializer.Serialize(new
             {
                 ProductionSha256 = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(typeof(ImageBuffer).Assembly.Location))),
-                FontSha256 = expected.GetProperty("sha256").GetString(), NoTiming = true, NoPublicLayoutIntegration = true,
+                FontSha256 = expected.GetProperty("sha256").GetString(), Positioning = positioning, NoTiming = true, NoPublicLayoutIntegration = true,
                 TemporaryOwnersReleased = true, RetainedFontReleased = true, PeakAdmittedBytes = budget.Peak, Cases = observations
             }));
         }
@@ -78,6 +101,17 @@ internal static class SubstitutionProbe
     private static object New(string name, params object[] args) => Activator.CreateInstance(Type(name), Instance, null, args, CultureInfo.InvariantCulture)!;
     private static object? Call(object target, string name, params object[] args) => target.GetType().GetMethod(name, Instance)!.Invoke(target, args);
     private static void Set(object glyph, string name, object value) => glyph.GetType().GetProperty(name, Instance)!.SetValue(glyph, value);
+    private static T Get<T>(object glyph, string name) => (T)glyph.GetType().GetProperty(name, Instance)!.GetValue(glyph)!;
+    private static object[] Records(object buffer)
+    {
+        var values = (Array)buffer.GetType().GetField("glyphs", Instance)!.GetValue(buffer)!;
+        var count = Get<int>(buffer, "Count"); return Enumerable.Range(0, count).Select(i => values.GetValue(i)!).ToArray();
+    }
+    private static void Store(object buffer, object[] records)
+    {
+        var values = (Array)buffer.GetType().GetField("glyphs", Instance)!.GetValue(buffer)!;
+        for (var i = 0; i < records.Length; i++) values.SetValue(records[i], i);
+    }
     private static int[] Values(object buffer)
     {
         var values = (Array)buffer.GetType().GetField("glyphs", Instance)!.GetValue(buffer)!;

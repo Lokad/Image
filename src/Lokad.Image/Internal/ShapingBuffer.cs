@@ -16,6 +16,10 @@ internal struct ShapingGlyph
     internal double Advance { get; set; }
     internal double OffsetX { get; set; }
     internal double OffsetY { get; set; }
+    internal double OriginX { get; set; }
+    internal int AttachTo { get; set; } // Logical glyph index + 1; zero means unattached.
+    internal double AttachX { get; set; }
+    internal double AttachY { get; set; }
 }
 
 // One coarse temporary owner for a run. Retained layout storage is allocated
