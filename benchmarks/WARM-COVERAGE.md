@@ -1,11 +1,22 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-69 independent passes,148 measured mean gaps and one confidence-open case across
+70 independent passes,147 measured mean gaps and one confidence-open case across
 all218 current numeric rows; no prior-production row remains. The
-[three-table summary](../docs/benchmark.md) contains125 current independent
-observations and93 qualified shorts.25named new boundaries are unmeasured.
+[three-table summary](../docs/benchmark.md) contains126 current independent
+observations and92 qualified shorts.25named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
+
+[Direct caller RGB420 sample writing](WARM-JPEG-CALLER-RGB420.md) removes the
+largest3.369x gap:71.3% less elapsed time, independently0.966x/upper0.971x,
+624,508B/op, exact398,601-byte caller RGB24. Gray's new rejection dispatch is
+refreshed at1.326x/273,422B/op and remains a short gap. Precisely these two rows
+change; all69existing passes stay valid and the new RGB pass stops. Exact pixels,
+normal/scalar native gates, padding/source, limits/cancellation and independent
+survivors pass. All4,176tests/OS,73affected hardware-off checks/OS and same actual
+private Windows package consumer/all three examples pass on both OS. Scope stays
+243named cases:218numeric/25unmeasured;70passes/147gaps/one confidence-open.
+Next largest measured gap is RGBA8 128x64 tight-memory bicubic1.687x.
 
 [Caller-RGB MCU preparation](WARM-JPEG-CALLER-MCU.md) improves the largest known
 gap33.7%,3,162.12→2,097.34µs, retaining exact74,040/52,093-byte matched-quality
@@ -96,28 +107,20 @@ No new case/grid, native/production/selector build or repeated full package proo
 Only benchmark harness inputs changed; existing executed production evidence stays
 valid.25new boundaries remain unmeasured. The original unbudgeted paths are reused.
 
-Direct JPEG sample decoding has two named representatives.
+Direct JPEG sample decoding has two named representatives, both currently
+measured in [the RGB420 writing round](WARM-JPEG-CALLER-RGB420.md).
 `JpegSamplesDecode/GrayscaleResident` reuses `WarmJpegDecode/OwnedDecodeGray`:
-[current qualified short](WARM-JPEG-GRAY-SAMPLES-DECODE.md) measures1.324x,
-upper1.449x,273,422B/op for fresh132,867-byte GRAY8 outputs. Native software
-MJPEG includes zeroed destination allocation, decode, row packing/copy and release
-of decoder/caller owners. Exact qualified managed pixels, normal/scalar native
-gates, native CLI delivery, padding/source and independent surviving owners pass.
-One tooling harness/native build; production and compiled selector reused.
-No older evidence is invalidated; unchanged4,169tests/OS and actual package both
-OS remain qualified. No long repeat for this above-one mean.
-`JpegSamplesDecode/Rgb420Resident` now has a
-[qualified short](WARM-JPEG-RGB-SAMPLES-DECODE.md):3.369x,upper3.516x,
-624,454B/op, fresh398,601-byte RGB24 output on both sides. It reuses
-`WarmJpegDecode/NativeDecode420`'s original52,093-byte packet. Native software
-MJPEG includes zeroed destination allocation, centered2x2 chroma expansion/crop,
-full-range BT.601 packing and decoder/chroma/caller owner release. No RGBA frame.
-Exact qualified managed RGB projection, native CLI delivery, original normal/scalar
-decoder gates, source/padding and independent surviving outputs pass. All three
-actuals and both quiet guards pass. One harness/native compilation, reused original
-selector/production/qualification; no older evidence is invalidated. The largest
-demonstrated gap now prioritizes RGB sample writing before smaller gains. No long
-repeat for this above-one mean. Packed rows/input/settings/gates stay fixed.
+new rejection-dispatch control1.326x/upper1.445x,273,422B/op,132,867-byte GRAY8.
+`JpegSamplesDecode/Rgb420Resident` reuses `WarmJpegDecode/NativeDecode420`:
+independent0.966x/upper0.971x,624,508B/op,398,601-byte RGB24. Stop this new pass.
+Both include fresh caller destination acquisition, complete decode/normalization
+and independent output lifetime with equivalent native delivery. RGB additionally
+includes native centered2x2 chroma expansion/crop and BT.601 packing. There is no
+RGBA frame. Original input/settings/native workers and JPEG quality gates stay
+fixed. Exact qualified managed pixels, native CLI delivery, normal/scalar gates,
+padding/source and independent surviving owners pass. The new SIMD packing
+primitive changes precisely RGB and gray dispatch timings; older other evidence
+is retained. Full cross-platform/differential/package qualification is recorded.
 JPEG sample decoding also supports CMYK, as described below.
 
 Direct JPEG sample encoding adds two now **screened** representatives:

@@ -135,8 +135,8 @@ def render():
         row('PNG opaque gray2 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray2', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG opaque gray4 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('JPEG baseline gray', 'warm-jpeg-gray-current-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-GRAY-CURRENT.md', verification='Gap (short; qualified)'),
-        row('JPEG gray → caller GRAY8', 'warm-jpeg-gray-samples-decode-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-GRAY-SAMPLES-DECODE.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0 → caller RGB24', 'warm-jpeg-rgb-samples-decode-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-RGB-SAMPLES-DECODE.md', verification='Gap (short; qualified)'),
+        row('JPEG gray → caller GRAY8', 'warm-jpeg-caller-rgb420-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-CALLER-RGB420.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0 → caller RGB24', 'warm-jpeg-caller-rgb420-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-CALLER-RGB420.md', True),
         row('JPEG baseline 4:2:0', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
@@ -337,20 +337,14 @@ Direct sample decoding, JPEG compatibility, async I/O, inspection, drawing and
 text now account for **twenty-five pending representatives**, with no grid.
 Existing numeric evidence is reused where paths remain unchanged.
 
-[Caller grayscale JPEG decoding](../benchmarks/WARM-JPEG-GRAY-SAMPLES-DECODE.md)
-now has a qualified short: **1.324× /273,422B/op**, complete fresh132,867-byte
-GRAY8 output on both sides. Destination allocation, native row packing and owner
-release are timed; no RGBA intermediate. Exact managed pixels, native CLI delivery,
-existing decoder gates, padding and independent owners pass. This adds one numeric
-row without changing production or invalidating evidence; its RGB neighbor below leaves25boundaries.
-
-[Caller RGB JPEG decoding](../benchmarks/WARM-JPEG-RGB-SAMPLES-DECODE.md)
-measures **3.369× /624,454B/op**, a qualified short and the largest demonstrated
-gap. Complete fresh398,601-byte RGB24 outputs, centered2×2 chroma expansion,
-BT.601 packing and native buffer release are timed. Exact managed pixels,
-normal/scalar decoder gates, padding/source and independent owners pass.
-The existing fixture/build are reused;25boundaries remain. Prioritize this
-RGB sample writer before smaller gains; no long repeat for its above-one mean.
+[Caller RGB420 JPEG decoding](../benchmarks/WARM-JPEG-CALLER-RGB420.md) now
+independently passes **0.966× /upper0.971×**, **624,508B/op**, with **71.3% less
+time**. Direct SIMD RGB packing preserves exact pixels, limits and ownership
+without an RGBA frame. Its gray rejection control remains a short gap at
+**1.326× /273,422B/op**. The same complete native operations and gates remain.
+All4,176tests/OS,73affected hardware-disabled checks/OS and the same actual private
+package consumer/all three examples pass on both OS. Exactly these two numeric
+rows change; prior passing paths retain evidence.25new boundaries remain.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end

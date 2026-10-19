@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
@@ -108,6 +109,16 @@ internal ref partial struct JpegDecoder
     private void WriteSamples(Span<byte> destination, JpegSampleFormat format, int stride,
         JpegColorSpace source, ImageOrientation orientation)
     {
+        if (format == JpegSampleFormat.Rgb && source == JpegColorSpace.YCbCr
+            && orientation == ImageOrientation.Normal && info.Width >= 32
+            && maxH == 2 && maxV == 2 && components.Length == 3
+            && components[0].H == 2 && components[0].V == 2
+            && components[1].H == 1 && components[1].V == 1
+            && components[2].H == 1 && components[2].V == 1
+            && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported && Ssse3.IsSupported)
+        {
+            WriteRgb420Samples(destination, stride); return;
+        }
         if (format == JpegSampleFormat.Grayscale && source != JpegColorSpace.Rgb
             && orientation == ImageOrientation.Normal)
         {

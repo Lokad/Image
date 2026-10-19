@@ -1,6 +1,10 @@
 # JPEG decoding into caller RGB samples
 
-`JpegSamplesDecode/Rgb420Resident` is the largest demonstrated warm parity gap.
+Historical before-writer measurement. Current timing/verification is in
+[the accepted RGB420 writing round](WARM-JPEG-CALLER-RGB420.md).
+
+
+`JpegSamplesDecode/Rgb420Resident` was the largest demonstrated gap at this checkpoint.
 The qualified three-actual screen reuses the original52,093-byte native4:2:0
 JPEG at513×259. Production, input, quality gates and settings are unchanged.
 

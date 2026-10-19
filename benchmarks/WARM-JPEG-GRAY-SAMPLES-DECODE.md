@@ -1,5 +1,9 @@
 # JPEG decoding into caller grayscale samples
 
+Historical before-writer measurement. Current timing/verification is in
+[the accepted RGB420 writing round](WARM-JPEG-CALLER-RGB420.md).
+
+
 The named `JpegSamplesDecode/GrayscaleResident` boundary is a demonstrated warm
 parity gap. A qualified three-actual screen uses the existing147,825-byte gray
 JPEG at513×259. There is no production change or new image/settings grid.
