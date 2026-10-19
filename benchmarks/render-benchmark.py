@@ -172,6 +172,7 @@ def render():
         row('WebP VP8L, native input / live cancelable token', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'NativeLosslessCancelable8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
     ]
     encodes = [
+        row('JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream', 'warm-jpeg-async-samples-evidence.json', ['cases', 'JpegRgb420AsyncSamples', -1], 'WARM-JPEG-ASYNC-SAMPLES.md', verification='Gap (short; qualified)'),
         row('JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality', 'warm-jpeg-async-encode-evidence.json', ['cases', 'Jpeg8AsyncNonSeekable', -1], 'WARM-JPEG-ASYNC-ENCODE.md', verification='Gap (short; qualified)'),
         row('PNG EncodePngAsync, fresh nonseekable Stream / level6', 'warm-png-async-encode-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-PNG-ASYNC-ENCODE.md', True),
         row('PNG RGBA8, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'Encode8', -1], 'WARM-PNG-CHUNK-CRC.md', True),
@@ -324,13 +325,13 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 235
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 236
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-20. Target: **warm single-CPU parity, independently confirmed
-conservative upper ≤1x**. The 235 numeric rows contain **{parity_count} passes,
+conservative upper ≤1x**. The 236 numeric rows contain **{parity_count} passes,
 {gap_count} gaps and {confidence_count} confidence-open case**. The finite
-[material checklist](../benchmarks/WARM-COVERAGE.md) has 254 named cases, 19 unmeasured.
+[material checklist](../benchmarks/WARM-COVERAGE.md) has 254 named cases, 18 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
@@ -382,7 +383,13 @@ qualification is reused. Stop this case. The
 normalization/encode/output ownership is timed. Packets158,812/133,041B and the
 frozen0.082440dB quality gap remain unchanged. Current quality samples revalidate
 once; setup/cleanup reuse exact hashes. No producer build or full/package repeat.
-Next: the named async caller-RGB420 output boundary, preserving its quality anchor.
+The [async caller-RGB420 screen](../benchmarks/WARM-JPEG-ASYNC-SAMPLES.md) adds the
+separate sample-source boundary: **2,076.73µs / 1.276x**, upper1.430,
+**232,614B/op**. Both sides borrow RGB24 without an RGBA frame and include complete
+conversion/encode, adaptive staging and independent output delivery/release.
+Packets74,040/52,093B and the0.106110dB source-quality gap stay frozen. Quality
+samples revalidate once; shared ownership/cancel/failure controls and current
+production/package qualification are reused. Next: lossless WebP async output.
 
 [Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
 **76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,
@@ -393,7 +400,7 @@ passing proofs are reused. No new image/settings grid, profile or baseline chang
 JPEG-round qualification:4,212tests/99hardware-off checks per OS, same actual private
 package consumer/all three examples on Windows/Linux. Released0.1.0 stays immutable.
 Largest measured gaps: Lanczos3 Reduce16 at1.836x, Reduce8 and current CMYK2D sparse1.829x.
-19unmeasured representatives cover async, header, drawing, text and governed ownership.
+18unmeasured representatives cover async, header, drawing, text and governed ownership.
 Stop passes; optimize demonstrated material gaps and resolve missing evidence.
 
 JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale

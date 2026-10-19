@@ -227,10 +227,11 @@ public partial class WarmJpeg
             || GCSettings.IsServerGC || Environment.GetEnvironmentVariable("DOTNET_TieredCompilation") != "0"
             || !GC.GetConfigurationVariables().TryGetValue("ConcurrentGC", out var concurrent) || Convert.ToBoolean(concurrent))
             throw new InvalidOperationException("JPEG worker requires one CPU, optimized JIT and non-concurrent workstation GC.");
-        if (Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ASYNC_NONSEEKABLE") == "1")
+        if (Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ASYNC_NONSEEKABLE") is "1" or "rgb-samples-v1")
         {
-            if (Case != WarmJpegCase.Encode8) throw new ArgumentOutOfRangeException(nameof(Case));
-            asyncOutput = new WarmAsyncJpegEncode(); asyncOutput.Setup(cpu, smoke, sampleCount); return;
+            var direct = Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ASYNC_NONSEEKABLE") == "rgb-samples-v1";
+            if (Case != (direct ? WarmJpegCase.Encode420_8 : WarmJpegCase.Encode8)) throw new ArgumentOutOfRangeException(nameof(Case));
+            asyncOutput = new WarmAsyncJpegEncode(direct); asyncOutput.Setup(cpu, smoke, sampleCount); return;
         }
         if (Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_SAMPLE_INPUT") == "raw-v1")
         {

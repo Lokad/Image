@@ -2,6 +2,12 @@ using BenchmarkDotNet.Running;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
+if (args.Length == 2 && args[0] == "--probe-async-jpeg-samples-encode")
+{
+    WarmAsyncJpegEncode.Probe(args[1], sampleInput: true);
+    return;
+}
+
 if (args.Length == 2 && args[0] == "--probe-async-jpeg-encode")
 {
     WarmAsyncJpegEncode.Probe(args[1]);
