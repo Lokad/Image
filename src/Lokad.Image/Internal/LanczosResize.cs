@@ -223,11 +223,36 @@ internal static class LanczosResize
     }
     private static void Horizontal8(ReadOnlySpan<byte> input, LanczosPlan plan, Span<long> output, OperationContext context)
     {
+        var keepRgb = Vector512.Create(Vector256.Create(-1, -1, -1, 0, -1, -1, -1, 0),
+            Vector256.Create(-1, -1, -1, 0, -1, -1, -1, 0));
+        var alphaOne = Vector512.Create(Vector256.Create(0, 0, 0, 1, 0, 0, 0, 1),
+            Vector256.Create(0, 0, 0, 1, 0, 0, 0, 1));
         for (var x = 0; x < plan.Windows.Length; x++)
         {
             var window = plan.Windows[x]; context.Work(window.Count * 4L);
-            var sum = Vector256<long>.Zero;
-            for (var i = 0; i < window.Count; i++)
+            var sum = Vector256<long>.Zero; var i = 0;
+            if (Avx512F.IsSupported)
+            {
+                // Byte premultiplication is <=65025, so each even Int32
+                // lane of the widened values remains a positive operand.
+                // Four disjoint tap subsets and their reduction stay <2^47.
+                var first = Vector512<long>.Zero; var second = Vector512<long>.Zero;
+                for (; i <= window.Count - 4; i += 4)
+                {
+                    if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                    var samples = Avx512F.ConvertToVector512Int32(Vector128.Create(input.Slice((window.First + i) * 4, 16)));
+                    var rgbOne = Avx512F.Or(Avx512F.And(samples, keepRgb), alphaOne);
+                    var products = Avx512F.MultiplyLow(rgbOne, Avx512F.Shuffle(samples, 255)).AsUInt32();
+                    var at = window.Offset + i;
+                    var weights01 = Vector512.Create(Vector256.Create((long)plan.Weights[at]), Vector256.Create((long)plan.Weights[at + 1])).AsInt32();
+                    var weights23 = Vector512.Create(Vector256.Create((long)plan.Weights[at + 2]), Vector256.Create((long)plan.Weights[at + 3])).AsInt32();
+                    first = Avx512F.Add(first, Avx512F.Multiply(Avx512F.ConvertToVector512Int64(products.GetLower()).AsInt32(), weights01));
+                    second = Avx512F.Add(second, Avx512F.Multiply(Avx512F.ConvertToVector512Int64(products.GetUpper()).AsInt32(), weights23));
+                }
+                var paired = Avx512F.Add(first, second);
+                sum = Avx2.Add(paired.GetLower(), paired.GetUpper());
+            }
+            for (; i < window.Count; i++)
             {
                 if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
                 var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(MemoryMarshal.Read<uint>(input.Slice((window.First + i) * 4, 4))).AsByte());

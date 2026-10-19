@@ -354,8 +354,11 @@ remaining taps use one-pixel reads. This adds no scratch or cache. Scalar
 fallback, admitted rows, work charges and 1024-tap cancellation boundaries are unchanged.
 Byte-depth horizontal filtering also has an AVX2 path: premultiplied samples
 are at most 65025, so signed 32×32→64 products retain every bit and all partial
-sums stay below 2^47. It uses the same admitted storage, work and polling; word
-filtering retains its existing unsigned-widened path.
+sums stay below 2^47. AVX512F can group four byte-depth taps from a bounded
+16-byte read using eight-lane signed32 products for each pair. Subset prefixes
+and recombination retain that same exact bound; the AVX2 tail remains. It uses
+the same admitted storage, work and polling; word filtering retains its existing
+unsigned-widened path.
 The independent decimal/BigInteger oracle covers transparency, edges and cache
 eviction. Opaque live FFmpeg controls use explicit edge extension and radius
 three, maximum RGB error 1, RGB RMSE <=0.25 and exact alpha. That correctness

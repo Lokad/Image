@@ -67,6 +67,10 @@ The [four-tap word round](../benchmarks/WARM-LANCZOS3-WORD-FOUR-TAP.md) saves
 4448tests/47scalar/47AVX512F-off checks and actual package pass on both OS, now
 including1031-tap support in the independent row theory. Four original frames
 remain exact; unchanged byte timing paths reuse their preceding build evidence.
+The [four-tap byte round](../benchmarks/WARM-LANCZOS3-BYTE-FOUR-TAP.md) then saves
+16.7% on RGBA8 reduction and2.7% on enlargement, with the same qualification,
+exact frames and unchanged storage/work/owners. Only byte timing rows refresh;
+word helper paths retain their identified build evidence. Parity remains open.
 
 Retained SHA-256 identities:
 
