@@ -2574,5 +2574,361 @@
       "sha256": "e7ea3296fc465416fd906bb734c4e3937b3be183e74bc2c2541b587f1f3d946b"
     }
   },
-  "nextPrimitive": "Horizontal filtering dominates the qualified Reduce16 diagnostic. Investigate reuse of premultiplied source pixels across overlapping windows, with proof of work/cancellation/admission and replacement peaks before implementation; no additional profile or workload grid."
+  "nextPrimitive": "Bounded horizontal four-tap vector feasibility audit: direct packed input, coefficient reuse and independent tap accumulators. First examine the retained paired-vector rejection and prove exact prefix bounds, cancellation/work ordering and any changed storage/admission; no code or performance claim yet. Do not repeat profiles or retune rejected row storage.",
+  "rejectedPremultipliedRowTrial": {
+    "caseId": "Reduce16",
+    "sourceSha256": "2523ebd4882e09f37754fdb2eca12997cba2fa73b97d2e0d02f9d86b643631cf",
+    "productionSha256": "9f2445297109f1cd66fc18f1f0b897bab68ff79da8f2f857b9d1319d608def40",
+    "managed": {
+      "statistics": {
+        "OriginalValues": [
+          1357749.44375,
+          1345648.18125,
+          1346414.78125
+        ],
+        "N": 3,
+        "Min": 1345648.18125,
+        "LowerFence": 1336955.5343749998,
+        "Q1": 1346031.48125,
+        "Median": 1346414.78125,
+        "Mean": 1349937.46875,
+        "Q3": 1352082.1125,
+        "UpperFence": 1361158.0593750002,
+        "Max": 1357749.44375,
+        "InterquartileRange": 6050.631250000093,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 3912.2514379178083,
+        "Variance": 45917133.940469876,
+        "StandardDeviation": 6776.218262458041,
+        "Skewness": 0.37936561210442526,
+        "Kurtosis": 0.6666666666666667,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 1349937.46875,
+          "StandardError": 3912.2514379178083,
+          "Level": 12,
+          "Margin": 123623.44620326778,
+          "Lower": 1226314.0225467323,
+          "Upper": 1473560.9149532677
+        },
+        "Percentiles": {
+          "P0": 1345648.18125,
+          "P25": 1346031.48125,
+          "P50": 1346414.78125,
+          "P67": 1350268.5665000002,
+          "P80": 1353215.5787499999,
+          "P85": 1354349.0450000002,
+          "P90": 1355482.5112500002,
+          "P95": 1356615.9775,
+          "P100": 1357749.44375
+        }
+      },
+      "unfilteredActualStatistics": {
+        "OriginalValues": [
+          1357751.2875,
+          1345650.025,
+          1346416.625
+        ],
+        "N": 3,
+        "Min": 1345650.025,
+        "LowerFence": 1336957.3781249998,
+        "Q1": 1346033.325,
+        "Median": 1346416.625,
+        "Mean": 1349939.3125,
+        "Q3": 1352083.95625,
+        "UpperFence": 1361159.9031250002,
+        "Max": 1357751.2875,
+        "InterquartileRange": 6050.631250000093,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 3912.2514379178083,
+        "Variance": 45917133.940469876,
+        "StandardDeviation": 6776.218262458041,
+        "Skewness": 0.37936561210442526,
+        "Kurtosis": 0.6666666666666667,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 1349939.3125,
+          "StandardError": 3912.2514379178083,
+          "Level": 12,
+          "Margin": 123623.44620326778,
+          "Lower": 1226315.8662967323,
+          "Upper": 1473562.7587032677
+        },
+        "Percentiles": {
+          "P0": 1345650.025,
+          "P25": 1346033.325,
+          "P50": 1346416.625,
+          "P67": 1350270.41025,
+          "P80": 1353217.4225,
+          "P85": 1354350.8887500002,
+          "P90": 1355484.355,
+          "P95": 1356617.82125,
+          "P100": 1357751.2875
+        }
+      },
+      "actual": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 160,
+          "Nanoseconds": 217240206
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 160,
+          "Nanoseconds": 215304004
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 160,
+          "Nanoseconds": 215426660
+        }
+      ],
+      "results": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 4,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 160,
+          "Nanoseconds": 217239911
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 4,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 160,
+          "Nanoseconds": 215303709
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 4,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 160,
+          "Nanoseconds": 215426365
+        }
+      ],
+      "rawGc": "// GC:  2 2 2 24778408 160",
+      "rawThreading": "// Threading:  0 0 160"
+    },
+    "managedUs": 1349.93746875,
+    "priorManagedUs": 1322.42865625,
+    "elapsedRegression": 0.020801736539804327,
+    "allocatedBytes": 154866,
+    "temporaryCapacityAddedBytes": 8240,
+    "nativeBrackets": {
+      "nativeBefore": {
+        "meanNanoseconds": 509558.828125,
+        "samples": [
+          {
+            "State": "sample",
+            "Operations": 128,
+            "ElapsedNanoseconds": 65283975,
+            "CompletedOperations": 771,
+            "Observed": 134154,
+            "OutputStride": 2048,
+            "Cpu": 0,
+            "OutputBytes": 264192,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 510031.0546875
+          },
+          {
+            "State": "sample",
+            "Operations": 128,
+            "ElapsedNanoseconds": 65160107,
+            "CompletedOperations": 899,
+            "Observed": 156426,
+            "OutputStride": 2048,
+            "Cpu": 0,
+            "OutputBytes": 264192,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 509063.3359375
+          },
+          {
+            "State": "sample",
+            "Operations": 128,
+            "ElapsedNanoseconds": 65226508,
+            "CompletedOperations": 1027,
+            "Observed": 178698,
+            "OutputStride": 2048,
+            "Cpu": 0,
+            "OutputBytes": 264192,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 509582.09375
+          }
+        ]
+      },
+      "nativeAfter": {
+        "meanNanoseconds": 508901.8463541667,
+        "samples": [
+          {
+            "State": "sample",
+            "Operations": 128,
+            "ElapsedNanoseconds": 65137203,
+            "CompletedOperations": 1539,
+            "Observed": 267786,
+            "OutputStride": 2048,
+            "Cpu": 0,
+            "OutputBytes": 264192,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 508884.3984375
+          },
+          {
+            "State": "sample",
+            "Operations": 128,
+            "ElapsedNanoseconds": 65119296,
+            "CompletedOperations": 1667,
+            "Observed": 290058,
+            "OutputStride": 2048,
+            "Cpu": 0,
+            "OutputBytes": 264192,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 508744.5
+          },
+          {
+            "State": "sample",
+            "Operations": 128,
+            "ElapsedNanoseconds": 65161810,
+            "CompletedOperations": 1795,
+            "Observed": 312330,
+            "OutputStride": 2048,
+            "Cpu": 0,
+            "OutputBytes": 264192,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 509076.640625
+          }
+        ]
+      }
+    },
+    "quietness": {
+      "before": {
+        "protocol": "exclusive-vm-idle-v2",
+        "sampleSeconds": 5.000292957993224,
+        "cpuSamples": {
+          "cpu": {
+            "cpuBusyFraction": 0.0,
+            "ioWaitFraction": 0.0,
+            "stealFraction": 0.0
+          },
+          "cpu0": {
+            "cpuBusyFraction": 0.0,
+            "ioWaitFraction": 0.0,
+            "stealFraction": 0.0
+          }
+        },
+        "overlappingJobsBefore": [],
+        "overlappingJobsAfter": [],
+        "loadAverageDiagnosticOnly": true,
+        "cpuBusyFraction": 0.0,
+        "ioWaitFraction": 0.0,
+        "stealFraction": 0.0,
+        "loadAverage": [
+          1.12451171875,
+          0.37939453125,
+          0.19482421875
+        ],
+        "passed": true,
+        "thresholds": {
+          "maxCpuBusyFraction": 0.05,
+          "maxIoWaitFraction": 0.01,
+          "maxStealFraction": 0.01
+        },
+        "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+      },
+      "after": {
+        "protocol": "exclusive-vm-idle-v2",
+        "sampleSeconds": 5.000302919070236,
+        "cpuSamples": {
+          "cpu": {
+            "cpuBusyFraction": 0.0,
+            "ioWaitFraction": 0.0,
+            "stealFraction": 0.0
+          },
+          "cpu0": {
+            "cpuBusyFraction": 0.0,
+            "ioWaitFraction": 0.0,
+            "stealFraction": 0.0
+          }
+        },
+        "overlappingJobsBefore": [],
+        "overlappingJobsAfter": [],
+        "loadAverageDiagnosticOnly": true,
+        "cpuBusyFraction": 0.0,
+        "ioWaitFraction": 0.0,
+        "stealFraction": 0.0,
+        "loadAverage": [
+          1.17236328125,
+          0.416015625,
+          0.20849609375
+        ],
+        "passed": true,
+        "thresholds": {
+          "maxCpuBusyFraction": 0.05,
+          "maxIoWaitFraction": 0.01,
+          "maxStealFraction": 0.01
+        },
+        "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+      }
+    },
+    "failedPreguard": {
+      "protocol": "exclusive-vm-idle-v2",
+      "sampleSeconds": 5.0003292000619695,
+      "cpuSamples": {
+        "cpu": {
+          "cpuBusyFraction": 0.0,
+          "ioWaitFraction": 0.01200600300150075,
+          "stealFraction": 0.0
+        },
+        "cpu0": {
+          "cpuBusyFraction": 0.0,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        }
+      },
+      "overlappingJobsBefore": [],
+      "overlappingJobsAfter": [],
+      "loadAverageDiagnosticOnly": true,
+      "cpuBusyFraction": 0.0,
+      "ioWaitFraction": 0.01200600300150075,
+      "stealFraction": 0.0,
+      "loadAverage": [
+        1.3291015625,
+        0.39306640625,
+        0.19775390625
+      ],
+      "passed": false,
+      "thresholds": {
+        "maxCpuBusyFraction": 0.05,
+        "maxIoWaitFraction": 0.01,
+        "maxStealFraction": 0.01
+      },
+      "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+    },
+    "failedPreguardLaunchedNothing": true,
+    "focusedTests": 49,
+    "allFourOriginalExpectedOutputsExact": true,
+    "fullyQualified": false,
+    "acceptedProductionUnchanged": true,
+    "acceptedProducerRestoredBothOs": true,
+    "freshRestoredFocusedTestsPerOs": 47,
+    "rawArchive": {
+      "file": "l3r-rejected-linux.tar.gz",
+      "sha256": "34575d05e967e94a5bf0b0f483cb13dca48a4e52e87c479fa872a4b08dd89e77"
+    },
+    "scope": "One short on an admitted temporary UInt32 product row; slower than the accepted build, rejected without expansion or full qualification"
+  }
 }

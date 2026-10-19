@@ -339,8 +339,10 @@ cuts complete time **10.8–20.5%**, leaving **1.482–2.603x gaps**
 (uppers1.590–2.900),146,634–4,617,090B/op. Full pixels remain exact;
 native quality, ownership and all operation boundaries are unchanged. Qualification
 passes4,448tests/47scalar plus47AVX512F-off checks per OS, same actual package and
-all three examples. A3.9% word-product trial is parked. A bounded diagnostic puts
-60.9% in horizontal filtering; next: reuse premultiplication across overlapping windows.
+all three examples. A3.9% word-product trial is parked; an admitted product-row
+trial regressed2.1% and is rejected. Accepted code is restored. A bounded diagnostic
+puts60.9% in horizontal filtering; next: four-tap vector feasibility, with exact
+prefix bounds, work/cancellation and storage/admission proved before implementation.
 
 [Exact SIMD JPEG 4:1:0](../benchmarks/WARM-JPEG-410-SIMD.md) cuts complete time
 **76.7%**,3,427.72→799.34µs, reducing7.144x to **1.669x / upper1.877x**,

@@ -45,11 +45,19 @@ place **60.9% in horizontal filtering**, 15.8% in vertical accumulation and 9.5%
 in final application/output processing; the math library accounts for 6.2%.
 These are diagnostic sample fractions, not scored timings. The target and pixel
 checks completed; raw evidence records the collector exit after target termination.
-Next: reduce repeated horizontal premultiplication across overlapping windows,
-with work, cancellation, admission and peak ownership proved before code changes.
+A subsequent temporary premultiplied-row trial passes 49 focused controls and
+all four protected full frames, but Reduce16 takes 1,349.94 µs versus 1,322.43 µs
+(2.1% slower), adding 8,240 B temporary capacity. It is rejected after one quiet
+short, without expansion or full qualification. Its first preguard refused I/O
+wait before launch; a fresh prefix passed both guards. The accepted source and
+producers are restored, with 47 freshly rebuilt focused checks per OS.
+
+Next is a bounded horizontal four-tap vector feasibility audit, including the
+retained paired-vector rejection. Prove exact prefix bounds, work/cancellation
+and any changed storage/admission before implementation; no repeated profile.
 
 [Numeric evidence](warm-lanczos3-wide-vertical-evidence.json) contains samples,
-allocations, identities, bounds, parked control and the sanitized profile.
+allocations, identities, bounds, parked/rejected controls and the sanitized profile.
 Qualified source: `e78dfb8f1035d5d43d7e589df51b88a8a9fc45856a113bc268e0f330818e3a4e`.
 Raw `l3v-qualified-windows.tar.gz`:
 `50ee7ca7274827bf763090842f9a2dbdbae9b08613ec4cbc53b3a7d9e1b83758`;

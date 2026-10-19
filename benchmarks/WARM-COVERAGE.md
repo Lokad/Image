@@ -30,8 +30,9 @@ boundary is material. Eight-channel vertical accumulation reuses admitted scratc
 with4448tests/47scalar and47AVX512F-off checks, the same actual private package
 consumer/examples passing on both OS. A3.9% word-product trial is parked.
 Only these four rows refresh. A bounded Reduce16 profile isolates horizontal
-filtering at60.9%; next: reuse premultiplication across overlapping windows,
-preserving memory/work/cancellation before implementation. No checklist expansion.
+filtering at60.9%. An admitted product-row trial regressed2.1% and is rejected;
+accepted source/producer restored. Next: bounded four-tap vector feasibility,
+including memory/work/cancellation proofs before implementation. No checklist expansion.
 
 A bounded audit of the accepted 0.2.0 additions identifies exactly three required
 paths absent from the older checklist; these are not a shape/depth/settings grid:
