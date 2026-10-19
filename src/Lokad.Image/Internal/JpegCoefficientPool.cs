@@ -6,7 +6,7 @@ internal sealed class JpegCoefficientPool
     internal const int MaxRetainedBytes=4*1024*1024;
     internal static JpegCoefficientPool Shared {get;}=new();
     private readonly object gate=new();
-    private readonly int[]?[] idle=new int[3][];
+    private int[]?[] idle=new int[3][];
     private readonly int maximumBytes;
     private int retainedBytes;
 
@@ -14,6 +14,19 @@ internal sealed class JpegCoefficientPool
     {
         if(maximumBytes<0)throw new ArgumentOutOfRangeException(nameof(maximumBytes));
         this.maximumBytes=maximumBytes;
+    }
+
+    // Full-resolution CMYK returns four planes. Grow only when that decoder
+    // already executes; ordinary fresh hosts retain their original three slots.
+    // The byte ceiling and nonblocking lease/return policy do not change.
+    internal void EnableFourthSlot()
+    {
+        if(!Monitor.TryEnter(gate))return;
+        try
+        {
+            if(idle.Length==3 && maximumBytes>0)Array.Resize(ref idle,4);
+        }
+        finally {Monitor.Exit(gate);}
     }
 
     internal int[] Rent(int length)

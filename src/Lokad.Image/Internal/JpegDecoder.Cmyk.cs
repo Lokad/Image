@@ -24,7 +24,12 @@ internal ref partial struct JpegDecoder
         var fullResolution = source == JpegColorSpace.Cmyk && components.Length == 4;
         for (var c = 0; fullResolution && c < components.Length; c++)
             fullResolution = components[c].H == maxH && components[c].V == maxV;
-        if (fullResolution) MaterializeCmykPlanes(); else MaterializeSamplePlanes();
+        if (fullResolution)
+        {
+            JpegCoefficientPool.Shared.EnableFourthSlot();
+            MaterializeCmykPlanes();
+        }
+        else MaterializeSamplePlanes();
         var result = ImageBuffer.Allocate(info.Width, info.Height, 8, context); result.Orientation = info.Orientation;
         try
         {

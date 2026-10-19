@@ -7,22 +7,16 @@ all221 current numeric rows; no prior-production row remains. The
 observations and95 qualified shorts.24named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
 
-[CMYK spectrum-aware materialization](WARM-JPEG-CMYK-SPECTRA.md) improves DC47%
-to1.422x/upper1.511x and one-AC30% to1.882x/upper1.979x. The retained general
-transform measures1.118x/upper1.244x, with3.1% higher mean. All are short gaps.
-Exact frozen-basis constant blocks and original-order sparse nonzero terms
-retain full work charges/admission/owners; other numeric paths stay unchanged.
-All4,193tests/OS,60affected hardware-off checks/OS and same actual private Windows
-package consumer/all three examples pass on both OS. All70passes stop.
-Two named required paths fill a concrete omission introduced by the shortcut:
-`JpegDecode/CmykAdobeAcResident` rejects DC and selects sparse evaluation;
-`JpegDecode/CmykAdobeGeneralResident` populates all63AC terms and retains the
-general transform. Both use the same original projection/geometry/quantization;
-no shape/depth/filter/quality grid. This is the only scope addition:245known
-cases=221numeric+24pending. All21bounded-round actuals and source mappings remain.
-No long timing repeats, new profile or unrelated qualification. Allocation reuse
-of the fourth component is next; no further case variants without an omitted
-distinct required algorithm identified by evidence.
+[Fourth CMYK coefficient-buffer reuse](WARM-JPEG-COEFFICIENT-REUSE.md) reduces
+allocations33.6%, about549KB/op, under the existing4MiB cap. Current DC/one-AC/
+general controls measure1.396x/1.921x/1.109x, at1,085,667/1,085,660/1,085,522B/op.
+All are short gaps; elapsed times are similar. Exact pixels, full work/admission,
+zeroing, source and owners pass. All4,196tests/OS,55affected hardware-off checks/OS
+and same actual Windows private package consumer/all three examples pass on both
+OS. Exactly these three rows change; all70passing paths retain evidence and stop.
+No new cases, native/harness/selector/fixture builds, profiles or long repeats.
+Scope stays245=221numeric+24pending. Original DC/one-AC/general spectral controls
+and their distinct-algorithm reasons are in [the preceding round](WARM-JPEG-CMYK-SPECTRA.md).
 
 [Direct caller RGB420 sample writing](WARM-JPEG-CALLER-RGB420.md) removes the
 largest3.369x gap:71.3% less elapsed time, independently0.966x/upper0.971x,
@@ -183,7 +177,7 @@ encoding and editing remain unchanged. No unaffected operation was retimed.
 
 Five representatives cover the required JPEG compatibility algorithms; the CMYK DC/sparse/general controls have the current gaps above, four remain **unmeasured**:
 
-- `JpegDecode/CmykAdobeResident` (**measured**1.422x DC gap): four component planes, Adobe inversion and
+- `JpegDecode/CmykAdobeResident` (**measured**1.396x DC gap): four component planes, Adobe inversion and
   complete owned RGBA conversion from an original CMYK projection. The
   separately named one-AC and all63-AC controls above cover sparse/general IDCT.
 

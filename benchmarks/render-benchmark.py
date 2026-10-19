@@ -137,9 +137,9 @@ def render():
         row('JPEG baseline gray', 'warm-jpeg-gray-current-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-GRAY-CURRENT.md', verification='Gap (short; qualified)'),
         row('JPEG gray → caller GRAY8', 'warm-jpeg-caller-rgb420-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-CALLER-RGB420.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 → caller RGB24', 'warm-jpeg-caller-rgb420-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-CALLER-RGB420.md', True),
-        row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-cmyk-spectra-evidence.json', ['cases', 'CmykAdobe', -1], 'WARM-JPEG-CMYK-SPECTRA.md', verification='Gap (short; qualified)'),
-        row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-cmyk-spectra-evidence.json', ['cases', 'CmykAdobeAc', -1], 'WARM-JPEG-CMYK-SPECTRA.md', verification='Gap (short; qualified)'),
-        row('JPEG Adobe CMYK, general transform control', 'warm-jpeg-cmyk-spectra-evidence.json', ['cases', 'CmykAdobeGeneral', -1], 'WARM-JPEG-CMYK-SPECTRA.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-coefficient-reuse-evidence.json', ['cases', 'CmykAdobe', -1], 'WARM-JPEG-COEFFICIENT-REUSE.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-coefficient-reuse-evidence.json', ['cases', 'CmykAdobeAc', -1], 'WARM-JPEG-COEFFICIENT-REUSE.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, general transform control', 'warm-jpeg-coefficient-reuse-evidence.json', ['cases', 'CmykAdobeGeneral', -1], 'WARM-JPEG-COEFFICIENT-REUSE.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
@@ -349,14 +349,14 @@ All4,176tests/OS,73affected hardware-disabled checks/OS and the same actual priv
 package consumer/all three examples pass on both OS. Exactly these two numeric
 rows change; prior passing paths retain evidence.24new boundaries remain.
 
-[Spectrum-aware CMYK decoding](../benchmarks/WARM-JPEG-CMYK-SPECTRA.md)
-improves DC **47.0%** to **1.422× /1,635,145B/op** and the one-AC control
-**30.0%** to **1.882× /1,635,146B/op**. General IDCT measures **1.118× /
-1,634,921B/op**, with a3.1% higher mean. Exact pixels, original work/admission,
-ownership and native gates remain. Two named controls close the new sparse/general
-algorithm boundaries: **245 finite cases**,24unmeasured; no geometry/quality grid.
-All4,193tests/OS,60affected hardware-disabled checks/OS and same actual private
-package consumer/all examples pass on both OS. No long repeat for these gaps.
+[Fourth CMYK coefficient-buffer reuse](../benchmarks/WARM-JPEG-COEFFICIENT-REUSE.md)
+reduces managed allocations **33.6%** to about **1,086KB/op**, within the same4MiB
+retention cap. Current DC/one-AC/general complete decode ratios are
+**1.396x /1.921x /1.109x**; short elapsed times are similar and remain gaps.
+Exact pixels, work/admission, zeroed leases and independent owners are unchanged.
+All4,196tests/OS,55affected hardware-off checks/OS and same actual private package
+consumer/all examples pass on both OS. Exactly three rows change; all70passes
+retain evidence and stop. Scope stays245finite cases,24unmeasured.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end

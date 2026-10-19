@@ -38,14 +38,14 @@ All4,176tests/OS,73affected hardware-disabled checks/OS and the same actual priv
 package consumer/all three examples pass on both OS. Exactly these two numeric
 rows change; prior passing paths retain evidence.24new boundaries remain.
 
-[Spectrum-aware CMYK decoding](../benchmarks/WARM-JPEG-CMYK-SPECTRA.md)
-improves DC **47.0%** to **1.422× /1,635,145B/op** and the one-AC control
-**30.0%** to **1.882× /1,635,146B/op**. General IDCT measures **1.118× /
-1,634,921B/op**, with a3.1% higher mean. Exact pixels, original work/admission,
-ownership and native gates remain. Two named controls close the new sparse/general
-algorithm boundaries: **245 finite cases**,24unmeasured; no geometry/quality grid.
-All4,193tests/OS,60affected hardware-disabled checks/OS and same actual private
-package consumer/all examples pass on both OS. No long repeat for these gaps.
+[Fourth CMYK coefficient-buffer reuse](../benchmarks/WARM-JPEG-COEFFICIENT-REUSE.md)
+reduces managed allocations **33.6%** to about **1,086KB/op**, within the same4MiB
+retention cap. Current DC/one-AC/general complete decode ratios are
+**1.396x /1.921x /1.109x**; short elapsed times are similar and remain gaps.
+Exact pixels, work/admission, zeroed leases and independent owners are unchanged.
+All4,196tests/OS,55affected hardware-off checks/OS and same actual private package
+consumer/all examples pass on both OS. Exactly three rows change; all70passes
+retain evidence and stop. Scope stays245finite cases,24unmeasured.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end
@@ -221,9 +221,9 @@ The24 named new boundaries remain unmeasured; stop current passing paths.
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-GRAY-CURRENT.md) | 973.44 | 682.79 | 1.426 / 1.459 | 672,186 | Gap (short; qualified) |
 | [JPEG gray → caller GRAY8](../benchmarks/WARM-JPEG-CALLER-RGB420.md) | 857.87 | 646.88 | 1.326 / 1.445 | 273,422 | Gap (short; qualified) |
 | [JPEG 4:2:0 → caller RGB24](../benchmarks/WARM-JPEG-CALLER-RGB420.md) | 1,121.95 | 1,161.53 | 0.966 / 0.971 | 624,508 | Parity confirmed |
-| [JPEG Adobe CMYK, four full-resolution planes](../benchmarks/WARM-JPEG-CMYK-SPECTRA.md) | 539.07 | 379.20 | 1.422 / 1.511 | 1,635,145 | Gap (short; qualified) |
-| [JPEG Adobe CMYK, one AC control](../benchmarks/WARM-JPEG-CMYK-SPECTRA.md) | 747.62 | 397.33 | 1.882 / 1.979 | 1,635,146 | Gap (short; qualified) |
-| [JPEG Adobe CMYK, general transform control](../benchmarks/WARM-JPEG-CMYK-SPECTRA.md) | 3,478.40 | 3,112.37 | 1.118 / 1.244 | 1,634,921 | Gap (short; qualified) |
+| [JPEG Adobe CMYK, four full-resolution planes](../benchmarks/WARM-JPEG-COEFFICIENT-REUSE.md) | 527.03 | 377.57 | 1.396 / 1.443 | 1,085,667 | Gap (short; qualified) |
+| [JPEG Adobe CMYK, one AC control](../benchmarks/WARM-JPEG-COEFFICIENT-REUSE.md) | 746.37 | 388.45 | 1.921 / 2.001 | 1,085,660 | Gap (short; qualified) |
+| [JPEG Adobe CMYK, general transform control](../benchmarks/WARM-JPEG-COEFFICIENT-REUSE.md) | 3,463.78 | 3,122.44 | 1.109 / 1.124 | 1,085,522 | Gap (short; qualified) |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,202.77 | 1,008.96 | 1.192 / 1.315 | 757,345 | Gap (short; qualified) |
 | [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,378.07 | 1,014.38 | 1.359 / 1.446 | 761,720 | Gap (short; qualified) |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,510.49 | 1,351.29 | 1.118 / 1.263 | 829,148 | Gap (short; qualified) |
