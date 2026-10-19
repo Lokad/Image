@@ -9,7 +9,8 @@ is separate from the solution and production package, and reports no timings.
 
 The [staged GSUB](text-substitution-qualification.md) and
 [GPOS](text-positioning-qualification.md) primitives are qualified internally.
-Public layout integration and the gaps below remain outstanding.
+[Direction and joining](text-direction-qualification.md) primitives are also
+qualified internally. Public layout integration and the gaps below remain outstanding.
 
 Six controls pass: Latin kerning, multiline/empty CRLF, narrow long-word wrapping,
 line spacing, supplied bold and supplied italic. Glyph and grapheme-cluster

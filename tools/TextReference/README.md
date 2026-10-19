@@ -47,3 +47,10 @@ combining-mark and Latin-kerning controls, recording glyph origins and advances.
 It verifies admission cleanup and reports that public layout integration and
 complete shaping remain unavailable. It does not time operations or qualify
 Arabic layout or rasterization.
+
+`python tools/TextReference/generate-unicode-properties.py --check` verifies the
+staged direction/joining property constants against the pinned Unicode 17
+specification files in ignored `external/specifications/unicode-17.0.0/`. The
+generator records exact input hashes, independently combines normative facts,
+and is excluded from production builds. It does not import an upstream algorithm
+or test corpus. These primitives do not yet change public text layout.
