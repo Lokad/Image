@@ -11,7 +11,8 @@ public sealed class LanczosHorizontalTests
     public void FullPrecisionAndNegativeWeightsMatchIndependentBigIntegerRows(int depth)
     {
         var maximum = depth == 8 ? 255 : 65535;
-        foreach (var (width, target) in new[] { (7, 13), (31, 9), (1, 5) })
+        // The long support crosses the 1024-tap poll and has a three-tap tail.
+        foreach (var (width, target) in new[] { (7, 13), (31, 9), (1, 5), (1031, 2) })
         {
             using var source = ImageBuffer.Create(width, 2, depth);
             for (var y = 0; y < 2; y++)

@@ -11,28 +11,29 @@ The finite scope is now **254 cases:231 numeric+23 unmeasured**. The existing
 codec/edit rows do not yet requalify 0.2.0 admission, disposal or governed storage.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
 required representatives using the same513×259 asymmetric RGBA rasters. Their
-[eight-channel vertical screens](WARM-LANCZOS3-WIDE-VERTICAL.md) improve10.8–20.5% from the
-preceding implementation, still gaps:
+[four-tap word screens](WARM-LANCZOS3-WORD-FOUR-TAP.md) improve reduction26.9% and
+enlargement6.4% from the preceding implementation; byte rows reuse their unchanged
+[vertical build](WARM-LANCZOS3-WIDE-VERTICAL.md). All remain gaps:
 
 | Named case | Fixed output and reason | State |
 | --- | --- | --- |
 | LanczosReduce8 | 256×129; widened radius-three antialias support and byte output | Gap2.360x/upper2.564x |
-| LanczosReduce16 | 256×129; full word precision and alpha normalization | Gap2.603x/upper2.900x |
+| LanczosReduce16 | 256×129; full word precision and alpha normalization | Gap1.910x/upper2.223x |
 | LanczosEnlarge8 | 1027×519; negative-lobe enlargement, byte saturation and tiny alpha | Gap1.482x/upper1.590x |
-| LanczosEnlarge16 | 1027×519; full word precision, overshoot and tiny-alpha normalization | Gap1.863x/upper1.947x |
+| LanczosEnlarge16 | 1027×519; full word precision, overshoot and tiny-alpha normalization | Gap1.746x/upper1.852x |
 
 The clamped halo/active-region and premultiplied float-output reference is now
 qualified for all four, including normal/scalar checks and twelve rejection
 controls each. All normalization, ownership and disposal are timed with one CPU.
 No other rows, gates or performance evidence are replaced. Aspect-fit uses the
 same kernel after small geometry work; add a separate timing case only if that
-boundary is material. Eight-channel vertical accumulation reuses admitted scratch,
+boundary is material. Four-tap word horizontal groups use registers only,
 with4448tests/47scalar and47AVX512F-off checks, the same actual private package
-consumer/examples passing on both OS. A3.9% word-product trial is parked.
-Only these four rows refresh. A bounded Reduce16 profile isolates horizontal
-filtering at60.9%. An admitted product-row trial regressed2.1% and is rejected;
-accepted source/producer restored. Next: bounded four-tap vector feasibility,
-including memory/work/cancellation proofs before implementation. No checklist expansion.
+consumer/examples passing on both OS. Only two word rows refresh; the byte helper
+returns before the new word dispatch. Other arithmetic/owners/boundaries remain
+unchanged. Earlier3.9% word-product and2.1% slower row-storage trials stay parked/
+rejected. Next: byte-depth four-tap signed32 products, Reduce8 first (2.360x),
+with exact subset, memory/work/cancellation proofs before code. No checklist expansion.
 
 A bounded audit of the accepted 0.2.0 additions identifies exactly three required
 paths absent from the older checklist; these are not a shape/depth/settings grid:

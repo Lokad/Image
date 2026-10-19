@@ -62,6 +62,11 @@ The [eight-channel vertical round](../benchmarks/WARM-LANCZOS3-WIDE-VERTICAL.md)
 saves another10.8–20.5%, with the same4448tests/47scalar/47AVX512F-off checks and
 actual package on both OS. Original frames, storage and work remain unchanged.
 The3.9% word-product trial is parked; parity stays open.
+The [four-tap word round](../benchmarks/WARM-LANCZOS3-WORD-FOUR-TAP.md) saves
+26.9% on RGBA16 reduction and6.4% on enlargement, adding no scratch. The same
+4448tests/47scalar/47AVX512F-off checks and actual package pass on both OS, now
+including1031-tap support in the independent row theory. Four original frames
+remain exact; unchanged byte timing paths reuse their preceding build evidence.
 
 Retained SHA-256 identities:
 

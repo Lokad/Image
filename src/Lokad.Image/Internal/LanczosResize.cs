@@ -159,28 +159,11 @@ internal static class LanczosResize
         if (source.BitDepth == 8) input8 = source.GetRow8(y); else input16 = source.GetRow16(y);
         if (source.BitDepth == 8 && Avx2.IsSupported)
         { Horizontal8(input8, plan, output, context); return; }
+        if (source.BitDepth == 16 && Avx2.IsSupported && Avx512DQ.VL.IsSupported)
+        { Horizontal16(input16, plan, output, context); return; }
         for (var x = 0; x < plan.Windows.Length; x++)
         {
             var window = plan.Windows[x]; context.Work(window.Count * 4L);
-            if (Avx2.IsSupported && Avx512DQ.VL.IsSupported)
-            {
-                // UInt32 premultiplied samples can exceed Int32 at 16 bits.
-                // Zero extension before signed64 weighting is essential. The
-                // axis magnitude bound keeps every partial sum inside Int64.
-                var sum = Vector256<long>.Zero;
-                for (var i = 0; i < window.Count; i++)
-                {
-                    if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
-                    var at = (window.First + i) * 4;
-                    var samples = source.BitDepth == 8
-                        ? Sse41.ConvertToVector128Int32(Vector128.CreateScalar(MemoryMarshal.Read<uint>(input8.Slice(at, 4))).AsByte())
-                        : Sse41.ConvertToVector128Int32(Vector128.CreateScalar(MemoryMarshal.Read<ulong>(MemoryMarshal.AsBytes(input16.Slice(at, 4)))).AsUInt16());
-                    var premultiplied = Sse41.MultiplyLow(Sse41.Insert(samples, 1, 3), Sse2.Shuffle(samples, 255)).AsUInt32();
-                    var weight = Vector256.Create((long)plan.Weights[window.Offset + i]);
-                    sum = Avx2.Add(sum, Avx512DQ.VL.MultiplyLow(Avx2.ConvertToVector256Int64(premultiplied), weight));
-                }
-                sum.CopyTo(output.Slice(x * 4, 4)); continue;
-            }
             long r = 0, g = 0, b = 0, alpha = 0;
             for (var i = 0; i < window.Count; i++)
             {
@@ -194,6 +177,48 @@ internal static class LanczosResize
             }
             var destination = x * 4; output[destination] = r; output[destination + 1] = g;
             output[destination + 2] = b; output[destination + 3] = alpha;
+        }
+    }
+
+    private static void Horizontal16(ReadOnlySpan<ushort> input, LanczosPlan plan, Span<long> output, OperationContext context)
+    {
+        var keepRgb = Vector512.Create(Vector256.Create(-1, -1, -1, 0, -1, -1, -1, 0),
+            Vector256.Create(-1, -1, -1, 0, -1, -1, -1, 0));
+        var alphaOne = Vector512.Create(Vector256.Create(0, 0, 0, 1, 0, 0, 0, 1),
+            Vector256.Create(0, 0, 0, 1, 0, 0, 0, 1));
+        for (var x = 0; x < plan.Windows.Length; x++)
+        {
+            var window = plan.Windows[x]; context.Work(window.Count * 4L);
+            var sum = Vector256<long>.Zero; var i = 0;
+            if (Avx512DQ.IsSupported)
+            {
+                // Four tap subsets retain the certified absolute-weight bound.
+                // All prefixes and their disjoint recombination fit Int64.
+                var first = Vector512<long>.Zero; var second = Vector512<long>.Zero;
+                for (; i <= window.Count - 4; i += 4)
+                {
+                    if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                    var samples = Avx512F.ConvertToVector512Int32(Vector256.Create(input.Slice((window.First + i) * 4, 16)));
+                    var rgbOne = Avx512F.Or(Avx512F.And(samples, keepRgb), alphaOne);
+                    var products = Avx512F.MultiplyLow(rgbOne, Avx512F.Shuffle(samples, 255)).AsUInt32();
+                    var at = window.Offset + i;
+                    var weights01 = Vector512.Create(Vector256.Create((long)plan.Weights[at]), Vector256.Create((long)plan.Weights[at + 1]));
+                    var weights23 = Vector512.Create(Vector256.Create((long)plan.Weights[at + 2]), Vector256.Create((long)plan.Weights[at + 3]));
+                    first = Avx512F.Add(first, Avx512DQ.MultiplyLow(Avx512F.ConvertToVector512Int64(products.GetLower()), weights01));
+                    second = Avx512F.Add(second, Avx512DQ.MultiplyLow(Avx512F.ConvertToVector512Int64(products.GetUpper()), weights23));
+                }
+                var paired = Avx512F.Add(first, second);
+                sum = Avx2.Add(paired.GetLower(), paired.GetUpper());
+            }
+            for (; i < window.Count; i++)
+            {
+                if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(MemoryMarshal.Read<ulong>(MemoryMarshal.AsBytes(input.Slice((window.First + i) * 4, 4)))).AsUInt16());
+                var products = Sse41.MultiplyLow(Sse41.Insert(samples, 1, 3), Sse2.Shuffle(samples, 255)).AsUInt32();
+                // UInt32 products need unsigned extension before signed64 weighting.
+                sum = Avx2.Add(sum, Avx512DQ.VL.MultiplyLow(Avx2.ConvertToVector256Int64(products), Vector256.Create((long)plan.Weights[window.Offset + i])));
+            }
+            sum.CopyTo(output.Slice(x * 4, 4));
         }
     }
     private static void Horizontal8(ReadOnlySpan<byte> input, LanczosPlan plan, Span<long> output, OperationContext context)

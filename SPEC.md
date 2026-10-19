@@ -347,8 +347,11 @@ This uses the same admitted scratch and preserves exact pixels at both depths.
 AVX512DQ/VL may also accumulate horizontal RGBA products in four Int64 lanes.
 Unsigned 32-bit premultiplied samples widen before signed weighting; the existing
 axis magnitude bound keeps every partial sum within Int64, including full RGBA16
-precision and negative weights. Each read covers exactly one pixel. Scalar
-fallback, admitted rows, work charges and cancellation boundaries are unchanged.
+precision and negative weights. On AVX512DQ, word filtering can process four
+adjacent taps from one bounded 32-byte read, with four independent tap subsets.
+Each subset and disjoint recombination obey the same Int64 absolute bound;
+remaining taps use one-pixel reads. This adds no scratch or cache. Scalar
+fallback, admitted rows, work charges and 1024-tap cancellation boundaries are unchanged.
 Byte-depth horizontal filtering also has an AVX2 path: premultiplied samples
 are at most 65025, so signed 32×32→64 products retain every bit and all partial
 sums stay below 2^47. It uses the same admitted storage, work and polling; word
