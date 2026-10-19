@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart, StreamDecode420Restart, NativeDecodeCancelable8, ProgressiveCancelable444, DirectRgb444, DirectRgb422, DirectRgb420, CmykAdobe, CmykAdobeAc, CmykAdobeGeneral, CmykAdobeSparse2D, Ycck420, CmykCaller }
+public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart, StreamDecode420Restart, NativeDecodeCancelable8, ProgressiveCancelable444, DirectRgb444, DirectRgb422, DirectRgb420, CmykAdobe, CmykAdobeAc, CmykAdobeGeneral, CmykAdobeSparse2D, Ycck420, CmykCaller, Ycck420CallerRgb }
 
 internal sealed record WarmJpegFixedPreparation(int SchemaVersion, string Project, string Recipe,
     string RasterSha256, string NativeFile, int EncodedBytes, string EncodedSha256,
@@ -27,6 +27,7 @@ public class WarmJpegDecode
     private WarmJpegCmykDecode? cmyk;
     private WarmJpegYcckDecode? ycck;
     private WarmJpegCmykSampleDecode? cmykSamples;
+    private WarmJpegYcckRgbDecode? ycckRgb;
     private byte[] encoded = [], managedPixels = [], nativePixels = [];
     private NativeWarmSample[] before = [];
     private JsonElement sourceIdentity;
@@ -216,6 +217,10 @@ public class WarmJpegDecode
             || !GC.GetConfigurationVariables().TryGetValue("ConcurrentGC", out var concurrent) || Convert.ToBoolean(concurrent))
             throw new InvalidOperationException("JPEG decode requires one CPU, optimized JIT and non-concurrent workstation GC.");
         var sampleMode = Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_SAMPLE_OUTPUT");
+        if (Case == WarmJpegDecodeCase.Ycck420CallerRgb)
+        {
+            ycckRgb = new WarmJpegYcckRgbDecode(); ycckRgb.Setup(cpu, smoke, sampleCount); return;
+        }
         if (Case == WarmJpegDecodeCase.CmykCaller)
         {
             cmykSamples = new WarmJpegCmykSampleDecode(); cmykSamples.Setup(cpu, smoke, sampleCount); return;
@@ -438,6 +443,7 @@ public class WarmJpegDecode
         if (cmyk is not null) return cmyk.Apply();
         if (ycck is not null) return ycck.Apply();
         if (cmykSamples is not null) return cmykSamples.Apply();
+        if (ycckRgb is not null) return ycckRgb.Apply();
         using var result = DecodeManaged();
         return result.Stride * result.Height ^ result.GetRow8(0)[513 * 2];
     }
@@ -450,6 +456,7 @@ public class WarmJpegDecode
         if (cmyk is not null) { cmyk.Cleanup(); return; }
         if (ycck is not null) { ycck.Cleanup(); return; }
         if (cmykSamples is not null) { cmykSamples.Cleanup(); return; }
+        if (ycckRgb is not null) { ycckRgb.Cleanup(); return; }
         try
         {
             if (!ready) return;

@@ -143,6 +143,7 @@ def render():
         row('JPEG Adobe CMYK, general transform control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeGeneral', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG Adobe CMYK, two-dimensional sparse control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeSparse2D', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG YCCK420, full-resolution black', 'warm-jpeg-four-component-planes-evidence.json', ['cases', 'Ycck420', -1], 'WARM-JPEG-FOUR-COMPONENT-PLANES.md', verification='Gap (short; qualified)'),
+        row('JPEG YCCK420 → caller RGB24', 'warm-jpeg-ycck-caller-rgb-evidence.json', ['cases', 'Ycck420CallerRgb', -1], 'WARM-JPEG-YCCK-CALLER-RGB.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
@@ -311,13 +312,13 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 224
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 225
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-19. Target: **warm single-CPU parity, independently confirmed
-conservative upper ≤1x**. The 224 current numeric rows contain **{parity_count} passes,
+conservative upper ≤1x**. The 225 current numeric rows contain **{parity_count} passes,
 {gap_count} gaps and {confidence_count} confidence-open case**. The finite
-[material checklist](../benchmarks/WARM-COVERAGE.md) has 247 named cases, 23 unmeasured.
+[material checklist](../benchmarks/WARM-COVERAGE.md) has 247 named cases, 22 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
@@ -331,11 +332,15 @@ bounds and complete operation ownership are unchanged. Four rows refresh;
 
 Accepted qualification: 4,208 tests and 95 hardware-off checks per OS, plus the
 same actual private package consumer/all three examples on Windows/Linux.
-The released 0.1.0 package/tag stay immutable. The largest current gap is CMYK
-2D sparse at 1.812x. The retained caller YCCK→RGB matrix/black path remains a
-named unmeasured control, using the existing packet. Async, header, drawing
-and text boundaries have functional qualification but pending warm evidence.
-Stop all 70 unchanged or newly reconfirmed passing cases; no settings grid.
+The released 0.1.0 package/tag stay immutable.
+
+[Caller YCCK420 RGB24](../benchmarks/WARM-JPEG-YCCK-CALLER-RGB.md) first measures
+**7.504x / upper 7.804x**, **4,532.59 / 604.01µs**, **1,337,431 B/op**. This is
+the new largest gap. Exact managed samples, approved native bounds and complete
+fresh caller ownership pass. Same existing packet, no new image/settings grid.
+Production and all224previous rows/qualification are reused. Async, header,
+drawing and text still have functional qualification but pending warm evidence.
+Stop all70passing paths;22named representatives remain unmeasured.
 
 JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale
 (managed/SIMD libjpeg-turbo) and **74,040/52,093 B** RGB420 (managed/FFmpeg), with

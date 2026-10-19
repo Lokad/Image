@@ -1,11 +1,20 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-70 independent passes,153 measured mean gaps and one confidence-open case across
-all224 current numeric rows; no prior-production row remains. The
+70 independent passes,154 measured mean gaps and one confidence-open case across
+all225 current numeric rows; no prior-production row remains. The
 [three-table summary](../docs/benchmark.md) contains126 current independent
-observations and98 qualified shorts.23named new boundaries are unmeasured.
+observations and99 qualified shorts.22named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
+
+[Caller YCCK420 RGB24](WARM-JPEG-YCCK-CALLER-RGB.md) now demonstrates the largest
+gap:7.504x/upper7.804x,4532.59/604.01us,1,337,431 B/op. The already-named retained
+caller matrix/black algorithm uses the existing packet/reference, with exact managed
+pixels, approved native bounds and equivalent fresh caller ownership. Direct native
+RGB24 matches the old native RGBA colors exactly. No new case/image/settings grid.
+Production/all224previous rows/full4208/95HWoff/package proof are reused. One short
+and one6sec profile; no long above one. Scope247=225numeric+22unmeasured,70passes/
+154mean gaps/one confidence-open. The next primitive targets scalar caller rows.
 
 [Four-component materialization](WARM-JPEG-FOUR-COMPONENT-PLANES.md) reduces caller
 CMYK time 47.7%, 1010.51→528.07us: 1.590x/upper1.736x, 1,635,475 B/op. Owned
@@ -151,7 +160,7 @@ delivery. The two lossless cases and photograph VP8 independently pass; the late
 bounded-model diagram result is the open comparison above. Lossless sizes are now 2.394x/2.090x the exact native packets; VP8
 sizes are 1.212x/1.167x at matched source quality. The preceding lossless change replaces only the five affected timing proofs;
 other production paths and qualification evidence are reused. Known scope is now247 named
-cases:224 numeric plus23 unmeasured. Stop these three time-passing cases unless
+cases:225 numeric plus22 unmeasured. Stop these three time-passing cases unless
 their relevant production path changes; compression-size work remains required.
 
 The two [shared-budget codec boundaries](WARM-SHARED-BUDGET.md) are now measured:
@@ -242,7 +251,7 @@ Five representatives cover the required JPEG compatibility algorithms; CMYK, YCC
   not video pixel format 4×4); confirm native sample-grid equivalence before timing.
 
 The accepted full-resolution CMYK caller selector exposes one concrete omitted
-required path: `JpegSamplesDecode/Ycck420RgbResident` (**UNMEASURED**). SourceYcck
+required path: `JpegSamplesDecode/Ycck420RgbResident` (**measured**7.504x gap). SourceYcck
 and outputRgb reject raw byte packing; the retained WriteCmykSamples path performs
 centered chroma expansion, binary64 matrix/inversion/black and directRGB24 stores.
 Neither owned-RGBA YCCK SIMD nor caller YCbCr420 RGB measures that complete public
