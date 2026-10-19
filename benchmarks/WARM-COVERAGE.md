@@ -1,12 +1,12 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-70 independent passes,160 measured mean gaps and one confidence-open case across
-231 numeric rows. The [three-table summary](../docs/benchmark.md)
-contains126 independent observations and105 qualified shorts.23named required
+70 independent passes,161 measured mean gaps and one confidence-open case across
+232 numeric rows. The [three-table summary](../docs/benchmark.md)
+contains126 independent observations and106 qualified shorts.22named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
-The finite scope is now **254 cases:231 numeric+23 unmeasured**. The existing
+The finite scope is now **254 cases:232 numeric+22 unmeasured**. The existing
 227 rows retain their identified performance-qualified builds; those earlier
 codec/edit rows do not yet requalify 0.2.0 admission, disposal or governed storage.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
@@ -40,9 +40,14 @@ full rerun. Only this existing row refreshes. Other226 older codec/edit rows kee
 their identified scopes. The [axis-cross trial](WARM-JPEG-AXIS-CROSS-TRIAL.md)
 regressed4.5% and is rejected, with production restored. Five freshly compiled
 sparse tests pass normally/scalar on both OS; current full/package evidence is
-reused. Next: the already-named asynchronous nonseekable PNG inspection boundary.
+reused. The [async nonseekable PNG inspection screen](WARM-PNG-ASYNC-IDENTIFY.md)
+moves one already-named boundary to numeric:24.10µs/native19.34µs,
+1.246x/upper1.571,8,408B/op. All21 managed controls revalidate; unchanged normal/
+scalar native controls are reused. Complete equivalent input/metadata/EOF/owners
+pass, with no producer/harness/selector/native build or full/package rerun.
+Next: qualify the existing async nonseekable PNG decode boundary before timing.
 All four Lanczos3 gaps remain required;
-finite254/231numeric/23untimed and all verification counts stay unchanged.
+finite254/232numeric/22untimed; the other231 numeric observations remain unchanged.
 
 A bounded audit of the accepted 0.2.0 additions identifies exactly three required
 paths absent from the older checklist; these are not a shape/depth/settings grid:
@@ -363,9 +368,10 @@ the named async boundaries below are already included. Do not add a
 shape, depth or quality grid. Add cases only for a distinct required path omitted
 from this list, with its concrete reason.
 
-Async input adds exactly two **unmeasured** common front-end boundaries:
-`AsyncStreamIdentify/PngRgba8FreshNonSeekable` and
-`AsyncStreamDecode/PngRgba8FreshNonSeekable`. Both reuse the existing PNG8 input
+Async input has exactly two named common front-end boundaries:
+`AsyncStreamIdentify/PngRgba8FreshNonSeekable` now has the qualified short gap
+above; `AsyncStreamDecode/PngRgba8FreshNonSeekable` remains **unmeasured**.
+Both reuse the existing PNG8 input
 and full structural/pixel gates, adding actual async reads through EOF, fresh
 private input acquisition/growth/release and independent descriptor/pixel owners.
 They cover the shared async acquisition path and its two different complete
