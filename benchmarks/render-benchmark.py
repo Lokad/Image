@@ -137,7 +137,7 @@ def render():
         row('JPEG baseline gray', 'warm-jpeg-gray-current-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-GRAY-CURRENT.md', verification='Gap (short; qualified)'),
         row('JPEG gray → caller GRAY8', 'warm-jpeg-caller-rgb420-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-CALLER-RGB420.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 → caller RGB24', 'warm-jpeg-caller-rgb420-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-CALLER-RGB420.md', True),
-        row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-cmyk-adobe-evidence.json', ['cases', 'CmykAdobe', -1], 'WARM-JPEG-CMYK-ADOBE.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-cmyk-row-evidence.json', ['cases', 'CmykAdobe', -1], 'WARM-JPEG-CMYK-ROW.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
@@ -347,13 +347,13 @@ All4,176tests/OS,73affected hardware-disabled checks/OS and the same actual priv
 package consumer/all three examples pass on both OS. Exactly these two numeric
 rows change; prior passing paths retain evidence.24new boundaries remain.
 
-[Adobe CMYK JPEG decoding](../benchmarks/WARM-JPEG-CMYK-ADOBE.md) now measures
-**7.284× /1,635,074B/op**, a qualified short and the largest demonstrated gap.
-The original513×259 raster's authored four-plane DC projection is10,910bytes;
-both complete operations return531,468owned RGBA bytes and include K conversion.
-Exact analytical managed pixels, native CLI delivery, original normal/scalar
-gates, opaque alpha and independent owners pass. Production is unchanged;
-24named boundaries remain. Prioritize full-resolution CMYK conversion next.
+[Adobe CMYK row conversion](../benchmarks/WARM-JPEG-CMYK-ROW.md) reduces the
+largest gap **63.1%**,7.284×→**2.687× /1,635,137B/op**. Exact direct planar/SIMD
+device arithmetic preserves pixels, work/admission and independently owned RGBA.
+The same10,910-byte513×259 DC projection and complete native boundary remain.
+All4,182tests/OS,49affected hardware-disabled checks/OS and the same actual private
+package consumer/all examples pass on both OS. A single six-second diagnostic
+points to IDCT next; no long repeat or new image/settings grid.24paths unmeasured.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end

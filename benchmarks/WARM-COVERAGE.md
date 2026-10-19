@@ -7,14 +7,16 @@ all219 current numeric rows; no prior-production row remains. The
 observations and93 qualified shorts.24named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
 
-[Adobe CMYK decode](WARM-JPEG-CMYK-ADOBE.md) fills one missing representative:
-7.284x/upper7.565x,1,635,074B/op, complete531,468-byte RGBA. The original raster
-projects to an authored10,910-byte baseline DC-only four-full-plane Adobe0 packet.
-Exact analytical CMYK/RGB, normal/scalar native gates, native CLI delivery,
-opaque alpha and independent outputs pass. This is the new largest demonstrated
-gap; prioritize full-resolution CMYK conversion, not a long timing repeat.
-One tooling harness/native build, reused production/selector/qualification; no
-older proof is invalidated. Scope219numeric/24pending/243known;70passes stop.
+[Full-resolution CMYK rows](WARM-JPEG-CMYK-ROW.md) remove63.1% of elapsed time
+from the newest/largest gap:2.687x/upper2.809x,1,635,137B/op. Only this complete
+owned CMYK RGBA row changes; source/precision/work/admission/owners and native
+gates remain. All4,182tests/OS,49affected hardware-off checks/OS and same actual
+private package consumer/all three examples on both OS pass. Reuse70old passes.
+One6s diagnostic (not timing evidence) puts56% in IDCT,7.6% in materialization,
+3.5% in the new writer. Next test a CMYK-scoped constant-block transform shortcut,
+with original binary64 rounding/work charges. The separate fourth coefficient
+buffer reuse opportunity is recorded. No profile/grid expansion or long repeat.
+Scope219numeric/24pending/243known is unchanged; CMYK remains a short gap.
 
 [Direct caller RGB420 sample writing](WARM-JPEG-CALLER-RGB420.md) removes the
 largest3.369x gap:71.3% less elapsed time, independently0.966x/upper0.971x,
@@ -173,9 +175,9 @@ preceding grayscale result; historical allocation counts are superseded.
 No new workload is needed. Resident codec paths, synchronous Identify, async input,
 encoding and editing remain unchanged. No unaffected operation was retimed.
 
-Five representatives cover the required JPEG compatibility algorithms; the CMYK decode now has the measured gap above, four remain **unmeasured**:
+Five representatives cover the required JPEG compatibility algorithms; the CMYK decode has the current2.687x gap above, four remain **unmeasured**:
 
-- `JpegDecode/CmykAdobeResident` (**measured**7.284x gap): four component planes, Adobe inversion and
+- `JpegDecode/CmykAdobeResident` (**measured**2.687x gap): four component planes, Adobe inversion and
   complete owned RGBA conversion from an original CMYK projection.
 - `JpegDecode/Ycck420Resident`: subsampled color reconstruction, explicit matrix
   transform and a full-resolution black plane, using the same original input.

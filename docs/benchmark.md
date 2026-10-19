@@ -38,13 +38,13 @@ All4,176tests/OS,73affected hardware-disabled checks/OS and the same actual priv
 package consumer/all three examples pass on both OS. Exactly these two numeric
 rows change; prior passing paths retain evidence.24new boundaries remain.
 
-[Adobe CMYK JPEG decoding](../benchmarks/WARM-JPEG-CMYK-ADOBE.md) now measures
-**7.284× /1,635,074B/op**, a qualified short and the largest demonstrated gap.
-The original513×259 raster's authored four-plane DC projection is10,910bytes;
-both complete operations return531,468owned RGBA bytes and include K conversion.
-Exact analytical managed pixels, native CLI delivery, original normal/scalar
-gates, opaque alpha and independent owners pass. Production is unchanged;
-24named boundaries remain. Prioritize full-resolution CMYK conversion next.
+[Adobe CMYK row conversion](../benchmarks/WARM-JPEG-CMYK-ROW.md) reduces the
+largest gap **63.1%**,7.284×→**2.687× /1,635,137B/op**. Exact direct planar/SIMD
+device arithmetic preserves pixels, work/admission and independently owned RGBA.
+The same10,910-byte513×259 DC projection and complete native boundary remain.
+All4,182tests/OS,49affected hardware-disabled checks/OS and the same actual private
+package consumer/all examples pass on both OS. A single six-second diagnostic
+points to IDCT next; no long repeat or new image/settings grid.24paths unmeasured.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end
@@ -220,7 +220,7 @@ The24 named new boundaries remain unmeasured; stop current passing paths.
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-GRAY-CURRENT.md) | 973.44 | 682.79 | 1.426 / 1.459 | 672,186 | Gap (short; qualified) |
 | [JPEG gray → caller GRAY8](../benchmarks/WARM-JPEG-CALLER-RGB420.md) | 857.87 | 646.88 | 1.326 / 1.445 | 273,422 | Gap (short; qualified) |
 | [JPEG 4:2:0 → caller RGB24](../benchmarks/WARM-JPEG-CALLER-RGB420.md) | 1,121.95 | 1,161.53 | 0.966 / 0.971 | 624,508 | Parity confirmed |
-| [JPEG Adobe CMYK, four full-resolution planes](../benchmarks/WARM-JPEG-CMYK-ADOBE.md) | 2,754.84 | 378.20 | 7.284 / 7.565 | 1,635,074 | Gap (short; qualified) |
+| [JPEG Adobe CMYK, four full-resolution planes](../benchmarks/WARM-JPEG-CMYK-ROW.md) | 1,017.42 | 378.58 | 2.687 / 2.809 | 1,635,137 | Gap (short; qualified) |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,202.77 | 1,008.96 | 1.192 / 1.315 | 757,345 | Gap (short; qualified) |
 | [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,378.07 | 1,014.38 | 1.359 / 1.446 | 761,720 | Gap (short; qualified) |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,510.49 | 1,351.29 | 1.118 / 1.263 | 829,148 | Gap (short; qualified) |

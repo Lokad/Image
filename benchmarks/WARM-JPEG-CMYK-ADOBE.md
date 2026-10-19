@@ -1,7 +1,11 @@
 # Adobe CMYK JPEG decode
 
-The named `JpegDecode/CmykAdobeResident` case is the largest demonstrated warm
-parity gap. It fills one missing measurement, using unchanged qualified production.
+Historical before-row-specialization measurement. Current timing and qualification
+are in [the accepted CMYK row round](WARM-JPEG-CMYK-ROW.md).
+
+
+The named `JpegDecode/CmykAdobeResident` case was the largest demonstrated warm
+parity gap at this checkpoint. It fills one missing measurement, using unchanged qualified production.
 
 | Complete public operation | Managed / FFmpeg µs | Ratio / upper | Managed allocated B/op | RGBA bytes, both |
 | --- | ---: | ---: | ---: | ---: |
