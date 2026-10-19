@@ -21,13 +21,13 @@ internal ref partial struct JpegDecoder
     {
         var source = ResolveSampleColorSpace(JpegColorSpace.Auto, adobeTransform);
         var invert = ResolveCmykInversion(JpegCmykInversion.Auto, adobeTransform);
-        MaterializeSamplePlanes();
+        var fullResolution = source == JpegColorSpace.Cmyk && components.Length == 4;
+        for (var c = 0; fullResolution && c < components.Length; c++)
+            fullResolution = components[c].H == maxH && components[c].V == maxV;
+        if (fullResolution) MaterializeCmykPlanes(); else MaterializeSamplePlanes();
         var result = ImageBuffer.Allocate(info.Width, info.Height, 8, context); result.Orientation = info.Orientation;
         try
         {
-            var fullResolution = source == JpegColorSpace.Cmyk && components.Length == 4;
-            for (var c = 0; fullResolution && c < components.Length; c++)
-                fullResolution = components[c].H == maxH && components[c].V == maxV;
             if (fullResolution)
             {
                 for (var y = 0; y < info.Height; y++)

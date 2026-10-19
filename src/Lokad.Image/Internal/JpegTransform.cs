@@ -4,7 +4,7 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
-internal static class JpegTransform
+internal static partial class JpegTransform
 {
     // Natural positions for JPEG's diagonal scan, generated from the geometry
     // defined in T.81 rather than copied from an implementation's lookup table.

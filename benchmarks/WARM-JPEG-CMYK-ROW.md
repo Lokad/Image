@@ -1,5 +1,9 @@
 # Full-resolution CMYK row conversion
 
+Historical row-conversion checkpoint. Current DC/sparse/general timing and
+qualification are in [the spectrum-aware round](WARM-JPEG-CMYK-SPECTRA.md).
+
+
 Complete Adobe CMYK JPEG decode is **63.1% faster**,2,754.84→1,017.42µs.
 It remains a demonstrated **2.687x** warm single-CPU gap; parity is open.
 The original10,910-byte513×259 authored DC projection, native worker and all

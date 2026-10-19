@@ -137,7 +137,9 @@ def render():
         row('JPEG baseline gray', 'warm-jpeg-gray-current-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-GRAY-CURRENT.md', verification='Gap (short; qualified)'),
         row('JPEG gray → caller GRAY8', 'warm-jpeg-caller-rgb420-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-CALLER-RGB420.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 → caller RGB24', 'warm-jpeg-caller-rgb420-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-CALLER-RGB420.md', True),
-        row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-cmyk-row-evidence.json', ['cases', 'CmykAdobe', -1], 'WARM-JPEG-CMYK-ROW.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-cmyk-spectra-evidence.json', ['cases', 'CmykAdobe', -1], 'WARM-JPEG-CMYK-SPECTRA.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-cmyk-spectra-evidence.json', ['cases', 'CmykAdobeAc', -1], 'WARM-JPEG-CMYK-SPECTRA.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, general transform control', 'warm-jpeg-cmyk-spectra-evidence.json', ['cases', 'CmykAdobeGeneral', -1], 'WARM-JPEG-CMYK-SPECTRA.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
@@ -306,11 +308,11 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 219
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 221
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 219 retained numeric rows contain **{parity_count} current
+conservative upper ≤1x**. The 221 retained numeric rows contain **{parity_count} current
 parity confirmations, {gap_count} measured gaps and {confidence_count} confidence-open cases**;
 all numeric rows have current evidence after the
 [input reconciliation](../benchmarks/WARM-INPUT-RECONCILIATION.md). Twenty-two prior
@@ -347,13 +349,14 @@ All4,176tests/OS,73affected hardware-disabled checks/OS and the same actual priv
 package consumer/all three examples pass on both OS. Exactly these two numeric
 rows change; prior passing paths retain evidence.24new boundaries remain.
 
-[Adobe CMYK row conversion](../benchmarks/WARM-JPEG-CMYK-ROW.md) reduces the
-largest gap **63.1%**,7.284×→**2.687× /1,635,137B/op**. Exact direct planar/SIMD
-device arithmetic preserves pixels, work/admission and independently owned RGBA.
-The same10,910-byte513×259 DC projection and complete native boundary remain.
-All4,182tests/OS,49affected hardware-disabled checks/OS and the same actual private
-package consumer/all examples pass on both OS. A single six-second diagnostic
-points to IDCT next; no long repeat or new image/settings grid.24paths unmeasured.
+[Spectrum-aware CMYK decoding](../benchmarks/WARM-JPEG-CMYK-SPECTRA.md)
+improves DC **47.0%** to **1.422× /1,635,145B/op** and the one-AC control
+**30.0%** to **1.882× /1,635,146B/op**. General IDCT measures **1.118× /
+1,634,921B/op**, with a3.1% higher mean. Exact pixels, original work/admission,
+ownership and native gates remain. Two named controls close the new sparse/general
+algorithm boundaries: **245 finite cases**,24unmeasured; no geometry/quality grid.
+All4,193tests/OS,60affected hardware-disabled checks/OS and same actual private
+package consumer/all examples pass on both OS. No long repeat for these gaps.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end

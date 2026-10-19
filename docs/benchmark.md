@@ -1,8 +1,8 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 219 retained numeric rows contain **70 current
-parity confirmations, 148 measured gaps and 1 confidence-open cases**;
+conservative upper ≤1x**. The 221 retained numeric rows contain **70 current
+parity confirmations, 150 measured gaps and 1 confidence-open cases**;
 all numeric rows have current evidence after the
 [input reconciliation](../benchmarks/WARM-INPUT-RECONCILIATION.md). Twenty-two prior
 rows were refreshed on the same qualified immutable build: JPEG Identify and
@@ -38,13 +38,14 @@ All4,176tests/OS,73affected hardware-disabled checks/OS and the same actual priv
 package consumer/all three examples pass on both OS. Exactly these two numeric
 rows change; prior passing paths retain evidence.24new boundaries remain.
 
-[Adobe CMYK row conversion](../benchmarks/WARM-JPEG-CMYK-ROW.md) reduces the
-largest gap **63.1%**,7.284×→**2.687× /1,635,137B/op**. Exact direct planar/SIMD
-device arithmetic preserves pixels, work/admission and independently owned RGBA.
-The same10,910-byte513×259 DC projection and complete native boundary remain.
-All4,182tests/OS,49affected hardware-disabled checks/OS and the same actual private
-package consumer/all examples pass on both OS. A single six-second diagnostic
-points to IDCT next; no long repeat or new image/settings grid.24paths unmeasured.
+[Spectrum-aware CMYK decoding](../benchmarks/WARM-JPEG-CMYK-SPECTRA.md)
+improves DC **47.0%** to **1.422× /1,635,145B/op** and the one-AC control
+**30.0%** to **1.882× /1,635,146B/op**. General IDCT measures **1.118× /
+1,634,921B/op**, with a3.1% higher mean. Exact pixels, original work/admission,
+ownership and native gates remain. Two named controls close the new sparse/general
+algorithm boundaries: **245 finite cases**,24unmeasured; no geometry/quality grid.
+All4,193tests/OS,60affected hardware-disabled checks/OS and same actual private
+package consumer/all examples pass on both OS. No long repeat for these gaps.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end
@@ -149,7 +150,7 @@ Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDEN
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
 retains its1.012x mean gap/1.014x upper. Current totals are **70 passes /
-148 gaps / 1 confidence open / 0 prior-production rows**.
+150 gaps / 1 confidence open / 0 prior-production rows**.
 Every actual/outlier and both quiet guards remain; unchanged qualification is reused.
 The24 named new boundaries remain unmeasured; stop current passing paths.
 
@@ -220,7 +221,9 @@ The24 named new boundaries remain unmeasured; stop current passing paths.
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-GRAY-CURRENT.md) | 973.44 | 682.79 | 1.426 / 1.459 | 672,186 | Gap (short; qualified) |
 | [JPEG gray → caller GRAY8](../benchmarks/WARM-JPEG-CALLER-RGB420.md) | 857.87 | 646.88 | 1.326 / 1.445 | 273,422 | Gap (short; qualified) |
 | [JPEG 4:2:0 → caller RGB24](../benchmarks/WARM-JPEG-CALLER-RGB420.md) | 1,121.95 | 1,161.53 | 0.966 / 0.971 | 624,508 | Parity confirmed |
-| [JPEG Adobe CMYK, four full-resolution planes](../benchmarks/WARM-JPEG-CMYK-ROW.md) | 1,017.42 | 378.58 | 2.687 / 2.809 | 1,635,137 | Gap (short; qualified) |
+| [JPEG Adobe CMYK, four full-resolution planes](../benchmarks/WARM-JPEG-CMYK-SPECTRA.md) | 539.07 | 379.20 | 1.422 / 1.511 | 1,635,145 | Gap (short; qualified) |
+| [JPEG Adobe CMYK, one AC control](../benchmarks/WARM-JPEG-CMYK-SPECTRA.md) | 747.62 | 397.33 | 1.882 / 1.979 | 1,635,146 | Gap (short; qualified) |
+| [JPEG Adobe CMYK, general transform control](../benchmarks/WARM-JPEG-CMYK-SPECTRA.md) | 3,478.40 | 3,112.37 | 1.118 / 1.244 | 1,634,921 | Gap (short; qualified) |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,202.77 | 1,008.96 | 1.192 / 1.315 | 757,345 | Gap (short; qualified) |
 | [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,378.07 | 1,014.38 | 1.359 / 1.446 | 761,720 | Gap (short; qualified) |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,510.49 | 1,351.29 | 1.118 / 1.263 | 829,148 | Gap (short; qualified) |

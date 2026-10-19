@@ -9,8 +9,10 @@ internal static class AuthoredJpegCompatibility
 {
     internal static byte[] Create(int width, int height, byte[] values, int h = 1, int v = 1,
         bool blackFull = false, int? adobe = null, bool progressive = false, int restart = 0, bool vary = false,
-        Func<int, int, int, int>? blockSample = null)
+        Func<int, int, int, int>? blockSample = null, bool nonzeroAc = false, int acTerms = 1)
     {
+        if (nonzeroAc && progressive) throw new ArgumentException("The authored AC control is baseline only.");
+        if (acTerms is < 1 or > 63) throw new ArgumentOutOfRangeException(nameof(acTerms));
         using var output = new MemoryStream(); output.Write(new byte[] { 255, 216 });
         if (adobe is not null) Segment(0xEE, [65, 100, 111, 98, 101, 0, 100, 0, 0, 0, 0, (byte)adobe.Value]);
         var quantization = new byte[65]; quantization.AsSpan(1).Fill(1); Segment(0xDB, quantization);
@@ -25,7 +27,8 @@ internal static class AuthoredJpegCompatibility
         var dc = new byte[29]; dc[4] = 12;
         for (var i = 0; i < 12; i++) dc[17 + i] = (byte)i;
         Segment(0xC4, dc);
-        var ac = new byte[18]; ac[0] = 16; ac[1] = 1; Segment(0xC4, ac);
+        var ac = new byte[nonzeroAc ? 19 : 18]; ac[0] = 16; ac[nonzeroAc ? 2 : 1] = nonzeroAc ? (byte)2 : (byte)1;
+        if (nonzeroAc) ac[18] = 3; Segment(0xC4, ac);
         if (restart != 0) { var dri = new byte[2]; BinaryPrimitives.WriteUInt16BigEndian(dri, (ushort)restart); Segment(0xDD, dri); }
         var selectors = Enumerable.Range(1, count).Select(i => (byte)i).ToArray();
         Scan(selectors, 0, progressive ? 0 : 63);
@@ -42,7 +45,11 @@ internal static class AuthoredJpegCompatibility
                     : blockSample(c, mcu % columns * hs[c] + bx, mcu / columns * vs[c] + by);
                 if ((uint)sample > 255) throw new ArgumentOutOfRangeException(nameof(blockSample));
                 var coefficient = (sample - 128) * 8; bits.Dc(coefficient - predictors[c]); predictors[c] = coefficient;
-                if (!progressive) bits.Write(0, 1);
+                if (!progressive)
+                {
+                    if (nonzeroAc) for (var term = 0; term < acTerms; term++) { bits.Write(1, 2); bits.Write(4, 3); }
+                    if (!nonzeroAc || acTerms != 63) bits.Write(0, nonzeroAc ? 2 : 1);
+                }
             }
         }
         bits.Align();

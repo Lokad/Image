@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart, StreamDecode420Restart, NativeDecodeCancelable8, ProgressiveCancelable444, DirectRgb444, DirectRgb422, DirectRgb420, CmykAdobe }
+public enum WarmJpegDecodeCase { Decode8, NativeDecode8, NativeDecode420, NativeDecode422, OwnedDecodeGray, ProgressiveGray, Progressive420, Progressive444, Progressive422, NativeDecode420Restart, StreamDecode420Restart, NativeDecodeCancelable8, ProgressiveCancelable444, DirectRgb444, DirectRgb422, DirectRgb420, CmykAdobe, CmykAdobeAc, CmykAdobeGeneral }
 
 internal sealed record WarmJpegFixedPreparation(int SchemaVersion, string Project, string Recipe,
     string RasterSha256, string NativeFile, int EncodedBytes, string EncodedSha256,
@@ -214,10 +214,10 @@ public class WarmJpegDecode
             || !GC.GetConfigurationVariables().TryGetValue("ConcurrentGC", out var concurrent) || Convert.ToBoolean(concurrent))
             throw new InvalidOperationException("JPEG decode requires one CPU, optimized JIT and non-concurrent workstation GC.");
         var sampleMode = Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_SAMPLE_OUTPUT");
-        if (Case == WarmJpegDecodeCase.CmykAdobe)
+        if (Case is WarmJpegDecodeCase.CmykAdobe or WarmJpegDecodeCase.CmykAdobeAc or WarmJpegDecodeCase.CmykAdobeGeneral)
         {
             if (sampleMode is not null) throw new InvalidOperationException("CMYK RGBA decode does not use a caller-sample output mode.");
-            cmyk = new WarmJpegCmykDecode(); cmyk.Setup(cpu, smoke, sampleCount); return;
+            cmyk = new WarmJpegCmykDecode(Case == WarmJpegDecodeCase.CmykAdobeAc, Case == WarmJpegDecodeCase.CmykAdobeGeneral); cmyk.Setup(cpu, smoke, sampleCount); return;
         }
         if (sampleMode is not null)
         {

@@ -8,6 +8,18 @@ if (args.SequenceEqual(["--prepare-warm-jpeg-cmyk"]))
     return;
 }
 
+if (args.SequenceEqual(["--prepare-warm-jpeg-cmyk-ac"]))
+{
+    WarmJpegCmykInput.Prepare(nonzeroAc: true);
+    return;
+}
+
+if (args.SequenceEqual(["--prepare-warm-jpeg-cmyk-general"]))
+{
+    WarmJpegCmykInput.Prepare(general: true);
+    return;
+}
+
 if (args.SequenceEqual(["--prepare-warm-vp8-simple"]))
 {
     WarmVp8Decode.PrepareSimpleOpaque();

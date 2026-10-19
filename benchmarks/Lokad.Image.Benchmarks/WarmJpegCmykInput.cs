@@ -8,10 +8,11 @@ internal sealed record CmykJpegPreparation(int SchemaVersion, string Project, st
 
 internal static class WarmJpegCmykInput
 {
-    public static string DirectoryPath(string root) => Path.Combine(root, "artifacts/warm-reference/jpeg-cmyk-adobe");
+    public static string DirectoryPath(string root, bool nonzeroAc = false, bool general = false) => Path.Combine(root, "artifacts/warm-reference", general ? "jpeg-cmyk-adobe-general" : nonzeroAc ? "jpeg-cmyk-adobe-ac" : "jpeg-cmyk-adobe");
 
-    public static void Prepare()
+    public static void Prepare(bool nonzeroAc = false, bool general = false)
     {
+        nonzeroAc |= general;
         using var state = new JpegBenchmarkCase();
         var original = HorizontalFlipInput.Create(8); var opaque = JpegQualityCorpus.Reference(original, 8, 0x204060);
         var projection = new byte[opaque.Length];
@@ -35,27 +36,41 @@ internal static class WarmJpegCmykInput
             blocks[(by * columns + bx) * 4 + c] = (byte)((sum + 32) / 64);
         }
         var packet = AuthoredJpegCompatibility.Create(513, 259, [0, 0, 0, 0], adobe: 0,
-            blockSample: (c, x, y) => blocks[(y * columns + x) * 4 + c]);
+            blockSample: (c, x, y) => blocks[(y * columns + x) * 4 + c], nonzeroAc: nonzeroAc, acTerms: general ? 63 : 1);
         var expected = new byte[513 * 259 * 4]; var canonical = new byte[expected.Length];
         for (var y = 0; y < 259; y++)
         for (var x = 0; x < 513; x++)
         {
             var at = (y * 513 + x) * 4; var block = ((y / 8) * columns + x / 8) * 4;
-            for (var c = 0; c < 4; c++) canonical[at + c] = (byte)(255 - blocks[block + c]);
-            for (var c = 0; c < 3; c++) expected[at + c] = (byte)((blocks[block + c] * blocks[block + 3] + 127) / 255);
+            // The optional first AC coefficient is4 at (u=1,v=0). Its
+            // analytical contribution is C(0)*cos((2x+1)pi/16), safely away
+            // from sample halves. Keep the original DC packet unchanged.
+            var adjustment = nonzeroAc ? (int)Math.Round(Math.Cos((2 * (x & 7) + 1) * Math.PI / 16) / Math.Sqrt(2), MidpointRounding.AwayFromZero) : 0;
+            for (var c = 0; c < 4; c++) canonical[at + c] = (byte)(255 - Math.Clamp(blocks[block + c] + adjustment, 0, 255));
+            for (var c = 0; c < 3; c++) expected[at + c] = (byte)(((255 - canonical[at + c]) * (255 - canonical[at + 3]) + 127) / 255);
             expected[at + 3] = 255;
         }
         var actualCmyk = new byte[canonical.Length]; ImageCodec.DecodeJpeg(packet, actualCmyk, JpegSampleFormat.Cmyk);
+        if (general)
+        {
+            // The direct caller CMYK path retains the qualified general IDCT.
+            // Freeze that independent path as the dense control's reference;
+            // both predecessor and candidate must reproduce it exactly.
+            actualCmyk.CopyTo(canonical, 0);
+            for (var i = 0; i < canonical.Length; i += 4)
+                for (var c = 0; c < 3; c++) expected[i + c] = (byte)(((255 - canonical[i + c]) * (255 - canonical[i + 3]) + 127) / 255);
+        }
         if (!actualCmyk.AsSpan().SequenceEqual(canonical)) throw new InvalidOperationException("Analytical CMYK fixture component/inversion check failed.");
         ImageCodec.DecodeJpeg(packet, actualCmyk, JpegSampleFormat.Cmyk, options: new() { CmykInversion = JpegCmykInversion.None });
         for (var i = 0; i < actualCmyk.Length; i++) if (actualCmyk[i] != 255 - canonical[i]) throw new InvalidOperationException("Explicit CMYK inversion control failed.");
         using (var decoded = ImageCodec.Decode(packet))
             if (!OriginalPixels.Bytes(decoded).AsSpan().SequenceEqual(expected)) throw new InvalidOperationException("Analytical CMYK device-RGB check failed.");
         var record = new CmykJpegPreparation(1, "Lokad.Image",
-            "Original513x259 RGBA8 raster flattened over0x204060; canonical device-CMYK projection stored Adobe-inverted, clamped8x8 component means rounded ties-up, authored T.81 baseline DC-only unit-quantization four-plane packet with Adobe transform0. K is black, never alpha.",
+            "Original513x259 RGBA8 raster flattened over0x204060; canonical device-CMYK projection stored Adobe-inverted, clamped8x8 component means rounded ties-up, authored T.81 baseline "
+            + (general ? "DC plus all63 AC=4 general-transform control, reference from unchanged caller-CMYK general IDCT" : nonzeroAc ? "DC plus first-AC=4 fallback-control" : "DC-only") + " unit-quantization four-plane packet with Adobe transform0. K is black, never alpha.",
             JpegBenchmarkCase.Hash(original), JpegBenchmarkCase.Hash(opaque), JpegBenchmarkCase.Hash(projection), JpegBenchmarkCase.Hash(blocks), packet.Length,
             JpegBenchmarkCase.Hash(packet), JpegBenchmarkCase.Hash(canonical), JpegBenchmarkCase.Hash(expected), JpegQualitySyntax.Read(packet).QuantizationHash, JpegBenchmarkCase.HashFile(state.Ffmpeg));
-        var directory = DirectoryPath(state.Root); Directory.CreateDirectory(directory);
+        var directory = DirectoryPath(state.Root, nonzeroAc, general); Directory.CreateDirectory(directory);
         foreach (var (name, data) in new[] { ("input.jpg", packet), ("projection.cmyk-inverted", projection), ("blocks.cmyk-inverted", blocks), ("expected.cmyk", canonical), ("expected.rgba", expected) })
         {
             var path = Path.Combine(directory, name);

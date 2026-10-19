@@ -1,22 +1,28 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-70 independent passes,148 measured mean gaps and one confidence-open case across
-all219 current numeric rows; no prior-production row remains. The
+70 independent passes,150 measured mean gaps and one confidence-open case across
+all221 current numeric rows; no prior-production row remains. The
 [three-table summary](../docs/benchmark.md) contains126 current independent
-observations and93 qualified shorts.24named new boundaries are unmeasured.
+observations and95 qualified shorts.24named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
 
-[Full-resolution CMYK rows](WARM-JPEG-CMYK-ROW.md) remove63.1% of elapsed time
-from the newest/largest gap:2.687x/upper2.809x,1,635,137B/op. Only this complete
-owned CMYK RGBA row changes; source/precision/work/admission/owners and native
-gates remain. All4,182tests/OS,49affected hardware-off checks/OS and same actual
-private package consumer/all three examples on both OS pass. Reuse70old passes.
-One6s diagnostic (not timing evidence) puts56% in IDCT,7.6% in materialization,
-3.5% in the new writer. Next test a CMYK-scoped constant-block transform shortcut,
-with original binary64 rounding/work charges. The separate fourth coefficient
-buffer reuse opportunity is recorded. No profile/grid expansion or long repeat.
-Scope219numeric/24pending/243known is unchanged; CMYK remains a short gap.
+[CMYK spectrum-aware materialization](WARM-JPEG-CMYK-SPECTRA.md) improves DC47%
+to1.422x/upper1.511x and one-AC30% to1.882x/upper1.979x. The retained general
+transform measures1.118x/upper1.244x, with3.1% higher mean. All are short gaps.
+Exact frozen-basis constant blocks and original-order sparse nonzero terms
+retain full work charges/admission/owners; other numeric paths stay unchanged.
+All4,193tests/OS,60affected hardware-off checks/OS and same actual private Windows
+package consumer/all three examples pass on both OS. All70passes stop.
+Two named required paths fill a concrete omission introduced by the shortcut:
+`JpegDecode/CmykAdobeAcResident` rejects DC and selects sparse evaluation;
+`JpegDecode/CmykAdobeGeneralResident` populates all63AC terms and retains the
+general transform. Both use the same original projection/geometry/quantization;
+no shape/depth/filter/quality grid. This is the only scope addition:245known
+cases=221numeric+24pending. All21bounded-round actuals and source mappings remain.
+No long timing repeats, new profile or unrelated qualification. Allocation reuse
+of the fourth component is next; no further case variants without an omitted
+distinct required algorithm identified by evidence.
 
 [Direct caller RGB420 sample writing](WARM-JPEG-CALLER-RGB420.md) removes the
 largest3.369x gap:71.3% less elapsed time, independently0.966x/upper0.971x,
@@ -101,8 +107,8 @@ All four measure complete output ownership and allocations with equivalent
 delivery. The two lossless cases and photograph VP8 independently pass; the later
 bounded-model diagram result is the open comparison above. Lossless sizes are now 2.394x/2.090x the exact native packets; VP8
 sizes are 1.212x/1.167x at matched source quality. The preceding lossless change replaces only the five affected timing proofs;
-other production paths and qualification evidence are reused. Known scope is now243 named
-cases:219 numeric plus24 unmeasured. Stop these three time-passing cases unless
+other production paths and qualification evidence are reused. Known scope is now245 named
+cases:221 numeric plus24 unmeasured. Stop these three time-passing cases unless
 their relevant production path changes; compression-size work remains required.
 
 The two [shared-budget codec boundaries](WARM-SHARED-BUDGET.md) are now measured:
@@ -175,10 +181,12 @@ preceding grayscale result; historical allocation counts are superseded.
 No new workload is needed. Resident codec paths, synchronous Identify, async input,
 encoding and editing remain unchanged. No unaffected operation was retimed.
 
-Five representatives cover the required JPEG compatibility algorithms; the CMYK decode has the current2.687x gap above, four remain **unmeasured**:
+Five representatives cover the required JPEG compatibility algorithms; the CMYK DC/sparse/general controls have the current gaps above, four remain **unmeasured**:
 
-- `JpegDecode/CmykAdobeResident` (**measured**2.687x gap): four component planes, Adobe inversion and
-  complete owned RGBA conversion from an original CMYK projection.
+- `JpegDecode/CmykAdobeResident` (**measured**1.422x DC gap): four component planes, Adobe inversion and
+  complete owned RGBA conversion from an original CMYK projection. The
+  separately named one-AC and all63-AC controls above cover sparse/general IDCT.
+
 - `JpegDecode/Ycck420Resident`: subsampled color reconstruction, explicit matrix
   transform and a full-resolution black plane, using the same original input.
 - `JpegSamplesDecode/CmykResident`: complete caller-owned canonical CMYK output;

@@ -4,6 +4,9 @@ using Lokad.Image.Tooling;
 
 internal sealed class WarmJpegCmykDecode
 {
+    private readonly bool nonzeroAc;
+    private readonly bool general;
+    public WarmJpegCmykDecode(bool nonzeroAc = false, bool general = false) { this.nonzeroAc = nonzeroAc || general; this.general = general; }
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
     private CmykJpegPreparation prepared = null!;
@@ -19,7 +22,7 @@ internal sealed class WarmJpegCmykDecode
         this.cpu = cpu; this.smoke = smoke; this.count = count; state = new JpegBenchmarkCase();
         try
         {
-            var directory = WarmJpegCmykInput.DirectoryPath(state.Root);
+            var directory = WarmJpegCmykInput.DirectoryPath(state.Root, nonzeroAc, general);
             prepared = JsonSerializer.Deserialize<CmykJpegPreparation>(File.ReadAllText(Path.Combine(directory, "preparation.json")), EncoderQualityCalibration.Json) ?? throw new InvalidOperationException("Run --prepare-warm-jpeg-cmyk first.");
             input = File.ReadAllBytes(Path.Combine(directory, "input.jpg")); expected = File.ReadAllBytes(Path.Combine(directory, "expected.rgba"));
             if (prepared.Project != "Lokad.Image" || prepared.SchemaVersion != 1 || prepared.RasterSha256 != JpegBenchmarkCase.Hash(HorizontalFlipInput.Create(8))
@@ -85,16 +88,17 @@ internal sealed class WarmJpegCmykDecode
             var path = Path.Combine(state.Root, "artifacts/benchmark-validation", "WarmJpegDecode-" + Guid.NewGuid().ToString("N") + ".json"); Directory.CreateDirectory(Path.GetDirectoryName(path)!);
             File.WriteAllText(path, JsonSerializer.Serialize(new
             {
-                schemaVersion = 1, name = "WarmJpegDecode", caseId = "CmykAdobe", publicBoundary = "JpegDecode/CmykAdobeResident",
+                schemaVersion = 1, name = "WarmJpegDecode", caseId = general ? "CmykAdobeGeneral" : nonzeroAc ? "CmykAdobeAc" : "CmykAdobe", publicBoundary = general ? "JpegDecode/CmykAdobeGeneralResident" : nonzeroAc ? "JpegDecode/CmykAdobeAcResident" : "JpegDecode/CmykAdobeResident",
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), smoke, cpu, width = 513, height = 259, depth = 8, sourceIdentity,
                 preparation = prepared, inputSha256 = prepared.EncodedSha256, rasterSha256 = prepared.RasterSha256, inputBytes = input.Length,
                 managedOutputBytes = expected.Length, nativeOutputBytes = nativePixels.Length, managedOutputSha256 = prepared.RgbaSha256, nativeOutputSha256 = JpegBenchmarkCase.Hash(nativePixels),
                 decoderMaximum = maximum, decoderRmse = rmse, scalarDecoderMaximum = scalarMaximum, scalarDecoderRmse = scalarRmse,
-                decoderAgreementWithinBounds = true, exactAnalyticalManagedPixels = true, nativeCliPixelsExact = true, scalarCliAgreementWithinBounds = true,
+                decoderAgreementWithinBounds = true, exactAnalyticalManagedPixels = !general, exactQualifiedGeneralManagedPixels = general, nativeCliPixelsExact = true, scalarCliAgreementWithinBounds = true,
                 alphaExact = true, blackIsNotAlpha = true, sourceUnchanged = true, independentOwnedOutput = true, iccConversion = false, exifReorientation = false,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmJpegCmykDecode).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after, nativeExitCode = 0,
-                boundary = "Identical resident authored Adobe-transform0 full-resolution four-component baseline JPEG to fresh independently owned RGBA8. Public managed Decode includes complete decode, component materialization, inversion/device-CMYK conversion, zeroed output allocation and disposal. Native software mjpeg includes state reset, all four component decodes and K/device-color multiplication, opaque alpha, fresh zeroed RGBA allocation, GBRAP packing and decoded-plane/output release. Codec, conversion, padded resident packet and empty frame wrapper reused; no decoded content cache. ICC conversion and EXIF reorientation disabled. Startup, projection/packet preparation, I/O, IPC, hashing and checks excluded. One CPU, exact analytical managed pixels; normal native CLI exact and normal/scalar JPEG maximum4/RMSE1.5 with exact opaque alpha."
+                boundary = "Identical resident authored Adobe-transform0 full-resolution four-component baseline JPEG to fresh independently owned RGBA8. Public managed Decode includes complete decode, component materialization, inversion/device-CMYK conversion, zeroed output allocation and disposal. Native software mjpeg includes state reset, all four component decodes and K/device-color multiplication, opaque alpha, fresh zeroed RGBA allocation, GBRAP packing and decoded-plane/output release. Codec, conversion, padded resident packet and empty frame wrapper reused; no decoded content cache. ICC conversion and EXIF reorientation disabled. Startup, projection/packet preparation, I/O, IPC, hashing and checks excluded. One CPU, "
+                    + (general ? "exact qualified general-reference managed pixels" : "exact analytical managed pixels") + "; normal native CLI exact and normal/scalar JPEG maximum4/RMSE1.5 with exact opaque alpha."
             }, EncoderQualityCalibration.Json) + "\n");
             Console.WriteLine("Validated CMYK JPEG decode: " + path);
         }
