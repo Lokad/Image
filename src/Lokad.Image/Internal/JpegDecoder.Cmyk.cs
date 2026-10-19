@@ -84,6 +84,8 @@ internal ref partial struct JpegDecoder
     private void WriteCmykSamples(Span<byte> destination, JpegSampleFormat format, int stride,
         JpegColorSpace source, bool invert, ImageOrientation orientation)
     {
+        if (format == JpegSampleFormat.Cmyk && source == JpegColorSpace.Cmyk && orientation == ImageOrientation.Normal
+            && TryWriteFullResolutionCmyk(destination, stride, invert)) return;
         for (var y = 0; y < info.Height; y++)
         {
             context.Work(info.Width * 32L);

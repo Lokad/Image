@@ -4,10 +4,21 @@ Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
 70 independent passes,153 measured mean gaps and one confidence-open case across
 all224 current numeric rows; no prior-production row remains. The
 [three-table summary](../docs/benchmark.md) contains126 current independent
-observations and98 qualified shorts.22named new boundaries are unmeasured.
+observations and98 qualified shorts.23named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
 
-[Caller CMYK JPEG decoding](WARM-JPEG-CALLER-CMYK.md) now demonstrates the largest
+[Direct caller CMYK packing](WARM-JPEG-CMYK-PACKING.md) cuts elapsed time64.1%,
+2817.13→1010.51us:3.057x/upper3.169x,1,635,459B/op. Exact four-channel samples,
+work/admission/cancellation, source/padding and independent owners remain.
+Only that numeric row changes;223others and70passing proofs are reused. Full
+4208tests/OS,72hardware-off checks/OS and the same actual Windows private package
+consumer/all three examples pass on both OS. Production/harness/native/selector
+builds during the bounded experiment:one/zero/zero/zero; no repeated profile.
+Current finite scope247=224numeric+23unmeasured. The new named control below
+documents one retained required algorithm omitted from the earlier checklist,
+with the existing packet/reference, not an image/settings grid. Parity stays open.
+
+[The initial caller CMYK measurement](WARM-JPEG-CALLER-CMYK.md) demonstrated the largest
 gap:8.522x/upper8.986x,2817.13/330.56us,1,635,373B/op. All four canonical ink
 channels and normal/scalar public CLI are exact, with varying black preserved.
 Complete fresh caller ownership/decode/packing/release are timed on one CPU.
@@ -128,8 +139,8 @@ All four measure complete output ownership and allocations with equivalent
 delivery. The two lossless cases and photograph VP8 independently pass; the later
 bounded-model diagram result is the open comparison above. Lossless sizes are now 2.394x/2.090x the exact native packets; VP8
 sizes are 1.212x/1.167x at matched source quality. The preceding lossless change replaces only the five affected timing proofs;
-other production paths and qualification evidence are reused. Known scope is now246 named
-cases:223 numeric plus23 unmeasured. Stop these three time-passing cases unless
+other production paths and qualification evidence are reused. Known scope is now247 named
+cases:224 numeric plus23 unmeasured. Stop these three time-passing cases unless
 their relevant production path changes; compression-size work remains required.
 
 The two [shared-budget codec boundaries](WARM-SHARED-BUDGET.md) are now measured:
@@ -218,6 +229,17 @@ Five representatives cover the required JPEG compatibility algorithms; CMYK, YCC
   existing RGB projection; confirm native sample-grid equivalence before timing.
 - `JpegDecode/410Resident`: quarter-width, half-height chroma (JPEG factors 4×2,
   not video pixel format 4×4); confirm native sample-grid equivalence before timing.
+
+The accepted full-resolution CMYK caller selector exposes one concrete omitted
+required path: `JpegSamplesDecode/Ycck420RgbResident` (**UNMEASURED**). SourceYcck
+and outputRgb reject raw byte packing; the retained WriteCmykSamples path performs
+centered chroma expansion, binary64 matrix/inversion/black and directRGB24 stores.
+Neither owned-RGBA YCCK SIMD nor caller YCbCr420 RGB measures that complete public
+boundary. Reuse the existing YCCK420 packet and analytical RGB; establish equivalent
+fresh native RGB24 ownership/normalization and preserve the approved fixed-fixture
+quality bound before timing. This single additional case changes246to247; no
+new image, shape, depth, filter, quality or sampling grid. Other sampling/orientation
+combinations retain correctness coverage, without a Cartesian timing expansion.
 
 Baseline/progressive analytical and live FFmpeg compatibility checks cover these
 layouts; they are not performance confirmations. Reuse the existing source
