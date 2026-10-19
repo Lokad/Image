@@ -4,7 +4,7 @@ using System.Text.Json;
 using Lokad.Image;
 
 // Original development worker; no bindings or native assets enter Lokad.Image.
-internal sealed class NativeWarmReference : IDisposable
+internal sealed partial class NativeWarmReference : IDisposable
 {
     private readonly Process process;
     private readonly Task<string> errors;
@@ -334,6 +334,7 @@ internal sealed class NativeWarmReference : IDisposable
             || (sample.CpuElapsedNanoseconds is { } cpuElapsed && (cpuElapsed <= 0 || !double.IsFinite(cpuElapsed)))
             || sample.Cpu != Ready.GetProperty("cpu").GetInt32()
             || (Ready.GetProperty("operation").GetString() is "png-encode" or "png-smallest8-encode" or "png-smallest16-encode" or "png-fast16-encode" or "png-store16-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "jpeg-encode" or "jpeg-gray-encode" or "jpeg-restart-encode" or "jpeg-samples-encode" or "webp-encode" or "webp-opaque-encode" or "webp-lossless-encode" or "png-identify" or "jpeg-identify" or "webp-identify" or "png-stream-identify" ? sample.OutputStride != 0 || sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32()
+                : Ready.GetProperty("operation").GetString() == "jpeg-gray-samples-decode" ? sample.OutputStride != 513 || sample.OutputBytes != 513 * 259
                 : sample.OutputStride < (Ready.GetProperty("operation").GetString() is "nearest-resize" or "bilinear-resize" or "bicubic-resize" or "crop" or "png-stream-crop-fit" or "png-stream16-crop-fit" ? Ready.GetProperty("outputWidth").GetInt32()
                     : Ready.GetProperty("operation").GetString() is "quarter-turn-cw" or "quarter-turn-ccw" or "transpose" or "transverse" ? 259 : HorizontalFlipInput.Width) * (Ready.GetProperty("depth").GetInt32() / 8) * 4)
             || (Ready.GetProperty("operation").GetString() is "png-stream-decode" or "png-stream16-decode" or "png-stream-crop-fit" or "png-stream16-crop-fit" && sample.OutputBytes != Ready.GetProperty("outputBytes").GetInt32())

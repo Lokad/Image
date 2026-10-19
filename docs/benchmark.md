@@ -1,8 +1,8 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 216 retained numeric rows contain **69 current
-parity confirmations, 146 measured gaps and 1 confidence-open cases**;
+conservative upper ≤1x**. The 217 retained numeric rows contain **69 current
+parity confirmations, 147 measured gaps and 1 confidence-open cases**;
 all numeric rows have current evidence after the
 [input reconciliation](../benchmarks/WARM-INPUT-RECONCILIATION.md). Twenty-two prior
 rows were refreshed on the same qualified immutable build: JPEG Identify and
@@ -26,8 +26,15 @@ JPEG bytes stay **74,040/52,093**, with unchanged quality/alpha gates. Both rema
 gaps; no long repeat or production/package rebuild. A long-lived finite caller
 budget and its resident-input/source reservation are prepared outside timing.
 Direct sample decoding, JPEG compatibility, async I/O, inspection, drawing and
-text now account for **twenty-seven pending representatives**, with no grid.
+text now account for **twenty-six pending representatives**, with no grid.
 Existing numeric evidence is reused where paths remain unchanged.
+
+[Caller grayscale JPEG decoding](../benchmarks/WARM-JPEG-GRAY-SAMPLES-DECODE.md)
+now has a qualified short: **1.324× /273,422B/op**, complete fresh132,867-byte
+GRAY8 output on both sides. Destination allocation, native row packing and owner
+release are timed; no RGBA intermediate. Exact managed pixels, native CLI delivery,
+existing decoder gates, padding and independent owners pass. This adds one numeric
+row without changing production or invalidating evidence;26boundaries remain.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end
@@ -132,9 +139,9 @@ Latest measurements: [three single-owner edits](../benchmarks/WARM-EDIT-CONFIDEN
 independently close transpose RGBA8 at**0.995x upper**. Half turn RGBA8 remains a
 small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../benchmarks/WARM-PNG-RGB-TRANSPARENCY-CONFIRM.md)
 retains its1.012x mean gap/1.014x upper. Current totals are **69 passes /
-146 gaps / 1 confidence open / 0 prior-production rows**.
+147 gaps / 1 confidence open / 0 prior-production rows**.
 Every actual/outlier and both quiet guards remain; unchanged qualification is reused.
-The27 named new boundaries remain unmeasured; stop current passing paths.
+The26 named new boundaries remain unmeasured; stop current passing paths.
 
 **Decode and metadata**
 
@@ -201,6 +208,7 @@ The27 named new boundaries remain unmeasured; stop current passing paths.
 | [PNG opaque gray2 → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 71.73 | 106.38 | 0.674 / 0.679 | 616 | Parity confirmed |
 | [PNG opaque gray4 → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 116.09 | 169.54 | 0.685 / 0.698 | 872 | Parity confirmed |
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-GRAY-CURRENT.md) | 973.44 | 682.79 | 1.426 / 1.459 | 672,186 | Gap (short; qualified) |
+| [JPEG gray → caller GRAY8](../benchmarks/WARM-JPEG-GRAY-SAMPLES-DECODE.md) | 856.64 | 646.91 | 1.324 / 1.449 | 273,422 | Gap (short; qualified) |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,202.77 | 1,008.96 | 1.192 / 1.315 | 757,345 | Gap (short; qualified) |
 | [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,378.07 | 1,014.38 | 1.359 / 1.446 | 761,720 | Gap (short; qualified) |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,510.49 | 1,351.29 | 1.118 / 1.263 | 829,148 | Gap (short; qualified) |

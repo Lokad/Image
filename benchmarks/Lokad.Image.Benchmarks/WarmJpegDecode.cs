@@ -22,6 +22,7 @@ public class WarmJpegDecode
     [ParamsSource(nameof(Cases))] public WarmJpegDecodeCase Case { get; set; }
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
+    private WarmJpegSampleDecode? sampleOutput;
     private byte[] encoded = [], managedPixels = [], nativePixels = [];
     private NativeWarmSample[] before = [];
     private JsonElement sourceIdentity;
@@ -210,6 +211,13 @@ public class WarmJpegDecode
             || GCSettings.IsServerGC || Environment.GetEnvironmentVariable("DOTNET_TieredCompilation") != "0"
             || !GC.GetConfigurationVariables().TryGetValue("ConcurrentGC", out var concurrent) || Convert.ToBoolean(concurrent))
             throw new InvalidOperationException("JPEG decode requires one CPU, optimized JIT and non-concurrent workstation GC.");
+        var sampleMode = Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_SAMPLE_OUTPUT");
+        if (sampleMode is not null)
+        {
+            if (sampleMode != "gray-v1" || Case != WarmJpegDecodeCase.OwnedDecodeGray)
+                throw new InvalidOperationException("Caller gray output requires gray-v1 and OwnedDecodeGray.");
+            sampleOutput = new WarmJpegSampleDecode(); sampleOutput.Setup(cpu, smoke, sampleCount); return;
+        }
         state = new JpegBenchmarkCase();
         try
         {
@@ -404,6 +412,7 @@ public class WarmJpegDecode
     [Benchmark]
     public int Managed()
     {
+        if (sampleOutput is not null) return sampleOutput.Apply();
         using var result = DecodeManaged();
         return result.Stride * result.Height ^ result.GetRow8(0)[513 * 2];
     }
@@ -411,6 +420,7 @@ public class WarmJpegDecode
     [GlobalCleanup]
     public void Cleanup()
     {
+        if (sampleOutput is not null) { sampleOutput.Cleanup(); return; }
         try
         {
             if (!ready) return;

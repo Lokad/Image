@@ -1,10 +1,10 @@
 # Material warm coverage
 
 Updated 2026-10-19. The **warm single-CPU parity objective remains open**:
-69 independent passes,146 measured mean gaps and one confidence-open case across
-all216 current numeric rows; no prior-production row remains. The
+69 independent passes,147 measured mean gaps and one confidence-open case across
+all217 current numeric rows; no prior-production row remains. The
 [three-table summary](../docs/benchmark.md) contains125 current independent
-observations and91 qualified shorts.27named new boundaries are unmeasured.
+observations and92 qualified shorts.26named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
 
 [Caller-RGB MCU preparation](WARM-JPEG-CALLER-MCU.md) improves the largest known
@@ -16,7 +16,7 @@ old scalar/tight/callback/cancelable/non420 samplers remain. Source/precision/wo
 owners and normal/scalar native gates pass. All4,169tests/OS,109affected hardware-off
 checks/OS and same actual private package consumer/all3examples pass on both OS.
 RGBA/shared-budget JPEG encoding and all other executed paths retain evidence;
-all69passing cases stop until affected. Full216numeric/27pending scope remains.
+all69passing cases stop until affected. That round retained216numeric/27pending; the caller-gray row below makes217/26.
 
 [Input reconciliation](WARM-INPUT-RECONCILIATION.md) refreshes the remaining22
 prior rows after shared JPEG parsing and final encoded-input copy removal.
@@ -80,7 +80,7 @@ delivery. The two lossless cases and photograph VP8 independently pass; the late
 bounded-model diagram result is the open comparison above. Lossless sizes are now 2.394x/2.090x the exact native packets; VP8
 sizes are 1.212x/1.167x at matched source quality. The preceding lossless change replaces only the five affected timing proofs;
 other production paths and qualification evidence are reused. Known scope is now243 named
-cases:216 numeric plus27 unmeasured. Stop these three time-passing cases unless
+cases:217 numeric plus26 unmeasured. Stop these three time-passing cases unless
 their relevant production path changes; compression-size work remains required.
 
 The two [shared-budget codec boundaries](WARM-SHARED-BUDGET.md) are now measured:
@@ -94,17 +94,25 @@ per-operation limits remain. Two live owners/packets, exact retained charges,
 surviving outputs, source stability and temporary-memory/work settlement pass.
 No new case/grid, native/production/selector build or repeated full package proof.
 Only benchmark harness inputs changed; existing executed production evidence stays
-valid.27new boundaries remain unmeasured. The original unbudgeted paths are reused.
+valid.26new boundaries remain unmeasured. The original unbudgeted paths are reused.
 
-Direct JPEG sample decoding adds two further **unmeasured** representatives:
-`JpegSamplesDecode/GrayscaleResident` reuses `WarmJpegDecode/OwnedDecodeGray`, and
-`JpegSamplesDecode/Rgb420Resident` reuses `WarmJpegDecode/NativeDecode420`.
-Each includes a fresh caller destination, complete decode and independent output
-lifetime, with equivalent native gray/RGB sample delivery. They exercise the
-distinct single-channel copy and three-channel color-writing boundaries without
-an RGBA frame. Packed rows, original inputs/settings and existing JPEG quality
-gates are fixed; padded rows and opt-in orientation have correctness coverage.
-JPEG sample decoding now also supports CMYK, as described below.
+Direct JPEG sample decoding has two named representatives.
+`JpegSamplesDecode/GrayscaleResident` reuses `WarmJpegDecode/OwnedDecodeGray`:
+[current qualified short](WARM-JPEG-GRAY-SAMPLES-DECODE.md) measures1.324x,
+upper1.449x,273,422B/op for fresh132,867-byte GRAY8 outputs. Native software
+MJPEG includes zeroed destination allocation, decode, row packing/copy and release
+of decoder/caller owners. Exact qualified managed pixels, normal/scalar native
+gates, native CLI delivery, padding/source and independent surviving owners pass.
+One tooling harness/native build; production and compiled selector reused.
+No older evidence is invalidated; unchanged4,169tests/OS and actual package both
+OS remain qualified. No long repeat for this above-one mean.
+`JpegSamplesDecode/Rgb420Resident` remains **unmeasured**, reusing
+`WarmJpegDecode/NativeDecode420`: fresh packed caller RGB, complete color writing
+and independent output lifetime with equivalent native delivery. It exercises
+three-channel color normalization absent from the single-channel copy, without
+an RGBA frame. Packed rows, original input/settings and JPEG quality gates stay
+fixed; padded rows and opt-in orientation have correctness coverage.
+JPEG sample decoding also supports CMYK, as described below.
 
 Direct JPEG sample encoding adds two now **screened** representatives:
 `JpegSamplesEncode/GrayscaleResident` uses the fixed grayscale projection and the
@@ -113,7 +121,7 @@ uses the fixed opaque RGB projection and FFmpeg's 4:2:0 reference. Retain existi
 quality/size matching, with equivalent raw sample delivery, complete row
 normalization, streaming and independent encoded output ownership. The cases
 cover single-component samples and packed RGB conversion, without a settings grid.
-The two direct-sample decode boundaries above remain unmeasured; the two shared-budget paths now have the qualified shorts above. The [current sample screens](WARM-JPEG-CALLER-MCU.md) measure gray1.162x/upper1.422x,
+The direct RGB sample decode above remains unmeasured; caller gray and both shared-budget paths have the qualified shorts above. The [current sample screens](WARM-JPEG-CALLER-MCU.md) measure gray1.162x/upper1.422x,
 155,007B/op and RGB4201.328x/upper1.408x,297,894B/op, after the33.7% RGB MCU win. Both are mean gaps, so no long
 confirmation follows. Native raw-input adapters use the same pinned libraries
 and exact frozen packets; each operation includes necessary normalization/coding

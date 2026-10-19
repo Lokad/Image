@@ -135,6 +135,7 @@ def render():
         row('PNG opaque gray2 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray2', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG opaque gray4 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('JPEG baseline gray', 'warm-jpeg-gray-current-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-GRAY-CURRENT.md', verification='Gap (short; qualified)'),
+        row('JPEG gray → caller GRAY8', 'warm-jpeg-gray-samples-decode-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-GRAY-SAMPLES-DECODE.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
@@ -303,11 +304,11 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 216
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 217
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-19. The current goal is **warm single-CPU parity: independent
-conservative upper ≤1x**. The 216 retained numeric rows contain **{parity_count} current
+conservative upper ≤1x**. The 217 retained numeric rows contain **{parity_count} current
 parity confirmations, {gap_count} measured gaps and {confidence_count} confidence-open cases**;
 all numeric rows have current evidence after the
 [input reconciliation](../benchmarks/WARM-INPUT-RECONCILIATION.md). Twenty-two prior
@@ -332,8 +333,15 @@ JPEG bytes stay **74,040/52,093**, with unchanged quality/alpha gates. Both rema
 gaps; no long repeat or production/package rebuild. A long-lived finite caller
 budget and its resident-input/source reservation are prepared outside timing.
 Direct sample decoding, JPEG compatibility, async I/O, inspection, drawing and
-text now account for **twenty-seven pending representatives**, with no grid.
+text now account for **twenty-six pending representatives**, with no grid.
 Existing numeric evidence is reused where paths remain unchanged.
+
+[Caller grayscale JPEG decoding](../benchmarks/WARM-JPEG-GRAY-SAMPLES-DECODE.md)
+now has a qualified short: **1.324× /273,422B/op**, complete fresh132,867-byte
+GRAY8 output on both sides. Destination allocation, native row packing and owner
+release are timed; no RGBA intermediate. Exact managed pixels, native CLI delivery,
+existing decoder gates, padding and independent owners pass. This adds one numeric
+row without changing production or invalidating evidence;26boundaries remain.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end
@@ -440,7 +448,7 @@ small mean gap; clockwise RGBA16 still straddles. [RGB8 PNG transparency](../ben
 retains its1.012x mean gap/1.014x upper. Current totals are **{parity_count} passes /
 {gap_count} gaps / {confidence_count} confidence open / {reconfirm_count} prior-production rows**.
 Every actual/outlier and both quiet guards remain; unchanged qualification is reused.
-The27 named new boundaries remain unmeasured; stop current passing paths.
+The26 named new boundaries remain unmeasured; stop current passing paths.
 
 **Decode and metadata**
 
