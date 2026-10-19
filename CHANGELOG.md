@@ -3,7 +3,8 @@
 ## 0.2.0 — Unreleased
 
 - Explicit OpenType text layout for supported Latin/Hebrew/Arabic font tables,
-  with bidirectional order, joining, ligatures, marks and line alignment.
+  with bidirectional order, joining, ligatures, marks, alignment and finite-grid
+  fitting with shared admission and cumulative work across trials.
 
 - Caller-owned `IMemoryBudget` hooks across codecs, inspection, editing and text;
   live capacities and retained results stay charged until explicit disposal.

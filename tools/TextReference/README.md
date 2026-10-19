@@ -24,8 +24,11 @@ compatibility task. Raw outer advance rectangles are retained, including their
 different trailing-leading policy.
 
 The public comparison explicitly selects `TextShaping.OpenType` and maps line
-alignment by name. Eleven controls currently pass on Windows/Linux; constrained
-fitting stays a failure until the public fitting boundary is implemented.
+alignment by name. All twelve controls pass on Windows/Linux. Constrained fitting
+uses `TryFit` with a 96×30 area, sizes 24–8 px and 0.25 px steps. Public reference
+measurement/renderer observations select the same 16.75 px candidate. Reference
+logical line boxes follow the explicit face-metrics policy; space advance boxes
+are excluded from ink. No raster is allocated during the fitting search.
 
 Require exact glyph/source-cluster sequences and line breaks, glyph positions
 within 1/64 pixel, and raster edges within one pixel. On the union of nonzero-

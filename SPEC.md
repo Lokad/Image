@@ -20,7 +20,7 @@ from required future functionality.
 | JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4×1) / 4:1:0 (4×2) sampling |
 | Stream extensions | Async Identify/Decode/Encode and fixed-workspace InspectHeaders implemented in development | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
 | Drawing/compositing | Implemented in development | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
-| Text | Supplied TrueType, legacy/OpenType layout, Latin/Hebrew/Arabic shaping, alignment and 8/16-bit rendering in development; fitting and full compatibility qualification pending | Supplied faces, alignment/style, wrapping/line spacing, reliable bounds/fitting, combining marks and bidirectional/shaped text including Arabic |
+| Text | Supplied TrueType, legacy/OpenType layout, Latin/Hebrew/Arabic shaping, alignment/fitting and 8/16-bit rendering in development; full replacement/performance qualification pending | Supplied faces, alignment/style, wrapping/line spacing, reliable bounds/fitting, combining marks and bidirectional/shaped text including Arabic |
 | Failure details | Implemented in development | Typed exhausted-limit and unsupported-feature categories with recognized codec when known |
 | Shared admission | Implemented in development | ImageBudget codec entry points and caller reservations; coarse per-operation reservation, cumulative charged work and independently retained BudgetedImage outputs |
 | Cooperative memory | Implemented in development; qualification ongoing | Borrowed host-independent shared-root hooks, pre-allocation capacity/peak admission and explicit retained-image/font/layout lifetime accounting across public operations |
@@ -239,7 +239,23 @@ consume the same retained placements and outlines.
 glyphs. `LayoutBounds` covers nominal line boxes and advances; `InkBounds` covers
 actual quadratic extrema, excluding spaces. `Bounds` is their union, preserving
 negative overhangs. `TextBounds.Translate` positions bounds, and `FitsInside`
-checks overflow. No scale-to-fit search or raster allocation is implicit.
+checks overflow. No fit search or raster allocation is implicit in `Create`.
+
+`TextLayout.TryFit(font, text, width, height, out layout, options,
+minimumFontSize: 1, fontSizeStep: .25)` searches a finite descending size grid
+starting at `options.FontSize` and including the exact minimum. It returns the
+largest fitting candidate, or false/null when no completed candidate fits.
+Wrapping is capped at the target width. Fit uses the union `Bounds` extent,
+including ink overhang: position the returned layout at
+`(-layout.Bounds.X, -layout.Bounds.Y)` within the target area. Sizes need not
+have a monotonic fit predicate across wrapping discontinuities.
+
+The potential candidate count is bounded by `MaxContainerItems`. One retained
+owner/admission context precedes allocation and survives a successful result.
+Rejected geometry/capacities release before the next trial; work remains cumulative.
+No image canvas or intermediate retained layout is created. Limits, admission
+refusal, cancellation, unsupported features and allocation failures terminate
+the call; they never trigger a lower-size retry or become a false/no-fit result.
 
 Outlines follow the public [glyf definition](https://learn.microsoft.com/en-us/typography/opentype/spec/glyf):
 packed/repeated flags, implied quadratic points, component transforms and point

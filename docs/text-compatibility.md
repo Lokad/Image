@@ -1,11 +1,11 @@
 # Supplied-font compatibility qualification
 
-Explicit `TextShaping.OpenType` now passes **eleven of twelve** fixed controls on
+Explicit `TextShaping.OpenType` now passes **all twelve** fixed controls on
 Windows/Linux: Latin kerning, multiline/empty CRLF, narrow long-word wrapping,
 line spacing, center/end alignment, supplied bold/italic faces, combining marks,
-mixed Hebrew/Latin/digits and joined Arabic with marks/digits. Constrained-area
-fitting remains open: the prepared layout passes its pixel/measurement control,
-but a qualified fitting API is still required.
+mixed Hebrew/Latin/digits, joined Arabic with marks/digits and constrained-area
+fitting. The [fitting qualification](text-fitting-qualification.md) records the
+finite size grid, ownership/failure tests and matching reference decision.
 
 The bounded comparison uses DejaVu Sans 2.37 regular/bold/oblique, Fonts 2.1.3,
 ImageSharp.Drawing 2.1.7 and ImageSharp 3.1.12. Fonts/license stay in ignored
@@ -15,7 +15,7 @@ is separate from the solution and production package and makes no timings.
 
 Glyph/grapheme-cluster sequences and line breaks agree exactly. Maximum glyph
 position error is 0.0000011 pixel, union-ink alpha RMSE is at most 9.701/255,
-coverage error is below 1.421%, and raster bounds agree. The unchanged gates
+coverage error is below 1.550%, and raster bounds agree. The unchanged gates
 require positions within 1/64 pixel, raster edges within one pixel, mean absolute
 alpha error ≤8/255, RMSE ≤16/255 and coverage error ≤2%. Reference DPI, hinting,
 line advance and leading origin are explicit; different default line boxes are

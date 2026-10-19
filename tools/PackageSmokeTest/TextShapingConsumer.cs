@@ -26,5 +26,11 @@ internal static class TextShapingConsumer
         using var aligned = TextLayout.Create(plain, "A", new() { FontSize = 10, WrapWidth = 30, Alignment = TextAlignment.Center });
         if (wrapped.LineCount != 2 || wrapped.GetLine(0).AdvanceWidth != 6 || aligned.GetGlyph(0).X != 12)
             throw new Exception("Package line-boundary positioning/alignment differ.");
+        if (!TextLayout.TryFit(plain, "AV", 20, 5, out var fitted, new() { FontSize = 10, Shaping = TextShaping.OpenType, Limits = limits },
+            minimumFontSize: 4, fontSizeStep: 1)) throw new Exception("Package fitting unexpectedly failed.");
+        using (fitted)
+            if (fitted.FontSize != 5 || !fitted.Bounds.Translate(-fitted.Bounds.X, -fitted.Bounds.Y).FitsInside(20, 5))
+                throw new Exception("Package fitting size/bounds differ.");
+        if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Package fitting ownership differs.");
     }
 }

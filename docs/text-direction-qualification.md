@@ -2,7 +2,8 @@
 
 This records the internal direction/joining checkpoint before public integration.
 The current [OpenType layout mode](text-shaping-qualification.md) uses these
-primitives; fitting and replacement qualification remain open.
+primitives. [Fitting](text-fitting-qualification.md) is qualified separately;
+replacement qualification remains open.
 
 The independently implemented paragraph resolver follows
 [Unicode 17 UAX #9 revision 51](https://www.unicode.org/reports/tr9/tr9-51.html):

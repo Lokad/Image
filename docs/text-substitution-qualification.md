@@ -42,4 +42,4 @@ Retained SHA-256 identities:
 - `p2b-qualified-linux.tar.gz`: `fd272d6dee7beccdd0e182efce2e2c6ca1d00840dfad2ec638175ebdeefefad5`.
 
 Published 0.1.0 is preserved. [Public shaping qualification](text-shaping-qualification.md)
-records subsequent integration; fitting remains outstanding.
+records subsequent integration; [fitting](text-fitting-qualification.md) is also qualified.

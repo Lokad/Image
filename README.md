@@ -16,7 +16,7 @@ implemented, with no NuGet dependencies, unsafe code or native bindings.
   fixed-workspace dimension/orientation inspection with `InspectHeaders`.
 - **Text (in development):** supplied TrueType faces, wrapping, alignment, pixel
   bounds and rendering on 8/16-bit canvases. Explicit OpenType mode adds Latin,
-  Hebrew and Arabic shaping with bidirectional layout; fitting remains pending.
+  Hebrew and Arabic shaping with bidirectional layout and constrained-area fitting.
 
 GIF, animation, ICC color management and metadata round-tripping are deferred.
 [SPEC.md](SPEC.md) defines current support and planned still-image extensions,

@@ -46,13 +46,27 @@ var observations = new List<object>();
 try {
  foreach (var c in cases) {
   var style = c.Face == 1 ? SixLabors.Fonts.FontStyle.Bold : c.Face == 2 ? SixLabors.Fonts.FontStyle.Italic : SixLabors.Fonts.FontStyle.Regular;
-  var font = families[c.Face].CreateFont(c.Size, style);
   var face=managedFonts[c.Face];
-  var bodyHeight=(face.Ascender-(double)face.Descender)*c.Size/face.UnitsPerEm;
-  var lineAdvance=(face.Ascender-(double)face.Descender+Math.Max(0,face.LineGap))*c.Size/face.UnitsPerEm*c.Spacing;
+  var managedOptions=new LOptions { FontSize=c.Size,WrapWidth=c.Wrap<0?double.PositiveInfinity:c.Wrap,LineSpacing=c.Spacing,Kerning=true,
+   Shaping=TextShaping.OpenType,Alignment=c.Alignment switch {
+    TextAlignment.Center=>Lokad.Image.TextAlignment.Center,TextAlignment.End=>Lokad.Image.TextAlignment.End,_=>Lokad.Image.TextAlignment.Start } };
+  TextLayout prepared; double referenceSize=c.Size; object? fitting=null;var fitDecision=true;
+  if(c.Name=="ConstrainedFit") {
+   if(!TextLayout.TryFit(face,c.Text,c.Wrap,30,out var fitted,managedOptions,minimumFontSize:8,fontSizeStep:.25))throw new InvalidDataException("Managed fitting unexpectedly failed.");
+   prepared=fitted;
+   var selected=FittingReference.Find(families[c.Face],style,face,c.Text,c.Size,8,.25,c.Wrap,30,c.Spacing)
+    ??throw new InvalidDataException("Reference fitting unexpectedly failed.");
+   referenceSize=selected.FontSize;fitDecision=prepared.FontSize==referenceSize;
+   fitting=new {TargetWidth=c.Wrap,TargetHeight=30,MinimumFontSize=8,MaximumFontSize=c.Size,FontSizeStep=.25,
+    ManagedFontSize=prepared.FontSize,Reference=selected,ExactSizeDecision=fitDecision};
+  } else prepared=TextLayout.Create(face,c.Text,managedOptions);
+  using var layout=prepared;
+  var font = families[c.Face].CreateFont((float)referenceSize, style);
+  var bodyHeight=(face.Ascender-(double)face.Descender)*referenceSize/face.UnitsPerEm;
+  var lineAdvance=(face.Ascender-(double)face.Descender+Math.Max(0,face.LineGap))*referenceSize/face.UnitsPerEm*c.Spacing;
   // Explicitly match the chosen face-metrics line boxes. Do not turn different
   // default line-height/leading policies into production compatibility changes.
-  var referenceSpacing=(float)(lineAdvance/c.Size);
+  var referenceSpacing=(float)(lineAdvance/referenceSize);
   var referenceOriginY=(float)(-(lineAdvance-bodyHeight)/2);
   var options = new SOptions(font) { Dpi=72, Origin=new(0,referenceOriginY), HintingMode=HintingMode.None,
    KerningMode=KerningMode.Standard, TextDirection=TextDirection.Auto, WordBreaking=WordBreaking.BreakWord,
@@ -60,10 +74,6 @@ try {
    HorizontalAlignment=HorizontalAlignment.Left, VerticalAlignment=VerticalAlignment.Top };
   var recorder=new Recorder(); new TextRenderer(recorder).RenderText(c.Text, options);
   TextMeasurer.TryMeasureCharacterAdvances(c.Text, options, out var advances);
-  using var layout=TextLayout.Create(managedFonts[c.Face], c.Text, new LOptions {
-   FontSize=c.Size, WrapWidth=c.Wrap<0?double.PositiveInfinity:c.Wrap, LineSpacing=c.Spacing, Kerning=true,
-   Shaping=TextShaping.OpenType,Alignment=c.Alignment switch {
-    TextAlignment.Center=>Lokad.Image.TextAlignment.Center,TextAlignment.End=>Lokad.Image.TextAlignment.End,_=>Lokad.Image.TextAlignment.Start } });
   using var managed=ImageBuffer.Create(width,height,8);
   ImageDrawing.DrawText(managed,layout,8,8,RgbaColor.From8(20,40,60));
   using var reference=new Image<Rgba32>(width,height);
@@ -92,23 +102,22 @@ try {
   double? positionError=exactGlyphSequence?0:null;
   if(exactGlyphSequence)for(var i=0;i<managedGlyphs.Length;i++) {
    var glyph=managedGlyphs[i];var metrics=face.GetGlyphMetrics(glyph.GlyphIndex);if(!metrics.HasOutline)continue;
-   var scale=c.Size/(double)face.UnitsPerEm;var native=recorder.Glyphs[i].Bounds;
+   var scale=layout.FontSize/face.UnitsPerEm;var native=recorder.Glyphs[i].Bounds;
    positionError=Math.Max(positionError!.Value,Math.Max(Math.Abs(glyph.X+metrics.LeftSideBearing*scale-native.X),Math.Abs(glyph.BaselineY-metrics.YMax*scale-native.Y)));
   }
   var meanAlpha=absolute/(double)Math.Max(1,union);var rmse=Math.Sqrt(squares/(double)Math.Max(1,union));
   var coverageError=Math.Abs(managedCoverage-referenceCoverage)/(double)Math.Max(1,referenceCoverage);
   var boundsError=lm.EdgeDifference(lr);
-  var missing=c.Name=="ConstrainedFit"?"fit API":null;
   var pass=exactGlyphSequence&&exactSourceClusters&&positionError<=1.0/64&&layout.LineCount==TextMeasurer.CountLines(c.Text,options)
-   &&meanAlpha<=8&&rmse<=16&&coverageError<=0.02&&boundsError<=1&&missing is null;
+   &&meanAlpha<=8&&rmse<=16&&coverageError<=0.02&&boundsError<=1&&fitDecision;
   observations.Add(new { c.Name,c.Text,c.Size,c.Wrap,c.Spacing,Alignment=c.Alignment.ToString(),Font=files[c.Face],
-   Managed=new { layout.LineCount,layout.LayoutBounds,layout.InkBounds,layout.Bounds,
+   Fitting=fitting,Managed=new { layout.FontSize,layout.LineCount,layout.LayoutBounds,layout.InkBounds,layout.Bounds,
     Glyphs=managedGlyphs,RasterBounds=lm.Value },
    Reference=new { ExplicitLineSpacing=referenceSpacing,ExplicitOriginY=referenceOriginY,LineCount=TextMeasurer.CountLines(c.Text,options),Advance=Rect(TextMeasurer.MeasureAdvance(c.Text,options)),
     Bounds=Rect(TextMeasurer.MeasureBounds(c.Text,options)),Glyphs=recorder.Glyphs,
     Advances=advances.ToArray().Select(a=>new { CodePoint=a.Codepoint.Value,a.GraphemeIndex,a.StringIndex,Bounds=Rect(a.Bounds) }).ToArray(),RasterBounds=lr.Value },
    Raster=new { UnionPixels=union,MeanAbsoluteAlpha=meanAlpha,AlphaRmse=rmse,RelativeCoverageError=coverageError,MaximumRasterEdgeDifference=boundsError },
-   Comparison=new {ExactGlyphSequence=exactGlyphSequence,ExactSourceClusters=exactSourceClusters,MaximumGlyphPositionError=positionError,Pass=pass},MissingPublicBoundary=missing });
+   Comparison=new {ExactGlyphSequence=exactGlyphSequence,ExactSourceClusters=exactSourceClusters,MaximumGlyphPositionError=positionError,Pass=pass} });
  }
 } finally { foreach(var font in managedFonts)font.Dispose(); }
 Console.WriteLine(JsonSerializer.Serialize(new {

@@ -150,7 +150,15 @@ Styles come from supplied faces. Add `Shaping = TextShaping.OpenType` for suppor
 Latin/Hebrew/Arabic shaping and bidirectional layout; `Direction` selects paragraph
 direction and `Alignment` controls line alignment. The default preserves legacy
 logical layout. [SPEC.md](../SPEC.md#supplied-truetype-fonts) defines supported font
-tables, wrapping and admission. Automatic fitting remains pending.
+tables, wrapping and admission.
+
+For a constrained area, call `TextLayout.TryFit(font, text, 240, 80, out var fitted,
+new TextOptions { FontSize = 24, Shaping = TextShaping.OpenType },
+minimumFontSize: 8, fontSizeStep: .25)`. On success, dispose `fitted` after use
+and draw it at `(-fitted.Bounds.X, -fitted.Bounds.Y)` relative to the target area.
+The largest fitting grid candidate is returned; false/null means none fits.
+Trials share work/admission and release rejected storage. Resource failure or
+cancellation terminates the call rather than trying a smaller candidate.
 
 For cooperative memory admission in 0.2.0 development, set
 `new ImageLimits { MemoryBudget = callerAdapter }` and pass these limits through

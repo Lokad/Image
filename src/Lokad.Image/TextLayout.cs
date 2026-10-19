@@ -48,8 +48,8 @@ public readonly record struct TextLine(int FirstGlyph, int GlyphCount, double Ba
 }
 
 /// <summary>Immutable positioned glyphs and decoded outlines; independent of caller text storage.</summary>
-/// <remarks>Unhinted default-instance outlines. No instruction execution, device-grid
-/// fitting or instruction execution. OpenType mode selects supported substitution,
+/// <remarks>Unhinted default-instance outlines, without device-grid fitting or
+/// font-instruction execution. OpenType mode selects supported substitution,
 /// positioning and bidirectional layout; legacy mode preserves logical order.
 /// Bounds use decoded curves, not declared glyph bounds. Source strings are not retained.</remarks>
 public sealed partial class TextLayout : IDisposable

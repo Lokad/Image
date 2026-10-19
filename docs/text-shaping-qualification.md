@@ -1,5 +1,8 @@
 # OpenType text layout qualification
 
+This records the public shaping checkpoint. [Subsequent fitting qualification](text-fitting-qualification.md)
+completes the twelve fixed controls within the declared font/table scope.
+
 `TextOptions.Shaping = TextShaping.OpenType` connects supplied-font substitution,
 positioning and Unicode direction rules to the public layout API. Measurement
 and rendering share retained placements/outlines. Latin, Hebrew and Arabic use
@@ -12,8 +15,8 @@ positioning at line boundaries and checks the resulting width. Start/center/end
 alignment and each line's paragraph direction are explicit. [SPEC.md](../SPEC.md#supplied-truetype-fonts)
 lists supported tables and typed unsupported cases, including other scripts,
 missing joining features, selected cursive/contextual positioning and mirrored
-glyphs without an encoded partner or supported font substitution. Fitting remains
-open; this is not general font compatibility or replacement readiness.
+glyphs without an encoded partner or supported font substitution. This checkpoint
+does not include fitting or prove general font compatibility/replacement readiness.
 
 Font tables borrow retained input. Temporary glyph/scalar/line workspace and
 retained output geometry use the same cooperative admission context. Preparation
@@ -32,8 +35,8 @@ passed both platform consumers, including authored Arabic layout/rendering,
 font disposal, shared admission and all three usage examples.
 
 The [fixed font comparisons](text-compatibility.md) pass eleven controls on both
-platforms; constrained fitting remains the sole missing public boundary in that
-set. No performance timing was measured. Existing historical timing evidence
+platforms at this checkpoint; fitting was qualified subsequently. No performance
+timing was measured. Existing historical timing evidence
 retains its original producers; new text paths still require qualification.
 
 Retained SHA-256 identities:

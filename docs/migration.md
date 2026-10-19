@@ -20,8 +20,10 @@ yet a claim of replacement readiness or performance parity for the expanded scop
 Text defaults to supplied-face logical layout with legacy kerning. Select
 `TextShaping.OpenType` for supported Latin/Hebrew/Arabic shaping and bidirectional
 layout; `Direction` and `Alignment` make paragraph flow and line alignment explicit.
-Unsupported font features fail with structured details. Constrained-area fitting
-and Lanczos3 remain pending; nearest/bilinear/bicubic are implemented.
+Unsupported font features fail with structured details. `TextLayout.TryFit`
+returns an owned layout on a finite size grid; translate its bounds origin into
+the target area. Limits/refusal remain terminal across fitting trials. Lanczos3
+remains pending; nearest/bilinear/bicubic are implemented.
 GIF/animation and ICC conversion remain deferred. EXIF reorientation is opt-in.
 Default option differences are accepted; select quality, sampling and orientation
 explicitly when their behavior matters. [SPEC.md](../SPEC.md) is authoritative;
