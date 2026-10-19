@@ -92,10 +92,14 @@ adapter with FFmpeg AVIO/descriptor APIs awaits its reference decision; complete
 packet parsing requires whole-input buffering. Numeric237/untimed17 is unchanged.
 A [completed current Reduce16 diagnostic](WARM-LANCZOS3-CURRENT-PROFILE.md) identifies
 horizontal filtering at43.4% of958 samples, vertical27.3%, Apply14.5%. These are
-sampling locations, not timing results. Next independent experiment: an admitted
-RGBA16 premultiplied source-row cache to avoid repeated work across overlapping
-windows, with exact sums, local/shared admission/cancellation/ownership preserved.
-One existing Reduce16 short first; no new image/settings grid or passing retune.
+sampling locations, not timing results. The [prepared-row trial](WARM-LANCZOS3-PREPARED-ROW-TRIAL.md)
+produced7.4%/3.8% gains with an extra row allocation and was rejected. Exact qualified
+source/binaries and native controls are restored;47 focused checks/OS pass. No
+numeric row is replaced. A scalar-FMA arithmetic prototype passes1,003 independent
+weighted-window controls (two need exact fallback), before SIMD integration. Next:
+certified double/FMA accumulation, one primitive, same four cases, original Q30
+plans and exact pixels; preserve work/memory/root/cancellation/ownership. No new
+image/settings grid or passing retune.
 
 A bounded audit of the accepted 0.2.0 additions identifies exactly three required
 paths absent from the older checklist; these are not a shape/depth/settings grid:

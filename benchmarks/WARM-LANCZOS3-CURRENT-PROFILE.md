@@ -11,13 +11,12 @@ CPU locations, **not scored timings or a new performance confirmation**.
 
 This supersedes the older coefficient-loop profile as optimization direction.
 The largest current measured gap remains Reduce16 at 1.836×; no numeric row or
-qualification changes. The horizontal pass recomputes RGBA16 premultiplication
-for overlapping source windows. Next bounded experiment: prepare one admitted
-premultiplied source row, reuse it through horizontal weighting, preserve exact
-signed sums and all limits/cancellation/ownership, then screen this existing case.
-Do not assume the additional memory traffic or allocation will be worthwhile.
-Retain the old path when selected before admission for insufficient local
-workspace; a cooperative admission refusal must terminate without fallback.
+qualification changes. The [prepared-row experiment](WARM-LANCZOS3-PREPARED-ROW-TRIAL.md) tested reuse of
+RGBA16 premultiplication across overlapping windows, but only saved7.4%/3.8% and
+added storage; it is rejected and the qualified producer is restored. Next is a
+larger arithmetic change: certified double/FMA accumulation with exact fallback,
+preserving Q30 plans, pixels and memory/work/cancellation/ownership guarantees.
+No timing or correctness claim follows from the proposed strategy alone.
 
 An initial longer capture ended with SIGTERM (-15) after retaining 1,495 samples;
 its benchmark exited successfully and raw data is retained. It is not presented

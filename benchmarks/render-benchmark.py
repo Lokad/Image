@@ -346,9 +346,11 @@ private package and all three examples on Windows/Linux. Published 0.1.0 is immu
 
 Largest measured gaps: Lanczos3 Reduce16 at **1.836x**, Reduce8 and current sparse
 CMYK at **1.829x**. A [current Reduce16 diagnostic](../benchmarks/WARM-LANCZOS3-CURRENT-PROFILE.md)
-places 43.4% of samples in horizontal filtering; the next bounded experiment targets
-repeated premultiplication across overlapping windows. Profiling supplies no timing
-or allocation claim. Optimize demonstrated gaps; stop passing cases.
+places 43.4% of samples in horizontal filtering. The [prepared-row trial](../benchmarks/WARM-LANCZOS3-PREPARED-ROW-TRIAL.md)
+was rejected: 7.4%/3.8% gains added storage and a duplicated path. Next is a bounded
+SIMD double/FMA accumulation experiment with certified error intervals and exact
+fallback. No pixel precision is relaxed. Profiling/arithmetic prototypes supply no
+new timing claim. Optimize demonstrated gaps; stop passing cases.
 
 Complete async PNG and lossless WebP outputs independently pass. WebP uses approved
 libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compressed
