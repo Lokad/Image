@@ -45,6 +45,7 @@ internal ref partial struct JpegDecoder
                 }
                 return result;
             }
+            if (TryRenderYcck420(result, source, invert)) return result;
             for (var y = 0; y < info.Height; y++)
             {
                 context.Work(info.Width * 32L);

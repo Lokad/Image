@@ -52,12 +52,14 @@ Three rows refreshed, one added; all70passing paths retain evidence and stop.
 was rejected as immaterial. Accepted production, current rows and qualification
 remain unchanged; no long repeat or package rerun.
 
-[YCCK420 complete decoding](../benchmarks/WARM-JPEG-YCCK420.md) now demonstrates
-the largest gap: **6.733x**, **4,761.24/707.13us**, **1,470,168B/op**. Exact managed
-pixels and complete native CLI/owner boundaries pass. The approved native-only
-chroma-transition bound is16, with4elsewhere/RMSE1.5 and exact alpha. Same fixed
-varying original projection; no new case/grid. Scope246cases,23unmeasured. All
-previous rows/qualification are reused; no producer build or package rerun.
+[Exact SIMD YCCK420 rows](../benchmarks/WARM-JPEG-YCCK-SIMD.md) cut elapsed time
+**76.1%**,4,761.24→1,135.97µs: **1.604x /upper1.636x**, **1,470,246B/op**.
+Exact managed pixels and the approved native-only transition bound remain.
+Four shared-dispatch CMYK controls refresh at1.391x/1.732x/1.113x/1.812x;
+all five remain short gaps. All4,202tests/OS,66affected hardware-off checks/OS
+and the same actual private package consumer/all three examples pass on both OS.
+Exactly five numeric rows change; all218other rows and70passing proofs are reused.
+Scope246cases,23unmeasured; no new image/grid. CMYK2D sparse is the largest gap.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end
@@ -233,11 +235,11 @@ The24 named new boundaries remain unmeasured; stop current passing paths.
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-GRAY-CURRENT.md) | 973.44 | 682.79 | 1.426 / 1.459 | 672,186 | Gap (short; qualified) |
 | [JPEG gray → caller GRAY8](../benchmarks/WARM-JPEG-CALLER-RGB420.md) | 857.87 | 646.88 | 1.326 / 1.445 | 273,422 | Gap (short; qualified) |
 | [JPEG 4:2:0 → caller RGB24](../benchmarks/WARM-JPEG-CALLER-RGB420.md) | 1,121.95 | 1,161.53 | 0.966 / 0.971 | 624,508 | Parity confirmed |
-| [JPEG Adobe CMYK, four full-resolution planes](../benchmarks/WARM-JPEG-HORIZONTAL-ROW.md) | 528.15 | 378.54 | 1.395 / 1.454 | 1,085,663 | Gap (short; qualified) |
-| [JPEG Adobe CMYK, one AC control](../benchmarks/WARM-JPEG-HORIZONTAL-ROW.md) | 671.44 | 388.99 | 1.726 / 1.853 | 1,085,662 | Gap (short; qualified) |
-| [JPEG Adobe CMYK, general transform control](../benchmarks/WARM-JPEG-HORIZONTAL-ROW.md) | 3,503.88 | 3,112.05 | 1.126 / 1.180 | 1,085,522 | Gap (short; qualified) |
-| [JPEG Adobe CMYK, two-dimensional sparse control](../benchmarks/WARM-JPEG-HORIZONTAL-ROW.md) | 795.30 | 437.20 | 1.819 / 1.928 | 1,085,656 | Gap (short; qualified) |
-| [JPEG YCCK420, full-resolution black](../benchmarks/WARM-JPEG-YCCK420.md) | 4,761.24 | 707.13 | 6.733 / 6.911 | 1,470,168 | Gap (short; qualified) |
+| [JPEG Adobe CMYK, four full-resolution planes](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 525.44 | 377.75 | 1.391 / 1.473 | 1,085,667 | Gap (short; qualified) |
+| [JPEG Adobe CMYK, one AC control](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 674.71 | 389.55 | 1.732 / 1.783 | 1,085,662 | Gap (short; qualified) |
+| [JPEG Adobe CMYK, general transform control](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 3,463.08 | 3,110.84 | 1.113 / 1.197 | 1,085,522 | Gap (short; qualified) |
+| [JPEG Adobe CMYK, two-dimensional sparse control](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 792.76 | 437.47 | 1.812 / 1.869 | 1,085,656 | Gap (short; qualified) |
+| [JPEG YCCK420, full-resolution black](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 1,135.97 | 708.06 | 1.604 / 1.636 | 1,470,246 | Gap (short; qualified) |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,202.77 | 1,008.96 | 1.192 / 1.315 | 757,345 | Gap (short; qualified) |
 | [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,378.07 | 1,014.38 | 1.359 / 1.446 | 761,720 | Gap (short; qualified) |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,510.49 | 1,351.29 | 1.118 / 1.263 | 829,148 | Gap (short; qualified) |

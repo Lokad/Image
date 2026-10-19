@@ -7,20 +7,21 @@ all223 current numeric rows; no prior-production row remains. The
 observations and97 qualified shorts.23named new boundaries are unmeasured.
 Reuse unchanged passing paths; no image or settings grid.
 
-[YCCK420 complete decoding](WARM-JPEG-YCCK420.md) now demonstrates the largest
-gap:6.733x/upper6.911x,4,761.24/707.13us,1,470,168B/op. It uses the already-named
-case and original varying projection, no new image/grid. Exact managed pixels,
-native CLI equality, independent owners and exact native phase model pass. The
-owner-approved native-only chroma-transition maximum16 keeps maximum4elsewhere,
-RMSE1.5 and exact alpha/managed pixels. Three actuals/both idle-v2/native brackets
-retained, no long repeat above one. All222prior rows and4,197test/61HWoff/package
-qualification are reused; production unchanged. Scope246=223numeric+23pending.
+[Exact SIMD YCCK420 rows](WARM-JPEG-YCCK-SIMD.md) reduce time76.1%,
+4,761.24→1,135.97us:1.604x/upper1.636x,1,470,246B/op. Exact original pixels,
+approved native-only transition16/interior4/RMSE1.5, source/owners/work remain.
+Four shared-dispatch CMYK gaps refresh at1.391x/1.732x/1.113x/1.812x.
+These five rows replace their prior measurements; all218other rows and70passing
+proofs are reused. One immutable producer/OS; frozen harness/native/selector/
+fixtures/CLI unchanged. All4,202tests/OS,66affected hardware-off checks/OS and
+the same actual Windows private package consumer/examples pass on both OS.
+Scope246=223numeric+23pending, unchanged. CMYK2D sparse1.812x is largest;
+its bounded prefix trial remains rejected. No new image/settings grid.
 
 [The bounded sparse-prefix trial](WARM-JPEG-SPARSE-PREFIX-TRIAL.md) was rejected:
 3.1% mean gain still left1.75x. The exact accepted source and producers are
 restored on both OS; all existing rows/qualification are reused. One current
-6sec profile and one3actual screen, no new case or full package rerun. Next
-resolve the already-listed YCCK420 delivery boundary before assuming a gap.
+6sec profile and one3actual screen, no new case or full package rerun. The later YCCK420 measurement and SIMD round supersede that next step.
 
 [Identical horizontal JPEG rows](WARM-JPEG-HORIZONTAL-ROW.md) improve the one-AC
 CMYK mean10.0%,746.37→671.44us, at1.726x. DC/general remain1.395x/1.126x,
@@ -194,12 +195,12 @@ encoding and editing remain unchanged. No unaffected operation was retimed.
 
 Five representatives cover the required JPEG compatibility algorithms; CMYK and YCCK have the current gaps above, three remain **unmeasured**:
 
-- `JpegDecode/CmykAdobeResident` (**measured**1.395x DC gap): four component planes, Adobe inversion and
+- `JpegDecode/CmykAdobeResident` (**measured**1.391x DC gap): four component planes, Adobe inversion and
   complete owned RGBA conversion from an original CMYK projection. The
   separately named horizontal, 2D sparse and all63-AC controls above cover each
   retained transform algorithm.
 
-- `JpegDecode/Ycck420Resident` (**measured**6.733x gap): subsampled color
+- `JpegDecode/Ycck420Resident` (**measured**1.604x gap): subsampled color
   reconstruction, explicit matrix and full-resolution black, original varying input.
 - `JpegSamplesDecode/CmykResident`: complete caller-owned canonical CMYK output;
   establish an equivalent native raw-component delivery boundary before timing.

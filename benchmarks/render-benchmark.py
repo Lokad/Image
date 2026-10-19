@@ -137,11 +137,11 @@ def render():
         row('JPEG baseline gray', 'warm-jpeg-gray-current-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-GRAY-CURRENT.md', verification='Gap (short; qualified)'),
         row('JPEG gray → caller GRAY8', 'warm-jpeg-caller-rgb420-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-CALLER-RGB420.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 → caller RGB24', 'warm-jpeg-caller-rgb420-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-CALLER-RGB420.md', True),
-        row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-horizontal-row-evidence.json', ['cases', 'CmykAdobe', -1], 'WARM-JPEG-HORIZONTAL-ROW.md', verification='Gap (short; qualified)'),
-        row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-horizontal-row-evidence.json', ['cases', 'CmykAdobeAc', -1], 'WARM-JPEG-HORIZONTAL-ROW.md', verification='Gap (short; qualified)'),
-        row('JPEG Adobe CMYK, general transform control', 'warm-jpeg-horizontal-row-evidence.json', ['cases', 'CmykAdobeGeneral', -1], 'WARM-JPEG-HORIZONTAL-ROW.md', verification='Gap (short; qualified)'),
-        row('JPEG Adobe CMYK, two-dimensional sparse control', 'warm-jpeg-horizontal-row-evidence.json', ['cases', 'CmykAdobeSparse2D', -1], 'WARM-JPEG-HORIZONTAL-ROW.md', verification='Gap (short; qualified)'),
-        row('JPEG YCCK420, full-resolution black', 'warm-jpeg-ycck420-evidence.json', ['cases', 'Ycck420', -1], 'WARM-JPEG-YCCK420.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobe', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeAc', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, general transform control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeGeneral', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, two-dimensional sparse control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeSparse2D', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
+        row('JPEG YCCK420, full-resolution black', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'Ycck420', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
@@ -365,12 +365,14 @@ Three rows refreshed, one added; all70passing paths retain evidence and stop.
 was rejected as immaterial. Accepted production, current rows and qualification
 remain unchanged; no long repeat or package rerun.
 
-[YCCK420 complete decoding](../benchmarks/WARM-JPEG-YCCK420.md) now demonstrates
-the largest gap: **6.733x**, **4,761.24/707.13us**, **1,470,168B/op**. Exact managed
-pixels and complete native CLI/owner boundaries pass. The approved native-only
-chroma-transition bound is16, with4elsewhere/RMSE1.5 and exact alpha. Same fixed
-varying original projection; no new case/grid. Scope246cases,23unmeasured. All
-previous rows/qualification are reused; no producer build or package rerun.
+[Exact SIMD YCCK420 rows](../benchmarks/WARM-JPEG-YCCK-SIMD.md) cut elapsed time
+**76.1%**,4,761.24→1,135.97µs: **1.604x /upper1.636x**, **1,470,246B/op**.
+Exact managed pixels and the approved native-only transition bound remain.
+Four shared-dispatch CMYK controls refresh at1.391x/1.732x/1.113x/1.812x;
+all five remain short gaps. All4,202tests/OS,66affected hardware-off checks/OS
+and the same actual private package consumer/all three examples pass on both OS.
+Exactly five numeric rows change; all218other rows and70passing proofs are reused.
+Scope246cases,23unmeasured; no new image/grid. CMYK2D sparse is the largest gap.
 
 `IdentifyAsync`/`DecodeAsync` now use asynchronous stream reads with bounded private
 input storage, complete validation and independent outputs; two named PNG8 front-end
