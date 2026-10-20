@@ -1,9 +1,9 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-20. Target: **warm single-CPU parity, independently confirmed
-conservative upper ≤1x**. The 237 numeric rows contain **72 passes,
-164 gaps and 1 confidence-open case**. The finite
-[material checklist](../benchmarks/WARM-COVERAGE.md) has 254 named cases, 17 unmeasured.
+conservative upper ≤1x**. The 238 numeric rows contain **72 passes,
+165 gaps and 1 confidence-open case**. The finite
+[material checklist](../benchmarks/WARM-COVERAGE.md) has 254 named cases, 16 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
@@ -11,7 +11,7 @@ These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
 is separate. **200 historical codec/edit rows do not yet requalify changed 0.2.0
 admission, disposal or governed storage.** Twenty-one current JPEG, four Lanczos3, two async
-input, four async output, one bicubic and five VP8 rows identify their current producers. Production
+input, four async output, one bicubic, five VP8 and one caller-owned-root row identify their current producers. Production
 qualification now passes 4,478 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
@@ -38,8 +38,14 @@ All five affected existing VP8 rows refresh, preserving exact pixels/work/cursor
 and the original short-input/cancelable path. A
 [prepared-double Lanczos trial](../benchmarks/WARM-LANCZOS3-PREPARED-FMA-TRIAL.md)
 is correct but 1.4% slower, at 154,894 B/op, and is rejected. Accepted production
-and all selected rows remain unchanged. Next: measure the already named shared-root
-two-retained-output boundary before deciding whether optimization is needed.
+and all selected rows remain unchanged. The already named
+[caller-owned-root operation](../benchmarks/WARM-COOPERATIVE-MEMORY.md) now measures
+two complete decodes with overlapping retained outputs: **1.502x/upper1.567x**,
+2,574,662 B/op, with a 2,306,560-byte admitted peak including resident input.
+Exact pixels, independent survivors, refusal/cancellation cleanup and both guards
+pass. One 924-sample diagnostic locates 49.6% in Deflate walking, 22.0% in literal
+copying and 8.0% in long-literal decoding. Next: bound one materialized-block
+decoder strategy; admission semantics remain intact.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
@@ -57,8 +63,8 @@ libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compres
 sizes **533,100/183,812 B**. Its passing timing does not establish compression parity.
 The two JPEG async-output cases remain short gaps; all timings/allocations follow.
 
-The 17 unmeasured representatives cover header inspection, drawing, text and shared
-ownership. [PNG fixed-workspace controls](../benchmarks/WARM-PNG-HEADERS-CONTROLS.md)
+The 16 unmeasured representatives cover header inspection, drawing and text.
+[PNG fixed-workspace controls](../benchmarks/WARM-PNG-HEADERS-CONTROLS.md)
 agree on all 21 original cases, including deliberately opaque CRC/Deflate. Timing
 awaits the explicitly labeled bounded FFmpeg AVIO/descriptor adapter decision;
 complete-packet parsing would add whole-input buffering outside this boundary.
@@ -100,6 +106,7 @@ reconciliation now covers every numeric row.
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
+| [PNG RGBA8, two retained outputs / caller-owned memory root](../benchmarks/WARM-COOPERATIVE-MEMORY.md) | 4,280.80 | 2,850.88 | 1.502 / 1.567 | 2,574,662 | Gap (short; qualified) |
 | [PNG DecodeAsync, fresh nonseekable Stream](../benchmarks/WARM-PNG-ASYNC-DECODE.md) | 2,049.34 | 1,412.89 | 1.450 / 1.683 | 12,784 | Gap (short; qualified) |
 | [PNG IdentifyAsync, fresh nonseekable Stream¶](../benchmarks/WARM-PNG-ASYNC-IDENTIFY.md) | 24.10 | 19.34 | 1.246 / 1.571 | 8,408 | Gap (short; qualified) |
 | [PNG Identify, fresh Stream¶](../benchmarks/WARM-PNG-STREAM-IDENTIFY.md) | 22.94 | 15.87 | 1.445 / 1.459 | 184 | Gap (independent) |

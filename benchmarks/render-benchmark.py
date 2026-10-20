@@ -74,6 +74,7 @@ def table(rows):
 
 def render():
     decodes = [
+        row('PNG RGBA8, two retained outputs / caller-owned memory root', 'warm-cooperative-memory-evidence.json', ['cases', 'Png8Retained2', -1], 'WARM-COOPERATIVE-MEMORY.md', verification='Gap (short; qualified)'),
         row('PNG DecodeAsync, fresh nonseekable Stream', 'warm-png-async-decode-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-PNG-ASYNC-DECODE.md', verification='Gap (short; qualified)'),
         row('PNG IdentifyAsync, fresh nonseekable Stream¶', 'warm-png-async-identify-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-PNG-ASYNC-IDENTIFY.md', verification='Gap (short; qualified)'),
         row('PNG Identify, fresh Stream¶', 'warm-png-stream-identify-evidence.json', ['observations', -1], 'WARM-PNG-STREAM-IDENTIFY.md', True),
@@ -326,13 +327,13 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 237
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 238
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-20. Target: **warm single-CPU parity, independently confirmed
-conservative upper ≤1x**. The 237 numeric rows contain **{parity_count} passes,
+conservative upper ≤1x**. The 238 numeric rows contain **{parity_count} passes,
 {gap_count} gaps and {confidence_count} confidence-open case**. The finite
-[material checklist](../benchmarks/WARM-COVERAGE.md) has 254 named cases, 17 unmeasured.
+[material checklist](../benchmarks/WARM-COVERAGE.md) has 254 named cases, 16 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
@@ -340,7 +341,7 @@ These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
 is separate. **200 historical codec/edit rows do not yet requalify changed 0.2.0
 admission, disposal or governed storage.** Twenty-one current JPEG, four Lanczos3, two async
-input, four async output, one bicubic and five VP8 rows identify their current producers. Production
+input, four async output, one bicubic, five VP8 and one caller-owned-root row identify their current producers. Production
 qualification now passes 4,478 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
@@ -367,8 +368,14 @@ All five affected existing VP8 rows refresh, preserving exact pixels/work/cursor
 and the original short-input/cancelable path. A
 [prepared-double Lanczos trial](../benchmarks/WARM-LANCZOS3-PREPARED-FMA-TRIAL.md)
 is correct but 1.4% slower, at 154,894 B/op, and is rejected. Accepted production
-and all selected rows remain unchanged. Next: measure the already named shared-root
-two-retained-output boundary before deciding whether optimization is needed.
+and all selected rows remain unchanged. The already named
+[caller-owned-root operation](../benchmarks/WARM-COOPERATIVE-MEMORY.md) now measures
+two complete decodes with overlapping retained outputs: **1.502x/upper1.567x**,
+2,574,662 B/op, with a 2,306,560-byte admitted peak including resident input.
+Exact pixels, independent survivors, refusal/cancellation cleanup and both guards
+pass. One 924-sample diagnostic locates 49.6% in Deflate walking, 22.0% in literal
+copying and 8.0% in long-literal decoding. Next: bound one materialized-block
+decoder strategy; admission semantics remain intact.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
@@ -386,8 +393,8 @@ libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compres
 sizes **533,100/183,812 B**. Its passing timing does not establish compression parity.
 The two JPEG async-output cases remain short gaps; all timings/allocations follow.
 
-The 17 unmeasured representatives cover header inspection, drawing, text and shared
-ownership. [PNG fixed-workspace controls](../benchmarks/WARM-PNG-HEADERS-CONTROLS.md)
+The 16 unmeasured representatives cover header inspection, drawing and text.
+[PNG fixed-workspace controls](../benchmarks/WARM-PNG-HEADERS-CONTROLS.md)
 agree on all 21 original cases, including deliberately opaque CRC/Deflate. Timing
 awaits the explicitly labeled bounded FFmpeg AVIO/descriptor adapter decision;
 complete-packet parsing would add whole-input buffering outside this boundary.

@@ -14,6 +14,7 @@ public enum WarmPngCase { Encode8, Decode8, Decode16, Encode16, DecodeAdam7_16, 
 public partial class WarmPng
 {
     private WarmAsyncPngEncode? asyncOutput;
+    private WarmPngRetainedMemory? retainedMemory;
     public static IEnumerable<WarmPngCase> Cases => SelectedCases();
     [ParamsSource(nameof(Cases))] public WarmPngCase Case { get; set; }
     private JpegBenchmarkCase state = null!;
@@ -93,6 +94,11 @@ public partial class WarmPng
         {
             if (Case != WarmPngCase.Encode8) throw new ArgumentOutOfRangeException(nameof(Case));
             asyncOutput = new WarmAsyncPngEncode(); asyncOutput.Setup(cpu, smoke, sampleCount); return;
+        }
+        if (Environment.GetEnvironmentVariable("LOKAD_IMAGE_MEMORY_RETAINED2") == "1")
+        {
+            if (Case != WarmPngCase.Decode8) throw new ArgumentOutOfRangeException(nameof(Case));
+            retainedMemory = new WarmPngRetainedMemory(); retainedMemory.Setup(cpu, smoke, sampleCount); return;
         }
         state = new JpegBenchmarkCase(Encode ? ".png" : "");
         try
@@ -494,6 +500,7 @@ public partial class WarmPng
     [Benchmark]
     public int Managed()
     {
+        if (retainedMemory is not null) return retainedMemory.Apply();
         if (asyncOutput is not null) return asyncOutput.Apply();
         if (Encode)
         {
@@ -528,6 +535,7 @@ public partial class WarmPng
     [GlobalCleanup]
     public void Cleanup()
     {
+        if (retainedMemory is not null) { retainedMemory.Cleanup(); return; }
         if (asyncOutput is not null) { asyncOutput.Cleanup(); return; }
         try
         {

@@ -1,15 +1,15 @@
 # Material warm coverage
 
 Updated 2026-10-20. The **warm single-CPU parity objective remains open**:
-72 independent passes,164 measured mean gaps and one confidence-open case across
-237 numeric rows. The [three-table summary](../docs/benchmark.md)
-contains127 independent observations and110 qualified shorts.17named required
+72 independent passes,165 measured mean gaps and one confidence-open case across
+238 numeric rows. The [three-table summary](../docs/benchmark.md)
+contains127 independent observations and111 qualified shorts.16named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
-The finite scope is now **254 cases:237 numeric+17 unmeasured**. The remaining
+The finite scope is now **254 cases:238 numeric+16 unmeasured**. The remaining
 200 historical codec/edit rows retain their identified performance-qualified
 builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
-Twenty-one current JPEG, four Lanczos3, two async input, four async output, one bicubic and five VP8 rows
+Twenty-one current JPEG, four Lanczos3, two async input, four async output, one bicubic, five VP8 and one caller-owned-root rows
 are identified below. The latest JPEG evidence replaces the earlier CMYK timings.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
 required representatives using the same513×259 asymmetric RGBA rasters. Their
@@ -140,11 +140,19 @@ paths absent from the older checklist; these are not a shape/depth/settings grid
   and disposals. Governed uncached storage and independent retained reservations
   differ from default pooling and the earlier `ImageBudget` quota.
 
-All three remain **unmeasured**; establish equivalent native font/admission
+The two text cases remain **unmeasured**; establish equivalent native font
 adapters and quality/ownership gates before timing. They add no new image or
-font/settings grid. The next item is `MemoryBudget/Png8Retained2`, following the
-caller-owned admission priority; functional admission is already qualified, but
-its governed complete-operation performance is not. The
+font/settings grid. [MemoryBudget/Png8Retained2](WARM-COOPERATIVE-MEMORY.md) now has
+one current three-actual short:4,280.80µs/native2,850.88µs,1.502x/upper1.567x,
+2,574,662B/op. Two complete decodes and overlapping independent outputs, exact
+pixels/hidden RGB, borrowed root, retained charges, refusal/cancellation cleanup
+and both official guards pass. Managed admission is included additional work;
+FFmpeg has no matching root API. Current production's full/package proofs are
+reused;36 adapter controls pass normally/scalar per OS. One924-sample diagnostic
+locates49.6% in Deflate walking,22.0% literal copying,8.0% long-literal decoding.
+Next: establish one materialized-block decoder strategy's feasibility, preserving
+exact work/error/cursor/ownership semantics. No new workload or long above one.
+The
 [prepared-double Lanczos trial](WARM-LANCZOS3-PREPARED-FMA-TRIAL.md) is correct but
 1.4% slower and rejected. Accepted producers and numeric rows remain unchanged.
 Further additions require evidence of a distinct omitted required algorithm or
@@ -872,3 +880,14 @@ and the same actual private package/three examples pass. Currentnormalrows37,
 historical200; all finite counts unchanged. Next: bound a distinct prepared-
 double/FMA row strategy for the larger LanczosReduce16 gap before a single-case
 trial. Existing separate preparation/FMA failures remain parked.
+
+The [two-retained-output shared-root screen](WARM-COOPERATIVE-MEMORY.md) then
+qualifies one previously named boundary on unchanged production:1.502x/upper1.567x,
+2,574,662B/op, exact pixels/retained charges, independent survivors and both guards.
+The finite scope is now254=238numeric+16unmeasured,72passes/165gaps/1confidence-open;
+38 current normal/governed rows and200historical,127independent/111shorts.
+The subsequent924sample diagnostic identifies Deflate walking/literal decoding,
+not root admission, as the sampled cost. Next: bound one specialized materialized
+block cursor, preserving original error/work/input/output/memory semantics.
+No production build or repeated full/package proof;36 current adapter controls
+pass normally/scalar per OS. All accepted producers and existing rows are retained.

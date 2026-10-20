@@ -6,6 +6,7 @@ namespace Lokad.Image.Tooling;
 internal sealed class TestMemoryBudget : IMemoryScope
 {
     private readonly TestMemoryBudget root;
+    private readonly TestMemoryBudget? parent;
     private readonly object gate;
     private readonly long limit;
     private readonly List<TestMemoryBudget> children = [];
@@ -15,7 +16,7 @@ internal sealed class TestMemoryBudget : IMemoryScope
     public Action<long>? Admitted { get; set; }
     public long RefuseAtGrowth { get; set; }
     public TestMemoryBudget(long limit) { this.limit = limit; root = this; gate = new(); }
-    private TestMemoryBudget(TestMemoryBudget parent) { root = parent.root; gate = root.gate; }
+    private TestMemoryBudget(TestMemoryBudget parent) { this.parent = parent; root = parent.root; gate = root.gate; }
     public long Bytes { get { lock (gate) return root.used; } }
     public long Peak { get { lock (gate) return root.peak; } }
     public long Attempts { get { lock (gate) return root.attempts; } }
@@ -52,9 +53,10 @@ internal sealed class TestMemoryBudget : IMemoryScope
         lock (gate)
         {
             if (disposed) return;
-            foreach (var child in children) child.Dispose();
-            foreach (var reservation in reservations) reservation.Dispose();
+            while (children.Count != 0) children[^1].Dispose();
+            while (reservations.Count != 0) reservations[^1].Dispose();
             disposed = true;
+            parent?.children.Remove(this);
         }
     }
     private sealed class Reservation(TestMemoryBudget owner, long bytes) : IMemoryReservation
@@ -81,6 +83,7 @@ internal sealed class TestMemoryBudget : IMemoryScope
             {
                 if (disposed) return;
                 disposed = true; owner.root.used -= value; value = 0;
+                owner.reservations.Remove(this);
             }
         }
     }
