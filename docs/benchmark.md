@@ -109,6 +109,10 @@ Original RGB420 remains74,040B; grayscale stays byte-identical. No general-conte
 compression claim follows. Next: the frozen lossy WebP size gaps. The earlier [structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md)
 is diagnostic evidence. Lossy WebP ceilings remain17,688/7,100 B at frozen matched
 quality (21,432/8,288 B).
+The [bounded lossy audit](../benchmarks/WARM-VP8-COMPRESSION-AUDIT.md) parks the
+tested skip/prediction-rate candidates: none meets both size gates. No production
+timing or packet row changes; intra16/grouped DC coding is the next structural path.
+
 The two JPEG async-output cases remain short gaps; all timings/allocations follow.
 
 The 16 unmeasured representatives cover header inspection, drawing and text.

@@ -12,6 +12,13 @@ builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
 Twenty-three current JPEG, four Lanczos3, two PNG resident, two async input, four async output, one bicubic, five VP8, five synchronous lossless WebP encodes and one caller-owned-root rows
 are identified below. The latest JPEG evidence replaces the earlier CMYK timings.
 
+The [bounded lossy WebP audit](WARM-VP8-COMPRESSION-AUDIT.md) changes no
+production row or count. Skip-only, top-two/all-six reconstructed-rate candidates
+and one existing full-mode coverage diagnostic all miss the fixed size gates.
+No scored timing or package qualification follows those screens; C37 source and
+build are restored exactly. Native intra16/grouped DC coding is the next material
+missing encoder path, especially for the diagram. Both content gates remain open.
+
 The [optional CompactColor JPEG policy](WARM-JPEG-COMPACT-COLOR.md) adds exactly
 one required algorithm case, `JpegSamplesEncode/CompactColorRgb420Resident`:
 the same borrowed packed RGB samples and complete owned JPEG boundary with an

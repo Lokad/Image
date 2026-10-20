@@ -1,0 +1,583 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "scope": "C38 bounded untimed efficiency audit of exactly the two fixed opaque 513x259 RGBA8 WebP controls; no new benchmark case or reference settings",
+  "acceptedProductionChange": false,
+  "noTimingOrAllocationClaim": true,
+  "requiredSizes": {
+    "Photograph8": 17688,
+    "Diagram8": 7100
+  },
+  "maximumSourcePsnrGapDb": 0.25,
+  "structure": {
+    "productionChanged": false,
+    "noTimingClaim": true,
+    "noNewInputOrQualitySearch": true,
+    "currentProducerSha256": "f40a67dbeeea7e9dfa78f8a6645e799e5c51668389a63ccd801c938042707c0c",
+    "reusedArchives": [
+      {
+        "file": "h9h-measurements.tar.gz",
+        "sha256": "a2eaadb2df20b87b4787998558d9c8c21721a177b4a75f916e4b84a3150248f1"
+      },
+      {
+        "file": "h9b-measurements.tar.gz",
+        "sha256": "7ef549b49556fa451227bbcf542af7a479d953faecc69569a2208b4452636f0f"
+      }
+    ],
+    "cases": [
+      {
+        "case": "Photograph8",
+        "sourceSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+        "maximumPsnrGapDb": 0.25,
+        "reusedSourcePsnrGapDb": 0.019385285642992092,
+        "managed": {
+          "setting": 78,
+          "packetBytes": 21432,
+          "sha256": "835121142c110ebc9ff8ef111983ef16872180752da39699f20a28e6e55ebeda",
+          "chunks": [
+            {
+              "type": "VP8 ",
+              "payloadBytes": 21412,
+              "pad": 0
+            }
+          ],
+          "uncompressedKeyFrameHeaderBytes": 10,
+          "firstPartitionBytes": 3654,
+          "coefficientPartitionAreaBytes": 17748,
+          "containerAndPaddingBytes": 20
+        },
+        "native": {
+          "setting": 75,
+          "packetBytes": 17688,
+          "sha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+          "chunks": [
+            {
+              "type": "VP8 ",
+              "payloadBytes": 17668,
+              "pad": 0
+            }
+          ],
+          "uncompressedKeyFrameHeaderBytes": 10,
+          "firstPartitionBytes": 2816,
+          "coefficientPartitionAreaBytes": 14842,
+          "containerAndPaddingBytes": 20
+        },
+        "excessBytes": 3744,
+        "firstPartitionExcessBytes": 838,
+        "coefficientPartitionAreaExcessBytes": 2906
+      },
+      {
+        "case": "Diagram8",
+        "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+        "maximumPsnrGapDb": 0.25,
+        "reusedSourcePsnrGapDb": 0.21825523479332448,
+        "managed": {
+          "setting": 75,
+          "packetBytes": 8288,
+          "sha256": "1fabd2c64652a37540e499526416c7df914eb9f29f916d811870fe34e4650111",
+          "chunks": [
+            {
+              "type": "VP8 ",
+              "payloadBytes": 8268,
+              "pad": 0
+            }
+          ],
+          "uncompressedKeyFrameHeaderBytes": 10,
+          "firstPartitionBytes": 1462,
+          "coefficientPartitionAreaBytes": 6796,
+          "containerAndPaddingBytes": 20
+        },
+        "native": {
+          "setting": 75,
+          "packetBytes": 7100,
+          "sha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
+          "chunks": [
+            {
+              "type": "VP8 ",
+              "payloadBytes": 7080,
+              "pad": 0
+            }
+          ],
+          "uncompressedKeyFrameHeaderBytes": 10,
+          "firstPartitionBytes": 1240,
+          "coefficientPartitionAreaBytes": 5830,
+          "containerAndPaddingBytes": 20
+        },
+        "excessBytes": 1188,
+        "firstPartitionExcessBytes": 222,
+        "coefficientPartitionAreaExcessBytes": 966
+      }
+    ]
+  },
+  "nativeHeaders": {
+    "productionChanged": false,
+    "noTimingClaim": true,
+    "scope": "Header-only syntax of the same two frozen native packets; original owned arithmetic reader/table definitions, no encoding/decoding/calibration job",
+    "cases": [
+      {
+        "case": "Photograph8",
+        "nativeSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+        "partitionCount": 1,
+        "coefficientPartitionSizeTableBytes": 0,
+        "baseQIndex": 36,
+        "quantizerDeltas": [
+          0,
+          0,
+          0,
+          -2,
+          -1
+        ],
+        "segmentation": true,
+        "absoluteSegments": true,
+        "segmentQuantizers": [
+          36,
+          32,
+          25,
+          19
+        ],
+        "segmentFilters": [
+          11,
+          7,
+          4,
+          13
+        ],
+        "macroblockSegments": {
+          "2": 210,
+          "3": 202,
+          "1": 100,
+          "0": 49
+        },
+        "filterLevel": 13,
+        "sharpness": 0,
+        "simpleFilter": false,
+        "coefficientProbabilityUpdates": 69,
+        "coefficientSkipSyntax": false,
+        "skipProbability": 0,
+        "skippedMacroblocks": 0,
+        "lumaMacroblockModes": {
+          "4": 518,
+          "3": 26,
+          "2": 11,
+          "0": 5,
+          "1": 1
+        },
+        "intra16Macroblocks": 43,
+        "intra4Macroblocks": 518,
+        "smallModes": {
+          "0": 2713,
+          "1": 1736,
+          "8": 621,
+          "3": 1522,
+          "4": 176,
+          "9": 675,
+          "6": 196,
+          "5": 299,
+          "2": 232,
+          "7": 118
+        },
+        "chromaModes": {
+          "0": 321,
+          "2": 180,
+          "3": 27,
+          "1": 33
+        },
+        "headerReadBytes": 2814,
+        "firstPartitionBytes": 2816
+      },
+      {
+        "case": "Diagram8",
+        "nativeSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
+        "partitionCount": 1,
+        "coefficientPartitionSizeTableBytes": 0,
+        "baseQIndex": 36,
+        "quantizerDeltas": [
+          0,
+          0,
+          0,
+          -2,
+          -1
+        ],
+        "segmentation": true,
+        "absoluteSegments": true,
+        "segmentQuantizers": [
+          36,
+          33,
+          29,
+          22
+        ],
+        "segmentFilters": [
+          11,
+          7,
+          6,
+          3
+        ],
+        "macroblockSegments": {
+          "2": 212,
+          "3": 308,
+          "1": 36,
+          "0": 5
+        },
+        "filterLevel": 11,
+        "sharpness": 0,
+        "simpleFilter": false,
+        "coefficientProbabilityUpdates": 122,
+        "coefficientSkipSyntax": false,
+        "skipProbability": 0,
+        "skippedMacroblocks": 0,
+        "lumaMacroblockModes": {
+          "0": 235,
+          "4": 208,
+          "2": 26,
+          "1": 63,
+          "3": 29
+        },
+        "intra16Macroblocks": 353,
+        "intra4Macroblocks": 208,
+        "smallModes": {
+          "1": 803,
+          "0": 1796,
+          "8": 82,
+          "6": 46,
+          "2": 185,
+          "7": 70,
+          "4": 30,
+          "5": 47,
+          "3": 128,
+          "9": 141
+        },
+        "chromaModes": {
+          "0": 312,
+          "2": 102,
+          "1": 145,
+          "3": 2
+        },
+        "headerReadBytes": 1239,
+        "firstPartitionBytes": 1240
+      }
+    ]
+  },
+  "experiments": {
+    "skipOnly": {
+      "productionChanged": false,
+      "noTimingClaim": true,
+      "scope": "Exactly two frozen own VP8 packets, skip-only arithmetic replay; no coefficient/mode/quantizer/model change or new quality settings",
+      "cases": [
+        {
+          "case": "Photograph8",
+          "qIndex": 28,
+          "oldBytes": 21432,
+          "nativeBytes": 17688,
+          "candidateBytes": 21434,
+          "candidateSha256": "a79ca49eebe1e94f134ce6a28a637fe9b8df12d246006192ed967eecb066d516",
+          "headerAndTokenReplayExact": true,
+          "coefficientDecisions": 163015,
+          "removedZeroDecisions": 192,
+          "removedEstimatedBits": 60.99190411687476,
+          "zeroMacroblocks": 8,
+          "totalMacroblocks": 561,
+          "zeroMacroblocksByRow": [
+            2,
+            0,
+            0,
+            1,
+            3,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "skipProbability": 252,
+          "newFirstPartitionBytes": 3663,
+          "newTokenPartitionBytes": 17741,
+          "nonzeroBlocksByType": {
+            "3": 6267,
+            "2": 2270
+          },
+          "modeCounts": {
+            "1": 2095,
+            "3": 3322,
+            "2": 726,
+            "5": 942,
+            "4": 605,
+            "0": 1286
+          },
+          "magnitudeCategories": {
+            "4": 24,
+            "2": 4382,
+            "1": 23366,
+            "3": 436
+          },
+          "sizeGatePass": false,
+          "sameModesCoefficientsAndModel": true,
+          "qualityAndPixelsRequireIndependentVerification": true
+        },
+        {
+          "case": "Diagram8",
+          "qIndex": 32,
+          "oldBytes": 8288,
+          "nativeBytes": 7100,
+          "candidateBytes": 8274,
+          "candidateSha256": "0289447288fbfe2b082cb3d7c6b8877f547d9431a4c429bcd90496e221b78e4c",
+          "headerAndTokenReplayExact": true,
+          "coefficientDecisions": 68155,
+          "removedZeroDecisions": 6552,
+          "removedEstimatedBits": 671.1407966307746,
+          "zeroMacroblocks": 273,
+          "totalMacroblocks": 561,
+          "zeroMacroblocksByRow": [
+            1,
+            22,
+            30,
+            19,
+            21,
+            3,
+            24,
+            3,
+            16,
+            5,
+            20,
+            6,
+            22,
+            5,
+            25,
+            18,
+            33
+          ],
+          "skipProbability": 131,
+          "newFirstPartitionBytes": 1534,
+          "newTokenPartitionBytes": 6709,
+          "nonzeroBlocksByType": {
+            "3": 1114,
+            "2": 835
+          },
+          "modeCounts": {
+            "2": 232,
+            "1": 1405,
+            "0": 6611,
+            "5": 169,
+            "4": 199,
+            "3": 360
+          },
+          "magnitudeCategories": {
+            "5": 25,
+            "3": 1079,
+            "4": 230,
+            "2": 2878,
+            "1": 5016
+          },
+          "sizeGatePass": false,
+          "sameModesCoefficientsAndModel": true,
+          "qualityAndPixelsRequireIndependentVerification": true
+        }
+      ]
+    },
+    "topTwoReconstructedRate": {
+      "managedEffort": 4,
+      "producerSha256": "db740dc604c1073103839089ed25633cfb175b01f1a085348fc10e7fe619fca3",
+      "cases": [
+        {
+          "case": "Photograph8",
+          "sourceSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+          "managedSetting": 78,
+          "nativeSetting": 75,
+          "managedBytes": 20556,
+          "nativeBytes": 17688,
+          "managedSha256": "1010fce90ef8f4ed0fc8824fca7284d86ce748dbd425d47f48fc423fce1192fb",
+          "nativeSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+          "sourcePsnrDb": 33.37941259192233,
+          "nativeSourcePsnrDb": 33.32534434006354,
+          "psnrGapDb": 0.05406825185879427,
+          "decoderDifference": {
+            "sumSquared": 3686,
+            "maximum": 1,
+            "samples": 398601,
+            "scale": 1,
+            "rgbMaximum": 1,
+            "rgbRmse": 0.09616310405075282,
+            "rgbPsnr": 68.47063413897585
+          },
+          "alphaExact": true,
+          "qualityPass": true,
+          "sizePass": false,
+          "sourceUnchanged": true,
+          "independentOutputs": true
+        },
+        {
+          "case": "Diagram8",
+          "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+          "managedSetting": 75,
+          "nativeSetting": 75,
+          "managedBytes": 8182,
+          "nativeBytes": 7100,
+          "managedSha256": "ef44b9d313fa441c54d5b350501bfad8e826108498a820d67fa36ef112a3bc78",
+          "nativeSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
+          "sourcePsnrDb": 33.52236014765595,
+          "nativeSourcePsnrDb": 33.76652284749056,
+          "psnrGapDb": 0.24416269983461092,
+          "decoderDifference": {
+            "sumSquared": 1156,
+            "maximum": 1,
+            "samples": 398601,
+            "scale": 1,
+            "rgbMaximum": 1,
+            "rgbRmse": 0.053852978107254604,
+            "rgbPsnr": 73.5066091069613
+          },
+          "alphaExact": true,
+          "qualityPass": true,
+          "sizePass": false,
+          "sourceUnchanged": true,
+          "independentOutputs": true
+        }
+      ]
+    },
+    "allSixReconstructedRate": {
+      "managedEffort": 4,
+      "producerSha256": "fa605e987597decd813494544758a7f2d624c0acc0b52a2731d57e7f53315e23",
+      "cases": [
+        {
+          "case": "Photograph8",
+          "sourceSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+          "managedSetting": 78,
+          "nativeSetting": 75,
+          "managedBytes": 19912,
+          "nativeBytes": 17688,
+          "managedSha256": "4cf997c33ccc1e80aad401d7d1e49295fc1ccbf1cc657f1eaddb9738add1b689",
+          "nativeSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+          "sourcePsnrDb": 33.421681177358444,
+          "nativeSourcePsnrDb": 33.32534434006354,
+          "psnrGapDb": 0.09633683729490627,
+          "decoderDifference": {
+            "sumSquared": 3908,
+            "maximum": 1,
+            "samples": 398601,
+            "scale": 1,
+            "rgbMaximum": 1,
+            "rgbRmse": 0.09901661732277513,
+            "rgbPsnr": 68.21664189733906
+          },
+          "alphaExact": true,
+          "qualityPass": true,
+          "sizePass": false,
+          "sourceUnchanged": true,
+          "independentOutputs": true
+        },
+        {
+          "case": "Diagram8",
+          "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+          "managedSetting": 75,
+          "nativeSetting": 75,
+          "managedBytes": 8054,
+          "nativeBytes": 7100,
+          "managedSha256": "c506417e6d97ec6b31962b81988c48f083940649852e7cdff791a7f884c9aee7",
+          "nativeSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
+          "sourcePsnrDb": 33.583933609268215,
+          "nativeSourcePsnrDb": 33.76652284749056,
+          "psnrGapDb": 0.18258923822234863,
+          "decoderDifference": {
+            "sumSquared": 1155,
+            "maximum": 1,
+            "samples": 398601,
+            "scale": 1,
+            "rgbMaximum": 1,
+            "rgbRmse": 0.053829680257102074,
+            "rgbPsnr": 73.51036760552478
+          },
+          "alphaExact": true,
+          "qualityPass": true,
+          "sizePass": false,
+          "sourceUnchanged": true,
+          "independentOutputs": true
+        }
+      ]
+    },
+    "existingFullFormatModeSearch": {
+      "managedEffort": 6,
+      "producerSha256": "f40a67dbeeea7e9dfa78f8a6645e799e5c51668389a63ccd801c938042707c0c",
+      "purpose": "One diagnostic of the existing full mode search; not an accepted setting change, performance row or retuned reference",
+      "cases": [
+        {
+          "case": "Photograph8",
+          "sourceSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+          "managedSetting": 78,
+          "nativeSetting": 75,
+          "managedBytes": 21126,
+          "nativeBytes": 17688,
+          "managedSha256": "c16b6a5c408e4b471a092e1f83c7bcfa821c2c344c40356c27bbc6113cbc1593",
+          "nativeSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+          "sourcePsnrDb": 33.336746432280805,
+          "nativeSourcePsnrDb": 33.32534434006354,
+          "psnrGapDb": 0.011402092217267068,
+          "decoderDifference": {
+            "sumSquared": 3860,
+            "maximum": 1,
+            "samples": 398601,
+            "scale": 1,
+            "rgbMaximum": 1,
+            "rgbRmse": 0.0984066528898943,
+            "rgbPsnr": 68.27031440108885
+          },
+          "alphaExact": true,
+          "qualityPass": true,
+          "sizePass": false,
+          "sourceUnchanged": true,
+          "independentOutputs": true
+        },
+        {
+          "case": "Diagram8",
+          "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+          "managedSetting": 75,
+          "nativeSetting": 75,
+          "managedBytes": 8002,
+          "nativeBytes": 7100,
+          "managedSha256": "71273ac51461e60add99fd4dda6044bcf9aa81da6124f752aab1633e0f3502b9",
+          "nativeSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
+          "sourcePsnrDb": 33.61323351806665,
+          "nativeSourcePsnrDb": 33.76652284749056,
+          "psnrGapDb": 0.15328932942391305,
+          "decoderDifference": {
+            "sumSquared": 1036,
+            "maximum": 1,
+            "samples": 398601,
+            "scale": 1,
+            "rgbMaximum": 1,
+            "rgbRmse": 0.050981274193458166,
+            "rgbPsnr": 73.98258989371426
+          },
+          "alphaExact": true,
+          "qualityPass": true,
+          "sizePass": false,
+          "sourceUnchanged": true,
+          "independentOutputs": true
+        }
+      ]
+    }
+  },
+  "disposition": "Park skip-only and reconstructed-rate candidates: none satisfies the numerical size gates. No full suite, package proof, scored timing, confirmation or profiling job follows a failed screen. C37 physical sources, incremental build and qualified runtime restored exactly.",
+  "existingEvidenceReused": "Current managed packets from h9h-measurements; frozen native from h9b-measurements. Pre-adaptation h9b managed packets rejected. Earlier full-frame histogram/cache performance rejection retained without rerunning it.",
+  "experimentBuilds": {
+    "linuxProduction": 2,
+    "windowsProduction": 0,
+    "harnessNativeSelectors": 0
+  },
+  "nextPrimitive": {
+    "name": "VP8 intra16 prediction and grouped Y2 DC transform",
+    "reason": "Native uses intra16 for 353/561 diagram macroblocks and43/561 photograph macroblocks; current encoder emits B_PRED only. Existing decoder already supports this format path. Segmentation/filtering are separate remaining structural differences; this is not a claim that intra16 alone closes both gates."
+  },
+  "rawArtifacts": {
+    "file": "c38-vp8-compression-audit.tar.gz",
+    "bytes": 1890769,
+    "sha256": "0cd946c50bf213d13988dd258e3604c9902e71cd48b7b78ee56754d4cea7fc17"
+  },
+  "acceptedProducerSha256": "f40a67dbeeea7e9dfa78f8a6645e799e5c51668389a63ccd801c938042707c0c",
+  "harnessSha256": "8526fc893dda27fae633a85a382c9607d8c11db5e2326a008fc6b35059cd4889",
+  "ffmpegSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2"
+}
