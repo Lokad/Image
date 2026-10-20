@@ -3,13 +3,13 @@
 Updated 2026-10-20. The **warm single-CPU parity objective remains open**:
 72 independent passes,164 measured mean gaps and one confidence-open case across
 237 numeric rows. The [three-table summary](../docs/benchmark.md)
-contains128 independent observations and109 qualified shorts.17named required
+contains127 independent observations and110 qualified shorts.17named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
 The finite scope is now **254 cases:237 numeric+17 unmeasured**. The remaining
-206 historical codec/edit rows retain their identified performance-qualified
+205 historical codec/edit rows retain their identified performance-qualified
 builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
-Twenty-one current JPEG, four Lanczos3, two async input and four async output rows
+Twenty-one current JPEG, four Lanczos3, two async input, four async output and one bicubic row
 are identified below. The latest JPEG evidence replaces the earlier CMYK timings.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
 required representatives using the same513×259 asymmetric RGBA rasters. Their
@@ -823,3 +823,15 @@ independent passes, 164 mean gaps and one confidence-open case. Its 206 historic
 codec/edit rows still need current-admission performance evidence. Normal-operation
 measurements do not qualify performance with a supplied shared root. Functional,
 memory and performance qualification remain separate; full parity stays open.
+
+
+Current admission-path reconciliation (2026-10-20): [TightWide8](WARM-BICUBIC-ADMISSION-CURRENT.md)
+is now a current accepted-code gap at1.704x/upper1.949x,32,913B/op. Original rational
+pixels,568332B local limit, normal/scalar native gates, complete packed/filter/
+quantization/output ownership and official quiet guards pass. Its old independent
+timing predates admission/disposal changes and remains historical. The other
+numeric rows keep their identified scopes. Current totals:32normal codec/edit
+rows and205historical;127independent observations and110shorts;72passes,164gaps,
+oneconfidence-open. Supplied-root timing remains separate. One983sample profile
+locates86.8%in the selected striphelper; four-column feasibility fits the same4KiB
+workspace. No speedup is claimed before the next single-case trial.

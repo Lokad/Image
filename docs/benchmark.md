@@ -9,9 +9,9 @@ to the named fixed inputs/settings/hardware, without extrapolating to other prof
 
 These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
-is separate. **206 historical codec/edit rows do not yet requalify changed 0.2.0
+is separate. **205 historical codec/edit rows do not yet requalify changed 0.2.0
 admission, disposal or governed storage.** Twenty-one current JPEG, four Lanczos3, two async
-input and four async output rows identify their current producers. Production
+input, four async output and one bicubic row identify their current producers. Production
 qualification now passes 4,469 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
@@ -29,8 +29,10 @@ at 8 bits. An [exact unsigned-product trial](../benchmarks/WARM-LANCZOS3-PRODUCT
 regressed 4.9% and was rejected. A current 944-sample profile puts 50.4% in RGBA16
 horizontal filtering. The [vertical-first trial](../benchmarks/WARM-LANCZOS3-VERTICAL-FIRST-TRIAL.md)
 cut allocation 71.1% but had no elapsed gain and was also rejected. Accepted
-production is restored. Next: resolve current-code uncertainty for the existing
-tight-memory Bicubic TightWide8 case, the largest historical mean gap at 1.687x.
+production is restored. The [current tight-memory bicubic check](../benchmarks/WARM-BICUBIC-ADMISSION-CURRENT.md)
+resolves the largest historical gap: **1.704x/upper1.949x**, 32,913 B/op on the
+accepted producer. One current profile locates 86.8% in its strip helper. Next:
+test a four-column mode within the same 4 KiB workspace, preserving exact pixels.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
@@ -277,7 +279,7 @@ reconciliation now covers every numeric row.
 | [Bicubic RGBA16, 16×8 / adaptive support beyond 128§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 441.93 | 496.89 | 0.889 / 0.893 | 202,231 | Parity confirmed |
 | [Bicubic RGBA8, 256×129 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-BYTE-STRIPS.md) | 654.01 | 416.59 | 1.570 / 1.660 | 132,293 | Gap (short; qualified) |
 | [Bicubic RGBA16, 256×129 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 818.75 | 570.81 | 1.434 / 1.445 | 264,469 | Gap (independent) |
-| [Bicubic RGBA8, 128×64 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 588.84 | 349.09 | 1.687 / 1.701 | 32,889 | Gap (independent) |
+| [Bicubic RGBA8, 128×64 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-ADMISSION-CURRENT.md) | 594.66 | 349.08 | 1.704 / 1.949 | 32,913 | Gap (short; qualified) |
 | [Bicubic RGBA16, 128×64 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 606.16 | 414.59 | 1.462 / 1.479 | 65,658 | Gap (independent) |
 | [Bicubic RGBA8, 64×32 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-WEIGHT-BROADCAST.md) | 560.51 | 367.05 | 1.527 / 1.797 | 8,313 | Gap (short; qualified) |
 | [Bicubic RGBA16, 64×32 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-WORD-BROADCAST.md) | 527.50 | 383.98 | 1.374 / 2.313 | 16,505 | Gap (short; qualified) |
