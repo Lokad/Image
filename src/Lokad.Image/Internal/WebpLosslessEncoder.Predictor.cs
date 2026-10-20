@@ -5,9 +5,11 @@ internal static partial class WebpLosslessEncoder
     private static CachedPlan SelectCachedPlan(ImageBuffer image, int effort, uint[] cache, OperationContext context)
     {
         var raw = PrepareCachedTables(image, effort, cache, false, context);
-        // Already well-referenced input rarely benefits from a spatial residual.
-        // Eligibility uses statistics gathered by the existing original pass.
-        if (raw.Literals <= (long)image.Width * image.Height / 4) return raw;
+        // Few literal misses can still leave expensive cache symbols. Retain
+        // literal-heavy eligibility and also consider a residual when the
+        // already gathered code cost exceeds one byte per source pixel.
+        var count = (long)image.Width * image.Height;
+        if (raw.Literals <= count / 4 && raw.BodyBits <= count * 8) return raw;
         var predicted = PrepareCachedTables(image, effort, cache, true, context) with { Alpha = raw.Alpha };
         var rawUpper = PayloadUpper(image, raw, context);
         var predictedUpper = PayloadUpper(image, predicted, context);

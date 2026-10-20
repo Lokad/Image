@@ -1008,3 +1008,13 @@ actual0.2.0 package/examples qualify; unchanged paths retain evidence. Scope255=
 including31 C43 metadata timings. Existing Opaque8 cached/raw packet170156/121896 B
 is the next bounded size audit: a demonstrated gap on the distinct path skipped
 by LEFT-only grouping, with no new fixture.
+
+
+The [coding-cost eligibility round](WARM-VP8L-CODE-COST.md) supersedes exactly the
+same six VP8L encode timings, all independently below parity. Existing Opaque8
+falls170156 to123602 B against121896 B; its allocation is9669728 B/op. Primary
+photo174748/160032 B and diagram7636/7234 B retain open size gates.4,576 tests/OS,
+24internal+117public scalar and the same actual0.2.0 package/examples qualify.
+No workload is added:255=239 numeric+16 pending,23 current/216 historical-or-pending,
+73 passes/165 mean gaps/1 confidence-open,125 independent/114 short unchanged.
+C43 metadata31 queue remains open. JPEG/PNG/VP8/edit/text/inspection paths unchanged.

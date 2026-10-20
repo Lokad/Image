@@ -44,13 +44,12 @@ internal static partial class WebpLosslessEncoder
             var result = new WebpPrefixCode[5];
             for (var channel = 0; channel < result.Length; channel++) result[channel] = new(frequencies[channel], context);
             var bodyBits = scan.ExtraBits;
-            if (predict || scan.Literals > (long)image.Width * image.Height / 4)
-                for (var channel = 0; channel < result.Length; channel++)
-                {
-                    context.Work(frequencies[channel].Length);
-                    for (var symbol = 0; symbol < frequencies[channel].Length; symbol++)
-                        bodyBits += (long)frequencies[channel][symbol] * result[channel].BitLength(symbol);
-                }
+            for (var channel = 0; channel < result.Length; channel++)
+            {
+                context.Work(frequencies[channel].Length);
+                for (var symbol = 0; symbol < frequencies[channel].Length; symbol++)
+                    bodyBits += (long)frequencies[channel][symbol] * result[channel].BitLength(symbol);
+            }
             return new(result, bodyBits, scan.Alpha, predict, scan.Literals);
         }
         finally { context.Release(frequencyBytes); }

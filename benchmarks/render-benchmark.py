@@ -177,7 +177,7 @@ def render():
         row('WebP VP8L, native input / live cancelable token', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'NativeLosslessCancelable8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
     ]
     encodes = [
-        row('WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream', 'warm-vp8l-spatial-entropy-evidence.json', ['cases', 'WebpLossless8AsyncNonSeekable', -1], 'WARM-VP8L-SPATIAL-ENTROPY.md', True),
+        row('WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream', 'warm-vp8l-code-cost-evidence.json', ['cases', 'WebpLossless8AsyncNonSeekable', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream', 'warm-jpeg-async-samples-evidence.json', ['cases', 'JpegRgb420AsyncSamples', -1], 'WARM-JPEG-ASYNC-SAMPLES.md', verification='Gap (short; qualified)'),
         row('JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality', 'warm-jpeg-async-encode-evidence.json', ['cases', 'Jpeg8AsyncNonSeekable', -1], 'WARM-JPEG-ASYNC-ENCODE.md', verification='Gap (short; qualified)'),
         row('PNG EncodePngAsync, fresh nonseekable Stream / level6', 'warm-png-async-encode-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-PNG-ASYNC-ENCODE.md', True),
@@ -219,9 +219,9 @@ def render():
         row('WebP VP8 + alpha‡', 'warm-vp8-forward-dct-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8-FORWARD-DCT.md', True),
         row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8-forward-dct-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8-FORWARD-DCT.md', True),
         row('WebP VP8 + alpha‡, caller work budget32M', 'warm-vp8-forward-dct-evidence.json', ['cases', 'EncodeBudget8', -1], 'WARM-VP8-FORWARD-DCT.md', True),
-        row('WebP VP8L, exact backend*', 'warm-vp8l-spatial-entropy-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-SPATIAL-ENTROPY.md', True),
-        row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-spatial-entropy-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-SPATIAL-ENTROPY.md', True),
-        row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-spatial-entropy-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-SPATIAL-ENTROPY.md', True),
+        row('WebP VP8L, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-CODE-COST.md', True),
+        row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-CODE-COST.md', True),
+        row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-CODE-COST.md', True),
     ]
     edits = [
         row('Horizontal flip RGBA8, two live outputs / per image', 'warm-horizontal-flip512-evidence.json', ['cases', 'Rgba8', -1], 'WARM-HORIZONTAL-FLIP512.md', verification='Gap (short; qualified)'),
@@ -316,8 +316,8 @@ def render():
         row('Mirrored transpose RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'Transverse8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
     ]
     encodes.extend([
-        row('WebP VP8L photograph RGBA8', 'warm-vp8l-spatial-entropy-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-SPATIAL-ENTROPY.md', True),
-        row('WebP VP8L text/diagram RGBA8', 'warm-vp8l-spatial-entropy-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-SPATIAL-ENTROPY.md', True),
+        row('WebP VP8L photograph RGBA8', 'warm-vp8l-code-cost-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-CODE-COST.md', True),
+        row('WebP VP8L text/diagram RGBA8', 'warm-vp8l-code-cost-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8 photograph RGBA8 / matched quality', 'warm-vp8-forward-dct-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-FORWARD-DCT.md', True),
         row('WebP VP8 text/diagram RGBA8 / matched quality', 'warm-vp8-forward-dct-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-FORWARD-DCT.md', True),
     ])
@@ -431,7 +431,7 @@ full parity remains open.
 
 Complete async PNG and lossless WebP outputs independently pass. WebP uses approved
 libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compressed
-sizes **171,108/183,812 B**. Its passing timing does not establish compression parity.
+sizes **145,648/183,812 B**. Its passing timing does not establish compression parity.
 Lossless size parity is a high-priority open gate: the fixed opaque photograph
 must reach ≤160,032 B (currently174,748 B), and diagram ≤7,234 B (currently7,636 B),
 with exact pixels and the unchanged libwebp exact=1 reference/settings. The
@@ -442,8 +442,10 @@ retain matched reconstruction quality and avoid material grayscale regression.
 These content/sampling controls do not establish general compression equivalence.
 The [spatial coding-group round](../benchmarks/WARM-VP8L-SPATIAL-ENTROPY.md)
 reduces the fixed photograph from184,518 to174,748 B; diagram remains7,636 B.
-All six affected complete encodes independently pass warm time parity;4,575 tests/OS
-and the same actual package/examples qualify. This spends
+The subsequent [coding-cost eligibility round](../benchmarks/WARM-VP8L-CODE-COST.md)
+reduces the existing opaque control from170,156 to123,602 B against121,896 B.
+All six affected complete encodes independently pass warm time parity;4,576 tests/OS
+and the same actual package/examples qualify. Opaque allocation is9,669,728 B/op. This spends
 more CPU and allocation for size: photograph9,912,952 B/op versus historical702,616.
 Both lossless size gates remain open against160,032/7,234 B. The earlier
 [structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md) is diagnostic evidence.
@@ -468,8 +470,8 @@ The [lossless adaptive-predictor screen](../benchmarks/WARM-VP8L-ADAPTIVE-PREDIC
 saves2,652/0 B on the fixed photograph/diagram but misses both lossless size gates.
 That predictor is not adopted; the subsequent coding-group round above supplies current production evidence.
 The [opaque coding-cost audit](../benchmarks/WARM-VP8L-OPAQUE-COST-AUDIT.md)
-finds a skipped existing plan yielding123,602 B against current170,156/reference121,896 B.
-It is exact but untimed; current production and its measurements remain unchanged.
+identified the skipped plan subsequently selected and qualified above. Its original
+untimed evidence remains historical; the six table rows use the accepted producer.
 
 The two JPEG async-output cases remain short gaps; all timings/allocations follow.
 

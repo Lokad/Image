@@ -4,6 +4,24 @@ namespace Lokad.Image.PublicApi.Tests;
 
 public sealed class WebpSpatialEntropyTests
 {
+    [Fact]
+    public void CacheHeavyOpaqueInputFitsThePredictionBoundWithExactPixelsAndGovernedStorage()
+    {
+        // The existing deterministic opaque control has few literal misses but
+        // costly cache symbols. Literal density alone used to skip prediction.
+        using var source=OriginalPixels.Buffer(513,259,8,opaque:true);
+        var expected=OriginalPixels.Bytes(source);
+        using var root=new TestMemoryBudget(32L*1024*1024);
+        var limits=new ImageLimits { MemoryBudget=root, MaxWorkingBytes=(long)source.Stride*source.Height+65536, MaxOutputBytes=151758 };
+        using var tight=new MemoryStream();ImageCodec.EncodeWebp(source,tight,new() { Limits=limits });
+        Assert.InRange(tight.Length,1,151758);Assert.Equal(0,root.Bytes);Assert.True(tight.CanWrite);
+        using var output=new MemoryStream();ImageCodec.EncodeWebp(source,output,new() { Limits=new() { MemoryBudget=root } });
+        Assert.True(output.Length<tight.Length);Assert.Equal(0,root.Bytes);Assert.False(root.IsDisposed);
+        Assert.Equal(expected,OriginalPixels.Bytes(source));
+        using var decoded=ImageCodec.Decode(output.ToArray());using var earlier=ImageCodec.Decode(tight.ToArray());source.Dispose();
+        Assert.Equal(expected,OriginalPixels.Bytes(decoded));Assert.Equal(expected,OriginalPixels.Bytes(earlier));
+    }
+
     [Theory] [InlineData(8)] [InlineData(16)]
     public void HeterogeneousResidualsPreserveExactNormalizedPixelsAndIndependentOwnership(int depth)
     {

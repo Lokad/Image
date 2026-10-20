@@ -1,5 +1,9 @@
 # Opaque lossless WebP coding-cost audit
 
+Historical C48 audit of the C47 producer. The subsequent
+[coding-cost round](WARM-VP8L-CODE-COST.md) selects and fully qualifies this plan;
+references to current production below describe the original audit only.
+
 The existing opaque513×259 control reveals a skipped compression opportunity.
 Current production remains170,156 B; an untimed probe considering the existing
 prediction/grouping code produces123,602 B. It is **not production-selected or

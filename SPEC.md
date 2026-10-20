@@ -1332,8 +1332,12 @@ repeats. This path is selected only if the configured local working allowance ha
 histograms, overlapping candidate trees and construction/header scratch are admitted before allocation
 through the same context; construction scratch is released promptly. Prefix lengths
 are bounded to15bits (7for code-length trees), and single-leaf trees consume no data
-bits. Literal-heavy input also evaluates a global LEFT spatial predictor after
+bits. Literal-heavy input, or a cached body costing more than8bits per pixel,
+also evaluates a global LEFT spatial predictor after
 green decorrelation, with the format's opaque-black first pixel and TOP first column.
+The existing frequency pass counts all weighted body bits, including cache symbols,
+reference extra bits and zero-bit singleton leaves; few literal misses alone do not
+prove that prediction is unhelpful.
 Histogram-weighted body bits and a serialized-header upper bound select prediction
 only when it reduces complete packet size; otherwise the original cached packet is
 preserved. Both candidate owners stay charged through comparison; unselected trees
