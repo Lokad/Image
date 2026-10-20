@@ -10,12 +10,15 @@ internal static partial class Vp8Encoder
         private readonly long reservation;
         private readonly int[] counts;
         private readonly byte[] side, last;
+        private readonly byte[]? macroModes, y2High;
         private bool disposed;
         internal byte[] Probabilities { get; }
         internal int PrefixMacroblocks { get; }
         internal bool Ready { get; private set; }
+        internal bool Intra16 => macroModes is not null;
+        internal byte[] Y2Above { get; }
 
-        internal static CoefficientModel? TryCreate(Vp8Planes source, int blocks, int lumaTrials, int chromaTrials, OperationContext context)
+        internal static CoefficientModel? TryCreate(Vp8Planes source, int blocks, int lumaTrials, int chromaTrials, OperationContext context, byte[]? modes = null)
         {
             var samples = source.Y.Length + source.U.Length + source.V.Length;
             var prefix = Math.Min(blocks, 64);
@@ -31,18 +34,26 @@ internal static partial class Vp8Encoder
             var growth = 3 * tokens + 3L * header + 384;
             var work = blocks * (16L * lumaTrials * 192 + chromaTrials * 512L + 24L * 512 + 64)
                 + samples * 128L + 65536;
+            var intraExtra = prefix * 16L + source.Stride / 16 + 64;
+            var intraWork = blocks * (4L * 3072 + 16 * 512 + 2048 + 256);
+            if (modes is not null && extra + intraExtra <= source.MemoryBytes
+                && extra + intraExtra + growth <= context.RemainingWorkingBytes && work + intraWork <= context.RemainingWork)
+                return new CoefficientModel(samples, blocks, context, modes, source.Stride / 16);
             if (extra > source.MemoryBytes || extra + growth > context.RemainingWorkingBytes || work > context.RemainingWork) return null;
             return new CoefficientModel(samples, blocks, context);
         }
 
-        internal CoefficientModel(int samples, int blocks, OperationContext context)
+        internal CoefficientModel(int samples, int blocks, OperationContext context, byte[]? modes = null, int columns = 0)
         {
             this.context = context; PrefixMacroblocks = Math.Min(blocks, 64);
             if (samples != blocks * 384) throw new ArgumentException("VP8 private plane geometry differs.");
-            reservation = PrefixMacroblocks * (384L / 4 + 24) + 16384;
+            reservation = PrefixMacroblocks * (384L / 4 + 24) + 16384 + (modes is null ? 0 : PrefixMacroblocks * 16L + columns + 64);
             context.Reserve(reservation);
             counts = new int[1056 * 2]; Probabilities = Vp8Tables.CoefficientProbabilities.ToArray();
             side = new byte[PrefixMacroblocks * 384 / 4]; last = new byte[PrefixMacroblocks * 24];
+            macroModes = modes;
+            y2High = modes is null ? null : new byte[PrefixMacroblocks * 16];
+            Y2Above = modes is null ? [] : new byte[columns];
         }
 
         internal byte Record(byte[] source, int stride, int x, int y, int sampleOffset, int block,
@@ -52,9 +63,9 @@ internal static partial class Vp8Encoder
             // plus cache/classification work. Admit this bounded block together;
             // cancellation is checked before any histogram or sample mutation.
             context.Work(64 + 12 * 16);
-            var end = 15; while (end >= 0 && coefficients[Zigzag[end]] == 0) end--;
+            var first = plane == 0 ? 1 : 0; var end = 15; while (end >= first && coefficients[Zigzag[end]] == 0) end--;
             last[block] = (byte)(end + 1); var previousZero = false;
-            for (var c = 0; c <= Math.Min(end + 1, 15); c++)
+            for (var c = first; c <= Math.Min(Math.Max(end + 1, first), 15); c++)
             {
                 var at = ((plane * 8 + Bands[c]) * 3 + predictor) * 11;
                 if (c > end) { Count(TokenPaths[11], at); break; }
@@ -72,6 +83,29 @@ internal static partial class Vp8Encoder
                 var path = TokenPaths[category < 0 ? magnitude : category + 5];
                 Count(previousZero ? path >> 5 : path, at);
                 predictor = Math.Min(magnitude, 2); previousZero = magnitude == 0;
+            }
+            return end < first ? (byte)0 : (byte)1;
+        }
+
+        internal byte RecordY2(Vp8Planes source, int macroblock, int x, int y, ReadOnlySpan<short> coefficients, int predictor)
+        {
+            context.Work(256);
+            var end = 15; while (end >= 0 && coefficients[Zigzag[end]] == 0) end--;
+            var metadata = macroModes ?? throw new InvalidOperationException("The second DC cache was not admitted.");
+            metadata[macroblock * 16] = (byte)((metadata[macroblock * 16] & 131) | (end + 1) << 2);
+            var previousZero = false;
+            for (var c = 0; c <= Math.Min(end + 1, 15); c++)
+            {
+                var at = ((8 + Bands[c]) * 3 + predictor) * 11;
+                if (c > end) { Count(TokenPaths[11], at); break; }
+                var z = Zigzag[c]; var value = coefficients[z]; var magnitude = Math.Abs((int)value);
+                if (magnitude > 2040) throw new InvalidOperationException("VP8 second DC coefficient exceeds its proven range.");
+                source.Y[(y + (z / 4) * 4) * source.Stride + x + (z % 4) * 4] = unchecked((byte)value);
+                y2High![macroblock * 16 + z] = (byte)(unchecked((ushort)value) >> 8);
+                var category = magnitude < 5 ? -1 : magnitude < 7 ? 0 : magnitude < 11 ? 1 : magnitude < 19 ? 2
+                    : magnitude < 35 ? 3 : magnitude < 67 ? 4 : 5;
+                var path = TokenPaths[category < 0 ? magnitude : category + 5];
+                Count(previousZero ? path >> 5 : path, at); predictor = Math.Min(magnitude, 2); previousZero = magnitude == 0;
             }
             return end < 0 ? (byte)0 : (byte)1;
         }
@@ -117,18 +151,22 @@ internal static partial class Vp8Encoder
         internal void Emit(Vp8Planes source, Vp8BooleanWriter writer, Span<byte> above, Span<byte> left, int columns, int rows)
         {
             above.Clear();
+            Span<byte> aboveY2 = Intra16 ? stackalloc byte[Math.Min(columns, PrefixMacroblocks)] : default;
+            aboveY2.Clear();
             for (var my = 0; my < rows; my++)
             {
-                left.Clear();
+                left.Clear(); byte leftY2 = 0;
                 for (var mx = 0; mx < columns; mx++)
                 {
                     if (my * columns + mx >= PrefixMacroblocks) return;
-                    var block = (my * columns + mx) * 24;
+                    var macroblock = my * columns + mx; var block = macroblock * 24;
+                    var large = Intra16 && (macroModes![macroblock * 16] & 128) != 0;
+                    if (large) aboveY2[mx] = leftY2 = EmitY2(source, macroblock, mx * 16, my * 16, aboveY2[mx] + leftY2, writer);
                     for (var b = 0; b < 16; b++)
                     {
                         var a = mx * 8 + b % 4; var l = b / 4;
                         above[a] = left[l] = EmitBlock(source.Y, source.Stride, mx * 16 + b % 4 * 4, my * 16 + b / 4 * 4,
-                            0, block + b, 3, above[a] + left[l], writer);
+                            0, block + b, large ? 0 : 3, above[a] + left[l], writer);
                     }
                     for (var plane = 0; plane < 2; plane++)
                     for (var b = 0; b < 4; b++)
@@ -144,8 +182,8 @@ internal static partial class Vp8Encoder
 
         private byte EmitBlock(byte[] source, int stride, int x, int y, int sampleOffset, int block, int plane, int predictor, Vp8BooleanWriter writer)
         {
-            var end = last[block] - 1; var previousZero = false;
-            for (var c = 0; c <= Math.Min(end + 1, 15); c++)
+            var first = plane == 0 ? 1 : 0; var end = last[block] - 1; var previousZero = false;
+            for (var c = first; c <= Math.Min(Math.Max(end + 1, first), 15); c++)
             {
                 var p = Probabilities.AsSpan(((plane * 8 + Bands[c]) * 3 + predictor) * 11, 11);
                 if (c > end) { writer.Codeword(TokenPaths[11], p); break; }
@@ -160,7 +198,19 @@ internal static partial class Vp8Encoder
                 if (magnitude != 0) writer.Write(packed >> 1 & 1);
                 predictor = Math.Min(magnitude, 2); previousZero = magnitude == 0;
             }
-            return end < 0 ? (byte)0 : (byte)1;
+            return end < first ? (byte)0 : (byte)1;
+        }
+
+        private byte EmitY2(Vp8Planes source, int macroblock, int x, int y, int predictor, Vp8BooleanWriter writer)
+        {
+            var end = (macroModes![macroblock * 16] >> 2 & 31) - 1;
+            Span<short> values = stackalloc short[16]; values.Clear();
+            for (var c = 0; c <= end; c++)
+            {
+                var z = Zigzag[c]; var low = source.Y[(y + z / 4 * 4) * source.Stride + x + z % 4 * 4];
+                values[z] = unchecked((short)(low | y2High![macroblock * 16 + z] << 8));
+            }
+            return Coefficients(writer, values, 1, predictor, Probabilities);
         }
 
         public void Dispose()

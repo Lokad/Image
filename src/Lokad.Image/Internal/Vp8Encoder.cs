@@ -33,21 +33,54 @@ internal static partial class Vp8Encoder
         using var tokens = new Vp8BooleanWriter(context, options.Limits.MaxOutputBytes);
         Span<byte> left = stackalloc byte[8];
         ReadOnlySpan<byte> candidates = [1, 2, 3, 4, 6, 8, 10];
-        using var model = CoefficientModel.TryCreate(source, count, candidates[options.Effort], options.Effort == 0 ? 1 : 4, context);
+        using var model = CoefficientModel.TryCreate(source, count, candidates[options.Effort], options.Effort == 0 ? 1 : 4, context,
+            options.Effort >= 4 && q != 0 ? modes : null);
+        var intra16 = model?.Intra16 == true;
+        Span<short> luma = intra16 ? stackalloc short[256] : default;
+        Span<short> y2 = intra16 ? stackalloc short[16] : default;
+        Span<int> bitCosts = intra16 ? stackalloc int[257] : default;
+        var lambda = 0;
+        if (intra16)
+        {
+            for (var p = 0; p <= 256; p++) bitCosts[p] = (int)Math.Round(-Math.Log2(Math.Max(1, p) / 256d) * 256, MidpointRounding.AwayFromZero);
+            var ac = (int)Vp8Tables.AcQuantizers[q];
+            lambda = (int)Math.Round(ac * ac * Math.Log(2) * 256 / 24, MidpointRounding.AwayFromZero);
+        }
         for (var my = 0; my < rows; my++)
         {
-            left.Clear();
+            left.Clear(); byte leftY2 = 0;
             for (var mx = 0; mx < columns; mx++)
             {
                 var index = my * columns + mx; var x = mx * 16; var y = my * 16;
-                for (var b = 0; b < 16; b++)
+                if (intra16)
                 {
-                    var bx = x + b % 4 * 4; var by = y + b / 4 * 4;
-                    var mode = SelectLuma(source, reconstructed, bx, by, x, y, candidates[options.Effort], context);
-                    modes[index * 16 + b] = (byte)mode;
-                    Block(source.Y, reconstructed.Y, source.Stride, bx, by, 3, q,
-                        tokens, above.AsSpan(mx * 8, 8), left, b % 4, b / 4, context, model, index * 24 + b, 0);
+                    var top = above.AsSpan(mx * 8, 8);
+                    var large = PrepareLumaMacroblock(source, reconstructed, x, y, q, candidates[options.Effort],
+                        index, columns, modes, top, left, model!.Y2Above[mx] + leftY2,
+                        model.Probabilities, bitCosts, lambda, luma, y2, context);
+                    if (large)
+                    {
+                        var predictor = model.Y2Above[mx] + leftY2;
+                        model.Y2Above[mx] = leftY2 = model.Ready ? Coefficients(tokens, y2, 1, predictor, model.Probabilities)
+                            : model.RecordY2(source, index, x, y, y2, predictor);
+                    }
+                    for (var b = 0; b < 16; b++)
+                    {
+                        var a = b % 4; var l = b / 4; var values = luma.Slice(b * 16, 16); var plane = large ? 0 : 3;
+                        top[a] = left[l] = model.Ready ? Coefficients(tokens, values, plane, top[a] + left[l], model.Probabilities)
+                            : model.Record(source.Y, source.Stride, x + a * 4, y + l * 4, 0,
+                                index * 24 + b, values, plane, top[a] + left[l]);
+                    }
                 }
+                else
+                    for (var b = 0; b < 16; b++)
+                    {
+                        var bx = x + b % 4 * 4; var by = y + b / 4 * 4;
+                        var mode = SelectLuma(source, reconstructed, bx, by, x, y, candidates[options.Effort], context);
+                        modes[index * 16 + b] = (byte)mode;
+                        Block(source.Y, reconstructed.Y, source.Stride, bx, by, 3, q,
+                            tokens, above.AsSpan(mx * 8, 8), left, b % 4, b / 4, context, model, index * 24 + b, 0);
+                    }
                 var chromaMode = SelectChroma(source, reconstructed, x / 2, y / 2, options.Effort == 0 ? 1 : 4, context);
                 chromaModes[index] = (byte)chromaMode;
                 for (var plane = 0; plane < 2; plane++)
@@ -224,10 +257,10 @@ internal static partial class Vp8Encoder
     private static byte Coefficients(Vp8BooleanWriter writer, ReadOnlySpan<short> coefficients, int plane, int predictor,
         ReadOnlySpan<byte> probabilities)
     {
-        var last = 15;
-        while (last >= 0 && coefficients[Zigzag[last]] == 0) last--;
+        var first = plane == 0 ? 1 : 0; var last = 15;
+        while (last >= first && coefficients[Zigzag[last]] == 0) last--;
         var previousZero = false;
-        for (var c = 0; c <= Math.Min(last + 1, 15); c++)
+        for (var c = first; c <= Math.Min(Math.Max(last + 1, first), 15); c++)
         {
             var p = probabilities.Slice(((plane * 8 + Bands[c]) * 3 + predictor) * 11, 11);
             if (c > last) { writer.Codeword(TokenPaths[11], p); break; }
@@ -240,7 +273,7 @@ internal static partial class Vp8Encoder
             if (magnitude != 0) writer.Write(value < 0 ? 1 : 0);
             predictor = Math.Min(magnitude, 2); previousZero = magnitude == 0;
         }
-        return last < 0 ? (byte)0 : (byte)1;
+        return last < first ? (byte)0 : (byte)1;
     }
 
     private static void Category(Vp8BooleanWriter writer, int category, int magnitude)
@@ -284,14 +317,26 @@ internal static partial class Vp8Encoder
             left.Clear();
             for (var mx = 0; mx < columns; mx++)
             {
-                context.Work(64); var index = my * columns + mx; writer.Write(0, 145); // B_PRED.
-                for (var by = 0; by < 4; by++)
-                    for (var bx = 0; bx < 4; bx++)
-                    {
-                        var p = (above[mx * 4 + bx] * 10 + left[by]) * 9; var mode = modes[index * 16 + by * 4 + bx];
-                        writer.Codeword(ModePaths[mode], Vp8Tables.BlockModeProbabilities.Slice(p, 9));
-                        above[mx * 4 + bx] = left[by] = mode;
-                    }
+                context.Work(64); var index = my * columns + mx;
+                if ((modes[index * 16] & 128) != 0)
+                {
+                    var mode = modes[index * 16] & 3;
+                    writer.Write(1, 145); writer.Write(mode < 2 ? 0 : 1, 156);
+                    writer.Write(mode & 1, mode < 2 ? 163 : 128);
+                    var equivalent = LargeEquivalent(mode);
+                    above.AsSpan(mx * 4, 4).Fill((byte)equivalent); left.Fill((byte)equivalent);
+                }
+                else
+                {
+                    writer.Write(0, 145); // B_PRED.
+                    for (var by = 0; by < 4; by++)
+                        for (var bx = 0; bx < 4; bx++)
+                        {
+                            var p = (above[mx * 4 + bx] * 10 + left[by]) * 9; var mode = modes[index * 16 + by * 4 + bx];
+                            writer.Codeword(ModePaths[mode], Vp8Tables.BlockModeProbabilities.Slice(p, 9));
+                            above[mx * 4 + bx] = left[by] = mode;
+                        }
+                }
                 var uv = chroma[index]; writer.Write(uv == 0 ? 0 : 1, 142);
                 if (uv != 0) { writer.Write(uv == 1 ? 0 : 1, 114); if (uv >= 2) writer.Write(uv - 2, 183); }
             }

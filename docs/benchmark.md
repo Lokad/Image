@@ -1,10 +1,13 @@
 # Lokad.Image benchmark state
 
-Updated 2026-10-20. Target: **warm single-CPU parity, independently confirmed
-conservative upper ≤1x**. The 239 numeric rows retain tested-producer evidence: **73 passes,
-165 gaps and 1 confidence-open case**. The finite
+Updated 2026-10-20. Priority: **complete-packet compression at the frozen quality
+gates**, lossy WebP first, then lossless WebP. Meaningful verified incremental
+gains may cost more CPU. Warm single-CPU parity (independently confirmed upper≤1x)
+remains a deferred objective; speed-only work and repeated confirmations wait
+while compression gates remain open. The 239 numeric rows retain tested-producer evidence: **71 passes,
+167 gaps and 1 confidence-open case**. The finite
 [material checklist](../benchmarks/WARM-COVERAGE.md) has 256 named cases, 17 unmeasured.
-The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
+The completed ≤2x phase belongs to 0.1.0; compression currently takes precedence over CPU parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
 These tables retain the performance-qualified producers identified by each report.
@@ -112,20 +115,20 @@ and the same actual package/examples qualify. Opaque allocation is9,669,728 B/op
 more CPU and allocation for size: photograph9,912,952 B/op versus historical702,616.
 Both lossless size gates remain open against160,032/7,234 B. The earlier
 [structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md) is diagnostic evidence.
-Lossy WebP ceilings remain17,688/7,100 B at frozen matched quality (21,432/8,288 B).
-The [bounded lossy audit](../benchmarks/WARM-VP8-COMPRESSION-AUDIT.md) parks the
-tested skip/prediction-rate candidates; the [intra16/Y2 screen](../benchmarks/WARM-VP8-INTRA16-SCREEN.md)
-also misses both size gates and is slower. These rejected candidates change no
-production packet. The [exact SIMD forward DCT](../benchmarks/WARM-VP8-FORWARD-DCT.md)
-qualifies seven existing encodes with current point means5.4–16.9% below earlier
-reported checkpoints, with identical coefficients,
-packets and quality. The diagram independently clears time parity at0.831x/upper0.834x;
-photo remains passing at0.679x/upper0.684x. Original opaque8/16 remain short gaps.
-These seven current encoder observations supersede their historical build scopes;
-all size ceilings and other functional/memory/performance requirements remain open.
+Lossy WebP ceilings remain17,688/7,100 B. The [intra16/Y2 milestone](../benchmarks/WARM-VP8-INTRA16-COMPRESSION.md)
+now accepts packets21,202/7,642 B (previously21,432/8,288), source-PSNR gaps
+0.021969/0.214030dB within0.25dB. It reconsiders the historical CPU-first rejection:
+1.1%/7.8% packet savings are useful despite higher CPU.4,600 tests/OS,135 internal
+and2 public scalar checks/OS and the same actual package/examples qualify. Two
+quiet three-actual cost screens record1.152x/1.077x and601,419/487,843 B/op; no
+independent timing confirmation or CPU acceptance gate applies to this milestone.
+The exact SIMD transform is retained. Exactly the two matched-quality content
+encode rows change; the other five existing VP8 encode rows use Quality100/q0
+and retain their prior branch and evidence. Both size ceilings remain open.
 An [untimed whole-frame entropy replay](../benchmarks/WARM-VP8-FULL-MODEL-AUDIT.md)
 recovers1,294/604 B with identical pixels but still misses both size ceilings;
-it changes no production result or benchmark row.
+it changes no production result or benchmark row. It can be reconsidered as a
+compression adjunct rather than rejected solely for missing the final ceiling.
 The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
 rejects a smaller packet with excessive quality loss and a quality-preserving
 variant with immaterial byte savings. The qualified producer and size gates remain unchanged.
@@ -166,8 +169,8 @@ RGB420 (managed/FFmpeg). Source-PSNR gaps are0.000033/0.106110/0.017274dB inside
 [optional-policy screen](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) includes complete
 time and allocations, while retaining the Original control. WebP photograph/diagram
 lossless sizes are174,748/160,032 B
-and 7,636/7,234 B; [lossy sizes](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md)
-are 21,432/17,688 B and 8,288/7,100 B at the fixed qualified source quality. Compression-
+and 7,636/7,234 B; [lossy sizes](../benchmarks/WARM-VP8-INTRA16-COMPRESSION.md)
+are 21,202/17,688 B and 7,642/7,100 B at the fixed qualified source quality. Compression-
 efficiency parity is not established. Current operation timings/allocations follow.
 
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
@@ -346,8 +349,8 @@ reconciliation now covers every numeric row.
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 66,156.61 | 122,061.47 | 0.542 / 0.550 | 10,286,320 | Parity confirmed |
 | [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-CODE-COST.md) | 65,462.97 | 82,409.48 | 0.794 / 0.802 | 9,912,952 | Parity confirmed |
 | [WebP VP8L text/diagram RGBA8](../benchmarks/WARM-VP8L-CODE-COST.md) | 6,715.35 | 10,254.85 | 0.655 / 0.669 | 107,568 | Parity confirmed |
-| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 6,555.59 | 9,649.33 | 0.679 / 0.684 | 558,587 | Parity confirmed |
-| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 4,856.65 | 5,841.64 | 0.831 / 0.834 | 489,948 | Parity confirmed |
+| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-INTRA16-COMPRESSION.md) | 11,184.03 | 9,709.76 | 1.152 / 1.214 | 601,419 | Gap (cost screen; CPU parity deferred) |
+| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-INTRA16-COMPRESSION.md) | 6,279.50 | 5,829.60 | 1.077 / 1.216 | 487,843 | Gap (cost screen; CPU parity deferred) |
 
 **Editing**
 
@@ -481,7 +484,10 @@ certified rational-half cases remain exact. Linked reports specify every halo
 and scope control; no managed tolerance is introduced.
 
 PNG byte RGB/gray/gray-alpha Optimal uses managed9/native6; RGBA Fastest uses2/1,
-SmallestSize9/9, with exact samples and the unchanged5% IDAT-size gate. Packed-gray
+SmallestSize9/9, with exact samples and the historical5% IDAT timing-equivalence
+gate. [Complete-packet reconciliation](../benchmarks/PNG-COMPLETE-PACKET-AUDIT.md)
+finds15 retained passes and two open level6RGBA8 boundaries, both218,775/210,973 B.
+A timing pass or IDAT tolerance is not a packet-size pass. Packed-gray
 transparency uses the approved exact timed native color-key correction. Raw
 incompatible baselines/refusals remain unscored; approved equivalent replacements
 are confirmed. GIF/animation, startup, concurrency and arbitrary profiles are
@@ -490,5 +496,6 @@ outside this still-image fixed warm scope.
 Maintain the selected evidence in [the renderer](../benchmarks/render-benchmark.py),
 regenerate with `python benchmarks/render-benchmark.py`, then run `--check`.
 Preserve raw evidence, failures, controls and package/source qualification.
-Stop independently confirmed ≤1x cases. Add a later case only when evidence identifies a distinct
+Defer CPU-only optimization while compression gates are open; retain passing
+performance evidence. Add a later case only when evidence identifies a distinct
 required algorithm or public boundary omitted from the finite checklist.

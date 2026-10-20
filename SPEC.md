@@ -1403,14 +1403,24 @@ Source conversion uses bounded views of the existing pixel storage, without a
 normalized-raster allocation. The first row work check precedes storage access;
 all row charges, matrix evaluation order and alpha-weighted rounding are retained.
 
-The VP8 encoder uses B_PRED luma, one token partition and no loop filter.
+The VP8 encoder uses one token partition and no loop filter. At effort 4..6 and
+quantizer index above zero, optional memory/work admission enables comparison of
+4x4 luma prediction with 16x16 prediction and grouped DC (Y2) coding. The decision
+combines reconstructed source error and estimated coefficient/header cost; ties
+retain 4x4. One macroblock is staged, without another full-frame copy. Quality 100,
+lower efforts and constrained local budgets retain the established 4x4 path.
+This search can change reconstructed lossy pixels; alpha remains exact. The two
+qualified photograph/diagram controls improve in size within the existing quality
+tolerance, without establishing general compression-size parity.
 When optional memory/work admission permits, coefficient probabilities adapt to
 the first at most 64 macroblocks, including the cost of signaling updates.
 The prefix reuses private converted sample bytes for coefficient magnitudes,
 with two extra bits per sample for sign and the ninth magnitude bit; bounded
-auxiliary storage is at most 24,064 bytes. Prediction, quantization and
-reconstruction execute once. The remaining blocks use the selected model
-directly. This changes compressed bytes while preserving decoded pixels.
+auxiliary storage is at most 24,064 bytes, or 26,176 bytes with the optional Y2
+cache and row contexts. Grouped DC needs signed high bytes beyond the ordinary
+coefficient cache range. Only the selected reconstruction is retained; the
+remaining blocks use the selected probability model directly. Entropy adaptation
+alone preserves decoded pixels.
 Constrained budgets retain the original fixed coefficient model and its work
 behavior; adaptation adds no mandatory admission requirement.
 Prediction search minimizes source-plane squared error;

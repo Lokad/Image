@@ -1,6 +1,10 @@
 # VP8 intra16/Y2 candidate screen
 
-This candidate is **rejected**. Mixed 4×4/16×16 luma prediction and grouped DC
+**Historical CPU-first screen.** The [later compression-first milestone](WARM-VP8-INTRA16-COMPRESSION.md)
+accepts this useful primitive with the current SIMD transform and full qualification.
+The original measurements and decision below remain historical evidence.
+
+This candidate was **rejected under the earlier ordering**. Mixed 4×4/16×16 luma prediction and grouped DC
 coding reduce the fixed photograph/diagram packets by 1.1%/7.8%, but miss both
 size ceilings and slow complete encoding. The qualified encoder is restored;
 these results do not replace its benchmark rows or qualify a new encoding path.

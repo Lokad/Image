@@ -2,6 +2,9 @@
 
 ## 0.2.0 — Unreleased
 
+- Smaller lossy WebP output through admitted 16x16 luma prediction and grouped DC
+  coding at higher efforts; compression parity remains open.
+
 - Coverage-based OpenType contextual substitution and validated zero default-instance
   positioning corrections for supplied TrueType text.
 

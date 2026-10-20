@@ -77,4 +77,39 @@ internal static class Vp8ForwardDct
                 coefficients[v * 4 + u] = checked((short)Math.Round(values[u] / (2 * (u + v == 0 ? dc : ac)), MidpointRounding.AwayFromZero));
         }
     }
+
+    // The inputs are sums of sixteen residual samples: twice each unquantized
+    // 4x4 DC value. H^2=4I and the normative inverse Walsh divides by eight,
+    // so the forward coefficient is H*input*H/4. Keep that fraction exact.
+    internal static void QuantizeWalsh(ReadOnlySpan<int> dcSums, Span<short> result, int dc, int ac)
+    {
+        if (dcSums.Length != 16 || result.Length != 16 || dc < 1 || ac < 1)
+            throw new ArgumentException("Walsh quantization needs sixteen DC sums and positive quantizers.");
+        Span<int> horizontal = stackalloc int[16];
+        for (var y = 0; y < 4; y++)
+        {
+            var row = dcSums.Slice(y * 4, 4);
+            Walsh(row[0], row[1], row[2], row[3], out horizontal[y * 4], out horizontal[y * 4 + 1],
+                out horizontal[y * 4 + 2], out horizontal[y * 4 + 3]);
+        }
+        for (var x = 0; x < 4; x++)
+        {
+            Walsh(horizontal[x], horizontal[4 + x], horizontal[8 + x], horizontal[12 + x],
+                out var a, out var b, out var c, out var d);
+            result[x] = WalshQuantize(a, x == 0 ? dc : ac);
+            result[4 + x] = WalshQuantize(b, ac); result[8 + x] = WalshQuantize(c, ac); result[12 + x] = WalshQuantize(d, ac);
+        }
+    }
+
+    private static short WalshQuantize(int numerator, int divisor)
+    {
+        var magnitude = (Math.Abs(numerator) + 2L * divisor) / (4L * divisor);
+        return checked((short)(numerator < 0 ? -magnitude : magnitude));
+    }
+
+    private static void Walsh(int a, int b, int c, int d, out int zero, out int first, out int second, out int third)
+    {
+        zero = a + b + c + d; first = a + b - c - d;
+        second = a - b - c + d; third = a - b + c - d;
+    }
 }

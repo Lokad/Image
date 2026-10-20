@@ -1,10 +1,13 @@
 # Material warm coverage
 
 Updated 2026-10-20. The **warm single-CPU parity objective remains open**:
-73 independent passes,165 measured mean gaps and one confidence-open case across
+71 independent passes,167 measured mean gaps and one confidence-open case across
 239 numeric rows. The [three-table summary](../docs/benchmark.md)
-contains125 independent observations and114 qualified shorts.17named required
+contains123 independent observations and116 qualified shorts.17named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
+Compression now precedes CPU parity: lossy WebP first, then lossless WebP.
+Accept verified incremental packet savings within unchanged quality/resource gates;
+CPU costs are recorded, with parity enforcement and speed-only work deferred.
 
 The finite scope is now **256 cases:239 numeric+17 unmeasured**. After [typed source metadata](../docs/source-metadata.md),23 unaffected current
 rows and216 historical/awaiting-confirmation rows remain. Exactly31 formerly
@@ -1047,3 +1050,20 @@ rejected at the byte/quality screen:20,284/7,868 B, source-PSNR gaps0.590/0.577d
 References, settings and the0.25dB gate remain frozen. One Linux core build, no
 scored jobs or new package proof; qualified sources/objects/core/package restored.
 No coverage count or performance row changes. All size gates remain open.
+
+
+The [intra16/Y2 compression milestone](WARM-VP8-INTRA16-COMPRESSION.md) reconsiders
+C39 under compression-first ordering:21,202/7,642 B, source-PSNR gaps0.021969/
+0.214030dB PASS, ceilings17,688/7,100 B still OPEN. The same original controls and
+settings remain fixed.4,600 tests/OS,135internal+2public scalar perOS and the same
+actual private package/examples pass. Two short quiet cost screens replace only
+the two content VP8 rows:1.152/1.077x,601,419/487,843 B/op; CPU parity deferred.
+The other five existing VP8 encode rows use Quality100/q0 and are unchanged.
+Scope256=239numeric+17pending and23current/216historical stay fixed; selected numeric
+ledger becomes71passes/167gaps/1confidence-open,123independent/116short. This is an
+honest replacement of old independent producer passes, not a whole-scope regression
+claim. No timing confirmations or unrelated optimization follow while compression
+is open. The [17-row PNG packet audit](PNG-COMPLETE-PACKET-AUDIT.md) separately
+finds15 retained packet-size passes and two gaps; the5% IDAT timing gate never
+established complete-packet parity. Optional JPEGCompactColor remains distinct
+from Original/default and from untested broader content.

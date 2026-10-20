@@ -1,0 +1,317 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "scope": "Bounded reconciliation of the existing 17 PNG encode rows only; retained complete packet receipts, no encoding/calibration/timing or matrix expansion.",
+  "acceptance": "Exact decoded samples and complete encoded packet no larger than frozen FFmpeg reference at each declared input/policy/settings. Five-percent IDAT tolerance is a historical timing-equivalence gate only.",
+  "retainedPacketPasses": 15,
+  "retainedPacketGaps": 2,
+  "currentProductionExecutionRepeated": false,
+  "cases": [
+    {
+      "name": "PNG EncodePngAsync, fresh nonseekable Stream / level6",
+      "evidence": "warm-png-async-encode-evidence.json",
+      "evidenceSha256": "5eb95e6482062b6b47fe71c16323bc2ce834fe8b763403160f5bfdcec657f5da",
+      "observationPath": [
+        "cases",
+        "Png8AsyncNonSeekable",
+        -1
+      ],
+      "managedPacketBytes": 218775,
+      "referencePacketBytes": 210973,
+      "completePacketSizePass": false,
+      "excessBytes": 7802,
+      "managedIdatBytes": 218682,
+      "referenceIdatBytes": 210283,
+      "report": "WARM-PNG-ASYNC-ENCODE.md",
+      "retainedObservationOnly": true
+    },
+    {
+      "name": "PNG RGBA8, level 6 / None",
+      "evidence": "warm-png-chunk-crc-evidence.json",
+      "evidenceSha256": "0f8bb1690407f963fcf48868960323c942218fe070dc47c9d721743537174b49",
+      "observationPath": [
+        "cases",
+        "Encode8",
+        -1
+      ],
+      "managedPacketBytes": 218775,
+      "referencePacketBytes": 210973,
+      "completePacketSizePass": false,
+      "excessBytes": 7802,
+      "managedIdatBytes": 218682,
+      "referenceIdatBytes": 210283,
+      "report": "WARM-PNG-CHUNK-CRC.md",
+      "retainedObservationOnly": true
+    },
+    {
+      "name": "PNG RGBA8, NoCompression / None",
+      "evidence": "warm-png-stored-capacity-evidence.json",
+      "evidenceSha256": "0c212aa8f8563b9260a1904f7e03c85b5b42ea9d64b9301ba600b7361a0a8184",
+      "observationPath": [
+        "cases",
+        "EncodeNoCompression8",
+        -1
+      ],
+      "managedPacketBytes": 531971,
+      "referencePacketBytes": 533444,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 531818,
+      "referenceIdatBytes": 531818,
+      "report": "WARM-PNG-STORED-CAPACITY.md",
+      "retainedObservationOnly": true
+    },
+    {
+      "name": "PNG RGBA16, NoCompression / None",
+      "evidence": "warm-png-stored-capacity-evidence.json",
+      "evidenceSha256": "0c212aa8f8563b9260a1904f7e03c85b5b42ea9d64b9301ba600b7361a0a8184",
+      "observationPath": [
+        "cases",
+        "EncodeNoCompression16",
+        -1
+      ],
+      "managedPacketBytes": 1063615,
+      "referencePacketBytes": 1066552,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 1063366,
+      "referenceIdatBytes": 1063366,
+      "report": "WARM-PNG-STORED-CAPACITY.md",
+      "retainedObservationOnly": true
+    },
+    {
+      "name": "PNG RGBA8, Fastest managed2/native1 / None",
+      "evidence": "warm-png-chunk-crc-evidence.json",
+      "evidenceSha256": "0f8bb1690407f963fcf48868960323c942218fe070dc47c9d721743537174b49",
+      "observationPath": [
+        "cases",
+        "EncodeFast8",
+        -1
+      ],
+      "managedPacketBytes": 231465,
+      "referencePacketBytes": 236828,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 231372,
+      "referenceIdatBytes": 236066,
+      "report": "WARM-PNG-CHUNK-CRC.md",
+      "retainedObservationOnly": true
+    },
+    {
+      "name": "PNG RGBA16, Fastest managed2/native1 / None",
+      "evidence": "warm-png-chunk-crc-evidence.json",
+      "evidenceSha256": "0f8bb1690407f963fcf48868960323c942218fe070dc47c9d721743537174b49",
+      "observationPath": [
+        "cases",
+        "EncodeFast16",
+        -1
+      ],
+      "managedPacketBytes": 963045,
+      "referencePacketBytes": 968216,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 962820,
+      "referenceIdatBytes": 965318,
+      "report": "WARM-PNG-CHUNK-CRC.md",
+      "retainedObservationOnly": true
+    },
+    {
+      "name": "PNG RGBA16, Fastest managed2/native1 / live cancelable token",
+      "evidence": "warm-png-chunk-crc-evidence.json",
+      "evidenceSha256": "0f8bb1690407f963fcf48868960323c942218fe070dc47c9d721743537174b49",
+      "observationPath": [
+        "cases",
+        "EncodeFastCancelable16",
+        -1
+      ],
+      "managedPacketBytes": 963045,
+      "referencePacketBytes": 968216,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 962820,
+      "referenceIdatBytes": 965318,
+      "report": "WARM-PNG-CHUNK-CRC.md",
+      "retainedObservationOnly": true
+    },
+    {
+      "name": "PNG RGBA16, Fastest managed2/native1 / forward-only output",
+      "evidence": "warm-png-chunk-crc-evidence.json",
+      "evidenceSha256": "0f8bb1690407f963fcf48868960323c942218fe070dc47c9d721743537174b49",
+      "observationPath": [
+        "cases",
+        "EncodeFastForward16",
+        -1
+      ],
+      "managedPacketBytes": 963045,
+      "referencePacketBytes": 968216,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 962820,
+      "referenceIdatBytes": 965318,
+      "report": "WARM-PNG-CHUNK-CRC.md",
+      "retainedObservationOnly": true
+    },
+    {
+      "name": "PNG RGBA16, level 6 / None",
+      "evidence": "warm-png-chunk-crc-evidence.json",
+      "evidenceSha256": "0f8bb1690407f963fcf48868960323c942218fe070dc47c9d721743537174b49",
+      "observationPath": [
+        "cases",
+        "Encode16",
+        -1
+      ],
+      "managedPacketBytes": 960565,
+      "referencePacketBytes": 963202,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 960340,
+      "referenceIdatBytes": 960316,
+      "report": "WARM-PNG-CHUNK-CRC.md",
+      "retainedObservationOnly": true
+    },
+    {
+      "name": "PNG RGBA8, SmallestSize9 / native9",
+      "evidence": "warm-png-chunk-crc-evidence.json",
+      "evidenceSha256": "0f8bb1690407f963fcf48868960323c942218fe070dc47c9d721743537174b49",
+      "observationPath": [
+        "cases",
+        "EncodeSmallest8",
+        -1
+      ],
+      "managedPacketBytes": 209407,
+      "referencePacketBytes": 210973,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 209314,
+      "referenceIdatBytes": 210283,
+      "report": "WARM-PNG-CHUNK-CRC.md",
+      "retainedObservationOnly": true
+    },
+    {
+      "name": "PNG RGBA16, SmallestSize managed9/native9 / None",
+      "evidence": "warm-png-chunk-crc-evidence.json",
+      "evidenceSha256": "0f8bb1690407f963fcf48868960323c942218fe070dc47c9d721743537174b49",
+      "observationPath": [
+        "cases",
+        "EncodeSmallest16",
+        -1
+      ],
+      "managedPacketBytes": 960650,
+      "referencePacketBytes": 963202,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 960425,
+      "referenceIdatBytes": 960316,
+      "report": "WARM-PNG-CHUNK-CRC.md",
+      "retainedObservationOnly": true
+    },
+    {
+      "name": "PNG RGB8, Optimal managed9/native6 / None",
+      "evidence": "warm-png-byte-packing-evidence.json",
+      "evidenceSha256": "eca70a92d083be55af3aa07f6503f0b3662d01881a18e49be2bac43604aa9704",
+      "observationPath": [
+        "cases",
+        "EncodeRgb8",
+        -1
+      ],
+      "managedPacketBytes": 163358,
+      "referencePacketBytes": 168729,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 163277,
+      "referenceIdatBytes": 168159,
+      "report": "WARM-PNG-BYTE-PACKING.md",
+      "retainedObservationOnly": true
+    },
+    {
+      "name": "PNG RGB16, level 6 / None",
+      "evidence": "warm-png-chunk-crc-evidence.json",
+      "evidenceSha256": "0f8bb1690407f963fcf48868960323c942218fe070dc47c9d721743537174b49",
+      "observationPath": [
+        "cases",
+        "EncodeRgb16",
+        -1
+      ],
+      "managedPacketBytes": 737426,
+      "referencePacketBytes": 739472,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 737237,
+      "referenceIdatBytes": 737246,
+      "report": "WARM-PNG-CHUNK-CRC.md",
+      "retainedObservationOnly": true
+    },
+    {
+      "name": "PNG gray8, Optimal managed9/native6 / None",
+      "evidence": "warm-png-byte-packing-evidence.json",
+      "evidenceSha256": "eca70a92d083be55af3aa07f6503f0b3662d01881a18e49be2bac43604aa9704",
+      "observationPath": [
+        "cases",
+        "EncodeGray8",
+        -1
+      ],
+      "managedPacketBytes": 72373,
+      "referencePacketBytes": 72586,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 72304,
+      "referenceIdatBytes": 72304,
+      "report": "WARM-PNG-BYTE-PACKING.md",
+      "retainedObservationOnly": true
+    },
+    {
+      "name": "PNG gray16, level 6 / None",
+      "evidence": "warm-png-chunk-crc-evidence.json",
+      "evidenceSha256": "0f8bb1690407f963fcf48868960323c942218fe070dc47c9d721743537174b49",
+      "observationPath": [
+        "cases",
+        "EncodeGray16",
+        -1
+      ],
+      "managedPacketBytes": 264939,
+      "referencePacketBytes": 265433,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 264834,
+      "referenceIdatBytes": 264587,
+      "report": "WARM-PNG-CHUNK-CRC.md",
+      "retainedObservationOnly": true
+    },
+    {
+      "name": "PNG gray-alpha8, Optimal managed9/native6 / None",
+      "evidence": "warm-png-byte-packing-evidence.json",
+      "evidenceSha256": "eca70a92d083be55af3aa07f6503f0b3662d01881a18e49be2bac43604aa9704",
+      "observationPath": [
+        "cases",
+        "EncodeGrayAlpha8",
+        -1
+      ],
+      "managedPacketBytes": 120036,
+      "referencePacketBytes": 120366,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 119967,
+      "referenceIdatBytes": 119940,
+      "report": "WARM-PNG-BYTE-PACKING.md",
+      "retainedObservationOnly": true
+    },
+    {
+      "name": "PNG gray-alpha16, level 6 / None",
+      "evidence": "warm-png-chunk-crc-evidence.json",
+      "evidenceSha256": "0f8bb1690407f963fcf48868960323c942218fe070dc47c9d721743537174b49",
+      "observationPath": [
+        "cases",
+        "EncodeGrayAlpha16",
+        -1
+      ],
+      "managedPacketBytes": 505483,
+      "referencePacketBytes": 506887,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 505342,
+      "referenceIdatBytes": 505333,
+      "report": "WARM-PNG-CHUNK-CRC.md",
+      "retainedObservationOnly": true
+    }
+  ]
+}
