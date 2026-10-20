@@ -92,7 +92,16 @@ public sealed class Vp8AdmissionTests
         var limits = new ImageLimits { MaxWorkingBytes = peak };
         using var exact = new NonseekableOutput();
         ImageCodec.EncodeWebp(source, exact, options with { Limits = limits });
-        Assert.Equal(expected, exact.ToArray()); Assert.True(exact.CanWrite);
+        var constrained = exact.ToArray();
+        // The tight mandatory-storage bound deliberately omits optional alpha
+        // history. Its ALPH representation may differ, while VP8 and pixels
+        // remain exact. Freeze that admitted packet for the output-size checks.
+        Assert.Equal(Vp8Payload(expected), Vp8Payload(constrained));
+        using (var original = ImageCodec.Decode(expected))
+        using (var admitted = ImageCodec.Decode(constrained))
+            Assert.Equal(OriginalPixels.Bytes(original), OriginalPixels.Bytes(admitted));
+        Assert.True(constrained.Length >= expected.Length); expected = constrained;
+        Assert.True(exact.CanWrite);
         using var rejectedMemory = new MemoryStream();
         Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, rejectedMemory, options with
         { Limits = limits with { MaxWorkingBytes = peak - 1 } }));

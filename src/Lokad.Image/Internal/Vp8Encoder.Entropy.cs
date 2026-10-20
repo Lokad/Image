@@ -19,7 +19,8 @@ internal static partial class Vp8Encoder
         internal bool Intra16 => macroModes is not null;
         internal byte[] Y2Above { get; }
 
-        internal static CoefficientModel? TryCreate(Vp8Planes source, int blocks, int lumaTrials, int chromaTrials, OperationContext context, byte[]? modes = null)
+        internal static CoefficientModel? TryCreate(Vp8Planes source, int blocks, int lumaTrials, int chromaTrials, OperationContext context,
+            byte[]? modes = null, bool fullFrame = false)
         {
             var samples = source.Y.Length + source.U.Length + source.V.Length;
             var prefix = Math.Min(blocks, 64);
@@ -52,6 +53,17 @@ internal static partial class Vp8Encoder
                 return new CoefficientModel(samples, blocks, context, modes, source.Stride / 16);
             }
             if (extra > source.MemoryBytes || extra + growth > context.RemainingWorkingBytes || work > context.RemainingWork) return null;
+            if (fullFrame && blocks > prefix)
+            {
+                // The q0 predictor does not consult the probability model, so
+                // fitting its complete frame changes entropy alone. Reuse the
+                // same private-plane cache without Y2 storage or another pass.
+                var fullExtra = blocks * 120L + 16384;
+                var fullWork = (blocks - prefix) * (24L * 256 + 256) + 1056 * 16;
+                if (fullExtra <= source.MemoryBytes && fullExtra + growth <= context.RemainingWorkingBytes
+                    && work + fullWork <= context.RemainingWork)
+                    return new CoefficientModel(samples, blocks, context, fullFrame: true);
+            }
             return new CoefficientModel(samples, blocks, context);
         }
 

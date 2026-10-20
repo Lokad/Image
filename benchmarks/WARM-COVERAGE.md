@@ -1123,3 +1123,18 @@ historical rather than being relabeled current passes. Counts256=239numeric+
 4,613tests/OS,146internal+3public scalar and the same actual package/examples pass.
 Frozen decoder corpus packets remain unchanged. Opaque q0, primary photograph/
 diagram, other codecs/edit/font/inspection paths reuse unchanged relevant proofs.
+
+
+The [alpha backward-reference milestone](WARM-VP8-ALPHA-MATCHES.md) refreshes four
+existing unrestricted q0 rows. Full-frame coefficient fitting saves2,036/2,048 B;
+bounded ALPH matches then save95,784 B. Alpha8/16 now170,196/98,590 B, opaque8/16
+149,570/72,380 B; all five procedural packet gates remain open. Exact old decoded
+RGBA/source quality, settings/reference packets and gates are unchanged. The
+work32M packet/work remains452,932 B/31,961,577, retaining its C58 short cost proof.
+4,628tests/OS,161internal+51public+2diff scalar and the same actual package/examples
+qualify. Four short costs1.397/1.426/0.523/0.532x and allocations1,543,152/1,543,152/
+1,793,800/1,793,800 B/op replace only these existing rows. CPU parity is deferred;
+no independent repeats, new workload or codec/edit/font/inspection invalidation.
+Counts256=239numeric+17pending;68independentpasses/167gaps/1confidence-open/
+3cost screens,120independent/119short,23current/216historical and31metadata queue.
+The unadopted gradient-only candidate does not introduce another required path.

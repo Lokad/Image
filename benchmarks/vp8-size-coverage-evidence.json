@@ -34,73 +34,75 @@
     },
     {
       "case": "WarmWebp/EncodeOpaque8",
-      "managedPacketBytes": 151606,
+      "managedPacketBytes": 149570,
       "referencePacketBytes": 72380,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "warm-vp8-forward-dct-evidence.json",
-      "observationPath": [
-        "cases",
-        "EncodeOpaque8",
-        -1
-      ],
-      "validity": "Retained C40 packet/quality receipt; q0 branch unchanged by C53-C57. Explicit fixed-q100 control, not the default quality85."
-    },
-    {
-      "case": "WarmWebp/EncodeOpaque16",
-      "managedPacketBytes": 151606,
-      "referencePacketBytes": 72380,
-      "managedQuality": 100,
-      "referenceQuality": 75,
-      "effort": 4,
-      "qualityPass": true,
-      "packetSizePass": false,
-      "evidence": "warm-vp8-forward-dct-evidence.json",
-      "observationPath": [
-        "cases",
-        "EncodeOpaque16",
-        -1
-      ],
-      "validity": "Retained C40 packet/quality receipt; q0 branch unchanged by C53-C57. Explicit fixed-q100 control, not the default quality85."
-    },
-    {
-      "case": "WarmWebp/Encode8",
-      "managedPacketBytes": 268028,
-      "referencePacketBytes": 98590,
-      "managedQuality": 100,
-      "referenceQuality": 75,
-      "effort": 4,
-      "qualityPass": true,
-      "packetSizePass": false,
-      "evidence": "vp8-compressed-alpha-evidence.json",
+      "evidence": "vp8-alpha-matches-evidence.json",
       "observationPath": [
         "observations",
         0
       ],
-      "validity": "C58 qualified exact compressed ALPH; same VP8 payload, decoded RGBA, source quality and fixed100/native75/effort4. Packet gate remains open.",
-      "previousManagedPacketBytes": 286532,
-      "alphaPayloadBytes": 114363
+      "validity": "C61 qualified full-frame q0 entropy and bounded ALPH matching; same decoded RGBA/source quality and fixed100/native75/effort4. Complete-packet gate remains open.",
+      "previousManagedPacketBytes": 151606,
+      "alphaPayloadBytes": 0
     },
     {
-      "case": "WarmWebp/Encode16",
-      "managedPacketBytes": 268028,
+      "case": "WarmWebp/EncodeOpaque16",
+      "managedPacketBytes": 149570,
+      "referencePacketBytes": 72380,
+      "managedQuality": 100,
+      "referenceQuality": 75,
+      "effort": 4,
+      "qualityPass": true,
+      "packetSizePass": false,
+      "evidence": "vp8-alpha-matches-evidence.json",
+      "observationPath": [
+        "observations",
+        1
+      ],
+      "validity": "C61 qualified full-frame q0 entropy and bounded ALPH matching; same decoded RGBA/source quality and fixed100/native75/effort4. Complete-packet gate remains open.",
+      "previousManagedPacketBytes": 151606,
+      "alphaPayloadBytes": 0
+    },
+    {
+      "case": "WarmWebp/Encode8",
+      "managedPacketBytes": 170196,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "vp8-compressed-alpha-evidence.json",
+      "evidence": "vp8-alpha-matches-evidence.json",
       "observationPath": [
         "observations",
-        1
+        2
       ],
-      "validity": "C58 qualified exact compressed ALPH; same VP8 payload, decoded RGBA, source quality and fixed100/native75/effort4. Packet gate remains open.",
-      "previousManagedPacketBytes": 286532,
-      "alphaPayloadBytes": 114363
+      "validity": "C61 qualified full-frame q0 entropy and bounded ALPH matching; same decoded RGBA/source quality and fixed100/native75/effort4. Complete-packet gate remains open.",
+      "previousManagedPacketBytes": 268028,
+      "alphaPayloadBytes": 18579
+    },
+    {
+      "case": "WarmWebp/Encode16",
+      "managedPacketBytes": 170196,
+      "referencePacketBytes": 98590,
+      "managedQuality": 100,
+      "referenceQuality": 75,
+      "effort": 4,
+      "qualityPass": true,
+      "packetSizePass": false,
+      "evidence": "vp8-alpha-matches-evidence.json",
+      "observationPath": [
+        "observations",
+        3
+      ],
+      "validity": "C61 qualified full-frame q0 entropy and bounded ALPH matching; same decoded RGBA/source quality and fixed100/native75/effort4. Complete-packet gate remains open.",
+      "previousManagedPacketBytes": 268028,
+      "alphaPayloadBytes": 18579
     },
     {
       "case": "WarmWebp/EncodeBudget8",
@@ -116,7 +118,7 @@
         "observations",
         2
       ],
-      "validity": "C58 qualified exact compressed ALPH; same VP8 payload, decoded RGBA, source quality and fixed100/native75/effort4. Packet gate remains open.",
+      "validity": "C58 cost retained; C61 verifies the complete encoded packet and logical work unchanged, with exact RGBA/quality. Explicit fixed100/native75 control remains a packet gap.",
       "previousManagedPacketBytes": 471436,
       "alphaPayloadBytes": 114363
     }

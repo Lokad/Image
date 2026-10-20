@@ -1399,11 +1399,16 @@ cells keep the same result. Luma and exact normalized alpha are unchanged.
 Odd and padded edges
 extend the last source pixel. Alpha is normalized once and preserved exactly.
 At nonzero effort, sufficient local work/memory permits a headerless VP8L green
-plane with horizontal alpha filtering and previous-pixel copies. A count pass
-selects compression only when the complete padded ALPH chunk is smaller than raw.
-The two passes borrow the existing alpha plane: no filtered/RGBA raster or encoded
-alpha buffer is allocated. Their fixed 2 KiB workspace is reserved through the
-same shared root before allocation and released when container writing ends.
+plane with horizontal alpha filtering and previous-pixel copies. At efforts 4..6,
+additional local admission permits four-position hashed backward references and
+adaptive green/distance prefix codes. The bounded history holds 65,536 positions
+(262,176 admitted bytes); 16 KiB additional headroom covers tables and construction
+scratch, including the fixed 2 KiB workspace. Count passes select the smaller
+complete padded ALPH candidate and require it to beat raw. All passes borrow the
+existing alpha plane: no filtered/RGBA raster or encoded-alpha buffer is allocated.
+Workspace is reserved through the same shared root before allocation and released
+when its owner ends. Insufficient local allowances retain fixed coding or raw
+before attempting the optional work; a worse successful candidate is discarded.
 Local admission is decided before attempting compression; insufficient local
 allowance retains raw unfiltered alpha. Shared refusal, cancellation or a failed
 attempt terminates the operation without fallback. Optional metadata is stripped.
@@ -1434,6 +1439,12 @@ original 64-block prefix: extending entropy statistics changes no selected mode
 or reconstructed pixel. There is no second raster conversion or full-frame copy.
 Otherwise local limits select the prefix cache before allocation; shared admission
 refusal always terminates the operation without retry.
+At efforts 4..6 with quantizer index zero, equivalent admission also permits
+whole-frame entropy fitting for the existing 4x4 path, using
+`120*macroblocks + 16384` auxiliary bytes without Y2 storage. Its predictor never
+consults the model, so mode choices and decoded pixels remain identical. The
+original conservative work envelope and every performed work charge are preserved;
+tight local allowances keep the prefix or fixed model before shared admission.
 The admitted mixed-mode path also compares actual quantized reconstruction error
 and coefficient/header bit cost for all ten luma directions and four chroma
 predictions. It stages one luma block or one 8x8 U/V pair on bounded stack storage.

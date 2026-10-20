@@ -18,7 +18,7 @@ public sealed class WebpAlphaEncodingTests
         using var context = new OperationContext(ImageLimits.Default, default);
         using var plan = WebpLosslessEncoder.AlphaEncoding.TryCreate(alpha, width, 4, context);
         Assert.NotNull(plan);
-        using var output = new MemoryStream(); output.WriteByte(5); plan.Write(alpha, width, output);
+        using var output = new MemoryStream(); output.WriteByte(plan.Header); plan.Write(alpha, width, output);
         Assert.Equal(plan.Length + 1, output.Length);
         Assert.True(output.Length + (output.Length & 1) < alpha.Length + 1 + ((alpha.Length + 1) & 1));
         using var decode = new OperationContext(ImageLimits.Default, default);
@@ -31,7 +31,7 @@ public sealed class WebpAlphaEncodingTests
     {
         var alpha = new byte[4096]; new Random(17).NextBytes(alpha); var unchanged = alpha.ToArray();
         using var root = new TestMemoryBudget(8192);
-        using var context = new OperationContext(new ImageLimits { MemoryBudget = root }, default);
+        using var context = new OperationContext(new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 2048 }, default);
         Assert.Null(WebpLosslessEncoder.AlphaEncoding.TryCreate(alpha, 64, 4, context));
         Assert.Equal(0, root.Bytes); Assert.Equal(unchanged, alpha);
         using var local = new OperationContext(new ImageLimits { MaxWorkingBytes = 2047, MemoryBudget = root }, default);
@@ -64,7 +64,7 @@ public sealed class WebpAlphaEncodingTests
     {
         using var root = new TestMemoryBudget(2048);
         Assert.True(root.TryReserve(1, out var retained));
-        using (var context = new OperationContext(new ImageLimits { MemoryBudget = root }, default))
+        using (var context = new OperationContext(new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 2048 }, default))
         {
             var error = Assert.Throws<ImageLimitException>(() =>
                 WebpLosslessEncoder.AlphaEncoding.TryCreate(new byte[1024], 32, 4, context));
@@ -72,7 +72,7 @@ public sealed class WebpAlphaEncodingTests
             Assert.Equal(ImageLimitScope.SharedBudget, error.Scope);
         }
         Assert.Equal(1, root.Refusals); Assert.Equal(1, root.Bytes); retained.Dispose();
-        using (var context = new OperationContext(new ImageLimits { MemoryBudget = root }, default))
+        using (var context = new OperationContext(new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 2048 }, default))
         using (var plan = WebpLosslessEncoder.AlphaEncoding.TryCreate(new byte[1024], 32, 4, context)) Assert.NotNull(plan);
         Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
@@ -83,11 +83,11 @@ public sealed class WebpAlphaEncodingTests
         using var cancellation = new CancellationTokenSource();
         using var root = new TestMemoryBudget(2048) { Admitted = _ => cancellation.Cancel() };
         var alpha = Enumerable.Repeat((byte)43, 1024).ToArray();
-        using (var context = new OperationContext(new ImageLimits { MemoryBudget = root }, cancellation.Token))
+        using (var context = new OperationContext(new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 2048 }, cancellation.Token))
             Assert.Throws<OperationCanceledException>(() => WebpLosslessEncoder.AlphaEncoding.TryCreate(alpha, 32, 4, context));
         Assert.Equal(0, root.Bytes); Assert.All(alpha, a => Assert.Equal(43, a)); Assert.False(root.IsDisposed);
         root.Admitted = null;
-        using var next = new OperationContext(new ImageLimits { MemoryBudget = root }, default);
+        using var next = new OperationContext(new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 2048 }, default);
         using var plan = WebpLosslessEncoder.AlphaEncoding.TryCreate(alpha, 32, 4, next); Assert.NotNull(plan);
     }
 
@@ -96,7 +96,7 @@ public sealed class WebpAlphaEncodingTests
     {
         using var cancellation = new CancellationTokenSource();
         using var root = new TestMemoryBudget(2048);
-        using var context = new OperationContext(new ImageLimits { MemoryBudget = root }, cancellation.Token);
+        using var context = new OperationContext(new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 2048 }, cancellation.Token);
         var alpha = new byte[1024];
         using (var plan = WebpLosslessEncoder.AlphaEncoding.TryCreate(alpha, 32, 4, context))
         {

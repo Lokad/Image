@@ -146,6 +146,20 @@ remain unmeasured. They replace three prior independent observations, without
 claiming current independent CPU parity. The fixed scope remains256 cases:
 120independent/119short observations. All five procedural compression gates remain
 open. Primary opaque content and unrelated algorithms reuse unchanged evidence.
+The [alpha backward-reference milestone](../benchmarks/WARM-VP8-ALPHA-MATCHES.md)
+then cuts unrestricted alpha8/16 packets268,028→170,196 B (36.5%) with exact old
+RGBA/source quality. ALPH itself is18,579/24,588 B; complete packets still exceed
+98,590 B. Full-frame q0 entropy also reduces opaque8/16 to149,570/72,380 B. The
+work32M packet/work remains452,932 B/31,961,577 units, reusing its C58 short proof.
+4,628tests/OS,161internal+51public+2diff scalar and the same actual private package/
+examples qualify. Four short costs record1.397/1.426/0.523/0.532x and
+1,543,152/1,543,152/1,793,800/1,793,800 B/op. CPU parity stays deferred. The owned
+262,176 B history/tables are admitted through the shared root and survive actual
+writing; there is no filtered/RGBA frame or encoded-alpha staging copy. A weaker
+gradient-only trial is retained but not adopted, avoiding another budget-specific
+algorithm. No source/settings/quality-gate change, new workload or timing repeat.
+The five procedural packet gaps, primary content passes and finite counts remain.
+
 
 The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
 rejects a smaller packet with excessive quality loss and a quality-preserving
@@ -358,10 +372,10 @@ reconciliation now covers every numeric row.
 | [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,251.71 | 1,079.34 | 1.160 / 1.394 | 155,026 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-CALLER-MCU.md) | 2,097.34 | 1,579.06 | 1.328 / 1.408 | 297,894 | Gap (short; qualified) |
-| [WebP VP8, opaque‡](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 19,177.49 | 15,528.15 | 1.235 / 1.354 | 1,482,108 | Gap (short; qualified) |
-| [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 19,531.60 | 15,602.44 | 1.252 / 1.284 | 1,481,944 | Gap (short; qualified) |
-| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-COMPRESSED-ALPHA.md) | 21,368.74 | 53,430.11 | 0.400 / 0.475 | 2,174,702 | Cost screen (CPU parity deferred) |
-| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-COMPRESSED-ALPHA.md) | 21,613.20 | 53,776.89 | 0.402 / 0.425 | 2,174,520 | Cost screen (CPU parity deferred) |
+| [WebP VP8, opaque‡](../benchmarks/WARM-VP8-ALPHA-MATCHES.md) | 21,766.38 | 15,580.79 | 1.397 / 1.457 | 1,543,152 | Gap (cost screen; CPU parity deferred) |
+| [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-ALPHA-MATCHES.md) | 22,277.85 | 15,618.46 | 1.426 / 1.531 | 1,543,152 | Gap (cost screen; CPU parity deferred) |
+| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-ALPHA-MATCHES.md) | 28,120.00 | 53,786.79 | 0.523 / 0.559 | 1,793,800 | Cost screen (CPU parity deferred) |
+| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-ALPHA-MATCHES.md) | 28,612.36 | 53,790.31 | 0.532 / 0.591 | 1,793,800 | Cost screen (CPU parity deferred) |
 | [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-COMPRESSED-ALPHA.md) | 23,542.60 | 53,383.44 | 0.441 / 0.514 | 2,681,364 | Cost screen (CPU parity deferred) |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 57,489.75 | 121,784.50 | 0.472 / 0.481 | 10,286,728 | Parity confirmed |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 49,621.60 | 69,789.18 | 0.711 / 0.720 | 9,669,728 | Parity confirmed |

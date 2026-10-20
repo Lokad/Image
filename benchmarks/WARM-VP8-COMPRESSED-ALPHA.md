@@ -1,5 +1,9 @@
 # Exact compressed alpha for lossy WebP
 
+The [bounded alpha-match successor](WARM-VP8-ALPHA-MATCHES.md) refreshes the four
+unrestricted q0 packet/cost rows. The work32M packet/work is unchanged; earlier
+producer-specific results below remain historical evidence.
+
 The three existing alpha controls each save **18,504 complete-packet bytes** with
 identical VP8 payloads, decoded RGBA, source quality and exact alpha. This is an
 incremental compression gain: all three packets remain above the frozen 98,590 B

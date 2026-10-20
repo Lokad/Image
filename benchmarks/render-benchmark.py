@@ -214,10 +214,10 @@ def render():
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-compact-color-evidence.json', ['cases', 'OriginalGray', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-caller-mcu-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-CALLER-MCU.md', verification='Gap (short; qualified)'),
-        row('WebP VP8, opaque‡', 'warm-vp8-forward-dct-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8-FORWARD-DCT.md', verification='Gap (short; qualified)'),
-        row('WebP VP8, opaque from RGBA16‡', 'warm-vp8-forward-dct-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-FORWARD-DCT.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 + alpha‡', 'vp8-compressed-alpha-evidence.json', ['observations', 0], 'WARM-VP8-COMPRESSED-ALPHA.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alpha from RGBA16‡', 'vp8-compressed-alpha-evidence.json', ['observations', 1], 'WARM-VP8-COMPRESSED-ALPHA.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8, opaque‡', 'vp8-alpha-matches-evidence.json', ['observations', 0], 'WARM-VP8-ALPHA-MATCHES.md', verification='Gap (cost screen; CPU parity deferred)'),
+        row('WebP VP8, opaque from RGBA16‡', 'vp8-alpha-matches-evidence.json', ['observations', 1], 'WARM-VP8-ALPHA-MATCHES.md', verification='Gap (cost screen; CPU parity deferred)'),
+        row('WebP VP8 + alpha‡', 'vp8-alpha-matches-evidence.json', ['observations', 2], 'WARM-VP8-ALPHA-MATCHES.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alpha from RGBA16‡', 'vp8-alpha-matches-evidence.json', ['observations', 3], 'WARM-VP8-ALPHA-MATCHES.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-compressed-alpha-evidence.json', ['observations', 2], 'WARM-VP8-COMPRESSED-ALPHA.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-CODE-COST.md', True),
@@ -484,6 +484,20 @@ remain unmeasured. They replace three prior independent observations, without
 claiming current independent CPU parity. The fixed scope remains256 cases:
 120independent/119short observations. All five procedural compression gates remain
 open. Primary opaque content and unrelated algorithms reuse unchanged evidence.
+The [alpha backward-reference milestone](../benchmarks/WARM-VP8-ALPHA-MATCHES.md)
+then cuts unrestricted alpha8/16 packets268,028→170,196 B (36.5%) with exact old
+RGBA/source quality. ALPH itself is18,579/24,588 B; complete packets still exceed
+98,590 B. Full-frame q0 entropy also reduces opaque8/16 to149,570/72,380 B. The
+work32M packet/work remains452,932 B/31,961,577 units, reusing its C58 short proof.
+4,628tests/OS,161internal+51public+2diff scalar and the same actual private package/
+examples qualify. Four short costs record1.397/1.426/0.523/0.532x and
+1,543,152/1,543,152/1,793,800/1,793,800 B/op. CPU parity stays deferred. The owned
+262,176 B history/tables are admitted through the shared root and survive actual
+writing; there is no filtered/RGBA frame or encoded-alpha staging copy. A weaker
+gradient-only trial is retained but not adopted, avoiding another budget-specific
+algorithm. No source/settings/quality-gate change, new workload or timing repeat.
+The five procedural packet gaps, primary content passes and finite counts remain.
+
 
 The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
 rejects a smaller packet with excessive quality loss and a quality-preserving

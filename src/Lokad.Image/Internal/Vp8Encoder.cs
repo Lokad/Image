@@ -35,7 +35,7 @@ internal static partial class Vp8Encoder
         Span<byte> left = stackalloc byte[8];
         ReadOnlySpan<byte> candidates = [1, 2, 3, 4, 6, 8, 10];
         using var model = CoefficientModel.TryCreate(source, count, candidates[options.Effort], options.Effort == 0 ? 1 : 4, context,
-            options.Effort >= 4 && q != 0 ? modes : null);
+            options.Effort >= 4 && q != 0 ? modes : null, fullFrame: options.Effort >= 4 && q == 0);
         var intra16 = model?.Intra16 == true;
         Span<short> luma = intra16 ? stackalloc short[256] : default;
         Span<short> y2 = intra16 ? stackalloc short[16] : default;
@@ -377,7 +377,7 @@ internal static partial class Vp8Encoder
             var w = width - 1; var h = height - 1;
             for (var i = 0; i < 3; i++) { bytes[12 + i] = (byte)(w >> (8 * i)); bytes[15 + i] = (byte)(h >> (8 * i)); }
             output.Write(bytes[..18]); "ALPH"u8.CopyTo(bytes); BinaryPrimitives.WriteInt32LittleEndian(bytes[4..], alphaLength);
-            output.Write(bytes[..8]); output.WriteByte(compressedAlpha is null ? (byte)0 : (byte)5);
+            output.Write(bytes[..8]); output.WriteByte(compressedAlpha?.Header ?? 0);
             if (compressedAlpha is not null) compressedAlpha.Write(alpha, width, output);
             else WritePartition(alpha, output, context);
             if ((alphaLength & 1) != 0) output.WriteByte(0);

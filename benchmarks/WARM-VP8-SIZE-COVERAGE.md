@@ -9,10 +9,10 @@ benchmark inputs, not the library default85. No general lossy WebP parity follow
 | --- | ---: | ---: | --- |
 | WarmCompression/PhotographLossy8 | 17,366 / 17,688 | 77 / 75 | Pass |
 | WarmCompression/DiagramLossy8 | 6,722 / 7,100 | 75 / 75 | Pass |
-| WarmWebp/EncodeOpaque8 | 151,606 / 72,380 | 100 / 75 | Open |
-| WarmWebp/EncodeOpaque16 | 151,606 / 72,380 | 100 / 75 | Open |
-| WarmWebp/Encode8 | 268,028 / 98,590 | 100 / 75 | Open |
-| WarmWebp/Encode16 | 268,028 / 98,590 | 100 / 75 | Open |
+| WarmWebp/EncodeOpaque8 | 149,570 / 72,380 | 100 / 75 | Open |
+| WarmWebp/EncodeOpaque16 | 149,570 / 72,380 | 100 / 75 | Open |
+| WarmWebp/Encode8 | 170,196 / 98,590 | 100 / 75 | Open |
+| WarmWebp/Encode16 | 170,196 / 98,590 | 100 / 75 | Open |
 | WarmWebp/EncodeBudget8 | 452,932 / 98,590 | 100 / 75 | Open |
 
 C57 reuses the approved bounded quality matcher only for the changed photograph:
@@ -21,19 +21,18 @@ size assessment. The old78 point (18,284 B,0.179085dB gap) remains recorded;77 i
 closer (0.140944dB) and produces17,366 B. Native75/effort4, input, packet and the
 0.25dB tolerance remain frozen. Diagram75 stays valid without another search.
 
-The [compressed-alpha milestone](WARM-VP8-COMPRESSED-ALPHA.md) saves18,504 B on
-each alpha8/16/work32M packet. ALPH payload falls132,868→114,363 B, including its
-header. VP8 payloads, reconstructed RGBA and source quality are unchanged; no
-quality search or reference change occurs. Those three paths are freshly
-qualified with4,613tests/OS and the same actual package/examples. Their three
-current costs are short screens; CPU parity and independent repeats are deferred.
-Opaque8/16 retain their valid original receipts and identical normalized packets.
+The [backward-reference milestone](WARM-VP8-ALPHA-MATCHES.md) reduces the two
+unrestricted alpha packets268,028→170,196 B with exact old RGBA/source quality.
+ALPH alone is18,579/24,588 B; complete-packet parity remains open. Full-frame q0
+entropy also reduces opaque8/16 to149,570 B. Four current cost screens,4,628tests/OS
+and the same actual package/examples qualify. References, inputs, numerical settings
+and all source-quality/alpha/decoder tolerances are unchanged; no quality search.
 
-All five procedural gates remain open. The work32M case completes in31,961,577
-units, still declining the optional coefficient model and producing a distinct
-larger packet. Its coefficient-model admission and the114,363 B alpha stream are
-named remaining opportunities. Raw-alpha removal alone does not establish size
-parity, and the two primary opaque passes do not establish whole-codec parity.
+All five procedural gates remain open. The work32M case remains byte/work-identical
+at452,932 B and31,961,577 units, keeping its existing fixed model and fixed ALPH
+policy. Its C58 cost proof is reused. The remaining unrestricted gap is coefficient
+coding; alpha on that control already beats its reference component. Primary
+opaque passes and component passes do not establish whole-codec parity.
 
 [Evidence](vp8-size-coverage-evidence.json) identifies the current and retained
 receipts. No new performance workload is introduced and the256-case warm checklist

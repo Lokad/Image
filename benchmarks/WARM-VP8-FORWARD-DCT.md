@@ -1,5 +1,9 @@
 # Exact SIMD VP8 forward DCT
 
+The [bounded alpha-match successor](WARM-VP8-ALPHA-MATCHES.md) refreshes the four
+unrestricted q0 packet/cost rows. The work32M packet/work is unchanged; earlier
+producer-specific results below remain historical evidence.
+
 Safe four-lane binary64 DCT qualifies the seven existing complete VP8 encodes
 on current production. Their point means are **5.4–16.9% below earlier reported
 checkpoints**; those earlier producers remain historical, rather than a new

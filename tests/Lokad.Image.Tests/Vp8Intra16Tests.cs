@@ -4,15 +4,15 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8Intra16Tests
 {
-    [Fact]
-    public void FullFrameCacheFreezesPredictionProbabilitiesAtTheOriginalPrefix()
+    [Theory] [InlineData(false)] [InlineData(true)]
+    public void FullFrameCacheFreezesPredictionProbabilitiesAtTheOriginalPrefix(bool mixed)
     {
         using var context = new OperationContext(ImageLimits.Default, default);
         const int columns = 13, rows = 5, blocks = columns * rows;
         var planes = new Vp8Planes(columns * 16, rows * 16, columns * 16,
             new byte[blocks * 256], new byte[blocks * 64], new byte[blocks * 64]);
         using var model = new Vp8Encoder.CoefficientModel(blocks * 384, blocks, context,
-            new byte[blocks * 16], columns, fullFrame: true);
+            mixed ? new byte[blocks * 16] : null, mixed ? columns : 0, fullFrame: true);
         Assert.Equal(64, model.PrefixMacroblocks); Assert.Equal(blocks, model.CacheMacroblocks);
         using var writer = new Vp8BooleanWriter(context, 65536);
         var zero = new short[16]; var dense = Enumerable.Repeat((short)1, 16).ToArray();
