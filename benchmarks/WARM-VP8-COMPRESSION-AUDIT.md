@@ -59,4 +59,7 @@ resource, cancellation and ownership requirements remain cumulative.
 identities, structures and candidate quality results. Raw source, arithmetic replay,
 candidate binaries and outputs are mirrored as `c38-vp8-compression-audit.tar.gz`,
 SHA256 `0cd946c50bf213d13988dd258e3604c9902e71cd48b7b78ee56754d4cea7fc17`.
+The subsequent [intra16/Y2 screen](WARM-VP8-INTRA16-SCREEN.md) also misses both
+size ceilings and is rejected for slower complete encoding. Its prototype and
+format proof are retained; current production remains unchanged.
 No benchmark selection, qualified production result or published release changes.
