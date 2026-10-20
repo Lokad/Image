@@ -7,9 +7,9 @@ contains127 independent observations and110 qualified shorts.17named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
 The finite scope is now **254 cases:237 numeric+17 unmeasured**. The remaining
-205 historical codec/edit rows retain their identified performance-qualified
+204 historical codec/edit rows retain their identified performance-qualified
 builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
-Twenty-one current JPEG, four Lanczos3, two async input, four async output and one bicubic row
+Twenty-one current JPEG, four Lanczos3, two async input, four async output, one bicubic and one VP8 row
 are identified below. The latest JPEG evidence replaces the earlier CMYK timings.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
 required representatives using the same513×259 asymmetric RGBA rasters. Their
@@ -846,3 +846,13 @@ and survivor ownership remain intact. Default cached/word/other selected paths
 retain their identified evidence; the finite scope/counts above are unchanged.
 Next: current-code uncertainty on the existing VP8 SimpleOpaque8 case. No new
 packet/settings matrix, retuning of passing cases or long repeat above parity.
+
+
+[Current VP8 SimpleOpaque8](WARM-VP8-ADMISSION-CURRENT.md) resolves one older
+admission/disposal uncertainty:1.556x/upper2.065x,760,572B/op. Original packet,
+managed/native hashes, exact alpha, normal/scalar CLI, source/owners and official
+quiet guards pass. Accepted C18 qualification is reused without builds. Current
+normal rows become33, historical rows204; all finite counts and performance gates
+remain unchanged. A current975sample profile puts76%in coefficient decoding;
+one block-scoped reader is the next bounded primitive. Earlier per-Read/window/
+local-state/local-work trials stay rejected; no new image or settings grid.

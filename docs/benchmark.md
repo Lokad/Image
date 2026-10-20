@@ -9,9 +9,9 @@ to the named fixed inputs/settings/hardware, without extrapolating to other prof
 
 These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
-is separate. **205 historical codec/edit rows do not yet requalify changed 0.2.0
+is separate. **204 historical codec/edit rows do not yet requalify changed 0.2.0
 admission, disposal or governed storage.** Twenty-one current JPEG, four Lanczos3, two async
-input, four async output and one bicubic row identify their current producers. Production
+input, four async output, one bicubic and one VP8 row identify their current producers. Production
 qualification now passes 4,475 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
@@ -32,8 +32,10 @@ cut allocation 71.1% but had no elapsed gain and was also rejected. Accepted
 production is restored. [Four-column bicubic strips](../benchmarks/WARM-BICUBIC-FOUR-COLUMNS.md)
 then save **16.2%** on TightWide8: **1.433x/upper1.644x**, 32,913 B/op, with exact
 pixels and the same 4 KiB reservation. Full suites and the same actual package
-qualify both OSes. Only that existing row changes. Next: resolve current-code
-uncertainty for the existing VP8 simple-luma-filter case before optimizing it.
+qualify both OSes. Only that existing row changes. The [current VP8 check](../benchmarks/WARM-VP8-ADMISSION-CURRENT.md)
+resolves SimpleOpaque8 at **1.556x/upper2.065x**, 760,572 B/op. One current profile
+puts 76% in coefficient decoding. Next: one block-scoped coefficient reader,
+preserving exact cursor/work and the original short-input/cancelable path.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
@@ -183,7 +185,7 @@ reconciliation now covers every numeric row.
 | [JPEG progressive 4:2:2](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 3,071.46 | 2,238.43 | 1.372 / 1.508 | 847,162 | Gap (short; qualified) |
 | [JPEG progressive 4:4:4](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 5,037.72 | 3,361.01 | 1.499 / 1.715 | 984,298 | Gap (short; qualified) |
 | [WebP VP8 + alpha](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 9,272.91 | 5,970.23 | 1.553 / 1.648 | 1,966,616 | Gap (short; qualified) |
-| [WebP VP8 opaque, simple luma filter](../benchmarks/WARM-VP8-BLOCK-PREDICTION.md) | 7,807.89 | 4,893.93 | 1.595 / 1.621 | 760,548 | Gap (short; qualified) |
+| [WebP VP8 opaque, simple luma filter](../benchmarks/WARM-VP8-ADMISSION-CURRENT.md) | 7,620.16 | 4,898.55 | 1.556 / 2.065 | 760,572 | Gap (short; qualified) |
 | [WebP VP8 opaque, live cancelable token](../benchmarks/WARM-VP8-BLOCK-PREDICTION.md) | 7,613.64 | 4,801.66 | 1.586 / 1.664 | 760,548 | Gap (short; qualified) |
 | [WebP VP8, opaque](../benchmarks/WARM-VP8-BLOCK-PREDICTION.md) | 7,568.84 | 4,798.45 | 1.577 / 1.672 | 760,548 | Gap (short; qualified) |
 | [WebP VP8L, sixteen-color indexed input](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 785.58 | 544.96 | 1.442 / 1.495 | 1,351,972 | Gap (short; qualified) |
