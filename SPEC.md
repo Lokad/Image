@@ -998,6 +998,8 @@ for at most eight nonzero frequencies with total dequantized magnitude≤65536.
 All 64 clipped rounding bins must certify before any destination write;
 uncertain blocks keep the original calculation. The original generated basis
 is 8 KiB of immutable module data, with no heap table or decoded-content cache.
+Horizontal-only blocks certify one repeated row using the same basis and bound;
+an uncertain row keeps the original ordered horizontal calculation.
 Pixel values, storage admission, logical work and cancellation remain unchanged.
 
 Subsampled YCbCr interiors may reconstruct sixteen pixels with exact integer

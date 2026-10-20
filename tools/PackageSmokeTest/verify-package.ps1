@@ -245,7 +245,9 @@ var cmykSamples = new byte[8]; ImageCodec.DecodeJpeg(cmykBytes, cmykSamples, Jpe
 if (cmykSamples.AsSpan().IndexOfAnyExcept((byte)127) >= 0)
     throw new Exception("Package consumer CMYK inversion differs.");
 byte[] sparseValues = [80, 170, 90, 200];
-var sparsePacket = Lokad.Image.Tooling.AuthoredJpegCompatibility.Create(17, 9, sparseValues, adobe: 0, nonzeroAc: true, acTerms: 2);
+foreach (var sparseTerms in new[] { 1, 2 })
+{
+var sparsePacket = Lokad.Image.Tooling.AuthoredJpegCompatibility.Create(17, 9, sparseValues, adobe: 0, nonzeroAc: true, acTerms: sparseTerms);
 using var sparseRoot = new Lokad.Image.Tooling.TestMemoryBudget(1024 * 1024);
 var sparseOptions = new DecodeOptions { Limits = new() { MemoryBudget = sparseRoot } };
 using var sparseFirst = ImageCodec.Decode(sparsePacket, sparseOptions);
@@ -257,7 +259,7 @@ for (var sy = 0; sy < 9; sy++)
 for (var sx = 0; sx < 17; sx++)
 {
     var delta = (int)Math.Round((Math.Cos((2 * (sx & 7) + 1) * Math.PI / 16)
-        + Math.Cos((2 * (sy & 7) + 1) * Math.PI / 16)) / Math.Sqrt(2), MidpointRounding.AwayFromZero);
+        + (sparseTerms == 2 ? Math.Cos((2 * (sy & 7) + 1) * Math.PI / 16) : 0)) / Math.Sqrt(2), MidpointRounding.AwayFromZero);
     for (var sc = 0; sc < 3; sc++)
         if (sparseSurvivor.GetRow8(sy)[sx * 4 + sc] != ((sparseValues[sc] + delta) * (sparseValues[3] + delta) + 127) / 255)
             throw new Exception("Packaged sparse JPEG analytical sample differs.");
@@ -265,6 +267,7 @@ for (var sx = 0; sx < 17; sx++)
 }
 sparseSurvivor.Dispose();
 if (sparseRoot.Bytes != 0) throw new Exception("Packaged sparse JPEG retained charge leaked.");
+}
 for (var y = 0; y < 8; y++)
 for (var x = 0; x < 8; x++) new byte[] { 123, 123, 123, 255 }.CopyTo(opaque.GetRow8(y)[(x*4)..]);
 using var jpeg = new MemoryStream();

@@ -2,7 +2,7 @@
 
 ## 0.2.0 — Unreleased
 
-- Certified integer SIMD for sparse four-component JPEG decoding, with the
+- Certified integer SIMD for sparse and horizontal-only four-component JPEG decoding, with the
   original calculation for uncertain blocks and no new heap workspace.
 
 - Faster exact SIMD Lanczos3 filtering at both depths, including grouped

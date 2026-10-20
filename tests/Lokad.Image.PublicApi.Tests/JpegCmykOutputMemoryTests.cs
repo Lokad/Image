@@ -32,11 +32,11 @@ public sealed class JpegCmykOutputMemoryTests
     }
 
     [Theory]
-    [InlineData(false)] [InlineData(true)]
-    public void RetainedOwnersAndEveryRefusalOrCanceledOutputAdmissionReleaseCapacity(bool ycck)
+    [InlineData(false, 1)] [InlineData(false, 2)] [InlineData(true, 0)]
+    public void RetainedOwnersAndEveryRefusalOrCanceledOutputAdmissionReleaseCapacity(bool ycck, int acTerms)
     {
         var input = AuthoredJpegCompatibility.Create(17, 9, [80, 170, 90, 200],
-            ycck ? 2 : 1, ycck ? 2 : 1, true, ycck ? 2 : 0, vary: true, nonzeroAc: !ycck, acTerms: 2);
+            ycck ? 2 : 1, ycck ? 2 : 1, true, ycck ? 2 : 0, vary: true, nonzeroAc: acTerms != 0, acTerms: Math.Max(1, acTerms));
         var original = input.ToArray(); const int outputBytes = 17 * 9 * 4;
         using var baseline = new TestMemoryBudget(1024 * 1024);
         var limits = new ImageLimits { MemoryBudget = baseline };

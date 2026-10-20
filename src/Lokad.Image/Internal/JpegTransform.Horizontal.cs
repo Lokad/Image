@@ -14,6 +14,7 @@ internal static partial class JpegTransform
     {
         if (Avx512F.IsSupported && Avx512F.VL.IsSupported)
         {
+            if (TryInverseHorizontalInteger(coefficients, quantization, pixels, active)) return;
             var sum = Vector512<double>.Zero; var remaining = active;
             var vertical = Vector512.Create(Cosines[0]);
             while (remaining != 0)

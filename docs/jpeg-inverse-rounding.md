@@ -114,8 +114,15 @@ Otherwise the existing ordered double kernel handles the entire block, preservin
 half ties and every original byte. Large magnitude and unsupported hardware take
 that kernel before any destination write.
 
+For horizontal-only blocks (`v=0`), the frozen vertical factor is identical
+at every row. All eight basis rows are therefore identical. One sixteen-lane
+group evaluates two copies of the output row; it uses the same mass bound and
+certificate, then duplicates the certified bytes to all eight rows. An uncertain
+group returns before any write to the original ordered horizontal calculation.
+There are at most eight active frequencies, as in the four-group proof above.
+
 The existing4096 logical work charge precedes both paths. At most512 approximate
 and512 fallback frequency contributions fit within it; no new array, owner,
-reservation or cancellation interval is introduced. Existing DC, horizontal-only,
-dense and scalar branches retain their calculation. Exact managed pixels remain
+reservation or cancellation interval is introduced. Existing DC, dense and
+scalar branches retain their calculation. Exact managed pixels remain
 separate from the approved native decoder's quality bounds.
