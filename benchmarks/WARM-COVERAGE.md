@@ -1,23 +1,37 @@
 # Material warm coverage
 
 Updated 2026-10-20. The **warm single-CPU parity objective remains open**:
-72 independent passes,165 measured mean gaps and one confidence-open case across
-238 numeric rows. The [three-table summary](../docs/benchmark.md)
-contains125 independent observations and113 qualified shorts.16named required
+72 independent passes,166 measured mean gaps and one confidence-open case across
+239 numeric rows. The [three-table summary](../docs/benchmark.md)
+contains125 independent observations and114 qualified shorts.16named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
-The finite scope is now **254 cases:238 numeric+16 unmeasured**. The remaining
-193 historical codec/edit rows retain their identified performance-qualified
+The finite scope is now **255 cases:239 numeric+16 unmeasured**. The remaining
+192 historical codec/edit rows retain their identified performance-qualified
 builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
-Twenty-one current JPEG, four Lanczos3, two PNG resident, two async input, four async output, one bicubic, five VP8, five synchronous lossless WebP encodes and one caller-owned-root rows
+Twenty-three current JPEG, four Lanczos3, two PNG resident, two async input, four async output, one bicubic, five VP8, five synchronous lossless WebP encodes and one caller-owned-root rows
 are identified below. The latest JPEG evidence replaces the earlier CMYK timings.
+
+The [optional CompactColor JPEG policy](WARM-JPEG-COMPACT-COLOR.md) adds exactly
+one required algorithm case, `JpegSamplesEncode/CompactColorRgb420Resident`:
+the same borrowed packed RGB samples and complete owned JPEG boundary with an
+explicit new quantization policy. It produces48701/52093B at sourcePSNRgap
+0.017274dB, with short1.126x/upper1.362x and162110B/op. The Original RGB420 row
+remains separately open; its74040B packet is unchanged. The existing caller-gray
+row refreshes at1.160x/upper1.394x,155026B/op and unchanged58823/58910B. Both are
+qualified shorts, not independent passes. Exactly47current/192historical rows;
+255cases,239numeric/16untimed,72passes/166gaps/1confidence-open,
+125independent/114short. All4534tests/OS,12newpublic normal/scalar checks/OS and
+the same actual private package/examples pass. Existing default quantizers,
+grayscale, other codecs/decoders and confirmed paths retain their identified
+evidence. Next: bounded lossy WebP photograph/diagram compression audit; no grid.
 
 The [conditional LEFT predictor](WARM-VP8L-LEFT-PREDICTOR.md) refreshes those same
 six current lossless encode rows, all independently passing time parity. Photograph
 184518/160032 B remains1.153x; diagram7636/7234 B stays byte-for-byte1.056x.
 All4522tests/OS,22internal+114public normal/scalar checks/OS and the same actual
 private package/examples pass. Both size gates remain open; the larger JPEG RGB420
-compression gap is next. No scope/count expansion or decoder fixture regeneration.
+compression gap was next at that checkpoint. No scope/count expansion or decoder fixture regeneration.
 
 The [bounded VP8L color-cache round](WARM-VP8L-COLOR-CACHE.md) replaces five
 historical synchronous encodes and the already-current async encode with six

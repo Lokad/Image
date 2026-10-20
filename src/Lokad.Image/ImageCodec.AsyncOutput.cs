@@ -85,7 +85,7 @@ public static partial class ImageCodec
         try
         {
             {
-                if (options.Quality is < 1 or > 100 || !Enum.IsDefined(options.Sampling)
+                if (options.Quality is < 1 or > 100 || !Enum.IsDefined(options.Sampling) || !Enum.IsDefined(options.QuantizationPolicy)
                     || options.RestartInterval is < 0 or > 65535 || options.BackgroundRgb > 0xFFFFFF)
                     throw new ArgumentOutOfRangeException(nameof(options));
                 var source = new JpegSampleInput(samples.Span, width, height, format, stride, context);

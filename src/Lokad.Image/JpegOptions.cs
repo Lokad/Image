@@ -3,6 +3,15 @@ namespace Lokad.Image;
 /// <summary>JPEG encoder color and chroma-sampling profiles.</summary>
 public enum JpegSampling { Grayscale, YCbCr444, YCbCr422, YCbCr420 }
 
+/// <summary>Encoder-specific quantization formulas. Numbering does not match other encoders.</summary>
+public enum JpegQuantizationPolicy
+{
+    /// <summary>The original frequency-weighted formula, including grayscale.</summary>
+    Original,
+    /// <summary>Add a quality-scaled precision floor for color JPEGs; grayscale keeps Original.</summary>
+    CompactColor
+}
+
 /// <summary>Interleaved, 8-bit caller sample layouts.</summary>
 public enum JpegSampleFormat { Grayscale = 1, Rgb = 3, Cmyk = 4 }
 
@@ -28,6 +37,8 @@ public sealed record JpegEncodeOptions
     public ImageLimits Limits { get; init; } = ImageLimits.Default;
     /// <summary>Original quantization policy, from 1 to 100. Defaults to 85; numbering is encoder-specific.</summary>
     public int Quality { get; init; } = 85;
+    /// <summary>Original by default. CompactColor trades color reconstruction precision for smaller packets.</summary>
+    public JpegQuantizationPolicy QuantizationPolicy { get; init; }
     public JpegSampling Sampling { get; init; } = JpegSampling.YCbCr420;
     /// <summary>RGB background for alpha flattening, packed as 0xRRGGBB. Null requires opaque input.</summary>
     public uint? BackgroundRgb { get; init; }

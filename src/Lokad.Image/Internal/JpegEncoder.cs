@@ -13,7 +13,7 @@ internal static partial class JpegEncoder
     {
         if (CanUseAdaptive(image, output, options, context))
         { EncodeAdaptive(image, output, options, context); return; }
-        if (options.Quality is < 1 or > 100 || !Enum.IsDefined(options.Sampling)
+        if (options.Quality is < 1 or > 100 || !Enum.IsDefined(options.Sampling) || !Enum.IsDefined(options.QuantizationPolicy)
             || options.RestartInterval is < 0 or > 65535 || options.BackgroundRgb > 0xFFFFFF)
             throw new ArgumentOutOfRangeException(nameof(options));
         context.PixelBytes(image.Width, image.Height, image.BitDepth);
@@ -25,7 +25,8 @@ internal static partial class JpegEncoder
         var h = options.Sampling is JpegSampling.YCbCr420 or JpegSampling.YCbCr422 ? 2 : 1;
         var v = options.Sampling == JpegSampling.YCbCr420 ? 2 : 1;
         var columns = (image.Width + h * 8 - 1) / (h * 8); var rows = (image.Height + v * 8 - 1) / (v * 8);
-        var luma = Quantization(options.Quality, false); var chroma = Quantization(options.Quality, true);
+        var policy = components == 1 ? JpegQuantizationPolicy.Original : options.QuantizationPolicy;
+        var luma = Quantization(options.Quality, false, policy); var chroma = Quantization(options.Quality, true, policy);
         var dcSymbols = Enumerable.Range(0, 12).Select(value => (byte)value).ToArray();
         var ac = FixedAc.Table;
         var acWords = FixedAc.Words;
@@ -208,7 +209,7 @@ internal static partial class JpegEncoder
         // The original path retains tight-limit, cancellable and caller-stream
         // failure sequencing. This first cache path requires explicit flattening.
         if (context.Cancellation.CanBeCanceled || options.BackgroundRgb is null or > 0xFFFFFF
-            || options.Quality is < 1 or > 100 || !Enum.IsDefined(options.Sampling)
+            || options.Quality is < 1 or > 100 || !Enum.IsDefined(options.Sampling) || !Enum.IsDefined(options.QuantizationPolicy)
             || options.RestartInterval is < 0 or > 65535) return false;
         var width = image.Width; var height = image.Height;
         if (width > 65535 || height > 65535 || width > context.Limits.MaxDimension
@@ -252,7 +253,8 @@ internal static partial class JpegEncoder
         try
         {
             var frequencies = new long[4][]; for (var t = 0; t < 4; t++) frequencies[t] = new long[256];
-            var luma = Quantization(options.Quality, false); var chroma = Quantization(options.Quality, true);
+            var policy = components == 1 ? JpegQuantizationPolicy.Original : options.QuantizationPolicy;
+            var luma = Quantization(options.Quality, false, policy); var chroma = Quantization(options.Quality, true, policy);
             var pixels = new byte[64]; var transformed = new double[64]; var predictors = new int[components];
             Span<int> quantized = stackalloc int[64]; var eventCount = 0;
             for (var mcu = 0; mcu < columns * rows; mcu++)
@@ -871,6 +873,21 @@ internal static partial class JpegEncoder
         var numerator = value * (long)alpha * 255 + background * (long)(maximum - alpha) * maximum;
         var denominator = (long)maximum * maximum;
         return (int)((numerator + denominator / 2) / denominator);
+    }
+
+    private static ushort[] Quantization(int quality, bool chroma, JpegQuantizationPolicy policy)
+    {
+        var result = Quantization(quality, chroma);
+        if (policy == JpegQuantizationPolicy.CompactColor)
+        {
+            // An independently chosen, frequency-independent precision floor,
+            // scaled by the existing quality curve. No image/reference statistics
+            // select quantizers. Original rounding and [1,255] bounds remain.
+            var scale = quality < 50 ? 5000 / quality : 200 - 2 * quality;
+            var floor = (16 * scale + 50) / 100;
+            for (var i = 0; i < result.Length; i++) result[i] = (ushort)Math.Min(255, result[i] + floor);
+        }
+        return result;
     }
 
     // Original frequency-weighted quantization policy. Quality controls this

@@ -27,7 +27,8 @@ internal static partial class JpegEncoder
         var prepareMcu = adaptive && source.Format == JpegSampleFormat.Rgb && h == 2 && v == 2
             && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported && Ssse3.IsSupported;
         Span<byte> preparedMcu = prepareMcu ? stackalloc byte[384] : default;
-        var luma = Quantization(options.Quality, false); var chroma = Quantization(options.Quality, true);
+        var policy = components == 1 ? JpegQuantizationPolicy.Original : options.QuantizationPolicy;
+        var luma = Quantization(options.Quality, false, policy); var chroma = Quantization(options.Quality, true, policy);
         var pixels = new byte[64]; var transformed = new double[64]; var predictors = new int[components];
         Span<int> quantized = stackalloc int[64];
         uint[]? cache = null; long[][]? frequencies = null; var eventCount = 0;

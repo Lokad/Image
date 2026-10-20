@@ -207,7 +207,8 @@ def render():
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-JPEG-VECTOR-AC.md', True),
-        row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-caller-mcu-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-JPEG-CALLER-MCU.md', verification='Gap (short; qualified)'),
+        row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-compact-color-evidence.json', ['cases', 'OriginalGray', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-caller-mcu-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-CALLER-MCU.md', verification='Gap (short; qualified)'),
         row('WebP VP8, opaque‡', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', verification='Gap (short; qualified)'),
         row('WebP VP8, opaque from RGBA16‡', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', verification='Gap (short; qualified)'),
@@ -327,22 +328,22 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in all_rows)
     gap_count = sum(' | Gap' in value for value in all_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 238
+    assert parity_count + confidence_count + gap_count + reconfirm_count == 239
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-20. Target: **warm single-CPU parity, independently confirmed
-conservative upper ≤1x**. The 238 numeric rows contain **{parity_count} passes,
+conservative upper ≤1x**. The 239 numeric rows contain **{parity_count} passes,
 {gap_count} gaps and {confidence_count} confidence-open case**. The finite
-[material checklist](../benchmarks/WARM-COVERAGE.md) has 254 named cases, 16 unmeasured.
+[material checklist](../benchmarks/WARM-COVERAGE.md) has 255 named cases, 16 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
 These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
-is separate. **193 historical codec/edit rows do not yet requalify changed 0.2.0
-admission, disposal or governed storage.** Twenty-one current JPEG, four Lanczos3, two PNG resident, two async
+is separate. **192 historical codec/edit rows do not yet requalify changed 0.2.0
+admission, disposal or governed storage.** Twenty-three current JPEG, four Lanczos3, two PNG resident, two async
 input, four async output, one bicubic, five VP8, five lossless WebP encodes and one caller-owned-root row identify their current producers. Production
-qualification now passes 4,522 tests/OS, affected hardware-off checks, the same actual
+qualification now passes 4,534 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
 [Buffered JPEG EOB decoding](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) saves 10.0%
@@ -431,8 +432,12 @@ The [conditional spatial-prediction round](../benchmarks/WARM-VP8L-LEFT-PREDICTO
 reduces photograph184,518 B (37.6% below the preceding cache round), leaving diagram
 byte-for-byte at7,636 B. All six affected encodes independently pass time parity.
 Photograph allocation falls38.4%; compression analysis costs more CPU, still below
-the reference. Both lossless size gates remain open. Next: the larger JPEG RGB420
-size gap. The earlier [structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md)
+the reference. Both lossless size gates remain open. The optional
+[CompactColor JPEG policy](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) now produces
+48,701/52,093 B on the fixed caller-RGB420 control, with a0.017274dB source-PSNR
+gap. Its short1.126x/upper1.362x time result remains above parity, at162,110B/op.
+Original RGB420 remains74,040B; grayscale stays byte-identical. No general-content
+compression claim follows. Next: the frozen lossy WebP size gaps. The earlier [structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md)
 is diagnostic evidence. Lossy WebP ceilings remain17,688/7,100 B at frozen matched
 quality (21,432/8,288 B).
 The two JPEG async-output cases remain short gaps; all timings/allocations follow.
@@ -444,11 +449,13 @@ awaits the explicitly labeled bounded FFmpeg AVIO/descriptor adapter decision;
 complete-packet parsing would add whole-input buffering outside this boundary.
 Full warm parity and release readiness remain open.
 
-JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale
-(managed/SIMD libjpeg-turbo) and **74,040/52,093 B** RGB420 (managed/FFmpeg), with
-source-PSNR gaps 0.000033/0.106110 dB inside 0.25 dB. Equal quality numbers are not the
-matching rule; [frozen comparisons](../benchmarks/WARM-JPEG-CALLER-MCU.md) include
-complete time/allocations. WebP photograph/diagram lossless sizes are 184,518/160,032 B
+JPEG caller-sample packets are **58,823/58,910 B** grayscale (managed/SIMD libjpeg-turbo),
+**74,040/52,093 B** Original RGB420, and **48,701/52,093 B** opt-in CompactColor
+RGB420 (managed/FFmpeg). Source-PSNR gaps are0.000033/0.106110/0.017274dB inside
+0.25dB. Equal quality numbers are not the matching rule; the
+[optional-policy screen](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) includes complete
+time and allocations, while retaining the Original control. WebP photograph/diagram
+lossless sizes are184,518/160,032 B
 and 7,636/7,234 B; [lossy sizes](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md)
 are 21,432/17,688 B and 8,288/7,100 B at the fixed qualified source quality. Compression-
 efficiency parity is not established. Current operation timings/allocations follow.

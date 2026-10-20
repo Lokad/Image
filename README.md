@@ -8,7 +8,7 @@ implemented, with no NuGet dependencies, unsafe code or native bindings.
 - **JPEG:** baseline/progressive decode; baseline encode with grayscale,
   subsampling, restart markers and explicit alpha flattening.
   CMYK/YCCK and 4:1:1/4:1:0 decode; caller-owned gray/RGB/CMYK decode samples
-  and gray/RGB encode samples.
+  and gray/RGB encode samples. Development adds optional compact color quantization.
 - **WebP:** lossy VP8 and lossless VP8L, including alpha and lossless hidden RGB.
 - **Editing:** 8/16-bit RGBA, EXIF orientation, crop, flips, quarter turns,
   transpose and nearest/bilinear/bicubic/Lanczos3 resize; rectangle fill/copy and alpha compositing.

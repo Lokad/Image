@@ -1116,7 +1116,19 @@ Quality 1..100 (default 85) controls an original frequency-weighted quantization
 formula: luma basis `1+2(u+v)+uv`, chroma basis `2+3(u+v)+uv`, scaled by
 `quality<50 ? 5000/quality : 200-2*quality`, then
 `clamp((basis*scale+50)/100,1,255)` with integer division. Quality 100 still loses
-information through color conversion, sampling and coefficient rounding. Huffman
+information through color conversion, sampling and coefficient rounding.
+`JpegEncodeOptions.QuantizationPolicy`
+defaults to `Original`, preserving the formula above. The opt-in `CompactColor`
+policy adds `(16*scale+50)/100` to each original quantizer, clamped to255, for
+three-component output. This is an independently chosen frequency-independent
+precision floor, not an upstream table or image-dependent search. Grayscale
+always retains Original; quality100 adds zero. Quality numbering remains
+encoder-specific. The policy applies to RGBA8/16 and caller RGB input, fixed and
+adaptive entropy, synchronous and asynchronous output. Sampling, flattening,
+coefficient rounding, resource/work limits and ownership are unchanged. This
+optional policy's compression/performance qualification is recorded separately
+from the unchanged Original controls.
+Huffman
 tables use independently implemented canonical coding. Large encodes to an
 ordinary MemoryStream with an explicit background, a noncancellable token and
 sufficient work/memory admission use per-image adaptive tables limited to 16

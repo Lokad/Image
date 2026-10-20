@@ -90,5 +90,23 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged cached WebP result depends on source lifetime.");
         }
         if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Packaged cached WebP owners leaked or closed the borrowed root.");
+        var rgb = new byte[17 * 11 * 3];
+        for (var i = 0; i < rgb.Length; i++) rgb[i] = (byte)(i * 37 + i / 11);
+        var compactOptions = new JpegEncodeOptions { Quality = 69, Limits = limits,
+            QuantizationPolicy = JpegQuantizationPolicy.CompactColor };
+        using var originalJpeg = new MemoryStream(); using var compactJpeg = new MemoryStream();
+        ImageCodec.EncodeJpeg(rgb, 17, 11, JpegSampleFormat.Rgb, originalJpeg,
+            options: compactOptions with { QuantizationPolicy = JpegQuantizationPolicy.Original });
+        await ImageCodec.EncodeJpegAsync(rgb, 17, 11, JpegSampleFormat.Rgb, compactJpeg, options: compactOptions);
+        if (originalJpeg.ToArray().AsSpan().SequenceEqual(compactJpeg.ToArray())
+            || budget.Bytes != 0 || !compactJpeg.CanWrite || budget.IsDisposed)
+            throw new Exception("Packaged optional JPEG quantization, async cleanup or borrowed ownership differs.");
+        using (var decoded = ImageCodec.Decode(compactJpeg.ToArray(), new() { Limits = limits }))
+        {
+            rgb.AsSpan().Clear();
+            if ((decoded.Width, decoded.Height, decoded.BitDepth) != (17, 11, 8) || budget.Bytes != 17 * 11 * 4)
+                throw new Exception("Packaged CompactColor result lifetime or geometry differs.");
+        }
+        if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Packaged CompactColor storage leaked.");
     }
 }

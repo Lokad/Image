@@ -30,3 +30,9 @@ GIF/animation and ICC conversion remain deferred. EXIF reorientation is opt-in.
 Default option differences are accepted; select quality, sampling and orientation
 explicitly when their behavior matters. [SPEC.md](../SPEC.md) is authoritative;
 [resource admission](resource-admission.md) defines ownership and accounting.
+
+JPEG keeps its original quantization by default. Development adds opt-in
+`JpegQuantizationPolicy.CompactColor` for color output; it retains grayscale,
+quality100, sampling and flattening, while trading other reconstruction precision
+for smaller packets. Assess complete size and quality together for the intended
+content; equal numerical quality across encoders does not establish equivalence.

@@ -2,6 +2,8 @@
 
 ## 0.2.0 — Unreleased
 
+- Optional `CompactColor` JPEG quantization; original defaults and grayscale remain unchanged.
+
 - Smaller lossless WebP output through bounded color-cache and adaptive prefix
   coding and conditional spatial prediction, preserving exact hidden RGBA and shared
   admission; size parity remains open.
