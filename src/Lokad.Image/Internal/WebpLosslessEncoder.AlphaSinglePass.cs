@@ -10,22 +10,31 @@ internal static partial class WebpLosslessEncoder
         private long singlePassBytes;
 
         // RFC 9649 sections 3.6/3.7. One recent position per three-residual
-        // hash, fixed complete prefix trees and overlapping copies. A rolling
+        // hash, bounded prefix trees and overlapping copies. A rolling
         // three-sample window avoids allocating a filtered alpha plane. Compute
         // the old run-only cost during the same traversal, then compare padded
         // sizes. Discarding a completed larger candidate is not limit recovery.
-        private void PrepareSinglePass(ReadOnlySpan<byte> alpha, int width)
+        private void PrepareSinglePass(ReadOnlySpan<byte> alpha, int width, bool adaptiveTokens)
         {
-            var storage = SingleHistoryBytes + alpha.Length + 32L;
+            var capacity = (adaptiveTokens ? 4L : 1L) * alpha.Length + 32;
+            var storage = SingleHistoryBytes + capacity;
             context.Reserve(storage); singlePassBytes = storage; context.Work(0);
             var entries = new int[SingleHistorySize];
-            stagedAlpha = new byte[alpha.Length];
+            var tokens = adaptiveTokens ? new uint[alpha.Length] : null; var tokenCount = 0;
+            if (!adaptiveTokens) stagedAlpha = new byte[alpha.Length];
+            Span<int> frequencies = adaptiveTokens ? stackalloc int[280] : default;
+            Span<int> distanceFrequencies = adaptiveTokens ? stackalloc int[40] : default;
+            frequencies.Clear(); distanceFrequencies.Clear();
             context.Work(SingleHistorySize); entries.AsSpan().Fill(-1);
-            using var destination = new AlphaStagingStream(stagedAlpha);
-            var writer = new WebpBitWriter(destination, context); var distances = new Table(40);
-            writer.Write(0, 1); writer.Write(0, 1); writer.Write(0, 1);
-            green.Header(writer); Singleton(writer, 0); Singleton(writer, 0); Singleton(writer, 0);
-            distances.Header(writer);
+            using var fixedDestination = adaptiveTokens ? null : new AlphaStagingStream(stagedAlpha!);
+            var writer = adaptiveTokens ? null : new WebpBitWriter(fixedDestination!, context);
+            var distances = adaptiveTokens ? null : new Table(40);
+            if (writer is not null)
+            {
+                writer.Write(0, 1); writer.Write(0, 1); writer.Write(0, 1);
+                green.Header(writer); Singleton(writer, 0); Singleton(writer, 0); Singleton(writer, 0);
+                distances!.Header(writer);
+            }
 
             // Three flags, the fixed 280-leaf green header (325 bits), three
             // zero-channel singletons and the previous-pixel distance singleton.
@@ -55,12 +64,26 @@ internal static partial class WebpLosslessEncoder
                 if (length >= 3)
                 {
                     Prefix(length, out var code, out var extra, out var bits);
-                    green.Symbol(writer, 256 + code, extra, bits);
-                    Distance(distance, width, out code, out extra, out bits);
-                    distances.Symbol(writer, code, extra, bits);
+                    if (tokens is not null)
+                    {
+                        context.Work(1); // Collect/classify one reusable token.
+                        tokens[tokenCount++] = (uint)(distance - 1) << 12 | (uint)(length - 2);
+                        frequencies[256 + code]++;
+                        Distance(distance, width, out code, out _, out _); distanceFrequencies[code]++;
+                    }
+                    else
+                    {
+                        green.Symbol(writer!, 256 + code, extra, bits);
+                        Distance(distance, width, out code, out extra, out bits);
+                        distances!.Symbol(writer!, code, extra, bits);
+                    }
                     consumed = length;
                 }
-                else green.Symbol(writer, first);
+                else if (tokens is not null)
+                {
+                    context.Work(1); tokens[tokenCount++] = (uint)first << 12; frequencies[first]++;
+                }
+                else green.Symbol(writer!, first);
                 for (var i = 0; i < consumed; i++)
                 {
                     context.Work(1); // Concurrent run-only candidate accounting.
@@ -83,8 +106,12 @@ internal static partial class WebpLosslessEncoder
                 }
                 position += consumed;
             }
-            originalBits += RunBits(runValue, runLength); writer.Finish();
+            originalBits += RunBits(runValue, runLength); writer?.Finish();
             context.Release(SingleHistoryBytes); singlePassBytes -= SingleHistoryBytes;
+            using var adaptiveDestination = tokens is null ? null
+                : StageTokens(tokens, tokenCount, frequencies, distanceFrequencies, alpha.Length, width);
+            if (tokens is not null) { context.Release(capacity); singlePassBytes -= capacity; }
+            var destination = adaptiveDestination ?? fixedDestination!;
             var original = checked((int)((originalBits + 7) / 8));
             var candidate = destination.Count + 1; var old = original + 1;
             if (!destination.Overflow && candidate + (candidate & 1) < old + (old & 1)) Length = destination.Count;
@@ -92,6 +119,49 @@ internal static partial class WebpLosslessEncoder
             {
                 stagedAlpha = null; context.Release(singlePassBytes); singlePassBytes = 0; Length = original;
             }
+        }
+
+        // RFC9649 exact references are collected once. Replaying compact token
+        // records fits adaptive prefix codes without another matching/input pass.
+        private AlphaStagingStream StageTokens(uint[] tokens, int count, ReadOnlySpan<int> frequencies,
+            ReadOnlySpan<int> distances, int capacity, int width)
+        {
+            adaptiveGreen = new WebpPrefixCode(frequencies, context);
+            adaptiveDistance = new WebpPrefixCode(distances, context);
+            context.Reserve(capacity + 32L); singlePassBytes += capacity + 32L; context.Work(0);
+            stagedAlpha = new byte[capacity]; var destination = new AlphaStagingStream(stagedAlpha);
+            var writer = new WebpBitWriter(destination, context);
+            writer.Write(0, 1); writer.Write(0, 1); writer.Write(0, 1);
+            adaptiveGreen.Header(writer, context); Singleton(writer, 0); Singleton(writer, 0); Singleton(writer, 0);
+            adaptiveDistance.Header(writer, context);
+            for (var i = 0; i < count; i++)
+            {
+                var token = tokens[i]; var length = (int)(token & 4095);
+                ulong value; int bits;
+                if (length == 0)
+                {
+                    var literal = (int)(token >> 12); bits = adaptiveGreen.BitLength(literal);
+                    value = (uint)adaptiveGreen.Code(literal);
+                }
+                else
+                {
+                    Prefix(length + 2, out var code, out var extra, out var extraBits);
+                    bits = adaptiveGreen.BitLength(256 + code);
+                    value = (uint)adaptiveGreen.Code(256 + code) | (ulong)(uint)extra << bits; bits += extraBits;
+                    Distance((int)(token >> 12) + 1, width, out code, out extra, out extraBits);
+                    var distanceBits = adaptiveDistance.BitLength(code);
+                    var distanceValue = (uint)adaptiveDistance.Code(code) | (ulong)(uint)extra << distanceBits;
+                    value |= distanceValue << bits; bits += distanceBits + extraBits;
+                }
+                // Two prefix+extra fields total at most58 bits. Physical writer
+                // calls carry at most24 bits and retain their actual work charge.
+                while (bits > 24) { writer.Write((int)(value & 0xFFFFFF), 24); value >>= 24; bits -= 24; }
+                writer.Write((int)value, bits);
+            }
+            writer.Finish();
+            context.Release(adaptiveGreen.MemoryBytes); adaptiveGreen = null;
+            context.Release(adaptiveDistance.MemoryBytes); adaptiveDistance = null;
+            return destination;
         }
 
         private static int SingleHash(int first, int second, int third) => ((first * 251 + second) * 251 + third) & 16383;

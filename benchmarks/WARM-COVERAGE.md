@@ -1164,3 +1164,16 @@ upper0.418x and1,707,064 B/op; no independent repeat or CPU-parity claim.
 Nine new correctness cases do not expand the finite performance matrix:
 256=239numeric+17pending,68independentpasses/167gaps/1confidence-open/3cost screens,
 120independent/119short,23current/216historical;31metadata confirmations unchanged.
+
+
+The [alpha-token milestone](WARM-WEBP-ALPHA-TOKENS.md) supersedes only existing
+WarmWebp/EncodeBudget8:208,216→181,998 B (12.6%), exact prior RGBA/source quality,
+31,980,594 actual units inside32M. ALPH54,552→28,333 B; complete target98,590 B
+remains open. Four unrestricted records remain byte/work/quality-identical.
+4,654tests/OS,182internal+8public+2diff scalar and the same actual package/examples
+qualify token/encoded overlap and terminal failures. One short cost records0.391x/
+upper0.435x and2,295,207 B/op, without an independent repeat or CPU-parity claim.
+Ten new tests do not expand the matrix:256=239numeric+17pending,68independentpasses/
+167gaps/1confidence-open/3cost screens,120independent/119short,23current/216historical;
+31metadata confirmations unchanged. The preceding coefficient/EOB candidate saves
+1528/1536B and remains unadopted for later; the larger alpha gain took priority.

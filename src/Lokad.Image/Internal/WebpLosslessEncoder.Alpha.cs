@@ -49,7 +49,11 @@ internal static partial class WebpLosslessEncoder
             try
             {
                 context.Work(0); result = new AlphaEncoding(context);
-                if (singlePass) result.PrepareSinglePass(alpha, width);
+                if (singlePass)
+                {
+                    var adaptiveTokens = context.RemainingWorkingBytes >= alpha.Length * 5L + SingleHistoryBytes + 16384;
+                    result.PrepareSinglePass(alpha, width, adaptiveTokens);
+                }
                 else
                 {
                     using var counter = new CountStream(int.MaxValue);

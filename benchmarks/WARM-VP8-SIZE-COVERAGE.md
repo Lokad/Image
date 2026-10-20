@@ -13,7 +13,7 @@ benchmark inputs, not the library default85. No general lossy WebP parity follow
 | WarmWebp/EncodeOpaque16 | 149,570 / 72,380 | 100 / 75 | Open |
 | WarmWebp/Encode8 | 170,196 / 98,590 | 100 / 75 | Open |
 | WarmWebp/Encode16 | 170,196 / 98,590 | 100 / 75 | Open |
-| WarmWebp/EncodeBudget8 | 208,216 / 98,590 | 100 / 75 | Open |
+| WarmWebp/EncodeBudget8 | 181,998 / 98,590 | 100 / 75 | Open |
 
 C57 reuses the approved bounded quality matcher only for the changed photograph:
 1,25,50,75,100 seeds and one refinement77, chosen by source-quality distance before
@@ -41,7 +41,11 @@ component. The [single-pass alpha milestone](WARM-WEBP-ALPHA-SINGLE-PASS.md) fur
 the work32M packet268,028→208,216 B and ALPH114,363→54,552 B against24,588 B.
 Exact prior RGBA/source quality and31,997,511 units fit32M, with shared staging/
 failure/ownership tests and the same actual package qualified on both OSes.
-The remaining coefficient and constrained-alpha gaps remain material. Passing primary
+The current [token-replay milestone](WARM-WEBP-ALPHA-TOKENS.md) further reduces
+that packet208,216→181,998 B and ALPH54,552→28,333 B. Exact prior RGBA/source
+quality,31,980,594 units inside32M, same-root overlap/cleanup and the same actual
+package qualify on both OSes. The shared coefficient gap remains the larger
+opportunity; constrained ALPH is still above24,588 B. Passing primary
 content or a component does not establish whole-codec parity.
 
 [Evidence](vp8-size-coverage-evidence.json) identifies the current and retained

@@ -106,22 +106,23 @@
     },
     {
       "case": "WarmWebp/EncodeBudget8",
-      "managedPacketBytes": 208216,
+      "managedPacketBytes": 181998,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "webp-alpha-single-pass-evidence.json",
+      "evidence": "webp-alpha-tokens-evidence.json",
       "observationPath": [
         "observations",
         0
       ],
-      "validity": "C65 qualified single-pass alpha within existing32M cap:31,997,511 actual units; exact prior RGBA/source quality. Packet remains above98,590B.",
-      "previousManagedPacketBytes": 268028,
+      "validity": "C67 qualified adaptive token replay within32M cap:31,980,594 actual units, exact prior RGBA/source quality. Complete packet remains above98,590B.",
+      "previousManagedPacketBytes": 208216,
       "alphaPayloadBytes": 114363,
-      "coefficientPolicy": "admitted64-macroblock prefix statistics; single-pass staged ALPH"
+      "coefficientPolicy": "admitted64-macroblock prefix statistics",
+      "alphaCodingPolicy": "one collected token sequence, adaptive prefix replay and charged token/encoded overlap"
     }
   ]
 }

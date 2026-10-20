@@ -1460,6 +1460,13 @@ padded sizes choose the smaller completed candidate. History is released after
 matching and staging stays charged until output finishes. Actual sample, matching,
 writer and copy work remains capped; refusal, exhaustion and cancellation terminate
 without another strategy. Unrestricted adaptive alpha coding is unchanged.
+With sufficient independent local workspace, this constrained path collects one
+bounded sequence of compact tokens and fits adaptive prefix codes without matching
+again. Admission covers the token capacity and overlapping encoded stage; history,
+tokens and model storage are released after their last users. Complete copy fields
+are packed into at most 24-bit writer calls, each charged as performed. A tighter
+local workspace selects the fixed-code staging path before shared admission;
+shared refusal never selects another strategy.
 The admitted mixed-mode path also compares actual quantized reconstruction error
 and coefficient/header bit cost for all ten luma directions and four chroma
 predictions. It stages one luma block or one 8x8 U/V pair on bounded stack storage.

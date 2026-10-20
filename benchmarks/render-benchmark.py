@@ -218,7 +218,7 @@ def render():
         row('WebP VP8, opaque from RGBA16‡', 'vp8-alpha-matches-evidence.json', ['observations', 1], 'WARM-VP8-ALPHA-MATCHES.md', verification='Gap (cost screen; CPU parity deferred)'),
         row('WebP VP8 + alpha‡', 'vp8-alpha-matches-evidence.json', ['observations', 2], 'WARM-VP8-ALPHA-MATCHES.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha from RGBA16‡', 'vp8-alpha-matches-evidence.json', ['observations', 3], 'WARM-VP8-ALPHA-MATCHES.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alpha‡, caller work budget32M', 'webp-alpha-single-pass-evidence.json', ['observations', 0], 'WARM-WEBP-ALPHA-SINGLE-PASS.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alpha‡, caller work budget32M', 'webp-alpha-tokens-evidence.json', ['observations', 0], 'WARM-WEBP-ALPHA-TOKENS.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-CODE-COST.md', True),
@@ -497,32 +497,18 @@ writing; there is no filtered/RGBA frame or encoded-alpha staging copy. A weaker
 gradient-only trial is retained but not adopted, avoiding another budget-specific
 algorithm. No source/settings/quality-gate change, new workload or timing repeat.
 The five procedural packet gaps, primary content passes and finite counts remain.
-The [limited-work prefix milestone](../benchmarks/WARM-VP8-PREFIX-WORK.md) then
-cuts the32M-work packet452,932→268,028 B (40.8%), with exact old RGBA/source quality
-and31,818,464 charged units inside32M. The complete target remains98,590 B.
-The prefix is eligible after search/transform/header, bounded statistics and
-minimum token work; variable arithmetic work is still cumulatively capped.
-Eligibility is not a whole-operation success promise, and exhaustion/refusal is
-terminal.4,635tests/OS,163internal+8public+2diff scalar and the same actual private
-package/examples qualify. One short cost screen records0.396x/upper0.429x and
-2,174,726 B/op; native allocations remain unmeasured. Only the existing work32M
-row refreshes; the other four procedural packet/work/quality records are exact.
-Historical fixed-model wording in the reused harness is explicitly superseded
-by packet/header evidence, with source labels corrected for future builds.
-No producer/harness rebuild or independent repeat follows the frozen experiment.
-All five fixed-setting packet gates and the full CPU objective remain open.
-The [single-pass alpha milestone](../benchmarks/WARM-WEBP-ALPHA-SINGLE-PASS.md)
-then reduces the work32M packet268,028→208,216 B (22.3%), with exact prior RGBA
-and source quality. ALPH falls114,363→54,552 B; the complete98,590 B target stays
-open. All31,997,511 actual units fit32M. Same-root admitted history/staging,
-terminal failures and output ownership pass4,644tests/OS, affected scalar checks
-and the same actual package/examples. One cost screen records0.385x/upper0.418x,
-1,707,064 B/op; no independent timing repeat or CPU-parity claim. Four unrestricted
-records remain exact and the finite matrix is unchanged. Passing primary content
-and unrestricted alpha are stopped; the five procedural packet gaps remain open.
-
-
-
+The current [alpha-token milestone](../benchmarks/WARM-WEBP-ALPHA-TOKENS.md)
+reduces the work32M packet208,216→181,998 B (12.6%), with exact prior RGBA/source
+quality and31,980,594 charged units inside32M. ALPH falls54,552→28,333 B; the
+complete98,590 B target stays open. Same-root token/staging overlap, terminal
+failures and surviving outputs pass4,654tests/OS, affected scalar checks and the
+same actual package/examples. One cost screen records0.391x/upper0.435x and
+2,295,207 B/op; native allocations are unmeasured and CPU parity/repeats deferred.
+One immutable core/internal build perOS; public/diff/reference/harness/native/
+selector binaries reused. Four unrestricted records remain exact; all five
+procedural packet gates and the finite matrix remain unchanged. The earlier
+[prefix](../benchmarks/WARM-VP8-PREFIX-WORK.md) and
+[fixed-stage](../benchmarks/WARM-WEBP-ALPHA-SINGLE-PASS.md) proofs are historical.
 
 The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
 rejects a smaller packet with excessive quality loss and a quality-preserving

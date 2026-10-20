@@ -1,5 +1,8 @@
 # WebP alpha compression under the work limit
 
+The [token-replay successor](WARM-WEBP-ALPHA-TOKENS.md) supersedes this default
+work32M packet/cost row. Fixed staging remains supported for smaller local workspace.
+
 The existing 32M-work control shrinks **268,028 → 208,216 B (22.3%)**. Its alpha
 payload falls **114,363 → 54,552 B**; decoded RGBA, source quality and alpha remain
 exactly unchanged. The complete **98,590 B** reference target remains open.

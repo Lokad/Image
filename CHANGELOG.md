@@ -6,10 +6,8 @@
   coding, full-direction reconstruction-based luma/chroma decisions and whole-frame entropy
   modeling at higher efforts, plus exact compressed alpha with bounded backward
   references and adaptive prefix codes; broader compression parity remains open.
-- Smaller q0 WebP output under limited work budgets through separately admitted
-  prefix statistics, preserving exact pixels, actual work caps and terminal refusal.
-- Smaller constrained-work WebP alpha packets with one bounded matching pass and
-  charged encoded staging, preserving exact alpha and terminal resource failures.
+- Smaller constrained-work WebP packets through admitted coefficient statistics
+  and reusable alpha tokens, preserving exact alpha, ownership and resource caps.
 
 - Coverage-based OpenType contextual substitution and validated zero default-instance
   positioning corrections for supplied TrueType text.

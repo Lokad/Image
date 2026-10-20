@@ -15,7 +15,7 @@ public sealed class WebpAlphaSinglePassTests
         alpha[0] = alpha[Width - 1] = 0; return alpha;
     }
     private static ImageLimits Limits(TestMemoryBudget root, long work = 693048)
-        => new() { MaxWork = work, MemoryBudget = root };
+        => new() { MaxWork = work, MaxWorkingBytes = 250000, MemoryBudget = root };
 
     [Fact]
     public void StagedBackwardReferencesAreExactAndOnlyRetainedCapacityRemainsCharged()
@@ -39,7 +39,7 @@ public sealed class WebpAlphaSinglePassTests
     public void ACompletedLargerCandidateReleasesItsStageAndUsesTheExactRunOnlyPacket()
     {
         var alpha = new byte[8195]; using var root = new TestMemoryBudget(100000);
-        using var context = new OperationContext(Limits(root, 70000), default);
+        using var context = new OperationContext(Limits(root, 70000) with { MaxWorkingBytes = 100000 }, default);
         using var plan = WebpLosslessEncoder.AlphaEncoding.TryCreate(alpha, 1, 4, context); Assert.NotNull(plan);
         Assert.Equal(2048, root.Bytes); Assert.True(root.Peak > 65568);
         using var fixedContext = new OperationContext(new ImageLimits { MaxWorkingBytes = 2048 }, default);
@@ -55,7 +55,7 @@ public sealed class WebpAlphaSinglePassTests
     public void ByteCapacityOverflowIsAnOrdinaryNoGainResultAndReleasesEveryTemporary()
     {
         var alpha = new byte[8192]; new Random(23).NextBytes(alpha); var unchanged = alpha.ToArray();
-        using var root = new TestMemoryBudget(100000); using var context = new OperationContext(Limits(root, 100000), default);
+        using var root = new TestMemoryBudget(100000); using var context = new OperationContext(Limits(root, 100000) with { MaxWorkingBytes = 100000 }, default);
         Assert.Null(WebpLosslessEncoder.AlphaEncoding.TryCreate(alpha, 128, 4, context));
         Assert.Equal(0, root.Bytes); Assert.True(root.Peak > 65568); Assert.Equal(0, root.Refusals); Assert.Equal(unchanged, alpha);
     }
