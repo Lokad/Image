@@ -34,8 +34,8 @@ internal static partial class Vp8Encoder
             var tokens = Math.Min(context.Limits.MaxOutputBytes, samples * 21L + 32);
             var header = Math.Min(0x7FFFF, context.Limits.MaxOutputBytes);
             var growth = 3 * tokens + 3L * header + 384;
-            var work = blocks * (16L * lumaTrials * 192 + chromaTrials * 512L + 24L * 512 + 64)
-                + samples * 128L + 65536;
+            var predictionWork = blocks * (16L * lumaTrials * 192 + chromaTrials * 512L + 24L * 512 + 64);
+            var work = predictionWork + samples * 128L + 65536;
             var intraExtra = prefix * 16L + source.Stride / 16 + 64;
             var intraWork = blocks * (4L * 3072 + 16 * 512 + 2048 + 256
                 + 16L * ((RateLumaModes - lumaTrials) * 192 + RateLumaModes * 768 - 512) + 20480);
@@ -52,7 +52,19 @@ internal static partial class Vp8Encoder
                     return new CoefficientModel(samples, blocks, context, modes, source.Stride / 16, fullFrame: true);
                 return new CoefficientModel(samples, blocks, context, modes, source.Stride / 16);
             }
-            if (extra > source.MemoryBytes || extra + growth > context.RemainingWorkingBytes || work > context.RemainingWork) return null;
+            if (extra > source.MemoryBytes || extra + growth > context.RemainingWorkingBytes) return null;
+            if (work > context.RemainingWork)
+            {
+                // A q0 prefix adds only bounded statistics/cache work. Retain
+                // the search/transform/header envelope and minimum token work;
+                // variable arithmetic carries/growth are charged as performed.
+                // This eligibility estimate does not promise that the complete
+                // operation fits. Exhaustion remains terminal, without retry.
+                var prefixWork = prefix * 24L * 256 + 1056 * 16;
+                if (!fullFrame || modes is not null
+                    || predictionWork + prefixWork + blocks * 24L > context.RemainingWork) return null;
+                return new CoefficientModel(samples, blocks, context);
+            }
             if (fullFrame && blocks > prefix)
             {
                 // The q0 predictor does not consult the probability model, so

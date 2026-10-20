@@ -1442,9 +1442,15 @@ refusal always terminates the operation without retry.
 At efforts 4..6 with quantizer index zero, equivalent admission also permits
 whole-frame entropy fitting for the existing 4x4 path, using
 `120*macroblocks + 16384` auxiliary bytes without Y2 storage. Its predictor never
-consults the model, so mode choices and decoded pixels remain identical. The
-original conservative work envelope and every performed work charge are preserved;
-tight local allowances keep the prefix or fixed model before shared admission.
+consults the model, so mode choices and decoded pixels remain identical. Full-frame
+eligibility retains the conservative work envelope. A limited-work q0 call may
+instead admit prefix statistics after accounting for the search/transform/header
+envelope, bounded prefix work and minimum token work. Variable arithmetic carries
+and buffer-growth work remain charged as performed. Eligibility does not guarantee
+the entire operation fits: every cumulative work check still applies, exhaustion
+terminates without fallback, and unused temporary reservations are released.
+Memory admission is unchanged; insufficient local capacity keeps fixed coding
+before shared admission. Every performed work charge is preserved.
 The admitted mixed-mode path also compares actual quantized reconstruction error
 and coefficient/header bit cost for all ten luma directions and four chroma
 predictions. It stages one luma block or one 8x8 U/V pair on bounded stack storage.

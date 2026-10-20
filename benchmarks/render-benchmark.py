@@ -218,7 +218,7 @@ def render():
         row('WebP VP8, opaque from RGBA16‡', 'vp8-alpha-matches-evidence.json', ['observations', 1], 'WARM-VP8-ALPHA-MATCHES.md', verification='Gap (cost screen; CPU parity deferred)'),
         row('WebP VP8 + alpha‡', 'vp8-alpha-matches-evidence.json', ['observations', 2], 'WARM-VP8-ALPHA-MATCHES.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha from RGBA16‡', 'vp8-alpha-matches-evidence.json', ['observations', 3], 'WARM-VP8-ALPHA-MATCHES.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-compressed-alpha-evidence.json', ['observations', 2], 'WARM-VP8-COMPRESSED-ALPHA.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-prefix-work-evidence.json', ['observations', 0], 'WARM-VP8-PREFIX-WORK.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-CODE-COST.md', True),
@@ -497,6 +497,21 @@ writing; there is no filtered/RGBA frame or encoded-alpha staging copy. A weaker
 gradient-only trial is retained but not adopted, avoiding another budget-specific
 algorithm. No source/settings/quality-gate change, new workload or timing repeat.
 The five procedural packet gaps, primary content passes and finite counts remain.
+The [limited-work prefix milestone](../benchmarks/WARM-VP8-PREFIX-WORK.md) then
+cuts the32M-work packet452,932→268,028 B (40.8%), with exact old RGBA/source quality
+and31,818,464 charged units inside32M. The complete target remains98,590 B.
+The prefix is eligible after search/transform/header, bounded statistics and
+minimum token work; variable arithmetic work is still cumulatively capped.
+Eligibility is not a whole-operation success promise, and exhaustion/refusal is
+terminal.4,635tests/OS,163internal+8public+2diff scalar and the same actual private
+package/examples qualify. One short cost screen records0.396x/upper0.429x and
+2,174,726 B/op; native allocations remain unmeasured. Only the existing work32M
+row refreshes; the other four procedural packet/work/quality records are exact.
+Historical fixed-model wording in the reused harness is explicitly superseded
+by packet/header evidence, with source labels corrected for future builds.
+No producer/harness rebuild or independent repeat follows the frozen experiment.
+All five fixed-setting packet gates and the full CPU objective remain open.
+
 
 
 The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)

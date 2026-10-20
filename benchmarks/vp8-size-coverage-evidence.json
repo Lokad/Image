@@ -106,21 +106,22 @@
     },
     {
       "case": "WarmWebp/EncodeBudget8",
-      "managedPacketBytes": 452932,
+      "managedPacketBytes": 268028,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "vp8-compressed-alpha-evidence.json",
+      "evidence": "vp8-prefix-work-evidence.json",
       "observationPath": [
         "observations",
-        2
+        0
       ],
-      "validity": "C58 cost retained; C61 verifies the complete encoded packet and logical work unchanged, with exact RGBA/quality. Explicit fixed100/native75 control remains a packet gap.",
-      "previousManagedPacketBytes": 471436,
-      "alphaPayloadBytes": 114363
+      "validity": "C64 qualified bounded-prefix admission under the existing32M cap:31,818,464 actual units, exact old RGBA/quality. Whole packet remains above98,590B.",
+      "previousManagedPacketBytes": 452932,
+      "alphaPayloadBytes": 114363,
+      "coefficientPolicy": "admitted64-macroblock prefix statistics"
     }
   ]
 }

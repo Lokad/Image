@@ -48,6 +48,9 @@ Geometry limits apply to codec input and newly created outputs. A transform may
 read a larger existing buffer to produce a smaller admitted result; that source
 still counts toward working memory. Work units are deterministic accounting,
 not CPU instructions or a time limit.
+Optional codec eligibility does not promise that a whole operation fits its work
+limit. Variable work is charged as performed; exhaustion stops the operation and
+releases temporary storage without retrying another encoding strategy.
 
 ## Shared budgets
 

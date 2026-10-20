@@ -1,5 +1,9 @@
 # WebP alpha backward references and q0 entropy
 
+The [limited-work prefix successor](WARM-VP8-PREFIX-WORK.md) supersedes the
+work32M packet/cost claim below. The four unrestricted results remain valid;
+earlier producer-specific work32M evidence is retained.
+
 The existing 8/16-bit alpha controls shrink **268,028 → 170,196 B (36.5%)** with
 exact decoded RGBA and unchanged source quality. Their complete-packet gate is
 still open against the frozen **98,590 B** FFmpeg/libwebp reference. Alpha alone

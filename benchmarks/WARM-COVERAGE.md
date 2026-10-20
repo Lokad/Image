@@ -1138,3 +1138,17 @@ no independent repeats, new workload or codec/edit/font/inspection invalidation.
 Counts256=239numeric+17pending;68independentpasses/167gaps/1confidence-open/
 3cost screens,120independent/119short,23current/216historical and31metadata queue.
 The unadopted gradient-only candidate does not introduce another required path.
+
+
+The [limited-work prefix milestone](WARM-VP8-PREFIX-WORK.md) refreshes exactly
+WarmWebp/EncodeBudget8:452,932→268,028 B with exact old RGBA/source quality and
+31,818,464 actual work units inside the unchanged32M cap. The target98,590 B is
+still open. Other four procedural records remain byte/work/quality-identical;
+primary content and unrelated algorithms retain their relevant unchanged proofs.
+4,635tests/OS,163internal+8public+2diff scalar and the same actual package/examples
+qualify. One short cost records0.396x/upper0.429x and2,174,726 B/op, without an
+independent repeat or CPU-parity claim. The seven added tests do not expand the
+performance matrix:256=239numeric+17pending,68independentpasses/167gaps/
+1confidence-open/3cost screens,120independent/119short,23current/216historical;
+31metadata confirmations unchanged. The earlier190B q0 luma trial is retained
+without adoption; no timing/full/package repeat was spent on that small result.
