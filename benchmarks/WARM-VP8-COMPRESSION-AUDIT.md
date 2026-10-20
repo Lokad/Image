@@ -1,5 +1,9 @@
 # Lossy WebP compression audit
 
+Historical decision under the earlier ordering. The [compression-first mode
+milestone](WARM-VP8-RECONSTRUCTED-MODES.md) later reuses this owned luma search
+on a mixed intra16/Y2 and whole-frame-model encoder, with full qualification.
+
 This bounded round accepts **no production change**. Neither tested prediction-rate
 strategy reaches the required photograph/diagram ceilings of **17,688/7,100 bytes**.
 The qualified C37 source, build and package are restored and reused.

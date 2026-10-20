@@ -38,6 +38,7 @@ internal static partial class Vp8Encoder
         var intra16 = model?.Intra16 == true;
         Span<short> luma = intra16 ? stackalloc short[256] : default;
         Span<short> y2 = intra16 ? stackalloc short[16] : default;
+        Span<short> chromaCoefficients = intra16 ? stackalloc short[128] : default;
         Span<int> bitCosts = intra16 ? stackalloc int[257] : default;
         var lambda = 0;
         if (intra16)
@@ -81,13 +82,25 @@ internal static partial class Vp8Encoder
                         Block(source.Y, reconstructed.Y, source.Stride, bx, by, 3, q,
                             tokens, above.AsSpan(mx * 8, 8), left, b % 4, b / 4, context, model, index * 24 + b, 0);
                     }
-                var chromaMode = SelectChroma(source, reconstructed, x / 2, y / 2, options.Effort == 0 ? 1 : 4, context);
+                var chromaMode = intra16
+                    ? SelectRateChroma(source, reconstructed, x / 2, y / 2, q, above.AsSpan(mx * 8, 8), left,
+                        model!.Probabilities, bitCosts, lambda, chromaCoefficients, context)
+                    : SelectChroma(source, reconstructed, x / 2, y / 2, options.Effort == 0 ? 1 : 4, context);
                 chromaModes[index] = (byte)chromaMode;
                 for (var plane = 0; plane < 2; plane++)
                 {
                     var src = plane == 0 ? source.U : source.V; var dst = plane == 0 ? reconstructed.U : reconstructed.V;
                     for (var b = 0; b < 4; b++)
-                        Block(src, dst, source.Stride / 2, x / 2 + b % 2 * 4, y / 2 + b / 2 * 4, 2, q,
+                        if (intra16)
+                        {
+                            var top = above.AsSpan(mx * 8, 8); var a = 4 + plane * 2 + b % 2; var l = 4 + plane * 2 + b / 2;
+                            var values = chromaCoefficients.Slice((plane * 4 + b) * 16, 16);
+                            top[a] = left[l] = model!.Ready ? Coefficients(tokens, values, 2, top[a] + left[l], model.Probabilities)
+                                : model.Record(src, source.Stride / 2, x / 2 + b % 2 * 4, y / 2 + b / 2 * 4,
+                                    source.Y.Length + plane * source.U.Length, index * 24 + 16 + plane * 4 + b,
+                                    values, 2, top[a] + left[l]);
+                        }
+                        else Block(src, dst, source.Stride / 2, x / 2 + b % 2 * 4, y / 2 + b / 2 * 4, 2, q,
                             tokens, above.AsSpan(mx * 8, 8), left, 4 + plane * 2 + b % 2, 4 + plane * 2 + b / 2, context,
                             model, index * 24 + 16 + plane * 4 + b, source.Y.Length + plane * source.U.Length);
                 }

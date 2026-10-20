@@ -1,5 +1,8 @@
 # VP8 whole-frame entropy compression milestone
 
+The [reconstructed-mode successor](WARM-VP8-RECONSTRUCTED-MODES.md) supersedes
+these sizes and costs; this accepted milestone remains historical evidence.
+
 The fixed opaque diagram now meets the **complete-packet size and unchanged
 quality gates**: **7,046 B versus7,100 B** for FFmpeg/libwebp. The photograph
 improves to19,808 B versus17,688 B; its size gate remains open. This qualifies

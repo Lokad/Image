@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "scope": "C54 admitted whole-frame coefficient model with the original prefix prediction costs. Exactly the same two frozen managed qualities78/75, native75/effort4; exact C53 reconstructed pixels and unchanged alpha/quality gates. No recalibration. Unchanged VP8L sizes/pixels and C49 timing evidence retained.",
+  "scope": "C55/C56 admitted reconstructed luma/chroma mode decisions on the C54 mixed-mode/global entropy encoder. Exactly the same two frozen managed qualities78/75, native75/effort4; source-PSNR gap <=0.25dB, exact alpha and unchanged decoder bounds. Lossy pixels may change. No recalibration; VP8L sizes/pixels and C49 timing evidence unchanged.",
   "maximumOwnedSettings": 8,
-  "librarySha256": "0a4bd2da1595493bf49b6e6be5916b41c46753e3a52b83ef02ac085af52878cb",
+  "librarySha256": "fc0098a5208605cdc8f15ad6876c66432430c0085562b6dbcc61e72e14bfa553",
   "harnessSha256": "8526fc893dda27fae633a85a382c9607d8c11db5e2326a008fc6b35059cd4889",
   "cases": [
     {
@@ -27,29 +27,29 @@
         "ownedSettings": [
           {
             "setting": 78,
-            "encodedBytes": 19808,
-            "encodedSha256": "a6d3db34961da321307a827ec9a2195ad504b069c1ad6515589c896c87edfa68",
-            "nativeDecodedSha256": "9bf4cb4ce0f54c4b0e967f7b167099949f7b32340e422b67b6a810813f696377",
-            "publicDecodedSha256": "7ac9a11a3b163b2e1a77e3bcfd7e7e5dbf218af4cf9a4e3ac8c11d1db7bf497f",
+            "encodedBytes": 18772,
+            "encodedSha256": "bf537c233ba5a1694c91f66c36d25c98d88dffb37e39953b3160132cf944bb00",
+            "nativeDecodedSha256": "83dbc1411b5fd69cb197dfea8f41c1eebb420c2915c9528cc5afe2eb917d7bdb",
+            "publicDecodedSha256": "78cd6a5e9bee6190cda791e3374c5b84baefa563d5372d994471ceaec7ca68c1",
             "codec": "VP8",
             "sampling": "4:2:0",
             "sourceError": {
-              "sumSquared": 12113823,
-              "maximum": 65,
+              "sumSquared": 11811719,
+              "maximum": 64,
               "samples": 398601,
               "scale": 1,
-              "rgbMaximum": 65,
-              "rgbRmse": 5.51278962922699,
-              "rgbPsnr": 33.30337521060497
+              "rgbMaximum": 64,
+              "rgbRmse": 5.443614488840493,
+              "rgbPsnr": 33.41305638201199
             },
             "decoderDifference": {
-              "sumSquared": 3753,
+              "sumSquared": 3651,
               "maximum": 1,
               "samples": 398601,
               "scale": 1,
               "rgbMaximum": 1,
-              "rgbRmse": 0.09703314108108656,
-              "rgbPsnr": 68.39240180367558
+              "rgbRmse": 0.0957054620976512,
+              "rgbPsnr": 68.51206911830913
             },
             "alphaExact": true,
             "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
@@ -87,34 +87,34 @@
           },
           "closestOwned": {
             "setting": 78,
-            "encodedBytes": 19808,
-            "encodedSha256": "a6d3db34961da321307a827ec9a2195ad504b069c1ad6515589c896c87edfa68",
-            "nativeDecodedSha256": "9bf4cb4ce0f54c4b0e967f7b167099949f7b32340e422b67b6a810813f696377",
-            "publicDecodedSha256": "7ac9a11a3b163b2e1a77e3bcfd7e7e5dbf218af4cf9a4e3ac8c11d1db7bf497f",
+            "encodedBytes": 18772,
+            "encodedSha256": "bf537c233ba5a1694c91f66c36d25c98d88dffb37e39953b3160132cf944bb00",
+            "nativeDecodedSha256": "83dbc1411b5fd69cb197dfea8f41c1eebb420c2915c9528cc5afe2eb917d7bdb",
+            "publicDecodedSha256": "78cd6a5e9bee6190cda791e3374c5b84baefa563d5372d994471ceaec7ca68c1",
             "codec": "VP8",
             "sampling": "4:2:0",
             "sourceError": {
-              "sumSquared": 12113823,
-              "maximum": 65,
+              "sumSquared": 11811719,
+              "maximum": 64,
               "samples": 398601,
               "scale": 1,
-              "rgbMaximum": 65,
-              "rgbRmse": 5.51278962922699,
-              "rgbPsnr": 33.30337521060497
+              "rgbMaximum": 64,
+              "rgbRmse": 5.443614488840493,
+              "rgbPsnr": 33.41305638201199
             },
             "decoderDifference": {
-              "sumSquared": 3753,
+              "sumSquared": 3651,
               "maximum": 1,
               "samples": 398601,
               "scale": 1,
               "rgbMaximum": 1,
-              "rgbRmse": 0.09703314108108656,
-              "rgbPsnr": 68.39240180367558
+              "rgbRmse": 0.0957054620976512,
+              "rgbPsnr": 68.51206911830913
             },
             "alphaExact": true,
             "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
           },
-          "psnrGapDb": 0.02196912945856866,
+          "psnrGapDb": 0.08771204194844984,
           "matched": true,
           "exclusionReason": null
         },
@@ -122,7 +122,7 @@
       },
       "sourceUnchanged": true,
       "independentOutputs": true,
-      "timingAndAllocations": "C54 short cost screen pending; CPU parity deferred. C49 lossless timings unchanged."
+      "timingAndAllocations": "C56 short cost screen pending; CPU parity deferred. C49 lossless timings unchanged."
     },
     {
       "name": "Diagram8",
@@ -146,29 +146,29 @@
         "ownedSettings": [
           {
             "setting": 75,
-            "encodedBytes": 7046,
-            "encodedSha256": "caa2745ea260990bc67ec663848a9c2756f92ed8f31b6114441d9557428ef3eb",
-            "nativeDecodedSha256": "d3b207a8e4d21c8317b3d0afbbf4618919c815ab35ce095700339ab4ea67f54f",
-            "publicDecodedSha256": "a64e65d529bc185047523dd08b1f197458ed5a5540e49a3ce382c5c1d31c04be",
+            "encodedBytes": 6752,
+            "encodedSha256": "4c2217f039e67cd4514221a32d6a7ce52ea29c0549945b0d9533e881ec1afa46",
+            "nativeDecodedSha256": "6dfe9f94ea1a28c492935417a537ce205727f5176a90542fec8071144d7a92fa",
+            "publicDecodedSha256": "c8e5d4b896bab9d67d958d77711b9abe5494b0d080afc09756705f2206ae4b72",
             "codec": "VP8",
             "sampling": "4:2:0",
             "sourceError": {
-              "sumSquared": 11438511,
-              "maximum": 80,
+              "sumSquared": 11219758,
+              "maximum": 77,
               "samples": 398601,
               "scale": 1,
-              "rgbMaximum": 80,
-              "rgbRmse": 5.356924865296645,
-              "rgbPsnr": 33.55249250618327
+              "rgbMaximum": 77,
+              "rgbRmse": 5.305453993549151,
+              "rgbPsnr": 33.636352550974024
             },
             "decoderDifference": {
-              "sumSquared": 979,
+              "sumSquared": 2461,
               "maximum": 1,
               "samples": 398601,
               "scale": 1,
               "rgbMaximum": 1,
-              "rgbRmse": 0.04955895656073099,
-              "rgbPsnr": 74.22836052977503
+              "rgbRmse": 0.07857540259770954,
+              "rgbPsnr": 70.22507131077839
             },
             "alphaExact": true,
             "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
@@ -206,34 +206,34 @@
           },
           "closestOwned": {
             "setting": 75,
-            "encodedBytes": 7046,
-            "encodedSha256": "caa2745ea260990bc67ec663848a9c2756f92ed8f31b6114441d9557428ef3eb",
-            "nativeDecodedSha256": "d3b207a8e4d21c8317b3d0afbbf4618919c815ab35ce095700339ab4ea67f54f",
-            "publicDecodedSha256": "a64e65d529bc185047523dd08b1f197458ed5a5540e49a3ce382c5c1d31c04be",
+            "encodedBytes": 6752,
+            "encodedSha256": "4c2217f039e67cd4514221a32d6a7ce52ea29c0549945b0d9533e881ec1afa46",
+            "nativeDecodedSha256": "6dfe9f94ea1a28c492935417a537ce205727f5176a90542fec8071144d7a92fa",
+            "publicDecodedSha256": "c8e5d4b896bab9d67d958d77711b9abe5494b0d080afc09756705f2206ae4b72",
             "codec": "VP8",
             "sampling": "4:2:0",
             "sourceError": {
-              "sumSquared": 11438511,
-              "maximum": 80,
+              "sumSquared": 11219758,
+              "maximum": 77,
               "samples": 398601,
               "scale": 1,
-              "rgbMaximum": 80,
-              "rgbRmse": 5.356924865296645,
-              "rgbPsnr": 33.55249250618327
+              "rgbMaximum": 77,
+              "rgbRmse": 5.305453993549151,
+              "rgbPsnr": 33.636352550974024
             },
             "decoderDifference": {
-              "sumSquared": 979,
+              "sumSquared": 2461,
               "maximum": 1,
               "samples": 398601,
               "scale": 1,
               "rgbMaximum": 1,
-              "rgbRmse": 0.04955895656073099,
-              "rgbPsnr": 74.22836052977503
+              "rgbRmse": 0.07857540259770954,
+              "rgbPsnr": 70.22507131077839
             },
             "alphaExact": true,
             "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
           },
-          "psnrGapDb": 0.21403034130729282,
+          "psnrGapDb": 0.130170296516539,
           "matched": true,
           "exclusionReason": null
         },
@@ -241,7 +241,7 @@
       },
       "sourceUnchanged": true,
       "independentOutputs": true,
-      "timingAndAllocations": "C54 short cost screen pending; CPU parity deferred. C49 lossless timings unchanged."
+      "timingAndAllocations": "C56 short cost screen pending; CPU parity deferred. C49 lossless timings unchanged."
     }
   ],
   "project": "Lokad.Image",

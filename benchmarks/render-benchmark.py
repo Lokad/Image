@@ -318,8 +318,8 @@ def render():
     encodes.extend([
         row('WebP VP8L photograph RGBA8', 'warm-vp8l-code-cost-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L text/diagram RGBA8', 'warm-vp8l-code-cost-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-CODE-COST.md', True),
-        row('WebP VP8 photograph RGBA8 / matched quality', 'vp8-full-model-compression-evidence.json', ['observations', 0], 'WARM-VP8-FULL-MODEL-COMPRESSION.md', verification='Gap (cost screen; CPU parity deferred)'),
-        row('WebP VP8 text/diagram RGBA8 / matched quality', 'vp8-full-model-compression-evidence.json', ['observations', 1], 'WARM-VP8-FULL-MODEL-COMPRESSION.md', verification='Gap (cost screen; CPU parity deferred)'),
+        row('WebP VP8 photograph RGBA8 / matched quality', 'vp8-reconstructed-mode-evidence.json', ['observations', 0], 'WARM-VP8-RECONSTRUCTED-MODES.md', verification='Gap (cost screen; CPU parity deferred)'),
+        row('WebP VP8 text/diagram RGBA8 / matched quality', 'vp8-reconstructed-mode-evidence.json', ['observations', 1], 'WARM-VP8-RECONSTRUCTED-MODES.md', verification='Gap (cost screen; CPU parity deferred)'),
     ])
     edits.extend([
         row('Lanczos3 reduction RGBA8', 'warm-lanczos3-certified-fma-evidence.json', ['cases', 'Reduce8', -1], 'WARM-LANCZOS3-CERTIFIED-FMA.md', verification='Gap (short; qualified)'),
@@ -454,17 +454,19 @@ more CPU and allocation for size: photograph9,912,952 B/op versus historical702,
 Both lossless size gates remain open against160,032/7,234 B. The earlier
 [structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md) is diagnostic evidence.
 The [intra16/Y2 milestone](../benchmarks/WARM-VP8-INTRA16-COMPRESSION.md)
-first reconsiders the useful C39 byte gains despite higher CPU. Its
-[whole-frame entropy successor](../benchmarks/WARM-VP8-FULL-MODEL-COMPRESSION.md)
-now emits19,808/7,046 B at the same frozen settings and exact reconstructed C53
-pixels. The diagram meets its7,100 B complete-packet ceiling; the photograph
-still exceeds17,688 B. Source-PSNR gaps0.021969/0.214030dB retain the0.25dB gate.
-4,601 tests/OS,136 internal+2 public scalar checks/OS and the same actual private
-package/examples qualify. Two quiet three-actual cost screens record1.201x/1.139x
-and625,323/571,203 B/op, without a CPU veto or independent timing confirmation.
-Only the two content encode rows change. The other five VP8 encode rows use
-Quality100/q0 and retain the previous branch/evidence. The original C41 audit
-is historical; the current mixed-mode replay and production agree exactly.
+and [whole-frame entropy successor](../benchmarks/WARM-VP8-FULL-MODEL-COMPRESSION.md)
+first reduce packets to19,808/7,046 B. The current
+[reconstructed luma/chroma search](../benchmarks/WARM-VP8-RECONSTRUCTED-MODES.md)
+reduces them further to18,772/6,752 B at frozen managed78/75, native75/effort4.
+Source-PSNR gaps0.087712/0.130170dB retain the0.25dB gate and exact alpha. Diagram
+meets its7,100 B complete-packet ceiling; photograph remains1,084 B above17,688.
+4,603 tests/OS,136internal+2public+2differential scalar checks/OS and the same actual
+private package/examples qualify. Two short quiet cost screens record2.641x/2.006x
+and660,776/554,595 B/op; CPU parity remains deferred. C38's useful owned luma R/D
+candidate is reconsidered on the newer mixed-mode/global model; the luma-only
+stage gets a byte/quality screen and final qualification is batched with chroma.
+Only the two content encode rows change; five Quality100/q0 VP8 encodes retain
+their branch and evidence. No workload matrix or reference settings change.
 The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
 rejects a smaller packet with excessive quality loss and a quality-preserving
 variant with immaterial byte savings. These historical trials do not alter the
@@ -506,8 +508,8 @@ RGB420 (managed/FFmpeg). Source-PSNR gaps are0.000033/0.106110/0.017274dB inside
 [optional-policy screen](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) includes complete
 time and allocations, while retaining the Original control. WebP photograph/diagram
 lossless sizes are174,748/160,032 B
-and 7,636/7,234 B; [lossy sizes](../benchmarks/WARM-VP8-FULL-MODEL-COMPRESSION.md)
-are 19,808/17,688 B and 7,046/7,100 B at the fixed qualified source quality. Compression-
+and 7,636/7,234 B; [lossy sizes](../benchmarks/WARM-VP8-RECONSTRUCTED-MODES.md)
+are 18,772/17,688 B and 6,752/7,100 B at the fixed qualified source quality. Compression-
 efficiency parity is not established. Current operation timings/allocations follow.
 
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
@@ -553,7 +555,7 @@ Production stays safe managed .NET 10 without dependencies or native bindings.
 
 ‡ Default VP8 comparisons freeze managed/native quality 100/75 and effort 4, retaining
 the 0.25 dB source-quality gate and exact alpha. Matched-quality content controls use
-their linked frozen settings. [Current packet sizes](../benchmarks/WARM-VP8-FULL-MODEL-COMPRESSION.md)
+their linked frozen settings. [Current packet sizes](../benchmarks/WARM-VP8-RECONSTRUCTED-MODES.md)
 and per-codec reports accompany time/allocation evidence; size parity remains open.
 
 ¶ PNG Identify references use the public FFmpeg PNG parser/CRC plus original

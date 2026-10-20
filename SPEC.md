@@ -1426,6 +1426,13 @@ original 64-block prefix: extending entropy statistics changes no selected mode
 or reconstructed pixel. There is no second raster conversion or full-frame copy.
 Otherwise local limits select the prefix cache before allocation; shared admission
 refusal always terminates the operation without retry.
+The admitted mixed-mode path also compares actual quantized reconstruction error
+and coefficient/header bit cost for the existing luma candidates and four chroma
+predictions. It stages one luma block or one 8x8 U/V pair on bounded stack storage.
+Luma ties retain the first minimum-prediction-error candidate, then format order;
+chroma ties retain format order. Additional performed trials charge work and check
+cancellation. Quantizers, nearest rounding, candidate-count limits and exact alpha
+are unchanged; selected modes and reconstructed lossy pixels may change.
 Grouped DC needs signed high bytes beyond the ordinary
 coefficient cache range. Only the selected reconstruction is retained; the
 remaining blocks use the selected probability model directly. Entropy adaptation

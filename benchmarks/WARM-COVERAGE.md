@@ -1079,3 +1079,17 @@ CPU parity remains deferred. No case is added:256=239numeric+17pending,71passes/
 167gaps/1confidence-open,123independent/116short,23current/216historical and31metadata
 confirmations remain. Five Quality100/q0 VP8 encodes retain their branch. All other
 codec/edit/font/inspection and frozen decode proofs are reused where unchanged.
+
+
+The [reconstructed-mode milestone](WARM-VP8-RECONSTRUCTED-MODES.md) reuses C38's
+owned six-mode search on the materially changed C54 base and adds reconstructed
+four-mode chroma scoring. The fixed packets become18,772/6,752 B against17,688/
+7,100 B, source-PSNR gaps0.087712/0.130170dB PASS. Photograph remains6.13% above
+reference; diagram remains passing. Two short cost screens2.641x/2.006x record
+660,776/554,595 B/op; CPU parity is deferred.4,603tests/OS,136internal+2public+
+2differential scalar/OS and the same actual package/examples qualify. The two
+new functional alpha8/16 tests cross optional-cache admission at129x129; no
+performance case is added. Counts stay256=239numeric+17pending,71passes/167gaps/
+1confidence-open,123independent/116short,23current/216historical,31metadata queue.
+Only the same two content VP8 encode rows change; five q0 encodes and all other
+codec/edit/font/inspection/frozen decode evidence retain their original scope.

@@ -30,20 +30,35 @@ internal static partial class Vp8Encoder
 
         var dc = (int)Vp8Tables.DcQuantizers[q]; var ac = (int)Vp8Tables.AcQuantizers[q];
         Span<short> residual = stackalloc short[16]; Span<short> inverse = stackalloc short[16];
+        Span<byte> rateTop = stackalloc byte[4]; Span<byte> rateSide = stackalloc byte[4];
+        Span<byte> modeTop = stackalloc byte[4]; Span<byte> modeSide = stackalloc byte[4];
+        above[..4].CopyTo(rateTop); left[..4].CopyTo(rateSide);
+        for (var i = 0; i < 4; i++)
+        {
+            modeTop[i] = (byte)(index < columns ? 0 : SmallMode(modes, index - columns, 12 + i));
+            modeSide[i] = (byte)(index % columns == 0 ? 0 : SmallMode(modes, index - 1, i * 4 + 3));
+        }
         for (var b = 0; b < 16; b++)
         {
-            var bx = x + b % 4 * 4; var by = y + b / 4 * 4;
-            modes[index * 16 + b] = (byte)SelectLuma(source, reconstructed, bx, by, x, y, candidates, context);
-            context.Work(512);
+            var a = b % 4; var l = b / 4; var bx = x + a * 4; var by = y + l * 4;
             var values = selected.Slice(b * 16, 16);
-            for (var row = 0; row < 4; row++)
-            for (var column = 0; column < 4; column++)
+            var mode = SelectRateLuma(source, reconstructed, bx, by, x, y, candidates, q,
+                Vp8Tables.BlockModeProbabilities.Slice((modeTop[a] * 10 + modeSide[l]) * 9, 9),
+                probabilities, rateTop[a] + rateSide[l], bitCosts, lambda, values, context, out var ready);
+            modes[index * 16 + b] = modeTop[a] = modeSide[l] = (byte)mode;
+            if (!ready)
             {
-                var at = (by + row) * source.Stride + bx + column;
-                residual[row * 4 + column] = (short)(source.Y[at] - reconstructed.Y[at]);
+                context.Work(512);
+                for (var row = 0; row < 4; row++)
+                for (var column = 0; column < 4; column++)
+                {
+                    var at = (by + row) * source.Stride + bx + column;
+                    residual[row * 4 + column] = (short)(source.Y[at] - reconstructed.Y[at]);
+                }
+                Vp8ForwardDct.Quantize(residual, values, dc, ac);
+                ReconstructLumaBlock(reconstructed, bx, by, values, values[0] * dc, ac, inverse);
             }
-            Vp8ForwardDct.Quantize(residual, values, dc, ac);
-            ReconstructLumaBlock(reconstructed, bx, by, values, values[0] * dc, ac, inverse);
+            rateTop[a] = rateSide[l] = (byte)(values.IndexOfAnyExcept((short)0) < 0 ? 0 : 1);
         }
         context.Work(1024);
         var smallRate = LumaRate(selected, 3, above, left, probabilities, bitCosts)
