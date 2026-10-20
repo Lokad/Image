@@ -122,6 +122,9 @@ all size ceilings and other functional/memory/performance requirements remain op
 An [untimed whole-frame entropy replay](../benchmarks/WARM-VP8-FULL-MODEL-AUDIT.md)
 recovers1,294/604 B with identical pixels but still misses both size ceilings;
 it changes no production result or benchmark row.
+The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
+rejects a smaller packet with excessive quality loss and a quality-preserving
+variant with immaterial byte savings. The qualified producer and size gates remain unchanged.
 
 The two JPEG async-output cases remain short gaps; all timings/allocations follow.
 
