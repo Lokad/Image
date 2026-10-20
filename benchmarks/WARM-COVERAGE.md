@@ -142,9 +142,13 @@ paths absent from the older checklist; these are not a shape/depth/settings grid
 
 All three remain **unmeasured**; establish equivalent native font/admission
 adapters and quality/ownership gates before timing. They add no new image or
-font/settings grid. These additions keep the full objective explicit while the
-demonstrated Lanczos3 gaps take priority. Further additions require evidence of
-a distinct omitted required algorithm or public boundary.
+font/settings grid. The next item is `MemoryBudget/Png8Retained2`, following the
+caller-owned admission priority; functional admission is already qualified, but
+its governed complete-operation performance is not. The
+[prepared-double Lanczos trial](WARM-LANCZOS3-PREPARED-FMA-TRIAL.md) is correct but
+1.4% slower and rejected. Accepted producers and numeric rows remain unchanged.
+Further additions require evidence of a distinct omitted required algorithm or
+public boundary.
 
 [Exact SIMD JPEG410](WARM-JPEG-410-SIMD.md) reduces complete time76.7%,
 3427.72→799.34us:1.669x/upper1.877x,720,810B/op. Exact1/32 chroma fractions,

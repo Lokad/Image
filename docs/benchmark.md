@@ -35,8 +35,11 @@ pixels and the same 4 KiB reservation. Full suites and the same actual package
 qualify both OSes. Only that existing row changes. A [block-scoped VP8 reader](../benchmarks/WARM-VP8-COEFFICIENT-BLOCK.md)
 then saves **11.2%** on current SimpleOpaque8 at **1.384x/upper1.459x**, 760,572 B/op.
 All five affected existing VP8 rows refresh, preserving exact pixels/work/cursors
-and the original short-input/cancelable path. Next: bound prepared-double source
-rows with certified horizontal FMA for the larger LanczosReduce16 gap.
+and the original short-input/cancelable path. A
+[prepared-double Lanczos trial](../benchmarks/WARM-LANCZOS3-PREPARED-FMA-TRIAL.md)
+is correct but 1.4% slower, at 154,894 B/op, and is rejected. Accepted production
+and all selected rows remain unchanged. Next: measure the already named shared-root
+two-retained-output boundary before deciding whether optimization is needed.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
