@@ -40,7 +40,11 @@ public sealed class JpegYcckRowTests
             Assert.Equal(255, first.GetRow8(y)[x * 4 + 3]);
         }
         var expected = OriginalPixels.Bytes(survivor); Assert.Equal(expected, OriginalPixels.Bytes(first));
-        first.GetRow8(0)[0] ^= 255; first.Dispose(); Assert.Equal(expected, OriginalPixels.Bytes(survivor));
+        for (var y = 0; y < height; y++) first.GetRow8(y).Fill(173);
+        first.Dispose(); Assert.Equal(expected, OriginalPixels.Bytes(survivor));
+        using var subsequent = ImageCodec.Decode(packet);
+        Assert.Equal(expected, OriginalPixels.Bytes(subsequent));
+        subsequent.GetRow8(0).Fill(81); Assert.Equal(expected, OriginalPixels.Bytes(survivor));
         for (var y = 0; y < height; y++) Assert.All(caller.AsSpan(y * stride + width * 3, 7).ToArray(), b => Assert.Equal(173, b));
         Assert.All(caller.AsSpan(stride * height).ToArray(), b => Assert.Equal(173, b));
         var expectedCaller = callerSurvivor.ToArray(); Array.Clear(caller); Assert.Equal(expectedCaller, callerSurvivor);

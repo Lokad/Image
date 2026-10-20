@@ -36,3 +36,13 @@ Retained evidence identities (SHA-256):
 - `p1-qualified-linux.tar.gz`: `42be8d4e9542891ed145833230e79c16c0afbac04dd573b2bc328c9f82c53f7e`.
 
 Published 0.1.0 artifacts are preserved. No package was published by this round.
+
+Four additional four-component JPEG owner/peak cases now pass within29 focused
+CMYK/YCCK tests normally and with intrinsics off on both OS. They cover retained
+output charges, poisoned-buffer overwrite and survivor independence, every growth
+refusal, cancellation at output admission, subsequent success and the unchanged
+caller-plane peak bound. Borrowed roots remain usable. These tests run against
+the restored qualified producer after the [storage trials](../benchmarks/WARM-JPEG-STORAGE-TRIALS.md);
+production sources/DLLs and the actual private package are unchanged. Full-test
+and package proofs are reused. This adds functional memory evidence, not a
+performance or broader compatibility claim.

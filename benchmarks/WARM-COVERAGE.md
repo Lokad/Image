@@ -46,7 +46,11 @@ sparse tests pass normally/scalar on both OS; current full/package evidence is
 reused. The [FP32-FMA sparse trial](WARM-JPEG-SPARSE-FMA-TRIAL.md) also regresses
 7.2% and is rejected. Exact qualified source/DLLs are restored, five fresh
 normal/scalar checks pass per OS, and existing 4457-test/full-package evidence
-remains valid. No numeric or checklist row changes. The [async nonseekable PNG inspection screen](WARM-PNG-ASYNC-IDENTIFY.md)
+remains valid. The [storage trials](WARM-JPEG-STORAGE-TRIALS.md) reduce allocation
+48.9–86.9% but are neutral/slower in elapsed time; both are removed. Restored
+production passes29 affected public normal/scalar controls per OS, retaining four
+new ownership/refusal/cancellation/peak cases. Selected numeric rows and the finite
+checklist stay unchanged. The [async nonseekable PNG inspection screen](WARM-PNG-ASYNC-IDENTIFY.md)
 moves one already-named boundary to numeric:24.10µs/native19.34µs,
 1.246x/upper1.571,8,408B/op. All21 managed controls revalidate; unchanged normal/
 scalar native controls are reused. Complete equivalent input/metadata/EOF/owners

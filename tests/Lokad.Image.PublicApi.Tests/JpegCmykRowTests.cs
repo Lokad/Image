@@ -25,7 +25,11 @@ public sealed class JpegCmykRowTests
             Assert.Equal(255, first.GetRow8(y)[x * 4 + 3]);
         }
         var expectedSurvivor = OriginalPixels.Bytes(survivor);
-        first.GetRow8(0)[0] ^= 255; first.Dispose(); Assert.Equal(expectedSurvivor, OriginalPixels.Bytes(survivor));
+        for (var y = 0; y < height; y++) first.GetRow8(y).Fill(173);
+        first.Dispose(); Assert.Equal(expectedSurvivor, OriginalPixels.Bytes(survivor));
+        using var subsequent = ImageCodec.Decode(encoded);
+        Assert.Equal(expectedSurvivor, OriginalPixels.Bytes(subsequent));
+        subsequent.GetRow8(0).Fill(81); Assert.Equal(expectedSurvivor, OriginalPixels.Bytes(survivor));
         Assert.Equal(unchanged, encoded); Array.Clear(encoded); Assert.Equal(expectedSurvivor, OriginalPixels.Bytes(survivor));
     }
 }
