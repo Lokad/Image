@@ -10,7 +10,8 @@ while compression gates remain open. The 239 numeric rows retain tested-producer
 The completed ≤2x phase belongs to 0.1.0; compression currently takes precedence over CPU parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
-These tables retain the performance-qualified producers identified by each report.
+These tables retain the tested producers identified by each report, including
+explicitly labeled compression-first cost screens.
 The [typed source-metadata extension](source-metadata.md) is functionally qualified
 by4,571 tests/OS,259 affected scalar checks/OS and the same actual private package
 consumer/all three examples on Windows/Linux. **31 marked decode/inspection rows
@@ -115,23 +116,22 @@ and the same actual package/examples qualify. Opaque allocation is9,669,728 B/op
 more CPU and allocation for size: photograph9,912,952 B/op versus historical702,616.
 Both lossless size gates remain open against160,032/7,234 B. The earlier
 [structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md) is diagnostic evidence.
-Lossy WebP ceilings remain17,688/7,100 B. The [intra16/Y2 milestone](../benchmarks/WARM-VP8-INTRA16-COMPRESSION.md)
-now accepts packets21,202/7,642 B (previously21,432/8,288), source-PSNR gaps
-0.021969/0.214030dB within0.25dB. It reconsiders the historical CPU-first rejection:
-1.1%/7.8% packet savings are useful despite higher CPU.4,600 tests/OS,135 internal
-and2 public scalar checks/OS and the same actual package/examples qualify. Two
-quiet three-actual cost screens record1.152x/1.077x and601,419/487,843 B/op; no
-independent timing confirmation or CPU acceptance gate applies to this milestone.
-The exact SIMD transform is retained. Exactly the two matched-quality content
-encode rows change; the other five existing VP8 encode rows use Quality100/q0
-and retain their prior branch and evidence. Both size ceilings remain open.
-An [untimed whole-frame entropy replay](../benchmarks/WARM-VP8-FULL-MODEL-AUDIT.md)
-recovers1,294/604 B with identical pixels but still misses both size ceilings;
-it changes no production result or benchmark row. It can be reconsidered as a
-compression adjunct rather than rejected solely for missing the final ceiling.
+The [intra16/Y2 milestone](../benchmarks/WARM-VP8-INTRA16-COMPRESSION.md)
+first reconsiders the useful C39 byte gains despite higher CPU. Its
+[whole-frame entropy successor](../benchmarks/WARM-VP8-FULL-MODEL-COMPRESSION.md)
+now emits19,808/7,046 B at the same frozen settings and exact reconstructed C53
+pixels. The diagram meets its7,100 B complete-packet ceiling; the photograph
+still exceeds17,688 B. Source-PSNR gaps0.021969/0.214030dB retain the0.25dB gate.
+4,601 tests/OS,136 internal+2 public scalar checks/OS and the same actual private
+package/examples qualify. Two quiet three-actual cost screens record1.201x/1.139x
+and625,323/571,203 B/op, without a CPU veto or independent timing confirmation.
+Only the two content encode rows change. The other five VP8 encode rows use
+Quality100/q0 and retain the previous branch/evidence. The original C41 audit
+is historical; the current mixed-mode replay and production agree exactly.
 The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
 rejects a smaller packet with excessive quality loss and a quality-preserving
-variant with immaterial byte savings. The qualified producer and size gates remain unchanged.
+variant with immaterial byte savings. These historical trials do not alter the
+current accepted producer or quality gates.
 The [source-activity audit](../benchmarks/WARM-VP8-ACTIVITY-AUDIT.md) finds strong
 native-quantizer/gradient rank correlation on the same two controls, supporting a
 source-derived spatial-quantization experiment. It changes no production packet,
@@ -169,8 +169,8 @@ RGB420 (managed/FFmpeg). Source-PSNR gaps are0.000033/0.106110/0.017274dB inside
 [optional-policy screen](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) includes complete
 time and allocations, while retaining the Original control. WebP photograph/diagram
 lossless sizes are174,748/160,032 B
-and 7,636/7,234 B; [lossy sizes](../benchmarks/WARM-VP8-INTRA16-COMPRESSION.md)
-are 21,202/17,688 B and 7,642/7,100 B at the fixed qualified source quality. Compression-
+and 7,636/7,234 B; [lossy sizes](../benchmarks/WARM-VP8-FULL-MODEL-COMPRESSION.md)
+are 19,808/17,688 B and 7,046/7,100 B at the fixed qualified source quality. Compression-
 efficiency parity is not established. Current operation timings/allocations follow.
 
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
@@ -349,8 +349,8 @@ reconciliation now covers every numeric row.
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 66,156.61 | 122,061.47 | 0.542 / 0.550 | 10,286,320 | Parity confirmed |
 | [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-CODE-COST.md) | 65,462.97 | 82,409.48 | 0.794 / 0.802 | 9,912,952 | Parity confirmed |
 | [WebP VP8L text/diagram RGBA8](../benchmarks/WARM-VP8L-CODE-COST.md) | 6,715.35 | 10,254.85 | 0.655 / 0.669 | 107,568 | Parity confirmed |
-| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-INTRA16-COMPRESSION.md) | 11,184.03 | 9,709.76 | 1.152 / 1.214 | 601,419 | Gap (cost screen; CPU parity deferred) |
-| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-INTRA16-COMPRESSION.md) | 6,279.50 | 5,829.60 | 1.077 / 1.216 | 487,843 | Gap (cost screen; CPU parity deferred) |
+| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-FULL-MODEL-COMPRESSION.md) | 11,605.40 | 9,664.37 | 1.201 / 1.266 | 625,323 | Gap (cost screen; CPU parity deferred) |
+| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-FULL-MODEL-COMPRESSION.md) | 6,638.80 | 5,829.99 | 1.139 / 1.352 | 571,203 | Gap (cost screen; CPU parity deferred) |
 
 **Editing**
 
@@ -459,7 +459,7 @@ Production stays safe managed .NET 10 without dependencies or native bindings.
 
 ‡ Default VP8 comparisons freeze managed/native quality 100/75 and effort 4, retaining
 the 0.25 dB source-quality gate and exact alpha. Matched-quality content controls use
-their linked frozen settings. [Current packet sizes](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md)
+their linked frozen settings. [Current packet sizes](../benchmarks/WARM-VP8-FULL-MODEL-COMPRESSION.md)
 and per-codec reports accompany time/allocation evidence; size parity remains open.
 
 ¶ PNG Identify references use the public FFmpeg PNG parser/CRC plus original

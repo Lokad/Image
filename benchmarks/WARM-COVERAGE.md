@@ -1067,3 +1067,15 @@ is open. The [17-row PNG packet audit](PNG-COMPLETE-PACKET-AUDIT.md) separately
 finds15 retained packet-size passes and two gaps; the5% IDAT timing gate never
 established complete-packet parity. Optional JPEGCompactColor remains distinct
 from Original/default and from untested broader content.
+
+
+The [whole-frame VP8 entropy milestone](WARM-VP8-FULL-MODEL-COMPRESSION.md) changes
+only the same two content encode rows. Photograph19,808/17,688 B remains open;
+diagram7,046/7,100 B now passes complete-packet size and the unchanged quality
+gate. All reconstructed pixels are exact to C53; no broader content claim follows.
+4,601 tests/OS,136internal+2public scalar and the same actual private package/
+examples pass bothOS. Costs1.201x/1.139x and625,323/571,203 B/op are short screens;
+CPU parity remains deferred. No case is added:256=239numeric+17pending,71passes/
+167gaps/1confidence-open,123independent/116short,23current/216historical and31metadata
+confirmations remain. Five Quality100/q0 VP8 encodes retain their branch. All other
+codec/edit/font/inspection and frozen decode proofs are reused where unchanged.

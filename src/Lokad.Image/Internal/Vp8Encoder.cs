@@ -91,8 +91,9 @@ internal static partial class Vp8Encoder
                             tokens, above.AsSpan(mx * 8, 8), left, 4 + plane * 2 + b % 2, 4 + plane * 2 + b / 2, context,
                             model, index * 24 + 16 + plane * 4 + b, source.Y.Length + plane * source.U.Length);
                 }
-                if (model is not null && !model.Ready && index + 1 == model.PrefixMacroblocks)
-                    model.CompletePrefix(source, tokens, columns, rows);
+                if (model is not null && !model.Ready
+                    && (index + 1 == model.PrefixMacroblocks || index + 1 == model.CacheMacroblocks))
+                    model.CompleteMacroblock(source, tokens, columns, rows, index + 1);
             }
         }
         tokens.Finish();

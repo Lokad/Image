@@ -1,5 +1,8 @@
 # VP8 intra16/Y2 compression milestone
 
+The [whole-frame entropy successor](WARM-VP8-FULL-MODEL-COMPRESSION.md) supersedes
+these packet sizes and costs; this accepted milestone remains historical evidence.
+
 Admitted mixed 4x4/16x16 luma prediction and grouped DC coding are **accepted as an
 incremental compression gain**. The fixed diagram packet shrinks 7.8%, photograph
 1.1%; both retain the unchanged matched-reconstruction-quality gate. Both complete

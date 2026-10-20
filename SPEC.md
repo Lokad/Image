@@ -1417,7 +1417,16 @@ the first at most 64 macroblocks, including the cost of signaling updates.
 The prefix reuses private converted sample bytes for coefficient magnitudes,
 with two extra bits per sample for sign and the ninth magnitude bit; bounded
 auxiliary storage is at most 24,064 bytes, or 26,176 bytes with the optional Y2
-cache and row contexts. Grouped DC needs signed high bytes beyond the ordinary
+prefix cache and row contexts. If local admission also permits, the mixed-mode
+path caches all selected coefficients in the converted planes and fits its final
+entropy model to the entire frame. Its auxiliary reservation is
+`136*macroblocks + 16384 + columns + 64` bytes, alongside the existing codec
+metadata allowance for row contexts. Prediction costs still freeze at the
+original 64-block prefix: extending entropy statistics changes no selected mode
+or reconstructed pixel. There is no second raster conversion or full-frame copy.
+Otherwise local limits select the prefix cache before allocation; shared admission
+refusal always terminates the operation without retry.
+Grouped DC needs signed high bytes beyond the ordinary
 coefficient cache range. Only the selected reconstruction is retained; the
 remaining blocks use the selected probability model directly. Entropy adaptation
 alone preserves decoded pixels.

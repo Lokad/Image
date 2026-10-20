@@ -14,6 +14,7 @@ internal static partial class Vp8Encoder
         private bool disposed;
         internal byte[] Probabilities { get; }
         internal int PrefixMacroblocks { get; }
+        internal int CacheMacroblocks { get; }
         internal bool Ready { get; private set; }
         internal bool Intra16 => macroModes is not null;
         internal byte[] Y2Above { get; }
@@ -38,21 +39,33 @@ internal static partial class Vp8Encoder
             var intraWork = blocks * (4L * 3072 + 16 * 512 + 2048 + 256);
             if (modes is not null && extra + intraExtra <= source.MemoryBytes
                 && extra + intraExtra + growth <= context.RemainingWorkingBytes && work + intraWork <= context.RemainingWork)
+            {
+                // Reuse converted samples for every selected coefficient. Keep
+                // the original prefix model for prediction decisions, then fit
+                // only the entropy model to the full frame. No second image pass.
+                var fullExtra = blocks * 136L + 16384 + source.Stride / 16 + 64;
+                var fullWork = (blocks - prefix) * (24L * 256 + 256) + 1056 * 16;
+                if (fullExtra <= source.MemoryBytes && fullExtra + growth <= context.RemainingWorkingBytes
+                    && work + intraWork + fullWork <= context.RemainingWork)
+                    return new CoefficientModel(samples, blocks, context, modes, source.Stride / 16, fullFrame: true);
                 return new CoefficientModel(samples, blocks, context, modes, source.Stride / 16);
+            }
             if (extra > source.MemoryBytes || extra + growth > context.RemainingWorkingBytes || work > context.RemainingWork) return null;
             return new CoefficientModel(samples, blocks, context);
         }
 
-        internal CoefficientModel(int samples, int blocks, OperationContext context, byte[]? modes = null, int columns = 0)
+        internal CoefficientModel(int samples, int blocks, OperationContext context, byte[]? modes = null, int columns = 0,
+            bool fullFrame = false)
         {
             this.context = context; PrefixMacroblocks = Math.Min(blocks, 64);
+            CacheMacroblocks = fullFrame ? blocks : PrefixMacroblocks;
             if (samples != blocks * 384) throw new ArgumentException("VP8 private plane geometry differs.");
-            reservation = PrefixMacroblocks * (384L / 4 + 24) + 16384 + (modes is null ? 0 : PrefixMacroblocks * 16L + columns + 64);
+            reservation = CacheMacroblocks * (384L / 4 + 24) + 16384 + (modes is null ? 0 : CacheMacroblocks * 16L + columns + 64);
             context.Reserve(reservation);
             counts = new int[1056 * 2]; Probabilities = Vp8Tables.CoefficientProbabilities.ToArray();
-            side = new byte[PrefixMacroblocks * 384 / 4]; last = new byte[PrefixMacroblocks * 24];
+            side = new byte[CacheMacroblocks * 384 / 4]; last = new byte[CacheMacroblocks * 24];
             macroModes = modes;
-            y2High = modes is null ? null : new byte[PrefixMacroblocks * 16];
+            y2High = modes is null ? null : new byte[CacheMacroblocks * 16];
             Y2Above = modes is null ? [] : new byte[columns];
         }
 
@@ -139,10 +152,15 @@ internal static partial class Vp8Encoder
 
         internal void UseDefaults() => Vp8Tables.CoefficientProbabilities.CopyTo(Probabilities);
 
-        internal void CompletePrefix(Vp8Planes source, Vp8BooleanWriter writer, int columns, int rows)
+        internal void CompleteMacroblock(Vp8Planes source, Vp8BooleanWriter writer, int columns, int rows, int completed)
         {
-            SelectProbabilities();
-            var above = new byte[Math.Min(columns, PrefixMacroblocks) * 8];
+            if (completed == PrefixMacroblocks) SelectProbabilities();
+            if (completed != CacheMacroblocks) return;
+            if (CacheMacroblocks > PrefixMacroblocks)
+            {
+                UseDefaults(); SelectProbabilities();
+            }
+            var above = new byte[Math.Min(columns, CacheMacroblocks) * 8];
             Span<byte> left = stackalloc byte[8];
             Emit(source, writer, above, left, columns, rows);
             Ready = true;
@@ -151,14 +169,14 @@ internal static partial class Vp8Encoder
         internal void Emit(Vp8Planes source, Vp8BooleanWriter writer, Span<byte> above, Span<byte> left, int columns, int rows)
         {
             above.Clear();
-            Span<byte> aboveY2 = Intra16 ? stackalloc byte[Math.Min(columns, PrefixMacroblocks)] : default;
+            Span<byte> aboveY2 = Intra16 ? stackalloc byte[Math.Min(columns, CacheMacroblocks)] : default;
             aboveY2.Clear();
             for (var my = 0; my < rows; my++)
             {
                 left.Clear(); byte leftY2 = 0;
                 for (var mx = 0; mx < columns; mx++)
                 {
-                    if (my * columns + mx >= PrefixMacroblocks) return;
+                    if (my * columns + mx >= CacheMacroblocks) return;
                     var macroblock = my * columns + mx; var block = macroblock * 24;
                     var large = Intra16 && (macroModes![macroblock * 16] & 128) != 0;
                     if (large) aboveY2[mx] = leftY2 = EmitY2(source, macroblock, mx * 16, my * 16, aboveY2[mx] + leftY2, writer);

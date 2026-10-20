@@ -5,6 +5,48 @@ namespace Lokad.Image.Tests;
 public sealed class Vp8Intra16Tests
 {
     [Fact]
+    public void FullFrameCacheFreezesPredictionProbabilitiesAtTheOriginalPrefix()
+    {
+        using var context = new OperationContext(ImageLimits.Default, default);
+        const int columns = 13, rows = 5, blocks = columns * rows;
+        var planes = new Vp8Planes(columns * 16, rows * 16, columns * 16,
+            new byte[blocks * 256], new byte[blocks * 64], new byte[blocks * 64]);
+        using var model = new Vp8Encoder.CoefficientModel(blocks * 384, blocks, context,
+            new byte[blocks * 16], columns, fullFrame: true);
+        Assert.Equal(64, model.PrefixMacroblocks); Assert.Equal(blocks, model.CacheMacroblocks);
+        using var writer = new Vp8BooleanWriter(context, 65536);
+        var zero = new short[16]; var dense = Enumerable.Repeat((short)1, 16).ToArray();
+        byte[]? prefix = null;
+        for (var mb = 0; mb < blocks; mb++)
+        {
+            for (var b = 0; b < 24; b++)
+            {
+                var plane = b < 16 ? 0 : 1 + (b - 16) / 4;
+                var width = plane == 0 ? columns * 16 : columns * 8;
+                var x = mb % columns * (plane == 0 ? 16 : 8);
+                var y = mb / columns * (plane == 0 ? 16 : 8);
+                var local = b < 16 ? b : (b - 16) % 4;
+                var across = plane == 0 ? 4 : 2;
+                model.Record(plane == 0 ? planes.Y : plane == 1 ? planes.U : planes.V,
+                    width, x + local % across * 4, y + local / across * 4,
+                    plane == 0 ? 0 : planes.Y.Length + (plane - 1) * planes.U.Length,
+                    mb * 24 + b, mb == 64 ? dense : zero, plane == 0 ? 3 : 2, 0);
+            }
+            if (mb == 63)
+            {
+                model.CompleteMacroblock(planes, writer, columns, rows, mb + 1);
+                prefix = model.Probabilities.ToArray(); Assert.False(model.Ready);
+            }
+        }
+        // Additional statistics must not alter prediction costs before the last
+        // block. Only final entropy selection may change the probability array.
+        Assert.Equal(prefix, model.Probabilities); Assert.False(model.Ready);
+        model.CompleteMacroblock(planes, writer, columns, rows, blocks);
+        Assert.True(model.Ready); Assert.False(prefix!.AsSpan().SequenceEqual(model.Probabilities));
+        writer.Finish(); Assert.NotEmpty(writer.Bytes.ToArray());
+    }
+
+    [Fact]
     public void ForwardWalshMatchesAnIndependentMatrixAtEveryFormatQuantizer()
     {
         // RFC 6386 section 14: the inverse Walsh basis has H*H=4I.
