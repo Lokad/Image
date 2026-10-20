@@ -1,5 +1,8 @@
 # Current VP8 simple-filter decode
 
+The [coefficient-block round](WARM-VP8-COEFFICIENT-BLOCK.md) supersedes this timing.
+The reconciliation and profile below describe its previous accepted producer.
+
 The existing SimpleOpaque8 case remains a current-code gap at
 **1.556x/upper2.065x**. This resolves its pre-0.2
 admission/disposal uncertainty before optimization.

@@ -7,9 +7,9 @@ contains127 independent observations and110 qualified shorts.17named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
 The finite scope is now **254 cases:237 numeric+17 unmeasured**. The remaining
-204 historical codec/edit rows retain their identified performance-qualified
+200 historical codec/edit rows retain their identified performance-qualified
 builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
-Twenty-one current JPEG, four Lanczos3, two async input, four async output, one bicubic and one VP8 row
+Twenty-one current JPEG, four Lanczos3, two async input, four async output, one bicubic and five VP8 rows
 are identified below. The latest JPEG evidence replaces the earlier CMYK timings.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
 required representatives using the same513×259 asymmetric RGBA rasters. Their
@@ -856,3 +856,15 @@ normal rows become33, historical rows204; all finite counts and performance gate
 remain unchanged. A current975sample profile puts76%in coefficient decoding;
 one block-scoped reader is the next bounded primitive. Earlier per-Read/window/
 local-state/local-work trials stay rejected; no new image or settings grid.
+
+
+[Block-scoped VP8 coefficients](WARM-VP8-COEFFICIENT-BLOCK.md) save11.2% on the
+matched current SimpleOpaque8 baseline. All five existing VP8 rows refresh with
+exact input/frame/work/cursor/native/ownership and quiet gates. The live-token
+entry predicate changes, so that row also refreshes while retaining the original
+bitreader. The latest Stream AVIO/copy/EOF boundary is preserved. No separate
+VP8async timing is added.4,478tests/OS,129internalnormal/scalar,305publicscalar
+and the same actual private package/three examples pass. Currentnormalrows37,
+historical200; all finite counts unchanged. Next: bound a distinct prepared-
+double/FMA row strategy for the larger LanczosReduce16 gap before a single-case
+trial. Existing separate preparation/FMA failures remain parked.

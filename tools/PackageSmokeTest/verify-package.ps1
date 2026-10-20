@@ -228,6 +228,28 @@ using (var packageWideRoot = new Lokad.Image.Tooling.TestMemoryBudget(513 * 259 
     if (packageWideRoot.Bytes != 0 || packageWideRoot.IsDisposed)
         throw new Exception("Package bounded bicubic root cleanup differs.");
 }
+using (var packageVp8Source = Lokad.Image.Tooling.OriginalPixels.Buffer(64, 64, 8, opaque: true))
+using (var packageVp8Encoded = new MemoryStream())
+using (var packageVp8Root = new Lokad.Image.Tooling.TestMemoryBudget(2 * 1024 * 1024))
+using (var packageVp8Cancellation = new CancellationTokenSource())
+{
+    ImageCodec.EncodeWebp(packageVp8Source, packageVp8Encoded, new WebpEncodeOptions { Lossless = false, Quality = 75, Effort = 4 });
+    var packageVp8Packet = packageVp8Encoded.ToArray();
+    if (packageVp8Packet.Length <= 1024) throw new Exception("Package VP8 block fixture is too short.");
+    var packageVp8Options = new DecodeOptions { Limits = new ImageLimits { MemoryBudget = packageVp8Root } };
+    using var packageVp8Fast = ImageCodec.Decode(packageVp8Packet, packageVp8Options);
+    using var packageVp8Original = ImageCodec.Decode(packageVp8Packet, packageVp8Options, packageVp8Cancellation.Token);
+    if (!Lokad.Image.Tooling.OriginalPixels.Bytes(packageVp8Fast).AsSpan().SequenceEqual(Lokad.Image.Tooling.OriginalPixels.Bytes(packageVp8Original))
+        || packageVp8Root.Bytes != 2 * 64 * 64 * 4)
+        throw new Exception("Package VP8 block pixels or retained charges differ.");
+    var packageVp8Pixel = packageVp8Original.GetRow8(0)[0];
+    packageVp8Fast.GetRow8(0)[0] ^= 255; packageVp8Fast.Dispose();
+    if (packageVp8Original.GetRow8(0)[0] != packageVp8Pixel || packageVp8Root.Bytes != 64 * 64 * 4)
+        throw new Exception("Package VP8 block survivors alias or lose their charge.");
+    packageVp8Original.Dispose();
+    if (packageVp8Root.Bytes != 0 || packageVp8Root.IsDisposed)
+        throw new Exception("Package VP8 block cleanup or borrowed root differs.");
+}
 using var originalPng = ImageCodec.Decode(File.ReadAllBytes(args[2]));
 using (var drawing = ImageBuffer.Create(3, 2, 16))
 using (var overlay = ImageBuffer.Create(1, 1, 8))

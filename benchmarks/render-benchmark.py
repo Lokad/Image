@@ -86,7 +86,7 @@ def render():
         row('PNG RGBA8, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'Png8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('PNG RGBA16, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'Png16', -1], 'WARM-INPUT-RECONCILIATION.md', True),
         row('JPEG420 restart, fresh seekable Stream', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'StreamDecode420Restart', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8-coefficient-block-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-VP8-COEFFICIENT-BLOCK.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'StreamNativeLossless8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGBA8, resident / shared budget', 'warm-shared-budget-evidence.json', ['cases', 'PngBudgetDecode8', -1], 'WARM-SHARED-BUDGET.md', verification='Gap (short; qualified)'),
@@ -162,10 +162,10 @@ def render():
         row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpeg-411-simd-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-JPEG-411-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG progressive 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'Progressive422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG progressive 4:4:4', 'warm-input-reconciliation-evidence.json', ['cases', 'Progressive444', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 + alpha', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'Native8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 opaque, simple luma filter', 'warm-vp8-admission-current-evidence.json', ['cases', 'SimpleOpaque8', -1], 'WARM-VP8-ADMISSION-CURRENT.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 opaque, live cancelable token', 'warm-vp8-block-prediction-evidence.json', ['cases', 'OpaqueCancelable8', -1], 'WARM-VP8-BLOCK-PREDICTION.md', verification='Gap (short; qualified)'),
-        row('WebP VP8, opaque', 'warm-vp8-block-prediction-evidence.json', ['cases', 'Opaque8', -1], 'WARM-VP8-BLOCK-PREDICTION.md', verification='Gap (short; qualified)'),
+        row('WebP VP8 + alpha', 'warm-vp8-coefficient-block-evidence.json', ['cases', 'Native8', -1], 'WARM-VP8-COEFFICIENT-BLOCK.md', verification='Gap (short; qualified)'),
+        row('WebP VP8 opaque, simple luma filter', 'warm-vp8-coefficient-block-evidence.json', ['cases', 'SimpleOpaque8', -1], 'WARM-VP8-COEFFICIENT-BLOCK.md', verification='Gap (short; qualified)'),
+        row('WebP VP8 opaque, live cancelable token', 'warm-vp8-coefficient-block-evidence.json', ['cases', 'OpaqueCancelable8', -1], 'WARM-VP8-COEFFICIENT-BLOCK.md', verification='Gap (short; qualified)'),
+        row('WebP VP8, opaque', 'warm-vp8-coefficient-block-evidence.json', ['cases', 'Opaque8', -1], 'WARM-VP8-COEFFICIENT-BLOCK.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, sixteen-color indexed input', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'IndexedNative16Colors8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, literal/run input', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'Lossless8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, native input', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'NativeLossless8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
@@ -338,10 +338,10 @@ to the named fixed inputs/settings/hardware, without extrapolating to other prof
 
 These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
-is separate. **204 historical codec/edit rows do not yet requalify changed 0.2.0
+is separate. **200 historical codec/edit rows do not yet requalify changed 0.2.0
 admission, disposal or governed storage.** Twenty-one current JPEG, four Lanczos3, two async
-input, four async output, one bicubic and one VP8 row identify their current producers. Production
-qualification now passes 4,475 tests/OS, affected hardware-off checks, the same actual
+input, four async output, one bicubic and five VP8 rows identify their current producers. Production
+qualification now passes 4,478 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
 [Buffered JPEG EOB decoding](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) saves 10.0%
@@ -361,10 +361,11 @@ cut allocation 71.1% but had no elapsed gain and was also rejected. Accepted
 production is restored. [Four-column bicubic strips](../benchmarks/WARM-BICUBIC-FOUR-COLUMNS.md)
 then save **16.2%** on TightWide8: **1.433x/upper1.644x**, 32,913 B/op, with exact
 pixels and the same 4 KiB reservation. Full suites and the same actual package
-qualify both OSes. Only that existing row changes. The [current VP8 check](../benchmarks/WARM-VP8-ADMISSION-CURRENT.md)
-resolves SimpleOpaque8 at **1.556x/upper2.065x**, 760,572 B/op. One current profile
-puts 76% in coefficient decoding. Next: one block-scoped coefficient reader,
-preserving exact cursor/work and the original short-input/cancelable path.
+qualify both OSes. Only that existing row changes. A [block-scoped VP8 reader](../benchmarks/WARM-VP8-COEFFICIENT-BLOCK.md)
+then saves **11.2%** on current SimpleOpaque8 at **1.384x/upper1.459x**, 760,572 B/op.
+All five affected existing VP8 rows refresh, preserving exact pixels/work/cursors
+and the original short-input/cancelable path. Next: bound prepared-double source
+rows with certified horizontal FMA for the larger LanczosReduce16 gap.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial

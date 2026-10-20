@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 namespace Lokad.Image.Internal;
 
 /// <summary>Owned bit-at-a-time interval decoder, derived from RFC 6386 section 7.2.</summary>
-internal struct Vp8BooleanReader
+internal partial struct Vp8BooleanReader
 {
     private int position, end, shift, range, value;
 

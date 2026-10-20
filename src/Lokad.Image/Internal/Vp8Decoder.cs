@@ -238,6 +238,8 @@ internal ref struct Vp8Decoder
     private bool Coefficients(ref Vp8BooleanReader tokens, scoped Span<short> values, int plane, int initialContext,
         int dc, int ac, out byte nonzero)
     {
+        if (tokens.CanReadCoefficientBlock(data, context))
+            return tokens.ReadCoefficientBlock(data, probabilities, values, plane, initialContext, dc, ac, context, out nonzero);
         ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
         ReadOnlySpan<byte> zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
         var previousZero = false; var predictor = initialContext; nonzero = 0;
