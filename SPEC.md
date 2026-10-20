@@ -814,10 +814,24 @@ without decoding pixels. Header-only inspection will keep bounded workspace and
 its documented validation boundary, with existing limits, structured failures,
 cancellation, shared admission and stream ownership preserved.
 
+Additional required supplied TrueType faces must form an explicit bounded set
+with names, versions, styles and licensed provenance. The existing twelve
+DejaVu Sans comparisons do not qualify other faces. Qualification must cover
+glyphs, wrapping, baseline/line spacing, alignment, ink bounds, fitting and
+measurement/rendering agreement within documented tolerances. Required faces
+exposing unsupported tables or scripts need a focused implementation or an
+explicit remaining blocker; no exhaustive font-engine expansion is implied.
+
 Compression acceptance considers complete encoded size and reconstruction quality
 together. The fixed lossless WebP photograph/diagram controls require outputs no
 larger than their frozen libwebp exact=1 references (160,032/7,234 bytes). These
-gates remain open. JPEG RGB420 improvements retain the existing matched-quality
+gates remain open. Lossy WebP also requires explicit matched-quality size gates:
+the same fixed photograph/diagram must reach at most 17,688/7,100 bytes (currently
+21,432/8,288), retaining frozen reference settings, existing source-quality
+tolerances and exact alpha requirements. Equal numerical quality settings are
+not equivalent quality. These gates are cumulative with memory, correctness and
+warm-performance requirements, and claims state tested content/settings scope.
+JPEG RGB420 improvements retain the existing matched-quality
 gate and avoid material grayscale regression; equal quality numbers do not prove
 equivalence. Claims name content, sampling and settings; broader claims require
 representative photographic and text/diagram evidence. Encoded lossy bytes and

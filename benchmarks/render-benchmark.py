@@ -427,6 +427,11 @@ size/quality gap: RGB42074,040/52,093 B at source-PSNR difference0.106110 dB
 (gate0.25 dB); grayscale58,823/58,910 B. RGB420 compression improvements must
 retain matched reconstruction quality and avoid material grayscale regression.
 These content/sampling controls do not establish general compression equivalence.
+An [untimed lossless structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md)
+reproduces current sizes and demonstrates exact diagnostic packets of196,528 B
+for the photograph and7,636 B for the diagram. Both exceed their size ceilings;
+production and selected timing evidence are unchanged. Lossy WebP size ceilings
+are17,688/7,100 B at the frozen matched quality (currently21,432/8,288 B).
 The two JPEG async-output cases remain short gaps; all timings/allocations follow.
 
 The 16 unmeasured representatives cover header inspection, drawing and text.
