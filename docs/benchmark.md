@@ -52,8 +52,12 @@ both guards pass. All21 async managed controls revalidate; unchanged native
 controls are reused. Two current rows refresh; previously historical PNG decode
 rows remain historical. Metadata, encoding and other codec/editing paths retain
 their scopes. The 924-sample profile describes the previous producer only.
-Next: one Reduce8 Lanczos diagnostic, then feasibility of a wider FP32 horizontal
-primitive with rigorous coefficient-conversion/FMA bounds and exact fallback.
+The [FP32 byte Lanczos trial](../benchmarks/WARM-LANCZOS3-FP32-BYTE-TRIAL.md)
+is rejected (50.7% slower); exact accepted production and tests are restored.
+All60 focused normal/scalar/AVX512-off controls pass perOS. New sampled profiles
+retain their respective producers. No selected row or full/package proof repeats.
+Next: resolve existing default resident PNG8/16 timing uncertainty on the same
+accepted producer, preserving the original packets and complete boundaries.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
