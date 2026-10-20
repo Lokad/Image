@@ -7,9 +7,10 @@ contains128 independent observations and109 qualified shorts.17named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
 The finite scope is now **254 cases:237 numeric+17 unmeasured**. The remaining
-225 historical codec/edit rows retain their identified performance-qualified
+206 historical codec/edit rows retain their identified performance-qualified
 builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
-Two current CMYK, four Lanczos3, two async input and four async output rows are identified below.
+Twenty-one current JPEG, four Lanczos3, two async input and four async output rows
+are identified below. The latest JPEG evidence replaces the earlier CMYK timings.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
 required representatives using the same513×259 asymmetric RGBA rasters. Their
 [certified FMA screens](WARM-LANCZOS3-CERTIFIED-FMA.md) improve all
