@@ -52,7 +52,10 @@ internal static partial class WebpLosslessEncoder
                 if (singlePass)
                 {
                     var adaptiveTokens = context.RemainingWorkingBytes >= alpha.Length * 5L + SingleHistoryBytes + 16384;
-                    result.PrepareSinglePass(alpha, width, adaptiveTokens);
+                    var anchors = adaptiveTokens
+                        && context.RemainingWorkingBytes >= alpha.Length * 5L + 2 * SingleHistoryBytes + 16384
+                        && context.RemainingWork - pendingOutputWork >= alpha.Length * 5L + 2 * SingleHistorySize + 512;
+                    result.PrepareSinglePass(alpha, width, adaptiveTokens, anchors);
                 }
                 else
                 {

@@ -13,7 +13,7 @@ benchmark inputs, not the library default85. No general lossy WebP parity follow
 | WarmWebp/EncodeOpaque16 | 74,962 / 72,380 | 100 / 75 | Open |
 | WarmWebp/Encode8 | 99,816 / 98,590 | 100 / 75 | Open |
 | WarmWebp/Encode16 | 99,816 / 98,590 | 100 / 75 | Open |
-| WarmWebp/EncodeBudget8 | 111,094 / 98,590 | 100 / 75 | Open |
+| WarmWebp/EncodeBudget8 | 104,500 / 98,590 | 100 / 75 | Open |
 
 C57 reuses the approved bounded quality matcher only for the changed photograph:
 1,25,50,75,100 seeds and one refinement77, chosen by source-quality distance before
@@ -55,12 +55,19 @@ Actual work31,752,723 fits32M. Primary packets/pixels remain exact. BothOS suite
 scalar checks and the same actual package/examples qualify; seven short jobs
 replace all affected encode cost observations. All five packet gates remain open.
 
-The current [interpolation-noise milestone](WARM-VP8-INTERPOLATION-NOISE.md) further
+The [interpolation-noise milestone](WARM-VP8-INTERPOLATION-NOISE.md) further
 reduces opaque83,838→74,962 B, alpha108,880→99,816 B and work32M120,146→111,094 B.
 Unchanged quality gates pass (0.016224/0.038933 dB gaps), exact alpha is preserved
 and31,916,945 units fit32M. BothOS4,674tests, scalar and same actual package/examples
 qualify; seven short costs supersede affected encodes. All five packet gates stay
 open, including12,504 B on the constrained path; no whole-codec parity claim.
+
+The current [alpha-anchor milestone](WARM-WEBP-ALPHA-ANCHORS.md) reduces the
+constrained packet111,094→104,500 B, exact prior VP8/RGBA/source quality and
+31,970,409 units within32M. ALPH21,740/ref24,588 B passes its component gate;
+the complete packet remains5,910 B above98,590 B. BothOS4,682tests/scalar and
+the same actual package/examples qualify. One short cost replaces only this row;
+four unrestricted records and opaque primary paths reuse unchanged C70 evidence.
 
 [Evidence](vp8-size-coverage-evidence.json) identifies the current and retained
 receipts. No new performance workload is introduced and the256-case warm checklist

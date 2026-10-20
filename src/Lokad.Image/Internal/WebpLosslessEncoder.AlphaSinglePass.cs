@@ -14,18 +14,21 @@ internal static partial class WebpLosslessEncoder
         // three-sample window avoids allocating a filtered alpha plane. Compute
         // the old run-only cost during the same traversal, then compare padded
         // sizes. Discarding a completed larger candidate is not limit recovery.
-        private void PrepareSinglePass(ReadOnlySpan<byte> alpha, int width, bool adaptiveTokens)
+        private void PrepareSinglePass(ReadOnlySpan<byte> alpha, int width, bool adaptiveTokens, bool useAnchors)
         {
             var capacity = (adaptiveTokens ? 4L : 1L) * alpha.Length + 32;
-            var storage = SingleHistoryBytes + capacity;
+            var historyBytes = (useAnchors ? 2L : 1L) * SingleHistoryBytes;
+            var storage = historyBytes + capacity;
             context.Reserve(storage); singlePassBytes = storage; context.Work(0);
             var entries = new int[SingleHistorySize];
+            var anchors = useAnchors ? new int[SingleHistorySize] : null;
             var tokens = adaptiveTokens ? new uint[alpha.Length] : null; var tokenCount = 0;
             if (!adaptiveTokens) stagedAlpha = new byte[alpha.Length];
             Span<int> frequencies = adaptiveTokens ? stackalloc int[280] : default;
             Span<int> distanceFrequencies = adaptiveTokens ? stackalloc int[40] : default;
             frequencies.Clear(); distanceFrequencies.Clear();
             context.Work(SingleHistorySize); entries.AsSpan().Fill(-1);
+            if (anchors is not null) { context.Work(SingleHistorySize); anchors.AsSpan().Fill(-1); }
             using var fixedDestination = adaptiveTokens ? null : new AlphaStagingStream(stagedAlpha!);
             var writer = adaptiveTokens ? null : new WebpBitWriter(fixedDestination!, context);
             var distances = adaptiveTokens ? null : new Table(40);
@@ -48,7 +51,7 @@ internal static partial class WebpLosslessEncoder
                 var length = 0; var distance = 0; var maximum = Math.Min(4096, alpha.Length - position);
                 if (maximum >= 3)
                 {
-                    context.Work(1); var previous = entries[SingleHash(first, second, third)];
+                    context.Work(1); var hash = SingleHash(first, second, third); var previous = entries[hash];
                     if (previous >= 0 && position - previous <= 1_048_456)
                     {
                         while (length < maximum)
@@ -58,6 +61,33 @@ internal static partial class WebpLosslessEncoder
                             length++;
                         }
                         distance = position - previous;
+                    }
+                    if (anchors is not null)
+                    {
+                        if (length < maximum)
+                        {
+                            context.Work(1); var anchor = anchors[hash];
+                            if (anchor >= 0 && anchor != previous && position - anchor <= 1_048_456)
+                            {
+                                // An older token start can outlive newer entries
+                                // inserted inside a copy. Reject a candidate at
+                                // the current best boundary before rechecking
+                                // its entire prefix; hash collisions stay exact.
+                                context.Work(1);
+                                if (Residual(alpha, width, anchor + length) == Residual(alpha, width, position + length))
+                                {
+                                    var matched = 0;
+                                    while (matched < maximum)
+                                    {
+                                        context.Work(1);
+                                        if (Residual(alpha, width, anchor + matched) != Residual(alpha, width, position + matched)) break;
+                                        matched++;
+                                    }
+                                    if (matched > length) { length = matched; distance = position - anchor; }
+                                }
+                            }
+                        }
+                        context.Work(1); anchors[hash] = position;
                     }
                 }
                 var consumed = 1;
@@ -107,7 +137,7 @@ internal static partial class WebpLosslessEncoder
                 position += consumed;
             }
             originalBits += RunBits(runValue, runLength); writer?.Finish();
-            context.Release(SingleHistoryBytes); singlePassBytes -= SingleHistoryBytes;
+            context.Release(historyBytes); singlePassBytes -= historyBytes;
             using var adaptiveDestination = tokens is null ? null
                 : StageTokens(tokens, tokenCount, frequencies, distanceFrequencies, alpha.Length, width);
             if (tokens is not null) { context.Release(capacity); singlePassBytes -= capacity; }

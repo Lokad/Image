@@ -128,25 +128,27 @@
     },
     {
       "case": "WarmWebp/EncodeBudget8",
-      "managedPacketBytes": 111094,
+      "managedPacketBytes": 104500,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "vp8-interpolation-noise-evidence.json",
+      "evidence": "webp-alpha-anchors-evidence.json",
       "observationPath": [
         "observations",
-        4
+        0
       ],
-      "validity": "C70 qualified interpolation-aware noise model; fixed inputs/reference/settings/quality gates, exact alpha and unchanged primary packets/pixels. Short costs only, CPU parity deferred.",
-      "previousManagedPacketBytes": 120146,
-      "alphaPayloadBytes": 28333,
+      "validity": "C72 qualified admitted alpha token-start anchors,31,970,409actual units inside32M; exact prior VP8/RGBA/source quality, unchanged reference/settings/gates. Whole packet remains5910B above target.",
+      "previousManagedPacketBytes": 111094,
+      "alphaPayloadBytes": 21740,
       "coefficientPolicy": "source-derived absolute segments with centered interpolation noise gain; existing admitted entropy policy",
-      "alphaCodingPolicy": "one collected token sequence, adaptive prefix replay and charged token/encoded overlap",
+      "alphaCodingPolicy": "single-pass rolling history plus token-start anchor, adaptive packed token replay and admitted histories/token/encoded overlap",
       "psnrGapDb": 0.03893331613484823,
-      "consumedWork": 31916945
+      "consumedWork": 31970409,
+      "referenceAlphaPayloadBytes": 24588,
+      "alphaComponentSizePass": true
     }
   ]
 }

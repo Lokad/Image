@@ -1486,6 +1486,14 @@ tokens and model storage are released after their last users. Complete copy fiel
 are packed into at most 24-bit writer calls, each charged as performed. A tighter
 local workspace selects the fixed-code staging path before shared admission;
 shared refusal never selects another strategy.
+In token mode, sufficient independent local work/memory may also admit one
+token-start anchor per hash alongside the rolling recent positions. Two histories
+reserve 131,136 bytes before allocation. A boundary probe rejects candidates that
+cannot improve the longest match; every chosen prefix is still checked exactly.
+Both histories end after matching. Initialization, reads, anchor updates, probes,
+comparisons and output copies retain their actual work charges. Tighter local
+allowances select the original history before shared admission; refusal or actual
+work/cancellation failure never retries it.
 The admitted mixed-mode path also compares actual quantized reconstruction error
 and coefficient/header bit cost for all ten luma directions and four chroma
 predictions. It stages one luma block or one 8x8 U/V pair on bounded stack storage.

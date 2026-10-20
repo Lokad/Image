@@ -218,7 +218,7 @@ def render():
         row('WebP VP8, opaque from RGBA16‡', 'vp8-interpolation-noise-evidence.json', ['observations', 1], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha‡', 'vp8-interpolation-noise-evidence.json', ['observations', 2], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha from RGBA16‡', 'vp8-interpolation-noise-evidence.json', ['observations', 3], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-interpolation-noise-evidence.json', ['observations', 4], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alpha‡, caller work budget32M', 'webp-alpha-anchors-evidence.json', ['observations', 0], 'WARM-WEBP-ALPHA-ANCHORS.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-CODE-COST.md', True),
@@ -524,7 +524,7 @@ timing repeat or CPU-parity claim. Opaque8/16 allocate1,002,712 B/op, alpha8/16
 are unmeasured. Unchanged decoder inputs and other production paths retain their
 qualified scopes; no workload, reference, input or tolerance changes.
 
-The current [interpolation-noise milestone](../benchmarks/WARM-VP8-INTERPOLATION-NOISE.md)
+The [interpolation-noise milestone](../benchmarks/WARM-VP8-INTERPOLATION-NOISE.md)
 further cuts opaque83,838→74,962 B, alpha108,880→99,816 B and work32M120,146→111,094 B.
 The respective complete references remain72,380/98,590/98,590 B; all five gates
 stay open. Source-PSNR gaps0.016224/0.038933 dB, exact alpha and unchanged decoder
@@ -537,6 +537,18 @@ opaque8/16 allocate1,002,488 B/op, alpha8/16 1,532,032, work32M1,806,692, photog
 590,152 and diagram570,856. No independent timing repeat or CPU-parity claim;
 one frozen producer/internal build perOS, unchanged public/diff/harness/native/
 selector binaries reused. Other production paths retain their qualified scopes.
+
+The current [alpha-anchor milestone](../benchmarks/WARM-WEBP-ALPHA-ANCHORS.md)
+reduces the work32M packet111,094→104,500 B (ref98,590), preserving exact prior
+VP8/RGBA/source quality and all reference/settings/gates. ALPH28,333→21,740 B
+beats the24,588 B component reference; the full packet remains5,910 B above target.
+One token-start anchor per hash supplements rolling recent positions, under
+131,136 B of admitted history ownership. Actual31,970,409 units fit32M; no extra
+source pass/filtered plane/frame. BothOS4,682tests,210internal+8public+2diff scalar
+and same actual package/all examples pass. One guarded cost screen replaces this
+row:15,008.23/reference53,686.75 µs and2,012,156 B/op (prior1,806,692 B/op).
+No CPU veto/independent repeat; four unrestricted records and primary opaque
+paths retain six unchanged C70 cost/quality proofs. Five packet gates remain open.
 
 The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
 rejects a smaller packet with excessive quality loss and a quality-preserving
