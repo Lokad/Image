@@ -106,22 +106,22 @@
     },
     {
       "case": "WarmWebp/EncodeBudget8",
-      "managedPacketBytes": 268028,
+      "managedPacketBytes": 208216,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "vp8-prefix-work-evidence.json",
+      "evidence": "webp-alpha-single-pass-evidence.json",
       "observationPath": [
         "observations",
         0
       ],
-      "validity": "C64 qualified bounded-prefix admission under the existing32M cap:31,818,464 actual units, exact old RGBA/quality. Whole packet remains above98,590B.",
-      "previousManagedPacketBytes": 452932,
+      "validity": "C65 qualified single-pass alpha within existing32M cap:31,997,511 actual units; exact prior RGBA/source quality. Packet remains above98,590B.",
+      "previousManagedPacketBytes": 268028,
       "alphaPayloadBytes": 114363,
-      "coefficientPolicy": "admitted64-macroblock prefix statistics"
+      "coefficientPolicy": "admitted64-macroblock prefix statistics; single-pass staged ALPH"
     }
   ]
 }

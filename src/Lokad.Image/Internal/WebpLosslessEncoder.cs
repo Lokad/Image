@@ -40,6 +40,9 @@ internal static partial class WebpLosslessEncoder
         }
 
         public void Symbol(WebpBitWriter writer, int symbol) => writer.Write(codes[symbol], lengths[symbol]);
+        public int Bits(int symbol) => lengths[symbol];
+        public void Symbol(WebpBitWriter writer, int symbol, int extra, int extraBits)
+            => writer.Write(codes[symbol] | extra << lengths[symbol], lengths[symbol] + extraBits);
     }
 
     public static void Encode(ImageBuffer image, Stream output, WebpEncodeOptions options, OperationContext context)

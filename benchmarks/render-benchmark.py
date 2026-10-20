@@ -218,7 +218,7 @@ def render():
         row('WebP VP8, opaque from RGBA16‡', 'vp8-alpha-matches-evidence.json', ['observations', 1], 'WARM-VP8-ALPHA-MATCHES.md', verification='Gap (cost screen; CPU parity deferred)'),
         row('WebP VP8 + alpha‡', 'vp8-alpha-matches-evidence.json', ['observations', 2], 'WARM-VP8-ALPHA-MATCHES.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha from RGBA16‡', 'vp8-alpha-matches-evidence.json', ['observations', 3], 'WARM-VP8-ALPHA-MATCHES.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-prefix-work-evidence.json', ['observations', 0], 'WARM-VP8-PREFIX-WORK.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alpha‡, caller work budget32M', 'webp-alpha-single-pass-evidence.json', ['observations', 0], 'WARM-WEBP-ALPHA-SINGLE-PASS.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-CODE-COST.md', True),
@@ -511,6 +511,16 @@ Historical fixed-model wording in the reused harness is explicitly superseded
 by packet/header evidence, with source labels corrected for future builds.
 No producer/harness rebuild or independent repeat follows the frozen experiment.
 All five fixed-setting packet gates and the full CPU objective remain open.
+The [single-pass alpha milestone](../benchmarks/WARM-WEBP-ALPHA-SINGLE-PASS.md)
+then reduces the work32M packet268,028→208,216 B (22.3%), with exact prior RGBA
+and source quality. ALPH falls114,363→54,552 B; the complete98,590 B target stays
+open. All31,997,511 actual units fit32M. Same-root admitted history/staging,
+terminal failures and output ownership pass4,644tests/OS, affected scalar checks
+and the same actual package/examples. One cost screen records0.385x/upper0.418x,
+1,707,064 B/op; no independent timing repeat or CPU-parity claim. Four unrestricted
+records remain exact and the finite matrix is unchanged. Passing primary content
+and unrestricted alpha are stopped; the five procedural packet gaps remain open.
+
 
 
 

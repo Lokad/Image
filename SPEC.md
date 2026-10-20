@@ -1451,6 +1451,15 @@ the entire operation fits: every cumulative work check still applies, exhaustion
 terminates without fallback, and unused temporary reservations are released.
 Memory admission is unchanged; insufficient local capacity keeps fixed coding
 before shared admission. Every performed work charge is preserved.
+When full adaptive alpha coding is ineligible, effort 4..6 may admit a single
+fixed-code matching pass from local work/memory estimates, including pending VP8
+output work. A 16,384-entry history and raw-sized encoded-alpha stage are reserved
+before allocation through the same shared root. Residuals stream through a
+three-sample window. The original run-only cost is computed in that pass; complete
+padded sizes choose the smaller completed candidate. History is released after
+matching and staging stays charged until output finishes. Actual sample, matching,
+writer and copy work remains capped; refusal, exhaustion and cancellation terminate
+without another strategy. Unrestricted adaptive alpha coding is unchanged.
 The admitted mixed-mode path also compares actual quantized reconstruction error
 and coefficient/header bit cost for all ten luma directions and four chroma
 predictions. It stages one luma block or one 8x8 U/V pair on bounded stack storage.

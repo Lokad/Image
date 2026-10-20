@@ -4,8 +4,8 @@ internal static partial class WebpLosslessEncoder
 {
     // RFC 9649 sections 2.7.1.2 and 3.6/3.7: ALPH is a headerless VP8L
     // green plane. Horizontal residuals and previous-pixel copies need neither
-    // a filtered plane nor a redundant RGBA raster. Count before writing so a
-    // nonseekable destination needs no encoded-alpha staging buffer either.
+    // a filtered plane nor a redundant RGBA raster. The unrestricted path counts
+    // before writing; constrained-work matching may stage one encoded pass.
     internal sealed partial class AlphaEncoding : IDisposable
     {
         private const int WorkingBytes = 2048;
@@ -23,7 +23,8 @@ internal static partial class WebpLosslessEncoder
             green = new Table(280);
         }
 
-        internal static AlphaEncoding? TryCreate(ReadOnlySpan<byte> alpha, int width, int effort, OperationContext context)
+        internal static AlphaEncoding? TryCreate(ReadOnlySpan<byte> alpha, int width, int effort, OperationContext context,
+            long pendingOutputWork = 0)
         {
             // Select from independent local allowances BEFORE shared admission.
             // Each pass charges one alpha sample (rather than four RGBA
@@ -36,15 +37,26 @@ internal static partial class WebpLosslessEncoder
             // and prefix work fit96*N+5.2M for both candidates and selected output.
             var adaptive = effort >= 4 && context.RemainingWorkingBytes >= HistoryBytes + 16384
                 && context.RemainingWork >= alpha.Length * 96L + 5_200_000;
+            // Keep the qualified adaptive path unchanged. A constrained call
+            // can instead stage one fixed-code pass with a single hash history.
+            // Eligibility is not a whole-operation work guarantee; every sample,
+            // comparison, writer call and final copy is still charged as done.
+            var singlePass = !adaptive && effort >= 4
+                && context.RemainingWorkingBytes >= WorkingBytes + SingleHistoryBytes + alpha.Length + 32L
+                && context.RemainingWork - pendingOutputWork >= alpha.Length * 5L + SingleHistorySize + 512;
             context.Reserve(WorkingBytes);
             AlphaEncoding? result = null;
             try
             {
                 context.Work(0); result = new AlphaEncoding(context);
-                using var counter = new CountStream(int.MaxValue);
-                result.Write(alpha, width, counter);
-                result.Length = counter.Count;
-                if (adaptive) result.SelectAdaptive(alpha, width);
+                if (singlePass) result.PrepareSinglePass(alpha, width);
+                else
+                {
+                    using var counter = new CountStream(int.MaxValue);
+                    result.Write(alpha, width, counter);
+                    result.Length = counter.Count;
+                    if (adaptive) result.SelectAdaptive(alpha, width);
+                }
                 // Include the ALPH header and RIFF padding in the decision.
                 var compressed = result.Length + 1; var raw = alpha.Length + 1;
                 if (compressed + (compressed & 1) < raw + (raw & 1)) return result;
@@ -61,6 +73,15 @@ internal static partial class WebpLosslessEncoder
         internal void Write(ReadOnlySpan<byte> alpha, int width, Stream output)
         {
             ObjectDisposedException.ThrowIf(disposed, this);
+            if (stagedAlpha is not null)
+            {
+                for (var offset = 0; offset < Length;)
+                {
+                    var count = Math.Min(65536, Length - offset); context.Work(count);
+                    output.Write(stagedAlpha.AsSpan(offset, count)); offset += count;
+                }
+                context.Work(0); return;
+            }
             var writer = new WebpBitWriter(output, context);
             writer.Write(0, 1); writer.Write(0, 1); writer.Write(0, 1); // No transforms, cache or groups.
             if (adaptiveGreen is null) green.Header(writer); else adaptiveGreen.Header(writer, context);
@@ -146,6 +167,7 @@ internal static partial class WebpLosslessEncoder
             if (adaptiveGreen is not null) context.Release(adaptiveGreen.MemoryBytes);
             if (adaptiveDistance is not null) context.Release(adaptiveDistance.MemoryBytes);
             if (history is not null) context.Release(HistoryBytes);
+            if (singlePassBytes != 0) context.Release(singlePassBytes);
             context.Release(WorkingBytes);
         }
     }

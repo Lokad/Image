@@ -1152,3 +1152,15 @@ performance matrix:256=239numeric+17pending,68independentpasses/167gaps/
 1confidence-open/3cost screens,120independent/119short,23current/216historical;
 31metadata confirmations unchanged. The earlier190B q0 luma trial is retained
 without adoption; no timing/full/package repeat was spent on that small result.
+
+
+The [single-pass alpha milestone](WARM-WEBP-ALPHA-SINGLE-PASS.md) supersedes only
+WarmWebp/EncodeBudget8:268,028→208,216 B, exact prior RGBA/source quality and
+31,997,511 actual units inside32M. ALPH114,363→54,552 B; the98,590 B packet target
+remains open. Four unrestricted records remain byte/work/quality-identical.
+4,644tests/OS,172internal+8public+2diff scalar and the same actual package/examples
+qualify charged staging and terminal failures. One short cost records0.385x/
+upper0.418x and1,707,064 B/op; no independent repeat or CPU-parity claim.
+Nine new correctness cases do not expand the finite performance matrix:
+256=239numeric+17pending,68independentpasses/167gaps/1confidence-open/3cost screens,
+120independent/119short,23current/216historical;31metadata confirmations unchanged.

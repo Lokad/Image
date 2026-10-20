@@ -13,7 +13,7 @@ benchmark inputs, not the library default85. No general lossy WebP parity follow
 | WarmWebp/EncodeOpaque16 | 149,570 / 72,380 | 100 / 75 | Open |
 | WarmWebp/Encode8 | 170,196 / 98,590 | 100 / 75 | Open |
 | WarmWebp/Encode16 | 170,196 / 98,590 | 100 / 75 | Open |
-| WarmWebp/EncodeBudget8 | 268,028 / 98,590 | 100 / 75 | Open |
+| WarmWebp/EncodeBudget8 | 208,216 / 98,590 | 100 / 75 | Open |
 
 C57 reuses the approved bounded quality matcher only for the changed photograph:
 1,25,50,75,100 seeds and one refinement77, chosen by source-quality distance before
@@ -37,8 +37,11 @@ No setting, source-quality gate or reference changes; other four procedural
 packet/work/quality records remain exact. Five whole-packet gates stay open.
 
 The unrestricted gap is coefficient coding; its ALPH already beats the reference
-component. The work32M case still has114,363 B ALPH against24,588 B, making bounded
-alpha coding under that work cap a named material opportunity. Passing primary
+component. The [single-pass alpha milestone](WARM-WEBP-ALPHA-SINGLE-PASS.md) further cuts
+the work32M packet268,028→208,216 B and ALPH114,363→54,552 B against24,588 B.
+Exact prior RGBA/source quality and31,997,511 units fit32M, with shared staging/
+failure/ownership tests and the same actual package qualified on both OSes.
+The remaining coefficient and constrained-alpha gaps remain material. Passing primary
 content or a component does not establish whole-codec parity.
 
 [Evidence](vp8-size-coverage-evidence.json) identifies the current and retained

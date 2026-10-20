@@ -8,6 +8,8 @@
   references and adaptive prefix codes; broader compression parity remains open.
 - Smaller q0 WebP output under limited work budgets through separately admitted
   prefix statistics, preserving exact pixels, actual work caps and terminal refusal.
+- Smaller constrained-work WebP alpha packets with one bounded matching pass and
+  charged encoded staging, preserving exact alpha and terminal resource failures.
 
 - Coverage-based OpenType contextual substitution and validated zero default-instance
   positioning corrections for supplied TrueType text.

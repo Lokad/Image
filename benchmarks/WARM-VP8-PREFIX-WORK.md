@@ -1,5 +1,8 @@
 # WebP prefix statistics under a work limit
 
+The [single-pass alpha successor](WARM-WEBP-ALPHA-SINGLE-PASS.md) supersedes this
+work32M packet/cost observation; the prefix-admission and historical proofs remain.
+
 The existing32M-work control shrinks **452,932 → 268,028 B (40.8%)**, with exact
 old decoded RGBA, alpha and source quality. It finishes at **31,818,464 work units**
 inside the unchanged32M cap, compared with31,961,577 before. Complete-packet size

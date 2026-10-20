@@ -115,7 +115,8 @@ internal static partial class Vp8Encoder
         using var header = BuildHeader(q, modes, chromaModes, columns, rows,
             model is null ? Vp8Tables.CoefficientProbabilities : model.Probabilities, context);
         using var compressedAlpha = alpha is null ? null
-            : WebpLosslessEncoder.AlphaEncoding.TryCreate(alpha, image.Width, options.Effort, context);
+            : WebpLosslessEncoder.AlphaEncoding.TryCreate(alpha, image.Width, options.Effort, context,
+                pendingOutputWork: (long)header.Bytes.Length + tokens.Bytes.Length);
         WriteContainer(image.Width, image.Height, alpha, compressedAlpha, header.Bytes, tokens.Bytes, output, context);
         context.Release(metadataBytes + 4096);
     }
