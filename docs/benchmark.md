@@ -1,18 +1,18 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-20. Target: **warm single-CPU parity, independently confirmed
-conservative upper ≤1x**. The 239 numeric rows contain **72 passes,
-166 gaps and 1 confidence-open case**. The finite
+conservative upper ≤1x**. The 239 numeric rows contain **73 passes,
+165 gaps and 1 confidence-open case**. The finite
 [material checklist](../benchmarks/WARM-COVERAGE.md) has 255 named cases, 16 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
 These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
-is separate. **192 historical codec/edit rows do not yet requalify changed 0.2.0
+is separate. **185 historical codec/edit rows do not yet requalify changed 0.2.0
 admission, disposal or governed storage.** Twenty-three current JPEG, four Lanczos3, two PNG resident, two async
-input, four async output, one bicubic, five VP8, five lossless WebP encodes and one caller-owned-root row identify their current producers. Production
-qualification now passes 4,534 tests/OS, affected hardware-off checks, the same actual
+input, four async output, one bicubic, five VP8 decodes, seven VP8 encodes, five lossless WebP encodes and one caller-owned-root row identify their current producers. Production
+qualification now passes 4,535 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
 [Buffered JPEG EOB decoding](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) saves 10.0%
@@ -110,8 +110,15 @@ compression claim follows. Next: the frozen lossy WebP size gaps. The earlier [s
 is diagnostic evidence. Lossy WebP ceilings remain17,688/7,100 B at frozen matched
 quality (21,432/8,288 B).
 The [bounded lossy audit](../benchmarks/WARM-VP8-COMPRESSION-AUDIT.md) parks the
-tested skip/prediction-rate candidates: none meets both size gates. No production
-timing or packet row changes; intra16/grouped DC coding is the next structural path.
+tested skip/prediction-rate candidates; the [intra16/Y2 screen](../benchmarks/WARM-VP8-INTRA16-SCREEN.md)
+also misses both size gates and is slower. These rejected candidates change no
+production packet. The [exact SIMD forward DCT](../benchmarks/WARM-VP8-FORWARD-DCT.md)
+qualifies seven existing encodes with current point means5.4–16.9% below earlier
+reported checkpoints, with identical coefficients,
+packets and quality. The diagram independently clears time parity at0.831x/upper0.834x;
+photo remains passing at0.679x/upper0.684x. Original opaque8/16 remain short gaps.
+These seven current encoder observations supersede their historical build scopes;
+all size ceilings and other functional/memory/performance requirements remain open.
 
 The two JPEG async-output cases remain short gaps; all timings/allocations follow.
 
@@ -299,18 +306,18 @@ reconciliation now covers every numeric row.
 | [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,251.71 | 1,079.34 | 1.160 / 1.394 | 155,026 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-CALLER-MCU.md) | 2,097.34 | 1,579.06 | 1.328 / 1.408 | 297,894 | Gap (short; qualified) |
-| [WebP VP8, opaque‡](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md) | 20,420.05 | 15,471.74 | 1.320 / 1.446 | 1,482,092 | Gap (short; qualified) |
-| [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md) | 20,641.94 | 15,607.33 | 1.323 / 1.375 | 1,481,928 | Gap (short; qualified) |
-| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md) | 20,670.47 | 53,317.03 | 0.388 / 0.391 | 2,109,290 | Parity confirmed |
-| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md) | 21,352.42 | 53,437.67 | 0.400 / 0.403 | 2,108,982 | Parity confirmed |
-| [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md) | 22,866.92 | 53,563.20 | 0.427 / 0.430 | 2,616,016 | Parity confirmed |
+| [WebP VP8, opaque‡](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 19,177.49 | 15,528.15 | 1.235 / 1.354 | 1,482,108 | Gap (short; qualified) |
+| [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 19,531.60 | 15,602.44 | 1.252 / 1.284 | 1,481,944 | Gap (short; qualified) |
+| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 19,209.65 | 53,462.22 | 0.359 / 0.362 | 2,109,306 | Parity confirmed |
+| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 20,042.86 | 53,642.99 | 0.374 / 0.376 | 2,108,980 | Parity confirmed |
+| [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 21,546.32 | 53,834.21 | 0.400 / 0.403 | 2,616,214 | Parity confirmed |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-LEFT-PREDICTOR.md) | 26,142.42 | 121,047.04 | 0.216 / 0.218 | 723,096 | Parity confirmed |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-LEFT-PREDICTOR.md) | 12,616.59 | 70,704.68 | 0.178 / 0.180 | 614,408 | Parity confirmed |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-LEFT-PREDICTOR.md) | 32,791.43 | 121,157.50 | 0.271 / 0.273 | 723,096 | Parity confirmed |
 | [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-LEFT-PREDICTOR.md) | 29,933.56 | 83,170.39 | 0.360 / 0.362 | 702,616 | Parity confirmed |
 | [WebP VP8L text/diagram RGBA8](../benchmarks/WARM-VP8L-LEFT-PREDICTOR.md) | 6,714.65 | 9,561.10 | 0.702 / 0.717 | 107,568 | Parity confirmed |
-| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md) | 7,643.09 | 9,722.18 | 0.786 / 0.790 | 558,520 | Parity confirmed |
-| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md) | 5,842.06 | 5,840.84 | 1.000 / 1.009 | 489,932 | Gap (independent) |
+| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 6,555.59 | 9,649.33 | 0.679 / 0.684 | 558,587 | Parity confirmed |
+| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 4,856.65 | 5,841.64 | 0.831 / 0.834 | 489,948 | Parity confirmed |
 
 **Editing**
 

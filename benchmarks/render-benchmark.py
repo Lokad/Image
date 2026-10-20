@@ -210,11 +210,11 @@ def render():
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-compact-color-evidence.json', ['cases', 'OriginalGray', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-caller-mcu-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-CALLER-MCU.md', verification='Gap (short; qualified)'),
-        row('WebP VP8, opaque‡', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', verification='Gap (short; qualified)'),
-        row('WebP VP8, opaque from RGBA16‡', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 + alpha‡', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
-        row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
-        row('WebP VP8 + alpha‡, caller work budget32M', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'EncodeBudget8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
+        row('WebP VP8, opaque‡', 'warm-vp8-forward-dct-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8-FORWARD-DCT.md', verification='Gap (short; qualified)'),
+        row('WebP VP8, opaque from RGBA16‡', 'warm-vp8-forward-dct-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-FORWARD-DCT.md', verification='Gap (short; qualified)'),
+        row('WebP VP8 + alpha‡', 'warm-vp8-forward-dct-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8-FORWARD-DCT.md', True),
+        row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8-forward-dct-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8-FORWARD-DCT.md', True),
+        row('WebP VP8 + alpha‡, caller work budget32M', 'warm-vp8-forward-dct-evidence.json', ['cases', 'EncodeBudget8', -1], 'WARM-VP8-FORWARD-DCT.md', True),
         row('WebP VP8L, exact backend*', 'warm-vp8l-left-predictor-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-LEFT-PREDICTOR.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-left-predictor-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-LEFT-PREDICTOR.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-left-predictor-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-LEFT-PREDICTOR.md', True),
@@ -314,8 +314,8 @@ def render():
     encodes.extend([
         row('WebP VP8L photograph RGBA8', 'warm-vp8l-left-predictor-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-LEFT-PREDICTOR.md', True),
         row('WebP VP8L text/diagram RGBA8', 'warm-vp8l-left-predictor-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-LEFT-PREDICTOR.md', True),
-        row('WebP VP8 photograph RGBA8 / matched quality', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
-        row('WebP VP8 text/diagram RGBA8 / matched quality', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
+        row('WebP VP8 photograph RGBA8 / matched quality', 'warm-vp8-forward-dct-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-FORWARD-DCT.md', True),
+        row('WebP VP8 text/diagram RGBA8 / matched quality', 'warm-vp8-forward-dct-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-FORWARD-DCT.md', True),
     ])
     edits.extend([
         row('Lanczos3 reduction RGBA8', 'warm-lanczos3-certified-fma-evidence.json', ['cases', 'Reduce8', -1], 'WARM-LANCZOS3-CERTIFIED-FMA.md', verification='Gap (short; qualified)'),
@@ -340,10 +340,10 @@ to the named fixed inputs/settings/hardware, without extrapolating to other prof
 
 These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
-is separate. **192 historical codec/edit rows do not yet requalify changed 0.2.0
+is separate. **185 historical codec/edit rows do not yet requalify changed 0.2.0
 admission, disposal or governed storage.** Twenty-three current JPEG, four Lanczos3, two PNG resident, two async
-input, four async output, one bicubic, five VP8, five lossless WebP encodes and one caller-owned-root row identify their current producers. Production
-qualification now passes 4,534 tests/OS, affected hardware-off checks, the same actual
+input, four async output, one bicubic, five VP8 decodes, seven VP8 encodes, five lossless WebP encodes and one caller-owned-root row identify their current producers. Production
+qualification now passes 4,535 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
 [Buffered JPEG EOB decoding](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) saves 10.0%
@@ -441,8 +441,15 @@ compression claim follows. Next: the frozen lossy WebP size gaps. The earlier [s
 is diagnostic evidence. Lossy WebP ceilings remain17,688/7,100 B at frozen matched
 quality (21,432/8,288 B).
 The [bounded lossy audit](../benchmarks/WARM-VP8-COMPRESSION-AUDIT.md) parks the
-tested skip/prediction-rate candidates: none meets both size gates. No production
-timing or packet row changes; intra16/grouped DC coding is the next structural path.
+tested skip/prediction-rate candidates; the [intra16/Y2 screen](../benchmarks/WARM-VP8-INTRA16-SCREEN.md)
+also misses both size gates and is slower. These rejected candidates change no
+production packet. The [exact SIMD forward DCT](../benchmarks/WARM-VP8-FORWARD-DCT.md)
+qualifies seven existing encodes with current point means5.4–16.9% below earlier
+reported checkpoints, with identical coefficients,
+packets and quality. The diagram independently clears time parity at0.831x/upper0.834x;
+photo remains passing at0.679x/upper0.684x. Original opaque8/16 remain short gaps.
+These seven current encoder observations supersede their historical build scopes;
+all size ceilings and other functional/memory/performance requirements remain open.
 
 The two JPEG async-output cases remain short gaps; all timings/allocations follow.
 

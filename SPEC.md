@@ -1339,7 +1339,11 @@ callers must synchronize mutable input across all passes. Unsupported profiles f
 explicitly without external fallbacks. Compression-size parity remains open.
 
 `Lossless=false` emits a VP8 key frame with 4:2:0 chroma, a mathematical forward
-4x4 DCT and the format's quantizers. `Quality` (default 85) maps to quantizer index
+4x4 DCT and the format's quantizers. Safe four-lane binary64 SIMD evaluates
+independent frequencies in the original multiply/add order, without fused
+operations; division and midpoint-away quantization are unchanged. Other hardware
+uses the original scalar calculation. Coefficients and encoded packets are exact.
+`Quality` (default 85) maps to quantizer index
 `((100-quality)*127+49)/99` with integer division. Quality 100 is still lossy.
 Quantized coefficients round halves away from zero; the forward DC basis preserves
 exact constant-block half ties.

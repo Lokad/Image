@@ -2,6 +2,9 @@
 
 ## 0.2.0 — Unreleased
 
+- Faster VP8 forward DCT with safe SIMD, identical coefficients and packets,
+  and the original scalar fallback.
+
 - Optional `CompactColor` JPEG quantization; original defaults and grayscale remain unchanged.
 
 - Smaller lossless WebP output through bounded color-cache and adaptive prefix

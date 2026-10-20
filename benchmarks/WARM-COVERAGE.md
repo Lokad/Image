@@ -1,23 +1,35 @@
 # Material warm coverage
 
 Updated 2026-10-20. The **warm single-CPU parity objective remains open**:
-72 independent passes,166 measured mean gaps and one confidence-open case across
+73 independent passes,165 measured mean gaps and one confidence-open case across
 239 numeric rows. The [three-table summary](../docs/benchmark.md)
 contains125 independent observations and114 qualified shorts.16named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
 The finite scope is now **255 cases:239 numeric+16 unmeasured**. The remaining
-192 historical codec/edit rows retain their identified performance-qualified
+185 historical codec/edit rows retain their identified performance-qualified
 builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
-Twenty-three current JPEG, four Lanczos3, two PNG resident, two async input, four async output, one bicubic, five VP8, five synchronous lossless WebP encodes and one caller-owned-root rows
+Twenty-three current JPEG, four Lanczos3, two PNG resident, two async input, four async output, one bicubic, five VP8 decodes, seven VP8 encodes, five synchronous lossless WebP encodes and one caller-owned-root rows
 are identified below. The latest JPEG evidence replaces the earlier CMYK timings.
+
+The [exact SIMD forward DCT](WARM-VP8-FORWARD-DCT.md) refreshes exactly seven
+existing VP8 encode rows with current production evidence: five independent time
+passes and two opaque short gaps. Diagram becomes a pass at0.831x/upper0.834x;
+photograph remains passing at0.679x/upper0.684x. Coefficients, packets, quality,
+alpha, work/admission and owners stay exact. All4535tests/OS,169affectedscalar/OS,
+and the same actual private package/three examples pass. The finite scope is
+unchanged:255cases,239numeric+16unmeasured,73passes/165gaps/1confidence-open,
+125independent/114short,54current/185historical. These seven encoder paths changed;
+unchanged decoders/lossless/other codecs/edit/text retain their identified scopes.
+Both photograph/diagram compression-size gates remain open.
 
 The [bounded lossy WebP audit](WARM-VP8-COMPRESSION-AUDIT.md) changes no
 production row or count. Skip-only, top-two/all-six reconstructed-rate candidates
 and one existing full-mode coverage diagnostic all miss the fixed size gates.
 No scored timing or package qualification follows those screens; C37 source and
-build are restored exactly. Native intra16/grouped DC coding is the next material
-missing encoder path, especially for the diagram. Both content gates remain open.
+build are restored exactly. The subsequent [intra16/Y2 screen](WARM-VP8-INTRA16-SCREEN.md) also fails both
+size gates and is slower; its prototype/format proof are retained. Both content
+gates remain open; this rejection does not change the seven accepted DCT results.
 
 The [optional CompactColor JPEG policy](WARM-JPEG-COMPACT-COLOR.md) adds exactly
 one required algorithm case, `JpegSamplesEncode/CompactColorRgb420Resident`:
@@ -26,12 +38,12 @@ explicit new quantization policy. It produces48701/52093B at sourcePSNRgap
 0.017274dB, with short1.126x/upper1.362x and162110B/op. The Original RGB420 row
 remains separately open; its74040B packet is unchanged. The existing caller-gray
 row refreshes at1.160x/upper1.394x,155026B/op and unchanged58823/58910B. Both are
-qualified shorts, not independent passes. Exactly47current/192historical rows;
+qualified shorts, not independent passes. At the C37 checkpoint:47current/192historical rows;
 255cases,239numeric/16untimed,72passes/166gaps/1confidence-open,
 125independent/114short. All4534tests/OS,12newpublic normal/scalar checks/OS and
 the same actual private package/examples pass. Existing default quantizers,
 grayscale, other codecs/decoders and confirmed paths retain their identified
-evidence. Next: bounded lossy WebP photograph/diagram compression audit; no grid.
+evidence. Its subsequent bounded lossy audit and DCT round are recorded above; no grid.
 
 The [conditional LEFT predictor](WARM-VP8L-LEFT-PREDICTOR.md) refreshes those same
 six current lossless encode rows, all independently passing time parity. Photograph
