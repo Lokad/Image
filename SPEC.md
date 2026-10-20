@@ -25,7 +25,7 @@ from required future functionality.
 | Shared admission | Implemented in development | ImageBudget codec entry points and caller reservations; coarse per-operation reservation, cumulative charged work and independently retained BudgetedImage outputs |
 | Cooperative memory | Implemented in development; qualification ongoing | Borrowed host-independent shared-root hooks, pre-allocation capacity/peak admission and explicit retained-image/font/layout lifetime accounting across public operations |
 | Compression efficiency | High-priority ongoing work | Lossless WebP size competitive with the fixed FFmpeg/libwebp reference; JPEG size and reconstruction quality assessed together, with matched quality and no material grayscale regression; content/sampling scope stated |
-| Source metadata | Typed representation extension required | Encoded color model, source sample depth and alpha representation, including PNG indexed/grayscale/RGB and explicit alpha versus palette/color-key transparency; consistent sync/async Identify and bounded InspectHeaders |
+| Source metadata | Typed encoded representation | `ImageInfo.SourceColor`, `SourceAlpha`, `SourceComponentCount` and source `BitDepth`; consistent sync/async Identify and bounded InspectHeaders |
 
 GIF, APNG and animated WebP are rejected. Arithmetic/lossless/12-bit JPEG,
 progressive JPEG encoding, indexed/Adam7 PNG encoding and metadata round-tripping
@@ -804,15 +804,29 @@ of a half; final channels saturate to the full 16-bit range.
 
 ## Formats and metadata
 
-Required extension: public identification and header inspection will expose typed
-encoded color and alpha representation, independently of decoded RGBA normalization.
-For PNG this includes grayscale, RGB and indexed samples, encoded sample depth,
-explicit alpha channels and palette/color-key tRNS. Current `ImageInfo` exposes
-geometry, depth, `HasAlpha` and orientation; the richer source descriptor is not
-yet implemented. Sync/async Identify and InspectHeaders must agree for valid inputs
-without decoding pixels. Header-only inspection will keep bounded workspace and
-its documented validation boundary, with existing limits, structured failures,
-cancellation, shared admission and stream ownership preserved.
+`ImageInfo.SourceColor`, `SourceAlpha` and `SourceComponentCount` describe encoded
+source representation, independently of decoded RGBA. `BitDepth` remains encoded
+sample precision, or PNG index precision; decoded packed/indexed PNG becomes RGBA8.
+PNG reports grayscale/RGB/indexed, explicit alpha channels, palette `tRNS`, color-key
+`tRNS` or no alpha. Palette entries and transparency tables do not change index depth.
+Component count includes explicit alpha; palette indices count as one.
+
+JPEG reports one-component grayscale and models established by JFIF, Adobe transforms
+or conventional RGB/CMYK component names. Unlabelled three/four-component models,
+unknown Adobe transforms or conflicting Adobe declarations report `Unknown`, retaining
+the known component count. This does not apply ICC, CMYK inversion, caller color
+overrides or EXIF reorientation, or validate coding-table/entropy semantics.
+WebP VP8 reports YCbCr and separate `ALPH` when present. VP8L reports RGB with four
+coded components and `Channel` alpha even when its nonbinding alpha hint is unset.
+`HasAlpha` keeps its existing header semantics: PNG channel/`tRNS` presence, or WebP
+feature flags/alpha hint. It does not establish that a decoded pixel is nonopaque.
+
+All sync/async Identify and InspectHeaders paths report the same source metadata for
+valid input without decoding pixels. Bounded header workspace, validation boundaries,
+limits, typed failures, cancellation, shared admission and borrowed streams remain.
+The original six-argument `ImageInfo` construction/deconstruction is retained; manual
+construction leaves descriptors `Unknown` and count zero until initialized. Record
+equality and serialization include the new fields.
 
 Additional required supplied TrueType faces must form an explicit bounded set
 with names, versions, styles and licensed provenance. The existing twelve

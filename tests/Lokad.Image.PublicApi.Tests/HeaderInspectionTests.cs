@@ -71,9 +71,12 @@ public sealed class HeaderInspectionTests
         var result = asynchronous ? await ImageCodec.InspectHeadersAsync(input, limits) : ImageCodec.InspectHeaders(input, limits);
         var expected = format switch
         {
-            "png" => new ImageInfo(ImageFormat.Png, 50000, 50000, 8, true, ImageOrientation.Normal),
-            "webp" => new ImageInfo(ImageFormat.WebP, 16384, 4096, 8, false, ImageOrientation.Rotate270),
+            "png" => new ImageInfo(ImageFormat.Png, 50000, 50000, 8, true, ImageOrientation.Normal)
+                { SourceColor = SourceColorModel.Rgb, SourceAlpha = SourceAlphaRepresentation.Channel, SourceComponentCount = 4 },
+            "webp" => new ImageInfo(ImageFormat.WebP, 16384, 4096, 8, false, ImageOrientation.Rotate270)
+                { SourceColor = SourceColorModel.Rgb, SourceAlpha = SourceAlphaRepresentation.Channel, SourceComponentCount = 4 },
             _ => new ImageInfo(ImageFormat.Jpeg, 60000, 50000, 8, false, ImageOrientation.Rotate90)
+                { SourceColor = SourceColorModel.Grayscale, SourceAlpha = SourceAlphaRepresentation.None, SourceComponentCount = 1 }
         };
         Assert.Equal(expected, result); Assert.Equal(input.Length, input.Position); Assert.False(input.WasDisposed);
         Assert.InRange(input.LargestRequest, 1, 8192);

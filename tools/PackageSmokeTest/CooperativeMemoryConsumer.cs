@@ -11,6 +11,13 @@ internal static class CooperativeMemoryConsumer
             input.GetRow8(0)[0] = 123;
             using var encoded = new MemoryStream();
             await ImageCodec.EncodePngAsync(input, encoded, new() { Limits = limits });
+            var info = ImageCodec.Identify(encoded.GetBuffer().AsSpan(0, checked((int)encoded.Length)), limits);
+            if ((info.SourceColor, info.SourceAlpha, info.SourceComponentCount, info.BitDepth)
+                != (SourceColorModel.Rgb, SourceAlphaRepresentation.Channel, (byte)4, 8))
+                throw new Exception("Packaged encoded PNG source representation differs.");
+            encoded.Position = 0;
+            if (await ImageCodec.InspectHeadersAsync(encoded, limits) != info)
+                throw new Exception("Packaged bounded source metadata differs.");
             encoded.Position = 0;
             using var decoded = await ImageCodec.DecodeAsync(encoded, new() { Limits = limits });
             if (budget.Bytes != 2 * 19 * 13 * 4 || decoded.GetRow8(0)[0] != 123 || !encoded.CanRead)

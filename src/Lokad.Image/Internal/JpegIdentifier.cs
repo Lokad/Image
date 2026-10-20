@@ -15,6 +15,7 @@ internal static class JpegIdentifier
         int position = 2, items = 0, metadata = 0, width = 0, height = 0;
         bool frame = false, scan = false, exif = false, scanSeen = false;
         var orientation = ImageOrientation.Normal;
+        var source = new JpegSourceMetadata();
         while (position < data.Length)
         {
             context.Work(1);
@@ -55,7 +56,7 @@ internal static class JpegIdentifier
             if (marker == 0xD9)
             {
                 if (!frame || !scanSeen || position != data.Length) throw new ImageDataException("Invalid JPEG end or trailing bytes.");
-                return new ImageInfo(ImageFormat.Jpeg, width, height, 8, false, orientation);
+                return source.Info(width, height, orientation);
             }
             if (marker is 0 or 0xD8 or 0x01 || position > data.Length - 2)
                 throw new ImageDataException("Invalid JPEG marker sequence.");
@@ -74,6 +75,7 @@ internal static class JpegIdentifier
                 if (components is not (1 or 3 or 4)) throw new UnsupportedImageException(UnsupportedImageFeature.ComponentLayout, "JPEG component layout is not supported.", ImageFormat.Jpeg);
                 if (payload.Length != 6 + components * 3 || width == 0 || height == 0)
                     throw new ImageDataException("Invalid JPEG frame dimensions or components.");
+                source.Frame(components, payload[6..]);
                 context.PixelBytes(width, height, 8); frame = true;
             }
             else if (marker == 0xDA)
@@ -87,6 +89,7 @@ internal static class JpegIdentifier
                 if (payload.Length > context.Limits.MaxMetadataBytes - metadata)
                     throw new ImageLimitException(ImageLimitKind.MetadataBytes, "JPEG metadata limit exceeded.");
                 metadata += payload.Length;
+                source.Application(marker, payload);
                 if (marker == 0xE1 && payload.StartsWith("Exif\0\0"u8))
                 {
                     if (exif) throw new ImageDataException("Duplicate JPEG EXIF.");

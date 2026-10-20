@@ -3,6 +3,13 @@
 Published 0.1.0 remains unchanged. Version 0.2.0 is under qualification; it is not
 yet a claim of replacement readiness or performance parity for the expanded scope.
 
+`ImageInfo.SourceColor`, `SourceAlpha` and `SourceComponentCount` describe encoded
+samples, alongside source `BitDepth`; they do not describe normalized RGBA pixels.
+Unlabelled JPEG color models remain `Unknown`. VP8L always codes alpha even when
+its header hint leaves `HasAlpha` false. The six-argument constructor/deconstructor
+is retained; manually constructed records default to unknown descriptors, and
+record equality/serialization include the new fields.
+
 - Pass one caller-owned adapter through `ImageLimits.MemoryBudget` for aggregate
   live-memory admission. Implement Lokad.Image's three interfaces against the
   caller's shared root; no governor package is required. Reuse these limits in

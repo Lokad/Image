@@ -21,7 +21,8 @@ public sealed class JpegIdentifierTests
         var scalar = Run(bytes, ImageLimits.Default, fast: false);
         var vector = Run(bytes, ImageLimits.Default, fast: true);
         Assert.Equal(scalar, vector);
-        Assert.Equal(new ImageInfo(ImageFormat.Jpeg, 513, 259, 8, false, ImageOrientation.Normal), vector.Info);
+        Assert.Equal(new ImageInfo(ImageFormat.Jpeg, 513, 259, 8, false, ImageOrientation.Normal)
+            { SourceColor = SourceColorModel.Grayscale, SourceAlpha = SourceAlphaRepresentation.None, SourceComponentCount = 1 }, vector.Info);
         Assert.Equal(original, bytes);
     }
 

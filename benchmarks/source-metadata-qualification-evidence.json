@@ -1,0 +1,147 @@
+{
+  "project": "Lokad.Image",
+  "affectedCurrentCases": {
+    "warm-jpeg-buffered-eob-evidence.json": [
+      "Sparse2D",
+      "OneAc",
+      "Adobe",
+      "General",
+      "Decode410",
+      "Decode411",
+      "Ycck420",
+      "Ycck420CallerRgb",
+      "GrayResident",
+      "GraySamples",
+      "Rgb420Samples",
+      "NativeDecode420",
+      "NativeDecode420Restart",
+      "NativeDecode422",
+      "Decode8",
+      "NativeDecode8",
+      "DirectRgb444",
+      "DirectRgb422",
+      "DirectRgb420",
+      "CmykCaller",
+      "StreamDecode420Restart"
+    ],
+    "warm-vp8-cancellable-block-evidence.json": [
+      "OpaqueCancelable8",
+      "SimpleOpaque8",
+      "Opaque8",
+      "Native8",
+      "StreamNative8"
+    ],
+    "warm-current-resident-png-evidence.json": [
+      "Decode8",
+      "Decode16"
+    ],
+    "warm-deflate-materialized-cursor-evidence.json": [
+      "Png8Retained2",
+      "Png8AsyncNonSeekable"
+    ],
+    "warm-png-async-identify-evidence.json": [
+      "Png8AsyncNonSeekable"
+    ]
+  },
+  "count": 31,
+  "reason": "ImageInfo initialization and JPEG/PNG/WebP header parsing enrich source representation. Pixel kernels, packets, resource boundaries and object capacity remain unchanged, but complete operation timings must be confirmed; PNG metadata-returning native adapter must include typed source descriptors before equivalent timing.",
+  "unaffectedCurrentCases": 23,
+  "historicalOrAwaitingTiming": 216,
+  "finiteScope": 255,
+  "numeric": 239,
+  "unmeasured": 16,
+  "noPerformanceClaimForC43": true,
+  "schemaVersion": 1,
+  "scope": "Typed encoded source metadata functional/package qualification; no new performance measurement or timing claim.",
+  "windows": {
+    "productionSha256": "73dfaf82df696b4b1c5bddf6af481aa7bebc1092f766325b3bc03c157c43dde1",
+    "counts": [
+      1683,
+      1956,
+      932
+    ],
+    "fullPassed": 4571,
+    "scalar": {
+      "public": 239,
+      "internal": 20
+    },
+    "imageInfoAllocationBytesBeforeAfter": 40,
+    "coreBuilds": 2,
+    "internalTestBuilds": 1,
+    "publicTestBuilds": 3,
+    "productionBuildsAfterFreeze": 0,
+    "harnessNativeSelectorDifferentialBuilds": 0,
+    "frozenIdentities": {
+      "Lokad.Image.dll": "73dfaf82df696b4b1c5bddf6af481aa7bebc1092f766325b3bc03c157c43dde1",
+      "Lokad.Image.pdb": "d2c04de7ff97778ee81c2c057a8ed4e574d7ab9450451998d3a21dd5e831e881",
+      "Lokad.Image.PublicApi.Tests.dll": "8ca04cf1e53156acca07cb14e0d551905cd864d1e70158081fdf48344c629934",
+      "Lokad.Image.PublicApi.Tests.pdb": "bf7a3afbebbafc1affb72282ffb01819997723d3094f318919349d0819865d9b",
+      "Lokad.Image.Tests.dll": "2ec9648666c1d13733583b4431f87a74829be4f4664bcd7eeb1842c78c8c76ff",
+      "Lokad.Image.Tests.pdb": "24a41abc955dd352c517f6454f10c44365eea3acaca37b5f24b71ee959f3d1d1",
+      "Lokad.Image.xml": "5256fbfd165a5b5420898e2bdc684f8f2e948d4c26aaa9fdd49479f0a6861799"
+    },
+    "actualPackageSha256": "b05504b3cd8c0feaae805ca17e4e78cb0abc87cff36df3168f72240d6a5f208e",
+    "sameActualPackageConsumerAndThreeExamples": true,
+    "packagedSourceMetadataAsyncRootAndIndependentOutputs": true
+  },
+  "linuxProducerSha256": "aae514fc5f04195ba920314ca473af3cbe999e7b7ff6957e877f6b12b2729d42",
+  "newPublicControls": 36,
+  "allApiFormsAgree": true,
+  "fixedHeaderWorkspaceBytes": 8448,
+  "imageInfoRecordAllocationBeforeAfter": 40,
+  "sourceSampleDepthNotNormalized": true,
+  "unknownJpegColorModelsExplicit": true,
+  "webpAlphaHintSemanticsPreserved": true,
+  "originalConstructorAndDeconstructionPreserved": true,
+  "linux": {
+    "productionSha256": "aae514fc5f04195ba920314ca473af3cbe999e7b7ff6957e877f6b12b2729d42",
+    "counts": [
+      1683,
+      1956,
+      932
+    ],
+    "fullPassed": 4571,
+    "scalar": {
+      "publicMetadata": 203,
+      "publicRoot": 36,
+      "internal": 20
+    },
+    "imageInfoAllocationBytesBeforeAfter": 40,
+    "coreBuilds": 1,
+    "internalTestBuilds": 1,
+    "publicTestBuilds": 1,
+    "productionBuildsAfterFreeze": 0,
+    "harnessNativeSelectorDifferentialBuilds": 0,
+    "actualPackageSha256": "b05504b3cd8c0feaae805ca17e4e78cb0abc87cff36df3168f72240d6a5f208e",
+    "sameActualPackageConsumerAndThreeExamples": true,
+    "packagedSourceMetadataAsyncRootAndIndependentOutputs": true,
+    "checkoutBytes": 4990102500
+  },
+  "rawArchives": [
+    {
+      "file": "c43-qualified-windows.tar.gz",
+      "sha256": "b30bf7a3a86998557f99403a34984c741e92ee4593a1aa326705f02ebbd0d580"
+    },
+    {
+      "file": "c43-qualified-linux.tar.gz",
+      "sha256": "4b12dc27f088cbca7a7310a359077f12d01d95e6be2e5da70a8872fb4e9fd5c2"
+    }
+  ],
+  "beforeAfterAllocationRecords": {
+    "windows": {
+      "baseline": {
+        "scope": "Untimed escaped record allocation only; not an image workload or timing claim.",
+        "instances": 10000,
+        "librarySha256": "9b8c6d063c6fbef96a82f989ed59cefd2a683fc074f4292ffab9bff7d209540d",
+        "allocatedBytes": 400000
+      },
+      "candidate": {
+        "scope": "Untimed escaped record allocation only; not an image workload or timing claim.",
+        "librarySha256": "73dfaf82df696b4b1c5bddf6af481aa7bebc1092f766325b3bc03c157c43dde1",
+        "allocatedBytes": 400000,
+        "instances": 10000
+      }
+    }
+  },
+  "allocationProofLinux": "c43-qualified-linux.tar.gz: tmp/c43-info-allocation-{baseline,candidate}-linux.json"
+}

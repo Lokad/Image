@@ -51,6 +51,10 @@ def row(label, name, path, report, confirmed=False, verification=None):
     if verification:
         assert not confirmed and quiet
         status = verification
+    if name in {'warm-jpeg-buffered-eob-evidence.json', 'warm-vp8-cancellable-block-evidence.json',
+                'warm-current-resident-png-evidence.json', 'warm-deflate-materialized-cursor-evidence.json',
+                'warm-png-async-identify-evidence.json'}:
+        status += '; metadata timing open'
     memory = observation.get('managedMemory')
     if memory:
         allocated = memory['BytesAllocatedPerOperation']
@@ -324,32 +328,40 @@ def render():
         row('Lanczos3 enlargement RGBA16', 'warm-lanczos3-certified-fma-evidence.json', ['cases', 'Enlarge16', -1], 'WARM-LANCZOS3-CERTIFIED-FMA.md', verification='Gap (short; qualified)'),
     ])
     all_rows = decodes + encodes + edits
-    parity_count = sum(' | Parity confirmed |' in value for value in all_rows)
-    confidence_count = sum(' | Confidence open |' in value for value in all_rows)
-    gap_count = sum(' | Gap' in value for value in all_rows)
-    reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in all_rows)
+    assert sum('; metadata timing open' in value for value in all_rows) == 31
+    producer_rows = [value.replace('; metadata timing open', '') for value in all_rows]
+    parity_count = sum(' | Parity confirmed |' in value for value in producer_rows)
+    confidence_count = sum(' | Confidence open |' in value for value in producer_rows)
+    gap_count = sum(' | Gap' in value for value in producer_rows)
+    reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in producer_rows)
     assert parity_count + confidence_count + gap_count + reconfirm_count == 239
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-20. Target: **warm single-CPU parity, independently confirmed
-conservative upper ≤1x**. The 239 numeric rows contain **{parity_count} passes,
+conservative upper ≤1x**. The 239 numeric rows retain tested-producer evidence: **{parity_count} passes,
 {gap_count} gaps and {confidence_count} confidence-open case**. The finite
 [material checklist](../benchmarks/WARM-COVERAGE.md) has 255 named cases, 16 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
-These tables retain the last performance-qualified builds linked in each report.
-The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
-is separate. **185 historical codec/edit rows do not yet requalify changed 0.2.0
-admission, disposal or governed storage.** Twenty-three current JPEG, four Lanczos3, two PNG resident, two async
-input, four async output, one bicubic, five VP8 decodes, seven VP8 encodes, five lossless WebP encodes and one caller-owned-root row identify their current producers. Production
-qualification now passes 4,535 tests/OS, affected hardware-off checks, the same actual
-private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
+These tables retain the performance-qualified producers identified by each report.
+The [typed source-metadata extension](source-metadata.md) is functionally qualified
+by4,571 tests/OS,259 affected scalar checks/OS and the same actual private package
+consumer/all three examples on Windows/Linux. **31 marked decode/inspection rows
+predate its changed header preflight and await timing confirmation.** The complete
+metadata-returning PNG reference also needs equivalent typed fields before timing.
+There are23 unaffected current rows (two caller JPEG encodes, four Lanczos3, four
+async outputs, one bicubic, seven VP8 encodes and five synchronous lossless encodes),
+and216 historical/awaiting-confirmation rows. Pixel kernels, source-quality/resource
+proofs and unaffected encoder/edit timings retain their identified scope. This does
+not prove expanded-scope parity or replacement readiness. Published0.1.0 is immutable.
+The checkpoint descriptions below retain their linked producer scopes; the metadata
+qualification above supersedes any earlier description of these31 rows as current.
 
 [Buffered JPEG EOB decoding](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) saves 10.0%
 on sparse-2D CMYK and 12.2% on one-AC CMYK, preserving exact pixels and allocation
-behavior. All 21 affected existing JPEG rows have current evidence. Caller RGB420
-retains an independent pass at **0.926x/upper0.931x**; the other 20 remain gaps.
+behavior. All21 JPEG rows were qualified at that checkpoint. Caller RGB420
+had an independent pass at **0.926x/upper0.931x**; the other20 were gaps.
 The unchanged progressive/live-token decoders, metadata, encoders and other
 codecs retain their identified scopes. A late affected-list correction included
 the already required fresh-stream JPEG case, with no new input or settings.

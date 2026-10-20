@@ -42,11 +42,13 @@ precision; JPEG/WebP output is 8-bit. WebP defaults to lossless. For transparent
 JPEG input, set `JpegEncodeOptions.BackgroundRgb` explicitly.
 Development toward 0.2.0 adds caller-owned cooperative memory admission through
 `ImageLimits.MemoryBudget`. `ImageBudget` separately provides codec memory/work quotas.
+`ImageInfo` reports encoded color, alpha representation and sample/index depth;
+`InspectHeadersAsync` reads these with bounded workspace, without decoding pixels.
 
 The [usage guide](docs/usage.md) covers encoding, cropping and 16-bit editing.
-The named warm single-CPU workloads meet the ≤2× target against explicitly labeled
-FFmpeg references; [benchmark results](docs/benchmark.md) state the tested scope,
-allocations and compressed sizes. Compression efficiency varies by codec/profile.
+The published 0.1.0 scope met its ≤2× warm single-CPU target. Current
+[benchmark results](docs/benchmark.md) state the tested scope, allocations,
+compressed sizes and remaining 0.2.0 parity gaps.
 
 For development, install the SDK in `global.json`, restore the solution, then run:
 

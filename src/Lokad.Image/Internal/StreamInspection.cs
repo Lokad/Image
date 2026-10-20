@@ -104,7 +104,7 @@ internal static class StreamInspection
             {
                 if (size != 0 || !data || compressed == 0) throw new ImageDataException("Invalid PNG end.");
                 await r.SkipAsync(4).ConfigureAwait(false); await r.EndAsync().ConfigureAwait(false);
-                return new ImageInfo(ImageFormat.Png, width, height, depth, color is 4 or 6 || transparency, orientation);
+                return ImageSourceMetadata.Png(width, height, depth, color, transparency, orientation);
             }
             else if (type == Four("acTL"u8) || type == Four("fcTL"u8) || type == Four("fdAT"u8))
                 throw new UnsupportedImageException(UnsupportedImageFeature.Animation, "Animated PNG is not supported.", ImageFormat.Png);
@@ -128,6 +128,7 @@ internal static class StreamInspection
         int items = 0, width = 0, height = 0; long metadata = 0;
         bool frame = false, scan = false, scanSeen = false, exif = false;
         var orientation = ImageOrientation.Normal;
+        var source = new JpegSourceMetadata();
         while (true)
         {
             var marker = await r.JpegMarkerAsync(scan).ConfigureAwait(false);
@@ -139,7 +140,7 @@ internal static class StreamInspection
             {
                 if (!frame || !scanSeen) throw new ImageDataException("Invalid JPEG end.");
                 await r.EndAsync().ConfigureAwait(false);
-                return new ImageInfo(ImageFormat.Jpeg, width, height, 8, false, orientation);
+                return source.Info(width, height, orientation);
             }
             if (marker is 0 or 0xD8 or 1) throw new ImageDataException("Invalid JPEG marker sequence.");
             await r.ReadAsync(2).ConfigureAwait(false); var length = BinaryPrimitives.ReadUInt16BigEndian(r.Header);
@@ -155,6 +156,8 @@ internal static class StreamInspection
                 if (count is not (1 or 3 or 4)) throw new UnsupportedImageException(UnsupportedImageFeature.ComponentLayout, "JPEG component layout is not supported.", ImageFormat.Jpeg);
                 if (size != 6 + count * 3) throw new ImageDataException("Invalid JPEG frame component count.");
                 Dimensions(r, width, height); frame = true;
+                await r.ReadAsync(count * 3).ConfigureAwait(false);
+                source.Frame(count, r.Header);
             }
             else if (marker == 0xDA)
             {
@@ -166,6 +169,12 @@ internal static class StreamInspection
             else if (marker is >= 0xE0 and <= 0xEF || marker == 0xFE)
             {
                 Metadata(r, size, ref metadata);
+                if (marker == 0xE0 && size >= 5 || marker == 0xEE && size >= 12)
+                {
+                    var prefixLength = marker == 0xE0 ? 5 : 12;
+                    await r.ReadAsync(prefixLength).ConfigureAwait(false);
+                    source.Application(marker, r.Header.AsSpan(0, prefixLength));
+                }
                 if (marker == 0xE1 && size >= 6)
                 {
                     await r.ReadAsync(6).ConfigureAwait(false);
@@ -249,7 +258,7 @@ internal static class StreamInspection
         if (!pixels || extended && (width != canvasW || height != canvasH)) throw new ImageDataException("Invalid WebP canvas geometry.");
         if (extended && (((flags & 8) != 0) != exif || ((flags & 32) != 0) != icc || ((flags & 4) != 0) != xmp || !lossless && alpha != alphaChunk)) throw new ImageDataException("WebP feature flags disagree with chunks.");
         Dimensions(r, width, height); await r.EndAsync().ConfigureAwait(false);
-        return new ImageInfo(ImageFormat.WebP, width, height, 8, alpha, orientation);
+        return ImageSourceMetadata.Webp(width, height, alpha, lossless, alphaChunk, orientation);
     }
 
     private static async ValueTask<ImageOrientation> ExifAsync(InspectionReader r, long length, bool optionalPrefix)

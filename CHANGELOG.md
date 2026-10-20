@@ -2,6 +2,9 @@
 
 ## 0.2.0 — Unreleased
 
+- Typed source color, alpha and component metadata across synchronous/asynchronous
+  identification and bounded header inspection, preserving source sample/index depth.
+
 - Faster VP8 forward DCT with safe SIMD, identical coefficients and packets,
   and the original scalar fallback.
 

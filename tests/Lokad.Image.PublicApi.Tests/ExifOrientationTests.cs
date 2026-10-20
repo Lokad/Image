@@ -18,11 +18,12 @@ public sealed class ExifOrientationTests
         var fixture = OriginalExif.Create(profile, 9, 7);
         var encoded = OriginalExif.Attach(fixture, orientation, bigEndian);
         var (width, height) = (int)orientation >= 5 ? (7, 9) : (9, 7);
-        var expectedInfo = new ImageInfo(fixture.Format, 9, 7, fixture.Depth, fixture.Alpha, orientation);
-        var info = ImageCodec.Identify(encoded); Assert.Equal(expectedInfo, info);
+        var info = ImageCodec.Identify(encoded);
+        Assert.Equal((fixture.Format, 9, 7, fixture.Depth, fixture.Alpha, orientation),
+            (info.Format, info.Width, info.Height, info.BitDepth, info.HasAlpha, info.Orientation));
         Assert.Equal((width, height), (info.OrientedWidth, info.OrientedHeight));
         using var identifyInput = new MemoryStream(encoded);
-        Assert.Equal(expectedInfo, ImageCodec.Identify(identifyInput)); Assert.True(identifyInput.CanRead);
+        Assert.Equal(info, ImageCodec.Identify(identifyInput)); Assert.True(identifyInput.CanRead);
         using var control = ImageCodec.Decode(fixture.Encoded);
         var controlPixels = OriginalPixels.Bytes(control);
         if (!fixture.Lossy) Assert.Equal(fixture.Source, controlPixels);

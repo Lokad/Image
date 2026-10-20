@@ -102,8 +102,7 @@ internal static class PngCodec
             {
                 if (length != 0 || !dataSeen || compressedLength == 0 || position != data.Length)
                     throw new ImageDataException("Invalid PNG end or trailing data.");
-                return new Header(new ImageInfo(ImageFormat.Png, width, height, depth,
-                    color is 4 or 6 || transparencySeen, orientation), color, depth, interlace,
+                return new Header(ImageSourceMetadata.Png(width, height, depth, color, transparencySeen, orientation), color, depth, interlace,
                     palette, transparency, compressedLength);
             }
             else if (type.SequenceEqual("acTL"u8) || type.SequenceEqual("fcTL"u8) || type.SequenceEqual("fdAT"u8))

@@ -88,8 +88,7 @@ internal static class PngIdentifier
             {
                 if (length != 0 || !dataSeen || compressedLength == 0 || position != data.Length)
                     throw new ImageDataException("Invalid PNG end or trailing data.");
-                return new ImageInfo(ImageFormat.Png, width, height, depth,
-                    color is 4 or 6 || transparencySeen, orientation);
+                return ImageSourceMetadata.Png(width, height, depth, color, transparencySeen, orientation);
             }
             else if (type.SequenceEqual("acTL"u8) || type.SequenceEqual("fcTL"u8) || type.SequenceEqual("fdAT"u8))
                 throw new UnsupportedImageException(UnsupportedImageFeature.Animation, "Animated PNG is not supported.", ImageFormat.Png);

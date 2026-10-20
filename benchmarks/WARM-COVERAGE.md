@@ -6,11 +6,16 @@ Updated 2026-10-20. The **warm single-CPU parity objective remains open**:
 contains125 independent observations and114 qualified shorts.16named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
-The finite scope is now **255 cases:239 numeric+16 unmeasured**. The remaining
-185 historical codec/edit rows retain their identified performance-qualified
-builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
-Twenty-three current JPEG, four Lanczos3, two PNG resident, two async input, four async output, one bicubic, five VP8 decodes, seven VP8 encodes, five synchronous lossless WebP encodes and one caller-owned-root rows
-are identified below. The latest JPEG evidence replaces the earlier CMYK timings.
+The finite scope is now **255 cases:239 numeric+16 unmeasured**. After [typed source metadata](../docs/source-metadata.md),23 unaffected current
+rows and216 historical/awaiting-confirmation rows remain. Exactly31 formerly
+current decode/inspection rows need confirmation because their metadata factories
+and header preflight changed. The [named invalidation list](source-metadata-qualification-evidence.json)
+identifies every case; no image/settings matrix expands. One PNG metadata-returning
+reference also needs equivalent typed fields. Existing pixel/resource proofs and
+unaffected encoders/edits are reused. No timing is claimed for this functional round.
+All4571tests/OS,259affectedscalar/OS and the same actual private package/three
+examples pass. The numeric pass/gap counts describe their retained tested producers,
+not an assertion that the changed complete-operation timings are already qualified.
 
 The [exact SIMD forward DCT](WARM-VP8-FORWARD-DCT.md) refreshes exactly seven
 existing VP8 encode rows with current production evidence: five independent time
