@@ -1,0 +1,78 @@
+{
+  "productionChanged": false,
+  "noTimingClaim": true,
+  "scope": "Exactly the two existing opaque 513x259 effort4 VP8 controls; independent owned arithmetic replay, no encoding/calibration/build or new profile",
+  "cases": [
+    {
+      "case": "Photograph8",
+      "currentBytes": 21432,
+      "requiredBytes": 17688,
+      "candidateBytes": 20138,
+      "candidateSha256": "03d58274bb2844abf5a75674ed833f64080bf363fccc2e9d8aadf3662555d579",
+      "originalHeaderAndCoefficientReplayExact": true,
+      "allModesQuantizersAndCoefficientsUnchanged": true,
+      "originalHeaderBytes": 3654,
+      "candidateHeaderBytes": 3751,
+      "originalTokenBytes": 17748,
+      "candidateTokenBytes": 16357,
+      "oldProbabilityUpdates": 13,
+      "fullProbabilityUpdates": 66,
+      "estimatedTreeBitSaving": 11283.008797730727,
+      "estimatedIdealTreeBitSaving": 11697.653105262987,
+      "probabilityModel": "Whole-frame empirical model with existing per-node signaling-cost threshold, unchanged fixed category/sign probabilities",
+      "sizeGatePass": false,
+      "independentPixelCheckPending": false,
+      "managedNormalScalarRgbaExact": {
+        "currentRgbaSha256": "7730878a75a9c689d882e6e01b0d44cf6ad5ed4971af877d0bfe94ebc2b32c7b",
+        "case": "Photograph8",
+        "exact": true,
+        "candidateRgbaSha256": "7730878a75a9c689d882e6e01b0d44cf6ad5ed4971af877d0bfe94ebc2b32c7b"
+      },
+      "nativeNormalScalarYuvExact": true,
+      "nativeYuvSha256": "1c16d2dbf99ba8ab421a36f05fd699b85de0904d69e5bc95578125584b17687d",
+      "sourceQualityAndAlphaUnchanged": true
+    },
+    {
+      "case": "Diagram8",
+      "currentBytes": 8288,
+      "requiredBytes": 7100,
+      "candidateBytes": 7684,
+      "candidateSha256": "792af17d9c13a2b2a9c1098e97d8364321e11eb1a19380abaaca1fccf16e280d",
+      "originalHeaderAndCoefficientReplayExact": true,
+      "allModesQuantizersAndCoefficientsUnchanged": true,
+      "originalHeaderBytes": 1462,
+      "candidateHeaderBytes": 1584,
+      "originalTokenBytes": 6796,
+      "candidateTokenBytes": 6070,
+      "oldProbabilityUpdates": 55,
+      "fullProbabilityUpdates": 120,
+      "estimatedTreeBitSaving": 6012.015948146211,
+      "estimatedIdealTreeBitSaving": 6682.985605390924,
+      "probabilityModel": "Whole-frame empirical model with existing per-node signaling-cost threshold, unchanged fixed category/sign probabilities",
+      "sizeGatePass": false,
+      "independentPixelCheckPending": false,
+      "managedNormalScalarRgbaExact": {
+        "currentRgbaSha256": "2d84ba188c3b613a779286fc118f922aac6fb5d940f5900384b3cffcaebde222",
+        "case": "Diagram8",
+        "exact": true,
+        "candidateRgbaSha256": "2d84ba188c3b613a779286fc118f922aac6fb5d940f5900384b3cffcaebde222"
+      },
+      "nativeNormalScalarYuvExact": true,
+      "nativeYuvSha256": "75dc5a9a90ebdd66cb07ce04147e99cec6ca51fa059d3f7171cb580feeb2dd97",
+      "sourceQualityAndAlphaUnchanged": true
+    }
+  ],
+  "productionBuilds": 0,
+  "harnessNativeSelectorBuilds": 0,
+  "scoredJobs": 0,
+  "additionalFullSuitesOrPackageProofs": 0,
+  "qualifiedC40CoreAndPackageUnchanged": true,
+  "project": "Lokad.Image",
+  "schemaVersion": 1,
+  "acceptedProductionChange": false,
+  "rawArchive": {
+    "file": "c41-full-model-audit.tar.gz",
+    "sha256": "d1b8cc71953040b8a2aae0da3f52a030942ee7220ff26359792c1f732f65689d"
+  },
+  "decision": "Park whole-frame probability adaptation as an adjunct: empirical and ideal tree-rate evidence cannot explain the entire gap; the tested variant misses both numerical size ceilings. No production build, tuning or timing."
+}

@@ -119,6 +119,9 @@ packets and quality. The diagram independently clears time parity at0.831x/upper
 photo remains passing at0.679x/upper0.684x. Original opaque8/16 remain short gaps.
 These seven current encoder observations supersede their historical build scopes;
 all size ceilings and other functional/memory/performance requirements remain open.
+An [untimed whole-frame entropy replay](../benchmarks/WARM-VP8-FULL-MODEL-AUDIT.md)
+recovers1,294/604 B with identical pixels but still misses both size ceilings;
+it changes no production result or benchmark row.
 
 The two JPEG async-output cases remain short gaps; all timings/allocations follow.
 
