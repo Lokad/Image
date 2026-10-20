@@ -4,8 +4,8 @@ Updated 2026-10-20. Priority: **complete-packet compression at the frozen qualit
 gates**, lossy WebP first, then lossless WebP. Meaningful verified incremental
 gains may cost more CPU. Warm single-CPU parity (independently confirmed upper≤1x)
 remains a deferred objective; speed-only work and repeated confirmations wait
-while compression gates remain open. The 239 numeric rows retain tested-producer evidence: **71 passes,
-167 gaps and 1 confidence-open case**. The finite
+while compression gates remain open. The 239 numeric rows retain tested-producer evidence: **68 passes,
+167 gaps, 1 confidence-open case and 3 short cost screens**. The finite
 [material checklist](../benchmarks/WARM-COVERAGE.md) has 256 named cases, 17 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; compression currently takes precedence over CPU parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
@@ -128,13 +128,25 @@ private package/examples qualify. Two short cost screens record3.491x/2.360x
 and589,432/570,136 B/op; CPU parity remains deferred. Relevant unchanged proofs
 are reused, with no independent timing repeats or workload grid.
 The [seven-control size ledger](../benchmarks/WARM-VP8-SIZE-COVERAGE.md) retains
-**five other fixed-q100 packet gaps**, including raw alpha and a work32M branch.
+**five other fixed-q100 packet gaps**, including the work32M branch.
 Those are benchmark inputs, not the defaultquality85. Primary parity is not
 whole-codec parity; these larger lossy gaps precede lossless work. The earlier
 [intra16/Y2](../benchmarks/WARM-VP8-INTRA16-COMPRESSION.md),
 [whole-frame entropy](../benchmarks/WARM-VP8-FULL-MODEL-COMPRESSION.md) and
 [reconstructed-mode](../benchmarks/WARM-VP8-RECONSTRUCTED-MODES.md) milestones
 retain their producer-specific data. Only the two primary encode rows change.
+The subsequent [compressed-alpha milestone](../benchmarks/WARM-VP8-COMPRESSED-ALPHA.md)
+saves18,504 B on each existing alpha8/16/work32M packet, now268,028/268,028/452,932 B
+against98,590 B. VP8 payloads, decoded RGBA and quality remain exact; references,
+settings and tolerances are unchanged. It adds2KiB admitted workspace without
+a filtered/RGBA frame or encoded-alpha buffer.4,613tests/OS,146internal+3public
+scalar checks and the same actual package/examples pass. Three short cost screens
+record0.400/0.402/0.441x and2,174,702/2,174,520/2,681,364 B/op; native allocations
+remain unmeasured. They replace three prior independent observations, without
+claiming current independent CPU parity. The fixed scope remains256 cases:
+120independent/119short observations. All five procedural compression gates remain
+open. Primary opaque content and unrelated algorithms reuse unchanged evidence.
+
 The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
 rejects a smaller packet with excessive quality loss and a quality-preserving
 variant with immaterial byte savings. These historical trials do not alter the
@@ -348,9 +360,9 @@ reconciliation now covers every numeric row.
 | [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-CALLER-MCU.md) | 2,097.34 | 1,579.06 | 1.328 / 1.408 | 297,894 | Gap (short; qualified) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 19,177.49 | 15,528.15 | 1.235 / 1.354 | 1,482,108 | Gap (short; qualified) |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 19,531.60 | 15,602.44 | 1.252 / 1.284 | 1,481,944 | Gap (short; qualified) |
-| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 19,209.65 | 53,462.22 | 0.359 / 0.362 | 2,109,306 | Parity confirmed |
-| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 20,042.86 | 53,642.99 | 0.374 / 0.376 | 2,108,980 | Parity confirmed |
-| [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 21,546.32 | 53,834.21 | 0.400 / 0.403 | 2,616,214 | Parity confirmed |
+| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-COMPRESSED-ALPHA.md) | 21,368.74 | 53,430.11 | 0.400 / 0.475 | 2,174,702 | Cost screen (CPU parity deferred) |
+| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-COMPRESSED-ALPHA.md) | 21,613.20 | 53,776.89 | 0.402 / 0.425 | 2,174,520 | Cost screen (CPU parity deferred) |
+| [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-COMPRESSED-ALPHA.md) | 23,542.60 | 53,383.44 | 0.441 / 0.514 | 2,681,364 | Cost screen (CPU parity deferred) |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 57,489.75 | 121,784.50 | 0.472 / 0.481 | 10,286,728 | Parity confirmed |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 49,621.60 | 69,789.18 | 0.711 / 0.720 | 9,669,728 | Parity confirmed |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 66,156.61 | 122,061.47 | 0.542 / 0.550 | 10,286,320 | Parity confirmed |
@@ -464,7 +476,7 @@ RGBA samples remain exact. Single-component grayscale JPEG uses the approved
 benchmark-only **SIMD libjpeg-turbo3.1.4.1** reference; FFmpeg emits three components.
 Production stays safe managed .NET 10 without dependencies or native bindings.
 
-‡ Default VP8 comparisons freeze managed/native quality 100/75 and effort 4, retaining
+‡ Procedural VP8 benchmark inputs freeze managed/native quality 100/75 and effort 4, retaining
 the 0.25 dB source-quality gate and exact alpha. Matched-quality content controls use
 their linked frozen settings. [Current packet sizes](../benchmarks/WARM-VP8-DIRECTION-COVERAGE.md)
 and per-codec reports accompany time/allocation evidence; size parity remains open.

@@ -4,7 +4,8 @@
 
 - Smaller lossy WebP output through admitted 16x16 luma prediction, grouped DC
   coding, full-direction reconstruction-based luma/chroma decisions and whole-frame entropy
-  modeling at higher efforts; broader compression parity remains open.
+  modeling at higher efforts, plus exact compressed alpha without another frame
+  buffer; broader compression parity remains open.
 
 - Coverage-based OpenType contextual substitution and validated zero default-instance
   positioning corrections for supplied TrueType text.

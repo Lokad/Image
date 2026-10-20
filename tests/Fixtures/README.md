@@ -53,6 +53,10 @@ identical. With the manifest's registered original FFmpeg executable, use
 `dotnet tools/Fixtures/bin/Release/net10.0/Fixtures.dll tests/Fixtures
 --refresh-managed-vp8` to refresh only managed outputs. The command verifies
 original input hashes and keeps all other fixture records and corpus counts.
+The exact-alpha compression encoder keeps these frozen decoder packets unchanged.
+The replay test requires unchanged source/options and VP8 payloads, identical
+decoded pixels and smaller complete packets when replacing raw ALPH with compressed
+ALPH; unchanged outputs still match their original packet hashes.
 
 Additional EXIF controls are generated during tests by `tools/Shared/OriginalExif.cs`;
 they do not change these frozen corpus counts. The original wrapper writes one

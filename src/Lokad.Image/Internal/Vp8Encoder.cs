@@ -114,7 +114,9 @@ internal static partial class Vp8Encoder
         context.Release(source.MemoryBytes + reconstructed.MemoryBytes);
         using var header = BuildHeader(q, modes, chromaModes, columns, rows,
             model is null ? Vp8Tables.CoefficientProbabilities : model.Probabilities, context);
-        WriteContainer(image.Width, image.Height, alpha, header.Bytes, tokens.Bytes, output, context);
+        using var compressedAlpha = alpha is null ? null
+            : WebpLosslessEncoder.AlphaEncoding.TryCreate(alpha, image.Width, options.Effort, context);
+        WriteContainer(image.Width, image.Height, alpha, compressedAlpha, header.Bytes, tokens.Bytes, output, context);
         context.Release(metadataBytes + 4096);
     }
 
@@ -358,10 +360,12 @@ internal static partial class Vp8Encoder
         }
     }
 
-    private static void WriteContainer(int width, int height, byte[]? alpha, ReadOnlySpan<byte> header,
+    private static void WriteContainer(int width, int height, byte[]? alpha,
+        WebpLosslessEncoder.AlphaEncoding? compressedAlpha, ReadOnlySpan<byte> header,
         ReadOnlySpan<byte> tokens, Stream output, OperationContext context)
     {
-        var payload = 10L + header.Length + tokens.Length; var alphaLength = alpha is null ? 0 : alpha.Length + 1;
+        var payload = 10L + header.Length + tokens.Length;
+        var alphaLength = alpha is null ? 0 : (compressedAlpha?.Length ?? alpha.Length) + 1;
         var total = 20L + payload + (payload & 1) + (alpha is null ? 0 : 26L + alphaLength + (alphaLength & 1));
         if (total > context.Limits.MaxOutputBytes) throw new ImageLimitException(ImageLimitKind.OutputBytes, "WebP encoded output limit exceeded.");
         Span<byte> bytes = stackalloc byte[30]; bytes.Clear();
@@ -373,11 +377,9 @@ internal static partial class Vp8Encoder
             var w = width - 1; var h = height - 1;
             for (var i = 0; i < 3; i++) { bytes[12 + i] = (byte)(w >> (8 * i)); bytes[15 + i] = (byte)(h >> (8 * i)); }
             output.Write(bytes[..18]); "ALPH"u8.CopyTo(bytes); BinaryPrimitives.WriteInt32LittleEndian(bytes[4..], alphaLength);
-            output.Write(bytes[..8]); output.WriteByte(0); // Raw alpha, no predictor or preprocessing.
-            for (var offset = 0; offset < alpha.Length; offset += Math.Min(65536, alpha.Length - offset))
-            {
-                var size = Math.Min(65536, alpha.Length - offset); context.Work(size); output.Write(alpha.AsSpan(offset, size));
-            }
+            output.Write(bytes[..8]); output.WriteByte(compressedAlpha is null ? (byte)0 : (byte)5);
+            if (compressedAlpha is not null) compressedAlpha.Write(alpha, width, output);
+            else WritePartition(alpha, output, context);
             if ((alphaLength & 1) != 0) output.WriteByte(0);
         }
         bytes.Clear(); "VP8 "u8.CopyTo(bytes); BinaryPrimitives.WriteInt32LittleEndian(bytes[4..], (int)payload);

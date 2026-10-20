@@ -216,9 +216,9 @@ def render():
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-caller-mcu-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-CALLER-MCU.md', verification='Gap (short; qualified)'),
         row('WebP VP8, opaque‡', 'warm-vp8-forward-dct-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8-FORWARD-DCT.md', verification='Gap (short; qualified)'),
         row('WebP VP8, opaque from RGBA16‡', 'warm-vp8-forward-dct-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-FORWARD-DCT.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 + alpha‡', 'warm-vp8-forward-dct-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8-FORWARD-DCT.md', True),
-        row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8-forward-dct-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8-FORWARD-DCT.md', True),
-        row('WebP VP8 + alpha‡, caller work budget32M', 'warm-vp8-forward-dct-evidence.json', ['cases', 'EncodeBudget8', -1], 'WARM-VP8-FORWARD-DCT.md', True),
+        row('WebP VP8 + alpha‡', 'vp8-compressed-alpha-evidence.json', ['observations', 0], 'WARM-VP8-COMPRESSED-ALPHA.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alpha from RGBA16‡', 'vp8-compressed-alpha-evidence.json', ['observations', 1], 'WARM-VP8-COMPRESSED-ALPHA.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-compressed-alpha-evidence.json', ['observations', 2], 'WARM-VP8-COMPRESSED-ALPHA.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-CODE-COST.md', True),
@@ -334,7 +334,8 @@ def render():
     confidence_count = sum(' | Confidence open |' in value for value in producer_rows)
     gap_count = sum(' | Gap' in value for value in producer_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in producer_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count == 239
+    cost_count = sum(' | Cost screen (CPU parity deferred) |' in value for value in producer_rows)
+    assert parity_count + confidence_count + gap_count + reconfirm_count + cost_count == 239
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-20. Priority: **complete-packet compression at the frozen quality
@@ -342,7 +343,7 @@ gates**, lossy WebP first, then lossless WebP. Meaningful verified incremental
 gains may cost more CPU. Warm single-CPU parity (independently confirmed upper≤1x)
 remains a deferred objective; speed-only work and repeated confirmations wait
 while compression gates remain open. The 239 numeric rows retain tested-producer evidence: **{parity_count} passes,
-{gap_count} gaps and {confidence_count} confidence-open case**. The finite
+{gap_count} gaps, {confidence_count} confidence-open case and {cost_count} short cost screens**. The finite
 [material checklist](../benchmarks/WARM-COVERAGE.md) has 256 named cases, 17 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; compression currently takes precedence over CPU parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
@@ -465,13 +466,25 @@ private package/examples qualify. Two short cost screens record3.491x/2.360x
 and589,432/570,136 B/op; CPU parity remains deferred. Relevant unchanged proofs
 are reused, with no independent timing repeats or workload grid.
 The [seven-control size ledger](../benchmarks/WARM-VP8-SIZE-COVERAGE.md) retains
-**five other fixed-q100 packet gaps**, including raw alpha and a work32M branch.
+**five other fixed-q100 packet gaps**, including the work32M branch.
 Those are benchmark inputs, not the defaultquality85. Primary parity is not
 whole-codec parity; these larger lossy gaps precede lossless work. The earlier
 [intra16/Y2](../benchmarks/WARM-VP8-INTRA16-COMPRESSION.md),
 [whole-frame entropy](../benchmarks/WARM-VP8-FULL-MODEL-COMPRESSION.md) and
 [reconstructed-mode](../benchmarks/WARM-VP8-RECONSTRUCTED-MODES.md) milestones
 retain their producer-specific data. Only the two primary encode rows change.
+The subsequent [compressed-alpha milestone](../benchmarks/WARM-VP8-COMPRESSED-ALPHA.md)
+saves18,504 B on each existing alpha8/16/work32M packet, now268,028/268,028/452,932 B
+against98,590 B. VP8 payloads, decoded RGBA and quality remain exact; references,
+settings and tolerances are unchanged. It adds2KiB admitted workspace without
+a filtered/RGBA frame or encoded-alpha buffer.4,613tests/OS,146internal+3public
+scalar checks and the same actual package/examples pass. Three short cost screens
+record0.400/0.402/0.441x and2,174,702/2,174,520/2,681,364 B/op; native allocations
+remain unmeasured. They replace three prior independent observations, without
+claiming current independent CPU parity. The fixed scope remains256 cases:
+120independent/119short observations. All five procedural compression gates remain
+open. Primary opaque content and unrelated algorithms reuse unchanged evidence.
+
 The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
 rejects a smaller packet with excessive quality loss and a quality-preserving
 variant with immaterial byte savings. These historical trials do not alter the
@@ -558,7 +571,7 @@ RGBA samples remain exact. Single-component grayscale JPEG uses the approved
 benchmark-only **SIMD libjpeg-turbo3.1.4.1** reference; FFmpeg emits three components.
 Production stays safe managed .NET 10 without dependencies or native bindings.
 
-‡ Default VP8 comparisons freeze managed/native quality 100/75 and effort 4, retaining
+‡ Procedural VP8 benchmark inputs freeze managed/native quality 100/75 and effort 4, retaining
 the 0.25 dB source-quality gate and exact alpha. Matched-quality content controls use
 their linked frozen settings. [Current packet sizes](../benchmarks/WARM-VP8-DIRECTION-COVERAGE.md)
 and per-codec reports accompany time/allocation evidence; size parity remains open.

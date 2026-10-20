@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "project": "Lokad.Image",
-  "scope": "Finite reconciliation of the seven already declared lossy WebP encode controls; no new performance case, encoding/timing job, source raster or quality grid.",
+  "scope": "Finite reconciliation of seven already declared lossy WebP controls, including accepted exact compressed ALPH on three existing alpha/work32M boundaries; no new workload or quality grid.",
   "acceptance": "Complete encoded packet <= fixed reference with existing source-quality/decoder/alpha and ownership/resource gates. Passing primary controls does not establish whole-codec parity.",
   "primaryMatchedControlPasses": 2,
   "otherDeclaredPacketGaps": 5,
@@ -68,54 +68,57 @@
     },
     {
       "case": "WarmWebp/Encode8",
-      "managedPacketBytes": 286532,
+      "managedPacketBytes": 268028,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "warm-vp8-forward-dct-evidence.json",
+      "evidence": "vp8-compressed-alpha-evidence.json",
       "observationPath": [
-        "cases",
-        "Encode8",
-        -1
+        "observations",
+        0
       ],
-      "validity": "Retained C40 packet/quality receipt; q0 branch unchanged by C53-C57. Explicit fixed-q100 control, not the default quality85."
+      "validity": "C58 qualified exact compressed ALPH; same VP8 payload, decoded RGBA, source quality and fixed100/native75/effort4. Packet gate remains open.",
+      "previousManagedPacketBytes": 286532,
+      "alphaPayloadBytes": 114363
     },
     {
       "case": "WarmWebp/Encode16",
-      "managedPacketBytes": 286532,
+      "managedPacketBytes": 268028,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "warm-vp8-forward-dct-evidence.json",
+      "evidence": "vp8-compressed-alpha-evidence.json",
       "observationPath": [
-        "cases",
-        "Encode16",
-        -1
+        "observations",
+        1
       ],
-      "validity": "Retained C40 packet/quality receipt; q0 branch unchanged by C53-C57. Explicit fixed-q100 control, not the default quality85."
+      "validity": "C58 qualified exact compressed ALPH; same VP8 payload, decoded RGBA, source quality and fixed100/native75/effort4. Packet gate remains open.",
+      "previousManagedPacketBytes": 286532,
+      "alphaPayloadBytes": 114363
     },
     {
       "case": "WarmWebp/EncodeBudget8",
-      "managedPacketBytes": 471436,
+      "managedPacketBytes": 452932,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "warm-vp8-forward-dct-evidence.json",
+      "evidence": "vp8-compressed-alpha-evidence.json",
       "observationPath": [
-        "cases",
-        "EncodeBudget8",
-        -1
+        "observations",
+        2
       ],
-      "validity": "Retained C40 packet/quality receipt; q0 branch unchanged by C53-C57. Explicit fixed-q100 control, not the default quality85."
+      "validity": "C58 qualified exact compressed ALPH; same VP8 payload, decoded RGBA, source quality and fixed100/native75/effort4. Packet gate remains open.",
+      "previousManagedPacketBytes": 471436,
+      "alphaPayloadBytes": 114363
     }
   ]
 }

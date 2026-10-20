@@ -1,9 +1,10 @@
 # Material warm coverage
 
 Updated 2026-10-20. The **warm single-CPU parity objective remains open**:
-71 independent passes,167 measured mean gaps and one confidence-open case across
+68 independent passes,167 measured mean gaps, one confidence-open case and three
+compression-first short cost screens across
 239 numeric rows. The [three-table summary](../docs/benchmark.md)
-contains123 independent observations and116 qualified shorts.17named required
+contains120 independent observations and119 qualified shorts.17named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 Compression now precedes CPU parity: lossy WebP first, then lossless WebP.
 Accept verified incremental packet savings within unchanged quality/resource gates;
@@ -1108,3 +1109,17 @@ short screens, CPU parity deferred. No case is added:256=239numeric+17pending,
 71passes/167gaps/1confidence-open,123independent/116short,23current/216historical,
 31metadata confirmations unchanged. q0/other codec/edit/font/inspection/frozen
 input evidence retains its original valid scope.
+
+
+The [compressed-alpha milestone](WARM-VP8-COMPRESSED-ALPHA.md) supersedes exactly
+three existing VP8 alpha8/16/work32M rows with current short cost screens. Each
+packet saves18,504 B with exact VP8 payloads, decoded RGBA and source quality:
+268,028/268,028/452,932 B versus98,590 B. All five procedural size gates remain
+open. Costs0.400/0.402/0.441x and2,174,702/2,174,520/2,681,364 B/op are recorded;
+CPU parity is deferred, so the three prior independent confirmations remain
+historical rather than being relabeled current passes. Counts256=239numeric+
+17pending,68independent passes/167gaps/1confidence-open/3cost screens,
+120independent/119short,23current/216historical and31metadata confirmations.
+4,613tests/OS,146internal+3public scalar and the same actual package/examples pass.
+Frozen decoder corpus packets remain unchanged. Opaque q0, primary photograph/
+diagram, other codecs/edit/font/inspection paths reuse unchanged relevant proofs.

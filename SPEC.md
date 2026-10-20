@@ -1397,8 +1397,16 @@ its normalized alpha before matrix conversion and rounding. Fully transparent
 cells retain their original unweighted average; opaque and uniform-opacity
 cells keep the same result. Luma and exact normalized alpha are unchanged.
 Odd and padded edges
-extend the last source pixel. Alpha is normalized once and preserved exactly in
-a raw unfiltered ALPH chunk. Optional metadata is stripped.
+extend the last source pixel. Alpha is normalized once and preserved exactly.
+At nonzero effort, sufficient local work/memory permits a headerless VP8L green
+plane with horizontal alpha filtering and previous-pixel copies. A count pass
+selects compression only when the complete padded ALPH chunk is smaller than raw.
+The two passes borrow the existing alpha plane: no filtered/RGBA raster or encoded
+alpha buffer is allocated. Their fixed 2 KiB workspace is reserved through the
+same shared root before allocation and released when container writing ends.
+Local admission is decided before attempting compression; insufficient local
+allowance retains raw unfiltered alpha. Shared refusal, cancellation or a failed
+attempt terminates the operation without fallback. Optional metadata is stripped.
 Source conversion uses bounded views of the existing pixel storage, without a
 normalized-raster allocation. The first row work check precedes storage access;
 all row charges, matrix evaluation order and alpha-weighted rounding are retained.

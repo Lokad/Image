@@ -7,7 +7,7 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class Vp8EncodeTests
 {
     [Fact]
-    public void ManagedCorpusReplaysFromDeclaredSourcesAndOptions()
+    public void ManagedCorpusReplaysDeclaredPixelsAndUnchangedVp8Payloads()
     {
         var root = new DirectoryInfo(AppContext.BaseDirectory);
         while (root is not null && !File.Exists(Path.Combine(root.FullName, "tests", "Fixtures", "vp8-manifest.json"))) root = root.Parent;
@@ -28,12 +28,39 @@ public sealed class Vp8EncodeTests
                 Lossless = options.GetProperty("lossless").GetBoolean(), Quality = options.GetProperty("quality").GetInt32(),
                 Effort = options.GetProperty("effort").GetInt32()
             });
-            Assert.Equal(fixture.GetProperty("encodedHash").GetString(), Hash(output.ToArray()));
+            var encoded = output.ToArray();
+            if (Hash(encoded) != fixture.GetProperty("encodedHash").GetString())
+            {
+                // Keep the frozen decoder corpus and its original packet hashes.
+                // Exact alpha compression may change only ALPH, never the VP8
+                // payload or reconstructed pixels of these declared controls.
+                var frozen = File.ReadAllBytes(Path.Combine(root.FullName, "tests", "Fixtures",
+                    fixture.GetProperty("name").GetString() + ".webp"));
+                Assert.Equal(fixture.GetProperty("encodedHash").GetString(), Hash(frozen));
+                Assert.True(fixture.GetProperty("alpha").GetBoolean());
+                Assert.True(options.GetProperty("effort").GetInt32() > 0);
+                Assert.Equal(0, Chunk(frozen, "ALPH"u8)[0]); Assert.Equal(5, Chunk(encoded, "ALPH"u8)[0]);
+                Assert.Equal(Chunk(frozen, "VP8 "u8).ToArray(), Chunk(encoded, "VP8 "u8).ToArray());
+                using var expected = ImageCodec.Decode(frozen); using var actual = ImageCodec.Decode(encoded);
+                Assert.Equal(OriginalPixels.Bytes(expected), OriginalPixels.Bytes(actual));
+                Assert.True(encoded.Length < frozen.Length);
+            }
         }
         Assert.Equal(42, count);
     }
 
     private static string Hash(byte[] data) => Convert.ToHexStringLower(SHA256.HashData(data));
+
+    private static ReadOnlySpan<byte> Chunk(byte[] encoded, ReadOnlySpan<byte> name)
+    {
+        for (var offset = 12; offset < encoded.Length;)
+        {
+            var length = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(encoded.AsSpan(offset + 4));
+            if (encoded.AsSpan(offset, 4).SequenceEqual(name)) return encoded.AsSpan(offset + 8, length);
+            offset += 8 + length + (length & 1);
+        }
+        throw new InvalidOperationException("Declared WebP chunk is missing.");
+    }
 
     [Theory]
     [InlineData(1, 0, false)] [InlineData(50, 1, true)] [InlineData(85, 4, false)] [InlineData(100, 6, true)]
