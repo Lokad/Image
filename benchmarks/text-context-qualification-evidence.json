@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "scope": "Coverage-based contextual substitution, GSUB type5 format3, including extensions. Authored format fixtures and existing twelve licensed public font controls only.",
+  "productionChanged": true,
+  "noTiming": true,
+  "qualification": {
+    "windows": {
+      "productionSha256": "2f94f869c520fb8afdf94a223344a110bb092893437cf9451a074e476d910111",
+      "counts": [
+        1690,
+        1959,
+        932
+      ],
+      "fullPassed": 4581,
+      "scalar": {
+        "internal": 58
+      },
+      "coreBuilds": 1,
+      "internalTestBuilds": 1,
+      "publicTestBuilds": 0,
+      "differentialHarnessNativeSelectorBuilds": 0,
+      "productionBuildsAfterFreeze": 0,
+      "frozenIdentities": {
+        "Lokad.Image.dll": "2f94f869c520fb8afdf94a223344a110bb092893437cf9451a074e476d910111",
+        "Lokad.Image.pdb": "454fc8c75f44acd8af5cbd92231931dc8716808e12bd86a5a643d5163cff8e6e",
+        "Lokad.Image.PublicApi.Tests.dll": "db982482cb1fb11202d3c16053d18d8751403a911eb56a9dcbc05744f8737c1b",
+        "Lokad.Image.PublicApi.Tests.pdb": "b2290e996a2e27203df0e8f8d959e30f24d59bd62d8af2ab3ffd16c26baf04d6",
+        "Lokad.Image.Tests.dll": "a3b22f7b1a557db7fd5a5f39d71228fcf3b38967e6acebd35ffb2c8f6d831b12",
+        "Lokad.Image.Tests.pdb": "784dc92ed9ac74d4061355957dbb05e2893befc1b23ff77f9447a85e7953ba7e",
+        "Lokad.Image.xml": "5256fbfd165a5b5420898e2bdc684f8f2e948d4c26aaa9fdd49479f0a6861799"
+      },
+      "actualPackageSha256": "ae5647bc47c5bc831f34a92d927ee75472b736617dae521eab0840d0336478a2",
+      "sameActualPackageConsumerAndThreeExamples": true,
+      "existingTextReferenceControls": 12,
+      "publicTestBinaryReused": true
+    },
+    "linux": {
+      "productionSha256": "6074f42a61e893381af21b2740cd256f23ab4dc7195af316106d43b9fe82409d",
+      "sourceSha256": "eebfa4284e8357a9689a383dfea14aa563a92ac88a3fc2e659bcc8f519017c1b",
+      "counts": [
+        1690,
+        1959,
+        932
+      ],
+      "fullPassed": 4581,
+      "scalarInternal": 58,
+      "coreBuilds": 1,
+      "internalTestBuilds": 1,
+      "publicTestBuilds": 0,
+      "differentialHarnessNativeSelectorBuilds": 0,
+      "productionBuildsAfterFreeze": 0,
+      "existingTextReferenceControls": 12,
+      "frozenIdentities": {
+        "Lokad.Image.pdb": "0105e7868100a0edfc6868f0353afc30b0663d47f486f37accdac10cbca484a4",
+        "Lokad.Image.xml": "77bc2af97424a7077a6ea2a237a198a17a849e9eb54e5626f2124aeaaa28f619",
+        "Lokad.Image.deps.json": "267fa2cc32c306d8e3a84c84a5d771f62ef2aedfb2a947e2af70e999b29c9eb8",
+        "Lokad.Image.PublicApi.Tests.dll": "c809f6ee230ac82fc10551176be3bbd7036afcb4bd9405f5e0f1311b648e03ee",
+        "Lokad.Image.Tests.dll": "4b9a9b39203961243f4076b2d0c13d5418c070c4c365eda7cc4379d0342cbc42",
+        "Lokad.Image.PublicApi.Tests.pdb": "cab48b5ba49004c1e04c6bd8651dc43ba748455210250e91907687727c5e22bd",
+        "Lokad.Image.dll": "6074f42a61e893381af21b2740cd256f23ab4dc7195af316106d43b9fe82409d",
+        "Lokad.Image.Tests.pdb": "5196ab2b99eeddd9cd7be8179ed28fd931bf335adc7ec06d51e9b2b100d835f8"
+      },
+      "actualPackageSha256": "ae5647bc47c5bc831f34a92d927ee75472b736617dae521eab0840d0336478a2",
+      "sameActualPackageConsumerAndThreeExamples": true,
+      "packagedSourceMetadataAsyncRootAndIndependentOutputs": true,
+      "checkoutBytes": 4993243489
+    }
+  },
+  "rawArtifacts": {
+    "windows": {
+      "file": "c50a-qualified-windows.tar.gz",
+      "bytes": 1957981,
+      "sha256": "057f9f7fb25db579933301b642726446547ec3bc9822a7e15e3563f86b4ec2f9",
+      "actualPackageSha256": "ae5647bc47c5bc831f34a92d927ee75472b736617dae521eab0840d0336478a2"
+    },
+    "linux": {
+      "file": "c50a-qualified-linux.tar.gz",
+      "bytes": 1958867,
+      "sha256": "4e95050e60ef534e5e0c61ddbf1e33abadf1957a84ffcb15dab866c82175ef61",
+      "actualPackageSha256": "ae5647bc47c5bc831f34a92d927ee75472b736617dae521eab0840d0336478a2",
+      "checkoutBytes": 4990844288
+    }
+  },
+  "correctness": "Coverage sets; ignored marks and run boundaries; ordered nested actions after ligature deletion; complete input consumption and empty actions; truncated/mutated programs; typed resource and cancellation cleanup through existing shaping suites; packaged public layout/rendering after font disposal.",
+  "memory": "No added heap storage or copies. Reuses borrowed font tables, admitted shaping buffer/selector and the same operation context; all count/range/lookups charge existing work limits.",
+  "evidenceInvalidation": "Only the previously unsupported GSUB type5 format3 path changes. Existing twelve public font comparisons freshly pass on both OSes. Codec/inspection/transform/drawing kernels and benchmark inputs/settings unchanged, so identified performance evidence is reused. No warm row or matrix expansion. Full parity/readiness remains open."
+}

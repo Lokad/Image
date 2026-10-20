@@ -212,7 +212,8 @@ Malformed UTF-16 is an argument error; missing scalars use glyph zero.
 
 OpenType mode uses the supplied face's default language system, with composition,
 localized forms, Arabic joining forms, required/contextual/standard ligatures and
-mark positioning. GSUB single/ligature/chained-context/extensions and GPOS
+mark positioning. GSUB single/ligature/chained-context/extensions, coverage-based
+contextual substitution (type 5 format 3), and GPOS
 single/pair/mark-base/mark-ligature/mark-mark/extensions are implemented. Selected
 cursive/contextual positioning, other lookup families and nonzero device/variation
 adjustments raise typed `FontTable` unsupported failures. Other scripts and missing

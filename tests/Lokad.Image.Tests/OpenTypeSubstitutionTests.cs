@@ -119,6 +119,70 @@ public sealed class OpenTypeSubstitutionTests
         engine.ApplyFeature(Latin, 0, Compose, run); Assert.Equal(new[] { 1, 9, 8, 4 }, Glyphs(run));
     }
 
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void CoverageSequenceContextMatchesSetsSkipsMarksAndHonorsRunBoundary(bool extension)
+    {
+        var rule = SequenceCoverages([[2, 5], [3]], (1, 1));
+        var bytes = Substitution([new(extension ? 7 : 5, 8, [extension ? Extension(5, rule) : rule]),
+            new(1, 0, [Single([3], [8])])], [new("ccmp", [0])]);
+        var definitions = Definitions(ClassRanges((2, 5, 1), (7, 7, 3)));
+        using var context = Context(); using var run = Buffer(context, 2, 7, 3, 5, 3, 2, 3);
+        using var engine = new OpenTypeSubstitution(bytes, definitions, 64, context);
+        engine.ApplyFeature(Latin, 0, Compose, run, start: 0, length: 6);
+        Assert.Equal(new[] { 2, 7, 8, 5, 8, 2, 3 }, Glyphs(run));
+        Assert.Equal(2, run[2].SourceOffset); Assert.Equal(2, run[2].Cluster);
+    }
+
+    [Fact]
+    public void CoverageSequenceActionsAddressTheResultOfEarlierLigatureActions()
+    {
+        var rule = SequenceCoverages([[1], [2], [3], [4]], (1, 1), (2, 2));
+        var bytes = Substitution([new(5, 0, [rule]), new(4, 0, [Ligature(2, (9, [3]))]),
+            new(1, 0, [Single([4], [8])])], [new("ccmp", [0])]);
+        using var context = Context(); using var run = Buffer(context, 1, 2, 3, 4, 4);
+        using var engine = new OpenTypeSubstitution(bytes, default, 64, context);
+        engine.ApplyFeature(Latin, 0, Compose, run); Assert.Equal(new[] { 1, 9, 8, 4 }, Glyphs(run));
+    }
+
+    [Fact]
+    public void CoverageSequenceEmptyActionsConsumeInputAndStopFallback()
+    {
+        var noAction = SequenceCoverages([[2], [2]]);
+        var action = SequenceCoverages([[2]], (0, 1));
+        var bytes = Substitution([new(5, 0, [noAction, action]), new(1, 0, [Single([2], [3])])], [new("ccmp", [0])]);
+        using var context = Context(); using var run = Buffer(context, 2, 2, 2);
+        using var engine = new OpenTypeSubstitution(bytes, default, 64, context);
+        engine.ApplyFeature(Latin, 0, Compose, run); Assert.Equal(new[] { 2, 2, 3 }, Glyphs(run));
+    }
+
+    [Fact]
+    public void CoverageSequenceMalformedProgramsRetainTypedFailureAndCleanup()
+    {
+        var good = SequenceCoverages([[2], [3]], (1, 1));
+        var programs = new List<byte[]> { Words(3, 0, 0), SequenceCoverages([[2]], (1, 1)),
+            SequenceCoverages([[2]], (0, 7)) };
+        for (var size = 0; size < good.Length; size++) programs.Add(good[..size]);
+        for (var offset = 0; offset < good.Length; offset += 2)
+        {
+            var mutated = good.ToArray(); Write(mutated, offset, 0xFFFF); programs.Add(mutated);
+        }
+        using var budget = new TestMemoryBudget(100_000);
+        foreach (var sub in programs)
+        {
+            using (var context = Context(new() { MemoryBudget = budget, MaxWork = 20_000 }))
+            using (var run = Buffer(context, 2, 3))
+            using (var engine = new OpenTypeSubstitution(Substitution([new(5, 0, [sub]), new(1, 0, [Single([3], [8])])],
+                [new("ccmp", [0])]), default, 64, context))
+            {
+                try { engine.ApplyFeature(Latin, 0, Compose, run); }
+                catch (Exception error) { Assert.True(error is ImageDataException or UnsupportedImageException or ImageLimitException, error.ToString()); }
+            }
+            Assert.Equal(0, budget.Bytes);
+        }
+        Assert.False(budget.IsDisposed);
+    }
+
     [Fact]
     public void ContextConsumesItsWholeInputAndEmptyActionRulesStopSubtableFallback()
     {

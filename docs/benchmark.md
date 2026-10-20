@@ -144,6 +144,12 @@ agree on all 21 original cases, including deliberately opaque CRC/Deflate. Timin
 awaits the explicitly labeled bounded FFmpeg AVIO/descriptor adapter decision;
 complete-packet parsing would add whole-input buffering outside this boundary.
 Full warm parity and release readiness remain open.
+The [contextual font lookup extension](text-context-qualification.md) passes4,581
+correctness tests/OS,58 affected scalar checks, the existing twelve public font
+controls and the same actual package/examples on both platforms. It changes no
+codec/edit/inspection benchmark path; existing timing evidence is reused and the
+unmeasured text boundaries remain open.
+
 
 JPEG caller-sample packets are **58,823/58,910 B** grayscale (managed/SIMD libjpeg-turbo),
 **74,040/52,093 B** Original RGB420, and **48,701/52,093 B** opt-in CompactColor

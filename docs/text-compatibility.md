@@ -32,3 +32,10 @@ The initial six-passing/six-open audit is retained for comparison:
 `p2-text-compatibility.tar.gz` SHA-256
 `8827f8e2116d252d1f1091db41a0a644278199411e4538b74cfe6fb288500a30`;
 raw `3cd5092c253d78faae307390371d16fb3d7f1a2f624ee729f9127056c97ab87e`.
+
+
+[Coverage-based contextual substitution](text-context-qualification.md) adds GSUB
+type5 format3, verified with authored programs and the same twelve controls on
+both platforms. This extends lookup support without broadening the named public
+font set; variation-axis selection and nonzero positioning adjustments remain
+unsupported as specified.

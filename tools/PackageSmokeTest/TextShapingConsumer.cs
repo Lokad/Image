@@ -32,5 +32,21 @@ internal static class TextShapingConsumer
             if (fitted.FontSize != 5 || !fitted.Bounds.Translate(-fitted.Bounds.X, -fitted.Bounds.Y).FitsInside(20, 5))
                 throw new Exception("Package fitting size/bounds differ.");
         if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Package fitting ownership differs.");
+        var contextBytes = AuthoredTrueType.Build(tableOverrides: new Dictionary<string, byte[]>
+        {
+            ["GSUB"] = Substitution([new(5, 0, [SequenceCoverages([[2], [3]], (0, 1))]),
+                new(1, 0, [Single([2], [4])])], [new("ccmp", [0])])
+        });
+        var contextFont = TrueTypeFont.Load(contextBytes, limits);
+        using (var contextLayout = TextLayout.Create(contextFont, "AV", new() { FontSize = 10, Shaping = TextShaping.OpenType, Limits = limits }))
+        {
+            if (contextLayout.GlyphCount != 2 || contextLayout.GetGlyph(0).GlyphIndex != 4
+                || contextLayout.GetGlyph(1).GlyphIndex != 3 || contextLayout.GetGlyph(1).SourceOffset != 1)
+                throw new Exception("Package contextual substitution differs.");
+            contextFont.Dispose();
+            using var canvas = ImageBuffer.Create(30, 20, 8, limits);
+            ImageDrawing.DrawText(canvas, contextLayout, 0, 0, RgbaColor.From8(1, 2, 3), limits);
+        }
+        if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Package contextual-layout ownership differs.");
     }
 }

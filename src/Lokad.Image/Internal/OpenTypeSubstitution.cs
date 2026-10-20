@@ -82,6 +82,7 @@ internal sealed class OpenTypeSubstitution : IDisposable
         {
             case 1: return Single(sub, glyphs, at);
             case 4: return Ligature(sub, glyphs, at, inputEnd, flags, filteringSet);
+            case 5: return SequenceContext(sub, glyphs, at, inputEnd, flags, filteringSet, depth, out next);
             case 6: return Context(sub, glyphs, at, inputEnd, flags, filteringSet, depth, out next);
             case 7:
                 if (table.U16(sub) != 1) throw OpenTypeTable.Unsupported("Unsupported OpenType substitution extension format.");
@@ -188,6 +189,23 @@ internal sealed class OpenTypeSubstitution : IDisposable
         first.Glyph = replacement; first.SourceOffset = sourceStart; first.SourceLength = sourceEnd - sourceStart;
         first.Cluster = cluster; first.Ligature = id; first.Component = 0; first.ComponentCount = components;
         glyphs[matched[0]] = first;
+    }
+
+    // OpenType chapter2 SequenceContextFormat3. Reuse the chained-context
+    // coverage matcher and ordered actions without inventing back/look ranges.
+    private bool SequenceContext(int sub, ShapingBuffer glyphs, int at, int inputEnd,
+        int flags, int filteringSet, int depth, out int next)
+    {
+        next = at + 1;
+        if (table.U16(sub) != 3) throw OpenTypeTable.Unsupported("Unsupported OpenType contextual substitution format.");
+        var count = table.U16(sub + 2); table.Items(count);
+        if (count == 0) throw OpenTypeTable.Bad("An OpenType context has no input.");
+        var actions = table.U16(sub + 4); table.Items(actions);
+        var coverage = sub + 6; table.Range(coverage, count * 2L + actions * 4L);
+        if (!MatchCoverage(glyphs, sub, at, 1, inputEnd, coverage, count, flags, filteringSet, out var last)) return false;
+        var end = last + 1;
+        ApplyActions(glyphs, at, ref end, coverage + count * 2, actions, flags, filteringSet, depth);
+        next = end; return true;
     }
 
     private bool Context(int sub, ShapingBuffer glyphs, int at, int inputEnd, int flags, int filteringSet, int depth, out int next)

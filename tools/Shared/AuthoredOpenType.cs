@@ -98,6 +98,12 @@ internal static class AuthoredOpenType
         foreach (var glyph in look) { children.Add((p, Coverage(glyph))); p += 2; }
         return Attach(header, children.ToArray());
     }
+    internal static byte[] SequenceCoverages(int[][] input, params (int Sequence, int Lookup)[] actions)
+    {
+        var header = Words([3, input.Length, actions.Length, .. new int[input.Length],
+            .. actions.SelectMany(a => new[] { a.Sequence, a.Lookup })]);
+        return Attach(header, input.Select((glyphs, i) => (6 + i * 2, Coverage(glyphs))).ToArray());
+    }
     internal static byte[] Extension(int type, byte[] child)
     {
         var bytes = new byte[8 + child.Length]; Write(bytes, 0, 1); Write(bytes, 2, type);
