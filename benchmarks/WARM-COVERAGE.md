@@ -1033,3 +1033,10 @@ Scope becomes256=239numeric+17pending;73passes/165gaps/1confidence-open,
 125independent/114short,23current/216historical numeric rows,31metadata confirmations
 unchanged.4,596tests/OS,105affectedscalar/OS,12publicfontcontrols/OS and the same
 actual0.2.0 package/three examples qualify; codec/edit/inspection paths unchanged.
+
+
+The [VP8 activity audit](WARM-VP8-ACTIVITY-AUDIT.md) reuses exactly the frozen
+photograph/diagram controls and native packets. Header quantizers correlate with
+source gradients, supporting one source-only spatial-quantization candidate.
+No production, quality-setting, timing/allocation or checklist change follows.
+All current size gates remain open; no image or quality grid is added.
