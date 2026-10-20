@@ -389,8 +389,12 @@ retain their respective producers. No selected row or full/package proof repeats
 The [current resident PNG checks](../benchmarks/WARM-CURRENT-RESIDENT-PNG.md)
 resolve those two old measurements without builds or repeated qualification;
 RGBA8 is1.134x/upper1.330x and RGBA16 is1.039x/upper1.064x.
-Both remain gaps; no longer repeat. Next: bound an exact paired signed16 byte
-Lanczos primitive before coding, retaining the original certificate and pixels.
+Both remain gaps; no longer repeat. The
+[paired-integer Lanczos trial](../benchmarks/WARM-LANCZOS3-PAIRED-BYTE-TRIAL.md)
+parks its small3.5% point-mean gain; once-prepared factor packing is neutral.
+Both variants retain exact pixels, original controls and admitted storage;
+accepted production is restored with no full/package repeat. Next: one current
+sparse-2D CMYK JPEG diagnostic before another substantial primitive.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial

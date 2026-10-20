@@ -19,6 +19,13 @@ score guards pass. No code, harness, selector, native or package builds. Both me
 remain above parity, so no longer repeat. Only these two historical rows become
 current:40 current/198 historical; other PNG boundaries retain their named scope.
 
+The [paired-integer Lanczos byte trial](WARM-LANCZOS3-PAIRED-BYTE-TRIAL.md)
+parks the small3.5% point-mean gain; once-prepared coefficient packing is neutral.
+Exact pixels, independent integer envelopes, retained ownership and all four
+score guards pass. Both experimental sources/binaries are archived; accepted
+production/tests are restored exactly. No selected row, finite count or current
+qualification changes; no full/package repeat for parked code.
+
 The [materialized Deflate cursor](WARM-DEFLATE-MATERIALIZED-CURSOR.md) now improves
 the two current PNG decode rows: two retained outputs1.265x/upper1.304x,
 2,574,671B/op (15.8% faster), and async input1.113x/upper1.176x,12,784B/op
