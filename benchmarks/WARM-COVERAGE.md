@@ -998,3 +998,13 @@ rows refresh; all coverage counts remain unchanged. Next: one current Reduce8
 Lanczos diagnostic and feasibility of wider FP32 horizontal arithmetic with
 rigorous conversion/FMA bounds and the existing exact fallback. The required
 1.548x byte/1.588x word gaps remain; rejected word strategies stay retired.
+
+
+The [spatial coding-group round](WARM-VP8L-SPATIAL-ENTROPY.md) supersedes the same
+six lossless encode timings, all independently below parity. Photograph174748/
+160032 B and diagram7636/7234 B retain open size gates.4,575 tests/OS and the same
+actual0.2.0 package/examples qualify; unchanged paths retain evidence. Scope255=
+239 numeric+16 pending and23 current/216 historical-or-pending stay unchanged,
+including31 C43 metadata timings. Existing Opaque8 cached/raw packet170156/121896 B
+is the next bounded size audit: a demonstrated gap on the distinct path skipped
+by LEFT-only grouping, with no new fixture.

@@ -1339,13 +1339,23 @@ only when it reduces complete packet size; otherwise the original cached packet 
 preserved. Both candidate owners stay charged through comparison; unselected trees
 are released promptly. Admission refusal never selects the other candidate. The
 VP8L alpha hint describes the normalized source, independently of residual alpha.
-No general match search or entropy groups are introduced.
+At effort>=4, eligible LEFT-predicted input may additionally use up to nine spatial
+prefix-code groups on fixed8x8 tiles. A source-token histogram and four deterministic
+coding-cost assignments choose the map; complete map/header/body costs retain the
+original packet unless smaller. The token parse, residuals and pixels are unchanged.
+This optional analysis requires an a-priori local/work allowance, including about
+2,754 bytes per tile for temporary counts/indices, map/ranking capacity, and overlapping
+table construction. All substantial storage is charged before allocation through
+the same borrowed root; temporary histograms and unselected tables are promptly
+released. A tighter local allowance selects the existing cached path before shared
+admission. Shared refusal remains terminal. No general match search is introduced.
 
 Other cases retain the fixed-table8KiB path and its opaque zero-bit alpha leaf when
 that saves bytes. Local path selection precedes shared admission; a shared refusal
 is terminal and never triggers the other encoder. The fixed path counts and writes
 in two passes; the cached path gathers frequencies, counts and writes in three,
-or four source passes when comparing prediction. Neighbors are normalized on demand.
+or four source passes when comparing prediction. Spatial grouping adds one source
+histogram pass and bounded map iterations. Neighbors are normalized on demand.
 Both compare resident normalized samples without a row/frame copy or encoded-frame
 staging buffer. Complete RIFF size and padding are checked before caller writes,
 including nonseekable output. Every pass charges work and checks cancellation;

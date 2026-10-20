@@ -11,7 +11,7 @@
 - Optional `CompactColor` JPEG quantization; original defaults and grayscale remain unchanged.
 
 - Smaller lossless WebP output through bounded color-cache and adaptive prefix
-  coding and conditional spatial prediction, preserving exact hidden RGBA and shared
+  coding, conditional prediction and spatial coding groups, preserving exact hidden RGBA and shared
   admission; size parity remains open.
 
 - Faster baseline JPEG decoding with unchanged pixels, work limits and cancellation.

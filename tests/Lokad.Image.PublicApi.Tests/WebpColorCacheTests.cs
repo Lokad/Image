@@ -35,8 +35,10 @@ public sealed class WebpColorCacheTests
     [Fact]
     public void NewPathRespectsLocalOutputAndWorkPreflightWithoutClosingCallerStream()
     {
-        using var source = Source(8); var packet = Encode(source);
-        var limits = new ImageLimits { MaxWorkingBytes = (long)source.Stride * source.Height + 65536, MaxOutputBytes = packet.Length };
+        using var source = Source(8);
+        // Freeze the cached-codec boundary, excluding optional larger analysis.
+        var limits = new ImageLimits { MaxWorkingBytes = (long)source.Stride * source.Height + 65536 };
+        var packet = Encode(source, limits); limits = limits with { MaxOutputBytes = packet.Length };
         using var exact = new NonseekableOutput(); ImageCodec.EncodeWebp(source, exact, new() { Limits = limits });
         Assert.Equal(packet, exact.ToArray()); Assert.True(exact.CanWrite);
         foreach (var (denied, kind) in new[]
@@ -56,16 +58,17 @@ public sealed class WebpColorCacheTests
     {
         const int sourceBytes = 129 * 129 * 4;
         using var root = new TestMemoryBudget(sourceBytes + 65536);
-        using var source = Source(8, new() { MemoryBudget = root });
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = sourceBytes + 65536 };
+        using var source = Source(8, limits);
         Assert.Equal(sourceBytes, root.Bytes);
         using var caller = root.CreateScope(); Assert.True(caller.TryReserve(65536 - 8192, out var held));
         using var rejected = new MemoryStream();
-        var error = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, rejected, new() { Limits = new() { MemoryBudget = root } }));
+        var error = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, rejected, new() { Limits = limits }));
         Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
         Assert.Equal(1, root.Refusals); Assert.Equal(sourceBytes + 65536 - 8192, root.Bytes);
         Assert.Equal(0, rejected.Length); Assert.True(rejected.CanWrite);
         held.Dispose();
-        using var output = new MemoryStream(); ImageCodec.EncodeWebp(source, output, new() { Limits = new() { MemoryBudget = root } });
+        using var output = new MemoryStream(); ImageCodec.EncodeWebp(source, output, new() { Limits = limits });
         Assert.Equal(sourceBytes, root.Bytes); Assert.InRange(root.Peak, sourceBytes + 8193, sourceBytes + 65536);
         Assert.False(root.IsDisposed); source.Dispose(); Assert.Equal(0, root.Bytes);
         using var surviving = ImageCodec.Decode(output.ToArray()); Assert.Equal(129, surviving.Width);
@@ -76,13 +79,14 @@ public sealed class WebpColorCacheTests
     {
         using var root = new TestMemoryBudget(1_000_000);
         using var source = Source(8, new() { MemoryBudget = root }); var charged = root.Bytes;
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = charged + 65536 };
         using var cancellation = new CancellationTokenSource();
         root.Admitted = bytes => { if (bytes > charged + 8192) cancellation.Cancel(); };
         using var rejected = new MemoryStream();
         Assert.Throws<OperationCanceledException>(() => ImageCodec.EncodeWebp(source, rejected,
-            new() { Limits = new() { MemoryBudget = root } }, cancellation.Token));
+            new() { Limits = limits }, cancellation.Token));
         Assert.Equal(charged, root.Bytes); Assert.Equal(0, rejected.Length); root.Admitted = null;
-        using var output = new MemoryStream(); ImageCodec.EncodeWebp(source, output, new() { Limits = new() { MemoryBudget = root } });
+        using var output = new MemoryStream(); ImageCodec.EncodeWebp(source, output, new() { Limits = limits });
         Assert.Equal(charged, root.Bytes); Assert.False(root.IsDisposed);
     }
 
@@ -125,8 +129,8 @@ public sealed class WebpColorCacheTests
         return result;
     }
 
-    private static byte[] Encode(ImageBuffer source)
-    { using var output = new MemoryStream(); ImageCodec.EncodeWebp(source, output); return output.ToArray(); }
+    private static byte[] Encode(ImageBuffer source, ImageLimits? limits = null)
+    { using var output = new MemoryStream(); ImageCodec.EncodeWebp(source, output, new() { Limits = limits ?? ImageLimits.Default }); return output.ToArray(); }
 
     private sealed class NonseekableOutput : MemoryStream
     {

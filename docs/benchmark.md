@@ -96,25 +96,21 @@ Complete async PNG and lossless WebP outputs independently pass. WebP uses appro
 libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compressed
 sizes **171,108/183,812 B**. Its passing timing does not establish compression parity.
 Lossless size parity is a high-priority open gate: the fixed opaque photograph
-must reach ≤160,032 B (currently184,518 B), and diagram ≤7,234 B (currently7,636 B),
+must reach ≤160,032 B (currently174,748 B), and diagram ≤7,234 B (currently7,636 B),
 with exact pixels and the unchanged libwebp exact=1 reference/settings. The
 [caller-JPEG controls](../benchmarks/WARM-JPEG-CALLER-MCU.md) also leave a joint
 size/quality gap: RGB42074,040/52,093 B at source-PSNR difference0.106110 dB
 (gate0.25 dB); grayscale58,823/58,910 B. RGB420 compression improvements must
 retain matched reconstruction quality and avoid material grayscale regression.
 These content/sampling controls do not establish general compression equivalence.
-The [conditional spatial-prediction round](../benchmarks/WARM-VP8L-LEFT-PREDICTOR.md)
-reduces photograph184,518 B (37.6% below the preceding cache round), leaving diagram
-byte-for-byte at7,636 B. All six affected encodes independently pass time parity.
-Photograph allocation falls38.4%; compression analysis costs more CPU, still below
-the reference. Both lossless size gates remain open. The optional
-[CompactColor JPEG policy](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) now produces
-48,701/52,093 B on the fixed caller-RGB420 control, with a0.017274dB source-PSNR
-gap. Its short1.126x/upper1.362x time result remains above parity, at162,110B/op.
-Original RGB420 remains74,040B; grayscale stays byte-identical. No general-content
-compression claim follows. Lossless and lossy size gaps remain open. The earlier [structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md)
-is diagnostic evidence. Lossy WebP ceilings remain17,688/7,100 B at frozen matched
-quality (21,432/8,288 B).
+The [spatial coding-group round](../benchmarks/WARM-VP8L-SPATIAL-ENTROPY.md)
+reduces the fixed photograph from184,518 to174,748 B; diagram remains7,636 B.
+All six affected complete encodes independently pass warm time parity;4,575 tests/OS
+and the same actual package/examples qualify. This spends
+more CPU and allocation for size: photograph9,912,952 B/op versus historical702,616.
+Both lossless size gates remain open against160,032/7,234 B. The earlier
+[structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md) is diagnostic evidence.
+Lossy WebP ceilings remain17,688/7,100 B at frozen matched quality (21,432/8,288 B).
 The [bounded lossy audit](../benchmarks/WARM-VP8-COMPRESSION-AUDIT.md) parks the
 tested skip/prediction-rate candidates; the [intra16/Y2 screen](../benchmarks/WARM-VP8-INTRA16-SCREEN.md)
 also misses both size gates and is slower. These rejected candidates change no
@@ -133,7 +129,10 @@ rejects a smaller packet with excessive quality loss and a quality-preserving
 variant with immaterial byte savings. The qualified producer and size gates remain unchanged.
 The [lossless adaptive-predictor screen](../benchmarks/WARM-VP8L-ADAPTIVE-PREDICTOR-AUDIT.md)
 saves2,652/0 B on the fixed photograph/diagram but misses both lossless size gates.
-It is not adopted; current production remains184,518/7,636 B, without a new timing claim.
+That predictor is not adopted; the subsequent coding-group round above supplies current production evidence.
+The [opaque coding-cost audit](../benchmarks/WARM-VP8L-OPAQUE-COST-AUDIT.md)
+finds a skipped existing plan yielding123,602 B against current170,156/reference121,896 B.
+It is exact but untimed; current production and its measurements remain unchanged.
 
 The two JPEG async-output cases remain short gaps; all timings/allocations follow.
 
@@ -150,7 +149,7 @@ RGB420 (managed/FFmpeg). Source-PSNR gaps are0.000033/0.106110/0.017274dB inside
 0.25dB. Equal quality numbers are not the matching rule; the
 [optional-policy screen](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) includes complete
 time and allocations, while retaining the Original control. WebP photograph/diagram
-lossless sizes are184,518/160,032 B
+lossless sizes are174,748/160,032 B
 and 7,636/7,234 B; [lossy sizes](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md)
 are 21,432/17,688 B and 8,288/7,100 B at the fixed qualified source quality. Compression-
 efficiency parity is not established. Current operation timings/allocations follow.
@@ -284,7 +283,7 @@ reconciliation now covers every numeric row.
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| [WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream](../benchmarks/WARM-VP8L-LEFT-PREDICTOR.md) | 26,517.06 | 120,996.97 | 0.219 / 0.222 | 723,480 | Parity confirmed |
+| [WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream](../benchmarks/WARM-VP8L-SPATIAL-ENTROPY.md) | 67,963.11 | 140,030.24 | 0.485 / 0.492 | 10,286,704 | Parity confirmed |
 | [JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream](../benchmarks/WARM-JPEG-ASYNC-SAMPLES.md) | 2,076.73 | 1,628.02 | 1.276 / 1.430 | 232,614 | Gap (short; qualified) |
 | [JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality](../benchmarks/WARM-JPEG-ASYNC-ENCODE.md) | 3,982.03 | 3,849.79 | 1.034 / 1.158 | 494,254 | Gap (short; qualified) |
 | [PNG EncodePngAsync, fresh nonseekable Stream / level6](../benchmarks/WARM-PNG-ASYNC-ENCODE.md) | 5,397.36 | 17,268.11 | 0.313 / 0.314 | 658,560 | Parity confirmed |
@@ -326,11 +325,11 @@ reconciliation now covers every numeric row.
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 19,209.65 | 53,462.22 | 0.359 / 0.362 | 2,109,306 | Parity confirmed |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 20,042.86 | 53,642.99 | 0.374 / 0.376 | 2,108,980 | Parity confirmed |
 | [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 21,546.32 | 53,834.21 | 0.400 / 0.403 | 2,616,214 | Parity confirmed |
-| [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-LEFT-PREDICTOR.md) | 26,142.42 | 121,047.04 | 0.216 / 0.218 | 723,096 | Parity confirmed |
-| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-LEFT-PREDICTOR.md) | 12,616.59 | 70,704.68 | 0.178 / 0.180 | 614,408 | Parity confirmed |
-| [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-LEFT-PREDICTOR.md) | 32,791.43 | 121,157.50 | 0.271 / 0.273 | 723,096 | Parity confirmed |
-| [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-LEFT-PREDICTOR.md) | 29,933.56 | 83,170.39 | 0.360 / 0.362 | 702,616 | Parity confirmed |
-| [WebP VP8L text/diagram RGBA8](../benchmarks/WARM-VP8L-LEFT-PREDICTOR.md) | 6,714.65 | 9,561.10 | 0.702 / 0.717 | 107,568 | Parity confirmed |
+| [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-SPATIAL-ENTROPY.md) | 66,545.73 | 141,275.61 | 0.471 / 0.478 | 10,286,728 | Parity confirmed |
+| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-SPATIAL-ENTROPY.md) | 14,963.90 | 82,930.81 | 0.180 / 0.182 | 614,408 | Parity confirmed |
+| [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-SPATIAL-ENTROPY.md) | 76,499.50 | 140,691.44 | 0.544 / 0.549 | 10,286,320 | Parity confirmed |
+| [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-SPATIAL-ENTROPY.md) | 76,320.26 | 96,413.88 | 0.792 / 0.801 | 9,912,952 | Parity confirmed |
+| [WebP VP8L text/diagram RGBA8](../benchmarks/WARM-VP8L-SPATIAL-ENTROPY.md) | 7,820.91 | 10,860.00 | 0.720 / 0.729 | 107,568 | Parity confirmed |
 | [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 6,555.59 | 9,649.33 | 0.679 / 0.684 | 558,587 | Parity confirmed |
 | [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-FORWARD-DCT.md) | 4,856.65 | 5,841.64 | 0.831 / 0.834 | 489,948 | Parity confirmed |
 

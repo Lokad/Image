@@ -10,7 +10,8 @@ internal static partial class WebpLosslessEncoder
     private const int CachedWorkingBytes = 65536;
     private const int CacheSize = 1024;
     private readonly record struct CachedScan(bool Alpha, int Literals, long ExtraBits);
-    private readonly record struct CachedPlan(WebpPrefixCode[] Tables, long BodyBits, bool Alpha, bool Predict, int Literals);
+    private readonly record struct CachedPlan(WebpPrefixCode[] Tables, long BodyBits, bool Alpha, bool Predict, int Literals,
+        EntropyGroups? Groups = null);
 
     private static void EncodeCached(ImageBuffer image, Stream output, WebpEncodeOptions options, OperationContext context)
     {
@@ -59,7 +60,7 @@ internal static partial class WebpLosslessEncoder
         uint[] cache, CachedPlan plan, OperationContext context)
     {
         var writer = CachedHeader(image, output, plan, context);
-        CachedPixels(image, effort, cache, plan.Predict, writer, plan.Tables, null, context);
+        CachedPixels(image, effort, cache, plan.Predict, writer, plan.Tables, null, context, groups: plan.Groups);
         writer.Finish();
     }
 
@@ -73,19 +74,25 @@ internal static partial class WebpLosslessEncoder
         writer.Write(1, 1); writer.Write(2, 2);
         if (plan.Predict) LeftPredictorHeader(image, writer, context);
         writer.Write(0, 1);
-        writer.Write(1, 1); writer.Write(10, 4); writer.Write(0, 1);
+        writer.Write(1, 1); writer.Write(10, 4);
+        if (plan.Groups is { } groups) EntropyHeader(groups, writer, context);
+        else writer.Write(0, 1);
         foreach (var table in plan.Tables) table.Header(writer, context);
         return writer;
     }
 
     private static CachedScan CachedPixels(ImageBuffer image, int effort, uint[] cache, bool predict,
-        WebpBitWriter? writer, WebpPrefixCode[]? tables, int[][]? frequencies, OperationContext context)
+        WebpBitWriter? writer, WebpPrefixCode[]? tables, int[][]? frequencies, OperationContext context,
+        TileHistograms? histograms = null, EntropyGroups? groups = null)
     {
         context.Work(CacheSize); cache.AsSpan().Clear();
         var count = image.Width * image.Height; var position = 0; uint previous = 0; var alpha = false;
         var literals = 0; long extraBits = 0;
         while (position < count)
         {
+            var tile = histograms is not null || groups is not null
+                ? (position / image.Width >> 3) * ((image.Width + 7) >> 3) + ((position % image.Width) >> 3) : 0;
+            var tableOffset = groups is null ? 0 : groups.Map[tile] * 5;
             var pixel = CachedPixel(image, position, predict, context);
             // Only the original normalized source determines the header hint.
             // Predictor residual alpha has different semantics.
@@ -104,9 +111,9 @@ internal static partial class WebpLosslessEncoder
             {
                 Prefix(run, out var code, out var extra, out var bits);
                 extraBits += bits;
-                CachedSymbol(0, 256 + code, writer, tables, frequencies, context);
+                CachedSymbol(0, 256 + code, writer, tables, frequencies, context, tableOffset, histograms, tile);
                 if (writer is not null) writer.Write(extra, bits); else context.Work(1);
-                CachedSymbol(4, fromAbove ? 0 : 1, writer, tables, frequencies, context);
+                CachedSymbol(4, fromAbove ? 0 : 1, writer, tables, frequencies, context, tableOffset, histograms, tile);
                 if (fromAbove)
                 {
                     for (var i = 0; i < run; i++)
@@ -126,14 +133,14 @@ internal static partial class WebpLosslessEncoder
             else
             {
                 var index = CacheIndex(pixel);
-                if (cache[index] == pixel) CachedSymbol(0, 280 + index, writer, tables, frequencies, context);
+                if (cache[index] == pixel) CachedSymbol(0, 280 + index, writer, tables, frequencies, context, tableOffset, histograms, tile);
                 else
                 {
                     literals++;
-                    CachedSymbol(0, (int)(pixel >> 8 & 255), writer, tables, frequencies, context);
-                    CachedSymbol(1, (int)(pixel >> 16 & 255), writer, tables, frequencies, context);
-                    CachedSymbol(2, (int)(pixel & 255), writer, tables, frequencies, context);
-                    CachedSymbol(3, (int)(pixel >> 24), writer, tables, frequencies, context);
+                    CachedSymbol(0, (int)(pixel >> 8 & 255), writer, tables, frequencies, context, tableOffset, histograms, tile);
+                    CachedSymbol(1, (int)(pixel >> 16 & 255), writer, tables, frequencies, context, tableOffset, histograms, tile);
+                    CachedSymbol(2, (int)(pixel & 255), writer, tables, frequencies, context, tableOffset, histograms, tile);
+                    CachedSymbol(3, (int)(pixel >> 24), writer, tables, frequencies, context, tableOffset, histograms, tile);
                 }
                 context.Work(1); cache[index] = pixel; position++;
             }
@@ -152,9 +159,15 @@ internal static partial class WebpLosslessEncoder
     }
 
     private static void CachedSymbol(int channel, int symbol, WebpBitWriter? writer,
-        WebpPrefixCode[]? tables, int[][]? frequencies, OperationContext context)
+        WebpPrefixCode[]? tables, int[][]? frequencies, OperationContext context,
+        int tableOffset = 0, TileHistograms? histograms = null, int tile = 0)
     {
-        if (writer is not null) tables![channel].Write(writer, symbol);
-        else { context.Work(1); frequencies![channel][symbol]++; }
+        if (writer is not null) tables![tableOffset + channel].Write(writer, symbol);
+        else
+        {
+            context.Work(1);
+            if (histograms is not null) histograms.Add(tile, channel, symbol);
+            else frequencies![channel][symbol]++;
+        }
     }
 }

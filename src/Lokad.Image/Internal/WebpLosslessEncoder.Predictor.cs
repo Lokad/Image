@@ -16,7 +16,7 @@ internal static partial class WebpLosslessEncoder
         // padding, so selection cannot enlarge the original complete packet.
         if (predictedUpper + 2 < rawUpper)
         {
-            ReleasePlan(raw, context); return predicted;
+            ReleasePlan(raw, context); return SelectEntropyPlan(image, effort, cache, predicted, context);
         }
         ReleasePlan(predicted, context); return raw;
     }
@@ -33,8 +33,9 @@ internal static partial class WebpLosslessEncoder
 
     private static void ReleasePlan(CachedPlan plan, OperationContext context)
     {
-        long bytes = 5 * 8 + 32;
+        long bytes = plan.Tables.Length * 8L + 32;
         foreach (var table in plan.Tables) bytes += table.MemoryBytes;
+        if (plan.Groups is { } groups) bytes += groups.Map.Length + 80L + groups.MapTable.MemoryBytes;
         context.Release(bytes);
     }
 

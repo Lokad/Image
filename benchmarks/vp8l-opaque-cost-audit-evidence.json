@@ -1,0 +1,219 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "productionBuilds": 0,
+  "noTimingOrAllocationClaim": true,
+  "sourceSha256": "54e27bd73c9ee221bdd4872e6b7bf79676257346cee2eff8ddacccb89e0cdb0a",
+  "scope": "One already measured original513x259 RGBA8 opacity projection, frozen exact=1 method4 quality75 worker output; no new input/setting/workload",
+  "packets": [
+    {
+      "kind": "native",
+      "bytes": 121896,
+      "sha256": "465b70013a8a598ec5e95e2e4d8fff3042317fa21dc31f2350fe9edb46ce465f",
+      "transforms": [
+        {
+          "type": 2
+        },
+        {
+          "type": 0,
+          "bits": 3,
+          "width": 65,
+          "height": 33,
+          "metadata": {
+            "cacheBits": 0,
+            "entropyBits": 0,
+            "groups": 1,
+            "tableUsedSymbols": [
+              [
+                21,
+                1,
+                1,
+                1,
+                2
+              ]
+            ]
+          },
+          "predictorModes": {
+            "2": 280,
+            "1": 362,
+            "7": 161,
+            "5": 182,
+            "9": 196,
+            "3": 241,
+            "6": 304,
+            "4": 218,
+            "8": 100,
+            "10": 99,
+            "13": 2
+          }
+        },
+        {
+          "type": 1,
+          "bits": 3,
+          "width": 65,
+          "height": 33,
+          "metadata": {
+            "cacheBits": 0,
+            "entropyBits": 0,
+            "groups": 1,
+            "tableUsedSymbols": [
+              [
+                10,
+                5,
+                1,
+                1,
+                2
+              ]
+            ]
+          },
+          "commonColorCoefficients": {
+            "0x80000": 1412,
+            "0x100000": 407,
+            "0x0": 282,
+            "0x200000": 30,
+            "0x180000": 14
+          }
+        }
+      ],
+      "main": {
+        "cacheBits": 2,
+        "entropyBits": 3,
+        "groups": 9,
+        "tableUsedSymbols": [
+          [
+            142,
+            6,
+            6,
+            1,
+            32
+          ],
+          [
+            83,
+            5,
+            4,
+            1,
+            33
+          ],
+          [
+            47,
+            5,
+            5,
+            1,
+            31
+          ],
+          [
+            86,
+            5,
+            5,
+            1,
+            31
+          ],
+          [
+            92,
+            5,
+            5,
+            1,
+            11
+          ],
+          [
+            41,
+            5,
+            4,
+            1,
+            32
+          ],
+          [
+            93,
+            5,
+            5,
+            1,
+            30
+          ],
+          [
+            138,
+            5,
+            6,
+            1,
+            31
+          ],
+          [
+            91,
+            5,
+            5,
+            1,
+            31
+          ]
+        ]
+      },
+      "headerBits": 16502,
+      "normalScalarNativeEveryPixelExact": true
+    },
+    {
+      "kind": "current",
+      "bytes": 170156,
+      "sha256": "62fc2818a8c42a5008a3314d207e3a19b1d914927c7acaa892274aa89188dd47",
+      "transforms": [
+        {
+          "type": 2
+        }
+      ],
+      "main": {
+        "cacheBits": 10,
+        "entropyBits": 0,
+        "groups": 1,
+        "tableUsedSymbols": [
+          [
+            880,
+            3,
+            3,
+            1,
+            1
+          ]
+        ]
+      },
+      "headerBits": 2919,
+      "normalScalarNativeEveryPixelExact": true
+    }
+  ],
+  "managedPlanAudit": {
+    "plans": [
+      {
+        "bodyBits": 0,
+        "predict": false,
+        "payloadUpper": 370,
+        "literals": 24348,
+        "bodyCostComplete": false
+      },
+      {
+        "bodyBits": 1210768,
+        "predict": true,
+        "payloadUpper": 151738,
+        "literals": 1845,
+        "bodyCostComplete": true
+      }
+    ],
+    "productionBuilds": 0,
+    "currentBytes": 170156,
+    "currentSha256": "62fc2818a8c42a5008a3314d207e3a19b1d914927c7acaa892274aa89188dd47",
+    "librarySha256": "4a4b6b8451afb2b4843594bce44421e82bbe6a244456cb558718e757366151dd",
+    "timingAndAllocationClaim": false
+  },
+  "skippedExistingPlan": {
+    "packetBytes": 123602,
+    "packetSha256": "44421f0d5a5438d1e0cbf8f18dbeade1c99ad9a758559936787adcea58cf3269",
+    "groups": 9,
+    "normalScalarNativeEverySampleExact": true,
+    "normalScalarManagedExactReencodeToCurrentPacket": true,
+    "productionSelected": false,
+    "timingAndAllocations": "Unmeasured; cannot reuse current default Opaque8 timings for this packet",
+    "interpretation": "Current literal-count early-out skips LEFT at24348 misses<=33216. Existing unselected LEFT upper151758B; existing LEFT plus current group selector123602B versus actual170156B. Candidate eligibility work must preserve a complete RAW body cost; its skipped raw BodyBits=0 was never used for selection. No production/source/build change."
+  },
+  "raw": {
+    "file": "c48-opaque-cost-audit.tar.gz",
+    "bytes": 480259,
+    "sha256": "41f15b531b4b5e88e72f9659efdb2746fb72ccdcd3fdbeb6d4c7ea1137dd7c3a",
+    "productionBuilds": 0,
+    "scoredJobs": 0,
+    "checkoutBytes": 4992397884
+  }
+}

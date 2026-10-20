@@ -56,7 +56,7 @@ public sealed class WebpEncoderPredictionTests
     public void OverlappingPlansRefuseTerminallyAndSucceedAfterCallerReleasesCapacity()
     {
         const int sourceBytes=129*129*4;
-        using var root=new TestMemoryBudget(sourceBytes+65536);var limits=new ImageLimits { MemoryBudget=root };
+        using var root=new TestMemoryBudget(sourceBytes+65536);var limits=new ImageLimits { MemoryBudget=root, MaxWorkingBytes=129*129*4+65536 };
         using var source=Gradient(129,129,8,false,limits);
         using var caller=root.CreateScope();Assert.True(caller.TryReserve(65536-55000,out var held));
         using var rejected=new MemoryStream();
@@ -71,7 +71,7 @@ public sealed class WebpEncoderPredictionTests
     [Fact]
     public void AnalysisCancellationAndOutputRefusalCleanUpBeforeCallerWrites()
     {
-        using var root=new TestMemoryBudget(1_000_000);var limits=new ImageLimits { MemoryBudget=root };
+        using var root=new TestMemoryBudget(1_000_000);var limits=new ImageLimits { MemoryBudget=root, MaxWorkingBytes=129*129*4+65536 };
         using var source=Gradient(129,129,8,false,limits);var baseline=root.Bytes;
         using(var cancellation=new CancellationTokenSource())
         {
@@ -81,7 +81,7 @@ public sealed class WebpEncoderPredictionTests
             Assert.Throws<OperationCanceledException>(()=>ImageCodec.EncodeWebp(source,rejected,new() { Limits=limits },cancellation.Token));
             Assert.Equal(baseline,root.Bytes);Assert.Equal(0,rejected.Length);root.Admitted=null;
         }
-        var packet=Encode(source);
+        var packet=Encode(source,limits);
         using var exact=new MemoryStream();ImageCodec.EncodeWebp(source,exact,new() { Limits=limits with { MaxOutputBytes=packet.Length } });
         Assert.Equal(packet,exact.ToArray());Assert.Equal(baseline,root.Bytes);
         using var shortOutput=new MemoryStream();
@@ -111,6 +111,6 @@ public sealed class WebpEncoderPredictionTests
         return result;
     }
 
-    private static byte[] Encode(ImageBuffer image)
-    { using var output=new MemoryStream();ImageCodec.EncodeWebp(image,output);return output.ToArray(); }
+    private static byte[] Encode(ImageBuffer image,ImageLimits? limits=null)
+    { using var output=new MemoryStream();ImageCodec.EncodeWebp(image,output,new() { Limits=limits??ImageLimits.Default });return output.ToArray(); }
 }
