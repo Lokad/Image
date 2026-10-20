@@ -26,12 +26,12 @@ public sealed class WebpAlphaAnchorTests
         using var context = new OperationContext(Limits(root), default);
         using (var plan = WebpLosslessEncoder.AlphaEncoding.TryCreate(alpha, Width, 4, context))
         {
-            Assert.NotNull(plan); Assert.Equal(21739, plan.Length); Assert.Equal(MatchingBytes, admissions[1]);
+            Assert.NotNull(plan); Assert.Equal(19245, plan.Length); Assert.Equal(MatchingBytes, admissions[1]);
             // Histories have ended; old tokens overlap new encoded capacity
             // during replacement. Only the encoded owner/tables survive.
             Assert.True(root.Peak >= 5L * Count + 64 + 2048); Assert.Equal(Count + 32 + 2048, root.Bytes);
             using var output = new MemoryStream(); output.WriteByte(plan.Header); plan.Write(alpha, Width, output);
-            Assert.Equal(727106, context.ConsumedWork); Assert.Equal(21740, output.Length);
+            Assert.Equal(704388, context.ConsumedWork); Assert.Equal(19246, output.Length);
             using var decode = new OperationContext(ImageLimits.Default, default);
             Assert.Equal(alpha, WebpAlpha.Decode(output.ToArray(), Width, Height, decode));
         }
@@ -68,7 +68,7 @@ public sealed class WebpAlphaAnchorTests
         Assert.Equal(350000, root.Bytes); Assert.Equal(1, root.Refusals); retained.Dispose();
         using (var next = new OperationContext(Limits(root), default))
         using (var plan = WebpLosslessEncoder.AlphaEncoding.TryCreate(alpha, Width, 4, next))
-        { Assert.NotNull(plan); Assert.Equal(21739, plan.Length); }
+        { Assert.NotNull(plan); Assert.Equal(19245, plan.Length); }
         Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 
@@ -125,5 +125,23 @@ public sealed class WebpAlphaAnchorTests
         using (var next = new OperationContext(Limits(root), default))
         using (var plan = WebpLosslessEncoder.AlphaEncoding.TryCreate(alpha, Width, 4, next)) Assert.NotNull(plan);
         Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
+    [Theory] [InlineData(64)] [InlineData(65)] [InlineData(66)] [InlineData(67)]
+    public void FourResidualKeyHandlesUnsignedMaximumAndEveryTail(int count)
+    {
+        // Every horizontal residual is255, including the first pixel. The
+        // polynomial key exceeds Int32, and the final three pixels lack a key.
+        var alpha = Enumerable.Range(0, count).Select(i => (byte)(255 - i)).ToArray();
+        var unchanged = alpha.ToArray(); using var root = new TestMemoryBudget(1000000);
+        using (var context = new OperationContext(Limits(root), default))
+        using (var plan = WebpLosslessEncoder.AlphaEncoding.TryCreate(alpha, count, 4, context))
+        {
+            Assert.NotNull(plan); using var output = new MemoryStream(); output.WriteByte(plan.Header);
+            plan.Write(alpha, count, output);
+            using var decode = new OperationContext(ImageLimits.Default, default);
+            Assert.Equal(alpha, WebpAlpha.Decode(output.ToArray(), count, 1, decode));
+        }
+        Assert.Equal(unchanged, alpha); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 }

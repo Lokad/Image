@@ -128,25 +128,25 @@
     },
     {
       "case": "WarmWebp/EncodeBudget8",
-      "managedPacketBytes": 104500,
+      "managedPacketBytes": 102006,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "webp-alpha-anchors-evidence.json",
+      "evidence": "webp-alpha-word-key-evidence.json",
       "observationPath": [
         "observations",
         0
       ],
-      "validity": "C72 qualified admitted alpha token-start anchors,31,970,409actual units inside32M; exact prior VP8/RGBA/source quality, unchanged reference/settings/gates. Whole packet remains5910B above target.",
-      "previousManagedPacketBytes": 111094,
-      "alphaPayloadBytes": 21740,
+      "validity": "C74 qualified four-residual key in admitted alpha-anchor mode.31,947,691actual units inside32M; exact prior VP8/RGBA/source quality and frozen reference/settings/gates. Complete packet remains3416B above target.",
+      "previousManagedPacketBytes": 104500,
+      "alphaPayloadBytes": 19246,
       "coefficientPolicy": "source-derived absolute segments with centered interpolation noise gain; existing admitted entropy policy",
-      "alphaCodingPolicy": "single-pass rolling history plus token-start anchor, adaptive packed token replay and admitted histories/token/encoded overlap",
+      "alphaCodingPolicy": "Four-residual rolling key, same recent/token-start histories, exact prefix verification and admitted adaptive packed replay.",
       "psnrGapDb": 0.03893331613484823,
-      "consumedWork": 31970409,
+      "consumedWork": 31947691,
       "referenceAlphaPayloadBytes": 24588,
       "alphaComponentSizePass": true
     }

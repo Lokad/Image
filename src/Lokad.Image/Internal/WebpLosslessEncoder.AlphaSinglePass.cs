@@ -9,9 +9,10 @@ internal static partial class WebpLosslessEncoder
         private byte[]? stagedAlpha;
         private long singlePassBytes;
 
-        // RFC 9649 sections 3.6/3.7. One recent position per three-residual
-        // hash, bounded prefix trees and overlapping copies. A rolling
-        // three-sample window avoids allocating a filtered alpha plane. Compute
+        // RFC 9649 sections 3.6/3.7. Recent positions and optional token-start
+        // anchors, bounded prefix trees and overlapping copies. Anchors use a
+        // four-residual key to distinguish recurring three-sample prefixes.
+        // A rolling window avoids allocating a filtered alpha plane. Compute
         // the old run-only cost during the same traversal, then compare padded
         // sizes. Discarding a completed larger candidate is not limit recovery.
         private void PrepareSinglePass(ReadOnlySpan<byte> alpha, int width, bool adaptiveTokens, bool useAnchors)
@@ -43,15 +44,19 @@ internal static partial class WebpLosslessEncoder
             // zero-channel singletons and the previous-pixel distance singleton.
             long originalBits = 3 + 325 + 3 * 4 + 4;
             var runValue = -1; var runLength = 0; var position = 0;
-            context.Work(3);
+            var keyLength = useAnchors ? 4 : 3;
+            context.Work(keyLength);
             var first = Residual(alpha, width, 0); var second = Residual(alpha, width, 1);
             var third = Residual(alpha, width, 2);
+            var fourth = useAnchors ? Residual(alpha, width, 3) : 0;
             while (position < alpha.Length)
             {
                 var length = 0; var distance = 0; var maximum = Math.Min(4096, alpha.Length - position);
-                if (maximum >= 3)
+                if (maximum >= keyLength)
                 {
-                    context.Work(1); var hash = SingleHash(first, second, third); var previous = entries[hash];
+                    context.Work(1);
+                    var hash = useAnchors ? SingleHash(first, second, third, fourth) : SingleHash(first, second, third);
+                    var previous = entries[hash];
                     if (previous >= 0 && position - previous <= 1_048_456)
                     {
                         while (length < maximum)
@@ -123,16 +128,20 @@ internal static partial class WebpLosslessEncoder
                         if (runLength != 0) originalBits += RunBits(runValue, runLength);
                         runValue = first; runLength = 1;
                     }
-                    if (position + i + 2 < alpha.Length)
+                    if (position + i + keyLength - 1 < alpha.Length)
                     {
-                        context.Work(1); entries[SingleHash(first, second, third)] = position + i;
+                        context.Work(1);
+                        var hash = useAnchors ? SingleHash(first, second, third, fourth) : SingleHash(first, second, third);
+                        entries[hash] = position + i;
                     }
                     first = second; second = third;
-                    if (position + i + 3 < alpha.Length)
+                    var next = 0;
+                    if (position + i + keyLength < alpha.Length)
                     {
-                        context.Work(1); third = Residual(alpha, width, position + i + 3);
+                        context.Work(1); next = Residual(alpha, width, position + i + keyLength);
                     }
-                    else third = 0;
+                    if (useAnchors) { third = fourth; fourth = next; }
+                    else third = next;
                 }
                 position += consumed;
             }
@@ -195,6 +204,11 @@ internal static partial class WebpLosslessEncoder
         }
 
         private static int SingleHash(int first, int second, int third) => ((first * 251 + second) * 251 + third) & 16383;
+
+        // Four byte terms fit UInt32, but can exceed Int32 in the checked build.
+        // Mask before conversion; hash collisions still require exact matching.
+        private static int SingleHash(int first, int second, int third, int fourth)
+            => (int)(((((uint)first * 251 + (uint)second) * 251 + (uint)third) * 251 + (uint)fourth) & 16383);
 
         private long RunBits(int value, int length)
         {

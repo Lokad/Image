@@ -1491,7 +1491,9 @@ local workspace selects the fixed-code staging path before shared admission;
 shared refusal never selects another strategy.
 In token mode, sufficient independent local work/memory may also admit one
 token-start anchor per hash alongside the rolling recent positions. Two histories
-reserve 131,136 bytes before allocation. A boundary probe rejects candidates that
+reserve 131,136 bytes before allocation. This mode keys four residual samples,
+streamed once through a four-sample window; the tighter single-history path keeps
+its three-sample key. A boundary probe rejects candidates that
 cannot improve the longest match; every chosen prefix is still checked exactly.
 Both histories end after matching. Initialization, reads, anchor updates, probes,
 comparisons and output copies retain their actual work charges. Tighter local

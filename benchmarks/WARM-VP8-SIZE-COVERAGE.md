@@ -13,7 +13,7 @@ benchmark inputs, not the library default85. No general lossy WebP parity follow
 | WarmWebp/EncodeOpaque16 | 73,740 / 72,380 | 100 / 75 | Open |
 | WarmWebp/Encode8 | 98,760 / 98,590 | 100 / 75 | Open |
 | WarmWebp/Encode16 | 98,760 / 98,590 | 100 / 75 | Open |
-| WarmWebp/EncodeBudget8 | 104,500 / 98,590 | 100 / 75 | Open |
+| WarmWebp/EncodeBudget8 | 102,006 / 98,590 | 100 / 75 | Open |
 
 C57 reuses the approved bounded quality matcher only for the changed photograph:
 1,25,50,75,100 seeds and one refinement77, chosen by source-quality distance before
@@ -69,12 +69,19 @@ the complete packet remains5,910 B above98,590 B. BothOS4,682tests/scalar and
 the same actual package/examples qualify. One short cost replaces only this row;
 four unrestricted records and opaque primary paths reuse unchanged C70 evidence.
 
-The current [segment-search milestone](WARM-VP8-SEGMENT-SEARCH.md) reduces opaque
+The [segment-search milestone](WARM-VP8-SEGMENT-SEARCH.md) reduces opaque
 74,962→73,740 B and unrestricted alpha99,816→98,760 B. Remaining gaps1,360/170 B
 stay explicit; source-quality gaps0.008682/0.030410 dB pass with exact unchanged
 ALPH. BothOS4,688tests/scalar and same actual package/examples qualify; four short
 costs supersede affected encodes despite higher CPU. Work32M104,500 B/31,970,409
 units and primary paths retain their exact prior scoped proofs. Five gates stay open.
+
+The current [four-residual-key milestone](WARM-WEBP-ALPHA-WORD-KEY.md) reduces
+the constrained packet104,500→102,006 B, with exact prior VP8/RGBA/source quality
+and31,947,691 units within32M. ALPH19,246/ref24,588 B is a component pass; the
+complete packet remains3,416 B above98,590 B. BothOS4,692tests/scalar and the same
+actual package/examples qualify. One short cost supersedes this row; four
+unrestricted full records and primary paths retain C73/C70 scoped evidence.
 
 [Evidence](vp8-size-coverage-evidence.json) identifies the current and retained
 receipts. No new performance workload is introduced and the256-case warm checklist
