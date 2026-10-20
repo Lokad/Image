@@ -116,20 +116,25 @@ and the same actual package/examples qualify. Opaque allocation is9,669,728 B/op
 more CPU and allocation for size: photograph9,912,952 B/op versus historical702,616.
 Both lossless size gates remain open against160,032/7,234 B. The earlier
 [structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md) is diagnostic evidence.
-The [intra16/Y2 milestone](../benchmarks/WARM-VP8-INTRA16-COMPRESSION.md)
-and [whole-frame entropy successor](../benchmarks/WARM-VP8-FULL-MODEL-COMPRESSION.md)
-first reduce packets to19,808/7,046 B. The current
-[reconstructed luma/chroma search](../benchmarks/WARM-VP8-RECONSTRUCTED-MODES.md)
-reduces them further to18,772/6,752 B at frozen managed78/75, native75/effort4.
-Source-PSNR gaps0.087712/0.130170dB retain the0.25dB gate and exact alpha. Diagram
-meets its7,100 B complete-packet ceiling; photograph remains1,084 B above17,688.
-4,603 tests/OS,136internal+2public+2differential scalar checks/OS and the same actual
-private package/examples qualify. Two short quiet cost screens record2.641x/2.006x
-and660,776/554,595 B/op; CPU parity remains deferred. C38's useful owned luma R/D
-candidate is reconsidered on the newer mixed-mode/global model; the luma-only
-stage gets a byte/quality screen and final qualification is batched with chroma.
-Only the two content encode rows change; five Quality100/q0 VP8 encodes retain
-their branch and evidence. No workload matrix or reference settings change.
+The [direction-coverage milestone](../benchmarks/WARM-VP8-DIRECTION-COVERAGE.md)
+now passes complete-packet size and quality for **both primary controls**:
+17,366/17,688 B photograph and6,722/7,100 B diagram. The changed photograph uses
+managed77 selected by the existing bounded closest-quality matcher; diagram75
+is retained, native75/effort4 and all reference packets/inputs unchanged. Gaps
+0.140944/0.117409dB retain the0.25dB gate and exact alpha. The former78 photograph
+point remains18,284 B/0.179085dB; no claim of size parity at that older number.
+4,603 tests/OS,136internal+2public+2differential scalar checks and the same actual
+private package/examples qualify. Two short cost screens record3.491x/2.360x
+and589,432/570,136 B/op; CPU parity remains deferred. Relevant unchanged proofs
+are reused, with no independent timing repeats or workload grid.
+The [seven-control size ledger](../benchmarks/WARM-VP8-SIZE-COVERAGE.md) retains
+**five other fixed-q100 packet gaps**, including raw alpha and a work32M branch.
+Those are benchmark inputs, not the defaultquality85. Primary parity is not
+whole-codec parity; these larger lossy gaps precede lossless work. The earlier
+[intra16/Y2](../benchmarks/WARM-VP8-INTRA16-COMPRESSION.md),
+[whole-frame entropy](../benchmarks/WARM-VP8-FULL-MODEL-COMPRESSION.md) and
+[reconstructed-mode](../benchmarks/WARM-VP8-RECONSTRUCTED-MODES.md) milestones
+retain their producer-specific data. Only the two primary encode rows change.
 The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
 rejects a smaller packet with excessive quality loss and a quality-preserving
 variant with immaterial byte savings. These historical trials do not alter the
@@ -171,8 +176,8 @@ RGB420 (managed/FFmpeg). Source-PSNR gaps are0.000033/0.106110/0.017274dB inside
 [optional-policy screen](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) includes complete
 time and allocations, while retaining the Original control. WebP photograph/diagram
 lossless sizes are174,748/160,032 B
-and 7,636/7,234 B; [lossy sizes](../benchmarks/WARM-VP8-RECONSTRUCTED-MODES.md)
-are 18,772/17,688 B and 6,752/7,100 B at the fixed qualified source quality. Compression-
+and 7,636/7,234 B; [lossy sizes](../benchmarks/WARM-VP8-DIRECTION-COVERAGE.md)
+are 17,366/17,688 B and 6,722/7,100 B at the documented matched source quality (managed77/75, native75). Compression-
 efficiency parity is not established. Current operation timings/allocations follow.
 
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
@@ -351,8 +356,8 @@ reconciliation now covers every numeric row.
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 66,156.61 | 122,061.47 | 0.542 / 0.550 | 10,286,320 | Parity confirmed |
 | [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-CODE-COST.md) | 65,462.97 | 82,409.48 | 0.794 / 0.802 | 9,912,952 | Parity confirmed |
 | [WebP VP8L text/diagram RGBA8](../benchmarks/WARM-VP8L-CODE-COST.md) | 6,715.35 | 10,254.85 | 0.655 / 0.669 | 107,568 | Parity confirmed |
-| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-RECONSTRUCTED-MODES.md) | 25,716.14 | 9,739.11 | 2.641 / 2.765 | 660,776 | Gap (cost screen; CPU parity deferred) |
-| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-RECONSTRUCTED-MODES.md) | 11,665.63 | 5,815.49 | 2.006 / 2.161 | 554,595 | Gap (cost screen; CPU parity deferred) |
+| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-DIRECTION-COVERAGE.md) | 33,904.97 | 9,712.89 | 3.491 / 3.545 | 589,432 | Gap (cost screen; CPU parity deferred) |
+| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-DIRECTION-COVERAGE.md) | 13,778.71 | 5,837.50 | 2.360 / 2.410 | 570,136 | Gap (cost screen; CPU parity deferred) |
 
 **Editing**
 
@@ -461,7 +466,7 @@ Production stays safe managed .NET 10 without dependencies or native bindings.
 
 ‡ Default VP8 comparisons freeze managed/native quality 100/75 and effort 4, retaining
 the 0.25 dB source-quality gate and exact alpha. Matched-quality content controls use
-their linked frozen settings. [Current packet sizes](../benchmarks/WARM-VP8-RECONSTRUCTED-MODES.md)
+their linked frozen settings. [Current packet sizes](../benchmarks/WARM-VP8-DIRECTION-COVERAGE.md)
 and per-codec reports accompany time/allocation evidence; size parity remains open.
 
 ¶ PNG Identify references use the public FFmpeg PNG parser/CRC plus original

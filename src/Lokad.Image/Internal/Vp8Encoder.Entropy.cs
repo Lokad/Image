@@ -37,7 +37,7 @@ internal static partial class Vp8Encoder
                 + samples * 128L + 65536;
             var intraExtra = prefix * 16L + source.Stride / 16 + 64;
             var intraWork = blocks * (4L * 3072 + 16 * 512 + 2048 + 256
-                + 16L * (lumaTrials * 768 - 512) + 20480);
+                + 16L * ((RateLumaModes - lumaTrials) * 192 + RateLumaModes * 768 - 512) + 20480);
             if (modes is not null && extra + intraExtra <= source.MemoryBytes
                 && extra + intraExtra + growth <= context.RemainingWorkingBytes && work + intraWork <= context.RemainingWork)
             {

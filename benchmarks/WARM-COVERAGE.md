@@ -1093,3 +1093,18 @@ performance case is added. Counts stay256=239numeric+17pending,71passes/167gaps/
 1confidence-open,123independent/116short,23current/216historical,31metadata queue.
 Only the same two content VP8 encode rows change; five q0 encodes and all other
 codec/edit/font/inspection/frozen decode evidence retain their original scope.
+
+
+The [direction-coverage milestone](WARM-VP8-DIRECTION-COVERAGE.md) changes only the
+two primary content rows:all ten existing luma directions become eligible on the
+admitted mixed path. Reusing the existing bounded quality sampler for the changed
+photograph selects77 (six evaluations), closer0.140944dB than former78/.179085dB;
+diagram75 stays valid without another search. Native75/4 and source/reference
+packets/tolerances are unchanged. Both primary packet gates nowPASS:17,366/17,688
+and6,722/7,100 B. This is not whole-codec parity: the [size ledger](WARM-VP8-SIZE-COVERAGE.md)
+retains five q100 gaps.4,603tests/OS,136internal+2public+2diff scalar/OS and the
+same actual package/examples pass. Costs3.491x/2.360x and589,432/570,136 B/op are
+short screens, CPU parity deferred. No case is added:256=239numeric+17pending,
+71passes/167gaps/1confidence-open,123independent/116short,23current/216historical,
+31metadata confirmations unchanged. q0/other codec/edit/font/inspection/frozen
+input evidence retains its original valid scope.

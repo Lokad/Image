@@ -1,5 +1,9 @@
 # VP8 reconstructed-mode compression milestone
 
+The [direction-coverage successor](WARM-VP8-DIRECTION-COVERAGE.md) supersedes
+these primary sizes/costs and records the changed photograph matching point.
+This accepted milestone remains historical evidence.
+
 Reconstruction-based luma and chroma mode selection reduces the fixed photograph
 packet **5.2%** and diagram **4.2%** from C54, within the unchanged quality gates.
 The diagram remains below its complete-packet ceiling. The photograph remains

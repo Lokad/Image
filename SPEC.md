@@ -1427,11 +1427,11 @@ or reconstructed pixel. There is no second raster conversion or full-frame copy.
 Otherwise local limits select the prefix cache before allocation; shared admission
 refusal always terminates the operation without retry.
 The admitted mixed-mode path also compares actual quantized reconstruction error
-and coefficient/header bit cost for the existing luma candidates and four chroma
+and coefficient/header bit cost for all ten luma directions and four chroma
 predictions. It stages one luma block or one 8x8 U/V pair on bounded stack storage.
 Luma ties retain the first minimum-prediction-error candidate, then format order;
 chroma ties retain format order. Additional performed trials charge work and check
-cancellation. Quantizers, nearest rounding, candidate-count limits and exact alpha
+cancellation. Quantizers, nearest rounding and exact alpha
 are unchanged; selected modes and reconstructed lossy pixels may change.
 Grouped DC needs signed high bytes beyond the ordinary
 coefficient cache range. Only the selected reconstruction is retained; the
@@ -1439,12 +1439,15 @@ remaining blocks use the selected probability model directly. Entropy adaptation
 alone preserves decoded pixels.
 Constrained budgets retain the original fixed coefficient model and its work
 behavior; adaptation adds no mandatory admission requirement.
-Prediction search minimizes source-plane squared error;
-ties choose the first candidate. Effort 0..6 permits respectively up to 1, 2, 3, 4, 6,
+The baseline prediction search minimizes source-plane squared error;
+ties choose the first candidate. Its Effort 0..6 caps are respectively 1, 2, 3, 4, 6,
 8 or 10 luma modes in format order (DC, true-motion, vertical, horizontal,
 left-down, right-down, vertical-right, vertical-left, horizontal-down,
-horizontal-up). Effort zero uses DC chroma; other settings consider all four
-chroma modes, stopping at zero error. Reconstruction for subsequent predictions uses the specified
+horizontal-up). The admitted mixed path at efforts 4..6 and quantizer index above
+zero makes all ten directions eligible, with its extra work included in admission.
+The baseline uses DC chroma at effort zero; otherwise it considers four chroma
+modes, stopping at zero error. Mixed-mode chroma scoring evaluates all four.
+Reconstruction for subsequent predictions uses the specified
 integer inverse transform. Higher effort expands search; it does not guarantee
 smaller output or lower final RGB error. Compression efficiency is not yet
 optimized. Two bounded arithmetic partitions are staged for nonseekable output;

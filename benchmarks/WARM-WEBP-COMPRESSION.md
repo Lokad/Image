@@ -1,5 +1,10 @@
 # WebP compression controls
 
+Historical baseline. The [direction-coverage milestone](WARM-VP8-DIRECTION-COVERAGE.md)
+reuses the bounded matcher after changed photograph quality response; native inputs/
+settings/tolerances stay frozen. Its selected managed point is77, diagram remains75.
+The five other fixed-q100 packet gaps are [separate](WARM-VP8-SIZE-COVERAGE.md).
+
 The lossless measurements below are the original content baseline; the current
 [previous-row encoder results](WARM-VP8L-PREVIOUS-ROW.md) supersede those two rows.
 The [bounded VP8 model](WARM-VP8-ADAPTIVE-PROBABILITIES.md) supersedes both VP8

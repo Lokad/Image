@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "scope": "C55/C56 admitted reconstructed luma/chroma mode decisions on the C54 mixed-mode/global entropy encoder. Exactly the same two frozen managed qualities78/75, native75/effort4; source-PSNR gap <=0.25dB, exact alpha and unchanged decoder bounds. Lossy pixels may change. No recalibration; VP8L sizes/pixels and C49 timing evidence unchanged.",
+  "scope": "C57 all-ten-direction mixed search; primary photograph/diagram matched packets17366/6722 B, native17688/7100. Changed photograph re-matched with existing bounded-v1 policy to quality77; diagram75 anchor retained. Native75/effort4, original inputs/packets and all quality/alpha/decoder tolerances unchanged. Five legacy q100 packet gaps are separate and remain open.",
   "maximumOwnedSettings": 8,
-  "librarySha256": "fc0098a5208605cdc8f15ad6876c66432430c0085562b6dbcc61e72e14bfa553",
+  "librarySha256": "2faf2225b28e22601811aef2dea093a5c1f13cb1f7934a3c6c0ba1474ddc148b",
   "harnessSha256": "8526fc893dda27fae633a85a382c9607d8c11db5e2326a008fc6b35059cd4889",
   "cases": [
     {
@@ -22,34 +22,184 @@
       "lossy": {
         "nativeSetting": 75,
         "ownedEvaluationOrder": [
-          78
+          1,
+          25,
+          50,
+          75,
+          100,
+          77
         ],
         "ownedSettings": [
           {
-            "setting": 78,
-            "encodedBytes": 18772,
-            "encodedSha256": "bf537c233ba5a1694c91f66c36d25c98d88dffb37e39953b3160132cf944bb00",
-            "nativeDecodedSha256": "83dbc1411b5fd69cb197dfea8f41c1eebb420c2915c9528cc5afe2eb917d7bdb",
-            "publicDecodedSha256": "78cd6a5e9bee6190cda791e3374c5b84baefa563d5372d994471ceaec7ca68c1",
+            "setting": 1,
+            "encodedBytes": 1852,
+            "encodedSha256": "b2e5ba56f37d015d34ded0c03dc01da824f197675fb7ca51147c1247d0c63fbc",
+            "nativeDecodedSha256": "e34781690f25e46f10ba59dd012ae3ef93b4acfae22f9d7a373ed97aae48738f",
+            "publicDecodedSha256": "2a36241084b99cd17ee4052ae98bb8401cbc3eda6406e241e137031a4adc4f23",
             "codec": "VP8",
             "sampling": "4:2:0",
             "sourceError": {
-              "sumSquared": 11811719,
-              "maximum": 64,
+              "sumSquared": 86866521,
+              "maximum": 155,
               "samples": 398601,
               "scale": 1,
-              "rgbMaximum": 64,
-              "rgbRmse": 5.443614488840493,
-              "rgbPsnr": 33.41305638201199
+              "rgbMaximum": 155,
+              "rgbRmse": 14.762401818634501,
+              "rgbPsnr": 24.747663163925317
             },
             "decoderDifference": {
-              "sumSquared": 3651,
+              "sumSquared": 2659,
               "maximum": 1,
               "samples": 398601,
               "scale": 1,
               "rgbMaximum": 1,
-              "rgbRmse": 0.0957054620976512,
-              "rgbPsnr": 68.51206911830913
+              "rgbRmse": 0.08167515676284155,
+              "rgbPsnr": 69.88900407449074
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          {
+            "setting": 25,
+            "encodedBytes": 3590,
+            "encodedSha256": "da088ff56dd51df2fb4ee9be0e49cc0540281d3e59185c06e8b6a0806ddbe026",
+            "nativeDecodedSha256": "5e6d438613ac9fc44f6a544a0fd37ea3ea7e99fe954c776bbc0a3063b2e55c1a",
+            "publicDecodedSha256": "6a464b7502149133f2d03c8d70fe6cecc672b7ee59c7dc5fbfe3c3d614c205b2",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 52803254,
+              "maximum": 118,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 118,
+              "rgbRmse": 11.50962440351771,
+              "rgbPsnr": 26.909580580290413
+            },
+            "decoderDifference": {
+              "sumSquared": 4171,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.10229417472855641,
+              "rgbPsnr": 67.9337855493481
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          {
+            "setting": 50,
+            "encodedBytes": 7578,
+            "encodedSha256": "0638eeb9a06f052f6b80c4bdccd1b09b69c1ecaf873881604ed9c6c07a0fa71f",
+            "nativeDecodedSha256": "cc5e3623bc982daa5fb20fa158f8c4a70eccce671b073b7922a34f8dbf99a63a",
+            "publicDecodedSha256": "2a36209789a11a84dd6304ddbba3f3edc9079fec3daa9ea7b1bf79686a4d4acc",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 29054950,
+              "maximum": 92,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 92,
+              "rgbRmse": 8.537699682863764,
+              "rgbPsnr": 29.503986123726627
+            },
+            "decoderDifference": {
+              "sumSquared": 3243,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.09019953161949654,
+              "rgbPsnr": 69.02671796107668
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          {
+            "setting": 75,
+            "encodedBytes": 16458,
+            "encodedSha256": "af31c987ef0f08b0698e8c57541cdd6b719bc7ab5083a410981a4b90aaee53f2",
+            "nativeDecodedSha256": "df87928453c0e871cb3617eae1e2cc021f38a9e2f772b82ebd8b3ef92af3aa9c",
+            "publicDecodedSha256": "b6479a128bc6a36379611678428dd489db6357c1b384bdd0f680e4c789576f8e",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 13349428,
+              "maximum": 65,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 65,
+              "rgbRmse": 5.787115320806884,
+              "rgbPsnr": 32.88156087452008
+            },
+            "decoderDifference": {
+              "sumSquared": 4063,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.1009611338289529,
+              "rgbPsnr": 68.04771922454229
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          {
+            "setting": 77,
+            "encodedBytes": 17366,
+            "encodedSha256": "58c80ab84efb1dfe361db495e2bd06068bed95dfe61660cc037d44e9e2bea510",
+            "nativeDecodedSha256": "056afa144827c129d3945039b6bfb4e24316f86c938731d6f6a9c2938f586e0a",
+            "publicDecodedSha256": "6335ee40dc91fb7a37d85a12431c0eb0079ef9bf0926b1084208cc6c0aa95c17",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 12450269,
+              "maximum": 67,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 67,
+              "rgbRmse": 5.588820682476897,
+              "rgbPsnr": 33.184400098988
+            },
+            "decoderDifference": {
+              "sumSquared": 3689,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.0962022292048979,
+              "rgbPsnr": 68.46710089553837
+            },
+            "alphaExact": true,
+            "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+          },
+          {
+            "setting": 100,
+            "encodedBytes": 83076,
+            "encodedSha256": "d773813d31e58d6ded4da9049ee7810d24589cd89ab619f7c2bbc1bdd8ae06d0",
+            "nativeDecodedSha256": "e60e3167a951a9f69f1cf121d01b89908cbac92ad5dd64e951cb3a9ff722eda5",
+            "publicDecodedSha256": "328c604974da709bf8366fb8a925a3d743886f809ada361d909f0901298c451c",
+            "codec": "VP8",
+            "sampling": "4:2:0",
+            "sourceError": {
+              "sumSquared": 3681024,
+              "maximum": 71,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 71,
+              "rgbRmse": 3.0388910673252907,
+              "rgbPsnr": 38.47650095757341
+            },
+            "decoderDifference": {
+              "sumSquared": 3869,
+              "maximum": 1,
+              "samples": 398601,
+              "scale": 1,
+              "rgbMaximum": 1,
+              "rgbRmse": 0.09852130887751913,
+              "rgbPsnr": 68.26020015059396
             },
             "alphaExact": true,
             "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
@@ -86,35 +236,35 @@
             "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
           },
           "closestOwned": {
-            "setting": 78,
-            "encodedBytes": 18772,
-            "encodedSha256": "bf537c233ba5a1694c91f66c36d25c98d88dffb37e39953b3160132cf944bb00",
-            "nativeDecodedSha256": "83dbc1411b5fd69cb197dfea8f41c1eebb420c2915c9528cc5afe2eb917d7bdb",
-            "publicDecodedSha256": "78cd6a5e9bee6190cda791e3374c5b84baefa563d5372d994471ceaec7ca68c1",
+            "setting": 77,
+            "encodedBytes": 17366,
+            "encodedSha256": "58c80ab84efb1dfe361db495e2bd06068bed95dfe61660cc037d44e9e2bea510",
+            "nativeDecodedSha256": "056afa144827c129d3945039b6bfb4e24316f86c938731d6f6a9c2938f586e0a",
+            "publicDecodedSha256": "6335ee40dc91fb7a37d85a12431c0eb0079ef9bf0926b1084208cc6c0aa95c17",
             "codec": "VP8",
             "sampling": "4:2:0",
             "sourceError": {
-              "sumSquared": 11811719,
-              "maximum": 64,
+              "sumSquared": 12450269,
+              "maximum": 67,
               "samples": 398601,
               "scale": 1,
-              "rgbMaximum": 64,
-              "rgbRmse": 5.443614488840493,
-              "rgbPsnr": 33.41305638201199
+              "rgbMaximum": 67,
+              "rgbRmse": 5.588820682476897,
+              "rgbPsnr": 33.184400098988
             },
             "decoderDifference": {
-              "sumSquared": 3651,
+              "sumSquared": 3689,
               "maximum": 1,
               "samples": 398601,
               "scale": 1,
               "rgbMaximum": 1,
-              "rgbRmse": 0.0957054620976512,
-              "rgbPsnr": 68.51206911830913
+              "rgbRmse": 0.0962022292048979,
+              "rgbPsnr": 68.46710089553837
             },
             "alphaExact": true,
             "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
           },
-          "psnrGapDb": 0.08771204194844984,
+          "psnrGapDb": 0.14094424107553039,
           "matched": true,
           "exclusionReason": null
         },
@@ -122,7 +272,7 @@
       },
       "sourceUnchanged": true,
       "independentOutputs": true,
-      "timingAndAllocations": "C56 short cost screen pending; CPU parity deferred. C49 lossless timings unchanged."
+      "timingAndAllocations": "C57 short cost screen pending; CPU parity deferred. C49 lossless timings unchanged."
     },
     {
       "name": "Diagram8",
@@ -146,29 +296,29 @@
         "ownedSettings": [
           {
             "setting": 75,
-            "encodedBytes": 6752,
-            "encodedSha256": "4c2217f039e67cd4514221a32d6a7ce52ea29c0549945b0d9533e881ec1afa46",
-            "nativeDecodedSha256": "6dfe9f94ea1a28c492935417a537ce205727f5176a90542fec8071144d7a92fa",
-            "publicDecodedSha256": "c8e5d4b896bab9d67d958d77711b9abe5494b0d080afc09756705f2206ae4b72",
+            "encodedBytes": 6722,
+            "encodedSha256": "c4fd67162050cb2fc531c4cc058f3fee07b9fc57f29beedf22502bbf43e8bad3",
+            "nativeDecodedSha256": "2a3598d624f547822c1ff677738e6083907e2fbc33ebb787c8b4aac10b8fc56f",
+            "publicDecodedSha256": "4a2e9eedfa878380853be5e06110fe49ff837d18a6e71fc75c57cad84264ebb4",
             "codec": "VP8",
             "sampling": "4:2:0",
             "sourceError": {
-              "sumSquared": 11219758,
+              "sumSquared": 11186837,
               "maximum": 77,
               "samples": 398601,
               "scale": 1,
               "rgbMaximum": 77,
-              "rgbRmse": 5.305453993549151,
-              "rgbPsnr": 33.636352550974024
+              "rgbRmse": 5.297664647217066,
+              "rgbPsnr": 33.649114346263964
             },
             "decoderDifference": {
-              "sumSquared": 2461,
+              "sumSquared": 3131,
               "maximum": 1,
               "samples": 398601,
               "scale": 1,
               "rgbMaximum": 1,
-              "rgbRmse": 0.07857540259770954,
-              "rgbPsnr": 70.22507131077839
+              "rgbRmse": 0.0886282842395895,
+              "rgbPsnr": 69.17935677163726
             },
             "alphaExact": true,
             "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
@@ -206,34 +356,34 @@
           },
           "closestOwned": {
             "setting": 75,
-            "encodedBytes": 6752,
-            "encodedSha256": "4c2217f039e67cd4514221a32d6a7ce52ea29c0549945b0d9533e881ec1afa46",
-            "nativeDecodedSha256": "6dfe9f94ea1a28c492935417a537ce205727f5176a90542fec8071144d7a92fa",
-            "publicDecodedSha256": "c8e5d4b896bab9d67d958d77711b9abe5494b0d080afc09756705f2206ae4b72",
+            "encodedBytes": 6722,
+            "encodedSha256": "c4fd67162050cb2fc531c4cc058f3fee07b9fc57f29beedf22502bbf43e8bad3",
+            "nativeDecodedSha256": "2a3598d624f547822c1ff677738e6083907e2fbc33ebb787c8b4aac10b8fc56f",
+            "publicDecodedSha256": "4a2e9eedfa878380853be5e06110fe49ff837d18a6e71fc75c57cad84264ebb4",
             "codec": "VP8",
             "sampling": "4:2:0",
             "sourceError": {
-              "sumSquared": 11219758,
+              "sumSquared": 11186837,
               "maximum": 77,
               "samples": 398601,
               "scale": 1,
               "rgbMaximum": 77,
-              "rgbRmse": 5.305453993549151,
-              "rgbPsnr": 33.636352550974024
+              "rgbRmse": 5.297664647217066,
+              "rgbPsnr": 33.649114346263964
             },
             "decoderDifference": {
-              "sumSquared": 2461,
+              "sumSquared": 3131,
               "maximum": 1,
               "samples": 398601,
               "scale": 1,
               "rgbMaximum": 1,
-              "rgbRmse": 0.07857540259770954,
-              "rgbPsnr": 70.22507131077839
+              "rgbRmse": 0.0886282842395895,
+              "rgbPsnr": 69.17935677163726
             },
             "alphaExact": true,
             "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
           },
-          "psnrGapDb": 0.130170296516539,
+          "psnrGapDb": 0.11740850122659907,
           "matched": true,
           "exclusionReason": null
         },
@@ -241,11 +391,12 @@
       },
       "sourceUnchanged": true,
       "independentOutputs": true,
-      "timingAndAllocations": "C56 short cost screen pending; CPU parity deferred. C49 lossless timings unchanged."
+      "timingAndAllocations": "C57 short cost screen pending; CPU parity deferred. C49 lossless timings unchanged."
     }
   ],
   "project": "Lokad.Image",
-  "policy": "Frozen previously selected quality anchors; only the two required content controls; complete packet sizes, unchanged source-PSNR tolerance and exact alpha. Historical quality search remains in qualitySelectionEvidence.",
-  "qualitySelectionEvidence": "warm-webp-compression-evidence.json",
-  "qualitySelectionHarnessSha256": "ff58e1b13bff857daeb74ea5bf2aaa128fdf2a539597543d532f0bde8145d2e3"
+  "policy": "Changed photograph only: bounded-v1 seeds1,25,50,75,100 plus refinement77; closest measured quality distance, no size-driven selection. Diagram75 revalidated unchanged. Original q78 point and earlier selection evidence retained.",
+  "qualitySelectionEvidence": "vp8-direction-coverage-evidence.json",
+  "qualitySelectionHarnessSha256": "ff58e1b13bff857daeb74ea5bf2aaa128fdf2a539597543d532f0bde8145d2e3",
+  "originalQualitySelectionEvidence": "warm-webp-compression-evidence.json"
 }

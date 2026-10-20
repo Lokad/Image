@@ -7,6 +7,7 @@ namespace Lokad.Image.Internal;
 /// <summary>Owned VP8 key-frame encoder with independent intra search and admitted entropy adaptation.</summary>
 internal static partial class Vp8Encoder
 {
+    private const int RateLumaModes = 10;
     // RFC 6386 sections 11 and 13: leaves are represented here as -(token+1).
     private static ReadOnlySpan<sbyte> ModeTree => [-1, 2, -2, 4, -3, 6, 8, 12, -4, 10, -6, -7, -5, 14, -8, 16, -9, -10];
     private static ReadOnlySpan<sbyte> TokenTree => [-12, 2, -1, 4, -2, 6, 8, 12, -3, 10, -4, -5, 14, 16, -6, -7, 18, 20, -8, -9, -10, -11];
@@ -56,7 +57,7 @@ internal static partial class Vp8Encoder
                 if (intra16)
                 {
                     var top = above.AsSpan(mx * 8, 8);
-                    var large = PrepareLumaMacroblock(source, reconstructed, x, y, q, candidates[options.Effort],
+                    var large = PrepareLumaMacroblock(source, reconstructed, x, y, q, RateLumaModes,
                         index, columns, modes, top, left, model!.Y2Above[mx] + leftY2,
                         model.Probabilities, bitCosts, lambda, luma, y2, context);
                     if (large)

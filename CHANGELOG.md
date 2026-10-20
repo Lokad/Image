@@ -3,7 +3,7 @@
 ## 0.2.0 — Unreleased
 
 - Smaller lossy WebP output through admitted 16x16 luma prediction, grouped DC
-  coding, reconstruction-based luma/chroma mode decisions and whole-frame entropy
+  coding, full-direction reconstruction-based luma/chroma decisions and whole-frame entropy
   modeling at higher efforts; broader compression parity remains open.
 
 - Coverage-based OpenType contextual substitution and validated zero default-instance
