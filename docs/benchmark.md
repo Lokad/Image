@@ -9,17 +9,19 @@ to the named fixed inputs/settings/hardware, without extrapolating to other prof
 
 These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
-is separate. **226 historical codec/edit rows do not yet requalify changed 0.2.0
-admission, disposal or governed storage.** Current CMYK, four Lanczos3, two async
+is separate. **225 historical codec/edit rows do not yet requalify changed 0.2.0
+admission, disposal or governed storage.** Two current CMYK, four Lanczos3, two async
 input and four async output rows identify their current producers. Production
 qualification now passes 4,464 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
-Largest demonstrated current-code gap: sparse CMYK at **1.617x** after the
+Largest demonstrated current-code gap: [one-AC CMYK](../benchmarks/WARM-JPEG-CMYK-AC-CURRENT.md)
+at **1.714x**. One short on the same qualified build resolves its older timing;
+no rebuild or repeated package proof. Next: a row-specific integer primitive
+using the qualified basis, preserving the accepted2D path. Sparse CMYK is **1.617x** after the
 [certified integer round](../benchmarks/WARM-JPEG-SPARSE-INTEGER.md), saving 11.3%
 with exact pixels, unchanged allocation and no heap table. The same actual package
-passes analytical sparse-AC and shared-owner checks on both OS. Next: resolve the
-existing one-AC case's older timing on this qualified build before optimization.
+passes analytical sparse-AC and shared-owner checks on both OS.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
@@ -147,7 +149,7 @@ reconciliation now covers every numeric row.
 | [JPEG untagged → caller CMYK8](../benchmarks/WARM-JPEG-YCCK-CALLER-SIMD.md) | 526.74 | 330.84 | 1.592 / 1.669 | 1,635,479 | Gap (short; qualified) |
 | [JPEG 4:2:0 → caller RGB24](../benchmarks/WARM-JPEG-FOUR-COMPONENT-PLANES.md) | 1,121.94 | 1,166.50 | 0.962 / 0.966 | 624,508 | Parity confirmed |
 | [JPEG Adobe CMYK, four full-resolution planes](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 525.44 | 377.75 | 1.391 / 1.473 | 1,085,667 | Gap (short; qualified) |
-| [JPEG Adobe CMYK, one AC control](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 674.71 | 389.55 | 1.732 / 1.783 | 1,085,662 | Gap (short; qualified) |
+| [JPEG Adobe CMYK, one AC control](../benchmarks/WARM-JPEG-CMYK-AC-CURRENT.md) | 668.26 | 390.00 | 1.714 / 1.764 | 1,085,686 | Gap (short; qualified) |
 | [JPEG Adobe CMYK, general transform control](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 3,463.08 | 3,110.84 | 1.113 / 1.197 | 1,085,522 | Gap (short; qualified) |
 | [JPEG Adobe CMYK, two-dimensional sparse control](../benchmarks/WARM-JPEG-SPARSE-INTEGER.md) | 714.01 | 441.52 | 1.617 / 1.693 | 1,085,682 | Gap (short; qualified) |
 | [JPEG YCCK420, full-resolution black](../benchmarks/WARM-JPEG-YCCK-CALLER-SIMD.md) | 824.27 | 708.72 | 1.163 / 1.175 | 1,470,256 | Gap (short; qualified) |

@@ -7,9 +7,9 @@ contains128 independent observations and109 qualified shorts.17named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
 The finite scope is now **254 cases:237 numeric+17 unmeasured**. The remaining
-226 historical codec/edit rows retain their identified performance-qualified
+225 historical codec/edit rows retain their identified performance-qualified
 builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
-Current CMYK, four Lanczos3, two async input and four async output rows are identified below.
+Two current CMYK, four Lanczos3, two async input and four async output rows are identified below.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
 required representatives using the same513×259 asymmetric RGBA rasters. Their
 [certified FMA screens](WARM-LANCZOS3-CERTIFIED-FMA.md) improve all
@@ -44,8 +44,13 @@ change qualifies4464tests/OS,8sparse+29public scalar checks/OS and the same actu
 private package/examples on both OS, including sparse-AC shared owners. The original
 8KiB basis is immutable module data with no heap table. All64 bins certify before
 writes; uncertain blocks retain the original calculation. Only this existing row
-refreshes. Other226 older codec/edit rows keep their identified scopes. Next:
-resolve the named one-AC case's older current-code uncertainty before optimization.
+refreshes. The subsequent [one-AC current-code check](WARM-JPEG-CMYK-AC-CURRENT.md)
+resolves another named row:668.26µs/1.714x/upper1.764,1,085,686B/op. It reuses this
+qualified producer, fixtures, worker, harness and selector without builds or
+repeated full/package checks. Exact analytical pixels and normal/scalar quality/
+owner gates pass. This largest demonstrated current gap motivates a separate
+row-specific integer primitive; the accepted2D kernel stays unchanged. Other225
+historical codec/edit rows keep their scopes; counts remain237numeric+17untimed.
 The [axis-cross trial](WARM-JPEG-AXIS-CROSS-TRIAL.md)
 regressed4.5% and is rejected, with production restored. Five freshly compiled
 sparse tests pass normally/scalar on both OS; current full/package evidence is

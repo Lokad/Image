@@ -141,7 +141,7 @@ def render():
         row('JPEG untagged → caller CMYK8', 'warm-jpeg-ycck-caller-simd-evidence.json', ['cases', 'CmykCaller', -1], 'WARM-JPEG-YCCK-CALLER-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 → caller RGB24', 'warm-jpeg-four-component-planes-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-FOUR-COMPONENT-PLANES.md', True),
         row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobe', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
-        row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeAc', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-cmyk-ac-current-evidence.json', ['cases', 'CmykAdobeAc', -1], 'WARM-JPEG-CMYK-AC-CURRENT.md', verification='Gap (short; qualified)'),
         row('JPEG Adobe CMYK, general transform control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeGeneral', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG Adobe CMYK, two-dimensional sparse control', 'warm-jpeg-sparse-integer-evidence.json', ['cases', 'CmykAdobeSparse2D', -1], 'WARM-JPEG-SPARSE-INTEGER.md', verification='Gap (short; qualified)'),
         row('JPEG YCCK420, full-resolution black', 'warm-jpeg-ycck-caller-simd-evidence.json', ['cases', 'Ycck420', -1], 'WARM-JPEG-YCCK-CALLER-SIMD.md', verification='Gap (short; qualified)'),
@@ -338,17 +338,19 @@ to the named fixed inputs/settings/hardware, without extrapolating to other prof
 
 These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
-is separate. **226 historical codec/edit rows do not yet requalify changed 0.2.0
-admission, disposal or governed storage.** Current CMYK, four Lanczos3, two async
+is separate. **225 historical codec/edit rows do not yet requalify changed 0.2.0
+admission, disposal or governed storage.** Two current CMYK, four Lanczos3, two async
 input and four async output rows identify their current producers. Production
 qualification now passes 4,464 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
-Largest demonstrated current-code gap: sparse CMYK at **1.617x** after the
+Largest demonstrated current-code gap: [one-AC CMYK](../benchmarks/WARM-JPEG-CMYK-AC-CURRENT.md)
+at **1.714x**. One short on the same qualified build resolves its older timing;
+no rebuild or repeated package proof. Next: a row-specific integer primitive
+using the qualified basis, preserving the accepted2D path. Sparse CMYK is **1.617x** after the
 [certified integer round](../benchmarks/WARM-JPEG-SPARSE-INTEGER.md), saving 11.3%
 with exact pixels, unchanged allocation and no heap table. The same actual package
-passes analytical sparse-AC and shared-owner checks on both OS. Next: resolve the
-existing one-AC case's older timing on this qualified build before optimization.
+passes analytical sparse-AC and shared-owner checks on both OS.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
