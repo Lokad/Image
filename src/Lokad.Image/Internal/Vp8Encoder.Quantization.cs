@@ -6,12 +6,13 @@ internal static partial class Vp8Encoder
 {
     // Independently derived source-conversion-loss masking. Transform coefficient
     // noise of variance step²/12 gives pixel variance step²/48 for our 4x4 DCT.
-    // The matrix gain conservatively omits the variance reduction from chroma
-    // interpolation. This is an encoding heuristic, not an output error bound.
+    // Propagate independent noise through centered chroma interpolation, combining
+    // coincident edge taps. This is a local equal-step encoding heuristic, not an
+    // output error bound: reconstruction rounding and noise can be correlated.
     internal sealed class QuantizationPlan : IDisposable
     {
-        private const double RgbNoiseGain = (255d / 219) * (255d / 219)
-            + (1.596026785714286 * 1.596026785714286 + .391762290094914 * .391762290094914
+        private const double LumaNoiseGain = (255d / 219) * (255d / 219);
+        private const double ChromaNoiseGain = (1.596026785714286 * 1.596026785714286 + .391762290094914 * .391762290094914
                 + .812967647237771 * .812967647237771 + 2.017232142857143 * 2.017232142857143) / 3;
         private readonly OperationContext context;
         private readonly long memory;
@@ -31,7 +32,7 @@ internal static partial class Vp8Encoder
             ReadOnlySpan<int> trials = [1, 2, 3, 4, 6, 8, 10];
             var predictionWork = count * (16L * trials[effort] * 192 + 4L * 512 + 24L * 512 + 64);
             var prefixWork = Math.Min(count, 64) * 24L * 256 + 1056 * 16 + count * 24L;
-            var analysisWork = count * (16L * 64 + 128 + 4) + 8192;
+            var analysisWork = count * (16L * 96 + 128 + 4) + 8192;
             var maximumHeader = ((count * (1L + 16 * 9 + 3 + 2) + 1056L * 9 + 192) * 7 + 7) / 8 + 3;
             if (count < 4 || count + 256L > context.RemainingWorkingBytes || maximumHeader > 0x7FFFF
                 || predictionWork + prefixWork + analysisWork > context.RemainingWork) return null;
@@ -56,22 +57,23 @@ internal static partial class Vp8Encoder
             Span<int> histogram = stackalloc int[128]; histogram.Clear(); var active = false;
             for (var index = 0; index < Map.Length; index++)
             {
-                long error = 0, weights = 0;
+                long error = 0; double noise = 0;
                 var mx = index % columns * 16; var my = index / columns * 16;
                 for (var by = 0; by < 4; by++)
                 for (var bx = 0; bx < 4; bx++)
                 {
-                    context.Work(64);
+                    context.Work(96);
                     var x = Math.Min(image.Width - 1, mx + bx * 4 + 1);
                     var y = Math.Min(image.Height - 1, my + by * 4 + 1);
                     var at = (y * image.Width + x) * 4;
                     var r = Sample(pixels, words, byteDepth, at); var g = Sample(pixels, words, byteDepth, at + 1);
                     var b = Sample(pixels, words, byteDepth, at + 2); var a = Sample(pixels, words, byteDepth, at + 3);
-                    var weight = a * a; weights += weight;
+                    var weight = a * a;
                     error += weight * (long)Vp8Color.SourceError(source, x, y, r, g, b);
+                    noise += weight * NoiseGain(x, y, image.Width, image.Height);
                 }
                 context.Work(128);
-                var targetSquared = weights == 0 ? 0 : 16d * error / (weights * RgbNoiseGain * (quality + 1));
+                var targetSquared = noise == 0 ? 0 : 16d * error / (noise * (quality + 1));
                 var q = baseQ;
                 while (q < 127 && steps[q + 1] * steps[q + 1] <= targetSquared) q++;
                 Map[index] = (byte)q; histogram[q]++; active |= q != baseQ;
@@ -108,6 +110,17 @@ internal static partial class Vp8Encoder
             probabilities[1] = Probability(counts[0], counts[0] + counts[1]);
             probabilities[2] = Probability(counts[2], counts[2] + counts[3]);
             return true;
+        }
+
+        internal static double NoiseGain(int x, int y, int width, int height)
+            => LumaNoiseGain + ChromaNoiseGain * AxisNoise(x, width) * AxisNoise(y, height);
+
+        private static double AxisNoise(int coordinate, int length)
+        {
+            var first = (coordinate - 1) / 2; var last = Math.Min(first + 1, (length + 1) / 2 - 1);
+            if (first == last || coordinate == 0) return 1;
+            var phase = (coordinate & 1) == 0 ? 3 : 1;
+            return ((4 - phase) * (4 - phase) + phase * phase) / 16d;
         }
 
         private static int Nearest(double value, ReadOnlySpan<double> centers)

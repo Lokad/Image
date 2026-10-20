@@ -214,11 +214,11 @@ def render():
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-compact-color-evidence.json', ['cases', 'OriginalGray', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-caller-mcu-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-CALLER-MCU.md', verification='Gap (short; qualified)'),
-        row('WebP VP8, opaque‡', 'vp8-source-quantization-evidence.json', ['observations', 0], 'WARM-VP8-SOURCE-QUANTIZATION.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8, opaque from RGBA16‡', 'vp8-source-quantization-evidence.json', ['observations', 1], 'WARM-VP8-SOURCE-QUANTIZATION.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alpha‡', 'vp8-source-quantization-evidence.json', ['observations', 2], 'WARM-VP8-SOURCE-QUANTIZATION.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alpha from RGBA16‡', 'vp8-source-quantization-evidence.json', ['observations', 3], 'WARM-VP8-SOURCE-QUANTIZATION.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-source-quantization-evidence.json', ['observations', 4], 'WARM-VP8-SOURCE-QUANTIZATION.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8, opaque‡', 'vp8-interpolation-noise-evidence.json', ['observations', 0], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8, opaque from RGBA16‡', 'vp8-interpolation-noise-evidence.json', ['observations', 1], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alpha‡', 'vp8-interpolation-noise-evidence.json', ['observations', 2], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alpha from RGBA16‡', 'vp8-interpolation-noise-evidence.json', ['observations', 3], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-interpolation-noise-evidence.json', ['observations', 4], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-CODE-COST.md', True),
@@ -318,8 +318,8 @@ def render():
     encodes.extend([
         row('WebP VP8L photograph RGBA8', 'warm-vp8l-code-cost-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L text/diagram RGBA8', 'warm-vp8l-code-cost-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-CODE-COST.md', True),
-        row('WebP VP8 photograph RGBA8 / matched quality', 'vp8-source-quantization-evidence.json', ['observations', 5], 'WARM-VP8-SOURCE-QUANTIZATION.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 text/diagram RGBA8 / matched quality', 'vp8-source-quantization-evidence.json', ['observations', 6], 'WARM-VP8-SOURCE-QUANTIZATION.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 photograph RGBA8 / matched quality', 'vp8-interpolation-noise-evidence.json', ['observations', 5], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 text/diagram RGBA8 / matched quality', 'vp8-interpolation-noise-evidence.json', ['observations', 6], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
     ])
     edits.extend([
         row('Lanczos3 reduction RGBA8', 'warm-lanczos3-certified-fma-evidence.json', ['cases', 'Reduce8', -1], 'WARM-LANCZOS3-CERTIFIED-FMA.md', verification='Gap (short; qualified)'),
@@ -338,7 +338,7 @@ def render():
     assert parity_count + confidence_count + gap_count + reconfirm_count + cost_count == 239
     return f'''# Lokad.Image benchmark state
 
-Updated 2026-10-20. Priority: **complete-packet compression at the frozen quality
+Updated 2026-10-21. Priority: **complete-packet compression at the frozen quality
 gates**, lossy WebP first, then lossless WebP. Meaningful verified incremental
 gains may cost more CPU. Warm single-CPU parity (independently confirmed upper≤1x)
 remains a deferred objective; speed-only work and repeated confirmations wait
@@ -510,7 +510,7 @@ procedural packet gates and the finite matrix remain unchanged. The earlier
 [prefix](../benchmarks/WARM-VP8-PREFIX-WORK.md) and
 [fixed-stage](../benchmarks/WARM-WEBP-ALPHA-SINGLE-PASS.md) proofs are historical.
 
-The current [source-quantization milestone](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md)
+The [source-quantization milestone](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md)
 cuts opaque149,570→83,838 B (ref72,380), alpha170,196→108,880 B (ref98,590)
 and work32M181,998→120,146 B (ref98,590). Exact alpha and unchanged quality gates
 pass; all five packet gaps remain open. Primary photograph/diagram packets,
@@ -523,6 +523,20 @@ timing repeat or CPU-parity claim. Opaque8/16 allocate1,002,712 B/op, alpha8/16
 1,532,200, work32M2,033,809, photograph590,152 and diagram570,856. Native allocations
 are unmeasured. Unchanged decoder inputs and other production paths retain their
 qualified scopes; no workload, reference, input or tolerance changes.
+
+The current [interpolation-noise milestone](../benchmarks/WARM-VP8-INTERPOLATION-NOISE.md)
+further cuts opaque83,838→74,962 B, alpha108,880→99,816 B and work32M120,146→111,094 B.
+The respective complete references remain72,380/98,590/98,590 B; all five gates
+stay open. Source-PSNR gaps0.016224/0.038933 dB, exact alpha and unchanged decoder
+bounds pass; primary packets/pixels/quality remain identical. Independent noise
+propagation includes centered chroma weights and coincident edge taps, with no
+new buffer and unchanged admission/ownership. Actual31,916,945 units fit32M.
+Both OSes pass4,674tests,202internal+8public+2diff scalar checks and the same actual
+private package/all examples. Seven short guarded costs supersede affected encodes:
+opaque8/16 allocate1,002,488 B/op, alpha8/16 1,532,032, work32M1,806,692, photograph
+590,152 and diagram570,856. No independent timing repeat or CPU-parity claim;
+one frozen producer/internal build perOS, unchanged public/diff/harness/native/
+selector binaries reused. Other production paths retain their qualified scopes.
 
 The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
 rejects a smaller packet with excessive quality loss and a quality-preserving

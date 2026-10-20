@@ -6,6 +6,33 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8SourceQuantizationTests
 {
+    [Theory]
+    [InlineData(1, 1, 0, 0)] [InlineData(2, 3, 1, 1)]
+    [InlineData(5, 5, 1, 1)] [InlineData(5, 5, 2, 2)]
+    [InlineData(5, 5, 0, 3)] [InlineData(5, 5, 4, 4)]
+    [InlineData(6, 4, 5, 3)] [InlineData(6, 4, 3, 0)]
+    public void CenteredNoiseGainMatchesIndependentImpulseEnergy(int width, int height, int x, int y)
+    {
+        // Place independent unit impulses in source chroma samples. Compute
+        // centered bilinear responses in continuous coordinates, with clamped
+        // taps combined in the raster before propagating the RGB matrix.
+        var weights = new double[(height + 1) / 2, (width + 1) / 2];
+        var sx = (x - .5) / 2; var sy = (y - .5) / 2;
+        var ix = (int)Math.Floor(sx); var iy = (int)Math.Floor(sy);
+        for (var dy = 0; dy < 2; dy++)
+        for (var dx = 0; dx < 2; dx++)
+            weights[Math.Clamp(iy + dy, 0, weights.GetLength(0) - 1), Math.Clamp(ix + dx, 0, weights.GetLength(1) - 1)]
+                += (dx == 0 ? 1 - (sx - ix) : sx - ix) * (dy == 0 ? 1 - (sy - iy) : sy - iy);
+        var energy = 3 * Math.Pow(255d / 219, 2);
+        foreach (var weight in weights)
+        {
+            var red = 1.596026785714286 * weight; var greenV = -.812967647237771 * weight;
+            var greenU = -.391762290094914 * weight; var blue = 2.017232142857143 * weight;
+            energy += red * red + greenV * greenV + greenU * greenU + blue * blue;
+        }
+        Assert.Equal(energy / 3, Vp8Encoder.QuantizationPlan.NoiseGain(x, y, width, height), precision: 12);
+    }
+
     private const int Width = 65, Height = 33;
     private static ImageLimits Limits(TestMemoryBudget root) => new() { MemoryBudget = root };
     private static ImageBuffer Source(TestMemoryBudget root, int? alpha = null)

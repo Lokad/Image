@@ -16,8 +16,8 @@
       "qualityPass": true,
       "packetSizePass": true,
       "psnrGapDb": 0.14094424107553039,
-      "evidence": "vp8-source-quantization-evidence.json",
-      "validity": "C69 qualified source-only quantization; fixed inputs/reference/settings, unchanged quality gates and exact alpha. Existing primary packets/pixels unchanged. Short costs only; CPU parity deferred.",
+      "evidence": "vp8-interpolation-noise-evidence.json",
+      "validity": "C70 qualified interpolation-aware noise model; fixed inputs/reference/settings/quality gates, exact alpha and unchanged primary packets/pixels. Short costs only, CPU parity deferred.",
       "previousManagedPacketBytes": 17366,
       "observationPath": [
         "observations",
@@ -34,8 +34,8 @@
       "qualityPass": true,
       "packetSizePass": true,
       "psnrGapDb": 0.11740850122659907,
-      "evidence": "vp8-source-quantization-evidence.json",
-      "validity": "C69 qualified source-only quantization; fixed inputs/reference/settings, unchanged quality gates and exact alpha. Existing primary packets/pixels unchanged. Short costs only; CPU parity deferred.",
+      "evidence": "vp8-interpolation-noise-evidence.json",
+      "validity": "C70 qualified interpolation-aware noise model; fixed inputs/reference/settings/quality gates, exact alpha and unchanged primary packets/pixels. Short costs only, CPU parity deferred.",
       "previousManagedPacketBytes": 6722,
       "observationPath": [
         "observations",
@@ -44,109 +44,109 @@
     },
     {
       "case": "WarmWebp/EncodeOpaque8",
-      "managedPacketBytes": 83838,
+      "managedPacketBytes": 74962,
       "referencePacketBytes": 72380,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "vp8-source-quantization-evidence.json",
+      "evidence": "vp8-interpolation-noise-evidence.json",
       "observationPath": [
         "observations",
         0
       ],
-      "validity": "C69 qualified source-only quantization; fixed inputs/reference/settings, unchanged quality gates and exact alpha. Existing primary packets/pixels unchanged. Short costs only; CPU parity deferred.",
-      "previousManagedPacketBytes": 149570,
+      "validity": "C70 qualified interpolation-aware noise model; fixed inputs/reference/settings/quality gates, exact alpha and unchanged primary packets/pixels. Short costs only, CPU parity deferred.",
+      "previousManagedPacketBytes": 83838,
       "alphaPayloadBytes": 0,
-      "psnrGapDb": 0.002978221313243952,
-      "consumedWork": 33538944,
-      "coefficientPolicy": "source-only absolute segment quantization; existing admitted entropy policy"
+      "psnrGapDb": 0.016224416735160823,
+      "consumedWork": 33708705,
+      "coefficientPolicy": "source-derived absolute segments with centered interpolation noise gain; existing admitted entropy policy"
     },
     {
       "case": "WarmWebp/EncodeOpaque16",
-      "managedPacketBytes": 83838,
+      "managedPacketBytes": 74962,
       "referencePacketBytes": 72380,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "vp8-source-quantization-evidence.json",
+      "evidence": "vp8-interpolation-noise-evidence.json",
       "observationPath": [
         "observations",
         1
       ],
-      "validity": "C69 qualified source-only quantization; fixed inputs/reference/settings, unchanged quality gates and exact alpha. Existing primary packets/pixels unchanged. Short costs only; CPU parity deferred.",
-      "previousManagedPacketBytes": 149570,
+      "validity": "C70 qualified interpolation-aware noise model; fixed inputs/reference/settings/quality gates, exact alpha and unchanged primary packets/pixels. Short costs only, CPU parity deferred.",
+      "previousManagedPacketBytes": 83838,
       "alphaPayloadBytes": 0,
-      "psnrGapDb": 0.002978221313243952,
-      "consumedWork": 33538944,
-      "coefficientPolicy": "source-only absolute segment quantization; existing admitted entropy policy"
+      "psnrGapDb": 0.016224416735160823,
+      "consumedWork": 33708705,
+      "coefficientPolicy": "source-derived absolute segments with centered interpolation noise gain; existing admitted entropy policy"
     },
     {
       "case": "WarmWebp/Encode8",
-      "managedPacketBytes": 108880,
+      "managedPacketBytes": 99816,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "vp8-source-quantization-evidence.json",
+      "evidence": "vp8-interpolation-noise-evidence.json",
       "observationPath": [
         "observations",
         2
       ],
-      "validity": "C69 qualified source-only quantization; fixed inputs/reference/settings, unchanged quality gates and exact alpha. Existing primary packets/pixels unchanged. Short costs only; CPU parity deferred.",
-      "previousManagedPacketBytes": 170196,
+      "validity": "C70 qualified interpolation-aware noise model; fixed inputs/reference/settings/quality gates, exact alpha and unchanged primary packets/pixels. Short costs only, CPU parity deferred.",
+      "previousManagedPacketBytes": 108880,
       "alphaPayloadBytes": 18579,
-      "psnrGapDb": 0.02932915023333853,
-      "consumedWork": 39119786,
-      "coefficientPolicy": "source-only absolute segment quantization; existing admitted entropy policy"
+      "psnrGapDb": 0.03893331613484823,
+      "consumedWork": 39282652,
+      "coefficientPolicy": "source-derived absolute segments with centered interpolation noise gain; existing admitted entropy policy"
     },
     {
       "case": "WarmWebp/Encode16",
-      "managedPacketBytes": 108880,
+      "managedPacketBytes": 99816,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "vp8-source-quantization-evidence.json",
+      "evidence": "vp8-interpolation-noise-evidence.json",
       "observationPath": [
         "observations",
         3
       ],
-      "validity": "C69 qualified source-only quantization; fixed inputs/reference/settings, unchanged quality gates and exact alpha. Existing primary packets/pixels unchanged. Short costs only; CPU parity deferred.",
-      "previousManagedPacketBytes": 170196,
+      "validity": "C70 qualified interpolation-aware noise model; fixed inputs/reference/settings/quality gates, exact alpha and unchanged primary packets/pixels. Short costs only, CPU parity deferred.",
+      "previousManagedPacketBytes": 108880,
       "alphaPayloadBytes": 18579,
-      "psnrGapDb": 0.02932915023333853,
-      "consumedWork": 39119786,
-      "coefficientPolicy": "source-only absolute segment quantization; existing admitted entropy policy"
+      "psnrGapDb": 0.03893331613484823,
+      "consumedWork": 39282652,
+      "coefficientPolicy": "source-derived absolute segments with centered interpolation noise gain; existing admitted entropy policy"
     },
     {
       "case": "WarmWebp/EncodeBudget8",
-      "managedPacketBytes": 120146,
+      "managedPacketBytes": 111094,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "vp8-source-quantization-evidence.json",
+      "evidence": "vp8-interpolation-noise-evidence.json",
       "observationPath": [
         "observations",
         4
       ],
-      "validity": "C69 qualified source-only quantization; fixed inputs/reference/settings, unchanged quality gates and exact alpha. Existing primary packets/pixels unchanged. Short costs only; CPU parity deferred.",
-      "previousManagedPacketBytes": 181998,
+      "validity": "C70 qualified interpolation-aware noise model; fixed inputs/reference/settings/quality gates, exact alpha and unchanged primary packets/pixels. Short costs only, CPU parity deferred.",
+      "previousManagedPacketBytes": 120146,
       "alphaPayloadBytes": 28333,
-      "coefficientPolicy": "source-only absolute segment quantization; existing admitted entropy policy",
+      "coefficientPolicy": "source-derived absolute segments with centered interpolation noise gain; existing admitted entropy policy",
       "alphaCodingPolicy": "one collected token sequence, adaptive prefix replay and charged token/encoded overlap",
-      "psnrGapDb": 0.02932915023333853,
-      "consumedWork": 31752723
+      "psnrGapDb": 0.03893331613484823,
+      "consumedWork": 31916945
     }
   ]
 }

@@ -1,6 +1,6 @@
 # Lokad.Image benchmark state
 
-Updated 2026-10-20. Priority: **complete-packet compression at the frozen quality
+Updated 2026-10-21. Priority: **complete-packet compression at the frozen quality
 gates**, lossy WebP first, then lossless WebP. Meaningful verified incremental
 gains may cost more CPU. Warm single-CPU parity (independently confirmed upper≤1x)
 remains a deferred objective; speed-only work and repeated confirmations wait
@@ -172,7 +172,7 @@ procedural packet gates and the finite matrix remain unchanged. The earlier
 [prefix](../benchmarks/WARM-VP8-PREFIX-WORK.md) and
 [fixed-stage](../benchmarks/WARM-WEBP-ALPHA-SINGLE-PASS.md) proofs are historical.
 
-The current [source-quantization milestone](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md)
+The [source-quantization milestone](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md)
 cuts opaque149,570→83,838 B (ref72,380), alpha170,196→108,880 B (ref98,590)
 and work32M181,998→120,146 B (ref98,590). Exact alpha and unchanged quality gates
 pass; all five packet gaps remain open. Primary photograph/diagram packets,
@@ -185,6 +185,20 @@ timing repeat or CPU-parity claim. Opaque8/16 allocate1,002,712 B/op, alpha8/16
 1,532,200, work32M2,033,809, photograph590,152 and diagram570,856. Native allocations
 are unmeasured. Unchanged decoder inputs and other production paths retain their
 qualified scopes; no workload, reference, input or tolerance changes.
+
+The current [interpolation-noise milestone](../benchmarks/WARM-VP8-INTERPOLATION-NOISE.md)
+further cuts opaque83,838→74,962 B, alpha108,880→99,816 B and work32M120,146→111,094 B.
+The respective complete references remain72,380/98,590/98,590 B; all five gates
+stay open. Source-PSNR gaps0.016224/0.038933 dB, exact alpha and unchanged decoder
+bounds pass; primary packets/pixels/quality remain identical. Independent noise
+propagation includes centered chroma weights and coincident edge taps, with no
+new buffer and unchanged admission/ownership. Actual31,916,945 units fit32M.
+Both OSes pass4,674tests,202internal+8public+2diff scalar checks and the same actual
+private package/all examples. Seven short guarded costs supersede affected encodes:
+opaque8/16 allocate1,002,488 B/op, alpha8/16 1,532,032, work32M1,806,692, photograph
+590,152 and diagram570,856. No independent timing repeat or CPU-parity claim;
+one frozen producer/internal build perOS, unchanged public/diff/harness/native/
+selector binaries reused. Other production paths retain their qualified scopes.
 
 The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
 rejects a smaller packet with excessive quality loss and a quality-preserving
@@ -397,18 +411,18 @@ reconciliation now covers every numeric row.
 | [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,251.71 | 1,079.34 | 1.160 / 1.394 | 155,026 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-CALLER-MCU.md) | 2,097.34 | 1,579.06 | 1.328 / 1.408 | 297,894 | Gap (short; qualified) |
-| [WebP VP8, opaque‡](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md) | 15,751.55 | 15,552.09 | 1.013 / 1.043 | 1,002,712 | Cost screen (CPU parity deferred) |
-| [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md) | 16,364.53 | 15,620.67 | 1.048 / 1.124 | 1,002,712 | Cost screen (CPU parity deferred) |
-| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md) | 22,841.16 | 53,441.37 | 0.427 / 0.461 | 1,532,200 | Cost screen (CPU parity deferred) |
-| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md) | 23,169.74 | 53,625.17 | 0.432 / 0.459 | 1,532,200 | Cost screen (CPU parity deferred) |
-| [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md) | 15,743.21 | 53,763.89 | 0.293 / 0.340 | 2,033,809 | Cost screen (CPU parity deferred) |
+| [WebP VP8, opaque‡](../benchmarks/WARM-VP8-INTERPOLATION-NOISE.md) | 14,873.97 | 15,522.15 | 0.958 / 0.996 | 1,002,488 | Cost screen (CPU parity deferred) |
+| [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-INTERPOLATION-NOISE.md) | 15,478.99 | 15,573.08 | 0.994 / 1.041 | 1,002,488 | Cost screen (CPU parity deferred) |
+| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-INTERPOLATION-NOISE.md) | 21,829.63 | 53,523.02 | 0.408 / 0.426 | 1,532,032 | Cost screen (CPU parity deferred) |
+| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-INTERPOLATION-NOISE.md) | 22,376.11 | 53,581.44 | 0.418 / 0.432 | 1,532,032 | Cost screen (CPU parity deferred) |
+| [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-INTERPOLATION-NOISE.md) | 14,856.36 | 54,164.87 | 0.274 / 0.312 | 1,806,692 | Cost screen (CPU parity deferred) |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 57,489.75 | 121,784.50 | 0.472 / 0.481 | 10,286,728 | Parity confirmed |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 49,621.60 | 69,789.18 | 0.711 / 0.720 | 9,669,728 | Parity confirmed |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 66,156.61 | 122,061.47 | 0.542 / 0.550 | 10,286,320 | Parity confirmed |
 | [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-CODE-COST.md) | 65,462.97 | 82,409.48 | 0.794 / 0.802 | 9,912,952 | Parity confirmed |
 | [WebP VP8L text/diagram RGBA8](../benchmarks/WARM-VP8L-CODE-COST.md) | 6,715.35 | 10,254.85 | 0.655 / 0.669 | 107,568 | Parity confirmed |
-| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md) | 33,969.44 | 9,646.86 | 3.521 / 3.683 | 590,152 | Cost screen (CPU parity deferred) |
-| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md) | 14,068.64 | 5,815.18 | 2.419 / 2.481 | 570,856 | Cost screen (CPU parity deferred) |
+| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-INTERPOLATION-NOISE.md) | 34,396.38 | 9,714.89 | 3.541 / 3.695 | 590,152 | Cost screen (CPU parity deferred) |
+| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-INTERPOLATION-NOISE.md) | 13,942.60 | 5,832.30 | 2.391 / 2.583 | 570,856 | Cost screen (CPU parity deferred) |
 
 **Editing**
 

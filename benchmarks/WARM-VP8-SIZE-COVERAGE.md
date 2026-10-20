@@ -9,11 +9,11 @@ benchmark inputs, not the library default85. No general lossy WebP parity follow
 | --- | ---: | ---: | --- |
 | WarmCompression/PhotographLossy8 | 17,366 / 17,688 | 77 / 75 | Pass |
 | WarmCompression/DiagramLossy8 | 6,722 / 7,100 | 75 / 75 | Pass |
-| WarmWebp/EncodeOpaque8 | 83,838 / 72,380 | 100 / 75 | Open |
-| WarmWebp/EncodeOpaque16 | 83,838 / 72,380 | 100 / 75 | Open |
-| WarmWebp/Encode8 | 108,880 / 98,590 | 100 / 75 | Open |
-| WarmWebp/Encode16 | 108,880 / 98,590 | 100 / 75 | Open |
-| WarmWebp/EncodeBudget8 | 120,146 / 98,590 | 100 / 75 | Open |
+| WarmWebp/EncodeOpaque8 | 74,962 / 72,380 | 100 / 75 | Open |
+| WarmWebp/EncodeOpaque16 | 74,962 / 72,380 | 100 / 75 | Open |
+| WarmWebp/Encode8 | 99,816 / 98,590 | 100 / 75 | Open |
+| WarmWebp/Encode16 | 99,816 / 98,590 | 100 / 75 | Open |
+| WarmWebp/EncodeBudget8 | 111,094 / 98,590 | 100 / 75 | Open |
 
 C57 reuses the approved bounded quality matcher only for the changed photograph:
 1,25,50,75,100 seeds and one refinement77, chosen by source-quality distance before
@@ -48,12 +48,19 @@ package qualify on both OSes. The shared coefficient gap remains the larger
 opportunity; constrained ALPH is still above24,588 B. Passing primary
 content or a component does not establish whole-codec parity.
 
-The current [source-quantization milestone](WARM-VP8-SOURCE-QUANTIZATION.md)
+The [source-quantization milestone](WARM-VP8-SOURCE-QUANTIZATION.md)
 reduces opaque149,570→83,838 B, alpha170,196→108,880 B and work32M181,998→120,146 B.
 Existing source-quality gaps are0.002978/0.029329 dB within0.25 dB; alpha is exact.
 Actual work31,752,723 fits32M. Primary packets/pixels remain exact. BothOS suites,
 scalar checks and the same actual package/examples qualify; seven short jobs
 replace all affected encode cost observations. All five packet gates remain open.
+
+The current [interpolation-noise milestone](WARM-VP8-INTERPOLATION-NOISE.md) further
+reduces opaque83,838→74,962 B, alpha108,880→99,816 B and work32M120,146→111,094 B.
+Unchanged quality gates pass (0.016224/0.038933 dB gaps), exact alpha is preserved
+and31,916,945 units fit32M. BothOS4,674tests, scalar and same actual package/examples
+qualify; seven short costs supersede affected encodes. All five packet gates stay
+open, including12,504 B on the constrained path; no whole-codec parity claim.
 
 [Evidence](vp8-size-coverage-evidence.json) identifies the current and retained
 receipts. No new performance workload is introduced and the256-case warm checklist

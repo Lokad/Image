@@ -1387,6 +1387,10 @@ segment quantizers that are no finer than this base index. One clamped sample pe
 source conversion. A source-only allowance `MSE/(Quality+1)`, the transform's
 expected `step²/48` quantization variance and the RGB conversion-matrix gain select
 desired steps. Four deterministic log-step clusters select format quantizers.
+The gain propagates independent sample noise through centered chroma interpolation,
+combining coincident clamped edge taps before squaring. Interior quarter phases
+reduce chroma noise variance by `100/256`; luma gain remains unchanged. Local equal
+neighboring steps and independent noise are assumptions, not reconstruction bounds.
 This is a compression heuristic, not a reconstruction-error or global quality
 monotonicity guarantee. Numeric quality remains encoder-specific; source-quality
 matching is validated separately. The base index and nearest coefficient rounding
