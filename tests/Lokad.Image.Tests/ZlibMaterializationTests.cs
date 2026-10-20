@@ -3,7 +3,7 @@ using Lokad.Image.Internal;
 
 namespace Lokad.Image.Tests;
 
-public sealed class ZlibMaterializationTests
+public sealed partial class ZlibMaterializationTests
 {
     [Theory]
     [InlineData(1, 0, 0, 0)] [InlineData(2, 1, 0, 0)] [InlineData(3, 2, 0, 0)]

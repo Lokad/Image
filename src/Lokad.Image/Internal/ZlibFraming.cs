@@ -8,7 +8,7 @@ namespace Lokad.Image.Internal;
 // This establishes BFINAL, the exact checksum position and the bounded output
 // count before raster processing. An optional private output span materializes
 // the same symbols without a second Deflate walk; the original validator remains.
-internal static class ZlibFraming
+internal static partial class ZlibFraming
 {
     public static int Validate(ReadOnlySpan<byte> data, long expectedBytes, OperationContext context)
         => Walk(data, expectedBytes, context, default, out _);
@@ -109,6 +109,13 @@ internal static class ZlibFraming
                     {
                         output = InflateCancelableMaterializedBlock(ref reader, literals, distances, literalLookup,
                             distanceLookup, destination, output, expectedBytes, window);
+                        continue;
+                    }
+                    if (expectedBytes == destination.Length && reader.CanInflateMaterializedCursor(
+                        destination.Length - (int)output))
+                    {
+                        output = reader.InflateMaterializedCursor(literals, distances, literalLookup,
+                            distanceLookup, destination, (int)output, window);
                         continue;
                     }
                     while (true)
@@ -401,7 +408,7 @@ internal static class ZlibFraming
         }
     }
 
-    private ref struct Bits
+    private ref partial struct Bits
     {
         private readonly ReadOnlySpan<byte> data;
         private readonly OperationContext context;

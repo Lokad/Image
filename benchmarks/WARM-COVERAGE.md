@@ -11,6 +11,16 @@ The finite scope is now **254 cases:238 numeric+16 unmeasured**. The remaining
 builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
 Twenty-one current JPEG, four Lanczos3, two async input, four async output, one bicubic, five VP8 and one caller-owned-root rows
 are identified below. The latest JPEG evidence replaces the earlier CMYK timings.
+
+The [materialized Deflate cursor](WARM-DEFLATE-MATERIALIZED-CURSOR.md) now improves
+the two current PNG decode rows: two retained outputs1.265x/upper1.304x,
+2,574,671B/op (15.8% faster), and async input1.113x/upper1.176x,12,784B/op
+(23.2% faster). All4,481 tests/OS,122Zlib+36root controls normally/scalar,
+178affected public scalar checks, and the same actual private package/examples
+pass. Both short pairs pass all pixels/owners/quiet guards; no longer repeat
+above one. Other PNG rows reaching changed `Walk` remain historical, including
+count-only/cancelable routes. Metadata, encoding, `WalkRgba` and other codecs/
+editing retain their identified scopes. No new finite case or matrix is added.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
 required representatives using the same513×259 asymmetric RGBA rasters. Their
 [certified FMA screens](WARM-LANCZOS3-CERTIFIED-FMA.md) improve all
@@ -143,7 +153,7 @@ paths absent from the older checklist; these are not a shape/depth/settings grid
 The two text cases remain **unmeasured**; establish equivalent native font
 adapters and quality/ownership gates before timing. They add no new image or
 font/settings grid. [MemoryBudget/Png8Retained2](WARM-COOPERATIVE-MEMORY.md) now has
-one current three-actual short:4,280.80µs/native2,850.88µs,1.502x/upper1.567x,
+an initial three-actual short:4,280.80µs/native2,850.88µs,1.502x/upper1.567x,
 2,574,662B/op. Two complete decodes and overlapping independent outputs, exact
 pixels/hidden RGB, borrowed root, retained charges, refusal/cancellation cleanup
 and both official guards pass. Managed admission is included additional work;
@@ -152,6 +162,8 @@ reused;36 adapter controls pass normally/scalar per OS. One924-sample diagnostic
 locates49.6% in Deflate walking,22.0% literal copying,8.0% long-literal decoding.
 Next: establish one materialized-block decoder strategy's feasibility, preserving
 exact work/error/cursor/ownership semantics. No new workload or long above one.
+That initial result and diagnostic describe the previous producer; the
+materialized-cursor round above supersedes the two current numeric rows.
 The
 [prepared-double Lanczos trial](WARM-LANCZOS3-PREPARED-FMA-TRIAL.md) is correct but
 1.4% slower and rejected. Accepted producers and numeric rows remain unchanged.
@@ -891,3 +903,14 @@ not root admission, as the sampled cost. Next: bound one specialized materialize
 block cursor, preserving original error/work/input/output/memory semantics.
 No production build or repeated full/package proof;36 current adapter controls
 pass normally/scalar per OS. All accepted producers and existing rows are retained.
+
+The [work-bounded Deflate round](WARM-DEFLATE-MATERIALIZED-CURSOR.md) supersedes
+those two PNG decode results after full Windows/Linux/differential/package
+qualification:1.265x for overlapping caller-root outputs and1.113x for async input,
+with exact pixels/work/cursor/failure state and preserved ownership. All21 async
+managed controls revalidate; unchanged normal/scalar native evidence is reused.
+Prior924sample fractions describe the old loop only.38current/200historical and
+all finite counts stay unchanged; historical PNG timings are not relabeled.
+Next: bound live-token VP8 block work settlement with every original per-decision
+cancellation poll. Its1.577x current gap remains relevant because this round
+changes PNG only; repeated failed Lanczos strategies remain retired.

@@ -74,8 +74,8 @@ def table(rows):
 
 def render():
     decodes = [
-        row('PNG RGBA8, two retained outputs / caller-owned memory root', 'warm-cooperative-memory-evidence.json', ['cases', 'Png8Retained2', -1], 'WARM-COOPERATIVE-MEMORY.md', verification='Gap (short; qualified)'),
-        row('PNG DecodeAsync, fresh nonseekable Stream', 'warm-png-async-decode-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-PNG-ASYNC-DECODE.md', verification='Gap (short; qualified)'),
+        row('PNG RGBA8, two retained outputs / caller-owned memory root', 'warm-deflate-materialized-cursor-evidence.json', ['cases', 'Png8Retained2', -1], 'WARM-DEFLATE-MATERIALIZED-CURSOR.md', verification='Gap (short; qualified)'),
+        row('PNG DecodeAsync, fresh nonseekable Stream', 'warm-deflate-materialized-cursor-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-DEFLATE-MATERIALIZED-CURSOR.md', verification='Gap (short; qualified)'),
         row('PNG IdentifyAsync, fresh nonseekable Stream¶', 'warm-png-async-identify-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-PNG-ASYNC-IDENTIFY.md', verification='Gap (short; qualified)'),
         row('PNG Identify, fresh Stream¶', 'warm-png-stream-identify-evidence.json', ['observations', -1], 'WARM-PNG-STREAM-IDENTIFY.md', True),
         row('WebP Identify, resident span (parser)', 'warm-webp-identify-evidence.json', ['observations', -1], 'WARM-WEBP-IDENTIFY.md', True),
@@ -90,7 +90,7 @@ def render():
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8-coefficient-block-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-VP8-COEFFICIENT-BLOCK.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'StreamNativeLossless8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('PNG RGBA8, resident / shared budget', 'warm-shared-budget-evidence.json', ['cases', 'PngBudgetDecode8', -1], 'WARM-SHARED-BUDGET.md', verification='Gap (short; qualified)'),
+        row('PNG RGBA8, resident / ImageBudget quota', 'warm-shared-budget-evidence.json', ['cases', 'PngBudgetDecode8', -1], 'WARM-SHARED-BUDGET.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None / live cancelable token', 'warm-png-cancel-blocks-evidence.json', ['cases', 'DecodeCancelable8', -1], 'WARM-PNG-CANCEL-BLOCKS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None / exact working limit', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTight8', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None / exact limit + live cancelable token', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTightCancelable8', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
@@ -342,7 +342,7 @@ The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lancz
 is separate. **200 historical codec/edit rows do not yet requalify changed 0.2.0
 admission, disposal or governed storage.** Twenty-one current JPEG, four Lanczos3, two async
 input, four async output, one bicubic, five VP8 and one caller-owned-root row identify their current producers. Production
-qualification now passes 4,478 tests/OS, affected hardware-off checks, the same actual
+qualification now passes 4,481 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
 [Buffered JPEG EOB decoding](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) saves 10.0%
@@ -369,13 +369,18 @@ and the original short-input/cancelable path. A
 [prepared-double Lanczos trial](../benchmarks/WARM-LANCZOS3-PREPARED-FMA-TRIAL.md)
 is correct but 1.4% slower, at 154,894 B/op, and is rejected. Accepted production
 and all selected rows remain unchanged. The already named
-[caller-owned-root operation](../benchmarks/WARM-COOPERATIVE-MEMORY.md) now measures
-two complete decodes with overlapping retained outputs: **1.502x/upper1.567x**,
-2,574,662 B/op, with a 2,306,560-byte admitted peak including resident input.
-Exact pixels, independent survivors, refusal/cancellation cleanup and both guards
-pass. One 924-sample diagnostic locates 49.6% in Deflate walking, 22.0% in literal
-copying and 8.0% in long-literal decoding. Next: bound one materialized-block
-decoder strategy; admission semantics remain intact.
+[caller-owned-root baseline](../benchmarks/WARM-COOPERATIVE-MEMORY.md) led to a
+[materialized Deflate cursor](../benchmarks/WARM-DEFLATE-MATERIALIZED-CURSOR.md):
+two retained decodes improve **15.8%**, to **1.265x/upper1.304x**, 2,574,671 B/op.
+The admitted peak stays 2,306,560 bytes including resident input. Async PNG decode
+improves **23.2%**, to **1.113x/upper1.176x**, at unchanged 12,784 B/op. Exact
+pixels/work/failure state, independent survivors, refusal/cancellation cleanup and
+both guards pass. All21 async managed controls revalidate; unchanged native
+controls are reused. Two current rows refresh; previously historical PNG decode
+rows remain historical. Metadata, encoding and other codec/editing paths retain
+their scopes. The 924-sample profile describes the previous producer only.
+Next: bound live-token VP8 block work settlement while preserving every original
+decision's cancellation poll and exact partial work/cursor state.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial

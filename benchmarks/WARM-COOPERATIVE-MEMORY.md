@@ -1,5 +1,9 @@
 # Caller-owned admission: two retained PNG outputs
 
+This baseline is superseded by the
+[materialized Deflate cursor](WARM-DEFLATE-MATERIALIZED-CURSOR.md). Its original
+measurement and diagnostic remain evidence for the previous producer.
+
 The already named `MemoryBudget/Png8Retained2` operation is now measured on the
 unchanged qualified producer. It remains a parity gap; no longer repeat runs
 above one. No new fixture or settings grid is added.

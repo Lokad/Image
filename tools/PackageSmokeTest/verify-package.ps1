@@ -250,6 +250,30 @@ using (var packageVp8Cancellation = new CancellationTokenSource())
     if (packageVp8Root.Bytes != 0 || packageVp8Root.IsDisposed)
         throw new Exception("Package VP8 block cleanup or borrowed root differs.");
 }
+using (var packagePngSource = Lokad.Image.Tooling.OriginalPixels.Buffer(64, 64, 8))
+using (var packagePngEncoded = new MemoryStream())
+using (var packagePngRoot = new Lokad.Image.Tooling.TestMemoryBudget(2 * 1024 * 1024))
+using (var packagePngCancellation = new CancellationTokenSource())
+{
+    // Reuse the existing original64x64 source; no new performance input.
+    ImageCodec.EncodePng(packagePngSource, packagePngEncoded);
+    var packagePngPacket = packagePngEncoded.ToArray();
+    var packagePngOptions = new DecodeOptions { Limits = new ImageLimits { MemoryBudget = packagePngRoot } };
+    using var packagePngFast = ImageCodec.Decode(packagePngPacket, packagePngOptions);
+    using var packagePngOriginal = ImageCodec.Decode(packagePngPacket, packagePngOptions, packagePngCancellation.Token);
+    var packagePngExpected = Lokad.Image.Tooling.OriginalPixels.Bytes(packagePngSource);
+    if (!Lokad.Image.Tooling.OriginalPixels.Bytes(packagePngFast).AsSpan().SequenceEqual(packagePngExpected)
+        || !Lokad.Image.Tooling.OriginalPixels.Bytes(packagePngOriginal).AsSpan().SequenceEqual(packagePngExpected)
+        || packagePngRoot.Bytes != 2 * 64 * 64 * 4)
+        throw new Exception("Package PNG cursor pixels or retained charges differ.");
+    packagePngFast.GetRow8(0)[0] ^= 255; packagePngFast.Dispose();
+    if (!Lokad.Image.Tooling.OriginalPixels.Bytes(packagePngOriginal).AsSpan().SequenceEqual(packagePngExpected)
+        || packagePngRoot.Bytes != 64 * 64 * 4)
+        throw new Exception("Package PNG cursor survivor aliases or loses its charge.");
+    packagePngOriginal.Dispose();
+    if (packagePngRoot.Bytes != 0 || packagePngRoot.IsDisposed)
+        throw new Exception("Package PNG cursor cleanup or borrowed root differs.");
+}
 using var originalPng = ImageCodec.Decode(File.ReadAllBytes(args[2]));
 using (var drawing = ImageBuffer.Create(3, 2, 16))
 using (var overlay = ImageBuffer.Create(1, 1, 8))

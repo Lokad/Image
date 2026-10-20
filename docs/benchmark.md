@@ -12,7 +12,7 @@ The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lancz
 is separate. **200 historical codec/edit rows do not yet requalify changed 0.2.0
 admission, disposal or governed storage.** Twenty-one current JPEG, four Lanczos3, two async
 input, four async output, one bicubic, five VP8 and one caller-owned-root row identify their current producers. Production
-qualification now passes 4,478 tests/OS, affected hardware-off checks, the same actual
+qualification now passes 4,481 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
 [Buffered JPEG EOB decoding](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) saves 10.0%
@@ -39,13 +39,18 @@ and the original short-input/cancelable path. A
 [prepared-double Lanczos trial](../benchmarks/WARM-LANCZOS3-PREPARED-FMA-TRIAL.md)
 is correct but 1.4% slower, at 154,894 B/op, and is rejected. Accepted production
 and all selected rows remain unchanged. The already named
-[caller-owned-root operation](../benchmarks/WARM-COOPERATIVE-MEMORY.md) now measures
-two complete decodes with overlapping retained outputs: **1.502x/upper1.567x**,
-2,574,662 B/op, with a 2,306,560-byte admitted peak including resident input.
-Exact pixels, independent survivors, refusal/cancellation cleanup and both guards
-pass. One 924-sample diagnostic locates 49.6% in Deflate walking, 22.0% in literal
-copying and 8.0% in long-literal decoding. Next: bound one materialized-block
-decoder strategy; admission semantics remain intact.
+[caller-owned-root baseline](../benchmarks/WARM-COOPERATIVE-MEMORY.md) led to a
+[materialized Deflate cursor](../benchmarks/WARM-DEFLATE-MATERIALIZED-CURSOR.md):
+two retained decodes improve **15.8%**, to **1.265x/upper1.304x**, 2,574,671 B/op.
+The admitted peak stays 2,306,560 bytes including resident input. Async PNG decode
+improves **23.2%**, to **1.113x/upper1.176x**, at unchanged 12,784 B/op. Exact
+pixels/work/failure state, independent survivors, refusal/cancellation cleanup and
+both guards pass. All21 async managed controls revalidate; unchanged native
+controls are reused. Two current rows refresh; previously historical PNG decode
+rows remain historical. Metadata, encoding and other codec/editing paths retain
+their scopes. The 924-sample profile describes the previous producer only.
+Next: bound live-token VP8 block work settlement while preserving every original
+decision's cancellation poll and exact partial work/cursor state.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
@@ -106,8 +111,8 @@ reconciliation now covers every numeric row.
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| [PNG RGBA8, two retained outputs / caller-owned memory root](../benchmarks/WARM-COOPERATIVE-MEMORY.md) | 4,280.80 | 2,850.88 | 1.502 / 1.567 | 2,574,662 | Gap (short; qualified) |
-| [PNG DecodeAsync, fresh nonseekable Stream](../benchmarks/WARM-PNG-ASYNC-DECODE.md) | 2,049.34 | 1,412.89 | 1.450 / 1.683 | 12,784 | Gap (short; qualified) |
+| [PNG RGBA8, two retained outputs / caller-owned memory root](../benchmarks/WARM-DEFLATE-MATERIALIZED-CURSOR.md) | 3,604.48 | 2,850.06 | 1.265 / 1.304 | 2,574,671 | Gap (short; qualified) |
+| [PNG DecodeAsync, fresh nonseekable Stream](../benchmarks/WARM-DEFLATE-MATERIALIZED-CURSOR.md) | 1,574.38 | 1,414.79 | 1.113 / 1.176 | 12,784 | Gap (short; qualified) |
 | [PNG IdentifyAsync, fresh nonseekable Stream¶](../benchmarks/WARM-PNG-ASYNC-IDENTIFY.md) | 24.10 | 19.34 | 1.246 / 1.571 | 8,408 | Gap (short; qualified) |
 | [PNG Identify, fresh Stream¶](../benchmarks/WARM-PNG-STREAM-IDENTIFY.md) | 22.94 | 15.87 | 1.445 / 1.459 | 184 | Gap (independent) |
 | [WebP Identify, resident span (parser)](../benchmarks/WARM-WEBP-IDENTIFY.md) | 0.02 | 4.54 | 0.004 / 0.004 | 88 | Parity confirmed |
@@ -122,7 +127,7 @@ reconciliation now covers every numeric row.
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-COEFFICIENT-BLOCK.md) | 8,210.18 | 5,993.82 | 1.370 / 1.407 | 1,966,744 | Gap (short; qualified) |
 | [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 4,320.01 | 3,018.37 | 1.431 / 1.494 | 1,216,276 | Gap (short; qualified) |
 | [PNG RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,904.89 | 1,392.72 | 1.368 / 1.371 | 4,456 | Gap (independent) |
-| [PNG RGBA8, resident / shared budget](../benchmarks/WARM-SHARED-BUDGET.md) | 2,004.67 | 1,392.79 | 1.439 / 1.482 | 4,561 | Gap (short; qualified) |
+| [PNG RGBA8, resident / ImageBudget quota](../benchmarks/WARM-SHARED-BUDGET.md) | 2,004.67 | 1,392.79 | 1.439 / 1.482 | 4,561 | Gap (short; qualified) |
 | [PNG RGBA8, None / live cancelable token](../benchmarks/WARM-PNG-CANCEL-BLOCKS.md) | 1,732.37 | 1,390.42 | 1.246 / 1.320 | 4,456 | Gap (short; qualified) |
 | [PNG RGBA8, None / exact working limit](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 2,028.73 | 1,395.91 | 1.453 / 1.597 | 68,200 | Gap (short; qualified) |
 | [PNG RGBA8, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 2,067.97 | 1,397.05 | 1.480 / 1.826 | 68,200 | Gap (short; qualified) |

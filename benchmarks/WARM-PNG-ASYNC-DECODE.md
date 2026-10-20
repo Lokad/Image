@@ -1,5 +1,9 @@
 # Asynchronous nonseekable PNG decoding
 
+This baseline is superseded by the
+[materialized Deflate cursor](WARM-DEFLATE-MATERIALIZED-CURSOR.md); the original
+native controls and complete async boundary are retained.
+
 The current qualified producer has a **1.450× gap** for the already-named
 complete async decode boundary. Production is unchanged; this is a short screen,
 with no independent parity confirmation claimed.
