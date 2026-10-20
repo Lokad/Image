@@ -354,7 +354,10 @@ the already required fresh-stream JPEG case, with no new input or settings.
 Full suites reused the verified frozen build through `test.ps1 -NoBuild`;
 actual-package consumers and all three examples pass on both OSes.
 Largest current gaps are now Lanczos3 reduction, **1.588x** at 16 bits and **1.548x**
-at 8 bits. Next: assess exact unsigned32-by-signed32 horizontal SIMD products.
+at 8 bits. An [exact unsigned-product trial](../benchmarks/WARM-LANCZOS3-PRODUCT-TRIAL.md)
+regressed 4.9% and was rejected. A current 944-sample profile puts 50.4% in RGBA16
+horizontal filtering. Next: assess vertical-first reduction with the same exact
+plans and certified pixels, putting integer weighting on contiguous rows.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
