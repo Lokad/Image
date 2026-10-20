@@ -21,6 +21,10 @@ Largest demonstrated current-code gap: sparse CMYK at **1.829x**.
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
 were rejected. Earlier profiles describe their original producers only.
 Optimize demonstrated gaps; stop passing cases. No pixel precision is relaxed.
+The [sparse JPEG FP32-FMA trial](../benchmarks/WARM-JPEG-SPARSE-FMA-TRIAL.md)
+regressed7.2% and is rejected; qualified source/DLLs are restored. Next is a bounded
+audit of complete-overwrite CMYK/YCCK output ownership, with existing pool and
+shared-admission safeguards. No selected result changes from that trial.
 
 Complete async PNG and lossless WebP outputs independently pass. WebP uses approved
 libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compressed

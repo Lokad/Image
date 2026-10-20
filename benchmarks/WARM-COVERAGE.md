@@ -43,7 +43,10 @@ full rerun. Only this existing row refreshes. Other226 older codec/edit rows kee
 their identified scopes. The [axis-cross trial](WARM-JPEG-AXIS-CROSS-TRIAL.md)
 regressed4.5% and is rejected, with production restored. Five freshly compiled
 sparse tests pass normally/scalar on both OS; current full/package evidence is
-reused. The [async nonseekable PNG inspection screen](WARM-PNG-ASYNC-IDENTIFY.md)
+reused. The [FP32-FMA sparse trial](WARM-JPEG-SPARSE-FMA-TRIAL.md) also regresses
+7.2% and is rejected. Exact qualified source/DLLs are restored, five fresh
+normal/scalar checks pass per OS, and existing 4457-test/full-package evidence
+remains valid. No numeric or checklist row changes. The [async nonseekable PNG inspection screen](WARM-PNG-ASYNC-IDENTIFY.md)
 moves one already-named boundary to numeric:24.10µs/native19.34µs,
 1.246x/upper1.571,8,408B/op. All21 managed controls revalidate; unchanged normal/
 scalar native controls are reused. Complete equivalent input/metadata/EOF/owners
