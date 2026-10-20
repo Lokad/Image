@@ -63,8 +63,11 @@ Both remain gaps; no longer repeat. The
 [paired-integer Lanczos trial](../benchmarks/WARM-LANCZOS3-PAIRED-BYTE-TRIAL.md)
 parks its small3.5% point-mean gain; once-prepared factor packing is neutral.
 Both variants retain exact pixels, original controls and admitted storage;
-accepted production is restored with no full/package repeat. Next: one current
-sparse-2D CMYK JPEG diagnostic before another substantial primitive.
+accepted production is restored with no full/package repeat. The
+[current sparse JPEG diagnostic](../benchmarks/WARM-JPEG-SPARSE-COST.md) places
+20.4% of963samples in the integer inverse transform; entropy/scan work is also
+material. No timing claim. Next: exact paired signed16 frequency products with
+the original certificate, existing basis and no added scratch; feasibility first.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial

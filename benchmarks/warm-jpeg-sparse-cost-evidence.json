@@ -1,0 +1,212 @@
+{
+  "preparedIdentities": {
+    "Lokad.Image.dll": "9e2a40d0d2621b5e308c3c79b447081c21982e28429e2f2b837fefe8620fbf53",
+    "Lokad.Image.Benchmarks.dll": "452f282256235afb0725a02b91054adea2683b100d2cb280afa169ee1614cfb7",
+    "Lokad.Image.Benchmarks-WarmShort-1.dll": "6dd6c70aaab0890daba23e233d569de1b3eb10847d30e82c8f56a6e01d054a88",
+    "Lokad.Image.Benchmarks-WarmShort-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f"
+  },
+  "profilingOnly": true,
+  "noTimingClaim": true,
+  "perfExitCode": 0,
+  "caseId": "CmykAdobeSparse2D",
+  "productionSha256": "9e2a40d0d2621b5e308c3c79b447081c21982e28429e2f2b837fefe8620fbf53",
+  "samples": 963,
+  "methods": [
+    {
+      "method": "bool [Lokad.Image] Lokad.Image.Internal.JpegTransform::TryInverseSparseInteger(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,uint64)[Optimized]",
+      "samples": 196,
+      "fraction": 0.2035306334371755
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+      "samples": 139,
+      "fraction": 0.14434060228452752
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadScan(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+      "samples": 98,
+      "fraction": 0.10176531671858775
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::MaterializeCmykPlanes()[Optimized]",
+      "samples": 95,
+      "fraction": 0.09865005192107996
+    },
+    {
+      "method": "Native/unresolved: libcoreclr.so",
+      "samples": 74,
+      "fraction": 0.07684319833852545
+    },
+    {
+      "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      "samples": 66,
+      "fraction": 0.06853582554517133
+    },
+    {
+      "method": "bool [Lokad.Image] Lokad.Image.Internal.JpegTransform::TryInverseSparse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      "samples": 42,
+      "fraction": 0.04361370716510903
+    },
+    {
+      "method": "Native/unresolved: libc.so.6",
+      "samples": 41,
+      "fraction": 0.04257528556593977
+    },
+    {
+      "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+      "samples": 35,
+      "fraction": 0.036344755970924195
+    },
+    {
+      "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::RenderCmykRow(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+      "samples": 32,
+      "fraction": 0.033229491173416406
+    },
+    {
+      "method": "class Lokad.Image.ImageInfo [Lokad.Image] Lokad.Image.Internal.ContainerHeaders::Jpeg(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      "samples": 30,
+      "fraction": 0.03115264797507788
+    },
+    {
+      "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+      "samples": 26,
+      "fraction": 0.02699896157840083
+    },
+    {
+      "method": "Native/unresolved: System.Private.CoreLib.dll",
+      "samples": 19,
+      "fraction": 0.01973001038421599
+    },
+    {
+      "method": "bool [Lokad.Image] Lokad.Image.Internal.JpegTransform::TryInverseDc(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      "samples": 17,
+      "fraction": 0.017653167185877467
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::EndLocalWork()[Optimized]",
+      "samples": 13,
+      "fraction": 0.013499480789200415
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::CommitAdmittedWork(int64)[Optimized]",
+      "samples": 12,
+      "fraction": 0.012461059190031152
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::BeginLocalWork()[Optimized]",
+      "samples": 10,
+      "fraction": 0.010384215991692628
+    },
+    {
+      "method": "Native/unresolved: libclrjit.so",
+      "samples": 7,
+      "fraction": 0.007268951194184839
+    },
+    {
+      "method": "instance int64 [Lokad.Image] Lokad.Image.Internal.OperationContext::get_RemainingWork()[Optimized]",
+      "samples": 7,
+      "fraction": 0.007268951194184839
+    },
+    {
+      "method": "void [BenchmarkDotNet] BenchmarkDotNet.Mathematics.MeasurementsStatistics::SumWithoutOutliers(valuetype [Perfolizer]Perfolizer.Mathematics.OutlierDetection.OutlierMode,class [System.Collections]System.Collections.Generic.List`1<valuetype BenchmarkDotNet.Reports.Measurement>,float64,float64,float64&,int32&)[Optimized]",
+      "samples": 1,
+      "fraction": 0.0010384215991692627
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegHuffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      "samples": 1,
+      "fraction": 0.0010384215991692627
+    },
+    {
+      "method": "instance class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.Internal.JpegDecoder::RenderCmyk(int32)[Optimized]",
+      "samples": 1,
+      "fraction": 0.0010384215991692627
+    },
+    {
+      "method": "instance class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.Internal.JpegDecoder::Decode()[Optimized]",
+      "samples": 1,
+      "fraction": 0.0010384215991692627
+    }
+  ],
+  "quietness": {
+    "before": {
+      "protocol": "exclusive-vm-idle-v2",
+      "sampleSeconds": 5.0003668640274554,
+      "cpuSamples": {
+        "cpu": {
+          "cpuBusyFraction": 0.0005002501250625312,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        },
+        "cpu0": {
+          "cpuBusyFraction": 0.0,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        }
+      },
+      "overlappingJobsBefore": [],
+      "overlappingJobsAfter": [],
+      "loadAverageDiagnosticOnly": true,
+      "cpuBusyFraction": 0.0005002501250625312,
+      "ioWaitFraction": 0.0,
+      "stealFraction": 0.0,
+      "loadAverage": [
+        0.0,
+        0.0888671875,
+        0.06884765625
+      ],
+      "passed": true,
+      "thresholds": {
+        "maxCpuBusyFraction": 0.05,
+        "maxIoWaitFraction": 0.01,
+        "maxStealFraction": 0.01
+      },
+      "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+    },
+    "after": {
+      "protocol": "exclusive-vm-idle-v2",
+      "sampleSeconds": 5.000298489932902,
+      "cpuSamples": {
+        "cpu": {
+          "cpuBusyFraction": 0.0,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        },
+        "cpu0": {
+          "cpuBusyFraction": 0.0,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        }
+      },
+      "overlappingJobsBefore": [],
+      "overlappingJobsAfter": [],
+      "loadAverageDiagnosticOnly": true,
+      "cpuBusyFraction": 0.0,
+      "ioWaitFraction": 0.0,
+      "stealFraction": 0.0,
+      "loadAverage": [
+        0.220703125,
+        0.134765625,
+        0.08447265625
+      ],
+      "passed": true,
+      "thresholds": {
+        "maxCpuBusyFraction": 0.05,
+        "maxIoWaitFraction": 0.01,
+        "maxStealFraction": 0.01
+      },
+      "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+    }
+  },
+  "productionChanged": false,
+  "currentAnalyticalPixelsAndNativeQualityAndOwnersPassed": true,
+  "relevantJpegAndOwnerContextPathsUnchangedSinceC12": true,
+  "productionHarnessSelectorNativeBuilds": 0,
+  "rawArtifact": {
+    "file": "c30-current-jpeg-sparse-profile-linux.tar.gz",
+    "sha256": "050a7ec7f387545368d72a38512b9a1c94fc3564aa7e1617db334c49fcf9936b",
+    "bytes": 60509,
+    "mirroredAndVerified": true
+  },
+  "nextItem": "Bound paired signed16 frequency sums inside existing sparse integer inverse transform, retaining exact Q16 sums and original certificate. No new table/storage or precision change; old path outside admitted numerical/ISA domain."
+}
