@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using System.Runtime.Intrinsics.X86;
 using Lokad.Image.Tooling;
 
 namespace Lokad.Image.PublicApi.Tests;
@@ -41,6 +42,9 @@ public sealed class WideColumnBicubicResizeTests
     [InlineData(65, 37, 15, 9, false)] [InlineData(81, 39, 18, 9, false)]
     [InlineData(67, 39, 15, 9, false)] [InlineData(71, 43, 15, 10, false)]
     [InlineData(65, 37, 15, 9, true)] [InlineData(81, 39, 18, 9, true)]
+    [InlineData(51, 37, 13, 9, false)] [InlineData(55, 37, 14, 9, false)]
+    [InlineData(59, 37, 15, 9, false)] [InlineData(66, 33, 16, 8, false)]
+    [InlineData(59, 37, 15, 9, true)]
     public void WiderSupportKeepsStripTailsNegativeLobesAndTinyAlphaExact(
         int sourceWidth, int sourceHeight, int width, int height, bool tiny)
     {
@@ -55,5 +59,41 @@ public sealed class WideColumnBicubicResizeTests
             new ImageLimits { MaxWorkingBytes = input.Length + (long)width * height * 4 + 4096 });
         Assert.Equal(OriginalPixels.Bytes(normal), OriginalPixels.Bytes(bounded));
         Assert.Equal(input, OriginalPixels.Bytes(source));
+    }
+
+    [Fact]
+    public void FourColumnWorkspaceKeepsRetainedOwnersAndTerminalAdmissionCleanup()
+    {
+        const int inputBytes = 513 * 259 * 4, outputBytes = 128 * 64 * 4;
+        using var root = new TestMemoryBudget(inputBytes + outputBytes + 4096);
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = inputBytes + outputBytes + 4096 };
+        using var source = ImageBuffer.Create(513, 259, 8, limits);
+        using (var authored = OriginalPixels.Buffer(513, 259, 8))
+            for (var y = 0; y < 259; y++) authored.GetRow8(y).CopyTo(source.GetRow8(y));
+        var original = OriginalPixels.Bytes(source); var start = root.GrowthAttempts;
+        var stripScratch = Avx512F.IsSupported && Avx2.IsSupported && Avx.IsSupported && Sse41.IsSupported ? 4096 : 0;
+        var first = ImageTransforms.Resize(source, 128, 64, ResizeFilter.Bicubic, limits);
+        var growths = root.GrowthAttempts - start;
+        Assert.Equal(inputBytes + outputBytes, root.Bytes);
+        Assert.Equal(inputBytes + outputBytes + stripScratch, root.Peak);
+        var refusal = Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 128, 64, ResizeFilter.Bicubic, limits));
+        Assert.Equal(ImageLimitScope.SharedBudget, refusal.Scope);
+        Assert.Equal(inputBytes + outputBytes, root.Bytes); first.Dispose();
+        for (var i = 1; i <= growths; i++)
+        {
+            root.RefuseAtGrowth = root.GrowthAttempts + i;
+            var error = Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 128, 64, ResizeFilter.Bicubic, limits));
+            Assert.Equal(ImageLimitScope.SharedBudget, error.Scope);
+            Assert.Equal(root.RefuseAtGrowth, root.GrowthAttempts); Assert.Equal(inputBytes, root.Bytes);
+        }
+        root.RefuseAtGrowth = 0;
+        using var cancellation = new CancellationTokenSource();
+        root.Admitted = bytes => { if (bytes == inputBytes + outputBytes + stripScratch) cancellation.Cancel(); };
+        Assert.Throws<OperationCanceledException>(() => ImageTransforms.Resize(source, 128, 64, ResizeFilter.Bicubic, limits, cancellation.Token));
+        Assert.Equal(inputBytes, root.Bytes); root.Admitted = null;
+        using var next = ImageTransforms.Resize(source, 128, 64, ResizeFilter.Bicubic, limits);
+        Assert.Equal(original, OriginalPixels.Bytes(source)); source.Dispose();
+        Assert.Equal(outputBytes, root.Bytes); Assert.NotEmpty(OriginalPixels.Bytes(next));
+        next.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 }

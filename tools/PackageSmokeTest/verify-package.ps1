@@ -66,6 +66,7 @@ try {
     $shapingFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredOpenType.cs'))
     $shapingConsumerPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/PackageSmokeTest/TextShapingConsumer.cs'))
     $jpegFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredJpegCompatibility.cs'))
+    $pixelFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalPixels.cs'))
     @"
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
@@ -82,6 +83,7 @@ try {
     <Compile Include="$shapingFixturePath" Link="AuthoredOpenType.cs" />
     <Compile Include="$shapingConsumerPath" Link="TextShapingConsumer.cs" />
     <Compile Include="$jpegFixturePath" Link="AuthoredJpegCompatibility.cs" />
+    <Compile Include="$pixelFixturePath" Link="OriginalPixels.cs" />
   </ItemGroup>
 </Project>
 "@ | Set-Content -LiteralPath (Join-Path $consumer 'Consumer.csproj') -Encoding utf8
@@ -204,6 +206,27 @@ foreach (var filter in new[] { ResizeFilter.Bilinear, ResizeFilter.Bicubic })
     for (var x = 0; x < 3; x++)
         if (!resizedHalf.GetRow16(1).Slice(x * 4, 4).SequenceEqual(new ushort[] { 65535, 65535, 65535, 1 }))
             throw new Exception("Package consumer resize loses visible color at an exact half-alpha tie.");
+}
+using (var packageWideRoot = new Lokad.Image.Tooling.TestMemoryBudget(513 * 259 * 4 + 2 * 128 * 64 * 4 + 4096))
+{
+    var packageWideLimits = new ImageLimits { MemoryBudget = packageWideRoot, MaxWorkingBytes = 513 * 259 * 4 + 128 * 64 * 4 + 4096 };
+    using var packageWideSource = ImageBuffer.Create(513, 259, 8, packageWideLimits);
+    var packageWideInput = Lokad.Image.Tooling.OriginalPixels.Generate(513, 259, 8);
+    for (var y = 0; y < 259; y++) packageWideInput.AsSpan(y * 513 * 4, 513 * 4).CopyTo(packageWideSource.GetRow8(y));
+    packageWideSource.GetRow8(0)[3] = packageWideSource.GetRow8(0)[513 * 4 - 1] = 0;
+    using var packageWideFirst = ImageTransforms.Resize(packageWideSource, 128, 64, ResizeFilter.Bicubic, packageWideLimits);
+    using var packageWideSecond = ImageTransforms.Resize(packageWideSource, 128, 64, ResizeFilter.Bicubic, packageWideLimits);
+    var packageWideHash = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(Lokad.Image.Tooling.OriginalPixels.Bytes(packageWideSecond))).ToLowerInvariant();
+    if (packageWideHash != "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71")
+        throw new Exception("Package bounded bicubic pixels differ.");
+    var packageWidePixel = packageWideSecond.GetRow8(0)[0];
+    packageWideFirst.GetRow8(0)[0] ^= 255;
+    packageWideSource.Dispose();
+    if (packageWideRoot.Bytes != 2 * 128 * 64 * 4 || packageWideSecond.GetRow8(0)[0] != packageWidePixel)
+        throw new Exception("Package bounded bicubic survivor ownership differs.");
+    packageWideFirst.Dispose(); packageWideSecond.Dispose();
+    if (packageWideRoot.Bytes != 0 || packageWideRoot.IsDisposed)
+        throw new Exception("Package bounded bicubic root cleanup differs.");
 }
 using var originalPng = ImageCodec.Decode(File.ReadAllBytes(args[2]));
 using (var drawing = ImageBuffer.Create(3, 2, 16))

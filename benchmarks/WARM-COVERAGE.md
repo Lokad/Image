@@ -835,3 +835,14 @@ rows and205historical;127independent observations and110shorts;72passes,164gaps,
 oneconfidence-open. Supplied-root timing remains separate. One983sample profile
 locates86.8%in the selected striphelper; four-column feasibility fits the same4KiB
 workspace. No speedup is claimed before the next single-case trial.
+
+
+The [four-column round](WARM-BICUBIC-FOUR-COLUMNS.md) supersedes only TightWide8:
+498.19µs,1.433x/upper1.644x,32,913B/op,16.2%faster with exact pixels and the same
+4KiB coarse reservation.4,475tests/OS,14focused normal/scalar/AVX512-off controls,
+and the same actual private0.2.0 package/three examples pass on both OSes.
+The original per-pixel arithmetic/certificates, shared-root refusal/cancellation
+and survivor ownership remain intact. Default cached/word/other selected paths
+retain their identified evidence; the finite scope/counts above are unchanged.
+Next: current-code uncertainty on the existing VP8 SimpleOpaque8 case. No new
+packet/settings matrix, retuning of passing cases or long repeat above parity.

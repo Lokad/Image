@@ -1,5 +1,8 @@
 # Current tight-memory bicubic reduction
 
+The [four-column round](WARM-BICUBIC-FOUR-COLUMNS.md) supersedes this timing;
+the reconciliation and profile below describe its previous accepted producer.
+
 The accepted current producer still has a gap on the existing TightWide8 operation:
 **1.704x/upper1.949x**. This resolves its pre-0.2
 ownership-path uncertainty before optimization; the old independent result is historical.
