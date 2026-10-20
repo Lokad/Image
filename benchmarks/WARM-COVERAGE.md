@@ -3,14 +3,21 @@
 Updated 2026-10-20. The **warm single-CPU parity objective remains open**:
 72 independent passes,165 measured mean gaps and one confidence-open case across
 238 numeric rows. The [three-table summary](../docs/benchmark.md)
-contains127 independent observations and111 qualified shorts.16named required
+contains125 independent observations and113 qualified shorts.16named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
 The finite scope is now **254 cases:238 numeric+16 unmeasured**. The remaining
-200 historical codec/edit rows retain their identified performance-qualified
+198 historical codec/edit rows retain their identified performance-qualified
 builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
-Twenty-one current JPEG, four Lanczos3, two async input, four async output, one bicubic, five VP8 and one caller-owned-root rows
+Twenty-one current JPEG, four Lanczos3, two PNG resident, two async input, four async output, one bicubic, five VP8 and one caller-owned-root rows
 are identified below. The latest JPEG evidence replaces the earlier CMYK timings.
+
+The [current resident PNG reconciliation](WARM-CURRENT-RESIDENT-PNG.md) replaces
+the two historical default RGBA8/16 None-filter rows with current qualified shorts.
+Original packets, exact frames/owners, native normal/scalar controls and all four
+score guards pass. No code, harness, selector, native or package builds. Both means
+remain above parity, so no longer repeat. Only these two historical rows become
+current:40 current/198 historical; other PNG boundaries retain their named scope.
 
 The [materialized Deflate cursor](WARM-DEFLATE-MATERIALIZED-CURSOR.md) now improves
 the two current PNG decode rows: two retained outputs1.265x/upper1.304x,

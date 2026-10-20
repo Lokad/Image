@@ -9,8 +9,8 @@ to the named fixed inputs/settings/hardware, without extrapolating to other prof
 
 These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
-is separate. **200 historical codec/edit rows do not yet requalify changed 0.2.0
-admission, disposal or governed storage.** Twenty-one current JPEG, four Lanczos3, two async
+is separate. **198 historical codec/edit rows do not yet requalify changed 0.2.0
+admission, disposal or governed storage.** Twenty-one current JPEG, four Lanczos3, two PNG resident, two async
 input, four async output, one bicubic, five VP8 and one caller-owned-root row identify their current producers. Production
 qualification now passes 4,484 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
@@ -56,8 +56,11 @@ The [FP32 byte Lanczos trial](../benchmarks/WARM-LANCZOS3-FP32-BYTE-TRIAL.md)
 is rejected (50.7% slower); exact accepted production and tests are restored.
 All60 focused normal/scalar/AVX512-off controls pass perOS. New sampled profiles
 retain their respective producers. No selected row or full/package proof repeats.
-Next: resolve existing default resident PNG8/16 timing uncertainty on the same
-accepted producer, preserving the original packets and complete boundaries.
+The [current resident PNG checks](../benchmarks/WARM-CURRENT-RESIDENT-PNG.md)
+resolve those two old measurements without builds or repeated qualification;
+RGBA8 is1.134x/upper1.330x and RGBA16 is1.039x/upper1.064x.
+Both remain gaps; no longer repeat. Next: bound an exact paired signed16 byte
+Lanczos primitive before coding, retaining the original certificate and pixels.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
@@ -133,14 +136,14 @@ reconciliation now covers every numeric row.
 | [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,329.08 | 996.80 | 1.333 / 1.411 | 761,840 | Gap (short; qualified) |
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 8,284.99 | 5,977.38 | 1.386 / 1.435 | 1,966,744 | Gap (short; qualified) |
 | [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 4,320.01 | 3,018.37 | 1.431 / 1.494 | 1,216,276 | Gap (short; qualified) |
-| [PNG RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,904.89 | 1,392.72 | 1.368 / 1.371 | 4,456 | Gap (independent) |
+| [PNG RGBA8, None](../benchmarks/WARM-CURRENT-RESIDENT-PNG.md) | 1,575.30 | 1,388.57 | 1.134 / 1.330 | 4,480 | Gap (short; qualified) |
 | [PNG RGBA8, resident / ImageBudget quota](../benchmarks/WARM-SHARED-BUDGET.md) | 2,004.67 | 1,392.79 | 1.439 / 1.482 | 4,561 | Gap (short; qualified) |
 | [PNG RGBA8, None / live cancelable token](../benchmarks/WARM-PNG-CANCEL-BLOCKS.md) | 1,732.37 | 1,390.42 | 1.246 / 1.320 | 4,456 | Gap (short; qualified) |
 | [PNG RGBA8, None / exact working limit](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 2,028.73 | 1,395.91 | 1.453 / 1.597 | 68,200 | Gap (short; qualified) |
 | [PNG RGBA8, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 2,067.97 | 1,397.05 | 1.480 / 1.826 | 68,200 | Gap (short; qualified) |
 | [PNG RGBA8, stored Deflate / None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 150.38 | 136.49 | 1.102 / 1.114 | 4,456 | Gap (independent) |
 | [PNG RGBA16, stored Deflate / None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 322.73 | 296.18 | 1.090 / 1.096 | 8,552 | Gap (independent) |
-| [PNG RGBA16, None](../benchmarks/WARM-CURRENT-PNG16-BICUBIC16.md) | 3,034.16 | 2,903.68 | 1.045 / 1.059 | 8,552 | Gap (independent) |
+| [PNG RGBA16, None](../benchmarks/WARM-CURRENT-RESIDENT-PNG.md) | 3,015.32 | 2,901.23 | 1.039 / 1.064 | 8,576 | Gap (short; qualified) |
 | [PNG RGBA16, None / exact working limit](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 3,103.58 | 2,902.28 | 1.069 / 1.242 | 70,248 | Gap (short; qualified) |
 | [PNG RGBA16, None / live cancelable token](../benchmarks/WARM-PNG-CANCEL-BLOCKS.md) | 3,068.88 | 2,897.86 | 1.059 / 1.108 | 8,552 | Gap (short; qualified) |
 | [PNG RGBA16, None / exact limit + live cancelable token](../benchmarks/WARM-PNG-STREAMING-ROWS.md) | 3,120.43 | 2,904.38 | 1.074 / 1.145 | 70,248 | Gap (short; qualified) |

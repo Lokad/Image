@@ -89,14 +89,14 @@ def render():
         row('JPEG420 restart, fresh seekable Stream', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'StreamDecode420Restart', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8-cancellable-block-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-VP8-CANCELLABLE-BLOCK.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'StreamNativeLossless8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
-        row('PNG RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
+        row('PNG RGBA8, None', 'warm-current-resident-png-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-RESIDENT-PNG.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, resident / ImageBudget quota', 'warm-shared-budget-evidence.json', ['cases', 'PngBudgetDecode8', -1], 'WARM-SHARED-BUDGET.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None / live cancelable token', 'warm-png-cancel-blocks-evidence.json', ['cases', 'DecodeCancelable8', -1], 'WARM-PNG-CANCEL-BLOCKS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None / exact working limit', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTight8', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None / exact limit + live cancelable token', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTightCancelable8', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, stored Deflate / None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeNoCompression8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG RGBA16, stored Deflate / None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeNoCompression16', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('PNG RGBA16, None', 'warm-current-png16-bicubic16-evidence.json', ['cases', 'png16', -1], 'WARM-CURRENT-PNG16-BICUBIC16.md', True),
+        row('PNG RGBA16, None', 'warm-current-resident-png-evidence.json', ['cases', 'Decode16', -1], 'WARM-CURRENT-RESIDENT-PNG.md', verification='Gap (short; qualified)'),
         row('PNG RGBA16, None / exact working limit', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTight16', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA16, None / live cancelable token', 'warm-png-cancel-blocks-evidence.json', ['cases', 'DecodeCancelable16', -1], 'WARM-PNG-CANCEL-BLOCKS.md', verification='Gap (short; qualified)'),
         row('PNG RGBA16, None / exact limit + live cancelable token', 'warm-png-streaming-rows-evidence.json', ['cases', 'DecodeTightCancelable16', -1], 'WARM-PNG-STREAMING-ROWS.md', verification='Gap (short; qualified)'),
@@ -339,8 +339,8 @@ to the named fixed inputs/settings/hardware, without extrapolating to other prof
 
 These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
-is separate. **200 historical codec/edit rows do not yet requalify changed 0.2.0
-admission, disposal or governed storage.** Twenty-one current JPEG, four Lanczos3, two async
+is separate. **198 historical codec/edit rows do not yet requalify changed 0.2.0
+admission, disposal or governed storage.** Twenty-one current JPEG, four Lanczos3, two PNG resident, two async
 input, four async output, one bicubic, five VP8 and one caller-owned-root row identify their current producers. Production
 qualification now passes 4,484 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
@@ -386,8 +386,11 @@ The [FP32 byte Lanczos trial](../benchmarks/WARM-LANCZOS3-FP32-BYTE-TRIAL.md)
 is rejected (50.7% slower); exact accepted production and tests are restored.
 All60 focused normal/scalar/AVX512-off controls pass perOS. New sampled profiles
 retain their respective producers. No selected row or full/package proof repeats.
-Next: resolve existing default resident PNG8/16 timing uncertainty on the same
-accepted producer, preserving the original packets and complete boundaries.
+The [current resident PNG checks](../benchmarks/WARM-CURRENT-RESIDENT-PNG.md)
+resolve those two old measurements without builds or repeated qualification;
+RGBA8 is1.134x/upper1.330x and RGBA16 is1.039x/upper1.064x.
+Both remain gaps; no longer repeat. Next: bound an exact paired signed16 byte
+Lanczos primitive before coding, retaining the original certificate and pixels.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
