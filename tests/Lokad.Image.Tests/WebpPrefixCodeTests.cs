@@ -51,6 +51,7 @@ public sealed class WebpPrefixCodeTests
         var unused = new WebpPrefixCode(new int[40], context);
         unused.Write(writer, 0); writer.Finish(); Assert.Equal(0, output.Length);
         Assert.Equal(1, tree.Length(symbol)); Assert.Equal(0, tree.Code(symbol));
+        Assert.Equal(0, tree.BitLength(symbol));
     }
 
     [Fact]

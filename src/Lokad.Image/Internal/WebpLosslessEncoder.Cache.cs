@@ -9,14 +9,16 @@ internal static partial class WebpLosslessEncoder
     // capacities below are charged separately through the borrowed context.
     private const int CachedWorkingBytes = 65536;
     private const int CacheSize = 1024;
+    private readonly record struct CachedScan(bool Alpha, int Literals, long ExtraBits);
+    private readonly record struct CachedPlan(WebpPrefixCode[] Tables, long BodyBits, bool Alpha, bool Predict, int Literals);
 
     private static void EncodeCached(ImageBuffer image, Stream output, WebpEncodeOptions options, OperationContext context)
     {
         context.Reserve(CacheSize * 4 + 32 + 128); context.Work(0);
         var cache = new uint[CacheSize];
-        var tables = PrepareCachedTables(image, options.Effort, cache, context);
+        var plan = SelectCachedPlan(image, options.Effort, cache, context);
         using var counter = new CountStream(options.Limits.MaxOutputBytes);
-        var alpha = CachedPayload(image, counter, options.Effort, false, cache, tables, context);
+        CachedPayload(image, counter, options.Effort, cache, plan, context);
         var payloadLength = counter.Count;
         if (payloadLength + 20L + (payloadLength & 1) > options.Limits.MaxOutputBytes)
             throw new ImageLimitException(ImageLimitKind.OutputBytes, "WebP encoded output limit exceeded.");
@@ -24,11 +26,11 @@ internal static partial class WebpLosslessEncoder
         "RIFF"u8.CopyTo(header); BinaryPrimitives.WriteInt32LittleEndian(header[4..], payloadLength + 12 + (payloadLength & 1));
         "WEBPVP8L"u8.CopyTo(header[8..]); BinaryPrimitives.WriteInt32LittleEndian(header[16..], payloadLength);
         output.Write(header);
-        CachedPayload(image, output, options.Effort, alpha, cache, tables, context);
+        CachedPayload(image, output, options.Effort, cache, plan, context);
         if ((payloadLength & 1) != 0) output.WriteByte(0);
     }
 
-    private static WebpPrefixCode[] PrepareCachedTables(ImageBuffer image, int effort, uint[] cache, OperationContext context)
+    private static CachedPlan PrepareCachedTables(ImageBuffer image, int effort, uint[] cache, bool predict, OperationContext context)
     {
         const int frequencyBytes = (280 + CacheSize + 256 * 3 + 40) * 4 + 256;
         context.Reserve(frequencyBytes);
@@ -36,51 +38,72 @@ internal static partial class WebpLosslessEncoder
         {
             context.Work(0);
             int[][] frequencies = [new int[280 + CacheSize], new int[256], new int[256], new int[256], new int[40]];
-            CachedPixels(image, effort, cache, null, null, frequencies, context);
+            var scan = CachedPixels(image, effort, cache, predict, null, null, frequencies, context);
             context.Reserve(5 * 8 + 32); context.Work(0);
             var result = new WebpPrefixCode[5];
             for (var channel = 0; channel < result.Length; channel++) result[channel] = new(frequencies[channel], context);
-            return result;
+            var bodyBits = scan.ExtraBits;
+            if (predict || scan.Literals > (long)image.Width * image.Height / 4)
+                for (var channel = 0; channel < result.Length; channel++)
+                {
+                    context.Work(frequencies[channel].Length);
+                    for (var symbol = 0; symbol < frequencies[channel].Length; symbol++)
+                        bodyBits += (long)frequencies[channel][symbol] * result[channel].BitLength(symbol);
+                }
+            return new(result, bodyBits, scan.Alpha, predict, scan.Literals);
         }
         finally { context.Release(frequencyBytes); }
     }
 
-    private static bool CachedPayload(ImageBuffer image, Stream output, int effort, bool alphaHint,
-        uint[] cache, WebpPrefixCode[] tables, OperationContext context)
+    private static void CachedPayload(ImageBuffer image, Stream output, int effort,
+        uint[] cache, CachedPlan plan, OperationContext context)
+    {
+        var writer = CachedHeader(image, output, plan, context);
+        CachedPixels(image, effort, cache, plan.Predict, writer, plan.Tables, null, context);
+        writer.Finish();
+    }
+
+    private static WebpBitWriter CachedHeader(ImageBuffer image, Stream output, CachedPlan plan, OperationContext context)
     {
         Span<byte> header = stackalloc byte[5]; header[0] = 0x2f;
-        BinaryPrimitives.WriteUInt32LittleEndian(header[1..], (uint)(image.Width - 1) | (uint)(image.Height - 1) << 14 | (alphaHint ? 1u << 28 : 0));
+        BinaryPrimitives.WriteUInt32LittleEndian(header[1..], (uint)(image.Width - 1) | (uint)(image.Height - 1) << 14 | (plan.Alpha ? 1u << 28 : 0));
         output.Write(header);
         var writer = new WebpBitWriter(output, context);
         // RFC9649 sections3.5.3/3.6.1: green decorrelation, then a ten-bit cache.
-        writer.Write(1, 1); writer.Write(2, 2); writer.Write(0, 1);
+        writer.Write(1, 1); writer.Write(2, 2);
+        if (plan.Predict) LeftPredictorHeader(image, writer, context);
+        writer.Write(0, 1);
         writer.Write(1, 1); writer.Write(10, 4); writer.Write(0, 1);
-        foreach (var table in tables) table.Header(writer, context);
-        var alpha = CachedPixels(image, effort, cache, writer, tables, null, context);
-        writer.Finish(); return alpha;
+        foreach (var table in plan.Tables) table.Header(writer, context);
+        return writer;
     }
 
-    private static bool CachedPixels(ImageBuffer image, int effort, uint[] cache,
+    private static CachedScan CachedPixels(ImageBuffer image, int effort, uint[] cache, bool predict,
         WebpBitWriter? writer, WebpPrefixCode[]? tables, int[][]? frequencies, OperationContext context)
     {
         context.Work(CacheSize); cache.AsSpan().Clear();
         var count = image.Width * image.Height; var position = 0; uint previous = 0; var alpha = false;
+        var literals = 0; long extraBits = 0;
         while (position < count)
         {
-            var pixel = GreenPixel(image, position, context); alpha |= pixel >> 24 != 255;
+            var pixel = CachedPixel(image, position, predict, context);
+            // Only the original normalized source determines the header hint.
+            // Predictor residual alpha has different semantics.
+            if (!predict) alpha |= pixel >> 24 != 255;
             var maximum = Math.Min(64 << effort, count - position); var run = 1; var fromAbove = false;
             if (position != 0 && pixel == previous)
-                while (run < maximum && GreenPixel(image, position + run, context) == pixel) run++;
+                while (run < maximum && CachedPixel(image, position + run, predict, context) == pixel) run++;
             if (position >= image.Width && run < maximum)
             {
                 var length = 0;
-                while (length < maximum && GreenPixel(image, position + length, context)
-                    == GreenPixel(image, position - image.Width + length, context)) length++;
+                while (length < maximum && CachedPixel(image, position + length, predict, context)
+                    == CachedPixel(image, position - image.Width + length, predict, context)) length++;
                 if (length > run) { run = length; fromAbove = true; }
             }
             if (run >= 2)
             {
                 Prefix(run, out var code, out var extra, out var bits);
+                extraBits += bits;
                 CachedSymbol(0, 256 + code, writer, tables, frequencies, context);
                 if (writer is not null) writer.Write(extra, bits); else context.Work(1);
                 CachedSymbol(4, fromAbove ? 0 : 1, writer, tables, frequencies, context);
@@ -88,7 +111,7 @@ internal static partial class WebpLosslessEncoder
                 {
                     for (var i = 0; i < run; i++)
                     {
-                        pixel = GreenPixel(image, position + i, context);
+                        pixel = CachedPixel(image, position + i, predict, context);
                         context.Work(1); cache[CacheIndex(pixel)] = pixel;
                     }
                 }
@@ -106,6 +129,7 @@ internal static partial class WebpLosslessEncoder
                 if (cache[index] == pixel) CachedSymbol(0, 280 + index, writer, tables, frequencies, context);
                 else
                 {
+                    literals++;
                     CachedSymbol(0, (int)(pixel >> 8 & 255), writer, tables, frequencies, context);
                     CachedSymbol(1, (int)(pixel >> 16 & 255), writer, tables, frequencies, context);
                     CachedSymbol(2, (int)(pixel & 255), writer, tables, frequencies, context);
@@ -115,7 +139,7 @@ internal static partial class WebpLosslessEncoder
             }
             previous = pixel;
         }
-        return alpha;
+        return new(alpha, literals, extraBits);
     }
 
     private static int CacheIndex(uint pixel) => (int)(unchecked(pixel * 0x1e35a7bdu) >> 22);

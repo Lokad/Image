@@ -9,6 +9,7 @@ internal sealed class WebpPrefixCode
     internal int MemoryBytes { get; }
     internal int Alphabet => lengths.Length;
     internal int Length(int symbol) => lengths[symbol];
+    internal int BitLength(int symbol) => single >= 0 ? 0 : lengths[symbol];
     internal int Code(int symbol) => codes[symbol];
 
     internal WebpPrefixCode(ReadOnlySpan<int> frequencies, OperationContext context, int maximumLength = 15)

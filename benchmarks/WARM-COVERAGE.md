@@ -12,11 +12,18 @@ builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
 Twenty-one current JPEG, four Lanczos3, two PNG resident, two async input, four async output, one bicubic, five VP8, five synchronous lossless WebP encodes and one caller-owned-root rows
 are identified below. The latest JPEG evidence replaces the earlier CMYK timings.
 
+The [conditional LEFT predictor](WARM-VP8L-LEFT-PREDICTOR.md) refreshes those same
+six current lossless encode rows, all independently passing time parity. Photograph
+184518/160032 B remains1.153x; diagram7636/7234 B stays byte-for-byte1.056x.
+All4522tests/OS,22internal+114public normal/scalar checks/OS and the same actual
+private package/examples pass. Both size gates remain open; the larger JPEG RGB420
+compression gap is next. No scope/count expansion or decoder fixture regeneration.
+
 The [bounded VP8L color-cache round](WARM-VP8L-COLOR-CACHE.md) replaces five
 historical synchronous encodes and the already-current async encode with six
 independent time-parity confirmations. Exactly45current/193historical rows;
 all254cases,72passes/165gaps/1confidence-open and125independent/113short counts
-are preserved. Photograph/diagram now295936/7636B versus160032/7234B: both size
+are preserved. Photograph/diagram at that cache checkpoint295936/7636B versus160032/7234B: both size
 gates remain open. All4509tests/OS,18prefix+105public normal/scalar checks/OS and
 the same actual private package/examples pass. No decoder fixture regeneration,
 reference change, new workload grid or retuning of unaffected passing paths.

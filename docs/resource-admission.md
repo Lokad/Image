@@ -91,7 +91,7 @@ remain caller-managed. Existing `ImageCodec` entry points use per-operation limi
 | Four-component JPEG | The same bounds with four coefficient/sample planes and descriptors; K is color, and shared admission counts caller CMYK storage |
 | JPEG encode | Source plus 8 KiB fixed workspace; eligible adaptive coding additionally admits event capacity and 64 KiB scratch |
 | JPEG caller-sample encode | Supplied gray/RGB span plus 8 KiB workspace and admitted optional event cache; bounded RGB rows, without RGBA conversion storage |
-| VP8L decode / encode | Decode admits trees/cache/transform rasters and simultaneous conversion buffers; encode borrows source and admits the fixed 8 KiB path or actual cached-tree/histogram scratch within a 64 KiB local bound; counts output before streaming |
+| VP8L decode / encode | Decode admits trees/cache/transform rasters and simultaneous conversion buffers; encode borrows source and admits the fixed 8 KiB path or actual cached-tree/histogram scratch and overlapping prediction candidates within a 64 KiB local bound; counts output before streaming |
 | VP8 decode / encode | Decode admits models/modes, padded YUV, alpha and RGBA phases; encode admits source/reconstruction planes, models, alpha and arithmetic-buffer capacity, including old/new growth overlap |
 
 These are logical admission charges, including conservative BCL allowances,

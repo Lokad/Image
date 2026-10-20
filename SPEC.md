@@ -1303,15 +1303,23 @@ At effort>=3 and at least16,384pixels, a green-decorrelated encoder uses a1,024-
 color cache, frequency-derived complete canonical trees and compact code-length
 repeats. This path is selected only if the configured local working allowance has
 64KiB remaining after borrowed source storage. Actual retained tree/cache capacity,
-histograms and overlapping construction/header scratch are admitted before allocation
+histograms, overlapping candidate trees and construction/header scratch are admitted before allocation
 through the same context; construction scratch is released promptly. Prefix lengths
 are bounded to15bits (7for code-length trees), and single-leaf trees consume no data
-bits. No general match search, spatial predictor or entropy groups are introduced.
+bits. Literal-heavy input also evaluates a global LEFT spatial predictor after
+green decorrelation, with the format's opaque-black first pixel and TOP first column.
+Histogram-weighted body bits and a serialized-header upper bound select prediction
+only when it reduces complete packet size; otherwise the original cached packet is
+preserved. Both candidate owners stay charged through comparison; unselected trees
+are released promptly. Admission refusal never selects the other candidate. The
+VP8L alpha hint describes the normalized source, independently of residual alpha.
+No general match search or entropy groups are introduced.
 
 Other cases retain the fixed-table8KiB path and its opaque zero-bit alpha leaf when
 that saves bytes. Local path selection precedes shared admission; a shared refusal
 is terminal and never triggers the other encoder. The fixed path counts and writes
-in two passes; the cached path gathers frequencies, counts and writes in three.
+in two passes; the cached path gathers frequencies, counts and writes in three,
+or four source passes when comparing prediction. Neighbors are normalized on demand.
 Both compare resident normalized samples without a row/frame copy or encoded-frame
 staging buffer. Complete RIFF size and padding are checked before caller writes,
 including nonseekable output. Every pass charges work and checks cancellation;
