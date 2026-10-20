@@ -21,6 +21,15 @@ pass. Both short pairs pass all pixels/owners/quiet guards; no longer repeat
 above one. Other PNG rows reaching changed `Walk` remain historical, including
 count-only/cancelable routes. Metadata, encoding, `WalkRgba` and other codecs/
 editing retain their identified scopes. No new finite case or matrix is added.
+
+The [VP8 helper for cancelable tokens](WARM-VP8-CANCELLABLE-BLOCK.md) then improves
+the existing live case 11.6% to 1.395x/upper1.437x at unchanged 760,572B/op.
+Every original decision still polls cancellation; exact completed-work/cursor
+publication includes canceled exits. All five existing VP8 rows refresh because
+their shared dispatcher changes; four control point means are 0.5–1.8% slower.
+All pixel/quality/owner/quiet gates, 4,484tests/OS,132VP8+36root normal/scalar,
+305public scalar controls and the same actual package/examples pass both OSes.
+No long above one or new case/settings grid. The finite counts stay unchanged.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
 required representatives using the same513×259 asymmetric RGBA rasters. Their
 [certified FMA screens](WARM-LANCZOS3-CERTIFIED-FMA.md) improve all
@@ -914,3 +923,10 @@ all finite counts stay unchanged; historical PNG timings are not relabeled.
 Next: bound live-token VP8 block work settlement with every original per-decision
 cancellation poll. Its1.577x current gap remains relevant because this round
 changes PNG only; repeated failed Lanczos strategies remain retired.
+
+The [subsequent VP8 round](WARM-VP8-CANCELLABLE-BLOCK.md) resolves that live-token
+item with an 11.6% gain, preserving every poll and exact partial state. Five current
+rows refresh; all coverage counts remain unchanged. Next: one current Reduce8
+Lanczos diagnostic and feasibility of wider FP32 horizontal arithmetic with
+rigorous conversion/FMA bounds and the existing exact fallback. The required
+1.548x byte/1.588x word gaps remain; rejected word strategies stay retired.

@@ -1,5 +1,9 @@
 # Block-scoped VP8 coefficient reader
 
+These results are superseded by the
+[helper for cancelable tokens](WARM-VP8-CANCELLABLE-BLOCK.md). The original
+noncancelable window remains unchanged; its baseline evidence is preserved here.
+
 Reading an admitted coefficient block through a private32bit window saves
 **11.2%** on current SimpleOpaque8. Exact pixels, logical work, original
 cursor state and allocations are preserved. All five affected existing cases

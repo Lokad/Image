@@ -4,7 +4,7 @@ using Lokad.Image.Tooling;
 
 namespace Lokad.Image.Tests;
 
-public sealed class Vp8CoefficientBlockTests
+public sealed partial class Vp8CoefficientBlockTests
 {
     private static readonly FieldInfo[] Fields = new[] { "position", "end", "shift", "range", "value" }
         .Select(n => typeof(Vp8BooleanReader).GetField(n, BindingFlags.Instance | BindingFlags.NonPublic)!).ToArray();

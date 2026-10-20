@@ -12,7 +12,7 @@ The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lancz
 is separate. **200 historical codec/edit rows do not yet requalify changed 0.2.0
 admission, disposal or governed storage.** Twenty-one current JPEG, four Lanczos3, two async
 input, four async output, one bicubic, five VP8 and one caller-owned-root row identify their current producers. Production
-qualification now passes 4,481 tests/OS, affected hardware-off checks, the same actual
+qualification now passes 4,484 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
 [Buffered JPEG EOB decoding](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) saves 10.0%
@@ -32,10 +32,13 @@ cut allocation 71.1% but had no elapsed gain and was also rejected. Accepted
 production is restored. [Four-column bicubic strips](../benchmarks/WARM-BICUBIC-FOUR-COLUMNS.md)
 then save **16.2%** on TightWide8: **1.433x/upper1.644x**, 32,913 B/op, with exact
 pixels and the same 4 KiB reservation. Full suites and the same actual package
-qualify both OSes. Only that existing row changes. A [block-scoped VP8 reader](../benchmarks/WARM-VP8-COEFFICIENT-BLOCK.md)
-then saves **11.2%** on current SimpleOpaque8 at **1.384x/upper1.459x**, 760,572 B/op.
-All five affected existing VP8 rows refresh, preserving exact pixels/work/cursors
-and the original short-input/cancelable path. A
+qualify both OSes. Only that existing row changes. The
+[original VP8 block reader](../benchmarks/WARM-VP8-COEFFICIENT-BLOCK.md) saved 11.2%
+at its checkpoint. A [live-token block helper](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md)
+now saves **11.6%**, reaching **1.395x/upper1.437x**, with 760,572 B/op unchanged,
+while preserving every per-decision cancellation poll and exact failure state.
+All five existing VP8 rows refresh; four control point means are 0.5–1.8% slower,
+with all quality/owner/quiet gates retained and no small-movement retuning. A
 [prepared-double Lanczos trial](../benchmarks/WARM-LANCZOS3-PREPARED-FMA-TRIAL.md)
 is correct but 1.4% slower, at 154,894 B/op, and is rejected. Accepted production
 and all selected rows remain unchanged. The already named
@@ -49,8 +52,8 @@ both guards pass. All21 async managed controls revalidate; unchanged native
 controls are reused. Two current rows refresh; previously historical PNG decode
 rows remain historical. Metadata, encoding and other codec/editing paths retain
 their scopes. The 924-sample profile describes the previous producer only.
-Next: bound live-token VP8 block work settlement while preserving every original
-decision's cancellation poll and exact partial work/cursor state.
+Next: one Reduce8 Lanczos diagnostic, then feasibility of a wider FP32 horizontal
+primitive with rigorous coefficient-conversion/FMA bounds and exact fallback.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
@@ -124,7 +127,7 @@ reconciliation now covers every numeric row.
 | [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,918.97 | 1,393.95 | 1.377 / 1.583 | 4,552 | Gap (short; qualified) |
 | [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 3,054.27 | 3,091.94 | 0.988 / 0.991 | 8,648 | Parity confirmed |
 | [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,329.08 | 996.80 | 1.333 / 1.411 | 761,840 | Gap (short; qualified) |
-| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-COEFFICIENT-BLOCK.md) | 8,210.18 | 5,993.82 | 1.370 / 1.407 | 1,966,744 | Gap (short; qualified) |
+| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 8,284.99 | 5,977.38 | 1.386 / 1.435 | 1,966,744 | Gap (short; qualified) |
 | [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 4,320.01 | 3,018.37 | 1.431 / 1.494 | 1,216,276 | Gap (short; qualified) |
 | [PNG RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,904.89 | 1,392.72 | 1.368 / 1.371 | 4,456 | Gap (independent) |
 | [PNG RGBA8, resident / ImageBudget quota](../benchmarks/WARM-SHARED-BUDGET.md) | 2,004.67 | 1,392.79 | 1.439 / 1.482 | 4,561 | Gap (short; qualified) |
@@ -200,10 +203,10 @@ reconciliation now covers every numeric row.
 | [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-411-SIMD.md) | 5,069.78 | 3,349.49 | 1.514 / 1.611 | 984,298 | Gap (short; qualified) |
 | [JPEG progressive 4:2:2](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 3,071.46 | 2,238.43 | 1.372 / 1.508 | 847,162 | Gap (short; qualified) |
 | [JPEG progressive 4:4:4](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 5,037.72 | 3,361.01 | 1.499 / 1.715 | 984,298 | Gap (short; qualified) |
-| [WebP VP8 + alpha](../benchmarks/WARM-VP8-COEFFICIENT-BLOCK.md) | 8,307.22 | 5,964.81 | 1.393 / 1.425 | 1,966,648 | Gap (short; qualified) |
-| [WebP VP8 opaque, simple luma filter](../benchmarks/WARM-VP8-COEFFICIENT-BLOCK.md) | 6,766.54 | 4,890.49 | 1.384 / 1.459 | 760,572 | Gap (short; qualified) |
-| [WebP VP8 opaque, live cancelable token](../benchmarks/WARM-VP8-COEFFICIENT-BLOCK.md) | 7,561.39 | 4,794.93 | 1.577 / 1.659 | 760,572 | Gap (short; qualified) |
-| [WebP VP8, opaque](../benchmarks/WARM-VP8-COEFFICIENT-BLOCK.md) | 6,603.84 | 4,795.63 | 1.377 / 1.419 | 760,572 | Gap (short; qualified) |
+| [WebP VP8 + alpha](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 8,353.50 | 5,968.68 | 1.400 / 1.436 | 1,966,648 | Gap (short; qualified) |
+| [WebP VP8 opaque, simple luma filter](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 6,888.59 | 4,890.64 | 1.409 / 1.450 | 760,572 | Gap (short; qualified) |
+| [WebP VP8 opaque, live cancelable token](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 6,687.81 | 4,793.83 | 1.395 / 1.437 | 760,572 | Gap (short; qualified) |
+| [WebP VP8, opaque](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 6,638.33 | 4,795.62 | 1.384 / 1.443 | 760,572 | Gap (short; qualified) |
 | [WebP VP8L, sixteen-color indexed input](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 785.58 | 544.96 | 1.442 / 1.495 | 1,351,972 | Gap (short; qualified) |
 | [WebP VP8L, literal/run input](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 2,269.12 | 2,157.09 | 1.052 / 1.074 | 1,074,326 | Gap (short; qualified) |
 | [WebP VP8L, native input](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 4,576.04 | 3,022.99 | 1.514 / 1.615 | 1,216,180 | Gap (short; qualified) |
