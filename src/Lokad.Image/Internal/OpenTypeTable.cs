@@ -22,6 +22,10 @@ internal sealed class OpenTypeTable(ReadOnlyMemory<byte> data, int glyphCount, O
         return BinaryPrimitives.ReadUInt16BigEndian(data.Span[offset..]);
     }
     internal int I16(int offset) => (short)U16(offset);
+    internal int I8(int offset)
+    {
+        context.Work(1); Range(offset, 1); return unchecked((sbyte)data.Span[offset]);
+    }
     internal uint U32(int offset)
     {
         context.Work(1); Range(offset, 4);

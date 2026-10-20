@@ -37,5 +37,6 @@ raw `3cd5092c253d78faae307390371d16fb3d7f1a2f624ee729f9127056c97ab87e`.
 [Coverage-based contextual substitution](text-context-qualification.md) adds GSUB
 type5 format3, verified with authored programs and the same twelve controls on
 both platforms. This extends lookup support without broadening the named public
-font set; variation-axis selection and nonzero positioning adjustments remain
-unsupported as specified.
+font set. [Default-instance positioning](text-default-instance-qualification.md)
+also accepts validated GDEF corrections whose sum is exactly zero. Axis selection,
+synthetic styles, device and nonzero default corrections remain unsupported.

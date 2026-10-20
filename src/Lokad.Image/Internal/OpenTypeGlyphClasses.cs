@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Lokad.Image.Internal;
 
-internal sealed class OpenTypeGlyphClasses
+internal sealed partial class OpenTypeGlyphClasses
 {
     private readonly OpenTypeTable table;
     private readonly int glyphClasses, markClasses, markSets;

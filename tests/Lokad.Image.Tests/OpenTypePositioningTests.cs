@@ -228,8 +228,9 @@ public sealed class OpenTypePositioningTests
     [Fact]
     public void ReservedValuesAndNonzeroDeviceCorrectionsAreNotSilentlyIgnored()
     {
-        var deviceAnchor = Words(3, 100, 200, 8, 0);
-        foreach (var lookup in new[] { new Lookup(1, 0, [SinglePosition(2, 256)]), new Lookup(1, 0, [SinglePosition(2, 17, 20, 1)]),
+        var deviceAnchor = Attach(Words(3, 100, 200, 0, 0), (6, Words(10, 20, 1, 0)));
+        var deviceValue = Attach(Words(1, 0, 17, 20, 0), (2, Coverage(2)), (8, Words(10, 20, 1, 0)));
+        foreach (var lookup in new[] { new Lookup(1, 0, [SinglePosition(2, 256)]), new Lookup(1, 0, [deviceValue]),
             new Lookup(4, 0, [MarkPosition(2, 7, deviceAnchor, Anchor(20, 0))]) })
         {
             using var context = Context(); using var run = Buffer(context, (2, 600), (7, 0));

@@ -32,16 +32,20 @@ internal static class TextShapingConsumer
             if (fitted.FontSize != 5 || !fitted.Bounds.Translate(-fitted.Bounds.X, -fitted.Bounds.Y).FitsInside(20, 5))
                 throw new Exception("Package fitting size/bounds differ.");
         if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Package fitting ownership differs.");
+        var defaultCorrection = Attach(Words(1, 0, 0x44, -50, 0), (2, Coverage(4)), (8, Words(0, 0, 0x8000)));
         var contextBytes = AuthoredTrueType.Build(tableOverrides: new Dictionary<string, byte[]>
         {
             ["GSUB"] = Substitution([new(5, 0, [SequenceCoverages([[2], [3]], (0, 1))]),
-                new(1, 0, [Single([2], [4])])], [new("ccmp", [0])])
+                new(1, 0, [Single([2], [4])])], [new("ccmp", [0])]),
+            ["GPOS"] = Positioning([new(1, 0, [defaultCorrection])], [new("kern", [0])]),
+            ["GDEF"] = DefinitionsWithVariation(ItemVariationStore([[[0, 16384, 16384]]], 1, [50]))
         });
         var contextFont = TrueTypeFont.Load(contextBytes, limits);
         using (var contextLayout = TextLayout.Create(contextFont, "AV", new() { FontSize = 10, Shaping = TextShaping.OpenType, Limits = limits }))
         {
             if (contextLayout.GlyphCount != 2 || contextLayout.GetGlyph(0).GlyphIndex != 4
-                || contextLayout.GetGlyph(1).GlyphIndex != 3 || contextLayout.GetGlyph(1).SourceOffset != 1)
+                || contextLayout.GetGlyph(1).GlyphIndex != 3 || contextLayout.GetGlyph(1).SourceOffset != 1
+                || contextLayout.GetGlyph(0).AdvanceWidth != 5.5)
                 throw new Exception("Package contextual substitution differs.");
             contextFont.Dispose();
             using var canvas = ImageBuffer.Create(30, 20, 8, limits);

@@ -3,7 +3,7 @@
 Updated 2026-10-20. Target: **warm single-CPU parity, independently confirmed
 conservative upper ≤1x**. The 239 numeric rows retain tested-producer evidence: **73 passes,
 165 gaps and 1 confidence-open case**. The finite
-[material checklist](../benchmarks/WARM-COVERAGE.md) has 255 named cases, 16 unmeasured.
+[material checklist](../benchmarks/WARM-COVERAGE.md) has 256 named cases, 17 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; current work targets parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
@@ -138,17 +138,18 @@ untimed evidence remains historical; the six table rows use the accepted produce
 
 The two JPEG async-output cases remain short gaps; all timings/allocations follow.
 
-The 16 unmeasured representatives cover header inspection, drawing and text.
+The 17 unmeasured representatives cover header inspection, drawing and text.
 [PNG fixed-workspace controls](../benchmarks/WARM-PNG-HEADERS-CONTROLS.md)
 agree on all 21 original cases, including deliberately opaque CRC/Deflate. Timing
 awaits the explicitly labeled bounded FFmpeg AVIO/descriptor adapter decision;
 complete-packet parsing would add whole-input buffering outside this boundary.
 Full warm parity and release readiness remain open.
-The [contextual font lookup extension](text-context-qualification.md) passes4,581
-correctness tests/OS,58 affected scalar checks, the existing twelve public font
-controls and the same actual package/examples on both platforms. It changes no
-codec/edit/inspection benchmark path; existing timing evidence is reused and the
-unmeasured text boundaries remain open.
+The [default-instance font extension](text-default-instance-qualification.md) passes
+4,596 correctness tests/OS,105 affected scalar checks, twelve public font controls
+and the same actual package/examples on both platforms. It changes no codec/edit/
+inspection benchmark path. One authored default-variation layout representative
+is added because region/row validation is a distinct required path; it awaits
+reference-boundary qualification and timing. Existing timing evidence is reused.
 
 
 JPEG caller-sample packets are **58,823/58,910 B** grayscale (managed/SIMD libjpeg-turbo),

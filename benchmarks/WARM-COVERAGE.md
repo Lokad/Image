@@ -3,10 +3,10 @@
 Updated 2026-10-20. The **warm single-CPU parity objective remains open**:
 73 independent passes,165 measured mean gaps and one confidence-open case across
 239 numeric rows. The [three-table summary](../docs/benchmark.md)
-contains125 independent observations and114 qualified shorts.16named required
+contains125 independent observations and114 qualified shorts.17named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
-The finite scope is now **255 cases:239 numeric+16 unmeasured**. After [typed source metadata](../docs/source-metadata.md),23 unaffected current
+The finite scope is now **256 cases:239 numeric+17 unmeasured**. After [typed source metadata](../docs/source-metadata.md),23 unaffected current
 rows and216 historical/awaiting-confirmation rows remain. Exactly31 formerly
 current decode/inspection rows need confirmation because their metadata factories
 and header preflight changed. The [named invalidation list](source-metadata-qualification-evidence.json)
@@ -1018,3 +1018,18 @@ photo174748/160032 B and diagram7636/7234 B retain open size gates.4,576 tests/O
 No workload is added:255=239 numeric+16 pending,23 current/216 historical-or-pending,
 73 passes/165 mean gaps/1 confidence-open,125 independent/114 short unchanged.
 C43 metadata31 queue remains open. JPEG/PNG/VP8/edit/text/inspection paths unchanged.
+
+
+The [default-instance font round](../docs/text-default-instance-qualification.md)
+adds exactly one required algorithm case, `TextLayout/OpenTypeDefaultVariation`.
+Use an authored two-glyph contextual-substitution program with two GDEF regions,
+signed word/byte deltas and default-zero GPOS adjustment. This reader validates
+region coordinates and delta rows, absent from the existing legacy/Arabic cases.
+Include complete owned OpenType layout, bounds measurement and disposal; exclude
+immutable font preparation. Equivalent reference output/ownership, quality and
+quiet-VM gates precede timing. **Unmeasured; allocations unmeasured.** No new font,
+image, style, size or axis grid is introduced; private inputs are not benchmark fixtures.
+Scope becomes256=239numeric+17pending;73passes/165gaps/1confidence-open,
+125independent/114short,23current/216historical numeric rows,31metadata confirmations
+unchanged.4,596tests/OS,105affectedscalar/OS,12publicfontcontrols/OS and the same
+actual0.2.0 package/three examples qualify; codec/edit/inspection paths unchanged.

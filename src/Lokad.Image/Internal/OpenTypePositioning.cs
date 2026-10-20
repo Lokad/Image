@@ -114,14 +114,22 @@ internal sealed class OpenTypePositioning : IDisposable
         if ((format & ~255) != 0) throw OpenTypeTable.Unsupported("Reserved OpenType positioning value fields are unsupported.");
         return BitOperations.PopCount((uint)format) * 2;
     }
-    private void Value(int offset, int format, ShapingBuffer glyphs, int at)
+    private void CheckDefaultCorrection(int origin, int field)
+    {
+        if (table.U16(field) == 0) return;
+        var correction = table.Offset16(origin, field);
+        if (table.U16(correction + 4) != 0x8000)
+            throw OpenTypeTable.Unsupported("OpenType device positioning corrections are unsupported.");
+        classes.CheckDefaultVariation(table.U16(correction), table.U16(correction + 2));
+    }
+    private void Value(int origin, int offset, int format, ShapingBuffer glyphs, int at)
     {
         table.Range(offset, ValueBytes(format));
         double x = 0, y = 0, advance = 0;
         for (var bit = 1; bit <= 128; bit <<= 1)
         {
             if ((format & bit) == 0) continue;
-            var value = table.I16(offset); offset += 2;
+            var value = bit < 16 ? table.I16(offset) : 0; var field = offset; offset += 2;
             switch (bit)
             {
                 case 1: x = value; break;
@@ -129,7 +137,7 @@ internal sealed class OpenTypePositioning : IDisposable
                 case 4: advance = value; break;
                 case 8: break; // yAdvance belongs to vertical layout, not horizontal text.
                 default:
-                    if (value != 0) throw OpenTypeTable.Unsupported("OpenType device and variation positioning adjustments are unsupported.");
+                    CheckDefaultCorrection(origin, field);
                     break;
             }
         }
@@ -149,7 +157,7 @@ internal sealed class OpenTypePositioning : IDisposable
             if (index >= count) throw OpenTypeTable.Bad("OpenType single positioning coverage exceeds its value array.");
             value = sub + 8 + index * size;
         }
-        Value(value, valueFormat, glyphs, at); return true;
+        Value(sub, value, valueFormat, glyphs, at); return true;
     }
 
     private bool Pair(int sub, ShapingBuffer glyphs, int at, int flags, int filteringSet, out int next)
@@ -162,12 +170,13 @@ internal sealed class OpenTypePositioning : IDisposable
         if (second < 0) return false;
         var firstFormat = table.U16(sub + 4); var secondFormat = table.U16(sub + 6);
         var firstSize = ValueBytes(firstFormat); var secondSize = ValueBytes(secondFormat); var size = firstSize + secondSize;
-        int value;
+        int value; var origin = sub;
         if (format == 1)
         {
             var sets = table.Count(sub + 8, 2);
             if (covered >= sets) throw OpenTypeTable.Bad("OpenType pair coverage exceeds its set array.");
             var set = table.Offset16(sub, sub + 10 + covered * 2); var count = table.Count(set, size + 2);
+            origin = set; // ValueRecord offsets are relative to the immediate PairSet parent.
             var low = 0; var high = count - 1; value = -1;
             while (low <= high)
             {
@@ -191,7 +200,7 @@ internal sealed class OpenTypePositioning : IDisposable
             if (firstClass >= firstCount || secondClass >= secondCount) throw OpenTypeTable.Bad("OpenType positioning class exceeds its pair matrix.");
             value = checked(sub + 16 + (firstClass * secondCount + secondClass) * size);
         }
-        Value(value, firstFormat, glyphs, at); Value(value + firstSize, secondFormat, glyphs, second);
+        Value(origin, value, firstFormat, glyphs, at); Value(origin, value + firstSize, secondFormat, glyphs, second);
         next = secondFormat == 0 ? second : second + 1; return true;
     }
 
@@ -202,9 +211,8 @@ internal sealed class OpenTypePositioning : IDisposable
         table.Range(offset, format == 3 ? 10 : format == 2 ? 8 : 6);
         var x = table.I16(offset + 2); var y = table.I16(offset + 4);
         // Anchor contour points refine hinted outlines. The unhinted path uses
-        // design coordinates; nonzero device/variation corrections need support.
-        if (format == 3 && (table.U16(offset + 6) != 0 || table.U16(offset + 8) != 0))
-            throw OpenTypeTable.Unsupported("OpenType device and variation anchors are unsupported.");
+        // design coordinates; variation corrections must be provably zero.
+        if (format == 3) { CheckDefaultCorrection(offset, offset + 6); CheckDefaultCorrection(offset, offset + 8); }
         return (x, y);
     }
     private bool Mark(int type, int sub, ShapingBuffer glyphs, int at, int flags, int filteringSet)

@@ -2,7 +2,8 @@
 
 ## 0.2.0 — Unreleased
 
-- Coverage-based OpenType contextual substitution for supplied TrueType text.
+- Coverage-based OpenType contextual substitution and validated zero default-instance
+  positioning corrections for supplied TrueType text.
 
 - Typed source color, alpha and component metadata across synchronous/asynchronous
   identification and bounded header inspection, preserving source sample/index depth.

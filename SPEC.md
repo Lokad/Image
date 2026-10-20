@@ -215,8 +215,13 @@ localized forms, Arabic joining forms, required/contextual/standard ligatures an
 mark positioning. GSUB single/ligature/chained-context/extensions, coverage-based
 contextual substitution (type 5 format 3), and GPOS
 single/pair/mark-base/mark-ligature/mark-mark/extensions are implemented. Selected
-cursive/contextual positioning, other lookup families and nonzero device/variation
-adjustments raise typed `FontTable` unsupported failures. Other scripts and missing
+cursive/contextual positioning and other lookup families raise typed `FontTable`
+unsupported failures. GPOS value records and format-three anchors may reference
+GDEF item variation data whose total correction is proven zero at the default
+instance. Referenced indices, region coordinates and delta-row bounds are checked;
+nonzero default corrections, device corrections and long-word positioning deltas
+remain explicitly unsupported. This provides no variation-axis selection.
+Other scripts and missing
 required Arabic joining features are explicitly unsupported. Mirroring uses encoded
 partners or the font's supported `rtlm` substitutions; a mirrored glyph without
 either fails explicitly. There is no implicit font substitution or raster fallback.

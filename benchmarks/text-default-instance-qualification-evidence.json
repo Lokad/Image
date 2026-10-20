@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "scope": "Zero default-instance GPOS corrections through GDEF ItemVariationStore, with independently authored fixtures and the existing twelve licensed public font controls.",
+  "productionChanged": true,
+  "noTiming": true,
+  "uniformWarmParityComplete": false,
+  "qualification": {
+    "windows": {
+      "productionSha256": "01b5cafc73dfc2178a1db93b9e29f4a8118fb2a16cac834073370cc8d9a1feab",
+      "counts": [
+        1705,
+        1959,
+        932
+      ],
+      "fullPassed": 4596,
+      "scalar": {
+        "internal": 105
+      },
+      "coreBuilds": 1,
+      "internalTestBuilds": 1,
+      "publicTestBuilds": 0,
+      "differentialHarnessNativeSelectorBuilds": 0,
+      "productionBuildsAfterFreeze": 0,
+      "frozenIdentities": {
+        "Lokad.Image.dll": "01b5cafc73dfc2178a1db93b9e29f4a8118fb2a16cac834073370cc8d9a1feab",
+        "Lokad.Image.pdb": "9752085c89f30a22501bf7b6d0b121ddbb634202fd46823df64bf96b3ebc81cb",
+        "Lokad.Image.xml": "5256fbfd165a5b5420898e2bdc684f8f2e948d4c26aaa9fdd49479f0a6861799"
+      },
+      "actualPackageSha256": "519328b7e41d3671a7570be59780d1e89981e904a26eab94fb5e5319b5912f8b",
+      "sameActualPackageConsumerAndThreeExamples": true,
+      "existingTextReferenceControls": 12,
+      "testIdentities": {
+        "Lokad.Image.Tests.dll": "d3685c3935b18f7b7229b024482f6c6ec671c7707a47aeb6cc20dbef2cf54f9e",
+        "Lokad.Image.Tests.pdb": "323286e8734c719bea361ae4783251fe4e1fa89c54a815d4c5db8b061489261c",
+        "Lokad.Image.PublicApi.Tests.dll": "db982482cb1fb11202d3c16053d18d8751403a911eb56a9dcbc05744f8737c1b",
+        "Lokad.Image.PublicApi.Tests.pdb": "b2290e996a2e27203df0e8f8d959e30f24d59bd62d8af2ab3ffd16c26baf04d6"
+      }
+    },
+    "linux": {
+      "productionSha256": "060d49892d2b0bc4570b06dd20c86a53985663812c3105026e325c2b32ea5646",
+      "sourceSha256": "2dfa775cfe1500d1f5f094d588620ddb8be3952fe5ab96ab5e4fd858acf7c54b",
+      "counts": [
+        1705,
+        1959,
+        932
+      ],
+      "fullPassed": 4596,
+      "scalarInternal": 105,
+      "coreBuilds": 1,
+      "internalTestBuilds": 1,
+      "publicTestBuilds": 0,
+      "differentialHarnessNativeSelectorBuilds": 0,
+      "productionBuildsAfterFreeze": 0,
+      "existingTextReferenceControls": 12,
+      "frozenIdentities": {
+        "Lokad.Image.pdb": "f37365aaa7ca6e593bff4f61eca0484d9a1dcc311c315ed0cd58f8e16e6890cf",
+        "Lokad.Image.xml": "77bc2af97424a7077a6ea2a237a198a17a849e9eb54e5626f2124aeaaa28f619",
+        "Lokad.Image.deps.json": "267fa2cc32c306d8e3a84c84a5d771f62ef2aedfb2a947e2af70e999b29c9eb8",
+        "Lokad.Image.dll": "060d49892d2b0bc4570b06dd20c86a53985663812c3105026e325c2b32ea5646"
+      },
+      "testIdentities": {
+        "Lokad.Image.Tests.dll": "63a27ee9c1df18aa51a218f74a048400ab1b3c496522b905736d1e2025d65873",
+        "Lokad.Image.Tests.pdb": "c5e6b0307e545c5123a478b6bac827f3b3e70d9b16e9b1074274b8ce13a6035d",
+        "Lokad.Image.PublicApi.Tests.dll": "c809f6ee230ac82fc10551176be3bbd7036afcb4bd9405f5e0f1311b648e03ee",
+        "Lokad.Image.PublicApi.Tests.pdb": "cab48b5ba49004c1e04c6bd8651dc43ba748455210250e91907687727c5e22bd"
+      },
+      "actualPackageSha256": "519328b7e41d3671a7570be59780d1e89981e904a26eab94fb5e5319b5912f8b",
+      "sameActualPackageConsumerAndThreeExamples": true,
+      "packagedSourceMetadataAsyncRootAndIndependentOutputs": true,
+      "checkoutBytes": 4994739067
+    }
+  },
+  "rawArtifacts": {
+    "windows": {
+      "file": "c50b-qualified-windows.tar.gz",
+      "bytes": 1971184,
+      "sha256": "7c44ed9c932c90d24555e28b18850a020a72bfd0336fafd449de35ae4e4d61d2",
+      "actualPackageSha256": "519328b7e41d3671a7570be59780d1e89981e904a26eab94fb5e5319b5912f8b"
+    },
+    "linux": {
+      "file": "c50b-qualified-linux.tar.gz",
+      "bytes": 1974053,
+      "sha256": "0bc6f20aa1ecf2407473c651cba1d5000ea360de8a0df679bbeb2e27c6833228",
+      "actualPackageSha256": "519328b7e41d3671a7570be59780d1e89981e904a26eab94fb5e5319b5912f8b",
+      "checkoutBytes": 4994774843
+    }
+  },
+  "correctness": "Immediate parent offsets for SinglePos, PairSet, PairPos2 and anchors; no-variation sentinel/null outer semantics; signed word/byte deltas; default-region exclusion and exact zero sums; invalid indices/coordinates/rows; bounded truncation/mutation; typed work/item/cancellation/refusal cleanup and successful subsequent operations. Actual packaged contextual layout plus default correction rendered after font disposal.",
+  "memory": "No new heap storage, cache, input copy or owner; font tables remain borrowed and every reader step charges the existing operation context. Existing admitted shaping and retained layout storage keep shared-root ownership.",
+  "limitations": "No axis selection or synthetic style. Nonzero default variation sums, device corrections and long-word positioning deltas remain typed FontTable unsupported failures. No general variable-font compatibility claim.",
+  "evidenceInvalidation": "Only previously unsupported nonzero correction-offset fields in GPOS change, plus the internal signed-byte reader. Existing public font comparisons freshly pass both OSes. No codec/edit/inspection timing invalidation. Add exactly one unmeasured required algorithm representative, TextLayout/OpenTypeDefaultVariation, using an authored program. Finite scope256=239 numeric+17 pending,73 retained passes/165 mean gaps/1 confidence-open,125 independent/114 short and31 metadata confirmations unchanged."
+}

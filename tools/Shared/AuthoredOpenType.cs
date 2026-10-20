@@ -130,6 +130,32 @@ internal static class AuthoredOpenType
     }
     internal static byte[] Positioning(Lookup[] lookups, Feature[] features)
         => Substitution(lookups, features);
+    internal static byte[] ItemVariationStore(int[][][] regions, int wordCount, params int[][] rows)
+    {
+        var axes = regions.Length == 0 ? 1 : regions[0].Length;
+        var regionList = Words([axes, regions.Length, .. regions.SelectMany(r => r.SelectMany(a => a))]);
+        var dataHeader = Words([rows.Length, wordCount, regions.Length, .. Enumerable.Range(0, regions.Length)]);
+        var data = new byte[dataHeader.Length + rows.Length * (regions.Length + wordCount)];
+        dataHeader.CopyTo(data, 0); var cursor = dataHeader.Length;
+        foreach (var row in rows)
+        for (var i = 0; i < row.Length; i++)
+        {
+            if (i < wordCount) { Write(data, cursor, row[i]); cursor += 2; }
+            else data[cursor++] = unchecked((byte)row[i]);
+        }
+        var store = new byte[12 + regionList.Length + data.Length]; Write(store, 0, 1); Write(store, 6, 1);
+        BinaryPrimitives.WriteUInt32BigEndian(store.AsSpan(2), 12);
+        BinaryPrimitives.WriteUInt32BigEndian(store.AsSpan(8), (uint)(12 + regionList.Length));
+        regionList.CopyTo(store, 12); data.CopyTo(store, 12 + regionList.Length); return store;
+    }
+    internal static byte[] DefinitionsWithVariation(byte[] store, byte[]? classes = null)
+    {
+        classes ??= [];
+        var bytes = new byte[18 + classes.Length + store.Length]; Write(bytes, 0, 1); Write(bytes, 2, 3);
+        if (classes.Length != 0) Write(bytes, 4, 18);
+        BinaryPrimitives.WriteUInt32BigEndian(bytes.AsSpan(14), (uint)(18 + classes.Length));
+        classes.CopyTo(bytes, 18); store.CopyTo(bytes, 18 + classes.Length); return bytes;
+    }
     internal static byte[] SinglePosition(int glyph, int format, params int[] values)
         => Attach(Words([1, 0, format, .. values]), (2, Coverage(glyph)));
     internal static byte[] SinglePositionArray(int[] glyphs, int valueFormat, params int[][] values)
