@@ -3,7 +3,7 @@ using System.Buffers.Binary;
 namespace Lokad.Image.Internal;
 
 /// <summary>Owned VP8L literal, repeated-color and previous-row encoder; no upstream code or tables.</summary>
-internal static class WebpLosslessEncoder
+internal static partial class WebpLosslessEncoder
 {
     private sealed class Table
     {
@@ -47,7 +47,13 @@ internal static class WebpLosslessEncoder
         if (options.Quality is < 1 or > 100 || options.Effort is < 0 or > 6) throw new ArgumentOutOfRangeException(nameof(options));
         context.PixelBytes(image.Width, image.Height, image.BitDepth);
         if (image.Width > 16384 || image.Height > 16384) throw new ImageLimitException(ImageLimitKind.Dimension, "VP8L dimensions exceed 16384.");
-        context.ReserveBorrowed(image.ByteLength); context.Reserve(8192);
+        context.ReserveBorrowed(image.ByteLength);
+        // Decide from this operation's configured local allowance, before any
+        // shared reservation. Admission refusal never selects another encoder.
+        if (options.Effort >= 3 && (long)image.Width * image.Height >= 16384
+            && context.RemainingWorkingBytes >= CachedWorkingBytes)
+        { EncodeCached(image, output, options, context); return; }
+        context.Reserve(8192);
         var green = new Table(280); var literal = new Table(256); var distance = new Table(40);
         // Count first so nonseekable output needs no encoded-frame staging buffer.
         // The caller must synchronize mutable pixels across the two passes.

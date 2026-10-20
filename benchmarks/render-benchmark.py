@@ -173,7 +173,7 @@ def render():
         row('WebP VP8L, native input / live cancelable token', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'NativeLosslessCancelable8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
     ]
     encodes = [
-        row('WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream', 'warm-webp-async-encode-evidence.json', ['cases', 'WebpLossless8AsyncNonSeekable', -1], 'WARM-WEBP-ASYNC-ENCODE.md', True),
+        row('WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream', 'warm-vp8l-color-cache-evidence.json', ['cases', 'WebpLossless8AsyncNonSeekable', -1], 'WARM-VP8L-COLOR-CACHE.md', True),
         row('JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream', 'warm-jpeg-async-samples-evidence.json', ['cases', 'JpegRgb420AsyncSamples', -1], 'WARM-JPEG-ASYNC-SAMPLES.md', verification='Gap (short; qualified)'),
         row('JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality', 'warm-jpeg-async-encode-evidence.json', ['cases', 'Jpeg8AsyncNonSeekable', -1], 'WARM-JPEG-ASYNC-ENCODE.md', verification='Gap (short; qualified)'),
         row('PNG EncodePngAsync, fresh nonseekable Stream / level6', 'warm-png-async-encode-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-PNG-ASYNC-ENCODE.md', True),
@@ -214,9 +214,9 @@ def render():
         row('WebP VP8 + alpha‡', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
         row('WebP VP8 + alpha from RGBA16‡', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
         row('WebP VP8 + alpha‡, caller work budget32M', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'EncodeBudget8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
-        row('WebP VP8L, exact backend*', 'warm-vp8l-previous-row-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-PREVIOUS-ROW.md', True),
-        row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-previous-row-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-PREVIOUS-ROW.md', True),
-        row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-previous-row-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-PREVIOUS-ROW.md', True),
+        row('WebP VP8L, exact backend*', 'warm-vp8l-color-cache-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-COLOR-CACHE.md', True),
+        row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-color-cache-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-COLOR-CACHE.md', True),
+        row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-color-cache-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-COLOR-CACHE.md', True),
     ]
     edits = [
         row('Horizontal flip RGBA8, two live outputs / per image', 'warm-horizontal-flip512-evidence.json', ['cases', 'Rgba8', -1], 'WARM-HORIZONTAL-FLIP512.md', verification='Gap (short; qualified)'),
@@ -311,8 +311,8 @@ def render():
         row('Mirrored transpose RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'Transverse8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
     ]
     encodes.extend([
-        row('WebP VP8L photograph RGBA8', 'warm-vp8l-previous-row-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-PREVIOUS-ROW.md', True),
-        row('WebP VP8L text/diagram RGBA8', 'warm-vp8l-previous-row-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-PREVIOUS-ROW.md', True),
+        row('WebP VP8L photograph RGBA8', 'warm-vp8l-color-cache-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-COLOR-CACHE.md', True),
+        row('WebP VP8L text/diagram RGBA8', 'warm-vp8l-color-cache-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-COLOR-CACHE.md', True),
         row('WebP VP8 photograph RGBA8 / matched quality', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
         row('WebP VP8 text/diagram RGBA8 / matched quality', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
     ])
@@ -339,10 +339,10 @@ to the named fixed inputs/settings/hardware, without extrapolating to other prof
 
 These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
-is separate. **198 historical codec/edit rows do not yet requalify changed 0.2.0
+is separate. **193 historical codec/edit rows do not yet requalify changed 0.2.0
 admission, disposal or governed storage.** Twenty-one current JPEG, four Lanczos3, two PNG resident, two async
-input, four async output, one bicubic, five VP8 and one caller-owned-root row identify their current producers. Production
-qualification now passes 4,484 tests/OS, affected hardware-off checks, the same actual
+input, four async output, one bicubic, five VP8, five lossless WebP encodes and one caller-owned-root row identify their current producers. Production
+qualification now passes 4,509 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
 [Buffered JPEG EOB decoding](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) saves 10.0%
@@ -418,20 +418,22 @@ full parity remains open.
 
 Complete async PNG and lossless WebP outputs independently pass. WebP uses approved
 libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compressed
-sizes **533,100/183,812 B**. Its passing timing does not establish compression parity.
+sizes **252,476/183,812 B**. Its passing timing does not establish compression parity.
 Lossless size parity is a high-priority open gate: the fixed opaque photograph
-must reach ≤160,032 B (currently383,154 B), and diagram ≤7,234 B (currently15,120 B),
+must reach ≤160,032 B (currently295,936 B), and diagram ≤7,234 B (currently7,636 B),
 with exact pixels and the unchanged libwebp exact=1 reference/settings. The
 [caller-JPEG controls](../benchmarks/WARM-JPEG-CALLER-MCU.md) also leave a joint
 size/quality gap: RGB42074,040/52,093 B at source-PSNR difference0.106110 dB
 (gate0.25 dB); grayscale58,823/58,910 B. RGB420 compression improvements must
 retain matched reconstruction quality and avoid material grayscale regression.
 These content/sampling controls do not establish general compression equivalence.
-An [untimed lossless structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md)
-reproduces current sizes and demonstrates exact diagnostic packets of196,528 B
-for the photograph and7,636 B for the diagram. Both exceed their size ceilings;
-production and selected timing evidence are unchanged. Lossy WebP size ceilings
-are17,688/7,100 B at the frozen matched quality (currently21,432/8,288 B).
+The [managed color-cache round](../benchmarks/WARM-VP8L-COLOR-CACHE.md) reduces
+photograph/diagram size22.8%/49.5%. All six affected complete encodes independently
+pass time parity, with allocations shown below. Compression costs more CPU and
+raises allocations for these two controls; smaller ordinary RGBA packets reduce
+stream-growth allocations. The earlier [structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md)
+remains diagnostic evidence. Next: the larger photograph spatial-prediction gap.
+Lossy WebP ceilings remain17,688/7,100 B at frozen matched quality (21,432/8,288 B).
 The two JPEG async-output cases remain short gaps; all timings/allocations follow.
 
 The 16 unmeasured representatives cover header inspection, drawing and text.
@@ -445,8 +447,8 @@ JPEG caller-sample matched-quality packets are **58,823/58,910 B** grayscale
 (managed/SIMD libjpeg-turbo) and **74,040/52,093 B** RGB420 (managed/FFmpeg), with
 source-PSNR gaps 0.000033/0.106110 dB inside 0.25 dB. Equal quality numbers are not the
 matching rule; [frozen comparisons](../benchmarks/WARM-JPEG-CALLER-MCU.md) include
-complete time/allocations. WebP photograph/diagram lossless sizes are 383,154/160,032 B
-and 15,120/7,234 B; [lossy sizes](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md)
+complete time/allocations. WebP photograph/diagram lossless sizes are 295,936/160,032 B
+and 7,636/7,234 B; [lossy sizes](../benchmarks/WARM-VP8-ADAPTIVE-PROBABILITIES.md)
 are 21,432/17,688 B and 8,288/7,100 B at the fixed qualified source quality. Compression-
 efficiency parity is not established. Current operation timings/allocations follow.
 

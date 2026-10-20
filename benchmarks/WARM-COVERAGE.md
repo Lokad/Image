@@ -7,17 +7,26 @@ contains125 independent observations and113 qualified shorts.16named required
 boundaries remain unmeasured. Reuse unchanged passing paths; no image/settings grid.
 
 The finite scope is now **254 cases:238 numeric+16 unmeasured**. The remaining
-198 historical codec/edit rows retain their identified performance-qualified
+193 historical codec/edit rows retain their identified performance-qualified
 builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
-Twenty-one current JPEG, four Lanczos3, two PNG resident, two async input, four async output, one bicubic, five VP8 and one caller-owned-root rows
+Twenty-one current JPEG, four Lanczos3, two PNG resident, two async input, four async output, one bicubic, five VP8, five synchronous lossless WebP encodes and one caller-owned-root rows
 are identified below. The latest JPEG evidence replaces the earlier CMYK timings.
+
+The [bounded VP8L color-cache round](WARM-VP8L-COLOR-CACHE.md) replaces five
+historical synchronous encodes and the already-current async encode with six
+independent time-parity confirmations. Exactly45current/193historical rows;
+all254cases,72passes/165gaps/1confidence-open and125independent/113short counts
+are preserved. Photograph/diagram now295936/7636B versus160032/7234B: both size
+gates remain open. All4509tests/OS,18prefix+105public normal/scalar checks/OS and
+the same actual private package/examples pass. No decoder fixture regeneration,
+reference change, new workload grid or retuning of unaffected passing paths.
 
 The [current resident PNG reconciliation](WARM-CURRENT-RESIDENT-PNG.md) replaces
 the two historical default RGBA8/16 None-filter rows with current qualified shorts.
 Original packets, exact frames/owners, native normal/scalar controls and all four
 score guards pass. No code, harness, selector, native or package builds. Both means
 remain above parity, so no longer repeat. Only these two historical rows become
-current:40 current/198 historical; other PNG boundaries retain their named scope.
+current at that checkpoint:40 current/198 historical; other PNG boundaries retain their named scope.
 
 The [paired-integer Lanczos byte trial](WARM-LANCZOS3-PAIRED-BYTE-TRIAL.md)
 parks the small3.5% point-mean gain; once-prepared coefficient packing is neutral.
@@ -376,7 +385,7 @@ text edges and flat-region rate/distortion. These distinct required content
 families were absent from the procedural controls. No shape/depth/effort grid.
 All four measure complete output ownership and allocations with equivalent
 delivery. The two lossless cases and photograph VP8 independently pass; the later
-bounded-model diagram result is the open comparison above. Lossless sizes are now 2.394x/2.090x the exact native packets; VP8
+bounded-model diagram result is the open comparison above. The earlier lossless sizes were2.394x/2.090x; the current cache round above reduces them to1.849x/1.056x the exact native packets; VP8
 sizes are 1.212x/1.167x at matched source quality. The preceding lossless change replaces only the five affected timing proofs;
 other production paths and qualification evidence are reused. Known scope is now247 named
 cases:225 numeric plus22 unmeasured. Stop these three time-passing cases unless

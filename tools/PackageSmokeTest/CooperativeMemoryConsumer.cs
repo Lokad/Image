@@ -55,5 +55,40 @@ internal static class CooperativeMemoryConsumer
                     throw new Exception("Packaged Lanczos3 samples differ.");
         }
         if (budget.Bytes != 0) throw new Exception("Packaged Lanczos3 retained storage was not released.");
+        using (var input = ImageBuffer.Create(129, 129, 8, limits))
+        {
+            for (var y = 0; y < input.Height; y++)
+            for (var x = 0; x < input.Width; x++)
+            {
+                var row = input.GetRow8(y); var at = x * 4;
+                row[at] = (byte)(x * 37 + y * 11); row[at + 1] = (byte)(x * 19 + y * 29);
+                row[at + 2] = (byte)(x * 7 + y * 53); row[at + 3] = x % 7 == 0 ? (byte)0 : (byte)255;
+            }
+            var sourceBytes = (long)input.Stride * input.Height;
+            using (var caller = budget.CreateScope())
+            {
+                if (!caller.TryReserve(4 * 1024 * 1024 - sourceBytes - 8192, out var held))
+                    throw new Exception("Packaged WebP refusal setup differs.");
+                using var rejected = new MemoryStream();
+                try
+                {
+                    ImageCodec.EncodeWebp(input, rejected, new() { Limits = limits });
+                    throw new Exception("Packaged WebP silently selected a lower-memory encoder after shared refusal.");
+                }
+                catch (ImageLimitException e) when (e.Scope == ImageLimitScope.SharedBudget && e.Limit == ImageLimitKind.WorkingBytes) { }
+                if (rejected.Length != 0 || budget.Bytes != sourceBytes + held.Bytes)
+                    throw new Exception("Packaged WebP refusal leaked codec storage or wrote output.");
+            }
+            using var output = new MemoryStream(); await ImageCodec.EncodeWebpAsync(input, output, new() { Limits = limits });
+            if (budget.Bytes != sourceBytes || !output.CanWrite || (output.GetBuffer()[25] & 31) != 21)
+                throw new Exception("Packaged cached WebP admission, caller stream or transform framing differs.");
+            using var decoded = ImageCodec.Decode(output.ToArray(), new() { Limits = limits });
+            for (var y = 0; y < input.Height; y++)
+                if (!input.GetRow8(y).SequenceEqual(decoded.GetRow8(y))) throw new Exception("Packaged cached WebP hidden RGBA differs.");
+            input.Dispose();
+            if (budget.Bytes != sourceBytes || decoded.GetRow8(0)[3] != 0)
+                throw new Exception("Packaged cached WebP result depends on source lifetime.");
+        }
+        if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Packaged cached WebP owners leaked or closed the borrowed root.");
     }
 }

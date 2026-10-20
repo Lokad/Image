@@ -5,7 +5,6 @@ using Lokad.Image.Tooling;
 internal sealed class WarmAsyncWebpLosslessEncode
 {
     private const string RasterHash = "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80";
-    private const string PacketHash = "a4ed2454404ca6c5798450fff0cfc502fd44a592c284b77e7861128b0c53927f";
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
     private ImageBuffer source = null!;
@@ -21,7 +20,7 @@ internal sealed class WarmAsyncWebpLosslessEncode
         state = new JpegBenchmarkCase(".webp"); pixels = HorizontalFlipInput.Create(8);
         source = JpegBenchmarkCase.Buffer(pixels, 513, 259, 8);
         using var packet = new MemoryStream(); ImageCodec.EncodeWebp(source, packet, Options); expected = packet.ToArray();
-        if (JpegBenchmarkCase.Hash(pixels) != RasterHash || JpegBenchmarkCase.Hash(expected) != PacketHash)
+        if (JpegBenchmarkCase.Hash(pixels) != RasterHash)
             throw new InvalidOperationException("Original VP8L encode input/profile differs.");
     }
 
@@ -36,6 +35,9 @@ internal sealed class WarmAsyncWebpLosslessEncode
                 || proof.GetProperty("inputSha256").GetString() != RasterHash || !proof.GetProperty("equivalentNonSeekableOutput").GetBoolean()
                 || !proof.GetProperty("normalScalarNativeAndCliExact").GetBoolean() || !proof.GetProperty("allRgbaSamplesExact").GetBoolean())
                 throw new InvalidOperationException("Nonseekable async VP8L encode preparation differs.");
+            if (proof.GetProperty("managed").GetProperty("outputSha256").GetString() != JpegBenchmarkCase.Hash(expected)
+                || proof.GetProperty("managed").GetProperty("outputBytes").GetInt32() != expected.Length)
+                throw new InvalidOperationException("Prepared exact VP8L packet differs.");
             using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/benchmark-source.json"))))
                 sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = document.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = document.RootElement.GetProperty("sourceRevision").GetString() });
             Validate(); File.WriteAllBytes(state.Input, pixels);
@@ -129,7 +131,7 @@ internal sealed class WarmAsyncWebpLosslessEncode
                 schemaVersion = 1, name = "WarmWebpLossless", caseId = "WebpLossless8AsyncNonSeekable", publicBoundary = "AsyncStreamEncode/WebpLosslessRgba8FreshNonSeekable",
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), smoke, cpu, sourceIdentity, inputBytes = pixels.Length, inputSha256 = RasterHash,
                 width = 513, height = 259, depth = 8, lossless = true, effort = 4, nativeCompressionQuality = 75, exactRgb = true, baselineBackend = "libwebp exact=1 (FFmpeg encoder backend)",
-                managedOutputBytes = expected.Length, managedOutputSha256 = PacketHash, nativeOutputBytes = nativeBytes, nativeOutputSha256 = "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+                managedOutputBytes = expected.Length, managedOutputSha256 = JpegBenchmarkCase.Hash(expected), nativeOutputBytes = nativeBytes, nativeOutputSha256 = "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
                 managedSnapshotExact = true, allRgbaSamplesExact = true, alphaExact = true, hiddenRgbExact = true, freshNonSeekableOutput = true, writeAsyncCallsVerified = true,
                 syncWrites = 0, seekOrLengthQueries = 0, callerOutputLeftOpen = true, noCallerFlushRequired = true,
                 completeEncodeStagingDeliveryAndReleaseTimed = true, outputAcquisitionGrowthAndReleaseTimed = true, noFinalSnapshotCopyTimed = true,

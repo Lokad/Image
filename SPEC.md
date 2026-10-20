@@ -1294,23 +1294,29 @@ boundaries. Empty partitions and inconsistent sizes are rejected.
 
 `EncodeWebp` defaults to lossless VP8L. RGBA16 input is normalized per channel
 with integer `(sample+128)/257`; RGBA8 samples are preserved exactly, including
-hidden RGB. The first encoder uses independently generated fixed canonical tables
-and repeated-color/previous-row references, without transforms, a color cache or general match search.
-Opaque output uses a zero-bit alpha255 leaf when it saves payload bytes; other
-literal tables remain fixed. `Effort` accepts 0..6 (default 4): zero writes
-only literals; other settings permit repeated-color or previous-row sequences up
-to `64<<effort` pixels. References may span rows and overlap their destinations;
-the encoder compares the resident normalized pixels without a row or frame copy.
-`Quality` accepts 1..100 but is ignored in lossless mode. VP8L payload length is counted before writing, so nonseekable output
-requires no encoded-frame staging buffer. Both passes charge work and require
-caller synchronization of mutable input pixels. Unsupported profiles fail
-explicitly, without external fallbacks.
+hidden RGB. `Effort` accepts0..6 (default4): zero writes only literals; other
+settings permit repeated-color/previous-row sequences up to `64<<effort` pixels.
+References may span rows and overlap destinations. `Quality` accepts1..100 but is
+ignored in lossless mode. Every path preserves alpha and hidden RGB exactly.
 
-Counting omits whole-byte alpha fields and adds their exact size, or the 29-byte
-singleton-header difference, before output preflight. Both passes still check
-work/cancellation per alpha field, including zero-bit leaves. Source plus the
-existing 8 KiB workspace suffices; no histogram, extra source scan or frame copy
-is introduced. Alpha-bearing sequences preserve all hidden RGB and alpha samples.
+At effort>=3 and at least16,384pixels, a green-decorrelated encoder uses a1,024-entry
+color cache, frequency-derived complete canonical trees and compact code-length
+repeats. This path is selected only if the configured local working allowance has
+64KiB remaining after borrowed source storage. Actual retained tree/cache capacity,
+histograms and overlapping construction/header scratch are admitted before allocation
+through the same context; construction scratch is released promptly. Prefix lengths
+are bounded to15bits (7for code-length trees), and single-leaf trees consume no data
+bits. No general match search, spatial predictor or entropy groups are introduced.
+
+Other cases retain the fixed-table8KiB path and its opaque zero-bit alpha leaf when
+that saves bytes. Local path selection precedes shared admission; a shared refusal
+is terminal and never triggers the other encoder. The fixed path counts and writes
+in two passes; the cached path gathers frequencies, counts and writes in three.
+Both compare resident normalized samples without a row/frame copy or encoded-frame
+staging buffer. Complete RIFF size and padding are checked before caller writes,
+including nonseekable output. Every pass charges work and checks cancellation;
+callers must synchronize mutable input across all passes. Unsupported profiles fail
+explicitly without external fallbacks. Compression-size parity remains open.
 
 `Lossless=false` emits a VP8 key frame with 4:2:0 chroma, a mathematical forward
 4x4 DCT and the format's quantizers. `Quality` (default 85) maps to quantizer index
