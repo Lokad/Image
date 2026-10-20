@@ -1040,3 +1040,10 @@ photograph/diagram controls and native packets. Header quantizers correlate with
 source gradients, supporting one source-only spatial-quantization candidate.
 No production, quality-setting, timing/allocation or checklist change follows.
 All current size gates remain open; no image or quality grid is added.
+
+
+The [source-only VP8 spatial policy](WARM-VP8-SPATIAL-QUANTIZATION-SCREEN.md) is
+rejected at the byte/quality screen:20,284/7,868 B, source-PSNR gaps0.590/0.577dB.
+References, settings and the0.25dB gate remain frozen. One Linux core build, no
+scored jobs or new package proof; qualified sources/objects/core/package restored.
+No coverage count or performance row changes. All size gates remain open.

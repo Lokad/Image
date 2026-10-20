@@ -470,6 +470,9 @@ The [source-activity audit](../benchmarks/WARM-VP8-ACTIVITY-AUDIT.md) finds stro
 native-quantizer/gradient rank correlation on the same two controls, supporting a
 source-derived spatial-quantization experiment. It changes no production packet,
 quality setting, timing or allocation; both size ceilings remain open.
+The [source-only spatial policy](../benchmarks/WARM-VP8-SPATIAL-QUANTIZATION-SCREEN.md)
+then fails the unchanged source-quality gate (0.590/0.577dB) and both size ceilings.
+It is rejected without timing; the qualified source/build/package are restored.
 The [lossless adaptive-predictor screen](../benchmarks/WARM-VP8L-ADAPTIVE-PREDICTOR-AUDIT.md)
 saves2,652/0 B on the fixed photograph/diagram but misses both lossless size gates.
 That predictor is not adopted; the subsequent coding-group round above supplies current production evidence.
