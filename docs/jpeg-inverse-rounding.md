@@ -86,3 +86,36 @@ assembly; they are primitive inputs rather than benchmark images or upstream
 test data. Public decode checks retain the existing fixture corpus and native
 decoder bounds. Correctness and generated code must pass before performance
 measurement on the dedicated VM.
+
+## Sparse integer certificate
+
+The four-component materializer can evaluate at most eight active frequencies
+with integer SIMD. Let `Q=65536`, `S=sum(abs(coefficient*quantizer))≤65536`, and
+`S_AC` omit the DC term. The original generator uses exact rational nearest-even
+rounding of `Q*Cx,u*Cy,v/4`, where C is the frozen owned binary64 basis. The
+4096 signed short weights occupy 8 KiB of compiler RVA data. The span getter
+allocates no table or cache; these are image-independent format constants.
+
+All weight magnitudes are below16384. Thus every signed product, partial sum,
+the `128Q` offset and final half-unit addition fit Int32. Non-DC weight rounding
+contributes at most `S_AC/2` Q units. The DC weight is8192 at every position;
+its quantization error times maximum S plus the original double-evaluation error
+is below one Q unit. Specifically, with `u=2^-53` and
+`g=10u/(1-10u)`, the reference error is bounded by
+`Q*((S/4)*g + u*((S/4)*(1+g)+128))`. Adding
+`S*abs(8192-Q*C0*C0/4)` remains below one at S65536. These rational inequalities
+and every generated constant have independent controls.
+
+Set `E=ceil(S_AC/2)+1`. After clipping the integer sum to `[0,255Q]`, a sample
+certifies only when its distance to the nearest half boundary exceeds E strictly.
+Clipping is nonexpansive, so the original double sample cannot cross a rounding
+boundary. All four sixteen-lane groups must certify before any byte is written.
+Otherwise the existing ordered double kernel handles the entire block, preserving
+half ties and every original byte. Large magnitude and unsupported hardware take
+that kernel before any destination write.
+
+The existing4096 logical work charge precedes both paths. At most512 approximate
+and512 fallback frequency contributions fit within it; no new array, owner,
+reservation or cancellation interval is introduced. Existing DC, horizontal-only,
+dense and scalar branches retain their calculation. Exact managed pixels remain
+separate from the approved native decoder's quality bounds.

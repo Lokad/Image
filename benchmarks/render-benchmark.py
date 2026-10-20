@@ -143,7 +143,7 @@ def render():
         row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobe', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeAc', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG Adobe CMYK, general transform control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeGeneral', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
-        row('JPEG Adobe CMYK, two-dimensional sparse control', 'warm-jpeg-cmyk-current-evidence.json', ['cases', 'CmykAdobeSparse2D', -1], 'WARM-JPEG-CMYK-CURRENT.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, two-dimensional sparse control', 'warm-jpeg-sparse-integer-evidence.json', ['cases', 'CmykAdobeSparse2D', -1], 'WARM-JPEG-SPARSE-INTEGER.md', verification='Gap (short; qualified)'),
         row('JPEG YCCK420, full-resolution black', 'warm-jpeg-ycck-caller-simd-evidence.json', ['cases', 'Ycck420', -1], 'WARM-JPEG-YCCK-CALLER-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG YCCK420 → caller RGB24', 'warm-jpeg-ycck-caller-simd-evidence.json', ['cases', 'Ycck420CallerRgb', -1], 'WARM-JPEG-YCCK-CALLER-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG H4V1 / 4:1:1 → owned RGBA8', 'warm-jpeg-410-simd-evidence.json', ['cases', 'Decode411', -1], 'WARM-JPEG-410-SIMD.md', verification='Gap (short; qualified)'),
@@ -341,10 +341,14 @@ The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lancz
 is separate. **226 historical codec/edit rows do not yet requalify changed 0.2.0
 admission, disposal or governed storage.** Current CMYK, four Lanczos3, two async
 input and four async output rows identify their current producers. Production
-qualification now passes 4,457 tests/OS, affected hardware-off checks, the same actual
+qualification now passes 4,464 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
-Largest demonstrated current-code gap: sparse CMYK at **1.829x**.
+Largest demonstrated current-code gap: sparse CMYK at **1.617x** after the
+[certified integer round](../benchmarks/WARM-JPEG-SPARSE-INTEGER.md), saving 11.3%
+with exact pixels, unchanged allocation and no heap table. The same actual package
+passes analytical sparse-AC and shared-owner checks on both OS. Next: resolve the
+existing one-AC case's older timing on this qualified build before optimization.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
@@ -352,9 +356,10 @@ were rejected. Earlier profiles describe their original producers only.
 Optimize demonstrated gaps; stop passing cases. No pixel precision is relaxed.
 The [sparse JPEG FP32-FMA trial](../benchmarks/WARM-JPEG-SPARSE-FMA-TRIAL.md)
 regressed7.2%. Subsequent [storage trials](../benchmarks/WARM-JPEG-STORAGE-TRIALS.md)
-cut allocation48.9–86.9%, but failed to improve elapsed time. Qualified source/DLLs
-are restored;29 affected ownership tests pass normally/scalar per OS. Selected
-results stay unchanged. Next: validate an integer sparse-IDCT rounding certificate.
+cut allocation 48.9–86.9%, but failed to improve elapsed time. Those candidates were
+removed; 29 affected ownership tests passed normally/scalar per OS. The subsequent
+accepted integer round refreshes only the existing sparse-2D row. Full parity
+remains open.
 
 Complete async PNG and lossless WebP outputs independently pass. WebP uses approved
 libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compressed

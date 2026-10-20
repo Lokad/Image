@@ -35,12 +35,18 @@ package consumer/examples on both OS. All four rows refresh; other233 rows retai
 their build scopes. Two full-FMA horizontal trials were slower and rejected;
 earlier word-product/prepared-row trials stay parked/rejected. Earlier sampled
 fractions describe their original producers, not these changed loops.
-The [current CMYK sparse-2D check](WARM-JPEG-CMYK-CURRENT.md) now resolves its old-code
-uncertainty:805.26µs/1.829x/upper1.902,1,085,680B/op. Exact managed pixels,
-normal/scalar native quality and two-live-output independence pass. Production,
-worker, fixture and existing selector/harness are reused; no rebuild or package/
-full rerun. Only this existing row refreshes. Other226 older codec/edit rows keep
-their identified scopes. The [axis-cross trial](WARM-JPEG-AXIS-CROSS-TRIAL.md)
+The [current CMYK sparse-2D check](WARM-JPEG-CMYK-CURRENT.md) resolves its old-code
+uncertainty; the subsequent [integer round](WARM-JPEG-SPARSE-INTEGER.md) saves11.3%:
+714.01µs/1.617x/upper1.693,1,085,682B/op. Exact managed pixels,
+normal/scalar native quality and two-live-output independence pass. The native
+worker, fixture and existing selector/harness are reused. The integer production
+change qualifies4464tests/OS,8sparse+29public scalar checks/OS and the same actual
+private package/examples on both OS, including sparse-AC shared owners. The original
+8KiB basis is immutable module data with no heap table. All64 bins certify before
+writes; uncertain blocks retain the original calculation. Only this existing row
+refreshes. Other226 older codec/edit rows keep their identified scopes. Next:
+resolve the named one-AC case's older current-code uncertainty before optimization.
+The [axis-cross trial](WARM-JPEG-AXIS-CROSS-TRIAL.md)
 regressed4.5% and is rejected, with production restored. Five freshly compiled
 sparse tests pass normally/scalar on both OS; current full/package evidence is
 reused. The [FP32-FMA sparse trial](WARM-JPEG-SPARSE-FMA-TRIAL.md) also regresses

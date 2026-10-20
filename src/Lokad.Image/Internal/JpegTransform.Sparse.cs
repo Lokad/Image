@@ -38,6 +38,7 @@ internal static partial class JpegTransform
         }
         if (Avx512F.IsSupported && Avx512F.VL.IsSupported)
         {
+            if (TryInverseSparseInteger(coefficients, quantization, pixels, active)) return true;
             Vector512<double> sum0 = Vector512<double>.Zero, sum1 = Vector512<double>.Zero,
                 sum2 = Vector512<double>.Zero, sum3 = Vector512<double>.Zero,
                 sum4 = Vector512<double>.Zero, sum5 = Vector512<double>.Zero,

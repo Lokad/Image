@@ -65,6 +65,7 @@ try {
     $memoryConsumerPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/PackageSmokeTest/CooperativeMemoryConsumer.cs'))
     $shapingFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredOpenType.cs'))
     $shapingConsumerPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/PackageSmokeTest/TextShapingConsumer.cs'))
+    $jpegFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredJpegCompatibility.cs'))
     @"
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
@@ -80,6 +81,7 @@ try {
     <Compile Include="$memoryConsumerPath" Link="CooperativeMemoryConsumer.cs" />
     <Compile Include="$shapingFixturePath" Link="AuthoredOpenType.cs" />
     <Compile Include="$shapingConsumerPath" Link="TextShapingConsumer.cs" />
+    <Compile Include="$jpegFixturePath" Link="AuthoredJpegCompatibility.cs" />
   </ItemGroup>
 </Project>
 "@ | Set-Content -LiteralPath (Join-Path $consumer 'Consumer.csproj') -Encoding utf8
@@ -242,6 +244,27 @@ if (!cmykPixels.GetRow8(0).SequenceEqual(new byte[] { 64, 64, 64, 255, 64, 64, 6
 var cmykSamples = new byte[8]; ImageCodec.DecodeJpeg(cmykBytes, cmykSamples, JpegSampleFormat.Cmyk);
 if (cmykSamples.AsSpan().IndexOfAnyExcept((byte)127) >= 0)
     throw new Exception("Package consumer CMYK inversion differs.");
+byte[] sparseValues = [80, 170, 90, 200];
+var sparsePacket = Lokad.Image.Tooling.AuthoredJpegCompatibility.Create(17, 9, sparseValues, adobe: 0, nonzeroAc: true, acTerms: 2);
+using var sparseRoot = new Lokad.Image.Tooling.TestMemoryBudget(1024 * 1024);
+var sparseOptions = new DecodeOptions { Limits = new() { MemoryBudget = sparseRoot } };
+using var sparseFirst = ImageCodec.Decode(sparsePacket, sparseOptions);
+using var sparseSurvivor = ImageCodec.Decode(sparsePacket, sparseOptions);
+if (sparseRoot.Bytes != 2 * 17 * 9 * 4) throw new Exception("Packaged sparse JPEG retained charges differ.");
+sparseFirst.GetRow8(0).Fill(173); sparseFirst.Dispose(); Array.Clear(sparsePacket);
+if (sparseRoot.Bytes != 17 * 9 * 4 || sparseRoot.IsDisposed) throw new Exception("Packaged sparse JPEG ownership differs.");
+for (var sy = 0; sy < 9; sy++)
+for (var sx = 0; sx < 17; sx++)
+{
+    var delta = (int)Math.Round((Math.Cos((2 * (sx & 7) + 1) * Math.PI / 16)
+        + Math.Cos((2 * (sy & 7) + 1) * Math.PI / 16)) / Math.Sqrt(2), MidpointRounding.AwayFromZero);
+    for (var sc = 0; sc < 3; sc++)
+        if (sparseSurvivor.GetRow8(sy)[sx * 4 + sc] != ((sparseValues[sc] + delta) * (sparseValues[3] + delta) + 127) / 255)
+            throw new Exception("Packaged sparse JPEG analytical sample differs.");
+    if (sparseSurvivor.GetRow8(sy)[sx * 4 + 3] != 255) throw new Exception("Packaged sparse JPEG alpha differs.");
+}
+sparseSurvivor.Dispose();
+if (sparseRoot.Bytes != 0) throw new Exception("Packaged sparse JPEG retained charge leaked.");
 for (var y = 0; y < 8; y++)
 for (var x = 0; x < 8; x++) new byte[] { 123, 123, 123, 255 }.CopyTo(opaque.GetRow8(y)[(x*4)..]);
 using var jpeg = new MemoryStream();

@@ -86,7 +86,7 @@ remain caller-managed. Existing `ImageCodec` entry points use per-operation limi
 | InspectHeaders / InspectHeadersAsync | Fixed 8,448-byte scratch/parser allowance; no whole-input, metadata-block or raster allocation |
 | PNG decode | Encoded input, concatenated IDAT, result, pass rows/palette/transparency, 4 KiB framing scratch and 256 KiB inflater allowance; optional filtered storage is separately admitted |
 | PNG encode | Source, packed row, 64 KiB IDAT storage and 1 MiB BCL compression allowance, admitted before the signature |
-| JPEG decode | Encoded input, parser/tables, padded coefficient/sample planes and RGBA result; orientation is admitted in the same operation |
+| JPEG decode | Encoded input, parser/tables, padded coefficient/sample planes and RGBA result; orientation is admitted in the same operation. Certified sparse SIMD uses 8 KiB of original immutable module data, with no heap table or new workspace |
 | JPEG caller-sample decode | Supplied encoded/destination spans and the same parser/planes; orientation writes directly into caller storage without an RGBA frame |
 | Four-component JPEG | The same bounds with four coefficient/sample planes and descriptors; K is color, and shared admission counts caller CMYK storage |
 | JPEG encode | Source plus 8 KiB fixed workspace; eligible adaptive coding additionally admits event capacity and 64 KiB scratch |

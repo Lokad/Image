@@ -993,6 +993,12 @@ On AVX-512/VL, horizontal/vertical passes are accepted only when a conservative
 rounding certificate proves the original byte. Uncertain rows and extreme blocks
 use the original direct evaluation; other processors retain that evaluation.
 The [inverse rounding proof](docs/jpeg-inverse-rounding.md) defines the bound.
+Four-component sample materialization can use a certified Q16 integer basis
+for at most eight nonzero frequencies with total dequantized magnitude≤65536.
+All 64 clipped rounding bins must certify before any destination write;
+uncertain blocks keep the original calculation. The original generated basis
+is 8 KiB of immutable module data, with no heap table or decoded-content cache.
+Pixel values, storage admission, logical work and cancellation remain unchanged.
 
 Subsampled YCbCr interiors may reconstruct sixteen pixels with exact integer
 sixteenth interpolation and a certified float color matrix. Chroma and luma are

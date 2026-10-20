@@ -46,3 +46,11 @@ the restored qualified producer after the [storage trials](../benchmarks/WARM-JP
 production sources/DLLs and the actual private package are unchanged. Full-test
 and package proofs are reused. This adds functional memory evidence, not a
 performance or broader compatibility claim.
+
+The subsequent [integer JPEG round](../benchmarks/WARM-JPEG-SPARSE-INTEGER.md)
+qualifies4,464 Release tests per OS and exercises sparse AC terms in the CMYK
+shared-root case and both actual-package consumers. The29 affected public tests
+also pass with intrinsics off. Its8KiB basis is immutable module data, with a
+zero-allocation RVA getter and no managed cache; image/temporary owners and
+admission remain unchanged. Unchanged text, fonts and other operations retain
+their scoped proofs.

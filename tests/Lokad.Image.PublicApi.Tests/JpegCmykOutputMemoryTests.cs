@@ -36,7 +36,7 @@ public sealed class JpegCmykOutputMemoryTests
     public void RetainedOwnersAndEveryRefusalOrCanceledOutputAdmissionReleaseCapacity(bool ycck)
     {
         var input = AuthoredJpegCompatibility.Create(17, 9, [80, 170, 90, 200],
-            ycck ? 2 : 1, ycck ? 2 : 1, true, ycck ? 2 : 0, vary: true);
+            ycck ? 2 : 1, ycck ? 2 : 1, true, ycck ? 2 : 0, vary: true, nonzeroAc: !ycck, acTerms: 2);
         var original = input.ToArray(); const int outputBytes = 17 * 9 * 4;
         using var baseline = new TestMemoryBudget(1024 * 1024);
         var limits = new ImageLimits { MemoryBudget = baseline };
