@@ -31,11 +31,13 @@ internal static partial class Vp8Encoder
         context.Reserve(metadataBytes);
         var modes = new byte[count * 16]; var chromaModes = new byte[count]; var above = new byte[columns * 8];
         var q = ((100 - options.Quality) * 127 + 49) / 99;
+        using var quantization = QuantizationPlan.TryCreate(image, source, q, options.Quality, options.Effort, context);
         using var tokens = new Vp8BooleanWriter(context, options.Limits.MaxOutputBytes);
         Span<byte> left = stackalloc byte[8];
         ReadOnlySpan<byte> candidates = [1, 2, 3, 4, 6, 8, 10];
         using var model = CoefficientModel.TryCreate(source, count, candidates[options.Effort], options.Effort == 0 ? 1 : 4, context,
-            options.Effort >= 4 && q != 0 ? modes : null, fullFrame: options.Effort >= 4 && q == 0);
+            options.Effort >= 4 && q != 0 ? modes : null, fullFrame: options.Effort >= 4 && q == 0,
+            segmented: quantization is not null);
         var intra16 = model?.Intra16 == true;
         Span<short> luma = intra16 ? stackalloc short[256] : default;
         Span<short> y2 = intra16 ? stackalloc short[16] : default;
@@ -54,12 +56,19 @@ internal static partial class Vp8Encoder
             for (var mx = 0; mx < columns; mx++)
             {
                 var index = my * columns + mx; var x = mx * 16; var y = my * 16;
+                var blockQ = quantization is null ? q : quantization.Quantizers[quantization.Map[index]];
+                var blockLambda = lambda;
+                if (intra16 && blockQ != q)
+                {
+                    context.Work(1); var ac = (int)Vp8Tables.AcQuantizers[blockQ];
+                    blockLambda = (int)Math.Round(ac * ac * Math.Log(2) * 256 / 24, MidpointRounding.AwayFromZero);
+                }
                 if (intra16)
                 {
                     var top = above.AsSpan(mx * 8, 8);
-                    var large = PrepareLumaMacroblock(source, reconstructed, x, y, q, RateLumaModes,
+                    var large = PrepareLumaMacroblock(source, reconstructed, x, y, blockQ, RateLumaModes,
                         index, columns, modes, top, left, model!.Y2Above[mx] + leftY2,
-                        model.Probabilities, bitCosts, lambda, luma, y2, context);
+                        model.Probabilities, bitCosts, blockLambda, luma, y2, context);
                     if (large)
                     {
                         var predictor = model.Y2Above[mx] + leftY2;
@@ -80,12 +89,12 @@ internal static partial class Vp8Encoder
                         var bx = x + b % 4 * 4; var by = y + b / 4 * 4;
                         var mode = SelectLuma(source, reconstructed, bx, by, x, y, candidates[options.Effort], context);
                         modes[index * 16 + b] = (byte)mode;
-                        Block(source.Y, reconstructed.Y, source.Stride, bx, by, 3, q,
+                        Block(source.Y, reconstructed.Y, source.Stride, bx, by, 3, blockQ,
                             tokens, above.AsSpan(mx * 8, 8), left, b % 4, b / 4, context, model, index * 24 + b, 0);
                     }
                 var chromaMode = intra16
-                    ? SelectRateChroma(source, reconstructed, x / 2, y / 2, q, above.AsSpan(mx * 8, 8), left,
-                        model!.Probabilities, bitCosts, lambda, chromaCoefficients, context)
+                    ? SelectRateChroma(source, reconstructed, x / 2, y / 2, blockQ, above.AsSpan(mx * 8, 8), left,
+                        model!.Probabilities, bitCosts, blockLambda, chromaCoefficients, context)
                     : SelectChroma(source, reconstructed, x / 2, y / 2, options.Effort == 0 ? 1 : 4, context);
                 chromaModes[index] = (byte)chromaMode;
                 for (var plane = 0; plane < 2; plane++)
@@ -101,7 +110,7 @@ internal static partial class Vp8Encoder
                                     source.Y.Length + plane * source.U.Length, index * 24 + 16 + plane * 4 + b,
                                     values, 2, top[a] + left[l]);
                         }
-                        else Block(src, dst, source.Stride / 2, x / 2 + b % 2 * 4, y / 2 + b / 2 * 4, 2, q,
+                        else Block(src, dst, source.Stride / 2, x / 2 + b % 2 * 4, y / 2 + b / 2 * 4, 2, blockQ,
                             tokens, above.AsSpan(mx * 8, 8), left, 4 + plane * 2 + b % 2, 4 + plane * 2 + b / 2, context,
                             model, index * 24 + 16 + plane * 4 + b, source.Y.Length + plane * source.U.Length);
                 }
@@ -113,7 +122,7 @@ internal static partial class Vp8Encoder
         tokens.Finish();
         context.Release(source.MemoryBytes + reconstructed.MemoryBytes);
         using var header = BuildHeader(q, modes, chromaModes, columns, rows,
-            model is null ? Vp8Tables.CoefficientProbabilities : model.Probabilities, context);
+            model is null ? Vp8Tables.CoefficientProbabilities : model.Probabilities, context, quantization);
         using var compressedAlpha = alpha is null ? null
             : WebpLosslessEncoder.AlphaEncoding.TryCreate(alpha, image.Width, options.Effort, context,
                 pendingOutputWork: (long)header.Bytes.Length + tokens.Bytes.Length);
@@ -307,17 +316,18 @@ internal static partial class Vp8Encoder
     }
 
     private static Vp8BooleanWriter BuildHeader(int q, byte[] modes, byte[] chroma, int columns, int rows,
-        ReadOnlySpan<byte> probabilities, OperationContext context)
+        ReadOnlySpan<byte> probabilities, OperationContext context, QuantizationPlan? quantization = null)
     {
         var writer = new Vp8BooleanWriter(context, Math.Min(0x7FFFF, context.Limits.MaxOutputBytes));
-        try { Header(writer, q, modes, chroma, columns, rows, probabilities, context); writer.Finish(); return writer; }
+        try { Header(writer, q, modes, chroma, columns, rows, probabilities, context, quantization); writer.Finish(); return writer; }
         catch { writer.Dispose(); throw; }
     }
 
     private static void Header(Vp8BooleanWriter writer, int q, byte[] modes, byte[] chroma, int columns, int rows,
-        ReadOnlySpan<byte> probabilities, OperationContext context)
+        ReadOnlySpan<byte> probabilities, OperationContext context, QuantizationPlan? quantization = null)
     {
-        writer.Write(0); writer.Write(0); writer.Write(0); // Color, clamp hint, segmentation.
+        writer.Write(0); writer.Write(0); // Color and clamp hint.
+        if (quantization is null) writer.Write(0); else quantization.Header(writer);
         writer.Write(0); writer.Literal(0, 6); writer.Literal(0, 3); writer.Write(0); // No loop filtering or deltas.
         writer.Literal(0, 2); writer.Literal(q, 7); // One token partition.
         for (var i = 0; i < 5; i++) writer.Write(0);
@@ -336,6 +346,7 @@ internal static partial class Vp8Encoder
             for (var mx = 0; mx < columns; mx++)
             {
                 context.Work(64); var index = my * columns + mx;
+                quantization?.Macroblock(writer, index);
                 if ((modes[index * 16] & 128) != 0)
                 {
                     var mode = modes[index * 16] & 3;

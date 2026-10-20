@@ -1381,6 +1381,21 @@ uses the original scalar calculation. Coefficients and encoded packets are exact
 `((100-quality)*127+49)/99` with integer division. Quality 100 is still lossy.
 Quantized coefficients round halves away from zero; the forward DC basis preserves
 exact constant-block half ties.
+At effort 4..6, independently admitted source analysis may assign four absolute
+segment quantizers that are no finer than this base index. One clamped sample per
+4x4 transform block estimates alpha-weighted RGB loss from the existing 4:2:0
+source conversion. A source-only allowance `MSE/(Quality+1)`, the transform's
+expected `step²/48` quantization variance and the RGB conversion-matrix gain select
+desired steps. Four deterministic log-step clusters select format quantizers.
+This is a compression heuristic, not a reconstruction-error or global quality
+monotonicity guarantee. Numeric quality remains encoder-specific; source-quality
+matching is validated separately. The base index and nearest coefficient rounding
+remain unchanged, applied with the selected segment's quantizer.
+The borrowed shared root admits the bounded map before allocation; analysis streams
+without another RGBA frame. Actual sampling, clustering, map/header and codec work
+remain capped. Insufficient independent local allowances retain uniform coding
+before shared admission; refusal, exhaustion and cancellation terminate without
+retry. Source statistics finish before coefficient caching reuses converted planes.
 Intra mode search prepares immutable neighboring samples once per luma block
 and emits complete 4x4 predictions. Candidate order, exact error scores, ties
 and selected pixels are preserved. A zero-error prediction ends the search:

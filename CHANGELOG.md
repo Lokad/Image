@@ -8,6 +8,8 @@
   references and adaptive prefix codes; broader compression parity remains open.
 - Smaller constrained-work WebP packets through admitted coefficient statistics
   and reusable alpha tokens, preserving exact alpha, ownership and resource caps.
+- Source-derived WebP spatial quantization at higher efforts, with bounded shared
+  admission, unchanged base quality mapping and separately verified lossy quality.
 
 - Coverage-based OpenType contextual substitution and validated zero default-instance
   positioning corrections for supplied TrueType text.

@@ -48,7 +48,9 @@ public sealed class Vp8PrefixWorkTests
         var held = root.Bytes; var previous = held; var admitted = false;
         root.Admitted = used => { if (used - previous == PrefixBytes) admitted = true; previous = used; };
         using var failed = new MemoryStream();
-        var failure = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, failed, Options(root, work: 31000000)));
+        // Keep exhaustion inside coefficient work as compression improves;
+        // a later failure may legitimately leave a partial caller stream.
+        var failure = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, failed, Options(root, work: 30500000)));
         Assert.True(admitted); Assert.Equal(ImageLimitKind.Work, failure.Limit); Assert.Equal(ImageLimitScope.Operation, failure.Scope);
         Assert.Equal(0, failed.Length); Assert.True(failed.CanWrite); Assert.Equal(held, root.Bytes); Assert.Equal(0, root.Refusals);
         root.Admitted = null;

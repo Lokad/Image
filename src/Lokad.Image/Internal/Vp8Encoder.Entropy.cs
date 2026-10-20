@@ -20,12 +20,13 @@ internal static partial class Vp8Encoder
         internal byte[] Y2Above { get; }
 
         internal static CoefficientModel? TryCreate(Vp8Planes source, int blocks, int lumaTrials, int chromaTrials, OperationContext context,
-            byte[]? modes = null, bool fullFrame = false)
+            byte[]? modes = null, bool fullFrame = false, bool segmented = false)
         {
             var samples = source.Y.Length + source.U.Length + source.V.Length;
             var prefix = Math.Min(blocks, 64);
             var extra = prefix * (384L / 4 + 24) + 16384;
-            var maximumHeaderBytes = ((blocks * (1L + 16 * 9 + 3) + 1056L * 9 + 64) * 7 + 7) / 8 + 3;
+            var maximumHeaderBytes = ((blocks * (1L + 16 * 9 + 3 + (segmented ? 2 : 0))
+                + 1056L * 9 + (segmented ? 192 : 64)) * 7 + 7) / 8 + 3;
             if (maximumHeaderBytes > 0x7FFFF) return null;
             // Conservative optional admission includes both staged partitions,
             // transient doubling, and a header retry. No mandatory extra limit.
@@ -35,6 +36,7 @@ internal static partial class Vp8Encoder
             var header = Math.Min(0x7FFFF, context.Limits.MaxOutputBytes);
             var growth = 3 * tokens + 3L * header + 384;
             var predictionWork = blocks * (16L * lumaTrials * 192 + chromaTrials * 512L + 24L * 512 + 64);
+            if (segmented) predictionWork += blocks * 32L + 2048;
             var work = predictionWork + samples * 128L + 65536;
             var intraExtra = prefix * 16L + source.Stride / 16 + 64;
             var intraWork = blocks * (4L * 3072 + 16 * 512 + 2048 + 256

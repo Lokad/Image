@@ -16,8 +16,13 @@
       "qualityPass": true,
       "packetSizePass": true,
       "psnrGapDb": 0.14094424107553039,
-      "evidence": "vp8-direction-coverage-evidence.json",
-      "validity": "C57 matched control; qualification/cost evidence recorded by the accepted round"
+      "evidence": "vp8-source-quantization-evidence.json",
+      "validity": "C69 qualified source-only quantization; fixed inputs/reference/settings, unchanged quality gates and exact alpha. Existing primary packets/pixels unchanged. Short costs only; CPU parity deferred.",
+      "previousManagedPacketBytes": 17366,
+      "observationPath": [
+        "observations",
+        5
+      ]
     },
     {
       "case": "WarmCompression/DiagramLossy8",
@@ -29,100 +34,119 @@
       "qualityPass": true,
       "packetSizePass": true,
       "psnrGapDb": 0.11740850122659907,
-      "evidence": "vp8-direction-coverage-evidence.json",
-      "validity": "C57 matched control; qualification/cost evidence recorded by the accepted round"
+      "evidence": "vp8-source-quantization-evidence.json",
+      "validity": "C69 qualified source-only quantization; fixed inputs/reference/settings, unchanged quality gates and exact alpha. Existing primary packets/pixels unchanged. Short costs only; CPU parity deferred.",
+      "previousManagedPacketBytes": 6722,
+      "observationPath": [
+        "observations",
+        6
+      ]
     },
     {
       "case": "WarmWebp/EncodeOpaque8",
-      "managedPacketBytes": 149570,
+      "managedPacketBytes": 83838,
       "referencePacketBytes": 72380,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "vp8-alpha-matches-evidence.json",
+      "evidence": "vp8-source-quantization-evidence.json",
       "observationPath": [
         "observations",
         0
       ],
-      "validity": "C61 qualified full-frame q0 entropy and bounded ALPH matching; same decoded RGBA/source quality and fixed100/native75/effort4. Complete-packet gate remains open.",
-      "previousManagedPacketBytes": 151606,
-      "alphaPayloadBytes": 0
+      "validity": "C69 qualified source-only quantization; fixed inputs/reference/settings, unchanged quality gates and exact alpha. Existing primary packets/pixels unchanged. Short costs only; CPU parity deferred.",
+      "previousManagedPacketBytes": 149570,
+      "alphaPayloadBytes": 0,
+      "psnrGapDb": 0.002978221313243952,
+      "consumedWork": 33538944,
+      "coefficientPolicy": "source-only absolute segment quantization; existing admitted entropy policy"
     },
     {
       "case": "WarmWebp/EncodeOpaque16",
-      "managedPacketBytes": 149570,
+      "managedPacketBytes": 83838,
       "referencePacketBytes": 72380,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "vp8-alpha-matches-evidence.json",
+      "evidence": "vp8-source-quantization-evidence.json",
       "observationPath": [
         "observations",
         1
       ],
-      "validity": "C61 qualified full-frame q0 entropy and bounded ALPH matching; same decoded RGBA/source quality and fixed100/native75/effort4. Complete-packet gate remains open.",
-      "previousManagedPacketBytes": 151606,
-      "alphaPayloadBytes": 0
+      "validity": "C69 qualified source-only quantization; fixed inputs/reference/settings, unchanged quality gates and exact alpha. Existing primary packets/pixels unchanged. Short costs only; CPU parity deferred.",
+      "previousManagedPacketBytes": 149570,
+      "alphaPayloadBytes": 0,
+      "psnrGapDb": 0.002978221313243952,
+      "consumedWork": 33538944,
+      "coefficientPolicy": "source-only absolute segment quantization; existing admitted entropy policy"
     },
     {
       "case": "WarmWebp/Encode8",
-      "managedPacketBytes": 170196,
+      "managedPacketBytes": 108880,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "vp8-alpha-matches-evidence.json",
+      "evidence": "vp8-source-quantization-evidence.json",
       "observationPath": [
         "observations",
         2
       ],
-      "validity": "C61 qualified full-frame q0 entropy and bounded ALPH matching; same decoded RGBA/source quality and fixed100/native75/effort4. Complete-packet gate remains open.",
-      "previousManagedPacketBytes": 268028,
-      "alphaPayloadBytes": 18579
+      "validity": "C69 qualified source-only quantization; fixed inputs/reference/settings, unchanged quality gates and exact alpha. Existing primary packets/pixels unchanged. Short costs only; CPU parity deferred.",
+      "previousManagedPacketBytes": 170196,
+      "alphaPayloadBytes": 18579,
+      "psnrGapDb": 0.02932915023333853,
+      "consumedWork": 39119786,
+      "coefficientPolicy": "source-only absolute segment quantization; existing admitted entropy policy"
     },
     {
       "case": "WarmWebp/Encode16",
-      "managedPacketBytes": 170196,
+      "managedPacketBytes": 108880,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "vp8-alpha-matches-evidence.json",
+      "evidence": "vp8-source-quantization-evidence.json",
       "observationPath": [
         "observations",
         3
       ],
-      "validity": "C61 qualified full-frame q0 entropy and bounded ALPH matching; same decoded RGBA/source quality and fixed100/native75/effort4. Complete-packet gate remains open.",
-      "previousManagedPacketBytes": 268028,
-      "alphaPayloadBytes": 18579
+      "validity": "C69 qualified source-only quantization; fixed inputs/reference/settings, unchanged quality gates and exact alpha. Existing primary packets/pixels unchanged. Short costs only; CPU parity deferred.",
+      "previousManagedPacketBytes": 170196,
+      "alphaPayloadBytes": 18579,
+      "psnrGapDb": 0.02932915023333853,
+      "consumedWork": 39119786,
+      "coefficientPolicy": "source-only absolute segment quantization; existing admitted entropy policy"
     },
     {
       "case": "WarmWebp/EncodeBudget8",
-      "managedPacketBytes": 181998,
+      "managedPacketBytes": 120146,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "webp-alpha-tokens-evidence.json",
+      "evidence": "vp8-source-quantization-evidence.json",
       "observationPath": [
         "observations",
-        0
+        4
       ],
-      "validity": "C67 qualified adaptive token replay within32M cap:31,980,594 actual units, exact prior RGBA/source quality. Complete packet remains above98,590B.",
-      "previousManagedPacketBytes": 208216,
-      "alphaPayloadBytes": 114363,
-      "coefficientPolicy": "admitted64-macroblock prefix statistics",
-      "alphaCodingPolicy": "one collected token sequence, adaptive prefix replay and charged token/encoded overlap"
+      "validity": "C69 qualified source-only quantization; fixed inputs/reference/settings, unchanged quality gates and exact alpha. Existing primary packets/pixels unchanged. Short costs only; CPU parity deferred.",
+      "previousManagedPacketBytes": 181998,
+      "alphaPayloadBytes": 28333,
+      "coefficientPolicy": "source-only absolute segment quantization; existing admitted entropy policy",
+      "alphaCodingPolicy": "one collected token sequence, adaptive prefix replay and charged token/encoded overlap",
+      "psnrGapDb": 0.02932915023333853,
+      "consumedWork": 31752723
     }
   ]
 }

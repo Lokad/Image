@@ -7,7 +7,7 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class Vp8EncodeTests
 {
     [Fact]
-    public void ManagedCorpusReplaysDeclaredPixelsAndUnchangedVp8Payloads()
+    public void ManagedCorpusRetainsFrozenPacketsAndCurrentEncodingQualityAndExactAlpha()
     {
         var root = new DirectoryInfo(AppContext.BaseDirectory);
         while (root is not null && !File.Exists(Path.Combine(root.FullName, "tests", "Fixtures", "vp8-manifest.json"))) root = root.Parent;
@@ -29,27 +29,57 @@ public sealed class Vp8EncodeTests
                 Effort = options.GetProperty("effort").GetInt32()
             });
             var encoded = output.ToArray();
+            var frozen = File.ReadAllBytes(Path.Combine(root.FullName, "tests", "Fixtures",
+                fixture.GetProperty("name").GetString() + ".webp"));
+            Assert.Equal(fixture.GetProperty("encodedHash").GetString(), Hash(frozen));
             if (Hash(encoded) != fixture.GetProperty("encodedHash").GetString())
             {
-                // Keep the frozen decoder corpus and its original packet hashes.
-                // Exact alpha compression may change only ALPH, never the VP8
-                // payload or reconstructed pixels of these declared controls.
-                var frozen = File.ReadAllBytes(Path.Combine(root.FullName, "tests", "Fixtures",
-                    fixture.GetProperty("name").GetString() + ".webp"));
-                Assert.Equal(fixture.GetProperty("encodedHash").GetString(), Hash(frozen));
-                Assert.True(fixture.GetProperty("alpha").GetBoolean());
                 Assert.True(options.GetProperty("effort").GetInt32() > 0);
-                Assert.Equal(0, Chunk(frozen, "ALPH"u8)[0]); Assert.Equal(5, Chunk(encoded, "ALPH"u8)[0]);
-                Assert.Equal(Chunk(frozen, "VP8 "u8).ToArray(), Chunk(encoded, "VP8 "u8).ToArray());
                 using var expected = ImageCodec.Decode(frozen); using var actual = ImageCodec.Decode(encoded);
-                Assert.Equal(OriginalPixels.Bytes(expected), OriginalPixels.Bytes(actual));
-                Assert.True(encoded.Length < frozen.Length);
+                if (Chunk(frozen, "VP8 "u8).SequenceEqual(Chunk(encoded, "VP8 "u8)))
+                {
+                    // Entropy-only alpha improvements retain all frozen pixels.
+                    Assert.True(fixture.GetProperty("alpha").GetBoolean());
+                    Assert.Equal(0, Chunk(frozen, "ALPH"u8)[0]); Assert.Equal(5, Chunk(encoded, "ALPH"u8)[0]);
+                    Assert.Equal(OriginalPixels.Bytes(expected), OriginalPixels.Bytes(actual));
+                    Assert.True(encoded.Length < frozen.Length);
+                }
+                else
+                {
+                    // Lossy source-derived quantization may change reconstruction.
+                    // Keep the original decoder corpus; compare source quality
+                    // separately and retain exact once-normalized alpha.
+                    Assert.InRange(options.GetProperty("effort").GetInt32(), 4, 6);
+                    var originalError = SourceError(image, expected); var currentError = SourceError(image, actual);
+                    Assert.True(Math.Abs(10 * Math.Log10(currentError / originalError)) <= .25);
+                }
             }
         }
         Assert.Equal(42, count);
     }
 
     private static string Hash(byte[] data) => Convert.ToHexStringLower(SHA256.HashData(data));
+
+    private static double SourceError(ImageBuffer source, ImageBuffer decoded)
+    {
+        Assert.Equal((source.Width, source.Height, 8), (decoded.Width, decoded.Height, decoded.BitDepth));
+        double squares = 0;
+        for (var y = 0; y < source.Height; y++)
+        for (var x = 0; x < source.Width; x++)
+        {
+            var alpha = source.BitDepth == 8 ? source.GetRow8(y)[x * 4 + 3]
+                : (source.GetRow16(y)[x * 4 + 3] + 128) / 257;
+            Assert.Equal(alpha, decoded.GetRow8(y)[x * 4 + 3]);
+            for (var c = 0; c < 3; c++)
+            {
+                var sample = source.BitDepth == 8 ? source.GetRow8(y)[x * 4 + c]
+                    : (source.GetRow16(y)[x * 4 + c] + 128) / 257;
+                var error = (sample - decoded.GetRow8(y)[x * 4 + c]) * alpha / 255d;
+                squares += error * error;
+            }
+        }
+        return squares;
+    }
 
     private static ReadOnlySpan<byte> Chunk(byte[] encoded, ReadOnlySpan<byte> name)
     {

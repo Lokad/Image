@@ -7,6 +7,17 @@ namespace Lokad.Image.Internal;
 /// <summary>Explicit centered chroma expansion and limited-range BT.601 conversion.</summary>
 internal static class Vp8Color
 {
+    internal static int SourceError(Vp8Planes planes, int x, int y, int red, int green, int blue)
+    {
+        var luma = (planes.Y[y * planes.Stride + x] - 16) * (255.0 / 219);
+        var u = Chroma(planes.U, planes.Stride / 2, (planes.Width + 1) / 2, (planes.Height + 1) / 2, x, y) - 128;
+        var v = Chroma(planes.V, planes.Stride / 2, (planes.Width + 1) / 2, (planes.Height + 1) / 2, x, y) - 128;
+        var r = red - Sample(luma + 1.596026785714286 * v);
+        var g = green - Sample(luma - 0.391762290094914 * u - 0.812967647237771 * v);
+        var b = blue - Sample(luma + 2.017232142857143 * u);
+        return r * r + g * g + b * b;
+    }
+
     public static ImageBuffer Render(Vp8Planes planes, byte[]? alpha, OperationContext context)
     {
         var result = ImageBuffer.Allocate(planes.Width, planes.Height, 8, context);

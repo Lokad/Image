@@ -5,7 +5,7 @@ gates**, lossy WebP first, then lossless WebP. Meaningful verified incremental
 gains may cost more CPU. Warm single-CPU parity (independently confirmed upper≤1x)
 remains a deferred objective; speed-only work and repeated confirmations wait
 while compression gates remain open. The 239 numeric rows retain tested-producer evidence: **68 passes,
-167 gaps, 1 confidence-open case and 3 short cost screens**. The finite
+163 gaps, 1 confidence-open case and 7 short cost screens**. The finite
 [material checklist](../benchmarks/WARM-COVERAGE.md) has 256 named cases, 17 unmeasured.
 The completed ≤2x phase belongs to 0.1.0; compression currently takes precedence over CPU parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
@@ -159,7 +159,7 @@ writing; there is no filtered/RGBA frame or encoded-alpha staging copy. A weaker
 gradient-only trial is retained but not adopted, avoiding another budget-specific
 algorithm. No source/settings/quality-gate change, new workload or timing repeat.
 The five procedural packet gaps, primary content passes and finite counts remain.
-The current [alpha-token milestone](../benchmarks/WARM-WEBP-ALPHA-TOKENS.md)
+The [alpha-token milestone](../benchmarks/WARM-WEBP-ALPHA-TOKENS.md)
 reduces the work32M packet208,216→181,998 B (12.6%), with exact prior RGBA/source
 quality and31,980,594 charged units inside32M. ALPH falls54,552→28,333 B; the
 complete98,590 B target stays open. Same-root token/staging overlap, terminal
@@ -171,6 +171,20 @@ selector binaries reused. Four unrestricted records remain exact; all five
 procedural packet gates and the finite matrix remain unchanged. The earlier
 [prefix](../benchmarks/WARM-VP8-PREFIX-WORK.md) and
 [fixed-stage](../benchmarks/WARM-WEBP-ALPHA-SINGLE-PASS.md) proofs are historical.
+
+The current [source-quantization milestone](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md)
+cuts opaque149,570→83,838 B (ref72,380), alpha170,196→108,880 B (ref98,590)
+and work32M181,998→120,146 B (ref98,590). Exact alpha and unchanged quality gates
+pass; all five packet gaps remain open. Primary photograph/diagram packets,
+pixels and quality stay exact. The new source-only analysis reserves its map
+through the borrowed root, without another RGBA frame;31,752,723 actual units
+fit32M. Both OSes pass4,666tests,194internal+8public+2diff scalar checks and the
+same actual private package/all three examples. Seven short guarded jobs replace
+all affected VP8 encode costs, including unchanged primary packets; no independent
+timing repeat or CPU-parity claim. Opaque8/16 allocate1,002,712 B/op, alpha8/16
+1,532,200, work32M2,033,809, photograph590,152 and diagram570,856. Native allocations
+are unmeasured. Unchanged decoder inputs and other production paths retain their
+qualified scopes; no workload, reference, input or tolerance changes.
 
 The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
 rejects a smaller packet with excessive quality loss and a quality-preserving
@@ -383,18 +397,18 @@ reconciliation now covers every numeric row.
 | [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,251.71 | 1,079.34 | 1.160 / 1.394 | 155,026 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-CALLER-MCU.md) | 2,097.34 | 1,579.06 | 1.328 / 1.408 | 297,894 | Gap (short; qualified) |
-| [WebP VP8, opaque‡](../benchmarks/WARM-VP8-ALPHA-MATCHES.md) | 21,766.38 | 15,580.79 | 1.397 / 1.457 | 1,543,152 | Gap (cost screen; CPU parity deferred) |
-| [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-ALPHA-MATCHES.md) | 22,277.85 | 15,618.46 | 1.426 / 1.531 | 1,543,152 | Gap (cost screen; CPU parity deferred) |
-| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-ALPHA-MATCHES.md) | 28,120.00 | 53,786.79 | 0.523 / 0.559 | 1,793,800 | Cost screen (CPU parity deferred) |
-| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-ALPHA-MATCHES.md) | 28,612.36 | 53,790.31 | 0.532 / 0.591 | 1,793,800 | Cost screen (CPU parity deferred) |
-| [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-WEBP-ALPHA-TOKENS.md) | 20,972.78 | 53,600.83 | 0.391 / 0.435 | 2,295,207 | Cost screen (CPU parity deferred) |
+| [WebP VP8, opaque‡](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md) | 15,751.55 | 15,552.09 | 1.013 / 1.043 | 1,002,712 | Cost screen (CPU parity deferred) |
+| [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md) | 16,364.53 | 15,620.67 | 1.048 / 1.124 | 1,002,712 | Cost screen (CPU parity deferred) |
+| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md) | 22,841.16 | 53,441.37 | 0.427 / 0.461 | 1,532,200 | Cost screen (CPU parity deferred) |
+| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md) | 23,169.74 | 53,625.17 | 0.432 / 0.459 | 1,532,200 | Cost screen (CPU parity deferred) |
+| [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md) | 15,743.21 | 53,763.89 | 0.293 / 0.340 | 2,033,809 | Cost screen (CPU parity deferred) |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 57,489.75 | 121,784.50 | 0.472 / 0.481 | 10,286,728 | Parity confirmed |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 49,621.60 | 69,789.18 | 0.711 / 0.720 | 9,669,728 | Parity confirmed |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 66,156.61 | 122,061.47 | 0.542 / 0.550 | 10,286,320 | Parity confirmed |
 | [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-CODE-COST.md) | 65,462.97 | 82,409.48 | 0.794 / 0.802 | 9,912,952 | Parity confirmed |
 | [WebP VP8L text/diagram RGBA8](../benchmarks/WARM-VP8L-CODE-COST.md) | 6,715.35 | 10,254.85 | 0.655 / 0.669 | 107,568 | Parity confirmed |
-| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-DIRECTION-COVERAGE.md) | 33,904.97 | 9,712.89 | 3.491 / 3.545 | 589,432 | Gap (cost screen; CPU parity deferred) |
-| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-DIRECTION-COVERAGE.md) | 13,778.71 | 5,837.50 | 2.360 / 2.410 | 570,136 | Gap (cost screen; CPU parity deferred) |
+| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md) | 33,969.44 | 9,646.86 | 3.521 / 3.683 | 590,152 | Cost screen (CPU parity deferred) |
+| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md) | 14,068.64 | 5,815.18 | 2.419 / 2.481 | 570,856 | Cost screen (CPU parity deferred) |
 
 **Editing**
 

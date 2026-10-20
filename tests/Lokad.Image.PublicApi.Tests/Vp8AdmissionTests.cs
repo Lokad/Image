@@ -70,7 +70,7 @@ public sealed class Vp8AdmissionTests
 
     [Theory]
     [MemberData(nameof(EncodeProfiles))]
-    public void EncoderAdmitsPlanesModesAlphaAndArithmeticGrowthBeforeOutput(int width, int height, int depth, bool opaque, int quality, int effort)
+    public void EncoderAdmitsPlanesModesQuantizationAlphaAndArithmeticGrowthBeforeOutput(int width, int height, int depth, bool opaque, int quality, int effort)
     {
         using var source = OriginalPixels.Buffer(width, height, depth, opaque: opaque);
         var unchanged = OriginalPixels.Bytes(source);
@@ -86,7 +86,11 @@ public sealed class Vp8AdmissionTests
         var metadata = columns * rows * 17L + columns * 12L + 128;
         // Transparency is tested after the declared once-only 16-to-8 conversion.
         var alphaBytes = ImageCodec.Identify(expected).HasAlpha ? (long)width * height + 32 : 0;
-        var common = unchanged.Length + 4096 + alphaBytes + metadata;
+        // These authored quality-100 controls select source-derived segments
+        // once there are four macroblocks. Include the retained map/owner, as
+        // well as both old and new arithmetic capacities, in the exact peak.
+        var quantization = quality == 100 && effort >= 4 && columns * rows >= 4 ? columns * rows + 256L : 0;
+        var common = unchanged.Length + 4096 + alphaBytes + metadata + quantization;
         var peak = Math.Max(common + planes * 2 + GrowthPeak(tokenCapacity),
             common + tokenCapacity + 32 + GrowthPeak(headerCapacity));
         var limits = new ImageLimits { MaxWorkingBytes = peak };

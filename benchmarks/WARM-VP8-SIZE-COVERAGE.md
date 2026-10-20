@@ -9,11 +9,11 @@ benchmark inputs, not the library default85. No general lossy WebP parity follow
 | --- | ---: | ---: | --- |
 | WarmCompression/PhotographLossy8 | 17,366 / 17,688 | 77 / 75 | Pass |
 | WarmCompression/DiagramLossy8 | 6,722 / 7,100 | 75 / 75 | Pass |
-| WarmWebp/EncodeOpaque8 | 149,570 / 72,380 | 100 / 75 | Open |
-| WarmWebp/EncodeOpaque16 | 149,570 / 72,380 | 100 / 75 | Open |
-| WarmWebp/Encode8 | 170,196 / 98,590 | 100 / 75 | Open |
-| WarmWebp/Encode16 | 170,196 / 98,590 | 100 / 75 | Open |
-| WarmWebp/EncodeBudget8 | 181,998 / 98,590 | 100 / 75 | Open |
+| WarmWebp/EncodeOpaque8 | 83,838 / 72,380 | 100 / 75 | Open |
+| WarmWebp/EncodeOpaque16 | 83,838 / 72,380 | 100 / 75 | Open |
+| WarmWebp/Encode8 | 108,880 / 98,590 | 100 / 75 | Open |
+| WarmWebp/Encode16 | 108,880 / 98,590 | 100 / 75 | Open |
+| WarmWebp/EncodeBudget8 | 120,146 / 98,590 | 100 / 75 | Open |
 
 C57 reuses the approved bounded quality matcher only for the changed photograph:
 1,25,50,75,100 seeds and one refinement77, chosen by source-quality distance before
@@ -41,12 +41,19 @@ component. The [single-pass alpha milestone](WARM-WEBP-ALPHA-SINGLE-PASS.md) fur
 the work32M packet268,028→208,216 B and ALPH114,363→54,552 B against24,588 B.
 Exact prior RGBA/source quality and31,997,511 units fit32M, with shared staging/
 failure/ownership tests and the same actual package qualified on both OSes.
-The current [token-replay milestone](WARM-WEBP-ALPHA-TOKENS.md) further reduces
+The [token-replay milestone](WARM-WEBP-ALPHA-TOKENS.md) further reduces
 that packet208,216→181,998 B and ALPH54,552→28,333 B. Exact prior RGBA/source
 quality,31,980,594 units inside32M, same-root overlap/cleanup and the same actual
 package qualify on both OSes. The shared coefficient gap remains the larger
 opportunity; constrained ALPH is still above24,588 B. Passing primary
 content or a component does not establish whole-codec parity.
+
+The current [source-quantization milestone](WARM-VP8-SOURCE-QUANTIZATION.md)
+reduces opaque149,570→83,838 B, alpha170,196→108,880 B and work32M181,998→120,146 B.
+Existing source-quality gaps are0.002978/0.029329 dB within0.25 dB; alpha is exact.
+Actual work31,752,723 fits32M. Primary packets/pixels remain exact. BothOS suites,
+scalar checks and the same actual package/examples qualify; seven short jobs
+replace all affected encode cost observations. All five packet gates remain open.
 
 [Evidence](vp8-size-coverage-evidence.json) identifies the current and retained
 receipts. No new performance workload is introduced and the256-case warm checklist
