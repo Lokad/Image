@@ -21,7 +21,10 @@ now improves 6.7% to **1.601x**, reusing the integer basis and strict certificat
 for one repeated row. Pixels remain exact, allocations are essentially unchanged
 and no heap table is introduced. The same actual package passes analytical
 one-AC/two-AC pixels and shared-owner checks on both OS. The unchanged2D path's
-evidence is reused. Next: assess one substantial constant-DC algebraic opportunity.
+evidence is reused. A [constant-DC trial](../benchmarks/WARM-JPEG-DC-TRIAL.md)
+saved only 1.2% and was parked. One current profile attributes 40.8% of samples
+to entropy traversal; next qualify buffered short-EOB completion, preserving
+exact work, byte position, error precedence and cancellation routing.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
