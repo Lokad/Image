@@ -13,6 +13,8 @@ internal static class LanczosResize
     {
         using var horizontal = LanczosPlan.Create(source.Width, width, context);
         using var vertical = LanczosPlan.Create(source.Height, height, context);
+        if (LanczosFmaResize.CanUse(source, width, height, horizontal, vertical, context))
+            return LanczosFmaResize.Apply(source, width, height, horizontal, vertical, context);
         var slots = Math.Min(vertical.MaximumCount, 64);
         var channels = width * 4L; var rowElements = channels * slots;
         var bytes = 128 + rowElements * 8 + channels * 16 + slots * 4L;

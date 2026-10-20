@@ -316,10 +316,10 @@ def render():
         row('WebP VP8 text/diagram RGBA8 / matched quality', 'warm-vp8-adaptive-probabilities-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-ADAPTIVE-PROBABILITIES.md', True),
     ])
     edits.extend([
-        row('Lanczos3 reduction RGBA8', 'warm-lanczos3-coefficient-permutations-evidence.json', ['cases', 'Reduce8', -1], 'WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md', verification='Gap (short; qualified)'),
-        row('Lanczos3 reduction RGBA16', 'warm-lanczos3-coefficient-permutations-evidence.json', ['cases', 'Reduce16', -1], 'WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md', verification='Gap (short; qualified)'),
-        row('Lanczos3 enlargement RGBA8', 'warm-lanczos3-coefficient-permutations-evidence.json', ['cases', 'Enlarge8', -1], 'WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md', verification='Gap (short; qualified)'),
-        row('Lanczos3 enlargement RGBA16', 'warm-lanczos3-coefficient-permutations-evidence.json', ['cases', 'Enlarge16', -1], 'WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md', verification='Gap (short; qualified)'),
+        row('Lanczos3 reduction RGBA8', 'warm-lanczos3-certified-fma-evidence.json', ['cases', 'Reduce8', -1], 'WARM-LANCZOS3-CERTIFIED-FMA.md', verification='Gap (short; qualified)'),
+        row('Lanczos3 reduction RGBA16', 'warm-lanczos3-certified-fma-evidence.json', ['cases', 'Reduce16', -1], 'WARM-LANCZOS3-CERTIFIED-FMA.md', verification='Gap (short; qualified)'),
+        row('Lanczos3 enlargement RGBA8', 'warm-lanczos3-certified-fma-evidence.json', ['cases', 'Enlarge8', -1], 'WARM-LANCZOS3-CERTIFIED-FMA.md', verification='Gap (short; qualified)'),
+        row('Lanczos3 enlargement RGBA16', 'warm-lanczos3-certified-fma-evidence.json', ['cases', 'Enlarge16', -1], 'WARM-LANCZOS3-CERTIFIED-FMA.md', verification='Gap (short; qualified)'),
     ])
     all_rows = decodes + encodes + edits
     parity_count = sum(' | Parity confirmed |' in value for value in all_rows)
@@ -341,16 +341,15 @@ The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lancz
 is separate. **226 historical codec/edit rows do not yet requalify changed 0.2.0
 admission, disposal or governed storage.** Current CMYK, four Lanczos3, two async
 input and four async output rows identify their current producers. Production
-qualification remains 4,448 tests/OS, affected hardware-off checks, the same actual
+qualification now passes 4,457 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
-Largest measured gaps: Lanczos3 Reduce16 at **1.836x**, Reduce8 and current sparse
-CMYK at **1.829x**. A [current Reduce16 diagnostic](../benchmarks/WARM-LANCZOS3-CURRENT-PROFILE.md)
-places 43.4% of samples in horizontal filtering. The [prepared-row trial](../benchmarks/WARM-LANCZOS3-PREPARED-ROW-TRIAL.md)
-was rejected: 7.4%/3.8% gains added storage and a duplicated path. Next is a bounded
-SIMD double/FMA accumulation experiment with certified error intervals and exact
-fallback. No pixel precision is relaxed. Profiling/arithmetic prototypes supply no
-new timing claim. Optimize demonstrated gaps; stop passing cases.
+Largest demonstrated current-code gap: sparse CMYK at **1.829x**.
+[Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
+13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
+1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
+were rejected. Earlier profiles describe their original producers only.
+Optimize demonstrated gaps; stop passing cases. No pixel precision is relaxed.
 
 Complete async PNG and lossless WebP outputs independently pass. WebP uses approved
 libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compressed

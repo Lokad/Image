@@ -12,27 +12,29 @@ builds and do not yet requalify 0.2.0 admission, disposal or governed storage.
 Current CMYK, four Lanczos3, two async input and four async output rows are identified below.
 [Lanczos3 functional qualification](../docs/lanczos3-qualification.md) adds four
 required representatives using the same513×259 asymmetric RGBA rasters. Their
-[packed-coefficient screens](WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md) improve all
-four operations2.8–7.2% on one immutable selected producer. All remain gaps:
+[certified FMA screens](WARM-LANCZOS3-CERTIFIED-FMA.md) improve all
+four operations13.6–23.8% on one immutable selected producer. All remain gaps:
 
 | Named case | Fixed output and reason | State |
 | --- | --- | --- |
-| LanczosReduce8 | 256×129; widened radius-three antialias support and byte output | Gap1.829x/upper1.993x |
-| LanczosReduce16 | 256×129; full word precision and alpha normalization | Gap1.836x/upper2.174x |
-| LanczosEnlarge8 | 1027×519; negative-lobe enlargement, byte saturation and tiny alpha | Gap1.395x/upper1.504x |
-| LanczosEnlarge16 | 1027×519; full word precision, overshoot and tiny-alpha normalization | Gap1.696x/upper1.806x |
+| LanczosReduce8 | 256×129; widened radius-three antialias support and byte output | Gap1.548x/upper1.646x |
+| LanczosReduce16 | 256×129; full word precision and alpha normalization | Gap1.588x/upper1.759x |
+| LanczosEnlarge8 | 1027×519; negative-lobe enlargement, byte saturation and tiny alpha | Gap1.061x/upper1.225x |
+| LanczosEnlarge16 | 1027×519; full word precision, overshoot and tiny-alpha normalization | Gap1.333x/upper1.459x |
 
 The clamped halo/active-region and premultiplied float-output reference is now
 qualified for all four, including normal/scalar checks and twelve rejection
 controls each. All normalization, ownership and disposal are timed with one CPU.
 No other rows, gates or performance evidence are replaced. Aspect-fit uses the
 same kernel after small geometry work; add a separate timing case only if that
-boundary is material. Packed coefficient loads and lane replication use registers only,
-with4448tests/47scalar and47AVX512F-off checks, the same actual private package
-consumer/examples passing on both OS. All four rows refresh; other arithmetic,
-owners and boundaries remain unchanged. A constant-placement control was neutral;
-earlier3.9% word-product and2.1% slower row-storage trials stay parked/rejected.
-The earlier profile motivates the change; its fractions predate these loops.
+boundary is material. Exact horizontal rows convert in place, followed by FMA
+vertical sums with strict rounding certificates and exact per-pixel fallback.
+Scratch falls; local work preselection, shared refusal, ownership and cancellation
+are qualified by4457tests/55scalar/55AVX512F-off and the same actual private
+package consumer/examples on both OS. All four rows refresh; other233 rows retain
+their build scopes. Two full-FMA horizontal trials were slower and rejected;
+earlier word-product/prepared-row trials stay parked/rejected. Earlier sampled
+fractions describe their original producers, not these changed loops.
 The [current CMYK sparse-2D check](WARM-JPEG-CMYK-CURRENT.md) now resolves its old-code
 uncertainty:805.26µs/1.829x/upper1.902,1,085,680B/op. Exact managed pixels,
 normal/scalar native quality and two-live-output independence pass. Production,

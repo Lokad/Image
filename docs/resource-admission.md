@@ -79,6 +79,7 @@ remain caller-managed. Existing `ImageCodec` entry points use per-operation limi
 | Text layout / measurement | Font, borrowed UTF-16 input, private placement/line capacities and decoded geometry; temporary component/flag/kerning storage and overlapping growth capacities, with no raster allocation |
 | Text rendering | Canvas/layout storage, prepared edges/events/crossings, one coverage row, 4 KiB descriptor/frame allowance and 1600-byte subdivision stack; overlapping growth capacities, no frame mask |
 | Bilinear / bicubic resize | Source, result, admitted optional geometry/row caches, and 4 KiB for exact low-alpha rounding when needed; tight limits select the original bounded path |
+| Lanczos3 resize | Source/result, Q30 plans, up to 64 horizontal rows and one output-sum row; eligible SIMD uses in-place Int64-to-double row conversion and certified FMA sums. Tight local work/memory selects the original integer kernel before admission; shared refusal is terminal |
 | Decode Stream input | 8 KiB scratch, simultaneous old/new growth capacities and actual retained capacity throughout decoding; no final full-input copy |
 | Synchronous Identify Stream input | 8 KiB scratch and conservative growth/final-copy admission; parses a private input prefix without the final copy |
 | Container / EXIF inspection | Encoded input and bounded metadata/parser state; dimensions are checked without allocating a decoded image |

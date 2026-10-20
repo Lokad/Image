@@ -3,8 +3,9 @@
 ## 0.2.0 — Unreleased
 
 - Faster exact SIMD Lanczos3 filtering at both depths, including grouped
-  horizontal products and packed coefficient loads. Memory admission and
-  cancellation are unchanged.
+  horizontal products, packed coefficient loads and certified FMA vertical sums
+  with exact fallback. Lower scratch allocation preserves cooperative admission
+  and cancellation.
 
 - Alpha-aware Lanczos3 resizing at 8/16 bits, with reduction antialiasing,
   clamped edges, aspect-preserving fit and cooperative-memory admission.

@@ -75,6 +75,12 @@ The [packed-coefficient round](../benchmarks/WARM-LANCZOS3-COEFFICIENT-PERMUTATI
 refreshes all four rows with2.8–7.2% lower complete time. Exact lanes, frames,
 owners and resource/cancellation behavior retain the same4448tests/47scalar/
 47AVX512F-off and actual-package qualification on both OS. No new storage.
+The [certified FMA round](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
+13.6–23.8% with exact integer horizontal rows and certified vertical sums.
+Uncertain pixels use exact recomputation. It qualifies 4457tests/55scalar/
+55AVX512F-off per OS, all four exact frames and the same actual private package
+on both systems. Scratch allocation falls; retained owners, terminal refusal,
+local work bounds and cancellation remain qualified. All four remain parity gaps.
 
 Retained SHA-256 identities:
 

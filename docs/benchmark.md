@@ -12,16 +12,15 @@ The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lancz
 is separate. **226 historical codec/edit rows do not yet requalify changed 0.2.0
 admission, disposal or governed storage.** Current CMYK, four Lanczos3, two async
 input and four async output rows identify their current producers. Production
-qualification remains 4,448 tests/OS, affected hardware-off checks, the same actual
+qualification now passes 4,457 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
-Largest measured gaps: Lanczos3 Reduce16 at **1.836x**, Reduce8 and current sparse
-CMYK at **1.829x**. A [current Reduce16 diagnostic](../benchmarks/WARM-LANCZOS3-CURRENT-PROFILE.md)
-places 43.4% of samples in horizontal filtering. The [prepared-row trial](../benchmarks/WARM-LANCZOS3-PREPARED-ROW-TRIAL.md)
-was rejected: 7.4%/3.8% gains added storage and a duplicated path. Next is a bounded
-SIMD double/FMA accumulation experiment with certified error intervals and exact
-fallback. No pixel precision is relaxed. Profiling/arithmetic prototypes supply no
-new timing claim. Optimize demonstrated gaps; stop passing cases.
+Largest demonstrated current-code gap: sparse CMYK at **1.829x**.
+[Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
+13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
+1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
+were rejected. Earlier profiles describe their original producers only.
+Optimize demonstrated gaps; stop passing cases. No pixel precision is relaxed.
 
 Complete async PNG and lossless WebP outputs independently pass. WebP uses approved
 libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compressed
@@ -315,10 +314,10 @@ reconciliation now covers every numeric row.
 | [Transpose RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 48.17 | 44.86 | 1.074 / 1.114 | 128 | Gap (independent) |
 | [Mirrored transpose RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 44.34 | 43.25 | 1.025 / 1.064 | 128 | Gap (independent) |
 | [Mirrored transpose RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 39.10 | 38.54 | 1.015 / 1.041 | 128 | Gap (independent) |
-| [Lanczos3 reduction RGBA8](../benchmarks/WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md) | 894.40 | 488.96 | 1.829 / 1.993 | 146,652 | Gap (short; qualified) |
-| [Lanczos3 reduction RGBA16](../benchmarks/WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md) | 931.20 | 507.17 | 1.836 / 2.174 | 146,643 | Gap (short; qualified) |
-| [Lanczos3 enlargement RGBA8](../benchmarks/WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md) | 5,671.76 | 4,066.82 | 1.395 / 1.504 | 351,910 | Gap (short; qualified) |
-| [Lanczos3 enlargement RGBA16](../benchmarks/WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md) | 6,661.47 | 3,928.07 | 1.696 / 1.806 | 4,617,090 | Gap (short; qualified) |
+| [Lanczos3 reduction RGBA8](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) | 758.75 | 490.07 | 1.548 / 1.646 | 138,466 | Gap (short; qualified) |
+| [Lanczos3 reduction RGBA16](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) | 804.22 | 506.28 | 1.588 / 1.759 | 138,454 | Gap (short; qualified) |
+| [Lanczos3 enlargement RGBA8](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) | 4,324.39 | 4,076.28 | 1.061 / 1.225 | 319,046 | Gap (short; qualified) |
+| [Lanczos3 enlargement RGBA16](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) | 5,248.30 | 3,935.96 | 1.333 / 1.459 | 4,584,270 | Gap (short; qualified) |
 
 * VP8L encode uses **libwebp exact=1, FFmpeg's encoder backend**, through its
 public API because FFmpeg does not expose hidden-RGB preservation. All decoded

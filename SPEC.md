@@ -362,6 +362,13 @@ unsigned-widened path.
 Four-tap horizontal groups may load four coefficients together, sign-extend
 them and replicate their lanes with register permutations. Coefficients, arithmetic
 order, work, cancellation and admitted storage remain unchanged.
+Eligible hardware can instead retain exact horizontal rows, convert them in
+place and use FMA vertical sums. A [strict rounding certificate](docs/lanczos3-fma-certificate.md)
+accepts only pixels whose four error intervals fit inside their rounding bins;
+uncertain pixels use the exact integer computation. The sum workspace is smaller,
+with reservations before allocation and independent result ownership. Missing
+hardware or tight local work/storage selects the integer kernel before admission;
+shared-budget refusal is terminal. Exact pixels and cancellation remain required.
 The independent decimal/BigInteger oracle covers transparency, edges and cache
 eviction. Opaque live FFmpeg controls use explicit edge extension and radius
 three, maximum RGB error 1, RGB RMSE <=0.25 and exact alpha. That correctness
