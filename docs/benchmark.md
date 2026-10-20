@@ -66,8 +66,14 @@ Both variants retain exact pixels, original controls and admitted storage;
 accepted production is restored with no full/package repeat. The
 [current sparse JPEG diagnostic](../benchmarks/WARM-JPEG-SPARSE-COST.md) places
 20.4% of963samples in the integer inverse transform; entropy/scan work is also
-material. No timing claim. Next: exact paired signed16 frequency products with
-the original certificate, existing basis and no added scratch; feasibility first.
+material. No timing claim. The stronger
+[exact-quadrant trial](../benchmarks/WARM-JPEG-SPARSE-QUADRANT-TRIAL.md)
+reduces frequency products64→16 but only saves a0.6% point mean; it is parked
+and accepted production is restored without full/package repeats. The
+[current direct-RGB diagnostic](../benchmarks/WARM-JPEG-DIRECT-RGB-COST.md)
+places 47.6% of934 samples in baseline AC reading and1.3% in SIMD RGB packing.
+The frozen Sparse2D packet contains no stuffed bytes. No timing claim or new
+workload matrix. JPEG tuning is deferred while lossless WebP size takes priority.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
@@ -83,6 +89,14 @@ full parity remains open.
 Complete async PNG and lossless WebP outputs independently pass. WebP uses approved
 libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compressed
 sizes **533,100/183,812 B**. Its passing timing does not establish compression parity.
+Lossless size parity is a high-priority open gate: the fixed opaque photograph
+must reach ≤160,032 B (currently383,154 B), and diagram ≤7,234 B (currently15,120 B),
+with exact pixels and the unchanged libwebp exact=1 reference/settings. The
+[caller-JPEG controls](../benchmarks/WARM-JPEG-CALLER-MCU.md) also leave a joint
+size/quality gap: RGB42074,040/52,093 B at source-PSNR difference0.106110 dB
+(gate0.25 dB); grayscale58,823/58,910 B. RGB420 compression improvements must
+retain matched reconstruction quality and avoid material grayscale regression.
+These content/sampling controls do not establish general compression equivalence.
 The two JPEG async-output cases remain short gaps; all timings/allocations follow.
 
 The 16 unmeasured representatives cover header inspection, drawing and text.

@@ -24,7 +24,8 @@ from required future functionality.
 | Failure details | Implemented in development | Typed exhausted-limit and unsupported-feature categories with recognized codec when known |
 | Shared admission | Implemented in development | ImageBudget codec entry points and caller reservations; coarse per-operation reservation, cumulative charged work and independently retained BudgetedImage outputs |
 | Cooperative memory | Implemented in development; qualification ongoing | Borrowed host-independent shared-root hooks, pre-allocation capacity/peak admission and explicit retained-image/font/layout lifetime accounting across public operations |
-| Compression efficiency | Required ongoing work | WebP lossless sizes and lossy size/quality/time; JPEG comparisons at matched quality or size on representative photographs and text/diagrams |
+| Compression efficiency | High-priority ongoing work | Lossless WebP size competitive with the fixed FFmpeg/libwebp reference; JPEG size and reconstruction quality assessed together, with matched quality and no material grayscale regression; content/sampling scope stated |
+| Source metadata | Typed representation extension required | Encoded color model, source sample depth and alpha representation, including PNG indexed/grayscale/RGB and explicit alpha versus palette/color-key transparency; consistent sync/async Identify and bounded InspectHeaders |
 
 GIF, APNG and animated WebP are rejected. Arithmetic/lossless/12-bit JPEG,
 progressive JPEG encoding, indexed/Adam7 PNG encoding and metadata round-tripping
@@ -802,6 +803,26 @@ the fractional remainder, preserving adjacent binary64 values on either side
 of a half; final channels saturate to the full 16-bit range.
 
 ## Formats and metadata
+
+Required extension: public identification and header inspection will expose typed
+encoded color and alpha representation, independently of decoded RGBA normalization.
+For PNG this includes grayscale, RGB and indexed samples, encoded sample depth,
+explicit alpha channels and palette/color-key tRNS. Current `ImageInfo` exposes
+geometry, depth, `HasAlpha` and orientation; the richer source descriptor is not
+yet implemented. Sync/async Identify and InspectHeaders must agree for valid inputs
+without decoding pixels. Header-only inspection will keep bounded workspace and
+its documented validation boundary, with existing limits, structured failures,
+cancellation, shared admission and stream ownership preserved.
+
+Compression acceptance considers complete encoded size and reconstruction quality
+together. The fixed lossless WebP photograph/diagram controls require outputs no
+larger than their frozen libwebp exact=1 references (160,032/7,234 bytes). These
+gates remain open. JPEG RGB420 improvements retain the existing matched-quality
+gate and avoid material grayscale regression; equal quality numbers do not prove
+equivalence. Claims name content, sampling and settings; broader claims require
+representative photographic and text/diagram evidence. Encoded lossy bytes and
+pixels may change while explicit quality, sampling, flattening, resource, ownership
+and warm-performance requirements remain satisfied.
 
 PNG follows the [W3C specification](https://www.w3.org/TR/png/). Validate signature,
 chunk lengths/names/order/CRCs, image geometry, transparency and decoded pixel

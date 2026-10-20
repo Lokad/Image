@@ -1,0 +1,215 @@
+{
+  "preparedIdentities": {
+    "Lokad.Image.dll": "9e2a40d0d2621b5e308c3c79b447081c21982e28429e2f2b837fefe8620fbf53",
+    "Lokad.Image.Benchmarks.dll": "452f282256235afb0725a02b91054adea2683b100d2cb280afa169ee1614cfb7",
+    "Lokad.Image.Benchmarks-WarmShort-1.dll": "6dd6c70aaab0890daba23e233d569de1b3eb10847d30e82c8f56a6e01d054a88",
+    "Lokad.Image.Benchmarks-WarmShort-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f"
+  },
+  "profilingOnly": true,
+  "noTimingClaim": true,
+  "perfExitCode": 0,
+  "caseId": "DirectRgb444",
+  "productionSha256": "9e2a40d0d2621b5e308c3c79b447081c21982e28429e2f2b837fefe8620fbf53",
+  "samples": 934,
+  "methods": [
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+      "samples": 445,
+      "fraction": 0.47644539614561027
+    },
+    {
+      "method": "bool [Lokad.Image] Lokad.Image.Internal.JpegTransform::TryInverseSeparable(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+      "samples": 192,
+      "fraction": 0.20556745182012848
+    },
+    {
+      "method": "class Lokad.Image.ImageInfo [Lokad.Image] Lokad.Image.Internal.ContainerHeaders::Jpeg(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      "samples": 49,
+      "fraction": 0.05246252676659529
+    },
+    {
+      "method": "Native/unresolved: libcoreclr.so",
+      "samples": 42,
+      "fraction": 0.044967880085653104
+    },
+    {
+      "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      "samples": 38,
+      "fraction": 0.04068522483940043
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadScan(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+      "samples": 32,
+      "fraction": 0.034261241970021415
+    },
+    {
+      "method": "instance class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.Internal.JpegDecoder::Render()[Optimized]",
+      "samples": 28,
+      "fraction": 0.029978586723768737
+    },
+    {
+      "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+      "samples": 20,
+      "fraction": 0.021413276231263382
+    },
+    {
+      "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+      "samples": 14,
+      "fraction": 0.014989293361884369
+    },
+    {
+      "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::RenderRgbRow(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+      "samples": 12,
+      "fraction": 0.01284796573875803
+    },
+    {
+      "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadLongHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+      "samples": 11,
+      "fraction": 0.011777301927194861
+    },
+    {
+      "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+      "samples": 11,
+      "fraction": 0.011777301927194861
+    },
+    {
+      "method": "Native/unresolved: libclrjit.so",
+      "samples": 8,
+      "fraction": 0.008565310492505354
+    },
+    {
+      "method": "Native/unresolved: libc.so.6",
+      "samples": 6,
+      "fraction": 0.006423982869379015
+    },
+    {
+      "method": "void [Lokad.Image] Lokad.Image.Internal.JpegTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      "samples": 6,
+      "fraction": 0.006423982869379015
+    },
+    {
+      "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegHuffman::ReadLong(valuetype Lokad.Image.Internal.JpegEntropyReader&)[Optimized]",
+      "samples": 4,
+      "fraction": 0.004282655246252677
+    },
+    {
+      "method": "instance int64 [Lokad.Image] Lokad.Image.Internal.OperationContext::get_RemainingWork()[Optimized]",
+      "samples": 4,
+      "fraction": 0.004282655246252677
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::EndLocalWork()[Optimized]",
+      "samples": 4,
+      "fraction": 0.004282655246252677
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::BeginLocalWork()[Optimized]",
+      "samples": 3,
+      "fraction": 0.0032119914346895075
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::CommitAdmittedWork(int64)[Optimized]",
+      "samples": 3,
+      "fraction": 0.0032119914346895075
+    },
+    {
+      "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadCanonicalPrefix(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+      "samples": 1,
+      "fraction": 0.0010706638115631692
+    },
+    {
+      "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadMarker()[Optimized]",
+      "samples": 1,
+      "fraction": 0.0010706638115631692
+    }
+  ],
+  "quietness": {
+    "before": {
+      "protocol": "exclusive-vm-idle-v2",
+      "sampleSeconds": 5.000340953934938,
+      "cpuSamples": {
+        "cpu": {
+          "cpuBusyFraction": 0.0005,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        },
+        "cpu0": {
+          "cpuBusyFraction": 0.0,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        }
+      },
+      "overlappingJobsBefore": [],
+      "overlappingJobsAfter": [],
+      "loadAverageDiagnosticOnly": true,
+      "cpuBusyFraction": 0.0005,
+      "ioWaitFraction": 0.0,
+      "stealFraction": 0.0,
+      "loadAverage": [
+        0.14697265625,
+        0.0322265625,
+        0.01025390625
+      ],
+      "passed": true,
+      "thresholds": {
+        "maxCpuBusyFraction": 0.05,
+        "maxIoWaitFraction": 0.01,
+        "maxStealFraction": 0.01
+      },
+      "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+    },
+    "after": {
+      "protocol": "exclusive-vm-idle-v2",
+      "sampleSeconds": 5.000327154994011,
+      "cpuSamples": {
+        "cpu": {
+          "cpuBusyFraction": 0.001,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        },
+        "cpu0": {
+          "cpuBusyFraction": 0.0,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        }
+      },
+      "overlappingJobsBefore": [],
+      "overlappingJobsAfter": [],
+      "loadAverageDiagnosticOnly": true,
+      "cpuBusyFraction": 0.001,
+      "ioWaitFraction": 0.0,
+      "stealFraction": 0.0,
+      "loadAverage": [
+        0.134765625,
+        0.03125,
+        0.009765625
+      ],
+      "passed": true,
+      "thresholds": {
+        "maxCpuBusyFraction": 0.05,
+        "maxIoWaitFraction": 0.01,
+        "maxStealFraction": 0.01
+      },
+      "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+    }
+  },
+  "productionChanged": false,
+  "currentQualifiedPixelsNativeQualityAndOwnersPassed": true,
+  "productionHarnessSelectorNativeBuilds": 0,
+  "rawArtifact": {
+    "file": "c32-current-directrgb444-profile-linux.tar.gz",
+    "sha256": "6b5fe8e4fd39c40953db6d4ac17e5fe48ea9714a8e08368841fd6518bc007cfe",
+    "bytes": 61467,
+    "mirroredAndVerified": true
+  },
+  "sparseInputStuffing": {
+    "productionChanged": false,
+    "noTimingClaim": true,
+    "inputSha256": "c25100b5a547cb15861a4f2f08b27c35a04d5e4250fca10021105823ba98b4a1",
+    "inputBytes": 22708,
+    "stuffedPairsInEntirePacket": 0,
+    "existingSparse2DBlocks": 8580,
+    "decision": "No stuffed pair occurs in the frozen Sparse2D packet; do not optimize byte stuffing for that case."
+  },
+  "nextItem": "Prioritize VP8L compression size on the two existing opaque content controls. JPEG entropy optimization is deferred; no production implementation is pending."
+}
