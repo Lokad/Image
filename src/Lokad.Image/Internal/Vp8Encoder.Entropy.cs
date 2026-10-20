@@ -17,10 +17,11 @@ internal static partial class Vp8Encoder
         internal int CacheMacroblocks { get; }
         internal bool Ready { get; private set; }
         internal bool Intra16 => macroModes is not null;
+        internal bool Refine { get; }
         internal byte[] Y2Above { get; }
 
         internal static CoefficientModel? TryCreate(Vp8Planes source, int blocks, int lumaTrials, int chromaTrials, OperationContext context,
-            byte[]? modes = null, bool fullFrame = false, bool segmented = false)
+            byte[]? modes = null, bool fullFrame = false, bool segmented = false, long refinementWork = 0)
         {
             var samples = source.Y.Length + source.U.Length + source.V.Length;
             var prefix = Math.Min(blocks, 64);
@@ -51,8 +52,10 @@ internal static partial class Vp8Encoder
                 var fullWork = (blocks - prefix) * (24L * 256 + 256) + 1056 * 16;
                 if (fullExtra <= source.MemoryBytes && fullExtra + growth <= context.RemainingWorkingBytes
                     && work + intraWork + fullWork <= context.RemainingWork)
-                    return new CoefficientModel(samples, blocks, context, modes, source.Stride / 16, fullFrame: true);
-                return new CoefficientModel(samples, blocks, context, modes, source.Stride / 16);
+                    return new CoefficientModel(samples, blocks, context, modes, source.Stride / 16, fullFrame: true,
+                        refine: refinementWork != 0 && work + intraWork + fullWork + refinementWork <= context.RemainingWork);
+                return new CoefficientModel(samples, blocks, context, modes, source.Stride / 16,
+                    refine: refinementWork != 0 && work + intraWork + refinementWork <= context.RemainingWork);
             }
             if (extra > source.MemoryBytes || extra + growth > context.RemainingWorkingBytes) return null;
             if (work > context.RemainingWork)
@@ -81,9 +84,9 @@ internal static partial class Vp8Encoder
         }
 
         internal CoefficientModel(int samples, int blocks, OperationContext context, byte[]? modes = null, int columns = 0,
-            bool fullFrame = false)
+            bool fullFrame = false, bool refine = false)
         {
-            this.context = context; PrefixMacroblocks = Math.Min(blocks, 64);
+            this.context = context; Refine = refine; PrefixMacroblocks = Math.Min(blocks, 64);
             CacheMacroblocks = fullFrame ? blocks : PrefixMacroblocks;
             if (samples != blocks * 384) throw new ArgumentException("VP8 private plane geometry differs.");
             reservation = CacheMacroblocks * (384L / 4 + 24) + 16384 + (modes is null ? 0 : CacheMacroblocks * 16L + columns + 64);

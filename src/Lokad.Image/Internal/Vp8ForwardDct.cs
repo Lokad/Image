@@ -47,6 +47,25 @@ internal static class Vp8ForwardDct
             }
     }
 
+    internal static void Transform(ReadOnlySpan<short> residual, Span<double> coefficients)
+    {
+        Span<double> horizontal = stackalloc double[16];
+        for (var y = 0; y < 4; y++)
+        for (var u = 0; u < 4; u++)
+        {
+            var sum = 0.0;
+            for (var x = 0; x < 4; x++) sum += residual[y * 4 + x] * Basis[u * 4 + x];
+            horizontal[y * 4 + u] = sum;
+        }
+        for (var v = 0; v < 4; v++)
+        for (var u = 0; u < 4; u++)
+        {
+            var sum = 0.0;
+            for (var y = 0; y < 4; y++) sum += horizontal[y * 4 + u] * Basis[v * 4 + y];
+            coefficients[v * 4 + u] = sum / 2;
+        }
+    }
+
     // Four independent frequencies share instructions, while every lane keeps
     // the scalar multiplication/addition order. Do not fuse or reassociate:
     // even a last-bit change can cross a quantization midpoint.

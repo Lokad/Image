@@ -214,10 +214,10 @@ def render():
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-compact-color-evidence.json', ['cases', 'OriginalGray', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-caller-mcu-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-CALLER-MCU.md', verification='Gap (short; qualified)'),
-        row('WebP VP8, opaque‡', 'vp8-segment-search-evidence.json', ['observations', 0], 'WARM-VP8-SEGMENT-SEARCH.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8, opaque from RGBA16‡', 'vp8-segment-search-evidence.json', ['observations', 1], 'WARM-VP8-SEGMENT-SEARCH.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alpha‡', 'vp8-segment-search-evidence.json', ['observations', 2], 'WARM-VP8-SEGMENT-SEARCH.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alpha from RGBA16‡', 'vp8-segment-search-evidence.json', ['observations', 3], 'WARM-VP8-SEGMENT-SEARCH.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8, opaque‡', 'vp8-coefficient-refinement-evidence.json', ['observations', 0], 'WARM-VP8-COEFFICIENT-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8, opaque from RGBA16‡', 'vp8-coefficient-refinement-evidence.json', ['observations', 1], 'WARM-VP8-COEFFICIENT-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alpha‡', 'vp8-coefficient-refinement-evidence.json', ['observations', 2], 'WARM-VP8-COEFFICIENT-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alpha from RGBA16‡', 'vp8-coefficient-refinement-evidence.json', ['observations', 3], 'WARM-VP8-COEFFICIENT-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha‡, caller work budget32M', 'webp-alpha-word-key-evidence.json', ['observations', 0], 'WARM-WEBP-ALPHA-WORD-KEY.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-CODE-COST.md', True),
@@ -454,120 +454,33 @@ and the same actual package/examples qualify. Opaque allocation is9,669,728 B/op
 more CPU and allocation for size: photograph9,912,952 B/op versus historical702,616.
 Both lossless size gates remain open against160,032/7,234 B. The earlier
 [structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md) is diagnostic evidence.
-The [direction-coverage milestone](../benchmarks/WARM-VP8-DIRECTION-COVERAGE.md)
-now passes complete-packet size and quality for **both primary controls**:
-17,366/17,688 B photograph and6,722/7,100 B diagram. The changed photograph uses
-managed77 selected by the existing bounded closest-quality matcher; diagram75
-is retained, native75/effort4 and all reference packets/inputs unchanged. Gaps
-0.140944/0.117409dB retain the0.25dB gate and exact alpha. The former78 photograph
-point remains18,284 B/0.179085dB; no claim of size parity at that older number.
-4,603 tests/OS,136internal+2public+2differential scalar checks and the same actual
-private package/examples qualify. Two short cost screens record3.491x/2.360x
-and589,432/570,136 B/op; CPU parity remains deferred. Relevant unchanged proofs
-are reused, with no independent timing repeats or workload grid.
-The [seven-control size ledger](../benchmarks/WARM-VP8-SIZE-COVERAGE.md) retains
-**five other fixed-q100 packet gaps**, including the work32M branch.
-Those are benchmark inputs, not the defaultquality85. Primary parity is not
-whole-codec parity; these larger lossy gaps precede lossless work. The earlier
-[intra16/Y2](../benchmarks/WARM-VP8-INTRA16-COMPRESSION.md),
-[whole-frame entropy](../benchmarks/WARM-VP8-FULL-MODEL-COMPRESSION.md) and
-[reconstructed-mode](../benchmarks/WARM-VP8-RECONSTRUCTED-MODES.md) milestones
-retain their producer-specific data. Only the two primary encode rows change.
-The subsequent [compressed-alpha milestone](../benchmarks/WARM-VP8-COMPRESSED-ALPHA.md)
-saves18,504 B on each existing alpha8/16/work32M packet, now268,028/268,028/452,932 B
-against98,590 B. VP8 payloads, decoded RGBA and quality remain exact; references,
-settings and tolerances are unchanged. It adds2KiB admitted workspace without
-a filtered/RGBA frame or encoded-alpha buffer.4,613tests/OS,146internal+3public
-scalar checks and the same actual package/examples pass. Three short cost screens
-record0.400/0.402/0.441x and2,174,702/2,174,520/2,681,364 B/op; native allocations
-remain unmeasured. They replace three prior independent observations, without
-claiming current independent CPU parity. The fixed scope remains256 cases:
-120independent/119short observations. All five procedural compression gates remain
-open. Primary opaque content and unrelated algorithms reuse unchanged evidence.
-The [alpha backward-reference milestone](../benchmarks/WARM-VP8-ALPHA-MATCHES.md)
-then cuts unrestricted alpha8/16 packets268,028→170,196 B (36.5%) with exact old
-RGBA/source quality. ALPH itself is18,579/24,588 B; complete packets still exceed
-98,590 B. Full-frame q0 entropy also reduces opaque8/16 to149,570/72,380 B. The
-work32M packet/work remains452,932 B/31,961,577 units, reusing its C58 short proof.
-4,628tests/OS,161internal+51public+2diff scalar and the same actual private package/
-examples qualify. Four short costs record1.397/1.426/0.523/0.532x and
-1,543,152/1,543,152/1,793,800/1,793,800 B/op. CPU parity stays deferred. The owned
-262,176 B history/tables are admitted through the shared root and survive actual
-writing; there is no filtered/RGBA frame or encoded-alpha staging copy. A weaker
-gradient-only trial is retained but not adopted, avoiding another budget-specific
-algorithm. No source/settings/quality-gate change, new workload or timing repeat.
-The five procedural packet gaps, primary content passes and finite counts remain.
-The [alpha-token milestone](../benchmarks/WARM-WEBP-ALPHA-TOKENS.md)
-reduces the work32M packet208,216→181,998 B (12.6%), with exact prior RGBA/source
-quality and31,980,594 charged units inside32M. ALPH falls54,552→28,333 B; the
-complete98,590 B target stays open. Same-root token/staging overlap, terminal
-failures and surviving outputs pass4,654tests/OS, affected scalar checks and the
-same actual package/examples. One cost screen records0.391x/upper0.435x and
-2,295,207 B/op; native allocations are unmeasured and CPU parity/repeats deferred.
-One immutable core/internal build perOS; public/diff/reference/harness/native/
-selector binaries reused. Four unrestricted records remain exact; all five
-procedural packet gates and the finite matrix remain unchanged. The earlier
-[prefix](../benchmarks/WARM-VP8-PREFIX-WORK.md) and
-[fixed-stage](../benchmarks/WARM-WEBP-ALPHA-SINGLE-PASS.md) proofs are historical.
+The [seven-control lossy size ledger](../benchmarks/WARM-VP8-SIZE-COVERAGE.md)
+now records **six passes and one open complete-packet gate**. Fixed primary
+photograph17,366/ref17,688 B and diagram6,722/ref7,100 B retain their matched
+managed77/75 versus native75/effort4 settings; source-PSNR gaps0.140944/0.117409 dB
+pass unchanged0.25dB and exact-alpha gates. Passing complete cases stay stopped.
 
-The [source-quantization milestone](../benchmarks/WARM-VP8-SOURCE-QUANTIZATION.md)
-cuts opaque149,570→83,838 B (ref72,380), alpha170,196→108,880 B (ref98,590)
-and work32M181,998→120,146 B (ref98,590). Exact alpha and unchanged quality gates
-pass; all five packet gaps remain open. Primary photograph/diagram packets,
-pixels and quality stay exact. The new source-only analysis reserves its map
-through the borrowed root, without another RGBA frame;31,752,723 actual units
-fit32M. Both OSes pass4,666tests,194internal+8public+2diff scalar checks and the
-same actual private package/all three examples. Seven short guarded jobs replace
-all affected VP8 encode costs, including unchanged primary packets; no independent
-timing repeat or CPU-parity claim. Opaque8/16 allocate1,002,712 B/op, alpha8/16
-1,532,200, work32M2,033,809, photograph590,152 and diagram570,856. Native allocations
-are unmeasured. Unchanged decoder inputs and other production paths retain their
-qualified scopes; no workload, reference, input or tolerance changes.
+The current [selected-coefficient round](../benchmarks/WARM-VP8-COEFFICIENT-REFINEMENT.md)
+reduces unrestricted opaque8/16 **73,740→71,154/ref72,380 B** and alpha8/16
+**98,760→96,708/ref98,590 B**. Source-quality gaps0.003192/0.022172 dB, decoder
+bounds and exact unchanged ALPH pass. Existing100/75/effort4 inputs, references
+and quality tolerances remain fixed. Rate-aware adjacent-level/EOB choices use
+current segment steps after selecting4x4 predictions, with no extra frame/cache.
+Added work is locally admitted and charged before mutation; shared refusal,
+exhaustion/cancellation and ownership contracts remain mandatory. BothOS4,699tests,
+223internal+12public+4diff scalar and same actual package/all examples qualify.
+Four short guarded costs in the table supersede the unrestricted rows, accepting
+higher CPU for packet gains; CPU parity/independent repeats remain deferred.
 
-The [interpolation-noise milestone](../benchmarks/WARM-VP8-INTERPOLATION-NOISE.md)
-further cuts opaque83,838→74,962 B, alpha108,880→99,816 B and work32M120,146→111,094 B.
-The respective complete references remain72,380/98,590/98,590 B; all five gates
-stay open. Source-PSNR gaps0.016224/0.038933 dB, exact alpha and unchanged decoder
-bounds pass; primary packets/pixels/quality remain identical. Independent noise
-propagation includes centered chroma weights and coincident edge taps, with no
-new buffer and unchanged admission/ownership. Actual31,916,945 units fit32M.
-Both OSes pass4,674tests,202internal+8public+2diff scalar checks and the same actual
-private package/all examples. Seven short guarded costs supersede affected encodes:
-opaque8/16 allocate1,002,488 B/op, alpha8/16 1,532,032, work32M1,806,692, photograph
-590,152 and diagram570,856. No independent timing repeat or CPU-parity claim;
-one frozen producer/internal build perOS, unchanged public/diff/harness/native/
-selector binaries reused. Other production paths retain their qualified scopes.
+The sole remaining lossy packet gap is **work32M102,006/ref98,590 B** (+3,416 B).
+Its full record remains exactly the [four-residual alpha-key round](../benchmarks/WARM-WEBP-ALPHA-WORD-KEY.md):
+31,947,691units within32M, ALPH19,246/ref24,588 B,15,047.12/reference53,488.81 µs
+and1,997,180 B/op. A component pass does not close the packet gate. That cost
+retains C74 identity; primary costs retain C70 identity, without new confirmations.
+Only these frozen controls support the claims; numerical qualities are not
+interchangeable and whole-codec compression parity remains open. Lossless WebP
+follows this remaining lossy gate, then default JPEG and PNG complete-packet gaps.
 
-The [segment-search milestone](../benchmarks/WARM-VP8-SEGMENT-SEARCH.md)
-admits existing intra16/Y2 and reconstruction/rate search for source-derived
-segments. Opaque73,740/ref72,380 B and unrestricted alpha98,760/ref98,590 B leave
-gaps1,360/170 B. Source-quality gaps0.008682/0.030410 dB and exact unchanged ALPH
-pass. Four C73 guarded cost screens remain current for these unchanged paths;
-primary photograph/diagram retain C70 scope. Higher CPU costs are accepted for
-compression; no CPU-parity or independent-repeat claim follows.
-
-The current [four-residual alpha-key milestone](../benchmarks/WARM-WEBP-ALPHA-WORD-KEY.md)
-cuts work32M104,500→102,006 B, exact prior VP8/RGBA/source quality and alpha.
-Actual31,947,691units fit32M; the full98,590 B ceiling remains open by3,416 B.
-ALPH19,246/ref24,588 B is only a component pass. Same admitted histories/owners,
-one rolling input traversal and all original work charges; no extra plane/frame.
-BothOS4,692tests,216internal+12public+4diff scalar and same actual package/examples
-qualify. One guarded three-actual cost replaces this row:15,047.12/reference53,488.81 µs
-and1,997,180 B/op (prior2,012,156). No independent timing repeat,
-settings/reference/tolerance change or new workload. All five procedural packet
-gates stay open; four unrestricted full records and passing primary paths stop.
-
-The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
-rejects a smaller packet with excessive quality loss and a quality-preserving
-variant with immaterial byte savings. These historical trials do not alter the
-current accepted producer or quality gates.
-The [source-activity audit](../benchmarks/WARM-VP8-ACTIVITY-AUDIT.md) finds strong
-native-quantizer/gradient rank correlation on the same two controls, supporting a
-source-derived spatial-quantization experiment. It changes no production packet,
-quality setting, timing or allocation; both size ceilings remain open.
-The [source-only spatial policy](../benchmarks/WARM-VP8-SPATIAL-QUANTIZATION-SCREEN.md)
-then fails the unchanged source-quality gate (0.590/0.577dB) and both size ceilings.
-It is rejected without timing; the qualified source/build/package are restored.
 The [lossless adaptive-predictor screen](../benchmarks/WARM-VP8L-ADAPTIVE-PREDICTOR-AUDIT.md)
 saves2,652/0 B on the fixed photograph/diagram but misses both lossless size gates.
 That predictor is not adopted; the subsequent coding-group round above supplies current production evidence.

@@ -4,7 +4,7 @@
   "scope": "Finite reconciliation of seven already declared lossy WebP controls, including accepted exact compressed ALPH on three existing alpha/work32M boundaries; no new workload or quality grid.",
   "acceptance": "Complete encoded packet <= fixed reference with existing source-quality/decoder/alpha and ownership/resource gates. Passing primary controls does not establish whole-codec parity.",
   "primaryMatchedControlPasses": 2,
-  "otherDeclaredPacketGaps": 5,
+  "otherDeclaredPacketGaps": 1,
   "cases": [
     {
       "case": "WarmCompression/PhotographLossy8",
@@ -44,87 +44,87 @@
     },
     {
       "case": "WarmWebp/EncodeOpaque8",
-      "managedPacketBytes": 73740,
+      "managedPacketBytes": 71154,
       "referencePacketBytes": 72380,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
-      "packetSizePass": false,
-      "evidence": "vp8-segment-search-evidence.json",
+      "packetSizePass": true,
+      "evidence": "vp8-coefficient-refinement-evidence.json",
       "observationPath": [
         "observations",
         0
       ],
-      "validity": "C73 qualified admitted existing mixed reconstruction/Y2 search for source-derived segments at baseq0; fixed benchmark/reference/settings/quality gates, exact alpha. Complete packet remains above target. Short costs only; CPU parity deferred.",
-      "previousManagedPacketBytes": 74962,
+      "validity": "C76 qualified selected4x4 adjacent-level/EOB refinement at current segment quantizers; complete-packet and unchanged source-quality/decoder/alpha gates pass. Current short costs; CPU parity deferred.",
+      "previousManagedPacketBytes": 73740,
       "alphaPayloadBytes": 0,
-      "psnrGapDb": 0.00868233958019439,
-      "consumedWork": 129119405,
-      "coefficientPolicy": "admitted mixed intra16/Y2, per-segment reconstruction/rate search and full-frame entropy"
+      "psnrGapDb": 0.0031915054196356174,
+      "consumedWork": 199970831,
+      "coefficientPolicy": "admitted selected-prediction adjacent-level/EOB refinement with segment-specific steps/rate scale, then existing full-frame entropy"
     },
     {
       "case": "WarmWebp/EncodeOpaque16",
-      "managedPacketBytes": 73740,
+      "managedPacketBytes": 71154,
       "referencePacketBytes": 72380,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
-      "packetSizePass": false,
-      "evidence": "vp8-segment-search-evidence.json",
+      "packetSizePass": true,
+      "evidence": "vp8-coefficient-refinement-evidence.json",
       "observationPath": [
         "observations",
         1
       ],
-      "validity": "C73 qualified admitted existing mixed reconstruction/Y2 search for source-derived segments at baseq0; fixed benchmark/reference/settings/quality gates, exact alpha. Complete packet remains above target. Short costs only; CPU parity deferred.",
-      "previousManagedPacketBytes": 74962,
+      "validity": "C76 qualified selected4x4 adjacent-level/EOB refinement at current segment quantizers; complete-packet and unchanged source-quality/decoder/alpha gates pass. Current short costs; CPU parity deferred.",
+      "previousManagedPacketBytes": 73740,
       "alphaPayloadBytes": 0,
-      "psnrGapDb": 0.00868233958019439,
-      "consumedWork": 129119405,
-      "coefficientPolicy": "admitted mixed intra16/Y2, per-segment reconstruction/rate search and full-frame entropy"
+      "psnrGapDb": 0.0031915054196356174,
+      "consumedWork": 199970831,
+      "coefficientPolicy": "admitted selected-prediction adjacent-level/EOB refinement with segment-specific steps/rate scale, then existing full-frame entropy"
     },
     {
       "case": "WarmWebp/Encode8",
-      "managedPacketBytes": 98760,
+      "managedPacketBytes": 96708,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
-      "packetSizePass": false,
-      "evidence": "vp8-segment-search-evidence.json",
+      "packetSizePass": true,
+      "evidence": "vp8-coefficient-refinement-evidence.json",
       "observationPath": [
         "observations",
         2
       ],
-      "validity": "C73 qualified admitted existing mixed reconstruction/Y2 search for source-derived segments at baseq0; fixed benchmark/reference/settings/quality gates, exact alpha. Complete packet remains above target. Short costs only; CPU parity deferred.",
-      "previousManagedPacketBytes": 99816,
+      "validity": "C76 qualified selected4x4 adjacent-level/EOB refinement at current segment quantizers; complete-packet and unchanged source-quality/decoder/alpha gates pass. Current short costs; CPU parity deferred.",
+      "previousManagedPacketBytes": 98760,
       "alphaPayloadBytes": 18579,
-      "psnrGapDb": 0.030409720822198415,
-      "consumedWork": 134689615,
-      "coefficientPolicy": "admitted mixed intra16/Y2, per-segment reconstruction/rate search and full-frame entropy"
+      "psnrGapDb": 0.022171975557426917,
+      "consumedWork": 205502553,
+      "coefficientPolicy": "admitted selected-prediction adjacent-level/EOB refinement with segment-specific steps/rate scale, then existing full-frame entropy"
     },
     {
       "case": "WarmWebp/Encode16",
-      "managedPacketBytes": 98760,
+      "managedPacketBytes": 96708,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
-      "packetSizePass": false,
-      "evidence": "vp8-segment-search-evidence.json",
+      "packetSizePass": true,
+      "evidence": "vp8-coefficient-refinement-evidence.json",
       "observationPath": [
         "observations",
         3
       ],
-      "validity": "C73 qualified admitted existing mixed reconstruction/Y2 search for source-derived segments at baseq0; fixed benchmark/reference/settings/quality gates, exact alpha. Complete packet remains above target. Short costs only; CPU parity deferred.",
-      "previousManagedPacketBytes": 99816,
+      "validity": "C76 qualified selected4x4 adjacent-level/EOB refinement at current segment quantizers; complete-packet and unchanged source-quality/decoder/alpha gates pass. Current short costs; CPU parity deferred.",
+      "previousManagedPacketBytes": 98760,
       "alphaPayloadBytes": 18579,
-      "psnrGapDb": 0.030409720822198415,
-      "consumedWork": 134689615,
-      "coefficientPolicy": "admitted mixed intra16/Y2, per-segment reconstruction/rate search and full-frame entropy"
+      "psnrGapDb": 0.022171975557426917,
+      "consumedWork": 205502553,
+      "coefficientPolicy": "admitted selected-prediction adjacent-level/EOB refinement with segment-specific steps/rate scale, then existing full-frame entropy"
     },
     {
       "case": "WarmWebp/EncodeBudget8",
@@ -150,5 +150,6 @@
       "referenceAlphaPayloadBytes": 24588,
       "alphaComponentSizePass": true
     }
-  ]
+  ],
+  "unrestrictedPacketPasses": 4
 }

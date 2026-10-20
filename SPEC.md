@@ -1379,7 +1379,7 @@ operations; division and midpoint-away quantization are unchanged. Other hardwar
 uses the original scalar calculation. Coefficients and encoded packets are exact.
 `Quality` (default 85) maps to quantizer index
 `((100-quality)*127+49)/99` with integer division. Quality 100 is still lossy.
-Quantized coefficients round halves away from zero; the forward DC basis preserves
+Nearest coefficient seeds round halves away from zero; the forward DC basis preserves
 exact constant-block half ties.
 At effort 4..6, independently admitted source analysis may assign four absolute
 segment quantizers that are no finer than this base index. One clamped sample per
@@ -1393,8 +1393,17 @@ reduce chroma noise variance by `100/256`; luma gain remains unchanged. Local eq
 neighboring steps and independent noise are assumptions, not reconstruction bounds.
 This is a compression heuristic, not a reconstruction-error or global quality
 monotonicity guarantee. Numeric quality remains encoder-specific; source-quality
-matching is validated separately. The base index and nearest coefficient rounding
-remain unchanged, applied with the selected segment's quantizer.
+matching is validated separately. The base index and nearest coefficient seed
+rounding remain unchanged, applied with the selected segment's quantizer.
+With base index zero and an admitted spatial plan, mixed-mode encoding may also
+admit adjacent-level and terminal-EOB rate/distortion refinement of selected 4x4
+luma/chroma predictions. It uses the current segment's steps and existing rate
+scale; final levels and lossy reconstruction may differ from the nearest seed.
+One bounded block on the existing stack allowance suffices. Every refinement and
+reconstruction is charged before mutation; its additional work estimate is selected
+before shared admission. A smaller independent work allowance retains the original
+search without refinement. Actual exhaustion, cancellation or shared refusal
+terminates without retry; alpha and ownership contracts are unchanged.
 The borrowed shared root admits the bounded map before allocation; analysis streams
 without another RGBA frame. Actual sampling, clustering, map/header and codec work
 remain capped. Insufficient independent local allowances retain uniform coding

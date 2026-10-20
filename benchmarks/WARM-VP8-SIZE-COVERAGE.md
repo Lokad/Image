@@ -1,18 +1,19 @@
 # Lossy WebP complete-packet coverage
 
-Seven already declared encode controls have separate compression gates. The two
-primary content controls pass at their current matched settings; **five fixed-q100
-procedural controls remain open**. These numerical quality settings are explicit
-benchmark inputs, not the library default85. No general lossy WebP parity follows.
+Six of seven already declared encode controls pass complete-packet size and
+quality: the two primary content controls and four unrestricted procedural controls.
+**Only the32M-work control remains open**, by3,416 B. Fixed managed100/native75
+settings below are benchmark inputs, not the library default85 or evidence of
+matching by numerical equality. No general lossy WebP parity follows.
 
 | Existing control | Managed / reference packet B | Managed / native quality | Complete-packet gate |
 | --- | ---: | ---: | --- |
 | WarmCompression/PhotographLossy8 | 17,366 / 17,688 | 77 / 75 | Pass |
 | WarmCompression/DiagramLossy8 | 6,722 / 7,100 | 75 / 75 | Pass |
-| WarmWebp/EncodeOpaque8 | 73,740 / 72,380 | 100 / 75 | Open |
-| WarmWebp/EncodeOpaque16 | 73,740 / 72,380 | 100 / 75 | Open |
-| WarmWebp/Encode8 | 98,760 / 98,590 | 100 / 75 | Open |
-| WarmWebp/Encode16 | 98,760 / 98,590 | 100 / 75 | Open |
+| WarmWebp/EncodeOpaque8 | 71,154 / 72,380 | 100 / 75 | Pass |
+| WarmWebp/EncodeOpaque16 | 71,154 / 72,380 | 100 / 75 | Pass |
+| WarmWebp/Encode8 | 96,708 / 98,590 | 100 / 75 | Pass |
+| WarmWebp/Encode16 | 96,708 / 98,590 | 100 / 75 | Pass |
 | WarmWebp/EncodeBudget8 | 102,006 / 98,590 | 100 / 75 | Open |
 
 C57 reuses the approved bounded quality matcher only for the changed photograph:
@@ -76,12 +77,20 @@ ALPH. BothOS4,688tests/scalar and same actual package/examples qualify; four sho
 costs supersede affected encodes despite higher CPU. Work32M104,500 B/31,970,409
 units and primary paths retain their exact prior scoped proofs. Five gates stay open.
 
-The current [four-residual-key milestone](WARM-WEBP-ALPHA-WORD-KEY.md) reduces
+The [four-residual-key milestone](WARM-WEBP-ALPHA-WORD-KEY.md) reduces
 the constrained packet104,500→102,006 B, with exact prior VP8/RGBA/source quality
 and31,947,691 units within32M. ALPH19,246/ref24,588 B is a component pass; the
 complete packet remains3,416 B above98,590 B. BothOS4,692tests/scalar and the same
 actual package/examples qualify. One short cost supersedes this row; four
 unrestricted full records and primary paths retain C73/C70 scoped evidence.
+
+The current [selected-coefficient milestone](WARM-VP8-COEFFICIENT-REFINEMENT.md)
+passes all four unrestricted packet gates:opaque71,154/ref72,380 B and
+alpha96,708/ref98,590 B. Source-quality gaps0.003192/0.022172 dB pass with exact
+unchanged ALPH. BothOS4,699tests/scalar and the same actual package/examples
+qualify. Four short cost screens record higher CPU, accepted for compression.
+The constrained full record is exactly C74,102,006 B/31,947,691units; primary
+cases stay passing/stopped. Six pass, one remains open; no broader parity claim.
 
 [Evidence](vp8-size-coverage-evidence.json) identifies the current and retained
 receipts. No new performance workload is introduced and the256-case warm checklist

@@ -37,7 +37,8 @@ internal static partial class Vp8Encoder
         ReadOnlySpan<byte> candidates = [1, 2, 3, 4, 6, 8, 10];
         using var model = CoefficientModel.TryCreate(source, count, candidates[options.Effort], options.Effort == 0 ? 1 : 4, context,
             options.Effort >= 4 && (q != 0 || quantization is not null) ? modes : null, fullFrame: options.Effort >= 4 && q == 0,
-            segmented: quantization is not null);
+            segmented: quantization is not null, refinementWork: q == 0 && quantization is not null
+                ? count * (24L * (RefinementWork + 512) + 512) : 0);
         var intra16 = model?.Intra16 == true;
         Span<short> luma = intra16 ? stackalloc short[256] : default;
         Span<short> y2 = intra16 ? stackalloc short[16] : default;
@@ -68,7 +69,7 @@ internal static partial class Vp8Encoder
                     var top = above.AsSpan(mx * 8, 8);
                     var large = PrepareLumaMacroblock(source, reconstructed, x, y, blockQ, RateLumaModes,
                         index, columns, modes, top, left, model!.Y2Above[mx] + leftY2,
-                        model.Probabilities, bitCosts, blockLambda, luma, y2, context);
+                        model.Probabilities, bitCosts, blockLambda, luma, y2, context, model.Refine);
                     if (large)
                     {
                         var predictor = model.Y2Above[mx] + leftY2;
@@ -94,7 +95,7 @@ internal static partial class Vp8Encoder
                     }
                 var chromaMode = intra16
                     ? SelectRateChroma(source, reconstructed, x / 2, y / 2, blockQ, above.AsSpan(mx * 8, 8), left,
-                        model!.Probabilities, bitCosts, blockLambda, chromaCoefficients, context)
+                        model!.Probabilities, bitCosts, blockLambda, chromaCoefficients, context, model.Refine)
                     : SelectChroma(source, reconstructed, x / 2, y / 2, options.Effort == 0 ? 1 : 4, context);
                 chromaModes[index] = (byte)chromaMode;
                 for (var plane = 0; plane < 2; plane++)

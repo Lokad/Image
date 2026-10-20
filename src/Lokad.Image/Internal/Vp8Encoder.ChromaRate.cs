@@ -6,7 +6,7 @@ internal static partial class Vp8Encoder
     // before scoring; retain one 8x8 U/V result and its selected coefficients.
     private static int SelectRateChroma(Vp8Planes source, Vp8Planes reconstructed, int x, int y, int q,
         ReadOnlySpan<byte> above, ReadOnlySpan<byte> left, ReadOnlySpan<byte> probabilities,
-        ReadOnlySpan<int> bitCosts, int lambda, Span<short> selected, OperationContext context)
+        ReadOnlySpan<int> bitCosts, int lambda, Span<short> selected, OperationContext context, bool refine = false)
     {
         var stride = source.Stride / 2; var dc = Math.Min(132, (int)Vp8Tables.DcQuantizers[q]);
         var ac = (int)Vp8Tables.AcQuantizers[q]; var best = 0; var bestScore = long.MaxValue;
@@ -59,6 +59,39 @@ internal static partial class Vp8Encoder
             {
                 reconstructed.U.AsSpan((y + row) * stride + x, 8).CopyTo(bestPixels.Slice(row * 8, 8));
                 reconstructed.V.AsSpan((y + row) * stride + x, 8).CopyTo(bestPixels.Slice(64 + row * 8, 8));
+            }
+        }
+        if (refine)
+        {
+            context.Work(512);
+            Vp8Prediction.Large(reconstructed.U, stride, x, y, 8, best);
+            Vp8Prediction.Large(reconstructed.V, stride, x, y, 8, best);
+            above.Slice(4, 4).CopyTo(top); left.Slice(4, 4).CopyTo(side);
+            for (var plane = 0; plane < 2; plane++)
+            for (var b = 0; b < 4; b++)
+            {
+                context.Work(512);
+                var src = plane == 0 ? source.U : source.V; var dst = plane == 0 ? reconstructed.U : reconstructed.V;
+                var bx = x + b % 2 * 4; var by = y + b / 2 * 4;
+                for (var row = 0; row < 4; row++)
+                for (var column = 0; column < 4; column++)
+                {
+                    var at = (by + row) * stride + bx + column;
+                    residual[row * 4 + column] = (short)(src[at] - dst[at]);
+                }
+                var values = selected.Slice((plane * 4 + b) * 16, 16);
+                var a = plane * 2 + b % 2; var l = plane * 2 + b / 2;
+                RefineCoefficients(residual, values, dc, ac, 2, top[a] + side[l], probabilities, bitCosts, lambda, context);
+                top[a] = side[l] = (byte)(values.IndexOfAnyExcept((short)0) < 0 ? 0 : 1);
+                for (var i = 0; i < 16; i++) inverse[i] = checked((short)(values[i] * (i == 0 ? dc : ac)));
+                Vp8Transforms.InverseDct(inverse);
+                for (var row = 0; row < 4; row++)
+                for (var column = 0; column < 4; column++)
+                {
+                    var at = (by + row) * stride + bx + column;
+                    bestPixels[plane * 64 + (b / 2 * 4 + row) * 8 + b % 2 * 4 + column]
+                        = (byte)Math.Clamp(dst[at] + inverse[row * 4 + column], 0, 255);
+                }
             }
         }
         for (var row = 0; row < 8; row++)

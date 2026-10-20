@@ -13,7 +13,7 @@ internal static partial class Vp8Encoder
     private static bool PrepareLumaMacroblock(Vp8Planes source, Vp8Planes reconstructed, int x, int y,
         int q, int candidates, int index, int columns, byte[] modes, ReadOnlySpan<byte> above, ReadOnlySpan<byte> left,
         int y2Context, ReadOnlySpan<byte> probabilities, ReadOnlySpan<int> bitCosts, int lambda,
-        Span<short> selected, Span<short> selectedY2, OperationContext context)
+        Span<short> selected, Span<short> selectedY2, OperationContext context, bool refine = false)
     {
         var bestLarge = 0; var bestError = long.MaxValue;
         for (var mode = 0; mode < 4; mode++)
@@ -44,7 +44,7 @@ internal static partial class Vp8Encoder
             var values = selected.Slice(b * 16, 16);
             var mode = SelectRateLuma(source, reconstructed, bx, by, x, y, candidates, q,
                 Vp8Tables.BlockModeProbabilities.Slice((modeTop[a] * 10 + modeSide[l]) * 9, 9),
-                probabilities, rateTop[a] + rateSide[l], bitCosts, lambda, values, context, out var ready);
+                probabilities, rateTop[a] + rateSide[l], bitCosts, lambda, values, context, out var ready, refine);
             modes[index * 16 + b] = modeTop[a] = modeSide[l] = (byte)mode;
             if (!ready)
             {

@@ -8,7 +8,7 @@ internal static partial class Vp8Encoder
     private static int SelectRateLuma(Vp8Planes source, Vp8Planes reconstructed, int x, int y, int macroX, int macroY,
         int candidates, int q, ReadOnlySpan<byte> modeProbabilities, ReadOnlySpan<byte> coefficientProbabilities,
         int predictor, ReadOnlySpan<int> bitCosts, int lambda, Span<short> selected,
-        OperationContext context, out bool ready)
+        OperationContext context, out bool ready, bool refine = false)
     {
         ready = false; var first = 0; var firstError = long.MaxValue;
         Span<int> prepared = stackalloc int[13];
@@ -56,6 +56,30 @@ internal static partial class Vp8Encoder
             {
                 var at = (y + row) * source.Stride + x + column;
                 bestPixels[row * 4 + column] = (byte)Math.Clamp(reconstructed.Y[at] + inverse[row * 4 + column], 0, 255);
+            }
+        }
+        if (refine)
+        {
+            // Refine only the selected prediction. Its final reconstruction
+            // becomes the boundary used by subsequent blocks and mode trials.
+            context.Work(512);
+            Vp8Prediction.SmallPrepared(reconstructed.Y, source.Stride, x, y, best, prepared, dcPrediction);
+            for (var row = 0; row < 4; row++)
+            for (var column = 0; column < 4; column++)
+            {
+                var at = (y + row) * source.Stride + x + column;
+                residual[row * 4 + column] = (short)(source.Y[at] - reconstructed.Y[at]);
+            }
+            if (RefineCoefficients(residual, selected, dc, ac, 3, predictor, coefficientProbabilities, bitCosts, lambda, context))
+            {
+                for (var i = 0; i < 16; i++) inverse[i] = checked((short)(selected[i] * (i == 0 ? dc : ac)));
+                Vp8Transforms.InverseDct(inverse);
+                for (var row = 0; row < 4; row++)
+                for (var column = 0; column < 4; column++)
+                {
+                    var at = (y + row) * source.Stride + x + column;
+                    bestPixels[row * 4 + column] = (byte)Math.Clamp(reconstructed.Y[at] + inverse[row * 4 + column], 0, 255);
+                }
             }
         }
         for (var row = 0; row < 4; row++) bestPixels.Slice(row * 4, 4).CopyTo(reconstructed.Y.AsSpan((y + row) * source.Stride + x, 4));

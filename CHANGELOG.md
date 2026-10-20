@@ -12,6 +12,8 @@
 - Source-derived WebP spatial quantization at higher efforts, with bounded shared
   admission, centered chroma noise propagation, unchanged base quality mapping
   and admitted intra16/Y2 search for its segments; lossy quality is verified separately.
+- Admitted coefficient-level/EOB refinement for selected high-precision WebP
+  predictions, reducing complete packets within verified reconstruction quality.
 
 - Coverage-based OpenType contextual substitution and validated zero default-instance
   positioning corrections for supplied TrueType text.
