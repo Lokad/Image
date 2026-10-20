@@ -112,7 +112,7 @@ the reference. Both lossless size gates remain open. The optional
 48,701/52,093 B on the fixed caller-RGB420 control, with a0.017274dB source-PSNR
 gap. Its short1.126x/upper1.362x time result remains above parity, at162,110B/op.
 Original RGB420 remains74,040B; grayscale stays byte-identical. No general-content
-compression claim follows. Next: the frozen lossy WebP size gaps. The earlier [structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md)
+compression claim follows. Lossless and lossy size gaps remain open. The earlier [structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md)
 is diagnostic evidence. Lossy WebP ceilings remain17,688/7,100 B at frozen matched
 quality (21,432/8,288 B).
 The [bounded lossy audit](../benchmarks/WARM-VP8-COMPRESSION-AUDIT.md) parks the
@@ -131,6 +131,9 @@ it changes no production result or benchmark row.
 The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
 rejects a smaller packet with excessive quality loss and a quality-preserving
 variant with immaterial byte savings. The qualified producer and size gates remain unchanged.
+The [lossless adaptive-predictor screen](../benchmarks/WARM-VP8L-ADAPTIVE-PREDICTOR-AUDIT.md)
+saves2,652/0 B on the fixed photograph/diagram but misses both lossless size gates.
+It is not adopted; current production remains184,518/7,636 B, without a new timing claim.
 
 The two JPEG async-output cases remain short gaps; all timings/allocations follow.
 
