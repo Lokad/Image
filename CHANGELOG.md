@@ -2,6 +2,8 @@
 
 ## 0.2.0 — Unreleased
 
+- Faster baseline JPEG decoding with unchanged pixels, work limits and cancellation.
+
 - Certified integer SIMD for sparse and horizontal-only four-component JPEG decoding, with the
   original calculation for uncertain blocks and no new heap workspace.
 

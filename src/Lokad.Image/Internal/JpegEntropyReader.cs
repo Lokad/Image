@@ -690,7 +690,15 @@ internal ref struct JpegEntropyReader
                 }
                 var packed = shortCodes[(int)((localBits >> (localAvailable - 8)) & 255)]; var count = packed & 15;
                 var token = packed >> 4; var size = token & 15; var run = token >> 4;
-                if (count == 0 || size is < 1 or > 10 || run >= 64 - k) return;
+                if (count == 0) return;
+                if (token == 0)
+                {
+                    // EOB has no amplitude. Complete it here without probing
+                    // the same prefix again through the scalar wrappers.
+                    if (count > budget) return;
+                    budget -= count; localAvailable -= count; k = 64; return;
+                }
+                if (size is < 1 or > 10 || run >= 64 - k) return;
                 // Preserve the existing atomic fused prefix/amplitude charge;
                 // insufficient work falls back before any speculative mutation.
                 if (count + 1 > budget) return;

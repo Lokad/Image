@@ -9,22 +9,23 @@ to the named fixed inputs/settings/hardware, without extrapolating to other prof
 
 These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
-is separate. **225 historical codec/edit rows do not yet requalify changed 0.2.0
-admission, disposal or governed storage.** Two current CMYK, four Lanczos3, two async
+is separate. **206 historical codec/edit rows do not yet requalify changed 0.2.0
+admission, disposal or governed storage.** Twenty-one current JPEG, four Lanczos3, two async
 input and four async output rows identify their current producers. Production
-qualification now passes 4,467 tests/OS, affected hardware-off checks, the same actual
+qualification now passes 4,469 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
-Largest demonstrated current-code gap: [sparse-2D CMYK](../benchmarks/WARM-JPEG-SPARSE-INTEGER.md)
-at **1.617x**, after an 11.3% improvement. [One-AC CMYK](../benchmarks/WARM-JPEG-HORIZONTAL-INTEGER.md)
-now improves 6.7% to **1.601x**, reusing the integer basis and strict certificate
-for one repeated row. Pixels remain exact, allocations are essentially unchanged
-and no heap table is introduced. The same actual package passes analytical
-one-AC/two-AC pixels and shared-owner checks on both OS. The unchanged2D path's
-evidence is reused. A [constant-DC trial](../benchmarks/WARM-JPEG-DC-TRIAL.md)
-saved only 1.2% and was parked. One current profile attributes 40.8% of samples
-to entropy traversal; next qualify buffered short-EOB completion, preserving
-exact work, byte position, error precedence and cancellation routing.
+[Buffered JPEG EOB decoding](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) saves 10.0%
+on sparse-2D CMYK and 12.2% on one-AC CMYK, preserving exact pixels and allocation
+behavior. All 21 affected existing JPEG rows have current evidence. Caller RGB420
+retains an independent pass at **0.926x/upper0.931x**; the other 20 remain gaps.
+The unchanged progressive/live-token decoders, metadata, encoders and other
+codecs retain their identified scopes. A late affected-list correction included
+the already required fresh-stream JPEG case, with no new input or settings.
+Full suites reused the verified frozen build through `test.ps1 -NoBuild`;
+actual-package consumers and all three examples pass on both OSes.
+Largest current gaps are now Lanczos3 reduction, **1.588x** at 16 bits and **1.548x**
+at 8 bits. Next: assess exact unsigned32-by-signed32 horizontal SIMD products.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
@@ -33,9 +34,9 @@ Optimize demonstrated gaps; stop passing cases. No pixel precision is relaxed.
 The [sparse JPEG FP32-FMA trial](../benchmarks/WARM-JPEG-SPARSE-FMA-TRIAL.md)
 regressed7.2%. Subsequent [storage trials](../benchmarks/WARM-JPEG-STORAGE-TRIALS.md)
 cut allocation 48.9–86.9%, but failed to improve elapsed time. Those candidates were
-removed; 29 affected ownership tests passed normally/scalar per OS. The subsequent
-accepted integer rounds refresh only the existing sparse-2D and one-AC rows. Full parity
-remains open.
+removed; their ownership checks passed. A [constant-DC trial](../benchmarks/WARM-JPEG-DC-TRIAL.md)
+saved only 1.2% and was parked. Accepted integer/EOB rounds preserve exact pixels;
+full parity remains open.
 
 Complete async PNG and lossless WebP outputs independently pass. WebP uses approved
 libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compressed
@@ -96,7 +97,7 @@ reconciliation now covers every numeric row.
 | [PNG16 Stream, orient/crop/nearest fit](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 3,355.49 | 2,946.76 | 1.139 / 1.213 | 1,401,314 | Gap (short; qualified) |
 | [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,918.97 | 1,393.95 | 1.377 / 1.583 | 4,552 | Gap (short; qualified) |
 | [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 3,054.27 | 3,091.94 | 0.988 / 0.991 | 8,648 | Parity confirmed |
-| [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,377.94 | 991.96 | 1.389 / 1.473 | 761,816 | Gap (short; qualified) |
+| [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,329.08 | 996.80 | 1.333 / 1.411 | 761,840 | Gap (short; qualified) |
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 9,381.96 | 6,007.84 | 1.562 / 1.793 | 1,966,712 | Gap (short; qualified) |
 | [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 4,320.01 | 3,018.37 | 1.431 / 1.494 | 1,216,276 | Gap (short; qualified) |
 | [PNG RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 1,904.89 | 1,392.72 | 1.368 / 1.371 | 4,456 | Gap (independent) |
@@ -147,26 +148,26 @@ reconciliation now covers every numeric row.
 | [PNG gray1/key1 and gray2/key1, unfiltered native](../benchmarks/WARM-PNG-PACKED-TRANSPARENCY.md) | — | — | — | — | Unscored: native alpha differs |
 | [PNG opaque gray2 → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 71.73 | 106.38 | 0.674 / 0.679 | 616 | Parity confirmed |
 | [PNG opaque gray4 → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 116.09 | 169.54 | 0.685 / 0.698 | 872 | Parity confirmed |
-| [JPEG baseline gray](../benchmarks/WARM-JPEG-GRAY-CURRENT.md) | 973.44 | 682.79 | 1.426 / 1.459 | 672,186 | Gap (short; qualified) |
-| [JPEG gray → caller GRAY8](../benchmarks/WARM-JPEG-FOUR-COMPONENT-PLANES.md) | 868.77 | 646.09 | 1.345 / 1.411 | 273,422 | Gap (short; qualified) |
-| [JPEG untagged → caller CMYK8](../benchmarks/WARM-JPEG-YCCK-CALLER-SIMD.md) | 526.74 | 330.84 | 1.592 / 1.669 | 1,635,479 | Gap (short; qualified) |
-| [JPEG 4:2:0 → caller RGB24](../benchmarks/WARM-JPEG-FOUR-COMPONENT-PLANES.md) | 1,121.94 | 1,166.50 | 0.962 / 0.966 | 624,508 | Parity confirmed |
-| [JPEG Adobe CMYK, four full-resolution planes](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 525.44 | 377.75 | 1.391 / 1.473 | 1,085,667 | Gap (short; qualified) |
-| [JPEG Adobe CMYK, one AC control](../benchmarks/WARM-JPEG-HORIZONTAL-INTEGER.md) | 623.44 | 389.30 | 1.601 / 1.638 | 1,085,689 | Gap (short; qualified) |
-| [JPEG Adobe CMYK, general transform control](../benchmarks/WARM-JPEG-YCCK-SIMD.md) | 3,463.08 | 3,110.84 | 1.113 / 1.197 | 1,085,522 | Gap (short; qualified) |
-| [JPEG Adobe CMYK, two-dimensional sparse control](../benchmarks/WARM-JPEG-SPARSE-INTEGER.md) | 714.01 | 441.52 | 1.617 / 1.693 | 1,085,682 | Gap (short; qualified) |
-| [JPEG YCCK420, full-resolution black](../benchmarks/WARM-JPEG-YCCK-CALLER-SIMD.md) | 824.27 | 708.72 | 1.163 / 1.175 | 1,470,256 | Gap (short; qualified) |
-| [JPEG YCCK420 → caller RGB24](../benchmarks/WARM-JPEG-YCCK-CALLER-SIMD.md) | 898.47 | 603.97 | 1.488 / 1.550 | 1,337,490 | Gap (short; qualified) |
-| [JPEG H4V1 / 4:1:1 → owned RGBA8](../benchmarks/WARM-JPEG-410-SIMD.md) | 608.85 | 458.97 | 1.327 / 1.402 | 751,279 | Gap (short; qualified) |
-| [JPEG H4V2 / 4:1:0 → owned RGBA8](../benchmarks/WARM-JPEG-410-SIMD.md) | 799.34 | 479.04 | 1.669 / 1.877 | 720,810 | Gap (short; qualified) |
-| [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG-411-SIMD.md) | 1,210.66 | 1,011.13 | 1.197 / 1.308 | 757,345 | Gap (short; qualified) |
-| [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,378.07 | 1,014.38 | 1.359 / 1.446 | 761,720 | Gap (short; qualified) |
-| [JPEG baseline 4:2:2](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,510.49 | 1,351.29 | 1.118 / 1.263 | 829,148 | Gap (short; qualified) |
-| [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,522.16 | 1,902.72 | 1.326 / 1.431 | 948,023 | Gap (short; qualified) |
-| [JPEG baseline 4:4:4, native input](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,300.39 | 1,719.44 | 1.338 / 1.418 | 966,317 | Gap (short; qualified) |
-| [JPEG baseline direct RGB, full resolution](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,193.44 | 1,452.84 | 1.510 / 1.656 | 966,317 | Gap (short; qualified) |
-| [JPEG direct RGB 4:2:2, timed centered correction](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,472.21 | 1,094.02 | 1.346 / 1.509 | 829,148 | Gap (short; qualified) |
-| [JPEG direct RGB 4:2:0, timed component-plane interpretation](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,073.37 | 743.41 | 1.444 / 1.518 | 757,346 | Gap (short; qualified) |
+| [JPEG baseline gray](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 927.74 | 681.93 | 1.360 / 1.455 | 672,210 | Gap (short; qualified) |
+| [JPEG gray → caller GRAY8](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 817.85 | 646.73 | 1.265 / 1.308 | 273,436 | Gap (short; qualified) |
+| [JPEG untagged → caller CMYK8](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 467.59 | 330.92 | 1.413 / 1.474 | 1,635,495 | Gap (short; qualified) |
+| [JPEG 4:2:0 → caller RGB24](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,075.13 | 1,160.67 | 0.926 / 0.931 | 624,524 | Parity confirmed |
+| [JPEG Adobe CMYK, four full-resolution planes](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 469.48 | 377.61 | 1.243 / 1.306 | 1,085,694 | Gap (short; qualified) |
+| [JPEG Adobe CMYK, one AC control](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 547.30 | 389.60 | 1.405 / 1.469 | 1,085,688 | Gap (short; qualified) |
+| [JPEG Adobe CMYK, general transform control](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 3,281.94 | 3,111.92 | 1.055 / 1.105 | 1,085,546 | Gap (short; qualified) |
+| [JPEG Adobe CMYK, two-dimensional sparse control](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 642.99 | 440.11 | 1.461 / 1.519 | 1,085,689 | Gap (short; qualified) |
+| [JPEG YCCK420, full-resolution black](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 786.35 | 708.51 | 1.110 / 1.178 | 1,470,280 | Gap (short; qualified) |
+| [JPEG YCCK420 → caller RGB24](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 865.17 | 604.01 | 1.432 / 1.476 | 1,337,511 | Gap (short; qualified) |
+| [JPEG H4V1 / 4:1:1 → owned RGBA8](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 588.74 | 456.30 | 1.290 / 1.347 | 751,303 | Gap (short; qualified) |
+| [JPEG H4V2 / 4:1:0 → owned RGBA8](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 591.35 | 477.47 | 1.238 / 1.282 | 720,844 | Gap (short; qualified) |
+| [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,159.27 | 1,008.12 | 1.150 / 1.246 | 757,369 | Gap (short; qualified) |
+| [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,321.56 | 1,013.22 | 1.304 / 1.462 | 761,744 | Gap (short; qualified) |
+| [JPEG baseline 4:2:2](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,469.44 | 1,348.59 | 1.090 / 1.194 | 829,172 | Gap (short; qualified) |
+| [JPEG baseline 4:4:4, owned input](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 2,391.79 | 1,899.20 | 1.259 / 1.304 | 948,060 | Gap (short; qualified) |
+| [JPEG baseline 4:4:4, native input](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 2,222.98 | 1,720.03 | 1.292 / 1.361 | 966,341 | Gap (short; qualified) |
+| [JPEG baseline direct RGB, full resolution](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 2,093.21 | 1,451.23 | 1.442 / 1.524 | 966,341 | Gap (short; qualified) |
+| [JPEG direct RGB 4:2:2, timed centered correction](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,401.73 | 1,094.82 | 1.280 / 1.405 | 829,172 | Gap (short; qualified) |
+| [JPEG direct RGB 4:2:0, timed component-plane interpretation](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,020.52 | 743.18 | 1.373 / 1.414 | 757,378 | Gap (short; qualified) |
 | [JPEG baseline 4:4:4, native input / live cancelable token](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,392.14 | 1,720.11 | 1.391 / 1.482 | 966,317 | Gap (short; qualified) |
 | [JPEG progressive gray](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,647.80 | 1,712.34 | 1.546 / 1.634 | 683,138 | Gap (short; qualified) |
 | [JPEG progressive 4:2:0](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,438.11 | 1,947.56 | 1.252 / 1.446 | 775,336 | Gap (short; qualified) |

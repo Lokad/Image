@@ -85,7 +85,7 @@ def render():
         row('PNG16 Stream, orient/crop/nearest fit', 'warm-input-reconciliation-evidence.json', ['cases', 'PngCropFit16', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'Png8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('PNG RGBA16, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'Png16', -1], 'WARM-INPUT-RECONCILIATION.md', True),
-        row('JPEG420 restart, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'StreamDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG420 restart, fresh seekable Stream', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'StreamDecode420Restart', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'StreamNativeLossless8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
@@ -136,26 +136,26 @@ def render():
         pending('PNG gray1/key1 and gray2/key1, unfiltered native', 'WARM-PNG-PACKED-TRANSPARENCY.md', 'Unscored: native alpha differs'),
         row('PNG opaque gray2 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray2', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG opaque gray4 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('JPEG baseline gray', 'warm-jpeg-gray-current-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-GRAY-CURRENT.md', verification='Gap (short; qualified)'),
-        row('JPEG gray → caller GRAY8', 'warm-jpeg-four-component-planes-evidence.json', ['cases', 'OwnedDecodeGray', -1], 'WARM-JPEG-FOUR-COMPONENT-PLANES.md', verification='Gap (short; qualified)'),
-        row('JPEG untagged → caller CMYK8', 'warm-jpeg-ycck-caller-simd-evidence.json', ['cases', 'CmykCaller', -1], 'WARM-JPEG-YCCK-CALLER-SIMD.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0 → caller RGB24', 'warm-jpeg-four-component-planes-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-FOUR-COMPONENT-PLANES.md', True),
-        row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobe', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
-        row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-horizontal-integer-evidence.json', ['cases', 'CmykAdobeAc', -1], 'WARM-JPEG-HORIZONTAL-INTEGER.md', verification='Gap (short; qualified)'),
-        row('JPEG Adobe CMYK, general transform control', 'warm-jpeg-ycck-simd-evidence.json', ['cases', 'CmykAdobeGeneral', -1], 'WARM-JPEG-YCCK-SIMD.md', verification='Gap (short; qualified)'),
-        row('JPEG Adobe CMYK, two-dimensional sparse control', 'warm-jpeg-sparse-integer-evidence.json', ['cases', 'CmykAdobeSparse2D', -1], 'WARM-JPEG-SPARSE-INTEGER.md', verification='Gap (short; qualified)'),
-        row('JPEG YCCK420, full-resolution black', 'warm-jpeg-ycck-caller-simd-evidence.json', ['cases', 'Ycck420', -1], 'WARM-JPEG-YCCK-CALLER-SIMD.md', verification='Gap (short; qualified)'),
-        row('JPEG YCCK420 → caller RGB24', 'warm-jpeg-ycck-caller-simd-evidence.json', ['cases', 'Ycck420CallerRgb', -1], 'WARM-JPEG-YCCK-CALLER-SIMD.md', verification='Gap (short; qualified)'),
-        row('JPEG H4V1 / 4:1:1 → owned RGBA8', 'warm-jpeg-410-simd-evidence.json', ['cases', 'Decode411', -1], 'WARM-JPEG-410-SIMD.md', verification='Gap (short; qualified)'),
-        row('JPEG H4V2 / 4:1:0 → owned RGBA8', 'warm-jpeg-410-simd-evidence.json', ['cases', 'Decode410', -1], 'WARM-JPEG-410-SIMD.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline 4:2:0', 'warm-jpeg-411-simd-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-411-SIMD.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline 4:2:0, row restart markers', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline 4:4:4, owned input', 'warm-input-reconciliation-evidence.json', ['cases', 'Decode8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline 4:4:4, native input', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecode8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
-        row('JPEG baseline direct RGB, full resolution', 'warm-input-reconciliation-evidence.json', ['cases', 'DirectRgb444', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
-        row('JPEG direct RGB 4:2:2, timed centered correction', 'warm-input-reconciliation-evidence.json', ['cases', 'DirectRgb422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
-        row('JPEG direct RGB 4:2:0, timed component-plane interpretation', 'warm-input-reconciliation-evidence.json', ['cases', 'DirectRgb420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline gray', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'GrayResident', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG gray → caller GRAY8', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'GraySamples', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG untagged → caller CMYK8', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'CmykCaller', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0 → caller RGB24', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Rgb420Samples', -1], 'WARM-JPEG-BUFFERED-EOB.md', True),
+        row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Adobe', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'OneAc', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, general transform control', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'General', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG Adobe CMYK, two-dimensional sparse control', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Sparse2D', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG YCCK420, full-resolution black', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Ycck420', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG YCCK420 → caller RGB24', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Ycck420CallerRgb', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG H4V1 / 4:1:1 → owned RGBA8', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Decode411', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG H4V2 / 4:1:0 → owned RGBA8', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Decode410', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:2:0', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:2:0, row restart markers', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:2:2', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:4:4, owned input', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Decode8', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline 4:4:4, native input', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'NativeDecode8', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG baseline direct RGB, full resolution', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'DirectRgb444', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG direct RGB 4:2:2, timed centered correction', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'DirectRgb422', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG direct RGB 4:2:0, timed component-plane interpretation', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'DirectRgb420', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:4:4, native input / live cancelable token', 'warm-input-reconciliation-evidence.json', ['cases', 'NativeDecodeCancelable8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG progressive gray', 'warm-input-reconciliation-evidence.json', ['cases', 'ProgressiveGray', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG progressive 4:2:0', 'warm-input-reconciliation-evidence.json', ['cases', 'Progressive420', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
@@ -338,22 +338,23 @@ to the named fixed inputs/settings/hardware, without extrapolating to other prof
 
 These tables retain the last performance-qualified builds linked in each report.
 The 0.2.0 cooperative-memory, text and [Lanczos3 functional qualification](lanczos3-qualification.md)
-is separate. **225 historical codec/edit rows do not yet requalify changed 0.2.0
-admission, disposal or governed storage.** Two current CMYK, four Lanczos3, two async
+is separate. **206 historical codec/edit rows do not yet requalify changed 0.2.0
+admission, disposal or governed storage.** Twenty-one current JPEG, four Lanczos3, two async
 input and four async output rows identify their current producers. Production
-qualification now passes 4,467 tests/OS, affected hardware-off checks, the same actual
+qualification now passes 4,469 tests/OS, affected hardware-off checks, the same actual
 private package and all three examples on Windows/Linux. Published 0.1.0 is immutable.
 
-Largest demonstrated current-code gap: [sparse-2D CMYK](../benchmarks/WARM-JPEG-SPARSE-INTEGER.md)
-at **1.617x**, after an 11.3% improvement. [One-AC CMYK](../benchmarks/WARM-JPEG-HORIZONTAL-INTEGER.md)
-now improves 6.7% to **1.601x**, reusing the integer basis and strict certificate
-for one repeated row. Pixels remain exact, allocations are essentially unchanged
-and no heap table is introduced. The same actual package passes analytical
-one-AC/two-AC pixels and shared-owner checks on both OS. The unchanged2D path's
-evidence is reused. A [constant-DC trial](../benchmarks/WARM-JPEG-DC-TRIAL.md)
-saved only 1.2% and was parked. One current profile attributes 40.8% of samples
-to entropy traversal; next qualify buffered short-EOB completion, preserving
-exact work, byte position, error precedence and cancellation routing.
+[Buffered JPEG EOB decoding](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) saves 10.0%
+on sparse-2D CMYK and 12.2% on one-AC CMYK, preserving exact pixels and allocation
+behavior. All 21 affected existing JPEG rows have current evidence. Caller RGB420
+retains an independent pass at **0.926x/upper0.931x**; the other 20 remain gaps.
+The unchanged progressive/live-token decoders, metadata, encoders and other
+codecs retain their identified scopes. A late affected-list correction included
+the already required fresh-stream JPEG case, with no new input or settings.
+Full suites reused the verified frozen build through `test.ps1 -NoBuild`;
+actual-package consumers and all three examples pass on both OSes.
+Largest current gaps are now Lanczos3 reduction, **1.588x** at 16 bits and **1.548x**
+at 8 bits. Next: assess exact unsigned32-by-signed32 horizontal SIMD products.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
 1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
@@ -362,9 +363,9 @@ Optimize demonstrated gaps; stop passing cases. No pixel precision is relaxed.
 The [sparse JPEG FP32-FMA trial](../benchmarks/WARM-JPEG-SPARSE-FMA-TRIAL.md)
 regressed7.2%. Subsequent [storage trials](../benchmarks/WARM-JPEG-STORAGE-TRIALS.md)
 cut allocation 48.9–86.9%, but failed to improve elapsed time. Those candidates were
-removed; 29 affected ownership tests passed normally/scalar per OS. The subsequent
-accepted integer rounds refresh only the existing sparse-2D and one-AC rows. Full parity
-remains open.
+removed; their ownership checks passed. A [constant-DC trial](../benchmarks/WARM-JPEG-DC-TRIAL.md)
+saved only 1.2% and was parked. Accepted integer/EOB rounds preserve exact pixels;
+full parity remains open.
 
 Complete async PNG and lossless WebP outputs independently pass. WebP uses approved
 libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compressed

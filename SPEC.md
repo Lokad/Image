@@ -1035,6 +1035,9 @@ budget, including cancelable operations. Completed charges are published on ever
 exit without another cancellation check. Noncancelable blocks may also keep runs
 of ordinary short AC symbols in local reader state, preserving the existing atomic
 fused prefix/amplitude charge and original fallback state.
+Short end-of-block codes may complete in that cache with only their exact
+code-bit work charge and no coefficient writes. Tight work retains the original
+per-bit fallback and partial admission.
 Noncancelable runs may refill a local 64-bit cache with four ordinary bytes and
 reuse its lookahead across symbols. Only bytes required by completed symbols
 are committed; unused whole bytes are returned before every exit. Stuffing,

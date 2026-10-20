@@ -810,3 +810,15 @@ sizes/hardware, startup and concurrent throughput. Add a later case only when
 concrete evidence identifies a distinct omitted required algorithm or public
 boundary, with a named representative and reason. Do not expand settings grids
 or retune a confirmed case without affected inputs or a demonstrated regression.
+
+The [buffered JPEG EOB round](WARM-JPEG-BUFFERED-EOB.md) refreshes all 21 existing
+noncancelable baseline JPEG decode rows, including the fresh-stream restart case.
+The shared AC reader changes their timed paths; earlier C7/C9 timings are
+superseded. Caller RGB420 samples retain an independent current pass at
+0.926x/upper0.931x. The other 20 rows remain gaps. Progressive/live-token readers,
+metadata, encoders, other codecs, editing and text retain their identified scopes.
+The finite checklist remains 254 cases (237 numeric, 17 unmeasured), with 72
+independent passes, 164 mean gaps and one confidence-open case. Its 206 historical
+codec/edit rows still need current-admission performance evidence. Normal-operation
+measurements do not qualify performance with a supplied shared root. Functional,
+memory and performance qualification remain separate; full parity stays open.
