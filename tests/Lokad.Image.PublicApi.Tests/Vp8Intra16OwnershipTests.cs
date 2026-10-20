@@ -4,13 +4,13 @@ namespace Lokad.Image.PublicApi.Tests;
 
 public sealed class Vp8Intra16OwnershipTests
 {
-    [Theory] [InlineData(8)] [InlineData(16)]
-    public void LossySearchReleasesEveryRefusedOrCanceledReservationAndPreservesOutputs(int depth)
+    [Theory] [InlineData(8, 78)] [InlineData(16, 78)] [InlineData(8, 100)] [InlineData(16, 100)]
+    public void LossySearchReleasesEveryRefusedOrCanceledReservationAndPreservesOutputs(int depth, int quality)
     {
         using var source = OriginalPixels.Buffer(129, 129, depth);
         var unchanged = OriginalPixels.Bytes(source);
         using var root = new TestMemoryBudget(16 * 1024 * 1024);
-        var options = new WebpEncodeOptions { Lossless = false, Quality = 78, Effort = 4,
+        var options = new WebpEncodeOptions { Lossless = false, Quality = quality, Effort = 4,
             Limits = new ImageLimits { MemoryBudget = root } };
         using var output = new MemoryStream(); ImageCodec.EncodeWebp(source, output, options);
         var packet = output.ToArray(); var growths = root.GrowthAttempts;

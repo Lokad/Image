@@ -27,6 +27,20 @@ public sealed class Vp8PrefixWorkAdmissionTests
     }
 
     [Fact]
+    public void OfferedSearchRetainsTheIndependentPrefixWhenItsLocalWorkDoesNotFit()
+    {
+        using var root = new TestMemoryBudget(65536);
+        using var context = new OperationContext(new ImageLimits { MaxWork = PrefixEligibility, MemoryBudget = root }, default);
+        using (var model = Vp8Encoder.CoefficientModel.TryCreate(Planes(), Blocks, 6, 4, context,
+            new byte[Blocks * 16], fullFrame: true))
+        {
+            Assert.NotNull(model); Assert.False(model.Intra16); Assert.Equal(64, model.CacheMacroblocks);
+            Assert.Equal(24064, root.Bytes); Assert.Equal(1, root.Attempts); Assert.Equal(PrefixEligibility, context.RemainingWork);
+        }
+        Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals); Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
     public void InsufficientLocalEligibilityOrUnrequestedPolicyMakesNoSharedReservation()
     {
         using var root = new TestMemoryBudget(65536);

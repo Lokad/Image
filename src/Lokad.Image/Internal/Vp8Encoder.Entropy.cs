@@ -63,8 +63,7 @@ internal static partial class Vp8Encoder
                 // This eligibility estimate does not promise that the complete
                 // operation fits. Exhaustion remains terminal, without retry.
                 var prefixWork = prefix * 24L * 256 + 1056 * 16;
-                if (!fullFrame || modes is not null
-                    || predictionWork + prefixWork + blocks * 24L > context.RemainingWork) return null;
+                if (!fullFrame || predictionWork + prefixWork + blocks * 24L > context.RemainingWork) return null;
                 return new CoefficientModel(samples, blocks, context);
             }
             if (fullFrame && blocks > prefix)

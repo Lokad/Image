@@ -8,7 +8,9 @@ public sealed class WebpFfmpegTests
     public void AdaptiveVp8EntropyPreservesNormalAndScalarNativePixels(int depth)
     {
         using var source = OriginalPixels.Buffer(257, 129, depth);
-        var options = new WebpEncodeOptions { Lossless = false, Quality = 100, Effort = 4 };
+        // Isolate entropy: effort4 can additionally select a lossy search when
+        // spatial quantizers and local admission permit it.
+        var options = new WebpEncodeOptions { Lossless = false, Quality = 100, Effort = 3 };
         using var adaptive = new MemoryStream(); using var fixedPacket = new MemoryStream();
         ImageCodec.EncodeWebp(source, adaptive, options);
         ImageCodec.EncodeWebp(source, fixedPacket, options with { Limits = new ImageLimits { MaxWorkingBytes = 1_000_000 } });

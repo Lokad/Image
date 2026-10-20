@@ -9,10 +9,10 @@ benchmark inputs, not the library default85. No general lossy WebP parity follow
 | --- | ---: | ---: | --- |
 | WarmCompression/PhotographLossy8 | 17,366 / 17,688 | 77 / 75 | Pass |
 | WarmCompression/DiagramLossy8 | 6,722 / 7,100 | 75 / 75 | Pass |
-| WarmWebp/EncodeOpaque8 | 74,962 / 72,380 | 100 / 75 | Open |
-| WarmWebp/EncodeOpaque16 | 74,962 / 72,380 | 100 / 75 | Open |
-| WarmWebp/Encode8 | 99,816 / 98,590 | 100 / 75 | Open |
-| WarmWebp/Encode16 | 99,816 / 98,590 | 100 / 75 | Open |
+| WarmWebp/EncodeOpaque8 | 73,740 / 72,380 | 100 / 75 | Open |
+| WarmWebp/EncodeOpaque16 | 73,740 / 72,380 | 100 / 75 | Open |
+| WarmWebp/Encode8 | 98,760 / 98,590 | 100 / 75 | Open |
+| WarmWebp/Encode16 | 98,760 / 98,590 | 100 / 75 | Open |
 | WarmWebp/EncodeBudget8 | 104,500 / 98,590 | 100 / 75 | Open |
 
 C57 reuses the approved bounded quality matcher only for the changed photograph:
@@ -62,12 +62,19 @@ and31,916,945 units fit32M. BothOS4,674tests, scalar and same actual package/exa
 qualify; seven short costs supersede affected encodes. All five packet gates stay
 open, including12,504 B on the constrained path; no whole-codec parity claim.
 
-The current [alpha-anchor milestone](WARM-WEBP-ALPHA-ANCHORS.md) reduces the
+The [alpha-anchor milestone](WARM-WEBP-ALPHA-ANCHORS.md) reduces the
 constrained packet111,094→104,500 B, exact prior VP8/RGBA/source quality and
 31,970,409 units within32M. ALPH21,740/ref24,588 B passes its component gate;
 the complete packet remains5,910 B above98,590 B. BothOS4,682tests/scalar and
 the same actual package/examples qualify. One short cost replaces only this row;
 four unrestricted records and opaque primary paths reuse unchanged C70 evidence.
+
+The current [segment-search milestone](WARM-VP8-SEGMENT-SEARCH.md) reduces opaque
+74,962→73,740 B and unrestricted alpha99,816→98,760 B. Remaining gaps1,360/170 B
+stay explicit; source-quality gaps0.008682/0.030410 dB pass with exact unchanged
+ALPH. BothOS4,688tests/scalar and same actual package/examples qualify; four short
+costs supersede affected encodes despite higher CPU. Work32M104,500 B/31,970,409
+units and primary paths retain their exact prior scoped proofs. Five gates stay open.
 
 [Evidence](vp8-size-coverage-evidence.json) identifies the current and retained
 receipts. No new performance workload is introduced and the256-case warm checklist

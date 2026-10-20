@@ -36,6 +36,27 @@ public sealed class Vp8FullFrameAdmissionTests
     }
 
     [Fact]
+    public void SelectedMixedCacheCannotRetryAnOtherwiseAdmissiblePrefixAfterSharedRefusal()
+    {
+        const int blocks = 81, columns = 9;
+        const long cacheBytes = blocks * 136 + 16384 + columns + 64;
+        var source = new Vp8Planes(129, 129, 144, new byte[blocks * 256], new byte[blocks * 64], new byte[blocks * 64]);
+        var modes = new byte[blocks * 16]; using var root = new TestMemoryBudget(cacheBytes);
+        Assert.True(root.TryReserve(1, out var retained)); Assert.True(24064 < cacheBytes - 1);
+        using (var context = new OperationContext(new ImageLimits { MemoryBudget = root }, default))
+        {
+            var error = Assert.Throws<ImageLimitException>(() => Vp8Encoder.CoefficientModel.TryCreate(
+                source, blocks, 6, 4, context, modes, fullFrame: true, segmented: true));
+            Assert.Equal(ImageLimitKind.WorkingBytes, error.Limit); Assert.Equal(ImageLimitScope.SharedBudget, error.Scope);
+        }
+        Assert.Equal(1, root.Bytes); Assert.Equal(1, root.Refusals); retained.Dispose();
+        using (var next = new OperationContext(new ImageLimits { MemoryBudget = root }, default))
+        using (var model = Vp8Encoder.CoefficientModel.TryCreate(source, blocks, 6, 4, next, modes, fullFrame: true, segmented: true))
+        { Assert.NotNull(model); Assert.True(model.Intra16); Assert.Equal(blocks, model.CacheMacroblocks); Assert.Equal(cacheBytes, root.Bytes); }
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
     public void SharedRefusalDoesNotRetryTheSmallerPrefixAndReleaseEnablesSubsequentWork()
     {
         using var root = new TestMemoryBudget(Blocks * 120 + 16384);

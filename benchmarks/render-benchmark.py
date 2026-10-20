@@ -214,10 +214,10 @@ def render():
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-compact-color-evidence.json', ['cases', 'OriginalGray', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-caller-mcu-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-CALLER-MCU.md', verification='Gap (short; qualified)'),
-        row('WebP VP8, opaque‡', 'vp8-interpolation-noise-evidence.json', ['observations', 0], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8, opaque from RGBA16‡', 'vp8-interpolation-noise-evidence.json', ['observations', 1], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alpha‡', 'vp8-interpolation-noise-evidence.json', ['observations', 2], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alpha from RGBA16‡', 'vp8-interpolation-noise-evidence.json', ['observations', 3], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8, opaque‡', 'vp8-segment-search-evidence.json', ['observations', 0], 'WARM-VP8-SEGMENT-SEARCH.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8, opaque from RGBA16‡', 'vp8-segment-search-evidence.json', ['observations', 1], 'WARM-VP8-SEGMENT-SEARCH.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alpha‡', 'vp8-segment-search-evidence.json', ['observations', 2], 'WARM-VP8-SEGMENT-SEARCH.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alpha from RGBA16‡', 'vp8-segment-search-evidence.json', ['observations', 3], 'WARM-VP8-SEGMENT-SEARCH.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha‡, caller work budget32M', 'webp-alpha-anchors-evidence.json', ['observations', 0], 'WARM-WEBP-ALPHA-ANCHORS.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-CODE-COST.md', True),
@@ -538,7 +538,7 @@ opaque8/16 allocate1,002,488 B/op, alpha8/16 1,532,032, work32M1,806,692, photog
 one frozen producer/internal build perOS, unchanged public/diff/harness/native/
 selector binaries reused. Other production paths retain their qualified scopes.
 
-The current [alpha-anchor milestone](../benchmarks/WARM-WEBP-ALPHA-ANCHORS.md)
+The [alpha-anchor milestone](../benchmarks/WARM-WEBP-ALPHA-ANCHORS.md)
 reduces the work32M packet111,094→104,500 B (ref98,590), preserving exact prior
 VP8/RGBA/source quality and all reference/settings/gates. ALPH28,333→21,740 B
 beats the24,588 B component reference; the full packet remains5,910 B above target.
@@ -549,6 +549,22 @@ and same actual package/all examples pass. One guarded cost screen replaces this
 row:15,008.23/reference53,686.75 µs and2,012,156 B/op (prior1,806,692 B/op).
 No CPU veto/independent repeat; four unrestricted records and primary opaque
 paths retain six unchanged C70 cost/quality proofs. Five packet gates remain open.
+
+The current [segment-search milestone](../benchmarks/WARM-VP8-SEGMENT-SEARCH.md)
+admits existing intra16/Y2 and reconstruction/rate search for source-derived
+segments at fixed100/baseq0. Opaque74,962→73,740 B (ref72,380), unrestricted
+alpha99,816→98,760 B (ref98,590); gaps1,360/170 B remain. Quality gaps0.008682/
+0.030410 dB pass with exact unchanged ALPH. Four guarded costs replace these rows:
+59,760.91/60,143.94/67,738.66/68,204.81 µs and1,006,048/1,006,048/1,537,008/
+1,537,008 B/op. These higher CPU costs are accepted for incremental compression,
+without CPU-parity/independent-repeat claims. BothOS4,688tests,212internal+12public+
+6diff scalar and the same actual package/all examples qualify. Entropy-only exact
+comparisons useeffort3; separate78/100 controls qualify search at both depths.
+Passing internal/public suites were reused after two differential scope assertions
+were corrected. One frozen producer perOS, no harness/native/selector build.
+The work32M full record is EXACT C72 (104,500 B/31,970,409units), primary paths
+are unchanged, and those three identified cost/quality proofs are retained. No
+benchmark input/reference/settings/tolerance or required-workload expansion.
 
 The [coefficient-rate audit](../benchmarks/WARM-VP8-COEFFICIENT-RATE-AUDIT.md)
 rejects a smaller packet with excessive quality loss and a quality-preserving

@@ -1435,12 +1435,15 @@ Source conversion uses bounded views of the existing pixel storage, without a
 normalized-raster allocation. The first row work check precedes storage access;
 all row charges, matrix evaluation order and alpha-weighted rounding are retained.
 
-The VP8 encoder uses one token partition and no loop filter. At effort 4..6 and
-quantizer index above zero, optional memory/work admission enables comparison of
+The VP8 encoder uses one token partition and no loop filter. At effort 4..6 with
+a positive base index or an admitted source-derived spatial plan, optional
+memory/work admission enables comparison of
 4x4 luma prediction with 16x16 prediction and grouped DC (Y2) coding. The decision
 combines reconstructed source error and estimated coefficient/header cost; ties
-retain 4x4. One macroblock is staged, without another full-frame copy. Quality 100,
-lower efforts and constrained local budgets retain the established 4x4 path.
+retain 4x4. One macroblock is staged, without another full-frame copy. Uniform
+base-index-zero encoding without a spatial plan, lower efforts and constrained
+local budgets retain the established 4x4 path. Quality100 with source-derived
+segments may admit the search; each segment supplies its quantizer and rate scale.
 This search can change reconstructed lossy pixels; alpha remains exact. The two
 qualified photograph/diagram controls improve in size within the existing quality
 tolerance, without establishing general compression-size parity.
@@ -1458,7 +1461,7 @@ original 64-block prefix: extending entropy statistics changes no selected mode
 or reconstructed pixel. There is no second raster conversion or full-frame copy.
 Otherwise local limits select the prefix cache before allocation; shared admission
 refusal always terminates the operation without retry.
-At efforts 4..6 with quantizer index zero, equivalent admission also permits
+At efforts 4..6 with base index zero and the selected 4x4 path, admission also permits
 whole-frame entropy fitting for the existing 4x4 path, using
 `120*macroblocks + 16384` auxiliary bytes without Y2 storage. Its predictor never
 consults the model, so mode choices and decoded pixels remain identical. Full-frame

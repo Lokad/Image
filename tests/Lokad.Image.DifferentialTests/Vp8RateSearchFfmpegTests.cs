@@ -6,14 +6,14 @@ public sealed class Vp8RateSearchFfmpegTests
 {
     // The older 129x67 controls do not admit the optional search cache. This
     // single geometry crosses that boundary, including exact 8/16-bit alpha.
-    [Theory] [InlineData(8)] [InlineData(16)]
-    public void AdmittedReconstructionSearchMatchesIndependentDecoding(int depth)
+    [Theory] [InlineData(8, 78)] [InlineData(16, 78)] [InlineData(8, 100)] [InlineData(16, 100)]
+    public void AdmittedReconstructionSearchMatchesIndependentDecoding(int depth, int quality)
     {
         const int width = 129, height = 129;
         using var source = OriginalPixels.Buffer(width, height, depth);
         var unchanged = OriginalPixels.Bytes(source);
         using var packet = new MemoryStream();
-        ImageCodec.EncodeWebp(source, packet, new WebpEncodeOptions { Lossless = false, Quality = 78, Effort = 4 });
+        ImageCodec.EncodeWebp(source, packet, new WebpEncodeOptions { Lossless = false, Quality = quality, Effort = 4 });
         var encoded = packet.ToArray();
         Assert.True(ImageCodec.Identify(encoded).HasAlpha);
         var expected = WebpOracle.Decode(encoded, width, height, alpha: true);
