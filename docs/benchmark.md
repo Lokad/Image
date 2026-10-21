@@ -16,6 +16,10 @@ trial failed quality; current 4:4:4 packets are restored. Existing 4:2:2 control
 size/quality, without photographic or diagram extrapolation. PNG retains 15/17
 complete-packet passes; two level-6 RGBA8 boundaries remain218,775/210,973 B.
 A timing pass or 5% IDAT tolerance does not establish packet-size parity.
+The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles all19
+existing encode rows:5default passes/13open, plus one separate optional pass.
+The largest gap is4:4:4 forward-only/cancellable output,170,978/133,041 B; an
+existing adaptive packet saves12,166 B with exactly the same pixels/quality.
 
 The scoped JPEG producer passes 4,864 Release tests/OS, 46+46 scalar checks/OS and
 the same actual private 0.2.0 package/all examples on Windows/Linux. Its active 4:2:0
@@ -28,8 +32,8 @@ Published 0.1.0 is immutable; replacement readiness remains open.
 
 The [finite checklist](../benchmarks/WARM-COVERAGE.md) remains 256 named cases:
 239 numeric and 17 unmeasured. Tested-producer rows contain **62 passes,
-151 gaps, 1 confidence-open case, 14 short cost
-screens and 11 superseded subsampled JPEG rows**. The latter predate
+152 gaps, 1 confidence-open case, 14 short cost
+screens and 10 superseded subsampled JPEG rows**. The latter predate
 actual AC decision work and need current packet/quality qualification before timing.
 Their stored values are historical, not demonstrated current gaps. Another 31 marked
 decode/inspection rows await confirmation after typed source-metadata changes;
@@ -159,7 +163,7 @@ is a CPU-parity confirmation.
 | --- | ---: | ---: | ---: | ---: | --- |
 | [WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream](../benchmarks/WARM-VP8L-COLOR-COST.md) | 441,626.63 | 121,213.42 | 3.643 / 4.686 | 55,170,368 | Cost screen (CPU parity deferred) |
 | [JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream](../benchmarks/WARM-JPEG-ASYNC-SAMPLES.md) | 2,076.73 | 1,628.02 | 1.276 / 1.430 | 232,614 | Prior production; reconfirm |
-| [JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality](../benchmarks/WARM-JPEG-ASYNC-ENCODE.md) | 3,982.03 | 3,849.79 | 1.034 / 1.158 | 494,254 | Prior production; reconfirm |
+| [JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality](../benchmarks/WARM-JPEG-ASYNC-ENCODE.md) | 3,982.03 | 3,849.79 | 1.034 / 1.158 | 494,254 | Gap (short; qualified) |
 | [PNG EncodePngAsync, fresh nonseekable Stream / level6](../benchmarks/WARM-PNG-ASYNC-ENCODE.md) | 5,397.36 | 17,268.11 | 0.313 / 0.314 | 658,560 | Parity confirmed |
 | [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 5,406.30 | 17,266.72 | 0.313 / 0.315 | 527,627 | Parity confirmed |
 | [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED-CAPACITY.md) | 245.37 | 189.47 | 1.295 / 1.430 | 604,319 | Gap (short; qualified) |

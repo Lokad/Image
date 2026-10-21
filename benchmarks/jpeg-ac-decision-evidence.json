@@ -984,7 +984,7 @@
     }
   },
   "algorithm": "Original DQT/DC and initial nearest-away quantization remain. Source-DCT errors; one reverse AC keep/zero pass with lambda=((16*scale+50)//100)^2 and sampling-cell error weighting; strict fixed geometric-model rate/error improvement, stable old ties. Shared helper on caller/RGBA/fixed/adaptive/async paths;444,gray,CompactColor and lambda0 bypass decisions. Existing scratch, bounded additional work, terminal limits/cancel, borrowed inputs and independent output ownership.",
-  "unchangedEvidence": "All WebP lossy7/lossless6 complete-packet controls stopped. Grayscale/CompactColor bypass decisions and reproduce packets;444 restores old packets/quality. Eleven old subsampled JPEG CPU rows predate actual decision work and are historical pending requalification; primary callerRGB420 replaced by one reused active-algorithm cost observation. CPU timings/allocations retain original tested-producer identities. No new timing/confirmation. Finite256 scope unchanged; PNG15/17 retained complete-packet passes with two level6RGBA8 gaps218775/ref210973. Full objective open.",
+  "unchangedEvidence": "All WebP lossy7/lossless6 complete-packet controls stopped. Grayscale/CompactColor bypass decisions and reproduce packets;444 restores old packets/quality. Ten old subsampled JPEG CPU rows predate actual decision work and are historical pending requalification; primary callerRGB420 replaced by one reused active-algorithm cost observation. CPU timings/allocations retain original tested-producer identities. No new timing/confirmation. Finite256 scope unchanged; PNG15/17 retained complete-packet passes with two level6RGBA8 gaps218775/ref210973. Full objective open.",
   "invalidatedMeasurements": [
     {
       "evidence": "warm-jpeg-vector-ac-evidence.json",
@@ -1035,11 +1035,7 @@
       "evidence": "warm-jpeg-async-samples-evidence.json",
       "case": "JpegRgb420AsyncSamples",
       "reason": "Original422/420 now executes direct source-DCT AC decisions and additional bounded work; old complete-operation timing/quality/packet cannot be asserted current. Reconcile current packet/quality first, no assumed optimization gap or timing repeat while compression gates remain open."
-    },
-    {
-      "evidence": "warm-jpeg-async-encode-evidence.json",
-      "case": "Jpeg8AsyncNonSeekable",
-      "reason": "Original422/420 now executes direct source-DCT AC decisions and additional bounded work; old complete-operation timing/quality/packet cannot be asserted current. Reconcile current packet/quality first, no assumed optimization gap or timing repeat while compression gates remain open."
     }
-  ]
+  ],
+  "reconciledUnchangedAsyncRgba": "Existing WarmAsyncJpegEncode(sampleInput:false) is explicitly444/q69 with0x204060, so scoped422/420 decisions do not execute. Its old tested-producer cost remains applicable in its stated scope; the callerRGB async variant is420 and remains affected. This corrects an initial11-row invalidation count to10 without a production/build/qualification/timing change."
 }

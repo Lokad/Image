@@ -3,8 +3,8 @@
 Updated 2026-10-21. Compression precedes CPU parity. The finite scope remains
 **256 named cases: 239 numeric and 17 unmeasured**. The current
 [three-table summary](../docs/benchmark.md) retains tested-producer evidence:
-62 independent passes, 151 gaps, one confidence-open case, 14 short cost screens
-and **11 superseded subsampled JPEG rows**. Counts identify tested producers;
+62 independent passes, 152 gaps, one confidence-open case, 14 short cost screens
+and **10 superseded subsampled JPEG rows**. Counts identify tested producers;
 full warm single-CPU parity and replacement readiness remain open.
 
 [Scoped JPEG AC decisions](WARM-JPEG-AC-DECISION.md) reduce default caller-RGB420
@@ -16,7 +16,7 @@ platforms. One identical-active420 cost is reused with its original producer:
 10.791x/upper11.190x and170,539 B/op, without a new timing/confirmation.
 
 The [named invalidation list](jpeg-ac-decision-evidence.json) identifies exactly
-11 old subsampled JPEG timing rows. Additional source-DCT coefficient decisions
+10 old subsampled JPEG timing rows. Additional source-DCT coefficient decisions
 and bounded work invalidate their old complete-operation costs. Reconcile current
 packets/quality before timing; stored historical means are not proven current
 gaps. Another31 metadata rows await the already recorded header-preflight
