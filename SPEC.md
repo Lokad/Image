@@ -1198,6 +1198,14 @@ strictly cheaper feasible path that improves the original-lambda objective is
 accepted. Other components remain fixed during a solve, and the full MCU modeled
 error stays within original nearest error times33/32. Source data alone governs
 this bounded search; native encoders and measured quality never select a path.
+One final frequency sweep then considers adjacent levels in component pairs
+Y/Cb, Y/Cr and Cb/Cr. It accepts strict improvements in the same RGB-error/rate
+objective with nonincreasing combined AC price and the same original-nearest
+MCU error cap. Equal-rate moves may reduce error for later pairs; exact ties keep
+the current values. The finite bank is current/minus-one/plus-one within the
+baseline amplitude range. Four Huffman tables, price training, quantizers and DC
+remain unchanged. Trials only read coefficients; work/cancellation checks precede
+selection and committing the two selected values.
 This model precedes
 clipping/rounding and does not replace measured RGB reconstruction-quality gates. Zero lambda,
 grayscale and CompactColor skip this pass. Original color packets
@@ -1213,7 +1221,8 @@ matrices or frame copies. Clearing an invisible block's AC charges64 instead.
 Local 4:4:4 decisions charge192 for the initial error scan,192 for initial prices,
 and64 before each trial: at most145536 per priced MCU (48512/block). The geometric
 trainer retains its121344-per-MCU bound. Trellis planning adds at most521904,
-giving667440 per final MCU (222480/block). Every bounded bank, arc, probe,
+giving667440 before the paired tail. That tail adds at most196002 per MCU,
+for863442 total (287814/block). Every bounded bank, arc, probe,
 reconstruction and selection step charges work before execution. Adaptive and
 async staging estimates also include source sampling: at most136129 per sampled
 MCU plus3632 to finish both models. Default work limits remain unchanged.
@@ -1222,6 +1231,8 @@ bank is rebuilt as needed. Alongside the2048-byte price model,2304-byte MCU,
 48-byte local candidate bank and existing scratch, it fits the admitted8KiB.
 There is no heap bank matrix or frame copy. Work exhaustion or
 cancellation remains terminal; tighter limits do not bypass coefficient decisions.
+The paired tail retains only three AC prices (12 stack bytes); its scratch does
+not overlap the preceding DAG's call. The existing8KiB workspace remains sufficient.
 
 Huffman
 tables use independently implemented canonical coding. Large encodes with an

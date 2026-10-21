@@ -198,7 +198,7 @@ def render():
         row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeGrayAlpha8', -1], 'WARM-PNG-BYTE-PACKING.md', True),
         row('PNG gray-alpha16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGrayAlpha16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
         row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
-        row('JPEG 4:4:4, forward-only / constrained AC trellis and adaptive Huffman', 'jpeg-constrained-ac-trellis-evidence.json', ['cases', 'Encode444Stream8', -1], 'JPEG-CONSTRAINED-AC-TRELLIS.md', verification='Cost screen (CPU parity deferred)'),
+        row('JPEG 4:4:4, forward-only / constrained trellis and component pairs', 'jpeg444-component-pair-evidence.json', ['cases', 'Encode444Stream8', -1], 'JPEG444-COMPONENT-PAIRS.md', verification='Cost screen (CPU parity deferred)'),
         row('JPEG 4:4:4, live cancelable token / prior geometric Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode444Cancelable8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
@@ -351,9 +351,9 @@ with source-PSNR gaps 0.085506/0.085851 dB inside the unchanged 0.25 dB gate.
 Grayscale remains 58,823/58,910 B;
 **optional CompactColor** remains 48,701/52,093 B on its separate procedural control.
 Equal numerical quality values do not establish equivalence. The earlier uncapped
-4:4:4 trial remains rejected; [source-constrained trellis](../benchmarks/JPEG-CONSTRAINED-AC-TRELLIS.md)
-now produce **142,580/133,041 B** (RGBA8) and **142,544/133,043 B** (RGBA16), with
-source-PSNR gaps 0.188932/0.195266 dB inside 0.25 dB. Existing 4:2:2 controls pass
+4:4:4 trial remains rejected; [coupled component pairs](../benchmarks/JPEG444-COMPONENT-PAIRS.md)
+now produce **141,528/133,041 B** (RGBA8) and **141,529/133,043 B** (RGBA16), with
+source-PSNR gaps 0.215790/0.220860 dB inside 0.25 dB. Existing 4:2:2 controls pass
 size/quality, without photographic or diagram extrapolation. PNG retains 15/17
 complete-packet passes; two level-6 RGBA8 boundaries remain218,775/210,973 B.
 A timing pass or 5% IDAT tolerance does not establish packet-size parity.
@@ -361,16 +361,16 @@ The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles
 existing encode rows: 13 default passes/5 open, plus one separate optional pass.
 The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) first saved12,166 B
 on 4:4:4 forward-only/cancellable output. Current source-priced coupled decisions save another
-16,232 B relative to that packet; the largest remaining 4:4:4 gap is about 7.2%.
+17,284 B relative to that packet; the largest remaining 4:4:4 gap is about 6.4%.
 
-The current JPEG producer passes 4,965 Release tests/OS, 141+57 scalar checks/OS and
+The current JPEG producer passes 4,979 Release tests/OS, 155+57 scalar checks/OS and
 the same actual private 0.2.0 package/all examples on Windows/Linux. The
 [ownership repair](../benchmarks/JPEG-BUDGET-EVENT-OWNERSHIP.md) keeps caller-budget
-event storage charged through its actual users. Forward 4:4:4 records 796,455.405 µs,
+event storage charged through its actual users. Forward 4:4:4 records 1,282,590.681 µs,
 564,192 B/op in one short cost screen: more CPU is accepted for the compression
-gain, and CPU parity remains deferred. That unaffected observation retains its
-C142 producer. Current caller 4:2:0 records 68,162.147 µs and170,648 B/op in one
-short screen, including normalization, full encoding and fresh output ownership.
+gain, and CPU parity remains deferred. The prior C142 cost was796,455.405 µs with
+the same allocations. Unaffected caller 4:2:0 retains C146's 68,162.147 µs and170,648 B/op
+in one short screen, including normalization, full encoding and fresh output ownership.
 CPU/allocation costs are recorded; speed-only work and independent confirmations
 wait while compression gates remain open. Full warm single-CPU parity still
 requires an independent conservative upper<=1 for every material required path.

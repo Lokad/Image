@@ -1,31 +1,31 @@
 # JPEG complete-packet coverage
 
-All 19 existing encode rows are reconciled on the qualified C146 producer:
+All 19 existing encode rows are reconciled on the qualified C150 producer:
 **18 default boundaries plus one optional CompactColor boundary**. Thirteen default
 cases pass size and quality; five remain open. CompactColor passes separately.
 These procedural controls do not establish photographic or diagram compression claims.
 
-[Source-constrained trellis](JPEG-CONSTRAINED-AC-TRELLIS.md) reduces the existing
-4:4:4 packets to 142,580/142,544 B for 8/16-bit input, within unchanged quality
+[Coupled component-pair refinement](JPEG444-COMPONENT-PAIRS.md) reduces the existing
+4:4:4 packets to 141,528/141,529 B for 8/16-bit input, within unchanged quality
 tolerances. Frozen source/reference/settings, Original DQT/DC and alpha gates
-remain. Actual packets exactly match the independent C141 prototypes;
+remain. Actual packets exactly match the independent C149 prototypes;
 unaffected controls retain their existing evidence.
 
 | Existing case / boundary | Managed / reference packet B | Size gate |
 | --- | ---: | --- |
-| Encode8 | 142,580 / 133,041 | Open |
+| Encode8 | 141,528 / 133,041 | Open |
 | Encode422_8 | 66,050 / 71,168 | Pass |
 | Encode420_8 | 51,379 / 52,093 | Pass |
-| Encode16 | 142,544 / 133,043 | Open |
+| Encode16 | 141,529 / 133,043 | Open |
 | Encode422_16 | 66,071 / 71,210 | Pass |
 | Encode420_16 | 51,471 / 52,117 | Pass |
 | Encode420Restart8 | 51,428 / 58,012 | Pass |
 | Encode420Stream16 | 51,471 / 52,117 | Pass |
 | Encode420Cancelable16 | 51,471 / 52,117 | Pass |
-| Encode444Stream8 | 142,580 / 133,041 | Open |
-| Encode444Cancelable8 | 142,580 / 133,041 | Open |
+| Encode444Stream8 | 141,528 / 133,041 | Open |
+| Encode444Cancelable8 | 141,528 / 133,041 | Open |
 | JpegBudgetEncode4208 | 51,379 / 52,093 | Pass |
-| Jpeg8AsyncNonSeekable | 142,580 / 133,041 | Open |
+| Jpeg8AsyncNonSeekable | 141,528 / 133,041 | Open |
 | JpegRgb420AsyncSamples | 51,379 / 52,093 | Pass |
 | EncodeGray8 | 58,823 / 58,910 | Pass |
 | CallerGray | 58,823 / 58,910 | Pass |
@@ -33,11 +33,11 @@ unaffected controls retain their existing evidence.
 | CompactColorRgb420 | 48,701 / 52,093 | Optional pass |
 | Encode420Stream8 | 51,379 / 52,093 | Pass |
 
-The largest remaining demonstrated gap is default 4:4:4, about 7.2% excess.
+The largest remaining demonstrated gap is default 4:4:4, about 6.4% excess.
 [Default 4:2:0](JPEG420-AC-TRELLIS.md) now passes all nine affected boundaries. Passing 4:2:2, grayscale, 4:2:0,
 optional CompactColor and all declared WebP controls stay stopped.
 
-[Current qualification and cost](JPEG420-AC-TRELLIS.md) records both platforms,
+[Current qualification and cost](JPEG444-COMPONENT-PAIRS.md) records both platforms,
 the actual package and one short quiet-VM observation. The finite256-case warm
 objective remains open; CPU parity and speed-only work are deferred. Historical
 fixed-stream costs are not asserted current after adaptive planning.
