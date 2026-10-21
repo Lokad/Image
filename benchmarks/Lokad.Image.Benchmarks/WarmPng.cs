@@ -67,7 +67,7 @@ public partial class WarmPng
     private string FastDirectory => "png-fast" + Depth + "-fast2" + (EncodeCancelable ? "-cancel" : ForwardOutput ? "-forward" : "");
     private CancellationToken EncodeCancellation => EncodeCancelable ? decodeCancellation : default;
     private int EncoderLevel => Smallest ? 9 : Fastest ? 1 : NoCompression ? 0 : 6;
-    private bool MatchedByteEncoding => Encode && Depth == 8 && ColorType is 0 or 2 or 4;
+    private bool MatchedByteEncoding => Encode && Depth == 8 && !Fastest && !NoCompression && !Smallest;
     private int ManagedEncoderLevel => Fastest ? 2 : MatchedByteEncoding ? 9 : EncoderLevel;
     private bool Encode => Case is WarmPngCase.EncodeSmallest8 or WarmPngCase.EncodeSmallest16 or WarmPngCase.EncodeFast8 or WarmPngCase.EncodeFastForward16 or WarmPngCase.EncodeFastCancelable16 or WarmPngCase.EncodeNoCompression16 or WarmPngCase.EncodeFast16 or WarmPngCase.EncodeNoCompression8 or WarmPngCase.EncodeGrayAlpha16 or WarmPngCase.EncodeGrayAlpha8 or WarmPngCase.Encode8 or WarmPngCase.Encode16 or WarmPngCase.EncodeRgb8 or WarmPngCase.EncodeRgb16 or WarmPngCase.EncodeGray8 or WarmPngCase.EncodeGray16;
     private bool Interlaced => Case is WarmPngCase.DecodePalette4Adam7 or WarmPngCase.DecodePalette8Adam7 or WarmPngCase.DecodeAdam7_16 or WarmPngCase.DecodeGray1Adam7;
@@ -175,6 +175,14 @@ public partial class WarmPng
                     : GrayAlpha ? "0bfdcc9aa57f0b6009a3ca31b1ab200d2d1bb59c1395495afaad584c5f6e630d"
                     : "8990a1cb03abac292d32deb02a97003b17b7b8347afe02e8370194de01bbc235";
                 if (JpegBenchmarkCase.Hash(encoded) != expectedHash) throw new InvalidOperationException("Frozen byte PNG decoder input changed.");
+            }
+            else if (!Encode && Depth == 8)
+            {
+                // Encoder policy changes must not replace the existing RGBA
+                // decoder inputs or invalidate their retained confirmations.
+                encoded = File.ReadAllBytes(Path.Combine(state.Root, "artifacts", "warm-reference", "png-cancel8", "input.png"));
+                if (JpegBenchmarkCase.Hash(encoded) != "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f")
+                    throw new InvalidOperationException("Frozen RGBA8 decoder input changed.");
             }
             else using (var output = new MemoryStream())
             {
@@ -357,11 +365,10 @@ public partial class WarmPng
         {
             ValidatePng(output, nativePacket: true);
             using var decoded = ImageCodec.Decode(output); ValidatePixels(decoded);
-            // Pin declared backend levels/filter and retain size evidence. A large payload
-            // discrepancy is a preparation mismatch rather than a scored speed win.
-            var nativeIdat = IdatBytes(output); var managedIdat = IdatBytes(encoded);
-            if (Math.Abs(nativeIdat - (double)managedIdat) / Math.Max(nativeIdat, managedIdat) > 0.05)
-                throw new InvalidOperationException("PNG compressed payload sizes differ by more than 5%; resolve effort matching before timing.");
+            // Exact pixels and complete packets, including all chunk framing.
+            // Optimal is a library policy; record actual backend levels.
+            if (encoded.Length > output.Length)
+                throw new InvalidOperationException("Managed complete PNG packet exceeds the frozen reference size gate.");
         }
         else if (!output.AsSpan().SequenceEqual(pixels)) throw new InvalidOperationException("Native owned RGBA pixels differ.");
     }
@@ -581,15 +588,15 @@ public partial class WarmPng
                     : MonoTransparency ? $"Authored gray{CodedDepth} PNG; filter None, noninterlaced, tRNS two-byte key{GrayTransparencyKey}; BCL Optimal level6; identical resident encoded input"
                     : GrayTransparency && Depth == 16 ? "Authored gray16BE PNG; filter None, noninterlaced, tRNS two-byte key0x7f7f; BCL Optimal level6; identical resident encoded input"
                     : GrayTransparency ? "Authored gray8 PNG; filter None, noninterlaced, tRNS two-byte key127; BCL Optimal level6; identical resident encoded input"
-                    : Smallest ? $"BCL SmallestSize level9 / FFmpeg level9; full RGBA{Depth} packing/compression/output timed; exact samples/alpha/hidden RGB and unchanged5% IDAT-size gate; filter None"
-                    : Fastest ? $"BCL streaming fast adaptive level2 / FFmpeg fast level1; complete row packing/compression/output timed; exact full RGBA{Depth}, filter None, unchanged5% IDAT-size gate"
+                    : Smallest ? $"BCL SmallestSize level9 / FFmpeg level9; full RGBA{Depth} packing/compression/output timed; exact samples/alpha/hidden RGB and complete-packet size gate; filter None"
+                    : Fastest ? $"BCL streaming fast adaptive level2 / FFmpeg fast level1; complete row packing/compression/output timed; exact full RGBA{Depth}, filter None, complete-packet size gate"
                     : NoCompression ? "BCL NoCompression / FFmpeg level0; stored Deflate only, filter None, noninterlaced RGBA" + Depth
                     : Paeth ? $"Authored noninterlaced PNG {(GrayAlpha ? "gray-alpha" : Gray ? "gray" : Rgb ? "RGB" : "RGBA")}{Depth}; every row Paeth; BCL Optimal level 6; identical resident encoded input"
                     : Up ? $"Authored noninterlaced PNG RGBA{Depth}; every row Up; BCL Optimal level 6; identical resident encoded input"
                     : Sub ? $"Authored noninterlaced PNG RGBA{Depth}; every row Sub; BCL Optimal level 6; identical resident encoded input"
                     : Average ? $"Authored noninterlaced PNG RGBA{Depth}; every row Average; BCL Optimal level 6; identical resident encoded input"
                     : Interlaced ? Palette ? $"Authored PNG Adam7 palette{CodedDepth}; existing byte raster palette{PaletteEntries}/full tRNS projection; BCL Optimal level6; filter None; identical resident encoded input" : Mono ? "Authored PNG Adam7 gray1; original byte raster black/white projection, zero pass padding; BCL Optimal level6; filter None; identical resident encoded input" : "Authored PNG Adam7 RGBA16; BCL Optimal level 6; filter None; identical resident encoded input"
-                    : MatchedByteEncoding ? "Lokad.Image Optimal uses BCL level9 / FFmpeg level6; exact samples and unchanged5% IDAT-size gate; filter None; noninterlaced"
+                    : MatchedByteEncoding ? "Lokad.Image Optimal uses BCL level9 / FFmpeg level6; exact samples and complete-packet size gate; filter None; noninterlaced"
                     : $"BCL Optimal (zlib default level 6) / FFmpeg level 6; filter None; noninterlaced {(Mono ? "packed gray" + CodedDepth + ", opaque" : Palette ? $"palette{CodedDepth}, {PaletteEntries} entries and {(PartialAlpha ? "two-entry" : "full")} tRNS" : GrayAlpha ? "gray-alpha" : Gray ? Depth == 16 ? "gray16be" : "gray" : Rgb ? "RGB" : "RGBA")}",
                 encoderLevel = Encode ? EncoderLevel : (int?)null, managedEncoderLevel = Encode ? ManagedEncoderLevel : (int?)null, nativeEncoderLevel = Encode ? EncoderLevel : (int?)null, storedDeflateBlocksExact = NoCompression,
                 nativePackedTransparencyFilterTimed = FilteredMonoTransparency,

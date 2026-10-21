@@ -7,7 +7,7 @@ using Lokad.Image.Tooling;
 internal sealed class WarmAsyncPngEncode
 {
     private const string RasterHash = "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80";
-    private const string PacketHash = "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f";
+    private const string PacketHash = "64a15e926457fd2093fb003830cc636b756a493457ada7d428cbaa750bf3d4a1";
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
     private ImageBuffer source = null!;
@@ -20,7 +20,7 @@ internal sealed class WarmAsyncPngEncode
     private void Prepare()
     {
         state = new JpegBenchmarkCase(".png"); pixels = HorizontalFlipInput.Create(8);
-        expected = File.ReadAllBytes(Path.Combine(state.Root, "artifacts/warm-reference/png-cancel8/input.png"));
+        expected = File.ReadAllBytes(Path.Combine(state.Root, "artifacts/warm-reference/png-optimal8-owned9/packet.png"));
         if (JpegBenchmarkCase.Hash(pixels) != RasterHash || JpegBenchmarkCase.Hash(expected) != PacketHash)
             throw new InvalidOperationException("Original PNG encode input/profile differs.");
         source = JpegBenchmarkCase.Buffer(pixels, 513, 259, 8);
@@ -32,10 +32,12 @@ internal sealed class WarmAsyncPngEncode
         try
         {
             Prepare();
-            using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/h13-async-encode-controls/proof.json")))) proof = document.RootElement.Clone();
-            if (proof.GetProperty("timing").GetBoolean() || proof.GetProperty("librarySha256").GetString() != JpegBenchmarkCase.HashFile(typeof(ImageCodec).Assembly.Location)
+            using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/png-optimal8-async-proof.json")))) proof = document.RootElement.Clone();
+            // Validate exercises the actual producer on every setup. Reuse an
+            // unchanged packet/native-boundary proof across unrelated changes.
+            if (proof.GetProperty("timing").GetBoolean() || proof.GetProperty("managedPacketSha256").GetString() != PacketHash
                 || proof.GetProperty("inputSha256").GetString() != RasterHash || !proof.GetProperty("equivalentNonSeekableOutput").GetBoolean()
-                || !proof.GetProperty("normalScalarNativeAndCliExact").GetBoolean() || !proof.GetProperty("idatSizeGate").GetBoolean())
+                || !proof.GetProperty("normalScalarNativeAndCliExact").GetBoolean() || !proof.GetProperty("completePacketSizeGate").GetBoolean())
                 throw new InvalidOperationException("Nonseekable async PNG encode preparation differs.");
             using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/benchmark-source.json"))))
                 sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = document.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = document.RootElement.GetProperty("sourceRevision").GetString() });
@@ -111,7 +113,7 @@ internal sealed class WarmAsyncPngEncode
     private void RequireNative()
     {
         var packet = File.ReadAllBytes(state.NativeOutput); nativeBytes = packet.Length; nativeIdat = IdatBytes(packet);
-        if (IdatBytes(expected) > nativeIdat * 1.05) throw new InvalidOperationException("Frozen 5% IDAT-size gate failed.");
+        if (expected.Length > nativeBytes) throw new InvalidOperationException("Complete PNG packet exceeds the frozen reference size gate.");
         using var decoded = ImageCodec.Decode(packet);
         if (decoded.Width != 513 || decoded.Height != 259 || decoded.BitDepth != 8 || !OriginalPixels.Bytes(decoded).AsSpan().SequenceEqual(pixels))
             throw new InvalidOperationException("Native PNG pixels differ.");
@@ -145,16 +147,16 @@ internal sealed class WarmAsyncPngEncode
             {
                 schemaVersion = 1, name = "WarmPng", caseId = "Png8AsyncNonSeekable", publicBoundary = "AsyncStreamEncode/PngRgba8FreshNonSeekable",
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), smoke, cpu, sourceIdentity, inputBytes = pixels.Length, inputSha256 = RasterHash,
-                width = 513, height = 259, depth = 8, managedLevel = 6, nativeLevel = 6, filterNone = true,
+                width = 513, height = 259, depth = 8, managedLevel = 9, nativeLevel = 6, filterNone = true,
                 managedOutputBytes = expected.Length, managedOutputSha256 = PacketHash, managedIdatBytes = IdatBytes(expected), nativeOutputBytes = nativeBytes, nativeIdatBytes = nativeIdat,
-                managedSnapshotExact = true, allRgbaSamplesExact = true, idatSizeGate = true, freshNonSeekableOutput = true, writeAsyncCallsVerified = true,
+                managedSnapshotExact = true, allRgbaSamplesExact = true, completePacketSizeGate = true, freshNonSeekableOutput = true, writeAsyncCallsVerified = true,
                 syncWrites = 0, seekOrLengthQueries = 0, callerOutputLeftOpen = true, noCallerFlushRequired = true,
                 completeEncodeStagingDeliveryAndReleaseTimed = true, outputAcquisitionGrowthAndReleaseTimed = true, noFinalSnapshotCopyTimed = true,
                 residentCallbacksCompleteImmediately = true, sourceUnchanged = true, independentOwnedOutput = true, survivingOutputAfterSourceDisposal = true,
                 resourceAndCancellationGates = true, sinkFailureCleanupAndRecovery = true, preparedEquivalentBoundaryControls = true, preparation = proof,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageCodec).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmAsyncPngEncode).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after, nativeExitCode = 0,
-                boundary = "Same resident borrowed RGBA8 to a fresh independently owned nonseekable caller output. Managed EncodePngAsync includes complete PNG encoding into admitted segmented staging, actual WriteAsync copies into caller-owned growing output, awaited completion and all staging/output release. Native single-thread FFmpeg PNG encoding into fresh owned packet staging, fresh nonseekable AVIO/scratch, output growth/callback copies, internal AVIO flush to finish writes, staging/AVIO/output release are timed. Both callbacks complete immediately; caller output remains alive after staging release and is disposed by its owner inside each complete operation. No final snapshot copy, input normalization for already-RGBA8 source, forced scheduling, real I/O, seek/length/output view or cached encoded content. Prepared source/context/wrappers and released private storage may be reused. Level6/filterNone on both sides, exact alpha/hidden RGB and frozen 5% IDAT-size gate. Native internal flush does not require managed caller FlushAsync. One CPU/thread, normal SIMD, nonconcurrent workstation GC. Startup, I/O, IPC, preparation/hashing and validation excluded."
+                boundary = "Same resident borrowed RGBA8 to a fresh independently owned nonseekable caller output. Managed EncodePngAsync includes complete PNG encoding into admitted segmented staging, actual WriteAsync copies into caller-owned growing output, awaited completion and all staging/output release. Native single-thread FFmpeg PNG encoding into fresh owned packet staging, fresh nonseekable AVIO/scratch, output growth/callback copies, internal AVIO flush to finish writes, staging/AVIO/output release are timed. Both callbacks complete immediately; caller output remains alive after staging release and is disposed by its owner inside each complete operation. No final snapshot copy, input normalization for already-RGBA8 source, forced scheduling, real I/O, seek/length/output view or cached encoded content. Prepared source/context/wrappers and released private storage may be reused. Managed Optimal level9/native frozen level6/filterNone, exact alpha/hidden RGB and complete-packet size gate. Native internal flush does not require managed caller FlushAsync. One CPU/thread, normal SIMD, nonconcurrent workstation GC. Startup, I/O, IPC, preparation/hashing and validation excluded."
             }, EncoderQualityCalibration.Json) + "\n");
         }
         finally { Dispose(); }
@@ -170,7 +172,7 @@ internal sealed class WarmAsyncPngEncode
             value.Prepare(); value.Validate(); using var output = new NonSeekableAsyncOutput(); value.Encode(output); value.RequireManaged(output);
             var packet = output.Snapshot(); File.WriteAllBytes(path, packet);
             Console.WriteLine(JsonSerializer.Serialize(new { librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageCodec).Assembly.Location), inputSha256 = RasterHash,
-                outputSha256 = JpegBenchmarkCase.Hash(packet), outputBytes = packet.Length, idatBytes = IdatBytes(packet), managedLevel = 6,
+                outputSha256 = JpegBenchmarkCase.Hash(packet), outputBytes = packet.Length, idatBytes = IdatBytes(packet), managedLevel = 9,
                 output.AsyncWrites, output.SyncWrites, output.MetadataQueries, output.AsyncFlushes, callerOpen = output.CanWrite, sourceUnchanged = true,
                 independentRetainedOutputs = true, sourceDisposalDoesNotInvalidateOutput = true, resourceLimits = true, cancellationBeforeAndDuringDelivery = true,
                 sinkFailureAndRecovery = true, immediateCallbacks = true, finalSnapshotUntimed = true }));

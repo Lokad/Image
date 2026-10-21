@@ -2,6 +2,8 @@
 
 ## 0.2.0 â€” Unreleased
 
+- Smaller 8-bit RGBA PNG output with the deeper `Optimal` search policy,
+  preserving exact samples, bounded admission and asynchronous ownership.
 - Smaller Original 4:4:4 JPEG packets through source-derived coefficient precision
   and admitted progressive scans; `BaselineOnly` preserves baseline syntax with
   the same pixels. Compression qualification remains specific to tested controls.

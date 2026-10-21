@@ -1,47 +1,57 @@
 {
   "schemaVersion": 1,
   "project": "Lokad.Image",
-  "scope": "Bounded reconciliation of the existing 17 PNG encode rows only; retained complete packet receipts, no encoding/calibration/timing or matrix expansion.",
+  "scope": "Existing17 PNG encode rows. C161 executes the two changed publicOptimal RGBA8 boundaries atmanaged9/nativefrozen6 with exactpixels/fullpacket gate. Other15 paths unchanged and retained; no workload grid or broad compression claim.",
   "acceptance": "Exact decoded samples and complete encoded packet no larger than frozen FFmpeg reference at each declared input/policy/settings. Five-percent IDAT tolerance is a historical timing-equivalence gate only.",
-  "retainedPacketPasses": 15,
-  "retainedPacketGaps": 2,
-  "currentProductionExecutionRepeated": false,
+  "retainedPacketPasses": 17,
+  "retainedPacketGaps": 0,
+  "currentProductionExecutionRepeated": true,
   "cases": [
     {
-      "name": "PNG EncodePngAsync, fresh nonseekable Stream / level6",
-      "evidence": "warm-png-async-encode-evidence.json",
-      "evidenceSha256": "5eb95e6482062b6b47fe71c16323bc2ce834fe8b763403160f5bfdcec657f5da",
+      "name": "PNG EncodePngAsync, fresh nonseekable Stream / Optimal managed9/native6",
+      "evidence": "png-optimal-rgba8-evidence.json",
+      "evidenceSha256": "daeb53cbf3776b25c14674a40687f32252642f6657c98bd2f1932290adee34f9",
       "observationPath": [
-        "cases",
-        "Png8AsyncNonSeekable",
-        -1
+        "packets",
+        "Png8AsyncNonSeekable"
       ],
-      "managedPacketBytes": 218775,
+      "managedPacketBytes": 209407,
       "referencePacketBytes": 210973,
-      "completePacketSizePass": false,
-      "excessBytes": 7802,
-      "managedIdatBytes": 218682,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 209314,
       "referenceIdatBytes": 210283,
-      "report": "WARM-PNG-ASYNC-ENCODE.md",
-      "retainedObservationOnly": true
+      "report": "PNG-OPTIMAL-RGBA8.md",
+      "retainedObservationOnly": false,
+      "previousName": "PNG EncodePngAsync, fresh nonseekable Stream / level6",
+      "currentProductionExecuted": true,
+      "managedBackendLevel": 9,
+      "nativeBackendLevel": 6,
+      "managedPacketSha256": "64a15e926457fd2093fb003830cc636b756a493457ada7d428cbaa750bf3d4a1",
+      "referencePacketSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920"
     },
     {
-      "name": "PNG RGBA8, level 6 / None",
-      "evidence": "warm-png-chunk-crc-evidence.json",
-      "evidenceSha256": "0f8bb1690407f963fcf48868960323c942218fe070dc47c9d721743537174b49",
+      "name": "PNG RGBA8, Optimal managed9/native6 / None",
+      "evidence": "png-optimal-rgba8-evidence.json",
+      "evidenceSha256": "daeb53cbf3776b25c14674a40687f32252642f6657c98bd2f1932290adee34f9",
       "observationPath": [
-        "cases",
-        "Encode8",
-        -1
+        "packets",
+        "Encode8"
       ],
-      "managedPacketBytes": 218775,
+      "managedPacketBytes": 209407,
       "referencePacketBytes": 210973,
-      "completePacketSizePass": false,
-      "excessBytes": 7802,
-      "managedIdatBytes": 218682,
+      "completePacketSizePass": true,
+      "excessBytes": 0,
+      "managedIdatBytes": 209314,
       "referenceIdatBytes": 210283,
-      "report": "WARM-PNG-CHUNK-CRC.md",
-      "retainedObservationOnly": true
+      "report": "PNG-OPTIMAL-RGBA8.md",
+      "retainedObservationOnly": false,
+      "previousName": "PNG RGBA8, level 6 / None",
+      "currentProductionExecuted": true,
+      "managedBackendLevel": 9,
+      "nativeBackendLevel": 6,
+      "managedPacketSha256": "64a15e926457fd2093fb003830cc636b756a493457ada7d428cbaa750bf3d4a1",
+      "referencePacketSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920"
     },
     {
       "name": "PNG RGBA8, NoCompression / None",
@@ -313,5 +323,12 @@
       "report": "WARM-PNG-CHUNK-CRC.md",
       "retainedObservationOnly": true
     }
-  ]
+  ],
+  "currentExecutionScope": [
+    "Encode8",
+    "Png8AsyncNonSeekable"
+  ],
+  "qualification": "5000tests/OS,465+157PNGscalar/OS,sameactualprivate0.2package/allthreeexamples bothOS; one complete sync cost screen. No timing confirmation.",
+  "invalidation": "Only two existing defaultRGBA8 PNG encode rows change in the finite256 ledger: sync current cost replaces prior producer, async prior timing superseded. Compound PNG8 crop/nearest/encode invocation costs also contain changed default encoding and remain historical. Frozen decoder inputs and other15 PNG packet paths, JPEG and WebP evidence remain valid in their existing scope.",
+  "currentEvidence": "png-optimal-rgba8-evidence.json"
 }

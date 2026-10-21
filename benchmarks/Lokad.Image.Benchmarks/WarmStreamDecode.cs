@@ -74,7 +74,9 @@ public class WarmStreamDecode
                 });
             input = HorizontalFlipInput.Create(Depth);
             expected = Compose ? ExpectedComposition(input) : input;
-            using (var source = JpegBenchmarkCase.Buffer(input, HorizontalFlipInput.Width, HorizontalFlipInput.Height, Depth))
+            if (Depth == 8)
+                encoded = File.ReadAllBytes(Path.Combine(state.Root, "artifacts", "warm-reference", "png-cancel8", "input.png"));
+            else using (var source = JpegBenchmarkCase.Buffer(input, HorizontalFlipInput.Width, HorizontalFlipInput.Height, Depth))
             using (var output = new MemoryStream())
             {
                 ImageCodec.EncodePng(source, output); encoded = output.ToArray();

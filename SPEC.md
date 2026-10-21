@@ -934,8 +934,8 @@ gray requires equal RGB channels; selecting a format without alpha requires
 opaque pixels. No implicit grayscale conversion or alpha removal occurs.
 
 The default `Optimal` compression policy uses the BCL's smallest-size search
-for 8-bit gray, RGB and gray-alpha output, avoiding the weaker compression of
-the runtime's default search on these layouts. Other formats and explicitly
+for every 8-bit output color type, including RGBA, avoiding the weaker compression
+of the runtime's default search on these layouts. 16-bit formats and explicitly
 selected `NoCompression` or `SmallestSize` retain their backend selection;
 RGBA `Fastest` follows the policy below. This is an implementation policy, not a promise of a
 particular numeric backend level or exact compressed bytes. Samples, filter and

@@ -1454,11 +1454,11 @@ internal static class PngCodec
         header[8] = (byte)source.BitDepth; header[9] = (byte)color; header[10] = 0; header[11] = 0; header[12] = 0;
         WriteChunk(output, "IHDR"u8, header);
         // Optimal is a library policy, rather than a fixed zlib level. Byte
-        // gray/RGB/gray-alpha need the BCL's deeper match search to retain
-        // comparable compression. RGBA Fastest selects its streaming fast
+        // output needs the BCL's deeper match search to retain comparable
+        // compression. RGBA Fastest selects its streaming fast
         // backend below; other formats retain their existing selection.
         var compression = options.Compression == CompressionLevel.Optimal
-            && source.BitDepth == 8 && color is 0 or 2 or 4
+            && source.BitDepth == 8
             ? CompressionLevel.SmallestSize : options.Compression;
         using (var chunks = new IdatWriter(output))
         {

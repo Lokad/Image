@@ -9,6 +9,12 @@ for consumers requiring baseline syntax. This switch retains the same quantizers
 and reconstructed pixels; local workspace selection may also use baseline syntax.
 Encoded bytes and lossy reconstruction may change between encoder versions.
 
+PNG `Optimal` now uses the deeper BCL search for every 8-bit color type, including
+RGBA. This may increase CPU time and change packet bytes; samples, filter None,
+memory admission, cancellation and ownership remain unchanged. It is a library
+policy, not a fixed numeric compression level. Explicit compression choices and
+16-bit output keep their previous backend selections.
+
 `ImageInfo.SourceColor`, `SourceAlpha` and `SourceComponentCount` describe encoded
 samples, alongside source `BitDepth`; they do not describe normalized RGBA pixels.
 Unlabelled JPEG color models remain `Unknown`. VP8L always codes alpha even when

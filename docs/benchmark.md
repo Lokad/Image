@@ -16,8 +16,11 @@ Equal numerical quality values do not establish equivalence. The earlier uncappe
 4:4:4 trial remains rejected; [source-derived progressive precision](../benchmarks/JPEG444-POINT-PRECISION.md)
 now produces **138,074/133,041 B** (RGBA8) and **138,002/133,043 B** (RGBA16), with
 source-PSNR gaps 0.113419/0.116827 dB inside 0.25 dB. Existing 4:2:2 controls pass
-size/quality, without photographic or diagram extrapolation. PNG retains 15/17
-complete-packet passes; two level-6 RGBA8 boundaries remain218,775/210,973 B.
+size/quality, without photographic or diagram extrapolation. [PNG Optimal RGBA8](../benchmarks/PNG-OPTIMAL-RGBA8.md) now closes the two changed
+sync/async boundaries at209,407/210,973 B, saving9,368 B each. All17 declared PNG
+packet gates pass, with exact RGBA. The public Optimal policy uses managed9 versus
+frozen native6; explicit modes and16bit selection remain unchanged. This is not
+an equal-effort comparison.
 A timing pass or 5% IDAT tolerance does not establish packet-size parity.
 The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles all 19
 existing encode rows: 13 default passes/5 open, plus one separate optional pass.
@@ -25,7 +28,7 @@ The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) first saved12
 on 4:4:4 forward-only/cancellable output. Source-derived coefficient decisions and progressive scans save another
 20,738 B relative to that packet; the largest remaining 4:4:4 gap is about 3.8%.
 
-The current JPEG producer passes 4,999 Release tests/OS, 170+62 scalar checks/OS and
+JPEG C159 qualification retains 4,999 Release tests/OS, 170+62 scalar checks/OS and
 the same actual private 0.2.0 package/all examples on Windows/Linux. The
 [ownership repair](../benchmarks/JPEG-BUDGET-EVENT-OWNERSHIP.md) keeps caller-budget
 event storage charged through its actual users. Forward 4:4:4 records 1,300,808.740 µs,
@@ -38,11 +41,18 @@ wait while compression gates remain open. Full warm single-CPU parity still
 requires an independent conservative upper<=1 for every material required path.
 Published 0.1.0 is immutable; replacement readiness remains open.
 
+The latest PNG change passes5,000 Release tests/OS,465+157 PNG scalar checks/OS
+and the same actual private0.2 package/all examples on both platforms. Its one
+complete sync cost screen records14,417.461 µs/reference17,231.327 µs and527,580 B/op.
+Actual backend levels and full-packet gates are explicit; CPU confirmation remains
+deferred. The previous defaultRGBA8 async timing is superseded. Decoder inputs
+remain frozen, and unchanged JPEG/WebP/other PNG evidence is reused.
+
 The [finite checklist](../benchmarks/WARM-COVERAGE.md) remains 256 named cases:
-239 numeric and 17 unmeasured. Tested-producer rows contain **62 passes,
-147 gaps, 1 confidence-open case, 15 short cost
-screens and 14 superseded JPEG rows**. The latter predate
-AC decision work or adaptive stream planning; current packet/quality evidence is
+239 numeric and 17 unmeasured. Tested-producer rows contain **60 passes,
+147 gaps, 1 confidence-open case, 16 short cost
+screens and 15 superseded encoder rows**. The latter predate
+JPEG decision/adaptive work or the PNG8 Optimal policy; current packet/quality evidence is
 reconciled and new costs are deferred while compression gates remain open.
 Their stored values are historical, not demonstrated current gaps. Another 31 marked
 decode/inspection rows await confirmation after typed source-metadata changes;
@@ -173,8 +183,8 @@ is a CPU-parity confirmation.
 | [WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream](../benchmarks/WARM-VP8L-COLOR-COST.md) | 441,626.63 | 121,213.42 | 3.643 / 4.686 | 55,170,368 | Cost screen (CPU parity deferred) |
 | [JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream](../benchmarks/WARM-JPEG-ASYNC-SAMPLES.md) | 2,076.73 | 1,628.02 | 1.276 / 1.430 | 232,614 | Prior production; reconfirm |
 | [JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality](../benchmarks/WARM-JPEG-ASYNC-ENCODE.md) | 3,982.03 | 3,849.79 | 1.034 / 1.158 | 494,254 | Prior production; reconfirm |
-| [PNG EncodePngAsync, fresh nonseekable Stream / level6](../benchmarks/WARM-PNG-ASYNC-ENCODE.md) | 5,397.36 | 17,268.11 | 0.313 / 0.314 | 658,560 | Parity confirmed |
-| [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 5,406.30 | 17,266.72 | 0.313 / 0.315 | 527,627 | Parity confirmed |
+| [PNG EncodePngAsync, Optimal managed9/native6 / prior timing](../benchmarks/PNG-OPTIMAL-RGBA8.md) | 5,397.36 | 17,268.11 | 0.313 / 0.314 | 658,560 | Prior production; reconfirm |
+| [PNG RGBA8, Optimal managed9/native6 / None](../benchmarks/PNG-OPTIMAL-RGBA8.md) | 14,417.46 | 17,231.33 | 0.837 / 0.885 | 527,580 | Cost screen (CPU parity deferred) |
 | [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED-CAPACITY.md) | 245.37 | 189.47 | 1.295 / 1.430 | 604,319 | Gap (short; qualified) |
 | [PNG RGBA16, NoCompression / None](../benchmarks/WARM-PNG-STORED-CAPACITY.md) | 349.92 | 406.43 | 0.861 / 0.870 | 1,140,504 | Parity confirmed |
 | [PNG RGBA8, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 3,053.16 | 4,355.98 | 0.701 / 0.704 | 527,694 | Parity confirmed |
@@ -351,7 +361,7 @@ elsewhere, retaining alphaâ‰¤1/both RMSEâ‰¤0.25. Managed frozen pixels a
 certified rational-half cases remain exact. Linked reports specify every halo
 and scope control; no managed tolerance is introduced.
 
-PNG byte RGB/gray/gray-alpha Optimal uses managed9/native6; RGBA Fastest uses2/1,
+PNG8 Optimal uses managed9/native6 for all four output color types; RGBA Fastest uses2/1,
 SmallestSize9/9, with exact samples and the historical5% IDAT timing-equivalence
 gate. [Complete-packet reconciliation](../benchmarks/PNG-COMPLETE-PACKET-AUDIT.md)
 finds15 retained passes and two open level-6 RGBA8 boundaries, both218,775/210,973 B.
