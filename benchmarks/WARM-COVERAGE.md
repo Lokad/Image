@@ -1201,3 +1201,17 @@ predictor and color ownership, refusal/cancellation/work cleanup and exact outpu
 No public/differential/harness/native/selector build. All seven lossy gates stay
 closed. Finite counts remain256=239numeric+17pending,62independentpasses/163gaps/
 1confidence-open/13costscreens,114independent/125short;31metadata timings pending.
+
+
+The [uncached-model milestone](WARM-VP8L-NO-CACHE.md) saves5,800B on the fixed
+lossless photograph:169808→164008/ref160032. Five other packets stay unchanged:
+diagram7636/7234,opaque123602/121896 and alpha8/16+async145648/183812. Three
+lossless complete-packet gaps remain open. Exactly six existing short cost rows
+replace C93; CPU parity/independent repeats remain deferred.4,792tests/OS,
+57internal+117public scalar and the same actual package/all3examples qualify
+inherited owners, green280 models, terminal failure cleanup and exact outputs.
+No public/differential/harness/native/selector build or new required workload.
+All seven lossy gates stay closed. Counts remain256=239numeric+17pending,
+62independentpasses/163gaps/1confidence-open/13costscreens,114independent/125short;
+31metadata confirmations pending. JPEG optional CompactColor and two PNG complete
+packet gaps retain their separately stated open/default scope.

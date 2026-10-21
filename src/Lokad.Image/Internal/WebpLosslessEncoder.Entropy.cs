@@ -22,13 +22,14 @@ internal static partial class WebpLosslessEncoder
         var histogram = new TileHistograms(count, context);
         try
         {
-            var scan = CachedPixels(image, effort, cache, baseline.Predict, null, null, null, context, histogram, modes: baseline.Modes, color: baseline.Color);
+            var scan = CachedPixels(image, effort, cache, baseline.Predict, null, null, null, context, histogram,
+                modes: baseline.Modes, color: baseline.Color, useCache: baseline.UseCache);
             context.Reserve(count * 9L + 112); context.Work(0);
             var map = new byte[count]; var ranking = new long[count];
             LearnEntropyMap(histogram, baseline.Tables, map, ranking, context);
             context.Release(count * 8L + 32);
             var groups = CompactGroups(map, context);
-            var tables = GroupTables(histogram, map, groups, context);
+            var tables = GroupTables(histogram, map, groups, baseline.Tables[0].Alphabet, context);
             long bodyBits = scan.ExtraBits;
             for (var tile = 0; tile < count; tile++)
             {
@@ -43,7 +44,8 @@ internal static partial class WebpLosslessEncoder
                 mapTable = new(frequencies, context);
             }
             finally { context.Release(280 * 4 + 32); }
-            var candidate = new CachedPlan(tables, bodyBits, baseline.Alpha, baseline.Predict, scan.Literals, new(map, mapTable), baseline.Modes, baseline.ModeTable, baseline.Color);
+            var candidate = new CachedPlan(tables, bodyBits, baseline.Alpha, baseline.Predict, scan.Literals,
+                new(map, mapTable), baseline.Modes, baseline.ModeTable, baseline.Color, baseline.UseCache);
             if (PayloadUpper(image, candidate, context) + 2 < PayloadUpper(image, baseline, context))
             {
                 ReleaseCodingPlan(baseline, context); return candidate;
@@ -88,7 +90,8 @@ internal static partial class WebpLosslessEncoder
         }
     }
 
-    private static WebpPrefixCode[] GroupTables(TileHistograms histogram, ReadOnlySpan<byte> map, int groups, OperationContext context)
+    private static WebpPrefixCode[] GroupTables(TileHistograms histogram, ReadOnlySpan<byte> map, int groups,
+        int greenAlphabet, OperationContext context)
     {
         var bytes = groups * EntropyAlphabet * 4L + 32; context.Reserve(bytes);
         try
@@ -109,7 +112,7 @@ internal static partial class WebpLosslessEncoder
             for (var group = 0; group < groups; group++)
             for (var channel = 0; channel < 5; channel++)
                 tables[group * 5 + channel] = new(frequencies.AsSpan(group * EntropyAlphabet + ChannelOffsets[channel],
-                    ChannelOffsets[channel + 1] - ChannelOffsets[channel]), context);
+                    channel == 0 ? greenAlphabet : ChannelOffsets[channel + 1] - ChannelOffsets[channel]), context);
             return tables;
         }
         finally { context.Release(bytes); }
@@ -131,7 +134,7 @@ internal static partial class WebpLosslessEncoder
         // No data/quality/effort search or independent allowance from root capacity.
         for (var pass = 0; pass < 4; pass++)
         {
-            var tables = GroupTables(histogram, map, MaximumGroups, context);
+            var tables = GroupTables(histogram, map, MaximumGroups, baseline[0].Alphabet, context);
             try
             {
                 for (var tile = 0; tile < histogram.Count; tile++)

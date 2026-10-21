@@ -1,5 +1,8 @@
 # Lossless WebP residual color decorrelation
 
+Historical producer and costs; current results are in the
+[uncached-model round](WARM-VP8L-NO-CACHE.md).
+
 The fixed photograph falls from **172,418 to169,808 bytes**, saving **2,610 bytes
 (1.51%)** with exact RGBA. It remains **9,776 bytes above** its160,032-byte reference.
 Diagram7,636/7,234 and procedural opaque123,602/121,896 bytes are unchanged; all

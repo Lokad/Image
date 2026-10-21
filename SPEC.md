@@ -1368,6 +1368,14 @@ complete packet cost with the retained baseline. Coefficient maps and trees are
 admitted before allocation, with both alternatives live; the inherited predictor
 map remains charged through color and coding-table replacement. No full-frame
 residual copy is allocated. Refusal/cancellation/work exhaustion remain terminal.
+At effort>=4, a locally admitted predicted plan may compare one alternative with
+no color cache. Its full literal distribution and current spatial groups are
+refit, using a280-symbol green alphabet rather than1304 with the1024-entry cache.
+The same transforms and run/prior-row parse remain exact. Count/write/group phases
+carry the selected cache mode; complete map/header/payload cost chooses the winner.
+Both predictor and color owners remain charged through coding-table replacement.
+No source-frame copy or additional decision map is retained; shared refusal never
+selects the previous plan as a fallback.
 This optional analysis requires an a-priori local/work allowance, including about
 2,754 bytes per tile for temporary counts/indices, map/ranking capacity, and overlapping
 table construction. All substantial storage is charged before allocation through
