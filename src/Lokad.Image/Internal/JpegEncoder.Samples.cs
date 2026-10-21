@@ -18,7 +18,7 @@ internal static partial class JpegEncoder
         var mcus = (long)columns * rows; var blocks = mcus * (h * v + components - 1);
         var events = blocks * 64 + (options.RestartInterval == 0 ? 0 : mcus);
         var work = 2 * mcus + mcus * (h * v * (4096 + 768) + (components - 1) * (4096 + 768 * h * v))
-            + blocks * (192L + (AcDecisionLambda(options.Quality, components, options.Sampling, options.QuantizationPolicy) == 0 ? 0 : 4096)) + 262145;
+            + blocks * (192L + AcDecisionWork(options.Quality, components, options.Sampling, options.QuantizationPolicy)) + 262145;
         var adaptive = blocks >= 256 && events <= Array.MaxLength
             && work <= context.RemainingWork && events * sizeof(uint) + 65536 <= context.RemainingWorkingBytes
             && output is LimitedWriteStream limited && limited.SupportsAdaptiveJpegPlanning(blocks * 432 + 2048);
@@ -75,7 +75,8 @@ internal static partial class JpegEncoder
                                 mcu / columns * v * 8 + by * 8, samplesX, samplesY, component, pixels);
                             blockPixels = pixels;
                         }
-                        TransformEncoderBlock(blockPixels, q, quantized, transformed, acLambda, samplesX * samplesY, context);
+                        TransformEncoderBlock(blockPixels, q, quantized, transformed, acLambda, samplesX * samplesY, context,
+                            options.Sampling == JpegSampling.YCbCr444);
                         if (!adaptive) { WriteFixedBlock(quantized, ref predictors[component], writer!, FixedAc.Words); continue; }
                         context.Work(64);
                         var group = component == 0 ? 0 : 1;

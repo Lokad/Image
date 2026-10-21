@@ -1,36 +1,38 @@
 # Material warm coverage
 
-Updated 2026-10-21. Compression precedes CPU parity. The finite scope remains
-**256 named cases: 239 numeric and 17 unmeasured**. The current
+Updated2026-10-21. Compression precedes CPU parity. The finite scope remains
+**256 named cases:239 numeric and17 unmeasured**. The current
 [three-table summary](../docs/benchmark.md) retains tested-producer evidence:
-62 independent passes, 150 gaps, one confidence-open case, 15 short cost screens
-and **11 superseded JPEG rows**. Counts identify tested producers;
-full warm single-CPU parity and replacement readiness remain open.
+62 independent passes,147 gaps,one confidence-open case,15 short cost screens
+and **14 superseded JPEG rows**. Counts identify tested producers; full warm
+single-CPU parity and replacement readiness remain open.
 
-[Scoped JPEG AC decisions](WARM-JPEG-AC-DECISION.md) reduce default caller-RGB420
-from 74,040 to 55,797/ref52,093 B, preserving the unchanged matched-quality gate.
-Original4:2:2/4:2:0 use the bounded pass; 4:4:4 is restored after a rejected quality
-trial. Grayscale and optional CompactColor remain separate. The current producer
-passes 4,890 tests/OS, 72+51 scalar checks/OS and the same actual package/all examples
-on both platforms. One identical-active420 cost is reused with its original producer:
-10.791x/upper11.190x and170,539 B/op, without a new timing/confirmation.
+[Source-relative JPEG error caps](JPEG-AC-ERROR-CAP.md) reduce default4:4:4
+packets to155,732/133,041 B and155,795/133,043 B for existing8/16-bit controls.
+Source-PSNR gaps0.186/0.187 dB pass the unchanged0.25 dB gate; remaining packet
+excess is about17.1%. Original DQT/DC remain fixed. This follows C127's adaptive
+stream savings; no photographic/diagram compression claim is made.
 
-The [named invalidation list](jpeg-ac-decision-evidence.json) identifies exactly
-10 old subsampled JPEG timing rows. [Adaptive stream planning](JPEG-ADAPTIVE-STREAM.md)
-also invalidates two old 4:4:4 stream costs: the forward-only row now has one current
-cost screen, while the live-token row awaits future measurement. Five stream controls
-save bytes with exact previously qualified adaptive packets; all remain size-open.
-Current packet/quality facts are reconciled; historical means are not proven current
-gaps. Another31 metadata rows await the already recorded header-preflight
-qualification, with equivalent PNG typed metadata required before timing.
-Unchanged sources, packets, paths and valid qualification evidence are reused.
+The current producer passes4,907 tests/OS,87+53 scalar checks/OS and the same
+actual package/all examples on both platforms. One forward4:4:4 short cost is
+38,556.568us,563,746 B/op,ratio10.221/upper10.976. CPU cost is accepted for bytes;
+there is no CPU-parity confirmation. Unchanged caller420 cost retains its original
+producer:10.791x/upper11.190x,170,539 B/op, without repeating timing.
+
+The ten named old subsampled rows in [C124 evidence](jpeg-ac-decision-evidence.json)
+and444livecancel remain superseded. [C129](jpeg-ac-error-cap-evidence.json) adds
+Encode8,Encode16 and RGBA8async to that list; its current forward444 screen replaces
+C127's observation. Current packets/quality are reconciled; historical means do not
+prove current gaps. Another31 metadata confirmations remain pending, with equivalent
+PNG typed fields required before timing. Reuse unaffected evidence and stop passing
+controls; do not add an image/settings grid or perform speed-only work.
 
 All seven declared lossy WebP and six lossless WebP packet gates pass/stay stopped.
-Default JPEG and the named PNG gaps stay open; optional CompactColor cannot close
-default gates, and PNG5% IDAT/timing acceptance is not complete-packet parity.
-Do not add an image/settings grid. Preserve exact lossless pixels, quality gates,
-cooperative admission, cancellation, ownership and equivalent complete operations.
-CPU parity/speed-only work is deferred while compression gates remain open.
+JPEG5default passes/13open; optional CompactColor remains separate. PNG15/17 pass;
+two level6RGBA8 sync/async packets remain218,775/210,973 B. A5%IDAT tolerance or
+timing pass does not establish complete-packet parity. Exact lossless pixels,
+quality gates, cooperative admission, cancellation, ownership and equivalent
+complete operations remain mandatory.
 
 Earlier qualification milestones below retain their historical producer scopes.
 

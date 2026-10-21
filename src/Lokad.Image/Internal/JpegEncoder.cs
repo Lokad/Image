@@ -142,7 +142,8 @@ internal static partial class JpegEncoder
                             pixels[y * 8 + x] = (byte)Math.Clamp(Math.Round(sum / (samplesX * samplesY), MidpointRounding.AwayFromZero), 0, 255);
                         }
                     }
-                    TransformEncoderBlock(pixels, q, quantized, transformed, acLambda, samplesX * samplesY, context);
+                    TransformEncoderBlock(pixels, q, quantized, transformed, acLambda, samplesX * samplesY, context,
+                        options.Sampling == JpegSampling.YCbCr444);
                     WriteFixedBlock(quantized, ref predictors[component], writer, acWords);
                 }
             }
@@ -220,7 +221,7 @@ internal static partial class JpegEncoder
         if (blocks < 256) return false;
         var cacheSamples = blocks * 64 + (options.RestartInterval == 0 ? 0 : mcus);
         var work = 2 * mcus + mcus * (h * v * (4096 + 768) + (components - 1) * (4096 + 768 * h * v))
-            + blocks * (192L + (AcDecisionLambda(options.Quality, components, options.Sampling, options.QuantizationPolicy) == 0 ? 0 : 4096)) + 262145;
+            + blocks * (192L + AcDecisionWork(options.Quality, components, options.Sampling, options.QuantizationPolicy)) + 262145;
         var memory = image.ByteLength + 8192L + cacheSamples * sizeof(uint) + 65536;
         var outputMaximum = blocks * 432 + 2048;
         return cacheSamples <= Array.MaxLength && work <= context.RemainingWork && memory <= context.RemainingWorkingBytes
@@ -345,7 +346,8 @@ internal static partial class JpegEncoder
                                 pixels[y * 8 + x] = (byte)Math.Clamp(Math.Round(sum / (samplesX * samplesY), MidpointRounding.AwayFromZero), 0, 255);
                             }
                         }
-                        TransformEncoderBlock(pixels, q, quantized, transformed, acLambda, samplesX * samplesY, context);
+                        TransformEncoderBlock(pixels, q, quantized, transformed, acLambda, samplesX * samplesY, context,
+                            options.Sampling == JpegSampling.YCbCr444);
                         context.Work(64);
                         var group = component == 0 ? 0 : 1;
                         var difference = quantized[0] - predictors[component]; predictors[component] = quantized[0];

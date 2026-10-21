@@ -179,7 +179,7 @@ def render():
     encodes = [
         row('WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream', 'vp8l-color-cost-evidence.json', ['cases', 'WebpLossless8AsyncNonSeekable', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
         row('JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream', 'warm-jpeg-async-samples-evidence.json', ['cases', 'JpegRgb420AsyncSamples', -1], 'WARM-JPEG-ASYNC-SAMPLES.md', verification='Prior production; reconfirm'),
-        row('JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality', 'warm-jpeg-async-encode-evidence.json', ['cases', 'Jpeg8AsyncNonSeekable', -1], 'WARM-JPEG-ASYNC-ENCODE.md', verification='Gap (short; qualified)'),
+        row('JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality', 'warm-jpeg-async-encode-evidence.json', ['cases', 'Jpeg8AsyncNonSeekable', -1], 'WARM-JPEG-ASYNC-ENCODE.md', verification='Prior production; reconfirm'),
         row('PNG EncodePngAsync, fresh nonseekable Stream / level6', 'warm-png-async-encode-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-PNG-ASYNC-ENCODE.md', True),
         row('PNG RGBA8, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'Encode8', -1], 'WARM-PNG-CHUNK-CRC.md', True),
         row('PNG RGBA8, NoCompression / None', 'warm-png-stored-capacity-evidence.json', ['cases', 'EncodeNoCompression8', -1], 'WARM-PNG-STORED-CAPACITY.md', verification='Gap (short; qualified)'),
@@ -197,10 +197,10 @@ def render():
         row('PNG gray16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGray16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Gap (short; qualified)'),
         row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeGrayAlpha8', -1], 'WARM-PNG-BYTE-PACKING.md', True),
         row('PNG gray-alpha16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGrayAlpha16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
-        row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:4:4, forward-only output / adaptive Huffman', 'jpeg-adaptive-stream-evidence.json', ['cases', 'Encode444Stream8', -1], 'JPEG-ADAPTIVE-STREAM.md', verification='Cost screen (CPU parity deferred)'),
+        row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
+        row('JPEG 4:4:4, forward-only / capped AC decisions and adaptive Huffman', 'jpeg-ac-error-cap-evidence.json', ['cases', 'Encode444Stream8', -1], 'JPEG-AC-ERROR-CAP.md', verification='Cost screen (CPU parity deferred)'),
         row('JPEG 4:4:4, live cancelable token / prior geometric Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode444Cancelable8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
-        row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
@@ -349,22 +349,25 @@ These are bounded controls, not general-image compression claims.
 **55,797/52,093 B**, down 24.6%, with source-PSNR gap 0.058120 dB inside 0.25 dB.
 Its remaining 7.1% size gap is open. Grayscale remains 58,823/58,910 B;
 **optional CompactColor** remains 48,701/52,093 B on its separate procedural control.
-Equal numerical quality values do not establish equivalence. The rejected 4:4:4
-trial failed quality; current 4:4:4 packets are restored. Existing 4:2:2 controls pass
+Equal numerical quality values do not establish equivalence. The earlier uncapped
+4:4:4 trial remains rejected; [source-relative caps](../benchmarks/JPEG-AC-ERROR-CAP.md)
+now produce **155,732/133,041 B** (RGBA8) and **155,795/133,043 B** (RGBA16), with
+source-PSNR gaps0.186/0.187 dB inside0.25 dB. Existing 4:2:2 controls pass
 size/quality, without photographic or diagram extrapolation. PNG retains 15/17
 complete-packet passes; two level-6 RGBA8 boundaries remain218,775/210,973 B.
 A timing pass or 5% IDAT tolerance does not establish packet-size parity.
 The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles all 19
 existing encode rows: 5 default passes/13 open, plus one separate optional pass.
-The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) saves 12,166 B
-on 4:4:4 forward-only/cancellable output: 158,812/133,041 B with exact prior adaptive
-packets/pixels/quality. The largest remaining default 4:4:4 gap is about 19.4%.
+The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) first saved12,166 B
+on 4:4:4 forward-only/cancellable output. Capped decisions save another3,080 B;
+the largest remaining default4:4:4 packet gap is about17.1%.
 
-The current JPEG producer passes 4,890 Release tests/OS, 72+51 scalar checks/OS and
+The current JPEG producer passes 4,907 Release tests/OS, 87+53 scalar checks/OS and
 the same actual private 0.2.0 package/all examples on Windows/Linux. The
 [ownership repair](../benchmarks/JPEG-BUDGET-EVENT-OWNERSHIP.md) keeps caller-budget
-event storage charged through its actual users. Forward 4:4:4 records 5,777.779 µs,
-559,443 B/op in one short cost screen; CPU parity remains deferred. Active caller 4:2:0
+event storage charged through its actual users. Forward4:4:4 records38,556.568 µs,
+563,746 B/op in one short cost screen: more CPU is accepted for the compression
+gain, and CPU parity remains deferred. Active caller4:2:0
 cost is reused from the identical decision code before eligibility was restricted;
 that observation retains its original tested producer. No timing was repeated.
 CPU/allocation costs are recorded; speed-only work and independent confirmations

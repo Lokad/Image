@@ -11,22 +11,25 @@ These are bounded controls, not general-image compression claims.
 **55,797/52,093 B**, down 24.6%, with source-PSNR gap 0.058120 dB inside 0.25 dB.
 Its remaining 7.1% size gap is open. Grayscale remains 58,823/58,910 B;
 **optional CompactColor** remains 48,701/52,093 B on its separate procedural control.
-Equal numerical quality values do not establish equivalence. The rejected 4:4:4
-trial failed quality; current 4:4:4 packets are restored. Existing 4:2:2 controls pass
+Equal numerical quality values do not establish equivalence. The earlier uncapped
+4:4:4 trial remains rejected; [source-relative caps](../benchmarks/JPEG-AC-ERROR-CAP.md)
+now produce **155,732/133,041 B** (RGBA8) and **155,795/133,043 B** (RGBA16), with
+source-PSNR gaps0.186/0.187 dB inside0.25 dB. Existing 4:2:2 controls pass
 size/quality, without photographic or diagram extrapolation. PNG retains 15/17
 complete-packet passes; two level-6 RGBA8 boundaries remain218,775/210,973 B.
 A timing pass or 5% IDAT tolerance does not establish packet-size parity.
 The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles all 19
 existing encode rows: 5 default passes/13 open, plus one separate optional pass.
-The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) saves 12,166 B
-on 4:4:4 forward-only/cancellable output: 158,812/133,041 B with exact prior adaptive
-packets/pixels/quality. The largest remaining default 4:4:4 gap is about 19.4%.
+The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) first saved12,166 B
+on 4:4:4 forward-only/cancellable output. Capped decisions save another3,080 B;
+the largest remaining default4:4:4 packet gap is about17.1%.
 
-The current JPEG producer passes 4,890 Release tests/OS, 72+51 scalar checks/OS and
+The current JPEG producer passes 4,907 Release tests/OS, 87+53 scalar checks/OS and
 the same actual private 0.2.0 package/all examples on Windows/Linux. The
 [ownership repair](../benchmarks/JPEG-BUDGET-EVENT-OWNERSHIP.md) keeps caller-budget
-event storage charged through its actual users. Forward 4:4:4 records 5,777.779 µs,
-559,443 B/op in one short cost screen; CPU parity remains deferred. Active caller 4:2:0
+event storage charged through its actual users. Forward4:4:4 records38,556.568 µs,
+563,746 B/op in one short cost screen: more CPU is accepted for the compression
+gain, and CPU parity remains deferred. Active caller4:2:0
 cost is reused from the identical decision code before eligibility was restricted;
 that observation retains its original tested producer. No timing was repeated.
 CPU/allocation costs are recorded; speed-only work and independent confirmations
@@ -36,8 +39,8 @@ Published 0.1.0 is immutable; replacement readiness remains open.
 
 The [finite checklist](../benchmarks/WARM-COVERAGE.md) remains 256 named cases:
 239 numeric and 17 unmeasured. Tested-producer rows contain **62 passes,
-150 gaps, 1 confidence-open case, 15 short cost
-screens and 11 superseded JPEG rows**. The latter predate
+147 gaps, 1 confidence-open case, 15 short cost
+screens and 14 superseded JPEG rows**. The latter predate
 AC decision work or adaptive stream planning; current packet/quality evidence is
 reconciled and new costs are deferred while compression gates remain open.
 Their stored values are historical, not demonstrated current gaps. Another 31 marked
@@ -168,7 +171,7 @@ is a CPU-parity confirmation.
 | --- | ---: | ---: | ---: | ---: | --- |
 | [WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream](../benchmarks/WARM-VP8L-COLOR-COST.md) | 441,626.63 | 121,213.42 | 3.643 / 4.686 | 55,170,368 | Cost screen (CPU parity deferred) |
 | [JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream](../benchmarks/WARM-JPEG-ASYNC-SAMPLES.md) | 2,076.73 | 1,628.02 | 1.276 / 1.430 | 232,614 | Prior production; reconfirm |
-| [JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality](../benchmarks/WARM-JPEG-ASYNC-ENCODE.md) | 3,982.03 | 3,849.79 | 1.034 / 1.158 | 494,254 | Gap (short; qualified) |
+| [JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality](../benchmarks/WARM-JPEG-ASYNC-ENCODE.md) | 3,982.03 | 3,849.79 | 1.034 / 1.158 | 494,254 | Prior production; reconfirm |
 | [PNG EncodePngAsync, fresh nonseekable Stream / level6](../benchmarks/WARM-PNG-ASYNC-ENCODE.md) | 5,397.36 | 17,268.11 | 0.313 / 0.314 | 658,560 | Parity confirmed |
 | [PNG RGBA8, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 5,406.30 | 17,266.72 | 0.313 / 0.315 | 527,627 | Parity confirmed |
 | [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED-CAPACITY.md) | 245.37 | 189.47 | 1.295 / 1.430 | 604,319 | Gap (short; qualified) |
@@ -186,10 +189,10 @@ is a CPU-parity confirmation.
 | [PNG gray16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 5,762.37 | 4,913.26 | 1.173 / 1.246 | 1,051,421 | Gap (short; qualified) |
 | [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 4,174.10 | 4,289.79 | 0.973 / 0.980 | 264,179 | Parity confirmed |
 | [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 9,426.43 | 10,150.04 | 0.929 / 0.933 | 1,052,317 | Parity confirmed |
-| [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,894.69 | 3,771.76 | 1.033 / 1.115 | 559,418 | Gap (short; qualified) |
-| [JPEG 4:4:4, forward-only output / adaptive Huffman](../benchmarks/JPEG-ADAPTIVE-STREAM.md) | 5,777.78 | 4,066.61 | 1.421 / 4.529 | 559,443 | Cost screen (CPU parity deferred) |
+| [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,894.69 | 3,771.76 | 1.033 / 1.115 | 559,418 | Prior production; reconfirm |
+| [JPEG 4:4:4, forward-only / capped AC decisions and adaptive Huffman](../benchmarks/JPEG-AC-ERROR-CAP.md) | 38,556.57 | 3,772.17 | 10.221 / 10.976 | 563,746 | Cost screen (CPU parity deferred) |
 | [JPEG 4:4:4, live cancelable token / prior geometric Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 4,465.15 | 3,775.40 | 1.183 / 1.364 | 525,997 | Prior production; reconfirm |
-| [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,980.90 | 3,855.74 | 1.032 / 1.135 | 556,284 | Gap (short; qualified) |
+| [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,980.90 | 3,855.74 | 1.032 / 1.135 | 556,284 | Prior production; reconfirm |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,579.93 | 2,354.66 | 1.096 / 1.227 | 294,116 | Prior production; reconfirm |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,633.91 | 2,421.91 | 1.088 / 1.220 | 294,116 | Prior production; reconfirm |
 | [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,022.21 | 1,766.91 | 1.144 / 1.247 | 297,781 | Prior production; reconfirm |

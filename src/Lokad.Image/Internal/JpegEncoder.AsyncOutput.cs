@@ -34,7 +34,8 @@ internal static partial class JpegEncoder
         var mcus = ((source.Width + h * 8L - 1) / (h * 8)) * ((source.Height + v * 8L - 1) / (v * 8));
         var blocks = mcus * (h * v + components - 1);
         var events = blocks * 64 + (options.RestartInterval == 0 ? 0 : mcus);
-        var work = 2 * mcus + mcus * (h * v * (4096 + 768) + (components - 1) * (4096 + 768 * h * v)) + blocks * 192 + 262145;
+        var work = 2 * mcus + mcus * (h * v * (4096 + 768) + (components - 1) * (4096 + 768 * h * v))
+            + blocks * (192L + AcDecisionWork(options.Quality, components, sampling, options.QuantizationPolicy)) + 262145;
         // The source/fixed sample workspace is already admitted by the new API.
         var memory = events * sizeof(uint) + 65536 + capacity + EncodedOutput.Overhead;
         return blocks >= 256 && events <= Array.MaxLength && work <= context.RemainingWork && memory <= context.RemainingWorkingBytes

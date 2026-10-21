@@ -31,6 +31,8 @@
 - Optional `CompactColor` JPEG quantization, separate from the default formula.
 - Smaller default subsampled color JPEG packets through bounded source-DCT AC decisions;
   original quantization tables, grayscale, shared admission and ownership remain unchanged.
+- Source-relative block-error caps extend bounded AC decisions to default 4:4:4
+  JPEG, preserving quantizers/DC and the separately verified reconstruction-quality gates.
 - Caller-budget JPEG encoding keeps adaptive event storage within its operation owner,
   without borrowing or retaining an uncharged thread cache.
 - Adaptive JPEG tables also reduce forward-only and cancellable packets while

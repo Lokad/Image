@@ -4,35 +4,55 @@ internal static partial class JpegEncoder
 {
     private static int AcDecisionLambda(int quality, int components, JpegSampling sampling, JpegQuantizationPolicy policy)
     {
-        if (components != 3 || sampling is not (JpegSampling.YCbCr422 or JpegSampling.YCbCr420)
+        if (components != 3 || sampling is not (JpegSampling.YCbCr444 or JpegSampling.YCbCr422 or JpegSampling.YCbCr420)
             || policy != JpegQuantizationPolicy.Original) return 0;
         var scale = quality < 50 ? 5000 / quality : 200 - 2 * quality;
         var precision = (16 * scale + 50) / 100;
         return precision * precision;
     }
 
+    private static int AcDecisionWork(int quality, int components, JpegSampling sampling, JpegQuantizationPolicy policy)
+        => AcDecisionLambda(quality, components, sampling, policy) == 0 ? 0
+            : sampling == JpegSampling.YCbCr444 ? 4160 : 4096;
+
     private static void TransformEncoderBlock(ReadOnlySpan<byte> pixels, ReadOnlySpan<ushort> quantization,
-        Span<int> quantized, Span<double> transformed, int lambda, int samplingArea, OperationContext context)
+        Span<int> quantized, Span<double> transformed, int lambda, int samplingArea, OperationContext context,
+        bool limitBlockError)
     {
         if (lambda == 0 && JpegTransform.TryForwardQuantized(pixels, quantization, quantized, context)) return;
         JpegTransform.Forward(pixels, transformed, context);
         Quantize(transformed, quantization, quantized);
-        if (lambda != 0) DecideAc(transformed, quantization, quantized, lambda, samplingArea, context);
+        if (lambda != 0) DecideAc(transformed, quantization, quantized, lambda, samplingArea, context, limitBlockError);
     }
 
     // T.81 permits encoder coefficient decisions independently of DQT. Keep the
-    // original quantizers, initial nearest-away rounding and DC for subsampled color;
-    // one reverse scan
-    // considers zero for each nonzero AC coefficient. The existing immutable
+    // original quantizers, initial nearest-away rounding and DC. One reverse scan
+    // considers zero for each nonzero AC coefficient. Full-resolution color also
+    // caps additional block error at 1/32 of its initial source-quantization error.
+    // This component-DCT bound does not replace measured RGB-quality gates.
+    // The existing immutable
     // geometric AC model makes decisions independent of stream/entropy/admission.
     // No image search, reference-derived constants, frame cache or new heap storage.
     internal static void DecideAc(ReadOnlySpan<double> transformed, ReadOnlySpan<ushort> quantization,
-        Span<int> quantized, int lambda, int samplingArea, OperationContext context)
+        Span<int> quantized, int lambda, int samplingArea, OperationContext context, bool limitBlockError = false)
     {
         if (transformed.Length != 64 || quantization.Length != 64 || quantized.Length != 64
             || lambda < 0 || samplingArea is < 1 or > 4)
             throw new ArgumentException("JPEG AC decisions require complete blocks and valid weights.");
         if (lambda == 0) return;
+        var maximumError = double.PositiveInfinity; var additionalError = 0d;
+        if (limitBlockError)
+        {
+            context.Work(64);
+            var originalError = 0d;
+            for (var scan = 0; scan < 64; scan++)
+            {
+                var index = JpegTransform.Zigzag[scan];
+                var residual = transformed[index] - (double)quantized[index] * quantization[index];
+                originalError += residual * residual;
+            }
+            maximumError = originalError * samplingArea / 32;
+        }
         var lengths = FixedAc.Table.Lengths;
         context.Work(64);
         var previousBits = AcDecisionBits(quantized, lengths);
@@ -45,7 +65,12 @@ internal static partial class JpegEncoder
             var nextBits = AcDecisionBits(quantized, lengths);
             var source = transformed[index]; var residual = source - (double)value * quantization[index];
             var error = samplingArea * (source * source - residual * residual);
-            if (error < (long)lambda * (previousBits - nextBits)) previousBits = nextBits;
+            if (error < (long)lambda * (previousBits - nextBits)
+                && (!limitBlockError || additionalError + error <= maximumError))
+            {
+                previousBits = nextBits;
+                if (limitBlockError) additionalError += error;
+            }
             else quantized[index] = value; // Stable old coefficient on ties.
         }
     }

@@ -40,8 +40,8 @@ public sealed class JpegQualityTests
             using var image = JpegQualityCorpus.Buffer(source, depth); using var encoded = new MemoryStream();
             var options = new JpegEncodeOptions { Sampling = sampling, Quality = setting, BackgroundRgb = background };
             // Retain the historical report and all its source/DQT/sampling checks.
-            // Subsampled Original AC decisions may change lossy pixels. Grayscale,
-            // 4:4:4 and quality100 keep their frozen pixels; all current entropy modes agree.
+            // Original color AC decisions may change lossy pixels. Grayscale and
+            // quality100 keep frozen pixels; all current entropy modes agree.
             // Matched-quality compression gates are qualified separately, without
             // treating this historical quality-number grid as matched pairs.
             using var historicalToken = new CancellationTokenSource();
@@ -50,7 +50,7 @@ public sealed class JpegQualityTests
             var header = JpegQualitySyntax.Read(bytes); Assert.Equal(entry.GetProperty("quantizationHash").GetString(), header.QuantizationHash);
             Assert.Equal(entry.GetProperty("codedSampling").GetString(), header.Sampling); Assert.Equal(sampling == JpegSampling.Grayscale ? 1 : 3, header.Components);
             using var decoded = ImageCodec.Decode(bytes); var currentPixelHash = Hash(OriginalPixels.Bytes(decoded));
-            if (sampling is JpegSampling.Grayscale or JpegSampling.YCbCr444 || setting == 100)
+            if (sampling == JpegSampling.Grayscale || setting == 100)
                 Assert.Equal(entry.GetProperty("managedDecodedHash").GetString(), currentPixelHash);
             using var current = new MemoryStream(); ImageCodec.EncodeJpeg(image, current, options);
             var currentHeader = JpegQualitySyntax.Read(current.ToArray());
