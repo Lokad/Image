@@ -26,7 +26,7 @@ public sealed class Vp8PrefixWorkTests
             Limits = new ImageLimits { MaxWork = work, MaxWorkingBytes = memory, MemoryBudget = root } };
 
     [Theory] [InlineData(8)] [InlineData(16)]
-    public void PrefixWithin32MCompressesExactPixelsAndPreservesIndependentOwners(int depth)
+    public void LimitedWorkEncodingPreservesQualityExactAlphaAndIndependentOwners(int depth)
     {
         using var root = new TestMemoryBudget(8000000); using var source = Source(depth, root);
         var unchanged = OriginalPixels.Bytes(source); var held = root.Bytes;
@@ -36,7 +36,21 @@ public sealed class Vp8PrefixWorkTests
         Assert.True(encoded.Length < fixedPacket.Length); Assert.NotSame(encoded.GetBuffer(), fixedPacket.GetBuffer());
         using var expected = ImageCodec.Decode(fixedPacket.ToArray());
         using var actual = ImageCodec.Decode(encoded.ToArray(), new DecodeOptions { Limits = new ImageLimits { MemoryBudget = root } });
-        var pixels = OriginalPixels.Bytes(expected); Assert.Equal(pixels, OriginalPixels.Bytes(actual));
+        // Optional coefficient decisions can change lossy RGB with local work/
+        // memory admission. Keep the same reconstruction-quality tolerance and
+        // exact source alpha while checking the actual result's surviving owner.
+        var baseline = OriginalPixels.Bytes(expected); var pixels = OriginalPixels.Bytes(actual);
+        long baselineError = 0, actualError = 0;
+        for (var i = 0; i < pixels.Length; i++)
+        {
+            var sourceSample = depth == 8 ? unchanged[i]
+                : (BinaryPrimitives.ReadUInt16LittleEndian(unchanged.AsSpan(i * 2)) + 128) / 257;
+            if (i % 4 == 3) { Assert.Equal(sourceSample, pixels[i]); continue; }
+            var previous = baseline[i] - sourceSample; var current = pixels[i] - sourceSample;
+            baselineError += (long)previous * previous; actualError += (long)current * current;
+        }
+        Assert.InRange(10 * Math.Log10((double)Math.Max(baselineError, actualError)
+            / Math.Max(1, Math.Min(baselineError, actualError))), 0, .25);
         Assert.Equal(unchanged, OriginalPixels.Bytes(source));
         source.Dispose(); encoded.GetBuffer().AsSpan().Clear(); fixedPacket.GetBuffer().AsSpan().Clear();
         Assert.Equal(Width * Height * 4, root.Bytes); Assert.Equal(pixels, OriginalPixels.Bytes(actual));

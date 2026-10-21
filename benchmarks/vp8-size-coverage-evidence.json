@@ -128,25 +128,25 @@
     },
     {
       "case": "WarmWebp/EncodeBudget8",
-      "managedPacketBytes": 100980,
+      "managedPacketBytes": 100544,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "vp8-noise-spectrum-evidence.json",
+      "evidence": "vp8-zero-one-evidence.json",
       "observationPath": [
         "observations",
-        4
+        0
       ],
-      "validity": "C83 qualified shared DC/AC spectral-noise correction; fixed inputs/reference/settings/quality gates and exact alpha. Seven current short cost observations, CPU parity deferred.",
-      "previousManagedPacketBytes": 101478,
+      "validity": "C85 qualified reconsidered zero/one coefficient decision on current pruned128-prefix limited-work path.31,696,404actual units inside32M; unchanged source/reference/settings/quality gates, exact ALPH. Completepacket remains1954B above target.",
+      "previousManagedPacketBytes": 100980,
       "alphaPayloadBytes": 19246,
-      "coefficientPolicy": "Shared DC/AC spectral-noise correction, fixed allowance/base steps/four clusters; no new owner/frame/copy.32 extra sample units and bounded monotone search retain128 search units. Existing constrained128 entropy sample and alpha matching unchanged.",
+      "coefficientPolicy": "Original C78 explicit-zero/one token-rate threshold with unchanged segment steps and lambda. Same128 prefix and19246B ALPH. Two3200-unit table preparations,257cost initialization,1unit/performed magnitude-one decision; conservative local envelope covers every coefficient. No extra heap owner/frame/transform/input pass; original4KiB stack admission retained.",
       "alphaCodingPolicy": "Four-residual rolling key, same recent/token-start histories, exact prefix verification and admitted adaptive packed replay.",
-      "psnrGapDb": 0.040560241093073546,
-      "consumedWork": 31632851,
+      "psnrGapDb": 0.04193553408083233,
+      "consumedWork": 31696404,
       "referenceAlphaPayloadBytes": 24588,
       "alphaComponentSizePass": true
     }

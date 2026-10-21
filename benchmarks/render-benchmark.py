@@ -218,7 +218,7 @@ def render():
         row('WebP VP8, opaque from RGBA16â€¡', 'vp8-noise-spectrum-evidence.json', ['observations', 1], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alphaâ€¡', 'vp8-noise-spectrum-evidence.json', ['observations', 2], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha from RGBA16â€¡', 'vp8-noise-spectrum-evidence.json', ['observations', 3], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alphaâ€¡, caller work budget32M', 'vp8-noise-spectrum-evidence.json', ['observations', 4], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alphaâ€¡, caller work budget32M', 'vp8-zero-one-evidence.json', ['observations', 0], 'WARM-VP8-ZERO-ONE.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-CODE-COST.md', True),
@@ -460,24 +460,23 @@ photograph17,366/ref17,688 B and diagram6,722/ref7,100 B retain their matched
 managed77/75 versus native75/effort4 settings; source-PSNR gaps0.140944/0.117409 dB
 pass unchanged0.25dB and exact-alpha gates. Passing complete cases stay stopped.
 
-The current [DC/AC-noise round](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) reduces
-unrestricted opaque8/16 **71,154â†’70,298/ref72,380 B**, alpha8/16
-**96,708â†’96,016/ref98,590 B**, and constrained work 32M **101,478â†’100,980/ref98,590 B**.
-The sole remaining lossy complete-packet gap is **2,390 B**. Source-quality gaps
-0.005052/0.021958/0.040560 dB, decoder bounds and exact alpha pass unchanged.
-Primary photograph/diagram packets/pixels/quality remain exact. A shared analytical
-correction propagates unequal DC/AC coefficient noise through centered chroma;
-the allowance, base map, steps and clustering policy are unchanged. No new owner,
-frame/cache/copy; additional analysis is charged and 31,632,851 units fit 32M.
-Shared refusal, exhaustion/cancellation and output ownership remain mandatory.
-Both OSes pass 4,723 tests, 247 internal + 12 public + 4 differential scalar and the same actual package/all
-examples qualify. Seven short guarded costs replace all affected analysis paths;
-CPU parity/independent repeats remain deferred. Only these fixed inputs/settings
-support the claims. Lossless WebP follows the remaining lossy gate, then default
-JPEG and PNG complete-packet gaps. Earlier
-[selected-coefficient](../benchmarks/WARM-VP8-COEFFICIENT-REFINEMENT.md) and
-[pruned-prefix](../benchmarks/WARM-WEBP-PRUNED-PREFIX.md) milestones retain their
-historical evidence; their costs are superseded on these seven paths.
+The [DC/AC-noise round](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) sets the current
+unrestricted opaque8/16 packets at **70,298/ref72,380 B** and alpha8/16 at
+**96,016/ref98,590 B**. The current
+[zero/one round](../benchmarks/WARM-VP8-ZERO-ONE.md) further reduces constrained
+work32M **100,980→100,544/ref98,590 B**. Its sole remaining complete-packet gap is
+**1,954 B**; source-quality gap0.041936dB, exact alpha and decoder bounds pass the
+unchanged gates. The earlier rejected candidate now fits without displacing
+stronger alpha compression. Original threshold/rate scale/steps remain fixed;
+31,696,404 actual units fit32M. No new frame/cache/copy or heap owner. Shared
+refusal, exhaustion/cancellation and independent output ownership remain mandatory.
+Both OSes pass4,733tests,257internal+12public+4diff scalar and the same actual
+private package/all examples. One guarded short cost replaces the constrained row;
+six other costs retain C83 producer identities. Higher CPU is accepted for the
+436 B gain; CPU parity and independent timing repeats remain deferred. Primary
+photograph/diagram packets/pixels/quality stay exact. Only these fixed inputs and
+settings support the claims. Lossless WebP follows the remaining lossy gate, then
+default JPEG and PNG complete-packet gaps. Earlier milestones retain their raw.
 
 The [lossless adaptive-predictor screen](../benchmarks/WARM-VP8L-ADAPTIVE-PREDICTOR-AUDIT.md)
 saves2,652/0 B on the fixed photograph/diagram but misses both lossless size gates.

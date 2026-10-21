@@ -38,27 +38,33 @@ internal static partial class Vp8Encoder
         using var model = CoefficientModel.TryCreate(source, count, candidates[options.Effort], options.Effort == 0 ? 1 : 4, context,
             options.Effort >= 4 && (q != 0 || quantization is not null) ? modes : null, fullFrame: options.Effort >= 4 && q == 0,
             segmented: quantization is not null, refinementWork: q == 0 && quantization is not null
-                ? count * (24L * (RefinementWork + 512) + 512) : 0);
+                ? count * (24L * (RefinementWork + 512) + 512) : 0,
+            nearZeroWork: q == 0 && quantization is not null ? count * 384L + 2 * NearZeroTableWork + 257 : 0);
         var intra16 = model?.Intra16 == true;
         var boundedPrediction = !intra16 && model is not null && q == 0 && quantization is not null;
+        var nearZero = model?.NearZero == true;
         Span<short> luma = intra16 ? stackalloc short[256] : default;
         Span<short> y2 = intra16 ? stackalloc short[16] : default;
         Span<short> chromaCoefficients = intra16 ? stackalloc short[128] : default;
-        Span<int> bitCosts = intra16 ? stackalloc int[257] : default;
+        Span<int> bitCosts = intra16 || nearZero ? stackalloc int[257] : default;
+        Span<double> zeroThresholds = nearZero ? stackalloc double[192] : default;
         var lambda = 0;
-        if (intra16)
+        if (intra16 || nearZero)
         {
+            if (nearZero) context.Work(257);
             for (var p = 0; p <= 256; p++) bitCosts[p] = (int)Math.Round(-Math.Log2(Math.Max(1, p) / 256d) * 256, MidpointRounding.AwayFromZero);
             var ac = (int)Vp8Tables.AcQuantizers[q];
             lambda = (int)Math.Round(ac * ac * Math.Log(2) * 256 / 24, MidpointRounding.AwayFromZero);
         }
+        if (nearZero) PrepareZeroThresholds(quantization!.Quantizers, model!.Probabilities, bitCosts, zeroThresholds, context);
         for (var my = 0; my < rows; my++)
         {
             left.Clear(); byte leftY2 = 0;
             for (var mx = 0; mx < columns; mx++)
             {
                 var index = my * columns + mx; var x = mx * 16; var y = my * 16;
-                var blockQ = quantization is null ? q : quantization.Quantizers[quantization.Map[index]];
+                var segment = quantization is null ? 0 : quantization.Map[index];
+                var blockQ = quantization is null ? q : quantization.Quantizers[segment];
                 var blockLambda = lambda;
                 if (intra16 && blockQ != q)
                 {
@@ -94,7 +100,8 @@ internal static partial class Vp8Encoder
                             : SelectLuma(source, reconstructed, bx, by, x, y, candidates[options.Effort], context);
                         modes[index * 16 + b] = (byte)mode;
                         Block(source.Y, reconstructed.Y, source.Stride, bx, by, 3, blockQ,
-                            tokens, above.AsSpan(mx * 8, 8), left, b % 4, b / 4, context, model, index * 24 + b, 0);
+                            tokens, above.AsSpan(mx * 8, 8), left, b % 4, b / 4, context, model, index * 24 + b, 0,
+                            nearZero ? zeroThresholds.Slice(segment * 48, 24) : default);
                     }
                 var chromaMode = intra16
                     ? SelectRateChroma(source, reconstructed, x / 2, y / 2, blockQ, above.AsSpan(mx * 8, 8), left,
@@ -116,11 +123,16 @@ internal static partial class Vp8Encoder
                         }
                         else Block(src, dst, source.Stride / 2, x / 2 + b % 2 * 4, y / 2 + b / 2 * 4, 2, blockQ,
                             tokens, above.AsSpan(mx * 8, 8), left, 4 + plane * 2 + b % 2, 4 + plane * 2 + b / 2, context,
-                            model, index * 24 + 16 + plane * 4 + b, source.Y.Length + plane * source.U.Length);
+                            model, index * 24 + 16 + plane * 4 + b, source.Y.Length + plane * source.U.Length,
+                            nearZero ? zeroThresholds.Slice(segment * 48 + 24, 24) : default);
                 }
                 if (model is not null && !model.Ready
                     && (index + 1 == model.PrefixMacroblocks || index + 1 == model.CacheMacroblocks))
+                {
                     model.CompleteMacroblock(source, tokens, columns, rows, index + 1);
+                    if (nearZero && index + 1 < count)
+                        PrepareZeroThresholds(quantization!.Quantizers, model.Probabilities, bitCosts, zeroThresholds, context);
+                }
             }
         }
         tokens.Finish();
@@ -258,7 +270,7 @@ internal static partial class Vp8Encoder
 
     private static void Block(byte[] source, byte[] reconstructed, int stride, int x, int y, int plane, int q,
         Vp8BooleanWriter writer, Span<byte> above, Span<byte> left, int a, int l, OperationContext context,
-        CoefficientModel? model, int block, int sampleOffset)
+        CoefficientModel? model, int block, int sampleOffset, ReadOnlySpan<double> zeroThresholds = default)
     {
         context.Work(512); Span<short> residual = stackalloc short[16]; Span<short> coefficients = stackalloc short[16];
         for (var dy = 0; dy < 4; dy++)
@@ -267,7 +279,9 @@ internal static partial class Vp8Encoder
                 var index = (y + dy) * stride + x + dx; residual[dy * 4 + dx] = (short)(source[index] - reconstructed[index]);
             }
         var dc = (int)Vp8Tables.DcQuantizers[q]; if (plane == 2) dc = Math.Min(132, dc);
-        var ac = Vp8Tables.AcQuantizers[q]; Vp8ForwardDct.Quantize(residual, coefficients, dc, ac);
+        var ac = Vp8Tables.AcQuantizers[q];
+        if (zeroThresholds.IsEmpty) Vp8ForwardDct.Quantize(residual, coefficients, dc, ac);
+        else QuantizeNearZero(residual, coefficients, dc, ac, above[a] + left[l], zeroThresholds, context);
         var nonzero = model is null ? Coefficients(writer, coefficients, plane, above[a] + left[l])
             : model.Ready ? Coefficients(writer, coefficients, plane, above[a] + left[l], model.Probabilities)
             : model.Record(source, stride, x, y, sampleOffset, block, coefficients, plane, above[a] + left[l]);

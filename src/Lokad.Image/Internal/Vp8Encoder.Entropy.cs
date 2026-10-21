@@ -18,10 +18,11 @@ internal static partial class Vp8Encoder
         internal bool Ready { get; private set; }
         internal bool Intra16 => macroModes is not null;
         internal bool Refine { get; }
+        internal bool NearZero { get; }
         internal byte[] Y2Above { get; }
 
         internal static CoefficientModel? TryCreate(Vp8Planes source, int blocks, int lumaTrials, int chromaTrials, OperationContext context,
-            byte[]? modes = null, bool fullFrame = false, bool segmented = false, long refinementWork = 0)
+            byte[]? modes = null, bool fullFrame = false, bool segmented = false, long refinementWork = 0, long nearZeroWork = 0)
         {
             var samples = source.Y.Length + source.U.Length + source.V.Length;
             var prefix = Math.Min(blocks, 64);
@@ -76,8 +77,10 @@ internal static partial class Vp8Encoder
                 if (segmented && modes is not null && extended > prefix && extendedExtra <= source.MemoryBytes
                     && extendedExtra + growth <= context.RemainingWorkingBytes
                     && predictionWork + extendedWork + blocks * 24L <= context.RemainingWork)
-                    return new CoefficientModel(samples, blocks, context, prefixMacroblocks: 128);
-                return new CoefficientModel(samples, blocks, context);
+                    return new CoefficientModel(samples, blocks, context, prefixMacroblocks: 128,
+                        nearZero: nearZeroWork != 0 && predictionWork + extendedWork + blocks * 24L + nearZeroWork <= context.RemainingWork);
+                return new CoefficientModel(samples, blocks, context, nearZero: nearZeroWork != 0
+                    && predictionWork + prefixWork + blocks * 24L + nearZeroWork <= context.RemainingWork);
             }
             if (fullFrame && blocks > prefix)
             {
@@ -94,9 +97,9 @@ internal static partial class Vp8Encoder
         }
 
         internal CoefficientModel(int samples, int blocks, OperationContext context, byte[]? modes = null, int columns = 0,
-            bool fullFrame = false, bool refine = false, int prefixMacroblocks = 64)
+            bool fullFrame = false, bool refine = false, int prefixMacroblocks = 64, bool nearZero = false)
         {
-            this.context = context; Refine = refine; PrefixMacroblocks = Math.Min(blocks, prefixMacroblocks);
+            this.context = context; Refine = refine; NearZero = nearZero; PrefixMacroblocks = Math.Min(blocks, prefixMacroblocks);
             CacheMacroblocks = fullFrame ? blocks : PrefixMacroblocks;
             if (samples != blocks * 384) throw new ArgumentException("VP8 private plane geometry differs.");
             reservation = CacheMacroblocks * (384L / 4 + 24) + 16384 + (modes is null ? 0 : CacheMacroblocks * 16L + columns + 64);

@@ -2,7 +2,7 @@
 
 Six of seven already declared encode controls pass complete-packet size and
 quality: the two primary content controls and four unrestricted procedural controls.
-**Only the32M-work control remains open**, by2,390 B. Fixed managed100/native75
+**Only the32M-work control remains open**, by1,954 B. Fixed managed100/native75
 settings below are benchmark inputs, not the library default85 or evidence of
 matching by numerical equality. No general lossy WebP parity follows.
 
@@ -14,9 +14,14 @@ matching by numerical equality. No general lossy WebP parity follows.
 | WarmWebp/EncodeOpaque16 | 70,298 / 72,380 | 100 / 75 | Pass |
 | WarmWebp/Encode8 | 96,016 / 98,590 | 100 / 75 | Pass |
 | WarmWebp/Encode16 | 96,016 / 98,590 | 100 / 75 | Pass |
-| WarmWebp/EncodeBudget8 | 100,980 / 98,590 | 100 / 75 | Open |
+| WarmWebp/EncodeBudget8 | 100,544 / 98,590 | 100 / 75 | Open |
 
-The current [DC/AC-noise round](WARM-VP8-NOISE-SPECTRUM.md) saves856 B per opaque
+The current [zero/one round](WARM-VP8-ZERO-ONE.md) reduces the constrained packet
+100,980→100,544 B with a0.041936dB source-quality gap within0.25dB, exact alpha
+and31,696,404 units inside32M. BothOS4,733tests/scalar and the same actual package/
+examples qualify. One short cost replaces that path; six other C83 costs remain.
+
+The [DC/AC-noise round](WARM-VP8-NOISE-SPECTRUM.md) saves856 B per opaque
 control,692 B per unrestricted alpha control and498 B under32M. Source-quality
 gaps are0.005052/0.021958/0.040560dB within0.25dB; exact alpha and decoder bounds
 pass. Primary packets/pixels/quality stay exact.31,632,851 actual units fit32M.
