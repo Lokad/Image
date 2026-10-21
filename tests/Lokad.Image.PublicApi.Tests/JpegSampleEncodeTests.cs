@@ -62,8 +62,9 @@ public sealed class JpegSampleEncodeTests
         using var actual = new MemoryStream();
         ImageCodec.EncodeJpeg(samples, source.Width, source.Height, format, actual, options: options);
         Assert.Equal(expected.ToArray(), actual.ToArray());
-        using var liveToken = new CancellationTokenSource(); using var fixedOutput = new MemoryStream();
-        ImageCodec.EncodeJpeg(samples, source.Width, source.Height, format, fixedOutput, options: options, cancellationToken: liveToken.Token);
+        using var fixedOutput = new MemoryStream();
+        ImageCodec.EncodeJpeg(samples, source.Width, source.Height, format, fixedOutput,
+            options: options with { Limits = new() { MaxWorkingBytes = samples.Length + 8192L } });
         Assert.True(actual.Length < fixedOutput.Length);
         using var adaptivePixels = ImageCodec.Decode(actual.ToArray()); using var fixedPixels = ImageCodec.Decode(fixedOutput.ToArray());
         Assert.Equal(OriginalPixels.Bytes(fixedPixels), OriginalPixels.Bytes(adaptivePixels));

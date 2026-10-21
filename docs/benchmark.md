@@ -16,15 +16,17 @@ trial failed quality; current 4:4:4 packets are restored. Existing 4:2:2 control
 size/quality, without photographic or diagram extrapolation. PNG retains 15/17
 complete-packet passes; two level-6 RGBA8 boundaries remain218,775/210,973 B.
 A timing pass or 5% IDAT tolerance does not establish packet-size parity.
-The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles all19
-existing encode rows:5default passes/13open, plus one separate optional pass.
-The largest gap is4:4:4 forward-only/cancellable output,170,978/133,041 B; an
-existing adaptive packet saves12,166 B with exactly the same pixels/quality.
+The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles all 19
+existing encode rows: 5 default passes/13 open, plus one separate optional pass.
+The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) saves 12,166 B
+on 4:4:4 forward-only/cancellable output: 158,812/133,041 B with exact prior adaptive
+packets/pixels/quality. The largest remaining default 4:4:4 gap is about 19.4%.
 
-The [JPEG ownership repair](../benchmarks/JPEG-BUDGET-EVENT-OWNERSHIP.md) passes
-4,876 Release tests/OS, 58+46 scalar checks/OS and the same actual private 0.2.0
-package/all examples on Windows/Linux. Caller-budget event storage now ends with
-its operation; default packets and previously measured costs are unchanged. Its active 4:2:0
+The current JPEG producer passes 4,890 Release tests/OS, 72+51 scalar checks/OS and
+the same actual private 0.2.0 package/all examples on Windows/Linux. The
+[ownership repair](../benchmarks/JPEG-BUDGET-EVENT-OWNERSHIP.md) keeps caller-budget
+event storage charged through its actual users. Forward 4:4:4 records 5,777.779 µs,
+559,443 B/op in one short cost screen; CPU parity remains deferred. Active caller 4:2:0
 cost is reused from the identical decision code before eligibility was restricted;
 that observation retains its original tested producer. No timing was repeated.
 CPU/allocation costs are recorded; speed-only work and independent confirmations
@@ -34,9 +36,10 @@ Published 0.1.0 is immutable; replacement readiness remains open.
 
 The [finite checklist](../benchmarks/WARM-COVERAGE.md) remains 256 named cases:
 239 numeric and 17 unmeasured. Tested-producer rows contain **62 passes,
-152 gaps, 1 confidence-open case, 14 short cost
-screens and 10 superseded subsampled JPEG rows**. The latter predate
-actual AC decision work and need current packet/quality qualification before timing.
+150 gaps, 1 confidence-open case, 15 short cost
+screens and 11 superseded JPEG rows**. The latter predate
+AC decision work or adaptive stream planning; current packet/quality evidence is
+reconciled and new costs are deferred while compression gates remain open.
 Their stored values are historical, not demonstrated current gaps. Another 31 marked
 decode/inspection rows await confirmation after typed source-metadata changes;
 the PNG metadata reference first needs equivalent typed fields. Unaffected evidence
@@ -184,8 +187,8 @@ is a CPU-parity confirmation.
 | [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 4,174.10 | 4,289.79 | 0.973 / 0.980 | 264,179 | Parity confirmed |
 | [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 9,426.43 | 10,150.04 | 0.929 / 0.933 | 1,052,317 | Parity confirmed |
 | [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,894.69 | 3,771.76 | 1.033 / 1.115 | 559,418 | Gap (short; qualified) |
-| [JPEG 4:4:4, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 4,379.70 | 3,778.08 | 1.159 / 1.353 | 526,029 | Gap (short; qualified) |
-| [JPEG 4:4:4, live cancelable token / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 4,465.15 | 3,775.40 | 1.183 / 1.364 | 525,997 | Gap (short; qualified) |
+| [JPEG 4:4:4, forward-only output / adaptive Huffman](../benchmarks/JPEG-ADAPTIVE-STREAM.md) | 5,777.78 | 4,066.61 | 1.421 / 4.529 | 559,443 | Cost screen (CPU parity deferred) |
+| [JPEG 4:4:4, live cancelable token / prior geometric Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 4,465.15 | 3,775.40 | 1.183 / 1.364 | 525,997 | Prior production; reconfirm |
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,980.90 | 3,855.74 | 1.032 / 1.135 | 556,284 | Gap (short; qualified) |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,579.93 | 2,354.66 | 1.096 / 1.227 | 294,116 | Prior production; reconfirm |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,633.91 | 2,421.91 | 1.088 / 1.220 | 294,116 | Prior production; reconfirm |

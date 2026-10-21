@@ -15,8 +15,8 @@ public sealed class JpegAdaptiveHuffmanTests
         using var image = Input(depth); var original = Pixels(image);
         var options = new JpegEncodeOptions { Quality = 69, Sampling = sampling, RestartInterval = restart, BackgroundRgb = 0x204060 };
         using var output = new MemoryStream(); ImageCodec.EncodeJpeg(image, output, options); var adaptive = output.ToArray();
-        using var cancellation = new CancellationTokenSource();
-        using var fixedOutput = new MemoryStream(); ImageCodec.EncodeJpeg(image, fixedOutput, options, cancellation.Token);
+        using var fixedOutput = new MemoryStream(); ImageCodec.EncodeJpeg(image, fixedOutput,
+            options with { Limits = new() { MaxWorkingBytes = image.ByteLength + 8192L } });
         using var expected = ImageCodec.Decode(fixedOutput.ToArray()); using var actual = ImageCodec.Decode(adaptive);
         Assert.Equal(Pixels(expected), Pixels(actual)); Assert.Equal(original, Pixels(image));
         using var repeat = new MemoryStream(); ImageCodec.EncodeJpeg(image, repeat, options); Assert.Equal(adaptive, repeat.ToArray());
@@ -24,19 +24,19 @@ public sealed class JpegAdaptiveHuffmanTests
     }
 
     [Theory]
-    [InlineData(0)] [InlineData(1)] [InlineData(2)]
-    public void TightAdmissionAndCallerStreamsKeepOriginalOutput(int constraint)
+    [InlineData(0)] [InlineData(1)]
+    public void TightAdmissionKeepsOriginalOutput(int constraint)
     {
         using var image = Input(8); var options = new JpegEncodeOptions { Quality = 69, BackgroundRgb = 0x204060 };
-        using var cancellation = new CancellationTokenSource(); using var expected = new MemoryStream();
-        ImageCodec.EncodeJpeg(image, expected, options, cancellation.Token);
+        using var expected = new MemoryStream();
+        ImageCodec.EncodeJpeg(image, expected, options with { Limits = new() { MaxWorkingBytes = image.ByteLength + 8192L } });
         var limits = ImageLimits.Default with
         {
             MaxWorkingBytes = constraint == 0 ? image.ByteLength + 8192 : ImageLimits.Default.MaxWorkingBytes,
             // Below adaptive worst-case admission, including new AC pricing work.
             MaxWork = constraint == 1 ? 4850000 : ImageLimits.Default.MaxWork
         };
-        using MemoryStream actual = constraint == 2 ? new CallerStream() : new MemoryStream();
+        using var actual = new MemoryStream();
         ImageCodec.EncodeJpeg(image, actual, options with { Limits = limits });
         Assert.Equal(expected.ToArray(), actual.ToArray());
     }
@@ -114,5 +114,4 @@ public sealed class JpegAdaptiveHuffmanTests
         return result;
     }
 
-    private sealed class CallerStream : MemoryStream { }
 }

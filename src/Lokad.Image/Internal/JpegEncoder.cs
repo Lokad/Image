@@ -203,9 +203,9 @@ internal static partial class JpegEncoder
 
     private static bool CanUseAdaptive(ImageBuffer image, Stream output, JpegEncodeOptions options, OperationContext context)
     {
-        // The original path retains tight-limit, cancellable and caller-stream
-        // failure sequencing. This first cache path requires explicit flattening.
-        if (context.Cancellation.CanBeCanceled || options.BackgroundRgb is null or > 0xFFFFFF
+        // Tight local limits retain incremental coding. Explicit flattening
+        // preserves validation before the admitted whole-image event plan.
+        if (options.BackgroundRgb is null or > 0xFFFFFF
             || options.Quality is < 1 or > 100 || !Enum.IsDefined(options.Sampling) || !Enum.IsDefined(options.QuantizationPolicy)
             || options.RestartInterval is < 0 or > 65535) return false;
         var width = image.Width; var height = image.Height;
@@ -224,7 +224,7 @@ internal static partial class JpegEncoder
         var memory = image.ByteLength + 8192L + cacheSamples * sizeof(uint) + 65536;
         var outputMaximum = blocks * 432 + 2048;
         return cacheSamples <= Array.MaxLength && work <= context.RemainingWork && memory <= context.RemainingWorkingBytes
-            && output is LimitedWriteStream limited && limited.SupportsAdaptiveJpeg(outputMaximum);
+            && output is LimitedWriteStream limited && limited.SupportsAdaptiveJpegPlanning(outputMaximum);
     }
 
     private static void EncodeAdaptive(ImageBuffer image, Stream output, JpegEncodeOptions options, OperationContext context)
@@ -385,7 +385,8 @@ internal static partial class JpegEncoder
             var scan = new byte[4 + components * 2]; scan[0] = (byte)components;
             for (var c = 0; c < components; c++) { scan[1 + c * 2] = (byte)(c + 1); scan[2 + c * 2] = c == 0 ? (byte)0 : (byte)17; }
             scan[2 + components * 2] = 63; Segment(output, 0xDA, scan);
-            var combineWords = (long)context.Limits.MaxOutputBytes >= blockCount * 432L + 2048;
+            var combineWords = output is LimitedWriteStream limited
+                && limited.SupportsAdmittedJpegBytes(blockCount * 432L + 2048);
             var writer = new JpegEntropyWriter(output, context, combineWords ? blockCount * 432L + 2048 : 0); var restart = 0;
             for (var i = 0; i < eventCount; i++)
             {

@@ -64,8 +64,12 @@ public sealed class AsyncOutputTests
         using var output = new AsyncOnlyOutput();
         await ImageCodec.EncodeJpegAsync(samples.AsMemory(), image.Width, image.Height, format, output, stride, options);
         Assert.Equal(expected.ToArray(), output.Bytes); Assert.Equal(original, samples); Assert.False(output.WasDisposed);
-        using var token = new CancellationTokenSource(); using var fixedPacket = new MemoryStream();
-        ImageCodec.EncodeJpeg(samples, image.Width, image.Height, format, fixedPacket, stride, options, token.Token);
+        using var token = new CancellationTokenSource(); using var livePacket = new MemoryStream();
+        ImageCodec.EncodeJpeg(samples, image.Width, image.Height, format, livePacket, stride, options, token.Token);
+        Assert.Equal(output.Bytes, livePacket.ToArray());
+        using var fixedPacket = new MemoryStream();
+        ImageCodec.EncodeJpeg(samples, image.Width, image.Height, format, fixedPacket, stride,
+            options with { Limits = new() { MaxWorkingBytes = samples.Length + 8192L } });
         Assert.True(output.Bytes.Length < fixedPacket.Length);
         using var exact = new AsyncOnlyOutput();
         await ImageCodec.EncodeJpegAsync(samples.AsMemory(), image.Width, image.Height, format, exact, stride,

@@ -33,6 +33,8 @@
   original quantization tables, grayscale, shared admission and ownership remain unchanged.
 - Caller-budget JPEG encoding keeps adaptive event storage within its operation owner,
   without borrowing or retaining an uncharged thread cache.
+- Adaptive JPEG tables also reduce forward-only and cancellable packets while
+  preserving checked writes, quotas and cancellation; reconstructed pixels are unchanged.
 
 - Smaller lossless WebP output through bounded color-cache and adaptive prefix
   coding, adaptive prediction, bounded predictor/color code-cost refinements,

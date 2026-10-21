@@ -34,12 +34,13 @@ public sealed class JpegFixedGeometricTests
     }
 
     [Fact]
-    public void ForwardOnlyPacketMatchesIndependentCoefficientPreservingRecoder()
+    public void TightWorkspaceForwardOnlyPacketMatchesIndependentCoefficientPreservingRecoder()
     {
         using var source = OriginalPixels.Buffer(513, 259, 8);
         source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
         var original = OriginalPixels.Bytes(source);
-        var options = new JpegEncodeOptions { Quality = 69, Sampling = JpegSampling.YCbCr420, BackgroundRgb = 0x204060 };
+        var options = new JpegEncodeOptions { Quality = 69, Sampling = JpegSampling.YCbCr420, BackgroundRgb = 0x204060,
+            Limits = new() { MaxWorkingBytes = original.Length + 8192L } };
         using var output = new MemoryStream(); using var stream = new ForwardOnlyOutput(output);
         ImageCodec.EncodeJpeg(source, stream, options);
         var packet = output.ToArray();
@@ -53,7 +54,7 @@ public sealed class JpegFixedGeometricTests
         Assert.Equal(packet, exact.ToArray());
         using var shortOutput = new MemoryStream(); using var shortStream = new ForwardOnlyOutput(shortOutput);
         Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(source, shortStream,
-            options with { Limits = ImageLimits.Default with { MaxOutputBytes = packet.Length - 1 } }));
+            options with { Limits = options.Limits with { MaxOutputBytes = packet.Length - 1 } }));
         Assert.InRange(shortOutput.Length, 1, packet.Length - 1);
         Assert.True(output.CanWrite); Assert.True(exact.CanWrite); Assert.True(shortOutput.CanWrite);
     }

@@ -3,22 +3,24 @@
 Updated 2026-10-21. Compression precedes CPU parity. The finite scope remains
 **256 named cases: 239 numeric and 17 unmeasured**. The current
 [three-table summary](../docs/benchmark.md) retains tested-producer evidence:
-62 independent passes, 152 gaps, one confidence-open case, 14 short cost screens
-and **10 superseded subsampled JPEG rows**. Counts identify tested producers;
+62 independent passes, 150 gaps, one confidence-open case, 15 short cost screens
+and **11 superseded JPEG rows**. Counts identify tested producers;
 full warm single-CPU parity and replacement readiness remain open.
 
 [Scoped JPEG AC decisions](WARM-JPEG-AC-DECISION.md) reduce default caller-RGB420
 from 74,040 to 55,797/ref52,093 B, preserving the unchanged matched-quality gate.
 Original4:2:2/4:2:0 use the bounded pass; 4:4:4 is restored after a rejected quality
-trial. Grayscale and optional CompactColor remain separate. All 4,864 tests/OS,
-46+46 scalar checks/OS and the same actual package/all three examples pass on both
-platforms. One identical-active420 cost is reused with its original producer:
+trial. Grayscale and optional CompactColor remain separate. The current producer
+passes 4,890 tests/OS, 72+51 scalar checks/OS and the same actual package/all examples
+on both platforms. One identical-active420 cost is reused with its original producer:
 10.791x/upper11.190x and170,539 B/op, without a new timing/confirmation.
 
 The [named invalidation list](jpeg-ac-decision-evidence.json) identifies exactly
-10 old subsampled JPEG timing rows. Additional source-DCT coefficient decisions
-and bounded work invalidate their old complete-operation costs. Reconcile current
-packets/quality before timing; stored historical means are not proven current
+10 old subsampled JPEG timing rows. [Adaptive stream planning](JPEG-ADAPTIVE-STREAM.md)
+also invalidates two old 4:4:4 stream costs: the forward-only row now has one current
+cost screen, while the live-token row awaits future measurement. Five stream controls
+save bytes with exact previously qualified adaptive packets; all remain size-open.
+Current packet/quality facts are reconciled; historical means are not proven current
 gaps. Another31 metadata rows await the already recorded header-preflight
 qualification, with equivalent PNG typed metadata required before timing.
 Unchanged sources, packets, paths and valid qualification evidence are reused.

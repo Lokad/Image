@@ -51,16 +51,18 @@ internal sealed class LimitedWriteStream(Stream output, int maximum, Cancellatio
         catch (NotSupportedException) { }
     }
 
-    internal bool SupportsAdaptiveJpeg(long worstEncodedBytes)
+    internal bool SupportsAdaptiveJpegPlanning(long worstEncodedBytes)
     {
-        // Plain MemoryStream has no caller callbacks; other streams retain the
-        // original incremental encode and failure sequence.
-        if (cancellation.CanBeCanceled || output.GetType() != typeof(MemoryStream)) return false;
+        // Planning does not touch the caller stream. Only stock MemoryStream
+        // needs its original position/Int32 capacity guard; do not query length,
+        // position or seek support on callback/forward-only streams.
+        if (output.GetType() != typeof(MemoryStream)) return true;
         var memory = (MemoryStream)output;
         return memory.CanSeek && memory.CanWrite && memory.Position <= int.MaxValue - worstEncodedBytes;
     }
     internal bool SupportsAdmittedJpegBytes(long worstEncodedBytes)
-        => worstEncodedBytes > 0 && worstEncodedBytes <= maximum && SupportsAdaptiveJpeg(worstEncodedBytes);
+        => worstEncodedBytes > 0 && worstEncodedBytes <= maximum && !cancellation.CanBeCanceled
+            && output.GetType() == typeof(MemoryStream) && SupportsAdaptiveJpegPlanning(worstEncodedBytes);
 
     // The adaptive JPEG caller has admitted the whole packet's upper bound.
     // Stock MemoryStream has no callbacks; keep one-byte writes and update the

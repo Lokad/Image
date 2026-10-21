@@ -125,7 +125,7 @@ samples and positive or packed strides. Input is neither changed nor retained.
 Gray input always produces one component; RGB input uses `JpegEncodeOptions`
 quality, sampling and restart controls. Samples are opaque; a valid background
 does not change them. Normalization uses bounded RGB rows, never an RGBA frame.
-Admitted noncancelable adaptive RGB4:2:0 encoding can prepare one MCU with safe
+Admitted adaptive RGB4:2:0 encoding can prepare one MCU with safe
 AVX-512 intrinsics: sixteen RGB rows are loaded once, sharing channel extraction
 for four luma blocks and two chroma blocks. Its384-byte result fits the existing
 8-KiB workspace. Binary64 matrix order, four-tap averaging, rounding and clamped
@@ -1168,9 +1168,8 @@ per-block scratch suffices without new heap or frame storage. Work exhaustion or
 cancellation remains terminal; tighter limits do not bypass coefficient decisions.
 
 Huffman
-tables use independently implemented canonical coding. Large encodes to an
-ordinary MemoryStream with an explicit background, a noncancellable token and
-sufficient work/memory admission use per-image adaptive tables limited to 16
+tables use independently implemented canonical coding. Large encodes with an
+explicit background and sufficient work/memory admission use per-image adaptive tables limited to 16
 bits. Other calls use image-independent canonical AC codes derived from a
 geometric zero-run/amplitude-size model; DC codes remain four bits. The shared
 immutable AC table is constructed once, covers all 162 supported symbols and
@@ -1178,7 +1177,9 @@ reserves the all-ones code, with a maximum length of 16. Its weights are
 `2^max(0,20-run-size)`, with EOB weighted `2^18` and ZRL weighted `2^4`.
 No image statistics or corpus-fitted constants select this table. This selection does
 not change quantized coefficients or decoded samples; encoded bytes may differ
-with stream, cancellation or resource options. Optional restart intervals count
+with resource options. Forward-only and live-cancellable output use the same
+admitted event plan, retaining cancellation and quota checks during emission.
+Planning does not query caller stream length, position or seeking. Optional restart intervals count
 MCUs and reset DC predictors.
 The fixed policy deliberately supersedes the original eight-bit AC codes;
 historical quality reports remain retained, while Original color coefficient
@@ -1811,8 +1812,8 @@ count toward working memory. Chunk capacity also respects the remaining working
 and output allowance. JPEG can use a fixed stock MemoryStream backed by a private
 array, admitted alongside codec/event workspace, to retain the existing adaptive
 Huffman policy. Capacity is bounded by the existing stuffed-entropy upper bound
-and `MaxOutputBytes`; the original resource/cancellable fixed-coding fallback
-remains available. No existing synchronous encoder path is changed.
+and `MaxOutputBytes`; tight local resources retain fixed coding. Planning and
+delivery both preserve cancellation and shared admission.
 
 Private output reuse retains at most two exact arrays totaling 4 MiB; active
 operations never share a lease and only fully written prefixes are delivered.

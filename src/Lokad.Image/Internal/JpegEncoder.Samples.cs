@@ -19,11 +19,11 @@ internal static partial class JpegEncoder
         var events = blocks * 64 + (options.RestartInterval == 0 ? 0 : mcus);
         var work = 2 * mcus + mcus * (h * v * (4096 + 768) + (components - 1) * (4096 + 768 * h * v))
             + blocks * (192L + (AcDecisionLambda(options.Quality, components, options.Sampling, options.QuantizationPolicy) == 0 ? 0 : 4096)) + 262145;
-        var adaptive = !context.Cancellation.CanBeCanceled && blocks >= 256 && events <= Array.MaxLength
+        var adaptive = blocks >= 256 && events <= Array.MaxLength
             && work <= context.RemainingWork && events * sizeof(uint) + 65536 <= context.RemainingWorkingBytes
-            && output is LimitedWriteStream limited && limited.SupportsAdaptiveJpeg(blocks * 432 + 2048);
-        // Whole-operation work was admitted above and this path has no caller
-        // callbacks/cancellation. Its 384-byte MCU fits the admitted 8 KiB.
+            && output is LimitedWriteStream limited && limited.SupportsAdaptiveJpegPlanning(blocks * 432 + 2048);
+        // Whole-operation work was admitted above; the bounded MCU preparation
+        // retains the surrounding work/cancellation checks and fits the 8 KiB.
         var prepareMcu = adaptive && source.Format == JpegSampleFormat.Rgb && h == 2 && v == 2
             && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported && Ssse3.IsSupported;
         Span<byte> preparedMcu = prepareMcu ? stackalloc byte[384] : default;
@@ -241,7 +241,8 @@ internal static partial class JpegEncoder
     private static void WriteSampleEvents(Stream output, OperationContext context,
         JpegEncodingTable?[] tables, uint[] events, int count, int blocks)
     {
-        var combineWords = (long)context.Limits.MaxOutputBytes >= blocks * 432L + 2048;
+        var combineWords = output is LimitedWriteStream limited
+            && limited.SupportsAdmittedJpegBytes(blocks * 432L + 2048);
         var writer = new JpegEntropyWriter(output, context, combineWords ? blocks * 432L + 2048 : 0); var restart = 0;
         for (var i = 0; i < count; i++)
         {
