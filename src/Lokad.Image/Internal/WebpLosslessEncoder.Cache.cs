@@ -29,6 +29,7 @@ internal static partial class WebpLosslessEncoder
             plan = SelectCodeCostPlan(image, options.Effort, cache, plan, context);
             // Predictor edits also change the residuals used by the color fit.
             plan = SelectColorPlan(image, options.Effort, cache, plan, context);
+            plan = SelectCodeCostColorPlan(image, options.Effort, cache, plan, context);
         }
         plan = SelectReferencePlan(image, options.Effort, cache, plan, context);
         plan = SelectSeededPlan(image, options.Effort, cache, plan, context);

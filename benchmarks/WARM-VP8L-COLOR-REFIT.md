@@ -1,5 +1,9 @@
 # Lossless WebP color refit after predictor changes
 
+The [color-code-cost round](WARM-VP8L-COLOR-COST.md) supersedes the photograph
+result and closes its declared packet gate. Other five costs remain selected
+after confirming their unchanged paths.
+
 The fixed photograph falls **160,918 → 160,612 bytes**, saving **306 B** and
 closing **34.5%** of its previous excess. It remains **580 B above** the frozen
 **160,032-byte** reference. The actual packet is two bytes smaller than the single

@@ -843,14 +843,17 @@ exposing unsupported tables or scripts need a focused implementation or an
 explicit remaining blocker; no exhaustive font-engine expansion is implied.
 
 Compression acceptance considers complete encoded size and reconstruction quality
-together. The fixed lossless WebP photograph/diagram controls require outputs no
-larger than their frozen libwebp exact=1 references (160,032/7,234 bytes). These
-gates remain open. Lossy WebP also requires explicit matched-quality size gates:
-the same fixed photograph/diagram must reach at most 17,688/7,100 bytes (currently
-21,432/8,288), retaining frozen reference settings, existing source-quality
-tolerances and exact alpha requirements. Equal numerical quality settings are
-not equivalent quality. These gates are cumulative with memory, correctness and
-warm-performance requirements, and claims state tested content/settings scope.
+together. The fixed lossless WebP photograph/diagram controls produce
+159,104/7,160 bytes, below their frozen libwebp exact=1 references of
+160,032/7,234 bytes, with exact normalized RGBA. All six declared lossless
+boundaries pass their complete-packet gates. The seven declared lossy WebP gates
+also pass: primary photograph/diagram packets are 17,366/6,722 bytes against
+17,688/7,100, retaining frozen reference settings, matched source-quality
+tolerances and exact alpha. Equal numerical quality settings are not equivalent
+quality. These are bounded content/settings claims; current scope and evidence
+are in [the benchmark summary](docs/benchmark.md). Full warm-performance
+qualification remains separate and open. Compression, memory, correctness and
+performance requirements remain cumulative for readiness.
 JPEG RGB420 improvements retain the existing matched-quality
 gate and avoid material grayscale regression; equal quality numbers do not prove
 equivalence. Claims name content, sampling and settings; broader claims require
@@ -1391,6 +1394,12 @@ on the changed residuals, preserving the selected cache mode. Both color/coding
 alternatives borrow the same predictor owner; complete-packet comparison releases
 only the losing color/coding storage. New maps, trees and replacement overlap are
 admitted before allocation with the same local/work guards and terminal failures.
+An eligible uncached mapped plan may then refine color coefficients once using
+actual selected red/blue codes plus coefficient-map code costs. It starts from
+the current coefficients, keeps stable ties, prices absent symbols at fifteen bits
+and retains the fixed 16/8/4/2/1 coordinate pass. Integer scoring borrows current
+models; the shared color-candidate backend admits and compares the new map/trees
+while preserving the same predictor owner, limits and terminal cleanup.
 This optional analysis requires an a-priori local/work allowance, including about
 2,754 bytes per tile for temporary counts/indices, map/ranking capacity, and overlapping
 table construction. All substantial storage is charged before allocation through

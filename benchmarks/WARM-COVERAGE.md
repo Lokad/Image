@@ -1295,3 +1295,22 @@ timing repeat, workload expansion or CPU-parity acceptance. Passing controls sto
 default JPEG and two PNG packet gaps stay open. Finite256=239numeric+17pending stays
 62independentpasses/163gaps/1confidenceopen/13costscreens,114independent/125short;
 31metadata confirmations pending. Full existing objectives remain open.
+
+
+The [color-code-cost milestone](WARM-VP8L-COLOR-COST.md) closes the last declared
+VP8L gate: photograph160612→159104/ref160032,928 B below reference. Exact normalized
+and hidden RGBA; diagram7160/7234,opaque41088/121896,alpha8/16/async60904/183812
+unchanged/pass. All SIX declared complete-packet gates stop, with the bounded scope
+and ledger retained; no arbitrary-content/profile claim. All seven lossy gates stay
+stopped with identical primary anchors and unchanged ALPH helpers.4856tests/OS,
+121internal+117public scalar,SAMEactualpackage/all3examples qualify. One currentphoto
+shortcost(3actuals/2passing idle-v2guards) replaces C114:7.330x/upper8.250x,67414112 B/op.
+Five C110 observations/allocations/guards/producers reused after skip/identical-packet
+proof, including async. SPEC status figures were corrected after qualification;
+API/targets/tolerances and binaries unchanged, measured SPEC retained, no repeat.
+Onecore/internalbuildperOS,zero public/diff/harness/native/driver/selectorbuild.
+No new workload or independent CPU pass. Finite256=239numeric+17pending stays
+62independentpasses/163gaps/1confidenceopen/13costscreens,114independent/125short;
+31metadata confirmations pending. Compression now moves to default Original JPEG
+and two PNG complete-packet gaps; optionalCompactColor remains separate. Full warm
+CPU/P4/readiness objectives remain OPEN.

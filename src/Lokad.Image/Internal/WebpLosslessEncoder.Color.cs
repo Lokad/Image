@@ -6,6 +6,19 @@ internal static partial class WebpLosslessEncoder
 
     private static CachedPlan SelectColorPlan(ImageBuffer image, int effort, uint[] cache,
         CachedPlan baseline, OperationContext context)
+        => SelectColorCandidate(image, effort, cache, baseline, context, false);
+
+    private static CachedPlan SelectCodeCostColorPlan(ImageBuffer image, int effort, uint[] cache,
+        CachedPlan baseline, OperationContext context)
+    {
+        if (effort < 4 || !baseline.Predict || baseline.UseCache || baseline.Modes is null
+            || baseline.Color is null || baseline.Groups is null || baseline.References is not null)
+            return baseline;
+        return SelectColorCandidate(image, effort, cache, baseline, context, true);
+    }
+
+    private static CachedPlan SelectColorCandidate(ImageBuffer image, int effort, uint[] cache,
+        CachedPlan baseline, OperationContext context, bool codeCost)
     {
         var tiles = ((image.Width + 7) >> 3) * ((image.Height + 7) >> 3);
         var mapBytes = tiles * 3L + 64; // Byte array and retained ColorPlan object.
@@ -14,7 +27,8 @@ internal static partial class WebpLosslessEncoder
             || work > context.RemainingWork) return baseline;
         context.Reserve(mapBytes); context.Work(0);
         var coefficients = new byte[tiles * 3];
-        SelectColorCoefficients(image, baseline.Predict, baseline.Modes, coefficients, context);
+        if (codeCost) SelectCodeCostColorCoefficients(image, baseline, coefficients, context);
+        else SelectColorCoefficients(image, baseline.Predict, baseline.Modes, coefficients, context);
         var color = new ColorPlan(coefficients, ColorTables(coefficients, context));
         var candidate = PrepareCachedTables(image, effort, cache, baseline.Predict, context,
             baseline.Modes, baseline.ModeTable, color, baseline.UseCache) with { Alpha = baseline.Alpha };
