@@ -100,7 +100,7 @@ Historical async PNG and lossless WebP output producers independently passed CPU
 libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compressed
 sizes **145,648/183,812 B**. Prior timing passes do not establish compression parity; current lossless CPU costs are below.
 Lossless size parity remains open: the fixed opaque photograph targets160,032 B
-(currently164,008 B). The diagram passes at7,160 B against7,234 B. Exact pixels and
+(currently161,410 B). The diagram passes at7,160 B against7,234 B. Exact pixels and
 unchanged libwebp exact=1 reference/settings remain mandatory. The
 [caller-JPEG controls](../benchmarks/WARM-JPEG-CALLER-MCU.md) also leave a joint
 size/quality gap: RGB42074,040/52,093 B at source-PSNR difference0.106110 dB
@@ -116,15 +116,17 @@ Those six historical C49 encodes independently passed CPU parity. The
 The [residual-color round](../benchmarks/WARM-VP8L-RESIDUAL-COLOR.md) saved2,610 B.
 The [uncached-model round](../benchmarks/WARM-VP8L-NO-CACHE.md) saved another5,800 B
 on the photograph, which remains **164,008/ref160,032 B**.
-The current [backward-reference round](../benchmarks/WARM-VP8L-REFERENCES.md) closes
-the fixed diagram gate: **7,636→7,160/ref7,234 B**, saving476 B with exact pixels.
-Photograph and opaque **123,602/ref121,896 B** remain open; alpha packets pass.
-Its six short costs replace the current rows; no independent repeat or CPU-parity
-acceptance. Diagram is **2.318x/upper3.789x**, **1,721,182 B/op**, accepting extra CPU/
-allocation for compression. Photograph is3.934x/upper4.246x,36,327,472 B/op.
-4,804tests/OS,69internal+117public scalar and the same actual package qualify
-token capacity, replacement peaks, terminal failures and exact outputs. The
-passing diagram stops here; CPU parity stays deferred. The earlier
+The [backward-reference round](../benchmarks/WARM-VP8L-REFERENCES.md) closes the fixed
+diagram gate: **7,636→7,160/ref7,234 B**, saving476 B with exact pixels.
+The current [code-cost predictor round](../benchmarks/WARM-VP8L-CODECOST-PREDICTION.md)
+saves another2,598 B: photograph **161,410/ref160,032 B**, with1,378 B still open.
+Opaque **123,602/ref121,896 B** has the larger remaining gap(1,706 B); alpha passes.
+Its six short costs replace current rows; no independent repeat or CPU-parity
+acceptance. Photograph is **4.800x/upper5.633x**, **44,090,320 B/op**, accepting extra
+CPU/allocation for compression. Other five packets/allocations remain unchanged.
+4,815tests/OS,80internal+117public scalar and the SAME package qualify predictor
+replacement/shared color ownership, terminal failures and exact independent outputs.
+Passing compression controls stay stopped; CPU parity remains deferred. The earlier
 [structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md) is diagnostic evidence.
 The [seven-control lossy size ledger](../benchmarks/WARM-VP8-SIZE-COVERAGE.md)
 now records **seven passing complete-packet gates**. Fixed primary
@@ -312,7 +314,7 @@ reconciliation now covers every numeric row.
 
 | Operation / fixed profile | Lokad Âµs | Reference Âµs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| [WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream](../benchmarks/WARM-VP8L-REFERENCES.md) | 238,520.42 | 121,133.47 | 1.969 / 2.477 | 37,809,152 | Cost screen (CPU parity deferred) |
+| [WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream](../benchmarks/WARM-VP8L-CODECOST-PREDICTION.md) | 238,002.05 | 121,435.65 | 1.960 / 2.364 | 37,809,152 | Cost screen (CPU parity deferred) |
 | [JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream](../benchmarks/WARM-JPEG-ASYNC-SAMPLES.md) | 2,076.73 | 1,628.02 | 1.276 / 1.430 | 232,614 | Gap (short; qualified) |
 | [JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality](../benchmarks/WARM-JPEG-ASYNC-ENCODE.md) | 3,982.03 | 3,849.79 | 1.034 / 1.158 | 494,254 | Gap (short; qualified) |
 | [PNG EncodePngAsync, fresh nonseekable Stream / level6](../benchmarks/WARM-PNG-ASYNC-ENCODE.md) | 5,397.36 | 17,268.11 | 0.313 / 0.314 | 658,560 | Parity confirmed |
@@ -354,11 +356,11 @@ reconciliation now covers every numeric row.
 | [WebP VP8 + alphaâ€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 86,100.75 | 53,409.99 | 1.612 / 1.790 | 1,537,304 | Cost screen (CPU parity deferred) |
 | [WebP VP8 + alpha from RGBA16â€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 83,863.51 | 53,727.26 | 1.561 / 1.652 | 1,537,304 | Cost screen (CPU parity deferred) |
 | [WebP VP8 + alphaâ€¡, caller work budget32M](../benchmarks/WARM-VP8-HISTOGRAM384.md) | 19,502.47 | 53,435.71 | 0.365 / 0.433 | 2,036,564 | Cost screen (CPU parity deferred) |
-| [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-REFERENCES.md) | 239,021.47 | 121,346.40 | 1.970 / 2.256 | 37,808,768 | Cost screen (CPU parity deferred) |
-| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-REFERENCES.md) | 223,323.17 | 71,325.46 | 3.131 / 4.333 | 36,142,008 | Cost screen (CPU parity deferred) |
-| [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-REFERENCES.md) | 268,183.76 | 121,761.68 | 2.203 / 2.712 | 37,807,136 | Cost screen (CPU parity deferred) |
-| [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-REFERENCES.md) | 327,683.41 | 83,295.82 | 3.934 / 4.246 | 36,327,472 | Cost screen (CPU parity deferred) |
-| [WebP VP8L text/diagram RGBA8](../benchmarks/WARM-VP8L-REFERENCES.md) | 21,919.21 | 9,457.14 | 2.318 / 3.789 | 1,721,182 | Cost screen (CPU parity deferred) |
+| [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-CODECOST-PREDICTION.md) | 240,372.88 | 121,953.91 | 1.971 / 2.316 | 37,808,768 | Cost screen (CPU parity deferred) |
+| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-CODECOST-PREDICTION.md) | 221,143.26 | 70,308.02 | 3.145 / 3.968 | 36,142,008 | Cost screen (CPU parity deferred) |
+| [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-CODECOST-PREDICTION.md) | 267,128.46 | 122,039.66 | 2.189 / 3.035 | 37,807,136 | Cost screen (CPU parity deferred) |
+| [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-CODECOST-PREDICTION.md) | 397,627.31 | 82,836.29 | 4.800 / 5.633 | 44,090,320 | Cost screen (CPU parity deferred) |
+| [WebP VP8L text/diagram RGBA8](../benchmarks/WARM-VP8L-CODECOST-PREDICTION.md) | 21,922.45 | 9,575.16 | 2.290 / 3.462 | 1,721,182 | Cost screen (CPU parity deferred) |
 | [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 35,062.49 | 9,726.09 | 3.605 / 3.820 | 590,152 | Cost screen (CPU parity deferred) |
 | [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 13,923.43 | 5,847.14 | 2.381 / 2.458 | 570,856 | Cost screen (CPU parity deferred) |
 

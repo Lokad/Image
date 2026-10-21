@@ -1231,3 +1231,18 @@ Other relevant evidence is reused. Finitecounts256=239numeric+17pending,
 31metadata confirmations pending. CPU parity remains deferred; optional JPEG
 CompactColor does not close the default gate, and two PNG complete-packet gaps
 remain open. Passing diagram compression stops here.
+
+
+The [code-cost predictor milestone](WARM-VP8L-CODECOST-PREDICTION.md) saves2,598B
+on the fixed photograph:164008→161410/ref160032. Diagram7160/7234 passes unchanged;
+opaque123602/121896 remains open, alpha8/16+async145648/183812 pass unchanged.
+All seven lossy gates retain identical primary anchors and stay stopped.
+Exactly six current costs replace C99 after the shared entry change; no independent
+repeat or new material workload. Photograph extraCPU/allocation is accepted for
+compression:4.800x/upper5.633x,44090320B/op.4,815tests/OS,80internal+117publicscalar
+and the SAMEpackage/all3examples qualify predictor replacement, shared color-owner
+transfer, terminal cleanup and exact independent outputs. Other valid proofs reused.
+Finitecounts256=239numeric+17pending,62independentpasses/163gaps/1confidence-open/
+13costscreens,114independent/125short;31metadata confirmations pending. CPU parity
+deferred; optional JPEGCompactColor does not close its default gate, and two PNG
+complete-packet gaps remain open. Opaque now has the larger remaining VP8L gap.

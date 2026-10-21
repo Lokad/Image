@@ -1,5 +1,8 @@
 # Lossless WebP bounded backward references
 
+Historical producer and costs; current results are in the
+[code-cost predictor round](WARM-VP8L-CODECOST-PREDICTION.md).
+
 The fixed text/diagram packet falls **7,636 → 7,160 bytes**, saving **476 bytes
 (6.23%)** and passing its **7,234-byte reference** with 74 bytes of headroom.
 The actual managed packet exactly matches the earlier fixed byte-only candidate;

@@ -1376,6 +1376,14 @@ carry the selected cache mode; complete map/header/payload cost chooses the winn
 Both predictor and color owners remain charged through coding-table replacement.
 No source-frame copy or additional decision map is retained; shared refusal never
 selects the previous plan as a fallback.
+An uncached predicted plan with existing predictor/color/spatial maps may compare
+one refinement using its actual channel-code lengths plus predictor-map code cost.
+All fourteen format modes are scored per8x8tile; missing codes cost15bits, and ties
+retain the existing mode. Color coefficients stay fixed; one current group refit
+and fullpacket comparison decide adoption. A bounded tile cache avoids a full-frame
+copy. Old/new predictor and coding owners overlap during selection; the SAME color
+owner transfers once to the winner. New capacities are admitted before allocation,
+with local/work guards before shared attempts and terminal refusal/cancellation.
 This optional analysis requires an a-priori local/work allowance, including about
 2,754 bytes per tile for temporary counts/indices, map/ranking capacity, and overlapping
 table construction. All substantial storage is charged before allocation through
