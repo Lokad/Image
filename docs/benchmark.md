@@ -21,8 +21,10 @@ existing encode rows:5default passes/13open, plus one separate optional pass.
 The largest gap is4:4:4 forward-only/cancellable output,170,978/133,041 B; an
 existing adaptive packet saves12,166 B with exactly the same pixels/quality.
 
-The scoped JPEG producer passes 4,864 Release tests/OS, 46+46 scalar checks/OS and
-the same actual private 0.2.0 package/all examples on Windows/Linux. Its active 4:2:0
+The [JPEG ownership repair](../benchmarks/JPEG-BUDGET-EVENT-OWNERSHIP.md) passes
+4,876 Release tests/OS, 58+46 scalar checks/OS and the same actual private 0.2.0
+package/all examples on Windows/Linux. Caller-budget event storage now ends with
+its operation; default packets and previously measured costs are unchanged. Its active 4:2:0
 cost is reused from the identical decision code before eligibility was restricted;
 that observation retains its original tested producer. No timing was repeated.
 CPU/allocation costs are recorded; speed-only work and independent confirmations

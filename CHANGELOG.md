@@ -31,6 +31,8 @@
 - Optional `CompactColor` JPEG quantization, separate from the default formula.
 - Smaller default subsampled color JPEG packets through bounded source-DCT AC decisions;
   original quantization tables, grayscale, shared admission and ownership remain unchanged.
+- Caller-budget JPEG encoding keeps adaptive event storage within its operation owner,
+  without borrowing or retaining an uncharged thread cache.
 
 - Smaller lossless WebP output through bounded color-cache and adaptive prefix
   coding, adaptive prediction, bounded predictor/color code-cost refinements,

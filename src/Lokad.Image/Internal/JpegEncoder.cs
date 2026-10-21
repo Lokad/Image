@@ -238,7 +238,10 @@ internal static partial class JpegEncoder
         var blockCount = checked(columns * rows * (h * v + components - 1));
         var eventCapacity = checked(blockCount * 64 + (options.RestartInterval == 0 ? 0 : columns * rows));
         context.Reserve(eventCapacity * 4L + 65536);
-        var cache = adaptiveEvents; adaptiveEvents = null;
+        // A caller budget owns this operation's storage, not the unowned thread cache.
+        // Do not borrow or retain a cached array beyond the reservation lifetime.
+        var cache = context.HasMemoryBudget ? null : adaptiveEvents;
+        if (!context.HasMemoryBudget) adaptiveEvents = null;
         if (cache is null || cache.Length != eventCapacity) cache = new uint[eventCapacity];
         // Optional scratch leaves the original adaptive admission boundary intact.
         var pairedChroma = image.BitDepth == 8 && image.Width >= 16 && h == 2 && v == 2
@@ -410,7 +413,7 @@ internal static partial class JpegEncoder
         finally
         {
             if (pairedChroma) context.Release(64);
-            if (cache.Length <= MaximumRetainedEvents) adaptiveEvents = cache;
+            if (!context.HasMemoryBudget && cache.Length <= MaximumRetainedEvents) adaptiveEvents = cache;
         }
     }
 

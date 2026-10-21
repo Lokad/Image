@@ -1212,7 +1212,10 @@ Adaptive coding requires at least 256 blocks. Sampling and transforms run once;
 an admitted packed-event buffer records DC/AC symbols and amplitudes, including
 restart positions. Separate luma/chroma tables reserve the all-ones code. The
 buffer is private, leased per thread, and retained only up to 4 MiB; every encode
-recomputes its events. Admission includes its full capacity and a 64 KiB table/
+recomputes its events. Calls with a caller memory budget neither borrow nor populate
+this unowned thread cache: their event arrays stay operation-owned until the last
+user finishes, so retained storage cannot outlive its refunded reservation.
+Admission includes its full capacity and a 64 KiB table/
 scratch allowance. Histogram traversal and table construction charge work.
 AC planning may reuse the fixed encoder's safe AVX2/BMI2 scan occupancy to visit
 only nonzero coefficients. Events, histograms and range-error order stay exact;

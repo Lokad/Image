@@ -36,7 +36,8 @@ internal static partial class JpegEncoder
         if (adaptive)
         {
             context.Reserve(events * sizeof(uint) + 65536);
-            cache = adaptiveEvents; adaptiveEvents = null;
+            cache = context.HasMemoryBudget ? null : adaptiveEvents;
+            if (!context.HasMemoryBudget) adaptiveEvents = null;
             if (cache is null || cache.Length != events) cache = new uint[(int)events];
         }
         try
@@ -100,7 +101,7 @@ internal static partial class JpegEncoder
         }
         finally
         {
-            if (cache is not null && cache.Length <= MaximumRetainedEvents) adaptiveEvents = cache;
+            if (!context.HasMemoryBudget && cache is not null && cache.Length <= MaximumRetainedEvents) adaptiveEvents = cache;
         }
     }
 
