@@ -43,10 +43,10 @@ public sealed class JpegFixedGeometricTests
         using var output = new MemoryStream(); using var stream = new ForwardOnlyOutput(output);
         ImageCodec.EncodeJpeg(source, stream, options);
         var packet = output.ToArray();
-        Assert.Equal(81255, packet.Length);
-        Assert.Equal("4dde782c79688075c7cb8ffcea5e7108e43d711183067ffcce4bed19f4393fdb", Hash(packet));
+        Assert.Equal(60987, packet.Length);
+        Assert.Equal("e85ffa2d67d64ffab746111d5dec26b3dca7825cbca90cee75b120b56dee6a5e", Hash(packet));
         using var decoded = ImageCodec.Decode(packet);
-        Assert.Equal("32b44b7568a992437d291d7fed40cd7a931321d8843a479f5463517ce8014eab", Hash(OriginalPixels.Bytes(decoded)));
+        Assert.Equal("d6ea22878331e7fcaec3ef5a08db203a2f81ff20abc9eddb1e9eb8a2286ad581", Hash(OriginalPixels.Bytes(decoded)));
         Assert.Equal(original, OriginalPixels.Bytes(source));
         using var exact = new MemoryStream(); using var exactStream = new ForwardOnlyOutput(exact);
         ImageCodec.EncodeJpeg(source, exactStream, options with { Limits = ImageLimits.Default with { MaxOutputBytes = packet.Length, MaxWorkingBytes = original.Length + 8192L } });

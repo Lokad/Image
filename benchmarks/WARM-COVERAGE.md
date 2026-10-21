@@ -1,5 +1,38 @@
 # Material warm coverage
 
+Updated 2026-10-21. Compression precedes CPU parity. The finite scope remains
+**256 named cases: 239 numeric and 17 unmeasured**. The current
+[three-table summary](../docs/benchmark.md) retains tested-producer evidence:
+62 independent passes, 151 gaps, one confidence-open case, 14 short cost screens
+and **11 superseded subsampled JPEG rows**. Counts identify tested producers;
+full warm single-CPU parity and replacement readiness remain open.
+
+[Scoped JPEG AC decisions](WARM-JPEG-AC-DECISION.md) reduce default caller-RGB420
+from 74,040 to 55,797/ref52,093 B, preserving the unchanged matched-quality gate.
+Original4:2:2/4:2:0 use the bounded pass; 4:4:4 is restored after a rejected quality
+trial. Grayscale and optional CompactColor remain separate. All 4,864 tests/OS,
+46+46 scalar checks/OS and the same actual package/all three examples pass on both
+platforms. One identical-active420 cost is reused with its original producer:
+10.791x/upper11.190x and170,539 B/op, without a new timing/confirmation.
+
+The [named invalidation list](jpeg-ac-decision-evidence.json) identifies exactly
+11 old subsampled JPEG timing rows. Additional source-DCT coefficient decisions
+and bounded work invalidate their old complete-operation costs. Reconcile current
+packets/quality before timing; stored historical means are not proven current
+gaps. Another31 metadata rows await the already recorded header-preflight
+qualification, with equivalent PNG typed metadata required before timing.
+Unchanged sources, packets, paths and valid qualification evidence are reused.
+
+All seven declared lossy WebP and six lossless WebP packet gates pass/stay stopped.
+Default JPEG and the named PNG gaps stay open; optional CompactColor cannot close
+default gates, and PNG5% IDAT/timing acceptance is not complete-packet parity.
+Do not add an image/settings grid. Preserve exact lossless pixels, quality gates,
+cooperative admission, cancellation, ownership and equivalent complete operations.
+CPU parity/speed-only work is deferred while compression gates remain open.
+
+Earlier qualification milestones below retain their historical producer scopes.
+
+
 Updated 2026-10-20. The **warm single-CPU parity objective remains open**:
 68 independent passes,167 measured mean gaps, one confidence-open case and three
 compression-first short cost screens across

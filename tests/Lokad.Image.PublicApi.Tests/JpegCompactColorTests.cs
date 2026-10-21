@@ -99,12 +99,13 @@ public sealed class JpegCompactColorTests
         Assert.Equal(0, output.Length); Assert.True(output.CanWrite); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 
-    [Fact]
-    public void SharedRefusalAndCancellationRefundWithoutFallbackAndAllowLaterSuccess()
+    [Theory]
+    [InlineData(JpegQuantizationPolicy.Original)] [InlineData(JpegQuantizationPolicy.CompactColor)]
+    public void SharedRefusalAndCancellationRefundWithoutFallbackAndAllowLaterSuccess(JpegQuantizationPolicy policy)
     {
         var samples = new byte[129 * 129 * 3]; using var output = new MemoryStream();
         using var root = new TestMemoryBudget(8 * 1024 * 1024);
-        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.CompactColor, Limits = new() { MemoryBudget = root } };
+        var options = new JpegEncodeOptions { QuantizationPolicy = policy, Limits = new() { MemoryBudget = root } };
         Assert.True(root.TryReserve(8 * 1024 * 1024, out var hold));
         var failure = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(samples, 129, 129, JpegSampleFormat.Rgb, output, options: options));
         Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (failure.Limit, failure.Scope));

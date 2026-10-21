@@ -178,8 +178,8 @@ def render():
     ]
     encodes = [
         row('WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream', 'vp8l-color-cost-evidence.json', ['cases', 'WebpLossless8AsyncNonSeekable', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
-        row('JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream', 'warm-jpeg-async-samples-evidence.json', ['cases', 'JpegRgb420AsyncSamples', -1], 'WARM-JPEG-ASYNC-SAMPLES.md', verification='Gap (short; qualified)'),
-        row('JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality', 'warm-jpeg-async-encode-evidence.json', ['cases', 'Jpeg8AsyncNonSeekable', -1], 'WARM-JPEG-ASYNC-ENCODE.md', verification='Gap (short; qualified)'),
+        row('JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream', 'warm-jpeg-async-samples-evidence.json', ['cases', 'JpegRgb420AsyncSamples', -1], 'WARM-JPEG-ASYNC-SAMPLES.md', verification='Prior production; reconfirm'),
+        row('JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality', 'warm-jpeg-async-encode-evidence.json', ['cases', 'Jpeg8AsyncNonSeekable', -1], 'WARM-JPEG-ASYNC-ENCODE.md', verification='Prior production; reconfirm'),
         row('PNG EncodePngAsync, fresh nonseekable Stream / level6', 'warm-png-async-encode-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-PNG-ASYNC-ENCODE.md', True),
         row('PNG RGBA8, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'Encode8', -1], 'WARM-PNG-CHUNK-CRC.md', True),
         row('PNG RGBA8, NoCompression / None', 'warm-png-stored-capacity-evidence.json', ['cases', 'EncodeNoCompression8', -1], 'WARM-PNG-STORED-CAPACITY.md', verification='Gap (short; qualified)'),
@@ -201,19 +201,19 @@ def render():
         row('JPEG 4:4:4, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode444Stream8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Gap (short; qualified)'),
         row('JPEG 4:4:4, live cancelable token / geometric AC Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode444Cancelable8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Gap (short; qualified)'),
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0, shared budget / matched quality', 'warm-shared-budget-evidence.json', ['cases', 'JpegBudgetEncode4208', -1], 'WARM-SHARED-BUDGET.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420Restart8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
+        row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
+        row('JPEG 4:2:0, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
+        row('JPEG 4:2:0, shared budget / matched quality', 'warm-shared-budget-evidence.json', ['cases', 'JpegBudgetEncode4208', -1], 'WARM-SHARED-BUDGET.md', verification='Prior production; reconfirm'),
+        row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420Restart8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
+        row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
+        row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
+        row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
+        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-JPEG-VECTOR-AC.md', True),
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-compact-color-evidence.json', ['cases', 'OriginalGray', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-caller-mcu-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-CALLER-MCU.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0 from caller RGB samples', 'jpeg-ac-decision-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-AC-DECISION.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaqueâ€¡', 'vp8-noise-spectrum-evidence.json', ['observations', 0], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque from RGBA16â€¡', 'vp8-noise-spectrum-evidence.json', ['observations', 1], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alphaâ€¡', 'vp8-noise-spectrum-evidence.json', ['observations', 2], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
@@ -338,229 +338,56 @@ def render():
     assert parity_count + confidence_count + gap_count + reconfirm_count + cost_count == 239
     return f'''# Lokad.Image benchmark state
 
-Updated 2026-10-21. Priority: **complete-packet compression at the frozen quality
-gates**. Seven declared lossy WebP controls pass; lossless WebP is next. Verified incremental
-gains may cost more CPU. Warm single-CPU parity (independently confirmed upperâ‰¤1x)
-remains a deferred objective; speed-only work and repeated confirmations wait
-while compression gates remain open. The 239 numeric rows retain tested-producer evidence: **{parity_count} passes,
-{gap_count} gaps, {confidence_count} confidence-open case and {cost_count} short cost screens**. The finite
-[material checklist](../benchmarks/WARM-COVERAGE.md) has 256 named cases, 17 unmeasured.
-The completed â‰¤2x phase belongs to 0.1.0; compression currently takes precedence over CPU parity. Results apply
-to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
+Updated 2026-10-21. **Complete-packet compression takes priority over CPU parity.**
+All seven declared lossy WebP and six lossless WebP gates pass and stay stopped.
+Lossless photograph/diagram packets are 159,104/160,032 and 7,160/7,234 B
+(managed/reference), with exact RGBA. Lossy photograph/diagram packets are
+17,366/17,688 and6,722/7,100 B at their frozen matched-quality settings and exact alpha.
+These are bounded controls, not general-image compression claims.
 
-These tables retain the tested producers identified by each report, including
-explicitly labeled compression-first cost screens.
-The [typed source-metadata extension](source-metadata.md) is functionally qualified
-by4,571 tests/OS,259 affected scalar checks/OS and the same actual private package
-consumer/all three examples on Windows/Linux. **31 marked decode/inspection rows
-predate its changed header preflight and await timing confirmation.** The complete
-metadata-returning PNG reference also needs equivalent typed fields before timing.
-There are23 unaffected current rows (two caller JPEG encodes, four Lanczos3, four
-async outputs, one bicubic, seven VP8 encodes and five synchronous lossless encodes),
-and216 historical/awaiting-confirmation rows. Pixel kernels, source-quality/resource
-proofs and unaffected encoder/edit timings retain their identified scope. This does
-not prove expanded-scope parity or replacement readiness. Published0.1.0 is immutable.
-The checkpoint descriptions below retain their linked producer scopes; the metadata
-qualification above supersedes any earlier description of these31 rows as current.
+[Default caller-RGB420 JPEG](../benchmarks/WARM-JPEG-AC-DECISION.md) is now
+**55,797/52,093 B**, down 24.6%, with source-PSNR gap 0.058120 dB inside 0.25 dB.
+Its remaining 7.1% size gap is open. Grayscale remains 58,823/58,910 B;
+**optional CompactColor** remains 48,701/52,093 B on its separate procedural control.
+Equal numerical quality values do not establish equivalence. The rejected 4:4:4
+trial failed quality; current 4:4:4 packets are restored. Existing 4:2:2 controls pass
+size/quality, without photographic or diagram extrapolation. PNG retains 15/17
+complete-packet passes; two level-6 RGBA8 boundaries remain218,775/210,973 B.
+A timing pass or 5% IDAT tolerance does not establish packet-size parity.
 
-[Buffered JPEG EOB decoding](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) saves 10.0%
-on sparse-2D CMYK and 12.2% on one-AC CMYK, preserving exact pixels and allocation
-behavior. All21 JPEG rows were qualified at that checkpoint. Caller RGB420
-had an independent pass at **0.926x/upper0.931x**; the other20 were gaps.
-The unchanged progressive/live-token decoders, metadata, encoders and other
-codecs retain their identified scopes. A late affected-list correction included
-the already required fresh-stream JPEG case, with no new input or settings.
-Full suites reused the verified frozen build through `test.ps1 -NoBuild`;
-actual-package consumers and all three examples pass on both OSes.
-Largest current gaps are now Lanczos3 reduction, **1.588x** at 16 bits and **1.548x**
-at 8 bits. An [exact unsigned-product trial](../benchmarks/WARM-LANCZOS3-PRODUCT-TRIAL.md)
-regressed 4.9% and was rejected. A current 944-sample profile puts 50.4% in RGBA16
-horizontal filtering. The [vertical-first trial](../benchmarks/WARM-LANCZOS3-VERTICAL-FIRST-TRIAL.md)
-cut allocation 71.1% but had no elapsed gain and was also rejected. Accepted
-production is restored. [Four-column bicubic strips](../benchmarks/WARM-BICUBIC-FOUR-COLUMNS.md)
-then save **16.2%** on TightWide8: **1.433x/upper1.644x**, 32,913 B/op, with exact
-pixels and the same 4 KiB reservation. Full suites and the same actual package
-qualify both OSes. Only that existing row changes. The
-[original VP8 block reader](../benchmarks/WARM-VP8-COEFFICIENT-BLOCK.md) saved 11.2%
-at its checkpoint. A [live-token block helper](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md)
-now saves **11.6%**, reaching **1.395x/upper1.437x**, with 760,572 B/op unchanged,
-while preserving every per-decision cancellation poll and exact failure state.
-All five existing VP8 rows refresh; four control point means are 0.5â€“1.8% slower,
-with all quality/owner/quiet gates retained and no small-movement retuning. A
-[prepared-double Lanczos trial](../benchmarks/WARM-LANCZOS3-PREPARED-FMA-TRIAL.md)
-is correct but 1.4% slower, at 154,894 B/op, and is rejected. Accepted production
-and all selected rows remain unchanged. The already named
-[caller-owned-root baseline](../benchmarks/WARM-COOPERATIVE-MEMORY.md) led to a
-[materialized Deflate cursor](../benchmarks/WARM-DEFLATE-MATERIALIZED-CURSOR.md):
-two retained decodes improve **15.8%**, to **1.265x/upper1.304x**, 2,574,671 B/op.
-The admitted peak stays 2,306,560 bytes including resident input. Async PNG decode
-improves **23.2%**, to **1.113x/upper1.176x**, at unchanged 12,784 B/op. Exact
-pixels/work/failure state, independent survivors, refusal/cancellation cleanup and
-both guards pass. All21 async managed controls revalidate; unchanged native
-controls are reused. Two current rows refresh; previously historical PNG decode
-rows remain historical. Metadata, encoding and other codec/editing paths retain
-their scopes. The 924-sample profile describes the previous producer only.
-The [FP32 byte Lanczos trial](../benchmarks/WARM-LANCZOS3-FP32-BYTE-TRIAL.md)
-is rejected (50.7% slower); exact accepted production and tests are restored.
-All60 focused normal/scalar/AVX512-off controls pass perOS. New sampled profiles
-retain their respective producers. No selected row or full/package proof repeats.
-The [current resident PNG checks](../benchmarks/WARM-CURRENT-RESIDENT-PNG.md)
-resolve those two old measurements without builds or repeated qualification;
-RGBA8 is1.134x/upper1.330x and RGBA16 is1.039x/upper1.064x.
-Both remain gaps; no longer repeat. The
-[paired-integer Lanczos trial](../benchmarks/WARM-LANCZOS3-PAIRED-BYTE-TRIAL.md)
-parks its small3.5% point-mean gain; once-prepared factor packing is neutral.
-Both variants retain exact pixels, original controls and admitted storage;
-accepted production is restored with no full/package repeat. The
-[current sparse JPEG diagnostic](../benchmarks/WARM-JPEG-SPARSE-COST.md) places
-20.4% of963samples in the integer inverse transform; entropy/scan work is also
-material. No timing claim. The stronger
-[exact-quadrant trial](../benchmarks/WARM-JPEG-SPARSE-QUADRANT-TRIAL.md)
-reduces frequency products64â†’16 but only saves a0.6% point mean; it is parked
-and accepted production is restored without full/package repeats. The
-[current direct-RGB diagnostic](../benchmarks/WARM-JPEG-DIRECT-RGB-COST.md)
-places 47.6% of934 samples in baseline AC reading and1.3% in SIMD RGB packing.
-The frozen Sparse2D packet contains no stuffed bytes. No timing claim or new
-workload matrix. JPEG tuning is deferred while lossless WebP size takes priority.
-[Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
-13.6â€“23.8%, with fewer allocations and exact pixels; its four gaps are now
-1.061â€“1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
-were rejected. Earlier profiles describe their original producers only.
-Optimize demonstrated gaps; stop passing cases. No pixel precision is relaxed.
-The [sparse JPEG FP32-FMA trial](../benchmarks/WARM-JPEG-SPARSE-FMA-TRIAL.md)
-regressed7.2%. Subsequent [storage trials](../benchmarks/WARM-JPEG-STORAGE-TRIALS.md)
-cut allocation 48.9â€“86.9%, but failed to improve elapsed time. Those candidates were
-removed; their ownership checks passed. A [constant-DC trial](../benchmarks/WARM-JPEG-DC-TRIAL.md)
-saved only 1.2% and was parked. Accepted integer/EOB rounds preserve exact pixels;
-full parity remains open.
+The scoped JPEG producer passes 4,864 Release tests/OS, 46+46 scalar checks/OS and
+the same actual private 0.2.0 package/all examples on Windows/Linux. Its active 4:2:0
+cost is reused from the identical decision code before eligibility was restricted;
+that observation retains its original tested producer. No timing was repeated.
+CPU/allocation costs are recorded; speed-only work and independent confirmations
+wait while compression gates remain open. Full warm single-CPU parity still
+requires an independent conservative upper<=1 for every material required path.
+Published 0.1.0 is immutable; replacement readiness remains open.
 
-Historical async PNG and lossless WebP output producers independently passed CPU parity. WebP uses approved
-libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compressed
-sizes **145,648/183,812 B** at that historical producer. Current alpha packets are
-**60,904/183,812 B**; their refreshed CPU costs are below. Prior timing passes
-do not establish current CPU parity.
-All six declared lossless WebP packet gates pass: photograph159,104/ref160,032 B,
-diagram7,160/ref7,234 B, opaque41,088/ref121,896 B and alpha8/16/async60,904/ref183,812 B.
-These fixed controls stop; broader content/profile parity is unproven. Exact pixels and
-unchanged libwebp exact=1 reference/settings remain mandatory. The
-[caller-JPEG controls](../benchmarks/WARM-JPEG-CALLER-MCU.md) also leave a joint
-size/quality gap: RGB42074,040/52,093 B at source-PSNR difference0.106110 dB
-(gate0.25 dB); grayscale58,823/58,910 B. RGB420 compression improvements must
-retain matched reconstruction quality and avoid material grayscale regression.
-These content/sampling controls do not establish general compression equivalence.
-The [spatial coding-group round](../benchmarks/WARM-VP8L-SPATIAL-ENTROPY.md)
-reduces the fixed photograph from184,518 to174,748 B; diagram remains7,636 B.
-The subsequent [coding-cost eligibility round](../benchmarks/WARM-VP8L-CODE-COST.md)
-reduces the existing opaque control from170,156 to123,602 B against121,896 B.
-Those six historical C49 encodes independently passed CPU parity. The
-[adaptive-map round](../benchmarks/WARM-VP8L-ADAPTIVE-GROUPS.md) then saved2,330 B.
-The [residual-color round](../benchmarks/WARM-VP8L-RESIDUAL-COLOR.md) saved2,610 B.
-The [uncached-model round](../benchmarks/WARM-VP8L-NO-CACHE.md) saved another5,800 B
-on the photograph, which remains **164,008/ref160,032 B**.
-The [backward-reference round](../benchmarks/WARM-VP8L-REFERENCES.md) closes the fixed
-diagram gate: **7,636→7,160/ref7,234 B**, saving476 B with exact pixels.
-The [code-cost predictor round](../benchmarks/WARM-VP8L-CODECOST-PREDICTION.md)
-saved2,598 B: photograph **161,410/ref160,032 B** at that producer.
-The [seeded-reference round](../benchmarks/WARM-VP8L-SEEDED-REFERENCES.md)
-closes opaque **123,602→41,088/ref121,896 B** and reduces already-passing
-alpha8/16/async **145,648→60,904/ref183,812 B**, with exact RGBA. These controls
-stop; the following photograph refinements close its remaining declared gap.
-The [bounded second refinement](../benchmarks/WARM-VP8L-SECOND-REFINEMENT.md)
-saved492 B: photograph **160,918/ref160,032 B** at that producer.
-The [color refit](../benchmarks/WARM-VP8L-COLOR-REFIT.md) saved306 B, reaching
-**160,612/ref160,032 B** at that producer. The current
-[color-code-cost round](../benchmarks/WARM-VP8L-COLOR-COST.md) saves **1,508 B**:
-photograph **159,104/ref160,032 B**, **928 B below** reference. All **six declared
-VP8L complete-packet gates pass and stop**, with exact normalized/hidden RGBA.
-Actual current channel/coefficient-map codes price one fixed coordinate pass;
-the shared color-candidate backend preserves admitted overlap, borrowed owners and
-terminal cleanup. **4,856tests/OS**,121internal+117public scalar and the SAME actual
-package qualify the change. A status-only SPEC correction reuses these valid binaries/proofs.
-One photograph cost refreshes: **7.330x/upper8.250x**, **67,414,112 B/op**, accepting
-extra CPU/allocation for compression. Five C110 costs/producer identities remain
-selected after skipped-analysis/identical-packet reconciliation; no timing repeats,
-independent CPU confirmation or new workload. CPU parity remains deferred. Default
-JPEG and two PNG packet gates stay open. The earlier
-[structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md) is diagnostic evidence.
-The [seven-control lossy size ledger](../benchmarks/WARM-VP8-SIZE-COVERAGE.md)
-now records **seven passing complete-packet gates**. Fixed primary
-photograph17,366/ref17,688 B and diagram6,722/ref7,100 B retain their matched
-managed77/75 versus native75/effort4 settings; source-PSNR gaps0.140944/0.117409 dB
-pass unchanged0.25dB and exact-alpha gates. Passing complete cases stay stopped.
+The [finite checklist](../benchmarks/WARM-COVERAGE.md) remains 256 named cases:
+239 numeric and 17 unmeasured. Tested-producer rows contain **{parity_count} passes,
+{gap_count} gaps, {confidence_count} confidence-open case, {cost_count} short cost
+screens and {reconfirm_count} superseded subsampled JPEG rows**. The latter predate
+actual AC decision work and need current packet/quality qualification before timing.
+Their stored values are historical, not demonstrated current gaps. Another 31 marked
+decode/inspection rows await confirmation after typed source-metadata changes;
+the PNG metadata reference first needs equivalent typed fields. Unaffected evidence
+is reused; the scope of every tested producer remains in its linked report.
 
-All **seven declared lossy WebP complete-packet gates pass**. The
-[token-histogram round](../benchmarks/WARM-VP8-HISTOGRAM384.md) reduces the final
-work32M packet **99,448→98,490/ref98,590 B**, 100 B below its fixed reference.
-Every signed coefficient, native/public pixel, source-quality record and compressed
-ALPH byte is exactly C87. One token-class counter replaces repeated branch updates;
-384 cached blocks support final entropy fitting while 128 still controls coefficient
-decisions. The 63,232 B owner is shared-admitted before allocation; actual 31,802,951
-units fit 32M, terminal failure/ownership contracts preserved. Both OSes pass 4,759
-tests, 281 internal + 14 public + 4 differential scalar and the same actual package/all examples.
-One guarded short cost replaces this row; six historical C83 costs retain producer
-identities without new current-code confirmations. The other passing packets are
-opaque8/16 **70,298/ref72,380 B**, alpha8/16 **96,016/ref98,590 B**, photograph
-**17,366/ref17,688 B** and diagram **6,722/ref7,100 B**. Frozen inputs/settings and
-quality gates remain. These controls establish no broader compression or CPU-parity
-claim. Lossless WebP is next; default JPEG/PNG complete-packet gaps and the full
-finite single-CPU warm-performance objective remain open.
+Dedicated AMD EPYC 9V45; Ubuntu 24.04.4; .NET 10.0.8/SDK 10.0.204; FFmpeg n8.1.
+One pinned CPU and codec/conversion/filter thread, normal SIMD, tiering off,
+workstation nonconcurrent GC. Times cover complete public operations, admission,
+normalization, fresh output ownership and release. Source preparation, startup,
+IPC, I/O, hashing and validation are excluded. Fresh-stream rows include wrapper,
+read/copy/EOF and release costs. Context/private scratch reuse is allowed;
+completed decoded or encoded outputs are not cached.
 
-The earlier [adaptive-predictor screen](../benchmarks/WARM-VP8L-ADAPTIVE-PREDICTOR-AUDIT.md)
-was rejected on its original basis. Its recipe is now reconsidered and qualified
-with current coding groups above; the historical2,652B is not a current-code gain.
-The [opaque coding-cost audit](../benchmarks/WARM-VP8L-OPAQUE-COST-AUDIT.md)
-identified the skipped plan subsequently selected and qualified above. Its original
-untimed evidence remains historical; the six table rows use the accepted producer.
-
-The two JPEG async-output cases remain short gaps; all timings/allocations follow.
-
-The 17 unmeasured representatives cover header inspection, drawing and text.
-[PNG fixed-workspace controls](../benchmarks/WARM-PNG-HEADERS-CONTROLS.md)
-agree on all 21 original cases, including deliberately opaque CRC/Deflate. Timing
-awaits the explicitly labeled bounded FFmpeg AVIO/descriptor adapter decision;
-complete-packet parsing would add whole-input buffering outside this boundary.
-Full warm parity and release readiness remain open.
-The [default-instance font extension](text-default-instance-qualification.md) passes
-4,596 correctness tests/OS,105 affected scalar checks, twelve public font controls
-and the same actual package/examples on both platforms. It changes no codec/edit/
-inspection benchmark path. One authored default-variation layout representative
-is added because region/row validation is a distinct required path; it awaits
-reference-boundary qualification and timing. Existing timing evidence is reused.
-
-
-JPEG caller-sample packets are **58,823/58,910 B** grayscale (managed/SIMD libjpeg-turbo),
-**74,040/52,093 B** Original RGB420, and **48,701/52,093 B** opt-in CompactColor
-RGB420 (managed/FFmpeg). Source-PSNR gaps are0.000033/0.106110/0.017274dB inside
-0.25dB. Equal quality numbers are not the matching rule; the
-[optional-policy screen](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) includes complete
-time and allocations, while retaining the Original control. WebP photograph/diagram
-lossless sizes are169,808/160,032 B
-and 7,636/7,234 B; [lossy sizes](../benchmarks/WARM-VP8-DIRECTION-COVERAGE.md)
-are 17,366/17,688 B and 6,722/7,100 B at the documented matched source quality (managed77/75, native75). Compression-
-efficiency parity is not established. Current operation timings/allocations follow.
-
-Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
-FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,
-normal SIMD, tiering off, nonconcurrent workstation GC. Inputs are the two original
-513Ã—259 RGBA8/16 rasters, the fixed photograph/text diagram pair and documented projections; exact case dimensions and
-policies are in linked reports. Only the two required content controls were added; no settings grid.
-
-Times include complete public operations, admission, conversion, fresh independent
-output ownership and disposal. Native contexts may be reused; managed private
-storage may be reused after release. No decoded output or descriptor is cached.
-Fresh Stream rows include source-wrapper/input acquisition, reads/copies/EOF and
-release. Startup, I/O, IPC, preparation/hashing and validation are excluded.
-
-Ratio = Lokad.Image / faster native pre/post mean; lower is faster. Upper retains
-the larger selected/all-actual confidence bound against the faster native bracket's
-lower bound. Parity confirmed requires an independent quiet repeat with upperâ‰¤1;
-a meanâ‰¤1 with upper>1 stays confidence-open. Gap rows exceed the new target.
-Independent jobs retain all 12 actuals; explicitly labeled short screens retain
-all three. Both retain 5s `exclusive-vm-idle-v2` guards. Earlier records
-retain their original protocol and failures. **B/op** is managed allocation from
-BenchmarkDotNet/raw GC bytes per operation, rounded up. Native allocations are
-**unmeasured**, not zero. Timings were collected across rounds; unchanged-path
-reconciliation now covers every numeric row.
+Ratio uses the faster native pre/post mean. Upper is the larger selected/all-actual
+bound against the faster native bracket's lower confidence bound. Independent
+jobs retain 12 actuals; short screens retain 3, with both idle-v2 guards. **B/op** is
+managed BenchmarkDotNet/raw-GC allocation rounded up. Native allocation is
+**unmeasured**, not zero. Compression gains may cost more CPU; no cost-only screen
+is a CPU-parity confirmation.
 
 **Decode and metadata**
 
@@ -582,8 +409,8 @@ Production stays safe managed .NET 10 without dependencies or native bindings.
 
 â€¡ Procedural VP8 benchmark inputs freeze managed/native quality 100/75 and effort 4, retaining
 the 0.25 dB source-quality gate and exact alpha. Matched-quality content controls use
-their linked frozen settings. [Current packet sizes](../benchmarks/WARM-VP8-DIRECTION-COVERAGE.md)
-and per-codec reports accompany time/allocation evidence; size parity remains open.
+their linked frozen settings. [Current packet sizes](../benchmarks/WARM-VP8-SIZE-COVERAGE.md)
+pass all seven declared lossy gates; no broader image/settings claim follows.
 
 Â¶ PNG Identify references use the public FFmpeg PNG parser/CRC plus original
 complete structural/EXIF validation and owned descriptors, without inflation;
@@ -609,7 +436,7 @@ and scope control; no managed tolerance is introduced.
 PNG byte RGB/gray/gray-alpha Optimal uses managed9/native6; RGBA Fastest uses2/1,
 SmallestSize9/9, with exact samples and the historical5% IDAT timing-equivalence
 gate. [Complete-packet reconciliation](../benchmarks/PNG-COMPLETE-PACKET-AUDIT.md)
-finds15 retained passes and two open level6RGBA8 boundaries, both218,775/210,973 B.
+finds15 retained passes and two open level-6 RGBA8 boundaries, both218,775/210,973 B.
 A timing pass or IDAT tolerance is not a packet-size pass. Packed-gray
 transparency uses the approved exact timed native color-key correction. Raw
 incompatible baselines/refusals remain unscored; approved equivalent replacements

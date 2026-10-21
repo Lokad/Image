@@ -1,5 +1,8 @@
 # Fused caller-RGB JPEG MCU preparation
 
+The [subsampled AC decision round](WARM-JPEG-AC-DECISION.md) supersedes the Original color packet/pixel and cost claims for affected layouts below. Default caller-RGB420 is now55,797/ref52,093 B; grayscale and optional CompactColor remain separate. The results below retain their historical producer scope.
+
+
 Complete RGB420 sample encoding improves **33.7%**, from
 **3,162.12→2,097.34µs**. The existing74,040-byte packet,
 decoded pixels and matched source quality remain exact. The current short ratio

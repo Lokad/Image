@@ -1,5 +1,8 @@
 # Optional compact color JPEG quantization
 
+The [subsampled AC decision round](WARM-JPEG-AC-DECISION.md) supersedes the Original color packet/pixel and cost claims for affected layouts below. Default caller-RGB420 is now55,797/ref52,093 B; grayscale and optional CompactColor remain separate. The results below retain their historical producer scope.
+
+
 Opt-in `JpegQuantizationPolicy.CompactColor` produces **48,701 bytes versus 52,093**
 for FFmpeg on the fixed caller-RGB420 control. The source-PSNR difference is
 **0.017274 dB**, inside the existing0.25dB gate. This is34.2% smaller than the

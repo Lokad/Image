@@ -6,14 +6,14 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class JpegChromaPairTests
 {
     [Fact]
-    public void SharedChromaKeepsTheOriginalAdaptivePacketAndSource()
+    public void SharedChromaKeepsTheQualifiedAcDecisionPacketAndSource()
     {
         using var source = OriginalPixels.Buffer(513, 259, 8);
         source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
         var original = OriginalPixels.Bytes(source);
         using var output = new MemoryStream();
         ImageCodec.EncodeJpeg(source, output, new JpegEncodeOptions { Quality = 69, Sampling = JpegSampling.YCbCr420, BackgroundRgb = 0x204060 });
-        Assert.Equal("2a817fe8c13098074dd782defdf3e8965265401ce478509b2634d41fe4374cc3",
+        Assert.Equal("9cf7de3326a1341820f553780fa7b481118a4d6b13697b35a56dab37df25ab53",
             Convert.ToHexString(SHA256.HashData(output.ToArray())).ToLowerInvariant());
         Assert.Equal(original, OriginalPixels.Bytes(source));
     }

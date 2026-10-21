@@ -29,9 +29,12 @@ explicit full-range BT.601 and centered bilinear chroma expansion described in
 Source RGB RMSE/PSNR measure error against the flattened reference. They are
 separate from agreement between Lokad.Image and FFmpeg decoding the same bitstream,
 which remains bounded by maximum channel error 4 and RGB RMSE 1.5. Alpha is exactly
-255. Public API tests reproduce all 160 historical owned bitstreams through the
-fixed fallback, check current encoding against their exact quantization and
-decoded samples, and verify normalization with matching entropy options.
+255. Public API tests retain all 160 historical owned source, quantization and
+sampling checks. Grayscale, 4:4:4 and quality100 still reproduce the historical pixels.
+Current Original subsampled color AC decisions may change lossy pixels; fixed/adaptive
+entropy modes must agree exactly, and normalization is checked with matching
+options. Current matched-quality compression evidence is separate from this
+historical quality-number grid.
 
 Selected RGBA8 results:
 
@@ -55,7 +58,7 @@ frequency-weighted quantization policy. Its output is larger on many of these
 inputs. Quality 100 remains lossy, and increasing quantization precision cannot
 restore color detail removed by subsampling. Neither source error nor encoded size
 is guaranteed to vary monotonically for every pattern or setting. This synthetic
-corpus establishes the historical fixed-table behavior and current pixel contract; it does not establish photographic quality,
+corpus establishes the historical fixed-table behavior; it does not establish photographic quality,
 competitive compression or performance. The separate
 [benchmark calibration](../../benchmarks/README.md) enumerates all owned quality
 settings against fixed native anchors, retaining matched pairs and explicit

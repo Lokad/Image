@@ -27,6 +27,7 @@ internal static partial class JpegEncoder
         var columns = (image.Width + h * 8 - 1) / (h * 8); var rows = (image.Height + v * 8 - 1) / (v * 8);
         var policy = components == 1 ? JpegQuantizationPolicy.Original : options.QuantizationPolicy;
         var luma = Quantization(options.Quality, false, policy); var chroma = Quantization(options.Quality, true, policy);
+        var acLambda = AcDecisionLambda(options.Quality, components, options.Sampling, policy);
         var dcSymbols = Enumerable.Range(0, 12).Select(value => (byte)value).ToArray();
         var ac = FixedAc.Table;
         var acWords = FixedAc.Words;
@@ -141,11 +142,7 @@ internal static partial class JpegEncoder
                             pixels[y * 8 + x] = (byte)Math.Clamp(Math.Round(sum / (samplesX * samplesY), MidpointRounding.AwayFromZero), 0, 255);
                         }
                     }
-                    if (!JpegTransform.TryForwardQuantized(pixels, q, quantized, context))
-                    {
-                        JpegTransform.Forward(pixels, transformed, context);
-                        Quantize(transformed, q, quantized);
-                    }
+                    TransformEncoderBlock(pixels, q, quantized, transformed, acLambda, samplesX * samplesY, context);
                     WriteFixedBlock(quantized, ref predictors[component], writer, acWords);
                 }
             }
@@ -223,7 +220,7 @@ internal static partial class JpegEncoder
         if (blocks < 256) return false;
         var cacheSamples = blocks * 64 + (options.RestartInterval == 0 ? 0 : mcus);
         var work = 2 * mcus + mcus * (h * v * (4096 + 768) + (components - 1) * (4096 + 768 * h * v))
-            + blocks * 192 + 262145;
+            + blocks * (192L + (AcDecisionLambda(options.Quality, components, options.Sampling, options.QuantizationPolicy) == 0 ? 0 : 4096)) + 262145;
         var memory = image.ByteLength + 8192L + cacheSamples * sizeof(uint) + 65536;
         var outputMaximum = blocks * 432 + 2048;
         return cacheSamples <= Array.MaxLength && work <= context.RemainingWork && memory <= context.RemainingWorkingBytes
@@ -255,6 +252,7 @@ internal static partial class JpegEncoder
             var frequencies = new long[4][]; for (var t = 0; t < 4; t++) frequencies[t] = new long[256];
             var policy = components == 1 ? JpegQuantizationPolicy.Original : options.QuantizationPolicy;
             var luma = Quantization(options.Quality, false, policy); var chroma = Quantization(options.Quality, true, policy);
+            var acLambda = AcDecisionLambda(options.Quality, components, options.Sampling, policy);
             var pixels = new byte[64]; var transformed = new double[64]; var predictors = new int[components];
             Span<int> quantized = stackalloc int[64]; var eventCount = 0;
             for (var mcu = 0; mcu < columns * rows; mcu++)
@@ -344,11 +342,7 @@ internal static partial class JpegEncoder
                                 pixels[y * 8 + x] = (byte)Math.Clamp(Math.Round(sum / (samplesX * samplesY), MidpointRounding.AwayFromZero), 0, 255);
                             }
                         }
-                        if (!JpegTransform.TryForwardQuantized(pixels, q, quantized, context))
-                        {
-                            JpegTransform.Forward(pixels, transformed, context);
-                            Quantize(transformed, q, quantized);
-                        }
+                        TransformEncoderBlock(pixels, q, quantized, transformed, acLambda, samplesX * samplesY, context);
                         context.Work(64);
                         var group = component == 0 ? 0 : 1;
                         var difference = quantized[0] - predictors[component]; predictors[component] = quantized[0];

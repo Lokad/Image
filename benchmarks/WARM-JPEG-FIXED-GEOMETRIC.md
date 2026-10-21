@@ -1,5 +1,8 @@
 # JPEG fallback: geometric AC coding
 
+The [subsampled AC decision round](WARM-JPEG-AC-DECISION.md) supersedes the Original color packet/pixel and cost claims for affected layouts below. Default caller-RGB420 is now55,797/ref52,093 B; grayscale and optional CompactColor remain separate. The results below retain their historical producer scope.
+
+
 The [fixed AC fusion round](WARM-JPEG-FIXED-AC-FUSION.md) supersedes the fixed
 encoder timings below. Frozen packets/quality anchors and unaffected adaptive
 controls remain applicable; earlier results retain their historical status.

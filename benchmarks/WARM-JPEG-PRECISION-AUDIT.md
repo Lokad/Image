@@ -1,5 +1,8 @@
 # JPEG compression audit
 
+The [subsampled AC decision round](WARM-JPEG-AC-DECISION.md) supersedes the Original color packet/pixel and cost claims for affected layouts below. Default caller-RGB420 is now55,797/ref52,093 B; grayscale and optional CompactColor remain separate. The results below retain their historical producer scope.
+
+
 The current caller-RGB420 control still produces **74,040 bytes versus 52,093**
 for FFmpeg. This is a compression gap, not missing adaptive Huffman coding:
 **21,835 of the 21,947 excess bytes are entropy data**. Header differences account

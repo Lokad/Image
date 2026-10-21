@@ -1,0 +1,66 @@
+namespace Lokad.Image.Internal;
+
+internal static partial class JpegEncoder
+{
+    private static int AcDecisionLambda(int quality, int components, JpegSampling sampling, JpegQuantizationPolicy policy)
+    {
+        if (components != 3 || sampling is not (JpegSampling.YCbCr422 or JpegSampling.YCbCr420)
+            || policy != JpegQuantizationPolicy.Original) return 0;
+        var scale = quality < 50 ? 5000 / quality : 200 - 2 * quality;
+        var precision = (16 * scale + 50) / 100;
+        return precision * precision;
+    }
+
+    private static void TransformEncoderBlock(ReadOnlySpan<byte> pixels, ReadOnlySpan<ushort> quantization,
+        Span<int> quantized, Span<double> transformed, int lambda, int samplingArea, OperationContext context)
+    {
+        if (lambda == 0 && JpegTransform.TryForwardQuantized(pixels, quantization, quantized, context)) return;
+        JpegTransform.Forward(pixels, transformed, context);
+        Quantize(transformed, quantization, quantized);
+        if (lambda != 0) DecideAc(transformed, quantization, quantized, lambda, samplingArea, context);
+    }
+
+    // T.81 permits encoder coefficient decisions independently of DQT. Keep the
+    // original quantizers, initial nearest-away rounding and DC for subsampled color;
+    // one reverse scan
+    // considers zero for each nonzero AC coefficient. The existing immutable
+    // geometric AC model makes decisions independent of stream/entropy/admission.
+    // No image search, reference-derived constants, frame cache or new heap storage.
+    internal static void DecideAc(ReadOnlySpan<double> transformed, ReadOnlySpan<ushort> quantization,
+        Span<int> quantized, int lambda, int samplingArea, OperationContext context)
+    {
+        if (transformed.Length != 64 || quantization.Length != 64 || quantized.Length != 64
+            || lambda < 0 || samplingArea is < 1 or > 4)
+            throw new ArgumentException("JPEG AC decisions require complete blocks and valid weights.");
+        if (lambda == 0) return;
+        var lengths = FixedAc.Table.Lengths;
+        context.Work(64);
+        var previousBits = AcDecisionBits(quantized, lengths);
+        for (var scan = 63; scan > 0; scan--)
+        {
+            var index = JpegTransform.Zigzag[scan]; var value = quantized[index];
+            if (value == 0) continue;
+            context.Work(64);
+            quantized[index] = 0;
+            var nextBits = AcDecisionBits(quantized, lengths);
+            var source = transformed[index]; var residual = source - (double)value * quantization[index];
+            var error = samplingArea * (source * source - residual * residual);
+            if (error < (long)lambda * (previousBits - nextBits)) previousBits = nextBits;
+            else quantized[index] = value; // Stable old coefficient on ties.
+        }
+    }
+
+    private static int AcDecisionBits(ReadOnlySpan<int> coefficients, ReadOnlySpan<byte> lengths)
+    {
+        var zeros = 0; var bits = 0;
+        for (var scan = 1; scan < 64; scan++)
+        {
+            var value = coefficients[JpegTransform.Zigzag[scan]];
+            if (value == 0) { zeros++; continue; }
+            while (zeros >= 16) { bits += lengths[0xF0]; zeros -= 16; }
+            var size = Category(value); bits += lengths[zeros << 4 | size] + size; zeros = 0;
+        }
+        if (zeros != 0) bits += lengths[0];
+        return bits;
+    }
+}

@@ -18,7 +18,7 @@ internal static partial class JpegEncoder
         var mcus = (long)columns * rows; var blocks = mcus * (h * v + components - 1);
         var events = blocks * 64 + (options.RestartInterval == 0 ? 0 : mcus);
         var work = 2 * mcus + mcus * (h * v * (4096 + 768) + (components - 1) * (4096 + 768 * h * v))
-            + blocks * 192 + 262145;
+            + blocks * (192L + (AcDecisionLambda(options.Quality, components, options.Sampling, options.QuantizationPolicy) == 0 ? 0 : 4096)) + 262145;
         var adaptive = !context.Cancellation.CanBeCanceled && blocks >= 256 && events <= Array.MaxLength
             && work <= context.RemainingWork && events * sizeof(uint) + 65536 <= context.RemainingWorkingBytes
             && output is LimitedWriteStream limited && limited.SupportsAdaptiveJpeg(blocks * 432 + 2048);
@@ -28,6 +28,7 @@ internal static partial class JpegEncoder
             && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported && Ssse3.IsSupported;
         Span<byte> preparedMcu = prepareMcu ? stackalloc byte[384] : default;
         var policy = components == 1 ? JpegQuantizationPolicy.Original : options.QuantizationPolicy;
+        var acLambda = AcDecisionLambda(options.Quality, components, options.Sampling, policy);
         var luma = Quantization(options.Quality, false, policy); var chroma = Quantization(options.Quality, true, policy);
         var pixels = new byte[64]; var transformed = new double[64]; var predictors = new int[components];
         Span<int> quantized = stackalloc int[64];
@@ -73,10 +74,7 @@ internal static partial class JpegEncoder
                                 mcu / columns * v * 8 + by * 8, samplesX, samplesY, component, pixels);
                             blockPixels = pixels;
                         }
-                        if (!JpegTransform.TryForwardQuantized(blockPixels, q, quantized, context))
-                        {
-                            JpegTransform.Forward(blockPixels, transformed, context); Quantize(transformed, q, quantized);
-                        }
+                        TransformEncoderBlock(blockPixels, q, quantized, transformed, acLambda, samplesX * samplesY, context);
                         if (!adaptive) { WriteFixedBlock(quantized, ref predictors[component], writer!, FixedAc.Words); continue; }
                         context.Work(64);
                         var group = component == 0 ? 0 : 1;

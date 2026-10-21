@@ -17,7 +17,7 @@ from required future functionality.
 | Exact edits | Implemented; hand-computed permutations and live FFmpeg checks | Crop, flips, quarter turns, transpose, all eight EXIF orientations |
 | Resize | Nearest/bilinear/bicubic implemented; Lanczos3 implemented in development, performance qualification pending | Exact dimensions, aspect-preserving fit and alpha-aware nearest/bilinear/bicubic/Lanczos3 at 8/16 bits |
 | JPEG caller samples | Gray/RGB/CMYK decode and gray/RGB encode implemented in development | Caller-provided 8-bit samples without mandatory RGBA; explicit source color space/inversion, quality and sampling |
-| JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4×1) / 4:1:0 (4×2) sampling |
+| JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4Ã—1) / 4:1:0 (4Ã—2) sampling |
 | Stream extensions | Async Identify/Decode/Encode and fixed-workspace InspectHeaders implemented in development | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
 | Drawing/compositing | Implemented in development | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
 | Text | Supplied TrueType, legacy/OpenType layout, Latin/Hebrew/Arabic shaping, alignment/fitting and 8/16-bit rendering in development; full replacement/performance qualification pending | Supplied faces, alignment/style, wrapping/line spacing, reliable bounds/fitting, combining marks and bidirectional/shaped text including Arabic |
@@ -360,7 +360,7 @@ Each subset and disjoint recombination obey the same Int64 absolute bound;
 remaining taps use one-pixel reads. This adds no scratch or cache. Scalar
 fallback, admitted rows, work charges and 1024-tap cancellation boundaries are unchanged.
 Byte-depth horizontal filtering also has an AVX2 path: premultiplied samples
-are at most 65025, so signed 32×32→64 products retain every bit and all partial
+are at most 65025, so signed 32Ã—32â†’64 products retain every bit and all partial
 sums stay below 2^47. AVX512F can group four byte-depth taps from a bounded
 16-byte read using eight-lane signed32 products for each pair. Subset prefixes
 and recombination retain that same exact bound; the AVX2 tail remains. It uses
@@ -1052,7 +1052,7 @@ rounding certificate proves the original byte. Uncertain rows and extreme blocks
 use the original direct evaluation; other processors retain that evaluation.
 The [inverse rounding proof](docs/jpeg-inverse-rounding.md) defines the bound.
 Four-component sample materialization can use a certified Q16 integer basis
-for at most eight nonzero frequencies with total dequantized magnitude≤65536.
+for at most eight nonzero frequencies with total dequantized magnitudeâ‰¤65536.
 All 64 clipped rounding bins must certify before any destination write;
 uncertain blocks keep the original calculation. The original generated basis
 is 8 KiB of immutable module data, with no heap table or decoded-content cache.
@@ -1151,6 +1151,22 @@ adaptive entropy, synchronous and asynchronous output. Sampling, flattening,
 coefficient rounding, resource/work limits and ownership are unchanged. This
 optional policy's compression/performance qualification is recorded separately
 from the unchanged Original controls.
+Original 4:2:2 and 4:2:0 color encoding additionally makes one bounded AC keep-or-zero pass after
+initial nearest-away quantization. DC and every DQT value remain unchanged. In
+reverse zigzag order it accepts only a strict decrease in source-DCT squared error
+plus `lambda * estimated AC bits`, where `lambda=((16*scale+50)/100)^2` with integer
+division and chroma error is weighted by the sampling-cell area. Prices use the
+existing immutable geometric AC model, including amplitudes, EOB and ZRL, so fixed
+and adaptive entropy, caller/RGBA input, cancellation and admission choices retain
+the same coefficient decisions and reconstructed pixels. Ties retain the old
+coefficient. Zero lambda, 4:4:4, grayscale and CompactColor skip this pass. Subsampled color packets
+and lossy pixels can therefore change from earlier Original encodes; quality
+numbering does not establish equivalence with another encoder. The direct frozen
+binary64 transform supplies the decision errors. Each pricing scan charges64 work
+units before examining/modifying coefficients (at most4096 per block), and existing
+per-block scratch suffices without new heap or frame storage. Work exhaustion or
+cancellation remains terminal; tighter limits do not bypass coefficient decisions.
+
 Huffman
 tables use independently implemented canonical coding. Large encodes to an
 ordinary MemoryStream with an explicit background, a noncancellable token and
@@ -1165,9 +1181,9 @@ not change quantized coefficients or decoded samples; encoded bytes may differ
 with stream, cancellation or resource options. Optional restart intervals count
 MCUs and reset DC predictors.
 The fixed policy deliberately supersedes the original eight-bit AC codes;
-historical quality reports remain unchanged and current decoded samples must
-match them exactly. Encoding retains the same source-plus-8192-byte admission
-and logical work/callback/failure ordering. Prevalidated canonical codewords skip
+historical quality reports remain retained, while Original color coefficient
+changes require fresh affected quality evidence. Encoding retains the same
+source-plus-8192-byte admission; the bounded AC decision work above is additional. Prevalidated canonical codewords skip
 repeated range validation; general amplitude entry points retain their checks.
 On AVX2/BMI2 x64, fixed-block emission builds a nonzero occupancy mask with eight
 row comparisons and bit deposits into the standard zigzag positions. It visits
@@ -1457,9 +1473,9 @@ At effort 4..6, independently admitted source analysis may assign four absolute
 segment quantizers that are no finer than this base index. One clamped sample per
 4x4 transform block estimates alpha-weighted RGB loss from the existing 4:2:0
 source conversion. A source-only allowance `MSE/(Quality+1)`, the transform's
-expected coefficient variance `step²/12` and the RGB conversion-matrix gain select
+expected coefficient variance `stepÂ²/12` and the RGB conversion-matrix gain select
 desired steps. Unequal DC/AC steps induce pixel covariance within each 4x4 block:
-`ac²/48*delta(i,j)+(dc²-ac²)/768`. Centered chroma interpolation combines clamped
+`acÂ²/48*delta(i,j)+(dcÂ²-acÂ²)/768`. Centered chroma interpolation combines clamped
 taps and groups them by transform block before propagating this covariance;
 chroma DC retains its format clamp. Equal DC/AC steps recover the independent
 pixel-noise model. Four deterministic log-step clusters select format quantizers.

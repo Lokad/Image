@@ -33,7 +33,8 @@ public sealed class JpegAdaptiveHuffmanTests
         var limits = ImageLimits.Default with
         {
             MaxWorkingBytes = constraint == 0 ? image.ByteLength + 8192 : ImageLimits.Default.MaxWorkingBytes,
-            MaxWork = constraint == 1 ? 2850000 : ImageLimits.Default.MaxWork
+            // Below adaptive worst-case admission, including new AC pricing work.
+            MaxWork = constraint == 1 ? 4850000 : ImageLimits.Default.MaxWork
         };
         using MemoryStream actual = constraint == 2 ? new CallerStream() : new MemoryStream();
         ImageCodec.EncodeJpeg(image, actual, options with { Limits = limits });

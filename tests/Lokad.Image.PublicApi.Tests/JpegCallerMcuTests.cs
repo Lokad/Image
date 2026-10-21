@@ -22,8 +22,8 @@ public sealed class JpegCallerMcuTests
         ImageCodec.EncodeJpeg(source, rgbaPacket, options);
         ImageCodec.EncodeJpeg(samples, width, height, JpegSampleFormat.Rgb, rgbPacket, stride, options);
         Assert.Equal(rgbaPacket.ToArray(), rgbPacket.ToArray()); Assert.Equal(unchanged, samples);
-        // Original pattern, qualified pre-MCU RGB encoder (9e72e960...); no corpus bytes.
-        Assert.Equal("9331261e00ea9f25426c834691e02146526ec70d54f6cfb4f174069160794c07",
+        // Original padded RGB pattern, requalified after source-DCT AC decisions; no corpus bytes.
+        Assert.Equal("5e402e6caefe7cf182980fc22b600f2319fea42755f494dbea94719abbf9853d",
             Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(rgbPacket.ToArray())));
     }
 }

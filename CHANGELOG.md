@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 — Unreleased
+## 0.2.0 â€” Unreleased
 
 - Smaller lossy WebP output through admitted 16x16 luma prediction, grouped DC
   coding, full-direction reconstruction-based luma/chroma decisions and whole-frame entropy
@@ -28,7 +28,9 @@
 - Faster VP8 forward DCT with safe SIMD, identical coefficients and packets,
   and the original scalar fallback.
 
-- Optional `CompactColor` JPEG quantization; original defaults and grayscale remain unchanged.
+- Optional `CompactColor` JPEG quantization, separate from the default formula.
+- Smaller default subsampled color JPEG packets through bounded source-DCT AC decisions;
+  original quantization tables, grayscale, shared admission and ownership remain unchanged.
 
 - Smaller lossless WebP output through bounded color-cache and adaptive prefix
   coding, adaptive prediction, bounded predictor/color code-cost refinements,
@@ -109,7 +111,7 @@
   bounded literal batching, alongside tight RGBA streaming inflation, preserving
   pixels, admission, work and failure ordering.
 
-## 0.1.0 — 2026-10-17
+## 0.1.0 â€” 2026-10-17
 
 Initial release of the safe, dependency-free .NET 10 library, published on
 [NuGet](https://www.nuget.org/packages/Lokad.Image/0.1.0).
@@ -120,7 +122,7 @@ Initial release of the safe, dependency-free .NET 10 library, published on
   and nearest/bilinear/bicubic resizing.
 - Stream and span APIs, independent buffer ownership, finite resource limits
   and cancellation. See [SPEC.md](SPEC.md) for supported profiles and exclusions.
-- Named warm single-CPU workloads within the ≤2× FFmpeg-reference target, with
+- Named warm single-CPU workloads within the â‰¤2Ã— FFmpeg-reference target, with
   exact-pixel/quality gates and documented [allocations and scope](docs/benchmark.md).
 - Windows/Linux validation, including live FFmpeg comparisons and the same NuGet
   package exercised by an isolated consumer and all three usage examples.
