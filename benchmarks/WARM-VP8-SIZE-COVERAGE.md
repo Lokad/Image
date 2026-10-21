@@ -2,7 +2,7 @@
 
 Six of seven already declared encode controls pass complete-packet size and
 quality: the two primary content controls and four unrestricted procedural controls.
-**Only the32M-work control remains open**, by1,954 B. Fixed managed100/native75
+**Only the32M-work control remains open**, by858 B. Fixed managed100/native75
 settings below are benchmark inputs, not the library default85 or evidence of
 matching by numerical equality. No general lossy WebP parity follows.
 
@@ -14,9 +14,16 @@ matching by numerical equality. No general lossy WebP parity follows.
 | WarmWebp/EncodeOpaque16 | 70,298 / 72,380 | 100 / 75 | Pass |
 | WarmWebp/Encode8 | 96,016 / 98,590 | 100 / 75 | Pass |
 | WarmWebp/Encode16 | 96,016 / 98,590 | 100 / 75 | Pass |
-| WarmWebp/EncodeBudget8 | 100,544 / 98,590 | 100 / 75 | Open |
+| WarmWebp/EncodeBudget8 | 99,448 / 98,590 | 100 / 75 | Open |
 
-The current [zero/one round](WARM-VP8-ZERO-ONE.md) reduces the constrained packet
+The current [small-level round](WARM-VP8-SMALL-LEVELS.md) reduces the constrained
+packet100,544→99,448 B with a0.025713dB source-quality gap within0.25dB, exact
+ALPH/source and31,782,253 units inside32M. An additional4KiB stack is locally
+checked then shared-admitted beforeuse; terminal failures/ownership stay intact.
+BothOS4,749tests/scalar and the same actual package/examples qualify. One short
+cost replaces that path; six other C83 costs remain. Complete-packet gap858B.
+
+The [zero/one round](WARM-VP8-ZERO-ONE.md) reduces the constrained packet
 100,980→100,544 B with a0.041936dB source-quality gap within0.25dB, exact alpha
 and31,696,404 units inside32M. BothOS4,733tests/scalar and the same actual package/
 examples qualify. One short cost replaces that path; six other C83 costs remain.

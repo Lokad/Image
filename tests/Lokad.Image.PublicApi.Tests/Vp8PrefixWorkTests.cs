@@ -107,13 +107,62 @@ public sealed class Vp8PrefixWorkTests
     {
         using var root = new TestMemoryBudget(8000000); using var source = Source(8, root);
         using var cancellation = new CancellationTokenSource();
-        var unchanged = OriginalPixels.Bytes(source); var held = root.Bytes; var previous = held; var admitted = false;
-        root.Admitted = used => { if (used - previous == PrefixBytes) { admitted = true; cancellation.Cancel(); } previous = used; };
+        var unchanged = OriginalPixels.Bytes(source); var held = root.Bytes; var previous = held; var admitted = false; long cancelledAt = 0;
+        root.Admitted = used => { if (used - previous == PrefixBytes) { admitted = true; cancelledAt = root.GrowthAttempts; cancellation.Cancel(); } previous = used; };
         using var output = new MemoryStream();
         Assert.Throws<OperationCanceledException>(() => ImageCodec.EncodeWebp(source, output, Options(root), cancellation.Token));
         Assert.True(admitted); Assert.Equal(held, root.Bytes); Assert.Equal(0, output.Length); Assert.True(output.CanWrite);
+        Assert.Equal(cancelledAt, root.GrowthAttempts); // No expanded stack reservation after prefix cancellation.
         Assert.Equal(unchanged, OriginalPixels.Bytes(source)); root.Admitted = null;
         ImageCodec.EncodeWebp(source, output, Options(root)); Assert.True(output.Length > 0);
         Assert.Equal(held, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
+    public void RefusedExpandedStackIsTerminalAndCleanupPermitsSubsequentEncoding()
+    {
+        long stackGrowth = 0;
+        using (var trace = new TestMemoryBudget(8000000))
+        using (var source = Source(8, trace))
+        {
+            var previous = trace.Bytes; var prefix = false;
+            trace.Admitted = used =>
+            {
+                if (used - previous == PrefixBytes) prefix = true;
+                else if (prefix && stackGrowth == 0 && used - previous == 4096) stackGrowth = trace.GrowthAttempts;
+                previous = used;
+            };
+            using var packet = new MemoryStream(); ImageCodec.EncodeWebp(source, packet, Options(trace));
+        }
+        Assert.True(stackGrowth > 0);
+        using var root = new TestMemoryBudget(8000000); using var input = Source(8, root);
+        var original = OriginalPixels.Bytes(input); var held = root.Bytes; root.RefuseAtGrowth = stackGrowth;
+        using var failed = new MemoryStream();
+        var error = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(input, failed, Options(root)));
+        Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
+        Assert.Equal(1, root.Refusals); Assert.Equal(held, root.Bytes); Assert.Equal(0, failed.Length); Assert.True(failed.CanWrite);
+        Assert.Equal(original, OriginalPixels.Bytes(input)); root.RefuseAtGrowth = 0;
+        using var success = new MemoryStream(); ImageCodec.EncodeWebp(input, success, Options(root));
+        Assert.True(success.Length > 0); Assert.Equal(held, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
+    public void CancellationAtExpandedStackAdmissionReleasesItsChargeAndPreservesBorrowedOwners()
+    {
+        using var root = new TestMemoryBudget(8000000); using var input = Source(8, root);
+        using var cancellation = new CancellationTokenSource();
+        var original = OriginalPixels.Bytes(input); var held = root.Bytes; var previous = held; var prefix = false; var admitted = false;
+        root.Admitted = used =>
+        {
+            if (used - previous == PrefixBytes) prefix = true;
+            else if (prefix && used - previous == 4096) { admitted = true; cancellation.Cancel(); }
+            previous = used;
+        };
+        using var failed = new MemoryStream();
+        Assert.Throws<OperationCanceledException>(() => ImageCodec.EncodeWebp(input, failed, Options(root), cancellation.Token));
+        Assert.True(admitted); Assert.Equal(held, root.Bytes); Assert.Equal(0, failed.Length); Assert.True(failed.CanWrite);
+        Assert.Equal(original, OriginalPixels.Bytes(input)); root.Admitted = null;
+        using var success = new MemoryStream(); ImageCodec.EncodeWebp(input, success, Options(root));
+        Assert.True(success.Length > 0); Assert.Equal(held, root.Bytes); Assert.False(root.IsDisposed);
     }
 }

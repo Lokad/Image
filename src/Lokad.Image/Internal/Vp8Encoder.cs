@@ -43,11 +43,12 @@ internal static partial class Vp8Encoder
         var intra16 = model?.Intra16 == true;
         var boundedPrediction = !intra16 && model is not null && q == 0 && quantization is not null;
         var nearZero = model?.NearZero == true;
+        if (nearZero) { context.Work(0); context.Reserve(NearZeroExtraStackBytes); }
         Span<short> luma = intra16 ? stackalloc short[256] : default;
         Span<short> y2 = intra16 ? stackalloc short[16] : default;
         Span<short> chromaCoefficients = intra16 ? stackalloc short[128] : default;
         Span<int> bitCosts = intra16 || nearZero ? stackalloc int[257] : default;
-        Span<double> zeroThresholds = nearZero ? stackalloc double[192] : default;
+        Span<double> zeroThresholds = nearZero ? stackalloc double[768] : default;
         var lambda = 0;
         if (intra16 || nearZero)
         {
@@ -101,7 +102,7 @@ internal static partial class Vp8Encoder
                         modes[index * 16 + b] = (byte)mode;
                         Block(source.Y, reconstructed.Y, source.Stride, bx, by, 3, blockQ,
                             tokens, above.AsSpan(mx * 8, 8), left, b % 4, b / 4, context, model, index * 24 + b, 0,
-                            nearZero ? zeroThresholds.Slice(segment * 48, 24) : default);
+                            nearZero ? zeroThresholds.Slice(segment * 192, 96) : default);
                     }
                 var chromaMode = intra16
                     ? SelectRateChroma(source, reconstructed, x / 2, y / 2, blockQ, above.AsSpan(mx * 8, 8), left,
@@ -124,7 +125,7 @@ internal static partial class Vp8Encoder
                         else Block(src, dst, source.Stride / 2, x / 2 + b % 2 * 4, y / 2 + b / 2 * 4, 2, blockQ,
                             tokens, above.AsSpan(mx * 8, 8), left, 4 + plane * 2 + b % 2, 4 + plane * 2 + b / 2, context,
                             model, index * 24 + 16 + plane * 4 + b, source.Y.Length + plane * source.U.Length,
-                            nearZero ? zeroThresholds.Slice(segment * 48 + 24, 24) : default);
+                            nearZero ? zeroThresholds.Slice(segment * 192 + 96, 96) : default);
                 }
                 if (model is not null && !model.Ready
                     && (index + 1 == model.PrefixMacroblocks || index + 1 == model.CacheMacroblocks))
@@ -143,7 +144,7 @@ internal static partial class Vp8Encoder
             : WebpLosslessEncoder.AlphaEncoding.TryCreate(alpha, image.Width, options.Effort, context,
                 pendingOutputWork: (long)header.Bytes.Length + tokens.Bytes.Length);
         WriteContainer(image.Width, image.Height, alpha, compressedAlpha, header.Bytes, tokens.Bytes, output, context);
-        context.Release(metadataBytes + 4096);
+        context.Release(metadataBytes + 4096 + (nearZero ? NearZeroExtraStackBytes : 0));
     }
 
     private static Vp8Planes Convert(ImageBuffer image, OperationContext context, out byte[]? alpha)

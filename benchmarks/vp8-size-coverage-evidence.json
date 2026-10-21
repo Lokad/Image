@@ -128,25 +128,25 @@
     },
     {
       "case": "WarmWebp/EncodeBudget8",
-      "managedPacketBytes": 100544,
+      "managedPacketBytes": 99448,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "vp8-zero-one-evidence.json",
+      "evidence": "vp8-small-levels-evidence.json",
       "observationPath": [
         "observations",
         0
       ],
-      "validity": "C85 qualified reconsidered zero/one coefficient decision on current pruned128-prefix limited-work path.31,696,404actual units inside32M; unchanged source/reference/settings/quality gates, exact ALPH. Completepacket remains1954B above target.",
-      "previousManagedPacketBytes": 100980,
+      "validity": "C87 qualified fixed small-level1..4 versus m-1 decisions at unchanged rate scale/steps.31,782,253actual units inside32M; governed additional4KiB stack, frozen source/reference/settings/quality gates and exact ALPH. Completepacket remains858B above target.",
+      "previousManagedPacketBytes": 100544,
       "alphaPayloadBytes": 19246,
-      "coefficientPolicy": "Original C78 explicit-zero/one token-rate threshold with unchanged segment steps and lambda. Same128 prefix and19246B ALPH. Two3200-unit table preparations,257cost initialization,1unit/performed magnitude-one decision; conservative local envelope covers every coefficient. No extra heap owner/frame/transform/input pass; original4KiB stack admission retained.",
+      "coefficientPolicy": "Existing local small-level token-rate score at fixed steps/lambda; no later-coefficient rate model. Two12416-unit table preparations+257cost initialization+1unit/actual magnitude1..4 decision. Local work envelope includes every coefficient; additional4096B stack (8192total) locally checked then shared admitted beforeuse, cancellation before newreservation. Same128cache, terminal refusal/exhaustion/cancel, no new heap owner/frame/copy/input pass.",
       "alphaCodingPolicy": "Four-residual rolling key, same recent/token-start histories, exact prefix verification and admitted adaptive packed replay.",
-      "psnrGapDb": 0.04193553408083233,
-      "consumedWork": 31696404,
+      "psnrGapDb": 0.025713267731781092,
+      "consumedWork": 31782253,
       "referenceAlphaPayloadBytes": 24588,
       "alphaComponentSizePass": true
     }

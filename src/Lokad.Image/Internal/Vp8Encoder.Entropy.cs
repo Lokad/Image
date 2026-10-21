@@ -78,8 +78,10 @@ internal static partial class Vp8Encoder
                     && extendedExtra + growth <= context.RemainingWorkingBytes
                     && predictionWork + extendedWork + blocks * 24L <= context.RemainingWork)
                     return new CoefficientModel(samples, blocks, context, prefixMacroblocks: 128,
-                        nearZero: nearZeroWork != 0 && predictionWork + extendedWork + blocks * 24L + nearZeroWork <= context.RemainingWork);
+                        nearZero: nearZeroWork != 0 && extendedExtra + growth + NearZeroExtraStackBytes <= context.RemainingWorkingBytes
+                            && predictionWork + extendedWork + blocks * 24L + nearZeroWork <= context.RemainingWork);
                 return new CoefficientModel(samples, blocks, context, nearZero: nearZeroWork != 0
+                    && extra + growth + NearZeroExtraStackBytes <= context.RemainingWorkingBytes
                     && predictionWork + prefixWork + blocks * 24L + nearZeroWork <= context.RemainingWork);
             }
             if (fullFrame && blocks > prefix)

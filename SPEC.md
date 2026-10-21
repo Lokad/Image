@@ -1426,13 +1426,15 @@ is reserved before allocation; tighter local limits keep the smaller sample befo
 shared admission. Actual exhaustion, refusal and cancellation terminate without
 retry. The larger sample changes encoded coefficients' probabilities, preserving
 quantization, reconstructed pixels, alpha and output ownership.
-The same constrained path can separately admit a zero-versus-one coefficient
-decision using the existing segment rate scale and token context. It replaces
-nearest seeds of magnitude one only when the explicit-zero rate benefit outweighs
-their additional coefficient error, retaining the base steps and seed half ties
-when zero does not win. One transform and bounded stack tables suffice. Table
-preparation and performed decisions are charged; local eligibility includes their
-upper bound before shared admission. This can change lossy RGB, which remains
+The same constrained path can separately admit one-step reductions of nearest
+coefficient magnitudes 1..4 using the existing segment rate scale and token context.
+The smaller explicit token must offset its additional coefficient error; base
+steps and half ties remain when it does not win. Later coefficient rates are not
+modeled. One transform and bounded stack tables suffice. This path admits an
+additional 4 KiB of stack capacity before use, for an 8 KiB total envelope; independent
+local memory/work checks precede shared admission. Table preparation and performed
+decisions are charged; cancellation is checked before the additional reservation.
+This can change lossy RGB, which remains
 subject to separate reconstruction-quality qualification. Exact alpha, borrowed
 inputs/root, terminal failures and independent output ownership are preserved.
 Work/cancellation checks cover every performed trial; skipped trials consume no work.

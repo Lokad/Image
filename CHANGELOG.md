@@ -16,7 +16,7 @@
   predictions, reducing complete packets within verified reconstruction quality.
 - Smaller constrained-work WebP packets through exact prediction pruning and
   a larger admitted coefficient sample, preserving reconstructed pixels.
-- Admitted zero/one coefficient decisions further reduce constrained-work WebP
+- Admitted small-coefficient decisions further reduce constrained-work WebP
   packets within verified reconstruction quality and the existing resource caps.
 
 - Coverage-based OpenType contextual substitution and validated zero default-instance
