@@ -11,10 +11,11 @@ internal static partial class JpegEncoder
     // Keep the same source-error cap, lambda, price models, DQT and DC.
     internal static void RefineComponentPairs444(ReadOnlySpan<double> source, ReadOnlySpan<ushort> luma,
         ReadOnlySpan<ushort> chroma, Span<int> values, ReadOnlySpan<int> prices, int lambda,
-        OperationContext context)
+        OperationContext context, double? errorLimit = null, ReadOnlySpan<ushort> amplitudeLimits = default)
     {
         if (source.Length != 192 || values.Length != 192 || luma.Length != 64 || chroma.Length != 64
-            || prices.Length != 512 || lambda < 0)
+            || prices.Length != 512 || lambda < 0 || amplitudeLimits.Length is not (0 or 128)
+            || errorLimit.HasValue && (!double.IsFinite(errorLimit.Value) || errorLimit.Value < 0))
             throw new ArgumentException("JPEG component pairs require three complete blocks and two price models.");
         if (lambda == 0) return;
         context.Work(384);
@@ -29,7 +30,7 @@ internal static partial class JpegEncoder
             currentError += JointRgbError(y - (double)values[i] * luma[i],
                 cb - (double)values[64 + i] * chroma[i], cr - (double)values[128 + i] * chroma[i]);
         }
-        var maximumError = originalError + originalError / 32;
+        var maximumError = errorLimit ?? (originalError + originalError / 32);
         // Twelve safe stack bytes once per MCU call, within the existing8KiB.
         // The preceding DAG's scratch is no longer live; no matrix or copy.
         Span<int> previous = stackalloc int[3];
@@ -57,7 +58,9 @@ internal static partial class JpegEncoder
                     if (oa == 0 && ob == 0) continue;
                     var la = va + (oa == 1 ? -1 : oa == 2 ? 1 : 0);
                     var lb = vb + (ob == 1 ? -1 : ob == 2 ? 1 : 0);
-                    if (la is < -1023 or > 1023 || lb is < -1023 or > 1023) continue;
+                    var limitA = amplitudeLimits.IsEmpty ? 1023 : amplitudeLimits[(a == 0 ? 0 : 64) + i];
+                    var limitB = amplitudeLimits.IsEmpty ? 1023 : amplitudeLimits[64 + i];
+                    if (la < -limitA || la > limitA || lb < -limitB || lb > limitB) continue;
                     context.Work(128);
                     var bitsA = PairAcPrice(values.Slice(a * 64, 64), prices.Slice(a == 0 ? 0 : 256, 256), i, la);
                     var bitsB = PairAcPrice(values.Slice(b * 64, 64), prices.Slice(256, 256), i, lb);

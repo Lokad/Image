@@ -1171,7 +1171,7 @@ visible edge blocks and all chroma blocks retain the normal decision path.
 Full-resolution 4:4:4 considers the closest amplitude in each smaller
 bit category, including zero, across three co-sited blocks. Its distortion model
 maps their DCT residuals through the existing inverse BT.601 matrix and averages
-squared RGB error. Cumulative added modeled error is capped at 1/32 of the initial
+squared RGB error. In the geometric price trainer, added modeled error is capped at 1/32 of the initial
 MCU error, including DC in that initial estimate while retaining its coefficients.
 It visits frequencies in reverse zigzag and components Y/Cb/Cr, accepting strict
 cost improvements with stable closest-category-first ties. Its two AC price
@@ -1182,12 +1182,25 @@ the difference of deterministic integer log2 estimates, clamped to1..4096;
 amplitude bits are scaled by256. Integer logs use eight Q31 square/normalize
 steps, without platform-dependent transcendental calls. Sampling, histograms and
 prices remain operation-local and do not depend on entropy/output admission.
+Before the final priced pass, Original4:4:4 selects a source-derived precision
+grid. Let `p=(16*scale+50)/100`; choose the largest power of two `f` with
+`q*f<=p`, or one when none is possible. Round source DCT divided by `q*f` away
+from zero and clamp to legal DC/AC multiples. These effective quantizers govern
+one local/DAG/pair decision pass; its selected levels are then multiplied by `f`
+into the unchanged Original DQT. DC may change to its grid's nearest value and
+is retained by the subsequent AC decisions. At each frequency the legal AC
+range is `+/-floor(1023/f)`; negative DC may reach `-1024/f`.
+The full MCU error limit is `max(coarseNearestError, fineNearestError*33/32)`.
+The coarse nearest point supplies a feasible floor, without receiving a second
+fractional error allowance merely because the precision grid changed. This
+source model precedes clipping/rounding; actual matched RGB quality is qualified
+separately. No native/reference image enters coefficient selection.
 The final source-priced pass also considers each original AC value minus/plus
-one, including initially zero values, within the baseline amplitude range
--1023..1023. Duplicate choices are skipped after the smaller-category candidates;
+one, including initially zero values, within the legal effective-grid amplitude
+range. Duplicate choices are skipped after the smaller-category candidates;
 strict improvement preserves the original and earlier-choice ties. These neighbors
 can reduce coupled RGB error within the same amplitude category. The geometric
-source trainer retains its smaller-category-only decisions. DC stays unchanged.
+source trainer retains its smaller-category-only decisions and original quantizers.
 The priced 4:4:4 pass then refines complete AC paths, one component at a time.
 A last-nonzero-position DAG prices zero gaps, ZRL, categories, amplitudes and EOB.
 Its bank contains the current and original nearest coefficients, smaller-category
@@ -1196,26 +1209,20 @@ first enumerated choices. It tries the original lambda; an over-budget path lead
 to zero and six fixed bisection probes between zero and that lambda. Only a
 strictly cheaper feasible path that improves the original-lambda objective is
 accepted. Other components remain fixed during a solve, and the full MCU modeled
-error stays within original nearest error times33/32. Source data alone governs
+error stays within the same grid-aware limit. Source data alone governs
 this bounded search; native encoders and measured quality never select a path.
 One final frequency sweep then considers adjacent levels in component pairs
 Y/Cb, Y/Cr and Cb/Cr. It accepts strict improvements in the same RGB-error/rate
-objective with nonincreasing combined AC price and the same original-nearest
+objective with nonincreasing combined AC price and the same grid-aware
 MCU error cap. Equal-rate moves may reduce error for later pairs; exact ties keep
 the current values. The finite bank is current/minus-one/plus-one within the
-baseline amplitude range. Four Huffman tables, price training, quantizers and DC
+legal effective-grid amplitude range. Four Huffman tables, price training, encoded quantizers and grid DC
 remain unchanged. Trials only read coefficients; work/cancellation checks precede
 selection and committing the two selected values.
-After this AC stage, Original4:4:4 applies a source-derived coefficient precision
-rule. Let `p=(16*scale+50)/100`. At each frequency choose the largest power of two
-`f` with `q*f<=p`, or one when none is possible. For `f>1`, round the direct source
-DCT divided by `q*f` away from zero, clamp to legal DC/AC multiples, then multiply
-by `f`; other coefficients retain the preceding decisions. This may change DC
-and low AC coefficients, preserving every DQT value. The earlier33/32 modeled
-error cap constrains the AC stage, not this subsequent precision rule; actual
-matched RGB quality is qualified separately. The rule is identical across fixed,
-adaptive, caller-sample and asynchronous paths and charges2880 work/MCU before
-mutation, without a new heap allocation.
+Grid preparation/rescaling is identical across fixed, adaptive, caller-sample
+and asynchronous paths. It charges2880 work/MCU before mutation, replacing the
+former late precision rule without a second transform or complete decision pass.
+Two128-entry ushort arrays add512 stack bytes; no heap allocation or frame copy.
 
 An admitted Original4:4:4 plan with nonzero decision lambda and no restart markers
 may emit SOF2 progressive syntax. `JpegEncodeOptions.BaselineOnly=true` requires
@@ -1250,7 +1257,9 @@ async staging estimates also include source sampling: at most136129 per sampled
 MCU plus3632 to finish both models. Default work limits remain unchanged.
 The1612-byte trellis scratch is allocated once per MCU call; each frequency's
 bank is rebuilt as needed. Alongside the2048-byte price model,2304-byte MCU,
-48-byte local candidate bank and existing scratch, it fits the admitted8KiB.
+512-byte effective-grid arrays,48-byte local candidate bank and existing scratch,
+it fits the admitted8KiB. Grid setup adds the existing2880-per-MCU precision bound
+to863442, for866322 total (288774/block); default work admission is unchanged.
 There is no heap bank matrix or frame copy. Work exhaustion or
 cancellation remains terminal; tighter limits do not bypass coefficient decisions.
 The paired tail retains only three AC prices (12 stack bytes); its scratch does

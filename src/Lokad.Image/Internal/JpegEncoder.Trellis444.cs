@@ -10,10 +10,11 @@ internal static partial class JpegEncoder
 
     internal static void RefineJoint444(ReadOnlySpan<double> source, ReadOnlySpan<ushort> luma,
         ReadOnlySpan<ushort> chroma, Span<int> values, ReadOnlySpan<int> prices, int lambda,
-        OperationContext context)
+        OperationContext context, double? errorLimit = null, ReadOnlySpan<ushort> amplitudeLimits = default)
     {
         if (source.Length != 192 || values.Length != 192 || luma.Length != 64 || chroma.Length != 64
-            || prices.Length != 512 || lambda < 0)
+            || prices.Length != 512 || lambda < 0 || amplitudeLimits.Length is not (0 or 128)
+            || errorLimit.HasValue && (!double.IsFinite(errorLimit.Value) || errorLimit.Value < 0))
             throw new ArgumentException("JPEG trellis requires three complete co-sited blocks and two price models.");
         if (lambda == 0) return;
         context.Work(384);
@@ -34,7 +35,7 @@ internal static partial class JpegEncoder
         Span<short> shorts = stackalloc short[217];
         Span<byte> bytes = stackalloc byte[74];
         var trellis = new JointTrellis(source, luma, chroma, values, prices, lambda, context,
-            originalError + originalError / 32, currentError, doubles, shorts, bytes);
+            errorLimit ?? (originalError + originalError / 32), currentError, doubles, shorts, bytes, amplitudeLimits);
         for (var component = 0; component < 3; component++) trellis.Run(component);
     }
 
@@ -47,6 +48,7 @@ internal static partial class JpegEncoder
         private readonly ReadOnlySpan<ushort> luma, chroma;
         private readonly Span<int> values;
         private readonly ReadOnlySpan<int> prices;
+        private readonly ReadOnlySpan<ushort> amplitudeLimits;
         private readonly int lambda;
         private readonly OperationContext context;
         private readonly double maximumError;
@@ -59,10 +61,11 @@ internal static partial class JpegEncoder
         internal JointTrellis(ReadOnlySpan<double> source, ReadOnlySpan<ushort> luma,
             ReadOnlySpan<ushort> chroma, Span<int> values, ReadOnlySpan<int> prices, int lambda,
             OperationContext context, double maximumError, double currentError,
-            Span<double> doubles, Span<short> shorts, Span<byte> bytes)
+            Span<double> doubles, Span<short> shorts, Span<byte> bytes, ReadOnlySpan<ushort> amplitudeLimits)
         {
             this.source = source; this.luma = luma; this.chroma = chroma; this.values = values;
             this.prices = prices; this.lambda = lambda; this.context = context;
+            this.amplitudeLimits = amplitudeLimits;
             this.maximumError = maximumError; this.currentError = currentError;
             zeroPrefix = doubles[..64]; costs = doubles.Slice(64, 64); levelErrors = doubles.Slice(128, 10);
             chosen = shorts[..64]; candidate = shorts.Slice(64, 64); best = shorts.Slice(128, 64);
@@ -163,6 +166,8 @@ internal static partial class JpegEncoder
         {
             var index = JpegTransform.Zigzag[scan]; var at = component * 64 + index;
             var original = TrellisNearest(source[at], component == 0 ? luma[index] : chroma[index]);
+            var limit = amplitudeLimits.IsEmpty ? 1023 : amplitudeLimits[(component == 0 ? 0 : 64) + index];
+            if (!amplitudeLimits.IsEmpty) original = Math.Clamp(original, -limit, limit);
             bank[0] = (short)values[at]; bank[1] = (short)original; bank[2] = 0; var used = 3;
             for (var category = Category(original) - 1; category >= 0; category--)
             {
@@ -174,7 +179,7 @@ internal static partial class JpegEncoder
             for (var i = 0; i < used; i++)
             {
                 var value = bank[i];
-                if (value is 0 or < -1023 or > 1023) continue;
+                if (value == 0 || value < -limit || value > limit) continue;
                 var category = (byte)Category(value); var slot = categories[..count].IndexOf(category);
                 var error = ErrorChange(scan, value);
                 if (slot < 0)

@@ -8,6 +8,9 @@ is admitted and restart markers are disabled. Set `JpegEncodeOptions.BaselineOnl
 for consumers requiring baseline syntax. This switch retains the same quantizers
 and reconstructed pixels; local workspace selection may also use baseline syntax.
 Encoded bytes and lossy reconstruction may change between encoder versions.
+The final Original4:4:4 decisions now use the intended coefficient precision grid
+with a source-derived error bound. DQT values, sampling and explicit quality
+remain unchanged; qualified compression claims apply only to their stated controls.
 
 PNG `Optimal` now uses the deeper BCL search for every 8-bit color type, including
 RGBA. This may increase CPU time and change packet bytes; samples, filter None,

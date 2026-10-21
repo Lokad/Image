@@ -12,13 +12,8 @@ internal static partial class JpegEncoder
         JpegTransform.Forward(pixels, block, context);
         Quantize(block, quantization, values.Slice(component * 64, 64));
         if (component != 2) return false;
-        DecideJoint444(source, luma, chroma, values, lambda, context, prices);
-        if (!prices.IsEmpty)
-        {
-            RefineJoint444(source, luma, chroma, values, prices, lambda, context);
-            RefineComponentPairs444(source, luma, chroma, values, prices, lambda, context);
-            RefinePrecision444(source, luma, chroma, values, lambda, context);
-        }
+        if (prices.IsEmpty) DecideJoint444(source, luma, chroma, values, lambda, context);
+        else DecidePrecisionGrid444(source, luma, chroma, values, prices, lambda, context);
         return true;
     }
 
@@ -26,10 +21,12 @@ internal static partial class JpegEncoder
     // RGB error uses the library's inverse BT.601 before clipping/rounding; actual
     // matched-reconstruction quality is qualified separately. DC/DQT are retained.
     internal static void DecideJoint444(ReadOnlySpan<double> source, ReadOnlySpan<ushort> luma,
-        ReadOnlySpan<ushort> chroma, Span<int> values, int lambda, OperationContext context, ReadOnlySpan<int> prices = default)
+        ReadOnlySpan<ushort> chroma, Span<int> values, int lambda, OperationContext context, ReadOnlySpan<int> prices = default,
+        double? errorLimit = null, ReadOnlySpan<ushort> amplitudeLimits = default)
     {
         if (source.Length != 192 || values.Length != 192 || luma.Length != 64 || chroma.Length != 64 || lambda < 0
-            || prices.Length is not (0 or 512))
+            || prices.Length is not (0 or 512) || amplitudeLimits.Length is not (0 or 128)
+            || errorLimit.HasValue && (!double.IsFinite(errorLimit.Value) || errorLimit.Value < 0))
             throw new ArgumentException("Joint JPEG decisions require three complete co-sited blocks.");
         if (lambda == 0) return;
         context.Work(192);
@@ -41,7 +38,7 @@ internal static partial class JpegEncoder
                 source[64 + index] - (double)values[64 + index] * chroma[index],
                 source[128 + index] - (double)values[128 + index] * chroma[index]);
         }
-        var maximumError = initialError / 32; var additionalError = 0d;
+        var maximumError = initialError / 32; var additionalError = 0d; var currentError = initialError;
         var lengths = FixedAc.Table.Lengths;
         context.Work(192);
         Span<int> previousBits = stackalloc int[3];
@@ -75,7 +72,8 @@ internal static partial class JpegEncoder
                     for (var direction = -1; direction <= 1; direction += 2)
                     {
                         var value = original + direction;
-                        if (value is < -1023 or > 1023 || trialLevels[..trialCount].Contains(value)) continue;
+                        var limit = amplitudeLimits.IsEmpty ? 1023 : amplitudeLimits[(component == 0 ? 0 : 64) + index];
+                        if (value < -limit || value > limit || trialLevels[..trialCount].Contains(value)) continue;
                         trialLevels[trialCount++] = value;
                     }
                 }
@@ -92,12 +90,13 @@ internal static partial class JpegEncoder
                         var error = JointRgbError(component == 0 ? residual : ey,
                             component == 1 ? residual : ecb, component == 2 ? residual : ecr) - before;
                         var cost = error + (long)lambda * (nextBits - previousBits[component]) / (prices.IsEmpty ? 1d : 256d);
-                        if (additionalError + error <= maximumError && cost < bestCost)
+                        if ((errorLimit.HasValue ? currentError + error <= errorLimit.Value : additionalError + error <= maximumError)
+                            && cost < bestCost)
                         { bestValue = value; bestBits = nextBits; bestError = error; bestCost = cost; }
                     }
                 }
                 finally { values[at] = bestValue; }
-                previousBits[component] = bestBits; additionalError += bestError;
+                previousBits[component] = bestBits; additionalError += bestError; currentError += bestError;
             }
         }
     }
