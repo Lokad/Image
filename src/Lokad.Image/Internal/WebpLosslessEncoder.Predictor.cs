@@ -18,7 +18,9 @@ internal static partial class WebpLosslessEncoder
         // padding, so selection cannot enlarge the original complete packet.
         if (predictedUpper + 2 < rawUpper)
         {
-            ReleasePlan(raw, context); return SelectEntropyPlan(image, effort, cache, predicted, context);
+            ReleasePlan(raw, context);
+            var baseline = SelectEntropyPlan(image, effort, cache, predicted, context);
+            return SelectAdaptivePlan(image, effort, cache, baseline, context);
         }
         ReleasePlan(predicted, context); return raw;
     }
@@ -35,14 +37,23 @@ internal static partial class WebpLosslessEncoder
 
     private static void ReleasePlan(CachedPlan plan, OperationContext context)
     {
+        ReleaseCodingPlan(plan, context);
+        if (plan.Modes is { } modes) context.Release(modes.Length + 32L + plan.ModeTable!.MemoryBytes);
+    }
+
+    // Entropy-group replacement transfers the SAME predictor map to its result.
+    // Release coding storage alone while this shared map remains live and charged.
+    private static void ReleaseCodingPlan(CachedPlan plan, OperationContext context)
+    {
         long bytes = plan.Tables.Length * 8L + 32;
         foreach (var table in plan.Tables) bytes += table.MemoryBytes;
         if (plan.Groups is { } groups) bytes += groups.Map.Length + 80L + groups.MapTable.MemoryBytes;
         context.Release(bytes);
     }
 
-    private static uint CachedPixel(ImageBuffer image, int position, bool predict, OperationContext context)
-        => predict ? LeftResidual(image, position, context) : GreenPixel(image, position, context);
+    private static uint CachedPixel(ImageBuffer image, int position, bool predict, OperationContext context, byte[]? modes = null)
+        => modes is not null ? AdaptiveResidual(image, position, modes, context)
+            : predict ? LeftResidual(image, position, context) : GreenPixel(image, position, context);
 
     // RFC9649 section3.5.1: mode1 is L except for the first pixel (opaque black)
     // and first column (T). Subtract after green decorrelation, per channel mod256.

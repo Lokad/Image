@@ -1353,6 +1353,13 @@ At effort>=4, eligible LEFT-predicted input may additionally use up to nine spat
 prefix-code groups on fixed8x8 tiles. A source-token histogram and four deterministic
 coding-cost assignments choose the map; complete map/header/body costs retain the
 original packet unless smaller. The token parse, residuals and pixels are unchanged.
+The same effort may then evaluate one adaptive8x8 predictor map, ranking the fourteen
+RFC9649 modes by per-channel source-residual entropy with deterministic ties. Its
+residuals are independently grouped before complete-packet comparison with the
+selected LEFT plan. Both alternatives remain charged through selection, including
+the predictor map while coding tables are replaced; no extra full-frame pixel
+buffer is kept. Local work/memory eligibility precedes shared admission. Refusal
+is terminal, and the final packet is selected only when its full cost is smaller.
 This optional analysis requires an a-priori local/work allowance, including about
 2,754 bytes per tile for temporary counts/indices, map/ranking capacity, and overlapping
 table construction. All substantial storage is charged before allocation through

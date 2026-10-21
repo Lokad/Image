@@ -1,5 +1,9 @@
 # Lossless WebP adaptive-predictor audit
 
+Historical C44 screen. The recipe is subsequently reconsidered on the current
+grouped basis in the [accepted C91 round](WARM-VP8L-ADAPTIVE-GROUPS.md); the values
+and rejection below describe the original producer only.
+
 The 8×8 adaptive-predictor candidate is **not adopted**. It saves 2,652 bytes
 (1.44%) on the fixed photograph and nothing on the diagram. Both size gates
 remain open; this result does not justify adding its search to production.

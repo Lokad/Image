@@ -1177,3 +1177,15 @@ Ten new tests do not expand the matrix:256=239numeric+17pending,68independentpas
 167gaps/1confidence-open/3cost screens,120independent/119short,23current/216historical;
 31metadata confirmations unchanged. The preceding coefficient/EOB candidate saves
 1528/1536B and remains unadopted for later; the larger alpha gain took priority.
+
+
+The [adaptive predictor plus groups milestone](WARM-VP8L-ADAPTIVE-GROUPS.md) saves
+2,330B on the fixed lossless photograph:174748→172418/ref160032. Diagram7636/7234,
+opaque123602/121896 and alpha8/16+async145648/183812 retain packets. Complete-packet
+lossless gates remain open. Exactly six existing VP8L encode rows replace C49
+independent timings with current compression-first short costs; old producer proofs
+remain historical.62independentpasses/163gaps/1confidence-open/13costscreens,
+114independent/125short;256=239numeric+17pending,31metadata confirmations unchanged.
+4,772tests/OS,37internal+117public scalar and the same actual package/examples
+qualify. No public/differential/harness/native/selector build or independent timing
+repeat. All seven lossy size/quality gates stay closed; no new required workload.
