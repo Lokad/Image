@@ -5,7 +5,7 @@ implemented, with no NuGet dependencies, unsafe code or native bindings.
 
 - **PNG:** decode all static color/depth profiles, including palette, transparency
   and Adam7; encode grayscale/RGB/grayscale-alpha/RGBA at 8 or 16 bits.
-- **JPEG:** baseline/progressive decode; baseline encode with grayscale,
+- **JPEG:** baseline/progressive decode and admitted progressive 4:4:4 encode; baseline encode with grayscale,
   subsampling, restart markers and explicit alpha flattening.
   CMYK/YCCK and 4:1:1/4:1:0 decode; caller-owned gray/RGB/CMYK decode samples
   and gray/RGB encode samples. Development adds optional compact color quantization.

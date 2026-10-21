@@ -10,20 +10,20 @@ and14 superseded JPEG rows. Full warm CPU parity and replacement readiness remai
 packet gates:51,379/52,093 B and51,471/52,117 B for the existing8/16-bit controls.
 Frozen source/reference/settings, Original DQT/DC and unchanged0.25dB/alpha/decoder
 quality gates remain. JPEG now has13 default passes/5 open444 rows; optional
-CompactColor stays separate. [C150 component pairs](JPEG444-COMPONENT-PAIRS.md) produce
-141,528/133,041 B and141,529/133,043 B, about6.4% maximum excess. These procedural
+CompactColor stays separate. [C159 source precision](JPEG444-POINT-PRECISION.md) produce
+138,074/133,041 B and138,002/133,043 B, about3.8% maximum excess. These procedural
 controls do not establish photographic or diagram compression claims.
 
-The current producer passes4,979 tests/OS,155+57 scalar checks/OS and the same
+The current producer passes4,999 tests/OS,170+62 scalar checks/OS and the same
 actualprivate0.2 package/allthreeexamples bothOS. The unaffected C146 callerRGB420 cost records
 68,162.147 us,170,648 B/op,ratio43.161/upper50.354. Both idle-v2 guards pass.
 CPU cost is accepted for verified4,418/4,363 B savings; no CPU-parity/speed claim
-or confirmation. Current C150forward444 records1,282,590.681 us,564,192 B/op,ratio340.497/upper366.211;
-the prior C142cost796,455.405 us is superseded. MoreCPU is accepted for1,052/1,015 B savings.
+or confirmation. Current C159forward444 records1,300,808.740 us,613,208 B/op,ratio344.564/upper380.168;
+the prior C150cost1,282,590.681 us/564,192 Bop is superseded. Costs are accepted for3,454/3,527 B savings.
 Fixed8KiB shared-root, terminalrefusal, cleanup and successful next use are qualified.
 
-C150 changes five444 packet rows. C146's nine420 rows, including restart, stay unchanged.
-The C146callerRGB420 cost remains valid; C150replaces only the C142forward444 screen. Eight old420 timing
+C159 changes five444 packet rows. C146's nine420 rows, including restart, stay unchanged.
+The C146callerRGB420 cost remains valid; C159replaces only the C150forward444 screen. Eight old420 timing
 rows already superseded by C124 remain historical; two old422 and four444
 superseded rows are unchanged. Current444 and other unaffected evidence remains
 valid in its stated scope. Another31 metadata confirmations remain pending;

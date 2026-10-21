@@ -9,7 +9,7 @@ from required future functionality.
 | PNG decode | Implemented; full authored profile matrix with exact analytical and FFmpeg RGBA | All legal static color/depth combinations, palette/tRNS, five filters and Adam7 |
 | PNG encode | Implemented; exact round trips and live FFmpeg checks | Noninterlaced gray/RGB/gray-alpha/RGBA, 8/16-bit |
 | JPEG identify | Implemented; live and authored header checks | Bounded baseline/progressive 8-bit inspection and orientation |
-| JPEG pixels | Implemented; authored analytical cases, frozen FFmpeg expectations and live comparisons | Baseline/progressive gray/RGB/YCbCr/CMYK/YCCK decode, restart markers and required sampling; baseline gray/YCbCr encode |
+| JPEG pixels | Implemented; authored analytical cases, frozen FFmpeg expectations and live comparisons | Baseline/progressive gray/RGB/YCbCr/CMYK/YCCK decode; baseline gray/YCbCr and admitted progressive 4:4:4 encode |
 | WebP identify | Implemented; live and authored header checks | Bounded simple/extended still-container inspection and orientation |
 | WebP lossless pixels | Implemented; exact frozen and live FFmpeg comparisons plus authored transform/entropy cases | VP8L decode/encode with transparency and hidden RGB |
 | WebP lossy decode | Implemented; exact frozen YUV/alpha reconstruction and bounded RGB comparisons | VP8 key frames with raw/compressed ALPH |
@@ -28,7 +28,7 @@ from required future functionality.
 | Source metadata | Typed encoded representation | `ImageInfo.SourceColor`, `SourceAlpha`, `SourceComponentCount` and source `BitDepth`; consistent sync/async Identify and bounded InspectHeaders |
 
 GIF, APNG and animated WebP are rejected. Arithmetic/lossless/12-bit JPEG,
-progressive JPEG encoding, indexed/Adam7 PNG encoding and metadata round-tripping
+general progressive JPEG encoding, indexed/Adam7 PNG encoding and metadata round-tripping
 are deferred. ICC conversion remains opt-in and is not currently implemented;
 EXIF reorientation is opt-in. Planned extensions preserve resource limits,
 cancellation, pixel precision, caller ownership and independent output lifetimes.
@@ -1132,7 +1132,7 @@ Every exit publishes exact reader/work state without replacing the original
 failure. Tighter budgets and unsupported hardware retain the preceding masked
 or scalar traversal. No additional table or heap workspace is introduced.
 
-The JPEG encoder emits baseline Huffman JFIF with selectable grayscale, 4:4:4,
+The JPEG encoder emits Huffman JFIF with selectable grayscale, 4:4:4,
 4:2:2 or 4:2:0 sampling (default 4:2:0). Grayscale explicitly converts RGB to
 luma. Chroma downsampling averages each sampling cell and extends edge pixels.
 Quality 1..100 (default 85) controls an original frequency-weighted quantization
@@ -1206,6 +1206,28 @@ the current values. The finite bank is current/minus-one/plus-one within the
 baseline amplitude range. Four Huffman tables, price training, quantizers and DC
 remain unchanged. Trials only read coefficients; work/cancellation checks precede
 selection and committing the two selected values.
+After this AC stage, Original4:4:4 applies a source-derived coefficient precision
+rule. Let `p=(16*scale+50)/100`. At each frequency choose the largest power of two
+`f` with `q*f<=p`, or one when none is possible. For `f>1`, round the direct source
+DCT divided by `q*f` away from zero, clamp to legal DC/AC multiples, then multiply
+by `f`; other coefficients retain the preceding decisions. This may change DC
+and low AC coefficients, preserving every DQT value. The earlier33/32 modeled
+error cap constrains the AC stage, not this subsequent precision rule; actual
+matched RGB quality is qualified separately. The rule is identical across fixed,
+adaptive, caller-sample and asynchronous paths and charges2880 work/MCU before
+mutation, without a new heap allocation.
+
+An admitted Original4:4:4 plan with nonzero decision lambda and no restart markers
+may emit SOF2 progressive syntax. `JpegEncodeOptions.BaselineOnly=true` requires
+baseline syntax with the same coefficient decisions and reconstructed pixels.
+Other configurations and locally selected fixed-workspace coding use baseline.
+The existing admitted packed-event capacity holds coefficients instead; there
+is no second frame array. Three DC scans precede maximal contiguous equal-point-
+transform AC bands. Each first scan uses a separately fitted canonical table and
+bounded EOB runs; selected coefficients are exact multiples, so no nonzero
+refinement bits are discarded. The plan admits a conservative192-table work
+bound and64KiB header bound. Output limits, cancellation, shared-budget refusal
+and ownership remain unchanged; admission refusal never retries baseline coding.
 This model precedes
 clipping/rounding and does not replace measured RGB reconstruction-quality gates. Zero lambda,
 grayscale and CompactColor skip this pass. Original color packets

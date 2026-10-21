@@ -6,8 +6,8 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class Jpeg444ErrorCapTests
 {
     [Theory]
-    [InlineData(8, 141528, "dbdac328278702f19b9eead50120ef391cb1693d722196ea5b615240bef6d099")]
-    [InlineData(16, 141529, "eccb78e3c51d2eb2af138c23cc2b12bd169c04c7431a95cbf4834e352ce24e66")]
+    [InlineData(8, 138074, "15d93f925b096dd2f9b1e40001eda60f9537cf3ed1b8f5c1522f57b97ea50ac0")]
+    [InlineData(16, 138002, "831dc65e1159b1caf6332e9f8b585e07aa0bff85e2ac72ede81ef0dea350e834")]
     public async Task IndependentSourceDctPacketsAgreeAcrossInputAndOutputBoundaries(int depth, int bytes, string hash)
     {
         using var source = OriginalPixels.Buffer(513, 259, depth);
@@ -26,6 +26,9 @@ public sealed class Jpeg444ErrorCapTests
         Assert.Equal(0, root.Bytes); Assert.Equal(8192, root.Peak); Assert.False(root.IsDisposed);
         using var decoded = ImageCodec.Decode(packet); using var fixedPixels = ImageCodec.Decode(fixedOutput.ToArray());
         Assert.Equal(OriginalPixels.Bytes(decoded), OriginalPixels.Bytes(fixedPixels));
+        using var baseline = new MemoryStream(); ImageCodec.EncodeJpeg(source, baseline, options with { BaselineOnly = true });
+        using var baselinePixels = ImageCodec.Decode(baseline.ToArray());
+        Assert.Equal(OriginalPixels.Bytes(decoded), OriginalPixels.Bytes(baselinePixels));
 
         var normalized = JpegQualityCorpus.Reference(original, depth, options.BackgroundRgb);
         var samples = new byte[513 * 259 * 3];

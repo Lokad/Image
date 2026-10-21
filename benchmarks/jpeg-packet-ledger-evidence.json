@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "project": "Lokad.Image",
-  "round": "C150",
+  "round": "C159",
   "productionChanged": true,
   "productionBuilds": 2,
   "harnessDriverSelectorNativeBuilds": 0,
@@ -9,22 +9,22 @@
   "timingRuns": 1,
   "independentConfirmations": 0,
   "scope": "Exactly all19 existing JPEG encode rows:18default boundaries and one explicitly optional CompactColor boundary. Existing inputs/sampling/quality/native packets retained; no new workload matrix.",
-  "producerSha256": "528960b2f6fc575b1d49053b0675b170ae2eb69dba854349c11d0c97bb87cc3c",
+  "producerSha256": "e4ff4c0e7ac04dfa5ca9dd69dfb031f4549d7740f27a7b2c11fadbc375c906b2",
   "cases": [
     {
       "case": "Encode8",
       "boundary": "RGBA8 adaptive",
-      "managedBytes": 141528,
+      "managedBytes": 138074,
       "referenceBytes": 133041,
-      "managedSha256": "dbdac328278702f19b9eead50120ef391cb1693d722196ea5b615240bef6d099",
+      "managedSha256": "15d93f925b096dd2f9b1e40001eda60f9537cf3ed1b8f5c1522f57b97ea50ac0",
       "referenceSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
-      "psnrGapDb": 0.21578961685837328,
+      "psnrGapDb": 0.11341924634265865,
       "qualityPass": true,
       "sizePass": false,
-      "evidence": "C150 adjacent component-pair tail after unchanged C142 constrained trellis. Exact independent C1498/16 packets bothOS/normal/scalar and public boundaries. OriginalDQT/DC/source/reference/settings/gates unchanged; no photo/diagram/generalJPEG claim.",
-      "excessBytes": 8487,
-      "sizeRatio": 1.0637923647597358,
-      "producerSha256": "528960b2f6fc575b1d49053b0675b170ae2eb69dba854349c11d0c97bb87cc3c"
+      "evidence": "C159 source-derived coefficient precision and admitted progressive scans. OriginalDQT/source/reference/q69/nativeqscale5/sampling/flattening unchanged; DC/lowAC may change. Exact corrected independent prototypes on both OS/normal/scalar/public boundaries. No photo/diagram/generalJPEG claim.",
+      "excessBytes": 5033,
+      "sizeRatio": 1.0378304432468186,
+      "producerSha256": "e4ff4c0e7ac04dfa5ca9dd69dfb031f4549d7740f27a7b2c11fadbc375c906b2"
     },
     {
       "case": "Encode422_8",
@@ -58,17 +58,17 @@
     {
       "case": "Encode16",
       "boundary": "RGBA16 adaptive",
-      "managedBytes": 141529,
+      "managedBytes": 138002,
       "referenceBytes": 133043,
-      "managedSha256": "eccb78e3c51d2eb2af138c23cc2b12bd169c04c7431a95cbf4834e352ce24e66",
+      "managedSha256": "831dc65e1159b1caf6332e9f8b585e07aa0bff85e2ac72ede81ef0dea350e834",
       "referenceSha256": "0f0933b13b4bbf4b0dcaea55f44ff54b83125743e88b7de7a71c750ec42d71ea",
-      "psnrGapDb": 0.220860264658711,
+      "psnrGapDb": 0.11682676079033882,
       "qualityPass": true,
       "sizePass": false,
-      "evidence": "C150 adjacent component-pair tail after unchanged C142 constrained trellis. Exact independent C1498/16 packets bothOS/normal/scalar and public boundaries. OriginalDQT/DC/source/reference/settings/gates unchanged; no photo/diagram/generalJPEG claim.",
-      "excessBytes": 8486,
-      "sizeRatio": 1.0637838894192104,
-      "producerSha256": "528960b2f6fc575b1d49053b0675b170ae2eb69dba854349c11d0c97bb87cc3c"
+      "evidence": "C159 source-derived coefficient precision and admitted progressive scans. OriginalDQT/source/reference/q69/nativeqscale5/sampling/flattening unchanged; DC/lowAC may change. Exact corrected independent prototypes on both OS/normal/scalar/public boundaries. No photo/diagram/generalJPEG claim.",
+      "excessBytes": 4959,
+      "sizeRatio": 1.037273663402058,
+      "producerSha256": "e4ff4c0e7ac04dfa5ca9dd69dfb031f4549d7740f27a7b2c11fadbc375c906b2"
     },
     {
       "case": "Encode422_16",
@@ -296,15 +296,15 @@
       "sampling": "444",
       "quality": 69,
       "nativeQuality": 5,
-      "managedBytes": 141528,
+      "managedBytes": 138074,
       "referenceBytes": 133041,
-      "managedSha256": "dbdac328278702f19b9eead50120ef391cb1693d722196ea5b615240bef6d099",
+      "managedSha256": "15d93f925b096dd2f9b1e40001eda60f9537cf3ed1b8f5c1522f57b97ea50ac0",
       "referenceSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
       "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
       "referenceSampleSha256": "ec2ea910c09a839ea55987103b9a2efa1c0bec62658fa55cda9c14726e88b5cd",
       "sizePass": false,
       "qualityPass": true,
-      "psnrGapDb": 0.21578961685837328,
+      "psnrGapDb": 0.11341924634265865,
       "qualityEvidenceReused": true,
       "qualitySample": {
         "setting": 69,
@@ -348,11 +348,11 @@
       "harnessNativeSelectorBuilds": 0,
       "nativeEncodes": 0,
       "timingRuns": 0,
-      "excessBytes": 8487,
-      "sizeRatio": 1.0637923647597358,
+      "excessBytes": 5033,
+      "sizeRatio": 1.0378304432468186,
       "boundary": "RGBA forward-only/live-cancellable output",
-      "evidence": "C150 adjacent component-pair tail after unchanged C142 constrained trellis. Exact independent C1498/16 packets bothOS/normal/scalar and public boundaries. OriginalDQT/DC/source/reference/settings/gates unchanged; no photo/diagram/generalJPEG claim.",
-      "producerSha256": "528960b2f6fc575b1d49053b0675b170ae2eb69dba854349c11d0c97bb87cc3c"
+      "evidence": "C159 source-derived coefficient precision and admitted progressive scans. OriginalDQT/source/reference/q69/nativeqscale5/sampling/flattening unchanged; DC/lowAC may change. Exact corrected independent prototypes on both OS/normal/scalar/public boundaries. No photo/diagram/generalJPEG claim.",
+      "producerSha256": "e4ff4c0e7ac04dfa5ca9dd69dfb031f4549d7740f27a7b2c11fadbc375c906b2"
     },
     {
       "case": "Encode444Cancelable8",
@@ -360,15 +360,15 @@
       "sampling": "444",
       "quality": 69,
       "nativeQuality": 5,
-      "managedBytes": 141528,
+      "managedBytes": 138074,
       "referenceBytes": 133041,
-      "managedSha256": "dbdac328278702f19b9eead50120ef391cb1693d722196ea5b615240bef6d099",
+      "managedSha256": "15d93f925b096dd2f9b1e40001eda60f9537cf3ed1b8f5c1522f57b97ea50ac0",
       "referenceSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
       "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
       "referenceSampleSha256": "ec2ea910c09a839ea55987103b9a2efa1c0bec62658fa55cda9c14726e88b5cd",
       "sizePass": false,
       "qualityPass": true,
-      "psnrGapDb": 0.21578961685837328,
+      "psnrGapDb": 0.11341924634265865,
       "qualityEvidenceReused": true,
       "qualitySample": {
         "setting": 69,
@@ -412,11 +412,11 @@
       "harnessNativeSelectorBuilds": 0,
       "nativeEncodes": 0,
       "timingRuns": 0,
-      "excessBytes": 8487,
-      "sizeRatio": 1.0637923647597358,
+      "excessBytes": 5033,
+      "sizeRatio": 1.0378304432468186,
       "boundary": "RGBA forward-only/live-cancellable output",
-      "evidence": "C150 adjacent component-pair tail after unchanged C142 constrained trellis. Exact independent C1498/16 packets bothOS/normal/scalar and public boundaries. OriginalDQT/DC/source/reference/settings/gates unchanged; no photo/diagram/generalJPEG claim.",
-      "producerSha256": "528960b2f6fc575b1d49053b0675b170ae2eb69dba854349c11d0c97bb87cc3c"
+      "evidence": "C159 source-derived coefficient precision and admitted progressive scans. OriginalDQT/source/reference/q69/nativeqscale5/sampling/flattening unchanged; DC/lowAC may change. Exact corrected independent prototypes on both OS/normal/scalar/public boundaries. No photo/diagram/generalJPEG claim.",
+      "producerSha256": "e4ff4c0e7ac04dfa5ca9dd69dfb031f4549d7740f27a7b2c11fadbc375c906b2"
     },
     {
       "case": "JpegBudgetEncode4208",
@@ -487,15 +487,15 @@
       "sampling": "444",
       "quality": 69,
       "nativeQuality": 5,
-      "managedBytes": 141528,
+      "managedBytes": 138074,
       "referenceBytes": 133041,
-      "managedSha256": "dbdac328278702f19b9eead50120ef391cb1693d722196ea5b615240bef6d099",
+      "managedSha256": "15d93f925b096dd2f9b1e40001eda60f9537cf3ed1b8f5c1522f57b97ea50ac0",
       "referenceSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
       "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
       "referenceSampleSha256": "ec2ea910c09a839ea55987103b9a2efa1c0bec62658fa55cda9c14726e88b5cd",
       "sizePass": false,
       "qualityPass": true,
-      "psnrGapDb": 0.21578961685837328,
+      "psnrGapDb": 0.11341924634265865,
       "qualityEvidenceReused": true,
       "qualitySample": {
         "setting": 69,
@@ -538,10 +538,10 @@
       "harnessNativeSelectorBuilds": 0,
       "nativeEncodes": 0,
       "timingRuns": 0,
-      "excessBytes": 8487,
-      "sizeRatio": 1.0637923647597358,
-      "evidence": "C150 adjacent component-pair tail after unchanged C142 constrained trellis. Exact independent C1498/16 packets bothOS/normal/scalar and public boundaries. OriginalDQT/DC/source/reference/settings/gates unchanged; no photo/diagram/generalJPEG claim.",
-      "producerSha256": "528960b2f6fc575b1d49053b0675b170ae2eb69dba854349c11d0c97bb87cc3c"
+      "excessBytes": 5033,
+      "sizeRatio": 1.0378304432468186,
+      "evidence": "C159 source-derived coefficient precision and admitted progressive scans. OriginalDQT/source/reference/q69/nativeqscale5/sampling/flattening unchanged; DC/lowAC may change. Exact corrected independent prototypes on both OS/normal/scalar/public boundaries. No photo/diagram/generalJPEG claim.",
+      "producerSha256": "e4ff4c0e7ac04dfa5ca9dd69dfb031f4549d7740f27a7b2c11fadbc375c906b2"
     },
     {
       "case": "JpegRgb420AsyncSamples",
@@ -702,44 +702,44 @@
   "rankedRemaining": [
     {
       "case": "Encode8",
-      "managedBytes": 141528,
+      "managedBytes": 138074,
       "referenceBytes": 133041,
-      "excessBytes": 8487,
-      "sizeRatio": 1.0637923647597358
+      "excessBytes": 5033,
+      "sizeRatio": 1.0378304432468186
     },
     {
       "case": "Encode444Stream8",
-      "managedBytes": 141528,
+      "managedBytes": 138074,
       "referenceBytes": 133041,
-      "excessBytes": 8487,
-      "sizeRatio": 1.0637923647597358
+      "excessBytes": 5033,
+      "sizeRatio": 1.0378304432468186
     },
     {
       "case": "Encode444Cancelable8",
-      "managedBytes": 141528,
+      "managedBytes": 138074,
       "referenceBytes": 133041,
-      "excessBytes": 8487,
-      "sizeRatio": 1.0637923647597358
+      "excessBytes": 5033,
+      "sizeRatio": 1.0378304432468186
     },
     {
       "case": "Jpeg8AsyncNonSeekable",
-      "managedBytes": 141528,
+      "managedBytes": 138074,
       "referenceBytes": 133041,
-      "excessBytes": 8487,
-      "sizeRatio": 1.0637923647597358
+      "excessBytes": 5033,
+      "sizeRatio": 1.0378304432468186
     },
     {
       "case": "Encode16",
-      "managedBytes": 141529,
+      "managedBytes": 138002,
       "referenceBytes": 133043,
-      "excessBytes": 8486,
-      "sizeRatio": 1.0637838894192104
+      "excessBytes": 4959,
+      "sizeRatio": 1.037273663402058
     }
   ],
-  "largestGap": "Only five default444 rows open:141528/ref133041 and141529/ref133043, about6.4% maximum excess. All nine420 boundaries pass; optionalCompactColor separate.",
-  "next": "One bounded exact-coefficient four-table Huffman grouping experiment on existing4448,16onlyifmeaningful. Preserve allpassingcontrols, no image/settings/quality grid or timing confirmations.",
-  "correctedInvalidation": "Five444 packet rows changed. Currentforward444 cost replacesC142; four other444, eight420 andtwo422 timingrows already superseded remainhistorical. C146caller420 cost and other unaffected producer evidence retained. Finite256/counts unchanged;31metadata confirmations pending.",
-  "qualificationReuse": "4979tests/OS,155+57scalar/OS,SAMEactualprivate0.2package/allthreeexamples bothOS. ExactC1498/16 packets and sourcequality reused; no new nativeencode/search. One core/testbuild/project/OS frozen throughout. No harness/native/selector/differential rebuild. One short forward444 cost.",
+  "largestGap": "Five default444 rows open:138074/ref133041 and138002/ref133043, about3.8% maximum excess. All nine420 boundaries pass; optionalCompactColor separate.",
+  "next": "One source-only precision-grid-aware coefficient experiment on the existing4448 control; paired16 only for meaningful saving and unchanged quality pass. Otherwise move to the named level6RGBA8 PNG packet gap. No image/settings/quality grid, passing-case retuning or timing confirmation.",
+  "correctedInvalidation": "Five444 packet rows changed. C159 forward444 cost replacesC150; four other444/eight420/two422 timing rows already superseded remain historical. Unchanged C146caller420 cost and other relevant path evidence retained. Finite256 counts unchanged;31metadata confirmations pending.",
+  "qualificationReuse": "4999tests/OS,170+62scalar/OS,SAMEactualprivate0.2package/allthreeexamples bothOS. One frozen core/OS; corrected independent source rounding matches exact actual8/16 packets. Test-only corrections rebuilt only affected test assemblies. No benchmark/native/selector/differential rebuild or native encode. One short complete forward444 cost.",
   "rawArtifact": {
     "file": "c125-jpeg-packet-ledger.tar.gz",
     "bytes": 10218,
@@ -753,53 +753,63 @@
   "changedBoundaries": [
     {
       "case": "Encode8",
-      "previousBytes": 142580,
-      "currentBytes": 141528,
-      "savingBytes": 1052,
-      "currentSha256": "dbdac328278702f19b9eead50120ef391cb1693d722196ea5b615240bef6d099",
+      "previousBytes": 141528,
+      "currentBytes": 138074,
+      "savingBytes": 3454,
+      "currentSha256": "15d93f925b096dd2f9b1e40001eda60f9537cf3ed1b8f5c1522f57b97ea50ac0",
       "referenceBytes": 133041,
-      "sourcePsnrGapDb": 0.21578961685837328,
+      "sourcePsnrGapDb": 0.11341924634265865,
       "qualityPass": true
     },
     {
       "case": "Encode16",
-      "previousBytes": 142544,
-      "currentBytes": 141529,
-      "savingBytes": 1015,
-      "currentSha256": "eccb78e3c51d2eb2af138c23cc2b12bd169c04c7431a95cbf4834e352ce24e66",
+      "previousBytes": 141529,
+      "currentBytes": 138002,
+      "savingBytes": 3527,
+      "currentSha256": "831dc65e1159b1caf6332e9f8b585e07aa0bff85e2ac72ede81ef0dea350e834",
       "referenceBytes": 133043,
-      "sourcePsnrGapDb": 0.220860264658711,
+      "sourcePsnrGapDb": 0.11682676079033882,
       "qualityPass": true
     },
     {
       "case": "Encode444Stream8",
-      "previousBytes": 142580,
-      "currentBytes": 141528,
-      "savingBytes": 1052,
-      "currentSha256": "dbdac328278702f19b9eead50120ef391cb1693d722196ea5b615240bef6d099",
+      "previousBytes": 141528,
+      "currentBytes": 138074,
+      "savingBytes": 3454,
+      "currentSha256": "15d93f925b096dd2f9b1e40001eda60f9537cf3ed1b8f5c1522f57b97ea50ac0",
       "referenceBytes": 133041,
-      "sourcePsnrGapDb": 0.21578961685837328,
+      "sourcePsnrGapDb": 0.11341924634265865,
       "qualityPass": true
     },
     {
       "case": "Encode444Cancelable8",
-      "previousBytes": 142580,
-      "currentBytes": 141528,
-      "savingBytes": 1052,
-      "currentSha256": "dbdac328278702f19b9eead50120ef391cb1693d722196ea5b615240bef6d099",
+      "previousBytes": 141528,
+      "currentBytes": 138074,
+      "savingBytes": 3454,
+      "currentSha256": "15d93f925b096dd2f9b1e40001eda60f9537cf3ed1b8f5c1522f57b97ea50ac0",
       "referenceBytes": 133041,
-      "sourcePsnrGapDb": 0.21578961685837328,
+      "sourcePsnrGapDb": 0.11341924634265865,
       "qualityPass": true
     },
     {
       "case": "Jpeg8AsyncNonSeekable",
-      "previousBytes": 142580,
-      "currentBytes": 141528,
-      "savingBytes": 1052,
-      "currentSha256": "dbdac328278702f19b9eead50120ef391cb1693d722196ea5b615240bef6d099",
+      "previousBytes": 141528,
+      "currentBytes": 138074,
+      "savingBytes": 3454,
+      "currentSha256": "15d93f925b096dd2f9b1e40001eda60f9537cf3ed1b8f5c1522f57b97ea50ac0",
       "referenceBytes": 133041,
-      "sourcePsnrGapDb": 0.21578961685837328,
+      "sourcePsnrGapDb": 0.11341924634265865,
       "qualityPass": true
+    }
+  ],
+  "currentQualificationRaw": [
+    {
+      "file": "c159-qualified-linux.tar.gz",
+      "sha256": "8eaf548b8810854286440c844b0b84bb09f7a264cf98a63df2e43e034e845629"
+    },
+    {
+      "file": "c159-qualified-windows.tar.gz",
+      "sha256": "1e9d46f4f62ed2e00a817a47202a558bdeafa26e19c59be95086bfb378ae3ac5"
     }
   ]
 }

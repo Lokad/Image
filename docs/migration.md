@@ -3,6 +3,12 @@
 Published 0.1.0 remains unchanged. Version 0.2.0 is under qualification; it is not
 yet a claim of replacement readiness or performance parity for the expanded scope.
 
+Original JPEG 4:4:4 encoding may now use progressive scans when its complete plan
+is admitted and restart markers are disabled. Set `JpegEncodeOptions.BaselineOnly`
+for consumers requiring baseline syntax. This switch retains the same quantizers
+and reconstructed pixels; local workspace selection may also use baseline syntax.
+Encoded bytes and lossy reconstruction may change between encoder versions.
+
 `ImageInfo.SourceColor`, `SourceAlpha` and `SourceComponentCount` describe encoded
 samples, alongside source `BitDepth`; they do not describe normalized RGBA pixels.
 Unlabelled JPEG color models remain `Unknown`. VP8L always codes alpha even when

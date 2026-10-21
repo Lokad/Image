@@ -2,6 +2,9 @@
 
 ## 0.2.0 â€” Unreleased
 
+- Smaller Original 4:4:4 JPEG packets through source-derived coefficient precision
+  and admitted progressive scans; `BaselineOnly` preserves baseline syntax with
+  the same pixels. Compression qualification remains specific to tested controls.
 - Smaller lossy WebP output through admitted 16x16 luma prediction, grouped DC
   coding, full-direction reconstruction-based luma/chroma decisions and whole-frame entropy
   modeling at higher efforts, plus exact compressed alpha with bounded backward

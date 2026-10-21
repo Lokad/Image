@@ -19,10 +19,11 @@ internal static partial class JpegEncoder
         var events = blocks * 64 + (options.RestartInterval == 0 ? 0 : mcus);
         var work = 2 * mcus + mcus * (h * v * (4096 + 768) + (components - 1) * (4096 + 768 * h * v))
             + blocks * (192L + AcDecisionWork(options.Quality, components, options.Sampling, options.QuantizationPolicy))
-            + JointPriceTrainingWork(mcus, options.Quality, components, options.Sampling, options.QuantizationPolicy) + 262145;
+            + JointPriceTrainingWork(mcus, options.Quality, components, options.Sampling, options.QuantizationPolicy) + 262145
+            + (sampling == JpegSampling.YCbCr444 ? Progressive444Work(blocks, options) : 0);
         var adaptive = blocks >= 256 && events <= Array.MaxLength
             && work <= context.RemainingWork && events * sizeof(uint) + 65536 <= context.RemainingWorkingBytes
-            && output is LimitedWriteStream limited && limited.SupportsAdaptiveJpegPlanning(blocks * 432 + 2048);
+            && output is LimitedWriteStream limited && limited.SupportsAdaptiveJpegPlanning(JpegPacketBound(blocks, options));
         // Whole-operation work was admitted above; the bounded MCU preparation
         // retains the surrounding work/cancellation checks and fits the 8 KiB.
         var prepareMcu = adaptive && source.Format == JpegSampleFormat.Rgb && h == 2 && v == 2
@@ -31,6 +32,7 @@ internal static partial class JpegEncoder
         var policy = components == 1 ? JpegQuantizationPolicy.Original : options.QuantizationPolicy;
         var acLambda = AcDecisionLambda(options.Quality, components, options.Sampling, policy);
         var joint444 = acLambda != 0 && options.Sampling == JpegSampling.YCbCr444;
+        var progressive = adaptive && joint444 && CanWriteProgressive444(options);
         Span<double> jointSource = joint444 ? stackalloc double[192] : default;
         Span<int> jointValues = joint444 ? stackalloc int[192] : default;
         Span<int> jointPrices = joint444 ? stackalloc int[512] : default;
@@ -86,7 +88,8 @@ internal static partial class JpegEncoder
                         if (joint444)
                         {
                             if (!PrepareJoint444Block(blockPixels, q, jointSource, jointValues, component, luma, chroma, acLambda, context, jointPrices)) continue;
-                            if (adaptive) eventCount = AppendJoint444Events(jointValues, predictors, frequencies!, cache!, eventCount, context);
+                            if (progressive) eventCount = AppendProgressive444(jointValues, cache!, eventCount, context);
+                            else if (adaptive) eventCount = AppendJoint444Events(jointValues, predictors, frequencies!, cache!, eventCount, context);
                             else for (var coded = 0; coded < 3; coded++)
                                 WriteFixedBlock(jointValues.Slice(coded * 64, 64), ref predictors[coded], writer!, FixedAc.Words);
                             continue;
@@ -109,6 +112,8 @@ internal static partial class JpegEncoder
                 }
             }
             if (!adaptive) writer!.Align();
+            else if (progressive)
+                WriteProgressive444(source.Width, source.Height, output, options, luma, chroma, cache!, (int)blocks, context);
             else
             {
                 var tables = new JpegEncodingTable?[4];

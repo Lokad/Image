@@ -40,6 +40,8 @@ public sealed record JpegEncodeOptions
     /// <summary>Original by default. CompactColor trades color reconstruction precision for smaller packets.</summary>
     public JpegQuantizationPolicy QuantizationPolicy { get; init; }
     public JpegSampling Sampling { get; init; } = JpegSampling.YCbCr420;
+    /// <summary>Require baseline JPEG syntax. Otherwise admitted Original 4:4:4 encoding may use progressive scans. Coefficient decisions are unchanged by this switch.</summary>
+    public bool BaselineOnly { get; init; }
     /// <summary>RGB background for alpha flattening, packed as 0xRRGGBB. Null requires opaque input.</summary>
     public uint? BackgroundRgb { get; init; }
     /// <summary>MCUs per restart interval, from 0 (disabled) to 65535.</summary>

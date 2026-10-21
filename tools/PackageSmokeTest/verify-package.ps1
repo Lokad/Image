@@ -447,7 +447,7 @@ if (callerGray.AsSpan().IndexOfAnyExcept((byte)123) >= 0 || shared.RemainingWork
     throw new Exception("Package consumer caller-owned grayscale admission differs.");
 using var callerEncoded = new MemoryStream();
 ImageCodec.EncodeJpeg(callerSamples, 8, 8, JpegSampleFormat.Rgb, callerEncoded, 27,
-    new JpegEncodeOptions { Quality = 100, Sampling = JpegSampling.Grayscale, RestartInterval = 1 });
+    new JpegEncodeOptions { Quality = 100, Sampling = JpegSampling.Grayscale, RestartInterval = 1, BaselineOnly = true });
 if (!callerEncoded.ToArray().AsSpan().SequenceEqual(jpeg.ToArray()) || !callerEncoded.CanWrite)
     throw new Exception("Package consumer caller RGB encoding differs.");
 using var callerEncodedGray = new MemoryStream();

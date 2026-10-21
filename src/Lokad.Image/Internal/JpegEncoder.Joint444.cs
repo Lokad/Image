@@ -17,6 +17,7 @@ internal static partial class JpegEncoder
         {
             RefineJoint444(source, luma, chroma, values, prices, lambda, context);
             RefineComponentPairs444(source, luma, chroma, values, prices, lambda, context);
+            RefinePrecision444(source, luma, chroma, values, lambda, context);
         }
         return true;
     }

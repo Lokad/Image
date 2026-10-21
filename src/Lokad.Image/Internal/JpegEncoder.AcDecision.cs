@@ -13,7 +13,7 @@ internal static partial class JpegEncoder
 
     private static int AcDecisionWork(int quality, int components, JpegSampling sampling, JpegQuantizationPolicy policy)
         => AcDecisionLambda(quality, components, sampling, policy) == 0 ? 0
-            : sampling == JpegSampling.YCbCr444 ? 48512 + (Trellis444WorkPerMcu + ComponentPairWorkPerMcu) / 3
+            : sampling == JpegSampling.YCbCr444 ? 49472 + (Trellis444WorkPerMcu + ComponentPairWorkPerMcu) / 3
             : sampling == JpegSampling.YCbCr420 ? 4096 + Trellis420WorkPerBlock : 4096;
 
     private static void TransformEncoderBlock(ReadOnlySpan<byte> pixels, ReadOnlySpan<ushort> quantization,

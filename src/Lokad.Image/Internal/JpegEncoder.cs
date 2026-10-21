@@ -238,9 +238,10 @@ internal static partial class JpegEncoder
         var cacheSamples = blocks * 64 + (options.RestartInterval == 0 ? 0 : mcus);
         var work = 2 * mcus + mcus * (h * v * (4096 + 768) + (components - 1) * (4096 + 768 * h * v))
             + blocks * (192L + AcDecisionWork(options.Quality, components, options.Sampling, options.QuantizationPolicy))
-            + JointPriceTrainingWork(mcus, options.Quality, components, options.Sampling, options.QuantizationPolicy) + 262145;
+            + JointPriceTrainingWork(mcus, options.Quality, components, options.Sampling, options.QuantizationPolicy) + 262145
+            + Progressive444Work(blocks, options);
         var memory = image.ByteLength + 8192L + cacheSamples * sizeof(uint) + 65536;
-        var outputMaximum = blocks * 432 + 2048;
+        var outputMaximum = JpegPacketBound(blocks, options);
         return cacheSamples <= Array.MaxLength && work <= context.RemainingWork && memory <= context.RemainingWorkingBytes
             && output is LimitedWriteStream limited && limited.SupportsAdaptiveJpegPlanning(outputMaximum);
     }
@@ -275,6 +276,7 @@ internal static partial class JpegEncoder
             var luma = Quantization(options.Quality, false, policy); var chroma = Quantization(options.Quality, true, policy);
             var acLambda = AcDecisionLambda(options.Quality, components, options.Sampling, policy);
             var joint444 = acLambda != 0 && options.Sampling == JpegSampling.YCbCr444;
+            var progressive = joint444 && CanWriteProgressive444(options);
             Span<double> jointSource = joint444 ? stackalloc double[192] : default;
             Span<int> jointValues = joint444 ? stackalloc int[192] : default;
             Span<int> jointPrices = joint444 ? stackalloc int[512] : default;
@@ -372,7 +374,8 @@ internal static partial class JpegEncoder
                         if (joint444)
                         {
                             if (!PrepareJoint444Block(pixels, q, jointSource, jointValues, component, luma, chroma, acLambda, context, jointPrices)) continue;
-                            eventCount = AppendJoint444Events(jointValues, predictors, frequencies, cache, eventCount, context);
+                            eventCount = progressive ? AppendProgressive444(jointValues, cache, eventCount, context)
+                                : AppendJoint444Events(jointValues, predictors, frequencies, cache, eventCount, context);
                             continue;
                         }
                         TransformEncoderBlock(pixels, q, quantized, transformed, acLambda, samplesX * samplesY, context,
@@ -390,6 +393,11 @@ internal static partial class JpegEncoder
                         eventCount = AppendAdaptiveAc(quantized, frequencies[group + 2], cache, eventCount, group + 2);
                     }
                 }
+            }
+            if (progressive)
+            {
+                WriteProgressive444(image.Width, image.Height, output, options, luma, chroma, cache, blockCount, context);
+                context.Cancellation.ThrowIfCancellationRequested(); output.Write(new byte[] { 255, 217 }); return;
             }
             var tables = new JpegEncodingTable?[4];
             for (var t = 0; t < 4; t++) if (frequencies[t].Any(x => x != 0)) tables[t] = JpegHuffmanBuilder.Build(frequencies[t], context);
