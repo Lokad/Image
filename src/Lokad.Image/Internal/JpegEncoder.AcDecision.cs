@@ -13,7 +13,7 @@ internal static partial class JpegEncoder
 
     private static int AcDecisionWork(int quality, int components, JpegSampling sampling, JpegQuantizationPolicy policy)
         => AcDecisionLambda(quality, components, sampling, policy) == 0 ? 0
-            : sampling == JpegSampling.YCbCr444 ? 4160 : 4096;
+            : sampling == JpegSampling.YCbCr444 ? 40448 : 4096;
 
     private static void TransformEncoderBlock(ReadOnlySpan<byte> pixels, ReadOnlySpan<ushort> quantization,
         Span<int> quantized, Span<double> transformed, int lambda, int samplingArea, OperationContext context,
@@ -27,9 +27,8 @@ internal static partial class JpegEncoder
 
     // T.81 permits encoder coefficient decisions independently of DQT. Keep the
     // original quantizers, initial nearest-away rounding and DC. One reverse scan
-    // considers zero for each nonzero AC coefficient. Full-resolution color also
-    // caps additional block error at 1/32 of its initial source-quantization error.
-    // This component-DCT bound does not replace measured RGB-quality gates.
+    // considers zero for each nonzero AC coefficient. The optional component cap
+    // remains an uncoupled reference; production Original444 uses DecideJoint444.
     // The existing immutable
     // geometric AC model makes decisions independent of stream/entropy/admission.
     // No image search, reference-derived constants, frame cache or new heap storage.

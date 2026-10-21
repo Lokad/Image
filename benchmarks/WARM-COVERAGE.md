@@ -1,38 +1,39 @@
 # Material warm coverage
 
-Updated2026-10-21. Compression precedes CPU parity. The finite scope remains
-**256 named cases:239 numeric and17 unmeasured**. The current
+Updated 2026-10-21. Compression precedes CPU parity. The finite scope remains
+**256 named cases: 239 numeric and 17 unmeasured**. The current
 [three-table summary](../docs/benchmark.md) retains tested-producer evidence:
-62 independent passes,147 gaps,one confidence-open case,15 short cost screens
-and **14 superseded JPEG rows**. Counts identify tested producers; full warm
-single-CPU parity and replacement readiness remain open.
+62 independent passes, 147 gaps, one confidence-open case, 15 short cost screens
+and **14 superseded JPEG rows**. Full warm single-CPU parity and replacement
+readiness remain open.
 
-[Source-relative JPEG error caps](JPEG-AC-ERROR-CAP.md) reduce default4:4:4
-packets to155,732/133,041 B and155,795/133,043 B for existing8/16-bit controls.
-Source-PSNR gaps0.186/0.187 dB pass the unchanged0.25 dB gate; remaining packet
-excess is about17.1%. Original DQT/DC remain fixed. This follows C127's adaptive
-stream savings; no photographic/diagram compression claim is made.
+[Coupled RGB category decisions](JPEG-JOINT-RGB-DECISIONS.md) reduce the existing
+4:4:4 packets to 150,479/133,041 B and 150,395/133,043 B for 8/16-bit input.
+Source-PSNR gaps 0.225/0.233 dB pass the unchanged 0.25 dB gate; remaining packet
+excess is about 13.1%. Original DQT/DC remain fixed. C130/C131 byte experiments
+precede this one coherent production qualification. There is no photographic or
+diagram compression claim.
 
-The current producer passes4,907 tests/OS,87+53 scalar checks/OS and the same
-actual package/all examples on both platforms. One forward4:4:4 short cost is
-38,556.568us,563,746 B/op,ratio10.221/upper10.976. CPU cost is accepted for bytes;
-there is no CPU-parity confirmation. Unchanged caller420 cost retains its original
-producer:10.791x/upper11.190x,170,539 B/op, without repeating timing.
+The current producer passes 4,917 tests/OS, 97+53 scalar checks/OS and the same
+actual package/all examples on both platforms. One forward 4:4:4 short cost is
+55,068.595 us, 563,802 B/op, ratio 14.401/upper 45.954. CPU cost is accepted for
+bytes; there is no CPU-parity confirmation. Other observations keep their original
+tested producers, with no repeated timing or whole-library audit.
 
 The ten named old subsampled rows in [C124 evidence](jpeg-ac-decision-evidence.json)
-and444livecancel remain superseded. [C129](jpeg-ac-error-cap-evidence.json) adds
-Encode8,Encode16 and RGBA8async to that list; its current forward444 screen replaces
-C127's observation. Current packets/quality are reconciled; historical means do not
-prove current gaps. Another31 metadata confirmations remain pending, with equivalent
-PNG typed fields required before timing. Reuse unaffected evidence and stop passing
-controls; do not add an image/settings grid or perform speed-only work.
+and four other affected 4:4:4 rows remain superseded. C132's current forward-only
+screen replaces C129's observation; current packets/quality are reconciled.
+Historical means do not prove current gaps. Another 31 metadata confirmations
+remain pending, with equivalent PNG typed fields required before timing. Reuse
+unaffected evidence and stop passing controls; do not add an image/settings grid
+or perform speed-only work.
 
 All seven declared lossy WebP and six lossless WebP packet gates pass/stay stopped.
-JPEG5default passes/13open; optional CompactColor remains separate. PNG15/17 pass;
-two level6RGBA8 sync/async packets remain218,775/210,973 B. A5%IDAT tolerance or
-timing pass does not establish complete-packet parity. Exact lossless pixels,
-quality gates, cooperative admission, cancellation, ownership and equivalent
-complete operations remain mandatory.
+JPEG has five default passes/13 open; optional CompactColor stays separate.
+PNG retains 15/17 passes; two level-6 RGBA8 sync/async packets remain
+218,775/210,973 B. A 5% IDAT tolerance or timing pass does not establish packet
+parity. Exact lossless pixels, quality gates, cooperative admission, cancellation,
+ownership and equivalent complete operations remain mandatory.
 
 Earlier qualification milestones below retain their historical producer scopes.
 

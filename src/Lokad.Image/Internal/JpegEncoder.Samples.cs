@@ -29,6 +29,9 @@ internal static partial class JpegEncoder
         Span<byte> preparedMcu = prepareMcu ? stackalloc byte[384] : default;
         var policy = components == 1 ? JpegQuantizationPolicy.Original : options.QuantizationPolicy;
         var acLambda = AcDecisionLambda(options.Quality, components, options.Sampling, policy);
+        var joint444 = acLambda != 0 && options.Sampling == JpegSampling.YCbCr444;
+        Span<double> jointSource = joint444 ? stackalloc double[192] : default;
+        Span<int> jointValues = joint444 ? stackalloc int[192] : default;
         var luma = Quantization(options.Quality, false, policy); var chroma = Quantization(options.Quality, true, policy);
         var pixels = new byte[64]; var transformed = new double[64]; var predictors = new int[components];
         Span<int> quantized = stackalloc int[64];
@@ -74,6 +77,14 @@ internal static partial class JpegEncoder
                             SampleCallerBlock(source, mcu % columns * h * 8 + bx * 8,
                                 mcu / columns * v * 8 + by * 8, samplesX, samplesY, component, pixels);
                             blockPixels = pixels;
+                        }
+                        if (joint444)
+                        {
+                            if (!PrepareJoint444Block(blockPixels, q, jointSource, jointValues, component, luma, chroma, acLambda, context)) continue;
+                            if (adaptive) eventCount = AppendJoint444Events(jointValues, predictors, frequencies!, cache!, eventCount, context);
+                            else for (var coded = 0; coded < 3; coded++)
+                                WriteFixedBlock(jointValues.Slice(coded * 64, 64), ref predictors[coded], writer!, FixedAc.Words);
+                            continue;
                         }
                         TransformEncoderBlock(blockPixels, q, quantized, transformed, acLambda, samplesX * samplesY, context,
                             options.Sampling == JpegSampling.YCbCr444);

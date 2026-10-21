@@ -28,6 +28,9 @@ internal static partial class JpegEncoder
         var policy = components == 1 ? JpegQuantizationPolicy.Original : options.QuantizationPolicy;
         var luma = Quantization(options.Quality, false, policy); var chroma = Quantization(options.Quality, true, policy);
         var acLambda = AcDecisionLambda(options.Quality, components, options.Sampling, policy);
+        var joint444 = acLambda != 0 && options.Sampling == JpegSampling.YCbCr444;
+        Span<double> jointSource = joint444 ? stackalloc double[192] : default;
+        Span<int> jointValues = joint444 ? stackalloc int[192] : default;
         var dcSymbols = Enumerable.Range(0, 12).Select(value => (byte)value).ToArray();
         var ac = FixedAc.Table;
         var acWords = FixedAc.Words;
@@ -141,6 +144,13 @@ internal static partial class JpegEncoder
                             }
                             pixels[y * 8 + x] = (byte)Math.Clamp(Math.Round(sum / (samplesX * samplesY), MidpointRounding.AwayFromZero), 0, 255);
                         }
+                    }
+                    if (joint444)
+                    {
+                        if (!PrepareJoint444Block(pixels, q, jointSource, jointValues, component, luma, chroma, acLambda, context)) continue;
+                        for (var coded = 0; coded < 3; coded++)
+                            WriteFixedBlock(jointValues.Slice(coded * 64, 64), ref predictors[coded], writer, acWords);
+                        continue;
                     }
                     TransformEncoderBlock(pixels, q, quantized, transformed, acLambda, samplesX * samplesY, context,
                         options.Sampling == JpegSampling.YCbCr444);
@@ -257,6 +267,9 @@ internal static partial class JpegEncoder
             var policy = components == 1 ? JpegQuantizationPolicy.Original : options.QuantizationPolicy;
             var luma = Quantization(options.Quality, false, policy); var chroma = Quantization(options.Quality, true, policy);
             var acLambda = AcDecisionLambda(options.Quality, components, options.Sampling, policy);
+            var joint444 = acLambda != 0 && options.Sampling == JpegSampling.YCbCr444;
+            Span<double> jointSource = joint444 ? stackalloc double[192] : default;
+            Span<int> jointValues = joint444 ? stackalloc int[192] : default;
             var pixels = new byte[64]; var transformed = new double[64]; var predictors = new int[components];
             Span<int> quantized = stackalloc int[64]; var eventCount = 0;
             for (var mcu = 0; mcu < columns * rows; mcu++)
@@ -345,6 +358,12 @@ internal static partial class JpegEncoder
                                 }
                                 pixels[y * 8 + x] = (byte)Math.Clamp(Math.Round(sum / (samplesX * samplesY), MidpointRounding.AwayFromZero), 0, 255);
                             }
+                        }
+                        if (joint444)
+                        {
+                            if (!PrepareJoint444Block(pixels, q, jointSource, jointValues, component, luma, chroma, acLambda, context)) continue;
+                            eventCount = AppendJoint444Events(jointValues, predictors, frequencies, cache, eventCount, context);
+                            continue;
                         }
                         TransformEncoderBlock(pixels, q, quantized, transformed, acLambda, samplesX * samplesY, context,
                             options.Sampling == JpegSampling.YCbCr444);

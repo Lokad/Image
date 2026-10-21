@@ -1,0 +1,101 @@
+namespace Lokad.Image.Internal;
+
+internal static partial class JpegEncoder
+{
+    // Three co-sited blocks require 2304 stack bytes within the fixed 8 KiB
+    // workspace. All source sampling/flattening remains at the original boundary.
+    private static bool PrepareJoint444Block(ReadOnlySpan<byte> pixels, ReadOnlySpan<ushort> quantization,
+        Span<double> source, Span<int> values, int component, ReadOnlySpan<ushort> luma,
+        ReadOnlySpan<ushort> chroma, int lambda, OperationContext context)
+    {
+        var block = source.Slice(component * 64, 64);
+        JpegTransform.Forward(pixels, block, context);
+        Quantize(block, quantization, values.Slice(component * 64, 64));
+        if (component != 2) return false;
+        DecideJoint444(source, luma, chroma, values, lambda, context);
+        return true;
+    }
+
+    // T.81 amplitude categories supply the closest smaller-category magnitude.
+    // RGB error uses the library's inverse BT.601 before clipping/rounding; actual
+    // matched-reconstruction quality is qualified separately. DC/DQT are retained.
+    internal static void DecideJoint444(ReadOnlySpan<double> source, ReadOnlySpan<ushort> luma,
+        ReadOnlySpan<ushort> chroma, Span<int> values, int lambda, OperationContext context)
+    {
+        if (source.Length != 192 || values.Length != 192 || luma.Length != 64 || chroma.Length != 64 || lambda < 0)
+            throw new ArgumentException("Joint JPEG decisions require three complete co-sited blocks.");
+        if (lambda == 0) return;
+        context.Work(192);
+        var initialError = 0d;
+        for (var scan = 0; scan < 64; scan++)
+        {
+            var index = JpegTransform.Zigzag[scan];
+            initialError += JointRgbError(source[index] - (double)values[index] * luma[index],
+                source[64 + index] - (double)values[64 + index] * chroma[index],
+                source[128 + index] - (double)values[128 + index] * chroma[index]);
+        }
+        var maximumError = initialError / 32; var additionalError = 0d;
+        var lengths = FixedAc.Table.Lengths;
+        context.Work(192);
+        Span<int> previousBits = stackalloc int[3];
+        for (var component = 0; component < 3; component++)
+            previousBits[component] = AcDecisionBits(values.Slice(component * 64, 64), lengths);
+        for (var scan = 63; scan > 0; scan--)
+        {
+            var index = JpegTransform.Zigzag[scan];
+            for (var component = 0; component < 3; component++)
+            {
+                var at = component * 64 + index; var original = values[at];
+                if (original == 0) continue;
+                var ey = source[index] - (double)values[index] * luma[index];
+                var ecb = source[64 + index] - (double)values[64 + index] * chroma[index];
+                var ecr = source[128 + index] - (double)values[128 + index] * chroma[index];
+                var before = JointRgbError(ey, ecb, ecr);
+                var bestValue = original; var bestBits = previousBits[component];
+                var bestError = 0d; var bestCost = 0d;
+                try
+                {
+                    for (var category = Category(original) - 1; category >= 0; category--)
+                    {
+                        context.Work(64);
+                        var magnitude = (1 << category) - 1;
+                        var value = original > 0 ? magnitude : -magnitude;
+                        values[at] = value;
+                        var nextBits = AcDecisionBits(values.Slice(component * 64, 64), lengths);
+                        var residual = source[at] - (double)value * (component == 0 ? luma[index] : chroma[index]);
+                        var error = JointRgbError(component == 0 ? residual : ey,
+                            component == 1 ? residual : ecb, component == 2 ? residual : ecr) - before;
+                        var cost = error + (long)lambda * (nextBits - previousBits[component]);
+                        if (additionalError + error <= maximumError && cost < bestCost)
+                        { bestValue = value; bestBits = nextBits; bestError = error; bestCost = cost; }
+                    }
+                }
+                finally { values[at] = bestValue; }
+                previousBits[component] = bestBits; additionalError += bestError;
+            }
+        }
+    }
+
+    private static double JointRgbError(double y, double cb, double cr)
+    {
+        var red = y + 1.402 * cr; var green = (y - 0.344136286 * cb) - 0.714136286 * cr;
+        var blue = y + 1.772 * cb;
+        return ((red * red + green * green) + blue * blue) / 3;
+    }
+
+    private static int AppendJoint444Events(ReadOnlySpan<int> values, int[] predictors,
+        long[][] frequencies, uint[] cache, int eventCount, OperationContext context)
+    {
+        for (var component = 0; component < 3; component++)
+        {
+            context.Work(64); var block = values.Slice(component * 64, 64); var group = component == 0 ? 0 : 1;
+            var difference = block[0] - predictors[component]; predictors[component] = block[0];
+            var category = Category(difference);
+            if (category > 11) throw new ImageDataException("JPEG DC transform exceeds its coding range.");
+            frequencies[group][category]++;
+            cache[eventCount++] = PackEntropyEvent(group, category, difference, category);
+            eventCount = AppendAdaptiveAc(block, frequencies[group + 2], cache, eventCount, group + 2);
+        }
+        return eventCount;
+    }
+}

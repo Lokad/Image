@@ -1151,7 +1151,7 @@ adaptive entropy, synchronous and asynchronous output. Sampling, flattening,
 coefficient rounding, resource/work limits and ownership are unchanged. This
 optional policy's compression/performance qualification is recorded separately
 from the unchanged Original controls.
-Original color encoding additionally makes one bounded AC keep-or-zero pass after
+Original subsampled color encoding additionally makes one bounded AC keep-or-zero pass after
 initial nearest-away quantization. DC and every DQT value remain unchanged. In
 reverse zigzag order it accepts only a strict decrease in source-DCT squared error
 plus `lambda * estimated AC bits`, where `lambda=((16*scale+50)/100)^2` with integer
@@ -1159,17 +1159,23 @@ division and chroma error is weighted by the sampling-cell area. Prices use the
 existing immutable geometric AC model, including amplitudes, EOB and ZRL, so fixed
 and adaptive entropy, caller/RGBA input, cancellation and admission choices retain
 the same coefficient decisions and reconstructed pixels. Ties retain the old
-coefficient. Full-resolution 4:4:4 also caps cumulative additional block DCT error
-at 1/32 of its original nearest-quantized block error, including DC in that initial
-error estimate while retaining its coefficient. This source-derived precision
-bound does not replace measured RGB reconstruction-quality gates. Zero lambda,
+coefficient. Full-resolution 4:4:4 considers the closest amplitude in each smaller
+bit category, including zero, across three co-sited blocks. Its distortion model
+maps their DCT residuals through the existing inverse BT.601 matrix and averages
+squared RGB error. Cumulative added modeled error is capped at 1/32 of the initial
+MCU error, including DC in that initial estimate while retaining its coefficients.
+It visits frequencies in reverse zigzag and components Y/Cb/Cr, accepting strict
+cost improvements with stable closest-category-first ties. This model precedes
+clipping/rounding and does not replace measured RGB reconstruction-quality gates. Zero lambda,
 grayscale and CompactColor skip this pass. Original color packets
 and lossy pixels can therefore change from earlier Original encodes; quality
 numbering does not establish equivalence with another encoder. The direct frozen
 binary64 transform supplies the decision errors. Each pricing scan charges64 work
-units before examining/modifying coefficients (at most4096 per block). The 4:4:4
-error-cap scan charges64 more before evaluation; adaptive work estimates include
-the full4160-unit bound, also when choosing asynchronous caller-sample staging. Existing
+units before examining/modifying coefficients (at most4096 per subsampled block).
+Joint 4:4:4 charges192 for the initial error scan,192 for initial prices, and64
+before each category trial: at most121344 per MCU, or40448 per block. Adaptive and
+async caller-sample staging estimates include this bound. Three-block scratch is
+2304 bytes within the existing8 KiB workspace, with no frame copy. Existing
 per-block scratch suffices without new heap or frame storage. Work exhaustion or
 cancellation remains terminal; tighter limits do not bypass coefficient decisions.
 
