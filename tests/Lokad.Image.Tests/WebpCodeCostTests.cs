@@ -34,7 +34,7 @@ public sealed class WebpCodeCostTests
         var expected = Normalize(source); var before = source.Pixels.ToArray();
         var options = new WebpEncodeOptions { Effort = 4, Limits = new() { MemoryBudget = root } };
         using var output = new MemoryStream(); ImageCodec.EncodeWebp(source, output, options);
-        Assert.InRange(output.Length, 1, 160918); Assert.Equal(before, source.Pixels.ToArray()); Assert.Equal(held, root.Bytes);
+        Assert.InRange(output.Length, 1, 160612); Assert.Equal(before, source.Pixels.ToArray()); Assert.Equal(held, root.Bytes);
         var packet = output.ToArray(); using var exact = new MemoryStream();
         ImageCodec.EncodeWebp(source, exact, options with { Limits = options.Limits with { MaxOutputBytes = packet.Length } });
         Assert.Equal(packet, exact.ToArray()); using var refused = new MemoryStream();

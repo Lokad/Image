@@ -1280,3 +1280,18 @@ workload expansion or CPU-parity acceptance. Passing controls remain stopped; de
 JPEG and two PNG packet gaps stay open. Finite256=239numeric+17pending remains
 62independentpasses/163gaps/1confidenceopen/13costscreens,114independent/125short;
 31metadata confirmations pending. All existing full objectives remain open.
+
+
+The [color refit after predictor changes](WARM-VP8L-COLOR-REFIT.md) saves306 B:
+photograph160918→160612/ref160032,580 B still open. One existing coefficient recipe,
+fixed predictor/cache0/parser and one groupfit; admitted color replacement borrows
+one predictor owner. Ten new ownership/guard/terminal-cleanup/hidden-RGB cases;
+4844tests/OS,109internal+117public scalar, SAMEactualpackage/all3examples pass.
+One photo shortcost(3actuals/2passing idle-v2guards) replaces C112:6.636x/upper7.566x,
+59631048 B/op. Five C110 observations/allocations/guards/producer identities are
+reused after proving skipped new analysis and identical complete packets, including
+async. No new build for public/diff/harness/drivers/native/selector, no independent
+timing repeat, workload expansion or CPU-parity acceptance. Passing controls stop;
+default JPEG and two PNG packet gaps stay open. Finite256=239numeric+17pending stays
+62independentpasses/163gaps/1confidenceopen/13costscreens,114independent/125short;
+31metadata confirmations pending. Full existing objectives remain open.

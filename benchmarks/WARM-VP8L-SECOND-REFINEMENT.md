@@ -1,5 +1,9 @@
 # Lossless WebP bounded second predictor refinement
 
+The photograph is further improved by the
+[color-refit round](WARM-VP8L-COLOR-REFIT.md). The other five costs remain selected
+after confirming their unchanged paths.
+
 The fixed photograph falls **161,410 → 160,918 bytes**, saving **492 B** and
 closing **35.7%** of its previous excess. It remains **886 B above** the frozen
 **160,032-byte** reference. Actual managed output exactly matches the single

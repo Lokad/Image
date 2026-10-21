@@ -1386,6 +1386,11 @@ Both passes retain the same local/work guards and shared color owner. A bounded 
 copy. Old/new predictor and coding owners overlap during selection; the SAME color
 owner transfers once to the winner. New capacities are admitted before allocation,
 with local/work guards before shared attempts and terminal refusal/cancellation.
+After a winning predictor refinement, one existing coefficient fit may be repeated
+on the changed residuals, preserving the selected cache mode. Both color/coding
+alternatives borrow the same predictor owner; complete-packet comparison releases
+only the losing color/coding storage. New maps, trees and replacement overlap are
+admitted before allocation with the same local/work guards and terminal failures.
 This optional analysis requires an a-priori local/work allowance, including about
 2,754 bytes per tile for temporary counts/indices, map/ranking capacity, and overlapping
 table construction. All substantial storage is charged before allocation through

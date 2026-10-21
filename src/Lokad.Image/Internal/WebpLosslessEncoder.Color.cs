@@ -17,7 +17,7 @@ internal static partial class WebpLosslessEncoder
         SelectColorCoefficients(image, baseline.Predict, baseline.Modes, coefficients, context);
         var color = new ColorPlan(coefficients, ColorTables(coefficients, context));
         var candidate = PrepareCachedTables(image, effort, cache, baseline.Predict, context,
-            baseline.Modes, baseline.ModeTable, color) with { Alpha = baseline.Alpha };
+            baseline.Modes, baseline.ModeTable, color, baseline.UseCache) with { Alpha = baseline.Alpha };
         candidate = SelectEntropyPlan(image, effort, cache, candidate, context);
         if (PayloadUpper(image, candidate, context) + 2 < PayloadUpper(image, baseline, context))
         {

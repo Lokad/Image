@@ -177,7 +177,7 @@ def render():
         row('WebP VP8L, native input / live cancelable token', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'NativeLosslessCancelable8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
     ]
     encodes = [
-        row('WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream', 'vp8l-second-refinement-evidence.json', ['cases', 'WebpLossless8AsyncNonSeekable', -1], 'WARM-VP8L-SECOND-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream', 'vp8l-color-refit-evidence.json', ['cases', 'WebpLossless8AsyncNonSeekable', -1], 'WARM-VP8L-COLOR-REFIT.md', verification='Cost screen (CPU parity deferred)'),
         row('JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream', 'warm-jpeg-async-samples-evidence.json', ['cases', 'JpegRgb420AsyncSamples', -1], 'WARM-JPEG-ASYNC-SAMPLES.md', verification='Gap (short; qualified)'),
         row('JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality', 'warm-jpeg-async-encode-evidence.json', ['cases', 'Jpeg8AsyncNonSeekable', -1], 'WARM-JPEG-ASYNC-ENCODE.md', verification='Gap (short; qualified)'),
         row('PNG EncodePngAsync, fresh nonseekable Stream / level6', 'warm-png-async-encode-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-PNG-ASYNC-ENCODE.md', True),
@@ -219,9 +219,9 @@ def render():
         row('WebP VP8 + alphaâ€¡', 'vp8-noise-spectrum-evidence.json', ['observations', 2], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha from RGBA16â€¡', 'vp8-noise-spectrum-evidence.json', ['observations', 3], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alphaâ€¡, caller work budget32M', 'vp8-histogram384-evidence.json', ['observations', 0], 'WARM-VP8-HISTOGRAM384.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8L, exact backend*', 'vp8l-second-refinement-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-SECOND-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8L, opaque RGBA8 / exact backend*', 'vp8l-second-refinement-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-SECOND-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8L from RGBA16, exact backend*', 'vp8l-second-refinement-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-SECOND-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8L, exact backend*', 'vp8l-color-refit-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-COLOR-REFIT.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8L, opaque RGBA8 / exact backend*', 'vp8l-color-refit-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-COLOR-REFIT.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8L from RGBA16, exact backend*', 'vp8l-color-refit-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-COLOR-REFIT.md', verification='Cost screen (CPU parity deferred)'),
     ]
     edits = [
         row('Horizontal flip RGBA8, two live outputs / per image', 'warm-horizontal-flip512-evidence.json', ['cases', 'Rgba8', -1], 'WARM-HORIZONTAL-FLIP512.md', verification='Gap (short; qualified)'),
@@ -316,8 +316,8 @@ def render():
         row('Mirrored transpose RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'Transverse8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
     ]
     encodes.extend([
-        row('WebP VP8L photograph RGBA8', 'vp8l-second-refinement-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-SECOND-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8L text/diagram RGBA8', 'vp8l-second-refinement-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-SECOND-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8L photograph RGBA8', 'vp8l-color-refit-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-COLOR-REFIT.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8L text/diagram RGBA8', 'vp8l-color-refit-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-COLOR-REFIT.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 photograph RGBA8 / matched quality', 'vp8-noise-spectrum-evidence.json', ['observations', 5], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 text/diagram RGBA8 / matched quality', 'vp8-noise-spectrum-evidence.json', ['observations', 6], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
     ])
@@ -440,7 +440,7 @@ sizes **145,648/183,812 B** at that historical producer. Current alpha packets a
 **60,904/183,812 B**; their refreshed CPU costs are below. Prior timing passes
 do not establish current CPU parity.
 Lossless size parity remains open: the fixed opaque photograph targets160,032 B
-(currently160,918 B). The diagram passes at7,160 B against7,234 B. Exact pixels and
+(currently160,612 B). The diagram passes at7,160 B against7,234 B. Exact pixels and
 unchanged libwebp exact=1 reference/settings remain mandatory. The
 [caller-JPEG controls](../benchmarks/WARM-JPEG-CALLER-MCU.md) also leave a joint
 size/quality gap: RGB42074,040/52,093 B at source-PSNR difference0.106110 dB
@@ -464,14 +464,17 @@ The [seeded-reference round](../benchmarks/WARM-VP8L-SEEDED-REFERENCES.md)
 closes opaque **123,602→41,088/ref121,896 B** and reduces already-passing
 alpha8/16/async **145,648→60,904/ref183,812 B**, with exact RGBA. These controls
 stop; photograph is the only remaining declared lossless WebP size gap.
-The current [bounded second refinement](../benchmarks/WARM-VP8L-SECOND-REFINEMENT.md)
-saves another **492 B**: photograph **160,918/ref160,032 B**, with **886 B open**.
-The second pass runs only after a first winning map, retaining the same color owner,
-local/work guards and terminal cleanup. **4,834tests/OS**,99internal+117public scalar
-and the SAME actual package qualify both replacements and exact independent outputs.
-One photograph cost refreshes: **5.721x/upper7.099x**, **51,847,984 B/op**, accepting
-extra CPU/allocation for compression. Other five C110 costs/producer identities stay
-selected after early-return/identical-packet reconciliation; no timing repeats,
+The [bounded second refinement](../benchmarks/WARM-VP8L-SECOND-REFINEMENT.md)
+saved492 B: photograph **160,918/ref160,032 B** at that producer.
+The current [color refit](../benchmarks/WARM-VP8L-COLOR-REFIT.md) saves another
+**306 B**: photograph **160,612/ref160,032 B**, with **580 B open**. One existing
+coefficient fit on changed residuals preserves cache mode and borrows the same
+predictor owner; new storage/overlaps are admitted, terminal cleanup preserved.
+**4,844tests/OS**,109internal+117public scalar and the SAME actual package qualify
+replacement/rejection, failure recovery, exact hidden RGBA and independent outputs.
+One photograph cost refreshes: **6.636x/upper7.566x**, **59,631,048 B/op**, accepting
+extra CPU/allocation for compression. Five C110 costs/producer identities remain
+selected after skipped-analysis/identical-packet reconciliation; no timing repeats,
 independent CPU confirmation or new workload. CPU parity remains deferred. The earlier
 [structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md) is diagnostic evidence.
 The [seven-control lossy size ledger](../benchmarks/WARM-VP8-SIZE-COVERAGE.md)
