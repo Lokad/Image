@@ -67,6 +67,16 @@ internal static partial class Vp8Encoder
                 // operation fits. Exhaustion remains terminal, without retry.
                 var prefixWork = prefix * 24L * 256 + 1056 * 16;
                 if (!fullFrame || predictionWork + prefixWork + blocks * 24L > context.RemainingWork) return null;
+                // Segmented4x4 calls use exact row-error pruning. A larger
+                // bounded sample can spend that work on compression; actual
+                // cumulative exhaustion remains terminal, without a retry.
+                var extended = Math.Min(blocks, 128);
+                var extendedExtra = extended * 120L + 16384;
+                var extendedWork = extended * 24L * 256 + 1056 * 16;
+                if (segmented && modes is not null && extended > prefix && extendedExtra <= source.MemoryBytes
+                    && extendedExtra + growth <= context.RemainingWorkingBytes
+                    && predictionWork + extendedWork + blocks * 24L <= context.RemainingWork)
+                    return new CoefficientModel(samples, blocks, context, prefixMacroblocks: 128);
                 return new CoefficientModel(samples, blocks, context);
             }
             if (fullFrame && blocks > prefix)
@@ -84,9 +94,9 @@ internal static partial class Vp8Encoder
         }
 
         internal CoefficientModel(int samples, int blocks, OperationContext context, byte[]? modes = null, int columns = 0,
-            bool fullFrame = false, bool refine = false)
+            bool fullFrame = false, bool refine = false, int prefixMacroblocks = 64)
         {
-            this.context = context; Refine = refine; PrefixMacroblocks = Math.Min(blocks, 64);
+            this.context = context; Refine = refine; PrefixMacroblocks = Math.Min(blocks, prefixMacroblocks);
             CacheMacroblocks = fullFrame ? blocks : PrefixMacroblocks;
             if (samples != blocks * 384) throw new ArgumentException("VP8 private plane geometry differs.");
             reservation = CacheMacroblocks * (384L / 4 + 24) + 16384 + (modes is null ? 0 : CacheMacroblocks * 16L + columns + 64);

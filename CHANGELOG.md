@@ -14,6 +14,8 @@
   and admitted intra16/Y2 search for its segments; lossy quality is verified separately.
 - Admitted coefficient-level/EOB refinement for selected high-precision WebP
   predictions, reducing complete packets within verified reconstruction quality.
+- Smaller constrained-work WebP packets through exact prediction pruning and
+  a larger admitted coefficient sample, preserving reconstructed pixels.
 
 - Coverage-based OpenType contextual substitution and validated zero default-instance
   positioning corrections for supplied TrueType text.

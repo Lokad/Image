@@ -128,25 +128,25 @@
     },
     {
       "case": "WarmWebp/EncodeBudget8",
-      "managedPacketBytes": 102006,
+      "managedPacketBytes": 101478,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
       "packetSizePass": false,
-      "evidence": "webp-alpha-word-key-evidence.json",
+      "evidence": "webp-pruned-prefix-evidence.json",
       "observationPath": [
         "observations",
         0
       ],
-      "validity": "C74 qualified four-residual key in admitted alpha-anchor mode.31,947,691actual units inside32M; exact prior VP8/RGBA/source quality and frozen reference/settings/gates. Complete packet remains3416B above target.",
-      "previousManagedPacketBytes": 104500,
+      "validity": "C81 qualified exact prediction-error pruning plus one128-block coefficient sample.31,343,084actual units inside32M; exact prior reconstruction/source-quality/alpha and frozen reference/settings/gates. Completepacket remains2888B above target.",
+      "previousManagedPacketBytes": 102006,
       "alphaPayloadBytes": 19246,
-      "coefficientPolicy": "source-derived absolute segments with centered interpolation noise gain; existing admitted entropy policy",
+      "coefficientPolicy": "Exact nonnegative-error row pruning enables128-macroblock probability sample; quantized coefficients and reconstructed pixels unchanged.",
       "alphaCodingPolicy": "Four-residual rolling key, same recent/token-start histories, exact prefix verification and admitted adaptive packed replay.",
       "psnrGapDb": 0.03893331613484823,
-      "consumedWork": 31947691,
+      "consumedWork": 31343084,
       "referenceAlphaPayloadBytes": 24588,
       "alphaComponentSizePass": true
     }

@@ -2,7 +2,7 @@
 
 Six of seven already declared encode controls pass complete-packet size and
 quality: the two primary content controls and four unrestricted procedural controls.
-**Only the32M-work control remains open**, by3,416 B. Fixed managed100/native75
+**Only the32M-work control remains open**, by2,888 B. Fixed managed100/native75
 settings below are benchmark inputs, not the library default85 or evidence of
 matching by numerical equality. No general lossy WebP parity follows.
 
@@ -14,7 +14,7 @@ matching by numerical equality. No general lossy WebP parity follows.
 | WarmWebp/EncodeOpaque16 | 71,154 / 72,380 | 100 / 75 | Pass |
 | WarmWebp/Encode8 | 96,708 / 98,590 | 100 / 75 | Pass |
 | WarmWebp/Encode16 | 96,708 / 98,590 | 100 / 75 | Pass |
-| WarmWebp/EncodeBudget8 | 102,006 / 98,590 | 100 / 75 | Open |
+| WarmWebp/EncodeBudget8 | 101,478 / 98,590 | 100 / 75 | Open |
 
 C57 reuses the approved bounded quality matcher only for the changed photograph:
 1,25,50,75,100 seeds and one refinement77, chosen by source-quality distance before
@@ -84,13 +84,21 @@ complete packet remains3,416 B above98,590 B. BothOS4,692tests/scalar and the sa
 actual package/examples qualify. One short cost supersedes this row; four
 unrestricted full records and primary paths retain C73/C70 scoped evidence.
 
-The current [selected-coefficient milestone](WARM-VP8-COEFFICIENT-REFINEMENT.md)
+The [selected-coefficient milestone](WARM-VP8-COEFFICIENT-REFINEMENT.md)
 passes all four unrestricted packet gates:opaque71,154/ref72,380 B and
 alpha96,708/ref98,590 B. Source-quality gaps0.003192/0.022172 dB pass with exact
 unchanged ALPH. BothOS4,699tests/scalar and the same actual package/examples
 qualify. Four short cost screens record higher CPU, accepted for compression.
 The constrained full record is exactly C74,102,006 B/31,947,691units; primary
 cases stay passing/stopped. Six pass, one remains open; no broader parity claim.
+
+The current [pruned-prefix milestone](WARM-WEBP-PRUNED-PREFIX.md) reduces the
+constrained packet102,006→101,478 B with exact prior source/decodedRGBA/alpha and
+31,343,084 units inside32M. Exact prediction pruning enables one128-block entropy
+sample; local/shared admission and every performed work charge remain enforced.
+BothOS4,709tests/scalar and the same actual package/examples qualify. One affected
+short cost replaces that row; six other cost/quality scopes are retained. The
+complete98,590 B ceiling remains open by2,888 B; six controls pass, one is open.
 
 [Evidence](vp8-size-coverage-evidence.json) identifies the current and retained
 receipts. No new performance workload is introduced and the256-case warm checklist

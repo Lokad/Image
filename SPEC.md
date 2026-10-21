@@ -1413,6 +1413,16 @@ Intra mode search prepares immutable neighboring samples once per luma block
 and emits complete 4x4 predictions. Candidate order, exact error scores, ties
 and selected pixels are preserved. A zero-error prediction ends the search:
 later candidates cannot improve it, and the winning prediction is already written.
+Segmented 4x4 calls that cannot admit mixed search may stop a losing candidate's
+error accumulation when its nonnegative partial squared error reaches the best
+complete score. Every full candidate retains its work charge; only unevaluated
+error rows end early. The selected prediction and reconstruction stay exact.
+This path may admit a 128-macroblock entropy sample in place of 64, under independent
+local work/memory estimates and the same shared root. Its retained cache capacity
+is reserved before allocation; tighter local limits keep the smaller sample before
+shared admission. Actual exhaustion, refusal and cancellation terminate without
+retry. The larger sample changes encoded coefficients' probabilities, preserving
+quantization, reconstructed pixels, alpha and output ownership.
 Work/cancellation checks cover every performed trial; skipped trials consume no work.
 The bounded stack scratch adds no allocation or mandatory resource admission.
 Numeric qualities do not promise the same reconstruction or size as another

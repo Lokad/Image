@@ -5,7 +5,9 @@ namespace Lokad.Image.PublicApi.Tests;
 
 public sealed class Vp8PrefixWorkTests
 {
-    private const int Width = 513, Height = 259, PrefixBytes = 24064;
+    // This default limited-work spatial path admits128 macroblocks. The
+    // smaller locally selected64-block owner is covered by admission tests.
+    private const int Width = 513, Height = 259, PrefixBytes = 128 * 120 + 16384;
     private static ImageBuffer Source(int depth, TestMemoryBudget root)
     {
         var bytes = OriginalPixels.Generate(Width, Height, depth);

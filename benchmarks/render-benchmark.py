@@ -218,7 +218,7 @@ def render():
         row('WebP VP8, opaque from RGBA16‡', 'vp8-coefficient-refinement-evidence.json', ['observations', 1], 'WARM-VP8-COEFFICIENT-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha‡', 'vp8-coefficient-refinement-evidence.json', ['observations', 2], 'WARM-VP8-COEFFICIENT-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha from RGBA16‡', 'vp8-coefficient-refinement-evidence.json', ['observations', 3], 'WARM-VP8-COEFFICIENT-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alpha‡, caller work budget32M', 'webp-alpha-word-key-evidence.json', ['observations', 0], 'WARM-WEBP-ALPHA-WORD-KEY.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alpha‡, caller work budget32M', 'webp-pruned-prefix-evidence.json', ['observations', 0], 'WARM-WEBP-PRUNED-PREFIX.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-CODE-COST.md', True),
@@ -472,11 +472,16 @@ exhaustion/cancellation and ownership contracts remain mandatory. BothOS4,699tes
 Four short guarded costs in the table supersede the unrestricted rows, accepting
 higher CPU for packet gains; CPU parity/independent repeats remain deferred.
 
-The sole remaining lossy packet gap is **work32M102,006/ref98,590 B** (+3,416 B).
-Its full record remains exactly the [four-residual alpha-key round](../benchmarks/WARM-WEBP-ALPHA-WORD-KEY.md):
-31,947,691units within32M, ALPH19,246/ref24,588 B,15,047.12/reference53,488.81 µs
-and1,997,180 B/op. A component pass does not close the packet gate. That cost
-retains C74 identity; primary costs retain C70 identity, without new confirmations.
+The sole remaining lossy packet gap is **work32M101,478/ref98,590 B** (+2,888 B).
+The [pruned-prefix round](../benchmarks/WARM-WEBP-PRUNED-PREFIX.md) saves528 B with
+identical prior decodedRGBA/source quality/alpha,31,343,084units inside32M.
+Nonnegative partial-error pruning preserves original predictions and fullcandidate
+charges, freeing work for exactly one128-block entropy sample. The same borrowed
+root admits31,744 B cache beforeallocation, versus24,064; refusal, actualwork/
+cancellation and surviving-output guarantees remain. BothOS4,709tests/scalar and
+the same actual package/all examples qualify. One guarded cost replaces this row:
+15,608.22/reference53,578.57 µs,2,005,004 B/op. No independent timing repeat.
+Four unrestricted costs retain C76 identity; primary costs retain C70 identity.
 Only these frozen controls support the claims; numerical qualities are not
 interchangeable and whole-codec compression parity remains open. Lossless WebP
 follows this remaining lossy gate, then default JPEG and PNG complete-packet gaps.

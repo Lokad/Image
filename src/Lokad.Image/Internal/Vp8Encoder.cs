@@ -40,6 +40,7 @@ internal static partial class Vp8Encoder
             segmented: quantization is not null, refinementWork: q == 0 && quantization is not null
                 ? count * (24L * (RefinementWork + 512) + 512) : 0);
         var intra16 = model?.Intra16 == true;
+        var boundedPrediction = !intra16 && model is not null && q == 0 && quantization is not null;
         Span<short> luma = intra16 ? stackalloc short[256] : default;
         Span<short> y2 = intra16 ? stackalloc short[16] : default;
         Span<short> chromaCoefficients = intra16 ? stackalloc short[128] : default;
@@ -88,7 +89,9 @@ internal static partial class Vp8Encoder
                     for (var b = 0; b < 16; b++)
                     {
                         var bx = x + b % 4 * 4; var by = y + b / 4 * 4;
-                        var mode = SelectLuma(source, reconstructed, bx, by, x, y, candidates[options.Effort], context);
+                        var mode = boundedPrediction
+                            ? SelectPrunedLuma(source, reconstructed, bx, by, x, y, candidates[options.Effort], context)
+                            : SelectLuma(source, reconstructed, bx, by, x, y, candidates[options.Effort], context);
                         modes[index * 16 + b] = (byte)mode;
                         Block(source.Y, reconstructed.Y, source.Stride, bx, by, 3, blockQ,
                             tokens, above.AsSpan(mx * 8, 8), left, b % 4, b / 4, context, model, index * 24 + b, 0);

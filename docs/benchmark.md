@@ -134,11 +134,16 @@ exhaustion/cancellation and ownership contracts remain mandatory. BothOS4,699tes
 Four short guarded costs in the table supersede the unrestricted rows, accepting
 higher CPU for packet gains; CPU parity/independent repeats remain deferred.
 
-The sole remaining lossy packet gap is **work32M102,006/ref98,590 B** (+3,416 B).
-Its full record remains exactly the [four-residual alpha-key round](../benchmarks/WARM-WEBP-ALPHA-WORD-KEY.md):
-31,947,691units within32M, ALPH19,246/ref24,588 B,15,047.12/reference53,488.81 µs
-and1,997,180 B/op. A component pass does not close the packet gate. That cost
-retains C74 identity; primary costs retain C70 identity, without new confirmations.
+The sole remaining lossy packet gap is **work32M101,478/ref98,590 B** (+2,888 B).
+The [pruned-prefix round](../benchmarks/WARM-WEBP-PRUNED-PREFIX.md) saves528 B with
+identical prior decodedRGBA/source quality/alpha,31,343,084units inside32M.
+Nonnegative partial-error pruning preserves original predictions and fullcandidate
+charges, freeing work for exactly one128-block entropy sample. The same borrowed
+root admits31,744 B cache beforeallocation, versus24,064; refusal, actualwork/
+cancellation and surviving-output guarantees remain. BothOS4,709tests/scalar and
+the same actual package/all examples qualify. One guarded cost replaces this row:
+15,608.22/reference53,578.57 µs,2,005,004 B/op. No independent timing repeat.
+Four unrestricted costs retain C76 identity; primary costs retain C70 identity.
 Only these frozen controls support the claims; numerical qualities are not
 interchangeable and whole-codec compression parity remains open. Lossless WebP
 follows this remaining lossy gate, then default JPEG and PNG complete-packet gaps.
@@ -347,7 +352,7 @@ reconciliation now covers every numeric row.
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-COEFFICIENT-REFINEMENT.md) | 76,128.24 | 15,591.97 | 4.883 / 5.126 | 1,006,328 | Cost screen (CPU parity deferred) |
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-COEFFICIENT-REFINEMENT.md) | 83,500.36 | 53,596.60 | 1.558 / 1.651 | 1,537,304 | Cost screen (CPU parity deferred) |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-COEFFICIENT-REFINEMENT.md) | 84,953.17 | 53,637.57 | 1.584 / 1.761 | 1,537,304 | Cost screen (CPU parity deferred) |
-| [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-WEBP-ALPHA-WORD-KEY.md) | 15,047.12 | 53,488.81 | 0.281 / 0.334 | 1,997,180 | Cost screen (CPU parity deferred) |
+| [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-WEBP-PRUNED-PREFIX.md) | 15,608.22 | 53,578.57 | 0.291 / 0.346 | 2,005,004 | Cost screen (CPU parity deferred) |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 57,489.75 | 121,784.50 | 0.472 / 0.481 | 10,286,728 | Parity confirmed |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 49,621.60 | 69,789.18 | 0.711 / 0.720 | 9,669,728 | Parity confirmed |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 66,156.61 | 122,061.47 | 0.542 / 0.550 | 10,286,320 | Parity confirmed |
