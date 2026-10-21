@@ -1381,7 +1381,20 @@ This optional analysis requires an a-priori local/work allowance, including abou
 table construction. All substantial storage is charged before allocation through
 the same borrowed root; temporary histograms and unselected tables are promptly
 released. A tighter local allowance selects the existing cached path before shared
-admission. Shared refusal remains terminal. No general match search is introduced.
+admission. Shared refusal remains terminal.
+At effort>=4, a locally admitted raw cached plan may compare one bounded
+backward-reference alternative. Four normalized pixels identify candidates in
+at most262144 preceding pixels; each token examines at most16 matching keys and
+256 hash-chain nodes, with copy lengths capped at1024. Strict current-prefix-cost
+improvements replace spans ending at original token boundaries, followed by one
+literal/distance-table refit and complete-packet comparison. Original cache-prefix
+semantics and exact hidden RGBA remain unchanged. Count/write share the selected
+retained token array. Source samples are read on demand without another frame copy.
+Original/new token capacities, prefix costs, bounded index arrays, records and
+old/new coding tables are shared-admitted before allocation. Unselected tokens
+and all search scratch release promptly; selected capacity stays charged until
+its final use. Local memory/work guards precede shared admission; refusal,
+cancellation and actual work exhaustion stop with cleanup, never a fallback.
 
 Other cases retain the fixed-table8KiB path and its opaque zero-bit alpha leaf when
 that saves bytes. Local path selection precedes shared admission; a shared refusal

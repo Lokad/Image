@@ -1215,3 +1215,19 @@ All seven lossy gates stay closed. Counts remain256=239numeric+17pending,
 62independentpasses/163gaps/1confidence-open/13costscreens,114independent/125short;
 31metadata confirmations pending. JPEG optional CompactColor and two PNG complete
 packet gaps retain their separately stated open/default scope.
+
+
+The [bounded-reference milestone](WARM-VP8L-REFERENCES.md) closes the fixed diagram
+complete-packet gate:7636→7160/ref7234B, exact pixels,74B headroom. Photograph
+164008/160032 and opaque123602/121896 stay open; alpha8/16+async145648/183812 pass
+unchanged. All seven lossy gates stay stopped with identical primary anchors.
+Exactly six short costs replace C97 because the common scanner changed; no new
+required workload or independent timing repeat. Diagram extraCPU/allocation is
+accepted for compression:2.318x/upper3.789x,1721182B/op.4,804tests/OS,
+69internal+117public scalar and the SAME package/all3examples qualify retained
+token capacity, replacement peaks, terminal cleanup and exact independent outputs.
+Other relevant evidence is reused. Finitecounts256=239numeric+17pending,
+62independentpasses/163gaps/1confidence-open/13costscreens,114independent/125short;
+31metadata confirmations pending. CPU parity remains deferred; optional JPEG
+CompactColor does not close the default gate, and two PNG complete-packet gaps
+remain open. Passing diagram compression stops here.

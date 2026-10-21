@@ -39,6 +39,7 @@ internal static partial class WebpLosslessEncoder
     private static void ReleasePlan(CachedPlan plan, OperationContext context)
     {
         ReleaseColorPlan(plan, context);
+        if (plan.References is { } references) context.Release(references.MemoryBytes);
         if (plan.Modes is { } modes) context.Release(modes.Length + 32L + plan.ModeTable!.MemoryBytes);
     }
 

@@ -1,5 +1,8 @@
 # Lossless WebP uncached literal models
 
+Historical producer and costs; current results are in the
+[backward-reference round](WARM-VP8L-REFERENCES.md).
+
 The fixed opaque photograph falls from **169,808 to 164,008 bytes**, saving
 **5,800 bytes (3.42%)** with exact RGBA. It remains **3,976 bytes above** its
 160,032-byte reference. Diagram 7,636/7,234 and procedural opaque 123,602/121,896
