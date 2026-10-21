@@ -11,7 +11,7 @@ internal static partial class JpegEncoder
     // Keep the same source-error cap, lambda, price models, DQT and DC.
     internal static Joint444State RefineComponentPairs444(ReadOnlySpan<double> source, ReadOnlySpan<ushort> luma,
         ReadOnlySpan<ushort> chroma, Span<int> values, ReadOnlySpan<int> prices, int lambda,
-        OperationContext context, double? errorLimit = null, ReadOnlySpan<ushort> amplitudeLimits = default)
+        OperationContext context, double? errorLimit = null, ReadOnlySpan<ushort> amplitudeLimits = default, JointAcBands bands = default)
     {
         if (source.Length != 192 || values.Length != 192 || luma.Length != 64 || chroma.Length != 64
             || prices.Length != 512 || lambda < 0 || amplitudeLimits.Length is not (0 or 128)
@@ -35,7 +35,7 @@ internal static partial class JpegEncoder
         // The preceding DAG's scratch is no longer live; no matrix or copy.
         Span<int> previous = stackalloc int[3];
         context.Work(192);
-        for (var c = 0; c < 3; c++) previous[c] = JointAcPrice(values.Slice(c * 64, 64), prices.Slice(c == 0 ? 0 : 256, 256));
+        for (var c = 0; c < 3; c++) previous[c] = JointAcPrice(values.Slice(c * 64, 64), prices.Slice(c == 0 ? 0 : 256, 256), bands.ForComponent(c));
         for (var scan = 63; scan > 0; scan--)
         {
             var i = JpegTransform.Zigzag[scan];
@@ -62,8 +62,8 @@ internal static partial class JpegEncoder
                     var limitB = amplitudeLimits.IsEmpty ? 1023 : amplitudeLimits[64 + i];
                     if (la < -limitA || la > limitA || lb < -limitB || lb > limitB) continue;
                     context.Work(128);
-                    var bitsA = PairAcPrice(values.Slice(a * 64, 64), prices.Slice(a == 0 ? 0 : 256, 256), i, la);
-                    var bitsB = PairAcPrice(values.Slice(b * 64, 64), prices.Slice(256, 256), i, lb);
+                    var bitsA = PairAcPrice(values.Slice(a * 64, 64), prices.Slice(a == 0 ? 0 : 256, 256), i, la, bands.ForComponent(a));
+                    var bitsB = PairAcPrice(values.Slice(b * 64, 64), prices.Slice(256, 256), i, lb, bands.ForComponent(b));
                     var ea = source[ia] - (double)la * qa; var eb = source[ib] - (double)lb * qb;
                     var error = JointRgbError(a == 0 ? ea : y, a == 1 ? ea : b == 1 ? eb : cb,
                         b == 2 ? eb : cr) - beforeError;
@@ -81,17 +81,24 @@ internal static partial class JpegEncoder
         return new(currentError, previous[0], previous[1], previous[2]);
     }
 
-    private static int PairAcPrice(ReadOnlySpan<int> values, ReadOnlySpan<int> prices, int index, int replacement)
+    internal static int PairAcPrice(ReadOnlySpan<int> values, ReadOnlySpan<int> prices, int index, int replacement, ulong bandEnds = 0)
     {
         var zeros = 0; var bits = 0;
         for (var scan = 1; scan < 64; scan++)
         {
             var i = JpegTransform.Zigzag[scan]; var value = i == index ? replacement : values[i];
-            if (value == 0) { zeros++; continue; }
-            while (zeros >= 16) { bits += prices[0xF0]; zeros -= 16; }
-            var size = Category(value); bits += prices[zeros * 16 + size] + size * 256; zeros = 0;
+            if (value == 0) zeros++;
+            else
+            {
+                while (zeros >= 16) { bits += prices[0xF0]; zeros -= 16; }
+                var size = Category(value); bits += prices[zeros * 16 + size] + size * 256; zeros = 0;
+            }
+            if (scan == 63 || (bandEnds & (1UL << scan)) != 0)
+            {
+                if (zeros != 0) bits += prices[0];
+                zeros = 0;
+            }
         }
-        if (zeros != 0) bits += prices[0];
         return bits;
     }
 }

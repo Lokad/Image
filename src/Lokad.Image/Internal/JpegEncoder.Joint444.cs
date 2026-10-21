@@ -22,7 +22,7 @@ internal static partial class JpegEncoder
     // matched-reconstruction quality is qualified separately. DC/DQT are retained.
     internal static void DecideJoint444(ReadOnlySpan<double> source, ReadOnlySpan<ushort> luma,
         ReadOnlySpan<ushort> chroma, Span<int> values, int lambda, OperationContext context, ReadOnlySpan<int> prices = default,
-        double? errorLimit = null, ReadOnlySpan<ushort> amplitudeLimits = default)
+        double? errorLimit = null, ReadOnlySpan<ushort> amplitudeLimits = default, JointAcBands bands = default)
     {
         if (source.Length != 192 || values.Length != 192 || luma.Length != 64 || chroma.Length != 64 || lambda < 0
             || prices.Length is not (0 or 512) || amplitudeLimits.Length is not (0 or 128)
@@ -45,7 +45,7 @@ internal static partial class JpegEncoder
         Span<int> trialLevels = stackalloc int[12];
         for (var component = 0; component < 3; component++)
             previousBits[component] = prices.IsEmpty ? AcDecisionBits(values.Slice(component * 64, 64), lengths)
-                : JointAcPrice(values.Slice(component * 64, 64), prices.Slice(component == 0 ? 0 : 256, 256));
+                : JointAcPrice(values.Slice(component * 64, 64), prices.Slice(component == 0 ? 0 : 256, 256), bands.ForComponent(component));
         for (var scan = 63; scan > 0; scan--)
         {
             var index = JpegTransform.Zigzag[scan];
@@ -85,7 +85,7 @@ internal static partial class JpegEncoder
                         var value = trialLevels[trial];
                         values[at] = value;
                         var nextBits = prices.IsEmpty ? AcDecisionBits(values.Slice(component * 64, 64), lengths)
-                            : JointAcPrice(values.Slice(component * 64, 64), prices.Slice(component == 0 ? 0 : 256, 256));
+                            : JointAcPrice(values.Slice(component * 64, 64), prices.Slice(component == 0 ? 0 : 256, 256), bands.ForComponent(component));
                         var residual = source[at] - (double)value * (component == 0 ? luma[index] : chroma[index]);
                         var error = JointRgbError(component == 0 ? residual : ey,
                             component == 1 ? residual : ecb, component == 2 ? residual : ecr) - before;

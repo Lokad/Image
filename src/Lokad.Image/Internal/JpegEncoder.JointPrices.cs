@@ -105,17 +105,24 @@ internal static partial class JpegEncoder
         return integral * 256 + fraction;
     }
 
-    private static int JointAcPrice(ReadOnlySpan<int> coefficients, ReadOnlySpan<int> prices)
+    internal static int JointAcPrice(ReadOnlySpan<int> coefficients, ReadOnlySpan<int> prices, ulong bandEnds = 0)
     {
         var zeros = 0; var result = 0;
         for (var scan = 1; scan < 64; scan++)
         {
             var value = coefficients[JpegTransform.Zigzag[scan]];
-            if (value == 0) { zeros++; continue; }
-            while (zeros >= 16) { result += prices[0xF0]; zeros -= 16; }
-            var size = Category(value); result += prices[zeros << 4 | size] + size * 256; zeros = 0;
+            if (value == 0) zeros++;
+            else
+            {
+                while (zeros >= 16) { result += prices[0xF0]; zeros -= 16; }
+                var size = Category(value); result += prices[zeros << 4 | size] + size * 256; zeros = 0;
+            }
+            if (scan == 63 || (bandEnds & (1UL << scan)) != 0)
+            {
+                if (zeros != 0) result += prices[0];
+                zeros = 0;
+            }
         }
-        if (zeros != 0) result += prices[0];
         return result;
     }
 }

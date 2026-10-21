@@ -1203,6 +1203,12 @@ can reduce coupled RGB error within the same amplitude category. The geometric
 source trainer retains its smaller-category-only decisions and original quantizers.
 The priced 4:4:4 pass then refines complete AC paths, one component at a time.
 A last-nonzero-position DAG prices zero gaps, ZRL, categories, amplitudes and EOB.
+The final local/DAG/pair/triplet decisions reset run/EOB at the existing
+equal-point-transform spectral bands. The DAG has a root and terminal per band,
+then evaluates one complete component candidate against the same global MCU
+error/rate criteria. It does not grant separate error allowances to each band.
+The source trainer and its two Q8 models remain unchanged; the band masks are
+two scalar64-bit values, derived from the already prepared amplitude grid.
 Its bank contains the current and original nearest coefficients, smaller-category
 levels and original nearest minus/plus one. Stable shortest-path ties retain the
 first enumerated choices. It tries the original lambda; an over-budget path leads
@@ -1231,6 +1237,10 @@ Grid preparation/rescaling is identical across fixed, adaptive, caller-sample
 and asynchronous paths. It charges2880 work/MCU before mutation, replacing the
 former late precision rule without a second transform or complete decision pass.
 Two128-entry ushort arrays add512 stack bytes; no heap allocation or frame copy.
+Grid preparation including the masks stays below2688 of its2880 precharged units.
+Band-aware prices retain the64-visit bound; their DAG predecessor domain is a
+subset of the original2016 arcs. Existing work estimates and default limits stay
+conservative, with no new storage reservation or ownership boundary.
 
 An admitted Original4:4:4 plan with nonzero decision lambda and no restart markers
 may emit SOF2 progressive syntax. `JpegEncodeOptions.BaselineOnly=true` requires

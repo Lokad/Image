@@ -1,6 +1,6 @@
 # Lokad.Image benchmark state
 
-Updated 2026-10-21. **Complete-packet compression takes priority over CPU parity.**
+Updated 2026-10-22. **Complete-packet compression takes priority over CPU parity.**
 All seven declared lossy WebP and six lossless WebP gates pass and stay stopped.
 Lossless photograph/diagram packets are 159,104/160,032 and 7,160/7,234 B
 (managed/reference), with exact RGBA. Lossy photograph/diagram packets are
@@ -13,9 +13,9 @@ with source-PSNR gaps 0.085506/0.085851 dB inside the unchanged 0.25 dB gate.
 Grayscale remains 58,823/58,910 B;
 **optional CompactColor** remains 48,701/52,093 B on its separate procedural control.
 Equal numerical quality values do not establish equivalence. The earlier uncapped
-4:4:4 trial remains rejected; [joint component choices](../benchmarks/JPEG444-COMPONENT-TRIPLETS.md)
-now produce **135,481/133,041 B** (RGBA8) and **135,487/133,043 B** (RGBA16), with
-source-PSNR gaps 0.222041/0.224030 dB inside 0.25 dB. Existing 4:2:2 controls pass
+4:4:4 trial remains rejected; [progressive-band prices](../benchmarks/JPEG444-PROGRESSIVE-BAND-PRICES.md)
+now produce **135,342/133,041 B** (RGBA8) and **135,265/133,043 B** (RGBA16), with
+source-PSNR gaps 0.220038/0.225525 dB inside 0.25 dB. Existing 4:2:2 controls pass
 size/quality, without photographic or diagram extrapolation. [PNG Optimal RGBA8](../benchmarks/PNG-OPTIMAL-RGBA8.md) now closes the two changed
 sync/async boundaries at209,407/210,973 B, saving9,368 B each. All17 declared PNG
 packet gates pass, with exact RGBA. The public Optimal policy uses managed9 versus
@@ -26,14 +26,14 @@ The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles
 existing encode rows: 13 default passes/5 open, plus one separate optional pass.
 The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) first saved12,166 B
 on 4:4:4 forward-only/cancellable output. Source-derived coefficient decisions and progressive scans save another
-23,331 B relative to that packet; the largest remaining 4:4:4 gap is about 1.84%.
+23,470 B relative to that packet; the largest remaining 4:4:4 gap is about 1.73%.
 
-JPEG C171 qualification retains 5,019 Release tests/OS, 189+62 scalar checks/OS and
+JPEG C176 qualification retains 5,031 Release tests/OS, 201+62 scalar checks/OS and
 the same actual private 0.2.0 package/all examples on Windows/Linux. The
 [ownership repair](../benchmarks/JPEG-BUDGET-EVENT-OWNERSHIP.md) keeps caller-budget
-event storage charged through its actual users. Forward 4:4:4 records 1,374,395.962 µs,
-613,632 B/op in one short cost screen: more CPU is accepted for the compression
-gain, and CPU parity remains deferred. The prior C165 cost was1,312,293.197 µs with613,632 B/op.
+event storage charged through its actual users. Forward 4:4:4 records 1,386,194.881 µs,
+611,264 B/op in one short cost screen: more CPU is accepted for the compression
+gain, and CPU parity remains deferred. The prior C171 cost was1,374,395.962 µs with613,632 B/op.
 Unaffected caller 4:2:0 retains C146's 68,162.147 µs and170,648 B/op
 in one short screen, including normalization, full encoding and fresh output ownership.
 CPU/allocation costs are recorded; speed-only work and independent confirmations
@@ -201,7 +201,7 @@ is a CPU-parity confirmation.
 | [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 4,174.10 | 4,289.79 | 0.973 / 0.980 | 264,179 | Parity confirmed |
 | [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 9,426.43 | 10,150.04 | 0.929 / 0.933 | 1,052,317 | Parity confirmed |
 | [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,894.69 | 3,771.76 | 1.033 / 1.115 | 559,418 | Prior production; reconfirm |
-| [JPEG 4:4:4, forward-only / joint component choices](../benchmarks/JPEG444-COMPONENT-TRIPLETS.md) | 1,374,395.96 | 3,773.85 | 364.189 / 380.647 | 613,632 | Cost screen (CPU parity deferred) |
+| [JPEG 4:4:4, forward-only / progressive-band prices](../benchmarks/JPEG444-PROGRESSIVE-BAND-PRICES.md) | 1,386,194.88 | 3,771.21 | 367.573 / 433.796 | 611,264 | Cost screen (CPU parity deferred) |
 | [JPEG 4:4:4, live cancelable token / prior geometric Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 4,465.15 | 3,775.40 | 1.183 / 1.364 | 525,997 | Prior production; reconfirm |
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,980.90 | 3,855.74 | 1.032 / 1.135 | 556,284 | Prior production; reconfirm |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,579.93 | 2,354.66 | 1.096 / 1.227 | 294,116 | Prior production; reconfirm |

@@ -9,7 +9,7 @@ internal static partial class JpegEncoder
 
     internal static void RefineComponentTriplets444(ReadOnlySpan<double> source, ReadOnlySpan<ushort> luma,
         ReadOnlySpan<ushort> chroma, Span<int> values, ReadOnlySpan<int> prices, int lambda,
-        OperationContext context, double maximumError, Joint444State state, ReadOnlySpan<ushort> amplitudeLimits = default)
+        OperationContext context, double maximumError, Joint444State state, ReadOnlySpan<ushort> amplitudeLimits = default, JointAcBands bands = default)
     {
         if (source.Length != 192 || values.Length != 192 || luma.Length != 64 || chroma.Length != 64
             || prices.Length != 512 || lambda < 0 || amplitudeLimits.Length is not (0 or 128)
@@ -38,7 +38,7 @@ internal static partial class JpegEncoder
                     if (value < -limit || value > limit) continue;
                     context.Work(64);
                     cached[c * 3 + choice] = PairAcPrice(values.Slice(c * 64, 64),
-                        prices.Slice(c == 0 ? 0 : 256, 256), i, value);
+                        prices.Slice(c == 0 ? 0 : 256, 256), i, value, bands.ForComponent(c));
                 }
             }
             var beforeBits = previous[0] + previous[1] + previous[2];

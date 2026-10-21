@@ -14,7 +14,8 @@ internal static partial class JpegEncoder
         if (lambda == 0) return;
         // Replace the former late precision pass's 2880 units, before mutation:
         // <=128*13 factor steps + 128 setup + 384 error visits + 192 quantize
-        // and 192 rescale visits = 2560. No second DCT or full decision pass.
+        // and 192 rescale visits + 128 band-mask setup/visits = 2688.
+        // No second DCT or full decision pass.
         context.Work(2880);
         var fineError = PrecisionGridError444(source, luma, chroma, values);
         var precision = (int)Math.Sqrt(lambda);
@@ -38,10 +39,11 @@ internal static partial class JpegEncoder
         }
         var coarseError = PrecisionGridError444(source, quantizers[..64], quantizers[64..], values);
         var maximumError = PrecisionGridErrorLimit444(fineError, coarseError);
-        DecideJoint444(source, quantizers[..64], quantizers[64..], values, lambda, context, prices, maximumError, limits);
-        RefineJoint444(source, quantizers[..64], quantizers[64..], values, prices, lambda, context, maximumError, limits);
-        var state = RefineComponentPairs444(source, quantizers[..64], quantizers[64..], values, prices, lambda, context, maximumError, limits);
-        RefineComponentTriplets444(source, quantizers[..64], quantizers[64..], values, prices, lambda, context, maximumError, state, limits);
+        var bands = new JointAcBands(AcBandEnds444(limits[..64]), AcBandEnds444(limits[64..]));
+        DecideJoint444(source, quantizers[..64], quantizers[64..], values, lambda, context, prices, maximumError, limits, bands);
+        RefineJoint444(source, quantizers[..64], quantizers[64..], values, prices, lambda, context, maximumError, limits, bands);
+        var state = RefineComponentPairs444(source, quantizers[..64], quantizers[64..], values, prices, lambda, context, maximumError, limits, bands);
+        RefineComponentTriplets444(source, quantizers[..64], quantizers[64..], values, prices, lambda, context, maximumError, state, limits, bands);
         for (var c = 0; c < 3; c++)
         for (var i = 0; i < 64; i++)
             values[c * 64 + i] *= quantizers[(c == 0 ? 0 : 64) + i] / (c == 0 ? luma[i] : chroma[i]);

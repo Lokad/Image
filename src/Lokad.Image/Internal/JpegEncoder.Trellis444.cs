@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace Lokad.Image.Internal;
 
 internal static partial class JpegEncoder
@@ -10,7 +12,7 @@ internal static partial class JpegEncoder
 
     internal static void RefineJoint444(ReadOnlySpan<double> source, ReadOnlySpan<ushort> luma,
         ReadOnlySpan<ushort> chroma, Span<int> values, ReadOnlySpan<int> prices, int lambda,
-        OperationContext context, double? errorLimit = null, ReadOnlySpan<ushort> amplitudeLimits = default)
+        OperationContext context, double? errorLimit = null, ReadOnlySpan<ushort> amplitudeLimits = default, JointAcBands bands = default)
     {
         if (source.Length != 192 || values.Length != 192 || luma.Length != 64 || chroma.Length != 64
             || prices.Length != 512 || lambda < 0 || amplitudeLimits.Length is not (0 or 128)
@@ -35,7 +37,7 @@ internal static partial class JpegEncoder
         Span<short> shorts = stackalloc short[217];
         Span<byte> bytes = stackalloc byte[74];
         var trellis = new JointTrellis(source, luma, chroma, values, prices, lambda, context,
-            errorLimit ?? (originalError + originalError / 32), currentError, doubles, shorts, bytes, amplitudeLimits);
+            errorLimit ?? (originalError + originalError / 32), currentError, doubles, shorts, bytes, amplitudeLimits, bands);
         for (var component = 0; component < 3; component++) trellis.Run(component);
     }
 
@@ -49,6 +51,8 @@ internal static partial class JpegEncoder
         private readonly Span<int> values;
         private readonly ReadOnlySpan<int> prices;
         private readonly ReadOnlySpan<ushort> amplitudeLimits;
+        private readonly JointAcBands bands;
+        private ulong bandEnds;
         private readonly int lambda;
         private readonly OperationContext context;
         private readonly double maximumError;
@@ -61,11 +65,12 @@ internal static partial class JpegEncoder
         internal JointTrellis(ReadOnlySpan<double> source, ReadOnlySpan<ushort> luma,
             ReadOnlySpan<ushort> chroma, Span<int> values, ReadOnlySpan<int> prices, int lambda,
             OperationContext context, double maximumError, double currentError,
-            Span<double> doubles, Span<short> shorts, Span<byte> bytes, ReadOnlySpan<ushort> amplitudeLimits)
+            Span<double> doubles, Span<short> shorts, Span<byte> bytes, ReadOnlySpan<ushort> amplitudeLimits, JointAcBands bands)
         {
             this.source = source; this.luma = luma; this.chroma = chroma; this.values = values;
             this.prices = prices; this.lambda = lambda; this.context = context;
             this.amplitudeLimits = amplitudeLimits;
+            this.bands = bands; bandEnds = 0;
             this.maximumError = maximumError; this.currentError = currentError;
             zeroPrefix = doubles[..64]; costs = doubles.Slice(64, 64); levelErrors = doubles.Slice(128, 10);
             chosen = shorts[..64]; candidate = shorts.Slice(64, 64); best = shorts.Slice(128, 64);
@@ -78,6 +83,7 @@ internal static partial class JpegEncoder
         internal void Run(int component)
         {
             this.component = component;
+            bandEnds = bands.ForComponent(component) | (1UL << 63);
             context.Work(192);
             zeroPrefix[0] = 0;
             for (var scan = 1; scan < 64; scan++) zeroPrefix[scan] = zeroPrefix[scan - 1] + ErrorChange(scan, 0);
@@ -123,16 +129,17 @@ internal static partial class JpegEncoder
             context.Work(64);
             costs[0] = 0;
             var model = Model;
+            var first = 1;
             for (var end = 1; end < 64; end++)
             {
                 context.Work(15);
                 var count = BuildLevels(end);
                 var bestCost = double.PositiveInfinity; var bestPrevious = 0; short bestLevel = 0;
                 var endPrefix = zeroPrefix[end - 1];
-                for (var start = 0; start < end; start++)
+                for (var start = first - 1; start < end; start++)
                 {
                     context.Work(count);
-                    var prefix = costs[start] + endPrefix - zeroPrefix[start];
+                    var prefix = (start == first - 1 ? 0 : costs[start]) + endPrefix - zeroPrefix[start];
                     var run = end - start - 1;
                     for (var option = 0; option < count; option++)
                     {
@@ -143,20 +150,28 @@ internal static partial class JpegEncoder
                     }
                 }
                 costs[end] = bestCost; previous[end] = (byte)bestPrevious; chosen[end] = bestLevel;
+                if ((bandEnds & (1UL << end)) != 0) first = end + 1;
             }
             context.Work(64);
             var eob = weight * model[0] / 256;
-            var finalCost = zeroPrefix[63] + eob; var last = 0;
-            for (var end = 1; end < 64; end++)
-            {
-                var cost = costs[end] + zeroPrefix[63] - zeroPrefix[end] + (end < 63 ? eob : 0);
-                if (cost < finalCost) { finalCost = cost; last = end; }
-            }
             context.Work(64);
             candidate.Clear();
             candidate[0] = (short)values[component * 64];
             context.Work(64);
-            while (last != 0) { candidate[last] = chosen[last]; last = previous[last]; }
+            // Every band has a root and terminal, but one whole-component
+            // candidate receives the existing global error/rate decision.
+            for (first = 1; first < 64;)
+            {
+                var endOfBand = BitOperations.TrailingZeroCount(bandEnds & (ulong.MaxValue << first));
+                var finalCost = zeroPrefix[endOfBand] - zeroPrefix[first - 1] + eob; var last = first - 1;
+                for (var end = first; end <= endOfBand; end++)
+                {
+                    var cost = costs[end] + zeroPrefix[endOfBand] - zeroPrefix[end] + (end < endOfBand ? eob : 0);
+                    if (cost < finalCost) { finalCost = cost; last = end; }
+                }
+                while (last >= first) { candidate[last] = chosen[last]; last = previous[last]; }
+                first = endOfBand + 1;
+            }
             context.Work(256);
             bits = PriceCandidate(); error = 0;
             for (var scan = 1; scan < 64; scan++) error += ErrorChange(scan, candidate[scan]);
@@ -202,7 +217,7 @@ internal static partial class JpegEncoder
         }
 
         private int PriceCurrent()
-            => JointAcPrice(values.Slice(component * 64, 64), Model);
+            => JointAcPrice(values.Slice(component * 64, 64), Model, bandEnds);
 
         private int PriceCandidate()
         {
@@ -210,11 +225,18 @@ internal static partial class JpegEncoder
             for (var scan = 1; scan < 64; scan++)
             {
                 var value = candidate[scan];
-                if (value == 0) { zeros++; continue; }
-                while (zeros >= 16) { result += model[0xF0]; zeros -= 16; }
-                var size = Category(value); result += model[zeros * 16 + size] + size * 256; zeros = 0;
+                if (value == 0) zeros++;
+                else
+                {
+                    while (zeros >= 16) { result += model[0xF0]; zeros -= 16; }
+                    var size = Category(value); result += model[zeros * 16 + size] + size * 256; zeros = 0;
+                }
+                if ((bandEnds & (1UL << scan)) != 0)
+                {
+                    if (zeros != 0) result += model[0];
+                    zeros = 0;
+                }
             }
-            if (zeros != 0) result += model[0];
             return result;
         }
     }
