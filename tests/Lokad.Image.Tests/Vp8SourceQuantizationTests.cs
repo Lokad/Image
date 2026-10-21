@@ -11,6 +11,80 @@ public sealed class Vp8SourceQuantizationTests
     [InlineData(5, 5, 1, 1)] [InlineData(5, 5, 2, 2)]
     [InlineData(5, 5, 0, 3)] [InlineData(5, 5, 4, 4)]
     [InlineData(6, 4, 5, 3)] [InlineData(6, 4, 3, 0)]
+    [InlineData(9, 9, 7, 7)] [InlineData(513, 259, 512, 258)]
+    public void UnequalPrecisionNoiseMatchesIndependentCoefficientImpulses(int width, int height, int x, int y)
+    {
+        // Independent inverse-basis impulses, rather than the covariance formula:
+        // each coefficient has variance step²/12. Accumulate the RGB energy after
+        // centered chroma interpolation, including coincident clamped taps.
+        static double Basis(int k, int p) => k == 0 ? 1 : Math.Sqrt(2) * Math.Cos((2 * p + 1) * k * Math.PI / 8);
+        var taps = new Dictionary<(int X, int Y), double>();
+        var sx = (x - .5) / 2; var sy = (y - .5) / 2;
+        var ix = (int)Math.Floor(sx); var iy = (int)Math.Floor(sy);
+        for (var dy = 0; dy < 2; dy++)
+        for (var dx = 0; dx < 2; dx++)
+        {
+            var at = (Math.Clamp(ix + dx, 0, (width + 1) / 2 - 1), Math.Clamp(iy + dy, 0, (height + 1) / 2 - 1));
+            taps.TryGetValue(at, out var previous);
+            taps[at] = previous + (dx == 0 ? 1 - (sx - ix) : sx - ix) * (dy == 0 ? 1 - (sy - iy) : sy - iy);
+        }
+        var luma = 3 * Math.Pow(255d / 219, 2);
+        var chroma = Math.Pow(1.596026785714286, 2) + Math.Pow(.812967647237771, 2)
+            + Math.Pow(.391762290094914, 2) + Math.Pow(2.017232142857143, 2);
+        Vp8Encoder.QuantizationPlan.NoiseCoefficients(x, y, width, height, out var acWeight, out var dcWeight, out var chromaDcWeight);
+        Assert.True(acWeight > 0 && dcWeight > 0 && chromaDcWeight > 0);
+        foreach (var (ac, dc, uvdc) in new[] { (4, 4, 4), (32, 16, 16), (284, 157, 132) })
+        {
+            double energy = 0;
+            for (var v = 0; v < 4; v++)
+            for (var u = 0; u < 4; u++)
+            {
+                var response = Basis(u, x % 4) * Basis(v, y % 4) / 8;
+                var step = u == 0 && v == 0 ? dc : ac;
+                energy += luma * response * response * step * step / 12;
+            }
+            foreach (var block in taps.Keys.Select(at => (X: at.X / 4, Y: at.Y / 4)).Distinct())
+            for (var v = 0; v < 4; v++)
+            for (var u = 0; u < 4; u++)
+            {
+                double response = 0;
+                foreach (var (at, weight) in taps)
+                    if (at.X / 4 == block.X && at.Y / 4 == block.Y)
+                        response += weight * Basis(u, at.X % 4) * Basis(v, at.Y % 4) / 8;
+                var step = u == 0 && v == 0 ? uvdc : ac;
+                energy += chroma * response * response * step * step / 12;
+            }
+            var model = (acWeight * ac * ac + dcWeight * dc * dc + chromaDcWeight * uvdc * uvdc) / 16;
+            Assert.InRange(Math.Abs(energy - model), 0, Math.Max(1e-12, energy * 2e-14));
+        }
+    }
+
+    [Theory] [InlineData(0)] [InlineData(27)] [InlineData(126)] [InlineData(127)]
+    public void QuantizerSearchMatchesLinearNoiseThresholdsAndPreservesTheBaseFloor(int baseQ)
+    {
+        foreach (var (acWeight, dcWeight, chromaDcWeight) in new[] { (0d, 0d, 0d), (3.5, .07, .12) })
+        {
+            double Noise(int q)
+            {
+                var ac = (int)Vp8Tables.AcQuantizers[q]; var dc = (int)Vp8Tables.DcQuantizers[q]; var uvdc = Math.Min(132, dc);
+                return acWeight * ac * ac + dcWeight * dc * dc + chromaDcWeight * uvdc * uvdc;
+            }
+            foreach (var q in new[] { 0, 15, 28, 127 })
+            foreach (var factor in new[] { .999999, 1.000001 })
+            {
+                var allowance = Noise(q) * factor; var expected = baseQ;
+                if (acWeight + dcWeight + chromaDcWeight != 0)
+                    for (var trial = baseQ + 1; trial <= 127; trial++) if (Noise(trial) <= allowance) expected = trial;
+                Assert.Equal(expected, Vp8Encoder.QuantizationPlan.SelectQuantizer(baseQ, acWeight, dcWeight, chromaDcWeight, allowance));
+            }
+        }
+    }
+
+    [Theory]
+    [InlineData(1, 1, 0, 0)] [InlineData(2, 3, 1, 1)]
+    [InlineData(5, 5, 1, 1)] [InlineData(5, 5, 2, 2)]
+    [InlineData(5, 5, 0, 3)] [InlineData(5, 5, 4, 4)]
+    [InlineData(6, 4, 5, 3)] [InlineData(6, 4, 3, 0)]
     public void CenteredNoiseGainMatchesIndependentImpulseEnergy(int width, int height, int x, int y)
     {
         // Place independent unit impulses in source chroma samples. Compute

@@ -2,12 +2,12 @@
 
 Updated 2026-10-21. Priority: **complete-packet compression at the frozen quality
 gates**, lossy WebP first, then lossless WebP. Meaningful verified incremental
-gains may cost more CPU. Warm single-CPU parity (independently confirmed upper≤1x)
+gains may cost more CPU. Warm single-CPU parity (independently confirmed upperâ‰¤1x)
 remains a deferred objective; speed-only work and repeated confirmations wait
 while compression gates remain open. The 239 numeric rows retain tested-producer evidence: **68 passes,
 163 gaps, 1 confidence-open case and 7 short cost screens**. The finite
 [material checklist](../benchmarks/WARM-COVERAGE.md) has 256 named cases, 17 unmeasured.
-The completed ≤2x phase belongs to 0.1.0; compression currently takes precedence over CPU parity. Results apply
+The completed â‰¤2x phase belongs to 0.1.0; compression currently takes precedence over CPU parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
 These tables retain the tested producers identified by each report, including
@@ -47,7 +47,7 @@ qualify both OSes. Only that existing row changes. The
 at its checkpoint. A [live-token block helper](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md)
 now saves **11.6%**, reaching **1.395x/upper1.437x**, with 760,572 B/op unchanged,
 while preserving every per-decision cancellation poll and exact failure state.
-All five existing VP8 rows refresh; four control point means are 0.5–1.8% slower,
+All five existing VP8 rows refresh; four control point means are 0.5â€“1.8% slower,
 with all quality/owner/quiet gates retained and no small-movement retuning. A
 [prepared-double Lanczos trial](../benchmarks/WARM-LANCZOS3-PREPARED-FMA-TRIAL.md)
 is correct but 1.4% slower, at 154,894 B/op, and is rejected. Accepted production
@@ -78,20 +78,20 @@ accepted production is restored with no full/package repeat. The
 20.4% of963samples in the integer inverse transform; entropy/scan work is also
 material. No timing claim. The stronger
 [exact-quadrant trial](../benchmarks/WARM-JPEG-SPARSE-QUADRANT-TRIAL.md)
-reduces frequency products64→16 but only saves a0.6% point mean; it is parked
+reduces frequency products64â†’16 but only saves a0.6% point mean; it is parked
 and accepted production is restored without full/package repeats. The
 [current direct-RGB diagnostic](../benchmarks/WARM-JPEG-DIRECT-RGB-COST.md)
 places 47.6% of934 samples in baseline AC reading and1.3% in SIMD RGB packing.
 The frozen Sparse2D packet contains no stuffed bytes. No timing claim or new
 workload matrix. JPEG tuning is deferred while lossless WebP size takes priority.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
-13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
-1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
+13.6â€“23.8%, with fewer allocations and exact pixels; its four gaps are now
+1.061â€“1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
 were rejected. Earlier profiles describe their original producers only.
 Optimize demonstrated gaps; stop passing cases. No pixel precision is relaxed.
 The [sparse JPEG FP32-FMA trial](../benchmarks/WARM-JPEG-SPARSE-FMA-TRIAL.md)
 regressed7.2%. Subsequent [storage trials](../benchmarks/WARM-JPEG-STORAGE-TRIALS.md)
-cut allocation 48.9–86.9%, but failed to improve elapsed time. Those candidates were
+cut allocation 48.9â€“86.9%, but failed to improve elapsed time. Those candidates were
 removed; their ownership checks passed. A [constant-DC trial](../benchmarks/WARM-JPEG-DC-TRIAL.md)
 saved only 1.2% and was parked. Accepted integer/EOB rounds preserve exact pixels;
 full parity remains open.
@@ -100,7 +100,7 @@ Complete async PNG and lossless WebP outputs independently pass. WebP uses appro
 libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compressed
 sizes **145,648/183,812 B**. Its passing timing does not establish compression parity.
 Lossless size parity is a high-priority open gate: the fixed opaque photograph
-must reach ≤160,032 B (currently174,748 B), and diagram ≤7,234 B (currently7,636 B),
+must reach â‰¤160,032 B (currently174,748 B), and diagram â‰¤7,234 B (currently7,636 B),
 with exact pixels and the unchanged libwebp exact=1 reference/settings. The
 [caller-JPEG controls](../benchmarks/WARM-JPEG-CALLER-MCU.md) also leave a joint
 size/quality gap: RGB42074,040/52,093 B at source-PSNR difference0.106110 dB
@@ -122,31 +122,24 @@ photograph17,366/ref17,688 B and diagram6,722/ref7,100 B retain their matched
 managed77/75 versus native75/effort4 settings; source-PSNR gaps0.140944/0.117409 dB
 pass unchanged0.25dB and exact-alpha gates. Passing complete cases stay stopped.
 
-The current [selected-coefficient round](../benchmarks/WARM-VP8-COEFFICIENT-REFINEMENT.md)
-reduces unrestricted opaque8/16 **73,740→71,154/ref72,380 B** and alpha8/16
-**98,760→96,708/ref98,590 B**. Source-quality gaps0.003192/0.022172 dB, decoder
-bounds and exact unchanged ALPH pass. Existing100/75/effort4 inputs, references
-and quality tolerances remain fixed. Rate-aware adjacent-level/EOB choices use
-current segment steps after selecting4x4 predictions, with no extra frame/cache.
-Added work is locally admitted and charged before mutation; shared refusal,
-exhaustion/cancellation and ownership contracts remain mandatory. BothOS4,699tests,
-223internal+12public+4diff scalar and same actual package/all examples qualify.
-Four short guarded costs in the table supersede the unrestricted rows, accepting
-higher CPU for packet gains; CPU parity/independent repeats remain deferred.
-
-The sole remaining lossy packet gap is **work32M101,478/ref98,590 B** (+2,888 B).
-The [pruned-prefix round](../benchmarks/WARM-WEBP-PRUNED-PREFIX.md) saves528 B with
-identical prior decodedRGBA/source quality/alpha,31,343,084units inside32M.
-Nonnegative partial-error pruning preserves original predictions and fullcandidate
-charges, freeing work for exactly one128-block entropy sample. The same borrowed
-root admits31,744 B cache beforeallocation, versus24,064; refusal, actualwork/
-cancellation and surviving-output guarantees remain. BothOS4,709tests/scalar and
-the same actual package/all examples qualify. One guarded cost replaces this row:
-15,608.22/reference53,578.57 µs,2,005,004 B/op. No independent timing repeat.
-Four unrestricted costs retain C76 identity; primary costs retain C70 identity.
-Only these frozen controls support the claims; numerical qualities are not
-interchangeable and whole-codec compression parity remains open. Lossless WebP
-follows this remaining lossy gate, then default JPEG and PNG complete-packet gaps.
+The current [DC/AC-noise round](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) reduces
+unrestricted opaque8/16 **71,154â†’70,298/ref72,380 B**, alpha8/16
+**96,708â†’96,016/ref98,590 B**, and constrained work 32M **101,478â†’100,980/ref98,590 B**.
+The sole remaining lossy complete-packet gap is **2,390 B**. Source-quality gaps
+0.005052/0.021958/0.040560 dB, decoder bounds and exact alpha pass unchanged.
+Primary photograph/diagram packets/pixels/quality remain exact. A shared analytical
+correction propagates unequal DC/AC coefficient noise through centered chroma;
+the allowance, base map, steps and clustering policy are unchanged. No new owner,
+frame/cache/copy; additional analysis is charged and 31,632,851 units fit 32M.
+Shared refusal, exhaustion/cancellation and output ownership remain mandatory.
+Both OSes pass 4,723 tests, 247 internal + 12 public + 4 differential scalar and the same actual package/all
+examples qualify. Seven short guarded costs replace all affected analysis paths;
+CPU parity/independent repeats remain deferred. Only these fixed inputs/settings
+support the claims. Lossless WebP follows the remaining lossy gate, then default
+JPEG and PNG complete-packet gaps. Earlier
+[selected-coefficient](../benchmarks/WARM-VP8-COEFFICIENT-REFINEMENT.md) and
+[pruned-prefix](../benchmarks/WARM-WEBP-PRUNED-PREFIX.md) milestones retain their
+historical evidence; their costs are superseded on these seven paths.
 
 The [lossless adaptive-predictor screen](../benchmarks/WARM-VP8L-ADAPTIVE-PREDICTOR-AUDIT.md)
 saves2,652/0 B on the fixed photograph/diagram but misses both lossless size gates.
@@ -185,7 +178,7 @@ efficiency parity is not established. Current operation timings/allocations foll
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
 FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,
 normal SIMD, tiering off, nonconcurrent workstation GC. Inputs are the two original
-513×259 RGBA8/16 rasters, the fixed photograph/text diagram pair and documented projections; exact case dimensions and
+513Ã—259 RGBA8/16 rasters, the fixed photograph/text diagram pair and documented projections; exact case dimensions and
 policies are in linked reports. Only the two required content controls were added; no settings grid.
 
 Times include complete public operations, admission, conversion, fresh independent
@@ -196,8 +189,8 @@ release. Startup, I/O, IPC, preparation/hashing and validation are excluded.
 
 Ratio = Lokad.Image / faster native pre/post mean; lower is faster. Upper retains
 the larger selected/all-actual confidence bound against the faster native bracket's
-lower bound. Parity confirmed requires an independent quiet repeat with upper≤1;
-a mean≤1 with upper>1 stays confidence-open. Gap rows exceed the new target.
+lower bound. Parity confirmed requires an independent quiet repeat with upperâ‰¤1;
+a meanâ‰¤1 with upper>1 stays confidence-open. Gap rows exceed the new target.
 Independent jobs retain all 12 actuals; explicitly labeled short screens retain
 all three. Both retain 5s `exclusive-vm-idle-v2` guards. Earlier records
 retain their original protocol and failures. **B/op** is managed allocation from
@@ -207,15 +200,15 @@ reconciliation now covers every numeric row.
 
 **Decode and metadata**
 
-| Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
+| Operation / fixed profile | Lokad Âµs | Reference Âµs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | [PNG RGBA8, two retained outputs / caller-owned memory root](../benchmarks/WARM-DEFLATE-MATERIALIZED-CURSOR.md) | 3,604.48 | 2,850.06 | 1.265 / 1.304 | 2,574,671 | Gap (short; qualified); metadata timing open |
 | [PNG DecodeAsync, fresh nonseekable Stream](../benchmarks/WARM-DEFLATE-MATERIALIZED-CURSOR.md) | 1,574.38 | 1,414.79 | 1.113 / 1.176 | 12,784 | Gap (short; qualified); metadata timing open |
-| [PNG IdentifyAsync, fresh nonseekable Stream¶](../benchmarks/WARM-PNG-ASYNC-IDENTIFY.md) | 24.10 | 19.34 | 1.246 / 1.571 | 8,408 | Gap (short; qualified); metadata timing open |
-| [PNG Identify, fresh Stream¶](../benchmarks/WARM-PNG-STREAM-IDENTIFY.md) | 22.94 | 15.87 | 1.445 / 1.459 | 184 | Gap (independent) |
+| [PNG IdentifyAsync, fresh nonseekable StreamÂ¶](../benchmarks/WARM-PNG-ASYNC-IDENTIFY.md) | 24.10 | 19.34 | 1.246 / 1.571 | 8,408 | Gap (short; qualified); metadata timing open |
+| [PNG Identify, fresh StreamÂ¶](../benchmarks/WARM-PNG-STREAM-IDENTIFY.md) | 22.94 | 15.87 | 1.445 / 1.459 | 184 | Gap (independent) |
 | [WebP Identify, resident span (parser)](../benchmarks/WARM-WEBP-IDENTIFY.md) | 0.02 | 4.54 | 0.004 / 0.004 | 88 | Parity confirmed |
-| [JPEG Identify, resident span‖](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 0.59 | 1.21 | 0.488 / 0.494 | 88 | Parity confirmed |
-| [PNG Identify, resident span¶](../benchmarks/WARM-PNG-IDENTIFY.md) | 16.09 | 13.04 | 1.234 / 1.238 | 88 | Gap (independent) |
+| [JPEG Identify, resident spanâ€–](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 0.59 | 1.21 | 0.488 / 0.494 | 88 | Parity confirmed |
+| [PNG Identify, resident spanÂ¶](../benchmarks/WARM-PNG-IDENTIFY.md) | 16.09 | 13.04 | 1.234 / 1.238 | 88 | Gap (independent) |
 | [PNG palette4/full tRNS Adam7](../benchmarks/WARM-PNG-PALETTE4-ADAM7.md) | 1,480.35 | 1,135.35 | 1.304 / 1.387 | 2,592 | Gap (independent) |
 | [PNG8 Stream, orient/crop/nearest fit](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 2,044.52 | 1,476.97 | 1.384 / 1.613 | 701,312 | Gap (short; qualified) |
 | [PNG16 Stream, orient/crop/nearest fit](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 3,355.49 | 2,946.76 | 1.139 / 1.213 | 1,401,314 | Gap (short; qualified) |
@@ -248,7 +241,7 @@ reconciliation now covers every numeric row.
 | [PNG gray8, Paeth](../benchmarks/WARM-PNG-GRAY8-PAETH.md) | 1,038.34 | 1,029.60 | 1.008 / 1.014 | 1,384 | Gap (independent) |
 | [PNG gray-alpha8, Paeth](../benchmarks/WARM-PNG-GRAY-ALPHA8-PAETH.md) | 2,051.11 | 2,016.66 | 1.017 / 1.068 | 2,408 | Gap (independent) |
 | [PNG RGBA16, Adam7](../benchmarks/WARM-CURRENT-PNG-ADAM7.md) | 5,393.13 | 3,917.00 | 1.377 / 1.381 | 23,600 | Gap (independent) |
-| [PNG gray1 → RGBA8, Adam7](../benchmarks/WARM-CURRENT-PNG-ADAM7.md) | 1,512.17 | 1,150.81 | 1.314 / 1.320 | 1,424 | Gap (independent) |
+| [PNG gray1 â†’ RGBA8, Adam7](../benchmarks/WARM-CURRENT-PNG-ADAM7.md) | 1,512.17 | 1,150.81 | 1.314 / 1.320 | 1,424 | Gap (independent) |
 | [PNG palette8 + tRNS, Adam7](../benchmarks/WARM-PNG-PALETTE8-ADAM7.md) | 1,710.03 | 1,465.40 | 1.167 / 1.177 | 4,960 | Gap (independent) |
 | [PNG RGB16, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 2,297.09 | 2,227.02 | 1.031 / 1.034 | 6,504 | Gap (independent) |
 | [PNG gray8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 357.47 | 363.27 | 0.984 / 0.993 | 1,384 | Parity confirmed |
@@ -263,27 +256,27 @@ reconciliation now covers every numeric row.
 | [PNG byte indices / sixteen-entry palette + tRNS, None](../benchmarks/WARM-PNG-SHORT-PALETTE.md) | 144.22 | 109.47 | 1.317 / 1.327 | 1,496 | Gap (independent) |
 | [PNG palette8 + tRNS, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 349.92 | 364.06 | 0.961 / 0.970 | 2,456 | Parity confirmed |
 | [PNG palette8 + two-entry tRNS, None](../benchmarks/WARM-PNG-PARTIAL-ALPHA.md) | 360.10 | 365.80 | 0.984 / 0.992 | 2,208 | Parity confirmed |
-| [PNG palette4 + tRNS → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 109.81 | 140.53 | 0.781 / 0.799 | 984 | Parity confirmed |
-| [PNG palette2 + tRNS → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 66.42 | 97.53 | 0.681 / 0.686 | 688 | Parity confirmed |
-| [PNG palette1 + tRNS → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 54.06 | 88.92 | 0.608 / 0.611 | 552 | Parity confirmed |
-| [PNG opaque gray1 → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 59.11 | 303.42 | 0.195 / 0.199 | 488 | Parity confirmed |
-| [PNG gray1 + tRNS key1 → RGBA8, exact timed FFmpeg color-key](../benchmarks/WARM-PNG-GRAY1-TRANSPARENCY.md) | 64.68 | 684.86 | 0.094 / 0.098 | 520 | Parity confirmed |
-| [PNG gray2 + tRNS key0 → RGBA8, None](../benchmarks/WARM-PNG-PACKED-TRANSPARENCY.md) | 71.49 | 497.90 | 0.144 / 0.145 | 648 | Parity confirmed |
-| [PNG gray1/key1 and gray2/key1, unfiltered native](../benchmarks/WARM-PNG-PACKED-TRANSPARENCY.md) | — | — | — | — | Unscored: native alpha differs |
-| [PNG opaque gray2 → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 71.73 | 106.38 | 0.674 / 0.679 | 616 | Parity confirmed |
-| [PNG opaque gray4 → RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 116.09 | 169.54 | 0.685 / 0.698 | 872 | Parity confirmed |
+| [PNG palette4 + tRNS â†’ RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 109.81 | 140.53 | 0.781 / 0.799 | 984 | Parity confirmed |
+| [PNG palette2 + tRNS â†’ RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 66.42 | 97.53 | 0.681 / 0.686 | 688 | Parity confirmed |
+| [PNG palette1 + tRNS â†’ RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 54.06 | 88.92 | 0.608 / 0.611 | 552 | Parity confirmed |
+| [PNG opaque gray1 â†’ RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 59.11 | 303.42 | 0.195 / 0.199 | 488 | Parity confirmed |
+| [PNG gray1 + tRNS key1 â†’ RGBA8, exact timed FFmpeg color-key](../benchmarks/WARM-PNG-GRAY1-TRANSPARENCY.md) | 64.68 | 684.86 | 0.094 / 0.098 | 520 | Parity confirmed |
+| [PNG gray2 + tRNS key0 â†’ RGBA8, None](../benchmarks/WARM-PNG-PACKED-TRANSPARENCY.md) | 71.49 | 497.90 | 0.144 / 0.145 | 648 | Parity confirmed |
+| [PNG gray1/key1 and gray2/key1, unfiltered native](../benchmarks/WARM-PNG-PACKED-TRANSPARENCY.md) | â€” | â€” | â€” | â€” | Unscored: native alpha differs |
+| [PNG opaque gray2 â†’ RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 71.73 | 106.38 | 0.674 / 0.679 | 616 | Parity confirmed |
+| [PNG opaque gray4 â†’ RGBA8, None](../benchmarks/WARM-CURRENT-PNG-DECODE.md) | 116.09 | 169.54 | 0.685 / 0.698 | 872 | Parity confirmed |
 | [JPEG baseline gray](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 927.74 | 681.93 | 1.360 / 1.455 | 672,210 | Gap (short; qualified); metadata timing open |
-| [JPEG gray → caller GRAY8](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 817.85 | 646.73 | 1.265 / 1.308 | 273,436 | Gap (short; qualified); metadata timing open |
-| [JPEG untagged → caller CMYK8](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 467.59 | 330.92 | 1.413 / 1.474 | 1,635,495 | Gap (short; qualified); metadata timing open |
-| [JPEG 4:2:0 → caller RGB24](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,075.13 | 1,160.67 | 0.926 / 0.931 | 624,524 | Parity confirmed; metadata timing open |
+| [JPEG gray â†’ caller GRAY8](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 817.85 | 646.73 | 1.265 / 1.308 | 273,436 | Gap (short; qualified); metadata timing open |
+| [JPEG untagged â†’ caller CMYK8](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 467.59 | 330.92 | 1.413 / 1.474 | 1,635,495 | Gap (short; qualified); metadata timing open |
+| [JPEG 4:2:0 â†’ caller RGB24](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,075.13 | 1,160.67 | 0.926 / 0.931 | 624,524 | Parity confirmed; metadata timing open |
 | [JPEG Adobe CMYK, four full-resolution planes](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 469.48 | 377.61 | 1.243 / 1.306 | 1,085,694 | Gap (short; qualified); metadata timing open |
 | [JPEG Adobe CMYK, one AC control](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 547.30 | 389.60 | 1.405 / 1.469 | 1,085,688 | Gap (short; qualified); metadata timing open |
 | [JPEG Adobe CMYK, general transform control](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 3,281.94 | 3,111.92 | 1.055 / 1.105 | 1,085,546 | Gap (short; qualified); metadata timing open |
 | [JPEG Adobe CMYK, two-dimensional sparse control](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 642.99 | 440.11 | 1.461 / 1.519 | 1,085,689 | Gap (short; qualified); metadata timing open |
 | [JPEG YCCK420, full-resolution black](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 786.35 | 708.51 | 1.110 / 1.178 | 1,470,280 | Gap (short; qualified); metadata timing open |
-| [JPEG YCCK420 → caller RGB24](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 865.17 | 604.01 | 1.432 / 1.476 | 1,337,511 | Gap (short; qualified); metadata timing open |
-| [JPEG H4V1 / 4:1:1 → owned RGBA8](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 588.74 | 456.30 | 1.290 / 1.347 | 751,303 | Gap (short; qualified); metadata timing open |
-| [JPEG H4V2 / 4:1:0 → owned RGBA8](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 591.35 | 477.47 | 1.238 / 1.282 | 720,844 | Gap (short; qualified); metadata timing open |
+| [JPEG YCCK420 â†’ caller RGB24](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 865.17 | 604.01 | 1.432 / 1.476 | 1,337,511 | Gap (short; qualified); metadata timing open |
+| [JPEG H4V1 / 4:1:1 â†’ owned RGBA8](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 588.74 | 456.30 | 1.290 / 1.347 | 751,303 | Gap (short; qualified); metadata timing open |
+| [JPEG H4V2 / 4:1:0 â†’ owned RGBA8](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 591.35 | 477.47 | 1.238 / 1.282 | 720,844 | Gap (short; qualified); metadata timing open |
 | [JPEG baseline 4:2:0](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,159.27 | 1,008.12 | 1.150 / 1.246 | 757,369 | Gap (short; qualified); metadata timing open |
 | [JPEG baseline 4:2:0, row restart markers](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,321.56 | 1,013.22 | 1.304 / 1.462 | 761,744 | Gap (short; qualified); metadata timing open |
 | [JPEG baseline 4:2:2](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,469.44 | 1,348.59 | 1.090 / 1.194 | 829,172 | Gap (short; qualified); metadata timing open |
@@ -309,7 +302,7 @@ reconciliation now covers every numeric row.
 
 **Encode**
 
-| Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
+| Operation / fixed profile | Lokad Âµs | Reference Âµs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | [WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream](../benchmarks/WARM-VP8L-CODE-COST.md) | 58,259.63 | 120,897.37 | 0.482 / 0.487 | 10,286,704 | Parity confirmed |
 | [JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream](../benchmarks/WARM-JPEG-ASYNC-SAMPLES.md) | 2,076.73 | 1,628.02 | 1.276 / 1.430 | 232,614 | Gap (short; qualified) |
@@ -348,22 +341,22 @@ reconciliation now covers every numeric row.
 | [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,251.71 | 1,079.34 | 1.160 / 1.394 | 155,026 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-CALLER-MCU.md) | 2,097.34 | 1,579.06 | 1.328 / 1.408 | 297,894 | Gap (short; qualified) |
-| [WebP VP8, opaque‡](../benchmarks/WARM-VP8-COEFFICIENT-REFINEMENT.md) | 75,237.69 | 15,555.78 | 4.837 / 5.092 | 1,006,328 | Cost screen (CPU parity deferred) |
-| [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-COEFFICIENT-REFINEMENT.md) | 76,128.24 | 15,591.97 | 4.883 / 5.126 | 1,006,328 | Cost screen (CPU parity deferred) |
-| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-COEFFICIENT-REFINEMENT.md) | 83,500.36 | 53,596.60 | 1.558 / 1.651 | 1,537,304 | Cost screen (CPU parity deferred) |
-| [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-COEFFICIENT-REFINEMENT.md) | 84,953.17 | 53,637.57 | 1.584 / 1.761 | 1,537,304 | Cost screen (CPU parity deferred) |
-| [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-WEBP-PRUNED-PREFIX.md) | 15,608.22 | 53,578.57 | 0.291 / 0.346 | 2,005,004 | Cost screen (CPU parity deferred) |
+| [WebP VP8, opaqueâ€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Cost screen (CPU parity deferred) |
+| [WebP VP8, opaque from RGBA16â€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 75,226.22 | 15,616.85 | 4.817 / 5.060 | 1,006,520 | Cost screen (CPU parity deferred) |
+| [WebP VP8 + alphaâ€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 86,100.75 | 53,409.99 | 1.612 / 1.790 | 1,537,304 | Cost screen (CPU parity deferred) |
+| [WebP VP8 + alpha from RGBA16â€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 83,863.51 | 53,727.26 | 1.561 / 1.652 | 1,537,304 | Cost screen (CPU parity deferred) |
+| [WebP VP8 + alphaâ€¡, caller work budget32M](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 15,545.61 | 53,549.92 | 0.290 / 0.346 | 2,004,972 | Cost screen (CPU parity deferred) |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 57,489.75 | 121,784.50 | 0.472 / 0.481 | 10,286,728 | Parity confirmed |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 49,621.60 | 69,789.18 | 0.711 / 0.720 | 9,669,728 | Parity confirmed |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 66,156.61 | 122,061.47 | 0.542 / 0.550 | 10,286,320 | Parity confirmed |
 | [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-CODE-COST.md) | 65,462.97 | 82,409.48 | 0.794 / 0.802 | 9,912,952 | Parity confirmed |
 | [WebP VP8L text/diagram RGBA8](../benchmarks/WARM-VP8L-CODE-COST.md) | 6,715.35 | 10,254.85 | 0.655 / 0.669 | 107,568 | Parity confirmed |
-| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-INTERPOLATION-NOISE.md) | 34,396.38 | 9,714.89 | 3.541 / 3.695 | 590,152 | Cost screen (CPU parity deferred) |
-| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-INTERPOLATION-NOISE.md) | 13,942.60 | 5,832.30 | 2.391 / 2.583 | 570,856 | Cost screen (CPU parity deferred) |
+| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 35,062.49 | 9,726.09 | 3.605 / 3.820 | 590,152 | Cost screen (CPU parity deferred) |
+| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 13,923.43 | 5,847.14 | 2.381 / 2.458 | 570,856 | Cost screen (CPU parity deferred) |
 
 **Editing**
 
-| Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
+| Operation / fixed profile | Lokad Âµs | Reference Âµs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | [Horizontal flip RGBA8, two live outputs / per image](../benchmarks/WARM-HORIZONTAL-FLIP512.md) | 9.56 | 9.08 | 1.053 / 1.142 | 128 | Gap (short; qualified) |
 | [Nearest resize RGBA8](../benchmarks/WARM-COVERAGE-QUIET.md) | 58.67 | 252.66 | 0.232 / 0.241 | 132,294 | Parity confirmed |
@@ -371,70 +364,70 @@ reconciliation now covers every numeric row.
 | [Nearest upscale RGBA16](../benchmarks/WARM-NEAREST-UP16.md) | 1,071.13 | 1,019.06 | 1.051 / 1.095 | 4,265,431 | Gap (independent) |
 | [Nearest resize RGBA16](../benchmarks/WARM-PREPARED-CONFIRM.md) | 105.69 | 170.58 | 0.620 / 0.629 | 264,466 | Parity confirmed |
 | [Bilinear resize RGBA8](../benchmarks/WARM-BILINEAR-BYTE-ROW-CACHE.md) | 500.71 | 387.70 | 1.291 / 1.406 | 157,960 | Gap (short; qualified) |
-| [Bilinear resize RGBA16†](../benchmarks/WARM-BILINEAR-WORD-CACHE.md) | 534.35 | 418.51 | 1.277 / 1.336 | 290,127 | Gap (short; qualified) |
-| [Bilinear upscale RGBA8†](../benchmarks/WARM-BILINEAR-BYTE-FACTORIZATION.md) | 3,138.47 | 2,155.65 | 1.456 / 1.549 | 2,235,599 | Gap (short; qualified) |
-| [Bilinear upscale RGBA16†](../benchmarks/WARM-CURRENT-BILINEAR.md) | 2,563.23 | 1,869.40 | 1.371 / 1.382 | 4,498,974 | Gap (independent) |
+| [Bilinear resize RGBA16â€ ](../benchmarks/WARM-BILINEAR-WORD-CACHE.md) | 534.35 | 418.51 | 1.277 / 1.336 | 290,127 | Gap (short; qualified) |
+| [Bilinear upscale RGBA8â€ ](../benchmarks/WARM-BILINEAR-BYTE-FACTORIZATION.md) | 3,138.47 | 2,155.65 | 1.456 / 1.549 | 2,235,599 | Gap (short; qualified) |
+| [Bilinear upscale RGBA16â€ ](../benchmarks/WARM-CURRENT-BILINEAR.md) | 2,563.23 | 1,869.40 | 1.371 / 1.382 | 4,498,974 | Gap (independent) |
 | [RGBA8 bicubic, single-pixel reduction](../benchmarks/WARM-BICUBIC-SINGLE-PIXEL.md) | 1,045.31 | 4,897.54 | 0.213 / 0.227 | 130 | Parity confirmed |
-| [Bicubic resize RGBA8§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 635.08 | 416.65 | 1.524 / 1.610 | 332,178 | Gap (short; qualified) |
-| [Bicubic resize RGBA16§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 729.05 | 571.10 | 1.277 / 1.715 | 464,343 | Gap (short; qualified) |
-| [Bicubic upscale RGBA8§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 3,919.91 | 3,036.45 | 1.291 / 1.357 | 3,244,646 | Gap (short; qualified) |
-| [Bicubic upscale RGBA16§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 4,258.22 | 2,871.12 | 1.483 / 1.690 | 5,016,578 | Gap (short; qualified) |
-| [Bicubic mixed-axis RGBA8§](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) | 1,135.34 | 868.67 | 1.307 / 1.473 | 530,385 | Gap (short; qualified) |
-| [Bicubic mixed-axis RGBA16§](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) | 1,237.22 | 846.01 | 1.462 / 1.883 | 1,060,429 | Gap (short; qualified) |
-| [Bicubic width reduction / height enlargement RGBA8§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 994.41 | 840.45 | 1.183 / 1.259 | 731,753 | Gap (short; qualified) |
-| [Bicubic width reduction / height enlargement RGBA16§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 1,056.31 | 819.48 | 1.289 / 1.388 | 1,263,255 | Gap (short; qualified) |
-| [Bicubic RGBA8, 128×64 / wider support§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 531.73 | 346.74 | 1.534 / 1.540 | 231,229 | Gap (independent) |
-| [Bicubic RGBA16, 128×64 / wider support§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 504.51 | 416.18 | 1.212 / 1.218 | 263,991 | Gap (independent) |
-| [Bicubic width reduction, unchanged height RGBA8§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 734.08 | 574.67 | 1.277 / 1.365 | 465,374 | Gap (short; qualified) |
-| [Bicubic width reduction, unchanged height RGBA16§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 866.64 | 579.18 | 1.496 / 1.646 | 730,691 | Gap (short; qualified) |
-| [Bicubic width enlargement, unchanged height RGBA8§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 2,211.79 | 1,516.35 | 1.459 / 1.596 | 1,930,617 | Gap (short; qualified) |
-| [Bicubic width enlargement, unchanged height RGBA16§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 1,965.91 | 1,460.21 | 1.346 / 1.467 | 2,129,333 | Gap (short; qualified) |
-| [Bicubic RGBA8, 64×32 / support beyond 32§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 418.52 | 369.03 | 1.134 / 1.215 | 205,884 | Gap (short; qualified) |
-| [Bicubic RGBA16, 64×32 / support beyond 32§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 522.57 | 390.56 | 1.338 / 1.351 | 214,071 | Gap (independent) |
-| [Bicubic RGBA8, 32×16 / support beyond 64§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 452.57 | 375.86 | 1.204 / 1.208 | 199,355 | Gap (independent) |
-| [Bicubic RGBA16, 32×16 / support beyond 64§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 455.52 | 412.28 | 1.105 / 1.110 | 201,398 | Gap (independent) |
-| [Bicubic RGBA8, 16×8 / adaptive support beyond 128§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 363.20 | 452.30 | 0.803 / 0.809 | 201,728 | Parity confirmed |
-| [Bicubic RGBA16, 16×8 / adaptive support beyond 128§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 441.93 | 496.89 | 0.889 / 0.893 | 202,231 | Parity confirmed |
-| [Bicubic RGBA8, 256×129 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-BYTE-STRIPS.md) | 654.01 | 416.59 | 1.570 / 1.660 | 132,293 | Gap (short; qualified) |
-| [Bicubic RGBA16, 256×129 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 818.75 | 570.81 | 1.434 / 1.445 | 264,469 | Gap (independent) |
-| [Bicubic RGBA8, 128×64 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-FOUR-COLUMNS.md) | 498.19 | 347.76 | 1.433 / 1.644 | 32,913 | Gap (short; qualified) |
-| [Bicubic RGBA16, 128×64 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 606.16 | 414.59 | 1.462 / 1.479 | 65,658 | Gap (independent) |
-| [Bicubic RGBA8, 64×32 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-WEIGHT-BROADCAST.md) | 560.51 | 367.05 | 1.527 / 1.797 | 8,313 | Gap (short; qualified) |
-| [Bicubic RGBA16, 64×32 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-WORD-BROADCAST.md) | 527.50 | 383.98 | 1.374 / 2.313 | 16,505 | Gap (short; qualified) |
-| [Bicubic RGBA16, 32×16 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 570.51 | 412.45 | 1.383 / 1.394 | 4,217 | Gap (independent) |
-| [Bicubic RGBA8, 32×16 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-PACKED-REDUCTION.md) | 477.99 | 377.49 | 1.266 / 2.275 | 2,169 | Gap (short; qualified) |
-| [Bicubic RGBA16, 16×8 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 487.53 | 495.21 | 0.984 / 0.995 | 1,145 | Parity confirmed |
-| [Bicubic RGBA8, 16×8 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 489.92 | 451.81 | 1.084 / 1.090 | 633 | Gap (independent) |
-| [Bicubic RGBA16 enlargement / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 4,188.86 | 2,870.82 | 1.459 / 1.637 | 4,264,616 | Gap (short; qualified) |
-| [Bicubic RGBA8 enlargement / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 4,766.98 | 3,042.21 | 1.567 / 1.693 | 2,493,057 | Gap (short; qualified) |
-| [Bicubic RGBA16, width up / height down / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) | 1,197.19 | 853.79 | 1.402 / 1.555 | 1,060,439 | Gap (short; qualified) |
-| [Bicubic RGBA8, width up / height down / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) | 1,192.42 | 868.12 | 1.374 / 1.571 | 530,385 | Gap (short; qualified) |
-| [Bicubic RGBA16, width down / height up / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,298.90 | 825.27 | 1.574 / 1.579 | 1,063,477 | Gap (independent) |
-| [Bicubic RGBA8, width down / height up / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,249.21 | 831.82 | 1.502 / 1.513 | 531,910 | Gap (independent) |
-| [Bicubic RGBA16, 8×4 / support beyond 256 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 445.77 | 693.80 | 0.643 / 0.651 | 377 | Parity confirmed |
-| [Bicubic RGBA8, 8×4 / support beyond 256 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 508.41 | 664.36 | 0.765 / 0.772 | 249 | Parity confirmed |
-| [Bicubic RGBA16, 4×2 / packed support beyond 304 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 624.81 | 1,235.83 | 0.506 / 0.509 | 185 | Parity confirmed |
-| [Bicubic RGBA8, 4×2 / packed support beyond 304 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 786.38 | 1,138.73 | 0.691 / 0.695 | 153 | Parity confirmed |
-| [Bicubic RGBA16, 2×2 / generated support beyond 544 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,069.82 | 2,336.26 | 0.458 / 0.487 | 154 | Parity confirmed |
-| [Bicubic RGBA16, 2×9 / bounded row blocks / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,474.00 | 1,286.00 | 1.146 / 1.180 | 266 | Gap (independent) |
-| [Bicubic RGBA16, 4×9 / packed row blocks / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 808.81 | 789.44 | 1.025 / 1.030 | 409 | Gap (independent) |
-| [Bicubic RGBA16, 8×17 / full-coefficient row blocks / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-8X17-RGBA16.md) | 516.33 | 530.91 | 0.973 / 0.981 | 1,209 | Parity confirmed |
-| [Bicubic RGBA8, 8×17 / full-coefficient row blocks / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-8X17-RGBA8.md) | 538.78 | 494.65 | 1.089 / 1.100 | 665 | Gap (independent) |
-| [Bicubic RGBA8, 4×9 / packed row blocks / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,002.56 | 675.80 | 1.484 / 1.488 | 266 | Gap (independent) |
-| [Bicubic RGBA8, 2×9 / bounded row blocks / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,337.80 | 1,050.39 | 1.274 / 1.286 | 194 | Gap (independent) |
-| [Bicubic RGBA8, 2×2 / generated support beyond 544 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,173.66 | 1,633.74 | 0.718 / 0.745 | 138 | Parity confirmed |
-| [Bicubic height reduction, unchanged width RGBA8§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 624.02 | 583.77 | 1.069 / 1.273 | 648,997 | Gap (short; qualified) |
-| [Bicubic height reduction, unchanged width RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) | 725.00 | 589.64 | 1.230 / 1.378 | 265,003 | Gap (short; qualified) |
-| [Bicubic height reduction, unchanged width RGBA16§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 782.41 | 592.55 | 1.320 / 1.672 | 913,737 | Gap (short; qualified) |
-| [Bicubic height reduction, unchanged width RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) | 770.52 | 589.55 | 1.307 / 1.361 | 529,847 | Gap (short; qualified) |
-| [Bicubic width reduction, unchanged height RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 838.73 | 579.56 | 1.447 / 1.459 | 530,858 | Gap (independent) |
-| [Bicubic width reduction, unchanged height RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL8.md) | 811.19 | 573.66 | 1.414 / 1.425 | 265,502 | Gap (independent) |
-| [Bicubic height enlargement, unchanged width RGBA8§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 1,776.78 | 1,742.77 | 1.020 / 1.024 | 1,664,251 | Gap (independent) |
-| [Bicubic height enlargement, unchanged width RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 2,614.86 | 1,744.07 | 1.499 / 1.722 | 1,280,402 | Gap (short; qualified) |
-| [Bicubic height enlargement, unchanged width RGBA16§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 1,998.15 | 1,670.35 | 1.196 / 1.482 | 2,516,599 | Gap (short; qualified) |
-| [Bicubic height enlargement, unchanged width RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 2,286.62 | 1,672.40 | 1.367 / 1.438 | 2,133,103 | Gap (short; qualified) |
-| [Bicubic width enlargement, unchanged height RGBA16 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 1,920.59 | 1,453.02 | 1.322 / 1.373 | 2,129,333 | Gap (short; qualified) |
-| [Bicubic width enlargement, unchanged height RGBA8 / input+output+4 KiB limit§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 2,125.43 | 1,509.12 | 1.408 / 1.529 | 1,178,425 | Gap (short; qualified) |
+| [Bicubic resize RGBA8Â§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 635.08 | 416.65 | 1.524 / 1.610 | 332,178 | Gap (short; qualified) |
+| [Bicubic resize RGBA16Â§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 729.05 | 571.10 | 1.277 / 1.715 | 464,343 | Gap (short; qualified) |
+| [Bicubic upscale RGBA8Â§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 3,919.91 | 3,036.45 | 1.291 / 1.357 | 3,244,646 | Gap (short; qualified) |
+| [Bicubic upscale RGBA16Â§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 4,258.22 | 2,871.12 | 1.483 / 1.690 | 5,016,578 | Gap (short; qualified) |
+| [Bicubic mixed-axis RGBA8Â§](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) | 1,135.34 | 868.67 | 1.307 / 1.473 | 530,385 | Gap (short; qualified) |
+| [Bicubic mixed-axis RGBA16Â§](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) | 1,237.22 | 846.01 | 1.462 / 1.883 | 1,060,429 | Gap (short; qualified) |
+| [Bicubic width reduction / height enlargement RGBA8Â§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 994.41 | 840.45 | 1.183 / 1.259 | 731,753 | Gap (short; qualified) |
+| [Bicubic width reduction / height enlargement RGBA16Â§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 1,056.31 | 819.48 | 1.289 / 1.388 | 1,263,255 | Gap (short; qualified) |
+| [Bicubic RGBA8, 128Ã—64 / wider supportÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 531.73 | 346.74 | 1.534 / 1.540 | 231,229 | Gap (independent) |
+| [Bicubic RGBA16, 128Ã—64 / wider supportÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 504.51 | 416.18 | 1.212 / 1.218 | 263,991 | Gap (independent) |
+| [Bicubic width reduction, unchanged height RGBA8Â§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 734.08 | 574.67 | 1.277 / 1.365 | 465,374 | Gap (short; qualified) |
+| [Bicubic width reduction, unchanged height RGBA16Â§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 866.64 | 579.18 | 1.496 / 1.646 | 730,691 | Gap (short; qualified) |
+| [Bicubic width enlargement, unchanged height RGBA8Â§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 2,211.79 | 1,516.35 | 1.459 / 1.596 | 1,930,617 | Gap (short; qualified) |
+| [Bicubic width enlargement, unchanged height RGBA16Â§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 1,965.91 | 1,460.21 | 1.346 / 1.467 | 2,129,333 | Gap (short; qualified) |
+| [Bicubic RGBA8, 64Ã—32 / support beyond 32Â§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 418.52 | 369.03 | 1.134 / 1.215 | 205,884 | Gap (short; qualified) |
+| [Bicubic RGBA16, 64Ã—32 / support beyond 32Â§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 522.57 | 390.56 | 1.338 / 1.351 | 214,071 | Gap (independent) |
+| [Bicubic RGBA8, 32Ã—16 / support beyond 64Â§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 452.57 | 375.86 | 1.204 / 1.208 | 199,355 | Gap (independent) |
+| [Bicubic RGBA16, 32Ã—16 / support beyond 64Â§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 455.52 | 412.28 | 1.105 / 1.110 | 201,398 | Gap (independent) |
+| [Bicubic RGBA8, 16Ã—8 / adaptive support beyond 128Â§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 363.20 | 452.30 | 0.803 / 0.809 | 201,728 | Parity confirmed |
+| [Bicubic RGBA16, 16Ã—8 / adaptive support beyond 128Â§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 441.93 | 496.89 | 0.889 / 0.893 | 202,231 | Parity confirmed |
+| [Bicubic RGBA8, 256Ã—129 / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-BYTE-STRIPS.md) | 654.01 | 416.59 | 1.570 / 1.660 | 132,293 | Gap (short; qualified) |
+| [Bicubic RGBA16, 256Ã—129 / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 818.75 | 570.81 | 1.434 / 1.445 | 264,469 | Gap (independent) |
+| [Bicubic RGBA8, 128Ã—64 / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-FOUR-COLUMNS.md) | 498.19 | 347.76 | 1.433 / 1.644 | 32,913 | Gap (short; qualified) |
+| [Bicubic RGBA16, 128Ã—64 / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 606.16 | 414.59 | 1.462 / 1.479 | 65,658 | Gap (independent) |
+| [Bicubic RGBA8, 64Ã—32 / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-WEIGHT-BROADCAST.md) | 560.51 | 367.05 | 1.527 / 1.797 | 8,313 | Gap (short; qualified) |
+| [Bicubic RGBA16, 64Ã—32 / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-WORD-BROADCAST.md) | 527.50 | 383.98 | 1.374 / 2.313 | 16,505 | Gap (short; qualified) |
+| [Bicubic RGBA16, 32Ã—16 / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 570.51 | 412.45 | 1.383 / 1.394 | 4,217 | Gap (independent) |
+| [Bicubic RGBA8, 32Ã—16 / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-PACKED-REDUCTION.md) | 477.99 | 377.49 | 1.266 / 2.275 | 2,169 | Gap (short; qualified) |
+| [Bicubic RGBA16, 16Ã—8 / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 487.53 | 495.21 | 0.984 / 0.995 | 1,145 | Parity confirmed |
+| [Bicubic RGBA8, 16Ã—8 / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 489.92 | 451.81 | 1.084 / 1.090 | 633 | Gap (independent) |
+| [Bicubic RGBA16 enlargement / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 4,188.86 | 2,870.82 | 1.459 / 1.637 | 4,264,616 | Gap (short; qualified) |
+| [Bicubic RGBA8 enlargement / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 4,766.98 | 3,042.21 | 1.567 / 1.693 | 2,493,057 | Gap (short; qualified) |
+| [Bicubic RGBA16, width up / height down / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) | 1,197.19 | 853.79 | 1.402 / 1.555 | 1,060,439 | Gap (short; qualified) |
+| [Bicubic RGBA8, width up / height down / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) | 1,192.42 | 868.12 | 1.374 / 1.571 | 530,385 | Gap (short; qualified) |
+| [Bicubic RGBA16, width down / height up / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,298.90 | 825.27 | 1.574 / 1.579 | 1,063,477 | Gap (independent) |
+| [Bicubic RGBA8, width down / height up / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,249.21 | 831.82 | 1.502 / 1.513 | 531,910 | Gap (independent) |
+| [Bicubic RGBA16, 8Ã—4 / support beyond 256 / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 445.77 | 693.80 | 0.643 / 0.651 | 377 | Parity confirmed |
+| [Bicubic RGBA8, 8Ã—4 / support beyond 256 / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 508.41 | 664.36 | 0.765 / 0.772 | 249 | Parity confirmed |
+| [Bicubic RGBA16, 4Ã—2 / packed support beyond 304 / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 624.81 | 1,235.83 | 0.506 / 0.509 | 185 | Parity confirmed |
+| [Bicubic RGBA8, 4Ã—2 / packed support beyond 304 / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 786.38 | 1,138.73 | 0.691 / 0.695 | 153 | Parity confirmed |
+| [Bicubic RGBA16, 2Ã—2 / generated support beyond 544 / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,069.82 | 2,336.26 | 0.458 / 0.487 | 154 | Parity confirmed |
+| [Bicubic RGBA16, 2Ã—9 / bounded row blocks / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,474.00 | 1,286.00 | 1.146 / 1.180 | 266 | Gap (independent) |
+| [Bicubic RGBA16, 4Ã—9 / packed row blocks / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 808.81 | 789.44 | 1.025 / 1.030 | 409 | Gap (independent) |
+| [Bicubic RGBA16, 8Ã—17 / full-coefficient row blocks / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-TIGHT-8X17-RGBA16.md) | 516.33 | 530.91 | 0.973 / 0.981 | 1,209 | Parity confirmed |
+| [Bicubic RGBA8, 8Ã—17 / full-coefficient row blocks / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-TIGHT-8X17-RGBA8.md) | 538.78 | 494.65 | 1.089 / 1.100 | 665 | Gap (independent) |
+| [Bicubic RGBA8, 4Ã—9 / packed row blocks / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,002.56 | 675.80 | 1.484 / 1.488 | 266 | Gap (independent) |
+| [Bicubic RGBA8, 2Ã—9 / bounded row blocks / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,337.80 | 1,050.39 | 1.274 / 1.286 | 194 | Gap (independent) |
+| [Bicubic RGBA8, 2Ã—2 / generated support beyond 544 / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 1,173.66 | 1,633.74 | 0.718 / 0.745 | 138 | Parity confirmed |
+| [Bicubic height reduction, unchanged width RGBA8Â§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 624.02 | 583.77 | 1.069 / 1.273 | 648,997 | Gap (short; qualified) |
+| [Bicubic height reduction, unchanged width RGBA8 / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-BYTE-PAIRED.md) | 725.00 | 589.64 | 1.230 / 1.378 | 265,003 | Gap (short; qualified) |
+| [Bicubic height reduction, unchanged width RGBA16Â§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 782.41 | 592.55 | 1.320 / 1.672 | 913,737 | Gap (short; qualified) |
+| [Bicubic height reduction, unchanged width RGBA16 / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-PAIRED-COLUMNS.md) | 770.52 | 589.55 | 1.307 / 1.361 | 529,847 | Gap (short; qualified) |
+| [Bicubic width reduction, unchanged height RGBA16 / input+output+4 KiB limitÂ§](../benchmarks/WARM-CURRENT-BICUBIC.md) | 838.73 | 579.56 | 1.447 / 1.459 | 530,858 | Gap (independent) |
+| [Bicubic width reduction, unchanged height RGBA8 / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-TIGHT-HORIZONTAL8.md) | 811.19 | 573.66 | 1.414 / 1.425 | 265,502 | Gap (independent) |
+| [Bicubic height enlargement, unchanged width RGBA8Â§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 1,776.78 | 1,742.77 | 1.020 / 1.024 | 1,664,251 | Gap (independent) |
+| [Bicubic height enlargement, unchanged width RGBA8 / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 2,614.86 | 1,744.07 | 1.499 / 1.722 | 1,280,402 | Gap (short; qualified) |
+| [Bicubic height enlargement, unchanged width RGBA16Â§](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 1,998.15 | 1,670.35 | 1.196 / 1.482 | 2,516,599 | Gap (short; qualified) |
+| [Bicubic height enlargement, unchanged width RGBA16 / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 2,286.62 | 1,672.40 | 1.367 / 1.438 | 2,133,103 | Gap (short; qualified) |
+| [Bicubic width enlargement, unchanged height RGBA16 / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 1,920.59 | 1,453.02 | 1.322 / 1.373 | 2,129,333 | Gap (short; qualified) |
+| [Bicubic width enlargement, unchanged height RGBA8 / input+output+4 KiB limitÂ§](../benchmarks/WARM-BICUBIC-ENLARGEMENT-STRIPS.md) | 2,125.43 | 1,509.12 | 1.408 / 1.529 | 1,178,425 | Gap (short; qualified) |
 | [Crop RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 2.37 | 2.27 | 1.042 / 1.053 | 96 | Gap (independent) |
 | [Crop RGBA16](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 4.11 | 4.30 | 0.955 / 0.963 | 96 | Parity confirmed |
 | [Clone RGBA8](../benchmarks/WARM-CURRENT-EXACT-EDITS.md) | 9.50 | 7.95 | 1.195 / 1.209 | 96 | Gap (independent) |
@@ -466,15 +459,15 @@ RGBA samples remain exact. Single-component grayscale JPEG uses the approved
 benchmark-only **SIMD libjpeg-turbo3.1.4.1** reference; FFmpeg emits three components.
 Production stays safe managed .NET 10 without dependencies or native bindings.
 
-‡ Procedural VP8 benchmark inputs freeze managed/native quality 100/75 and effort 4, retaining
+â€¡ Procedural VP8 benchmark inputs freeze managed/native quality 100/75 and effort 4, retaining
 the 0.25 dB source-quality gate and exact alpha. Matched-quality content controls use
 their linked frozen settings. [Current packet sizes](../benchmarks/WARM-VP8-DIRECTION-COVERAGE.md)
 and per-codec reports accompany time/allocation evidence; size parity remains open.
 
-¶ PNG Identify references use the public FFmpeg PNG parser/CRC plus original
+Â¶ PNG Identify references use the public FFmpeg PNG parser/CRC plus original
 complete structural/EXIF validation and owned descriptors, without inflation;
 the Stream reference also times fresh AVIO/scratch/input/EOF and release.
-‖ JPEG Identify uses FFmpeg MJPEG discard-all, original complete structural/EXIF
+â€– JPEG Identify uses FFmpeg MJPEG discard-all, original complete structural/EXIF
 validation and a timed17-byte canonical SOF2 metadata projection, fresh packet/
 descriptor ownership and reset, with zero pixel-buffer requests. WebP Identify
 uses the public FFmpeg WebP parser plus original complete RIFF/EXIF validation,
@@ -482,13 +475,13 @@ including mandatory parser buffering/EOF flush and descriptor ownership. Its
 0.0040x/upper0.0045x is specific to this metadata boundary and parser copy cost.
 All six managed metadata fields remain exact.
 
-† RGBA16 bilinear and explicit RGBA8 upscale allow native-only alpha max1/RMSE≤0.25;
+â€  RGBA16 bilinear and explicit RGBA8 upscale allow native-only alpha max1/RMSEâ‰¤0.25;
 Up8 times zero-alpha RGB clearing. Managed pixels remain exact; Down8 alpha is exact.
-§ Bicubic uses **zimg, FFmpeg's zscale backend**, with all required clamped halo,
+Â§ Bicubic uses **zimg, FFmpeg's zscale backend**, with all required clamped halo,
 packing, premultiplied float filtering, unpremultiplication/quantization, zero-alpha
-RGB clearing and independent owners timed. Native RGB/alpha max1 and both RMSE≤0.25;
-only RGBA16 513×259→513×519 permits native RGB≤2 where reference alpha≤16,≤1
-elsewhere, retaining alpha≤1/both RMSE≤0.25. Managed frozen pixels and independently
+RGB clearing and independent owners timed. Native RGB/alpha max1 and both RMSEâ‰¤0.25;
+only RGBA16 513Ã—259â†’513Ã—519 permits native RGBâ‰¤2 where reference alphaâ‰¤16,â‰¤1
+elsewhere, retaining alphaâ‰¤1/both RMSEâ‰¤0.25. Managed frozen pixels and independently
 certified rational-half cases remain exact. Linked reports specify every halo
 and scope control; no managed tolerance is introduced.
 

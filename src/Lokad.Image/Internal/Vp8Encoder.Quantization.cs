@@ -5,9 +5,10 @@ namespace Lokad.Image.Internal;
 internal static partial class Vp8Encoder
 {
     // Independently derived source-conversion-loss masking. Transform coefficient
-    // noise of variance step²/12 gives pixel variance step²/48 for our 4x4 DCT.
-    // Propagate independent noise through centered chroma interpolation, combining
-    // coincident edge taps. This is a local equal-step encoding heuristic, not an
+    // noise of variance step²/12 gives pixel variance step²/48 for equal steps.
+    // Unequal DC/AC precision also gives covariance within each 4x4 block. Propagate
+    // both terms through centered chroma, coalescing taps and grouping their blocks.
+    // This is a local uniform-neighbor-step encoding heuristic, not an
     // output error bound: reconstruction rounding and noise can be correlated.
     internal sealed class QuantizationPlan : IDisposable
     {
@@ -32,7 +33,7 @@ internal static partial class Vp8Encoder
             ReadOnlySpan<int> trials = [1, 2, 3, 4, 6, 8, 10];
             var predictionWork = count * (16L * trials[effort] * 192 + 4L * 512 + 24L * 512 + 64);
             var prefixWork = Math.Min(count, 64) * 24L * 256 + 1056 * 16 + count * 24L;
-            var analysisWork = count * (16L * 96 + 128 + 4) + 8192;
+            var analysisWork = count * (16L * 128 + 128 + 4) + 8192;
             var maximumHeader = ((count * (1L + 16 * 9 + 3 + 2) + 1056L * 9 + 192) * 7 + 7) / 8 + 3;
             if (count < 4 || count + 256L > context.RemainingWorkingBytes || maximumHeader > 0x7FFFF
                 || predictionWork + prefixWork + analysisWork > context.RemainingWork) return null;
@@ -57,12 +58,12 @@ internal static partial class Vp8Encoder
             Span<int> histogram = stackalloc int[128]; histogram.Clear(); var active = false;
             for (var index = 0; index < Map.Length; index++)
             {
-                long error = 0; double noise = 0;
+                long error = 0; double noiseAc = 0, noiseDc = 0, noiseChromaDc = 0;
                 var mx = index % columns * 16; var my = index / columns * 16;
                 for (var by = 0; by < 4; by++)
                 for (var bx = 0; bx < 4; bx++)
                 {
-                    context.Work(96);
+                    context.Work(128);
                     var x = Math.Min(image.Width - 1, mx + bx * 4 + 1);
                     var y = Math.Min(image.Height - 1, my + by * 4 + 1);
                     var at = (y * image.Width + x) * 4;
@@ -70,12 +71,13 @@ internal static partial class Vp8Encoder
                     var b = Sample(pixels, words, byteDepth, at + 2); var a = Sample(pixels, words, byteDepth, at + 3);
                     var weight = a * a;
                     error += weight * (long)Vp8Color.SourceError(source, x, y, r, g, b);
-                    noise += weight * NoiseGain(x, y, image.Width, image.Height);
+                    NoiseCoefficients(x, y, image.Width, image.Height, out var gainAc, out var gainDc, out var gainChromaDc);
+                    noiseAc += weight * gainAc; noiseDc += weight * gainDc; noiseChromaDc += weight * gainChromaDc;
                 }
                 context.Work(128);
-                var targetSquared = noise == 0 ? 0 : 16d * error / (noise * (quality + 1));
-                var q = baseQ;
-                while (q < 127 && steps[q + 1] * steps[q + 1] <= targetSquared) q++;
+                // At most seven monotone model evaluations, each bounded by 16
+                // units, retain the original 128-unit quantizer-search charge.
+                var q = SelectQuantizer(baseQ, noiseAc, noiseDc, noiseChromaDc, 16d * error / (quality + 1));
                 Map[index] = (byte)q; histogram[q]++; active |= q != baseQ;
             }
             if (!active) return false;
@@ -113,12 +115,41 @@ internal static partial class Vp8Encoder
         }
 
         internal static double NoiseGain(int x, int y, int width, int height)
-            => LumaNoiseGain + ChromaNoiseGain * AxisNoise(x, width) * AxisNoise(y, height);
+        {
+            NoiseCoefficients(x, y, width, height, out var ac, out var dc, out var chromaDc);
+            return ac + dc + chromaDc;
+        }
 
-        private static double AxisNoise(int coordinate, int length)
+        // Inverse-DCT covariance is ac²/48*delta(i,j)+(dc²-ac²)/768
+        // within a block. Return weights scaled so RGB squared error equals
+        // (acWeight*ac²+dcWeight*dc²+chromaDcWeight*chromaDc²)/16.
+        internal static void NoiseCoefficients(int x, int y, int width, int height,
+            out double ac, out double dc, out double chromaDc)
+        {
+            var independent = AxisNoise(x, width) * AxisNoise(y, height);
+            var grouped = AxisNoise(x, width, true) * AxisNoise(y, height, true) / 16;
+            dc = LumaNoiseGain / 16; chromaDc = ChromaNoiseGain * grouped;
+            ac = LumaNoiseGain - dc + ChromaNoiseGain * (independent - grouped);
+        }
+
+        internal static int SelectQuantizer(int baseQ, double acWeight, double dcWeight, double chromaDcWeight, double allowance)
+        {
+            if (acWeight + dcWeight + chromaDcWeight == 0) return baseQ;
+            var low = baseQ; var high = 127;
+            while (low < high)
+            {
+                var q = (low + high + 1) / 2;
+                var ac = (int)Vp8Tables.AcQuantizers[q]; var dc = (int)Vp8Tables.DcQuantizers[q]; var chromaDc = Math.Min(132, dc);
+                var variance = acWeight * ac * ac + dcWeight * dc * dc + chromaDcWeight * chromaDc * chromaDc;
+                if (variance <= allowance) low = q; else high = q - 1;
+            }
+            return low;
+        }
+
+        private static double AxisNoise(int coordinate, int length, bool grouped = false)
         {
             var first = (coordinate - 1) / 2; var last = Math.Min(first + 1, (length + 1) / 2 - 1);
-            if (first == last || coordinate == 0) return 1;
+            if (first == last || coordinate == 0 || grouped && first / 4 == last / 4) return 1;
             var phase = (coordinate & 1) == 0 ? 3 : 1;
             return ((4 - phase) * (4 - phase) + phase * phase) / 16d;
         }

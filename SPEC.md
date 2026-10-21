@@ -1385,12 +1385,15 @@ At effort 4..6, independently admitted source analysis may assign four absolute
 segment quantizers that are no finer than this base index. One clamped sample per
 4x4 transform block estimates alpha-weighted RGB loss from the existing 4:2:0
 source conversion. A source-only allowance `MSE/(Quality+1)`, the transform's
-expected `step²/48` quantization variance and the RGB conversion-matrix gain select
-desired steps. Four deterministic log-step clusters select format quantizers.
-The gain propagates independent sample noise through centered chroma interpolation,
-combining coincident clamped edge taps before squaring. Interior quarter phases
-reduce chroma noise variance by `100/256`; luma gain remains unchanged. Local equal
-neighboring steps and independent noise are assumptions, not reconstruction bounds.
+expected coefficient variance `step²/12` and the RGB conversion-matrix gain select
+desired steps. Unequal DC/AC steps induce pixel covariance within each 4x4 block:
+`ac²/48*delta(i,j)+(dc²-ac²)/768`. Centered chroma interpolation combines clamped
+taps and groups them by transform block before propagating this covariance;
+chroma DC retains its format clamp. Equal DC/AC steps recover the independent
+pixel-noise model. Four deterministic log-step clusters select format quantizers.
+Locally uniform neighboring steps and independent coefficient noise are heuristic
+assumptions, not reconstruction bounds. Additional analysis is charged before
+sampling; a bounded monotone quantizer search retains the base-index floor.
 This is a compression heuristic, not a reconstruction-error or global quality
 monotonicity guarantee. Numeric quality remains encoder-specific; source-quality
 matching is validated separately. The base index and nearest coefficient seed

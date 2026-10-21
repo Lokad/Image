@@ -47,14 +47,19 @@ public sealed class Vp8PrefixWorkTests
     public void ActualWorkExhaustionAfterPrefixAdmissionIsTerminalAndCleanupAllowsSuccess()
     {
         using var root = new TestMemoryBudget(8000000); using var source = Source(8, root);
-        var held = root.Bytes; var previous = held; var admitted = false;
-        root.Admitted = used => { if (used - previous == PrefixBytes) admitted = true; previous = used; };
+        var held = root.Bytes; var previous = held; var admitted = false; var unchanged = OriginalPixels.Bytes(source);
+        // The lower failure allowance can select the smaller 64-block prefix
+        // before shared admission. Either owned prefix must clean up on actual
+        // exhaustion; default-allowance refusal/cancellation below still require128.
+        root.Admitted = used => { if (used - previous is PrefixBytes or (64 * 120 + 16384)) admitted = true; previous = used; };
         using var failed = new MemoryStream();
-        // Keep exhaustion inside coefficient work as compression improves;
-        // a later failure may legitimately leave a partial caller stream.
+        failed.Write([1, 2, 3, 4]);
+        // Actual exhaustion can move between stages as compression changes.
+        // Caller streams allow partial output; existing content remains owned.
         var failure = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, failed, Options(root, work: 30500000)));
         Assert.True(admitted); Assert.Equal(ImageLimitKind.Work, failure.Limit); Assert.Equal(ImageLimitScope.Operation, failure.Scope);
-        Assert.Equal(0, failed.Length); Assert.True(failed.CanWrite); Assert.Equal(held, root.Bytes); Assert.Equal(0, root.Refusals);
+        Assert.Equal(new byte[] { 1, 2, 3, 4 }, failed.ToArray()[..4]); Assert.True(failed.CanWrite);
+        Assert.Equal(unchanged, OriginalPixels.Bytes(source)); Assert.Equal(held, root.Bytes); Assert.Equal(0, root.Refusals);
         root.Admitted = null;
         using var success = new MemoryStream(); ImageCodec.EncodeWebp(source, success, Options(root));
         Assert.True(success.Length > 0); Assert.Equal(held, root.Bytes); Assert.False(root.IsDisposed);

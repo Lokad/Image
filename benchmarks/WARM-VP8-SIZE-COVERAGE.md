@@ -2,7 +2,7 @@
 
 Six of seven already declared encode controls pass complete-packet size and
 quality: the two primary content controls and four unrestricted procedural controls.
-**Only the32M-work control remains open**, by2,888 B. Fixed managed100/native75
+**Only the32M-work control remains open**, by2,390 B. Fixed managed100/native75
 settings below are benchmark inputs, not the library default85 or evidence of
 matching by numerical equality. No general lossy WebP parity follows.
 
@@ -10,11 +10,19 @@ matching by numerical equality. No general lossy WebP parity follows.
 | --- | ---: | ---: | --- |
 | WarmCompression/PhotographLossy8 | 17,366 / 17,688 | 77 / 75 | Pass |
 | WarmCompression/DiagramLossy8 | 6,722 / 7,100 | 75 / 75 | Pass |
-| WarmWebp/EncodeOpaque8 | 71,154 / 72,380 | 100 / 75 | Pass |
-| WarmWebp/EncodeOpaque16 | 71,154 / 72,380 | 100 / 75 | Pass |
-| WarmWebp/Encode8 | 96,708 / 98,590 | 100 / 75 | Pass |
-| WarmWebp/Encode16 | 96,708 / 98,590 | 100 / 75 | Pass |
-| WarmWebp/EncodeBudget8 | 101,478 / 98,590 | 100 / 75 | Open |
+| WarmWebp/EncodeOpaque8 | 70,298 / 72,380 | 100 / 75 | Pass |
+| WarmWebp/EncodeOpaque16 | 70,298 / 72,380 | 100 / 75 | Pass |
+| WarmWebp/Encode8 | 96,016 / 98,590 | 100 / 75 | Pass |
+| WarmWebp/Encode16 | 96,016 / 98,590 | 100 / 75 | Pass |
+| WarmWebp/EncodeBudget8 | 100,980 / 98,590 | 100 / 75 | Open |
+
+The current [DC/AC-noise round](WARM-VP8-NOISE-SPECTRUM.md) saves856 B per opaque
+control,692 B per unrestricted alpha control and498 B under32M. Source-quality
+gaps are0.005052/0.021958/0.040560dB within0.25dB; exact alpha and decoder bounds
+pass. Primary packets/pixels/quality stay exact.31,632,851 actual units fit32M.
+BothOS4,723tests/scalar and the same actual package/examples qualify. Seven short
+cost observations supersede affected analysis paths; CPU parity stays deferred.
+Earlier milestones below retain their historical scope and raw evidence.
 
 C57 reuses the approved bounded quality matcher only for the changed photograph:
 1,25,50,75,100 seeds and one refinement77, chosen by source-quality distance before

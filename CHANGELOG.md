@@ -10,7 +10,7 @@
   and reusable alpha tokens with four-sample keys and bounded older-match anchors, preserving exact
   alpha, ownership and resource caps.
 - Source-derived WebP spatial quantization at higher efforts, with bounded shared
-  admission, centered chroma noise propagation, unchanged base quality mapping
+  admission, DC/AC-aware centered chroma noise propagation, unchanged base quality mapping
   and admitted intra16/Y2 search for its segments; lossy quality is verified separately.
 - Admitted coefficient-level/EOB refinement for selected high-precision WebP
   predictions, reducing complete packets within verified reconstruction quality.

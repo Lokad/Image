@@ -68,11 +68,11 @@ def row(label, name, path, report, confirmed=False, verification=None):
 
 
 def pending(label, report, status):
-    return f'| [{label}](../benchmarks/{report}) | — | — | — | — | {status} |'
+    return f'| [{label}](../benchmarks/{report}) | â€” | â€” | â€” | â€” | {status} |'
 
 
 def table(rows):
-    return '\n'.join(['| Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |',
+    return '\n'.join(['| Operation / fixed profile | Lokad Âµs | Reference Âµs | Ratio / upper | Lokad allocated B/op | Status |',
                       '| --- | ---: | ---: | ---: | ---: | --- |', *rows])
 
 
@@ -80,11 +80,11 @@ def render():
     decodes = [
         row('PNG RGBA8, two retained outputs / caller-owned memory root', 'warm-deflate-materialized-cursor-evidence.json', ['cases', 'Png8Retained2', -1], 'WARM-DEFLATE-MATERIALIZED-CURSOR.md', verification='Gap (short; qualified)'),
         row('PNG DecodeAsync, fresh nonseekable Stream', 'warm-deflate-materialized-cursor-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-DEFLATE-MATERIALIZED-CURSOR.md', verification='Gap (short; qualified)'),
-        row('PNG IdentifyAsync, fresh nonseekable Stream¶', 'warm-png-async-identify-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-PNG-ASYNC-IDENTIFY.md', verification='Gap (short; qualified)'),
-        row('PNG Identify, fresh Stream¶', 'warm-png-stream-identify-evidence.json', ['observations', -1], 'WARM-PNG-STREAM-IDENTIFY.md', True),
+        row('PNG IdentifyAsync, fresh nonseekable StreamÂ¶', 'warm-png-async-identify-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'WARM-PNG-ASYNC-IDENTIFY.md', verification='Gap (short; qualified)'),
+        row('PNG Identify, fresh StreamÂ¶', 'warm-png-stream-identify-evidence.json', ['observations', -1], 'WARM-PNG-STREAM-IDENTIFY.md', True),
         row('WebP Identify, resident span (parser)', 'warm-webp-identify-evidence.json', ['observations', -1], 'WARM-WEBP-IDENTIFY.md', True),
-        row('JPEG Identify, resident span‖', 'warm-input-reconciliation-evidence.json', ['cases', 'IdentifyJpeg8', -1], 'WARM-INPUT-RECONCILIATION.md', True),
-        row('PNG Identify, resident span¶', 'warm-png-identify-evidence.json', ['observations', -1], 'WARM-PNG-IDENTIFY.md', True),
+        row('JPEG Identify, resident spanâ€–', 'warm-input-reconciliation-evidence.json', ['cases', 'IdentifyJpeg8', -1], 'WARM-INPUT-RECONCILIATION.md', True),
+        row('PNG Identify, resident spanÂ¶', 'warm-png-identify-evidence.json', ['observations', -1], 'WARM-PNG-IDENTIFY.md', True),
         row('PNG palette4/full tRNS Adam7', 'warm-png-palette4-adam7-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE4-ADAM7.md', True),
         row('PNG8 Stream, orient/crop/nearest fit', 'warm-input-reconciliation-evidence.json', ['cases', 'PngCropFit8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('PNG16 Stream, orient/crop/nearest fit', 'warm-input-reconciliation-evidence.json', ['cases', 'PngCropFit16', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
@@ -117,7 +117,7 @@ def render():
         row('PNG gray8, Paeth', 'warm-png-gray8-paeth-evidence.json', ['observations', -1], 'WARM-PNG-GRAY8-PAETH.md', True),
         row('PNG gray-alpha8, Paeth', 'warm-png-gray-alpha8-paeth-evidence.json', ['observations', -1], 'WARM-PNG-GRAY-ALPHA8-PAETH.md', True),
         row('PNG RGBA16, Adam7', 'warm-current-png-adam7-evidence.json', ['cases', 'DecodeAdam7_16', -1], 'WARM-CURRENT-PNG-ADAM7.md', True),
-        row('PNG gray1 → RGBA8, Adam7', 'warm-current-png-adam7-evidence.json', ['cases', 'DecodeGray1Adam7', -1], 'WARM-CURRENT-PNG-ADAM7.md', True),
+        row('PNG gray1 â†’ RGBA8, Adam7', 'warm-current-png-adam7-evidence.json', ['cases', 'DecodeGray1Adam7', -1], 'WARM-CURRENT-PNG-ADAM7.md', True),
         row('PNG palette8 + tRNS, Adam7', 'warm-png-palette8-adam7-evidence.json', ['observations', -1], 'WARM-PNG-PALETTE8-ADAM7.md', True),
         row('PNG RGB16, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeRgb16', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG gray8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
@@ -132,27 +132,27 @@ def render():
         row('PNG byte indices / sixteen-entry palette + tRNS, None', 'warm-png-short-palette-evidence.json', ['observations', 2], 'WARM-PNG-SHORT-PALETTE.md', True),
         row('PNG palette8 + tRNS, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette8', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('PNG palette8 + two-entry tRNS, None', 'warm-png-partial-alpha-evidence.json', ['cases', 'DecodePalette8PartialAlpha', -1], 'WARM-PNG-PARTIAL-ALPHA.md', True),
-        row('PNG palette4 + tRNS → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('PNG palette2 + tRNS → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette2', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('PNG palette1 + tRNS → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette1', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('PNG opaque gray1 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray1', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('PNG gray1 + tRNS key1 → RGBA8, exact timed FFmpeg color-key', 'warm-png-gray1-transparency-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-TRANSPARENCY.md', True),
-        row('PNG gray2 + tRNS key0 → RGBA8, None', 'warm-png-packed-transparency-evidence.json', ['observations', -1], 'WARM-PNG-PACKED-TRANSPARENCY.md', True),
+        row('PNG palette4 + tRNS â†’ RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
+        row('PNG palette2 + tRNS â†’ RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette2', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
+        row('PNG palette1 + tRNS â†’ RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodePalette1', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
+        row('PNG opaque gray1 â†’ RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray1', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
+        row('PNG gray1 + tRNS key1 â†’ RGBA8, exact timed FFmpeg color-key', 'warm-png-gray1-transparency-evidence.json', ['observations', -1], 'WARM-PNG-GRAY1-TRANSPARENCY.md', True),
+        row('PNG gray2 + tRNS key0 â†’ RGBA8, None', 'warm-png-packed-transparency-evidence.json', ['observations', -1], 'WARM-PNG-PACKED-TRANSPARENCY.md', True),
         pending('PNG gray1/key1 and gray2/key1, unfiltered native', 'WARM-PNG-PACKED-TRANSPARENCY.md', 'Unscored: native alpha differs'),
-        row('PNG opaque gray2 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray2', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
-        row('PNG opaque gray4 → RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
+        row('PNG opaque gray2 â†’ RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray2', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
+        row('PNG opaque gray4 â†’ RGBA8, None', 'warm-current-png-decode-evidence.json', ['cases', 'DecodeGray4', -1], 'WARM-CURRENT-PNG-DECODE.md', True),
         row('JPEG baseline gray', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'GrayResident', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
-        row('JPEG gray → caller GRAY8', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'GraySamples', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
-        row('JPEG untagged → caller CMYK8', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'CmykCaller', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0 → caller RGB24', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Rgb420Samples', -1], 'WARM-JPEG-BUFFERED-EOB.md', True),
+        row('JPEG gray â†’ caller GRAY8', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'GraySamples', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG untagged â†’ caller CMYK8', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'CmykCaller', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0 â†’ caller RGB24', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Rgb420Samples', -1], 'WARM-JPEG-BUFFERED-EOB.md', True),
         row('JPEG Adobe CMYK, four full-resolution planes', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Adobe', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
         row('JPEG Adobe CMYK, one AC control', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'OneAc', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
         row('JPEG Adobe CMYK, general transform control', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'General', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
         row('JPEG Adobe CMYK, two-dimensional sparse control', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Sparse2D', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
         row('JPEG YCCK420, full-resolution black', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Ycck420', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
-        row('JPEG YCCK420 → caller RGB24', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Ycck420CallerRgb', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
-        row('JPEG H4V1 / 4:1:1 → owned RGBA8', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Decode411', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
-        row('JPEG H4V2 / 4:1:0 → owned RGBA8', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Decode410', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG YCCK420 â†’ caller RGB24', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Ycck420CallerRgb', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG H4V1 / 4:1:1 â†’ owned RGBA8', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Decode411', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
+        row('JPEG H4V2 / 4:1:0 â†’ owned RGBA8', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'Decode410', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'NativeDecode420', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:0, row restart markers', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'NativeDecode420Restart', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
         row('JPEG baseline 4:2:2', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'NativeDecode422', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
@@ -214,11 +214,11 @@ def render():
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-compact-color-evidence.json', ['cases', 'OriginalGray', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-caller-mcu-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-CALLER-MCU.md', verification='Gap (short; qualified)'),
-        row('WebP VP8, opaque‡', 'vp8-coefficient-refinement-evidence.json', ['observations', 0], 'WARM-VP8-COEFFICIENT-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8, opaque from RGBA16‡', 'vp8-coefficient-refinement-evidence.json', ['observations', 1], 'WARM-VP8-COEFFICIENT-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alpha‡', 'vp8-coefficient-refinement-evidence.json', ['observations', 2], 'WARM-VP8-COEFFICIENT-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alpha from RGBA16‡', 'vp8-coefficient-refinement-evidence.json', ['observations', 3], 'WARM-VP8-COEFFICIENT-REFINEMENT.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 + alpha‡, caller work budget32M', 'webp-pruned-prefix-evidence.json', ['observations', 0], 'WARM-WEBP-PRUNED-PREFIX.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8, opaqueâ€¡', 'vp8-noise-spectrum-evidence.json', ['observations', 0], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8, opaque from RGBA16â€¡', 'vp8-noise-spectrum-evidence.json', ['observations', 1], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alphaâ€¡', 'vp8-noise-spectrum-evidence.json', ['observations', 2], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alpha from RGBA16â€¡', 'vp8-noise-spectrum-evidence.json', ['observations', 3], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 + alphaâ€¡, caller work budget32M', 'vp8-noise-spectrum-evidence.json', ['observations', 4], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L from RGBA16, exact backend*', 'warm-vp8l-code-cost-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-CODE-COST.md', True),
@@ -230,70 +230,70 @@ def render():
         row('Nearest upscale RGBA16', 'warm-nearestup16-evidence.json', ['observations', -1], 'WARM-NEAREST-UP16.md', True),
         row('Nearest resize RGBA16', 'warm-prepared-confirm-evidence.json', ['observations', -1], 'WARM-PREPARED-CONFIRM.md', True),
         row('Bilinear resize RGBA8', 'warm-bilinear-byte-row-cache-evidence.json', ['cases', 'Down8', -1], 'WARM-BILINEAR-BYTE-ROW-CACHE.md', verification='Gap (short; qualified)'),
-        row('Bilinear resize RGBA16†', 'warm-bilinear-word-cache-evidence.json', ['observations', -1], 'WARM-BILINEAR-WORD-CACHE.md', verification='Gap (short; qualified)'),
-        row('Bilinear upscale RGBA8†', 'warm-bilinear-byte-factorization-evidence.json', ['cases', 'Up8', -1], 'WARM-BILINEAR-BYTE-FACTORIZATION.md', verification='Gap (short; qualified)'),
-        row('Bilinear upscale RGBA16†', 'warm-current-bilinear-evidence.json', ['cases', 'Up16', -1], 'WARM-CURRENT-BILINEAR.md', True),
+        row('Bilinear resize RGBA16â€ ', 'warm-bilinear-word-cache-evidence.json', ['observations', -1], 'WARM-BILINEAR-WORD-CACHE.md', verification='Gap (short; qualified)'),
+        row('Bilinear upscale RGBA8â€ ', 'warm-bilinear-byte-factorization-evidence.json', ['cases', 'Up8', -1], 'WARM-BILINEAR-BYTE-FACTORIZATION.md', verification='Gap (short; qualified)'),
+        row('Bilinear upscale RGBA16â€ ', 'warm-current-bilinear-evidence.json', ['cases', 'Up16', -1], 'WARM-CURRENT-BILINEAR.md', True),
         row('RGBA8 bicubic, single-pixel reduction', 'warm-bicubic-single-pixel-evidence.json', ['observations', -1], 'WARM-BICUBIC-SINGLE-PIXEL.md', True),
-        row('Bicubic resize RGBA8§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Down8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
-        row('Bicubic resize RGBA16§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Down16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
-        row('Bicubic upscale RGBA8§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Up8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
-        row('Bicubic upscale RGBA16§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Up16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
-        row('Bicubic mixed-axis RGBA8§', 'warm-bicubic-byte-paired-evidence.json', ['cases', 'Mixed8', -1], 'WARM-BICUBIC-BYTE-PAIRED.md', verification='Gap (short; qualified)'),
-        row('Bicubic mixed-axis RGBA16§', 'warm-bicubic-paired-columns-evidence.json', ['cases', 'Mixed16', -1], 'WARM-BICUBIC-PAIRED-COLUMNS.md', verification='Gap (short; qualified)'),
-        row('Bicubic width reduction / height enlargement RGBA8§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Cross8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
-        row('Bicubic width reduction / height enlargement RGBA16§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Cross16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
-        row('Bicubic RGBA8, 128×64 / wider support§', 'warm-current-bicubic-evidence.json', ['cases', 'Wide8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA16, 128×64 / wider support§', 'warm-current-bicubic-evidence.json', ['cases', 'Wide16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic width reduction, unchanged height RGBA8§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Horizontal8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
-        row('Bicubic width reduction, unchanged height RGBA16§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Horizontal16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
-        row('Bicubic width enlargement, unchanged height RGBA8§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'HorizontalUp8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
-        row('Bicubic width enlargement, unchanged height RGBA16§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'HorizontalUp16', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
-        row('Bicubic RGBA8, 64×32 / support beyond 32§', 'warm-current-bicubic-evidence.json', ['cases', 'Down64x32_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', verification='Gap (short; qualified)'),
-        row('Bicubic RGBA16, 64×32 / support beyond 32§', 'warm-current-bicubic-evidence.json', ['cases', 'Down64x32_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA8, 32×16 / support beyond 64§', 'warm-current-bicubic-evidence.json', ['cases', 'Down32x16_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA16, 32×16 / support beyond 64§', 'warm-current-bicubic-evidence.json', ['cases', 'Down32x16_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA8, 16×8 / adaptive support beyond 128§', 'warm-current-bicubic-evidence.json', ['cases', 'Down16x8_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA16, 16×8 / adaptive support beyond 128§', 'warm-current-bicubic-evidence.json', ['cases', 'Down16x8_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA8, 256×129 / input+output+4 KiB limit§', 'warm-bicubic-byte-strips-evidence.json', ['observations', -1], 'WARM-BICUBIC-BYTE-STRIPS.md', verification='Gap (short; qualified)'),
-        row('Bicubic RGBA16, 256×129 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'TightDown16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA8, 128×64 / input+output+4 KiB limit§', 'warm-bicubic-four-columns-evidence.json', ['cases', 'TightWide8', -1], 'WARM-BICUBIC-FOUR-COLUMNS.md', verification='Gap (short; qualified)'),
-        row('Bicubic RGBA16, 128×64 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'TightWide16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA8, 64×32 / input+output+4 KiB limit§', 'warm-bicubic-weight-broadcast-evidence.json', ['cases', 'Tight64x32_8', -1], 'WARM-BICUBIC-WEIGHT-BROADCAST.md', verification='Gap (short; qualified)'),
-        row('Bicubic RGBA16, 64×32 / input+output+4 KiB limit§', 'warm-bicubic-word-broadcast-evidence.json', ['cases', 'Tight64x32_16', -1], 'WARM-BICUBIC-WORD-BROADCAST.md', verification='Gap (short; qualified)'),
-        row('Bicubic RGBA16, 32×16 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight32x16_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA8, 32×16 / input+output+4 KiB limit§', 'warm-bicubic-packed-reduction-evidence.json', ['cases', 'Tight32x16_8', -1], 'WARM-BICUBIC-PACKED-REDUCTION.md', verification='Gap (short; qualified)'),
-        row('Bicubic RGBA16, 16×8 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight16x8_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA8, 16×8 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight16x8_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA16 enlargement / input+output+4 KiB limit§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'TightUp16', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
-        row('Bicubic RGBA8 enlargement / input+output+4 KiB limit§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'TightUp8', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
-        row('Bicubic RGBA16, width up / height down / input+output+4 KiB limit§', 'warm-bicubic-paired-columns-evidence.json', ['cases', 'TightMixed16', -1], 'WARM-BICUBIC-PAIRED-COLUMNS.md', verification='Gap (short; qualified)'),
-        row('Bicubic RGBA8, width up / height down / input+output+4 KiB limit§', 'warm-bicubic-byte-paired-evidence.json', ['cases', 'TightMixed8', -1], 'WARM-BICUBIC-BYTE-PAIRED.md', verification='Gap (short; qualified)'),
-        row('Bicubic RGBA16, width down / height up / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'TightCross16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA8, width down / height up / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'TightCross8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA16, 8×4 / support beyond 256 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight8x4_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA8, 8×4 / support beyond 256 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight8x4_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA16, 4×2 / packed support beyond 304 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight4x2_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA8, 4×2 / packed support beyond 304 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight4x2_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA16, 2×2 / generated support beyond 544 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight2x2_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA16, 2×9 / bounded row blocks / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight2x9_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA16, 4×9 / packed row blocks / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight4x9_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA16, 8×17 / full-coefficient row blocks / input+output+4 KiB limit§', 'warm-bicubictight8x17word-generated-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-8X17-RGBA16.md', True),
-        row('Bicubic RGBA8, 8×17 / full-coefficient row blocks / input+output+4 KiB limit§', 'warm-bicubictight8x17byte-generated-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-8X17-RGBA8.md', True),
-        row('Bicubic RGBA8, 4×9 / packed row blocks / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight4x9_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA8, 2×9 / bounded row blocks / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight2x9_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic RGBA8, 2×2 / generated support beyond 544 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight2x2_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic height reduction, unchanged width RGBA8§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Vertical8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
-        row('Bicubic height reduction, unchanged width RGBA8 / input+output+4 KiB limit§', 'warm-bicubic-byte-paired-evidence.json', ['cases', 'TightVertical8', -1], 'WARM-BICUBIC-BYTE-PAIRED.md', verification='Gap (short; qualified)'),
-        row('Bicubic height reduction, unchanged width RGBA16§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Vertical16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
-        row('Bicubic height reduction, unchanged width RGBA16 / input+output+4 KiB limit§', 'warm-bicubic-paired-columns-evidence.json', ['cases', 'TightVertical16', -1], 'WARM-BICUBIC-PAIRED-COLUMNS.md', verification='Gap (short; qualified)'),
-        row('Bicubic width reduction, unchanged height RGBA16 / input+output+4 KiB limit§', 'warm-current-bicubic-evidence.json', ['cases', 'TightHorizontal16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
-        row('Bicubic width reduction, unchanged height RGBA8 / input+output+4 KiB limit§', 'warm-bicubictighthorizontal8-cross-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-HORIZONTAL8.md', True),
-        row('Bicubic height enlargement, unchanged width RGBA8§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'VerticalUp8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', True),
-        row('Bicubic height enlargement, unchanged width RGBA8 / input+output+4 KiB limit§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'TightVerticalUp8', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
-        row('Bicubic height enlargement, unchanged width RGBA16§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'VerticalUp16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
-        row('Bicubic height enlargement, unchanged width RGBA16 / input+output+4 KiB limit§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'TightVerticalUp16', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
-        row('Bicubic width enlargement, unchanged height RGBA16 / input+output+4 KiB limit§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'TightHorizontalUp16', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
-        row('Bicubic width enlargement, unchanged height RGBA8 / input+output+4 KiB limit§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'TightHorizontalUp8', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
+        row('Bicubic resize RGBA8Â§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Down8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
+        row('Bicubic resize RGBA16Â§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Down16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
+        row('Bicubic upscale RGBA8Â§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Up8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
+        row('Bicubic upscale RGBA16Â§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Up16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
+        row('Bicubic mixed-axis RGBA8Â§', 'warm-bicubic-byte-paired-evidence.json', ['cases', 'Mixed8', -1], 'WARM-BICUBIC-BYTE-PAIRED.md', verification='Gap (short; qualified)'),
+        row('Bicubic mixed-axis RGBA16Â§', 'warm-bicubic-paired-columns-evidence.json', ['cases', 'Mixed16', -1], 'WARM-BICUBIC-PAIRED-COLUMNS.md', verification='Gap (short; qualified)'),
+        row('Bicubic width reduction / height enlargement RGBA8Â§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Cross8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
+        row('Bicubic width reduction / height enlargement RGBA16Â§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Cross16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
+        row('Bicubic RGBA8, 128Ã—64 / wider supportÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'Wide8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA16, 128Ã—64 / wider supportÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'Wide16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic width reduction, unchanged height RGBA8Â§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Horizontal8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
+        row('Bicubic width reduction, unchanged height RGBA16Â§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Horizontal16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
+        row('Bicubic width enlargement, unchanged height RGBA8Â§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'HorizontalUp8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
+        row('Bicubic width enlargement, unchanged height RGBA16Â§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'HorizontalUp16', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
+        row('Bicubic RGBA8, 64Ã—32 / support beyond 32Â§', 'warm-current-bicubic-evidence.json', ['cases', 'Down64x32_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', verification='Gap (short; qualified)'),
+        row('Bicubic RGBA16, 64Ã—32 / support beyond 32Â§', 'warm-current-bicubic-evidence.json', ['cases', 'Down64x32_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA8, 32Ã—16 / support beyond 64Â§', 'warm-current-bicubic-evidence.json', ['cases', 'Down32x16_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA16, 32Ã—16 / support beyond 64Â§', 'warm-current-bicubic-evidence.json', ['cases', 'Down32x16_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA8, 16Ã—8 / adaptive support beyond 128Â§', 'warm-current-bicubic-evidence.json', ['cases', 'Down16x8_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA16, 16Ã—8 / adaptive support beyond 128Â§', 'warm-current-bicubic-evidence.json', ['cases', 'Down16x8_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA8, 256Ã—129 / input+output+4 KiB limitÂ§', 'warm-bicubic-byte-strips-evidence.json', ['observations', -1], 'WARM-BICUBIC-BYTE-STRIPS.md', verification='Gap (short; qualified)'),
+        row('Bicubic RGBA16, 256Ã—129 / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'TightDown16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA8, 128Ã—64 / input+output+4 KiB limitÂ§', 'warm-bicubic-four-columns-evidence.json', ['cases', 'TightWide8', -1], 'WARM-BICUBIC-FOUR-COLUMNS.md', verification='Gap (short; qualified)'),
+        row('Bicubic RGBA16, 128Ã—64 / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'TightWide16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA8, 64Ã—32 / input+output+4 KiB limitÂ§', 'warm-bicubic-weight-broadcast-evidence.json', ['cases', 'Tight64x32_8', -1], 'WARM-BICUBIC-WEIGHT-BROADCAST.md', verification='Gap (short; qualified)'),
+        row('Bicubic RGBA16, 64Ã—32 / input+output+4 KiB limitÂ§', 'warm-bicubic-word-broadcast-evidence.json', ['cases', 'Tight64x32_16', -1], 'WARM-BICUBIC-WORD-BROADCAST.md', verification='Gap (short; qualified)'),
+        row('Bicubic RGBA16, 32Ã—16 / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight32x16_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA8, 32Ã—16 / input+output+4 KiB limitÂ§', 'warm-bicubic-packed-reduction-evidence.json', ['cases', 'Tight32x16_8', -1], 'WARM-BICUBIC-PACKED-REDUCTION.md', verification='Gap (short; qualified)'),
+        row('Bicubic RGBA16, 16Ã—8 / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight16x8_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA8, 16Ã—8 / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight16x8_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA16 enlargement / input+output+4 KiB limitÂ§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'TightUp16', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
+        row('Bicubic RGBA8 enlargement / input+output+4 KiB limitÂ§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'TightUp8', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
+        row('Bicubic RGBA16, width up / height down / input+output+4 KiB limitÂ§', 'warm-bicubic-paired-columns-evidence.json', ['cases', 'TightMixed16', -1], 'WARM-BICUBIC-PAIRED-COLUMNS.md', verification='Gap (short; qualified)'),
+        row('Bicubic RGBA8, width up / height down / input+output+4 KiB limitÂ§', 'warm-bicubic-byte-paired-evidence.json', ['cases', 'TightMixed8', -1], 'WARM-BICUBIC-BYTE-PAIRED.md', verification='Gap (short; qualified)'),
+        row('Bicubic RGBA16, width down / height up / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'TightCross16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA8, width down / height up / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'TightCross8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA16, 8Ã—4 / support beyond 256 / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight8x4_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA8, 8Ã—4 / support beyond 256 / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight8x4_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA16, 4Ã—2 / packed support beyond 304 / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight4x2_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA8, 4Ã—2 / packed support beyond 304 / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight4x2_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA16, 2Ã—2 / generated support beyond 544 / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight2x2_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA16, 2Ã—9 / bounded row blocks / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight2x9_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA16, 4Ã—9 / packed row blocks / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight4x9_16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA16, 8Ã—17 / full-coefficient row blocks / input+output+4 KiB limitÂ§', 'warm-bicubictight8x17word-generated-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-8X17-RGBA16.md', True),
+        row('Bicubic RGBA8, 8Ã—17 / full-coefficient row blocks / input+output+4 KiB limitÂ§', 'warm-bicubictight8x17byte-generated-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-8X17-RGBA8.md', True),
+        row('Bicubic RGBA8, 4Ã—9 / packed row blocks / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight4x9_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA8, 2Ã—9 / bounded row blocks / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight2x9_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic RGBA8, 2Ã—2 / generated support beyond 544 / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'Tight2x2_8', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic height reduction, unchanged width RGBA8Â§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Vertical8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
+        row('Bicubic height reduction, unchanged width RGBA8 / input+output+4 KiB limitÂ§', 'warm-bicubic-byte-paired-evidence.json', ['cases', 'TightVertical8', -1], 'WARM-BICUBIC-BYTE-PAIRED.md', verification='Gap (short; qualified)'),
+        row('Bicubic height reduction, unchanged width RGBA16Â§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Vertical16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
+        row('Bicubic height reduction, unchanged width RGBA16 / input+output+4 KiB limitÂ§', 'warm-bicubic-paired-columns-evidence.json', ['cases', 'TightVertical16', -1], 'WARM-BICUBIC-PAIRED-COLUMNS.md', verification='Gap (short; qualified)'),
+        row('Bicubic width reduction, unchanged height RGBA16 / input+output+4 KiB limitÂ§', 'warm-current-bicubic-evidence.json', ['cases', 'TightHorizontal16', 'observations', -1], 'WARM-CURRENT-BICUBIC.md', True),
+        row('Bicubic width reduction, unchanged height RGBA8 / input+output+4 KiB limitÂ§', 'warm-bicubictighthorizontal8-cross-evidence.json', ['observations', -1], 'WARM-BICUBIC-TIGHT-HORIZONTAL8.md', True),
+        row('Bicubic height enlargement, unchanged width RGBA8Â§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'VerticalUp8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', True),
+        row('Bicubic height enlargement, unchanged width RGBA8 / input+output+4 KiB limitÂ§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'TightVerticalUp8', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
+        row('Bicubic height enlargement, unchanged width RGBA16Â§', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'VerticalUp16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
+        row('Bicubic height enlargement, unchanged width RGBA16 / input+output+4 KiB limitÂ§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'TightVerticalUp16', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
+        row('Bicubic width enlargement, unchanged height RGBA16 / input+output+4 KiB limitÂ§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'TightHorizontalUp16', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
+        row('Bicubic width enlargement, unchanged height RGBA8 / input+output+4 KiB limitÂ§', 'warm-bicubic-enlargement-strips-evidence.json', ['cases', 'TightHorizontalUp8', -1], 'WARM-BICUBIC-ENLARGEMENT-STRIPS.md', verification='Gap (short; qualified)'),
         row('Crop RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'Crop8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
         row('Crop RGBA16', 'warm-current-exact-edits-evidence.json', ['cases', 'Crop16', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
         row('Clone RGBA8', 'warm-current-exact-edits-evidence.json', ['cases', 'Clone8', 'observations', -1], 'WARM-CURRENT-EXACT-EDITS.md', True),
@@ -318,8 +318,8 @@ def render():
     encodes.extend([
         row('WebP VP8L photograph RGBA8', 'warm-vp8l-code-cost-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-CODE-COST.md', True),
         row('WebP VP8L text/diagram RGBA8', 'warm-vp8l-code-cost-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-CODE-COST.md', True),
-        row('WebP VP8 photograph RGBA8 / matched quality', 'vp8-interpolation-noise-evidence.json', ['observations', 5], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8 text/diagram RGBA8 / matched quality', 'vp8-interpolation-noise-evidence.json', ['observations', 6], 'WARM-VP8-INTERPOLATION-NOISE.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 photograph RGBA8 / matched quality', 'vp8-noise-spectrum-evidence.json', ['observations', 5], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8 text/diagram RGBA8 / matched quality', 'vp8-noise-spectrum-evidence.json', ['observations', 6], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
     ])
     edits.extend([
         row('Lanczos3 reduction RGBA8', 'warm-lanczos3-certified-fma-evidence.json', ['cases', 'Reduce8', -1], 'WARM-LANCZOS3-CERTIFIED-FMA.md', verification='Gap (short; qualified)'),
@@ -340,12 +340,12 @@ def render():
 
 Updated 2026-10-21. Priority: **complete-packet compression at the frozen quality
 gates**, lossy WebP first, then lossless WebP. Meaningful verified incremental
-gains may cost more CPU. Warm single-CPU parity (independently confirmed upper≤1x)
+gains may cost more CPU. Warm single-CPU parity (independently confirmed upperâ‰¤1x)
 remains a deferred objective; speed-only work and repeated confirmations wait
 while compression gates remain open. The 239 numeric rows retain tested-producer evidence: **{parity_count} passes,
 {gap_count} gaps, {confidence_count} confidence-open case and {cost_count} short cost screens**. The finite
 [material checklist](../benchmarks/WARM-COVERAGE.md) has 256 named cases, 17 unmeasured.
-The completed ≤2x phase belongs to 0.1.0; compression currently takes precedence over CPU parity. Results apply
+The completed â‰¤2x phase belongs to 0.1.0; compression currently takes precedence over CPU parity. Results apply
 to the named fixed inputs/settings/hardware, without extrapolating to other profiles.
 
 These tables retain the tested producers identified by each report, including
@@ -385,7 +385,7 @@ qualify both OSes. Only that existing row changes. The
 at its checkpoint. A [live-token block helper](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md)
 now saves **11.6%**, reaching **1.395x/upper1.437x**, with 760,572 B/op unchanged,
 while preserving every per-decision cancellation poll and exact failure state.
-All five existing VP8 rows refresh; four control point means are 0.5–1.8% slower,
+All five existing VP8 rows refresh; four control point means are 0.5â€“1.8% slower,
 with all quality/owner/quiet gates retained and no small-movement retuning. A
 [prepared-double Lanczos trial](../benchmarks/WARM-LANCZOS3-PREPARED-FMA-TRIAL.md)
 is correct but 1.4% slower, at 154,894 B/op, and is rejected. Accepted production
@@ -416,20 +416,20 @@ accepted production is restored with no full/package repeat. The
 20.4% of963samples in the integer inverse transform; entropy/scan work is also
 material. No timing claim. The stronger
 [exact-quadrant trial](../benchmarks/WARM-JPEG-SPARSE-QUADRANT-TRIAL.md)
-reduces frequency products64→16 but only saves a0.6% point mean; it is parked
+reduces frequency products64â†’16 but only saves a0.6% point mean; it is parked
 and accepted production is restored without full/package repeats. The
 [current direct-RGB diagnostic](../benchmarks/WARM-JPEG-DIRECT-RGB-COST.md)
 places 47.6% of934 samples in baseline AC reading and1.3% in SIMD RGB packing.
 The frozen Sparse2D packet contains no stuffed bytes. No timing claim or new
 workload matrix. JPEG tuning is deferred while lossless WebP size takes priority.
 [Certified FMA Lanczos3](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
-13.6–23.8%, with fewer allocations and exact pixels; its four gaps are now
-1.061–1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
+13.6â€“23.8%, with fewer allocations and exact pixels; its four gaps are now
+1.061â€“1.588x. Two full-FMA horizontal trials and the earlier prepared-row trial
 were rejected. Earlier profiles describe their original producers only.
 Optimize demonstrated gaps; stop passing cases. No pixel precision is relaxed.
 The [sparse JPEG FP32-FMA trial](../benchmarks/WARM-JPEG-SPARSE-FMA-TRIAL.md)
 regressed7.2%. Subsequent [storage trials](../benchmarks/WARM-JPEG-STORAGE-TRIALS.md)
-cut allocation 48.9–86.9%, but failed to improve elapsed time. Those candidates were
+cut allocation 48.9â€“86.9%, but failed to improve elapsed time. Those candidates were
 removed; their ownership checks passed. A [constant-DC trial](../benchmarks/WARM-JPEG-DC-TRIAL.md)
 saved only 1.2% and was parked. Accepted integer/EOB rounds preserve exact pixels;
 full parity remains open.
@@ -438,7 +438,7 @@ Complete async PNG and lossless WebP outputs independently pass. WebP uses appro
 libwebp exact=1 (FFmpeg encoder backend), retaining exact hidden RGB and compressed
 sizes **145,648/183,812 B**. Its passing timing does not establish compression parity.
 Lossless size parity is a high-priority open gate: the fixed opaque photograph
-must reach ≤160,032 B (currently174,748 B), and diagram ≤7,234 B (currently7,636 B),
+must reach â‰¤160,032 B (currently174,748 B), and diagram â‰¤7,234 B (currently7,636 B),
 with exact pixels and the unchanged libwebp exact=1 reference/settings. The
 [caller-JPEG controls](../benchmarks/WARM-JPEG-CALLER-MCU.md) also leave a joint
 size/quality gap: RGB42074,040/52,093 B at source-PSNR difference0.106110 dB
@@ -460,31 +460,24 @@ photograph17,366/ref17,688 B and diagram6,722/ref7,100 B retain their matched
 managed77/75 versus native75/effort4 settings; source-PSNR gaps0.140944/0.117409 dB
 pass unchanged0.25dB and exact-alpha gates. Passing complete cases stay stopped.
 
-The current [selected-coefficient round](../benchmarks/WARM-VP8-COEFFICIENT-REFINEMENT.md)
-reduces unrestricted opaque8/16 **73,740→71,154/ref72,380 B** and alpha8/16
-**98,760→96,708/ref98,590 B**. Source-quality gaps0.003192/0.022172 dB, decoder
-bounds and exact unchanged ALPH pass. Existing100/75/effort4 inputs, references
-and quality tolerances remain fixed. Rate-aware adjacent-level/EOB choices use
-current segment steps after selecting4x4 predictions, with no extra frame/cache.
-Added work is locally admitted and charged before mutation; shared refusal,
-exhaustion/cancellation and ownership contracts remain mandatory. BothOS4,699tests,
-223internal+12public+4diff scalar and same actual package/all examples qualify.
-Four short guarded costs in the table supersede the unrestricted rows, accepting
-higher CPU for packet gains; CPU parity/independent repeats remain deferred.
-
-The sole remaining lossy packet gap is **work32M101,478/ref98,590 B** (+2,888 B).
-The [pruned-prefix round](../benchmarks/WARM-WEBP-PRUNED-PREFIX.md) saves528 B with
-identical prior decodedRGBA/source quality/alpha,31,343,084units inside32M.
-Nonnegative partial-error pruning preserves original predictions and fullcandidate
-charges, freeing work for exactly one128-block entropy sample. The same borrowed
-root admits31,744 B cache beforeallocation, versus24,064; refusal, actualwork/
-cancellation and surviving-output guarantees remain. BothOS4,709tests/scalar and
-the same actual package/all examples qualify. One guarded cost replaces this row:
-15,608.22/reference53,578.57 µs,2,005,004 B/op. No independent timing repeat.
-Four unrestricted costs retain C76 identity; primary costs retain C70 identity.
-Only these frozen controls support the claims; numerical qualities are not
-interchangeable and whole-codec compression parity remains open. Lossless WebP
-follows this remaining lossy gate, then default JPEG and PNG complete-packet gaps.
+The current [DC/AC-noise round](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) reduces
+unrestricted opaque8/16 **71,154â†’70,298/ref72,380 B**, alpha8/16
+**96,708â†’96,016/ref98,590 B**, and constrained work 32M **101,478â†’100,980/ref98,590 B**.
+The sole remaining lossy complete-packet gap is **2,390 B**. Source-quality gaps
+0.005052/0.021958/0.040560 dB, decoder bounds and exact alpha pass unchanged.
+Primary photograph/diagram packets/pixels/quality remain exact. A shared analytical
+correction propagates unequal DC/AC coefficient noise through centered chroma;
+the allowance, base map, steps and clustering policy are unchanged. No new owner,
+frame/cache/copy; additional analysis is charged and 31,632,851 units fit 32M.
+Shared refusal, exhaustion/cancellation and output ownership remain mandatory.
+Both OSes pass 4,723 tests, 247 internal + 12 public + 4 differential scalar and the same actual package/all
+examples qualify. Seven short guarded costs replace all affected analysis paths;
+CPU parity/independent repeats remain deferred. Only these fixed inputs/settings
+support the claims. Lossless WebP follows the remaining lossy gate, then default
+JPEG and PNG complete-packet gaps. Earlier
+[selected-coefficient](../benchmarks/WARM-VP8-COEFFICIENT-REFINEMENT.md) and
+[pruned-prefix](../benchmarks/WARM-WEBP-PRUNED-PREFIX.md) milestones retain their
+historical evidence; their costs are superseded on these seven paths.
 
 The [lossless adaptive-predictor screen](../benchmarks/WARM-VP8L-ADAPTIVE-PREDICTOR-AUDIT.md)
 saves2,652/0 B on the fixed photograph/diagram but misses both lossless size gates.
@@ -523,7 +516,7 @@ efficiency parity is not established. Current operation timings/allocations foll
 Dedicated AMD EPYC9V45 VM; Ubuntu24.04.4; .NET10.0.8/SDK10.0.204;
 FFmpeg n8.1 (`9047fa1b084f`). One pinned CPU, one codec/conversion/filter thread,
 normal SIMD, tiering off, nonconcurrent workstation GC. Inputs are the two original
-513×259 RGBA8/16 rasters, the fixed photograph/text diagram pair and documented projections; exact case dimensions and
+513Ã—259 RGBA8/16 rasters, the fixed photograph/text diagram pair and documented projections; exact case dimensions and
 policies are in linked reports. Only the two required content controls were added; no settings grid.
 
 Times include complete public operations, admission, conversion, fresh independent
@@ -534,8 +527,8 @@ release. Startup, I/O, IPC, preparation/hashing and validation are excluded.
 
 Ratio = Lokad.Image / faster native pre/post mean; lower is faster. Upper retains
 the larger selected/all-actual confidence bound against the faster native bracket's
-lower bound. Parity confirmed requires an independent quiet repeat with upper≤1;
-a mean≤1 with upper>1 stays confidence-open. Gap rows exceed the new target.
+lower bound. Parity confirmed requires an independent quiet repeat with upperâ‰¤1;
+a meanâ‰¤1 with upper>1 stays confidence-open. Gap rows exceed the new target.
 Independent jobs retain all 12 actuals; explicitly labeled short screens retain
 all three. Both retain 5s `exclusive-vm-idle-v2` guards. Earlier records
 retain their original protocol and failures. **B/op** is managed allocation from
@@ -561,15 +554,15 @@ RGBA samples remain exact. Single-component grayscale JPEG uses the approved
 benchmark-only **SIMD libjpeg-turbo3.1.4.1** reference; FFmpeg emits three components.
 Production stays safe managed .NET 10 without dependencies or native bindings.
 
-‡ Procedural VP8 benchmark inputs freeze managed/native quality 100/75 and effort 4, retaining
+â€¡ Procedural VP8 benchmark inputs freeze managed/native quality 100/75 and effort 4, retaining
 the 0.25 dB source-quality gate and exact alpha. Matched-quality content controls use
 their linked frozen settings. [Current packet sizes](../benchmarks/WARM-VP8-DIRECTION-COVERAGE.md)
 and per-codec reports accompany time/allocation evidence; size parity remains open.
 
-¶ PNG Identify references use the public FFmpeg PNG parser/CRC plus original
+Â¶ PNG Identify references use the public FFmpeg PNG parser/CRC plus original
 complete structural/EXIF validation and owned descriptors, without inflation;
 the Stream reference also times fresh AVIO/scratch/input/EOF and release.
-‖ JPEG Identify uses FFmpeg MJPEG discard-all, original complete structural/EXIF
+â€– JPEG Identify uses FFmpeg MJPEG discard-all, original complete structural/EXIF
 validation and a timed17-byte canonical SOF2 metadata projection, fresh packet/
 descriptor ownership and reset, with zero pixel-buffer requests. WebP Identify
 uses the public FFmpeg WebP parser plus original complete RIFF/EXIF validation,
@@ -577,13 +570,13 @@ including mandatory parser buffering/EOF flush and descriptor ownership. Its
 0.0040x/upper0.0045x is specific to this metadata boundary and parser copy cost.
 All six managed metadata fields remain exact.
 
-† RGBA16 bilinear and explicit RGBA8 upscale allow native-only alpha max1/RMSE≤0.25;
+â€  RGBA16 bilinear and explicit RGBA8 upscale allow native-only alpha max1/RMSEâ‰¤0.25;
 Up8 times zero-alpha RGB clearing. Managed pixels remain exact; Down8 alpha is exact.
-§ Bicubic uses **zimg, FFmpeg's zscale backend**, with all required clamped halo,
+Â§ Bicubic uses **zimg, FFmpeg's zscale backend**, with all required clamped halo,
 packing, premultiplied float filtering, unpremultiplication/quantization, zero-alpha
-RGB clearing and independent owners timed. Native RGB/alpha max1 and both RMSE≤0.25;
-only RGBA16 513×259→513×519 permits native RGB≤2 where reference alpha≤16,≤1
-elsewhere, retaining alpha≤1/both RMSE≤0.25. Managed frozen pixels and independently
+RGB clearing and independent owners timed. Native RGB/alpha max1 and both RMSEâ‰¤0.25;
+only RGBA16 513Ã—259â†’513Ã—519 permits native RGBâ‰¤2 where reference alphaâ‰¤16,â‰¤1
+elsewhere, retaining alphaâ‰¤1/both RMSEâ‰¤0.25. Managed frozen pixels and independently
 certified rational-half cases remain exact. Linked reports specify every halo
 and scope control; no managed tolerance is introduced.
 
