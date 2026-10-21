@@ -198,7 +198,7 @@ def render():
         row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeGrayAlpha8', -1], 'WARM-PNG-BYTE-PACKING.md', True),
         row('PNG gray-alpha16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGrayAlpha16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
         row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
-        row('JPEG 4:4:4, forward-only / precision-grid decisions', 'jpeg444-precision-grid-evidence.json', ['cases', 'Encode444Stream8', -1], 'JPEG444-PRECISION-GRID.md', verification='Cost screen (CPU parity deferred)'),
+        row('JPEG 4:4:4, forward-only / joint component choices', 'jpeg444-component-triplet-evidence.json', ['cases', 'Encode444Stream8', -1], 'JPEG444-COMPONENT-TRIPLETS.md', verification='Cost screen (CPU parity deferred)'),
         row('JPEG 4:4:4, live cancelable token / prior geometric Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode444Cancelable8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
@@ -351,9 +351,9 @@ with source-PSNR gaps 0.085506/0.085851 dB inside the unchanged 0.25 dB gate.
 Grayscale remains 58,823/58,910 B;
 **optional CompactColor** remains 48,701/52,093 B on its separate procedural control.
 Equal numerical quality values do not establish equivalence. The earlier uncapped
-4:4:4 trial remains rejected; [precision-grid decisions](../benchmarks/JPEG444-PRECISION-GRID.md)
-now produce **135,630/133,041 B** (RGBA8) and **135,576/133,043 B** (RGBA16), with
-source-PSNR gaps 0.218811/0.220739 dB inside 0.25 dB. Existing 4:2:2 controls pass
+4:4:4 trial remains rejected; [joint component choices](../benchmarks/JPEG444-COMPONENT-TRIPLETS.md)
+now produce **135,481/133,041 B** (RGBA8) and **135,487/133,043 B** (RGBA16), with
+source-PSNR gaps 0.222041/0.224030 dB inside 0.25 dB. Existing 4:2:2 controls pass
 size/quality, without photographic or diagram extrapolation. [PNG Optimal RGBA8](../benchmarks/PNG-OPTIMAL-RGBA8.md) now closes the two changed
 sync/async boundaries at209,407/210,973 B, saving9,368 B each. All17 declared PNG
 packet gates pass, with exact RGBA. The public Optimal policy uses managed9 versus
@@ -364,14 +364,14 @@ The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles
 existing encode rows: 13 default passes/5 open, plus one separate optional pass.
 The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) first saved12,166 B
 on 4:4:4 forward-only/cancellable output. Source-derived coefficient decisions and progressive scans save another
-23,182 B relative to that packet; the largest remaining 4:4:4 gap is about 1.95%.
+23,331 B relative to that packet; the largest remaining 4:4:4 gap is about 1.84%.
 
-JPEG C165 qualification retains 5,006 Release tests/OS, 176+62 scalar checks/OS and
+JPEG C171 qualification retains 5,019 Release tests/OS, 189+62 scalar checks/OS and
 the same actual private 0.2.0 package/all examples on Windows/Linux. The
 [ownership repair](../benchmarks/JPEG-BUDGET-EVENT-OWNERSHIP.md) keeps caller-budget
-event storage charged through its actual users. Forward 4:4:4 records 1,312,293.197 µs,
+event storage charged through its actual users. Forward 4:4:4 records 1,374,395.962 µs,
 613,632 B/op in one short cost screen: more CPU is accepted for the compression
-gain, and CPU parity remains deferred. The prior C159 cost was1,300,808.740 µs with613,208 B/op.
+gain, and CPU parity remains deferred. The prior C165 cost was1,312,293.197 µs with613,632 B/op.
 Unaffected caller 4:2:0 retains C146's 68,162.147 µs and170,648 B/op
 in one short screen, including normalization, full encoding and fresh output ownership.
 CPU/allocation costs are recorded; speed-only work and independent confirmations

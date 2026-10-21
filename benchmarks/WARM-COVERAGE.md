@@ -1,18 +1,18 @@
 # Material warm coverage
 
-Updated2026-10-21. Compression precedes CPU parity. The finite scope remains
+Updated2026-10-22. Compression precedes CPU parity. The finite scope remains
 **256 named cases:239 numeric and17 unmeasured**. Current tested-producer evidence
 contains60 independent passes,147 gaps,one confidence-open case,16 short cost
 screens and15 superseded encoder rows. Full warm CPU parity and replacement
 readiness remain open; no new shapes, settings or quality grid is added.
 
-[C165 JPEG444 precision-grid decisions](JPEG444-PRECISION-GRID.md) save2,444/2,426B:
-135,630/133,041 and135,576/133,043 B, with unchanged quality/alpha gates passing.
-Five packet gates remain open (maximum1.95% excess). BothOS5,006 tests and176+62
+[C171 JPEG444 joint component choices](JPEG444-COMPONENT-TRIPLETS.md) save149/89B:
+135,481/133,041 and135,487/133,043 B, with unchanged quality/alpha gates passing.
+Five packet gates remain open (maximum1.84% excess). BothOS5,019 tests and189+62
 scalar checks/OS, exact independent packets across public boundaries, and the
 same actual private0.2package/all3examples pass. One core/test build/OS; the
 C161 portable benchmark and existing native/differential/driver/parser are reused.
-One complete forward444 cost is1,312,293.197us/613,632Bop; priorC159 is historical.
+One complete forward444 cost is1,374,395.962us/613,632Bop; priorC165 is historical.
 No repeated timing confirmation, CPU-parity pass or broader compression claim.
 
 [PNG Optimal RGBA8](PNG-OPTIMAL-RGBA8.md) closes the two sync/async packet gaps:
@@ -33,11 +33,11 @@ independent confirmation. Prior default6 sync cost5,406.297 us is superseded;
 old default8 async timing is historical and awaits later CPU qualification.
 Compound PNG8 crop/nearest/encode invocation costs also contain changed default
 encoding and remain historical. Other15 PNG paths and WebP costs retain
-validity; JPEG reuse follows the C165 scope above. No whole-library method audit
+validity; JPEG reuse follows the C171 scope above. No whole-library method audit
 or repeat is needed.
 
 [Default420](JPEG420-AC-TRELLIS.md) retains nine packet passes; optionalCompactColor
-stays separate. C165 updates the five444 packets and forward cost above;
+stays separate. C171 updates the five444 packets and forward cost above;
 C146caller42068,162.147 us/170,648 Bop remains valid on its unchanged path.
 All7 lossy and6 lossless WebP packet gates pass/stay stopped. No broad JPEG,
 photographic or diagram compression claim follows from procedural controls.

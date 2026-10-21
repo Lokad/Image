@@ -1211,7 +1211,7 @@ strictly cheaper feasible path that improves the original-lambda objective is
 accepted. Other components remain fixed during a solve, and the full MCU modeled
 error stays within the same grid-aware limit. Source data alone governs
 this bounded search; native encoders and measured quality never select a path.
-One final frequency sweep then considers adjacent levels in component pairs
+A following frequency sweep considers adjacent levels in component pairs
 Y/Cb, Y/Cr and Cb/Cr. It accepts strict improvements in the same RGB-error/rate
 objective with nonincreasing combined AC price and the same grid-aware
 MCU error cap. Equal-rate moves may reduce error for later pairs; exact ties keep
@@ -1219,6 +1219,14 @@ the current values. The finite bank is current/minus-one/plus-one within the
 legal effective-grid amplitude range. Four Huffman tables, price training, encoded quantizers and grid DC
 remain unchanged. Trials only read coefficients; work/cancellation checks precede
 selection and committing the two selected values.
+A final sweep considers current/minus-one/plus-one levels across all three
+components together. It retains the same error cap, objective, nonincreasing
+total AC price and stable ties. Six changed full-block prices are cached per
+frequency; the current error and three current prices come directly from the
+pair pass. All26 nonoriginal combinations remain available. No second error
+scan, full refinement, source DCT or frame copy is introduced. Invalid amplitude
+neighbors are excluded before their cached prices enter a sum, and checks precede
+price work, evaluation and the three-coefficient commit.
 Grid preparation/rescaling is identical across fixed, adaptive, caller-sample
 and asynchronous paths. It charges2880 work/MCU before mutation, replacing the
 former late precision rule without a second transform or complete decision pass.
@@ -1259,7 +1267,11 @@ The1612-byte trellis scratch is allocated once per MCU call; each frequency's
 bank is rebuilt as needed. Alongside the2048-byte price model,2304-byte MCU,
 512-byte effective-grid arrays,48-byte local candidate bank and existing scratch,
 it fits the admitted8KiB. Grid setup adds the existing2880-per-MCU precision bound
-to863442, for866322 total (288774/block); default work admission is unchanged.
+to863442, for866322 before the three-component tail. That tail charges at most
+63*(6*64+26setup+26*8trial+3commit)=39123 per MCU, reusing the existing pair state.
+The total is905445 (301815/block), included in adaptive and async estimates.
+The default2B limit is unchanged. Its48-byte stack bank is sequential with the
+prior1612-byte DAG scratch and introduces no heap owner.
 There is no heap bank matrix or frame copy. Work exhaustion or
 cancellation remains terminal; tighter limits do not bypass coefficient decisions.
 The paired tail retains only three AC prices (12 stack bytes); its scratch does

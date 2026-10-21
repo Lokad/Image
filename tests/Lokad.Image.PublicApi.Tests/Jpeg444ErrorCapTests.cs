@@ -6,8 +6,8 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class Jpeg444ErrorCapTests
 {
     [Theory]
-    [InlineData(8, 135630, "97195d3f7bacd3c7258e09226edb33bd28d3a540b2cfe8230ef6d4748bce9f87")]
-    [InlineData(16, 135576, "954d0f40b69392273da1dd84a7fa0c79f0e0fb4ac62b4f2866c75c657e21de7c")]
+    [InlineData(8, 135481, "119c1c19b9508f0f1d61c94728b552cdbb9f0ec786623e826f56e1c5327baf3e")]
+    [InlineData(16, 135487, "e16f93daf0ef4b832fade717ffda69dbe8907ee198826f2bbe21fc1f2bc7add8")]
     public async Task IndependentSourceDctPacketsAgreeAcrossInputAndOutputBoundaries(int depth, int bytes, string hash)
     {
         using var source = OriginalPixels.Buffer(513, 259, depth);
@@ -15,6 +15,7 @@ public sealed class Jpeg444ErrorCapTests
         else source.GetRow16(0)[3] = source.GetRow16(0)[513 * 4 - 1] = 0;
         var original = OriginalPixels.Bytes(source);
         var options = new JpegEncodeOptions { Quality = 69, Sampling = JpegSampling.YCbCr444, BackgroundRgb = 0x204060 };
+        Assert.Equal(2_000_000_000L, options.Limits.MaxWork);
         using var adaptive = new MemoryStream(); ImageCodec.EncodeJpeg(source, adaptive, options);
         var packet = adaptive.ToArray(); Assert.Equal(bytes, packet.Length); Assert.Equal(hash, Hash(packet));
         using var token = new CancellationTokenSource(); using var cancelable = new MemoryStream();

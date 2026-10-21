@@ -11,6 +11,8 @@ Encoded bytes and lossy reconstruction may change between encoder versions.
 The final Original4:4:4 decisions now use the intended coefficient precision grid
 with a source-derived error bound. DQT values, sampling and explicit quality
 remain unchanged; qualified compression claims apply only to their stated controls.
+Joint three-component AC choices reuse the pair stage's error/prices to fit the
+existing default work limit; terminal admission failure still aborts the operation.
 
 PNG `Optimal` now uses the deeper BCL search for every 8-bit color type, including
 RGBA. This may increase CPU time and change packet bytes; samples, filter None,

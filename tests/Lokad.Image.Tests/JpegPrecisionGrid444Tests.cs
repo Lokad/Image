@@ -27,7 +27,7 @@ public sealed class JpegPrecisionGrid444Tests
         Assert.NotEqual(coarse, values); // The priced choices survive rescaling.
         Assert.All(values, x => Assert.Equal(0, x % 8));
         Assert.Equal(sourceBefore, source); Assert.Equal(qBefore, q); Assert.Equal(pricesBefore, prices);
-        Assert.InRange(context.ConsumedWork, 2880, 3 * 49472 + JpegEncoder.Trellis444WorkPerMcu + JpegEncoder.ComponentPairWorkPerMcu);
+        Assert.InRange(context.ConsumedWork, 2880, 3 * 49472 + JpegEncoder.Trellis444WorkPerMcu + JpegEncoder.ComponentPairWorkPerMcu + JpegEncoder.ComponentTripletWorkPerMcu);
     }
 
     [Theory]

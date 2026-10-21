@@ -40,7 +40,8 @@ internal static partial class JpegEncoder
         var maximumError = PrecisionGridErrorLimit444(fineError, coarseError);
         DecideJoint444(source, quantizers[..64], quantizers[64..], values, lambda, context, prices, maximumError, limits);
         RefineJoint444(source, quantizers[..64], quantizers[64..], values, prices, lambda, context, maximumError, limits);
-        RefineComponentPairs444(source, quantizers[..64], quantizers[64..], values, prices, lambda, context, maximumError, limits);
+        var state = RefineComponentPairs444(source, quantizers[..64], quantizers[64..], values, prices, lambda, context, maximumError, limits);
+        RefineComponentTriplets444(source, quantizers[..64], quantizers[64..], values, prices, lambda, context, maximumError, state, limits);
         for (var c = 0; c < 3; c++)
         for (var i = 0; i < 64; i++)
             values[c * 64 + i] *= quantizers[(c == 0 ? 0 : 64) + i] / (c == 0 ? luma[i] : chroma[i]);

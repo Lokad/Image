@@ -9,7 +9,7 @@ internal static partial class JpegEncoder
     // The componentwise DAG holds the other components fixed. One bounded tail
     // can jointly change two adjacent levels to account for RGB cross terms.
     // Keep the same source-error cap, lambda, price models, DQT and DC.
-    internal static void RefineComponentPairs444(ReadOnlySpan<double> source, ReadOnlySpan<ushort> luma,
+    internal static Joint444State RefineComponentPairs444(ReadOnlySpan<double> source, ReadOnlySpan<ushort> luma,
         ReadOnlySpan<ushort> chroma, Span<int> values, ReadOnlySpan<int> prices, int lambda,
         OperationContext context, double? errorLimit = null, ReadOnlySpan<ushort> amplitudeLimits = default)
     {
@@ -17,7 +17,7 @@ internal static partial class JpegEncoder
             || prices.Length != 512 || lambda < 0 || amplitudeLimits.Length is not (0 or 128)
             || errorLimit.HasValue && (!double.IsFinite(errorLimit.Value) || errorLimit.Value < 0))
             throw new ArgumentException("JPEG component pairs require three complete blocks and two price models.");
-        if (lambda == 0) return;
+        if (lambda == 0) return default;
         context.Work(384);
         var originalError = 0d; var currentError = 0d;
         for (var scan = 0; scan < 64; scan++)
@@ -78,6 +78,7 @@ internal static partial class JpegEncoder
                 previous[a] = bestBitsA; previous[b] = bestBitsB; currentError += bestError;
             }
         }
+        return new(currentError, previous[0], previous[1], previous[2]);
     }
 
     private static int PairAcPrice(ReadOnlySpan<int> values, ReadOnlySpan<int> prices, int index, int replacement)
