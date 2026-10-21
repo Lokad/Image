@@ -18,7 +18,8 @@ internal static partial class JpegEncoder
         var mcus = (long)columns * rows; var blocks = mcus * (h * v + components - 1);
         var events = blocks * 64 + (options.RestartInterval == 0 ? 0 : mcus);
         var work = 2 * mcus + mcus * (h * v * (4096 + 768) + (components - 1) * (4096 + 768 * h * v))
-            + blocks * (192L + AcDecisionWork(options.Quality, components, options.Sampling, options.QuantizationPolicy)) + 262145;
+            + blocks * (192L + AcDecisionWork(options.Quality, components, options.Sampling, options.QuantizationPolicy))
+            + JointPriceTrainingWork(mcus, options.Quality, components, options.Sampling, options.QuantizationPolicy) + 262145;
         var adaptive = blocks >= 256 && events <= Array.MaxLength
             && work <= context.RemainingWork && events * sizeof(uint) + 65536 <= context.RemainingWorkingBytes
             && output is LimitedWriteStream limited && limited.SupportsAdaptiveJpegPlanning(blocks * 432 + 2048);
@@ -32,6 +33,7 @@ internal static partial class JpegEncoder
         var joint444 = acLambda != 0 && options.Sampling == JpegSampling.YCbCr444;
         Span<double> jointSource = joint444 ? stackalloc double[192] : default;
         Span<int> jointValues = joint444 ? stackalloc int[192] : default;
+        Span<int> jointPrices = joint444 ? stackalloc int[512] : default;
         var luma = Quantization(options.Quality, false, policy); var chroma = Quantization(options.Quality, true, policy);
         var pixels = new byte[64]; var transformed = new double[64]; var predictors = new int[components];
         Span<int> quantized = stackalloc int[64];
@@ -45,6 +47,8 @@ internal static partial class JpegEncoder
         }
         try
         {
+            if (joint444) TrainJoint444Prices(null, source, options.BackgroundRgb, columns, rows, luma, chroma,
+                jointSource, jointValues, jointPrices, acLambda, context);
             if (adaptive)
             {
                 frequencies = new long[4][];
@@ -80,7 +84,7 @@ internal static partial class JpegEncoder
                         }
                         if (joint444)
                         {
-                            if (!PrepareJoint444Block(blockPixels, q, jointSource, jointValues, component, luma, chroma, acLambda, context)) continue;
+                            if (!PrepareJoint444Block(blockPixels, q, jointSource, jointValues, component, luma, chroma, acLambda, context, jointPrices)) continue;
                             if (adaptive) eventCount = AppendJoint444Events(jointValues, predictors, frequencies!, cache!, eventCount, context);
                             else for (var coded = 0; coded < 3; coded++)
                                 WriteFixedBlock(jointValues.Slice(coded * 64, 64), ref predictors[coded], writer!, FixedAc.Words);

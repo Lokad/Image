@@ -1165,7 +1165,15 @@ maps their DCT residuals through the existing inverse BT.601 matrix and averages
 squared RGB error. Cumulative added modeled error is capped at 1/32 of the initial
 MCU error, including DC in that initial estimate while retaining its coefficients.
 It visits frequencies in reverse zigzag and components Y/Cb/Cr, accepting strict
-cost improvements with stable closest-category-first ties. This model precedes
+cost improvements with stable closest-category-first ties. Its two AC price
+models (Y and shared Cb/Cr) use at most64 evenly spaced distinct source MCUs,
+including the endpoints. These samples first undergo the geometric decisions;
+their AC histograms receive +1 smoothing on all162 legal symbols. Q8 prices are
+the difference of deterministic integer log2 estimates, clamped to1..4096;
+amplitude bits are scaled by256. Integer logs use eight Q31 square/normalize
+steps, without platform-dependent transcendental calls. Sampling, histograms and
+prices remain operation-local and do not depend on entropy/output admission.
+This model precedes
 clipping/rounding and does not replace measured RGB reconstruction-quality gates. Zero lambda,
 grayscale and CompactColor skip this pass. Original color packets
 and lossy pixels can therefore change from earlier Original encodes; quality
@@ -1174,9 +1182,10 @@ binary64 transform supplies the decision errors. Each pricing scan charges64 wor
 units before examining/modifying coefficients (at most4096 per subsampled block).
 Joint 4:4:4 charges192 for the initial error scan,192 for initial prices, and64
 before each category trial: at most121344 per MCU, or40448 per block. Adaptive and
-async caller-sample staging estimates include this bound. Three-block scratch is
-2304 bytes within the existing8 KiB workspace, with no frame copy. Existing
-per-block scratch suffices without new heap or frame storage. Work exhaustion or
+async caller-sample staging estimates include this bound and the source sketch:
+at most136129 per sampled MCU, plus3632 to finish both models. A512-int stack
+histogram becomes the prices in place. Its2048 bytes and2304-byte MCU scratch
+fit the existing admitted8KiB workspace, without new heap or frame storage. Work exhaustion or
 cancellation remains terminal; tighter limits do not bypass coefficient decisions.
 
 Huffman

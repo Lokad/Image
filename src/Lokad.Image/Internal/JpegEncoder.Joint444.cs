@@ -6,13 +6,13 @@ internal static partial class JpegEncoder
     // workspace. All source sampling/flattening remains at the original boundary.
     private static bool PrepareJoint444Block(ReadOnlySpan<byte> pixels, ReadOnlySpan<ushort> quantization,
         Span<double> source, Span<int> values, int component, ReadOnlySpan<ushort> luma,
-        ReadOnlySpan<ushort> chroma, int lambda, OperationContext context)
+        ReadOnlySpan<ushort> chroma, int lambda, OperationContext context, ReadOnlySpan<int> prices = default)
     {
         var block = source.Slice(component * 64, 64);
         JpegTransform.Forward(pixels, block, context);
         Quantize(block, quantization, values.Slice(component * 64, 64));
         if (component != 2) return false;
-        DecideJoint444(source, luma, chroma, values, lambda, context);
+        DecideJoint444(source, luma, chroma, values, lambda, context, prices);
         return true;
     }
 
@@ -20,9 +20,10 @@ internal static partial class JpegEncoder
     // RGB error uses the library's inverse BT.601 before clipping/rounding; actual
     // matched-reconstruction quality is qualified separately. DC/DQT are retained.
     internal static void DecideJoint444(ReadOnlySpan<double> source, ReadOnlySpan<ushort> luma,
-        ReadOnlySpan<ushort> chroma, Span<int> values, int lambda, OperationContext context)
+        ReadOnlySpan<ushort> chroma, Span<int> values, int lambda, OperationContext context, ReadOnlySpan<int> prices = default)
     {
-        if (source.Length != 192 || values.Length != 192 || luma.Length != 64 || chroma.Length != 64 || lambda < 0)
+        if (source.Length != 192 || values.Length != 192 || luma.Length != 64 || chroma.Length != 64 || lambda < 0
+            || prices.Length is not (0 or 512))
             throw new ArgumentException("Joint JPEG decisions require three complete co-sited blocks.");
         if (lambda == 0) return;
         context.Work(192);
@@ -39,7 +40,8 @@ internal static partial class JpegEncoder
         context.Work(192);
         Span<int> previousBits = stackalloc int[3];
         for (var component = 0; component < 3; component++)
-            previousBits[component] = AcDecisionBits(values.Slice(component * 64, 64), lengths);
+            previousBits[component] = prices.IsEmpty ? AcDecisionBits(values.Slice(component * 64, 64), lengths)
+                : JointAcPrice(values.Slice(component * 64, 64), prices.Slice(component == 0 ? 0 : 256, 256));
         for (var scan = 63; scan > 0; scan--)
         {
             var index = JpegTransform.Zigzag[scan];
@@ -61,11 +63,12 @@ internal static partial class JpegEncoder
                         var magnitude = (1 << category) - 1;
                         var value = original > 0 ? magnitude : -magnitude;
                         values[at] = value;
-                        var nextBits = AcDecisionBits(values.Slice(component * 64, 64), lengths);
+                        var nextBits = prices.IsEmpty ? AcDecisionBits(values.Slice(component * 64, 64), lengths)
+                            : JointAcPrice(values.Slice(component * 64, 64), prices.Slice(component == 0 ? 0 : 256, 256));
                         var residual = source[at] - (double)value * (component == 0 ? luma[index] : chroma[index]);
                         var error = JointRgbError(component == 0 ? residual : ey,
                             component == 1 ? residual : ecb, component == 2 ? residual : ecr) - before;
-                        var cost = error + (long)lambda * (nextBits - previousBits[component]);
+                        var cost = error + (long)lambda * (nextBits - previousBits[component]) / (prices.IsEmpty ? 1d : 256d);
                         if (additionalError + error <= maximumError && cost < bestCost)
                         { bestValue = value; bestBits = nextBits; bestError = error; bestCost = cost; }
                     }

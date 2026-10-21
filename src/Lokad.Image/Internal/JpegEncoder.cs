@@ -31,6 +31,7 @@ internal static partial class JpegEncoder
         var joint444 = acLambda != 0 && options.Sampling == JpegSampling.YCbCr444;
         Span<double> jointSource = joint444 ? stackalloc double[192] : default;
         Span<int> jointValues = joint444 ? stackalloc int[192] : default;
+        Span<int> jointPrices = joint444 ? stackalloc int[512] : default;
         var dcSymbols = Enumerable.Range(0, 12).Select(value => (byte)value).ToArray();
         var ac = FixedAc.Table;
         var acWords = FixedAc.Words;
@@ -38,6 +39,8 @@ internal static partial class JpegEncoder
         // The existing quantization destination fits in the admitted fixed
         // workspace. Keep it on the safe stack when passed to the SIMD helper.
         Span<int> quantized = stackalloc int[64];
+        if (joint444) TrainJoint444Prices(image, default, options.BackgroundRgb, columns, rows, luma, chroma,
+            jointSource, jointValues, jointPrices, acLambda, context);
         output.Write(new byte[] { 255, 216 });
         Segment(output, 0xE0, new byte[] { 74, 70, 73, 70, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0 });
         WriteQuantization(output, luma, 0);
@@ -147,7 +150,7 @@ internal static partial class JpegEncoder
                     }
                     if (joint444)
                     {
-                        if (!PrepareJoint444Block(pixels, q, jointSource, jointValues, component, luma, chroma, acLambda, context)) continue;
+                        if (!PrepareJoint444Block(pixels, q, jointSource, jointValues, component, luma, chroma, acLambda, context, jointPrices)) continue;
                         for (var coded = 0; coded < 3; coded++)
                             WriteFixedBlock(jointValues.Slice(coded * 64, 64), ref predictors[coded], writer, acWords);
                         continue;
@@ -231,7 +234,8 @@ internal static partial class JpegEncoder
         if (blocks < 256) return false;
         var cacheSamples = blocks * 64 + (options.RestartInterval == 0 ? 0 : mcus);
         var work = 2 * mcus + mcus * (h * v * (4096 + 768) + (components - 1) * (4096 + 768 * h * v))
-            + blocks * (192L + AcDecisionWork(options.Quality, components, options.Sampling, options.QuantizationPolicy)) + 262145;
+            + blocks * (192L + AcDecisionWork(options.Quality, components, options.Sampling, options.QuantizationPolicy))
+            + JointPriceTrainingWork(mcus, options.Quality, components, options.Sampling, options.QuantizationPolicy) + 262145;
         var memory = image.ByteLength + 8192L + cacheSamples * sizeof(uint) + 65536;
         var outputMaximum = blocks * 432 + 2048;
         return cacheSamples <= Array.MaxLength && work <= context.RemainingWork && memory <= context.RemainingWorkingBytes
@@ -270,8 +274,11 @@ internal static partial class JpegEncoder
             var joint444 = acLambda != 0 && options.Sampling == JpegSampling.YCbCr444;
             Span<double> jointSource = joint444 ? stackalloc double[192] : default;
             Span<int> jointValues = joint444 ? stackalloc int[192] : default;
+            Span<int> jointPrices = joint444 ? stackalloc int[512] : default;
             var pixels = new byte[64]; var transformed = new double[64]; var predictors = new int[components];
             Span<int> quantized = stackalloc int[64]; var eventCount = 0;
+            if (joint444) TrainJoint444Prices(image, default, options.BackgroundRgb, columns, rows, luma, chroma,
+                jointSource, jointValues, jointPrices, acLambda, context);
             for (var mcu = 0; mcu < columns * rows; mcu++)
             {
                 context.Work(1);
@@ -361,7 +368,7 @@ internal static partial class JpegEncoder
                         }
                         if (joint444)
                         {
-                            if (!PrepareJoint444Block(pixels, q, jointSource, jointValues, component, luma, chroma, acLambda, context)) continue;
+                            if (!PrepareJoint444Block(pixels, q, jointSource, jointValues, component, luma, chroma, acLambda, context, jointPrices)) continue;
                             eventCount = AppendJoint444Events(jointValues, predictors, frequencies, cache, eventCount, context);
                             continue;
                         }

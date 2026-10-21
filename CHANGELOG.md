@@ -33,6 +33,8 @@
   original quantization tables, grayscale, shared admission and ownership remain unchanged.
 - Source-relative block-error caps extend bounded AC decisions to default 4:4:4
   JPEG, preserving quantizers/DC and the separately verified reconstruction-quality gates.
+- Bounded source-derived AC prices further reduce default 4:4:4 JPEG output,
+  preserving shared admission, cancellation and independent output ownership.
 - Coupled RGB-error modeling and smaller amplitude-category choices further reduce
   default 4:4:4 JPEG packets using bounded MCU scratch and admitted work.
 - Caller-budget JPEG encoding keeps adaptive event storage within its operation owner,

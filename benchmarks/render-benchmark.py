@@ -198,7 +198,7 @@ def render():
         row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeGrayAlpha8', -1], 'WARM-PNG-BYTE-PACKING.md', True),
         row('PNG gray-alpha16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGrayAlpha16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
         row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
-        row('JPEG 4:4:4, forward-only / coupled RGB decisions and adaptive Huffman', 'jpeg-joint-rgb-decision-evidence.json', ['cases', 'Encode444Stream8', -1], 'JPEG-JOINT-RGB-DECISIONS.md', verification='Cost screen (CPU parity deferred)'),
+        row('JPEG 4:4:4, forward-only / source-trained AC prices and adaptive Huffman', 'jpeg-source-ac-price-evidence.json', ['cases', 'Encode444Stream8', -1], 'JPEG-SOURCE-AC-PRICES.md', verification='Cost screen (CPU parity deferred)'),
         row('JPEG 4:4:4, live cancelable token / prior geometric Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode444Cancelable8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
@@ -350,22 +350,22 @@ These are bounded controls, not general-image compression claims.
 Its remaining 7.1% size gap is open. Grayscale remains 58,823/58,910 B;
 **optional CompactColor** remains 48,701/52,093 B on its separate procedural control.
 Equal numerical quality values do not establish equivalence. The earlier uncapped
-4:4:4 trial remains rejected; [coupled RGB decisions](../benchmarks/JPEG-JOINT-RGB-DECISIONS.md)
-now produce **150,479/133,041 B** (RGBA8) and **150,395/133,043 B** (RGBA16), with
-source-PSNR gaps 0.225/0.233 dB inside 0.25 dB. Existing 4:2:2 controls pass
+4:4:4 trial remains rejected; [source-trained AC prices](../benchmarks/JPEG-SOURCE-AC-PRICES.md)
+now produce **149,650/133,041 B** (RGBA8) and **149,528/133,043 B** (RGBA16), with
+source-PSNR gaps 0.226/0.234 dB inside 0.25 dB. Existing 4:2:2 controls pass
 size/quality, without photographic or diagram extrapolation. PNG retains 15/17
 complete-packet passes; two level-6 RGBA8 boundaries remain218,775/210,973 B.
 A timing pass or 5% IDAT tolerance does not establish packet-size parity.
 The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles all 19
 existing encode rows: 5 default passes/13 open, plus one separate optional pass.
 The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) first saved12,166 B
-on 4:4:4 forward-only/cancellable output. Current coupled decisions save another
-8,333 B relative to that packet; the largest remaining 4:4:4 gap is about 13.1%.
+on 4:4:4 forward-only/cancellable output. Current source-priced coupled decisions save another
+9,162 B relative to that packet; the largest remaining 4:4:4 gap is about 12.5%.
 
-The current JPEG producer passes 4,917 Release tests/OS, 97+53 scalar checks/OS and
+The current JPEG producer passes 4,935 Release tests/OS, 115+53 scalar checks/OS and
 the same actual private 0.2.0 package/all examples on Windows/Linux. The
 [ownership repair](../benchmarks/JPEG-BUDGET-EVENT-OWNERSHIP.md) keeps caller-budget
-event storage charged through its actual users. Forward 4:4:4 records 55,068.595 µs,
+event storage charged through its actual users. Forward 4:4:4 records 54,822.079 µs,
 563,802 B/op in one short cost screen: more CPU is accepted for the compression
 gain, and CPU parity remains deferred. The retained caller 4:2:0 cost keeps its
 original tested producer; it was not retimed in this round.
