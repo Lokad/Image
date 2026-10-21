@@ -37,6 +37,8 @@
   preserving shared admission, cancellation and independent output ownership.
 - Adjacent AC choices improve coupled color decisions without changing JPEG
   quantization tables or DC coefficients; reconstruction quality is verified separately.
+- Bounded source-constrained AC trellis planning further reduces default 4:4:4
+  JPEG packets, preserving admission, cancellation and output ownership.
 - Coupled RGB-error modeling and smaller amplitude-category choices further reduce
   default 4:4:4 JPEG packets using bounded MCU scratch and admitted work.
 - Caller-budget JPEG encoding keeps adaptive event storage within its operation owner,

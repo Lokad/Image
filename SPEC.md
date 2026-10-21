@@ -1179,6 +1179,16 @@ one, including initially zero values, within the baseline amplitude range
 strict improvement preserves the original and earlier-choice ties. These neighbors
 can reduce coupled RGB error within the same amplitude category. The geometric
 source trainer retains its smaller-category-only decisions. DC stays unchanged.
+The priced 4:4:4 pass then refines complete AC paths, one component at a time.
+A last-nonzero-position DAG prices zero gaps, ZRL, categories, amplitudes and EOB.
+Its bank contains the current and original nearest coefficients, smaller-category
+levels and original nearest minus/plus one. Stable shortest-path ties retain the
+first enumerated choices. It tries the original lambda; an over-budget path leads
+to zero and six fixed bisection probes between zero and that lambda. Only a
+strictly cheaper feasible path that improves the original-lambda objective is
+accepted. Other components remain fixed during a solve, and the full MCU modeled
+error stays within original nearest error times33/32. Source data alone governs
+this bounded search; native encoders and measured quality never select a path.
 This model precedes
 clipping/rounding and does not replace measured RGB reconstruction-quality gates. Zero lambda,
 grayscale and CompactColor skip this pass. Original color packets
@@ -1186,14 +1196,17 @@ and lossy pixels can therefore change from earlier Original encodes; quality
 numbering does not establish equivalence with another encoder. The direct frozen
 binary64 transform supplies the decision errors. Each pricing scan charges64 work
 units before examining/modifying coefficients (at most4096 per subsampled block).
-Joint 4:4:4 charges192 for the initial error scan,192 for initial prices, and64
-before each trial: at most145536 per final priced MCU, or48512 per block. The
-geometric trainer retains its121344-per-MCU bound. Adaptive and
-async caller-sample staging estimates include this bound and the source sketch:
-at most136129 per sampled MCU, plus3632 to finish both models. A512-int stack
-histogram becomes the prices in place. Its2048 bytes and2304-byte MCU scratch
-fit the existing admitted8KiB workspace, including48 bytes of candidate levels
-allocated once per decision call, without new heap or frame storage. Work exhaustion or
+Local 4:4:4 decisions charge192 for the initial error scan,192 for initial prices,
+and64 before each trial: at most145536 per priced MCU (48512/block). The geometric
+trainer retains its121344-per-MCU bound. Trellis planning adds at most521904,
+giving667440 per final MCU (222480/block). Every bounded bank, arc, probe,
+reconstruction and selection step charges work before execution. Adaptive and
+async staging estimates also include source sampling: at most136129 per sampled
+MCU plus3632 to finish both models. Default work limits remain unchanged.
+The1612-byte trellis scratch is allocated once per MCU call; each frequency's
+bank is rebuilt as needed. Alongside the2048-byte price model,2304-byte MCU,
+48-byte local candidate bank and existing scratch, it fits the admitted8KiB.
+There is no heap bank matrix or frame copy. Work exhaustion or
 cancellation remains terminal; tighter limits do not bypass coefficient decisions.
 
 Huffman

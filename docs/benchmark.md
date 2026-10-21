@@ -12,9 +12,9 @@ These are bounded controls, not general-image compression claims.
 Its remaining 7.1% size gap is open. Grayscale remains 58,823/58,910 B;
 **optional CompactColor** remains 48,701/52,093 B on its separate procedural control.
 Equal numerical quality values do not establish equivalence. The earlier uncapped
-4:4:4 trial remains rejected; [adjacent AC choices](../benchmarks/JPEG-ADJACENT-AC-LEVELS.md)
-now produce **149,037/133,041 B** (RGBA8) and **148,972/133,043 B** (RGBA16), with
-source-PSNR gaps 0.224518/0.232120 dB inside 0.25 dB. Existing 4:2:2 controls pass
+4:4:4 trial remains rejected; [source-constrained trellis](../benchmarks/JPEG-CONSTRAINED-AC-TRELLIS.md)
+now produce **142,580/133,041 B** (RGBA8) and **142,544/133,043 B** (RGBA16), with
+source-PSNR gaps 0.188932/0.195266 dB inside 0.25 dB. Existing 4:2:2 controls pass
 size/quality, without photographic or diagram extrapolation. PNG retains 15/17
 complete-packet passes; two level-6 RGBA8 boundaries remain218,775/210,973 B.
 A timing pass or 5% IDAT tolerance does not establish packet-size parity.
@@ -22,13 +22,13 @@ The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles
 existing encode rows: 5 default passes/13 open, plus one separate optional pass.
 The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) first saved12,166 B
 on 4:4:4 forward-only/cancellable output. Current source-priced coupled decisions save another
-9,775 B relative to that packet; the largest remaining 4:4:4 gap is about 12.0%.
+16,232 B relative to that packet; the largest remaining 4:4:4 gap is about 7.2%.
 
-The current JPEG producer passes 4,943 Release tests/OS, 123+53 scalar checks/OS and
+The current JPEG producer passes 4,953 Release tests/OS, 132+54 scalar checks/OS and
 the same actual private 0.2.0 package/all examples on Windows/Linux. The
 [ownership repair](../benchmarks/JPEG-BUDGET-EVENT-OWNERSHIP.md) keeps caller-budget
-event storage charged through its actual users. Forward 4:4:4 records 106,257.837 µs,
-563,924 B/op in one short cost screen: more CPU is accepted for the compression
+event storage charged through its actual users. Forward 4:4:4 records 796,455.405 µs,
+564,192 B/op in one short cost screen: more CPU is accepted for the compression
 gain, and CPU parity remains deferred. The retained caller 4:2:0 cost keeps its
 original tested producer; it was not retimed in this round.
 CPU/allocation costs are recorded; speed-only work and independent confirmations
@@ -189,7 +189,7 @@ is a CPU-parity confirmation.
 | [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 4,174.10 | 4,289.79 | 0.973 / 0.980 | 264,179 | Parity confirmed |
 | [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 9,426.43 | 10,150.04 | 0.929 / 0.933 | 1,052,317 | Parity confirmed |
 | [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,894.69 | 3,771.76 | 1.033 / 1.115 | 559,418 | Prior production; reconfirm |
-| [JPEG 4:4:4, forward-only / adjacent AC levels and adaptive Huffman](../benchmarks/JPEG-ADJACENT-AC-LEVELS.md) | 106,257.84 | 3,780.69 | 28.105 / 36.492 | 563,924 | Cost screen (CPU parity deferred) |
+| [JPEG 4:4:4, forward-only / constrained AC trellis and adaptive Huffman](../benchmarks/JPEG-CONSTRAINED-AC-TRELLIS.md) | 796,455.41 | 3,780.72 | 210.662 / 221.706 | 564,192 | Cost screen (CPU parity deferred) |
 | [JPEG 4:4:4, live cancelable token / prior geometric Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 4,465.15 | 3,775.40 | 1.183 / 1.364 | 525,997 | Prior production; reconfirm |
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,980.90 | 3,855.74 | 1.032 / 1.135 | 556,284 | Prior production; reconfirm |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,579.93 | 2,354.66 | 1.096 / 1.227 | 294,116 | Prior production; reconfirm |

@@ -7,22 +7,23 @@ Updated 2026-10-21. Compression precedes CPU parity. The finite scope remains
 and **14 superseded JPEG rows**. Full warm single-CPU parity and replacement
 readiness remain open.
 
-[Adjacent AC choices](JPEG-ADJACENT-AC-LEVELS.md) reduce the existing
-4:4:4 packets to 149,037/133,041 B and 148,972/133,043 B for 8/16-bit input.
-Source-PSNR gaps 0.224518/0.232120 dB pass the unchanged 0.25 dB gate; maximum
-packet excess remains about 12.0%. Original DQT/DC and the geometric source
-trainer stay fixed. There is no photographic or diagram compression claim.
+[Source-constrained trellis](JPEG-CONSTRAINED-AC-TRELLIS.md) reduces the existing
+4:4:4 packets to 142,580/133,041 B and 142,544/133,043 B for 8/16-bit input.
+Source-PSNR gaps 0.188932/0.195266 dB pass the unchanged 0.25 dB gate; maximum
+packet excess remains about 7.2%. Original DQT/DC and the geometric source trainer
+stay fixed. There is no photographic or diagram compression claim.
 
-The current producer passes 4,943 tests/OS, 123+53 scalar checks/OS and the same
-actual package/all examples on both platforms. One forward 4:4:4 short cost is
-106,257.837 us, 563,924 B/op, ratio 28.105/upper 36.492. This substantial CPU cost
-is accepted for verified613/556B compression gains. There is no CPU-parity or
-speed-improvement claim/confirmation. Other observations keep their original
-tested producers, with no repeated timing or whole-library audit.
+The current producer passes 4,953 tests/OS, 132+54 scalar checks/OS and the same actual
+package/all examples on both platforms. One forward 4:4:4 short cost is 796,455.405 us,
+564,192 B/op, ratio 210.662/upper 221.706. This large CPU cost is accepted for
+verified 6,457/6,428 B compression gains. There is no CPU-parity or speed-improvement
+claim/confirmation. Other observations retain their original tested producers,
+with no repeated timing or whole-library audit. Shared 8 KiB fixed-workspace,
+terminal refusal and successful subsequent use after release are qualified.
 
 The ten named old subsampled rows in [C124 evidence](jpeg-ac-decision-evidence.json)
-and four other affected 4:4:4 rows remain superseded. C139's current forward-only
-screen replaces C137's observation; current packets/quality are reconciled.
+and four other affected 4:4:4 rows remain superseded. C142's current forward-only
+screen replaces C139's observation; current packets/quality are reconciled.
 Historical means do not prove current gaps. Another 31 metadata confirmations
 remain pending, with equivalent PNG typed fields required before timing. Reuse
 unaffected evidence and stop passing controls; do not add an image/settings grid

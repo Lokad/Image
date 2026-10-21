@@ -6,8 +6,8 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class Jpeg444ErrorCapTests
 {
     [Theory]
-    [InlineData(8, 149037, "9f45d76fbd889700f8c05e8f7db1452868da4204c881f3e8ca5eb4e204d84508")]
-    [InlineData(16, 148972, "505e70ab1071fc64c868352ab884143f723ff54b5bd247909d8038e368b4b2ce")]
+    [InlineData(8, 142580, "bdfc9d2c719ccff4c0c87e1f0fdfcc1f0719a8e4f55cc8073ddb609ef6a29542")]
+    [InlineData(16, 142544, "cd10d2404f3d930a51abf1068c7fb4238ae12e8293471682a9668d1d1d095378")]
     public async Task IndependentSourceDctPacketsAgreeAcrossInputAndOutputBoundaries(int depth, int bytes, string hash)
     {
         using var source = OriginalPixels.Buffer(513, 259, depth);
@@ -20,7 +20,10 @@ public sealed class Jpeg444ErrorCapTests
         using var token = new CancellationTokenSource(); using var cancelable = new MemoryStream();
         ImageCodec.EncodeJpeg(source, cancelable, options, token.Token); Assert.Equal(packet, cancelable.ToArray());
         using var fixedOutput = new MemoryStream();
-        ImageCodec.EncodeJpeg(source, fixedOutput, options with { Limits = new() { MaxWorkingBytes = original.Length + 8192L } });
+        using var root = new TestMemoryBudget(8192);
+        ImageCodec.EncodeJpeg(source, fixedOutput, options with
+        { Limits = new() { MaxWorkingBytes = original.Length + 8192L, MemoryBudget = root } });
+        Assert.Equal(0, root.Bytes); Assert.Equal(8192, root.Peak); Assert.False(root.IsDisposed);
         using var decoded = ImageCodec.Decode(packet); using var fixedPixels = ImageCodec.Decode(fixedOutput.ToArray());
         Assert.Equal(OriginalPixels.Bytes(decoded), OriginalPixels.Bytes(fixedPixels));
 
@@ -37,6 +40,25 @@ public sealed class Jpeg444ErrorCapTests
         Assert.Equal(original, OriginalPixels.Bytes(source)); Assert.Equal(unchanged, samples);
         source.Dispose(); adaptive.Dispose(); caller.Dispose(); samples.AsSpan().Clear();
         Assert.Equal(packet, asyncSamples.ToArray()); Assert.True(asyncSamples.CanWrite);
+    }
+
+    [Fact]
+    public void WorkspaceRefusalIsTerminalAndReleasedCapacityAllowsTheNextOperation()
+    {
+        using var source = OriginalPixels.Buffer(17, 11, 8);
+        var original = OriginalPixels.Bytes(source);
+        using var root = new TestMemoryBudget(8192); using var held = root.CreateScope();
+        Assert.True(held.TryReserve(1, out var reservation));
+        var options = new JpegEncodeOptions { Quality = 69, Sampling = JpegSampling.YCbCr444, BackgroundRgb = 0x204060,
+            Limits = new() { MemoryBudget = root, MaxWorkingBytes = original.Length + 8192L } };
+        using var output = new MemoryStream(); var attempts = root.Attempts;
+        var error = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(source, output, options));
+        Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
+        Assert.Equal(attempts + 1, root.Attempts); Assert.Equal(1, root.Bytes); Assert.Equal(0, output.Length);
+        reservation!.Dispose(); Assert.Equal(0, root.Bytes);
+        ImageCodec.EncodeJpeg(source, output, options);
+        Assert.True(output.Length > 0); Assert.True(output.CanWrite); Assert.Equal(0, root.Bytes);
+        Assert.Equal(8192, root.Peak); Assert.False(root.IsDisposed); Assert.Equal(original, OriginalPixels.Bytes(source));
     }
 
     private static string Hash(byte[] bytes) => Convert.ToHexStringLower(SHA256.HashData(bytes));

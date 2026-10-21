@@ -13,6 +13,7 @@ internal static partial class JpegEncoder
         Quantize(block, quantization, values.Slice(component * 64, 64));
         if (component != 2) return false;
         DecideJoint444(source, luma, chroma, values, lambda, context, prices);
+        if (!prices.IsEmpty) RefineJoint444(source, luma, chroma, values, prices, lambda, context);
         return true;
     }
 
