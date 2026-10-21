@@ -1426,6 +1426,14 @@ is reserved before allocation; tighter local limits keep the smaller sample befo
 shared admission. Actual exhaustion, refusal and cancellation terminate without
 retry. The larger sample changes encoded coefficients' probabilities, preserving
 quantization, reconstructed pixels, alpha and output ownership.
+An independently admitted token-class histogram can extend that cache to 384
+macroblocks. Its one-counter updates replace repeated tree-branch updates; bounded
+per-context reduction recovers the same branch statistics. The original 128-block
+fit still controls coefficient decisions. A later entropy-only fit and replay
+preserve those decisions and pixels. The larger retained owner includes histogram
+capacity and is reserved before allocation; tighter local allowances keep the
+original cache before shared admission. Actual work, terminal failures and
+independent output lifetimes remain enforced.
 The same constrained path can separately admit one-step reductions of nearest
 coefficient magnitudes 1..4 using the existing segment rate scale and token context.
 The smaller explicit token must offset its additional coefficient error; base

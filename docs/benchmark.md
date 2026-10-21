@@ -117,27 +117,27 @@ more CPU and allocation for size: photograph9,912,952 B/op versus historical702,
 Both lossless size gates remain open against160,032/7,234 B. The earlier
 [structure audit](../benchmarks/WARM-VP8L-COMPRESSION-STRUCTURE.md) is diagnostic evidence.
 The [seven-control lossy size ledger](../benchmarks/WARM-VP8-SIZE-COVERAGE.md)
-now records **six passes and one open complete-packet gate**. Fixed primary
+now records **seven passing complete-packet gates**. Fixed primary
 photograph17,366/ref17,688 B and diagram6,722/ref7,100 B retain their matched
 managed77/75 versus native75/effort4 settings; source-PSNR gaps0.140944/0.117409 dB
 pass unchanged0.25dB and exact-alpha gates. Passing complete cases stay stopped.
 
-The [DC/AC-noise round](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) sets the current
-unrestricted opaque8/16 packets at **70,298/ref72,380 B** and alpha8/16 at
-**96,016/ref98,590 B**. The current
-[small-level round](../benchmarks/WARM-VP8-SMALL-LEVELS.md) further reduces
-constrained work32M **100,544→99,448/ref98,590 B**, leaving **858 B** open.
-Source-quality gap 0.025713 dB, exact ALPH/source and decoder bounds pass unchanged.
-Nearest magnitudes 1..4 can drop one level under the existing explicit-token rate
-score and segment steps, without tuning. Extra 4 KiB stack (8 KiB total) is locally
-checked and shared-admitted before use, with cancellation checked before reservation.
-31,782,253 actual units fit 32M; refusal/exhaustion/cancel remain terminal. No new
-heap owner/frame/cache/copy. Both OSes pass 4,749 tests, 271 internal + 14 public + 4 differential
-scalar and the same actual private package/all examples. One short guarded cost
-replaces this row, accepting higher CPU for 1,096 B saved. Six other costs retain
-C83 identities. Primary packets/pixels/quality remain exact. CPU parity and timing
-repeats stay deferred. Claims cover these fixed inputs/settings only. Lossless WebP
-follows this remaining lossy gate, then default JPEG and PNG complete-packet gaps.
+All **seven declared lossy WebP complete-packet gates pass**. The
+[token-histogram round](../benchmarks/WARM-VP8-HISTOGRAM384.md) reduces the final
+work32M packet **99,448→98,490/ref98,590 B**, 100 B below its fixed reference.
+Every signed coefficient, native/public pixel, source-quality record and compressed
+ALPH byte is exactly C87. One token-class counter replaces repeated branch updates;
+384 cached blocks support final entropy fitting while 128 still controls coefficient
+decisions. The 63,232 B owner is shared-admitted before allocation; actual 31,802,951
+units fit 32M, terminal failure/ownership contracts preserved. Both OSes pass 4,759
+tests, 281 internal + 14 public + 4 differential scalar and the same actual package/all examples.
+One guarded short cost replaces this row; six historical C83 costs retain producer
+identities without new current-code confirmations. The other passing packets are
+opaque8/16 **70,298/ref72,380 B**, alpha8/16 **96,016/ref98,590 B**, photograph
+**17,366/ref17,688 B** and diagram **6,722/ref7,100 B**. Frozen inputs/settings and
+quality gates remain. These controls establish no broader compression or CPU-parity
+claim. Lossless WebP is next; default JPEG/PNG complete-packet gaps and the full
+finite single-CPU warm-performance objective remain open.
 
 The [lossless adaptive-predictor screen](../benchmarks/WARM-VP8L-ADAPTIVE-PREDICTOR-AUDIT.md)
 saves2,652/0 B on the fixed photograph/diagram but misses both lossless size gates.
@@ -343,7 +343,7 @@ reconciliation now covers every numeric row.
 | [WebP VP8, opaque from RGBA16â€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 75,226.22 | 15,616.85 | 4.817 / 5.060 | 1,006,520 | Cost screen (CPU parity deferred) |
 | [WebP VP8 + alphaâ€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 86,100.75 | 53,409.99 | 1.612 / 1.790 | 1,537,304 | Cost screen (CPU parity deferred) |
 | [WebP VP8 + alpha from RGBA16â€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 83,863.51 | 53,727.26 | 1.561 / 1.652 | 1,537,304 | Cost screen (CPU parity deferred) |
-| [WebP VP8 + alphaâ€¡, caller work budget32M](../benchmarks/WARM-VP8-SMALL-LEVELS.md) | 19,482.25 | 53,662.00 | 0.363 / 0.407 | 2,004,836 | Cost screen (CPU parity deferred) |
+| [WebP VP8 + alphaâ€¡, caller work budget32M](../benchmarks/WARM-VP8-HISTOGRAM384.md) | 19,502.47 | 53,435.71 | 0.365 / 0.433 | 2,036,564 | Cost screen (CPU parity deferred) |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 57,489.75 | 121,784.50 | 0.472 / 0.481 | 10,286,728 | Parity confirmed |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 49,621.60 | 69,789.18 | 0.711 / 0.720 | 9,669,728 | Parity confirmed |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-CODE-COST.md) | 66,156.61 | 122,061.47 | 0.542 / 0.550 | 10,286,320 | Parity confirmed |

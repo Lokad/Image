@@ -131,7 +131,7 @@ internal static partial class Vp8Encoder
                     && (index + 1 == model.PrefixMacroblocks || index + 1 == model.CacheMacroblocks))
                 {
                     model.CompleteMacroblock(source, tokens, columns, rows, index + 1);
-                    if (nearZero && index + 1 < count)
+                    if (nearZero && index + 1 == model.PrefixMacroblocks && index + 1 < count)
                         PrepareZeroThresholds(quantization!.Quantizers, model.Probabilities, bitCosts, zeroThresholds, context);
                 }
             }

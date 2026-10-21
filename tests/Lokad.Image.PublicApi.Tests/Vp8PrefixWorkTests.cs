@@ -5,9 +5,9 @@ namespace Lokad.Image.PublicApi.Tests;
 
 public sealed class Vp8PrefixWorkTests
 {
-    // This default limited-work spatial path admits128 macroblocks. The
-    // smaller locally selected64-block owner is covered by admission tests.
-    private const int Width = 513, Height = 259, PrefixBytes = 128 * 120 + 16384;
+    // Default limited-work statistics retain384 macroblocks; tighter independent
+    // allowances keep the original128/64 owners before shared admission.
+    private const int Width = 513, Height = 259, PrefixBytes = 384 * 120 + 16384 + 768;
     private static ImageBuffer Source(int depth, TestMemoryBudget root)
     {
         var bytes = OriginalPixels.Generate(Width, Height, depth);
@@ -63,9 +63,9 @@ public sealed class Vp8PrefixWorkTests
         using var root = new TestMemoryBudget(8000000); using var source = Source(8, root);
         var held = root.Bytes; var previous = held; var admitted = false; var unchanged = OriginalPixels.Bytes(source);
         // The lower failure allowance can select the smaller 64-block prefix
-        // before shared admission. Either owned prefix must clean up on actual
-        // exhaustion; default-allowance refusal/cancellation below still require128.
-        root.Admitted = used => { if (used - previous is PrefixBytes or (64 * 120 + 16384)) admitted = true; previous = used; };
+        // before shared admission. Every selected owner must clean up on actual
+        // exhaustion; default refusal/cancellation below require the384 cache.
+        root.Admitted = used => { if (used - previous is PrefixBytes or (128 * 120 + 16384) or (64 * 120 + 16384)) admitted = true; previous = used; };
         using var failed = new MemoryStream();
         failed.Write([1, 2, 3, 4]);
         // Actual exhaustion can move between stages as compression changes.

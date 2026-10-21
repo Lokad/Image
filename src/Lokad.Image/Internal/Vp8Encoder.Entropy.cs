@@ -6,6 +6,7 @@ internal static partial class Vp8Encoder
     // 11.5/13 specify the probability-update syntax and coefficient contexts.
     internal sealed class CoefficientModel : IDisposable
     {
+        private const int HistogramFitWork = 96 * 24 * 12 + 1056 * 16;
         private readonly OperationContext context;
         private readonly long reservation;
         private readonly int[] counts;
@@ -19,6 +20,7 @@ internal static partial class Vp8Encoder
         internal bool Intra16 => macroModes is not null;
         internal bool Refine { get; }
         internal bool NearZero { get; }
+        internal bool Histogram { get; }
         internal byte[] Y2Above { get; }
 
         internal static CoefficientModel? TryCreate(Vp8Planes source, int blocks, int lumaTrials, int chromaTrials, OperationContext context,
@@ -77,9 +79,22 @@ internal static partial class Vp8Encoder
                 if (segmented && modes is not null && extended > prefix && extendedExtra <= source.MemoryBytes
                     && extendedExtra + growth <= context.RemainingWorkingBytes
                     && predictionWork + extendedWork + blocks * 24L <= context.RemainingWork)
+                {
+                    // One token-class counter replaces up to twelve branch
+                    // updates. Three times the sample fits the old record-work
+                    // envelope; admit both histogram reductions separately.
+                    var cached = Math.Min(blocks, 384);
+                    var histogramExtra = cached * 120L + 16384 + 768;
+                    var histogramWork = cached * 24L * 80 + 2L * HistogramFitWork;
+                    if (nearZeroWork != 0 && cached > extended && histogramExtra <= source.MemoryBytes
+                        && histogramExtra + growth + NearZeroExtraStackBytes <= context.RemainingWorkingBytes
+                        && predictionWork + histogramWork + blocks * 24L + nearZeroWork <= context.RemainingWork)
+                        return new CoefficientModel(samples, blocks, context, prefixMacroblocks: 128,
+                            nearZero: true, cacheMacroblocks: 384, histogram: true);
                     return new CoefficientModel(samples, blocks, context, prefixMacroblocks: 128,
                         nearZero: nearZeroWork != 0 && extendedExtra + growth + NearZeroExtraStackBytes <= context.RemainingWorkingBytes
                             && predictionWork + extendedWork + blocks * 24L + nearZeroWork <= context.RemainingWork);
+                }
                 return new CoefficientModel(samples, blocks, context, nearZero: nearZeroWork != 0
                     && extra + growth + NearZeroExtraStackBytes <= context.RemainingWorkingBytes
                     && predictionWork + prefixWork + blocks * 24L + nearZeroWork <= context.RemainingWork);
@@ -99,14 +114,17 @@ internal static partial class Vp8Encoder
         }
 
         internal CoefficientModel(int samples, int blocks, OperationContext context, byte[]? modes = null, int columns = 0,
-            bool fullFrame = false, bool refine = false, int prefixMacroblocks = 64, bool nearZero = false)
+            bool fullFrame = false, bool refine = false, int prefixMacroblocks = 64, bool nearZero = false,
+            int cacheMacroblocks = 0, bool histogram = false)
         {
-            this.context = context; Refine = refine; NearZero = nearZero; PrefixMacroblocks = Math.Min(blocks, prefixMacroblocks);
-            CacheMacroblocks = fullFrame ? blocks : PrefixMacroblocks;
+            this.context = context; Refine = refine; NearZero = nearZero; Histogram = histogram; PrefixMacroblocks = Math.Min(blocks, prefixMacroblocks);
+            CacheMacroblocks = cacheMacroblocks == 0 ? fullFrame ? blocks : PrefixMacroblocks : Math.Min(blocks, cacheMacroblocks);
             if (samples != blocks * 384) throw new ArgumentException("VP8 private plane geometry differs.");
-            reservation = CacheMacroblocks * (384L / 4 + 24) + 16384 + (modes is null ? 0 : CacheMacroblocks * 16L + columns + 64);
+            if (histogram && (modes is not null || CacheMacroblocks < PrefixMacroblocks)) throw new ArgumentException("Histogram cache geometry differs.");
+            reservation = CacheMacroblocks * (384L / 4 + 24) + 16384 + (histogram ? 768 : 0)
+                + (modes is null ? 0 : CacheMacroblocks * 16L + columns + 64);
             context.Reserve(reservation);
-            counts = new int[1056 * 2]; Probabilities = Vp8Tables.CoefficientProbabilities.ToArray();
+            counts = new int[histogram ? 2304 : 1056 * 2]; Probabilities = Vp8Tables.CoefficientProbabilities.ToArray();
             side = new byte[CacheMacroblocks * 384 / 4]; last = new byte[CacheMacroblocks * 24];
             macroModes = modes;
             y2High = modes is null ? null : new byte[CacheMacroblocks * 16];
@@ -116,16 +134,17 @@ internal static partial class Vp8Encoder
         internal byte Record(byte[] source, int stride, int x, int y, int sampleOffset, int block,
             ReadOnlySpan<short> coefficients, int plane, int predictor)
         {
-            // At most twelve token-tree decisions for each of sixteen values,
-            // plus cache/classification work. Admit this bounded block together;
+            // Histogram mode increments one token-class counter per value;
+            // branch mode updates at most twelve. Packing/classification stays64.
+            // Admit this bounded block together;
             // cancellation is checked before any histogram or sample mutation.
-            context.Work(64 + 12 * 16);
+            context.Work(64 + (Histogram ? 1 : 12) * 16);
             var first = plane == 0 ? 1 : 0; var end = 15; while (end >= first && coefficients[Zigzag[end]] == 0) end--;
             last[block] = (byte)(end + 1); var previousZero = false;
             for (var c = first; c <= Math.Min(Math.Max(end + 1, first), 15); c++)
             {
-                var at = ((plane * 8 + Bands[c]) * 3 + predictor) * 11;
-                if (c > end) { Count(TokenPaths[11], at); break; }
+                var group = (plane * 8 + Bands[c]) * 3 + predictor;
+                if (c > end) { RecordToken(11, group, false); break; }
                 var z = Zigzag[c]; var value = coefficients[z]; var magnitude = Math.Abs((int)value);
                 // The normalized 4x4 transform has absolute coefficient <=2040;
                 // every quantizer is >=4. Nine magnitude bits cover rounding.
@@ -137,8 +156,7 @@ internal static partial class Vp8Encoder
                 side[global >> 2] |= (byte)(packed << ((global & 3) * 2));
                 var category = magnitude < 5 ? -1 : magnitude < 7 ? 0 : magnitude < 11 ? 1 : magnitude < 19 ? 2
                     : magnitude < 35 ? 3 : magnitude < 67 ? 4 : 5;
-                var path = TokenPaths[category < 0 ? magnitude : category + 5];
-                Count(previousZero ? path >> 5 : path, at);
+                RecordToken(category < 0 ? magnitude : category + 5, group, previousZero);
                 predictor = Math.Min(magnitude, 2); previousZero = magnitude == 0;
             }
             return end < first ? (byte)0 : (byte)1;
@@ -176,8 +194,15 @@ internal static partial class Vp8Encoder
             }
         }
 
+        private void RecordToken(int token, int group, bool omittedEob)
+        {
+            if (Histogram) counts[(group * 12 + token) * 2 + (omittedEob ? 1 : 0)]++;
+            else Count(omittedEob ? TokenPaths[token] >> 5 : TokenPaths[token], group * 11);
+        }
+
         internal void SelectProbabilities()
         {
+            if (Histogram) { SelectHistogramProbabilities(); return; }
             context.Work(1056 * 16);
             for (var i = 0; i < 1056; i++)
             {
@@ -188,6 +213,35 @@ internal static partial class Vp8Encoder
                 var update = Vp8Tables.CoefficientUpdateProbabilities[i];
                 var overhead = 8 + Math.Log2(update / (256d - update));
                 if (Cost(zero, one, old) - Cost(zero, one, candidate) > overhead) Probabilities[i] = (byte)candidate;
+            }
+        }
+
+        private void SelectHistogramProbabilities()
+        {
+            context.Work(HistogramFitWork);
+            Span<int> branches = stackalloc int[22];
+            for (var group = 0; group < 96; group++)
+            {
+                branches.Clear();
+                for (var token = 0; token < 12; token++)
+                for (var omitted = 0; omitted < 2; omitted++)
+                {
+                    var amount = counts[(group * 12 + token) * 2 + omitted];
+                    if (amount == 0) continue;
+                    var path = omitted == 0 ? TokenPaths[token] : TokenPaths[token] >> 5;
+                    while (path != 1) { branches[(int)(path & 31)] += amount; path >>= 5; }
+                }
+                for (var branch = 0; branch < 11; branch++)
+                {
+                    var zero = branches[branch * 2]; var one = branches[branch * 2 + 1]; var total = (long)zero + one;
+                    if (total == 0) continue;
+                    var i = group * 11 + branch;
+                    var candidate = (int)Math.Clamp((zero * 256L + total / 2) / total, 1, 255);
+                    var old = Probabilities[i]; if (candidate == old) continue;
+                    var update = Vp8Tables.CoefficientUpdateProbabilities[i];
+                    var overhead = 8 + Math.Log2(update / (256d - update));
+                    if (Cost(zero, one, old) - Cost(zero, one, candidate) > overhead) Probabilities[i] = (byte)candidate;
+                }
             }
         }
 

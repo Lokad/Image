@@ -106,7 +106,9 @@ public sealed class Vp8NearZeroTests
         Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Attempts); Assert.False(root.IsDisposed);
     }
 
-    private const int Blocks = 129, Capacity = 128 * 120 + 16384;
+    // Keep these tests on the original 128-cache fallback: its work threshold
+    // is lower than the 384-cache histogram threshold at this frame size.
+    private const int Blocks = 400, Capacity = 128 * 120 + 16384;
     private const long Eligibility = Blocks * (16L * 6 * 192 + 4L * 512 + 24L * 512 + 64 + 32)
         + 2048 + 128 * 24L * 256 + 1056 * 16 + Blocks * 24L;
     private const long AdditionalWork = Blocks * 384L + 2 * 12416 + 257;

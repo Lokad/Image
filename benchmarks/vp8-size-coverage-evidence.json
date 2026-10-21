@@ -4,7 +4,7 @@
   "scope": "Finite reconciliation of seven already declared lossy WebP controls, including accepted exact compressed ALPH on three existing alpha/work32M boundaries; no new workload or quality grid.",
   "acceptance": "Complete encoded packet <= fixed reference with existing source-quality/decoder/alpha and ownership/resource gates. Passing primary controls does not establish whole-codec parity.",
   "primaryMatchedControlPasses": 2,
-  "otherDeclaredPacketGaps": 1,
+  "otherDeclaredPacketGaps": 0,
   "cases": [
     {
       "case": "WarmCompression/PhotographLossy8",
@@ -128,28 +128,29 @@
     },
     {
       "case": "WarmWebp/EncodeBudget8",
-      "managedPacketBytes": 99448,
+      "managedPacketBytes": 98490,
       "referencePacketBytes": 98590,
       "managedQuality": 100,
       "referenceQuality": 75,
       "effort": 4,
       "qualityPass": true,
-      "packetSizePass": false,
-      "evidence": "vp8-small-levels-evidence.json",
+      "packetSizePass": true,
+      "evidence": "vp8-histogram384-evidence.json",
       "observationPath": [
         "observations",
         0
       ],
-      "validity": "C87 qualified fixed small-level1..4 versus m-1 decisions at unchanged rate scale/steps.31,782,253actual units inside32M; governed additional4KiB stack, frozen source/reference/settings/quality gates and exact ALPH. Completepacket remains858B above target.",
-      "previousManagedPacketBytes": 100544,
+      "validity": "C89 qualified token-class histograms plus384cache; original128 threshold fit preserved.31,802,951units<=32M, exact C87 signedcoefficients/native+publicRGBA/sourcequality/compressedALPH. Complete packet100B BELOWreference; allseven gatespass.",
+      "previousManagedPacketBytes": 99448,
       "alphaPayloadBytes": 19246,
-      "coefficientPolicy": "Existing local small-level token-rate score at fixed steps/lambda; no later-coefficient rate model. Two12416-unit table preparations+257cost initialization+1unit/actual magnitude1..4 decision. Local work envelope includes every coefficient; additional4096B stack (8192total) locally checked then shared admitted beforeuse, cancellation before newreservation. Same128cache, terminal refusal/exhaustion/cancel, no new heap owner/frame/copy/input pass.",
+      "coefficientPolicy": "One token-class histogram counter replaces up to12branch updates, omittedEOB flag preserved.80units/recordblock vs256;44544/fit at128+384. Larger63232B owner reserved beforeallocation vs31744; tighterlocal allowances keep128/64. First128 threshold table retained through restoframe, final384 fit affectsentropyonly. Sharedrefusal/cancel/exhaustion terminal, same8KiB stack and output lifetime.",
       "alphaCodingPolicy": "Four-residual rolling key, same recent/token-start histories, exact prefix verification and admitted adaptive packed replay.",
       "psnrGapDb": 0.025713267731781092,
-      "consumedWork": 31782253,
+      "consumedWork": 31802951,
       "referenceAlphaPayloadBytes": 24588,
       "alphaComponentSizePass": true
     }
   ],
-  "unrestrictedPacketPasses": 4
+  "unrestrictedPacketPasses": 4,
+  "allDeclaredPacketPasses": 7
 }

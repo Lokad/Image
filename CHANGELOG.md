@@ -15,7 +15,7 @@
 - Admitted coefficient-level/EOB refinement for selected high-precision WebP
   predictions, reducing complete packets within verified reconstruction quality.
 - Smaller constrained-work WebP packets through exact prediction pruning and
-  a larger admitted coefficient sample, preserving reconstructed pixels.
+  admitted coefficient samples with token histograms, preserving reconstructed pixels.
 - Admitted small-coefficient decisions further reduce constrained-work WebP
   packets within verified reconstruction quality and the existing resource caps.
 
