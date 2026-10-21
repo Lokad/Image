@@ -34,7 +34,7 @@ public sealed class WebpCodeCostTests
         var expected = Normalize(source); var before = source.Pixels.ToArray();
         var options = new WebpEncodeOptions { Effort = 4, Limits = new() { MemoryBudget = root } };
         using var output = new MemoryStream(); ImageCodec.EncodeWebp(source, output, options);
-        Assert.InRange(output.Length, 1, 161410); Assert.Equal(before, source.Pixels.ToArray()); Assert.Equal(held, root.Bytes);
+        Assert.InRange(output.Length, 1, 160918); Assert.Equal(before, source.Pixels.ToArray()); Assert.Equal(held, root.Bytes);
         var packet = output.ToArray(); using var exact = new MemoryStream();
         ImageCodec.EncodeWebp(source, exact, options with { Limits = options.Limits with { MaxOutputBytes = packet.Length } });
         Assert.Equal(packet, exact.ToArray()); using var refused = new MemoryStream();
@@ -48,14 +48,16 @@ public sealed class WebpCodeCostTests
         second.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 
-    [Fact]
-    public void RefinementReplacesPredictorOwnershipAndTransfersExactlyOneColorOwner()
+    [Theory] [InlineData(1)] [InlineData(2)]
+    public void RefinementReplacesPredictorOwnershipAndTransfersExactlyOneColorOwner(int passes)
     {
         using var root = new TestMemoryBudget(32L * 1024 * 1024);
         using var source = WebpAdaptivePredictorTests.Photograph(8, root); var held = root.Bytes;
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         var cache = new uint[1024]; var baseline = Prime(source, cache, context);
-        var selected = Call("SelectCodeCostPlan", source, 4, cache, baseline, context);
+        var selected = baseline;
+        for (var pass = 0; pass < passes; pass++)
+            selected = Call("SelectCodeCostPlan", source, 4, cache, selected, context);
         Assert.NotSame(Get(baseline, "Modes"), Get(selected, "Modes"));
         Assert.NotSame(Get(baseline, "ModeTable"), Get(selected, "ModeTable"));
         Assert.Same(Get(baseline, "Color"), Get(selected, "Color"));
@@ -68,13 +70,15 @@ public sealed class WebpCodeCostTests
         Call("ReleasePlan", selected, context); Assert.Equal(held, root.Bytes); Assert.False(root.IsDisposed);
     }
 
-    [Theory] [InlineData(false)] [InlineData(true)]
-    public void LocalMemoryOrWorkGuardSkipsBeforeSharedAdmission(bool work)
+    [Theory] [InlineData(false, false)] [InlineData(true, false)]
+    [InlineData(false, true)] [InlineData(true, true)]
+    public void LocalMemoryOrWorkGuardSkipsBeforeSharedAdmission(bool work, bool afterFirst)
     {
         using var root = new TestMemoryBudget(32L * 1024 * 1024);
         using var source = WebpAdaptivePredictorTests.Photograph(8, root);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         var cache = new uint[1024]; var baseline = Prime(source, cache, context);
+        if (afterFirst) baseline = Call("SelectCodeCostPlan", source, 4, cache, baseline, context);
         var borrowed = 0L;
         if (work) context.Work(context.RemainingWork - 1);
         else { borrowed = context.RemainingWorkingBytes - 1; context.ReserveBorrowed(borrowed); }
@@ -84,15 +88,18 @@ public sealed class WebpCodeCostTests
         if (!work) context.ReleaseBorrowed(borrowed);
     }
 
-    [Theory] [InlineData(0)] [InlineData(1)] [InlineData(2)]
-    public void InitialRefusalCancellationOrWorkExhaustionIsTerminalAndReleasesTheNewMap(int failure)
+    [Theory] [InlineData(0, false)] [InlineData(1, false)] [InlineData(2, false)]
+    [InlineData(0, true)] [InlineData(1, true)] [InlineData(2, true)]
+    public void InitialRefusalCancellationOrWorkExhaustionIsTerminalAndReleasesTheNewMap(int failure, bool afterFirst)
     {
         using var root = new TestMemoryBudget(32L * 1024 * 1024);
         using var source = WebpAdaptivePredictorTests.Photograph(8, root); var held = root.Bytes;
         using (var cancellation = new CancellationTokenSource())
         using (var context = new OperationContext(new() { MemoryBudget = root }, cancellation.Token))
         {
-            var cache = new uint[1024]; var baseline = Prime(source, cache, context); var before = root.Bytes;
+            var cache = new uint[1024]; var baseline = Prime(source, cache, context);
+            if (afterFirst) baseline = Call("SelectCodeCostPlan", source, 4, cache, baseline, context);
+            var before = root.Bytes;
             if (failure == 0) root.RefuseAtGrowth = root.GrowthAttempts + 1;
             else root.Admitted = _ =>
             {

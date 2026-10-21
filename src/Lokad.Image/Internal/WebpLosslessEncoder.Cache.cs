@@ -20,7 +20,12 @@ internal static partial class WebpLosslessEncoder
         var cache = new uint[CacheSize];
         var plan = SelectCachedPlan(image, options.Effort, cache, context);
         plan = SelectNoCachePlan(image, options.Effort, cache, plan, context);
+        var originalModes = plan.Modes;
         plan = SelectCodeCostPlan(image, options.Effort, cache, plan, context);
+        // A winning map refits the coding probabilities. Reprice once against
+        // that new model; unchanged or rejected maps need no repeated analysis.
+        if (!ReferenceEquals(originalModes, plan.Modes))
+            plan = SelectCodeCostPlan(image, options.Effort, cache, plan, context);
         plan = SelectReferencePlan(image, options.Effort, cache, plan, context);
         plan = SelectSeededPlan(image, options.Effort, cache, plan, context);
         using var counter = new CountStream(options.Limits.MaxOutputBytes);

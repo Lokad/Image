@@ -1,5 +1,9 @@
 # Lossless WebP references with seeded copy costs
 
+Photograph refinement is superseded by the
+[bounded second pass](WARM-VP8L-SECOND-REFINEMENT.md). The other five costs remain
+selected after confirming their unchanged paths.
+
 The existing opaque control falls **123,602 → 41,088 bytes**, saving **82,514 B
 (66.8%)**, below its **121,896-byte** reference. The transparent RGBA8/16 and async
 controls fall **145,648 → 60,904 B**, saving **84,744 B (58.2%)**, below **183,812 B**.

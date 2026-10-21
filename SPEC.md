@@ -1380,7 +1380,9 @@ An uncached predicted plan with existing predictor/color/spatial maps may compar
 one refinement using its actual channel-code lengths plus predictor-map code cost.
 All fourteen format modes are scored per8x8tile; missing codes cost15bits, and ties
 retain the existing mode. Color coefficients stay fixed; one current group refit
-and fullpacket comparison decide adoption. A bounded tile cache avoids a full-frame
+and fullpacket comparison decide adoption. A winning first refinement may reprice
+once against its new coding tables; unchanged or rejected maps stop after one pass.
+Both passes retain the same local/work guards and shared color owner. A bounded tile cache avoids a full-frame
 copy. Old/new predictor and coding owners overlap during selection; the SAME color
 owner transfers once to the winner. New capacities are admitted before allocation,
 with local/work guards before shared attempts and terminal refusal/cancellation.

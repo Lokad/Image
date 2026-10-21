@@ -31,7 +31,7 @@
 - Optional `CompactColor` JPEG quantization; original defaults and grayscale remain unchanged.
 
 - Smaller lossless WebP output through bounded color-cache and adaptive prefix
-  coding, adaptive prediction and code-cost refinement, residual color decorrelation,
+  coding, adaptive prediction and bounded code-cost refinements, residual color decorrelation,
   uncached spatial groups and bounded references with seeded copy probabilities. Exact hidden RGBA and shared
   admission are preserved; size parity remains open.
 

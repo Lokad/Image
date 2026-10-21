@@ -1264,3 +1264,19 @@ reused. Finite256=239numeric+17pending,62independentpasses/163gaps/1confidenceop
 13costscreens,114independent/125short;31metadata confirmations pending. CPU parity
 remains deferred; optional JPEGCompactColor does not close its default gate, and
 two PNG complete-packet gaps remain open. No broad content/codec parity claim.
+
+
+The [bounded second predictor refinement](WARM-VP8L-SECOND-REFINEMENT.md) saves492 B:
+photograph161410→160918/ref160032,886 B still open. At most two passes, second only
+following a first accepted map; fixed color owner/parser/settings and all resource
+contracts. Six new second-replacement/guard/terminal-cleanup cases;4834tests/OS,
+99internal+117public scalar, SAMEactualpackage/all3examples pass. One photo short
+cost(3actuals/2passing idle-v2guards) replaces C110:5.721x/upper7.099x,51847984 B/op.
+Five other C110 observations/allocations/guards/producer identities are reused after
+proving unchanged early-return paths and identical complete packets, including async.
+A launcher-resolution setup failure produced zero actuals; its uniquely named retry
+is retained, without rebuild or qualification repeat. No independent timing repeat,
+workload expansion or CPU-parity acceptance. Passing controls remain stopped; default
+JPEG and two PNG packet gaps stay open. Finite256=239numeric+17pending remains
+62independentpasses/163gaps/1confidenceopen/13costscreens,114independent/125short;
+31metadata confirmations pending. All existing full objectives remain open.
