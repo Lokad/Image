@@ -33,8 +33,9 @@ public sealed class JpegAdaptiveHuffmanTests
         var limits = ImageLimits.Default with
         {
             MaxWorkingBytes = constraint == 0 ? image.ByteLength + 8192 : ImageLimits.Default.MaxWorkingBytes,
-            // Below adaptive worst-case admission, including new AC pricing work.
-            MaxWork = constraint == 1 ? 4850000 : ImageLimits.Default.MaxWork
+            // One below adaptive worst-case admission, including the 4:2:0
+            // DAG bound. The incremental route still executes every decision.
+            MaxWork = constraint == 1 ? 15744808 : ImageLimits.Default.MaxWork
         };
         using var actual = new MemoryStream();
         ImageCodec.EncodeJpeg(image, actual, options with { Limits = limits });

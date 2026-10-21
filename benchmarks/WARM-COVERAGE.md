@@ -3,38 +3,38 @@
 Updated 2026-10-21. Compression precedes CPU parity. The finite scope remains
 **256 named cases: 239 numeric and 17 unmeasured**. The current
 [three-table summary](../docs/benchmark.md) retains tested-producer evidence:
-62 independent passes, 147 gaps, one confidence-open case, 15 short cost screens
-and **14 superseded JPEG rows**. Full warm single-CPU parity and replacement
-readiness remain open.
+62 independent passes,147 gaps,one confidence-open case,15 short cost screens
+and14 superseded JPEG rows. Full warm CPU parity and replacement readiness remain open.
 
-[Source-constrained trellis](JPEG-CONSTRAINED-AC-TRELLIS.md) reduces the existing
-4:4:4 packets to 142,580/133,041 B and 142,544/133,043 B for 8/16-bit input.
-Source-PSNR gaps 0.188932/0.195266 dB pass the unchanged 0.25 dB gate; maximum
-packet excess remains about 7.2%. Original DQT/DC and the geometric source trainer
-stay fixed. There is no photographic or diagram compression claim.
+[Default420 trellis/padding](JPEG420-AC-TRELLIS.md) closes all nine affected
+packet gates:51,379/52,093 B and51,471/52,117 B for the existing8/16-bit controls.
+Frozen source/reference/settings, Original DQT/DC and unchanged0.25dB/alpha/decoder
+quality gates remain. JPEG now has13 default passes/5 open444 rows; optional
+CompactColor stays separate. [C142444](JPEG-CONSTRAINED-AC-TRELLIS.md) stays
+142,580/133,041 B and142,544/133,043 B, about7.2% maximum excess. These procedural
+controls do not establish photographic or diagram compression claims.
 
-The current producer passes 4,953 tests/OS, 132+54 scalar checks/OS and the same actual
-package/all examples on both platforms. One forward 4:4:4 short cost is 796,455.405 us,
-564,192 B/op, ratio 210.662/upper 221.706. This large CPU cost is accepted for
-verified 6,457/6,428 B compression gains. There is no CPU-parity or speed-improvement
-claim/confirmation. Other observations retain their original tested producers,
-with no repeated timing or whole-library audit. Shared 8 KiB fixed-workspace,
-terminal refusal and successful subsequent use after release are qualified.
+The current producer passes4,965 tests/OS,141+57 scalar checks/OS and the same
+actualprivate0.2 package/allthreeexamples bothOS. One callerRGB420 shortcost records
+68,162.147 us,170,648 B/op,ratio43.161/upper50.354. Both idle-v2 guards pass.
+CPU cost is accepted for verified4,418/4,363 B savings; no CPU-parity/speed claim
+or confirmation. The unaffected C142forward444 cost retains its tested producer.
+Fixed8KiB shared-root, terminalrefusal, cleanup and successful next use are qualified.
 
-The ten named old subsampled rows in [C124 evidence](jpeg-ac-decision-evidence.json)
-and four other affected 4:4:4 rows remain superseded. C142's current forward-only
-screen replaces C139's observation; current packets/quality are reconciled.
-Historical means do not prove current gaps. Another 31 metadata confirmations
-remain pending, with equivalent PNG typed fields required before timing. Reuse
-unaffected evidence and stop passing controls; do not add an image/settings grid
-or perform speed-only work.
+Nine420 packet rows changed, including the already-passing restart control.
+The new callerRGB420 cost replaces its prior C123 screen. Eight old420 timing
+rows already superseded by C124 remain historical; two old422 and four444
+superseded rows are unchanged. Current444 and other unaffected evidence remains
+valid in its stated scope. Another31 metadata confirmations remain pending;
+PNG typed reference fields must be equivalent first. No image/settings grid,
+repeated timing or whole-library audit is added.
 
-All seven declared lossy WebP and six lossless WebP packet gates pass/stay stopped.
-JPEG has five default passes/13 open; optional CompactColor stays separate.
-PNG retains 15/17 passes; two level-6 RGBA8 sync/async packets remain
-218,775/210,973 B. A 5% IDAT tolerance or timing pass does not establish packet
-parity. Exact lossless pixels, quality gates, cooperative admission, cancellation,
-ownership and equivalent complete operations remain mandatory.
+All seven lossy WebP and six lossless WebP packet gates pass/stay stopped.
+PNG retains15/17 passes; two level6RGBA8 sync/async packets remain218,775/210,973 B.
+A5% IDAT tolerance or timing pass does not establish complete-packet parity.
+Exact lossless pixels, matched quality, cooperative admission, cancellation,
+ownership and equivalent complete operations remain mandatory. Speed-only work
+and CPU-parity confirmations wait until compression gates close.
 
 Earlier qualification milestones below retain their historical producer scopes.
 

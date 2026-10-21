@@ -13,7 +13,7 @@ public sealed class JpegChromaPairTests
         var original = OriginalPixels.Bytes(source);
         using var output = new MemoryStream();
         ImageCodec.EncodeJpeg(source, output, new JpegEncodeOptions { Quality = 69, Sampling = JpegSampling.YCbCr420, BackgroundRgb = 0x204060 });
-        Assert.Equal("9cf7de3326a1341820f553780fa7b481118a4d6b13697b35a56dab37df25ab53",
+        Assert.Equal("7fb75df22ca227bf8017a491cf8f1187127c53c4f3847c4058f22fb32254f58c",
             Convert.ToHexString(SHA256.HashData(output.ToArray())).ToLowerInvariant());
         Assert.Equal(original, OriginalPixels.Bytes(source));
     }

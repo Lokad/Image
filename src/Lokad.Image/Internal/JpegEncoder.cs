@@ -156,7 +156,10 @@ internal static partial class JpegEncoder
                         continue;
                     }
                     TransformEncoderBlock(pixels, q, quantized, transformed, acLambda, samplesX * samplesY, context,
-                        options.Sampling == JpegSampling.YCbCr444);
+                        options.Sampling == JpegSampling.YCbCr444,
+                        acLambda != 0 && options.Sampling == JpegSampling.YCbCr420,
+                        acLambda != 0 && options.Sampling == JpegSampling.YCbCr420 && component == 0
+                            && (sourceLeft >= image.Width || sourceTop >= image.Height));
                     WriteFixedBlock(quantized, ref predictors[component], writer, acWords);
                 }
             }
@@ -373,7 +376,10 @@ internal static partial class JpegEncoder
                             continue;
                         }
                         TransformEncoderBlock(pixels, q, quantized, transformed, acLambda, samplesX * samplesY, context,
-                            options.Sampling == JpegSampling.YCbCr444);
+                            options.Sampling == JpegSampling.YCbCr444,
+                            acLambda != 0 && options.Sampling == JpegSampling.YCbCr420,
+                            acLambda != 0 && options.Sampling == JpegSampling.YCbCr420 && component == 0
+                                && (sourceLeft >= image.Width || sourceTop >= image.Height));
                         context.Work(64);
                         var group = component == 0 ? 0 : 1;
                         var difference = quantized[0] - predictors[component]; predictors[component] = quantized[0];

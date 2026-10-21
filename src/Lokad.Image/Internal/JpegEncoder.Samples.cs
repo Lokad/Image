@@ -74,12 +74,13 @@ internal static partial class JpegEncoder
                     {
                         context.Work(64L * (component == 0 ? 1 : h * v) * 12);
                         var samplesX = component == 0 ? 1 : h; var samplesY = component == 0 ? 1 : v;
+                        var sourceLeft = mcu % columns * h * 8 + bx * 8;
+                        var sourceTop = mcu / columns * v * 8 + by * 8;
                         scoped ReadOnlySpan<byte> blockPixels;
                         if (prepareMcu) blockPixels = preparedMcu.Slice((component == 0 ? by * 2 + bx : component + 3) * 64, 64);
                         else
                         {
-                            SampleCallerBlock(source, mcu % columns * h * 8 + bx * 8,
-                                mcu / columns * v * 8 + by * 8, samplesX, samplesY, component, pixels);
+                            SampleCallerBlock(source, sourceLeft, sourceTop, samplesX, samplesY, component, pixels);
                             blockPixels = pixels;
                         }
                         if (joint444)
@@ -91,7 +92,10 @@ internal static partial class JpegEncoder
                             continue;
                         }
                         TransformEncoderBlock(blockPixels, q, quantized, transformed, acLambda, samplesX * samplesY, context,
-                            options.Sampling == JpegSampling.YCbCr444);
+                            options.Sampling == JpegSampling.YCbCr444,
+                            acLambda != 0 && options.Sampling == JpegSampling.YCbCr420,
+                            acLambda != 0 && options.Sampling == JpegSampling.YCbCr420 && component == 0
+                                && (sourceLeft >= source.Width || sourceTop >= source.Height));
                         if (!adaptive) { WriteFixedBlock(quantized, ref predictors[component], writer!, FixedAc.Words); continue; }
                         context.Work(64);
                         var group = component == 0 ? 0 : 1;

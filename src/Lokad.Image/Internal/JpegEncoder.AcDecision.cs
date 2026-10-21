@@ -13,16 +13,24 @@ internal static partial class JpegEncoder
 
     private static int AcDecisionWork(int quality, int components, JpegSampling sampling, JpegQuantizationPolicy policy)
         => AcDecisionLambda(quality, components, sampling, policy) == 0 ? 0
-            : sampling == JpegSampling.YCbCr444 ? 48512 + Trellis444WorkPerMcu / 3 : 4096;
+            : sampling == JpegSampling.YCbCr444 ? 48512 + Trellis444WorkPerMcu / 3
+            : sampling == JpegSampling.YCbCr420 ? 4096 + Trellis420WorkPerBlock : 4096;
 
     private static void TransformEncoderBlock(ReadOnlySpan<byte> pixels, ReadOnlySpan<ushort> quantization,
         Span<int> quantized, Span<double> transformed, int lambda, int samplingArea, OperationContext context,
-        bool limitBlockError)
+        bool limitBlockError, bool refine420 = false, bool discardAc = false)
     {
         if (lambda == 0 && JpegTransform.TryForwardQuantized(pixels, quantization, quantized, context)) return;
         JpegTransform.Forward(pixels, transformed, context);
         Quantize(transformed, quantization, quantized);
+        if (discardAc)
+        {
+            // Entirely invisible interleaved luma blocks still carry DC for
+            // prediction, but their AC values cannot contribute output pixels.
+            context.Work(64); quantized[1..].Clear(); return;
+        }
         if (lambda != 0) DecideAc(transformed, quantization, quantized, lambda, samplingArea, context, limitBlockError);
+        if (refine420) Refine420(transformed, quantization, quantized, lambda, samplingArea, context);
     }
 
     // T.81 permits encoder coefficient decisions independently of DQT. Keep the

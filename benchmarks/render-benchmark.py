@@ -213,7 +213,7 @@ def render():
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-JPEG-VECTOR-AC.md', True),
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-compact-color-evidence.json', ['cases', 'OriginalGray', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0 from caller RGB samples', 'jpeg-ac-decision-evidence.json', ['cases', 'Encode420_8', -1], 'WARM-JPEG-AC-DECISION.md', verification='Cost screen (CPU parity deferred)'),
+        row('JPEG 4:2:0 from caller RGB / AC trellis and padding pruning', 'jpeg420-ac-trellis-evidence.json', ['cases', 'Encode420_8', -1], 'JPEG420-AC-TRELLIS.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaqueâ€¡', 'vp8-noise-spectrum-evidence.json', ['observations', 0], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque from RGBA16â€¡', 'vp8-noise-spectrum-evidence.json', ['observations', 1], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alphaâ€¡', 'vp8-noise-spectrum-evidence.json', ['observations', 2], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
@@ -345,9 +345,10 @@ Lossless photograph/diagram packets are 159,104/160,032 and 7,160/7,234 B
 17,366/17,688 and6,722/7,100 B at their frozen matched-quality settings and exact alpha.
 These are bounded controls, not general-image compression claims.
 
-[Default caller-RGB420 JPEG](../benchmarks/WARM-JPEG-AC-DECISION.md) is now
-**55,797/52,093 B**, down 24.6%, with source-PSNR gap 0.058120 dB inside 0.25 dB.
-Its remaining 7.1% size gap is open. Grayscale remains 58,823/58,910 B;
+[Default 4:2:0 JPEG](../benchmarks/JPEG420-AC-TRELLIS.md) now passes all nine
+affected boundaries: **51,379/52,093 B** (8-bit) and **51,471/52,117 B** (16-bit),
+with source-PSNR gaps 0.085506/0.085851 dB inside the unchanged 0.25 dB gate.
+Grayscale remains 58,823/58,910 B;
 **optional CompactColor** remains 48,701/52,093 B on its separate procedural control.
 Equal numerical quality values do not establish equivalence. The earlier uncapped
 4:4:4 trial remains rejected; [source-constrained trellis](../benchmarks/JPEG-CONSTRAINED-AC-TRELLIS.md)
@@ -357,18 +358,19 @@ size/quality, without photographic or diagram extrapolation. PNG retains 15/17
 complete-packet passes; two level-6 RGBA8 boundaries remain218,775/210,973 B.
 A timing pass or 5% IDAT tolerance does not establish packet-size parity.
 The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles all 19
-existing encode rows: 5 default passes/13 open, plus one separate optional pass.
+existing encode rows: 13 default passes/5 open, plus one separate optional pass.
 The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) first saved12,166 B
 on 4:4:4 forward-only/cancellable output. Current source-priced coupled decisions save another
 16,232 B relative to that packet; the largest remaining 4:4:4 gap is about 7.2%.
 
-The current JPEG producer passes 4,953 Release tests/OS, 132+54 scalar checks/OS and
+The current JPEG producer passes 4,965 Release tests/OS, 141+57 scalar checks/OS and
 the same actual private 0.2.0 package/all examples on Windows/Linux. The
 [ownership repair](../benchmarks/JPEG-BUDGET-EVENT-OWNERSHIP.md) keeps caller-budget
 event storage charged through its actual users. Forward 4:4:4 records 796,455.405 µs,
 564,192 B/op in one short cost screen: more CPU is accepted for the compression
-gain, and CPU parity remains deferred. The retained caller 4:2:0 cost keeps its
-original tested producer; it was not retimed in this round.
+gain, and CPU parity remains deferred. That unaffected observation retains its
+C142 producer. Current caller 4:2:0 records 68,162.147 µs and170,648 B/op in one
+short screen, including normalization, full encoding and fresh output ownership.
 CPU/allocation costs are recorded; speed-only work and independent confirmations
 wait while compression gates remain open. Full warm single-CPU parity still
 requires an independent conservative upper<=1 for every material required path.

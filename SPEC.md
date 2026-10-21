@@ -1159,7 +1159,16 @@ division and chroma error is weighted by the sampling-cell area. Prices use the
 existing immutable geometric AC model, including amplitudes, EOB and ZRL, so fixed
 and adaptive entropy, caller/RGBA input, cancellation and admission choices retain
 the same coefficient decisions and reconstructed pixels. Ties retain the old
-coefficient. Full-resolution 4:4:4 considers the closest amplitude in each smaller
+coefficient. Default 4:2:0 follows
+its zero-only pass with one last-nonzero-position DAG using the same geometric
+prices, cell-area-weighted squared error and lambda. Its finite bank contains the
+current and original nearest values, closest smaller-category amplitudes and
+original nearest minus/plus one. It prices zero gaps, ZRL, amplitudes and EOB;
+only strictly lower estimated AC bits and an improved source-error/rate objective
+replace the current block. Stable ties preserve earlier choices. Entirely
+invisible interleaved luma padding blocks retain DC but clear AC; partially
+visible edge blocks and all chroma blocks retain the normal decision path.
+Full-resolution 4:4:4 considers the closest amplitude in each smaller
 bit category, including zero, across three co-sited blocks. Its distortion model
 maps their DCT residuals through the existing inverse BT.601 matrix and averages
 squared RGB error. Cumulative added modeled error is capped at 1/32 of the initial
@@ -1195,7 +1204,12 @@ grayscale and CompactColor skip this pass. Original color packets
 and lossy pixels can therefore change from earlier Original encodes; quality
 numbering does not establish equivalence with another encoder. The direct frozen
 binary64 transform supplies the decision errors. Each pricing scan charges64 work
-units before examining/modifying coefficients (at most4096 per subsampled block).
+units before examining/modifying coefficients (at most4096 for the zero-only pass).
+The 4:2:0 DAG adds at most21937 work units per block (26033 including that pass),
+charged before prefix construction, bank/arc evaluation, reconstruction and
+commit. Adaptive/async admission includes this bound. Its1484-byte stack scratch
+is allocated once per block call within the same admitted8KiB, without heap
+matrices or frame copies. Clearing an invisible block's AC charges64 instead.
 Local 4:4:4 decisions charge192 for the initial error scan,192 for initial prices,
 and64 before each trial: at most145536 per priced MCU (48512/block). The geometric
 trainer retains its121344-per-MCU bound. Trellis planning adds at most521904,

@@ -22,8 +22,9 @@ public sealed class JpegCallerMcuTests
         ImageCodec.EncodeJpeg(source, rgbaPacket, options);
         ImageCodec.EncodeJpeg(samples, width, height, JpegSampleFormat.Rgb, rgbPacket, stride, options);
         Assert.Equal(rgbaPacket.ToArray(), rgbPacket.ToArray()); Assert.Equal(unchanged, samples);
-        // Original padded RGB pattern, requalified after source-DCT AC decisions; no corpus bytes.
-        Assert.Equal("5e402e6caefe7cf182980fc22b600f2319fea42755f494dbea94719abbf9853d",
+        // Original padded RGB pattern after bounded 4:2:0 AC path selection;
+        // this is packet stability, not a matched-quality compression claim.
+        Assert.Equal("3988bf5f87d394c24b7ca2e728562b06f7a4b65f3eb60e9bcb8e6f728c391713",
             Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(rgbPacket.ToArray())));
     }
 }
