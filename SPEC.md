@@ -1404,6 +1404,18 @@ and all search scratch release promptly; selected capacity stays charged until
 its final use. Local memory/work guards precede shared admission; refusal,
 cancellation and actual work exhaustion stop with cleanup, never a fallback.
 
+A cached LEFT plan with spatial groups may instead seed its green/distance models
+from possible three-pixel-key references before pricing spans. Two bounded passes
+use at most262144 history pixels,1024 lookahead,16 matching keys and256 chain
+visits per token. Original token endpoints and cache-prefix semantics remain exact.
+Only strictly positive modeled savings rewrite spans; one existing coding/group
+refit and complete-packet comparison select the result. The normalized residual
+ring, search arrays, original/new token capacities and prefix costs are admitted
+before allocation. Temporary models borrow the original red/blue/alpha trees;
+only new green/distance owners release before refitting. Selected token capacity
+stays charged through final output. Local memory/work guards precede shared
+attempts; refusal, cancellation and actual work exhaustion remain terminal.
+
 Other cases retain the fixed-table8KiB path and its opaque zero-bit alpha leaf when
 that saves bytes. Local path selection precedes shared admission; a shared refusal
 is terminal and never triggers the other encoder. The fixed path counts and writes

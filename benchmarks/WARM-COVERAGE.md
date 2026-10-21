@@ -1246,3 +1246,21 @@ Finitecounts256=239numeric+17pending,62independentpasses/163gaps/1confidence-ope
 13costscreens,114independent/125short;31metadata confirmations pending. CPU parity
 deferred; optional JPEGCompactColor does not close its default gate, and two PNG
 complete-packet gaps remain open. Opaque now has the larger remaining VP8L gap.
+
+
+The [seeded-reference milestone](WARM-VP8L-SEEDED-REFERENCES.md) closes the opaque
+complete-packet gap:123602→41088/ref121896 B. Exact alpha8/16/async improves
+145648→60904/ref183812 B. Diagram7160/ref7234 passes unchanged. These cases stop;
+photograph161410/ref160032 is the only remaining declared VP8L gap(1378 B).
+All seven lossy gates keep identical primary anchors and remain stopped. Exactly
+six current costs replace C104 after the shared entry change;18actuals/12passing
+idle-v2guards, no independent repeats or new required workload. Extra CPU/allocation
+is accepted for compression: opaque6.927x/upper8.486x,53104872 B/op.
+4828tests/OS,93internal+117publicscalar and the SAMEpackage/all3examples qualify
+retained capacity, replacement peaks, borrowed trees, terminal cleanup and exact
+independent outputs. A single-chunk async packet required only an untimed sink-check
+fix; one Linux harness build, same timed boundary/drivers/worker. Other valid proofs
+reused. Finite256=239numeric+17pending,62independentpasses/163gaps/1confidenceopen/
+13costscreens,114independent/125short;31metadata confirmations pending. CPU parity
+remains deferred; optional JPEGCompactColor does not close its default gate, and
+two PNG complete-packet gaps remain open. No broad content/codec parity claim.

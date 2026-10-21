@@ -1,5 +1,8 @@
 # Lossless WebP predictor refinement by coding cost
 
+Historical producer and costs; current results are in the
+[seeded-reference round](WARM-VP8L-SEEDED-REFERENCES.md).
+
 The fixed photograph falls **164,008 → 161,410 bytes**, saving **2,598 bytes
 (1.58%)** with exact RGBA. It remains **1,378 bytes above** its 160,032-byte
 reference. Actual managed output exactly matches the fixed C103 prototype;

@@ -32,7 +32,7 @@
 
 - Smaller lossless WebP output through bounded color-cache and adaptive prefix
   coding, adaptive prediction and code-cost refinement, residual color decorrelation,
-  uncached spatial groups and bounded references. Exact hidden RGBA and shared
+  uncached spatial groups and bounded references with seeded copy probabilities. Exact hidden RGBA and shared
   admission are preserved; size parity remains open.
 
 - Faster baseline JPEG decoding with unchanged pixels, work limits and cancellation.

@@ -22,6 +22,7 @@ internal static partial class WebpLosslessEncoder
         plan = SelectNoCachePlan(image, options.Effort, cache, plan, context);
         plan = SelectCodeCostPlan(image, options.Effort, cache, plan, context);
         plan = SelectReferencePlan(image, options.Effort, cache, plan, context);
+        plan = SelectSeededPlan(image, options.Effort, cache, plan, context);
         using var counter = new CountStream(options.Limits.MaxOutputBytes);
         CachedPayload(image, counter, options.Effort, cache, plan, context);
         var payloadLength = counter.Count;
