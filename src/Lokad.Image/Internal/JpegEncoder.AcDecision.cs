@@ -13,7 +13,7 @@ internal static partial class JpegEncoder
 
     private static int AcDecisionWork(int quality, int components, JpegSampling sampling, JpegQuantizationPolicy policy)
         => AcDecisionLambda(quality, components, sampling, policy) == 0 ? 0
-            : sampling == JpegSampling.YCbCr444 ? 40448 : 4096;
+            : sampling == JpegSampling.YCbCr444 ? 48512 : 4096;
 
     private static void TransformEncoderBlock(ReadOnlySpan<byte> pixels, ReadOnlySpan<ushort> quantization,
         Span<int> quantized, Span<double> transformed, int lambda, int samplingArea, OperationContext context,

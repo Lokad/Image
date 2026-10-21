@@ -1173,6 +1173,12 @@ the difference of deterministic integer log2 estimates, clamped to1..4096;
 amplitude bits are scaled by256. Integer logs use eight Q31 square/normalize
 steps, without platform-dependent transcendental calls. Sampling, histograms and
 prices remain operation-local and do not depend on entropy/output admission.
+The final source-priced pass also considers each original AC value minus/plus
+one, including initially zero values, within the baseline amplitude range
+-1023..1023. Duplicate choices are skipped after the smaller-category candidates;
+strict improvement preserves the original and earlier-choice ties. These neighbors
+can reduce coupled RGB error within the same amplitude category. The geometric
+source trainer retains its smaller-category-only decisions. DC stays unchanged.
 This model precedes
 clipping/rounding and does not replace measured RGB reconstruction-quality gates. Zero lambda,
 grayscale and CompactColor skip this pass. Original color packets
@@ -1181,11 +1187,13 @@ numbering does not establish equivalence with another encoder. The direct frozen
 binary64 transform supplies the decision errors. Each pricing scan charges64 work
 units before examining/modifying coefficients (at most4096 per subsampled block).
 Joint 4:4:4 charges192 for the initial error scan,192 for initial prices, and64
-before each category trial: at most121344 per MCU, or40448 per block. Adaptive and
+before each trial: at most145536 per final priced MCU, or48512 per block. The
+geometric trainer retains its121344-per-MCU bound. Adaptive and
 async caller-sample staging estimates include this bound and the source sketch:
 at most136129 per sampled MCU, plus3632 to finish both models. A512-int stack
 histogram becomes the prices in place. Its2048 bytes and2304-byte MCU scratch
-fit the existing admitted8KiB workspace, without new heap or frame storage. Work exhaustion or
+fit the existing admitted8KiB workspace, including48 bytes of candidate levels
+allocated once per decision call, without new heap or frame storage. Work exhaustion or
 cancellation remains terminal; tighter limits do not bypass coefficient decisions.
 
 Huffman

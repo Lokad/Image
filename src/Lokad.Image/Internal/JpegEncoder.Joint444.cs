@@ -39,6 +39,7 @@ internal static partial class JpegEncoder
         var lengths = FixedAc.Table.Lengths;
         context.Work(192);
         Span<int> previousBits = stackalloc int[3];
+        Span<int> trialLevels = stackalloc int[12];
         for (var component = 0; component < 3; component++)
             previousBits[component] = prices.IsEmpty ? AcDecisionBits(values.Slice(component * 64, 64), lengths)
                 : JointAcPrice(values.Slice(component * 64, 64), prices.Slice(component == 0 ? 0 : 256, 256));
@@ -48,20 +49,36 @@ internal static partial class JpegEncoder
             for (var component = 0; component < 3; component++)
             {
                 var at = component * 64 + index; var original = values[at];
-                if (original == 0) continue;
+                if (original == 0 && prices.IsEmpty) continue;
                 var ey = source[index] - (double)values[index] * luma[index];
                 var ecb = source[64 + index] - (double)values[64 + index] * chroma[index];
                 var ecr = source[128 + index] - (double)values[128 + index] * chroma[index];
                 var before = JointRgbError(ey, ecb, ecr);
                 var bestValue = original; var bestBits = previousBits[component];
                 var bestError = 0d; var bestCost = 0d;
+                var trialCount = 0;
+                for (var category = Category(original) - 1; category >= 0; category--)
+                {
+                    var magnitude = (1 << category) - 1;
+                    trialLevels[trialCount++] = original > 0 ? magnitude : -magnitude;
+                }
+                // Preserve the geometric source trainer. Only the final priced
+                // pass adds adjacent levels, after the existing stable choices.
+                if (!prices.IsEmpty)
+                {
+                    for (var direction = -1; direction <= 1; direction += 2)
+                    {
+                        var value = original + direction;
+                        if (value is < -1023 or > 1023 || trialLevels[..trialCount].Contains(value)) continue;
+                        trialLevels[trialCount++] = value;
+                    }
+                }
                 try
                 {
-                    for (var category = Category(original) - 1; category >= 0; category--)
+                    for (var trial = 0; trial < trialCount; trial++)
                     {
                         context.Work(64);
-                        var magnitude = (1 << category) - 1;
-                        var value = original > 0 ? magnitude : -magnitude;
+                        var value = trialLevels[trial];
                         values[at] = value;
                         var nextBits = prices.IsEmpty ? AcDecisionBits(values.Slice(component * 64, 64), lengths)
                             : JointAcPrice(values.Slice(component * 64, 64), prices.Slice(component == 0 ? 0 : 256, 256));
