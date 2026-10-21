@@ -1360,6 +1360,14 @@ selected LEFT plan. Both alternatives remain charged through selection, includin
 the predictor map while coding tables are replaced; no extra full-frame pixel
 buffer is kept. Local work/memory eligibility precedes shared admission. Refusal
 is terminal, and the final packet is selected only when its full cost is smaller.
+An eligible predicted plan may additionally fit one signed cross-color transform
+per8x8 residual tile (RFC9649 section3.5.2). Source-derived least-squares seeds
+and a fixed entropy-guided coordinate pass select coefficients; original red
+is used for blue decorrelation. Current spatial groups are refit before comparing
+complete packet cost with the retained baseline. Coefficient maps and trees are
+admitted before allocation, with both alternatives live; the inherited predictor
+map remains charged through color and coding-table replacement. No full-frame
+residual copy is allocated. Refusal/cancellation/work exhaustion remain terminal.
 This optional analysis requires an a-priori local/work allowance, including about
 2,754 bytes per tile for temporary counts/indices, map/ranking capacity, and overlapping
 table construction. All substantial storage is charged before allocation through

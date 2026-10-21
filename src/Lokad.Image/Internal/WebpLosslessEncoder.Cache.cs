@@ -11,7 +11,7 @@ internal static partial class WebpLosslessEncoder
     private const int CacheSize = 1024;
     private readonly record struct CachedScan(bool Alpha, int Literals, long ExtraBits);
     private readonly record struct CachedPlan(WebpPrefixCode[] Tables, long BodyBits, bool Alpha, bool Predict, int Literals,
-        EntropyGroups? Groups = null, byte[]? Modes = null, WebpPrefixCode? ModeTable = null);
+        EntropyGroups? Groups = null, byte[]? Modes = null, WebpPrefixCode? ModeTable = null, ColorPlan? Color = null);
 
     private static void EncodeCached(ImageBuffer image, Stream output, WebpEncodeOptions options, OperationContext context)
     {
@@ -32,7 +32,7 @@ internal static partial class WebpLosslessEncoder
     }
 
     private static CachedPlan PrepareCachedTables(ImageBuffer image, int effort, uint[] cache, bool predict, OperationContext context,
-        byte[]? modes = null, WebpPrefixCode? modeTable = null)
+        byte[]? modes = null, WebpPrefixCode? modeTable = null, ColorPlan? color = null)
     {
         const int frequencyBytes = (280 + CacheSize + 256 * 3 + 40) * 4 + 256;
         context.Reserve(frequencyBytes);
@@ -40,7 +40,7 @@ internal static partial class WebpLosslessEncoder
         {
             context.Work(0);
             int[][] frequencies = [new int[280 + CacheSize], new int[256], new int[256], new int[256], new int[40]];
-            var scan = CachedPixels(image, effort, cache, predict, null, null, frequencies, context, modes: modes);
+            var scan = CachedPixels(image, effort, cache, predict, null, null, frequencies, context, modes: modes, color: color);
             context.Reserve(5 * 8 + 32); context.Work(0);
             var result = new WebpPrefixCode[5];
             for (var channel = 0; channel < result.Length; channel++) result[channel] = new(frequencies[channel], context);
@@ -51,7 +51,7 @@ internal static partial class WebpLosslessEncoder
                 for (var symbol = 0; symbol < frequencies[channel].Length; symbol++)
                     bodyBits += (long)frequencies[channel][symbol] * result[channel].BitLength(symbol);
             }
-            return new(result, bodyBits, scan.Alpha, predict, scan.Literals, Modes: modes, ModeTable: modeTable);
+            return new(result, bodyBits, scan.Alpha, predict, scan.Literals, Modes: modes, ModeTable: modeTable, Color: color);
         }
         finally { context.Release(frequencyBytes); }
     }
@@ -60,7 +60,7 @@ internal static partial class WebpLosslessEncoder
         uint[] cache, CachedPlan plan, OperationContext context)
     {
         var writer = CachedHeader(image, output, plan, context);
-        CachedPixels(image, effort, cache, plan.Predict, writer, plan.Tables, null, context, groups: plan.Groups, modes: plan.Modes);
+        CachedPixels(image, effort, cache, plan.Predict, writer, plan.Tables, null, context, groups: plan.Groups, modes: plan.Modes, color: plan.Color);
         writer.Finish();
     }
 
@@ -74,6 +74,7 @@ internal static partial class WebpLosslessEncoder
         writer.Write(1, 1); writer.Write(2, 2);
         if (plan.Modes is { } modes) AdaptivePredictorHeader(modes, plan.ModeTable!, writer, context);
         else if (plan.Predict) LeftPredictorHeader(image, writer, context);
+        if (plan.Color is { } color) ColorHeader(color, writer, context);
         writer.Write(0, 1);
         writer.Write(1, 1); writer.Write(10, 4);
         if (plan.Groups is { } groups) EntropyHeader(groups, writer, context);
@@ -84,7 +85,7 @@ internal static partial class WebpLosslessEncoder
 
     private static CachedScan CachedPixels(ImageBuffer image, int effort, uint[] cache, bool predict,
         WebpBitWriter? writer, WebpPrefixCode[]? tables, int[][]? frequencies, OperationContext context,
-        TileHistograms? histograms = null, EntropyGroups? groups = null, byte[]? modes = null)
+        TileHistograms? histograms = null, EntropyGroups? groups = null, byte[]? modes = null, ColorPlan? color = null)
     {
         context.Work(CacheSize); cache.AsSpan().Clear();
         var count = image.Width * image.Height; var position = 0; uint previous = 0; var alpha = false;
@@ -94,18 +95,18 @@ internal static partial class WebpLosslessEncoder
             var tile = histograms is not null || groups is not null
                 ? (position / image.Width >> 3) * ((image.Width + 7) >> 3) + ((position % image.Width) >> 3) : 0;
             var tableOffset = groups is null ? 0 : groups.Map[tile] * 5;
-            var pixel = CachedPixel(image, position, predict, context, modes);
+            var pixel = CachedPixel(image, position, predict, context, modes, color);
             // Only the original normalized source determines the header hint.
             // Predictor residual alpha has different semantics.
             if (!predict) alpha |= pixel >> 24 != 255;
             var maximum = Math.Min(64 << effort, count - position); var run = 1; var fromAbove = false;
             if (position != 0 && pixel == previous)
-                while (run < maximum && CachedPixel(image, position + run, predict, context, modes) == pixel) run++;
+                while (run < maximum && CachedPixel(image, position + run, predict, context, modes, color) == pixel) run++;
             if (position >= image.Width && run < maximum)
             {
                 var length = 0;
-                while (length < maximum && CachedPixel(image, position + length, predict, context, modes)
-                    == CachedPixel(image, position - image.Width + length, predict, context, modes)) length++;
+                while (length < maximum && CachedPixel(image, position + length, predict, context, modes, color)
+                    == CachedPixel(image, position - image.Width + length, predict, context, modes, color)) length++;
                 if (length > run) { run = length; fromAbove = true; }
             }
             if (run >= 2)
@@ -119,7 +120,7 @@ internal static partial class WebpLosslessEncoder
                 {
                     for (var i = 0; i < run; i++)
                     {
-                        pixel = CachedPixel(image, position + i, predict, context, modes);
+                        pixel = CachedPixel(image, position + i, predict, context, modes, color);
                         context.Work(1); cache[CacheIndex(pixel)] = pixel;
                     }
                 }

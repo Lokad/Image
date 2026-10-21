@@ -20,7 +20,8 @@ internal static partial class WebpLosslessEncoder
         {
             ReleasePlan(raw, context);
             var baseline = SelectEntropyPlan(image, effort, cache, predicted, context);
-            return SelectAdaptivePlan(image, effort, cache, baseline, context);
+            baseline = SelectAdaptivePlan(image, effort, cache, baseline, context);
+            return SelectColorPlan(image, effort, cache, baseline, context);
         }
         ReleasePlan(predicted, context); return raw;
     }
@@ -37,7 +38,7 @@ internal static partial class WebpLosslessEncoder
 
     private static void ReleasePlan(CachedPlan plan, OperationContext context)
     {
-        ReleaseCodingPlan(plan, context);
+        ReleaseColorPlan(plan, context);
         if (plan.Modes is { } modes) context.Release(modes.Length + 32L + plan.ModeTable!.MemoryBytes);
     }
 
@@ -51,9 +52,27 @@ internal static partial class WebpLosslessEncoder
         context.Release(bytes);
     }
 
-    private static uint CachedPixel(ImageBuffer image, int position, bool predict, OperationContext context, byte[]? modes = null)
-        => modes is not null ? AdaptiveResidual(image, position, modes, context)
+    private static void ReleaseColorPlan(CachedPlan plan, OperationContext context)
+    {
+        ReleaseCodingPlan(plan, context);
+        if (plan.Color is { } color)
+        {
+            context.Release(color.Coefficients.Length + 64L);
+            ReleaseTables(color.Tables, context);
+        }
+    }
+
+    private static uint CachedPixel(ImageBuffer image, int position, bool predict, OperationContext context,
+        byte[]? modes = null, ColorPlan? color = null)
+    {
+        var pixel = modes is not null ? AdaptiveResidual(image, position, modes, context)
             : predict ? LeftResidual(image, position, context) : GreenPixel(image, position, context);
+        if (color is null) return pixel;
+        var at = ((position / image.Width >> 3) * ((image.Width + 7) >> 3) + (position % image.Width >> 3)) * 3;
+        context.Work(16);
+        return ColorResidual(pixel, unchecked((sbyte)color.Coefficients[at]),
+            unchecked((sbyte)color.Coefficients[at + 1]), unchecked((sbyte)color.Coefficients[at + 2]));
+    }
 
     // RFC9649 section3.5.1: mode1 is L except for the first pixel (opaque black)
     // and first column (T). Subtract after green decorrelation, per channel mod256.

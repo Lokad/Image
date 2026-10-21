@@ -135,7 +135,7 @@ public sealed class WebpAdaptivePredictorTests
         Assert.Equal(baseline, root.Bytes); Assert.Equal(original, source.Pixels.ToArray()); Assert.False(root.IsDisposed);
     }
 
-    private static ImageBuffer Photograph(int depth, TestMemoryBudget root)
+    internal static ImageBuffer Photograph(int depth, TestMemoryBudget root)
     {
         string? path = null;
         for (var directory = new DirectoryInfo(AppContext.BaseDirectory); directory is not null; directory = directory.Parent)

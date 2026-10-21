@@ -1189,3 +1189,15 @@ remain historical.62independentpasses/163gaps/1confidence-open/13costscreens,
 4,772tests/OS,37internal+117public scalar and the same actual package/examples
 qualify. No public/differential/harness/native/selector build or independent timing
 repeat. All seven lossy size/quality gates stay closed; no new required workload.
+
+
+The [residual-color milestone](WARM-VP8L-RESIDUAL-COLOR.md) saves2,610B on the fixed
+lossless photograph:172418→169808/ref160032. Five other packets remain unchanged:
+diagram7636/7234,opaque123602/121896 and alpha8/16+async145648/183812. All three
+lossless packet gaps remain open. Six compression-first short costs replace C91
+shorts, no independent timing repeat or additional workload.4,783tests/OS,
+48internal+117public scalar and the SAMEactualpackage/all3examples qualify inherited
+predictor and color ownership, refusal/cancellation/work cleanup and exact outputs.
+No public/differential/harness/native/selector build. All seven lossy gates stay
+closed. Finite counts remain256=239numeric+17pending,62independentpasses/163gaps/
+1confidence-open/13costscreens,114independent/125short;31metadata timings pending.

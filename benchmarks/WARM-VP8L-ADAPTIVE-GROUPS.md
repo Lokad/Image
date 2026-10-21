@@ -1,5 +1,9 @@
 # Lossless WebP adaptive prediction with coding groups
 
+Historical C91 milestone. The [residual-color round](WARM-VP8L-RESIDUAL-COLOR.md)
+subsequently saves another2,610B and replaces the six cost rows; this report retains
+its original producer, packet sizes and qualification scope.
+
 The fixed photograph falls from **174,748 to 172,418 bytes**, saving **2,330 bytes
 (1.33%)** with exact RGBA. It remains **12,386 bytes above** the frozen 160,032-byte
 reference. Diagram remains 7,636/7,234 bytes; procedural opaque remains

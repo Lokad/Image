@@ -22,7 +22,7 @@ internal static partial class WebpLosslessEncoder
         var histogram = new TileHistograms(count, context);
         try
         {
-            var scan = CachedPixels(image, effort, cache, baseline.Predict, null, null, null, context, histogram, modes: baseline.Modes);
+            var scan = CachedPixels(image, effort, cache, baseline.Predict, null, null, null, context, histogram, modes: baseline.Modes, color: baseline.Color);
             context.Reserve(count * 9L + 112); context.Work(0);
             var map = new byte[count]; var ranking = new long[count];
             LearnEntropyMap(histogram, baseline.Tables, map, ranking, context);
@@ -43,7 +43,7 @@ internal static partial class WebpLosslessEncoder
                 mapTable = new(frequencies, context);
             }
             finally { context.Release(280 * 4 + 32); }
-            var candidate = new CachedPlan(tables, bodyBits, baseline.Alpha, baseline.Predict, scan.Literals, new(map, mapTable), baseline.Modes, baseline.ModeTable);
+            var candidate = new CachedPlan(tables, bodyBits, baseline.Alpha, baseline.Predict, scan.Literals, new(map, mapTable), baseline.Modes, baseline.ModeTable, baseline.Color);
             if (PayloadUpper(image, candidate, context) + 2 < PayloadUpper(image, baseline, context))
             {
                 ReleaseCodingPlan(baseline, context); return candidate;
