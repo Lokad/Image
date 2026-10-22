@@ -56,21 +56,28 @@ def dynamic(bits):
     # RFC1951 section3.2.7 defines this format permutation.
     for index in [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15][:count]:
         alphabet[index] = bits.read(3)
-    table, lengths = coding(alphabet), []
+    table, lengths, runs = coding(alphabet), [], []
     while len(lengths) < literals + distances:
         value = symbol(bits, table)
         if value < 16:
             lengths.append(value)
+            runs.append([value, 0, 0])
         elif value == 16:
             assert lengths
-            lengths.extend([lengths[-1]] * (bits.read(2) + 3))
+            extra = bits.read(2)
+            lengths.extend([lengths[-1]] * (extra + 3))
+            runs.append([value, extra, 2])
         elif value == 17:
-            lengths.extend([0] * (bits.read(3) + 3))
+            extra = bits.read(3)
+            lengths.extend([0] * (extra + 3))
+            runs.append([value, extra, 3])
         else:
-            lengths.extend([0] * (bits.read(7) + 11))
+            extra = bits.read(7)
+            lengths.extend([0] * (extra + 11))
+            runs.append([value, extra, 7])
         assert len(lengths) <= literals + distances
     assert lengths[256]
-    return lengths[:literals], lengths[literals:]
+    return lengths[:literals], lengths[literals:], alphabet, runs, count
 
 
 def observe(packet_path, token_path):
@@ -103,10 +110,12 @@ def observe(packet_path, token_path):
         else:
             assert kind in (1, 2)
             if kind == 2:
-                literal_lengths, distance_lengths = dynamic(bits)
+                literal_lengths, distance_lengths, code_lengths, runs, code_length_count = dynamic(bits)
             else:
                 literal_lengths = [8 if i < 144 else 9 if i < 256 else 7 if i < 280 else 8 for i in range(288)]
                 distance_lengths = [5] * 32
+                code_lengths = []
+                runs, code_length_count = [], 0
             literal_table, distance_table = coding(literal_lengths), coding(distance_lengths)
             while True:
                 value = symbol(bits, literal_table)
@@ -139,7 +148,11 @@ def observe(packet_path, token_path):
         encoded = b''.join(struct.pack('<HHH', *token) for token in all_tokens[start_token:])
         blocks.append(dict(type=kind, final=bool(final), firstToken=start_token, tokens=len(all_tokens) - start_token,
                            outputOffset=start_output, outputBytes=len(output) - start_output,
-                           startBit=start_bit, endBit=bits.position, tokenSha256=sha(encoded)))
+                           startBit=start_bit, endBit=bits.position, tokenSha256=sha(encoded),
+                           literalLengths=literal_lengths if kind else [],
+                           distanceLengths=distance_lengths if kind else [],
+                           codeLengths=code_lengths if kind else [],
+                           headerRuns=runs if kind else [], codeLengthCount=code_length_count if kind else 0))
     assert (bits.position + 7) // 8 == len(idat) - 6
     assert zlib.adler32(output) == struct.unpack('>I', idat[-4:])[0]
     assert len(output) == 531727 and output == zlib.decompress(idat)

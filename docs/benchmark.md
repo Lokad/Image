@@ -25,9 +25,10 @@ Original/CompactColor are superseded experiments with no compatibility commitmen
 Reference CPU/allocations are
 unmeasured; existing JPEG encoding timings predate its added dispatch and require
 affected confirmation when CPU qualification resumes. Other unchanged paths retain evidence.
-The development-only PNG tokenizer matches all111,511 tokens of the existing
-RGBA8 Optimal control on both platforms, normal/scalar; Huffman/packet generation
-and production integration remain open. No timing or allocation claim follows.
+The development-only PNG prototype matches the entire210,973B packet of the existing
+RGBA8 Optimal/native level6 control on both platforms, normal/scalar, with no metadata
+exemption. Other controls and production integration remain open; no timing or
+allocation claim follows.
 All seven declared lossy WebP and six lossless WebP historical size gates pass.
 Lossless photograph/diagram packets are 159,104/160,032 and 7,160/7,234 B
 (managed/reference), with exact RGBA. Lossy photograph/diagram packets are

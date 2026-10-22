@@ -89,14 +89,16 @@ and exact decoding remain open.
 These two procedural controls establish no general compression claim. CPU and allocations for the Reference profile are unmeasured; tables retain
 Original-profile observations with their recorded producer identities.
 
-The development-only PNG level6 tokenizer now matches all **111,511 tokens** across
-the seven observed blocks of the existing **513×259 RGBA8 Optimal** control on
-Windows/Linux, with intrinsics enabled and disabled. An independent RFC1950/1951
-observer validates the reference CRCs, filtered bytes, Adler32 and token expansion.
-The encoder receives only source pixels. Huffman coding, block decisions and
-zlib/PNG serialization are still outstanding; this is no complete-packet or
-production resource/performance claim. [Numeric evidence](../benchmarks/png-byte-parity-evidence.json)
-records the bounded stage and its unchanged production build.
+The development-only PNG prototype now reproduces the complete **210,973 B**
+packet for the existing **513×259 RGBA8 Optimal/native level6** control, raw-exact
+on Windows/Linux with intrinsics enabled and disabled. It generates all **111,511
+tokens**, **21 Huffman trees**, **1,549 code-length runs**, seven dynamic blocks,
+zlib checksums and PNG chunks from source pixels alone. An independent RFC1950/1951
+observer validates intermediate values and token expansion. No metadata exemption
+is used. Other controls and admitted production integration remain outstanding;
+this is no production resource or performance claim.
+[Numeric evidence](../benchmarks/png-byte-parity-evidence.json) records the bounded
+stages and unchanged production build.
 
 In `tools/WarmReference`, `verify-jpeg-scan-stage.ps1` checks the independent
 complete encoder and its supplied-table stage; `verify-jpeg-huffman-stage.ps1`

@@ -136,9 +136,9 @@
   "timingRuns": 0,
   "cpuAndAllocations": "Unmeasured; source-only prototype is not production qualification",
   "outstanding": [
-    "Independent Huffman trees, code-length runs, block decisions and bit serialization",
-    "zlib/PNG framing; remaining existing PNG controls and public boundaries",
-    "Admitted production integration, affected correctness/package qualification",
+    "Other existing PNG source/policy controls: required levels0/1/6/9, source depths and color layouts",
+    "General bounded encoder and admitted production integration, cancellation/ownership/async behavior, affected cross-platform correctness/package qualification",
+    "Removal of superseded JPEG experimental API/branches/tests/tooling at a coherent production milestone",
     "WebP exact encoders, exact decoders and finite warm CPU/allocation qualification"
   ],
   "invalidatedEvidence": "None: production algorithms, public options and binaries unchanged. Documentation removes experimental preservation obligations.",
@@ -148,5 +148,113 @@
     "sha256": "67efc3a089b89a575b8e29ee903771e3d3750243e5732aebbf956b46d4c9dcdb",
     "members": 9,
     "mirrored": true
+  },
+  "latestRound": "E19",
+  "huffmanPrototype": {
+    "round": "E18",
+    "sourceBase": "195c2ba848a7ab5e873ef53cb842ab3310549adb",
+    "verification": {
+      "sourceOnly": true,
+      "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "sourceUnchanged": true,
+      "blocks": 7,
+      "exactTrees": 21,
+      "exactCodeLengthRuns": 1549,
+      "structuresBytes": 7042,
+      "structuresSha256": "c4573d1692823cc69e03dc016e96d7990d38d5a07b23dafae5714f2a43f2c847",
+      "negativeMutationRejected": true,
+      "independentLiveOutputs": true,
+      "survivingOutputUnchanged": true,
+      "oracleEncoderInputs": false,
+      "productionBuilds": 0,
+      "nativeEncodes": 0,
+      "timingRuns": 0
+    },
+    "platforms": [
+      "windows",
+      "windows-scalar",
+      "linux",
+      "linux-scalar"
+    ],
+    "initialCorrection": "First comparison omitted the unused trailing zero in the 19-symbol code-length alphabet; vector padded without changing tree decisions. All literal/distance trees already agreed.",
+    "productionChanged": false
+  },
+  "completePacketPrototype": {
+    "round": "E19",
+    "sourceBase": "195c2ba848a7ab5e873ef53cb842ab3310549adb",
+    "verification": {
+      "sourceOnly": true,
+      "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "sourceUnchanged": true,
+      "packetBytes": 210973,
+      "packetSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "completePacketRawExact": true,
+      "exactBlockEndBits": [
+        242485,
+        490966,
+        739587,
+        988053,
+        1235177,
+        1482570,
+        1682209
+      ],
+      "attributionExceptionUsed": false,
+      "negativeMutationRejected": true,
+      "independentLiveOutputs": true,
+      "survivingOutputUnchanged": true,
+      "oracleEncoderInputs": false,
+      "productionBuilds": 0,
+      "nativeEncodes": 0,
+      "timingRuns": 0
+    },
+    "platforms": [
+      "windows",
+      "windows-scalar",
+      "linux",
+      "linux-scalar"
+    ],
+    "scope": "ONE existing 513x259 RGBA8 Optimal/native level6 control, source-only development prototype; not production integration or other controls",
+    "rawPacketExact": true,
+    "metadataExceptionUsed": false,
+    "idatChunks": 52,
+    "idatChunkCapacity": 4096,
+    "productionChanged": false,
+    "sourceFiles": [
+      {
+        "path": "tools/WarmReference/PngDeflateParity.cs",
+        "sha256": "e605180f7cd439f2b9fbc7fb9bae2cd8b33b1ebebdf7e53b6001f9d5378bbd1c"
+      },
+      {
+        "path": "tools/WarmReference/PngHuffmanParity.cs",
+        "sha256": "e8a0ce7a7b57317b67f9f36ec7a325a36e27fc3024462e76cdc623074aff0db8"
+      },
+      {
+        "path": "tools/WarmReference/PngPacketParity.cs",
+        "sha256": "5f4d3fedec3a664e2d6e6510fed71b5fcd2f773059249c8a474984dd215621f9"
+      },
+      {
+        "path": "tools/WarmReference/audit-png-deflate.py",
+        "sha256": "6a946ba91fd5c09cc899ae79573322cdd56a243e4484fc3d7fec10f08e4cbe94"
+      },
+      {
+        "path": "tools/WarmReference/verify-png-deflate-stage.ps1",
+        "sha256": "fc068f92428c4737c21b6ce697ab95b0881ceb1ff6470626b581c450fff63c2d"
+      },
+      {
+        "path": "tools/WarmReference/verify-png-huffman-stage.ps1",
+        "sha256": "37b4ddca8f91d0c7c5111d940635a13ae5db7833a810b8a8bdd2ffff310da04d"
+      },
+      {
+        "path": "tools/WarmReference/verify-png-packet-stage.ps1",
+        "sha256": "3531abcb6807b5a02895a4081a9239bf91d94ef4d8c3caa4de8bd7f955f9db0d"
+      }
+    ],
+    "rawArchive": {
+      "file": "e18-e19-qualified-png-packet-prototype.tar.gz",
+      "bytes": 225821,
+      "sha256": "20507248f50919aae8a7367bc0aa05b0c2bb1d2fa1ac1c3402676b70cacaa641",
+      "members": 17,
+      "mirrored": true
+    }
   }
 }

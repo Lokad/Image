@@ -1532,6 +1532,17 @@ a verifier input. `verify-png-deflate-stage.ps1 -SourcePath SOURCE.rgba
 -NativeTokensPath OBSERVED.bin -NativeAuditPath OBSERVED.json` compares all seven
 observed blocks and checks source preservation, independent outputs and mutation
 rejection. Repeat with `DOTNET_EnableHWIntrinsic=0` for scalar execution.
-This stage does not establish complete-packet, production resource or performance
+This token stage does not establish complete-packet, production resource or performance
 qualification. [Evidence](../../benchmarks/png-byte-parity-evidence.json) records
 the frozen identities and cross-platform checks; no fixture grid is added.
+
+`PngHuffmanParity.cs` independently generates the three coding trees per block
+and the code-length runs; `verify-png-huffman-stage.ps1` checks all21trees and1549runs
+against the extended observer. `PngPacketParity.cs` then generates canonical codes,
+dynamic block choices, zlib/PNG checksums and framing from source pixels alone.
+`verify-png-packet-stage.ps1 -SourcePath SOURCE.rgba -NativePacketPath REFERENCE.png`
+checks the entire210973B packet, all7block bit boundaries, input/retained-output
+preservation and mutation rejection. Windows/Linux normal/scalar checks agree
+raw-exact, without metadata exemptions. This remains a development prototype for
+ONE frozen control; required other levels/layouts and admitted production
+integration remain open. Production code and its qualification are unchanged.
