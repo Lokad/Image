@@ -72,7 +72,7 @@ public static class JpegScanParity
         return EncodeWithTables(planes, quantization, tables, null, nativeAttribution, sampling);
     }
 
-    private static Result EncodeWithTables(byte[] planes, ushort[] quantization, CodeTable[] tables,
+    internal static Result EncodeWithTables(byte[] planes, ushort[] quantization, CodeTable[] tables,
         byte[] expectedPhantoms, bool nativeAttribution, int sampling = 444, bool rowRestart = false)
     {
         const int width = 513, height = 259, plane = width * height;

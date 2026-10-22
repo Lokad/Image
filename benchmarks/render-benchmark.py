@@ -350,8 +350,8 @@ and filter-edge branches; no performance claim follows from packet equality.
 The production grayscale Reference profile also matches its58,910B packet exactly,
 including caller Gray8/RGB8 and async boundaries; no attribution exception is needed.
 CPU/allocation qualification remains open.
-A tooling stage also matches the58,012B row-restart4:2:0 packet using supplied
-tables; independent fixed-table generation and production integration remain open.
+The source-only row-restart4:2:0 prototype also matches its58,012B packet with
+independently generated fixed tables; production integration remains open.
 Original/CompactColor packet behavior is unchanged. Reference CPU/allocations are
 unmeasured; existing JPEG encoding timings predate its added dispatch and require
 affected confirmation when CPU qualification resumes. Other unchanged paths retain evidence.

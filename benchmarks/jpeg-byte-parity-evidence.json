@@ -126,7 +126,7 @@
     "sha256": "17a146f3a307fec096b8189161fc1a1e4e1d947327dc895c9b4e1e8d1d9b5d93",
     "mirrored": true
   },
-  "next": "E10: independently generate the four fixed T.81 format tables and reproduce the frozen4208 restart33 packet from source only, reusing E9 exact coefficient/framing proofs. Then admit the production path and qualify named remaining option/normalization/default boundaries; PNG/WebP encoder and exact decoder work plus full CPU/release objective remain open.",
+  "next": "E11: promote the exact fixed-table restart primitive into admitted public Reference color JPEG operations; qualify exact4208 restart33 plus generic interval/layout functionality, memory/cancellation/ownership and affected actual package on both platforms. Reuse E8/E9/E10 evidence where paths are unchanged. Required grayscale16/native restart/default adoption and remaining codecs/CPU/release scope remain OPEN.",
   "forwardStage": {
     "qualification": "E2",
     "nativeDispatch": "ff_fdct_sse2",
@@ -412,7 +412,7 @@
     },
     "adoptedIn": "E6"
   },
-  "latestPrototypeQualification": "E7",
+  "latestPrototypeQualification": "E10",
   "originalPacketProducerCoreSha256": "2d82a81dc60cd5e30c0644c2f62e4206da74ac6322e6caab6df02370705909e3",
   "productionSubsampling": {
     "qualification": "E6",
@@ -1101,7 +1101,8 @@
       "linuxBytesAfterMirror": 4999041816,
       "limitBytes": 5000000000,
       "rejectedCleanupTargetsUntouched": true
-    }
+    },
+    "independentPrototypeQualifiedIn": "E10"
   },
   "jpegOptionCoverageAudit": {
     "round": "E9",
@@ -1364,6 +1365,72 @@
       "RGBA16": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
       "normalizedCallerRGB8": "257210317c8bb87ec196f89d511de45f014c66e73049fbcf5f44f399184d9668",
       "normalizedCallerGray8": "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d"
+    }
+  },
+  "restartReplication": {
+    "project": "Lokad.Image",
+    "round": "E10",
+    "prototypeOnly": true,
+    "oraclePacketOrTableInputs": false,
+    "sourceRgba8Sha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "fixedTables": [
+      {
+        "sha256": "9fb04cb1a8076318f33f273ffef967a9ea7291ecf3adeca79f643dfd300de425",
+        "symbols": 12,
+        "id": 0
+      },
+      {
+        "sha256": "af48d4f608dfb682fd19ee479c66dad5342dfbed5b1d1807b95393162a8715d1",
+        "symbols": 12,
+        "id": 1
+      },
+      {
+        "sha256": "f27ce9b718f91cd426885e6ce4a37d0ba4900db219f719eef29ecc1f7f4fd5f0",
+        "symbols": 162,
+        "id": 16
+      },
+      {
+        "sha256": "8cf60aa835f8474bb590e73332bee9c246bec9ce1e368aa725674c096f3efd2c",
+        "symbols": 162,
+        "id": 17
+      }
+    ],
+    "rawExact": true,
+    "nativeAttributionBytes": 58012,
+    "nativeAttributionSha256": "bd0060bf5bbf48a9f55120c5e71b22ac2763751bb370e9c5c2d93ebba38ed622",
+    "ownAttributionBytes": 58010,
+    "ownAttributionSha256": "1af33b85d17d4dd24a19f98e66242eba42c7c77b7347dfa564a83d64b19feea4",
+    "rowRestartInterval": 33,
+    "restartMarkers": 16,
+    "sourceAndSurvivingOutputsPreserved": true,
+    "productionChanged": false,
+    "productionBuilds": 0,
+    "nativeEncodes": 0,
+    "timingRuns": 0,
+    "qualification": "E10",
+    "status": "Qualified independent source-only restart33 encoder prototype on Windows/Linux; production/admission integration OPEN",
+    "exactOnWindows": true,
+    "exactOnLinux": true,
+    "standard": "https://www.w3.org/Graphics/JPEG/itu-t81.pdf#page=162",
+    "standardSection": "T.81 K.3.3; optional example tables K.3-K.6, not mandatory JPEG defaults",
+    "derivation": "DC category-length formulas; specification short-code counts/symbols; generate remaining legal AC run/size symbols at length16 in ordinal order; derive canonical codewords. No upstream implementation table copied.",
+    "onlyApprovedAttributionDifference": true,
+    "productionQualificationReused": "E8 core524360ad\u2026,5130full+63scalar/OS, actual private0.2 package/all3examples; no relevant production or package input changed.",
+    "stageQualificationReused": "E9 exact209088 retained coefficients, all padding via complete packet, six existing color regressions/OS. E10 changes only EncodeWithTables visibility, leaving its body and all prior generators/helpers unchanged.",
+    "cpuAndAllocations": "Unmeasured; no timing or CPU parity claim.",
+    "nativeBuilds": 0,
+    "sourceSha256": {
+      "tools/WarmReference/JpegFixedReferenceTables.cs": "ae23cf72afe7a9bf8749b9df727fc5fa6e76e2596c86bdcc0adff50ad46c9460",
+      "tools/WarmReference/JpegRestartParity.cs": "88fb289923b6c02f958c58a809a1ab9aa597e1bc242d843caef8ed7bd8bf007a",
+      "tools/WarmReference/JpegScanParity.cs": "833cea1f8c110b1a1bf912855174c7c2a9dd87d31a3c95baad3154a5597ac2be",
+      "tools/WarmReference/verify-jpeg-restart-generated.ps1": "243e77719aa4c36995f077b3844a0205cc7cf314dd93b79b29bd15e5b97d5448"
+    },
+    "rawArchive": {
+      "file": "e10-independent-restart-prototype.tar.gz",
+      "bytes": 123740,
+      "sha256": "6df87686ec27ae3e51f6b2379633ec6d482ed9b57d7fc5c15792be4ed2fb42c1",
+      "members": 9,
+      "mirrored": true
     }
   }
 }
