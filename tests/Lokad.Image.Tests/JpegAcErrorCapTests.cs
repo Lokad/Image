@@ -104,7 +104,7 @@ public sealed class JpegAcErrorCapTests
         var blocks = mcus * (h * v + 2);
         var bound = 2L * mcus + mcus * (h * v * (4096 + 768) + 2 * (4096 + 768 * h * v))
             + blocks * (192L + (sampling == JpegSampling.YCbCr444 ? 301815 : 26033))
-            + (sampling == JpegSampling.YCbCr444 ? Math.Min(64, mcus) * 136129L + 3632 : 0) + 262145
+            + (sampling == JpegSampling.YCbCr444 ? Math.Min(64, mcus) * 136129L + 3632 + 1920 : 0) + 262145
             + (sampling == JpegSampling.YCbCr444 ? 192L * 65536 + blocks * 512L : 0);
         using var root = new TestMemoryBudget(2 * 1024 * 1024);
         using (var context = new OperationContext(new() { MemoryBudget = root, MaxWork = bound - (exact ? 0 : 1) }, default))

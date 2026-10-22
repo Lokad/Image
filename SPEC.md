@@ -1176,8 +1176,11 @@ MCU error, including DC in that initial estimate while retaining its coefficient
 It visits frequencies in reverse zigzag and components Y/Cb/Cr, accepting strict
 cost improvements with stable closest-category-first ties. Its two AC price
 models (Y and shared Cb/Cr) use at most64 evenly spaced distinct source MCUs,
-including the endpoints. These samples first undergo the geometric decisions;
-their AC histograms receive +1 smoothing on all162 legal symbols. Q8 prices are
+including the endpoints. These samples first undergo the same geometric decisions
+on the original fine quantizers. Their unchanged fine-unit AC coefficients are
+counted independently over the eventual equal-point-transform spectral bands,
+resetting run/EOB at each boundary; they are not rescaled or retrained on a coarser
+grid. The two histograms receive +1 smoothing on all162 legal symbols. Q8 prices are
 the difference of deterministic integer log2 estimates, clamped to1..4096;
 amplitude bits are scaled by256. Integer logs use eight Q31 square/normalize
 steps, without platform-dependent transcendental calls. Sampling, histograms and
@@ -1272,7 +1275,10 @@ giving667440 before the paired tail. That tail adds at most196002 per MCU,
 for863442 total (287814/block). Every bounded bank, arc, probe,
 reconstruction and selection step charges work before execution. Adaptive and
 async staging estimates also include source sampling: at most136129 per sampled
-MCU plus3632 to finish both models. Default work limits remain unchanged.
+MCU plus3632 to finish both models and1920 once to prepare their band masks.
+Mask setup charges before clearing histograms, reuses128 stack bytes and adds no
+owner or frame copy. The declared control plans1,999,576,760 units under the
+unchanged default2B limit. Default work limits remain unchanged.
 The1612-byte trellis scratch is allocated once per MCU call; each frequency's
 bank is rebuilt as needed. Alongside the2048-byte price model,2304-byte MCU,
 512-byte effective-grid arrays,48-byte local candidate bank and existing scratch,

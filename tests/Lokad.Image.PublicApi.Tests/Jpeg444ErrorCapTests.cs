@@ -6,8 +6,8 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class Jpeg444ErrorCapTests
 {
     [Theory]
-    [InlineData(8, 135342, "ec7d35abede5fa94e05886176a5fed783070fc0603615752b8e226bd33ff8f38")]
-    [InlineData(16, 135265, "b4ecbe351fe6768962557740206f1ff73595d240b3e9745bbb9d6217a8df93a7")]
+    [InlineData(8, 135237, "fbdf17717f20ed199a992cf4c098957221289f7a948b85b23a76ee4a55bcf84a")]
+    [InlineData(16, 135144, "1a5b29a95fb6575008dede85b1664444f3c45381c588f3153a5b2098024900e9")]
     public async Task IndependentSourceDctPacketsAgreeAcrossInputAndOutputBoundaries(int depth, int bytes, string hash)
     {
         using var source = OriginalPixels.Buffer(513, 259, depth);

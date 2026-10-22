@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "project": "Lokad.Image",
-  "round": "C176",
+  "round": "C178",
   "productionChanged": true,
   "productionBuilds": 2,
   "harnessDriverSelectorNativeBuilds": 0,
@@ -9,22 +9,22 @@
   "timingRuns": 1,
   "independentConfirmations": 0,
   "scope": "Exactly all19 existing JPEG encode rows:18default boundaries and one explicitly optional CompactColor boundary. Existing inputs/sampling/quality/native packets retained; no new workload matrix.",
-  "producerSha256": "d435615483a2b4009bbc4d46e77d127bea417ba384e3cf00e6a550f7db30315e",
+  "producerSha256": "3e1a66498caca2015b2fc869e854a40623a019e180da16ee724048c6ebfa3141",
   "cases": [
     {
       "case": "Encode8",
       "boundary": "RGBA8 adaptive",
-      "managedBytes": 135342,
+      "managedBytes": 135237,
       "referenceBytes": 133041,
-      "managedSha256": "ec7d35abede5fa94e05886176a5fed783070fc0603615752b8e226bd33ff8f38",
+      "managedSha256": "fbdf17717f20ed199a992cf4c098957221289f7a948b85b23a76ee4a55bcf84a",
       "referenceSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
-      "psnrGapDb": 0.22003845048967463,
+      "psnrGapDb": 0.21908730312018676,
       "qualityPass": true,
       "sizePass": false,
-      "evidence": "C176 fixed progressive-band run/EOB pricing throughout one precision-grid local/DAG/pair/triplet pass. Same trainer/Q8prices/lambda100/DC/OriginalDQT/factors/source/reference/q69/native5/flattening/sampling/globalMCUcap. Per-band DAG roots form one wholecomponent candidate under the existing global criteria. Exact independent8/16 packets across bothOS normal/scalar/public boundaries. No photographic/diagram/generalJPEG claim.",
-      "excessBytes": 2301,
-      "sizeRatio": 1.0172954202088078,
-      "producerSha256": "d435615483a2b4009bbc4d46e77d127bea417ba384e3cf00e6a550f7db30315e"
+      "evidence": "C178 SAMEfine-geometric source training coefficients counted over existing spectral bands; Q8finishing rule/positions/smoothing/fineunits fixed, derivedmodels change. FinalC176RDO/lambda100/DC/OriginalDQT/factors/source/reference/q69/native5/flattening/sampling/globalMCUcap retained. Exact independent8/16 packets across bothOS normal/scalar/public boundaries. No photographic/diagram/generalJPEG claim.",
+      "excessBytes": 2196,
+      "sizeRatio": 1.016506189821183,
+      "producerSha256": "3e1a66498caca2015b2fc869e854a40623a019e180da16ee724048c6ebfa3141"
     },
     {
       "case": "Encode422_8",
@@ -58,17 +58,17 @@
     {
       "case": "Encode16",
       "boundary": "RGBA16 adaptive",
-      "managedBytes": 135265,
+      "managedBytes": 135144,
       "referenceBytes": 133043,
-      "managedSha256": "b4ecbe351fe6768962557740206f1ff73595d240b3e9745bbb9d6217a8df93a7",
+      "managedSha256": "1a5b29a95fb6575008dede85b1664444f3c45381c588f3153a5b2098024900e9",
       "referenceSha256": "0f0933b13b4bbf4b0dcaea55f44ff54b83125743e88b7de7a71c750ec42d71ea",
-      "psnrGapDb": 0.22552535657734296,
+      "psnrGapDb": 0.2271272407834104,
       "qualityPass": true,
       "sizePass": false,
-      "evidence": "C176 fixed progressive-band run/EOB pricing throughout one precision-grid local/DAG/pair/triplet pass. Same trainer/Q8prices/lambda100/DC/OriginalDQT/factors/source/reference/q69/native5/flattening/sampling/globalMCUcap. Per-band DAG roots form one wholecomponent candidate under the existing global criteria. Exact independent8/16 packets across bothOS normal/scalar/public boundaries. No photographic/diagram/generalJPEG claim.",
-      "excessBytes": 2222,
-      "sizeRatio": 1.016701367227137,
-      "producerSha256": "d435615483a2b4009bbc4d46e77d127bea417ba384e3cf00e6a550f7db30315e"
+      "evidence": "C178 SAMEfine-geometric source training coefficients counted over existing spectral bands; Q8finishing rule/positions/smoothing/fineunits fixed, derivedmodels change. FinalC176RDO/lambda100/DC/OriginalDQT/factors/source/reference/q69/native5/flattening/sampling/globalMCUcap retained. Exact independent8/16 packets across bothOS normal/scalar/public boundaries. No photographic/diagram/generalJPEG claim.",
+      "excessBytes": 2101,
+      "sizeRatio": 1.01579188683358,
+      "producerSha256": "3e1a66498caca2015b2fc869e854a40623a019e180da16ee724048c6ebfa3141"
     },
     {
       "case": "Encode422_16",
@@ -296,15 +296,15 @@
       "sampling": "444",
       "quality": 69,
       "nativeQuality": 5,
-      "managedBytes": 135342,
+      "managedBytes": 135237,
       "referenceBytes": 133041,
-      "managedSha256": "ec7d35abede5fa94e05886176a5fed783070fc0603615752b8e226bd33ff8f38",
+      "managedSha256": "fbdf17717f20ed199a992cf4c098957221289f7a948b85b23a76ee4a55bcf84a",
       "referenceSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
       "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
       "referenceSampleSha256": "ec2ea910c09a839ea55987103b9a2efa1c0bec62658fa55cda9c14726e88b5cd",
       "sizePass": false,
       "qualityPass": true,
-      "psnrGapDb": 0.22003845048967463,
+      "psnrGapDb": 0.21908730312018676,
       "qualityEvidenceReused": true,
       "qualitySample": {
         "setting": 69,
@@ -348,11 +348,11 @@
       "harnessNativeSelectorBuilds": 0,
       "nativeEncodes": 0,
       "timingRuns": 0,
-      "excessBytes": 2301,
-      "sizeRatio": 1.0172954202088078,
+      "excessBytes": 2196,
+      "sizeRatio": 1.016506189821183,
       "boundary": "RGBA forward-only/live-cancellable output",
-      "evidence": "C176 fixed progressive-band run/EOB pricing throughout one precision-grid local/DAG/pair/triplet pass. Same trainer/Q8prices/lambda100/DC/OriginalDQT/factors/source/reference/q69/native5/flattening/sampling/globalMCUcap. Per-band DAG roots form one wholecomponent candidate under the existing global criteria. Exact independent8/16 packets across bothOS normal/scalar/public boundaries. No photographic/diagram/generalJPEG claim.",
-      "producerSha256": "d435615483a2b4009bbc4d46e77d127bea417ba384e3cf00e6a550f7db30315e"
+      "evidence": "C178 SAMEfine-geometric source training coefficients counted over existing spectral bands; Q8finishing rule/positions/smoothing/fineunits fixed, derivedmodels change. FinalC176RDO/lambda100/DC/OriginalDQT/factors/source/reference/q69/native5/flattening/sampling/globalMCUcap retained. Exact independent8/16 packets across bothOS normal/scalar/public boundaries. No photographic/diagram/generalJPEG claim.",
+      "producerSha256": "3e1a66498caca2015b2fc869e854a40623a019e180da16ee724048c6ebfa3141"
     },
     {
       "case": "Encode444Cancelable8",
@@ -360,15 +360,15 @@
       "sampling": "444",
       "quality": 69,
       "nativeQuality": 5,
-      "managedBytes": 135342,
+      "managedBytes": 135237,
       "referenceBytes": 133041,
-      "managedSha256": "ec7d35abede5fa94e05886176a5fed783070fc0603615752b8e226bd33ff8f38",
+      "managedSha256": "fbdf17717f20ed199a992cf4c098957221289f7a948b85b23a76ee4a55bcf84a",
       "referenceSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
       "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
       "referenceSampleSha256": "ec2ea910c09a839ea55987103b9a2efa1c0bec62658fa55cda9c14726e88b5cd",
       "sizePass": false,
       "qualityPass": true,
-      "psnrGapDb": 0.22003845048967463,
+      "psnrGapDb": 0.21908730312018676,
       "qualityEvidenceReused": true,
       "qualitySample": {
         "setting": 69,
@@ -412,11 +412,11 @@
       "harnessNativeSelectorBuilds": 0,
       "nativeEncodes": 0,
       "timingRuns": 0,
-      "excessBytes": 2301,
-      "sizeRatio": 1.0172954202088078,
+      "excessBytes": 2196,
+      "sizeRatio": 1.016506189821183,
       "boundary": "RGBA forward-only/live-cancellable output",
-      "evidence": "C176 fixed progressive-band run/EOB pricing throughout one precision-grid local/DAG/pair/triplet pass. Same trainer/Q8prices/lambda100/DC/OriginalDQT/factors/source/reference/q69/native5/flattening/sampling/globalMCUcap. Per-band DAG roots form one wholecomponent candidate under the existing global criteria. Exact independent8/16 packets across bothOS normal/scalar/public boundaries. No photographic/diagram/generalJPEG claim.",
-      "producerSha256": "d435615483a2b4009bbc4d46e77d127bea417ba384e3cf00e6a550f7db30315e"
+      "evidence": "C178 SAMEfine-geometric source training coefficients counted over existing spectral bands; Q8finishing rule/positions/smoothing/fineunits fixed, derivedmodels change. FinalC176RDO/lambda100/DC/OriginalDQT/factors/source/reference/q69/native5/flattening/sampling/globalMCUcap retained. Exact independent8/16 packets across bothOS normal/scalar/public boundaries. No photographic/diagram/generalJPEG claim.",
+      "producerSha256": "3e1a66498caca2015b2fc869e854a40623a019e180da16ee724048c6ebfa3141"
     },
     {
       "case": "JpegBudgetEncode4208",
@@ -487,15 +487,15 @@
       "sampling": "444",
       "quality": 69,
       "nativeQuality": 5,
-      "managedBytes": 135342,
+      "managedBytes": 135237,
       "referenceBytes": 133041,
-      "managedSha256": "ec7d35abede5fa94e05886176a5fed783070fc0603615752b8e226bd33ff8f38",
+      "managedSha256": "fbdf17717f20ed199a992cf4c098957221289f7a948b85b23a76ee4a55bcf84a",
       "referenceSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
       "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
       "referenceSampleSha256": "ec2ea910c09a839ea55987103b9a2efa1c0bec62658fa55cda9c14726e88b5cd",
       "sizePass": false,
       "qualityPass": true,
-      "psnrGapDb": 0.22003845048967463,
+      "psnrGapDb": 0.21908730312018676,
       "qualityEvidenceReused": true,
       "qualitySample": {
         "setting": 69,
@@ -538,10 +538,10 @@
       "harnessNativeSelectorBuilds": 0,
       "nativeEncodes": 0,
       "timingRuns": 0,
-      "excessBytes": 2301,
-      "sizeRatio": 1.0172954202088078,
-      "evidence": "C176 fixed progressive-band run/EOB pricing throughout one precision-grid local/DAG/pair/triplet pass. Same trainer/Q8prices/lambda100/DC/OriginalDQT/factors/source/reference/q69/native5/flattening/sampling/globalMCUcap. Per-band DAG roots form one wholecomponent candidate under the existing global criteria. Exact independent8/16 packets across bothOS normal/scalar/public boundaries. No photographic/diagram/generalJPEG claim.",
-      "producerSha256": "d435615483a2b4009bbc4d46e77d127bea417ba384e3cf00e6a550f7db30315e"
+      "excessBytes": 2196,
+      "sizeRatio": 1.016506189821183,
+      "evidence": "C178 SAMEfine-geometric source training coefficients counted over existing spectral bands; Q8finishing rule/positions/smoothing/fineunits fixed, derivedmodels change. FinalC176RDO/lambda100/DC/OriginalDQT/factors/source/reference/q69/native5/flattening/sampling/globalMCUcap retained. Exact independent8/16 packets across bothOS normal/scalar/public boundaries. No photographic/diagram/generalJPEG claim.",
+      "producerSha256": "3e1a66498caca2015b2fc869e854a40623a019e180da16ee724048c6ebfa3141"
     },
     {
       "case": "JpegRgb420AsyncSamples",
@@ -710,44 +710,44 @@
   "rankedRemaining": [
     {
       "case": "Encode8",
-      "managedBytes": 135342,
+      "managedBytes": 135237,
       "referenceBytes": 133041,
-      "excessBytes": 2301,
-      "sizeRatio": 1.0172954202088078
+      "excessBytes": 2196,
+      "sizeRatio": 1.016506189821183
     },
     {
       "case": "Encode444Stream8",
-      "managedBytes": 135342,
+      "managedBytes": 135237,
       "referenceBytes": 133041,
-      "excessBytes": 2301,
-      "sizeRatio": 1.0172954202088078
+      "excessBytes": 2196,
+      "sizeRatio": 1.016506189821183
     },
     {
       "case": "Encode444Cancelable8",
-      "managedBytes": 135342,
+      "managedBytes": 135237,
       "referenceBytes": 133041,
-      "excessBytes": 2301,
-      "sizeRatio": 1.0172954202088078
+      "excessBytes": 2196,
+      "sizeRatio": 1.016506189821183
     },
     {
       "case": "Jpeg8AsyncNonSeekable",
-      "managedBytes": 135342,
+      "managedBytes": 135237,
       "referenceBytes": 133041,
-      "excessBytes": 2301,
-      "sizeRatio": 1.0172954202088078
+      "excessBytes": 2196,
+      "sizeRatio": 1.016506189821183
     },
     {
       "case": "Encode16",
-      "managedBytes": 135265,
+      "managedBytes": 135144,
       "referenceBytes": 133043,
-      "excessBytes": 2222,
-      "sizeRatio": 1.016701367227137
+      "excessBytes": 2101,
+      "sizeRatio": 1.01579188683358
     }
   ],
-  "largestGap": "Five default444 rows open:135342/ref133041 and135265/ref133043B, maximum1.7296% excess. Thirteen other default controls and separate optionalCompactColor pass.",
+  "largestGap": "Five default444 rows open:135237/ref133041 and135144/ref133043B, maximum1.6507% excess. Thirteen other default controls and separate optionalCompactColor pass.",
   "next": "One bounded material compression primitive on existing Original444 controls. Preserve frozen source/reference/settings/quality and full oneCPU operation boundaries. Accept meaningful verified incremental gains; defer CPU parity/speed-only work. Passing WebP/PNG/otherJPEG stay stopped.",
-  "correctedInvalidation": "Five Original444 packet rows and current forward444 cost replaceC171. Every other invocation containing changed Original444 encoding retains historical timing until measured. Relevant420/422/grayscale/optionalCompactColor/native/decoder/PNG/WebP paths unchanged; C146caller420/C161PNG/WebP evidence reused. Finite256=60passes/147gaps/1confidenceOpen/16costScreens/15superseded;31metadata confirmations pending.",
-  "qualificationReuse": "5031tests/OS,201+62scalar/OS,SAMEactualprivate0.2package/all3examples bothOS. One frozen core/OS; only an expected stable-tie assertion corrected by rebuilding internal tests on Windows. Actual packets match independently qualifiedC175 at both depths. Benchmark/native/driver/parser/differential builds0; one completeforward cost.",
+  "correctedInvalidation": "Five Original444 packet rows and current forward444 cost replaceC176. Every other invocation containing changed Original444 encoding retains historical timing until measured. Relevant420/422/grayscale/optionalCompactColor/native/decoder/PNG/WebP paths unchanged; C146caller420/C161PNG/WebP evidence reused. Finite256=60passes/147gaps/1confidenceOpen/16costScreens/15superseded;31metadata confirmations pending.",
+  "qualificationReuse": "5037tests/OS,207+62scalar/OS,SAMEactualprivate0.2package/all3examples bothOS. One frozen core/OS; one core/internal/public build perOS with no test corrections or post-freeze rebuilds. Actual packets match independently qualifiedC177 at both depths. Benchmark/native/driver/parser/differential builds0; one completeforward cost.",
   "rawArtifact": {
     "file": "c125-jpeg-packet-ledger.tar.gz",
     "bytes": 10218,
@@ -761,65 +761,65 @@
   "changedBoundaries": [
     {
       "case": "Encode8",
-      "previousBytes": 135481,
-      "currentBytes": 135342,
-      "savingBytes": 139,
-      "currentSha256": "ec7d35abede5fa94e05886176a5fed783070fc0603615752b8e226bd33ff8f38",
+      "previousBytes": 135342,
+      "currentBytes": 135237,
+      "savingBytes": 105,
+      "currentSha256": "fbdf17717f20ed199a992cf4c098957221289f7a948b85b23a76ee4a55bcf84a",
       "referenceBytes": 133041,
-      "sourcePsnrGapDb": 0.22003845048967463,
+      "sourcePsnrGapDb": 0.21908730312018676,
       "qualityPass": true
     },
     {
       "case": "Encode16",
-      "previousBytes": 135487,
-      "currentBytes": 135265,
-      "savingBytes": 222,
-      "currentSha256": "b4ecbe351fe6768962557740206f1ff73595d240b3e9745bbb9d6217a8df93a7",
+      "previousBytes": 135265,
+      "currentBytes": 135144,
+      "savingBytes": 121,
+      "currentSha256": "1a5b29a95fb6575008dede85b1664444f3c45381c588f3153a5b2098024900e9",
       "referenceBytes": 133043,
-      "sourcePsnrGapDb": 0.22552535657734296,
+      "sourcePsnrGapDb": 0.2271272407834104,
       "qualityPass": true
     },
     {
       "case": "Encode444Stream8",
-      "previousBytes": 135481,
-      "currentBytes": 135342,
-      "savingBytes": 139,
-      "currentSha256": "ec7d35abede5fa94e05886176a5fed783070fc0603615752b8e226bd33ff8f38",
+      "previousBytes": 135342,
+      "currentBytes": 135237,
+      "savingBytes": 105,
+      "currentSha256": "fbdf17717f20ed199a992cf4c098957221289f7a948b85b23a76ee4a55bcf84a",
       "referenceBytes": 133041,
-      "sourcePsnrGapDb": 0.22003845048967463,
+      "sourcePsnrGapDb": 0.21908730312018676,
       "qualityPass": true
     },
     {
       "case": "Encode444Cancelable8",
-      "previousBytes": 135481,
-      "currentBytes": 135342,
-      "savingBytes": 139,
-      "currentSha256": "ec7d35abede5fa94e05886176a5fed783070fc0603615752b8e226bd33ff8f38",
+      "previousBytes": 135342,
+      "currentBytes": 135237,
+      "savingBytes": 105,
+      "currentSha256": "fbdf17717f20ed199a992cf4c098957221289f7a948b85b23a76ee4a55bcf84a",
       "referenceBytes": 133041,
-      "sourcePsnrGapDb": 0.22003845048967463,
+      "sourcePsnrGapDb": 0.21908730312018676,
       "qualityPass": true
     },
     {
       "case": "Jpeg8AsyncNonSeekable",
-      "previousBytes": 135481,
-      "currentBytes": 135342,
-      "savingBytes": 139,
-      "currentSha256": "ec7d35abede5fa94e05886176a5fed783070fc0603615752b8e226bd33ff8f38",
+      "previousBytes": 135342,
+      "currentBytes": 135237,
+      "savingBytes": 105,
+      "currentSha256": "fbdf17717f20ed199a992cf4c098957221289f7a948b85b23a76ee4a55bcf84a",
       "referenceBytes": 133041,
-      "sourcePsnrGapDb": 0.22003845048967463,
+      "sourcePsnrGapDb": 0.21908730312018676,
       "qualityPass": true
     }
   ],
   "currentQualificationRaw": [
     {
-      "file": "c176-qualified-linux.tar.gz",
-      "bytes": 2083923,
-      "sha256": "b46fb7841f18ebd4500a698f6bab80fd39c797d4317a56226d4b5e858cfe5bef"
+      "file": "c178-qualified-linux.tar.gz",
+      "bytes": 2079015,
+      "sha256": "fe10ca94f490be950f938dea8f2f2284bd2bcc28ae50c471fc7e2ae05a7854c7"
     },
     {
-      "file": "c176-qualified-windows.tar.gz",
-      "bytes": 2723949,
-      "sha256": "b48f4e35b79fdc3e4fa8b1e948a85dda79fe5f59beac3cba10b0ecc445de19e0"
+      "file": "c178-qualified-windows.tar.gz",
+      "bytes": 2718547,
+      "sha256": "99f703333fa4dfd35edca90c33ae84cf10a293a7a970c5b7fc9164350ff84226"
     }
   ],
   "countReconciliation": "Recomputed defaultPasses/defaultOpen from all18 rows:13/5. The previous root counters5/13 were stale; its per-case packets and published13/5 table were already correct. No new measurements or changed acceptance result."

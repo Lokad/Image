@@ -15,6 +15,8 @@ Joint three-component AC choices reuse the pair stage's error/prices to fit the
 existing default work limit; terminal admission failure still aborts the operation.
 Final AC prices now follow the progressive spectral bands, retaining one global
 MCU error allowance and the existing memory/work limits.
+Source histograms now count those bands on the same fine training coefficients;
+mask setup adds1,920 admitted work units once per operation.
 
 PNG `Optimal` now uses the deeper BCL search for every 8-bit color type, including
 RGBA. This may increase CPU time and change packet bytes; samples, filter None,
