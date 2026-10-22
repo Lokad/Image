@@ -129,10 +129,16 @@ static void write_packet(const Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if ((argc != 8 && argc != 9) || strcmp(argv[1], "webp-lossless-encode")) fail("Usage: libwebp-lossless-warm webp-lossless-encode INPUT WIDTH HEIGHT 8|16 OUTPUT QUALITY [NORMALIZED-RGBA8 when depth16]");
+    if (argc < 8 || argc > 10 || strcmp(argv[1], "webp-lossless-encode")) fail("Usage: libwebp-lossless-warm webp-lossless-encode INPUT WIDTH HEIGHT 8|16 OUTPUT QUALITY [NORMALIZED-RGBA8 when depth16] [METHOD0..6]");
     Work work = {0}; work.cpu = affinity_cpu();
     work.width = number(argv[3]); work.height = number(argv[4]); work.quality = number(argv[7]); work.depth = number(argv[5]);
-    if ((work.depth != 8 && work.depth != 16) || work.quality > 100 || argc != 8+(work.depth==16)) fail("WebP requires depth 8/16, the matching reference for depth16 and quality 1..100.");
+    const int base_argc = 8+(work.depth==16);
+    if ((work.depth != 8 && work.depth != 16) || work.quality > 100 || (argc != base_argc && argc != base_argc+1)) fail("WebP requires depth 8/16, the matching reference for depth16 and quality 1..100.");
+    int method = 4;
+    if (argc == base_argc+1) {
+        if (strlen(argv[base_argc]) != 1 || argv[base_argc][0] < '0' || argv[base_argc][0] > '6') fail("Method must be 0..6.");
+        method = argv[base_argc][0]-'0';
+    }
     work.raw_bytes = (size_t)work.width * work.height * 4 * (work.depth/8);
     if (work.raw_bytes > 512U*1024U*1024U) fail("Reference raster exceeds 512 MiB.");
     work.original = read_file(argv[2], work.raw_bytes);
@@ -141,7 +147,7 @@ int main(int argc, char **argv)
     if (!work.source_copy || !work.bgra) fail("Allocate source/scratch failed.");
     memcpy(work.source_copy,work.original,work.raw_bytes);
     if (!WebPConfigInit(&work.config) || !WebPPictureInit(&work.picture)) fail("Initialize public libwebp API failed.");
-    work.config.lossless = 1; work.config.method = 4; work.config.quality = (float)work.quality;
+    work.config.lossless = 1; work.config.method = method; work.config.quality = (float)work.quality;
     work.config.exact = 1; work.config.thread_level = 0;
     if (!WebPValidateConfig(&work.config)) fail("Invalid exact configuration.");
     work.picture.width = work.width; work.picture.height = work.height; work.picture.use_argb = 1;
@@ -155,8 +161,8 @@ int main(int argc, char **argv)
     check_packet(&work,&held); check_packet(&work,&work.packet);
     WebPMemoryWriterClear(&held); WebPMemoryWriterClear(&work.packet);
     apply(&work); check_packet(&work,&work.packet); check_source(&work); write_packet(&work,argv[6]); WebPMemoryWriterClear(&work.packet);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"webp-lossless-encode\",\"width\":%d,\"height\":%d,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"quality\":%d,\"effort\":4,\"lossless\":true,\"exactRgb\":true,\"baselineBackend\":\"libwebp exact=1 (FFmpeg encoder backend)\",\"inputFormat\":\"BGRA\",\"repackingTimed\":true,\"fullSourceNormalizationTimed\":%s,\"normalizedReferenceExact\":%s,\"inputImportAllocationTimed\":true,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"bitstreamDeterministic\":true,\"libwebpEncoderVersion\":%d}\n",
-        work.width,work.height,work.depth,work.cpu,work.quality,work.depth == 16 ? "true" : "false",work.depth == 16 ? "true" : "false",work.output_bytes,work.completed,WebPGetEncoderVersion()); fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"webp-lossless-encode\",\"width\":%d,\"height\":%d,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"conversionThreads\":1,\"quality\":%d,\"effort\":%d,\"lossless\":true,\"exactRgb\":true,\"baselineBackend\":\"libwebp exact=1 (FFmpeg encoder backend)\",\"inputFormat\":\"BGRA\",\"repackingTimed\":true,\"fullSourceNormalizationTimed\":%s,\"normalizedReferenceExact\":%s,\"inputImportAllocationTimed\":true,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"bitstreamDeterministic\":true,\"libwebpEncoderVersion\":%d}\n",
+        work.width,work.height,work.depth,work.cpu,work.quality,method,work.depth == 16 ? "true" : "false",work.depth == 16 ? "true" : "false",work.output_bytes,work.completed,WebPGetEncoderVersion()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;

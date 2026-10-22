@@ -80,3 +80,17 @@ The native public encoder's 16383 limit prevents a packet comparison for the
 existing 16384-pixel functional boundary; the companions do not establish parity
 at that size. Remaining named paths and blockers are in the
 [coverage checklist](VP8L-PRODUCTION-COVERAGE.md).
+
+The same two-color input also matches the pinned backend at methods 0..6 on
+both platforms. Method 0 produces 48 bytes: its hash-chain-only matcher omits
+left/above probes and emits 1,026 literals, with two groups, 512×512 histogram
+tiles and end bit 210. Methods 1..6 reproduce the established 46-byte packet.
+The shared matcher change preserves all ten default-method packets in the same
+frozen model. Thus eleven packet identities are qualified, within the stated
+inputs/settings; other non-default effort families remain open.
+
+`libwebp-lossless-warm.c` now accepts an optional final method 0..6, preserving
+default method 4. The original reference binary is unchanged. One separately
+built worker confirms the seven methods, the default 8/16-bit argument paths,
+explicit 16-bit method 0, independent outputs and source normalization. These
+were correctness snapshots, with no timing/allocation claim or production change.

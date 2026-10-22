@@ -23,7 +23,7 @@ public static class Vp8lDirectPacketParity
         var residual=new byte[pixels.Length*4];for(var i=0;i<pixels.Length;i++)BinaryPrimitives.WriteUInt32LittleEndian(residual.AsSpan(i*4),pixels[i]);
         return Compose(new(header,40,residual,new{mode=0}),width,height,choice.HistogramBits,choice);
     }
-    internal static Vp8lDirectPacketResult Compose(Vp8lInputParity stage,int width,int height,int tileBits,object choice)
+    internal static Vp8lDirectPacketResult Compose(Vp8lInputParity stage,int width,int height,int tileBits,object choice,bool lowEffort=false)
     {
         var pixels=new uint[width*height];
         for(var i=0;i<pixels.Length;i++)pixels[i]=BinaryPrimitives.ReadUInt32LittleEndian(stage.CodedResidual.AsSpan(i*4));
@@ -31,7 +31,10 @@ public static class Vp8lDirectPacketParity
         var prefix=Auxiliary("Vp8lLzParity","Prefix").CreateDelegate<Func<int,(int Code,int Extra)>>();
         var plane=Auxiliary("Vp8lLzParity","Plane").CreateDelegate<Func<int,int,int>>();
         var population=Auxiliary("Vp8lLzParity","Population").CreateDelegate<Func<int[],long>>();
-        var parsed=Vp8lMainParsing.Encode(pixels,index(pixels,width,75),width);var bits=parsed.Bits;
+        var parsed=lowEffort
+            ?new Vp8lMainParsing.Result(Vp8lLzParity.Greedy(pixels,Vp8lMatchParity.BuildLowEffort(pixels,width,75)),0,new{lowEffort=true,winner="standard"})
+            :Vp8lMainParsing.Encode(pixels,index(pixels,width,75),width);
+        var bits=parsed.Bits;
         var columns=(width+(1<<tileBits)-1)>>tileBits;
         var histograms=Enumerable.Range(0,columns*((height+(1<<tileBits)-1)>>tileBits)).Select(_=>new[]{new int[280+(bits==0?0:1<<bits)],new int[256],new int[256],new int[256],new int[40]}).ToArray();
         var tokens=new List<Vp8lFrameToken>();

@@ -7,10 +7,10 @@ using System.Buffers.Binary;
 public sealed record Vp8lPalettePacketResult(byte[] Packet,object Details);
 public static class Vp8lPalettePacketParity
 {
-    public static Vp8lPalettePacketResult Encode(byte[] source,int width,int height)
+    public static Vp8lPalettePacketResult Encode(byte[] source,int width,int height,int method=4)
     {
         if(width<1||width>16384||height<1||height>16384||source.Length!=checked(width*height*4))throw new ArgumentException("Expected RGBA8 dimensions.");
-        var choice=Vp8lInitialChoice.Select(source,width,height);
+        var choice=Vp8lInitialChoice.Select(source,width,height,method);
         if(choice.Mode!=4)throw new NotSupportedException("This stage composes palette coding only.");
         var palette=Vp8lPaletteParity.Build(source,width,height);
         var bits=new Vp8lParityBits();
@@ -22,7 +22,7 @@ public static class Vp8lPalettePacketParity
         var coded=new byte[palette.Packed.Length*4];
         for(var i=0;i<palette.Packed.Length;i++)BinaryPrimitives.WriteUInt32LittleEndian(coded.AsSpan(i*4),palette.Packed[i]);
         var stage=new Vp8lInputParity(bits.Finish(),bits.Count,coded,new{palette=palette.Colors.Length});
-        var frame=Vp8lDirectPacketParity.Compose(stage,palette.CodedWidth,height,choice.HistogramBits,choice);
+        var frame=Vp8lDirectPacketParity.Compose(stage,palette.CodedWidth,height,choice.HistogramBits,choice,method==0);
         return new(frame.Packet,new{colors=palette.Colors.Length,packingBits=palette.PackingBits,codedWidth=palette.CodedWidth,composition=frame.Details});
     }
 }

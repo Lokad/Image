@@ -41,9 +41,17 @@ performance grid.
    and every residual sample on both platforms. Its histogram-based palette
    eligibility, spatial-only prediction and uniform map sizing are qualified on
    this input; other maps and general shape coverage remain open.
-4. **Existing effort range.** Public `Effort` accepts 0..6. Reuse the current
-   single two-color admission input at its existing efforts/depths for functional
-   and option qualification. Do not multiply this into a new image/settings matrix.
+4. **Existing effort range.** The two-color input now matches native methods 0..6
+   in the source model on both platforms: 48 bytes at method 0, 46 at methods 1..6.
+   The fast matcher omits left/above probes and emits 1,026 literals here, yielding
+   two histogram groups; full parsing uses three tokens and one group. Native
+   default-method and 16-bit normalization argument paths also retain those bytes.
+   This is not general effort qualification. Three named non-palette paths remain,
+   reusing the existing asymmetric RGBA8 input: **Effort0ForcedPredictorRgba8**
+   (fixed prediction/no cross-color and fast clustering), **Effort1CoarseTilesRgba8**
+   (variable transform tile sizing), and **Effort5AdaptiveTilesRgba8** (adaptive
+   predictor sampling). These exercise distinct algorithms without a settings grid.
+   Reuse the current two-color depths for complete public-operation qualification.
    Implementation-specific old packet/header assertions are replaceable; exact
    normalized pixels and the declared option/resource contracts remain required.
 5. **Complete public operations.** Qualify existing RGBA16 normalization and fresh

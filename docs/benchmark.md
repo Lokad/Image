@@ -42,7 +42,9 @@ names the remaining required paths; its1x1 and two-color4103x2 palette packets
 are raw-exact on both platforms, as is the129x129 direct-coding packet.
 The19x7 hidden-RGB spatial-only packet and its maps/residuals also match exactly.
 One dependency-free source build now confirms these and both16383-pixel axis
-companions: ten packet identities on both platforms. The native public encoder
+companions: ten default packet identities on both platforms. The same two-color
+input also matches at methods0..6 (48B at0,46B at1..6), giving eleven identities;
+other non-default effort families remain open. The native public encoder
 refuses16384; those existing functional tests have no native packet confirmation.
 These do not change production/timing claims below.
 

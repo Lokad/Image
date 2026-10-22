@@ -9,7 +9,9 @@ internal static class Vp8lMatchParity
     private const int MaximumLength = (1 << 12) - 1;
     private static int Fingerprint(uint first, uint next)
         => (int)(unchecked(next * 0xc6a4a793u + first * 0x5bd1e996u) >> 14);
-    internal static uint[] Build(uint[] pixels, int width, int quality)
+    internal static uint[] Build(uint[] pixels, int width, int quality)=>BuildCore(pixels,width,quality,false);
+    internal static uint[] BuildLowEffort(uint[] pixels, int width, int quality)=>BuildCore(pixels,width,quality,true);
+    private static uint[] BuildCore(uint[] pixels, int width, int quality, bool lowEffort)
     {
         var result = new uint[pixels.Length];
         if (pixels.Length <= 2) return result;
@@ -52,16 +54,19 @@ internal static class Vp8lMatchParity
             var limit=Math.Min(MaximumLength,pixels.Length-1-position);var enough=Math.Min(256,limit);
             var minimum=Math.Max(0,position-window);var candidate=previous[position];var remaining=checks;
             var length=0;var distance=0;
-            if(position>=width)
+            if(!lowEffort)
             {
-                var found=Length(position-width,position,length,limit);
-                if(found>length){length=found;distance=width;}
+                if(position>=width)
+                {
+                    var found=Length(position-width,position,length,limit);
+                    if(found>length){length=found;distance=width;}
+                    remaining--;
+                }
+                var left=Length(position-1,position,length,limit);
+                if(left>length){length=left;distance=1;}
                 remaining--;
+                if(length==MaximumLength)candidate=minimum-1;
             }
-            var left=Length(position-1,position,length,limit);
-            if(left>length){length=left;distance=1;}
-            remaining--;
-            if(length==MaximumLength)candidate=minimum-1;
             while(candidate>=minimum && --remaining!=0)
             {
                 if(pixels[candidate+length]==pixels[position+length])

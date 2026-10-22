@@ -17,8 +17,9 @@ internal static class Vp8lInitialChoice
         var minimum=((long)mix*(2*total-h.Max())*Scale+(1000-mix)*entropy+500)/1000;
         return Math.Max(entropy,minimum);
     }
-    internal static Result Select(byte[] rgba,int width,int height)
+    internal static Result Select(byte[] rgba,int width,int height,int method=4)
     {
+        if(method<0||method>6)throw new ArgumentOutOfRangeException(nameof(method));
         if(rgba.Length!=checked(width*height*4))throw new ArgumentException("RGBA size");
         uint Pixel(int at)=>(uint)rgba[4*at+3]<<24|(uint)rgba[4*at]<<16|(uint)rgba[4*at+1]<<8|rgba[4*at+2];
         var raw=Enumerable.Range(0,4).Select(_=>new int[256]).ToArray();var residual=Enumerable.Range(0,4).Select(_=>new int[256]).ToArray();
@@ -40,10 +41,11 @@ internal static class Vp8lInitialChoice
         }
         var palettePossible=colors.Count<=256;
         int Tiles(int bits)=>((width+(1<<bits)-1)>>bits)*((height+(1<<bits)-1)>>bits);
-        var histogramBits=palettePossible?5:3;
+        var histogramBits=Math.Clamp((palettePossible?9:7)-method,2,9);
         while(histogramBits<9&&Tiles(histogramBits)>2600)histogramBits++;
         while(histogramBits>2&&Tiles(histogramBits-1)==1)histogramBits--;
-        var transformBits=Math.Min(5,histogramBits);
+        var transformBits=Math.Min(method<4?6:method>4?4:5,histogramBits);
+        if(method==0)return new(palettePossible?4:3,palettePossible,Array.Empty<long>(),colors.Count,histogramBits,transformBits);
         if(palettePossible&&colors.Count<=16)return new(4,true,Array.Empty<long>(),colors.Count,histogramBits,transformBits);
         foreach(var h in residual)h[0]++;foreach(var h in greenResidual)h[0]++;
         var tiles=Tiles(transformBits);
