@@ -66,9 +66,9 @@
   "repeatedPackageProofs": 0,
   "correction": "Linux verifier waited on its stdin through the automatic PowerShell input variable. Live process was verified blocked in anon_pipe_read, explicitly terminated, wrapper variable renamed and stdin closed for the new invocation. Same frozen model then passed bothOS. No timeout-based restart or numerical retuning.",
   "remaining": [
-    "Main-image cache/group analysis and complete entropy/image generation for the first lossless control.",
-    "Complete packet reproduction on remaining five lossless and seven lossy controls; bounded admitted production integration.",
-    "All exact decoders, full functional/memory/text/Lanczos3, finite one-CPU warm upper<=1 and allocation/release objectives."
+    "Derive the nine spatial histogram groups and map from source on the first control, then exact main Huffman/tree/token serialization and complete packet framing.",
+    "Remaining five lossless and seven lossy controls, admitted production integration and exact decoders.",
+    "Full functional/memory/text/Lanczos3, finite warm one-CPU upper<=1/allocation objectives and release qualification."
   ],
   "rawArchive": {
     "name": "e26-vp8l-predictor-qualified.tar.gz",
@@ -77,7 +77,7 @@
     "members": 22,
     "mirrored": true
   },
-  "latestRound": "E28",
+  "latestRound": "E30",
   "crossColorAndAuxiliaryStages": {
     "scope": "ONE existing513x259 RGBA8 method4/quality75/exact=1 control. Complete transform prefix, not main image or complete encoder.",
     "productionChanged": false,
@@ -186,6 +186,196 @@
       "bytes": 92762,
       "sha256": "64702511d413b69c347c38d9132484789280bce7d6aa341857c32929e33ff536",
       "members": 39,
+      "mirrored": true
+    }
+  },
+  "mainParserStage": {
+    "scope": "ONE existing513x259 RGBA8 method4/quality75/exact=1 control. Exact source-derived match index and complete semantic parse; spatial clustering/bitstream remain open.",
+    "verification": {
+      "sourceOnly": true,
+      "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "codedResidualSha256": "b72edfa146d02b4adbbe48a667ad28bf10b6073b2800c7679ccfc546c9969610",
+      "samples": 132867,
+      "indexSha256": "343de9bb699497ccfdb3ad33f243e182416c7a2d8423d909ac847affd12efc68",
+      "caches": {
+        "standard": {
+          "SeedTokens": 116487,
+          "BestBits": 10,
+          "Costs": [
+            15229889069764,
+            15105289186124,
+            15040523357938,
+            14964661988429,
+            14905971113799,
+            14874762569373,
+            14825617146784,
+            14738053610438,
+            14565565061191,
+            14218542218812,
+            13643238887569
+          ]
+        },
+        "repeats": {
+          "SeedTokens": 132843,
+          "BestBits": 10,
+          "Costs": [
+            17380008750512,
+            17160226044572,
+            16943401131919,
+            16651542890305,
+            16424285606088,
+            16340807674608,
+            16277301007436,
+            16199008203289,
+            16063706503578,
+            15731563974499,
+            15156791877195
+          ]
+        }
+      },
+      "parser": {
+        "cacheBits": 10,
+        "standardTokens": 116487,
+        "repeatTokens": 132843,
+        "standardCost": 13935641814781,
+        "repeatCost": 15156842602059,
+        "traceTokens": 110306,
+        "traceCost": 13412584171091,
+        "winner": "trace",
+        "tokens": 110306,
+        "literals": 52617,
+        "copies": 6039,
+        "caches": 51650,
+        "semanticTokenSha256": "060676025dd0b04254e06cc29988e5efbad7917b2a7e612407546e0851a1b574"
+      },
+      "oracleEncoderInputs": false,
+      "productionChanged": false,
+      "verification": {
+        "allMatchCandidatesExact": true,
+        "allSemanticTokensExact": true,
+        "sourceUnchanged": true,
+        "repeatedResultExact": true,
+        "goldenPacketReadAfterModel": true,
+        "productionBuilds": 0,
+        "nativeEncodes": 0,
+        "timingRuns": 0,
+        "scope": "ONE existing513x259 RGBA8 method4/quality75/exact=1 control. Source-only parse. Spatial groups, bit serialization and complete encoder remain open."
+      }
+    },
+    "sameWindowsBuiltModelBothOS": true,
+    "sourceEntrypointWindows": true,
+    "modelAssemblySha256": "167cce8e070f23945c1b7da936630b7a244cc61a197a9bfb4db933d765234c85",
+    "dependencies": {
+      "Probe.dll": "c446836fb06897bebb125e178980fa680c7ff042dc413f757570d8388482438c",
+      "AuxiliaryProbe.dll": "96221a0f4dabbdf23cc314a6f0354d0cc811b236e08c27afb1c51d50aaa27430"
+    },
+    "sourceFiles": {
+      "tools/WarmReference/Vp8lMainParity.cs": "4b932afb0dfaa3ebbb6befd238c53d16c9841631b8178f357789bf8a995cb27f",
+      "tools/WarmReference/verify-vp8l-main-parser.ps1": "a948a8bbb4f59ee4bc9085c6a54a12930d28e2cb857401f21e51e94ec696b048"
+    },
+    "nativeObservation": {
+      "sourceSha256": "0fd3e52a3ddaa55e5a3b938a9930a0e5e05912ab191b85126385f784731c5c67",
+      "binarySha256": "290b1f74f1162179cedbe442cd164926d9b7dbde99b0dfd380ff3187a0a902e4",
+      "libwebpArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "cpu": 0,
+      "buildStderr": "",
+      "query": {
+        "version": 67072,
+        "cacheBits": 10,
+        "tokens": 110306,
+        "literals": 52617,
+        "copies": 6039,
+        "cacheTokens": 51650,
+        "coveredPixels": 132867,
+        "completeNativeEncodes": 0
+      },
+      "queryStderr": "",
+      "indexSha256": "343de9bb699497ccfdb3ad33f243e182416c7a2d8423d909ac847affd12efc68",
+      "referencesSha256": "060676025dd0b04254e06cc29988e5efbad7917b2a7e612407546e0851a1b574",
+      "sourceCodedSha256": "b72edfa146d02b4adbbe48a667ad28bf10b6073b2800c7679ccfc546c9969610",
+      "nativeStageQueries": 1,
+      "completeNativeEncodes": 0
+    },
+    "independentFrozenPacketObservation": {
+      "referencePacketSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "tokens": 110306,
+      "counts": {
+        "literal": 52617,
+        "copy": 6039,
+        "cache": 51650
+      },
+      "semanticTokenSha256": "060676025dd0b04254e06cc29988e5efbad7917b2a7e612407546e0851a1b574",
+      "treeLengthsSha256": "f5af936066af9e065dc81ec04fe3fd072db5db09f224a315efe3d28dfc656c7d",
+      "codedResidualSha256": "b72edfa146d02b4adbbe48a667ad28bf10b6073b2800c7679ccfc546c9969610",
+      "endBit": 1470323,
+      "nativeEncodes": 0,
+      "productionChanged": false
+    },
+    "spatialMapObservation": {
+      "referencePacketSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "mainCacheBits": 10,
+      "histogramTileBits": 3,
+      "columns": 65,
+      "rows": 33,
+      "groups": 9,
+      "groupMapSha256": "ec2f7b311fbae0f5019064da191e2d61076bbf736f67a7dc70ae9ee8c7f28dd8",
+      "groupMapStartBit": 6016,
+      "groupMapEndBit": 10482,
+      "populations": {
+        "0": 81,
+        "1": 392,
+        "2": 408,
+        "3": 85,
+        "4": 43,
+        "5": 644,
+        "6": 296,
+        "7": 125,
+        "8": 71
+      },
+      "encodedBits": 4466,
+      "productionChanged": false,
+      "nativeEncodes": 0
+    },
+    "nativeObservationScope": "E29 adapter observes candidate index/final references from source-derived exact coded residuals. Complete reference semantics independently agree with frozen packet. E30 source model uses no native/token/map oracle inputs.",
+    "indexCacheRawArchive": {
+      "name": "e29-main-index-cache-qualified.tar.gz",
+      "bytes": 196669,
+      "sha256": "27e1d2a3eca2501134f1510327e62b221f1914e10aabb4b07d8fe5639608bc51",
+      "members": 23,
+      "mirrored": true
+    },
+    "cacheCosts": "Chosen10-bit cache agrees with frozen encoder. All numerical cache-cost vector entries have not been independently queried from native; no broader cost-identity claim.",
+    "builds": {
+      "E29WindowsModel": 2,
+      "E30WindowsModel": 3,
+      "E30WindowsSourceHostSuccess": 1,
+      "E30WindowsSourceHostFailed": 1,
+      "linuxModel": 0,
+      "production": 0,
+      "E29NativeAdapter": 1,
+      "E30NativeAdapter": 0
+    },
+    "nativeStageQueries": {
+      "E29": 1,
+      "E30": 0
+    },
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationRuns": 0,
+    "repeatedFullCorrectnessSuites": 0,
+    "repeatedPackageProofs": 0,
+    "sourceHostCorrection": "Missing explicit System.IO import in the standalone source host. Final source/binary frozen after correction; same numerical results bothOS. One failed symbolic-link creation needed no elevation: dependency assemblies copied normally within quota.",
+    "qualificationValidity": "Production E24 and frozen E28 auxiliary paths unchanged. Reuse their existing qualification; current models have no production admission/performance claim.",
+    "retiredDuplicates": {
+      "windowsBytes": 205761,
+      "proof": "Every retired transfer member exact in canonical E24 raw master; every retired model DLL/PDB intermediate exact in retained runtime. No raw masters or published package removed."
+    },
+    "rawArchive": {
+      "name": "e30-vp8l-main-parser-qualified.tar.gz",
+      "bytes": 63041,
+      "sha256": "9fdbd52a6ad5419a9c3c341d07f17a73421d1fff1382c98fd8cc1da5daf0b42e",
+      "members": 19,
       "mirrored": true
     }
   }

@@ -1557,3 +1557,10 @@ outputs and mutation rejection. Optional `-AssemblyPath` reuses the frozen model
 the predictor-model `Probe.dll` must be alongside it. These are development-only
 models, outside the production build. See the [stage report](../../benchmarks/VP8L-AUXILIARY-STAGES.md)
 for exact scope and remaining main-image/production qualification.
+
+`Vp8lMainParity.cs` extends the source-only proof through cache selection and the
+complete main-image parse. `verify-vp8l-main-parser.ps1` accepts the same source/
+reference arguments and optional frozen assembly path, with its own predictor and
+auxiliary-model dependencies alongside it. All110,306 tokens agree on Windows/Linux.
+The [parser report](../../benchmarks/VP8L-MAIN-PARSER.md) distinguishes this proof
+from the still-open spatial clustering, complete packets and production integration.

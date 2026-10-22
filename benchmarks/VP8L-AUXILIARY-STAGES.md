@@ -28,6 +28,8 @@ Production remains unchanged. These development models have no production memory
 admission or performance qualification. No library rebuild, package proof, timing
 or allocation run was repeated. Main-image cache/group selection and coding come
 next, followed by complete packets, admitted integration and the remaining controls.
+The subsequent [main-image parser](VP8L-MAIN-PARSER.md) now matches every token on
+this control; source-derived spatial clustering remains open.
 
 Run `tools/WarmReference/verify-vp8l-auxiliary-stage.ps1 -SourcePath SOURCE.rgba
 -NativePacketPath REFERENCE.webp`. Supply `-AssemblyPath` to reuse a frozen model
