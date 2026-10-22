@@ -97,7 +97,7 @@ public class EncodeBatch
         switch (Encoder)
         {
             case BatchEncoder.Png: ImageCodec.EncodePng(image, output); break;
-            case BatchEncoder.Jpeg420: ImageCodec.EncodeJpeg(image, output, new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 85, Sampling = JpegSampling.YCbCr420 }); break;
+            case BatchEncoder.Jpeg420: ImageCodec.EncodeJpeg(image, output, new JpegEncodeOptions { Quality = 85, Sampling = JpegSampling.YCbCr420 }); break;
             default: ImageCodec.EncodeWebp(image, output, new WebpEncodeOptions { Lossless = Encoder == BatchEncoder.WebpLossless, Quality = 85, Effort = 4 }); break;
         }
     }

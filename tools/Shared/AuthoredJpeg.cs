@@ -173,6 +173,38 @@ internal static class AuthoredJpeg
         return ProgressiveFrame(width, height, sampling, restartInterval);
     }
 
+    // Original deterministic sequential fixture. Decoder admission tests must
+    // not depend on an evolving production encoder's table or MCU choices.
+    public static byte[] SequentialFrame(int width, int height, JpegSampling sampling, int restartInterval)
+    {
+        var components = sampling == JpegSampling.Grayscale ? 1 : 3;
+        byte[] ids = components == 1 ? [1] : [1, 2, 3];
+        var h = sampling is JpegSampling.YCbCr422 or JpegSampling.YCbCr420 ? 2 : 1;
+        var v = sampling == JpegSampling.YCbCr420 ? 2 : 1;
+        var columns = (width + h * 8 - 1) / (h * 8); var rows = (height + v * 8 - 1) / (v * 8);
+        using var output = Header(width, height, restartInterval, sampling, progressive: false);
+        Scan(output, 0, 63, 0, 0, bits =>
+        {
+            var previous = new int[components];
+            for (var mcu = 0; mcu < columns * rows; mcu++)
+            {
+                if (restartInterval != 0 && mcu != 0 && mcu % restartInterval == 0)
+                { bits.Restart(mcu / restartInterval - 1); Array.Clear(previous); }
+                for (var component = 0; component < components; component++)
+                {
+                    var bh = component == 0 ? h : 1; var bv = component == 0 ? v : 1;
+                    for (var by = 0; by < bv; by++)
+                    for (var bx = 0; bx < bh; bx++)
+                    {
+                        var dc = ((mcu % columns * bh + bx) * 41 + (mcu / columns * bv + by) * 23 + component * 53) % 193 - 96;
+                        bits.Dc(dc - previous[component]); previous[component] = dc; bits.Ac(0);
+                    }
+                }
+            }
+        }, ids);
+        output.Write(new byte[] { 255, 217 }); return output.ToArray();
+    }
+
     public static byte[] ProgressiveFrame(int width, int height, JpegSampling sampling, int restartInterval)
     {
         var componentCount = sampling == JpegSampling.Grayscale ? 1 : 3;

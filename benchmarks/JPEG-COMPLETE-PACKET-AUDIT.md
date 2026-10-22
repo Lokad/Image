@@ -1,4 +1,12 @@
-# JPEG complete-packet coverage
+# Historical JPEG complete-packet coverage
+
+This records superseded experimental producers, not current encoder behavior.
+The current single encoder matches ten frozen reference controls, subject only
+to the approved color COM attribution replacement; see
+[codec parity](../docs/codec-parity.md) and
+[exact packet evidence](jpeg-byte-parity-evidence.json). No historical experimental
+option remains in production. CPU/allocation reconfirmation is deferred.
+
 
 All 19 existing encode rows are reconciled on the qualified C193 producer:
 **18 default boundaries plus one optional CompactColor boundary**. Thirteen default

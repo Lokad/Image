@@ -29,7 +29,7 @@ benchmark binaries are reused. No timing or general font-compatibility claim fol
 Exactly one required warm representative is added to the finite checklist:
 `TextLayout/OpenTypeDefaultVariation`, an authored two-glyph contextual program
 with two variation regions and signed word/byte deltas. It exercises new region/
-row validation absent from legacy and Arabic layouts. Font preparation is excluded;
+row validation absent from logical and Arabic layouts. Font preparation is excluded;
 complete owned layout, bounds measurement and disposal are included. Equivalent
 reference ownership/quality must be established before scoring. It is unmeasured,
 with allocations unmeasured. Other timing evidence is unchanged; full parity and

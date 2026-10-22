@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "project": "Lokad.Image",
-  "qualification": "E15",
-  "status": "Reference is the0.2 development JPEG default. Ten frozen native controls plus8 default public wrappers qualified bothOS with exact packets (only approved color COM attribution). Explicit Original/CompactColor preserved. Other exact encoders/decoders, CPU/allocation and release objective OPEN.",
+  "qualification": "E22",
+  "status": "Single safe managed JPEG encoder. Ten exact frozen packet controls and eight default wrappers pass both OS; superseded unreleased experiments removed without aliases. Only approved color COM metadata differs. Full codec/performance/release objective OPEN.",
   "productionChanged": true,
-  "productionCoreSha256": "989414597671e2d96d7731b2ee8f9a2764323bc95f65eb97db8e51e1545c69aa",
+  "productionCoreSha256": "b82318b66c093c12e545e83944cf069aaa44e1a2626156b47fa7f6b1f30a0f96",
   "oracle": {
     "ffmpegRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
     "ffmpegVersion": "n8.1",
@@ -1435,7 +1435,7 @@
     },
     "adoptedIn": "E11"
   },
-  "latestProductionQualification": "E15",
+  "latestProductionQualification": "E22",
   "productionColorRestarts": {
     "project": "Lokad.Image",
     "round": "E11",
@@ -2209,6 +2209,120 @@
       "bytes": 5544,
       "sha256": "d527dec324d59c5a7def11ccdede7d5de855126dcdb7f509aa3cdfa70591dd60",
       "members": 10,
+      "mirrored": true
+    }
+  },
+  "experimentalRemoval": {
+    "round": "E22",
+    "sourceBase": "f5dda21da0d92bb8ad58af741d0ae11015d42997",
+    "productionChanged": true,
+    "productionCoreSha256": "b82318b66c093c12e545e83944cf069aaa44e1a2626156b47fa7f6b1f30a0f96",
+    "core": [
+      {
+        "Name": "Lokad.Image.dll",
+        "Bytes": 708608,
+        "Sha256": "b82318b66c093c12e545e83944cf069aaa44e1a2626156b47fa7f6b1f30a0f96"
+      },
+      {
+        "Name": "Lokad.Image.pdb",
+        "Bytes": 311356,
+        "Sha256": "8e58fdbb18251e7f9beed1a380e1663292376b3356caf1b02a764e392e6f3303"
+      },
+      {
+        "Name": "Lokad.Image.xml",
+        "Bytes": 40046,
+        "Sha256": "863647215b395908c76fb24a59b76da6beeca4db160bc097268ab0a0f5a1355b"
+      }
+    ],
+    "scope": "Single required exact-reference encoder. Superseded Original/CompactColor and experimental progressive/RDO branches removed without compatibility aliases. Required quality/sampling/restarts/background/caller samples/admission/ownership retained. No numeric encoder/decoder algorithm changed.",
+    "removed": {
+      "productionSourceFiles": 15,
+      "experimentTestClasses": 39,
+      "obsoletePublicOptions": [
+        "JpegQuantizationPolicy",
+        "JpegEncodeOptions.QuantizationPolicy",
+        "JpegEncodeOptions.BaselineOnly"
+      ]
+    },
+    "currentPacketControls": {
+      "jpeg": 10,
+      "pngOptimal": 8,
+      "jpegDefaultWrappers": 8,
+      "allExistingHashesUnchanged": true
+    },
+    "qualification": {
+      "perPlatform": {
+        "internal": 1812,
+        "public": 2026,
+        "differential": 940,
+        "total": 4778,
+        "affectedScalar": 133
+      },
+      "platforms": [
+        "Windows x64",
+        "Linux x64"
+      ],
+      "sameWindowsBuiltRuntime": true,
+      "linuxProductionBuilds": 0,
+      "postFreezeProductionBuilds": 0,
+      "retiredExperimentCaseCount": 403,
+      "decoderAdmissionFixtures": "Independent authored sequential/progressive packets replace retired encoder-generated fixtures."
+    },
+    "package": {
+      "runtimeQualifiedSha256": "417a17aa00ff03e492794eddc62fc578b06ef3a05f53f5a00362008fbcf6bce1",
+      "finalSha256": "cb0aa2787afed61550ab3a3bfa7eb3de8b87aa4405ef98aa63e1fd0c5608ec90",
+      "bytes": 373132,
+      "privateVersion": "0.2.0",
+      "consumerBothOS": true,
+      "usageExamplesBothOS": 3,
+      "documentaryProof": {
+        "project": "Lokad.Image",
+        "runtimeQualifiedPackageSha256": "417a17aa00ff03e492794eddc62fc578b06ef3a05f53f5a00362008fbcf6bce1",
+        "finalPackageSha256": "cb0aa2787afed61550ab3a3bfa7eb3de8b87aa4405ef98aa63e1fd0c5608ec90",
+        "finalPackageBytes": 373132,
+        "onlySemanticChange": [
+          "docs/resource-admission.md"
+        ],
+        "unchangedEntries": 15,
+        "executableAndNugetMetadataIdentical": true,
+        "consumerProofReused": true,
+        "productionRebuilds": 0,
+        "repeatedPackageConsumerBuilds": 0
+      }
+    },
+    "tooling": {
+      "jpegQualitySweepsRetired": true,
+      "exactFrozenNativePacketsRequired": true,
+      "minimalSourceQualitySanityRetained": true,
+      "sevenFrozenComparatorControlsPassed": true,
+      "unapprovedAttributionRejected": true,
+      "benchmarkCompilePassed": true,
+      "webpQualityToolingUnchanged": true
+    },
+    "invalidatedEvidence": [
+      "All prior JPEG encoder CPU/allocation results remain historical and require current-path confirmation after exact-reference adoption and cleanup.",
+      "Measured encode portions of pipelines likewise require confirmation."
+    ],
+    "preservedEvidence": [
+      "All ten frozen JPEG packet hashes and eight PNG Optimal packet hashes.",
+      "Unchanged Reference normalization, DCT, quantization, Huffman/scan decisions and decoder numerical bodies.",
+      "Decoder/transform evidence remains scoped to its original frozen encoded input, never a new default-encoded fixture."
+    ],
+    "timingRuns": 0,
+    "nativeEncodes": 0,
+    "nativeBuilds": 0,
+    "cpuAndAllocatedBytesPerOperation": "Unmeasured for current encoder build; CPU parity deferred until exact codec replication.",
+    "corrections": [
+      "Removed two overlooked reflection tests for the deleted adaptive-AC experiment.",
+      "Removed five obsolete 8KiB fallback comparisons; generic boundary/resource/ownership assertions retained.",
+      "Normal test rebuild restored testhost dependencies after an unsuitable compile-only flag.",
+      "Usage verifier accepts CRLF closing code fences; existing consumer reused with absolute path after manual relative-path invocation failed."
+    ],
+    "rawArchive": {
+      "name": "e22-qualified-jpeg-cleanup.tar.gz",
+      "bytes": 4466090,
+      "sha256": "e3034dcb3a837307729479525a808f02323745ba3bc2d48d3624a2631503c3b6",
+      "members": 27,
       "mirrored": true
     }
   }

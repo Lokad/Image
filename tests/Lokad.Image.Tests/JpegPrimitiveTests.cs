@@ -94,9 +94,7 @@ public sealed class JpegPrimitiveTests
         var coefficients = new int[64]; coefficients[0] = 80;
         var output = new byte[64]; JpegTransform.Inverse(coefficients, quantization, output, Context());
         Assert.All(output, value => Assert.Equal(138, value));
-        var transformed = new double[64]; JpegTransform.Forward(output, transformed, Context());
-        Assert.Equal(80, transformed[0], 8);
-        Assert.All(transformed.Skip(1), value => Assert.InRange(Math.Abs(value), 0, 1e-10));
+
     }
 
     private static OperationContext Context() => new(ImageLimits.Default, CancellationToken.None);

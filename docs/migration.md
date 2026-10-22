@@ -3,39 +3,15 @@
 Published 0.1.0 remains unchanged. Version 0.2.0 is under qualification; it is not
 yet a claim of replacement readiness or performance parity for the expanded scope.
 
-JPEG now defaults to `JpegQuantizationPolicy.Reference`: baseline output with the
-pinned reference-compatible algorithm. Color quality maps to qscale
-`1 + (100 - Quality) * 30 / 99`; default85 maps to5. Grayscale keeps the owned
-quantizer formula but uses the reference transform and optimized tables.
-Packets and lossy pixels can change. The earlier `Original` and `CompactColor`
-development experiments are superseded and scheduled for removal, with no
-compatibility commitment. `Reference` admits its coding tables and temporary tree
-storage before allocation, even for small images; refusal stops the operation.
-Historical JPEG timing/size records retain their explicit Original producer and
-do not measure the new default. [Codec compatibility](codec-parity.md) states the
-exact tested source/settings scope and the approved attribution exception.
-
-Original JPEG 4:4:4 encoding may now use progressive scans when its complete plan
-is admitted and restart markers are disabled. Set `JpegEncodeOptions.BaselineOnly`
-for consumers requiring baseline syntax. This switch retains the same quantizers
-and reconstructed pixels; local workspace selection may also use baseline syntax.
-Encoded bytes and lossy reconstruction may change between encoder versions.
-Progressive output may share tables between corresponding chroma scans, preserving
-all coefficients and reconstructed pixels while reducing qualified packet sizes.
-The final Original4:4:4 decisions now use the intended coefficient precision grid
-with a source-derived error bound. DQT values, sampling and explicit quality
-remain unchanged; qualified compression claims apply only to their stated controls.
-Joint three-component AC choices reuse the pair stage's error/prices to fit the
-existing default work limit; terminal admission failure still aborts the operation.
-Final AC prices now follow the progressive spectral bands, retaining one global
-MCU error allowance and the existing memory/work limits.
-Source histograms count the same fine training choices in coded point-transform
-units; the choices themselves are unchanged. Mask and point-level setup each add
-1,920 admitted work units once per operation.
-Source prices use canonical Huffman lengths per band and observed EOB-run costs,
-including extra bits, amortized per terminal block. Pending runs stay separate
-per component. They fit the same8KiB workspace;
-the default work limit and final MCU error bound are unchanged.
+JPEG uses one baseline encoder with explicit quality, sampling, background and
+restart options, including direct caller gray/RGB samples. Color quality maps to
+qscale `1 + (100 - Quality) * 30 / 99`; default85 maps to5. Grayscale keeps its
+owned quantizer formula with the reference integer transform and optimized tables.
+Packets and reconstructed lossy pixels may differ from0.1.0. Unreleased
+experimental quantization/progressive switches are removed. Table capacity and
+temporary tree peaks are admitted before allocation; refusal stops the operation.
+[Codec compatibility](codec-parity.md) states the exact tested scope and attribution
+exception. Historical JPEG times refer to their recorded producers.
 
 PNG `Optimal` now uses the managed level6 encoder for every supported color type
 at8/16bits. It emits4096-byte IDAT chunks and the reference's neutral pHYs field.
@@ -65,7 +41,7 @@ record equality/serialization include the new fields.
 - `ImageBudget` remains a separate codec memory/work quota. It can be used with
   cooperative memory hooks; local `ImageLimits` and work limits still apply.
 
-Text defaults to supplied-face logical layout with legacy kerning. Select
+Text defaults to supplied-face logical layout with horizontal `kern` kerning. Select
 `TextShaping.OpenType` for supported Latin/Hebrew/Arabic shaping and bidirectional
 layout; `Direction` and `Alignment` make paragraph flow and line alignment explicit.
 Unsupported font features fail with structured details. `TextLayout.TryFit`
@@ -78,9 +54,3 @@ GIF/animation and ICC conversion remain deferred. EXIF reorientation is opt-in.
 Default option differences are accepted; select quality, sampling and orientation
 explicitly when their behavior matters. [SPEC.md](../SPEC.md) is authoritative;
 [resource admission](resource-admission.md) defines ownership and accounting.
-
-Explicit `Original` JPEG retains its original quantization. Opt-in
-`JpegQuantizationPolicy.CompactColor` for color output; it retains grayscale,
-quality100, sampling and flattening, while trading other reconstruction precision
-for smaller packets. Assess complete size and quality together for the intended
-content; equal numerical quality across encoders does not establish equivalence.

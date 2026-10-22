@@ -149,8 +149,7 @@ to check positioned overflow. Render with `ImageDrawing.DrawText(canvas, layout,
 x, y, RgbaColor.From8(20, 40, 60))`; destinations clip and preserve canvas precision.
 Styles come from supplied faces. Add `Shaping = TextShaping.OpenType` for supported
 Latin/Hebrew/Arabic shaping and bidirectional layout; `Direction` selects paragraph
-direction and `Alignment` controls line alignment. The default preserves legacy
-logical layout. [SPEC.md](../SPEC.md#supplied-truetype-fonts) defines supported font
+direction and `Alignment` controls line alignment. The default selects logical left-to-right layout. [SPEC.md](../SPEC.md#supplied-truetype-fonts) defines supported font
 tables, wrapping and admission.
 
 For a constrained area, call `TextLayout.TryFit(font, text, 240, 80, out var fitted,

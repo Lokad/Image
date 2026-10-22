@@ -33,7 +33,7 @@ try {
             }
         }
         if (-not ($archive.Entries.FullName -contains 'lib/net10.0/Lokad.Image.dll')) { throw 'Library DLL missing.' }
-        foreach ($document in @('README.md', 'SPEC.md', 'LICENSE.txt', 'icon.png', 'docs/resource-admission.md', 'docs/codec-parity.md', 'docs/lanczos3-fma-certificate.md', 'docs/jpeg-inverse-rounding.md', 'docs/jpeg-forward-quantization.md', 'docs/usage.md', 'docs/migration.md')) {
+        foreach ($document in @('README.md', 'SPEC.md', 'LICENSE.txt', 'icon.png', 'docs/resource-admission.md', 'docs/codec-parity.md', 'docs/lanczos3-fma-certificate.md', 'docs/jpeg-inverse-rounding.md', 'docs/usage.md', 'docs/migration.md')) {
             $entry = $archive.GetEntry($document)
             if ($null -eq $entry) { throw "Package document missing: $document" }
             $bytes = [IO.MemoryStream]::new()
@@ -120,8 +120,6 @@ foreach (var pngColor in new[] { PngColorType.Grayscale, PngColorType.Rgb, PngCo
         != expectedPngHash || pngRoot.Bytes != 0 || pngRoot.IsDisposed)
         throw new Exception("Packaged managed PNG bytes or shared ownership differ.");
 }
-if (new JpegEncodeOptions().QuantizationPolicy != JpegQuantizationPolicy.Reference)
-    throw new Exception("Package JPEG default profile differs.");
 foreach (var referenceDepth in new[] { 8, 16 })
 foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YCbCr422, JpegSampling.YCbCr420, JpegSampling.Grayscale })
 {
@@ -549,7 +547,7 @@ if (callerGray.AsSpan().IndexOfAnyExcept((byte)123) >= 0 || shared.RemainingWork
     throw new Exception("Package consumer caller-owned grayscale admission differs.");
 using var callerEncoded = new MemoryStream();
 ImageCodec.EncodeJpeg(callerSamples, 8, 8, JpegSampleFormat.Rgb, callerEncoded, 27,
-    new JpegEncodeOptions { Quality = 100, Sampling = JpegSampling.Grayscale, RestartInterval = 1, BaselineOnly = true });
+    new JpegEncodeOptions { Quality = 100, Sampling = JpegSampling.Grayscale, RestartInterval = 1 });
 if (!callerEncoded.ToArray().AsSpan().SequenceEqual(jpeg.ToArray()) || !callerEncoded.CanWrite)
     throw new Exception("Package consumer caller RGB encoding differs.");
 using var callerEncodedGray = new MemoryStream();

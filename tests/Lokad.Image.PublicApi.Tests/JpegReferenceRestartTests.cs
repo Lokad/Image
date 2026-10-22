@@ -6,7 +6,7 @@ public sealed class JpegReferenceRestartTests
 {
     private static readonly JpegEncodeOptions Options = new()
     {
-        QuantizationPolicy = JpegQuantizationPolicy.Reference, BackgroundRgb = 0x204060
+        BackgroundRgb = 0x204060
     };
 
     [Theory]

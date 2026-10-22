@@ -47,7 +47,10 @@ internal static class EncoderQualityCalibration
         var directory = Path.Combine(identity.Root, "artifacts", "encoder-quality", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(directory);
         var manifest = Path.Combine(directory, "calibration.json");
-        var profiles = Profiles(scope);
+        // JPEG is qualified by complete reference packets. Keep this remaining
+        // calibration only for WebP until its stronger gates replace it too.
+        var profiles = Profiles(scope).Where(profile => profile.Encoder == QualityEncoder.Vp8).ToArray();
+        if (profiles.Length == 0) throw new ArgumentException("This scope has no remaining WebP calibration controls; JPEG uses exact packet checks.", nameof(scope));
         var catalog = new QualityCalibrationCatalog(4, "Lokad.Image", scope, false, DateTime.UtcNow.ToString("O", System.Globalization.CultureInfo.InvariantCulture),
             RuntimeInformation.FrameworkDescription, RuntimeInformation.RuntimeIdentifier,
             JpegBenchmarkCase.Hash(File.ReadAllBytes(Path.Combine(Path.GetDirectoryName(identity.Probe)!, "Lokad.Image.dll"))),
@@ -187,7 +190,7 @@ internal static class EncoderQualityCalibration
     {
         if (profile.Encoder == QualityEncoder.Vp8)
             ImageCodec.EncodeWebp(source, output, new WebpEncodeOptions { Lossless = false, Quality = quality, Effort = 4 });
-        else ImageCodec.EncodeJpeg(source, output, new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = quality, Sampling = Sampling(profile.Encoder), BackgroundRgb = profile.BackgroundRgb });
+        else ImageCodec.EncodeJpeg(source, output, new JpegEncodeOptions { Quality = quality, Sampling = Sampling(profile.Encoder), BackgroundRgb = profile.BackgroundRgb });
     }
 
     public static EncoderQualityProfile[] Profiles(string scope)

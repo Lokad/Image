@@ -1,5 +1,9 @@
 # JPEG forward-transform quantization certificate
 
+Historical experiment: this transform and its production path have been removed.
+The current JPEG encoder uses its separately qualified integer transforms. This
+certificate is retained only for the linked historical benchmark evidence.
+
 The quantized-coefficient contract is the original binary64 forward evaluation
 of [T.81 A.3.3](https://www.itu.int/rec/T-REC-T.81/en) with the stored, owned basis:
 subtract 128 from each byte sample, multiply by horizontal and vertical basis

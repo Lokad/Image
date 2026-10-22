@@ -8,7 +8,6 @@ internal sealed class WarmJpegSamples
 {
     private readonly WarmJpegCase selected;
     private readonly bool gray;
-    private readonly bool compact;
     private readonly JpegSampleFormat format;
     private readonly JpegEncodeOptions options;
     private JpegBenchmarkCase state = null!;
@@ -26,15 +25,8 @@ internal sealed class WarmJpegSamples
     {
         if (selected is not (WarmJpegCase.EncodeGray8 or WarmJpegCase.Encode420_8)) throw new ArgumentException("Raw samples require EncodeGray8 or Encode420_8.");
         this.selected = selected; gray = selected == WarmJpegCase.EncodeGray8;
-        compact = Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_QUANTIZATION") switch
-        {
-            null => false,
-            "compact-color-v1" when !gray => true,
-            _ => throw new InvalidOperationException("CompactColor measurement requires the caller-RGB420 control.")
-        };
         format = gray ? JpegSampleFormat.Grayscale : JpegSampleFormat.Rgb;
-        options = new() { Quality = 69, Sampling = gray ? JpegSampling.Grayscale : JpegSampling.YCbCr420,
-            QuantizationPolicy = compact ? JpegQuantizationPolicy.CompactColor : JpegQuantizationPolicy.Original };
+        options = new() { Quality = gray ? 69 : 85, Sampling = gray ? JpegSampling.Grayscale : JpegSampling.YCbCr420 };
     }
 
     public void Setup(int cpu, bool smoke, int count)
@@ -42,22 +34,21 @@ internal sealed class WarmJpegSamples
         this.cpu = cpu; this.smoke = smoke; this.count = count; state = new JpegBenchmarkCase();
         try
         {
-            var path = Path.Combine(state.Root, "artifacts/warm-reference", compact ? "jpeg-compact-color-match.json" : gray ? "jpeg-gray/preparation.json" : "jpeg420-adaptive-match.json");
+            var path = Path.Combine(state.Root, "artifacts/warm-reference", gray ? "jpeg-gray/preparation.json" : "jpeg420-adaptive-match.json");
             prepared = JsonSerializer.Deserialize<WarmJpegPreparation>(File.ReadAllText(path), EncoderQualityCalibration.Json) ?? throw new InvalidOperationException("Missing prepared anchor.");
             var pixels = HorizontalFlipInput.Create(8);
             reference = gray ? File.ReadAllBytes(Path.Combine(state.Root, "artifacts/warm-reference/jpeg-gray/reference.rgba")) : JpegQualityCorpus.Reference(pixels, 8, 0x204060);
             input = gray ? File.ReadAllBytes(Path.Combine(state.Root, "artifacts/warm-reference/jpeg-gray/reference.gray")) : new byte[513 * 259 * 3];
             if (!gray) for (var i = 0; i < 513 * 259; i++) reference.AsSpan(i * 4, 3).CopyTo(input.AsSpan(i * 3, 3));
             inputHash = JpegBenchmarkCase.Hash(input);
-            if (prepared.Project != "Lokad.Image" || prepared.SourceDepth != 8 || !prepared.Match.Matched || prepared.Match.ClosestOwned.Setting != 69
-                || compact && prepared.QualityPolicy != "compact-color-v1: original quality69 plus scaled16-basis precision floor; fixed FFmpegqscale5/RGB420; no quality search"
+            if (prepared.Project != "Lokad.Image" || prepared.SourceDepth != 8 || !prepared.Match.Matched
                 || prepared.NativeQuality != (gray ? 69 : 5) || JpegBenchmarkCase.Hash(pixels) != prepared.RasterSha256
                 || JpegBenchmarkCase.Hash(reference) != prepared.ReferenceSha256 || JpegBenchmarkCase.HashFile(state.Ffmpeg) != prepared.FfmpegSha256
                 || inputHash != (gray ? "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d" : "257210317c8bb87ec196f89d511de45f014c66e73049fbcf5f44f399184d9668"))
                 throw new InvalidOperationException("Raw JPEG input/quality/reference anchor differs.");
-            expected = File.ReadAllBytes(Path.Combine(state.Root, prepared.ManagedFile));
+            expected = JpegReferencePacket.FromNative(File.ReadAllBytes(Path.Combine(state.Root, prepared.NativeFile)));
             var frozenNative = Path.Combine(state.Root, prepared.NativeFile);
-            if (JpegBenchmarkCase.Hash(expected) != prepared.Match.ClosestOwned.EncodedSha256 || JpegBenchmarkCase.HashFile(frozenNative) != prepared.Match.Native.EncodedSha256)
+            if (JpegBenchmarkCase.HashFile(frozenNative) != prepared.Match.Native.EncodedSha256)
                 throw new InvalidOperationException("Frozen JPEG packets differ.");
             using (var manifest = JsonDocument.Parse(File.ReadAllText(Path.Combine(state.Root, "tmp/benchmark-source.json"))))
                 sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = manifest.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = manifest.RootElement.GetProperty("sourceRevision").GetString() });
@@ -86,9 +77,9 @@ internal sealed class WarmJpegSamples
     private void ValidateQuality()
     {
         var profile = new EncoderQualityProfile(513, 8, gray ? QualityEncoder.Jpeg444 : QualityEncoder.Jpeg420, QualityPattern.Asymmetric);
-        managedQuality = EncoderQualityCalibration.Validate(expected, reference, profile, 69, state.Ffmpeg, options.Sampling);
+        managedQuality = EncoderQualityCalibration.Validate(expected, reference, profile, options.Quality, state.Ffmpeg, options.Sampling);
         nativeQuality = EncoderQualityCalibration.Validate(File.ReadAllBytes(state.NativeOutput), reference, profile, prepared.NativeQuality, state.Ffmpeg, options.Sampling);
-        if (managedQuality != prepared.Match.ClosestOwned || nativeQuality != prepared.Match.Native || !EncoderQualityCalibration.Match(nativeQuality, [managedQuality]).Matched)
+        if (nativeQuality != prepared.Match.Native || !EncoderQualityCalibration.Match(nativeQuality, [managedQuality]).Matched)
             throw new InvalidOperationException("Raw JPEG source-quality/native packet differs from qualified anchor.");
     }
 
@@ -102,8 +93,8 @@ internal sealed class WarmJpegSamples
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);
             File.WriteAllText(path, JsonSerializer.Serialize(new
             {
-                schemaVersion = 1, name = "WarmJpeg", caseId = selected.ToString(), publicBoundary = compact ? "JpegSamplesEncode/CompactColorRgb420Resident" : gray ? "JpegSamplesEncode/GrayscaleResident" : "JpegSamplesEncode/Rgb420Resident",
-                quantizationPolicy = options.QuantizationPolicy.ToString(),
+                schemaVersion = 1, name = "WarmJpeg", caseId = selected.ToString(), publicBoundary = gray ? "JpegSamplesEncode/GrayscaleResident" : "JpegSamplesEncode/Rgb420Resident",
+                encodingProfile = "reference-compatible",
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), smoke, nativeSampleCount = smoke ? 1 : count, width = 513, height = 259, depth = 8, cpu,
                 referenceLabel = gray ? "SIMD-enabled libjpeg-turbo 3.1.4.1; single-component grayscale benchmark exception" : "FFmpeg n8.1 MJPEG",
                 managedAffinityCount = 1, processorCount = Environment.ProcessorCount, serverGc = GCSettings.IsServerGC, gcConfiguration = GC.GetConfigurationVariables(), sourceIdentity,

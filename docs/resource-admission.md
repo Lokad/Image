@@ -101,8 +101,8 @@ remain caller-managed. Existing `ImageCodec` entry points use per-operation limi
 | JPEG decode | Encoded input, parser/tables, padded coefficient/sample planes and RGBA result; orientation is admitted in the same operation. Certified sparse SIMD uses 8 KiB of original immutable module data, with no heap table or new workspace |
 | JPEG caller-sample decode | Supplied encoded/destination spans and the same parser/planes; orientation writes directly into caller storage without an RGBA frame |
 | Four-component JPEG | The same bounds with four coefficient/sample planes and descriptors; K is color, and shared admission counts caller CMYK storage |
-| JPEG encode | Source plus 8 KiB fixed workspace; eligible adaptive coding additionally admits event capacity and 64 KiB scratch |
-| JPEG caller-sample encode | Supplied gray/RGB span plus 8 KiB workspace and admitted optional event cache; bounded RGB rows, without RGBA conversion storage |
+| JPEG encode | Borrowed source,8KiB fixed workspace,16KiB table owner and separately admitted temporary Huffman-building peaks; no frame/event cache |
+| JPEG caller-sample encode | Borrowed gray/RGB span and the same fixed/table/tree owners; bounded rows without RGBA conversion storage |
 | VP8L decode / encode | Decode admits trees/cache/transform rasters and simultaneous conversion buffers; encode borrows source and admits the fixed 8 KiB path, 64 KiB cached baseline, separately admitted predictor/color maps, optional uncached literal models, predictor/color replacements that borrow the other map owner, bounded reference-token/index/prefix capacities, seeded copy models with borrowed channel trees and a bounded residual history/lookahead ring and spatial-group analysis with tile counts/indices, map/ranking and overlapping tables; counts output before streaming |
 | VP8 decode / encode | Decode admits models/modes, padded YUV, alpha and RGBA phases; encode admits source/reconstruction planes, coefficient caches, alpha and optional bounded alpha history/tables, plus arithmetic-buffer capacity and old/new growth overlap |
 
@@ -151,8 +151,8 @@ fuller container validation and `Decode` for pixels. Shared reservations span aw
 `EncodePng/Jpeg/WebpAsync` stage encoded bytes privately, then use caller
 `WriteAsync` in blocks up to 64 KiB. Charge actual staging capacity, 256 bytes
 of stream bookkeeping and 64 bytes per linked chunk, plus existing codec workspaces.
-JPEG retains adaptive coding with an admitted bounded stock-memory destination;
-resource/cancellable fallbacks remain. A separate private output pool retains at
+JPEG uses the same reference-compatible encoder and segmented staging for every
+stream and cancellation boundary; admission refusal terminates the operation. A separate private output pool retains at
 most two exact arrays totaling 4 MiB. Shared reservations remain held across writes.
 Unused tails are cleared before handing array-backed memory to callers. Work
 includes codec work, staging-copy, cleared-tail and delivery-attempt bytes. No final

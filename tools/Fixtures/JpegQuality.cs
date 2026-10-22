@@ -22,7 +22,7 @@ internal static class JpegQuality
                 string[]? encode = null; byte[] encoded;
                 if (owned)
                 {
-                    using var stream = new MemoryStream(); ImageCodec.EncodeJpeg(image, stream, new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Sampling = sampling, Quality = setting, BackgroundRgb = background });
+                    using var stream = new MemoryStream(); ImageCodec.EncodeJpeg(image, stream, new JpegEncodeOptions { Sampling = sampling, Quality = setting, BackgroundRgb = background });
                     encoded = stream.ToArray();
                 }
                 else

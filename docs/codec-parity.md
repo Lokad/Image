@@ -2,10 +2,10 @@
 
 The qualification target is byte-exact encoder output, followed by exact decoder
 samples, against pinned FFmpeg builds and explicit settings. CPU/allocation tuning
-follows correctness. JPEG defaults to the `Reference` profile in0.2.0 development;
-Original/CompactColor are superseded development experiments scheduled for removal.
-Their historical size/quality passes do not establish this target or create a
-compatibility obligation.
+follows correctness. JPEG uses one managed baseline encoder in0.2.0 development.
+The superseded Original/CompactColor branches, option switches and experimental
+forward-transform machinery are removed; historical size/quality results remain
+producer-specific evidence, not compatibility obligations.
 
 Only identified encoder-attribution metadata may differ. For the current JPEG
 reference, its single `Lavc62.28.100\0` COM payload becomes `Lokad.Image\0`,
@@ -13,7 +13,7 @@ with its length updated. Every other byte must match. JFIF, ICC, EXIF, orientati
 color information, quantization, entropy and extra comments are not exempt.
 Other codecs need their own explicit attribution inventory.
 
-The managed JPEG `JpegQuantizationPolicy.Reference` profile reproduces the frozen
+The managed JPEG encoder reproduces the frozen
 **513×259 RGBA8/16** controls at **4:4:4, 4:2:2 and 4:2:0** completely. Encoding receives source samples and options;
 it reads no oracle packet or table. It generates color
 samples, integer transforms, quantization, optimal Huffman tables, headers and

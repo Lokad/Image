@@ -60,8 +60,8 @@ internal sealed class WarmGrayscaleJpeg
             native = new NativeWarmReference(state, cpu, Path.Combine(directory, "reference.gray"));
             if (native.BuildIdentity.GetProperty("workerSha256").GetString() != prepared.NativeBuild.GetProperty("workerSha256").GetString())
                 throw new InvalidOperationException("Prepared grayscale worker differs.");
-            encoded = File.ReadAllBytes(Path.Combine(state.Root, prepared.ManagedFile));
-            if (JpegBenchmarkCase.Hash(encoded) != "2442100fb89c3000f4646e8ae9c5e25b45980dd2d9e1be3d38f38e69f9a32cea"
+            encoded = JpegReferencePacket.FromNative(File.ReadAllBytes(Path.Combine(state.Root, prepared.NativeFile)));
+            if (JpegBenchmarkCase.Hash(encoded) != "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423"
                 || JpegBenchmarkCase.HashFile(state.NativeOutput) != "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423"
                 || JpegBenchmarkCase.HashFile(Path.Combine(state.Root, prepared.NativeFile)) != prepared.Match.Native.EncodedSha256)
                 throw new InvalidOperationException("Frozen grayscale packets differ.");
@@ -93,7 +93,7 @@ internal sealed class WarmGrayscaleJpeg
             throw new InvalidOperationException("Grayscale components/quantization differ.");
         managedQuality = EncoderQualityCalibration.Validate(encoded, reference, profile, 69, state.Ffmpeg, JpegSampling.Grayscale);
         nativeQuality = EncoderQualityCalibration.Validate(packet, reference, profile, 69, state.Ffmpeg, JpegSampling.Grayscale);
-        if (managedQuality != prepared.Match.ClosestOwned || nativeQuality != prepared.Match.Native
+        if (nativeQuality != prepared.Match.Native
             || !EncoderQualityCalibration.Match(nativeQuality, [managedQuality]).Matched)
             throw new InvalidOperationException("Frozen grayscale decoder/source quality differs.");
     }

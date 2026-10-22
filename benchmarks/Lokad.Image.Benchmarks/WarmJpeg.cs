@@ -24,16 +24,12 @@ public partial class WarmJpeg
     private bool Source16 => Case is WarmJpegCase.Encode420Cancelable16 or WarmJpegCase.Encode422_16 or WarmJpegCase.Encode16 or WarmJpegCase.Encode420_16 or WarmJpegCase.Encode420Stream16;
     private int Depth => Source16 ? 16 : 8;
     private bool Cancelable => Case is WarmJpegCase.Encode444Cancelable8 or WarmJpegCase.Encode420Cancelable16;
-    private bool FixedAnchor => Cancelable || ForwardOnly || Subsampled || Source16 || AdaptiveEntropy;
     private bool Horizontal => Case is WarmJpegCase.Encode422_8 or WarmJpegCase.Encode422_16;
     private bool Restart => Case == WarmJpegCase.Encode420Restart8;
     private bool ForwardOnly => Case is WarmJpegCase.Encode420Stream8 or WarmJpegCase.Encode420Stream16 or WarmJpegCase.Encode444Stream8;
     private bool Subsampled => Case is WarmJpegCase.Encode420Cancelable16 or WarmJpegCase.Encode420Restart8 or WarmJpegCase.Encode422_16 or WarmJpegCase.Encode420_8 or WarmJpegCase.Encode422_8 or WarmJpegCase.Encode420_16 or WarmJpegCase.Encode420Stream8 or WarmJpegCase.Encode420Stream16;
     private string NativeSampling => Horizontal ? "422" : Subsampled ? "420" : "444";
     private string DisplaySampling => Horizontal ? "4:2:2" : Subsampled ? "4:2:0" : "4:4:4";
-    private string FixedPolicy => Restart ? FixedRestartPolicy : Source16 ? (Horizontal ? Fixed42216Policy : Subsampled ? Fixed42016Policy : Fixed16Policy)
-        : Horizontal ? Fixed422Policy : Subsampled ? Fixed420Policy : Fixed444Policy;
-    private int FixedQuality => Horizontal ? 65 : 69;
     private EncoderQualityProfile TargetProfile => ProfileFor(Subsampled, Horizontal, Depth);
     private static EncoderQualityProfile ProfileFor(bool subsampled, bool horizontal = false, int depth = 8) => new(513, depth,
         horizontal ? QualityEncoder.Jpeg422 : subsampled ? QualityEncoder.Jpeg420 : QualityEncoder.Jpeg444, QualityPattern.Asymmetric);
@@ -43,16 +39,17 @@ public partial class WarmJpeg
         var recipe = horizontal ? Recipe444.Replace("4:4:4", "4:2:2") : subsampled ? Recipe444.Replace("4:4:4", "4:2:0") : Recipe444;
         var result = depth == 16 ? recipe.Replace("Create(8)", "Create(16)").Replace("RGBA8", "RGBA16")
             + " Full 16-bit alpha flattening and normalization to 8-bit use one rounding after blending, inside every operation." : recipe;
-        if (forwardOnly) result += " Fresh forward-only Stream wrapper over fresh owned MemoryStream storage; fixed geometric AC Huffman path.";
+        if (forwardOnly) result += " Fresh forward-only Stream wrapper over fresh owned MemoryStream storage; reference-compatible encoding.";
         if (restartRows) result += " Restart interval33 MCUs, one row per interval, sixteen sequenced restart markers.";
-        return AdaptiveEntropy ? result + " Independently implemented adaptive Huffman coding, admitted private event workspace, same coefficients and quality anchor." : result;
+        return result;
     }
+    // Selects an existing reference catalog filename, never an encoder algorithm.
     private static bool AdaptiveEntropy => Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") switch
     {
         null => false,
         "adaptive-v1" => true,
         "fixed-geometric-v1" => false,
-        _ => throw new InvalidOperationException("Unknown JPEG entropy preparation policy.")
+        _ => throw new InvalidOperationException("Unknown frozen JPEG catalog selector.")
     };
     private static string MatchFile(bool subsampled, bool horizontal, int depth, bool forwardOnly = false, bool restartRows = false)
     {
@@ -63,14 +60,7 @@ public partial class WarmJpeg
         return AdaptiveEntropy ? name.Replace("-match.json", "-adaptive-match.json") : name;
     }
     private string Recipe => RecipeFor(Subsampled, Horizontal, Depth, ForwardOnly, Restart)
-        + (Cancelable ? " Live cancelable token, never signaled; stock MemoryStream; fixed geometric Huffman fallback. Token/source setup and disposal outside timing." : "");
-    private const string FixedRestartPolicy = "fixed-anchor-v1: native qscale5 / managed quality69 / 4:2:0 / restart interval33; serial native slices; one owned evaluation; no quality sweep";
-    private const string Fixed444Policy = "fixed-anchor-v1: native qscale 5 / managed quality 69 / 4:4:4; previously matched anchor; one owned evaluation; no quality sweep";
-    private const string Fixed420Policy = "fixed-anchor-v1: native qscale 5 / managed quality 69 / 4:2:0; one owned evaluation; no quality sweep";
-    private const string Fixed422Policy = "fixed-anchor-v1: native qscale 5 / managed quality 65 / 4:2:2; one owned evaluation; no quality sweep";
-    private const string Fixed16Policy = "fixed-anchor-v1: native qscale 5 / managed quality 69 / RGBA16 to 4:4:4; one owned evaluation; no quality sweep";
-    private const string Fixed42216Policy = "fixed-anchor-v1: native qscale 5 / managed quality 65 / RGBA16 to 4:2:2; one owned evaluation; no quality sweep";
-    private const string Fixed42016Policy = "fixed-anchor-v1: native qscale 5 / managed quality 69 / RGBA16 to 4:2:0; one owned evaluation; no quality sweep";
+        + (Cancelable ? " Live cancelable token, never signaled; stock MemoryStream; reference-compatible encoding. Token/source setup and disposal outside timing." : "");
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
     private ImageBuffer source = null!;
@@ -93,19 +83,19 @@ public partial class WarmJpeg
         return selection switch
         {
             null or "Encode8" => [WarmJpegCase.Encode8],
-            "EncodeGray8" when AdaptiveEntropy => [WarmJpegCase.EncodeGray8],
+            "EncodeGray8" => [WarmJpegCase.EncodeGray8],
             "Encode420_8" => [WarmJpegCase.Encode420_8],
             "Encode422_8" => [WarmJpegCase.Encode422_8],
             "Encode16" => [WarmJpegCase.Encode16],
             "Encode420_16" => [WarmJpegCase.Encode420_16],
             "Encode422_16" => [WarmJpegCase.Encode422_16],
-            "Encode420Restart8" when AdaptiveEntropy => [WarmJpegCase.Encode420Restart8],
-            "Encode420Stream8" when !AdaptiveEntropy => [WarmJpegCase.Encode420Stream8],
-            "Encode420Stream16" when !AdaptiveEntropy => [WarmJpegCase.Encode420Stream16],
-            "Encode444Stream8" when !AdaptiveEntropy => [WarmJpegCase.Encode444Stream8],
-            "Encode444Cancelable8" when !AdaptiveEntropy => [WarmJpegCase.Encode444Cancelable8],
-            "Encode420Cancelable16" when !AdaptiveEntropy => [WarmJpegCase.Encode420Cancelable16],
-            _ => throw new ArgumentException("Choose one JPEG case: Encode8, Encode16, Encode420_8, Encode422_8, Encode422_16, Encode420Restart8 (adaptive-v1), Encode420_16, Encode420Stream8, Encode420Stream16 or Encode444Stream8/Encode444Cancelable8/Encode420Cancelable16 (fixed-geometric-v1 policy).")
+            "Encode420Restart8" => [WarmJpegCase.Encode420Restart8],
+            "Encode420Stream8" => [WarmJpegCase.Encode420Stream8],
+            "Encode420Stream16" => [WarmJpegCase.Encode420Stream16],
+            "Encode444Stream8" => [WarmJpegCase.Encode444Stream8],
+            "Encode444Cancelable8" => [WarmJpegCase.Encode444Cancelable8],
+            "Encode420Cancelable16" => [WarmJpegCase.Encode420Cancelable16],
+            _ => throw new ArgumentException("Choose one JPEG case: Encode8, Encode16, Encode420_8, Encode422_8, Encode422_16, Encode420Restart8, Encode420_16, Encode420Stream8, Encode420Stream16 or Encode444Stream8/Encode444Cancelable8/Encode420Cancelable16.")
         };
     }
 
@@ -128,13 +118,12 @@ public partial class WarmJpeg
         if (subsampled && horizontal) throw new ArgumentException("Choose one JPEG subsampling layout.");
         if (depth is not (8 or 16))
             throw new ArgumentException("JPEG source depth must be 8 or16.");
-        if (forwardOnly && (horizontal || !subsampled && depth != 8 || Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") != "fixed-geometric-v1"))
-            throw new ArgumentException("Forward-only preparation requires RGBA8 4:4:4 or RGBA8/16 4:2:0 with fixed-geometric-v1.");
-        if (restartRows && (depth != 8 || !subsampled || horizontal || forwardOnly || !AdaptiveEntropy))
-            throw new ArgumentException("Row-restart preparation requires adaptive RGBA8 4:2:0.");
-        var fixedAnchor = forwardOnly || subsampled || horizontal || depth == 16 || AdaptiveEntropy;
+        if (forwardOnly && (horizontal || !subsampled && depth != 8))
+            throw new ArgumentException("Forward-only preparation requires RGBA8 4:4:4 or RGBA8/16 4:2:0 reference input.");
+        if (restartRows && (depth != 8 || !subsampled || horizontal || forwardOnly))
+            throw new ArgumentException("Row-restart preparation requires RGBA8 4:2:0.");
         var sampling = horizontal ? "422" : subsampled ? "420" : "444";
-        if (fixedAnchor && nativeQscale != 5) throw new ArgumentException("The fixed JPEG anchor requires native qscale 5.");
+        if (nativeQscale != 5) throw new ArgumentException("The fixed JPEG anchor requires native qscale 5.");
         using var process = Process.GetCurrentProcess(); var oldAffinity = process.ProcessorAffinity;
         process.ProcessorAffinity = new IntPtr(1L << cpu);
         try
@@ -154,11 +143,13 @@ public partial class WarmJpeg
             {
                 using var output = new MemoryStream();
                 using var wrapper = forwardOnly ? new ForwardOnlyOutput(output) : null;
-                ImageCodec.EncodeJpeg(source, (Stream?)wrapper ?? output, new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = quality, Sampling = horizontal ? JpegSampling.YCbCr422 : subsampled ? JpegSampling.YCbCr420 : JpegSampling.YCbCr444, BackgroundRgb = Background, RestartInterval = restartRows ? 33 : 0 });
+                ImageCodec.EncodeJpeg(source, (Stream?)wrapper ?? output, new JpegEncodeOptions { Quality = quality, Sampling = horizontal ? JpegSampling.YCbCr422 : subsampled ? JpegSampling.YCbCr420 : JpegSampling.YCbCr444, BackgroundRgb = Background, RestartInterval = restartRows ? 33 : 0 });
                 var bytes = output.ToArray(); files.Add(quality, bytes); order.Add(quality);
                 return EncoderQualityCalibration.Validate(bytes, reference, target, quality, state.Ffmpeg);
             }
-            var owned = fixedAnchor ? new[] { Sample(horizontal ? 65 : 69) } : EncoderQualityCalibration.SampleOwned([nativeSample], Sample);
+            var owned = new[] { Sample(85) };
+            if (!files[85].AsSpan().SequenceEqual(JpegReferencePacket.FromNative(nativeBytes)))
+                throw new InvalidOperationException("Complete JPEG reference packet differs.");
             var match = EncoderQualityCalibration.Match(nativeSample, owned);
             if (forwardOnly && !subsampled) ValidateForward444Pixels(state.Root, match.ClosestOwned, nativeSample);
             if (restartRows)
@@ -180,11 +171,9 @@ public partial class WarmJpeg
                 Path.GetRelativePath(state.Root, nativeFile), Path.GetRelativePath(state.Root, managedFile), match, owned, order.ToArray(), SourceIdentity(state.Root),
                 JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), JpegBenchmarkCase.HashFile(typeof(WarmJpeg).Assembly.Location),
                 JpegBenchmarkCase.HashFile(state.Ffmpeg), native.BuildIdentity, native.Ready,
-                sampling, restartRows ? FixedRestartPolicy : depth == 16 ? (horizontal ? Fixed42216Policy : subsampled ? Fixed42016Policy : Fixed16Policy)
-                    : horizontal ? Fixed422Policy : subsampled ? Fixed420Policy
-                    : fixedAnchor ? Fixed444Policy : EncoderQualityCalibration.OwnedQualityPolicy, depth);
+                sampling, "exact-reference-v1: native qscale5 / managed quality85; complete packet equality apart from approved attribution; no quality sweep", depth);
             var path = Path.Combine(state.Root, "artifacts", "warm-reference", MatchFile(subsampled, horizontal, depth, forwardOnly, restartRows));
-            if ((AdaptiveEntropy || forwardOnly) && File.Exists(path)) throw new InvalidOperationException("Preserve the existing preparation before replacing it.");
+            if (File.Exists(path)) throw new InvalidOperationException("Preserve the existing preparation before replacing it.");
             File.WriteAllText(path, JsonSerializer.Serialize(record, EncoderQualityCalibration.Json) + "\n");
             Console.WriteLine($"Prepared one warm JPEG pair: native qscale {nativeQscale}, owned quality {match.ClosestOwned.Setting}, gap {match.PsnrGapDb:F4} dB, matched={match.Matched}; {owned.Length} owned settings, one source raster. {path}");
         }
@@ -218,7 +207,6 @@ public partial class WarmJpeg
             && (budgetSelection != "1" || Case != WarmJpegCase.Encode420_8
                 || Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_SAMPLE_INPUT") is not null))
             throw new InvalidOperationException("Shared JPEG measurement requires resident RGBA8 Encode420_8.");
-        if ((ForwardOnly || Cancelable) && Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ENTROPY") != "fixed-geometric-v1") throw new InvalidOperationException("The selected output boundary requires the fixed geometric AC Huffman policy.");
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -250,30 +238,22 @@ public partial class WarmJpeg
                 MatchFile(Subsampled, Horizontal, Depth, ForwardOnly || Cancelable, Restart));
             prepared = JsonSerializer.Deserialize<WarmJpegPreparation>(File.ReadAllText(path), EncoderQualityCalibration.Json)
                 ?? throw new InvalidOperationException("Missing warm JPEG preparation; run --prepare-warm-jpeg first.");
-            if (prepared.SchemaVersion != 1 || prepared.Project != "Lokad.Image" || prepared.Recipe != (Cancelable ? RecipeFor(Subsampled, Horizontal, Depth, forwardOnly: true) : Recipe) || prepared.BackgroundRgb != Background || prepared.SourceDepth != Depth
-                || !prepared.Match.Matched || prepared.Match.PsnrGapDb is not (>= 0 and <= EncoderQualityCalibration.MaximumPsnrGapDb)
-                || (!FixedAnchor && prepared.OwnedSettings.Length is < 5 or > EncoderQualityCalibration.MaximumOwnedSettings)
-                || (FixedAnchor && (prepared.Sampling != NativeSampling || prepared.QualityPolicy != FixedPolicy
-                    || prepared.NativeQuality != 5 || prepared.OwnedSettings.Length != 1
-                    || prepared.OwnedSettings[0].Setting != FixedQuality || prepared.Match.ClosestOwned.Setting != FixedQuality
-                    || prepared.Match.Native.Setting != 5 || prepared.OwnedEvaluationOrder.Length != 1 || prepared.OwnedEvaluationOrder[0] != FixedQuality))
-                || prepared.OwnedEvaluationOrder.Length != prepared.OwnedSettings.Length
-                || prepared.OwnedEvaluationOrder.Distinct().Count() != prepared.OwnedSettings.Length)
-                throw new InvalidOperationException("Warm JPEG quality preparation is unmatched or outside its bounded contract.");
+            if (prepared.SchemaVersion != 1 || prepared.Project != "Lokad.Image" || prepared.SourceDepth != Depth
+                || prepared.BackgroundRgb != Background || prepared.NativeQuality != 5 || prepared.Sampling != NativeSampling)
+                throw new InvalidOperationException("Frozen JPEG source/native settings differ.");
             sourceIdentity = SourceIdentity(state.Root);
             pixels = HorizontalFlipInput.Create(Depth); reference = JpegQualityCorpus.Reference(pixels, Depth, Background);
             if (JpegBenchmarkCase.Hash(pixels) != prepared.RasterSha256 || JpegBenchmarkCase.Hash(reference) != prepared.ReferenceSha256
                 || JpegBenchmarkCase.HashFile(state.Ffmpeg) != prepared.FfmpegSha256)
                 throw new InvalidOperationException("Warm JPEG input/reference/oracle identity changed; prepare only this pair again.");
-            options = new() { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = prepared.Match.ClosestOwned.Setting, Sampling = Horizontal ? JpegSampling.YCbCr422 : Subsampled ? JpegSampling.YCbCr420 : JpegSampling.YCbCr444, BackgroundRgb = Background, RestartInterval = Restart ? 33 : 0 };
+            options = new() { Quality = 85, Sampling = Horizontal ? JpegSampling.YCbCr422 : Subsampled ? JpegSampling.YCbCr420 : JpegSampling.YCbCr444, BackgroundRgb = Background, RestartInterval = Restart ? 33 : 0 };
             source = JpegBenchmarkCase.Buffer(pixels, 513, 259, Depth); File.WriteAllBytes(state.Input, pixels);
             PrepareSharedBudget();
             native = new NativeWarmReference(state, Depth, cpu, Restart ? "jpeg-restart-encode" : "jpeg-encode", expectedRaw: NormalizedInput(state.Root, pixels, reference, Depth), nativeQuality: prepared.NativeQuality, jpegSampling: NativeSampling);
             if (native.BuildIdentity.GetProperty("workerSha256").GetString() != prepared.NativeBuild.GetProperty("workerSha256").GetString())
                 throw new InvalidOperationException("Native JPEG worker changed; prepare this pair again.");
-            encoded = File.ReadAllBytes(Path.Combine(state.Root, prepared.ManagedFile));
-            if (JpegBenchmarkCase.Hash(encoded) != prepared.Match.ClosestOwned.EncodedSha256
-                || JpegBenchmarkCase.HashFile(state.NativeOutput) != prepared.Match.Native.EncodedSha256
+            encoded = JpegReferencePacket.FromNative(File.ReadAllBytes(Path.Combine(state.Root, prepared.NativeFile)));
+            if (JpegBenchmarkCase.HashFile(state.NativeOutput) != prepared.Match.Native.EncodedSha256
                 || JpegBenchmarkCase.HashFile(Path.Combine(state.Root, prepared.NativeFile)) != prepared.Match.Native.EncodedSha256)
                 throw new InvalidOperationException("Prepared JPEG bitstreams changed.");
             if (Cancelable)
@@ -318,7 +298,7 @@ public partial class WarmJpeg
         if (Restart) { ValidateRestartPacket(encoded); ValidateRestartPacket(File.ReadAllBytes(state.NativeOutput)); }
         managedQuality = EncoderQualityCalibration.Validate(encoded, reference, TargetProfile, options.Quality, state.Ffmpeg);
         nativeQuality = EncoderQualityCalibration.Validate(File.ReadAllBytes(state.NativeOutput), reference, TargetProfile, prepared.NativeQuality, state.Ffmpeg);
-        if (managedQuality != prepared.Match.ClosestOwned || nativeQuality != prepared.Match.Native
+        if (nativeQuality != prepared.Match.Native
             || !EncoderQualityCalibration.Match(nativeQuality, [managedQuality]).Matched)
             throw new InvalidOperationException("Warm JPEG source/decoder quality changed; prepare this pair again.");
         if (Restart) ValidateRestartPixels(state.Root, managedQuality, nativeQuality);
@@ -327,16 +307,12 @@ public partial class WarmJpeg
 
     private static void ValidateForward444Pixels(string root, QualitySample managed, QualitySample native)
     {
-        var anchor = JsonSerializer.Deserialize<WarmJpegPreparation>(File.ReadAllText(Path.Combine(root,
-            "artifacts", "warm-reference", "jpeg-adaptive-match.json")), EncoderQualityCalibration.Json)
-            ?? throw new InvalidOperationException("Qualified adaptive JPEG444 anchor missing.");
-        if (managed.Setting != 69 || native.Setting != 5
-            || managed.SourceError != anchor.Match.ClosestOwned.SourceError || native.SourceError != anchor.Match.Native.SourceError
-            || managed.PublicDecodedSha256 != anchor.Match.ClosestOwned.PublicDecodedSha256
-            || managed.NativeDecodedSha256 != anchor.Match.ClosestOwned.NativeDecodedSha256
-            || native.PublicDecodedSha256 != anchor.Match.Native.PublicDecodedSha256
-            || native.NativeDecodedSha256 != anchor.Match.Native.NativeDecodedSha256)
-            throw new InvalidOperationException("JPEG444 fallback changed the qualified per-encoder pixels or source quality.");
+        // Exact coded packets permit only the known attribution difference.
+        if (managed.Setting != 85 || native.Setting != 5
+            || managed.SourceError != native.SourceError
+            || managed.PublicDecodedSha256 != native.PublicDecodedSha256
+            || managed.NativeDecodedSha256 != native.NativeDecodedSha256)
+            throw new InvalidOperationException("JPEG reference packets reconstruct different pixels.");
     }
 
     internal static (int Dri, int FirstRestart) ValidateRestartPacket(byte[] bytes)
@@ -390,8 +366,8 @@ public partial class WarmJpeg
         var anchor = JsonSerializer.Deserialize<WarmJpegPreparation>(File.ReadAllText(Path.Combine(root,
             "artifacts", "warm-reference", "jpeg420-adaptive-match.json")), EncoderQualityCalibration.Json)
             ?? throw new InvalidOperationException("Original 420 anchor missing.");
-        if (managed.PublicDecodedSha256 != anchor.Match.ClosestOwned.PublicDecodedSha256
-            || managed.NativeDecodedSha256 != anchor.Match.ClosestOwned.NativeDecodedSha256
+        if (managed.PublicDecodedSha256 != anchor.Match.Native.PublicDecodedSha256
+            || managed.NativeDecodedSha256 != anchor.Match.Native.NativeDecodedSha256
             || native.PublicDecodedSha256 != anchor.Match.Native.PublicDecodedSha256
             || native.NativeDecodedSha256 != anchor.Match.Native.NativeDecodedSha256)
             throw new InvalidOperationException("Restart coding changed per-encoder decoded pixels.");
@@ -465,22 +441,22 @@ public partial class WarmJpeg
                 managedOutputBytes = encoded.Length, nativeOutputBytes = nativeQuality.EncodedBytes,
                 managedEncodedSha256 = JpegBenchmarkCase.Hash(encoded), nativeOutputSha256 = JpegBenchmarkCase.HashFile(state.NativeOutput),
                 recipe = Recipe, sampling = DisplaySampling, restartInterval = Restart ? 33 : 0, restartMarkers = Restart ? 16 : 0,
-                serialRestartFramingValidated = Restart, qualityPolicy = prepared.QualityPolicy,
+                serialRestartFramingValidated = Restart, qualityPolicy = "exact-reference-v1",
                 outputBoundary = ForwardOnly ? "Fresh forward-only Stream wrapper over fresh owned MemoryStream storage; wrapper creation/disposal and storage growth included; no seek/length/position access." : "Fresh MemoryStream",
                 cancellationCanBeCanceled = encodeCancellation.CanBeCanceled, cancellationRequested = encodeCancellation.IsCancellationRequested,
                 alreadyCanceledRejectedWithoutOutput = Cancelable ? true : (bool?)null,
                 frozenForwardOnlyPacketExact = Cancelable ? true : (bool?)null,
                 coefficientAnchorEvidence = Cancelable ? Source16 ? "warm-jpeg-stream16-evidence.json" : "warm-jpeg444stream-evidence.json" : null,
                 cancellationBoundary = Cancelable ? "Live cancelable token, never signaled; token/source setup/disposal outside timing. Native has no equivalent cancellation setting; complete flatten/conversion/encode/owned output release remain timed." : null,
-                backgroundRgb = Background, managedHuffman = AdaptiveEntropy ? "adaptive-v1" : "fixed-geometric-v1", privateEntropyWorkspaceReused = AdaptiveEntropy, qualityMatched = true, fullSourceNormalizationTimed = Source16, normalizedReferenceExact = true, alphaExact = true, decoderAgreementWithinBounds = true,
-                psnrGapDb = prepared.Match.PsnrGapDb, maximumPsnrGapDb = EncoderQualityCalibration.MaximumPsnrGapDb,
-                ownedEnumeratedSettings = prepared.OwnedSettings.Length, ownedEvaluationOrder = prepared.OwnedEvaluationOrder,
-                ownedSettings = prepared.OwnedSettings, managedQuality, nativeQuality,
+                backgroundRgb = Background, managedHuffman = "source-derived-reference-compatible", privateEntropyWorkspaceReused = false, qualityMatched = true, fullSourceNormalizationTimed = Source16, normalizedReferenceExact = true, alphaExact = true, decoderAgreementWithinBounds = true,
+                psnrGapDb = EncoderQualityCalibration.Match(nativeQuality, [managedQuality]).PsnrGapDb, maximumPsnrGapDb = EncoderQualityCalibration.MaximumPsnrGapDb,
+                ownedEnumeratedSettings = 1, ownedEvaluationOrder = new[] { options.Quality },
+                ownedSettings = new[] { managedQuality }, managedQuality, nativeQuality,
                 sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmJpeg).Assembly.Location), nativeBuild = native.BuildIdentity,
                 nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = SharedBudgetBoundary + $"Resident original RGBA{Depth} to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, {DisplaySampling} encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included{(ForwardOnly ? ", plus fresh forward-only Stream wrapper creation/disposal" : "")}; no redundant ToArray. Native optimal Huffman and managed {(AdaptiveEntropy ? "adaptive Huffman with histogram/cache work and private workspace reuse" : "fixed geometric AC Huffman")} recorded. Quality matched by frozen <=0.25 dB RGB source-error band; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded."
+                boundary = SharedBudgetBoundary + $"Resident original RGBA{Depth} to complete independent JPEG bytes: explicit single-round alpha flattening and normalization on 0x204060, full-range BT.601 conversion, {DisplaySampling} encode, output acquisition/release. Native codec/conversion/scratch/frame/packet wrappers reused, but pixels are flattened/converted and encoded every operation. Fresh managed MemoryStream creation, growth, encode and disposal included{(ForwardOnly ? ", plus fresh forward-only Stream wrapper creation/disposal" : "")}; no redundant ToArray. Native optimal Huffman and managed source-derived reference-compatible Huffman recorded. Complete coded packet exact apart from approved encoder attribution; one fixed-setting source-quality sanity check; fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded."
             }, new JsonSerializerOptions(EncoderQualityCalibration.Json) { PropertyNamingPolicy = null }) + "\n");
             Console.WriteLine("Validated warm JPEG pair: " + path);
         }

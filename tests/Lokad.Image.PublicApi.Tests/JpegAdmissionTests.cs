@@ -81,45 +81,10 @@ public sealed class JpegAdmissionTests
         { Limits = options.Limits with { MaxWorkingBytes = peak - 1 } }));
     }
 
-    public static IEnumerable<object[]> EncodeProfiles()
-    {
-        foreach (var depth in new[] { 8, 16 })
-        foreach (var sampling in Enum.GetValues<JpegSampling>()) yield return [depth, sampling];
-    }
-
-    [Theory]
-    [MemberData(nameof(EncodeProfiles))]
-    public void EncoderAdmitsSourceAndScratchBeforeOutputAndBoundsEveryEncodedWrite(int depth, JpegSampling sampling)
-    {
-        using var source = OriginalPixels.Buffer(17, 11, depth);
-        var unchanged = OriginalPixels.Bytes(source);
-        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Sampling = sampling, Quality = 85, RestartInterval = 1, BackgroundRgb = 0x17395B };
-        using var reference = new MemoryStream(); ImageCodec.EncodeJpeg(source, reference, options);
-        var expected = reference.ToArray();
-        var limits = new ImageLimits { MaxWorkingBytes = unchanged.Length + 8192L, MaxOutputBytes = expected.Length };
-        using var exact = new MemoryStream(); ImageCodec.EncodeJpeg(source, exact, options with { Limits = limits });
-        Assert.Equal(expected, exact.ToArray()); Assert.True(exact.CanWrite);
-        using var rejected = new MemoryStream();
-        Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(source, rejected, options with
-        { Limits = limits with { MaxWorkingBytes = limits.MaxWorkingBytes - 1 } }));
-        Assert.Equal(0, rejected.Length); Assert.True(rejected.CanWrite);
-        using var shortOutput = new MemoryStream();
-        Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(source, shortOutput, options with
-        { Limits = limits with { MaxOutputBytes = expected.Length - 1 } }));
-        Assert.InRange(shortOutput.Length, 1L, expected.Length - 1L); Assert.True(shortOutput.CanWrite);
-        using var canceled = new MemoryStream();
-        Assert.Throws<OperationCanceledException>(() => ImageCodec.EncodeJpeg(source, canceled, options, new CancellationToken(true)));
-        Assert.Equal(0, canceled.Length); Assert.True(canceled.CanWrite);
-        Assert.Equal(unchanged, OriginalPixels.Bytes(source));
-    }
-
     private static byte[] CreateEncoded(int width, int height, JpegSampling sampling, bool progressive)
     {
         if (progressive) return AuthoredJpeg.ProgressiveFrame(width, height, sampling, restartInterval: 1);
-        using var source = OriginalPixels.Buffer(width, height, 8, opaque: true);
-        using var output = new MemoryStream();
-        ImageCodec.EncodeJpeg(source, output, new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Sampling = sampling, Quality = 85, RestartInterval = 1 });
-        return output.ToArray();
+        return AuthoredJpeg.SequentialFrame(width, height, sampling, restartInterval: 1);
     }
 
     private static long WorkspacePeak(int width, int height, JpegSampling sampling, bool progressive, bool orient)
@@ -132,11 +97,10 @@ public sealed class JpegAdmissionTests
         var firstPlane = mcus * h * v * 64;
         var components = sampling == JpegSampling.Grayscale ? 1 : 3;
         var allPlanes = firstPlane + (components - 1) * mcus * 64;
-        var quantization = progressive || components == 1 ? 128 : 256;
-        // One DC/AC pair: 12 DC symbols and 162 (current encoder) or 176
-        // (authored progressive) AC symbols. Both tables have short prefixes;
-        // geometric AC adds the existing 1024-entry ushort long-prefix lookup.
-        var tables = 2 * (204 + 512) + 12 + (progressive ? 176 : 162 + 2048);
+        const int quantization = 128;
+        // Authored sequential/progressive fixtures use one 12/176-symbol pair,
+        // all with short prefixes and one quantization table.
+        const int tables = 2 * (204 + 512) + 12 + 176;
         var state = 1024 + quantization + tables + components * (256 + 128);
         var coefficientPeak = allPlanes * 4 + firstPlane;
         var resultPeak = allPlanes + (long)width * height * 4 * (orient ? 2 : 1);

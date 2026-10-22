@@ -4,17 +4,15 @@ Target: a dependency-free safe C# library for .NET 10, providing still PNG/JPEG/
 codecs and basic image editing. This document distinguishes implemented behavior
 from required future functionality.
 
-The development JPEG default, `JpegQuantizationPolicy.Reference`, selects managed
-reference-compatible baseline grayscale/4:4:4/4:2:2/4:2:0 pipelines. MCU restart
-intervals use fixed format tables for color and optimized tables for grayscale.
-It accepts RGBA8/16 images and caller Gray8/RGB8 samples, with synchronous/
-asynchronous streams. Caller grayscale format overrides `Sampling`, as in other
-policies. Color quality maps to qscale `1 + (100 - Quality) * 30 / 99`; default85
-maps to5. Grayscale uses the existing owned mathematical quality formula and the
-same quality value as the pinned grayscale backend (the frozen control uses69).
-`BaselineOnly` does not change this always-baseline profile. Original/CompactColor
-remain available explicitly with unchanged behavior. [Codec parity](docs/codec-parity.md) states the
-exact tested scope and approved grayscale reference exception.
+The development JPEG encoder uses one managed reference-compatible baseline
+implementation for grayscale/4:4:4/4:2:2/4:2:0. It accepts RGBA8/16 images and caller
+Gray8/RGB8 samples through sync/async streams. Caller grayscale overrides Sampling.
+MCU restarts use fixed format tables for color and optimized tables for grayscale.
+Color quality maps to qscale `1 + (100 - Quality) * 30 / 99`; default85 maps to5.
+Grayscale uses the owned mathematical quantizer formula and its pinned backend's
+quality value, with69 frozen. Superseded experimental encoder choices and switches
+are removed. [Codec parity](docs/codec-parity.md) states the exact tested scope and
+approved grayscale reference exception.
 
 The next codec qualification target is [byte compatibility](docs/codec-parity.md)
 with pinned FFmpeg encoders, then exact decoder samples, before further CPU or
@@ -38,7 +36,7 @@ target; the existing implemented behavior below remains the current contract.
 | JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4Ã—1) / 4:1:0 (4Ã—2) sampling |
 | Stream extensions | Async Identify/Decode/Encode and fixed-workspace InspectHeaders implemented in development | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
 | Drawing/compositing | Implemented in development | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
-| Text | Supplied TrueType, legacy/OpenType layout, Latin/Hebrew/Arabic shaping, alignment/fitting and 8/16-bit rendering in development; full replacement/performance qualification pending | Supplied faces, alignment/style, wrapping/line spacing, reliable bounds/fitting, combining marks and bidirectional/shaped text including Arabic |
+| Text | Supplied TrueType, logical/OpenType layout, Latin/Hebrew/Arabic shaping, alignment/fitting and 8/16-bit rendering in development; full replacement/performance qualification pending | Supplied faces, alignment/style, wrapping/line spacing, reliable bounds/fitting, combining marks and bidirectional/shaped text including Arabic |
 | Failure details | Implemented in development | Typed exhausted-limit and unsupported-feature categories with recognized codec when known |
 | Shared admission | Implemented in development | ImageBudget codec entry points and caller reservations; coarse per-operation reservation, cumulative charged work and independently retained BudgetedImage outputs |
 | Cooperative memory | Implemented in development; qualification ongoing | Borrowed host-independent shared-root hooks, pre-allocation capacity/peak admission and explicit retained-image/font/layout lifetime accounting across public operations |
@@ -143,15 +141,11 @@ samples and positive or packed strides. Input is neither changed nor retained.
 Gray input always produces one component; RGB input uses `JpegEncodeOptions`
 quality, sampling and restart controls. Samples are opaque; a valid background
 does not change them. Normalization uses bounded RGB rows, never an RGBA frame.
-Admitted adaptive RGB4:2:0 encoding can prepare one MCU with safe
-AVX-512 intrinsics: sixteen RGB rows are loaded once, sharing channel extraction
-for four luma blocks and two chroma blocks. Its384-byte result fits the existing
-8-KiB workspace. Binary64 matrix order, four-tap averaging, rounding and clamped
-edges are unchanged. Other sampling, scalar, tight-budget and callback/cancelable
-paths retain row normalization. Fixed/adaptive Huffman coding, quantization, stream limits
-and cancellation retain the established codec policies. Caller input and 8 KiB
-fixed workspace are admitted, with optional adaptive event storage separately
-admitted. Quality numbers remain specific to this encoder.
+Bounded rows feed the same reference-compatible component conversion, integer
+transform, tables and entropy writer as image inputs. Borrowed source storage,
+8KiB fixed workspace, table capacity and temporary tree-building peaks remain
+separately admitted. Refusal stops the operation without another encoder path.
+Quality numbers remain specific to this encoder.
 
 Transforms return new owned buffers and preserve precision and source pixels.
 Outstanding raw orientation is retained until `AutoOrient` or decode with
@@ -221,7 +215,7 @@ There is no mutable global font cache or per-lookup font copy.
 `TextLayout.Create(font, text, TextOptions)` returns immutable layout in pixels.
 `FontSize` is pixels per em; style comes from the selected supplied face.
 The default `Shaping = TextShaping.Legacy` preserves logical left-to-right layout
-with ordinary horizontal legacy `kern` format-zero tables unless `Kerning` is
+with ordinary horizontal `kern` format-zero tables unless `Kerning` is
 false. `Shaping = TextShaping.OpenType` enables supported Latin, Hebrew and Arabic
 shaping and Unicode 17 bidirectional layout. `Direction` selects automatic,
 left-to-right or right-to-left paragraph direction; the latter requires OpenType
@@ -246,7 +240,7 @@ either fails explicitly. There is no implicit font substitution or raster fallba
 
 `WrapWidth` defaults to infinity. Greedy wrapping drops separator spaces/tabs at
 automatic breaks, preserving explicit leading/trailing whitespace otherwise.
-Overlong legacy words break between Unicode scalars. OpenType wrapping preserves
+Overlong words in logical mode break between Unicode scalars. OpenType wrapping preserves
 grapheme/ligature clusters and reapplies positioning at final line boundaries;
 an individual unbreakable cluster may overflow.
 Nonbreaking spaces are not separators. CRLF is one break; CR/LF and Unicode line/
@@ -1153,283 +1147,48 @@ Every exit publishes exact reader/work state without replacing the original
 failure. Tighter budgets and unsupported hardware retain the preceding masked
 or scalar traversal. No additional table or heap workspace is introduced.
 
-The JPEG encoder emits Huffman JFIF with selectable grayscale, 4:4:4,
-4:2:2 or 4:2:0 sampling (default 4:2:0). Grayscale explicitly converts RGB to
-luma. Chroma downsampling averages each sampling cell and extends edge pixels.
-Quality 1..100 (default 85) controls an original frequency-weighted quantization
-formula: luma basis `1+2(u+v)+uv`, chroma basis `2+3(u+v)+uv`, scaled by
-`quality<50 ? 5000/quality : 200-2*quality`, then
-`clamp((basis*scale+50)/100,1,255)` with integer division. Quality 100 still loses
-information through color conversion, sampling and coefficient rounding.
-`JpegEncodeOptions.QuantizationPolicy`
-defaults to `Original`, preserving the formula above. The opt-in `CompactColor`
-policy adds `(16*scale+50)/100` to each original quantizer, clamped to255, for
-three-component output. This is an independently chosen frequency-independent
-precision floor, not an upstream table or image-dependent search. Grayscale
-always retains Original; quality100 adds zero. Quality numbering remains
-encoder-specific. The policy applies to RGBA8/16 and caller RGB input, fixed and
-adaptive entropy, synchronous and asynchronous output. Sampling, flattening,
-coefficient rounding, resource/work limits and ownership are unchanged. This
-optional policy's compression/performance qualification is recorded separately
-from the unchanged Original controls.
-Original subsampled color encoding additionally makes one bounded AC keep-or-zero pass after
-initial nearest-away quantization. DC and every DQT value remain unchanged. In
-reverse zigzag order it accepts only a strict decrease in source-DCT squared error
-plus `lambda * estimated AC bits`, where `lambda=((16*scale+50)/100)^2` with integer
-division and chroma error is weighted by the sampling-cell area. Prices use the
-existing immutable geometric AC model, including amplitudes, EOB and ZRL, so fixed
-and adaptive entropy, caller/RGBA input, cancellation and admission choices retain
-the same coefficient decisions and reconstructed pixels. Ties retain the old
-coefficient. Default 4:2:0 follows
-its zero-only pass with one last-nonzero-position DAG using the same geometric
-prices, cell-area-weighted squared error and lambda. Its finite bank contains the
-current and original nearest values, closest smaller-category amplitudes and
-original nearest minus/plus one. It prices zero gaps, ZRL, amplitudes and EOB;
-only strictly lower estimated AC bits and an improved source-error/rate objective
-replace the current block. Stable ties preserve earlier choices. Entirely
-invisible interleaved luma padding blocks retain DC but clear AC; partially
-visible edge blocks and all chroma blocks retain the normal decision path.
-Full-resolution 4:4:4 considers the closest amplitude in each smaller
-bit category, including zero, across three co-sited blocks. Its distortion model
-maps their DCT residuals through the existing inverse BT.601 matrix and averages
-squared RGB error. In the geometric price trainer, added modeled error is capped at 1/32 of the initial
-MCU error, including DC in that initial estimate while retaining its coefficients.
-It visits frequencies in reverse zigzag and components Y/Cb/Cr, accepting strict
-cost improvements with stable closest-category-first ties. Its two AC price
-families (Y and shared Cb/Cr) use at most64 evenly spaced distinct source MCUs,
-including the endpoints. These samples first undergo the same geometric decisions
-on the original fine quantizers. Their unchanged AC choices are projected into
-coded point-transform units only while counting, using the writer's signed
-arithmetic right shift. Positive values may become zero; negative values retain
-the signed shift behavior. Runs/EOB reset at each eventual equal-point-transform
-spectral band. The training decisions are not repeated on a coarser grid or
-modified. Each band has its own histogram within the Y/shared-CbCr families.
-Every model receives +1 smoothing on all176 legal progressive AC/EOB-run symbols,
-including unreachable runs whose zero counters are implicit. Ordinary AC prices
-are deterministic at-most16-bit Huffman lengths times256, with one dummy leaf
-reserving the all-ones code. Source EOB runs coalesce separately per component;
-Cb/Cr share histogram counts, never a pending run. Their observed code lengths
-plus extra bits are amortized over source terminal blocks and rounded to nearest
-Q8; absent EOB observations retain the canonical standalone price. Equal weights
-use ascending symbol order; internal nodes follow leaves. T.81 Annex K limiting
-and stable descending-frequency assignment match the separate canonical builder.
-Amplitude bits are scaled by256. Sampling, histograms and prices remain local
-and independent of entropy/output admission.
-Before the final priced pass, Original4:4:4 selects a source-derived precision
-grid. Let `p=(16*scale+50)/100`; choose the largest power of two `f` with
-`q*f<=p`, or one when none is possible. Round source DCT divided by `q*f` away
-from zero and clamp to legal DC/AC multiples. These effective quantizers govern
-one local/DAG/pair decision pass; its selected levels are then multiplied by `f`
-into the unchanged Original DQT. DC may change to its grid's nearest value and
-is retained by the subsequent AC decisions. At each frequency the legal AC
-range is `+/-floor(1023/f)`; negative DC may reach `-1024/f`.
-The full MCU error limit is `max(coarseNearestError, fineNearestError*33/32)`.
-The coarse nearest point supplies a feasible floor, without receiving a second
-fractional error allowance merely because the precision grid changed. This
-source model precedes clipping/rounding; actual matched RGB quality is qualified
-separately. No native/reference image enters coefficient selection.
-The final source-priced pass also considers each original AC value minus/plus
-one, including initially zero values, within the legal effective-grid amplitude
-range. Duplicate choices are skipped after the smaller-category candidates;
-strict improvement preserves the original and earlier-choice ties. These neighbors
-can reduce coupled RGB error within the same amplitude category. The geometric
-source trainer retains its smaller-category-only decisions and original quantizers.
-The priced 4:4:4 pass then refines complete AC paths, one component at a time.
-A last-nonzero-position DAG prices zero gaps, ZRL, categories, amplitudes and EOB.
-The final local/DAG/pair/triplet decisions reset run/EOB at the existing
-equal-point-transform spectral bands. The DAG has a root and terminal per band,
-then evaluates one complete component candidate against the same global MCU
-error/rate criteria. It does not grant separate error allowances to each band.
-The source trainer and prepared Q8 models are not refreshed by this pass; the band masks are
-two scalar64-bit values, derived from the already prepared amplitude grid.
-Its bank contains the current and original nearest coefficients, smaller-category
-levels and original nearest minus/plus one. Stable shortest-path ties retain the
-first enumerated choices. It tries the original lambda; an over-budget path leads
-to zero and six fixed bisection probes between zero and that lambda. Only a
-strictly cheaper feasible path that improves the original-lambda objective is
-accepted. Other components remain fixed during a solve, and the full MCU modeled
-error stays within the same grid-aware limit. Source data alone governs
-this bounded search; native encoders and measured quality never select a path.
-A following frequency sweep considers adjacent levels in component pairs
-Y/Cb, Y/Cr and Cb/Cr. It accepts strict improvements in the same RGB-error/rate
-objective with nonincreasing combined AC price and the same grid-aware
-MCU error cap. Equal-rate moves may reduce error for later pairs; exact ties keep
-the current values. The finite bank is current/minus-one/plus-one within the
-legal effective-grid amplitude range. Four Huffman tables, price training, encoded quantizers and grid DC
-remain unchanged. Trials only read coefficients; work/cancellation checks precede
-selection and committing the two selected values.
-A final sweep considers current/minus-one/plus-one levels across all three
-components together. It retains the same error cap, objective, nonincreasing
-total AC price and stable ties. Six changed full-block prices are cached per
-frequency; the current error and three current prices come directly from the
-pair pass. All26 nonoriginal combinations remain available. No second error
-scan, full refinement, source DCT or frame copy is introduced. Invalid amplitude
-neighbors are excluded before their cached prices enter a sum, and checks precede
-price work, evaluation and the three-coefficient commit.
-Grid preparation/rescaling is identical across fixed, adaptive, caller-sample
-and asynchronous paths. It charges2880 work/MCU before mutation, replacing the
-former late precision rule without a second transform or complete decision pass.
-Two128-entry ushort arrays add512 stack bytes; no heap allocation or frame copy.
-Grid preparation including the masks stays below2688 of its2880 precharged units.
-Band-aware prices retain the64-visit bound; their DAG predecessor domain is a
-subset of the original2016 arcs. Existing work estimates and default limits stay
-conservative, with no new storage reservation or ownership boundary.
+JPEG encoding always emits baseline Huffman syntax with grayscale,4:4:4,4:2:2
+or4:2:0 sampling (default420). Quality1..100 defaults to85. Color uses the explicit
+qscale mapping above and mathematically generated quantization from normative
+H.262 section6.3.11 format data. Grayscale retains the independently chosen luma
+basis `1+2(u+v)+uv`, scaled by `quality<50 ? 5000/quality : 200-2*quality`, then
+`clamp((basis*scale+50)/100,1,255)` with integer division. Quality100 still loses
+information through conversion, sampling and coefficient rounding; numeric quality
+values across encoders are not equivalent.
 
-An admitted Original4:4:4 plan with nonzero decision lambda and no restart markers
-may emit SOF2 progressive syntax. `JpegEncodeOptions.BaselineOnly=true` requires
-baseline syntax with the same coefficient decisions and reconstructed pixels.
-Other configurations and locally selected fixed-workspace coding use baseline.
-The existing admitted packed-event capacity holds coefficients instead; there
-is no second frame array. Three DC scans precede maximal contiguous equal-point-
-transform AC bands, with Y bands followed by corresponding Cb/Cr scan pairs.
-Chroma pairs share a canonical table only when weighted code lengths plus the
-complete DHT size strictly improve on separate tables; ties remain separate.
-Bounded EOB runs and every coefficient remain unchanged. Selected coefficients
-are exact multiples, so no nonzero refinement bits are discarded. Three reused
-histograms, up to three fitted tables and fitter replacement peaks fit the same
-64KiB adaptive workspace. Across supported Original quantizers, at most12 family
-bands bound fitting to39 tables and bookkeeping below65536 logical visits; these
-fit the existing conservative192-table work and64KiB header bounds. Output limits, cancellation, shared-budget refusal
-and ownership remain unchanged; admission refusal never retries baseline coding.
-This model precedes
-clipping/rounding and does not replace measured RGB reconstruction-quality gates. Zero lambda,
-grayscale and CompactColor skip this pass. Original color packets
-and lossy pixels can therefore change from earlier Original encodes; quality
-numbering does not establish equivalence with another encoder. The direct frozen
-binary64 transform supplies the decision errors. Each pricing scan charges64 work
-units before examining/modifying coefficients (at most4096 for the zero-only pass).
-The 4:2:0 DAG adds at most21937 work units per block (26033 including that pass),
-charged before prefix construction, bank/arc evaluation, reconstruction and
-commit. Adaptive/async admission includes this bound. Its1484-byte stack scratch
-is allocated once per block call within the same admitted8KiB, without heap
-matrices or frame copies. Clearing an invisible block's AC charges64 instead.
-Local 4:4:4 decisions charge192 for the initial error scan,192 for initial prices,
-and64 before each trial: at most145536 per priced MCU (48512/block). The geometric
-trainer retains its121344-per-MCU bound. Trellis planning adds at most521904,
-giving667440 before the paired tail. That tail adds at most196002 per MCU,
-for863442 total (287814/block). Every bounded bank, arc, probe,
-reconstruction and selection step charges work before execution. Adaptive and
-async staging estimates also include source sampling:136129 per sampled MCU,
-plus one pending-run visit per component/band per sample and once at completion,
-1920 for band masks,1920 for the once-per-operation point-level lookup and1536
-for layout/clear preparation. Work is charged before
-its corresponding mutation. Source finishing uses at most177 leaves/353 nodes,
-total weight8241 and depth27. Heap-pop leaf order supplies stable descending
-frequency assignment in linear passes. Each band prepays45056 logical visits,
-covering validation, heap/parent work, length redistribution, ordering and output.
-All models are validated before any histogram mutation.
-Across Original qualities1..98,930 ushort entries suffice, including an observed terminal-block count per band; they become Q8 prices
-in place. The1860-byte arena,256-byte scan map,192-byte component-local pending
-runs,2304-byte MCU,64 sample bytes,128-byte point-level lookup and2532-byte
-sequential source builder total7336 substantial stack bytes within the same8KiB workspace. No heap owner, frame
-copy or cache is added. The declared control has nine models,613 counter slots
-and13 component bands:405504 finish units and1,999,982,933 complete planned work,
-under the unchanged default2B limit.
-The1612-byte trellis scratch is allocated once per MCU call; each frequency's
-bank is rebuilt as needed. Alongside the2116-byte price arena/map,2304-byte MCU,
-512-byte effective-grid arrays,48-byte local candidate bank and existing scratch,
-it fits the admitted8KiB. Grid setup adds the existing2880-per-MCU precision bound
-to863442, for866322 before the three-component tail. That tail charges at most
-63*(6*64+26setup+26*8trial+3commit)=39123 per MCU, reusing the existing pair state.
-The total is905445 (301815/block), included in adaptive and async estimates.
-The default2B limit is unchanged. Its48-byte stack bank is sequential with the
-prior1612-byte DAG scratch and introduces no heap owner.
-There is no heap bank matrix or frame copy. Work exhaustion or
-cancellation remains terminal; tighter limits do not bypass coefficient decisions.
-The paired tail retains only three AC prices (12 stack bytes); its scratch does
-not overlap the preceding DAG's call. The existing8KiB workspace remains sufficient.
+The encoder independently generates full-range BT.601 color samples, integer
+transforms, quantization, canonical Huffman tables and entropy syntax. Subsampled
+color uses the pinned conversion phase/rounding, with independently generated
+cell-area weights and edge handling. Color uses the reference's16-row MCU layout,
+including required vertical padding; grayscale uses8x8blocks. Two passes collect
+source frequencies and write optimized tables/coefficients, without retained
+full-frame YUV, coefficient or event arrays. Color restart intervals use generated
+T.81 AnnexK fixed tables in one pass; grayscale optimizes tables with DC predictors
+reset at restart boundaries. Format constants come from public specifications.
 
-Huffman
-tables use independently implemented canonical coding. Large encodes with an
-explicit background and sufficient work/memory admission use per-image adaptive tables limited to 16
-bits. Other calls use image-independent canonical AC codes derived from a
-geometric zero-run/amplitude-size model; DC codes remain four bits. The shared
-immutable AC table is constructed once, covers all 162 supported symbols and
-reserves the all-ones code, with a maximum length of 16. Its weights are
-`2^max(0,20-run-size)`, with EOB weighted `2^18` and ZRL weighted `2^4`.
-No image statistics or corpus-fitted constants select this table. This selection does
-not change quantized coefficients or decoded samples; encoded bytes may differ
-with resource options. Forward-only and live-cancellable output use the same
-admitted event plan, retaining cancellation and quota checks during emission.
-Planning does not query caller stream length, position or seeking. Optional restart intervals count
-MCUs and reset DC predictors.
-The fixed policy deliberately supersedes the original eight-bit AC codes;
-historical quality reports remain retained, while Original color coefficient
-changes require fresh affected quality evidence. Encoding retains the same
-source-plus-8192-byte admission; the bounded AC decision work above is additional. Prevalidated canonical codewords skip
-repeated range validation; general amplitude entry points retain their checks.
-On AVX2/BMI2 x64, fixed-block emission builds a nonzero occupancy mask with eight
-row comparisons and bit deposits into the standard zigzag positions. It visits
-only nonzero AC coefficients, retaining ZRL/EOB, amplitudes, ordered work charges,
-callbacks and partial-failure state exactly. Eight row masks are generated from
-the independent zigzag construction; they are shared format state, not image
-storage. Other processors retain the scalar traversal. No workspace is added.
-The fixed AC traversal may fuse bit emission, retaining bit state locally and
-publishing it on every exit. Each code/amplitude still charges work and checks
-cancellation at its original position; byte callbacks, stuffing, quotas and
-partial-failure state remain exact. Amplitudes derived from the already-validated
-category fit the original range check by construction. No heap workspace or
-additional admission is needed.
-Decoding a new table with nine/ten-bit codes uses the existing additional 2 KiB
-prefix lookup; original short-table input admission is unchanged.
-The forward transform evaluates independent coefficients with safe AVX/AVX-512
-when available, preserving the frozen binary64 basis, separate multiplications
-and accumulation order. Other processors use the original scalar calculation.
-Encoding on AVX-512 can combine a separable transform with quantization when a
-conservative [rounding certificate](docs/jpeg-forward-quantization.md) proves the
-original quantized integer. Uncertain coefficients use the original direct
-evaluation. Encoded bytes, standalone coefficient bits and work admission remain
-unchanged; unsupported hardware uses the original transform and quantization.
+RGBA8/16 images and padded caller gray/RGB spans share the same encoder. Grayscale
+caller input selects one component independently of Sampling, with no mandatory
+RGBA intermediate. Images require opaque pixels or explicit `BackgroundRgb`
+packed as0xRRGGBB. Flattening in encoded sample space and16-to8 normalization use
+one nearest-integer rounding; alpha becomes opaque and source metadata is stripped.
+The only approved reference-byte difference is the single encoder-attribution COM
+described in [codec compatibility](docs/codec-parity.md). No experimental
+quantization policies, progressive encoder or lower-memory encoder fallback remain.
 
-Adaptive coding requires at least 256 blocks. Sampling and transforms run once;
-an admitted packed-event buffer records DC/AC symbols and amplitudes, including
-restart positions. Separate luma/chroma tables reserve the all-ones code. The
-buffer is private, leased per thread, and retained only up to 4 MiB; every encode
-recomputes its events. Calls with a caller memory budget neither borrow nor populate
-this unowned thread cache: their event arrays stay operation-owned until the last
-user finishes, so retained storage cannot outlive its refunded reservation.
-Admission includes its full capacity and a 64 KiB table/
-scratch allowance. Histogram traversal and table construction charge work.
-AC planning may reuse the fixed encoder's safe AVX2/BMI2 scan occupancy to visit
-only nonzero coefficients. Events, histograms and range-error order stay exact;
-other hardware retains scalar traversal, with no additional workspace/admission.
-Lower output quotas retain adaptive coding and enforce every write; combined
-symbol writes apply only when conservative output and work bounds are satisfied.
-When the whole packet's conservative bound fits the output quota, a
-noncancellable stock `MemoryStream` may emit adaptive entropy bytes directly
-through the bounded writer. Byte stuffing, restart framing, work charges and
-partial-write failures remain identical. Caller stream subclasses, cancellable
-operations and tighter quotas retain the original per-write checks.
+Before output, owned fixed/table capacity and temporary tree-building peaks are
+admitted through the borrowed operation context. Supplied images/spans remain
+borrowed; temporary storage is refunded when encoding finishes. Local/output/work
+limits remain independent; shared refusal is terminal, without fallback or waiting.
+Async encoded storage keeps its separate owner through actual writer completion.
+Quality/sampling/restart/background options, source precision and caller ownership
+remain explicit. Complete-packet claims cover the named frozen controls, not every
+image/settings combination or warm CPU/allocation parity.
 
-JPEG requires opaque input or an explicit `BackgroundRgb` packed as 0xRRGGBB.
-Alpha flattening operates in encoded sample space before 16-to-8-bit conversion,
-with one nearest-integer rounding. Output is opaque and strips input metadata.
-Both 8-bit and 16-bit RGBA sources are accepted.
-Dense one-to-one encoder component rows may use safe SIMD: AVX-512/AVX2 for
-RGBA8 and AVX-512F/DQ for RGBA16, including luma in 4:2:0 and 4:2:2. The RGBA16
-blend's integer products and sums are exact in binary64; flooring its adjusted
-quotient reproduces the original integer normalization for every sample.
-Right-edge padding and other hardware retain their existing paths. Sample
-arithmetic, work charges, memory admission and encoded bytes are unchanged;
-no additional image workspace or converted-pixel cache is introduced.
-Dense 2:1 chroma rows may convert sixteen RGBA8 or RGBA16 pixels from one or two source
-rows with safe SIMD. Unrounded binary64 component values accumulate in the
-original row/pixel order, average, then round once. RGBA16 taps use the same exact
-single-round normalization as the full-resolution row kernel. Edges and other
-hardware retain scalar sampling; no extra workspace or pixel cache is introduced.
-Adaptive RGBA8 4:2:0 encoding may share unpacking and alpha flattening between
-the two chroma components on AVX-512/AVX2. An optional, charged 64-byte stack
-block retains Cr while Cb is transformed; insufficient remaining admission
-keeps the original sampling path. Both paths preserve the original arithmetic,
-quantized coefficients, component order, work charges and encoded bytes.
-JPEG coefficient planes, Huffman tables, scans and transforms are charged against
-operation limits.
-Component coefficient storage is released after conversion to its sample plane;
-table/sample-plane charges conservatively remain through optional orientation.
-Every Huffman redefinition is charged, including unused or replaced tables.
-JPEG encoding admits the supplied pixels plus 8192 bytes of fixed workspace
-before writing output. The [resource admission notes](docs/resource-admission.md)
-describe the reviewed lifetimes and exact boundary tests.
+JPEG decoder coefficient planes, Huffman tables, scans and transforms remain
+charged against operation limits. Component coefficients release after conversion
+to sample planes; table/plane charges conservatively remain through optional
+orientation. Every Huffman redefinition is charged, including unused/replaced
+tables. [Resource admission](docs/resource-admission.md) describes the owners.
 
 The original JPEG correctness corpus uses maximum RGB-channel error 4 and RGB
 RMSE 1.5 against pinned FFmpeg, with exact dimensions and alpha 255. These bounds
@@ -1983,11 +1742,9 @@ until delivery finishes and settle consumed work on every exit.
 Staging normally uses linked private chunks, each at most 64 KiB. Actual byte
 capacity plus coarse 256-byte stream and 64-byte per-chunk bookkeeping allowances
 count toward working memory. Chunk capacity also respects the remaining working
-and output allowance. JPEG can use a fixed stock MemoryStream backed by a private
-array, admitted alongside codec/event workspace, to retain the existing adaptive
-Huffman policy. Capacity is bounded by the existing stuffed-entropy upper bound
-and `MaxOutputBytes`; tight local resources retain fixed coding. Planning and
-delivery both preserve cancellation and shared admission.
+and output allowance. PNG/JPEG output uses admitted segments; JPEG has no
+alternative adaptive staging or encoder fallback. Planning and delivery preserve
+cancellation and shared admission.
 
 Private output reuse retains at most two exact arrays totaling 4 MiB; active
 operations never share a lease and only fully written prefixes are delivered.

@@ -58,7 +58,7 @@ public sealed class JpegFfmpegTests(ITestOutputHelper output)
         using var encoded = new MemoryStream();
         ImageCodec.EncodeJpeg(image, encoded, new JpegEncodeOptions
         {
-            QuantizationPolicy = JpegQuantizationPolicy.Reference, Sampling = sampling, RestartInterval = interval
+            Sampling = sampling, RestartInterval = interval
         });
         using var actual = ImageCodec.Decode(encoded.ToArray());
         // Historical decoder interoperability tolerance, not an exact decoder

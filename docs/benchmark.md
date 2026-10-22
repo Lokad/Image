@@ -9,12 +9,12 @@ The default managed JPEG Reference encoder matches ten frozen packets across
 grayscale/444/422/420,8/16-bit sources and declared color/grayscale restarts.
 Color uses only the approved COM replacement; grayscale is raw-exact. Required
 image/caller/sync/async/ImageBudget boundaries are qualified. Superseded
-Original/CompactColor experiments carry no compatibility obligation.
+Original/CompactColor experiments and their public switches have been removed.
 
 The production [managed PNG Optimal encoder](../benchmarks/PNG-MANAGED-OPTIMAL.md)
 now matches all eight existing grayscale/RGB/grayscale-alpha/RGBA controls at8/16bits
 raw-exact, including complete chunks/checksums. It uses bounded storage and shared
-admission. Both platforms pass5,181 Release checks,21 affected scalar checks and
+admission. After JPEG experiment removal, both platforms pass4,778 Release checks,133 affected JPEG scalar checks and
 the SAME actual private0.2.0 package with all three examples. **Current PNG/JPEG
 encoding CPU and allocated B/op are unmeasured.** All17 prior BCL PNG rows
 below are superseded, as are the earlier JPEG producers. Shared entry/framing changes also require confirmation of the other policies,
@@ -31,7 +31,7 @@ identities; smaller packets, equal quality numbers or timing passes do not prove
 the new exact-reference target. Old quality tooling retires as stronger gates cover
 its required scope.
 
-No timing or allocation runs accompanied the new PNG encoder. Unchanged paths
+No timing or allocation runs accompanied the new PNG encoder or JPEG cleanup. Unchanged paths
 retain evidence on their recorded frozen inputs; new default-encoded fixtures do
 not silently replace those inputs. CPU tuning/independent confirmation resumes
 after exact codec work. The full warm single-CPU objective remains independent

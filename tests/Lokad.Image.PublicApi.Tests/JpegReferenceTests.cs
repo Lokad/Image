@@ -8,7 +8,7 @@ public sealed class JpegReferenceTests
 {
     private static readonly JpegEncodeOptions Options = new()
     {
-        QuantizationPolicy = JpegQuantizationPolicy.Reference, Sampling = JpegSampling.YCbCr444,
+        Sampling = JpegSampling.YCbCr444,
         BackgroundRgb = 0x204060
     };
 
@@ -52,9 +52,9 @@ public sealed class JpegReferenceTests
         if ((sampling == JpegSampling.YCbCr444 && depth == 8) ||
             (sampling == JpegSampling.YCbCr420 && depth == 16) || sampling == JpegSampling.Grayscale)
         {
-            // Preserve E9's successful live-token and BaselineOnly packet proof.
+            // Preserve E9's successful live-token packet proof.
             using var live = new CancellationTokenSource(); using var baseline = new MemoryStream();
-            ImageCodec.EncodeJpeg(image, baseline, options with { BaselineOnly = true }, live.Token);
+            ImageCodec.EncodeJpeg(image, baseline, options, live.Token);
             AssertPacket(baseline.ToArray(), length, packetHash);
         }
         using var forward = new ForwardOutput(); ImageCodec.EncodeJpeg(image, forward, options);

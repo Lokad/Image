@@ -5,7 +5,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $guide = [IO.File]::ReadAllText($GuidePath)
-$snippets = [regex]::Matches($guide, '(?ms)^```csharp\r?\n(.*?)\r?\n```$')
+$snippets = [regex]::Matches($guide, '(?ms)^```csharp\r?\n(.*?)\r?\n```\r?$')
 if ($snippets.Count -ne 3) { throw 'Expected the three runnable usage-guide examples.' }
 $cache = Join-Path $ConsumerDirectory 'packages'
 $config = Join-Path $ConsumerDirectory 'NuGet.Config'
@@ -97,7 +97,7 @@ Console.WriteLine("Usage example passed through the exact Release package.");
 
 for ($index = 0; $index -lt $snippets.Count; $index++) {
     $directory = Join-Path $ConsumerDirectory ('usage-example-' + ($index + 1))
-    New-Item -ItemType Directory -Path $directory | Out-Null
+    New-Item -ItemType Directory -Path $directory -Force | Out-Null
     $project = Join-Path $directory 'Example.csproj'
     @"
 <Project Sdk="Microsoft.NET.Sdk">

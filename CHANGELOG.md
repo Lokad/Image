@@ -1,146 +1,28 @@
 # Changelog
 
-## 0.2.0 â€” Unreleased
+## 0.2.0 — Unreleased
 
-- Managed JPEG `Reference` profile is the development default for baseline grayscale/4:4:4/4:2:2/4:2:0, with deterministic
-  quality mapping, shared admission and bounded MCU encoding, including color/grayscale restarts.
-  Earlier `Original` and `CompactColor` experiments are superseded.
-- Managed streaming PNG `Optimal` encoding with bounded shared admission,
-  exact samples and complete FFmpeg packet equality on eight frozen8/16-bit controls.
-- Smaller Original 4:4:4 JPEG packets through source-derived precision-grid,
-  canonical source prices with EOB-run costs per spectral band and joint component decisions
-  and admitted progressive scans; `BaselineOnly` preserves baseline syntax with
-  the same pixels. Compression qualification remains specific to tested controls.
-- Shared Huffman tables for corresponding progressive JPEG chroma bands reduce
-  qualified packets without changing coefficients or pixels.
-- Source JPEG histograms count unchanged training choices in coded point-transform
-  units, reducing tested aggregate packet size within matched-quality bounds.
-- Smaller lossy WebP output through admitted 16x16 luma prediction, grouped DC
-  coding, full-direction reconstruction-based luma/chroma decisions and whole-frame entropy
-  modeling at higher efforts, plus exact compressed alpha with bounded backward
-  references and adaptive prefix codes; broader compression parity remains open.
-- Smaller constrained-work WebP packets through admitted coefficient statistics
-  and reusable alpha tokens with four-sample keys and bounded older-match anchors, preserving exact
-  alpha, ownership and resource caps.
-- Source-derived WebP spatial quantization at higher efforts, with bounded shared
-  admission, DC/AC-aware centered chroma noise propagation, unchanged base quality mapping
-  and admitted intra16/Y2 search for its segments; lossy quality is verified separately.
-- Admitted coefficient-level/EOB refinement for selected high-precision WebP
-  predictions, reducing complete packets within verified reconstruction quality.
-- Smaller constrained-work WebP packets through exact prediction pruning and
-  admitted coefficient samples with token histograms, preserving reconstructed pixels.
-- Admitted small-coefficient decisions further reduce constrained-work WebP
-  packets within verified reconstruction quality and the existing resource caps.
+- Reference-compatible managed JPEG encoding for grayscale/4:4:4/4:2:2/4:2:0,
+  including restarts, direct caller samples and async output. Removed superseded
+  experimental encoders and switches. Ten frozen controls match complete reference
+  packets, allowing only the documented color attribution replacement.
+- Bounded managed PNG `Optimal` encoding, with complete raw packet equality on
+  eight frozen 8/16-bit color controls.
+- Smaller lossless/lossy WebP output on declared controls; exact-reference encoder
+  replication and broader qualification remain open.
+- Caller-owned cooperative memory admission across nested work and retained
+  images, fonts, layouts and caches, with structured limit/unsupported failures.
+- Typed source color/alpha metadata, bounded header inspection and async stream
+  operations that retain caller ownership.
+- CMYK/YCCK and 4:1:1/4:1:0 JPEG decode, explicit color/inversion options and
+  direct caller grayscale/RGB/CMYK buffers.
+- Supplied TrueType measurement/rendering, wrapping, alignment and fitting,
+  supported OpenType Latin/Hebrew/Arabic shaping, drawing and alpha compositing.
+- Lanczos3 resizing and bounded SIMD improvements across codecs and transforms.
 
-- Coverage-based OpenType contextual substitution and validated zero default-instance
-  positioning corrections for supplied TrueType text.
-
-- Typed source color, alpha and component metadata across synchronous/asynchronous
-  identification and bounded header inspection, preserving source sample/index depth.
-
-- Faster VP8 forward DCT with safe SIMD, identical coefficients and packets,
-  and the original scalar fallback.
-
-- Optional `CompactColor` JPEG quantization, separate from the default formula.
-- Smaller default subsampled color JPEG packets through bounded source-DCT AC decisions;
-  original quantization tables, grayscale, shared admission and ownership remain unchanged.
-- Source-relative block-error caps extend bounded AC decisions to default 4:4:4
-  JPEG, preserving quantizers/DC and the separately verified reconstruction-quality gates.
-- Bounded source-derived AC prices further reduce default 4:4:4 JPEG output,
-  preserving shared admission, cancellation and independent output ownership.
-- Adjacent AC choices improve coupled color decisions without changing JPEG
-  quantization tables or DC coefficients; reconstruction quality is verified separately.
-- Bounded source-constrained AC trellis planning further reduces default 4:4:4
-  JPEG packets, preserving admission, cancellation and output ownership.
-- Joint adjacent component-pair choices further reduce 4:4:4 JPEG packets
-  within the existing source-error, memory and independently verified quality gates.
-- Bounded 4:2:0 AC path selection and invisible-luma padding pruning reduce
-  complete JPEG packets within separately verified reconstruction-quality gates.
-- Coupled RGB-error modeling and smaller amplitude-category choices further reduce
-  default 4:4:4 JPEG packets using bounded MCU scratch and admitted work.
-- Caller-budget JPEG encoding keeps adaptive event storage within its operation owner,
-  without borrowing or retaining an uncharged thread cache.
-- Adaptive JPEG tables also reduce forward-only and cancellable packets while
-  preserving checked writes, quotas and cancellation; reconstructed pixels are unchanged.
-
-- Smaller lossless WebP output through bounded color-cache and adaptive prefix
-  coding, adaptive prediction, bounded predictor/color code-cost refinements,
-  residual color fits after predictor changes, uncached spatial groups and bounded
-  references with seeded copy probabilities. Exact hidden RGBA and shared admission
-  are preserved; the declared lossless controls fit their frozen packet-size references.
-
-- Faster baseline JPEG decoding with unchanged pixels, work limits and cancellation.
-
-- Certified integer SIMD for sparse and horizontal-only four-component JPEG decoding, with the
-  original calculation for uncertain blocks and no new heap workspace.
-
-- Faster exact SIMD Lanczos3 filtering at both depths, including grouped
-  horizontal products, packed coefficient loads and certified FMA vertical sums
-  with exact fallback. Lower scratch allocation preserves cooperative admission
-  and cancellation.
-
-- Alpha-aware Lanczos3 resizing at 8/16 bits, with reduction antialiasing,
-  clamped edges, aspect-preserving fit and cooperative-memory admission.
-
-- Explicit OpenType text layout for supported Latin/Hebrew/Arabic font tables,
-  with bidirectional order, joining, ligatures, marks, alignment and finite-grid
-  fitting with shared admission and cumulative work across trials.
-
-- Caller-owned `IMemoryBudget` hooks across codecs, inspection, editing and text;
-  live capacities and retained results stay charged until explicit disposal.
-  Fonts and prepared layouts now implement `IDisposable`.
-
-- Asynchronous PNG/JPEG/WebP output, including caller JPEG samples and shared
-  budgets, with bounded staging and JPEG adaptive entropy when admitted.
-- Asynchronous stream input for identification and decoding, including shared
-  budgets, cancellation and independent outputs without a final input copy.
-- CMYK/YCCK JPEG decoding, including caller CMYK samples and explicit inversion,
-  plus JPEG 4:1:1/4:1:0 sampling layouts.
-- JPEG decoding/encoding with caller-owned grayscale/RGB samples and strides,
-  explicit decode color interpretation/orientation and encode quality/sampling,
-  without RGBA intermediates.
-- Shared codec memory/work budgets, caller reservations and independently owned
-  budgeted decode results, with typed shared-budget exhaustion.
-- Typed limit and unsupported-feature details on codec exceptions, preserving
-  existing exception types, messages and cancellation behavior.
-- Faster subsampled JPEG color reconstruction with certified exact rounding
-  and the original binary64 fallback, preserving pixels and resource limits.
-- Faster VP8 encoding through prepared block prediction, preserving exact
-  packets, mode selection, resource limits and cancellation.
-- Faster VP8 decoding through bounded vertical SIMD filtering and whole-block
-  prediction, preserving exact pixels, edge order, resource admission and cancellation.
-- Faster lossless WebP decoding through fused RGBA inverse prediction and
-  complete-byte literal reads, preserving exact pixels, hidden RGB, resource
-  limits and cancellation behavior.
-- Lower JPEG decode allocations through bounded private coefficient reuse,
-  preserving exact pixels, resource admission and failure behavior.
-- Faster cache-coded lossless WebP decoding with unchanged pixels, working
-  memory, work limits and cancellation.
-- Faster JPEG metadata inspection through bounded entropy scanning, preserving
-  complete validation, resource charges and cancellation.
-- Faster cancelable baseline JPEG decoding through bounded AC lookahead reuse,
-  preserving pixels, work charges and partial-failure state.
-- Faster progressive JPEG refinement, including live cancelable decoding,
-  through bounded lookahead reuse with unchanged pixels, resource limits,
-  logical failure state and cancellation behavior;
-  see the [benchmark state](docs/benchmark.md).
-- Faster RGBA8 horizontal flips with unchanged pixels, owners and resource limits.
-- Faster RGBA8/16 bilinear reduction through bounded row reuse, preserving exact
-  pixels, resource admission and cancellation.
-- Faster RGBA8 bilinear enlargement through exact integer factorization,
-  preserving pixels, working memory and rounding.
-- Faster RGBA8/16 bicubic filtering through bounded row/column reuse, wider
-  enlargement strips, packed coefficient broadcasts, parallel byte reductions
-  and certified quotient bounds, preserving exact pixels and output ownership.
-- Faster adaptive JPEG event planning through parallel integer category/amplitude
-  preparation, and faster fixed-Huffman emission, preserving packets, work, limits
-  and stream callback/failure behavior.
-- Faster VP8 source conversion with unchanged packets, alpha and resource charges.
-- Faster PNG checksums, packing, filters and palette expansion with partial
-  transparency, with fewer stored-PNG allocations and unchanged samples and limits.
-- Faster cancelable PNG materialization through separate block dispatch and
-  bounded literal batching, alongside tight RGBA streaming inflation, preserving
-  pixels, admission, work and failure ordering.
+See [SPEC.md](SPEC.md) for supported boundaries and [benchmark state](docs/benchmark.md)
+for measured scope. Exact codec replication, full performance parity and replacement
+release qualification remain in progress.
 
 ## 0.1.0 â€” 2026-10-17
 

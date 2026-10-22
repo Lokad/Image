@@ -6,8 +6,7 @@ completes the twelve fixed controls within the declared font/table scope.
 `TextOptions.Shaping = TextShaping.OpenType` connects supplied-font substitution,
 positioning and Unicode direction rules to the public layout API. Measurement
 and rendering share retained placements/outlines. Latin, Hebrew and Arabic use
-the supplied face's default language system; styles come from that face. Existing
-default legacy pixels are preserved.
+the supplied face's default language system; styles come from that face. Logical left-to-right layout is a separate mode.
 
 Joining controls remain effective through direction processing; source spans
 survive ligatures. Wrapping preserves grapheme/ligature clusters, reapplies

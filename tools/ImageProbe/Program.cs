@@ -97,7 +97,7 @@ if (args[0] is "encode-sequence" or "encode-quality-sequence" && args.Length is 
         || (format != "png" && qualities.Any(quality => quality is < 1 or > 100))
         || (format.StartsWith("webp", StringComparison.Ordinal) && effort is < 0 or > 6))
         throw new ArgumentException("An encode sequence requires positive geometry, 8/16-bit samples, PNG/JPEG444/JPEG422/JPEG420/WebP and 1..100000 frames; quality 1..100 and WebP effort 0..6. Background RGB is only valid for JPEG. Encode-quality-sequence requires exactly one comma-separated quality per JPEG/lossy WebP frame.");
-    var jpegOptions = qualities.Select(quality => new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = quality, BackgroundRgb = background,
+    var jpegOptions = qualities.Select(quality => new JpegEncodeOptions { Quality = quality, BackgroundRgb = background,
         Sampling = format == "jpeg444" ? JpegSampling.YCbCr444 : format == "jpeg422" ? JpegSampling.YCbCr422 : JpegSampling.YCbCr420 }).ToArray();
     using var sequenceInput = File.OpenRead(args[1]);
     if (sequenceInput.Length != checked((long)width * height * 4 * (depth / 8) * count))
@@ -145,7 +145,7 @@ if (args[0] == "encode-webp" && args.Length == 8)
 if (args[0] == "encode-jpeg" && args.Length is 8 or 9)
 {
     var background = args.Length == 9 ? (uint?)HexRgb(args[8]) : null;
-    var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = Integer(args[6]), Sampling = EnumValue<JpegSampling>(args[7]), BackgroundRgb = background };
+    var options = new JpegEncodeOptions { Quality = Integer(args[6]), Sampling = EnumValue<JpegSampling>(args[7]), BackgroundRgb = background };
     using var raw = RawPixels.Read(args[1], Integer(args[3]), Integer(args[4]), Integer(args[5]));
     using var jpegOutput = File.Create(args[2]);
     ImageCodec.EncodeJpeg(raw, jpegOutput, options);
@@ -167,7 +167,7 @@ if (args[0] == "resize-jpeg" && args.Length == 8)
 {
     using var resized = ImageTransforms.Resize(image, Integer(args[3]), Integer(args[4]), EnumValue<ResizeFilter>(args[5]));
     using var jpegOutput = File.Create(args[2]);
-    ImageCodec.EncodeJpeg(resized, jpegOutput, new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = Integer(args[6]), Sampling = EnumValue<JpegSampling>(args[7]) });
+    ImageCodec.EncodeJpeg(resized, jpegOutput, new JpegEncodeOptions { Quality = Integer(args[6]), Sampling = EnumValue<JpegSampling>(args[7]) });
     return;
 }
 if (args[0] == "webp" && args.Length == 5)

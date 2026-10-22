@@ -49,7 +49,7 @@ public sealed class AsyncOutputTests
     [InlineData(JpegSampleFormat.Rgb, JpegSampling.YCbCr444)]
     [InlineData(JpegSampleFormat.Rgb, JpegSampling.YCbCr422)]
     [InlineData(JpegSampleFormat.Rgb, JpegSampling.YCbCr420)]
-    public async Task CallerSamplesKeepAdaptivePacketsPaddingAndOwnership(JpegSampleFormat format, JpegSampling sampling)
+    public async Task CallerSamplesKeepPacketsPaddingAndOwnership(JpegSampleFormat format, JpegSampling sampling)
     {
         using var image = OriginalPixels.Buffer(129, 129, 8, grayscale: format == JpegSampleFormat.Grayscale, opaque: true);
         var stride = image.Width * (int)format + 5;
@@ -58,7 +58,7 @@ public sealed class AsyncOutputTests
         for (var x = 0; x < image.Width; x++)
             image.GetRow8(y).Slice(x * 4, (int)format).CopyTo(samples.AsSpan(y * stride + x * (int)format));
         var original = samples.ToArray();
-        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Sampling = sampling, RestartInterval = 3 };
+        var options = new JpegEncodeOptions { Quality = 69, Sampling = sampling, RestartInterval = 3 };
         using var expected = new MemoryStream();
         ImageCodec.EncodeJpeg(samples, image.Width, image.Height, format, expected, stride, options);
         using var output = new AsyncOnlyOutput();
@@ -67,10 +67,6 @@ public sealed class AsyncOutputTests
         using var token = new CancellationTokenSource(); using var livePacket = new MemoryStream();
         ImageCodec.EncodeJpeg(samples, image.Width, image.Height, format, livePacket, stride, options, token.Token);
         Assert.Equal(output.Bytes, livePacket.ToArray());
-        using var fixedPacket = new MemoryStream();
-        ImageCodec.EncodeJpeg(samples, image.Width, image.Height, format, fixedPacket, stride,
-            options with { Limits = new() { MaxWorkingBytes = samples.Length + 8192L } });
-        Assert.True(output.Bytes.Length < fixedPacket.Length);
         using var exact = new AsyncOnlyOutput();
         await ImageCodec.EncodeJpegAsync(samples.AsMemory(), image.Width, image.Height, format, exact, stride,
             options with { Limits = new() { MaxOutputBytes = checked((int)expected.Length) } });
@@ -79,7 +75,7 @@ public sealed class AsyncOutputTests
 
     [Theory]
     [InlineData(JpegSampling.Grayscale, 8)] [InlineData(JpegSampling.YCbCr420, 8)] [InlineData(JpegSampling.YCbCr422, 16)]
-    public async Task ImageJpegRetainsAdaptiveCodingAndExactOutputQuota(JpegSampling sampling, int depth)
+    public async Task ImageJpegKeepsSyncAsyncPacketsAndExactOutputQuota(JpegSampling sampling, int depth)
     {
         using var source = OriginalPixels.Buffer(129, 129, depth, grayscale: sampling == JpegSampling.Grayscale);
         var options = new JpegEncodeOptions { Quality = 69, Sampling = sampling, BackgroundRgb = 0x204060 };
@@ -95,20 +91,6 @@ public sealed class AsyncOutputTests
         Assert.Equal(ImageLimitKind.OutputBytes, failure.Limit); Assert.Empty(rejected.Bytes); Assert.False(rejected.WasDisposed);
     }
 
-    [Fact]
-    public async Task TightJpegAdmissionUsesEstablishedFallbackWithoutChangingPixels()
-    {
-        using var source = OriginalPixels.Buffer(129, 129, 8, grayscale: true, opaque: true);
-        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Sampling = JpegSampling.Grayscale, BackgroundRgb = 0 };
-        using var adaptive = new MemoryStream(); ImageCodec.EncodeJpeg(source, adaptive, options);
-        var limited = options with { Limits = new() { MaxWorkingBytes = 129 * 129 * 4 + 8192 + 65536 + 320 } };
-        using var expected = new MemoryStream(); ImageCodec.EncodeJpeg(source, expected, limited);
-        using var output = new AsyncOnlyOutput(); await ImageCodec.EncodeJpegAsync(source, output, limited);
-        Assert.Equal(expected.ToArray(), output.Bytes); Assert.True(output.Bytes.Length > adaptive.Length);
-        using var pixels = ImageCodec.Decode(output.Bytes); using var reference = ImageCodec.Decode(adaptive.ToArray());
-        Assert.Equal(OriginalPixels.Bytes(reference), OriginalPixels.Bytes(pixels));
-    }
-
     [Theory]
     [InlineData(false)] [InlineData(true)]
     public async Task LiveJpegCancellationRetainsEstablishedFixedPackets(bool samples)
@@ -116,7 +98,7 @@ public sealed class AsyncOutputTests
         using var image = OriginalPixels.Buffer(129, 129, 8, grayscale: true, opaque: true);
         var gray = new byte[129 * 129];
         for (var y = 0; y < 129; y++) for (var x = 0; x < 129; x++) gray[y * 129 + x] = image.GetRow8(y)[x * 4];
-        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Sampling = JpegSampling.Grayscale, BackgroundRgb = 0 };
+        var options = new JpegEncodeOptions { Quality = 69, Sampling = JpegSampling.Grayscale, BackgroundRgb = 0 };
         using var token = new CancellationTokenSource(); using var expected = new MemoryStream(); using var output = new AsyncOnlyOutput();
         if (samples)
         {
@@ -129,19 +111,6 @@ public sealed class AsyncOutputTests
             await ImageCodec.EncodeJpegAsync(image, output, options, token.Token);
         }
         Assert.Equal(expected.ToArray(), output.Bytes); Assert.Equal(token.Token, output.LastToken);
-    }
-
-    [Fact]
-    public async Task TightCallerSamplesUseFixedCodingWithUnchangedPixels()
-    {
-        using var image = OriginalPixels.Buffer(129, 129, 8, grayscale: true, opaque: true);
-        var gray = new byte[129 * 129];
-        for (var y = 0; y < 129; y++) for (var x = 0; x < 129; x++) gray[y * 129 + x] = image.GetRow8(y)[x * 4];
-        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Limits = new() { MaxWorkingBytes = gray.Length + 8192 + 65536 + 320 } };
-        using var expected = new MemoryStream(); ImageCodec.EncodeJpeg(gray, 129, 129, JpegSampleFormat.Grayscale, expected, options: options);
-        using var output = new AsyncOnlyOutput();
-        await ImageCodec.EncodeJpegAsync(gray.AsMemory(), 129, 129, JpegSampleFormat.Grayscale, output, options: options);
-        Assert.Equal(expected.ToArray(), output.Bytes);
     }
 
     [Theory]
