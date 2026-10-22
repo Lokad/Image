@@ -51,7 +51,8 @@ public sealed class JpegFfmpegTests(ITestOutputHelper output)
     [InlineData(JpegSampling.YCbCr444, 2)]
     [InlineData(JpegSampling.YCbCr422, 3)]
     [InlineData(JpegSampling.YCbCr420, 3)]
-    public void ReferenceFixedTableRestartsInteroperateAtNonRowBoundaries(JpegSampling sampling, int interval)
+    [InlineData(JpegSampling.Grayscale, 3)]
+    public void ReferenceRestartsInteroperateAtNonRowBoundaries(JpegSampling sampling, int interval)
     {
         using var image = OriginalPixels.Buffer(18, 19, 8, opaque: true);
         using var encoded = new MemoryStream();

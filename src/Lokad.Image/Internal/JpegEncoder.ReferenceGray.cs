@@ -13,7 +13,8 @@ internal static partial class JpegEncoder
             throw new ImageLimitException(ImageLimitKind.Dimension, "JPEG dimensions exceed 65535.");
         context.Work(0);
         var blocks = ((width + 7L) / 8) * ((height + 7L) / 8);
-        var plannedWork = 2 * blocks * ReferenceGrayBlockWork + blocks * 132 + 2L * JpegReferenceTables.HuffmanWork + 4096;
+        var restartWork = options.RestartInterval == 0 ? 0 : (blocks - 1) / options.RestartInterval * 5;
+        var plannedWork = 2 * blocks * ReferenceGrayBlockWork + blocks * 132 + 2L * JpegReferenceTables.HuffmanWork + restartWork + 4096;
         if (plannedWork > context.RemainingWork)
             throw new ImageLimitException(ImageLimitKind.Work, "Reference grayscale JPEG work exceeds the configured limit.");
         long borrowed = 0; var fixedReserved = image is null; var tablesReserved = false;
@@ -27,14 +28,14 @@ internal static partial class JpegEncoder
             context.Work(0);
             var quantization = JpegGrayReferenceTransform.Quantization(options.Quality);
             var histograms = new int[4][]; histograms[0] = new int[256]; histograms[2] = new int[256];
-            ReferenceGrayPass(image, source, width, height, options.BackgroundRgb, quantization, histograms, null, null, context);
+            ReferenceGrayPass(image, source, width, height, options.BackgroundRgb, quantization, histograms, null, null, context, options.RestartInterval);
             context.Reserve(ReferenceTableBytes); tablesReserved = true; context.Work(0);
             var tables = new JpegEncodingTable[4];
             tables[0] = JpegGrayReferenceTables.Huffman(histograms[0], context);
             tables[2] = JpegGrayReferenceTables.Huffman(histograms[2], context);
-            WriteReferenceGrayHeader(output, width, height, quantization, tables, context);
+            WriteReferenceGrayHeader(output, width, height, quantization, tables, context, options.RestartInterval);
             var writer = new JpegEntropyWriter(output, context);
-            ReferenceGrayPass(image, source, width, height, options.BackgroundRgb, quantization, histograms, tables, writer, context);
+            ReferenceGrayPass(image, source, width, height, options.BackgroundRgb, quantization, histograms, tables, writer, context, options.RestartInterval);
             writer.Align(); context.Work(2); output.WriteByte(255); output.WriteByte(217);
         }
         finally
@@ -47,14 +48,18 @@ internal static partial class JpegEncoder
 
     private static void ReferenceGrayPass(ImageBuffer? image, JpegSampleInput source, int width, int height,
         uint? background, ushort[] quantization, int[][] histograms, JpegEncodingTable[]? tables,
-        JpegEntropyWriter? writer, OperationContext context)
+        JpegEntropyWriter? writer, OperationContext context, int restartInterval)
     {
         Span<byte> samples = stackalloc byte[64];
         Span<short> transformed = stackalloc short[64], coefficients = stackalloc short[64];
         Span<int> previous = stackalloc int[1]; previous.Clear();
+        var mcu = 0;
         for (var top = 0; top < height; top += 8)
         for (var left = 0; left < width; left += 8)
         {
+            // Single-component scans have one block per MCU. Both passes must
+            // reset DC before collecting/encoding the first block of an interval.
+            ReferenceRestart(mcu++, restartInterval, previous, writer, context);
             context.Work(ReferenceGrayBlockWork);
             if (image is null && source.Format == JpegSampleFormat.Grayscale) source.CopyGrayBlock(left, top, samples);
             else
@@ -75,7 +80,7 @@ internal static partial class JpegEncoder
     }
 
     private static void WriteReferenceGrayHeader(Stream output, int width, int height, ushort[] quantization,
-        JpegEncodingTable[] tables, OperationContext context)
+        JpegEncodingTable[] tables, OperationContext context, int restartInterval)
     {
         context.Work(2); output.WriteByte(255); output.WriteByte(216);
         // JFIF APP0 version1.01 with unitless1:1 density, matching the pinned
@@ -94,6 +99,8 @@ internal static partial class JpegEncoder
             table.Counts.CopyTo(huffman[1..]); table.Symbols.CopyTo(huffman[17..]);
             ReferenceSegment(output, 196, huffman[..(17 + table.Symbols.Length)], context);
         }
+        if (restartInterval != 0)
+            ReferenceSegment(output, 221, [(byte)(restartInterval >> 8), (byte)restartInterval], context);
         ReferenceSegment(output, 218, [1, 1, 0, 0, 63, 0], context);
     }
 }

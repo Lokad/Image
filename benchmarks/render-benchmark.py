@@ -354,7 +354,10 @@ including normalized caller samples and scalar execution, with the unchanged bui
 CPU/allocation qualification remains open.
 Production color restarts now match the frozen4:2:0 row-restart33 packet:
 58,012B native,58,010B with the approved attribution. Generic MCU intervals have
-functional/interoperability checks; grayscale restarts and default adoption remain open.
+functional/interoperability checks. Grayscale interval3 now matches its61,152B
+packet raw-exact, including714 markers, across image/caller/async boundaries.
+Both platforms pass5,153 full checks plus82 affected scalar checks, and the same
+actual Release package consumer and three examples. Default adoption remains open.
 Original/CompactColor packet behavior is unchanged. Reference CPU/allocations are
 unmeasured; existing JPEG encoding timings predate its added dispatch and require
 affected confirmation when CPU qualification resumes. Other unchanged paths retain evidence.

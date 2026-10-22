@@ -13,6 +13,8 @@ public sealed class JpegReferenceRestartTests
     [InlineData(JpegSampling.YCbCr444, 8, 2)]
     [InlineData(JpegSampling.YCbCr422, 8, 3)]
     [InlineData(JpegSampling.YCbCr420, 16, 3)]
+    [InlineData(JpegSampling.Grayscale, 8, 3)]
+    [InlineData(JpegSampling.Grayscale, 16, 1)]
     public async Task NonRowIntervalsPreserveCoefficientsAcrossOwnedAndBorrowedInputs(JpegSampling sampling, int depth, int interval)
     {
         // Reuse the existing18x19 edge shape. These intervals cross MCU rows or
@@ -25,7 +27,7 @@ public sealed class JpegReferenceRestartTests
         var packet = encoded.ToArray();
         using var first = ImageCodec.Decode(baseline.ToArray()); using var second = ImageCodec.Decode(packet);
         Assert.Equal(OriginalPixels.Bytes(first), OriginalPixels.Bytes(second));
-        var mcus = (sampling == JpegSampling.YCbCr444 ? 3 : 2) * 2;
+        var mcus = sampling == JpegSampling.Grayscale ? 3 * 3 : (sampling == JpegSampling.YCbCr444 ? 3 : 2) * 2;
         var markers = Enumerable.Range(0, packet.Length - 1)
             .Where(i => packet[i] == 255 && packet[i + 1] is >= 208 and <= 215).ToArray();
         Assert.Equal((mcus - 1) / interval, markers.Length);
@@ -52,6 +54,23 @@ public sealed class JpegReferenceRestartTests
         using var root = new TestMemoryBudget(1024 * 1024) { RefuseAtGrowth = growth };
         var options = Options with { RestartInterval = 3, Limits = ImageLimits.Default with { MemoryBudget = root } };
         using var output = new MemoryStream();
+        var error = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(image, output, options));
+        Assert.Equal(ImageLimitScope.SharedBudget, error.Scope); Assert.Equal(1, root.Refusals);
+        Assert.Equal(0, root.Bytes); Assert.Equal(0, output.Length); Assert.Equal(before, OriginalPixels.Bytes(image));
+        root.RefuseAtGrowth = 0; ImageCodec.EncodeJpeg(image, output, options);
+        Assert.True(output.Length > 0); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
+    [Theory]
+    [InlineData(1)] [InlineData(4)]
+    public void GrayscaleTableRefusalIsTerminalBeforeWritingHeaders(long growth)
+    {
+        using var image = OriginalPixels.Buffer(18, 19, 8);
+        using var root = new TestMemoryBudget(1024 * 1024) { RefuseAtGrowth = growth };
+        var options = Options with { Sampling = JpegSampling.Grayscale, RestartInterval = 3,
+            Limits = ImageLimits.Default with { MemoryBudget = root } };
+        using var output = new MemoryStream();
+        var before = OriginalPixels.Bytes(image);
         var error = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(image, output, options));
         Assert.Equal(ImageLimitScope.SharedBudget, error.Scope); Assert.Equal(1, root.Refusals);
         Assert.Equal(0, root.Bytes); Assert.Equal(0, output.Length); Assert.Equal(before, OriginalPixels.Bytes(image));

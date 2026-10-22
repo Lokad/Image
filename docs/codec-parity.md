@@ -61,6 +61,10 @@ The independent [T.81 K.2](https://www.w3.org/Graphics/JPEG/itu-t81.pdf#page=148
 table prototype matches **34 original histograms**, including length limiting;
 production tests also freeze its complete packet and uniform-alphabet table.
 No metadata exception is needed: the grayscale reference has no attribution COM.
+The existing RGBA16 control also matches its complete **58,942 B** packet after
+independent16-bit normalization. The RGBA8 grayscale control with explicit MCU
+restart interval3 matches **61,152 B**, including714 sequenced markers and
+optimized tables. These checks use the same backend, quality and quantizers.
 
 The production encoder uses at most a 512-byte MCU buffer, with no
 full-frame YUV or coefficient/event copy. Chroma weights are generated on the
@@ -71,9 +75,9 @@ forward-only and async delivery. Color quality maps to native qscale
 `1 + (100 - Quality) * 30 / 99`; default85 maps to the frozen qscale5 reference.
 Grayscale uses its existing owned quantization formula and the same quality as its
 pinned backend, with69 frozen above. Caller Gray8 overrides Sampling and needs no
-RGBA intermediate. RGBA16-to-gray normalization and quality endpoints have
-functional checks; grayscale native-packet claims cover the declared 8-bit control.
-Grayscale restart markers still return structured unsupported-feature failures.
+RGBA intermediate. Grayscale packet claims cover the two declared source depths
+without restarts, plus the8-bit interval3 control. Other intervals have functional
+coverage; quality endpoints do not imply a broader native-packet claim.
 
 Shared admission reserves fixed/table capacity and coarse table-building peaks
 before allocation. Temporary storage is released before async delivery; encoded

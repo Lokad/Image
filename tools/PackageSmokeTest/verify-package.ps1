@@ -92,7 +92,6 @@ using Lokad.Image;
 foreach (var referenceDepth in new[] { 8, 16 })
 foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YCbCr422, JpegSampling.YCbCr420, JpegSampling.Grayscale })
 {
-    if (referenceSampling == JpegSampling.Grayscale && referenceDepth != 8) continue;
     using var referenceImage = Lokad.Image.Tooling.OriginalPixels.Buffer(513, 259, referenceDepth);
     if (referenceDepth == 8) { referenceImage.GetRow8(0)[3] = 0; referenceImage.GetRow8(0)[513 * 4 - 1] = 0; }
     else { referenceImage.GetRow16(0)[3] = 0; referenceImage.GetRow16(0)[513 * 4 - 1] = 0; }
@@ -113,6 +112,7 @@ foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YC
         (JpegSampling.YCbCr420, 8) => "83e9e80a87c1928c8e23e2929b15348d0e8e8ce5568247420f6e366abeb830e3",
         (JpegSampling.YCbCr420, 16) => "20461d0d4c85dd2d07e1068e2f9d7a856805c637f1d9576201b35456eeee71ed",
         (JpegSampling.Grayscale, 8) => "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+        (JpegSampling.Grayscale, 16) => "2a99dee8551c14e8acceb8df6adec6a2a263a9f037ec00cabe2791c96b178bfc",
         _ => throw new Exception("Unknown reference control.")
     };
     if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(referencePacket.ToArray())).ToLowerInvariant()
@@ -131,7 +131,7 @@ foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YC
             != "1af33b85d17d4dd24a19f98e66242eba42c7c77b7347dfa564a83d64b19feea4" || referenceRoot.Bytes != 0)
             throw new Exception("Packaged reference row-restart bytes or ownership differ.");
     }
-    if (referenceSampling == JpegSampling.Grayscale)
+    if (referenceSampling == JpegSampling.Grayscale && referenceDepth == 8)
     {
         var gray = new byte[513 * 259];
         for (var y = 0; y < 259; y++)
@@ -149,6 +149,13 @@ foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YC
                 Limits = ImageLimits.Default with { MemoryBudget = referenceRoot } });
         if (!callerGrayPacket.ToArray().AsSpan().SequenceEqual(referencePacket.ToArray()) || referenceRoot.Bytes != 0)
             throw new Exception("Packaged reference caller gray sampling override or ownership differs.");
+        using var grayRestartPacket = new MemoryStream();
+        await ImageCodec.EncodeJpegAsync(gray, 513, 259, JpegSampleFormat.Grayscale, grayRestartPacket,
+            options: new JpegEncodeOptions { Quality = 69, QuantizationPolicy = JpegQuantizationPolicy.Reference,
+                RestartInterval = 3, Limits = ImageLimits.Default with { MemoryBudget = referenceRoot } });
+        if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(grayRestartPacket.ToArray())).ToLowerInvariant()
+            != "25fb908c13a1e15645bfe07948e7f1d70366d6bf26e99eb3a2a88f112c78ea02" || referenceRoot.Bytes != 0)
+            throw new Exception("Packaged reference grayscale restart bytes or ownership differ.");
     }
 }
 await Lokad.Image.Tooling.CooperativeMemoryConsumer.Verify();

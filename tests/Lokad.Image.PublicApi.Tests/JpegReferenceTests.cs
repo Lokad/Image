@@ -31,6 +31,8 @@ public sealed class JpegReferenceTests
         "1af33b85d17d4dd24a19f98e66242eba42c7c77b7347dfa564a83d64b19feea4")]
     [InlineData(JpegSampling.Grayscale, 16, 69, 0, "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9", 58942,
         "2a99dee8551c14e8acceb8df6adec6a2a263a9f037ec00cabe2791c96b178bfc")]
+    [InlineData(JpegSampling.Grayscale, 8, 69, 3, "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", 61152,
+        "25fb908c13a1e15645bfe07948e7f1d70366d6bf26e99eb3a2a88f112c78ea02")]
     public async Task FrozenNativePacketsMatchAcrossOwnedAndCallerBoundaries(JpegSampling sampling, int depth, int quality, int restart, string sourceHash, int length, string packetHash)
     {
         using var root = new TestMemoryBudget(4 * 1024 * 1024);
@@ -162,6 +164,7 @@ public sealed class JpegReferenceTests
     [InlineData(JpegSampling.YCbCr420, 0)]
     [InlineData(JpegSampling.Grayscale, 0)]
     [InlineData(JpegSampling.YCbCr420, 33)]
+    [InlineData(JpegSampling.Grayscale, 3)]
     public void WorkCancellationAndFailedWritesCleanUpWithoutDisposingTheCaller(JpegSampling sampling, int restart)
     {
         using var image = OriginalPixels.Buffer(17, 11, 8);
@@ -204,6 +207,9 @@ public sealed class JpegReferenceTests
     [InlineData(false, false, JpegSampling.YCbCr420, 33)]
     [InlineData(true, false, JpegSampling.YCbCr420, 33)]
     [InlineData(false, true, JpegSampling.YCbCr420, 33)]
+    [InlineData(false, false, JpegSampling.Grayscale, 3)]
+    [InlineData(true, false, JpegSampling.Grayscale, 3)]
+    [InlineData(false, true, JpegSampling.Grayscale, 3)]
     public async Task SharedRootIncludesPendingActualAsyncUsersAndRecovers(bool cancel, bool fail, JpegSampling sampling, int restart)
     {
         using var image = OriginalPixels.Buffer(17, 11, 8);
@@ -235,17 +241,6 @@ public sealed class JpegReferenceTests
         Assert.Equal(0, root.Bytes); Assert.True(held.CanWrite);
         using var next = new MemoryStream(); ImageCodec.EncodeJpeg(image, next, options);
         Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
-    }
-
-    [Theory]
-    [InlineData(JpegSampling.Grayscale, 1, UnsupportedImageFeature.ControlMarker)]
-    public void PendingReferenceFeaturesAreStructuredFailures(JpegSampling sampling, int restart, UnsupportedImageFeature feature)
-    {
-        using var image = OriginalPixels.Buffer(1, 1, 8, opaque: true);
-        using var output = new MemoryStream();
-        var error = Assert.Throws<UnsupportedImageException>(() => ImageCodec.EncodeJpeg(image, output,
-            Options with { Sampling = sampling, RestartInterval = restart }));
-        Assert.Equal(feature, error.Feature); Assert.Equal(0, output.Length);
     }
 
     [Theory]

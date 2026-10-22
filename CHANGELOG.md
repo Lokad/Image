@@ -3,7 +3,7 @@
 ## 0.2.0 â€” Unreleased
 
 - Explicit managed JPEG `Reference` profile for baseline grayscale/4:4:4/4:2:2/4:2:0, with deterministic
-  quality mapping, shared admission and bounded MCU encoding, including color restarts.
+  quality mapping, shared admission and bounded MCU encoding, including color/grayscale restarts.
 - Smaller 8-bit RGBA PNG output with the deeper `Optimal` search policy,
   preserving exact samples, bounded admission and asynchronous ownership.
 - Smaller Original 4:4:4 JPEG packets through source-derived precision-grid,

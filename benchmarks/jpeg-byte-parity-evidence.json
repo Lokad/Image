@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "project": "Lokad.Image",
-  "qualification": "E12",
-  "status": "Opt-in Reference JPEG has nine frozen complete controls, including independently confirmed grayscale16. Raw gray exactness and only approved color COM attribution on Windows/Linux. Production E11 unchanged; grayscale restarts, default adoption, other codecs and CPU/release scope OPEN.",
-  "productionChanged": false,
-  "productionCoreSha256": "19ac3ff61260997adea86afa390d7c8a4be0396bc0a1bfc545c33b7abc6bd3e2",
+  "qualification": "E14",
+  "status": "Production opt-in Reference JPEG grayscale/color MCU restart support qualified both OS. Ten frozen complete controls match: raw gray equality, only approved color COM attribution. Default adoption, other exact encoders/decoders, CPU/release objective OPEN.",
+  "productionChanged": true,
+  "productionCoreSha256": "455c83d91595f2886cff854f7964e5d7332e606b4481fc0d5982bae50f4c0c42",
   "oracle": {
     "ffmpegRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
     "ffmpegVersion": "n8.1",
@@ -126,7 +126,7 @@
     "sha256": "17a146f3a307fec096b8189161fc1a1e4e1d947327dc895c9b4e1e8d1d9b5d93",
     "mirrored": true
   },
-  "next": "E13: Reference grayscale MCU restarts against the same approved SIMD-enabled libjpeg-turbo backend, one existing raster/settings interval control; independent optimized histogram reset and exact header/framing. Then default/legacy migration, other exact encoders/decoders, finite CPU/allocation and release scope.",
+  "next": "E15: bounded0.2 default/legacy migration: adopt Reference deliberately while preserving explicit Original/CompactColor and producer-specific historical evidence. Exact color restart scope stays frozen33; arbitrary intervals retain functional/spec-derived support. Then PNG/WebP encoders and exact decoders, finite CPU/allocation and release qualification.",
   "forwardStage": {
     "qualification": "E2",
     "nativeDispatch": "ff_fdct_sse2",
@@ -196,7 +196,7 @@
     "nativeEncodes": 0,
     "timingRuns": 0
   },
-  "priorProductionCoreSha256": "524360ad311f61aaad5352fd824a9383b20cdf85f539503720d6bec4935c64fa",
+  "priorProductionCoreSha256": "19ac3ff61260997adea86afa390d7c8a4be0396bc0a1bfc545c33b7abc6bd3e2",
   "controlsProductionPacketIdentity": "Original policy at C193; implementation/packets unchanged by E4/E6. Reference production qualification is separate in productionAdoption and productionSubsampling.",
   "prototypeProductionBuilds": 0,
   "prototypeRepeatedPackageProofs": 0,
@@ -412,7 +412,7 @@
     },
     "adoptedIn": "E6"
   },
-  "latestPrototypeQualification": "E10",
+  "latestPrototypeQualification": "E13",
   "originalPacketProducerCoreSha256": "2d82a81dc60cd5e30c0644c2f62e4206da74ac6322e6caab6df02370705909e3",
   "productionSubsampling": {
     "qualification": "E6",
@@ -758,7 +758,7 @@
       "mirrored": true
     }
   },
-  "latestAudit": "E12",
+  "latestAudit": "E14",
   "grayscaleReplication": {
     "qualification": "E7",
     "status": "Qualified independent source-only grayscale encoder prototype on Windows/Linux; production/API/admission integration OPEN",
@@ -1435,7 +1435,7 @@
     },
     "adoptedIn": "E11"
   },
-  "latestProductionQualification": "E11",
+  "latestProductionQualification": "E14",
   "productionColorRestarts": {
     "project": "Lokad.Image",
     "round": "E11",
@@ -1587,9 +1587,9 @@
     }
   },
   "currentReferenceEncoderCoverage": {
-    "round": "E12",
+    "round": "E14",
     "status": "All18 required existing row boundaries have packet confirmations for opt-in Reference; default remains Original. Optional CompactColor and broader option/native scope remain distinct, with named follow-ups OPEN.",
-    "productionCoreSha256": "19ac3ff61260997adea86afa390d7c8a4be0396bc0a1bfc545c33b7abc6bd3e2",
+    "productionCoreSha256": "455c83d91595f2886cff854f7964e5d7332e606b4481fc0d5982bae50f4c0c42",
     "existingRows": 19,
     "requiredRows": 18,
     "requiredReferencePacketBoundariesQualified": 18,
@@ -1822,18 +1822,23 @@
           "liveCancelableToken": true,
           "sourcePreserved": true,
           "packetSha256": "2a99dee8551c14e8acceb8df6adec6a2a263a9f037ec00cabe2791c96b178bfc"
+        },
+        {
+          "depth": 8,
+          "sampling": "Grayscale",
+          "quality": 69,
+          "restartInterval": 3,
+          "baselineOnly": true,
+          "liveCancelableToken": true,
+          "sourcePreserved": true,
+          "packetSha256": "25fb908c13a1e15645bfe07948e7f1d70366d6bf26e99eb3a2a88f112c78ea02"
         }
       ],
-      "meaning": "BaselineOnly=true plus successful live cancellation token preserve the frozen packet at4448,42016 andgray8; complements E8 failure/cancellation/ownership checks without changing production inputs. E12 adds the missing gray16 anchor; no production changes.",
-      "productionCoreSha256": "19ac3ff61260997adea86afa390d7c8a4be0396bc0a1bfc545c33b7abc6bd3e2",
+      "meaning": "BaselineOnly=true plus successful live cancellation token preserve the frozen packet at4448,42016 andgray8; complements E8 failure/cancellation/ownership checks without changing production inputs. E12 adds the missing gray16 anchor; no production changes. E14 adds exact grayscale interval3;10 frozen complete controls now pass.",
+      "productionCoreSha256": "455c83d91595f2886cff854f7964e5d7332e606b4481fc0d5982bae50f4c0c42",
       "durableTestsSince": "E11"
     },
     "remainingNamedCases": [
-      {
-        "case": "Reference grayscale MCU restarts",
-        "reason": "Existing explicit Original gray restart support is preserved; Reference still returns typed unsupported. Distinct optimized-gray histogram resets and native header placement require qualification.",
-        "acceptance": "One bounded existing grayscale raster/settings control against approved SIMD-enabled libjpeg-turbo with explicit interval; exact packet, then admitted public boundaries and affected qualification."
-      },
       {
         "case": "Public restart intervals other than the frozen33 row interval",
         "reason": "Existing caller sample tests require arbitrary MCU intervals2/3. Pinned FFmpeg serial-slice setting produces row intervals, not an arbitrary public MCU interval setting.",
@@ -1847,7 +1852,7 @@
       }
     ],
     "qualityScope": "Reference color qscale mapping and grayscale identity formula are explicit. Native exact anchors stay qscale5/gray69. Existing1/100 functional tests remain; do not create a quality sweep or infer equality of legacy numeric quality values.",
-    "changesInvalidatingOlderEvidence": "New Reference color restart path replaces prior unsupported behavior. Existing Reference no-restart MCU traversal adds an interval-zero guard, so complete packets and affected scalar/API/ownership checks were reconfirmed. Gray algorithm and Original/CompactColor packets are unchanged. No prior valid Reference CPU cost existed; old JPEG timings remain tied to Original producers. Unaffected decoder/transform evidence is reused. E12 changes only native tooling and one public fixture row; E11 production/full/scalar/package evidence remains valid unchanged. Nine affected frozen rows pass normal/scalar on both platforms; no full-suite rerun claimed.",
+    "changesInvalidatingOlderEvidence": "New Reference color restart path replaces prior unsupported behavior. Existing Reference no-restart MCU traversal adds an interval-zero guard, so complete packets and affected scalar/API/ownership checks were reconfirmed. Gray algorithm and Original/CompactColor packets are unchanged. No prior valid Reference CPU cost existed; old JPEG timings remain tied to Original producers. Unaffected decoder/transform evidence is reused. E12 changes only native tooling and one public fixture row; E11 production/full/scalar/package evidence remains valid unchanged. Nine affected frozen rows pass normal/scalar on both platforms; no full-suite rerun claimed. E14 enables Reference gray restarts and adds an interval guard in both gray passes; all previous complete packets were reconfirmed both platforms normal/scalar. New header/work behavior is qualified, with existing memory owners unchanged. All other production method bodies, explicit Original/CompactColor and decoder/transform paths are unchanged; no prior Reference timing proof existed.",
     "noExpandedWorkloadMatrix": true,
     "canonicalSourceIdentities": {
       "RGBA8": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
@@ -1934,6 +1939,193 @@
       "tools/WarmReference/libjpeg-gray16-stage.c": "8fb136a9661135d069bddc901c16b7b8b1859321142a8b5e4e610f8e05734e90",
       "tools/WarmReference/build-libjpeg-gray16-stage-linux.sh": "5da5ccb8cece136b5865c8c4cbc017c0bde4685f6e01607162c66165eba791ea",
       "tests/Lokad.Image.PublicApi.Tests/JpegReferenceTests.cs": "ed12a9e8f7a79bd0f7c9fdea22a5f0f1983d82159ae6c2452973f15f87c0efa4"
+    }
+  },
+  "productionGrayscaleRestarts": {
+    "project": "Lokad.Image",
+    "round": "E14",
+    "sourceBase": "de33c16079f6b58971dad946f2dfc8adf31ff882",
+    "status": "Production Reference grayscale MCU restart encoding qualified on Windows/Linux; full objective OPEN",
+    "productionChanged": true,
+    "productionCoreSha256": "455c83d91595f2886cff854f7964e5d7332e606b4481fc0d5982bae50f4c0c42",
+    "core": [
+      {
+        "Name": "Lokad.Image.dll",
+        "Bytes": 771584,
+        "Sha256": "455c83d91595f2886cff854f7964e5d7332e606b4481fc0d5982bae50f4c0c42"
+      },
+      {
+        "Name": "Lokad.Image.pdb",
+        "Bytes": 340696,
+        "Sha256": "adcd9450fd5ba8224b7000991fe670e7e064fdcd45df67fa58751537c0ddcc47"
+      },
+      {
+        "Name": "Lokad.Image.xml",
+        "Bytes": 41016,
+        "Sha256": "af55d2f15f9793fdcb18fedd5b31223c5b362948d43b32edbcdf23f9735f0002"
+      }
+    ],
+    "nativeControl": {
+      "project": "Lokad.Image",
+      "round": "E13",
+      "sourceDepth": 8,
+      "width": 513,
+      "height": 259,
+      "components": 1,
+      "quality": 69,
+      "ownedQuantizers": true,
+      "isLowSimdAvailable": true,
+      "affinityCount": 1,
+      "codecThreads": 1,
+      "conversionThreads": 1,
+      "optimizeHuffman": true,
+      "restartInterval": 3,
+      "sourceBytes": 531468,
+      "normalizedGrayBytes": 132867,
+      "packetBytes": 61152,
+      "timingRuns": 0,
+      "workerSha256": "c4be62ee379236fabaf21f1fce3b361d58de815315e9cdd4f5cc012482768d7c",
+      "sourceToolSha256": "b4bddfaa352d78f4f04cc3f2a4f641f7df4421b0c6ebc46f58e001fbc3ca66c2",
+      "libjpegRevision": "9217719d3a58633923b096af4c1d50d304768a64",
+      "libjpegArchiveSha256": "faeac65984bc945a3acf12abffadf9814ba64b91d49a0b10bc6d2fe191b55d24",
+      "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-math-errno",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "sourceRgba8Sha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "normalizedGraySha256": "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d",
+      "nativePacketSha256": "25fb908c13a1e15645bfe07948e7f1d70366d6bf26e99eb3a2a88f112c78ea02",
+      "cpu": 0
+    },
+    "testsPerPlatform": {
+      "internal": 2152,
+      "publicApi": 2061,
+      "liveFfmpeg": 940,
+      "total": 5153
+    },
+    "scalarChecksPerPlatform": {
+      "internal": 4,
+      "publicApi": 78,
+      "total": 82
+    },
+    "focusedLinuxChecks": {
+      "publicApi": 78,
+      "liveFfmpeg": 4
+    },
+    "package": {
+      "path": "artifacts/qualification/jpeg-gray-restart-reference-profile/Lokad.Image.0.2.0.nupkg",
+      "version": "0.2.0",
+      "bytes": 406890,
+      "sha256": "49bee7d94f95bf06a80234004c12d2d35a03c2b5fdc9b6c27aa1a93287eabc86",
+      "sameActualPackageBothPlatforms": true,
+      "usageExamplesPerPlatform": 3,
+      "frozenPacketControls": 10,
+      "callerGrayscaleChecks": 2
+    },
+    "builds": {
+      "production": 1,
+      "internalTests": 1,
+      "publicTests": 2,
+      "differentialTests": 1,
+      "productionRebuildsAfterFreeze": 0
+    },
+    "buildNote": "All compilers succeeded with zero warnings/errors. Initial post-build wrapper expected an unnecessary internal copy-local core; resumed without rebuilding the successful production/internal assemblies. Second public-only build fixes CI test scheduling; core unchanged.",
+    "ciTestFix": "E12 Windows CI timed out waiting for a pool-queued blocking worker. Dedicated LongRunning worker passed focused checks both OS. Linux full production suite predates only this test-only scheduling change; all other source paths unchanged and evidence reused. Windows full suite includes it.",
+    "nativeWorkerBuilds": 1,
+    "nativeEncodes": 1,
+    "timingRuns": 0,
+    "packetBytes": 61152,
+    "packetSha256": "25fb908c13a1e15645bfe07948e7f1d70366d6bf26e99eb3a2a88f112c78ea02",
+    "rawExactBothPlatforms": true,
+    "attributionExceptionUsed": false,
+    "oraclePacketOrTableInputs": false,
+    "fullFrameCopy": false,
+    "sourceAndSurvivingOutputsPreserved": true,
+    "memory": "Same fixed8KiB/table16KiB and coarse temporary Huffman ownership; reserve before allocation, terminal refusal, cancellation/failure cleanup, independent work/output/local limits and shared pending actual async users",
+    "scope": "Frozen513x259RGBA8 gray69 interval3,714 markers; image/caller RGB8/Gray8 sync/forward/async raw-exact. Existing Gray16/no-restart and all color packets preserved. Generic intervals1/3 functional at18x19 RGBA8/16, native decoder interoperability interval3. No broad native packet or exact decoder claim.",
+    "cpuAndAllocations": "Unmeasured; no CPU/allocation parity claim. Added gray traversal interval guard and deterministic restart work. Historical Original/CompactColor producers unchanged.",
+    "changedProductionInputs": [
+      "src/Lokad.Image/Internal/JpegEncoder.Reference.cs",
+      "src/Lokad.Image/Internal/JpegEncoder.ReferenceGray.cs",
+      "src/Lokad.Image/JpegOptions.cs"
+    ],
+    "rawArchive": {
+      "file": "e14-qualified-linux.tar.gz",
+      "bytes": 2066248,
+      "sha256": "b7f5e7f5a5719af94acdcbc771c14f11663694353e52e380d283db851090e25d",
+      "members": 52,
+      "mirrored": true
+    },
+    "windowsRawArchive": {
+      "file": "e14-qualified-windows.tar.gz",
+      "bytes": 72663,
+      "sha256": "a68f90d9f791024aae74715bd8404d8c96ea7d09e453f8b48f2ae98f29c210ca",
+      "members": 11,
+      "mirrored": true
+    }
+  },
+  "grayscaleRestartReplication": {
+    "round": "E13",
+    "prototypeOnly": true,
+    "adoptedIn": "E14",
+    "rawExactBothPlatforms": true,
+    "oraclePacketOrTableInputs": false,
+    "packetBytes": 61152,
+    "packetSha256": "25fb908c13a1e15645bfe07948e7f1d70366d6bf26e99eb3a2a88f112c78ea02",
+    "nativeControl": {
+      "project": "Lokad.Image",
+      "round": "E13",
+      "sourceDepth": 8,
+      "width": 513,
+      "height": 259,
+      "components": 1,
+      "quality": 69,
+      "ownedQuantizers": true,
+      "isLowSimdAvailable": true,
+      "affinityCount": 1,
+      "codecThreads": 1,
+      "conversionThreads": 1,
+      "optimizeHuffman": true,
+      "restartInterval": 3,
+      "sourceBytes": 531468,
+      "normalizedGrayBytes": 132867,
+      "packetBytes": 61152,
+      "timingRuns": 0,
+      "workerSha256": "c4be62ee379236fabaf21f1fce3b361d58de815315e9cdd4f5cc012482768d7c",
+      "sourceToolSha256": "b4bddfaa352d78f4f04cc3f2a4f641f7df4421b0c6ebc46f58e001fbc3ca66c2",
+      "libjpegRevision": "9217719d3a58633923b096af4c1d50d304768a64",
+      "libjpegArchiveSha256": "faeac65984bc945a3acf12abffadf9814ba64b91d49a0b10bc6d2fe191b55d24",
+      "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-math-errno",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "sourceRgba8Sha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "normalizedGraySha256": "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d",
+      "nativePacketSha256": "25fb908c13a1e15645bfe07948e7f1d70366d6bf26e99eb3a2a88f112c78ea02",
+      "cpu": 0
+    },
+    "productionBuilds": 0,
+    "nativeWorkerBuilds": 1,
+    "nativeEncodes": 1,
+    "timingRuns": 0,
+    "rawArchive": {
+      "file": "e14-qualified-linux.tar.gz",
+      "bytes": 2066248,
+      "sha256": "b7f5e7f5a5719af94acdcbc771c14f11663694353e52e380d283db851090e25d",
+      "members": 52,
+      "mirrored": true
     }
   }
 }

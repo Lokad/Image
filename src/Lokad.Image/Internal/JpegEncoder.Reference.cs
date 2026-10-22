@@ -20,9 +20,6 @@ internal static partial class JpegEncoder
         if (format is not (JpegSampleFormat.Rgb or JpegSampleFormat.Grayscale))
             throw new UnsupportedImageException(UnsupportedImageFeature.ComponentLayout,
                 "The reference JPEG profile accepts grayscale, RGB or RGBA input.", ImageFormat.Jpeg);
-        if (options.RestartInterval != 0 && (options.Sampling == JpegSampling.Grayscale || format == JpegSampleFormat.Grayscale))
-            throw new UnsupportedImageException(UnsupportedImageFeature.ControlMarker,
-                "The reference grayscale JPEG profile currently requires restart markers disabled.", ImageFormat.Jpeg);
     }
 
     private static void EncodeReference(ImageBuffer? image, JpegSampleInput source, Stream output,
