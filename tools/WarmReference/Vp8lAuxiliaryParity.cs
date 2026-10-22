@@ -15,13 +15,13 @@ public sealed record Vp8lPrefixResult(byte[] Bytes, int BitCount, byte[] Modes,
 
 public static class Vp8lAuxiliaryParity
 {
-    public static Vp8lAuxiliaryResult Encode(uint[] pixels, int width, int quality)
+    public static Vp8lAuxiliaryResult Encode(uint[] pixels, int width, int quality, bool lowEffort=false)
     {
         if (width <= 0 || pixels.Length < 1 || pixels.Length % width != 0 || pixels.Length > 65536)
             throw new ArgumentException("Expected a bounded auxiliary raster.");
-        if (quality != 75) throw new ArgumentOutOfRangeException(nameof(quality), "Only the frozen effort is qualified.");
-        var matches = Vp8lMatchParity.Build(pixels, width, quality);
-        var parsed = Vp8lLzParity.Encode(pixels, matches, width);
+        if (quality != 20 && quality != 75) throw new ArgumentOutOfRangeException(nameof(quality), "Only pinned auxiliary qualities20/75 are qualified.");
+        var matches = lowEffort?Vp8lMatchParity.BuildLowEffort(pixels,width,quality):Vp8lMatchParity.Build(pixels,width,quality);
+        var parsed = Vp8lLzParity.Encode(pixels, matches, width, quality>=25);
         var trees = Vp8lLzParity.Histograms(parsed.Result, width, true)
             .Select(x => Vp8lPrefixParity.Lengths(x)).ToArray();
         var encoded = Vp8lBitParity.Encode(parsed.Result, width, trees);

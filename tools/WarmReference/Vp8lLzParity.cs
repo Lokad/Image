@@ -166,12 +166,12 @@ internal static class Vp8lLzParity
         foreach(var n in lengths){result.Add(n==1?new(position,pixels[position],1,0):new(position,0,n,(int)(matches[position]>>12)));position+=n;}
         return result;
     }
-    internal static (List<Vp8lParityToken> Result,object Summary) Encode(uint[] pixels,uint[] matches,int width)
+    internal static (List<Vp8lParityToken> Result,object Summary) Encode(uint[] pixels,uint[] matches,int width,bool traceSearch=true)
     {
         var standard=Greedy(pixels,matches);var rle=Repeats(pixels,width);var standardCost=Estimate(standard,width);var rleCost=Estimate(rle,width);
         var result=standard;var winner="standard";var finalCost=standardCost;List<Vp8lParityToken>? trace=null;long? traceCost=null;
         if(rleCost<finalCost){result=rle;winner="rle";finalCost=rleCost;}
-        if(winner=="standard")
+        if(traceSearch&&winner=="standard")
         {
             trace=Trace(pixels,matches,width,standard);traceCost=Estimate(trace,width);
             if(traceCost<finalCost){result=trace;winner="trace";finalCost=traceCost.Value;}

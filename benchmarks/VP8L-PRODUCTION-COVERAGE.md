@@ -1,8 +1,8 @@
 # VP8L remaining production coverage
 
-One dependency-free source model reproduces ten packet identities on Windows/Linux:
-the four frozen non-palette cores, four existing functional inputs and two named
-single-axis companions. All use method 4, quality 75 and `exact=1`.
+One dependency-free source model reproduces fourteen packet identities on Windows/Linux:
+thirteen default-method packets and the method-0 two-color variant. Main quality
+is 75 with `exact=1`; palette auxiliary encoding uses the backend's internal quality 20.
 Production adoption also has to preserve the existing public encoding scope.
 This bounded checklist comes from current tests and options; it adds no warm
 performance grid.
@@ -14,12 +14,13 @@ performance grid.
    The existing two-color 4103×2 admission input also has an exact source-only
    packet on both platforms: 46 bytes, including palette deltas, eight indices
    per byte, a partial final byte and complete framing. The current model qualifies
-   both palettes alongside the other packet families. Three named controls remain
-   to exercise distinct untested branches: **Palette4ColorPartialPacking** (four
-   indices per byte), **Palette16ColorPartialPacking** (two per byte), and
-   **Palette18ColorUnpackedZero** (unpacked indices, greedy color ordering and
-   handling a zero palette entry). These are bounded algorithm controls, not a
-   palette/shape grid; their inputs and native packets still need to be frozen.
+   both palettes alongside the other packet families. Three further named controls
+   now pass: **Palette4ColorPartialPacking** (four indices per byte, 66 bytes),
+   **Palette16ColorPartialPacking** (two per byte, 130 bytes), and
+   **Palette18ColorUnpackedZero** (unpacked indices and greedy ordering, 236 bytes).
+   The last uses 17 encoded entries for 18 source colors: the final zero is implicit.
+   All palette orders, packed samples and complete packets are exact on both
+   platforms. This covers the named branches, not arbitrary palette inputs/settings.
 2. **Direct coding and variable dimensions.** The existing 129×129 xorshift input
    now has a byte-exact 50,010-byte source-model packet on both platforms, reusing
    the pinned snapshot. The dimension-aware parser and framer select no transform,

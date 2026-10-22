@@ -94,3 +94,14 @@ default method 4. The original reference binary is unchanged. One separately
 built worker confirms the seven methods, the default 8/16-bit argument paths,
 explicit 16-bit method 0, independent outputs and source normalization. These
 were correctness snapshots, with no timing/allocation claim or production change.
+
+The current model also passes the three named palette packing/order controls:
+66 bytes (four colors), 130 bytes (sixteen) and 236 bytes (eighteen source colors).
+Every palette entry, packed sample and complete packet matches on Windows/Linux.
+The eighteen-color case omits the final zero entry, using the format's zero fill;
+it still uses unpacked indices. Palette auxiliary data uses internal quality 20
+and skips optimal tracing below 25. The promoted files are byte-identical to the
+frozen prototype's compiler inputs. The same binary reconfirms the affected prior
+default/effort cases, giving **fourteen packet identities** without another build,
+native encoding or production qualification run. The original fixture formula and
+seed are in `PalettePackingInput.cs`; `verify-vp8l-palette-packing.ps1` checks them.

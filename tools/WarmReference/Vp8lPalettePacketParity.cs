@@ -13,11 +13,13 @@ public static class Vp8lPalettePacketParity
         var choice=Vp8lInitialChoice.Select(source,width,height,method);
         if(choice.Mode!=4)throw new NotSupportedException("This stage composes palette coding only.");
         var palette=Vp8lPaletteParity.Build(source,width,height);
+        var entries=palette.Colors.Length;
+        if(entries>17&&palette.Colors[^1]==0)entries--; // RFC color-index padding supplies the final zero.
         var bits=new Vp8lParityBits();
         bits.Put(0x2f,8);bits.Put(width-1,14);bits.Put(height-1,14);
         bits.Put(Enumerable.Range(0,width*height).Any(i=>source[4*i+3]!=255)?1:0,1);bits.Put(0,3);
-        bits.Put(1,1);bits.Put(3,2);bits.Put(palette.Colors.Length-1,8);
-        var auxiliary=Vp8lAuxiliaryParity.Encode(palette.Deltas,palette.Deltas.Length,75);
+        bits.Put(1,1);bits.Put(3,2);bits.Put(entries-1,8);
+        var auxiliary=Vp8lAuxiliaryParity.Encode(palette.Deltas.AsSpan(0,entries).ToArray(),entries,20,method==0);
         for(var bit=0;bit<auxiliary.BitCount;bit++)bits.Put(auxiliary.Bytes[bit>>3]>>(bit&7)&1,1);
         var coded=new byte[palette.Packed.Length*4];
         for(var i=0;i<palette.Packed.Length;i++)BinaryPrimitives.WriteUInt32LittleEndian(coded.AsSpan(i*4),palette.Packed[i]);
