@@ -26,7 +26,9 @@ the final immutable model passes both platforms and the source entrypoint.
 
 This proves one control's parse, not complete packet equality. The nine spatial
 coding groups, their map and their Huffman serialization must still be generated
-from source. Other controls and production admission/performance remain open.
+from source. The subsequent [complete-packet model](VP8L-COMPLETE-PACKET.md)
+now reproduces those stages and the entire packet on this control. Other controls
+and production admission/performance remain open.
 
 Run `tools/WarmReference/verify-vp8l-main-parser.ps1 -SourcePath SOURCE.rgba
 -NativePacketPath REFERENCE.webp`; optional `-AssemblyPath` reuses the frozen model,

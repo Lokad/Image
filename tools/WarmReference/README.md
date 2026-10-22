@@ -1563,4 +1563,11 @@ complete main-image parse. `verify-vp8l-main-parser.ps1` accepts the same source
 reference arguments and optional frozen assembly path, with its own predictor and
 auxiliary-model dependencies alongside it. All110,306 tokens agree on Windows/Linux.
 The [parser report](../../benchmarks/VP8L-MAIN-PARSER.md) distinguishes this proof
-from the still-open spatial clustering, complete packets and production integration.
+from complete packets and production integration.
+
+`Vp8lSpatialParity.cs`, `Vp8lFrameParity.cs` and `Vp8lPacketParity.cs` complete the
+source-only model for that control. `verify-vp8l-packet-stage.ps1` accepts the same
+source/reference arguments and optional frozen assembly path. It checks all183,812
+packet bytes, source preservation, independent outputs and mutation rejection.
+The [packet report](../../benchmarks/VP8L-COMPLETE-PACKET.md) states the single-control
+scope and the remaining controls, production admission and performance work.
