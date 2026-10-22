@@ -1571,3 +1571,11 @@ source/reference arguments and optional frozen assembly path. It checks all183,8
 packet bytes, source preservation, independent outputs and mutation rejection.
 The [packet report](../../benchmarks/VP8L-COMPLETE-PACKET.md) states the single-control
 scope and the remaining controls, production admission and performance work.
+
+`Vp8lInitialChoice.cs`, `Vp8lInputParity.cs` and `Vp8lMainParsing.cs` extend the
+complete-packet model to all four frozen non-palette cores. `verify-vp8l-controls.ps1`
+reuses a frozen model and dependency directory, preparing original/opaque and
+frozen photograph/diagram samples without changing the controls. It compares all
+packet bytes twice, preserves sources and checks independent output mutations.
+The [current packet report](../../benchmarks/VP8L-COMPLETE-PACKET.md) distinguishes
+these four cores from public normalization/async boundaries and integration.

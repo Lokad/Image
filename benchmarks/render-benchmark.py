@@ -370,10 +370,11 @@ the new exact-reference target. Old quality tooling retires as stronger gates co
 its required scope.
 
 The source-only [VP8L packet model](../benchmarks/VP8L-COMPLETE-PACKET.md) reproduces
-the entire183,812B frozen packet on ONE existing RGBA8 control, raw-exact on both
-platforms with the same binary. This includes transforms,110,306 tokens,nine groups,
-all45 main trees and framing/padding. Production is unchanged. Five other lossless
-controls, lossy controls, admitted integration and performance remain open.
+all FOUR unique frozen lossless packets (183,812/121,896/160,032/7,234B), raw-exact
+on both platforms using the same binary. Six existing workload rows share these
+cores; RGBA16 normalization and async public-operation qualification remain open.
+Production is unchanged. Other required inputs/settings, admitted integration,
+lossy controls and performance remain open.
 
 No timing or allocation runs accompanied the new PNG encoder or JPEG cleanup. Unchanged paths
 retain evidence on their recorded frozen inputs; new default-encoded fixtures do

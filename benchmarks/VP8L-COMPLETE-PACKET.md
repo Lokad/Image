@@ -1,35 +1,38 @@
 # VP8L complete-packet reproduction
 
-The source-only encoder model reproduces the **entire 183,812-byte reference
-packet** for the existing 513×259 RGBA8 control. Windows and Linux use the same
-frozen model and produce raw-identical bytes, without metadata exceptions.
-The reference remains libwebp 1.6.0, method 4, quality 75, `exact=1`, explicitly
-labeled as FFmpeg's encoder backend. This qualifies one control, not production
-encoding or the remaining lossless/lossy controls.
+The source-only model reproduces **all four unique frozen VP8L packets**:
+183,812 B asymmetric RGBA8, 121,896 B opaque projection, 160,032 B photograph
+and 7,234 B text/diagram. Windows/Linux use the same frozen model and compare
+every byte, including framing and padding, without metadata exceptions.
+The reference is libwebp 1.6.0, method 4, quality 75, `exact=1`, explicitly
+labeled as FFmpeg's encoder backend.
 
-Source pixels determine the transforms, residuals, 110,306 tokens, 2,145 spatial
-histograms, nine coding groups and all 45 main Huffman trees. Clustering performs
-2,049 entropy-bin merges, 54 fixed-seed sampling merges and 33 greedy merges,
-then remaps the original histograms. Sampling reproduces a fixed algorithmic
-sequence; no image/settings search or output-driven tuning is involved.
+Initial transform choice comes from source histograms and entropy estimates.
+The first three inputs select subtract-green, prediction and cross-color;
+the diagram selects subtract-green alone. Selected cache sizes are 10, 2, 0
+and 10 bits. The first three packets use nine spatial coding groups; the
+single-group diagram omits the group-map syntax. Candidate matching, cache-aware
+and cache-free parsing, clustering, all Huffman trees and packet serialization
+come from source pixels. No reference tokens, maps, trees or packets enter the model.
 
-The group map occupies 4,466 bits. Main-image data begins at payload bit 36,698
-and ends at bit 1,470,323. Generated canonical codes, tree headers, cache/copy
-references, RIFF/VP8L framing and padding all agree. Public syntax follows
-RFC 9649. No upstream source or implementation tables enter the models or
-production build; existing independent stage models supply their mathematics.
+The six existing workload rows contain these four packet identities. RGBA16
+normalization and asynchronous delivery reuse the first packet's core proof;
+their complete public-operation qualification remains open for integration.
+Other shapes, palette/direct transform families and settings are unqualified
+in this development model. Production continues to support its existing scope.
 
-Both platforms pass complete byte comparison, borrowed-source preservation,
-independent output ownership and mutation rejection. The standalone source-host
-entrypoint passes on Windows. Existing production decoding evidence is reused
-because the packet is byte-identical to its frozen input. Production remains
-unchanged; admission, work limits, cancellation and performance require separate
-qualification during integration. No new native build/query/encode, library build,
-full suite, package proof, timing or allocation measurement accompanies this round.
+Both platforms pass source preservation, repeated complete-packet comparison,
+independent outputs and mutation rejection. The standalone source-host entrypoint
+passes on the asymmetric control. Production and the frozen predictor/parser/math
+models are unchanged. This round adds no native build/query/encode, timing,
+allocation measurement, library rebuild, full suite or package proof.
 
-Run `tools/WarmReference/verify-vp8l-packet-stage.ps1 -SourcePath SOURCE.rgba
--NativePacketPath REFERENCE.webp`. Optional `-AssemblyPath` reuses the frozen
-packet model, with its predictor, auxiliary and main-parser models alongside it.
-[Numeric evidence](vp8l-byte-parity-evidence.json) records hashes, exact scope and
-retained raw evidence. Next: the five remaining frozen lossless controls and
-bounded production integration, followed by the other required codecs/objectives.
+`verify-vp8l-controls.ps1` accepts the original raster, frozen compression fixture
+directory, two reference archives, model assembly and existing dependency directory.
+Its library argument supplies managed PNG decoding during fixture preparation only;
+it is outside the encoder model and production dependencies. Numerical identities,
+exact scope and raw evidence are in [the evidence](vp8l-byte-parity-evidence.json).
+
+Next: named production-coverage gaps, bounded shared admission, cancellation/work
+limits, and complete public-operation/package qualification before adoption.
+CPU parity and allocation tuning resume after the required exact codec coverage.

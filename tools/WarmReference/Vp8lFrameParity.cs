@@ -52,14 +52,14 @@ internal static class Vp8lFrameParity
         var high=(int)System.Numerics.BitOperations.Log2((uint)(value-1));var extra=high-1;
         var symbol=2*high+((value-1)>>extra&1);codes.Write(writer,offset+symbol);writer.Put((value-1)&((1<<extra)-1),extra);
     }
-    internal static (byte[] Packet,object Details) Encode(Vp8lPrefixResult prefix,int[] map,int[][][] counts,List<Vp8lFrameToken> tokens)
+    internal static (byte[] Packet,object Details) Encode(Vp8lInputParity prefix,int[] map,int[][][] counts,List<Vp8lFrameToken> tokens,int cacheBits)
     {
-        var groupPixels=map.Select(x=>(uint)x<<8).ToArray();var auxiliary=Vp8lAuxiliaryParity.Encode(groupPixels,65,75);
+        var groupPixels=map.Select(x=>(uint)x<<8).ToArray();var auxiliary=counts.Length>1?Vp8lAuxiliaryParity.Encode(groupPixels,65,75):null;
         var trees=counts.Select(group=>group.Select(histogram=>Lengths(histogram,15)).ToArray()).ToArray();
         using var treeHash=IncrementalHash.CreateHash(HashAlgorithmName.SHA256);foreach(var group in trees)foreach(var tree in group)treeHash.AppendData(tree);
         var writer=new Writer();writer.Append(prefix.Bytes,prefix.BitCount);
-        writer.Put(0,1);writer.Put(1,1);writer.Put(10,4);writer.Put(1,1);writer.Put(1,3);
-        var mapStart=writer.Count();writer.Append(auxiliary.Bytes,auxiliary.BitCount);var mapEnd=writer.Count();
+        writer.Put(0,1);writer.Put(cacheBits==0?0:1,1);if(cacheBits!=0)writer.Put(cacheBits,4);writer.Put(counts.Length>1?1:0,1);if(counts.Length>1)writer.Put(1,3);
+        var mapStart=writer.Count();if(auxiliary!=null)writer.Append(auxiliary.Bytes,auxiliary.BitCount);var mapEnd=writer.Count();
         var header=Method("Vp8lBitParity","Tree");foreach(var group in trees)foreach(var tree in group)header.Invoke(null,new object[]{writer.State,tree});
         var dataStart=writer.Count();var codes=trees.Select(group=>group.Select(tree=>new Codes(tree)).ToArray()).ToArray();
         foreach(var token in tokens)
@@ -72,6 +72,6 @@ internal static class Vp8lFrameParity
         var payload=writer.Finish();var packet=new byte[20+payload.Length+(payload.Length&1)];
         "RIFF"u8.CopyTo(packet);BinaryPrimitives.WriteUInt32LittleEndian(packet.AsSpan(4),(uint)(packet.Length-8));"WEBPVP8L"u8.CopyTo(packet.AsSpan(8));
         BinaryPrimitives.WriteUInt32LittleEndian(packet.AsSpan(16),(uint)payload.Length);payload.CopyTo(packet,20);
-        return(packet,new{groups=counts.Length,huffmanTrees=counts.Length*5,treeLengthsSha256=Convert.ToHexStringLower(treeHash.GetHashAndReset()),groupMapBits=auxiliary.BitCount,mapStartBit=mapStart,mapEndBit=mapEnd,firstDataBit=dataStart,endBit=writer.Count(),payloadBytes=payload.Length,packetBytes=packet.Length});
+        return(packet,new{groups=counts.Length,huffmanTrees=counts.Length*5,treeLengthsSha256=Convert.ToHexStringLower(treeHash.GetHashAndReset()),groupMapBits=auxiliary?.BitCount??0,mapStartBit=mapStart,mapEndBit=mapEnd,firstDataBit=dataStart,endBit=writer.Count(),payloadBytes=payload.Length,packetBytes=packet.Length});
     }
 }

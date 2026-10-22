@@ -15,7 +15,7 @@ if($AssemblyPath) {
     foreach($name in 'Probe.dll','AuxiliaryProbe.dll','MainParityProbe.dll'){[void][Reflection.Assembly]::LoadFrom((Join-Path $directory $name))}
     [void][Reflection.Assembly]::LoadFrom($assemblyFile)
 } else {
-    $names='Vp8lPredictorParity','Vp8lCrossColorParity','Vp8lMatchParity','Vp8lLzParity','Vp8lPrefixParity','Vp8lBitParity','Vp8lAuxiliaryParity','Vp8lMainParity','Vp8lSpatialParity','Vp8lFrameParity','Vp8lPacketParity'
+    $names='Vp8lPredictorParity','Vp8lCrossColorParity','Vp8lMatchParity','Vp8lLzParity','Vp8lPrefixParity','Vp8lBitParity','Vp8lAuxiliaryParity','Vp8lMainParity','Vp8lSpatialParity','Vp8lFrameParity','Vp8lPacketParity','Vp8lInitialChoice','Vp8lInputParity','Vp8lMainParsing'
     Add-Type -Path @($names | ForEach-Object { Join-Path $PSScriptRoot "${_}.cs" })
 }
 # Only source pixels enter either complete model invocation.

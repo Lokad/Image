@@ -22,9 +22,9 @@ internal static class Vp8lSpatialParity
         internal required long[] Costs;
         internal long Total,Delta;
     }
-    private sealed class Merger(Func<int[],long> population)
+    private sealed class Merger(Func<int[],long> population,int[] sizes)
     {
-        private readonly int[][] scratch=[new int[1304],new int[256],new int[256],new int[256],new int[40]];
+        private readonly int[][] scratch=sizes.Select(n=>new int[n]).ToArray();
         internal Histogram Initial(int[][] counts)
         {
             var trivial=new int[5];var used=new bool[5];
@@ -153,6 +153,7 @@ internal static class Vp8lSpatialParity
             var map=new int[original.Length];
             for(var tile=0;tile<original.Length;tile++)
             {
+                if(!original[tile].Used.Any(x=>x)){map[tile]=tile==0?0:map[tile-1];continue;}
                 long best=long.MaxValue;
                 for(var group=0;group<groups.Count;group++)
                 {
@@ -165,11 +166,11 @@ internal static class Vp8lSpatialParity
     }
     internal static Result Build(int[][][] counts,Func<int[],long> population)
     {
-        var merger=new Merger(population);var original=counts.Select(merger.Initial).ToArray();var items=original.ToList();
-        var binMerges=merger.MergeBins(items);var afterBins=items.Count;
+        var merger=new Merger(population,counts[0].Select(h=>h.Length).ToArray());var original=counts.Select(merger.Initial).ToArray();var items=original.Where(h=>h.Used.Any(x=>x)).ToList();
+        var binMerges=items.Count>128?merger.MergeBins(items):0;var afterBins=items.Count;
         var sample=merger.Sample(items);var afterSample=items.Count;var greedyMerges=sample.Greedy?merger.Greedy(items):0;
         var map=merger.Remap(original,items);
-        var result=Enumerable.Range(0,items.Count).Select(_=>new[]{new int[1304],new int[256],new int[256],new int[256],new int[40]}).ToArray();
+        var result=Enumerable.Range(0,items.Count).Select(_=>counts[0].Select(h=>new int[h.Length]).ToArray()).ToArray();
         for(var tile=0;tile<map.Length;tile++)for(var bank=0;bank<5;bank++)for(var symbol=0;symbol<counts[tile][bank].Length;symbol++)result[map[tile]][bank][symbol]+=counts[tile][bank][symbol];
         return new(map,result,new{binMerges,afterBins,sampleMerges=sample.Merges,afterSample,greedyMerges,sampleSeed=sample.Seed});
     }
