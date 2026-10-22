@@ -20,15 +20,15 @@ internal static partial class JpegEncoder
         if (format != JpegSampleFormat.Rgb)
             throw new UnsupportedImageException(UnsupportedImageFeature.ComponentLayout,
                 "The reference JPEG profile currently accepts RGB or RGBA input.", ImageFormat.Jpeg);
-        if (options.Sampling != JpegSampling.YCbCr444)
+        if (options.Sampling == JpegSampling.Grayscale)
             throw new UnsupportedImageException(UnsupportedImageFeature.SamplingLayout,
-                "The reference JPEG profile currently supports 4:4:4 sampling.", ImageFormat.Jpeg);
+                "The reference JPEG profile currently supports three-component color sampling.", ImageFormat.Jpeg);
         if (options.RestartInterval != 0)
             throw new UnsupportedImageException(UnsupportedImageFeature.ControlMarker,
                 "The reference JPEG profile currently requires restart markers disabled.", ImageFormat.Jpeg);
     }
 
-    private static void EncodeReference444(ImageBuffer? image, JpegSampleInput source, Stream output,
+    private static void EncodeReference(ImageBuffer? image, JpegSampleInput source, Stream output,
         JpegEncodeOptions options, OperationContext context)
     {
         ValidateReferenceOptions(options, image is null ? source.Format : JpegSampleFormat.Rgb);
@@ -37,8 +37,11 @@ internal static partial class JpegEncoder
         if (width > 65535 || height > 65535)
             throw new ImageLimitException(ImageLimitKind.Dimension, "JPEG dimensions exceed 65535.");
         context.Work(0);
-        var mcus = ((width + 7L) / 8) * ((height + 15L) / 16);
-        var plannedWork = 2 * mcus * ReferenceMcuWork + mcus * 6 * 132 + 4L * JpegReferenceTables.HuffmanWork + 4096;
+        var mcuWidth = options.Sampling == JpegSampling.YCbCr444 ? 8 : 16;
+        var mcus = ((width + mcuWidth - 1L) / mcuWidth) * ((height + 15L) / 16);
+        var mcuWork = options.Sampling == JpegSampling.YCbCr444 ? ReferenceMcuWork : ReferenceSubsampledMcuWork;
+        var blocks = options.Sampling == JpegSampling.YCbCr422 ? 8 : 6;
+        var plannedWork = 2 * mcus * mcuWork + mcus * blocks * 132 + 4L * JpegReferenceTables.HuffmanWork + 4096;
         if (plannedWork > context.RemainingWork)
             throw new ImageLimitException(ImageLimitKind.Work, "Reference JPEG work exceeds the configured limit.");
         long borrowed = 0; var fixedReserved = image is null; var tablesReserved = false;
@@ -55,15 +58,15 @@ internal static partial class JpegEncoder
             var quantization = JpegReferenceTables.Quantization(ReferenceQScale(options.Quality));
             var histograms = new int[4][];
             for (var i = 0; i < 4; i++) histograms[i] = new int[256];
-            ReferencePass(image, source, width, height, options.BackgroundRgb, quantization, histograms, null, null, context);
+            ReferencePass(image, source, width, height, options.BackgroundRgb, options.Sampling, quantization, histograms, null, null, context);
             // Establish the owner of all four surviving table arrays before the
             // generators allocate them. Their graph scratch has a shorter owner.
             context.Reserve(ReferenceTableBytes); tablesReserved = true; context.Work(0);
             var tables = new JpegEncodingTable[4];
             for (var i = 0; i < 4; i++) tables[i] = JpegReferenceTables.Huffman(histograms[i], context);
-            WriteReferenceHeader(output, width, height, quantization, tables, context);
+            WriteReferenceHeader(output, width, height, options.Sampling, quantization, tables, context);
             var writer = new JpegEntropyWriter(output, context);
-            ReferencePass(image, source, width, height, options.BackgroundRgb, quantization, histograms, tables, writer, context);
+            ReferencePass(image, source, width, height, options.BackgroundRgb, options.Sampling, quantization, histograms, tables, writer, context);
             writer.Align(); context.Work(2); output.WriteByte(255); output.WriteByte(217);
         }
         finally
@@ -74,9 +77,15 @@ internal static partial class JpegEncoder
         }
     }
 
-    private static void ReferencePass(ImageBuffer? image, JpegSampleInput source, int width, int height, uint? background,
+    private static void ReferencePass(ImageBuffer? image, JpegSampleInput source, int width, int height, uint? background, JpegSampling sampling,
         ushort[] quantization, int[][] histograms, JpegEncodingTable[]? tables, JpegEntropyWriter? writer, OperationContext context)
     {
+        if (sampling != JpegSampling.YCbCr444)
+        {
+            ReferenceSubsampledPass(image, source, width, height, background, sampling,
+                quantization, histograms, tables, writer, context);
+            return;
+        }
         Span<byte> mcu = stackalloc byte[384]; Span<byte> row = stackalloc byte[24];
         Span<short> transformed = stackalloc short[64], coefficients = stackalloc short[64];
         Span<int> previous = stackalloc int[3]; previous.Clear();
@@ -103,20 +112,26 @@ internal static partial class JpegEncoder
             {
                 JpegReferenceTransform.Forward(mcu.Slice(component * 128 + vertical * 64, 64), transformed);
                 JpegReferenceTransform.Quantize(transformed, quantization, coefficients);
-                var family = component == 0 ? 0 : 1;
-                var difference = coefficients[0] - previous[component]; previous[component] = coefficients[0];
-                ReferenceCoefficient(writer, tables, histograms, family, 0, difference);
-                var run = 0;
-                for (var k = 1; k < 64; k++)
-                {
-                    var value = coefficients[JpegTransform.Zigzag[k]];
-                    if (value == 0) { run++; continue; }
-                    while (run >= 16) { ReferenceSymbol(writer, tables, histograms, family + 2, 240); run -= 16; }
-                    ReferenceCoefficient(writer, tables, histograms, family + 2, run, value); run = 0;
-                }
-                if (run != 0) ReferenceSymbol(writer, tables, histograms, family + 2, 0);
+                ReferenceBlock(coefficients, component, previous, histograms, tables, writer);
             }
         }
+    }
+
+    private static void ReferenceBlock(ReadOnlySpan<short> coefficients, int component, Span<int> previous,
+        int[][] histograms, JpegEncodingTable[]? tables, JpegEntropyWriter? writer)
+    {
+        var family = component == 0 ? 0 : 1;
+        var difference = coefficients[0] - previous[component]; previous[component] = coefficients[0];
+        ReferenceCoefficient(writer, tables, histograms, family, 0, difference);
+        var run = 0;
+        for (var k = 1; k < 64; k++)
+        {
+            var value = coefficients[JpegTransform.Zigzag[k]];
+            if (value == 0) { run++; continue; }
+            while (run >= 16) { ReferenceSymbol(writer, tables, histograms, family + 2, 240); run -= 16; }
+            ReferenceCoefficient(writer, tables, histograms, family + 2, run, value); run = 0;
+        }
+        if (run != 0) ReferenceSymbol(writer, tables, histograms, family + 2, 0);
     }
 
     private static void ReferenceCoefficient(JpegEntropyWriter? writer, JpegEncodingTable[]? tables,
@@ -136,7 +151,7 @@ internal static partial class JpegEncoder
         writer.Write(coding.Codes[symbol], length);
     }
 
-    private static void WriteReferenceHeader(Stream output, int width, int height, ushort[] quantization,
+    private static void WriteReferenceHeader(Stream output, int width, int height, JpegSampling sampling, ushort[] quantization,
         JpegEncodingTable[] tables, OperationContext context)
     {
         context.Work(2); output.WriteByte(255); output.WriteByte(216);
@@ -153,7 +168,9 @@ internal static partial class JpegEncoder
         }
         ReferenceSegment(output, 196, huffman[..at], context);
         Span<byte> frame = stackalloc byte[] { 8, (byte)(height >> 8), (byte)height, (byte)(width >> 8), (byte)width,
-            3, 1, 18, 0, 2, 18, 0, 3, 18, 0 };
+            3, 1, (byte)(sampling == JpegSampling.YCbCr444 ? 18 : 34), 0,
+            2, (byte)(sampling == JpegSampling.YCbCr420 ? 17 : 18), 0,
+            3, (byte)(sampling == JpegSampling.YCbCr420 ? 17 : 18), 0 };
         ReferenceSegment(output, 192, frame, context);
         ReferenceSegment(output, 218, [3, 1, 0, 2, 17, 3, 17, 0, 63, 0], context);
     }

@@ -10,7 +10,7 @@ public enum JpegQuantizationPolicy
     Original,
     /// <summary>Add a quality-scaled precision floor for color JPEGs; grayscale keeps Original.</summary>
     CompactColor,
-    /// <summary>Managed reference-compatible baseline 4:4:4, without restart markers.
+    /// <summary>Managed reference-compatible baseline 4:4:4/4:2:2/4:2:0, without restart markers.
     /// Quality maps to qscale 1 + (100 - quality) * 30 / 99; default 85 maps to 5.</summary>
     Reference
 }

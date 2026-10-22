@@ -5,9 +5,9 @@ codecs and basic image editing. This document distinguishes implemented behavior
 from required future functionality.
 
 The development JPEG `JpegQuantizationPolicy.Reference` profile selects the managed
-reference-compatible baseline 4:4:4 pipeline. It accepts RGBA8/16 images and caller
-RGB8 samples, with synchronous/asynchronous streams; restart markers and other
-sampling/layouts currently return typed unsupported-feature failures. Quality maps
+reference-compatible baseline 4:4:4/4:2:2/4:2:0 pipeline. It accepts RGBA8/16 images
+and caller RGB8 samples, with synchronous/asynchronous streams; grayscale and
+restart markers currently return typed unsupported-feature failures. Quality maps
 to qscale `1 + (100 - Quality) * 30 / 99`, so default85 maps to5. `BaselineOnly`
 does not change this always-baseline profile. Existing Original/CompactColor remain
 unchanged during adoption. Exact qualification is scoped in [codec parity](docs/codec-parity.md).

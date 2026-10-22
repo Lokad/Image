@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "project": "Lokad.Image",
-  "qualification": "E4",
-  "status": "Production opt-in Reference JPEG444 reproduces two complete frozen native controls outside one approved attribution segment; remaining profiles/codecs and default adoption OPEN",
+  "qualification": "E6",
+  "status": "Production opt-in Reference JPEG444/422/420 reproduces six frozen native controls plus six bounded functional edge controls outside one approved attribution segment; remaining JPEG modes/codecs and default adoption OPEN",
   "productionChanged": true,
-  "productionCoreSha256": "5f0dab9bd4eed0f575999c8919669abe54fcb8b83560d174dc160605fce8940a",
+  "productionCoreSha256": "db10e12cf070cfc5de56df0f89fd12c9a858ddfca3a507f66d3472b0f8221606",
   "oracle": {
     "ffmpegRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
     "ffmpegVersion": "n8.1",
@@ -126,7 +126,7 @@
     "sha256": "17a146f3a307fec096b8189161fc1a1e4e1d947327dc895c9b4e1e8d1d9b5d93",
     "mirrored": true
   },
-  "next": "E6: integrate verified422/420 chroma and MCU logic with bounded admitted storage and public boundaries, including functional qualification of distinct even-width conversion and small-dimension paths. Preserve exact444 controls. Then approved grayscale/restart profiles, default adoption, remaining encoders/decoders. CPU tuning deferred.",
+  "next": "E7: pin the existing SIMD libjpeg-turbo single-component grayscale control and find the first deterministic transform/table/serialization divergence; reproduce it independently. Then existing restart/options profiles, deliberate default adoption, PNG/WebP encoders and exact decoders. No heuristic quality/size search or CPU tuning.",
   "forwardStage": {
     "qualification": "E2",
     "nativeDispatch": "ff_fdct_sse2",
@@ -196,8 +196,8 @@
     "nativeEncodes": 0,
     "timingRuns": 0
   },
-  "priorProductionCoreSha256": "2d82a81dc60cd5e30c0644c2f62e4206da74ac6322e6caab6df02370705909e3",
-  "controlsProductionPacketIdentity": "Original policy at C193; unchanged in E4, separate from the new Reference packets in independentEncoder and productionAdoption",
+  "priorProductionCoreSha256": "5f0dab9bd4eed0f575999c8919669abe54fcb8b83560d174dc160605fce8940a",
+  "controlsProductionPacketIdentity": "Original policy at C193; implementation/packets unchanged by E4/E6. Reference production qualification is separate in productionAdoption and productionSubsampling.",
   "prototypeProductionBuilds": 0,
   "prototypeRepeatedPackageProofs": 0,
   "productionAdoption": {
@@ -293,11 +293,12 @@
       "sha256": "d7fb8587c7fff6f794c94a0274f9294aaf0ee70909018fbd018fd8a39ec59ee3",
       "members": 23,
       "mirrored": true
-    }
+    },
+    "productionCoreSha256": "5f0dab9bd4eed0f575999c8919669abe54fcb8b83560d174dc160605fce8940a"
   },
   "subsampling": {
     "qualification": "E5",
-    "status": "Qualified independent source-only prototype on Windows/Linux; production integration pending",
+    "status": "Independent E5 prototype qualified on Windows/Linux; adopted into production in E6",
     "prototypeOnly": true,
     "productionChanged": false,
     "productionBuilds": 0,
@@ -408,7 +409,195 @@
       "sha256": "5a8a54bdb7067cf55e0b0e9387309daa49e91bb7003d1ffb096cca174bdb8304",
       "members": 49,
       "mirrored": true
-    }
+    },
+    "adoptedIn": "E6"
   },
-  "latestPrototypeQualification": "E5"
+  "latestPrototypeQualification": "E5",
+  "originalPacketProducerCoreSha256": "2d82a81dc60cd5e30c0644c2f62e4206da74ac6322e6caab6df02370705909e3",
+  "productionSubsampling": {
+    "qualification": "E6",
+    "productionCoreSha256": "db10e12cf070cfc5de56df0f89fd12c9a858ddfca3a507f66d3472b0f8221606",
+    "profile": "JpegQuantizationPolicy.Reference",
+    "qualityMappingUnchangedFromE4": true,
+    "sampling": [
+      "444",
+      "422",
+      "420"
+    ],
+    "baseline": true,
+    "restartInterval": 0,
+    "defaultAdoptionComplete": false,
+    "frozenMainControls": 6,
+    "boundedFunctionalControls": 6,
+    "completePublicBoundaryChecksPerPlatform": 42,
+    "exactOnWindows": true,
+    "exactOnLinux": true,
+    "mainPacketIdentities": "444 controls.independentEncoder; 422/420 subsampling.controls; only the single approved COM/length replacement differs",
+    "generalizedChroma": {
+      "exactSamplesPerPlatform": 932616,
+      "mainControls": 4,
+      "boundedFunctionalControls": 6,
+      "sourceOnly": true,
+      "generatedAreaWeights": "Q16 phase, at most three source cells, ordered rounding and folded edges; even-width RGB pairs precede matrix rounding",
+      "retainedRowOrFilterPlanBytes": 0
+    },
+    "boundedFunctionalReasons": "Distinct native even-width input prefilter, identity axes and tiny one/two/three-cell filters, partial MCU edges. Original asymmetric-v1 inputs only; no new timed case, content set or quality grid.",
+    "functionalControls": [
+      {
+        "case": "Paired420",
+        "width": 18,
+        "height": 19,
+        "depth": 8,
+        "sampling": "420",
+        "reason": "Even-width RGB-pair input, odd-height area filter and partial MCU",
+        "sourceSha256": "bb425e04fc82c4bf6df02bbdc9950e61cde69259a7de8e169b9bf2df1aab46dc",
+        "nativePacketBytes": 558,
+        "nativePacketSha256": "3d13395d3e7bfbb80e9c5f073b6676e9dab1f5b9d28c0527b1b0c6a200ec4a85",
+        "stageBytes": 522,
+        "stageSha256": "6fe1ee5dab08ffa22dbc86e1b62dfe28a199bd7da943692cd7bc6d72a5e1e124",
+        "ownAttributionBytes": 556,
+        "ownAttributionSha256": "ef83424661e0e90b54cb5d166af4dadfa851a57793f25275abc97a2ccbdaddb8"
+      },
+      {
+        "case": "Paired422",
+        "width": 18,
+        "height": 19,
+        "depth": 8,
+        "sampling": "422",
+        "reason": "Same paired source without vertical filtering",
+        "sourceSha256": "bb425e04fc82c4bf6df02bbdc9950e61cde69259a7de8e169b9bf2df1aab46dc",
+        "nativePacketBytes": 639,
+        "nativePacketSha256": "10c039ea87fd3263dda5e789d33f51f43226e8dad027bde033a67e53716ce7d9",
+        "stageBytes": 684,
+        "stageSha256": "521c9500300144b567c8a195376163f9084251ea9d45e30bacf0d0755841e637",
+        "ownAttributionBytes": 637,
+        "ownAttributionSha256": "41ae5d88e2c83d34fd6df06a11d0498908abd5d2cadbb5daea82c3e25f25305d"
+      },
+      {
+        "case": "Unit420",
+        "width": 1,
+        "height": 1,
+        "depth": 8,
+        "sampling": "420",
+        "reason": "Unscaled chroma axes and degenerate edge replication",
+        "sourceSha256": "d1702632ae14f252a701dd314241b757eb1ef76f80a0298190be8bb130cbbe55",
+        "nativePacketBytes": 205,
+        "nativePacketSha256": "16bf4e2d01b750b5f7413ff4264a6cb1abb3054e47f78717550761224887493c",
+        "stageBytes": 3,
+        "stageSha256": "aa8e126a76d3a270d2c29697651dbcb0e3a25458e505ec18b0e040f8b915bbba",
+        "ownAttributionBytes": 203,
+        "ownAttributionSha256": "0463f3b09d4a3ce44ee2f4be32d421657bbf4607476370d0cac90cc168fa2749"
+      },
+      {
+        "case": "Two420",
+        "width": 2,
+        "height": 2,
+        "depth": 8,
+        "sampling": "420",
+        "reason": "Paired input and one-cell tiny vertical filter",
+        "sourceSha256": "f892d406b3f44430aa29892a0c16055c5ad42b1ca06ab7d092512c77e0dc3aed",
+        "nativePacketBytes": 227,
+        "nativePacketSha256": "43afac5aa2ceb3f611409fdb670d66abeae87975d367f03b0f553b9babd319eb",
+        "stageBytes": 6,
+        "stageSha256": "960c42e4b16cd01fa2e5401746c1c95b27e33c12b6487ebeb448bdaf9530009f",
+        "ownAttributionBytes": 225,
+        "ownAttributionSha256": "f64cc5a933f842ca144709b336dcd358a3ad6d2e94ac4091bb67b55404d9ca34"
+      },
+      {
+        "case": "Three420",
+        "width": 3,
+        "height": 3,
+        "depth": 8,
+        "sampling": "420",
+        "reason": "Odd-width one-cell tiny horizontal and vertical filters",
+        "sourceSha256": "38cfa8ec37dd9d8a3019fb905c99fb2d6b7339076611e0285ab765045d386f6b",
+        "nativePacketBytes": 265,
+        "nativePacketSha256": "1c17cdf46f94aeef930bf6cd1b8e5c2dd37613d433400d65e924f0dd802a7077",
+        "stageBytes": 17,
+        "stageSha256": "864a9cb700786957d6fe0c081425a71feaa22a37ff7adcc2b19e6af169f00d4c",
+        "ownAttributionBytes": 263,
+        "ownAttributionSha256": "c45bd5b142ef0c9b73b29a6eba9d312ffb988737f5ca4248fc73dff291a1d712"
+      },
+      {
+        "case": "Four420",
+        "width": 4,
+        "height": 4,
+        "depth": 8,
+        "sampling": "420",
+        "reason": "Paired input and two-cell vertical filter",
+        "sourceSha256": "d50ece5f42692215f80761df9533b3fc7fe27a061e5e3d20a95d95772e8a3631",
+        "nativePacketBytes": 284,
+        "nativePacketSha256": "877ffeb030f9210e8cd6e9a90311a18ff13b733dec7f6cc71b6f0174a0e5c5bb",
+        "stageBytes": 24,
+        "stageSha256": "7e19f6da1a34cd0a43c1dfc84ac8aaa1bf2f88e78606744ed003911f084670f6",
+        "ownAttributionBytes": 282,
+        "ownAttributionSha256": "550236ed436bd6e35b1e7b090f5dc381682272b06828f3c8ca3a6dbaaf6ac86d"
+      }
+    ],
+    "memory": {
+      "maximumMcuBytes": 512,
+      "fixedReservationBytes": 8192,
+      "survivingTableReservationBytes": 16384,
+      "newHeapFrameCopies": 0,
+      "newRetainedPlans": 0,
+      "sharedRootForwarded": true,
+      "terminalRefusal": true,
+      "actualAsyncUsersRetainCharges": true,
+      "maxSubsampledMcuWorkPerPass": 262144
+    },
+    "ownershipChecks": "All three sampling layouts cover image8/16 and padded caller RGB, sync/forward-only/async delivery, surviving output/input ownership, aggregate root, four refusal points, cancellation/failure cleanup, pending actual async users and subsequent successful operations.",
+    "testsPerPlatform": {
+      "internal": 2149,
+      "publicApi": 2030,
+      "liveFfmpeg": 936,
+      "total": 5115
+    },
+    "scalarChecksPerPlatform": {
+      "internal": 1,
+      "publicApi": 47,
+      "total": 48
+    },
+    "package": {
+      "version": "0.2.0",
+      "bytes": 403032,
+      "sha256": "4e63b6e69087b70fe273ca897fc08c52e851f56eef40f1dddc68d9e6687d1167",
+      "sameActualPackageBothPlatforms": true,
+      "allSixFrozenPacketsExact": true,
+      "usageExamplesPerPlatform": 3
+    },
+    "builds": {
+      "production": 1,
+      "publicTests": 1,
+      "internalTests": 0,
+      "differentialTests": 0,
+      "productionRebuildsAfterFreeze": 0
+    },
+    "qualificationCorrections": "Production/public builds and all codec tests passed first time. Before Windows execution an old differential test binary differed from Linux; the existing qualified Linux DLL/PDB was copied, without rebuild. A supplemental PowerShell stage comparison initially called an unavailable AsSpan extension; comparison moved into the C# bridge, numerical logic/core unchanged. Failure log retained.",
+    "cpuAndAllocations": "Unmeasured. No scored timing or performance claim. E4 already marked JPEG encode observations uncertain after its dispatcher change; E6 changes Reference paths only. Original/CompactColor implementation and unrelated decode/edit/inspect paths remain unchanged.",
+    "sourceSha256": {
+      "src/Lokad.Image/Internal/JpegEncoder.Samples.cs": "0cf8933b9544f445f11a42ed3e24954605c3d388d0505b4008f77fe890335af3",
+      "src/Lokad.Image/Internal/JpegEncoder.cs": "c77590268e6565c6f8a4077a673a9737790fef16f74de1e2ced7e1dee4464b77",
+      "src/Lokad.Image/Internal/JpegReferenceColor.cs": "e4537683842aabfcb14bc1402b2d7305fc9472e4a54e01a0bdeb6cc6234de58a",
+      "src/Lokad.Image/JpegOptions.cs": "5d7988d5ba0a657e8e5714cfd1af52c72980e3218777aae1beac379373003b01",
+      "tests/Lokad.Image.PublicApi.Tests/JpegReferenceTests.cs": "b99fe55bdd2f3f840e6ad07f691778a2f94c592c4a83c3a1093c235171c8f881",
+      "tools/PackageSmokeTest/verify-package.ps1": "ce6ac8b9c56dd05970f2b00c85fab4f186a3fb8f9795c1f968923c4b654870a2",
+      "src/Lokad.Image/Internal/JpegEncoder.Reference.cs": "3153ae1fcff73845e21725f26658b120f9f825aac2a4e71af4c1d43ce22a2339",
+      "src/Lokad.Image/Internal/JpegEncoder.ReferenceSubsampled.cs": "1a13b06cd7ee2ede67d80186e4877a77d4ed69416221e5d6df5698a92755b8e4",
+      "src/Lokad.Image/Internal/JpegReferenceArea.cs": "c27a14be8bb7fa34e25987628576d67ee971fa155009f600ab0ac2d580ae6f1f"
+    },
+    "rawArchive": {
+      "file": "e6-qualified-linux.tar.gz",
+      "bytes": 2894416,
+      "sha256": "e60c2cde2e77ea7357b6e694018191750ffdbbf2b3180b7e5cf4eca968f14e26",
+      "members": 85,
+      "mirrored": true
+    },
+    "windowsRawArchive": {
+      "file": "e6-qualified-windows.tar.gz",
+      "bytes": 174436,
+      "sha256": "badcb89b642d82c268fa7180fcc33a7cf2fb3a95cf6156426f99d4b884a8e59c",
+      "members": 29,
+      "mirrored": true
+    }
+  }
 }

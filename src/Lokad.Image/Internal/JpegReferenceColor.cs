@@ -28,4 +28,25 @@ internal static class JpegReferenceColor
         cb = FullRange((Ur * r + Ug * g + Ub * b + (128 << 15) + 256) >> 9, 224);
         cr = FullRange((Vr * r + Vg * g + Vb * b + (128 << 15) + 256) >> 9, 224);
     }
+
+    internal static byte Luma(int r, int g, int b)
+        => FullRange((Yr * r + Yg * g + Yb * b + (16 << 15) + 256) >> 9, 219);
+
+    // An even-width source combines RGB pairs before matrix rounding. Odd
+    // widths instead filter full-resolution Q6 matrix samples horizontally.
+    internal static void LimitedChroma(int r, int g, int b, bool pair, out int cb, out int cr)
+    {
+        var shift = pair ? 10 : 9;
+        var offset = pair ? (128 << 16) + 512 : (128 << 15) + 256;
+        cb = (Ur * r + Ug * g + Ub * b + offset) >> shift;
+        cr = (Vr * r + Vg * g + Vb * b + offset) >> shift;
+    }
+
+    internal static int FullChromaQ7(int limitedQ7)
+    {
+        const int range = 224;
+        var scale = (255 * 16384 + range - 1) / range;
+        var offset = (255 << 21) - ((16 + range) << 7) * scale + 8192;
+        return Math.Min(32767, (limitedQ7 * scale + offset) >> 14);
+    }
 }

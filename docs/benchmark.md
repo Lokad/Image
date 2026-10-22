@@ -6,9 +6,9 @@ encoder-attribution metadata may differ; see [scope and current progress](codec-
 Current size/quality passes below are historical transition evidence, **not byte-exact
 qualification**. Active quality/calibration tooling retires after exact replacements
 cover its required paths. The explicit managed JPEG `Reference` profile now reproduces
-both frozen complete444 packets with its own tables, apart from approved attribution.
-The source-only422/420 prototype also matches its four existing packets; production
-adoption remains open.
+all six frozen complete444/422/420 packets with its own tables, apart from approved
+attribution. Six tiny/paired functional controls cover the additional conversion
+and filter-edge branches; no performance claim follows from packet equality.
 Original/CompactColor packet behavior is unchanged. Reference CPU/allocations are
 unmeasured; existing JPEG encoding timings predate its added dispatch and require
 affected confirmation when CPU qualification resumes. Other unchanged paths retain evidence.

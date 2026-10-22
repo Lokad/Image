@@ -12,11 +12,11 @@ with its length updated. Every other byte must match. JFIF, ICC, EXIF, orientati
 color information, quantization, entropy and extra comments are not exempt.
 Other codecs need their own explicit attribution inventory.
 
-The managed JPEG `JpegQuantizationPolicy.Reference` profile reproduces both frozen **513×259
-RGBA8/16** controls completely. Encoding receives source samples and options;
+The managed JPEG `JpegQuantizationPolicy.Reference` profile reproduces the frozen
+**513×259 RGBA8/16** controls at **4:4:4, 4:2:2 and 4:2:0** completely. Encoding receives source samples and options;
 it reads no oracle packet or table. It generates color
 samples, integer transforms, quantization, optimal Huffman tables, headers and
-the complete scan, including all **195 padding blocks per control**.
+the complete scan, including all **195 vertical padding blocks per 4:4:4 control**.
 
 The pinned oracle is FFmpeg n8.1, revision
 `9047fa1b084f76b1b4d065af2d743df1b40dfb56`: single-thread MJPEG, qscale 5,
@@ -35,18 +35,20 @@ implementation table or corpus is incorporated.
 [Numeric evidence](../benchmarks/jpeg-byte-parity-evidence.json) identifies the
 sources, binaries, earlier exact stages and mirrored raw results.
 
-The independent prototype also reproduces the four existing **4:2:2/4:2:0,
-RGBA8/16** controls on Windows/Linux: **71,168/71,210 B** and **52,093/52,117 B**
+Production also reproduces the four existing **4:2:2/4:2:0, RGBA8/16** controls
+on Windows/Linux: **71,168/71,210 B** and **52,093/52,117 B**
 with native attribution, two bytes less with Lokad.Image attribution. All **931,360**
-submitted color samples per OS match exactly. Production integration of these
-layouts remains open; these are the same two procedural inputs, not new content.
+submitted color samples per OS match exactly. Six small functional controls also
+qualify even-width RGB pairing, tiny one/two/three-cell filters and partial MCUs.
+These reuse the original procedural recipe and do not broaden content claims.
 
-The production encoder uses a 384-byte MCU buffer in two passes, with no
-full-frame YUV or coefficient/event copy. RGBA8/16 images and caller RGB8 spans
+The production encoder uses at most a 512-byte MCU buffer in two passes, with no
+full-frame YUV or coefficient/event copy. Chroma weights are generated on the
+stack; no retained row or filter plan is needed. RGBA8/16 images and caller RGB8 spans
 with stride support sync, forward-only and async delivery. Quality maps to native
 qscale `1 + (100 - Quality) * 30 / 99`; default85 maps to the frozen qscale5
 reference. Small dimensions and quality endpoints have functional checks; exact
-packet claims remain limited to the two controls above. Other sampling and restart
+packet claims remain limited to the declared controls above. Grayscale and restart
 markers currently return structured unsupported-feature failures for this profile.
 
 Shared admission reserves fixed/table capacity and coarse table-building peaks

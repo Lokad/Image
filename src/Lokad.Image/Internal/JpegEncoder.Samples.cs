@@ -11,7 +11,7 @@ internal static partial class JpegEncoder
     internal static void EncodeSamples(JpegSampleInput source, Stream output, JpegEncodeOptions options, OperationContext context)
     {
         if (options.QuantizationPolicy == JpegQuantizationPolicy.Reference)
-        { EncodeReference444(null, source, output, options, context); return; }
+        { EncodeReference(null, source, output, options, context); return; }
         var sampling = source.Format == JpegSampleFormat.Grayscale ? JpegSampling.Grayscale : options.Sampling;
         var components = sampling == JpegSampling.Grayscale ? 1 : 3;
         var h = sampling is JpegSampling.YCbCr420 or JpegSampling.YCbCr422 ? 2 : 1;

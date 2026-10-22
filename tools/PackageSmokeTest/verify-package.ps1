@@ -90,6 +90,7 @@ try {
     @'
 using Lokad.Image;
 foreach (var referenceDepth in new[] { 8, 16 })
+foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YCbCr422, JpegSampling.YCbCr420 })
 {
     using var referenceImage = Lokad.Image.Tooling.OriginalPixels.Buffer(513, 259, referenceDepth);
     if (referenceDepth == 8) { referenceImage.GetRow8(0)[3] = 0; referenceImage.GetRow8(0)[513 * 4 - 1] = 0; }
@@ -98,12 +99,19 @@ foreach (var referenceDepth in new[] { 8, 16 })
     using var referencePacket = new MemoryStream();
     await ImageCodec.EncodeJpegAsync(referenceImage, referencePacket, new JpegEncodeOptions
     {
-        QuantizationPolicy = JpegQuantizationPolicy.Reference, Sampling = JpegSampling.YCbCr444,
+        QuantizationPolicy = JpegQuantizationPolicy.Reference, Sampling = referenceSampling,
         BackgroundRgb = 0x204060, Limits = ImageLimits.Default with { MemoryBudget = referenceRoot }
     });
-    var expectedReferenceHash = referenceDepth == 8
-        ? "21389750d4936f4c45f8252020843576916cd5689913de2396ee4113df379ecd"
-        : "f69ce841c602373b71afac9ce403d2d634fe84630cca21cd585c370169cc2a07";
+    var expectedReferenceHash = (referenceSampling, referenceDepth) switch
+    {
+        (JpegSampling.YCbCr444, 8) => "21389750d4936f4c45f8252020843576916cd5689913de2396ee4113df379ecd",
+        (JpegSampling.YCbCr444, 16) => "f69ce841c602373b71afac9ce403d2d634fe84630cca21cd585c370169cc2a07",
+        (JpegSampling.YCbCr422, 8) => "a1d3d66671a19606075b7604173922d7677236928381a14355bc6fb640ebd3a4",
+        (JpegSampling.YCbCr422, 16) => "afe4c4f147555ca198d3c82858c481eb0901dab08cd3ccf7c287915fba00d030",
+        (JpegSampling.YCbCr420, 8) => "83e9e80a87c1928c8e23e2929b15348d0e8e8ce5568247420f6e366abeb830e3",
+        (JpegSampling.YCbCr420, 16) => "20461d0d4c85dd2d07e1068e2f9d7a856805c637f1d9576201b35456eeee71ed",
+        _ => throw new Exception("Unknown reference control.")
+    };
     if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(referencePacket.ToArray())).ToLowerInvariant()
         != expectedReferenceHash || referenceRoot.Bytes != 0 || referenceRoot.IsDisposed)
         throw new Exception("Packaged reference JPEG bytes or shared ownership differ.");

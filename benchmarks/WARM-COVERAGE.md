@@ -6,10 +6,11 @@ contains60 independent passes,147 gaps,one confidence-open case,16 short cost
 screens and15 superseded encoder rows. Full warm CPU parity and replacement
 readiness remain open; no new shapes, settings or quality grid is added.
 
-E4 adds an explicit managed JPEG Reference profile: both original444 controls are
+E4/E6 add an explicit managed JPEG Reference profile: all six original444/422/420 controls are
 byte exact (with the single approved attribution change) through image/caller,
 seekable/forward-only and async boundaries. It uses bounded MCU storage and the
-shared root. Its CPU/allocations are unmeasured; no performance pass is inferred.
+shared root. Six small functional controls cover paired RGB input and tiny filters;
+these add no timed case. Its CPU/allocations are unmeasured; no performance pass is inferred.
 Existing JPEG encoding observations predate the added dispatcher and require
 affected confirmation when CPU qualification resumes. Other unchanged paths retain
 valid evidence; the numeric counts below describe their recorded producers.

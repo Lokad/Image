@@ -13,11 +13,19 @@ public sealed class JpegReferenceTests
     };
 
     [Theory]
-    [InlineData(8, "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", 133039,
+    [InlineData(JpegSampling.YCbCr444, 8, "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", 133039,
         "21389750d4936f4c45f8252020843576916cd5689913de2396ee4113df379ecd")]
-    [InlineData(16, "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9", 133041,
+    [InlineData(JpegSampling.YCbCr444, 16, "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9", 133041,
         "f69ce841c602373b71afac9ce403d2d634fe84630cca21cd585c370169cc2a07")]
-    public async Task FrozenNativePacketsMatchAcrossOwnedAndCallerBoundaries(int depth, string sourceHash, int length, string packetHash)
+    [InlineData(JpegSampling.YCbCr422, 8, "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", 71166,
+        "a1d3d66671a19606075b7604173922d7677236928381a14355bc6fb640ebd3a4")]
+    [InlineData(JpegSampling.YCbCr422, 16, "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9", 71208,
+        "afe4c4f147555ca198d3c82858c481eb0901dab08cd3ccf7c287915fba00d030")]
+    [InlineData(JpegSampling.YCbCr420, 8, "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", 52091,
+        "83e9e80a87c1928c8e23e2929b15348d0e8e8ce5568247420f6e366abeb830e3")]
+    [InlineData(JpegSampling.YCbCr420, 16, "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9", 52115,
+        "20461d0d4c85dd2d07e1068e2f9d7a856805c637f1d9576201b35456eeee71ed")]
+    public async Task FrozenNativePacketsMatchAcrossOwnedAndCallerBoundaries(JpegSampling sampling, int depth, string sourceHash, int length, string packetHash)
     {
         using var root = new TestMemoryBudget(4 * 1024 * 1024);
         var limits = ImageLimits.Default with { MemoryBudget = root };
@@ -30,7 +38,7 @@ public sealed class JpegReferenceTests
             if (depth == 8) original.AsSpan(y * 513 * 4, 513 * 4).CopyTo(image.GetRow8(y));
             else for (var x = 0; x < 513 * 4; x++)
                 image.GetRow16(y)[x] = BinaryPrimitives.ReadUInt16LittleEndian(original.AsSpan((y * 513 * 4 + x) * 2));
-        var options = Options with { Limits = limits };
+        var options = Options with { Limits = limits, Sampling = sampling };
         using var first = new MemoryStream(); ImageCodec.EncodeJpeg(image, first, options);
         AssertPacket(first.ToArray(), length, packetHash); Assert.Equal(original.Length, root.Bytes);
         using var forward = new ForwardOutput(); ImageCodec.EncodeJpeg(image, forward, options);
@@ -61,25 +69,44 @@ public sealed class JpegReferenceTests
     }
 
     [Theory]
-    [InlineData(1)] [InlineData(85)] [InlineData(100)]
-    public void SmallImagesAndQualityEndpointsRemainValid(int quality)
+    [InlineData(JpegSampling.YCbCr444, 1)]
+    [InlineData(JpegSampling.YCbCr444, 85)]
+    [InlineData(JpegSampling.YCbCr444, 100)]
+    [InlineData(JpegSampling.YCbCr422, 1)]
+    [InlineData(JpegSampling.YCbCr422, 85)]
+    [InlineData(JpegSampling.YCbCr422, 100)]
+    [InlineData(JpegSampling.YCbCr420, 1)]
+    [InlineData(JpegSampling.YCbCr420, 85)]
+    [InlineData(JpegSampling.YCbCr420, 100)]
+    public void SmallImagesAndQualityEndpointsRemainValid(JpegSampling sampling, int quality)
     {
         using var image = OriginalPixels.Buffer(1, 1, 16, opaque: true);
         using var output = new MemoryStream();
-        ImageCodec.EncodeJpeg(image, output, Options with { Quality = quality });
+        ImageCodec.EncodeJpeg(image, output, Options with { Quality = quality, Sampling = sampling });
         using var decoded = ImageCodec.Decode(output.ToArray());
         Assert.Equal((1, 1, 8), (decoded.Width, decoded.Height, decoded.BitDepth));
         Assert.Equal((byte)255, decoded.GetRow8(0)[3]);
     }
 
     [Theory]
-    [InlineData(1)] [InlineData(2)] [InlineData(3)] [InlineData(4)]
-    public void RefusalIsTerminalAndReleasesPriorReservations(long atGrowth)
+    [InlineData(JpegSampling.YCbCr444, 1)]
+    [InlineData(JpegSampling.YCbCr444, 2)]
+    [InlineData(JpegSampling.YCbCr444, 3)]
+    [InlineData(JpegSampling.YCbCr444, 4)]
+    [InlineData(JpegSampling.YCbCr422, 1)]
+    [InlineData(JpegSampling.YCbCr422, 2)]
+    [InlineData(JpegSampling.YCbCr422, 3)]
+    [InlineData(JpegSampling.YCbCr422, 4)]
+    [InlineData(JpegSampling.YCbCr420, 1)]
+    [InlineData(JpegSampling.YCbCr420, 2)]
+    [InlineData(JpegSampling.YCbCr420, 3)]
+    [InlineData(JpegSampling.YCbCr420, 4)]
+    public void RefusalIsTerminalAndReleasesPriorReservations(JpegSampling sampling, long atGrowth)
     {
         using var image = OriginalPixels.Buffer(17, 11, 8);
         var before = OriginalPixels.Bytes(image);
         using var root = new TestMemoryBudget(1024 * 1024) { RefuseAtGrowth = atGrowth };
-        var options = Options with { Limits = ImageLimits.Default with { MemoryBudget = root } };
+        var options = Options with { Sampling = sampling, Limits = ImageLimits.Default with { MemoryBudget = root } };
         using var output = new MemoryStream();
         var error = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(image, output, options));
         Assert.Equal(ImageLimitScope.SharedBudget, error.Scope); Assert.Equal(1, root.Refusals);
@@ -88,12 +115,15 @@ public sealed class JpegReferenceTests
         Assert.True(output.Length > 0); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 
-    [Fact]
-    public void WorkCancellationAndFailedWritesCleanUpWithoutDisposingTheCaller()
+    [Theory]
+    [InlineData(JpegSampling.YCbCr444)]
+    [InlineData(JpegSampling.YCbCr422)]
+    [InlineData(JpegSampling.YCbCr420)]
+    public void WorkCancellationAndFailedWritesCleanUpWithoutDisposingTheCaller(JpegSampling sampling)
     {
         using var image = OriginalPixels.Buffer(17, 11, 8);
         using var root = new TestMemoryBudget(1024 * 1024);
-        var options = Options with { Limits = ImageLimits.Default with { MemoryBudget = root } };
+        var options = Options with { Sampling = sampling, Limits = ImageLimits.Default with { MemoryBudget = root } };
         using var output = new MemoryStream();
         var limited = options with { Limits = options.Limits with { MaxWork = 1 } };
         Assert.Equal(ImageLimitKind.Work, Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(image, output, limited)).Limit);
@@ -116,19 +146,27 @@ public sealed class JpegReferenceTests
     }
 
     [Theory]
-    [InlineData(false, false)] [InlineData(true, false)] [InlineData(false, true)]
-    public async Task SharedRootIncludesPendingActualAsyncUsersAndRecovers(bool cancel, bool fail)
+    [InlineData(false, false, JpegSampling.YCbCr444)]
+    [InlineData(true, false, JpegSampling.YCbCr444)]
+    [InlineData(false, true, JpegSampling.YCbCr444)]
+    [InlineData(false, false, JpegSampling.YCbCr422)]
+    [InlineData(true, false, JpegSampling.YCbCr422)]
+    [InlineData(false, true, JpegSampling.YCbCr422)]
+    [InlineData(false, false, JpegSampling.YCbCr420)]
+    [InlineData(true, false, JpegSampling.YCbCr420)]
+    [InlineData(false, true, JpegSampling.YCbCr420)]
+    public async Task SharedRootIncludesPendingActualAsyncUsersAndRecovers(bool cancel, bool fail, JpegSampling sampling)
     {
         using var image = OriginalPixels.Buffer(17, 11, 8);
         long required;
         using (var measure = new TestMemoryBudget(1024 * 1024))
         using (var probe = new MemoryStream())
         {
-            ImageCodec.EncodeJpeg(image, probe, Options with { Limits = ImageLimits.Default with { MemoryBudget = measure } });
+            ImageCodec.EncodeJpeg(image, probe, Options with { Sampling = sampling, Limits = ImageLimits.Default with { MemoryBudget = measure } });
             required = measure.Peak;
         }
         using var root = new TestMemoryBudget(required);
-        var options = Options with { Limits = ImageLimits.Default with { MemoryBudget = root } };
+        var options = Options with { Sampling = sampling, Limits = ImageLimits.Default with { MemoryBudget = root } };
         using var token = new CancellationTokenSource(); using var held = new HeldOutput(root, fail);
         var pending = ImageCodec.EncodeJpegAsync(image, held, options, token.Token).AsTask();
         await held.Entered.Task.WaitAsync(TimeSpan.FromSeconds(10));
@@ -151,7 +189,7 @@ public sealed class JpegReferenceTests
     }
 
     [Theory]
-    [InlineData(JpegSampling.YCbCr420, 0, UnsupportedImageFeature.SamplingLayout)]
+    [InlineData(JpegSampling.Grayscale, 0, UnsupportedImageFeature.SamplingLayout)]
     [InlineData(JpegSampling.YCbCr444, 1, UnsupportedImageFeature.ControlMarker)]
     public void PendingReferenceFeaturesAreStructuredFailures(JpegSampling sampling, int restart, UnsupportedImageFeature feature)
     {
@@ -160,6 +198,48 @@ public sealed class JpegReferenceTests
         var error = Assert.Throws<UnsupportedImageException>(() => ImageCodec.EncodeJpeg(image, output,
             Options with { Sampling = sampling, RestartInterval = restart }));
         Assert.Equal(feature, error.Feature); Assert.Equal(0, output.Length);
+    }
+
+    [Theory]
+    [InlineData(18, 19, JpegSampling.YCbCr420, 556,
+        "bb425e04fc82c4bf6df02bbdc9950e61cde69259a7de8e169b9bf2df1aab46dc",
+        "ef83424661e0e90b54cb5d166af4dadfa851a57793f25275abc97a2ccbdaddb8")]
+    [InlineData(18, 19, JpegSampling.YCbCr422, 637,
+        "bb425e04fc82c4bf6df02bbdc9950e61cde69259a7de8e169b9bf2df1aab46dc",
+        "41ae5d88e2c83d34fd6df06a11d0498908abd5d2cadbb5daea82c3e25f25305d")]
+    [InlineData(1, 1, JpegSampling.YCbCr420, 203,
+        "d1702632ae14f252a701dd314241b757eb1ef76f80a0298190be8bb130cbbe55",
+        "0463f3b09d4a3ce44ee2f4be32d421657bbf4607476370d0cac90cc168fa2749")]
+    [InlineData(2, 2, JpegSampling.YCbCr420, 225,
+        "f892d406b3f44430aa29892a0c16055c5ad42b1ca06ab7d092512c77e0dc3aed",
+        "f64cc5a933f842ca144709b336dcd358a3ad6d2e94ac4091bb67b55404d9ca34")]
+    [InlineData(3, 3, JpegSampling.YCbCr420, 263,
+        "38cfa8ec37dd9d8a3019fb905c99fb2d6b7339076611e0285ab765045d386f6b",
+        "c45bd5b142ef0c9b73b29a6eba9d312ffb988737f5ca4248fc73dff291a1d712")]
+    [InlineData(4, 4, JpegSampling.YCbCr420, 282,
+        "d50ece5f42692215f80761df9533b3fc7fe27a061e5e3d20a95d95772e8a3631",
+        "550236ed436bd6e35b1e7b090f5dc381682272b06828f3c8ca3a6dbaaf6ac86d")]
+    public async Task PairedInputAndTinyFilterBoundariesMatchNativePackets(int width, int height, JpegSampling sampling,
+        int length, string sourceHash, string packetHash)
+    {
+        using var image = OriginalPixels.Buffer(width, height, 8);
+        var before = OriginalPixels.Bytes(image); Assert.Equal(sourceHash, Hash(before));
+        using var root = new TestMemoryBudget(1024 * 1024);
+        var options = Options with { Sampling = sampling, Limits = ImageLimits.Default with { MemoryBudget = root } };
+        using var output = new ForwardOutput(); ImageCodec.EncodeJpeg(image, output, options);
+        AssertPacket(output.ToArray(), length, packetHash); Assert.Equal(0, root.Bytes);
+        var normalized = JpegQualityCorpus.Reference(before, 8, 0x204060);
+        var stride = width * 3 + 5; var rgb = Enumerable.Repeat((byte)165, stride * height + 7).ToArray();
+        for (var y = 0; y < height; y++)
+        for (var x = 0; x < width; x++)
+            normalized.AsSpan((y * width + x) * 4, 3).CopyTo(rgb.AsSpan(y * stride + x * 3, 3));
+        var originalRgb = rgb.ToArray(); using var callerOutput = new MemoryStream();
+        await ImageCodec.EncodeJpegAsync(rgb, width, height, JpegSampleFormat.Rgb, callerOutput, stride, options);
+        AssertPacket(callerOutput.ToArray(), length, packetHash); Assert.Equal(0, root.Bytes);
+        Assert.Equal(originalRgb, rgb); Assert.Equal(before, OriginalPixels.Bytes(image));
+        AssertPacket(output.ToArray(), length, packetHash); Assert.False(root.IsDisposed);
+        using var decoded = ImageCodec.Decode(output.ToArray());
+        Assert.Equal((width, height, 8), (decoded.Width, decoded.Height, decoded.BitDepth));
     }
 
     private static string Hash(byte[] bytes) => Convert.ToHexStringLower(SHA256.HashData(bytes));
