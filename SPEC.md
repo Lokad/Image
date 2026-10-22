@@ -1177,10 +1177,12 @@ It visits frequencies in reverse zigzag and components Y/Cb/Cr, accepting strict
 cost improvements with stable closest-category-first ties. Its two AC price
 families (Y and shared Cb/Cr) use at most64 evenly spaced distinct source MCUs,
 including the endpoints. These samples first undergo the same geometric decisions
-on the original fine quantizers. Their unchanged fine-unit AC coefficients are
-counted independently over the eventual equal-point-transform spectral bands,
-resetting run/EOB at each boundary; they are not rescaled or retrained on a coarser
-grid. Each spectral band has its own histogram within the Y/shared-CbCr families.
+on the original fine quantizers. Their unchanged AC choices are projected into
+coded point-transform units only while counting, using the writer's signed
+arithmetic right shift. Positive values may become zero; negative values retain
+the signed shift behavior. Runs/EOB reset at each eventual equal-point-transform
+spectral band. The training decisions are not repeated on a coarser grid or
+modified. Each band has its own histogram within the Y/shared-CbCr families.
 Every model receives +1 smoothing on all176 legal progressive AC/EOB-run symbols,
 including unreachable runs whose zero counters are implicit. Ordinary AC prices
 are deterministic at-most16-bit Huffman lengths times256, with one dummy leaf
@@ -1288,7 +1290,8 @@ for863442 total (287814/block). Every bounded bank, arc, probe,
 reconstruction and selection step charges work before execution. Adaptive and
 async staging estimates also include source sampling:136129 per sampled MCU,
 plus one pending-run visit per component/band per sample and once at completion,
-1920 for band masks and1536 for layout/clear preparation. Work is charged before
+1920 for band masks,1920 for the once-per-operation point-level lookup and1536
+for layout/clear preparation. Work is charged before
 its corresponding mutation. Source finishing uses at most177 leaves/353 nodes,
 total weight8241 and depth27. Heap-pop leaf order supplies stable descending
 frequency assignment in linear passes. Each band prepays45056 logical visits,
@@ -1296,10 +1299,10 @@ covering validation, heap/parent work, length redistribution, ordering and outpu
 All models are validated before any histogram mutation.
 Across Original qualities1..98,930 ushort entries suffice, including an observed terminal-block count per band; they become Q8 prices
 in place. The1860-byte arena,256-byte scan map,192-byte component-local pending
-runs,2304-byte MCU,64 sample bytes and2532-byte sequential source builder total
-7208 substantial stack bytes within the same8KiB workspace. No heap owner, frame
+runs,2304-byte MCU,64 sample bytes,128-byte point-level lookup and2532-byte
+sequential source builder total7336 substantial stack bytes within the same8KiB workspace. No heap owner, frame
 copy or cache is added. The declared control has nine models,613 counter slots
-and13 component bands:405504 finish units and1,999,981,013 complete planned work,
+and13 component bands:405504 finish units and1,999,982,933 complete planned work,
 under the unchanged default2B limit.
 The1612-byte trellis scratch is allocated once per MCU call; each frequency's
 bank is rebuilt as needed. Alongside the2116-byte price arena/map,2304-byte MCU,

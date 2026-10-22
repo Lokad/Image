@@ -17,8 +17,9 @@ Joint three-component AC choices reuse the pair stage's error/prices to fit the
 existing default work limit; terminal admission failure still aborts the operation.
 Final AC prices now follow the progressive spectral bands, retaining one global
 MCU error allowance and the existing memory/work limits.
-Source histograms now count those bands on the same fine training coefficients;
-mask setup adds1,920 admitted work units once per operation.
+Source histograms count the same fine training choices in coded point-transform
+units; the choices themselves are unchanged. Mask and point-level setup each add
+1,920 admitted work units once per operation.
 Source prices use canonical Huffman lengths per band and observed EOB-run costs,
 including extra bits, amortized per terminal block. Pending runs stay separate
 per component. They fit the same8KiB workspace;

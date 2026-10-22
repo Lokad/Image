@@ -13,9 +13,9 @@ with source-PSNR gaps 0.085506/0.085851 dB inside the unchanged 0.25 dB gate.
 Grayscale remains 58,823/58,910 B;
 **optional CompactColor** remains 48,701/52,093 B on its separate procedural control.
 Equal numerical quality values do not establish equivalence. The earlier uncapped
-4:4:4 trial remains rejected; [paired chroma tables](../benchmarks/JPEG444-PAIRED-CHROMA-TABLES.md)
-now produce **134,741/133,041 B** (RGBA8) and **134,687/133,043 B** (RGBA16), with
-source-PSNR gaps 0.218071/0.225823 dB inside 0.25 dB. Existing 4:2:2 controls pass
+4:4:4 trial remains rejected; [coded source histograms](../benchmarks/JPEG444-CODED-SOURCE-HISTOGRAMS.md)
+now produce **134,676/133,041 B** (RGBA8) and **134,688/133,043 B** (RGBA16), with
+source-PSNR gaps 0.218264/0.226798 dB inside 0.25 dB. Existing 4:2:2 controls pass
 size/quality, without photographic or diagram extrapolation. [PNG Optimal RGBA8](../benchmarks/PNG-OPTIMAL-RGBA8.md) now closes the two changed
 sync/async boundaries at209,407/210,973 B, saving9,368 B each. All17 declared PNG
 packet gates pass, with exact RGBA. The public Optimal policy uses managed9 versus
@@ -26,14 +26,16 @@ The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles
 existing encode rows: 13 default passes/5 open, plus one separate optional pass.
 The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) first saved12,166 B
 on 4:4:4 forward-only/cancellable output. Source-derived coefficient decisions and progressive scans save another
-24,071 B relative to that packet; the largest remaining 4:4:4 gap is about 1.28%.
+24,136 B relative to that packet; the largest remaining 4:4:4 gap is about 1.24%.
 
-JPEG C191 qualification retains 5,056 Release tests/OS, 226+62 scalar checks/OS and
+The latest histogram-unit change saves 65 B on RGBA8 and adds one byte on RGBA16,
+a net 259 B across the five rows. JPEG C193 retains 5,067 Release tests/OS,
+237+62 scalar checks/OS and
 the same actual private 0.2.0 package/all examples on Windows/Linux. The
 [ownership repair](../benchmarks/JPEG-BUDGET-EVENT-OWNERSHIP.md) keeps caller-budget
-event storage charged through its actual users. Forward 4:4:4 records 1,949,513.811 µs,
-643,160 B/op in one short cost screen: more CPU is accepted for the compression
-gain, and CPU parity remains deferred. The prior C187 cost was 1,957,616.722 µs with 615,792 B/op.
+event storage charged through its actual users. Forward 4:4:4 records 1,929,269.703 µs,
+644,112 B/op in one short cost screen: more CPU is accepted for the compression
+gain, and CPU parity remains deferred. The prior C191 cost was 1,949,513.811 µs with 643,160 B/op.
 Unaffected caller 4:2:0 retains C146's 68,162.147 µs and170,648 B/op
 in one short screen, including normalization, full encoding and fresh output ownership.
 CPU/allocation costs are recorded; speed-only work and independent confirmations
@@ -201,7 +203,7 @@ is a CPU-parity confirmation.
 | [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 4,174.10 | 4,289.79 | 0.973 / 0.980 | 264,179 | Parity confirmed |
 | [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 9,426.43 | 10,150.04 | 0.929 / 0.933 | 1,052,317 | Parity confirmed |
 | [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,894.69 | 3,771.76 | 1.033 / 1.115 | 559,418 | Prior production; reconfirm |
-| [JPEG 4:4:4, forward-only / paired chroma tables](../benchmarks/JPEG444-PAIRED-CHROMA-TABLES.md) | 1,949,513.81 | 3,761.93 | 518.222 / 541.403 | 643,160 | Cost screen (CPU parity deferred) |
+| [JPEG 4:4:4, forward-only / coded source histograms](../benchmarks/JPEG444-CODED-SOURCE-HISTOGRAMS.md) | 1,929,269.70 | 3,768.09 | 512.002 / 585.587 | 644,112 | Cost screen (CPU parity deferred) |
 | [JPEG 4:4:4, live cancelable token / prior geometric Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 4,465.15 | 3,775.40 | 1.183 / 1.364 | 525,997 | Prior production; reconfirm |
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,980.90 | 3,855.74 | 1.032 / 1.135 | 556,284 | Prior production; reconfirm |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,579.93 | 2,354.66 | 1.096 / 1.227 | 294,116 | Prior production; reconfirm |

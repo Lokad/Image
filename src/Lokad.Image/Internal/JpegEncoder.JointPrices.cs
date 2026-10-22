@@ -5,6 +5,7 @@ internal static partial class JpegEncoder
     // Sparse counters become Q8 source prices in place. Arena, scan map and
     // component-local pending EOB runs fit the existing admitted 8 KiB workspace.
     private const int JointPriceBandSetupWork = 1920;
+    private const int JointPointLevelSetupWork = 1920;
     private const int JointPriceSampleWork = 136129;
 
     private static long JointPriceTrainingWork(long mcus, int quality, int components,
@@ -13,7 +14,7 @@ internal static partial class JpegEncoder
         if (sampling != JpegSampling.YCbCr444 || AcDecisionLambda(quality, components, sampling, policy) == 0) return 0;
         var shape = SourcePriceShape444(PlannedSourcePriceBands444(quality));
         return Math.Min(64, mcus) * (JointPriceSampleWork + shape.ComponentBands)
-            + shape.FinishWork + shape.ComponentBands + JointPriceBandSetupWork + JointPriceLayoutWork;
+            + shape.FinishWork + shape.ComponentBands + JointPriceBandSetupWork + JointPriceLayoutWork + JointPointLevelSetupWork;
     }
 
     private static JointAcPrices TrainJoint444Prices(ImageBuffer? image, scoped JpegSampleInput samples, uint? background,
@@ -21,6 +22,8 @@ internal static partial class JpegEncoder
         scoped Span<double> source, scoped Span<int> values, Span<ushort> prices, Span<ushort> offsets,
         int lambda, OperationContext context)
     {
+        Span<byte> pointLevels = stackalloc byte[128];
+        SourcePointLevels444(luma, chroma, lambda, pointLevels, context);
         var bands = SourcePriceBands444(luma, chroma, lambda, context);
         context.Work(JointPriceLayoutWork);
         var shape = SourcePriceShape444(bands);
@@ -62,7 +65,8 @@ internal static partial class JpegEncoder
             context.Work(192 + shape.ComponentBands);
             for (var component = 0; component < 3; component++)
                 CountSourceBandAc(values.Slice(component * 64, 64), prices,
-                    offsets.Slice(component == 0 ? 0 : 64, 64), pending.Slice(component * 64, 64), bands.ForComponent(component));
+                    offsets.Slice(component == 0 ? 0 : 64, 64), pending.Slice(component * 64, 64), bands.ForComponent(component),
+                    pointLevels.Slice(component == 0 ? 0 : 64, 64));
         }
         context.Work(shape.ComponentBands);
         for (var component = 0; component < 3; component++)
@@ -70,6 +74,22 @@ internal static partial class JpegEncoder
                 pending.Slice(component * 64, 64), bands.ForComponent(component));
         FinishSourceBandPrices(prices, bands, context);
         return new(prices, offsets);
+    }
+
+    internal static void SourcePointLevels444(ReadOnlySpan<ushort> luma, ReadOnlySpan<ushort> chroma,
+        int lambda, Span<byte> levels, OperationContext context)
+    {
+        if (luma.Length != 64 || chroma.Length != 64 || levels.Length != 128 || lambda < 0)
+            throw new ArgumentException("Source point levels require two quantizers and a complete destination.");
+        // At most 128*13 factor steps plus setup/output. Refusal precedes mutation.
+        context.Work(JointPointLevelSetupWork);
+        var precision = (int)Math.Sqrt(lambda);
+        for (var family = 0; family < 2; family++)
+        {
+            var q = family == 0 ? luma : chroma;
+            for (var natural = 0; natural < 64; natural++)
+                levels[family * 64 + natural] = (byte)PointTransform444(q[natural], precision);
+        }
     }
 
     internal static int JointPriceSamplePosition(int sample, int count, int mcus)
@@ -98,12 +118,17 @@ internal static partial class JpegEncoder
     }
 
     internal static void CountSourceBandAc(ReadOnlySpan<int> values, Span<ushort> counts,
-        ReadOnlySpan<ushort> offsets, Span<byte> pending, ulong bandEnds)
+        ReadOnlySpan<ushort> offsets, Span<byte> pending, ulong bandEnds, ReadOnlySpan<byte> pointLevels = default)
     {
+        if (!pointLevels.IsEmpty && pointLevels.Length != 64)
+            throw new ArgumentException("Source point levels require one complete block.");
         var zeros = 0; var first = 1; var hasValues = false;
         for (var scan = 1; scan < 64; scan++)
         {
-            var at = offsets[scan] & 1023; var value = values[JpegTransform.Zigzag[scan]];
+            var natural = JpegTransform.Zigzag[scan]; var at = offsets[scan] & 1023;
+            // Keep every fine-geometric training choice intact. Only histogram
+            // amplitudes use the eventual writer's signed point-transform units.
+            var value = values[natural] >> (pointLevels.IsEmpty ? 0 : pointLevels[natural]);
             if (value == 0) zeros++;
             else
             {

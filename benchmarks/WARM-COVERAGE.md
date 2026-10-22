@@ -6,20 +6,26 @@ contains60 independent passes,147 gaps,one confidence-open case,16 short cost
 screens and15 superseded encoder rows. Full warm CPU parity and replacement
 readiness remain open; no new shapes, settings or quality grid is added.
 
-[C191 JPEG444 paired chroma tables](JPEG444-PAIRED-CHROMA-TABLES.md) save 43/47 B:
-134,741/133,041 and 134,687/133,043 B. Coefficients/pixels and quality/alpha gates
-are unchanged. Five packet gates remain open (maximum 1.28% excess). Both OS pass
-5,056 tests and 226+62 scalar checks each; exact independent packets across public
-boundaries and the same actual private 0.2 package/all three examples pass.
-One frozen Linux core/internal/public build runs on both OS. Only the new internal
-test needed its caller-owned EOI added after its first failure; production stayed
-frozen. Benchmark/native/differential/driver/parser binaries are reused.
-One complete forward444 cost is 1,949,513.811 us / 643,160 B/op; prior C187 cost
-is historical. No repeated timing confirmation, CPU-parity pass or speed claim.
-Only Original progressive three-component444 (qualities 1..98) changes packet
-ordering/table bytes and encoding costs. Coefficients/source models/pixel quality,
-baseline/fixed/restart, qualities99/100, other policies/sampling and unrelated
-paths retain relevant evidence.
+[C193 JPEG444 coded source histograms](JPEG444-CODED-SOURCE-HISTOGRAMS.md) save
+65 B on RGBA8 and add one byte on RGBA16: 134,676/133,041 and 134,688/133,043 B.
+Net259 B across five rows removes3.07% of prior excess; FIVE packet gates remain
+open (maximum1.24%). Source-PSNR gaps0.218264/0.226798dB pass the unchanged0.25dB
+quality/exactalpha/decoder gates. Both OS pass5,067 tests and237+62 scalar checks
+each; exact C192 packets across public boundaries and the SAME actual private0.2
+package/all3examples pass. One core/internal/public build passes first time and
+supplies the SAME frozen binaries across OS; no production rebuild after freeze.
+Benchmark/native/differential/driver/parser binaries are reused.
+One complete forward444 cost is1,929,269.703us /644,112Bop; prior C191 is historical.
+No repeated timing confirmation, CPU-parity pass or speed claim. Only source
+histogram amplitude units change; fine training choices/samples/bands and final
+RDO/error/DQT/reference/settings remain fixed. The128byte lookup keeps source
+scratch7336<8192;1920 extra setup work plans1999982933<unchanged2B.
+All decision-enabled Original three-component444 qualities1..98 change coefficient
+decisions/lossy pixels/packets/encode costs, INCLUDING baseline/fixed/restart,
+caller samples/async and containing invocations. The five packet rows and forward
+cost supersede C191; other affected timings remain historical. Qualities99/100,
+other policies/sampling, native/decode/edit/inspect/PNG/WebP retain evidence.
+Decoder fixture packets stay frozen; no new finite case or workload grid is added.
 
 [PNG Optimal RGBA8](PNG-OPTIMAL-RGBA8.md) closes the two sync/async packet gaps:
 209,407/210,973 B, exact RGBA/alpha/hidden RGB and9,368 B savings. Optimal is a
@@ -39,11 +45,11 @@ independent confirmation. Prior default6 sync cost5,406.297 us is superseded;
 old default8 async timing is historical and awaits later CPU qualification.
 Compound PNG8 crop/nearest/encode invocation costs also contain changed default
 encoding and remain historical. Other15 PNG paths and WebP costs retain
-validity; JPEG reuse follows the C191 scope above. No whole-library method audit
+validity; JPEG reuse follows the C193 scope above. No whole-library method audit
 or repeat is needed.
 
 [Default420](JPEG420-AC-TRELLIS.md) retains nine packet passes; optionalCompactColor
-stays separate. C191 updates the five444 packets and forward cost above;
+stays separate. C193 updates the five444 packets and forward cost above;
 C146caller42068,162.147 us/170,648 Bop remains valid on its unchanged path.
 All7 lossy and6 lossless WebP packet gates pass/stay stopped. No broad JPEG,
 photographic or diagram compression claim follows from procedural controls.

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "project": "Lokad.Image",
-  "round": "C191",
+  "round": "C193",
   "productionChanged": true,
   "productionBuilds": 1,
   "harnessDriverSelectorNativeBuilds": 0,
@@ -9,48 +9,48 @@
   "timingRuns": 1,
   "independentConfirmations": 0,
   "scope": "Exactly all19 existing JPEG encode rows:18default boundaries and one explicitly optional CompactColor boundary. Existing inputs/sampling/quality/native packets retained; no new workload matrix.",
-  "producerSha256": "7995248f5679442a1e8f60b6fd2d018e2022776838328cc52162d932a2337f8b",
+  "producerSha256": "2d82a81dc60cd5e30c0644c2f62e4206da74ac6322e6caab6df02370705909e3",
   "cases": [
     {
       "case": "Encode8",
       "boundary": "RGBA8 adaptive",
-      "managedBytes": 134741,
+      "managedBytes": 134676,
       "referenceBytes": 133041,
-      "managedSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
+      "managedSha256": "4713e6868a620175c0caccfc9504c2bb8931a22768489b37ca041f62876c3ca8",
       "referenceSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
-      "psnrGapDb": 0.21807105354474743,
+      "psnrGapDb": 0.21826438203815002,
       "qualityPass": true,
       "sizePass": false,
-      "evidence": "C191 Pair only corresponding Cb/Cr spectral bands. Fit singleton and pooled canonical codebooks; share only when predicted symbol-code bits plus COMPLETE DHT framing is strictly smaller, retaining split tables on ties. Emit corresponding component scans together. Y/DC scans and all coefficients/DQT/sampling/source-trained prices/finalRDO/globalcap/source/reference/settings/pixels unchanged. No grouping/order/quality grid.",
-      "excessBytes": 1700,
-      "sizeRatio": 1.0127780157996407,
-      "producerSha256": "7995248f5679442a1e8f60b6fd2d018e2022776838328cc52162d932a2337f8b",
-      "qualityEvidenceReused": "Actual C191 packets match qualifiedC190 exactly; every411840 coefficient per depth and all8 normal/scalar/native decoder pixel/ownership checks remain identical toC187. Source quality/alpha/decoder gates unchanged.",
+      "evidence": "C193 Replay existing source models, then count the SAME fine-geometric training choices after signed arithmetic point-transform projection. No retraining, mutation of choices, sample/band/grouping/176symbol+1/dummy1/canonical/EOB-amortization/finalRDO/globalcap/DQT/lambda/reference/settings changes. C191 paired-chroma serialization retained. One format-unit primitive, no weight/quality/reference/workload grid.",
+      "excessBytes": 1635,
+      "sizeRatio": 1.0122894446073014,
+      "producerSha256": "2d82a81dc60cd5e30c0644c2f62e4206da74ac6322e6caab6df02370705909e3",
+      "qualityEvidenceReused": "Actual C193 packets match qualifiedC192 exactly; all411840 source-nearest/chosen coefficients per depth and twelve normal/scalar/native baseline-equivalent pixel/ownership checks reused. Lossy pixels change within frozen .25dB/exactalpha/decoder gates.",
       "qualitySample": {
         "setting": 69,
-        "encodedBytes": 134741,
-        "encodedSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
-        "nativeDecodedSha256": "8ffcd023ebd5de3bd508c2af917759981694ea9ca45fc96ce278916379a2dd11",
-        "publicDecodedSha256": "e7e756886bb8ac6d7e2133a536122bf13ca77ef3fab2424e0573458e990a03c0",
+        "encodedBytes": 134676,
+        "encodedSha256": "4713e6868a620175c0caccfc9504c2bb8931a22768489b37ca041f62876c3ca8",
+        "nativeDecodedSha256": "006ccce2c20bdff6d674698f4c873226896a2c8320622f7defc61ef130cf61db",
+        "publicDecodedSha256": "a93c71254706d17874efb7ce61d4ee32fbc32f3f565f9a31a77c219377cf8ab8",
         "codec": "JPEG",
         "sampling": "1x1,1x1,1x1",
         "sourceError": {
-          "sumSquared": 51464039,
-          "maximum": 87,
+          "sumSquared": 51466330,
+          "maximum": 85,
           "samples": 398601,
           "scale": 1,
-          "rgbMaximum": 87,
-          "rgbRmse": 11.362731429997897,
-          "rgbPsnr": 27.021148772751943
+          "rgbMaximum": 85,
+          "rgbRmse": 11.362984341822392,
+          "rgbPsnr": 27.02095544425854
         },
         "decoderDifference": {
-          "sumSquared": 20856,
+          "sumSquared": 20421,
           "maximum": 3,
           "samples": 398601,
           "scale": 1,
           "rgbMaximum": 3,
-          "rgbRmse": 0.22874221230769964,
-          "rgbPsnr": 60.943877266203685
+          "rgbRmse": 0.22634416893445738,
+          "rgbPsnr": 61.03541739456381
         },
         "alphaExact": true,
         "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
@@ -90,43 +90,43 @@
     {
       "case": "Encode16",
       "boundary": "RGBA16 adaptive",
-      "managedBytes": 134687,
+      "managedBytes": 134688,
       "referenceBytes": 133043,
-      "managedSha256": "a88c9421a3e63fd3c4a56f51c2a4d1fe2554725881f12063cc4c72c30961faf4",
+      "managedSha256": "c4dbe6fc4e83fc1be0210c45f660844e1cf63a5790c1b7b941b7b342302d97af",
       "referenceSha256": "0f0933b13b4bbf4b0dcaea55f44ff54b83125743e88b7de7a71c750ec42d71ea",
-      "psnrGapDb": 0.2258234478453396,
+      "psnrGapDb": 0.22679764303462235,
       "qualityPass": true,
       "sizePass": false,
-      "evidence": "C191 Pair only corresponding Cb/Cr spectral bands. Fit singleton and pooled canonical codebooks; share only when predicted symbol-code bits plus COMPLETE DHT framing is strictly smaller, retaining split tables on ties. Emit corresponding component scans together. Y/DC scans and all coefficients/DQT/sampling/source-trained prices/finalRDO/globalcap/source/reference/settings/pixels unchanged. No grouping/order/quality grid.",
-      "excessBytes": 1644,
-      "sizeRatio": 1.0123569071653526,
-      "producerSha256": "7995248f5679442a1e8f60b6fd2d018e2022776838328cc52162d932a2337f8b",
-      "qualityEvidenceReused": "Actual C191 packets match qualifiedC190 exactly; every411840 coefficient per depth and all8 normal/scalar/native decoder pixel/ownership checks remain identical toC187. Source quality/alpha/decoder gates unchanged.",
+      "evidence": "C193 Replay existing source models, then count the SAME fine-geometric training choices after signed arithmetic point-transform projection. No retraining, mutation of choices, sample/band/grouping/176symbol+1/dummy1/canonical/EOB-amortization/finalRDO/globalcap/DQT/lambda/reference/settings changes. C191 paired-chroma serialization retained. One format-unit primitive, no weight/quality/reference/workload grid.",
+      "excessBytes": 1645,
+      "sizeRatio": 1.0123644235322415,
+      "producerSha256": "2d82a81dc60cd5e30c0644c2f62e4206da74ac6322e6caab6df02370705909e3",
+      "qualityEvidenceReused": "Actual C193 packets match qualifiedC192 exactly; all411840 source-nearest/chosen coefficients per depth and twelve normal/scalar/native baseline-equivalent pixel/ownership checks reused. Lossy pixels change within frozen .25dB/exactalpha/decoder gates.",
       "qualitySample": {
         "setting": 69,
-        "encodedBytes": 134687,
-        "encodedSha256": "a88c9421a3e63fd3c4a56f51c2a4d1fe2554725881f12063cc4c72c30961faf4",
-        "nativeDecodedSha256": "d1c6370872b39c5c4cdf8bde304ffd6ab99f3701ec46c57183d3ea62f6807bdf",
-        "publicDecodedSha256": "a9246473c74a0306ea9407ae61ae1ce0b58c15d6f9b4358b89768f9da5274735",
+        "encodedBytes": 134688,
+        "encodedSha256": "c4dbe6fc4e83fc1be0210c45f660844e1cf63a5790c1b7b941b7b342302d97af",
+        "nativeDecodedSha256": "211c4dd3e541adcd2230b5f5469bdd11b81f593f1c92df502558e53a24b1dca6",
+        "publicDecodedSha256": "cc886d4d6b27f4c66ef4a5c97f033c31a74f4d05d62b6c5f80b2e26e0d1302d1",
         "codec": "JPEG",
         "sampling": "1x1,1x1,1x1",
         "sourceError": {
-          "sumSquared": 51532952,
-          "maximum": 93,
+          "sumSquared": 51544513,
+          "maximum": 91,
           "samples": 398601,
           "scale": 1,
-          "rgbMaximum": 93,
-          "rgbRmse": 11.370336526380791,
-          "rgbPsnr": 27.015337235966875
+          "rgbMaximum": 91,
+          "rgbRmse": 11.371611876265996,
+          "rgbPsnr": 27.014363040777592
         },
         "decoderDifference": {
-          "sumSquared": 20391,
+          "sumSquared": 20799,
           "maximum": 3,
           "samples": 398601,
           "scale": 1,
           "rgbMaximum": 3,
-          "rgbRmse": 0.2261778494403734,
-          "rgbPsnr": 61.04180220138716
+          "rgbRmse": 0.22842941918330179,
+          "rgbPsnr": 60.95576289862207
         },
         "alphaExact": true,
         "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
@@ -360,41 +360,41 @@
       "sampling": "444",
       "quality": 69,
       "nativeQuality": 5,
-      "managedBytes": 134741,
+      "managedBytes": 134676,
       "referenceBytes": 133041,
-      "managedSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
+      "managedSha256": "4713e6868a620175c0caccfc9504c2bb8931a22768489b37ca041f62876c3ca8",
       "referenceSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
       "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
       "referenceSampleSha256": "ec2ea910c09a839ea55987103b9a2efa1c0bec62658fa55cda9c14726e88b5cd",
       "sizePass": false,
       "qualityPass": true,
-      "psnrGapDb": 0.21807105354474743,
-      "qualityEvidenceReused": "Actual C191 packets match qualifiedC190 exactly; every411840 coefficient per depth and all8 normal/scalar/native decoder pixel/ownership checks remain identical toC187. Source quality/alpha/decoder gates unchanged.",
+      "psnrGapDb": 0.21826438203815002,
+      "qualityEvidenceReused": "Actual C193 packets match qualifiedC192 exactly; all411840 source-nearest/chosen coefficients per depth and twelve normal/scalar/native baseline-equivalent pixel/ownership checks reused. Lossy pixels change within frozen .25dB/exactalpha/decoder gates.",
       "qualitySample": {
         "setting": 69,
-        "encodedBytes": 134741,
-        "encodedSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
-        "nativeDecodedSha256": "8ffcd023ebd5de3bd508c2af917759981694ea9ca45fc96ce278916379a2dd11",
-        "publicDecodedSha256": "e7e756886bb8ac6d7e2133a536122bf13ca77ef3fab2424e0573458e990a03c0",
+        "encodedBytes": 134676,
+        "encodedSha256": "4713e6868a620175c0caccfc9504c2bb8931a22768489b37ca041f62876c3ca8",
+        "nativeDecodedSha256": "006ccce2c20bdff6d674698f4c873226896a2c8320622f7defc61ef130cf61db",
+        "publicDecodedSha256": "a93c71254706d17874efb7ce61d4ee32fbc32f3f565f9a31a77c219377cf8ab8",
         "codec": "JPEG",
         "sampling": "1x1,1x1,1x1",
         "sourceError": {
-          "sumSquared": 51464039,
-          "maximum": 87,
+          "sumSquared": 51466330,
+          "maximum": 85,
           "samples": 398601,
           "scale": 1,
-          "rgbMaximum": 87,
-          "rgbRmse": 11.362731429997897,
-          "rgbPsnr": 27.021148772751943
+          "rgbMaximum": 85,
+          "rgbRmse": 11.362984341822392,
+          "rgbPsnr": 27.02095544425854
         },
         "decoderDifference": {
-          "sumSquared": 20856,
+          "sumSquared": 20421,
           "maximum": 3,
           "samples": 398601,
           "scale": 1,
           "rgbMaximum": 3,
-          "rgbRmse": 0.22874221230769964,
-          "rgbPsnr": 60.943877266203685
+          "rgbRmse": 0.22634416893445738,
+          "rgbPsnr": 61.03541739456381
         },
         "alphaExact": true,
         "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
@@ -412,11 +412,11 @@
       "harnessNativeSelectorBuilds": 0,
       "nativeEncodes": 0,
       "timingRuns": 1,
-      "excessBytes": 1700,
-      "sizeRatio": 1.0127780157996407,
+      "excessBytes": 1635,
+      "sizeRatio": 1.0122894446073014,
       "boundary": "RGBA forward-only/live-cancellable output",
-      "evidence": "C191 Pair only corresponding Cb/Cr spectral bands. Fit singleton and pooled canonical codebooks; share only when predicted symbol-code bits plus COMPLETE DHT framing is strictly smaller, retaining split tables on ties. Emit corresponding component scans together. Y/DC scans and all coefficients/DQT/sampling/source-trained prices/finalRDO/globalcap/source/reference/settings/pixels unchanged. No grouping/order/quality grid.",
-      "producerSha256": "7995248f5679442a1e8f60b6fd2d018e2022776838328cc52162d932a2337f8b"
+      "evidence": "C193 Replay existing source models, then count the SAME fine-geometric training choices after signed arithmetic point-transform projection. No retraining, mutation of choices, sample/band/grouping/176symbol+1/dummy1/canonical/EOB-amortization/finalRDO/globalcap/DQT/lambda/reference/settings changes. C191 paired-chroma serialization retained. One format-unit primitive, no weight/quality/reference/workload grid.",
+      "producerSha256": "2d82a81dc60cd5e30c0644c2f62e4206da74ac6322e6caab6df02370705909e3"
     },
     {
       "case": "Encode444Cancelable8",
@@ -424,41 +424,41 @@
       "sampling": "444",
       "quality": 69,
       "nativeQuality": 5,
-      "managedBytes": 134741,
+      "managedBytes": 134676,
       "referenceBytes": 133041,
-      "managedSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
+      "managedSha256": "4713e6868a620175c0caccfc9504c2bb8931a22768489b37ca041f62876c3ca8",
       "referenceSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
       "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
       "referenceSampleSha256": "ec2ea910c09a839ea55987103b9a2efa1c0bec62658fa55cda9c14726e88b5cd",
       "sizePass": false,
       "qualityPass": true,
-      "psnrGapDb": 0.21807105354474743,
-      "qualityEvidenceReused": "Actual C191 packets match qualifiedC190 exactly; every411840 coefficient per depth and all8 normal/scalar/native decoder pixel/ownership checks remain identical toC187. Source quality/alpha/decoder gates unchanged.",
+      "psnrGapDb": 0.21826438203815002,
+      "qualityEvidenceReused": "Actual C193 packets match qualifiedC192 exactly; all411840 source-nearest/chosen coefficients per depth and twelve normal/scalar/native baseline-equivalent pixel/ownership checks reused. Lossy pixels change within frozen .25dB/exactalpha/decoder gates.",
       "qualitySample": {
         "setting": 69,
-        "encodedBytes": 134741,
-        "encodedSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
-        "nativeDecodedSha256": "8ffcd023ebd5de3bd508c2af917759981694ea9ca45fc96ce278916379a2dd11",
-        "publicDecodedSha256": "e7e756886bb8ac6d7e2133a536122bf13ca77ef3fab2424e0573458e990a03c0",
+        "encodedBytes": 134676,
+        "encodedSha256": "4713e6868a620175c0caccfc9504c2bb8931a22768489b37ca041f62876c3ca8",
+        "nativeDecodedSha256": "006ccce2c20bdff6d674698f4c873226896a2c8320622f7defc61ef130cf61db",
+        "publicDecodedSha256": "a93c71254706d17874efb7ce61d4ee32fbc32f3f565f9a31a77c219377cf8ab8",
         "codec": "JPEG",
         "sampling": "1x1,1x1,1x1",
         "sourceError": {
-          "sumSquared": 51464039,
-          "maximum": 87,
+          "sumSquared": 51466330,
+          "maximum": 85,
           "samples": 398601,
           "scale": 1,
-          "rgbMaximum": 87,
-          "rgbRmse": 11.362731429997897,
-          "rgbPsnr": 27.021148772751943
+          "rgbMaximum": 85,
+          "rgbRmse": 11.362984341822392,
+          "rgbPsnr": 27.02095544425854
         },
         "decoderDifference": {
-          "sumSquared": 20856,
+          "sumSquared": 20421,
           "maximum": 3,
           "samples": 398601,
           "scale": 1,
           "rgbMaximum": 3,
-          "rgbRmse": 0.22874221230769964,
-          "rgbPsnr": 60.943877266203685
+          "rgbRmse": 0.22634416893445738,
+          "rgbPsnr": 61.03541739456381
         },
         "alphaExact": true,
         "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
@@ -476,11 +476,11 @@
       "harnessNativeSelectorBuilds": 0,
       "nativeEncodes": 0,
       "timingRuns": 0,
-      "excessBytes": 1700,
-      "sizeRatio": 1.0127780157996407,
+      "excessBytes": 1635,
+      "sizeRatio": 1.0122894446073014,
       "boundary": "RGBA forward-only/live-cancellable output",
-      "evidence": "C191 Pair only corresponding Cb/Cr spectral bands. Fit singleton and pooled canonical codebooks; share only when predicted symbol-code bits plus COMPLETE DHT framing is strictly smaller, retaining split tables on ties. Emit corresponding component scans together. Y/DC scans and all coefficients/DQT/sampling/source-trained prices/finalRDO/globalcap/source/reference/settings/pixels unchanged. No grouping/order/quality grid.",
-      "producerSha256": "7995248f5679442a1e8f60b6fd2d018e2022776838328cc52162d932a2337f8b"
+      "evidence": "C193 Replay existing source models, then count the SAME fine-geometric training choices after signed arithmetic point-transform projection. No retraining, mutation of choices, sample/band/grouping/176symbol+1/dummy1/canonical/EOB-amortization/finalRDO/globalcap/DQT/lambda/reference/settings changes. C191 paired-chroma serialization retained. One format-unit primitive, no weight/quality/reference/workload grid.",
+      "producerSha256": "2d82a81dc60cd5e30c0644c2f62e4206da74ac6322e6caab6df02370705909e3"
     },
     {
       "case": "JpegBudgetEncode4208",
@@ -551,41 +551,41 @@
       "sampling": "444",
       "quality": 69,
       "nativeQuality": 5,
-      "managedBytes": 134741,
+      "managedBytes": 134676,
       "referenceBytes": 133041,
-      "managedSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
+      "managedSha256": "4713e6868a620175c0caccfc9504c2bb8931a22768489b37ca041f62876c3ca8",
       "referenceSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
       "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
       "referenceSampleSha256": "ec2ea910c09a839ea55987103b9a2efa1c0bec62658fa55cda9c14726e88b5cd",
       "sizePass": false,
       "qualityPass": true,
-      "psnrGapDb": 0.21807105354474743,
-      "qualityEvidenceReused": "Actual C191 packets match qualifiedC190 exactly; every411840 coefficient per depth and all8 normal/scalar/native decoder pixel/ownership checks remain identical toC187. Source quality/alpha/decoder gates unchanged.",
+      "psnrGapDb": 0.21826438203815002,
+      "qualityEvidenceReused": "Actual C193 packets match qualifiedC192 exactly; all411840 source-nearest/chosen coefficients per depth and twelve normal/scalar/native baseline-equivalent pixel/ownership checks reused. Lossy pixels change within frozen .25dB/exactalpha/decoder gates.",
       "qualitySample": {
         "setting": 69,
-        "encodedBytes": 134741,
-        "encodedSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
-        "nativeDecodedSha256": "8ffcd023ebd5de3bd508c2af917759981694ea9ca45fc96ce278916379a2dd11",
-        "publicDecodedSha256": "e7e756886bb8ac6d7e2133a536122bf13ca77ef3fab2424e0573458e990a03c0",
+        "encodedBytes": 134676,
+        "encodedSha256": "4713e6868a620175c0caccfc9504c2bb8931a22768489b37ca041f62876c3ca8",
+        "nativeDecodedSha256": "006ccce2c20bdff6d674698f4c873226896a2c8320622f7defc61ef130cf61db",
+        "publicDecodedSha256": "a93c71254706d17874efb7ce61d4ee32fbc32f3f565f9a31a77c219377cf8ab8",
         "codec": "JPEG",
         "sampling": "1x1,1x1,1x1",
         "sourceError": {
-          "sumSquared": 51464039,
-          "maximum": 87,
+          "sumSquared": 51466330,
+          "maximum": 85,
           "samples": 398601,
           "scale": 1,
-          "rgbMaximum": 87,
-          "rgbRmse": 11.362731429997897,
-          "rgbPsnr": 27.021148772751943
+          "rgbMaximum": 85,
+          "rgbRmse": 11.362984341822392,
+          "rgbPsnr": 27.02095544425854
         },
         "decoderDifference": {
-          "sumSquared": 20856,
+          "sumSquared": 20421,
           "maximum": 3,
           "samples": 398601,
           "scale": 1,
           "rgbMaximum": 3,
-          "rgbRmse": 0.22874221230769964,
-          "rgbPsnr": 60.943877266203685
+          "rgbRmse": 0.22634416893445738,
+          "rgbPsnr": 61.03541739456381
         },
         "alphaExact": true,
         "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
@@ -602,10 +602,10 @@
       "harnessNativeSelectorBuilds": 0,
       "nativeEncodes": 0,
       "timingRuns": 0,
-      "excessBytes": 1700,
-      "sizeRatio": 1.0127780157996407,
-      "evidence": "C191 Pair only corresponding Cb/Cr spectral bands. Fit singleton and pooled canonical codebooks; share only when predicted symbol-code bits plus COMPLETE DHT framing is strictly smaller, retaining split tables on ties. Emit corresponding component scans together. Y/DC scans and all coefficients/DQT/sampling/source-trained prices/finalRDO/globalcap/source/reference/settings/pixels unchanged. No grouping/order/quality grid.",
-      "producerSha256": "7995248f5679442a1e8f60b6fd2d018e2022776838328cc52162d932a2337f8b"
+      "excessBytes": 1635,
+      "sizeRatio": 1.0122894446073014,
+      "evidence": "C193 Replay existing source models, then count the SAME fine-geometric training choices after signed arithmetic point-transform projection. No retraining, mutation of choices, sample/band/grouping/176symbol+1/dummy1/canonical/EOB-amortization/finalRDO/globalcap/DQT/lambda/reference/settings changes. C191 paired-chroma serialization retained. One format-unit primitive, no weight/quality/reference/workload grid.",
+      "producerSha256": "2d82a81dc60cd5e30c0644c2f62e4206da74ac6322e6caab6df02370705909e3"
     },
     {
       "case": "JpegRgb420AsyncSamples",
@@ -773,39 +773,39 @@
   ],
   "rankedRemaining": [
     {
+      "case": "Encode16",
+      "excessBytes": 1645,
+      "sizeRatio": 1.0123644235322415
+    },
+    {
       "case": "Encode8",
-      "excessBytes": 1700,
-      "sizeRatio": 1.0127780157996407
+      "excessBytes": 1635,
+      "sizeRatio": 1.0122894446073014
     },
     {
       "case": "Encode444Stream8",
-      "excessBytes": 1700,
-      "sizeRatio": 1.0127780157996407
+      "excessBytes": 1635,
+      "sizeRatio": 1.0122894446073014
     },
     {
       "case": "Encode444Cancelable8",
-      "excessBytes": 1700,
-      "sizeRatio": 1.0127780157996407
+      "excessBytes": 1635,
+      "sizeRatio": 1.0122894446073014
     },
     {
       "case": "Jpeg8AsyncNonSeekable",
-      "excessBytes": 1700,
-      "sizeRatio": 1.0127780157996407
-    },
-    {
-      "case": "Encode16",
-      "excessBytes": 1644,
-      "sizeRatio": 1.0123569071653526
+      "excessBytes": 1635,
+      "sizeRatio": 1.0122894446073014
     }
   ],
   "largestGap": {
-    "case": "Encode8",
-    "excessBytes": 1700,
-    "sizeRatio": 1.0127780157996407
+    "case": "Encode16",
+    "excessBytes": 1645,
+    "sizeRatio": 1.0123644235322415
   },
-  "next": "One named source-histogram unit-projection hypothesis: retain fine-geometric training choices, then count coded point-transformed amplitudes. Replay current models first; one8bit byte screen before quality/depth extension. Distinct from rejected coarse-grid retraining. No quality/weight/reference/workload grid.",
-  "correctedInvalidation": "Only decision-enabled Original three-component progressive444 qualities1..98 change packet ordering/table bytes and encoding costs. These five declared packets and one forward444 cost supersedeC187. Other affected timings remain historical. Source models/coefficient decisions/pixel quality are unchanged; exact declared packets reuse C190 normal/scalar/native pixel and coefficient proofs. Baseline/fixed/restart, qualities99/100, other policies/sampling, grayscale/420/422/optionalCompactColor/native/decode/edit/inspect/PNG/WebP retain relevant evidence. Finite256-case objective and31metadata confirmations remain open.",
-  "qualificationReuse": "C191 exactC190 packet checks/full5056 and226+62 scalar/OS; SAME actual0.2package/all3examples bothOS. Unchanged compression/quality paths retain evidence.",
+  "next": "One bounded source-Huffman alphabet audit: quantify +1 priors assigned to spectral-band run symbols that cannot occur, replay current models, then consider one format-derived reachable-run prior primitive if observations support it. No source/ref/quality/weight/workload grid or unchanged rejected retry.",
+  "correctedInvalidation": "All decision-enabled Original three-component444 qualities1..98 source-price paths change coefficient decisions, lossy pixels, packets and encode costs: adaptive, baseline/fixed/restart, caller samples, async and containing invocations. Five declared packet rows and the forward444 cost supersedeC191; other affected timings remain historical. Qualities99/100, other policies/sampling/grayscale/420/422/optionalCompactColor and native/decode/edit/inspect/PNG/WebP paths retain relevant evidence. Decoder fixture packets stay frozen. No finite case is added; 256-case CPU objective and31metadata confirmations remain open.",
+  "qualificationReuse": "C193 exactC192 packets/full5067 and237+62 scalar/OS; SAME actual private0.2package/all3examples bothOS. Unchanged codec/sampling/decoder paths reuse evidence.",
   "rawArtifact": {
     "file": "c125-jpeg-packet-ledger.tar.gz",
     "bytes": 10218,
@@ -819,69 +819,69 @@
   "changedBoundaries": [
     {
       "case": "Encode8",
-      "previousBytes": 134784,
-      "currentBytes": 134741,
-      "savingBytes": 43,
-      "currentSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
+      "previousBytes": 134741,
+      "currentBytes": 134676,
+      "savingBytes": 65,
+      "currentSha256": "4713e6868a620175c0caccfc9504c2bb8931a22768489b37ca041f62876c3ca8",
       "referenceBytes": 133041,
-      "sourcePsnrGapDb": 0.21807105354474743,
+      "sourcePsnrGapDb": 0.21826438203815002,
       "qualityPass": true
     },
     {
       "case": "Encode16",
-      "previousBytes": 134734,
-      "currentBytes": 134687,
-      "savingBytes": 47,
-      "currentSha256": "a88c9421a3e63fd3c4a56f51c2a4d1fe2554725881f12063cc4c72c30961faf4",
+      "previousBytes": 134687,
+      "currentBytes": 134688,
+      "savingBytes": -1,
+      "currentSha256": "c4dbe6fc4e83fc1be0210c45f660844e1cf63a5790c1b7b941b7b342302d97af",
       "referenceBytes": 133043,
-      "sourcePsnrGapDb": 0.2258234478453396,
+      "sourcePsnrGapDb": 0.22679764303462235,
       "qualityPass": true
     },
     {
       "case": "Encode444Stream8",
-      "previousBytes": 134784,
-      "currentBytes": 134741,
-      "savingBytes": 43,
-      "currentSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
+      "previousBytes": 134741,
+      "currentBytes": 134676,
+      "savingBytes": 65,
+      "currentSha256": "4713e6868a620175c0caccfc9504c2bb8931a22768489b37ca041f62876c3ca8",
       "referenceBytes": 133041,
-      "sourcePsnrGapDb": 0.21807105354474743,
+      "sourcePsnrGapDb": 0.21826438203815002,
       "qualityPass": true
     },
     {
       "case": "Encode444Cancelable8",
-      "previousBytes": 134784,
-      "currentBytes": 134741,
-      "savingBytes": 43,
-      "currentSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
+      "previousBytes": 134741,
+      "currentBytes": 134676,
+      "savingBytes": 65,
+      "currentSha256": "4713e6868a620175c0caccfc9504c2bb8931a22768489b37ca041f62876c3ca8",
       "referenceBytes": 133041,
-      "sourcePsnrGapDb": 0.21807105354474743,
+      "sourcePsnrGapDb": 0.21826438203815002,
       "qualityPass": true
     },
     {
       "case": "Jpeg8AsyncNonSeekable",
-      "previousBytes": 134784,
-      "currentBytes": 134741,
-      "savingBytes": 43,
-      "currentSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
+      "previousBytes": 134741,
+      "currentBytes": 134676,
+      "savingBytes": 65,
+      "currentSha256": "4713e6868a620175c0caccfc9504c2bb8931a22768489b37ca041f62876c3ca8",
       "referenceBytes": 133041,
-      "sourcePsnrGapDb": 0.21807105354474743,
+      "sourcePsnrGapDb": 0.21826438203815002,
       "qualityPass": true
     }
   ],
   "currentQualificationRaw": [
     {
-      "file": "c191-qualified-linux.tar.gz",
-      "bytes": 3595889,
-      "sha256": "8e6d1d4eae8f85932817fb5e569af9ce86e2b10e6a31a140b2ebab499182e802",
-      "members": 91,
-      "footprint": 4994370859
+      "file": "c193-qualified-linux.tar.gz",
+      "bytes": 3016225,
+      "sha256": "cf44d00f4ed237ad1f99d2d06ca58547c991bbe3c245e0c5f602dc4600b28c60",
+      "members": 86,
+      "footprint": 4982413968
     },
     {
-      "file": "c191-qualified-windows.tar.gz",
-      "bytes": 382962,
-      "sha256": "d38037edfacec609398c0652de989b8d534c68dd6cfbf956d2d7eb364d4088bf",
-      "members": 38,
-      "footprint": 4996644350
+      "file": "c193-qualified-windows.tar.gz",
+      "bytes": 445126,
+      "sha256": "0160384dcfb17bb10e91778736bc42c975d9cf8ef24b42adb3ec90bf3c419408",
+      "members": 40,
+      "footprint": 4995435538
     }
   ],
   "countReconciliation": "Recomputed defaultPasses/defaultOpen from all18 rows:13/5. The previous root counters5/13 were stale; its per-case packets and published13/5 table were already correct. No new measurements or changed acceptance result.",

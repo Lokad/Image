@@ -10,6 +10,8 @@
   the same pixels. Compression qualification remains specific to tested controls.
 - Shared Huffman tables for corresponding progressive JPEG chroma bands reduce
   qualified packets without changing coefficients or pixels.
+- Source JPEG histograms count unchanged training choices in coded point-transform
+  units, reducing tested aggregate packet size within matched-quality bounds.
 - Smaller lossy WebP output through admitted 16x16 luma prediction, grouped DC
   coding, full-direction reconstruction-based luma/chroma decisions and whole-frame entropy
   modeling at higher efforts, plus exact compressed alpha with bounded backward

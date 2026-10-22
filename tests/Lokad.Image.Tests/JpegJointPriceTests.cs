@@ -113,9 +113,9 @@ public sealed class JpegJointPriceTests
             JpegEncoder.SourcePriceOffsets444(actual, offsets);
         }
         Assert.Equal(900, maximum);
-        // MCU2304 + arena1860 + descriptors256 + pending192 + source-builder2532 + pixels64.
-        Assert.Equal(7208, 2304 + JpegEncoder.SourcePriceCapacity * 2 + 128 * 2 + 192 + 2532 + 64);
-        Assert.True(7208 < 8192);
+        // MCU2304 + arena1860 + descriptors256 + pending192 + builder2532 + pixels64 + levels128.
+        Assert.Equal(7336, 2304 + JpegEncoder.SourcePriceCapacity * 2 + 128 * 2 + 192 + 2532 + 64 + 128);
+        Assert.True(7336 < 8192);
         var control = JpegEncoder.SourcePriceShape444(JpegEncoder.PlannedSourcePriceBands444(69));
         Assert.Equal(613, control.Slots); Assert.Equal(405504, control.FinishWork); Assert.Equal(13, control.ComponentBands);
     }

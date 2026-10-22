@@ -19,7 +19,7 @@ internal static partial class JpegEncoder
         // symbols receive +1; a dummy reserves the all-ones code. Total <=8241,
         // depth <=27. Leaf IDs preserve symbol order, before internal-node ties.
         // 2532 stack bytes sequentially; source MCU, arena, map, pending runs and
-        // pixels bring simultaneous substantial scratch to 7208 B, within 8 KiB.
+        // pixels and128 point levels total7336 B of substantial scratch, within8KiB.
         Span<ushort> weights = stackalloc ushort[353], parents = stackalloc ushort[353];
         Span<ushort> heap = stackalloc ushort[177], symbols = stackalloc ushort[177];
         Span<ushort> order = stackalloc ushort[176], eobCounts = stackalloc ushort[15];
