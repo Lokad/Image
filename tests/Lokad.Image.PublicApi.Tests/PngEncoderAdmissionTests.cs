@@ -22,7 +22,7 @@ public sealed class PngEncoderAdmissionTests
         var sourcePixels = OriginalPixels.Bytes(source);
         var channels = color switch { PngColorType.Grayscale => 1, PngColorType.Rgb => 3, PngColorType.GrayscaleAlpha => 2, _ => 4 };
         // Public admission policy: supplied pixels + one packed scanline + 64 KiB
-        // IDAT transport buffer + 1 MiB BCL compression allowance. The inflater
+        // IDAT transport buffer + 1 MiB managed compressor workspace. The inflater
         // has a separate 256 KiB allowance; this test only constrains encoding.
         var peak = sourcePixels.Length + 9L * channels * (depth / 8) + 65536 + 1024 * 1024;
         var options = new PngEncodeOptions { ColorType = color, Compression = compression, Limits = new ImageLimits { MaxWorkingBytes = peak } };

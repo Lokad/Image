@@ -97,7 +97,7 @@ remain caller-managed. Existing `ImageCodec` entry points use per-operation limi
 | Container / EXIF inspection | Encoded input and bounded metadata/parser state; dimensions are checked without allocating a decoded image |
 | InspectHeaders / InspectHeadersAsync | Fixed 8,448-byte scratch/parser allowance; no whole-input, metadata-block or raster allocation |
 | PNG decode | Encoded input, concatenated IDAT, result, pass rows/palette/transparency, 4 KiB framing scratch and 256 KiB inflater allowance; optional filtered storage is separately admitted |
-| PNG encode | Source, packed row, 64 KiB chunk allowance and 1 MiB compressor workspace, admitted before the signature; Optimal uses bounded managed storage |
+| PNG encode | Source, packed row, 64 KiB chunk allowance and 1 MiB compressor workspace, admitted before the signature; all policies use bounded managed storage |
 | JPEG decode | Encoded input, parser/tables, padded coefficient/sample planes and RGBA result; orientation is admitted in the same operation. Certified sparse SIMD uses 8 KiB of original immutable module data, with no heap table or new workspace |
 | JPEG caller-sample decode | Supplied encoded/destination spans and the same parser/planes; orientation writes directly into caller storage without an RGBA frame |
 | Four-component JPEG | The same bounds with four coefficient/sample planes and descriptors; K is color, and shared admission counts caller CMYK storage |
@@ -115,7 +115,9 @@ four work units per pixel in chunks up to 4096 pixels; compositing charges sixte
 in chunks up to 256. Limits/cancellation can leave completed chunks in traversal
 order. Argument, geometry and memory validation precede mutation.
 Caller-owned encoded output storage is separate from codec workspace;
-`MaxOutputBytes` limits actual writes. Eligible stored RGBA PNG encodes may
+`MaxOutputBytes` limits actual writes. Stored PNG work includes packed-row preparation plus one unit per filtered byte;
+compressed policies additionally count bounded search/token/tree work.
+Eligible stored RGBA PNG encodes may
 reserve plain `MemoryStream` capacity after work/output preflight, preserving
 the original writes and limit checks.
 Tight noninterlaced PNG RGBA decoding can keep 64 KiB of raw history inside the

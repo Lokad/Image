@@ -89,22 +89,22 @@ and exact decoding remain open.
 These two procedural controls establish no general compression claim. CPU and allocations for the Reference profile are unmeasured; tables retain
 Original-profile observations with their recorded producer identities.
 
-PNG `Optimal` now uses the independently implemented managed streaming level6
-encoder for grayscale/RGB/grayscale-alpha/RGBA at8/16bits. All eight existing
-**513×259** controls reproduce complete frozen FFmpeg packets, raw-exact with
-no metadata exemption. Source pixels alone determine tokens, Huffman trees,
-stored/fixed/dynamic blocks, zlib checksums and4096-byte PNG chunks. The initial
-RGBA8 prototype also matches111,511observed tokens,21trees and1549code-length runs;
-the independent RFC1950/1951 observer retains those intermediate checks.
+All four PNG compression policies use original managed streaming Deflate:
+stored level0, greedy level1, lazy level6 and longer lazy level9. The existing
+four color types at8/16bits qualify Optimal; RGBA8/16 also qualify each other
+policy. All14 **513×259** controls match complete frozen FFmpeg packets raw-exact,
+including pHYs,4096-byte IDAT chunks, checksums and entropy. No metadata exemption
+is used. Required async, forward, live-token and ImageBudget boundaries retain
+those packets; no quality search or new reference setting is involved.
 
-Production keeps a bounded history/dictionary and one token block rather than
-full-frame filtered/coefficient copies. One conservative1MiB workspace reservation
-precedes allocation through the borrowed operation context. It remains charged
-until its synchronous users finish; encoded async output keeps its separate owner.
-Refusal, cancellation and writer failure release workspace without encoder fallback
-or cleanup writes. Source/stream ownership and independent surviving outputs remain
-qualified. Other policies and CPU/allocation qualification remain open.
-[Numeric evidence](../benchmarks/png-byte-parity-evidence.json) records the tested scope.
+One bounded history/dictionary/token-block workspace is reserved before allocation
+through the borrowed operation context. Stored blocks keep scanlines whole at the
+flush threshold. Refusal, cancellation and writer failure release workspace without
+fallback or cleanup writes. Async output retains its separate owner until actual
+writes finish. [Numeric evidence](../benchmarks/png-byte-parity-evidence.json)
+records exact tested scope; current CPU/allocation qualification remains open.
+The initial RGBA8 level6 prototype retains111,511token,21tree and1549code-length
+run comparisons through independent RFC1950/1951 observers.
 
 In `tools/WarmReference`, `verify-jpeg-scan-stage.ps1` checks the independent
 complete encoder and its supplied-table stage; `verify-jpeg-huffman-stage.ps1`

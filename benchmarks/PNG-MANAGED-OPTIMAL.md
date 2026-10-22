@@ -1,6 +1,9 @@
-# Managed PNG Optimal packet qualification
+# E21 managed PNG Optimal packet qualification
 
-The default encoder now uses original safe managed level6 Deflate, generated
+This records E21. [E24 qualification](PNG-MANAGED-POLICIES.md) extends the managed
+encoder to every compression policy and records current binaries/tests/packages.
+
+At E21, the default encoder used original safe managed level6 Deflate, generated
 Huffman trees, filterNone and4096-byte IDAT chunks. These are the same eight
 513×259 original controls and frozen FFmpeg inputs/settings used previously.
 Complete packets match raw-exact; no metadata exception is used.
@@ -30,8 +33,8 @@ comparison. Both package identities are recorded in the evidence.
 
 CPU time and allocated B/op for this new encoder are **unmeasured**. All17prior
 BCL PNG timing rows predate the changed shared entry/framing code; nine also have
-the new default algorithm. Other policies retain their
-backends; remaining required levels0/1/9 need exact replication. Unchanged decoders
+the new default algorithm. At that checkpoint, other policies retained runtime backends;
+E24 subsequently completes the six named level0/1/9 controls. Unchanged decoders
 and transforms retain evidence on their recorded frozen inputs. These controls
 do not establish general-image, other-policy or performance parity.
 

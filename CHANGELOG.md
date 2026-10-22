@@ -6,8 +6,8 @@
   including restarts, direct caller samples and async output. Removed superseded
   experimental encoders and switches. Ten frozen controls match complete reference
   packets, allowing only the documented color attribution replacement.
-- Bounded managed PNG `Optimal` encoding, with complete raw packet equality on
-  eight frozen 8/16-bit color controls.
+- Bounded managed PNG stored/fast/optimal/smallest encoding, with complete raw
+  packet equality on14 frozen8/16-bit controls and shared admission throughout.
 - Smaller lossless/lossy WebP output on declared controls; exact-reference encoder
   replication and broader qualification remain open.
 - Caller-owned cooperative memory admission across nested work and retained

@@ -31,17 +31,17 @@ internal sealed class LimitedWriteStream(Stream output, int maximum, Cancellatio
             || cancellation.CanBeCanceled || output.GetType() != typeof(MemoryStream)) return;
         // RFC1951 section3.2.4: at most one five-byte stored header per byte,
         // plus a final empty block; RFC1950 adds its six-byte wrapper. Include
-        // PNG framing for every64KiB IDAT. This loose bound only selects the
+        // PNG framing for every4096-byte IDAT plus neutral pHYs. This loose bound only selects the
         // optional capacity path; every original output-quota check remains.
         var worstZlib = filteredBytes * 6 + 11;
-        var worstPng = worstZlib + 45 + 12 * ((worstZlib + 65535) / 65536);
+        var worstPng = worstZlib + 66 + 12 * ((worstZlib + 4095) / 4096);
         if (worstPng > maximum - written) return;
         var memory = (MemoryStream)output;
         if (!memory.CanSeek || !memory.CanWrite) return;
         // A size estimate, not a new output/admission bound. Ordinary writes
         // can still grow beyond it. Allow framing and modest stored overhead.
         var estimate = filteredBytes + filteredBytes / 200 + 1024;
-        estimate += 45 + 12 * ((estimate + 65535) / 65536);
+        estimate += 66 + 12 * ((estimate + 4095) / 4096);
         if (estimate > Array.MaxLength - memory.Position) return;
         var capacity = (int)(memory.Position + estimate);
         if (capacity <= memory.Capacity) return;

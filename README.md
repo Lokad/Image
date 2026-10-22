@@ -8,7 +8,7 @@ grayscale and 4:4:4/4:2:2/4:2:0. [Codec compatibility](docs/codec-parity.md) sta
 
 - **PNG:** decode all static color/depth profiles, including palette, transparency
   and Adam7; encode grayscale/RGB/grayscale-alpha/RGBA at 8 or 16 bits.
-  Managed `Optimal` encoding matches the eight frozen FFmpeg packet controls.
+  All four managed compression policies match the 14 frozen FFmpeg packet controls.
 - **JPEG:** baseline/progressive decode; baseline encode with grayscale,
   subsampling, restart markers and explicit alpha flattening.
   CMYK/YCCK and 4:1:1/4:1:0 decode; caller-owned gray/RGB/CMYK decode samples

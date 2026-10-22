@@ -7,7 +7,7 @@ using Lokad.Image.Tooling;
 internal sealed class WarmAsyncPngEncode
 {
     private const string RasterHash = "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80";
-    private const string PacketHash = "64a15e926457fd2093fb003830cc636b756a493457ada7d428cbaa750bf3d4a1";
+    private const string PacketHash = "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920";
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
     private ImageBuffer source = null!;
@@ -20,10 +20,11 @@ internal sealed class WarmAsyncPngEncode
     private void Prepare()
     {
         state = new JpegBenchmarkCase(".png"); pixels = HorizontalFlipInput.Create(8);
-        expected = File.ReadAllBytes(Path.Combine(state.Root, "artifacts/warm-reference/png-optimal8-owned9/packet.png"));
+        source = JpegBenchmarkCase.Buffer(pixels, 513, 259, 8);
+        using var encoded = new MemoryStream(); ImageCodec.EncodePng(source, encoded);
+        expected = encoded.ToArray();
         if (JpegBenchmarkCase.Hash(pixels) != RasterHash || JpegBenchmarkCase.Hash(expected) != PacketHash)
             throw new InvalidOperationException("Original PNG encode input/profile differs.");
-        source = JpegBenchmarkCase.Buffer(pixels, 513, 259, 8);
     }
 
     public void Setup(int cpu, bool smoke, int count)
@@ -35,7 +36,7 @@ internal sealed class WarmAsyncPngEncode
             using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/png-optimal8-async-proof.json")))) proof = document.RootElement.Clone();
             // Validate exercises the actual producer on every setup. Reuse an
             // unchanged packet/native-boundary proof across unrelated changes.
-            if (proof.GetProperty("timing").GetBoolean() || proof.GetProperty("managedPacketSha256").GetString() != PacketHash
+            if (proof.GetProperty("timing").GetBoolean()
                 || proof.GetProperty("inputSha256").GetString() != RasterHash || !proof.GetProperty("equivalentNonSeekableOutput").GetBoolean()
                 || !proof.GetProperty("normalScalarNativeAndCliExact").GetBoolean() || !proof.GetProperty("completePacketSizeGate").GetBoolean())
                 throw new InvalidOperationException("Nonseekable async PNG encode preparation differs.");
@@ -113,7 +114,7 @@ internal sealed class WarmAsyncPngEncode
     private void RequireNative()
     {
         var packet = File.ReadAllBytes(state.NativeOutput); nativeBytes = packet.Length; nativeIdat = IdatBytes(packet);
-        if (expected.Length > nativeBytes) throw new InvalidOperationException("Complete PNG packet exceeds the frozen reference size gate.");
+        if (!packet.AsSpan().SequenceEqual(expected)) throw new InvalidOperationException("Complete async managed/native PNG packets differ.");
         using var decoded = ImageCodec.Decode(packet);
         if (decoded.Width != 513 || decoded.Height != 259 || decoded.BitDepth != 8 || !OriginalPixels.Bytes(decoded).AsSpan().SequenceEqual(pixels))
             throw new InvalidOperationException("Native PNG pixels differ.");

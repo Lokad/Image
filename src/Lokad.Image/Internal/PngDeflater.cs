@@ -1,6 +1,6 @@
 namespace Lokad.Image.Internal;
 
-// Independent RFC1950/1951 streaming level6 encoder. Only a bounded history,
+// Independent RFC1950/1951 streaming stored/greedy/lazy encoder. Only a bounded history,
 // dictionary, token block and tree workspace survive between input writes.
 // The execution's borrowed context governs every substantial owned allocation.
 internal sealed partial class PngDeflater : Stream
@@ -9,17 +9,20 @@ internal sealed partial class PngDeflater : Stream
     private const int Window = 32768, Minimum = 3, Maximum = 258, Lookahead = 262, TokenCapacity = 16383;
     private readonly Stream output;
     private readonly OperationContext context;
+    private readonly int level;
     private byte[] history = [], encoded = [];
     private long[] heads = [], older = [];
     private uint[] tokens = [];
     private long position, filled, windowOrigin, deferredStart, blockStart;
+    private int storedCount;
     private int deferredLength = Minimum - 1, tokenCount, encodedCount, pendingBits;
     private uint pending, adlerA = 1, adlerB;
     private bool hasDeferredByte, started, completed, disposed;
 
-    internal PngDeflater(Stream output, OperationContext context)
+    internal PngDeflater(Stream output, OperationContext context, int level = 6)
     {
-        this.output = output; this.context = context;
+        if (level is not (0 or 1 or 6 or 9)) throw new ArgumentOutOfRangeException(nameof(level));
+        this.output = output; this.context = context; this.level = level;
         // ~660 KiB fixed arrays plus <64 KiB of overlapping tree/code storage;
         // 1 MiB conservatively covers actual retained capacities and minor owners.
         context.Reserve(WorkspaceBytes);
@@ -36,6 +39,7 @@ internal sealed partial class PngDeflater : Stream
         ObjectDisposedException.ThrowIf(disposed, this);
         if (completed) throw new InvalidOperationException("PNG compression is complete.");
         context.Work(0); Start();
+        if (level == 0) { WriteStored(data); return; }
         while (!data.IsEmpty)
         {
             AdvanceOrigin();
@@ -48,6 +52,37 @@ internal sealed partial class PngDeflater : Stream
             { adlerA = (adlerA + value) % 65521; adlerB = (adlerB + adlerA) % 65521; }
             filled += count; data = data[count..]; Process(false);
         }
+    }
+
+    internal void WriteRow(ReadOnlySpan<byte> row)
+    {
+        WriteByte(0); Write(row);
+        // A PNG scanline, including its filter byte, is one reference input
+        // boundary. Flush stored data only after the entire row, never after
+        // its separately written filter byte. Generic writes fill fixed blocks.
+        if (level == 0 && storedCount >= Window) StoredBlock(false);
+    }
+
+    private void WriteStored(ReadOnlySpan<byte> data)
+    {
+        context.Work(data.Length);
+        while (!data.IsEmpty)
+        {
+            var count = Math.Min(data.Length, 65531 - storedCount);
+            data[..count].CopyTo(history.AsSpan(storedCount));
+            foreach (var value in data[..count])
+            { adlerA = (adlerA + value) % 65521; adlerB = (adlerB + adlerA) % 65521; }
+            storedCount += count; data = data[count..];
+            if (storedCount == 65531) StoredBlock(false);
+        }
+    }
+    private void StoredBlock(bool final)
+    {
+        Put(final ? 1 : 0, 3); Align();
+        OutputByte((byte)storedCount); OutputByte((byte)(storedCount >> 8));
+        OutputByte((byte)~storedCount); OutputByte((byte)(~storedCount >> 8));
+        for (var at = 0; at < storedCount; at++) OutputByte(history[at]);
+        storedCount = 0;
     }
 
     public override void WriteByte(byte value) { Span<byte> one = stackalloc byte[1]; one[0] = value; Write(one); }
@@ -69,16 +104,57 @@ internal sealed partial class PngDeflater : Stream
 
     private void Process(bool final)
     {
+        if (level == 1) ProcessFast(final); else ProcessLazy(final);
+    }
+
+    private void ProcessFast(bool final)
+    {
         while (position < filled && (final || filled - position >= Lookahead))
         {
             context.Work(1); AdvanceOrigin();
             var prior = position + Minimum <= filled ? Insert(position) : 0;
             var length = Minimum - 1; long start = 0;
-            if (prior > windowOrigin && position - prior <= Window - Lookahead && deferredLength < 16)
+            var available = (int)Math.Min(Maximum, filled - position);
+            if (prior > windowOrigin && position - prior <= Window - Lookahead)
             {
-                var budget = deferredLength >= 8 ? 32 : 128;
+                var budget = 4; var limit = Math.Max(windowOrigin, position - (Window - Lookahead));
+                do
+                {
+                    context.Work(1);
+                    if (length < available && Byte(prior + length) == Byte(position + length)
+                        && Byte(prior) == Byte(position) && Byte(prior + 1) == Byte(position + 1))
+                    {
+                        var found = 2;
+                        while (found < available && Byte(prior + found) == Byte(position + found)) found++;
+                        context.Work(found);
+                        if (found > length) { length = found; start = prior; if (found >= Math.Min(8, available)) break; }
+                    }
+                    prior = older[(int)(prior & (Window - 1))];
+                } while (prior > limit && --budget != 0);
+            }
+            if (length >= Minimum)
+            {
+                Emit((uint)length | (uint)(position - start) << 9);
+                if (length <= 4 && filled - position - length >= Minimum)
+                    for (var at = position + 1; at < position + length; at++) Insert(at);
+                position += length;
+            }
+            else { Emit(Byte(position)); position++; }
+        }
+    }
+
+    private void ProcessLazy(bool final)
+    {
+        while (position < filled && (final || filled - position >= Lookahead))
+        {
+            context.Work(1); AdvanceOrigin();
+            var prior = position + Minimum <= filled ? Insert(position) : 0;
+            var length = Minimum - 1; long start = 0;
+            if (prior > windowOrigin && position - prior <= Window - Lookahead && deferredLength < (level == 9 ? 258 : 16))
+            {
+                var budget = level == 9 ? (deferredLength >= 32 ? 1024 : 4096) : deferredLength >= 8 ? 32 : 128;
                 var best = deferredLength; var limit = Math.Max(windowOrigin, position - (Window - Lookahead));
-                var available = (int)Math.Min(Maximum, filled - position); var enough = Math.Min(128, available);
+                var available = (int)Math.Min(Maximum, filled - position); var enough = Math.Min(level == 9 ? 258 : 128, available);
                 do
                 {
                     context.Work(1);
@@ -121,9 +197,15 @@ internal sealed partial class PngDeflater : Stream
     {
         ObjectDisposedException.ThrowIf(disposed, this);
         if (completed) throw new InvalidOperationException("PNG compression is complete.");
-        context.Work(0); Start(); Process(true);
-        if (hasDeferredByte) { Emit(Byte(position - 1)); hasDeferredByte = false; }
-        Block(true); Align();
+        context.Work(0); Start();
+        if (level == 0) StoredBlock(true);
+        else
+        {
+            Process(true);
+            if (hasDeferredByte) { Emit(Byte(position - 1)); hasDeferredByte = false; }
+            Block(true);
+        }
+        Align();
         var adler = adlerB << 16 | adlerA;
         for (var shift = 24; shift >= 0; shift -= 8) OutputByte((byte)(adler >> shift));
         Flush(); completed = true;
@@ -132,7 +214,7 @@ internal sealed partial class PngDeflater : Stream
     private void Start()
     {
         if (started) return;
-        started = true; OutputByte(0x78); OutputByte(0x9c);
+        started = true; OutputByte(0x78); OutputByte(level == 9 ? (byte)0xda : level is 0 or 1 ? (byte)0x01 : (byte)0x9c);
     }
     private void Put(int value, int width)
     {

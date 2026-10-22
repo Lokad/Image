@@ -1441,95 +1441,88 @@ internal static class PngCodec
         context.ReserveBorrowed(source.ByteLength);
         var color = (int)options.ColorType;
         var rowBytes = source.Width * Channels(color) * (source.BitDepth / 8);
-        var managed = options.Compression == CompressionLevel.Optimal;
-        // Row/chunk ownership precedes allocation. The managed compressor owns
-        // its separate fixed reservation; other policies retain the BCL allowance.
-        context.Reserve(rowBytes + 65536L + (managed ? 0 : 1024 * 1024));
+        var level = options.Compression switch
+        {
+            CompressionLevel.NoCompression => 0,
+            CompressionLevel.Fastest => 1,
+            CompressionLevel.Optimal => 6,
+            CompressionLevel.SmallestSize => 9,
+            _ => throw new ArgumentOutOfRangeException(nameof(options))
+        };
+        // Establish row/chunk and compressor owners before writing the signature.
+        context.Reserve(rowBytes + 65536L);
         var row = new byte[rowBytes];
-        using var chunks = new IdatWriter(output, managed ? 4096 : 65536, !managed);
-        using var deflater = managed ? new PngDeflater(chunks, context) : null;
+        using var chunks = new IdatWriter(output, 4096, false);
+        using var deflater = new PngDeflater(chunks, context, level);
         output.Write(Signature);
         Span<byte> header = stackalloc byte[13];
         BinaryPrimitives.WriteInt32BigEndian(header, source.Width);
         BinaryPrimitives.WriteInt32BigEndian(header[4..], source.Height);
         header[8] = (byte)source.BitDepth; header[9] = (byte)color; header[10] = 0; header[11] = 0; header[12] = 0;
         WriteChunk(output, "IHDR"u8, header);
-        if (managed)
         {
             Span<byte> physical = stackalloc byte[9]; physical.Clear(); physical[7] = 1;
             WriteChunk(output, "pHYs"u8, physical);
         }
-        var compression = options.Compression;
+        if (level == 0 && color == 6
+            && context.RemainingWork >= (rowBytes * 9L + 1) * source.Height
+            && output is LimitedWriteStream bounded)
+            bounded.PrepareStoredPngCapacity((rowBytes + 1L) * source.Height);
+        for (var y = 0; y < source.Height; y++)
         {
-            // The runtime's numeric level1 selects its fixed-tree quick path.
-            // Numeric level2 selects fast adaptive coding, streaming through the
-            // same bounded writer for ordinary, caller and cancelable outputs.
-            using (Stream zlib = deflater is not null ? deflater : compression == CompressionLevel.Fastest && color == 6
-                ? new ZLibStream(chunks, new ZLibCompressionOptions { CompressionLevel = 2 }, true)
-                : new ZLibStream(chunks, compression, true))
+            context.Work(rowBytes * 8L);
+            if (color == 6 && source.BitDepth == 8)
             {
-                if (compression == CompressionLevel.NoCompression && color == 6
-                    && context.RemainingWork >= rowBytes * 8L * source.Height
-                    && output is LimitedWriteStream bounded)
-                    bounded.PrepareStoredPngCapacity((rowBytes + 1L) * source.Height);
-                for (var y = 0; y < source.Height; y++)
+                for (var x = 0; x < source.Width; x += 4096)
                 {
-                    context.Work(rowBytes * 8L);
-                    if (color == 6 && source.BitDepth == 8)
-                    {
-                        for (var x = 0; x < source.Width; x += 4096)
-                        {
-                            context.Cancellation.ThrowIfCancellationRequested();
-                            var bytes = Math.Min(4096, source.Width - x) * 4;
-                            source.GetRow8(y).Slice(x * 4, bytes).CopyTo(row.AsSpan(x * 4, bytes));
-                        }
-                    }
-                    else if (color == 6 && source.BitDepth == 16)
-                    {
-                        for (var x = 0; x < source.Width; x += 4096)
-                        {
-                            context.Cancellation.ThrowIfCancellationRequested();
-                            var samples = Math.Min(4096, source.Width - x) * 4;
-                            var input = source.GetRow16(y).Slice(x * 4, samples);
-                            var destination = MemoryMarshal.Cast<byte, ushort>(row.AsSpan(x * 8, samples * 2));
-                            // PNG stores full-word samples most significant byte first.
-                            // The span overload provides portable vectorized conversion.
-                            if (BitConverter.IsLittleEndian) BinaryPrimitives.ReverseEndianness(input, destination);
-                            else input.CopyTo(destination);
-                        }
-                    }
-                    else if (source.BitDepth == 8 && color is 0 or 2 or 4)
-                    {
-                        PackByteRow(source, y, row, color, context.Cancellation);
-                    }
-                    else
-                    {
-                        var position = 0;
-                        for (var x = 0; x < source.Width; x++)
-                        {
-                            if ((x & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested();
-                            var r = source.Sample(x, y, 0); var g = source.Sample(x, y, 1); var b = source.Sample(x, y, 2);
-                            var a = source.Sample(x, y, 3);
-                            var maximum = source.BitDepth == 8 ? 255 : 65535;
-                            if ((color is 0 or 4) && (r != g || r != b))
-                                throw new ArgumentException("Grayscale encoding requires equal RGB channels.", nameof(source));
-                            if ((color is 0 or 2) && a != maximum)
-                                throw new ArgumentException("Encoding without alpha requires opaque pixels.", nameof(source));
-                            WriteSample(row, ref position, r, source.BitDepth);
-                            if (color is 2 or 6)
-                            {
-                                WriteSample(row, ref position, g, source.BitDepth);
-                                WriteSample(row, ref position, b, source.BitDepth);
-                            }
-                            if (color is 4 or 6) WriteSample(row, ref position, a, source.BitDepth);
-                        }
-                    }
-                    zlib.WriteByte(0); // Correctness-first encoder: PNG filter None.
-                    zlib.Write(row);
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    var bytes = Math.Min(4096, source.Width - x) * 4;
+                    source.GetRow8(y).Slice(x * 4, bytes).CopyTo(row.AsSpan(x * 4, bytes));
                 }
-                deflater?.Complete();
             }
+            else if (color == 6 && source.BitDepth == 16)
+            {
+                for (var x = 0; x < source.Width; x += 4096)
+                {
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    var samples = Math.Min(4096, source.Width - x) * 4;
+                    var input = source.GetRow16(y).Slice(x * 4, samples);
+                    var destination = MemoryMarshal.Cast<byte, ushort>(row.AsSpan(x * 8, samples * 2));
+                    // PNG stores full-word samples most significant byte first.
+                    // The span overload provides portable vectorized conversion.
+                    if (BitConverter.IsLittleEndian) BinaryPrimitives.ReverseEndianness(input, destination);
+                    else input.CopyTo(destination);
+                }
+            }
+            else if (source.BitDepth == 8 && color is 0 or 2 or 4)
+            {
+                PackByteRow(source, y, row, color, context.Cancellation);
+            }
+            else
+            {
+                var position = 0;
+                for (var x = 0; x < source.Width; x++)
+                {
+                    if ((x & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                    var r = source.Sample(x, y, 0); var g = source.Sample(x, y, 1); var b = source.Sample(x, y, 2);
+                    var a = source.Sample(x, y, 3);
+                    var maximum = source.BitDepth == 8 ? 255 : 65535;
+                    if ((color is 0 or 4) && (r != g || r != b))
+                        throw new ArgumentException("Grayscale encoding requires equal RGB channels.", nameof(source));
+                    if ((color is 0 or 2) && a != maximum)
+                        throw new ArgumentException("Encoding without alpha requires opaque pixels.", nameof(source));
+                    WriteSample(row, ref position, r, source.BitDepth);
+                    if (color is 2 or 6)
+                    {
+                        WriteSample(row, ref position, g, source.BitDepth);
+                        WriteSample(row, ref position, b, source.BitDepth);
+                    }
+                    if (color is 4 or 6) WriteSample(row, ref position, a, source.BitDepth);
+                }
+            }
+            deflater.WriteRow(row);
         }
+        deflater.Complete();
         chunks.Flush();
         context.Cancellation.ThrowIfCancellationRequested();
         WriteChunk(output, "IEND"u8, []);

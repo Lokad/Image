@@ -88,10 +88,13 @@ try {
 </Project>
 "@ | Set-Content -LiteralPath (Join-Path $consumer 'Consumer.csproj') -Encoding utf8
     @'
+using System.IO.Compression;
 using Lokad.Image;
+foreach (var pngCompression in new[] { CompressionLevel.Optimal, CompressionLevel.NoCompression, CompressionLevel.Fastest, CompressionLevel.SmallestSize })
 foreach (var pngDepth in new[] { 8, 16 })
 foreach (var pngColor in new[] { PngColorType.Grayscale, PngColorType.Rgb, PngColorType.GrayscaleAlpha, PngColorType.Rgba })
 {
+    if (pngCompression != CompressionLevel.Optimal && pngColor != PngColorType.Rgba) continue;
     using var pngImage = Lokad.Image.Tooling.OriginalPixels.Buffer(513, 259, pngDepth,
         grayscale: pngColor is PngColorType.Grayscale or PngColorType.GrayscaleAlpha,
         opaque: pngColor is PngColorType.Grayscale or PngColorType.Rgb);
@@ -100,7 +103,16 @@ foreach (var pngColor in new[] { PngColorType.Grayscale, PngColorType.Rgb, PngCo
         if (pngDepth == 8) pngImage.GetRow8(0)[3] = pngImage.GetRow8(0)[513 * 4 - 1] = 0;
         else pngImage.GetRow16(0)[3] = pngImage.GetRow16(0)[513 * 4 - 1] = 0;
     }
-    var expectedPngHash = (pngColor, pngDepth) switch
+    var expectedPngHash = pngCompression != CompressionLevel.Optimal ? (pngDepth, pngCompression) switch
+    {
+        (8, CompressionLevel.NoCompression) => "c8f17d7b3b3c1aff850539b1be0ee318956a58ec6ce555da332838ed0cc1cd3c",
+        (16, CompressionLevel.NoCompression) => "9b31604447d61d5ab7a30aad3cfde4cd73fef6d85ff506e74baeba807e54574d",
+        (8, CompressionLevel.Fastest) => "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+        (16, CompressionLevel.Fastest) => "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+        (8, CompressionLevel.SmallestSize) => "4d8f15d9fdb8f415544b831c8f0845c1532adc8696f2707264bced25fc424c3c",
+        (16, CompressionLevel.SmallestSize) => "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+        _ => throw new Exception("Unknown PNG policy control.")
+    } : (pngColor, pngDepth) switch
     {
         (PngColorType.Grayscale, 8) => "c5b4a248c1ca0f76115d06e7795698f50ac7e623c366fcee4a659cb08da2872a",
         (PngColorType.Rgb, 8) => "e1b0f39154bb07b69c6fab59512dbd55f1fb855c0a9805a44892d510efb73228",
@@ -115,7 +127,7 @@ foreach (var pngColor in new[] { PngColorType.Grayscale, PngColorType.Rgb, PngCo
     using var pngRoot = new Lokad.Image.Tooling.TestMemoryBudget(4 * 1024 * 1024);
     using var pngPacket = new MemoryStream();
     await ImageCodec.EncodePngAsync(pngImage, pngPacket, new PngEncodeOptions
-    { ColorType = pngColor, Limits = ImageLimits.Default with { MemoryBudget = pngRoot } });
+    { ColorType = pngColor, Compression = pngCompression, Limits = ImageLimits.Default with { MemoryBudget = pngRoot } });
     if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(pngPacket.ToArray())).ToLowerInvariant()
         != expectedPngHash || pngRoot.Bytes != 0 || pngRoot.IsDisposed)
         throw new Exception("Packaged managed PNG bytes or shared ownership differ.");

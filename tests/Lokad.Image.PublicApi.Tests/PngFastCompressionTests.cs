@@ -12,9 +12,9 @@ public sealed class PngFastCompressionTests
     {
         using var source = OriginalPixels.Buffer(513, 259, depth); var original = OriginalPixels.Bytes(source);
         using var live = new CancellationTokenSource();
-        var legacy = Encode(source, token: live.Token); var candidate = Encode(source);
-        Assert.Equal(legacy, candidate);
-        Assert.Equal(1, Idat(candidate)[1] >> 6);
+        var cancelable = Encode(source, token: live.Token); var candidate = Encode(source);
+        Assert.Equal(cancelable, candidate);
+        Assert.Equal(0, Idat(candidate)[1] >> 6);
         using var first = ImageCodec.Decode(candidate); using var second = ImageCodec.Decode(candidate);
         Assert.Equal(original, OriginalPixels.Bytes(first)); Assert.Equal(original, OriginalPixels.Bytes(second));
         if (depth == 8) first.GetRow8(0)[0] ^= 255;
@@ -23,17 +23,16 @@ public sealed class PngFastCompressionTests
     }
 
     [Fact]
-    public void ExactBaseMemoryAndRowWorkAdmitTheSamePacketWithoutOptionalWorkspace()
+    public void ExactBaseMemoryAdmitsTheSamePacketAndOneByteLessRefuses()
     {
         using var source = OriginalPixels.Buffer(513, 259, 16); using var live = new CancellationTokenSource();
-        var legacy = Encode(source, token: live.Token); var adapted = Encode(source);
+        var cancelable = Encode(source, token: live.Token); var adapted = Encode(source);
         var rowBytes = 513 * 8;
-        var oldPeak = 513L * 259 * 8 + rowBytes + 65536 + 1024 * 1024;
-        var work = rowBytes * 259L * 8;
-        Assert.Equal(legacy, adapted);
-        Assert.Equal(adapted, Encode(source, ImageLimits.Default with { MaxWorkingBytes = oldPeak, MaxWork = work }));
+        var peak = 513L * 259 * 8 + rowBytes + 65536 + 1024 * 1024;
+        Assert.Equal(cancelable, adapted);
+        Assert.Equal(adapted, Encode(source, ImageLimits.Default with { MaxWorkingBytes = peak }));
         using var rejected = new MemoryStream();
-        Assert.Throws<ImageLimitException>(() => ImageCodec.EncodePng(source, rejected, Options(ImageLimits.Default with { MaxWorkingBytes = oldPeak - 1 })));
+        Assert.Throws<ImageLimitException>(() => ImageCodec.EncodePng(source, rejected, Options(ImageLimits.Default with { MaxWorkingBytes = peak - 1 })));
         Assert.Equal(0, rejected.Length);
     }
 
@@ -42,12 +41,12 @@ public sealed class PngFastCompressionTests
     public void ConstrainedFailuresKeepOriginalExceptionAndPartialPacket(string constraint)
     {
         using var source = OriginalPixels.Buffer(513, 259, 16); using var live = new CancellationTokenSource();
-        var legacy = Encode(source, token: live.Token);
+        var cancelable = Encode(source, token: live.Token);
         var limits = constraint switch
         {
             "memory" => ImageLimits.Default with { MaxWorkingBytes = 513L * 259 * 8 + 513 * 8 + 65536 + 1024 * 1024 - 1 },
             "work" => ImageLimits.Default with { MaxWork = 513L * 259 * 8 * 8 - 1 },
-            _ => ImageLimits.Default with { MaxOutputBytes = legacy.Length - 1 }
+            _ => ImageLimits.Default with { MaxOutputBytes = cancelable.Length - 1 }
         };
         using var actual = new MemoryStream(); using var reference = new MemoryStream();
         var expected = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodePng(source, reference, Options(limits), live.Token));

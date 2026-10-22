@@ -67,8 +67,7 @@ public partial class WarmPng
     private string FastDirectory => "png-fast" + Depth + "-fast2" + (EncodeCancelable ? "-cancel" : ForwardOutput ? "-forward" : "");
     private CancellationToken EncodeCancellation => EncodeCancelable ? decodeCancellation : default;
     private int EncoderLevel => Smallest ? 9 : Fastest ? 1 : NoCompression ? 0 : 6;
-    private bool MatchedByteEncoding => Encode && Depth == 8 && !Fastest && !NoCompression && !Smallest;
-    private int ManagedEncoderLevel => Fastest ? 2 : MatchedByteEncoding ? 9 : EncoderLevel;
+    private int ManagedEncoderLevel => EncoderLevel;
     private bool Encode => Case is WarmPngCase.EncodeSmallest8 or WarmPngCase.EncodeSmallest16 or WarmPngCase.EncodeFast8 or WarmPngCase.EncodeFastForward16 or WarmPngCase.EncodeFastCancelable16 or WarmPngCase.EncodeNoCompression16 or WarmPngCase.EncodeFast16 or WarmPngCase.EncodeNoCompression8 or WarmPngCase.EncodeGrayAlpha16 or WarmPngCase.EncodeGrayAlpha8 or WarmPngCase.Encode8 or WarmPngCase.Encode16 or WarmPngCase.EncodeRgb8 or WarmPngCase.EncodeRgb16 or WarmPngCase.EncodeGray8 or WarmPngCase.EncodeGray16;
     private bool Interlaced => Case is WarmPngCase.DecodePalette4Adam7 or WarmPngCase.DecodePalette8Adam7 or WarmPngCase.DecodeAdam7_16 or WarmPngCase.DecodeGray1Adam7;
     private bool Paeth => Case is WarmPngCase.DecodeRgbPaeth16 or WarmPngCase.DecodeGrayAlphaPaeth8 or WarmPngCase.DecodeGrayPaeth8 or WarmPngCase.DecodeRgbPaeth8 or WarmPngCase.DecodePaeth16 or WarmPngCase.DecodePaeth8;
@@ -166,22 +165,25 @@ public partial class WarmPng
             else if (Average) encoded = WarmPngAverageInput.Build(pixels, Depth);
             else if (Mono) encoded = WarmPngMonoInput.Build(pixels, CodedDepth);
             else if (Palette) encoded = WarmPngPaletteInput.Build(pixels, CodedDepth, PartialAlpha, shortPalette: ShortPalette);
-            else if (Case is WarmPngCase.DecodeRgb8 or WarmPngCase.DecodeGray8 or WarmPngCase.DecodeGrayAlpha8)
+            else if (Case is WarmPngCase.DecodeRgb8 or WarmPngCase.DecodeGray8 or WarmPngCase.DecodeGrayAlpha8 or WarmPngCase.DecodeRgb16 or WarmPngCase.DecodeGray16 or WarmPngCase.DecodeGrayAlpha16)
             {
                 // Decoder workload bytes remain frozen when encoder policy changes.
-                var name = Rgb ? "png-rgb8" : GrayAlpha ? "png-gray-alpha8" : "png-gray8";
+                var name = (Rgb ? "png-rgb" : GrayAlpha ? "png-gray-alpha" : "png-gray") + Depth;
                 encoded = File.ReadAllBytes(Path.Combine(state.Root, "artifacts", "warm-reference", name, "input.png"));
-                var expectedHash = Rgb ? "ad3af25e172e383b77969917599c4a66cea2581dd64b0cd13f0610ac54816855"
+                var expectedHash = Depth == 16 ? (Rgb ? "c70d40002f3ba6df122a2498d860e94acea34c2e0d657700d5fe2a2e6b2b4300"
+                    : GrayAlpha ? "4d3f55f244a05fd1d19044a807ed3885b4306f3b734c66d773c99259e9e97fe8"
+                    : "66c9aab3f8d04cd2d4d924971dc6f8156eea19634466dcbcec8c9bf95314350b")
+                    : Rgb ? "ad3af25e172e383b77969917599c4a66cea2581dd64b0cd13f0610ac54816855"
                     : GrayAlpha ? "0bfdcc9aa57f0b6009a3ca31b1ab200d2d1bb59c1395495afaad584c5f6e630d"
                     : "8990a1cb03abac292d32deb02a97003b17b7b8347afe02e8370194de01bbc235";
                 if (JpegBenchmarkCase.Hash(encoded) != expectedHash) throw new InvalidOperationException("Frozen byte PNG decoder input changed.");
             }
-            else if (!Encode && Depth == 8)
+            else if (!Encode)
             {
                 // Encoder policy changes must not replace the existing RGBA
                 // decoder inputs or invalidate their retained confirmations.
-                encoded = File.ReadAllBytes(Path.Combine(state.Root, "artifacts", "warm-reference", "png-cancel8", "input.png"));
-                if (JpegBenchmarkCase.Hash(encoded) != "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f")
+                encoded = File.ReadAllBytes(Path.Combine(state.Root, "artifacts", "warm-reference", "png-cancel" + Depth, "input.png"));
+                if (JpegBenchmarkCase.Hash(encoded) != (Depth == 8 ? "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f" : "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8"))
                     throw new InvalidOperationException("Frozen RGBA8 decoder input changed.");
             }
             else using (var output = new MemoryStream())
@@ -226,7 +228,7 @@ public partial class WarmPng
                 if (Paeth && (Gray || GrayAlpha)) directory += "-paeth";
                 if (ShortPalette) directory += "-entries16";
                 if (Interlaced && Palette) directory += "-adam7";
-                if (MatchedByteEncoding) directory += "-optimal9";
+                if (Encode) directory += "-reference-v1";
                 Directory.CreateDirectory(directory);
                 foreach (var (name, bytes) in new[] { ("input.png", encoded), ("expected.raw", pixels) })
                 {
@@ -367,8 +369,8 @@ public partial class WarmPng
             using var decoded = ImageCodec.Decode(output); ValidatePixels(decoded);
             // Exact pixels and complete packets, including all chunk framing.
             // Optimal is a library policy; record actual backend levels.
-            if (encoded.Length > output.Length)
-                throw new InvalidOperationException("Managed complete PNG packet exceeds the frozen reference size gate.");
+            if (!encoded.AsSpan().SequenceEqual(output))
+                throw new InvalidOperationException("Complete managed/native PNG packets differ.");
         }
         else if (!output.AsSpan().SequenceEqual(pixels)) throw new InvalidOperationException("Native owned RGBA pixels differ.");
     }
@@ -396,7 +398,7 @@ public partial class WarmPng
             position = checked(position + length + 12);
         }
         if (Smallest && (compressed.Length < 2 || compressed.GetBuffer()[1] >> 6 != 3)) throw new InvalidOperationException("PNG SmallestSize header differs from level9 compression class.");
-        if (Fastest && (compressed.Length < 2 || compressed.GetBuffer()[1] >> 6 != (nativePacket ? 0 : 1))) throw new InvalidOperationException("PNG Fastest header differs from the declared numeric backend class.");
+        if (Fastest && (compressed.Length < 2 || compressed.GetBuffer()[1] >> 6 != 0)) throw new InvalidOperationException("PNG Fastest header differs from the declared numeric backend class.");
         if (NoCompression) WarmPngStoredInput.Validate(compressed.ToArray(), pixels, Depth);
         if (GrayTransparency)
         {
@@ -588,15 +590,15 @@ public partial class WarmPng
                     : MonoTransparency ? $"Authored gray{CodedDepth} PNG; filter None, noninterlaced, tRNS two-byte key{GrayTransparencyKey}; BCL Optimal level6; identical resident encoded input"
                     : GrayTransparency && Depth == 16 ? "Authored gray16BE PNG; filter None, noninterlaced, tRNS two-byte key0x7f7f; BCL Optimal level6; identical resident encoded input"
                     : GrayTransparency ? "Authored gray8 PNG; filter None, noninterlaced, tRNS two-byte key127; BCL Optimal level6; identical resident encoded input"
-                    : Smallest ? $"BCL SmallestSize level9 / FFmpeg level9; full RGBA{Depth} packing/compression/output timed; exact samples/alpha/hidden RGB and complete-packet size gate; filter None"
-                    : Fastest ? $"BCL streaming fast adaptive level2 / FFmpeg fast level1; complete row packing/compression/output timed; exact full RGBA{Depth}, filter None, complete-packet size gate"
-                    : NoCompression ? "BCL NoCompression / FFmpeg level0; stored Deflate only, filter None, noninterlaced RGBA" + Depth
+                    : Smallest ? $"Safe managed SmallestSize level9 / FFmpeg level9; full RGBA{Depth} packing/compression/output timed; exact samples/alpha/hidden RGB and complete-packet size gate; filter None"
+                    : Fastest ? $"Safe managed greedy level1 / FFmpeg fast level1; complete row packing/compression/output timed; exact full RGBA{Depth}, filter None, complete-packet size gate"
+                    : NoCompression ? "Stored NoCompression / FFmpeg level0; stored Deflate only, filter None, noninterlaced RGBA" + Depth
                     : Paeth ? $"Authored noninterlaced PNG {(GrayAlpha ? "gray-alpha" : Gray ? "gray" : Rgb ? "RGB" : "RGBA")}{Depth}; every row Paeth; BCL Optimal level 6; identical resident encoded input"
                     : Up ? $"Authored noninterlaced PNG RGBA{Depth}; every row Up; BCL Optimal level 6; identical resident encoded input"
                     : Sub ? $"Authored noninterlaced PNG RGBA{Depth}; every row Sub; BCL Optimal level 6; identical resident encoded input"
                     : Average ? $"Authored noninterlaced PNG RGBA{Depth}; every row Average; BCL Optimal level 6; identical resident encoded input"
                     : Interlaced ? Palette ? $"Authored PNG Adam7 palette{CodedDepth}; existing byte raster palette{PaletteEntries}/full tRNS projection; BCL Optimal level6; filter None; identical resident encoded input" : Mono ? "Authored PNG Adam7 gray1; original byte raster black/white projection, zero pass padding; BCL Optimal level6; filter None; identical resident encoded input" : "Authored PNG Adam7 RGBA16; BCL Optimal level 6; filter None; identical resident encoded input"
-                    : MatchedByteEncoding ? "Lokad.Image Optimal uses BCL level9 / FFmpeg level6; exact samples and complete-packet size gate; filter None; noninterlaced"
+                    : Encode ? "Safe managed Optimal level6 / FFmpeg level6; complete packet raw equality; filter None; noninterlaced"
                     : $"BCL Optimal (zlib default level 6) / FFmpeg level 6; filter None; noninterlaced {(Mono ? "packed gray" + CodedDepth + ", opaque" : Palette ? $"palette{CodedDepth}, {PaletteEntries} entries and {(PartialAlpha ? "two-entry" : "full")} tRNS" : GrayAlpha ? "gray-alpha" : Gray ? Depth == 16 ? "gray16be" : "gray" : Rgb ? "RGB" : "RGBA")}",
                 encoderLevel = Encode ? EncoderLevel : (int?)null, managedEncoderLevel = Encode ? ManagedEncoderLevel : (int?)null, nativeEncoderLevel = Encode ? EncoderLevel : (int?)null, storedDeflateBlocksExact = NoCompression,
                 nativePackedTransparencyFilterTimed = FilteredMonoTransparency,

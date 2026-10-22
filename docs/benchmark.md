@@ -11,14 +11,14 @@ Color uses only the approved COM replacement; grayscale is raw-exact. Required
 image/caller/sync/async/ImageBudget boundaries are qualified. Superseded
 Original/CompactColor experiments and their public switches have been removed.
 
-The production [managed PNG Optimal encoder](../benchmarks/PNG-MANAGED-OPTIMAL.md)
-now matches all eight existing grayscale/RGB/grayscale-alpha/RGBA controls at8/16bits
-raw-exact, including complete chunks/checksums. It uses bounded storage and shared
-admission. After JPEG experiment removal, both platforms pass4,778 Release checks,133 affected JPEG scalar checks and
-the SAME actual private0.2.0 package with all three examples. **Current PNG/JPEG
-encoding CPU and allocated B/op are unmeasured.** All17 prior BCL PNG rows
-below are superseded, as are the earlier JPEG producers. Shared entry/framing changes also require confirmation of the other policies,
-which still use their runtime backends; exact replication remains open.
+All four production [managed PNG policies](../benchmarks/PNG-MANAGED-POLICIES.md)
+match14 frozen complete packets raw-exact: all eight Optimal color/depth controls
+plus RGBA8/16 stored, fast and smallest. The17 existing delivery/profile rows
+are exact, including checksums/framing. Both platforms pass4,807 Release checks,
+69 affected PNG scalar checks and the SAME actual private0.2.0 package with all
+three examples. **Current PNG/JPEG encoding CPU and allocated B/op are unmeasured.**
+All17 historical BCL PNG timing rows below are superseded, as are the earlier
+JPEG encoder producers. No new timing or image/settings controls were added.
 
 The existing seven lossy WebP and six lossless WebP historical size gates pass.
 Lossless photograph/diagram sizes are159,104/160,032 and7,160/7,234B

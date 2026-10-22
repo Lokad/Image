@@ -14,7 +14,7 @@ public sealed class PngStoredCapacityTests
         var limits = ImageLimits.Default with
         {
             MaxWorkingBytes = original.Length + source.Stride + 1024L * 1024 + 65536,
-            MaxWork = (long)source.Stride * source.Height * 8
+            MaxWork = ((long)source.Stride * 9 + 1) * source.Height
         };
         var options = Options() with { Limits = limits };
         using (var rejected = new MemoryStream())
@@ -49,7 +49,7 @@ public sealed class PngStoredCapacityTests
     {
         using var source = OriginalPixels.Buffer(513, 259, depth);
         using var complete = new OriginalOutput(); ImageCodec.EncodePng(source, complete, Options());
-        var exactWork = (long)source.Stride * source.Height * 8;
+        var exactWork = ((long)source.Stride * 9 + 1) * source.Height;
         foreach (var limits in new[]
         {
             ImageLimits.Default with { MaxWork = exactWork - 1 },
