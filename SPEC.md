@@ -25,7 +25,7 @@ target; the existing implemented behavior below remains the current contract.
 | Capability | Current status | Required target |
 | --- | --- | --- |
 | PNG decode | Implemented; full authored profile matrix with exact analytical and FFmpeg RGBA | All legal static color/depth combinations, palette/tRNS, five filters and Adam7 |
-| PNG encode | Implemented; exact round trips and live FFmpeg checks | Noninterlaced gray/RGB/gray-alpha/RGBA, 8/16-bit |
+| PNG encode | Implemented; managed Optimal matches eight frozen complete FFmpeg packets; other policies pending byte qualification | Noninterlaced gray/RGB/gray-alpha/RGBA, 8/16-bit |
 | JPEG identify | Implemented; live and authored header checks | Bounded baseline/progressive 8-bit inspection and orientation |
 | JPEG pixels | Implemented; authored analytical cases, frozen FFmpeg expectations and live comparisons | Baseline/progressive gray/RGB/YCbCr/CMYK/YCCK decode; baseline gray/YCbCr and admitted progressive 4:4:4 encode |
 | WebP identify | Implemented; live and authored header checks | Bounded simple/extended still-container inspection and orientation |
@@ -947,17 +947,20 @@ reserved chunk bits follow unknown-chunk handling: unknown critical chunks fail,
 and unknown ancillary chunks are skipped. Recognized EXIF must precede IDAT.
 Unused ancillary payloads are skipped without decompression. Decoder scratch and
 compressed buffers cease admission before requested orientation. The encoder uses
-filter None, splits IDAT output into bounded chunks, and strips metadata. Selecting
+filter None, splits IDAT output into bounded chunks, and strips source metadata. Selecting
 gray requires equal RGB channels; selecting a format without alpha requires
 opaque pixels. No implicit grayscale conversion or alpha removal occurs.
 
-The default `Optimal` compression policy uses the BCL's smallest-size search
-for every 8-bit output color type, including RGBA, avoiding the weaker compression
-of the runtime's default search on these layouts. 16-bit formats and explicitly
-selected `NoCompression` or `SmallestSize` retain their backend selection;
-RGBA `Fastest` follows the policy below. This is an implementation policy, not a promise of a
-particular numeric backend level or exact compressed bytes. Samples, filter and
-chunk bounds are unchanged.
+The default `Optimal` policy uses an independently implemented managed level6
+Deflate encoder at both depths and all four output color types. Its bounded
+history/dictionary, one token block and source-derived Huffman trees preserve
+samples exactly, without full-frame filtered/token storage. Fixed, dynamic and
+stored blocks are selected from their coding costs. IDAT payloads are at most
+4096 bytes; the neutral pHYs field matches the pinned reference (x0/y1/unit0).
+The eight existing513x259 color/depth controls match complete FFmpeg packets
+raw-exact. This does not establish every image/setting or CPU/allocation parity.
+Other compression policies retain their runtime backends pending exact replication.
+See [codec compatibility](docs/codec-parity.md). No source metadata is copied.
 
 RGBA `Fastest` uses the BCL's streaming fast adaptive compressor at numeric
 backend level2, rather than numeric level1's fixed-tree quick compressor. The
@@ -1861,11 +1864,13 @@ apply in addition. All limits are positive immutable options and may be lowered.
 Work units are deterministic admission accounting, not elapsed-time guarantees.
 
 Working-memory admission includes supplied pixels/encoded input, result pixels,
-codec buffers and conservative allowances for BCL compression. This is an
+codec buffers and conservative compressor workspace. This is an
 allocation policy, not a bound on total process RSS or .NET GC heap retention.
 Limits and cancellation are checked before allocation and within long loops.
-PNG encoding admits a 1 MiB BCL compression allowance, one packed row and a
-64 KiB IDAT buffer in addition to the supplied pixels, before writing its signature.
+PNG encoding admits one packed row and64KiB chunk allowance, plus1MiB for the
+managed Optimal workspace or the other policies' BCL allowance, before writing
+its signature. The managed owner reserves before allocation and releases on
+success/failure without retry; failure cleanup does not flush more output.
 PNG decoding retains its separate 256 KiB inflater allowance, including the
 optional managed-inflation path. Its additional filtered buffer is admitted
 exactly; insufficient room selects bounded RGBA streaming or the original

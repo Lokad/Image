@@ -1441,31 +1441,30 @@ internal static class PngCodec
         context.ReserveBorrowed(source.ByteLength);
         var color = (int)options.ColorType;
         var rowBytes = source.Width * Channels(color) * (source.BitDepth / 8);
-        // Fixed admission allowance for the BCL compressor and its managed IO
-        // buffer. Default zlib deflate state alone exceeds 256 KiB; leave margin
-        // for the runtime's implementation. This is not a total-process RSS cap.
-        // https://zlib.net/zlib_tech.html#memory
-        context.Reserve(rowBytes + 1024 * 1024L + 65536);
+        var managed = options.Compression == CompressionLevel.Optimal;
+        // Row/chunk ownership precedes allocation. The managed compressor owns
+        // its separate fixed reservation; other policies retain the BCL allowance.
+        context.Reserve(rowBytes + 65536L + (managed ? 0 : 1024 * 1024));
         var row = new byte[rowBytes];
+        using var chunks = new IdatWriter(output, managed ? 4096 : 65536, !managed);
+        using var deflater = managed ? new PngDeflater(chunks, context) : null;
         output.Write(Signature);
         Span<byte> header = stackalloc byte[13];
         BinaryPrimitives.WriteInt32BigEndian(header, source.Width);
         BinaryPrimitives.WriteInt32BigEndian(header[4..], source.Height);
         header[8] = (byte)source.BitDepth; header[9] = (byte)color; header[10] = 0; header[11] = 0; header[12] = 0;
         WriteChunk(output, "IHDR"u8, header);
-        // Optimal is a library policy, rather than a fixed zlib level. Byte
-        // output needs the BCL's deeper match search to retain comparable
-        // compression. RGBA Fastest selects its streaming fast
-        // backend below; other formats retain their existing selection.
-        var compression = options.Compression == CompressionLevel.Optimal
-            && source.BitDepth == 8
-            ? CompressionLevel.SmallestSize : options.Compression;
-        using (var chunks = new IdatWriter(output))
+        if (managed)
+        {
+            Span<byte> physical = stackalloc byte[9]; physical.Clear(); physical[7] = 1;
+            WriteChunk(output, "pHYs"u8, physical);
+        }
+        var compression = options.Compression;
         {
             // The runtime's numeric level1 selects its fixed-tree quick path.
             // Numeric level2 selects fast adaptive coding, streaming through the
             // same bounded writer for ordinary, caller and cancelable outputs.
-            using (var zlib = compression == CompressionLevel.Fastest && color == 6
+            using (Stream zlib = deflater is not null ? deflater : compression == CompressionLevel.Fastest && color == 6
                 ? new ZLibStream(chunks, new ZLibCompressionOptions { CompressionLevel = 2 }, true)
                 : new ZLibStream(chunks, compression, true))
             {
@@ -1528,8 +1527,10 @@ internal static class PngCodec
                     zlib.WriteByte(0); // Correctness-first encoder: PNG filter None.
                     zlib.Write(row);
                 }
+                deflater?.Complete();
             }
         }
+        chunks.Flush();
         context.Cancellation.ThrowIfCancellationRequested();
         WriteChunk(output, "IEND"u8, []);
     }
@@ -1630,9 +1631,9 @@ internal static class PngCodec
         return crc;
     }
 
-    private sealed class IdatWriter(Stream output) : Stream
+    private sealed class IdatWriter(Stream output, int capacity, bool flushOnDispose) : Stream
     {
-        private readonly byte[] buffer = new byte[65536];
+        private readonly byte[] buffer = new byte[capacity];
         private int count;
         public override bool CanRead => false;
         public override bool CanSeek => false;
@@ -1650,7 +1651,7 @@ internal static class PngCodec
         }
         public override void Write(byte[] data, int offset, int count) => Write(data.AsSpan(offset, count));
         public override void Flush() { if (count == 0) return; WriteChunk(output, "IDAT"u8, buffer.AsSpan(0, count)); count = 0; }
-        protected override void Dispose(bool disposing) { if (disposing) Flush(); base.Dispose(disposing); }
+        protected override void Dispose(bool disposing) { if (disposing && flushOnDispose) Flush(); base.Dispose(disposing); }
         public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException();
         public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
         public override void SetLength(long value) => throw new NotSupportedException();

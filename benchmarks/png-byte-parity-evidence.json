@@ -136,8 +136,7 @@
   "timingRuns": 0,
   "cpuAndAllocations": "Unmeasured; source-only prototype is not production qualification",
   "outstanding": [
-    "Other existing PNG source/policy controls: required levels0/1/6/9, source depths and color layouts",
-    "General bounded encoder and admitted production integration, cancellation/ownership/async behavior, affected cross-platform correctness/package qualification",
+    "Six existing source/policy controls: RGBA8/16 NoCompression/native0, Fastest/native1 and SmallestSize/native9; two duplicate Fastest delivery boundaries",
     "Removal of superseded JPEG experimental API/branches/tests/tooling at a coherent production milestone",
     "WebP exact encoders, exact decoders and finite warm CPU/allocation qualification"
   ],
@@ -149,7 +148,7 @@
     "members": 9,
     "mirrored": true
   },
-  "latestRound": "E19",
+  "latestRound": "E21",
   "huffmanPrototype": {
     "round": "E18",
     "sourceBase": "195c2ba848a7ab5e873ef53cb842ab3310549adb",
@@ -254,6 +253,194 @@
       "bytes": 225821,
       "sha256": "20507248f50919aae8a7367bc0aa05b0c2bb1d2fa1ac1c3402676b70cacaa641",
       "members": 17,
+      "mirrored": true
+    }
+  },
+  "productionIntegration": {
+    "round": "E21",
+    "sourceBase": "cae082ba7220a8e05ff3b840826f9fdc79dc05b8",
+    "productionChanged": true,
+    "core": [
+      {
+        "Name": "Lokad.Image.dll",
+        "Bytes": 780288,
+        "Sha256": "add9b56032d352ce5b1865454f49de14fde10b05b6163e9f394d88f577a92931"
+      },
+      {
+        "Name": "Lokad.Image.pdb",
+        "Bytes": 345992,
+        "Sha256": "62263c4b2a63d36d30f7a4b96943eaa7e464dd6fe2e13115030214767601ef50"
+      },
+      {
+        "Name": "Lokad.Image.xml",
+        "Bytes": 41556,
+        "Sha256": "987aee4299986ff19794847de787da0366bb1fc954d5d826e3099c2a44047597"
+      }
+    ],
+    "productionCoreSha256": "add9b56032d352ce5b1865454f49de14fde10b05b6163e9f394d88f577a92931",
+    "scope": "Production Optimal only: eight frozen grayscale/RGB/grayscale-alpha/RGBA8/16 controls, sync/async plus original RGBA8 forward/async-only/ImageBudget boundaries",
+    "controls": [
+      {
+        "depth": 8,
+        "colorType": 6,
+        "level": 6,
+        "packetBytes": 210973,
+        "packetSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+        "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80"
+      },
+      {
+        "depth": 16,
+        "colorType": 4,
+        "level": 6,
+        "packetBytes": 506887,
+        "packetSha256": "addd3f236e49cef7fc937ab70022420681cf4d9f61d895b680605934429aca76",
+        "rasterSha256": "9d0ed2b90676c863eb54a8adfca3d0d9e975af34b1986bc26308ea980e883280"
+      },
+      {
+        "depth": 8,
+        "colorType": 4,
+        "level": 6,
+        "packetBytes": 120366,
+        "packetSha256": "eefb49b94adbd654b38b4e33edc8aac89fdfd9273a8124a1fbf7884ee8789fb5",
+        "rasterSha256": "a2a2e4edd7a51693352b26525a6e8bf96bb9d74047c8ffc7b207f11881bc0e5e"
+      },
+      {
+        "depth": 16,
+        "colorType": 6,
+        "level": 6,
+        "packetBytes": 963202,
+        "packetSha256": "4f8f4d9950068c51b006ea87e2200523a5064e00842373eeb9c3a7f38bc12a0b",
+        "rasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9"
+      },
+      {
+        "depth": 16,
+        "colorType": 0,
+        "level": 6,
+        "packetBytes": 265433,
+        "packetSha256": "97b2e6d66070a7f42d3f487e837bd5c3ef2a1beb0362d5ec02110794007c3f70",
+        "rasterSha256": "346f1646546bce543afb6e800a81610727af1e5f0cb39eaa123f1f77b584ccd1"
+      },
+      {
+        "depth": 16,
+        "colorType": 2,
+        "level": 6,
+        "packetBytes": 739472,
+        "packetSha256": "4b8a2c3c99342ab51f2919c35f5dfb50506cb6c5812e84ede61c53f0db7388bf",
+        "rasterSha256": "25a17b853ffe24f7c8ca7d19c1e76b1390e34ae7e6924b460721df8ce53f6f99"
+      },
+      {
+        "depth": 8,
+        "colorType": 0,
+        "level": 6,
+        "packetBytes": 72586,
+        "packetSha256": "c5b4a248c1ca0f76115d06e7795698f50ac7e623c366fcee4a659cb08da2872a",
+        "rasterSha256": "24609f53449ebce137f741b38af44e63fbcddeec6ac906219d13210230e9da39"
+      },
+      {
+        "depth": 8,
+        "colorType": 2,
+        "level": 6,
+        "packetBytes": 168729,
+        "packetSha256": "e1b0f39154bb07b69c6fab59512dbd55f1fb855c0a9805a44892d510efb73228",
+        "rasterSha256": "54e27bd73c9ee221bdd4872e6b7bf79676257346cee2eff8ddacccb89e0cdb0a"
+      }
+    ],
+    "rawPacketExact": true,
+    "attributionExceptionUsed": false,
+    "boundedWorkspace": {
+      "reservedBytes": 1048576,
+      "historyBytes": 65536,
+      "dictionaryEntries": 32768,
+      "dictionaryArrays": 2,
+      "dictionaryElementBytes": 8,
+      "tokenCapacity": 16383,
+      "tokenBytes": 4,
+      "outputBufferBytes": 4096,
+      "fullFrameFilteredOrTokenStorage": false
+    },
+    "qualification": {
+      "platforms": [
+        "Windows x64",
+        "Linux x64"
+      ],
+      "normalFullScreen": {
+        "internal": 2160,
+        "publicApi": 2080,
+        "liveFfmpeg": 940,
+        "total": 5180
+      },
+      "unchangedScreenReuse": true,
+      "newBoundaryChecksPerPlatform": 1,
+      "currentUniqueTotalPerPlatform": 5181,
+      "affectedScalarPerPlatform": {
+        "internal": 8,
+        "publicApi": 13,
+        "total": 21
+      },
+      "semantics": "Full5180 screen per OS plus one appended forward/async-only/budget test; prior methods and immutable core unchanged. No second full suite.",
+      "sourceUnchanged": true,
+      "independentSurvivingOutputs": true,
+      "sharedAggregateAdmission": true,
+      "terminalRefusalCleanup": true,
+      "cancellationAndWriterFailureCleanup": true,
+      "subsequentSuccess": true,
+      "pendingAsyncOutputOwnership": "Existing full-suite suspended-write/shared-budget tests passed on current core; separate encoded owners await actual users."
+    },
+    "builds": {
+      "productionWindows": 2,
+      "productionLinux": 0,
+      "productionRebuildsAfterFreeze": 0,
+      "internalWindows": 1,
+      "internalLinux": 1,
+      "publicWindows": 6,
+      "publicLinux": 2,
+      "differentialPerPlatform": 1
+    },
+    "initialCorrections": [
+      "Observed cancellation immediately after completed synchronous output callback before returning from compressor flush.",
+      "Test fixtures: explicit image depth, nonrecursive MemoryStream callback writes, and sufficient independent ImageBudget work tickets for two operations. No numerical or gate changes."
+    ],
+    "package": {
+      "path": "artifacts/qualification/png-managed-optimal/Lokad.Image.0.2.0.nupkg",
+      "version": "0.2.0",
+      "bytes": 412966,
+      "sha256": "939a3a7317f6b75afc5d93409ae5cf5c9fa3ad7d77f79d132141adb5568fa75b",
+      "runtimeQualifiedSha256": "510a592ea284ed64276ae57d6455677af817335057090367f00e7aee7e048085",
+      "sameRuntimeQualifiedPackageBothPlatforms": true,
+      "usageExamplesPerPlatform": 3,
+      "frozenPngControls": 8,
+      "productionRebuilds": 0,
+      "documentaryAmendment": {
+        "project": "Lokad.Image",
+        "runtimeQualifiedPackageSha256": "510a592ea284ed64276ae57d6455677af817335057090367f00e7aee7e048085",
+        "finalPackageSha256": "939a3a7317f6b75afc5d93409ae5cf5c9fa3ad7d77f79d132141adb5568fa75b",
+        "finalPackageBytes": 412966,
+        "onlySemanticChange": [
+          "docs/resource-admission.md"
+        ],
+        "unchangedEntries": 16,
+        "executableAndNugetMetadataIdentical": true,
+        "consumerProofReused": true,
+        "productionRebuilds": 0,
+        "repeatedPackageConsumerBuilds": 0
+      }
+    },
+    "nativeEncodes": 0,
+    "nativeBuilds": 0,
+    "timingRuns": 0,
+    "cpuAndAllocatedBytesPerOperation": "Unmeasured for new production encoder",
+    "invalidatedEvidence": "All17 PNG encode timing/allocation rows predate shared entry/IdatWriter changes; nine default rows also change the compressor algorithm. EncodeBatch(Png) and PngCropResizePipeline measured encoding changes too. WarmStreamDecode(PngCropFit8/16), DecodeBatch and invocation setup regenerate encoded inputs only during preparation: retain their recorded frozen input packets when reusing valid decoder/transform evidence. Other codec/transform algorithms unchanged.",
+    "preservedEvidence": "E17-E19 intermediate parser/tree proofs retained; all eight new default complete packets are additionally executed from the immutable admitted production core. E15 JPEG and other unchanged paths retain their relevant evidence.",
+    "storage": {
+      "windowsBytesFreed": 37768257,
+      "linuxBytesFreed": 40140610,
+      "method": "Lossless gzip/roundtrip hashes of old source-inventory extracts; raw masters/releases/reference sources and protected targets retained."
+    },
+    "rawArchive": {
+      "file": "e21-qualified-managed-png.tar.gz",
+      "bytes": 4640005,
+      "sha256": "76d96c7337d874840f918c443253c44fdebb92571a87178f033a020bb6d14367",
+      "members": 55,
       "mirrored": true
     }
   }

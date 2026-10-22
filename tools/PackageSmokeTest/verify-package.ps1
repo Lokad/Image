@@ -89,6 +89,37 @@ try {
 "@ | Set-Content -LiteralPath (Join-Path $consumer 'Consumer.csproj') -Encoding utf8
     @'
 using Lokad.Image;
+foreach (var pngDepth in new[] { 8, 16 })
+foreach (var pngColor in new[] { PngColorType.Grayscale, PngColorType.Rgb, PngColorType.GrayscaleAlpha, PngColorType.Rgba })
+{
+    using var pngImage = Lokad.Image.Tooling.OriginalPixels.Buffer(513, 259, pngDepth,
+        grayscale: pngColor is PngColorType.Grayscale or PngColorType.GrayscaleAlpha,
+        opaque: pngColor is PngColorType.Grayscale or PngColorType.Rgb);
+    if (pngColor is PngColorType.GrayscaleAlpha or PngColorType.Rgba)
+    {
+        if (pngDepth == 8) pngImage.GetRow8(0)[3] = pngImage.GetRow8(0)[513 * 4 - 1] = 0;
+        else pngImage.GetRow16(0)[3] = pngImage.GetRow16(0)[513 * 4 - 1] = 0;
+    }
+    var expectedPngHash = (pngColor, pngDepth) switch
+    {
+        (PngColorType.Grayscale, 8) => "c5b4a248c1ca0f76115d06e7795698f50ac7e623c366fcee4a659cb08da2872a",
+        (PngColorType.Rgb, 8) => "e1b0f39154bb07b69c6fab59512dbd55f1fb855c0a9805a44892d510efb73228",
+        (PngColorType.GrayscaleAlpha, 8) => "eefb49b94adbd654b38b4e33edc8aac89fdfd9273a8124a1fbf7884ee8789fb5",
+        (PngColorType.Rgba, 8) => "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+        (PngColorType.Grayscale, 16) => "97b2e6d66070a7f42d3f487e837bd5c3ef2a1beb0362d5ec02110794007c3f70",
+        (PngColorType.Rgb, 16) => "4b8a2c3c99342ab51f2919c35f5dfb50506cb6c5812e84ede61c53f0db7388bf",
+        (PngColorType.GrayscaleAlpha, 16) => "addd3f236e49cef7fc937ab70022420681cf4d9f61d895b680605934429aca76",
+        (PngColorType.Rgba, 16) => "4f8f4d9950068c51b006ea87e2200523a5064e00842373eeb9c3a7f38bc12a0b",
+        _ => throw new Exception("Unknown PNG reference control.")
+    };
+    using var pngRoot = new Lokad.Image.Tooling.TestMemoryBudget(4 * 1024 * 1024);
+    using var pngPacket = new MemoryStream();
+    await ImageCodec.EncodePngAsync(pngImage, pngPacket, new PngEncodeOptions
+    { ColorType = pngColor, Limits = ImageLimits.Default with { MemoryBudget = pngRoot } });
+    if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(pngPacket.ToArray())).ToLowerInvariant()
+        != expectedPngHash || pngRoot.Bytes != 0 || pngRoot.IsDisposed)
+        throw new Exception("Packaged managed PNG bytes or shared ownership differ.");
+}
 if (new JpegEncodeOptions().QuantizationPolicy != JpegQuantizationPolicy.Reference)
     throw new Exception("Package JPEG default profile differs.");
 foreach (var referenceDepth in new[] { 8, 16 })

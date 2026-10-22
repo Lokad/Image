@@ -181,22 +181,22 @@ def render():
         row('JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream', 'warm-jpeg-async-samples-evidence.json', ['cases', 'JpegRgb420AsyncSamples', -1], 'WARM-JPEG-ASYNC-SAMPLES.md', verification='Prior production; reconfirm'),
         row('JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality', 'warm-jpeg-async-encode-evidence.json', ['cases', 'Jpeg8AsyncNonSeekable', -1], 'WARM-JPEG-ASYNC-ENCODE.md', verification='Prior production; reconfirm'),
         row('PNG EncodePngAsync, Optimal managed9/native6 / prior timing', 'warm-png-async-encode-evidence.json', ['cases', 'Png8AsyncNonSeekable', -1], 'PNG-OPTIMAL-RGBA8.md', verification='Prior production; reconfirm'),
-        row('PNG RGBA8, Optimal managed9/native6 / None', 'png-optimal-rgba8-evidence.json', ['cases', 'Encode8', -1], 'PNG-OPTIMAL-RGBA8.md', verification='Cost screen (CPU parity deferred)'),
-        row('PNG RGBA8, NoCompression / None', 'warm-png-stored-capacity-evidence.json', ['cases', 'EncodeNoCompression8', -1], 'WARM-PNG-STORED-CAPACITY.md', verification='Gap (short; qualified)'),
-        row('PNG RGBA16, NoCompression / None', 'warm-png-stored-capacity-evidence.json', ['cases', 'EncodeNoCompression16', -1], 'WARM-PNG-STORED-CAPACITY.md', True),
-        row('PNG RGBA8, Fastest managed2/native1 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeFast8', -1], 'WARM-PNG-CHUNK-CRC.md', True),
-        row('PNG RGBA16, Fastest managed2/native1 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeFast16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
-        row('PNG RGBA16, Fastest managed2/native1 / live cancelable token', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeFastCancelable16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
-        row('PNG RGBA16, Fastest managed2/native1 / forward-only output', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeFastForward16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
-        row('PNG RGBA16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'Encode16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
-        row('PNG RGBA8, SmallestSize9 / native9', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeSmallest8', -1], 'WARM-PNG-CHUNK-CRC.md', True),
-        row('PNG RGBA16, SmallestSize managed9/native9 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeSmallest16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
-        row('PNG RGB8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeRgb8', -1], 'WARM-PNG-BYTE-PACKING.md', True),
-        row('PNG RGB16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeRgb16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
-        row('PNG gray8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-PNG-BYTE-PACKING.md', True),
-        row('PNG gray16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGray16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Gap (short; qualified)'),
-        row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeGrayAlpha8', -1], 'WARM-PNG-BYTE-PACKING.md', True),
-        row('PNG gray-alpha16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGrayAlpha16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
+        row('PNG RGBA8, Optimal managed9/native6 / None', 'png-optimal-rgba8-evidence.json', ['cases', 'Encode8', -1], 'PNG-OPTIMAL-RGBA8.md', verification='Prior production; reconfirm'),
+        row('PNG RGBA8, NoCompression / None', 'warm-png-stored-capacity-evidence.json', ['cases', 'EncodeNoCompression8', -1], 'WARM-PNG-STORED-CAPACITY.md', verification='Prior production; reconfirm'),
+        row('PNG RGBA16, NoCompression / None', 'warm-png-stored-capacity-evidence.json', ['cases', 'EncodeNoCompression16', -1], 'WARM-PNG-STORED-CAPACITY.md', verification='Prior production; reconfirm'),
+        row('PNG RGBA8, Fastest managed2/native1 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeFast8', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
+        row('PNG RGBA16, Fastest managed2/native1 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeFast16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
+        row('PNG RGBA16, Fastest managed2/native1 / live cancelable token', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeFastCancelable16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
+        row('PNG RGBA16, Fastest managed2/native1 / forward-only output', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeFastForward16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
+        row('PNG RGBA16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'Encode16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
+        row('PNG RGBA8, SmallestSize9 / native9', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeSmallest8', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
+        row('PNG RGBA16, SmallestSize managed9/native9 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeSmallest16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
+        row('PNG RGB8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeRgb8', -1], 'WARM-PNG-BYTE-PACKING.md', verification='Prior production; reconfirm'),
+        row('PNG RGB16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeRgb16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
+        row('PNG gray8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-PNG-BYTE-PACKING.md', verification='Prior production; reconfirm'),
+        row('PNG gray16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGray16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
+        row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeGrayAlpha8', -1], 'WARM-PNG-BYTE-PACKING.md', verification='Prior production; reconfirm'),
+        row('PNG gray-alpha16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGrayAlpha16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:4:4, forward-only / coded source histograms', 'jpeg444-coded-source-histogram-evidence.json', ['cases', 'Encode444Stream8', -1], 'JPEG444-CODED-SOURCE-HISTOGRAMS.md', verification='Cost screen (CPU parity deferred)'),
         row('JPEG 4:4:4, live cancelable token / prior geometric Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode444Cancelable8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
@@ -339,88 +339,48 @@ def render():
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-22. **Byte-exact codec replication takes priority over CPU parity:**
-encoders first, then decoders, against pinned FFmpeg builds/settings. Only explicit
-encoder-attribution metadata may differ; see [scope and current progress](codec-parity.md).
-Current size/quality passes below are historical transition evidence, **not byte-exact
-qualification**. Active quality/calibration tooling retires after exact replacements
-cover its required paths. The default managed JPEG `Reference` profile now reproduces
-all six frozen complete444/422/420 packets with its own tables, apart from approved
-attribution. Six tiny/paired functional controls cover the additional conversion
-and filter-edge branches; no performance claim follows from packet equality.
-The production grayscale Reference profile also matches its58,910B packet exactly,
-including caller Gray8/RGB8 and async boundaries; no attribution exception is needed.
-The existing RGBA16 control is confirmed too:58,942B raw-exact on Windows/Linux,
-including normalized caller samples and scalar execution, with the unchanged build.
-CPU/allocation qualification remains open.
-Production color restarts now match the frozen4:2:0 row-restart33 packet:
-58,012B native,58,010B with the approved attribution. Generic MCU intervals have
-functional/interoperability checks. Grayscale interval3 now matches its61,152B
-packet raw-exact, including714 markers, across image/caller/async boundaries.
-Both platforms qualify5,164 checks plus92 affected scalar checks, and the same
-actual Release package consumer and three examples. All eight default image/caller/
-async/ImageBudget wrappers reproduce the frozen packet; options-null calls agree.
-Original/CompactColor are superseded experiments with no compatibility commitment.
-Reference CPU/allocations are
-unmeasured; existing JPEG encoding timings predate its added dispatch and require
-affected confirmation when CPU qualification resumes. Other unchanged paths retain evidence.
-The development-only PNG prototype matches the entire210,973B packet of the existing
-RGBA8 Optimal/native level6 control on both platforms, normal/scalar, with no metadata
-exemption. Other controls and production integration remain open; no timing or
-allocation claim follows.
-All seven declared lossy WebP and six lossless WebP historical size gates pass.
-Lossless photograph/diagram packets are 159,104/160,032 and 7,160/7,234 B
-(managed/reference), with exact RGBA. Lossy photograph/diagram packets are
-17,366/17,688 and6,722/7,100 B at their frozen matched-quality settings and exact alpha.
-These are bounded controls, not general-image compression claims.
+encoders first, then exact decoder samples, against pinned FFmpeg builds/settings.
+Only explicitly approved encoder-attribution metadata may differ; see
+[codec compatibility](codec-parity.md).
 
-[Earlier Original 4:2:0 JPEG](../benchmarks/JPEG420-AC-TRELLIS.md) passed all nine
-affected boundaries: **51,379/52,093 B** (8-bit) and **51,471/52,117 B** (16-bit),
-with source-PSNR gaps 0.085506/0.085851 dB inside the unchanged 0.25 dB gate.
-Grayscale remains 58,823/58,910 B;
-**optional CompactColor** remains 48,701/52,093 B on its separate procedural control.
-Equal numerical quality values do not establish equivalence. The earlier uncapped
-4:4:4 trial remains rejected; [coded source histograms](../benchmarks/JPEG444-CODED-SOURCE-HISTOGRAMS.md)
-now produce **134,676/133,041 B** (RGBA8) and **134,688/133,043 B** (RGBA16), with
-source-PSNR gaps 0.218264/0.226798 dB inside 0.25 dB. Existing 4:2:2 controls pass
-size/quality, without photographic or diagram extrapolation. [PNG Optimal RGBA8](../benchmarks/PNG-OPTIMAL-RGBA8.md) now closes the two changed
-sync/async boundaries at209,407/210,973 B, saving9,368 B each. All17 declared PNG
-packet gates pass, with exact RGBA. The public Optimal policy uses managed9 versus
-frozen native6; explicit modes and16bit selection remain unchanged. This is not
-an equal-effort comparison.
-A timing pass or 5% IDAT tolerance does not establish packet-size parity.
-The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles all 19
-historical encode rows: 13 Original passes/5 open, plus one separate optional pass.
-The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) first saved12,166 B
-on 4:4:4 forward-only/cancellable output. Source-derived coefficient decisions and progressive scans save another
-24,136 B relative to that packet; the largest remaining 4:4:4 gap is about 1.24%.
+The default managed JPEG Reference encoder matches ten frozen packets across
+grayscale/444/422/420,8/16-bit sources and declared color/grayscale restarts.
+Color uses only the approved COM replacement; grayscale is raw-exact. Required
+image/caller/sync/async/ImageBudget boundaries are qualified. Superseded
+Original/CompactColor experiments carry no compatibility obligation.
 
-The latest histogram-unit change saves 65 B on RGBA8 and adds one byte on RGBA16,
-a net 259 B across the five rows. JPEG C193 retains 5,067 Release tests/OS,
-237+62 scalar checks/OS and
-the same actual private 0.2.0 package/all examples on Windows/Linux. The
-[ownership repair](../benchmarks/JPEG-BUDGET-EVENT-OWNERSHIP.md) keeps caller-budget
-event storage charged through its actual users. Forward 4:4:4 records 1,929,269.703 µs,
-644,112 B/op in one short cost screen: more CPU is accepted for the compression
-gain, and CPU parity remains deferred. The prior C191 cost was 1,949,513.811 µs with 643,160 B/op.
-Unaffected caller 4:2:0 retains C146's 68,162.147 µs and170,648 B/op
-in one short screen, including normalization, full encoding and fresh output ownership.
-CPU/allocation costs are recorded; speed-only work and independent confirmations
-wait while exact codec qualification remains open. Full warm single-CPU parity still
-requires an independent conservative upper<=1 for every material required path.
-Published 0.1.0 is immutable; replacement readiness remains open.
+The production [managed PNG Optimal encoder](../benchmarks/PNG-MANAGED-OPTIMAL.md)
+now matches all eight existing grayscale/RGB/grayscale-alpha/RGBA controls at8/16bits
+raw-exact, including complete chunks/checksums. It uses bounded storage and shared
+admission. Both platforms pass5,181 Release checks,21 affected scalar checks and
+the SAME actual private0.2.0 package with all three examples. **Current PNG/JPEG
+encoding CPU and allocated B/op are unmeasured.** All17 prior BCL PNG rows
+below are superseded, as are the earlier JPEG producers. Shared entry/framing changes also require confirmation of the other policies,
+which still use their runtime backends; exact replication remains open.
 
-The latest PNG change passes5,000 Release tests/OS,465+157 PNG scalar checks/OS
-and the same actual private0.2 package/all examples on both platforms. Its one
-complete sync cost screen records14,417.461 µs/reference17,231.327 µs and527,580 B/op.
-Actual backend levels and full-packet gates are explicit; CPU confirmation remains
-deferred. The previous defaultRGBA8 async timing is superseded. Decoder inputs
-remain frozen, and unchanged JPEG/WebP/other PNG evidence is reused.
+The existing seven lossy WebP and six lossless WebP historical size gates pass.
+Lossless photograph/diagram sizes are159,104/160,032 and7,160/7,234B
+(managed/reference), with exact RGBA. Lossy sizes are17,366/17,688 and6,722/7,100B
+at frozen matched-quality settings with exact alpha. These are bounded historical
+controls, not byte-exact encoder qualification or general compression claims.
+The [PNG](../benchmarks/PNG-COMPLETE-PACKET-AUDIT.md) and
+[JPEG](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) packet ledgers retain producer
+identities; smaller packets, equal quality numbers or timing passes do not prove
+the new exact-reference target. Old quality tooling retires as stronger gates cover
+its required scope.
+
+No timing or allocation runs accompanied the new PNG encoder. Unchanged paths
+retain evidence on their recorded frozen inputs; new default-encoded fixtures do
+not silently replace those inputs. CPU tuning/independent confirmation resumes
+after exact codec work. The full warm single-CPU objective remains independent
+conservative upper<=1 for every material required path. Published0.1.0 is immutable;
+replacement readiness remains open.
 
 The [finite checklist](../benchmarks/WARM-COVERAGE.md) remains 256 named cases:
 239 numeric and 17 unmeasured. Tested-producer rows contain **{parity_count} passes,
 {gap_count} gaps, {confidence_count} confidence-open case, {cost_count} short cost
 screens and {reconfirm_count} superseded encoder rows**. The latter predate
-JPEG decision/adaptive work or the PNG8 Optimal policy; current packet/quality evidence is
+JPEG decision/adaptive work or the managed PNG Optimal encoder; current packet evidence is
 reconciled and new costs are deferred while compression gates remain open.
 Their stored values are historical, not demonstrated current gaps. Another 31 marked
 decode/inspection rows await confirmation after typed source-metadata changes;

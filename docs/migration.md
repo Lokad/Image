@@ -37,11 +37,12 @@ including extra bits, amortized per terminal block. Pending runs stay separate
 per component. They fit the same8KiB workspace;
 the default work limit and final MCU error bound are unchanged.
 
-PNG `Optimal` now uses the deeper BCL search for every 8-bit color type, including
-RGBA. This may increase CPU time and change packet bytes; samples, filter None,
-memory admission, cancellation and ownership remain unchanged. It is a library
-policy, not a fixed numeric compression level. Explicit compression choices and
-16-bit output keep their previous backend selections.
+PNG `Optimal` now uses the managed level6 encoder for every supported color type
+at8/16bits. It emits4096-byte IDAT chunks and the reference's neutral pHYs field.
+The eight frozen controls match complete reference packets; source samples,
+cooperative admission, cancellation and stream ownership remain supported.
+Other policies still use runtime compression; their byte replication is pending.
+CPU/allocation qualification of the new path remains open.
 
 `ImageInfo.SourceColor`, `SourceAlpha` and `SourceComponentCount` describe encoded
 samples, alongside source `BitDepth`; they do not describe normalized RGBA pixels.

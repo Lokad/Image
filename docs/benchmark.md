@@ -1,88 +1,48 @@
 # Lokad.Image benchmark state
 
 Updated 2026-10-22. **Byte-exact codec replication takes priority over CPU parity:**
-encoders first, then decoders, against pinned FFmpeg builds/settings. Only explicit
-encoder-attribution metadata may differ; see [scope and current progress](codec-parity.md).
-Current size/quality passes below are historical transition evidence, **not byte-exact
-qualification**. Active quality/calibration tooling retires after exact replacements
-cover its required paths. The default managed JPEG `Reference` profile now reproduces
-all six frozen complete444/422/420 packets with its own tables, apart from approved
-attribution. Six tiny/paired functional controls cover the additional conversion
-and filter-edge branches; no performance claim follows from packet equality.
-The production grayscale Reference profile also matches its58,910B packet exactly,
-including caller Gray8/RGB8 and async boundaries; no attribution exception is needed.
-The existing RGBA16 control is confirmed too:58,942B raw-exact on Windows/Linux,
-including normalized caller samples and scalar execution, with the unchanged build.
-CPU/allocation qualification remains open.
-Production color restarts now match the frozen4:2:0 row-restart33 packet:
-58,012B native,58,010B with the approved attribution. Generic MCU intervals have
-functional/interoperability checks. Grayscale interval3 now matches its61,152B
-packet raw-exact, including714 markers, across image/caller/async boundaries.
-Both platforms qualify5,164 checks plus92 affected scalar checks, and the same
-actual Release package consumer and three examples. All eight default image/caller/
-async/ImageBudget wrappers reproduce the frozen packet; options-null calls agree.
-Original/CompactColor are superseded experiments with no compatibility commitment.
-Reference CPU/allocations are
-unmeasured; existing JPEG encoding timings predate its added dispatch and require
-affected confirmation when CPU qualification resumes. Other unchanged paths retain evidence.
-The development-only PNG prototype matches the entire210,973B packet of the existing
-RGBA8 Optimal/native level6 control on both platforms, normal/scalar, with no metadata
-exemption. Other controls and production integration remain open; no timing or
-allocation claim follows.
-All seven declared lossy WebP and six lossless WebP historical size gates pass.
-Lossless photograph/diagram packets are 159,104/160,032 and 7,160/7,234 B
-(managed/reference), with exact RGBA. Lossy photograph/diagram packets are
-17,366/17,688 and6,722/7,100 B at their frozen matched-quality settings and exact alpha.
-These are bounded controls, not general-image compression claims.
+encoders first, then exact decoder samples, against pinned FFmpeg builds/settings.
+Only explicitly approved encoder-attribution metadata may differ; see
+[codec compatibility](codec-parity.md).
 
-[Earlier Original 4:2:0 JPEG](../benchmarks/JPEG420-AC-TRELLIS.md) passed all nine
-affected boundaries: **51,379/52,093 B** (8-bit) and **51,471/52,117 B** (16-bit),
-with source-PSNR gaps 0.085506/0.085851 dB inside the unchanged 0.25 dB gate.
-Grayscale remains 58,823/58,910 B;
-**optional CompactColor** remains 48,701/52,093 B on its separate procedural control.
-Equal numerical quality values do not establish equivalence. The earlier uncapped
-4:4:4 trial remains rejected; [coded source histograms](../benchmarks/JPEG444-CODED-SOURCE-HISTOGRAMS.md)
-now produce **134,676/133,041 B** (RGBA8) and **134,688/133,043 B** (RGBA16), with
-source-PSNR gaps 0.218264/0.226798 dB inside 0.25 dB. Existing 4:2:2 controls pass
-size/quality, without photographic or diagram extrapolation. [PNG Optimal RGBA8](../benchmarks/PNG-OPTIMAL-RGBA8.md) now closes the two changed
-sync/async boundaries at209,407/210,973 B, saving9,368 B each. All17 declared PNG
-packet gates pass, with exact RGBA. The public Optimal policy uses managed9 versus
-frozen native6; explicit modes and16bit selection remain unchanged. This is not
-an equal-effort comparison.
-A timing pass or 5% IDAT tolerance does not establish packet-size parity.
-The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles all 19
-historical encode rows: 13 Original passes/5 open, plus one separate optional pass.
-The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) first saved12,166 B
-on 4:4:4 forward-only/cancellable output. Source-derived coefficient decisions and progressive scans save another
-24,136 B relative to that packet; the largest remaining 4:4:4 gap is about 1.24%.
+The default managed JPEG Reference encoder matches ten frozen packets across
+grayscale/444/422/420,8/16-bit sources and declared color/grayscale restarts.
+Color uses only the approved COM replacement; grayscale is raw-exact. Required
+image/caller/sync/async/ImageBudget boundaries are qualified. Superseded
+Original/CompactColor experiments carry no compatibility obligation.
 
-The latest histogram-unit change saves 65 B on RGBA8 and adds one byte on RGBA16,
-a net 259 B across the five rows. JPEG C193 retains 5,067 Release tests/OS,
-237+62 scalar checks/OS and
-the same actual private 0.2.0 package/all examples on Windows/Linux. The
-[ownership repair](../benchmarks/JPEG-BUDGET-EVENT-OWNERSHIP.md) keeps caller-budget
-event storage charged through its actual users. Forward 4:4:4 records 1,929,269.703 µs,
-644,112 B/op in one short cost screen: more CPU is accepted for the compression
-gain, and CPU parity remains deferred. The prior C191 cost was 1,949,513.811 µs with 643,160 B/op.
-Unaffected caller 4:2:0 retains C146's 68,162.147 µs and170,648 B/op
-in one short screen, including normalization, full encoding and fresh output ownership.
-CPU/allocation costs are recorded; speed-only work and independent confirmations
-wait while exact codec qualification remains open. Full warm single-CPU parity still
-requires an independent conservative upper<=1 for every material required path.
-Published 0.1.0 is immutable; replacement readiness remains open.
+The production [managed PNG Optimal encoder](../benchmarks/PNG-MANAGED-OPTIMAL.md)
+now matches all eight existing grayscale/RGB/grayscale-alpha/RGBA controls at8/16bits
+raw-exact, including complete chunks/checksums. It uses bounded storage and shared
+admission. Both platforms pass5,181 Release checks,21 affected scalar checks and
+the SAME actual private0.2.0 package with all three examples. **Current PNG/JPEG
+encoding CPU and allocated B/op are unmeasured.** All17 prior BCL PNG rows
+below are superseded, as are the earlier JPEG producers. Shared entry/framing changes also require confirmation of the other policies,
+which still use their runtime backends; exact replication remains open.
 
-The latest PNG change passes5,000 Release tests/OS,465+157 PNG scalar checks/OS
-and the same actual private0.2 package/all examples on both platforms. Its one
-complete sync cost screen records14,417.461 µs/reference17,231.327 µs and527,580 B/op.
-Actual backend levels and full-packet gates are explicit; CPU confirmation remains
-deferred. The previous defaultRGBA8 async timing is superseded. Decoder inputs
-remain frozen, and unchanged JPEG/WebP/other PNG evidence is reused.
+The existing seven lossy WebP and six lossless WebP historical size gates pass.
+Lossless photograph/diagram sizes are159,104/160,032 and7,160/7,234B
+(managed/reference), with exact RGBA. Lossy sizes are17,366/17,688 and6,722/7,100B
+at frozen matched-quality settings with exact alpha. These are bounded historical
+controls, not byte-exact encoder qualification or general compression claims.
+The [PNG](../benchmarks/PNG-COMPLETE-PACKET-AUDIT.md) and
+[JPEG](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) packet ledgers retain producer
+identities; smaller packets, equal quality numbers or timing passes do not prove
+the new exact-reference target. Old quality tooling retires as stronger gates cover
+its required scope.
+
+No timing or allocation runs accompanied the new PNG encoder. Unchanged paths
+retain evidence on their recorded frozen inputs; new default-encoded fixtures do
+not silently replace those inputs. CPU tuning/independent confirmation resumes
+after exact codec work. The full warm single-CPU objective remains independent
+conservative upper<=1 for every material required path. Published0.1.0 is immutable;
+replacement readiness remains open.
 
 The [finite checklist](../benchmarks/WARM-COVERAGE.md) remains 256 named cases:
-239 numeric and 17 unmeasured. Tested-producer rows contain **60 passes,
-147 gaps, 1 confidence-open case, 16 short cost
-screens and 15 superseded encoder rows**. The latter predate
-JPEG decision/adaptive work or the PNG8 Optimal policy; current packet/quality evidence is
+239 numeric and 17 unmeasured. Tested-producer rows contain **47 passes,
+145 gaps, 1 confidence-open case, 15 short cost
+screens and 31 superseded encoder rows**. The latter predate
+JPEG decision/adaptive work or the managed PNG Optimal encoder; current packet evidence is
 reconciled and new costs are deferred while compression gates remain open.
 Their stored values are historical, not demonstrated current gaps. Another 31 marked
 decode/inspection rows await confirmation after typed source-metadata changes;
@@ -214,22 +174,22 @@ is a CPU-parity confirmation.
 | [JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream](../benchmarks/WARM-JPEG-ASYNC-SAMPLES.md) | 2,076.73 | 1,628.02 | 1.276 / 1.430 | 232,614 | Prior production; reconfirm |
 | [JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality](../benchmarks/WARM-JPEG-ASYNC-ENCODE.md) | 3,982.03 | 3,849.79 | 1.034 / 1.158 | 494,254 | Prior production; reconfirm |
 | [PNG EncodePngAsync, Optimal managed9/native6 / prior timing](../benchmarks/PNG-OPTIMAL-RGBA8.md) | 5,397.36 | 17,268.11 | 0.313 / 0.314 | 658,560 | Prior production; reconfirm |
-| [PNG RGBA8, Optimal managed9/native6 / None](../benchmarks/PNG-OPTIMAL-RGBA8.md) | 14,417.46 | 17,231.33 | 0.837 / 0.885 | 527,580 | Cost screen (CPU parity deferred) |
-| [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED-CAPACITY.md) | 245.37 | 189.47 | 1.295 / 1.430 | 604,319 | Gap (short; qualified) |
-| [PNG RGBA16, NoCompression / None](../benchmarks/WARM-PNG-STORED-CAPACITY.md) | 349.92 | 406.43 | 0.861 / 0.870 | 1,140,504 | Parity confirmed |
-| [PNG RGBA8, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 3,053.16 | 4,355.98 | 0.701 / 0.704 | 527,694 | Parity confirmed |
-| [PNG RGBA16, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 13,289.83 | 17,822.40 | 0.746 / 0.776 | 2,103,738 | Parity confirmed |
-| [PNG RGBA16, Fastest managed2/native1 / live cancelable token](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 12,846.40 | 17,513.32 | 0.734 / 0.743 | 2,103,738 | Parity confirmed |
-| [PNG RGBA16, Fastest managed2/native1 / forward-only output](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 12,790.89 | 17,465.07 | 0.732 / 0.740 | 2,103,770 | Parity confirmed |
-| [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 14,604.45 | 20,095.18 | 0.727 / 0.731 | 2,103,624 | Parity confirmed |
-| [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 14,486.25 | 17,324.40 | 0.836 / 0.843 | 527,564 | Parity confirmed |
-| [PNG RGBA16, SmallestSize managed9/native9 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 19,610.01 | 20,110.26 | 0.975 / 0.980 | 2,103,522 | Parity confirmed |
-| [PNG RGB8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 8,712.51 | 9,507.55 | 0.916 / 0.922 | 527,032 | Parity confirmed |
-| [PNG RGB16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 13,163.23 | 15,313.53 | 0.860 / 0.863 | 2,102,732 | Parity confirmed |
-| [PNG gray8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 1,871.37 | 1,934.46 | 0.967 / 0.974 | 263,699 | Parity confirmed |
-| [PNG gray16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 5,762.37 | 4,913.26 | 1.173 / 1.246 | 1,051,421 | Gap (short; qualified) |
-| [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 4,174.10 | 4,289.79 | 0.973 / 0.980 | 264,179 | Parity confirmed |
-| [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 9,426.43 | 10,150.04 | 0.929 / 0.933 | 1,052,317 | Parity confirmed |
+| [PNG RGBA8, Optimal managed9/native6 / None](../benchmarks/PNG-OPTIMAL-RGBA8.md) | 14,417.46 | 17,231.33 | 0.837 / 0.885 | 527,580 | Prior production; reconfirm |
+| [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED-CAPACITY.md) | 245.37 | 189.47 | 1.295 / 1.430 | 604,319 | Prior production; reconfirm |
+| [PNG RGBA16, NoCompression / None](../benchmarks/WARM-PNG-STORED-CAPACITY.md) | 349.92 | 406.43 | 0.861 / 0.870 | 1,140,504 | Prior production; reconfirm |
+| [PNG RGBA8, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 3,053.16 | 4,355.98 | 0.701 / 0.704 | 527,694 | Prior production; reconfirm |
+| [PNG RGBA16, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 13,289.83 | 17,822.40 | 0.746 / 0.776 | 2,103,738 | Prior production; reconfirm |
+| [PNG RGBA16, Fastest managed2/native1 / live cancelable token](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 12,846.40 | 17,513.32 | 0.734 / 0.743 | 2,103,738 | Prior production; reconfirm |
+| [PNG RGBA16, Fastest managed2/native1 / forward-only output](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 12,790.89 | 17,465.07 | 0.732 / 0.740 | 2,103,770 | Prior production; reconfirm |
+| [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 14,604.45 | 20,095.18 | 0.727 / 0.731 | 2,103,624 | Prior production; reconfirm |
+| [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 14,486.25 | 17,324.40 | 0.836 / 0.843 | 527,564 | Prior production; reconfirm |
+| [PNG RGBA16, SmallestSize managed9/native9 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 19,610.01 | 20,110.26 | 0.975 / 0.980 | 2,103,522 | Prior production; reconfirm |
+| [PNG RGB8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 8,712.51 | 9,507.55 | 0.916 / 0.922 | 527,032 | Prior production; reconfirm |
+| [PNG RGB16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 13,163.23 | 15,313.53 | 0.860 / 0.863 | 2,102,732 | Prior production; reconfirm |
+| [PNG gray8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 1,871.37 | 1,934.46 | 0.967 / 0.974 | 263,699 | Prior production; reconfirm |
+| [PNG gray16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 5,762.37 | 4,913.26 | 1.173 / 1.246 | 1,051,421 | Prior production; reconfirm |
+| [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 4,174.10 | 4,289.79 | 0.973 / 0.980 | 264,179 | Prior production; reconfirm |
+| [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 9,426.43 | 10,150.04 | 0.929 / 0.933 | 1,052,317 | Prior production; reconfirm |
 | [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,894.69 | 3,771.76 | 1.033 / 1.115 | 559,418 | Prior production; reconfirm |
 | [JPEG 4:4:4, forward-only / coded source histograms](../benchmarks/JPEG444-CODED-SOURCE-HISTOGRAMS.md) | 1,929,269.70 | 3,768.09 | 512.002 / 585.587 | 644,112 | Cost screen (CPU parity deferred) |
 | [JPEG 4:4:4, live cancelable token / prior geometric Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 4,465.15 | 3,775.40 | 1.183 / 1.364 | 525,997 | Prior production; reconfirm |
