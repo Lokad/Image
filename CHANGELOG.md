@@ -2,6 +2,8 @@
 
 ## 0.2.0 â€” Unreleased
 
+- Explicit managed JPEG `Reference` profile for baseline 4:4:4, with deterministic
+  quality mapping, shared admission and bounded two-pass MCU encoding.
 - Smaller 8-bit RGBA PNG output with the deeper `Optimal` search policy,
   preserving exact samples, bounded admission and asynchronous ownership.
 - Smaller Original 4:4:4 JPEG packets through source-derived precision-grid,

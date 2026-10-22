@@ -1,10 +1,19 @@
 # Material warm coverage
 
-Updated2026-10-22. Compression precedes CPU parity. The finite scope remains
+Updated2026-10-22. Byte-exact codec qualification precedes CPU parity. The finite scope remains
 **256 named cases:239 numeric and17 unmeasured**. Current tested-producer evidence
 contains60 independent passes,147 gaps,one confidence-open case,16 short cost
 screens and15 superseded encoder rows. Full warm CPU parity and replacement
 readiness remain open; no new shapes, settings or quality grid is added.
+
+E4 adds an explicit managed JPEG Reference profile: both original444 controls are
+byte exact (with the single approved attribution change) through image/caller,
+seekable/forward-only and async boundaries. It uses bounded MCU storage and the
+shared root. Its CPU/allocations are unmeasured; no performance pass is inferred.
+Existing JPEG encoding observations predate the added dispatcher and require
+affected confirmation when CPU qualification resumes. Other unchanged paths retain
+valid evidence; the numeric counts below describe their recorded producers.
+The default/optional Original/CompactColor packet behavior remains unchanged.
 
 [C193 JPEG444 coded source histograms](JPEG444-CODED-SOURCE-HISTOGRAMS.md) save
 65 B on RGBA8 and add one byte on RGBA16: 134,676/133,041 and 134,688/133,043 B.

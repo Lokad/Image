@@ -89,6 +89,25 @@ try {
 "@ | Set-Content -LiteralPath (Join-Path $consumer 'Consumer.csproj') -Encoding utf8
     @'
 using Lokad.Image;
+foreach (var referenceDepth in new[] { 8, 16 })
+{
+    using var referenceImage = Lokad.Image.Tooling.OriginalPixels.Buffer(513, 259, referenceDepth);
+    if (referenceDepth == 8) { referenceImage.GetRow8(0)[3] = 0; referenceImage.GetRow8(0)[513 * 4 - 1] = 0; }
+    else { referenceImage.GetRow16(0)[3] = 0; referenceImage.GetRow16(0)[513 * 4 - 1] = 0; }
+    using var referenceRoot = new Lokad.Image.Tooling.TestMemoryBudget(2 * 1024 * 1024);
+    using var referencePacket = new MemoryStream();
+    await ImageCodec.EncodeJpegAsync(referenceImage, referencePacket, new JpegEncodeOptions
+    {
+        QuantizationPolicy = JpegQuantizationPolicy.Reference, Sampling = JpegSampling.YCbCr444,
+        BackgroundRgb = 0x204060, Limits = ImageLimits.Default with { MemoryBudget = referenceRoot }
+    });
+    var expectedReferenceHash = referenceDepth == 8
+        ? "21389750d4936f4c45f8252020843576916cd5689913de2396ee4113df379ecd"
+        : "f69ce841c602373b71afac9ce403d2d634fe84630cca21cd585c370169cc2a07";
+    if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(referencePacket.ToArray())).ToLowerInvariant()
+        != expectedReferenceHash || referenceRoot.Bytes != 0 || referenceRoot.IsDisposed)
+        throw new Exception("Packaged reference JPEG bytes or shared ownership differ.");
+}
 await Lokad.Image.Tooling.CooperativeMemoryConsumer.Verify();
 Lokad.Image.Tooling.TextShapingConsumer.Verify();
 if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(

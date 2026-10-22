@@ -91,7 +91,7 @@ public sealed class JpegCompactColorTests
         using var image = OriginalPixels.Buffer(17, 11, 8, opaque: true);
         var samples = new byte[17 * 11 * 3]; using var output = new MemoryStream();
         using var root = new TestMemoryBudget(8 * 1024 * 1024);
-        var options = new JpegEncodeOptions { QuantizationPolicy = (JpegQuantizationPolicy)2, Limits = new() { MemoryBudget = root } };
+        var options = new JpegEncodeOptions { QuantizationPolicy = (JpegQuantizationPolicy)int.MaxValue, Limits = new() { MemoryBudget = root } };
         Assert.Throws<ArgumentOutOfRangeException>(() => ImageCodec.EncodeJpeg(image, output, options));
         Assert.Throws<ArgumentOutOfRangeException>(() => ImageCodec.EncodeJpeg(samples, 17, 11, JpegSampleFormat.Rgb, output, options: options));
         await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => ImageCodec.EncodeJpegAsync(image, output, options).AsTask());

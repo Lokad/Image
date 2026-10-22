@@ -11,6 +11,8 @@ internal static partial class JpegEncoder
 
     public static void Encode(ImageBuffer image, Stream output, JpegEncodeOptions options, OperationContext context)
     {
+        if (options.QuantizationPolicy == JpegQuantizationPolicy.Reference)
+        { EncodeReference444(image, default, output, options, context); return; }
         if (CanUseAdaptive(image, output, options, context))
         { EncodeAdaptive(image, output, options, context); return; }
         if (options.Quality is < 1 or > 100 || !Enum.IsDefined(options.Sampling) || !Enum.IsDefined(options.QuantizationPolicy)

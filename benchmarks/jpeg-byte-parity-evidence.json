@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "project": "Lokad.Image",
-  "qualification": "E3",
-  "status": "Independent source-only JPEG444 prototype exactly reproduces two complete native controls; production adoption and remaining codec scope OPEN",
-  "productionChanged": false,
-  "productionCoreSha256": "2d82a81dc60cd5e30c0644c2f62e4206da74ac6322e6caab6df02370705909e3",
+  "qualification": "E4",
+  "status": "Production opt-in Reference JPEG444 reproduces two complete frozen native controls outside one approved attribution segment; remaining profiles/codecs and default adoption OPEN",
+  "productionChanged": true,
+  "productionCoreSha256": "5f0dab9bd4eed0f575999c8919669abe54fcb8b83560d174dc160605fce8940a",
   "oracle": {
     "ffmpegRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
     "ffmpegVersion": "n8.1",
@@ -119,8 +119,6 @@
   ],
   "totalExactSamplesPerPlatform": 797202,
   "comparatorBoundaryTests": 6,
-  "productionBuilds": 0,
-  "repeatedPackageProofs": 0,
   "timingRuns": 0,
   "rawArchive": {
     "file": "e1-jpeg-color-stage-qualified.tar.gz",
@@ -128,7 +126,7 @@
     "sha256": "17a146f3a307fec096b8189161fc1a1e4e1d947327dc895c9b4e1e8d1d9b5d93",
     "mirrored": true
   },
-  "next": "Promote exact source/color/DCT/quantization/table/scan logic into admitted production operations with bounded MCU sampling, shared root, work/cancellation and output ownership. Qualify public image/caller/stream/async boundaries and actual package before adoption. Other required codecs/profiles remain OPEN.",
+  "next": "E5: reproduce native chroma conversion/MCU traversal for existing 422 and 420 controls, then approved grayscale/restart profiles. Preserve E4 Reference444 exactness, resource ownership and full required codec/default adoption objective. No heuristic size/quality search.",
   "forwardStage": {
     "qualification": "E2",
     "nativeDispatch": "ff_fdct_sse2",
@@ -197,5 +195,104 @@
     "productionBuilds": 0,
     "nativeEncodes": 0,
     "timingRuns": 0
+  },
+  "priorProductionCoreSha256": "2d82a81dc60cd5e30c0644c2f62e4206da74ac6322e6caab6df02370705909e3",
+  "controlsProductionPacketIdentity": "Original policy at C193; unchanged in E4, separate from the new Reference packets in independentEncoder and productionAdoption",
+  "prototypeProductionBuilds": 0,
+  "prototypeRepeatedPackageProofs": 0,
+  "productionAdoption": {
+    "qualification": "E4",
+    "profile": "JpegQuantizationPolicy.Reference",
+    "qualityToQscale": "1 + (100 - Quality) * 30 / 99",
+    "defaultQuality": 85,
+    "frozenControlQscale": 5,
+    "sampling": "444",
+    "baseline": true,
+    "restartInterval": 0,
+    "defaultAdoptionComplete": false,
+    "inputs": [
+      "RGBA8 ImageBuffer",
+      "RGBA16 ImageBuffer",
+      "caller RGB8 span with stride"
+    ],
+    "delivery": [
+      "sync seekable",
+      "sync forward-only",
+      "async"
+    ],
+    "frozenControlBoundaryChecks": 10,
+    "exactOnWindows": true,
+    "exactOnLinux": true,
+    "oraclePacketOrTableInputs": false,
+    "fullFrameYuvOrCoefficientCopies": false,
+    "mcuBytes": 384,
+    "fixedReservationBytes": 8192,
+    "survivingTableReservationBytes": 16384,
+    "sharedAdmission": "Single borrowed root; reserve before allocation including coarse table replacement overlap; terminal refusal; retained encoded output charged until actual async users finish.",
+    "focusedChecks": [
+      "source and surviving output ownership",
+      "aggregate root and retained output",
+      "table replacement peaks against cumulative allocation",
+      "refusal and subsequent successful operation",
+      "work/local working/output limits",
+      "cancellation and actual pending async users",
+      "independent stream failure cleanup",
+      "small dimensions and quality endpoints",
+      "typed unsupported profiles"
+    ],
+    "testsPerPlatform": {
+      "internal": 2149,
+      "publicApi": 1998,
+      "liveFfmpeg": 936,
+      "total": 5083
+    },
+    "scalarChecksPerPlatform": {
+      "internal": 1,
+      "publicApi": 15
+    },
+    "package": {
+      "version": "0.2.0",
+      "bytes": 401350,
+      "sha256": "0fc52b31bab5c8be0642310bb714ea59db3c0a3c4e674d7dd32ec6735538168b",
+      "sameActualPackageBothPlatforms": true,
+      "usageExamplesPerPlatform": 3
+    },
+    "builds": {
+      "production": 1,
+      "internalTests": 1,
+      "publicTests": 4,
+      "productionRebuildsAfterFreeze": 0
+    },
+    "fixtureCorrections": "Buffered failing-output fixture then MemoryStream virtual dispatch were corrected; undefined policy test now uses int.MaxValue because 2 is valid Reference. Failed logs retained; frozen production core unchanged.",
+    "cpuAndAllocations": "Unmeasured; no new timing or parity claim. Earlier JPEG encode observations predate the new dispatcher and require affected confirmation when CPU qualification resumes.",
+    "rawArchive": {
+      "file": "e4-qualified-linux.tar.gz",
+      "bytes": 2576881,
+      "sha256": "4d423557d33393ad2d9fe9401585301623dc2873077ab2edcb351f000a8cd0a3",
+      "members": 53,
+      "mirrored": true
+    },
+    "sourceSha256": {
+      "src/Lokad.Image/Internal/JpegEncoder.AsyncOutput.cs": "2b387a10d59e2dac6b4a165b5251ed35e67e8afb4b2fbebac30ed6baf1e2bc81",
+      "src/Lokad.Image/Internal/JpegEncoder.Reference444.cs": "b18fe513edaa8ed283bc6950f1f1b6ca92715bd2370b44a9de3d64975319d4cd",
+      "src/Lokad.Image/Internal/JpegEncoder.Samples.cs": "a33734cc12b22fe9eff1668cde5e442f61d7fa378c88144789ef066a63bd3be8",
+      "src/Lokad.Image/Internal/JpegEncoder.cs": "fae50841f2360ad7d5faac21513c814cbdb439ab65d69fccc8ef9c161f6fb128",
+      "src/Lokad.Image/Internal/JpegReferenceColor.cs": "3049bdab3b4379ba097370ff3971595458c2f77ec7750eaf154332c2ab9a85b2",
+      "src/Lokad.Image/Internal/JpegReferenceTables.cs": "e129a316dc317a9ab9f4daec6b2e5f393ef852ad716ad3828abd55f60fc997ee",
+      "src/Lokad.Image/Internal/JpegReferenceTransform.cs": "623cae8c2a09f234699ec89258291fa349e7e6334db9d2e83dd1fd1ba240e06c",
+      "src/Lokad.Image/JpegOptions.cs": "5022a676e1ce501de221e04c6d669f1ecea79ce426a848ebf465b3e9c9b45a5b",
+      "src/Lokad.Image/Lokad.Image.csproj": "6d0ae3faa0132beaf0b6890a08a9dcd58d4d10790b984904340319239c9a78ee",
+      "tests/Lokad.Image.PublicApi.Tests/JpegCompactColorTests.cs": "8b12e616886c97e900a8db12a9f39e835b628b807566608a6aa8010da3304251",
+      "tests/Lokad.Image.PublicApi.Tests/JpegReferenceTests.cs": "b9a2f986650c6588cd5770f7c14b0fb042d03deb8f74b40b8c34da0866ab1498",
+      "tests/Lokad.Image.Tests/JpegReferenceAdmissionTests.cs": "48c407a00217625fea71eac6304fa6a8d39121624bf6347e6eaefac83252a3ce",
+      "tools/PackageSmokeTest/verify-package.ps1": "0d02b0ebd35e7b25da4a1b513b91a448b33e10af0cdeb3eeb4a07f572e9c68f9"
+    },
+    "windowsRawArchive": {
+      "archive": "tmp/e4-qualified-windows.tar.gz",
+      "bytes": 386773,
+      "sha256": "d7fb8587c7fff6f794c94a0274f9294aaf0ee70909018fbd018fd8a39ec59ee3",
+      "members": 23,
+      "mirrored": true
+    }
   }
 }

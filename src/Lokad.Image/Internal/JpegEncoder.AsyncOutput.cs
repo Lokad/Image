@@ -4,6 +4,8 @@ internal static partial class JpegEncoder
 {
     internal static EncodedOutput AsyncOutput(ImageBuffer image, JpegEncodeOptions options, OperationContext context)
     {
+        if (options.QuantizationPolicy == JpegQuantizationPolicy.Reference)
+        { ValidateReferenceOptions(options, JpegSampleFormat.Rgb); return EncodedOutput.Segmented(context); }
         var capacity = AsyncCapacity(image.Width, image.Height, options.Sampling, options, context);
         if (capacity > 0)
         {
@@ -25,6 +27,8 @@ internal static partial class JpegEncoder
 
     internal static EncodedOutput AsyncSampleOutput(JpegSampleInput source, JpegEncodeOptions options, OperationContext context)
     {
+        if (options.QuantizationPolicy == JpegQuantizationPolicy.Reference)
+        { ValidateReferenceOptions(options, source.Format); return EncodedOutput.Segmented(context); }
         var sampling = source.Format == JpegSampleFormat.Grayscale ? JpegSampling.Grayscale : options.Sampling;
         var capacity = AsyncCapacity(source.Width, source.Height, sampling, options, context);
         if (capacity == 0 || context.Cancellation.CanBeCanceled) return EncodedOutput.Segmented(context);

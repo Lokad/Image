@@ -3,6 +3,9 @@
 A safe C#/.NET 10 library for still-image codecs and basic editing. Independently
 implemented, with no NuGet dependencies, unsafe code or native bindings.
 
+The 0.2.0 development API adds an explicit JPEG `Reference` profile for baseline
+4:4:4. [Codec compatibility](docs/codec-parity.md) states its exact tested scope.
+
 - **PNG:** decode all static color/depth profiles, including palette, transparency
   and Adam7; encode grayscale/RGB/grayscale-alpha/RGBA at 8 or 16 bits.
 - **JPEG:** baseline/progressive decode and admitted progressive 4:4:4 encode; baseline encode with grayscale,

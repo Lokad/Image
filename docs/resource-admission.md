@@ -24,6 +24,12 @@ operation and releases relinquished storage. It never waits, retries or selects
 a fallback after refusal. Cancellation and allocation failure remain distinct.
 Local limits and cumulative `ImageBudget` work quotas continue independently.
 
+The JPEG Reference profile borrows pixels and uses a 384-byte MCU buffer in two
+passes. It admits 8 KiB fixed storage, 16 KiB for retained coding tables, and coarse
+temporary table-building capacity before allocation. Scratch is released after
+each builder; codec workspace is released before asynchronous delivery, whose
+encoded chunks remain charged until their actual users finish. Refusal is terminal.
+
 `ImageLimits` bounds one operation's admitted buffers and algorithm work. It is
 not a process RSS, GC-heap, elapsed-time or global-cache quota. Supplied pixel or
 encoded buffers, results and live codec workspaces count toward admission;

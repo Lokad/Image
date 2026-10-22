@@ -9,7 +9,10 @@ public enum JpegQuantizationPolicy
     /// <summary>The original frequency-weighted formula, including grayscale.</summary>
     Original,
     /// <summary>Add a quality-scaled precision floor for color JPEGs; grayscale keeps Original.</summary>
-    CompactColor
+    CompactColor,
+    /// <summary>Managed reference-compatible baseline 4:4:4, without restart markers.
+    /// Quality maps to qscale 1 + (100 - quality) * 30 / 99; default 85 maps to 5.</summary>
+    Reference
 }
 
 /// <summary>Interleaved, 8-bit caller sample layouts.</summary>
@@ -35,12 +38,12 @@ public sealed record JpegDecodeOptions
 public sealed record JpegEncodeOptions
 {
     public ImageLimits Limits { get; init; } = ImageLimits.Default;
-    /// <summary>Original quantization policy, from 1 to 100. Defaults to 85; numbering is encoder-specific.</summary>
+    /// <summary>Quality from 1 to 100. Defaults to 85; numbering and mapping are profile-specific.</summary>
     public int Quality { get; init; } = 85;
-    /// <summary>Original by default. CompactColor trades color reconstruction precision for smaller packets.</summary>
+    /// <summary>Original by default. CompactColor adds a precision floor; Reference selects the pinned compatible baseline profile.</summary>
     public JpegQuantizationPolicy QuantizationPolicy { get; init; }
     public JpegSampling Sampling { get; init; } = JpegSampling.YCbCr420;
-    /// <summary>Require baseline JPEG syntax. Otherwise admitted Original 4:4:4 encoding may use progressive scans. Coefficient decisions are unchanged by this switch.</summary>
+    /// <summary>Require baseline JPEG syntax. Otherwise admitted Original 4:4:4 encoding may use progressive scans. Reference always uses baseline.</summary>
     public bool BaselineOnly { get; init; }
     /// <summary>RGB background for alpha flattening, packed as 0xRRGGBB. Null requires opaque input.</summary>
     public uint? BackgroundRgb { get; init; }
