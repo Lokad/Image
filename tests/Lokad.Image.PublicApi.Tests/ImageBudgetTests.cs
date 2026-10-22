@@ -170,7 +170,11 @@ public sealed class ImageBudgetTests
         var budget = new ImageBudget(Limits.MaxWorkingBytes, Limits.MaxWork);
         using var cancellation = new CancellationTokenSource();
         using var input = new GatedReadStream(data);
-        var call = Task.Run(() => budget.Decode(input, new() { Limits = Limits }, cancellation.Token));
+        // This worker deliberately blocks in Read while the test inspects its
+        // reservation. Give it a dedicated thread instead of depending on pool
+        // injection while other parallel tests may also be blocking.
+        var call = Task.Factory.StartNew(() => budget.Decode(input, new() { Limits = Limits }, cancellation.Token),
+            CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         try
         {
             Assert.True(input.Entered.Wait(TimeSpan.FromSeconds(10)));
