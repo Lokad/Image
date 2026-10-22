@@ -5,7 +5,9 @@ encoders first, then decoders, against pinned FFmpeg builds/settings. Only expli
 encoder-attribution metadata may differ; see [scope and current progress](codec-parity.md).
 Current size/quality passes below are historical transition evidence, **not byte-exact
 qualification**. Active quality/calibration tooling retires after exact replacements
-cover its required paths. Production is unchanged by the initial stage probes.
+cover its required paths. The independent JPEG444 prototype now exactly reproduces
+both frozen complete packets with its own tables, apart from approved attribution;
+production is unchanged. Prototype CPU/allocations are unmeasured.
 All seven declared lossy WebP and six lossless WebP historical size gates pass.
 Lossless photograph/diagram packets are 159,104/160,032 and 7,160/7,234 B
 (managed/reference), with exact RGBA. Lossy photograph/diagram packets are

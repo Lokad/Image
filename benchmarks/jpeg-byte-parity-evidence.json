@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "project": "Lokad.Image",
-  "qualification": "E1",
-  "status": "Exact normalization, full-resolution color, forward DCT and visible quantized coefficients; full encoder/decoder parity OPEN",
+  "qualification": "E3",
+  "status": "Independent source-only JPEG444 prototype exactly reproduces two complete native controls; production adoption and remaining codec scope OPEN",
   "productionChanged": false,
   "productionCoreSha256": "2d82a81dc60cd5e30c0644c2f62e4206da74ac6322e6caab6df02370705909e3",
   "oracle": {
@@ -63,6 +63,19 @@
         "quantizationExact": true,
         "nativeCoefficientDumpSha256": "4dae291fe76da1d67e9099ced2c4062ab6593c59f92075bee59c5956f1272542",
         "changedCoefficientRejected": true
+      },
+      "independentEncoder": {
+        "exactOnWindows": true,
+        "exactOnLinux": true,
+        "oracleTablesSupplied": false,
+        "rawNativeAttributionSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
+        "ownAttributionPacketBytes": 133039,
+        "ownAttributionPacketSha256": "21389750d4936f4c45f8252020843576916cd5689913de2396ee4113df379ecd",
+        "onlyApprovedAttributionDifference": true,
+        "phantomBlocks": 195,
+        "phantomValues": 12480,
+        "borrowedSourceUnchanged": true,
+        "survivingOutputUnchanged": true
       }
     },
     {
@@ -88,6 +101,19 @@
         "quantizationExact": true,
         "nativeCoefficientDumpSha256": "308e551f13cf2c8760d678d1cc9652ba48f01dda752aaef80ed5918622751e99",
         "changedCoefficientRejected": true
+      },
+      "independentEncoder": {
+        "exactOnWindows": true,
+        "exactOnLinux": true,
+        "oracleTablesSupplied": false,
+        "rawNativeAttributionSha256": "0f0933b13b4bbf4b0dcaea55f44ff54b83125743e88b7de7a71c750ec42d71ea",
+        "ownAttributionPacketBytes": 133041,
+        "ownAttributionPacketSha256": "f69ce841c602373b71afac9ce403d2d634fe84630cca21cd585c370169cc2a07",
+        "onlyApprovedAttributionDifference": true,
+        "phantomBlocks": 195,
+        "phantomValues": 12480,
+        "borrowedSourceUnchanged": true,
+        "survivingOutputUnchanged": true
       }
     }
   ],
@@ -102,7 +128,7 @@
     "sha256": "17a146f3a307fec096b8189161fc1a1e4e1d947327dc895c9b4e1e8d1d9b5d93",
     "mirrored": true
   },
-  "next": "Reproduce MCU traversal and phantom blocks, then optimal Huffman tie-breaking and complete baseline serialization. Native DQT generator remains required. No quality or size search.",
+  "next": "Promote exact source/color/DCT/quantization/table/scan logic into admitted production operations with bounded MCU sampling, shared root, work/cancellation and output ownership. Qualify public image/caller/stream/async boundaries and actual package before adoption. Other required codecs/profiles remain OPEN.",
   "forwardStage": {
     "qualification": "E2",
     "nativeDispatch": "ff_fdct_sse2",
@@ -124,5 +150,52 @@
       "sha256": "cd2679ddf31655a0d1ee944ccfa0fd82e3667c5622dd759a8ab07d5611a1ba1e",
       "mirrored": true
     }
+  },
+  "independentEncoder": {
+    "prototypeOnly": true,
+    "method": "JpegScanParity.EncodeGenerated(sourceRGBA, depth, nativeAttribution)",
+    "sourceOnly": true,
+    "nativeQscale": 5,
+    "sampling": "444",
+    "sourceDepths": [
+      8,
+      16
+    ],
+    "width": 513,
+    "height": 259,
+    "baseline": true,
+    "restartInterval": 0,
+    "productionChanged": false,
+    "generatedDqtSource": {
+      "standard": "ITU-T H.262 (02/2000), section6.3.11",
+      "url": "https://www.itu.int/rec/dologin_pub.asp?id=T-REC-H.262-200002-S!!PDF-E&lang=s&type=items"
+    },
+    "generatedHuffman": {
+      "algorithm": "Length-limited package merge, zero-weight reserved leaf, pinned frequency-tie ordering",
+      "cases": 32,
+      "exactOnWindows": true,
+      "exactOnLinux": true,
+      "changedTableRejected": true,
+      "histogramsSha256": "c226bea46b3f09888c2b381a02dcc4e1fdded6b5fe93302411d6918e1d877205",
+      "nativeTablesSha256": "b86e3bf62915e33860199ab1c8b20d9b4b019cf1cff954464ad41ee780813d6f",
+      "nativeProbeSha256": "989be2f5e8d1842887bb57e9aaea3da74070023cf0969163372054325773d453"
+    },
+    "sourceSha256": {
+      "tools\\WarmReference\\JpegScanParity.cs": "15f91a2a3c805294815d013f4190a4ace0636fd70e8c4e1a26cf861db859e81d",
+      "tools\\WarmReference\\JpegReferenceTables.cs": "23e1160ee118d3dc82eff6325634dc444eaa4a0f16d31c45c19b9aa162a3b832",
+      "tools\\WarmReference\\verify-jpeg-scan-stage.ps1": "26e759dffed95ee5b7169baa29ef9d453727e1ffd69d490ae6fc5378c0805344",
+      "tools\\WarmReference\\verify-jpeg-huffman-stage.ps1": "6a55f821dc8ef5269db08688cb74eb4621a1f52d65ee5eebd2f3e01ddd40dd01",
+      "tools\\WarmReference\\ffmpeg-jpeg-huffman.c": "2dc4b7930389b97f4c16d632e90314d1ea0779656be01c929cca96c975ba6462"
+    },
+    "rawArchive": {
+      "file": "e3-jpeg444-independent-encoder-qualified-prototype.tar.gz",
+      "bytes": 304288,
+      "sha256": "e78692450d099c8b81b5dd71cba1187492835c1a94eb6184405dd44e26d6fb04",
+      "members": 33,
+      "mirrored": true
+    },
+    "productionBuilds": 0,
+    "nativeEncodes": 0,
+    "timingRuns": 0
   }
 }
