@@ -12,6 +12,7 @@ if ((Get-Item -LiteralPath $SourcePath).Length -ne (513 * 259 * $Depth / 2) -or
     (Get-Item -LiteralPath $ReferencePacketPath).Length -ne $control.nativeCompletePacketBytes -or
     (Get-Item -LiteralPath $ExpectedPhantomsPath).Length -ne 24960) { throw 'Frozen stage inputs required.' }
 Add-Type -Path @((Join-Path $PSScriptRoot 'JpegColorParity.cs'),
+    (Join-Path $PSScriptRoot 'JpegSubsampleParity.cs'),
     (Join-Path $PSScriptRoot 'JpegForwardParity.cs'), (Join-Path $PSScriptRoot 'JpegScanParity.cs'),
     (Join-Path $PSScriptRoot 'JpegReferenceTables.cs'))
 function Hash([byte[]]$Bytes) { [Convert]::ToHexStringLower([Security.Cryptography.SHA256]::HashData($Bytes)) }

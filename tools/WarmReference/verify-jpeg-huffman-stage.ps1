@@ -5,7 +5,9 @@ param(
 $ErrorActionPreference = 'Stop'
 if ((Get-Item -LiteralPath $HistogramsPath).Length -ne 32768 -or
     (Get-Item -LiteralPath $ExpectedTablesPath).Length -gt 8768) { throw 'Bounded 32-case table batch required.' }
-Add-Type -Path @((Join-Path $PSScriptRoot 'JpegColorParity.cs'), (Join-Path $PSScriptRoot 'JpegForwardParity.cs'),
+Add-Type -Path @((Join-Path $PSScriptRoot 'JpegColorParity.cs'),
+    (Join-Path $PSScriptRoot 'JpegSubsampleParity.cs'),
+    (Join-Path $PSScriptRoot 'JpegForwardParity.cs'),
     (Join-Path $PSScriptRoot 'JpegScanParity.cs'), (Join-Path $PSScriptRoot 'JpegReferenceTables.cs'))
 function Hash([byte[]]$Bytes) { [Convert]::ToHexStringLower([Security.Cryptography.SHA256]::HashData($Bytes)) }
 $histograms = [IO.File]::ReadAllBytes((Resolve-Path -LiteralPath $HistogramsPath).Path)

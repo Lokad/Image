@@ -13,15 +13,16 @@ color information, quantization, entropy and extra comments are not exempt.
 Other codecs need their own explicit attribution inventory.
 
 The managed JPEG `JpegQuantizationPolicy.Reference` profile reproduces both frozen **513×259
-RGBA8/16** controls completely. Encoding receives only source samples, depth and
-attribution selection; it reads no oracle packet or table. It generates color
+RGBA8/16** controls completely. Encoding receives source samples and options;
+it reads no oracle packet or table. It generates color
 samples, integer transforms, quantization, optimal Huffman tables, headers and
 the complete scan, including all **195 padding blocks per control**.
 
 The pinned oracle is FFmpeg n8.1, revision
 `9047fa1b084f76b1b4d065af2d743df1b40dfb56`: single-thread MJPEG, qscale 5,
 optimal Huffman, full-range BT.601 4:4:4, baseline/no restart, 0x204060 flattening.
-Native attribution reproduces its exact **133,041/133,043 B** hashes. Lokad.Image
+The test-only prototype with native attribution reproduces its exact
+**133,041/133,043 B** hashes. Production Lokad.Image
 attribution produces **133,039/133,041 B**, with only the approved COM difference.
 All these checks pass on Windows/Linux, preserving inputs and surviving outputs.
 The Huffman generator additionally matches **32 original bounded histograms**,
@@ -33,6 +34,12 @@ Transform constants are generated mathematically. No upstream implementation,
 implementation table or corpus is incorporated.
 [Numeric evidence](../benchmarks/jpeg-byte-parity-evidence.json) identifies the
 sources, binaries, earlier exact stages and mirrored raw results.
+
+The independent prototype also reproduces the four existing **4:2:2/4:2:0,
+RGBA8/16** controls on Windows/Linux: **71,168/71,210 B** and **52,093/52,117 B**
+with native attribution, two bytes less with Lokad.Image attribution. All **931,360**
+submitted color samples per OS match exactly. Production integration of these
+layouts remains open; these are the same two procedural inputs, not new content.
 
 The production encoder uses a 384-byte MCU buffer in two passes, with no
 full-frame YUV or coefficient/event copy. RGBA8/16 images and caller RGB8 spans
@@ -57,6 +64,7 @@ checks the table generator. The color/forward-stage verifiers retain intermediat
 checks. `compare-jpeg-packets.py ACTUAL REFERENCE --allow-encoder-attribution`
 enables only the exception above, reporting raw equality separately. Its boundary
 checks run with `python -B tools/WarmReference/test-jpeg-packet-comparison.py`.
+`verify-jpeg-subsampling-stage.ps1` checks the source-only 4:2:2/4:2:0 prototype.
 
 Lossless WebP retains the approved libwebp `exact=1` reference; grayscale JPEG
 retains the explicitly labeled SIMD-enabled libjpeg-turbo reference. Existing

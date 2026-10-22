@@ -7,6 +7,8 @@ Current size/quality passes below are historical transition evidence, **not byte
 qualification**. Active quality/calibration tooling retires after exact replacements
 cover its required paths. The explicit managed JPEG `Reference` profile now reproduces
 both frozen complete444 packets with its own tables, apart from approved attribution.
+The source-only422/420 prototype also matches its four existing packets; production
+adoption remains open.
 Original/CompactColor packet behavior is unchanged. Reference CPU/allocations are
 unmeasured; existing JPEG encoding timings predate its added dispatch and require
 affected confirmation when CPU qualification resumes. Other unchanged paths retain evidence.

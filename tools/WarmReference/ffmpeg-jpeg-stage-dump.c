@@ -17,16 +17,25 @@ static int capture_frame(AVCodecContext *context, const AVFrame *value)
 {
     static int captured;
     if (!captured) {
-        if (value->format != AV_PIX_FMT_YUVJ444P) fail("Stage probe requires full-resolution JPEG YUV.");
+        int horizontal, vertical;
+        switch (value->format) {
+        case AV_PIX_FMT_YUVJ444P: horizontal = vertical = 0; break;
+        case AV_PIX_FMT_YUVJ422P: horizontal = 1; vertical = 0; break;
+        case AV_PIX_FMT_YUVJ420P: horizontal = vertical = 1; break;
+        default: fail("Stage probe requires planar full-range JPEG YUV."); return -1;
+        }
         const char *path = getenv("LOKAD_JPEG_STAGE_DUMP");
         if (!path || !*path) fail("Stage dump path required.");
         FILE *output = fopen(path, "wb");
         if (!output) fail("Open stage dump failed.");
-        for (int component = 0; component < 3; component++)
-            for (int y = 0; y < value->height; y++)
+        for (int component = 0; component < 3; component++) {
+            int width = component ? (value->width + ((1 << horizontal) - 1)) >> horizontal : value->width;
+            int height = component ? (value->height + ((1 << vertical) - 1)) >> vertical : value->height;
+            for (int y = 0; y < height; y++)
                 if (fwrite(value->data[component] + (size_t)y * value->linesize[component],
-                           1, (size_t)value->width, output) != (size_t)value->width)
+                           1, (size_t)width, output) != (size_t)width)
                     fail("Stage dump write failed.");
+        }
         if (fclose(output)) fail("Stage dump close failed.");
         captured = 1;
     }

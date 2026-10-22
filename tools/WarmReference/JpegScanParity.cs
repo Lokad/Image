@@ -51,42 +51,56 @@ public static class JpegScanParity
     }
 
     public static Result EncodeGenerated(byte[] rgba, int depth, bool nativeAttribution)
+        => EncodeGenerated(rgba, depth, nativeAttribution, 444);
+
+    public static Result EncodeGenerated(byte[] rgba, int depth, bool nativeAttribution, int sampling)
     {
-        byte[] planes = JpegColorParity.Convert(rgba, depth);
+        byte[] planes = sampling == 444 ? JpegColorParity.Convert(rgba, depth)
+            : JpegSubsampleParity.Convert(rgba, depth, sampling);
         ushort[] quantization = JpegReferenceTables.Quantization(5);
-        Result statistics = EncodeWithTables(planes, quantization, null, null, nativeAttribution);
+        Result statistics = EncodeWithTables(planes, quantization, null, null, nativeAttribution, sampling);
         var tables = new CodeTable[4];
         for (int i = 0; i < 4; i++) tables[i] = JpegReferenceTables.Huffman(statistics.Histograms[i]);
-        return EncodeWithTables(planes, quantization, tables, null, nativeAttribution);
+        return EncodeWithTables(planes, quantization, tables, null, nativeAttribution, sampling);
     }
 
     private static Result EncodeWithTables(byte[] planes, ushort[] quantization, CodeTable[] tables,
-        byte[] expectedPhantoms, bool nativeAttribution)
+        byte[] expectedPhantoms, bool nativeAttribution, int sampling = 444)
     {
         const int width = 513, height = 259, plane = width * height;
-        if (planes.Length != plane * 3 || (expectedPhantoms != null && expectedPhantoms.Length != 195 * 128))
+        int chromaWidth = sampling == 444 ? width : 257;
+        int chromaHeight = sampling == 420 ? 130 : height;
+        if (sampling != 444 && sampling != 422 && sampling != 420
+            || planes.Length != plane + chromaWidth * chromaHeight * 2
+            || expectedPhantoms != null && (sampling != 444 || expectedPhantoms.Length != 195 * 128))
             throw new ArgumentException("Frozen full-resolution planes and phantom coefficients required.");
         var result = new Result();
         for (int i = 0; i < 4; i++) result.Histograms[i] = new int[256];
-        var packet = tables == null ? new List<byte>() : Headers(quantization, tables, nativeAttribution);
+        var packet = tables == null ? new List<byte>() : Headers(quantization, tables, nativeAttribution, sampling);
         var writer = new ScanWriter(packet, tables, result.Histograms);
         Span<byte> samples = stackalloc byte[64];
         Span<short> transformed = stackalloc short[64];
         Span<short> coefficients = stackalloc short[64];
         Span<int> previous = stackalloc int[3]; previous.Clear();
         for (int top = 0; top < height; top += 16)
-            for (int left = 0; left < width; left += 8)
+            for (int left = 0; left < width; left += sampling == 444 ? 8 : 16)
                 for (int component = 0; component < 3; component++)
-                    for (int vertical = 0; vertical < 2; vertical++)
+                    for (int vertical = 0; vertical < (component != 0 && sampling == 420 ? 1 : 2); vertical++)
+                    for (int horizontal = 0; horizontal < (component == 0 && sampling != 444 ? 2 : 1); horizontal++)
                     {
-                        int blockTop = top + vertical * 8;
+                        int componentWidth = component == 0 ? width : chromaWidth;
+                        int componentHeight = component == 0 ? height : chromaHeight;
+                        int offset = component == 0 ? 0 : plane + (component - 1) * chromaWidth * chromaHeight;
+                        int blockTop = (component != 0 && sampling == 420 ? top / 2 : top) + vertical * 8;
+                        int blockLeft = (component != 0 && sampling != 444 ? left / 2 : left) + horizontal * 8;
                         for (int y = 0; y < 8; y++)
                             for (int x = 0; x < 8; x++)
-                                samples[y * 8 + x] = planes[component * plane
-                                    + Math.Min(blockTop + y, height - 1) * width + Math.Min(left + x, width - 1)];
+                                samples[y * 8 + x] = planes[offset
+                                    + Math.Min(blockTop + y, componentHeight - 1) * componentWidth
+                                    + Math.Min(blockLeft + x, componentWidth - 1)];
                         JpegForwardParity.Forward(samples, transformed);
                         JpegForwardParity.Quantize(transformed, quantization, coefficients);
-                        if (blockTop >= height)
+                        if (blockTop >= componentHeight)
                             for (int k = 0; k < 64; k++, result.PhantomValues++)
                             {
                                 if (expectedPhantoms != null)
@@ -155,7 +169,7 @@ public static class JpegScanParity
             throw new ArgumentException("Incomplete pinned tables.");
     }
 
-    public static List<byte> Headers(ushort[] quantization, CodeTable[] tables, bool nativeAttribution)
+    public static List<byte> Headers(ushort[] quantization, CodeTable[] tables, bool nativeAttribution, int sampling = 444)
     {
         var packet = new List<byte>(150000) { 255, 216 };
         Segment(packet, 254, Encoding.ASCII.GetBytes(nativeAttribution ? "Lavc62.28.100\0" : "Lokad.Image\0"));
@@ -169,7 +183,10 @@ public static class JpegScanParity
             huffman.AddRange(tables[i].Counts); huffman.AddRange(tables[i].Symbols);
         }
         Segment(packet, 196, huffman.ToArray());
-        Segment(packet, 192, new byte[] { 8, 1, 3, 2, 1, 3, 1, 18, 0, 2, 18, 0, 3, 18, 0 });
+        byte lumaSampling = (byte)(sampling == 444 ? 18 : 34);
+        byte chromaSampling = (byte)(sampling == 420 ? 17 : 18);
+        Segment(packet, 192, new byte[] { 8, 1, 3, 2, 1, 3, 1, lumaSampling, 0,
+            2, chromaSampling, 0, 3, chromaSampling, 0 });
         Segment(packet, 218, new byte[] { 3, 1, 0, 2, 17, 3, 17, 0, 63, 0 });
         return packet;
     }
