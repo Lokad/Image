@@ -50,6 +50,14 @@ public static class JpegScanParity
         return EncodeWithTables(planes, quantization, tables, expectedPhantoms, nativeAttribution);
     }
 
+    // Framing stage only: supplied DQT/DHT, frozen420 row interval33. Independent
+    // standard-table generation and production admission are separate milestones.
+    public static Result EncodeRowRestartStage(byte[] planes, byte[] referencePacket, bool nativeAttribution)
+    {
+        ReadTables(referencePacket, out ushort[] quantization, out CodeTable[] tables);
+        return EncodeWithTables(planes, quantization, tables, null, nativeAttribution, 420, true);
+    }
+
     public static Result EncodeGenerated(byte[] rgba, int depth, bool nativeAttribution)
         => EncodeGenerated(rgba, depth, nativeAttribution, 444);
 
@@ -65,7 +73,7 @@ public static class JpegScanParity
     }
 
     private static Result EncodeWithTables(byte[] planes, ushort[] quantization, CodeTable[] tables,
-        byte[] expectedPhantoms, bool nativeAttribution, int sampling = 444)
+        byte[] expectedPhantoms, bool nativeAttribution, int sampling = 444, bool rowRestart = false)
     {
         const int width = 513, height = 259, plane = width * height;
         int chromaWidth = sampling == 444 ? width : 257;
@@ -76,13 +84,20 @@ public static class JpegScanParity
             throw new ArgumentException("Frozen full-resolution planes and phantom coefficients required.");
         var result = new Result();
         for (int i = 0; i < 4; i++) result.Histograms[i] = new int[256];
-        var packet = tables == null ? new List<byte>() : Headers(quantization, tables, nativeAttribution, sampling);
+        if (rowRestart && sampling != 420) throw new ArgumentException("Frozen row-restart420 stage required.");
+        var packet = tables == null ? new List<byte>() : Headers(quantization, tables, nativeAttribution, sampling, rowRestart);
         var writer = new ScanWriter(packet, tables, result.Histograms);
         Span<byte> samples = stackalloc byte[64];
         Span<short> transformed = stackalloc short[64];
         Span<short> coefficients = stackalloc short[64];
         Span<int> previous = stackalloc int[3]; previous.Clear();
         for (int top = 0; top < height; top += 16)
+        {
+            if (rowRestart && top != 0)
+            {
+                writer.Finish(); previous.Clear();
+                if (tables != null) { packet.Add(255); packet.Add((byte)(208 + ((top / 16 - 1) & 7))); }
+            }
             for (int left = 0; left < width; left += sampling == 444 ? 8 : 16)
                 for (int component = 0; component < 3; component++)
                     for (int vertical = 0; vertical < (component != 0 && sampling == 420 ? 1 : 2); vertical++)
@@ -125,6 +140,7 @@ public static class JpegScanParity
                         }
                         if (run != 0) writer.Symbol(family + 2, 0);
                     }
+        }
         writer.Finish();
         if (tables != null) { packet.Add(255); packet.Add(217); }
         result.Packet = packet.ToArray();
@@ -169,13 +185,14 @@ public static class JpegScanParity
             throw new ArgumentException("Incomplete pinned tables.");
     }
 
-    public static List<byte> Headers(ushort[] quantization, CodeTable[] tables, bool nativeAttribution, int sampling = 444)
+    public static List<byte> Headers(ushort[] quantization, CodeTable[] tables, bool nativeAttribution, int sampling = 444, bool rowRestart = false)
     {
         var packet = new List<byte>(150000) { 255, 216 };
         Segment(packet, 254, Encoding.ASCII.GetBytes(nativeAttribution ? "Lavc62.28.100\0" : "Lokad.Image\0"));
         var quantizationBytes = new byte[65];
         for (int k = 0; k < 64; k++) quantizationBytes[k + 1] = checked((byte)quantization[Zigzag[k]]);
         Segment(packet, 219, quantizationBytes);
+        if (rowRestart) Segment(packet, 221, new byte[] { 0, 33 });
         var huffman = new List<byte>();
         for (int i = 0; i < 4; i++)
         {
