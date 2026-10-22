@@ -1181,14 +1181,17 @@ on the original fine quantizers. Their unchanged fine-unit AC coefficients are
 counted independently over the eventual equal-point-transform spectral bands,
 resetting run/EOB at each boundary; they are not rescaled or retrained on a coarser
 grid. Each spectral band has its own histogram within the Y/shared-CbCr families.
-Every model receives +1 smoothing on all162 legal symbols, including unreachable
-runs whose zero counters are implicit. Q8 prices
-are deterministic, at-most16-bit Huffman code lengths multiplied by256, with one
-dummy leaf reserving the all-ones code. Equal weights use ascending symbol order;
-internal nodes follow leaves. T.81 Annex K length limiting and stable descending
-frequency assignment match the encoder's separate canonical table builder.
-Amplitude bits are scaled by256. Sampling, histograms and
-prices remain operation-local and do not depend on entropy/output admission.
+Every model receives +1 smoothing on all176 legal progressive AC/EOB-run symbols,
+including unreachable runs whose zero counters are implicit. Ordinary AC prices
+are deterministic at-most16-bit Huffman lengths times256, with one dummy leaf
+reserving the all-ones code. Source EOB runs coalesce separately per component;
+Cb/Cr share histogram counts, never a pending run. Their observed code lengths
+plus extra bits are amortized over source terminal blocks and rounded to nearest
+Q8; absent EOB observations retain the canonical standalone price. Equal weights
+use ascending symbol order; internal nodes follow leaves. T.81 Annex K limiting
+and stable descending-frequency assignment match the separate canonical builder.
+Amplitude bits are scaled by256. Sampling, histograms and prices remain local
+and independent of entropy/output admission.
 Before the final priced pass, Original4:4:4 selects a source-derived precision
 grid. Let `p=(16*scale+50)/100`; choose the largest power of two `f` with
 `q*f<=p`, or one when none is possible. Round source DCT divided by `q*f` away
@@ -1278,23 +1281,23 @@ trainer retains its121344-per-MCU bound. Trellis planning adds at most521904,
 giving667440 before the paired tail. That tail adds at most196002 per MCU,
 for863442 total (287814/block). Every bounded bank, arc, probe,
 reconstruction and selection step charges work before execution. Adaptive and
-async staging estimates also include source sampling: at most136129 per sampled
-MCU,1920 once to prepare band masks and1024 for layout/clear preparation.
-Mask setup charges before clearing histograms, reuses128 stack bytes and adds no
-owner or frame copy. Source-table finishing reuses2116 stack bytes sequentially
-for all models: at most163 leaves,325 nodes and total weight8227. Each band stores
-EOB/ZRL and ten categories per reachable run. Across Original qualities1..98,
-750 ushort counters suffice; they become exact ushort Q8 prices in place. With
-128 ushort scan offsets this is1756 bytes, alongside the2304-byte MCU,64 sample
-bytes and existing fixed scratch within8KiB. No heap, retained owner or frame
-copy is added. Each finish prepays40960 logical visits plus r*(323-r)/2 sorting
-shifts, where r=1+10*min(16,bandLength)+(bandLength>=17?1:0) bounds positive
-source symbols. All models are validated before any histogram mutation.
-The declared control's nine models charge416519 finish units and plan
-1,999,990,671 units under the
-unchanged default2B limit. Default work limits remain unchanged.
+async staging estimates also include source sampling:136129 per sampled MCU,
+plus one pending-run visit per component/band per sample and once at completion,
+1920 for band masks and1536 for layout/clear preparation. Work is charged before
+its corresponding mutation. Source finishing uses at most177 leaves/353 nodes,
+total weight8241 and depth27. Heap-pop leaf order supplies stable descending
+frequency assignment in linear passes. Each band prepays45056 logical visits,
+covering validation, heap/parent work, length redistribution, ordering and output.
+All models are validated before any histogram mutation.
+Across Original qualities1..98,930 ushort entries suffice, including an observed terminal-block count per band; they become Q8 prices
+in place. The1860-byte arena,256-byte scan map,192-byte component-local pending
+runs,2304-byte MCU,64 sample bytes and2532-byte sequential source builder total
+7208 substantial stack bytes within the same8KiB workspace. No heap owner, frame
+copy or cache is added. The declared control has nine models,613 counter slots
+and13 component bands:405504 finish units and1,999,981,013 complete planned work,
+under the unchanged default2B limit.
 The1612-byte trellis scratch is allocated once per MCU call; each frequency's
-bank is rebuilt as needed. Alongside the1756-byte price arena/map,2304-byte MCU,
+bank is rebuilt as needed. Alongside the2116-byte price arena/map,2304-byte MCU,
 512-byte effective-grid arrays,48-byte local candidate bank and existing scratch,
 it fits the admitted8KiB. Grid setup adds the existing2880-per-MCU precision bound
 to863442, for866322 before the three-component tail. That tail charges at most

@@ -6,19 +6,20 @@ contains60 independent passes,147 gaps,one confidence-open case,16 short cost
 screens and15 superseded encoder rows. Full warm CPU parity and replacement
 readiness remain open; no new shapes, settings or quality grid is added.
 
-[C185 JPEG444 source Huffman prices](JPEG444-SOURCE-HUFFMAN-PRICES.md) save362/305B:
-134,875/133,041 and134,839/133,043 B, with unchanged quality/alpha gates passing.
-Five packet gates remain open (maximum1.38% excess). BothOS5,040 tests and210+62
+[C187 JPEG444 source EOB-run prices](JPEG444-SOURCE-EOB-PRICES.md) save91/105B:
+134,784/133,041 and134,734/133,043 B, with unchanged quality/alpha gates passing.
+Five packet gates remain open (maximum1.31% excess). BothOS5,048 tests and218+62
 scalar checks/OS, exact independent packets across public boundaries, and the
-same actual private0.2package/all3examples pass. One successful frozen Linux core
-and test build is reused on Windows; two core compiler attempts, no rebuild after
-freeze. Benchmark/native/differential/driver/parser binaries are reused. One
-complete forward444 cost is1,908,412.257us/615,832Bop; priorC178 is historical.
-No repeated timing confirmation, CPU-parity pass or broader compression claim.
-Source samples/fine units/choices/bands remain; canonical-Huffman lengths replace
-fractional-log prices and condition models on the existing bands. Only affected
-Original three-component444 decision paths (qualities1..98) invalidate prior
-encoder evidence;99/100, other policies/sampling and unrelated paths retain it.
+same actual private0.2package/all3examples pass. The final frozen Linux core and
+internal/public binaries run on Windows. Two core builds: the first failed the
+independent goldens; actual terminal-block counts corrected its EOB amortization.
+No production rebuild follows final freeze; benchmark/native/differential/driver/
+parser binaries are reused. One complete forward444 cost is1,957,616.722us/
+615,792Bop; priorC185 is historical. No repeated timing confirmation, CPU-parity
+pass or broader compression claim. Source samples/fine units/choices/bands remain.
+Only affected Original three-component444 decision paths (qualities1..98)
+invalidate prior encoder evidence;99/100, other policies/sampling and unrelated
+paths retain relevant evidence.
 
 [PNG Optimal RGBA8](PNG-OPTIMAL-RGBA8.md) closes the two sync/async packet gaps:
 209,407/210,973 B, exact RGBA/alpha/hidden RGB and9,368 B savings. Optimal is a
@@ -38,11 +39,11 @@ independent confirmation. Prior default6 sync cost5,406.297 us is superseded;
 old default8 async timing is historical and awaits later CPU qualification.
 Compound PNG8 crop/nearest/encode invocation costs also contain changed default
 encoding and remain historical. Other15 PNG paths and WebP costs retain
-validity; JPEG reuse follows the C185 scope above. No whole-library method audit
+validity; JPEG reuse follows the C187 scope above. No whole-library method audit
 or repeat is needed.
 
 [Default420](JPEG420-AC-TRELLIS.md) retains nine packet passes; optionalCompactColor
-stays separate. C185 updates the five444 packets and forward cost above;
+stays separate. C187 updates the five444 packets and forward cost above;
 C146caller42068,162.147 us/170,648 Bop remains valid on its unchanged path.
 All7 lossy and6 lossless WebP packet gates pass/stay stopped. No broad JPEG,
 photographic or diagram compression claim follows from procedural controls.

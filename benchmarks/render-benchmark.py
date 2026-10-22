@@ -198,7 +198,7 @@ def render():
         row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeGrayAlpha8', -1], 'WARM-PNG-BYTE-PACKING.md', True),
         row('PNG gray-alpha16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGrayAlpha16', -1], 'WARM-PNG-CHUNK-CRC.md', True),
         row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
-        row('JPEG 4:4:4, forward-only / source Huffman prices', 'jpeg444-source-huffman-price-evidence.json', ['cases', 'Encode444Stream8', -1], 'JPEG444-SOURCE-HUFFMAN-PRICES.md', verification='Cost screen (CPU parity deferred)'),
+        row('JPEG 4:4:4, forward-only / source EOB-run prices', 'jpeg444-source-eob-price-evidence.json', ['cases', 'Encode444Stream8', -1], 'JPEG444-SOURCE-EOB-PRICES.md', verification='Cost screen (CPU parity deferred)'),
         row('JPEG 4:4:4, live cancelable token / prior geometric Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode444Cancelable8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
@@ -351,9 +351,9 @@ with source-PSNR gaps 0.085506/0.085851 dB inside the unchanged 0.25 dB gate.
 Grayscale remains 58,823/58,910 B;
 **optional CompactColor** remains 48,701/52,093 B on its separate procedural control.
 Equal numerical quality values do not establish equivalence. The earlier uncapped
-4:4:4 trial remains rejected; [source Huffman prices](../benchmarks/JPEG444-SOURCE-HUFFMAN-PRICES.md)
-now produce **134,875/133,041 B** (RGBA8) and **134,839/133,043 B** (RGBA16), with
-source-PSNR gaps 0.218530/0.224697 dB inside 0.25 dB. Existing 4:2:2 controls pass
+4:4:4 trial remains rejected; [source EOB-run prices](../benchmarks/JPEG444-SOURCE-EOB-PRICES.md)
+now produce **134,784/133,041 B** (RGBA8) and **134,734/133,043 B** (RGBA16), with
+source-PSNR gaps 0.218071/0.225823 dB inside 0.25 dB. Existing 4:2:2 controls pass
 size/quality, without photographic or diagram extrapolation. [PNG Optimal RGBA8](../benchmarks/PNG-OPTIMAL-RGBA8.md) now closes the two changed
 sync/async boundaries at209,407/210,973 B, saving9,368 B each. All17 declared PNG
 packet gates pass, with exact RGBA. The public Optimal policy uses managed9 versus
@@ -364,14 +364,14 @@ The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles
 existing encode rows: 13 default passes/5 open, plus one separate optional pass.
 The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) first saved12,166 B
 on 4:4:4 forward-only/cancellable output. Source-derived coefficient decisions and progressive scans save another
-23,937 B relative to that packet; the largest remaining 4:4:4 gap is about 1.38%.
+24,028 B relative to that packet; the largest remaining 4:4:4 gap is about 1.31%.
 
-JPEG C185 qualification retains 5,040 Release tests/OS, 210+62 scalar checks/OS and
+JPEG C187 qualification retains 5,048 Release tests/OS, 218+62 scalar checks/OS and
 the same actual private 0.2.0 package/all examples on Windows/Linux. The
 [ownership repair](../benchmarks/JPEG-BUDGET-EVENT-OWNERSHIP.md) keeps caller-budget
-event storage charged through its actual users. Forward 4:4:4 records 1,908,412.257 µs,
-615,832 B/op in one short cost screen: more CPU is accepted for the compression
-gain, and CPU parity remains deferred. The prior C178 cost was1,420,508.479 µs with611,264 B/op.
+event storage charged through its actual users. Forward 4:4:4 records 1,957,616.722 µs,
+615,792 B/op in one short cost screen: more CPU is accepted for the compression
+gain, and CPU parity remains deferred. The prior C185 cost was1,908,412.257 µs with615,832 B/op.
 Unaffected caller 4:2:0 retains C146's 68,162.147 µs and170,648 B/op
 in one short screen, including normalization, full encoding and fresh output ownership.
 CPU/allocation costs are recorded; speed-only work and independent confirmations

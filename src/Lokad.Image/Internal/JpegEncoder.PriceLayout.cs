@@ -4,13 +4,13 @@ namespace Lokad.Image.Internal;
 
 internal static partial class JpegEncoder
 {
-    internal const int SourcePriceCapacity = 750;
-    private const int JointPriceLayoutWork = 1024;
-    internal readonly record struct JointPriceShape(int Slots, long FinishWork);
+    internal const int SourcePriceCapacity = 930;
+    private const int JointPriceLayoutWork = 1536;
+    internal readonly record struct JointPriceShape(int Slots, long FinishWork, int ComponentBands);
 
     internal static JointPriceShape SourcePriceShape444(JointAcBands bands)
     {
-        var slots = 0; var work = 0L;
+        var slots = 0; var work = 0L; var componentBands = 0;
         for (var family = 0; family < 2; family++)
         {
             var ends = bands.ForComponent(family) | (1UL << 63);
@@ -18,15 +18,13 @@ internal static partial class JpegEncoder
             {
                 var last = BitOperations.TrailingZeroCount(ends & (ulong.MaxValue << first));
                 var length = last - first + 1;
-                slots += 2 + 10 * Math.Min(16, length);
-                // At most r symbols have a positive source count. The other
-                // smoothed leaves have equal unit weights and never cross ties.
-                var r = 1 + 10 * Math.Min(16, length) + (length >= 17 ? 1 : 0);
-                work += 40960 + r * (323 - r) / 2;
+                slots += 17 + 10 * Math.Min(16, length);
+                work += SourceHuffmanFinishWork;
+                componentBands += family == 0 ? 1 : 2;
                 first = last + 1;
             }
         }
-        return new(slots, work);
+        return new(slots, work, componentBands);
     }
 
     internal static void SourcePriceOffsets444(JointAcBands bands, Span<ushort> offsets)
@@ -43,7 +41,7 @@ internal static partial class JpegEncoder
                 var last = BitOperations.TrailingZeroCount(ends & (ulong.MaxValue << first));
                 var runs = Math.Min(16, last - first + 1);
                 offsets.Slice(family * 64 + first, last - first + 1).Fill((ushort)(at | runs << 10));
-                at += 2 + 10 * runs; first = last + 1;
+                at += 17 + 10 * runs; first = last + 1;
             }
         }
     }

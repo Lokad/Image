@@ -22,12 +22,13 @@ internal static partial class JpegEncoder
         {
             if (offsets.IsEmpty) return values[symbol];
             var descriptor = offsets[scan]; var index = SourcePriceSlot(symbol);
-            if (index >= 2 + 10 * (descriptor >> 10))
+            if (index >= 17 + 10 * (descriptor >> 10))
                 throw new InvalidOperationException("AC run exceeds its source-price band.");
             return values[(descriptor & 1023) + index];
         }
     }
 
     private static int SourcePriceSlot(int symbol)
-        => symbol == 0 ? 0 : symbol == 0xF0 ? 1 : 1 + 10 * (symbol >> 4) + (symbol & 15);
+        => symbol == 0 ? 0 : symbol == 0xF0 ? 1
+            : (symbol & 15) == 0 ? 1 + (symbol >> 4) : 16 + 10 * (symbol >> 4) + (symbol & 15);
 }

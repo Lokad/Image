@@ -2,17 +2,19 @@ namespace Lokad.Image.Internal;
 
 internal static partial class JpegEncoder
 {
-    // Sparse ushort counters become exact Q8 prices in place. The 1500-byte
-    // arena and 256-byte scan map fit the existing admitted 8 KiB workspace.
+    // Sparse counters become Q8 source prices in place. Arena, scan map and
+    // component-local pending EOB runs fit the existing admitted 8 KiB workspace.
     private const int JointPriceBandSetupWork = 1920;
     private const int JointPriceSampleWork = 136129;
 
     private static long JointPriceTrainingWork(long mcus, int quality, int components,
         JpegSampling sampling, JpegQuantizationPolicy policy)
-        => sampling == JpegSampling.YCbCr444 && AcDecisionLambda(quality, components, sampling, policy) != 0
-            ? Math.Min(64, mcus) * JointPriceSampleWork
-                + SourcePriceShape444(PlannedSourcePriceBands444(quality)).FinishWork
-                + JointPriceBandSetupWork + JointPriceLayoutWork : 0;
+    {
+        if (sampling != JpegSampling.YCbCr444 || AcDecisionLambda(quality, components, sampling, policy) == 0) return 0;
+        var shape = SourcePriceShape444(PlannedSourcePriceBands444(quality));
+        return Math.Min(64, mcus) * (JointPriceSampleWork + shape.ComponentBands)
+            + shape.FinishWork + shape.ComponentBands + JointPriceBandSetupWork + JointPriceLayoutWork;
+    }
 
     private static JointAcPrices TrainJoint444Prices(ImageBuffer? image, scoped JpegSampleInput samples, uint? background,
         int columns, int rows, scoped ReadOnlySpan<ushort> luma, scoped ReadOnlySpan<ushort> chroma,
@@ -26,6 +28,7 @@ internal static partial class JpegEncoder
         SourcePriceOffsets444(bands, offsets);
         prices = prices[..shape.Slots];
         prices.Clear();
+        Span<byte> pending = stackalloc byte[192]; pending.Clear();
         var mcus = checked(columns * rows); var count = Math.Min(64, mcus);
         Span<byte> pixels = stackalloc byte[64];
         for (var sample = 0; sample < count; sample++)
@@ -56,11 +59,15 @@ internal static partial class JpegEncoder
                 PrepareJoint444Block(pixels, component == 0 ? luma : chroma, source, values,
                     component, luma, chroma, lambda, context);
             }
-            context.Work(192);
+            context.Work(192 + shape.ComponentBands);
             for (var component = 0; component < 3; component++)
                 CountSourceBandAc(values.Slice(component * 64, 64), prices,
-                    offsets.Slice(component == 0 ? 0 : 64, 64), bands.ForComponent(component));
+                    offsets.Slice(component == 0 ? 0 : 64, 64), pending.Slice(component * 64, 64), bands.ForComponent(component));
         }
+        context.Work(shape.ComponentBands);
+        for (var component = 0; component < 3; component++)
+            FlushSourceBandEobRuns(prices, offsets.Slice(component == 0 ? 0 : 64, 64),
+                pending.Slice(component * 64, 64), bands.ForComponent(component));
         FinishSourceBandPrices(prices, bands, context);
         return new(prices, offsets);
     }
@@ -90,23 +97,45 @@ internal static partial class JpegEncoder
         }
     }
 
-    private static void CountSourceBandAc(ReadOnlySpan<int> values, Span<ushort> counts,
-        ReadOnlySpan<ushort> offsets, ulong bandEnds)
+    internal static void CountSourceBandAc(ReadOnlySpan<int> values, Span<ushort> counts,
+        ReadOnlySpan<ushort> offsets, Span<byte> pending, ulong bandEnds)
     {
-        var zeros = 0;
+        var zeros = 0; var first = 1; var hasValues = false;
         for (var scan = 1; scan < 64; scan++)
         {
             var at = offsets[scan] & 1023; var value = values[JpegTransform.Zigzag[scan]];
             if (value == 0) zeros++;
             else
             {
+                if (!hasValues) { FlushSourceEobRun(counts, at, ref pending[first]); hasValues = true; }
                 while (zeros >= 16) { counts[at + 1]++; zeros -= 16; }
                 var size = Category(value);
                 if (size > 10) throw new ImageDataException("JPEG AC transform exceeds its coding range.");
                 counts[at + SourcePriceSlot(zeros << 4 | size)]++; zeros = 0;
             }
             if (scan == 63 || (bandEnds & (1UL << scan)) != 0)
-            { if (zeros != 0) counts[at]++; zeros = 0; }
+            {
+                if (zeros != 0) { pending[first]++; counts[at + 16]++; }
+                zeros = 0; first = scan + 1; hasValues = false;
+            }
+        }
+    }
+
+    private static void FlushSourceEobRun(Span<ushort> counts, int at, ref byte pending)
+    {
+        if (pending == 0) return;
+        counts[at + SourcePriceSlot(System.Numerics.BitOperations.Log2((uint)pending) << 4)]++;
+        pending = 0;
+    }
+
+    internal static void FlushSourceBandEobRuns(Span<ushort> counts, ReadOnlySpan<ushort> offsets,
+        Span<byte> pending, ulong bandEnds)
+    {
+        bandEnds |= 1UL << 63;
+        for (var first = 1; first < 64;)
+        {
+            FlushSourceEobRun(counts, offsets[first] & 1023, ref pending[first]);
+            first = System.Numerics.BitOperations.TrailingZeroCount(bandEnds & (ulong.MaxValue << first)) + 1;
         }
     }
 
@@ -116,8 +145,8 @@ internal static partial class JpegEncoder
         if (prices.Length != shape.Slots || shape.Slots > SourcePriceCapacity)
             throw new ArgumentException("Invalid bounded source-price arena.");
         context.Work(shape.FinishWork);
-        // Validate every model before any histogram is changed. An impossible
-        // short-band ZRL would invalidate the positive-symbol sorting bound.
+        // Validate all models before mutation. Each source component contributes
+        // at most 64 terminal blocks; even shared Cb/Cr runs coalesce separately.
         for (var pass = 0; pass < 2; pass++)
         {
             var at = 0;
@@ -127,13 +156,22 @@ internal static partial class JpegEncoder
                 for (var first = 1; first < 64;)
                 {
                     var last = System.Numerics.BitOperations.TrailingZeroCount(ends & (ulong.MaxValue << first));
-                    var length = last - first + 1; var size = 2 + 10 * Math.Min(16, length);
+                    var length = last - first + 1; var size = 17 + 10 * Math.Min(16, length);
                     var model = prices.Slice(at, size);
                     if (pass == 0)
                     {
                         var total = 0;
-                        foreach (var count in model) total += count;
-                        if (total > 8064 || length <= 16 && model[1] != 0)
+                        for (var i = 0; i < model.Length; i++) if (i != 16) total += model[i];
+                        var eobBlocks = 0; var maximumEobBlocks = 0;
+                        for (var exponent = 0; exponent < 15; exponent++)
+                        {
+                            var count = model[SourcePriceSlot(exponent << 4)];
+                            if (exponent > 6 && count != 0)
+                                throw new ArgumentOutOfRangeException(nameof(prices), "Source EOB run exceeds its sample count.");
+                            eobBlocks += count << exponent;
+                            maximumEobBlocks += count * ((1 << (exponent + 1)) - 1);
+                        }
+                        if (total > 8064 || length <= 16 && model[1] != 0 || model[16] < eobBlocks || model[16] > maximumEobBlocks || model[16] > (family == 0 ? 64 : 128))
                             throw new ArgumentOutOfRangeException(nameof(prices), "Invalid source AC histogram.");
                     }
                     else SourceHuffmanPrices(model);
