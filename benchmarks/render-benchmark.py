@@ -338,8 +338,13 @@ def render():
     assert parity_count + confidence_count + gap_count + reconfirm_count + cost_count == 239
     return f'''# Lokad.Image benchmark state
 
-Updated 2026-10-22. **Complete-packet compression takes priority over CPU parity.**
-All seven declared lossy WebP and six lossless WebP gates pass and stay stopped.
+Updated 2026-10-22. **Byte-exact codec replication takes priority over CPU parity:**
+encoders first, then decoders, against pinned FFmpeg builds/settings. Only explicit
+encoder-attribution metadata may differ; see [scope and current progress](codec-parity.md).
+Current size/quality passes below are historical transition evidence, **not byte-exact
+qualification**. Active quality/calibration tooling retires after exact replacements
+cover its required paths. Production is unchanged by the initial stage probes.
+All seven declared lossy WebP and six lossless WebP historical size gates pass.
 Lossless photograph/diagram packets are 159,104/160,032 and 7,160/7,234 B
 (managed/reference), with exact RGBA. Lossy photograph/diagram packets are
 17,366/17,688 and6,722/7,100 B at their frozen matched-quality settings and exact alpha.
@@ -377,7 +382,7 @@ gain, and CPU parity remains deferred. The prior C191 cost was 1,949,513.811 µs
 Unaffected caller 4:2:0 retains C146's 68,162.147 µs and170,648 B/op
 in one short screen, including normalization, full encoding and fresh output ownership.
 CPU/allocation costs are recorded; speed-only work and independent confirmations
-wait while compression gates remain open. Full warm single-CPU parity still
+wait while exact codec qualification remains open. Full warm single-CPU parity still
 requires an independent conservative upper<=1 for every material required path.
 Published 0.1.0 is immutable; replacement readiness remains open.
 

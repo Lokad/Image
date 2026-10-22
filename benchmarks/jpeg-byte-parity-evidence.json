@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "qualification": "E1",
+  "status": "Exact normalization, full-resolution color, forward DCT and visible quantized coefficients; full encoder/decoder parity OPEN",
+  "productionChanged": false,
+  "productionCoreSha256": "2d82a81dc60cd5e30c0644c2f62e4206da74ac6322e6caab6df02370705909e3",
+  "oracle": {
+    "ffmpegRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
+    "ffmpegVersion": "n8.1",
+    "existingWorkerSha256": "72911420ce633d5472189cff8eceb723c68c79504cfa1fb2bb49fdf204259708",
+    "instrumentedWorkerSha256": "2ea5799b474265679052a97807ef214cbdf6a461f33abca351177afe167e7225",
+    "settings": {
+      "codec": "mjpeg",
+      "qscale": 5,
+      "huffman": "optimal",
+      "sampling": "444",
+      "backgroundRgb": "204060",
+      "colorMatrix": "full-range BT.601",
+      "scaleFlags": [
+        "AREA",
+        "ACCURATE_RND",
+        "BITEXACT"
+      ],
+      "codecThreads": 1,
+      "conversionThreads": 1,
+      "normalSimd": true
+    },
+    "sourceSha256": {
+      "tools/WarmReference/ffmpeg-jpeg-stage-dump.c": "198371cc928526485ecbc09a1749e087f5d06c1dfa067f0afb3b09992a7b2905",
+      "tools/WarmReference/ffmpeg-jpeg-warm.c": "7f7e24e76f773da905094732d6d8dc87259fab14b259eefc397baeb7882c9b29",
+      "tools/WarmReference/JpegColorParity.cs": "d7864ea4f62b504ad9302f7fe7c552671cacff81d51ae1b8333bf0fe8866ab11",
+      "tools/WarmReference/verify-jpeg-color-stage.ps1": "a05042097fdbb10081aa2463d4b6a03de7daa8773bc8e2331322496a20eb7db7"
+    }
+  },
+  "planeLayout": "Y, Cb, Cr; each width*height bytes; no row padding",
+  "encoderAttributionException": {
+    "referenceCommentHex": "4c61766336322e32382e31303000",
+    "managedCommentHex": "4c6f6b61642e496d61676500",
+    "rule": "Exactly one COM replacement and its length; every other byte must match; raw equality reported separately"
+  },
+  "controls": [
+    {
+      "sourceDepth": 8,
+      "width": 513,
+      "height": 259,
+      "samples": 398601,
+      "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "exactYuvSha256": "768de922c9a95eab113af000bcf3d1bdbf6b3f0aafe17d166c2488a711c65f3e",
+      "exactOnWindows": true,
+      "exactOnLinux": true,
+      "borrowedInputUnchanged": true,
+      "nativeCompletePacketBytes": 133041,
+      "nativeCompletePacketSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
+      "productionCompletePacketBytes": 134676,
+      "productionCompletePacketSha256": "4713e6868a620175c0caccfc9504c2bb8931a22768489b37ca041f62876c3ca8",
+      "productionFirstDifferentOffset": 3,
+      "forwardTransform": {
+        "exactValuesPerOS": 411840,
+        "exactOnWindows": true,
+        "exactOnLinux": true,
+        "dctSha256": "d46f47179821fb7720e4ca1a30fcae71472aa84269b59b7f65bb1c6fe5d4784a",
+        "quantizationExact": true,
+        "nativeCoefficientDumpSha256": "4dae291fe76da1d67e9099ced2c4062ab6593c59f92075bee59c5956f1272542",
+        "changedCoefficientRejected": true
+      }
+    },
+    {
+      "sourceDepth": 16,
+      "width": 513,
+      "height": 259,
+      "samples": 398601,
+      "sourceSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "exactYuvSha256": "44e221e7a9dcf7acf2e13c447fe9370e2c5cf00bb15100a2d2d1231f152856c7",
+      "exactOnWindows": true,
+      "exactOnLinux": true,
+      "borrowedInputUnchanged": true,
+      "nativeCompletePacketBytes": 133043,
+      "nativeCompletePacketSha256": "0f0933b13b4bbf4b0dcaea55f44ff54b83125743e88b7de7a71c750ec42d71ea",
+      "productionCompletePacketBytes": 134688,
+      "productionCompletePacketSha256": "c4dbe6fc4e83fc1be0210c45f660844e1cf63a5790c1b7b941b7b342302d97af",
+      "productionFirstDifferentOffset": 3,
+      "forwardTransform": {
+        "exactValuesPerOS": 411840,
+        "exactOnWindows": true,
+        "exactOnLinux": true,
+        "dctSha256": "7c41b05ea1ee06eaa3d848f9d9cd468e9f704ba27972c94a96c126d8479107f7",
+        "quantizationExact": true,
+        "nativeCoefficientDumpSha256": "308e551f13cf2c8760d678d1cc9652ba48f01dda752aaef80ed5918622751e99",
+        "changedCoefficientRejected": true
+      }
+    }
+  ],
+  "totalExactSamplesPerPlatform": 797202,
+  "comparatorBoundaryTests": 6,
+  "productionBuilds": 0,
+  "repeatedPackageProofs": 0,
+  "timingRuns": 0,
+  "rawArchive": {
+    "file": "e1-jpeg-color-stage-qualified.tar.gz",
+    "bytes": 3583475,
+    "sha256": "17a146f3a307fec096b8189161fc1a1e4e1d947327dc895c9b4e1e8d1d9b5d93",
+    "mirrored": true
+  },
+  "next": "Reproduce MCU traversal and phantom blocks, then optimal Huffman tie-breaking and complete baseline serialization. Native DQT generator remains required. No quality or size search.",
+  "forwardStage": {
+    "qualification": "E2",
+    "nativeDispatch": "ff_fdct_sse2",
+    "nativeProbeSha256": "13f733b5f238fe99f42a9e259881b1f464d7e7b1470da260db1801331a58320d",
+    "valuesPerStagePerPlatform": 823680,
+    "managedConstants": "Generated from DCT cosine/tangent geometry; no copied implementation tables",
+    "productionChanged": false,
+    "nativeEncodes": 0,
+    "timingRuns": 0,
+    "scope": "Two frozen513x259 controls,6435 visible8x8 blocks each. Replicated edges match all visible native JPEG coefficients. Phantom blocks/MCU traversal/entropy/serialization still OPEN.",
+    "sourceSha256": {
+      "tools\\WarmReference\\JpegForwardParity.cs": "c010cce60e73c6babb48fffe9a55abe81d080b07c133c9096b05cfda14c9d15b",
+      "tools\\WarmReference\\ffmpeg-jpeg-fdct.c": "2e8083001c395dbdfaca05031b58ef75e4e77e27f1e8d400059400ecec9b79af",
+      "tools\\WarmReference\\verify-jpeg-forward-stage.ps1": "c79e0048ab5df46dbd3fb3dac84246245b77b8fea06f50f841c8b38b6f78e5d4"
+    },
+    "rawArchive": {
+      "file": "e2-jpeg-forward-quantization-qualified.tar.gz",
+      "bytes": 1734707,
+      "sha256": "cd2679ddf31655a0d1ee944ccfa0fd82e3667c5622dd759a8ab07d5611a1ba1e",
+      "mirrored": true
+    }
+  }
+}

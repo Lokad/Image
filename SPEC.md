@@ -4,6 +4,12 @@ Target: a dependency-free safe C# library for .NET 10, providing still PNG/JPEG/
 codecs and basic image editing. This document distinguishes implemented behavior
 from required future functionality.
 
+The next codec qualification target is [byte compatibility](docs/codec-parity.md)
+with pinned FFmpeg encoders, then exact decoder samples, before further CPU or
+allocation tuning. Only explicitly identified encoder-attribution metadata may
+differ. Current size/quality and bounded pixel comparisons do not establish this
+target; the existing implemented behavior below remains the current contract.
+
 | Capability | Current status | Required target |
 | --- | --- | --- |
 | PNG decode | Implemented; full authored profile matrix with exact analytical and FFmpeg RGBA | All legal static color/depth combinations, palette/tRNS, five filters and Adam7 |
