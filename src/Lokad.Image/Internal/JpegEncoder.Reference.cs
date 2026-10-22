@@ -17,12 +17,9 @@ internal static partial class JpegEncoder
         if (options.Quality is < 1 or > 100 || !Enum.IsDefined(options.Sampling)
             || options.RestartInterval is < 0 or > 65535 || options.BackgroundRgb > 0xFFFFFF)
             throw new ArgumentOutOfRangeException(nameof(options));
-        if (format != JpegSampleFormat.Rgb)
+        if (format is not (JpegSampleFormat.Rgb or JpegSampleFormat.Grayscale))
             throw new UnsupportedImageException(UnsupportedImageFeature.ComponentLayout,
-                "The reference JPEG profile currently accepts RGB or RGBA input.", ImageFormat.Jpeg);
-        if (options.Sampling == JpegSampling.Grayscale)
-            throw new UnsupportedImageException(UnsupportedImageFeature.SamplingLayout,
-                "The reference JPEG profile currently supports three-component color sampling.", ImageFormat.Jpeg);
+                "The reference JPEG profile accepts grayscale, RGB or RGBA input.", ImageFormat.Jpeg);
         if (options.RestartInterval != 0)
             throw new UnsupportedImageException(UnsupportedImageFeature.ControlMarker,
                 "The reference JPEG profile currently requires restart markers disabled.", ImageFormat.Jpeg);
@@ -32,6 +29,8 @@ internal static partial class JpegEncoder
         JpegEncodeOptions options, OperationContext context)
     {
         ValidateReferenceOptions(options, image is null ? source.Format : JpegSampleFormat.Rgb);
+        if (options.Sampling == JpegSampling.Grayscale || image is null && source.Format == JpegSampleFormat.Grayscale)
+        { EncodeReferenceGray(image, source, output, options, context); return; }
         var width = image?.Width ?? source.Width; var height = image?.Height ?? source.Height;
         context.PixelBytes(width, height, image?.BitDepth ?? 8);
         if (width > 65535 || height > 65535)

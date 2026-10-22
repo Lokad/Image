@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "project": "Lokad.Image",
-  "qualification": "E6",
-  "status": "Production opt-in Reference JPEG444/422/420 reproduces six frozen native controls plus six bounded functional edge controls outside one approved attribution segment; remaining JPEG modes/codecs and default adoption OPEN",
+  "qualification": "E8",
+  "status": "Production opt-in Reference JPEG grayscale/444/422/420 reproduces seven frozen complete native controls, with only the approved COM adjustment for color; remaining options/codecs and default adoption OPEN",
   "productionChanged": true,
-  "productionCoreSha256": "db10e12cf070cfc5de56df0f89fd12c9a858ddfca3a507f66d3472b0f8221606",
+  "productionCoreSha256": "524360ad311f61aaad5352fd824a9383b20cdf85f539503720d6bec4935c64fa",
   "oracle": {
     "ffmpegRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
     "ffmpegVersion": "n8.1",
@@ -126,7 +126,7 @@
     "sha256": "17a146f3a307fec096b8189161fc1a1e4e1d947327dc895c9b4e1e8d1d9b5d93",
     "mirrored": true
   },
-  "next": "E8: promote exact grayscale transform/quantization/Huffman/serialization into admitted image8/16, caller Gray8/RGB and sync/forward-only/async operations. Document grayscale quality identity mapping and preserved caller-gray sampling override; do not change frozen tables/settings. Qualify affected API/root/cancellation/output ownership and actual package, preserving six color controls. Then restart/options/default adoption, other codecs and full CPU/release objective.",
+  "next": "E9: bounded inventory of remaining JPEG option/reference boundaries and default adoption, preserving all required restart/legacy behavior. Reuse E8 confirmations on unchanged paths; resolve native counterparts and first divergence before further production edits. Then PNG/WebP encoder exactness, required exact decoders, finite CPU/allocation parity and release qualification.",
   "forwardStage": {
     "qualification": "E2",
     "nativeDispatch": "ff_fdct_sse2",
@@ -196,7 +196,7 @@
     "nativeEncodes": 0,
     "timingRuns": 0
   },
-  "priorProductionCoreSha256": "5f0dab9bd4eed0f575999c8919669abe54fcb8b83560d174dc160605fce8940a",
+  "priorProductionCoreSha256": "db10e12cf070cfc5de56df0f89fd12c9a858ddfca3a507f66d3472b0f8221606",
   "controlsProductionPacketIdentity": "Original policy at C193; implementation/packets unchanged by E4/E6. Reference production qualification is separate in productionAdoption and productionSubsampling.",
   "prototypeProductionBuilds": 0,
   "prototypeRepeatedPackageProofs": 0,
@@ -816,6 +816,123 @@
       "sha256": "f7087184e61f274572069033b2104986e2341d9f5b5c1fa1f1c92350e17bd2d6",
       "members": 48,
       "mirrored": true
+    },
+    "adoptedIn": "E8"
+  },
+  "productionGrayscale": {
+    "round": "E8",
+    "status": "Production Reference grayscale qualified on Windows/Linux; full objective OPEN",
+    "testsPerPlatform": {
+      "internal": 2151,
+      "publicApi": 2043,
+      "liveFfmpeg": 936,
+      "total": 5130
+    },
+    "scalarChecksPerPlatform": {
+      "internal": 3,
+      "publicApi": 60,
+      "total": 63
+    },
+    "focusedChecksLinux": {
+      "internal": 2,
+      "publicApi": 60
+    },
+    "package": {
+      "path": "artifacts/qualification/jpeg-grayscale-reference-profile/Lokad.Image.0.2.0.nupkg",
+      "version": "0.2.0",
+      "bytes": 405531,
+      "sha256": "fa1b74fda3605285813e6b2b29619fe0a9def2d0ac6092d8a591ef835072df67",
+      "sameActualPackageBothPlatforms": true,
+      "allThreeUsageExamplesBothPlatforms": true,
+      "frozenMainPacketControls": 7,
+      "callerGrayscalePacketChecks": 1
+    },
+    "productionBuilds": 1,
+    "testAssemblyBuilds": {
+      "internal": 1,
+      "publicApi": 1,
+      "differential": 0
+    },
+    "productionRebuildsAfterFreeze": 0,
+    "buildLogNote": "All three builds succeeded with zero warnings/errors; first shell wrapper exited nonzero after successful builds due solely to exit-code quoting. No rebuild was repeated.",
+    "timingRuns": 0,
+    "nativeEncodes": 0,
+    "packetBytes": 58910,
+    "packetSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+    "grayBoundaryOperations": 7,
+    "attributionExceptionUsed": false,
+    "sourceAndSurvivingOutputsPreserved": true,
+    "fullFrameGrayCopy": false,
+    "image16Scope": "Functional normalization composition only; no additional native packet/content/quality claim",
+    "cpuAndAllocations": "Unmeasured; allocations bounded by admitted capacity in focused tests, no scored timing or CPU parity claim",
+    "ownership": "Borrow one root; fixed/table owner established before allocation; coarse temporary tree/queue replacement overlap; terminal refusal; work/local/output limits; cancellation/failure cleanup; async chunks charged until actual users finish",
+    "qualification": "E8",
+    "profile": "JpegQuantizationPolicy.Reference",
+    "productionCoreSha256": "524360ad311f61aaad5352fd824a9383b20cdf85f539503720d6bec4935c64fa",
+    "previousProductionCoreSha256": "db10e12cf070cfc5de56df0f89fd12c9a858ddfca3a507f66d3472b0f8221606",
+    "sampling": "Grayscale",
+    "quality": 69,
+    "colorQualityMappingUnchanged": true,
+    "grayQualityMapping": "Existing owned mathematical quality formula; identity quality to pinned grayscale backend",
+    "defaultAdoptionComplete": false,
+    "frozenSourceRgba8Sha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "frozenNormalizedGraySha256": "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d",
+    "inputs": [
+      "RGBA8/16 ImageBuffer",
+      "caller Gray8/RGB8 with padded stride and preserved suffix"
+    ],
+    "delivery": [
+      "sync seekable",
+      "sync forward-only",
+      "async"
+    ],
+    "callerGrayOverridesSampling": true,
+    "workingGrayBlockBytes": 64,
+    "fixedReservationBytes": 8192,
+    "survivingTableReservationBytes": 16384,
+    "tableScratchReservation": "65536 + (activeSymbols + 1) * 2048 bytes, including backing-capacity replacement overlap",
+    "uniformAlphabetAdmittedPeakBytes": 608256,
+    "integerStageValuesPerPlatform": {
+      "rawDct": 137280,
+      "quantized": 137280
+    },
+    "uniformTableSha256": "fe76a73fd404d34dcc701f254ced15adca29ba9412f4c782a1a4a120dc18d93a",
+    "exactOnWindows": true,
+    "exactOnLinux": true,
+    "sixFrozenColorControlsRemainExact": true,
+    "invalidatedEvidence": "New Reference grayscale production path previously unsupported; E8 full/scalar/package qualification replaces E6 for this core. Color algorithm bodies and Original/CompactColor packets are unchanged. No new timing or broad content claims; prior JPEG dispatch timing uncertainty remains open. Unchanged decoder/transform evidence is reused.",
+    "sourceSha256": {
+      "src/Lokad.Image/Internal/JpegEncoder.Reference.cs": "e38deda81c492646c106d668d55e8e9647eaeae82c75479947ee135da79b6762",
+      "src/Lokad.Image/Internal/JpegEncoder.ReferenceGray.cs": "7ed73c153654fe3535e02fcc8300a75113ea58ce84f2025082c5216259e80fa3",
+      "src/Lokad.Image/Internal/JpegGrayReferenceTables.cs": "ce2de7b3d2d3b49cc5518e11ee9b3a419a76202e5dfc2a5e4bf599ecefc0fd6f",
+      "src/Lokad.Image/Internal/JpegGrayReferenceTransform.cs": "7bfd5b1653c59ce3b79017581d8a05a1cee56eba7eb090fbf383fa9dac4c6a08",
+      "src/Lokad.Image/JpegOptions.cs": "9d79c5596777b1366ff6a8d105a3caea62de4a2d20a7786225b7d4d6df6cba7d",
+      "tests/Lokad.Image.Tests/JpegGrayReferenceTests.cs": "8b05041f20f7bdfa5b716c4af0dab69952d6a4c708b8890f60307dd9ec1c0b9c",
+      "tests/Lokad.Image.Tests/Lokad.Image.Tests.csproj": "8cb0ff9802b7ca325e4dbe2e963c55593e738fb1e1d5a7cd2807c47b5846a07e",
+      "tests/Lokad.Image.PublicApi.Tests/JpegReferenceTests.cs": "b9d1f9fc9519083302d12cc9f90ec4d76ca454e3d794cb7ae45f7062da481134",
+      "tools/PackageSmokeTest/verify-package.ps1": "000d8c0eb7ec2ad15b07592d391fb2281652156dca5da06dd3f22835b08a8f46"
+    },
+    "rawArchive": {
+      "file": "e8-qualified-linux.tar.gz",
+      "bytes": 2213908,
+      "sha256": "61d7feb32862dc7274a33aa62fbd0ff94951a6242c0fddf5778abc8e185f9a1f",
+      "members": 38,
+      "mirrored": true
+    },
+    "windowsRawArchive": {
+      "file": "e8-qualified-windows.tar.gz",
+      "bytes": 13326,
+      "sha256": "e7cd585dc8baad995ef8f294e93441c7959eb9d30edc51ada7d57dc248d652af",
+      "members": 8,
+      "mirrored": true
+    },
+    "storage": {
+      "windowsBytesAfterArchive": 4993254542,
+      "linuxBytesAfterLinuxArchive": 4997715160,
+      "linuxMirroredWindowsArchiveBytes": 13326,
+      "limitBytes": 5000000000,
+      "rawEvidencePreserved": true,
+      "cleanup": "Losslessly compressed an uncited calibration aggregate after complete roundtrip; retired only byte-identical VM mirrors whose complete Windows masters remain. Retired verified duplicate assembly-transfer archive on VM; frozen binaries remain on both OS. Rejected stale-consumer directory deletions were not retried."
     }
   }
 }

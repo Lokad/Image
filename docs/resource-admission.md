@@ -26,7 +26,8 @@ Local limits and cumulative `ImageBudget` work quotas continue independently.
 
 The JPEG Reference profile borrows pixels and uses at most a 512-byte MCU buffer in two
 passes, generating chroma weights on the stack without retained filter plans. It admits 8 KiB fixed storage, 16 KiB for retained coding tables, and coarse
-temporary table-building capacity before allocation. Scratch is released after
+temporary table-building capacity before allocation, including grayscale tree/
+priority-queue replacement peaks. Grayscale uses a single64-byte block. Scratch is released after
 each builder; codec workspace is released before asynchronous delivery, whose
 encoded chunks remain charged until their actual users finish. Refusal is terminal.
 

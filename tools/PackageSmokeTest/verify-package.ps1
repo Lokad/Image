@@ -33,7 +33,7 @@ try {
             }
         }
         if (-not ($archive.Entries.FullName -contains 'lib/net10.0/Lokad.Image.dll')) { throw 'Library DLL missing.' }
-        foreach ($document in @('README.md', 'SPEC.md', 'LICENSE.txt', 'icon.png', 'docs/resource-admission.md', 'docs/lanczos3-fma-certificate.md', 'docs/jpeg-inverse-rounding.md', 'docs/jpeg-forward-quantization.md', 'docs/usage.md', 'docs/migration.md')) {
+        foreach ($document in @('README.md', 'SPEC.md', 'LICENSE.txt', 'icon.png', 'docs/resource-admission.md', 'docs/codec-parity.md', 'docs/lanczos3-fma-certificate.md', 'docs/jpeg-inverse-rounding.md', 'docs/jpeg-forward-quantization.md', 'docs/usage.md', 'docs/migration.md')) {
             $entry = $archive.GetEntry($document)
             if ($null -eq $entry) { throw "Package document missing: $document" }
             $bytes = [IO.MemoryStream]::new()
@@ -90,8 +90,9 @@ try {
     @'
 using Lokad.Image;
 foreach (var referenceDepth in new[] { 8, 16 })
-foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YCbCr422, JpegSampling.YCbCr420 })
+foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YCbCr422, JpegSampling.YCbCr420, JpegSampling.Grayscale })
 {
+    if (referenceSampling == JpegSampling.Grayscale && referenceDepth != 8) continue;
     using var referenceImage = Lokad.Image.Tooling.OriginalPixels.Buffer(513, 259, referenceDepth);
     if (referenceDepth == 8) { referenceImage.GetRow8(0)[3] = 0; referenceImage.GetRow8(0)[513 * 4 - 1] = 0; }
     else { referenceImage.GetRow16(0)[3] = 0; referenceImage.GetRow16(0)[513 * 4 - 1] = 0; }
@@ -100,6 +101,7 @@ foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YC
     await ImageCodec.EncodeJpegAsync(referenceImage, referencePacket, new JpegEncodeOptions
     {
         QuantizationPolicy = JpegQuantizationPolicy.Reference, Sampling = referenceSampling,
+        Quality = referenceSampling == JpegSampling.Grayscale ? 69 : 85,
         BackgroundRgb = 0x204060, Limits = ImageLimits.Default with { MemoryBudget = referenceRoot }
     });
     var expectedReferenceHash = (referenceSampling, referenceDepth) switch
@@ -110,11 +112,31 @@ foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YC
         (JpegSampling.YCbCr422, 16) => "afe4c4f147555ca198d3c82858c481eb0901dab08cd3ccf7c287915fba00d030",
         (JpegSampling.YCbCr420, 8) => "83e9e80a87c1928c8e23e2929b15348d0e8e8ce5568247420f6e366abeb830e3",
         (JpegSampling.YCbCr420, 16) => "20461d0d4c85dd2d07e1068e2f9d7a856805c637f1d9576201b35456eeee71ed",
+        (JpegSampling.Grayscale, 8) => "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
         _ => throw new Exception("Unknown reference control.")
     };
     if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(referencePacket.ToArray())).ToLowerInvariant()
         != expectedReferenceHash || referenceRoot.Bytes != 0 || referenceRoot.IsDisposed)
         throw new Exception("Packaged reference JPEG bytes or shared ownership differ.");
+    if (referenceSampling == JpegSampling.Grayscale)
+    {
+        var gray = new byte[513 * 259];
+        for (var y = 0; y < 259; y++)
+        for (var x = 0; x < 513; x++)
+        {
+            var pixel = referenceImage.GetRow8(y).Slice(x * 4, 4); var alpha = pixel[3];
+            var r = (pixel[0] * alpha + 32 * (255 - alpha) + 127) / 255;
+            var g = (pixel[1] * alpha + 64 * (255 - alpha) + 127) / 255;
+            var b = (pixel[2] * alpha + 96 * (255 - alpha) + 127) / 255;
+            gray[y * 513 + x] = (byte)Math.Floor((0.299 * r + 0.587 * g) + 0.114 * b + 0.5);
+        }
+        using var callerGrayPacket = new MemoryStream();
+        await ImageCodec.EncodeJpegAsync(gray, 513, 259, JpegSampleFormat.Grayscale, callerGrayPacket,
+            options: new JpegEncodeOptions { Quality = 69, QuantizationPolicy = JpegQuantizationPolicy.Reference,
+                Limits = ImageLimits.Default with { MemoryBudget = referenceRoot } });
+        if (!callerGrayPacket.ToArray().AsSpan().SequenceEqual(referencePacket.ToArray()) || referenceRoot.Bytes != 0)
+            throw new Exception("Packaged reference caller gray sampling override or ownership differs.");
+    }
 }
 await Lokad.Image.Tooling.CooperativeMemoryConsumer.Verify();
 Lokad.Image.Tooling.TextShapingConsumer.Verify();
