@@ -62,6 +62,13 @@ internal static partial class JpegEncoder
     internal static void WriteProgressive444(int width, int height, Stream output, JpegEncodeOptions options,
         ushort[] luma, ushort[] chroma, uint[] coefficients, int blocks, OperationContext context)
     {
+        // The existing 64 KiB adaptive reservation covers three histograms,
+        // three retained tables and a fitter (including queue replacement peaks).
+        // At most 12 Original Y/shared-chroma bands imply <=39 fits, plus <64K
+        // bookkeeping visits, within the existing 192*65536 fixed work plan.
+        context.Work(2048);
+        var lambda = AcDecisionLambda(options.Quality, 3, options.Sampling, options.QuantizationPolicy);
+        var bands = SourcePriceBands444(luma, chroma, lambda, context);
         var mcus = blocks / 3;
         output.Write(new byte[] { 255, 216 });
         Segment(output, 0xE0, new byte[] { 74, 70, 73, 70, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0 });
@@ -71,36 +78,85 @@ internal static partial class JpegEncoder
         BinaryPrimitives.WriteUInt16BigEndian(frame[3..], (ushort)width);
         for (var c = 0; c < 3; c++) { frame[6 + c * 3] = (byte)(c + 1); frame[7 + c * 3] = 17; frame[8 + c * 3] = c == 0 ? (byte)0 : (byte)1; }
         Segment(output, 0xC2, frame);
-        var precision = (int)Math.Sqrt(AcDecisionLambda(options.Quality, 3, options.Sampling, options.QuantizationPolicy));
+        var precision = (int)Math.Sqrt(lambda);
         var histogram = new long[256];
-        // Keep one scan's fitted table live at a time within the adaptive64KiB.
         for (var c = 0; c < 3; c++)
         {
             var q = c == 0 ? luma : chroma;
             var al = PointTransform444(q[0], precision);
             WriteProgressiveScan(output, coefficients, mcus, c, 0, 0, al, histogram, context);
         }
-        for (var c = 0; c < 3; c++)
+        var ends = bands.Luma | (1UL << 63);
+        for (var first = 1; first < 64;)
         {
-            var q = c == 0 ? luma : chroma;
-            for (var start = 1; start < 64;)
-            {
-                var al = PointTransform444(q[JpegTransform.Zigzag[start]], precision); var end = start;
-                while (end < 63 && PointTransform444(q[JpegTransform.Zigzag[end + 1]], precision) == al) end++;
-                WriteProgressiveScan(output, coefficients, mcus, c, start, end, al, histogram, context);
-                start = end + 1;
-            }
+            var last = System.Numerics.BitOperations.TrailingZeroCount(ends & (ulong.MaxValue << first));
+            var al = PointTransform444(luma[JpegTransform.Zigzag[first]], precision);
+            WriteProgressiveScan(output, coefficients, mcus, 0, first, last, al, histogram, context);
+            first = last + 1;
         }
+        var other = new long[256]; var pooled = new long[256];
+        ends = bands.Chroma | (1UL << 63);
+        for (var first = 1; first < 64;)
+        {
+            var last = System.Numerics.BitOperations.TrailingZeroCount(ends & (ulong.MaxValue << first));
+            var al = PointTransform444(chroma[JpegTransform.Zigzag[first]], precision);
+            context.Work(512); Array.Clear(histogram); Array.Clear(other);
+            ProgressiveScanTokens(coefficients, mcus, 1, first, last, al, histogram, null, null, context);
+            ProgressiveScanTokens(coefficients, mcus, 2, first, last, al, other, null, null, context);
+            var cb = JpegHuffmanBuilder.Build(histogram, context);
+            var cr = JpegHuffmanBuilder.Build(other, context);
+            context.Work(256);
+            for (var symbol = 0; symbol < 256; symbol++) pooled[symbol] = checked(histogram[symbol] + other[symbol]);
+            var shared = JpegHuffmanBuilder.Build(pooled, context);
+            var splitCost = checked(ProgressiveTableBitCost(histogram, cb, context) + ProgressiveTableBitCost(other, cr, context));
+            if (ProgressiveTableBitCost(pooled, shared, context) < splitCost)
+            {
+                WriteProgressiveTable(output, shared, false, context);
+                WriteProgressiveEntropyScan(output, coefficients, mcus, 1, first, last, al, shared, context);
+                WriteProgressiveEntropyScan(output, coefficients, mcus, 2, first, last, al, shared, context);
+            }
+            else
+            {
+                WriteProgressiveTable(output, cb, false, context);
+                WriteProgressiveEntropyScan(output, coefficients, mcus, 1, first, last, al, cb, context);
+                WriteProgressiveTable(output, cr, false, context);
+                WriteProgressiveEntropyScan(output, coefficients, mcus, 2, first, last, al, cr, context);
+            }
+            first = last + 1;
+        }
+    }
+
+    internal static long ProgressiveTableBitCost(ReadOnlySpan<long> histogram, JpegEncodingTable table, OperationContext context)
+    {
+        if (histogram.Length != 256 || table.Lengths.Length != 256)
+            throw new ArgumentException("A complete JPEG symbol histogram and table are required.");
+        context.Work(256);
+        // Marker/length4 + table selector1 + length counts16 + symbol bytes.
+        var bits = 8L * (21 + table.Symbols.Length);
+        for (var symbol = 0; symbol < 256; symbol++) bits = checked(bits + histogram[symbol] * table.Lengths[symbol]);
+        return bits;
     }
 
     private static void WriteProgressiveScan(Stream output, uint[] coefficients, int mcus, int component,
         int first, int last, int al, long[] histogram, OperationContext context)
     {
-        Array.Clear(histogram);
+        context.Work(256); Array.Clear(histogram);
         ProgressiveScanTokens(coefficients, mcus, component, first, last, al, histogram, null, null, context);
         var table = JpegHuffmanBuilder.Build(histogram, context);
-        var payload = new byte[17 + table.Symbols.Length]; payload[0] = first == 0 ? (byte)0 : (byte)16;
+        WriteProgressiveTable(output, table, first == 0, context);
+        WriteProgressiveEntropyScan(output, coefficients, mcus, component, first, last, al, table, context);
+    }
+
+    private static void WriteProgressiveTable(Stream output, JpegEncodingTable table, bool dc, OperationContext context)
+    {
+        context.Work(512);
+        var payload = new byte[17 + table.Symbols.Length]; payload[0] = dc ? (byte)0 : (byte)16;
         table.Counts.CopyTo(payload, 1); table.Symbols.CopyTo(payload, 17); Segment(output, 0xC4, payload);
+    }
+
+    private static void WriteProgressiveEntropyScan(Stream output, uint[] coefficients, int mcus, int component,
+        int first, int last, int al, JpegEncodingTable table, OperationContext context)
+    {
         Span<byte> header = stackalloc byte[6] { 1, (byte)(component + 1), 0, (byte)first, (byte)last, (byte)al };
         Segment(output, 0xDA, header);
         var writer = new JpegEntropyWriter(output, context);

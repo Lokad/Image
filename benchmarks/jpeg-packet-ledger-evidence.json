@@ -1,35 +1,35 @@
 {
   "schemaVersion": 1,
   "project": "Lokad.Image",
-  "round": "C187",
+  "round": "C191",
   "productionChanged": true,
-  "productionBuilds": 2,
+  "productionBuilds": 1,
   "harnessDriverSelectorNativeBuilds": 0,
   "nativeEncodes": 0,
   "timingRuns": 1,
   "independentConfirmations": 0,
   "scope": "Exactly all19 existing JPEG encode rows:18default boundaries and one explicitly optional CompactColor boundary. Existing inputs/sampling/quality/native packets retained; no new workload matrix.",
-  "producerSha256": "f82a3f7682dae771ed3ec26ec2ecc8f9cca493c2dbf6d8b637359ffecf1b610d",
+  "producerSha256": "7995248f5679442a1e8f60b6fd2d018e2022776838328cc52162d932a2337f8b",
   "cases": [
     {
       "case": "Encode8",
       "boundary": "RGBA8 adaptive",
-      "managedBytes": 134784,
+      "managedBytes": 134741,
       "referenceBytes": 133041,
-      "managedSha256": "4feed58bb74239f964fbb81d61fd886f7e6a53c46efc4334ec2689ebb8173fda",
+      "managedSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
       "referenceSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
       "psnrGapDb": 0.21807105354474743,
       "qualityPass": true,
       "sizePass": false,
-      "evidence": "C187 Source progressive EOB-run-aware prices on the same64fine-geometric samples/positions/units/choices/bands/Y-sharedCbCr. Coalesce pending runs separately per component; all176 legal progressive symbols retain +1/dummy1 canonical priors. Ordinary AC lengths*256; observed run code+extra-bit costs amortized using SEPARATELY retained actual terminal-block counts, exact roundedQ8. Same finalRDO/lambda100/DC/OriginalDQT/factors/globalMCUcap/source/reference/settings. No refresh/weight/quality/settings grid.",
-      "excessBytes": 1743,
-      "sizeRatio": 1.0131012244345727,
-      "producerSha256": "f82a3f7682dae771ed3ec26ec2ecc8f9cca493c2dbf6d8b637359ffecf1b610d",
-      "qualityEvidenceReused": "Exact actual C187 packet SHA matches independently qualifiedC186; unchanged source quality/exactalpha/decoder/411840coefficients-per-depth and per-decoder normal/scalar/native pixels reused.",
+      "evidence": "C191 Pair only corresponding Cb/Cr spectral bands. Fit singleton and pooled canonical codebooks; share only when predicted symbol-code bits plus COMPLETE DHT framing is strictly smaller, retaining split tables on ties. Emit corresponding component scans together. Y/DC scans and all coefficients/DQT/sampling/source-trained prices/finalRDO/globalcap/source/reference/settings/pixels unchanged. No grouping/order/quality grid.",
+      "excessBytes": 1700,
+      "sizeRatio": 1.0127780157996407,
+      "producerSha256": "7995248f5679442a1e8f60b6fd2d018e2022776838328cc52162d932a2337f8b",
+      "qualityEvidenceReused": "Actual C191 packets match qualifiedC190 exactly; every411840 coefficient per depth and all8 normal/scalar/native decoder pixel/ownership checks remain identical toC187. Source quality/alpha/decoder gates unchanged.",
       "qualitySample": {
         "setting": 69,
-        "encodedBytes": 134784,
-        "encodedSha256": "4feed58bb74239f964fbb81d61fd886f7e6a53c46efc4334ec2689ebb8173fda",
+        "encodedBytes": 134741,
+        "encodedSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
         "nativeDecodedSha256": "8ffcd023ebd5de3bd508c2af917759981694ea9ca45fc96ce278916379a2dd11",
         "publicDecodedSha256": "e7e756886bb8ac6d7e2133a536122bf13ca77ef3fab2424e0573458e990a03c0",
         "codec": "JPEG",
@@ -55,7 +55,7 @@
         "alphaExact": true,
         "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
       },
-      "productionBuilds": 2,
+      "productionBuilds": 1,
       "timingRuns": 0
     },
     {
@@ -90,22 +90,22 @@
     {
       "case": "Encode16",
       "boundary": "RGBA16 adaptive",
-      "managedBytes": 134734,
+      "managedBytes": 134687,
       "referenceBytes": 133043,
-      "managedSha256": "f06847fd4f522ee8d57fcf0d43654c921f29a6d8ee2f5010b6169438708fed7c",
+      "managedSha256": "a88c9421a3e63fd3c4a56f51c2a4d1fe2554725881f12063cc4c72c30961faf4",
       "referenceSha256": "0f0933b13b4bbf4b0dcaea55f44ff54b83125743e88b7de7a71c750ec42d71ea",
       "psnrGapDb": 0.2258234478453396,
       "qualityPass": true,
       "sizePass": false,
-      "evidence": "C187 Source progressive EOB-run-aware prices on the same64fine-geometric samples/positions/units/choices/bands/Y-sharedCbCr. Coalesce pending runs separately per component; all176 legal progressive symbols retain +1/dummy1 canonical priors. Ordinary AC lengths*256; observed run code+extra-bit costs amortized using SEPARATELY retained actual terminal-block counts, exact roundedQ8. Same finalRDO/lambda100/DC/OriginalDQT/factors/globalMCUcap/source/reference/settings. No refresh/weight/quality/settings grid.",
-      "excessBytes": 1691,
-      "sizeRatio": 1.0127101764091309,
-      "producerSha256": "f82a3f7682dae771ed3ec26ec2ecc8f9cca493c2dbf6d8b637359ffecf1b610d",
-      "qualityEvidenceReused": "Exact actual C187 packet SHA matches independently qualifiedC186; unchanged source quality/exactalpha/decoder/411840coefficients-per-depth and per-decoder normal/scalar/native pixels reused.",
+      "evidence": "C191 Pair only corresponding Cb/Cr spectral bands. Fit singleton and pooled canonical codebooks; share only when predicted symbol-code bits plus COMPLETE DHT framing is strictly smaller, retaining split tables on ties. Emit corresponding component scans together. Y/DC scans and all coefficients/DQT/sampling/source-trained prices/finalRDO/globalcap/source/reference/settings/pixels unchanged. No grouping/order/quality grid.",
+      "excessBytes": 1644,
+      "sizeRatio": 1.0123569071653526,
+      "producerSha256": "7995248f5679442a1e8f60b6fd2d018e2022776838328cc52162d932a2337f8b",
+      "qualityEvidenceReused": "Actual C191 packets match qualifiedC190 exactly; every411840 coefficient per depth and all8 normal/scalar/native decoder pixel/ownership checks remain identical toC187. Source quality/alpha/decoder gates unchanged.",
       "qualitySample": {
         "setting": 69,
-        "encodedBytes": 134734,
-        "encodedSha256": "f06847fd4f522ee8d57fcf0d43654c921f29a6d8ee2f5010b6169438708fed7c",
+        "encodedBytes": 134687,
+        "encodedSha256": "a88c9421a3e63fd3c4a56f51c2a4d1fe2554725881f12063cc4c72c30961faf4",
         "nativeDecodedSha256": "d1c6370872b39c5c4cdf8bde304ffd6ab99f3701ec46c57183d3ea62f6807bdf",
         "publicDecodedSha256": "a9246473c74a0306ea9407ae61ae1ce0b58c15d6f9b4358b89768f9da5274735",
         "codec": "JPEG",
@@ -131,7 +131,7 @@
         "alphaExact": true,
         "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
       },
-      "productionBuilds": 2,
+      "productionBuilds": 1,
       "timingRuns": 0
     },
     {
@@ -360,20 +360,20 @@
       "sampling": "444",
       "quality": 69,
       "nativeQuality": 5,
-      "managedBytes": 134784,
+      "managedBytes": 134741,
       "referenceBytes": 133041,
-      "managedSha256": "4feed58bb74239f964fbb81d61fd886f7e6a53c46efc4334ec2689ebb8173fda",
+      "managedSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
       "referenceSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
       "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
       "referenceSampleSha256": "ec2ea910c09a839ea55987103b9a2efa1c0bec62658fa55cda9c14726e88b5cd",
       "sizePass": false,
       "qualityPass": true,
       "psnrGapDb": 0.21807105354474743,
-      "qualityEvidenceReused": "Exact actual C187 packet SHA matches independently qualifiedC186; unchanged source quality/exactalpha/decoder/411840coefficients-per-depth and per-decoder normal/scalar/native pixels reused.",
+      "qualityEvidenceReused": "Actual C191 packets match qualifiedC190 exactly; every411840 coefficient per depth and all8 normal/scalar/native decoder pixel/ownership checks remain identical toC187. Source quality/alpha/decoder gates unchanged.",
       "qualitySample": {
         "setting": 69,
-        "encodedBytes": 134784,
-        "encodedSha256": "4feed58bb74239f964fbb81d61fd886f7e6a53c46efc4334ec2689ebb8173fda",
+        "encodedBytes": 134741,
+        "encodedSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
         "nativeDecodedSha256": "8ffcd023ebd5de3bd508c2af917759981694ea9ca45fc96ce278916379a2dd11",
         "publicDecodedSha256": "e7e756886bb8ac6d7e2133a536122bf13ca77ef3fab2424e0573458e990a03c0",
         "codec": "JPEG",
@@ -408,15 +408,15 @@
         "survivorAfterSourceAndFirstRelease": true,
         "liveCancelable": false
       },
-      "productionBuilds": 2,
+      "productionBuilds": 1,
       "harnessNativeSelectorBuilds": 0,
       "nativeEncodes": 0,
       "timingRuns": 1,
-      "excessBytes": 1743,
-      "sizeRatio": 1.0131012244345727,
+      "excessBytes": 1700,
+      "sizeRatio": 1.0127780157996407,
       "boundary": "RGBA forward-only/live-cancellable output",
-      "evidence": "C187 Source progressive EOB-run-aware prices on the same64fine-geometric samples/positions/units/choices/bands/Y-sharedCbCr. Coalesce pending runs separately per component; all176 legal progressive symbols retain +1/dummy1 canonical priors. Ordinary AC lengths*256; observed run code+extra-bit costs amortized using SEPARATELY retained actual terminal-block counts, exact roundedQ8. Same finalRDO/lambda100/DC/OriginalDQT/factors/globalMCUcap/source/reference/settings. No refresh/weight/quality/settings grid.",
-      "producerSha256": "f82a3f7682dae771ed3ec26ec2ecc8f9cca493c2dbf6d8b637359ffecf1b610d"
+      "evidence": "C191 Pair only corresponding Cb/Cr spectral bands. Fit singleton and pooled canonical codebooks; share only when predicted symbol-code bits plus COMPLETE DHT framing is strictly smaller, retaining split tables on ties. Emit corresponding component scans together. Y/DC scans and all coefficients/DQT/sampling/source-trained prices/finalRDO/globalcap/source/reference/settings/pixels unchanged. No grouping/order/quality grid.",
+      "producerSha256": "7995248f5679442a1e8f60b6fd2d018e2022776838328cc52162d932a2337f8b"
     },
     {
       "case": "Encode444Cancelable8",
@@ -424,20 +424,20 @@
       "sampling": "444",
       "quality": 69,
       "nativeQuality": 5,
-      "managedBytes": 134784,
+      "managedBytes": 134741,
       "referenceBytes": 133041,
-      "managedSha256": "4feed58bb74239f964fbb81d61fd886f7e6a53c46efc4334ec2689ebb8173fda",
+      "managedSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
       "referenceSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
       "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
       "referenceSampleSha256": "ec2ea910c09a839ea55987103b9a2efa1c0bec62658fa55cda9c14726e88b5cd",
       "sizePass": false,
       "qualityPass": true,
       "psnrGapDb": 0.21807105354474743,
-      "qualityEvidenceReused": "Exact actual C187 packet SHA matches independently qualifiedC186; unchanged source quality/exactalpha/decoder/411840coefficients-per-depth and per-decoder normal/scalar/native pixels reused.",
+      "qualityEvidenceReused": "Actual C191 packets match qualifiedC190 exactly; every411840 coefficient per depth and all8 normal/scalar/native decoder pixel/ownership checks remain identical toC187. Source quality/alpha/decoder gates unchanged.",
       "qualitySample": {
         "setting": 69,
-        "encodedBytes": 134784,
-        "encodedSha256": "4feed58bb74239f964fbb81d61fd886f7e6a53c46efc4334ec2689ebb8173fda",
+        "encodedBytes": 134741,
+        "encodedSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
         "nativeDecodedSha256": "8ffcd023ebd5de3bd508c2af917759981694ea9ca45fc96ce278916379a2dd11",
         "publicDecodedSha256": "e7e756886bb8ac6d7e2133a536122bf13ca77ef3fab2424e0573458e990a03c0",
         "codec": "JPEG",
@@ -472,15 +472,15 @@
         "survivorAfterSourceAndFirstRelease": true,
         "liveCancelable": true
       },
-      "productionBuilds": 2,
+      "productionBuilds": 1,
       "harnessNativeSelectorBuilds": 0,
       "nativeEncodes": 0,
       "timingRuns": 0,
-      "excessBytes": 1743,
-      "sizeRatio": 1.0131012244345727,
+      "excessBytes": 1700,
+      "sizeRatio": 1.0127780157996407,
       "boundary": "RGBA forward-only/live-cancellable output",
-      "evidence": "C187 Source progressive EOB-run-aware prices on the same64fine-geometric samples/positions/units/choices/bands/Y-sharedCbCr. Coalesce pending runs separately per component; all176 legal progressive symbols retain +1/dummy1 canonical priors. Ordinary AC lengths*256; observed run code+extra-bit costs amortized using SEPARATELY retained actual terminal-block counts, exact roundedQ8. Same finalRDO/lambda100/DC/OriginalDQT/factors/globalMCUcap/source/reference/settings. No refresh/weight/quality/settings grid.",
-      "producerSha256": "f82a3f7682dae771ed3ec26ec2ecc8f9cca493c2dbf6d8b637359ffecf1b610d"
+      "evidence": "C191 Pair only corresponding Cb/Cr spectral bands. Fit singleton and pooled canonical codebooks; share only when predicted symbol-code bits plus COMPLETE DHT framing is strictly smaller, retaining split tables on ties. Emit corresponding component scans together. Y/DC scans and all coefficients/DQT/sampling/source-trained prices/finalRDO/globalcap/source/reference/settings/pixels unchanged. No grouping/order/quality grid.",
+      "producerSha256": "7995248f5679442a1e8f60b6fd2d018e2022776838328cc52162d932a2337f8b"
     },
     {
       "case": "JpegBudgetEncode4208",
@@ -551,20 +551,20 @@
       "sampling": "444",
       "quality": 69,
       "nativeQuality": 5,
-      "managedBytes": 134784,
+      "managedBytes": 134741,
       "referenceBytes": 133041,
-      "managedSha256": "4feed58bb74239f964fbb81d61fd886f7e6a53c46efc4334ec2689ebb8173fda",
+      "managedSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
       "referenceSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
       "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
       "referenceSampleSha256": "ec2ea910c09a839ea55987103b9a2efa1c0bec62658fa55cda9c14726e88b5cd",
       "sizePass": false,
       "qualityPass": true,
       "psnrGapDb": 0.21807105354474743,
-      "qualityEvidenceReused": "Exact actual C187 packet SHA matches independently qualifiedC186; unchanged source quality/exactalpha/decoder/411840coefficients-per-depth and per-decoder normal/scalar/native pixels reused.",
+      "qualityEvidenceReused": "Actual C191 packets match qualifiedC190 exactly; every411840 coefficient per depth and all8 normal/scalar/native decoder pixel/ownership checks remain identical toC187. Source quality/alpha/decoder gates unchanged.",
       "qualitySample": {
         "setting": 69,
-        "encodedBytes": 134784,
-        "encodedSha256": "4feed58bb74239f964fbb81d61fd886f7e6a53c46efc4334ec2689ebb8173fda",
+        "encodedBytes": 134741,
+        "encodedSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
         "nativeDecodedSha256": "8ffcd023ebd5de3bd508c2af917759981694ea9ca45fc96ce278916379a2dd11",
         "publicDecodedSha256": "e7e756886bb8ac6d7e2133a536122bf13ca77ef3fab2424e0573458e990a03c0",
         "codec": "JPEG",
@@ -598,14 +598,14 @@
         "callerOutputLeftOpen": true,
         "survivorAfterFirstAndSourceRelease": true
       },
-      "productionBuilds": 2,
+      "productionBuilds": 1,
       "harnessNativeSelectorBuilds": 0,
       "nativeEncodes": 0,
       "timingRuns": 0,
-      "excessBytes": 1743,
-      "sizeRatio": 1.0131012244345727,
-      "evidence": "C187 Source progressive EOB-run-aware prices on the same64fine-geometric samples/positions/units/choices/bands/Y-sharedCbCr. Coalesce pending runs separately per component; all176 legal progressive symbols retain +1/dummy1 canonical priors. Ordinary AC lengths*256; observed run code+extra-bit costs amortized using SEPARATELY retained actual terminal-block counts, exact roundedQ8. Same finalRDO/lambda100/DC/OriginalDQT/factors/globalMCUcap/source/reference/settings. No refresh/weight/quality/settings grid.",
-      "producerSha256": "f82a3f7682dae771ed3ec26ec2ecc8f9cca493c2dbf6d8b637359ffecf1b610d"
+      "excessBytes": 1700,
+      "sizeRatio": 1.0127780157996407,
+      "evidence": "C191 Pair only corresponding Cb/Cr spectral bands. Fit singleton and pooled canonical codebooks; share only when predicted symbol-code bits plus COMPLETE DHT framing is strictly smaller, retaining split tables on ties. Emit corresponding component scans together. Y/DC scans and all coefficients/DQT/sampling/source-trained prices/finalRDO/globalcap/source/reference/settings/pixels unchanged. No grouping/order/quality grid.",
+      "producerSha256": "7995248f5679442a1e8f60b6fd2d018e2022776838328cc52162d932a2337f8b"
     },
     {
       "case": "JpegRgb420AsyncSamples",
@@ -774,44 +774,38 @@
   "rankedRemaining": [
     {
       "case": "Encode8",
-      "managedBytes": 134784,
-      "referenceBytes": 133041,
-      "excessBytes": 1743,
-      "sizeRatio": 1.0131012244345727
+      "excessBytes": 1700,
+      "sizeRatio": 1.0127780157996407
     },
     {
       "case": "Encode444Stream8",
-      "managedBytes": 134784,
-      "referenceBytes": 133041,
-      "excessBytes": 1743,
-      "sizeRatio": 1.0131012244345727
+      "excessBytes": 1700,
+      "sizeRatio": 1.0127780157996407
     },
     {
       "case": "Encode444Cancelable8",
-      "managedBytes": 134784,
-      "referenceBytes": 133041,
-      "excessBytes": 1743,
-      "sizeRatio": 1.0131012244345727
+      "excessBytes": 1700,
+      "sizeRatio": 1.0127780157996407
     },
     {
       "case": "Jpeg8AsyncNonSeekable",
-      "managedBytes": 134784,
-      "referenceBytes": 133041,
-      "excessBytes": 1743,
-      "sizeRatio": 1.0131012244345727
+      "excessBytes": 1700,
+      "sizeRatio": 1.0127780157996407
     },
     {
       "case": "Encode16",
-      "managedBytes": 134734,
-      "referenceBytes": 133043,
-      "excessBytes": 1691,
-      "sizeRatio": 1.0127101764091309
+      "excessBytes": 1644,
+      "sizeRatio": 1.0123569071653526
     }
   ],
-  "largestGap": "Five default444 rows open:134784/ref133041 and134734/ref133043B, maximum1.3102% excess. Thirteen other default controls and separate optionalCompactColor pass.",
-  "next": "One bounded material compression primitive on existing Original444 controls. Preserve frozen source/reference/settings/quality and full oneCPU operation boundaries. Accept meaningful verified incremental gains; defer CPU parity/speed-only work. Passing WebP/PNG/otherJPEG stay stopped.",
-  "correctedInvalidation": "Only changed Original three-component444 decision-enabled qualities1..98 and invocations containing them invalidate encoder packet/cost evidence. These five current packet rows and one forward444 cost supersedeC185. Other affected timings remain historical. Qualities99/100, other quantization policies,420/422/grayscale/optionalCompactColor/native/decode/edit/inspect/PNG/WebP paths unchanged; reuse relevant evidence. Finite256-case objective and31metadata confirmations remain open.",
-  "qualificationReuse": "5048tests/OS,218+62scalar/OS,SAMEactualprivate0.2package/all3examples bothOS. Final frozen Linux core/internal/public binaries reused on Windows. Two core builds: first failed independent packet goldens; actual EOB block counts fixed without weakening any gate. No production rebuild after final freeze. Exact C186 packets both depths; unchanged quality/coefficients/pixels reused. Benchmark/native/driver/parser/differential builds0; ONE complete forward cost.",
+  "largestGap": {
+    "case": "Encode8",
+    "excessBytes": 1700,
+    "sizeRatio": 1.0127780157996407
+  },
+  "next": "One named source-histogram unit-projection hypothesis: retain fine-geometric training choices, then count coded point-transformed amplitudes. Replay current models first; one8bit byte screen before quality/depth extension. Distinct from rejected coarse-grid retraining. No quality/weight/reference/workload grid.",
+  "correctedInvalidation": "Only decision-enabled Original three-component progressive444 qualities1..98 change packet ordering/table bytes and encoding costs. These five declared packets and one forward444 cost supersedeC187. Other affected timings remain historical. Source models/coefficient decisions/pixel quality are unchanged; exact declared packets reuse C190 normal/scalar/native pixel and coefficient proofs. Baseline/fixed/restart, qualities99/100, other policies/sampling, grayscale/420/422/optionalCompactColor/native/decode/edit/inspect/PNG/WebP retain relevant evidence. Finite256-case objective and31metadata confirmations remain open.",
+  "qualificationReuse": "C191 exactC190 packet checks/full5056 and226+62 scalar/OS; SAME actual0.2package/all3examples bothOS. Unchanged compression/quality paths retain evidence.",
   "rawArtifact": {
     "file": "c125-jpeg-packet-ledger.tar.gz",
     "bytes": 10218,
@@ -825,50 +819,50 @@
   "changedBoundaries": [
     {
       "case": "Encode8",
-      "previousBytes": 134875,
-      "currentBytes": 134784,
-      "savingBytes": 91,
-      "currentSha256": "4feed58bb74239f964fbb81d61fd886f7e6a53c46efc4334ec2689ebb8173fda",
+      "previousBytes": 134784,
+      "currentBytes": 134741,
+      "savingBytes": 43,
+      "currentSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
       "referenceBytes": 133041,
       "sourcePsnrGapDb": 0.21807105354474743,
       "qualityPass": true
     },
     {
       "case": "Encode16",
-      "previousBytes": 134839,
-      "currentBytes": 134734,
-      "savingBytes": 105,
-      "currentSha256": "f06847fd4f522ee8d57fcf0d43654c921f29a6d8ee2f5010b6169438708fed7c",
+      "previousBytes": 134734,
+      "currentBytes": 134687,
+      "savingBytes": 47,
+      "currentSha256": "a88c9421a3e63fd3c4a56f51c2a4d1fe2554725881f12063cc4c72c30961faf4",
       "referenceBytes": 133043,
       "sourcePsnrGapDb": 0.2258234478453396,
       "qualityPass": true
     },
     {
       "case": "Encode444Stream8",
-      "previousBytes": 134875,
-      "currentBytes": 134784,
-      "savingBytes": 91,
-      "currentSha256": "4feed58bb74239f964fbb81d61fd886f7e6a53c46efc4334ec2689ebb8173fda",
+      "previousBytes": 134784,
+      "currentBytes": 134741,
+      "savingBytes": 43,
+      "currentSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
       "referenceBytes": 133041,
       "sourcePsnrGapDb": 0.21807105354474743,
       "qualityPass": true
     },
     {
       "case": "Encode444Cancelable8",
-      "previousBytes": 134875,
-      "currentBytes": 134784,
-      "savingBytes": 91,
-      "currentSha256": "4feed58bb74239f964fbb81d61fd886f7e6a53c46efc4334ec2689ebb8173fda",
+      "previousBytes": 134784,
+      "currentBytes": 134741,
+      "savingBytes": 43,
+      "currentSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
       "referenceBytes": 133041,
       "sourcePsnrGapDb": 0.21807105354474743,
       "qualityPass": true
     },
     {
       "case": "Jpeg8AsyncNonSeekable",
-      "previousBytes": 134875,
-      "currentBytes": 134784,
-      "savingBytes": 91,
-      "currentSha256": "4feed58bb74239f964fbb81d61fd886f7e6a53c46efc4334ec2689ebb8173fda",
+      "previousBytes": 134784,
+      "currentBytes": 134741,
+      "savingBytes": 43,
+      "currentSha256": "d4f84ad7e4f08ebc943cde9e2f532ad10af951f1241b8095d337de452b1df67b",
       "referenceBytes": 133041,
       "sourcePsnrGapDb": 0.21807105354474743,
       "qualityPass": true
@@ -876,16 +870,20 @@
   ],
   "currentQualificationRaw": [
     {
-      "file": "c187-qualified-linux.tar.gz",
-      "bytes": 3042207,
-      "sha256": "7366703427a10386bcdc7b6139ff4b2526d3bd7364a82b635fa6f89a77aa8342"
+      "file": "c191-qualified-linux.tar.gz",
+      "bytes": 3595889,
+      "sha256": "8e6d1d4eae8f85932817fb5e569af9ce86e2b10e6a31a140b2ebab499182e802",
+      "members": 91,
+      "footprint": 4994370859
     },
     {
-      "file": "c187-qualified-windows.tar.gz",
-      "bytes": 367995,
-      "sha256": "968c49aad3b124ae7c246acaf06ebace0ed88d2a172d47030e0befff1d0db406"
+      "file": "c191-qualified-windows.tar.gz",
+      "bytes": 382962,
+      "sha256": "d38037edfacec609398c0652de989b8d534c68dd6cfbf956d2d7eb364d4088bf",
+      "members": 38,
+      "footprint": 4996644350
     }
   ],
   "countReconciliation": "Recomputed defaultPasses/defaultOpen from all18 rows:13/5. The previous root counters5/13 were stale; its per-case packets and published13/5 table were already correct. No new measurements or changed acceptance result.",
-  "productionBuildAttempts": 2
+  "productionBuildAttempts": 1
 }

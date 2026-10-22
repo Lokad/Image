@@ -8,6 +8,8 @@ is admitted and restart markers are disabled. Set `JpegEncodeOptions.BaselineOnl
 for consumers requiring baseline syntax. This switch retains the same quantizers
 and reconstructed pixels; local workspace selection may also use baseline syntax.
 Encoded bytes and lossy reconstruction may change between encoder versions.
+Progressive output may share tables between corresponding chroma scans, preserving
+all coefficients and reconstructed pixels while reducing qualified packet sizes.
 The final Original4:4:4 decisions now use the intended coefficient precision grid
 with a source-derived error bound. DQT values, sampling and explicit quality
 remain unchanged; qualified compression claims apply only to their stated controls.

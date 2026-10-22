@@ -1258,10 +1258,15 @@ baseline syntax with the same coefficient decisions and reconstructed pixels.
 Other configurations and locally selected fixed-workspace coding use baseline.
 The existing admitted packed-event capacity holds coefficients instead; there
 is no second frame array. Three DC scans precede maximal contiguous equal-point-
-transform AC bands. Each first scan uses a separately fitted canonical table and
-bounded EOB runs; selected coefficients are exact multiples, so no nonzero
-refinement bits are discarded. The plan admits a conservative192-table work
-bound and64KiB header bound. Output limits, cancellation, shared-budget refusal
+transform AC bands, with Y bands followed by corresponding Cb/Cr scan pairs.
+Chroma pairs share a canonical table only when weighted code lengths plus the
+complete DHT size strictly improve on separate tables; ties remain separate.
+Bounded EOB runs and every coefficient remain unchanged. Selected coefficients
+are exact multiples, so no nonzero refinement bits are discarded. Three reused
+histograms, up to three fitted tables and fitter replacement peaks fit the same
+64KiB adaptive workspace. Across supported Original quantizers, at most12 family
+bands bound fitting to39 tables and bookkeeping below65536 logical visits; these
+fit the existing conservative192-table work and64KiB header bounds. Output limits, cancellation, shared-budget refusal
 and ownership remain unchanged; admission refusal never retries baseline coding.
 This model precedes
 clipping/rounding and does not replace measured RGB reconstruction-quality gates. Zero lambda,
