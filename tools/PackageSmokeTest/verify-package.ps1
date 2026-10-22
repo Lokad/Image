@@ -118,6 +118,19 @@ foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YC
     if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(referencePacket.ToArray())).ToLowerInvariant()
         != expectedReferenceHash || referenceRoot.Bytes != 0 || referenceRoot.IsDisposed)
         throw new Exception("Packaged reference JPEG bytes or shared ownership differ.");
+    if (referenceSampling == JpegSampling.YCbCr420 && referenceDepth == 8)
+    {
+        using var restartPacket = new MemoryStream();
+        await ImageCodec.EncodeJpegAsync(referenceImage, restartPacket, new JpegEncodeOptions
+        {
+            QuantizationPolicy = JpegQuantizationPolicy.Reference, Sampling = JpegSampling.YCbCr420,
+            RestartInterval = 33, BackgroundRgb = 0x204060,
+            Limits = ImageLimits.Default with { MemoryBudget = referenceRoot }
+        });
+        if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(restartPacket.ToArray())).ToLowerInvariant()
+            != "1af33b85d17d4dd24a19f98e66242eba42c7c77b7347dfa564a83d64b19feea4" || referenceRoot.Bytes != 0)
+            throw new Exception("Packaged reference row-restart bytes or ownership differ.");
+    }
     if (referenceSampling == JpegSampling.Grayscale)
     {
         var gray = new byte[513 * 259];

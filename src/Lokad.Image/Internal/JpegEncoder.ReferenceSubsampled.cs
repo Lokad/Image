@@ -8,7 +8,7 @@ internal static partial class JpegEncoder
 
     private static void ReferenceSubsampledPass(ImageBuffer? image, JpegSampleInput source, int width, int height,
         uint? background, JpegSampling sampling, ushort[] quantization, int[][] histograms,
-        JpegEncodingTable[]? tables, JpegEntropyWriter? writer, OperationContext context)
+        JpegEncodingTable[]? tables, JpegEntropyWriter? writer, OperationContext context, int restartInterval)
     {
         // All per-MCU and nested tap storage fits the admitted8-KiB fixed owner.
         // No row/filter plan, frame copy or coefficient cache escapes this call.
@@ -18,9 +18,11 @@ internal static partial class JpegEncoder
         var chromaWidth = (width + 1) / 2;
         var chromaRows = sampling == JpegSampling.YCbCr420 ? 8 : 16;
         var chromaHeight = sampling == JpegSampling.YCbCr420 ? (height + 1) / 2 : height;
+        var mcuIndex = 0;
         for (var top = 0; top < height; top += 16)
         for (var left = 0; left < width; left += 16)
         {
+            ReferenceRestart(mcuIndex++, restartInterval, previous, writer, context);
             context.Work(ReferenceSubsampledMcuWork);
             for (var y = 0; y < 16; y++)
             for (var x = 0; x < 16; x++)

@@ -48,6 +48,24 @@ public sealed class JpegFfmpegTests(ITestOutputHelper output)
     }
 
     [Theory]
+    [InlineData(JpegSampling.YCbCr444, 2)]
+    [InlineData(JpegSampling.YCbCr422, 3)]
+    [InlineData(JpegSampling.YCbCr420, 3)]
+    public void ReferenceFixedTableRestartsInteroperateAtNonRowBoundaries(JpegSampling sampling, int interval)
+    {
+        using var image = OriginalPixels.Buffer(18, 19, 8, opaque: true);
+        using var encoded = new MemoryStream();
+        ImageCodec.EncodeJpeg(image, encoded, new JpegEncodeOptions
+        {
+            QuantizationPolicy = JpegQuantizationPolicy.Reference, Sampling = sampling, RestartInterval = interval
+        });
+        using var actual = ImageCodec.Decode(encoded.ToArray());
+        // Historical decoder interoperability tolerance, not an exact decoder
+        // qualification or a reference-packet claim for these new MCU intervals.
+        Compare(OriginalPixels.Bytes(actual), JpegOracle.Decode(encoded.ToArray(), 18, 19, sampling), 18 * 19, "Reference restart " + sampling);
+    }
+
+    [Theory]
     [InlineData(false)] [InlineData(true)]
     public void AuthoredProgressiveRefinementInteroperates(bool negativeDc)
     {

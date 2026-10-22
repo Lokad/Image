@@ -5,8 +5,9 @@ codecs and basic image editing. This document distinguishes implemented behavior
 from required future functionality.
 
 The development JPEG `JpegQuantizationPolicy.Reference` profile selects managed
-reference-compatible baseline grayscale/4:4:4/4:2:2/4:2:0 pipelines, without restart
-markers. It accepts RGBA8/16 images and caller Gray8/RGB8 samples, with synchronous/
+reference-compatible baseline grayscale/4:4:4/4:2:2/4:2:0 pipelines. Color supports
+MCU restart intervals with fixed format tables; grayscale requires restarts disabled.
+It accepts RGBA8/16 images and caller Gray8/RGB8 samples, with synchronous/
 asynchronous streams. Caller grayscale format overrides `Sampling`, as in other
 policies. Color quality maps to qscale `1 + (100 - Quality) * 30 / 99`; default85
 maps to5. Grayscale uses the existing owned mathematical quality formula and the

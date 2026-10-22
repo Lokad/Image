@@ -42,6 +42,17 @@ submitted color samples per OS match exactly. Six small functional controls also
 qualify even-width RGB pairing, tiny one/two/three-cell filters and partial MCUs.
 These reuse the original procedural recipe and do not broaden content claims.
 
+The existing **4:2:0 RGBA8 row-restart33** control also matches: **58,012 B** with
+native attribution, **58,010 B** with the approved COM replacement, including all
+16 sequenced restart markers. The native reference uses two **serial** slice
+contexts on one codec thread; these force fixed tables despite its requested
+optimal setting. Lokad.Image independently generates those optional format
+examples from [T.81 K.3.3](https://www.w3.org/Graphics/JPEG/itu-t81.pdf#page=162).
+No oracle packet or coding table is an encoder input.
+At18×19, non-row intervals2/3 have functional checks for444/422 from RGBA8 and
+420 from RGBA16, plus native-decoder interoperability checks for all three from RGBA8.
+Those checks establish no additional native-packet or exact-decoder claim.
+
 The production **grayscale Reference profile** also reproduces its existing
 **58,910 B** packet exactly, using the approved SIMD libjpeg-turbo3.1.4.1 reference,
 quality69 and the existing owned quantizers. Its **137,280 raw transforms** and
@@ -51,9 +62,10 @@ table prototype matches **34 original histograms**, including length limiting;
 production tests also freeze its complete packet and uniform-alphabet table.
 No metadata exception is needed: the grayscale reference has no attribution COM.
 
-The production encoder uses at most a 512-byte MCU buffer in two passes, with no
+The production encoder uses at most a 512-byte MCU buffer, with no
 full-frame YUV or coefficient/event copy. Chroma weights are generated on the
-stack; no retained row or filter plan is needed. Grayscale uses a single 64-byte
+stack; no retained row or filter plan is needed. Optimal tables use two passes;
+color restarts use fixed tables in one pass. Grayscale uses a single 64-byte
 block. RGBA8/16 images and caller Gray8/RGB8 spans with stride support sync,
 forward-only and async delivery. Color quality maps to native qscale
 `1 + (100 - Quality) * 30 / 99`; default85 maps to the frozen qscale5 reference.
@@ -61,7 +73,7 @@ Grayscale uses its existing owned quantization formula and the same quality as i
 pinned backend, with69 frozen above. Caller Gray8 overrides Sampling and needs no
 RGBA intermediate. RGBA16-to-gray normalization and quality endpoints have
 functional checks; grayscale native-packet claims cover the declared 8-bit control.
-Restart markers still return structured unsupported-feature failures.
+Grayscale restart markers still return structured unsupported-feature failures.
 
 Shared admission reserves fixed/table capacity and coarse table-building peaks
 before allocation. Temporary storage is released before async delivery; encoded

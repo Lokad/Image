@@ -10,7 +10,8 @@ public enum JpegQuantizationPolicy
     Original,
     /// <summary>Add a quality-scaled precision floor for color JPEGs; grayscale keeps Original.</summary>
     CompactColor,
-    /// <summary>Managed reference-compatible baseline grayscale/4:4:4/4:2:2/4:2:0, without restart markers.
+    /// <summary>Managed reference-compatible baseline grayscale/4:4:4/4:2:2/4:2:0.
+    /// Color supports MCU restart intervals with fixed format tables; grayscale requires restarts disabled.
     /// Color quality maps to qscale 1 + (100 - quality) * 30 / 99; default85 maps to5.
     /// Grayscale uses the owned mathematical quality formula, matching the pinned grayscale reference at69.</summary>
     Reference

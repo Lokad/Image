@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "project": "Lokad.Image",
-  "qualification": "E8",
-  "status": "Production opt-in Reference JPEG grayscale/444/422/420 reproduces seven frozen complete native controls, with only the approved COM adjustment for color; remaining options/codecs and default adoption OPEN",
+  "qualification": "E11",
+  "status": "Production opt-in Reference JPEG grayscale/444/422/420 and color MCU restarts qualified on Windows/Linux. Eight complete frozen controls match outside only approved color COM attribution; default adoption, named gray/native option gaps, other codecs and CPU/release scope OPEN.",
   "productionChanged": true,
-  "productionCoreSha256": "524360ad311f61aaad5352fd824a9383b20cdf85f539503720d6bec4935c64fa",
+  "productionCoreSha256": "19ac3ff61260997adea86afa390d7c8a4be0396bc0a1bfc545c33b7abc6bd3e2",
   "oracle": {
     "ffmpegRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
     "ffmpegVersion": "n8.1",
@@ -126,7 +126,7 @@
     "sha256": "17a146f3a307fec096b8189161fc1a1e4e1d947327dc895c9b4e1e8d1d9b5d93",
     "mirrored": true
   },
-  "next": "E11: promote the exact fixed-table restart primitive into admitted public Reference color JPEG operations; qualify exact4208 restart33 plus generic interval/layout functionality, memory/cancellation/ownership and affected actual package on both platforms. Reuse E8/E9/E10 evidence where paths are unchanged. Required grayscale16/native restart/default adoption and remaining codecs/CPU/release scope remain OPEN.",
+  "next": "E12: resolve missing grayscale16 native complete-packet confirmation using the existingRGBA16 raster at69 and approved SIMD libjpeg-turbo backend; reuse immutable E11 build and qualification. Then Reference grayscale restarts and deliberate default/legacy adoption; preserve remaining exact encoder/decoder, full finite CPU/allocation and release objective.",
   "forwardStage": {
     "qualification": "E2",
     "nativeDispatch": "ff_fdct_sse2",
@@ -196,7 +196,7 @@
     "nativeEncodes": 0,
     "timingRuns": 0
   },
-  "priorProductionCoreSha256": "db10e12cf070cfc5de56df0f89fd12c9a858ddfca3a507f66d3472b0f8221606",
+  "priorProductionCoreSha256": "524360ad311f61aaad5352fd824a9383b20cdf85f539503720d6bec4935c64fa",
   "controlsProductionPacketIdentity": "Original policy at C193; implementation/packets unchanged by E4/E6. Reference production qualification is separate in productionAdoption and productionSubsampling.",
   "prototypeProductionBuilds": 0,
   "prototypeRepeatedPackageProofs": 0,
@@ -1365,7 +1365,8 @@
       "RGBA16": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
       "normalizedCallerRGB8": "257210317c8bb87ec196f89d511de45f014c66e73049fbcf5f44f399184d9668",
       "normalizedCallerGray8": "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d"
-    }
+    },
+    "supersededBy": "E11 currentReferenceEncoderCoverage; E9 remains historical inventory"
   },
   "restartReplication": {
     "project": "Lokad.Image",
@@ -1431,6 +1432,424 @@
       "sha256": "6df87686ec27ae3e51f6b2379633ec6d482ed9b57d7fc5c15792be4ed2fb42c1",
       "members": 9,
       "mirrored": true
+    },
+    "adoptedIn": "E11"
+  },
+  "latestProductionQualification": "E11",
+  "productionColorRestarts": {
+    "project": "Lokad.Image",
+    "round": "E11",
+    "status": "Production Reference color restart encoding qualified on Windows/Linux; full objective OPEN",
+    "nativeControl": {
+      "sampling": "420",
+      "sourceDepth": 8,
+      "width": 513,
+      "height": 259,
+      "quality": 85,
+      "nativeQscale": 5,
+      "restartInterval": 33,
+      "restartMarkers": 16,
+      "nativeBytes": 58012,
+      "nativeSha256": "bd0060bf5bbf48a9f55120c5e71b22ac2763751bb370e9c5c2d93ebba38ed622",
+      "ownBytes": 58010,
+      "ownSha256": "1af33b85d17d4dd24a19f98e66242eba42c7c77b7347dfa564a83d64b19feea4",
+      "onlyApprovedAttributionDifference": true,
+      "oraclePacketOrTableInputs": false
+    },
+    "testsPerPlatform": {
+      "internal": 2152,
+      "publicApi": 2052,
+      "liveFfmpeg": 939,
+      "total": 5143
+    },
+    "scalarChecksPerPlatform": {
+      "internal": 4,
+      "publicApi": 69,
+      "total": 73
+    },
+    "focusedLinuxChecks": {
+      "internal": 4,
+      "publicApi": 69,
+      "liveFfmpeg": 3
+    },
+    "package": {
+      "path": "artifacts/qualification/jpeg-reference-restart-profile/Lokad.Image.0.2.0.nupkg",
+      "bytes": 406786,
+      "sha256": "00f317b6e7d59020c0c0d7d8f9d76b5b7087ea1be6b3266a38bc5e78f0b2c514",
+      "version": "0.2.0",
+      "sameActualPackageBothPlatforms": true,
+      "usageExamplesPerPlatform": 3,
+      "frozenPacketControls": 8
+    },
+    "builds": {
+      "production": 1,
+      "internalAttempts": 2,
+      "publicApi": 1,
+      "differential": 1,
+      "productionRebuildsAfterFreeze": 0
+    },
+    "qualificationCorrection": "New internal test initially missed its Tooling namespace import; corrected only the test. Failed build log retained; successful production core reused unchanged.",
+    "productionChanged": true,
+    "nativeReferenceReencodesOutsideDifferentialTests": 0,
+    "nativeDiagnosticBuilds": 0,
+    "timingRuns": 0,
+    "passes": {
+      "fixedColorRestarts": 1,
+      "optimalNoRestart": 2
+    },
+    "capacity": {
+      "fixedWorkspaceBytes": 8192,
+      "retainedTableOwnerBytes": 16384,
+      "fixedTableCumulativeAllocationsWithinOwner": true,
+      "resizingOrGlobalTableCache": false,
+      "maximumMcuBytes": 512,
+      "fullFrameCopies": false
+    },
+    "publicBoundaryChecks": {
+      "frozenRestartControlOperations": 5,
+      "callerRgbStrideAndSuffixPreserved": true,
+      "sourceAndSurvivingOutputsPreserved": true,
+      "terminalFixedAndTableOwnerRefusal": true,
+      "independentWorkAndLocalAndOutputLimits": true,
+      "actualAsyncUserLifetimeIncludingCancelAndFailure": true,
+      "successfulSubsequentOperations": true,
+      "liveTokenAndBaselineOnlyAnchorsNowDurable": 3
+    },
+    "nonRowFunctionalScope": [
+      {
+        "sampling": "444",
+        "sourceDepth": 8,
+        "width": 18,
+        "height": 19,
+        "interval": 2
+      },
+      {
+        "sampling": "422",
+        "sourceDepth": 8,
+        "width": 18,
+        "height": 19,
+        "interval": 3
+      },
+      {
+        "sampling": "420",
+        "sourceDepth": 16,
+        "width": 18,
+        "height": 19,
+        "interval": 3
+      }
+    ],
+    "nonRowNativeInteroperabilityScope": "Same18x19 atRGBA8, intervals2/3, all3color layouts. Historical RGBmaximum4/RMSE1.5 decoder gate; no exact native packet or decoder claim.",
+    "remaining": "Reference grayscale restarts, missingGray16 native packet confirmation, default/legacy adoption, other encoder/decoder exactness, deferred full CPU/allocation and release qualification",
+    "cpuAndAllocations": "Unmeasured; no scored timing or Reference CPU parity claim. Capacity/allocation ownership bound checked in focused tests.",
+    "linuxBytesAfterPackage": 4990296974,
+    "windowsBytesAfterPackage": 4994683618,
+    "qualification": "E11",
+    "productionCoreSha256": "19ac3ff61260997adea86afa390d7c8a4be0396bc0a1bfc545c33b7abc6bd3e2",
+    "profile": "JpegQuantizationPolicy.Reference",
+    "defaultAdoptionComplete": false,
+    "fixedTableStandard": "https://www.w3.org/Graphics/JPEG/itu-t81.pdf#page=162",
+    "sourceSha256": {
+      "CHANGELOG.md": "622d335d2178a39b810115a9d615ad67c0417bff952047cd118fc3281b0240a0",
+      "SPEC.md": "70c35e989188c1958e8e3cfc11370609864b0ff51c705f3e0e76c081f876c90b",
+      "docs/codec-parity.md": "f70cb8c94efd43f0ee07ceb6310fc1a1fa9a1ffbed3e549b0ad9565d5752d1f3",
+      "docs/resource-admission.md": "db30171919641ef39c53470c18e1c174dfb2cf8f6867090273eba35ac5d3fa47",
+      "src/Lokad.Image/Internal/JpegEncoder.Reference.cs": "7731f581873f8858f6aa55f6f833fbf0d447f52b948d99f989e59a425087c00f",
+      "src/Lokad.Image/Internal/JpegEncoder.ReferenceSubsampled.cs": "7f3aa221702642eeec84f40b9de02ba95bbe688ffb8553e1fef429030f693bec",
+      "src/Lokad.Image/Internal/JpegFixedReferenceTables.cs": "3d955ba6fd8424850db6fdb56f091eb8ea52ab50adbd967679c6f3cb19b82a85",
+      "src/Lokad.Image/JpegOptions.cs": "59a14d2074f8c0f7a75eb46f1cb22cba703c3aa605af4c736dc753cd6f3aa9c5",
+      "tests/Lokad.Image.DifferentialTests/JpegFfmpegTests.cs": "a52277a7ab2f7609312f2de2443a609607fbd88de6173d971243f4d7beb892da",
+      "tests/Lokad.Image.PublicApi.Tests/JpegReferenceRestartTests.cs": "789ce904a015dbb234c30ec99a5527824eff5526a129fdeb95e1f7a0714c891e",
+      "tests/Lokad.Image.PublicApi.Tests/JpegReferenceTests.cs": "300331c124dcad3e77d2000dccf69411a19b8b3e875503ad20b790eb1089f521",
+      "tests/Lokad.Image.Tests/JpegFixedReferenceTests.cs": "78adb5dc19fff065c4f8f641a81f3d481f97259125fc855ea1742709d4c26471",
+      "tools/PackageSmokeTest/verify-package.ps1": "0d37eb3dc7e96810a856ffb21824e2390f9b39843ad94c7f7d87111d68a81797"
+    },
+    "rawArchive": {
+      "file": "e11-qualified-linux.tar.gz",
+      "bytes": 2355969,
+      "sha256": "bebf98923b6531f88b9fb9f4e392ade55ce03d7bb6044cbfd25e0fc927061f65",
+      "members": 42,
+      "mirrored": true
+    },
+    "windowsRawArchive": {
+      "file": "e11-qualified-windows.tar.gz",
+      "bytes": 15177,
+      "sha256": "007d3eb91bf0d4189c14d2ee8fae46763b852107c453be4fa9bd41c24495650b",
+      "members": 8,
+      "mirrored": true
+    },
+    "invalidatedEvidence": "New Reference color restart path replaces prior unsupported behavior. Existing Reference no-restart MCU traversal adds an interval-zero guard, so complete packets and affected scalar/API/ownership checks were reconfirmed. Gray algorithm and Original/CompactColor packets are unchanged. No prior valid Reference CPU cost existed; old JPEG timings remain tied to Original producers. Unaffected decoder/transform evidence is reused.",
+    "storage": {
+      "windowsBytesAfterRaw": 4997059170,
+      "linuxBytesAfterLinuxRaw": 4992688411,
+      "linuxWindowsRawMirrorBytes": 15177,
+      "limitBytes": 5000000000,
+      "cleanup": "Windows uncited calibration aggregate compressed after exact roundtrip; three duplicate assembly-transfer containers removed only after every member matched its preserved cited raw archive. Six old VM raw mirrors retired only after identical full Windows master proof. Rejected deletion targets untouched."
+    }
+  },
+  "currentReferenceEncoderCoverage": {
+    "round": "E11",
+    "status": "All18 required existing row boundaries have packet confirmations for opt-in Reference; default remains Original. Optional CompactColor and broader option/native scope remain distinct, with named follow-ups OPEN.",
+    "productionCoreSha256": "19ac3ff61260997adea86afa390d7c8a4be0396bc0a1bfc545c33b7abc6bd3e2",
+    "existingRows": 19,
+    "requiredRows": 18,
+    "requiredReferencePacketBoundariesQualified": 18,
+    "optionalLegacyRows": 1,
+    "rows": [
+      {
+        "existingCase": "JpegRgb420AsyncSamples",
+        "label": "JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream",
+        "historicalEvidence": "warm-jpeg-async-samples-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "257210317c8bb87ec196f89d511de45f014c66e73049fbcf5f44f399184d9668",
+        "frozenReferencePacketSha256": "ccca91bcdaddc90c7aecf62d07cdc629c09c27e607c955cfcc97a7bf91caaf08"
+      },
+      {
+        "existingCase": "Jpeg8AsyncNonSeekable",
+        "label": "JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality",
+        "historicalEvidence": "warm-jpeg-async-encode-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "frozenReferencePacketSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274"
+      },
+      {
+        "existingCase": "Encode8",
+        "label": "JPEG 4:4:4, adaptive Huffman / matched quality",
+        "historicalEvidence": "warm-jpeg-vector-ac-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "frozenReferencePacketSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274"
+      },
+      {
+        "existingCase": "Encode444Stream8",
+        "label": "JPEG 4:4:4, forward-only / coded source histograms",
+        "historicalEvidence": "jpeg444-coded-source-histogram-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "frozenReferencePacketSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274"
+      },
+      {
+        "existingCase": "Encode444Cancelable8",
+        "label": "JPEG 4:4:4, live cancelable token / prior geometric Huffman",
+        "historicalEvidence": "warm-jpeg-fixed-fields-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "frozenReferencePacketSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274"
+      },
+      {
+        "existingCase": "Encode16",
+        "label": "JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization",
+        "historicalEvidence": "warm-jpeg-vector-ac-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "frozenReferencePacketSha256": "0f0933b13b4bbf4b0dcaea55f44ff54b83125743e88b7de7a71c750ec42d71ea"
+      },
+      {
+        "existingCase": "Encode422_8",
+        "label": "JPEG 4:2:2, adaptive Huffman / matched quality",
+        "historicalEvidence": "warm-jpeg-vector-ac-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "frozenReferencePacketSha256": "f0b28dd0edce8c7286099c9b4572d7fd8baf6290bcd7b4ff9134f1e699354828"
+      },
+      {
+        "existingCase": "Encode422_16",
+        "label": "JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization",
+        "historicalEvidence": "warm-jpeg-vector-ac-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "frozenReferencePacketSha256": "7063e458e3cca4120b4c3b52a97f62b45f01e6978d7dcc876fc66b5a5e73ee9d"
+      },
+      {
+        "existingCase": "Encode420_8",
+        "label": "JPEG 4:2:0, adaptive Huffman / matched quality",
+        "historicalEvidence": "warm-jpeg-vector-ac-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "frozenReferencePacketSha256": "ccca91bcdaddc90c7aecf62d07cdc629c09c27e607c955cfcc97a7bf91caaf08"
+      },
+      {
+        "existingCase": "JpegBudgetEncode4208",
+        "label": "JPEG 4:2:0, shared budget / matched quality",
+        "historicalEvidence": "warm-shared-budget-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "frozenReferencePacketSha256": "ccca91bcdaddc90c7aecf62d07cdc629c09c27e607c955cfcc97a7bf91caaf08"
+      },
+      {
+        "existingCase": "Encode420Restart8",
+        "label": "JPEG 4:2:0, adaptive / row restart markers",
+        "historicalEvidence": "warm-jpeg-vector-ac-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Independent fixed-table Reference production packet qualified E11; frozen native serial-slice row restart33 unchanged.",
+        "frozenInputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "frozenReferencePacketSha256": "bd0060bf5bbf48a9f55120c5e71b22ac2763751bb370e9c5c2d93ebba38ed622"
+      },
+      {
+        "existingCase": "Encode420Stream8",
+        "label": "JPEG 4:2:0, forward-only output / geometric AC Huffman",
+        "historicalEvidence": "warm-jpeg-fixed-fields-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "frozenReferencePacketSha256": "ccca91bcdaddc90c7aecf62d07cdc629c09c27e607c955cfcc97a7bf91caaf08"
+      },
+      {
+        "existingCase": "Encode420Stream16",
+        "label": "JPEG 4:2:0 from RGBA16, forward-only output",
+        "historicalEvidence": "warm-jpeg-fixed-fields-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "frozenReferencePacketSha256": "75698d283f6b170e1fd4866223af6ac87dc3f226e377353b4fe894e04cec9301"
+      },
+      {
+        "existingCase": "Encode420Cancelable16",
+        "label": "JPEG 4:2:0 from RGBA16, live cancelable token",
+        "historicalEvidence": "warm-jpeg-fixed-fields-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "frozenReferencePacketSha256": "75698d283f6b170e1fd4866223af6ac87dc3f226e377353b4fe894e04cec9301"
+      },
+      {
+        "existingCase": "Encode420_16",
+        "label": "JPEG 4:2:0 from RGBA16, adaptive Huffman",
+        "historicalEvidence": "warm-jpeg-vector-ac-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "frozenReferencePacketSha256": "75698d283f6b170e1fd4866223af6ac87dc3f226e377353b4fe894e04cec9301"
+      },
+      {
+        "existingCase": "EncodeGray8",
+        "label": "JPEG grayscale, standalone SIMD libjpeg-turbo",
+        "historicalEvidence": "warm-jpeg-vector-ac-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "frozenReferencePacketSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423"
+      },
+      {
+        "existingCase": "OriginalGray",
+        "label": "JPEG from caller gray samples, standalone SIMD libjpeg-turbo",
+        "historicalEvidence": "warm-jpeg-compact-color-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d"
+      },
+      {
+        "existingCase": "CompactColorRgb420",
+        "label": "JPEG 4:2:0 from caller RGB / optional CompactColor",
+        "historicalEvidence": "warm-jpeg-compact-color-evidence.json",
+        "historicalProducerPolicy": "CompactColor",
+        "referencePacketBoundaryQualified": false,
+        "status": "Optional legacy profile retained; not a Reference exactness or default claim",
+        "frozenInputSha256": "257210317c8bb87ec196f89d511de45f014c66e73049fbcf5f44f399184d9668"
+      },
+      {
+        "existingCase": "Encode420_8",
+        "label": "JPEG 4:2:0 from caller RGB / AC trellis and padding pruning",
+        "historicalEvidence": "jpeg420-ac-trellis-evidence.json",
+        "historicalProducerPolicy": "Original",
+        "referencePacketBoundaryQualified": true,
+        "status": "Reference boundary qualified on current E8 core; historical timings remain tied to their Original producer",
+        "frozenInputSha256": "257210317c8bb87ec196f89d511de45f014c66e73049fbcf5f44f399184d9668"
+      }
+    ],
+    "publicOptionChecks": {
+      "bothPlatforms": true,
+      "productionBuilds": 0,
+      "controls": [
+        {
+          "depth": 8,
+          "sampling": "YCbCr444",
+          "quality": 85,
+          "baselineOnly": true,
+          "liveCancelableToken": true,
+          "sourcePreserved": true,
+          "packetSha256": "21389750d4936f4c45f8252020843576916cd5689913de2396ee4113df379ecd"
+        },
+        {
+          "depth": 16,
+          "sampling": "YCbCr420",
+          "quality": 85,
+          "baselineOnly": true,
+          "liveCancelableToken": true,
+          "sourcePreserved": true,
+          "packetSha256": "20461d0d4c85dd2d07e1068e2f9d7a856805c637f1d9576201b35456eeee71ed"
+        },
+        {
+          "depth": 8,
+          "sampling": "Grayscale",
+          "quality": 69,
+          "baselineOnly": true,
+          "liveCancelableToken": true,
+          "sourcePreserved": true,
+          "packetSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423"
+        }
+      ],
+      "meaning": "BaselineOnly=true plus successful live cancellation token preserve the frozen packet at4448,42016 andgray8; complements E8 failure/cancellation/ownership checks without changing production inputs.",
+      "productionCoreSha256": "19ac3ff61260997adea86afa390d7c8a4be0396bc0a1bfc545c33b7abc6bd3e2",
+      "durableTestsSince": "E11"
+    },
+    "remainingNamedCases": [
+      {
+        "case": "Reference grayscale from existing513x259 RGBA16 raster at69",
+        "reason": "16-bit normalization/flattening is a distinct required source boundary; E8 proves its composition functionally but does not freeze a native Gray16 packet.",
+        "acceptance": "One reused RGBA16 raster, independent normalized Gray8 samples and approved grayscale backend; exact complete packet. No new content/quality/shape grid."
+      },
+      {
+        "case": "Reference grayscale MCU restarts",
+        "reason": "Existing explicit Original gray restart support is preserved; Reference still returns typed unsupported. Distinct optimized-gray histogram resets and native header placement require qualification.",
+        "acceptance": "One bounded existing grayscale raster/settings control against approved SIMD-enabled libjpeg-turbo with explicit interval; exact packet, then admitted public boundaries and affected qualification."
+      },
+      {
+        "case": "Public restart intervals other than the frozen33 row interval",
+        "reason": "Existing caller sample tests require arbitrary MCU intervals2/3. Pinned FFmpeg serial-slice setting produces row intervals, not an arbitrary public MCU interval setting.",
+        "acceptance": "Preserve existing support; derive generic interval logic from T.81 and the exact row primitive; state precisely which native settings have exact evidence. Do not relabel unmatched native options as byte-exact or add a backend exception silently.",
+        "status": "Generic intervals2/3 now functionally qualified and decoded by native FFmpeg in E11; exact native packet scope stays the frozen row33 configuration. No arbitrary native encoder option or new backend exception was invented."
+      },
+      {
+        "case": "0.2 default adoption and explicit Original/CompactColor migration",
+        "reason": "Current default remains Original; opt-in Reference does not satisfy the complete objective.",
+        "acceptance": "Deliberate versioned default decision after required public boundaries work; retain explicit legacy behavior and published0.1.0. Never silently lose restart support."
+      }
+    ],
+    "qualityScope": "Reference color qscale mapping and grayscale identity formula are explicit. Native exact anchors stay qscale5/gray69. Existing1/100 functional tests remain; do not create a quality sweep or infer equality of legacy numeric quality values.",
+    "changesInvalidatingOlderEvidence": "New Reference color restart path replaces prior unsupported behavior. Existing Reference no-restart MCU traversal adds an interval-zero guard, so complete packets and affected scalar/API/ownership checks were reconfirmed. Gray algorithm and Original/CompactColor packets are unchanged. No prior valid Reference CPU cost existed; old JPEG timings remain tied to Original producers. Unaffected decoder/transform evidence is reused.",
+    "noExpandedWorkloadMatrix": true,
+    "canonicalSourceIdentities": {
+      "RGBA8": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "RGBA16": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "normalizedCallerRGB8": "257210317c8bb87ec196f89d511de45f014c66e73049fbcf5f44f399184d9668",
+      "normalizedCallerGray8": "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d"
     }
   }
 }

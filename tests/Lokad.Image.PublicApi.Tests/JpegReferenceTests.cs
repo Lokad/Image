@@ -13,21 +13,23 @@ public sealed class JpegReferenceTests
     };
 
     [Theory]
-    [InlineData(JpegSampling.YCbCr444, 8, 85, "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", 133039,
+    [InlineData(JpegSampling.YCbCr444, 8, 85, 0, "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", 133039,
         "21389750d4936f4c45f8252020843576916cd5689913de2396ee4113df379ecd")]
-    [InlineData(JpegSampling.YCbCr444, 16, 85, "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9", 133041,
+    [InlineData(JpegSampling.YCbCr444, 16, 85, 0, "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9", 133041,
         "f69ce841c602373b71afac9ce403d2d634fe84630cca21cd585c370169cc2a07")]
-    [InlineData(JpegSampling.YCbCr422, 8, 85, "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", 71166,
+    [InlineData(JpegSampling.YCbCr422, 8, 85, 0, "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", 71166,
         "a1d3d66671a19606075b7604173922d7677236928381a14355bc6fb640ebd3a4")]
-    [InlineData(JpegSampling.YCbCr422, 16, 85, "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9", 71208,
+    [InlineData(JpegSampling.YCbCr422, 16, 85, 0, "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9", 71208,
         "afe4c4f147555ca198d3c82858c481eb0901dab08cd3ccf7c287915fba00d030")]
-    [InlineData(JpegSampling.YCbCr420, 8, 85, "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", 52091,
+    [InlineData(JpegSampling.YCbCr420, 8, 85, 0, "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", 52091,
         "83e9e80a87c1928c8e23e2929b15348d0e8e8ce5568247420f6e366abeb830e3")]
-    [InlineData(JpegSampling.YCbCr420, 16, 85, "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9", 52115,
+    [InlineData(JpegSampling.YCbCr420, 16, 85, 0, "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9", 52115,
         "20461d0d4c85dd2d07e1068e2f9d7a856805c637f1d9576201b35456eeee71ed")]
-    [InlineData(JpegSampling.Grayscale, 8, 69, "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", 58910,
+    [InlineData(JpegSampling.Grayscale, 8, 69, 0, "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", 58910,
         "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423")]
-    public async Task FrozenNativePacketsMatchAcrossOwnedAndCallerBoundaries(JpegSampling sampling, int depth, int quality, string sourceHash, int length, string packetHash)
+    [InlineData(JpegSampling.YCbCr420, 8, 85, 33, "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", 58010,
+        "1af33b85d17d4dd24a19f98e66242eba42c7c77b7347dfa564a83d64b19feea4")]
+    public async Task FrozenNativePacketsMatchAcrossOwnedAndCallerBoundaries(JpegSampling sampling, int depth, int quality, int restart, string sourceHash, int length, string packetHash)
     {
         using var root = new TestMemoryBudget(4 * 1024 * 1024);
         var limits = ImageLimits.Default with { MemoryBudget = root };
@@ -40,9 +42,17 @@ public sealed class JpegReferenceTests
             if (depth == 8) original.AsSpan(y * 513 * 4, 513 * 4).CopyTo(image.GetRow8(y));
             else for (var x = 0; x < 513 * 4; x++)
                 image.GetRow16(y)[x] = BinaryPrimitives.ReadUInt16LittleEndian(original.AsSpan((y * 513 * 4 + x) * 2));
-        var options = Options with { Limits = limits, Sampling = sampling, Quality = quality };
+        var options = Options with { Limits = limits, Sampling = sampling, Quality = quality, RestartInterval = restart };
         using var first = new MemoryStream(); ImageCodec.EncodeJpeg(image, first, options);
         AssertPacket(first.ToArray(), length, packetHash); Assert.Equal(original.Length, root.Bytes);
+        if ((sampling == JpegSampling.YCbCr444 && depth == 8) ||
+            (sampling == JpegSampling.YCbCr420 && depth == 16) || sampling == JpegSampling.Grayscale)
+        {
+            // Preserve E9's successful live-token and BaselineOnly packet proof.
+            using var live = new CancellationTokenSource(); using var baseline = new MemoryStream();
+            ImageCodec.EncodeJpeg(image, baseline, options with { BaselineOnly = true }, live.Token);
+            AssertPacket(baseline.ToArray(), length, packetHash);
+        }
         using var forward = new ForwardOutput(); ImageCodec.EncodeJpeg(image, forward, options);
         AssertPacket(forward.ToArray(), length, packetHash);
         using var asynchronous = new MemoryStream(); await ImageCodec.EncodeJpegAsync(image, asynchronous, options);
@@ -144,15 +154,16 @@ public sealed class JpegReferenceTests
     }
 
     [Theory]
-    [InlineData(JpegSampling.YCbCr444)]
-    [InlineData(JpegSampling.YCbCr422)]
-    [InlineData(JpegSampling.YCbCr420)]
-    [InlineData(JpegSampling.Grayscale)]
-    public void WorkCancellationAndFailedWritesCleanUpWithoutDisposingTheCaller(JpegSampling sampling)
+    [InlineData(JpegSampling.YCbCr444, 0)]
+    [InlineData(JpegSampling.YCbCr422, 0)]
+    [InlineData(JpegSampling.YCbCr420, 0)]
+    [InlineData(JpegSampling.Grayscale, 0)]
+    [InlineData(JpegSampling.YCbCr420, 33)]
+    public void WorkCancellationAndFailedWritesCleanUpWithoutDisposingTheCaller(JpegSampling sampling, int restart)
     {
         using var image = OriginalPixels.Buffer(17, 11, 8);
         using var root = new TestMemoryBudget(1024 * 1024);
-        var options = Options with { Sampling = sampling, Limits = ImageLimits.Default with { MemoryBudget = root } };
+        var options = Options with { Sampling = sampling, RestartInterval = restart, Limits = ImageLimits.Default with { MemoryBudget = root } };
         using var output = new MemoryStream();
         var limited = options with { Limits = options.Limits with { MaxWork = 1 } };
         Assert.Equal(ImageLimitKind.Work, Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(image, output, limited)).Limit);
@@ -175,30 +186,33 @@ public sealed class JpegReferenceTests
     }
 
     [Theory]
-    [InlineData(false, false, JpegSampling.YCbCr444)]
-    [InlineData(true, false, JpegSampling.YCbCr444)]
-    [InlineData(false, true, JpegSampling.YCbCr444)]
-    [InlineData(false, false, JpegSampling.YCbCr422)]
-    [InlineData(true, false, JpegSampling.YCbCr422)]
-    [InlineData(false, true, JpegSampling.YCbCr422)]
-    [InlineData(false, false, JpegSampling.YCbCr420)]
-    [InlineData(true, false, JpegSampling.YCbCr420)]
-    [InlineData(false, true, JpegSampling.YCbCr420)]
-    [InlineData(false, false, JpegSampling.Grayscale)]
-    [InlineData(true, false, JpegSampling.Grayscale)]
-    [InlineData(false, true, JpegSampling.Grayscale)]
-    public async Task SharedRootIncludesPendingActualAsyncUsersAndRecovers(bool cancel, bool fail, JpegSampling sampling)
+    [InlineData(false, false, JpegSampling.YCbCr444, 0)]
+    [InlineData(true, false, JpegSampling.YCbCr444, 0)]
+    [InlineData(false, true, JpegSampling.YCbCr444, 0)]
+    [InlineData(false, false, JpegSampling.YCbCr422, 0)]
+    [InlineData(true, false, JpegSampling.YCbCr422, 0)]
+    [InlineData(false, true, JpegSampling.YCbCr422, 0)]
+    [InlineData(false, false, JpegSampling.YCbCr420, 0)]
+    [InlineData(true, false, JpegSampling.YCbCr420, 0)]
+    [InlineData(false, true, JpegSampling.YCbCr420, 0)]
+    [InlineData(false, false, JpegSampling.Grayscale, 0)]
+    [InlineData(true, false, JpegSampling.Grayscale, 0)]
+    [InlineData(false, true, JpegSampling.Grayscale, 0)]
+    [InlineData(false, false, JpegSampling.YCbCr420, 33)]
+    [InlineData(true, false, JpegSampling.YCbCr420, 33)]
+    [InlineData(false, true, JpegSampling.YCbCr420, 33)]
+    public async Task SharedRootIncludesPendingActualAsyncUsersAndRecovers(bool cancel, bool fail, JpegSampling sampling, int restart)
     {
         using var image = OriginalPixels.Buffer(17, 11, 8);
         long required;
         using (var measure = new TestMemoryBudget(1024 * 1024))
         using (var probe = new MemoryStream())
         {
-            ImageCodec.EncodeJpeg(image, probe, Options with { Sampling = sampling, Limits = ImageLimits.Default with { MemoryBudget = measure } });
+            await ImageCodec.EncodeJpegAsync(image, probe, Options with { Sampling = sampling, RestartInterval = restart, Limits = ImageLimits.Default with { MemoryBudget = measure } });
             required = measure.Peak;
         }
         using var root = new TestMemoryBudget(required);
-        var options = Options with { Sampling = sampling, Limits = ImageLimits.Default with { MemoryBudget = root } };
+        var options = Options with { Sampling = sampling, RestartInterval = restart, Limits = ImageLimits.Default with { MemoryBudget = root } };
         using var token = new CancellationTokenSource(); using var held = new HeldOutput(root, fail);
         var pending = ImageCodec.EncodeJpegAsync(image, held, options, token.Token).AsTask();
         await held.Entered.Task.WaitAsync(TimeSpan.FromSeconds(10));
@@ -207,7 +221,7 @@ public sealed class JpegReferenceTests
             var charged = root.Bytes; Assert.True(charged > 0);
             using var competing = new MemoryStream();
             Assert.Equal(ImageLimitScope.SharedBudget,
-                Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(image, competing, options)).Scope);
+                (await Assert.ThrowsAsync<ImageLimitException>(() => ImageCodec.EncodeJpegAsync(image, competing, options).AsTask())).Scope);
             Assert.Equal(charged, root.Bytes); Assert.Equal(0, competing.Length);
             if (cancel) { token.Cancel(); Assert.False(pending.IsCompleted); Assert.Equal(charged, root.Bytes); }
         }
@@ -222,7 +236,6 @@ public sealed class JpegReferenceTests
 
     [Theory]
     [InlineData(JpegSampling.Grayscale, 1, UnsupportedImageFeature.ControlMarker)]
-    [InlineData(JpegSampling.YCbCr444, 1, UnsupportedImageFeature.ControlMarker)]
     public void PendingReferenceFeaturesAreStructuredFailures(JpegSampling sampling, int restart, UnsupportedImageFeature feature)
     {
         using var image = OriginalPixels.Buffer(1, 1, 8, opaque: true);
