@@ -55,7 +55,7 @@ public sealed class JpegSampleEncodeTests
     {
         using var source = OriginalPixels.Buffer(129, 129, 8, grayscale: format == JpegSampleFormat.Grayscale, opaque: true);
         var samples = Samples(source, format, 0); var original = samples.ToArray();
-        var options = new JpegEncodeOptions { Sampling = sampling, Quality = 69, RestartInterval = 3 };
+        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Sampling = sampling, Quality = 69, RestartInterval = 3 };
         using var expected = new MemoryStream();
         // Explicit matte enables the established adaptive path; input is opaque.
         ImageCodec.EncodeJpeg(source, expected, options with { BackgroundRgb = 0 });
@@ -91,7 +91,7 @@ public sealed class JpegSampleEncodeTests
         using var source = OriginalPixels.Buffer(17, 11, 8, grayscale: format == JpegSampleFormat.Grayscale, opaque: true);
         var samples = Samples(source, format, 3); var original = samples.ToArray();
         var limits = new ImageLimits { MaxWorkingBytes = samples.Length + 8192, MaxInputBytes = 1 };
-        var options = new JpegEncodeOptions { Limits = limits };
+        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Limits = limits };
         using var output = new MemoryStream();
         ImageCodec.EncodeJpeg(samples, source.Width, source.Height, format, output, source.Width * (int)format + 3, options);
         Assert.True(output.Length > 0); Assert.Equal(original, samples);
@@ -135,18 +135,20 @@ public sealed class JpegSampleEncodeTests
         Assert.Equal(0, output.Length); Assert.True(output.CanWrite); Assert.Equal(original, samples);
     }
 
-    [Fact]
-    public void SharedSuccessfulWorkAndPartialWorkFailureSettleWithoutTakingSourceOwnership()
+    [Theory]
+    [InlineData(JpegQuantizationPolicy.Original)] [InlineData(JpegQuantizationPolicy.Reference)]
+    public void SharedSuccessfulWorkAndWorkFailureSettleWithoutTakingSourceOwnership(JpegQuantizationPolicy policy)
     {
         using var source = OriginalPixels.Buffer(17, 11, 8, opaque: true);
         var samples = Samples(source, JpegSampleFormat.Rgb, 0); var original = samples.ToArray();
         var limits = new ImageLimits { MaxWorkingBytes = 1024 * 1024, MaxWork = 2_000_000 };
+        var options = new JpegEncodeOptions { QuantizationPolicy = policy, Limits = limits };
         var budget = new ImageBudget(limits.MaxWorkingBytes + samples.Length, limits.MaxWork);
         using var expected = new MemoryStream();
         using (budget.Reserve(samples.Length))
         {
             budget.EncodeJpeg(samples, source.Width, source.Height, JpegSampleFormat.Rgb, expected,
-                options: new() { Limits = limits });
+                options: options);
             Assert.Equal(limits.MaxWorkingBytes, budget.RemainingWorkingBytes);
         }
         Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes); Assert.True(budget.ConsumedWork > 0);
@@ -154,13 +156,25 @@ public sealed class JpegSampleEncodeTests
         var shortBudget = new ImageBudget(limits.MaxWorkingBytes, limits.MaxWork);
         using var failed = new MemoryStream();
         var failure = Assert.Throws<ImageLimitException>(() => shortBudget.EncodeJpeg(samples, source.Width, source.Height,
-            JpegSampleFormat.Rgb, failed, options: new() { Limits = limits with { MaxWork = budget.ConsumedWork - 1 } }));
+            JpegSampleFormat.Rgb, failed, options: options with { Limits = limits with { MaxWork = budget.ConsumedWork - 1 } }));
         Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (failure.Limit, failure.Scope));
-        Assert.True(shortBudget.ConsumedWork > 0);
+        if (policy == JpegQuantizationPolicy.Original)
+        {
+            Assert.True(shortBudget.ConsumedWork > 0);
+            Assert.InRange(failed.Length, 1, expected.Length - 2);
+            Assert.Equal(expected.ToArray().AsSpan(0, (int)failed.Length).ToArray(), failed.ToArray());
+        }
+        else
+        {
+            // Reference rejects its bounded plan before entropy work/output;
+            // the refused operation leaves capacity available to the next call.
+            Assert.Equal(0, shortBudget.ConsumedWork); Assert.Equal(0, failed.Length);
+            using var retry = new MemoryStream();
+            shortBudget.EncodeJpeg(samples, source.Width, source.Height, JpegSampleFormat.Rgb, retry, options: options);
+            Assert.Equal(expected.ToArray(), retry.ToArray());
+        }
         Assert.Equal(shortBudget.MaxWorkingBytes, shortBudget.RemainingWorkingBytes);
         Assert.Equal(shortBudget.MaxWork - shortBudget.ConsumedWork, shortBudget.RemainingWork);
-        Assert.InRange(failed.Length, 1, expected.Length - 2);
-        Assert.Equal(expected.ToArray().AsSpan(0, (int)failed.Length).ToArray(), failed.ToArray());
         Assert.Equal(original, samples); Assert.True(failed.CanWrite);
     }
 
@@ -169,7 +183,7 @@ public sealed class JpegSampleEncodeTests
     {
         using var source = OriginalPixels.Buffer(129, 129, 8, opaque: true);
         var samples = Samples(source, JpegSampleFormat.Rgb, 0); var original = samples.ToArray();
-        var limits = new ImageLimits { MaxWorkingBytes = 1024 * 1024, MaxWork = 20_000_000 };
+        var limits = new ImageLimits { MaxWorkingBytes = 1024 * 1024, MaxWork = 50_000_000 };
         var budget = new ImageBudget(limits.MaxWorkingBytes, limits.MaxWork * 2);
         var options = new JpegEncodeOptions { Limits = limits, BackgroundRgb = 0, RestartInterval = 2 };
         using var expected = new FailingStream(); using var actual = new FailingStream();

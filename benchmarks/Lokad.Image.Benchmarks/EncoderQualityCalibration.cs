@@ -187,7 +187,7 @@ internal static class EncoderQualityCalibration
     {
         if (profile.Encoder == QualityEncoder.Vp8)
             ImageCodec.EncodeWebp(source, output, new WebpEncodeOptions { Lossless = false, Quality = quality, Effort = 4 });
-        else ImageCodec.EncodeJpeg(source, output, new JpegEncodeOptions { Quality = quality, Sampling = Sampling(profile.Encoder), BackgroundRgb = profile.BackgroundRgb });
+        else ImageCodec.EncodeJpeg(source, output, new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = quality, Sampling = Sampling(profile.Encoder), BackgroundRgb = profile.BackgroundRgb });
     }
 
     public static EncoderQualityProfile[] Profiles(string scope)

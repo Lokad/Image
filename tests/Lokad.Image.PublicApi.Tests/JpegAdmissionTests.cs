@@ -93,7 +93,7 @@ public sealed class JpegAdmissionTests
     {
         using var source = OriginalPixels.Buffer(17, 11, depth);
         var unchanged = OriginalPixels.Bytes(source);
-        var options = new JpegEncodeOptions { Sampling = sampling, Quality = 85, RestartInterval = 1, BackgroundRgb = 0x17395B };
+        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Sampling = sampling, Quality = 85, RestartInterval = 1, BackgroundRgb = 0x17395B };
         using var reference = new MemoryStream(); ImageCodec.EncodeJpeg(source, reference, options);
         var expected = reference.ToArray();
         var limits = new ImageLimits { MaxWorkingBytes = unchanged.Length + 8192L, MaxOutputBytes = expected.Length };
@@ -118,7 +118,7 @@ public sealed class JpegAdmissionTests
         if (progressive) return AuthoredJpeg.ProgressiveFrame(width, height, sampling, restartInterval: 1);
         using var source = OriginalPixels.Buffer(width, height, 8, opaque: true);
         using var output = new MemoryStream();
-        ImageCodec.EncodeJpeg(source, output, new JpegEncodeOptions { Sampling = sampling, Quality = 85, RestartInterval = 1 });
+        ImageCodec.EncodeJpeg(source, output, new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Sampling = sampling, Quality = 85, RestartInterval = 1 });
         return output.ToArray();
     }
 

@@ -3,6 +3,18 @@
 Published 0.1.0 remains unchanged. Version 0.2.0 is under qualification; it is not
 yet a claim of replacement readiness or performance parity for the expanded scope.
 
+JPEG now defaults to `JpegQuantizationPolicy.Reference`: baseline output with the
+pinned reference-compatible algorithm. Color quality maps to qscale
+`1 + (100 - Quality) * 30 / 99`; default85 maps to5. Grayscale keeps the owned
+quantizer formula but uses the reference transform and optimized tables.
+Packets and lossy pixels can change. Set `QuantizationPolicy` explicitly to
+`Original` or `CompactColor` to retain their previous behavior; enum values are
+unchanged. `Reference` admits its coding tables and temporary tree storage before
+allocation, even for small images; a tighter limit fails without legacy fallback.
+Historical JPEG timing/size records retain their explicit Original producer and
+do not measure the new default. [Codec compatibility](codec-parity.md) states the
+exact tested source/settings scope and the approved attribution exception.
+
 Original JPEG 4:4:4 encoding may now use progressive scans when its complete plan
 is admitted and restart markers are disabled. Set `JpegEncodeOptions.BaselineOnly`
 for consumers requiring baseline syntax. This switch retains the same quantizers
@@ -66,7 +78,7 @@ Default option differences are accepted; select quality, sampling and orientatio
 explicitly when their behavior matters. [SPEC.md](../SPEC.md) is authoritative;
 [resource admission](resource-admission.md) defines ownership and accounting.
 
-JPEG keeps its original quantization by default. Development adds opt-in
+Explicit `Original` JPEG retains its original quantization. Opt-in
 `JpegQuantizationPolicy.CompactColor` for color output; it retains grayscale,
 quality100, sampling and flattening, while trading other reconstruction precision
 for smaller packets. Assess complete size and quality together for the intended

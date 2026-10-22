@@ -9,7 +9,7 @@ public sealed class JpegProgressiveEncodeTests
     public void BaselineOnlyChangesSyntaxWhileRetainingQuantizersAndDecodedPixels(int quality)
     {
         using var image = OriginalPixels.Buffer(129, 129, 8);
-        var options = new JpegEncodeOptions { Quality = quality, Sampling = JpegSampling.YCbCr444, BackgroundRgb = 0x204060 };
+        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = quality, Sampling = JpegSampling.YCbCr444, BackgroundRgb = 0x204060 };
         using var automatic = new MemoryStream(); ImageCodec.EncodeJpeg(image, automatic, options);
         using var baseline = new MemoryStream(); ImageCodec.EncodeJpeg(image, baseline, options with { BaselineOnly = true });
         var a = automatic.ToArray(); var b = baseline.ToArray();
@@ -28,7 +28,7 @@ public sealed class JpegProgressiveEncodeTests
     public void WholePlanAdmissionRefusalIsTerminalAndDoesNotWriteABaselineFallback()
     {
         using var image = OriginalPixels.Buffer(129, 129, 8); using var root = new TestMemoryBudget(8192);
-        var options = new JpegEncodeOptions { Quality = 69, Sampling = JpegSampling.YCbCr444, BackgroundRgb = 0x204060, Limits = new() { MemoryBudget = root } };
+        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Sampling = JpegSampling.YCbCr444, BackgroundRgb = 0x204060, Limits = new() { MemoryBudget = root } };
         using var output = new MemoryStream();
         var error = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(image, output, options));
         Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
@@ -43,7 +43,7 @@ public sealed class JpegProgressiveEncodeTests
     public void CancellationKeepsThePlanChargedUntilTheWriterStopsAndAllowsSubsequentSuccess()
     {
         using var image = OriginalPixels.Buffer(129, 129, 8); using var root = new TestMemoryBudget(1_000_000);
-        var options = new JpegEncodeOptions { Quality = 69, Sampling = JpegSampling.YCbCr444, BackgroundRgb = 0x204060, Limits = new() { MemoryBudget = root } };
+        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Sampling = JpegSampling.YCbCr444, BackgroundRgb = 0x204060, Limits = new() { MemoryBudget = root } };
         using var token = new CancellationTokenSource(); using var output = new CancelingOutput(token, root);
         Assert.ThrowsAny<OperationCanceledException>(() => ImageCodec.EncodeJpeg(image, output, options, token.Token));
         Assert.True(output.SawChargedPlan); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed); Assert.True(output.CanWrite);

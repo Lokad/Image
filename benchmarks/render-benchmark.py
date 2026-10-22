@@ -343,7 +343,7 @@ encoders first, then decoders, against pinned FFmpeg builds/settings. Only expli
 encoder-attribution metadata may differ; see [scope and current progress](codec-parity.md).
 Current size/quality passes below are historical transition evidence, **not byte-exact
 qualification**. Active quality/calibration tooling retires after exact replacements
-cover its required paths. The explicit managed JPEG `Reference` profile now reproduces
+cover its required paths. The default managed JPEG `Reference` profile now reproduces
 all six frozen complete444/422/420 packets with its own tables, apart from approved
 attribution. Six tiny/paired functional controls cover the additional conversion
 and filter-edge branches; no performance claim follows from packet equality.
@@ -356,8 +356,9 @@ Production color restarts now match the frozen4:2:0 row-restart33 packet:
 58,012B native,58,010B with the approved attribution. Generic MCU intervals have
 functional/interoperability checks. Grayscale interval3 now matches its61,152B
 packet raw-exact, including714 markers, across image/caller/async boundaries.
-Both platforms pass5,153 full checks plus82 affected scalar checks, and the same
-actual Release package consumer and three examples. Default adoption remains open.
+Both platforms qualify5,164 checks plus92 affected scalar checks, and the same
+actual Release package consumer and three examples. All eight default image/caller/
+async/ImageBudget wrappers reproduce the frozen packet; options-null calls agree.
 Original/CompactColor packet behavior is unchanged. Reference CPU/allocations are
 unmeasured; existing JPEG encoding timings predate its added dispatch and require
 affected confirmation when CPU qualification resumes. Other unchanged paths retain evidence.
@@ -367,7 +368,7 @@ Lossless photograph/diagram packets are 159,104/160,032 and 7,160/7,234 B
 17,366/17,688 and6,722/7,100 B at their frozen matched-quality settings and exact alpha.
 These are bounded controls, not general-image compression claims.
 
-[Default 4:2:0 JPEG](../benchmarks/JPEG420-AC-TRELLIS.md) now passes all nine
+[Legacy Original 4:2:0 JPEG](../benchmarks/JPEG420-AC-TRELLIS.md) passed all nine
 affected boundaries: **51,379/52,093 B** (8-bit) and **51,471/52,117 B** (16-bit),
 with source-PSNR gaps 0.085506/0.085851 dB inside the unchanged 0.25 dB gate.
 Grayscale remains 58,823/58,910 B;
@@ -383,7 +384,7 @@ frozen native6; explicit modes and16bit selection remain unchanged. This is not
 an equal-effort comparison.
 A timing pass or 5% IDAT tolerance does not establish packet-size parity.
 The [JPEG packet ledger](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) reconciles all 19
-existing encode rows: 13 default passes/5 open, plus one separate optional pass.
+historical encode rows: 13 Original passes/5 open, plus one separate optional pass.
 The [adaptive stream round](../benchmarks/JPEG-ADAPTIVE-STREAM.md) first saved12,166 B
 on 4:4:4 forward-only/cancellable output. Source-derived coefficient decisions and progressive scans save another
 24,136 B relative to that packet; the largest remaining 4:4:4 gap is about 1.24%.

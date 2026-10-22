@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "project": "Lokad.Image",
-  "qualification": "E14",
-  "status": "Production opt-in Reference JPEG grayscale/color MCU restart support qualified both OS. Ten frozen complete controls match: raw gray equality, only approved color COM attribution. Default adoption, other exact encoders/decoders, CPU/release objective OPEN.",
+  "qualification": "E15",
+  "status": "Reference is the0.2 development JPEG default. Ten frozen native controls plus8 default public wrappers qualified bothOS with exact packets (only approved color COM attribution). Explicit Original/CompactColor preserved. Other exact encoders/decoders, CPU/allocation and release objective OPEN.",
   "productionChanged": true,
-  "productionCoreSha256": "455c83d91595f2886cff854f7964e5d7332e606b4481fc0d5982bae50f4c0c42",
+  "productionCoreSha256": "989414597671e2d96d7731b2ee8f9a2764323bc95f65eb97db8e51e1545c69aa",
   "oracle": {
     "ffmpegRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
     "ffmpegVersion": "n8.1",
@@ -126,7 +126,7 @@
     "sha256": "17a146f3a307fec096b8189161fc1a1e4e1d947327dc895c9b4e1e8d1d9b5d93",
     "mirrored": true
   },
-  "next": "E15: bounded0.2 default/legacy migration: adopt Reference deliberately while preserving explicit Original/CompactColor and producer-specific historical evidence. Exact color restart scope stays frozen33; arbitrary intervals retain functional/spec-derived support. Then PNG/WebP encoders and exact decoders, finite CPU/allocation and release qualification.",
+  "next": "E16: PNG first-divergence audit using existing frozen complete packets/settings, starting with the existing RGBA8 Optimal control. Inventory headers/attribution, filtered rows, zlib/Deflate and chunk boundaries before independently reproducing one primitive at a time. Preserve finite required PNG/WebP modes, exact decoders, quiet-VM CPU/allocation and release scope.",
   "forwardStage": {
     "qualification": "E2",
     "nativeDispatch": "ff_fdct_sse2",
@@ -196,7 +196,7 @@
     "nativeEncodes": 0,
     "timingRuns": 0
   },
-  "priorProductionCoreSha256": "19ac3ff61260997adea86afa390d7c8a4be0396bc0a1bfc545c33b7abc6bd3e2",
+  "priorProductionCoreSha256": "455c83d91595f2886cff854f7964e5d7332e606b4481fc0d5982bae50f4c0c42",
   "controlsProductionPacketIdentity": "Original policy at C193; implementation/packets unchanged by E4/E6. Reference production qualification is separate in productionAdoption and productionSubsampling.",
   "prototypeProductionBuilds": 0,
   "prototypeRepeatedPackageProofs": 0,
@@ -209,7 +209,7 @@
     "sampling": "444",
     "baseline": true,
     "restartInterval": 0,
-    "defaultAdoptionComplete": false,
+    "defaultAdoptionComplete": true,
     "inputs": [
       "RGBA8 ImageBuffer",
       "RGBA16 ImageBuffer",
@@ -426,7 +426,7 @@
     ],
     "baseline": true,
     "restartInterval": 0,
-    "defaultAdoptionComplete": false,
+    "defaultAdoptionComplete": true,
     "frozenMainControls": 6,
     "boundedFunctionalControls": 6,
     "completePublicBoundaryChecksPerPlatform": 42,
@@ -758,7 +758,7 @@
       "mirrored": true
     }
   },
-  "latestAudit": "E14",
+  "latestAudit": "E15",
   "grayscaleReplication": {
     "qualification": "E7",
     "status": "Qualified independent source-only grayscale encoder prototype on Windows/Linux; production/API/admission integration OPEN",
@@ -874,7 +874,7 @@
     "quality": 69,
     "colorQualityMappingUnchanged": true,
     "grayQualityMapping": "Existing owned mathematical quality formula; identity quality to pinned grayscale backend",
-    "defaultAdoptionComplete": false,
+    "defaultAdoptionComplete": true,
     "frozenSourceRgba8Sha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
     "frozenNormalizedGraySha256": "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d",
     "inputs": [
@@ -1435,7 +1435,7 @@
     },
     "adoptedIn": "E11"
   },
-  "latestProductionQualification": "E14",
+  "latestProductionQualification": "E15",
   "productionColorRestarts": {
     "project": "Lokad.Image",
     "round": "E11",
@@ -1587,9 +1587,9 @@
     }
   },
   "currentReferenceEncoderCoverage": {
-    "round": "E14",
-    "status": "All18 required existing row boundaries have packet confirmations for opt-in Reference; default remains Original. Optional CompactColor and broader option/native scope remain distinct, with named follow-ups OPEN.",
-    "productionCoreSha256": "455c83d91595f2886cff854f7964e5d7332e606b4481fc0d5982bae50f4c0c42",
+    "round": "E15",
+    "status": "All18 existing required encoder boundaries have Reference packet counterparts. Reference is now the development default;8 public wrappers/options-null calls agree. Historical timings remain Original; CompactColor stays an explicit optional legacy profile. Exact claims retain their frozen inputs/settings scope.",
+    "productionCoreSha256": "989414597671e2d96d7731b2ee8f9a2764323bc95f65eb97db8e51e1545c69aa",
     "existingRows": 19,
     "requiredRows": 18,
     "requiredReferencePacketBoundariesQualified": 18,
@@ -1835,7 +1835,7 @@
         }
       ],
       "meaning": "BaselineOnly=true plus successful live cancellation token preserve the frozen packet at4448,42016 andgray8; complements E8 failure/cancellation/ownership checks without changing production inputs. E12 adds the missing gray16 anchor; no production changes. E14 adds exact grayscale interval3;10 frozen complete controls now pass.",
-      "productionCoreSha256": "455c83d91595f2886cff854f7964e5d7332e606b4481fc0d5982bae50f4c0c42",
+      "productionCoreSha256": "989414597671e2d96d7731b2ee8f9a2764323bc95f65eb97db8e51e1545c69aa",
       "durableTestsSince": "E11"
     },
     "remainingNamedCases": [
@@ -1844,15 +1844,10 @@
         "reason": "Existing caller sample tests require arbitrary MCU intervals2/3. Pinned FFmpeg serial-slice setting produces row intervals, not an arbitrary public MCU interval setting.",
         "acceptance": "Preserve existing support; derive generic interval logic from T.81 and the exact row primitive; state precisely which native settings have exact evidence. Do not relabel unmatched native options as byte-exact or add a backend exception silently.",
         "status": "Generic intervals2/3 now functionally qualified and decoded by native FFmpeg in E11; exact native packet scope stays the frozen row33 configuration. No arbitrary native encoder option or new backend exception was invented."
-      },
-      {
-        "case": "0.2 default adoption and explicit Original/CompactColor migration",
-        "reason": "Current default remains Original; opt-in Reference does not satisfy the complete objective.",
-        "acceptance": "Deliberate versioned default decision after required public boundaries work; retain explicit legacy behavior and published0.1.0. Never silently lose restart support."
       }
     ],
     "qualityScope": "Reference color qscale mapping and grayscale identity formula are explicit. Native exact anchors stay qscale5/gray69. Existing1/100 functional tests remain; do not create a quality sweep or infer equality of legacy numeric quality values.",
-    "changesInvalidatingOlderEvidence": "New Reference color restart path replaces prior unsupported behavior. Existing Reference no-restart MCU traversal adds an interval-zero guard, so complete packets and affected scalar/API/ownership checks were reconfirmed. Gray algorithm and Original/CompactColor packets are unchanged. No prior valid Reference CPU cost existed; old JPEG timings remain tied to Original producers. Unaffected decoder/transform evidence is reused. E12 changes only native tooling and one public fixture row; E11 production/full/scalar/package evidence remains valid unchanged. Nine affected frozen rows pass normal/scalar on both platforms; no full-suite rerun claimed. E14 enables Reference gray restarts and adds an interval guard in both gray passes; all previous complete packets were reconfirmed both platforms normal/scalar. New header/work behavior is qualified, with existing memory owners unchanged. All other production method bodies, explicit Original/CompactColor and decoder/transform paths are unchanged; no prior Reference timing proof existed.",
+    "changesInvalidatingOlderEvidence": "New Reference color restart path replaces prior unsupported behavior. Existing Reference no-restart MCU traversal adds an interval-zero guard, so complete packets and affected scalar/API/ownership checks were reconfirmed. Gray algorithm and Original/CompactColor packets are unchanged. No prior valid Reference CPU cost existed; old JPEG timings remain tied to Original producers. Unaffected decoder/transform evidence is reused. E12 changes only native tooling and one public fixture row; E11 production/full/scalar/package evidence remains valid unchanged. Nine affected frozen rows pass normal/scalar on both platforms; no full-suite rerun claimed. E14 enables Reference gray restarts and adds an interval guard in both gray passes; all previous complete packets were reconfirmed both platforms normal/scalar. New header/work behavior is qualified, with existing memory owners unchanged. All other production method bodies, explicit Original/CompactColor and decoder/transform paths are unchanged; no prior Reference timing proof existed. E15 changes only the default property initializer. Constructor/options-null behavior changes at8 public entry points, now covered by10 default-profile tests, full API qualification and the actual package. All encoder algorithms and explicit Original/CompactColor packets stay unchanged; historical quality/timing producers are pinned explicitly. All prior frozen Reference packets and scalar checks reconfirmed. Default CPU/allocation costs remain unmeasured.",
     "noExpandedWorkloadMatrix": true,
     "canonicalSourceIdentities": {
       "RGBA8": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
@@ -1860,7 +1855,8 @@
       "normalizedCallerRGB8": "257210317c8bb87ec196f89d511de45f014c66e73049fbcf5f44f399184d9668",
       "normalizedCallerGray8": "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d",
       "normalizedGrayFromRGBA16": "47a685cb7e759840f7e50cff59e4254ae172aa9807b17b3f18551b9883d846a6"
-    }
+    },
+    "defaultAdoptionComplete": true
   },
   "grayscale16Confirmation": {
     "project": "Lokad.Image",
@@ -2125,6 +2121,94 @@
       "bytes": 2066248,
       "sha256": "b7f5e7f5a5719af94acdcbc771c14f11663694353e52e380d283db851090e25d",
       "members": 52,
+      "mirrored": true
+    }
+  },
+  "defaultAdoption": {
+    "project": "Lokad.Image",
+    "round": "E15",
+    "sourceBase": "a986ab135133f9829483a8ea8b6acd8ce65f8491",
+    "productionCoreSha256": "989414597671e2d96d7731b2ee8f9a2764323bc95f65eb97db8e51e1545c69aa",
+    "core": [
+      {
+        "Name": "Lokad.Image.dll",
+        "Bytes": 771584,
+        "Sha256": "989414597671e2d96d7731b2ee8f9a2764323bc95f65eb97db8e51e1545c69aa"
+      },
+      {
+        "Name": "Lokad.Image.pdb",
+        "Bytes": 340700,
+        "Sha256": "b1c8cc5d584b0399cda2252002e2c4ec37e077307c9b2099efe06cca3bb1070a"
+      },
+      {
+        "Name": "Lokad.Image.xml",
+        "Bytes": 40994,
+        "Sha256": "ce8169aa0e0fbb1f6060b909abed9798f98bd8e4e2a78baa338c0a73b9a68016"
+      }
+    ],
+    "productionChanged": true,
+    "productionBuilds": 1,
+    "defaultProfile": "Reference",
+    "enumNumericValues": {
+      "Original": 0,
+      "CompactColor": 1,
+      "Reference": 2
+    },
+    "algorithmsChanged": false,
+    "sourceChanged": "JpegOptions.cs default property initializer and XML only",
+    "legacyProfiles": "Explicit Original/CompactColor preserved; eight image/caller/async/ImageBudget wrapper hashes retain their historical identities",
+    "testsPerPlatform": {
+      "internal": 2152,
+      "publicApi": 2072,
+      "liveFfmpeg": 940,
+      "total": 5164
+    },
+    "scalarChecksPerPlatform": {
+      "internal": 4,
+      "publicApi": 88,
+      "total": 92
+    },
+    "linuxQualification": "Full screen2150/2152 internal and2068/2071 public passed,940/940 differential passed. Two legacy staging rows plus three old profile/work assumptions corrected in tests only. Four corrected internal/four public checks pass; all other source/methods and core unchanged. Union qualifies2152internal+2072public+940live; full project reruns avoided.",
+    "windowsQualification": "One complete current-source ./test.ps1 -Differential -NoBuild run passes all5164, plus92 scalar checks",
+    "builds": {
+      "production": 1,
+      "internalTests": 2,
+      "publicTests": 2,
+      "differentialTests": 1,
+      "benchmarkCompile": 1,
+      "imageProbe": 1,
+      "fixtures": 1,
+      "productionRebuildsAfterFreeze": 0
+    },
+    "package": {
+      "path": "artifacts/qualification/jpeg-reference-default/Lokad.Image.0.2.0.nupkg",
+      "version": "0.2.0",
+      "bytes": 407268,
+      "sha256": "e68773ed1fdd7ebdb88e0b64fa4d20dae8e4ecd610b5d968d5cbe651d268d154",
+      "sameActualPackageBothPlatforms": true,
+      "usageExamplesPerPlatform": 3,
+      "frozenPacketControls": 10,
+      "callerGrayChecks": 2,
+      "defaultSelected": true
+    },
+    "nativeEncodes": 0,
+    "timingRuns": 0,
+    "scope": "Existing10 frozen native packets plus default selection at8 public wrappers using normalized existing RGB raster; options-null calls, caller-gray override and exact legacy packets. No broader source/quality/shape claim.",
+    "cpuAndAllocations": "Reference unmeasured; historical Original producers pinned explicitly, no reinterpretation of existing times/allocations",
+    "invalidatedEvidence": "Only default/options-null selection changes; encoder/decoder/transform algorithms unchanged. All frozen packets reconfirmed normal/scalar bothOS. Generic API/ownership tests follow new default; legacy-specific tests/tools explicitly choose Original. Existing independent decoder/transform evidence reused.",
+    "storageNote": "Benchmark compile restored dependency copies, detected transient VM5026572522B after transfer archive. Replaced7 restored dependency copies with byte-identical global-cache links; retired duplicate own compile outputs/exact archived stage extractions and unused reinstallable SDK formatter. Future compile-only helper checks must set CopyLocalLockFileAssemblies=false or account for dependency-copy peaks. Protected/rejected cleanup targets untouched; raw masters/runtimes/actual packages retained. SDK formatter is in the pre-existing shared external toolchain, so its removal does not free physical checkout bytes. Lossless gzip of14 historical profiler traces/sample texts subsequently freed10227670B; complete roundtrip hashes retained. Final physical checkouts are below5GB.",
+    "rawArchive": {
+      "file": "e15-qualified-linux.tar.gz",
+      "bytes": 1999417,
+      "sha256": "24c88aee643089a9508c10d01f2457f316ef24980ec01086d213fba0bdbd8617",
+      "members": 77,
+      "mirrored": true
+    },
+    "windowsRawArchive": {
+      "file": "e15-qualified-windows.tar.gz",
+      "bytes": 5544,
+      "sha256": "d527dec324d59c5a7def11ccdede7d5de855126dcdb7f509aa3cdfa70591dd60",
+      "members": 10,
       "mirrored": true
     }
   }

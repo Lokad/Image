@@ -17,7 +17,7 @@ public sealed class JpegCallerMcuTests
         }
         // Explicit background admits adaptive coding for the RGBA route too;
         // default null selects its fixed-table path, even for opaque pixels.
-        var unchanged = samples.ToArray(); var options = new JpegEncodeOptions { Quality = 85, Sampling = JpegSampling.YCbCr420, BackgroundRgb = 0 };
+        var unchanged = samples.ToArray(); var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 85, Sampling = JpegSampling.YCbCr420, BackgroundRgb = 0 };
         using var rgbaPacket = new MemoryStream(); using var rgbPacket = new MemoryStream();
         ImageCodec.EncodeJpeg(source, rgbaPacket, options);
         ImageCodec.EncodeJpeg(samples, width, height, JpegSampleFormat.Rgb, rgbPacket, stride, options);

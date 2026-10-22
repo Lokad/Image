@@ -112,7 +112,7 @@ public sealed class JpegAcErrorCapTests
             var samples = new byte[side * side * 3];
             context.ReserveBorrowed(samples.Length); context.Reserve(8192);
             var input = new JpegSampleInput(samples, side, side, JpegSampleFormat.Rgb, 0, context);
-            using (var output = JpegEncoder.AsyncSampleOutput(input, new() { Sampling = sampling, Quality = 69 }, context))
+            using (var output = JpegEncoder.AsyncSampleOutput(input, new() { QuantizationPolicy = JpegQuantizationPolicy.Original, Sampling = sampling, Quality = 69 }, context))
             {
                 Assert.Equal(exact, output.Target is MemoryStream);
                 Assert.Equal(exact ? 8192L + blocks * 432L + (sampling == JpegSampling.YCbCr444 ? 65536 : 2048) + EncodedOutput.Overhead : 8192, root.Bytes);

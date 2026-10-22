@@ -66,7 +66,7 @@ public sealed class JpegChromaTableTests
         using (var context = new OperationContext(ImageLimits.Default with { MemoryBudget = root }, default))
         {
             context.Reserve(blocks * 432L + 65536);
-            JpegEncoder.WriteProgressive444(17, 11, output, new() { Quality = 69, Sampling = JpegSampling.YCbCr444 }, y, c, coefficients, blocks, context);
+            JpegEncoder.WriteProgressive444(17, 11, output, new() { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Sampling = JpegSampling.YCbCr444 }, y, c, coefficients, blocks, context);
             Assert.Equal(blocks * 432L + 65536, root.Bytes);
             Assert.True(context.ConsumedWork <= 192L * 65536 + blocks * 512L);
         }
@@ -91,7 +91,7 @@ public sealed class JpegChromaTableTests
     [InlineData(2047, false)] [InlineData(3967, false)] [InlineData(10_000_000, true)]
     public void WriterSetupRefusalCleansAdmissionBeforeOutputAndLaterOperationSucceeds(long work, bool cancel)
     {
-        var (y, c) = Quantizers(); var coefficients = new uint[3 * 64]; var options = new JpegEncodeOptions { Quality = 69, Sampling = JpegSampling.YCbCr444 };
+        var (y, c) = Quantizers(); var coefficients = new uint[3 * 64]; var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Sampling = JpegSampling.YCbCr444 };
         using var root = new TestMemoryBudget(100_000); using var output = new MemoryStream();
         using var token = new CancellationTokenSource();
         using (var context = new OperationContext(ImageLimits.Default with { MaxWork = work, MemoryBudget = root }, token.Token))

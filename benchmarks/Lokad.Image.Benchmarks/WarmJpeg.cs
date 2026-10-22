@@ -154,7 +154,7 @@ public partial class WarmJpeg
             {
                 using var output = new MemoryStream();
                 using var wrapper = forwardOnly ? new ForwardOnlyOutput(output) : null;
-                ImageCodec.EncodeJpeg(source, (Stream?)wrapper ?? output, new JpegEncodeOptions { Quality = quality, Sampling = horizontal ? JpegSampling.YCbCr422 : subsampled ? JpegSampling.YCbCr420 : JpegSampling.YCbCr444, BackgroundRgb = Background, RestartInterval = restartRows ? 33 : 0 });
+                ImageCodec.EncodeJpeg(source, (Stream?)wrapper ?? output, new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = quality, Sampling = horizontal ? JpegSampling.YCbCr422 : subsampled ? JpegSampling.YCbCr420 : JpegSampling.YCbCr444, BackgroundRgb = Background, RestartInterval = restartRows ? 33 : 0 });
                 var bytes = output.ToArray(); files.Add(quality, bytes); order.Add(quality);
                 return EncoderQualityCalibration.Validate(bytes, reference, target, quality, state.Ffmpeg);
             }
@@ -265,7 +265,7 @@ public partial class WarmJpeg
             if (JpegBenchmarkCase.Hash(pixels) != prepared.RasterSha256 || JpegBenchmarkCase.Hash(reference) != prepared.ReferenceSha256
                 || JpegBenchmarkCase.HashFile(state.Ffmpeg) != prepared.FfmpegSha256)
                 throw new InvalidOperationException("Warm JPEG input/reference/oracle identity changed; prepare only this pair again.");
-            options = new() { Quality = prepared.Match.ClosestOwned.Setting, Sampling = Horizontal ? JpegSampling.YCbCr422 : Subsampled ? JpegSampling.YCbCr420 : JpegSampling.YCbCr444, BackgroundRgb = Background, RestartInterval = Restart ? 33 : 0 };
+            options = new() { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = prepared.Match.ClosestOwned.Setting, Sampling = Horizontal ? JpegSampling.YCbCr422 : Subsampled ? JpegSampling.YCbCr420 : JpegSampling.YCbCr444, BackgroundRgb = Background, RestartInterval = Restart ? 33 : 0 };
             source = JpegBenchmarkCase.Buffer(pixels, 513, 259, Depth); File.WriteAllBytes(state.Input, pixels);
             PrepareSharedBudget();
             native = new NativeWarmReference(state, Depth, cpu, Restart ? "jpeg-restart-encode" : "jpeg-encode", expectedRaw: NormalizedInput(state.Root, pixels, reference, Depth), nativeQuality: prepared.NativeQuality, jpegSampling: NativeSampling);

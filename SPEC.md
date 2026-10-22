@@ -4,7 +4,7 @@ Target: a dependency-free safe C# library for .NET 10, providing still PNG/JPEG/
 codecs and basic image editing. This document distinguishes implemented behavior
 from required future functionality.
 
-The development JPEG `JpegQuantizationPolicy.Reference` profile selects managed
+The development JPEG default, `JpegQuantizationPolicy.Reference`, selects managed
 reference-compatible baseline grayscale/4:4:4/4:2:2/4:2:0 pipelines. MCU restart
 intervals use fixed format tables for color and optimized tables for grayscale.
 It accepts RGBA8/16 images and caller Gray8/RGB8 samples, with synchronous/
@@ -13,7 +13,7 @@ policies. Color quality maps to qscale `1 + (100 - Quality) * 30 / 99`; default8
 maps to5. Grayscale uses the existing owned mathematical quality formula and the
 same quality value as the pinned grayscale backend (the frozen control uses69).
 `BaselineOnly` does not change this always-baseline profile. Original/CompactColor
-remain unchanged during adoption. [Codec parity](docs/codec-parity.md) states the
+remain available explicitly with unchanged behavior. [Codec parity](docs/codec-parity.md) states the
 exact tested scope and approved grayscale reference exception.
 
 The next codec qualification target is [byte compatibility](docs/codec-parity.md)

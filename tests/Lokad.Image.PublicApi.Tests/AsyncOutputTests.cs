@@ -58,7 +58,7 @@ public sealed class AsyncOutputTests
         for (var x = 0; x < image.Width; x++)
             image.GetRow8(y).Slice(x * 4, (int)format).CopyTo(samples.AsSpan(y * stride + x * (int)format));
         var original = samples.ToArray();
-        var options = new JpegEncodeOptions { Quality = 69, Sampling = sampling, RestartInterval = 3 };
+        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Sampling = sampling, RestartInterval = 3 };
         using var expected = new MemoryStream();
         ImageCodec.EncodeJpeg(samples, image.Width, image.Height, format, expected, stride, options);
         using var output = new AsyncOnlyOutput();
@@ -99,7 +99,7 @@ public sealed class AsyncOutputTests
     public async Task TightJpegAdmissionUsesEstablishedFallbackWithoutChangingPixels()
     {
         using var source = OriginalPixels.Buffer(129, 129, 8, grayscale: true, opaque: true);
-        var options = new JpegEncodeOptions { Quality = 69, Sampling = JpegSampling.Grayscale, BackgroundRgb = 0 };
+        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Sampling = JpegSampling.Grayscale, BackgroundRgb = 0 };
         using var adaptive = new MemoryStream(); ImageCodec.EncodeJpeg(source, adaptive, options);
         var limited = options with { Limits = new() { MaxWorkingBytes = 129 * 129 * 4 + 8192 + 65536 + 320 } };
         using var expected = new MemoryStream(); ImageCodec.EncodeJpeg(source, expected, limited);
@@ -116,7 +116,7 @@ public sealed class AsyncOutputTests
         using var image = OriginalPixels.Buffer(129, 129, 8, grayscale: true, opaque: true);
         var gray = new byte[129 * 129];
         for (var y = 0; y < 129; y++) for (var x = 0; x < 129; x++) gray[y * 129 + x] = image.GetRow8(y)[x * 4];
-        var options = new JpegEncodeOptions { Quality = 69, Sampling = JpegSampling.Grayscale, BackgroundRgb = 0 };
+        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Sampling = JpegSampling.Grayscale, BackgroundRgb = 0 };
         using var token = new CancellationTokenSource(); using var expected = new MemoryStream(); using var output = new AsyncOnlyOutput();
         if (samples)
         {
@@ -137,7 +137,7 @@ public sealed class AsyncOutputTests
         using var image = OriginalPixels.Buffer(129, 129, 8, grayscale: true, opaque: true);
         var gray = new byte[129 * 129];
         for (var y = 0; y < 129; y++) for (var x = 0; x < 129; x++) gray[y * 129 + x] = image.GetRow8(y)[x * 4];
-        var options = new JpegEncodeOptions { Quality = 69, Limits = new() { MaxWorkingBytes = gray.Length + 8192 + 65536 + 320 } };
+        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Limits = new() { MaxWorkingBytes = gray.Length + 8192 + 65536 + 320 } };
         using var expected = new MemoryStream(); ImageCodec.EncodeJpeg(gray, 129, 129, JpegSampleFormat.Grayscale, expected, options: options);
         using var output = new AsyncOnlyOutput();
         await ImageCodec.EncodeJpegAsync(gray.AsMemory(), 129, 129, JpegSampleFormat.Grayscale, output, options: options);

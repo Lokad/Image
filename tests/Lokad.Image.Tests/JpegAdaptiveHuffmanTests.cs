@@ -13,7 +13,7 @@ public sealed class JpegAdaptiveHuffmanTests
     public void AdaptiveTablesRetainDecodedSamplesRestartEdgesAndSource(int depth, JpegSampling sampling, int restart)
     {
         using var image = Input(depth); var original = Pixels(image);
-        var options = new JpegEncodeOptions { Quality = 69, Sampling = sampling, RestartInterval = restart, BackgroundRgb = 0x204060 };
+        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Sampling = sampling, RestartInterval = restart, BackgroundRgb = 0x204060 };
         using var output = new MemoryStream(); ImageCodec.EncodeJpeg(image, output, options); var adaptive = output.ToArray();
         using var fixedOutput = new MemoryStream(); ImageCodec.EncodeJpeg(image, fixedOutput,
             options with { Limits = new() { MaxWorkingBytes = image.ByteLength + 8192L } });
@@ -27,7 +27,7 @@ public sealed class JpegAdaptiveHuffmanTests
     [InlineData(0)] [InlineData(1)]
     public void TightAdmissionKeepsOriginalOutput(int constraint)
     {
-        using var image = Input(8); var options = new JpegEncodeOptions { Quality = 69, BackgroundRgb = 0x204060 };
+        using var image = Input(8); var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, BackgroundRgb = 0x204060 };
         using var expected = new MemoryStream();
         ImageCodec.EncodeJpeg(image, expected, options with { Limits = new() { MaxWorkingBytes = image.ByteLength + 8192L } });
         var limits = ImageLimits.Default with
@@ -46,7 +46,7 @@ public sealed class JpegAdaptiveHuffmanTests
     public void PrivateScratchDoesNotAliasHeldOutputsOrSurviveAsCachedPackets()
     {
         using var first = Input(16); using var second = Input(16);
-        second.GetRow16(0).Fill(65535); var options = new JpegEncodeOptions { Quality = 69, BackgroundRgb = 0x204060 };
+        second.GetRow16(0).Fill(65535); var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, BackgroundRgb = 0x204060 };
         using var one = new MemoryStream(); ImageCodec.EncodeJpeg(first, one, options); var held = one.ToArray();
         using var two = new MemoryStream(); ImageCodec.EncodeJpeg(second, two, options);
         Assert.Equal(held, one.ToArray()); Assert.NotEqual(held, two.ToArray());
@@ -56,7 +56,7 @@ public sealed class JpegAdaptiveHuffmanTests
     [Fact]
     public void AdaptiveEncodingUsesTheSamePacketAtItsExactOutputQuota()
     {
-        using var image = Input(16); var options = new JpegEncodeOptions { Quality = 69, BackgroundRgb = 0x204060 };
+        using var image = Input(16); var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, BackgroundRgb = 0x204060 };
         using var reference = new MemoryStream(); ImageCodec.EncodeJpeg(image, reference, options); var expected = reference.ToArray();
         using var exact = new MemoryStream(); ImageCodec.EncodeJpeg(image, exact, options with { Limits = ImageLimits.Default with { MaxOutputBytes = expected.Length } });
         Assert.Equal(expected, exact.ToArray());

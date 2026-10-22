@@ -6,10 +6,10 @@ public sealed class JpegCompactColorTests
 {
     [Theory]
     [InlineData(1, 800)] [InlineData(50, 16)] [InlineData(69, 10)] [InlineData(100, 0)]
-    public void ExplicitColorPolicyHasBoundedTablesAndPreservesOriginalDefault(int quality, int floor)
+    public void ExplicitColorPolicyHasBoundedTablesAndPreservesOriginalProfile(int quality, int floor)
     {
         using var image = OriginalPixels.Buffer(17, 11, 8, opaque: true);
-        var options = new JpegEncodeOptions { Quality = quality };
+        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = quality };
         var original = Encode(image, options);
         Assert.Equal(JpegQuantizationPolicy.Original, options.QuantizationPolicy);
         Assert.Equal(original, Encode(image, options with { QuantizationPolicy = JpegQuantizationPolicy.Original }));
@@ -32,7 +32,7 @@ public sealed class JpegCompactColorTests
     public void BothGrayscaleBoundariesKeepOriginalPackets(int quality)
     {
         using var image = OriginalPixels.Buffer(129, 129, 8, grayscale: true, opaque: true);
-        var options = new JpegEncodeOptions { Quality = quality, Sampling = JpegSampling.Grayscale, BackgroundRgb = 0 };
+        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = quality, Sampling = JpegSampling.Grayscale, BackgroundRgb = 0 };
         var gray = new byte[image.Width * image.Height];
         for (var y = 0; y < image.Height; y++)
         for (var x = 0; x < image.Width; x++) gray[y * image.Width + x] = image.GetRow8(y)[x * 4];

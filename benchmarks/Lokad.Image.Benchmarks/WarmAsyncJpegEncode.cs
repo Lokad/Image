@@ -14,7 +14,7 @@ internal sealed class WarmAsyncJpegEncode
     public WarmAsyncJpegEncode(bool sampleInput = false)
     {
         this.sampleInput = sampleInput;
-        profileOptions = new() { Quality = 69, Sampling = sampleInput ? JpegSampling.YCbCr420 : JpegSampling.YCbCr444, BackgroundRgb = sampleInput ? null : 0x204060 };
+        profileOptions = new() { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Sampling = sampleInput ? JpegSampling.YCbCr420 : JpegSampling.YCbCr444, BackgroundRgb = sampleInput ? null : 0x204060 };
         qualityProfile = new(513, 8, sampleInput ? QualityEncoder.Jpeg420 : QualityEncoder.Jpeg444, QualityPattern.Asymmetric);
     }
     private WarmJpegPreparation anchor = null!;

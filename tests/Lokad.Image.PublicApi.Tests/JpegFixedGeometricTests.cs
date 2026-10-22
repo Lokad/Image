@@ -10,7 +10,8 @@ public sealed class JpegFixedGeometricTests
     public void FixedTableDeclaresEveryLegalAcSymbolAndReservesAllOnes()
     {
         using var source = ImageBuffer.Create(1, 1, 8); source.GetRow8(0).Fill(255);
-        using var output = new MemoryStream(); ImageCodec.EncodeJpeg(source, output);
+        using var output = new MemoryStream(); ImageCodec.EncodeJpeg(source, output,
+            new() { QuantizationPolicy = JpegQuantizationPolicy.Original });
         var bytes = output.ToArray(); var found = false;
         for (var at = 2; bytes[at + 1] != 0xDA;)
         {
@@ -39,7 +40,7 @@ public sealed class JpegFixedGeometricTests
         using var source = OriginalPixels.Buffer(513, 259, 8);
         source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
         var original = OriginalPixels.Bytes(source);
-        var options = new JpegEncodeOptions { Quality = 69, Sampling = JpegSampling.YCbCr420, BackgroundRgb = 0x204060,
+        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Sampling = JpegSampling.YCbCr420, BackgroundRgb = 0x204060,
             Limits = new() { MaxWorkingBytes = original.Length + 8192L } };
         using var output = new MemoryStream(); using var stream = new ForwardOnlyOutput(output);
         ImageCodec.EncodeJpeg(source, stream, options);

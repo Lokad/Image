@@ -14,7 +14,7 @@ public sealed class Jpeg420TrellisTests
         if (depth == 8) source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
         else source.GetRow16(0)[3] = source.GetRow16(0)[513 * 4 - 1] = 0;
         var original = OriginalPixels.Bytes(source);
-        var options = new JpegEncodeOptions { Quality = 69, Sampling = JpegSampling.YCbCr420, BackgroundRgb = 0x204060 };
+        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Sampling = JpegSampling.YCbCr420, BackgroundRgb = 0x204060 };
         using var adaptive = new MemoryStream(); ImageCodec.EncodeJpeg(source, adaptive, options);
         var packet = adaptive.ToArray(); Assert.Equal(bytes, packet.Length); Assert.Equal(hash, Hash(packet));
         using var token = new CancellationTokenSource(); using var cancelable = new MemoryStream();
@@ -50,7 +50,7 @@ public sealed class Jpeg420TrellisTests
         var original = OriginalPixels.Bytes(source);
         using var root = new TestMemoryBudget(8192); using var held = root.CreateScope();
         Assert.True(held.TryReserve(1, out var reservation));
-        var options = new JpegEncodeOptions { Quality = 69, Sampling = JpegSampling.YCbCr420, BackgroundRgb = 0x204060,
+        var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Sampling = JpegSampling.YCbCr420, BackgroundRgb = 0x204060,
             Limits = new() { MemoryBudget = root, MaxWorkingBytes = original.Length + 8192L } };
         using var output = new MemoryStream(); var attempts = root.Attempts;
         var error = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(source, output, options));

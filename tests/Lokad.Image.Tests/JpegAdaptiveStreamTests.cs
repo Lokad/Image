@@ -106,7 +106,7 @@ public sealed class JpegAdaptiveStreamTests
         internal readonly ImageBuffer Image;
         private readonly int kind;
         private readonly byte[] samples, original;
-        internal JpegEncodeOptions Options => new() { Quality = 69, BackgroundRgb = 0x204060, Sampling = JpegSampling.YCbCr444 };
+        internal JpegEncodeOptions Options => new() { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, BackgroundRgb = 0x204060, Sampling = JpegSampling.YCbCr444 };
         internal long AdaptiveBytes => 8192L + 17 * 17 * (kind == 3 ? 1 : 3) * 64 * sizeof(uint) + 65536;
         internal Input(int kind)
         {

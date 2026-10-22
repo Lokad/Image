@@ -75,7 +75,7 @@ public sealed class JpegBudgetEventCacheTests
     }
 
     private static JpegEncodeOptions Options(TestMemoryBudget root) => new()
-    { Quality = 69, Sampling = JpegSampling.YCbCr444, BackgroundRgb = 0x204060, Limits = new() { MemoryBudget = root } };
+    { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 69, Sampling = JpegSampling.YCbCr444, BackgroundRgb = 0x204060, Limits = new() { MemoryBudget = root } };
 
     private static void Encode(int input, Stream output, JpegEncodeOptions options)
     {

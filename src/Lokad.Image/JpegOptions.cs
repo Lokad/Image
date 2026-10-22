@@ -42,8 +42,8 @@ public sealed record JpegEncodeOptions
     public ImageLimits Limits { get; init; } = ImageLimits.Default;
     /// <summary>Quality from 1 to 100. Defaults to 85; numbering and mapping are profile-specific.</summary>
     public int Quality { get; init; } = 85;
-    /// <summary>Original by default. CompactColor adds a precision floor; Reference selects the pinned compatible baseline profile.</summary>
-    public JpegQuantizationPolicy QuantizationPolicy { get; init; }
+    /// <summary>Reference by default. Original and CompactColor retain the explicit legacy encoding profiles.</summary>
+    public JpegQuantizationPolicy QuantizationPolicy { get; init; } = JpegQuantizationPolicy.Reference;
     public JpegSampling Sampling { get; init; } = JpegSampling.YCbCr420;
     /// <summary>Require baseline JPEG syntax. Otherwise admitted Original 4:4:4 encoding may use progressive scans. Reference always uses baseline.</summary>
     public bool BaselineOnly { get; init; }

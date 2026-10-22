@@ -47,7 +47,7 @@ internal sealed class JpegBenchmarkCase : IDisposable
         else if (sampling == JpegSampling.Grayscale)
         {
             using var pixels = OriginalPixels.Buffer(width, height, 8, grayscale: true, opaque: true);
-            using var output = new MemoryStream(); ImageCodec.EncodeJpeg(pixels, output, new JpegEncodeOptions { Quality = 85, Sampling = sampling });
+            using var output = new MemoryStream(); ImageCodec.EncodeJpeg(pixels, output, new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 85, Sampling = sampling });
             encoded = output.ToArray();
         }
         else encoded = OracleProcess.Run(Ffmpeg, JpegOracle.EncodeArguments(width, height, sampling, 5), OriginalPixels.Generate(width, height, 8, opaque: true));
@@ -118,7 +118,7 @@ internal sealed class JpegBenchmarkCase : IDisposable
     public void ValidateManagedEncode(byte[] source, int width, int height, int depth, JpegSampling sampling)
     {
         using var image = Buffer(source, width, height, depth); using var expected = new MemoryStream();
-        ImageCodec.EncodeJpeg(image, expected, new JpegEncodeOptions { Quality = 85, Sampling = sampling });
+        ImageCodec.EncodeJpeg(image, expected, new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Quality = 85, Sampling = sampling });
         if (!expected.ToArray().AsSpan().SequenceEqual(File.ReadAllBytes(ManagedOutput))) throw new InvalidOperationException("ImageProbe output differs from the requested public API workflow.");
     }
 

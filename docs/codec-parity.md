@@ -2,8 +2,8 @@
 
 The qualification target is byte-exact encoder output, followed by exact decoder
 samples, against pinned FFmpeg builds and explicit settings. CPU/allocation tuning
-follows correctness. The explicit JPEG `Reference` profile is the first production adoption; defaults
-retain Original/CompactColor during migration. Their size/quality passes do not
+follows correctness. JPEG defaults to the `Reference` profile in0.2.0 development;
+Original/CompactColor remain explicit legacy profiles. Their size/quality passes do not
 establish this target.
 
 Only identified encoder-attribution metadata may differ. For the current JPEG

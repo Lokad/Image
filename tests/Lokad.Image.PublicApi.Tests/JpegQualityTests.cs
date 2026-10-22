@@ -38,7 +38,7 @@ public sealed class JpegQualityTests
             Assert.Equal("Lokad.Image", subject); Assert.Contains(setting, JpegQualityCorpus.ManagedQualities); ownedCount++;
             Assert.Equal("Lokad.Image-quality-1..100", entry.GetProperty("settingKind").GetString());
             using var image = JpegQualityCorpus.Buffer(source, depth); using var encoded = new MemoryStream();
-            var options = new JpegEncodeOptions { Sampling = sampling, Quality = setting, BackgroundRgb = background };
+            var options = new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Sampling = sampling, Quality = setting, BackgroundRgb = background };
             // Retain the historical report and all its source/DQT/sampling checks.
             // Original color AC decisions may change lossy pixels. Grayscale and
             // quality100 keep frozen pixels; all current entropy modes agree.
@@ -71,7 +71,7 @@ public sealed class JpegQualityTests
         using var source = ImageBuffer.Create(1, 1, 8); new byte[] { 128, 128, 128, 255 }.CopyTo(source.GetRow8(0));
         foreach (var sampling in Enum.GetValues<JpegSampling>())
         {
-            using var output = new MemoryStream(); ImageCodec.EncodeJpeg(source, output, new JpegEncodeOptions { Sampling = sampling, Quality = quality });
+            using var output = new MemoryStream(); ImageCodec.EncodeJpeg(source, output, new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Sampling = sampling, Quality = quality });
             var header = JpegQualitySyntax.Read(output.ToArray());
             Assert.Equal(sampling == JpegSampling.Grayscale ? 1 : 3, header.Components);
             Assert.Equal(sampling switch { JpegSampling.Grayscale => "1x1", JpegSampling.YCbCr444 => "1x1,1x1,1x1", JpegSampling.YCbCr422 => "2x1,1x1,1x1", _ => "2x2,1x1,1x1" }, header.Sampling);
@@ -96,8 +96,8 @@ public sealed class JpegQualityTests
             var reference = JpegQualityCorpus.Reference(source, depth, JpegQualityCorpus.Background(pattern));
             using var original = JpegQualityCorpus.Buffer(source, depth); using var normalized = JpegQualityCorpus.Buffer(reference, 8);
             using var first = new MemoryStream(); using var second = new MemoryStream();
-            ImageCodec.EncodeJpeg(original, first, new JpegEncodeOptions { Sampling = sampling, Quality = 85, BackgroundRgb = JpegQualityCorpus.Background(pattern) });
-            ImageCodec.EncodeJpeg(normalized, second, new JpegEncodeOptions { Sampling = sampling, Quality = 85, BackgroundRgb = JpegQualityCorpus.Background(pattern) });
+            ImageCodec.EncodeJpeg(original, first, new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Sampling = sampling, Quality = 85, BackgroundRgb = JpegQualityCorpus.Background(pattern) });
+            ImageCodec.EncodeJpeg(normalized, second, new JpegEncodeOptions { QuantizationPolicy = JpegQuantizationPolicy.Original, Sampling = sampling, Quality = 85, BackgroundRgb = JpegQualityCorpus.Background(pattern) });
             Assert.Equal(second.ToArray(), first.ToArray());
         }
     }

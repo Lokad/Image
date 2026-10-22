@@ -89,6 +89,8 @@ try {
 "@ | Set-Content -LiteralPath (Join-Path $consumer 'Consumer.csproj') -Encoding utf8
     @'
 using Lokad.Image;
+if (new JpegEncodeOptions().QuantizationPolicy != JpegQuantizationPolicy.Reference)
+    throw new Exception("Package JPEG default profile differs.");
 foreach (var referenceDepth in new[] { 8, 16 })
 foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YCbCr422, JpegSampling.YCbCr420, JpegSampling.Grayscale })
 {
@@ -99,7 +101,7 @@ foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YC
     using var referencePacket = new MemoryStream();
     await ImageCodec.EncodeJpegAsync(referenceImage, referencePacket, new JpegEncodeOptions
     {
-        QuantizationPolicy = JpegQuantizationPolicy.Reference, Sampling = referenceSampling,
+        Sampling = referenceSampling,
         Quality = referenceSampling == JpegSampling.Grayscale ? 69 : 85,
         BackgroundRgb = 0x204060, Limits = ImageLimits.Default with { MemoryBudget = referenceRoot }
     });
@@ -123,7 +125,7 @@ foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YC
         using var restartPacket = new MemoryStream();
         await ImageCodec.EncodeJpegAsync(referenceImage, restartPacket, new JpegEncodeOptions
         {
-            QuantizationPolicy = JpegQuantizationPolicy.Reference, Sampling = JpegSampling.YCbCr420,
+            Sampling = JpegSampling.YCbCr420,
             RestartInterval = 33, BackgroundRgb = 0x204060,
             Limits = ImageLimits.Default with { MemoryBudget = referenceRoot }
         });
@@ -145,13 +147,13 @@ foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YC
         }
         using var callerGrayPacket = new MemoryStream();
         await ImageCodec.EncodeJpegAsync(gray, 513, 259, JpegSampleFormat.Grayscale, callerGrayPacket,
-            options: new JpegEncodeOptions { Quality = 69, QuantizationPolicy = JpegQuantizationPolicy.Reference,
+            options: new JpegEncodeOptions { Quality = 69,
                 Limits = ImageLimits.Default with { MemoryBudget = referenceRoot } });
         if (!callerGrayPacket.ToArray().AsSpan().SequenceEqual(referencePacket.ToArray()) || referenceRoot.Bytes != 0)
             throw new Exception("Packaged reference caller gray sampling override or ownership differs.");
         using var grayRestartPacket = new MemoryStream();
         await ImageCodec.EncodeJpegAsync(gray, 513, 259, JpegSampleFormat.Grayscale, grayRestartPacket,
-            options: new JpegEncodeOptions { Quality = 69, QuantizationPolicy = JpegQuantizationPolicy.Reference,
+            options: new JpegEncodeOptions { Quality = 69,
                 RestartInterval = 3, Limits = ImageLimits.Default with { MemoryBudget = referenceRoot } });
         if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(grayRestartPacket.ToArray())).ToLowerInvariant()
             != "25fb908c13a1e15645bfe07948e7f1d70366d6bf26e99eb3a2a88f112c78ea02" || referenceRoot.Bytes != 0)
