@@ -126,7 +126,7 @@
     "sha256": "17a146f3a307fec096b8189161fc1a1e4e1d947327dc895c9b4e1e8d1d9b5d93",
     "mirrored": true
   },
-  "next": "E7: pin the existing SIMD libjpeg-turbo single-component grayscale control and find the first deterministic transform/table/serialization divergence; reproduce it independently. Then existing restart/options profiles, deliberate default adoption, PNG/WebP encoders and exact decoders. No heuristic quality/size search or CPU tuning.",
+  "next": "Independently reproduce ISLOW integer transform/quantization on frozen gray samples, then grayscale Huffman tie/canonical ordering. DQT unchanged; full raw packet equality, no attribution exception needed. Production integration/default adoption, other encoders/decoders and full performance/release objectives remain open.",
   "forwardStage": {
     "qualification": "E2",
     "nativeDispatch": "ff_fdct_sse2",
@@ -599,5 +599,164 @@
       "members": 29,
       "mirrored": true
     }
-  }
+  },
+  "grayscaleAudit": {
+    "round": "E7",
+    "status": "PINNED_GRAY_FIRST_DIVERGENCE",
+    "productionChanged": false,
+    "productionCoreSha256": "db10e12cf070cfc5de56df0f89fd12c9a858ddfca3a507f66d3472b0f8221606",
+    "nativeIdentity": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Approved standalone SIMD libjpeg-turbo grayscale JPEG benchmark-tooling exception",
+      "revision": "9217719d3a58633923b096af4c1d50d304768a64",
+      "simdEnabled": true,
+      "workerSha256": "11215fae72156842476b4e437d5c75829281d03e9159ad39ae5d27d3d25a6c1d",
+      "sourceSha256": "193a22466e5ad6931eec65b0b5edd3cf42d8eb26ab071e608671301375bab576",
+      "buildScriptSha256": "7b70d802f66d0ca7e2a265c77a930e8ce5cd534c1180f9c6f79a1d0d781de012",
+      "staticLibrarySha256": "faeac65984bc945a3acf12abffadf9814ba64b91d49a0b10bc6d2fe191b55d24",
+      "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-math-errno",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "reusedImmutablePreparedWorker": true,
+      "preparedBuildDriverSha256": "944f71881666a62ca18282727ca84ebd4b4199bdcafb7b8e2206b950ed9993d4",
+      "buildScriptRole": "Reproduction recipe; immutable prepared build driver retained separately",
+      "approvalScope": "Single-component grayscale JPEG benchmark tooling only"
+    },
+    "nativeQuality": 69,
+    "quantizers": "Existing owned mathematical quality69 formula; same complete DQT in both packets",
+    "grayInputSha256": "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d",
+    "grayInputBytes": 132867,
+    "coefficientVisitorSha256": "c9fcfa231aa161649f4dc2d51d68fff9213d14259582846de45c26cba26fe54d",
+    "nativeBuilds": 0,
+    "productionBuilds": 0,
+    "nativeEncodes": 0,
+    "timingRuns": 0,
+    "blocks": 2145,
+    "coefficientsPerPacket": 137280,
+    "differentCoefficients": 1205,
+    "differentDc": 251,
+    "differentAc": 954,
+    "maximumCoefficientError": 1,
+    "firstDifferences": [
+      {
+        "block": 1,
+        "frequency": 57,
+        "managed": -1,
+        "native": -2
+      },
+      {
+        "block": 2,
+        "frequency": 0,
+        "managed": -287,
+        "native": -288
+      },
+      {
+        "block": 9,
+        "frequency": 50,
+        "managed": 0,
+        "native": 1
+      },
+      {
+        "block": 10,
+        "frequency": 27,
+        "managed": -5,
+        "native": -6
+      },
+      {
+        "block": 16,
+        "frequency": 52,
+        "managed": 0,
+        "native": 1
+      },
+      {
+        "block": 17,
+        "frequency": 11,
+        "managed": 2,
+        "native": 3
+      },
+      {
+        "block": 17,
+        "frequency": 58,
+        "managed": 0,
+        "native": 1
+      },
+      {
+        "block": 20,
+        "frequency": 24,
+        "managed": -1,
+        "native": -2
+      },
+      {
+        "block": 23,
+        "frequency": 9,
+        "managed": -2,
+        "native": -3
+      },
+      {
+        "block": 24,
+        "frequency": 48,
+        "managed": -1,
+        "native": -2
+      },
+      {
+        "block": 25,
+        "frequency": 15,
+        "managed": 0,
+        "native": 1
+      },
+      {
+        "block": 28,
+        "frequency": 2,
+        "managed": 0,
+        "native": 1
+      }
+    ],
+    "packetMarkers": "JFIF, DQT, SOF0 and SOS identical; first byte difference123 in DHT; no encoder-attribution comment in either packet",
+    "comparisonScope": "Existing frozen Original grayscale packet vs approved SIMD libjpeg-turbo control; production Reference grayscale remains unsupported. No new production encode or current performance claim.",
+    "packets": {
+      "native": {
+        "packetBytes": 58910,
+        "packetSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+        "coefficientDumpBytes": 274728,
+        "coefficientDumpSha256": "f2c173c2c5f649ae981b754458a3d8ca29e3fc7dc72081ee5c70487021dbbafc",
+        "quantizationSha256": "06acd84c989dbe0df2eb2d265a9e27b7488465518ac4b81527554a2bcd3a751d"
+      },
+      "managed": {
+        "packetBytes": 58823,
+        "packetSha256": "2442100fb89c3000f4646e8ae9c5e25b45980dd2d9e1be3d38f38e69f9a32cea",
+        "coefficientDumpBytes": 274728,
+        "coefficientDumpSha256": "93b584704e51aa7cce284361b8986a2bb6403802ca15aa9af2ab3d19e92879cb",
+        "quantizationSha256": "06acd84c989dbe0df2eb2d265a9e27b7488465518ac4b81527554a2bcd3a751d"
+      }
+    },
+    "existingColorHuffmanGeneratorAgainstGrayNativeHistograms": [
+      {
+        "family": 0,
+        "countsEqual": true,
+        "symbolsEqual": false
+      },
+      {
+        "family": 1,
+        "countsEqual": false,
+        "symbolsEqual": false
+      }
+    ],
+    "next": "Independently reproduce ISLOW integer transform/quantization on frozen gray samples, then grayscale Huffman tie/canonical ordering. DQT unchanged; full raw packet equality, no attribution exception needed.",
+    "rawArchive": {
+      "file": "e7-grayscale-first-divergence-audit.tar.gz",
+      "bytes": 367167,
+      "sha256": "17c31e5cfe2311ab858842dccc7a67c54e4bfaa5a1dc8202cae5a5cca3c2dafc",
+      "members": 15,
+      "mirrored": true
+    }
+  },
+  "latestAudit": "E7"
 }
