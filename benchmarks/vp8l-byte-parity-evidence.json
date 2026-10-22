@@ -66,9 +66,9 @@
   "repeatedPackageProofs": 0,
   "correction": "Linux verifier waited on its stdin through the automatic PowerShell input variable. Live process was verified blocked in anon_pipe_read, explicitly terminated, wrapper variable renamed and stdin closed for the new invocation. Same frozen model then passed bothOS. No timeout-based restart or numerical retuning.",
   "remaining": [
-    "Reference cross-color coefficient map and resulting coded residuals.",
-    "Auxiliary-image and main-image LZ/cache/group/tree/bit generation.",
-    "Remaining five lossless and seven lossy controls, all exact decoders, full functional/memory/performance/release objective."
+    "Main-image cache/group analysis and complete entropy/image generation for the first lossless control.",
+    "Complete packet reproduction on remaining five lossless and seven lossy controls; bounded admitted production integration.",
+    "All exact decoders, full functional/memory/text/Lanczos3, finite one-CPU warm upper<=1 and allocation/release objectives."
   ],
   "rawArchive": {
     "name": "e26-vp8l-predictor-qualified.tar.gz",
@@ -76,5 +76,117 @@
     "sha256": "c0bfda400d5be9736b8399b05ca3d422abaa4d7f88f16ff40b587713bf6f4593",
     "members": 22,
     "mirrored": true
+  },
+  "latestRound": "E28",
+  "crossColorAndAuxiliaryStages": {
+    "scope": "ONE existing513x259 RGBA8 method4/quality75/exact=1 control. Complete transform prefix, not main image or complete encoder.",
+    "productionChanged": false,
+    "productionCoreSha256": "e983ce41045f95065f26108e213d7211bdbc35f487906aa97c7a7b7b8ec5a782",
+    "verification": {
+      "sourceOnly": true,
+      "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "prefixBits": 6006,
+      "allPrefixBitsExact": true,
+      "prefixSha256": "d0a32e908161bae2c0e625993d47ab9836a954996d67f983ae3017f3e560ed36",
+      "crossColorMapEntries": 2145,
+      "codedResidualBytes": 531468,
+      "predictor": {
+        "bits": 2492,
+        "tokens": 337,
+        "firstDataBit": 316,
+        "selection": {
+          "standardTokens": 295,
+          "rleTokens": 549,
+          "traceTokens": 337,
+          "standardCost": 30482148066,
+          "rleCost": 31477728268,
+          "traceCost": 27436962299,
+          "winner": "trace",
+          "finalCost": 27436962299
+        },
+        "indexSha256": "b73951795b606f5a8dbe08a89cac0a63ed9ce43a8e35dd4eda94c488aac71946"
+      },
+      "color": {
+        "bits": 3459,
+        "tokens": 713,
+        "firstDataBit": 2775,
+        "selection": {
+          "standardTokens": 259,
+          "rleTokens": 713,
+          "traceTokens": null,
+          "standardCost": 33532551983,
+          "rleCost": 33359792038,
+          "traceCost": null,
+          "winner": "rle",
+          "finalCost": 33359792038
+        },
+        "indexSha256": "fd24f2291fe4607ae59aec81a8bf7e89b7c4abea656bc0de515207b38ba259b0"
+      },
+      "independentOutputs": true,
+      "sourceUnchanged": true,
+      "negativeMutationsRejected": true,
+      "oracleEncoderInputs": false,
+      "productionChanged": false,
+      "productionBuilds": 0,
+      "nativeEncodes": 0,
+      "timingRuns": 0,
+      "scope": "ONE fixed513x259 method4/exact=1 VP8L control. Complete transform prefix; main image and complete packet remain open. No production admission or performance claim."
+    },
+    "sameWindowsBuiltModelBothOS": true,
+    "sourceEntrypointWindows": true,
+    "modelAssemblySha256": "96221a0f4dabbdf23cc314a6f0354d0cc811b236e08c27afb1c51d50aaa27430",
+    "predictorDependencySha256": "c446836fb06897bebb125e178980fa680c7ff042dc413f757570d8388482438c",
+    "crossColorMapSha256": "870a05bb67a28441242246a7235844eafae6236571ee264c25f5a84d535420eb",
+    "codedResidualSha256": "b72edfa146d02b4adbbe48a667ad28bf10b6073b2800c7679ccfc546c9969610",
+    "predictorMatchIndexSamples": 2145,
+    "predictorCandidateIndexExact": true,
+    "predictorTokens": 337,
+    "colorTokens": 713,
+    "allTenHuffmanTreesExact": true,
+    "nativeStageQuery": {
+      "sourceSha256": "40f4b0c01a191a80f81f4b50e8d3362594a9d443bf4b00194deb14e56d5c44b9",
+      "binarySha256": "46b16575bef11b470073f27857f2b815050e56191bca96953d2c709c9fe39d76",
+      "libwebpArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "cpu": 0,
+      "stdout": "Pinned backend stage: 337 references, 2145 covered pixels; no complete image encode.\n",
+      "stderr": "",
+      "completeNativeEncodes": 0,
+      "nativeStageQueries": 1
+    },
+    "nativeStageQueryScope": "One predictor auxiliary raster, already pinned static backend, no full encode. Its337 tokens equal independently observed frozen packet tokens. Original adapter binary remains ignored on VM; raw archive preserves adapter source and identity.",
+    "sourceFiles": {
+      "tools/WarmReference/Vp8lPredictorParity.cs": "a58db2081646476443b21ea66fe3600078b42fc8347fb12787704907686b5508",
+      "tools/WarmReference/Vp8lCrossColorParity.cs": "2bb586057932f4ca7dd3b6ed1f6959d8d05970e2c499f08ccc43e2f9456f2837",
+      "tools/WarmReference/Vp8lMatchParity.cs": "58fcce3542f02a25a697cbc8f7ae6f2d72e6eddbb60988c9d1d2a642f6b9ea40",
+      "tools/WarmReference/Vp8lLzParity.cs": "de37549d6e8ed306478ca15c0e2f5e34e8c08b866e7b070fc0ba8536cdcac7fb",
+      "tools/WarmReference/Vp8lPrefixParity.cs": "9fa72e1ac498270a9831cfc80209b58bcc2fac2da13b121d6067d738871db018",
+      "tools/WarmReference/Vp8lBitParity.cs": "c4dd3473804c6504dffda44397def4ce465a24ded3873fbed9c2d89553c25694",
+      "tools/WarmReference/Vp8lAuxiliaryParity.cs": "2124c730ea0db98c865b9edd63819cd50d5d60a9953f76b84105c2a9ad8eecce",
+      "tools/WarmReference/verify-vp8l-auxiliary-stage.ps1": "0a6ebd8b8e2c4b49e1b773ef155c731fe1f0aa448e23c429908df0d15770bddb"
+    },
+    "builds": {
+      "E27WindowsModel": 1,
+      "E28WindowsModel": 6,
+      "E28WindowsSourceHost": 2,
+      "linuxModel": 0,
+      "production": 0,
+      "nativeAdapter": 1
+    },
+    "nativeEncodes": 0,
+    "timingRuns": 0,
+    "allocationRuns": 0,
+    "repeatedFullCorrectnessSuites": 0,
+    "repeatedPackageProofs": 0,
+    "independentModel": "Generated coefficient-search geometry, arithmetic candidate fingerprints, deterministic parser/cost selection, histogram smoothing, priority-queue trees and RFC9649 canonical bit generation. No upstream implementation sources/tables or oracle tokens/maps/trees enter the model.",
+    "evidenceValidity": "Production E24 unchanged; existing JPEG/PNG/decoder/admission/package evidence remains valid. Prior WebP timings/packets do not qualify the new source-only strategy.",
+    "retiredArtifacts": "Three unused Windows-generated model apphosts removed; managed binaries/PDB/runtime metadata retained.486912B freed. All cited raw masters and release packages retained.",
+    "rawArchive": {
+      "name": "e28-vp8l-auxiliary-qualified.tar.gz",
+      "bytes": 92762,
+      "sha256": "64702511d413b69c347c38d9132484789280bce7d6aa341857c32929e33ff536",
+      "members": 39,
+      "mirrored": true
+    }
   }
 }

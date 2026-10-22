@@ -1546,3 +1546,14 @@ preservation and mutation rejection. Windows/Linux normal/scalar checks agree
 raw-exact, without metadata exemptions. This remains a development prototype for
 ONE frozen control; required other levels/layouts and admitted production
 integration remain open. Production code and its qualification are unchanged.
+
+### VP8L source-only stages
+
+`Vp8lPredictorParity.cs`, `Vp8lCrossColorParity.cs` and the shared auxiliary-image
+models independently generate the transform prefix of one existing RGBA8 control.
+`verify-vp8l-auxiliary-stage.ps1 -SourcePath SOURCE.rgba -NativePacketPath REFERENCE.webp`
+checks all6,006 bits, coefficient/residual hashes, source preservation, independent
+outputs and mutation rejection. Optional `-AssemblyPath` reuses the frozen model;
+the predictor-model `Probe.dll` must be alongside it. These are development-only
+models, outside the production build. See the [stage report](../../benchmarks/VP8L-AUXILIARY-STAGES.md)
+for exact scope and remaining main-image/production qualification.

@@ -31,6 +31,11 @@ identities; smaller packets, equal quality numbers or timing passes do not prove
 the new exact-reference target. Old quality tooling retires as stronger gates cover
 its required scope.
 
+The source-only [VP8L stage model](../benchmarks/VP8L-AUXILIARY-STAGES.md) matches
+all6,006 payload bits through both transform images on ONE existing RGBA8 control,
+plus all coded residual samples, using the same binary on Windows/Linux. Production
+is unchanged; main-image coding, complete packets, admission and performance remain open.
+
 No timing or allocation runs accompanied the new PNG encoder or JPEG cleanup. Unchanged paths
 retain evidence on their recorded frozen inputs; new default-encoded fixtures do
 not silently replace those inputs. CPU tuning/independent confirmation resumes

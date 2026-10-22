@@ -21,5 +21,6 @@ Automatic tile-size analysis and broader effort/settings coverage are unqualifie
 Run `tools/WarmReference/verify-vp8l-predictor-stage.ps1` with `-SourcePath`,
 `-NativeModesPath` and `-NativeResidualGzipPath`; optional `-AssemblyPath` reuses
 an immutable stage build. [Numeric evidence](vp8l-byte-parity-evidence.json) pins
-inputs, hashes, exact scope and raw records. Next: source-derived cross-color
-coefficients and residuals, then shared auxiliary/main-image entropy coding.
+inputs, hashes, exact scope and raw records. The subsequent
+[cross-color and auxiliary-image stages](VP8L-AUXILIARY-STAGES.md) now reproduce
+the complete transform prefix on this same control. Main-image coding remains open.
