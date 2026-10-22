@@ -37,6 +37,9 @@ on both platforms using the same binary. Six existing workload rows share these
 cores; RGBA16 normalization and async public-operation qualification remain open.
 Production is unchanged. Other required inputs/settings, admitted integration,
 lossy controls and performance remain open.
+A separate source-only [production coverage audit](../benchmarks/VP8L-PRODUCTION-COVERAGE.md)
+names the remaining required paths; its first1x1 palette primitive is raw-exact
+on both platforms. It does not change the production/timing claims below.
 
 No timing or allocation runs accompanied the new PNG encoder or JPEG cleanup. Unchanged paths
 retain evidence on their recorded frozen inputs; new default-encoded fixtures do

@@ -1579,3 +1579,9 @@ frozen photograph/diagram samples without changing the controls. It compares all
 packet bytes twice, preserves sources and checks independent output mutations.
 The [current packet report](../../benchmarks/VP8L-COMPLETE-PACKET.md) distinguishes
 these four cores from public normalization/async boundaries and integration.
+
+`Vp8lSingletonPaletteParity.cs` exercises the first palette primitive using the
+existing normalized 1×1 public input. `verify-vp8l-singleton-palette.ps1` compares
+its complete 34-byte packet and ownership/mutation behavior with a supplied frozen
+reference. Broader palette/dimension/option and production gates are listed in
+the [bounded coverage checklist](../../benchmarks/VP8L-PRODUCTION-COVERAGE.md).

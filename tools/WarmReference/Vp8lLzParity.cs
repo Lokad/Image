@@ -16,9 +16,11 @@ internal static class Vp8lLzParity
     internal static int Plane(int distance,int width)
     {
         var y=distance/width;var x=distance%width;
-        if(x>width-8&&y<7){x-=width;y++;}
-        else if(x>8||y>=8)return distance+120;
-        return Array.IndexOf(Geometry,(x,y))+1;
+        // The two coordinate forms overlap on narrow images. The native
+        // strategy selects the direct coordinates before the wrapped form.
+        if(x<=8&&y<8)return Array.IndexOf(Geometry,(x,y))+1;
+        if(x>width-8&&y<7)return Array.IndexOf(Geometry,(x-width,y+1))+1;
+        return distance+120;
     }
     private static (int Code,int Extra) Prefix(int value)
     {

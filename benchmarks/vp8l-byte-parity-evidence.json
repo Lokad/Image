@@ -77,7 +77,7 @@
     "members": 22,
     "mirrored": true
   },
-  "latestRound": "E35",
+  "latestRound": "E37",
   "crossColorAndAuxiliaryStages": {
     "scope": "ONE existing513x259 RGBA8 method4/quality75/exact=1 control. Complete transform prefix, not main image or complete encoder.",
     "productionChanged": false,
@@ -969,5 +969,181 @@
       "mirrored": true
     },
     "retiredTransferBytes": 51780
+  },
+  "productionCoverageAudit": {
+    "scope": "Existing functional/public cases only, no added warm image/settings controls. Production unchanged.",
+    "checklist": "benchmarks/VP8L-PRODUCTION-COVERAGE.md",
+    "directCase": {
+      "existingPublicCase": "WebpEncoderPredictionTests.NonbeneficialNoiseRetainsTheExactPredecessorPacket",
+      "sourceSha256": "8d7970238f86775153ef39a123c7dfa67b7c1afc5040fb7fab2685357d4ff5a0",
+      "width": 129,
+      "height": 129,
+      "packetBytes": 50010,
+      "packetSha256": "18b6120553762b78d4ca5df0fbf34b45d9ee3a3eaaca02462636c17e795e9ec5",
+      "noTransforms": true,
+      "sourceModelModeZeroNativeConfirmed": true,
+      "nativePreparationEncodes": 3,
+      "nativeBuilds": 0,
+      "timedCommands": 0,
+      "workerSha256": "ef377bddaeb9530b1ee32773144d5b766c902c467c63643cab04eadb96ce4f9d"
+    },
+    "initialSourceAudit": {
+      "existingInput": "WebpEncoderPredictionTests.NonbeneficialNoiseRetainsTheExactPredecessorPacket",
+      "sourceSha256": "8d7970238f86775153ef39a123c7dfa67b7c1afc5040fb7fab2685357d4ff5a0",
+      "choice": {
+        "Mode": 0,
+        "RedBlueZero": false,
+        "Costs": [
+          3345512605371,
+          3354882593038,
+          3345567680264,
+          3356892594545
+        ],
+        "DistinctCapped": 257
+      },
+      "singletonPlane": {
+        "width": 1,
+        "distance": 1,
+        "sourceModelCode": 8,
+        "normativeAndNativeCode": 1
+      },
+      "productionChanged": false,
+      "nativeBuilds": 0,
+      "nativeEncodes": 0,
+      "timingRuns": 0
+    },
+    "correctedNarrowDistance": {
+      "cases": [
+        {
+          "width": 1,
+          "distance": 1,
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "width": 1,
+          "distance": 2,
+          "expected": 5,
+          "actual": 5
+        },
+        {
+          "width": 2,
+          "distance": 1,
+          "expected": 2,
+          "actual": 2
+        },
+        {
+          "width": 2,
+          "distance": 2,
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "width": 2,
+          "distance": 3,
+          "expected": 3,
+          "actual": 3
+        },
+        {
+          "width": 8,
+          "distance": 8,
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "width": 8,
+          "distance": 9,
+          "expected": 3,
+          "actual": 3
+        },
+        {
+          "width": 17,
+          "distance": 1,
+          "expected": 2,
+          "actual": 2
+        },
+        {
+          "width": 17,
+          "distance": 17,
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "width": 513,
+          "distance": 513,
+          "expected": 1,
+          "actual": 1
+        }
+      ],
+      "allExact": true,
+      "productionChanged": false,
+      "sourceHostCompiles": 1,
+      "nativeBuilds": 0,
+      "nativeEncodes": 0,
+      "timingRuns": 0
+    },
+    "narrowDistanceExactBothOS": true,
+    "singletonPalette": {
+      "existingPublicCase": "WebpTests.SixteenBitInputRoundsOnceToEightBitSamples",
+      "packetBytes": 34,
+      "packetSha256": "98dc19987970964d8c3a2bd9e57c9e4cd4e29dc1e99fe8658b087f53aabcb618",
+      "rawExact": true,
+      "independentOutputs": true,
+      "sourceUnchanged": true,
+      "negativeMutationRejected": true,
+      "productionChanged": false,
+      "nativeBuilds": 0,
+      "nativeEncodes": 0,
+      "timingRuns": 0,
+      "scope": "First one-color palette primitive only. Multi-color packing/sorting, integration, admission and public normalization remain open."
+    },
+    "singletonNativeIdentity": {
+      "existingPublicCase": "WebpTests.SixteenBitInputRoundsOnceToEightBitSamples",
+      "normalizedRgba": [
+        255,
+        0,
+        1,
+        0
+      ],
+      "sourceSha256": "fcac58980f5053b60bc41f02af0a17a9003f5377edfaed7735cd433452f09069",
+      "packetBytes": 34,
+      "packetSha256": "98dc19987970964d8c3a2bd9e57c9e4cd4e29dc1e99fe8658b087f53aabcb618",
+      "workerSha256": "ef377bddaeb9530b1ee32773144d5b766c902c467c63643cab04eadb96ce4f9d",
+      "nativeVersion": 67072,
+      "nativePreparationEncodes": 3,
+      "timedCommands": 0,
+      "nativeBuilds": 0
+    },
+    "singletonSameSourceBothOS": true,
+    "sourceFiles": {
+      "tools/WarmReference/Vp8lLzParity.cs": "6a4baa5743df9d23f77cb0b72febe909dd167a53ed3b8dc81447793e699b68ce",
+      "tools/WarmReference/Vp8lAuxiliaryParity.cs": "7d0753366e8615021dfeeeab54588d2584adb3e3b95896bfe8335082821aa572",
+      "tools/WarmReference/Vp8lSingletonPaletteParity.cs": "de3e9fa23290397c42b0d0b7d45773a1011399db6db9ae827a55bbc4b78e3c26",
+      "tools/WarmReference/verify-vp8l-singleton-palette.ps1": "a333ccef4021b626158ed141d74ce190164fee7476ee0fe9a996979b4396cdda"
+    },
+    "qualificationReuse": "Frozen E35/E28/E30 builds unchanged. Narrow-width branch ordering only affects widths<=15; the four core/main and auxiliary widths513/65 are disjoint. Singleton acceptance changes only previously rejected auxiliary size1. No four-core retuning/reconfirmation, production/full-suite/package repeats or timing runs.",
+    "correction": "Initial singleton model used alpha0 for the packed index carrier; independent frozen-packet decoding showed the native opaque carrier0xff000000. Corrected that strategy without a baseline adjustment or new native encode. Actual source alpha remains in the palette.",
+    "nativeBuilds": 0,
+    "nativePreparationEncodes": 6,
+    "timingRuns": 0,
+    "sourceHostCompiles": {
+      "planeWindows": 1,
+      "planeLinux": 1,
+      "noiseRecipeWindows": 1,
+      "singletonWindowsIncludingFailedAndDiagnostic": 3,
+      "singletonLinux": 1
+    },
+    "remaining": [
+      "Multi-color palette ordering/deltas and index packing on existing19x7/two-color4103x2 inputs.",
+      "Direct/no-transform case, dimensions/borders and existing effort0..6 functional coverage.",
+      "Admitted production, RGBA16/async public operations and actual-package qualification, followed by remaining full codec/performance/release objectives."
+    ],
+    "rawArchive": {
+      "name": "e37-vp8l-production-paths.tar.gz",
+      "bytes": 78119,
+      "sha256": "1aa5bdd69899176d3671575d4406126786c0cb35fd3e8c387f2bce6685355c3d",
+      "members": 20,
+      "mirrored": true
+    }
   }
 }

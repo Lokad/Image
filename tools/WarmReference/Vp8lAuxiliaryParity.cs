@@ -17,7 +17,7 @@ public static class Vp8lAuxiliaryParity
 {
     public static Vp8lAuxiliaryResult Encode(uint[] pixels, int width, int quality)
     {
-        if (width <= 0 || pixels.Length < 2 || pixels.Length % width != 0 || pixels.Length > 65536)
+        if (width <= 0 || pixels.Length < 1 || pixels.Length % width != 0 || pixels.Length > 65536)
             throw new ArgumentException("Expected a bounded auxiliary raster.");
         if (quality != 75) throw new ArgumentOutOfRangeException(nameof(quality), "Only the frozen effort is qualified.");
         var matches = Vp8lMatchParity.Build(pixels, width, quality);
