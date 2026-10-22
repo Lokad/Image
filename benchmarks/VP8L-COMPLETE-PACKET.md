@@ -36,3 +36,12 @@ exact scope and raw evidence are in [the evidence](vp8l-byte-parity-evidence.jso
 Next: named production-coverage gaps, bounded shared admission, cancellation/work
 limits, and complete public-operation/package qualification before adoption.
 CPU parity and allocation tuning resume after the required exact codec coverage.
+
+The separate palette model also reproduces the existing two-color 4103×2
+functional input's complete 46-byte packet on Windows/Linux. Palette ordering,
+channel deltas, 1,026 packed samples and all five main Huffman trees agree;
+data ends at bit 206. The same frozen binary and direct source-host verifier pass
+source preservation, independent outputs and mutation rejection. This qualifies
+two-color packing with a partial byte, not arbitrary palettes or production
+admission. It reuses the existing reference snapshot and frozen helpers, with
+no native encode or timing run. `verify-vp8l-palette-packet.ps1` records its scope.
