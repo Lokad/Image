@@ -45,3 +45,12 @@ source preservation, independent outputs and mutation rejection. This qualifies
 two-color packing with a partial byte, not arbitrary palettes or production
 admission. It reuses the existing reference snapshot and frozen helpers, with
 no native encode or timing run. `verify-vp8l-palette-packet.ps1` records its scope.
+
+The existing 129×129 xorshift input's direct-coding packet is also raw-exact:
+50,010 bytes on both platforms with the same frozen model. Dimension-aware repeat
+seeding, trace parsing and framing produce no transform/cache, one group, five
+Huffman trees and the reference end bit 399,906. An independent packet reader
+recovers every source sample. `verify-vp8l-direct-packet.ps1` checks complete
+packets, source preservation, independent outputs and mutation rejection using
+the retained reference archive. General shape qualification and production
+adoption remain open; the earlier four-core/palette binaries are unchanged.

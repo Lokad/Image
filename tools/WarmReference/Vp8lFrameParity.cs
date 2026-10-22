@@ -52,20 +52,21 @@ internal static class Vp8lFrameParity
         var high=(int)System.Numerics.BitOperations.Log2((uint)(value-1));var extra=high-1;
         var symbol=2*high+((value-1)>>extra&1);codes.Write(writer,offset+symbol);writer.Put((value-1)&((1<<extra)-1),extra);
     }
-    internal static (byte[] Packet,object Details) Encode(Vp8lInputParity prefix,int[] map,int[][][] counts,List<Vp8lFrameToken> tokens,int cacheBits)
+    internal static (byte[] Packet,object Details) Encode(Vp8lInputParity prefix,int[] map,int[][][] counts,List<Vp8lFrameToken> tokens,int cacheBits,int width=513,int tileBits=3)
     {
-        var groupPixels=map.Select(x=>(uint)x<<8).ToArray();var auxiliary=counts.Length>1?Vp8lAuxiliaryParity.Encode(groupPixels,65,75):null;
+        var columns=(width+(1<<tileBits)-1)>>tileBits;
+        var groupPixels=map.Select(x=>(uint)x<<8).ToArray();var auxiliary=counts.Length>1?Vp8lAuxiliaryParity.Encode(groupPixels,columns,75):null;
         var trees=counts.Select(group=>group.Select(histogram=>Lengths(histogram,15)).ToArray()).ToArray();
         using var treeHash=IncrementalHash.CreateHash(HashAlgorithmName.SHA256);foreach(var group in trees)foreach(var tree in group)treeHash.AppendData(tree);
         var writer=new Writer();writer.Append(prefix.Bytes,prefix.BitCount);
-        writer.Put(0,1);writer.Put(cacheBits==0?0:1,1);if(cacheBits!=0)writer.Put(cacheBits,4);writer.Put(counts.Length>1?1:0,1);if(counts.Length>1)writer.Put(1,3);
+        writer.Put(0,1);writer.Put(cacheBits==0?0:1,1);if(cacheBits!=0)writer.Put(cacheBits,4);writer.Put(counts.Length>1?1:0,1);if(counts.Length>1)writer.Put(tileBits-2,3);
         var mapStart=writer.Count();if(auxiliary!=null)writer.Append(auxiliary.Bytes,auxiliary.BitCount);var mapEnd=writer.Count();
         var header=Method("Vp8lBitParity","Tree");foreach(var group in trees)foreach(var tree in group)header.Invoke(null,new object[]{writer.State,tree});
         var dataStart=writer.Count();var codes=trees.Select(group=>group.Select(tree=>new Codes(tree)).ToArray()).ToArray();
         foreach(var token in tokens)
         {
-            var group=map[(token.Position/513>>3)*65+(token.Position%513>>3)];var c=codes[group];
-            if(token.Distance!=0){Prefix(writer,c[0],token.Length,256);Prefix(writer,c[4],Plane(token.Distance,513),0);}
+            var group=map[(token.Position/width>>tileBits)*columns+(token.Position%width>>tileBits)];var c=codes[group];
+            if(token.Distance!=0){Prefix(writer,c[0],token.Length,256);Prefix(writer,c[4],Plane(token.Distance,width),0);}
             else if(token.Cached>=0)c[0].Write(writer,280+token.Cached);
             else{c[0].Write(writer,(int)(token.Pixel>>8&255));c[1].Write(writer,(int)(token.Pixel>>16&255));c[2].Write(writer,(int)(token.Pixel&255));c[3].Write(writer,(int)(token.Pixel>>24));}
         }

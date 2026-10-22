@@ -77,7 +77,7 @@
     "members": 22,
     "mirrored": true
   },
-  "latestRound": "E39",
+  "latestRound": "E40",
   "crossColorAndAuxiliaryStages": {
     "scope": "ONE existing513x259 RGBA8 method4/quality75/exact=1 control. Complete transform prefix, not main image or complete encoder.",
     "productionChanged": false,
@@ -1326,5 +1326,109 @@
     },
     "coverageCorrection": "E37 proposed19x7 as a palette anchor before observation. E38 independent frozen-packet inspection proves133colors select spatial-only prediction/cross-color, both tileBits9; no palette or subtract-green. The existing4103x2 input is the qualified two-color palette anchor. No new image grid.",
     "qualificationReuse": "Production E24 unchanged; existing same-core both-OS/full/differential/scalar/package evidence retained. Frozen E28/E30/E35 numerical helpers unchanged; four-core confirmations reused. No timing/allocation claim for this source-only model."
+  },
+  "directPacketStage": {
+    "round": "E40",
+    "verification": {
+      "existingPublicCase": "WebpEncoderPredictionTests.NonbeneficialNoiseRetainsTheExactPredecessorPacket",
+      "width": 129,
+      "height": 129,
+      "sourceSha256": "8d7970238f86775153ef39a123c7dfa67b7c1afc5040fb7fab2685357d4ff5a0",
+      "packetBytes": 50010,
+      "packetSha256": "18b6120553762b78d4ca5df0fbf34b45d9ee3a3eaaca02462636c17e795e9ec5",
+      "rawExact": true,
+      "metadataExemptions": 0,
+      "independentOutputs": true,
+      "sourceUnchanged": true,
+      "negativeMutationRejected": true,
+      "goldenPacketReadAfterModel": true,
+      "details": {
+        "choice": {
+          "Mode": 0,
+          "RedBlueZero": false,
+          "Costs": [
+            3345512605371,
+            3354882593038,
+            3345567680264,
+            3356892594545
+          ],
+          "DistinctCapped": 257
+        },
+        "cacheBits": 0,
+        "groups": 1,
+        "tokens": 16641,
+        "parser": {
+          "standardBits": 0,
+          "repeatedBits": 0,
+          "standardCost": 3369559788707,
+          "repeatedCost": 3369559788707,
+          "traceCost": 3369559788707,
+          "winner": "standard"
+        },
+        "framing": {
+          "groups": 1,
+          "huffmanTrees": 5,
+          "treeLengthsSha256": "0fc5957fb7bc147e9e2f575645faf39943b75b61a17bfbceee0be2402928a518",
+          "groupMapBits": 0,
+          "mapStartBit": 43,
+          "mapEndBit": 43,
+          "firstDataBit": 537,
+          "endBit": 399906,
+          "payloadBytes": 49989,
+          "packetBytes": 50010
+        }
+      },
+      "productionChanged": false,
+      "nativeBuilds": 0,
+      "nativeEncodes": 0,
+      "timingRuns": 0,
+      "scope": "Existing129x129 direct-coding input only; dimension-aware source model, not admitted production or general shape qualification."
+    },
+    "sameFrozenModelBothOS": true,
+    "independentReferenceObservation": {
+      "width": 129,
+      "height": 129,
+      "cacheBits": 0,
+      "groups": 1,
+      "histogramBits": 0,
+      "endBit": 399906,
+      "sourcePixelsExact": true,
+      "packetBytes": 50010,
+      "packetSha256": "18b6120553762b78d4ca5df0fbf34b45d9ee3a3eaaca02462636c17e795e9ec5",
+      "sourceSha256": "8d7970238f86775153ef39a123c7dfa67b7c1afc5040fb7fab2685357d4ff5a0",
+      "nativeBuilds": 0,
+      "nativeEncodes": 0,
+      "timingRuns": 0
+    },
+    "model": {
+      "name": "DirectPacketProbe.dll",
+      "bytes": 47104,
+      "sha256": "6f9871dd40161ba501be1a1b56de651f153e3350aa9dc73d38b1a25da6ef802a"
+    },
+    "sourceFiles": {
+      "tools/WarmReference/Vp8lDirectPacketParity.cs": "e2e85c9733d1aeff21460d46adda3df9fe7b00c763fd589cbead76c90f404771",
+      "tools/WarmReference/Vp8lMainParsing.cs": "c359889eadf95292e4e71a49766b79699edb57730a2a023de590f9d06aa2f169",
+      "tools/WarmReference/Vp8lFrameParity.cs": "837a165927be28bc50e44d07cd2009ec7698ea223d758b0b54d1f97c1445818a",
+      "tools/WarmReference/Vp8lInputParity.cs": "80d28d0c34702f7e07f73a09851e9fb36b5416fa8f8f7b500092f37456768f92",
+      "tools/WarmReference/Vp8lInitialChoice.cs": "3560daf43096595d7af0885e9837487ac18b1cbd726620630ec8e980062091e4",
+      "tools/WarmReference/Vp8lSpatialParity.cs": "51ce77f4d21c3a6a7dbaa22c3e383373e77da09424c54b1ccd433ab94fee5416",
+      "tools/WarmReference/verify-vp8l-direct-packet.ps1": "2bf0db8ac1cadf20019b26ab811df7892838fca27e8023985903521283d92233"
+    },
+    "modelBuilds": {
+      "windows": 1,
+      "linux": 0
+    },
+    "productionBuilds": 0,
+    "nativeBuilds": 0,
+    "nativeEncodes": 0,
+    "timingRuns": 0,
+    "evidenceValidity": "Frozen E24 production and E35/E39 four-core/palette binaries unchanged; their confirmations remain valid. The source parser now receives repeat/trace width, and source framing receives width/tile geometry. E40 qualifies only129x129 direct coding in the new model; prior binary proofs are not a general current-source sizing qualification. Production integration must qualify affected public paths.",
+    "rawArchive": {
+      "name": "e40-vp8l-direct-packet-qualified.tar.gz",
+      "bytes": 46642,
+      "sha256": "2e8ab6fb731d7b932c9a8f01dcb8d52c39740ab4c3c892bca38187830f8758a2",
+      "members": 15,
+      "mirrored": true
+    }
   }
 }
