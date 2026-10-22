@@ -18,13 +18,22 @@ public static class Vp8lDirectPacketParity
         if(choice.Mode!=0)throw new NotSupportedException("This stage composes direct coding only.");
         var pixels=new uint[width*height];var alpha=false;
         for(var i=0;i<pixels.Length;i++){var at=4*i;pixels[i]=(uint)source[at+3]<<24|(uint)source[at]<<16|(uint)source[at+1]<<8|source[at+2];alpha|=source[at+3]!=255;}
+        var header=new byte[5];var value=0x2fUL|((ulong)(width-1)<<8)|((ulong)(height-1)<<22)|(alpha?1UL<<36:0);
+        for(var i=0;i<header.Length;i++)header[i]=(byte)(value>>(8*i));
+        var residual=new byte[pixels.Length*4];for(var i=0;i<pixels.Length;i++)BinaryPrimitives.WriteUInt32LittleEndian(residual.AsSpan(i*4),pixels[i]);
+        return Compose(new(header,40,residual,new{mode=0}),width,height,choice.HistogramBits,choice);
+    }
+    internal static Vp8lDirectPacketResult Compose(Vp8lInputParity stage,int width,int height,int tileBits,object choice)
+    {
+        var pixels=new uint[width*height];
+        for(var i=0;i<pixels.Length;i++)pixels[i]=BinaryPrimitives.ReadUInt32LittleEndian(stage.CodedResidual.AsSpan(i*4));
         var index=Auxiliary("Vp8lMatchParity","Build").CreateDelegate<Func<uint[],int,int,uint[]>>();
         var prefix=Auxiliary("Vp8lLzParity","Prefix").CreateDelegate<Func<int,(int Code,int Extra)>>();
         var plane=Auxiliary("Vp8lLzParity","Plane").CreateDelegate<Func<int,int,int>>();
         var population=Auxiliary("Vp8lLzParity","Population").CreateDelegate<Func<int[],long>>();
         var parsed=Vp8lMainParsing.Encode(pixels,index(pixels,width,75),width);var bits=parsed.Bits;
-        const int tileBits=3;var columns=(width+7)>>3;
-        var histograms=Enumerable.Range(0,columns*((height+7)>>3)).Select(_=>new[]{new int[280+(bits==0?0:1<<bits)],new int[256],new int[256],new int[256],new int[40]}).ToArray();
+        var columns=(width+(1<<tileBits)-1)>>tileBits;
+        var histograms=Enumerable.Range(0,columns*((height+(1<<tileBits)-1)>>tileBits)).Select(_=>new[]{new int[280+(bits==0?0:1<<bits)],new int[256],new int[256],new int[256],new int[40]}).ToArray();
         var tokens=new List<Vp8lFrameToken>();
         foreach(var token in (IEnumerable)parsed.Tokens)
         {
@@ -37,10 +46,6 @@ public static class Vp8lDirectPacketParity
             tokens.Add(new(position,pixel,length,distance,cached));
         }
         var grouped=Vp8lSpatialParity.Build(histograms,population);
-        var header=new byte[5];var value=0x2fUL|((ulong)(width-1)<<8)|((ulong)(height-1)<<22)|(alpha?1UL<<36:0);
-        for(var i=0;i<header.Length;i++)header[i]=(byte)(value>>(8*i));
-        var residual=new byte[pixels.Length*4];for(var i=0;i<pixels.Length;i++)BinaryPrimitives.WriteUInt32LittleEndian(residual.AsSpan(i*4),pixels[i]);
-        var stage=new Vp8lInputParity(header,40,residual,new{mode=0});
         var frame=Vp8lFrameParity.Encode(stage,grouped.Map,grouped.Counts,tokens,bits,width,tileBits);
         return new(frame.Packet,new{choice,cacheBits=bits,groups=grouped.Counts.Length,tokens=tokens.Count,parser=parsed.Summary,framing=frame.Details});
     }

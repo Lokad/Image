@@ -18,8 +18,8 @@ come from source pixels. No reference tokens, maps, trees or packets enter the m
 The six existing workload rows contain these four packet identities. RGBA16
 normalization and asynchronous delivery reuse the first packet's core proof;
 their complete public-operation qualification remains open for integration.
-Other shapes, palette/direct transform families and settings are unqualified
-in this development model. Production continues to support its existing scope.
+These four-core results alone do not qualify other shapes, palette/direct
+transform families or settings. Production continues to support its existing scope.
 
 Both platforms pass source preservation, repeated complete-packet comparison,
 independent outputs and mutation rejection. The standalone source-host entrypoint
@@ -54,3 +54,12 @@ recovers every source sample. `verify-vp8l-direct-packet.ps1` checks complete
 packets, source preservation, independent outputs and mutation rejection using
 the retained reference archive. General shape qualification and production
 adoption remain open; the earlier four-core/palette binaries are unchanged.
+
+The 19×7 hidden-RGB input's spatial-only packet also matches every reference byte:
+82 bytes on both platforms, including the uniform TOP predictor, identity color
+map and all 532 residual bytes. The source has 133 colors; entropy selection
+rejects palette coding and subtract-green. Uniform transform maps compact to
+512×512 tiles. The same model reconfirms the affected direct-coding input after
+sharing packet composition. `verify-vp8l-spatial-only.ps1` checks these stages,
+complete framing, source preservation, independent outputs and mutation rejection.
+Other maps, shapes, settings and admitted production integration remain open.

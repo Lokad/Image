@@ -24,8 +24,10 @@ performance grid.
 3. **Spatial-only selection.** The existing 19×7 hidden-RGB control has 133 colors
    but the pinned backend selects prediction and cross-color, without
    subtract-green or palette coding. Its 82-byte reference uses uniform 512×512
-   transform maps. Reproduce palette eligibility, spatial-only residuals and
-   uniform map sizing; the four current non-palette cores do not cover these paths.
+   transform maps. The source-only model now reproduces all 82 bytes, both maps
+   and every residual sample on both platforms. Its histogram-based palette
+   eligibility, spatial-only prediction and uniform map sizing are qualified on
+   this input; other maps and general shape coverage remain open.
 4. **Existing effort range.** Public `Effort` accepts 0..6. Reuse the current
    single two-color admission input at its existing efforts/depths for functional
    and option qualification. Do not multiply this into a new image/settings matrix.

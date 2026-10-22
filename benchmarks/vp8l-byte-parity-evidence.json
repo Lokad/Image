@@ -77,7 +77,7 @@
     "members": 22,
     "mirrored": true
   },
-  "latestRound": "E40",
+  "latestRound": "E41",
   "crossColorAndAuxiliaryStages": {
     "scope": "ONE existing513x259 RGBA8 method4/quality75/exact=1 control. Complete transform prefix, not main image or complete encoder.",
     "productionChanged": false,
@@ -1428,6 +1428,208 @@
       "bytes": 46642,
       "sha256": "2e8ab6fb731d7b932c9a8f01dcb8d52c39740ab4c3c892bca38187830f8758a2",
       "members": 15,
+      "mirrored": true
+    }
+  },
+  "spatialOnlyPacketStage": {
+    "round": "E41",
+    "verification": {
+      "existingPublicCase": "WebpTests.LosslessEncodePreservesAlphaAndHiddenRgbOnNonseekableOutput",
+      "width": 19,
+      "height": 7,
+      "sourceSha256": "c4c881cd7125a4f91eb16d548728801b3cfacf1c1f8ede5933f514260eb8eb96",
+      "packetBytes": 82,
+      "packetSha256": "c432b85f60f9817358985ffad69ae307d33926f02de3fb80abe8645b5f526c58",
+      "rawExact": true,
+      "metadataExemptions": 0,
+      "intermediateMapsAndResidualsExact": true,
+      "independentOutputs": true,
+      "sourceUnchanged": true,
+      "negativeMutationsRejected": true,
+      "goldenPacketReadAfterModel": true,
+      "details": {
+        "choice": {
+          "Mode": 1,
+          "RedBlueZero": false,
+          "Costs": [
+            16339056306,
+            6992866713,
+            22282002555,
+            6999389758,
+            15720641351
+          ],
+          "DistinctCapped": 133,
+          "HistogramBits": 5,
+          "TransformBits": 5
+        },
+        "predictorBits": 9,
+        "colorBits": 9,
+        "predictorResidualSha256": "7416018eeb4d196de281306b2952d9cae631dd8148e419555a311e44d6bcd106",
+        "codedResidualSha256": "7416018eeb4d196de281306b2952d9cae631dd8148e419555a311e44d6bcd106",
+        "frame": {
+          "choice": {
+            "Mode": 1,
+            "RedBlueZero": false,
+            "Costs": [
+              16339056306,
+              6992866713,
+              22282002555,
+              6999389758,
+              15720641351
+            ],
+            "DistinctCapped": 133,
+            "HistogramBits": 5,
+            "TransformBits": 5
+          },
+          "cacheBits": 3,
+          "groups": 1,
+          "tokens": 21,
+          "parser": {
+            "standardBits": 1,
+            "repeatedBits": 3,
+            "standardCost": 6048448706,
+            "repeatedCost": 6027254956,
+            "traceCost": null,
+            "winner": "repeat"
+          },
+          "framing": {
+            "groups": 1,
+            "huffmanTrees": 5,
+            "treeLengthsSha256": "3dae0a4fdbb5964977a9652fa78c44184e92030e8b45e4f5d84f050f7f5cfe8b",
+            "groupMapBits": 0,
+            "mapStartBit": 122,
+            "mapEndBit": 122,
+            "firstDataBit": 372,
+            "endBit": 494,
+            "payloadBytes": 62,
+            "packetBytes": 82
+          }
+        }
+      },
+      "productionChanged": false,
+      "nativeBuilds": 0,
+      "nativeEncodes": 0,
+      "timingRuns": 0,
+      "scope": "Existing19x7 spatial-only input with uniform predictor/color maps. Other map/sizing paths and admitted production remain open."
+    },
+    "affectedDirectConfirmation": {
+      "existingPublicCase": "WebpEncoderPredictionTests.NonbeneficialNoiseRetainsTheExactPredecessorPacket",
+      "width": 129,
+      "height": 129,
+      "sourceSha256": "8d7970238f86775153ef39a123c7dfa67b7c1afc5040fb7fab2685357d4ff5a0",
+      "packetBytes": 50010,
+      "packetSha256": "18b6120553762b78d4ca5df0fbf34b45d9ee3a3eaaca02462636c17e795e9ec5",
+      "rawExact": true,
+      "metadataExemptions": 0,
+      "independentOutputs": true,
+      "sourceUnchanged": true,
+      "negativeMutationRejected": true,
+      "goldenPacketReadAfterModel": true,
+      "details": {
+        "choice": {
+          "Mode": 0,
+          "RedBlueZero": false,
+          "Costs": [
+            3345512605371,
+            3354882593038,
+            3345567680264,
+            3356892594545
+          ],
+          "DistinctCapped": 257,
+          "HistogramBits": 3,
+          "TransformBits": 3
+        },
+        "cacheBits": 0,
+        "groups": 1,
+        "tokens": 16641,
+        "parser": {
+          "standardBits": 0,
+          "repeatedBits": 0,
+          "standardCost": 3369559788707,
+          "repeatedCost": 3369559788707,
+          "traceCost": 3369559788707,
+          "winner": "standard"
+        },
+        "framing": {
+          "groups": 1,
+          "huffmanTrees": 5,
+          "treeLengthsSha256": "0fc5957fb7bc147e9e2f575645faf39943b75b61a17bfbceee0be2402928a518",
+          "groupMapBits": 0,
+          "mapStartBit": 43,
+          "mapEndBit": 43,
+          "firstDataBit": 537,
+          "endBit": 399906,
+          "payloadBytes": 49989,
+          "packetBytes": 50010
+        }
+      },
+      "productionChanged": false,
+      "nativeBuilds": 0,
+      "nativeEncodes": 0,
+      "timingRuns": 0,
+      "scope": "Existing129x129 direct-coding input only; dimension-aware source model, not admitted production or general shape qualification."
+    },
+    "sameFrozenModelBothOS": true,
+    "independentReferenceObservation": {
+      "width": 19,
+      "height": 7,
+      "transforms": [
+        {
+          "type": 0,
+          "tileBits": 9,
+          "argb": [
+            4278190592
+          ]
+        },
+        {
+          "type": 1,
+          "tileBits": 9,
+          "argb": [
+            4278190080
+          ]
+        }
+      ],
+      "cacheBits": 3,
+      "groups": 1,
+      "predictorResidualSha256": "7416018eeb4d196de281306b2952d9cae631dd8148e419555a311e44d6bcd106",
+      "codedResidualSha256": "7416018eeb4d196de281306b2952d9cae631dd8148e419555a311e44d6bcd106",
+      "endBit": 494,
+      "packetBytes": 82,
+      "packetSha256": "c432b85f60f9817358985ffad69ae307d33926f02de3fb80abe8645b5f526c58",
+      "nativeBuilds": 0,
+      "nativeEncodes": 0,
+      "timingRuns": 0
+    },
+    "model": {
+      "name": "SpatialOnlyProbe.dll",
+      "bytes": 58368,
+      "sha256": "4ebd1ae0187ab13f3698341d9b9cc62484c7abb1d866bd4561fe2657c2974177"
+    },
+    "sourceFiles": {
+      "tools/WarmReference/Vp8lSpatialOnlyParity.cs": "3e1334ec5933876ba17b536d7626c758e5f69cc72d12472ebd77e9f4ec46887c",
+      "tools/WarmReference/verify-vp8l-spatial-only.ps1": "86a3aec73a7d4c4949ece7b0b0d946a2eab620c8f31fd2a4129962e050fe1511",
+      "tools/WarmReference/Vp8lPredictorParity.cs": "50910d681109215018ff6079a8e103076eee1c873601a0a03596c7dc539e2593",
+      "tools/WarmReference/Vp8lInitialChoice.cs": "4f88a6e34453d70b24fa070bbefb46b1d9cab95caf6f923ba0f97fb3e12e70d3",
+      "tools/WarmReference/Vp8lDirectPacketParity.cs": "ad92d003b57930fede5ac17b83b536f1ecbdf801ebbff622877ef0a1221cdd1d",
+      "tools/WarmReference/Vp8lMainParsing.cs": "c359889eadf95292e4e71a49766b79699edb57730a2a023de590f9d06aa2f169",
+      "tools/WarmReference/Vp8lFrameParity.cs": "837a165927be28bc50e44d07cd2009ec7698ea223d758b0b54d1f97c1445818a",
+      "tools/WarmReference/Vp8lSpatialParity.cs": "51ce77f4d21c3a6a7dbaa22c3e383373e77da09424c54b1ccd433ab94fee5416",
+      "tools/WarmReference/Vp8lInputParity.cs": "80d28d0c34702f7e07f73a09851e9fb36b5416fa8f8f7b500092f37456768f92"
+    },
+    "modelBuilds": {
+      "windows": 1,
+      "linux": 0
+    },
+    "productionBuilds": 0,
+    "nativeBuilds": 0,
+    "nativeEncodes": 0,
+    "timingRuns": 0,
+    "evidenceValidity": "Current source-only composition refactor qualified on affected129x129 direct case with the same E41 binary. New spatial-only family and palette eligibility qualified only on19x7; arbitrary palettes/maps/shapes/efforts are not established. Earlier E24 production and E35/E39 frozen model binaries remain unchanged and valid within their scope; they are not a complete-current-source integration proof. Predictor default subtract-green arithmetic remains the same; the new false branch and one-map syntax are confirmed here. Accepted production integration must qualify all affected public contracts.",
+    "rawArchive": {
+      "name": "e41-vp8l-spatial-only-qualified.tar.gz",
+      "bytes": 59037,
+      "sha256": "56adf3f29375a414c66c56f8e001f13596377a865482cc761f78285e71a7a528",
+      "members": 20,
       "mirrored": true
     }
   }

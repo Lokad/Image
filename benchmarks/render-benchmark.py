@@ -378,8 +378,8 @@ lossy controls and performance remain open.
 A separate source-only [production coverage audit](../benchmarks/VP8L-PRODUCTION-COVERAGE.md)
 names the remaining required paths; its1x1 and two-color4103x2 palette packets
 are raw-exact on both platforms, as is the129x129 direct-coding packet.
-The19x7 hidden-RGB case requires spatial-only
-prediction, not palette coding. These do not change production/timing claims below.
+The19x7 hidden-RGB spatial-only packet and its maps/residuals also match exactly.
+These do not change production/timing claims below.
 
 No timing or allocation runs accompanied the new PNG encoder or JPEG cleanup. Unchanged paths
 retain evidence on their recorded frozen inputs; new default-encoded fixtures do

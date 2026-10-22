@@ -9,8 +9,8 @@ using System.Numerics;
 public static class Vp8lPredictorParity
 {
     private const long Scale = 1L << 23;
-    public static byte[] EncodeModes(byte[] rgba, int width, int height, int bits)
-        => Select(rgba, width, height, bits, out _);
+    public static byte[] EncodeModes(byte[] rgba, int width, int height, int bits, bool subtractGreen=true)
+        => Select(rgba, width, height, bits, out _, subtractGreen);
 
     private static long SLog(int count)
     {
@@ -53,15 +53,15 @@ public static class Vp8lPredictorParity
         }
         return value;
     }
-    internal static byte[] Select(byte[] rgba, int width, int height, int bits, out long[] scores)
+    internal static byte[] Select(byte[] rgba, int width, int height, int bits, out long[] scores, bool subtractGreen=true)
     {
         if (rgba.Length != checked(width * height * 4)) throw new ArgumentException("RGBA size differs.");
         var pixels = new uint[width * height];
         for (var i = 0; i < pixels.Length; i++)
         {
-            var green = rgba[i * 4 + 1];
-            pixels[i] = (uint)rgba[i * 4 + 3] << 24 | (uint)((rgba[i * 4] - green) & 255) << 16
-                | (uint)green << 8 | (uint)((rgba[i * 4 + 2] - green) & 255);
+            var green = rgba[i * 4 + 1]; var adjustment = subtractGreen ? green : 0;
+            pixels[i] = (uint)rgba[i * 4 + 3] << 24 | (uint)((rgba[i * 4] - adjustment) & 255) << 16
+                | (uint)green << 8 | (uint)((rgba[i * 4 + 2] - adjustment) & 255);
         }
         var side = 1 << bits; var columns = (width + side - 1) >> bits; var rows = (height + side - 1) >> bits;
         var modes = new byte[columns * rows]; scores = new long[modes.Length * 14];
@@ -102,14 +102,14 @@ public static class Vp8lPredictorParity
         }
         return modes;
     }
-    public static byte[] Residual(byte[] rgba, int width, int height, int bits, byte[] modes)
+    public static byte[] Residual(byte[] rgba, int width, int height, int bits, byte[] modes, bool subtractGreen=true)
     {
         var input = new uint[width * height];
         for (var i = 0; i < input.Length; i++)
         {
-            var green = rgba[i * 4 + 1];
-            input[i] = (uint)rgba[i * 4 + 3] << 24 | (uint)((rgba[i * 4] - green) & 255) << 16
-                | (uint)green << 8 | (uint)((rgba[i * 4 + 2] - green) & 255);
+            var green = rgba[i * 4 + 1]; var adjustment = subtractGreen ? green : 0;
+            input[i] = (uint)rgba[i * 4 + 3] << 24 | (uint)((rgba[i * 4] - adjustment) & 255) << 16
+                | (uint)green << 8 | (uint)((rgba[i * 4 + 2] - adjustment) & 255);
         }
         var columns = (width + (1 << bits) - 1) >> bits;
         var result = new byte[rgba.Length];
