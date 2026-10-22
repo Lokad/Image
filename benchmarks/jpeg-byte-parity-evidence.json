@@ -126,7 +126,7 @@
     "sha256": "17a146f3a307fec096b8189161fc1a1e4e1d947327dc895c9b4e1e8d1d9b5d93",
     "mirrored": true
   },
-  "next": "Independently reproduce ISLOW integer transform/quantization on frozen gray samples, then grayscale Huffman tie/canonical ordering. DQT unchanged; full raw packet equality, no attribution exception needed. Production integration/default adoption, other encoders/decoders and full performance/release objectives remain open.",
+  "next": "E8: promote exact grayscale transform/quantization/Huffman/serialization into admitted image8/16, caller Gray8/RGB and sync/forward-only/async operations. Document grayscale quality identity mapping and preserved caller-gray sampling override; do not change frozen tables/settings. Qualify affected API/root/cancellation/output ownership and actual package, preserving six color controls. Then restart/options/default adoption, other codecs and full CPU/release objective.",
   "forwardStage": {
     "qualification": "E2",
     "nativeDispatch": "ff_fdct_sse2",
@@ -412,7 +412,7 @@
     },
     "adoptedIn": "E6"
   },
-  "latestPrototypeQualification": "E5",
+  "latestPrototypeQualification": "E7",
   "originalPacketProducerCoreSha256": "2d82a81dc60cd5e30c0644c2f62e4206da74ac6322e6caab6df02370705909e3",
   "productionSubsampling": {
     "qualification": "E6",
@@ -758,5 +758,64 @@
       "mirrored": true
     }
   },
-  "latestAudit": "E7"
+  "latestAudit": "E7",
+  "grayscaleReplication": {
+    "qualification": "E7",
+    "status": "Qualified independent source-only grayscale encoder prototype on Windows/Linux; production/API/admission integration OPEN",
+    "prototypeOnly": true,
+    "productionChanged": false,
+    "productionBuilds": 0,
+    "timingRuns": 0,
+    "nativeEncodes": 0,
+    "nativeDiagnosticBuilds": 2,
+    "sourceGraySha256": "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d",
+    "sourceGrayBytes": 132867,
+    "nativePacketBytes": 58910,
+    "nativePacketSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+    "nativeDctSha256": "5e861e273a85c021d4c2a62b95f28e824cde355113e0715f237ed0603335a2db",
+    "nativeQuantizedSha256": "fa5ae5e71aa6bdcfba65001c838deb80b3826d29f4421d2b352edac85623e57a",
+    "nativeCoefficientDumpSha256": "f2c173c2c5f649ae981b754458a3d8ca29e3fc7dc72081ee5c70487021dbbafc",
+    "nativeHuffmanHistogramsSha256": "fe7ee747c65f58d79df445679e17596e55e25381e181a75b2768bf119b4aea80",
+    "nativeHuffmanTablesSha256": "4d2ac069e7e45f45a168be09051093396a06cfe66a057469c2bdf525476251c4",
+    "nativeDctProbeSha256": "1efc0d09e37d723be10394843f90c0e2aac52482e35b0ca7a184bad5bc6a6dda",
+    "nativeHuffmanProbeSha256": "ebb109aced2ac16f67031debcc00478b4ed5d7aad8acd590539342549649ea97",
+    "width": 513,
+    "height": 259,
+    "sourceDepth": 8,
+    "quality": 69,
+    "quantizerPolicy": "Existing owned mathematical quality69 quantizers; no change to reference settings",
+    "attributionExceptionUsed": false,
+    "oraclePacketOrTableInputs": false,
+    "rawDctValues": 137280,
+    "quantizedValues": 137280,
+    "huffmanCases": 34,
+    "huffmanProvenance": "Two frozen grayscale DC/AC histograms plus the same32 original sparse/tied/length-limit/seeded E3 histograms",
+    "derivation": "Independent Q13 cosine-rotation matrix and explicit row/column rounding; signed division quantization; priority-queue/tree form of T.81 K.2 with reserved unit leaf and original-depth/ordinal symbol ordering",
+    "standard": "https://www.w3.org/Graphics/JPEG/itu-t81.pdf#page=148",
+    "exactOnWindows": true,
+    "exactOnLinux": true,
+    "sourceAndSurvivingOutputsPreserved": true,
+    "nativeScalarEqualsAutomaticSimd": true,
+    "completeOperationHistogramsExact": true,
+    "existingColorControlRegressionsPerPlatform": 6,
+    "existingColorHuffmanRegressionsPerPlatform": 32,
+    "productionQualificationReused": "E6 coredb10e12c,5115tests/OS,48scalar/OS and the SAME actual private0.2 package/all3examples; no production input changed, no repeated build/test/package proof.",
+    "cpuAndAllocations": "Unmeasured; no scored timing or CPU parity claim.",
+    "sourceSha256": {
+      "tools/WarmReference/JpegGrayParity.cs": "08063c50ec7fe32e0c9d73af5f4ff83d1164393015985f63b4bf4c4ab3ffd6e8",
+      "tools/WarmReference/JpegGrayReferenceTables.cs": "89c29e6e3cc60d6eaa6f72a8182bd7a999cc678182259227c11abf9141c50cd0",
+      "tools/WarmReference/JpegGrayPacketParity.cs": "97173548eca8563a5eb575f6147d6df64ddea8f535da4c0506a1da04a2b39e89",
+      "tools/WarmReference/JpegScanParity.cs": "e840a6f69f2884b84e39cbe9e5e8850cad3273aa660c358d97ae451b486bf28e",
+      "tools/WarmReference/libjpeg-gray-fdct.c": "1a163d9347ad92b37182d2b97de94f1e7ad0cdd1554760a6b98c4ceceaffde07",
+      "tools/WarmReference/libjpeg-gray-huffman.c": "43be5b43840a1b24d5db6966d99b8241412e875378a339cac57ecf7e967c78db",
+      "tools/WarmReference/verify-jpeg-gray-stage.ps1": "14e8086ac8d4355efed6af4c667e156bde32f84ff6a15aa3e68e153b988962f8"
+    },
+    "rawArchive": {
+      "file": "e7-grayscale-independent-encoder-qualified-prototype.tar.gz",
+      "bytes": 816266,
+      "sha256": "f7087184e61f274572069033b2104986e2341d9f5b5c1fa1f1c92350e17bd2d6",
+      "members": 48,
+      "mirrored": true
+    }
+  }
 }

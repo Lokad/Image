@@ -347,6 +347,8 @@ cover its required paths. The explicit managed JPEG `Reference` profile now repr
 all six frozen complete444/422/420 packets with its own tables, apart from approved
 attribution. Six tiny/paired functional controls cover the additional conversion
 and filter-edge branches; no performance claim follows from packet equality.
+The source-only grayscale prototype now matches its58,910B packet; public adoption
+and CPU/allocation qualification remain open.
 Original/CompactColor packet behavior is unchanged. Reference CPU/allocations are
 unmeasured; existing JPEG encoding timings predate its added dispatch and require
 affected confirmation when CPU qualification resumes. Other unchanged paths retain evidence.

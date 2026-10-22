@@ -42,6 +42,15 @@ submitted color samples per OS match exactly. Six small functional controls also
 qualify even-width RGB pairing, tiny one/two/three-cell filters and partial MCUs.
 These reuse the original procedural recipe and do not broaden content claims.
 
+The source-only **grayscale prototype** also reproduces its existing **58,910 B**
+packet exactly on both OS, using the approved SIMD libjpeg-turbo3.1.4.1 reference,
+quality69 and the existing owned quantizers. Its **137,280 raw transforms** and
+**137,280 quantized coefficients** match; the native scalar/SIMD transforms agree.
+Its independent [T.81 K.2](https://www.w3.org/Graphics/JPEG/itu-t81.pdf#page=148)
+table generator matches **34 original histograms**, including length limiting.
+No metadata exception is needed. Public API/admission integration remains open;
+this adds no production grayscale or performance claim.
+
 The production encoder uses at most a 512-byte MCU buffer in two passes, with no
 full-frame YUV or coefficient/event copy. Chroma weights are generated on the
 stack; no retained row or filter plan is needed. RGBA8/16 images and caller RGB8 spans
@@ -67,6 +76,7 @@ checks. `compare-jpeg-packets.py ACTUAL REFERENCE --allow-encoder-attribution`
 enables only the exception above, reporting raw equality separately. Its boundary
 checks run with `python -B tools/WarmReference/test-jpeg-packet-comparison.py`.
 `verify-jpeg-subsampling-stage.ps1` checks the source-only 4:2:2/4:2:0 prototype.
+`verify-jpeg-gray-stage.ps1` checks the grayscale stages, tables and complete packet.
 
 Lossless WebP retains the approved libwebp `exact=1` reference; grayscale JPEG
 retains the explicitly labeled SIMD-enabled libjpeg-turbo reference. Existing

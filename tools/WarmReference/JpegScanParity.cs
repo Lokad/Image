@@ -197,7 +197,7 @@ public static class JpegScanParity
         output.Add(255); output.Add(marker); output.Add((byte)(length >> 8)); output.Add((byte)length); output.AddRange(payload);
     }
 
-    private sealed class ScanWriter
+    internal sealed class ScanWriter
     {
         private readonly List<byte> output;
         private readonly CodeTable[] tables;
@@ -233,7 +233,7 @@ public static class JpegScanParity
         public void Finish() { if (used != 0) Bits(255, 8 - used); }
     }
 
-    private static int[] MakeZigzag()
+    internal static int[] MakeZigzag()
     {
         var result = new int[64]; int i = 0;
         for (int diagonal = 0; diagonal <= 14; diagonal++)
