@@ -43,7 +43,7 @@ public sealed class JpegComponentPairTests
     public void AllValidAdjacentTrialsFitTheExact196002Bound()
     {
         var source = Enumerable.Repeat(512d, 192).ToArray(); var values = Enumerable.Repeat(512, 192).ToArray();
-        var q = Enumerable.Repeat((ushort)1, 64).ToArray(); var prices = Enumerable.Repeat(256, 512).ToArray();
+        var q = Enumerable.Repeat((ushort)1, 64).ToArray(); var prices = Enumerable.Repeat((ushort)256, 512).ToArray();
         using var context = new OperationContext(ImageLimits.Default with { MaxWork = 196002 }, default);
         JpegEncoder.RefineComponentPairs444(source, q, q, values, prices, 100, context);
         Assert.Equal(196002, context.ConsumedWork); Assert.All(values, v => Assert.Equal(512, v));
@@ -54,7 +54,7 @@ public sealed class JpegComponentPairTests
     public void BaselineAmplitudeEdgesSkipOutOfRangeNeighbors(int level)
     {
         var values = Enumerable.Repeat(level, 192).ToArray(); var source = values.Select(v => (double)v).ToArray();
-        var q = Enumerable.Repeat((ushort)1, 64).ToArray(); var prices = Enumerable.Repeat(256, 512).ToArray();
+        var q = Enumerable.Repeat((ushort)1, 64).ToArray(); var prices = Enumerable.Repeat((ushort)256, 512).ToArray();
         using var context = new OperationContext(ImageLimits.Default, default);
         JpegEncoder.RefineComponentPairs444(source, q, q, values, prices, 100, context);
         Assert.All(values, v => Assert.Equal(level, v)); Assert.Equal(75042, context.ConsumedWork);
@@ -79,10 +79,10 @@ public sealed class JpegComponentPairTests
         Assert.Equal(before, values); Assert.Equal(0, context.ConsumedWork);
     }
 
-    private static (double[], int[], ushort[], int[]) CoupledCase(int sign)
+    private static (double[], int[], ushort[], ushort[]) CoupledCase(int sign)
     {
         var source = new double[192]; var values = new int[192];
         for (var c = 0; c < 3; c++) { source[c * 64] = values[c * 64] = sign * 17; source[c * 64 + 63] = sign * 3.51; values[c * 64 + 63] = sign * 4; }
-        return (source, values, Enumerable.Repeat((ushort)1, 64).ToArray(), Enumerable.Repeat(256, 512).ToArray());
+        return (source, values, Enumerable.Repeat((ushort)1, 64).ToArray(), Enumerable.Repeat((ushort)256, 512).ToArray());
     }
 }

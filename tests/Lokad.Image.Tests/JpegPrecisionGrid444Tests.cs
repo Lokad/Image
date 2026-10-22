@@ -15,7 +15,7 @@ public sealed class JpegPrecisionGrid444Tests
             source[c * 64] = sign * 23.5; values[c * 64] = sign * 24;
             source[c * 64 + 63] = sign * 28.08; values[c * 64 + 63] = sign * 28;
         }
-        var prices = Enumerable.Repeat(256, 512).ToArray();
+        var prices = Enumerable.Repeat((ushort)256, 512).ToArray();
         var sourceBefore = source.ToArray(); var qBefore = q.ToArray(); var pricesBefore = prices.ToArray();
         var fineError = Error(source, values);
         var coarse = values.Select(x => (int)Math.Round(x / 8d, MidpointRounding.AwayFromZero) * 8).ToArray();
@@ -36,7 +36,7 @@ public sealed class JpegPrecisionGrid444Tests
     {
         var source = Enumerable.Repeat(sign * 100000d, 192).ToArray();
         var values = Enumerable.Repeat(sign * 1023, 192).ToArray();
-        var q = Enumerable.Repeat((ushort)1, 64).ToArray(); var prices = Enumerable.Repeat(256, 512).ToArray();
+        var q = Enumerable.Repeat((ushort)1, 64).ToArray(); var prices = Enumerable.Repeat((ushort)256, 512).ToArray();
         using var context = new OperationContext(ImageLimits.Default, default);
         JpegEncoder.DecidePrecisionGrid444(source, q, q, values, prices, 100, context);
         for (var c = 0; c < 3; c++)
@@ -51,7 +51,7 @@ public sealed class JpegPrecisionGrid444Tests
     public void RefusalOrCancellationPrecedesMutationAndSubsequentOperationSucceeds(bool cancel)
     {
         var source = new double[192]; var values = Enumerable.Repeat(17, 192).ToArray();
-        var q = Enumerable.Repeat((ushort)1, 64).ToArray(); var prices = Enumerable.Repeat(256, 512).ToArray();
+        var q = Enumerable.Repeat((ushort)1, 64).ToArray(); var prices = Enumerable.Repeat((ushort)256, 512).ToArray();
         using var token = new CancellationTokenSource(); using var context = new OperationContext(new() { MaxWork = 2879 }, token.Token);
         if (cancel) token.Cancel();
         if (cancel) Assert.ThrowsAny<OperationCanceledException>(() => JpegEncoder.DecidePrecisionGrid444(source, q, q, values, prices, 100, context));

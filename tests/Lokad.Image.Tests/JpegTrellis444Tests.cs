@@ -36,7 +36,7 @@ public sealed class JpegTrellis444Tests
     public void EightMaximumCategorySolvesFitTheDeclared521904Bound()
     {
         var source = Enumerable.Repeat(513d, 192).ToArray(); var values = Enumerable.Repeat(513, 192).ToArray();
-        var q = Enumerable.Repeat((ushort)1, 64).ToArray(); var prices = Enumerable.Repeat(256, 512).ToArray();
+        var q = Enumerable.Repeat((ushort)1, 64).ToArray(); var prices = Enumerable.Repeat((ushort)256, 512).ToArray();
         using var context = new OperationContext(ImageLimits.Default with { MaxWork = 521904 }, default);
         JpegEncoder.RefineJoint444(source, q, q, values, prices, 100, context);
         Assert.All(values, v => Assert.Equal(513, v)); Assert.Equal(521904, context.ConsumedWork);
@@ -62,12 +62,12 @@ public sealed class JpegTrellis444Tests
         Assert.Equal(0, context.ConsumedWork);
     }
 
-    private static (double[], int[], ushort[], int[]) EobCase()
+    private static (double[], int[], ushort[], ushort[]) EobCase()
     {
         var source = new double[192]; var values = new int[192];
         var q = Enumerable.Repeat((ushort)1, 64).ToArray(); q[0] = 255;
         for (var c = 0; c < 3; c++) source[c * 64] = 127;
-        var prices = Enumerable.Repeat(1, 512).ToArray(); prices[0] = prices[256] = 4096;
+        var prices = Enumerable.Repeat((ushort)1, 512).ToArray(); prices[0] = prices[256] = 4096;
         return (source, values, q, prices);
     }
 }

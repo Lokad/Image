@@ -6,11 +6,11 @@ internal static partial class JpegEncoder
     // The Original DQT remains the encoded quantizer. Changing the decision grid
     // must not itself grant an additional fractional source-error allowance.
     internal static void DecidePrecisionGrid444(ReadOnlySpan<double> source, ReadOnlySpan<ushort> luma,
-        ReadOnlySpan<ushort> chroma, Span<int> values, ReadOnlySpan<int> prices, int lambda, OperationContext context)
+        ReadOnlySpan<ushort> chroma, Span<int> values, JointAcPrices prices, int lambda, OperationContext context)
     {
         if (source.Length != 192 || values.Length != 192 || luma.Length != 64 || chroma.Length != 64
-            || prices.Length != 512 || lambda < 0)
-            throw new ArgumentException("JPEG precision decisions require three complete blocks and two price models.");
+            || prices.Families != 2 || lambda < 0)
+            throw new ArgumentException("JPEG precision decisions require three complete blocks and Y and chroma price families.");
         if (lambda == 0) return;
         // Replace the former late precision pass's 2880 units, before mutation:
         // <=128*13 factor steps + 128 setup + 384 error visits + 192 quantize

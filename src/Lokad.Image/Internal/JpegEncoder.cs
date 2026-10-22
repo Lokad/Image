@@ -31,7 +31,9 @@ internal static partial class JpegEncoder
         var joint444 = acLambda != 0 && options.Sampling == JpegSampling.YCbCr444;
         Span<double> jointSource = joint444 ? stackalloc double[192] : default;
         Span<int> jointValues = joint444 ? stackalloc int[192] : default;
-        Span<int> jointPrices = joint444 ? stackalloc int[512] : default;
+        Span<ushort> jointPriceData = joint444 ? stackalloc ushort[SourcePriceCapacity] : default;
+        Span<ushort> jointPriceOffsets = joint444 ? stackalloc ushort[128] : default;
+        scoped JointAcPrices jointPrices = default;
         var dcSymbols = Enumerable.Range(0, 12).Select(value => (byte)value).ToArray();
         var ac = FixedAc.Table;
         var acWords = FixedAc.Words;
@@ -39,8 +41,8 @@ internal static partial class JpegEncoder
         // The existing quantization destination fits in the admitted fixed
         // workspace. Keep it on the safe stack when passed to the SIMD helper.
         Span<int> quantized = stackalloc int[64];
-        if (joint444) TrainJoint444Prices(image, default, options.BackgroundRgb, columns, rows, luma, chroma,
-            jointSource, jointValues, jointPrices, acLambda, context);
+        if (joint444) jointPrices = TrainJoint444Prices(image, default, options.BackgroundRgb, columns, rows, luma, chroma,
+            jointSource, jointValues, jointPriceData, jointPriceOffsets, acLambda, context);
         output.Write(new byte[] { 255, 216 });
         Segment(output, 0xE0, new byte[] { 74, 70, 73, 70, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0 });
         WriteQuantization(output, luma, 0);
@@ -279,11 +281,13 @@ internal static partial class JpegEncoder
             var progressive = joint444 && CanWriteProgressive444(options);
             Span<double> jointSource = joint444 ? stackalloc double[192] : default;
             Span<int> jointValues = joint444 ? stackalloc int[192] : default;
-            Span<int> jointPrices = joint444 ? stackalloc int[512] : default;
+            Span<ushort> jointPriceData = joint444 ? stackalloc ushort[SourcePriceCapacity] : default;
+            Span<ushort> jointPriceOffsets = joint444 ? stackalloc ushort[128] : default;
+            scoped JointAcPrices jointPrices = default;
             var pixels = new byte[64]; var transformed = new double[64]; var predictors = new int[components];
             Span<int> quantized = stackalloc int[64]; var eventCount = 0;
-            if (joint444) TrainJoint444Prices(image, default, options.BackgroundRgb, columns, rows, luma, chroma,
-                jointSource, jointValues, jointPrices, acLambda, context);
+            if (joint444) jointPrices = TrainJoint444Prices(image, default, options.BackgroundRgb, columns, rows, luma, chroma,
+                jointSource, jointValues, jointPriceData, jointPriceOffsets, acLambda, context);
             for (var mcu = 0; mcu < columns * rows; mcu++)
             {
                 context.Work(1);

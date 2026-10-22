@@ -1,25 +1,30 @@
-using System.Numerics;
-
 namespace Lokad.Image.Internal;
 
 internal static partial class JpegEncoder
 {
-    // The histogram becomes the Q8 prices in place: 2048 stack bytes, alongside
-    // the 2304-byte MCU and existing scratch within the admitted 8 KiB workspace.
-    private const int JointPriceFinishWork = 3632;
+    // Sparse ushort counters become exact Q8 prices in place. The 1500-byte
+    // arena and 256-byte scan map fit the existing admitted 8 KiB workspace.
     private const int JointPriceBandSetupWork = 1920;
     private const int JointPriceSampleWork = 136129;
 
     private static long JointPriceTrainingWork(long mcus, int quality, int components,
         JpegSampling sampling, JpegQuantizationPolicy policy)
         => sampling == JpegSampling.YCbCr444 && AcDecisionLambda(quality, components, sampling, policy) != 0
-            ? Math.Min(64, mcus) * JointPriceSampleWork + JointPriceFinishWork + JointPriceBandSetupWork : 0;
+            ? Math.Min(64, mcus) * JointPriceSampleWork
+                + SourcePriceShape444(PlannedSourcePriceBands444(quality)).FinishWork
+                + JointPriceBandSetupWork + JointPriceLayoutWork : 0;
 
-    private static void TrainJoint444Prices(ImageBuffer? image, JpegSampleInput samples, uint? background,
-        int columns, int rows, ReadOnlySpan<ushort> luma, ReadOnlySpan<ushort> chroma,
-        Span<double> source, Span<int> values, Span<int> prices, int lambda, OperationContext context)
+    private static JointAcPrices TrainJoint444Prices(ImageBuffer? image, scoped JpegSampleInput samples, uint? background,
+        int columns, int rows, scoped ReadOnlySpan<ushort> luma, scoped ReadOnlySpan<ushort> chroma,
+        scoped Span<double> source, scoped Span<int> values, Span<ushort> prices, Span<ushort> offsets,
+        int lambda, OperationContext context)
     {
         var bands = SourcePriceBands444(luma, chroma, lambda, context);
+        context.Work(JointPriceLayoutWork);
+        var shape = SourcePriceShape444(bands);
+        if (prices.Length < shape.Slots) throw new ArgumentException("Source-price arena is too small.");
+        SourcePriceOffsets444(bands, offsets);
+        prices = prices[..shape.Slots];
         prices.Clear();
         var mcus = checked(columns * rows); var count = Math.Min(64, mcus);
         Span<byte> pixels = stackalloc byte[64];
@@ -53,9 +58,11 @@ internal static partial class JpegEncoder
             }
             context.Work(192);
             for (var component = 0; component < 3; component++)
-                CountJointAc(values.Slice(component * 64, 64), prices.Slice(component == 0 ? 0 : 256, 256), bands.ForComponent(component));
+                CountSourceBandAc(values.Slice(component * 64, 64), prices,
+                    offsets.Slice(component == 0 ? 0 : 64, 64), bands.ForComponent(component));
         }
-        FinishJointPrices(prices, context);
+        FinishSourceBandPrices(prices, bands, context);
+        return new(prices, offsets);
     }
 
     internal static int JointPriceSamplePosition(int sample, int count, int mcus)
@@ -83,38 +90,60 @@ internal static partial class JpegEncoder
         }
     }
 
-    internal static void FinishJointPrices(Span<int> prices, OperationContext context)
+    private static void CountSourceBandAc(ReadOnlySpan<int> values, Span<ushort> counts,
+        ReadOnlySpan<ushort> offsets, ulong bandEnds)
     {
-        if (prices.Length != 512) throw new ArgumentException("Two complete JPEG AC models are required.");
-        // 512 histogram visits + 512 output visits + eight squarings for each
-        // of 324 legal symbols and the two totals, charged before mutation.
-        context.Work(JointPriceFinishWork);
-        for (var group = 0; group < 2; group++)
+        var zeros = 0;
+        for (var scan = 1; scan < 64; scan++)
         {
-            var model = prices.Slice(group * 256, 256); var total = 162;
-            for (var i = 0; i < 256; i++) total += model[i];
-            var totalLog = JointLog2Q8(total);
-            for (var symbol = 0; symbol < 256; symbol++)
-                model[symbol] = symbol is 0 or 0xF0 || (symbol & 15) is >= 1 and <= 10
-                    ? Math.Clamp(totalLog - JointLog2Q8(model[symbol] + 1), 1, 4096) : 0;
+            var at = offsets[scan] & 1023; var value = values[JpegTransform.Zigzag[scan]];
+            if (value == 0) zeros++;
+            else
+            {
+                while (zeros >= 16) { counts[at + 1]++; zeros -= 16; }
+                var size = Category(value);
+                if (size > 10) throw new ImageDataException("JPEG AC transform exceeds its coding range.");
+                counts[at + SourcePriceSlot(zeros << 4 | size)]++; zeros = 0;
+            }
+            if (scan == 63 || (bandEnds & (1UL << scan)) != 0)
+            { if (zeros != 0) counts[at]++; zeros = 0; }
         }
     }
 
-    internal static int JointLog2Q8(int value)
+    internal static void FinishSourceBandPrices(Span<ushort> prices, JointAcBands bands, OperationContext context)
     {
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
-        var integral = BitOperations.Log2((uint)value);
-        var normalized = (ulong)value << (31 - integral); var fraction = 0;
-        for (var bit = 7; bit >= 0; bit--)
+        var shape = SourcePriceShape444(bands);
+        if (prices.Length != shape.Slots || shape.Slots > SourcePriceCapacity)
+            throw new ArgumentException("Invalid bounded source-price arena.");
+        context.Work(shape.FinishWork);
+        // Validate every model before any histogram is changed. An impossible
+        // short-band ZRL would invalidate the positive-symbol sorting bound.
+        for (var pass = 0; pass < 2; pass++)
         {
-            // normalized < 2^32, so its square fits UInt64 before the shift.
-            normalized = normalized * normalized >> 31;
-            if (normalized >= 1UL << 32) { normalized >>= 1; fraction |= 1 << bit; }
+            var at = 0;
+            for (var family = 0; family < 2; family++)
+            {
+                var ends = bands.ForComponent(family) | (1UL << 63);
+                for (var first = 1; first < 64;)
+                {
+                    var last = System.Numerics.BitOperations.TrailingZeroCount(ends & (ulong.MaxValue << first));
+                    var length = last - first + 1; var size = 2 + 10 * Math.Min(16, length);
+                    var model = prices.Slice(at, size);
+                    if (pass == 0)
+                    {
+                        var total = 0;
+                        foreach (var count in model) total += count;
+                        if (total > 8064 || length <= 16 && model[1] != 0)
+                            throw new ArgumentOutOfRangeException(nameof(prices), "Invalid source AC histogram.");
+                    }
+                    else SourceHuffmanPrices(model);
+                    at += size; first = last + 1;
+                }
+            }
         }
-        return integral * 256 + fraction;
     }
 
-    internal static int JointAcPrice(ReadOnlySpan<int> coefficients, ReadOnlySpan<int> prices, ulong bandEnds = 0)
+    internal static int JointAcPrice(ReadOnlySpan<int> coefficients, JointAcPrices prices, ulong bandEnds = 0)
     {
         var zeros = 0; var result = 0;
         for (var scan = 1; scan < 64; scan++)
@@ -123,12 +152,12 @@ internal static partial class JpegEncoder
             if (value == 0) zeros++;
             else
             {
-                while (zeros >= 16) { result += prices[0xF0]; zeros -= 16; }
-                var size = Category(value); result += prices[zeros << 4 | size] + size * 256; zeros = 0;
+                while (zeros >= 16) { result += prices.At(0xF0, scan); zeros -= 16; }
+                var size = Category(value); result += prices.At(zeros << 4 | size, scan) + size * 256; zeros = 0;
             }
             if (scan == 63 || (bandEnds & (1UL << scan)) != 0)
             {
-                if (zeros != 0) result += prices[0];
+                if (zeros != 0) result += prices.At(0, scan);
                 zeros = 0;
             }
         }

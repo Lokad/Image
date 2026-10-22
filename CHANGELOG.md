@@ -4,7 +4,7 @@
 
 - Smaller 8-bit RGBA PNG output with the deeper `Optimal` search policy,
   preserving exact samples, bounded admission and asynchronous ownership.
-- Smaller Original 4:4:4 JPEG packets through source-derived precision-grid, band-aware prices/histograms and joint component decisions
+- Smaller Original 4:4:4 JPEG packets through source-derived precision-grid, canonical source prices per spectral band and joint component decisions
   and admitted progressive scans; `BaselineOnly` preserves baseline syntax with
   the same pixels. Compression qualification remains specific to tested controls.
 - Smaller lossy WebP output through admitted 16x16 luma prediction, grouped DC

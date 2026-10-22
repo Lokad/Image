@@ -48,7 +48,7 @@ public sealed class JpegComponentTripletTests
     public void AllValidTrialsFit39123WithoutRepeatingTheSuppliedStateScans()
     {
         var source = Enumerable.Repeat(512d, 192).ToArray(); var values = Enumerable.Repeat(512, 192).ToArray();
-        var q = Enumerable.Repeat((ushort)1, 64).ToArray(); var prices = Enumerable.Repeat(256, 512).ToArray();
+        var q = Enumerable.Repeat((ushort)1, 64).ToArray(); var prices = Enumerable.Repeat((ushort)256, 512).ToArray();
         // Each AC is nonzero: 63*(one symbol + ten amplitude bits)*256.
         var state = new JpegEncoder.Joint444State(0, 177408, 177408, 177408);
         using var context = new OperationContext(new() { MaxWork = 39123 }, default);
@@ -62,7 +62,7 @@ public sealed class JpegComponentTripletTests
     {
         var values = Enumerable.Repeat(level, 192).ToArray(); var source = values.Select(x => x * 8d).ToArray();
         var q = Enumerable.Repeat((ushort)8, 64).ToArray(); var limits = Enumerable.Repeat((ushort)127, 128).ToArray();
-        var prices = Enumerable.Repeat(256, 512).ToArray();
+        var prices = Enumerable.Repeat((ushort)256, 512).ToArray();
         var state = new JpegEncoder.Joint444State(0, 129024, 129024, 129024); // 63*(symbol + seven amplitude bits)*256.
         using var context = new OperationContext(ImageLimits.Default, default);
         JpegEncoder.RefineComponentTriplets444(source, q, q, values, prices, 100, context, 0, state, limits);
@@ -94,12 +94,12 @@ public sealed class JpegComponentTripletTests
         Assert.Equal(original, values); Assert.Equal(0, context.ConsumedWork);
     }
 
-    private static (double[], int[], ushort[], int[]) CoupledCase(int sign)
+    private static (double[], int[], ushort[], ushort[]) CoupledCase(int sign)
     {
         var source = new double[192]; var values = new int[192];
         for (var c = 0; c < 3; c++) { source[c * 64] = values[c * 64] = sign * 17; values[c * 64 + 63] = sign * 4; }
         source[63] = sign * 3.2937551643482448; source[127] = sign * 4.4430380400607525; source[191] = sign * 4.5250117985302518;
-        return (source, values, Enumerable.Repeat((ushort)1, 64).ToArray(), Enumerable.Repeat(256, 512).ToArray());
+        return (source, values, Enumerable.Repeat((ushort)1, 64).ToArray(), Enumerable.Repeat((ushort)256, 512).ToArray());
     }
 
     private static double Error(double[] source, int[] values)

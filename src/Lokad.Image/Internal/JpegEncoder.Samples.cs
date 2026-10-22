@@ -35,7 +35,9 @@ internal static partial class JpegEncoder
         var progressive = adaptive && joint444 && CanWriteProgressive444(options);
         Span<double> jointSource = joint444 ? stackalloc double[192] : default;
         Span<int> jointValues = joint444 ? stackalloc int[192] : default;
-        Span<int> jointPrices = joint444 ? stackalloc int[512] : default;
+        Span<ushort> jointPriceData = joint444 ? stackalloc ushort[SourcePriceCapacity] : default;
+        Span<ushort> jointPriceOffsets = joint444 ? stackalloc ushort[128] : default;
+        scoped JointAcPrices jointPrices = default;
         var luma = Quantization(options.Quality, false, policy); var chroma = Quantization(options.Quality, true, policy);
         var pixels = new byte[64]; var transformed = new double[64]; var predictors = new int[components];
         Span<int> quantized = stackalloc int[64];
@@ -49,8 +51,8 @@ internal static partial class JpegEncoder
         }
         try
         {
-            if (joint444) TrainJoint444Prices(null, source, options.BackgroundRgb, columns, rows, luma, chroma,
-                jointSource, jointValues, jointPrices, acLambda, context);
+            if (joint444) jointPrices = TrainJoint444Prices(null, source, options.BackgroundRgb, columns, rows, luma, chroma,
+                jointSource, jointValues, jointPriceData, jointPriceOffsets, acLambda, context);
             if (adaptive)
             {
                 frequencies = new long[4][];

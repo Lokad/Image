@@ -1175,15 +1175,19 @@ squared RGB error. In the geometric price trainer, added modeled error is capped
 MCU error, including DC in that initial estimate while retaining its coefficients.
 It visits frequencies in reverse zigzag and components Y/Cb/Cr, accepting strict
 cost improvements with stable closest-category-first ties. Its two AC price
-models (Y and shared Cb/Cr) use at most64 evenly spaced distinct source MCUs,
+families (Y and shared Cb/Cr) use at most64 evenly spaced distinct source MCUs,
 including the endpoints. These samples first undergo the same geometric decisions
 on the original fine quantizers. Their unchanged fine-unit AC coefficients are
 counted independently over the eventual equal-point-transform spectral bands,
 resetting run/EOB at each boundary; they are not rescaled or retrained on a coarser
-grid. The two histograms receive +1 smoothing on all162 legal symbols. Q8 prices are
-the difference of deterministic integer log2 estimates, clamped to1..4096;
-amplitude bits are scaled by256. Integer logs use eight Q31 square/normalize
-steps, without platform-dependent transcendental calls. Sampling, histograms and
+grid. Each spectral band has its own histogram within the Y/shared-CbCr families.
+Every model receives +1 smoothing on all162 legal symbols, including unreachable
+runs whose zero counters are implicit. Q8 prices
+are deterministic, at-most16-bit Huffman code lengths multiplied by256, with one
+dummy leaf reserving the all-ones code. Equal weights use ascending symbol order;
+internal nodes follow leaves. T.81 Annex K length limiting and stable descending
+frequency assignment match the encoder's separate canonical table builder.
+Amplitude bits are scaled by256. Sampling, histograms and
 prices remain operation-local and do not depend on entropy/output admission.
 Before the final priced pass, Original4:4:4 selects a source-derived precision
 grid. Let `p=(16*scale+50)/100`; choose the largest power of two `f` with
@@ -1210,7 +1214,7 @@ The final local/DAG/pair/triplet decisions reset run/EOB at the existing
 equal-point-transform spectral bands. The DAG has a root and terminal per band,
 then evaluates one complete component candidate against the same global MCU
 error/rate criteria. It does not grant separate error allowances to each band.
-The source trainer and its two Q8 models remain unchanged; the band masks are
+The source trainer and prepared Q8 models are not refreshed by this pass; the band masks are
 two scalar64-bit values, derived from the already prepared amplitude grid.
 Its bank contains the current and original nearest coefficients, smaller-category
 levels and original nearest minus/plus one. Stable shortest-path ties retain the
@@ -1275,12 +1279,22 @@ giving667440 before the paired tail. That tail adds at most196002 per MCU,
 for863442 total (287814/block). Every bounded bank, arc, probe,
 reconstruction and selection step charges work before execution. Adaptive and
 async staging estimates also include source sampling: at most136129 per sampled
-MCU plus3632 to finish both models and1920 once to prepare their band masks.
+MCU,1920 once to prepare band masks and1024 for layout/clear preparation.
 Mask setup charges before clearing histograms, reuses128 stack bytes and adds no
-owner or frame copy. The declared control plans1,999,576,760 units under the
+owner or frame copy. Source-table finishing reuses2116 stack bytes sequentially
+for all models: at most163 leaves,325 nodes and total weight8227. Each band stores
+EOB/ZRL and ten categories per reachable run. Across Original qualities1..98,
+750 ushort counters suffice; they become exact ushort Q8 prices in place. With
+128 ushort scan offsets this is1756 bytes, alongside the2304-byte MCU,64 sample
+bytes and existing fixed scratch within8KiB. No heap, retained owner or frame
+copy is added. Each finish prepays40960 logical visits plus r*(323-r)/2 sorting
+shifts, where r=1+10*min(16,bandLength)+(bandLength>=17?1:0) bounds positive
+source symbols. All models are validated before any histogram mutation.
+The declared control's nine models charge416519 finish units and plan
+1,999,990,671 units under the
 unchanged default2B limit. Default work limits remain unchanged.
 The1612-byte trellis scratch is allocated once per MCU call; each frequency's
-bank is rebuilt as needed. Alongside the2048-byte price model,2304-byte MCU,
+bank is rebuilt as needed. Alongside the1756-byte price arena/map,2304-byte MCU,
 512-byte effective-grid arrays,48-byte local candidate bank and existing scratch,
 it fits the admitted8KiB. Grid setup adds the existing2880-per-MCU precision bound
 to863442, for866322 before the three-component tail. That tail charges at most

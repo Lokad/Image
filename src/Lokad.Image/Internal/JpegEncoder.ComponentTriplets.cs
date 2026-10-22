@@ -8,11 +8,11 @@ internal static partial class JpegEncoder
     internal const int ComponentTripletWorkPerMcu = 63 * (6 * 64 + 26 + 26 * 8 + 3);
 
     internal static void RefineComponentTriplets444(ReadOnlySpan<double> source, ReadOnlySpan<ushort> luma,
-        ReadOnlySpan<ushort> chroma, Span<int> values, ReadOnlySpan<int> prices, int lambda,
+        ReadOnlySpan<ushort> chroma, Span<int> values, JointAcPrices prices, int lambda,
         OperationContext context, double maximumError, Joint444State state, ReadOnlySpan<ushort> amplitudeLimits = default, JointAcBands bands = default)
     {
         if (source.Length != 192 || values.Length != 192 || luma.Length != 64 || chroma.Length != 64
-            || prices.Length != 512 || lambda < 0 || amplitudeLimits.Length is not (0 or 128)
+            || prices.Families != 2 || lambda < 0 || amplitudeLimits.Length is not (0 or 128)
             || !double.IsFinite(maximumError) || maximumError < 0 || !double.IsFinite(state.Error))
             throw new ArgumentException("JPEG component triplets require three complete blocks and their current decision state.");
         if (lambda == 0) return;
@@ -38,7 +38,7 @@ internal static partial class JpegEncoder
                     if (value < -limit || value > limit) continue;
                     context.Work(64);
                     cached[c * 3 + choice] = PairAcPrice(values.Slice(c * 64, 64),
-                        prices.Slice(c == 0 ? 0 : 256, 256), i, value, bands.ForComponent(c));
+                        prices.ForComponent(c), i, value, bands.ForComponent(c));
                 }
             }
             var beforeBits = previous[0] + previous[1] + previous[2];

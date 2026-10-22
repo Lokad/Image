@@ -38,7 +38,7 @@ public sealed class JpegAdjacentLevelTests
     public void MaximumPricedCategoriesFitTheDeclared145536Work()
     {
         var source = Enumerable.Repeat(513d, 192).ToArray(); var values = Enumerable.Repeat(513, 192).ToArray();
-        var q = Enumerable.Repeat((ushort)1, 64).ToArray(); var prices = Enumerable.Repeat(256, 512).ToArray();
+        var q = Enumerable.Repeat((ushort)1, 64).ToArray(); var prices = Enumerable.Repeat((ushort)256, 512).ToArray();
         using var context = new OperationContext(ImageLimits.Default with { MaxWork = 145536 }, default);
         JpegEncoder.DecideJoint444(source, q, q, values, 100, context, prices);
         Assert.All(values, v => Assert.Equal(513, v)); Assert.Equal(145536, context.ConsumedWork);
@@ -55,11 +55,11 @@ public sealed class JpegAdjacentLevelTests
         Assert.Equal(token.Token, error.CancellationToken); Assert.Equal(before, values); Assert.Equal(0, context.ConsumedWork);
     }
 
-    private static (double[], int[], ushort[], ushort[], int[]) Case(int original, int sign)
+    private static (double[], int[], ushort[], ushort[], ushort[]) Case(int original, int sign)
     {
         var source = new double[192]; var values = new int[192];
         source[63] = sign * (original + .49); values[63] = sign * original; source[127] = sign * 31.4;
         return (source, values, Enumerable.Repeat((ushort)1, 64).ToArray(),
-            Enumerable.Repeat((ushort)64, 64).ToArray(), Enumerable.Repeat(256, 512).ToArray());
+            Enumerable.Repeat((ushort)64, 64).ToArray(), Enumerable.Repeat((ushort)256, 512).ToArray());
     }
 }

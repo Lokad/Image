@@ -27,7 +27,7 @@ public sealed class JpegAcBandTests
     public void BandBoundariesFlushEobAndPreventCrossBandZrl()
     {
         var values = new int[64]; values[JpegTransform.Zigzag[18]] = -4;
-        var prices = Enumerable.Range(0, 256).Select(i => 5 + i * 37).ToArray();
+        var prices = Enumerable.Range(0, 256).Select(i => (ushort)(5 + i * 37)).ToArray();
         var expected = prices[0] * 2 + prices[0x13] + 3 * 256;
         Assert.Equal(expected, JpegEncoder.JointAcPrice(values, prices, 1UL << 16));
         Assert.Equal(prices[0xF0] + prices[0x13] + 3 * 256 + prices[0], JpegEncoder.JointAcPrice(values, prices));
@@ -42,7 +42,7 @@ public sealed class JpegAcBandTests
     [Fact]
     public void ReplacementPricesMatchIndependentTokensWithoutMutatingInput()
     {
-        var values = new int[64]; var prices = Enumerable.Range(0, 256).Select(i => 17 + i * 19).ToArray();
+        var values = new int[64]; var prices = Enumerable.Range(0, 256).Select(i => (ushort)(17 + i * 19)).ToArray();
         for (var scan = 1; scan < 64; scan++) if (scan % 7 == 0) values[JpegTransform.Zigzag[scan]] = scan % 5 - 2;
         var original = values.ToArray(); var ends = (1UL << 2) | (1UL << 6) | (1UL << 9) | (1UL << 31);
         for (var scan = 1; scan < 64; scan++)
@@ -86,7 +86,7 @@ public sealed class JpegAcBandTests
     public void SplitBandsFitTheExistingEightSolveWorkBound()
     {
         var source = Enumerable.Repeat(513d, 192).ToArray(); var values = Enumerable.Repeat(513, 192).ToArray();
-        var q = Enumerable.Repeat((ushort)1, 64).ToArray(); var prices = Enumerable.Repeat(256, 512).ToArray();
+        var q = Enumerable.Repeat((ushort)1, 64).ToArray(); var prices = Enumerable.Repeat((ushort)256, 512).ToArray();
         using var context = new OperationContext(new() { MaxWork = JpegEncoder.Trellis444WorkPerMcu }, default);
         JpegEncoder.RefineJoint444(source, q, q, values, prices, 100, context, bands: new(1UL << 31, (1UL << 15) | (1UL << 31)));
         Assert.All(values, v => Assert.Equal(513, v)); Assert.InRange(context.ConsumedWork, 1, JpegEncoder.Trellis444WorkPerMcu - 1);
@@ -117,7 +117,7 @@ public sealed class JpegAcBandTests
         Assert.Equal(-1, values[JpegTransform.Zigzag[31]]);
     }
 
-    private static int Oracle(int[] values, int[] prices, ulong ends)
+    private static int Oracle(int[] values, ushort[] prices, ulong ends)
     {
         var total = 0; var first = 1;
         for (var last = 1; last < 64; last++)
@@ -136,11 +136,11 @@ public sealed class JpegAcBandTests
         return total;
     }
 
-    private static (double[], int[], ushort[], int[]) EobCase()
+    private static (double[], int[], ushort[], ushort[]) EobCase()
     {
         var source = new double[192]; var values = new int[192]; var q = Enumerable.Repeat((ushort)1, 64).ToArray(); q[0] = 255;
         for (var c = 0; c < 3; c++) source[c * 64] = 127;
-        var prices = Enumerable.Repeat(1, 512).ToArray(); prices[0] = prices[256] = 4096;
+        var prices = Enumerable.Repeat((ushort)1, 512).ToArray(); prices[0] = prices[256] = 4096;
         return (source, values, q, prices);
     }
 }
