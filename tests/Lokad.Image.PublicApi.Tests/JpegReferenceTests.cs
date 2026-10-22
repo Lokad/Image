@@ -29,6 +29,8 @@ public sealed class JpegReferenceTests
         "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423")]
     [InlineData(JpegSampling.YCbCr420, 8, 85, 33, "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", 58010,
         "1af33b85d17d4dd24a19f98e66242eba42c7c77b7347dfa564a83d64b19feea4")]
+    [InlineData(JpegSampling.Grayscale, 16, 69, 0, "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9", 58942,
+        "2a99dee8551c14e8acceb8df6adec6a2a263a9f037ec00cabe2791c96b178bfc")]
     public async Task FrozenNativePacketsMatchAcrossOwnedAndCallerBoundaries(JpegSampling sampling, int depth, int quality, int restart, string sourceHash, int length, string packetHash)
     {
         using var root = new TestMemoryBudget(4 * 1024 * 1024);
@@ -77,7 +79,8 @@ public sealed class JpegReferenceTests
         if (sampling == JpegSampling.Grayscale)
         {
             var gray = GraySamples(normalized);
-            Assert.Equal("6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d", Hash(gray));
+            Assert.Equal(depth == 8 ? "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d"
+                : "47a685cb7e759840f7e50cff59e4254ae172aa9807b17b3f18551b9883d846a6", Hash(gray));
             const int grayStride = 518;
             var padded = Enumerable.Repeat((byte)165, grayStride * 259 + 7).ToArray();
             for (var y = 0; y < 259; y++) gray.AsSpan(y * 513, 513).CopyTo(padded.AsSpan(y * grayStride, 513));

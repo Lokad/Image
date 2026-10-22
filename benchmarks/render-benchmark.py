@@ -349,6 +349,8 @@ attribution. Six tiny/paired functional controls cover the additional conversion
 and filter-edge branches; no performance claim follows from packet equality.
 The production grayscale Reference profile also matches its58,910B packet exactly,
 including caller Gray8/RGB8 and async boundaries; no attribution exception is needed.
+The existing RGBA16 control is confirmed too:58,942B raw-exact on Windows/Linux,
+including normalized caller samples and scalar execution, with the unchanged build.
 CPU/allocation qualification remains open.
 Production color restarts now match the frozen4:2:0 row-restart33 packet:
 58,012B native,58,010B with the approved attribution. Generic MCU intervals have

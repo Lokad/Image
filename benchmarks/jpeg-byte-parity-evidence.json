@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "project": "Lokad.Image",
-  "qualification": "E11",
-  "status": "Production opt-in Reference JPEG grayscale/444/422/420 and color MCU restarts qualified on Windows/Linux. Eight complete frozen controls match outside only approved color COM attribution; default adoption, named gray/native option gaps, other codecs and CPU/release scope OPEN.",
-  "productionChanged": true,
+  "qualification": "E12",
+  "status": "Opt-in Reference JPEG has nine frozen complete controls, including independently confirmed grayscale16. Raw gray exactness and only approved color COM attribution on Windows/Linux. Production E11 unchanged; grayscale restarts, default adoption, other codecs and CPU/release scope OPEN.",
+  "productionChanged": false,
   "productionCoreSha256": "19ac3ff61260997adea86afa390d7c8a4be0396bc0a1bfc545c33b7abc6bd3e2",
   "oracle": {
     "ffmpegRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
@@ -126,7 +126,7 @@
     "sha256": "17a146f3a307fec096b8189161fc1a1e4e1d947327dc895c9b4e1e8d1d9b5d93",
     "mirrored": true
   },
-  "next": "E12: resolve missing grayscale16 native complete-packet confirmation using the existingRGBA16 raster at69 and approved SIMD libjpeg-turbo backend; reuse immutable E11 build and qualification. Then Reference grayscale restarts and deliberate default/legacy adoption; preserve remaining exact encoder/decoder, full finite CPU/allocation and release objective.",
+  "next": "E13: Reference grayscale MCU restarts against the same approved SIMD-enabled libjpeg-turbo backend, one existing raster/settings interval control; independent optimized histogram reset and exact header/framing. Then default/legacy migration, other exact encoders/decoders, finite CPU/allocation and release scope.",
   "forwardStage": {
     "qualification": "E2",
     "nativeDispatch": "ff_fdct_sse2",
@@ -758,7 +758,7 @@
       "mirrored": true
     }
   },
-  "latestAudit": "E9",
+  "latestAudit": "E12",
   "grayscaleReplication": {
     "qualification": "E7",
     "status": "Qualified independent source-only grayscale encoder prototype on Windows/Linux; production/API/admission integration OPEN",
@@ -863,7 +863,7 @@
     "attributionExceptionUsed": false,
     "sourceAndSurvivingOutputsPreserved": true,
     "fullFrameGrayCopy": false,
-    "image16Scope": "Functional normalization composition only; no additional native packet/content/quality claim",
+    "image16Scope": "Confirmed in E12 with unchanged E11 core: existing RGBA16 raster, independent normalization, complete58942B native packet raw-exact both platforms; caller RGB8/Gray8 sync/async included.",
     "cpuAndAllocations": "Unmeasured; allocations bounded by admitted capacity in focused tests, no scored timing or CPU parity claim",
     "ownership": "Borrow one root; fixed/table owner established before allocation; coarse temporary tree/queue replacement overlap; terminal refusal; work/local/output limits; cancellation/failure cleanup; async chunks charged until actual users finish",
     "qualification": "E8",
@@ -1587,7 +1587,7 @@
     }
   },
   "currentReferenceEncoderCoverage": {
-    "round": "E11",
+    "round": "E12",
     "status": "All18 required existing row boundaries have packet confirmations for opt-in Reference; default remains Original. Optional CompactColor and broader option/native scope remain distinct, with named follow-ups OPEN.",
     "productionCoreSha256": "19ac3ff61260997adea86afa390d7c8a4be0396bc0a1bfc545c33b7abc6bd3e2",
     "existingRows": 19,
@@ -1813,18 +1813,22 @@
           "liveCancelableToken": true,
           "sourcePreserved": true,
           "packetSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423"
+        },
+        {
+          "depth": 16,
+          "sampling": "Grayscale",
+          "quality": 69,
+          "baselineOnly": true,
+          "liveCancelableToken": true,
+          "sourcePreserved": true,
+          "packetSha256": "2a99dee8551c14e8acceb8df6adec6a2a263a9f037ec00cabe2791c96b178bfc"
         }
       ],
-      "meaning": "BaselineOnly=true plus successful live cancellation token preserve the frozen packet at4448,42016 andgray8; complements E8 failure/cancellation/ownership checks without changing production inputs.",
+      "meaning": "BaselineOnly=true plus successful live cancellation token preserve the frozen packet at4448,42016 andgray8; complements E8 failure/cancellation/ownership checks without changing production inputs. E12 adds the missing gray16 anchor; no production changes.",
       "productionCoreSha256": "19ac3ff61260997adea86afa390d7c8a4be0396bc0a1bfc545c33b7abc6bd3e2",
       "durableTestsSince": "E11"
     },
     "remainingNamedCases": [
-      {
-        "case": "Reference grayscale from existing513x259 RGBA16 raster at69",
-        "reason": "16-bit normalization/flattening is a distinct required source boundary; E8 proves its composition functionally but does not freeze a native Gray16 packet.",
-        "acceptance": "One reused RGBA16 raster, independent normalized Gray8 samples and approved grayscale backend; exact complete packet. No new content/quality/shape grid."
-      },
       {
         "case": "Reference grayscale MCU restarts",
         "reason": "Existing explicit Original gray restart support is preserved; Reference still returns typed unsupported. Distinct optimized-gray histogram resets and native header placement require qualification.",
@@ -1843,13 +1847,93 @@
       }
     ],
     "qualityScope": "Reference color qscale mapping and grayscale identity formula are explicit. Native exact anchors stay qscale5/gray69. Existing1/100 functional tests remain; do not create a quality sweep or infer equality of legacy numeric quality values.",
-    "changesInvalidatingOlderEvidence": "New Reference color restart path replaces prior unsupported behavior. Existing Reference no-restart MCU traversal adds an interval-zero guard, so complete packets and affected scalar/API/ownership checks were reconfirmed. Gray algorithm and Original/CompactColor packets are unchanged. No prior valid Reference CPU cost existed; old JPEG timings remain tied to Original producers. Unaffected decoder/transform evidence is reused.",
+    "changesInvalidatingOlderEvidence": "New Reference color restart path replaces prior unsupported behavior. Existing Reference no-restart MCU traversal adds an interval-zero guard, so complete packets and affected scalar/API/ownership checks were reconfirmed. Gray algorithm and Original/CompactColor packets are unchanged. No prior valid Reference CPU cost existed; old JPEG timings remain tied to Original producers. Unaffected decoder/transform evidence is reused. E12 changes only native tooling and one public fixture row; E11 production/full/scalar/package evidence remains valid unchanged. Nine affected frozen rows pass normal/scalar on both platforms; no full-suite rerun claimed.",
     "noExpandedWorkloadMatrix": true,
     "canonicalSourceIdentities": {
       "RGBA8": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
       "RGBA16": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
       "normalizedCallerRGB8": "257210317c8bb87ec196f89d511de45f014c66e73049fbcf5f44f399184d9668",
-      "normalizedCallerGray8": "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d"
+      "normalizedCallerGray8": "6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d",
+      "normalizedGrayFromRGBA16": "47a685cb7e759840f7e50cff59e4254ae172aa9807b17b3f18551b9883d846a6"
+    }
+  },
+  "grayscale16Confirmation": {
+    "project": "Lokad.Image",
+    "round": "E12",
+    "productionChanged": false,
+    "productionCoreSha256": "19ac3ff61260997adea86afa390d7c8a4be0396bc0a1bfc545c33b7abc6bd3e2",
+    "native": {
+      "project": "Lokad.Image",
+      "round": "E12",
+      "sourceDepth": 16,
+      "width": 513,
+      "height": 259,
+      "components": 1,
+      "quality": 69,
+      "ownedQuantizers": true,
+      "isLowSimdAvailable": true,
+      "affinityCount": 1,
+      "codecThreads": 1,
+      "conversionThreads": 1,
+      "optimizeHuffman": true,
+      "restartInterval": 0,
+      "sourceBytes": 1062936,
+      "normalizedGrayBytes": 132867,
+      "packetBytes": 58942,
+      "timingRuns": 0,
+      "workerSha256": "78c207c49559ba78a2e9f7867cb83018bd0f981629e41ad558b29cf7aee461a9",
+      "sourceToolSha256": "8fb136a9661135d069bddc901c16b7b8b1859321142a8b5e4e610f8e05734e90",
+      "sourceRgba16Sha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "libjpegArchiveSha256": "faeac65984bc945a3acf12abffadf9814ba64b91d49a0b10bc6d2fe191b55d24",
+      "revision": "9217719d3a58633923b096af4c1d50d304768a64",
+      "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-math-errno",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "cpu": 0,
+      "normalizedGraySha256": "47a685cb7e759840f7e50cff59e4254ae172aa9807b17b3f18551b9883d846a6",
+      "nativePacketSha256": "2a99dee8551c14e8acceb8df6adec6a2a263a9f037ec00cabe2791c96b178bfc"
+    },
+    "productionBuilds": 0,
+    "publicTestBuilds": 1,
+    "nativeWorkerBuilds": 1,
+    "nativeEncodes": 1,
+    "timingRuns": 0,
+    "packetBytes": 58942,
+    "rawExactBothPlatforms": true,
+    "attributionExceptionUsed": false,
+    "affectedFrozenRowsPerPlatform": 9,
+    "affectedScalarRowsPerPlatform": 9,
+    "completeOperations": [
+      "RGBA16 image sync",
+      "RGBA16 forward-only output",
+      "RGBA16 image async",
+      "normalized RGB8 caller sync",
+      "normalized RGB8 caller async",
+      "normalized Gray8 caller sync",
+      "normalized Gray8 caller async"
+    ],
+    "ownership": "Borrowed source unchanged; padded samples/suffix preserved; single shared root; surviving outputs independent",
+    "reusedQualification": "E11 full5143+scalar73 and same actual private0.2 package/consumer/all3examples both platforms; no changed production or package inputs",
+    "currentFullSuiteRerun": false,
+    "cpuAndAllocations": "Unmeasured; no timing or additional performance claim",
+    "rawArchive": {
+      "file": "e12-grayscale16-confirmation.tar.gz",
+      "bytes": 492672,
+      "sha256": "8cda75a3e4fad03a442d422e67fb178766e5f5175ae3d42223e4a1b48a0a89f8",
+      "members": 12,
+      "mirrored": true
+    },
+    "sourceSha256": {
+      "tools/WarmReference/libjpeg-gray16-stage.c": "8fb136a9661135d069bddc901c16b7b8b1859321142a8b5e4e610f8e05734e90",
+      "tools/WarmReference/build-libjpeg-gray16-stage-linux.sh": "5da5ccb8cece136b5865c8c4cbc017c0bde4685f6e01607162c66165eba791ea",
+      "tests/Lokad.Image.PublicApi.Tests/JpegReferenceTests.cs": "ed12a9e8f7a79bd0f7c9fdea22a5f0f1983d82159ae6c2452973f15f87c0efa4"
     }
   }
 }
