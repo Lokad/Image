@@ -63,3 +63,20 @@ rejects palette coding and subtract-green. Uniform transform maps compact to
 sharing packet composition. `verify-vp8l-spatial-only.ps1` checks these stages,
 complete framing, source preservation, independent outputs and mutation rejection.
 Other maps, shapes, settings and admitted production integration remain open.
+
+The current framework-only `Vp8lParityModel` project consolidates these paths.
+One Windows build reproduces **ten complete packets on both platforms**: the
+four 513×259 cores, the 1×1 and two-color palettes, direct and spatial-only inputs,
+and the two 16383-pixel single-axis companions (74 bytes each). The palette path
+uses typed shared composition; the uniform-map encoder uses the current narrow
+distance mapping. No prior development assemblies are runtime/build dependencies.
+Source preservation, independent outputs and mutation checks pass across the set.
+No native build/encode or timing run was needed for this consolidation.
+
+Build once with `dotnet build tools/WarmReference/Vp8lParityModel -c Release --tl:off`
+and reuse that assembly with the packet verifiers. The four-core verifier uses
+Lokad.Image only to prepare the frozen PNG inputs, outside the encoding model.
+The native public encoder's 16383 limit prevents a packet comparison for the
+existing 16384-pixel functional boundary; the companions do not establish parity
+at that size. Remaining named paths and blockers are in the
+[coverage checklist](VP8L-PRODUCTION-COVERAGE.md).

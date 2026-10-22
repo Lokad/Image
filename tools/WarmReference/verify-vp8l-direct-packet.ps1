@@ -1,12 +1,8 @@
 param(
     [Parameter(Mandatory)][string]$NativeArchivePath,
-    [Parameter(Mandatory)][string]$DependencyDirectory,
     [Parameter(Mandatory)][string]$ModelAssembly
 )
 $ErrorActionPreference='Stop'
-foreach($name in 'Probe.dll','AuxiliaryProbe.dll','MainParityProbe.dll'){
-    [void][Reflection.Assembly]::LoadFrom((Resolve-Path (Join-Path $DependencyDirectory $name)).Path)
-}
 [void][Reflection.Assembly]::LoadFrom((Resolve-Path $ModelAssembly).Path)
 Add-Type -TypeDefinition @'
 public static class Vp8lDirectControlInput {

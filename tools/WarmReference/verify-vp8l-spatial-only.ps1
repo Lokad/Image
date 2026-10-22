@@ -1,12 +1,8 @@
 param(
     [Parameter(Mandatory)][string]$NativePacketPath,
-    [Parameter(Mandatory)][string]$DependencyDirectory,
     [Parameter(Mandatory)][string]$ModelAssembly
 )
 $ErrorActionPreference='Stop'
-foreach($name in 'Probe.dll','AuxiliaryProbe.dll','MainParityProbe.dll'){
-    [void][Reflection.Assembly]::LoadFrom((Resolve-Path (Join-Path $DependencyDirectory $name)).Path)
-}
 [void][Reflection.Assembly]::LoadFrom((Resolve-Path $ModelAssembly).Path)
 function Hash([byte[]]$bytes){[Convert]::ToHexStringLower([Security.Cryptography.SHA256]::HashData($bytes))}
 $source=[byte[]]::new(19*7*4)

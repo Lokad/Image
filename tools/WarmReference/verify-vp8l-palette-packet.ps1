@@ -1,21 +1,9 @@
 param(
     [Parameter(Mandatory)][string]$NativePacketPath,
-    [Parameter(Mandatory)][string]$DependencyDirectory,
-    [Parameter(Mandatory)][string]$ControlsAssembly,
-    [string]$ModelAssembly
+    [Parameter(Mandatory)][string]$ModelAssembly
 )
 $ErrorActionPreference='Stop'
-foreach($name in 'Probe.dll','AuxiliaryProbe.dll','MainParityProbe.dll'){
-    [void][Reflection.Assembly]::LoadFrom((Resolve-Path (Join-Path $DependencyDirectory $name)).Path)
-}
-[void][Reflection.Assembly]::LoadFrom((Resolve-Path $ControlsAssembly).Path)
-if($ModelAssembly){
-    [void][Reflection.Assembly]::LoadFrom((Resolve-Path $ModelAssembly).Path)
-}else{
-    $references=@(Get-ChildItem (Join-Path $PSHOME 'ref') -Filter '*.dll'|ForEach-Object FullName)
-    $references+=@((Resolve-Path $ControlsAssembly).Path,(Resolve-Path (Join-Path $DependencyDirectory 'AuxiliaryProbe.dll')).Path)
-    Add-Type -Path @('Vp8lPaletteParity','Vp8lPalettePacketParity'|ForEach-Object{Join-Path $PSScriptRoot "${_}.cs"}) -ReferencedAssemblies $references
-}
+[void][Reflection.Assembly]::LoadFrom((Resolve-Path $ModelAssembly).Path)
 function Hash([byte[]]$bytes){[Convert]::ToHexStringLower([Security.Cryptography.SHA256]::HashData($bytes))}
 $source=[byte[]]::new(4103*2*4)
 for($i=0;$i -lt $source.Length;$i+=4){$source[$i]=48;$source[$i+1]=211;$source[$i+2]=255}

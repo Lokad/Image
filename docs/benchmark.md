@@ -41,6 +41,9 @@ A separate source-only [production coverage audit](../benchmarks/VP8L-PRODUCTION
 names the remaining required paths; its1x1 and two-color4103x2 palette packets
 are raw-exact on both platforms, as is the129x129 direct-coding packet.
 The19x7 hidden-RGB spatial-only packet and its maps/residuals also match exactly.
+One dependency-free source build now confirms these and both16383-pixel axis
+companions: ten packet identities on both platforms. The native public encoder
+refuses16384; those existing functional tests have no native packet confirmation.
 These do not change production/timing claims below.
 
 No timing or allocation runs accompanied the new PNG encoder or JPEG cleanup. Unchanged paths

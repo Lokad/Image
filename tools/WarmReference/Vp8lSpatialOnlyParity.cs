@@ -21,26 +21,21 @@ public static class Vp8lSpatialOnlyParity
         for(var i=0;i<colors.Length;i++)colors[i]=BinaryPrimitives.ReadUInt32LittleEndian(color.Map.AsSpan(i*4));
         // Uniform maps can increase sampling through the format maximum without
         // changing any pixel's predictor or color transform. Other maps are open.
-        if(width>512||height>512||modes.Distinct().Count()!=1||colors.Distinct().Count()!=1)
-            throw new NotSupportedException("Only bounded uniform transform maps are qualified in this stage.");
+        if(modes.Distinct().Count()!=1||colors.Distinct().Count()!=1)
+            throw new NotSupportedException("This prototype requires uniform transform maps.");
         var writerType=typeof(Vp8lAuxiliaryParity).Assembly.GetType("Vp8lParityBits")!;var writer=Activator.CreateInstance(writerType,true)!;
         var put=writerType.GetMethod("Put",BindingFlags.Instance|BindingFlags.NonPublic)!.CreateDelegate<Action<int,int>>(writer);
         var finish=writerType.GetMethod("Finish",BindingFlags.Instance|BindingFlags.NonPublic)!.CreateDelegate<Func<byte[]>>(writer);
         var count=writerType.GetProperty("Count",BindingFlags.Instance|BindingFlags.NonPublic)!.GetMethod!.CreateDelegate<Func<int>>(writer);
-        var lengths=Auxiliary("Vp8lPrefixParity","Lengths").CreateDelegate<Func<int[],int,byte[]>>();var tree=Auxiliary("Vp8lBitParity","Tree");
-        void Singleton(uint pixel)
+        void Map(uint pixel)
         {
-            put(0,1); // No auxiliary color cache. Singleton trees carry no data.
-            var values=new[]{(int)(pixel>>8&255),(int)(pixel>>16&255),(int)(pixel&255),(int)(pixel>>24),-1};
-            for(var bank=0;bank<5;bank++)
-            {
-                var h=new int[bank==0?280:bank==4?40:256];if(values[bank]>=0)h[values[bank]]=1;
-                tree.Invoke(null,new object[]{writer,lengths(h,15)});
-            }
+            var columns=(width+511)>>9;var rows=(height+511)>>9;
+            var image=Vp8lAuxiliaryParity.Encode(Enumerable.Repeat(pixel,columns*rows).ToArray(),columns,75);
+            for(var bit=0;bit<image.BitCount;bit++)put(image.Bytes[bit>>3]>>(bit&7)&1,1);
         }
         put(0x2f,8);put(width-1,14);put(height-1,14);put(Enumerable.Range(0,width*height).Any(i=>source[4*i+3]!=255)?1:0,1);put(0,3);
-        put(1,1);put(0,2);put(7,3);Singleton(0xff000000u|(uint)modes[0]<<8);
-        put(1,1);put(1,2);put(7,3);Singleton(colors[0]);
+        put(1,1);put(0,2);put(7,3);Map(0xff000000u|(uint)modes[0]<<8);
+        put(1,1);put(1,2);put(7,3);Map(colors[0]);
         var stage=new Vp8lInputParity(finish(),count(),color.Coded,new{mode=1,predictorBits=9,colorBits=9});
         var frame=Vp8lDirectPacketParity.Compose(stage,width,height,choice.HistogramBits,choice);
         string Hash(byte[] bytes)=>Convert.ToHexStringLower(SHA256.HashData(bytes));

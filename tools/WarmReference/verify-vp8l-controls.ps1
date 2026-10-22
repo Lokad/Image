@@ -4,7 +4,6 @@ param(
     [Parameter(Mandatory)][string]$FirstReferenceArchive,
     [Parameter(Mandatory)][string]$RemainingReferenceArchive,
     [Parameter(Mandatory)][string]$AssemblyPath,
-    [Parameter(Mandatory)][string]$DependencyDirectory,
     [string]$LibraryPath='src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll'
 )
 $ErrorActionPreference='Stop'
@@ -12,10 +11,10 @@ function FileHash([string]$Path){[Convert]::ToHexStringLower([Security.Cryptogra
 if((FileHash $FirstReferenceArchive) -ne '131e24330559655b4c71c1a9e086ee3155ba8f5d3f96f0ddddd34718d8f7f12e' -or
    (FileHash $RemainingReferenceArchive) -ne 'd62a0362758b5744f06b797febee6fdbaf09452461c4f47fd901d87acf348eef'){throw 'Frozen reference archives differ.'}
 [void][Reflection.Assembly]::LoadFrom((Resolve-Path -LiteralPath $LibraryPath).Path)
-foreach($name in 'Probe.dll','AuxiliaryProbe.dll','MainParityProbe.dll'){
-    [void][Reflection.Assembly]::LoadFrom((Resolve-Path -LiteralPath (Join-Path $DependencyDirectory $name)).Path)
-}
 [void][Reflection.Assembly]::LoadFrom((Resolve-Path -LiteralPath $AssemblyPath).Path)
+$references=@(Get-ChildItem (Join-Path $PSHOME 'ref') -Filter '*.dll'|ForEach-Object FullName)
+$references+=@((Resolve-Path $AssemblyPath).Path,(Resolve-Path $LibraryPath).Path)
+Add-Type -Path (Join-Path $PSScriptRoot 'Vp8lControlProbe.cs') -ReferencedAssemblies $references
 $rows=[Vp8lControlProbe]::Run((Resolve-Path -LiteralPath $SourcePath).Path,
     (Resolve-Path -LiteralPath $FixtureDirectory).Path,
     (Resolve-Path -LiteralPath $FirstReferenceArchive).Path,
