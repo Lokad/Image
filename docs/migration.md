@@ -7,10 +7,10 @@ JPEG now defaults to `JpegQuantizationPolicy.Reference`: baseline output with th
 pinned reference-compatible algorithm. Color quality maps to qscale
 `1 + (100 - Quality) * 30 / 99`; default85 maps to5. Grayscale keeps the owned
 quantizer formula but uses the reference transform and optimized tables.
-Packets and lossy pixels can change. Set `QuantizationPolicy` explicitly to
-`Original` or `CompactColor` to retain their previous behavior; enum values are
-unchanged. `Reference` admits its coding tables and temporary tree storage before
-allocation, even for small images; a tighter limit fails without legacy fallback.
+Packets and lossy pixels can change. The earlier `Original` and `CompactColor`
+development experiments are superseded and scheduled for removal, with no
+compatibility commitment. `Reference` admits its coding tables and temporary tree
+storage before allocation, even for small images; refusal stops the operation.
 Historical JPEG timing/size records retain their explicit Original producer and
 do not measure the new default. [Codec compatibility](codec-parity.md) states the
 exact tested source/settings scope and the approved attribution exception.

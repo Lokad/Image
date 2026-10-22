@@ -11,8 +11,7 @@ grayscale and 4:4:4/4:2:2/4:2:0. [Codec compatibility](docs/codec-parity.md) sta
 - **JPEG:** baseline/progressive decode; baseline encode with grayscale,
   subsampling, restart markers and explicit alpha flattening.
   CMYK/YCCK and 4:1:1/4:1:0 decode; caller-owned gray/RGB/CMYK decode samples
-  and gray/RGB encode samples. Explicit legacy profiles retain admitted progressive
-  4:4:4 encoding and optional compact color quantization.
+  and gray/RGB encode samples.
 - **WebP:** lossy VP8 and lossless VP8L, including alpha and lossless hidden RGB.
 - **Editing:** 8/16-bit RGBA, EXIF orientation, crop, flips, quarter turns,
   transpose and nearest/bilinear/bicubic/Lanczos3 resize; rectangle fill/copy and alpha compositing.

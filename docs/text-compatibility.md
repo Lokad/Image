@@ -25,8 +25,8 @@ not compatibility work.
 package checks, ownership/failure tests and raw evidence. [SPEC.md](../SPEC.md#supplied-truetype-fonts)
 defines supported scripts/font tables and explicit unsupported features. These
 named fonts/text/settings do not prove general font/script compatibility,
-performance parity or replacement readiness. Legacy mode preserves its previous
-logical layout.
+performance parity or replacement readiness. The default layout mode follows
+logical character order.
 
 The initial six-passing/six-open audit is retained for comparison:
 `p2-text-compatibility.tar.gz` SHA-256

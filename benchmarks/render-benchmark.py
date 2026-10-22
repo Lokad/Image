@@ -359,16 +359,20 @@ packet raw-exact, including714 markers, across image/caller/async boundaries.
 Both platforms qualify5,164 checks plus92 affected scalar checks, and the same
 actual Release package consumer and three examples. All eight default image/caller/
 async/ImageBudget wrappers reproduce the frozen packet; options-null calls agree.
-Original/CompactColor packet behavior is unchanged. Reference CPU/allocations are
+Original/CompactColor are superseded experiments with no compatibility commitment.
+Reference CPU/allocations are
 unmeasured; existing JPEG encoding timings predate its added dispatch and require
 affected confirmation when CPU qualification resumes. Other unchanged paths retain evidence.
+The development-only PNG tokenizer matches all111,511 tokens of the existing
+RGBA8 Optimal control on both platforms, normal/scalar; Huffman/packet generation
+and production integration remain open. No timing or allocation claim follows.
 All seven declared lossy WebP and six lossless WebP historical size gates pass.
 Lossless photograph/diagram packets are 159,104/160,032 and 7,160/7,234 B
 (managed/reference), with exact RGBA. Lossy photograph/diagram packets are
 17,366/17,688 and6,722/7,100 B at their frozen matched-quality settings and exact alpha.
 These are bounded controls, not general-image compression claims.
 
-[Legacy Original 4:2:0 JPEG](../benchmarks/JPEG420-AC-TRELLIS.md) passed all nine
+[Earlier Original 4:2:0 JPEG](../benchmarks/JPEG420-AC-TRELLIS.md) passed all nine
 affected boundaries: **51,379/52,093 B** (8-bit) and **51,471/52,117 B** (16-bit),
 with source-PSNR gaps 0.085506/0.085851 dB inside the unchanged 0.25 dB gate.
 Grayscale remains 58,823/58,910 B;

@@ -3,8 +3,9 @@
 The qualification target is byte-exact encoder output, followed by exact decoder
 samples, against pinned FFmpeg builds and explicit settings. CPU/allocation tuning
 follows correctness. JPEG defaults to the `Reference` profile in0.2.0 development;
-Original/CompactColor remain explicit legacy profiles. Their size/quality passes do not
-establish this target.
+Original/CompactColor are superseded development experiments scheduled for removal.
+Their historical size/quality passes do not establish this target or create a
+compatibility obligation.
 
 Only identified encoder-attribution metadata may differ. For the current JPEG
 reference, its single `Lavc62.28.100\0` COM payload becomes `Lokad.Image\0`,
@@ -87,6 +88,15 @@ remain independent; refusal has no fallback. Other required codecs, JPEG setting
 and exact decoding remain open.
 These two procedural controls establish no general compression claim. CPU and allocations for the Reference profile are unmeasured; tables retain
 Original-profile observations with their recorded producer identities.
+
+The development-only PNG level6 tokenizer now matches all **111,511 tokens** across
+the seven observed blocks of the existing **513×259 RGBA8 Optimal** control on
+Windows/Linux, with intrinsics enabled and disabled. An independent RFC1950/1951
+observer validates the reference CRCs, filtered bytes, Adler32 and token expansion.
+The encoder receives only source pixels. Huffman coding, block decisions and
+zlib/PNG serialization are still outstanding; this is no complete-packet or
+production resource/performance claim. [Numeric evidence](../benchmarks/png-byte-parity-evidence.json)
+records the bounded stage and its unchanged production build.
 
 In `tools/WarmReference`, `verify-jpeg-scan-stage.ps1` checks the independent
 complete encoder and its supplied-table stage; `verify-jpeg-huffman-stage.ps1`

@@ -4,7 +4,7 @@
 
 - Managed JPEG `Reference` profile is the development default for baseline grayscale/4:4:4/4:2:2/4:2:0, with deterministic
   quality mapping, shared admission and bounded MCU encoding, including color/grayscale restarts.
-  Explicit `Original` and `CompactColor` retain legacy behavior.
+  Earlier `Original` and `CompactColor` experiments are superseded.
 - Smaller 8-bit RGBA PNG output with the deeper `Optimal` search policy,
   preserving exact samples, bounded admission and asynchronous ownership.
 - Smaller Original 4:4:4 JPEG packets through source-derived precision-grid,

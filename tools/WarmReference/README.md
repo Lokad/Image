@@ -1519,3 +1519,19 @@ custom AVIO/scratch/input acquisition, length query, full reads/EOF and release,
 plus independent descriptors. Managed times a fresh non-exposed seekable
 MemoryStream, complete public buffering/Identify and wrapper disposal. The
 caller remains open during Identify. No second Stream format/depth matrix.
+
+
+### PNG exact token stage
+
+`PngDeflateParity.cs` is an original source-only development prototype for the
+existing RGBA8 Optimal/native level6 control. It generates filtered rows and all
+111,511 LZ tokens from source pixels, without oracle packet/table/token inputs.
+`audit-png-deflate.py` independently observes the frozen packet using RFC1950/1951,
+checks CRC/Adler32 and reconstructs the filtered bytes. Its token output is solely
+a verifier input. `verify-png-deflate-stage.ps1 -SourcePath SOURCE.rgba
+-NativeTokensPath OBSERVED.bin -NativeAuditPath OBSERVED.json` compares all seven
+observed blocks and checks source preservation, independent outputs and mutation
+rejection. Repeat with `DOTNET_EnableHWIntrinsic=0` for scalar execution.
+This stage does not establish complete-packet, production resource or performance
+qualification. [Evidence](../../benchmarks/png-byte-parity-evidence.json) records
+the frozen identities and cross-platform checks; no fixture grid is added.

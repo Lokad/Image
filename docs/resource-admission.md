@@ -168,7 +168,7 @@ Exhausted quotas raise `ImageLimitException`; malformed data raises
 `ImageLimitException.Limit` identifies the exhausted `ImageLimits` category or
 the managed buffer-length ceiling. `UnsupportedImageException.Feature` identifies
 the unsupported feature and `Format` identifies the recognized codec when known.
-Legacy message-only constructors report `Unspecified`; library failures provide
+Message-only constructors report `Unspecified`; library failures provide
 typed categories. These properties do not require exception-message parsing.
 `ImageLimitException.Scope` distinguishes per-operation exhaustion from shared
 budget exhaustion; shared failures report `WorkingBytes` or `Work` as the limit.
