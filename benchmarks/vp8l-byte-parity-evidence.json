@@ -1,0 +1,80 @@
+{
+  "project": "Lokad.Image",
+  "round": "E26",
+  "productionChanged": false,
+  "productionCoreSha256": "e983ce41045f95065f26108e213d7211bdbc35f487906aa97c7a7b7b8ec5a782",
+  "scope": "Source-only VP8L predictor modes and exact channel residuals on ONE existing513x259 RGBA8 effort4/exact=1 reference control. Fixed8x8 stage layout; no automatic tile-size or complete-packet qualification.",
+  "reference": {
+    "backend": "libwebp1.6.0 exact=1, FFmpeg encoder backend",
+    "checkoutRevision": "4fa21912338357f89e4fd51cf2368325b59e9bd9",
+    "quality": 75,
+    "method": 4,
+    "packetBytes": 183812,
+    "packetSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+    "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "priorArchive": "e25-vp8l-first-stage.tar.gz"
+  },
+  "modeStage": {
+    "samples": 2145,
+    "exactBothOS": true,
+    "sha256": "bdad28ced56613fe6dc21387f5f10cac85e43ec37c785d77ac80694426c763b7",
+    "nativeArgbSha256": "6835fd3eccbb60127357c8a6b671eb7068677bfea9f34b22d5b4526fde6c3294"
+  },
+  "residualStage": {
+    "bytes": 531468,
+    "exactBothOS": true,
+    "sha256": "9a29c48cef0fd5f0de20121fa07b1807c41366ef3e3c9d7cf9937dc4b8558f0a",
+    "oracle": "Independent RFC9649 reader decodes the frozen main bitstream and inverses its cross-color transform; no fresh native encode.",
+    "observedCodedResidualSha256": "b72edfa146d02b4adbbe48a667ad28bf10b6073b2800c7679ccfc546c9969610"
+  },
+  "verification": {
+    "sourceOnly": true,
+    "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "width": 513,
+    "height": 259,
+    "tileBits": 3,
+    "modeSamples": 2145,
+    "modeSha256": "bdad28ced56613fe6dc21387f5f10cac85e43ec37c785d77ac80694426c763b7",
+    "allModesExact": true,
+    "residualBytes": 531468,
+    "residualSha256": "9a29c48cef0fd5f0de20121fa07b1807c41366ef3e3c9d7cf9937dc4b8558f0a",
+    "allResidualBytesExact": true,
+    "independentOutputs": true,
+    "sourceUnchanged": true,
+    "negativeMutationsRejected": true,
+    "oracleEncoderInputs": false,
+    "productionBuilds": 0,
+    "nativeEncodes": 0,
+    "timingRuns": 0,
+    "scope": "One fixed method4 VP8L stage; no complete encoder or automatic tile-size qualification."
+  },
+  "sameWindowsBuiltModelBothOS": true,
+  "modelAssemblySha256": "c446836fb06897bebb125e178980fa680c7ff042dc413f757570d8388482438c",
+  "sourceFiles": {
+    "tools/WarmReference/Vp8lPredictorParity.cs": "a58db2081646476443b21ea66fe3600078b42fc8347fb12787704907686b5508",
+    "tools/WarmReference/verify-vp8l-predictor-stage.ps1": "af626a7907b0e26e6c55a8ac5783e97ccffb8bb263897c707df85db8159b8d31"
+  },
+  "independentModel": "Local residual histograms plus accumulated history, deterministic ties and neighboring-mode preference. Quantized logarithms generated from mathematics; no imported upstream source/lookup tables and no oracle modes used by the model.",
+  "builds": {
+    "windowsModel": 3,
+    "linuxModel": 0,
+    "production": 0,
+    "native": 0
+  },
+  "nativeEncodes": 0,
+  "timingRuns": 0,
+  "repeatedPackageProofs": 0,
+  "correction": "Linux verifier waited on its stdin through the automatic PowerShell input variable. Live process was verified blocked in anon_pipe_read, explicitly terminated, wrapper variable renamed and stdin closed for the new invocation. Same frozen model then passed bothOS. No timeout-based restart or numerical retuning.",
+  "remaining": [
+    "Reference cross-color coefficient map and resulting coded residuals.",
+    "Auxiliary-image and main-image LZ/cache/group/tree/bit generation.",
+    "Remaining five lossless and seven lossy controls, all exact decoders, full functional/memory/performance/release objective."
+  ],
+  "rawArchive": {
+    "name": "e26-vp8l-predictor-qualified.tar.gz",
+    "bytes": 420545,
+    "sha256": "c0bfda400d5be9736b8399b05ca3d422abaa4d7f88f16ff40b587713bf6f4593",
+    "members": 22,
+    "mirrored": true
+  }
+}
