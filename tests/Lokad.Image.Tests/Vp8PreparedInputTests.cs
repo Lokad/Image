@@ -21,7 +21,7 @@ public sealed class Vp8PreparedInputTests
         yield return ["two-color", 8, "9d51a3272e0dc3ec843b0ab1439848a0d49aebcb6bdd2a2dfbd7ecb8e02a93a8"];
     }
 
-    private static ImageBuffer Source(string name, int depth, TestMemoryBudget root)
+    internal static ImageBuffer Source(string name, int depth, TestMemoryBudget root)
     {
         if (depth != 16) return OriginalVp8lControls.Buffer(name, depth, root);
         var pixels = OriginalPixels.Generate(513, 259, 16);
@@ -33,7 +33,7 @@ public sealed class Vp8PreparedInputTests
         return result;
     }
 
-    private static string Hash(Vp8PreparedInput input)
+    internal static string Hash(Vp8PreparedInput input)
     {
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
         for (var y = 0; y < input.Height; y++) hash.AppendData(input.Y.Slice(y * input.Stride, input.Width));
@@ -42,7 +42,7 @@ public sealed class Vp8PreparedInputTests
         hash.AppendData(input.Alpha); return Convert.ToHexStringLower(hash.GetHashAndReset());
     }
 
-    private static void Padding(ReadOnlySpan<byte> plane, int stride, int width, int height)
+    internal static void Padding(ReadOnlySpan<byte> plane, int stride, int width, int height)
     {
         for (var y = 0; y < plane.Length / stride; y++)
         for (var x = 0; x < stride; x++)

@@ -111,7 +111,6 @@ internal sealed class Vp8PreparedInput : IDisposable
                         yPlane[y * result.Stride + x] = (byte)((Yr * r + Yg * g + Yb * b + (16 << 16) + (1 << 15)) >> 16);
                         if (hasAlpha) alphaPlane[y * width + x] = (byte)Sample(bytes, words, eightBit, p + 3);
                     }
-                    yPlane.Slice(y * result.Stride + width, result.Stride - width).Fill(yPlane[y * result.Stride + width - 1]);
                 }
                 var chromaWidth = (width + 1) / 2; var chromaHeight = (height + 1) / 2; var stride = result.Stride / 2;
                 for (var y = 0; y < chromaHeight; y++)
@@ -130,25 +129,87 @@ internal sealed class Vp8PreparedInput : IDisposable
                         uPlane[y * stride + x] = (byte)Math.Clamp((Ur * r + Ug * g + (ChromaScale / 2) * b + (128 << 18) + (1 << 17)) >> 18, 0, 255);
                         vPlane[y * stride + x] = (byte)Math.Clamp((Vr * r + Vg * g + Vb * b + (128 << 18) + (1 << 17)) >> 18, 0, 255);
                     }
-                    uPlane.Slice(y * stride + chromaWidth, stride - chromaWidth).Fill(uPlane[y * stride + chromaWidth - 1]);
-                    vPlane.Slice(y * stride + chromaWidth, stride - chromaWidth).Fill(vPlane[y * stride + chromaWidth - 1]);
                 }
-                for (var y = height; y < result.StorageHeight; y++)
-                {
-                    context.Work(result.Stride);
-                    yPlane.Slice((height - 1) * result.Stride, result.Stride).CopyTo(yPlane.Slice(y * result.Stride));
-                }
-                for (var y = chromaHeight; y < result.StorageHeight / 2; y++)
-                {
-                    context.Work(result.Stride);
-                    uPlane.Slice((chromaHeight - 1) * stride, stride).CopyTo(uPlane.Slice(y * stride));
-                    vPlane.Slice((chromaHeight - 1) * stride, stride).CopyTo(vPlane.Slice(y * stride));
-                }
+                result.Pad();
             }
             finally { context.Release(ScratchBytes); }
             return result;
         }
         catch { result.Dispose(); throw; }
+    }
+
+    private void Pad()
+    {
+        var data = storage ?? throw new ObjectDisposedException(nameof(Vp8PreparedInput));
+        PadPlane(data.AsSpan(0, lumaLength), Stride, Width, Height);
+        PadPlane(data.AsSpan(lumaLength, chromaLength), Stride / 2, (Width + 1) / 2, (Height + 1) / 2);
+        PadPlane(data.AsSpan(lumaLength + chromaLength, chromaLength), Stride / 2, (Width + 1) / 2, (Height + 1) / 2);
+    }
+
+    private void PadPlane(Span<byte> plane, int stride, int width, int height)
+    {
+        for (var y = 0; y < height; y++)
+        {
+            context.Work(stride - width);
+            plane.Slice(y * stride + width, stride - width).Fill(plane[y * stride + width - 1]);
+        }
+        for (var y = height; y < plane.Length / stride; y++)
+        {
+            context.Work(stride);
+            plane.Slice((height - 1) * stride, stride).CopyTo(plane.Slice(y * stride));
+        }
+    }
+
+    // Pinned lossy exact=0 preprocessing. Mixed blocks replace only invisible
+    // luma with the visible mean. Fully invisible complete8x8 blocks share the
+    // first block's Y/U/V across a horizontal run; partial edge blocks do not.
+    // The existing owner is modified in place; no extra storage or allowance.
+    internal void CleanupTransparentArea()
+    {
+        var data = storage ?? throw new ObjectDisposedException(nameof(Vp8PreparedInput));
+        context.Work(0); if (!HasAlpha) return;
+        var yPlane = data.AsSpan(0, lumaLength);
+        var uPlane = data.AsSpan(lumaLength, chromaLength);
+        var vPlane = data.AsSpan(lumaLength + chromaLength, chromaLength);
+        var alpha = data.AsSpan(lumaLength + 2 * chromaLength);
+        for (var top = 0; top < Height; top += 8)
+        {
+            var run = false; byte runY = 0, runU = 0, runV = 0;
+            var height = Math.Min(8, Height - top);
+            for (var left = 0; left < Width; left += 8)
+            {
+                var width = Math.Min(8, Width - left); var count = 0; var sum = 0;
+                context.Work(width * height * 4L);
+                for (var y = top; y < top + height; y++)
+                for (var x = left; x < left + width; x++)
+                    if (alpha[y * Width + x] != 0) { count++; sum += yPlane[y * Stride + x]; }
+                if (count is > 0 && count < width * height)
+                {
+                    var mean = (byte)(sum / count);
+                    for (var y = top; y < top + height; y++)
+                    for (var x = left; x < left + width; x++)
+                        if (alpha[y * Width + x] == 0) yPlane[y * Stride + x] = mean;
+                }
+                if (count == 0 && width == 8 && height == 8)
+                {
+                    if (!run)
+                    {
+                        runY = yPlane[top * Stride + left];
+                        runU = uPlane[(top / 2) * (Stride / 2) + left / 2];
+                        runV = vPlane[(top / 2) * (Stride / 2) + left / 2]; run = true;
+                    }
+                    for (var y = top; y < top + 8; y++) yPlane.Slice(y * Stride + left, 8).Fill(runY);
+                    for (var y = top / 2; y < top / 2 + 4; y++)
+                    {
+                        uPlane.Slice(y * (Stride / 2) + left / 2, 4).Fill(runU);
+                        vPlane.Slice(y * (Stride / 2) + left / 2, 4).Fill(runV);
+                    }
+                }
+                else run = false;
+            }
+        }
+        // Native macroblock import extends the cleaned logical planes.
+        Pad();
     }
 
     public void Dispose()

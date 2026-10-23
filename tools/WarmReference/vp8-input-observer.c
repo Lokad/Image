@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <webp/encode.h>
 
 static void fail(const char *message) { fprintf(stderr, "%s\n", message); exit(1); }
@@ -17,7 +18,9 @@ static void plane(FILE *output, const uint8_t *data, int stride, int width, int 
         if (fwrite(data + (size_t)y * stride, 1, width, output) != (size_t)width) fail("Write plane failed.");
 }
 int main(int argc, char **argv) {
-    if (argc != 5) fail("Usage: vp8-input-observer WIDTH HEIGHT 8|16 OUTPUT < RGBA");
+    if (argc != 5 && argc != 6) fail("Usage: vp8-input-observer WIDTH HEIGHT 8|16 OUTPUT [cleanup] < RGBA");
+    const int cleanup = argc == 6;
+    if (cleanup && strcmp(argv[5], "cleanup")) fail("Unknown stage.");
     const int width = number(argv[1]), height = number(argv[2]), depth = number(argv[3]);
     if (depth != 8 && depth != 16) fail("Invalid sample depth.");
     const size_t samples = (size_t)width * height * 4, bytes = samples * (depth / 8);
@@ -32,6 +35,7 @@ int main(int argc, char **argv) {
     picture.use_argb = 1; picture.width = width; picture.height = height;
     if (!WebPPictureImportRGBA(&picture, rgba, width * 4)) fail("RGBA import failed.");
     if (!WebPPictureARGBToYUVA(&picture, WEBP_YUV420)) fail("YUVA conversion failed.");
+    if (cleanup) WebPCleanupTransparentArea(&picture);
     FILE *output = fopen(argv[4], "wb"); if (!output) fail("Open output failed.");
     const int has_alpha = (picture.colorspace & WEBP_CSP_ALPHA_BIT) != 0;
     plane(output, picture.y, picture.y_stride, width, height);
@@ -43,7 +47,7 @@ int main(int argc, char **argv) {
         plane(output, picture.a, picture.a_stride, width, height);
     }
     if (fclose(output)) fail("Close output failed.");
-    printf("{\"width\":%d,\"height\":%d,\"depth\":%d,\"hasAlpha\":%s,\"libwebpVersion\":%d,\"stage\":\"ordinary undithered YUVA before transparent cleanup\"}\n",
-        width, height, depth, has_alpha ? "true" : "false", WebPGetEncoderVersion());
+    printf("{\"width\":%d,\"height\":%d,\"depth\":%d,\"hasAlpha\":%s,\"libwebpVersion\":%d,\"cleanup\":%s}\n",
+        width, height, depth, has_alpha ? "true" : "false", WebPGetEncoderVersion(), cleanup ? "true" : "false");
     WebPPictureFree(&picture); free(rgba); free(source); return 0;
 }

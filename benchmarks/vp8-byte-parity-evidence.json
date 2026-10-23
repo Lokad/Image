@@ -1,7 +1,7 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E64",
-  "scope": "Private unwired ordinary undithered RGB-to-YUVA input conversion only, before native transparent cleanup. Public lossy encoder/full packet replication remains open.",
+  "latestRound": "E65",
+  "scope": "Private unwired ordinary undithered RGB-to-YUVA conversion plus native exact=0 transparent-area cleanup. Public lossy encoder/full packet replication remains open.",
   "productionPublicBehaviorChanged": false,
   "fullObjectiveOpen": true,
   "reference": {
@@ -286,6 +286,172 @@
       "bytes": 1298328,
       "members": 23,
       "sha256": "5b90b5fc2b24d8493a36970b386f4d1028662c3b472bea4d90eff46f9046a234",
+      "everySourceMemberByteVerified": true,
+      "mirrored": true
+    }
+  },
+  "transparentCleanupStage": {
+    "round": "E65",
+    "source": "src/Lokad.Image/Internal/Vp8PreparedInput.cs",
+    "privatePreparationOnly": true,
+    "algorithm": "In-place invisible-luma mean within mixed8x8 blocks; full transparent complete blocks share firstYUV in each horizontal run, resetting across visible blocks and new block rows. Partial edges smooth only. Regenerate macroblock padding from cleaned logical planes. Alpha/source unchanged; no new buffer or admission allowance.",
+    "boundedCoverageAddition": {
+      "name": "TransparentCleanupBands",
+      "width": 33,
+      "height": 17,
+      "reason": "Existing singleton/two-color transparent inputs have height1/2; the four frozen packet rasters do not expose a fully transparent complete8x8 run. This single original control qualifies full run reuse, visible resets, new band resets and partial right/bottom blocks. No timed workload or settings grid added.",
+      "sourceSha256": "ef125e4e87bb909eb255f1ca99a41e48e7d2bfaaf9414d53b791dbd73b2721d8",
+      "provenance": "OriginalPixels asymmetry formula forRGB; explicitly authored zero/positive alpha pattern in Vp8TransparentCleanupTests.Bands."
+    },
+    "nativeObserver": {
+      "round": "E65",
+      "sourceSha256": "e44b1f24bbb74b7546f6a3b6e4547cc6eeffa4c9ee9280b7c0b33a3d457919c4",
+      "workerSha256": "692f8d312fda23ea800d5a17834c851e9b7904b141edad733fd897e04c71d099",
+      "controls": [
+        {
+          "name": "opaque",
+          "sourceSha256": "54e27bd73c9ee221bdd4872e6b7bf79676257346cee2eff8ddacccb89e0cdb0a",
+          "bytes": 199687,
+          "sha256": "f1e516c70c0d315b2f785b90fdd6a6c6e26e30eca898b7f1616380ab18aae715",
+          "ready": {
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "hasAlpha": false,
+            "libwebpVersion": 67072,
+            "cleanup": true
+          }
+        },
+        {
+          "name": "asymmetric",
+          "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "bytes": 332554,
+          "sha256": "ed906b1f159183b9dc46a1c4f1ba0e3273f4afb99a93ad6de832010590482cea",
+          "ready": {
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "hasAlpha": true,
+            "libwebpVersion": 67072,
+            "cleanup": true
+          }
+        },
+        {
+          "name": "two-color",
+          "sourceSha256": "6429d23b373c1aaf3967399292008764e55453ea970f822366616d425795eecf",
+          "bytes": 20516,
+          "sha256": "9d51a3272e0dc3ec843b0ab1439848a0d49aebcb6bdd2a2dfbd7ecb8e02a93a8",
+          "ready": {
+            "width": 4103,
+            "height": 2,
+            "depth": 8,
+            "hasAlpha": true,
+            "libwebpVersion": 67072,
+            "cleanup": true
+          }
+        },
+        {
+          "name": "singleton",
+          "sourceSha256": "fcac58980f5053b60bc41f02af0a17a9003f5377edfaed7735cd433452f09069",
+          "bytes": 4,
+          "sha256": "f8b2cdc0bd43d7e47a46cc40550af0cba0b5d3b8aeecbddf19dea2b18bbb4c00",
+          "ready": {
+            "width": 1,
+            "height": 1,
+            "depth": 8,
+            "hasAlpha": true,
+            "libwebpVersion": 67072,
+            "cleanup": true
+          }
+        },
+        {
+          "name": "cleanup-bands-raw",
+          "sourceSha256": "ef125e4e87bb909eb255f1ca99a41e48e7d2bfaaf9414d53b791dbd73b2721d8",
+          "bytes": 1428,
+          "sha256": "e59538e95a097aff66ce58c6bd1831c8c284786b95d4b2c3b932fba64b53bddf",
+          "ready": {
+            "width": 33,
+            "height": 17,
+            "depth": 8,
+            "hasAlpha": true,
+            "libwebpVersion": 67072,
+            "cleanup": false
+          }
+        },
+        {
+          "name": "cleanup-bands",
+          "sourceSha256": "ef125e4e87bb909eb255f1ca99a41e48e7d2bfaaf9414d53b791dbd73b2721d8",
+          "bytes": 1428,
+          "sha256": "da30dc07df6ab6beec72da32ecb8bfb78980a134e68dd9b86d4ae61fb5d02e7f",
+          "ready": {
+            "width": 33,
+            "height": 17,
+            "depth": 8,
+            "hasAlpha": true,
+            "libwebpVersion": 67072,
+            "cleanup": true
+          }
+        }
+      ],
+      "nativeCompleteEncodes": 0,
+      "timingRuns": 0
+    },
+    "worker": {
+      "bytes": 1507328,
+      "sha256": "59a2282f91585419c3753a9853428d22f50ebe04fee9b0f71dbc80ba18abce46"
+    },
+    "sourceFiles": {
+      "src/Lokad.Image/Internal/Vp8PreparedInput.cs": {
+        "bytes": 12280,
+        "sha256": "a67bf4d9150a67e4fa6004b9421dfa68fb8499308f408dc5fe41baca8bb9ffed"
+      },
+      "tests/Lokad.Image.Tests/Vp8TransparentCleanupTests.cs": {
+        "bytes": 6995,
+        "sha256": "06e374ca74b7ba5195fc6b2157353b8d7178606bc8f9697953193e18462ea8d6"
+      },
+      "tests/Lokad.Image.Tests/Vp8PreparedInputTests.cs": {
+        "bytes": 7584,
+        "sha256": "20acdcb8e3c21225f72649c39ea8602cdaf58cc012c33ac8e20cdf367c27cd13"
+      },
+      "tools/WarmReference/vp8-input-observer.c": {
+        "bytes": 3192,
+        "sha256": "e44b1f24bbb74b7546f6a3b6e4547cc6eeffa4c9ee9280b7c0b33a3d457919c4"
+      }
+    },
+    "qualification": {
+      "sameWindowsBuiltAssemblyBothOS": true,
+      "normalPerOS": 25,
+      "scalarPerOS": 25,
+      "priorConversionChecksReconfirmedPerOS": 13,
+      "newCleanupChecksPerOS": 12,
+      "sourceAlphaPreserved": true,
+      "visibleLumaPreserved": true,
+      "paddingExact": true,
+      "idempotence": true,
+      "noAdditionalAdmissionCallsDuringCleanup": true,
+      "retainedResultBlocksOtherOperationOnSameRoot": true,
+      "refusalCleanupRecovery": true,
+      "cancellationRetainsChargeUntilOwnerDisposal": true,
+      "lateWorkFailureRetainsChargeUntilOwnerDisposal": true
+    },
+    "builds": {
+      "windowsLinkedInternalTests": 1,
+      "linux": 0,
+      "publicProductionCore": 0,
+      "sourceModel": 0,
+      "nativeObserver": 1
+    },
+    "nativeConversionCleanupObservations": 6,
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "invalidation": "Create now shares converted-plane padding with cleanup; all13previous exact/native/resource checks reconfirmed in current assembly bothOS normal/scalar. No existing public encoder method/body or call changed; E62public-core/full/differential/actualpackage scope and unaffected producer timing evidence remain valid. Generic public adoption still open.",
+    "remaining": "Exact4x4 forwardDCT/Y2Walsh, quality75 quantizer/segmentation/filter analysis, intra4/intra16/chroma/macroblock and coefficient decisions, Boolean/token/header coding, ALPH filtering/headerlessVP8L and completeRIFF on the four frozen identities; admitted public integration and all existing decoder/performance/functional/memory/release objectives.",
+    "rawArchive": {
+      "name": "e65-vp8-cleanup-qualified.tar.gz",
+      "bytes": 1171435,
+      "members": 24,
+      "sha256": "95995566ca9b70b67b6c645b2aa2929da058b5bc3eb458508ebe1e3e5ad5e8f7",
       "everySourceMemberByteVerified": true,
       "mirrored": true
     }
