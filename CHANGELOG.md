@@ -8,7 +8,8 @@
   packets, allowing only the documented color attribution replacement.
 - Fixed-point JPEG decoding with exact samples on30 frozen grayscale/4:4:4/4:2:2/4:2:0
   controls, shared caller RGB conversion and opt-in orientation. Removed superseded
-  inverse variants; other color layouts remain under exactness qualification.
+  inverse variants. CMYK/YCCK now share reference-precision RGB/grayscale
+  conversion; removed superseded YCCK paths. Quarter-width exactness remains open.
 - Bounded managed PNG stored/fast/optimal/smallest encoding, with complete raw
   packet equality on14 frozen8/16-bit controls and shared admission throughout.
 - Managed VP8L prediction, palette, references/cache and entropy groups reproduce

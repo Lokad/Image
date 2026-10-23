@@ -19,7 +19,7 @@ public sealed class JpegCmykRowTests
             for (var c = 0; c < 3; c++)
             {
                 var channel = (basis[c] + x / 8 * 13 + y / 8 * 29) & 255; if (!adobe) channel = 255 - channel;
-                var expected = (byte)decimal.Round((decimal)channel * k / 255, 0, MidpointRounding.AwayFromZero);
+                var expected = (byte)decimal.Round((decimal)channel * k * 257 / 65536, 0, MidpointRounding.ToNegativeInfinity);
                 Assert.Equal(expected, first.GetRow8(y)[x * 4 + c]); Assert.Equal(expected, survivor.GetRow8(y)[x * 4 + c]);
             }
             Assert.Equal(255, first.GetRow8(y)[x * 4 + 3]);

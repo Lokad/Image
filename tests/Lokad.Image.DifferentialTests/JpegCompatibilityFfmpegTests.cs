@@ -15,7 +15,9 @@ public sealed class JpegCompatibilityFfmpegTests
             sampling, sampling, true, ycck ? 2 : 0, progressive, 1);
         using var actual = ImageCodec.Decode(data);
         var expected = JpegOracle.Decode(data, width, height, JpegSampling.YCbCr444);
-        Compare(OriginalPixels.Bytes(actual), expected);
+        Assert.Equal(expected, OriginalPixels.Bytes(actual));
+        var caller = new byte[width * height * 3]; ImageCodec.DecodeJpeg(data, caller, JpegSampleFormat.Rgb);
+        for (var i = 0; i < width * height; i++) Assert.Equal(expected.AsSpan(i * 4, 3).ToArray(), caller.AsSpan(i * 3, 3).ToArray());
     }
 
     [Theory]
@@ -29,6 +31,22 @@ public sealed class JpegCompatibilityFfmpegTests
             progressive: progressive, restart: 1);
         using var actual = ImageCodec.Decode(data);
         Compare(OriginalPixels.Bytes(actual), JpegOracle.Decode(data, width, height, JpegSampling.YCbCr444));
+    }
+
+    [Theory] [InlineData(false)] [InlineData(true)]
+    public void ExistingVaryingFourComponentRgbAndGrayMatchNativeExactly(bool ycck)
+    {
+        const int width = 65, height = 31;
+        var data = AuthoredJpegCompatibility.Create(width, height, [17, 191, 250, 63], ycck ? 2 : 1, ycck ? 2 : 1,
+            ycck, ycck ? 2 : 0, restart: ycck ? 1 : 0, vary: true);
+        var expected = JpegOracle.Decode(data, width, height, JpegSampling.YCbCr444);
+        using var owned = ImageCodec.Decode(data); Assert.Equal(expected, OriginalPixels.Bytes(owned));
+        var rgb = new byte[width * height * 3]; ImageCodec.DecodeJpeg(data, rgb, JpegSampleFormat.Rgb);
+        for (var i = 0; i < width * height; i++) Assert.Equal(expected.AsSpan(i * 4, 3).ToArray(), rgb.AsSpan(i * 3, 3).ToArray());
+        var gray = new byte[width * height]; ImageCodec.DecodeJpeg(data, gray, JpegSampleFormat.Grayscale);
+        var args = JpegOracle.DecodeArguments(width, height, JpegSampling.YCbCr444);
+        args[Array.IndexOf(args, "rgba")] = "gray";
+        Assert.Equal(OracleProcess.Run(OracleProcess.Ffmpeg, args, data), gray);
     }
 
     private static void Compare(byte[] actual, byte[] expected)

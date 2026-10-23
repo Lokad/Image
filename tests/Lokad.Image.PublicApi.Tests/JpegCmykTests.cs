@@ -36,14 +36,14 @@ public sealed class JpegCmykTests
 
     [Theory]
     [InlineData(false, 1)] [InlineData(true, 1)] [InlineData(false, 2)] [InlineData(true, 2)]
-    public void YcckMatrixAndBlackAreAppliedBeforeFinalQuantization(bool progressive, int sampling)
+    public void YcckCanonicalInkAndReferenceRgbHaveExplicitPrecision(bool progressive, int sampling)
     {
         byte[] values = [80, 170, 90, 200];
         var data = AuthoredJpegCompatibility.Create(17, 9, values, sampling, sampling, true, 2, progressive, 1);
         // Independent decimal evaluation of the documented matrix and inversion.
         decimal c = 80 + 1.402m * -38, m = 80 - .344136286m * 42 - .714136286m * -38, y = 80 + 1.772m * 42, k = 55;
         byte[] expectedCmyk = [Quantize(c), Quantize(m), Quantize(y), Quantize(k)];
-        byte[] expectedRgb = [Quantize((255 - c) * 200 / 255), Quantize((255 - m) * 200 / 255), Quantize((255 - y) * 200 / 255)];
+        byte[] expectedRgb = [178, 128, 79]; // Frozen native YCCK444/420 control.
         var samples = new byte[17 * 9 * 4]; ImageCodec.DecodeJpeg(data, samples, JpegSampleFormat.Cmyk);
         Assert.All(samples.Chunk(4), pixel => Assert.Equal(expectedCmyk, pixel));
         var rgb = new byte[17 * 9 * 3]; ImageCodec.DecodeJpeg(data, rgb, JpegSampleFormat.Rgb);
@@ -57,13 +57,13 @@ public sealed class JpegCmykTests
 
     [Theory]
     [InlineData(false)] [InlineData(true)]
-    public void SaturatedYcckDoesNotClipColorBeforeApplyingBlack(bool progressive)
+    public void SaturatedYcckMatchesTheNativeBlackBeforeColorBoundary(bool progressive)
     {
         var data = AuthoredJpegCompatibility.Create(8, 8, [0, 128, 0, 128], adobe: 2, progressive: progressive);
-        // The unclipped matrix red is -179.456, so RGB red rounds to 218 after
-        // black multiplication; clipping to CMYK bytes first would incorrectly give 128.
+        // Original saturated control: compare complete native pixels, including
+        // clipping after black adjustment and the integer color matrix.
         using var result = ImageCodec.Decode(data);
-        Assert.Equal(218, result.GetRow8(0)[0]); Assert.Equal(255, result.GetRow8(0)[3]);
+        JpegFourComponentExactTests.AssertNative(data, OriginalPixels.Bytes(result));
     }
 
     [Fact]

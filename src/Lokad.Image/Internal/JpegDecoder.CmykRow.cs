@@ -24,11 +24,7 @@ internal ref partial struct JpegDecoder
                     var full = Vector256.Create((ushort)255);
                     c = Avx2.Subtract(full, c); m = Avx2.Subtract(full, m); y = Avx2.Subtract(full, y); k = Avx2.Subtract(full, k);
                 }
-                // For n=a*b, 0<=n<=65025, nearest(n/255) is exactly
-                // ((n+128)*257)>>16. The odd divisor excludes exact halves;
-                // n+128 fits ushort. This implements the device-color contract
-                // without floating division or an intermediate alpha raster.
-                var r = DivideRounded(Avx2.MultiplyLow(c, k)); var g = DivideRounded(Avx2.MultiplyLow(m, k)); var b = DivideRounded(Avx2.MultiplyLow(y, k));
+                var r = Product(Avx2.MultiplyLow(c, k)); var g = Product(Avx2.MultiplyLow(m, k)); var b = Product(Avx2.MultiplyLow(y, k));
                 Pack(r.GetLower(), g.GetLower(), b.GetLower(), output.Slice(x * 4, 32));
                 Pack(r.GetUpper(), g.GetUpper(), b.GetUpper(), output.Slice(x * 4 + 32, 32));
             }
@@ -36,13 +32,13 @@ internal ref partial struct JpegDecoder
         for (; x < cyan.Length; x++)
         {
             var k = inverted ? black[x] : 255 - black[x];
-            output[x * 4] = (byte)(((inverted ? cyan[x] : 255 - cyan[x]) * k + 127) / 255);
-            output[x * 4 + 1] = (byte)(((inverted ? magenta[x] : 255 - magenta[x]) * k + 127) / 255);
-            output[x * 4 + 2] = (byte)(((inverted ? yellow[x] : 255 - yellow[x]) * k + 127) / 255); output[x * 4 + 3] = 255;
+            output[x * 4] = (byte)(JpegBlackColor.Product(inverted ? cyan[x] : 255 - cyan[x], k));
+            output[x * 4 + 1] = (byte)(JpegBlackColor.Product(inverted ? magenta[x] : 255 - magenta[x], k));
+            output[x * 4 + 2] = (byte)(JpegBlackColor.Product(inverted ? yellow[x] : 255 - yellow[x], k)); output[x * 4 + 3] = 255;
         }
 
-        static Vector256<ushort> DivideRounded(Vector256<ushort> product)
-            => Avx2.MultiplyHigh(Avx2.Add(product, Vector256.Create((ushort)128)), Vector256.Create((ushort)257));
+        static Vector256<ushort> Product(Vector256<ushort> product)
+            => Avx2.MultiplyHigh(product, Vector256.Create(JpegBlackColor.ProductScale));
         static void Pack(Vector128<ushort> red, Vector128<ushort> green, Vector128<ushort> blue, Span<byte> target)
         {
             var r = Avx2.ConvertToVector256Int32(red.AsInt16()).AsUInt32();

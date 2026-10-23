@@ -16,8 +16,10 @@ exception. Historical JPEG times refer to their recorded producers.
 JPEG decoding now uses one pinned fixed-point inverse policy for every block.
 YCbCr4:4:4/4:2:2/4:2:0 and caller RGB share derived integer color conversion,
 including oriented destinations and eight-bit chroma rounding. All30 existing
-frozen grayscale/color controls are exact; CMYK/YCCK and4:1:1/4:1:0 remain under
-exactness qualification. Older decoded half ties and performance results are superseded.
+frozen grayscale/color controls are exact. CMYK/YCCK RGB/grayscale use integer
+product, expansion and black-before-color precision, matching the named native
+controls; canonical ink samples keep their explicit interpretation. Three-component
+4:1:1/4:1:0 exactness remains under qualification. Older decoded half ties and performance results are superseded.
 The numerical policy is described in [inverse rounding](jpeg-inverse-rounding.md).
 
 All four PNG compression policies use the managed Deflate encoder. Fourteen

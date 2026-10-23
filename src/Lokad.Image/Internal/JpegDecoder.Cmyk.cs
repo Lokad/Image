@@ -45,17 +45,13 @@ internal ref partial struct JpegDecoder
                 }
                 return result;
             }
-            if (TryRenderYcck420(result, source, invert)) return result;
             for (var y = 0; y < info.Height; y++)
             {
                 context.Work(info.Width * 32L);
                 var row = result.GetRow8(y);
                 for (var x = 0; x < info.Width; x++)
                 {
-                    CmykValues(x, y, source, invert, out var c, out var m, out var yellow, out var k);
-                    row[x * 4] = Round((255 - c) * (255 - k) / 255);
-                    row[x * 4 + 1] = Round((255 - m) * (255 - k) / 255);
-                    row[x * 4 + 2] = Round((255 - yellow) * (255 - k) / 255); row[x * 4 + 3] = 255;
+                    WriteFourComponentPixel(x, y, source, invert, row.Slice(x * 4, 4), 4);
                 }
             }
             return result;
@@ -63,7 +59,7 @@ internal ref partial struct JpegDecoder
         catch { result.Dispose(); throw; }
     }
 
-    private void CmykValues(int x, int y, JpegColorSpace source, bool invert,
+    private void CanonicalCmykValues(int x, int y, JpegColorSpace source, bool invert,
         out double c, out double m, out double yellow, out double k)
     {
         c = Interpolate(components[0], x, y); m = Interpolate(components[1], x, y);
@@ -72,7 +68,8 @@ internal ref partial struct JpegDecoder
         {
             // The YCCK transform maps (255-C,255-M,255-Y) through the owned
             // YCbCr matrix; K is independent. Keep matrix/black arithmetic in
-            // binary64 until the requested output channels are quantized.
+            // binary64 until canonical ink samples are quantized. RGB/gray
+            // have a separate black-before-color precision boundary.
             var luma = c; var cb = m - 128; var cr = yellow - 128;
             c = 255 - (luma + 1.402 * cr);
             m = 255 - (luma - 0.344136286 * cb - 0.714136286 * cr);
@@ -86,14 +83,11 @@ internal ref partial struct JpegDecoder
     {
         if (format == JpegSampleFormat.Cmyk && source == JpegColorSpace.Cmyk && orientation == ImageOrientation.Normal
             && TryWriteFullResolutionCmyk(destination, stride, invert)) return;
-        if (format == JpegSampleFormat.Rgb && source == JpegColorSpace.Ycck && orientation == ImageOrientation.Normal
-            && TryWriteYcck420Rgb(destination, stride, invert)) return;
         for (var y = 0; y < info.Height; y++)
         {
             context.Work(info.Width * 32L);
             for (var x = 0; x < info.Width; x++)
             {
-                CmykValues(x, y, source, invert, out var c, out var m, out var yellow, out var k);
                 var (dx, dy) = orientation switch
                 {
                     ImageOrientation.MirrorHorizontal => (info.Width - 1 - x, y),
@@ -108,18 +102,49 @@ internal ref partial struct JpegDecoder
                 var offset = dy * stride + dx * (int)format;
                 if (format == JpegSampleFormat.Cmyk)
                 {
+                    CanonicalCmykValues(x, y, source, invert, out var c, out var m, out var yellow, out var k);
                     destination[offset] = Round(c); destination[offset + 1] = Round(m);
                     destination[offset + 2] = Round(yellow); destination[offset + 3] = Round(k);
                 }
-                else
-                {
-                    var r = (255 - c) * (255 - k) / 255;
-                    var g = (255 - m) * (255 - k) / 255;
-                    var b = (255 - yellow) * (255 - k) / 255;
-                    if (format == JpegSampleFormat.Grayscale) destination[offset] = Round(0.299 * r + 0.587 * g + 0.114 * b);
-                    else { destination[offset] = Round(r); destination[offset + 1] = Round(g); destination[offset + 2] = Round(b); }
-                }
+                else WriteFourComponentPixel(x, y, source, invert,
+                    destination.Slice(offset, (int)format), (int)format);
             }
         }
     }
+
+    private void WriteFourComponentPixel(int x, int y, JpegColorSpace source, bool inverted,
+        Span<byte> destination, int channels)
+    {
+        var first = FourComponentSample(components[0], x, y);
+        var second = FourComponentSample(components[1], x, y);
+        var third = FourComponentSample(components[2], x, y);
+        var black = FourComponentSample(components[3], x, y);
+        if (source == JpegColorSpace.Ycck)
+            JpegBlackColor.WriteYcck(first, second, third, black, inverted, destination, channels);
+        else JpegBlackColor.WriteCmyk(first, second, third, black, inverted, destination, channels);
+    }
+
+    private byte FourComponentSample(Component component, int x, int y)
+    {
+        var halfH = component.H * 2 == maxH; var halfV = component.V * 2 == maxV;
+        if ((component.H == maxH || halfH) && (component.V == maxV || halfV))
+        {
+            // Four-component half-resolution grids are expanded at integral
+            // half-grid origins, rounding horizontally before vertically.
+            var x0 = halfH ? x / 2 : x; var y0 = halfV ? y / 2 : y;
+            var x1 = Math.Min(halfH ? (x + 1) / 2 : x, component.SampleWidth - 1);
+            var y1 = Math.Min(halfV ? (y + 1) / 2 : y, component.SampleHeight - 1);
+            var stride = component.BlockColumns * 8;
+            var top = (int)component.Plane[y0 * stride + x0];
+            if (halfH) top = (top + component.Plane[y0 * stride + x1]) >> 1;
+            if (!halfV) return (byte)top;
+            var bottom = (int)component.Plane[y1 * stride + x0];
+            if (halfH) bottom = (bottom + component.Plane[y1 * stride + x1]) >> 1;
+            return (byte)((top + bottom) >> 1);
+        }
+        // Other admitted sampling factors retain centered edge extension;
+        // their exact native qualification is listed independently.
+        return Round(Interpolate(component, x, y));
+    }
+
 }

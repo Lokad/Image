@@ -166,8 +166,12 @@ samples, including odd edges, progressive refinement, EOB/split scans and restar
 The three31x23 baseline anchors also have exact array/sync/async stream output,
 caller gray/RGB, padding and opt-in orientation. Existing live controls require
 exact samples; the three anchors and signed refinement pair also check normal
-native execution. CMYK/YCCK and4:1:1/4:1:0 retain transitional functional bounds
-and require further exact qualification.
+native execution. Named CMYK/YCCK constant, varying, progressive, saturated and
+AC controls also require exact samples. The two65x31 varying controls cover
+RGB/grayscale, streams, caller padding and orientation. CMYK output preserves its
+explicit canonical ink contract. Four-component half-grid/black/color precision
+is shared across owned and caller outputs. Three-component4:1:1/4:1:0 still require
+further exact qualification.
 [Decoder evidence](../benchmarks/decoder-exactness-evidence.json) states the scope;
 [rounding](jpeg-inverse-rounding.md) describes the integer boundaries. No old
 inverse variant or compatibility mode remains. Earlier JPEG decode CPU/allocation

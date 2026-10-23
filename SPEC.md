@@ -118,7 +118,7 @@ admission on return; caller storage lifetimes can use an explicit reservation.
 Failures may leave a completed pixel prefix; no buffer ownership is transferred.
 `JpegDecodeOptions.SourceColorSpace` selects encoded Gray/RGB/YCbCr/CMYK/YCCK interpretation;
 Auto preserves component-count, Adobe and RGB-ID inference. RGB output uses the
-existing encoded-space color matrix and rounding. Grayscale takes decoded Y for
+encoded-space color matrix at the documented integer precision. Grayscale takes decoded Y for
 YCbCr, repeats gray unchanged, or rounds `0.299 R + 0.587 G + 0.114 B` for RGB.
 EXIF reorientation is opt-in and writes directly to the oriented destination
 layout; returned dimensions/orientation describe those samples. ICC is not applied.
@@ -130,8 +130,20 @@ owned inverse YCbCr matrix to `(255-C,255-M,255-Y)` while keeping K independent.
 `CmykInversion.Auto` then inverts all four values for Adobe transform 0/2, leaving
 untagged data unchanged; `None` and `Invert` override that convention explicitly.
 These defaults accommodate the [documented inversion ambiguity](https://raw.githubusercontent.com/libjpeg-turbo/libjpeg-turbo/main/doc/libjpeg.txt).
-RGB uses `(255-C)*(255-K)/255` per channel, with unrounded matrix/black arithmetic
-until the final clamp/round; grayscale weights those unrounded RGB values.
+RGB uses a device-color multiplication with a Q16 reciprocal derived as
+`floor(65536/255)`: signed products shift16 bits without an added rounding bias.
+For CMYK, inversion selects the color and black factors before multiplication.
+For YCCK, half-resolution components expand from integer half-grid origins with
+horizontal byte rounding before vertical rounding. Black/inversion is applied in
+Y/U/V before the shared Q13 RGB matrix. Grayscale returns the adjusted Y for
+YCCK; CMYK uses rational BT.601 Q15 studio luma on the multiplied RGB bytes, then
+endpoint-aligned Q14 full-range conversion and final byte rounding. Canonical
+CMYK output retains the stated ink interpretation and its own matrix precision.
+Owned RGBA and caller RGB/grayscale share these output boundaries, including
+opt-in orientation. No full-frame intermediate is required; YCCK RGB uses three
+stack bytes. Existing block/row work and ownership/admission boundaries remain.
+Original constant, varying, progressive, saturated and AC controls have exact
+native pixel gates; the tested scope is in the decoder evidence ledger.
 This is a device-color approximation with no ICC processing. JPEG K is never
 alpha. CMYK output requires four encoded components; CMYK encoding is unsupported.
 Four-component frames use the existing sampling-factor and ten-block MCU bounds.

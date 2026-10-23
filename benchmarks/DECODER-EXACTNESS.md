@@ -1,44 +1,49 @@
 # Decoder exactness
 
-[The finite checklist and numeric evidence](decoder-exactness-evidence.json)
-reuse existing controls and pinned references. Exact normalized samples and typed
-source metadata are required. Remaining lossy bounds are transitional checks.
+[The finite checklist and numeric evidence](decoder-exactness-evidence.json) reuse
+original controls and pinned references. Exact normalized samples and typed source
+metadata are required. Remaining error bounds are transitional functional checks.
 
 | Required path | Current evidence and next action |
 |---|---|
-| PNG normalization, Adam7, entropy, packed depths and tRNS | Existing exact frozen/live assertions pass; stop at that scope. |
+| PNG normalization, Adam7, entropy, packed depths and tRNS | Existing frozen/live exact assertions pass; stop at that scope. |
 | VP8L transforms, palette, cache and copies | Existing60-fixture/authored/live exact assertions pass; stop at that scope. |
-| JPEG inverse and progressive coefficients | Integer primitive qualified; all30 frozen grayscale/444/422/420 controls and named live cases exact. Stop passing cases. |
-| JPEG444/422/420 color and direct RGB | Exact frozen/live samples pass on both OSes, including odd edges, restarts and progressive scans. Rounded chroma precedes the integer matrix. |
-| JPEG CMYK/YCCK and411/410 | Windows diagnostic CMYK/constant411 pass; constant YCCK444/420 expose a one-sample conversion difference. Resolve it before varying-chroma confirmation. |
-| JPEG caller grayscale/RGB/CMYK | Native Y/RGB444/422/420, padding and orientation pass. Windows direct-RGB grayscale diagnostic passes; durable assertion and CMYK exact confirmation remain. |
+| JPEG inverse and progressive coefficients | Integer primitive and all30 frozen grayscale/YCbCr444/422/420 controls pass; stop passing cases. |
+| JPEG444/422/420 YCbCr color | Exact frozen/live samples, odd edges, restarts and progressive scans pass on both OSes. |
+| JPEG direct-RGB422/420 | Reuse the two named existing warm packets and approved reference normalization; distinct expansion/caller branches need confirmation. |
+| JPEG CMYK/YCCK and411/410 | E106 named CMYK/YCCK RGB/gray controls pass. Varying three-component411/410 remain pending. |
+| JPEG caller grayscale/RGB/CMYK | Native Y/RGB444/422/420 and named CMYK/YCCK RGB/gray, padding/orientation/ownership pass. Canonical ink/source/inversion contracts retained. |
 | VP8 reconstruction and deblocking | Measure planar reconstruction before changing a primitive. |
 | VP8 chroma/RGB and ALPH | RGB exactness uncertain; retain passing exact-alpha controls. |
 | Typed source metadata, orientation and delivery | Existing sync/async, caller-buffer and lifetime checks pass; retain them. |
 
-E104 routes half-resolution YCbCr through rounded eight-bit chroma and the
-qualified Q13 BT.601 matrix. Centered interpolation geometry is unchanged.
-Owned RGBA and caller RGB share the conversion, including opt-in orientation.
-Fixed32-sample chunks add64 stack bytes, with no new owned heap storage or frame
-copy. Existing4096-per-block and32-per-pixel row work, cancellation, terminal
-refusal and retained ownership remain. Superseded floating H2 implementations
-and their implementation-only tests are removed.
+The fixed-point inverse and Q13 color matrix preserve the pinned numerical policy,
+including the recorded native C/normal AVX distinction. All30 existing frozen
+JPEG grayscale/YCbCr controls require exact samples. Three31x23 anchors cover
+arrays, synchronous/asynchronous streams, caller RGB, padding and orientation.
+Existing live baseline/progressive/restart/caller controls require exact samples.
 
-All30 existing frozen grayscale/444/422/420 controls now require exact complete
-RGBA samples. The three31x23 anchors additionally cover arrays, synchronous and
-asynchronous streams, caller RGB, padding and orientation. Existing live baseline,
-progressive, restart and caller controls require exact samples; the three anchors
-also compare normal native execution. Original numeric inverse controls retain
-their explicit pinned normal x64 policy, including native C/AVX differences.
+E106 adopts the demonstrated CMYK/YCCK integer product and black-before-color
+precision for owned RGBA and caller RGB/grayscale. Original constant, varying,
+saturated, AC and progressive controls have native pixel gates. The two65x31
+varying packets additionally cover grayscale, streams, oriented/padded caller
+outputs and retained shared-root lifetime. Canonical CMYK keeps its explicitly
+requested ink representation and source/inversion controls.
 
-Windows and Linux each pass5,023 checks, including940 live comparisons, plus33
-internal and77 public affected scalar checks. The SAME actual private0.2.0 package
-passes both consumers and all3 usage examples. Earlier JPEG decode timing and
-allocation rows describe the replaced producer; no new CPU/GC measurement is
-claimed. Broader decoder equality, warm single-CPU parity and readiness remain open.
+YCCK uses three stack bytes, with no added owned heap storage or frame copy.
+Existing4096 block/32-per-pixel row work, admission, cancellation and ownership
+boundaries remain. Superseded floating YCCK output paths and their implementation-
+only tests are removed.
 
-The next bounded screen reuses the current immutable build. Existing constant
-CMYK and direct-RGB grayscale controls match normal/scalar native on Windows.
-Existing constant YCCK444/420 differ by one sample and identify the next conversion
-boundary. Constant411 agreement does not qualify varying-chroma interpolation.
-Keep those distinctions; no new quality/shape grid or passing-case retuning.
+Windows and Linux each pass5,027 qualified checks, including942 live comparisons,
+plus33 internal/113 public affected scalar checks. Valid1977-check internal results
+are reused after a public expectation correction; production/internal-test DLLs
+stayed unchanged. The SAME actual private0.2.0 package passes both consumers and
+all3 usage examples. Earlier JPEG decode timing/allocation rows describe prior
+producers; no new CPU/GC measurement is claimed.
+
+Next, resolve exactness on the named existing direct-RGB422/420 warm controls and
+67x19 varying three-component411/410 controls. These are distinct expansion/output
+branches. Preserve approved reference normalization/settings and input hashes;
+no new workload grid or passing-case retuning. VP8, broader decoder equality,
+warm single-CPU parity and replacement readiness remain open.

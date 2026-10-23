@@ -83,7 +83,8 @@ public sealed class JpegCompatibilityBoundaryTests
     {
         var data = AuthoredJpegCompatibility.Create(2, 1, [75, 110, 190, black], adobe: 0);
         using var result = ImageCodec.Decode(data);
-        byte[] expected = [(byte)((75 * black + 127) / 255), (byte)((110 * black + 127) / 255), (byte)((190 * black + 127) / 255), 255];
+        // The pinned Q16 reciprocal keeps opaque alpha even at the black endpoints.
+        byte[] expected = black == 0 ? [0, 0, 0, 255] : [74, 109, 189, 255];
         Assert.Equal(expected, result.GetRow8(0)[..4].ToArray());
     }
 

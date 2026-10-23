@@ -11,6 +11,10 @@ public sealed class JpegFfmpegTests
         var encoded = AuthoredJpeg.DirectRgb(adobe);
         using var actual = ImageCodec.Decode(encoded);
         Assert.Equal(JpegOracle.Decode(encoded, 8, 8, JpegSampling.YCbCr444), OriginalPixels.Bytes(actual));
+        var gray = new byte[64]; ImageCodec.DecodeJpeg(encoded, gray, JpegSampleFormat.Grayscale);
+        var args = JpegOracle.DecodeArguments(8, 8, JpegSampling.YCbCr444);
+        args[Array.IndexOf(args, "rgba")] = "gray";
+        Assert.Equal(OracleProcess.Run(OracleProcess.Ffmpeg, args, encoded), gray);
     }
 
     [Theory]

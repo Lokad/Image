@@ -481,7 +481,7 @@ for (var sx = 0; sx < 17; sx++)
     var delta = (int)Math.Round((Math.Cos((2 * (sx & 7) + 1) * Math.PI / 16)
         + (sparseTerms == 2 ? Math.Cos((2 * (sy & 7) + 1) * Math.PI / 16) : 0)) / Math.Sqrt(2), MidpointRounding.AwayFromZero);
     for (var sc = 0; sc < 3; sc++)
-        if (sparseSurvivor.GetRow8(sy)[sx * 4 + sc] != ((sparseValues[sc] + delta) * (sparseValues[3] + delta) + 127) / 255)
+        if (sparseSurvivor.GetRow8(sy)[sx * 4 + sc] != (((sparseValues[sc] + delta) * (sparseValues[3] + delta) * 257) >> 16))
             throw new Exception("Packaged sparse JPEG analytical sample differs.");
     if (sparseSurvivor.GetRow8(sy)[sx * 4 + 3] != 255) throw new Exception("Packaged sparse JPEG alpha differs.");
 }
@@ -806,6 +806,61 @@ foreach (var (sampling, packetHash, pixelHash) in new[]
         if (!jpegExactOriented.AsSpan((x * 23 + 22 - y) * 3, 3).SequenceEqual(jpegExactNative.AsSpan((y * 31 + x) * 4, 3)))
             throw new Exception("Package oriented caller RGB pixels differ.");
     if (jpegExactRoot.Bytes != 0 || jpegExactRoot.IsDisposed) throw new Exception("Package JPEG admission cleanup differs.");
+}
+// Existing original varying CMYK/YCCK controls exercise the actual package.
+foreach (var isYcck in new[] { false, true })
+{
+    var fourData = Lokad.Image.Tooling.AuthoredJpegCompatibility.Create(65, 31, new byte[] {17,191,250,63},
+        isYcck ? 2 : 1, isYcck ? 2 : 1, isYcck, isYcck ? 2 : 0, restart: isYcck ? 1 : 0, vary: true);
+    var fourHash = isYcck ? "adabc4449f31ac8f77fb941686c4cbbc1f178ba919d373220bdf1991a07b71cc" : "8deae32e317740b58b94ddcbbb0270c6437616391d9d559f25aef7984413fd44";
+    var grayHash = isYcck ? "04282e0fb862d9360eb9ed1138b3bd343b675818ee2bba2f292254b5e90bca15" : "34e9c10cdde85e632e61821274846ed642d1f5c575295f42eb212e5aa4c5aaad";
+    using var fourRoot = new Lokad.Image.Tooling.TestMemoryBudget(4 * 1024 * 1024);
+    var fourLimits = ImageLimits.Default with { MemoryBudget = fourRoot };
+    using (var fourImage = ImageCodec.Decode(fourData, new DecodeOptions { Limits = fourLimits }))
+    {
+        if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(Lokad.Image.Tooling.OriginalPixels.Bytes(fourImage))) != fourHash || fourRoot.Bytes != 65*31*4)
+            throw new Exception("Package four-component native samples or retained charges differ.");
+        using (var fourInput = new MemoryStream(fourData, writable:false))
+        {
+            using var fourSync = ImageCodec.Decode(fourInput, new DecodeOptions { Limits = fourLimits });
+            if (!fourInput.CanRead || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(Lokad.Image.Tooling.OriginalPixels.Bytes(fourSync))) != fourHash)
+                throw new Exception("Package four-component synchronous delivery differs.");
+        }
+        using (var fourInput = new MemoryStream(fourData, writable:false))
+        {
+            using var fourAsync = await ImageCodec.DecodeAsync(fourInput, new DecodeOptions { Limits = fourLimits });
+            if (!fourInput.CanRead || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(Lokad.Image.Tooling.OriginalPixels.Bytes(fourAsync))) != fourHash)
+                throw new Exception("Package four-component asynchronous delivery differs.");
+        }
+    }
+    foreach (var oriented in new[] { false, true })
+    {
+        using var fourPacket = new MemoryStream();fourPacket.Write(fourData.AsSpan(0,2));
+        fourPacket.Write(new byte[] {255,225,(byte)(app1Length>>8),(byte)app1Length});
+        fourPacket.Write("Exif\0\0"u8);fourPacket.Write(tiff);fourPacket.Write(fourData.AsSpan(2));
+        var width = oriented ? 31 : 65; var height = oriented ? 65 : 31;
+        var rgbStride = width*3+5;var grayStride=width+5;
+        var rgbSamples=Enumerable.Repeat((byte)165,rgbStride*height+7).ToArray();
+        var graySamples=Enumerable.Repeat((byte)165,grayStride*height+7).ToArray();
+        var fourOptions=new JpegDecodeOptions { ApplyOrientation=oriented, Limits=fourLimits };
+        ImageCodec.DecodeJpeg(fourPacket.ToArray(),rgbSamples,JpegSampleFormat.Rgb,rgbStride,fourOptions);
+        ImageCodec.DecodeJpeg(fourPacket.ToArray(),graySamples,JpegSampleFormat.Grayscale,grayStride,fourOptions);
+        var rgbaSamples=new byte[65*31*4];var packedGray=new byte[65*31];
+        for(var y=0;y<31;y++)for(var x=0;x<65;x++)
+        {
+            var dx=oriented?30-y:x;var dy=oriented?x:y;
+            rgbSamples.AsSpan(dy*rgbStride+dx*3,3).CopyTo(rgbaSamples.AsSpan((y*65+x)*4,3));
+            rgbaSamples[(y*65+x)*4+3]=255;packedGray[y*65+x]=graySamples[dy*grayStride+dx];
+        }
+        if(Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(rgbaSamples))!=fourHash
+            ||Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(packedGray))!=grayHash)
+            throw new Exception("Package four-component caller RGB/gray/orientation differs.");
+        for(var y=0;y<height;y++)if(rgbSamples.AsSpan(y*rgbStride+width*3,5).ContainsAnyExcept((byte)165)
+            ||graySamples.AsSpan(y*grayStride+width,5).ContainsAnyExcept((byte)165))throw new Exception("Package four-component row padding changed.");
+        if(rgbSamples.AsSpan(rgbStride*height).ContainsAnyExcept((byte)165)||graySamples.AsSpan(grayStride*height).ContainsAnyExcept((byte)165))
+            throw new Exception("Package four-component caller tail changed.");
+    }
+    if(fourRoot.Bytes!=0||fourRoot.IsDisposed)throw new Exception("Package four-component admission cleanup differs.");
 }
 Console.WriteLine("Exact Release package consumer passed.");
 '@ | Set-Content -LiteralPath (Join-Path $consumer 'Program.cs') -Encoding utf8

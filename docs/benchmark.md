@@ -51,7 +51,9 @@ require new costs later. Frozen decoder inputs and unchanged code retain evidenc
 
 Current JPEG decoding uses the pinned integer inverse and rounded-chroma color
 policy. Thirty frozen grayscale/4:4:4/4:2:2/4:2:0 controls and the declared
-public stream/caller/orientation boundaries have exact pixel gates. Earlier JPEG
+public stream/caller/orientation boundaries have exact pixel gates. Named CMYK/YCCK
+controls also require exact RGB/grayscale, including black-before-color precision.
+Earlier JPEG
 decode timings and allocations describe the replaced producer and are marked
 **Prior production; reconfirm**. No new decoder timing/allocation run is claimed.
 

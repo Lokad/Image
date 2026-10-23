@@ -1,6 +1,6 @@
 {
   "project": "Lokad.Image",
-  "round": "E104",
+  "round": "E106",
   "policy": "Exact normalized output samples first. Reuse unchanged valid evidence. Resolve uncertainty before changing algorithms. Old lossy RGB tolerances are transitional interoperability checks, not completion gates. No new workload grid, CPU tuning or repeated package proof.",
   "reference": {
     "executableSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
@@ -46,28 +46,40 @@
       "id": "jpeg-color",
       "controls": "Existing31x23 baseline444/422/420 anchors and existing1x17/17x1 odd-edge companions; existing explicit-RGB declarations",
       "why": "YCbCr matrix/range rounding, centered half-resolution chroma and direct-RGB interpretation",
-      "status": "PASS and STOP at E104 scope: all30 frozen grayscale/444/422/420 controls and existing live baseline/progressive/restart/caller controls exact on BOTHOS. Three31x23 anchors also match normal native execution. Rounded8-bit chroma and integer matrix shared by owned RGBA/caller RGB/orientation. CMYK/YCCK/411/410 remain separately listed.",
+      "status": "PASS and STOP at E104/E106 tested scope: all30 frozen grayscale/YCbCr444/422/420 controls and existing live cases exact. Explicit direct-RGB8x8 declaration/caller-gray controls pass. Subsampled direct-RGB output has separate named branches and is listed next; no broader direct-RGB equality claim.",
       "tests": [
         "JpegFfmpegTests.BaselineDecodeMatchesConfiguredFfmpeg",
         "JpegFfmpegTests.ExplicitRgbDeclarationsInteroperate"
       ]
     },
     {
+      "id": "jpeg-direct-rgb-subsampled",
+      "controls": "Existing513x259 WarmJpegRgbInput RGB422 input0894aa4975ec61d5a3723bb04ee4703a23313532097e5bc080823b623134b9c9 and RGB420 input26e897ecf53f5eb6ea45e6bb881c2168e989dddd5a62c7449268e0c1feeb34e5; existing matching caller-RGB output",
+      "why": "Required explicit RGB JPEG interpretation uses separate RenderRgb422Row/RenderRgb420Row and caller interpolation branches, rather than the now-qualified YCbCr matrix path; this distinct existing required path was omitted from the initial exact checklist. Reuse its approved native normalization/settings without silently changing reference phase.",
+      "status": "UNCERTAIN exact samples on current integer inverse. Resolve with those existing controls before optimizing or changing geometry; no new dimensions/quality matrix.",
+      "tests": [
+        "WarmJpegRgbInput",
+        "JpegSampleDecodeTests"
+      ]
+    },
+    {
       "id": "jpeg-four-component-and-quarter-width",
-      "controls": "Existing17x9 CMYK/YCCK baseline/progressive and420 controls;67x19 411/410 controls; existing varying-chroma YCCK420/411/410 benchmark controls if constants cannot expose expansion phase",
+      "controls": "Existing constant17x9 CMYK/YCCK baseline/progressive and420 controls;65x31 varying CMYK/YCCK420; existing saturated8x8 YCCK, CMYK AC1/63 and four odd-edge/progressive YCCK controls. Separately67x19 varying three-component411/410 controls and existing513x259 benchmark companions.",
       "why": "Explicit inversion, four-component conversion and distinct quarter-width/vertical chroma phases",
-      "status": "E105 unchanged-build Windows screen: existing17x9 constant CMYK and67x19 constant411 match native normal/scalar RGBA and callerRGB;17x9 constant YCCK444/420 differ at306 RGB channels by1 each. Resolve that specific conversion boundary; constant controls do not confirm varying-chroma phases. Full exact qualification remains open.",
+      "status": "CMYK/YCCK RGB/gray PASS and STOP at E106 declared scope, BOTHOS/full/scalar/SAME package; canonical CMYK/source/inversion semantics and ownership/admission preserved. Three-component411/410 varying expansion and color are still UNCERTAIN; constant agreement is insufficient.",
       "tests": [
         "JpegCompatibilityFfmpegTests",
         "JpegCmykTests",
-        "JpegYcckRowTests"
+        "JpegYcckRowTests",
+        "JpegFourComponentExactTests",
+        "JpegCompatibilityFfmpegTests.ExistingVaryingFourComponentRgbAndGrayMatchNativeExactly"
       ]
     },
     {
       "id": "jpeg-caller-samples",
       "controls": "Existing31x23 caller grayscale/RGB baseline/progressive controls and existing CMYK sample controls; existing stride/tail and ownership tests; existing8x8 authored direct-RGB control projected into caller GRAY8",
       "why": "Direct caller destinations use specialized packing/conversion without mandatory RGBA; retain inversion/options and untouched padding; direct-RGB to grayscale computes luminance rather than extracting decoded Y, a distinct existing public branch identified during adoption",
-      "status": "Native Y and caller RGB444/422/420/padding/opt-in orientation PASS at E104 scope, BOTHOS/scalar/SAME package. CMYK exactness remains uncertain. E105 Windows-only existing8x8 direct-RGB caller-gray projection matches normal/scalar native; durable live assertion remains pending.",
+      "status": "PASS and STOP: native Y, RGB444/422/420, named Adobe CMYK/YCCK RGB/gray, padding/orientation, stream and retained-root boundaries. Canonical ink/source/inversion cases retain explicit functional contracts. Direct-RGB8x8 grayscale has a live exact assertion. Direct-RGB subsampled caller output remains on the newly named distinct branch checklist.",
       "tests": [
         "JpegSampleFfmpegTests",
         "JpegSampleDecodeTests",
@@ -228,7 +240,7 @@
   },
   "cpuTimingRuns": 0,
   "gcAllocationsMeasured": false,
-  "next": "Resolve YCCK conversion precision on the existing17x9 full-resolution control, then confirm the existing420/411/410 varying-chroma paths. The E105 constant CMYK and direct-RGB caller-gray controls already pass on Windows; preserve them without retuning and add durable exact native assertions. Do not infer varying-chroma equality from constant controls. No new grid or timing round.",
+  "next": "Resolve exactness of the named existing direct-RGB422/420 warm controls and67x19 varying three-component411/410 controls before changing them. These use distinct expansion/output branches. Preserve approved reference normalization/settings, existing input hashes and caller boundaries. Passing E106 CMYK/YCCK RGB/gray, E104 YCbCr, inverse, PNG/VP8L and metadata cases stop at their qualified scopes. Then VP8 planar reconstruction/RGB remains on the checklist. No new image/settings grid or CPU tuning.",
   "rawArchive": {
     "name": "e100-decoder-audit.tar.xz",
     "bytes": 20372,
@@ -966,16 +978,16 @@
   "currentProductionProducer": {
     "windowsCore": {
       "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
-      "bytes": 758784,
-      "sha256": "70d146edebd3364110e5e9a231ebcce2ff5dfc9ff35a6c15726bcc647ebeddfb"
+      "bytes": 754176,
+      "sha256": "3a75592d426ed3b2ce8be84473b59110ccba66c81d348764108b7a563bf145b1"
     },
     "linuxCore": {
       "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
-      "bytes": 758784,
-      "sha256": "1af3702aa0322f119bc2abfd7ce397e3cf06926bda88cafbf0e5195310ffe4b6"
+      "bytes": 754176,
+      "sha256": "b7d6e94755312bd404034aa538352ed53a24eb5107ac43a17995ca0a4a9b21ea"
     }
   },
-  "lastProductionRound": "E104",
+  "lastProductionRound": "E106",
   "productionChangedThisRound": true,
   "subsampledColorBoundary": {
     "round": "E104",
@@ -1263,9 +1275,9 @@
   },
   "remainingJpegScreen": {
     "round": "E105",
-    "status": "Windows byte diagnostics only; no production change or full qualification claim",
+    "status": "Diagnostic controls adopted by E106 publicFourComponentAdoption; original byte experiments retained.",
     "coreSha256": "70d146edebd3364110e5e9a231ebcce2ff5dfc9ff35a6c15726bcc647ebeddfb",
-    "scope": "Five named existing controls only; original authored generator methods reused from the verified current test assembly. Normal/scalar pinned FFmpeg settings retained. No new workload grid, production rebuild or timing.",
+    "scope": "Seven named existing controls only, including the65x31 varying CMYK/YCCK420 public controls. Original generators and immutable E104 production build reused. Byte diagnostics, not an accepted production patch or broad equality claim.",
     "managed": [
       {
         "name": "direct-rgb-gray",
@@ -1607,7 +1619,7 @@
         "productionUnchanged": true
       }
     ],
-    "next": "Resolve YCCK conversion precision on the existing17x9 full-resolution control, then confirm the existing420/411/410 varying-chroma paths. The E105 constant CMYK and direct-RGB caller-gray controls already pass on Windows; preserve them without retuning and add durable exact native assertions. Do not infer varying-chroma equality from constant controls. No new grid or timing round.",
+    "next": "Adopt the demonstrated CMYK product precision and YCCK integer chroma/black-before-color boundary as one coherent color conversion slice. Existing65x31 varying controls reproduce every native byte in independent composition. Keep explicit canonical CMYK/source/inversion/gray semantics, ownership/admission/work/cancellation and named quarter-width paths explicit; retire replaced paths/tests without compatibility modes. Then batch affected qualification. No new workload matrix or CPU tuning. Caller grayscale on these same packets has1279/1087 differing samples: YCCK native gray is its exact post-black Y; CMYK gray is exactly reproduced by rational BT.601 Q15 studio-luma rounding followed by endpoint-aligned Q14 full-range conversion. Include these existing public boundaries in adoption; no extra images.",
     "rawArchive": {
       "name": "e105-jpeg-remaining-screen.tar.xz",
       "bytes": 11288,
@@ -1617,6 +1629,452 @@
       "everySourceMemberByteVerified": true,
       "linuxBeforeMirror": 4992902092,
       "linuxAfterMirror": 4992913380,
+      "allObservedAndProjectedPeaksBelowCap": true
+    },
+    "blackPrecisionExperiment": {
+      "scope": "Existing17x9 constant YCCK444 only. Native post-black planar capture and byte composition; no production rebuild/patch/timing.",
+      "inputSha256": "01cca6cc3c6daf67a2da41061fd3d0c1b55f7e4abb209c8365b65444821b2ddd",
+      "postBlackYuvValues": [
+        [
+          137
+        ],
+        [
+          95
+        ],
+        [
+          157
+        ]
+      ],
+      "postBlackSha256": "ff38e3c883ebf79e45636512b2a05e6a240c7ecd855bfdcfe6e6f48c77da86df",
+      "composedRgba": [
+        178,
+        128,
+        79,
+        255
+      ],
+      "rgbaSha256": "56d65bcc75c3921ef42b56978fe4d5a9d99924bf31fb193943a40d4b8ab70345",
+      "completeRgbaMismatches": 0,
+      "observation": "Native black/inversion adjustment occurs in Y/U/V integer precision before Q13 RGB conversion. Existing production converts fractional YCCK to CMYK/RGB before black and rounds only at output. Order of quantization, rather than inverse or entropy, is the first divergence.",
+      "referenceArguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-noautorotate",
+        "-f",
+        "image2pipe",
+        "-i",
+        "pipe:0",
+        "-vf",
+        "extractplanes=y+u+v[y][u][v];[y][u][v]mergeplanes=0x001020:format=yuv444p",
+        "-frames:v",
+        "1",
+        "-threads:v",
+        "1",
+        "-pix_fmt",
+        "yuv444p",
+        "-f",
+        "rawvideo",
+        "pipe:1"
+      ]
+    },
+    "varyingComposition": [
+      {
+        "name": "ycck420-varying",
+        "packetSha256": "eadc9fd3c13268da1978cb41ce31deae5b0f8b0fd04e57ee6077dd87c4e84728",
+        "scope": "Existing65x31 public authored varying control only. Reused verified E104 production DLL and original generator. Byte composition, no production patch/build/timing.",
+        "observed": {
+          "normal": {
+            "rgbaSha256": "adabc4449f31ac8f77fb941686c4cbbc1f178ba919d373220bdf1991a07b71cc",
+            "currentProductionMismatches": 3475,
+            "composedRgbaMismatches": 0,
+            "postBlackPlanesMismatches": 0,
+            "postBlackSha256": "24bfb78e0a8126f597a49524db95ca3b4f9debcafe6a6f6faa85c6ecaef63e1f"
+          },
+          "scalar": {
+            "rgbaSha256": "adabc4449f31ac8f77fb941686c4cbbc1f178ba919d373220bdf1991a07b71cc",
+            "currentProductionMismatches": 3475,
+            "composedRgbaMismatches": 0,
+            "postBlackPlanesMismatches": 0,
+            "postBlackSha256": "24bfb78e0a8126f597a49524db95ca3b4f9debcafe6a6f6faa85c6ecaef63e1f"
+          }
+        }
+      },
+      {
+        "name": "cmyk-varying",
+        "packetSha256": "ded06cb1a81aec05e8eff6f4dee6bdf46a019a10179f04b7d2be198a9389161b",
+        "scope": "Existing65x31 public authored varying control only. Reused verified E104 production DLL and original generator. Byte composition, no production patch/build/timing.",
+        "observed": {
+          "normal": {
+            "rgbaSha256": "8deae32e317740b58b94ddcbbb0270c6437616391d9d559f25aef7984413fd44",
+            "currentProductionMismatches": 2831,
+            "composedRgbaMismatches": 0
+          },
+          "scalar": {
+            "rgbaSha256": "8deae32e317740b58b94ddcbbb0270c6437616391d9d559f25aef7984413fd44",
+            "currentProductionMismatches": 2831,
+            "composedRgbaMismatches": 0
+          }
+        }
+      }
+    ],
+    "blackBoundaryRawArchive": {
+      "name": "e105-jpeg-black-boundary.tar.xz",
+      "bytes": 15568,
+      "sha256": "a0aed7b3f4ab0677123a04ebe5fba0e31cdb12e2ebe88a96ce9b93219ca434f4",
+      "members": 25,
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "linuxAfterMirror": 4994616504
+    },
+    "grayBoundaries": [
+      {
+        "name": "ycck420-varying",
+        "publicBoundary": "Existing caller grayscale output on the same frozen65x31 packets; no new input or producer",
+        "managed": {
+          "Width": 65,
+          "Height": 31,
+          "format": "Grayscale",
+          "sourceColor": "Auto",
+          "inputSha256": "eadc9fd3c13268da1978cb41ce31deae5b0f8b0fd04e57ee6077dd87c4e84728",
+          "outputSha256": "d6aaf705ffbe3959ade1be0c76a4a0354ae8652fb5820f7edd139f80d96723e0",
+          "coreSha256": "70d146edebd3364110e5e9a231ebcce2ff5dfc9ff35a6c15726bcc647ebeddfb"
+        },
+        "native": {
+          "normal": {
+            "sha256": "04282e0fb862d9360eb9ed1138b3bd343b675818ee2bba2f292254b5e90bca15",
+            "currentMismatches": 1279,
+            "matchesPostBlackY": true
+          },
+          "scalar": {
+            "sha256": "04282e0fb862d9360eb9ed1138b3bd343b675818ee2bba2f292254b5e90bca15",
+            "currentMismatches": 1279,
+            "matchesPostBlackY": true
+          }
+        }
+      },
+      {
+        "name": "cmyk-varying",
+        "publicBoundary": "Existing caller grayscale output on the same frozen65x31 packets; no new input or producer",
+        "managed": {
+          "Width": 65,
+          "Height": 31,
+          "format": "Grayscale",
+          "sourceColor": "Auto",
+          "inputSha256": "ded06cb1a81aec05e8eff6f4dee6bdf46a019a10179f04b7d2be198a9389161b",
+          "outputSha256": "49b9be8513616ac4981b1beb7cee6d8aaf05e8d1985a705648296ad7a4202263",
+          "coreSha256": "70d146edebd3364110e5e9a231ebcce2ff5dfc9ff35a6c15726bcc647ebeddfb"
+        },
+        "native": {
+          "normal": {
+            "sha256": "34e9c10cdde85e632e61821274846ed642d1f5c575295f42eb212e5aa4c5aaad",
+            "currentMismatches": 1087
+          },
+          "scalar": {
+            "sha256": "34e9c10cdde85e632e61821274846ed642d1f5c575295f42eb212e5aa4c5aaad",
+            "currentMismatches": 1087
+          }
+        }
+      }
+    ],
+    "cmykGrayComposition": {
+      "scope": "Same existing65x31 CMYK varying control; rational coefficient/range derivation from BT.601 precision steps, no new input or production change",
+      "weightsQ15": [
+        8414,
+        16519,
+        3208
+      ],
+      "rangeScaleQ14": 19078,
+      "rangeOffset": -39084288,
+      "mismatches": 0,
+      "first": [],
+      "sha256": "34e9c10cdde85e632e61821274846ed642d1f5c575295f42eb212e5aa4c5aaad",
+      "expectedSha256": "34e9c10cdde85e632e61821274846ed642d1f5c575295f42eb212e5aa4c5aaad",
+      "precisionSteps": [
+        "Q15 weights = nearest(Kr/Kg/Kb *219/255 *32768), with rational299/587/114 over1000",
+        "Y6 = (dot(Q15weights, decodedRGB8) +(16<<15) +256)>>9",
+        "Range scale = ceil(255*16384/219); offset =(255<<21) -(235<<7)*scale +8192",
+        "Y7 = min(32767, ((2*Y6)*scale +offset)>>14)",
+        "GRAY8 = clamp((Y7+64)>>7,0,255)"
+      ]
+    },
+    "grayRawArchive": {
+      "name": "e105-jpeg-gray-boundaries.tar.xz",
+      "bytes": 2628,
+      "sha256": "7b574da3839dbca437e761ebd21ca633a786323e415835114549139cc3a41f39",
+      "members": 10,
+      "mirrored": true,
+      "everySourceMemberByteVerified": true
+    },
+    "linuxNativeConfirmation": {
+      "scope": "Two existing65x31 CMYK/YCCK420 varying packets; native normal/scalar RGBA and callerGRAY. No production change/build/timing; same reference options.",
+      "files": [
+        {
+          "path": "tmp/e105-linux-native/ycck420-varying-normal.rgba",
+          "bytes": 8060,
+          "sha256": "adabc4449f31ac8f77fb941686c4cbbc1f178ba919d373220bdf1991a07b71cc",
+          "matchesWindowsFrozenNative": true
+        },
+        {
+          "path": "tmp/e105-linux-native/ycck420-varying-normal.gray",
+          "bytes": 2015,
+          "sha256": "04282e0fb862d9360eb9ed1138b3bd343b675818ee2bba2f292254b5e90bca15",
+          "matchesWindowsFrozenNative": true
+        },
+        {
+          "path": "tmp/e105-linux-native/ycck420-varying-scalar.rgba",
+          "bytes": 8060,
+          "sha256": "adabc4449f31ac8f77fb941686c4cbbc1f178ba919d373220bdf1991a07b71cc",
+          "matchesWindowsFrozenNative": true
+        },
+        {
+          "path": "tmp/e105-linux-native/ycck420-varying-scalar.gray",
+          "bytes": 2015,
+          "sha256": "04282e0fb862d9360eb9ed1138b3bd343b675818ee2bba2f292254b5e90bca15",
+          "matchesWindowsFrozenNative": true
+        },
+        {
+          "path": "tmp/e105-linux-native/cmyk-varying-normal.rgba",
+          "bytes": 8060,
+          "sha256": "8deae32e317740b58b94ddcbbb0270c6437616391d9d559f25aef7984413fd44",
+          "matchesWindowsFrozenNative": true
+        },
+        {
+          "path": "tmp/e105-linux-native/cmyk-varying-normal.gray",
+          "bytes": 2015,
+          "sha256": "34e9c10cdde85e632e61821274846ed642d1f5c575295f42eb212e5aa4c5aaad",
+          "matchesWindowsFrozenNative": true
+        },
+        {
+          "path": "tmp/e105-linux-native/cmyk-varying-scalar.rgba",
+          "bytes": 8060,
+          "sha256": "8deae32e317740b58b94ddcbbb0270c6437616391d9d559f25aef7984413fd44",
+          "matchesWindowsFrozenNative": true
+        },
+        {
+          "path": "tmp/e105-linux-native/cmyk-varying-scalar.gray",
+          "bytes": 2015,
+          "sha256": "34e9c10cdde85e632e61821274846ed642d1f5c575295f42eb212e5aa4c5aaad",
+          "matchesWindowsFrozenNative": true
+        }
+      ],
+      "ffmpegSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
+      "passed": true,
+      "rawArchive": {
+        "archive": "tmp/e105-linux-native.tar.xz",
+        "bytes": 1540,
+        "sha256": "4cb93f370630ed451e6410c643b64234f2dd7d64a4b43084f7cb3b121c47f9c5",
+        "checks": 8,
+        "passed": true,
+        "everySourceMemberByteVerified": true,
+        "mirrored": true
+      }
+    }
+  },
+  "publicFourComponentAdoption": {
+    "round": "E106",
+    "status": "ACCEPTED at declared scope; full objective remains open",
+    "scope": "Named Adobe CMYK/YCCK constant, varying, saturated, AC and progressive controls. Existing65x31 varying packets have exact RGB and callerGRAY across arrays/sync/async, padding/Rotate90 and retained shared-root lifetime. Explicit canonical CMYK ink/source/inversion contracts preserved. No arbitrary-input or quarter-width equality claim.",
+    "implementation": "Derived Q16 device product; integer half-grid expansion with horizontal then vertical byte rounding; YCCK black/inversion in YUV before shared Q13 RGB. CMYK gray uses derived Q15 studio luma then endpoint-aligned Q14 range conversion; YCCK gray is adjusted Y. Removed floating YCCK SIMD/caller paths and their implementation-only tests; retained CMYK integer SIMD with the same scalar product precision.",
+    "memoryAndWork": {
+      "newOwnedHeapBytes": 0,
+      "ycckLeafStackBytes": 3,
+      "inverseWorkPerBlock": 4096,
+      "rowWorkPerPixel": 32,
+      "sharedAdmissionOwnershipCancellationUnchanged": true
+    },
+    "windowsProducer": [
+      {
+        "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "bytes": 754176,
+        "sha256": "3a75592d426ed3b2ce8be84473b59110ccba66c81d348764108b7a563bf145b1"
+      },
+      {
+        "path": "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll",
+        "bytes": 1600000,
+        "sha256": "b003295c867880eae382613bbd892979f0af6683503e10659c2afaaca5c4ae24"
+      },
+      {
+        "path": "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll",
+        "bytes": 806912,
+        "sha256": "24ae8f9a027c0c4c47ddbd129226bd46b53cf8e65e198d2874907f6b6a827bce"
+      },
+      {
+        "path": "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.DifferentialTests.dll",
+        "bytes": 239616,
+        "sha256": "6b5993c8ff25c35c0c2f07639e1cb7a1c250289bbe8a77ad003aa662d44a48a5"
+      }
+    ],
+    "linuxProducer": [
+      {
+        "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "bytes": 754176,
+        "sha256": "b7d6e94755312bd404034aa538352ed53a24eb5107ac43a17995ca0a4a9b21ea"
+      },
+      {
+        "path": "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll",
+        "bytes": 1600000,
+        "sha256": "de934b42fd31b8856bdfae493604ceb39f596c62c16fa368f785e7f3aa67995d"
+      },
+      {
+        "path": "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll",
+        "bytes": 806912,
+        "sha256": "1a267fe5f42e8f1178fcfdd4ec98385e5598484a464ad276cdfb94c806b1223d"
+      },
+      {
+        "path": "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.DifferentialTests.dll",
+        "bytes": 239616,
+        "sha256": "f8d41c520325097009e069ad6d874158b65c6f3c1b0c7a27bc8b9351ae176393"
+      }
+    ],
+    "qualification": {
+      "aggregateChecksEachOs": 5027,
+      "internalChecks": 1977,
+      "publicChecks": 2108,
+      "liveChecks": 942,
+      "scalarInternalEachOs": 33,
+      "scalarPublicEachOs": 113,
+      "sameActualPackageBothOs": true,
+      "usageExamplesEachOs": 3,
+      "windowsConsumer": "artifacts/package-smoke/c97651860a594fe2a8e2656981afc8dd",
+      "linuxConsumer": "artifacts/package-smoke/52f45ffc33a847668d7af7d59cc72732",
+      "reusedValidInternalChecks": "First complete runs passed1977 internal checks each. One public endpoint expectation then changed, with production and internal-test DLLs unchanged. Reused those internal results and reran affected public/live/scalar suites. Original failed-public logs retained.",
+      "consumerOnlyCorrection": "Updated the existing sparse-CMYK consumer expectation to Q16 product precision; same actual package reused, no repack or production rebuild."
+    },
+    "package": {
+      "path": "artifacts/qualification/jpeg-black-final/Lokad.Image.0.2.0.nupkg",
+      "bytes": 389866,
+      "sha256": "9e7efd9f460094d476c6b3ebc90cc3df9276b7b50a7ef9d4a7b5f949e9d67425",
+      "coreSha256": "3a75592d426ed3b2ce8be84473b59110ccba66c81d348764108b7a563bf145b1",
+      "consumer": "artifacts/package-smoke/c97651860a594fe2a8e2656981afc8dd",
+      "passed": true,
+      "usageExamples": 3
+    },
+    "linuxPackage": {
+      "path": "artifacts/qualification/jpeg-black-final/Lokad.Image.0.2.0.nupkg",
+      "bytes": 389866,
+      "sha256": "9e7efd9f460094d476c6b3ebc90cc3df9276b7b50a7ef9d4a7b5f949e9d67425",
+      "coreSha256": "3a75592d426ed3b2ce8be84473b59110ccba66c81d348764108b7a563bf145b1",
+      "passed": true,
+      "usageExamples": 3,
+      "linuxBefore": 4988874031,
+      "linuxAfter": 4996485560,
+      "exitCode": 0,
+      "sameActualPackage": true,
+      "log": "tmp/e106-package-linux.log",
+      "windowsConsumer": "artifacts/package-smoke/c97651860a594fe2a8e2656981afc8dd",
+      "consumer": "artifacts/package-smoke/52f45ffc33a847668d7af7d59cc72732"
+    },
+    "existingAdditionalNativeControls": [
+      {
+        "name": "ycck-1x3-false",
+        "packetSha256": "e6ec2c7bdabfdeaee6519365108b2b59a16e6cc20957d180a47885f1101159ff",
+        "native": {
+          "normal": "b33e64062eaaa5bcdd31293b2df53d03c841fcf4ab6dbb04a7360819727067e3",
+          "scalar": "b33e64062eaaa5bcdd31293b2df53d03c841fcf4ab6dbb04a7360819727067e3"
+        }
+      },
+      {
+        "name": "ycck-17x9-true",
+        "packetSha256": "e5a5087914f95d39290819c320bb6ad82a4a0ea6e2e97b69205b63eb6ddfae96",
+        "native": {
+          "normal": "edd938efb97f63eb23589b69cecac988083bdb6752bc5101f72582d70a4fe222",
+          "scalar": "edd938efb97f63eb23589b69cecac988083bdb6752bc5101f72582d70a4fe222"
+        }
+      },
+      {
+        "name": "ycck-65x31-false",
+        "packetSha256": "eadc9fd3c13268da1978cb41ce31deae5b0f8b0fd04e57ee6077dd87c4e84728",
+        "native": {
+          "normal": "adabc4449f31ac8f77fb941686c4cbbc1f178ba919d373220bdf1991a07b71cc",
+          "scalar": "adabc4449f31ac8f77fb941686c4cbbc1f178ba919d373220bdf1991a07b71cc"
+        }
+      },
+      {
+        "name": "ycck-66x33-true",
+        "packetSha256": "18800b54ec100212cddc9013f71a866bc091b1bded4261969951c99345013339",
+        "native": {
+          "normal": "a77ca3a0286c38caaa18b225944c367b7ef53d9c596466f840618f8ad64d8821",
+          "scalar": "a77ca3a0286c38caaa18b225944c367b7ef53d9c596466f840618f8ad64d8821"
+        }
+      },
+      {
+        "name": "ycck-saturated-false",
+        "packetSha256": "cd67b21b16fc74c7d9bd744e02be1a5b71bede67a7efca515bcb76dad073443b",
+        "native": {
+          "normal": "82bb422a37a94efc69bd0ac2b6b2bd2d1985aa38ef8232c353effee2258edae6",
+          "scalar": "82bb422a37a94efc69bd0ac2b6b2bd2d1985aa38ef8232c353effee2258edae6"
+        }
+      },
+      {
+        "name": "ycck-saturated-true",
+        "packetSha256": "bbc0bc0f43f81298d65d713015648fb2a2b75cdae8b46705ae6fbca0e00925a3",
+        "native": {
+          "normal": "82bb422a37a94efc69bd0ac2b6b2bd2d1985aa38ef8232c353effee2258edae6",
+          "scalar": "82bb422a37a94efc69bd0ac2b6b2bd2d1985aa38ef8232c353effee2258edae6"
+        }
+      },
+      {
+        "name": "cmyk-ac1",
+        "packetSha256": "1ab4709a317499cbf0517f4a033e5510581364c975aaad21be22406dfdf28753",
+        "native": {
+          "normal": "97612f0764dc27a90a2829f1caae65ef25758b2d83516bc98993e1304f7c1f0b",
+          "scalar": "97612f0764dc27a90a2829f1caae65ef25758b2d83516bc98993e1304f7c1f0b"
+        }
+      },
+      {
+        "name": "cmyk-ac63",
+        "packetSha256": "7354a9d0740a6a3e27e2819b1c08440a6fb99ecdfe52fb92ed3d1e6855f9225d",
+        "native": {
+          "normal": "d5697f2a925d35ec7972e5b5fa8f7396f0c1de0f84bbaca1e71313f0ed43a5ab",
+          "scalar": "d5697f2a925d35ec7972e5b5fa8f7396f0c1de0f84bbaca1e71313f0ed43a5ab"
+        }
+      }
+    ],
+    "logs": [
+      "tmp/e106-full-windows.log",
+      "tmp/e106-full-linux.log",
+      "tmp/e106-public-windows.log",
+      "tmp/e106-public-linux.log",
+      "tmp/e106-live-windows.log",
+      "tmp/e106-live-linux.log",
+      "tmp/e106-scalar-internal-windows.log",
+      "tmp/e106-scalar-public-windows.log",
+      "tmp/e106-scalar-internal-linux.log",
+      "tmp/e106-scalar-public-linux.log",
+      "tmp/e106-package-windows-first.log",
+      "tmp/e106-package-windows.log",
+      "tmp/e106-package-linux.log"
+    ],
+    "evidenceReuse": "Inverse, YCbCr, explicit canonical ink, metadata, encoder and unrelated editing/text paths unchanged; existing passing scope remains valid and is exercised by accepted suites/package. Prior JPEG decode timings/allocations remain invalid for the current producer; no timing or GC measurement added.",
+    "storageCompaction": {
+      "archive": "tmp/e106-cold-e103-consumer-linux.tar.xz",
+      "bytes": 1377000,
+      "sha256": "dacc2d2fb17486c8edfd8148932dfd0b5ebc518e3b81c21c4dc8dd3027135a5a",
+      "retiredRegularFiles": 139,
+      "retiredBytes": 7263387,
+      "mirrored": true,
+      "everySourceByteVerified": true,
+      "peak": 4996040055,
+      "after": 4988776668
+    },
+    "parentCi": {
+      "sha": "d8b8990716066c331b33814816e74dfd1310627c",
+      "run": 40038120515,
+      "conclusion": "success",
+      "jobs": 3
+    },
+    "cpuTimingRuns": 0,
+    "gcAllocationsMeasured": false,
+    "next": "Resolve exactness of the named existing direct-RGB422/420 warm controls and67x19 varying three-component411/410 controls before changing them. These use distinct expansion/output branches. Preserve approved reference normalization/settings, existing input hashes and caller boundaries. Passing E106 CMYK/YCCK RGB/gray, E104 YCbCr, inverse, PNG/VP8L and metadata cases stop at their qualified scopes. Then VP8 planar reconstruction/RGB remains on the checklist. No new image/settings grid or CPU tuning.",
+    "rawArchive": {
+      "name": "e106-public-black-qualified.tar.xz",
+      "bytes": 1686080,
+      "sha256": "b92fbf75bd7ed2bc979d032bbab7cbbced5b1d779f56bfbc724b09d5b1134754",
+      "members": 77,
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "linuxBeforeMirror": 4996485560,
+      "linuxAfterMirror": 4998171640,
       "allObservedAndProjectedPeaksBelowCap": true
     }
   }
