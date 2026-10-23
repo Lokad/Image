@@ -152,8 +152,10 @@ public sealed class Vp8MacroblockDecisionTests
         finally { rate?.Dispose(); context.Release(scratch); }
     }
 
-    [Fact]
-    public void BorrowedInputsCanAliasResultsAndInvalidLayoutsOrCancellationPreserveSeparateInputs()
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void BorrowedInputsCanAliasResultsAndInvalidLayoutsOrCancellationPreserveSeparateInputs(bool correctDc)
     {
         using var root = new TestMemoryBudget(16_000_000); using var image = OriginalVp8lControls.Buffer("opaque", 8, root);
         using var context = new OperationContext(new() { MemoryBudget = root }, default); using var input = Vp8PreparedInput.Create(image, context);
@@ -170,12 +172,20 @@ public sealed class Vp8MacroblockDecisionTests
             Span<byte> dst, Span<short> coefficients, Span<byte> modeOut, Span<sbyte> errorOut, OperationContext operation)
             => Vp8MacroblockDecision.Select(src, neighbors, modesIn, ctxIn, errorsIn, false, false,
                 quantization.Matrix(segment, Vp8CoefficientPlane.Luma), quantization.Matrix(segment, Vp8CoefficientPlane.Walsh), quantization.Matrix(segment, Vp8CoefficientPlane.Chroma),
-                quantization.Costs(segment), rate, weights, 65536, dst, coefficients, modeOut, errorOut, operation);
+                quantization.Costs(segment), rate, weights, 65536, dst, coefficients, modeOut, errorOut, operation, correctDc);
         context.Reserve(Vp8MacroblockDecision.ScratchBytes);
         try
         {
             var retained = root.Bytes; var pixels = new byte[386]; var levels = new short[402]; var modes = new byte[18]; var errors = new sbyte[16];
             var expected = Run(source, modeInput, contexts, diffusion, pixels, levels, modes, errors, context);
+            if (!correctDc)
+            {
+                // With DC diffusion disabled, incoming neighbor error is inert
+                // and no selected error can escape into the next macroblock.
+                Array.Fill(diffusion, (sbyte)31);
+                Assert.Equal(expected, Run(source, modeInput, contexts, diffusion, pixels, levels, modes, errors, context));
+                Assert.All(errors[..14], value => Assert.Equal((sbyte)0, value)); Array.Clear(diffusion);
+            }
             var aliasPixels = new byte[386]; source.CopyTo(aliasPixels, 0); aliasPixels[384] = 97; aliasPixels[385] = 98;
             var aliasLevels = new short[402]; var aliasModes = new byte[18]; var aliasErrors = new sbyte[16];
             aliasLevels[400] = 1234; aliasLevels[401] = -1234; aliasModes[16] = 95; aliasModes[17] = 96; aliasErrors[14] = 93; aliasErrors[15] = 94;

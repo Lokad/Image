@@ -79,7 +79,7 @@ internal sealed class Vp8FramePlan : IDisposable
     }
 
     internal static Vp8FramePlan Create(Vp8PreparedInput input, Vp8SourceSegments segments, Vp8QuantizationPlan quantization,
-        OperationContext context, int headerLimit = 65536)
+        OperationContext context, int headerLimit = 65536, bool correctDc = true)
     {
         if (headerLimit is < 0 or > 65536 || segments.Width != input.Stride / 16 || segments.Height != input.StorageHeight / 16
             || quantization.SegmentCount != segments.SegmentCount) throw new ArgumentException("Inconsistent VP8 frame preparation.");
@@ -91,7 +91,7 @@ internal sealed class Vp8FramePlan : IDisposable
             context.Reserve(scratch);
             try
             {
-                context.Work(0); result.Prepare(input, segments, quantization);
+                context.Work(0); result.Prepare(input, segments, quantization, correctDc);
             }
             finally { context.Release(scratch); }
             return result;
@@ -205,7 +205,7 @@ internal sealed class Vp8FramePlan : IDisposable
         for (var s = 0; s < 4; s++) parameters![12 + s] = parameters[4 + s];
     }
 
-    private void Prepare(Vp8PreparedInput input, Vp8SourceSegments segments, Vp8QuantizationPlan quantization)
+    private void Prepare(Vp8PreparedInput input, Vp8SourceSegments segments, Vp8QuantizationPlan quantization, bool correctDc)
     {
         var ownedParameters = parameters!;
         var yTop = new byte[Columns * 16]; var uvTop = new byte[Columns * 16]; var modeTop = new byte[Columns * 4];
@@ -253,7 +253,7 @@ internal sealed class Vp8FramePlan : IDisposable
                     var segment = segments.Map[index]; var data = blocks!.AsSpan(index * BlockBytes, BlockBytes); var levels = coefficients!.AsSpan(index * 400, 400);
                     var score = Vp8MacroblockDecision.Select(source, neighbors, modeContexts, contexts, errorInput, y != 0, x != 0,
                         quantization.Matrix(segment, Vp8CoefficientPlane.Luma), quantization.Matrix(segment, Vp8CoefficientPlane.Walsh), quantization.Matrix(segment, Vp8CoefficientPlane.Chroma),
-                        quantization.Costs(segment), rate, weights, HeaderLimit, pixels, levels, data[..16], errors, context);
+                        quantization.Costs(segment), rate, weights, HeaderLimit, pixels, levels, data[..16], errors, context, correctDc);
                     data[16] = (byte)score.LumaMode; data[17] = (byte)score.ChromaMode; data[18] = (byte)((score.Intra16 ? 1 : 0) | (score.Nonzero == 0 ? 2 : 0)); data[19] = segment;
                     headerCost += score.Header; ownedParameters[8 + segment] = Math.Max(ownedParameters[8 + segment], score.MaximumEdge);
                     Record(levels, score.Intra16, contexts, statistics); contexts[..9].CopyTo(coefficientTop.AsSpan(x * 9, 9));

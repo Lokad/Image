@@ -27,7 +27,7 @@ public sealed class Vp8FrameEncodingTests
         }
         internal Vp8FramePlan Frame(OperationContext? operation = null) => method <= 2
             ? Vp8FramePlan.CreateDistortion(Prepared, Analysis, Segments, Quantization, method, operation ?? Context, correctDc: quality <= 98)
-            : Vp8FramePlan.Create(Prepared, Segments, Quantization, operation ?? Context);
+            : Vp8FramePlan.Create(Prepared, Segments, Quantization, operation ?? Context, correctDc: quality <= 98);
         internal void ReleaseInputs() { Quantization.Dispose(); Segments.Dispose(); Analysis.Dispose(); Prepared.Dispose(); image.Dispose(); }
         public void Dispose() { ReleaseInputs(); Context.Dispose(); }
     }
@@ -41,6 +41,9 @@ public sealed class Vp8FrameEncodingTests
     [InlineData("diagram", 9244, "50d50af60b76e99dcb1f49eda60efc548a564dbaaaa931d06fc0164aa28c0bea", 1, 75)]
     [InlineData("diagram", 7330, "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b", 2, 75)]
     [InlineData("diagram", 27668, "eb4cd33ce7a5b39698b49fd94b4dd59a7ec9c0a0d8d5ac0bf12b10d8a0afbdba", 0, 100)]
+    [InlineData("diagram", 2304, "28bff919826e67d69d393f457d3920017ffff21cc3732e3db06d55a80f873f54", 4, 1)]
+    [InlineData("diagram", 8898, "51a4abeda30c4f8c8b1dea563ab6690a89a5feed93b69c467398f9b736aeb536", 4, 85)]
+    [InlineData("diagram", 15172, "6a4332bb32c3b93248a76eb804a0dc74d2c519d4955f310dcb94ef798cd2616e", 4, 100)]
     public async Task CompletePacketMatchesNativeWithIndependentSourceAndOutputLifetimes(string name, int bytes, string expected, int method, int quality)
     {
         using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs(name, root, method, quality); using var frame = input.Frame();

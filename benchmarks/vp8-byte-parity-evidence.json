@@ -1,7 +1,7 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E86",
-  "scope": "Private complete-packet parity on frozen method0/1/2Q75 and method0Q100 diagram controls, plus unchanged method3 and four method4Q75 packet identities. Public lossy unchanged; remaining named policies, public integration, exact decoders, performance and full functional/release objective remain open.",
+  "latestRound": "E87",
+  "scope": "Private complete-packet parity on existing diagram: methods0/1/2/3/4Q75, method0Q100, and method4Q1/85/100, plus prior four default identities. Public lossy unchanged; trellis/alpha/header, public integration, exact decoder, deferred performance and full functional/release objectives remain open.",
   "productionPublicBehaviorChanged": false,
   "fullObjectiveOpen": true,
   "reference": {
@@ -4726,7 +4726,7 @@
         "why": "Minimum public quality and quantizer/segment clamps",
         "nativeBytes": 2304,
         "nativeSha256": "28bff919826e67d69d393f457d3920017ffff21cc3732e3db06d55a80f873f54",
-        "managedStatus": "OPEN"
+        "managedStatus": "Complete packet exact E87 BOTHOSnormal/scalar, sync/async after source/frame disposal. Q1/Q85 already passed E86 unchanged; Q100 disables DC correction. Stopped as passing."
       },
       {
         "id": "method4-quality85-diagram",
@@ -4736,7 +4736,7 @@
         "why": "Actual public default quality rather than the quality75 anchor",
         "nativeBytes": 8898,
         "nativeSha256": "51a4abeda30c4f8c8b1dea563ab6690a89a5feed93b69c467398f9b736aeb536",
-        "managedStatus": "OPEN"
+        "managedStatus": "Complete packet exact E87 BOTHOSnormal/scalar, sync/async after source/frame disposal. Q1/Q85 already passed E86 unchanged; Q100 disables DC correction. Stopped as passing."
       },
       {
         "id": "method4-quality100-diagram",
@@ -4746,7 +4746,7 @@
         "why": "Maximum public quality, zero-index quantization and disabled high-quality DC diffusion",
         "nativeBytes": 15172,
         "nativeSha256": "6a4332bb32c3b93248a76eb804a0dc74d2c519d4955f310dcb94ef798cd2616e",
-        "managedStatus": "OPEN"
+        "managedStatus": "Complete packet exact E87 BOTHOSnormal/scalar, sync/async after source/frame disposal. Q1/Q85 already passed E86 unchanged; Q100 disables DC correction. Stopped as passing."
       },
       {
         "id": "method6-quality75-asymmetric",
@@ -4874,7 +4874,7 @@
         "allOriginalBytesVerified": true
       }
     },
-    "next": "Resolve frozen method4 quality1/85/100 measurements on the unchanged E86 build first; implement only demonstrated policy differences. Then trellis, alpha/header, coherent public qualification. No new inputs/settings grid or timing.",
+    "next": "E88 one primitive: admitted borrowed-buffer trellis coefficient quantization. Freeze native method5/6 observer decisions gated by existing7026/6818B packet identities, then implement/test exact quantized and dequantized samples. No CPU tuning/new image/settings grid. Public integration remains open.",
     "additionalBoundaries": {
       "round": "E83/E84-named-boundaries",
       "scope": "Three concrete required paths identified by source inspection. Existing diagram/asymmetric controls only; no image/settings cross-product. Native-only frozen targets, managed qualification remains open.",
@@ -6732,5 +6732,143 @@
       "No retained source pixels or reconstructed full frame. Existing default token path and all earlier passing component/packet checks remain exact."
     ],
     "remaining": "Quality/trellis/alpha/header named cases, coherent public integration/package qualification, then exact decoder and deferred CPU/allocation objectives plus original functionality/memory/text/Lanczos3/release."
+  },
+  "qualityPacketEncoding": {
+    "round": "E87",
+    "scope": "Private complete method4 diagram packets at qualities1/85/100. Q1/Q85 already matched unchanged E86 build; only demonstrated Q100 DC correction policy changed. Public lossy unchanged.",
+    "files": {
+      "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": {
+        "bytes": 1752576,
+        "sha256": "1d77d712d5a025589e825a42646f095ec5bc75e23f9dcc7ae4b040264777a7ff"
+      },
+      "src/Lokad.Image/Internal/Vp8FramePlan.cs": {
+        "bytes": 20607,
+        "sha256": "39844fe133f3ebf7d434f27d6380928f8c78ec73bb9260e22ceece7434c327be"
+      },
+      "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": {
+        "bytes": 17790,
+        "sha256": "72f0119a0025d211e006219545bf0e59875a680beb8637a5fbfe8eddd6382f8e"
+      },
+      "tests/Lokad.Image.Tests/Vp8FrameEncodingTests.cs": {
+        "bytes": 16506,
+        "sha256": "a77a0a1f793f54b3abd3a0b50b902aced6a38ab15a624b7f199f3f8e401838ef"
+      },
+      "tests/Lokad.Image.Tests/Vp8MacroblockDecisionTests.cs": {
+        "bytes": 18037,
+        "sha256": "a3394eaa373421755c1221f3c4ed2acd169cebc0f0ab5a89e576340d83b86f77"
+      }
+    },
+    "sameWindowsBuiltAssemblyBothOS": true,
+    "normalPerOS": 443,
+    "scalarPerOS": 443,
+    "firstScreen": 25,
+    "builds": {
+      "windowsLinkedTestsSuccessful": 1,
+      "windowsCompileAttempts": 1,
+      "linuxManaged": 0,
+      "publicCore": 0,
+      "sourceModel": 0,
+      "native": 0,
+      "probeFrontend": 1
+    },
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "initialProbeProducerSha256": "89196c6151e43ac2055c7a58865c7c93f0919397607f776064bcd25854934aa0",
+    "initialProbeResults": [
+      {
+        "scope": "Private method4 existing diagram RGBA8; frozen Q1/85/100 native comparison; public lossy unchanged",
+        "producerSha256": "89196c6151e43ac2055c7a58865c7c93f0919397607f776064bcd25854934aa0",
+        "method": 4,
+        "quality": 1,
+        "nativeMatch": true,
+        "packetBytes": 2304,
+        "packetSha256": "28bff919826e67d69d393f457d3920017ffff21cc3732e3db06d55a80f873f54",
+        "syncAndAsyncExact": true,
+        "sourceAndFrameDisposedBeforeDelivery": true,
+        "borrowedRootAndStreamsSurvive": true,
+        "retainedAccountingBytes": 3840,
+        "releasedBeforeContextDisposal": 0,
+        "cpuOrGcAllocationMeasurements": false
+      },
+      {
+        "scope": "Private method4 existing diagram RGBA8; frozen Q1/85/100 native comparison; public lossy unchanged",
+        "producerSha256": "89196c6151e43ac2055c7a58865c7c93f0919397607f776064bcd25854934aa0",
+        "method": 4,
+        "quality": 85,
+        "nativeMatch": true,
+        "packetBytes": 8898,
+        "packetSha256": "51a4abeda30c4f8c8b1dea563ab6690a89a5feed93b69c467398f9b736aeb536",
+        "syncAndAsyncExact": true,
+        "sourceAndFrameDisposedBeforeDelivery": true,
+        "borrowedRootAndStreamsSurvive": true,
+        "retainedAccountingBytes": 11008,
+        "releasedBeforeContextDisposal": 0,
+        "cpuOrGcAllocationMeasurements": false
+      },
+      {
+        "scope": "Private method4 existing diagram RGBA8; frozen Q1/85/100 native comparison; public lossy unchanged",
+        "producerSha256": "89196c6151e43ac2055c7a58865c7c93f0919397607f776064bcd25854934aa0",
+        "method": 4,
+        "quality": 100,
+        "nativeMatch": false,
+        "packetBytes": 15228,
+        "packetSha256": "3605946caf2f6cac6b6196955d842ec7a78a897dfed7820ccb82d15453177d6e",
+        "syncAndAsyncExact": true,
+        "sourceAndFrameDisposedBeforeDelivery": true,
+        "borrowedRootAndStreamsSurvive": true,
+        "retainedAccountingBytes": 19200,
+        "releasedBeforeContextDisposal": 0,
+        "cpuOrGcAllocationMeasurements": false
+      }
+    ],
+    "completePackets": [
+      {
+        "quality": 1,
+        "method": 4,
+        "packetBytes": 2304,
+        "packetSha256": "28bff919826e67d69d393f457d3920017ffff21cc3732e3db06d55a80f873f54"
+      },
+      {
+        "quality": 85,
+        "method": 4,
+        "packetBytes": 8898,
+        "packetSha256": "51a4abeda30c4f8c8b1dea563ab6690a89a5feed93b69c467398f9b736aeb536"
+      },
+      {
+        "quality": 100,
+        "method": 4,
+        "packetBytes": 15172,
+        "packetSha256": "6a4332bb32c3b93248a76eb804a0dc74d2c519d4955f310dcb94ef798cd2616e"
+      }
+    ],
+    "contracts": [
+      "Q100 disables chroma DC correction and propagation; incoming errors ignored and outputs zero",
+      "same borrowed root and owned capacities; no new storage or admission policy",
+      "earlier native exact decision streams and complete packets remain passing",
+      "sync/async delivery after input/frame disposal and independent surviving outputs"
+    ],
+    "rawArchive": {
+      "name": "e87-quality-packets-qualified.tar.xz",
+      "bytes": 546228,
+      "members": 28,
+      "sha256": "1281692821e80361997d3c6a1a95349aba904ddd00f834ba2e972d7e5f344325",
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "storage": {
+        "capBytes": 5000000000,
+        "windowsAfterMaster": 4770868147,
+        "linuxAfterMaster": 4992555400,
+        "allMembersRead": true,
+        "allPeaksBelowCap": true
+      }
+    },
+    "parentCi": {
+      "headSha": "fa311f309f54475ca14b50580aef61d8209febbd",
+      "run": 39996211108,
+      "statusAtRecording": "Windows/Linux correctness and actual-package jobs succeeded; live differential in progress. Probe at next safe point."
+    },
+    "evidenceInvalidation": "Only private chroma selection and frame factory now accept explicit DC-correction policy, default true. Existing Q75 decision/packet paths rechecked on same443check producer; Q100 prior mismatch is replaced by the frozen15172B packet proof. Public encode/decode/edit APIs and published packages unchanged.",
+    "remaining": "Trellis5/6, alpha0/1/6, named native-positive header retry; coherent public full/package/live integration; exact decoders, deferred performance and full original functionality/memory/text/Lanczos3/release."
   }
 }

@@ -157,7 +157,7 @@ internal static class Vp8MacroblockDecision
     private static Metric Chroma(ReadOnlySpan<byte> source, ReadOnlySpan<byte> neighbors, ReadOnlySpan<byte> contexts,
         ReadOnlySpan<sbyte> diffusion, bool hasTop, bool hasLeft, Vp8QuantizationMatrix matrix, Vp8QuantizationCosts costs,
         Vp8RatePlan rate, Span<byte> pixels, Span<short> levels, Span<sbyte> errors, OperationContext context,
-        out int bestMode, out uint nonzero)
+        out int bestMode, out uint nonzero, bool correctDc)
     {
         Span<byte> trial = stackalloc byte[128]; Span<byte> prediction = stackalloc byte[64];
         Span<short> coefficients = stackalloc short[128]; Span<short> trialLevels = stackalloc short[128];
@@ -174,7 +174,8 @@ internal static class Vp8MacroblockDecision
                 for (var y = 0; y < 8; y++) prediction.Slice(y * 8, 8).CopyTo(trial.Slice(y * 16 + plane * 8, 8));
             }
             for (var b = 0; b < 8; b++) Transform(source, trial, UvBlock(b), coefficients.Slice(b * 16, 16));
-            CorrectDc(coefficients, diffusion, trialErrors, matrix);
+            if (correctDc) CorrectDc(coefficients, diffusion, trialErrors, matrix);
+            else trialErrors.Clear();
             uint nz = 0;
             for (var b = 0; b < 8; b++)
             {
@@ -209,7 +210,7 @@ internal static class Vp8MacroblockDecision
         ReadOnlySpan<byte> modeContexts, ReadOnlySpan<byte> coefficientContexts, ReadOnlySpan<sbyte> diffusion,
         bool hasTop, bool hasLeft, Vp8QuantizationMatrix luma, Vp8QuantizationMatrix walsh, Vp8QuantizationMatrix chroma,
         Vp8QuantizationCosts costs, Vp8RatePlan rate, ReadOnlySpan<ushort> weights, int headerLimit,
-        Span<byte> pixels, Span<short> levels, Span<byte> modes, Span<sbyte> errors, OperationContext context)
+        Span<byte> pixels, Span<short> levels, Span<byte> modes, Span<sbyte> errors, OperationContext context, bool correctDc = true)
     {
         if (source.Length < 384 || neighbors.Length < 71 || modeContexts.Length < 8 || coefficientContexts.Length < 18
             || diffusion.Length < 8 || weights.Length < 16 || headerLimit < 0 || pixels.Length < 384 || levels.Length < 400 || modes.Length < 16 || errors.Length < 14)
@@ -241,7 +242,7 @@ internal static class Vp8MacroblockDecision
             best = smallScore; nz = smallNz; smallPixels.CopyTo(pixels); smallLevels.CopyTo(levels[16..]); levels[..16].Clear(); smallModes.CopyTo(modes);
         }
         var uv = Chroma(sourceCopy[256..], neighborsCopy, coefficientCopy, errorInput, hasTop, hasLeft, chroma, costs, rate,
-            pixels.Slice(256, 128), levels.Slice(272, 128), errors[..14], context, out var uvMode, out var uvNz);
+            pixels.Slice(256, 128), levels.Slice(272, 128), errors[..14], context, out var uvMode, out var uvNz, correctDc);
         best = best.Add(uv);
         return new(best.D, best.S, best.H, best.R, best.Total, nz | uvNz, lumaMode, uvMode, intra16, maxEdge);
     }

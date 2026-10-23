@@ -133,7 +133,7 @@ its task finishes. Terminal admission refusal, cleanup/recovery, local/work/outp
 limits and mismatched dimensions pass. Quality75 lossless packet checks also pass
 with the shared preparation changes; the scoped native inputs/settings stay fixed.
 
-The same immutable assembly passes439focused checks per platform on Windows/Linux,
+The same immutable assembly passes443focused checks per platform on Windows/Linux,
 normal and SIMD disabled, including the durable method3 packet row. The direct
 statistics extension reuses the prior decision/packet checks on that same producer. Shared admission covers
 owned capacity, retained results and replacement overlap. Refusal, cancellation,
@@ -160,9 +160,9 @@ targets; source-only qualification is distinct from complete-packet agreement:
 | Diagram Q75 / method3 | Basic RDO/token path, non-full SNS | 7,082 | Complete packet exact |
 | Diagram Q75 / method5 | Selected-mode trellis, including I16/Y2 | 7,026 | Open |
 | Diagram Q75 / method6 | Trellis on every candidate | 6,818 | Open |
-| Diagram Q1 / method4 | Minimum quality and quantizer clamps | 2,304 | Open |
-| Diagram Q85 / method4 | Public default quality | 8,898 | Open |
-| Diagram Q100 / method4 | Maximum quality and high-quality DC policy | 15,172 | Open |
+| Diagram Q1 / method4 | Minimum quality and quantizer clamps | 2,304 | Complete packet exact |
+| Diagram Q85 / method4 | Public default quality | 8,898 | Complete packet exact |
+| Diagram Q100 / method4 | Maximum quality and high-quality DC policy | 15,172 | Complete packet exact |
 | Alpha Q75 / method6 | Internal alpha VP8L quality100 search | 85,796 | Open |
 | Diagram Q100 / method0 | High-quality fast source and distortion-only DC policy | 27,668 | Complete packet exact |
 | Alpha Q75 / method0 | Low-effort alpha VP8L | 93,386 | Open |
@@ -241,3 +241,11 @@ correction and the zero-map-cost branch that leaves default probabilities intact
 Both sync/async packets survive disposed source/frame owners. Owned/scratch/rate
 refusal, cancellation, work/local limits, replacement peaks and recovery pass.
 These cases are stopped as passing; public lossy encoding is still unchanged.
+
+Method4 diagram qualities1/85/100 now produce exact complete2,304/8,898/15,172-byte
+packets. The first two passed on the unchanged prior build and required no tuning.
+Only the demonstrated Q100 mismatch needed a policy change: disable chroma DC
+correction above quality98. Incoming diffusion errors are ignored and no errors
+propagate in that branch; source/result aliasing and cancellation remain covered.
+There is no additional allocation or changed admission boundary. The three cases
+are stopped as passing. Trellis methods5/6 and the named alpha/header cases remain.
