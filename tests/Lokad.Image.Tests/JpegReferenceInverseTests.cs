@@ -10,6 +10,9 @@ public sealed class JpegReferenceInverseTests
 
     [Fact]
     public void ExistingBaselineCoefficientsAndPlanarSamplesMatchPinnedNative()
+        => BaselinePlanes();
+
+    internal static byte[] BaselinePlanes()
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null && !File.Exists(Path.Combine(directory.FullName, "tests", "Fixtures", "jpeg-manifest.json")))
@@ -58,6 +61,7 @@ public sealed class JpegReferenceInverseTests
         // normal native agreement on this image, independently checked first.
         Assert.Equal("37fc65b130eb90dd9d43e8ffa6831d910de969f692921ede3ea0ece80f286c2c", Hash(planes.ToArray()));
         Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        return planes.ToArray();
     }
 
     private static string Hash(byte[] bytes) => Convert.ToHexStringLower(SHA256.HashData(bytes));

@@ -1,6 +1,6 @@
 {
   "project": "Lokad.Image",
-  "round": "E101",
+  "round": "E102",
   "policy": "Exact normalized output samples first. Reuse unchanged valid evidence. Resolve uncertainty before changing algorithms. Old lossy RGB tolerances are transitional interoperability checks, not completion gates. No new workload grid, CPU tuning or repeated package proof.",
   "producer": {
     "commit": "b325ce2ff3a0f47e4fef9b936e39fada4bdc93fa",
@@ -59,7 +59,7 @@
       "id": "jpeg-color",
       "controls": "Existing31x23 baseline444/422/420 anchors and existing1x17/17x1 odd-edge companions; existing explicit-RGB declarations",
       "why": "YCbCr matrix/range rounding, centered half-resolution chroma and direct-RGB interpretation",
-      "status": "UNCERTAIN beyond the demonstrated initial444 RGB gap (50/2139 samples, maximum2). Existing max4/RMSE1.5 assertions do not establish exactness. Resolve inverse stage first.",
+      "status": "E102 private full-resolution444 inverse+color slice PASS, complete713-pixel RGB/RGBA exact BOTHOS normal/scalar-managed. Public adoption and named422/420/direct-RGB confirmations remain open.",
       "tests": [
         "JpegFfmpegTests.BaselineDecodeMatchesConfiguredFfmpeg",
         "JpegFfmpegTests.ExplicitRgbDeclarationsInteroperate"
@@ -241,7 +241,7 @@
   },
   "cpuTimingRuns": 0,
   "gcAllocationsMeasured": false,
-  "next": "Qualify the full-resolution JPEG inverse-color primitive against the already frozen planar/RGBA pair, then adopt the qualified JPEG slice coherently and remove superseded inverse implementations/tests/certificates. Preserve all named progressive/sampling/four-component/caller boundaries; confirm them when affected. No aliases or old-rounding mode.",
+  "next": "Coherent public JPEG adoption: route every inverse block through the qualified integer primitive, use qualified color for full-resolution YCbCr including caller RGB and orientation, remove superseded inverse algorithms/tests/certificate without compatibility modes. Keep other required chroma/CMYK/YCCK paths functional and explicitly pending exact confirmation. Run affected screens then batched bothOS/live/scalar/SAME actual package qualification for accepted production changes.",
   "rawArchive": {
     "name": "e100-decoder-audit.tar.xz",
     "bytes": 20372,
@@ -414,6 +414,305 @@
       "mirrored": true,
       "everySourceMemberByteVerified": true,
       "linuxAfterMirror": 4984662717,
+      "allPeaksBelowCap": true
+    }
+  },
+  "privateInverseColor": {
+    "round": "E102",
+    "status": "Private full-resolution inverse color qualified; public adoption open",
+    "source": "src/Lokad.Image/Internal/JpegInverseColor.cs",
+    "scope": "Reuse the existing31x23 baseline444 coefficient/plane/RGBA pair. After replacing inverse arithmetic, the old floating color conversion had two green-channel differences of1; fixed-point conversion resolves both. One10-pixel planar arithmetic row adds clipping, range and rounding checks, without a codec workload/quality grid.",
+    "initialColorComparison": {
+      "scope": "Existing frozen full-resolution planes and RGBA, no native launch or production build",
+      "pixels": 713,
+      "mismatchedChannels": 2,
+      "maximum": 1,
+      "currentFloatColorSha256": "510dcedf8f13dadb600714bf84b201f6b6f7a1c0a01d7e8cbb2ce2e0641884a6",
+      "referenceRgbaSha256": "fbf313b3c7bc442832b67d3b08bf228da503aefc142d4ac2ed8d2bfc720b76e4",
+      "differences": [
+        {
+          "index": 417,
+          "pixel": 104,
+          "channel": 1,
+          "actual": 208,
+          "expected": 207,
+          "ycbcr": [
+            164,
+            68,
+            96
+          ]
+        },
+        {
+          "index": 2449,
+          "pixel": 612,
+          "channel": 1,
+          "actual": 164,
+          "expected": 163,
+          "ycbcr": [
+            120,
+            68,
+            96
+          ]
+        }
+      ]
+    },
+    "algorithm": "Derive coefficients rationally from BT.601 Kr=299/1000, Kb=114/1000. Round studio-range Q16 coefficients, remove chroma range expansion by signed integer division, then round to signed Q13. Apply a single Q13 pixel-rounding bias and clip. No copied implementation table, float calibration or adjustable correction.",
+    "derivedQ13": {
+      "vToRed": 11485,
+      "uToBlue": 14516,
+      "uToGreen": -2819,
+      "vToGreen": -5850
+    },
+    "completeImage": {
+      "pixels": 713,
+      "normalizedRgbaBytes": 2852,
+      "sha256": "fbf313b3c7bc442832b67d3b08bf228da503aefc142d4ac2ed8d2bfc720b76e4",
+      "rgbPackingAlsoExact": true,
+      "pipeline": "Current owned entropy/quantization observer -> E101 inverse -> E102 color; full public decoder dispatch is not switched yet."
+    },
+    "arithmeticBoundaryReference": {
+      "scope": "Ten original arithmetic triples in one planar row; full-range BT601 rounding/clipping, not an additional codec workload matrix",
+      "source": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          0,
+          255,
+          255
+        ],
+        [
+          255,
+          0,
+          0
+        ],
+        [
+          128,
+          128,
+          128
+        ],
+        [
+          164,
+          68,
+          96
+        ],
+        [
+          16,
+          128,
+          128
+        ],
+        [
+          235,
+          128,
+          128
+        ],
+        [
+          1,
+          128,
+          255
+        ],
+        [
+          254,
+          255,
+          128
+        ]
+      ],
+      "inputSha256": "542f4167fcdf78d211e2c5e6d62dd3e685929ef7dfff3911cf28391d8bbf7576",
+      "filter": "scale=in_range=pc:out_range=pc:in_color_matrix=bt601:out_color_matrix=bt601:flags=bilinear+accurate_rnd+full_chroma_int:in_h_chr_pos=0:in_v_chr_pos=0",
+      "reference": {
+        "executableSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
+        "version": "ffmpeg version n8.1 Copyright (c) 2000-2026 the FFmpeg developers",
+        "sourceRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
+        "bytes": 4993477513
+      },
+      "outputs": {
+        "normal": {
+          "bytes": 40,
+          "sha256": "4147ca81e3d5b4071b5ab23a84e7dfcd84985b484a7e0f74911f9261fcb39a47",
+          "pixels": [
+            [
+              0,
+              135,
+              0,
+              255
+            ],
+            [
+              255,
+              121,
+              255,
+              255
+            ],
+            [
+              178,
+              0,
+              225,
+              255
+            ],
+            [
+              76,
+              255,
+              28,
+              255
+            ],
+            [
+              128,
+              128,
+              128,
+              255
+            ],
+            [
+              119,
+              207,
+              58,
+              255
+            ],
+            [
+              16,
+              16,
+              16,
+              255
+            ],
+            [
+              235,
+              235,
+              235,
+              255
+            ],
+            [
+              179,
+              0,
+              1,
+              255
+            ],
+            [
+              254,
+              210,
+              255,
+              255
+            ]
+          ]
+        },
+        "scalar": {
+          "bytes": 40,
+          "sha256": "4147ca81e3d5b4071b5ab23a84e7dfcd84985b484a7e0f74911f9261fcb39a47",
+          "pixels": [
+            [
+              0,
+              135,
+              0,
+              255
+            ],
+            [
+              255,
+              121,
+              255,
+              255
+            ],
+            [
+              178,
+              0,
+              225,
+              255
+            ],
+            [
+              76,
+              255,
+              28,
+              255
+            ],
+            [
+              128,
+              128,
+              128,
+              255
+            ],
+            [
+              119,
+              207,
+              58,
+              255
+            ],
+            [
+              16,
+              16,
+              16,
+              255
+            ],
+            [
+              235,
+              235,
+              235,
+              255
+            ],
+            [
+              179,
+              0,
+              1,
+              255
+            ],
+            [
+              254,
+              210,
+              255,
+              255
+            ]
+          ]
+        }
+      }
+    },
+    "qualification": {
+      "testAssembly": {
+        "bytes": 1672192,
+        "sha256": "65ea1cae1765296c447fbc39710642ffaf7af0e4e29be083a9ba668982cf6318"
+      },
+      "sameImmutableAssemblyBothPlatforms": true,
+      "checksPerRun": 31,
+      "publicCoreUnchanged": true,
+      "platforms": [
+        "Windows x64",
+        "Linux x64"
+      ],
+      "modes": [
+        "normal",
+        "DOTNET_EnableHWIntrinsic=0"
+      ],
+      "testBuilds": 1,
+      "productionOrLinuxBuilds": 0,
+      "nativeCompleteEncodes": 0,
+      "nativeRawConversions": 2,
+      "cpuOrGcMeasurement": false,
+      "linuxAfterTransfer": 4986351824
+    },
+    "contracts": "Readonly caller planes and caller-owned RGB/RGBA destinations; exact opaque alpha, input immutability and untouched destination tails. Incomplete planes, insufficient output, unsupported packing and overlap fail before writes. Empty rows leave tails. The allocation-free leaf relies on its parent admitting row work; no shared root/scope/reservation is created or disposed, and no result escapes. Four minor static integer fields, no buffer cache. No CPU or GC B/op measurement.",
+    "logs": [
+      "tmp/e102-first-screen-windows.log",
+      "tmp/e102-scalar-windows.log",
+      "tmp/e102-normal-linux.log",
+      "tmp/e102-scalar-linux.log"
+    ],
+    "parentCi": {
+      "sha": "6fba93c638cf41202607a16c02e62a6f315c362d",
+      "run": 40029867098,
+      "conclusion": "success",
+      "jobs": 3
+    },
+    "evidenceInvalidation": "Public dispatch and E99 production/package evidence retain their original unchanged path scope. E101 inverse primitive source is unchanged; its full baseline proof remains and is exercised again by the composed slice. The old E100 public sample mismatch remains until adoption. Exactness claims are limited to the frozen444 image and the named arithmetic controls.",
+    "next": "Coherent public JPEG adoption: route every inverse block through the qualified integer primitive, use qualified color for full-resolution YCbCr including caller RGB and orientation, remove superseded inverse algorithms/tests/certificate without compatibility modes. Keep other required chroma/CMYK/YCCK paths functional and explicitly pending exact confirmation. Run affected screens then batched bothOS/live/scalar/SAME actual package qualification for accepted production changes.",
+    "rawArchive": {
+      "name": "e102-inverse-color-qualified.tar.xz",
+      "bytes": 701948,
+      "sha256": "61f1e3c170921eeccb258d38278f7906a4cbd53a95659398ed030b9b069e3ee6",
+      "members": 27,
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "linuxAfterMirror": 4987053772,
       "allPeaksBelowCap": true
     }
   }
