@@ -3,9 +3,45 @@ using System.Runtime.CompilerServices;
 
 namespace Lokad.Image.Internal;
 
+// Encoder search/bit-cost order, distinct from the shared geometric formula
+// indices for the three diagonal modes. Keep search ties in this explicit order.
+internal enum Vp8SmallIntraMode : byte
+{
+    Dc, TrueMotion, Vertical, Horizontal, DownRight, VerticalRight, DownLeft,
+    VerticalLeft, HorizontalDown, HorizontalUp
+}
+
 /// <summary>Owned geometric formulation of RFC 6386 section 12 intra prediction.</summary>
 internal static class Vp8Prediction
 {
+    // Pure borrowed4x4 entry for the prepared encoder. Caller supplies eight top
+    // and four left samples (including defaults/edge replication). Snapshot all
+    // neighbors before writes so the output can alias either border. The outer
+    // encoder admits block work/cancel and coarse workspace; no heap/cache/scope.
+    internal static void SmallBlock(Vp8SmallIntraMode mode, ReadOnlySpan<byte> topSamples,
+        ReadOnlySpan<byte> leftSamples, byte corner, Span<byte> destination)
+    {
+        if ((uint)mode > 9) throw new ArgumentOutOfRangeException(nameof(mode));
+        if (topSamples.Length < 8 || leftSamples.Length < 4 || destination.Length < 16)
+            throw new ArgumentException("Small prediction requires eight top samples, four left samples and sixteen output pixels.");
+        Span<int> neighbors = stackalloc int[21];
+        var top = neighbors[..8]; var left = neighbors.Slice(8, 4); var edge = neighbors.Slice(12, 9);
+        for (var p = 0; p < 8; p++) top[p] = topSamples[p];
+        for (var p = 0; p < 4; p++) { left[p] = leftSamples[p]; edge[3 - p] = left[p]; edge[5 + p] = top[p]; }
+        edge[4] = corner;
+        var dc = (top[0] + top[1] + top[2] + top[3] + left[0] + left[1] + left[2] + left[3] + 4) >> 3;
+        // Shared geometry indexes LD/RD/VR as4/5/6; encoder visits RD/VR/LD.
+        var geometry = mode switch
+        {
+            Vp8SmallIntraMode.DownRight => 5,
+            Vp8SmallIntraMode.VerticalRight => 6,
+            Vp8SmallIntraMode.DownLeft => 4,
+            _ => (int)mode
+        };
+        for (var y = 0; y < 4; y++) for (var x = 0; x < 4; x++)
+            destination[y * 4 + x] = (byte)Math.Clamp(SmallPixel(geometry, x, y, top, left, edge, corner, dc), 0, 255);
+    }
+
     public static int Sample(byte[] plane, int stride, int x, int y)
         => y < 0 ? 127 : x < 0 ? 129 : plane[y * stride + Math.Min(x, stride - 1)];
 

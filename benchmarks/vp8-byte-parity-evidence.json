@@ -1,7 +1,7 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E74",
-  "scope": "Private unwired preparation through quantization and encoder pixel/inverse reconstruction. Actual intra4/RDO/full managed VP8 encoder remain open.",
+  "latestRound": "E75",
+  "scope": "Private unwired preparation through large/small prediction and encoder reconstruction. Actual RDO/entropy/full managed VP8 encoder remain open.",
   "productionPublicBehaviorChanged": false,
   "fullObjectiveOpen": true,
   "reference": {
@@ -2413,5 +2413,491 @@
       "scope": "Existingrunner rotated afterexactE73masterDLLcomparison; host/deps/config unchanged. Published/citedmasters/references/performanceworkers/actualpackages preserved."
     },
     "remaining": "Qualify/reuse4x4 prediction with explicitencoder/decoder mode-order mapping, then actualintra4/intra16/chroma/RDO, entropy/ALPH/fullpackets/publicintegration, finite requiredoptions, exactdecoders and fullCPU/allocation/functional/memory/release objective remain open."
+  },
+  "smallBlockPrediction": {
+    "round": "E75",
+    "publicEncoderSwitched": false,
+    "worker": {
+      "bytes": 1603072,
+      "sha256": "4634acf7cfa5aae3341876121c283304726eb3f3f13e18a9136d35076db192e8"
+    },
+    "sourceFiles": {
+      "src/Lokad.Image/Internal/Vp8Prediction.cs": {
+        "bytes": 17213,
+        "sha256": "2300a9485ca77ca2622924f2c51be171908bca19bdb4d76b1dbe5ef71347878b"
+      },
+      "tests/Lokad.Image.Tests/Vp8SmallBlockPredictionTests.cs": {
+        "bytes": 5146,
+        "sha256": "ea873e1e1911f139731a8983c810f1ed4633dcd781837253f70e3ff22025c99e"
+      },
+      "tools/WarmReference/vp8-small-prediction-observer.c": {
+        "bytes": 1797,
+        "sha256": "1aca3c0f127ed3d4d52e7072720a1bfa187fa1c0dd29dcfc4030e69264c3a6fe"
+      }
+    },
+    "native": {
+      "round": "E75-observation",
+      "scope": "Supplied-neighbor4x4geometry only, all10native modes on50contexts:16subblocks atorigin/interior/partialedge ofONEexistingopaque control plus2alternatingcorner fragments. Source-top-right atmacro-right usesmacroY-1; defaults127top/129left andlogicaledge replication. No actualRDO/reconstructedneighbor-choice/fullencode/managedE75claim.",
+      "sourceSha256": "1aca3c0f127ed3d4d52e7072720a1bfa187fa1c0dd29dcfc4030e69264c3a6fe",
+      "workerSha256": "bf95fd098fc7d4db0b943a34dccf1e947452a3ca55ae585aa7c5899c15ae74cc",
+      "workerBytes": 109992,
+      "backendArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "sourceYuvSha256": "f1e516c70c0d315b2f785b90fdd6a6c6e26e30eca898b7f1616380ab18aae715",
+      "inputBytes": 658,
+      "inputSha256": "4af7f64e7d8068ed5dd5f126276d4b78e92bf82f82c8755166e9d2e88dafeda2",
+      "contexts": [
+        {
+          "macroX": 0,
+          "macroY": 0,
+          "blockX": 0,
+          "blockY": 0
+        },
+        {
+          "macroX": 0,
+          "macroY": 0,
+          "blockX": 4,
+          "blockY": 0
+        },
+        {
+          "macroX": 0,
+          "macroY": 0,
+          "blockX": 8,
+          "blockY": 0
+        },
+        {
+          "macroX": 0,
+          "macroY": 0,
+          "blockX": 12,
+          "blockY": 0
+        },
+        {
+          "macroX": 0,
+          "macroY": 0,
+          "blockX": 0,
+          "blockY": 4
+        },
+        {
+          "macroX": 0,
+          "macroY": 0,
+          "blockX": 4,
+          "blockY": 4
+        },
+        {
+          "macroX": 0,
+          "macroY": 0,
+          "blockX": 8,
+          "blockY": 4
+        },
+        {
+          "macroX": 0,
+          "macroY": 0,
+          "blockX": 12,
+          "blockY": 4
+        },
+        {
+          "macroX": 0,
+          "macroY": 0,
+          "blockX": 0,
+          "blockY": 8
+        },
+        {
+          "macroX": 0,
+          "macroY": 0,
+          "blockX": 4,
+          "blockY": 8
+        },
+        {
+          "macroX": 0,
+          "macroY": 0,
+          "blockX": 8,
+          "blockY": 8
+        },
+        {
+          "macroX": 0,
+          "macroY": 0,
+          "blockX": 12,
+          "blockY": 8
+        },
+        {
+          "macroX": 0,
+          "macroY": 0,
+          "blockX": 0,
+          "blockY": 12
+        },
+        {
+          "macroX": 0,
+          "macroY": 0,
+          "blockX": 4,
+          "blockY": 12
+        },
+        {
+          "macroX": 0,
+          "macroY": 0,
+          "blockX": 8,
+          "blockY": 12
+        },
+        {
+          "macroX": 0,
+          "macroY": 0,
+          "blockX": 12,
+          "blockY": 12
+        },
+        {
+          "macroX": 16,
+          "macroY": 16,
+          "blockX": 16,
+          "blockY": 16
+        },
+        {
+          "macroX": 16,
+          "macroY": 16,
+          "blockX": 20,
+          "blockY": 16
+        },
+        {
+          "macroX": 16,
+          "macroY": 16,
+          "blockX": 24,
+          "blockY": 16
+        },
+        {
+          "macroX": 16,
+          "macroY": 16,
+          "blockX": 28,
+          "blockY": 16
+        },
+        {
+          "macroX": 16,
+          "macroY": 16,
+          "blockX": 16,
+          "blockY": 20
+        },
+        {
+          "macroX": 16,
+          "macroY": 16,
+          "blockX": 20,
+          "blockY": 20
+        },
+        {
+          "macroX": 16,
+          "macroY": 16,
+          "blockX": 24,
+          "blockY": 20
+        },
+        {
+          "macroX": 16,
+          "macroY": 16,
+          "blockX": 28,
+          "blockY": 20
+        },
+        {
+          "macroX": 16,
+          "macroY": 16,
+          "blockX": 16,
+          "blockY": 24
+        },
+        {
+          "macroX": 16,
+          "macroY": 16,
+          "blockX": 20,
+          "blockY": 24
+        },
+        {
+          "macroX": 16,
+          "macroY": 16,
+          "blockX": 24,
+          "blockY": 24
+        },
+        {
+          "macroX": 16,
+          "macroY": 16,
+          "blockX": 28,
+          "blockY": 24
+        },
+        {
+          "macroX": 16,
+          "macroY": 16,
+          "blockX": 16,
+          "blockY": 28
+        },
+        {
+          "macroX": 16,
+          "macroY": 16,
+          "blockX": 20,
+          "blockY": 28
+        },
+        {
+          "macroX": 16,
+          "macroY": 16,
+          "blockX": 24,
+          "blockY": 28
+        },
+        {
+          "macroX": 16,
+          "macroY": 16,
+          "blockX": 28,
+          "blockY": 28
+        },
+        {
+          "macroX": 512,
+          "macroY": 256,
+          "blockX": 512,
+          "blockY": 256
+        },
+        {
+          "macroX": 512,
+          "macroY": 256,
+          "blockX": 516,
+          "blockY": 256
+        },
+        {
+          "macroX": 512,
+          "macroY": 256,
+          "blockX": 520,
+          "blockY": 256
+        },
+        {
+          "macroX": 512,
+          "macroY": 256,
+          "blockX": 524,
+          "blockY": 256
+        },
+        {
+          "macroX": 512,
+          "macroY": 256,
+          "blockX": 512,
+          "blockY": 260
+        },
+        {
+          "macroX": 512,
+          "macroY": 256,
+          "blockX": 516,
+          "blockY": 260
+        },
+        {
+          "macroX": 512,
+          "macroY": 256,
+          "blockX": 520,
+          "blockY": 260
+        },
+        {
+          "macroX": 512,
+          "macroY": 256,
+          "blockX": 524,
+          "blockY": 260
+        },
+        {
+          "macroX": 512,
+          "macroY": 256,
+          "blockX": 512,
+          "blockY": 264
+        },
+        {
+          "macroX": 512,
+          "macroY": 256,
+          "blockX": 516,
+          "blockY": 264
+        },
+        {
+          "macroX": 512,
+          "macroY": 256,
+          "blockX": 520,
+          "blockY": 264
+        },
+        {
+          "macroX": 512,
+          "macroY": 256,
+          "blockX": 524,
+          "blockY": 264
+        },
+        {
+          "macroX": 512,
+          "macroY": 256,
+          "blockX": 512,
+          "blockY": 268
+        },
+        {
+          "macroX": 512,
+          "macroY": 256,
+          "blockX": 516,
+          "blockY": 268
+        },
+        {
+          "macroX": 512,
+          "macroY": 256,
+          "blockX": 520,
+          "blockY": 268
+        },
+        {
+          "macroX": 512,
+          "macroY": 256,
+          "blockX": 524,
+          "blockY": 268
+        },
+        {
+          "originalAlternatingFragment": true,
+          "corner": 0
+        },
+        {
+          "originalAlternatingFragment": true,
+          "corner": 255
+        }
+      ],
+      "observations": [
+        {
+          "cpu": "normal",
+          "ready": {
+            "scalar": false,
+            "contexts": 50,
+            "modes": 10,
+            "bytesPerContext": 160
+          },
+          "bytes": 8000,
+          "sha256": "6ed6785ef609b7bf0163a71b3df4010ed3006c9447ed7870330f67ff5b832225"
+        },
+        {
+          "cpu": "scalar",
+          "ready": {
+            "scalar": true,
+            "contexts": 50,
+            "modes": 10,
+            "bytesPerContext": 160
+          },
+          "bytes": 8000,
+          "sha256": "6ed6785ef609b7bf0163a71b3df4010ed3006c9447ed7870330f67ff5b832225"
+        }
+      ],
+      "everyNativeNormalScalarPixelByteEqual": true,
+      "modeHashes": [
+        {
+          "mode": 0,
+          "bytes": 800,
+          "sha256": "20a75a0391258027655df916b497e40329d8ba0a2f894c863eb90134a816e606"
+        },
+        {
+          "mode": 1,
+          "bytes": 800,
+          "sha256": "5c6751a83d5849b447f5e80dd329cca3648303a218a7744f171cbb8ba462a852"
+        },
+        {
+          "mode": 2,
+          "bytes": 800,
+          "sha256": "eb1cac2dc77159bb042a50444cbf04c2daf47d29739bffdf538a5361591789ba"
+        },
+        {
+          "mode": 3,
+          "bytes": 800,
+          "sha256": "d0eac2310554a4bcf2f96d2d48f5bfb6efe6daa86df874704507739721414b1a"
+        },
+        {
+          "mode": 4,
+          "bytes": 800,
+          "sha256": "25234075466aa7159aa2a206b33e9a1f68f5fd3cda2a2c46cfc49d3f4565ec14"
+        },
+        {
+          "mode": 5,
+          "bytes": 800,
+          "sha256": "c00acb8e7ca436eaf4bbf3a2536d018eb91af5237da8ece3e39e31262165cbcf"
+        },
+        {
+          "mode": 6,
+          "bytes": 800,
+          "sha256": "82c9828fef0df12e746ad6120678ba79742768c351c5d3e79a7f5fac296a054a"
+        },
+        {
+          "mode": 7,
+          "bytes": 800,
+          "sha256": "84872e5bd50fa9324a1cef98c3d503ea9db9eb009372ef9b94b8a704c2b4d114"
+        },
+        {
+          "mode": 8,
+          "bytes": 800,
+          "sha256": "948a982c63d3af751a76f0ee681f1a173f47d06ea2b63f189da3c37de2c1668e"
+        },
+        {
+          "mode": 9,
+          "bytes": 800,
+          "sha256": "f8633f34cff231b17a568594c22750ec25e4a79f1358b948a4636f01da19575d"
+        }
+      ],
+      "nativeModeOrder": [
+        "DC",
+        "TM",
+        "VE",
+        "HE",
+        "RD",
+        "VR",
+        "LD",
+        "VL",
+        "HD",
+        "HU"
+      ],
+      "nativeToExistingGeometryMode": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        4,
+        7,
+        8,
+        9
+      ],
+      "rawOrder": "context thennativeMode0..9 then16rowmajor pixels. Inputneighborbytes left3,left2,left1,left0,corner,top0..top7.",
+      "compressedRaw": {
+        "name": "e75-native-small-prediction.bin.gz",
+        "bytes": 2759,
+        "sha256": "1c922a0002b2e8d30f1ac5c50e26683baf8d9cd748ad74e5802b4c21542f6c03"
+      },
+      "dotnetBuilds": 0,
+      "nativeCompleteEncodes": 0,
+      "timingRuns": 0
+    },
+    "algorithm": "Reuse unchanged sharedSmallPixel geometry through anewborrowedspanentry/nativeorderenum. MapencoderRD/VR/LD indices4/5/6 togeometry5/6/4 explicitly; preserve native searchorder. Eighttop/fourleft/corner inputs snapshot in84B stack before16pixelwrites; no heap/cache/owner/perblockadmission. Caller supplies defaults/replication/work/cancel/coarseworkspace.",
+    "verified": [
+      "All8000native pixelbytes,50contexts*10modes, match; nativeSIMD/forcedscalar outputs agree. Oneexistingopaque image,48subblockcontexts atorigin/interior/partialedge plus2originalalternatingcorner fragments.",
+      "Defaults127top/129left, partialimage replication andmacro-right top-right reuse covered; TMclipping/average rounding covered. This is supplied-neighbor arithmetic, not actualreconstructed/RDO-neighbor selection.",
+      "Separateinput/sourceplanes andtails unchanged; aliasedborder/output uses originals. Invalidmode/incompleteinputs failbeforewrites."
+    ],
+    "qualification": {
+      "sameWindowsBuiltAssemblyBothOS": true,
+      "normalPerOS": 198,
+      "scalarPerOS": 198,
+      "windowsNormalUnion": [
+        12,
+        186
+      ],
+      "newChecks": 12,
+      "priorChecksReconfirmed": 186
+    },
+    "builds": {
+      "windowsLinkedInternalTests": 1,
+      "linux": 0,
+      "publicCore": 0,
+      "sourceModel": 0,
+      "nativeObserver": 1
+    },
+    "nativeKernelObservations": 2,
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "evidenceReuse": "ExistingSmallPixel/Small/SmallPrepared/Large bodies/callers unchanged; onlynativeorderenum and newunwiredspanentry added. All186priorchecks reconfirmed sameassemblybothOSnormal/scalar. Publiccodec/full/differential/package/frozenproducer evidence retains scopes; parent3c3d9534358043277c20236e65dc4ad3adb9b9d6 CI39950224178 allgreen. No repeatedlocal full/package proof.",
+    "rawArchive": {
+      "name": "e75-small-prediction-qualified.tar.xz",
+      "bytes": 506712,
+      "members": 18,
+      "sha256": "246c7ed81347c9744a7fe1311bf11b97d6e812b80f0774ba8ae96e38485485be",
+      "everySourceMemberByteVerified": true,
+      "mirrored": true
+    },
+    "storage": {
+      "capBytes": 5000000000,
+      "windowsAfterMasterAndRetirement": 4988762357,
+      "linuxAfterMasterAndRetirement": 4998926603,
+      "allPeaksBelowCap": true,
+      "scope": "ExactE74master-backed DLL rotation inexistingrunner. Only637185B completedE73/E74nativeobserver/rawgzip duplicates retired afterqualifiedmaster fullbyteproof onbothhosts; citedmasters/currentE75worker/actualpackages/references/performanceinputs preserved."
+    },
+    "remaining": "Exactdistortion/entropy-cost primitives then actualintra4/intra16/chroma/RDO, coefficient/probability/header/ALPH/fullpackets/publicintegration, finite requiredoptions, exactdecoders andfullCPU/allocation/functional/memory/release objective remain open."
   }
 }
