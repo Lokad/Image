@@ -72,6 +72,12 @@ uses two admitted original-row buffers; color search borrows unchanged tiles and
 then transforms them in place, without tile or full-frame copies. Compacted color
 maps retain their actual capacity charge until disposal. Native maps/residuals,
 admission/refusal/recovery, cancellation and independent work limits are checked.
+Transform-family analysis adds 18 checks: thirteen frozen-control decisions across
+all five families and the required effort paths, exact 256/257-color cardinality,
+shared refusal/recovery, cancellation and independent work cleanup. It borrows
+untransformed normalized ARGB and returns only scalar decisions; its fixed histogram
+and color-counting storage is released before subsequent transforms. All 45 focused
+checks pass with the same assembly on both platforms.
 The last full shared-build qualification (E53) passed 3,884 offline tests per
 platform, the same private Release package and all three usage examples on both.
 These public paths remain unchanged. The encoder is not switched: complete-operation

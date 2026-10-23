@@ -392,7 +392,9 @@ candidate packets, with ordinary-first ties. These named effort primitives pass;
 admitted production and complete public operations remain open.
 Production matching/prediction/color transforms pass 8/9/10 focused checks with one
 Windows/Linux assembly. Native maps/residuals and shared admission pass; color search
-and map compaction operate in place while charging retained capacity. Unchanged
+and map compaction operate in place while charging retained capacity. Analysis adds
+18 checks of frozen-control decisions, cardinality and cleanup: 45 focused passes
+with one assembly on both platforms, using fixed admitted scratch. Unchanged
 public paths reuse E53's 3,884 offline checks per platform and the same private
 Release package/three usage examples on both. Public encoding does not call these
 components yet; integrated qualification remains open. No new timings or allocations.

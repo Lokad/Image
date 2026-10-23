@@ -90,7 +90,7 @@ performance grid.
    nonseekable async delivery, including independent surviving outputs, failures
    and cancellation. Their core packet identity reuses the first frozen packet;
    complete operations still require integration evidence.
-6. **Admitted integration.** Matching, prediction and color transforms are ported:
+6. **Admitted integration.** Analysis, matching, prediction and color transforms are ported:
    typed ordinary/low-effort/box matching accepts borrowed spans and returns an
    owned index. Eight focused checks pass with the same assembly on Windows/Linux:
    native indices, aggregate admission/replacement peaks, prompt retained-result
@@ -104,8 +104,12 @@ performance grid.
    fixed/coarse and adaptive-photograph native maps/residuals, spatial-only hidden RGB,
    in-place map compaction with retained-capacity charges, overlapping results,
    terminal refusal/recovery, cancellation and independent work failure. Subtract-green
-   arithmetic also runs through the production helper in predictor tests. All 27
-   focused checks pass with one assembly on both platforms. Public paths reuse E53's
+   arithmetic also runs through the production helper in predictor tests. Eighteen
+   analysis checks cover thirteen existing packet-control decisions across all five
+   transform families, effort routing, the 256/257-color boundary, shared refusal,
+   cancellation and work cleanup. Analysis borrows original normalized ARGB, admits
+   fixed scratch before allocation and releases it before returning scalar decisions.
+   All 45 focused checks pass with one assembly on both platforms. Public paths reuse E53's
    3,884 offline checks and same-package/three-example qualification per platform.
    Public encoding does not call these components yet. Port the remaining state and
    connect the complete encoder before claiming end-to-end production qualification.
