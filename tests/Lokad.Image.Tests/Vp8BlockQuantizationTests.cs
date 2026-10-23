@@ -1,0 +1,141 @@
+using System.Buffers.Binary;
+using System.Security.Cryptography;
+using Lokad.Image.Internal;
+using Lokad.Image.Tooling;
+
+namespace Lokad.Image.Tests;
+
+public sealed class Vp8BlockQuantizationTests
+{
+    private static void MinimumStep(Span<int> values)
+    {
+        for (var p = 0; p < 16; p++)
+        {
+            var bias = (p == 0 ? 96 : 110) << 9;
+            values[p] = 4; values[16 + p] = (1 << 17) / 4; values[32 + p] = bias;
+            values[48 + p] = ((1 << 17) - 1 - bias) / ((1 << 17) / 4); values[64 + p] = 0;
+        }
+    }
+
+    private static bool Append(Span<short> coefficients, Span<short> levels, Vp8QuantizationMatrix matrix, IncrementalHash hash)
+    {
+        var nonzero = Vp8BlockQuantization.Apply(coefficients, levels, matrix);
+        Span<byte> bytes = stackalloc byte[65]; bytes[0] = nonzero ? (byte)1 : (byte)0;
+        for (var p = 0; p < 16; p++)
+        {
+            BinaryPrimitives.WriteInt16LittleEndian(bytes[(1 + 2 * p)..], coefficients[p]);
+            BinaryPrimitives.WriteInt16LittleEndian(bytes[(33 + 2 * p)..], levels[p]);
+        }
+        hash.AppendData(bytes); return nonzero;
+    }
+
+    [Theory]
+    [InlineData(0, "e4d148c64007223065d096c87058763ab418ccde84a568885755f47b7b3c063d", 653)]
+    [InlineData(1, "360e5d6e7a737709549545de8473aa5500e4e3e0abed7f97ed73e627b7f33c25", 340)]
+    [InlineData(2, "f1420ae8955485b640473476a5c9a367a94d852e0035224ddc8b3091b9fdc42c", 709)]
+    [InlineData(3, "e5dde916bdd05e2355ace2837233ddff32546f1e72e29441374db19ed50ba6dd", 2047)]
+    public void SignedThresholdAndSaturationFragmentsMatchNative(int kind, string expected, int maximum)
+    {
+        using var image = OriginalVp8lControls.Buffer("opaque", 8); using var root = new TestMemoryBudget(16_000_000);
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        using var input = Vp8PreparedInput.Create(image, context); using var analysis = Vp8SourceAnalysis.Create(input, context);
+        using var segments = Vp8SourceSegments.Create(analysis, 75, false, context);
+        using var plan = Vp8QuantizationPlan.Create(segments, analysis.MeanChromaScore, context);
+        Span<int> minimum = stackalloc int[80]; MinimumStep(minimum);
+        var matrix = kind == 3 ? new Vp8QuantizationMatrix(minimum) : plan.Matrix(0, (Vp8CoefficientPlane)kind);
+        Span<short> coefficients = stackalloc short[18]; Span<short> levels = stackalloc short[18];
+        coefficients[16] = 30000; coefficients[17] = -30000; levels[16] = 97; levels[17] = -98;
+        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256); var nonzero = 0; var max = 0; var retained = root.Bytes;
+        for (var fragment = 0; fragment < 11; fragment++)
+        {
+            context.Work(128);
+            for (var p = 0; p < 16; p++)
+                coefficients[p] = (short)(fragment switch
+                {
+                    0 => 0, 1 => 16320, 2 => -16320,
+                    3 => (p / 4 + p % 4) % 2 == 0 ? 16320 : -16320,
+                    10 => (p + 1) * 73 * (p % 2 == 0 ? 1 : -1),
+                    _ => Math.Max(0, matrix.ZeroThresholds[p] - matrix.Sharpening[p] + (fragment - 4) / 2 - 1) * (fragment % 2 == 0 ? 1 : -1)
+                });
+            if (Append(coefficients, levels, matrix, hash)) nonzero++;
+            foreach (var level in levels[..16]) max = Math.Max(max, Math.Abs((int)level));
+        }
+        Assert.Equal(expected, Convert.ToHexStringLower(hash.GetHashAndReset())); Assert.Equal(6, nonzero); Assert.Equal(maximum, max);
+        Assert.Equal((30000, -30000, 97, -98), ((int)coefficients[16], (int)coefficients[17], (int)levels[16], (int)levels[17]));
+        Assert.Equal(retained, root.Bytes);
+    }
+
+    private static int AppendPlane(ReadOnlySpan<byte> plane, int stride, Vp8QuantizationMatrix matrix,
+        Span<short> coefficients, Span<short> levels, IncrementalHash hash, OperationContext context)
+    {
+        Span<short> residual = stackalloc short[16]; var blocks = 0;
+        for (var y = 0; y < plane.Length / stride; y += 4)
+        for (var x = 0; x < stride; x += 4)
+        {
+            context.Work(1024);
+            for (var dy = 0; dy < 4; dy++) for (var dx = 0; dx < 4; dx++)
+                residual[dy * 4 + dx] = (short)(plane[(y + dy) * stride + x + dx] - 128);
+            Vp8ForwardTransform.Dct(residual, coefficients); Append(coefficients, levels, matrix, hash); blocks++;
+        }
+        return blocks;
+    }
+
+    [Theory]
+    [InlineData(0, 8976, "850ac3db2f0feefdb47ce273923c44af8c9446f6c0b2312bc305a34f367805ab")]
+    [InlineData(1, 561, "34ddbb9460c2310c3dcb3ce5777137c46c8e360df25e30e445c471fb5187201c")]
+    [InlineData(2, 4488, "d92d8a4be549be3c2c456b22e2ce603d20052d01200846634f54e2d3c9755d1b")]
+    public void AllExistingOpaqueDctAndWalshBlocksMatchNative(int plane, int expectedBlocks, string expected)
+    {
+        using var image = OriginalVp8lControls.Buffer("opaque", 8); using var root = new TestMemoryBudget(16_000_000);
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        using var input = Vp8PreparedInput.Create(image, context); var original = Vp8PreparedInputTests.Hash(input);
+        using var analysis = Vp8SourceAnalysis.Create(input, context); using var segments = Vp8SourceSegments.Create(analysis, 75, false, context);
+        using var plan = Vp8QuantizationPlan.Create(segments, analysis.MeanChromaScore, context); var retained = root.Bytes;
+        var matrix = plan.Matrix(0, (Vp8CoefficientPlane)plane);
+        Span<short> coefficients = stackalloc short[18]; Span<short> levels = stackalloc short[18];
+        coefficients[16] = 30000; coefficients[17] = -30000; levels[16] = 97; levels[17] = -98;
+        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256); var blocks = 0;
+        if (plane == 0) blocks = AppendPlane(input.Y, input.Stride, matrix, coefficients, levels, hash, context);
+        else if (plane == 2)
+            blocks = AppendPlane(input.U, input.Stride / 2, matrix, coefficients, levels, hash, context)
+                + AppendPlane(input.V, input.Stride / 2, matrix, coefficients, levels, hash, context);
+        else
+        {
+            Span<short> residual = stackalloc short[16]; Span<short> dc = stackalloc short[16]; Span<short> dct = stackalloc short[16];
+            for (var my = 0; my < input.StorageHeight; my += 16)
+            for (var mx = 0; mx < input.Stride; mx += 16)
+            {
+                context.Work(16 * 1024);
+                for (var by = 0; by < 16; by += 4) for (var bx = 0; bx < 16; bx += 4)
+                {
+                    for (var dy = 0; dy < 4; dy++) for (var dx = 0; dx < 4; dx++)
+                        residual[dy * 4 + dx] = (short)(input.Y[(my + by + dy) * input.Stride + mx + bx + dx] - 128);
+                    Vp8ForwardTransform.Dct(residual, dct); dc[by / 4 * 4 + bx / 4] = dct[0];
+                }
+                Vp8ForwardTransform.WalshDc(dc, coefficients); Append(coefficients, levels, matrix, hash); blocks++;
+            }
+        }
+        Assert.Equal(expectedBlocks, blocks); Assert.Equal(expected, Convert.ToHexStringLower(hash.GetHashAndReset()));
+        Assert.Equal((30000, -30000, 97, -98), ((int)coefficients[16], (int)coefficients[17], (int)levels[16], (int)levels[17]));
+        Assert.Equal(original, Vp8PreparedInputTests.Hash(input)); Assert.Equal(retained, root.Bytes);
+    }
+
+    [Theory]
+    [InlineData(-16321)] [InlineData(16321)]
+    public void InvalidTransformRangeFailsBeforeMutatingEitherBuffer(short invalid)
+    {
+        var coefficients = new short[18]; coefficients[15] = invalid; var original = coefficients.ToArray();
+        var levels = Enumerable.Repeat((short)77, 18).ToArray(); var values = new int[80]; MinimumStep(values);
+        Assert.Throws<ArgumentOutOfRangeException>(() => Vp8BlockQuantization.Apply(coefficients, levels, new(values)));
+        Assert.Equal(original, coefficients); Assert.All(levels, value => Assert.Equal((short)77, value));
+    }
+
+    [Fact]
+    public void OverlappingCallerBuffersFailBeforeAnyMutation()
+    {
+        var data = Enumerable.Range(0, 32).Select(i => (short)i).ToArray(); var original = data.ToArray();
+        var values = new int[80]; MinimumStep(values);
+        Assert.Throws<ArgumentException>(() => Vp8BlockQuantization.Apply(data.AsSpan(0, 18), data.AsSpan(8, 18), new(values)));
+        Assert.Equal(original, data);
+    }
+}

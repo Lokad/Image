@@ -1,7 +1,7 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E72",
-  "scope": "Private unwired preparation through source segmentation and admitted quantization matrices/costs. Actual coefficient decisions/RDO/full managed VP8 encoder remain open.",
+  "latestRound": "E73",
+  "scope": "Private unwired preparation through quantization matrices and exact block quantizedlevels/reconstructedcoefficients. Actual inverse/reconstruction/RDO/full managed VP8 encoder remain open.",
   "productionPublicBehaviorChanged": false,
   "fullObjectiveOpen": true,
   "reference": {
@@ -2022,5 +2022,221 @@
       "scope": "Exact-backed completedE60Windowsworker and inactiveE69/E70Linuxhost/config duplicates retired. Nativeobserver archived onWindows then RAMverified againstVM before retiring its723312B loosebinary and writing285620B master. Everytransfer/archivalpeak belowcap. Existingrunner reused instead of duplicating dependency/config files. Actualcore/packages/references/performanceworkers/citedmasters retained."
     },
     "remaining": "Apply quantization with exact thresholds/sign/rounding/zigzag/dequantizedcoefficients; actualintra4/intra16/chroma/RDO, entropy/ALPH/fullpackets/publicintegration, finite requiredoption audit, exactdecoders and fullCPU/allocation/functional/memory/release objective remain open."
+  },
+  "blockQuantization": {
+    "round": "E73",
+    "publicEncoderSwitched": false,
+    "worker": {
+      "bytes": 1588736,
+      "sha256": "59381ec1537a1bfa55406ab1aa63197a072d2cd4df7abeb82a9d3f76b1fd96d2"
+    },
+    "sourceFiles": {
+      "src/Lokad.Image/Internal/Vp8BlockQuantization.cs": {
+        "bytes": 2343,
+        "sha256": "a7686fb038fec7aba2b7ce99fce75a394b9aa19da6b73bccd381a257451f42f0"
+      },
+      "tests/Lokad.Image.Tests/Vp8BlockQuantizationTests.cs": {
+        "bytes": 8461,
+        "sha256": "839c91d9e6c57186b43ae3162713a09047fcd7368db3172dc0ec86ed1eebb15e"
+      },
+      "tools/WarmReference/vp8-quantization-observer.c": {
+        "bytes": 3031,
+        "sha256": "4674512f102a779762880b7410a98265f55bfe1e6da8b3fc50e82ccec44c451e"
+      }
+    },
+    "native": {
+      "round": "E73-observation",
+      "scope": "Borrowed native quantization kernels on one original opaque control: all8976luma/4488chromaDCT blocks plus561Y2Walsh blocks from qualified masters, each at opaque segment0matrix. Eleven signed/threshold fragments per3matrices plus ONE minimum-step scalar matrix fragment to cover otherwise-unexercised2047saturation. No new sourceimage/encodedquality/settings grid, no actualRDO/fullencode or managedE73claim.",
+      "sourceSha256": "4674512f102a779762880b7410a98265f55bfe1e6da8b3fc50e82ccec44c451e",
+      "workerSha256": "5de2d2b2ecb704ca51c7c9c3fa61c9d0dc18d17d3e259185bcadbb2d53d2068c",
+      "workerBytes": 110088,
+      "backendArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "matrixObservationCompressedSha256": "28b63fbc61b1ec82a786a1d8b43d0998376df0146cde9316c555c6016b98edaa",
+      "inputBytes": 452512,
+      "inputSha256": "53045a9df24ca4aa80e3258c9589cfb7c9c7ca3c1325a02d698e00c7ed895f60",
+      "observations": [
+        {
+          "cpu": "normal",
+          "ready": {
+            "scalar": false,
+            "groups": 7,
+            "bytesPerBlock": 65,
+            "coefficientBound": 16320
+          },
+          "bytes": 914485,
+          "sha256": "1561aaf42b4930c5ad80fb9cf30fc63709336980dd7a0832e0f4d6097c13a9e5"
+        },
+        {
+          "cpu": "scalar",
+          "ready": {
+            "scalar": true,
+            "groups": 7,
+            "bytesPerBlock": 65,
+            "coefficientBound": 16320
+          },
+          "bytes": 914485,
+          "sha256": "1561aaf42b4930c5ad80fb9cf30fc63709336980dd7a0832e0f4d6097c13a9e5"
+        }
+      ],
+      "everyNativeNormalScalarOutputByteEqual": true,
+      "groups": [
+        {
+          "name": "luma-fragments",
+          "entryPoint": "ordinary",
+          "blocks": 11,
+          "matrixSha256": "e9313b58c1b5ab06092d957a0b0d4a16bf3e8a70fc729aea52baab23788a3f7d",
+          "coefficientInputSha256": "9742bc623774ec0ff98bfe8da0451a9ba10a41a4b68d5d494331b10436dee565",
+          "outputBytes": 715,
+          "outputSha256": "e4d148c64007223065d096c87058763ab418ccde84a568885755f47b7b3c063d",
+          "nonzeroBlocks": 6,
+          "maxLevelMagnitude": 653
+        },
+        {
+          "name": "walsh-fragments",
+          "entryPoint": "WHT",
+          "blocks": 11,
+          "matrixSha256": "9622f9fa0ba372fcb58f8dc05379e9a7a45ff20d2ca59a8d3603ab1f4b065462",
+          "coefficientInputSha256": "d625028be9eade4c437810a7e5ecb0edff99291dc14e486ccedbc24fb00aed6a",
+          "outputBytes": 715,
+          "outputSha256": "360e5d6e7a737709549545de8473aa5500e4e3e0abed7f97ed73e627b7f33c25",
+          "nonzeroBlocks": 6,
+          "maxLevelMagnitude": 340
+        },
+        {
+          "name": "chroma-fragments",
+          "entryPoint": "ordinary",
+          "blocks": 11,
+          "matrixSha256": "fd877b1625ae8a57d9058b48b9b0a9df8a30e9c522d9998ece6223c2a8ec5dad",
+          "coefficientInputSha256": "cde335c1fc6e15817b2c5a2f466b566c7cf4c5b63ded7122cd3f66c13aa9fab1",
+          "outputBytes": 715,
+          "outputSha256": "f1420ae8955485b640473476a5c9a367a94d852e0035224ddc8b3091b9fdc42c",
+          "nonzeroBlocks": 6,
+          "maxLevelMagnitude": 709
+        },
+        {
+          "name": "minimum-step-saturation-fragments",
+          "entryPoint": "ordinary",
+          "blocks": 11,
+          "matrixSha256": "66fda37d26e9e08a0bb1fe96cd775a0117969b5a5034485bf6c626de5312e968",
+          "coefficientInputSha256": "b0ceaa50036c1ff86220b594e62bb63d126d18d1f9df7446a66a36c02a6daa56",
+          "outputBytes": 715,
+          "outputSha256": "e5dde916bdd05e2355ace2837233ddff32546f1e72e29441374db19ed50ba6dd",
+          "nonzeroBlocks": 6,
+          "maxLevelMagnitude": 2047
+        },
+        {
+          "name": "luma-raster",
+          "entryPoint": "ordinary",
+          "blocks": 8976,
+          "matrixSha256": "e9313b58c1b5ab06092d957a0b0d4a16bf3e8a70fc729aea52baab23788a3f7d",
+          "coefficientInputSha256": "40c2a206837f7c1f8e2c9eb71189347b68ca89d76fd45fcf8428f6113abfae09",
+          "outputBytes": 583440,
+          "outputSha256": "850ac3db2f0feefdb47ce273923c44af8c9446f6c0b2312bc305a34f367805ab",
+          "nonzeroBlocks": 8964,
+          "maxLevelMagnitude": 12
+        },
+        {
+          "name": "walsh-raster",
+          "entryPoint": "WHT",
+          "blocks": 561,
+          "matrixSha256": "9622f9fa0ba372fcb58f8dc05379e9a7a45ff20d2ca59a8d3603ab1f4b065462",
+          "coefficientInputSha256": "429a1d6abd085057d28828ae65d8f8e80d9975f44530bbe658d535b00d0c4f81",
+          "outputBytes": 36465,
+          "outputSha256": "34ddbb9460c2310c3dcb3ce5777137c46c8e360df25e30e445c471fb5187201c",
+          "nonzeroBlocks": 561,
+          "maxLevelMagnitude": 26
+        },
+        {
+          "name": "chroma-raster",
+          "entryPoint": "ordinary",
+          "blocks": 4488,
+          "matrixSha256": "fd877b1625ae8a57d9058b48b9b0a9df8a30e9c522d9998ece6223c2a8ec5dad",
+          "coefficientInputSha256": "4b78a3066b5394215b1ff20bb20022dc172b91841a4796305087afbaf44249ea",
+          "outputBytes": 291720,
+          "outputSha256": "d92d8a4be549be3c2c456b22e2ce603d20052d01200846634f54e2d3c9755d1b",
+          "nonzeroBlocks": 4488,
+          "maxLevelMagnitude": 18
+        }
+      ],
+      "rawOrder": "groups aslisted; eachblock nonzero byte then16int16LE dequantizedraster coefficients then16int16LE zigzaglevels. Input/outputs separate; inputcoefficient domain[-16320,16320].",
+      "rawCompressed": {
+        "name": "e73-native-quantization.bin.gz",
+        "bytes": 199052,
+        "sha256": "dcd6b8e87a49bc3ce37524030db0cdbadd9521c94b5fdc6829cbc6eb756a3fa8"
+      },
+      "dotnetBuilds": 0,
+      "nativeCompleteEncodes": 0,
+      "timingRuns": 0,
+      "nativeCompileAttempts": 3,
+      "nativeCompileFixes": [
+        "Declare exported CPUdispatch pointer using referenceheader type",
+        "Separate emitcalls from failedwrite guard for-Werror indentation"
+      ],
+      "flags": [
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Iexternal/libwebp"
+      ],
+      "timingBaselineUnchanged": "NativeDSPcorrectness observer only; FFmpeg remains complete-operation benchmarkreference."
+    },
+    "algorithm": "Raster-order independent coefficients with native threshold/sharpen/fixed17-bit rounding/sign/cap2047; compute RFCdiagonal scan ranks mathematically instead of importing a lookup table. Mutate16raster coefficients to dequantizedsamples and write16zigzaglevels; return anynonzero. Validate16sample transformdomain[-16320,16320] and nonoverlappingbuffers before writes.",
+    "verified": [
+      "All914485nativeoutputbytes for14025rasterblocks plus44arithmetic fragments match managed: nonzero flags,225104dequantizedcoefficients and225104zigzaglevels. Native SIMD/forcedscalar outputbytes identical.",
+      "OnlyONEexistingopaquecontrol, nativequalified E66DCT/E67Walsh masters, opaque segment0threeplane matrices. Elevenfragments per3matrices plusoneformat-minimum-step matrix cover2047saturation not exercised otherwise; no extra sourceimage/encodedquality/shape/effort grid.",
+      "Caller tails unchanged, sourceplanes unchanged, matrices borrowed, overlappingbuffers/invalidtransformrange rejected before any mutation. No heap/cache/owner/perblockadmission; outerencoder handleswork/cancellation/coarseworkspace."
+    ],
+    "qualification": {
+      "sameWindowsBuiltAssemblyBothOS": true,
+      "normalPerOS": 176,
+      "scalarPerOS": 176,
+      "windowsNormalUnion": [
+        10,
+        166
+      ],
+      "newChecks": 10,
+      "priorChecksReconfirmed": 166
+    },
+    "builds": {
+      "windowsLinkedInternalTests": 1,
+      "linux": 0,
+      "publicCore": 0,
+      "sourceModel": 0,
+      "nativeCompileAttempts": 3,
+      "verifiedNativeWorkers": 1
+    },
+    "nativeKernelObservations": 2,
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "evidenceReuse": "All166earlier checks reconfirmed samecurrentassembly bothOS normal/scalar. Prior helper/publiccodec bodies/calls unchanged; existing full/differential/actualpackage andproducer proofs retain theirscope. Parent11e36b65bd56dc229d96ce415a727b92c7279fe2 CI39942165083 green/all3jobs. No repeatedlocal full/package proof.",
+    "rawArchive": {
+      "name": "e73-block-quantization-qualified.tar.xz",
+      "bytes": 700664,
+      "members": 21,
+      "sha256": "e9d8b2ee9527f5831b69aada03eea5fb82dc4f67a2886ec2761417c3af82fb3a",
+      "everySourceMemberByteVerified": true,
+      "mirrored": true
+    },
+    "storage": {
+      "capBytes": 5000000000,
+      "windowsAfterMaster": 4987387663,
+      "linuxAfterMaster": 4997849554,
+      "staleAlias": "Removedonlytmp/bdn-result-parser/bin junction after verifying actualtools/WarmReference/ParseBenchmarkLog/bin files unchanged. Canonicaltally had counted12084325toolbytes twice; actual currentparser/source/cache retained.",
+      "coldDebugArchive": {
+        "name": "e73-historical-debug-symbols-linux.tar.xz",
+        "bytes": 208468,
+        "sha256": "4a16541071219a6e998890d19143a2cd4650536acd0c3a86ad31ee4c4c25df32",
+        "members": 12,
+        "rawBytes": 3232596,
+        "everyByteVerifiedBeforeRetirement": true,
+        "mirrored": true,
+        "scope": "Historical debugPDBs only; executableDLLs/config/dependencies/manifests/currentworker/packages/referencecheckouts/citedmasters retained. Restoredebugsymbols frommaster ifneeded fordebug/strictmanifestreplay."
+      },
+      "allPeaksBelowCap": true
+    },
+    "remaining": "Verify/reuse existing inverseDCT/Walsh whereexact, composepixelreconstruction; actualintra4/intra16/chroma/RDO, entropy/ALPH/fullpackets/publicintegration, boundedrequiredoptions, exactdecoders and fullCPU/allocation/functional/memory/release objective remain open."
   }
 }

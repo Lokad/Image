@@ -1,6 +1,6 @@
 # VP8 encoder preparation
 
-The private managed pipeline is verified through quantization-matrix setup.
+The private managed pipeline is verified through block quantization.
 The public lossy encoder is unchanged; complete VP8 packet replication remains open.
 
 Seven existing encoding rows have four reference packet identities:
@@ -47,8 +47,16 @@ call parameter setup on zero macroblocks with the qualified susceptibility input
 this qualifies matrix setup, not independent full analysis or actual encoding.
 Normative quantizer steps and independent formulas replace implementation tables.
 
-The same immutable assembly passes166focused checks per platform on Windows/Linux,
-normal and SIMD disabled, including all157earlier checks. Shared admission covers
+Block quantization matches914,485native output bytes across14,025reused DCT/Walsh
+blocks from the opaque control and44signed/threshold fragments: nonzero flags,
+quantized zigzag levels and reconstructed coefficients. A format-minimum-step
+arithmetic probe covers the2,047level cap without another image or encoder setting.
+Native SIMD/scalar output agrees. The managed kernel derives diagonal scan ranks,
+borrows its matrix/caller buffers and preserves tails. Invalid coefficient ranges
+or overlapping outputs fail before mutation; no per-block heap or admission exists.
+
+The same immutable assembly passes176focused checks per platform on Windows/Linux,
+normal and SIMD disabled, including all166earlier checks. Shared admission covers
 owned capacity, retained results and replacement overlap. Refusal, cancellation,
 local/work limits and cleanup/recovery pass; sources and caller roots stay borrowed.
 The matrix owner retains3,128/4,128admitted bytes for3/4used segments. Earlier source
@@ -57,7 +65,7 @@ accounting capacities; no new timing or GC-allocation measurements are claimed.
 
 [Structured evidence](vp8-byte-parity-evidence.json) records exact producers,
 reference observations, scope and preserved raw masters. Prior public codec and
-package evidence retains its stated scope. Next are quantized/reconstructed
-coefficients, macroblock decisions, entropy/framing and ALPH, followed by complete
+package evidence retains its stated scope. Next are inverse/pixel reconstruction,
+macroblock decisions, entropy/framing and ALPH, followed by complete
 packets and the bounded required-option audit. No readiness claim follows from
 these private stages.
