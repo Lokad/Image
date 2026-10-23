@@ -57,8 +57,18 @@ The private Y2Walsh now matches all8,976 native coefficients from561luma
 macroblocks of the same opaque control. Thirty-six signed/extreme/odd-half
 fragments also match; native SIMD/scalar streams are byte-identical. Its Hadamard
 weights come from Gray-code parity, with exact signed half-scaling and the same
-borrowing/stack contract. Current same-assembly qualification passes103checks per
+borrowing/stack contract. Walsh qualification passed103checks per
 platform, normal and SIMD disabled, preserving all64earlier checks.
 
-Next are source analysis, segmentation/quantizers and macroblock decisions, then
-entropy/framing and ALPH coding, preserving the four fixed packet targets.
+Coefficient histograms now match1,122 native luma/UV summaries on the same opaque
+control, plus ten original population probes. Native SIMD/scalar results agree.
+Borrowed counters accumulate magnitude buckets with saturation; empty-bin and tie
+rules match. The separately inspected raw-score ratio stays unclamped until mixing.
+Current same-assembly qualification passes115checks per platform, normal and SIMD
+disabled, including all103previous checks; no public encoder body changed.
+
+A public backend observer reproduces all four frozen FFmpeg packets before exposing
+segment maps, quantizers and filter levels. Those observations are fixed test data
+for the next source-analysis implementation. Next are source-border predictors,
+segmentation/quantizers and macroblock decisions, then entropy/framing and ALPH
+coding, preserving the four fixed packet targets.

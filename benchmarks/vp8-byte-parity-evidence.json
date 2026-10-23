@@ -1,7 +1,7 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E67",
-  "scope": "Private unwired input conversion, transparent cleanup, exact forward4x4DCT and Y2Walsh. Public lossy encoder/full packet replication remains open.",
+  "latestRound": "E68",
+  "scope": "Private unwired conversion/cleanup/forwardtransforms and coefficient-histogram summaries. Native analysis decisions frozen from4byte-matched FFmpeg packets; managed source analysis/full encoder still open.",
   "productionPublicBehaviorChanged": false,
   "fullObjectiveOpen": true,
   "reference": {
@@ -665,6 +665,360 @@
       "bytes": 929965,
       "members": 16,
       "sha256": "fac2c25ae3ed858d8495a5aa16763d09dee50d8800867b4221297900fca5659e",
+      "everySourceMemberByteVerified": true,
+      "mirrored": true
+    }
+  },
+  "nativeDecisionObservations": {
+    "round": "E68",
+    "scope": "PublicAPIstatistics/segmentmap only after validating complete existingFFmpegpacket hashes. No managed analysis implementation or performance claim. Benchmarkreference remainsFFmpeg.",
+    "sourceSha256": "3885cce09566a7eecf910259ac4be607a751caab52deeff220030682516fdfb0",
+    "workerSha256": "5c1fad94eeedb91fd8ac87471183016f6637cfd1c1c9a88fcf807a891ede967f",
+    "backendArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+    "flags": [
+      "-std=c11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror"
+    ],
+    "sharedConfig": {
+      "quality": 75,
+      "method": 4,
+      "threadLevel": 0,
+      "segments": 4,
+      "snsStrength": 50,
+      "filterStrength": 60,
+      "filterSharpness": 0,
+      "filterType": 1,
+      "autoFilter": 0,
+      "pass": 1,
+      "preprocessing": 0,
+      "partitions": 0,
+      "partitionLimit": 0,
+      "alphaCompression": 1,
+      "alphaFiltering": 1,
+      "alphaQuality": 100,
+      "exact": 0,
+      "lowMemory": 0,
+      "sharpYuv": 0
+    },
+    "cases": [
+      {
+        "name": "opaque",
+        "sourceSha256": "54e27bd73c9ee221bdd4872e6b7bf79676257346cee2eff8ddacccb89e0cdb0a",
+        "packetBytes": 72380,
+        "packetSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+        "allPacketBytesMatchExistingFrozenHash": true,
+        "segmentMapSha256": "872fd9e831d98ef6ac1363a90c431141a9bc8a63b8f2ecdf27e104fefc4cedcc",
+        "nativeStats": {
+          "libwebpVersion": 67072,
+          "packetBytes": 72380,
+          "macroblocks": 561,
+          "extraInfoType": 2,
+          "segmentQuantizers": [
+            27,
+            22,
+            15,
+            15
+          ],
+          "segmentFilterLevels": [
+            8,
+            5,
+            2,
+            2
+          ],
+          "segmentSizes": [
+            508,
+            3,
+            50,
+            0
+          ],
+          "blockCounts": [
+            561,
+            0,
+            0
+          ],
+          "alphaDataBytes": 0
+        }
+      },
+      {
+        "name": "photograph",
+        "sourceSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+        "packetBytes": 17688,
+        "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+        "allPacketBytesMatchExistingFrozenHash": true,
+        "segmentMapSha256": "ccf2215ba2875d875a3a844250221ad05df6d184f8a0a8a019fece337786b528",
+        "nativeStats": {
+          "libwebpVersion": 67072,
+          "packetBytes": 17688,
+          "macroblocks": 561,
+          "extraInfoType": 2,
+          "segmentQuantizers": [
+            36,
+            32,
+            25,
+            19
+          ],
+          "segmentFilterLevels": [
+            11,
+            7,
+            4,
+            13
+          ],
+          "segmentSizes": [
+            49,
+            100,
+            210,
+            202
+          ],
+          "blockCounts": [
+            518,
+            43,
+            0
+          ],
+          "alphaDataBytes": 0
+        }
+      },
+      {
+        "name": "diagram",
+        "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+        "packetBytes": 7100,
+        "packetSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
+        "allPacketBytesMatchExistingFrozenHash": true,
+        "segmentMapSha256": "d67c66d25d507e79371f3d9b66e2aefa1d911501dca93813ab0482773574d2f3",
+        "nativeStats": {
+          "libwebpVersion": 67072,
+          "packetBytes": 7100,
+          "macroblocks": 561,
+          "extraInfoType": 2,
+          "segmentQuantizers": [
+            36,
+            33,
+            29,
+            22
+          ],
+          "segmentFilterLevels": [
+            11,
+            7,
+            6,
+            3
+          ],
+          "segmentSizes": [
+            5,
+            36,
+            212,
+            308
+          ],
+          "blockCounts": [
+            208,
+            353,
+            255
+          ],
+          "alphaDataBytes": 0
+        }
+      },
+      {
+        "name": "asymmetric",
+        "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "packetBytes": 98590,
+        "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "allPacketBytesMatchExistingFrozenHash": true,
+        "segmentMapSha256": "5ae95290d4376ce3333e9ce4424c2944be2520455c0189167fd39b2ae6c8741a",
+        "nativeStats": {
+          "libwebpVersion": 67072,
+          "packetBytes": 98590,
+          "macroblocks": 561,
+          "extraInfoType": 2,
+          "segmentQuantizers": [
+            27,
+            20,
+            15,
+            15
+          ],
+          "segmentFilterLevels": [
+            8,
+            5,
+            2,
+            2
+          ],
+          "segmentSizes": [
+            509,
+            2,
+            50,
+            0
+          ],
+          "blockCounts": [
+            560,
+            1,
+            0
+          ],
+          "alphaDataBytes": 24588
+        }
+      }
+    ],
+    "nativeCompleteEncodes": 4,
+    "timingRuns": 0,
+    "rawArchive": {
+      "name": "e68-native-decision-observations.tar.gz",
+      "bytes": 347628,
+      "members": 6,
+      "sha256": "ce54ae9f65ec8fb1e6c15de4ddaab6e3992a853c626a870d92d0a70a1bba76b7",
+      "everySourceMemberByteVerified": true,
+      "sourceIdentitiesExact": true,
+      "frozenFFmpegPacketsExact": 4,
+      "publicImplementationChanged": false,
+      "mirrored": true
+    },
+    "scopeBoundary": "Statistics/segmentmaps are verification data only; no production code reads these packet/map outputs. Nativebackend observer is not a new timing baseline; original FFmpeg reference unchanged."
+  },
+  "sourceHistogramStage": {
+    "round": "E68",
+    "source": "src/Lokad.Image/Internal/Vp8SourceHistogram.cs",
+    "privatePreparationOnly": true,
+    "nativeObserver": {
+      "round": "E68-histogram",
+      "scope": "Native2-int histogram summaries only:10original population probes plusluma/UV pairs on561macroblocks of ONE existing opaque neutral128prediction control. No actual analysis predictor selection, segments or complete managed packets.",
+      "sourceYuvSha256": "f1e516c70c0d315b2f785b90fdd6a6c6e26e30eca898b7f1616380ab18aae715",
+      "sourceSha256": "085db371080d1aeb74f14f3f009c9da36d0ee76318c2e0e793da009a9732d748",
+      "workerSha256": "782407b0845fae3ccf64c67cef9d32c281446f338fc70e69da89118a50fa67a2",
+      "backendArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "flags": [
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "observations": [
+        {
+          "cpu": "normal",
+          "bytes": 9056,
+          "sha256": "163852a43aef3a685275e0db55ff7ce9e1f7825969804811c253283744bfb980",
+          "ready": {
+            "scalar": false,
+            "populationProbes": 10,
+            "macroblocks": 561,
+            "summaryValues": 2,
+            "prediction": 128
+          }
+        },
+        {
+          "cpu": "scalar",
+          "bytes": 9056,
+          "sha256": "163852a43aef3a685275e0db55ff7ce9e1f7825969804811c253283744bfb980",
+          "ready": {
+            "scalar": true,
+            "populationProbes": 10,
+            "macroblocks": 561,
+            "summaryValues": 2,
+            "prediction": 128
+          }
+        }
+      ],
+      "normalScalarEveryByteEqual": true,
+      "populationShapes": [
+        [
+          0,
+          1
+        ],
+        [
+          256,
+          0
+        ],
+        [
+          1,
+          31
+        ],
+        [
+          2,
+          31
+        ],
+        [
+          2,
+          31
+        ],
+        [
+          9,
+          31
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          29
+        ],
+        [
+          200,
+          31
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "rasterSummariesSha256": "0a5a98f718855df77c8698fd638252fa89506ae194f633569959f267f0655371",
+      "rasterSummaryCount": 1122,
+      "rawScorePolicy": "Unclamped510*LastBin/PeakPopulation whenPeak>1; scalarpolicy from inspected analysisGetAlpha, not an independently linked function.",
+      "nativeCompleteEncodes": 0,
+      "timingRuns": 0
+    },
+    "worker": {
+      "bytes": 1529856,
+      "sha256": "6cfe1a8939aa348ae043f518fc7e06790552e7431b856c88cee2524bc14ddf14"
+    },
+    "sourceFiles": {
+      "src/Lokad.Image/Internal/Vp8SourceHistogram.cs": {
+        "bytes": 1518,
+        "sha256": "11391b638faf29891dd760a77a1cec202d502b0bdb1bf401e1aa04ebc22814b2"
+      },
+      "tests/Lokad.Image.Tests/Vp8SourceHistogramTests.cs": {
+        "bytes": 5128,
+        "sha256": "aac3d6979a32bf2eb5ed12b74d4726570a286a1ba6635ef4234671f4f106d627"
+      },
+      "tools/WarmReference/vp8-histogram-observer.c": {
+        "bytes": 4079,
+        "sha256": "085db371080d1aeb74f14f3f009c9da36d0ee76318c2e0e793da009a9732d748"
+      },
+      "tools/WarmReference/libwebp-vp8-decisions-observer.c": {
+        "bytes": 3832,
+        "sha256": "3885cce09566a7eecf910259ac4be607a751caab52deeff220030682516fdfb0"
+      }
+    },
+    "algorithm": "Magnitude buckets abs(int16)>>3 with saturation31, positive peak population and final occupied bucket; empty last-bin sentinel1. Caller-owned32-counter scratch is borrowed/accumulated; no heap/cache/reservation owner. Rawscore follows the separately inspected integerpolicy510*last/peak whenpeak>1, without early clamp.",
+    "verified": [
+      "NativeSIMD/forcedscalar9056Bstreams agree byte for byte.10original population probes and1122luma/UV histogram summaries from561padded MBs of existing opaque neutral128control match native.",
+      "Separate rawscore policy checks cover empty/single-population, ties, integer flooring and values above255. This scalar ratio was inspected, not a separately linked upstream GetAlpha function.",
+      "Signed/extreme coefficients saturate safely, including int16minimum. Accumulation keeps borrowed coefficient inputs and workspace tails unchanged."
+    ],
+    "qualification": {
+      "sameWindowsBuiltAssemblyBothOS": true,
+      "normalPerOS": 115,
+      "scalarPerOS": 115,
+      "newHistogramChecks": 12,
+      "priorChecksReconfirmed": 103
+    },
+    "builds": {
+      "windowsLinkedInternalTests": 1,
+      "linux": 0,
+      "publicProductionCore": 0,
+      "nativeHistogramObserver": 1,
+      "nativePublicDecisionObserver": 1,
+      "sourceModel": 0
+    },
+    "nativePrimitiveObservations": 2,
+    "nativeCompleteEncodesForThisPrimitive": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "evidenceReuse": "All previous private stage bodies unchanged;103priorchecks reconfirmed in one new assembly bothOS normal/scalar. Existing public codec bodies/calls unchanged; reuse E62public-core/full/differential/actualpackage and unchanged producer evidence. No local full/package replay.",
+    "remaining": "Source-border DC/TM prediction/traversal and rawscore mix, deterministic1D clustering/neighbor smoothing andquality75quant/filter derivation. Macroblock/rate/coefficient decisions, entropy/ALPH/fullpackets/public integration andfull existing exact-decoder/performance/memory/functional/release objective remain open.",
+    "rawArchive": {
+      "name": "e68-histogram-qualified.tar.gz",
+      "bytes": 629434,
+      "members": 18,
+      "sha256": "4c7adf32d490ee3bf0494c6c3bbb7168061285fc20ef8919f1815e146aa9021a",
       "everySourceMemberByteVerified": true,
       "mirrored": true
     }
