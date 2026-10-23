@@ -1,7 +1,7 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E71",
-  "scope": "Private unwired input/transform/prediction/histogram, source analysis and segmentation/initialquantizer stages. Actual RDO/full managed VP8 encoder remain open.",
+  "latestRound": "E72",
+  "scope": "Private unwired preparation through source segmentation and admitted quantization matrices/costs. Actual coefficient decisions/RDO/full managed VP8 encoder remain open.",
   "productionPublicBehaviorChanged": false,
   "fullObjectiveOpen": true,
   "reference": {
@@ -1859,5 +1859,168 @@
       "completedWorkerRetired": "Only exact E70archivedDLL after E71Windowschecks; currentworker/publiccore/packages/reference/performanceworkers/citedmasters retained. All E71transfer/archive overlaps preflighted belowcap."
     },
     "remaining": "Quantization matrices/deadzones, actualintra4/intra16/chroma/RDO/coefficients, entropy/ALPH/fullpackets/publicintegration, finite requiredoptions, exactdecoders and original CPU/allocation/functional/memory/release objective remain open."
+  },
+  "quantizationPlan": {
+    "round": "E72",
+    "publicEncoderSwitched": false,
+    "worker": {
+      "bytes": 1582080,
+      "sha256": "2efe33d0b03cd5118a01cf0ae2753ee5bd6fa8c2079458495e4b55ea91e078c2"
+    },
+    "sourceFiles": {
+      "src/Lokad.Image/Internal/Vp8QuantizationPlan.cs": {
+        "bytes": 7369,
+        "sha256": "42b93df8967dbbe0023c9788f3fca8189c142974931ead437a2a9cce8d0f6722"
+      },
+      "tests/Lokad.Image.Tests/Vp8QuantizationPlanTests.cs": {
+        "bytes": 9983,
+        "sha256": "20ef092c6d216502a600e2adf6f4bb1979d69aa2ce19fbf7d9eab526ffbe946b"
+      },
+      "tools/WarmReference/vp8-matrix-observer.c": {
+        "bytes": 2771,
+        "sha256": "7eec2561fe38c9271f55317a77b745f8661a0d91fd8fa5debb3765d607fd7227"
+      }
+    },
+    "native": {
+      "round": "E72-observation",
+      "scope": "Nativeparameter setup on zero macroblocks given E71qualified source-derived scalar inputs; not native source analysis or full encoding. Four existing controls/defaultquality75/method4/sns50/filter60/sharpness0 only. Allused q/iq/bias/threshold/sharpen entries and scalarlambdas compared independently. No managedE72production component yet.",
+      "sourceSha256": "7eec2561fe38c9271f55317a77b745f8661a0d91fd8fa5debb3765d607fd7227",
+      "workerSha256": "c928ae1b5c75787742dca3489e7ef0f43e7c14472f68361c5e7003a6d138cefb",
+      "workerBytes": 723312,
+      "backendArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "nativeHeaderSha256": "57f41fb07d50dc8508a45416844c967efe29356020dbec355725e8f67f888c10",
+      "sourceSegmentsSha256": "51971bf87ecb1fb7bbcb9d45ce7127019bbfcecb805e558eec81f3aaa590a18c",
+      "nativeCompileAttempts": 3,
+      "compileFixes": [
+        "Use longlong format for score_t intra4penalty",
+        "Link already pinned libsharpyuv.a required transitively by nativearchive"
+      ],
+      "nativeParameterObservations": 4,
+      "nativeCompleteEncodes": 0,
+      "dotnetBuilds": 0,
+      "timingRuns": 0
+    },
+    "nativeRows": [
+      {
+        "name": "opaque",
+        "segments": 3,
+        "uvRawScore": 610,
+        "deltas": [
+          0,
+          0,
+          0,
+          -2,
+          6
+        ],
+        "nativeOutputSha256": "dd302d9b32389ab11c41aece4680fe525e657bd21a41af1acc6dbf12ae34e98c",
+        "everyUsedMatrixEntryAndCostMatches": true
+      },
+      {
+        "name": "photograph",
+        "segments": 4,
+        "uvRawScore": 38,
+        "deltas": [
+          0,
+          0,
+          0,
+          -2,
+          -1
+        ],
+        "nativeOutputSha256": "9120b55f54d300f0dd4d45ab57b8d948db81a9b6407808a4f94054bbcec027bd",
+        "everyUsedMatrixEntryAndCostMatches": true
+      },
+      {
+        "name": "diagram",
+        "segments": 4,
+        "uvRawScore": 42,
+        "deltas": [
+          0,
+          0,
+          0,
+          -2,
+          -1
+        ],
+        "nativeOutputSha256": "fa91aa92392845eef76b76dd7ff3342a235fd5d951f26220c6d284b958dc8d23",
+        "everyUsedMatrixEntryAndCostMatches": true
+      },
+      {
+        "name": "asymmetric",
+        "segments": 3,
+        "uvRawScore": 682,
+        "deltas": [
+          0,
+          0,
+          0,
+          -2,
+          6
+        ],
+        "nativeOutputSha256": "5f99cf6f83bd51ce29f2fc364f682eb1433b22d32dc190908188f1099cf734d5",
+        "everyUsedMatrixEntryAndCostMatches": true
+      }
+    ],
+    "nativeObservationScope": "Parameter setup on zeroMBs with previously qualified source-derived susceptibility scalars; not an independent native source-analysis run or full encoder. Frozen4controls atquality75/method4/defaultsns50/filter60/sharpness0. Only used matrices are compared.",
+    "nativeCompressedData": {
+      "name": "e72-native-matrices.json.gz",
+      "bytes": 2506,
+      "sha256": "28b63fbc61b1ec82a786a1d8b43d0998376df0146cde9316c555c6016b98edaa"
+    },
+    "nativeRawArchive": {
+      "name": "e72-native-matrix-observations.tar.xz",
+      "bytes": 285620,
+      "members": 4,
+      "sha256": "de9e3907b44b9098a6499a26c86d26ecad3e20009c58afd6408eefaf47ecb62c",
+      "everySourceMemberByteVerified": true,
+      "mirrored": true
+    },
+    "verifiedMatrixEntries": 3360,
+    "verifiedMatrices": 42,
+    "verifiedCostScalars": 140,
+    "algorithm": "Normative ownRFC6386DC/ACsteps; generateWalshAC max(8,155*AC/100), fixed17-bit reciprocals, explicit scalar plane rounding biases, exactzero thresholds and sharpening30*min(3,u+v)*step>>11. Preserve separate signedUVdelta divisions. DeriveeightintegerRDweights, minimumdistortion andintra4penalty from roundedaverage steps. No upstreamimplementationtable imported.",
+    "memory": "One admitted int[] owned before allocation;1000B perusedsegment plus128Bcoarsemetadata,3128/4128B for3/4segments.12B stack temporary fitscoarse allowance; no separate minor-allocation machinery. Borrowed readonly matrix/cost views, sameoperation/root, no source/image/segment/histogram references retained, no retry/fallback. Owner confinedtooperation. These are admission capacities, not measuredGCallocations.",
+    "verified": [
+      "All3360native q/iq/bias/threshold/sharpen entries and140costscalars match across4frozencontrols. Native5deltas match; UVAC6procedural/-1photo&diagram, UVDC-2.",
+      "Result remains readable/charged after sourceimage/preparedinput/analysis/segments are disposed. Source maps/parameters unchanged; repeateddisposal refunds once.",
+      "Aggregate refusal/recovery, postadmission cancellation, lateworkfailure, independentlocalworkinglimit and retainedreplacementpeak pass without disposing borrowedroot/input."
+    ],
+    "qualification": {
+      "sameWindowsBuiltAssemblyBothOS": true,
+      "normalPerOS": 166,
+      "scalarPerOS": 166,
+      "windowsNormalUnion": [
+        9,
+        157
+      ],
+      "newChecks": 9,
+      "priorChecksReconfirmed": 157
+    },
+    "builds": {
+      "windowsLinkedInternalTestAttempts": 2,
+      "verifiedWindowsAssemblies": 1,
+      "linux": 0,
+      "publicCore": 0,
+      "sourceModel": 0
+    },
+    "compileCorrection": "Explicit ReadOnlySpan fields/constructors replace prohibited primary-constructor capture in refstruct. Initial filter saw no tests in older DLL after compilefailure; it is not qualification. Matrix arithmetic passed first execution.",
+    "runnerReuse": "Replaced exact-backed previous DLL in existinge71-runtime container; regular host/deps/config and package dependency links unchanged.",
+    "additionalNativeObservationsAfterMatrixCapture": 0,
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "evidenceReuse": "Existing157privatechecks reconfirmed in same currentassembly bothOSnormal/scalar. Publiccodec bodies/calls unchanged; full/differential/actualpackage andfrozenproducer proofs retain stated scopes. Parent16aa6c54bb67473ad7ad2ab56a1444520f0d8c0c CI39939334500 green/all3jobs. No repeatedlocal full/package proof.",
+    "rawArchive": {
+      "name": "e72-quantization-plan-qualified.tar.xz",
+      "bytes": 461976,
+      "members": 21,
+      "sha256": "d445d7e9b1136a55f397ca01cb6b7364aed100503cdf64af28a20769ff842dfb",
+      "everySourceMemberByteVerified": true,
+      "mirrored": true
+    },
+    "storage": {
+      "capBytes": 5000000000,
+      "windowsAfterMaster": 4998090414,
+      "linuxAfterMaster": 4999839492,
+      "scope": "Exact-backed completedE60Windowsworker and inactiveE69/E70Linuxhost/config duplicates retired. Nativeobserver archived onWindows then RAMverified againstVM before retiring its723312B loosebinary and writing285620B master. Everytransfer/archivalpeak belowcap. Existingrunner reused instead of duplicating dependency/config files. Actualcore/packages/references/performanceworkers/citedmasters retained."
+    },
+    "remaining": "Apply quantization with exact thresholds/sign/rounding/zigzag/dequantizedcoefficients; actualintra4/intra16/chroma/RDO, entropy/ALPH/fullpackets/publicintegration, finite requiredoption audit, exactdecoders and fullCPU/allocation/functional/memory/release objective remain open."
   }
 }

@@ -1,10 +1,9 @@
 # VP8 encoder preparation
 
-Private managed input conversion, transparent-area cleanup, forward4×4DCT
-and Y2Walsh match the pinned backend at their declared stages. The public lossy encoder is
-unchanged; complete VP8 packet replication remains open.
+The private managed pipeline is verified through quantization-matrix setup.
+The public lossy encoder is unchanged; complete VP8 packet replication remains open.
 
-The seven existing encoding rows have four reference packet identities:
+Seven existing encoding rows have four reference packet identities:
 
 | Original 513×259 input | Existing rows | Complete reference bytes |
 |---|---|---:|
@@ -13,94 +12,52 @@ The seven existing encoding rows have four reference packet identities:
 | Photograph | RGBA8 | 17,688 |
 | Text/diagram | RGBA8 | 7,100 |
 
-References remain FFmpeg n8.1/libwebp1.6.0, quality75, method4, preset none, one
-codec thread and BGRA delivery. Materializing three missing loose packets at
-unchanged settings reproduces their preexisting complete hashes; the alpha packet
-was reused. Earlier managed quality anchors describe their historical producers.
+References remain FFmpeg n8.1/libwebp1.6.0, quality75, method4, preset none,
+one codec thread and BGRA delivery. There is no WebP metadata exemption.
+Frozen packets, original inputs and settings are reused without a quality sweep.
 
-Ordinary undithered conversion matches six complete native logicalYUVA streams:
-the four original rasters and existing singleton/two-color inputs. The original
-two16-bit procedural inputs normalize to identical native streams. Matrix weights,
-gamma knots and bounded alpha reciprocals are generated mathematically; no upstream
-table is incorporated. The current public opaque luma formula differs at9,153 of
-132,867 samples, before any transform coding. The private primitive matches native.
+Input conversion matches six complete native logicalYUVA streams: the four
+rasters plus existing singleton/two-color controls. Both original16-bit procedural
+inputs normalize identically. Mathematical color/gamma generation introduces no
+upstream table. A single admitted owner retains padded planes and exact alpha;
+normalization happens on access, without an RGBA frame copy. In-place transparent
+cleanup matches native exact=0. One original33×17 control covers complete8×8 runs,
+resets and partial edges; alpha and visible luma remain exact.
 
-One admitted output buffer owns padded planes and exact alpha; the source is
-borrowed and normalized on access. Gamma workspace releases before returning;
-retained output stays charged until disposal through the same operation/root.
+The forward4×4DCT matches215,424native coefficients from the opaque control
+against neutral128 prediction, plus36signed/extreme fragments. Y2Walsh matches
+8,976coefficients and36signed/odd-half fragments. Histograms match1,122native
+luma/UV summaries and ten population fragments. Large-block prediction matches
+861,696candidate pixels across allfour modes at16×16Y/8×8UV, including missing
+borders, clipping and edge replication. Native SIMD/scalar streams agree.
 
-Cleanup matches native `exact=0` preprocessing in place. Mixed8×8 blocks smooth
-invisible luma; complete transparent blocks share their firstY/U/V across a
-horizontal run. Visible blocks and new bands reset the run; incomplete edges only
-smooth. One original33×17 control covers this omitted complete-block branch,
-including resets and partial edges, without a new timed case or settings grid.
-Alpha and visible luma remain exact; padding extends the cleaned logical planes.
-Cleanup adds no storage or admission calls. Retained owners block another shared
-operation until release; cancellation/late work keep storage charged until disposal.
+Composed source analysis matches8,976native candidate shapes on allfour rasters,
+then exact derived susceptibility, seed modes, distributions and means. This uses
+original source borders, preceding reconstruction and RDO. Selection/mixing is
+separately inspected encoder policy. Weighted centroid clustering and initial
+quantizer/filter setup reproduce all2,244native segment-map bytes and16quantizers.
+One original5×3 majority fragment verifies smoothing without neighbor feedback;
+frozen controls use preprocessing0. Final frame filtering remains a later gate:
+reconstructed Y2edges raise some photograph/diagram filter levels.
 
-The forwardDCT matches all215,424 native coefficients from13,464 paddedY/U/V blocks
-of the opaque control against neutral128 prediction. Thirty-six original
-signed/extreme arithmetic fragments also match, including native zero-residual
-rounding at index1. Native SIMD/scalar coefficient streams agree byte for byte.
-This qualifies transform arithmetic, not actual encoder predictor/quantizer choices.
+The admitted matrix owner matches all3,360entries of42used native matrices,
+including reciprocals, rounding biases, zero thresholds and generated sharpening,
+plus140rate/distortion cost scalars and the quantizer deltas. Native observations
+call parameter setup on zero macroblocks with the qualified susceptibility inputs;
+this qualifies matrix setup, not independent full analysis or actual encoding.
+Normative quantizer steps and independent formulas replace implementation tables.
 
-The DCT uses independent integer matrix projections and generated sine/cosine
-weights. Borrowed input/output may overlap; fixed64-byte stack scratch has no
-retained lifetime or per-block admission machinery. The encoder admits work and
-cancellation at its block boundary. The DCT-stage assembly passed64checks per platform,
-normal and SIMD disabled, including all25conversion/cleanup checks. No public
-encoder body changed; prior frozen producer evidence retains its stated scope.
+The same immutable assembly passes166focused checks per platform on Windows/Linux,
+normal and SIMD disabled, including all157earlier checks. Shared admission covers
+owned capacity, retained results and replacement overlap. Refusal, cancellation,
+local/work limits and cleanup/recovery pass; sources and caller roots stay borrowed.
+The matrix owner retains3,128/4,128admitted bytes for3/4used segments. Earlier source
+analysis/segment owners retain2,835/769bytes on these561macroblocks. These are
+accounting capacities; no new timing or GC-allocation measurements are claimed.
 
-[Structured evidence](vp8-byte-parity-evidence.json) records sources, native/managed
-hashes and raw receipts. No new timing/allocation or complete-packet claim is made.
-The private Y2Walsh now matches all8,976 native coefficients from561luma
-macroblocks of the same opaque control. Thirty-six signed/extreme/odd-half
-fragments also match; native SIMD/scalar streams are byte-identical. Its Hadamard
-weights come from Gray-code parity, with exact signed half-scaling and the same
-borrowing/stack contract. Walsh qualification passed103checks per
-platform, normal and SIMD disabled, preserving all64earlier checks.
-
-Coefficient histograms now match1,122 native luma/UV summaries on the same opaque
-control, plus ten original population probes. Native SIMD/scalar results agree.
-Borrowed counters accumulate magnitude buckets with saturation; empty-bin and tie
-rules match. The separately inspected raw-score ratio stays unclamped until mixing.
-Histogram qualification passed115checks per platform, normal and SIMD
-disabled, including all103previous checks; no public encoder body changed.
-
-A public backend observer reproduces all four frozen FFmpeg packets before exposing
-segment maps, quantizers and filter levels. Those observations are fixed test data
-for the next source-analysis implementation. Large-block prediction now matches861,696 native candidate pixels across the
-same561macroblocks: all four DC/true-motion/vertical/horizontal modes at16×16Y
-and8×8UV. The control includes absent top/left borders, clipped true-motion and
-partial-image replication. Native SIMD/scalar streams agree. Borrowed destination
-can overlap its borders using a32-byte stack snapshot, with no retained storage.
-Current same-assembly qualification passes131checks per platform, normal and SIMD
-disabled, including all115previous checks. Actual mode decisions remain open.
-Source-only analysis now composes these helpers on all four controls. All8,976
-native candidate histogram shapes match, followed by exact derived susceptibility,
-seed modes, distributions and floored means. Selection/mixing follows separately
-inspected policy; static native full analysis is not directly observed. A result
-owner retains2,835admitted bytes on these561macroblocks, plus1,024transient scratch;
-these are accounting capacities, without new allocation/timing measurements.
-The same shared operation/root covers source, result and replacement overlap.
-Refusal, cancellation and work failure refund unused capacity; retained analysis
-survives source disposal. Same-assembly qualification passes141checks per platform,
-normal and SIMD disabled, including all131earlier checks.
-
-The admitted segmentation continuation now reproduces all2,244complete native map
-bytes and all16quantizers. It derives centroids, signed susceptibility factors,
-initial filter settings and equal-parameter compaction from source analysis alone.
-Six iterations, lower ties, empty centers and rounding are explicit. A small
-original majority fragment verifies smoothing without neighbor feedback or changed
-edges. At561macroblocks the result retains769admitted bytes; optional smoothing
-adds561transient bytes beside the1,024-byte coarse scratch allowance. Independent
-ownership, replacement peaks, refusal/cancellation at all three allocation stages
-and late work cleanup pass. Same-assembly qualification passes157checks per
-platform, normal and SIMD disabled, including all141earlier checks.
-
-This remains private preparation at the frozen quality75/default analysis settings.
-Final filter adjustment also depends on reconstructed Y2edges; the photograph and
-diagram final levels are higher than their initial setup. No full packet, required
-option sweep or performance claim follows from these stage checks.
-Next are quantization matrices and macroblock decisions, then entropy/framing and
-ALPH coding, preserving the four fixed packet targets and required option audit.
+[Structured evidence](vp8-byte-parity-evidence.json) records exact producers,
+reference observations, scope and preserved raw masters. Prior public codec and
+package evidence retains its stated scope. Next are quantized/reconstructed
+coefficients, macroblock decisions, entropy/framing and ALPH, followed by complete
+packets and the bounded required-option audit. No readiness claim follows from
+these private stages.
