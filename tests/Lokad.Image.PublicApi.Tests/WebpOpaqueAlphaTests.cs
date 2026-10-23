@@ -9,7 +9,7 @@ public sealed class WebpOpaqueAlphaTests
     { using var output = new MemoryStream(); ImageCodec.EncodeWebp(image, output, options); return output.ToArray(); }
 
     [Theory] [InlineData(28)] [InlineData(29)] [InlineData(30)] [InlineData(31)]
-    public void SingletonOnlySavesPayloadBytesAboveItsHeaderCost(int count)
+    public void OpaqueAndSubOpaqueAlphaKeepExactPacketsPixelsAndRiffLengths(int count)
     {
         using var opaque = ImageBuffer.Create(count, 1, 8); using var alpha = ImageBuffer.Create(count, 1, 8);
         for (var x = 0; x < count; x++)
@@ -20,7 +20,9 @@ public sealed class WebpOpaqueAlphaTests
         var actual = Encode(opaque); var fixedAlpha = Encode(alpha);
         var payload = BinaryPrimitives.ReadInt32LittleEndian(actual.AsSpan(16));
         var fixedPayload = BinaryPrimitives.ReadInt32LittleEndian(fixedAlpha.AsSpan(16));
-        Assert.Equal(Math.Max(0, count - 29), fixedPayload - payload);
+        Assert.Equal(fixedPayload + 20 + (fixedPayload & 1), fixedAlpha.Length);
+        Assert.False(ImageCodec.Identify(actual).HasAlpha); Assert.True(ImageCodec.Identify(fixedAlpha).HasAlpha);
+        using var decodedAlpha = ImageCodec.Decode(fixedAlpha); Assert.Equal(OriginalPixels.Bytes(alpha), OriginalPixels.Bytes(decodedAlpha));
         Assert.Equal(payload + 20 + (payload & 1), actual.Length);
         using var decoded = ImageCodec.Decode(actual); Assert.True(opaque.GetRow8(0).SequenceEqual(decoded.GetRow8(0)));
     }
@@ -56,8 +58,8 @@ public sealed class WebpOpaqueAlphaTests
             if (depth == 8) new byte[] { (byte)(color * 17), (byte)(color * 29), (byte)(color * 47), 255 }.CopyTo(source.GetRow8(y)[(x * 4)..]);
             else new ushort[] { (ushort)((color * 12347) & 65535), (ushort)((color * 7919) & 65535), (ushort)((color * 101) & 65535), 65534 }.CopyTo(source.GetRow16(y)[(x * 4)..]);
         }
-        var unchanged = OriginalPixels.Bytes(source); var packet = Encode(source);
-        var limits = new ImageLimits { MaxWorkingBytes = unchanged.Length + 8192L, MaxOutputBytes = packet.Length };
+        var unchanged = OriginalPixels.Bytes(source); var reference = WebpAdmissionControl.Reference(source); var packet = reference.Packet;
+        var limits = new ImageLimits { MaxWorkingBytes = reference.WorkingBytes, MaxOutputBytes = packet.Length };
         using var exact = new NonseekableOutput(); ImageCodec.EncodeWebp(source, exact, new() { Limits = limits });
         Assert.Equal(packet, exact.Bytes); Assert.True(exact.CanWrite);
         using var decoded = ImageCodec.Decode(packet);

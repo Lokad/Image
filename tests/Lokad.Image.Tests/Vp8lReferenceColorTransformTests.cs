@@ -48,7 +48,7 @@ public sealed class Vp8lReferenceColorTransformTests
     public void AdaptivePhotographMatchesTheFrozenNativePacketStages()
     {
         using var fixtureRoot = new TestMemoryBudget(8_000_000);
-        using var image = WebpAdaptivePredictorTests.Photograph(8, fixtureRoot);
+        using var image = OriginalVp8lControls.Buffer("photograph", 8, fixtureRoot);
         var rgba = OriginalPixels.Bytes(image);
         using var root = new TestMemoryBudget(8_000_000);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);

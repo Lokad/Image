@@ -76,7 +76,7 @@ public sealed class Vp8lReferencePredictorTests
     public void AdaptiveFineWinnerMatchesTheExistingPhotograph()
     {
         using var fixtureRoot = new TestMemoryBudget(8_000_000);
-        using var image = WebpAdaptivePredictorTests.Photograph(8, fixtureRoot);
+        using var image = OriginalVp8lControls.Buffer("photograph", 8, fixtureRoot);
         var rgba = OriginalPixels.Bytes(image);
         Assert.Equal("2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090", Hash(rgba));
         using var root = new TestMemoryBudget(8_000_000);

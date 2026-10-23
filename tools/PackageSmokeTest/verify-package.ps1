@@ -67,6 +67,7 @@ try {
     $shapingConsumerPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/PackageSmokeTest/TextShapingConsumer.cs'))
     $jpegFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredJpegCompatibility.cs'))
     $pixelFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalPixels.cs'))
+    $vp8lFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalVp8lControls.cs'))
     @"
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
@@ -84,12 +85,28 @@ try {
     <Compile Include="$shapingConsumerPath" Link="TextShapingConsumer.cs" />
     <Compile Include="$jpegFixturePath" Link="AuthoredJpegCompatibility.cs" />
     <Compile Include="$pixelFixturePath" Link="OriginalPixels.cs" />
+    <Compile Include="$vp8lFixturePath" Link="OriginalVp8lControls.cs" />
   </ItemGroup>
 </Project>
 "@ | Set-Content -LiteralPath (Join-Path $consumer 'Consumer.csproj') -Encoding utf8
     @'
 using System.IO.Compression;
 using Lokad.Image;
+foreach (var control in Lokad.Image.Tooling.OriginalVp8lControls.Cases())
+{
+    var name = (string)control[0]; var effort = (int)control[1]; var length = (int)control[2]; var hash = (string)control[3];
+    using var root = new Lokad.Image.Tooling.TestMemoryBudget(128_000_000);
+    using var image = Lokad.Image.Tooling.OriginalVp8lControls.Buffer(name, 8, root);
+    var before = Lokad.Image.Tooling.OriginalPixels.Bytes(image); var retained = root.Bytes;
+    using var packet = new MemoryStream();
+    ImageCodec.EncodeWebp(image, packet, new() { Effort = effort, Limits = new() { MemoryBudget = root } });
+    if (packet.Length != length || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(packet.ToArray())) != hash)
+        throw new Exception($"Package VP8L reference packet differs: {name}/{effort}.");
+    if (root.Bytes != retained || !before.AsSpan().SequenceEqual(Lokad.Image.Tooling.OriginalPixels.Bytes(image)))
+        throw new Exception("Package VP8L source/admission ownership differs.");
+    image.Dispose(); if (root.Bytes != 0 || !packet.CanWrite || root.IsDisposed)
+        throw new Exception("Package VP8L retained-source/output ownership differs.");
+}
 foreach (var pngCompression in new[] { CompressionLevel.Optimal, CompressionLevel.NoCompression, CompressionLevel.Fastest, CompressionLevel.SmallestSize })
 foreach (var pngDepth in new[] { 8, 16 })
 foreach (var pngColor in new[] { PngColorType.Grayscale, PngColorType.Rgb, PngColorType.GrayscaleAlpha, PngColorType.Rgba })
@@ -625,7 +642,11 @@ if (webpPixels.Width != 2 || webpPixels.Height != 1 || webpPixels.BitDepth != 8 
 for (var sample = 0; sample < 8; sample++)
     if (webpPixels.GetRow8(0)[sample] != (flipped.GetRow16(0)[sample] + 128) / 257)
         throw new Exception("Package consumer WebP normalized pixels differ.");
-var webpLimits = new ImageLimits { MaxWorkingBytes = 16 + 8192, MaxOutputBytes = (int)webp.Length };
+using var webpPeakRoot = new Lokad.Image.Tooling.TestMemoryBudget(ImageLimits.Default.MaxWorkingBytes);
+using var webpPeakPacket = new MemoryStream();
+ImageCodec.EncodeWebp(flipped, webpPeakPacket, new() { Effort = 6, Limits = new() { MemoryBudget = webpPeakRoot } });
+if (webpPeakRoot.Bytes != 0) throw new Exception("Package VP8L peak probe leaked admission.");
+var webpLimits = new ImageLimits { MaxWorkingBytes = (long)flipped.Stride * flipped.Height + webpPeakRoot.Peak, MaxOutputBytes = (int)webp.Length };
 using var admittedWebp = new MemoryStream();
 ImageCodec.EncodeWebp(flipped, admittedWebp, new WebpEncodeOptions { Effort = 6, Limits = webpLimits });
 if (!admittedWebp.ToArray().AsSpan().SequenceEqual(webp.ToArray()))
@@ -641,9 +662,12 @@ foreach (var exhausted in new[] { webpLimits with { MaxWorkingBytes = webpLimits
     catch (ImageLimitException) { }
     if (rejected.Length != 0 || !rejected.CanWrite) throw new Exception("Package consumer VP8L admission writes output or closes its stream.");
 }
-// The fixed full-alphabet encoder's five trees peak while building the distance
-// tree: 512 parser + 72 references + 3376 existing trees + 72 lengths + 400 tree.
-var webpDecodeLimits = new ImageLimits { MaxWorkingBytes = webp.Length + 8944 };
+// Derive the local boundary for this actual encoded profile through the public
+// cooperative-admission adapter; authored decode-profile thresholds are separate.
+using var webpDecodeRoot = new Lokad.Image.Tooling.TestMemoryBudget(ImageLimits.Default.MaxWorkingBytes);
+using (var probe = ImageCodec.Decode(webp.ToArray(), new() { Limits = new() { MemoryBudget = webpDecodeRoot } })) { }
+if (webpDecodeRoot.Bytes != 0) throw new Exception("Package VP8L decode probe leaked ownership.");
+var webpDecodeLimits = new ImageLimits { MaxWorkingBytes = webp.Length + webpDecodeRoot.Peak };
 using var admittedWebpPixels = ImageCodec.Decode(webp.ToArray(), new DecodeOptions { Limits = webpDecodeLimits });
 if (!admittedWebpPixels.GetRow8(0).SequenceEqual(webpPixels.GetRow8(0)))
     throw new Exception("Package consumer VP8L decode admission changes its pixels.");

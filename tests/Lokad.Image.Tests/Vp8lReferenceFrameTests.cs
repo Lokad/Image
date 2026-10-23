@@ -50,7 +50,7 @@ public sealed class Vp8lReferenceFrameTests
         finally { context.Release(pixels.Length * 4L); }
     }
 
-    private static Prepared Palette(string name, OperationContext context)
+    private static Prepared Palette(string name, OperationContext context, bool spatial = false, bool box = false)
     {
         var width = name == "singleton" ? 1 : name == "two-color" ? 4103 : 23;
         var height = name == "singleton" ? 1 : name == "two-color" ? 2 : 13;
@@ -62,12 +62,21 @@ public sealed class Vp8lReferenceFrameTests
         var pixels = Working(source, false, context); var low = name == "numeric";
         try
         {
-            var analysis = Vp8lEncodingAnalysis.Select(pixels, width, low ? 0 : 4, context);
+            var analysis = Vp8lEncodingAnalysis.Select(pixels, width, spatial ? 5 : low ? 0 : 4, context);
             using var palette = Vp8lReferencePalette.SelectAndPack(pixels, width, colors, !low, context);
             result.Prefix = result.Prefix with { Palette = Vp8lImageCode.Auxiliary(palette.EncodedDeltas, palette.EncodedColorCount, 20, low, context), PaletteEntries = palette.EncodedColorCount };
             var input = pixels.AsSpan(0, palette.PackedPixelCount);
+            if (spatial)
+            {
+                var maximum = analysis.TransformBits;
+                while (maximum > 2 && ((palette.CodedWidth + (1 << (maximum - 1)) - 1) >> (maximum - 1)) * ((height + (1 << (maximum - 1)) - 1) >> (maximum - 1)) == 1) maximum--;
+                using var prediction = Vp8lReferencePredictor.SelectAndApply(input, palette.CodedWidth, Math.Max(2, maximum - 2), maximum, false, context);
+                result.Prefix = result.Prefix with { Prediction = Prediction(prediction, palette.CodedWidth, false, context), PredictionBits = prediction.StoredBits };
+            }
             using var matches = Vp8lReferenceMatcher.Build(input, palette.CodedWidth, 75, low, context);
+            using var boxMatches = box ? Vp8lReferenceMatcher.BuildBox(input, palette.CodedWidth, matches.Values, context) : null;
             var tokens = low ? Vp8lReferenceLz.Greedy(input, matches.Values, context)
+                : box ? Vp8lReferenceMainParsing.EncodeBox(input, boxMatches!.Values, palette.CodedWidth, false, System.Numerics.BitOperations.Log2((uint)colors) + 1, context)
                 : Vp8lReferenceMainParsing.Encode(input, matches.Values, palette.CodedWidth, false, System.Numerics.BitOperations.Log2((uint)colors) + 1, context);
             result.Main = Vp8lImageCode.TakeMain(tokens, palette.CodedWidth, height, analysis.HistogramBits, low, context);
             return result;
@@ -116,6 +125,18 @@ public sealed class Vp8lReferenceFrameTests
         var packet = Emit(prepared, context); Assert.Equal(retained, root.Bytes);
         Assert.Equal(length, packet.Length); Assert.Equal(expected, Convert.ToHexStringLower(SHA256.HashData(packet)));
         prepared.Dispose(); Assert.Equal(0, root.Bytes); Assert.Equal(expected, Convert.ToHexStringLower(SHA256.HashData(packet)));
+    }
+
+    [Theory]
+    [InlineData("greedy", false, 256, "2fbb3167c8da95e86dbec67aa0b5c853f4ed651e48bcdc8ebb70ce34cb75ac82")]
+    [InlineData("two-color", true, 50, "c14334d5aba4d17c193a0a0026d4a2b95bb2f9f8d7dc557b8fa15c66ad155dca")]
+    public void ExistingForcedSpatialAndBoxCandidatePacketsRemainByteExact(string name, bool box, int bytes, string expected)
+    {
+        using var root = new TestMemoryBudget(2_000_000);
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        using var prepared = Palette(name, context, true, box); var packet = Emit(prepared, context);
+        Assert.Equal(bytes, packet.Length); Assert.Equal(expected, Convert.ToHexStringLower(SHA256.HashData(packet)));
+        prepared.Dispose(); Assert.Equal(0, root.Bytes);
     }
 
     private static Vp8lTokenBuffer Single(OperationContext context)

@@ -83,7 +83,7 @@ public sealed class WebpLosslessAdmissionTests
 
     [Theory]
     [MemberData(nameof(EncodeProfiles))]
-    public void TwoPassEncoderAdmitsSourceAndScratchAndChecksSizeBeforeWriting(int depth, int effort)
+    public void PreparedEncoderAdmitsSourceScratchAndChecksCompleteSizeBeforeWriting(int depth, int effort)
     {
         using var source = ImageBuffer.Create(4103, 2, depth);
         for (var y = 0; y < source.Height; y++)
@@ -97,9 +97,8 @@ public sealed class WebpLosslessAdmissionTests
         else source.GetRow16(1)[^4] = 77 * 257;
         var unchanged = OriginalPixels.Bytes(source);
         var options = new WebpEncodeOptions { Lossless = true, Effort = effort };
-        using var reference = new MemoryStream(); ImageCodec.EncodeWebp(source, reference, options);
-        var expected = reference.ToArray();
-        var limits = new ImageLimits { MaxWorkingBytes = unchanged.Length + 8192L, MaxOutputBytes = expected.Length };
+        var reference = WebpAdmissionControl.Reference(source, effort); var expected = reference.Packet;
+        var limits = new ImageLimits { MaxWorkingBytes = reference.WorkingBytes, MaxOutputBytes = expected.Length };
         using var exact = new NonseekableOutput(); ImageCodec.EncodeWebp(source, exact, options with { Limits = limits });
         Assert.Equal(expected, exact.ToArray()); Assert.True(exact.CanWrite);
         using var decoded = ImageCodec.Decode(expected);

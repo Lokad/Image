@@ -13,12 +13,18 @@ temporary tree peaks are admitted before allocation; refusal stops the operation
 [Codec compatibility](codec-parity.md) states the exact tested scope and attribution
 exception. Historical JPEG times refer to their recorded producers.
 
-PNG `Optimal` now uses the managed level6 encoder for every supported color type
-at8/16bits. It emits4096-byte IDAT chunks and the reference's neutral pHYs field.
-The eight frozen controls match complete reference packets; source samples,
-cooperative admission, cancellation and stream ownership remain supported.
-Other policies still use runtime compression; their byte replication is pending.
-CPU/allocation qualification of the new path remains open.
+All four PNG compression policies use the managed Deflate encoder. Fourteen
+8/16-bit controls match complete frozen reference packets, including4096-byte
+IDAT chunks and neutral pHYs metadata. CPU/allocation qualification remains open.
+
+Lossless WebP uses one managed transform/reference/entropy pipeline. Its19 selected
+and two additional forced packet identities match the pinned libwebp exact=1 controls.
+Effort0..6 still controls search; lossless quality remains ignored. RGBA16 normalizes
+once and hidden RGB stays exact. Packet bytes and workspace requirements differ
+from0.1.0. Encoding decisions are independent of available memory: insufficient
+admission fails without switching to a smaller-workspace encoder. Prepared coding
+state avoids extra normalized/encoded frame copies. Historical timings describe
+their frozen producers; new performance qualification remains open.
 
 `ImageInfo.SourceColor`, `SourceAlpha` and `SourceComponentCount` describe encoded
 samples, alongside source `BitDepth`; they do not describe normalized RGBA pixels.

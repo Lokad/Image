@@ -87,8 +87,8 @@ internal static class CooperativeMemoryConsumer
                     throw new Exception("Packaged WebP refusal leaked codec storage or wrote output.");
             }
             using var output = new MemoryStream(); await ImageCodec.EncodeWebpAsync(input, output, new() { Limits = limits });
-            if (budget.Bytes != sourceBytes || !output.CanWrite || (output.GetBuffer()[25] & 7) != 5)
-                throw new Exception("Packaged cached WebP admission, caller stream or transform framing differs.");
+            if (budget.Bytes != sourceBytes || !output.CanWrite)
+                throw new Exception("Packaged WebP admission or caller stream differs.");
             using var decoded = ImageCodec.Decode(output.ToArray(), new() { Limits = limits });
             for (var y = 0; y < input.Height; y++)
                 if (!input.GetRow8(y).SequenceEqual(decoded.GetRow8(y))) throw new Exception("Packaged cached WebP hidden RGBA differs.");

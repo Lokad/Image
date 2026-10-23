@@ -1,163 +1,48 @@
-# VP8L remaining production coverage
+# VP8L production coverage
 
-One dependency-free source model reproduces nineteen packet identities on Windows/Linux:
-thirteen default-method packets, the method-0 two-color variant and three
-non-palette effort controls on the existing asymmetric input, plus one adaptive
-photograph packet and one effort-0 numeric-palette packet. Main quality
-is 75 with `exact=1`; palette auxiliary encoding uses the backend's internal quality 20.
-Production adoption also has to preserve the existing public encoding scope.
-This bounded checklist comes from current tests and options; it adds no warm
-performance grid.
+The finite checklist below is covered by the production managed encoder at
+libwebp1.6.0 quality75, `exact=1`, with the declared matching effort. It comprises
+19 selected packet identities across25 existing source/settings rows and two
+additional forced candidate packets. It adds no warm benchmark grid.
+[Complete packet sizes and provenance](VP8L-COMPLETE-PACKET.md) and the
+[numeric ledger](vp8l-byte-parity-evidence.json) bound every claim.
 
-1. **Palette/index coding.** `WebpTests.SixteenBitInputRoundsOnceToEightBitSamples`
-   supplies a 1×1 input normalizing to RGBA `(255,0,1,0)`. Its 34-byte palette
-   packet matches the pinned backend through the shared palette composition path.
-   The opaque index carrier preserves the real alpha in the palette.
-   The existing two-color 4103×2 admission input also has an exact source-only
-   packet on both platforms: 46 bytes, including palette deltas, eight indices
-   per byte, a partial final byte and complete framing. The current model qualifies
-   both palettes alongside the other packet families. Three further named controls
-   now pass: **Palette4ColorPartialPacking** (four indices per byte, 66 bytes),
-   **Palette16ColorPartialPacking** (two per byte, 130 bytes), and
-   **Palette18ColorUnpackedZero** (unpacked indices and greedy ordering, 236 bytes).
-   The last uses 17 encoded entries for 18 source colors: the final zero is implicit.
-   All palette orders, packed samples and complete packets are exact on both
-   platforms. This covers the named branches, not arbitrary palette inputs/settings.
-2. **Direct coding and variable dimensions.** The existing 129×129 xorshift input
-   now has a byte-exact 50,010-byte source-model packet on both platforms, reusing
-   the pinned snapshot. The dimension-aware parser and framer select no transform,
-   no cache and one group. This replaces the obsolete predecessor-packet target
-   when the new encoder lands. The public native encoder refuses a side of 16384;
-   its limit is 16383. Two explicitly named **Axis16383Horizontal/Vertical**
-   companions, using the first 16383 samples of the existing authored axis input,
-   isolate single-axis/narrow-distance coding and both match complete 74-byte
-   reference packets in the current model. They do not substitute for the existing
-   16384×1/1×16384 functional tests or establish native packet parity there.
-   The same frozen model also emits 74-byte packets at both original 16384-axis
-   sizes; pinned FFmpeg decodes every sample exactly. These are functional format
-   extensions beyond the native encoder's maximum, without an encoder-byte or
-   performance claim. Preserve their functional tests during production adoption.
-   The source distance mapper gives direct
-   coordinates priority where forms overlap on narrow widths; ten fixed format
-   examples pass on Windows/Linux. Current four-core widths are unaffected.
-3. **Spatial-only selection.** The existing 19×7 hidden-RGB control has 133 colors
-   but the pinned backend selects prediction and cross-color, without
-   subtract-green or palette coding. Its 82-byte reference uses uniform 512×512
-   transform maps. The source-only model now reproduces all 82 bytes, both maps
-   and every residual sample on both platforms. Its histogram-based palette
-   eligibility, spatial-only prediction and uniform map sizing are qualified on
-   this input; other maps and general shape coverage remain open.
-4. **Existing effort range.** The two-color input now matches native methods 0..6
-   in the source model on both platforms: 48 bytes at method 0, 46 at methods 1..6.
-   The fast matcher omits left/above probes and emits 1,026 literals here, yielding
-   two histogram groups; full parsing uses three tokens and one group. Native
-   default-method and 16-bit normalization argument paths also retain those bytes.
-   The existing asymmetric RGBA8 input also passes three exact complete packets:
-   **Effort0ForcedPredictorRgba8** (316,566 bytes, forced mode 11, four-bin fast
-   clustering and equivalent histogram-map coarsening), **Effort1CoarseTilesRgba8**
-   (176,216 bytes, 64×64 transform tiles), and **Effort5CacheComparisonRgba8**
-   (155,162 bytes, cached versus uncached writer selection). The full method-5
-   adaptive selector now also reproduces every 4×4/8×8 predictor mode and entropy
-   cost on the asymmetric input and the existing photograph. It selects 8×8 on
-   the first, 4×4 on the photograph; their complete packets are 155,162 and
-   160,600 bytes. **Effort5AdaptivePhotograph** therefore closes the missing
-   fine-winner algorithm on an existing input, without a new fixture/grid.
-   Hierarchical traversal, per-level histories, entropy selection and packet
-   composition pass together in the same model on both platforms.
-   The existing eighteen-color input now qualifies both method-5 transform
-   candidates: 236-byte plain palette and 256-byte palette-plus-spatial. Both
-   complete candidate packets match; source-derived payload comparison selects
-   the native plain result. Packed index carriers use adaptive prediction without
-   subtract-green or cross-color, and cache search is capped by palette size.
-   This verifies both candidates and plain selection; it adds no spatial-winning
-   input or selected packet identity.
-   The remaining two effort primitives now have named proofs.
-   **Effort0NumericPalette18Color** reproduces all 268 bytes with numeric order
-   and an omitted final zero. **SmallPaletteBoxTwoColor** reuses the existing
-   4103×2 input: every 1,026-entry box index matches (1,020 nonzero copies), as
-   do ordinary/box candidate packets at 46 bytes for plain indices and 50 bytes
-   with prediction. Equal writer sizes retain the ordinary candidate. The small
-   four-color carrier was not used for this proof because it has no long copies.
-   Both new packets pass exact pinned-FFmpeg decoding, including hidden RGB.
-   All nineteen selected packet identities and the forced candidate/index proofs
-   pass in one frozen model on both platforms. These are bounded algorithm proofs;
-   generic routing, admitted production and complete public operations remain open.
-   Quality100/method6 brute-force search is outside this pinned quality75 scope.
-   Reuse current two-color depths for complete public-operation qualification. Unpublished implementation
-   assertions may change; exact normalized pixels and declared option/resource
-   contracts remain required. No compatibility alias is needed for experiments.
-5. **Complete public operations.** Qualify existing RGBA16 normalization and fresh
-   nonseekable async delivery, including independent surviving outputs, failures
-   and cancellation. Their core packet identity reuses the first frozen packet;
-   complete operations still require integration evidence.
-6. **Admitted integration.** Analysis, transforms, matching and all parsing are ported:
-   typed ordinary/low-effort/box matching accepts borrowed spans and returns an
-   owned index. Eight focused checks pass with the same assembly on Windows/Linux:
-   native indices, aggregate admission/replacement peaks, prompt retained-result
-   cleanup, refusal recovery, cancellation, independent work limits and zero/negative
-   capacity. Sparse/dense head storage depends on input length, not available budget.
-   Nine predictor checks also pass in the same compiled assembly on both platforms:
-   fixed/adaptive coarse and fine winners, forced low-effort sampling, uniform-map
-   coarsening, hidden RGB residuals, retained-map overlap and refusal/cancellation/work
-   cleanup. Its analysis borrows pixels, releases phase scratch, then applies residuals
-   in place using two admitted original-row buffers. Ten color-transform checks cover
-   fixed/coarse and adaptive-photograph native maps/residuals, spatial-only hidden RGB,
-   in-place map compaction with retained-capacity charges, overlapping results,
-   terminal refusal/recovery, cancellation and independent work failure. Subtract-green
-   arithmetic also runs through the production helper in predictor tests. Eighteen
-   analysis checks cover thirteen existing packet-control decisions across all five
-   transform families, effort routing, the 256/257-color boundary, shared refusal,
-   cancellation and work cleanup. Analysis borrows original normalized ARGB, admits
-   fixed scratch before allocation and releases it before returning scalar decisions.
-   Twelve palette checks cover six frozen native order/delta/index controls,
-   independent retained owners, overlapping capacity/refusal/recovery, cancellation
-   and early/late work cleanup. Packing clips partial rows in place, retains the
-   full working-buffer charge, and preserves numeric/greedy/implicit-zero rules.
-   Eleven uncached-parser checks match the four frozen auxiliary token streams and
-   predictor decision costs, with candidate/trace admission cleanup, cancellation,
-   late work failure and typed retained-token ownership. Near-distance codes derive
-   from format geometry; trace paths avoid a separate reconstruction list.
-   Eleven cached-main checks add the complete asymmetric 110,306-token stream and
-   candidate costs, hidden-RGB repeat winner, ordinary/Box/cache-disabled palette
-   streams, initial-zero/copy cache updates and refusal/cancellation/work cleanup.
-   Owned seeds convert in place; cached tracing shares the uncached traversal and
-   releases DP scratch before forward cache conversion. All 79 focused checks pass
-   with one assembly on both platforms. Fourteen Huffman checks add canonical
-   lengths/words, header emission and exact complete bits for predictor/color and
-   numeric/greedy palette auxiliaries, plus cached hidden-RGB main trees. Empty
-   alphabets use the serialized symbol-zero placeholder; maximum data/header
-   depths, retained-capacity overlap, refusal/recovery, cancellation and late work
-   cleanup pass. Ten clustering checks match every tile assignment and final
-   population of the existing method4/method0/method1 packets (9/2/16 groups).
-   Original/working counts use flat admitted slabs and fixed pair storage; final
-   counts/maps have independent owners. Sampling candidates are reset before
-   greedy merging. Sparse token-start tiles, overlap, refusal/recovery,
-   cancellation and late work failure pass. All 103 checks use one assembly on
-   both platforms. Thirteen prepared entropy/framing checks bring the total to
-   116 on the same assembly both platforms. Seven complete packets match native
-   bytes from typed components (asymmetric 0/1/4 and four palette controls), with
-   coarsened maps, partial-bit boundaries and RIFF lengths/padding. Counting and
-   emission share owned tokens/maps/codes; no source pixels or full encoded frame
-   are retained, and population arrays release after code construction. Refusal,
-   cancellation, output limits and late work cleanup pass. Transform/effort choices
-   still come from test orchestration; generic public routing remains open.
-   Public paths reuse E53's
-   3,884 offline checks and same-package/three-example qualification per platform.
-   Public encoding does not call these components yet. Complete generic effort/
-   transform/candidate routing, all nineteen packets and public-boundary proofs, and
-   connect the complete encoder before claiming end-to-end production qualification.
-   Reserve substantial storage before allocation through
-   the borrowed shared root, account for replacement peaks and retained outputs,
-   preserve work/local limits, and release operation storage promptly. Refusal is
-   terminal. Reuse current admission, cancellation, recovery and ownership suites;
-   qualify the actual changed package on both platforms at the production milestone.
+1. **Palette/index coding.** Singleton RGBA `(255,0,1,0)`, two-color4103×2,
+   four-color7×3, sixteen-color17×3 and eighteen-color23×13 controls qualify
+   one/two/four/eight indices per byte, partial final bytes, numeric/greedy order,
+   hidden alpha, retained palette ownership and the implicit final zero.
+2. **Direct coding and axis boundaries.** Xorshift129×129 selects no transform,
+   cache or extra group. Existing16383×1/1×16383 companions both match their
+   distinct74-byte native packets, qualifying narrow-width distances and both
+   axes. The separate16384-axis tests qualify exact functional round trips beyond
+   the native encoder maximum, without a native packet claim.
+3. **Spatial-only selection.** Hidden-RGB19×7 selects prediction/cross-color
+   without subtract-green or palette, including uniform512×512 maps. Asymmetric
+   RGBA513×259, its opaque projection and photograph/diagram qualify the other
+   non-palette families, cached parsing and multiple spatial groups.
+4. **Effort and candidate routing.** Existing two-color methods0..6, asymmetric
+   methods0/1/4/5, photograph method5 and eighteen-color methods0/4/5 qualify
+   low-effort forced prediction/numeric ordering, fixed/adaptive transform sizes,
+   cached/uncached and ordinary/Box choices. Independent forced palette/spatial
+   packets test both candidates even where plain coding wins. No claim is made
+   about method6/quality100 brute force or unmeasured inputs/settings.
+5. **Public operation boundaries.** Asymmetric RGBA8/16 normalizes once to the
+   same packet through sync/async and ImageBudget APIs. Source/root/stream are
+   borrowed; outputs remain independent. Forward-only, output-size, writer failure,
+   cancellation and work-limit tests remain applicable. No budget-dependent
+   alternate encoder or compatibility mode is retained.
+6. **Owned implementation and qualification.** Analysis, palette, prediction,
+   cross-color, matches, parsing, clustering, Huffman and framing use the same
+   admission context. Capacity is reserved before allocation, overlapping owners
+   stay charged, losing candidates release and refusal is terminal. Focused
+   tests cover retained results, refusal/recovery, cancellation and late work
+   failure. Full Windows/Linux offline/live differential suites, affected scalar
+   checks and the SAME actual private Release package/three examples qualify
+   the public integration. Final axes are a test-only coverage addition against
+   the unchanged production DLL; their receipts are recorded separately.
 
-The direct/palette models and narrow-distance correction are development tooling.
-They do not establish general palette, shape, production or performance readiness.
-The current source project is `tools/WarmReference/Vp8lParityModel`; it needs no
-production/reference assemblies to build. Fixture PNG decoding is separate.
-The unchanged public encoder paths reuse their qualification. Matching, prediction
-and color transforms have focused stage/admission evidence; end-to-end requalification follows
-integration. No performance/allocation claim follows from these proofs. See
-[numeric evidence](vp8l-byte-parity-evidence.json) and the
-[complete-packet report](VP8L-COMPLETE-PACKET.md).
+This completes the named VP8L integration checklist, not the full codec objective.
+Exact lossy WebP encoding and decoder samples remain open. New production encoder
+CPU/allocation evidence is unmeasured; earlier producer timings are retained with
+that limitation. Resume speed work only after required exact codec coverage.
+Add a case only when evidence identifies a distinct required omitted path.

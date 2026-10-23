@@ -2,7 +2,7 @@ using System.Buffers.Binary;
 
 namespace Lokad.Image.Internal;
 
-/// <summary>Owned VP8L literal, repeated-color and previous-row encoder; no upstream code or tables.</summary>
+/// <summary>Safe managed VP8L encoding with admitted transforms, references and entropy coding.</summary>
 internal static partial class WebpLosslessEncoder
 {
     private sealed class Table
@@ -51,96 +51,19 @@ internal static partial class WebpLosslessEncoder
         context.PixelBytes(image.Width, image.Height, image.BitDepth);
         if (image.Width > 16384 || image.Height > 16384) throw new ImageLimitException(ImageLimitKind.Dimension, "VP8L dimensions exceed 16384.");
         context.ReserveBorrowed(image.ByteLength);
-        // Decide from this operation's configured local allowance, before any
-        // shared reservation. Admission refusal never selects another encoder.
-        if (options.Effort >= 3 && (long)image.Width * image.Height >= 16384
-            && context.RemainingWorkingBytes >= CachedWorkingBytes)
-        { EncodeCached(image, output, options, context); return; }
-        context.Reserve(8192);
-        var green = new Table(280); var literal = new Table(256); var distance = new Table(40);
-        // Count first so nonseekable output needs no encoded-frame staging buffer.
-        // The caller must synchronize mutable pixels across the two passes.
-        using var counter = new CountStream(options.Limits.MaxOutputBytes);
-        var alpha = Payload(image, counter, options.Effort, false, green, literal, distance, context,
-            omitAlpha: true, singletonAlpha: false, out var literals);
-        // Omitting eight alpha bits per literal preserves byte alignment. The
-        // normal single-leaf alpha header below adds exactly 232 bits (29 bytes)
-        // to the fixed header. Count is always a lower bound on the final size.
-        var singletonAlpha = !alpha && literals > 29;
-        var payloadLength = counter.Count + (singletonAlpha ? 29 : literals);
-        if (payloadLength + 20L + (payloadLength & 1) > options.Limits.MaxOutputBytes)
-            throw new ImageLimitException(ImageLimitKind.OutputBytes, "WebP encoded output limit exceeded.");
-        Span<byte> header = stackalloc byte[20];
-        "RIFF"u8.CopyTo(header); BinaryPrimitives.WriteInt32LittleEndian(header[4..], payloadLength + 12 + (payloadLength & 1));
-        "WEBPVP8L"u8.CopyTo(header[8..]); BinaryPrimitives.WriteInt32LittleEndian(header[16..], payloadLength);
-        output.Write(header);
-        Payload(image, output, options.Effort, alpha, green, literal, distance, context,
-            omitAlpha: false, singletonAlpha, out _);
-        if ((payloadLength & 1) != 0) output.WriteByte(0);
-    }
-
-    private static bool Payload(ImageBuffer image, Stream output, int effort, bool alphaHint,
-        Table green, Table literal, Table distance, OperationContext context,
-        bool omitAlpha, bool singletonAlpha, out int literals)
-    {
-        Span<byte> header = stackalloc byte[5]; header[0] = 0x2F;
-        BinaryPrimitives.WriteUInt32LittleEndian(header[1..], (uint)(image.Width - 1) | (uint)(image.Height - 1) << 14 | (alphaHint ? 1u << 28 : 0));
-        output.Write(header);
-        var writer = new WebpBitWriter(output, context);
-        writer.Write(0, 1); writer.Write(0, 1); writer.Write(0, 1); // No transforms, cache or spatial groups.
-        green.Header(writer); literal.Header(writer); literal.Header(writer);
-        if (singletonAlpha) OpaqueAlphaHeader(writer); else literal.Header(writer);
-        distance.Header(writer); literals = 0;
-        var count = image.Width * image.Height; var position = 0; uint previous = 0; var alpha = false;
-        while (position < count)
+        var count = image.Width * image.Height; var reserved = count * 4L;
+        context.Reserve(reserved);
+        try
         {
-            var pixel = Pixel(image, position, context); alpha |= pixel >> 24 != 255;
-            var run = 1; var fromAbove = false;
-            var maximum = Math.Min(64 << effort, count - position);
-            if (effort != 0 && position != 0 && pixel == previous)
-            {
-                while (run < maximum && Pixel(image, position + run, context) == pixel) run++;
-            }
-            if (effort != 0 && position >= image.Width && run < maximum)
-            {
-                // RFC 9649 section 3.6.2.2: a reference may span rows and overlap
-                // its destination. Read the resident source, with no row copy.
-                var length = 0;
-                while (length < maximum && Pixel(image, position + length, context)
-                    == Pixel(image, position - image.Width + length, context)) length++;
-                if (length > run) { run = length; fromAbove = true; }
-            }
-            if (run >= 2)
-            {
-                Prefix(run, out var code, out var extra, out var bits);
-                green.Symbol(writer, 256 + code); writer.Write(extra, bits);
-                // RFC 9649 section 3.6.2.2.1: code1 is one row above; code2 is
-                // one pixel behind. Both use the existing distance alphabet.
-                distance.Symbol(writer, fromAbove ? 0 : 1);
-                position += run;
-                if (fromAbove) pixel = Pixel(image, position - 1, context);
-            }
-            else
-            {
-                green.Symbol(writer, (int)(pixel >> 8 & 255)); literal.Symbol(writer, (int)(pixel >> 16 & 255));
-                literal.Symbol(writer, (int)(pixel & 255));
-                if (omitAlpha || singletonAlpha) writer.Write(0, 0); // Retain the alpha-field work/cancellation check.
-                else literal.Symbol(writer, (int)(pixel >> 24));
-                position++; literals++;
-            }
-            previous = pixel;
+            context.Work(0); var pixels = new uint[count];
+            for (var i = 0; i < pixels.Length; i++) pixels[i] = Pixel(image, i, context);
+            using var prepared = Vp8lPreparedEncoding.Prepare(pixels, image.Width, options.Effort, context);
+            // Prepared tokens contain all literal values and copy distances.
+            // Normalized pixels have no remaining users during output delivery.
+            context.Release(reserved); reserved = 0;
+            prepared.Write(output);
         }
-        writer.Finish(); return alpha;
-    }
-
-    private static void OpaqueAlphaHeader(WebpBitWriter writer)
-    {
-        // RFC 9649 section 3.7.2.1.2: normal code-length tree with symbols0/1.
-        // Only alpha255 has length1; using that single leaf consumes zero bits.
-        writer.Write(0, 1); writer.Write(0, 4); // Four code-length symbols:17,18,0,1.
-        writer.Write(0, 3); writer.Write(0, 3); writer.Write(1, 3); writer.Write(1, 3);
-        writer.Write(0, 1); // Full256-entry alpha alphabet.
-        for (var i = 0; i < 256; i++) writer.Write(i == 255 ? 1 : 0, 1);
+        finally { if (reserved != 0) context.Release(reserved); }
     }
 
     private static uint Pixel(ImageBuffer image, int position, OperationContext context)

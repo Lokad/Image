@@ -1,10 +1,21 @@
 # Material warm coverage
 
-Updated2026-10-22. Byte-exact codec qualification precedes CPU parity. The finite scope remains
+Updated2026-10-23. Byte-exact codec qualification precedes CPU parity. The finite scope remains
 **256 named cases:239 numeric and17 unmeasured**. Current tested-producer evidence
-contains60 independent passes,147 gaps,one confidence-open case,16 short cost
-screens and15 superseded encoder rows. Full warm CPU parity and replacement
+contains60 independent passes,147 gaps,one confidence-open case,10 short cost
+screens and21 superseded encoder rows. Full warm CPU parity and replacement
 readiness remain open; no new shapes, settings or quality grid is added.
+
+E62 adopts the complete managed VP8L encoder:19 selected packet identities plus two
+additional forced spatial/box candidates (21 distinct packets). The25 existing
+selected settings, original8/16bit and public sync/async/ImageBudget boundaries pass. The
+photograph/diagram are exactly160032/7234B on their declared controls. BothOS pass
+4865 full/live tests and27 affected scalar checks using one immutable worker set.
+A test-only extension against the unchanged core passes26 internal/27 public
+packet checks and27 scalar packet checks, adding the existing16383 axes. The SAME actual private0.2.0 package and all3examples pass. Six previous VP8L encode
+rows are superseded for CPU/allocation claims; no new timing or workload grid.
+Decoder inputs remain frozen and unchanged decoder/other-code evidence is reused.
+The chronology below records its original producers, rather than current behavior.
 
 E4/E6 add an explicit managed JPEG Reference profile: all six original444/422/420 controls are
 byte exact (with the single approved attribution change) through image/caller,
@@ -14,7 +25,7 @@ these add no timed case. Its CPU/allocations are unmeasured; no performance pass
 Existing JPEG encoding observations predate the added dispatcher and require
 affected confirmation when CPU qualification resumes. Other unchanged paths retain
 valid evidence; the numeric counts below describe their recorded producers.
-The default/optional Original/CompactColor packet behavior remains unchanged.
+These paragraphs retain historical producer evidence; unpublished encoder branches and switches carry no compatibility obligation.
 
 [C193 JPEG444 coded source histograms](JPEG444-CODED-SOURCE-HISTOGRAMS.md) save
 65 B on RGBA8 and add one byte on RGBA16: 134,676/133,041 and 134,688/133,043 B.

@@ -3,8 +3,8 @@
 A safe C#/.NET 10 library for still-image codecs and basic editing. Independently
 implemented, with no NuGet dependencies, unsafe code or native bindings.
 
-The 0.2.0 development API uses one managed JPEG encoder for baseline
-grayscale and 4:4:4/4:2:2/4:2:0. [Codec compatibility](docs/codec-parity.md) states its exact tested scope.
+The 0.2.0 development encoders target exact PNG, JPEG and lossless WebP reference
+packets. [Codec compatibility](docs/codec-parity.md) states the tested inputs and settings.
 
 - **PNG:** decode all static color/depth profiles, including palette, transparency
   and Adam7; encode grayscale/RGB/grayscale-alpha/RGBA at 8 or 16 bits.

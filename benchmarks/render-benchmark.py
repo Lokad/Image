@@ -51,6 +51,8 @@ def row(label, name, path, report, confirmed=False, verification=None):
     if verification:
         assert not confirmed and quiet
         status = verification
+    if name == 'vp8l-color-cost-evidence.json':
+        status = 'Prior production; reconfirm'  # Full encoder replaced by packet-exact pipeline.
     if name in {'warm-jpeg-buffered-eob-evidence.json', 'warm-vp8-cancellable-block-evidence.json',
                 'warm-current-resident-png-evidence.json', 'warm-deflate-materialized-cursor-evidence.json',
                 'warm-png-async-identify-evidence.json'}:
@@ -369,43 +371,25 @@ identities; smaller packets, equal quality numbers or timing passes do not prove
 the new exact-reference target. Old quality tooling retires as stronger gates cover
 its required scope.
 
-The source-only [VP8L packet model](../benchmarks/VP8L-COMPLETE-PACKET.md) reproduces
-all FOUR unique frozen lossless packets (183,812/121,896/160,032/7,234B), raw-exact
-on both platforms using the same binary. Six existing workload rows share these
-cores; RGBA16 normalization and async public-operation qualification remain open.
-Production is unchanged. Other required inputs/settings, admitted integration,
-lossy controls and performance remain open.
-A separate source-only [production coverage audit](../benchmarks/VP8L-PRODUCTION-COVERAGE.md)
-names the remaining required paths; its1x1 and two-color4103x2 palette packets
-are raw-exact on both platforms, as is the129x129 direct-coding packet.
-The19x7 hidden-RGB spatial-only packet and its maps/residuals also match exactly.
-One dependency-free source build now confirms nineteen complete packet identities
-on both platforms. Method5 adaptive selection reproduces every4x4/8x8 candidate
-mode and entropy cost on the existing asymmetric input and photograph:8x8 and4x4
-win respectively. Complete packets match155,162/160,600B. The new photograph packet
-closes the missing fine-winner path using an existing input; it establishes no
-broader compression or performance claim. Both forced palette/spatial candidate
-packets on the existing18-color input also match236/256B and select the native
-plain result. Numeric effort0 palette order now matches268B on the same18-color
-input. The existing two-color input qualifies both1026-entry box indices and46/50B
-candidate packets, with ordinary-first ties. These named effort primitives pass;
-admitted production and complete public operations remain open.
-Typed production analysis, transforms, matching, uncached/cached/Box parsing and
-Huffman coding/clustering/framing pass 116 focused checks with one Windows/Linux assembly. Native maps,
-palette data, four complete auxiliary bitstreams, cached hidden-RGB main trees and
-the complete asymmetric 110,306-token main stream match. Three frozen effort packets
-also match every tile assignment and final population of their 9/2/16 groups;
-seven complete typed-component packets match native bytes (asymmetric0/1/4 and
-four palettes). Counting/emission reuse owned coding state without an encoded-frame
-buffer. Shared admission, retained capacity and failure cleanup pass. Packed pixels and
-cache conversion operate in place. Unchanged public paths reuse E53's 3,884 offline
-checks per platform and same private package/three usage examples on both. Public
-encoding is not switched; integrated qualification and new timings/allocations remain open.
-The native encoder refuses16384; the model's existing axis cases instead pass exact
-pinned-FFmpeg decoding, without an encoder-byte or timing claim.
-These do not change production/timing claims below.
+The managed [VP8L encoder](../benchmarks/VP8L-COMPLETE-PACKET.md) now reproduces
+all19 selected packet identities through25 existing settings checks, plus two
+additional forced spatial/box candidates (21 distinct complete packets). Public sync/async/ImageBudget
+boundaries retain the asymmetric packet at8/16bits. The photograph/diagram controls
+match160,032/7,234B exactly. Source-only proofs are retained as earlier evidence;
+public production no longer uses the superseded full-image encoder.
+Prepared transforms/tokens/maps/canonical codes share one borrowed admission root.
+One normalized working image releases before emission; counting/write reuse prepared
+state without an encoded-frame buffer. Refusal/cancellation and output ownership
+pass. Both platforms pass1,855 internal+2,070 public+940 live FFmpeg checks and27
+scalar public/axis checks, with one immutable worker set. A test-only extension
+against the unchanged core passes26 internal/27 public packet checks and27 scalar
+packet checks, including the two16383 axes. The SAME private Release
+package and all3usage examples pass on both. The native encoder refuses16384;
+those axis cases remain functional extensions without an encoder-byte claim.
+Six affected encoder time/allocation rows below describe the prior producer and
+require new costs later. Frozen decoder inputs and unchanged code retain evidence.
 
-No timing or allocation runs accompanied the new PNG encoder or JPEG cleanup. Unchanged paths
+No timing or allocation runs accompanied the new PNG/JPEG/VP8L encoder adoption. Unchanged paths
 retain evidence on their recorded frozen inputs; new default-encoded fixtures do
 not silently replace those inputs. CPU tuning/independent confirmation resumes
 after exact codec work. The full warm single-CPU objective remains independent
@@ -416,7 +400,7 @@ The [finite checklist](../benchmarks/WARM-COVERAGE.md) remains 256 named cases:
 239 numeric and 17 unmeasured. Tested-producer rows contain **{parity_count} passes,
 {gap_count} gaps, {confidence_count} confidence-open case, {cost_count} short cost
 screens and {reconfirm_count} superseded encoder rows**. The latter predate
-JPEG decision/adaptive work or the managed PNG Optimal encoder; current packet evidence is
+JPEG decision/adaptive work or the managed PNG/VP8L encoder replacements; current packet evidence is
 reconciled and new costs are deferred while compression gates remain open.
 Their stored values are historical, not demonstrated current gaps. Another 31 marked
 decode/inspection rows await confirmation after typed source-metadata changes;

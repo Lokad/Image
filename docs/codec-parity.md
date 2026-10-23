@@ -115,6 +115,25 @@ checks run with `python -B tools/WarmReference/test-jpeg-packet-comparison.py`.
 `verify-jpeg-subsampling-stage.ps1` checks the source-only 4:2:2/4:2:0 prototype.
 `verify-jpeg-gray-stage.ps1` checks the grayscale stages, tables and complete packet.
 
+The managed VP8L encoder independently selects transforms, palette ordering and
+packing, bounded matches, cache/references, spatial groups and canonical trees.
+The pinned libwebp1.6.0 backend reference uses quality75, matching method, exact=1
+and one CPU. The frozen inventory contains19 selected packet identities across25 existing
+input/settings checks, plus two additional forced spatial/box candidate identities.
+The total is21 distinct complete packets. No WebP metadata
+exception is used. Source pixels and options are encoder inputs; reference bytes
+and observed tables are verification data only.
+
+The scope includes the513×259 photograph/diagram at160,032/7,234 bytes, asymmetric
+RGBA8 across efforts0/1/4/5, adaptive photograph effort5, direct noise, hidden RGB,
+packed palettes, single-axis16383 controls and all existing two-color effort settings. Complete public sync,
+async and ImageBudget boundaries retain the asymmetric packet at8/16bits, with
+one normalization and independent owners. The16384-axis companions remain functional
+format extensions; the pinned native encoder accepts at most16383, so those axes
+make no encoder-byte claim. Remaining lossy WebP/exact-decoder work and new
+single-CPU/allocation qualification are open. [Numeric evidence](../benchmarks/vp8l-byte-parity-evidence.json)
+records source/settings and qualification scope.
+
 Lossless WebP retains the approved libwebp `exact=1` reference; grayscale JPEG
 retains the explicitly labeled SIMD-enabled libjpeg-turbo reference. Existing
 quality checks remain until exact packet/sample gates cover the same required

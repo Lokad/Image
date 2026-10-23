@@ -9,7 +9,7 @@ public sealed class WebpPreviousRowTests
     {
         using var image = Rows(depth, 47, 101);
         var expected = Expected(image); var packet = Encode(image, 4);
-        Assert.True(packet.Length < Encode(image, 0).Length / 8);
+        Assert.True(packet.Length < expected.Length / 8);
         // The transparent colors occur inside copied sequences, including the
         // overlapping tail of a reference longer than a row.
         Assert.NotEqual(0u, BinaryPrimitives.ReadUInt32LittleEndian(packet.AsSpan(21)) & (1u << 28));
@@ -36,8 +36,8 @@ public sealed class WebpPreviousRowTests
     [Fact]
     public void PreviousRowEncodingPreservesExactAdmissionAndPreflightBeforeCallerWrites()
     {
-        using var image = Rows(8, 47, 101); var packet = Encode(image, 4);
-        var limits = new ImageLimits { MaxWorkingBytes = (long)image.Stride * image.Height + 8192, MaxOutputBytes = packet.Length };
+        using var image = Rows(8, 47, 101); var reference = WebpAdmissionControl.Reference(image); var packet = reference.Packet;
+        var limits = new ImageLimits { MaxWorkingBytes = reference.WorkingBytes, MaxOutputBytes = packet.Length };
         using var exact = new MemoryStream(); ImageCodec.EncodeWebp(image, exact, new() { Limits = limits });
         Assert.Equal(packet, exact.ToArray());
         foreach (var (bound, kind) in new[]

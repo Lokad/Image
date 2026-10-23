@@ -1278,122 +1278,46 @@ all token partition counts, sparse categories and probability updates, both
 segment feature modes, quantizer deltas/clamps and filter adjustment/sharpness
 boundaries. Empty partitions and inconsistent sizes are rejected.
 
-`EncodeWebp` defaults to lossless VP8L. RGBA16 input is normalized per channel
-with integer `(sample+128)/257`; RGBA8 samples are preserved exactly, including
-hidden RGB. `Effort` accepts0..6 (default4): zero writes only literals; other
-settings permit repeated-color/previous-row sequences up to `64<<effort` pixels.
-References may span rows and overlap destinations. `Quality` accepts1..100 but is
-ignored in lossless mode. Every path preserves alpha and hidden RGB exactly.
+`EncodeWebp` defaults to lossless VP8L. RGBA16 input is normalized once per
+channel with integer `(sample+128)/257`; RGBA8 samples, alpha and hidden RGB are
+preserved exactly. `Quality` accepts1..100 but is ignored in lossless mode.
+`Effort` accepts0..6 (default4) and controls transform/reference search. The
+reference settings for byte qualification are libwebp1.6.0 quality75, matching
+method, exact=1 and one CPU; the numerical lossy quality option is unrelated.
 
-At effort>=3 and at least16,384pixels, a green-decorrelated encoder uses a1,024-entry
-color cache, frequency-derived complete canonical trees and compact code-length
-repeats. This path is selected only if the configured local working allowance has
-64KiB remaining after borrowed source storage. Actual retained tree/cache capacity,
-histograms, overlapping candidate trees and construction/header scratch are admitted before allocation
-through the same context; construction scratch is released promptly. Prefix lengths
-are bounded to15bits (7for code-length trees), and single-leaf trees consume no data
-bits. Literal-heavy input, or a cached body costing more than8bits per pixel,
-also evaluates a global LEFT spatial predictor after
-green decorrelation, with the format's opaque-black first pixel and TOP first column.
-The existing frequency pass counts all weighted body bits, including cache symbols,
-reference extra bits and zero-bit singleton leaves; few literal misses alone do not
-prove that prediction is unhelpful.
-Histogram-weighted body bits and a serialized-header upper bound select prediction
-only when it reduces complete packet size; otherwise the original cached packet is
-preserved. Both candidate owners stay charged through comparison; unselected trees
-are released promptly. Admission refusal never selects the other candidate. The
-VP8L alpha hint describes the normalized source, independently of residual alpha.
-At effort>=4, eligible LEFT-predicted input may additionally use up to nine spatial
-prefix-code groups on fixed8x8 tiles. A source-token histogram and four deterministic
-coding-cost assignments choose the map; complete map/header/body costs retain the
-original packet unless smaller. The token parse, residuals and pixels are unchanged.
-The same effort may then evaluate one adaptive8x8 predictor map, ranking the fourteen
-RFC9649 modes by per-channel source-residual entropy with deterministic ties. Its
-residuals are independently grouped before complete-packet comparison with the
-selected LEFT plan. Both alternatives remain charged through selection, including
-the predictor map while coding tables are replaced; no extra full-frame pixel
-buffer is kept. Local work/memory eligibility precedes shared admission. Refusal
-is terminal, and the final packet is selected only when its full cost is smaller.
-An eligible predicted plan may additionally fit one signed cross-color transform
-per8x8 residual tile (RFC9649 section3.5.2). Source-derived least-squares seeds
-and a fixed entropy-guided coordinate pass select coefficients; original red
-is used for blue decorrelation. Current spatial groups are refit before comparing
-complete packet cost with the retained baseline. Coefficient maps and trees are
-admitted before allocation, with both alternatives live; the inherited predictor
-map remains charged through color and coding-table replacement. No full-frame
-residual copy is allocated. Refusal/cancellation/work exhaustion remain terminal.
-At effort>=4, a locally admitted predicted plan may compare one alternative with
-no color cache. Its full literal distribution and current spatial groups are
-refit, using a280-symbol green alphabet rather than1304 with the1024-entry cache.
-The same transforms and run/prior-row parse remain exact. Count/write/group phases
-carry the selected cache mode; complete map/header/payload cost chooses the winner.
-Both predictor and color owners remain charged through coding-table replacement.
-No source-frame copy or additional decision map is retained; shared refusal never
-selects the previous plan as a fallback.
-An uncached predicted plan with existing predictor/color/spatial maps may compare
-one refinement using its actual channel-code lengths plus predictor-map code cost.
-All fourteen format modes are scored per8x8tile; missing codes cost15bits, and ties
-retain the existing mode. Color coefficients stay fixed; one current group refit
-and fullpacket comparison decide adoption. A winning first refinement may reprice
-once against its new coding tables; unchanged or rejected maps stop after one pass.
-Both passes retain the same local/work guards and shared color owner. A bounded tile cache avoids a full-frame
-copy. Old/new predictor and coding owners overlap during selection; the SAME color
-owner transfers once to the winner. New capacities are admitted before allocation,
-with local/work guards before shared attempts and terminal refusal/cancellation.
-After a winning predictor refinement, one existing coefficient fit may be repeated
-on the changed residuals, preserving the selected cache mode. Both color/coding
-alternatives borrow the same predictor owner; complete-packet comparison releases
-only the losing color/coding storage. New maps, trees and replacement overlap are
-admitted before allocation with the same local/work guards and terminal failures.
-An eligible uncached mapped plan may then refine color coefficients once using
-actual selected red/blue codes plus coefficient-map code costs. It starts from
-the current coefficients, keeps stable ties, prices absent symbols at fifteen bits
-and retains the fixed 16/8/4/2/1 coordinate pass. Integer scoring borrows current
-models; the shared color-candidate backend admits and compares the new map/trees
-while preserving the same predictor owner, limits and terminal cleanup.
-This optional analysis requires an a-priori local/work allowance, including about
-2,754 bytes per tile for temporary counts/indices, map/ranking capacity, and overlapping
-table construction. All substantial storage is charged before allocation through
-the same borrowed root; temporary histograms and unselected tables are promptly
-released. A tighter local allowance selects the existing cached path before shared
-admission. Shared refusal remains terminal.
-At effort>=4, a locally admitted raw cached plan may compare one bounded
-backward-reference alternative. Four normalized pixels identify candidates in
-at most262144 preceding pixels; each token examines at most16 matching keys and
-256 hash-chain nodes, with copy lengths capped at1024. Strict current-prefix-cost
-improvements replace spans ending at original token boundaries, followed by one
-literal/distance-table refit and complete-packet comparison. Original cache-prefix
-semantics and exact hidden RGBA remain unchanged. Count/write share the selected
-retained token array. Source samples are read on demand without another frame copy.
-Original/new token capacities, prefix costs, bounded index arrays, records and
-old/new coding tables are shared-admitted before allocation. Unselected tokens
-and all search scratch release promptly; selected capacity stays charged until
-its final use. Local memory/work guards precede shared admission; refusal,
-cancellation and actual work exhaustion stop with cleanup, never a fallback.
+The encoder independently analyzes five transform families: direct, prediction,
+subtract-green, prediction/subtract-green and palette. Palette ordering, modular
+color deltas, partial-row index packing and implicit final zero follow the format.
+Spatial prediction selects among all fourteen format modes with bounded tile maps;
+signed cross-color search uses the unchanged residual tiles before applying each
+selected transform in place. Effort zero uses forced prediction or numeric palette
+order. Higher efforts use entropy-based choices; small palettes compare ordinary
+and short-distance box references. Effort five additionally compares cache/no-cache
+and plain/spatial palette candidates. Complete payload byte lengths determine the
+winner, with earlier candidates winning ties. Choices never depend on available
+memory, and admission refusal never selects a different candidate.
 
-A cached LEFT plan with spatial groups may instead seed its green/distance models
-from possible three-pixel-key references before pricing spans. Two bounded passes
-use at most262144 history pixels,1024 lookahead,16 matching keys and256 chain
-visits per token. Original token endpoints and cache-prefix semantics remain exact.
-Only strictly positive modeled savings rewrite spans; one existing coding/group
-refit and complete-packet comparison select the result. The normalized residual
-ring, search arrays, original/new token capacities and prefix costs are admitted
-before allocation. Temporary models borrow the original red/blue/alpha trees;
-only new green/distance owners release before refitting. Selected token capacity
-stays charged through final output. Local memory/work guards precede shared
-attempts; refusal, cancellation and actual work exhaustion remain terminal.
+Bounded matching, greedy/repeated/trace parsing, color-cache selection and spatial
+histogram clustering construct canonical Huffman codes (maximum15 bits;7 for tree
+headers). References may overlap and span rows. Counts, maps, tokens, paths and
+replacement peaks are reserved before allocation through the same borrowed root.
+Final tokens own literal values/distances and keep their actual capacity charge;
+prepared coding state borrows no source pixels. Unused histogram populations and
+losing candidates release promptly. Shared refusal, cancellation and work failure
+terminate with cleanup, without retry or a lower-memory encoding path.
 
-Other cases retain the fixed-table8KiB path and its opaque zero-bit alpha leaf when
-that saves bytes. Local path selection precedes shared admission; a shared refusal
-is terminal and never triggers the other encoder. The fixed path counts and writes
-in two passes; the cached path gathers frequencies, counts and writes in three,
-or four source passes when comparing prediction. Spatial grouping adds one source
-histogram pass and bounded map iterations. Neighbors are normalized on demand.
-Both compare resident normalized samples without a row/frame copy or encoded-frame
-staging buffer. Complete RIFF size and padding are checked before caller writes,
-including nonseekable output. Every pass charges work and checks cancellation;
-callers must synchronize mutable input across all passes. Unsupported profiles fail
-explicitly without external fallbacks. Compression-size parity remains open.
+The normalized working image releases before delivery. Prepared transforms,
+tokens/maps and codes are counted and emitted without repeating pixel analysis or
+allocating a full encoded-frame buffer. Complete RIFF lengths/padding are checked
+before caller writes, including nonseekable output. Async encoding uses the existing
+single admitted output staging owner until its actual writes finish.
+
+The frozen scope contains19 selected packet identities and two additional forced spatial/box
+candidate identities from original controls; no metadata difference is allowed.
+It includes photograph/diagram outputs of160,032/7,234 bytes at their declared
+settings. Those controls establish no general content or CPU/allocation claim.
+[Codec compatibility](docs/codec-parity.md) records exact reference scope; broader
+codec replication and performance qualification remain in progress.
 
 `Lossless=false` emits a VP8 key frame with 4:2:0 chroma, a mathematical forward
 4x4 DCT and the format's quantizers. Safe four-lane binary64 SIMD evaluates

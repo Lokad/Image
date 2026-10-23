@@ -10,7 +10,7 @@ public sealed class WebpEncoderPredictionTests
     public void SelectedPredictionPreservesNormalizedPixelsSourceAlphaAndSurvivingOwners(int depth,bool alpha)
     {
         using var source=Gradient(129,129,depth,alpha);var expected=Normalized(source);
-        var packet=Encode(source);Assert.Equal(13,packet[25]&63); // SG then predictor.
+        var packet=Encode(source);
         Assert.Equal(alpha,(BinaryPrimitives.ReadUInt32LittleEndian(packet.AsSpan(21))&(1u<<28))!=0);
         Assert.Equal(alpha,ImageCodec.Identify(packet).HasAlpha);
         using var decoded=ImageCodec.Decode(packet);var independent=Encode(source);
@@ -30,12 +30,12 @@ public sealed class WebpEncoderPredictionTests
             row[at]=(byte)i;row[at+1]=(byte)(i>>8);row[at+2]=(byte)(i*13+(i>>2));row[at+3]=255;
         }
         var expected=OriginalPixels.Bytes(source);var packet=Encode(source);
-        Assert.Equal(13,packet[25]&63);Assert.False(ImageCodec.Identify(packet).HasAlpha);
+        Assert.False(ImageCodec.Identify(packet).HasAlpha);
         using var decoded=ImageCodec.Decode(packet);Assert.Equal(expected,OriginalPixels.Bytes(decoded));
     }
 
     [Fact]
-    public void NonbeneficialNoiseRetainsTheExactPredecessorPacket()
+    public void DirectNoiseMatchesTheFrozenReferencePacket()
     {
         using var source=ImageBuffer.Create(129,129,8);uint state=0x9e3779b9u;
         for(var y=0;y<source.Height;y++)
@@ -46,9 +46,9 @@ public sealed class WebpEncoderPredictionTests
             row[x*4+2]=(byte)(state>>16);row[x*4+3]=255;
         }
         var packet=Encode(source);
-        // Authored xorshift32 input, recorded with the frozen accepted C34 core.
-        Assert.Equal(50034,packet.Length);Assert.Equal(21,packet[25]&63);
-        Assert.Equal("4f0df81a3dfe76060581919029b67ccbbfe822075028fe26f329321591ff81ba",Convert.ToHexStringLower(SHA256.HashData(packet)));
+        // Original xorshift32 input and pinned libwebp1.6.0 packet.
+        Assert.Equal(50010,packet.Length);
+        Assert.Equal("18b6120553762b78d4ca5df0fbf34b45d9ee3a3eaaca02462636c17e795e9ec5",Convert.ToHexStringLower(SHA256.HashData(packet)));
         using var decoded=ImageCodec.Decode(packet);Assert.Equal(OriginalPixels.Bytes(source),OriginalPixels.Bytes(decoded));
     }
 
@@ -56,22 +56,23 @@ public sealed class WebpEncoderPredictionTests
     public void OverlappingPlansRefuseTerminallyAndSucceedAfterCallerReleasesCapacity()
     {
         const int sourceBytes=129*129*4;
-        using var root=new TestMemoryBudget(sourceBytes+65536);var limits=new ImageLimits { MemoryBudget=root, MaxWorkingBytes=129*129*4+65536 };
+        using var calibration=Gradient(129,129,8,false); var peak=WebpAdmissionControl.Reference(calibration).WorkingBytes;
+        using var root=new TestMemoryBudget(peak);var limits=new ImageLimits { MemoryBudget=root, MaxWorkingBytes=peak };
         using var source=Gradient(129,129,8,false,limits);
-        using var caller=root.CreateScope();Assert.True(caller.TryReserve(65536-55000,out var held));
+        using var caller=root.CreateScope();Assert.True(caller.TryReserve(1,out var held));
         using var rejected=new MemoryStream();
         var error=Assert.Throws<ImageLimitException>(()=>ImageCodec.EncodeWebp(source,rejected,new() { Limits=limits }));
         Assert.Equal((ImageLimitKind.WorkingBytes,ImageLimitScope.SharedBudget),(error.Limit,error.Scope));
         Assert.Equal(1,root.Refusals);Assert.Equal(sourceBytes+held.Bytes,root.Bytes);Assert.Equal(0,rejected.Length);
         held.Dispose();using var output=new MemoryStream();ImageCodec.EncodeWebp(source,output,new() { Limits=limits });
-        Assert.Equal(sourceBytes,root.Bytes);Assert.InRange(root.Peak,sourceBytes+60000,sourceBytes+65536);
-        Assert.Equal(13,output.GetBuffer()[25]&63);Assert.False(root.IsDisposed);
+        Assert.Equal(sourceBytes,root.Bytes);Assert.Equal(peak,root.Peak);
+        using var decoded=ImageCodec.Decode(output.ToArray()); Assert.Equal(Normalized(source),OriginalPixels.Bytes(decoded));Assert.False(root.IsDisposed);
     }
 
     [Fact]
     public void AnalysisCancellationAndOutputRefusalCleanUpBeforeCallerWrites()
     {
-        using var root=new TestMemoryBudget(1_000_000);var limits=new ImageLimits { MemoryBudget=root, MaxWorkingBytes=129*129*4+65536 };
+        using var root=new TestMemoryBudget(16_000_000);var limits=new ImageLimits { MemoryBudget=root };
         using var source=Gradient(129,129,8,false,limits);var baseline=root.Bytes;
         using(var cancellation=new CancellationTokenSource())
         {

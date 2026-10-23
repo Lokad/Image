@@ -8,8 +8,9 @@
   packets, allowing only the documented color attribution replacement.
 - Bounded managed PNG stored/fast/optimal/smallest encoding, with complete raw
   packet equality on14 frozen8/16-bit controls and shared admission throughout.
-- Smaller lossless/lossy WebP output on declared controls; exact-reference encoder
-  replication and broader qualification remain open.
+- Managed VP8L prediction, palette, references/cache and entropy groups reproduce
+  19 selected and two additional forced frozen libwebp packets. Lossy WebP byte replication
+  and new CPU/allocation qualification remain open.
 - Caller-owned cooperative memory admission across nested work and retained
   images, fonts, layouts and caches, with structured limit/unsupported failures.
 - Typed source color/alpha metadata, bounded header inspection and async stream

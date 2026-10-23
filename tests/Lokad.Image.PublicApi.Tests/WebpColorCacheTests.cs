@@ -21,12 +21,14 @@ public sealed class WebpColorCacheTests
     }
 
     [Theory] [InlineData(8)] [InlineData(16)]
-    public void LocalTightWorkspaceChoosesSimpleEncodingBeforeSharedAdmissionAndStaysLossless(int depth)
+    public void LocalTightWorkspaceFailsWithoutEncodingAnAlternativeAndRecoveryStaysLossless(int depth)
     {
         using var source = Source(depth); var expected = Normalized(source);
         var limits = new ImageLimits { MaxWorkingBytes = (long)source.Stride * source.Height + 8192 };
         using var output = new NonseekableOutput();
-        ImageCodec.EncodeWebp(source, output, new() { Limits = limits });
+        var error = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, output, new() { Limits = limits }));
+        Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.Operation), (error.Limit, error.Scope));
+        Assert.Empty(output.ToArray()); ImageCodec.EncodeWebp(source, output);
         using var decoded = ImageCodec.Decode(output.ToArray());
         Assert.Equal(expected, OriginalPixels.Bytes(decoded)); Assert.Equal(expected, Normalized(source));
         Assert.True(output.CanWrite);
@@ -36,9 +38,8 @@ public sealed class WebpColorCacheTests
     public void CachedEncodingRespectsLocalOutputAndWorkPreflightWithoutClosingCallerStream()
     {
         using var source = Source(8);
-        // Freeze the cached-codec boundary, excluding optional larger analysis.
-        var limits = new ImageLimits { MaxWorkingBytes = (long)source.Stride * source.Height + 65536 };
-        var packet = Encode(source, limits); limits = limits with { MaxOutputBytes = packet.Length };
+        var reference = WebpAdmissionControl.Reference(source); var packet = reference.Packet;
+        var limits = new ImageLimits { MaxWorkingBytes = reference.WorkingBytes, MaxOutputBytes = packet.Length };
         using var exact = new NonseekableOutput(); ImageCodec.EncodeWebp(source, exact, new() { Limits = limits });
         Assert.Equal(packet, exact.ToArray()); Assert.True(exact.CanWrite);
         foreach (var (denied, kind) in new[]
@@ -57,19 +58,20 @@ public sealed class WebpColorCacheTests
     public void SharedRefusalIsTerminalAndReleasedCapacityAllowsSuccess()
     {
         const int sourceBytes = 129 * 129 * 4;
-        using var root = new TestMemoryBudget(sourceBytes + 65536);
-        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = sourceBytes + 65536 };
+        using var calibration = Source(8); var peak = WebpAdmissionControl.Reference(calibration).WorkingBytes;
+        using var root = new TestMemoryBudget(peak);
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = peak };
         using var source = Source(8, limits);
         Assert.Equal(sourceBytes, root.Bytes);
-        using var caller = root.CreateScope(); Assert.True(caller.TryReserve(65536 - 8192, out var held));
+        using var caller = root.CreateScope(); Assert.True(caller.TryReserve(1, out var held));
         using var rejected = new MemoryStream();
         var error = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, rejected, new() { Limits = limits }));
         Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
-        Assert.Equal(1, root.Refusals); Assert.Equal(sourceBytes + 65536 - 8192, root.Bytes);
+        Assert.Equal(1, root.Refusals); Assert.Equal(sourceBytes + 1, root.Bytes);
         Assert.Equal(0, rejected.Length); Assert.True(rejected.CanWrite);
         held.Dispose();
         using var output = new MemoryStream(); ImageCodec.EncodeWebp(source, output, new() { Limits = limits });
-        Assert.Equal(sourceBytes, root.Bytes); Assert.InRange(root.Peak, sourceBytes + 8193, sourceBytes + 65536);
+        Assert.Equal(sourceBytes, root.Bytes); Assert.Equal(peak, root.Peak);
         Assert.False(root.IsDisposed); source.Dispose(); Assert.Equal(0, root.Bytes);
         using var surviving = ImageCodec.Decode(output.ToArray()); Assert.Equal(129, surviving.Width);
     }
@@ -77,9 +79,9 @@ public sealed class WebpColorCacheTests
     [Fact]
     public void CancellationDuringAdmissionReleasesCodecStorageAndAllowsSubsequentEncode()
     {
-        using var root = new TestMemoryBudget(1_000_000);
+        using var root = new TestMemoryBudget(16_000_000);
         using var source = Source(8, new() { MemoryBudget = root }); var charged = root.Bytes;
-        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = charged + 65536 };
+        var limits = new ImageLimits { MemoryBudget = root };
         using var cancellation = new CancellationTokenSource();
         root.Admitted = bytes => { if (bytes > charged + 8192) cancellation.Cancel(); };
         using var rejected = new MemoryStream();
