@@ -90,7 +90,7 @@ performance grid.
    nonseekable async delivery, including independent surviving outputs, failures
    and cancellation. Their core packet identity reuses the first frozen packet;
    complete operations still require integration evidence.
-6. **Admitted integration.** Analysis, matching, prediction, color and palette transforms are ported:
+6. **Admitted integration.** Analysis, transforms, matching and uncached parsing are ported:
    typed ordinary/low-effort/box matching accepts borrowed spans and returns an
    owned index. Eight focused checks pass with the same assembly on Windows/Linux:
    native indices, aggregate admission/replacement peaks, prompt retained-result
@@ -113,7 +113,11 @@ performance grid.
    independent retained owners, overlapping capacity/refusal/recovery, cancellation
    and early/late work cleanup. Packing clips partial rows in place, retains the
    full working-buffer charge, and preserves numeric/greedy/implicit-zero rules.
-   All 57 focused checks pass with one assembly on both platforms. Public paths reuse E53's
+   Eleven uncached-parser checks match the four frozen auxiliary token streams and
+   predictor decision costs, with candidate/trace admission cleanup, cancellation,
+   late work failure and typed retained-token ownership. Near-distance codes derive
+   from format geometry; trace paths avoid a separate reconstruction list.
+   All 68 focused checks pass with one assembly on both platforms. Public paths reuse E53's
    3,884 offline checks and same-package/three-example qualification per platform.
    Public encoding does not call these components yet. Port the remaining state and
    connect the complete encoder before claiming end-to-end production qualification.

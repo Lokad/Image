@@ -81,7 +81,13 @@ and color-counting storage is released before subsequent transforms. Palette ord
 overlapping capacity, refusal/recovery, cancellation and early/late work failure.
 Palette data has its own retained owner; index packing reuses the working buffer
 without refunding its still-allocated capacity. All 57 focused checks pass with one
-assembly on Windows/Linux. No additional native encoding or timing was needed.
+assembly on Windows/Linux. Uncached parsing adds 11 checks: exact predictor/color
+and palette auxiliary token streams, frozen greedy/repeat/trace decision costs,
+candidate/trace refusal cleanup, cancellation, late work failure and typed token
+ownership. Tokens use owned eight-byte entries; positions are derived cumulatively.
+Trace scratch is admitted before allocation and losing candidates are released.
+All 68 focused checks pass with one assembly on both platforms. No additional
+native encoding or timing was needed.
 The last full shared-build qualification (E53) passed 3,884 offline tests per
 platform, the same private Release package and all three usage examples on both.
 These public paths remain unchanged. The encoder is not switched: complete-operation
