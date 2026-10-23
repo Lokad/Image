@@ -39,17 +39,17 @@ internal static class Vp8lReferenceClustering
     {
         private readonly OperationContext context;
         private readonly Vp8lHistogramLayout layout;
-        private readonly int tiles;
+        private readonly int tiles, quality, threshold;
         private readonly int[] original, working, scratch, slots;
         private readonly Stats[] originals, items;
         private readonly Pair[] pool;
         private int count, pairs;
-        internal State(int tiles, Vp8lHistogramLayout layout, OperationContext context)
+        internal State(int tiles, Vp8lHistogramLayout layout, OperationContext context, int quality, int threshold)
         {
-            this.tiles = tiles; this.layout = layout; this.context = context;
+            this.quality = quality; this.threshold = threshold; this.tiles = tiles; this.layout = layout; this.context = context;
             original = new int[tiles * layout.Total]; working = new int[original.Length]; scratch = new int[layout.Total];
             slots = new int[tiles]; originals = new Stats[tiles]; items = new Stats[tiles];
-            var limit = Math.Min(tiles, 43); pool = new Pair[limit * limit];
+            var limit = Math.Min(tiles, threshold); pool = new Pair[limit * limit];
         }
 
         private int Start(int bank) => bank switch { 0 => 0, 1 => layout.Red, 2 => layout.Blue, 3 => layout.Alpha, _ => layout.Distance };
@@ -172,11 +172,19 @@ internal static class Vp8lReferenceClustering
             }
             Span<int> first = stackalloc int[64]; first.Fill(-1);
             Span<int> failures = stackalloc int[64]; failures.Clear();
+            var factor = 16;
+            if (quality < 90)
+            {
+                if (tiles > 256) factor /= 2;
+                if (tiles > 512) factor /= 2;
+                if (tiles > 1024) factor /= 2;
+                if (quality <= 50) factor /= 2;
+            }
             for (var at = 0; at < count;)
             {
                 context.Work(1); var candidate = items[slots[at]]; var bin = candidate.Bin;
                 if (first[bin] < 0) { first[bin] = at++; continue; }
-                var aSlot = slots[first[bin]]; var a = items[aSlot]; var change = -((candidate.Total * 2 + 50) / 100);
+                var aSlot = slots[first[bin]]; var a = items[aSlot]; var change = -((candidate.Total * factor + 50) / 100);
                 if (!Evaluate(aSlot, slots[at], false, a.Total + candidate.Total + change, out var costs)) { at++; continue; }
                 var nontrivial = false;
                 for (var bank = 1; bank < 4; bank++) nontrivial |= a.Trivial(bank) != candidate.Trivial(bank) || a.Trivial(bank) < 0;
@@ -188,7 +196,7 @@ internal static class Vp8lReferenceClustering
 
         private bool Sample()
         {
-            const int threshold = 43, capacity = 9;
+            const int capacity = 9;
             if (count < threshold) return true;
             var outer = count; var misses = 0; var limit = outer / 2; uint seed = 1;
             for (var iteration = 0; iteration < outer && count >= threshold && ++misses < limit; iteration++)
@@ -237,7 +245,7 @@ internal static class Vp8lReferenceClustering
 
         internal Vp8lHistogramPlan Finish(bool lowEffort, int columns, int bits)
         {
-            var useBins = count > (lowEffort ? 8 : 128);
+            var useBins = count > (lowEffort ? 8 : 128) && quality < 100;
             if (useBins) { if (lowEffort) MergeLowBins(); else MergeBins(); }
             if (!(lowEffort && useBins) && Sample()) Greedy();
             var result = new Vp8lHistogramPlan(context, layout, count, tiles, columns, bits);
@@ -269,22 +277,24 @@ internal static class Vp8lReferenceClustering
     }
 
     internal static Vp8lHistogramPlan Build(ReadOnlySpan<Vp8lToken> tokens, int width, int height,
-        int tileBits, int cacheBits, bool lowEffort, OperationContext context)
+        int tileBits, int cacheBits, bool lowEffort, OperationContext context, int quality = 75)
     {
         if (width is < 1 or > 16384 || height is < 1 or > 16384 || tileBits is < 2 or > 9)
             throw new ArgumentOutOfRangeException(nameof(width));
+        if (quality is < 0 or > 100) throw new ArgumentOutOfRangeException(nameof(quality));
+        var threshold = 1 + (quality * quality * quality * 99 + 500_000) / 1_000_000;
         var columns = (width + (1 << tileBits) - 1) >> tileBits;
         var tiles = columns * ((height + (1 << tileBits) - 1) >> tileBits);
         // The preceding analysis selects tile bits to keep this finite bound.
         if (tiles > 2600) throw new ArgumentException("Histogram tiling exceeds the analyzed bound.", nameof(tileBits));
-        var layout = new Vp8lHistogramLayout(cacheBits); var pairLimit = Math.Min(tiles, 43);
+        var layout = new Vp8lHistogramLayout(cacheBits); var pairLimit = Math.Min(tiles, threshold);
         // Two flat count slabs, two conservative metadata allowances, index
         // slots, reusable sum scratch and a fixed pair pool. No candidate allocs.
         var reserved = tiles * (layout.Total * 8L + 192) + layout.Total * 4L + pairLimit * pairLimit * 64L + 512;
         context.Work(0); context.Reserve(reserved);
         try
         {
-            context.Work(0); var state = new State(tiles, layout, context);
+            context.Work(0); var state = new State(tiles, layout, context, quality, threshold);
             state.Fill(tokens, width, height, tileBits); return state.Finish(lowEffort, columns, tileBits);
         }
         finally { context.Release(reserved); }

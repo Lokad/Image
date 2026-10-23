@@ -27,32 +27,32 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
     }
 
     private void MainCandidates(ReadOnlySpan<uint> pixels, int width, int height, Vp8lFramePrefix candidatePrefix,
-        Vp8lEncodingAnalysis analysis, int effort, int paletteColors)
+        Vp8lEncodingAnalysis analysis, int effort, int paletteColors, int quality)
     {
-        var low = effort == 0; var maximumCacheBits = paletteColors == 0 ? 10 : BitOperations.Log2((uint)paletteColors) + 1;
-        using var matches = Vp8lReferenceMatcher.Build(pixels, width, 75, low, context);
+        var low = effort == 0; var maximumCacheBits = quality <= 25 ? 0 : paletteColors == 0 ? 10 : BitOperations.Log2((uint)paletteColors) + 1;
+        using var matches = Vp8lReferenceMatcher.Build(pixels, width, quality, low, context);
         if (low)
         {
             var tokens = Vp8lReferenceLz.Greedy(pixels, matches.Values, context);
-            Consider(candidatePrefix, Vp8lImageCode.TakeMain(tokens, width, height, analysis.HistogramBits, true, context));
+            Consider(candidatePrefix, Vp8lImageCode.TakeMain(tokens, width, height, analysis.HistogramBits, true, context, quality));
             return;
         }
-        var ordinary = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, width, false, maximumCacheBits, context);
-        Consider(candidatePrefix, Vp8lImageCode.TakeMain(ordinary, width, height, analysis.HistogramBits, false, context));
-        if (effort == 5)
+        var ordinary = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, width, false, maximumCacheBits, context, quality >= 25);
+        Consider(candidatePrefix, Vp8lImageCode.TakeMain(ordinary, width, height, analysis.HistogramBits, false, context, quality));
+        if (effort == 5 && quality >= 75)
         {
-            var uncached = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, width, true, maximumCacheBits, context);
-            Consider(candidatePrefix, Vp8lImageCode.TakeMain(uncached, width, height, analysis.HistogramBits, false, context));
+            var uncached = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, width, true, maximumCacheBits, context, quality >= 25);
+            Consider(candidatePrefix, Vp8lImageCode.TakeMain(uncached, width, height, analysis.HistogramBits, false, context, quality));
         }
         if (paletteColors is >= 1 and <= 16)
         {
             using var box = Vp8lReferenceMatcher.BuildBox(pixels, width, matches.Values, context);
-            var boxed = Vp8lReferenceMainParsing.EncodeBox(pixels, box.Values, width, false, maximumCacheBits, context);
-            Consider(candidatePrefix, Vp8lImageCode.TakeMain(boxed, width, height, analysis.HistogramBits, false, context));
-            if (effort == 5)
+            var boxed = Vp8lReferenceMainParsing.EncodeBox(pixels, box.Values, width, false, maximumCacheBits, context, quality >= 25);
+            Consider(candidatePrefix, Vp8lImageCode.TakeMain(boxed, width, height, analysis.HistogramBits, false, context, quality));
+            if (effort == 5 && quality >= 75)
             {
-                var uncached = Vp8lReferenceMainParsing.EncodeBox(pixels, box.Values, width, true, maximumCacheBits, context);
-                Consider(candidatePrefix, Vp8lImageCode.TakeMain(uncached, width, height, analysis.HistogramBits, false, context));
+                var uncached = Vp8lReferenceMainParsing.EncodeBox(pixels, box.Values, width, true, maximumCacheBits, context, quality >= 25);
+                Consider(candidatePrefix, Vp8lImageCode.TakeMain(uncached, width, height, analysis.HistogramBits, false, context, quality));
             }
         }
     }
@@ -67,7 +67,7 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
     }
 
     private Vp8lFramePrefix Predict(Span<uint> pixels, int width, int height, int effort, int transformBits,
-        Vp8lFramePrefix candidatePrefix)
+        Vp8lFramePrefix candidatePrefix, int quality)
     {
         var maximum = ClampPredictionBits(width, height, transformBits);
         var minimum = ClampPredictionBits(width, height, maximum - 2 * Math.Max(0, effort - 4));
@@ -77,7 +77,7 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
         {
             context.Work(0); var map = new uint[plan.Modes.Length];
             for (var i = 0; i < map.Length; i++) { context.Work(1); map[i] = 0xff000000u | (uint)plan.Modes[i] << 8; }
-            prediction = Vp8lImageCode.Auxiliary(map, (width + (1 << plan.StoredBits) - 1) >> plan.StoredBits, 75, effort == 0, context);
+            prediction = Vp8lImageCode.Auxiliary(map, (width + (1 << plan.StoredBits) - 1) >> plan.StoredBits, quality, effort == 0, context);
         }
         finally { context.Release(reserved); }
         return candidatePrefix with { Prediction = prediction, PredictionBits = plan.StoredBits };
@@ -86,8 +86,9 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
     // working is the library's admitted normalization buffer and is modified in
     // place. Its owner keeps the full capacity charged, including palette tails.
     // Returned prepared state owns no reference to this buffer.
-    internal static Vp8lPreparedEncoding Prepare(Span<uint> working, int width, int effort, OperationContext context)
+    internal static Vp8lPreparedEncoding Prepare(Span<uint> working, int width, int effort, OperationContext context, int quality = 75)
     {
+        if (quality is < 0 or > 100) throw new ArgumentOutOfRangeException(nameof(quality));
         var analysis = Vp8lEncodingAnalysis.Select(working, width, effort, context);
         var height = working.Length / width; var result = new Vp8lPreparedEncoding(context);
         var candidatePrefix = new Vp8lFramePrefix(width, height, analysis.HasNonOpaqueAlpha);
@@ -99,13 +100,13 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
                 result.palette = Vp8lImageCode.Auxiliary(plan.EncodedDeltas, plan.EncodedColorCount, 20, effort == 0, context);
                 candidatePrefix = candidatePrefix with { Palette = result.palette, PaletteEntries = plan.EncodedColorCount };
                 var input = working[..plan.PackedPixelCount];
-                result.MainCandidates(input, plan.CodedWidth, height, candidatePrefix, analysis, effort, plan.ColorCount);
-                if (effort == 5)
+                result.MainCandidates(input, plan.CodedWidth, height, candidatePrefix, analysis, effort, plan.ColorCount, quality);
+                if (effort == 5 && quality >= 75)
                 {
                     // Selected plain tokens contain all literal values and copy
                     // distances. They survive this in-place spatial transform.
-                    candidatePrefix = result.Predict(input, plan.CodedWidth, height, effort, analysis.TransformBits, candidatePrefix);
-                    result.MainCandidates(input, plan.CodedWidth, height, candidatePrefix, analysis, effort, plan.ColorCount);
+                    candidatePrefix = result.Predict(input, plan.CodedWidth, height, effort, analysis.TransformBits, candidatePrefix, quality);
+                    result.MainCandidates(input, plan.CodedWidth, height, candidatePrefix, analysis, effort, plan.ColorCount, quality);
                 }
             }
             else
@@ -116,15 +117,15 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
                 { Vp8lReferenceColorTransform.SubtractGreen(working, context); candidatePrefix = candidatePrefix with { SubtractGreen = true }; }
                 if (predict)
                 {
-                    candidatePrefix = result.Predict(working, width, height, effort, analysis.TransformBits, candidatePrefix);
+                    candidatePrefix = result.Predict(working, width, height, effort, analysis.TransformBits, candidatePrefix, quality);
                     if (effort != 0 && !analysis.RedBlueZero)
                     {
-                        using var plan = Vp8lReferenceColorTransform.SelectAndApply(working, width, analysis.TransformBits, 75, context);
-                        result.color = Vp8lImageCode.Auxiliary(plan.Coefficients, (width + (1 << plan.StoredBits) - 1) >> plan.StoredBits, 75, false, context);
+                        using var plan = Vp8lReferenceColorTransform.SelectAndApply(working, width, analysis.TransformBits, quality, context);
+                        result.color = Vp8lImageCode.Auxiliary(plan.Coefficients, (width + (1 << plan.StoredBits) - 1) >> plan.StoredBits, quality, false, context);
                         candidatePrefix = candidatePrefix with { Color = result.color, ColorBits = plan.StoredBits };
                     }
                 }
-                result.MainCandidates(working, width, height, candidatePrefix, analysis, effort, 0);
+                result.MainCandidates(working, width, height, candidatePrefix, analysis, effort, 0, quality);
             }
             if (!ReferenceEquals(result.prefix.Prediction, result.prediction))
             { result.prediction?.Dispose(); result.prediction = null; }
@@ -137,6 +138,9 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
 
     internal void Write(Stream output)
         => Vp8lReferenceFrame.Write(output, prefix, image ?? throw new ObjectDisposedException(nameof(Vp8lPreparedEncoding)), PayloadBytes, context);
+
+    internal void WriteAlphaBody(Stream output)
+        => Vp8lReferenceFrame.WritePayload(output, prefix, image ?? throw new ObjectDisposedException(nameof(Vp8lPreparedEncoding)), context, includeHeader: false);
 
     public void Dispose()
     {

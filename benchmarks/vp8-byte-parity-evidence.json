@@ -1,8 +1,8 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E79",
-  "scope": "Private unwired preparation through large/small prediction and encoder reconstruction. Actual RDO/entropy/full managed VP8 encoder remain open.",
-  "productionPublicBehaviorChanged": false,
+  "latestRound": "E80",
+  "scope": "Private default quality75/method4 complete VP8 packets on the four existing identities, including exact ALPH and RGBA8/16 transparent input. Public lossy integration, required options/work/header confirmation, decoder and performance objectives remain open.",
+  "productionPublicBehaviorChanged": true,
   "fullObjectiveOpen": true,
   "reference": {
     "ffmpeg": "n8.1",
@@ -635,9 +635,9 @@
     },
     "algorithm": "Independent sequency-ordered Hadamard projections from two-bit reversedGraycode parity, followed by signed arithmetic half-scaling.16unquantized lumaDCs from16DCTblocks; no imported basis/table. Borrowed spans may overlap,64B bounded stack, no owned heap/cache/admission machinery; block work/cancellation remain with encoder.",
     "verified": [
-      "All8976coefficients from561macroblocks of the existing opaqueDCT control match native.36original DCfragments qualify zero,constant±2040,checker±2040 and signed-unit±1 odd-half rounding at eachposition.",
+      "All8976coefficients from561macroblocks of the existing opaqueDCT control match native.36original DCfragments qualify zero,constant\u00c2\u00b12040,checker\u00c2\u00b12040 and signed-unit\u00c2\u00b11 odd-half rounding at eachposition.",
       "NativeSIMD/forcedscalar19104Bstreams agree byte for byte. First1152bytes contain36arithmetic fragment vectors; remainder is existing opaqueY2coefficients.",
-      "Caller input is preserved for separate output; overlapping buffers and output tails obey borrowing. Unsupported DC±2041 fails before any caller-output mutation."
+      "Caller input is preserved for separate output; overlapping buffers and output tails obey borrowing. Unsupported DC\u00c2\u00b12041 fails before any caller-output mutation."
     ],
     "qualification": {
       "sameWindowsBuiltAssemblyBothOS": true,
@@ -3707,5 +3707,125 @@
       "Required method0/1fast and5/6trellis, declared quality/alpha boundaries and a native-positive large first-partition/header-strengthening confirmation. All current controls require zero header retries.",
       "Exact decoder, full warm singleCPU performance/allocation, functional/memory/text/Lanczos3 and release objectives remain open."
     ]
+  },
+  "alphaPacketEncoding": {
+    "round": "E80",
+    "scope": "Private default quality75/method4 alpha packet from the existing asymmetric RGBA8/16 control, exact headerless VP8L ALPH at quality32, complete sync/async delivery. Public lossy encoder remains unwired. Required options, work32M and native-positive header retry remain open.",
+    "files": {
+      "tmp/e71-runtime/Lokad.Image.Tests.dll": {
+        "bytes": 1718272,
+        "sha256": "e5c445f74b188fb312dea0806623e686968c713187aba2a8537201f326978a42"
+      },
+      "src/Lokad.Image/Internal/Vp8AlphaEncoding.cs": {
+        "bytes": 6331,
+        "sha256": "d1b1b560cac3f30c2b06ac1d84b439922e70301497f948a04110d1da56c595be"
+      },
+      "src/Lokad.Image/Internal/Vp8FrameEncoding.cs": {
+        "bytes": 15358,
+        "sha256": "ceabdc3cecc556e543fe92d8674856b2df3409224bb4624b90cf865b21e4921f"
+      },
+      "src/Lokad.Image/Internal/Vp8lPreparedEncoding.cs": {
+        "bytes": 8895,
+        "sha256": "2dd650c48c36db26d706576b311a249334e3e7a3defccbd0b1f30dc503aba18e"
+      },
+      "src/Lokad.Image/Internal/Vp8lImageCode.cs": {
+        "bytes": 6646,
+        "sha256": "f18494424deb63acf6e9eb229fb0786f81bdf85adf24ed71eaba43832e9e6e28"
+      },
+      "src/Lokad.Image/Internal/Vp8lReferenceClustering.cs": {
+        "bytes": 16679,
+        "sha256": "f99fda75abf31b33e797e3dbdb5de3c2bea6d297a01e2a7ed7e6449faf81864b"
+      },
+      "src/Lokad.Image/Internal/Vp8lReferenceFrame.cs": {
+        "bytes": 3518,
+        "sha256": "b145f63a1f4b92cfc4b97b77a2644eff58c348bef015714705417b8c7594ef47"
+      },
+      "src/Lokad.Image/Internal/Vp8lReferenceMainParsing.cs": {
+        "bytes": 3490,
+        "sha256": "1c12d48f1da671949af74a1a63b163c149f2e33bc141a65b92dabc708af2fa31"
+      },
+      "tests/Lokad.Image.Tests/Vp8AlphaEncodingTests.cs": {
+        "bytes": 12901,
+        "sha256": "127bfc01baa2629f58e7bbb69932f5b9bf8dbbaa989ff2f8a18ccbb6f4242e69"
+      }
+    },
+    "sameWindowsBuiltAssemblyBothOS": true,
+    "normalPerOS": 411,
+    "scalarPerOS": 411,
+    "newAlphaAndContainerChecks": 9,
+    "vp8PriorChecksReconfirmed": 250,
+    "vp8lChecksReconfirmed": 152,
+    "packets": [
+      {
+        "control": "asymmetric",
+        "depths": [
+          8,
+          16
+        ],
+        "bytes": 98590,
+        "sha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "alphaBytes": 24588,
+        "alphaSha256": "ca83ebb44c092e661126e81d83a3345877b1de833a2d0bde289217b19d2d25ae",
+        "syncAndAsyncExact": true,
+        "independentOfDisposedSources": true
+      }
+    ],
+    "builds": {
+      "windowsLinkedInternalTestsSuccessful": 3,
+      "windowsCompileAttempts": 3,
+      "linux": 0,
+      "publicCore": 0,
+      "native": 0,
+      "sourceModel": 0
+    },
+    "nativeCalls": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "firstScreens": [
+      "First trace path was relative to the testhost directory; corrected invocation to absolute path without rebuilding.",
+      "ALPH size and SHA passed first byte screen; full packet was90B larger because the test omitted existing CleanupTransparentArea. Invoking that qualified input stage fixed the packet without changing its primitive."
+    ],
+    "defaultVp8lEvidence": "Quality75 now passes explicitly through shared preparation; all152 existing VP8L checks reconfirmed, including selected and forced complete packets. General bin combine factor now derives from actual tile count and quality, with native quality32 ALPH exercising the distinct low-quality policy. Existing complete packet identities at75 remain unchanged; untested shapes are not byte parity claims.",
+    "publicQualification": "No public lossy switch or package change. Full public/differential/actual-package CI runs at every push; coherent adoption still needs both-platform consumer/functional qualification. Unaffected earlier path evidence retains its scope.",
+    "algorithm": "Exact logical alpha is filtered on access into one admitted green-only uint workspace (A/R/B zero). Default FAST occupancy scoring chooses NONE and one predicted filter; strict payload-size ties preserve the earlier candidate. Shared VP8L preparation receives quality32/method4, including quality-dependent matching, cache/trace and histogram clustering. Headerless VP8L is emitted directly into the selected ALPH buffer; raw syntax is selected only when compressed bytes exceed source length. Old/new winner capacities overlap until replacement succeeds. Extended VP8X/ALPH/VP8 container delivery writes existing buffers directly, without a joined full-packet copy.",
+    "ownedCapacities": {
+      "retainedAlphaBytes": "payload capacity plus128",
+      "temporaryAlphaBytes": "4*logicalPixelCount+512, plus separately admitted VP8L coding owners and old/new selected payload overlap",
+      "noNewGcAllocationOrTimingMeasurement": true
+    },
+    "verified": [
+      "Complete98590B packet and24588B ALPH chunk match frozen reference hashes from both RGBA8 and normalized RGBA16. Sync and async bytes agree. Source/prepared/frame owners release before delivery; encoded owners remain charged.",
+      "Owned/scratch/final-candidate and aggregate admission refusals are terminal. Work, local, output and cancellation failures release unused storage and allow subsequent operations after caller capacity is released. Borrowed input/root/stream ownership is preserved.",
+      "An actual alpha-buffer async user stays blocked after cancellation; both alpha and color storage remain charged until that user completes. Stream failure follows the same cleanup boundary. Full-container output limit and alpha dimension mismatch reject before writing.",
+      "All250prior VP8 checks and152VP8L checks reconfirmed BOTHOSnormal/scalar on the same assembly. These include unchanged selected/forced public lossless packet identities at quality75; public lossy remains unwired."
+    ],
+    "rawArchive": {
+      "name": "e80-alpha-packet-qualified.tar.xz",
+      "bytes": 680936,
+      "members": 28,
+      "sha256": "f52c1bc2101c3114a761d8289e846a371221af867f7d68e5607d80070636db74",
+      "everySourceMemberByteVerified": true,
+      "mirrored": true
+    },
+    "storage": {
+      "capBytes": 5000000000,
+      "windowsAfterMaster": 4997599424,
+      "linux": {
+        "beforeBytes": 4999101506,
+        "archiveBytes": 680936,
+        "afterArchiveBytes": 4999782442,
+        "sha256": "f52c1bc2101c3114a761d8289e846a371221af867f7d68e5607d80070636db74",
+        "members": 28,
+        "allMembersRead": true
+      },
+      "allPeaksBelowCap": true
+    },
+    "evidenceReuse": "Native packets/settings reused from E63, no native encodes or CPU/GC measurements. Parent a12ce3272855a2e37b1a7497741d92e3c7b08f6b CI39974820486 succeeded on Windows/Linux correctness+actual package and live differential. Earlier public/full/package evidence retains its path scope.",
+    "remaining": [
+      "Required method0/1fast and5/6trellis and quality/alpha options, existing work32M boundary and native-positive header-strengthening confirmation.",
+      "Coherent public lossy integration and full bothOS/differential/affectedscalar/SAMEactualpackage qualification.",
+      "Exact decoder pixels, warm singleCPU parity/allocations and all remaining functional/memory/text/Lanczos3/release objectives."
+    ],
+    "publicLosslessChange": "Shared clustering now derives the merge factor from actual tile count and quality instead of a fixed large-control factor. This can change public lossless outputs on other tilings. All frozen quality75 complete packets remain exact. Public lossy encoder is not switched. CI performs full Windows/Linux and live differential suites plus actual-package consumers; local qualification here is the411affected checks per OS/cpu mode."
   }
 }

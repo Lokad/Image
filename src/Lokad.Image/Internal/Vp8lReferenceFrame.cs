@@ -13,14 +13,17 @@ internal readonly record struct Vp8lFramePrefix(int Width, int Height, bool Alph
     internal Vp8lImageCode? Color { get; init; }
     internal int ColorBits { get; init; }
 
-    internal void Write(WebpBitWriter writer)
+    internal void Write(WebpBitWriter writer, bool includeHeader = true)
     {
         if (Width is < 1 or > 16384 || Height is < 1 or > 16384) throw new ArgumentOutOfRangeException(nameof(Width));
         if (Palette is not null && PaletteEntries is < 1 or > 256) throw new ArgumentOutOfRangeException(nameof(PaletteEntries));
         if (Prediction is not null && PredictionBits is < 2 or > 9) throw new ArgumentOutOfRangeException(nameof(PredictionBits));
         if (Color is not null && ColorBits is < 2 or > 9) throw new ArgumentOutOfRangeException(nameof(ColorBits));
-        writer.Write(0x2f, 8); writer.Write(Width - 1, 14); writer.Write(Height - 1, 14);
-        writer.Write(Alpha ? 1 : 0, 1); writer.Write(0, 3);
+        if (includeHeader)
+        {
+            writer.Write(0x2f, 8); writer.Write(Width - 1, 14); writer.Write(Height - 1, 14);
+            writer.Write(Alpha ? 1 : 0, 1); writer.Write(0, 3);
+        }
         if (SubtractGreen) { writer.Write(1, 1); writer.Write(2, 2); }
         if (Palette is not null) { writer.Write(1, 1); writer.Write(3, 2); writer.Write(PaletteEntries - 1, 8); Palette.Write(writer); }
         if (Prediction is not null) { writer.Write(1, 1); writer.Write(0, 2); writer.Write(PredictionBits - 2, 3); Prediction.Write(writer); }
@@ -39,9 +42,9 @@ internal static class Vp8lReferenceFrame
         WritePayload(count, prefix, image, context); return count.Count;
     }
 
-    private static void WritePayload(Stream output, Vp8lFramePrefix prefix, Vp8lImageCode image, OperationContext context)
+    internal static void WritePayload(Stream output, Vp8lFramePrefix prefix, Vp8lImageCode image, OperationContext context, bool includeHeader = true)
     {
-        var writer = new WebpBitWriter(output, context); prefix.Write(writer); image.Write(writer); writer.Finish();
+        var writer = new WebpBitWriter(output, context); prefix.Write(writer, includeHeader); image.Write(writer); writer.Finish();
     }
 
     internal static void Write(Stream output, Vp8lFramePrefix prefix, Vp8lImageCode image, int payloadBytes, OperationContext context)

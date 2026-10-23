@@ -51,12 +51,12 @@ internal sealed class Vp8lImageCode : IDisposable
     // Ownership of tokens transfers on entry, including failure. The caller
     // must not dispose or modify them after passing them here.
     internal static Vp8lImageCode TakeMain(Vp8lTokenBuffer tokens, int width, int height,
-        int tileBits, bool lowEffort, OperationContext context)
+        int tileBits, bool lowEffort, OperationContext context, int quality = 75)
     {
         var result = new Vp8lImageCode(tokens, width, height, true, context);
         try
         {
-            var plan = result.histograms = Vp8lReferenceClustering.Build(tokens.Tokens, width, height, tileBits, tokens.CacheBits, lowEffort, context);
+            var plan = result.histograms = Vp8lReferenceClustering.Build(tokens.Tokens, width, height, tileBits, tokens.CacheBits, lowEffort, context, quality);
             result.StoredTileBits = tileBits;
             if (plan.GroupCount > 1)
             {
@@ -81,7 +81,7 @@ internal sealed class Vp8lImageCode : IDisposable
                     for (var y = 0; y < codedRows; y++)
                     for (var x = 0; x < codedColumns; x++)
                     { context.Work(1); pixels[y * codedColumns + x] = (uint)map[y * stride * columns + x * stride] << 8; }
-                    result.groupMap = Auxiliary(pixels, codedColumns, 75, lowEffort, context);
+                    result.groupMap = Auxiliary(pixels, codedColumns, quality, lowEffort, context);
                 }
                 finally { context.Release(reserved); }
             }

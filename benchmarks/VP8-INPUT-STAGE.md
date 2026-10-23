@@ -5,7 +5,7 @@ The public lossy encoder is unchanged. Alpha, required options and public integr
 
 Seven existing encoding rows have four reference packet identities:
 
-| Original 513×259 input | Existing rows | Complete reference bytes |
+| Original 513Ã—259 input | Existing rows | Complete reference bytes |
 |---|---|---:|
 | Opaque procedural | RGBA8 / RGBA16 | 72,380 |
 | Alpha procedural | RGBA8 / RGBA16 / work-budget boundary | 98,590 |
@@ -21,14 +21,14 @@ rasters plus existing singleton/two-color controls. Both original16-bit procedur
 inputs normalize identically. Mathematical color/gamma generation introduces no
 upstream table. A single admitted owner retains padded planes and exact alpha;
 normalization happens on access, without an RGBA frame copy. In-place transparent
-cleanup matches native exact=0. One original33×17 control covers complete8×8 runs,
+cleanup matches native exact=0. One original33Ã—17 control covers complete8Ã—8 runs,
 resets and partial edges; alpha and visible luma remain exact.
 
-The forward4×4DCT matches215,424native coefficients from the opaque control
+The forward4Ã—4DCT matches215,424native coefficients from the opaque control
 against neutral128 prediction, plus36signed/extreme fragments. Y2Walsh matches
 8,976coefficients and36signed/odd-half fragments. Histograms match1,122native
 luma/UV summaries and ten population fragments. Large-block prediction matches
-861,696candidate pixels across allfour modes at16×16Y/8×8UV, including missing
+861,696candidate pixels across allfour modes at16Ã—16Y/8Ã—8UV, including missing
 borders, clipping and edge replication. Native SIMD/scalar streams agree.
 
 Composed source analysis matches8,976native candidate shapes on allfour rasters,
@@ -36,7 +36,7 @@ then exact derived susceptibility, seed modes, distributions and means. This use
 original source borders, preceding reconstruction and RDO. Selection/mixing is
 separately inspected encoder policy. Weighted centroid clustering and initial
 quantizer/filter setup reproduce all2,244native segment-map bytes and16quantizers.
-One original5×3 majority fragment verifies smoothing without neighbor feedback;
+One original5Ã—3 majority fragment verifies smoothing without neighbor feedback;
 frozen controls use preprocessing0. Final frame filtering remains a later gate:
 reconstructed Y2edges raise some photograph/diagram filter levels.
 
@@ -63,7 +63,7 @@ stack snapshots. Aliased caller buffers and compact/native strides pass; incompl
 or overflowing layouts fail before writes. This qualifies the tested encoder
 domain, without a broader decoder-range or actual RDO claim.
 
-Allten4×4predictor modes now match8,000native pixel bytes on50bounded neighbor
+Allten4Ã—4predictor modes now match8,000native pixel bytes on50bounded neighbor
 contexts from the same image and two original rounding/clipping fragments. The
 span entry reuses shared geometry unchanged, with explicit encoder/geometry
 ordering for the three diagonal modes. Neighbors are snapshotted in84stack bytes;
@@ -73,7 +73,7 @@ add actual reconstructed-neighbor choice during RDO.
 Squared-error and weighted-Hadamard texture scores match79,240native result bytes
 on561opaque-control macroblock pairs and five original arithmetic pairs. Analytic
 Gaussian importance generation reproduces the16-value profile without an imported
-table. Texture rounding and absolute differences apply per4×4tile; reversed-tile
+table. Texture rounding and absolute differences apply per4Ã—4tile; reversed-tile
 controls distinguish that rule from global accumulation. Independent strides,
 maximum error, source preservation and invalid-layout rejection pass.
 
@@ -115,8 +115,25 @@ and failed growth copying refund unused capacity without retry or fallback.
 Allcurrent controls require zero header-strengthening retries; a native-positive
 large-header confirmation remains an explicit required coverage item.
 
-The same immutable assembly passes250focused checks per platform on Windows/Linux,
-normal and SIMD disabled, including all223earlier checks. Shared admission covers
+The fourth complete packet now matches98,590bytes from the existing transparent
+RGBA8 and normalized RGBA16 inputs. Its24,588-byte ALPH payload is also exact.
+Default filter estimation compares NONE and one predicted filter, with strict
+size ties. Alpha is carried in green with A/R/B zero; shared VP8L preparation
+uses quality32/method4 and emits its headerless body directly. Retained storage
+is only the selected payload plus128accounting bytes; one temporary green-only
+workspace and coding owners release before delivery. Replacement capacity
+includes both old and new payloads. This is a private pipeline, not public lossy
+encoder adoption or a claim about other encoder settings.
+
+Alpha and color deliver directly through VP8X/ALPH/VP8 framing, including sync
+and async output. They survive disposed input/frame owners. A blocked actual
+alpha-buffer write remains charged through cancellation or stream failure until
+its task finishes. Terminal admission refusal, cleanup/recovery, local/work/output
+limits and mismatched dimensions pass. Quality75 lossless packet checks also pass
+with the shared preparation changes; the scoped native inputs/settings stay fixed.
+
+The same immutable assembly passes411focused checks per platform on Windows/Linux,
+normal and SIMD disabled:250prior VP8,152VP8L and9new alpha/container checks. Shared admission covers
 owned capacity, retained results and replacement overlap. Refusal, cancellation,
 local/work limits and cleanup/recovery pass; sources and caller roots stay borrowed.
 The matrix owner retains3,128/4,128admitted bytes for3/4used segments. Earlier source
@@ -125,6 +142,6 @@ accounting capacities; no new timing or GC-allocation measurements are claimed.
 
 [Structured evidence](vp8-byte-parity-evidence.json) records exact producers,
 reference observations, scope and preserved raw masters. Prior public codec and
-package evidence retains its stated scope. Next are ALPH/the fourth packet identity,
-the bounded required-option audit, then public integration and packaged consumer
-qualification. No readiness claim follows from these private stages.
+package evidence retains its stated scope. Next are the bounded required-option,
+work32M and native-positive header-retry confirmations, then public integration
+and packaged consumer qualification. No readiness claim follows from these private stages.
