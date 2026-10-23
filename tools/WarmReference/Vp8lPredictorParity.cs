@@ -12,7 +12,7 @@ public static class Vp8lPredictorParity
     public static byte[] EncodeModes(byte[] rgba, int width, int height, int bits, bool subtractGreen=true)
         => Select(rgba, width, height, bits, out _, subtractGreen);
 
-    private static long SLog(int count)
+    internal static long SLog(int count)
     {
         if (count < 2) return 0;
         if (count < 256) return (long)Math.Round(Scale * Math.Log2(count) * count);
@@ -34,7 +34,7 @@ public static class Vp8lPredictorParity
         }
         return -(weighted + 5) / 10;
     }
-    private static long Cost(ReadOnlySpan<int> current, ReadOnlySpan<int> previous)
+    internal static long Cost(ReadOnlySpan<int> current, ReadOnlySpan<int> previous)
     {
         long value = 0;
         for (var plane = 0; plane < 4; plane++)

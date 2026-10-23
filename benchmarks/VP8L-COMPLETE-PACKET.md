@@ -1,6 +1,6 @@
 # VP8L complete-packet reproduction
 
-One dependency-free source model reproduces **17 complete packet identities** on
+One dependency-free source model reproduces **18 complete packet identities** on
 Windows and Linux with the same frozen assembly. Every packet byte, including
 framing and padding, matches; there is no metadata exception. The pinned reference
 is libwebp 1.6.0, quality 75, `exact=1`, explicitly labeled as FFmpeg's encoder
@@ -21,6 +21,7 @@ backend. This is development tooling; production adoption remains open.
 | Sixteen-color partial packing, 17×3 | 4 | 130 |
 | Eighteen-color implicit zero, 23×13 | 4 | 236 |
 | Asymmetric RGBA8, 513×259 | 0 / 1 / 5 | 316,566 / 176,216 / 155,162 |
+| Photograph, 513×259 | 5 | 160,600 |
 
 Transform choice, predictor/color maps, residuals, palette ordering and packing,
 cache-aware/free parsing, clustering, Huffman trees and framing come from source
@@ -29,33 +30,38 @@ Palette auxiliary encoding uses internal quality 20; its parsing skips optimal
 tracing below 25. The eighteen-color control encodes 17 entries and uses the
 format's implicit final zero.
 
-The latest round adds the asymmetric input's non-palette effort primitives.
 Method 0 uses forced prediction, four literal-cost bins with unconditional bin
 merging, and lossless histogram-map coarsening from 128×128 to 512×512 tiles.
-Method 1 uses 64×64 predictor/color tiles. The method-5 snapshot chooses the same
-8×8 transform prefix as method 4, then selects the smaller uncached writer
-payload (155,141 bytes versus the cached candidate), excluding RIFF padding.
-This is a cache-comparison proof, **not general adaptive-sampling qualification**.
+Method 1 uses 64×64 predictor/color tiles. At method 5, independent hierarchical
+selection reproduces **every 4×4 and 8×8 candidate mode and entropy cost** on the
+asymmetric input and photograph. Separate accumulated histories and quadrant
+traversal select 8×8 and 4×4 respectively, followed by complete cached/uncached
+writer-payload comparison. Both complete packets match. The photograph's method-5
+packet is larger than its method-4 packet; this is byte reproduction of distinct
+settings, without a compression-gain claim.
 
-The same consolidated assembly passes all 17 identities, repeated packets,
+The same consolidated assembly passes all 18 identities, repeated packets,
 source preservation, independent outputs and mutation rejection on both platforms.
-Two Windows model builds were needed in this round: the method-0 prototype and
-the typed consolidation. There were no Linux/production/native builds, native
-encodes, timing/allocation runs or repeated package proofs. Unchanged production
-qualification is reused. Numerical identities, source hashes and mirrored raw
-receipts are in [the evidence](vp8l-byte-parity-evidence.json).
+This round used two Windows model builds (adaptive selector, then complete packet
+composition), one native observation adapter and three preparation encodes for
+one new photograph snapshot. It reused the asymmetric packet and all existing
+inputs. There were no Linux/production builds, timing/allocation runs or repeated
+package proofs. Unchanged production qualification is reused. Numerical identities,
+source hashes and mirrored raw receipts are in
+[the evidence](vp8l-byte-parity-evidence.json).
 
 Build once with `dotnet build tools/WarmReference/Vp8lParityModel -c Release --tl:off`
 and reuse the assembly with the packet verifiers. The four-core verifier uses
 Lokad.Image only to prepare frozen PNG inputs, outside the encoding model.
-`verify-vp8l-nonpalette-efforts.ps1` checks the three additional effort packets
-against retained snapshots; the other verifiers cover their named families.
+`verify-vp8l-adaptive-predictor.ps1` checks both adaptive selectors and packets;
+`verify-vp8l-nonpalette-efforts.ps1` checks the fixed effort/cache primitives.
+The other verifiers cover their named families.
 
 The six original workload rows share four core packet identities. Their complete
 RGBA16 normalization and asynchronous public operations still need integration
 qualification. The native public encoder refuses sides above 16383: the axis
 companions do not establish packet parity for existing 16384-pixel functional tests.
-General adaptive predictor sampling, admitted production integration, work and
+Complete effort-family routing, admitted production integration, work and
 cancellation limits, output ownership and actual-package qualification remain
 open in the [finite coverage checklist](VP8L-PRODUCTION-COVERAGE.md).
 CPU parity and allocation tuning resume after required exact codec coverage.

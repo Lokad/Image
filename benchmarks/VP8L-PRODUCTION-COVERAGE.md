@@ -1,8 +1,9 @@
 # VP8L remaining production coverage
 
-One dependency-free source model reproduces seventeen packet identities on Windows/Linux:
+One dependency-free source model reproduces eighteen packet identities on Windows/Linux:
 thirteen default-method packets, the method-0 two-color variant and three
-non-palette effort controls on the existing asymmetric input. Main quality
+non-palette effort controls on the existing asymmetric input, plus one adaptive
+photograph packet. Main quality
 is 75 with `exact=1`; palette auxiliary encoding uses the backend's internal quality 20.
 Production adoption also has to preserve the existing public encoding scope.
 This bounded checklist comes from current tests and options; it adds no warm
@@ -52,12 +53,19 @@ performance grid.
    **Effort0ForcedPredictorRgba8** (316,566 bytes, forced mode 11, four-bin fast
    clustering and equivalent histogram-map coarsening), **Effort1CoarseTilesRgba8**
    (176,216 bytes, 64×64 transform tiles), and **Effort5CacheComparisonRgba8**
-   (155,162 bytes, cached versus uncached writer selection). The last reference
-   uses the same 8×8 transform prefix as method 4; it does **not** establish
-   adaptive predictor sampling. That remains a distinct required algorithm:
-   evaluate intermediate fine/coarse decisions on this input first, adding at most
-   one named original control if needed to expose a missing fine-winner path.
-   General effort/settings qualification remains open. Reuse current two-color
+   (155,162 bytes, cached versus uncached writer selection). The full method-5
+   adaptive selector now also reproduces every 4×4/8×8 predictor mode and entropy
+   cost on the asymmetric input and the existing photograph. It selects 8×8 on
+   the first, 4×4 on the photograph; their complete packets are 155,162 and
+   160,600 bytes. **Effort5AdaptivePhotograph** therefore closes the missing
+   fine-winner algorithm on an existing input, without a new fixture/grid.
+   Hierarchical traversal, per-level histories, entropy selection and packet
+   composition pass together in the same model on both platforms.
+   Complete effort-family routing remains open, including the method-5
+   palette-plus-spatial candidate comparison. Audit that named branch on the
+   existing eighteen-color input before integration; add no general settings grid.
+   Quality100/method6 brute-force search is outside this pinned quality75 scope.
+   Reuse current two-color
    depths for complete public-operation qualification. Unpublished implementation
    assertions may change; exact normalized pixels and declared option/resource
    contracts remain required. No compatibility alias is needed for experiments.

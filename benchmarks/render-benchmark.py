@@ -379,13 +379,14 @@ A separate source-only [production coverage audit](../benchmarks/VP8L-PRODUCTION
 names the remaining required paths; its1x1 and two-color4103x2 palette packets
 are raw-exact on both platforms, as is the129x129 direct-coding packet.
 The19x7 hidden-RGB spatial-only packet and its maps/residuals also match exactly.
-One dependency-free source build now confirms seventeen complete packet identities
-on both platforms: thirteen default-method packets, the two-color method0 variant
-and three non-palette effort packets on the existing asymmetric input. Those
-method0/1/5 packets are316,566/176,216/155,162B. The method5 result qualifies cached
-versus uncached writer selection on its shared default prefix; general adaptive
-predictor sampling remains open. The native public encoder refuses16384; those
-existing functional tests have no native packet confirmation.
+One dependency-free source build now confirms eighteen complete packet identities
+on both platforms. Method5 adaptive selection reproduces every4x4/8x8 candidate
+mode and entropy cost on the existing asymmetric input and photograph:8x8 and4x4
+win respectively. Complete packets match155,162/160,600B. The new photograph packet
+closes the missing fine-winner path using an existing input; it establishes no
+broader compression or performance claim. Complete effort-family routing and
+admitted production/public-operation qualification remain open. The native public
+encoder refuses16384; those existing functional tests have no native packet proof.
 These do not change production/timing claims below.
 
 No timing or allocation runs accompanied the new PNG encoder or JPEG cleanup. Unchanged paths

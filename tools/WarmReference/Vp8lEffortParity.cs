@@ -1,11 +1,12 @@
 // Source-only non-palette effort primitives. RFC 9649 defines transform syntax.
-// General adaptive sampling and admitted production integration remain open.
+// Adaptive method5 sampling is qualified on named controls only; production is open.
 #nullable enable
 using System;
 using System.Linq;
 using System.Buffers.Binary;
 
 public sealed record Vp8lCacheComparisonResult(Vp8lPacketResult Selected,int CachedBytes,int UncachedBytes);
+public sealed record Vp8lAdaptivePacketResult(byte[] Packet,int CachedBytes,int UncachedBytes,Vp8lAdaptivePredictorResult Predictor,object Details);
 public static class Vp8lEffortParity
 {
     public static Vp8lDirectPacketResult EncodeFixedSampling(byte[] source,int width,int height,int method)
@@ -33,6 +34,43 @@ public static class Vp8lEffortParity
         }
         var stage=new Vp8lInputParity(writer.Finish(),writer.Count,residual,new{method});
         return Vp8lDirectPacketParity.Compose(stage,width,height,choice.HistogramBits,choice,low);
+        void Append(Vp8lAuxiliaryResult image){for(var bit=0;bit<image.BitCount;bit++)writer.Put(image.Bytes[bit>>3]>>(bit&7)&1,1);}
+    }
+
+    public static Vp8lAdaptivePacketResult EncodeAdaptiveSampling(byte[] source,int width,int height)
+    {
+        var choice=Vp8lInitialChoice.Select(source,width,height,5);
+        if(choice.Mode!=3)throw new NotSupportedException("This stage covers the spatial/subtract-green transform family at method5.");
+        var maximum=choice.TransformBits;
+        int Tiles(int bits)=>((width+(1<<bits)-1)>>bits)*((height+(1<<bits)-1)>>bits);
+        while(maximum<9&&Tiles(maximum)>16384)maximum++;
+        while(maximum>2&&Tiles(maximum-1)==1)maximum--;
+        var minimum=Math.Max(2,maximum-2);
+        while(minimum<9&&Tiles(minimum)>16384)minimum++;
+        while(minimum>2&&Tiles(minimum-1)==1)minimum--;
+        var prediction=Vp8lAdaptivePredictorParity.Select(source,width,height,minimum,maximum);
+        var predictorColumns=(width+(1<<prediction.StoredBits)-1)>>prediction.StoredBits;
+        var predictor=Vp8lAuxiliaryParity.Encode(prediction.Modes.Select(m=>0xff000000u|(uint)m<<8).ToArray(),predictorColumns,75);
+        var writer=new Vp8lParityBits();writer.Put(0x2f,8);writer.Put(width-1,14);writer.Put(height-1,14);
+        writer.Put(Enumerable.Range(0,width*height).Any(i=>source[4*i+3]!=255)?1:0,1);writer.Put(0,3);
+        writer.Put(1,1);writer.Put(2,2);writer.Put(1,1);writer.Put(0,2);writer.Put(prediction.StoredBits-2,3);Append(predictor);
+        var residual=prediction.Residual;
+        if(!choice.RedBlueZero)
+        {
+            var color=Vp8lCrossColorParity.Select(residual,width,height,choice.TransformBits,75);
+            var pixels=new uint[color.Map.Length/4];
+            for(var i=0;i<pixels.Length;i++)pixels[i]=BinaryPrimitives.ReadUInt32LittleEndian(color.Map.AsSpan(i*4));
+            var columns=(width+(1<<choice.TransformBits)-1)>>choice.TransformBits;
+            var coefficients=Vp8lAuxiliaryParity.Encode(pixels,columns,75);
+            writer.Put(1,1);writer.Put(1,2);writer.Put(choice.TransformBits-2,3);Append(coefficients);residual=color.Coded;
+        }
+        var stage=new Vp8lInputParity(writer.Finish(),writer.Count,residual,new{method=5,prediction.SelectedBits,prediction.StoredBits});
+        var cached=Vp8lDirectPacketParity.Compose(stage,width,height,choice.HistogramBits,choice);
+        var uncached=Vp8lDirectPacketParity.Compose(stage,width,height,choice.HistogramBits,choice,false,true);
+        var first=BinaryPrimitives.ReadUInt32LittleEndian(cached.Packet.AsSpan(16));
+        var second=BinaryPrimitives.ReadUInt32LittleEndian(uncached.Packet.AsSpan(16));
+        var selected=second<first?uncached:cached;
+        return new(selected.Packet,cached.Packet.Length,uncached.Packet.Length,prediction,selected.Details);
         void Append(Vp8lAuxiliaryResult image){for(var bit=0;bit<image.BitCount;bit++)writer.Put(image.Bytes[bit>>3]>>(bit&7)&1,1);}
     }
 
