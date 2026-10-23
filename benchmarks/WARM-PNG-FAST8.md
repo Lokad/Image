@@ -36,7 +36,7 @@ intervals against the faster native bracket's lower bound. Both runs use the
 same immutable production DLL, harness and native worker.
 
 Only the benchmark selector and native adapter's depth admission/description
-change. The existing native RGBA8 path is reused; its legacy fast16 executable
+change. The existing native RGBA8 path is reused; its existing fast16 executable
 and protocol names remain. Existing **3,373 Release tests per OS**, including
 **898 live comparisons**, and the same actual package's consumer plus all three
 examples on Windows/Linux are reused from the [streaming round](WARM-PNG-FAST2.md).

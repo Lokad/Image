@@ -7,8 +7,8 @@ This fixed pair clears 2x; full required warm coverage remains open.
 
 | Run | Managed mean (microseconds) | Worst native bracket ratio | Conservative upper | Quiet guards |
 | --- | ---: | ---: | ---: | --- |
-| Baseline screen (legacy guard) | 6,543.63 | 2.06600x | 2.65384x | Pass |
-| Baseline confirmation (legacy guard failed) | 5,958.48 | 2.03251x | 2.04666x | FAIL |
+| Baseline screen (original guard) | 6,543.63 | 2.06600x | 2.65384x | Pass |
+| Baseline confirmation (original guard failed) | 5,958.48 | 2.03251x | 2.04666x | FAIL |
 | Literal-run screen | 6,222.94 | 1.98273x | 2.20619x | Pass |
 | Independent literal-run confirmation | 5,740.60 | 1.95836x | 1.96783x | Pass |
 
@@ -34,7 +34,7 @@ no new allocation or production dependency.
 The owner confirmed exclusive VM use. Protocol `exclusive-vm-idle-v2` checks
 live jobs and five-second aggregate/CPU0 samples: busy <=5%, I/O wait <=1%,
 steal <=1%. Load average is diagnostic only; our previous work needs no cooldown.
-The legacy confirmation fails its original load guard and remains failed.
+The earlier confirmation fails its original load guard and remains failed.
 No certified before/after speedup is claimed across the protocol change.
 The candidate's first preparatory guard fails aggregate I/O wait (1.951%) and
 launches no benchmark. One fresh idle check passes, followed by the screen and

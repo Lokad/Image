@@ -65,7 +65,7 @@ The [original refusal](WARM-PNG-FAST16-REFUSAL.md) and
 [retired recoder](WARM-PNG-FAST16-RECODE.md) remain historical evidence. Stop these
 two confirmed pairs; remaining material boundaries and unmatched policies stay open.
 
-Receipt-text erratum: the legacy generic boundary sentence “Both level1” was
+Receipt-text erratum: the earlier generic boundary sentence “Both level1” was
 incorrect for this policy. Explicit numeric fields and preparation validation
 already enforce managed2/native1, as stated throughout this report. Raw receipts
 and their hashes remain unchanged; subsequent harness text is corrected.

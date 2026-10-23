@@ -48,7 +48,7 @@ before an invalid index. Each OS passes 2,533 Release tests: 783 internal,
 854 public and 896 live FFmpeg. The row controls and eight authored PNG tests
 covering 72 original profiles also pass with SIMD disabled. The same actual
 Release package passes all three usage examples on both OSes; all 580 production
-methods and flags match fresh/timed assemblies to that package. Legacy RGBA8/16,
+methods and flags match fresh/timed assemblies to that package. Existing RGBA8/16,
 RGB8/16, gray8/16 and gray-alpha8/16 native-worker controls also pass.
 
 The [numeric evidence](warm-pngpalette8-row-evidence.json) retains every actual,

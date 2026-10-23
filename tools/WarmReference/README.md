@@ -1388,7 +1388,7 @@ never signaled and setup stays outside timing. See the
 
 RGBA8 Fastest uses `-WarmFamily Png -WarmCases EncodeFast8`, the same explicit
 managed2/native1 policy and unchanged5% IDAT-size/exact-sample gates. The existing
-fast worker now admits its existing RGBA8 path; its legacy executable/protocol
+fast worker now admits its existing RGBA8 path; its existing executable/protocol
 name remains `ffmpeg-png-fast16-warm` / `png-fast16-encode`. Depth is explicit in
 the protocol and receipt. No word conversion is performed or timed at byte depth.
 See the [byte Fastest result](../../benchmarks/WARM-PNG-FAST8.md).

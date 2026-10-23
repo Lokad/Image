@@ -40,7 +40,7 @@ Each OS passes 2,587 Release tests: 837 internal, 854 public and 896 live FFmpeg
 The row controls and eight authored PNG tests covering 72 original profiles also
 pass with SIMD disabled. The same actual Release package passes all three usage
 examples on both OSes; all 581 production methods and flags match fresh/timed
-assemblies to that package. Legacy RGBA8/16, RGB8/16, gray8/16, gray-alpha8/16
+assemblies to that package. Existing RGBA8/16, RGB8/16, gray8/16, gray-alpha8/16
 and palette8 native-worker controls also pass.
 
 Before this round, an independent RFC 1951 structural audit validates all 133,126

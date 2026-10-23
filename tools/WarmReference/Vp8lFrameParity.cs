@@ -52,10 +52,26 @@ internal static class Vp8lFrameParity
         var high=(int)System.Numerics.BitOperations.Log2((uint)(value-1));var extra=high-1;
         var symbol=2*high+((value-1)>>extra&1);codes.Write(writer,offset+symbol);writer.Put((value-1)&((1<<extra)-1),extra);
     }
-    internal static (byte[] Packet,object Details) Encode(Vp8lInputParity prefix,int[] map,int[][][] counts,List<Vp8lFrameToken> tokens,int cacheBits,int width=513,int tileBits=3)
+    private static (int[] Map,int Bits) Sample(int[] map,int width,int bits)
     {
+        var columns=(width+(1<<bits)-1)>>bits;var rows=map.Length/columns;var chosen=bits;
+        for(var candidate=bits+1;candidate<=9;candidate++)
+        {
+            var step=1<<(candidate-bits);var same=true;
+            for(var y=0;same&&y<rows;y++)for(var x=0;x<columns;x++)
+                if(map[y*columns+x]!=map[(y/step*step)*columns+x/step*step]){same=false;break;}
+            if(!same)break;chosen=candidate;
+        }
+        if(chosen==bits)return(map,bits);
+        var stride=1<<(chosen-bits);var newColumns=(columns+stride-1)/stride;var newRows=(rows+stride-1)/stride;var result=new int[newColumns*newRows];
+        for(var y=0;y<newRows;y++)for(var x=0;x<newColumns;x++)result[y*newColumns+x]=map[y*stride*columns+x*stride];
+        return(result,chosen);
+    }
+    internal static (byte[] Packet,object Details) Encode(Vp8lInputParity prefix,int[] map,int[][][] counts,List<Vp8lFrameToken> tokens,int cacheBits,int width=513,int tileBits=3,bool lowEffort=false)
+    {
+        if(counts.Length>1){var sampled=Sample(map,width,tileBits);map=sampled.Map;tileBits=sampled.Bits;}
         var columns=(width+(1<<tileBits)-1)>>tileBits;
-        var groupPixels=map.Select(x=>(uint)x<<8).ToArray();var auxiliary=counts.Length>1?Vp8lAuxiliaryParity.Encode(groupPixels,columns,75):null;
+        var groupPixels=map.Select(x=>(uint)x<<8).ToArray();var auxiliary=counts.Length>1?Vp8lAuxiliaryParity.Encode(groupPixels,columns,75,lowEffort):null;
         var trees=counts.Select(group=>group.Select(histogram=>Lengths(histogram,15)).ToArray()).ToArray();
         using var treeHash=IncrementalHash.CreateHash(HashAlgorithmName.SHA256);foreach(var group in trees)foreach(var tree in group)treeHash.AppendData(tree);
         var writer=new Writer();writer.Append(prefix.Bytes,prefix.BitCount);
@@ -73,6 +89,6 @@ internal static class Vp8lFrameParity
         var payload=writer.Finish();var packet=new byte[20+payload.Length+(payload.Length&1)];
         "RIFF"u8.CopyTo(packet);BinaryPrimitives.WriteUInt32LittleEndian(packet.AsSpan(4),(uint)(packet.Length-8));"WEBPVP8L"u8.CopyTo(packet.AsSpan(8));
         BinaryPrimitives.WriteUInt32LittleEndian(packet.AsSpan(16),(uint)payload.Length);payload.CopyTo(packet,20);
-        return(packet,new{groups=counts.Length,huffmanTrees=counts.Length*5,treeLengthsSha256=Convert.ToHexStringLower(treeHash.GetHashAndReset()),groupMapBits=auxiliary?.BitCount??0,mapStartBit=mapStart,mapEndBit=mapEnd,firstDataBit=dataStart,endBit=writer.Count(),payloadBytes=payload.Length,packetBytes=packet.Length});
+        return(packet,new{storedHistogramBits=tileBits,mapSamples=map.Length,groups=counts.Length,huffmanTrees=counts.Length*5,treeLengthsSha256=Convert.ToHexStringLower(treeHash.GetHashAndReset()),groupMapBits=auxiliary?.BitCount??0,mapStartBit=mapStart,mapEndBit=mapEnd,firstDataBit=dataStart,endBit=writer.Count(),payloadBytes=payload.Length,packetBytes=packet.Length});
     }
 }

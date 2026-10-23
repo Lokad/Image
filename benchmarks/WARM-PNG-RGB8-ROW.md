@@ -37,7 +37,7 @@ PNG tests covering 72 original profiles also pass with SIMD disabled. The same
 actual Release package passes all three usage examples on both OSes; all 577
 production methods and flags match fresh/timed assemblies to that package.
 Managed and native normal/scalar pixels, source integrity and independent owners
-are exact. Legacy RGBA8/16, RGB16, gray8 and gray-alpha8 worker controls also pass.
+are exact. Existing RGBA8/16, RGB16, gray8 and gray-alpha8 worker controls also pass.
 
 The [numeric evidence](warm-pngrgb8-row-evidence.json) retains all actuals, brackets,
 source/input/derived-raster hashes, four actual child identities and raw/QA/profile

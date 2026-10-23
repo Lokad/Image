@@ -23,10 +23,10 @@ internal static class Vp8lMainParsing
         return result;
     }
     internal sealed record Result(object Tokens,int Bits,object Summary);
-    internal static Result Encode(uint[] pixels,uint[] matches,int width=513)
+    internal static Result Encode(uint[] pixels,uint[] matches,int width=513,bool disableCache=false)
     {
         var standard=Main("Tokens","Greedy",pixels,matches);var repeated=Repeated(pixels,width);
-        var standardBits=BestCache(pixels,standard);var repeatedBits=BestCache(pixels,repeated);
+        var standardBits=disableCache?0:BestCache(pixels,standard);var repeatedBits=disableCache?0:BestCache(pixels,repeated);
         standard=standardBits==0?Uncached("Greedy",pixels,matches):Main("WithCache",pixels,standard,standardBits);
         repeated=repeatedBits==0?Uncached("Repeats",pixels,width):Main("WithCache",pixels,repeated,repeatedBits);
         long Cost(object tokens,int bits)=>(long)(bits==0?Uncached("Estimate",tokens,width):Main("Estimate",tokens,bits));

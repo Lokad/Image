@@ -48,8 +48,8 @@ public static class Vp8lDirectPacketParity
             else{h[0][pixel>>8&255]++;h[1][pixel>>16&255]++;h[2][pixel&255]++;h[3][pixel>>24]++;}
             tokens.Add(new(position,pixel,length,distance,cached));
         }
-        var grouped=Vp8lSpatialParity.Build(histograms,population);
-        var frame=Vp8lFrameParity.Encode(stage,grouped.Map,grouped.Counts,tokens,bits,width,tileBits);
+        var grouped=Vp8lSpatialParity.Build(histograms,population,lowEffort);
+        var frame=Vp8lFrameParity.Encode(stage,grouped.Map,grouped.Counts,tokens,bits,width,tileBits,lowEffort);
         return new(frame.Packet,new{choice,cacheBits=bits,groups=grouped.Counts.Length,tokens=tokens.Count,parser=parsed.Summary,framing=frame.Details});
     }
 }

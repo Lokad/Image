@@ -50,7 +50,7 @@ no new allocation or production dependency.
 The owner confirmed exclusive VM use. Protocol `exclusive-vm-idle-v2` checks
 live jobs and five-second aggregate/CPU0 samples: busy <=5%, I/O wait <=1%,
 steal <=1%. Load average is diagnostic only; our previous work needs no cooldown.
-The legacy confirmation fails its original load guard and remains failed.
+The earlier confirmation fails its original load guard and remains failed.
 No certified before/after speedup is claimed across the protocol change.
 The candidate's first preparatory guard fails aggregate I/O wait (1.951%) and
 launches no benchmark. One fresh idle check passes, followed by the screen and

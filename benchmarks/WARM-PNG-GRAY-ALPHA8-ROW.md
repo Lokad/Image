@@ -40,7 +40,7 @@ covering the existing 72 original profiles also pass with SIMD disabled.
 The same actual Release package passes all three usage examples on both OSes.
 All 576 production methods and flags match fresh/timed assemblies to that package.
 Managed and native normal/scalar pixels, alpha, source and independent owners are
-exact; legacy RGBA8/16 native-worker controls also pass.
+exact; existing RGBA8/16 native-worker controls also pass.
 
 The [numeric evidence](warm-pnggrayalpha8-row-evidence.json) retains every actual,
 bracket, source/input/derived-raster hash, four actual child identities and raw/QA

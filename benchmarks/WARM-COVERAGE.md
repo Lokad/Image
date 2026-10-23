@@ -294,7 +294,7 @@ paths absent from the older checklist; these are not a shape/depth/settings grid
 - `TextLayout/OpenTypeArabicMarksDigits`: reuse the fixed `ArabicMarksDigits`
   text/settings and licensed regular face from the twelve functional comparisons.
   Arabic joining, bidi order, GSUB and mark positioning are distinct from the
-  three original legacy outline-layout controls below. Complete owned layout,
+  three original logical-order outline-layout controls below. Complete owned layout,
   measurement and disposal; immutable font preparation excluded.
 - `TextFit/OpenTypeConstrained`: reuse `ConstrainedFit`, 96×30, maximum24,
   minimum8, step.25 and the same face. The descending search performs30 candidate
@@ -1103,7 +1103,7 @@ The [default-instance font round](../docs/text-default-instance-qualification.md
 adds exactly one required algorithm case, `TextLayout/OpenTypeDefaultVariation`.
 Use an authored two-glyph contextual-substitution program with two GDEF regions,
 signed word/byte deltas and default-zero GPOS adjustment. This reader validates
-region coordinates and delta rows, absent from the existing legacy/Arabic cases.
+region coordinates and delta rows, absent from the existing logical-order/Arabic cases.
 Include complete owned OpenType layout, bounds measurement and disposal; exclude
 immutable font preparation. Equivalent reference output/ownership, quality and
 quiet-VM gates precede timing. **Unmeasured; allocations unmeasured.** No new font,

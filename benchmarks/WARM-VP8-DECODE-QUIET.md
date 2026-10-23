@@ -28,7 +28,7 @@ normal SIMD, disabled tiering and nonconcurrent workstation GC are fixed.
 Protocol `exclusive-vm-idle-v2` checks live jobs and five-second aggregate/CPU0
 samples: busy <=5%, I/O wait <=1%, steal <=1%. Exclusive VM use requires no
 historical-load cooldown. Load averages are diagnostic only. The earlier
-[color-conversion round](WARM-VP8-COLOR-BLOCK.md) retains its legacy failed
+[color-conversion round](WARM-VP8-COLOR-BLOCK.md) retains its earlier failed
 guards; these are not reclassified. Preparation/smoke checks occur outside timing.
 
 The independent repeat retains 12 actual / 10

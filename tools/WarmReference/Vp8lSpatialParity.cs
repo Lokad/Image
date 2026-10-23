@@ -77,6 +77,20 @@ internal static class Vp8lSpatialParity
             var pair=new Pair{A=a,B=b,Costs=[]};if(!Refresh(pair,histograms,threshold))return 0;
             pool.Add(pair);Promote(pool,pool.Count-1);return pair.Delta;
         }
+        internal int MergeLowBins(List<Histogram> items)
+        {
+            var minimum=items.Min(h=>h.Costs[0]);var maximum=items.Max(h=>h.Costs[0]);var range=maximum-minimum;
+            foreach(var h in items)h.Bin=range==0?0:(int)((4-1e-6)*(h.Costs[0]-minimum)/range);
+            var first=Enumerable.Repeat(-1,4).ToArray();var merges=0;
+            for(var at=0;at<items.Count;)
+            {
+                var bin=items[at].Bin;
+                if(first[bin]<0){first[bin]=at++;continue;}
+                items[first[bin]]=Combine(items[first[bin]],items[at],new long[5]);Remove(items,at);merges++;
+            }
+            for(var i=0;i<items.Count;i++)items[i]=Initial(items[i].Counts);
+            return merges;
+        }
         internal int MergeBins(List<Histogram> items)
         {
             var min=Enumerable.Range(0,3).Select(c=>items.Min(h=>h.Costs[c])).ToArray();
@@ -164,11 +178,12 @@ internal static class Vp8lSpatialParity
             return map;
         }
     }
-    internal static Result Build(int[][][] counts,Func<int[],long> population)
+    internal static Result Build(int[][][] counts,Func<int[],long> population,bool lowEffort=false)
     {
         var merger=new Merger(population,counts[0].Select(h=>h.Length).ToArray());var original=counts.Select(merger.Initial).ToArray();var items=original.Where(h=>h.Used.Any(x=>x)).ToList();
-        var binMerges=items.Count>128?merger.MergeBins(items):0;var afterBins=items.Count;
-        var sample=merger.Sample(items);var afterSample=items.Count;var greedyMerges=sample.Greedy?merger.Greedy(items):0;
+        var useBins=items.Count>(lowEffort?8:128);
+        var binMerges=useBins?(lowEffort?merger.MergeLowBins(items):merger.MergeBins(items)):0;var afterBins=items.Count;
+        var sample=lowEffort&&useBins?(Greedy:false,Merges:0,Seed:1u):merger.Sample(items);var afterSample=items.Count;var greedyMerges=sample.Greedy?merger.Greedy(items):0;
         var map=merger.Remap(original,items);
         var result=Enumerable.Range(0,items.Count).Select(_=>counts[0].Select(h=>new int[h.Length]).ToArray()).ToArray();
         for(var tile=0;tile<map.Length;tile++)for(var bank=0;bank<5;bank++)for(var symbol=0;symbol<counts[tile][bank].Length;symbol++)result[map[tile]][bank][symbol]+=counts[tile][bank][symbol];

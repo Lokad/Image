@@ -1,7 +1,8 @@
 # VP8L remaining production coverage
 
-One dependency-free source model reproduces fourteen packet identities on Windows/Linux:
-thirteen default-method packets and the method-0 two-color variant. Main quality
+One dependency-free source model reproduces seventeen packet identities on Windows/Linux:
+thirteen default-method packets, the method-0 two-color variant and three
+non-palette effort controls on the existing asymmetric input. Main quality
 is 75 with `exact=1`; palette auxiliary encoding uses the backend's internal quality 20.
 Production adoption also has to preserve the existing public encoding scope.
 This bounded checklist comes from current tests and options; it adds no warm
@@ -47,14 +48,19 @@ performance grid.
    The fast matcher omits left/above probes and emits 1,026 literals here, yielding
    two histogram groups; full parsing uses three tokens and one group. Native
    default-method and 16-bit normalization argument paths also retain those bytes.
-   This is not general effort qualification. Three named non-palette paths remain,
-   reusing the existing asymmetric RGBA8 input: **Effort0ForcedPredictorRgba8**
-   (fixed prediction/no cross-color and fast clustering), **Effort1CoarseTilesRgba8**
-   (variable transform tile sizing), and **Effort5AdaptiveTilesRgba8** (adaptive
-   predictor sampling). These exercise distinct algorithms without a settings grid.
-   Reuse the current two-color depths for complete public-operation qualification.
-   Implementation-specific old packet/header assertions are replaceable; exact
-   normalized pixels and the declared option/resource contracts remain required.
+   The existing asymmetric RGBA8 input also passes three exact complete packets:
+   **Effort0ForcedPredictorRgba8** (316,566 bytes, forced mode 11, four-bin fast
+   clustering and equivalent histogram-map coarsening), **Effort1CoarseTilesRgba8**
+   (176,216 bytes, 64×64 transform tiles), and **Effort5CacheComparisonRgba8**
+   (155,162 bytes, cached versus uncached writer selection). The last reference
+   uses the same 8×8 transform prefix as method 4; it does **not** establish
+   adaptive predictor sampling. That remains a distinct required algorithm:
+   evaluate intermediate fine/coarse decisions on this input first, adding at most
+   one named original control if needed to expose a missing fine-winner path.
+   General effort/settings qualification remains open. Reuse current two-color
+   depths for complete public-operation qualification. Unpublished implementation
+   assertions may change; exact normalized pixels and declared option/resource
+   contracts remain required. No compatibility alias is needed for experiments.
 5. **Complete public operations.** Qualify existing RGBA16 normalization and fresh
    nonseekable async delivery, including independent surviving outputs, failures
    and cancellation. Their core packet identity reuses the first frozen packet;

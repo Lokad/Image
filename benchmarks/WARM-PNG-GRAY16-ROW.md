@@ -41,7 +41,7 @@ and cancellation before writes. Each OS passes 2,503 Release tests: 753 internal
 covering 72 original profiles also pass with SIMD disabled. The same actual
 Release package passes all three usage examples on both OSes; all 578 production
 methods and flags match fresh/timed assemblies to that package. Managed and native
-normal/scalar pixels, source integrity and independent owners are exact. Legacy
+normal/scalar pixels, source integrity and independent owners are exact. Existing
 RGBA8/16, RGB8/16, gray8 and gray-alpha8 native-worker controls also pass.
 
 The [numeric evidence](warm-pnggray16-row-evidence.json) retains all actuals,

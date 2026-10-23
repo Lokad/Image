@@ -65,7 +65,7 @@ comparisons**, plus **456 focused checks per mode per OS**. Eleven new writer
 checks compare every pending-bit position, stuffing, restart and exact work,
 output, callback and cancellation failures against the checked emitter. Three
 new public checks cover complete packet/pixels/source, exact output/workspace
-limits, all AC symbols/reserved ones, and the unchanged legacy short-table decode
+limits, all AC symbols/reserved ones, and the existing short-table decode
 admission. Historical quality-report bytes remain immutable; all 160 current
 fixed/adaptive quality profiles preserve their frozen quantization and pixels.
 New nine/ten-bit AC codes require the decoder's existing additional 2 KiB prefix
