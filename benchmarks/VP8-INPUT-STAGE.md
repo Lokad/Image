@@ -133,7 +133,7 @@ its task finishes. Terminal admission refusal, cleanup/recovery, local/work/outp
 limits and mismatched dimensions pass. Quality75 lossless packet checks also pass
 with the shared preparation changes; the scoped native inputs/settings stay fixed.
 
-The same immutable assembly passes466focused checks per platform on Windows/Linux,
+The same immutable assembly passes475focused checks per platform on Windows/Linux,
 normal and SIMD disabled, including the durable method3 packet row. The direct
 statistics extension reuses the prior decision/packet checks on that same producer. Shared admission covers
 owned capacity, retained results and replacement overlap. Refusal, cancellation,
@@ -166,7 +166,7 @@ targets; source-only qualification is distinct from complete-packet agreement:
 | Alpha Q75 / method6 | Internal alpha VP8L quality100 search | 85,796 | Open |
 | Diagram Q100 / method0 | High-quality fast source and distortion-only DC policy | 27,668 | Complete packet exact |
 | Alpha Q75 / method0 | Low-effort alpha VP8L | 93,386 | Complete packet exact |
-| Alpha Q75 / method1 | Alpha VP8L without cache/trace; small clustering bound | 106,588 | Open |
+| Alpha Q75 / method1 | Alpha VP8L without cache/trace; small clustering bound | 106,588 | Complete packet exact |
 
 One named large-header case uses the same original procedural formula at
 5,632×5,632. Native-positive header strengthening is still unconfirmed; observe it
@@ -288,7 +288,7 @@ Walsh/chroma quantization remain ordinary. This method has one UV reconstruction
 and no final selected-mode reconstruction. Shared owned capacity and the16KiB
 scratch envelope remain unchanged; replacement/refusal/cancellation/work/local
 limits, aliases/tails, recovery and independent packet lifetimes pass. The case is
-stopped as passing. The named ALPH1/6, header and public integration gates remain.
+stopped as passing. The named ALPH6, header and public integration gates remain.
 
 Low-effort method0 now matches the asymmetricQ75 RGBA8 complete93,386-byte packet,
 including its15,238-byte ALPH payload. The unchanged prior build already matched
@@ -299,5 +299,16 @@ colors. The same admitted green workspace, payload ownership, strict ties and
 replacement overlap remain. Terminal refusal, cancellation/work/local/output
 cleanup, recovery and source-independent sync/async delivery pass. Defaultmethod4
 RGBA8/16 packets stay exact; the method0 claim covers the named RGBA8 control.
-No native encode, new image, quality search or timing was needed. ALPH1/6, header
+No native encode, new image, quality search or timing was needed. ALPH6, header
 and public integration remain open.
+
+Method1 now matches the asymmetricQ75 RGBA8 complete106,588-byte packet and its
+30,101-byte ALPH payload. Its76,440-byte color payload already matched on the
+unchanged prior build. The internal VP8L quality8 policy disables cache/trace.
+The shared histogram pair pool now covers the sampler's nine candidates separately
+from its quality-dependent greedy threshold; one helper sizes allocation and
+admission. Sampling starts with at least four live tiles. Defaultquality75 and
+alpha4quality32 capacities remain unchanged; lower qualities can reserve more.
+Scratch/final-owner refusal, cancellation and late-work cleanup/recovery pass at
+qualities8/75, alongside ALPH lifetime/ownership checks. The case is stopped as
+passing. The high-quality ALPH6 cruncher, header case and public adoption remain.

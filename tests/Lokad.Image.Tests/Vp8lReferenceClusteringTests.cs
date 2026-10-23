@@ -70,46 +70,52 @@ public sealed class Vp8lReferenceClusteringTests
     }
 
     [Theory]
-    [InlineData(1)]
-    [InlineData(2)]
-    public void ScratchAndFinalOwnerAdmissionRefusalIsTerminalAndAllowsRecovery(int phase)
+    [InlineData(1, 75)]
+    [InlineData(2, 75)]
+    [InlineData(1, 8)]
+    [InlineData(2, 8)]
+    public void ScratchAndFinalOwnerAdmissionRefusalIsTerminalAndAllowsRecovery(int phase, int quality)
     {
         using var root = new TestMemoryBudget(100_000) { RefuseAtGrowth = phase };
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, context));
+        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, context, quality));
         Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
         Assert.Equal(1, root.Refusals); Assert.Equal(phase, root.GrowthAttempts); Assert.Equal(0, root.Bytes);
         root.RefuseAtGrowth = 0;
-        using var next = Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, context);
+        using var next = Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, context, quality);
         next.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 
     [Theory]
-    [InlineData(1)]
-    [InlineData(2)]
-    public void ScratchOrRetainedOwnerCancellationRefundsAllStorageAndAllowsRecovery(int phase)
+    [InlineData(1, 75)]
+    [InlineData(2, 75)]
+    [InlineData(1, 8)]
+    [InlineData(2, 8)]
+    public void ScratchOrRetainedOwnerCancellationRefundsAllStorageAndAllowsRecovery(int phase, int quality)
     {
         using var root = new TestMemoryBudget(100_000); using var cancellation = new CancellationTokenSource();
         root.Admitted = _ => { if (root.GrowthAttempts == phase) cancellation.Cancel(); };
         using var context = new OperationContext(new() { MemoryBudget = root }, cancellation.Token);
-        Assert.Throws<OperationCanceledException>(() => Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, context));
+        Assert.Throws<OperationCanceledException>(() => Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, context, quality));
         Assert.True(cancellation.IsCancellationRequested); Assert.Equal(0, root.Bytes); root.Admitted = null;
         using var nextContext = new OperationContext(new() { MemoryBudget = root }, default);
-        using var next = Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, nextContext);
+        using var next = Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, nextContext, quality);
         next.Dispose(); Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals);
     }
 
-    [Fact]
-    public void LateRecountWorkFailureDisposesBothRetainedArraysAndScratch()
+    [Theory]
+    [InlineData(75)]
+    [InlineData(8)]
+    public void LateRecountWorkFailureDisposesBothRetainedArraysAndScratch(int quality)
     {
         long work;
         using (var calibration = new OperationContext(ImageLimits.Default, default))
         {
-            using var plan = Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, calibration); work = calibration.ConsumedWork;
+            using var plan = Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, calibration, quality); work = calibration.ConsumedWork;
         }
         using var root = new TestMemoryBudget(100_000);
         using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = work - 1 }, default);
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, context));
+        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, context, quality));
         Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
         Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals);
     }

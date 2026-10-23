@@ -10,6 +10,7 @@ public sealed class Vp8AlphaEncodingTests
     [InlineData(8, 4, 24588, "ca83ebb44c092e661126e81d83a3345877b1de833a2d0bde289217b19d2d25ae", 98590, "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10")]
     [InlineData(16, 4, 24588, "ca83ebb44c092e661126e81d83a3345877b1de833a2d0bde289217b19d2d25ae", 98590, "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10")]
     [InlineData(8, 0, 15238, "4753265a0d3567b9b4bce842cf09f6dd174a51b3002d3358ab8fa6243771d15a", 93386, "eb12853d220295a4327d151827462eda69df74bc9a21b938af5ca31f40cf134d")]
+    [InlineData(8, 1, 30101, "21ff9bd761842e805268a49eb86b4f31ee605716833fcbc920e04867b12828af", 106588, "9491f97d6c703e0d8869c02eb4ba0edabcde831992f7173cae5ef5b16ab330ce")]
     public async Task ExistingTransparentControlMatchesEntireNativePacketWithoutRetainingSource(int depth, int method, int alphaBytes, string alphaHash, int packetBytes, string packetHash)
     {
         using var root = new TestMemoryBudget(128_000_000);
@@ -40,6 +41,7 @@ public sealed class Vp8AlphaEncodingTests
     [Theory]
     [InlineData(4)]
     [InlineData(0)]
+    [InlineData(1)]
     public void RawSingletonRetainsOnlyItsOwnPayloadAndSurvivesBorrowedInputReplacement(int method)
     {
         using var root = new TestMemoryBudget(1_000_000); using var context = new OperationContext(new() { MemoryBudget = root }, default);
@@ -55,6 +57,7 @@ public sealed class Vp8AlphaEncodingTests
     [Theory]
     [InlineData(4)]
     [InlineData(0)]
+    [InlineData(1)]
     public void OwnedScratchAndFinalCandidateRefusalAreTerminalAndRecoveryUsesTheSameRoot(int method)
     {
         var source = Ramp(); var original = source.ToArray(); long peak, last;
@@ -80,6 +83,7 @@ public sealed class Vp8AlphaEncodingTests
     [Theory]
     [InlineData(4)]
     [InlineData(0)]
+    [InlineData(1)]
     public void CancellationLocalWorkAndOutputFailuresReleaseAllNewOwnership(int method)
     {
         var source = Ramp(); long work;

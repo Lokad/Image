@@ -4,6 +4,16 @@ namespace Lokad.Image.Internal;
 // 5.2.3; deterministic merge decisions use the admitted integer entropy model.
 internal static class Vp8lReferenceClustering
 {
+    private const int SamplingPairs = 9;
+
+    private static int PairCapacity(int tiles, int threshold)
+    {
+        var limit = Math.Min(tiles, threshold);
+        // Sampling can enqueue repeated pairs independently of the subsequent
+        // greedy threshold. Its loop runs only with at least four live tiles.
+        return Math.Max(limit * limit, tiles >= 4 ? SamplingPairs : 1);
+    }
+
     private struct Stats
     {
         internal long C0, C1, C2, C3, C4, Total;
@@ -49,7 +59,7 @@ internal static class Vp8lReferenceClustering
             this.quality = quality; this.threshold = threshold; this.tiles = tiles; this.layout = layout; this.context = context;
             original = new int[tiles * layout.Total]; working = new int[original.Length]; scratch = new int[layout.Total];
             slots = new int[tiles]; originals = new Stats[tiles]; items = new Stats[tiles];
-            var limit = Math.Min(tiles, threshold); pool = new Pair[limit * limit];
+            pool = new Pair[PairCapacity(tiles, threshold)];
         }
 
         private int Start(int bank) => bank switch { 0 => 0, 1 => layout.Red, 2 => layout.Blue, 3 => layout.Alpha, _ => layout.Distance };
@@ -196,7 +206,7 @@ internal static class Vp8lReferenceClustering
 
         private bool Sample()
         {
-            const int capacity = 9;
+            const int capacity = SamplingPairs;
             if (count < threshold) return true;
             var outer = count; var misses = 0; var limit = outer / 2; uint seed = 1;
             for (var iteration = 0; iteration < outer && count >= threshold && ++misses < limit; iteration++)
@@ -287,10 +297,10 @@ internal static class Vp8lReferenceClustering
         var tiles = columns * ((height + (1 << tileBits) - 1) >> tileBits);
         // The preceding analysis selects tile bits to keep this finite bound.
         if (tiles > 2600) throw new ArgumentException("Histogram tiling exceeds the analyzed bound.", nameof(tileBits));
-        var layout = new Vp8lHistogramLayout(cacheBits); var pairLimit = Math.Min(tiles, threshold);
+        var layout = new Vp8lHistogramLayout(cacheBits); var pairCapacity = PairCapacity(tiles, threshold);
         // Two flat count slabs, two conservative metadata allowances, index
         // slots, reusable sum scratch and a fixed pair pool. No candidate allocs.
-        var reserved = tiles * (layout.Total * 8L + 192) + layout.Total * 4L + pairLimit * pairLimit * 64L + 512;
+        var reserved = tiles * (layout.Total * 8L + 192) + layout.Total * 4L + pairCapacity * 64L + 512;
         context.Work(0); context.Reserve(reserved);
         try
         {
