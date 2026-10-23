@@ -1,8 +1,10 @@
 # VP8 encoder preparation
 
-The private managed pipeline reproduces the four method4/Q75 packet identities
-and the method3/Q75 diagram packet, including exact method4 ALPH from RGBA8/16. The public lossy encoder is unchanged. Required
-options, the named header/work boundaries and public integration remain open.
+The private managed pipeline reproduces the four method4/Q75 packet identities,
+the named diagram method/quality controls, and asymmetric method0/1 packets.
+Method4 ALPH is exact from RGBA8/16. Twelve high-quality ALPH6 candidate bodies
+are now exact; complete ALPH6 search is still open. The public lossy encoder is
+unchanged. The named header/work boundaries and public integration remain open.
 
 Seven existing encoding rows have four reference packet identities:
 
@@ -312,3 +314,28 @@ alpha4quality32 capacities remain unchanged; lower qualities can reserve more.
 Scratch/final-owner refusal, cancellation and late-work cleanup/recovery pass at
 qualities8/75, alongside ALPH lifetime/ownership checks. The case is stopped as
 passing. The high-quality ALPH6 cruncher, header case and public adoption remain.
+
+Single-family method6/search-quality100 preparation now matches twelve complete
+headerless candidate bodies: both existing alpha filters across direct, spatial,
+subtract-green, spatial/subtract-green, plain palette and spatial palette families.
+Palette cases currently use MinDelta. Each owner retains its entire transform and
+coding state, independently of erased/released input. Cached/uncached choices keep
+strict earlier ties and skip an uncached retry when caching already selected zero.
+The original global red/blue-zero decision is preserved across forced families.
+
+All490 focused checks pass on the same immutable assembly on Windows/Linux,
+with intrinsics enabled and disabled. An admission refusal during a later coding
+trial disposes the earlier winner and fails the operation. Cancellation, late work
+failure, cleanup, retained ownership and subsequent same-root operations pass.
+The NONE spatial/subtract-green candidate requires3,295,459,208 accounted work
+units: its positive byte proof uses an explicit8B caller allowance; default2B
+refusal remains a separate passing safeguard. These are accounting figures,
+without CPU or GC-allocation measurements. No limit was raised or work rescaled.
+
+The second palette ordering and four corresponding candidate bodies remain open,
+followed by complete eight-configuration selection. Matching a guessed winning
+subset does not establish complete ALPH6 parity. The two native alpha controls,
+all sixteen candidate bodies and their final unchanged85,796-byte reference packet
+are frozen; further work reuses them without another native encode or image grid.
+Completed qualification reports were compacted losslessly with byte verification,
+keeping both checkouts below5GB and preserving original replay paths and evidence.

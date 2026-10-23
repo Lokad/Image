@@ -29,6 +29,7 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
     private void MainCandidates(ReadOnlySpan<uint> pixels, int width, int height, Vp8lFramePrefix candidatePrefix,
         Vp8lEncodingAnalysis analysis, int effort, int paletteColors, int quality)
     {
+        var tryNoCache = effort == 5 && quality >= 75 || effort == 6 && quality == 100;
         var low = effort == 0; var maximumCacheBits = quality <= 25 ? 0 : paletteColors == 0 ? 10 : BitOperations.Log2((uint)paletteColors) + 1;
         using var matches = Vp8lReferenceMatcher.Build(pixels, width, quality, low, context);
         if (low)
@@ -38,8 +39,10 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
             return;
         }
         var ordinary = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, width, false, maximumCacheBits, context, quality >= 25);
+        var compareOrdinary = tryNoCache && ordinary.CacheBits != 0;
         Consider(candidatePrefix, Vp8lImageCode.TakeMain(ordinary, width, height, analysis.HistogramBits, false, context, quality));
-        if (effort == 5 && quality >= 75)
+        // Native already considers this profile complete when caching chose0.
+        if (compareOrdinary)
         {
             var uncached = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, width, true, maximumCacheBits, context, quality >= 25);
             Consider(candidatePrefix, Vp8lImageCode.TakeMain(uncached, width, height, analysis.HistogramBits, false, context, quality));
@@ -48,8 +51,9 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
         {
             using var box = Vp8lReferenceMatcher.BuildBox(pixels, width, matches.Values, context);
             var boxed = Vp8lReferenceMainParsing.EncodeBox(pixels, box.Values, width, false, maximumCacheBits, context, quality >= 25);
+            var compareBox = tryNoCache && boxed.CacheBits != 0;
             Consider(candidatePrefix, Vp8lImageCode.TakeMain(boxed, width, height, analysis.HistogramBits, false, context, quality));
-            if (effort == 5 && quality >= 75)
+            if (compareBox)
             {
                 var uncached = Vp8lReferenceMainParsing.EncodeBox(pixels, box.Values, width, true, maximumCacheBits, context, quality >= 25);
                 Consider(candidatePrefix, Vp8lImageCode.TakeMain(uncached, width, height, analysis.HistogramBits, false, context, quality));
@@ -90,18 +94,42 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
     {
         if (quality is < 0 or > 100) throw new ArgumentOutOfRangeException(nameof(quality));
         var analysis = Vp8lEncodingAnalysis.Select(working, width, effort, context);
+        return PrepareCore(working, width, effort, context, quality, analysis, comparePalettePrediction: effort == 5 && quality >= 75);
+    }
+
+    // One explicit family from the method6/quality100 search. Analysis is shared
+    // across families so the original global red/blue-zero decision is retained.
+    // This owner holds its full transform/coding bundle independently of source
+    // storage and other candidates. Alpha method6 routing remains separate.
+    internal static Vp8lPreparedEncoding PrepareCandidate(Span<uint> working, int width,
+        Vp8lEncodingAnalysis analysis, Vp8lTransformKind transform, OperationContext context)
+    {
+        if (width is < 1 or > 16384 || working.Length == 0 || working.Length % width != 0 || working.Length / width > 16384
+            || (uint)transform > (uint)Vp8lTransformKind.PalettePrediction || analysis.HistogramBits is < 2 or > 9 || analysis.TransformBits is < 2 or > 9)
+            throw new ArgumentException("Invalid VP8L search candidate layout.");
+        if (transform is Vp8lTransformKind.Palette or Vp8lTransformKind.PalettePrediction && analysis.DistinctColorsCapped is < 1 or > 256)
+            throw new ArgumentException("Palette candidate requires a representable source palette.");
+        context.Work(0);
+        return PrepareCore(working, width, 6, context, 100, analysis with { Transform = transform }, comparePalettePrediction: false);
+    }
+
+    private static Vp8lPreparedEncoding PrepareCore(Span<uint> working, int width, int effort,
+        OperationContext context, int quality, Vp8lEncodingAnalysis analysis, bool comparePalettePrediction)
+    {
         var height = working.Length / width; var result = new Vp8lPreparedEncoding(context);
         var candidatePrefix = new Vp8lFramePrefix(width, height, analysis.HasNonOpaqueAlpha);
         try
         {
-            if (analysis.Transform == Vp8lTransformKind.Palette)
+            if (analysis.Transform is Vp8lTransformKind.Palette or Vp8lTransformKind.PalettePrediction)
             {
                 using var plan = Vp8lReferencePalette.SelectAndPack(working, width, analysis.DistinctColorsCapped, effort != 0, context);
                 result.palette = Vp8lImageCode.Auxiliary(plan.EncodedDeltas, plan.EncodedColorCount, 20, effort == 0, context);
                 candidatePrefix = candidatePrefix with { Palette = result.palette, PaletteEntries = plan.EncodedColorCount };
                 var input = working[..plan.PackedPixelCount];
+                if (analysis.Transform == Vp8lTransformKind.PalettePrediction)
+                    candidatePrefix = result.Predict(input, plan.CodedWidth, height, effort, analysis.TransformBits, candidatePrefix, quality);
                 result.MainCandidates(input, plan.CodedWidth, height, candidatePrefix, analysis, effort, plan.ColorCount, quality);
-                if (effort == 5 && quality >= 75)
+                if (comparePalettePrediction)
                 {
                     // Selected plain tokens contain all literal values and copy
                     // distances. They survive this in-place spatial transform.

@@ -21,6 +21,8 @@ owned capacity before allocation and keep retained results charged until disposa
 Admission refusal is terminal, without retry, waiting or a lower-memory fallback.
 Preserve independent local/work limits and await actual asynchronous users before
 releasing their storage. Published 0.1.0 is immutable; development targets 0.2.0.
+Lokad.Image has no production usage. Unpublished APIs and implementations may be
+replaced without compatibility layers; preserve the declared contracts and tests.
 
 Use `./test.ps1` for offline Release tests, and `./test.ps1 -Differential` for live
 FFmpeg comparisons. Missing FFmpeg must fail the differential suite explicitly.

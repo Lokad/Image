@@ -1,6 +1,6 @@
 namespace Lokad.Image.Internal;
 
-internal enum Vp8lTransformKind { Direct, Prediction, SubtractGreen, PredictionSubtractGreen, Palette }
+internal enum Vp8lTransformKind { Direct, Prediction, SubtractGreen, PredictionSubtractGreen, Palette, PalettePrediction }
 
 internal readonly record struct Vp8lEncodingAnalysis(Vp8lTransformKind Transform, bool RedBlueZero,
     bool HasNonOpaqueAlpha, int DistinctColorsCapped, int HistogramBits, int TransformBits)
