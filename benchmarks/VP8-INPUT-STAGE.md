@@ -1,6 +1,6 @@
 # VP8 encoder preparation
 
-The private managed pipeline is verified through block reconstruction and small-block prediction.
+The private managed pipeline is verified through block reconstruction, prediction and distortion scoring.
 The public lossy encoder is unchanged; complete VP8 packet replication remains open.
 
 Seven existing encoding rows have four reference packet identities:
@@ -70,8 +70,15 @@ ordering for the three diagonal modes. Neighbors are snapshotted in84stack bytes
 aliased output and tails pass. This qualifies supplied-neighbor arithmetic,
 not actual reconstructed-neighbor choice during RDO.
 
-The same immutable assembly passes198focused checks per platform on Windows/Linux,
-normal and SIMD disabled, including all186earlier checks. Shared admission covers
+Squared-error and weighted-Hadamard texture scores match79,240native result bytes
+on561opaque-control macroblock pairs and five original arithmetic pairs. Analytic
+Gaussian importance generation reproduces the16-value profile without an imported
+table. Texture rounding and absolute differences apply per4×4tile; reversed-tile
+controls distinguish that rule from global accumulation. Independent strides,
+maximum error, source preservation and invalid-layout rejection pass.
+
+The same immutable assembly passes207focused checks per platform on Windows/Linux,
+normal and SIMD disabled, including all198earlier checks. Shared admission covers
 owned capacity, retained results and replacement overlap. Refusal, cancellation,
 local/work limits and cleanup/recovery pass; sources and caller roots stay borrowed.
 The matrix owner retains3,128/4,128admitted bytes for3/4used segments. Earlier source
@@ -80,7 +87,7 @@ accounting capacities; no new timing or GC-allocation measurements are claimed.
 
 [Structured evidence](vp8-byte-parity-evidence.json) records exact producers,
 reference observations, scope and preserved raw masters. Prior public codec and
-package evidence retains its stated scope. Next are distortion/costs and
+package evidence retains its stated scope. Next are entropy costs and
 macroblock decisions, entropy/framing and ALPH, followed by complete
 packets and the bounded required-option audit. No readiness claim follows from
 these private stages.
