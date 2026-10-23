@@ -37,9 +37,11 @@ public static partial class Vp8lMainParity
     }
     private sealed record CacheChoice(int SeedTokens,int BestBits,long[] Costs);
     private static CacheChoice Cache(uint[] pixels,List<Token> tokens)
+        => CacheLimited(pixels,tokens,10);
+    private static CacheChoice CacheLimited(uint[] pixels,List<Token> tokens,int maximumBits)
     {
-        var costs=new long[11];var best=0;
-        for(var bits=0;bits<=10;bits++)
+        var costs=new long[maximumBits+1];var best=0;
+        for(var bits=0;bits<=maximumBits;bits++)
         {
             var cache=new uint[bits==0?0:1<<bits];
             var hist=new[]{new int[280+cache.Length],new int[256],new int[256],new int[256],new int[40]};

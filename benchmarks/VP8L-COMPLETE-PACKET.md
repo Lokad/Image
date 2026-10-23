@@ -40,19 +40,26 @@ writer-payload comparison. Both complete packets match. The photograph's method-
 packet is larger than its method-4 packet; this is byte reproduction of distinct
 settings, without a compression-gain claim.
 
-The same consolidated assembly passes all 18 identities, repeated packets,
-source preservation, independent outputs and mutation rejection on both platforms.
-This round used two Windows model builds (adaptive selector, then complete packet
-composition), one native observation adapter and three preparation encodes for
-one new photograph snapshot. It reused the asymmetric packet and all existing
-inputs. There were no Linux/production builds, timing/allocation runs or repeated
-package proofs. Unchanged production qualification is reused. Numerical identities,
-source hashes and mirrored raw receipts are in
-[the evidence](vp8l-byte-parity-evidence.json).
+The existing eighteen-color input also qualifies both method-5 transform
+candidates: **236 B plain palette / 256 B palette-plus-spatial**. These are
+complete forced-candidate observations; the pinned public reference selects the
+236-byte packet already counted above. The independent model predicts packed
+opaque index carriers, applies palette-bounded cache analysis and compares complete
+writer payloads. Every byte of both candidates and the selected result matches.
+No new fixture or spatial-winning control was added.
+
+One frozen assembly passes all 18 selected identities and both candidate packets,
+source preservation, repeated outputs and mutation rejection on both platforms.
+The latest round needed one Windows model build and one native candidate adapter
+(two compile attempts), with two forced candidate encodes. Production, Linux model
+builds, timing/allocation runs and package requalification were unnecessary.
+Unchanged production evidence is reused. Numerical identities, exact scope and
+mirrored raw receipts are in [the evidence](vp8l-byte-parity-evidence.json).
 
 Build once with `dotnet build tools/WarmReference/Vp8lParityModel -c Release --tl:off`
 and reuse the assembly with the packet verifiers. The four-core verifier uses
 Lokad.Image only to prepare frozen PNG inputs, outside the encoding model.
+`verify-vp8l-palette-candidates.ps1` checks the two transform candidates and selection.
 `verify-vp8l-adaptive-predictor.ps1` checks both adaptive selectors and packets;
 `verify-vp8l-nonpalette-efforts.ps1` checks the fixed effort/cache primitives.
 The other verifiers cover their named families.
@@ -61,6 +68,9 @@ The six original workload rows share four core packet identities. Their complete
 RGBA16 normalization and asynchronous public operations still need integration
 qualification. The native public encoder refuses sides above 16383: the axis
 companions do not establish packet parity for existing 16384-pixel functional tests.
+The frozen source model's two 16384-axis packets pass exact pinned-FFmpeg decoding;
+these remain separate functional format-extension checks, without an encoder-byte
+or timing claim.
 Complete effort-family routing, admitted production integration, work and
 cancellation limits, output ownership and actual-package qualification remain
 open in the [finite coverage checklist](VP8L-PRODUCTION-COVERAGE.md).

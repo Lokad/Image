@@ -46,9 +46,12 @@ on both platforms. Method5 adaptive selection reproduces every4x4/8x8 candidate
 mode and entropy cost on the existing asymmetric input and photograph:8x8 and4x4
 win respectively. Complete packets match155,162/160,600B. The new photograph packet
 closes the missing fine-winner path using an existing input; it establishes no
-broader compression or performance claim. Complete effort-family routing and
-admitted production/public-operation qualification remain open. The native public
-encoder refuses16384; those existing functional tests have no native packet proof.
+broader compression or performance claim. Both forced palette/spatial candidate
+packets on the existing18-color input also match236/256B and select the native
+plain result; these add no selected-output identity. Numeric effort0 palette order,
+small-palette box matching and admitted production/public operations remain open.
+The native encoder refuses16384; the model's existing axis cases instead pass exact
+pinned-FFmpeg decoding, without an encoder-byte or timing claim.
 These do not change production/timing claims below.
 
 No timing or allocation runs accompanied the new PNG encoder or JPEG cleanup. Unchanged paths

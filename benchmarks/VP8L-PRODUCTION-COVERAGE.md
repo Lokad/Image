@@ -33,7 +33,10 @@ performance grid.
    isolate single-axis/narrow-distance coding and both match complete 74-byte
    reference packets in the current model. They do not substitute for the existing
    16384×1/1×16384 functional tests or establish native packet parity there.
-   That reference boundary needs resolution before release qualification.
+   The same frozen model also emits 74-byte packets at both original 16384-axis
+   sizes; pinned FFmpeg decodes every sample exactly. These are functional format
+   extensions beyond the native encoder's maximum, without an encoder-byte or
+   performance claim. Preserve their functional tests during production adoption.
    The source distance mapper gives direct
    coordinates priority where forms overlap on narrow widths; ten fixed format
    examples pass on Windows/Linux. Current four-core widths are unaffected.
@@ -61,12 +64,21 @@ performance grid.
    fine-winner algorithm on an existing input, without a new fixture/grid.
    Hierarchical traversal, per-level histories, entropy selection and packet
    composition pass together in the same model on both platforms.
-   Complete effort-family routing remains open, including the method-5
-   palette-plus-spatial candidate comparison. Audit that named branch on the
-   existing eighteen-color input before integration; add no general settings grid.
+   The existing eighteen-color input now qualifies both method-5 transform
+   candidates: 236-byte plain palette and 256-byte palette-plus-spatial. Both
+   complete candidate packets match; source-derived payload comparison selects
+   the native plain result. Packed index carriers use adaptive prediction without
+   subtract-green or cross-color, and cache search is capped by palette size.
+   This verifies both candidates and plain selection; it adds no spatial-winning
+   input or selected packet identity.
+   Two named required effort algorithms remain: **Effort0NumericPalette18Color**
+   (numeric ordering instead of greedy ordering) and **SmallPaletteBox4Color**
+   (the short-distance box matcher and its complete-writer candidate). Reuse the
+   existing eighteen-color and four-color inputs. Ordinary fixed/adaptive effort
+   policies reuse the qualified primitives; complete routing and production
+   operations still need integration. Add no general settings grid.
    Quality100/method6 brute-force search is outside this pinned quality75 scope.
-   Reuse current two-color
-   depths for complete public-operation qualification. Unpublished implementation
+   Reuse current two-color depths for complete public-operation qualification. Unpublished implementation
    assertions may change; exact normalized pixels and declared option/resource
    contracts remain required. No compatibility alias is needed for experiments.
 5. **Complete public operations.** Qualify existing RGBA16 normalization and fresh

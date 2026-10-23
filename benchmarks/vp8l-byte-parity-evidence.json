@@ -77,7 +77,7 @@
     "members": 22,
     "mirrored": true
   },
-  "latestRound": "E48",
+  "latestRound": "E50",
   "crossColorAndAuxiliaryStages": {
     "scope": "ONE existing513x259 RGBA8 method4/quality75/exact=1 control. Complete transform prefix, not main image or complete encoder.",
     "productionChanged": false,
@@ -5256,5 +5256,221 @@
       "Complete effort-family routing, especially palette-plus-spatial candidate selection, before admitted production integration.",
       "Bounded/shared admission, cancellation/work, RGBA16/async and actual-package qualification, remaining lossy/exact decoders/CPU and release objectives."
     ]
+  },
+  "paletteSpatialCandidates": {
+    "round": "E50",
+    "productionChanged": false,
+    "qualifiedSelectedPacketIdentities": 18,
+    "forcedTransformCandidatePackets": 2,
+    "sameFrozenModelBothOS": true,
+    "model": {
+      "bytes": 141824,
+      "sha256": "a0f8ff1b0ddcc89a5dd696dbf1d3fd3f2382935117e22e2cc44a144ac91eea3b"
+    },
+    "verification": {
+      "sourceOnly": true,
+      "sourceSha256": "d09cae7c789257e4d740adf2f43a18517e503c9c84748f2b8e662ce857436325",
+      "cases": [
+        {
+          "candidate": 0,
+          "packetBytes": 236,
+          "packetSha256": "a4bb56684758d4ff4fa58da15729a126098a74b228c54307204c95d7e4942736",
+          "rawExact": true,
+          "independentOutputs": true,
+          "sourceUnchanged": true,
+          "negativeMutationRejected": true,
+          "details": {
+            "colors": 18,
+            "packingBits": 0,
+            "codedWidth": 23,
+            "spatial": false,
+            "predictorBits": null,
+            "cachedBytes": 236,
+            "uncachedBytes": 236,
+            "composition": {
+              "choice": {
+                "Mode": 4,
+                "RedBlueZero": false,
+                "Costs": [
+                  29834589017,
+                  37077448666,
+                  29834589017,
+                  36433122575,
+                  10408065102
+                ],
+                "DistinctCapped": 18,
+                "HistogramBits": 4,
+                "TransformBits": 4
+              },
+              "cacheBits": 0,
+              "groups": 1,
+              "tokens": 299,
+              "parser": {
+                "standardBits": 0,
+                "repeatedBits": 0,
+                "standardCost": 15109467028,
+                "repeatedCost": 15034911643,
+                "traceCost": null,
+                "winner": "repeat"
+              },
+              "framing": {
+                "storedHistogramBits": 4,
+                "mapSamples": 2,
+                "groups": 1,
+                "huffmanTrees": 5,
+                "treeLengthsSha256": "b1094bc95f9c6e659dd1b8ac15a1ac7c0d2c088cc1417ce2cd3de49f33d2df4d",
+                "groupMapBits": 0,
+                "mapStartBit": 394,
+                "mapEndBit": 394,
+                "firstDataBit": 483,
+                "endBit": 1718,
+                "payloadBytes": 215,
+                "packetBytes": 236
+              }
+            }
+          }
+        },
+        {
+          "candidate": 1,
+          "packetBytes": 256,
+          "packetSha256": "2fbb3167c8da95e86dbec67aa0b5c853f4ed651e48bcdc8ebb70ce34cb75ac82",
+          "rawExact": true,
+          "independentOutputs": true,
+          "sourceUnchanged": true,
+          "negativeMutationRejected": true,
+          "details": {
+            "colors": 18,
+            "packingBits": 0,
+            "codedWidth": 23,
+            "spatial": true,
+            "predictorBits": 9,
+            "cachedBytes": 256,
+            "uncachedBytes": 256,
+            "composition": {
+              "choice": {
+                "Mode": 4,
+                "RedBlueZero": false,
+                "Costs": [
+                  29834589017,
+                  37077448666,
+                  29834589017,
+                  36433122575,
+                  10408065102
+                ],
+                "DistinctCapped": 18,
+                "HistogramBits": 4,
+                "TransformBits": 4
+              },
+              "cacheBits": 0,
+              "groups": 1,
+              "tokens": 290,
+              "parser": {
+                "standardBits": 0,
+                "repeatedBits": 0,
+                "standardCost": 15527898157,
+                "repeatedCost": 15634489473,
+                "traceCost": 15761419303,
+                "winner": "standard"
+              },
+              "framing": {
+                "storedHistogramBits": 4,
+                "mapSamples": 2,
+                "groups": 1,
+                "huffmanTrees": 5,
+                "treeLengthsSha256": "76fa5cf2fdd01e3b002d4bf6736bbe4ea1051bc6d4f7a596446170dc707c3848",
+                "groupMapBits": 0,
+                "mapStartBit": 428,
+                "mapEndBit": 428,
+                "firstDataBit": 598,
+                "endBit": 1879,
+                "payloadBytes": 235,
+                "packetBytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "selectedPacketBytes": 236,
+      "selectedPacketSha256": "a4bb56684758d4ff4fa58da15729a126098a74b228c54307204c95d7e4942736",
+      "selectedRawExact": true,
+      "productionChanged": false,
+      "timingRuns": 0,
+      "scope": "Existing18-color23x13 method5/quality75/exact1 control: both forced transform-candidate packets and final selection. Public reference selects plain; no claim of a spatial-winning control or general effort-family qualification."
+    },
+    "affectedCases": "Same final assembly reconfirms all18 selected-output identities on both platforms, including the two-color methods0..6 and both adaptive method5 controls.",
+    "modelBuilds": {
+      "windows": 1,
+      "linux": 0
+    },
+    "nativeBuilds": 1,
+    "nativeCompileAttempts": 2,
+    "nativeForcedCandidateEncodes": 2,
+    "newFixtureInputs": 0,
+    "productionBuilds": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "newPrimitive": "Predict opaque packed palette indices with adaptive tile selection; bounded palette-derived cache search; cache/no-cache then plain/spatial complete writer-payload comparison, strict smaller wins, ties retain first.",
+    "qualificationReuse": "ProductionE24 full bothOS/differential/scalar/actual-package evidence remains valid; no production input changed. One immutable model reused for all affected bothOS source proofs.",
+    "rawNativeArchive": {
+      "name": "e50-native-palette-candidates.tar.gz",
+      "bytes": 345960,
+      "sha256": "b6826cb5459084dc7fb4dc009a3396838c178af5560d56ee58f16fd388c5a52e",
+      "members": 7,
+      "mirrored": true
+    },
+    "rawArchive": {
+      "name": "e50-palette-candidates-qualified.tar.gz",
+      "bytes": 157580,
+      "sha256": "513188a36b9963f669f19ab84fd75bf73bffc5f012da31da4269dcd19d59a2b5",
+      "members": 70,
+      "mirrored": true
+    },
+    "remaining": [
+      "Small-palette LZ77Box complete-writer candidate and effort0 numeric palette order are distinct required existing effort branches; use existing4/16/18-color controls, without a settings grid.",
+      "Generic effort/family routing and admitted production/public-operation/package integration.",
+      "Remaining lossy encoders/exact decoders/deferred warmCPU<=1/allocation and full functional/release objectives."
+    ]
+  },
+  "functional16384Boundary": {
+    "round": "E49",
+    "sourceOnly": true,
+    "productionChanged": false,
+    "scope": "Existing16384x1 and1x16384 axis recipe. The same frozen E48 source model emits74B packets; pinnedFFmpeg decodes all65536RGBAbytes exactly. Functional format extension beyond native encoder maximum16383, without a native encoder packet or timing claim.",
+    "verification": {
+      "sourceOnly": true,
+      "ffmpegVersion": "ffmpeg version n8.1 Copyright (c) 2000-2026 the FFmpeg developers",
+      "ffmpegSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
+      "cases": [
+        {
+          "width": 16384,
+          "height": 1,
+          "packetBytes": 74,
+          "packetSha256": "18d19ba08c9ced828004bd9cdc3b6f49eeca4ed66c7197bc859cfbbd87568498",
+          "decodedBytes": 65536,
+          "decodedSha256": "8b750eb0af82316b2e2245553a7fce0f59129ab2e0007d9844f722f9d5c0e4da",
+          "allPixelsExact": true
+        },
+        {
+          "width": 1,
+          "height": 16384,
+          "packetBytes": 74,
+          "packetSha256": "8be7f4aa8825b3fb1ac138d310051caae842058beba8d869817396a37c3519b7",
+          "decodedBytes": 65536,
+          "decodedSha256": "8b750eb0af82316b2e2245553a7fce0f59129ab2e0007d9844f722f9d5c0e4da",
+          "allPixelsExact": true
+        }
+      ],
+      "nativeEncoderByteClaim": false,
+      "nativeDecoderOperations": 2,
+      "timingRuns": 0
+    },
+    "sameSourcePacketsBothOS": true,
+    "rawArchive": {
+      "name": "e49-bounded-audit.tar.gz",
+      "bytes": 5983,
+      "sha256": "1e2c337699504aea07b21702865a02443dd7f42cc0a27e23c0e848dd5d92b04d",
+      "members": 11,
+      "mirrored": true
+    }
   }
 }
