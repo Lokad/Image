@@ -47,7 +47,7 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
             var uncached = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, width, true, maximumCacheBits, context, quality >= 25);
             Consider(candidatePrefix, Vp8lImageCode.TakeMain(uncached, width, height, analysis.HistogramBits, false, context, quality));
         }
-        if (paletteColors is >= 1 and <= 16)
+        if (paletteColors is >= 1 and <= 16 || effort == 6 && quality == 100 && analysis.DistinctColorsCapped is >= 1 and <= 16)
         {
             using var box = Vp8lReferenceMatcher.BuildBox(pixels, width, matches.Values, context);
             var boxed = Vp8lReferenceMainParsing.EncodeBox(pixels, box.Values, width, false, maximumCacheBits, context, quality >= 25);
@@ -94,7 +94,42 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
     {
         if (quality is < 0 or > 100) throw new ArgumentOutOfRangeException(nameof(quality));
         var analysis = Vp8lEncodingAnalysis.Select(working, width, effort, context);
+        if (effort == 6 && quality == 100) return PrepareAllFamilies(working, width, analysis, context);
         return PrepareCore(working, width, effort, context, quality, analysis, comparePalettePrediction: effort == 5 && quality >= 75);
+    }
+
+    // One admitted mutable trial is reset from the borrowed untransformed input.
+    // A selected owner retains the entire coding/transform bundle, so it can
+    // overlap the next trial without retaining or copying an encoded frame.
+    private static Vp8lPreparedEncoding PrepareAllFamilies(ReadOnlySpan<uint> source, int width,
+        Vp8lEncodingAnalysis analysis, OperationContext context)
+    {
+        var scratch = source.Length * 4L; context.Reserve(scratch);
+        Vp8lPreparedEncoding? best = null;
+        try
+        {
+            context.Work(0); var trial = new uint[source.Length];
+            for (var family = Vp8lTransformKind.Direct; family <= Vp8lTransformKind.PalettePrediction; family++)
+            {
+                var palette = family is Vp8lTransformKind.Palette or Vp8lTransformKind.PalettePrediction;
+                if (palette && analysis.DistinctColorsCapped > 256) continue;
+                var orders = palette ? 2 : 1;
+                for (var order = 0; order < orders; order++)
+                {
+                    context.Work(source.Length); source.CopyTo(trial);
+                    var next = PrepareCandidate(trial, width, analysis, family, context,
+                        order == 0 ? Vp8lPaletteOrder.MinDelta : Vp8lPaletteOrder.ModifiedZeng);
+                    try
+                    {
+                        if (best is null || next.PayloadBytes < best.PayloadBytes)
+                        { best?.Dispose(); best = next; next = null!; }
+                    }
+                    finally { next?.Dispose(); }
+                }
+            }
+            var result = best!; best = null; return result;
+        }
+        finally { best?.Dispose(); context.Release(scratch); }
     }
 
     // One explicit family from the method6/quality100 search. Analysis is shared

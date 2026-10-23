@@ -3,7 +3,7 @@
 The private managed pipeline reproduces the four method4/Q75 packet identities,
 the named diagram method/quality controls, and asymmetric method0/1 packets.
 Method4 ALPH is exact from RGBA8/16. All sixteen high-quality ALPH6 candidate bodies
-are now exact; complete ALPH6 search is still open. The public lossy encoder is
+are exact and complete ALPH6 search now passes at its stated work allowance. The public lossy encoder is
 unchanged. The named header/work boundaries and public integration remain open.
 
 Seven existing encoding rows have four reference packet identities:
@@ -165,7 +165,7 @@ targets; source-only qualification is distinct from complete-packet agreement:
 | Diagram Q1 / method4 | Minimum quality and quantizer clamps | 2,304 | Complete packet exact |
 | Diagram Q85 / method4 | Public default quality | 8,898 | Complete packet exact |
 | Diagram Q100 / method4 | Maximum quality and high-quality DC policy | 15,172 | Complete packet exact |
-| Alpha Q75 / method6 | Internal alpha VP8L quality100 search | 85,796 | Open |
+| Alpha Q75 / method6 | Internal alpha VP8L quality100 search | 85,796 | Complete packet exact with explicit work allowance |
 | Diagram Q100 / method0 | High-quality fast source and distortion-only DC policy | 27,668 | Complete packet exact |
 | Alpha Q75 / method0 | Low-effort alpha VP8L | 93,386 | Complete packet exact |
 | Alpha Q75 / method1 | Alpha VP8L without cache/trace; small clustering bound | 106,588 | Complete packet exact |
@@ -355,3 +355,21 @@ The old boolean palette selector was replaced by an explicit private ordering
 enum. Existing Sorted/MinDelta decisions and public routing remain unchanged.
 No new native encode, timing or GC-allocation measurement was needed. Complete
 search composition, ALPH6, the named header case and public adoption remain open.
+
+Complete method6 alpha search now matches the frozen11,667-byte ALPH payload and
+85,796-byte asymmetricQ75 RGBA8 packet on its first screen. Every family/order
+runs in fixed native order, resetting one admitted trial plane from immutable
+filtered input. Old and new complete owners overlap until strict size selection;
+losers release promptly. Small source palettes enable Box matching for every
+exhaustive family, including non-palette transforms. No encoded-frame copy is added.
+
+The same immutable build passes510 focused checks on both platforms with and
+without intrinsics. Refusal/cancellation in the final family and late work failure
+discard the earlier winner, preserve caller input/charges and allow recovery.
+ALPH output replacement, limits and source-independent sync/async lifetimes pass.
+The positive complete preparation consumes17,660,696,844 accounted work units
+(and17,660,868,436 including both deliveries), under an explicit64B caller allowance.
+Default2B refusal is separately qualified; no limit, work scale or fallback changed.
+These are resource-accounting figures, without timing or GC-allocation claims.
+No new reference encode or image/settings grid was needed. The named native-positive
+header observation and coherent public adoption/qualification remain open.

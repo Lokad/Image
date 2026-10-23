@@ -11,10 +11,13 @@ public sealed class Vp8AlphaEncodingTests
     [InlineData(16, 4, 24588, "ca83ebb44c092e661126e81d83a3345877b1de833a2d0bde289217b19d2d25ae", 98590, "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10")]
     [InlineData(8, 0, 15238, "4753265a0d3567b9b4bce842cf09f6dd174a51b3002d3358ab8fa6243771d15a", 93386, "eb12853d220295a4327d151827462eda69df74bc9a21b938af5ca31f40cf134d")]
     [InlineData(8, 1, 30101, "21ff9bd761842e805268a49eb86b4f31ee605716833fcbc920e04867b12828af", 106588, "9491f97d6c703e0d8869c02eb4ba0edabcde831992f7173cae5ef5b16ab330ce")]
+    [InlineData(8, 6, 11667, "9893369a72e99d43c8010e37f10bc33d9aa7a35d85f63faf5324befa6c26cff0", 85796, "e58f431cec4412c38b3ee49da4ff62c25cc896fa71bcffe9f131dd08e1bccc96")]
     public async Task ExistingTransparentControlMatchesEntireNativePacketWithoutRetainingSource(int depth, int method, int alphaBytes, string alphaHash, int packetBytes, string packetHash)
     {
         using var root = new TestMemoryBudget(128_000_000);
-        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        // Exhaustive byte proof uses an explicit caller allowance; default work
+        // refusal is a separate required test. No default limit is changed.
+        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = method == 6 ? 64_000_000_000 : 2_000_000_000 }, default);
         using var source = OriginalVp8lControls.Buffer("asymmetric", depth, root);
         using var input = Vp8PreparedInput.Create(source, context);
         using var alpha = Vp8AlphaEncoding.Create(input.Alpha, input.Width, context, method);
@@ -26,6 +29,7 @@ public sealed class Vp8AlphaEncodingTests
             ? Vp8FramePlan.CreateDistortion(input, analysis, segments, quantization, method, context)
             : Vp8FramePlan.Create(input, segments, quantization, context, method: method);
         using var packet = Vp8FrameEncoding.Create(frame, context);
+        var preparationWork = context.ConsumedWork;
         source.Dispose(); input.Dispose(); analysis.Dispose(); segments.Dispose(); quantization.Dispose(); frame.Dispose();
         Assert.Equal(alpha.CapacityBytes + packet.CapacityBytes, root.Bytes);
         using var output = new MemoryStream(); packet.WriteWebp(output, alpha); var bytes = output.ToArray();
@@ -35,6 +39,8 @@ public sealed class Vp8AlphaEncodingTests
         Assert.Equal(packetBytes, packet.WebpLengthWithAlpha(alpha)); Assert.Equal(packetBytes, bytes.Length);
         Assert.Equal(packetHash, Convert.ToHexStringLower(SHA256.HashData(bytes)));
         using var second = new MemoryStream(); await packet.WriteWebpAsync(second, alpha); Assert.Equal(bytes, second.ToArray());
+        if (method == 6 && Environment.GetEnvironmentVariable("LOKAD_VP8_PACKET_TRACE") is { } workPath)
+            File.WriteAllText(workPath + "-alpha6-work.json", System.Text.Json.JsonSerializer.Serialize(new { preparationWork, workIncludingBothDeliveries = context.ConsumedWork, retainedAccountingBytes = root.Bytes, callerMaxWork = context.Limits.MaxWork, cpuOrGcAllocationMeasurement = false }));
         alpha.Dispose(); packet.Dispose(); Assert.Equal(0, root.Bytes); Assert.True(output.CanWrite); Assert.True(second.CanWrite); Assert.False(root.IsDisposed);
     }
 
@@ -42,6 +48,7 @@ public sealed class Vp8AlphaEncodingTests
     [InlineData(4)]
     [InlineData(0)]
     [InlineData(1)]
+    [InlineData(6)]
     public void RawSingletonRetainsOnlyItsOwnPayloadAndSurvivesBorrowedInputReplacement(int method)
     {
         using var root = new TestMemoryBudget(1_000_000); using var context = new OperationContext(new() { MemoryBudget = root }, default);
@@ -58,6 +65,7 @@ public sealed class Vp8AlphaEncodingTests
     [InlineData(4)]
     [InlineData(0)]
     [InlineData(1)]
+    [InlineData(6)]
     public void OwnedScratchAndFinalCandidateRefusalAreTerminalAndRecoveryUsesTheSameRoot(int method)
     {
         var source = Ramp(); var original = source.ToArray(); long peak, last;
@@ -84,6 +92,7 @@ public sealed class Vp8AlphaEncodingTests
     [InlineData(4)]
     [InlineData(0)]
     [InlineData(1)]
+    [InlineData(6)]
     public void CancellationLocalWorkAndOutputFailuresReleaseAllNewOwnership(int method)
     {
         var source = Ramp(); long work;
