@@ -25,11 +25,16 @@ internal sealed class Vp8lHistogramPlan : IDisposable
         catch { counts = null; context.Release(reserved); throw; }
     }
 
-    public void Dispose()
+    internal void DisposePopulations()
     {
         var ownedCounts = Interlocked.Exchange(ref counts, null);
-        var ownedMap = Interlocked.Exchange(ref map, null);
         if (ownedCounts is not null) context.Release(ownedCounts.Length * 4L);
+    }
+
+    public void Dispose()
+    {
+        DisposePopulations();
+        var ownedMap = Interlocked.Exchange(ref map, null);
         if (ownedMap is not null) context.Release(ownedMap.Length * 4L);
     }
 }

@@ -83,39 +83,23 @@ internal static class Vp8lReferenceHuffman
     // caller owns the output stream/writer, so several images can share bit state.
     internal static void WriteAuxiliary(WebpBitWriter writer, ReadOnlySpan<Vp8lToken> tokens, int width, OperationContext context)
     {
-        var layout = new Vp8lHistogramLayout(0); var codes = new Vp8lHuffmanCode?[5];
+        var layout = new Vp8lHistogramLayout(0); Vp8lHuffmanGroup? group = null;
         try
         {
             var reserved = layout.Total * 4L; context.Reserve(reserved);
             try
             {
                 context.Work(0); var counts = new int[layout.Total]; layout.Fill(tokens, width, true, counts, context);
-                codes[0] = Vp8lHuffmanCode.Build(counts.AsSpan(0, layout.GreenSize), context);
-                codes[1] = Vp8lHuffmanCode.Build(counts.AsSpan(layout.Red, 256), context);
-                codes[2] = Vp8lHuffmanCode.Build(counts.AsSpan(layout.Blue, 256), context);
-                codes[3] = Vp8lHuffmanCode.Build(counts.AsSpan(layout.Alpha, 256), context);
-                codes[4] = Vp8lHuffmanCode.Build(counts.AsSpan(layout.Distance, 40), context);
+                group = Vp8lHuffmanGroup.Build(counts, layout, context);
             }
             finally { context.Release(reserved); }
             writer.Write(0, 1);
-            foreach (var code in codes) WriteTree(writer, code!.Lengths, context);
+            group.WriteTrees(writer);
             foreach (var token in tokens)
             {
-                context.Work(1);
-                if (token.Code > 0)
-                {
-                    WritePrefix(writer, codes[0]!, token.Code, 256);
-                    WritePrefix(writer, codes[4]!, Vp8lSymbols.Plane((int)token.Value, width), 0);
-                }
-                else
-                {
-                    if (token.Code != 0) throw new InvalidOperationException("An auxiliary image cannot use cache tokens.");
-                    var pixel = token.Value;
-                    codes[0]!.Write(writer, (int)(pixel >> 8 & 255)); codes[1]!.Write(writer, (int)(pixel >> 16 & 255));
-                    codes[2]!.Write(writer, (int)(pixel & 255)); codes[3]!.Write(writer, (int)(pixel >> 24));
-                }
+                group.WriteToken(writer, token, width);
             }
         }
-        finally { for (var i = codes.Length - 1; i >= 0; i--) codes[i]?.Dispose(); }
+        finally { group?.Dispose(); }
     }
 }

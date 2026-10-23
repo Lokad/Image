@@ -107,6 +107,16 @@ Sampling and greedy merging reuse storage with separate candidate sets. All 103
 checks pass with one assembly on both platforms, including sparse token-start
 tiles, overlap, terminal refusal/recovery, cancellation and late work cleanup.
 No new native encode or timing was needed.
+Prepared main entropy/framing adds 13 checks. Seven complete packets now match
+from typed production components: asymmetric efforts 0/1/4 and singleton,
+two-color, greedy/numeric 18-color palettes. This includes coarsened group maps,
+cache/spatial flags, partial-bit transform boundaries, all trees/tokens and RIFF
+lengths/padding. Prepared state owns no source pixels; counting and emission reuse
+its tokens/maps/codes without an encoded-frame buffer. Unused population arrays
+release after code construction. All 116 focused checks pass in one assembly on
+both platforms, including refusal, cancellation, output limits and late work
+cleanup. Test orchestration supplies the transform/effort choice: generic public
+routing and the complete 19-packet integration gate remain open.
 The last full shared-build qualification (E53) passed 3,884 offline tests per
 platform, the same private Release package and all three usage examples on both.
 These public paths remain unchanged. The encoder is not switched: complete-operation

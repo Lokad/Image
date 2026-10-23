@@ -133,10 +133,18 @@ performance grid.
    counts/maps have independent owners. Sampling candidates are reset before
    greedy merging. Sparse token-start tiles, overlap, refusal/recovery,
    cancellation and late work failure pass. All 103 checks use one assembly on
-   both platforms. Public paths reuse E53's
+   both platforms. Thirteen prepared entropy/framing checks bring the total to
+   116 on the same assembly both platforms. Seven complete packets match native
+   bytes from typed components (asymmetric 0/1/4 and four palette controls), with
+   coarsened maps, partial-bit boundaries and RIFF lengths/padding. Counting and
+   emission share owned tokens/maps/codes; no source pixels or full encoded frame
+   are retained, and population arrays release after code construction. Refusal,
+   cancellation, output limits and late work cleanup pass. Transform/effort choices
+   still come from test orchestration; generic public routing remains open.
+   Public paths reuse E53's
    3,884 offline checks and same-package/three-example qualification per platform.
-   Public encoding does not call these components yet. Port main entropy/framing
-   and complete effort routing, and
+   Public encoding does not call these components yet. Complete generic effort/
+   transform/candidate routing, all nineteen packets and public-boundary proofs, and
    connect the complete encoder before claiming end-to-end production qualification.
    Reserve substantial storage before allocation through
    the borrowed shared root, account for replacement peaks and retained outputs,

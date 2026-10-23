@@ -53,11 +53,13 @@ input. The existing two-color input qualifies both1026-entry box indices and46/5
 candidate packets, with ordinary-first ties. These named effort primitives pass;
 admitted production and complete public operations remain open.
 Typed production analysis, transforms, matching, uncached/cached/Box parsing and
-Huffman coding/clustering pass 103 focused checks with one Windows/Linux assembly. Native maps,
+Huffman coding/clustering/framing pass 116 focused checks with one Windows/Linux assembly. Native maps,
 palette data, four complete auxiliary bitstreams, cached hidden-RGB main trees and
 the complete asymmetric 110,306-token main stream match. Three frozen effort packets
 also match every tile assignment and final population of their 9/2/16 groups;
-shared admission, retained capacity and failure cleanup pass. Packed pixels and
+seven complete typed-component packets match native bytes (asymmetric0/1/4 and
+four palettes). Counting/emission reuse owned coding state without an encoded-frame
+buffer. Shared admission, retained capacity and failure cleanup pass. Packed pixels and
 cache conversion operate in place. Unchanged public paths reuse E53's 3,884 offline
 checks per platform and same private package/three usage examples on both. Public
 encoding is not switched; integrated qualification and new timings/allocations remain open.

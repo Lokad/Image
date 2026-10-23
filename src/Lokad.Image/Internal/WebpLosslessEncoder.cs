@@ -167,7 +167,7 @@ internal static partial class WebpLosslessEncoder
         throw new ArgumentOutOfRangeException(nameof(value));
     }
 
-    private sealed class CountStream(int maximum) : Stream
+    internal sealed class CountStream(int maximum) : Stream
     {
         public int Count { get; private set; }
         public override bool CanRead => false;
