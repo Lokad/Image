@@ -67,6 +67,7 @@ public sealed class Vp8MacroblockDecisionTests
     [InlineData("opaque", "96434ac268b05cdc2e48575fb179dd6fc06bacb517161bfc220df443b7ee0783", "712746471599612d0c67af42d67aeb9313377efdc3abe5dddb8fcbb3d9176871", "c3d707570839159f043e2d20025c9a936c4f60504acca655faf8e4def24d7e26", 0, 0, 4)]
     [InlineData("diagram", "7edee9f0b7b7be0dce5074b0d9b38804f25fff5079fb6fd60a873110941d07e6", "53b0c735333ac5b2def299cac2d6636c42dbe66049a8aea2c6f40dd9ffa42138", "c5c3326ccf2ec81011734300af1120b4a535b60c38368335436ee9a5164477ab", 353, 255, 4)]
     [InlineData("diagram", "d47a2887f3a9107bcd60cb0690e1ba0c571a58f346fa8f979c7d5457b36c3175", "3edef52edaa67c7bb29446ea0032413353656520f6474a05cb829fce1417e9a4", "5df4edf14b246acc1a4f603b84a9e3afd331294dffd54cc40eea896226ea1b2d", 349, 240, 5)]
+    [InlineData("diagram", "fcd54df5bb195ec90bb7c2c5afeb99f60da95c2c8a5d460d85eb0b5974f06709", "adc2b5101c386a025d6be9dc7f9117e4112bab3a8afcd95ac16d5138b0a6f6c0", "22120b0e737d76f48b7e16bc26c86bf1e07fc6396f60c75f0a1b47b8bf7c571f", 357, 255, 6)]
     public void CompleteDecisionAndRollingStateMatchNativeOnOriginalControls(string name, string expectedBefore,
         string expectedAfter, string expectedProfiles, int expectedIntra16, int expectedSkips, int method)
     {
@@ -121,7 +122,7 @@ public sealed class Vp8MacroblockDecisionTests
                 for (var p = 0; p < 4; p++) neighbors[67 + p] = x + 1 < columns ? yTop[(x + 1) * 16 + p] : yTop[x * 16 + 15];
                 modeTop.AsSpan(x * 4, 4).CopyTo(modeContexts); modeLeft.CopyTo(modeContexts[4..]);
                 Contexts(nonzero[x + 1], nonzero[x], leftDc, contexts); topErrors.AsSpan(x * 4, 4).CopyTo(errorInput); errorLeft.CopyTo(errorInput[4..]);
-                var segment = segments.Map[index]; WriteBefore(before, index, x, y, segment, source, neighbors, modeContexts, nonzero[x + 1], nonzero[x], leftDc, errorInput, method == 5 ? 2 : 1);
+                var segment = segments.Map[index]; WriteBefore(before, index, x, y, segment, source, neighbors, modeContexts, nonzero[x + 1], nonzero[x], leftDc, errorInput, Math.Max(1, method - 3));
                 var retained = root.Bytes;
                 var score = Vp8MacroblockDecision.Select(source, neighbors, modeContexts, contexts, errorInput, y != 0, x != 0,
                     quantization.Matrix(segment, Vp8CoefficientPlane.Luma), quantization.Matrix(segment, Vp8CoefficientPlane.Walsh), quantization.Matrix(segment, Vp8CoefficientPlane.Chroma),
@@ -158,6 +159,8 @@ public sealed class Vp8MacroblockDecisionTests
     [InlineData(false, 4)]
     [InlineData(true, 5)]
     [InlineData(false, 5)]
+    [InlineData(true, 6)]
+    [InlineData(false, 6)]
     public void BorrowedInputsCanAliasResultsAndInvalidLayoutsOrCancellationPreserveSeparateInputs(bool correctDc, int method)
     {
         using var root = new TestMemoryBudget(16_000_000); using var image = OriginalVp8lControls.Buffer("opaque", 8, root);

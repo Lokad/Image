@@ -45,6 +45,7 @@ public sealed class Vp8FrameEncodingTests
     [InlineData("diagram", 8898, "51a4abeda30c4f8c8b1dea563ab6690a89a5feed93b69c467398f9b736aeb536", 4, 85)]
     [InlineData("diagram", 15172, "6a4332bb32c3b93248a76eb804a0dc74d2c519d4955f310dcb94ef798cd2616e", 4, 100)]
     [InlineData("diagram", 7026, "0e994ebda4b10234f2e9f00caf7ea6c27ae03ce82c1f3cada8eda355430cba68", 5, 75)]
+    [InlineData("diagram", 6818, "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee", 6, 75)]
     public async Task CompletePacketMatchesNativeWithIndependentSourceAndOutputLifetimes(string name, int bytes, string expected, int method, int quality)
     {
         using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs(name, root, method, quality); using var frame = input.Frame();
@@ -62,6 +63,7 @@ public sealed class Vp8FrameEncodingTests
     [Theory]
     [InlineData(4)]
     [InlineData(5)]
+    [InlineData(6)]
     public void RetainedFrameAndReplacementUseOneRootAndReleaseIndependentlyOfInputs(int method)
     {
         using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs("singleton", root, method); using var first = input.Frame();
@@ -78,6 +80,7 @@ public sealed class Vp8FrameEncodingTests
     [Theory]
     [InlineData(4)]
     [InlineData(5)]
+    [InlineData(6)]
     public void OwnedAndTransientFrameRefusalsAreTerminalAndAllowSubsequentOperations(int method)
     {
         foreach (var available in new long[] { 2195, 2196 + 25265 - 1, 2196 + 25265 + 20192 - 1 })
@@ -94,6 +97,7 @@ public sealed class Vp8FrameEncodingTests
     [Theory]
     [InlineData(4)]
     [InlineData(5)]
+    [InlineData(6)]
     public void FrameCancellationAndLateWorkFailureRefundAllNewOwnership(int method)
     {
         using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs("singleton", root, method); var baseline = root.Bytes;

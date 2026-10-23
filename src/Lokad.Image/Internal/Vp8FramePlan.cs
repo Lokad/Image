@@ -81,7 +81,7 @@ internal sealed class Vp8FramePlan : IDisposable
     internal static Vp8FramePlan Create(Vp8PreparedInput input, Vp8SourceSegments segments, Vp8QuantizationPlan quantization,
         OperationContext context, int headerLimit = 65536, bool correctDc = true, int method = 4)
     {
-        if (method is < 3 or > 5 || headerLimit is < 0 or > 65536 || segments.Width != input.Stride / 16 || segments.Height != input.StorageHeight / 16
+        if (method is < 3 or > 6 || headerLimit is < 0 or > 65536 || segments.Width != input.Stride / 16 || segments.Height != input.StorageHeight / 16
             || quantization.SegmentCount != segments.SegmentCount) throw new ArgumentException("Inconsistent VP8 frame preparation.");
         context.Work(0); var result = new Vp8FramePlan(input, segments, quantization, headerLimit, context);
         try
