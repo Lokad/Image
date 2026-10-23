@@ -1,7 +1,7 @@
 # VP8 encoder preparation
 
-The private managed pipeline is verified through composed macroblock decisions and adaptive coefficient state.
-The public lossy encoder is unchanged; complete VP8 packet replication remains open.
+The private managed pipeline is verified through complete opaque packets on the three declared RGBA8 controls.
+The public lossy encoder is unchanged. Alpha, required options and public integration remain open.
 
 Seven existing encoding rows have four reference packet identities:
 
@@ -99,10 +99,24 @@ Counter rescaling arithmetic, update-header costs and the explicit token-buffer
 statistics policy pass focused checks. Borrowed macroblock inputs are snapshotted;
 aliases, tails, invalid layouts, cancellation and late work failure pass. The
 caller admits16,384scratch bytes once, without per-block owners or reservations.
-The returned maximum-edge candidate still needs final frame-filter qualification.
+Final frame-filter adjustment is now qualified by the complete packets below.
 
-The same immutable assembly passes223focused checks per platform on Windows/Linux,
-normal and SIMD disabled, including all213earlier checks. Shared admission covers
+The private frame/partition pipeline reproduces allthree complete opaque packets:
+72,380/7,100/17,688bytes for the procedural/diagram/photograph controls. Sources
+and settings are unchanged. Final coefficient refresh, segment/mode headers,
+filter levels and canonical partition termination match. The native VP8 chunk
+counts its final zero padding internally; this declaration is also exact.
+
+The admitted frame retains coefficients/modes/probabilities, with rolling borders
+instead of a reconstructed image. Owned partitions deliver directly to sync/async
+streams without a joined frame copy. Input/frame owners can release first; packet
+charges persist through actual asynchronous users, including cancellation. Refusal
+and failed growth copying refund unused capacity without retry or fallback.
+Allcurrent controls require zero header-strengthening retries; a native-positive
+large-header confirmation remains an explicit required coverage item.
+
+The same immutable assembly passes250focused checks per platform on Windows/Linux,
+normal and SIMD disabled, including all223earlier checks. Shared admission covers
 owned capacity, retained results and replacement overlap. Refusal, cancellation,
 local/work limits and cleanup/recovery pass; sources and caller roots stay borrowed.
 The matrix owner retains3,128/4,128admitted bytes for3/4used segments. Earlier source
@@ -111,7 +125,6 @@ accounting capacities; no new timing or GC-allocation measurements are claimed.
 
 [Structured evidence](vp8-byte-parity-evidence.json) records exact producers,
 reference observations, scope and preserved raw masters. Prior public codec and
-package evidence retains its stated scope. Next are admitted frame ownership, entropy/framing, final filtering and ALPH,
-followed by complete
-packets and the bounded required-option audit. No readiness claim follows from
-these private stages.
+package evidence retains its stated scope. Next are ALPH/the fourth packet identity,
+the bounded required-option audit, then public integration and packaged consumer
+qualification. No readiness claim follows from these private stages.
