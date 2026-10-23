@@ -84,16 +84,16 @@ public sealed class IdentificationInputTests
         try
         {
             if (fast) { using var input = IdentificationInput.Read(reader, context); result = input.Span.ToArray(); }
-            else result = LegacyInput(reader, context);
+            else result = BufferedReferenceInput(reader, context);
         }
         catch (Exception e) { error = e; }
         Assert.True(reader.CanRead);
         return new(result, error?.GetType(), context.RemainingWork, context.RemainingWorkingBytes, reader.Reads, reader.Consumed,
             error is OperationCanceledException canceled && canceled.CancellationToken == cts.Token);
     }
-    // Freeze our former reader as the historical synchronous Identify admission
-    // oracle. Decode now deliberately uses actual-capacity admission instead.
-    private static byte[] LegacyInput(Stream input, OperationContext context)
+    // Buffered reference for synchronous Identify admission. Decode uses
+    // actual-capacity admission instead.
+    private static byte[] BufferedReferenceInput(Stream input, OperationContext context)
     {
         ArgumentNullException.ThrowIfNull(input);
         var limits = context.Limits;

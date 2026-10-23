@@ -34,7 +34,7 @@ public sealed class ImageDataException : IOException
 
 public sealed class ImageLimitException : IOException
 {
-    /// <summary>The exhausted limit. Unspecified is reserved for the legacy constructor.</summary>
+    /// <summary>The exhausted limit. The message-only constructor uses Unspecified.</summary>
     public ImageLimitKind Limit { get; }
     /// <summary>Whether the exhausted allowance belongs to one operation or a shared budget.</summary>
     public ImageLimitScope Scope { get; }

@@ -21,7 +21,7 @@ public sealed class WebpColorCacheTests
     }
 
     [Theory] [InlineData(8)] [InlineData(16)]
-    public void LocalTightWorkspaceChoosesLegacyBeforeSharedAdmissionAndStaysLossless(int depth)
+    public void LocalTightWorkspaceChoosesSimpleEncodingBeforeSharedAdmissionAndStaysLossless(int depth)
     {
         using var source = Source(depth); var expected = Normalized(source);
         var limits = new ImageLimits { MaxWorkingBytes = (long)source.Stride * source.Height + 8192 };
@@ -33,7 +33,7 @@ public sealed class WebpColorCacheTests
     }
 
     [Fact]
-    public void NewPathRespectsLocalOutputAndWorkPreflightWithoutClosingCallerStream()
+    public void CachedEncodingRespectsLocalOutputAndWorkPreflightWithoutClosingCallerStream()
     {
         using var source = Source(8);
         // Freeze the cached-codec boundary, excluding optional larger analysis.
@@ -54,7 +54,7 @@ public sealed class WebpColorCacheTests
     }
 
     [Fact]
-    public void SharedRefusalDoesNotRetryTheLegacyEncoderAndReleasedCapacityAllowsSuccess()
+    public void SharedRefusalIsTerminalAndReleasedCapacityAllowsSuccess()
     {
         const int sourceBytes = 129 * 129 * 4;
         using var root = new TestMemoryBudget(sourceBytes + 65536);

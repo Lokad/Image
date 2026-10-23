@@ -118,12 +118,12 @@ public sealed class TextShapingTests
     }
 
     [Fact]
-    public void UnsupportedScriptsJoiningProgramsAndLegacyDirectionAreExplicit()
+    public void UnsupportedScriptsJoiningProgramsAndLogicalDirectionAreExplicit()
     {
         using var font = Font(("cmap", Mapping()));
         Assert.Equal(UnsupportedImageFeature.FontTable, Assert.Throws<UnsupportedImageException>(() => TextLayout.Create(font, "بب", Options)).Feature);
         Assert.Equal(UnsupportedImageFeature.FontTable, Assert.Throws<UnsupportedImageException>(() => TextLayout.Create(font, "क", Options)).Feature);
-        Assert.Throws<ArgumentException>(() => TextLayout.Create(font, "A", Options with { Shaping = TextShaping.Legacy, Direction = TextDirection.RightToLeft }));
+        Assert.Throws<ArgumentException>(() => TextLayout.Create(font, "A", Options with { Shaping = TextShaping.Logical, Direction = TextDirection.RightToLeft }));
     }
 
     [Theory]

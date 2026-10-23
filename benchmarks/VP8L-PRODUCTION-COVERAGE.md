@@ -90,13 +90,20 @@ performance grid.
    nonseekable async delivery, including independent surviving outputs, failures
    and cancellation. Their core packet identity reuses the first frozen packet;
    complete operations still require integration evidence.
-6. **Admitted integration.** The first production component is now ported:
+6. **Admitted integration.** Matching and prediction are now ported:
    typed ordinary/low-effort/box matching accepts borrowed spans and returns an
    owned index. Eight focused checks pass with the same assembly on Windows/Linux:
    native indices, aggregate admission/replacement peaks, prompt retained-result
    cleanup, refusal recovery, cancellation, independent work limits and zero/negative
    capacity. Sparse/dense head storage depends on input length, not available budget.
-   The public encoder does not call this component yet. Port the remaining state and
+   Nine predictor checks also pass in the same compiled assembly on both platforms:
+   fixed/adaptive coarse and fine winners, forced low-effort sampling, uniform-map
+   coarsening, hidden RGB residuals, retained-map overlap and refusal/cancellation/work
+   cleanup. Its analysis borrows pixels, releases phase scratch, then applies residuals
+   in place using two admitted original-row buffers. Current assemblies pass all
+   3,884 offline checks on each platform. The same private Release package and its
+   three usage examples pass on both. Public encoding does not call these components
+   yet. Port the remaining state and
    connect the complete encoder before claiming end-to-end production qualification.
    Reserve substantial storage before allocation through
    the borrowed shared root, account for replacement peaks and retained outputs,
@@ -108,8 +115,8 @@ The direct/palette models and narrow-distance correction are development tooling
 They do not establish general palette, shape, production or performance readiness.
 The current source project is `tools/WarmReference/Vp8lParityModel`; it needs no
 production/reference assemblies to build. Fixture PNG decoding is separate.
-The unchanged public encoder paths reuse their qualification. The new match
-component has focused index/admission evidence; end-to-end requalification follows
+The unchanged public encoder paths reuse their qualification. Matching and prediction
+have focused stage/admission evidence; end-to-end requalification follows
 integration. No performance/allocation claim follows from these proofs. See
 [numeric evidence](vp8l-byte-parity-evidence.json) and the
 [complete-packet report](VP8L-COMPLETE-PACKET.md).

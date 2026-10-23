@@ -120,15 +120,15 @@ public sealed class StructuredFailureTests
     }
 
     [Fact]
-    public void UnknownFormatAndLegacyConstructorsHaveExplicitUnspecifiedValues()
+    public void UnknownFormatAndMessageOnlyConstructorsHaveExplicitUnspecifiedValues()
     {
         var error = Assert.Throws<UnsupportedImageException>(() => ImageCodec.Identify("GIF89a"u8));
         Assert.Equal(UnsupportedImageFeature.Format, error.Feature); Assert.Null(error.Format);
-        var legacyLimit = new ImageLimitException("caller message");
-        Assert.Equal(ImageLimitKind.Unspecified, legacyLimit.Limit); Assert.Equal("caller message", legacyLimit.Message);
-        var legacyFeature = new UnsupportedImageException("caller feature");
-        Assert.Equal(UnsupportedImageFeature.Unspecified, legacyFeature.Feature);
-        Assert.Null(legacyFeature.Format); Assert.Equal("caller feature", legacyFeature.Message);
+        var messageLimit = new ImageLimitException("caller message");
+        Assert.Equal(ImageLimitKind.Unspecified, messageLimit.Limit); Assert.Equal("caller message", messageLimit.Message);
+        var messageFeature = new UnsupportedImageException("caller feature");
+        Assert.Equal(UnsupportedImageFeature.Unspecified, messageFeature.Feature);
+        Assert.Null(messageFeature.Format); Assert.Equal("caller feature", messageFeature.Message);
     }
 
     [Fact]

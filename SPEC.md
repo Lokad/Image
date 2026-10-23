@@ -214,7 +214,7 @@ There is no mutable global font cache or per-lookup font copy.
 
 `TextLayout.Create(font, text, TextOptions)` returns immutable layout in pixels.
 `FontSize` is pixels per em; style comes from the selected supplied face.
-The default `Shaping = TextShaping.Legacy` preserves logical left-to-right layout
+The default `Shaping = TextShaping.Logical` uses logical left-to-right layout
 with ordinary horizontal `kern` format-zero tables unless `Kerning` is
 false. `Shaping = TextShaping.OpenType` enables supported Latin, Hebrew and Arabic
 shaping and Unicode 17 bidirectional layout. `Direction` selects automatic,

@@ -4,7 +4,7 @@ using Lokad.Image.Internal;
 
 namespace Lokad.Image;
 
-public enum TextShaping { Legacy, OpenType }
+public enum TextShaping { Logical, OpenType }
 public enum TextDirection { Auto, LeftToRight, RightToLeft }
 public enum TextAlignment { Start, Center, End }
 
@@ -50,7 +50,7 @@ public readonly record struct TextLine(int FirstGlyph, int GlyphCount, double Ba
 /// <summary>Immutable positioned glyphs and decoded outlines; independent of caller text storage.</summary>
 /// <remarks>Unhinted default-instance outlines, without device-grid fitting or
 /// font-instruction execution. OpenType mode selects supported substitution,
-/// positioning and bidirectional layout; legacy mode preserves logical order.
+/// positioning and bidirectional layout; Logical mode uses logical character order.
 /// Bounds use decoded curves, not declared glyph bounds. Source strings are not retained.</remarks>
 public sealed partial class TextLayout : IDisposable
 {
@@ -109,7 +109,7 @@ public sealed partial class TextLayout : IDisposable
             || !Enum.IsDefined(options.Shaping) || !Enum.IsDefined(options.Direction) || !Enum.IsDefined(options.Alignment))
             throw new ArgumentOutOfRangeException(nameof(options));
         var context = new OperationContext(options.Limits, cancellationToken);
-        if (options.Shaping == TextShaping.Legacy && options.Direction == TextDirection.RightToLeft)
+        if (options.Shaping == TextShaping.Logical && options.Direction == TextDirection.RightToLeft)
             throw new ArgumentException("Right-to-left direction requires OpenType shaping.", nameof(options));
         if (options.FontSize > context.Limits.MaxDimension) throw new ImageLimitException(ImageLimitKind.Dimension, "Font size exceeds the dimension limit.");
         var initial = context.RemainingWorkingBytes;
@@ -188,7 +188,7 @@ public sealed partial class TextLayout : IDisposable
             var bytes = 32 + count * 64L;
             if (bytes > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "Text glyph storage exceeds the managed limit.");
             context.Reserve(bytes); context.Reserve(256); Glyphs = new Placement[count];
-            if (count != 0 && options.Kerning && options.Shaping == TextShaping.Legacy) kerning = new(font, context);
+            if (count != 0 && options.Kerning && options.Shaping == TextShaping.Logical) kerning = new(font, context);
         }
 
         private Shape Get(int glyph)

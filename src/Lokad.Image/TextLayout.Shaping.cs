@@ -141,7 +141,7 @@ public sealed partial class TextLayout
         }
         internal void AlignLines()
         {
-            if (options.Shaping == TextShaping.Legacy && options.Alignment == TextAlignment.Start) return;
+            if (options.Shaping == TextShaping.Logical && options.Alignment == TextAlignment.Start) return;
             var target = double.IsFinite(options.WrapWidth) ? options.WrapWidth : allMax;
             allMin = allMax = 0;
             for (var i = 0; i < LineCount; i++)

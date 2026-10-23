@@ -275,22 +275,22 @@ public sealed class CooperativeMemoryTests
     }
 
     [Fact]
-    public void NestedOrientationAndLegacyWorkAdmissionPreserveBothIndependentBudgets()
+    public void NestedOrientationAndWorkAdmissionPreserveBothIndependentBudgets()
     {
         var fixture = OriginalExif.Create(MetadataProfile.Png16, 19, 13);
         var packet = OriginalExif.Attach(fixture, ImageOrientation.Rotate90, false);
         using var root = new TestMemory(32 * 1024 * 1024);
         var limits = new ImageLimits { MemoryBudget = root, MaxWork = 2_000_000, MaxWorkingBytes = 4 * 1024 * 1024 };
-        var legacy = new ImageBudget(8 * 1024 * 1024, 10_000_000);
-        using (var result = legacy.Decode(packet, new() { Limits = limits, ApplyOrientation = true }))
+        var budget = new ImageBudget(8 * 1024 * 1024, 10_000_000);
+        using (var result = budget.Decode(packet, new() { Limits = limits, ApplyOrientation = true }))
         {
             Assert.Equal((13, 19), (result.Image.Width, result.Image.Height));
             Assert.Equal(19 * 13 * 8, root.Bytes);
-            Assert.Equal(legacy.MaxWorkingBytes - root.Bytes, legacy.RemainingWorkingBytes);
+            Assert.Equal(budget.MaxWorkingBytes - root.Bytes, budget.RemainingWorkingBytes);
         }
         Assert.Equal(0, root.Bytes);
-        Assert.Equal(legacy.MaxWorkingBytes, legacy.RemainingWorkingBytes);
-        Assert.True(legacy.ConsumedWork > 0);
+        Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes);
+        Assert.True(budget.ConsumedWork > 0);
     }
 
     [Theory]

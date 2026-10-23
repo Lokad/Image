@@ -31,7 +31,7 @@ public sealed partial class TextLayout
             || !double.IsFinite(options.LineSpacing) || options.LineSpacing <= 0 || options.TabSpaces < 1
             || !Enum.IsDefined(options.Shaping) || !Enum.IsDefined(options.Direction) || !Enum.IsDefined(options.Alignment))
             throw new ArgumentOutOfRangeException(nameof(options));
-        if (options.Shaping == TextShaping.Legacy && options.Direction == TextDirection.RightToLeft)
+        if (options.Shaping == TextShaping.Logical && options.Direction == TextDirection.RightToLeft)
             throw new ArgumentException("Right-to-left direction requires OpenType shaping.", nameof(options));
         var context = new OperationContext(options.Limits, cancellationToken);
         Builder? builder = null;

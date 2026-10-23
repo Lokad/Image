@@ -52,9 +52,12 @@ plain result. Numeric effort0 palette order now matches268B on the same18-color
 input. The existing two-color input qualifies both1026-entry box indices and46/50B
 candidate packets, with ordinary-first ties. These named effort primitives pass;
 admitted production and complete public operations remain open.
-The first production match component passes8 focused Windows/Linux native-index,
-shared-admission and cleanup checks. Public encoding does not call it yet; this
-adds no end-to-end encoder, timing or allocation claim.
+Production matching/prediction pass8/9 focused Windows/Linux native-stage,
+shared-admission and cleanup checks. Prediction applies residuals in place with two
+admitted row buffers. Current assemblies pass3,884 offline checks per platform;
+the same private Release package and all3 usage examples pass on both. Public
+encoding does not call these components yet; integrated encoder qualification
+remains open, with no new timing or allocation claim.
 The native encoder refuses16384; the model's existing axis cases instead pass exact
 pinned-FFmpeg decoding, without an encoder-byte or timing claim.
 These do not change production/timing claims below.
