@@ -16,20 +16,20 @@ match14 frozen complete packets raw-exact: all eight Optimal color/depth control
 plus RGBA8/16 stored, fast and smallest. The17 existing delivery/profile rows
 are exact, including checksums/framing. Both platforms pass4,807 Release checks,
 69 affected PNG scalar checks and the SAME actual private0.2.0 package with all
-three examples. **Current PNG/JPEG encoding CPU and allocated B/op are unmeasured.**
+three examples. **Current PNG/JPEG/VP8 encoding CPU and allocated B/op are unmeasured.**
 All17 historical BCL PNG timing rows below are superseded, as are the earlier
 JPEG encoder producers. No new timing or image/settings controls were added.
 
-The existing seven lossy WebP and six lossless WebP historical size gates pass.
-Lossless photograph/diagram sizes are159,104/160,032 and7,160/7,234B
-(managed/reference), with exact RGBA. Lossy sizes are17,366/17,688 and6,722/7,100B
-at frozen matched-quality settings with exact alpha. These are bounded historical
-controls, not byte-exact encoder qualification or general compression claims.
-The [PNG](../benchmarks/PNG-COMPLETE-PACKET-AUDIT.md) and
-[JPEG](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) packet ledgers retain producer
-identities; smaller packets, equal quality numbers or timing passes do not prove
-the new exact-reference target. Old quality tooling retires as stronger gates cover
-its required scope.
+The production VP8 pipeline now matches20 pinned complete packet identities
+across22 source/settings rows, including all efforts and default-method8/16-bit
+normalization. Photograph/diagram packets are exactly17,688/7,100B at the pinned
+Q75/method4 settings. The separate large-header control also passes. Shared
+admission, exact normalized alpha, stream ownership and direct async delivery
+are qualified; [VP8 scope](../benchmarks/VP8-INPUT-STAGE.md) records details.
+All seven prior VP8 time/allocation rows are superseded. In particular, the old
+32M-work timing describes a success on the prior algorithm; current encoding
+must fail that resource boundary, so it is not a new performance pass. No CPU
+measurement or retuning accompanies byte qualification.
 
 The managed [VP8L encoder](../benchmarks/VP8L-COMPLETE-PACKET.md) now reproduces
 all19 selected packet identities through25 existing settings checks, plus two
@@ -58,8 +58,8 @@ replacement readiness remains open.
 
 The [finite checklist](../benchmarks/WARM-COVERAGE.md) remains 256 named cases:
 239 numeric and 17 unmeasured. Tested-producer rows contain **47 passes,
-145 gaps, 1 confidence-open case, 9 short cost
-screens and 37 superseded encoder rows**. The latter predate
+145 gaps, 1 confidence-open case, 2 short cost
+screens and 44 superseded encoder rows**. The latter predate
 JPEG decision/adaptive work or the managed PNG/VP8L encoder replacements; current packet evidence is
 reconciled and new costs are deferred while compression gates remain open.
 Their stored values are historical, not demonstrated current gaps. Another 31 marked
@@ -225,18 +225,18 @@ is a CPU-parity confirmation.
 | [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,251.71 | 1,079.34 | 1.160 / 1.394 | 155,026 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / AC trellis and padding pruning](../benchmarks/JPEG420-AC-TRELLIS.md) | 68,162.15 | 1,579.24 | 43.161 / 50.354 | 170,648 | Cost screen (CPU parity deferred) |
-| [WebP VP8, opaqueâ€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Cost screen (CPU parity deferred) |
-| [WebP VP8, opaque from RGBA16â€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 75,226.22 | 15,616.85 | 4.817 / 5.060 | 1,006,520 | Cost screen (CPU parity deferred) |
-| [WebP VP8 + alphaâ€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 86,100.75 | 53,409.99 | 1.612 / 1.790 | 1,537,304 | Cost screen (CPU parity deferred) |
-| [WebP VP8 + alpha from RGBA16â€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 83,863.51 | 53,727.26 | 1.561 / 1.652 | 1,537,304 | Cost screen (CPU parity deferred) |
-| [WebP VP8 + alphaâ€¡, caller work budget32M](../benchmarks/WARM-VP8-HISTOGRAM384.md) | 19,502.47 | 53,435.71 | 0.365 / 0.433 | 2,036,564 | Cost screen (CPU parity deferred) |
+| [WebP VP8, opaqueâ€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Prior production; reconfirm |
+| [WebP VP8, opaque from RGBA16â€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 75,226.22 | 15,616.85 | 4.817 / 5.060 | 1,006,520 | Prior production; reconfirm |
+| [WebP VP8 + alphaâ€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 86,100.75 | 53,409.99 | 1.612 / 1.790 | 1,537,304 | Prior production; reconfirm |
+| [WebP VP8 + alpha from RGBA16â€¡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 83,863.51 | 53,727.26 | 1.561 / 1.652 | 1,537,304 | Prior production; reconfirm |
+| [WebP VP8 + alphaâ€¡, caller work budget32M](../benchmarks/WARM-VP8-HISTOGRAM384.md) | 19,502.47 | 53,435.71 | 0.365 / 0.433 | 2,036,564 | Prior production; reconfirm |
 | [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 445,941.10 | 121,336.20 | 3.675 / 5.157 | 55,238,624 | Prior production; reconfirm |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 464,921.62 | 121,865.49 | 3.815 / 4.757 | 55,238,624 | Prior production; reconfirm |
 | [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-COLOR-COST.md) | 612,338.64 | 83,533.61 | 7.330 / 8.250 | 67,414,112 | Prior production; reconfirm |
 | [WebP VP8L text/diagram RGBA8](../benchmarks/WARM-VP8L-COLOR-COST.md) | 21,878.12 | 9,549.20 | 2.291 / 3.344 | 1,721,182 | Prior production; reconfirm |
-| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 35,062.49 | 9,726.09 | 3.605 / 3.820 | 590,152 | Cost screen (CPU parity deferred) |
-| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 13,923.43 | 5,847.14 | 2.381 / 2.458 | 570,856 | Cost screen (CPU parity deferred) |
+| [WebP VP8 photograph RGBA8 / matched quality](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 35,062.49 | 9,726.09 | 3.605 / 3.820 | 590,152 | Prior production; reconfirm |
+| [WebP VP8 text/diagram RGBA8 / matched quality](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 13,923.43 | 5,847.14 | 2.381 / 2.458 | 570,856 | Prior production; reconfirm |
 
 **Editing**
 
@@ -343,10 +343,11 @@ RGBA samples remain exact. Single-component grayscale JPEG uses the approved
 benchmark-only **SIMD libjpeg-turbo3.1.4.1** reference; FFmpeg emits three components.
 Production stays safe managed .NET 10 without dependencies or native bindings.
 
-â€¡ Procedural VP8 benchmark inputs freeze managed/native quality 100/75 and effort 4, retaining
-the 0.25 dB source-quality gate and exact alpha. Matched-quality content controls use
-their linked frozen settings. [Current packet sizes](../benchmarks/WARM-VP8-SIZE-COVERAGE.md)
-pass all seven declared lossy gates; no broader image/settings claim follows.
+â€¡ Historical procedural VP8 timings use managed/native quality100/75 and
+matched-source tolerances. The replacement encoder instead uses the pinned native
+policy and complete-packet equality; those times/allocations do not qualify it.
+The historical32M successful call is now a required terminal Work failure.
+
 
 Â¶ PNG Identify references use the public FFmpeg PNG parser/CRC plus original
 complete structural/EXIF validation and owned descriptors, without inflation;

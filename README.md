@@ -3,7 +3,7 @@
 A safe C#/.NET 10 library for still-image codecs and basic editing. Independently
 implemented, with no NuGet dependencies, unsafe code or native bindings.
 
-The 0.2.0 development encoders target exact PNG, JPEG and lossless WebP reference
+The 0.2.0 development encoders reproduce declared PNG, JPEG and WebP reference
 packets. [Codec compatibility](docs/codec-parity.md) states the tested inputs and settings.
 
 - **PNG:** decode all static color/depth profiles, including palette, transparency

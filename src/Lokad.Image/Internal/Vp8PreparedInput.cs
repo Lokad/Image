@@ -6,7 +6,7 @@ namespace Lokad.Image.Internal;
 // supplies the color weights and limited ranges; RFC6386 defines 4:2:0 planes.
 // The pinned encoder's discrete-range/fixed-point and gamma conventions are
 // intentional here. Tables are generated from mathematics, never imported.
-// This owner is private preparation, not yet the public lossy encoder path.
+// Owns normalized preparation planes for the public lossy encoder.
 internal sealed class Vp8PreparedInput : IDisposable
 {
     private const int MetadataBytes = 128, ScratchBytes = 1024;

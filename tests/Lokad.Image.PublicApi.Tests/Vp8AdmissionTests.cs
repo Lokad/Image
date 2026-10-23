@@ -75,36 +75,12 @@ public sealed class Vp8AdmissionTests
         using var source = OriginalPixels.Buffer(width, height, depth, opaque: opaque);
         var unchanged = OriginalPixels.Bytes(source);
         var options = new WebpEncodeOptions { Lossless = false, Quality = quality, Effort = effort };
-        using var reference = new MemoryStream(); ImageCodec.EncodeWebp(source, reference, options);
-        var expected = reference.ToArray();
-        var payload = Vp8Payload(expected);
-        var headerLength = (payload[0] | payload[1] << 8 | payload[2] << 16) >> 5;
-        var tokenLength = payload.Length - 10 - headerLength;
-        var tokenCapacity = Capacity(tokenLength); var headerCapacity = Capacity(headerLength);
-        var columns = (width + 15) / 16; var rows = (height + 15) / 16;
-        var planes = columns * rows * 384L + 128;
-        var metadata = columns * rows * 17L + columns * 12L + 128;
-        // Transparency is tested after the declared once-only 16-to-8 conversion.
-        var alphaBytes = ImageCodec.Identify(expected).HasAlpha ? (long)width * height + 32 : 0;
-        // These authored quality-100 controls select source-derived segments
-        // once there are four macroblocks. Include the retained map/owner, as
-        // well as both old and new arithmetic capacities, in the exact peak.
-        var quantization = quality == 100 && effort >= 4 && columns * rows >= 4 ? columns * rows + 256L : 0;
-        var common = unchanged.Length + 4096 + alphaBytes + metadata + quantization;
-        var peak = Math.Max(common + planes * 2 + GrowthPeak(tokenCapacity),
-            common + tokenCapacity + 32 + GrowthPeak(headerCapacity));
+        var reference = WebpAdmissionControl.Reference(source, effort, lossless: false, quality: quality);
+        var expected = reference.Packet; var peak = reference.WorkingBytes;
         var limits = new ImageLimits { MaxWorkingBytes = peak };
         using var exact = new NonseekableOutput();
         ImageCodec.EncodeWebp(source, exact, options with { Limits = limits });
-        var constrained = exact.ToArray();
-        // The tight mandatory-storage bound deliberately omits optional alpha
-        // history. Its ALPH representation may differ, while VP8 and pixels
-        // remain exact. Freeze that admitted packet for the output-size checks.
-        Assert.Equal(Vp8Payload(expected), Vp8Payload(constrained));
-        using (var original = ImageCodec.Decode(expected))
-        using (var admitted = ImageCodec.Decode(constrained))
-            Assert.Equal(OriginalPixels.Bytes(original), OriginalPixels.Bytes(admitted));
-        Assert.True(constrained.Length >= expected.Length); expected = constrained;
+        Assert.Equal(expected, exact.ToArray());
         Assert.True(exact.CanWrite);
         using var rejectedMemory = new MemoryStream();
         Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, rejectedMemory, options with

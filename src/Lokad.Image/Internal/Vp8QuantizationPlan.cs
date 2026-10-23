@@ -36,7 +36,7 @@ internal readonly ref struct Vp8QuantizationCosts
 // Private preparation, confined to the SAME operation as its context. RFC6386
 // section14.1 supplies steps and the Walsh scale; encoder policy supplies the
 // rounding/dead-zone biases and rate/distortion weights. No upstream tables or
-// source objects are retained. The public lossy encoder is not switched here.
+// source objects are retained. The public encoder borrows these admitted views.
 internal sealed class Vp8QuantizationPlan : IDisposable
 {
     private const int MatrixLength = 5 * 16, SegmentLength = 3 * MatrixLength + 10, MetadataBytes = 128;

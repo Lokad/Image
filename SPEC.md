@@ -29,7 +29,7 @@ target; the existing implemented behavior below remains the current contract.
 | WebP identify | Implemented; live and authored header checks | Bounded simple/extended still-container inspection and orientation |
 | WebP lossless pixels | Implemented; exact frozen and live FFmpeg comparisons plus authored transform/entropy cases | VP8L decode/encode with transparency and hidden RGB |
 | WebP lossy decode | Implemented; exact frozen YUV/alpha reconstruction and bounded RGB comparisons | VP8 key frames with raw/compressed ALPH |
-| WebP lossy encode | Implemented; original output independently decoded by FFmpeg | VP8 output with explicit quality/effort and transparency |
+| WebP lossy encode | Implemented; complete pinned reference-packet controls | VP8 quality/effort, exact alpha, direct async delivery and shared admission |
 | Exact edits | Implemented; hand-computed permutations and live FFmpeg checks | Crop, flips, quarter turns, transpose, all eight EXIF orientations |
 | Resize | Nearest/bilinear/bicubic implemented; Lanczos3 implemented in development, performance qualification pending | Exact dimensions, aspect-preserving fit and alpha-aware nearest/bilinear/bicubic/Lanczos3 at 8/16 bits |
 | JPEG caller samples | Gray/RGB/CMYK decode and gray/RGB encode implemented in development | Caller-provided 8-bit samples without mandatory RGBA; explicit source color space/inversion, quality and sampling |
@@ -854,18 +854,14 @@ measurement/rendering agreement within documented tolerances. Required faces
 exposing unsupported tables or scripts need a focused implementation or an
 explicit remaining blocker; no exhaustive font-engine expansion is implied.
 
-Compression acceptance considers complete encoded size and reconstruction quality
-together. The fixed lossless WebP photograph/diagram controls produce
-159,104/7,160 bytes, below their frozen libwebp exact=1 references of
-160,032/7,234 bytes, with exact normalized RGBA. All six declared lossless
-boundaries pass their complete-packet gates. The seven declared lossy WebP gates
-also pass: primary photograph/diagram packets are 17,366/6,722 bytes against
-17,688/7,100, retaining frozen reference settings, matched source-quality
-tolerances and exact alpha. Equal numerical quality settings are not equivalent
-quality. These are bounded content/settings claims; current scope and evidence
-are in [the benchmark summary](docs/benchmark.md). Full warm-performance
-qualification remains separate and open. Compression, memory, correctness and
-performance requirements remain cumulative for readiness.
+Compression acceptance considers complete encoded packets. The current VP8L
+photograph/diagram controls are exactly160,032/7,234 bytes; VP8 controls are
+exactly17,688/7,100 bytes at their pinned quality75/method4 settings. These are
+raw packet identities, with no WebP metadata exemption, rather than matched-quality
+size tolerances. Other content/settings claims require their own declared evidence.
+Equal numerical quality values alone never establish equivalent reconstruction.
+Current CPU/allocation qualification remains separate and open. Compression,
+memory, correctness and performance remain cumulative readiness requirements.
 JPEG RGB420 improvements retain the existing matched-quality
 gate and avoid material grayscale regression; equal quality numbers do not prove
 equivalence. Claims name content, sampling and settings; broader claims require
@@ -1319,224 +1315,45 @@ settings. Those controls establish no general content or CPU/allocation claim.
 [Codec compatibility](docs/codec-parity.md) records exact reference scope; broader
 codec replication and performance qualification remain in progress.
 
-`Lossless=false` emits a VP8 key frame with 4:2:0 chroma, a mathematical forward
-4x4 DCT and the format's quantizers. Safe four-lane binary64 SIMD evaluates
-independent frequencies in the original multiply/add order, without fused
-operations; division and midpoint-away quantization are unchanged. Other hardware
-uses the original scalar calculation. Coefficients and encoded packets are exact.
-`Quality` (default 85) maps to quantizer index
-`((100-quality)*127+49)/99` with integer division. Quality 100 is still lossy.
-Nearest coefficient seeds round halves away from zero; the forward DC basis preserves
-exact constant-block half ties.
-At effort 4..6, independently admitted source analysis may assign four absolute
-segment quantizers that are no finer than this base index. One clamped sample per
-4x4 transform block estimates alpha-weighted RGB loss from the existing 4:2:0
-source conversion. A source-only allowance `MSE/(Quality+1)`, the transform's
-expected coefficient variance `stepÂ²/12` and the RGB conversion-matrix gain select
-desired steps. Unequal DC/AC steps induce pixel covariance within each 4x4 block:
-`acÂ²/48*delta(i,j)+(dcÂ²-acÂ²)/768`. Centered chroma interpolation combines clamped
-taps and groups them by transform block before propagating this covariance;
-chroma DC retains its format clamp. Equal DC/AC steps recover the independent
-pixel-noise model. Four deterministic log-step clusters select format quantizers.
-Locally uniform neighboring steps and independent coefficient noise are heuristic
-assumptions, not reconstruction bounds. Additional analysis is charged before
-sampling; a bounded monotone quantizer search retains the base-index floor.
-This is a compression heuristic, not a reconstruction-error or global quality
-monotonicity guarantee. Numeric quality remains encoder-specific; source-quality
-matching is validated separately. The base index and nearest coefficient seed
-rounding remain unchanged, applied with the selected segment's quantizer.
-With base index zero and an admitted spatial plan, mixed-mode encoding may also
-admit adjacent-level and terminal-EOB rate/distortion refinement of selected 4x4
-luma/chroma predictions. It uses the current segment's steps and existing rate
-scale; final levels and lossy reconstruction may differ from the nearest seed.
-One bounded block on the existing stack allowance suffices. Every refinement and
-reconstruction is charged before mutation; its additional work estimate is selected
-before shared admission. A smaller independent work allowance retains the original
-search without refinement. Actual exhaustion, cancellation or shared refusal
-terminates without retry; alpha and ownership contracts are unchanged.
-The borrowed shared root admits the bounded map before allocation; analysis streams
-without another RGBA frame. Actual sampling, clustering, map/header and codec work
-remain capped. Insufficient independent local allowances retain uniform coding
-before shared admission; refusal, exhaustion and cancellation terminate without
-retry. Source statistics finish before coefficient caching reuses converted planes.
-Intra mode search prepares immutable neighboring samples once per luma block
-and emits complete 4x4 predictions. Candidate order, exact error scores, ties
-and selected pixels are preserved. A zero-error prediction ends the search:
-later candidates cannot improve it, and the winning prediction is already written.
-Segmented 4x4 calls that cannot admit mixed search may stop a losing candidate's
-error accumulation when its nonnegative partial squared error reaches the best
-complete score. Every full candidate retains its work charge; only unevaluated
-error rows end early. The selected prediction and reconstruction stay exact.
-This path may admit a 128-macroblock entropy sample in place of 64, under independent
-local work/memory estimates and the same shared root. Its retained cache capacity
-is reserved before allocation; tighter local limits keep the smaller sample before
-shared admission. Actual exhaustion, refusal and cancellation terminate without
-retry. The larger sample changes encoded coefficients' probabilities, preserving
-quantization, reconstructed pixels, alpha and output ownership.
-An independently admitted token-class histogram can extend that cache to 384
-macroblocks. Its one-counter updates replace repeated tree-branch updates; bounded
-per-context reduction recovers the same branch statistics. The original 128-block
-fit still controls coefficient decisions. A later entropy-only fit and replay
-preserve those decisions and pixels. The larger retained owner includes histogram
-capacity and is reserved before allocation; tighter local allowances keep the
-original cache before shared admission. Actual work, terminal failures and
-independent output lifetimes remain enforced.
-The same constrained path can separately admit one-step reductions of nearest
-coefficient magnitudes 1..4 using the existing segment rate scale and token context.
-The smaller explicit token must offset its additional coefficient error; base
-steps and half ties remain when it does not win. Later coefficient rates are not
-modeled. One transform and bounded stack tables suffice. This path admits an
-additional 4 KiB of stack capacity before use, for an 8 KiB total envelope; independent
-local memory/work checks precede shared admission. Table preparation and performed
-decisions are charged; cancellation is checked before the additional reservation.
-This can change lossy RGB, which remains
-subject to separate reconstruction-quality qualification. Exact alpha, borrowed
-inputs/root, terminal failures and independent output ownership are preserved.
-Work/cancellation checks cover every performed trial; skipped trials consume no work.
-The bounded stack scratch adds no allocation or mandatory resource admission.
-Numeric qualities do not promise the same reconstruction or size as another
-encoder's quality settings. Limited-range BT.601 source conversion uses
-Y=16+(219/255)(0.299R+0.587G+0.114B),
-U=128+(224/255)(-0.168735892R-0.331264108G+0.5B), and
-V=128+(224/255)(0.5R-0.418687589G-0.081312411B).
-Chroma averages each 2x2 source RGB cell in encoded sample space, weighted by
-its normalized alpha before matrix conversion and rounding. Fully transparent
-cells retain their original unweighted average; opaque and uniform-opacity
-cells keep the same result. Luma and exact normalized alpha are unchanged.
-Odd and padded edges
-extend the last source pixel. Alpha is normalized once and preserved exactly.
-At nonzero effort, sufficient local work/memory permits a headerless VP8L green
-plane with horizontal alpha filtering and previous-pixel copies. At efforts 4..6,
-additional local admission permits four-position hashed backward references and
-adaptive green/distance prefix codes. The bounded history holds 65,536 positions
-(262,176 admitted bytes); 16 KiB additional headroom covers tables and construction
-scratch, including the fixed 2 KiB workspace. Count passes select the smaller
-complete padded ALPH candidate and require it to beat raw. All passes borrow the
-existing alpha plane: no filtered/RGBA raster or encoded-alpha buffer is allocated.
-Workspace is reserved through the same shared root before allocation and released
-when its owner ends. Insufficient local allowances retain fixed coding or raw
-before attempting the optional work; a worse successful candidate is discarded.
-Local admission is decided before attempting compression; insufficient local
-allowance retains raw unfiltered alpha. Shared refusal, cancellation or a failed
-attempt terminates the operation without fallback. Optional metadata is stripped.
-Source conversion uses bounded views of the existing pixel storage, without a
-normalized-raster allocation. The first row work check precedes storage access;
-all row charges, matrix evaluation order and alpha-weighted rounding are retained.
+`Lossless=false` emits a VP8 key frame with4:2:0 chroma. `Quality` is1..100
+(default85);100 still quantizes. `Effort` is0..6 and controls the pinned prediction,
+rate/distortion and trellis policies. Source clustering, nonlinear quality mapping,
+quantization, probability updates, header strengthening and strong loop filtering
+are independently implemented. One token partition and sharpness0 are used.
+RGBA16 samples normalize once by `(sample+128)/257`; luma and gamma-aware,
+alpha-weighted chroma conversion match the ordinary undithered reference path.
+Opaque detection uses these normalized samples. Partial edges repeat source
+borders; transparent-area cleanup follows the declared lossy policy. Alpha remains
+exact after normalization, using raw or headerless VP8L `ALPH` as selected by the
+fixed codec policy. No ICC conversion or EXIF reorientation is implicit.
 
-The VP8 encoder uses one token partition and no loop filter. At effort 4..6 with
-a positive base index or an admitted source-derived spatial plan, optional
-memory/work admission enables comparison of
-4x4 luma prediction with 16x16 prediction and grouped DC (Y2) coding. The decision
-combines reconstructed source error and estimated coefficient/header cost; ties
-retain 4x4. One macroblock is staged, without another full-frame copy. Uniform
-base-index-zero encoding without a spatial plan, lower efforts and constrained
-local budgets retain the established 4x4 path. Quality100 with source-derived
-segments may admit the search; each segment supplies its quantizer and rate scale.
-This search can change reconstructed lossy pixels; alpha remains exact. The two
-qualified photograph/diagram controls improve in size within the existing quality
-tolerance, without establishing general compression-size parity.
-When optional memory/work admission permits, coefficient probabilities adapt to
-the first at most 64 macroblocks, including the cost of signaling updates.
-The prefix reuses private converted sample bytes for coefficient magnitudes,
-with two extra bits per sample for sign and the ninth magnitude bit; bounded
-auxiliary storage is at most 24,064 bytes, or 26,176 bytes with the optional Y2
-prefix cache and row contexts. If local admission also permits, the mixed-mode
-path caches all selected coefficients in the converted planes and fits its final
-entropy model to the entire frame. Its auxiliary reservation is
-`136*macroblocks + 16384 + columns + 64` bytes, alongside the existing codec
-metadata allowance for row contexts. Prediction costs still freeze at the
-original 64-block prefix: extending entropy statistics changes no selected mode
-or reconstructed pixel. There is no second raster conversion or full-frame copy.
-Otherwise local limits select the prefix cache before allocation; shared admission
-refusal always terminates the operation without retry.
-At efforts 4..6 with base index zero and the selected 4x4 path, admission also permits
-whole-frame entropy fitting for the existing 4x4 path, using
-`120*macroblocks + 16384` auxiliary bytes without Y2 storage. Its predictor never
-consults the model, so mode choices and decoded pixels remain identical. Full-frame
-eligibility retains the conservative work envelope. A limited-work q0 call may
-instead admit prefix statistics after accounting for the search/transform/header
-envelope, bounded prefix work and minimum token work. Variable arithmetic carries
-and buffer-growth work remain charged as performed. Eligibility does not guarantee
-the entire operation fits: every cumulative work check still applies, exhaustion
-terminates without fallback, and unused temporary reservations are released.
-Memory admission is unchanged; insufficient local capacity keeps fixed coding
-before shared admission. Every performed work charge is preserved.
-When full adaptive alpha coding is ineligible, effort 4..6 may admit a single
-fixed-code matching pass from local work/memory estimates, including pending VP8
-output work. A 16,384-entry history and raw-sized encoded-alpha stage are reserved
-before allocation through the same shared root. Residuals stream through a
-three-sample window. The original run-only cost is computed in that pass; complete
-padded sizes choose the smaller completed candidate. History is released after
-matching and staging stays charged until output finishes. Actual sample, matching,
-writer and copy work remains capped; refusal, exhaustion and cancellation terminate
-without another strategy. Unrestricted adaptive alpha coding is unchanged.
-With sufficient independent local workspace, this constrained path collects one
-bounded sequence of compact tokens and fits adaptive prefix codes without matching
-again. Admission covers the token capacity and overlapping encoded stage; history,
-tokens and model storage are released after their last users. Complete copy fields
-are packed into at most 24-bit writer calls, each charged as performed. A tighter
-local workspace selects the fixed-code staging path before shared admission;
-shared refusal never selects another strategy.
-In token mode, sufficient independent local work/memory may also admit one
-token-start anchor per hash alongside the rolling recent positions. Two histories
-reserve 131,136 bytes before allocation. This mode keys four residual samples,
-streamed once through a four-sample window; the tighter single-history path keeps
-its three-sample key. A boundary probe rejects candidates that
-cannot improve the longest match; every chosen prefix is still checked exactly.
-Both histories end after matching. Initialization, reads, anchor updates, probes,
-comparisons and output copies retain their actual work charges. Tighter local
-allowances select the original history before shared admission; refusal or actual
-work/cancellation failure never retries it.
-The admitted mixed-mode path also compares actual quantized reconstruction error
-and coefficient/header bit cost for all ten luma directions and four chroma
-predictions. It stages one luma block or one 8x8 U/V pair on bounded stack storage.
-Luma ties retain the first minimum-prediction-error candidate, then format order;
-chroma ties retain format order. Additional performed trials charge work and check
-cancellation. Quantizers, nearest rounding and exact alpha
-are unchanged; selected modes and reconstructed lossy pixels may change.
-Grouped DC needs signed high bytes beyond the ordinary
-coefficient cache range. Only the selected reconstruction is retained; the
-remaining blocks use the selected probability model directly. Entropy adaptation
-alone preserves decoded pixels.
-Constrained budgets retain the original fixed coefficient model and its work
-behavior; adaptation adds no mandatory admission requirement.
-The baseline prediction search minimizes source-plane squared error;
-ties choose the first candidate. Its Effort 0..6 caps are respectively 1, 2, 3, 4, 6,
-8 or 10 luma modes in format order (DC, true-motion, vertical, horizontal,
-left-down, right-down, vertical-right, vertical-left, horizontal-down,
-horizontal-up). The admitted mixed path at efforts 4..6 and quantizer index above
-zero makes all ten directions eligible, with its extra work included in admission.
-The baseline uses DC chroma at effort zero; otherwise it considers four chroma
-modes, stopping at zero error. Mixed-mode chroma scoring evaluates all four.
-Reconstruction for subsequent predictions uses the specified
-integer inverse transform. Higher effort expands search; it does not guarantee
-smaller output or lower final RGB error. Compression efficiency is not yet
-optimized. Two bounded arithmetic partitions are staged for nonseekable output;
-the first partition has the format's 19-bit length bound. Working memory includes
-source/reconstructed planes, mode/context arrays, alpha and partition growth.
-Arithmetic normalization packs at most seven emitted bits together only within
-already admitted partition capacity; growth and constrained failures retain the
-original bit sequence. Immutable leaf paths are derived once from the encoder's
-format trees, preserving each ordered probability and bit/carry work charge.
-For each selected coefficient model, this emission preserves its encoded bytes,
-prediction choices, coefficients and partial failures.
-Original quality/size evidence and its limits are recorded in
-[tests/Quality](tests/Quality/README.md).
+The bounded inventory comprises20 complete513×259 packet identities across22
+public source/settings rows: procedural opaque/alpha, photographs and text/diagrams;
+all seven effort policies; named quality endpoints/default85; and default-method
+RGBA8/16 normalization. A separate opaque5,632×5,632 Q75/method4 control takes one
+native header-strengthening retry and matches its complete16,787,132-byte packet.
+Unused segment syntax is refreshed on retry, while initial padding remains intact.
+[Codec compatibility](docs/codec-parity.md) and its numeric ledger state exact
+content/settings/producer scope. No WebP metadata exception or general image-grid
+claim is made. Reference packets/tables never become encoder inputs.
 
-EXIF parsing reads only the IFD0 orientation field, bounds every accessed offset,
-and never follows unrelated tags or directory links. `MaxContainerItems` also
-bounds IFD0 entry count; a structurally valid directory over that limit raises
-`ImageLimitException`. A truncated directory raises `ImageDataException`.
-Optional metadata is stripped
-on PNG/JPEG/WebP output. Container inspection may read the entire supplied encoded input,
-but never allocates a decoded pixel plane.
+One borrowed operation/root admits source planes, alpha search, frame/coding state
+and overlapping arithmetic-buffer capacities before allocation. The caller image
+is borrowed and independently lifetime-owned. Source/analysis/frame storage is
+released after partition preparation; surviving alpha/partition owners retain their
+charges through actual sync/async writes. No joined encoded-frame buffer is needed;
+lossy async output writes those prepared partitions directly. Caller streams stay
+open. All local/work limits remain independent of aggregate shared admission.
 
-Original public-API and live FFmpeg controls cover every orientation at both
-TIFF byte orders for PNG8/PNG16, baseline/progressive 4:2:0 JPEG and lossless/lossy
-WebP with alpha. Lossless orientation retains exact samples and hidden RGB.
-The native control uses an explicit RGB permutation after the declared color
-conversion, with implicit autorotation disabled; it validates the geometry and
-decoder agreement rather than FFmpeg's metadata dispatch.
+Encoding choices do not change with available memory/work. Admission refusal,
+actual work exhaustion and cancellation terminate with cleanup; there is no
+lower-memory codec, retry or waiting. The named32M-work public operation is a
+required structured Work failure. The high-effort alpha control also exceeds the
+default2B work allowance: its positive byte proof uses an explicit64B caller limit,
+while the default refusal remains tested. The large-header positive scope uses an
+explicit512B work allowance. These are deterministic work-accounting units,
+without CPU or GC-allocation claims. Performance qualification for the new encoder
+remains open. Published0.1.0 artifacts remain unchanged.
 
 ## Limits, failures and streams
 

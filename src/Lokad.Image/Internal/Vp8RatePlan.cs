@@ -3,7 +3,7 @@ namespace Lokad.Image.Internal;
 // Private encoder preparation. One operation-owned allocation contains generated
 // costs; probabilities and caller buffers remain borrowed. RFC6386 sections11/13
 // supply the mode/coefficient trees and category probabilities. No implementation
-// cost tables are imported. The public encoder is not switched here.
+// cost tables are imported. The public encoder borrows this operation-local plan.
 internal sealed class Vp8RatePlan : IDisposable
 {
     private const int FixedAt = 256, ModesAt = FixedAt + 2048, EobAt = ModesAt + 1008;

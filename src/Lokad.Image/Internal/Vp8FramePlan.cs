@@ -5,7 +5,7 @@ internal readonly record struct Vp8FrameBlock(int LumaMode, int ChromaMode, int 
 // Operation-confined owner for the two-pass coefficient stream. Source pixels,
 // analysis and matrices are borrowed only during creation. Retain coefficients,
 // modes and final probabilities; reconstructed pixels need only rolling borders.
-// The public encoder is not switched here.
+// The public encoder borrows this operation-confined frame during partition coding.
 internal sealed class Vp8FramePlan : IDisposable
 {
     private const int MetadataBytes = 256, BlockBytes = 20;

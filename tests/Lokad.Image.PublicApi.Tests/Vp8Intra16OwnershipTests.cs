@@ -15,9 +15,10 @@ public sealed class Vp8Intra16OwnershipTests
         using var output = new MemoryStream(); ImageCodec.EncodeWebp(source, output, options);
         var packet = output.ToArray(); var growths = root.GrowthAttempts;
         Assert.True(growths >= 6); Assert.Equal(0, root.Bytes);
-        // Inject refusal at each substantial storage acquisition, including search
-        // cache and writer replacements. A refusal must be terminal, never retried.
-        for (var at = 1L; at <= growths; at++)
+        // Public ownership boundaries: initial planes, subsequent source/alpha
+        // workspace and final partition capacity. Primitive owners have their
+        // own focused fault tests; avoid replaying every nested allocation here.
+        foreach (var at in new long[] { 1, 2, 6, growths })
         {
             root.RefuseAtGrowth = root.GrowthAttempts + at;
             var refusals = root.Refusals;

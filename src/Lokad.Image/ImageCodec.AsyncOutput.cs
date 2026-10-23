@@ -12,7 +12,7 @@ public static partial class ImageCodec
     public static ValueTask EncodeJpegAsync(ImageBuffer image, Stream output, JpegEncodeOptions? options = null,
         CancellationToken cancellationToken = default) => EncodeJpegWithBudgetAsync(image, output, null, options, cancellationToken);
 
-    /// <summary>Encode synchronously into admitted private staging, then write asynchronously. Leaves output open.</summary>
+    /// <summary>Prepare admitted encoded data, then write asynchronously. Leaves output open.</summary>
     public static ValueTask EncodeWebpAsync(ImageBuffer image, Stream output, WebpEncodeOptions? options = null,
         CancellationToken cancellationToken = default) => EncodeWebpWithBudgetAsync(image, output, null, options, cancellationToken);
 
@@ -65,10 +65,16 @@ public static partial class ImageCodec
         var admission = budget?.Begin(context.Limits);
         try
         {
+            if (!options.Lossless)
+            {
+                // Prepared VP8 partitions validate the complete output bound
+                // and retain ownership through actual asynchronous stream use.
+                await Vp8Encoder.EncodeAsync(image, output, options, context).ConfigureAwait(false);
+                return;
+            }
             using var staged = EncodedOutput.Segmented(context);
             using var bounded = new LimitedWriteStream(staged.Target, context.Limits.MaxOutputBytes, cancellationToken);
-            if (options.Lossless) WebpLosslessEncoder.Encode(image, bounded, options, context);
-            else Vp8Encoder.Encode(image, bounded, options, context);
+            WebpLosslessEncoder.Encode(image, bounded, options, context);
             await staged.DeliverAsync(output).ConfigureAwait(false);
         }
         finally { admission?.Complete(context.ConsumedWork); }

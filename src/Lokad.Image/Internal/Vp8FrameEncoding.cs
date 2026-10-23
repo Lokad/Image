@@ -4,7 +4,7 @@ namespace Lokad.Image.Internal;
 
 // Two independently owned arithmetic partitions, without a joined encoded-frame
 // allocation. Confined to the enclosing operation; await delivery before disposal.
-// The public encoder remains unchanged until complete codec qualification.
+// The public encoder retains these owners through actual output delivery.
 internal sealed class Vp8FrameEncoding : IDisposable
 {
     private readonly OperationContext context;

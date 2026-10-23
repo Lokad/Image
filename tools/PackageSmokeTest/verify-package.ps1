@@ -68,6 +68,7 @@ try {
     $jpegFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredJpegCompatibility.cs'))
     $pixelFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalPixels.cs'))
     $vp8lFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalVp8lControls.cs'))
+    $vp8FixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalVp8Controls.cs'))
     @"
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
@@ -86,12 +87,33 @@ try {
     <Compile Include="$jpegFixturePath" Link="AuthoredJpegCompatibility.cs" />
     <Compile Include="$pixelFixturePath" Link="OriginalPixels.cs" />
     <Compile Include="$vp8lFixturePath" Link="OriginalVp8lControls.cs" />
+    <Compile Include="$vp8FixturePath" Link="OriginalVp8Controls.cs" />
   </ItemGroup>
 </Project>
 "@ | Set-Content -LiteralPath (Join-Path $consumer 'Consumer.csproj') -Encoding utf8
     @'
 using System.IO.Compression;
 using Lokad.Image;
+foreach (var control in Lokad.Image.Tooling.OriginalVp8Controls.Cases())
+{
+    var name = (string)control[0]; var depth = (int)control[1]; var effort = (int)control[2]; var quality = (int)control[3];
+    var length = (int)control[4]; var hash = (string)control[5];
+    using var root = new Lokad.Image.Tooling.TestMemoryBudget(128_000_000);
+    using var image = Lokad.Image.Tooling.OriginalVp8lControls.Buffer(name, depth, root);
+    var before = Lokad.Image.Tooling.OriginalPixels.Bytes(image); var retained = root.Bytes;
+    var options = new WebpEncodeOptions { Lossless = false, Effort = effort, Quality = quality,
+        Limits = new() { MemoryBudget = root, MaxWork = Lokad.Image.Tooling.OriginalVp8Controls.WorkLimit(name, effort) } };
+    using var packet = new MemoryStream(); ImageCodec.EncodeWebp(image, packet, options);
+    using var asynchronous = new MemoryStream(); await ImageCodec.EncodeWebpAsync(image, asynchronous, options);
+    var bytes = packet.ToArray();
+    if (bytes.Length != length || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(bytes)) != hash
+        || !bytes.AsSpan().SequenceEqual(asynchronous.ToArray()))
+        throw new Exception($"Package VP8 complete reference packet differs: {name}/{depth}/{effort}/{quality}.");
+    if (root.Bytes != retained || !before.AsSpan().SequenceEqual(Lokad.Image.Tooling.OriginalPixels.Bytes(image)))
+        throw new Exception("Package VP8 source/admission ownership differs.");
+    image.Dispose(); if (root.Bytes != 0 || !packet.CanWrite || !asynchronous.CanWrite || root.IsDisposed)
+        throw new Exception("Package VP8 retained-source/output ownership differs.");
+}
 foreach (var control in Lokad.Image.Tooling.OriginalVp8lControls.Cases())
 {
     var name = (string)control[0]; var effort = (int)control[1]; var length = (int)control[2]; var hash = (string)control[3];

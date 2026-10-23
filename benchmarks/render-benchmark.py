@@ -51,6 +51,8 @@ def row(label, name, path, report, confirmed=False, verification=None):
     if verification:
         assert not confirmed and quiet
         status = verification
+    if name in {'vp8-noise-spectrum-evidence.json', 'vp8-histogram384-evidence.json'}:
+        status = 'Prior production; reconfirm'  # Public VP8 encoder replaced; byte proof is separate.
     if name == 'vp8l-color-cost-evidence.json':
         status = 'Prior production; reconfirm'  # Full encoder replaced by packet-exact pipeline.
     if name in {'warm-jpeg-buffered-eob-evidence.json', 'warm-vp8-cancellable-block-evidence.json',
@@ -356,20 +358,20 @@ match14 frozen complete packets raw-exact: all eight Optimal color/depth control
 plus RGBA8/16 stored, fast and smallest. The17 existing delivery/profile rows
 are exact, including checksums/framing. Both platforms pass4,807 Release checks,
 69 affected PNG scalar checks and the SAME actual private0.2.0 package with all
-three examples. **Current PNG/JPEG encoding CPU and allocated B/op are unmeasured.**
+three examples. **Current PNG/JPEG/VP8 encoding CPU and allocated B/op are unmeasured.**
 All17 historical BCL PNG timing rows below are superseded, as are the earlier
 JPEG encoder producers. No new timing or image/settings controls were added.
 
-The existing seven lossy WebP and six lossless WebP historical size gates pass.
-Lossless photograph/diagram sizes are159,104/160,032 and7,160/7,234B
-(managed/reference), with exact RGBA. Lossy sizes are17,366/17,688 and6,722/7,100B
-at frozen matched-quality settings with exact alpha. These are bounded historical
-controls, not byte-exact encoder qualification or general compression claims.
-The [PNG](../benchmarks/PNG-COMPLETE-PACKET-AUDIT.md) and
-[JPEG](../benchmarks/JPEG-COMPLETE-PACKET-AUDIT.md) packet ledgers retain producer
-identities; smaller packets, equal quality numbers or timing passes do not prove
-the new exact-reference target. Old quality tooling retires as stronger gates cover
-its required scope.
+The production VP8 pipeline now matches20 pinned complete packet identities
+across22 source/settings rows, including all efforts and default-method8/16-bit
+normalization. Photograph/diagram packets are exactly17,688/7,100B at the pinned
+Q75/method4 settings. The separate large-header control also passes. Shared
+admission, exact normalized alpha, stream ownership and direct async delivery
+are qualified; [VP8 scope](../benchmarks/VP8-INPUT-STAGE.md) records details.
+All seven prior VP8 time/allocation rows are superseded. In particular, the old
+32M-work timing describes a success on the prior algorithm; current encoding
+must fail that resource boundary, so it is not a new performance pass. No CPU
+measurement or retuning accompanies byte qualification.
 
 The managed [VP8L encoder](../benchmarks/VP8L-COMPLETE-PACKET.md) now reproduces
 all19 selected packet identities through25 existing settings checks, plus two
@@ -440,10 +442,11 @@ RGBA samples remain exact. Single-component grayscale JPEG uses the approved
 benchmark-only **SIMD libjpeg-turbo3.1.4.1** reference; FFmpeg emits three components.
 Production stays safe managed .NET 10 without dependencies or native bindings.
 
-â€¡ Procedural VP8 benchmark inputs freeze managed/native quality 100/75 and effort 4, retaining
-the 0.25 dB source-quality gate and exact alpha. Matched-quality content controls use
-their linked frozen settings. [Current packet sizes](../benchmarks/WARM-VP8-SIZE-COVERAGE.md)
-pass all seven declared lossy gates; no broader image/settings claim follows.
+â€¡ Historical procedural VP8 timings use managed/native quality100/75 and
+matched-source tolerances. The replacement encoder instead uses the pinned native
+policy and complete-packet equality; those times/allocations do not qualify it.
+The historical32M successful call is now a required terminal Work failure.
+
 
 Â¶ PNG Identify references use the public FFmpeg PNG parser/CRC plus original
 complete structural/EXIF validation and owned descriptors, without inflation;

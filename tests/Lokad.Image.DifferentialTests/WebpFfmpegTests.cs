@@ -5,20 +5,24 @@ namespace Lokad.Image.DifferentialTests;
 public sealed class WebpFfmpegTests
 {
     [Theory] [InlineData(8)] [InlineData(16)]
-    public void AdaptiveVp8EntropyPreservesNormalAndScalarNativePixels(int depth)
+    public void SufficientMemoryQuotasPreserveVp8PacketsAndNormalAndScalarNativeAlpha(int depth)
     {
         using var source = OriginalPixels.Buffer(257, 129, depth);
-        // Isolate entropy: effort4 can additionally select a lossy search when
-        // spatial quantizers and local admission permit it.
         var options = new WebpEncodeOptions { Lossless = false, Quality = 100, Effort = 3 };
-        using var adaptive = new MemoryStream(); using var fixedPacket = new MemoryStream();
-        ImageCodec.EncodeWebp(source, adaptive, options);
-        ImageCodec.EncodeWebp(source, fixedPacket, options with { Limits = new ImageLimits { MaxWorkingBytes = 1_000_000 } });
-        Assert.True(adaptive.Length < fixedPacket.Length);
-        Assert.Equal(ReferenceDecode(fixedPacket.ToArray()), ReferenceDecode(adaptive.ToArray()));
+        using var original = new MemoryStream(); using var bounded = new MemoryStream();
+        ImageCodec.EncodeWebp(source, original, options);
+        ImageCodec.EncodeWebp(source, bounded, options with { Limits = new ImageLimits { MaxWorkingBytes = 256L * 1024 * 1024 } });
+        var packet = original.ToArray(); Assert.Equal(packet, bounded.ToArray());
         byte[] Normal(byte[] packet) => OracleProcess.Run(OracleProcess.Ffmpeg,
             ["-v", "error", "-threads", "1", "-noautorotate", "-f", "image2pipe", "-i", "pipe:0", "-frames:v", "1", "-threads:v", "1", "-pix_fmt", "rgba", "-f", "rawvideo", "pipe:1"], packet);
-        Assert.Equal(Normal(fixedPacket.ToArray()), Normal(adaptive.ToArray()));
+        foreach (var decoded in new[] { ReferenceDecode(packet), Normal(packet) })
+        {
+            Assert.Equal(source.Width * source.Height * 4, decoded.Length);
+            for (var y = 0; y < source.Height; y++)
+            for (var x = 0; x < source.Width; x++)
+                Assert.Equal(depth == 8 ? source.GetRow8(y)[x * 4 + 3] : (source.GetRow16(y)[x * 4 + 3] + 128) / 257,
+                    decoded[(y * source.Width + x) * 4 + 3]);
+        }
     }
 
     [Theory] [InlineData(8)] [InlineData(16)]

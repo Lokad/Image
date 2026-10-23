@@ -26,6 +26,16 @@ admission fails without switching to a smaller-workspace encoder. Prepared codin
 state avoids extra normalized/encoded frame copies. Historical timings describe
 their frozen producers; new performance qualification remains open.
 
+Lossy WebP uses the same independently implemented reference policy at every
+admitted local budget. Quality85 and effort4 remain defaults; all efforts0..6
+are supported. Packet bytes and reconstructed RGB can change. The declared
+controls now match complete native packets; alpha remains exact after8-bit
+normalization. Async output delivers prepared partitions directly. Resource
+refusal never selects another encoder. Tight work limits can fail earlier;
+method6's exhaustive alpha search may need an explicit larger caller allowance.
+The32M-work control is a required terminal Work failure. Historical VP8 timings
+refer to the replaced producer; new CPU/allocation qualification remains open.
+
 `ImageInfo.SourceColor`, `SourceAlpha` and `SourceComponentCount` describe encoded
 samples, alongside source `BitDepth`; they do not describe normalized RGBA pixels.
 Unlabelled JPEG color models remain `Unknown`. VP8L always codes alpha even when

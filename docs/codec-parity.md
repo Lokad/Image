@@ -130,12 +130,32 @@ packed palettes, single-axis16383 controls and all existing two-color effort set
 async and ImageBudget boundaries retain the asymmetric packet at8/16bits, with
 one normalization and independent owners. The16384-axis companions remain functional
 format extensions; the pinned native encoder accepts at most16383, so those axes
-make no encoder-byte claim. Remaining lossy WebP/exact-decoder work and new
-single-CPU/allocation qualification are open. [Numeric evidence](../benchmarks/vp8l-byte-parity-evidence.json)
+make no encoder-byte claim. Exact-decoder and new single-CPU/allocation
+qualification remain open. [Numeric evidence](../benchmarks/vp8l-byte-parity-evidence.json)
 records source/settings and qualification scope.
 
+The production VP8 encoder now uses the qualified managed input/analysis/RDO,
+alpha and arithmetic-partition pipeline. Twenty frozen513×259 identities span22
+public rows, including all seven efforts, quality1/75/85/100 named policies,
+photograph/diagram and default-method RGBA8/16 normalization. Complete reference
+photograph/diagram packets are17,688/7,100 bytes; the method6 alpha control is
+85,796 bytes with an11,667-byte ALPH payload. The separate5,632-square opaque
+header case has one retry and an exact16,787,132-byte packet. No metadata exemption
+is used. These claims identify tested scope, without an exhaustive option grid.
+
+The superseded encoder and its internal experimental profiles are removed.
+Admitted planes, frame state and old/new arithmetic capacities share the borrowed
+root. Source/frame storage releases before delivery; alpha/partitions remain owned
+until actual sync/async users finish. Lossy async streams need no extra encoded
+staging copy. Refusal, cancellation and actual work exhaustion terminate without
+another strategy. Small frozen header fields provide a fast regression for the
+large case. [VP8 evidence](../benchmarks/vp8-byte-parity-evidence.json) preserves
+primitive, complete-packet, producer and resource scope. The high-effort positive
+alpha proof uses an explicit64B work allowance; default2B and public32M failures
+remain separate safeguards. Work counters are not timing/allocation measurements.
+
 Lossless WebP retains the approved libwebp `exact=1` reference; grayscale JPEG
-retains the explicitly labeled SIMD-enabled libjpeg-turbo reference. Existing
-quality checks remain until exact packet/sample gates cover the same required
-paths; then retire calibration/dB analysis, keeping minimal sanity tests and
-historical evidence. All functional, resource and performance objectives remain.
+retains the explicitly labeled SIMD-enabled libjpeg-turbo reference. New encoding
+checks compare exact packets, retaining original decoder corpora and minimal
+interoperability/alpha sanity tests. Historical quality/timing evidence keeps its
+recorded scope; exact decoding and CPU/allocation qualification remain open.

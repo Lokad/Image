@@ -3,7 +3,7 @@ namespace Lokad.Image.Internal;
 // Encoder-selected forward arithmetic, independently expressed as separable
 // integer matrix projections. RFC6386 section14 specifies the inverse/geometry;
 // forward rounding is pinned separately by native coefficient observations.
-// This private preparation is not yet the public lossy encoder's transform.
+// Used by the public lossy encoder's prediction and reconstruction search.
 internal static class Vp8ForwardTransform
 {
     private static readonly int Sine = (int)Math.Round(4096 * Math.Sqrt(2) * Math.Sin(Math.PI / 8));

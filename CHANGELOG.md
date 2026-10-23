@@ -9,8 +9,10 @@
 - Bounded managed PNG stored/fast/optimal/smallest encoding, with complete raw
   packet equality on14 frozen8/16-bit controls and shared admission throughout.
 - Managed VP8L prediction, palette, references/cache and entropy groups reproduce
-  19 selected and two additional forced frozen libwebp packets. Lossy WebP byte replication
-  and new CPU/allocation qualification remain open.
+  19 selected and two additional forced frozen libwebp packets.
+- Managed VP8 encoding matches20 declared complete reference packets, with all
+  effort policies, exact normalized alpha and direct async partition delivery.
+  Removed superseded encoder experiments; new CPU/allocation qualification is open.
 - Caller-owned cooperative memory admission across nested work and retained
   images, fonts, layouts and caches, with structured limit/unsupported failures.
 - Typed source color/alpha metadata, bounded header inspection and async stream
