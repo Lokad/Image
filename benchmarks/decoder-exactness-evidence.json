@@ -1,0 +1,420 @@
+{
+  "project": "Lokad.Image",
+  "round": "E101",
+  "policy": "Exact normalized output samples first. Reuse unchanged valid evidence. Resolve uncertainty before changing algorithms. Old lossy RGB tolerances are transitional interoperability checks, not completion gates. No new workload grid, CPU tuning or repeated package proof.",
+  "producer": {
+    "commit": "b325ce2ff3a0f47e4fef9b936e39fada4bdc93fa",
+    "coreSha256": "2a92171b088321988f9f499315a2a27ad76c5e399d5694d51762997b069e4e29",
+    "source": "Same actual E99 private package; no production/test assembly rebuild. Only a bounded public diagnostic frontend compiled.",
+    "probeSha256": "2f3ee91bfda5c1a691c263a18546175c9af33ef2a3db58460e272b0f8d383235",
+    "platform": "Linux x64, CPU0 affinity, DOTNET_PROCESSOR_COUNT=1",
+    "ci": {
+      "run": 40026342353,
+      "conclusion": "success",
+      "jobs": 3,
+      "url": "https://github.com/Lokad/Image/actions/runs/40026342353"
+    }
+  },
+  "reference": {
+    "executableSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
+    "version": "ffmpeg version n8.1 Copyright (c) 2000-2026 the FFmpeg developers",
+    "sourceRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
+    "bytes": 4993477513
+  },
+  "finiteChecklist": [
+    {
+      "id": "png-samples",
+      "controls": "Existing16 frozen native PNG anchors plus authored PNG profiles, packed depths,8/16-bit channels, Adam7, stored/fixed/dynamic deflate and tRNS controls",
+      "why": "Required normalization, entropy, interlace and transparency paths",
+      "status": "PASS and STOP at existing tested scope; E99 full both-platform suite reuses exact assertions",
+      "tests": [
+        "PngTests.FrozenFfmpegPngFixturesMatchExactly",
+        "PngProfileFfmpegTests",
+        "PngTransparencyOracleTests"
+      ]
+    },
+    {
+      "id": "vp8l-samples",
+      "controls": "Existing60 frozen native VP8L fixtures plus authored transform/palette/cache/overlapping-copy controls",
+      "why": "Required lossless branches and exact hidden RGB/alpha",
+      "status": "PASS and STOP at existing tested scope; E99 both-platform full suite has exact sample assertions",
+      "tests": [
+        "WebpFixtureTests.FrozenLosslessFfmpegExpectationsCoverTheVp8lBranches",
+        "WebpFfmpegTests.LosslessDecodeMatchesFfmpegExactly",
+        "WebpFfmpegTests.AuthoredLosslessBranchesInteroperateExactly"
+      ]
+    },
+    {
+      "id": "jpeg-inverse",
+      "controls": "Existing31x23 baseline444 anchor first; existing progressive-gray negative/refinement/EOB and sparse-band controls after shared kernel qualification",
+      "why": "Shared dequantization/inverse-transform rounding before color conversion; progressive scan reconstruction is a separate coefficient boundary",
+      "status": "E101 private coefficient/inverse primitive PASS on the existing444 anchor and18 original arithmetic fragments, BOTHOS normal/scalar-managed. Public adoption and named progressive-coefficient confirmations remain open; E100 public gap is not claimed fixed yet.",
+      "tests": [
+        "JpegFfmpegTests.BaselineDecodeMatchesConfiguredFfmpeg",
+        "JpegFfmpegTests.AuthoredProgressiveRefinementInteroperates",
+        "JpegFfmpegTests.SplitSpectralBandsAndEmptyEobRunsInteroperate"
+      ]
+    },
+    {
+      "id": "jpeg-color",
+      "controls": "Existing31x23 baseline444/422/420 anchors and existing1x17/17x1 odd-edge companions; existing explicit-RGB declarations",
+      "why": "YCbCr matrix/range rounding, centered half-resolution chroma and direct-RGB interpretation",
+      "status": "UNCERTAIN beyond the demonstrated initial444 RGB gap (50/2139 samples, maximum2). Existing max4/RMSE1.5 assertions do not establish exactness. Resolve inverse stage first.",
+      "tests": [
+        "JpegFfmpegTests.BaselineDecodeMatchesConfiguredFfmpeg",
+        "JpegFfmpegTests.ExplicitRgbDeclarationsInteroperate"
+      ]
+    },
+    {
+      "id": "jpeg-four-component-and-quarter-width",
+      "controls": "Existing17x9 CMYK/YCCK baseline/progressive and420 controls;67x19 411/410 controls; existing varying-chroma YCCK420/411/410 benchmark controls if constants cannot expose expansion phase",
+      "why": "Explicit inversion, four-component conversion and distinct quarter-width/vertical chroma phases",
+      "status": "UNCERTAIN exact samples; existing tolerance/decimal functional checks are preserved but are not exact-reference passes. Reuse existing controls, no sampling/shape grid.",
+      "tests": [
+        "JpegCompatibilityFfmpegTests",
+        "JpegCmykTests",
+        "JpegYcckRowTests"
+      ]
+    },
+    {
+      "id": "jpeg-caller-samples",
+      "controls": "Existing31x23 caller grayscale/RGB baseline/progressive controls and existing CMYK sample controls; existing stride/tail and ownership tests",
+      "why": "Direct caller destinations use specialized packing/conversion without mandatory RGBA; retain inversion/options and untouched padding",
+      "status": "DEMONSTRATED initial gray/RGB gap shared with jpeg-inverse/color. CMYK exact confirmation remains uncertain; functional/ownership safeguards already qualified.",
+      "tests": [
+        "JpegSampleFfmpegTests",
+        "JpegSampleDecodeTests",
+        "JpegCmykPackingTests"
+      ]
+    },
+    {
+      "id": "vp8-reconstruction",
+      "controls": "Existing native/authored VP8 manifests and authored raw/compressed ALPH filters; first use one existing31x23 normal frame and one already-authored filter/edge control",
+      "why": "Arithmetic decoding, intra prediction, inverse transform and deblocking must be distinguished from final chroma/RGB conversion",
+      "status": "UNCERTAIN; current full-frame native assertions permit RGB error. Measure planar samples before selecting a primitive; do not assume every reconstruction stage needs changes.",
+      "tests": [
+        "Vp8FfmpegTests",
+        "AuthoredVp8FfmpegTests",
+        "Vp8Tests.FrozenLossyPixelsMatchExplicitFfmpegConversionAndExactAlpha"
+      ]
+    },
+    {
+      "id": "vp8-color-alpha",
+      "controls": "Same existing31x23 frame, authored matrix extremes and ALPH filter controls; retain existing exact alpha and hidden-RGB expectations",
+      "why": "Limited-range matrix, chroma phase/rounding and independent exact alpha",
+      "status": "RGB UNCERTAIN under old bounds; exact alpha coverage reused and STOPPED. No new quality/shape grid.",
+      "tests": [
+        "Vp8OracleColorTests",
+        "Vp8FfmpegTests.AuthoredRawAndCompressedAlphaFiltersInteroperateExactly",
+        "Vp8Tests.RawAlphaFiltersPreserveIndependentSourceSamplesAndLossyRgb"
+      ]
+    },
+    {
+      "id": "source-metadata-and-delivery",
+      "controls": "Existing SourceMetadataTests, ExifOrientationFfmpegTests, async/header inspection and caller-buffer/retained-output tests",
+      "why": "Encoded representation/depth is independent of normalized pixels; sync/async inspection, opt-in orientation and output ownership are public boundaries",
+      "status": "PASS and STOP for existing typed metadata/ownership tests, including E99 both-platform/full-package qualification. New sample algorithms must retain these tests; no native representation-string equality is implied.",
+      "tests": [
+        "SourceMetadataTests",
+        "ExifOrientationFfmpegTests",
+        "JpegSampleDecodeTests"
+      ]
+    }
+  ],
+  "initialJpeg": {
+    "scope": "E100 initial JPEG exact-sample audit, existing baseline444 fixture only; no production rebuild or timing",
+    "fixture": "tests/Fixtures/jpeg-ffmpeg-YCbCr444-31x23.jpg",
+    "inputBytes": 1594,
+    "inputSha256": "ad1d9d11e42273349e85cfebc9b73c89231b595b883cd25d2b7832f62c353573",
+    "coreSha256": "2a92171b088321988f9f499315a2a27ad76c5e399d5694d51762997b069e4e29",
+    "metadata": {
+      "Format": 1,
+      "Width": 31,
+      "Height": 23,
+      "BitDepth": 8,
+      "HasAlpha": false,
+      "Orientation": 1,
+      "SourceColor": 0,
+      "SourceAlpha": 1,
+      "SourceComponentCount": 3,
+      "OrientedWidth": 31,
+      "OrientedHeight": 23
+    },
+    "results": [
+      {
+        "nativeCpu": "cpuflags0",
+        "rgba": {
+          "samples": 2852,
+          "mismatches": 50,
+          "maximum": 2,
+          "actualSha256": "40508faf926ff9a03bc1a941775e0e16e634283db207e50af2c10bf58f8d4339",
+          "referenceSha256": "fbf313b3c7bc442832b67d3b08bf228da503aefc142d4ac2ed8d2bfc720b76e4",
+          "first": {
+            "index": 18,
+            "x": 4,
+            "y": 0,
+            "channel": 2,
+            "actual": 133,
+            "expected": 131
+          }
+        },
+        "callerRgb": {
+          "samples": 2139,
+          "mismatches": 50,
+          "maximum": 2,
+          "actualSha256": "59bb43025dd5af6a46c4988dd722c09c6d64df87af50029caf2325a696a08f5e",
+          "referenceSha256": "fa729bc15fe9fcbb8785be37166437b840fbe4b577cdadd7a11af3e30910e874",
+          "first": {
+            "index": 14,
+            "x": 4,
+            "y": 0,
+            "channel": 2,
+            "actual": 133,
+            "expected": 131
+          }
+        },
+        "callerGray": {
+          "samples": 713,
+          "mismatches": 7,
+          "maximum": 1,
+          "actualSha256": "d2ba4c4b8a8cd53f518c43e211333dd16c9e9594a3702ae50d8919d7ac74d48c",
+          "referenceSha256": "7c208d4a6353d69de6f9da697fe23efe603fef3fb2499568c47bd08f52752a98",
+          "first": {
+            "index": 14,
+            "x": 14,
+            "y": 0,
+            "channel": 0,
+            "actual": 205,
+            "expected": 204
+          }
+        }
+      },
+      {
+        "nativeCpu": "normal SIMD",
+        "rgba": {
+          "samples": 2852,
+          "mismatches": 50,
+          "maximum": 2,
+          "actualSha256": "40508faf926ff9a03bc1a941775e0e16e634283db207e50af2c10bf58f8d4339",
+          "referenceSha256": "fbf313b3c7bc442832b67d3b08bf228da503aefc142d4ac2ed8d2bfc720b76e4",
+          "first": {
+            "index": 18,
+            "x": 4,
+            "y": 0,
+            "channel": 2,
+            "actual": 133,
+            "expected": 131
+          }
+        },
+        "callerRgb": {
+          "samples": 2139,
+          "mismatches": 50,
+          "maximum": 2,
+          "actualSha256": "59bb43025dd5af6a46c4988dd722c09c6d64df87af50029caf2325a696a08f5e",
+          "referenceSha256": "fa729bc15fe9fcbb8785be37166437b840fbe4b577cdadd7a11af3e30910e874",
+          "first": {
+            "index": 14,
+            "x": 4,
+            "y": 0,
+            "channel": 2,
+            "actual": 133,
+            "expected": 131
+          }
+        },
+        "callerGray": {
+          "samples": 713,
+          "mismatches": 7,
+          "maximum": 1,
+          "actualSha256": "d2ba4c4b8a8cd53f518c43e211333dd16c9e9594a3702ae50d8919d7ac74d48c",
+          "referenceSha256": "7c208d4a6353d69de6f9da697fe23efe603fef3fb2499568c47bd08f52752a98",
+          "first": {
+            "index": 14,
+            "x": 14,
+            "y": 0,
+            "channel": 0,
+            "actual": 205,
+            "expected": 204
+          }
+        }
+      }
+    ]
+  },
+  "cpuTimingRuns": 0,
+  "gcAllocationsMeasured": false,
+  "next": "Qualify the full-resolution JPEG inverse-color primitive against the already frozen planar/RGBA pair, then adopt the qualified JPEG slice coherently and remove superseded inverse implementations/tests/certificates. Preserve all named progressive/sampling/four-component/caller boundaries; confirm them when affected. No aliases or old-rounding mode.",
+  "rawArchive": {
+    "name": "e100-decoder-audit.tar.xz",
+    "bytes": 20372,
+    "sha256": "c7210b142b9e458d7489d7496d05979e904967d84173d80e6b9c72682ce2ff2e",
+    "members": 13,
+    "mirrored": true,
+    "everySourceMemberByteVerified": true,
+    "linuxAfter": 4993497885
+  },
+  "publicDecoderBehaviorChanged": false,
+  "productionSourcesChanged": true,
+  "privateInverseTransform": {
+    "round": "E101",
+    "status": "Private primitive qualified; public adoption remains open",
+    "scope": "Independent generated-math fixed-point inverse transform, exact coefficient extraction and planar samples on the existing31x23 baseline444 input, plus18 original numeric fragments. No image/settings grid, codec/library rebuild, CPU tuning or PSNR calibration.",
+    "source": "src/Lokad.Image/Internal/JpegInverseTransform.cs",
+    "testOnlyCoefficientObserver": "tools/WarmReference/JpegInverseStage.cs",
+    "producer": {
+      "testAssembly": {
+        "bytes": 1668096,
+        "sha256": "aae21dd9c3e19813b79b21ff2751dd248811f705865deba5888a3b959680beb2"
+      },
+      "sameImmutableAssembly": true,
+      "publicCoreUnchanged": "2a92171b088321988f9f499315a2a27ad76c5e399d5694d51762997b069e4e29",
+      "checksPerRun": 23,
+      "platforms": [
+        "Windows x64",
+        "Linux x64"
+      ],
+      "cpuModes": [
+        "normal",
+        "DOTNET_EnableHWIntrinsic=0"
+      ],
+      "linuxDuringQualification": 4995671750,
+      "environmentOnlyLaunchCorrection": "Source the prepared runtime PATH before test launch; transferred binaries unchanged and all hashes reverified.",
+      "productionBuilds": 0,
+      "testBuilds": 1,
+      "linuxBuilds": 0,
+      "nativeObserverBuilds": 3,
+      "nativeObserverBuildNote": "Two fixed observers; JPEG helper ran twice after correcting common V=2 frame geometry. No reference codec/library rebuild or new encoded image."
+    },
+    "nativeProducer": {
+      "files": [
+        {
+          "path": "tmp/e101-jpeg-inverse-observer",
+          "bytes": 141944,
+          "sha256": "ec701b2437eba5210de33cf74740dfb5807289aa0448fd37a3de0c7fd1e3bfa4"
+        },
+        {
+          "path": "tmp/e101-inverse-fragments",
+          "bytes": 329144,
+          "sha256": "81f839100d087c73fd033241d884730ae8bee220ef733e2cf1f92b6e69cd8348"
+        },
+        {
+          "path": "external/jpegtran-build/libjpeg.a",
+          "bytes": 909726,
+          "sha256": "fa737bc32c9cc2d9491f64475fad1052c4a031f55bd1fd416c071e956b6b62bd"
+        },
+        {
+          "path": "external/linux-x64/native/lib/libavcodec.a",
+          "bytes": 1813322,
+          "sha256": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6"
+        },
+        {
+          "path": "external/linux-x64/native/lib/libavutil.a",
+          "bytes": 1442098,
+          "sha256": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd"
+        }
+      ],
+      "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+    },
+    "reference": {
+      "executableSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
+      "version": "ffmpeg version n8.1 Copyright (c) 2000-2026 the FFmpeg developers",
+      "sourceRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
+      "bytes": 4993477513
+    },
+    "coefficientComparison": {
+      "bytes": 5072,
+      "sha256": "8c5ceb73a9935b65b94ff7b017449b646bc3bcbcc68789f1afc21474c67d190e",
+      "visibleBlocks": 36,
+      "components": 3,
+      "quantizationAndCoefficientsExact": true,
+      "independentVisitor": "Public libjpeg-turbo coefficient API, a verification tool only; no pixel or timing baseline substitution.",
+      "frameSampling": "All components H=1,V=2; full-resolution444, four by three visible blocks. Original packet/settings unchanged."
+    },
+    "planarComparison": {
+      "samples": 2139,
+      "sha256": "37fc65b130eb90dd9d43e8ffa6831d910de969f692921ede3ea0ece80f286c2c",
+      "managedMismatchCount": 0,
+      "actualNativeCliScalarAndNormalEqual": true,
+      "order": "Three contiguous31x23 planes Y,Cb,Cr without range remapping; visible samples cropped from padded8x8 blocks."
+    },
+    "fragments": {
+      "count": 18,
+      "why": "DC clipping/half ties, signed horizontal/vertical/mid/diagonal impulses, three mixed spectra and two wide-quantizer arithmetic boundaries. Numeric controls, not additional images/settings.",
+      "expectedNormalHashes": [
+        "f5a5fd42d16a20302798ef6ed309979b43003d2320d9f0e8ea9831a92759fb4b",
+        "e0205519f6bcde4208fd5e9aece72f518eb4ce5879ca1832a6cb221d534a2d7e",
+        "1df1b7ce1fd8fcbe20cde61646875e54fe38d8945ea7911afd59e025cc520a68",
+        "1df1b7ce1fd8fcbe20cde61646875e54fe38d8945ea7911afd59e025cc520a68",
+        "8667e718294e9e0df1d30600ba3eeb201f764aad2dad72748643e4a285e1d1f7",
+        "70fe63e96c27e8b5db0251f3707a3542755b373a4bb2684d3a786ed4c5f2ae6e",
+        "c739c1e56becd1eb8af75a29a6e74356bf026bd0d1e7a094f21d6ce2ed6ed635",
+        "bba08462257aa492462f36441dc4ce08ada1d31d527a0762b5fe9d94bed969a2",
+        "328aa548fe2f53f12da65a1f6ff44e8e21e835dcb26827eb5a6b8c2c94811c47",
+        "6f7210bb5af4e231d83e36d40dbb210bafcb50ac58313accba16404e2f86ccf1",
+        "04f19e938ae90c082e404c78dc0dd3e5366cde530f3fc9f1789e8895369d24bb",
+        "d323bc87f1e869f15292bef487f219ac2bcad8a82273e1159fa161dfd495da4b",
+        "94c35f57af1f4f9d86f561fa5f6f95761c10d4b49193f9f151730332ffa54b7b",
+        "39856e989bffd9645bc139f06542afe687fe0b8c2105522d9424d3a25215ee88",
+        "fd86ae4dc8d27c535380b6011ae2c7d20bca2ce8a903b5367b0967d402607e67",
+        "591f6986ec38c4a9d23392723733f8571b776ab4da15f50fdd5932e9d8e9f72e",
+        "f5a5fd42d16a20302798ef6ed309979b43003d2320d9f0e8ea9831a92759fb4b",
+        "1df1b7ce1fd8fcbe20cde61646875e54fe38d8945ea7911afd59e025cc520a68"
+      ],
+      "nativeScalarDifference": {
+        "control": 16,
+        "differentSamples": 32,
+        "reason": "Signed row saturation and word-width addition of column bias. The target is the pinned normal x64 AVX path, even with managed intrinsics disabled. Scalar native agreement is claimed only where observed; no relaxed sample tolerance."
+      }
+    },
+    "algorithm": "Generate the Q14 cosine kernel from T.81, with the pinned unit-rotation policy. Dequantized AC narrows modulo16bits; DC saturates after the1024 level shift. DC-only rows use the exact word shift; other rows round at11bits and saturate. Add the32 column bias in signed words, accumulate modulo32bits, shift20 and clip. Matrix evaluation is independent of upstream butterfly/assembly implementations; no upstream source/table in production.",
+    "resources": "256 bytes of stack scratch per block, borrowed coefficient/quantizer/destination spans and a minor256-byte static kernel payload. No per-call owned heap buffers or escaping ownership. All4096 existing work units are admitted before destination mutation; refusal/cancellation preserve output, input and borrowed root. These are accounting/source properties, not measured GC B/op or CPU timing.",
+    "qualification": {
+      "checksPerRun": 23,
+      "platforms": [
+        "Windows x64",
+        "Linux x64"
+      ],
+      "managedModes": [
+        "normal",
+        "DOTNET_EnableHWIntrinsic=0"
+      ],
+      "sameImmutableWindowsBuiltAssembly": true,
+      "newProductionBuilds": 0,
+      "testBuilds": 1,
+      "linuxBuilds": 0,
+      "nativeLibraryBuilds": 0,
+      "newEncodedImages": 0,
+      "timingRuns": 0,
+      "gcAllocationsMeasured": false,
+      "logs": [
+        "tmp/e101-first-screen-windows.log",
+        "tmp/e101-scalar-windows.log",
+        "tmp/e101-normal-linux.log",
+        "tmp/e101-scalar-linux.log"
+      ]
+    },
+    "storage": {
+      "archive": "tmp/e101-cold-completed-consumers-linux.tar.xz",
+      "sha256": "bffbff165492f9dc00054ae95f03d93b9fdf3a841fcb4aebbe16585c28ecee0f",
+      "bytes": 1901968,
+      "members": 643,
+      "retiredRegularFiles": 642,
+      "retiredBytes": 13916476,
+      "everyOriginalByteVerified": true,
+      "mirrored": true,
+      "linuxPeak": 4997729129,
+      "linuxAfter": 4983812653,
+      "protectedCurrentReleaseAndReferenceInputsUntouched": true
+    },
+    "evidenceInvalidation": "Public decoder dispatch and its old inverse implementation are not changed in this round. E99 public/core/package evidence keeps its producer scope; no repeat package proof. E100 public sample discrepancies remain until coherent adoption. No new current CPU/allocation claim.",
+    "next": "Qualify the full-resolution JPEG inverse-color primitive against the already frozen planar/RGBA pair, then adopt the qualified JPEG slice coherently and remove superseded inverse implementations/tests/certificates. Preserve all named progressive/sampling/four-component/caller boundaries; confirm them when affected. No aliases or old-rounding mode.",
+    "rawArchive": {
+      "name": "e101-inverse-qualified.tar.xz",
+      "bytes": 850064,
+      "sha256": "2413cb7694d31b374b45318b05b9c828e04cc6bd8825da2a3b47b0b06bf8fe51",
+      "members": 43,
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "linuxAfterMirror": 4984662717,
+      "allPeaksBelowCap": true
+    }
+  }
+}
