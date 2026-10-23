@@ -1,7 +1,7 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E73",
-  "scope": "Private unwired preparation through quantization matrices and exact block quantizedlevels/reconstructedcoefficients. Actual inverse/reconstruction/RDO/full managed VP8 encoder remain open.",
+  "latestRound": "E74",
+  "scope": "Private unwired preparation through quantization and encoder pixel/inverse reconstruction. Actual intra4/RDO/full managed VP8 encoder remain open.",
   "productionPublicBehaviorChanged": false,
   "fullObjectiveOpen": true,
   "reference": {
@@ -2238,5 +2238,180 @@
       "allPeaksBelowCap": true
     },
     "remaining": "Verify/reuse existing inverseDCT/Walsh whereexact, composepixelreconstruction; actualintra4/intra16/chroma/RDO, entropy/ALPH/fullpackets/publicintegration, boundedrequiredoptions, exactdecoders and fullCPU/allocation/functional/memory/release objective remain open."
+  },
+  "blockReconstruction": {
+    "round": "E74",
+    "publicEncoderSwitched": false,
+    "worker": {
+      "bytes": 1596416,
+      "sha256": "afd6adde806bd845140f56e3c373376b35e042e2052289c24e2ecec1613a0c01"
+    },
+    "sourceFiles": {
+      "src/Lokad.Image/Internal/Vp8BlockReconstruction.cs": {
+        "bytes": 2188,
+        "sha256": "462c5844a680f2a190cf62adf3bdde2b4e6a58fbc64582b69b6d025c4c6418d1"
+      },
+      "src/Lokad.Image/Internal/Vp8Transforms.cs": {
+        "bytes": 3096,
+        "sha256": "111ec42afdff9882f7a6024428fdfdb0d447c6097ef007c64335b77e6441d06b"
+      },
+      "tests/Lokad.Image.Tests/Vp8BlockReconstructionTests.cs": {
+        "bytes": 10578,
+        "sha256": "0ddc51ad6f0c183e7c6b16c51062d097429552bc5e0d150d9506e746372a30d1"
+      },
+      "tools/WarmReference/vp8-reconstruction-observer.c": {
+        "bytes": 3396,
+        "sha256": "c8ca80561b309ba98c6c5d28163b5701b803133b5a33513586ccc8f6cc5880e0"
+      }
+    },
+    "native": {
+      "round": "E74-observation",
+      "scope": "Encoder inverse/pixel arithmetic only on oneexistingopaque control: E73quantizeddequantraster coefficients plus36existingvalidDCT/36validWalshforwardfragments andONEpaired-block boundary. Onevarying predictor formula29*block+73*x+41*y mod256; no newimages/quality/settings grid oractualRDO/fullencode/managedE74claim. Quantizer-onlyall16320saturation probes excluded.",
+      "sourceSha256": "c8ca80561b309ba98c6c5d28163b5701b803133b5a33513586ccc8f6cc5880e0",
+      "workerSha256": "10102feb6ccd0dd56f0579c65399b63b17eaee4ce58f40c885459d3bfd27bab2",
+      "workerBytes": 110064,
+      "backendArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "inputBytes": 451224,
+      "inputSha256": "8c9e2988d5231b88933f208c49845753eec575e518156f531be5292e7d9bb92f",
+      "observations": [
+        {
+          "cpu": "normal",
+          "ready": {
+            "scalar": false,
+            "groups": 6,
+            "pixelStride": 32
+          },
+          "bytes": 235136,
+          "sha256": "6804fc4b28eeecd2a7b21d12c45409c6bb0627b01232aa805ab7b89e154ffc0a"
+        },
+        {
+          "cpu": "scalar",
+          "ready": {
+            "scalar": true,
+            "groups": 6,
+            "pixelStride": 32
+          },
+          "bytes": 235136,
+          "sha256": "6804fc4b28eeecd2a7b21d12c45409c6bb0627b01232aa805ab7b89e154ffc0a"
+        }
+      ],
+      "everyNativeNormalScalarOutputByteEqual": true,
+      "groups": [
+        {
+          "name": "luma-raster",
+          "kind": 0,
+          "blocks": 8976,
+          "inputCoefficientSha256": "14e29f98a868f13ea742c82306e15f018f3487191a422ec7cf02229d7664aff3",
+          "outputBytes": 143616,
+          "outputSha256": "eca643ce229746671e540d3b173073ac959118b1d8393d1048a16b00ce398cde",
+          "boundaryPixelSamples": 14847
+        },
+        {
+          "name": "chroma-raster",
+          "kind": 0,
+          "blocks": 4488,
+          "inputCoefficientSha256": "c490c7354b5502eae72e62a89f78ffd02d6100ca4d170b1580c74c2d9dffa154",
+          "outputBytes": 71808,
+          "outputSha256": "58c20cb0748d282b53eee3fe49f0183ce2284cf23cad51ccee0e9cb6dc1d3d9f",
+          "boundaryPixelSamples": 4851
+        },
+        {
+          "name": "walsh-raster",
+          "kind": 1,
+          "blocks": 561,
+          "inputCoefficientSha256": "cf63fba00bc19d002e94106fdd05faf007961e31bdd9557b0511971f5136cbce",
+          "outputBytes": 17952,
+          "outputSha256": "2adc8ca12e0938b1c2a1a5bf75e73e96af7d5c6482fd1844c554f89ff2641649",
+          "boundaryPixelSamples": null
+        },
+        {
+          "name": "paired-luma",
+          "kind": 2,
+          "blocks": 1,
+          "inputCoefficientSha256": "b5b996fe735eef076a154a0881b179d7e695fda540875e8d0d8a7bd6c7fb01b8",
+          "outputBytes": 32,
+          "outputSha256": "a3d6cec674d728c086b82d9902f5f6a50bfed7c10f29de875fb101058e3231b3",
+          "boundaryPixelSamples": 7
+        },
+        {
+          "name": "valid-dct-fragments",
+          "kind": 0,
+          "blocks": 36,
+          "inputCoefficientSha256": "788f6a3f11340c00613460a581931db339250cf4e278c10af4295964d2df2ca8",
+          "outputBytes": 576,
+          "outputSha256": "f5c967757fa26fc45d83bd675b4bbb4a9cda5ef67ffef012fc6591a4fab58ee9",
+          "boundaryPixelSamples": 84
+        },
+        {
+          "name": "valid-walsh-fragments",
+          "kind": 1,
+          "blocks": 36,
+          "inputCoefficientSha256": "25756e96e4547629f5b9277f5f086b7fa79fdb3745f295bf42911509c433e181",
+          "outputBytes": 1152,
+          "outputSha256": "2b6deec89cf9f7f4e8dbda1f8cde88137a0229e361791541f037ce9753668c4e",
+          "boundaryPixelSamples": null
+        }
+      ],
+      "verifiedNativeContracts": [
+        "Inputcoefficient/predictionbuffers untouched; pixelrowpadding untouched.",
+        "WHTwritesonly16DCslots at16*index, preservingallACslots.",
+        "Positive/negativeconstantDCTfragments forceboth high/low clipping."
+      ],
+      "rawOrder": "groupsaslisted; DCTpixels4rows x4columns, pair4rows x8columns, WHT16int16LE extracted fromsparse256shortoutput.",
+      "compressedRaw": {
+        "name": "e74-native-reconstruction.bin.gz",
+        "bytes": 217981,
+        "sha256": "f9db7c13bb546468fa23520e944cc57e3fbf2112d5b3bbb9182089c76970ed18"
+      },
+      "dotnetBuilds": 0,
+      "nativeCompleteEncodes": 0,
+      "timingRuns": 0
+    },
+    "algorithm": "Reuse unchanged Vp8Transforms.InverseDct/InverseWalsh on64/32-byte stack snapshots; add-and-clip single/paired4x4 blocks, scatter16WalshDCs at16shortintervals. Validate full layouts using wide arithmetic before writes; snapshots preserve separate inputs and support caller aliases. No heap/cache/owner/perblockadmission; outerencoder admitswork/cancel/coarseworkspace.",
+    "verified": [
+      "All235136native outputbytes match:216032pixel bytes plus9552signedDCvalues, using one existingopaquecontrol,72previous validforwardfragments andONEpaired boundary. Native SIMD/forcedscalar outputs agree.",
+      "Bothhigh/low clipping, native32stride andcompact9stride pairedlayouts, rowpadding/AC/tails, separateinput preservation, aliasedsinglebuffer/sparseDC andprewrite layout/overflow rejection verified.",
+      "Existingsharedinverse source unchanged, not rewritten. This qualifies encoder-produced/testedtransformdomain; no all-decoder-token-domain orRDO/mode-choice claim."
+    ],
+    "qualification": {
+      "sameWindowsBuiltAssemblyBothOS": true,
+      "normalPerOS": 186,
+      "scalarPerOS": 186,
+      "windowsNormalUnion": [
+        10,
+        176
+      ],
+      "newChecks": 10,
+      "priorChecksReconfirmed": 176
+    },
+    "builds": {
+      "windowsLinkedInternalTests": 1,
+      "linux": 0,
+      "publicCore": 0,
+      "sourceModel": 0,
+      "nativeObserver": 1
+    },
+    "nativeKernelObservations": 2,
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "evidenceReuse": "All176prior checks reconfirmed samecurrentassembly bothOSnormal/scalar. Shared inverse and all publiccodec bodies unchanged; existingfull/differential/actualpackage/frozenproducer evidence retains scopes. Parent786a44eb30fc70c17630b2747d4a0ff5d563084c CI39945849000 allgreen. No repeatedlocal full/package qualification.",
+    "rawArchive": {
+      "name": "e74-block-reconstruction-qualified.tar.xz",
+      "bytes": 721128,
+      "members": 19,
+      "sha256": "b9eb4151815358e3732c90477569efa16073c31f607651523f9310de10e842c3",
+      "everySourceMemberByteVerified": true,
+      "mirrored": true
+    },
+    "storage": {
+      "capBytes": 5000000000,
+      "windowsAfterMaster": 4988612264,
+      "linuxAfterMaster": 4998919887,
+      "allPeaksBelowCap": true,
+      "runnerReused": true,
+      "scope": "Existingrunner rotated afterexactE73masterDLLcomparison; host/deps/config unchanged. Published/citedmasters/references/performanceworkers/actualpackages preserved."
+    },
+    "remaining": "Qualify/reuse4x4 prediction with explicitencoder/decoder mode-order mapping, then actualintra4/intra16/chroma/RDO, entropy/ALPH/fullpackets/publicintegration, finite requiredoptions, exactdecoders and fullCPU/allocation/functional/memory/release objective remain open."
   }
 }

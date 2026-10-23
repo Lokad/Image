@@ -1,6 +1,6 @@
 # VP8 encoder preparation
 
-The private managed pipeline is verified through block quantization.
+The private managed pipeline is verified through block pixel reconstruction.
 The public lossy encoder is unchanged; complete VP8 packet replication remains open.
 
 Seven existing encoding rows have four reference packet identities:
@@ -55,8 +55,16 @@ Native SIMD/scalar output agrees. The managed kernel derives diagonal scan ranks
 borrows its matrix/caller buffers and preserves tails. Invalid coefficient ranges
 or overlapping outputs fail before mutation; no per-block heap or admission exists.
 
-The same immutable assembly passes176focused checks per platform on Windows/Linux,
-normal and SIMD disabled, including all166earlier checks. Shared admission covers
+Pixel reconstruction reuses the existing inverse DCT/Walsh functions unchanged.
+All235,136native output bytes match:216,032pixels and9,552signedDCvalues from the
+same control,72existing valid transform fragments and one paired-block probe.
+The wrappers preserve coefficient inputs, row padding and AC slots with64/32-byte
+stack snapshots. Aliased caller buffers and compact/native strides pass; incomplete
+or overflowing layouts fail before writes. This qualifies the tested encoder
+domain, without a broader decoder-range or actual RDO claim.
+
+The same immutable assembly passes186focused checks per platform on Windows/Linux,
+normal and SIMD disabled, including all176earlier checks. Shared admission covers
 owned capacity, retained results and replacement overlap. Refusal, cancellation,
 local/work limits and cleanup/recovery pass; sources and caller roots stay borrowed.
 The matrix owner retains3,128/4,128admitted bytes for3/4used segments. Earlier source
@@ -65,7 +73,7 @@ accounting capacities; no new timing or GC-allocation measurements are claimed.
 
 [Structured evidence](vp8-byte-parity-evidence.json) records exact producers,
 reference observations, scope and preserved raw masters. Prior public codec and
-package evidence retains its stated scope. Next are inverse/pixel reconstruction,
+package evidence retains its stated scope. Next are4×4prediction and
 macroblock decisions, entropy/framing and ALPH, followed by complete
 packets and the bounded required-option audit. No readiness claim follows from
 these private stages.
