@@ -51,10 +51,10 @@ public sealed class Vp8DistortionDecisionTests
     // Native hashes cover all decisions in the statistics AND final pass.
     // Coefficient NZ contexts are not used by this primitive and are excluded.
     [Theory]
-    [InlineData(0, "6c7f700dc2407785c6c6997c92a7e92ee32abf02c002b05fe57e19bf5860c878", "a35c269369869f5c2992449357bb759b3c2acaf900f792653f6510bda6fd63eb", "aef574014b86dcb1f7f8d9242d6294b0c9d92b71af8dd671ba7067ca035fe874")]
-    [InlineData(1, "584520e2ecc90a57e89731dd674597224d5cf01bb69e34433ffb32b3db26eee8", "1321e430af726b2fa9e669b293d81eb55a02e5bca46f0b552ab4dc1e1f8f9f6c", "aef574014b86dcb1f7f8d9242d6294b0c9d92b71af8dd671ba7067ca035fe874")]
-    [InlineData(2, "9a44b3a4c502a47b339e5d96ee07963410779b3f4948caa411194052bc7dc6c7", "460fa9a22d62f776d44b2bdc7e1435bbb4d43bec7cd4b6995075878853c8d0eb", "888dc0adcc8659b8000102583680defdf2568427958a929a7696127d74268849")]
-    public void StatisticsAndFinalPassDecisionsMatchNative(int method, string expectedBefore, string expectedAfter, string expectedParameters)
+    [InlineData(0, "6c7f700dc2407785c6c6997c92a7e92ee32abf02c002b05fe57e19bf5860c878", "a35c269369869f5c2992449357bb759b3c2acaf900f792653f6510bda6fd63eb", "aef574014b86dcb1f7f8d9242d6294b0c9d92b71af8dd671ba7067ca035fe874", "85dcc7a9cb7bf71278180fa89a5db70abfe3738945ea268da705cfcb251263be", "8948c6ff4f09d7644c837fde90ac08350652e5058b8f5ebfa27856708a1c1a19")]
+    [InlineData(1, "584520e2ecc90a57e89731dd674597224d5cf01bb69e34433ffb32b3db26eee8", "1321e430af726b2fa9e669b293d81eb55a02e5bca46f0b552ab4dc1e1f8f9f6c", "aef574014b86dcb1f7f8d9242d6294b0c9d92b71af8dd671ba7067ca035fe874", "656c1187843b1daef7c9481fb680fa9e0ff452c0d2a927fbd3f5c1a7c0493feb", "ad9167d55c222f7a71b06b05d5e02a934b0af95e706192a27b81ad494bf8e102")]
+    [InlineData(2, "9a44b3a4c502a47b339e5d96ee07963410779b3f4948caa411194052bc7dc6c7", "460fa9a22d62f776d44b2bdc7e1435bbb4d43bec7cd4b6995075878853c8d0eb", "888dc0adcc8659b8000102583680defdf2568427958a929a7696127d74268849", "d5c21a65f122a51b7a59dff9457b4df366db25ad13496777a8ae7db7967a7b54", "646db0f1c004f33730add34a6f4e9bab68700a67fdd12a54675e8ea2725962cf")]
+    public void StatisticsAndFinalPassDecisionsMatchNative(int method, string expectedBefore, string expectedAfter, string expectedParameters, string expectedStatisticsBefore, string expectedProfiles)
     {
         using var root = new TestMemoryBudget(16_000_000); using var image = OriginalVp8lControls.Buffer("diagram", 8, root);
         using var context = new OperationContext(new() { MemoryBudget = root }, default); using var input = Vp8PreparedInput.Create(image, context);
@@ -68,24 +68,27 @@ public sealed class Vp8DistortionDecisionTests
         {
             var sourceTypes = new bool[count]; var sourceModes = new byte[count]; var uvModes = analysis.ChromaModes.ToArray();
             for (var i = 0; i < count; i++) { sourceTypes[i] = analysis.LumaModes[i] != 2; sourceModes[i] = sourceTypes[i] ? analysis.LumaModes[i] : (byte)0; }
+            var statistics = new uint[1056]; var probabilities = Vp8Tables.CoefficientProbabilities.ToArray(); var nonzero = new uint[columns + 1];
             var yTop = new byte[columns * 16]; var uvTop = new byte[columns * 16]; var modeTop = new byte[columns * 4];
             Span<byte> source = stackalloc byte[384]; Span<byte> edges = stackalloc byte[71]; Span<byte> contexts = stackalloc byte[8];
             Span<byte> modeLeft = stackalloc byte[4]; Span<sbyte> diffusion = stackalloc sbyte[8]; diffusion.Clear();
             Span<byte> pixels = stackalloc byte[386]; Span<short> levels = stackalloc short[402]; Span<byte> modes = stackalloc byte[18]; Span<sbyte> errors = stackalloc sbyte[16];
             pixels[384] = 97; pixels[385] = 98; levels[400] = -30000; levels[401] = 30000; modes[16] = 95; modes[17] = 96; errors[14] = 93; errors[15] = 94;
-            Span<byte> before = stackalloc byte[511]; Span<byte> after = stackalloc byte[1282];
+            Span<byte> before = stackalloc byte[511]; Span<byte> after = stackalloc byte[1282]; Span<byte> nzContexts = stackalloc byte[18];
+            Span<byte> fullBefore = stackalloc byte[523]; Span<byte> profile = stackalloc byte[1064];
+            using var statBefore = IncrementalHash.CreateHash(HashAlgorithmName.SHA256); using var profileHash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
             using var pre = IncrementalHash.CreateHash(HashAlgorithmName.SHA256); using var post = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
             using var trace = Environment.GetEnvironmentVariable("LOKAD_VP8_DISTORTION_TRACE") is { } path
                 ? new GZipStream(File.Create(path + "-m" + method + ".bin.gz"), CompressionLevel.Fastest) : null;
-            var call = 0;
+            var call = 0; "PRB8"u8.CopyTo(profile); BinaryPrimitives.WriteInt32LittleEndian(profile[4..], 0); probabilities.CopyTo(profile[8..]); profileHash.AppendData(profile);
             for (var pass = 0; pass < 2; pass++)
             {
-                yTop.AsSpan().Fill(127); uvTop.AsSpan().Fill(127); modeTop.AsSpan().Clear();
+                yTop.AsSpan().Fill(127); uvTop.AsSpan().Fill(127); modeTop.AsSpan().Clear(); nonzero.AsSpan().Clear(); byte leftDc = 0;
                 var length = pass == 0 && method == 0 ? count / 4 : count;
                 for (var index = 0; index < length; index++, call++)
                 {
                     context.Work(4096); var x = index % columns; var y = index / columns;
-                    if (x == 0) { edges[..35].Fill(129); edges[0] = edges[17] = edges[26] = y == 0 ? (byte)127 : (byte)129; modeLeft.Clear(); }
+                    if (x == 0) { edges[..35].Fill(129); edges[0] = edges[17] = edges[26] = y == 0 ? (byte)127 : (byte)129; modeLeft.Clear(); leftDc = 0; }
                     for (var yy = 0; yy < 16; yy++) input.Y.Slice((y * 16 + yy) * input.Stride + x * 16, 16).CopyTo(source.Slice(yy * 16, 16));
                     for (var yy = 0; yy < 8; yy++)
                     {
@@ -96,12 +99,24 @@ public sealed class Vp8DistortionDecisionTests
                     for (var p = 0; p < 4; p++) edges[67 + p] = x + 1 < columns ? yTop[(x + 1) * 16 + p] : yTop[x * 16 + 15];
                     modeTop.AsSpan(x * 4, 4).CopyTo(contexts); modeLeft.CopyTo(contexts[4..]); var segment = segments.Map[index];
                     Before(before, call, x, y, segment, sourceTypes[index], sourceModes[index], uvModes[index], source, edges, contexts, diffusion);
+                    if (pass == 0)
+                    {
+                        Contexts(nonzero[x + 1], nonzero[x], leftDc, nzContexts);
+                        before[..499].CopyTo(fullBefore); BinaryPrimitives.WriteUInt32LittleEndian(fullBefore[499..], nonzero[x + 1]);
+                        BinaryPrimitives.WriteUInt32LittleEndian(fullBefore[503..], nonzero[x]); BinaryPrimitives.WriteInt32LittleEndian(fullBefore[507..], leftDc);
+                        before[499..].CopyTo(fullBefore[511..]); statBefore.AppendData(fullBefore);
+                    }
                     var retained = root.Bytes;
                     var score = Vp8DistortionDecision.Select(source, edges, contexts, diffusion, y != 0, x != 0, method, sourceTypes[index], uvModes[index],
                         256L * 510 * 8 * 1024 / count, true, quantization.Matrix(segment, Vp8CoefficientPlane.Luma), quantization.Matrix(segment, Vp8CoefficientPlane.Walsh),
                         quantization.Matrix(segment, Vp8CoefficientPlane.Chroma), quantization.Costs(segment), rate, pixels, levels, modes, errors, context);
                     Assert.Equal(retained, root.Bytes); After(after, call, score, modes, levels, pixels, errors);
                     pre.AppendData(before); post.AppendData(after); trace?.Write(before); trace?.Write(after);
+                    if (pass == 0)
+                    {
+                        Vp8FramePlan.Record(levels, score.Intra16, nzContexts, statistics, tokenBuffer: false);
+                        nonzero[x + 1] = Pack(nzContexts); leftDc = nzContexts[17];
+                    }
                     sourceTypes[index] = score.Intra16; sourceModes[index] = score.Intra16 ? (byte)score.LumaMode : modes[0]; uvModes[index] = (byte)score.ChromaMode;
                     for (var p = 0; p < 4; p++)
                     {
@@ -116,12 +131,34 @@ public sealed class Vp8DistortionDecisionTests
                     if (y + 1 < rows) { pixels.Slice(240, 16).CopyTo(yTop.AsSpan(x * 16, 16)); pixels.Slice(368, 16).CopyTo(uvTop.AsSpan(x * 16, 16)); }
                     foreach (var error in errors.Slice(6, 8)) Assert.Equal((sbyte)0, error);
                 }
+                if (pass == 0)
+                {
+                    context.Work(1056 * 16L); Vp8TokenStatistics.Update(statistics, rate.Entropy, probabilities, out var changed); Assert.True(changed);
+                    "PRB8"u8.CopyTo(profile); BinaryPrimitives.WriteInt32LittleEndian(profile[4..], call); probabilities.CopyTo(profile[8..]); profileHash.AppendData(profile);
+                }
             }
+            Assert.Equal(expectedStatisticsBefore, Convert.ToHexStringLower(statBefore.GetHashAndReset()));
+            Assert.Equal(expectedProfiles, Convert.ToHexStringLower(profileHash.GetHashAndReset()));
             Assert.Equal(method == 0 ? 701 : 1122, call);
             Assert.Equal(expectedBefore, Convert.ToHexStringLower(pre.GetHashAndReset())); Assert.Equal(expectedAfter, Convert.ToHexStringLower(post.GetHashAndReset()));
             Assert.Equal((97, 98, -30000, 30000, 95, 96, 93, 94), ((int)pixels[384], (int)pixels[385], (int)levels[400], (int)levels[401], (int)modes[16], (int)modes[17], (int)errors[14], (int)errors[15]));
         }
         finally { context.Release(Vp8DistortionDecision.ScratchBytes + 32_768); }
+    }
+
+    private static void Contexts(uint top, uint left, byte dc, Span<byte> values)
+    {
+        ReadOnlySpan<int> above = [12, 13, 14, 15, 18, 19, 22, 23, 24];
+        ReadOnlySpan<int> side = [3, 7, 11, 15, 17, 19, 21, 23];
+        for (var p = 0; p < 9; p++) values[p] = (byte)(top >> above[p] & 1);
+        for (var p = 0; p < 8; p++) values[9 + p] = (byte)(left >> side[p] & 1);
+        values[17] = dc;
+    }
+    private static uint Pack(ReadOnlySpan<byte> values)
+    {
+        ReadOnlySpan<int> above = [12, 13, 14, 15, 18, 19, 22, 23, 24]; uint packed = 0;
+        for (var p = 0; p < 9; p++) packed |= (uint)values[p] << above[p];
+        return packed | (uint)values[9] << 3 | (uint)values[10] << 7 | (uint)values[11] << 11 | (uint)values[13] << 17 | (uint)values[15] << 21;
     }
 
     private sealed class Fixture : IDisposable

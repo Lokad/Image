@@ -1,7 +1,7 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E84",
-  "scope": "Private method4/Q75 complete packet identities, method0/1/2Q75 source/distortion decisions and method3Q75 diagram complete packet. Public lossy remains unchanged. Remaining named policies, coherent public adoption, exact decoders, performance, functional and release objectives remain open.",
+  "latestRound": "E85",
+  "scope": "Private method4/Q75 and method3Q75 diagram packet identities, method0/1/2Q75 distortion decisions and direct statistics on existing controls. Public lossy unchanged. Final non-token emission and remaining named policies/public/decoder/performance/functional/release gates remain open.",
   "productionPublicBehaviorChanged": false,
   "fullObjectiveOpen": true,
   "reference": {
@@ -4666,7 +4666,7 @@
         "why": "Fast source decision, distortion refinement without UV reexamination and fast probability probe",
         "nativeBytes": 9980,
         "nativeSha256": "1c454bdfaff968c856a479c9828f8396137556c0708354c85a5a9b37d2bbe5d5",
-        "managedStatus": "Source, initial parameters/matrices and statistics/final distortion decisions verifiedE83; non-token emission/full-packet confirmation OPEN."
+        "managedStatus": "Source/matrices/distortion decisions exactE83; direct statistics and probability profiles exactE85. Final non-token skip/emission/full-packet confirmation OPEN."
       },
       {
         "id": "method1-quality75-diagram",
@@ -4676,7 +4676,7 @@
         "why": "Fast source decision plus UV distortion reexamination",
         "nativeBytes": 9244,
         "nativeSha256": "50d50af60b76e99dcb1f49eda60efc548a564dbaaaa931d06fc0164aa28c0bea",
-        "managedStatus": "Source, initial parameters/matrices and statistics/final distortion decisions verifiedE83; non-token emission/full-packet confirmation OPEN."
+        "managedStatus": "Source/matrices/distortion decisions exactE83; direct statistics and probability profiles exactE85. Final non-token skip/emission/full-packet confirmation OPEN."
       },
       {
         "id": "method2-quality75-diagram",
@@ -4686,7 +4686,7 @@
         "why": "Full source analysis and distortion-only I4/I16 reexamination",
         "nativeBytes": 7330,
         "nativeSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
-        "managedStatus": "Source, initial parameters/matrices and statistics/final distortion decisions verifiedE83; non-token emission/full-packet confirmation OPEN."
+        "managedStatus": "Source/matrices/distortion decisions exactE83; direct statistics and probability profiles exactE85. Final non-token skip/emission/full-packet confirmation OPEN."
       },
       {
         "id": "method3-quality75-diagram",
@@ -4874,7 +4874,7 @@
         "allOriginalBytesVerified": true
       }
     },
-    "next": "E85 direct non-token coefficient statistics, reusing E83 final/native profiles and managed distortion decisions. Then fast frame/skip emission and the remaining named trellis/quality/alpha/header/public cases. Method3 packet is confirmed and stopped. No speed-only work while byte gates remain open.",
+    "next": "E86 admitted non-token frame preparation, followed by final skip/context/header/partition emission. Reuse E83/E85 native decisions/profiles; method3 is stopped as passing. No new image/settings/timing sweep.",
     "additionalBoundaries": {
       "round": "E83/E84-named-boundaries",
       "scope": "Three concrete required paths identified by source inspection. Existing diagram/asymmetric controls only; no image/settings cross-product. Native-only frozen targets, managed qualification remains open.",
@@ -6461,6 +6461,170 @@
       "mirrored": true,
       "everySourceMemberByteVerified": true
     },
-    "regressionTest": "One method3 row added to Vp8FrameEncodingTests from this verified probe. It is not in the local frozen DLL; full Windows/Linux CI compiles and runs it at this coherent checkpoint. Existing production inputs and their same-assembly proofs are reused."
+    "regressionTest": "One method3 row added to Vp8FrameEncodingTests from this verified probe. It is not in the local frozen DLL; full Windows/Linux CI compiles and runs it at this coherent checkpoint. Existing production inputs and their same-assembly proofs are reused.",
+    "regressionQualifiedBy": {
+      "round": "E85",
+      "sameAssemblySha256": "0cb688c366e51f1a4a821a0c28e41a1e3287683c45d9b17ddf14d322076dfce1",
+      "bothOSNormalAndScalar": true,
+      "fullCiParent": 39988352736
+    }
+  },
+  "directStatistics": {
+    "round": "E85",
+    "scope": "Private direct non-token macroblock coefficient statistics and NZ contexts during original diagramQ75 statistics passes; all native probability profiles exact. Final skip/emission and public lossy integration remain open.",
+    "files": {
+      "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": {
+        "bytes": 1742848,
+        "sha256": "0cb688c366e51f1a4a821a0c28e41a1e3287683c45d9b17ddf14d322076dfce1"
+      },
+      "src/Lokad.Image/Internal/Vp8FramePlan.cs": {
+        "bytes": 13399,
+        "sha256": "b411492e4cd796fcabdbdc586543a2a6c2d8f29f5da42ba725ebc0876fbbdd93"
+      },
+      "src/Lokad.Image/Internal/Vp8TokenStatistics.cs": {
+        "bytes": 5092,
+        "sha256": "4fbdcd3081b3d6fc514773c524468289d1f24ebb996e7741acfa15e848ad37eb"
+      },
+      "tests/Lokad.Image.Tests/Vp8DistortionDecisionTests.cs": {
+        "bytes": 22029,
+        "sha256": "266d385deada1c2115669f7c21b12621109ba579a312df289b8093684102de5e"
+      },
+      "tests/Lokad.Image.Tests/Vp8FrameEncodingTests.cs": {
+        "bytes": 11235,
+        "sha256": "12edf4d01569211e2f0643b65be0dbfa01d8ff6d1b0e5568250c20890fde4023"
+      }
+    },
+    "sameWindowsBuiltAssemblyBothOS": true,
+    "normalPerOS": 430,
+    "scalarPerOS": 430,
+    "statisticsMacroblocks": 1262,
+    "fullBeforeStatisticsBytes": 660026,
+    "profileBytesIncludingTags": 6384,
+    "builds": {
+      "windowsLinkedTestsSuccessful": 1,
+      "windowsCompileAttempts": 1,
+      "linuxManaged": 0,
+      "publicCore": 0,
+      "sourceModel": 0,
+      "native": 0,
+      "probeFrontend": 0
+    },
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "nativeEvidenceReused": "E83 native distortion observation master; derived statistics-prefix/probability targets without invoking an encoder.",
+    "regression": "The E84method3 complete-packet xUnit row now runs on this same immutable assembly on bothOSnormal/scalar; no separate packet producer or re-tuning. Parent51a8d42858fe1bd59a69bd4e81f7b8afbe9ea58a CI39988352736 allgreen with full/package/live qualification.",
+    "algorithm": "Forward the explicit existing direct/token counter policy through whole-macroblock recording. Direct recording uses coefficient node10 for category5/6; the token-buffer branch retains its pinned node9 policy. Normative coefficient syntax and the default token path are unchanged. No new owner, allocation, cache or per-block scope.",
+    "nativeTargets": {
+      "source": "E83 frozen original native observations; no native call or setting/input change",
+      "cases": [
+        {
+          "method": 0,
+          "statisticsBeforeAllSha256": "85dcc7a9cb7bf71278180fa89a5db70abfe3738945ea268da705cfcb251263be",
+          "profiles": [
+            {
+              "call": 0,
+              "sha256": "3234d2f1df76ac054b3882e1ab968e0bcfbce29ffcf349e37c843500ef80767e"
+            },
+            {
+              "call": 140,
+              "sha256": "4d2ff36f1b51e53cfd0ca87e47cba5be3dd3d9fec70fce3e53f0ed8b2e6fb240"
+            }
+          ],
+          "profilesSha256": "8948c6ff4f09d7644c837fde90ac08350652e5058b8f5ebfa27856708a1c1a19"
+        },
+        {
+          "method": 1,
+          "statisticsBeforeAllSha256": "656c1187843b1daef7c9481fb680fa9e0ff452c0d2a927fbd3f5c1a7c0493feb",
+          "profiles": [
+            {
+              "call": 0,
+              "sha256": "3234d2f1df76ac054b3882e1ab968e0bcfbce29ffcf349e37c843500ef80767e"
+            },
+            {
+              "call": 561,
+              "sha256": "fa7b9d4d67587e710ae8a855ae7456cb9789ea65399442f26901d22b38c437bf"
+            }
+          ],
+          "profilesSha256": "ad9167d55c222f7a71b06b05d5e02a934b0af95e706192a27b81ad494bf8e102"
+        },
+        {
+          "method": 2,
+          "statisticsBeforeAllSha256": "d5c21a65f122a51b7a59dff9457b4df366db25ad13496777a8ae7db7967a7b54",
+          "profiles": [
+            {
+              "call": 0,
+              "sha256": "3234d2f1df76ac054b3882e1ab968e0bcfbce29ffcf349e37c843500ef80767e"
+            },
+            {
+              "call": 561,
+              "sha256": "5b7d38a5def6c1def3e6b5c73e504358f1bf376f79a7bba4c803ffa1e0735737"
+            }
+          ],
+          "profilesSha256": "646db0f1c004f33730add34a6f4e9bab68700a67fdd12a54675e8ea2725962cf"
+        }
+      ]
+    },
+    "verified": [
+      "All1262statistics-pass macroblocks have byte-exact complete before-state records including packed native nonzero contexts:140method0,561method1,561method2. Final-loop skip/context behavior is outside this stage.",
+      "Allsix1056-byte coefficient probability snapshots and their tagged call indices match native, including initial defaults and the post-statistics profile for each method. Native captures are reused from E83 with no encode, input or settings change.",
+      "Same immutable430checks BOTHOSnormal/scalar, including the durable method3 complete7082B xUnit row. Existing default packet/source/resource proofs remain passing.",
+      "Counter/probability workspace stays borrowed on the caller root; work/cancellation remain admitted by the enclosing block loop. Default token-buffer callers preserve their existing behavior."
+    ],
+    "rawArchive": {
+      "name": "e85-direct-statistics-qualified.tar.xz",
+      "bytes": 814544,
+      "members": 20,
+      "sha256": "c4e562c95d4464a601eb26c34475435084ee93363f98044e39ab0b9ac81737e9",
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "storage": {
+        "capBytes": 5000000000,
+        "windowsAfterMaster": 4769374243,
+        "linux": {
+          "beforeMasterBytes": 4990671931,
+          "afterMasterBytes": 4991486475,
+          "allMembersRead": true
+        },
+        "allPeaksBelowCap": true
+      }
+    },
+    "coldEvidence": [
+      {
+        "archive": "tmp/e85-cold-profiles-linux.tar.xz",
+        "bytes": 355928,
+        "sha256": "5dbf93ccf707b74f45108c95668a2d860ce26121af03f6ae6c6aaac102a66bca",
+        "mirrored": true,
+        "restore": "Extract the tar.xz at checkout root before opening/replaying these twelve exact historical profiler reports. All timestamps, stacks and samples are preserved byte-exact. No measurements rerun; no protected cache, runtime, package or reference source touched."
+      },
+      {
+        "archive": "tmp/e85-cold-profiles-remainder-linux.tar.xz",
+        "bytes": 271784,
+        "sha256": "6ebf4aa4082290213eccbc4826d76a2f3a9906f1f802ec3a6774392fcf055e14",
+        "mirrored": true,
+        "restore": "Extract at checkout root to restore these exact original completed profiler reports before historical replay. Every stack/sample/timestamp byte is preserved. Protected SerialDry/FlipDry caches, packages, runtime binaries and reference sources remain untouched."
+      },
+      {
+        "archive": "tmp/e85-cold-validation-windows.tar.xz",
+        "bytes": 24932,
+        "sha256": "26d42083e56fb2d249ca3b5fe9fbee7f216520a8b2e3252029c1f1c88dafd619",
+        "mirrored": true,
+        "restore": "Extract the tar.xz at checkout root to recover fifty exact historical validation JSON files. All quality/size/producer/measurement fields are unmodified; inputs, reference settings, release packages and sources remain. No reruns or protected cache retirement."
+      },
+      {
+        "archive": "tmp/e85-cold-validation-remainder-windows.tar.xz",
+        "bytes": 2444028,
+        "sha256": "ce5b32043b272198be35eef1d022de197340eb14508cd740a74fdbd453172e44",
+        "mirrored": true,
+        "restore": "Extract the tar.xz at checkout root to restore exact original validation-report paths before historical replay. All data/producer/quality/timing bytes preserved. No measurement rerun or package/reference source change."
+      }
+    ],
+    "parentCi": {
+      "headSha": "51a8d42858fe1bd59a69bd4e81f7b8afbe9ea58a",
+      "run": 39988352736,
+      "conclusion": "success",
+      "allThreeJobs": true
+    },
+    "remaining": "Final non-token skip/context reset and packet emission, then trellis, quality/alpha/header cases and coherent public adoption. Exact decoder, warm CPU/allocation, functional/memory/text/Lanczos3 and release objectives remain open."
   }
 }

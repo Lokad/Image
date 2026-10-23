@@ -63,16 +63,16 @@ internal sealed class Vp8FramePlan : IDisposable
 
     // Advance logical edge contexts directly, without depending on the native
     // observer's packed internal representation. The Y2 edge survives I4 blocks.
-    internal static void Record(ReadOnlySpan<short> levels, bool intra16, Span<byte> contexts, Span<uint> statistics)
+    internal static void Record(ReadOnlySpan<short> levels, bool intra16, Span<byte> contexts, Span<uint> statistics, bool tokenBuffer = true)
     {
         var top = contexts[..9]; var left = contexts.Slice(9, 9);
-        if (intra16) top[8] = left[8] = Vp8TokenStatistics.Record(levels[..16], 1, 0, top[8] + left[8], statistics) ? (byte)1 : (byte)0;
+        if (intra16) top[8] = left[8] = Vp8TokenStatistics.Record(levels[..16], 1, 0, top[8] + left[8], statistics, tokenBuffer) ? (byte)1 : (byte)0;
         for (var y = 0; y < 4; y++) for (var x = 0; x < 4; x++)
-            top[x] = left[y] = Vp8TokenStatistics.Record(levels.Slice(16 + (y * 4 + x) * 16, 16), intra16 ? 0 : 3, intra16 ? 1 : 0, top[x] + left[y], statistics) ? (byte)1 : (byte)0;
+            top[x] = left[y] = Vp8TokenStatistics.Record(levels.Slice(16 + (y * 4 + x) * 16, 16), intra16 ? 0 : 3, intra16 ? 1 : 0, top[x] + left[y], statistics, tokenBuffer) ? (byte)1 : (byte)0;
         for (var channel = 0; channel < 2; channel++) for (var y = 0; y < 2; y++) for (var x = 0; x < 2; x++)
         {
             var a = 4 + channel * 2 + x; var b = 4 + channel * 2 + y;
-            top[a] = left[b] = Vp8TokenStatistics.Record(levels.Slice(272 + (channel * 4 + y * 2 + x) * 16, 16), 2, 0, top[a] + left[b], statistics) ? (byte)1 : (byte)0;
+            top[a] = left[b] = Vp8TokenStatistics.Record(levels.Slice(272 + (channel * 4 + y * 2 + x) * 16, 16), 2, 0, top[a] + left[b], statistics, tokenBuffer) ? (byte)1 : (byte)0;
         }
     }
 

@@ -133,9 +133,9 @@ its task finishes. Terminal admission refusal, cleanup/recovery, local/work/outp
 limits and mismatched dimensions pass. Quality75 lossless packet checks also pass
 with the shared preparation changes; the scoped native inputs/settings stay fixed.
 
-The same immutable assembly passes429focused checks per platform on Windows/Linux,
-normal and SIMD disabled:421prior checks and8distortion-decision checks. The same
-producer also passes the complete method3 packet probe in allfour OS/CPU modes. Shared admission covers
+The same immutable assembly passes430focused checks per platform on Windows/Linux,
+normal and SIMD disabled, including the durable method3 packet row. The direct
+statistics extension reuses the prior decision/packet checks on that same producer. Shared admission covers
 owned capacity, retained results and replacement overlap. Refusal, cancellation,
 local/work limits and cleanup/recovery pass; sources and caller roots stay borrowed.
 The matrix owner retains3,128/4,128admitted bytes for3/4used segments. Earlier source
@@ -154,9 +154,9 @@ targets; source-only qualification is distinct from complete-packet agreement:
 
 | Existing input / settings | Required policy | Native bytes | Managed status |
 |---|---|---:|---|
-| Diagram Q75 / method0 | Fast source and distortion selection, non-token probe | 9,980 | Decisions exact; emission open |
-| Diagram Q75 / method1 | Fast source plus UV reexamination | 9,244 | Decisions exact; emission open |
-| Diagram Q75 / method2 | Distortion-only I4/I16 reexamination | 7,330 | Decisions exact; emission open |
+| Diagram Q75 / method0 | Fast source and distortion selection, non-token probe | 9,980 | Decisions/statistics exact; emission open |
+| Diagram Q75 / method1 | Fast source plus UV reexamination | 9,244 | Decisions/statistics exact; emission open |
+| Diagram Q75 / method2 | Distortion-only I4/I16 reexamination | 7,330 | Decisions/statistics exact; emission open |
 | Diagram Q75 / method3 | Basic RDO/token path, non-full SNS | 7,082 | Complete packet exact |
 | Diagram Q75 / method5 | Selected-mode trellis, including I16/Y2 | 7,026 | Open |
 | Diagram Q75 / method6 | Trellis on every candidate | 6,818 | Open |
@@ -218,3 +218,17 @@ managed confirmation remains open. The low-quality clustering sampler must retai
 its nine-entry candidate capacity even when its greedy threshold is smaller.
 No shape/depth/quality cross-product is introduced. Non-token statistics/skip
 emission is next; full nondefault packet parity and public integration remain open.
+
+Direct non-token statistics now matches the native post-statistics coefficient
+probabilities for methods0/1/2. All1,262sampled macroblocks also match complete
+nonzero-context inputs:140for method0 and561each for methods1/2. The macroblock
+recorder forwards its existing direct/token policy explicitly; the default token
+path stays exact. This adds no retained storage or per-block admission. Earlier
+native captures provide all targets, so no new encode, fixture or quality search
+was needed. Final-loop skip resets and complete non-token packets remain open.
+
+Historical validation and profiler reports are stored losslessly in mirrored
+archives. Original producer, quality, size, timing and stack data are preserved;
+restore the original paths before historical replay. Release packages, reference
+sources and protected caches remain. This creates build headroom without rerunning
+measurements. The generated performance summary still matches retained evidence.
