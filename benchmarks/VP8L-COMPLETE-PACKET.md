@@ -66,14 +66,16 @@ were needed to correct its input-width guard; four forced candidates and three
 public-worker preparation encodes reuse existing inputs. Production builds,
 timing/allocation runs and repeated package qualification were unnecessary.
 [The evidence](vp8l-byte-parity-evidence.json) records exact scope and mirrored raw
-receipts. Production integration is in progress. The typed matcher passes 8 focused
-native-index/admission checks; the predictor passes 9 fixed/adaptive/forced-mode,
-residual and ownership checks on Windows/Linux. Predictor analysis releases its
-scratch before in-place residual application with two admitted original-row buffers.
-Both components preserve the shared root and retain only owned results. The current
-assemblies pass 3,884 offline tests on each platform; the same private Release package
-and all three usage examples pass on both. The public encoder is not switched:
-complete-operation qualification remains open for the integrated codec.
+receipts. Production integration is in progress. Matching, prediction and color
+transforms pass 8/9/10 focused checks in one assembly on Windows/Linux. Prediction
+uses two admitted original-row buffers; color search borrows unchanged tiles and
+then transforms them in place, without tile or full-frame copies. Compacted color
+maps retain their actual capacity charge until disposal. Native maps/residuals,
+admission/refusal/recovery, cancellation and independent work limits are checked.
+The last full shared-build qualification (E53) passed 3,884 offline tests per
+platform, the same private Release package and all three usage examples on both.
+These public paths remain unchanged. The encoder is not switched: complete-operation
+qualification remains open for the integrated codec.
 
 Build once with `dotnet build tools/WarmReference/Vp8lParityModel -c Release --tl:off`
 and reuse the assembly with the packet verifiers. The four-core verifier uses

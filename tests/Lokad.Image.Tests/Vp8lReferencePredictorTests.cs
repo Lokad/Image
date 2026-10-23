@@ -17,20 +17,20 @@ public sealed class Vp8lReferencePredictorTests
         return Hash(bytes);
     }
 
-    private static uint[] Working(ReadOnlySpan<byte> rgba, bool subtractGreen, OperationContext context)
+    internal static uint[] Working(ReadOnlySpan<byte> rgba, bool subtractGreen, OperationContext context)
     {
         context.Reserve(rgba.Length);
         var pixels = new uint[rgba.Length / 4];
         for (var at = 0; at < pixels.Length; at++)
         {
-            var green = rgba[at * 4 + 1]; var adjustment = subtractGreen ? green : 0;
-            pixels[at] = (uint)rgba[at * 4 + 3] << 24 | (uint)((rgba[at * 4] - adjustment) & 255) << 16
-                | (uint)green << 8 | (uint)((rgba[at * 4 + 2] - adjustment) & 255);
+            pixels[at] = (uint)rgba[at * 4 + 3] << 24 | (uint)rgba[at * 4] << 16
+                | (uint)rgba[at * 4 + 1] << 8 | rgba[at * 4 + 2];
         }
+        if (subtractGreen) Vp8lReferenceColorTransform.SubtractGreen(pixels, context);
         return pixels;
     }
 
-    private static byte[] HiddenRgb()
+    internal static byte[] HiddenRgb()
     {
         var rgba = new byte[19 * 7 * 4];
         for (var y = 0; y < 7; y++)
@@ -43,7 +43,7 @@ public sealed class Vp8lReferencePredictorTests
         return rgba;
     }
 
-    private static byte[] Asymmetric()
+    internal static byte[] Asymmetric()
     {
         var rgba = OriginalPixels.Generate(513, 259, 8);
         // The existing warm reference fixes both first-row endpoint alphas at zero.

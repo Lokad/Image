@@ -90,7 +90,7 @@ performance grid.
    nonseekable async delivery, including independent surviving outputs, failures
    and cancellation. Their core packet identity reuses the first frozen packet;
    complete operations still require integration evidence.
-6. **Admitted integration.** Matching and prediction are now ported:
+6. **Admitted integration.** Matching, prediction and color transforms are ported:
    typed ordinary/low-effort/box matching accepts borrowed spans and returns an
    owned index. Eight focused checks pass with the same assembly on Windows/Linux:
    native indices, aggregate admission/replacement peaks, prompt retained-result
@@ -100,10 +100,14 @@ performance grid.
    fixed/adaptive coarse and fine winners, forced low-effort sampling, uniform-map
    coarsening, hidden RGB residuals, retained-map overlap and refusal/cancellation/work
    cleanup. Its analysis borrows pixels, releases phase scratch, then applies residuals
-   in place using two admitted original-row buffers. Current assemblies pass all
-   3,884 offline checks on each platform. The same private Release package and its
-   three usage examples pass on both. Public encoding does not call these components
-   yet. Port the remaining state and
+   in place using two admitted original-row buffers. Ten color-transform checks cover
+   fixed/coarse and adaptive-photograph native maps/residuals, spatial-only hidden RGB,
+   in-place map compaction with retained-capacity charges, overlapping results,
+   terminal refusal/recovery, cancellation and independent work failure. Subtract-green
+   arithmetic also runs through the production helper in predictor tests. All 27
+   focused checks pass with one assembly on both platforms. Public paths reuse E53's
+   3,884 offline checks and same-package/three-example qualification per platform.
+   Public encoding does not call these components yet. Port the remaining state and
    connect the complete encoder before claiming end-to-end production qualification.
    Reserve substantial storage before allocation through
    the borrowed shared root, account for replacement peaks and retained outputs,
@@ -115,8 +119,8 @@ The direct/palette models and narrow-distance correction are development tooling
 They do not establish general palette, shape, production or performance readiness.
 The current source project is `tools/WarmReference/Vp8lParityModel`; it needs no
 production/reference assemblies to build. Fixture PNG decoding is separate.
-The unchanged public encoder paths reuse their qualification. Matching and prediction
-have focused stage/admission evidence; end-to-end requalification follows
+The unchanged public encoder paths reuse their qualification. Matching, prediction
+and color transforms have focused stage/admission evidence; end-to-end requalification follows
 integration. No performance/allocation claim follows from these proofs. See
 [numeric evidence](vp8l-byte-parity-evidence.json) and the
 [complete-packet report](VP8L-COMPLETE-PACKET.md).
