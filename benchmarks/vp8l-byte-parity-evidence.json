@@ -77,7 +77,7 @@
     "members": 22,
     "mirrored": true
   },
-  "latestRound": "E58",
+  "latestRound": "E59",
   "crossColorAndAuxiliaryStages": {
     "scope": "ONE existing513x259 RGBA8 method4/quality75/exact=1 control. Complete transform prefix, not main image or complete encoder.",
     "productionChanged": false,
@@ -6483,5 +6483,111 @@
     },
     "evidenceReuse": "Public code paths remain unchanged. E53 same-package/shared-build evidence and19 complete source-model packets retain their precise scopes; current-source CI validates pushes. Dynamic uncached layout changes are reconfirmed by all prior stage checks.",
     "remaining": "Huffman/tree headers, histogram clustering, typed serialization/framing and public encoder integration; same19 packets/RGBA16/async/resources/coherent full qualification."
+  },
+  "ownedProductionHuffmanPreparation": {
+    "round": "E59",
+    "productionSourceAdded": true,
+    "publicEncoderSwitched": false,
+    "sameFrozenTestAssemblyBothOS": true,
+    "focusedNewCases": 14,
+    "focusedTotalIncludingPriorComponents": 93,
+    "testAssembly": {
+      "bytes": 1558016,
+      "sha256": "428b5f46de8f8466a218fe09884aba083569d885973be01c749a65d9c4f66d2a"
+    },
+    "sourceFiles": {
+      "src/Lokad.Image/Internal/Vp8lHuffmanLengths.cs": {
+        "bytes": 6173,
+        "sha256": "bc0fbafa222ae772dc2e372bbec6e4147c3b46bc1aafc9050207add5922b9ae5"
+      },
+      "src/Lokad.Image/Internal/Vp8lHuffmanCode.cs": {
+        "bytes": 2914,
+        "sha256": "b1b9efcfb3072778c9e9aa2879a9a8464326f1c0f9ff9eedf05fa8275149c12a"
+      },
+      "src/Lokad.Image/Internal/Vp8lReferenceHuffman.cs": {
+        "bytes": 6291,
+        "sha256": "0a24d1a0d39e203536c26c7b30779f976ee0e36f14c2e694883b2867909938b0"
+      },
+      "src/Lokad.Image/Internal/WebpBitWriter.cs": {
+        "bytes": 692,
+        "sha256": "a75b1a7fb4202d94a75bc375388c7322b845502ea74a231ba415c0c00a2d5a36"
+      },
+      "tests/Lokad.Image.Tests/Vp8lReferenceLzTests.cs": {
+        "bytes": 10075,
+        "sha256": "fd5e9e4e67b27d9162e5c989a9c4d567c64d87e06b9bc00ef20385082682fbaa"
+      },
+      "tests/Lokad.Image.Tests/Vp8lReferenceHuffmanTests.cs": {
+        "bytes": 12248,
+        "sha256": "e2003afcd7d8d45d6e0913d4202c13b28ee129d23a4332a7e76b184e276731c0"
+      }
+    },
+    "scope": "Owned smoothed/depth-bounded Huffman lengths, canonical words, tree headers and cache-free auxiliary emission. Reuses existing LSB writer. Histogram clustering, main entropy/framing and public integration remain open.",
+    "verified": [
+      "Predictor/color auxiliaries: all ten native tables and every2492/3459 encoded bits match their frozen packet.",
+      "Greedy/numeric18-color palette auxiliaries: five native trees and every340/550 encoded bits match; cached hidden-RGB main trees match.",
+      "Maximum data/header depths15/7 and full canonical Kraft sums on skewed populations; deterministic equal-weight ties, empty/single alphabets and invalid input/depth failures.",
+      "Unused alphabets serialize as the normative simple symbol-zero placeholder; construction lengths remain all zero.",
+      "Full retained alphabet/word capacities, overlapping construction peaks and independent lifetime/disposal; output/scratch/canonical admission refusal terminal with successful recovery.",
+      "Cancellation after scratch admission refunds both owners; late auxiliary work failure refunds all trees while caller-owned staged output remains charged until disposal, then successful recovery."
+    ],
+    "nativePacketObservations": {
+      "scope": "Existing frozen packets, original RFC reader, zero native encodes/model builds/timing.",
+      "asymmetricPacketArchive": "tmp/e25-vp8l-first-stage.tar.gz",
+      "asymmetricPacketSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "cases": [
+        {
+          "name": "predictor",
+          "bits": 2492,
+          "treeLengthsSha256": "de899d765b739f0e5406b44a664c8f98c72cf39eadb35c192979faa45027c712",
+          "packedBitsSha256": "20baeada36f61f67839646df238e1cff5c5cad8f0b06bf6b5f9cdf976680bec4"
+        },
+        {
+          "name": "color",
+          "bits": 3459,
+          "treeLengthsSha256": "7e5ad9061195679132376aac5c57ecca0e3b167c632c537959eecba03c97e34c",
+          "packedBitsSha256": "1a23dcb5fdcfb8989e2d527022d0b55fad6af4d3c147698d6414fb7d300a82c3"
+        },
+        {
+          "name": "hidden",
+          "treeLengthsSha256": "3dae0a4fdbb5964977a9652fa78c44184e92030e8b45e4f5d84f050f7f5cfe8b",
+          "packetSha256": "c432b85f60f9817358985ffad69ae307d33926f02de3fb80abe8645b5f526c58"
+        },
+        {
+          "name": "palette18-greedy",
+          "bits": 340,
+          "treeLengthsSha256": "1d22037fef78e954247abf4f3d656b3b257aca031ec677871e2ef6b52c48b1fd",
+          "packedBitsSha256": "92390a67158a0fcfe1ac55025c215d301675338bd85ea9899eeccbb28188032f",
+          "packetSha256": "a4bb56684758d4ff4fa58da15729a126098a74b228c54307204c95d7e4942736"
+        },
+        {
+          "name": "palette18-numeric",
+          "bits": 550,
+          "treeLengthsSha256": "f119399f9240ab76216a35f6a9662f1eed6204ca0f4c23de3b8b28d5c324685d",
+          "packedBitsSha256": "ea6b661edfa122386abfa6f2eff1f9c2b46ab3d195ebde2e2f086570a369e41f",
+          "packetSha256": "634ad1b52a2b14326ac2e3336e9e5cfb4848d2b94b24ca305b23df26211ed315"
+        }
+      ]
+    },
+    "testBuilds": {
+      "windows": 2,
+      "linux": 0
+    },
+    "productionLibraryBuiltLocally": false,
+    "sourceModelBuilds": 0,
+    "nativeBuilds": 0,
+    "nativeCompleteEncodes": 0,
+    "newNativeFixtureInputs": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "correction": "First screen92/93; test reader-level tree hash now accounts for the serialized symbol-zero placeholder of an unused alphabet. No production algorithm correction.",
+    "rawArchive": {
+      "name": "e59-huffman-components.tar.gz",
+      "bytes": 853568,
+      "members": 17,
+      "sha256": "721e65c14fb813dab751ff945b1b8e3d8c89e70375a30070e2b9393f8b75013b",
+      "mirrored": true
+    },
+    "evidenceReuse": "Public encoder selection and existing writer method bodies remain unchanged (only a read-only pending-bit getter added). E53 shared-build/same-package correctness and19 source-model packets retain their scopes; full current-source CI still validates pushes. No new CPU or allocation claim.",
+    "remaining": "Histogram clustering, main entropy/framing and complete effort routing/public encoder integration; all19 packets, RGBA16/async/resources and coherent full bothOS/differential/scalar/same-package qualification."
   }
 }

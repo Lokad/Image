@@ -390,9 +390,10 @@ plain result. Numeric effort0 palette order now matches268B on the same18-color
 input. The existing two-color input qualifies both1026-entry box indices and46/50B
 candidate packets, with ordinary-first ties. These named effort primitives pass;
 admitted production and complete public operations remain open.
-Typed production analysis, transforms, matching and uncached/cached/Box parsing
-pass 79 focused checks with one Windows/Linux assembly. Native maps, palette data,
-auxiliary streams and the complete asymmetric 110,306-token main stream match;
+Typed production analysis, transforms, matching, uncached/cached/Box parsing and
+Huffman coding pass 93 focused checks with one Windows/Linux assembly. Native maps,
+palette data, four complete auxiliary bitstreams, cached hidden-RGB main trees and
+the complete asymmetric 110,306-token main stream match;
 shared admission, retained capacity and failure cleanup pass. Packed pixels and
 cache conversion operate in place. Unchanged public paths reuse E53's 3,884 offline
 checks per platform and same private package/three usage examples on both. Public

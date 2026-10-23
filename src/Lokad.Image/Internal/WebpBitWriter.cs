@@ -4,6 +4,7 @@ internal sealed class WebpBitWriter(Stream output, OperationContext context)
 {
     private uint bits;
     private int available;
+    internal int PendingBits => available;
 
     public void Write(int value, int count)
     {

@@ -23,7 +23,7 @@ public sealed class Vp8lReferenceLzTests
         return Convert.ToHexStringLower(hash.GetHashAndReset());
     }
 
-    private static uint[] Map(bool color, OperationContext context)
+    internal static uint[] Map(bool color, OperationContext context)
     {
         var rgba = Asymmetric(); var working = Working(rgba, true, context);
         try

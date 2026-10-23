@@ -122,9 +122,15 @@ performance grid.
    streams, initial-zero/copy cache updates and refusal/cancellation/work cleanup.
    Owned seeds convert in place; cached tracing shares the uncached traversal and
    releases DP scratch before forward cache conversion. All 79 focused checks pass
-   with one assembly on both platforms. Public paths reuse E53's
+   with one assembly on both platforms. Fourteen Huffman checks add canonical
+   lengths/words, header emission and exact complete bits for predictor/color and
+   numeric/greedy palette auxiliaries, plus cached hidden-RGB main trees. Empty
+   alphabets use the serialized symbol-zero placeholder; maximum data/header
+   depths, retained-capacity overlap, refusal/recovery, cancellation and late work
+   cleanup pass. All 93 checks use one assembly on both platforms. Public paths reuse E53's
    3,884 offline checks and same-package/three-example qualification per platform.
-   Public encoding does not call these components yet. Port the remaining state and
+   Public encoding does not call these components yet. Port histogram clustering,
+   main entropy/framing and complete effort routing, and
    connect the complete encoder before claiming end-to-end production qualification.
    Reserve substantial storage before allocation through
    the borrowed shared root, account for replacement peaks and retained outputs,

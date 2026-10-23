@@ -92,7 +92,14 @@ repeat winner, ordinary/Box/cache-disabled palette streams and 18-color uncached
 decision also match. Cache conversion reuses owned token storage and trace shares
 the uncached traversal. All 79 focused checks pass with one assembly on both
 platforms, including refusal/cancellation/late-work cleanup. No additional native
-encoding or timing was needed.
+encoding or timing was needed. Huffman coding adds 14 checks: smoothed/depth-bounded
+lengths, canonical words, tree headers and auxiliary emission reuse the existing
+LSB writer. Predictor/color and numeric/greedy palette auxiliaries match every
+native bit (2,492/3,459/550/340 bits); the cached hidden-RGB main trees also match.
+All 93 focused checks pass with one assembly on both platforms, including retained
+capacity/overlap, terminal refusal/recovery, cancellation and late work cleanup.
+Unused alphabets serialize as the format's simple symbol-zero placeholder; their
+construction populations remain empty. No new native encode or timing was needed.
 The last full shared-build qualification (E53) passed 3,884 offline tests per
 platform, the same private Release package and all three usage examples on both.
 These public paths remain unchanged. The encoder is not switched: complete-operation
@@ -114,7 +121,7 @@ companions do not establish packet parity for existing 16384-pixel functional te
 The frozen source model's two 16384-axis packets pass exact pinned-FFmpeg decoding;
 these remain separate functional format-extension checks, without an encoder-byte
 or timing claim.
-Complete effort-family routing, admitted production integration, work and
+Histogram clustering, complete effort-family routing, admitted production integration, work and
 cancellation limits, output ownership and actual-package qualification remain
 open in the [finite coverage checklist](VP8L-PRODUCTION-COVERAGE.md).
 CPU parity and allocation tuning resume after required exact codec coverage.
