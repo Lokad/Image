@@ -1,7 +1,7 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E65",
-  "scope": "Private unwired ordinary undithered RGB-to-YUVA conversion plus native exact=0 transparent-area cleanup. Public lossy encoder/full packet replication remains open.",
+  "latestRound": "E66",
+  "scope": "Private unwired input conversion, transparent cleanup and exact forward4x4DCT. Public lossy encoder/full packet replication remains open.",
   "productionPublicBehaviorChanged": false,
   "fullObjectiveOpen": true,
   "reference": {
@@ -452,6 +452,115 @@
       "bytes": 1171435,
       "members": 24,
       "sha256": "95995566ca9b70b67b6c645b2aa2929da058b5bc3eb458508ebe1e3e5ad5e8f7",
+      "everySourceMemberByteVerified": true,
+      "mirrored": true
+    }
+  },
+  "forwardDctStage": {
+    "round": "E66",
+    "source": "src/Lokad.Image/Internal/Vp8ForwardTransform.cs",
+    "privatePreparationOnly": true,
+    "nativeObserver": {
+      "round": "E66",
+      "scope": "One existing opaque513x259 convertedYUV raster, neutral128 predictor, every padded4x4block;36 original signed/extreme arithmetic probes. Primitive coefficients only, not native mode choices, quantization or complete packets.",
+      "sourceSha256": "f1e516c70c0d315b2f785b90fdd6a6c6e26e30eca898b7f1616380ab18aae715",
+      "sourceSha256Meaning": "LogicalYUV bytes, reused from qualifiedE65opaque conversion",
+      "nativeSourceSha256": "62611bcca7de9d4403dfec380ff7f1f0c66c517d6dd65b00f91512e00b10e79b",
+      "workerSha256": "8e3f15910e37276d8ca3e02dd79aaa54d76e6967caf6150ef5a82a29149a12e3",
+      "backendArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "flags": [
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "observations": [
+        {
+          "cpu": "normal",
+          "bytes": 432000,
+          "sha256": "d8b05824c7acf9afc2c5dd74c68df550cc66a1fafe3f814995f9ed00885e8e68",
+          "ready": {
+            "libwebpVersion": 67072,
+            "scalar": false,
+            "signedProbes": 36,
+            "rasterBlocks": 13464,
+            "width": 513,
+            "height": 259,
+            "prediction": 128
+          }
+        },
+        {
+          "cpu": "scalar",
+          "bytes": 432000,
+          "sha256": "d8b05824c7acf9afc2c5dd74c68df550cc66a1fafe3f814995f9ed00885e8e68",
+          "ready": {
+            "libwebpVersion": 67072,
+            "scalar": true,
+            "signedProbes": 36,
+            "rasterBlocks": 13464,
+            "width": 513,
+            "height": 259,
+            "prediction": 128
+          }
+        }
+      ],
+      "normalScalarEveryByteEqual": true,
+      "rasterCoefficientsSha256": "c6d3f52d3dc7ac14a798919f533d1e96c94cd5f1aa5f18780dbe9ea339ec2abc",
+      "rasterCoefficientCount": 215424,
+      "nativeCompleteEncodes": 0,
+      "timingRuns": 0
+    },
+    "worker": {
+      "bytes": 1516544,
+      "sha256": "2ac60bd3cdeaf2f548cc72251ca6d30ba16413cc19d3faa2f630c2508303da9f"
+    },
+    "sourceFiles": {
+      "src/Lokad.Image/Internal/Vp8ForwardTransform.cs": {
+        "bytes": 2528,
+        "sha256": "bdd59a0faf3997f5cf220d69cc7531620a82bfe9f07413b4c010fc257c2ee771"
+      },
+      "tests/Lokad.Image.Tests/Vp8ForwardTransformTests.cs": {
+        "bytes": 7193,
+        "sha256": "697567658e79dac8a85a18ae22cff6fc2f9289876a90e9b5d8b51504df8631ce"
+      },
+      "tools/WarmReference/vp8-transform-observer.c": {
+        "bytes": 4047,
+        "sha256": "62611bcca7de9d4403dfec380ff7f1f0c66c517d6dd65b00f91512e00b10e79b"
+      }
+    },
+    "algorithm": "Independent separable integer matrix projections with mathematically generated sine/cosine weights. Encoder-specific row/column rounding is explicit; no upstream implementation table/body is a build input. Borrowed residual/output spans may overlap;64bytes bounded stack scratch, no owned heap/cache storage. Parent encoder admits block work/cancellation; no per-block budget/reservation machinery.",
+    "verified": [
+      "All215424 coefficients of13464padded Y/U/V blocks on ONE existing opaque513x259 raster against neutral128 prediction match native; this does not establish actual predictor/mode decisions.",
+      "36original zero/constant-extreme/checker/signed-unit fragments match every coefficient, including nativezero-residual output with coefficient1atindex1. No image/settings grid.",
+      "Native normalSIMD and forcedscalar432000byte streams agree byte for byte; raw first1152bytes are the36fragment coefficients and the rest is the opaque raster.",
+      "Separate borrowed input remains unchanged, overlapping input/output works, caller output tails remain unchanged, and out-of-range residuals fail before output mutation."
+    ],
+    "qualification": {
+      "sameWindowsBuiltAssemblyBothOS": true,
+      "normalPerOS": 64,
+      "scalarPerOS": 64,
+      "newForwardDctChecks": 39,
+      "previousConversionCleanupChecksReconfirmed": 25
+    },
+    "builds": {
+      "windowsLinkedInternalTests": 1,
+      "linux": 0,
+      "publicProductionCore": 0,
+      "nativeObserver": 1,
+      "sourceModel": 0
+    },
+    "nativePrimitiveObservations": 2,
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "evidenceReuse": "New private transform is unwired; no existing public encoder body/call/dependency changed. E65conversion/cleanup source bodies unchanged, with all25checks reconfirmed in same new assembly bothOS normal/scalar. E62frozen public core/full/differential/actualpackage and unaffected producer performance evidence retain their scopes. No repeat package proof or whole-library audit.",
+    "remaining": "ExactY2Walsh, native quality75 quantizers/segmentation/filter analysis, intra/chroma/macroblock/coefficient decisions, Boolean/token/header coding, ALPH filtering/headerlessVP8L, complete four packet identities and admitted public integration. All existing exact-decoder/CPU/allocation/functional/memory/text/Lanczos3/release objectives remain open.",
+    "rawArchive": {
+      "name": "e66-forward-dct-qualified.tar.gz",
+      "bytes": 1166148,
+      "members": 17,
+      "sha256": "b3e0f7446318e1a21f915c2a8a50d6ca629c65544649eaafbc62ecee1c80609b",
       "everySourceMemberByteVerified": true,
       "mirrored": true
     }
