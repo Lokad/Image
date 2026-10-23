@@ -1,0 +1,293 @@
+{
+  "project": "Lokad.Image",
+  "latestRound": "E64",
+  "scope": "Private unwired ordinary undithered RGB-to-YUVA input conversion only, before native transparent cleanup. Public lossy encoder/full packet replication remains open.",
+  "productionPublicBehaviorChanged": false,
+  "fullObjectiveOpen": true,
+  "reference": {
+    "ffmpeg": "n8.1",
+    "ffmpegRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
+    "backend": "libwebp1.6.0",
+    "libwebpRevision": "4fa21912338357f89e4fd51cf2368325b59e9bd9",
+    "backendArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+    "quality": 75,
+    "method": 4,
+    "preset": "none",
+    "input": "BGRA",
+    "codecThreads": 1,
+    "ordinaryUnditheredConversion": true,
+    "metadataException": false
+  },
+  "finitePacketInventory": {
+    "existingRows": 7,
+    "distinctPacketIdentities": 4,
+    "settingsUnchanged": true,
+    "cases": [
+      {
+        "rows": [
+          "EncodeOpaque8",
+          "EncodeOpaque16"
+        ],
+        "bytes": 72380,
+        "sha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f"
+      },
+      {
+        "rows": [
+          "Encode8",
+          "Encode16",
+          "EncodeBudget8"
+        ],
+        "bytes": 98590,
+        "sha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10"
+      },
+      {
+        "rows": [
+          "PhotographLossy8"
+        ],
+        "bytes": 17688,
+        "sha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b"
+      },
+      {
+        "rows": [
+          "DiagramLossy8"
+        ],
+        "bytes": 7100,
+        "sha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050"
+      }
+    ],
+    "rawArchive": {
+      "name": "e63-lossy-reference-inventory.tar.gz",
+      "bytes": 690309,
+      "members": 12,
+      "sha256": "930161f81e403f6f72622780c47ec18e1e7ae4303d139948bb352796881c7715",
+      "scope": "Seven existing rows/four unique nativeVP8packets; three missing loose master packets materialized with exact preexisting hashes, alpha master reused. No new source/settings and no timing or production/model build."
+    },
+    "preparation": "Three missing loose masters materialized using unchanged native worker/hash at original inputs/settings,3launches/9initial validation encodes; alpha master reused. All four complete hashes match original receipts. No production/native/model build or timing forE63."
+  },
+  "firstDivergence": {
+    "scope": "Existing opaque513x259 control, original public conversion formula only; current method body unchanged fromE62. No timing or quality tuning.",
+    "lumaMismatches": 9153,
+    "lumaSamples": 132867,
+    "first": {
+      "x": 3,
+      "y": 0,
+      "rgba": [
+        144,
+        235,
+        72,
+        255
+      ],
+      "currentY": 178,
+      "referenceY": 179
+    }
+  },
+  "inputStage": {
+    "source": "src/Lokad.Image/Internal/Vp8PreparedInput.cs",
+    "nativeObserver": {
+      "round": "E64",
+      "stage": "Native public ordinary undithered conversion only, before transparent-area cleanup. Not complete encoder.",
+      "workerSha256": "8c81035e57683b0dd5579d0db080806498c8e42e85f4a4cbf1051c644c2c7419",
+      "sourceSha256": "c83f86623601ab1aed58425c9aa0e61cbc00d5c1e9964331e5190c160e6cf227",
+      "flags": [
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "backendArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "controls": [
+        {
+          "name": "opaque",
+          "sourceSha256": "54e27bd73c9ee221bdd4872e6b7bf79676257346cee2eff8ddacccb89e0cdb0a",
+          "bytes": 199687,
+          "sha256": "f1e516c70c0d315b2f785b90fdd6a6c6e26e30eca898b7f1616380ab18aae715",
+          "Y": "01abedda68dcf0e13365435f202925ad797c633854f1f62c23a71175661bebb2",
+          "U": "26820b95be74f5783dfcf7c4a4faf354ca06d8ccedb585591057a87c1ca5ebce",
+          "V": "f6db498e4aecaf6a6e38fcff460d5c68b091d9caaddaf98e22b8b75cfb91e073",
+          "alpha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "ready": {
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "hasAlpha": false,
+            "libwebpVersion": 67072,
+            "stage": "ordinary undithered YUVA before transparent cleanup"
+          }
+        },
+        {
+          "name": "photograph",
+          "sourceSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+          "bytes": 199687,
+          "sha256": "b5e23d147ee602a9abeee06279c7f462c087b691a04d649ec8d349df7d9910a9",
+          "Y": "4b42b57d4df60ebbe588f20c4fdae7f16a19b01e85a62ff16f9bc1e1708c9dbb",
+          "U": "295b5095b9640fbbc9e9c2cbcbd11d441333c41007cc1daf1e430aff2ed72ade",
+          "V": "29708ee6961ca723c7fb382e65a8564a74ef5a487011af33cbfb7cee1a80295d",
+          "alpha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "ready": {
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "hasAlpha": false,
+            "libwebpVersion": 67072,
+            "stage": "ordinary undithered YUVA before transparent cleanup"
+          }
+        },
+        {
+          "name": "diagram",
+          "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+          "bytes": 199687,
+          "sha256": "38d9463e671d1f131f62d637d7972a83f1d4f3c6b0657e2983d498ed1020089c",
+          "Y": "c3f0bfb85fdc10b1507c1b82fba3751ecfdc8326f243d2906aec638cc83a8fc9",
+          "U": "239cc05d59e2ec45eecf1af66dc6bd5709a977b2ab96126d32ea4a87c648def1",
+          "V": "6e03fd57fb43d459a57b8f4ff2634c6f6ab7a08e1ab38ef0465369ddebe676c2",
+          "alpha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "ready": {
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "hasAlpha": false,
+            "libwebpVersion": 67072,
+            "stage": "ordinary undithered YUVA before transparent cleanup"
+          }
+        },
+        {
+          "name": "asymmetric",
+          "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "bytes": 332554,
+          "sha256": "b77569bd20a7ce1b4e6877cb628a9977f7d49b10e250ce8cda9d16e50a83bf28",
+          "Y": "01abedda68dcf0e13365435f202925ad797c633854f1f62c23a71175661bebb2",
+          "U": "7b6a0106c6291aa580a4de5ba381b79a0a58b287aaf7332980066c1e1eb6426e",
+          "V": "a8fae8be5251d85e436b0a1f0d78d1e15f1d4abcedd75d22ff33540150878ad0",
+          "alpha": "c879f6709c3f9686ff110c901d7130e2d1f5a91d3453d321eeda1c65caf708ee",
+          "ready": {
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "hasAlpha": true,
+            "libwebpVersion": 67072,
+            "stage": "ordinary undithered YUVA before transparent cleanup"
+          }
+        },
+        {
+          "name": "singleton",
+          "sourceSha256": "fcac58980f5053b60bc41f02af0a17a9003f5377edfaed7735cd433452f09069",
+          "bytes": 4,
+          "sha256": "f8b2cdc0bd43d7e47a46cc40550af0cba0b5d3b8aeecbddf19dea2b18bbb4c00",
+          "Y": "8c2574892063f995fdf756bce07f46c1a5193e54cd52837ed91e32008ccf41ac",
+          "U": "245843abef9e72e7efac30138a994bf6301e7e1d7d7042a33d42e863d2638811",
+          "V": "fde502858306c235a3121e42326b53228b7ef4690eeed92a2b2eafe73c03a3ef",
+          "alpha": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+          "ready": {
+            "width": 1,
+            "height": 1,
+            "depth": 8,
+            "hasAlpha": true,
+            "libwebpVersion": 67072,
+            "stage": "ordinary undithered YUVA before transparent cleanup"
+          }
+        },
+        {
+          "name": "two-color",
+          "sourceSha256": "6429d23b373c1aaf3967399292008764e55453ea970f822366616d425795eecf",
+          "bytes": 20516,
+          "sha256": "9d51a3272e0dc3ec843b0ab1439848a0d49aebcb6bdd2a2dfbd7ecb8e02a93a8",
+          "Y": "658989c2430d14fe19e7b56f180222bfd02ce22d9cc0fc8e577c1d77dcad186d",
+          "U": "d010219271a26fd6dbda01e89000f3ddc0d7cbfe26e7821ec223b1b8cf859271",
+          "V": "dc731692f4125761c51359ebee150e8223ea50f6d092864fc603f30bb71dc5b2",
+          "alpha": "f6f3fba63313fb5131b9ebd6718ddcc3ee31b5e1ed1e6055b86cddab4594c881",
+          "ready": {
+            "width": 4103,
+            "height": 2,
+            "depth": 8,
+            "hasAlpha": true,
+            "libwebpVersion": 67072,
+            "stage": "ordinary undithered YUVA before transparent cleanup"
+          }
+        }
+      ],
+      "timingRuns": 0,
+      "nativeCompleteEncodes": 0,
+      "native16NormalizationCases": [
+        {
+          "name": "opaque",
+          "sourceSha256": "25a17b853ffe24f7c8ca7d19c1e76b1390e34ae7e6924b460721df8ce53f6f99",
+          "sha256": "f1e516c70c0d315b2f785b90fdd6a6c6e26e30eca898b7f1616380ab18aae715",
+          "everyByteEqualsEightBitReference": true,
+          "ready": {
+            "width": 513,
+            "height": 259,
+            "depth": 16,
+            "hasAlpha": false,
+            "libwebpVersion": 67072,
+            "stage": "ordinary undithered YUVA before transparent cleanup"
+          }
+        },
+        {
+          "name": "asymmetric",
+          "sourceSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "sha256": "b77569bd20a7ce1b4e6877cb628a9977f7d49b10e250ce8cda9d16e50a83bf28",
+          "everyByteEqualsEightBitReference": true,
+          "ready": {
+            "width": 513,
+            "height": 259,
+            "depth": 16,
+            "hasAlpha": true,
+            "libwebpVersion": 67072,
+            "stage": "ordinary undithered YUVA before transparent cleanup"
+          }
+        }
+      ]
+    },
+    "managedProof": {
+      "sameAssemblyBothOS": true,
+      "normalChecksPerOS": 13,
+      "scalarChecksPerOS": 13,
+      "worker": {
+        "bytes": 1501696,
+        "sha256": "a01c8f965be4f21472114a56d129abaa690ffadaa8ef2153b2861b107689a859"
+      },
+      "sourceCapacity": {
+        "bytes": 9736,
+        "sha256": "dec091a25fdd304c019f528b8e6fb6955b47c6bc559207bcaa1f8e2d07658940"
+      },
+      "testSource": {
+        "bytes": 7581,
+        "sha256": "8de8c56587f4a092624f5a8a35d91b59259d03b184a6f82b53f8d9b7fc004e07"
+      }
+    },
+    "verified": [
+      "All six complete logicalYUVA stream hashes match public native conversion observations; original16-bit opaque/alpha sources independently normalize to byte-identical native streams.",
+      "One owned padded storage capacity, no normalized input frame. All padding samples replicate their logical converted-plane edge. Source is borrowed, unchanged and not retained by prepared output.",
+      "Same borrowed operation/root admits output before allocation and accounts stack gamma workspace. Output remains charged after source disposal, until owner disposal.",
+      "Shared output and scratch refusal are terminal with cleanup and subsequent success after caller charge release. Cancellation at either admission boundary and late independent work failure release all storage; caller root remains open.",
+      "Matrix coefficients generated from BT.601 weights and inclusive8bit ranges; gamma power knots and alpha reciprocal generated mathematically, no upstream source/table is a build input."
+    ],
+    "builds": {
+      "windowsLinkedInternalTestAttempts": 2,
+      "firstAttempt": "Test fixture selected readonly MemoryMarshal.Cast overload; corrected explicit AsSpan. No production algorithm correction.",
+      "linux": 0,
+      "publicProductionCore": 0,
+      "nativeObserver": 1,
+      "sourceModel": 0
+    },
+    "nativeConversionObservations": 8,
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "evidenceReuse": "Existing public encoder method bodies and dependencies unchanged; the private new class is unwired. Reuse E62 frozen public core/full4865tests+axisextension/actualpackage, prior unchanged codec/transform evidence and pinned native packets. No new CPU/allocation or completeVP8packet claim.",
+    "remaining": [
+      "Transparent-area cleanup at native exact=0 before analysis; use existing transparent controls.",
+      "Exact integer forward transforms, quantizers, analysis/macroblock decisions, coefficient contexts and full packet framing on the four frozen identities.",
+      "Generic public integration, remaining exact decoders, finite single-CPU upper<=1/allocation qualification and all existing functional/memory/text/Lanczos3/release requirements."
+    ],
+    "rawArchive": {
+      "name": "e64-vp8-input-qualified.tar.gz",
+      "bytes": 1298328,
+      "members": 23,
+      "sha256": "5b90b5fc2b24d8493a36970b386f4d1028662c3b472bea4d90eff46f9046a234",
+      "everySourceMemberByteVerified": true,
+      "mirrored": true
+    }
+  }
+}
