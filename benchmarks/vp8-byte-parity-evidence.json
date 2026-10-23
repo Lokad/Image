@@ -1,6 +1,6 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E80",
+  "latestRound": "E81",
   "scope": "Private default quality75/method4 complete VP8 packets on the four existing identities, including exact ALPH and RGBA8/16 transparent input. Public lossy integration, required options/work/header confirmation, decoder and performance objectives remain open.",
   "productionPublicBehaviorChanged": true,
   "fullObjectiveOpen": true,
@@ -3827,5 +3827,1023 @@
       "Exact decoder pixels, warm singleCPU parity/allocations and all remaining functional/memory/text/Lanczos3/release objectives."
     ],
     "publicLosslessChange": "Shared clustering now derives the merge factor from actual tile count and quality instead of a fixed large-control factor. This can change public lossless outputs on other tilings. All frozen quality75 complete packets remain exact. Public lossy encoder is not switched. CI performs full Windows/Linux and live differential suites plus actual-package consumers; local qualification here is the411affected checks per OS/cpu mode."
+  },
+  "requiredPolicyAudit": {
+    "round": "E81",
+    "scope": "Finite coverage audit; native reference settings frozen before implementing missing policies. No production/test-assembly rebuild or optimization. Public lossy unchanged.",
+    "referenceInventory": {
+      "round": "E81",
+      "scope": "Finite required public method/quality policy reference inventory, reusing diagram and asymmetric controls only. Ten distinct omitted policy/settings cases plus the unchanged frozen method4 diagram anchor. Native observations only; no new managed confirmation, quality tuning or timing.",
+      "producer": {
+        "sourceSha256": "7971248c1881bcee6eaf44e9489ff63779640ea57036f6820790538bbda566ff",
+        "workerBytes": 723560,
+        "workerSha256": "da53201b284be474a3d8b209a362ae4deed5aba64e88e28a7a7bea84cc75a9f2",
+        "backendArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+        "compileCommand": [
+          "cc",
+          "-std=c11",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-Iexternal/libwebp",
+          "-Iexternal/linux-x64/native/include",
+          "tmp/e81-decisions-observer.c",
+          "external/linux-x64/native/lib/libwebp.a",
+          "external/linux-x64/native/lib/libsharpyuv.a",
+          "-lm",
+          "-o",
+          "tmp/e81-decisions-observer"
+        ]
+      },
+      "cases": [
+        {
+          "name": "diagram",
+          "quality": 75,
+          "method": 4,
+          "distinctRequiredReason": "Unchanged frozen anchor for this worker build",
+          "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+          "packetBytes": 7100,
+          "packetSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
+          "observation": {
+            "libwebpVersion": 67072,
+            "packetBytes": 7100,
+            "macroblocks": 561,
+            "extraInfoType": 2,
+            "config": {
+              "quality": 75,
+              "method": 4,
+              "threadLevel": 0,
+              "segments": 4,
+              "snsStrength": 50,
+              "filterStrength": 60,
+              "filterSharpness": 0,
+              "filterType": 1,
+              "autoFilter": 0,
+              "pass": 1,
+              "preprocessing": 0,
+              "partitions": 0,
+              "partitionLimit": 0,
+              "alphaCompression": 1,
+              "alphaFiltering": 1,
+              "alphaQuality": 100,
+              "exact": 0,
+              "lowMemory": 0,
+              "sharpYuv": 0
+            },
+            "segmentQuantizers": [
+              36,
+              33,
+              29,
+              22
+            ],
+            "segmentFilterLevels": [
+              11,
+              7,
+              6,
+              3
+            ],
+            "segmentSizes": [
+              5,
+              36,
+              212,
+              308
+            ],
+            "blockCounts": [
+              208,
+              353,
+              255
+            ],
+            "alphaDataBytes": 0,
+            "segmentMapHex": "020202030202030302020203030303030303030303030303030303030303030303030100000001010001010101030303030303030303030303030303030303030303030303030302030303030302030303030303030303030303030303030303030303020202020202020202020202020202020202020202010201020201010202020202030202020202030303030303030303030303030303010202020301010202030303030202030303030303030303030303030302020303030302020303030303030303030302030303030303030303030302020302020303030302020302020303030303030102030303030302020303030302020302020202020202020302020303030303030302030302020302020303020202020302020203020302020302020203030303030202020202020302020202020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020101020201010202020001020201010202020101020201010202020303030303030203030302020303030202030302020303030203030302020303030303030102010202010102010101010101020303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+          },
+          "raw": "tmp/e81-native-diagram-q75-m4.bin",
+          "nativeOnlyNotManagedConfirmation": true
+        },
+        {
+          "name": "diagram",
+          "quality": 75,
+          "method": 0,
+          "distinctRequiredReason": "Fast source decision, distortion refinement without UV reexamination and fast probability probe",
+          "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+          "packetBytes": 9980,
+          "packetSha256": "1c454bdfaff968c856a479c9828f8396137556c0708354c85a5a9b37d2bbe5d5",
+          "observation": {
+            "libwebpVersion": 67072,
+            "packetBytes": 9980,
+            "macroblocks": 561,
+            "extraInfoType": 2,
+            "config": {
+              "quality": 75,
+              "method": 0,
+              "threadLevel": 0,
+              "segments": 4,
+              "snsStrength": 50,
+              "filterStrength": 60,
+              "filterSharpness": 0,
+              "filterType": 1,
+              "autoFilter": 0,
+              "pass": 1,
+              "preprocessing": 0,
+              "partitions": 0,
+              "partitionLimit": 0,
+              "alphaCompression": 1,
+              "alphaFiltering": 1,
+              "alphaQuality": 100,
+              "exact": 0,
+              "lowMemory": 0,
+              "sharpYuv": 0
+            },
+            "segmentQuantizers": [
+              36,
+              36,
+              26,
+              21
+            ],
+            "segmentFilterLevels": [
+              11,
+              9,
+              4,
+              3
+            ],
+            "segmentSizes": [
+              20,
+              112,
+              81,
+              348
+            ],
+            "blockCounts": [
+              5,
+              556,
+              177
+            ],
+            "alphaDataBytes": 0,
+            "segmentMapHex": "020303030303030303030303030303030303030303030303030303030303030303030202020202020202020202030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303020202020202020202020202020202020202020202000202020200010202020202030303030302030303030303030303030303030303000202020300010302030303030303030303030303030303030303030301010303030301010303030303030303030303030303030303030303030302020301010303030301010300010303030303030303030303030300010303030301010301010101020101010301010303030303030303030301010301010303010101010301010202010301010301010101030303030303020101010301010101010301010301010202010301010301010202030303030303010301010301010202010301010301010202010301010301010202030303030303010301010301010202010301010301010202010301010301010202030303030303010301010301010202010301010301010202010301010301010202030303030303010000000300000101010100000300000101010000000300000101030303030303030202030303030303030302030303030303030302030302020303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+          },
+          "raw": "tmp/e81-native-diagram-q75-m0.bin",
+          "nativeOnlyNotManagedConfirmation": true
+        },
+        {
+          "name": "diagram",
+          "quality": 75,
+          "method": 1,
+          "distinctRequiredReason": "Fast source decision plus UV distortion reexamination",
+          "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+          "packetBytes": 9244,
+          "packetSha256": "50d50af60b76e99dcb1f49eda60efc548a564dbaaaa931d06fc0164aa28c0bea",
+          "observation": {
+            "libwebpVersion": 67072,
+            "packetBytes": 9244,
+            "macroblocks": 561,
+            "extraInfoType": 2,
+            "config": {
+              "quality": 75,
+              "method": 1,
+              "threadLevel": 0,
+              "segments": 4,
+              "snsStrength": 50,
+              "filterStrength": 60,
+              "filterSharpness": 0,
+              "filterType": 1,
+              "autoFilter": 0,
+              "pass": 1,
+              "preprocessing": 0,
+              "partitions": 0,
+              "partitionLimit": 0,
+              "alphaCompression": 1,
+              "alphaFiltering": 1,
+              "alphaQuality": 100,
+              "exact": 0,
+              "lowMemory": 0,
+              "sharpYuv": 0
+            },
+            "segmentQuantizers": [
+              36,
+              36,
+              26,
+              21
+            ],
+            "segmentFilterLevels": [
+              11,
+              9,
+              4,
+              3
+            ],
+            "segmentSizes": [
+              20,
+              112,
+              81,
+              348
+            ],
+            "blockCounts": [
+              5,
+              556,
+              177
+            ],
+            "alphaDataBytes": 0,
+            "segmentMapHex": "020303030303030303030303030303030303030303030303030303030303030303030202020202020202020202030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303020202020202020202020202020202020202020202000202020200010202020202030303030302030303030303030303030303030303000202020300010302030303030303030303030303030303030303030301010303030301010303030303030303030303030303030303030303030302020301010303030301010300010303030303030303030303030300010303030301010301010101020101010301010303030303030303030301010301010303010101010301010202010301010301010101030303030303020101010301010101010301010301010202010301010301010202030303030303010301010301010202010301010301010202010301010301010202030303030303010301010301010202010301010301010202010301010301010202030303030303010301010301010202010301010301010202010301010301010202030303030303010000000300000101010100000300000101010000000300000101030303030303030202030303030303030302030303030303030302030302020303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+          },
+          "raw": "tmp/e81-native-diagram-q75-m1.bin",
+          "nativeOnlyNotManagedConfirmation": true
+        },
+        {
+          "name": "diagram",
+          "quality": 75,
+          "method": 2,
+          "distinctRequiredReason": "Full source analysis and distortion-only I4/I16 reexamination",
+          "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+          "packetBytes": 7330,
+          "packetSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+          "observation": {
+            "libwebpVersion": 67072,
+            "packetBytes": 7330,
+            "macroblocks": 561,
+            "extraInfoType": 2,
+            "config": {
+              "quality": 75,
+              "method": 2,
+              "threadLevel": 0,
+              "segments": 4,
+              "snsStrength": 50,
+              "filterStrength": 60,
+              "filterSharpness": 0,
+              "filterType": 1,
+              "autoFilter": 0,
+              "pass": 1,
+              "preprocessing": 0,
+              "partitions": 0,
+              "partitionLimit": 0,
+              "alphaCompression": 1,
+              "alphaFiltering": 1,
+              "alphaQuality": 100,
+              "exact": 0,
+              "lowMemory": 0,
+              "sharpYuv": 0
+            },
+            "segmentQuantizers": [
+              36,
+              33,
+              29,
+              22
+            ],
+            "segmentFilterLevels": [
+              11,
+              7,
+              5,
+              3
+            ],
+            "segmentSizes": [
+              5,
+              36,
+              212,
+              308
+            ],
+            "blockCounts": [
+              151,
+              410,
+              188
+            ],
+            "alphaDataBytes": 0,
+            "segmentMapHex": "020202030202030302020203030303030303030303030303030303030303030303030100000001010001010101030303030303030303030303030303030303030303030303030302030303030302030303030303030303030303030303030303030303020202020202020202020202020202020202020202010201020201010202020202030202020202030303030303030303030303030303010202020301010202030303030202030303030303030303030303030302020303030302020303030303030303030302030303030303030303030302020302020303030302020302020303030303030102030303030302020303030302020302020202020202020302020303030303030302030302020302020303020202020302020203020302020302020203030303030202020202020302020202020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020101020201010202020001020201010202020101020201010202020303030303030203030302020303030202030302020303030203030302020303030303030102010202010102010101010101020303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+          },
+          "raw": "tmp/e81-native-diagram-q75-m2.bin",
+          "nativeOnlyNotManagedConfirmation": true
+        },
+        {
+          "name": "diagram",
+          "quality": 75,
+          "method": 3,
+          "distinctRequiredReason": "Basic RDO/token path with fast probe and non-full SNS",
+          "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+          "packetBytes": 7082,
+          "packetSha256": "3bea8726b4473a4f1436a621229d12a489603537ebbd54945044241d3d478dda",
+          "observation": {
+            "libwebpVersion": 67072,
+            "packetBytes": 7082,
+            "macroblocks": 561,
+            "extraInfoType": 2,
+            "config": {
+              "quality": 75,
+              "method": 3,
+              "threadLevel": 0,
+              "segments": 4,
+              "snsStrength": 50,
+              "filterStrength": 60,
+              "filterSharpness": 0,
+              "filterType": 1,
+              "autoFilter": 0,
+              "pass": 1,
+              "preprocessing": 0,
+              "partitions": 0,
+              "partitionLimit": 0,
+              "alphaCompression": 1,
+              "alphaFiltering": 1,
+              "alphaQuality": 100,
+              "exact": 0,
+              "lowMemory": 0,
+              "sharpYuv": 0
+            },
+            "segmentQuantizers": [
+              36,
+              33,
+              29,
+              22
+            ],
+            "segmentFilterLevels": [
+              11,
+              7,
+              6,
+              3
+            ],
+            "segmentSizes": [
+              5,
+              36,
+              212,
+              308
+            ],
+            "blockCounts": [
+              212,
+              349,
+              252
+            ],
+            "alphaDataBytes": 0,
+            "segmentMapHex": "020202030202030302020203030303030303030303030303030303030303030303030100000001010001010101030303030303030303030303030303030303030303030303030302030303030302030303030303030303030303030303030303030303020202020202020202020202020202020202020202010201020201010202020202030202020202030303030303030303030303030303010202020301010202030303030202030303030303030303030303030302020303030302020303030303030303030302030303030303030303030302020302020303030302020302020303030303030102030303030302020303030302020302020202020202020302020303030303030302030302020302020303020202020302020203020302020302020203030303030202020202020302020202020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020101020201010202020001020201010202020101020201010202020303030303030203030302020303030202030302020303030203030302020303030303030102010202010102010101010101020303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+          },
+          "raw": "tmp/e81-native-diagram-q75-m3.bin",
+          "nativeOnlyNotManagedConfirmation": true
+        },
+        {
+          "name": "diagram",
+          "quality": 75,
+          "method": 5,
+          "distinctRequiredReason": "Final selected-mode trellis including selected I16/Y2",
+          "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+          "packetBytes": 7026,
+          "packetSha256": "0e994ebda4b10234f2e9f00caf7ea6c27ae03ce82c1f3cada8eda355430cba68",
+          "observation": {
+            "libwebpVersion": 67072,
+            "packetBytes": 7026,
+            "macroblocks": 561,
+            "extraInfoType": 2,
+            "config": {
+              "quality": 75,
+              "method": 5,
+              "threadLevel": 0,
+              "segments": 4,
+              "snsStrength": 50,
+              "filterStrength": 60,
+              "filterSharpness": 0,
+              "filterType": 1,
+              "autoFilter": 0,
+              "pass": 1,
+              "preprocessing": 0,
+              "partitions": 0,
+              "partitionLimit": 0,
+              "alphaCompression": 1,
+              "alphaFiltering": 1,
+              "alphaQuality": 100,
+              "exact": 0,
+              "lowMemory": 0,
+              "sharpYuv": 0
+            },
+            "segmentQuantizers": [
+              36,
+              33,
+              29,
+              22
+            ],
+            "segmentFilterLevels": [
+              11,
+              7,
+              5,
+              3
+            ],
+            "segmentSizes": [
+              5,
+              36,
+              212,
+              308
+            ],
+            "blockCounts": [
+              212,
+              349,
+              240
+            ],
+            "alphaDataBytes": 0,
+            "segmentMapHex": "020202030202030302020203030303030303030303030303030303030303030303030100000001010001010101030303030303030303030303030303030303030303030303030302030303030302030303030303030303030303030303030303030303020202020202020202020202020202020202020202010201020201010202020202030202020202030303030303030303030303030303010202020301010202030303030202030303030303030303030303030302020303030302020303030303030303030302030303030303030303030302020302020303030302020302020303030303030102030303030302020303030302020302020202020202020302020303030303030302030302020302020303020202020302020203020302020302020203030303030202020202020302020202020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020101020201010202020001020201010202020101020201010202020303030303030203030302020303030202030302020303030203030302020303030303030102010202010102010101010101020303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+          },
+          "raw": "tmp/e81-native-diagram-q75-m5.bin",
+          "nativeOnlyNotManagedConfirmation": true
+        },
+        {
+          "name": "diagram",
+          "quality": 75,
+          "method": 6,
+          "distinctRequiredReason": "Trellis on every RDO candidate including I16/Y2",
+          "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+          "packetBytes": 6818,
+          "packetSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+          "observation": {
+            "libwebpVersion": 67072,
+            "packetBytes": 6818,
+            "macroblocks": 561,
+            "extraInfoType": 2,
+            "config": {
+              "quality": 75,
+              "method": 6,
+              "threadLevel": 0,
+              "segments": 4,
+              "snsStrength": 50,
+              "filterStrength": 60,
+              "filterSharpness": 0,
+              "filterType": 1,
+              "autoFilter": 0,
+              "pass": 1,
+              "preprocessing": 0,
+              "partitions": 0,
+              "partitionLimit": 0,
+              "alphaCompression": 1,
+              "alphaFiltering": 1,
+              "alphaQuality": 100,
+              "exact": 0,
+              "lowMemory": 0,
+              "sharpYuv": 0
+            },
+            "segmentQuantizers": [
+              36,
+              33,
+              29,
+              22
+            ],
+            "segmentFilterLevels": [
+              11,
+              7,
+              6,
+              3
+            ],
+            "segmentSizes": [
+              5,
+              36,
+              212,
+              308
+            ],
+            "blockCounts": [
+              204,
+              357,
+              255
+            ],
+            "alphaDataBytes": 0,
+            "segmentMapHex": "020202030202030302020203030303030303030303030303030303030303030303030100000001010001010101030303030303030303030303030303030303030303030303030302030303030302030303030303030303030303030303030303030303020202020202020202020202020202020202020202010201020201010202020202030202020202030303030303030303030303030303010202020301010202030303030202030303030303030303030303030302020303030302020303030303030303030302030303030303030303030302020302020303030302020302020303030303030102030303030302020303030302020302020202020202020302020303030303030302030302020302020303020202020302020203020302020302020203030303030202020202020302020202020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020101020201010202020001020201010202020101020201010202020303030303030203030302020303030202030302020303030203030302020303030303030102010202010102010101010101020303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+          },
+          "raw": "tmp/e81-native-diagram-q75-m6.bin",
+          "nativeOnlyNotManagedConfirmation": true
+        },
+        {
+          "name": "diagram",
+          "quality": 1,
+          "method": 4,
+          "distinctRequiredReason": "Minimum public quality and quantizer/segment clamps",
+          "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+          "packetBytes": 2304,
+          "packetSha256": "28bff919826e67d69d393f457d3920017ffff21cc3732e3db06d55a80f873f54",
+          "observation": {
+            "libwebpVersion": 67072,
+            "packetBytes": 2304,
+            "macroblocks": 561,
+            "extraInfoType": 2,
+            "config": {
+              "quality": 1,
+              "method": 4,
+              "threadLevel": 0,
+              "segments": 4,
+              "snsStrength": 50,
+              "filterStrength": 60,
+              "filterSharpness": 0,
+              "filterType": 1,
+              "autoFilter": 0,
+              "pass": 1,
+              "preprocessing": 0,
+              "partitions": 0,
+              "partitionLimit": 0,
+              "alphaCompression": 1,
+              "alphaFiltering": 1,
+              "alphaQuality": 100,
+              "exact": 0,
+              "lowMemory": 0,
+              "sharpYuv": 0
+            },
+            "segmentQuantizers": [
+              115,
+              113,
+              107,
+              96
+            ],
+            "segmentFilterLevels": [
+              63,
+              43,
+              63,
+              22
+            ],
+            "segmentSizes": [
+              5,
+              36,
+              212,
+              308
+            ],
+            "blockCounts": [
+              151,
+              410,
+              322
+            ],
+            "alphaDataBytes": 0,
+            "segmentMapHex": "020202030202030302020203030303030303030303030303030303030303030303030100000001010001010101030303030303030303030303030303030303030303030303030302030303030302030303030303030303030303030303030303030303020202020202020202020202020202020202020202010201020201010202020202030202020202030303030303030303030303030303010202020301010202030303030202030303030303030303030303030302020303030302020303030303030303030302030303030303030303030302020302020303030302020302020303030303030102030303030302020303030302020302020202020202020302020303030303030302030302020302020303020202020302020203020302020302020203030303030202020202020302020202020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020101020201010202020001020201010202020101020201010202020303030303030203030302020303030202030302020303030203030302020303030303030102010202010102010101010101020303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+          },
+          "raw": "tmp/e81-native-diagram-q1-m4.bin",
+          "nativeOnlyNotManagedConfirmation": true
+        },
+        {
+          "name": "diagram",
+          "quality": 85,
+          "method": 4,
+          "distinctRequiredReason": "Actual public default quality rather than the quality75 anchor",
+          "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+          "packetBytes": 8898,
+          "packetSha256": "51a4abeda30c4f8c8b1dea563ab6690a89a5feed93b69c467398f9b736aeb536",
+          "observation": {
+            "libwebpVersion": 67072,
+            "packetBytes": 8898,
+            "macroblocks": 561,
+            "extraInfoType": 2,
+            "config": {
+              "quality": 85,
+              "method": 4,
+              "threadLevel": 0,
+              "segments": 4,
+              "snsStrength": 50,
+              "filterStrength": 60,
+              "filterSharpness": 0,
+              "filterType": 1,
+              "autoFilter": 0,
+              "pass": 1,
+              "preprocessing": 0,
+              "partitions": 0,
+              "partitionLimit": 0,
+              "alphaCompression": 1,
+              "alphaFiltering": 1,
+              "alphaQuality": 100,
+              "exact": 0,
+              "lowMemory": 0,
+              "sharpYuv": 0
+            },
+            "segmentQuantizers": [
+              20,
+              18,
+              16,
+              12
+            ],
+            "segmentFilterLevels": [
+              7,
+              4,
+              3,
+              2
+            ],
+            "segmentSizes": [
+              5,
+              36,
+              212,
+              308
+            ],
+            "blockCounts": [
+              210,
+              351,
+              260
+            ],
+            "alphaDataBytes": 0,
+            "segmentMapHex": "020202030202030302020203030303030303030303030303030303030303030303030100000001010001010101030303030303030303030303030303030303030303030303030302030303030302030303030303030303030303030303030303030303020202020202020202020202020202020202020202010201020201010202020202030202020202030303030303030303030303030303010202020301010202030303030202030303030303030303030303030302020303030302020303030303030303030302030303030303030303030302020302020303030302020302020303030303030102030303030302020303030302020302020202020202020302020303030303030302030302020302020303020202020302020203020302020302020203030303030202020202020302020202020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020302020302020203020302020302020203020302020302020203030303030202020101020201010202020001020201010202020101020201010202020303030303030203030302020303030202030302020303030203030302020303030303030102010202010102010101010101020303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+          },
+          "raw": "tmp/e81-native-diagram-q85-m4.bin",
+          "nativeOnlyNotManagedConfirmation": true
+        },
+        {
+          "name": "diagram",
+          "quality": 100,
+          "method": 4,
+          "distinctRequiredReason": "Maximum public quality, zero-index quantization and disabled high-quality DC diffusion",
+          "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+          "packetBytes": 15172,
+          "packetSha256": "6a4332bb32c3b93248a76eb804a0dc74d2c519d4955f310dcb94ef798cd2616e",
+          "observation": {
+            "libwebpVersion": 67072,
+            "packetBytes": 15172,
+            "macroblocks": 561,
+            "extraInfoType": 2,
+            "config": {
+              "quality": 100,
+              "method": 4,
+              "threadLevel": 0,
+              "segments": 4,
+              "snsStrength": 50,
+              "filterStrength": 60,
+              "filterSharpness": 0,
+              "filterType": 1,
+              "autoFilter": 0,
+              "pass": 1,
+              "preprocessing": 0,
+              "partitions": 0,
+              "partitionLimit": 0,
+              "alphaCompression": 1,
+              "alphaFiltering": 1,
+              "alphaQuality": 100,
+              "exact": 0,
+              "lowMemory": 0,
+              "sharpYuv": 0
+            },
+            "segmentQuantizers": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "segmentFilterLevels": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "segmentSizes": [
+              561,
+              0,
+              0,
+              0
+            ],
+            "blockCounts": [
+              217,
+              344,
+              315
+            ],
+            "alphaDataBytes": 0,
+            "segmentMapHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          },
+          "raw": "tmp/e81-native-diagram-q100-m4.bin",
+          "nativeOnlyNotManagedConfirmation": true
+        },
+        {
+          "name": "asymmetric",
+          "quality": 75,
+          "method": 6,
+          "distinctRequiredReason": "Exact alpha method6 uses internal VP8L quality100/all-transform compression",
+          "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "packetBytes": 85796,
+          "packetSha256": "e58f431cec4412c38b3ee49da4ff62c25cc896fa71bcffe9f131dd08e1bccc96",
+          "observation": {
+            "libwebpVersion": 67072,
+            "packetBytes": 85796,
+            "macroblocks": 561,
+            "extraInfoType": 2,
+            "config": {
+              "quality": 75,
+              "method": 6,
+              "threadLevel": 0,
+              "segments": 4,
+              "snsStrength": 50,
+              "filterStrength": 60,
+              "filterSharpness": 0,
+              "filterType": 1,
+              "autoFilter": 0,
+              "pass": 1,
+              "preprocessing": 0,
+              "partitions": 0,
+              "partitionLimit": 0,
+              "alphaCompression": 1,
+              "alphaFiltering": 1,
+              "alphaQuality": 100,
+              "exact": 0,
+              "lowMemory": 0,
+              "sharpYuv": 0
+            },
+            "segmentQuantizers": [
+              27,
+              20,
+              15,
+              15
+            ],
+            "segmentFilterLevels": [
+              8,
+              5,
+              2,
+              2
+            ],
+            "segmentSizes": [
+              509,
+              2,
+              50,
+              0
+            ],
+            "blockCounts": [
+              560,
+              1,
+              0
+            ],
+            "alphaDataBytes": 11667,
+            "segmentMapHex": "000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000002000000000000010000000000000000020000000000000000000000000000000002000000000000000000000000000000010000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000002020202020202020202020202020202020202020202020202020202020202020202"
+          },
+          "raw": "tmp/e81-native-asymmetric-q75-m6.bin",
+          "nativeOnlyNotManagedConfirmation": true
+        }
+      ],
+      "nativeCompleteEncodes": 11,
+      "timingRuns": 0,
+      "productionBuilds": 0,
+      "testAssemblyRebuilds": 0
+    },
+    "workBoundary": {
+      "assemblySha256": "e5c445f74b188fb312dea0806623e686968c713187aba2a8537201f326978a42",
+      "runs": [
+        {
+          "maximum": 2000000000,
+          "scope": "color input/cleanup/analysis/segments/quantization/frame/partition emission and raw VP8 delivery only; excludes ALPH and extended container",
+          "stages": [
+            {
+              "stage": "source",
+              "work": 0,
+              "live": 531468,
+              "peak": 531468
+            },
+            {
+              "stage": "input",
+              "work": 6052677,
+              "live": 879887,
+              "peak": 880911
+            },
+            {
+              "stage": "cleanup",
+              "work": 6599882
+            },
+            {
+              "stage": "analysis",
+              "work": 34605002,
+              "live": 882722,
+              "peak": 883746
+            },
+            {
+              "stage": "segments",
+              "work": 34608172,
+              "live": 883491,
+              "peak": 884515
+            },
+            {
+              "stage": "quantization",
+              "work": 34613548,
+              "live": 886619,
+              "peak": 886619
+            },
+            {
+              "stage": "frame",
+              "work": 296059741,
+              "live": 1348015,
+              "peak": 1416256
+            },
+            {
+              "stage": "partitions",
+              "work": 297704609,
+              "live": 1483951,
+              "peak": 1551068
+            },
+            {
+              "stage": "frameDelivery",
+              "work": 297778565,
+              "bytes": 73956,
+              "sha256": "b66e2d42b030c49d342cc237167c338f0b463a9b5d8e015f3d2a4c8e9da5eaaa"
+            }
+          ],
+          "failure": null,
+          "releasedBeforeContextDisposal": 0,
+          "after": 0,
+          "borrowedRootAlive": true
+        },
+        {
+          "maximum": 32000000,
+          "scope": "color input/cleanup/analysis/segments/quantization/frame/partition emission and raw VP8 delivery only; excludes ALPH and extended container",
+          "stages": [
+            {
+              "stage": "source",
+              "work": 0,
+              "live": 531468,
+              "peak": 531468
+            },
+            {
+              "stage": "input",
+              "work": 6052677,
+              "live": 879887,
+              "peak": 880911
+            },
+            {
+              "stage": "cleanup",
+              "work": 6599882
+            }
+          ],
+          "failure": {
+            "stage": "analysis",
+            "type": "Lokad.Image.ImageLimitException",
+            "limit": "Work",
+            "scope": "Operation",
+            "work": 31999818
+          },
+          "releasedBeforeContextDisposal": 0,
+          "after": 0,
+          "borrowedRootAlive": true
+        }
+      ],
+      "cpuTimingMeasured": false
+    },
+    "workConclusion": "The existing32M call demonstrably fails during source analysis at31999818consumed units. Color-only full encoding/delivery costs297778565units, excluding ALPH/container. Both runs release all storage BEFORE context disposal and preserve the borrowed root. Work units are deterministic accounting, not CPU instructions or stable cross-encoder costs. Preserve this named32M resource boundary at public adoption: require structured terminal Work failure/cleanup; do not silently increase limits, discount work, retry another encoder or record failed operations as successful timing/packet comparisons. The complete default operation remains required. Existing older public benchmark row retains only its original producer scope until adoption.",
+    "remainingNamedCases": [
+      {
+        "id": "method0-quality75-diagram",
+        "control": "diagram",
+        "quality": 75,
+        "method": 0,
+        "why": "Fast source decision, distortion refinement without UV reexamination and fast probability probe",
+        "nativeBytes": 9980,
+        "nativeSha256": "1c454bdfaff968c856a479c9828f8396137556c0708354c85a5a9b37d2bbe5d5",
+        "managedStatus": "OPEN"
+      },
+      {
+        "id": "method1-quality75-diagram",
+        "control": "diagram",
+        "quality": 75,
+        "method": 1,
+        "why": "Fast source decision plus UV distortion reexamination",
+        "nativeBytes": 9244,
+        "nativeSha256": "50d50af60b76e99dcb1f49eda60efc548a564dbaaaa931d06fc0164aa28c0bea",
+        "managedStatus": "OPEN"
+      },
+      {
+        "id": "method2-quality75-diagram",
+        "control": "diagram",
+        "quality": 75,
+        "method": 2,
+        "why": "Full source analysis and distortion-only I4/I16 reexamination",
+        "nativeBytes": 7330,
+        "nativeSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+        "managedStatus": "OPEN"
+      },
+      {
+        "id": "method3-quality75-diagram",
+        "control": "diagram",
+        "quality": 75,
+        "method": 3,
+        "why": "Basic RDO/token path with fast probe and non-full SNS",
+        "nativeBytes": 7082,
+        "nativeSha256": "3bea8726b4473a4f1436a621229d12a489603537ebbd54945044241d3d478dda",
+        "managedStatus": "OPEN"
+      },
+      {
+        "id": "method5-quality75-diagram",
+        "control": "diagram",
+        "quality": 75,
+        "method": 5,
+        "why": "Final selected-mode trellis including selected I16/Y2",
+        "nativeBytes": 7026,
+        "nativeSha256": "0e994ebda4b10234f2e9f00caf7ea6c27ae03ce82c1f3cada8eda355430cba68",
+        "managedStatus": "OPEN"
+      },
+      {
+        "id": "method6-quality75-diagram",
+        "control": "diagram",
+        "quality": 75,
+        "method": 6,
+        "why": "Trellis on every RDO candidate including I16/Y2",
+        "nativeBytes": 6818,
+        "nativeSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+        "managedStatus": "OPEN"
+      },
+      {
+        "id": "method4-quality1-diagram",
+        "control": "diagram",
+        "quality": 1,
+        "method": 4,
+        "why": "Minimum public quality and quantizer/segment clamps",
+        "nativeBytes": 2304,
+        "nativeSha256": "28bff919826e67d69d393f457d3920017ffff21cc3732e3db06d55a80f873f54",
+        "managedStatus": "OPEN"
+      },
+      {
+        "id": "method4-quality85-diagram",
+        "control": "diagram",
+        "quality": 85,
+        "method": 4,
+        "why": "Actual public default quality rather than the quality75 anchor",
+        "nativeBytes": 8898,
+        "nativeSha256": "51a4abeda30c4f8c8b1dea563ab6690a89a5feed93b69c467398f9b736aeb536",
+        "managedStatus": "OPEN"
+      },
+      {
+        "id": "method4-quality100-diagram",
+        "control": "diagram",
+        "quality": 100,
+        "method": 4,
+        "why": "Maximum public quality, zero-index quantization and disabled high-quality DC diffusion",
+        "nativeBytes": 15172,
+        "nativeSha256": "6a4332bb32c3b93248a76eb804a0dc74d2c519d4955f310dcb94ef798cd2616e",
+        "managedStatus": "OPEN"
+      },
+      {
+        "id": "method6-quality75-asymmetric",
+        "control": "asymmetric",
+        "quality": 75,
+        "method": 6,
+        "why": "Exact alpha method6 uses internal VP8L quality100/all-transform compression",
+        "nativeBytes": 85796,
+        "nativeSha256": "e58f431cec4412c38b3ee49da4ff62c25cc896fa71bcffe9f131dd08e1bccc96",
+        "managedStatus": "OPEN"
+      },
+      {
+        "id": "native-positive-header-retry",
+        "control": "Original opaque procedural formula at5632x5632",
+        "why": "Current controls never exceed first-partition estimated capacity. One large supported image is needed to observe actual native header strengthening, carried prices/reset state and exact final packet. This is one named case, not a dimension grid.",
+        "status": "OPEN; native positivity unconfirmed",
+        "limits": "31719424pixels; explicit generous work allowance and unchanged memory/root/ownership safeguards. Native observation first; do not run managed tuning or assume retry without evidence."
+      },
+      {
+        "id": "caller-work32M",
+        "control": "Existing asymmetricRGBA8",
+        "why": "Independent deterministic work limit must remain terminal and clean up under new algorithm; it does not authorize a different bitstream.",
+        "status": "Private failure/cleanup observed with frozenE80; public entry-point assertion remains required."
+      },
+      {
+        "id": "public-delivery-and-ownership",
+        "control": "Existing opaque/asymmetricRGBA8/16 plus photograph/diagram",
+        "why": "Private packet equality is not actual public API/stream/budget/cancellation/package qualification. Reuse normalization and unchanged primitive proofs; complete direct delivery boundaries at adoption.",
+        "status": "OPEN; no new images/settings required."
+      }
+    ],
+    "rawArchive": {
+      "name": "e81-required-policy-inventory.tar.xz",
+      "bytes": 463796,
+      "members": 22,
+      "sha256": "52ad5368ac3a7161691922b2c13de85834965bd2204b18af92b2ba827f784cef",
+      "everySourceMemberByteVerified": true,
+      "mirrored": true,
+      "storage": {
+        "linux": {
+          "beforeMasterBytes": 4999718071,
+          "retiredArchiveVerifiedWorkerBytes": 723560,
+          "afterMasterBytes": 4999458307,
+          "allMembersRead": true,
+          "nativeSourceRetained": true
+        },
+        "windowsAfterMaster": 4998766329,
+        "capBytes": 5000000000,
+        "allPeaksBelowCap": true
+      }
+    },
+    "parentCi": {
+      "headSha": "8b12225f5176f4d119ada17840ecf6addbea1c39",
+      "run": 39977722215,
+      "conclusion": "success",
+      "allThreeJobs": true
+    },
+    "builds": {
+      "production": 0,
+      "testAssembly": 0,
+      "linuxManaged": 0,
+      "nativeObserver": 1,
+      "workProbeFrontendSuccessful": 2,
+      "workProbeFrontendCompileAttempts": 2
+    },
+    "probeCorrection": "Restrict reflection activation to instance constructors; initial probe matched both type initializer and constructor. The codec/test assembly was never rebuilt.",
+    "storageCleanup": {
+      "archive": "tmp/e81-completed-debug-symbols-linux.tar.xz",
+      "sha256": "925ee03291dacfd0aad3836fcf5662a1eebebe1e47fd1c8a88b99eeeaa070baa",
+      "bytes": 298584,
+      "mirrored": true,
+      "restoreForHistoricalDebugOrStrictReplay": true,
+      "files": [
+        {
+          "path": "tmp/c193-runtime/Lokad.Image.pdb",
+          "bytes": 328560,
+          "sha256": "0cb85920a0215bd500dc4b1a7a965fd5f087c8b5a5922938946eceeb356048f5"
+        },
+        {
+          "path": "tmp/c110-runtime/Lokad.Image.Benchmarks.pdb",
+          "bytes": 218856,
+          "sha256": "144a2ccd8b6123191a7682c06c30db7f582d1c7c0bcbd356936a981cda375d49"
+        },
+        {
+          "path": "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb",
+          "bytes": 543172,
+          "sha256": "47c46495b8fcda1ab320477194cf255fb8dc7ed9cb57f88c5ed062cb54dd59c5"
+        }
+      ],
+      "retirement": {
+        "beforeBytes": 4999782442,
+        "removedLooseBytes": 1090588,
+        "archiveBytes": 298584,
+        "afterBytes": 4998990438,
+        "allOriginalBytesVerified": true
+      }
+    },
+    "next": "Method0/1 fast source analysis as one private primitive. Then distortion/non-token decisions, method3 policy, trellis and quality/ALPH6 paths, one at a time. Confirm only passing named cases and stop them; no quality or timing sweeps."
   }
 }

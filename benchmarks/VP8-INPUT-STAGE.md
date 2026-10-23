@@ -1,11 +1,12 @@
 # VP8 encoder preparation
 
-The private managed pipeline is verified through complete opaque packets on the three declared RGBA8 controls.
-The public lossy encoder is unchanged. Alpha, required options and public integration remain open.
+The private managed pipeline reproduces allfour existing complete packet identities,
+including exact ALPH from RGBA8/16. The public lossy encoder is unchanged. Required
+options, the named header/work boundaries and public integration remain open.
 
 Seven existing encoding rows have four reference packet identities:
 
-| Original 513Ã—259 input | Existing rows | Complete reference bytes |
+| Original 513×259 input | Existing rows | Complete reference bytes |
 |---|---|---:|
 | Opaque procedural | RGBA8 / RGBA16 | 72,380 |
 | Alpha procedural | RGBA8 / RGBA16 / work-budget boundary | 98,590 |
@@ -21,14 +22,14 @@ rasters plus existing singleton/two-color controls. Both original16-bit procedur
 inputs normalize identically. Mathematical color/gamma generation introduces no
 upstream table. A single admitted owner retains padded planes and exact alpha;
 normalization happens on access, without an RGBA frame copy. In-place transparent
-cleanup matches native exact=0. One original33Ã—17 control covers complete8Ã—8 runs,
+cleanup matches native exact=0. One original33×17 control covers complete8×8 runs,
 resets and partial edges; alpha and visible luma remain exact.
 
-The forward4Ã—4DCT matches215,424native coefficients from the opaque control
+The forward4×4DCT matches215,424native coefficients from the opaque control
 against neutral128 prediction, plus36signed/extreme fragments. Y2Walsh matches
 8,976coefficients and36signed/odd-half fragments. Histograms match1,122native
 luma/UV summaries and ten population fragments. Large-block prediction matches
-861,696candidate pixels across allfour modes at16Ã—16Y/8Ã—8UV, including missing
+861,696candidate pixels across allfour modes at16×16Y/8×8UV, including missing
 borders, clipping and edge replication. Native SIMD/scalar streams agree.
 
 Composed source analysis matches8,976native candidate shapes on allfour rasters,
@@ -36,7 +37,7 @@ then exact derived susceptibility, seed modes, distributions and means. This use
 original source borders, preceding reconstruction and RDO. Selection/mixing is
 separately inspected encoder policy. Weighted centroid clustering and initial
 quantizer/filter setup reproduce all2,244native segment-map bytes and16quantizers.
-One original5Ã—3 majority fragment verifies smoothing without neighbor feedback;
+One original5×3 majority fragment verifies smoothing without neighbor feedback;
 frozen controls use preprocessing0. Final frame filtering remains a later gate:
 reconstructed Y2edges raise some photograph/diagram filter levels.
 
@@ -63,7 +64,7 @@ stack snapshots. Aliased caller buffers and compact/native strides pass; incompl
 or overflowing layouts fail before writes. This qualifies the tested encoder
 domain, without a broader decoder-range or actual RDO claim.
 
-Allten4Ã—4predictor modes now match8,000native pixel bytes on50bounded neighbor
+Allten4×4predictor modes now match8,000native pixel bytes on50bounded neighbor
 contexts from the same image and two original rounding/clipping fragments. The
 span entry reuses shared geometry unchanged, with explicit encoder/geometry
 ordering for the three diagonal modes. Neighbors are snapshotted in84stack bytes;
@@ -73,7 +74,7 @@ add actual reconstructed-neighbor choice during RDO.
 Squared-error and weighted-Hadamard texture scores match79,240native result bytes
 on561opaque-control macroblock pairs and five original arithmetic pairs. Analytic
 Gaussian importance generation reproduces the16-value profile without an imported
-table. Texture rounding and absolute differences apply per4Ã—4tile; reversed-tile
+table. Texture rounding and absolute differences apply per4×4tile; reversed-tile
 controls distinguish that rule from global accumulation. Independent strides,
 maximum error, source preservation and invalid-layout rejection pass.
 
@@ -145,3 +146,34 @@ reference observations, scope and preserved raw masters. Prior public codec and
 package evidence retains its stated scope. Next are the bounded required-option,
 work32M and native-positive header-retry confirmations, then public integration
 and packaged consumer qualification. No readiness claim follows from these private stages.
+
+The bounded option audit adds only settings that exercise a distinct required
+policy, reusing the existing diagram and alpha inputs. These are frozen native
+packets awaiting managed confirmation:
+
+| Existing input / settings | Required policy | Native bytes |
+|---|---|---:|
+| Diagram Q75 / method0 | Fast source decisions, distortion refinement, fast probability probe | 9,980 |
+| Diagram Q75 / method1 | Fast source decisions plus UV reexamination | 9,244 |
+| Diagram Q75 / method2 | Distortion-only I4/I16 reexamination | 7,330 |
+| Diagram Q75 / method3 | Basic RDO/token path and non-full SNS | 7,082 |
+| Diagram Q75 / method5 | Selected-mode trellis, including I16/Y2 | 7,026 |
+| Diagram Q75 / method6 | Trellis on every candidate | 6,818 |
+| Diagram Q1 / method4 | Minimum quality and quantizer clamps | 2,304 |
+| Diagram Q85 / method4 | Public default quality | 8,898 |
+| Diagram Q100 / method4 | Maximum quality and high-quality DC policy | 15,172 |
+| Alpha Q75 / method6 | Internal alpha VP8L quality100 search | 85,796 |
+
+One named large-header case uses the same original procedural formula at
+5,632×5,632. Native-positive header strengthening is still unconfirmed; observe it
+before assuming an optimization is needed. There is no additional dimension grid.
+
+The existing32M-work call exhausts source analysis at31,999,818consumed units on
+the frozen E80 assembly. Complete color-only encoding/delivery costs297,778,565
+units, excluding ALPH/container; its73,956-byte VP8 payload is exactly native.
+Both runs release all owned storage before context disposal. These counts describe
+deterministic admission, not CPU performance. The32M boundary stays a required
+structured-failure/cleanup check at public adoption. Its older successful benchmark
+row retains its original producer scope; failed operations must not become timing
+or packet passes. No work rescaling, limit increase or alternate-encoder retry is
+introduced. Full default-operation comparisons remain required.
