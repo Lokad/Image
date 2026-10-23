@@ -90,7 +90,15 @@ performance grid.
    nonseekable async delivery, including independent surviving outputs, failures
    and cancellation. Their core packet identity reuses the first frozen packet;
    complete operations still require integration evidence.
-6. **Admitted integration.** Reserve substantial storage before allocation through
+6. **Admitted integration.** The first production component is now ported:
+   typed ordinary/low-effort/box matching accepts borrowed spans and returns an
+   owned index. Eight focused checks pass with the same assembly on Windows/Linux:
+   native indices, aggregate admission/replacement peaks, prompt retained-result
+   cleanup, refusal recovery, cancellation, independent work limits and zero/negative
+   capacity. Sparse/dense head storage depends on input length, not available budget.
+   The public encoder does not call this component yet. Port the remaining state and
+   connect the complete encoder before claiming end-to-end production qualification.
+   Reserve substantial storage before allocation through
    the borrowed shared root, account for replacement peaks and retained outputs,
    preserve work/local limits, and release operation storage promptly. Refusal is
    terminal. Reuse current admission, cancellation, recovery and ownership suites;
@@ -100,7 +108,8 @@ The direct/palette models and narrow-distance correction are development tooling
 They do not establish general palette, shape, production or performance readiness.
 The current source project is `tools/WarmReference/Vp8lParityModel`; it needs no
 production/reference assemblies to build. Fixture PNG decoding is separate.
-Unchanged production qualification is reused; no performance/allocation claim
-follows from these packet proofs. See
+The unchanged public encoder paths reuse their qualification. The new match
+component has focused index/admission evidence; end-to-end requalification follows
+integration. No performance/allocation claim follows from these proofs. See
 [numeric evidence](vp8l-byte-parity-evidence.json) and the
 [complete-packet report](VP8L-COMPLETE-PACKET.md).

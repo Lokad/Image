@@ -77,7 +77,7 @@
     "members": 22,
     "mirrored": true
   },
-  "latestRound": "E51",
+  "latestRound": "E52",
   "crossColorAndAuxiliaryStages": {
     "scope": "ONE existing513x259 RGBA8 method4/quality75/exact=1 control. Complete transform prefix, not main image or complete encoder.",
     "productionChanged": false,
@@ -5676,5 +5676,55 @@
       "ActualRGBA16/stream/async/ImageBudget boundaries and coherent full bothOS/differential/affectedscalar/same-package qualification; remove superseded implementation-specific assertions.",
       "Remaining lossy encoders/exact decoders/deferredCPU<=1/allocations and complete functional/memory/text/Lanczos/release objectives."
     ]
+  },
+  "ownedProductionMatcherPreparation": {
+    "round": "E52",
+    "productionSourceAdded": true,
+    "publicEncoderSwitched": false,
+    "sameFrozenTestAssemblyBothOS": true,
+    "focusedCases": 8,
+    "nativeIndexGoldens": {
+      "packedOrdinary75": "b901367dc26c29cbae7817e8a8e6a1763f9a24d56e7ff15c2cd44ada736a9736",
+      "packedLowEffort75": "4f2cfec1c5dc3827cdeb42906713b37cae91e009aa0e2d211c376ccb9969b3ea",
+      "packedBox75": "036d7cf07d987fa2b59bb7e162f3d0a18141f1cd6ba2747843ec9a729295b6b7",
+      "axisBorderDense75": "8680a36126915fd200a43406d31f0f7c2094041afab506de2788d51a44e9f03e"
+    },
+    "scope": "Typed ordinary/low/box match primitive with explicit borrowed spans, output capacity owner, admitted temporary capacity, shared-root/context forwarding and cancellation/work checkpoints. Sparse/dense storage policy depends on input length, never available budget. Public encoder still uses the prior implementation.",
+    "verified": [
+      "All three native index goldens, including dense storage/maximal lengths, plus box index golden.",
+      "Aggregate live admission and overlapping old/new index ownership; terminal single refusal, cleanup and successful subsequent operation.",
+      "Retained result capacity released promptly/idempotently; borrowed inputs/root preserved.",
+      "Cancellation during successful admission refunds unused scratch/result; independent work failure also refunds.",
+      "Zero valid, negative capacity rejected without allocation."
+    ],
+    "offlineWindows": {
+      "internalLinkedProductionSource": 1830,
+      "publicUsingUnchangedE24Assembly": 2045
+    },
+    "testBuilds": {
+      "windows": 2,
+      "linux": 0
+    },
+    "buildReason": "First build qualified7 ownership/index cases. One coherent test addition covers the newly introduced dense-head storage branch and maximal matches using existing axis residuals; final immutable assembly reused onbothOS. One test provenance comment subsequently clarified without rebuilding unchanged production/test code; exact compiler input is retained.",
+    "productionLibraryBuiltLocally": false,
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "rawNativeArchive": {
+      "name": "e52-native-matches.tar.gz",
+      "bytes": 692505,
+      "sha256": "c9cc05d2f438b3a787f28e4397c06092575442169cfb8edc9511244a877b6fca",
+      "members": 8,
+      "mirrored": true
+    },
+    "rawArchive": {
+      "name": "e52-owned-match-qualified.tar.gz",
+      "bytes": 796751,
+      "sha256": "7882527d95528cee39276882701d19506e1ce40cc5b6dcee9fc1351b455b5ec1",
+      "members": 20,
+      "mirrored": true
+    },
+    "evidenceReuse": "New internal matcher is not called by public encoding. Prior public-path and source-model packet evidence remains scoped to those unchanged paths; this component has index/admission proofs, not new end-to-end encoder/package/performance qualification.",
+    "remaining": "Complete typed transform/cost/predictor/palette/token/entropy/framing port and public integration, same19 packets/16-bit/async/work/ownership, coherent full bothOS/differential/scalar/same-package qualification. No public encoder readiness/performance claim from this component."
   }
 }
