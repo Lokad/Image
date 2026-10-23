@@ -1,6 +1,6 @@
 # VP8 encoder preparation
 
-The private managed pipeline is verified through block reconstruction, prediction, distortion and entropy-rate scoring.
+The private managed pipeline is verified through composed macroblock decisions and adaptive coefficient state.
 The public lossy encoder is unchanged; complete VP8 packet replication remains open.
 
 Seven existing encoding rows have four reference packet identities:
@@ -67,8 +67,8 @@ Allten4×4predictor modes now match8,000native pixel bytes on50bounded neighbor
 contexts from the same image and two original rounding/clipping fragments. The
 span entry reuses shared geometry unchanged, with explicit encoder/geometry
 ordering for the three diagonal modes. Neighbors are snapshotted in84stack bytes;
-aliased output and tails pass. This qualifies supplied-neighbor arithmetic,
-not actual reconstructed-neighbor choice during RDO.
+aliased output and tails pass. That isolated check qualifies supplied-neighbor arithmetic; composed checks below
+add actual reconstructed-neighbor choice during RDO.
 
 Squared-error and weighted-Hadamard texture scores match79,240native result bytes
 on561opaque-control macroblock pairs and five original arithmetic pairs. Analytic
@@ -87,8 +87,22 @@ low category-two cost for9/10. These affect decisions, not emitted token syntax.
 One admitted20,192-byte owner retains costs without source/probability references;
 1,024temporary stack bytes are separately charged and released after generation.
 
-The same immutable assembly passes213focused checks per platform on Windows/Linux,
-normal and SIMD disabled, including all207earlier checks. Shared admission covers
+Composed basic-RDO decisions and rolling state match2,011,746native before/after
+bytes on the existing opaque and diagram controls:1,122macroblocks. This includes
+all coefficients, reconstructed pixels, captured scores, modes and nonzero/diffusion
+state. The diagram adds353selectedI16 blocks,255skips, flat regions and allfour UV
+modes. Allsix adaptive probability snapshots per control match. Native captures
+are accepted only after their unchanged complete72,380/7,100-byte packets match.
+Offline tests regenerate every input and predecessor state without oracle files.
+
+Counter rescaling arithmetic, update-header costs and the explicit token-buffer
+statistics policy pass focused checks. Borrowed macroblock inputs are snapshotted;
+aliases, tails, invalid layouts, cancellation and late work failure pass. The
+caller admits16,384scratch bytes once, without per-block owners or reservations.
+The returned maximum-edge candidate still needs final frame-filter qualification.
+
+The same immutable assembly passes223focused checks per platform on Windows/Linux,
+normal and SIMD disabled, including all213earlier checks. Shared admission covers
 owned capacity, retained results and replacement overlap. Refusal, cancellation,
 local/work limits and cleanup/recovery pass; sources and caller roots stay borrowed.
 The matrix owner retains3,128/4,128admitted bytes for3/4used segments. Earlier source
@@ -97,7 +111,7 @@ accounting capacities; no new timing or GC-allocation measurements are claimed.
 
 [Structured evidence](vp8-byte-parity-evidence.json) records exact producers,
 reference observations, scope and preserved raw masters. Prior public codec and
-package evidence retains its stated scope. Next are actual reconstructed-neighbor
-macroblock decisions, entropy/framing and ALPH, followed by complete
+package evidence retains its stated scope. Next are admitted frame ownership, entropy/framing, final filtering and ALPH,
+followed by complete
 packets and the bounded required-option audit. No readiness claim follows from
 these private stages.
