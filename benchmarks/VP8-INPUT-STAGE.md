@@ -1,6 +1,6 @@
 # VP8 encoder preparation
 
-The private managed pipeline is verified through block reconstruction, prediction and distortion scoring.
+The private managed pipeline is verified through block reconstruction, prediction, distortion and entropy-rate scoring.
 The public lossy encoder is unchanged; complete VP8 packet replication remains open.
 
 Seven existing encoding rows have four reference packet identities:
@@ -77,8 +77,18 @@ table. Texture rounding and absolute differences apply per4×4tile; reversed-til
 controls distinguish that rule from global accumulation. Independent strides,
 maximum error, source preservation and invalid-layout rejection pass.
 
-The same immutable assembly passes207focused checks per platform on Windows/Linux,
-normal and SIMD disabled, including all198earlier checks. Shared admission covers
+Generated rate costs match all16,752native table words and138,276residual costs
+under normative defaults and one original probability profile including0/255.
+The23,046cases reuse the same opaque coefficients and prior arithmetic fragments,
+adding AC-only companions and one sparse last-position/category probe. Entropy
+prices derive from boolean-range cycles; mode/level costs derive from normative
+trees. Two native pricing quirks are explicit: UV branch inversions and omitted
+low category-two cost for9/10. These affect decisions, not emitted token syntax.
+One admitted20,192-byte owner retains costs without source/probability references;
+1,024temporary stack bytes are separately charged and released after generation.
+
+The same immutable assembly passes213focused checks per platform on Windows/Linux,
+normal and SIMD disabled, including all207earlier checks. Shared admission covers
 owned capacity, retained results and replacement overlap. Refusal, cancellation,
 local/work limits and cleanup/recovery pass; sources and caller roots stay borrowed.
 The matrix owner retains3,128/4,128admitted bytes for3/4used segments. Earlier source
@@ -87,7 +97,7 @@ accounting capacities; no new timing or GC-allocation measurements are claimed.
 
 [Structured evidence](vp8-byte-parity-evidence.json) records exact producers,
 reference observations, scope and preserved raw masters. Prior public codec and
-package evidence retains its stated scope. Next are entropy costs and
+package evidence retains its stated scope. Next are actual reconstructed-neighbor
 macroblock decisions, entropy/framing and ALPH, followed by complete
 packets and the bounded required-option audit. No readiness claim follows from
 these private stages.

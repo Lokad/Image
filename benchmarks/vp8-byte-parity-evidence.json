@@ -1,6 +1,6 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E76",
+  "latestRound": "E77",
   "scope": "Private unwired preparation through large/small prediction and encoder reconstruction. Actual RDO/entropy/full managed VP8 encoder remain open.",
   "productionPublicBehaviorChanged": false,
   "fullObjectiveOpen": true,
@@ -3201,5 +3201,141 @@
       "scope": "Existing runner rotated only after old E75 DLL matched its qualified archive. E73/E74 completed loose observer/raw duplicates retired only after exact archive comparisons; every cited master, release, reference source and performance input retained."
     },
     "remaining": "Entropy and mode/token costs, actual intra4/intra16/chroma decisions and reconstructed-neighbor state, probability/header/ALPH/full packets/public integration, finite required options, exact decoders and full performance/functional/memory/release objectives remain open."
+  },
+  "ratePlan": {
+    "round": "E77",
+    "status": "accepted-private-unwired",
+    "scope": "Private generated encoder rate costs and residual scoring, not wired to public encoder. Actual macroblock/RDO choices and full VP8 packets remain open.",
+    "files": {
+      "tmp/e71-runtime/Lokad.Image.Tests.dll": {
+        "bytes": 1625088,
+        "sha256": "e826998d27a531e0897132aa2db3dd316ffc8055b27ae96c44650f655fb3a186"
+      },
+      "src/Lokad.Image/Internal/Vp8RatePlan.cs": {
+        "bytes": 9970,
+        "sha256": "b3a90068c7a2649544b6f49f5253a2b38ddb04a1ee36697be83bf32796c8d478"
+      },
+      "tests/Lokad.Image.Tests/Vp8RatePlanTests.cs": {
+        "bytes": 12633,
+        "sha256": "7076d5c3e7cb873af1add6afdca65ffc694d94a28a79e5c414d5c931d5b49a5c"
+      },
+      "tools/WarmReference/vp8-rate-observer.c": {
+        "bytes": 3160,
+        "sha256": "dbb03def471b23e647bd513344642250cb3e36aad8b89699b807fe3ac730568e"
+      }
+    },
+    "nativeObservation": {
+      "round": "E77-observation",
+      "scope": "Integer entropy, fixed level/mode, variable context costs and residual costs only, using E73 coefficients from one existing opaque control plus one sparse category/last-position arithmetic probe. Normative defaults and one original arithmetic probability profile including zero/255. No new image/encoder settings/full encodes or managed E77 implementation claim.",
+      "inputBytes": 1661432,
+      "inputSha256": "86518229e32e0655150e30329c7f6ac32f5a28cb7a183198fa791f12670b7507",
+      "sourceSha256": "dbb03def471b23e647bd513344642250cb3e36aad8b89699b807fe3ac730568e",
+      "probabilityProfileSha256": [
+        "3234d2f1df76ac054b3882e1ab968e0bcfbce29ffcf349e37c843500ef80767e",
+        "84548277a886607b72c89df5578434dc9d1ec966469818449e35b5bb2cbc6ebd"
+      ],
+      "blocks": 23046,
+      "tables": {
+        "entropy": 256,
+        "fixedLevels": 2048,
+        "modes": 1008,
+        "eobPerProfile": 192,
+        "variablePerProfile": 6528
+      },
+      "observations": [
+        {
+          "cpu": "normal",
+          "ready": {
+            "scalar": false,
+            "blocks": 23046,
+            "profiles": 2,
+            "tableWords": 16752
+          },
+          "bytes": 586608,
+          "sha256": "da53fad6635617aac953bbb44abc920064479497aa43bc1eeee970978b661f37"
+        },
+        {
+          "cpu": "scalar",
+          "ready": {
+            "scalar": true,
+            "blocks": 23046,
+            "profiles": 2,
+            "tableWords": 16752
+          },
+          "bytes": 586608,
+          "sha256": "da53fad6635617aac953bbb44abc920064479497aa43bc1eeee970978b661f37"
+        }
+      ],
+      "everyNativeNormalScalarResultByteEqual": true,
+      "everyResultMatchesIndependentAlgorithm": true,
+      "tablePrefixSha256": "58dfedadf26f4d9e6d3c6e7c088d6c149df3108e42d9a9c5814a7a4d0ace17bf",
+      "residualStreamSha256": "060287472f05753d8361860c7f4ee8e78fdbca724b2f51dac7e53ea9a8cc7569",
+      "compressedRaw": {
+        "name": "e77-native-rates.bin.gz",
+        "bytes": 295514,
+        "sha256": "da5ef6c674db5f395e18c330cf8580298377f92147024a43fc6d63fe3e3d5fbe"
+      },
+      "nativeKernelObservationAttempts": 5,
+      "firstIndependentScreenCorrection": "Native RDO pricing omits the low category-two bit for levels9/10 and inverts the first two UV-tree branch decisions relative to actual emission. Preserve both pricing quirks; actual syntax emission remains normative.",
+      "nativeCompleteEncodes": 0,
+      "dotnetBuilds": 0,
+      "timingRuns": 0,
+      "coefficientInputSha256": "1561aaf42b4930c5ad80fb9cf30fc63709336980dd7a0832e0f4d6097c13a9e5",
+      "workerBytes": 723528,
+      "workerSha256": "0b88012e30d9cf7e3fc7d436f815539d4e1e9546bf5d8aeb28abe5753861bf1f",
+      "backendArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "nativeObserverBuilds": 1
+    },
+    "algorithm": "Generate entropy from repeated-zero inclusive-range boolean-coder cycles: ceil(256*cycle shifts/cycle length), at most128states. Derive sign/category prices and fixed I16/UV/context I4 prices from normative probability trees; map native/geometry diagonal modes explicitly. Derive all96*68variable prices from coefficient decision predicates, including context-dependent EOB. Residual walk follows zigzag bands, suppresses EOB after zeros, handles AC-only first1 and terminal index15, and uses magnitude-dependent next context. Preserve native pricing quirks (UV first two branch inversions and omitted low category-two bit for9/10); actual syntax remains normative.",
+    "verified": [
+      "All16,752native table words and138,276residual costs match, with identical native normal/scalar results. Normative defaults and one original arithmetic probability profile including0/255;23,046coefficient cases, including one sparse category/last-position probe. No new image or encoder setting grid.",
+      "Native real coefficient inputs reuse allE73original opaque-control DCT/Walsh and signed/threshold/minimum-step fragments; luma adds AC-only companions. Managed reconstruction of those test inputs matches the complete frozen residual stream.",
+      "One20,192-byte admitted owner,1,024temporary stack bytes, no probability/source retention or per-block scope. Aggregate owned/scratch refusals, replacement overlap and independent survivors, cancellation, late work failure, local working limits, input/tail preservation and disposal/recovery pass."
+    ],
+    "qualification": {
+      "sameWindowsBuiltAssemblyBothOS": true,
+      "normalPerOS": 213,
+      "scalarPerOS": 213,
+      "windowsNormalUnion": [
+        6,
+        207
+      ],
+      "newChecks": 6,
+      "priorChecksReconfirmed": 207
+    },
+    "builds": {
+      "windowsLinkedInternalTestsSuccessful": 1,
+      "windowsCompileAttempts": 2,
+      "linux": 0,
+      "publicCore": 0,
+      "sourceModel": 0,
+      "nativeObserver": 1
+    },
+    "toolingCorrections": [
+      "Use existing OperationContext Reserve/Release in try/finally; no ReserveTransient API exists. First executed managed arithmetic passes.",
+      "Windows snapshot directory lacks runnable test dependencies, so two initial invocations discovered no tests. Qualified Windows runs use actual test output with exactly the same DLL; empty discoveries are not counted."
+    ],
+    "nativeKernelObservationAttempts": 5,
+    "nativeKernelAcceptedObservations": 2,
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "evidenceReuse": "Only new private unwired helper/tests. All207prior checks reconfirmed with the same assembly bothOSnormal/scalar. Parent aed79c040944aaa83673c4965e2f77648c8ee413 CI39955476605 succeeded in Windows/Linux correctness+actual-package and live FFmpeg jobs. Existing public codec/full/differential/frozen-package evidence retains its stated scope; no local full/package repeat.",
+    "rawArchive": {
+      "name": "e77-rate-costs-qualified.tar.xz",
+      "bytes": 1048780,
+      "members": 22,
+      "sha256": "77ad6edfbd418746cbd2ce9cff46481dfaf71f1ac31037a7efc832b0c3eb1040",
+      "everySourceMemberByteVerified": true,
+      "mirrored": true
+    },
+    "storage": {
+      "capBytes": 5000000000,
+      "windowsAfterMasterAndReceipts": 4990583818,
+      "linuxAfterMasterAndRetirement": 4999840270,
+      "allPeaksBelowCap": true,
+      "scope": "Only exact qualified-master-backed completed worker/raw duplicates retired. Linux historical c182 and e24/e62 debug symbols cold-archived losslessly and mirrored before retiring loose PDBs; restore for debugging/strict manifest replay. Native E77 worker retired only after incoming archive was fully verified in memory against current files; executable identity and every raw byte remain in the mirrored qualified master. Published packages, reference sources, performance inputs and protected paths retained."
+    },
+    "remaining": "Actual reconstructed-neighbor intra4/intra16/chroma/RDO decisions, coefficient probabilities/statistics, headers/ALPH/full packets/public integration, finite required options, exact decoders and full performance/functional/memory/release objectives remain open."
   }
 }
