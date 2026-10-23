@@ -127,10 +127,16 @@ performance grid.
    numeric/greedy palette auxiliaries, plus cached hidden-RGB main trees. Empty
    alphabets use the serialized symbol-zero placeholder; maximum data/header
    depths, retained-capacity overlap, refusal/recovery, cancellation and late work
-   cleanup pass. All 93 checks use one assembly on both platforms. Public paths reuse E53's
+   cleanup pass. Ten clustering checks match every tile assignment and final
+   population of the existing method4/method0/method1 packets (9/2/16 groups).
+   Original/working counts use flat admitted slabs and fixed pair storage; final
+   counts/maps have independent owners. Sampling candidates are reset before
+   greedy merging. Sparse token-start tiles, overlap, refusal/recovery,
+   cancellation and late work failure pass. All 103 checks use one assembly on
+   both platforms. Public paths reuse E53's
    3,884 offline checks and same-package/three-example qualification per platform.
-   Public encoding does not call these components yet. Port histogram clustering,
-   main entropy/framing and complete effort routing, and
+   Public encoding does not call these components yet. Port main entropy/framing
+   and complete effort routing, and
    connect the complete encoder before claiming end-to-end production qualification.
    Reserve substantial storage before allocation through
    the borrowed shared root, account for replacement peaks and retained outputs,

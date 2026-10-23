@@ -99,7 +99,14 @@ native bit (2,492/3,459/550/340 bits); the cached hidden-RGB main trees also mat
 All 93 focused checks pass with one assembly on both platforms, including retained
 capacity/overlap, terminal refusal/recovery, cancellation and late work cleanup.
 Unused alphabets serialize as the format's simple symbol-zero placeholder; their
-construction populations remain empty. No new native encode or timing was needed.
+construction populations remain empty. Spatial clustering adds ten checks: the
+existing method4/method0/method1 packets match every 2,145/15/45 tile assignment
+and final population of their 9/2/16 groups. Flat histogram slabs and a fixed pair
+pool are admitted before allocation; final maps/counts have independent owners.
+Sampling and greedy merging reuse storage with separate candidate sets. All 103
+checks pass with one assembly on both platforms, including sparse token-start
+tiles, overlap, terminal refusal/recovery, cancellation and late work cleanup.
+No new native encode or timing was needed.
 The last full shared-build qualification (E53) passed 3,884 offline tests per
 platform, the same private Release package and all three usage examples on both.
 These public paths remain unchanged. The encoder is not switched: complete-operation
@@ -121,7 +128,7 @@ companions do not establish packet parity for existing 16384-pixel functional te
 The frozen source model's two 16384-axis packets pass exact pinned-FFmpeg decoding;
 these remain separate functional format-extension checks, without an encoder-byte
 or timing claim.
-Histogram clustering, complete effort-family routing, admitted production integration, work and
+Main entropy/framing, complete effort-family routing, public integration, work and
 cancellation limits, output ownership and actual-package qualification remain
 open in the [finite coverage checklist](VP8L-PRODUCTION-COVERAGE.md).
 CPU parity and allocation tuning resume after required exact codec coverage.

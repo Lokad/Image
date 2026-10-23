@@ -77,7 +77,7 @@
     "members": 22,
     "mirrored": true
   },
-  "latestRound": "E59",
+  "latestRound": "E60",
   "crossColorAndAuxiliaryStages": {
     "scope": "ONE existing513x259 RGBA8 method4/quality75/exact=1 control. Complete transform prefix, not main image or complete encoder.",
     "productionChanged": false,
@@ -6589,5 +6589,99 @@
     },
     "evidenceReuse": "Public encoder selection and existing writer method bodies remain unchanged (only a read-only pending-bit getter added). E53 shared-build/same-package correctness and19 source-model packets retain their scopes; full current-source CI still validates pushes. No new CPU or allocation claim.",
     "remaining": "Histogram clustering, main entropy/framing and complete effort routing/public encoder integration; all19 packets, RGBA16/async/resources and coherent full bothOS/differential/scalar/same-package qualification."
+  },
+  "ownedProductionClusteringPreparation": {
+    "round": "E60",
+    "productionSourceAdded": true,
+    "publicEncoderSwitched": false,
+    "sameFrozenTestAssemblyBothOS": true,
+    "focusedNewCases": 10,
+    "focusedTotalIncludingPriorComponents": 103,
+    "testAssembly": {
+      "bytes": 1573376,
+      "sha256": "79e55730e447998b20c384f0e489f9f49b08da004a6ea1892d105c1f9fefa597"
+    },
+    "sourceFiles": {
+      "src/Lokad.Image/Internal/Vp8lHistogramPlan.cs": {
+        "bytes": 1823,
+        "sha256": "71a9ff24a0d7daa69dd4e9c21472619102276024d26fe42a2835adcf603fc69b"
+      },
+      "src/Lokad.Image/Internal/Vp8lReferenceClustering.cs": {
+        "bytes": 16068,
+        "sha256": "e96dc3ba7dafe917be2d10c2b08bcb7f5c386439b5e701ce7adcd733e1e234d3"
+      },
+      "tests/Lokad.Image.Tests/Vp8lReferenceClusteringTests.cs": {
+        "bytes": 7961,
+        "sha256": "20c4993205041874bc60221689f8b4fec08a68c278bd2ddbcf95b5b5cdeee1c3"
+      }
+    },
+    "scope": "Typed spatial histogram clustering with flat original/working slabs, fixed candidate storage, low/ordinary bin merging, fixed-seed sampling, greedy merging, strict first-tie remapping and independently owned final maps/populations. Complete framing/public encoder integration remains open.",
+    "verified": [
+      "Existing asymmetric method4/cache10: all2145 tile assignments and all19008 final populations of9 groups match native coded tokens/group assignments.",
+      "Existing method0/cache0: all15 tile assignments (expanded native coarsened map) and all2176 populations of2 groups match.",
+      "Existing method1/cache10: all45 tile assignments and all33792 populations of16 groups match, covering the sampling-to-greedy transition.",
+      "Sparse token-start tiles inherit predecessor assignments; copies are assigned by their start, independent retained map/count ownership and overlapping construction peaks.",
+      "Scratch/result admission refusal terminal with cleanup/recovery; cancellation at either ownership boundary and late independent recount-work failure refund all owned arrays.",
+      "Fixed pair storage resets the candidate count between sampling and greedy; no per-candidate allocation or budget-driven strategy."
+    ],
+    "nativePacketObservations": {
+      "scope": "Three existing frozen packets; final populations observed from coded tokens/group assignments with the original RFC reader. Coarsened native maps expand to their analyzed grid; map hashes encode plain int32 indices. No native encodes/model builds/timing.",
+      "cases": [
+        {
+          "name": "ordinary",
+          "archive": "tmp/e25-vp8l-first-stage.tar.gz",
+          "packetSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+          "tileBits": 3,
+          "tiles": 2145,
+          "groups": 9,
+          "cacheBits": 10,
+          "mapSha256": "a830a6669049c9cd598c370d1a99a77f609d39564b857294cbb6b38e45aa778c",
+          "groupPopulationsSha256": "2f1af5ac8f2a35ca01ce4797780aba77f10f8853464cee96d7aa1d595aa1793b"
+        },
+        {
+          "name": "low-effort",
+          "archive": "tmp/e46-native-effort-inventory.tar.gz",
+          "packetSha256": "a83e601e8d0fd35d256dd92d682db09d6868a7f401466d8f13cb95b1fd6d150b",
+          "tileBits": 7,
+          "tiles": 15,
+          "groups": 2,
+          "cacheBits": 0,
+          "mapSha256": "a3e902d3485919e7f086f8f943bdd809b309ff86c3d71b220f76db088bf41955",
+          "groupPopulationsSha256": "6eb392809e16ba3e66de8a9df4392c393824e9ee49e3cce9020a58db93bab913"
+        },
+        {
+          "name": "sampling-to-greedy",
+          "archive": "tmp/e46-native-effort-inventory.tar.gz",
+          "packetSha256": "f5a66ebfaff467b0f2409663753b3387b02b4f872e711c034869c328317b956d",
+          "tileBits": 6,
+          "tiles": 45,
+          "groups": 16,
+          "cacheBits": 10,
+          "mapSha256": "5b9740d12603b1633b2aafad0e9ee9da5be75c16e6cd8b2ad0b0b4215e1e5eec",
+          "groupPopulationsSha256": "a21ac006f47eab416493a42dd35f2dd9cd584c302249402a99e80b7603686014"
+        }
+      ]
+    },
+    "testBuilds": {
+      "windows": 3,
+      "linux": 0
+    },
+    "buildReason": "Initial102/102 pass. Add work/cancellation checks to bin-assignment loops/early-rejected evaluations; then reset the reused candidate pool between sampling and greedy, adding the existing method1 native control for that transition. Final103/103 Windows pass; no reference fixture/settings change.",
+    "productionLibraryBuiltLocally": false,
+    "sourceModelBuilds": 0,
+    "nativeBuilds": 0,
+    "nativeCompleteEncodes": 0,
+    "newNativeFixtureInputs": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "rawArchive": {
+      "name": "e60-clustering-components.tar.gz",
+      "bytes": 866495,
+      "members": 18,
+      "sha256": "f974d9acfc55fd5be23125446635cc3e77ab7d69c7144788f679168e188dd507",
+      "mirrored": true
+    },
+    "evidenceReuse": "All93 prior component checks reconfirmed in the same final assembly bothOS. Public code paths and frozen references remain unchanged; E53 shared-build/same-package public qualification and19 source-model packets retain their scopes, with current-source CI per push. No new CPU/allocation claim.",
+    "remaining": "Main entropy/framing, complete candidate/effort routing and public encoder integration; all19 packets, RGBA16/async/resources and coherent full bothOS/differential/scalar/same-package qualification."
   }
 }
