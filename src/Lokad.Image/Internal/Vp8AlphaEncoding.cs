@@ -1,6 +1,6 @@
 namespace Lokad.Image.Internal;
 
-// Exact ALPH (RFC 9649 section 2.2.1), for pinned method0/1/4/6 policies.
+// Exact ALPH (RFC 9649 section 2.2.1), for pinned method0..6 policies.
 // Alpha is borrowed only during preparation. The selected payload owns its
 // admitted capacity; no source, filtered plane or encoded frame is retained.
 internal sealed class Vp8AlphaEncoding : IDisposable
@@ -60,7 +60,7 @@ internal sealed class Vp8AlphaEncoding : IDisposable
 
     internal static Vp8AlphaEncoding Create(ReadOnlySpan<byte> alpha, int width, OperationContext context, int method = 4)
     {
-        if (method is not (0 or 1 or 4 or 6)) throw new ArgumentOutOfRangeException(nameof(method));
+        if (method is < 0 or > 6) throw new ArgumentOutOfRangeException(nameof(method));
         if (width is < 1 or > 16383 || alpha.Length == 0 || alpha.Length % width != 0 || alpha.Length / width > 16383)
             throw new ArgumentException("Expected complete VP8 alpha rows.");
         context.Work(0); context.PixelBytes(width, alpha.Length / width, 8);

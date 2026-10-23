@@ -12,6 +12,9 @@ public sealed class Vp8AlphaEncodingTests
     [InlineData(8, 0, 15238, "4753265a0d3567b9b4bce842cf09f6dd174a51b3002d3358ab8fa6243771d15a", 93386, "eb12853d220295a4327d151827462eda69df74bc9a21b938af5ca31f40cf134d")]
     [InlineData(8, 1, 30101, "21ff9bd761842e805268a49eb86b4f31ee605716833fcbc920e04867b12828af", 106588, "9491f97d6c703e0d8869c02eb4ba0edabcde831992f7173cae5ef5b16ab330ce")]
     [InlineData(8, 6, 11667, "9893369a72e99d43c8010e37f10bc33d9aa7a35d85f63faf5324befa6c26cff0", 85796, "e58f431cec4412c38b3ee49da4ff62c25cc896fa71bcffe9f131dd08e1bccc96")]
+    [InlineData(8, 2, 29094, "bbd5cc0324b413a166fe362d3f9aa40ecdbc9ce8ceddc1df7dbe0ca77a0220b9", 102582, "e4d5cf3f3c83e2c4c882a6863f1eb3c003b3b5a4647c8169ef8a951148feeefe")]
+    [InlineData(8, 3, 28510, "54be30f757cc7e0454f22c448c8a28c992c2b6dd6f2b5e9d1c9291519481d99f", 102502, "5d3ccf6fbbec6308132e7832b757122ba05007706e7786ef8296901862659e93")]
+    [InlineData(8, 5, 24387, "f7772abd25c603784e996df2b823b3d2357dd0431a8319b96038c3db8ca48e68", 98602, "2467239de7717bbaef94fdfb2fde2fe872b13c14a1a0e6010b9fc25842df797e")]
     public async Task ExistingTransparentControlMatchesEntireNativePacketWithoutRetainingSource(int depth, int method, int alphaBytes, string alphaHash, int packetBytes, string packetHash)
     {
         using var root = new TestMemoryBudget(128_000_000);
@@ -49,6 +52,9 @@ public sealed class Vp8AlphaEncodingTests
     [InlineData(0)]
     [InlineData(1)]
     [InlineData(6)]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(5)]
     public void RawSingletonRetainsOnlyItsOwnPayloadAndSurvivesBorrowedInputReplacement(int method)
     {
         using var root = new TestMemoryBudget(1_000_000); using var context = new OperationContext(new() { MemoryBudget = root }, default);
@@ -66,6 +72,9 @@ public sealed class Vp8AlphaEncodingTests
     [InlineData(0)]
     [InlineData(1)]
     [InlineData(6)]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(5)]
     public void OwnedScratchAndFinalCandidateRefusalAreTerminalAndRecoveryUsesTheSameRoot(int method)
     {
         var source = Ramp(); var original = source.ToArray(); long peak, last;
@@ -93,6 +102,9 @@ public sealed class Vp8AlphaEncodingTests
     [InlineData(0)]
     [InlineData(1)]
     [InlineData(6)]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(5)]
     public void CancellationLocalWorkAndOutputFailuresReleaseAllNewOwnership(int method)
     {
         var source = Ramp(); long work;

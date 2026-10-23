@@ -388,6 +388,17 @@ on the same immutable build. There is no new production storage/admission bounda
 source/frame disposal, retained packet ownership and independent sync/async delivery
 are verified under an explicit512B work allowance. These are correctness and
 resource proofs, without timing or GC-allocation measurements. The passing header
-case is stopped. Public alpha effort2/3/5 forwarding remains a concrete adoption
-boundary: public options accept these methods, while the private alpha factory
-currently rejects them. Existing input/settings/reference tools will be reused.
+case is stopped. Private alpha effort2/3/5 forwarding is subsequently qualified below; coherent
+public delivery/adoption remains open.
+
+The remaining declared alpha efforts2/3/5 now produce exact complete packets of
+102,582/102,502/98,602 bytes on the same asymmetricQ75 RGBA8 control. Their ALPH
+payloads are29,094/28,510/24,387 bytes. The only production change extends the
+private accepted-method guard; existing internal qualities16/24/40 already work.
+The immutable reference worker is restored from prior verified evidence, without
+another native build, new source or quality search. All523 focused checks pass
+on both platforms with and without intrinsics. All seven methods cover retained
+ownership, replacement peaks, terminal refusal, cancellation/limits and recovery.
+The three new positive cases use the unchanged default2B work allowance. There
+is no timing or GC-allocation claim. The unchanged large opaque header path keeps
+its prior proof. Public adoption and packaged delivery qualification are next.
