@@ -133,7 +133,7 @@ its task finishes. Terminal admission refusal, cleanup/recovery, local/work/outp
 limits and mismatched dimensions pass. Quality75 lossless packet checks also pass
 with the shared preparation changes; the scoped native inputs/settings stay fixed.
 
-The same immutable assembly passes462focused checks per platform on Windows/Linux,
+The same immutable assembly passes466focused checks per platform on Windows/Linux,
 normal and SIMD disabled, including the durable method3 packet row. The direct
 statistics extension reuses the prior decision/packet checks on that same producer. Shared admission covers
 owned capacity, retained results and replacement overlap. Refusal, cancellation,
@@ -165,7 +165,7 @@ targets; source-only qualification is distinct from complete-packet agreement:
 | Diagram Q100 / method4 | Maximum quality and high-quality DC policy | 15,172 | Complete packet exact |
 | Alpha Q75 / method6 | Internal alpha VP8L quality100 search | 85,796 | Open |
 | Diagram Q100 / method0 | High-quality fast source and distortion-only DC policy | 27,668 | Complete packet exact |
-| Alpha Q75 / method0 | Low-effort alpha VP8L | 93,386 | Open |
+| Alpha Q75 / method0 | Low-effort alpha VP8L | 93,386 | Complete packet exact |
 | Alpha Q75 / method1 | Alpha VP8L without cache/trace; small clustering bound | 106,588 | Open |
 
 One named large-header case uses the same original procedural formula at
@@ -288,4 +288,16 @@ Walsh/chroma quantization remain ordinary. This method has one UV reconstruction
 and no final selected-mode reconstruction. Shared owned capacity and the16KiB
 scratch envelope remain unchanged; replacement/refusal/cancellation/work/local
 limits, aliases/tails, recovery and independent packet lifetimes pass. The case is
-stopped as passing. The named ALPH0/1/6, header and public integration gates remain.
+stopped as passing. The named ALPH1/6, header and public integration gates remain.
+
+Low-effort method0 now matches the asymmetricQ75 RGBA8 complete93,386-byte packet,
+including its15,238-byte ALPH payload. The unchanged prior build already matched
+the78,102-byte color payload; its hardcoded method4 alpha was the isolated gap.
+Alpha now selects effort0/internal VP8L search quality0, preserving exact samples.
+FAST filtering also tries NONE when effort exceeds3 or alpha has more than192
+colors. The same admitted green workspace, payload ownership, strict ties and
+replacement overlap remain. Terminal refusal, cancellation/work/local/output
+cleanup, recovery and source-independent sync/async delivery pass. Defaultmethod4
+RGBA8/16 packets stay exact; the method0 claim covers the named RGBA8 control.
+No native encode, new image, quality search or timing was needed. ALPH1/6, header
+and public integration remain open.

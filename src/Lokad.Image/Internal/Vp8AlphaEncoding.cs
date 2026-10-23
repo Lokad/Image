@@ -1,6 +1,6 @@
 namespace Lokad.Image.Internal;
 
-// Exact ALPH (RFC 9649 section 2.2.1), for the pinned default method4 policy.
+// Exact ALPH (RFC 9649 section 2.2.1), for pinned method0 and method4 policies.
 // Alpha is borrowed only during preparation. The selected payload owns its
 // admitted capacity; no source, filtered plane or encoded frame is retained.
 internal sealed class Vp8AlphaEncoding : IDisposable
@@ -29,9 +29,9 @@ internal sealed class Vp8AlphaEncoding : IDisposable
     }
 
     // Occupied residual-magnitude bins estimate a second candidate. Ties retain
-    // the earlier filter. Only the frozen default FAST policy is wired here;
-    // required non-default encoder options remain a separate qualification step.
-    private static int Candidates(ReadOnlySpan<byte> alpha, int width, OperationContext context)
+    // the earlier filter. The frozen FAST filter policy is used here;
+    // other alpha effort policies remain separate qualification steps.
+    private static int Candidates(ReadOnlySpan<byte> alpha, int width, OperationContext context, int method)
     {
         Span<byte> colors = stackalloc byte[256]; colors.Clear();
         for (var i = 0; i < alpha.Length; i++) { context.Work(1); colors[alpha[i]] = 1; }
@@ -55,11 +55,12 @@ internal sealed class Vp8AlphaEncoding : IDisposable
             var sum = 0; for (var b = 0; b < 16; b++) if ((bins[f] & (1 << b)) != 0) sum += b;
             if (sum < score) { score = sum; best = f; }
         }
-        return 1 | (1 << best); // Default method4 always also tries NONE.
+        return (method > 3 || count > 192 ? 1 : 0) | (1 << best);
     }
 
-    internal static Vp8AlphaEncoding Create(ReadOnlySpan<byte> alpha, int width, OperationContext context)
+    internal static Vp8AlphaEncoding Create(ReadOnlySpan<byte> alpha, int width, OperationContext context, int method = 4)
     {
+        if (method is not (0 or 4)) throw new ArgumentOutOfRangeException(nameof(method));
         if (width is < 1 or > 16383 || alpha.Length == 0 || alpha.Length % width != 0 || alpha.Length / width > 16383)
             throw new ArgumentException("Expected complete VP8 alpha rows.");
         context.Work(0); context.PixelBytes(width, alpha.Length / width, 8);
@@ -70,7 +71,7 @@ internal sealed class Vp8AlphaEncoding : IDisposable
             var scratch = alpha.Length * 4L + 512; context.Reserve(scratch);
             try
             {
-                context.Work(0); var working = new uint[alpha.Length]; var candidates = Candidates(alpha, width, context);
+                context.Work(0); var working = new uint[alpha.Length]; var candidates = Candidates(alpha, width, context, method);
                 for (var filter = 0; filter < 4; filter++)
                 {
                     if ((candidates & (1 << filter)) == 0) continue;
@@ -81,7 +82,7 @@ internal sealed class Vp8AlphaEncoding : IDisposable
                         // carried in green: this is an internal exact image.
                         working[i] = (uint)((alpha[i] - Predict(alpha, width, i, filter)) & 255) << 8;
                     }
-                    using var prepared = Vp8lPreparedEncoding.Prepare(working, width, 4, context, quality: 32);
+                    using var prepared = Vp8lPreparedEncoding.Prepare(working, width, method, context, quality: method == 0 ? 0 : 32);
                     var body = prepared.PayloadBytes - 5; var compressed = body <= alpha.Length;
                     var length = 1 + (compressed ? body : alpha.Length);
                     if (result.payload is not null && length >= result.payload.Length) continue;
