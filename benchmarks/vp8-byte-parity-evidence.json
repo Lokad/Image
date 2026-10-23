@@ -1,7 +1,7 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E87",
-  "scope": "Private complete-packet parity on existing diagram: methods0/1/2/3/4Q75, method0Q100, and method4Q1/85/100, plus prior four default identities. Public lossy unchanged; trellis/alpha/header, public integration, exact decoder, deferred performance and full functional/release objectives remain open.",
+  "latestRound": "E88",
+  "scope": "Private luma trellis primitive matches432native records on reused transform fragments/probability profiles; earlier finite complete packet proofs unchanged. Managed method5/6 packets and public lossy adoption remain open, as do exact decoders, deferred performance and full functional/release objectives.",
   "productionPublicBehaviorChanged": false,
   "fullObjectiveOpen": true,
   "reference": {
@@ -4874,7 +4874,7 @@
         "allOriginalBytesVerified": true
       }
     },
-    "next": "E88 one primitive: admitted borrowed-buffer trellis coefficient quantization. Freeze native method5/6 observer decisions gated by existing7026/6818B packet identities, then implement/test exact quantized and dequantized samples. No CPU tuning/new image/settings grid. Public integration remains open.",
+    "next": "E89 compose selected-mode luma trellis for method5 using frozen7026B diagram. Observe exact final macroblock state first, including ordinary second UV reconstruction/diffusion; retain existing source/matrices/rate/primitive evidence. Method6 all-candidate follows. No new images/settings grid or CPU optimization.",
     "additionalBoundaries": {
       "round": "E83/E84-named-boundaries",
       "scope": "Three concrete required paths identified by source inspection. Existing diagram/asymmetric controls only; no image/settings cross-product. Native-only frozen targets, managed qualification remains open.",
@@ -6866,9 +6866,199 @@
     "parentCi": {
       "headSha": "fa311f309f54475ca14b50580aef61d8209febbd",
       "run": 39996211108,
-      "statusAtRecording": "Windows/Linux correctness and actual-package jobs succeeded; live differential in progress. Probe at next safe point."
+      "conclusion": "success",
+      "allThreeJobs": true
     },
     "evidenceInvalidation": "Only private chroma selection and frame factory now accept explicit DC-correction policy, default true. Existing Q75 decision/packet paths rechecked on same443check producer; Q100 prior mismatch is replaced by the frozen15172B packet proof. Public encode/decode/edit APIs and published packages unchanged.",
     "remaining": "Trellis5/6, alpha0/1/6, named native-positive header retry; coherent public full/package/live integration; exact decoders, deferred performance and full original functionality/memory/text/Lanczos3/release."
+  },
+  "trellisQuantization": {
+    "round": "E88",
+    "scope": "Private borrowed-buffer luma I16AC/I4 trellis quantization on36 reused signed transform fragments, both reused coefficient-probability profiles and allthree initial contexts. Complete method5/6 managed packets and public adoption remain open.",
+    "files": {
+      "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": {
+        "bytes": 1760768,
+        "sha256": "2c8db7105f6f4fe261958245ac47fa88237f16c4680dd28004cb582798828029"
+      },
+      "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": {
+        "bytes": 6302,
+        "sha256": "5d46402c8bfa34dcf4c036c37c70574566359a4275f09c5c54a6c7bc8b8d6297"
+      },
+      "tests/Lokad.Image.Tests/Vp8TrellisQuantizationTests.cs": {
+        "bytes": 7633,
+        "sha256": "87fb4896aeda185abc294b6b5ca79c836236bfd05a51cf6174de1c9aad6302b0"
+      },
+      "tools/WarmReference/vp8-trellis-observer.c": {
+        "bytes": 4425,
+        "sha256": "ba2e65df6fc3514944ac10714e1a6ea30caa038a66182aff32830cd998b2b405"
+      }
+    },
+    "sameWindowsBuiltAssemblyBothOS": true,
+    "normalPerOS": 448,
+    "scalarPerOS": 448,
+    "firstScreen": 5,
+    "primitiveRecords": 432,
+    "nativeOutputBytes": 28080,
+    "builds": {
+      "windowsLinkedTestsSuccessful": 2,
+      "windowsCompileAttempts": 2,
+      "linuxManaged": 0,
+      "publicCore": 0,
+      "sourceModel": 0,
+      "nativeSuccessful": 1,
+      "nativeCompileAttempts": 2,
+      "probeFrontend": 0
+    },
+    "initialScreenCorrections": [
+      "Native observer Werror indentation fixed before any encode.",
+      "Cancellation test now cancels after constructing OperationContext; initial four native equality tests already passed. No production math changed after first screen."
+    ],
+    "nativeCompleteEncodes": 2,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "retainedStorageAdded": 0,
+    "scratchBytes": 2048,
+    "contracts": [
+      "safe managed borrowed-buffer DP with bounded stack scratch admitted by enclosing operation",
+      "generated scan and independent equivalent Gaussian importance model; no imported implementation tables",
+      "I16AC preserves both DC slots; DCT domain only; disjoint spans and tails protected",
+      "native strict earlier tie/candidate pruning/skip/EOB behavior",
+      "invalid inputs/cancellation/work failure preserve both buffers; successful recovery leaves same root charges"
+    ],
+    "nativeReference": {
+      "round": "E88-native",
+      "producer": {
+        "workerBytes": 720024,
+        "workerSha256": "b6c81272f0845f16a7224fb5d613ed349c3ef5033b199f8d10fd808a853e32f0",
+        "backendArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+        "sourceSha256": "ba2e65df6fc3514944ac10714e1a6ea30caa038a66182aff32830cd998b2b405",
+        "originalQuantSourceSha256": "7fb4311aad071dc23bfb289c7635922e9bfe744f4fd763a338def95c57b4f4ad",
+        "instrumentedQuantSha256": "1877a709c62dc8a2cc8580c5c24ef582a9a05100c1522710ea022e6f7bb4cf18",
+        "compileCommand": [
+          "cc",
+          "-std=c11",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-Iexternal/libwebp",
+          "-Iexternal/linux-x64/native/include",
+          "tmp/e88-trellis-observer.c",
+          "tmp/e88-native-quant.c",
+          "-Wl,--wrap=VP8Decimate",
+          "external/linux-x64/native/lib/libwebp.a",
+          "external/linux-x64/native/lib/libsharpyuv.a",
+          "-lm",
+          "-o",
+          "tmp/e88-trellis-observer"
+        ]
+      },
+      "cases": [
+        {
+          "method": 5,
+          "raw": "tmp/e88-native-method5.bin.gz",
+          "rawBytes": 40690,
+          "rawSha256": "d976b106fae23e6671892042705b993356b067367d6581f0f283dd1c01bb79d7",
+          "packetBytes": 7026,
+          "packetSha256": "0e994ebda4b10234f2e9f00caf7ea6c27ae03ce82c1f3cada8eda355430cba68",
+          "profiles": [
+            {
+              "profile": 0,
+              "type": 0,
+              "lambda": 961,
+              "matrixSha256": "3fd59f74e4a6b8aeb5935a0e24fd91474aa5438ea548669fed91b1cdfb9446a9",
+              "probabilitiesSha256": "3234d2f1df76ac054b3882e1ab968e0bcfbce29ffcf349e37c843500ef80767e",
+              "records": 108,
+              "recordsBytes": 7020,
+              "recordsSha256": "53911b000188cf148a0696c8f72febae2d677be3ea7d2fd62d4f1d45dff44f62"
+            },
+            {
+              "profile": 0,
+              "type": 3,
+              "lambda": 1400,
+              "matrixSha256": "3fd59f74e4a6b8aeb5935a0e24fd91474aa5438ea548669fed91b1cdfb9446a9",
+              "probabilitiesSha256": "3234d2f1df76ac054b3882e1ab968e0bcfbce29ffcf349e37c843500ef80767e",
+              "records": 108,
+              "recordsBytes": 7020,
+              "recordsSha256": "9da1da443994cdafd155dabff5666cf82ba3363c0c1e4de8ee2b36b4e2decbde"
+            },
+            {
+              "profile": 1,
+              "type": 0,
+              "lambda": 961,
+              "matrixSha256": "3fd59f74e4a6b8aeb5935a0e24fd91474aa5438ea548669fed91b1cdfb9446a9",
+              "probabilitiesSha256": "84548277a886607b72c89df5578434dc9d1ec966469818449e35b5bb2cbc6ebd",
+              "records": 108,
+              "recordsBytes": 7020,
+              "recordsSha256": "41eff35731aed0268f7cba207ec6960b58077e539032494e6fd6b83d6344632d"
+            },
+            {
+              "profile": 1,
+              "type": 3,
+              "lambda": 1400,
+              "matrixSha256": "3fd59f74e4a6b8aeb5935a0e24fd91474aa5438ea548669fed91b1cdfb9446a9",
+              "probabilitiesSha256": "84548277a886607b72c89df5578434dc9d1ec966469818449e35b5bb2cbc6ebd",
+              "records": 108,
+              "recordsBytes": 7020,
+              "recordsSha256": "f6c5bea511a469f8648343406161ed155ff144f29a168b91c28e4a44e09277cb"
+            }
+          ]
+        },
+        {
+          "method": 6,
+          "raw": "tmp/e88-native-method6.bin.gz",
+          "rawBytes": 6834,
+          "rawSha256": "0f37f1fc9e59055ca4408613863f9c784a4310f9a3bf276a1120a6497cbf9179",
+          "packetBytes": 6818,
+          "packetSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+          "profiles": []
+        }
+      ],
+      "nativeCompleteEncodes": 2,
+      "timingRuns": 0
+    },
+    "nativeMaster": {
+      "name": "e88-native-trellis-reference.tar.xz",
+      "bytes": 313956,
+      "members": 9,
+      "sha256": "87efb630832a2c6586fdb1f503cad03bf982ff25718db6dcebbdfde34d45b620",
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "storage": {
+        "archive": "tmp/e88-native-trellis-reference.tar.xz",
+        "everyMemberRead": true,
+        "exactRetiredFiles": [
+          "tmp/e88-trellis-observer",
+          "tmp/e88-native-quant.c"
+        ],
+        "retiredBytes": 770421,
+        "linuxBeforeRetirementBytes": 4993654527,
+        "linuxAfterRetirementBytes": 4992884106
+      }
+    },
+    "rawArchive": {
+      "name": "e88-trellis-primitive-qualified.tar.xz",
+      "bytes": 509636,
+      "members": 21,
+      "sha256": "bf7366f3330df4364c485ad2e83d90d55787ae52a47b46f183736ef935a143b1",
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "storage": {
+        "capBytes": 5000000000,
+        "windowsAfterMaster": 4771941623,
+        "linuxAfterMaster": 4993394032,
+        "allMembersRead": true,
+        "allPeaksBelowCap": true
+      }
+    },
+    "parentCi": {
+      "headSha": "7a5f098b75a91af55325ccebbe87525575cbe91c",
+      "run": 39996846499,
+      "conclusion": "success",
+      "allThreeJobs": true
+    },
+    "evidenceInvalidation": "New private primitive only; no public/default or earlier qualified production path changed. Existing448checks on the same immutable assembly retain earlier source/decision/packet scope. Complete managed method5/6 remains unconfirmed.",
+    "requiredPathCorrection": "Pinned DO_TRELLIS_I16/I4 are enabled; Y2 uses ordinary Walsh quantization and DO_TRELLIS_UV is disabled. No separate Y2/chroma trellis implementation or coverage grid is required.",
+    "remaining": "Compose selected-mode method5, then all-candidate method6; exact frozen complete packets before public adoption. Alpha0/1/6, native-positive header case and full original objective remain open."
   }
 }
