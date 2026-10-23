@@ -1,6 +1,6 @@
 {
   "project": "Lokad.Image",
-  "round": "E103",
+  "round": "E104",
   "policy": "Exact normalized output samples first. Reuse unchanged valid evidence. Resolve uncertainty before changing algorithms. Old lossy RGB tolerances are transitional interoperability checks, not completion gates. No new workload grid, CPU tuning or repeated package proof.",
   "reference": {
     "executableSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
@@ -35,7 +35,7 @@
       "id": "jpeg-inverse",
       "controls": "Existing31x23 baseline444 anchor first; existing progressive-gray negative/refinement/EOB and sparse-band controls after shared kernel qualification",
       "why": "Shared dequantization/inverse-transform rounding before color conversion; progressive scan reconstruction is a separate coefficient boundary",
-      "status": "PASS and STOP at E103 tested scope: all14 frozen grayscale/full-resolution controls, original live cases, and18 numeric primitive controls. Public inverse/coefficients/progressive work boundaries qualified BOTHOS/full/scalar/package; no claim for arbitrary FFmpeg versions.",
+      "status": "PASS and STOP: E103 primitive evidence remains valid; E104 full qualification additionally requires exact samples on all30 frozen grayscale/444/422/420 controls. Inverse production source unchanged from E103.",
       "tests": [
         "JpegFfmpegTests.BaselineDecodeMatchesConfiguredFfmpeg",
         "JpegFfmpegTests.AuthoredProgressiveRefinementInteroperates",
@@ -46,7 +46,7 @@
       "id": "jpeg-color",
       "controls": "Existing31x23 baseline444/422/420 anchors and existing1x17/17x1 odd-edge companions; existing explicit-RGB declarations",
       "why": "YCbCr matrix/range rounding, centered half-resolution chroma and direct-RGB interpretation",
-      "status": "Full-resolution YCbCr/direct-RGB named controls PASS; existing31x23 baseline422 now has a measured734-channel gap, maximum1. Baseline/progressive422/420 chroma/color exactness remains open; inspect intermediate planes next.",
+      "status": "PASS and STOP at E104 scope: all30 frozen grayscale/444/422/420 controls and existing live baseline/progressive/restart/caller controls exact on BOTHOS. Three31x23 anchors also match normal native execution. Rounded8-bit chroma and integer matrix shared by owned RGBA/caller RGB/orientation. CMYK/YCCK/411/410 remain separately listed.",
       "tests": [
         "JpegFfmpegTests.BaselineDecodeMatchesConfiguredFfmpeg",
         "JpegFfmpegTests.ExplicitRgbDeclarationsInteroperate"
@@ -56,7 +56,7 @@
       "id": "jpeg-four-component-and-quarter-width",
       "controls": "Existing17x9 CMYK/YCCK baseline/progressive and420 controls;67x19 411/410 controls; existing varying-chroma YCCK420/411/410 benchmark controls if constants cannot expose expansion phase",
       "why": "Explicit inversion, four-component conversion and distinct quarter-width/vertical chroma phases",
-      "status": "UNCERTAIN exact samples; existing tolerance/decimal functional checks are preserved but are not exact-reference passes. Reuse existing controls, no sampling/shape grid.",
+      "status": "E105 unchanged-build Windows screen: existing17x9 constant CMYK and67x19 constant411 match native normal/scalar RGBA and callerRGB;17x9 constant YCCK444/420 differ at306 RGB channels by1 each. Resolve that specific conversion boundary; constant controls do not confirm varying-chroma phases. Full exact qualification remains open.",
       "tests": [
         "JpegCompatibilityFfmpegTests",
         "JpegCmykTests",
@@ -67,7 +67,7 @@
       "id": "jpeg-caller-samples",
       "controls": "Existing31x23 caller grayscale/RGB baseline/progressive controls and existing CMYK sample controls; existing stride/tail and ownership tests; existing8x8 authored direct-RGB control projected into caller GRAY8",
       "why": "Direct caller destinations use specialized packing/conversion without mandatory RGBA; retain inversion/options and untouched padding; direct-RGB to grayscale computes luminance rather than extracting decoded Y, a distinct existing public branch identified during adoption",
-      "status": "Native Y and full-resolution caller RGB/padding/opt-in orientation PASS at E103 scope. Subsampled/CMYK sample exactness and the named direct-RGB grayscale projection remain uncertain; functional and ownership checks pass. No new input grid.",
+      "status": "Native Y and caller RGB444/422/420/padding/opt-in orientation PASS at E104 scope, BOTHOS/scalar/SAME package. CMYK exactness remains uncertain. E105 Windows-only existing8x8 direct-RGB caller-gray projection matches normal/scalar native; durable live assertion remains pending.",
       "tests": [
         "JpegSampleFfmpegTests",
         "JpegSampleDecodeTests",
@@ -228,7 +228,7 @@
   },
   "cpuTimingRuns": 0,
   "gcAllocationsMeasured": false,
-  "next": "Qualify subsampled chroma expansion and its color boundary next, starting with the existing31x23 baseline422 gap. Resolve intermediate samples before editing. Continue the finite CMYK/YCCK/411/410/caller/VP8 checklist; preserve all functional, shared-memory, supplied-font, Lanczos3, deferred CPU/allocation and release objectives.",
+  "next": "Resolve YCCK conversion precision on the existing17x9 full-resolution control, then confirm the existing420/411/410 varying-chroma paths. The E105 constant CMYK and direct-RGB caller-gray controls already pass on Windows; preserve them without retuning and add durable exact native assertions. Do not infer varying-chroma equality from constant controls. No new grid or timing round.",
   "rawArchive": {
     "name": "e100-decoder-audit.tar.xz",
     "bytes": 20372,
@@ -954,24 +954,670 @@
       "linuxBeforeMirror": 4994664702,
       "linuxAfterMirror": 4996482450,
       "allObservedAndProjectedPeaksBelowCap": true
+    },
+    "nativeWindowsIdentityConfirmation": "PATH resolves a Chocolatey launcher with a different hash. Its installed target and the explicitly used external/tools/ffmpeg.exe both match the original corpus executable hash; no reference version/settings were changed.",
+    "ci": {
+      "sha": "a8112365cb8d0e4ceddcae7c09bfe0f6f00c2bd9",
+      "run": 40035385592,
+      "conclusion": "success",
+      "jobs": 3
     }
   },
   "currentProductionProducer": {
     "windowsCore": {
       "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
-      "bytes": 765440,
-      "sha256": "d0ced689214fb6c5398228634e93bb88646a7b0177fbaf8cf3e83d225c759a94"
+      "bytes": 758784,
+      "sha256": "70d146edebd3364110e5e9a231ebcce2ff5dfc9ff35a6c15726bcc647ebeddfb"
     },
     "linuxCore": {
       "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
-      "bytes": 765440,
-      "sha256": "cf5fee07ad932236fd5e835cd24bd32365f9b7d286d3e58e08ee10538376d481"
+      "bytes": 758784,
+      "sha256": "1af3702aa0322f119bc2abfd7ce397e3cf06926bda88cafbf0e5195310ffe4b6"
+    }
+  },
+  "lastProductionRound": "E104",
+  "productionChangedThisRound": true,
+  "subsampledColorBoundary": {
+    "round": "E104",
+    "status": "Diagnostic completed; production adoption accepted below in publicSubsampledJpegAdoption",
+    "scope": "Existing31x23 baseline422 and420 controls only. Reused immutable E103 core, prepared ImageProbe and one tiny public-sample diagnostic frontend. No production rebuild, sync, encoded input change or new workload grid.",
+    "coreSha256": "d0ced689214fb6c5398228634e93bb88646a7b0177fbaf8cf3e83d225c759a94",
+    "managedObservation": {
+      "probeSha256": "446e63508655b7581a3e71e6e4ab9f33854b4ada4e18d68c8b1757e999eac8ae",
+      "scope": "One public diagnostic frontend; reused immutable E103 core, no production rebuild",
+      "runs": [
+        {
+          "Width": 31,
+          "Height": 23,
+          "format": "Grayscale",
+          "sourceColor": "Auto",
+          "inputSha256": "a9fabad2b1f038030698fc31490cdfc55ea9cd362f42759cb90dc239864b4667",
+          "outputSha256": "7c208d4a6353d69de6f9da697fe23efe603fef3fb2499568c47bd08f52752a98",
+          "coreSha256": "d0ced689214fb6c5398228634e93bb88646a7b0177fbaf8cf3e83d225c759a94"
+        },
+        {
+          "Width": 31,
+          "Height": 23,
+          "format": "Rgb",
+          "sourceColor": "Rgb",
+          "inputSha256": "a9fabad2b1f038030698fc31490cdfc55ea9cd362f42759cb90dc239864b4667",
+          "outputSha256": "62e028566108a5472868e49630e49dea469931ed8a35715e6a2eac06db22407c",
+          "coreSha256": "d0ced689214fb6c5398228634e93bb88646a7b0177fbaf8cf3e83d225c759a94"
+        }
+      ]
     },
-    "actualPackage": {
-      "path": "artifacts/qualification/jpeg-inverse-final/Lokad.Image.0.2.0.nupkg",
-      "bytes": 392895,
-      "sha256": "b915403ddf174dc5b0c9e24b15eeca0b676edd7e4f2cdeae256b0baed9faca7b",
-      "coreSha256": "d0ced689214fb6c5398228634e93bb88646a7b0177fbaf8cf3e83d225c759a94"
+    "managed420": [
+      {
+        "Width": 31,
+        "Height": 23,
+        "format": "Grayscale",
+        "sourceColor": "Auto",
+        "inputSha256": "9e4b1365e3dd349e01dddd50cdf7ed801d9ca554bb1a16c54c561aa9159bef1c",
+        "outputSha256": "7c208d4a6353d69de6f9da697fe23efe603fef3fb2499568c47bd08f52752a98",
+        "coreSha256": "d0ced689214fb6c5398228634e93bb88646a7b0177fbaf8cf3e83d225c759a94"
+      },
+      {
+        "Width": 31,
+        "Height": 23,
+        "format": "Rgb",
+        "sourceColor": "Rgb",
+        "inputSha256": "9e4b1365e3dd349e01dddd50cdf7ed801d9ca554bb1a16c54c561aa9159bef1c",
+        "outputSha256": "38779b89e86d35255264301e4f2428c1d00ca752e2126d124802e5ae0c02ae55",
+        "coreSha256": "d0ced689214fb6c5398228634e93bb88646a7b0177fbaf8cf3e83d225c759a94"
+      }
+    ],
+    "comparisons": {
+      "422": {
+        "scope": "Existing31x23 baseline422 only; no production rebuild or new encoded input",
+        "normalAndScalarNativeEqual": true,
+        "completeRgbaMatchesFrozenReference": true,
+        "planes": [
+          {
+            "channel": "Y",
+            "mismatches": 0,
+            "maximum": 0,
+            "first": []
+          },
+          {
+            "channel": "Cb",
+            "mismatches": 0,
+            "maximum": 0,
+            "first": []
+          },
+          {
+            "channel": "Cr",
+            "mismatches": 0,
+            "maximum": 0,
+            "first": []
+          }
+        ]
+      },
+      "420": {
+        "scope": "Existing31x23 baseline420 only; no production rebuild or new encoded input",
+        "normalAndScalarNativeEqual": true,
+        "completeRgbaMatchesFrozenReference": true,
+        "planes": [
+          {
+            "channel": "Y",
+            "mismatches": 0,
+            "maximum": 0,
+            "first": []
+          },
+          {
+            "channel": "Cb",
+            "mismatches": 0,
+            "maximum": 0,
+            "first": []
+          },
+          {
+            "channel": "Cr",
+            "mismatches": 0,
+            "maximum": 0,
+            "first": []
+          }
+        ]
+      }
+    },
+    "composedByteExperiments": [
+      {
+        "scope": "Composition of already qualified Q13 color with existing rounded interpolated planes; byte experiment only",
+        "sampling": "422",
+        "pixels": 713,
+        "mismatches": 0,
+        "packetUnchanged": true,
+        "sha256": "cec70c8458142ab8d00666d40771cb7d08fe129e022aa55eca70ffccd1ba9f5d"
+      },
+      {
+        "scope": "Composition of already qualified Q13 color with existing rounded interpolated planes; byte experiment only",
+        "sampling": "420",
+        "pixels": 713,
+        "mismatches": 0,
+        "packetUnchanged": true,
+        "sha256": "009c2dd00e6ae9653438d65ae999a1eff56080340b6d8852617fe7281c5024c3"
+      }
+    ],
+    "reference": {
+      "windowsExecutableSha256": "1a65d5b0b10d8d9a81d2824a3538046a40ed3607c906b335a166add87613f705",
+      "sameExecutableAsFrozenCorpus": true,
+      "normalAndScalarEqualOnBothControls": true,
+      "nativeExpandedAndRgbaCaptures": [
+        "tmp/e104-native-intermediates.json",
+        "tmp/e104-420-native-intermediates.json"
+      ],
+      "launcherIdentityNote": "PATH resolves a Chocolatey launcher with a different hash. Its installed target and the explicitly used external/tools/ffmpeg.exe both match the original corpus executable hash; no reference version/settings were changed."
+    },
+    "observation": "Public SourceColorSpace.Rgb interpretation exposes Y and rounded interpolated Cb/Cr without a YCbCr matrix. All2139 visible expanded samples per image match actual reference intermediates, including borders. Applying the already qualified Q13 matrix to those bytes matches every2852-byte reference RGBA output. Geometry and inverse arithmetic are stopped as passing for these controls; divergence is the unrounded-chroma/floating color boundary.",
+    "qualificationScope": "Byte experiments on Windows x64 only, not an accepted production patch or a new cross-platform/package claim. One diagnostic frontend compiled; no production/codec/native-library rebuild, CPU timing or GC measurement. Existing E103 qualification remains valid.",
+    "next": "Completed by E104 production adoption; original diagnostic scope and bytes retained unchanged.",
+    "rawArchive": {
+      "name": "e104-subsampled-color-boundary.tar.xz",
+      "bytes": 22652,
+      "sha256": "470c80c2c89ee0d08b7ce22a167a1a618a628b474d1b55535a7dfd9975cfe835",
+      "members": 30,
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "linuxAfterMirror": 4996505102
+    },
+    "parentCi": {
+      "sha": "a8112365cb8d0e4ceddcae7c09bfe0f6f00c2bd9",
+      "run": 40035385592,
+      "conclusion": "success",
+      "jobs": 3
+    }
+  },
+  "publicSubsampledJpegAdoption": {
+    "round": "E104",
+    "status": "ACCEPTED at declared scope; full objective remains open",
+    "scope": "All30 existing frozen grayscale/444/422/420 controls; existing live baseline/progressive/restart/direct-caller controls; three31x23 anchors through array/sync/async and caller RGB with padding/Rotate90. Native normal companion checks on the three anchors and signed refinement pair.",
+    "implementation": "Centered interpolation unchanged. Round half-resolution chroma to8-bit before shared Q13 color. Fixed32-sample chunks for ownedRGBA/callerRGB/orientation; removed floating H2 output variants and their superseded implementation-only tests. Two still-used unchanged helpers moved to the YCCK caller.",
+    "memoryAndWork": {
+      "newOwnedHeapBytes": 0,
+      "fixedChunkStackBytes": 64,
+      "inverseWorkPerBlock": 4096,
+      "rowWorkPerPixel": 32,
+      "ownershipAndTerminalRefusalPreserved": true
+    },
+    "windowsProducer": [
+      {
+        "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "bytes": 758784,
+        "sha256": "70d146edebd3364110e5e9a231ebcce2ff5dfc9ff35a6c15726bcc647ebeddfb"
+      },
+      {
+        "path": "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll",
+        "bytes": 1609216,
+        "sha256": "45c6e6633198c5ef4ec72a61b8579259d8e3d11689d49d6a5f86d8f2fe9be934"
+      },
+      {
+        "path": "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll",
+        "bytes": 801280,
+        "sha256": "197e43fff73775ed88bbc39561a99bf7098e82597faf70f292a208211dd9563a"
+      },
+      {
+        "path": "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.DifferentialTests.dll",
+        "bytes": 239104,
+        "sha256": "d2a32a170ed6cadb0936e966f8aeb187d23059038ccf134f7192ad8f7615b894"
+      }
+    ],
+    "linuxProducer": [
+      {
+        "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "bytes": 758784,
+        "sha256": "1af3702aa0322f119bc2abfd7ce397e3cf06926bda88cafbf0e5195310ffe4b6"
+      },
+      {
+        "path": "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll",
+        "bytes": 1609216,
+        "sha256": "548c7632b919bcea0c5c0d5617a2ab49d69a915562d842daab0e8370e7e96dce"
+      },
+      {
+        "path": "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll",
+        "bytes": 801280,
+        "sha256": "8c80d9c84dd51234014b7778452dcb0eef55038a548d49ad7b0f66399c12fdc0"
+      },
+      {
+        "path": "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.DifferentialTests.dll",
+        "bytes": 239104,
+        "sha256": "8a7347d68a62d66dbb4addf15b6afbf1d43431d1509ac44f00ebee004e4113f3"
+      }
+    ],
+    "qualification": {
+      "fullChecksEachOs": 5023,
+      "internalChecks": 1981,
+      "publicChecks": 2102,
+      "liveChecks": 940,
+      "scalarInternalEachOs": 33,
+      "scalarPublicEachOs": 77,
+      "sameActualPackageBothOs": true,
+      "usageExamplesEachOs": 3,
+      "windowsConsumer": "artifacts/package-smoke/cf230e1a4c35448c9743296b6f327fd0",
+      "linuxConsumer": "artifacts/package-smoke/51e1ceabaa3d4cd0879c026ae40c7a13"
+    },
+    "package": {
+      "path": "artifacts/qualification/jpeg-subsampled-final/Lokad.Image.0.2.0.nupkg",
+      "bytes": 390301,
+      "sha256": "11eb044dbbefd420a844bd0ac63c5b10fab95e99e1e6938e8cc7ddb7e66d8efe",
+      "coreSha256": "70d146edebd3364110e5e9a231ebcce2ff5dfc9ff35a6c15726bcc647ebeddfb",
+      "consumer": "artifacts/package-smoke/cf230e1a4c35448c9743296b6f327fd0",
+      "passed": true,
+      "usageExamples": 3
+    },
+    "linuxPackage": {
+      "path": "artifacts/qualification/jpeg-subsampled-final/Lokad.Image.0.2.0.nupkg",
+      "bytes": 390301,
+      "sha256": "11eb044dbbefd420a844bd0ac63c5b10fab95e99e1e6938e8cc7ddb7e66d8efe",
+      "coreSha256": "70d146edebd3364110e5e9a231ebcce2ff5dfc9ff35a6c15726bcc647ebeddfb",
+      "consumer": "artifacts/package-smoke/cf230e1a4c35448c9743296b6f327fd0",
+      "passed": true,
+      "usageExamples": 3,
+      "linuxBefore": 4985284313,
+      "linuxAfter": 4992902092,
+      "exitCode": 0,
+      "sameActualPackage": true,
+      "log": "tmp/e104-package-linux.log"
+    },
+    "evidenceReuse": "Inverse math, full-resolution color, grayscale, typed metadata, encoder packets and non-JPEG paths unchanged. Existing E103 relevant confirmations remain valid and are additionally exercised by the E104 full suite. Old approximate H2 color evidence is superseded. JPEG decode CPU/allocation rows already invalidated by E103 remain prior-production; no new timing or GC claim.",
+    "logs": [
+      "tmp/e104-full-windows.log",
+      "tmp/e104-full-linux.log",
+      "tmp/e104-scalar-internal-windows.log",
+      "tmp/e104-scalar-public-windows.log",
+      "tmp/e104-scalar-internal-linux.log",
+      "tmp/e104-scalar-public-linux.log",
+      "tmp/e104-package-windows.log",
+      "tmp/e104-package-linux.log"
+    ],
+    "storageCompaction": {
+      "archives": [
+        {
+          "path": "tmp/e104-cold-completed-runtimes-linux.tar.xz",
+          "bytes": 3967284,
+          "sha256": "77d6f0aae470ebe1f00969fc71aa25549a0bef867d5afdac5101ce788a9b1db9"
+        },
+        {
+          "path": "tmp/e104-cold-inverse-runtimes-linux.tar.xz",
+          "bytes": 603132,
+          "sha256": "c61d78966544c698602730db8a3b575dd87086aa106d8388a92a63f1f8ceeb24"
+        }
+      ],
+      "retiredRegularFiles": 549,
+      "retiredBytes": 15787085,
+      "everyOriginalByteVerified": true,
+      "mirrored": true,
+      "retiredBootstrapFiles": 6,
+      "linuxAfter": 4985288433
+    },
+    "cpuTimingRuns": 0,
+    "gcAllocationsMeasured": false,
+    "rawArchive": {
+      "name": "e104-public-subsampled-qualified.tar.xz",
+      "bytes": 1687556,
+      "sha256": "6d98bf1b78198ca07888fc81ebadc08c366a17aa557a859c900414cefad38796",
+      "members": 66,
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "linuxBeforeMirror": 4992913380,
+      "linuxAfterMirror": 4994600936,
+      "allObservedAndProjectedPeaksBelowCap": true
+    }
+  },
+  "remainingJpegScreen": {
+    "round": "E105",
+    "status": "Windows byte diagnostics only; no production change or full qualification claim",
+    "coreSha256": "70d146edebd3364110e5e9a231ebcce2ff5dfc9ff35a6c15726bcc647ebeddfb",
+    "scope": "Five named existing controls only; original authored generator methods reused from the verified current test assembly. Normal/scalar pinned FFmpeg settings retained. No new workload grid, production rebuild or timing.",
+    "managed": [
+      {
+        "name": "direct-rgb-gray",
+        "Width": 8,
+        "Height": 8,
+        "format": "Grayscale",
+        "packetSha256": "ebbb4a31a0eaced52498afc90968b753bf86bd604193abb7b9327adaba779501",
+        "rgbaSha256": "f54b91de72cfa7bd1cee94482e7ccc901bd900a3b561ecfa1fe3657a72d5e982",
+        "samplesSha256": "a0fab1377f49a759b57f63318262ebe89fabfc990e8e93ceac2984561482b9d4",
+        "coreSha256": "70d146edebd3364110e5e9a231ebcce2ff5dfc9ff35a6c15726bcc647ebeddfb"
+      },
+      {
+        "name": "cmyk",
+        "Width": 17,
+        "Height": 9,
+        "format": "Rgb",
+        "packetSha256": "4f7e589c4b0ec42c29e21bcf2fe428a3819976616e40d863fbce6c648e347c97",
+        "rgbaSha256": "497a93c0574428af41e2dc2a082e72c6d843feb3e3337dcb56af4a89d92ab920",
+        "samplesSha256": "11700550fdcc685e4a66e8c44324b2b97d245d1fde059eddeb737b846ef7e823",
+        "coreSha256": "70d146edebd3364110e5e9a231ebcce2ff5dfc9ff35a6c15726bcc647ebeddfb"
+      },
+      {
+        "name": "ycck444",
+        "Width": 17,
+        "Height": 9,
+        "format": "Rgb",
+        "packetSha256": "01cca6cc3c6daf67a2da41061fd3d0c1b55f7e4abb209c8365b65444821b2ddd",
+        "rgbaSha256": "3ce5649a12f9775e8db4a67f2076ec81b096e5a87821077752f2a7c00dcd24df",
+        "samplesSha256": "b491f17b7d0636a07fa9627bfb1fcaec08d33810de5e4783d2bfa37f06e5fecd",
+        "coreSha256": "70d146edebd3364110e5e9a231ebcce2ff5dfc9ff35a6c15726bcc647ebeddfb"
+      },
+      {
+        "name": "ycck420",
+        "Width": 17,
+        "Height": 9,
+        "format": "Rgb",
+        "packetSha256": "355076189e3b468d4e4df212f392bb0d7dd441649bf38271a5464a2e8a41bcb9",
+        "rgbaSha256": "3ce5649a12f9775e8db4a67f2076ec81b096e5a87821077752f2a7c00dcd24df",
+        "samplesSha256": "b491f17b7d0636a07fa9627bfb1fcaec08d33810de5e4783d2bfa37f06e5fecd",
+        "coreSha256": "70d146edebd3364110e5e9a231ebcce2ff5dfc9ff35a6c15726bcc647ebeddfb"
+      },
+      {
+        "name": "ycbcr411",
+        "Width": 67,
+        "Height": 19,
+        "format": "Rgb",
+        "packetSha256": "3deb02a9e1725a9e9dd28cda3a01d82df99d60ce3b8bea50d3a07b54ecdef14f",
+        "rgbaSha256": "c69f0c06bff0b4c87d225702deb4fedf8791caabce9864037df14a391e81ed82",
+        "samplesSha256": "4146b88c96f964d4f45ec3db6fac4def0bf9ee4b6a9bea77ae5b9f7c8cf4bae6",
+        "coreSha256": "70d146edebd3364110e5e9a231ebcce2ff5dfc9ff35a6c15726bcc647ebeddfb"
+      }
+    ],
+    "comparisons": [
+      {
+        "name": "direct-rgb-gray",
+        "referenceArguments": [
+          "-hide_banner",
+          "-loglevel",
+          "error",
+          "-cpuflags",
+          "0",
+          "-noautorotate",
+          "-f",
+          "image2pipe",
+          "-i",
+          "pipe:0",
+          "-filter_complex",
+          "scale=in_range=pc:out_range=pc:in_color_matrix=bt601:out_color_matrix=bt601:flags=bilinear+accurate_rnd+full_chroma_int:in_h_chr_pos=0:in_v_chr_pos=0",
+          "-frames:v",
+          "1",
+          "-threads:v",
+          "1",
+          "-pix_fmt",
+          "gray",
+          "-f",
+          "rawvideo",
+          "pipe:1"
+        ],
+        "observed": {
+          "normal": {
+            "rgbaSha256": "f54b91de72cfa7bd1cee94482e7ccc901bd900a3b561ecfa1fe3657a72d5e982",
+            "mismatches": 0,
+            "maximum": 0,
+            "first": [],
+            "graySha256": "a0fab1377f49a759b57f63318262ebe89fabfc990e8e93ceac2984561482b9d4",
+            "grayMismatches": 0,
+            "graySamples": [
+              98
+            ]
+          },
+          "scalar": {
+            "rgbaSha256": "f54b91de72cfa7bd1cee94482e7ccc901bd900a3b561ecfa1fe3657a72d5e982",
+            "mismatches": 0,
+            "maximum": 0,
+            "first": [],
+            "graySha256": "a0fab1377f49a759b57f63318262ebe89fabfc990e8e93ceac2984561482b9d4",
+            "grayMismatches": 0,
+            "graySamples": [
+              98
+            ]
+          }
+        },
+        "productionUnchanged": true
+      },
+      {
+        "name": "cmyk",
+        "referenceArguments": [
+          "-hide_banner",
+          "-loglevel",
+          "error",
+          "-cpuflags",
+          "0",
+          "-noautorotate",
+          "-f",
+          "image2pipe",
+          "-i",
+          "pipe:0",
+          "-filter_complex",
+          "scale=in_range=pc:out_range=pc:in_color_matrix=bt601:out_color_matrix=bt601:flags=bilinear+accurate_rnd+full_chroma_int:in_h_chr_pos=0:in_v_chr_pos=0",
+          "-frames:v",
+          "1",
+          "-threads:v",
+          "1",
+          "-pix_fmt",
+          "rgba",
+          "-f",
+          "rawvideo",
+          "pipe:1"
+        ],
+        "observed": {
+          "normal": {
+            "rgbaSha256": "497a93c0574428af41e2dc2a082e72c6d843feb3e3337dcb56af4a89d92ab920",
+            "mismatches": 0,
+            "maximum": 0,
+            "first": [],
+            "callerRgbMismatches": 0
+          },
+          "scalar": {
+            "rgbaSha256": "497a93c0574428af41e2dc2a082e72c6d843feb3e3337dcb56af4a89d92ab920",
+            "mismatches": 0,
+            "maximum": 0,
+            "first": [],
+            "callerRgbMismatches": 0
+          }
+        },
+        "productionUnchanged": true
+      },
+      {
+        "name": "ycck444",
+        "referenceArguments": [
+          "-hide_banner",
+          "-loglevel",
+          "error",
+          "-cpuflags",
+          "0",
+          "-noautorotate",
+          "-f",
+          "image2pipe",
+          "-i",
+          "pipe:0",
+          "-filter_complex",
+          "scale=in_range=pc:out_range=pc:in_color_matrix=bt601:out_color_matrix=bt601:flags=bilinear+accurate_rnd+full_chroma_int:in_h_chr_pos=0:in_v_chr_pos=0",
+          "-frames:v",
+          "1",
+          "-threads:v",
+          "1",
+          "-pix_fmt",
+          "rgba",
+          "-f",
+          "rawvideo",
+          "pipe:1"
+        ],
+        "observed": {
+          "normal": {
+            "rgbaSha256": "56d65bcc75c3921ef42b56978fe4d5a9d99924bf31fb193943a40d4b8ab70345",
+            "mismatches": 306,
+            "maximum": 1,
+            "first": [
+              [
+                0,
+                179,
+                178
+              ],
+              [
+                1,
+                127,
+                128
+              ],
+              [
+                4,
+                179,
+                178
+              ]
+            ],
+            "callerRgbMismatches": 306
+          },
+          "scalar": {
+            "rgbaSha256": "56d65bcc75c3921ef42b56978fe4d5a9d99924bf31fb193943a40d4b8ab70345",
+            "mismatches": 306,
+            "maximum": 1,
+            "first": [
+              [
+                0,
+                179,
+                178
+              ],
+              [
+                1,
+                127,
+                128
+              ],
+              [
+                4,
+                179,
+                178
+              ]
+            ],
+            "callerRgbMismatches": 306
+          }
+        },
+        "productionUnchanged": true
+      },
+      {
+        "name": "ycck420",
+        "referenceArguments": [
+          "-hide_banner",
+          "-loglevel",
+          "error",
+          "-cpuflags",
+          "0",
+          "-noautorotate",
+          "-f",
+          "image2pipe",
+          "-i",
+          "pipe:0",
+          "-filter_complex",
+          "scale=in_range=pc:out_range=pc:in_color_matrix=bt601:out_color_matrix=bt601:flags=bilinear+accurate_rnd+full_chroma_int:in_h_chr_pos=0:in_v_chr_pos=0",
+          "-frames:v",
+          "1",
+          "-threads:v",
+          "1",
+          "-pix_fmt",
+          "rgba",
+          "-f",
+          "rawvideo",
+          "pipe:1"
+        ],
+        "observed": {
+          "normal": {
+            "rgbaSha256": "56d65bcc75c3921ef42b56978fe4d5a9d99924bf31fb193943a40d4b8ab70345",
+            "mismatches": 306,
+            "maximum": 1,
+            "first": [
+              [
+                0,
+                179,
+                178
+              ],
+              [
+                1,
+                127,
+                128
+              ],
+              [
+                4,
+                179,
+                178
+              ]
+            ],
+            "callerRgbMismatches": 306
+          },
+          "scalar": {
+            "rgbaSha256": "56d65bcc75c3921ef42b56978fe4d5a9d99924bf31fb193943a40d4b8ab70345",
+            "mismatches": 306,
+            "maximum": 1,
+            "first": [
+              [
+                0,
+                179,
+                178
+              ],
+              [
+                1,
+                127,
+                128
+              ],
+              [
+                4,
+                179,
+                178
+              ]
+            ],
+            "callerRgbMismatches": 306
+          }
+        },
+        "productionUnchanged": true
+      },
+      {
+        "name": "ycbcr411",
+        "referenceArguments": [
+          "-hide_banner",
+          "-loglevel",
+          "error",
+          "-cpuflags",
+          "0",
+          "-noautorotate",
+          "-f",
+          "image2pipe",
+          "-i",
+          "pipe:0",
+          "-filter_complex",
+          "scale=in_range=pc:out_range=pc:in_color_matrix=bt601:out_color_matrix=bt601:flags=bilinear+accurate_rnd+full_chroma_int:in_h_chr_pos=0:in_v_chr_pos=0",
+          "-frames:v",
+          "1",
+          "-threads:v",
+          "1",
+          "-pix_fmt",
+          "rgba",
+          "-f",
+          "rawvideo",
+          "pipe:1"
+        ],
+        "observed": {
+          "normal": {
+            "rgbaSha256": "c69f0c06bff0b4c87d225702deb4fedf8791caabce9864037df14a391e81ed82",
+            "mismatches": 0,
+            "maximum": 0,
+            "first": [],
+            "callerRgbMismatches": 0
+          },
+          "scalar": {
+            "rgbaSha256": "c69f0c06bff0b4c87d225702deb4fedf8791caabce9864037df14a391e81ed82",
+            "mismatches": 0,
+            "maximum": 0,
+            "first": [],
+            "callerRgbMismatches": 0
+          }
+        },
+        "productionUnchanged": true
+      }
+    ],
+    "next": "Resolve YCCK conversion precision on the existing17x9 full-resolution control, then confirm the existing420/411/410 varying-chroma paths. The E105 constant CMYK and direct-RGB caller-gray controls already pass on Windows; preserve them without retuning and add durable exact native assertions. Do not infer varying-chroma equality from constant controls. No new grid or timing round.",
+    "rawArchive": {
+      "name": "e105-jpeg-remaining-screen.tar.xz",
+      "bytes": 11288,
+      "sha256": "158afc093b0693553b0e82cf863d9c2096e308d51c40e16ce4f24a0c5bbb6d46",
+      "members": 36,
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "linuxBeforeMirror": 4992902092,
+      "linuxAfterMirror": 4992913380,
+      "allObservedAndProjectedPeaksBelowCap": true
     }
   }
 }

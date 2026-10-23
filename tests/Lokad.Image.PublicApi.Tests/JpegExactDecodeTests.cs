@@ -5,10 +5,11 @@ namespace Lokad.Image.PublicApi.Tests;
 
 public sealed class JpegExactDecodeTests
 {
-    [Fact]
-    public async Task FrozenFullResolutionPixelsMatchAcrossArrayAndStreamBoundaries()
+    [Theory]
+    [InlineData("YCbCr444")] [InlineData("YCbCr422")] [InlineData("YCbCr420")]
+    public async Task FrozenPixelsMatchAcrossArrayAndStreamBoundaries(string sampling)
     {
-        var (encoded, expected) = Load(); var original = encoded.ToArray();
+        var (encoded, expected) = Load(sampling); var original = encoded.ToArray();
         using var root = new TestMemoryBudget(4 * 1024 * 1024);
         var options = new DecodeOptions { Limits = ImageLimits.Default with { MemoryBudget = root } };
         using (var retained = ImageCodec.Decode(encoded, options))
@@ -33,10 +34,13 @@ public sealed class JpegExactDecodeTests
         Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 
-    [Theory] [InlineData(false)] [InlineData(true)]
-    public void CallerRgbMatchesNativePixelsWithPaddingAndOptInOrientation(bool orient)
+    [Theory]
+    [InlineData("YCbCr444", false)] [InlineData("YCbCr444", true)]
+    [InlineData("YCbCr422", false)] [InlineData("YCbCr422", true)]
+    [InlineData("YCbCr420", false)] [InlineData("YCbCr420", true)]
+    public void CallerRgbMatchesNativePixelsWithPaddingAndOptInOrientation(string sampling, bool orient)
     {
-        var (data, native) = Load();
+        var (data, native) = Load(sampling);
         var encoded = OriginalExif.Attach(new(data, null, 31, 23, MetadataProfile.JpegBaseline420), ImageOrientation.Rotate90, true);
         var original = encoded.ToArray();
         var expected = orient ? OriginalExif.Permute(native, 31, 23, 8, ImageOrientation.Rotate90) : native;
@@ -67,16 +71,14 @@ public sealed class JpegExactDecodeTests
 
     private static string Hash(byte[] bytes) => Convert.ToHexStringLower(SHA256.HashData(bytes));
 
-    private static (byte[] Encoded, byte[] Native) Load()
+    private static (byte[] Encoded, byte[] Native) Load(string sampling = "YCbCr444")
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null && !File.Exists(Path.Combine(directory.FullName, "tests", "Fixtures", "jpeg-manifest.json")))
             directory = directory.Parent;
         Assert.NotNull(directory);
-        var prefix = Path.Combine(directory.FullName, "tests", "Fixtures", "jpeg-ffmpeg-YCbCr444-31x23");
-        var encoded = File.ReadAllBytes(prefix + ".jpg"); var native = File.ReadAllBytes(prefix + ".rgba");
-        Assert.Equal("ad1d9d11e42273349e85cfebc9b73c89231b595b883cd25d2b7832f62c353573", Hash(encoded));
-        Assert.Equal("fbf313b3c7bc442832b67d3b08bf228da503aefc142d4ac2ed8d2bfc720b76e4", Hash(native));
-        return (encoded, native);
+        var name = "jpeg-ffmpeg-" + sampling + "-31x23";
+        var encoded = File.ReadAllBytes(Path.Combine(directory.FullName, "tests", "Fixtures", name + ".jpg"));
+        return (encoded, JpegFixtureTests.NativePixels(name, encoded));
     }
 }

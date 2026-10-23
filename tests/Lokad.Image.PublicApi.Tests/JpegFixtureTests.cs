@@ -22,21 +22,11 @@ public sealed class JpegFixtureTests
             Assert.Equal((fixture.GetProperty("width").GetInt32(), fixture.GetProperty("height").GetInt32(), 8),
                 (actual.Width, actual.Height, actual.BitDepth));
             Assert.Equal(actual.Width * actual.Height * 4, expected.Length);
-            var maximum = 0; double squared = 0;
             for (var y = 0; y < actual.Height; y++)
             {
                 var row = actual.GetRow8(y);
-                if (fixture.GetProperty("sampling").GetString() is "Grayscale" or "YCbCr444")
-                    Assert.Equal(expected.AsSpan(y * row.Length, row.Length).ToArray(), row.ToArray());
-                for (var x = 0; x < row.Length; x++)
-                {
-                    if (x % 4 == 3) { Assert.Equal(255, row[x]); Assert.Equal(255, expected[y * row.Length + x]); continue; }
-                    var error = Math.Abs(row[x] - expected[y * row.Length + x]);
-                    maximum = Math.Max(maximum, error); squared += error * error;
-                }
+                Assert.Equal(expected.AsSpan(y * row.Length, row.Length).ToArray(), row.ToArray());
             }
-            var rmse = Math.Sqrt(squared / (actual.Width * actual.Height * 3));
-            Assert.True(maximum <= 4 && rmse <= 1.5, $"{name}: maximum {maximum}, RMSE {rmse:F4}");
         }
     }
 

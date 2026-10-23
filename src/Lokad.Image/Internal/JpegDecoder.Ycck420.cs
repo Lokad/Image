@@ -1,3 +1,4 @@
+using System.Buffers.Binary;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
@@ -118,5 +119,33 @@ internal ref partial struct JpegDecoder
     var r = WidenSamples8(scratch[..8]).AsUInt32(); var g = Avx2.ShiftLeftLogical(WidenSamples8(scratch.Slice(8, 8)).AsUInt32(), 8);
     var b = Avx2.ShiftLeftLogical(WidenSamples8(scratch.Slice(16, 8)).AsUInt32(), 16);
         return Avx2.Or(Avx2.Or(r, g), b);
+    }
+
+    private static Vector512<double> Interpolate420Row8(ReadOnlySpan<byte> top, ReadOnlySpan<byte> bottom, int topWeight)
+    {
+        // T.81 sampling maps these centered pixels to exact quarter fractions.
+        // Integer numerators reproduce the binary64 horizontal/vertical sums
+        // exactly: their maximum is 16*255. No chroma rounding is introduced.
+        var left = Vector256.Create(0, 1, 1, 2, 2, 3, 3, 4);
+        var right = Vector256.Create(1, 2, 2, 3, 3, 4, 4, 5);
+        var a = Vector256.Create(1, 3, 1, 3, 1, 3, 1, 3);
+        var b = Vector256.Create(3, 1, 3, 1, 3, 1, 3, 1);
+        var upper = WidenSamples8(top); var lower = WidenSamples8(bottom);
+        upper = Avx2.Add(Avx2.MultiplyLow(Avx2.PermuteVar8x32(upper, left), a), Avx2.MultiplyLow(Avx2.PermuteVar8x32(upper, right), b));
+        lower = Avx2.Add(Avx2.MultiplyLow(Avx2.PermuteVar8x32(lower, left), a), Avx2.MultiplyLow(Avx2.PermuteVar8x32(lower, right), b));
+        var sum = Avx2.Add(Avx2.MultiplyLow(upper, Vector256.Create(topWeight)), Avx2.MultiplyLow(lower, Vector256.Create(4 - topWeight)));
+        return Avx512F.Multiply(Avx512F.ConvertToVector512Double(Avx2.Subtract(sum, Vector256.Create(128 * 16))), Vector512.Create(1d / 16));
+    }
+
+    private static void PackRgb8(Vector256<uint> packed, Span<byte> output)
+    {
+        // Four 32-bit channel lanes become twelve bytes. No alpha raster or
+        // padding write: the final store is exactly four bytes, even at tails.
+        var mask = Vector128.Create((byte)0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 128, 128, 128, 128);
+        var lower = Ssse3.Shuffle(packed.GetLower().AsByte(), mask); var upper = Ssse3.Shuffle(packed.GetUpper().AsByte(), mask);
+        BinaryPrimitives.WriteUInt64LittleEndian(output, lower.AsUInt64().GetElement(0));
+        BinaryPrimitives.WriteUInt32LittleEndian(output.Slice(8), lower.AsUInt32().GetElement(2));
+        BinaryPrimitives.WriteUInt64LittleEndian(output.Slice(12), upper.AsUInt64().GetElement(0));
+        BinaryPrimitives.WriteUInt32LittleEndian(output.Slice(20), upper.AsUInt32().GetElement(2));
     }
 }

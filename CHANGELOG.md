@@ -6,7 +6,7 @@
   including restarts, direct caller samples and async output. Removed superseded
   experimental encoders and switches. Ten frozen controls match complete reference
   packets, allowing only the documented color attribution replacement.
-- Fixed-point JPEG decoding with exact samples on14 frozen grayscale/full-resolution
+- Fixed-point JPEG decoding with exact samples on30 frozen grayscale/4:4:4/4:2:2/4:2:0
   controls, shared caller RGB conversion and opt-in orientation. Removed superseded
   inverse variants; other color layouts remain under exactness qualification.
 - Bounded managed PNG stored/fast/optimal/smallest encoding, with complete raw

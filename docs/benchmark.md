@@ -49,8 +49,8 @@ those axis cases remain functional extensions without an encoder-byte claim.
 Six affected encoder time/allocation rows below describe the prior producer and
 require new costs later. Frozen decoder inputs and unchanged code retain evidence.
 
-Current JPEG decoding uses the pinned integer inverse and full-resolution color
-policy. Fourteen frozen grayscale/full-resolution controls and the declared
+Current JPEG decoding uses the pinned integer inverse and rounded-chroma color
+policy. Thirty frozen grayscale/4:4:4/4:2:2/4:2:0 controls and the declared
 public stream/caller/orientation boundaries have exact pixel gates. Earlier JPEG
 decode timings and allocations describe the replaced producer and are marked
 **Prior production; reconfirm**. No new decoder timing/allocation run is claimed.

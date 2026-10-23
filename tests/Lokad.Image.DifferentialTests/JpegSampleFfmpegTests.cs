@@ -23,7 +23,7 @@ public sealed class JpegSampleFfmpegTests
         ImageCodec.DecodeJpeg(encoded, rgb, JpegSampleFormat.Rgb);
         var expectedRgb = new byte[rgb.Length];
         for (var i = 0; i < width * height; i++) rgba.AsSpan(i * 4, 3).CopyTo(expectedRgb.AsSpan(i * 3, 3));
-        Compare(rgb, expectedRgb);
+        Assert.Equal(expectedRgb, rgb);
 
         // Extract decoded Y without RGB conversion or a range remap.
         var gray = new byte[width * height];
@@ -32,18 +32,7 @@ public sealed class JpegSampleFfmpegTests
             ["-hide_banner", "-loglevel", "error", "-cpuflags", "0", "-noautorotate", "-f", "image2pipe", "-i", "pipe:0",
              "-filter_threads", "1", "-vf", "extractplanes=y", "-frames:v", "1", "-threads:v", "1",
              "-pix_fmt", "gray", "-f", "rawvideo", "pipe:1"], encoded);
-        Compare(gray, expectedGray);
+        Assert.Equal(expectedGray, gray);
     }
 
-    private static void Compare(byte[] actual, byte[] expected)
-    {
-        Assert.Equal(expected.Length, actual.Length);
-        int maximum = 0; double squared = 0;
-        for (var i = 0; i < actual.Length; i++)
-        {
-            var error = Math.Abs(actual[i] - expected[i]); maximum = Math.Max(maximum, error); squared += error * error;
-        }
-        var rmse = Math.Sqrt(squared / actual.Length);
-        Assert.True(maximum <= 4 && rmse <= 1.5, $"JPEG caller samples: maximum {maximum}, RMSE {rmse:F4}");
-    }
 }

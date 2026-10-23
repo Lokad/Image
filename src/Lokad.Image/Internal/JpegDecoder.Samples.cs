@@ -1,5 +1,4 @@
 using System.Buffers.Binary;
-using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
@@ -127,15 +126,15 @@ internal ref partial struct JpegDecoder
             }
             return;
         }
-        if (format == JpegSampleFormat.Rgb && source == JpegColorSpace.YCbCr
-            && orientation == ImageOrientation.Normal && info.Width >= 32
-            && maxH == 2 && maxV == 2 && components.Length == 3
-            && components[0].H == 2 && components[0].V == 2
-            && components[1].H == 1 && components[1].V == 1
-            && components[2].H == 1 && components[2].V == 1
-            && Avx512F.IsSupported && Avx512F.VL.IsSupported && Avx2.IsSupported && Ssse3.IsSupported)
+        var subsampledYcbcr = source == JpegColorSpace.YCbCr && HasHalfResolutionChroma();
+        if (subsampledYcbcr && format == JpegSampleFormat.Rgb && orientation == ImageOrientation.Normal)
         {
-            WriteRgb420Samples(destination, stride); return;
+            for (var y = 0; y < info.Height; y++)
+            {
+                context.Work(info.Width * 32L);
+                WriteYcbcrPixels(y, 0, info.Width, destination.Slice(y * stride, info.Width * 3), 3);
+            }
+            return;
         }
         if (format == JpegSampleFormat.Grayscale && source != JpegColorSpace.Rgb
             && orientation == ImageOrientation.Normal)
@@ -172,6 +171,11 @@ internal ref partial struct JpegDecoder
                         components[1].Plane.AsSpan(y * components[1].BlockColumns * 8 + x, 1),
                         components[2].Plane.AsSpan(y * components[2].BlockColumns * 8 + x, 1),
                         destination.Slice(offset, 3), 3);
+                    continue;
+                }
+                if (subsampledYcbcr && format == JpegSampleFormat.Rgb)
+                {
+                    WriteYcbcrPixels(y, x, 1, destination.Slice(offset, 3), 3);
                     continue;
                 }
                 double first = firstRow[x];

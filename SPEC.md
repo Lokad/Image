@@ -1058,31 +1058,21 @@ are admitted before pixel writes. The primitive uses256 bytes of stack scratch
 and a minor256-byte immutable kernel payload, without per-block heap buffers.
 [Inverse rounding](docs/jpeg-inverse-rounding.md) states the numerical policy.
 
-Full-resolution YCbCr uses integer BT.601 conversion with coefficients derived
-from Kr=299/1000 and Kb=114/1000 through the pinned Q16/range/Q13 precision steps.
-RGBA and caller RGB use the same conversion, including opt-in orientation.
-RGB component identifiers or Adobe transform0 select direct RGB planes.
-Decode produces opaque RGBA8; no ICC conversion is applied. Fourteen existing
-frozen grayscale/full-resolution controls now require exact native samples,
-including baseline, progressive refinement, EOB runs, split bands and restarts.
-Other required sampling/color paths retain their functional gates pending exact
-reference qualification; this is not a claim of exact decoding for every input.
+YCbCr 4:4:4, 4:2:2 and 4:2:0 use integer BT.601 conversion with coefficients
+derived from Kr=299/1000 and Kb=114/1000 through the pinned Q16/range/Q13 precision
+steps. RGBA and caller RGB share this conversion, including opt-in orientation.
+Centered bilinear chroma expansion extends the edge and rounds to eight bits
+before the matrix. Fixed32-sample chunks use64 bytes of stack scratch; no extra
+row/frame allocation is introduced. Existing32-per-pixel row work/cancellation
+boundaries remain. RGB component identifiers or Adobe transform0 select direct
+RGB planes. Decode produces opaque RGBA8; no ICC conversion is applied.
 
-Subsampled chroma still uses centered bilinear expansion with edge extension.
-Its current color policy evaluates R=Y+1.402Cr,
-G=Y-0.344136286Cb-0.714136286Cr and B=Y+1.772Cb, centered at128.
-No superseded inverse implementation or old-rounding option is retained.
-
-Subsampled YCbCr interiors may reconstruct sixteen pixels with exact integer
-sixteenth interpolation and a certified float color matrix. Chroma and luma are
-exact float inputs. Coefficient differences contribute less than `2^-16` each;
-at most four float operations contribute at most `2^-16` each, with intermediates
-below512 in magnitude. Including binary64 reference error, the absolute bound
-is less than `2^-13`. Clipping does not increase error. A block is accepted only
-when every channel lies farther than this bound from a rounding half; otherwise
-the original eight-pixel binary64 path writes the block. Opaque alpha, scalar
-edges/tails, source/owner, per-row work/cancellation and memory admission remain.
-No approximate decoded byte escapes the certificate or new workspace is added.
+All30 existing frozen grayscale/4:4:4/4:2:2/4:2:0 controls require exact native
+samples, including baseline, odd edges, progressive refinement, EOB runs, split
+bands and restarts. Existing live controls require exact samples too. CMYK/YCCK
+and4:1:1/4:1:0 retain functional gates pending their exact-reference qualification;
+this is not a claim of exact decoding for every input. No superseded inverse or
+floating half-resolution YCbCr color variant is retained.
 
 
 Full-resolution direct RGB planes pack their already rounded/clipped bytes into

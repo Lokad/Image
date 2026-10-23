@@ -25,14 +25,6 @@ public sealed class JpegSampleEncodeFfmpegTests
         Assert.True(encoded.Length > 0); Assert.Equal(original, samples); Assert.True(output.CanWrite);
         using var owned = ImageCodec.Decode(encoded);
         var actual = OriginalPixels.Bytes(owned); var expected = JpegOracle.Decode(encoded, width, height, sampling);
-        Assert.Equal(expected.Length, actual.Length);
-        int maximum = 0; double squared = 0;
-        for (var i = 0; i < actual.Length; i++)
-        {
-            if (i % 4 == 3) { Assert.Equal(255, actual[i]); continue; }
-            var error = Math.Abs(actual[i] - expected[i]); maximum = Math.Max(maximum, error); squared += error * error;
-        }
-        var rmse = Math.Sqrt(squared / (width * height * 3));
-        Assert.True(maximum <= 4 && rmse <= 1.5, $"JPEG caller encode: maximum {maximum}, RMSE {rmse:F4}");
+        Assert.Equal(expected, actual);
     }
 }

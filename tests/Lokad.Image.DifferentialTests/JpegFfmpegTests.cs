@@ -1,9 +1,8 @@
 using Lokad.Image.Tooling;
-using Xunit.Abstractions;
 
 namespace Lokad.Image.DifferentialTests;
 
-public sealed class JpegFfmpegTests(ITestOutputHelper output)
+public sealed class JpegFfmpegTests
 {
     [Theory]
     [InlineData(false)] [InlineData(true)]
@@ -26,12 +25,8 @@ public sealed class JpegFfmpegTests(ITestOutputHelper output)
         using var actual = ImageCodec.Decode(encoded);
         var sampling = pixelFormat switch { "yuvj444p" => JpegSampling.YCbCr444, "yuvj422p" => JpegSampling.YCbCr422, _ => JpegSampling.YCbCr420 };
         var reference = JpegOracle.Decode(encoded, width, height, sampling);
-        if (sampling == JpegSampling.YCbCr444)
-        {
-            Assert.Equal(reference, OriginalPixels.Bytes(actual));
-            if (width == 31 && height == 23) AssertNormalNative(encoded, width, height, sampling, OriginalPixels.Bytes(actual));
-        }
-        else Compare(OriginalPixels.Bytes(actual), reference, width * height, pixelFormat);
+        Assert.Equal(reference, OriginalPixels.Bytes(actual));
+        if (width == 31 && height == 23) AssertNormalNative(encoded, width, height, sampling, OriginalPixels.Bytes(actual));
     }
 
     public static IEnumerable<object[]> EncodingProfiles()
@@ -50,8 +45,7 @@ public sealed class JpegFfmpegTests(ITestOutputHelper output)
         ImageCodec.EncodeJpeg(image, encoded, new JpegEncodeOptions { Sampling = sampling, Quality = quality, RestartInterval = 2 });
         using var actual = ImageCodec.Decode(encoded.ToArray());
         var reference = JpegOracle.Decode(encoded.ToArray(), image.Width, image.Height, sampling);
-        if (sampling is JpegSampling.YCbCr444 or JpegSampling.Grayscale) Assert.Equal(reference, OriginalPixels.Bytes(actual));
-        else Compare(OriginalPixels.Bytes(actual), reference, image.Width * image.Height, sampling.ToString());
+        Assert.Equal(reference, OriginalPixels.Bytes(actual));
         Assert.True(encoded.CanWrite);
     }
 
@@ -69,9 +63,7 @@ public sealed class JpegFfmpegTests(ITestOutputHelper output)
             Sampling = sampling, RestartInterval = interval
         });
         using var actual = ImageCodec.Decode(encoded.ToArray());
-        // Historical decoder interoperability tolerance, not an exact decoder
-        // qualification or a reference-packet claim for these new MCU intervals.
-        Compare(OriginalPixels.Bytes(actual), JpegOracle.Decode(encoded.ToArray(), 18, 19, sampling), 18 * 19, "Reference restart " + sampling);
+        Assert.Equal(JpegOracle.Decode(encoded.ToArray(), 18, 19, sampling), OriginalPixels.Bytes(actual));
     }
 
     [Theory]
@@ -101,7 +93,7 @@ public sealed class JpegFfmpegTests(ITestOutputHelper output)
     {
         var encoded = AuthoredJpeg.ProgressiveColor(width, height, sampling, restartInterval);
         using var actual = ImageCodec.Decode(encoded);
-        Compare(OriginalPixels.Bytes(actual), JpegOracle.Decode(encoded, width, height, sampling), width * height, "progressive " + sampling);
+        Assert.Equal(JpegOracle.Decode(encoded, width, height, sampling), OriginalPixels.Bytes(actual));
     }
 
     [Theory]
@@ -127,24 +119,11 @@ public sealed class JpegFfmpegTests(ITestOutputHelper output)
     private static void AssertNormalNative(byte[] encoded, int width, int height, JpegSampling sampling, byte[] actual)
     {
         // Reuse all frozen conversion/delivery options; additionally verify the
-        // normal native path on the existing anchor and signed refinement pair.
+        // normal native path on the existing anchors and signed refinement pair.
         var arguments = JpegOracle.DecodeArguments(width, height, sampling).ToList();
         var cpu = arguments.IndexOf("-cpuflags"); Assert.True(cpu >= 0);
         arguments.RemoveRange(cpu, 2);
         Assert.Equal(OracleProcess.Run(OracleProcess.Ffmpeg, arguments, encoded), actual);
     }
 
-    private void Compare(byte[] actual, byte[] expected, int pixels, string profile)
-    {
-        Assert.Equal(pixels * 4, actual.Length); Assert.Equal(actual.Length, expected.Length);
-        int max = 0; double squared = 0;
-        for (var i = 0; i < actual.Length; i++)
-        {
-            if (i % 4 == 3) { Assert.Equal(255, actual[i]); continue; }
-            var error = Math.Abs(actual[i] - expected[i]); max = Math.Max(max, error); squared += error * error;
-        }
-        var rmse = Math.Sqrt(squared / (pixels * 3));
-        output.WriteLine($"{profile}: maximum channel error {max}, RMSE {rmse:F4}");
-        Assert.True(max <= 4 && rmse <= 1.5, $"{profile}: maximum {max}, RMSE {rmse:F4}");
-    }
 }

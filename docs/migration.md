@@ -14,10 +14,10 @@ temporary tree peaks are admitted before allocation; refusal stops the operation
 exception. Historical JPEG times refer to their recorded producers.
 
 JPEG decoding now uses one pinned fixed-point inverse policy for every block.
-Full-resolution YCbCr and caller RGB share derived integer color conversion,
-including oriented destinations. Existing grayscale/full-resolution reference
-controls are exact; other required color layouts remain under exactness
-qualification. Older decoded half ties and performance results are superseded.
+YCbCr4:4:4/4:2:2/4:2:0 and caller RGB share derived integer color conversion,
+including oriented destinations and eight-bit chroma rounding. All30 existing
+frozen grayscale/color controls are exact; CMYK/YCCK and4:1:1/4:1:0 remain under
+exactness qualification. Older decoded half ties and performance results are superseded.
 The numerical policy is described in [inverse rounding](jpeg-inverse-rounding.md).
 
 All four PNG compression policies use the managed Deflate encoder. Fourteen

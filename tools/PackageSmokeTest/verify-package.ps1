@@ -741,12 +741,18 @@ for (var sample = 0; sample < 31*4; sample++)
 }
 if (vp8Maximum > 4 || Math.Sqrt(vp8Squares/(31*23*3)) > 1.5)
     throw new Exception("Package consumer VP8 RGB differs.");
-// Frozen original JPEG decoder control, read by this package-only consumer.
+// Frozen original JPEG decoder controls, read by this package-only consumer.
+foreach (var (sampling, packetHash, pixelHash) in new[]
 {
-    var jpegExactData = File.ReadAllBytes(args[5]);
-    var jpegExactNative = File.ReadAllBytes(args[6]);
-    if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(jpegExactData)) != "ad1d9d11e42273349e85cfebc9b73c89231b595b883cd25d2b7832f62c353573"
-        || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(jpegExactNative)) != "fbf313b3c7bc442832b67d3b08bf228da503aefc142d4ac2ed8d2bfc720b76e4")
+    ("444", "ad1d9d11e42273349e85cfebc9b73c89231b595b883cd25d2b7832f62c353573", "fbf313b3c7bc442832b67d3b08bf228da503aefc142d4ac2ed8d2bfc720b76e4"),
+    ("422", "a9fabad2b1f038030698fc31490cdfc55ea9cd362f42759cb90dc239864b4667", "cec70c8458142ab8d00666d40771cb7d08fe129e022aa55eca70ffccd1ba9f5d"),
+    ("420", "9e4b1365e3dd349e01dddd50cdf7ed801d9ca554bb1a16c54c561aa9159bef1c", "009c2dd00e6ae9653438d65ae999a1eff56080340b6d8852617fe7281c5024c3")
+})
+{
+    var jpegExactData = File.ReadAllBytes(args[5].Replace("YCbCr444", "YCbCr" + sampling));
+    var jpegExactNative = File.ReadAllBytes(args[6].Replace("YCbCr444", "YCbCr" + sampling));
+    if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(jpegExactData)) != packetHash
+        || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(jpegExactNative)) != pixelHash)
         throw new Exception("Package JPEG decoder control provenance differs.");
     using var jpegExactRoot = new Lokad.Image.Tooling.TestMemoryBudget(4 * 1024 * 1024);
     var jpegExactOptions = new DecodeOptions { Limits = ImageLimits.Default with { MemoryBudget = jpegExactRoot } };
