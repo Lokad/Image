@@ -1,7 +1,7 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E66",
-  "scope": "Private unwired input conversion, transparent cleanup and exact forward4x4DCT. Public lossy encoder/full packet replication remains open.",
+  "latestRound": "E67",
+  "scope": "Private unwired input conversion, transparent cleanup, exact forward4x4DCT and Y2Walsh. Public lossy encoder/full packet replication remains open.",
   "productionPublicBehaviorChanged": false,
   "fullObjectiveOpen": true,
   "reference": {
@@ -561,6 +561,110 @@
       "bytes": 1166148,
       "members": 17,
       "sha256": "b3e0f7446318e1a21f915c2a8a50d6ca629c65544649eaafbc62ecee1c80609b",
+      "everySourceMemberByteVerified": true,
+      "mirrored": true
+    }
+  },
+  "forwardWalshStage": {
+    "round": "E67",
+    "source": "src/Lokad.Image/Internal/Vp8ForwardTransform.cs",
+    "privatePreparationOnly": true,
+    "nativeObserver": {
+      "round": "E67",
+      "scope": "Y2Walsh primitive:561macroblocks from existingE66opaque neutral128DCT control plus36original signed/extreme/odd-half fragments. Not predictor/quantizer/completepacket qualification.",
+      "sourceDctSha256": "d8b05824c7acf9afc2c5dd74c68df550cc66a1fafe3f814995f9ed00885e8e68",
+      "sourceSha256": "41844569ca5fda03e65d7121941da0fb1f052bab0b89194cd603a6b88f74bfdb",
+      "workerSha256": "3b1267f9ed1d7cad501dbb4477acb5dc857c45d84ed71e5f5a02fc1d9652625c",
+      "backendArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "observations": [
+        {
+          "cpu": "normal",
+          "bytes": 19104,
+          "sha256": "c2877ed6d624a5700f7ae254fc4bab3794c115ca66e2d009f82d3d26b16b8e51",
+          "ready": {
+            "libwebpVersion": 67072,
+            "scalar": false,
+            "signedProbes": 36,
+            "macroblocks": 561
+          }
+        },
+        {
+          "cpu": "scalar",
+          "bytes": 19104,
+          "sha256": "c2877ed6d624a5700f7ae254fc4bab3794c115ca66e2d009f82d3d26b16b8e51",
+          "ready": {
+            "libwebpVersion": 67072,
+            "scalar": true,
+            "signedProbes": 36,
+            "macroblocks": 561
+          }
+        }
+      ],
+      "normalScalarEveryByteEqual": true,
+      "rasterCoefficientsSha256": "429a1d6abd085057d28828ae65d8f8e80d9975f44530bbe658d535b00d0c4f81",
+      "rasterCoefficientCount": 8976,
+      "nativeCompleteEncodes": 0,
+      "timingRuns": 0,
+      "flags": [
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "nativeBuildAttempts": 2,
+      "firstBuildCorrection": "Separate fclose check and free onto distinct lines to satisfy misleading-indentation warning; no algorithm change."
+    },
+    "worker": {
+      "bytes": 1524736,
+      "sha256": "5be68dd6a8e04fa9d5e18fd7c546dd7c7b867acea9d0607645a30c4e15efb91b"
+    },
+    "sourceFiles": {
+      "src/Lokad.Image/Internal/Vp8ForwardTransform.cs": {
+        "bytes": 4102,
+        "sha256": "afa8b0b157a687a14a9db60339b1c265d27234e41c39c3f66f36bf92bb7996c5"
+      },
+      "tests/Lokad.Image.Tests/Vp8WalshTransformTests.cs": {
+        "bytes": 6186,
+        "sha256": "d9496ae6df19e76faa00097b91306d03734405eb7238e2d7295819e172b78973"
+      },
+      "tools/WarmReference/vp8-walsh-observer.c": {
+        "bytes": 3238,
+        "sha256": "41844569ca5fda03e65d7121941da0fb1f052bab0b89194cd603a6b88f74bfdb"
+      }
+    },
+    "algorithm": "Independent sequency-ordered Hadamard projections from two-bit reversedGraycode parity, followed by signed arithmetic half-scaling.16unquantized lumaDCs from16DCTblocks; no imported basis/table. Borrowed spans may overlap,64B bounded stack, no owned heap/cache/admission machinery; block work/cancellation remain with encoder.",
+    "verified": [
+      "All8976coefficients from561macroblocks of the existing opaqueDCT control match native.36original DCfragments qualify zero,constant\u00b12040,checker\u00b12040 and signed-unit\u00b11 odd-half rounding at eachposition.",
+      "NativeSIMD/forcedscalar19104Bstreams agree byte for byte. First1152bytes contain36arithmetic fragment vectors; remainder is existing opaqueY2coefficients.",
+      "Caller input is preserved for separate output; overlapping buffers and output tails obey borrowing. Unsupported DC\u00b12041 fails before any caller-output mutation."
+    ],
+    "qualification": {
+      "sameWindowsBuiltAssemblyBothOS": true,
+      "normalPerOS": 103,
+      "scalarPerOS": 103,
+      "newWalshChecks": 39,
+      "priorFocusedChecksReconfirmed": 64
+    },
+    "builds": {
+      "windowsLinkedInternalTests": 1,
+      "linux": 0,
+      "publicProductionCore": 0,
+      "nativeObserverAttempts": 2,
+      "nativeFirstAttempt": "Cmisleading-indentation warning at fclose/free, corrected formatting only. No reference algorithm or managed arithmetic correction.",
+      "sourceModel": 0
+    },
+    "nativePrimitiveObservations": 2,
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "evidenceReuse": "DCT and earlier private stage bodies unchanged; all64prior checks reconfirmed in one new assembly bothOS normal/scalar. No existing public encoder body/call changed, so reuse E62frozen public-core/full/differential/actualpackage and unaffected producer performance evidence. No repeated local full/package proof.",
+    "remaining": "Freeze unchanged quality75 public backend segment/quant/filter statistics against four complete packet hashes, then reproduce source analysis, clustering/smoothing and quantizer/filter decisions. Intra/macroblock/coefficient choices, Boolean/token/header coding, ALPH/headerlessVP8L, complete packets, public integration and full decoder/performance/functional/memory/release objective remain open.",
+    "rawArchive": {
+      "name": "e67-y2-walsh-qualified.tar.gz",
+      "bytes": 929965,
+      "members": 16,
+      "sha256": "fac2c25ae3ed858d8495a5aa16763d09dee50d8800867b4221297900fca5659e",
       "everySourceMemberByteVerified": true,
       "mirrored": true
     }

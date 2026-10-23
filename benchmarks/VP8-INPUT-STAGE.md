@@ -1,7 +1,7 @@
 # VP8 encoder preparation
 
-Private managed input conversion, transparent-area cleanup and forward4×4DCT
-match the pinned backend at their declared stages. The public lossy encoder is
+Private managed input conversion, transparent-area cleanup, forward4×4DCT
+and Y2Walsh match the pinned backend at their declared stages. The public lossy encoder is
 unchanged; complete VP8 packet replication remains open.
 
 The seven existing encoding rows have four reference packet identities:
@@ -47,11 +47,18 @@ This qualifies transform arithmetic, not actual encoder predictor/quantizer choi
 The DCT uses independent integer matrix projections and generated sine/cosine
 weights. Borrowed input/output may overlap; fixed64-byte stack scratch has no
 retained lifetime or per-block admission machinery. The encoder admits work and
-cancellation at its block boundary. The same assembly passes64checks per platform,
+cancellation at its block boundary. The DCT-stage assembly passed64checks per platform,
 normal and SIMD disabled, including all25conversion/cleanup checks. No public
 encoder body changed; prior frozen producer evidence retains its stated scope.
 
 [Structured evidence](vp8-byte-parity-evidence.json) records sources, native/managed
 hashes and raw receipts. No new timing/allocation or complete-packet claim is made.
-Next are Y2Walsh, quantizers and macroblock decisions, then entropy/framing and
-ALPH coding, preserving the four fixed packet targets.
+The private Y2Walsh now matches all8,976 native coefficients from561luma
+macroblocks of the same opaque control. Thirty-six signed/extreme/odd-half
+fragments also match; native SIMD/scalar streams are byte-identical. Its Hadamard
+weights come from Gray-code parity, with exact signed half-scaling and the same
+borrowing/stack contract. Current same-assembly qualification passes103checks per
+platform, normal and SIMD disabled, preserving all64earlier checks.
+
+Next are source analysis, segmentation/quantizers and macroblock decisions, then
+entropy/framing and ALPH coding, preserving the four fixed packet targets.

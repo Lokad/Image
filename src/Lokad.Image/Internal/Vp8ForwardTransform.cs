@@ -46,4 +46,37 @@ internal static class Vp8ForwardTransform
             coefficients[v * 4 + u] = checked((short)value);
         }
     }
+
+    // Sequency-ordered4-point Hadamard basis: reverse the two Gray-code bits,
+    // then take the parity of their intersection with the sample position.
+    private static int WalshWeight(int frequency, int position)
+    {
+        var gray = frequency ^ (frequency >> 1); var mask = (gray >> 1) | ((gray & 1) << 1);
+        var bits = mask & position; return ((bits ^ (bits >> 1)) & 1) == 0 ? 1 : -1;
+    }
+
+    // Sixteen unquantized lumaDCs in block-row order, with the native signed
+    // half-scale after both projections. Uses the same borrowing/stack contract
+    // as Dct; no per-block owner or budget allowance is introduced.
+    internal static void WalshDc(ReadOnlySpan<short> dc, Span<short> coefficients)
+    {
+        if (dc.Length < 16 || coefficients.Length < 16) throw new ArgumentException("Y2Walsh requires16DCsamples.");
+        for (var p = 0; p < 16; p++)
+            if (dc[p] is < -2040 or > 2040) throw new ArgumentOutOfRangeException(nameof(dc), "Unquantized8bit lumaDC exceeds its range.");
+        Span<int> rows = stackalloc int[16];
+        for (var y = 0; y < 4; y++)
+        for (var u = 0; u < 4; u++)
+        {
+            var sum = 0;
+            for (var x = 0; x < 4; x++) sum += WalshWeight(u, x) * dc[y * 4 + x];
+            rows[y * 4 + u] = sum;
+        }
+        for (var v = 0; v < 4; v++)
+        for (var u = 0; u < 4; u++)
+        {
+            var sum = 0;
+            for (var y = 0; y < 4; y++) sum += WalshWeight(v, y) * rows[y * 4 + u];
+            coefficients[v * 4 + u] = checked((short)(sum >> 1));
+        }
+    }
 }
