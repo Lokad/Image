@@ -1,7 +1,7 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E69",
-  "scope": "Private unwired input/transform/histogram and large-block prediction stages. Composed source analysis/full managed VP8 encoder remain open.",
+  "latestRound": "E70",
+  "scope": "Private unwired input/transform/prediction/histogram and original-source analysis stages. Segmentation/full managed VP8 encoder remain open.",
   "productionPublicBehaviorChanged": false,
   "fullObjectiveOpen": true,
   "reference": {
@@ -635,9 +635,9 @@
     },
     "algorithm": "Independent sequency-ordered Hadamard projections from two-bit reversedGraycode parity, followed by signed arithmetic half-scaling.16unquantized lumaDCs from16DCTblocks; no imported basis/table. Borrowed spans may overlap,64B bounded stack, no owned heap/cache/admission machinery; block work/cancellation remain with encoder.",
     "verified": [
-      "All8976coefficients from561macroblocks of the existing opaqueDCT control match native.36original DCfragments qualify zero,constant\u00b12040,checker\u00b12040 and signed-unit\u00b11 odd-half rounding at eachposition.",
+      "All8976coefficients from561macroblocks of the existing opaqueDCT control match native.36original DCfragments qualify zero,constant±2040,checker±2040 and signed-unit±1 odd-half rounding at eachposition.",
       "NativeSIMD/forcedscalar19104Bstreams agree byte for byte. First1152bytes contain36arithmetic fragment vectors; remainder is existing opaqueY2coefficients.",
-      "Caller input is preserved for separate output; overlapping buffers and output tails obey borrowing. Unsupported DC\u00b12041 fails before any caller-output mutation."
+      "Caller input is preserved for separate output; overlapping buffers and output tails obey borrowing. Unsupported DC±2041 fails before any caller-output mutation."
     ],
     "qualification": {
       "sameWindowsBuiltAssemblyBothOS": true,
@@ -1183,6 +1183,282 @@
       "initialUnpublishedGzipSha256": "eceaf804c6170baa70f91a3ee0c93db6abfd21eac4d87a91866c6eb3b911f418",
       "reason": "Smaller new container before publication, exact raw data retained.",
       "mirrored": true
+    }
+  },
+  "publicDiagnosticWordingChange": "Only unsupported-font kern version-zero diagnostic wording changes; no public codec bytes, pixels, ownership or resource behavior changes.",
+  "sourceAnalysis": {
+    "round": "E70",
+    "publicEncoderSwitched": false,
+    "native": {
+      "round": "E70",
+      "scope": "Native candidatehistograms on original source borders for the four frozen rasters; selection/mix is separately inspected scalar policy, not a direct static GetAlpha or full native encoder-stage observation. No new complete encodes or timing.",
+      "sourceSha256": "35186dae52dd652c307ebbd7209818291ae24725cfc279b0422bb6fc58a9617b",
+      "workerSha256": "cbc5b11362eacf1ebe15a9b728bbd69532af880685fb893a524ddc47d8126017",
+      "backendArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "rows": [
+        {
+          "name": "opaque",
+          "sourceYuvSha256": "f1e516c70c0d315b2f785b90fdd6a6c6e26e30eca898b7f1616380ab18aae715",
+          "sourceFullYuvaSha256": "f1e516c70c0d315b2f785b90fdd6a6c6e26e30eca898b7f1616380ab18aae715",
+          "observations": [
+            {
+              "cpu": "normal",
+              "bytes": 17952,
+              "sha256": "315225a22ef50787a8c757b7651f2de8a4d24410b7d104fd5da7a61301723601",
+              "ready": {
+                "scalar": false,
+                "width": 513,
+                "height": 259,
+                "macroblocks": 561,
+                "analysis": true,
+                "modes": 2,
+                "bytesPerMacroblock": 32
+              }
+            },
+            {
+              "cpu": "scalar",
+              "bytes": 17952,
+              "sha256": "315225a22ef50787a8c757b7651f2de8a4d24410b7d104fd5da7a61301723601",
+              "ready": {
+                "scalar": true,
+                "width": 513,
+                "height": 259,
+                "macroblocks": 561,
+                "analysis": true,
+                "modes": 2,
+                "bytesPerMacroblock": 32
+              }
+            }
+          ],
+          "normalScalarEveryByteEqual": true,
+          "analysisBytes": 1683,
+          "analysisSha256": "ddbabdd395643a9a39b91d364c57d1fbc6035271993a540d90eac942cf6bbf5b",
+          "histogramSha256": "15400b8a8a7f4562fdac76ba73f60dd3c48b849c51ea84a276a2fc79913cd1ca",
+          "averageAlpha": 11,
+          "averageUvRawScore": 610,
+          "lumaTmSeeds": 551,
+          "uvTmSeeds": 3
+        },
+        {
+          "name": "photograph",
+          "sourceYuvSha256": "b5e23d147ee602a9abeee06279c7f462c087b691a04d649ec8d349df7d9910a9",
+          "sourceFullYuvaSha256": "b5e23d147ee602a9abeee06279c7f462c087b691a04d649ec8d349df7d9910a9",
+          "observations": [
+            {
+              "cpu": "normal",
+              "bytes": 17952,
+              "sha256": "735fd31b29295bc3843af3f1821a9b6b6eeb88d8153282730e2fa03db2cc7301",
+              "ready": {
+                "scalar": false,
+                "width": 513,
+                "height": 259,
+                "macroblocks": 561,
+                "analysis": true,
+                "modes": 2,
+                "bytesPerMacroblock": 32
+              }
+            },
+            {
+              "cpu": "scalar",
+              "bytes": 17952,
+              "sha256": "735fd31b29295bc3843af3f1821a9b6b6eeb88d8153282730e2fa03db2cc7301",
+              "ready": {
+                "scalar": true,
+                "width": 513,
+                "height": 259,
+                "macroblocks": 561,
+                "analysis": true,
+                "modes": 2,
+                "bytesPerMacroblock": 32
+              }
+            }
+          ],
+          "normalScalarEveryByteEqual": true,
+          "analysisBytes": 1683,
+          "analysisSha256": "57ea731fdb7d35168ee52e4f47dd85e92d7e183ad72e5f886a713ee8fe7eda21",
+          "histogramSha256": "4540eb8c02a1fb198e3aa2052dfc01c5cb5f8ada9ec3b256cf9bc7b0bf55acad",
+          "averageAlpha": 172,
+          "averageUvRawScore": 38,
+          "lumaTmSeeds": 328,
+          "uvTmSeeds": 257
+        },
+        {
+          "name": "diagram",
+          "sourceYuvSha256": "38d9463e671d1f131f62d637d7972a83f1d4f3c6b0657e2983d498ed1020089c",
+          "sourceFullYuvaSha256": "38d9463e671d1f131f62d637d7972a83f1d4f3c6b0657e2983d498ed1020089c",
+          "observations": [
+            {
+              "cpu": "normal",
+              "bytes": 17952,
+              "sha256": "e79d71b00f0a209e273c7fda7bbaf15f7b0ebd37388d036cb48b85a7508bd77b",
+              "ready": {
+                "scalar": false,
+                "width": 513,
+                "height": 259,
+                "macroblocks": 561,
+                "analysis": true,
+                "modes": 2,
+                "bytesPerMacroblock": 32
+              }
+            },
+            {
+              "cpu": "scalar",
+              "bytes": 17952,
+              "sha256": "e79d71b00f0a209e273c7fda7bbaf15f7b0ebd37388d036cb48b85a7508bd77b",
+              "ready": {
+                "scalar": true,
+                "width": 513,
+                "height": 259,
+                "macroblocks": 561,
+                "analysis": true,
+                "modes": 2,
+                "bytesPerMacroblock": 32
+              }
+            }
+          ],
+          "normalScalarEveryByteEqual": true,
+          "analysisBytes": 1683,
+          "analysisSha256": "a0bc6e12d2b5f21ea22e6fea51b5518b748e2f2ffeee276db77223bcc6f25f7d",
+          "histogramSha256": "17535e17d4998767b7c4ec8c67f2b0d6db34d2baeff5d3d0d4f3355f62aa670d",
+          "averageAlpha": 213,
+          "averageUvRawScore": 42,
+          "lumaTmSeeds": 47,
+          "uvTmSeeds": 167
+        },
+        {
+          "name": "asymmetric",
+          "sourceYuvSha256": "18344202ae5c844099fa158361be1b4bd16422958768cdd51429c69383d4a4b5",
+          "sourceFullYuvaSha256": "ed906b1f159183b9dc46a1c4f1ba0e3273f4afb99a93ad6de832010590482cea",
+          "observations": [
+            {
+              "cpu": "normal",
+              "bytes": 17952,
+              "sha256": "07ba7bde4b73e4ed1402651738630526acd3fbb1a9c8370adb8cfa9b26cabb0b",
+              "ready": {
+                "scalar": false,
+                "width": 513,
+                "height": 259,
+                "macroblocks": 561,
+                "analysis": true,
+                "modes": 2,
+                "bytesPerMacroblock": 32
+              }
+            },
+            {
+              "cpu": "scalar",
+              "bytes": 17952,
+              "sha256": "07ba7bde4b73e4ed1402651738630526acd3fbb1a9c8370adb8cfa9b26cabb0b",
+              "ready": {
+                "scalar": true,
+                "width": 513,
+                "height": 259,
+                "macroblocks": 561,
+                "analysis": true,
+                "modes": 2,
+                "bytesPerMacroblock": 32
+              }
+            }
+          ],
+          "normalScalarEveryByteEqual": true,
+          "analysisBytes": 1683,
+          "analysisSha256": "7d3a61709ed2ca311b451c5043b52c7eead48f8c6fff081b70764801ff8adf38",
+          "histogramSha256": "2b7e77fe1257f4173f2723c2e0ecb69cebb941ae3a4f5b763b6aa790c741dd47",
+          "averageAlpha": 11,
+          "averageUvRawScore": 682,
+          "lumaTmSeeds": 550,
+          "uvTmSeeds": 12
+        }
+      ],
+      "rawOrder": "opaque,photograph,diagram,asymmetric; macroblock row order; mode0Y,mode0UV,mode1Y,mode1UV each with int32LE peak,last",
+      "compressedRaw": {
+        "name": "e70-native-analysis-shapes.bin.gz",
+        "bytes": 14432,
+        "sha256": "2ad09684bb9a37910998835cb5f066b26bd607e69bbc0ca0f8bd65157ee7919a"
+      },
+      "nativeCompleteEncodes": 0,
+      "timingRuns": 0
+    },
+    "worker": {
+      "bytes": 1548288,
+      "sha256": "7db5617ea27ce5ac00f443ec8b431c60eef8bf18b5f266b5606f084c413a67da"
+    },
+    "sourceFiles": {
+      "src/Lokad.Image/Internal/Vp8SourceAnalysis.cs": {
+        "bytes": 6094,
+        "sha256": "aab342167ecbaf70e86f2e57ee30b0b05e9e2d13fcd8d6b7618780451f9c66ae"
+      },
+      "tests/Lokad.Image.Tests/Vp8SourceAnalysisTests.cs": {
+        "bytes": 9653,
+        "sha256": "942e20374e550e74c54210bac9ca8f75c7f27bb83863af7f543b43fbd63b06db"
+      },
+      "tools/WarmReference/vp8-prediction-observer.c": {
+        "bytes": 5118,
+        "sha256": "35186dae52dd652c307ebbd7209818291ae24725cfc279b0422bb6fc58a9617b"
+      },
+      "src/Lokad.Image/TrueTypeFont.Kerning.cs": {
+        "bytes": 4075,
+        "sha256": "055f1585c3f6ca1431bd64bb8ace8775c3a2a2d956ef10a31b58085a8d2cc5b0"
+      }
+    },
+    "algorithm": "Independent composition of verified source-border prediction, integer forwardDCT and magnitude histograms. DC/TM max score sets luma complexity with first strict-max seed; combinedUV max complexity has first strict-min seed. Mix(3*luma+uv+2)>>2, invert/clamp255; floor global means. This is pre-reconstruction analysis, not actual RDO/winners.",
+    "memory": "One result owner established before allocating3*macroblocks bytes plus256int histogram;128B coarse metadata allowance. SAME borrowed operation/root,1024B coarse transient stack reserve, no source pixels retained. At513x259 retained admission2835B and scratch1024B; these are accounting capacities, not measured GC allocations. Owner is confined to its operation. No retry/fallback after refusal.",
+    "verified": [
+      "All8976native candidate shapes across4fixedrasters (71808B) match managed; nativeSIMD/scalar streams agree. Every derived alpha/luma/UV record,256entry distribution and both floored means match separately inspected selection/mix policy. Static native GetAlpha/fullanalysis is not independently linked; finalnative segmentmaps remain the next composed gate.",
+      "Source and prepared pixels unchanged. Result remains charged and readable after both are disposed; repeated owner disposal releases exactly once.",
+      "Aggregate refusal at result/scratch, cancellation after either admission, latework failure and overlapping retained/replacement capacity clean up and permit subsequent work. Caller root/input remain borrowed."
+    ],
+    "qualification": {
+      "sameWindowsBuiltAssemblyBothOS": true,
+      "normalPerOS": 141,
+      "scalarPerOS": 141,
+      "windowsNormalUnion": [
+        102,
+        39
+      ],
+      "newSourceAnalysisChecks": 10,
+      "priorChecksReconfirmed": 131
+    },
+    "builds": {
+      "windowsLinkedInternalTests": 1,
+      "linux": 0,
+      "publicProductionCore": 0,
+      "nativeObserver": 1,
+      "sourceModel": 0
+    },
+    "nativePrimitiveObservations": 8,
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "evidenceReuse": "Existing private helpers unchanged and all131prior checks reconfirmed in same new assembly bothOS normal/scalar. Public codec bodies/calls unchanged; reuse E62frozen public-core/full/differential/actualpackage and other frozen producers within recorded scopes. Font diagnostic wording correction does not invalidate codec evidence.",
+    "remaining": "Deterministic1Dclustering/smoothing/quantization must match4native maps and parameters; actualRDO/coefficients/entropy/ALPH/fullpackets/public integration, requiredoption audit, exactdecoders and fulloriginal performance/functional/memory/release objective remain open.",
+    "rawArchive": {
+      "name": "e70-source-analysis-qualified.tar.xz",
+      "bytes": 506732,
+      "members": 22,
+      "sha256": "003fe33a1890dc4fcdc23a815575004bd5a2625985e6df6df1b2dd1b5a1a592b",
+      "everySourceMemberByteVerified": true,
+      "mirrored": true
+    },
+    "storage": {
+      "capBytes": 5000000000,
+      "observedTemporaryVmPeak": 5000355898,
+      "temporaryViolationBytes": 355898,
+      "cause": "Uploading646532B compressed completedE60worker archive before retiring its2163784B raw originals exceeded the destination temporary peak allowance.",
+      "correction": "Verified every raw member, retired only those completed originals, and immediately returned below the cap (4998192737B). Archive retained exactly on both hosts.",
+      "futureRule": "Preflight destination including the transfer/archival overlap. If insufficient, verify against a streamed in-memory archive and release completed duplicates before materializing it.",
+      "e60Archive": {
+        "name": "e70-retired-e60-pre-reset-runtime.tar.xz",
+        "bytes": 646532,
+        "sha256": "80c2d18fc9d81d436761a0c4138b6446ade2cd5e3e298215a7bdc99d59ecfd3d"
+      },
+      "currentBeforeMaster": {
+        "windows": 4997280828,
+        "linux": 4998275859
+      },
+      "afterMaster": {
+        "windows": 4997791246,
+        "linux": 4998782591
+      }
     }
   }
 }

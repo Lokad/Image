@@ -76,5 +76,16 @@ partial-image replication. Native SIMD/scalar streams agree. Borrowed destinatio
 can overlap its borders using a32-byte stack snapshot, with no retained storage.
 Current same-assembly qualification passes131checks per platform, normal and SIMD
 disabled, including all115previous checks. Actual mode decisions remain open.
-Next are composed source analysis, segmentation/quantizers and macroblock decisions,
-then entropy/framing and ALPH coding, preserving the four fixed packet targets.
+Source-only analysis now composes these helpers on all four controls. All8,976
+native candidate histogram shapes match, followed by exact derived susceptibility,
+seed modes, distributions and floored means. Selection/mixing follows separately
+inspected policy; static native full analysis is not directly observed. A result
+owner retains2,835admitted bytes on these561macroblocks, plus1,024transient scratch;
+these are accounting capacities, without new allocation/timing measurements.
+The same shared operation/root covers source, result and replacement overlap.
+Refusal, cancellation and work failure refund unused capacity; retained analysis
+survives source disposal. Same-assembly qualification passes141checks per platform,
+normal and SIMD disabled, including all131earlier checks.
+
+Next are segmentation/quantizers and macroblock decisions, then entropy/framing
+and ALPH coding, preserving the four fixed packet targets.

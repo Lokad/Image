@@ -20,7 +20,7 @@ public sealed partial class TrueTypeFont
             if (range is null) { tables = []; context.Reserve(StorageBytes); return; }
             var bytes = font.Span(range.Value);
             if (bytes.Length < 4) throw new ImageDataException("Truncated kerning header.");
-            if (U16(bytes) != 0) throw new UnsupportedImageException(UnsupportedImageFeature.FontTable, "Only OpenType legacy kern version zero is supported.");
+            if (U16(bytes) != 0) throw new UnsupportedImageException(UnsupportedImageFeature.FontTable, "Only OpenType kern version zero is supported.");
             var count = U16(bytes[2..]); Items(count, context);
             context.Reserve(128 + count * 16L + 32);
             try

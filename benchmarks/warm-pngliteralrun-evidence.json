@@ -10,7 +10,7 @@
   "totalRetainedPerformanceRasters": 2,
   "observations": [
     {
-      "label": "Baseline screen (legacy guard)",
+      "label": "Baseline screen (earlier guard)",
       "runId": "png16decode-quiet-prepared-short-20261012",
       "source": {
         "sourceSha256": "6e9816b2c0372b5b1ebf73dfe27e4b58410dce4df1825369f5c8b7e124baf49e",
@@ -513,7 +513,7 @@
       "boundary": "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE conversion and second output allocation included natively; no conversion for RGBA8. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded."
     },
     {
-      "label": "Baseline confirmation (legacy guard failed)",
+      "label": "Baseline confirmation (earlier guard failed)",
       "runId": "png16decode-quiet-prepared-confirm-20261012",
       "source": {
         "sourceSha256": "6e9816b2c0372b5b1ebf73dfe27e4b58410dce4df1825369f5c8b7e124baf49e",
@@ -3624,6 +3624,6 @@
     "files": 40,
     "source": "9b957be05e9bfe5a5ea8b8793700f4f34f72e0a4ffca16d69ed34fb9dec9d296"
   },
-  "quietnessProtocolChange": "Owner confirmed exclusive VM use. New exclusive-vm-idle-v2 uses live process checks and five-second aggregate/CPU0 CPU, IO-wait and steal samples; load average is diagnostic only. Legacy guard failures remain failed. No before/after speedup certification is claimed across the protocol change.",
+  "quietnessProtocolChange": "Owner confirmed exclusive VM use. New exclusive-vm-idle-v2 uses live process checks and five-second aggregate/CPU0 CPU, IO-wait and steal samples; load average is diagnostic only. Earlier guard failures remain failed. No before/after speedup certification is claimed across the protocol change.",
   "nextAction": "Stop tuning this passing fixed pair. Confirm the next largest remaining matched material case; uniform required warm coverage stays open."
 }

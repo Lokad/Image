@@ -1106,7 +1106,7 @@
   },
   "jpegOptionCoverageAudit": {
     "round": "E9",
-    "status": "Bounded current encoder inventory;17 of18 required existing boundary rows have Reference packet confirmations; remaining row is restart33. Optional legacy CompactColor remains separate. Default adoption, explicitly named option/normalization proofs and other codecs remain OPEN.",
+    "status": "Bounded current encoder inventory;17 of18 required existing boundary rows have Reference packet confirmations; remaining row is restart33. Optional CompactColor remains separate. Default adoption, explicitly named option/normalization proofs and other codecs remain OPEN.",
     "productionCoreSha256": "524360ad311f61aaad5352fd824a9383b20cdf85f539503720d6bec4935c64fa",
     "existingRows": 19,
     "requiredRows": 18,
@@ -1288,7 +1288,7 @@
         "historicalEvidence": "warm-jpeg-compact-color-evidence.json",
         "historicalProducerPolicy": "CompactColor",
         "referencePacketBoundaryQualified": false,
-        "status": "Optional legacy profile retained; not a Reference exactness or default claim",
+        "status": "Optional profile recorded; not a Reference exactness or default claim",
         "frozenInputSha256": "257210317c8bb87ec196f89d511de45f014c66e73049fbcf5f44f399184d9668"
       },
       {
@@ -1354,10 +1354,10 @@
       {
         "case": "0.2 default adoption and explicit Original/CompactColor migration",
         "reason": "Current default remains Original; opt-in Reference does not satisfy the complete objective.",
-        "acceptance": "Deliberate versioned default decision after required public boundaries work; retain explicit legacy behavior and published0.1.0. Never silently lose restart support."
+        "acceptance": "Deliberate versioned default decision after required public boundaries work; allow replacement of unpublished profiles; published0.1.0 is immutable. Never silently lose restart support."
       }
     ],
-    "qualityScope": "Reference color qscale mapping and grayscale identity formula are explicit. Native exact anchors stay qscale5/gray69. Existing1/100 functional tests remain; do not create a quality sweep or infer equality of legacy numeric quality values.",
+    "qualityScope": "Reference color qscale mapping and grayscale identity formula are explicit. Native exact anchors stay qscale5/gray69. Existing1/100 functional tests remain; do not create a quality sweep or infer equality of earlier numeric quality values.",
     "changesInvalidatingOlderEvidence": "E9 changes only development-stage tools. Relevant production/package inputs remain E8, so full/scalar/package checks are reused. Shared color prototype traversal changed only to add a guarded row-restart branch, so six existing color complete packets were reconfirmed on both OS. Unchanged Huffman/gray helper evidence is retained.",
     "noExpandedWorkloadMatrix": true,
     "canonicalSourceIdentities": {
@@ -1539,7 +1539,7 @@
       }
     ],
     "nonRowNativeInteroperabilityScope": "Same18x19 atRGBA8, intervals2/3, all3color layouts. Historical RGBmaximum4/RMSE1.5 decoder gate; no exact native packet or decoder claim.",
-    "remaining": "Reference grayscale restarts, missingGray16 native packet confirmation, default/legacy adoption, other encoder/decoder exactness, deferred full CPU/allocation and release qualification",
+    "remaining": "Reference grayscale restarts, missingGray16 native packet confirmation, default/profile adoption, other encoder/decoder exactness, deferred full CPU/allocation and release qualification",
     "cpuAndAllocations": "Unmeasured; no scored timing or Reference CPU parity claim. Capacity/allocation ownership bound checked in focused tests.",
     "linuxBytesAfterPackage": 4990296974,
     "windowsBytesAfterPackage": 4994683618,
@@ -1588,7 +1588,7 @@
   },
   "currentReferenceEncoderCoverage": {
     "round": "E15",
-    "status": "All18 existing required encoder boundaries have Reference packet counterparts. Reference is now the development default;8 public wrappers/options-null calls agree. Historical timings remain Original; CompactColor stays an explicit optional legacy profile. Exact claims retain their frozen inputs/settings scope.",
+    "status": "All18 existing required encoder boundaries have Reference packet counterparts. Reference is now the development default;8 public wrappers/options-null calls agree. Historical timings remain Original; CompactColor stays an explicit optional profile. Exact claims retain their frozen inputs/settings scope.",
     "productionCoreSha256": "989414597671e2d96d7731b2ee8f9a2764323bc95f65eb97db8e51e1545c69aa",
     "existingRows": 19,
     "requiredRows": 18,
@@ -1770,7 +1770,7 @@
         "historicalEvidence": "warm-jpeg-compact-color-evidence.json",
         "historicalProducerPolicy": "CompactColor",
         "referencePacketBoundaryQualified": false,
-        "status": "Optional legacy profile retained; not a Reference exactness or default claim",
+        "status": "Optional profile recorded; not a Reference exactness or default claim",
         "frozenInputSha256": "257210317c8bb87ec196f89d511de45f014c66e73049fbcf5f44f399184d9668"
       },
       {
@@ -1846,7 +1846,7 @@
         "status": "Generic intervals2/3 now functionally qualified and decoded by native FFmpeg in E11; exact native packet scope stays the frozen row33 configuration. No arbitrary native encoder option or new backend exception was invented."
       }
     ],
-    "qualityScope": "Reference color qscale mapping and grayscale identity formula are explicit. Native exact anchors stay qscale5/gray69. Existing1/100 functional tests remain; do not create a quality sweep or infer equality of legacy numeric quality values.",
+    "qualityScope": "Reference color qscale mapping and grayscale identity formula are explicit. Native exact anchors stay qscale5/gray69. Existing1/100 functional tests remain; do not create a quality sweep or infer equality of earlier numeric quality values.",
     "changesInvalidatingOlderEvidence": "New Reference color restart path replaces prior unsupported behavior. Existing Reference no-restart MCU traversal adds an interval-zero guard, so complete packets and affected scalar/API/ownership checks were reconfirmed. Gray algorithm and Original/CompactColor packets are unchanged. No prior valid Reference CPU cost existed; old JPEG timings remain tied to Original producers. Unaffected decoder/transform evidence is reused. E12 changes only native tooling and one public fixture row; E11 production/full/scalar/package evidence remains valid unchanged. Nine affected frozen rows pass normal/scalar on both platforms; no full-suite rerun claimed. E14 enables Reference gray restarts and adds an interval guard in both gray passes; all previous complete packets were reconfirmed both platforms normal/scalar. New header/work behavior is qualified, with existing memory owners unchanged. All other production method bodies, explicit Original/CompactColor and decoder/transform paths are unchanged; no prior Reference timing proof existed. E15 changes only the default property initializer. Constructor/options-null behavior changes at8 public entry points, now covered by10 default-profile tests, full API qualification and the actual package. All encoder algorithms and explicit Original/CompactColor packets stay unchanged; historical quality/timing producers are pinned explicitly. All prior frozen Reference packets and scalar checks reconfirmed. Default CPU/allocation costs remain unmeasured.",
     "noExpandedWorkloadMatrix": true,
     "canonicalSourceIdentities": {
@@ -2168,7 +2168,7 @@
       "publicApi": 88,
       "total": 92
     },
-    "linuxQualification": "Full screen2150/2152 internal and2068/2071 public passed,940/940 differential passed. Two legacy staging rows plus three old profile/work assumptions corrected in tests only. Four corrected internal/four public checks pass; all other source/methods and core unchanged. Union qualifies2152internal+2072public+940live; full project reruns avoided.",
+    "linuxQualification": "Full screen2150/2152 internal and2068/2071 public passed,940/940 differential passed. Two obsolete staging rows plus three old profile/work assumptions corrected in tests only. Four corrected internal/four public checks pass; all other source/methods and core unchanged. Union qualifies2152internal+2072public+940live; full project reruns avoided.",
     "windowsQualification": "One complete current-source ./test.ps1 -Differential -NoBuild run passes all5164, plus92 scalar checks",
     "builds": {
       "production": 1,
@@ -2193,9 +2193,9 @@
     },
     "nativeEncodes": 0,
     "timingRuns": 0,
-    "scope": "Existing10 frozen native packets plus default selection at8 public wrappers using normalized existing RGB raster; options-null calls, caller-gray override and exact legacy packets. No broader source/quality/shape claim.",
+    "scope": "Existing10 frozen native packets plus default selection at8 public wrappers using normalized existing RGB raster; options-null calls, caller-gray override and exact Original-profile packets. No broader source/quality/shape claim.",
     "cpuAndAllocations": "Reference unmeasured; historical Original producers pinned explicitly, no reinterpretation of existing times/allocations",
-    "invalidatedEvidence": "Only default/options-null selection changes; encoder/decoder/transform algorithms unchanged. All frozen packets reconfirmed normal/scalar bothOS. Generic API/ownership tests follow new default; legacy-specific tests/tools explicitly choose Original. Existing independent decoder/transform evidence reused.",
+    "invalidatedEvidence": "Only default/options-null selection changes; encoder/decoder/transform algorithms unchanged. All frozen packets reconfirmed normal/scalar bothOS. Generic API/ownership tests follow new default; Original-specific tests/tools explicitly choose Original. Existing independent decoder/transform evidence reused.",
     "storageNote": "Benchmark compile restored dependency copies, detected transient VM5026572522B after transfer archive. Replaced7 restored dependency copies with byte-identical global-cache links; retired duplicate own compile outputs/exact archived stage extractions and unused reinstallable SDK formatter. Future compile-only helper checks must set CopyLocalLockFileAssemblies=false or account for dependency-copy peaks. Protected/rejected cleanup targets untouched; raw masters/runtimes/actual packages retained. SDK formatter is in the pre-existing shared external toolchain, so its removal does not free physical checkout bytes. Lossless gzip of14 historical profiler traces/sample texts subsequently freed10227670B; complete roundtrip hashes retained. Final physical checkouts are below5GB.",
     "rawArchive": {
       "file": "e15-qualified-linux.tar.gz",
