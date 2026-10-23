@@ -11,7 +11,7 @@ public sealed class JpegFfmpegTests(ITestOutputHelper output)
     {
         var encoded = AuthoredJpeg.DirectRgb(adobe);
         using var actual = ImageCodec.Decode(encoded);
-        Compare(OriginalPixels.Bytes(actual), JpegOracle.Decode(encoded, 8, 8, JpegSampling.YCbCr444), 64, "explicit RGB");
+        Assert.Equal(JpegOracle.Decode(encoded, 8, 8, JpegSampling.YCbCr444), OriginalPixels.Bytes(actual));
     }
 
     [Theory]
@@ -25,7 +25,13 @@ public sealed class JpegFfmpegTests(ITestOutputHelper output)
              "-pix_fmt", pixelFormat, "-q:v", "3", "-f", "image2pipe", "pipe:1"], OriginalPixels.Generate(width, height, 8, opaque: true));
         using var actual = ImageCodec.Decode(encoded);
         var sampling = pixelFormat switch { "yuvj444p" => JpegSampling.YCbCr444, "yuvj422p" => JpegSampling.YCbCr422, _ => JpegSampling.YCbCr420 };
-        Compare(OriginalPixels.Bytes(actual), JpegOracle.Decode(encoded, width, height, sampling), width * height, pixelFormat);
+        var reference = JpegOracle.Decode(encoded, width, height, sampling);
+        if (sampling == JpegSampling.YCbCr444)
+        {
+            Assert.Equal(reference, OriginalPixels.Bytes(actual));
+            if (width == 31 && height == 23) AssertNormalNative(encoded, width, height, sampling, OriginalPixels.Bytes(actual));
+        }
+        else Compare(OriginalPixels.Bytes(actual), reference, width * height, pixelFormat);
     }
 
     public static IEnumerable<object[]> EncodingProfiles()
@@ -43,7 +49,9 @@ public sealed class JpegFfmpegTests(ITestOutputHelper output)
         using var encoded = new MemoryStream();
         ImageCodec.EncodeJpeg(image, encoded, new JpegEncodeOptions { Sampling = sampling, Quality = quality, RestartInterval = 2 });
         using var actual = ImageCodec.Decode(encoded.ToArray());
-        Compare(OriginalPixels.Bytes(actual), JpegOracle.Decode(encoded.ToArray(), image.Width, image.Height, sampling), image.Width * image.Height, sampling.ToString());
+        var reference = JpegOracle.Decode(encoded.ToArray(), image.Width, image.Height, sampling);
+        if (sampling is JpegSampling.YCbCr444 or JpegSampling.Grayscale) Assert.Equal(reference, OriginalPixels.Bytes(actual));
+        else Compare(OriginalPixels.Bytes(actual), reference, image.Width * image.Height, sampling.ToString());
         Assert.True(encoded.CanWrite);
     }
 
@@ -72,7 +80,8 @@ public sealed class JpegFfmpegTests(ITestOutputHelper output)
     {
         var encoded = AuthoredJpeg.RefinedBlock(negativeDc);
         using var actual = ImageCodec.Decode(encoded);
-        Compare(OriginalPixels.Bytes(actual), JpegOracle.Decode(encoded, 8, 8, JpegSampling.Grayscale), 64, "progressive refinement");
+        Assert.Equal(JpegOracle.Decode(encoded, 8, 8, JpegSampling.Grayscale), OriginalPixels.Bytes(actual));
+        AssertNormalNative(encoded, 8, 8, JpegSampling.Grayscale, OriginalPixels.Bytes(actual));
     }
 
     [Theory]
@@ -81,7 +90,7 @@ public sealed class JpegFfmpegTests(ITestOutputHelper output)
     {
         var encoded = AuthoredJpeg.EobRun(restartInterval);
         using var actual = ImageCodec.Decode(encoded);
-        Compare(OriginalPixels.Bytes(actual), JpegOracle.Decode(encoded, 24, 8, JpegSampling.Grayscale), 192, "progressive EOB/restart");
+        Assert.Equal(JpegOracle.Decode(encoded, 24, 8, JpegSampling.Grayscale), OriginalPixels.Bytes(actual));
     }
 
     [Theory]
@@ -102,7 +111,7 @@ public sealed class JpegFfmpegTests(ITestOutputHelper output)
     {
         var encoded = AuthoredJpeg.ProgressiveFrame(width, height, JpegSampling.Grayscale, restartInterval);
         using var actual = ImageCodec.Decode(encoded);
-        Compare(OriginalPixels.Bytes(actual), JpegOracle.Decode(encoded, width, height, JpegSampling.Grayscale), width * height, "progressive gray");
+        Assert.Equal(JpegOracle.Decode(encoded, width, height, JpegSampling.Grayscale), OriginalPixels.Bytes(actual));
     }
 
     [Fact]
@@ -111,8 +120,18 @@ public sealed class JpegFfmpegTests(ITestOutputHelper output)
         foreach (var (encoded, width) in new[] { (AuthoredJpeg.SparseBands(), 8), (AuthoredJpeg.EmptyEobRun(), 24) })
         {
             using var actual = ImageCodec.Decode(encoded);
-            Compare(OriginalPixels.Bytes(actual), JpegOracle.Decode(encoded, width, 8, JpegSampling.Grayscale), width * 8, "spectral bands/EOB");
+            Assert.Equal(JpegOracle.Decode(encoded, width, 8, JpegSampling.Grayscale), OriginalPixels.Bytes(actual));
         }
+    }
+
+    private static void AssertNormalNative(byte[] encoded, int width, int height, JpegSampling sampling, byte[] actual)
+    {
+        // Reuse all frozen conversion/delivery options; additionally verify the
+        // normal native path on the existing anchor and signed refinement pair.
+        var arguments = JpegOracle.DecodeArguments(width, height, sampling).ToList();
+        var cpu = arguments.IndexOf("-cpuflags"); Assert.True(cpu >= 0);
+        arguments.RemoveRange(cpu, 2);
+        Assert.Equal(OracleProcess.Run(OracleProcess.Ffmpeg, arguments, encoded), actual);
     }
 
     private void Compare(byte[] actual, byte[] expected, int pixels, string profile)

@@ -82,7 +82,7 @@ internal ref partial struct JpegDecoder
 
     private void MaterializeSamplePlanes()
     {
-        // Four-component decoding shares the exact DC/sparse/general walk.
+        // Four-component decoding shares the qualified inverse block walk.
         // Allocation, block charges and coefficient release retain their order.
         if (components.Length == 4) { MaterializeCmykPlanes(); return; }
         Span<byte> block = stackalloc byte[64];
@@ -100,7 +100,7 @@ internal ref partial struct JpegDecoder
                     for (var k = 0; k < 64; k++) natural[JpegTransform.Zigzag[k]] = coefficients[k];
                     coefficients = natural;
                 }
-                JpegTransform.Inverse(coefficients, component.FrozenQuantization!, block, context);
+                JpegInverseTransform.Inverse(coefficients, component.FrozenQuantization!, block, context);
                 for (var by = 0; by < 8; by++)
                     block.Slice(by * 8, 8).CopyTo(component.Plane.AsSpan((y * 8 + by) * component.BlockColumns * 8 + x * 8, 8));
             }
@@ -112,6 +112,21 @@ internal ref partial struct JpegDecoder
     private void WriteSamples(Span<byte> destination, JpegSampleFormat format, int stride,
         JpegColorSpace source, ImageOrientation orientation)
     {
+        var fullResolutionYcbcr = source == JpegColorSpace.YCbCr && components.Length == 3;
+        for (var c = 0; fullResolutionYcbcr && c < components.Length; c++)
+            fullResolutionYcbcr = components[c].H == maxH && components[c].V == maxV;
+        if (fullResolutionYcbcr && format == JpegSampleFormat.Rgb && orientation == ImageOrientation.Normal)
+        {
+            for (var y = 0; y < info.Height; y++)
+            {
+                context.Work(info.Width * 32L);
+                JpegInverseColor.WriteRow(components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width),
+                    components[1].Plane.AsSpan(y * components[1].BlockColumns * 8, info.Width),
+                    components[2].Plane.AsSpan(y * components[2].BlockColumns * 8, info.Width),
+                    destination.Slice(y * stride, info.Width * 3), 3);
+            }
+            return;
+        }
         if (format == JpegSampleFormat.Rgb && source == JpegColorSpace.YCbCr
             && orientation == ImageOrientation.Normal && info.Width >= 32
             && maxH == 2 && maxV == 2 && components.Length == 3
@@ -139,6 +154,26 @@ internal ref partial struct JpegDecoder
             var firstRow = components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width);
             for (var x = 0; x < info.Width; x++)
             {
+                var (dx, dy) = orientation switch
+                {
+                    ImageOrientation.MirrorHorizontal => (info.Width - 1 - x, y),
+                    ImageOrientation.Rotate180 => (info.Width - 1 - x, info.Height - 1 - y),
+                    ImageOrientation.MirrorVertical => (x, info.Height - 1 - y),
+                    ImageOrientation.Transpose => (y, x),
+                    ImageOrientation.Rotate90 => (info.Height - 1 - y, x),
+                    ImageOrientation.Transverse => (info.Height - 1 - y, info.Width - 1 - x),
+                    ImageOrientation.Rotate270 => (y, info.Width - 1 - x),
+                    _ => (x, y)
+                };
+                var offset = dy * stride + dx * (int)format;
+                if (fullResolutionYcbcr && format == JpegSampleFormat.Rgb)
+                {
+                    JpegInverseColor.WriteRow(firstRow.Slice(x, 1),
+                        components[1].Plane.AsSpan(y * components[1].BlockColumns * 8 + x, 1),
+                        components[2].Plane.AsSpan(y * components[2].BlockColumns * 8 + x, 1),
+                        destination.Slice(offset, 3), 3);
+                    continue;
+                }
                 double first = firstRow[x];
                 var red = first; var green = first; var blue = first;
                 if (source != JpegColorSpace.Grayscale && (format != JpegSampleFormat.Grayscale || source == JpegColorSpace.Rgb))
@@ -153,18 +188,6 @@ internal ref partial struct JpegDecoder
                         blue = first + 1.772 * cb;
                     }
                 }
-                var (dx, dy) = orientation switch
-                {
-                    ImageOrientation.MirrorHorizontal => (info.Width - 1 - x, y),
-                    ImageOrientation.Rotate180 => (info.Width - 1 - x, info.Height - 1 - y),
-                    ImageOrientation.MirrorVertical => (x, info.Height - 1 - y),
-                    ImageOrientation.Transpose => (y, x),
-                    ImageOrientation.Rotate90 => (info.Height - 1 - y, x),
-                    ImageOrientation.Transverse => (info.Height - 1 - y, info.Width - 1 - x),
-                    ImageOrientation.Rotate270 => (y, info.Width - 1 - x),
-                    _ => (x, y)
-                };
-                var offset = dy * stride + dx * (int)format;
                 if (format == JpegSampleFormat.Grayscale)
                     destination[offset] = Round(source == JpegColorSpace.Rgb ? 0.299 * red + 0.587 * green + 0.114 * blue : first);
                 else

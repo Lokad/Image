@@ -27,19 +27,21 @@ public sealed class JpegTests
 
     [Theory]
     [InlineData(false)] [InlineData(true)]
-    public void ProgressiveRefinementHasAnalyticalPixels(bool negativeDc)
+    public void ProgressiveRefinementHasExactNativePixels(bool negativeDc)
     {
-        using var decoded = ImageCodec.Decode(AuthoredJpeg.RefinedBlock(negativeDc));
-        var expected = AuthoredJpeg.ExpectedRefinedBlock(negativeDc);
+        var data = AuthoredJpeg.RefinedBlock(negativeDc);
+        using var decoded = ImageCodec.Decode(data);
+        var expected = JpegFixtureTests.NativePixels(negativeDc ? "jpeg-progressive-gray-negative" : "jpeg-progressive-gray-positive", data);
         for (var y = 0; y < 8; y++) Assert.Equal(expected.AsSpan(y * 32, 32).ToArray(), decoded.GetRow8(y).ToArray());
     }
 
     [Theory]
     [InlineData(0)] [InlineData(1)]
-    public void ProgressiveEobRunsAndRestartsHaveAnalyticalPixels(int restartInterval)
+    public void ProgressiveEobRunsAndRestartsHaveExactNativePixels(int restartInterval)
     {
-        using var decoded = ImageCodec.Decode(AuthoredJpeg.EobRun(restartInterval));
-        var expected = AuthoredJpeg.ExpectedEobRun();
+        var data = AuthoredJpeg.EobRun(restartInterval);
+        using var decoded = ImageCodec.Decode(data);
+        var expected = JpegFixtureTests.NativePixels($"jpeg-progressive-eob-restart{restartInterval}", data);
         for (var y = 0; y < 8; y++) Assert.Equal(expected.AsSpan(y * 96, 96).ToArray(), decoded.GetRow8(y).ToArray());
     }
 
@@ -57,10 +59,11 @@ public sealed class JpegTests
     }
 
     [Fact]
-    public void SplitSpectralBandsAndRefinementZeroRunsHaveAnalyticalPixels()
+    public void SplitSpectralBandsAndRefinementZeroRunsHaveExactNativePixels()
     {
-        using var decoded = ImageCodec.Decode(AuthoredJpeg.SparseBands());
-        var expected = AuthoredJpeg.ExpectedSparseBands();
+        var data = AuthoredJpeg.SparseBands();
+        using var decoded = ImageCodec.Decode(data);
+        var expected = JpegFixtureTests.NativePixels("jpeg-progressive-sparse-bands", data);
         for (var y = 0; y < 8; y++) Assert.Equal(expected.AsSpan(y * 32, 32).ToArray(), decoded.GetRow8(y).ToArray());
     }
 

@@ -37,7 +37,7 @@ public sealed class JpegAdmissionTests
 
         void Transform()
         {
-            JpegTransform.Inverse(integerCoefficients, quantization, pixels, context);
+            JpegInverseTransform.Inverse(integerCoefficients, quantization, pixels, context);
         }
     }
 }

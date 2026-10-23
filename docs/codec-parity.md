@@ -159,3 +159,16 @@ retains the explicitly labeled SIMD-enabled libjpeg-turbo reference. New encodin
 checks compare exact packets, retaining original decoder corpora and minimal
 interoperability/alpha sanity tests. Historical quality/timing evidence keeps its
 recorded scope; exact decoding and CPU/allocation qualification remain open.
+
+JPEG decoding now uses the independently generated fixed-point inverse for all
+blocks. Fourteen existing frozen grayscale/full-resolution packet controls have
+exact decoded samples, including progressive refinement, EOB/split scans and
+restarts. The existing31x23 baseline444 anchor also has exact array/sync/async
+stream output, caller gray/RGB, padding and opt-in orientation. Live full-resolution
+and grayscale controls require exact samples; the anchor and signed refinement
+pair also check normal native execution. Other JPEG sampling/color layouts retain
+transitional functional bounds and require further exact qualification.
+[Decoder evidence](../benchmarks/decoder-exactness-evidence.json) states the scope;
+[rounding](jpeg-inverse-rounding.md) describes the integer boundaries. No old
+inverse variant or compatibility mode remains. Earlier JPEG decode CPU/allocation
+rows describe the replaced producer; current measurements remain open.

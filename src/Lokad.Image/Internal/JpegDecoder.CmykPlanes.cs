@@ -3,7 +3,7 @@ namespace Lokad.Image.Internal;
 internal ref partial struct JpegDecoder
 {
     // Owned CMYK and other four-component sample planes share this exact
-    // sparse-aware walk. Allocation, charges and pooled coefficient lifetimes
+    // block walk. Allocation, charges and pooled coefficient lifetimes
     // retain the original component order, including subsampled YCCK planes.
     private void MaterializeCmykPlanes()
     {
@@ -22,9 +22,7 @@ internal ref partial struct JpegDecoder
                     for (var k = 0; k < 64; k++) natural[JpegTransform.Zigzag[k]] = coefficients[k];
                     coefficients = natural;
                 }
-                if (!JpegTransform.TryInverseDc(coefficients, component.FrozenQuantization!, block, context)
-                    && !JpegTransform.TryInverseSparse(coefficients, component.FrozenQuantization!, block, context))
-                    JpegTransform.Inverse(coefficients, component.FrozenQuantization!, block, context);
+                JpegInverseTransform.Inverse(coefficients, component.FrozenQuantization!, block, context);
                 for (var by = 0; by < 8; by++)
                     block.Slice(by * 8, 8).CopyTo(component.Plane.AsSpan((y * 8 + by) * component.BlockColumns * 8 + x * 8, 8));
             }

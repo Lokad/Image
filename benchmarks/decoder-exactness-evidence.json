@@ -1,25 +1,12 @@
 {
   "project": "Lokad.Image",
-  "round": "E102",
+  "round": "E103",
   "policy": "Exact normalized output samples first. Reuse unchanged valid evidence. Resolve uncertainty before changing algorithms. Old lossy RGB tolerances are transitional interoperability checks, not completion gates. No new workload grid, CPU tuning or repeated package proof.",
-  "producer": {
-    "commit": "b325ce2ff3a0f47e4fef9b936e39fada4bdc93fa",
-    "coreSha256": "2a92171b088321988f9f499315a2a27ad76c5e399d5694d51762997b069e4e29",
-    "source": "Same actual E99 private package; no production/test assembly rebuild. Only a bounded public diagnostic frontend compiled.",
-    "probeSha256": "2f3ee91bfda5c1a691c263a18546175c9af33ef2a3db58460e272b0f8d383235",
-    "platform": "Linux x64, CPU0 affinity, DOTNET_PROCESSOR_COUNT=1",
-    "ci": {
-      "run": 40026342353,
-      "conclusion": "success",
-      "jobs": 3,
-      "url": "https://github.com/Lokad/Image/actions/runs/40026342353"
-    }
-  },
   "reference": {
     "executableSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
     "version": "ffmpeg version n8.1 Copyright (c) 2000-2026 the FFmpeg developers",
     "sourceRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
-    "bytes": 4993477513
+    "captureCheckoutBytes": 4993477513
   },
   "finiteChecklist": [
     {
@@ -48,7 +35,7 @@
       "id": "jpeg-inverse",
       "controls": "Existing31x23 baseline444 anchor first; existing progressive-gray negative/refinement/EOB and sparse-band controls after shared kernel qualification",
       "why": "Shared dequantization/inverse-transform rounding before color conversion; progressive scan reconstruction is a separate coefficient boundary",
-      "status": "E101 private coefficient/inverse primitive PASS on the existing444 anchor and18 original arithmetic fragments, BOTHOS normal/scalar-managed. Public adoption and named progressive-coefficient confirmations remain open; E100 public gap is not claimed fixed yet.",
+      "status": "PASS and STOP at E103 tested scope: all14 frozen grayscale/full-resolution controls, original live cases, and18 numeric primitive controls. Public inverse/coefficients/progressive work boundaries qualified BOTHOS/full/scalar/package; no claim for arbitrary FFmpeg versions.",
       "tests": [
         "JpegFfmpegTests.BaselineDecodeMatchesConfiguredFfmpeg",
         "JpegFfmpegTests.AuthoredProgressiveRefinementInteroperates",
@@ -59,7 +46,7 @@
       "id": "jpeg-color",
       "controls": "Existing31x23 baseline444/422/420 anchors and existing1x17/17x1 odd-edge companions; existing explicit-RGB declarations",
       "why": "YCbCr matrix/range rounding, centered half-resolution chroma and direct-RGB interpretation",
-      "status": "E102 private full-resolution444 inverse+color slice PASS, complete713-pixel RGB/RGBA exact BOTHOS normal/scalar-managed. Public adoption and named422/420/direct-RGB confirmations remain open.",
+      "status": "Full-resolution YCbCr/direct-RGB named controls PASS; existing31x23 baseline422 now has a measured734-channel gap, maximum1. Baseline/progressive422/420 chroma/color exactness remains open; inspect intermediate planes next.",
       "tests": [
         "JpegFfmpegTests.BaselineDecodeMatchesConfiguredFfmpeg",
         "JpegFfmpegTests.ExplicitRgbDeclarationsInteroperate"
@@ -78,9 +65,9 @@
     },
     {
       "id": "jpeg-caller-samples",
-      "controls": "Existing31x23 caller grayscale/RGB baseline/progressive controls and existing CMYK sample controls; existing stride/tail and ownership tests",
-      "why": "Direct caller destinations use specialized packing/conversion without mandatory RGBA; retain inversion/options and untouched padding",
-      "status": "DEMONSTRATED initial gray/RGB gap shared with jpeg-inverse/color. CMYK exact confirmation remains uncertain; functional/ownership safeguards already qualified.",
+      "controls": "Existing31x23 caller grayscale/RGB baseline/progressive controls and existing CMYK sample controls; existing stride/tail and ownership tests; existing8x8 authored direct-RGB control projected into caller GRAY8",
+      "why": "Direct caller destinations use specialized packing/conversion without mandatory RGBA; retain inversion/options and untouched padding; direct-RGB to grayscale computes luminance rather than extracting decoded Y, a distinct existing public branch identified during adoption",
+      "status": "Native Y and full-resolution caller RGB/padding/opt-in orientation PASS at E103 scope. Subsampled/CMYK sample exactness and the named direct-RGB grayscale projection remain uncertain; functional and ownership checks pass. No new input grid.",
       "tests": [
         "JpegSampleFfmpegTests",
         "JpegSampleDecodeTests",
@@ -241,7 +228,7 @@
   },
   "cpuTimingRuns": 0,
   "gcAllocationsMeasured": false,
-  "next": "Coherent public JPEG adoption: route every inverse block through the qualified integer primitive, use qualified color for full-resolution YCbCr including caller RGB and orientation, remove superseded inverse algorithms/tests/certificate without compatibility modes. Keep other required chroma/CMYK/YCCK paths functional and explicitly pending exact confirmation. Run affected screens then batched bothOS/live/scalar/SAME actual package qualification for accepted production changes.",
+  "next": "Qualify subsampled chroma expansion and its color boundary next, starting with the existing31x23 baseline422 gap. Resolve intermediate samples before editing. Continue the finite CMYK/YCCK/411/410/caller/VP8 checklist; preserve all functional, shared-memory, supplied-font, Lanczos3, deferred CPU/allocation and release objectives.",
   "rawArchive": {
     "name": "e100-decoder-audit.tar.xz",
     "bytes": 20372,
@@ -251,7 +238,7 @@
     "everySourceMemberByteVerified": true,
     "linuxAfter": 4993497885
   },
-  "publicDecoderBehaviorChanged": false,
+  "publicDecoderBehaviorChanged": true,
   "productionSourcesChanged": true,
   "privateInverseTransform": {
     "round": "E101",
@@ -714,6 +701,277 @@
       "everySourceMemberByteVerified": true,
       "linuxAfterMirror": 4987053772,
       "allPeaksBelowCap": true
+    }
+  },
+  "fullObjectiveOpen": true,
+  "initialAuditProducer": {
+    "commit": "b325ce2ff3a0f47e4fef9b936e39fada4bdc93fa",
+    "coreSha256": "2a92171b088321988f9f499315a2a27ad76c5e399d5694d51762997b069e4e29",
+    "source": "Same actual E99 private package; no production/test assembly rebuild. Only a bounded public diagnostic frontend compiled.",
+    "probeSha256": "2f3ee91bfda5c1a691c263a18546175c9af33ef2a3db58460e272b0f8d383235",
+    "platform": "Linux x64, CPU0 affinity, DOTNET_PROCESSOR_COUNT=1",
+    "ci": {
+      "run": 40026342353,
+      "conclusion": "success",
+      "jobs": 3,
+      "url": "https://github.com/Lokad/Image/actions/runs/40026342353"
+    }
+  },
+  "publicJpegAdoption": {
+    "round": "E103",
+    "status": "Accepted at the declared JPEG inverse/full-resolution scope",
+    "scope": "All public JPEG inverse blocks use the qualified fixed-point transform. Full-resolution YCbCr RGBA and caller RGB share the derived integer matrix, including opt-in orientation. Fourteen existing frozen grayscale/full-resolution inputs now have exact sample gates; existing live grayscale/full-resolution controls are strengthened. Other required color layouts remain functional and explicitly pending exactness.",
+    "windowsProducer": [
+      {
+        "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "bytes": 765440,
+        "sha256": "d0ced689214fb6c5398228634e93bb88646a7b0177fbaf8cf3e83d225c759a94"
+      },
+      {
+        "path": "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll",
+        "bytes": 1626624,
+        "sha256": "19707a0058420f6ee082461ca858518a31e4c858cd96cd8707dbdf1fa1cab4a0"
+      },
+      {
+        "path": "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll",
+        "bytes": 801792,
+        "sha256": "7f7b4e9fdd5df6357ed0ddd950761ad800c5100dfdeca23885cd8d4d40ed7dcb"
+      },
+      {
+        "path": "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.DifferentialTests.dll",
+        "bytes": 240128,
+        "sha256": "b988889d0510843f8ba5e0c2afdabd5970bcdece7f55b73b130bdf02fe83c22c"
+      }
+    ],
+    "linuxProducer": [
+      {
+        "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "bytes": 765440,
+        "sha256": "cf5fee07ad932236fd5e835cd24bd32365f9b7d286d3e58e08ee10538376d481"
+      },
+      {
+        "path": "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll",
+        "bytes": 1626624,
+        "sha256": "6e2f8f797ce78ee6e7b5da3b808630547f38e6e7bb1154bc5aa6ca3e1f9f70ec"
+      },
+      {
+        "path": "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll",
+        "bytes": 801792,
+        "sha256": "661ee0bf15c1666f135ca170d3097006aeeb7c42bd605c17165928d0ec6fbcd7"
+      },
+      {
+        "path": "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.DifferentialTests.dll",
+        "bytes": 240128,
+        "sha256": "3f9c9393069dc9d475763927fb26a6509f67003753b2156e13ad7828900c6b00"
+      }
+    ],
+    "exactFrozenControls": [
+      {
+        "name": "jpeg-ffmpeg-YCbCr444-31x23",
+        "sampling": "YCbCr444",
+        "encodedSha256": "ad1d9d11e42273349e85cfebc9b73c89231b595b883cd25d2b7832f62c353573",
+        "pixelSha256": "fbf313b3c7bc442832b67d3b08bf228da503aefc142d4ac2ed8d2bfc720b76e4"
+      },
+      {
+        "name": "jpeg-ffmpeg-YCbCr444-9x7",
+        "sampling": "YCbCr444",
+        "encodedSha256": "21e36cb5fd6e1d2e9cb31c57566dada4efe76a38e344366629eabf5888d90061",
+        "pixelSha256": "fec91f008e64036e485002e7880b8bed4b5d7338dedef0d4869cca484a0d45e0"
+      },
+      {
+        "name": "jpeg-ffmpeg-YCbCr444-17x1",
+        "sampling": "YCbCr444",
+        "encodedSha256": "dd632511bde3246532e321764b804421040f5ad05e8db6198e31f5a746b354c4",
+        "pixelSha256": "dd12d3b42bc098422d11ec804e261588e413403507e0a12b7e869ec763a9dccf"
+      },
+      {
+        "name": "jpeg-ffmpeg-YCbCr444-1x17",
+        "sampling": "YCbCr444",
+        "encodedSha256": "73e83c9e65c859471d63e183ca2fb679ec6b9b6bfd41adefb152eac78b479cf8",
+        "pixelSha256": "de59282efb936842c9218b2c000f00b97394068d24bc9f6c62d02e4da8247edd"
+      },
+      {
+        "name": "jpeg-ffmpeg-YCbCr444-1x1",
+        "sampling": "YCbCr444",
+        "encodedSha256": "0252d659ee82ef5fc200323594b5a202126ca27e2177ac288bf7ce47263a498c",
+        "pixelSha256": "c0179eebe88f0b7d66833e5696e21e0130641d4b0149eeb1b8049b0f6a6d38d4"
+      },
+      {
+        "name": "jpeg-owned-Grayscale-restart",
+        "sampling": "Grayscale",
+        "encodedSha256": "27aee523cc8d9f096c5390df94d8fd5070b9f155ec17fcb20b98ea01e7ecbf98",
+        "pixelSha256": "e2845f3a5bcdc72c1fa1939d04935f7b81121ddd9978c79186f60f5d0f937413"
+      },
+      {
+        "name": "jpeg-owned-YCbCr444-restart",
+        "sampling": "YCbCr444",
+        "encodedSha256": "855e58067a83e9d7c5188e5d9d7513bbbff08b1be2f10b188d89ebd96fb0aeb0",
+        "pixelSha256": "f369c55ba56641bce77902afef67fa9af01e851dee9643808047a93d0a40539f"
+      },
+      {
+        "name": "jpeg-progressive-gray-positive",
+        "sampling": "Grayscale",
+        "encodedSha256": "e3e3ef1a3f0027bb92594813ad32bcebd19fc5f4ee35e21831f00cfa5ff801dd",
+        "pixelSha256": "6ca0f41de44c8fb7ff6f776db515668011b8a7f728d240087ced510a12d1963e"
+      },
+      {
+        "name": "jpeg-progressive-gray-negative",
+        "sampling": "Grayscale",
+        "encodedSha256": "9ee3c4c23d1d1de7f96fa83c2537ea4f5c3290dde294ec30cc6a677d6dba24b4",
+        "pixelSha256": "ff4b81719373d98d0709db8920e613950e439722e1a708c17d5654c61f831092"
+      },
+      {
+        "name": "jpeg-progressive-eob-restart0",
+        "sampling": "Grayscale",
+        "encodedSha256": "9c297f231a7b99da6f0fa875aab0430ee29f6d563f3bbe2e37412f6a3645a25c",
+        "pixelSha256": "ec2a88f225e708e45e36cf3089dcbe4c17bf17910846bdbfcf9a23c68378830f"
+      },
+      {
+        "name": "jpeg-progressive-eob-restart1",
+        "sampling": "Grayscale",
+        "encodedSha256": "f9959a10792f45f34fff8b2fc0a03eb1d24e8c964df976d978a871216de763b8",
+        "pixelSha256": "ec2a88f225e708e45e36cf3089dcbe4c17bf17910846bdbfcf9a23c68378830f"
+      },
+      {
+        "name": "jpeg-progressive-YCbCr444-31x23",
+        "sampling": "YCbCr444",
+        "encodedSha256": "dbd0129df03da7f8452aa42f64fdb0020fee8495ab4d27f9853700fa58745854",
+        "pixelSha256": "22c7e037c078ab0b1e31dc0f2b3fb0942e0d6cbe11f1495483e735bb5f47af8c"
+      },
+      {
+        "name": "jpeg-progressive-sparse-bands",
+        "sampling": "Grayscale",
+        "encodedSha256": "ceb56e505cf68647f9c95c87e944d4f90c73d8e3bfd7e56f6d970e0f2a8774f8",
+        "pixelSha256": "371cd805ea0f022d3cde103efb278dc50ffea7b1ac3d707217df4100deb09851"
+      },
+      {
+        "name": "jpeg-progressive-empty-eob",
+        "sampling": "Grayscale",
+        "encodedSha256": "1137af9828e3998b0970114a36f05f184d3ecf4d4ab1ff17f4da908d84482a25",
+        "pixelSha256": "37c9a8369161b97a9a45595f229973ec06641e6a5a6e9d04cc75031997872e41"
+      }
+    ],
+    "qualification": {
+      "platforms": [
+        "Windows x64",
+        "Linux x64"
+      ],
+      "internalPerPlatform": 2009,
+      "publicPerPlatform": 2096,
+      "liveDifferentialPerPlatform": 940,
+      "fullTotalPerPlatform": 5045,
+      "affectedScalarInternalPerPlatform": 33,
+      "affectedScalarPublicPerPlatform": 71,
+      "logs": [
+        "tmp/e103-full-windows.log",
+        "tmp/e103-full-linux.log",
+        "tmp/e103-scalar-internal-windows.log",
+        "tmp/e103-scalar-public-windows.log",
+        "tmp/e103-scalar-internal-linux.log",
+        "tmp/e103-scalar-public-linux.log"
+      ],
+      "firstAcceptedPublicScreen": 71,
+      "earlierCorrections": [
+        "Initial public test incorrectly referenced internal ImageBuffer.ByteLength; corrected to the known native pixel capacity and rebuilt only the test project.",
+        "An old analytical progressive assertion differed at a native rounding boundary; replaced it and sparse-band expectations with existing independently frozen native pixels/hashes. Existing work minima are unchanged."
+      ],
+      "buildCommands": {
+        "firstPublicProjectGraph": 1,
+        "testOnlyBuildProjectReferencesFalse": 2,
+        "finalWindowsSolution": 1,
+        "linuxSerialSourceSolution": 1
+      },
+      "reuse": "Production source/DLL remained unchanged throughout the corrected test gates, full Windows suite, scalar checks and actual-package qualification. Package uses --no-build --no-restore. Linux independently built the synchronized source once.",
+      "nativeLibraryBuilds": 0,
+      "newEncodedFixtures": 0,
+      "timingRuns": 0,
+      "gcAllocationsMeasured": false
+    },
+    "publicBoundaries": [
+      "Exact frozen31x23 baseline444 array, synchronous Stream and asynchronous Stream decoding.",
+      "Caller grayscale equals native Y; RGB packing/padding and opt-in quarter-turn equal the frozen native samples.",
+      "Borrowed input/streams/root survive; retained image charges end at disposal; independent outputs survive input mutation.",
+      "Existing work/local/shared admission, cancellation, malformed input, component layouts and output-lifetime tests pass; work remains4096 units per inverse block."
+    ],
+    "package": {
+      "path": "artifacts/qualification/jpeg-inverse-final/Lokad.Image.0.2.0.nupkg",
+      "bytes": 392895,
+      "sha256": "b915403ddf174dc5b0c9e24b15eeca0b676edd7e4f2cdeae256b0baed9faca7b",
+      "coreSha256": "d0ced689214fb6c5398228634e93bb88646a7b0177fbaf8cf3e83d225c759a94",
+      "sameActualPackageBothPlatforms": true,
+      "usageExamplesPerPlatform": 3,
+      "dependencyFreeSafeManagedVerified": true,
+      "published": false,
+      "logs": [
+        "tmp/e103-package-windows.log",
+        "tmp/e103-package-linux.log"
+      ],
+      "newConsumerProof": "Exact JPEG array/sync/async streams, caller gray/RGB padding and orientation, root retention/cleanup, in addition to existing PNG/JPEG/WebP encoding, editing, text and shared-admission checks."
+    },
+    "removed": "Five superseded inverse partials, their generated sparse basis, obsolete generator and seven implementation-only inverse/color test helpers. Removed unused floating analytical pixel generators and replaced the old inverse certificate text. Scan geometry and the still-required subsampled/four-component color-rounding helper remain, without compatibility modes or aliases.",
+    "evidenceInvalidation": "All previous JPEG decode CPU/GC-allocation measurements used the replaced inverse; corresponding summary rows now say Prior production; reconfirm. JPEG Identify and unrelated unchanged paths retain their existing scopes. PNG/JPEG/WebP encoder byte proofs are rechecked by current suites/package; their algorithms did not change. Earlier mathematical progressive pixel expectations are superseded by independent native values, without discounting work or relaxing error gates.",
+    "nextMeasuredGap": {
+      "scope": "Bounded next-item measurement only: existing31x23 baseline422, reused verified public DLL and prepared ImageProbe; no rebuild/sync/native launch/timing",
+      "fixture": "tests/Fixtures/jpeg-ffmpeg-YCbCr422-31x23.jpg",
+      "inputSha256": "a9fabad2b1f038030698fc31490cdfc55ea9cd362f42759cb90dc239864b4667",
+      "coreSha256": "d0ced689214fb6c5398228634e93bb88646a7b0177fbaf8cf3e83d225c759a94",
+      "samples": 2852,
+      "mismatches": 734,
+      "maximum": 1,
+      "first": {
+        "index": 10,
+        "x": 2,
+        "y": 0,
+        "channel": 2,
+        "actual": 97,
+        "expected": 96
+      },
+      "managedSha256": "1c6f50152181f32779dfe656f5c4957c758257e0e859dc74fbe05f1e8620df25",
+      "referenceSha256": "cec70c8458142ab8d00666d40771cb7d08fe129e022aa55eca70ffccd1ba9f5d"
+    },
+    "remaining": "Qualify subsampled chroma expansion and its color boundary next, starting with the existing31x23 baseline422 gap. Resolve intermediate samples before editing. Continue the finite CMYK/YCCK/411/410/caller/VP8 checklist; preserve all functional, shared-memory, supplied-font, Lanczos3, deferred CPU/allocation and release objectives.",
+    "storage": {
+      "capBytes": 5000000000,
+      "linuxBeforeSourceBuild": 4987233938,
+      "linuxAfterSourceBuild": 4987006917,
+      "linuxAfterSamePackage": 4994664702,
+      "allObservedAndProjectedPeaksBelowCap": true,
+      "earlierCompaction": "E101 mirrored cold-consumer archive retained all642 original regular files before retirement; protected/current/release/reference sources remain intact."
+    },
+    "parentCi": {
+      "sha": "fd8e9df58b34e74f4613c69e3006f0cb3c60f20c",
+      "run": 40031071084,
+      "conclusion": "success",
+      "jobs": 3
+    },
+    "rawArchive": {
+      "name": "e103-public-jpeg-qualified.tar.xz",
+      "bytes": 1817748,
+      "sha256": "ed8950c3ff826c252100498b5328421efdd5fe4ee0d2f6ffcbb2a4a5c1891182",
+      "members": 48,
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "linuxBeforeMirror": 4994664702,
+      "linuxAfterMirror": 4996482450,
+      "allObservedAndProjectedPeaksBelowCap": true
+    }
+  },
+  "currentProductionProducer": {
+    "windowsCore": {
+      "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+      "bytes": 765440,
+      "sha256": "d0ced689214fb6c5398228634e93bb88646a7b0177fbaf8cf3e83d225c759a94"
+    },
+    "linuxCore": {
+      "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+      "bytes": 765440,
+      "sha256": "cf5fee07ad932236fd5e835cd24bd32365f9b7d286d3e58e08ee10538376d481"
+    },
+    "actualPackage": {
+      "path": "artifacts/qualification/jpeg-inverse-final/Lokad.Image.0.2.0.nupkg",
+      "bytes": 392895,
+      "sha256": "b915403ddf174dc5b0c9e24b15eeca0b676edd7e4f2cdeae256b0baed9faca7b",
+      "coreSha256": "d0ced689214fb6c5398228634e93bb88646a7b0177fbaf8cf3e83d225c759a94"
     }
   }
 }

@@ -6,6 +6,9 @@
   including restarts, direct caller samples and async output. Removed superseded
   experimental encoders and switches. Ten frozen controls match complete reference
   packets, allowing only the documented color attribution replacement.
+- Fixed-point JPEG decoding with exact samples on14 frozen grayscale/full-resolution
+  controls, shared caller RGB conversion and opt-in orientation. Removed superseded
+  inverse variants; other color layouts remain under exactness qualification.
 - Bounded managed PNG stored/fast/optimal/smallest encoding, with complete raw
   packet equality on14 frozen8/16-bit controls and shared admission throughout.
 - Managed VP8L prediction, palette, references/cache and entropy groups reproduce

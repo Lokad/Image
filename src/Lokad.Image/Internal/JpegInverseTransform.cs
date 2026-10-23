@@ -1,7 +1,7 @@
 namespace Lokad.Image.Internal;
 
 // Independent matrix evaluation of T.81 A.3.3 at the pinned reference's
-// fixed-point boundaries. This primitive is qualified before public adoption.
+// fixed-point boundaries, used by every JPEG inverse block.
 // The kernel is generated from the cosine definition, without upstream tables.
 internal static class JpegInverseTransform
 {

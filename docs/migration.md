@@ -13,6 +13,13 @@ temporary tree peaks are admitted before allocation; refusal stops the operation
 [Codec compatibility](codec-parity.md) states the exact tested scope and attribution
 exception. Historical JPEG times refer to their recorded producers.
 
+JPEG decoding now uses one pinned fixed-point inverse policy for every block.
+Full-resolution YCbCr and caller RGB share derived integer color conversion,
+including oriented destinations. Existing grayscale/full-resolution reference
+controls are exact; other required color layouts remain under exactness
+qualification. Older decoded half ties and performance results are superseded.
+The numerical policy is described in [inverse rounding](jpeg-inverse-rounding.md).
+
 All four PNG compression policies use the managed Deflate encoder. Fourteen
 8/16-bit controls match complete frozen reference packets, including4096-byte
 IDAT chunks and neutral pHYs metadata. CPU/allocation qualification remains open.

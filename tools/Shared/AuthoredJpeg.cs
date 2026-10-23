@@ -103,11 +103,6 @@ internal static class AuthoredJpeg
         return output.ToArray();
     }
 
-    public static byte[] ExpectedRefinedBlock(bool negativeDc = false)
-        => Expected(8, 8, negativeDc ? -81 : 83, 21, -9, -1);
-
-    public static byte[] ExpectedEobRun() => Expected(24, 8, 0, 3, 0, 0);
-
     public static byte[] EmptyEobRun(bool exceedsScan = false)
     {
         using var output = Header(24, 8, 0);
@@ -145,26 +140,6 @@ internal static class AuthoredJpeg
             bits.Ac(0); bits.Write(1, 1); // Refine k=63 after EOB.
         });
         output.Write(new byte[] { 255, 217 }); return output.ToArray();
-    }
-
-    public static byte[] ExpectedSparseBands()
-    {
-        // Natural positions derived from the diagonal geometry: k=1 -> (1,0),
-        // k=18 -> (2,3), k=25 -> (4,2), k=55 -> (6,5), k=63 -> (7,7).
-        (int U, int V, int Value)[] frequencies = [(1, 0, 3), (2, 3, -3), (4, 2, 3), (6, 5, 1), (7, 7, -3)];
-        var result = new byte[256];
-        for (var y = 0; y < 8; y++)
-        for (var x = 0; x < 8; x++)
-        {
-            double sample = 128;
-            foreach (var (u, v, value) in frequencies)
-                sample += value / 4.0 * (u == 0 ? 1 / Math.Sqrt(2) : 1) * (v == 0 ? 1 / Math.Sqrt(2) : 1)
-                    * Math.Cos((2 * x + 1) * u * Math.PI / 16) * Math.Cos((2 * y + 1) * v * Math.PI / 16);
-            var rounded = (byte)Math.Clamp(Math.Round(sample, MidpointRounding.AwayFromZero), 0, 255);
-            var position = (y * 8 + x) * 4;
-            result[position] = rounded; result[position + 1] = rounded; result[position + 2] = rounded; result[position + 3] = 255;
-        }
-        return result;
     }
 
     public static byte[] ProgressiveColor(int width, int height, JpegSampling sampling, int restartInterval)
@@ -267,23 +242,6 @@ internal static class AuthoredJpeg
         output.Write(new byte[] { 255, 217 }); return output.ToArray();
 
         static int Dc(int bx, int by, int component) => (bx * 41 + by * 23 + component * 53) % 193 - 96;
-    }
-
-    private static byte[] Expected(int width, int height, int dc, int horizontal, int vertical, int secondVertical)
-    {
-        var result = new byte[width * height * 4];
-        for (var y = 0; y < height; y++)
-        for (var x = 0; x < width; x++)
-        {
-            var sample = 128 + dc / 8.0
-                + horizontal * Math.Cos((2 * (x % 8) + 1) * Math.PI / 16) / (4 * Math.Sqrt(2))
-                + vertical * Math.Cos((2 * (y % 8) + 1) * Math.PI / 16) / (4 * Math.Sqrt(2))
-                + secondVertical * Math.Cos((2 * (y % 8) + 1) * Math.PI / 8) / (4 * Math.Sqrt(2));
-            var value = (byte)Math.Clamp(Math.Round(sample, MidpointRounding.AwayFromZero), 0, 255);
-            var position = (y * width + x) * 4;
-            result[position] = value; result[position + 1] = value; result[position + 2] = value; result[position + 3] = 255;
-        }
-        return result;
     }
 
     private static MemoryStream Header(int width, int height, int restartInterval, JpegSampling sampling = JpegSampling.Grayscale,

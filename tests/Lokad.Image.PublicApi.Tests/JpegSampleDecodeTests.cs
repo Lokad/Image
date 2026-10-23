@@ -103,10 +103,10 @@ public sealed class JpegSampleDecodeTests
     }
 
     [Fact]
-    public void AuthoredProgressiveRefinementUsesAnalyticalCallerSamples()
+    public void AuthoredProgressiveRefinementMatchesFrozenNativeCallerSamples()
     {
         var data = AuthoredJpeg.RefinedBlock();
-        var expected = AuthoredJpeg.ExpectedRefinedBlock();
+        var expected = JpegFixtureTests.NativePixels("jpeg-progressive-gray-positive", data);
         var gray = new byte[64];
         ImageCodec.DecodeJpeg(data, gray, JpegSampleFormat.Grayscale);
         for (var i = 0; i < 64; i++) Assert.Equal(expected[i * 4], gray[i]);

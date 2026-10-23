@@ -1050,26 +1050,28 @@ at both interlace settings without a pixel tolerance.
 
 JPEG follows [T.81](https://www.itu.int/rec/T-REC-T.81/en). Decode 8-bit Huffman
 baseline sequential and progressive grayscale/YCbCr at 4:4:4, 4:2:2 and 4:2:0,
-including equivalent sampling-factor representations. Chroma samples use centered
-bilinear expansion with edge extension. Convert full-range YCbCr using
-R=Y+1.402Cr, G=Y-0.344136286Cb-0.714136286Cr, B=Y+1.772Cb (Cb/Cr centered at 128).
-IDCT uses the direct mathematical transform, with samples rounded and clipped
-before chroma expansion. The original T.81 basis is frozen as binary64 values;
-this keeps coefficient and pixel rounding independent of platform `Math.Cos`
-differences. RGB component identifiers or Adobe transform 0 select
-direct RGB planes. Decode produces opaque RGBA8; no ICC conversion is applied.
-On AVX-512/VL, horizontal/vertical passes are accepted only when a conservative
-rounding certificate proves the original byte. Uncertain rows and extreme blocks
-use the original direct evaluation; other processors retain that evaluation.
-The [inverse rounding proof](docs/jpeg-inverse-rounding.md) defines the bound.
-Four-component sample materialization can use a certified Q16 integer basis
-for at most eight nonzero frequencies with total dequantized magnitudeâ‰¤65536.
-All 64 clipped rounding bins must certify before any destination write;
-uncertain blocks keep the original calculation. The original generated basis
-is 8 KiB of immutable module data, with no heap table or decoded-content cache.
-Horizontal-only blocks certify one repeated row using the same basis and bound;
-an uncertain row keeps the original ordered horizontal calculation.
-Pixel values, storage admission, logical work and cancellation remain unchanged.
+including equivalent sampling-factor representations. Every inverse block uses
+an independently generated fixed-point T.81 cosine kernel with the pinned native
+precision boundaries: dequantization and DC level shift, signed row saturation,
+word-width column bias, final shifting and byte clipping. All4096 block work units
+are admitted before pixel writes. The primitive uses256 bytes of stack scratch
+and a minor256-byte immutable kernel payload, without per-block heap buffers.
+[Inverse rounding](docs/jpeg-inverse-rounding.md) states the numerical policy.
+
+Full-resolution YCbCr uses integer BT.601 conversion with coefficients derived
+from Kr=299/1000 and Kb=114/1000 through the pinned Q16/range/Q13 precision steps.
+RGBA and caller RGB use the same conversion, including opt-in orientation.
+RGB component identifiers or Adobe transform0 select direct RGB planes.
+Decode produces opaque RGBA8; no ICC conversion is applied. Fourteen existing
+frozen grayscale/full-resolution controls now require exact native samples,
+including baseline, progressive refinement, EOB runs, split bands and restarts.
+Other required sampling/color paths retain their functional gates pending exact
+reference qualification; this is not a claim of exact decoding for every input.
+
+Subsampled chroma still uses centered bilinear expansion with edge extension.
+Its current color policy evaluates R=Y+1.402Cr,
+G=Y-0.344136286Cb-0.714136286Cr and B=Y+1.772Cb, centered at128.
+No superseded inverse implementation or old-rounding option is retained.
 
 Subsampled YCbCr interiors may reconstruct sixteen pixels with exact integer
 sixteenth interpolation and a certified float color matrix. Chroma and luma are

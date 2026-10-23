@@ -26,6 +26,8 @@ public sealed class JpegFixtureTests
             for (var y = 0; y < actual.Height; y++)
             {
                 var row = actual.GetRow8(y);
+                if (fixture.GetProperty("sampling").GetString() is "Grayscale" or "YCbCr444")
+                    Assert.Equal(expected.AsSpan(y * row.Length, row.Length).ToArray(), row.ToArray());
                 for (var x = 0; x < row.Length; x++)
                 {
                     if (x % 4 == 3) { Assert.Equal(255, row[x]); Assert.Equal(255, expected[y * row.Length + x]); continue; }
@@ -36,6 +38,18 @@ public sealed class JpegFixtureTests
             var rmse = Math.Sqrt(squared / (actual.Width * actual.Height * 3));
             Assert.True(maximum <= 4 && rmse <= 1.5, $"{name}: maximum {maximum}, RMSE {rmse:F4}");
         }
+    }
+
+    internal static byte[] NativePixels(string name, byte[] encoded)
+    {
+        var directory = FindFixtures();
+        using var manifest = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(directory, "jpeg-manifest.json")));
+        var fixture = manifest.RootElement.GetProperty("fixtures").EnumerateArray()
+            .Single(item => item.GetProperty("name").GetString() == name);
+        var expected = File.ReadAllBytes(Path.Combine(directory, name + ".rgba"));
+        Assert.Equal(fixture.GetProperty("encodedHash").GetString(), Hash(encoded));
+        Assert.Equal(fixture.GetProperty("expectedHash").GetString(), Hash(expected));
+        return expected;
     }
 
     private static string FindFixtures()

@@ -92,7 +92,7 @@ public sealed class JpegPrimitiveTests
         Assert.Equal(64, JpegTransform.Zigzag.Distinct().Count()); Assert.Equal(63, JpegTransform.Zigzag[^1]);
         var quantization = Enumerable.Repeat((ushort)1, 64).ToArray();
         var coefficients = new int[64]; coefficients[0] = 80;
-        var output = new byte[64]; JpegTransform.Inverse(coefficients, quantization, output, Context());
+        var output = new byte[64]; JpegInverseTransform.Inverse(coefficients, quantization, output, Context());
         Assert.All(output, value => Assert.Equal(138, value));
 
     }

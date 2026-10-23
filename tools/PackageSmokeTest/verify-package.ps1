@@ -741,6 +741,66 @@ for (var sample = 0; sample < 31*4; sample++)
 }
 if (vp8Maximum > 4 || Math.Sqrt(vp8Squares/(31*23*3)) > 1.5)
     throw new Exception("Package consumer VP8 RGB differs.");
+// Frozen original JPEG decoder control, read by this package-only consumer.
+{
+    var jpegExactData = File.ReadAllBytes(args[5]);
+    var jpegExactNative = File.ReadAllBytes(args[6]);
+    if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(jpegExactData)) != "ad1d9d11e42273349e85cfebc9b73c89231b595b883cd25d2b7832f62c353573"
+        || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(jpegExactNative)) != "fbf313b3c7bc442832b67d3b08bf228da503aefc142d4ac2ed8d2bfc720b76e4")
+        throw new Exception("Package JPEG decoder control provenance differs.");
+    using var jpegExactRoot = new Lokad.Image.Tooling.TestMemoryBudget(4 * 1024 * 1024);
+    var jpegExactOptions = new DecodeOptions { Limits = ImageLimits.Default with { MemoryBudget = jpegExactRoot } };
+    using (var jpegExactImage = ImageCodec.Decode(jpegExactData, jpegExactOptions))
+    {
+        if (!Lokad.Image.Tooling.OriginalPixels.Bytes(jpegExactImage).AsSpan().SequenceEqual(jpegExactNative))
+            throw new Exception("Package array JPEG pixels differ from the frozen reference.");
+        using (var jpegExactInput = new MemoryStream(jpegExactData, writable: false))
+        {
+            using var jpegExactSync = ImageCodec.Decode(jpegExactInput, jpegExactOptions);
+            if (!jpegExactInput.CanRead || !Lokad.Image.Tooling.OriginalPixels.Bytes(jpegExactSync).AsSpan().SequenceEqual(jpegExactNative))
+                throw new Exception("Package synchronous JPEG pixels or stream ownership differ.");
+        }
+        using (var jpegExactInput = new MemoryStream(jpegExactData, writable: false))
+        {
+            using var jpegExactAsync = await ImageCodec.DecodeAsync(jpegExactInput, jpegExactOptions);
+            if (!jpegExactInput.CanRead || !Lokad.Image.Tooling.OriginalPixels.Bytes(jpegExactAsync).AsSpan().SequenceEqual(jpegExactNative))
+                throw new Exception("Package asynchronous JPEG pixels or stream ownership differ.");
+        }
+        if (jpegExactRoot.Bytes != jpegExactNative.Length || jpegExactRoot.IsDisposed)
+            throw new Exception("Package retained JPEG ownership differs.");
+    }
+    var jpegExactRgb = Enumerable.Repeat((byte)165, 98 * 23 + 7).ToArray();
+    ImageCodec.DecodeJpeg(jpegExactData, jpegExactRgb, JpegSampleFormat.Rgb, 98,
+        new JpegDecodeOptions { Limits = jpegExactOptions.Limits });
+    for (var y = 0; y < 23; y++)
+    {
+        for (var x = 0; x < 31; x++)
+            if (!jpegExactRgb.AsSpan(y * 98 + x * 3, 3).SequenceEqual(jpegExactNative.AsSpan((y * 31 + x) * 4, 3)))
+                throw new Exception("Package caller RGB pixels differ.");
+        if (jpegExactRgb.AsSpan(y * 98 + 93, 5).ContainsAnyExcept((byte)165))
+            throw new Exception("Package caller RGB padding changed.");
+    }
+    if (jpegExactRgb.AsSpan(98 * 23).ContainsAnyExcept((byte)165)) throw new Exception("Package caller RGB tail changed.");
+    var jpegExactGray = new byte[713];
+    ImageCodec.DecodeJpeg(jpegExactData, jpegExactGray, JpegSampleFormat.Grayscale,
+        options: new JpegDecodeOptions { Limits = jpegExactOptions.Limits });
+    if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(jpegExactGray)) != "7c208d4a6353d69de6f9da697fe23efe603fef3fb2499568c47bd08f52752a98")
+        throw new Exception("Package caller grayscale pixels differ.");
+    using var jpegExactOrientedPacket = new MemoryStream();
+    jpegExactOrientedPacket.Write(jpegExactData.AsSpan(0, 2));
+    jpegExactOrientedPacket.Write(new byte[] {255,225,(byte)(app1Length >> 8),(byte)app1Length});
+    jpegExactOrientedPacket.Write("Exif\0\0"u8); jpegExactOrientedPacket.Write(tiff); jpegExactOrientedPacket.Write(jpegExactData.AsSpan(2));
+    var jpegExactOriented = new byte[713 * 3];
+    var jpegExactInfo = ImageCodec.DecodeJpeg(jpegExactOrientedPacket.ToArray(), jpegExactOriented, JpegSampleFormat.Rgb,
+        options: new JpegDecodeOptions { ApplyOrientation = true, Limits = jpegExactOptions.Limits });
+    if ((jpegExactInfo.Width, jpegExactInfo.Height, jpegExactInfo.Orientation) != (23,31,ImageOrientation.Normal))
+        throw new Exception("Package caller RGB orientation differs.");
+    for (var y = 0; y < 23; y++)
+    for (var x = 0; x < 31; x++)
+        if (!jpegExactOriented.AsSpan((x * 23 + 22 - y) * 3, 3).SequenceEqual(jpegExactNative.AsSpan((y * 31 + x) * 4, 3)))
+            throw new Exception("Package oriented caller RGB pixels differ.");
+    if (jpegExactRoot.Bytes != 0 || jpegExactRoot.IsDisposed) throw new Exception("Package JPEG admission cleanup differs.");
+}
 Console.WriteLine("Exact Release package consumer passed.");
 '@ | Set-Content -LiteralPath (Join-Path $consumer 'Program.cs') -Encoding utf8
     $config = [xml]'<configuration><packageSources><clear /><add key="local" value="" /></packageSources></configuration>'
@@ -754,9 +814,11 @@ Console.WriteLine("Exact Release package consumer passed.");
     $vp8Expected = Join-Path $repoRoot 'tests/Fixtures/vp8-ffmpeg-31x23-effort6-quality75-alpha.rgba'
     $pngFixture = Join-Path $repoRoot 'tests/Fixtures/png-authored-c6-d16-adam7-all-filters.png'
     $pngExpected = Join-Path $repoRoot 'tests/Fixtures/png-authored-c6-d16-adam7-all-filters.rgba'
+    $jpegExactFixture = Join-Path $repoRoot 'tests/Fixtures/jpeg-ffmpeg-YCbCr444-31x23.jpg'
+    $jpegExactExpected = Join-Path $repoRoot 'tests/Fixtures/jpeg-ffmpeg-YCbCr444-31x23.rgba'
     dotnet build (Join-Path $consumer 'Consumer.csproj') -c Release --no-restore --tl:off --nologo -v minimal -m:1 -nr:false -p:UseSharedCompilation=false
     if ($LASTEXITCODE -ne 0) { throw 'Package-only consumer build failed.' }
-    dotnet (Join-Path $consumer 'bin/Release/net10.0/Consumer.dll') $vp8Fixture $vp8Expected $pngFixture $pngExpected $librarySha256
+    dotnet (Join-Path $consumer 'bin/Release/net10.0/Consumer.dll') $vp8Fixture $vp8Expected $pngFixture $pngExpected $librarySha256 $jpegExactFixture $jpegExactExpected
     if ($LASTEXITCODE -ne 0) { throw 'Package-only consumer failed.' }
     & (Join-Path $PSScriptRoot 'verify-usage.ps1') -ConsumerDirectory $consumer -GuidePath (Join-Path $repoRoot 'docs/usage.md') -LibrarySha256 $librarySha256
 } finally { Pop-Location }
