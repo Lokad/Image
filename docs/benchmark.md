@@ -55,8 +55,9 @@ admitted production and complete public operations remain open.
 Production matching/prediction/color transforms pass 8/9/10 focused checks with one
 Windows/Linux assembly. Native maps/residuals and shared admission pass; color search
 and map compaction operate in place while charging retained capacity. Analysis adds
-18 checks of frozen-control decisions, cardinality and cleanup: 45 focused passes
-with one assembly on both platforms, using fixed admitted scratch. Unchanged
+18 checks of frozen-control decisions, cardinality and cleanup. Palette adds 12
+native order/delta/index and ownership checks, packing in place with retained
+capacity charged: 57 focused passes with one assembly on both platforms. Unchanged
 public paths reuse E53's 3,884 offline checks per platform and the same private
 Release package/three usage examples on both. Public encoding does not call these
 components yet; integrated qualification remains open. No new timings or allocations.

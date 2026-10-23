@@ -76,8 +76,12 @@ Transform-family analysis adds 18 checks: thirteen frozen-control decisions acro
 all five families and the required effort paths, exact 256/257-color cardinality,
 shared refusal/recovery, cancellation and independent work cleanup. It borrows
 untransformed normalized ARGB and returns only scalar decisions; its fixed histogram
-and color-counting storage is released before subsequent transforms. All 45 focused
-checks pass with the same assembly on both platforms.
+and color-counting storage is released before subsequent transforms. Palette ordering/packing adds
+12 checks: six frozen native palette/delta/index controls, independent owners,
+overlapping capacity, refusal/recovery, cancellation and early/late work failure.
+Palette data has its own retained owner; index packing reuses the working buffer
+without refunding its still-allocated capacity. All 57 focused checks pass with one
+assembly on Windows/Linux. No additional native encoding or timing was needed.
 The last full shared-build qualification (E53) passed 3,884 offline tests per
 platform, the same private Release package and all three usage examples on both.
 These public paths remain unchanged. The encoder is not switched: complete-operation

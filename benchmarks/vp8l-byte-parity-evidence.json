@@ -77,7 +77,7 @@
     "members": 22,
     "mirrored": true
   },
-  "latestRound": "E55",
+  "latestRound": "E56",
   "crossColorAndAuxiliaryStages": {
     "scope": "ONE existing513x259 RGBA8 method4/quality75/exact=1 control. Complete transform prefix, not main image or complete encoder.",
     "productionChanged": false,
@@ -5956,5 +5956,301 @@
     },
     "evidenceReuse": "Public encoder code paths remain unchanged. E53 full shared-build/same-package evidence and the19 frozen model packets remain scoped to those paths. E54 current-source CI is green; CI validates subsequent source pushes. New analysis is not end-to-end encoder qualification.",
     "remaining": "Typed palette ordering/packing/implicit zero, token/cache parsing, clustering/trees and framing; public integration, same19 packets/RGBA16/async/resources and coherent full qualification."
+  },
+  "ownedProductionPalettePreparation": {
+    "round": "E56",
+    "productionSourceAdded": true,
+    "publicEncoderSwitched": false,
+    "sameFrozenTestAssemblyBothOS": true,
+    "focusedNewCases": 12,
+    "focusedTotalIncludingPriorComponents": 57,
+    "testAssembly": {
+      "bytes": 1511424,
+      "sha256": "62eac91b86c4c9fdb95beea57a07f6341db043d4c6b378ac80039f9e675733d0"
+    },
+    "sourceFiles": {
+      "src/Lokad.Image/Internal/Vp8lReferencePalette.cs": {
+        "bytes": 8478,
+        "sha256": "02095fa23b4fad2c87ad5ca956c06e13400a2a341f1bf054ad63d56851a5c3e5"
+      },
+      "tests/Lokad.Image.Tests/Vp8lReferencePaletteTests.cs": {
+        "bytes": 9782,
+        "sha256": "ba5de2613982e17d8dfece35d13355c118b67a234d775a1adbc2c3f5894ee946"
+      }
+    },
+    "scope": "Typed numeric/greedy palette order, modular deltas, implicit final zero and in-place partial-row index packing, with separately owned palette data. Input is library-owned untransformed normalized ARGB; complete public encoder integration remains open.",
+    "verified": [
+      "Six existing native controls: singleton, two-color4103x2,4-color7x3,16-color17x3,18-color23x13 greedy and numeric. Exact palette/delta/packed hashes and encoded counts.",
+      "Native goldens reuse existing frozen packets and prior native palette snapshots; no new encoder/model/native build or fixture.",
+      "Packing modifies only the owned working prefix, clips partial rows, and keeps its original capacity charged. Palette and delta capacity remain charged, including omitted implicit-zero data.",
+      "Independent surviving palettes/packed buffers, idempotent disposal, overlapping old/new result capacity, terminal refusal and successful recovery.",
+      "Cancellation after scratch admission and both early/late work failures release unused result/lookup storage; late failure exercises cleanup after in-place writes.",
+      "All prior45 matcher/predictor/color/analysis checks reconfirmed in the same Windows-built assembly on Linux."
+    ],
+    "nativeStageGoldens": {
+      "scope": "Existing original palette controls only; native packets already frozen. RFC observation reuses prior palette snapshots; no new encode/model/native build or timing.",
+      "nativeEncodes": 0,
+      "cases": [
+        {
+          "name": "singleton",
+          "width": 1,
+          "height": 1,
+          "colors": 1,
+          "packingBits": 3,
+          "encodedPaletteEntries": 1,
+          "paletteArgb": [
+            16711681
+          ],
+          "deltaArgb": [
+            16711681
+          ],
+          "colorsSha256": "108926562b2303b9fffdfaa34f5aeeaf701a785231d1de42a2c9d5948fc6bc3e",
+          "deltasSha256": "108926562b2303b9fffdfaa34f5aeeaf701a785231d1de42a2c9d5948fc6bc3e",
+          "packedSha256": "e3820096cb82366b860b8a4e668453a7aaaf423af03bdf289fa308ea03a79332",
+          "packedSamples": 1,
+          "nativePacketSha256": "98dc19987970964d8c3a2bd9e57c9e4cd4e29dc1e99fe8658b087f53aabcb618"
+        },
+        {
+          "name": "two-color",
+          "width": 4103,
+          "height": 2,
+          "colors": 2,
+          "packingBits": 3,
+          "encodedPaletteEntries": 2,
+          "paletteArgb": [
+            3199999,
+            5100543
+          ],
+          "deltaArgb": [
+            3199999,
+            1900544
+          ],
+          "colorsSha256": "7b701a440e7dfa774aafc90be2a3009ce536082e1b01110ae05df2f2d8d3497d",
+          "deltasSha256": "2fa98359e0ba2666f98a90f35e3f04081eeed456e0d4fd9bd5c6af67110184f2",
+          "packedSha256": "b575d8901a7aa4aabfb48c8505224f1fa438c8a2d990eb74fd3b1c5c1b1f13a2",
+          "packedSamples": 1026,
+          "nativePacketSha256": "8f241022ea6585480f36d10a8d4c2cfefcc3e311ae6120b14867e34260aeb9bc"
+        },
+        {
+          "name": "Palette4ColorPartialPacking",
+          "width": 7,
+          "height": 3,
+          "colors": 4,
+          "sourceSha256": "4d1445a674a8bb595abb9087529668f16b5e6354681099d351be847543536e11",
+          "packetBytes": 66,
+          "packetSha256": "5b7387a2bc7bbf253f6488dc6d10b26a395eecb5835819e718c8f043ed268ab7",
+          "packetHex": "524946463a000000574542505650384c2e0000002f068000101f20164c719afb120ba638a3fd090492ddb39876fea3f20700598089c06cf66598675f4211fd8ff154",
+          "encodedPaletteEntries": 4,
+          "paletteArgb": [
+            0,
+            4282015898,
+            4285118749,
+            4288156320
+          ],
+          "deltaArgb": [
+            0,
+            4282015898,
+            3103107,
+            3103107
+          ],
+          "packedSamples": 6,
+          "packedSha256": "395f91ddd7ca52eb3edd3ecd46d06949d28532a0a01a3c47aa27eaac52dfc3ee",
+          "packingBits": 2,
+          "cacheBits": 0,
+          "endBit": 367,
+          "independentSourcePixelsExact": true,
+          "nativePreparationEncodes": 3,
+          "colorsSha256": "b8c38a9f98ffbf8553567c4a9c04f8847e27045940dfd71cd400cedf412f1f57",
+          "deltasSha256": "577ff48fb4a72e543f3fedffce84d7be2487cd9cf05315b9c2b5d4700fc4c831"
+        },
+        {
+          "name": "Palette16ColorPartialPacking",
+          "width": 17,
+          "height": 3,
+          "colors": 16,
+          "sourceSha256": "185909f068ddee0655967de50590853d679ac05bfa13acb9bbd6ed29c05e07da",
+          "packetBytes": 130,
+          "packetSha256": "b24691e94f5e5369d84f8de9074c436ca470f6ca9a3a9a7389c1256972cb1d33",
+          "packetHex": "524946467a000000574542505650384c6e0000002f108000107f60988de4dc52f4770843716ada469296c477ee8f3fc0690cb3919c5b865a1cd5309c80a0c8ffd16235f76f2841b80450698012f87e00a60100346125aea112e184fd0197700338f2f6016f309a773799f58f88fe074b8fe87e3523f186a9e1cb4a6ef9d59ec60d03",
+          "encodedPaletteEntries": 16,
+          "paletteArgb": [
+            0,
+            4280622377,
+            4282331963,
+            4282015898,
+            5535404,
+            4285435070,
+            4285118749,
+            4286828335,
+            10347841,
+            4288156320,
+            4289865906,
+            4291575492,
+            4291259171,
+            4292968757,
+            4294362278,
+            4279294648
+          ],
+          "deltaArgb": [
+            0,
+            4280622377,
+            1709586,
+            16461151,
+            18486802,
+            4279899666,
+            16461151,
+            1709586,
+            18486802,
+            4294651231,
+            1709586,
+            1709586,
+            16461151,
+            1709586,
+            1393521,
+            1709586
+          ],
+          "packedSamples": 27,
+          "packedSha256": "f5225a458c0c84f13964c57cd2cb75eb7d7070ba84855a65c716b0c0cb53a0b8",
+          "packingBits": 1,
+          "cacheBits": 0,
+          "endBit": 874,
+          "independentSourcePixelsExact": true,
+          "nativePreparationEncodes": 3,
+          "colorsSha256": "c26429cae0d1eb320040e99f1cc34132758bc557a39d7dd9daefdc56ceadacca",
+          "deltasSha256": "230a87bd46a5003c82258e4df6635133dd771def621da99975c9db5ae438ec97"
+        },
+        {
+          "name": "Palette18ColorUnpackedZero",
+          "width": 23,
+          "height": 13,
+          "colors": 18,
+          "sourceSha256": "d09cae7c789257e4d740adf2f43a18517e503c9c84748f2b8e662ce857436325",
+          "packetBytes": 236,
+          "packetSha256": "a4bb56684758d4ff4fa58da15729a126098a74b228c54307204c95d7e4942736",
+          "packetHex": "52494646e4000000574542505650384cd70000002f160003108740986d64d1df21cc1ff0248404c90fbaff075a040269c8218ba9161014f93f5a0f56430fe11ea07e80de03280c00a20d87909111d1ff58e41775482c1baefa1f3f75b40991bc7997d4d5c5a9d77c29032680cecd985a71103d72df8483dcfc5b55b65fd80734873f899346826def9ad00965180df247800073fbcedd70a454aa61a1a0a1df20fff77ef387e82b3158d4d5dbc5e141763803f80e963695d12b00fb3e7a5aa9a9c0eb90b088a180ad7af241e66cb65f0227a3de92b56c4e214c905953f21ad8a5dada9057b5a59b3713003f00",
+          "encodedPaletteEntries": 17,
+          "paletteArgb": [
+            4280622377,
+            4282331963,
+            4282015898,
+            5535404,
+            4285435070,
+            4285118749,
+            4286828335,
+            10347841,
+            4288156320,
+            4289865906,
+            4291575492,
+            4291259171,
+            4292968757,
+            4294678343,
+            4294362278,
+            4279294648,
+            4281004234,
+            0
+          ],
+          "deltaArgb": [
+            4280622377,
+            1709586,
+            16461151,
+            18486802,
+            4279899666,
+            16461151,
+            1709586,
+            18486802,
+            4294651231,
+            1709586,
+            1709586,
+            16461151,
+            1709586,
+            1709586,
+            16461151,
+            1709586,
+            1709586
+          ],
+          "packedSamples": 299,
+          "packedSha256": "8c26bbbf5d7fbe12536daa24055c27a35fa4790703c0ba458fe8b888d3c4e398",
+          "packingBits": 0,
+          "cacheBits": 0,
+          "endBit": 1718,
+          "independentSourcePixelsExact": true,
+          "nativePreparationEncodes": 3,
+          "colorsSha256": "c6f5b9984587c8e5e150540ceaa414cd64996fd2ae866e03e1491937e0625931",
+          "deltasSha256": "535b0b264eb93b40c27028cd96b942142bb4316d9f0fcb1c861cdfc5f7ffea33"
+        },
+        {
+          "name": "numeric18",
+          "width": 23,
+          "height": 13,
+          "colors": 18,
+          "packingBits": 0,
+          "encodedPaletteEntries": 17,
+          "paletteArgb": [
+            5535404,
+            10347841,
+            4279294648,
+            4280622377,
+            4281004234,
+            4282015898,
+            4282331963,
+            4285118749,
+            4285435070,
+            4286828335,
+            4288156320,
+            4289865906,
+            4291259171,
+            4291575492,
+            4292968757,
+            4294362278,
+            4294678343,
+            0
+          ],
+          "deltaArgb": [
+            5535404,
+            4812693,
+            4285789559,
+            1393521,
+            381857,
+            1077456,
+            381857,
+            2787042,
+            381857,
+            1393521,
+            1393521,
+            1709586,
+            1393521,
+            381857,
+            1393521,
+            1393521,
+            381857
+          ],
+          "colorsSha256": "343d570a724262fbaad16d0c55efc0ab33490d3a722e5cee81e5e8c5dc1ae11c",
+          "deltasSha256": "04ceb85f29dd4748cafd283dd2401f2aec44d15626fa2e21cb264cb3b492090c",
+          "packedSha256": "7a5791e5fae50aad4830fd5d94aa24529d4f55d213f074682ccafa076e541929",
+          "packedSamples": 299,
+          "nativePacketSha256": "634ad1b52a2b14326ac2e3336e9e5cfb4848d2b94b24ca305b23df26211ed315"
+        }
+      ]
+    },
+    "testBuilds": {
+      "windows": 1,
+      "linux": 0
+    },
+    "productionLibraryBuiltLocally": false,
+    "sourceModelBuilds": 0,
+    "nativeBuilds": 0,
+    "nativeCompleteEncodes": 0,
+    "newNativeFixtureInputs": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "rawArchive": {
+      "name": "e56-palette-components.tar.gz",
+      "bytes": 821818,
+      "members": 10,
+      "sha256": "523b96781acd2e495073d5183114048d1a99e3b6669cf14113de20f9718fc35a",
+      "mirrored": true
+    },
+    "evidenceReuse": "Public production code paths remain unchanged. E53 same-package/shared-build evidence and prior19 complete model packets remain valid within their scopes; current-source CI validates pushes. This is a stage/ownership proof, not integrated encoder readiness.",
+    "remaining": "Typed token/cache parsing, clustering/trees, framing and public integration; then same19 packets/RGBA16/async/resource ownership and coherent full qualification."
   }
 }
