@@ -22,6 +22,8 @@ internal sealed class Vp8FramePlan : IDisposable
     internal int SegmentCount { get; }
     internal int HeaderLimit { get; private set; }
     internal int HeaderRetries { get; private set; }
+    internal bool UseSkipProbability { get; private set; }
+    internal byte SkipProbability { get; private set; } = 255;
     internal Vp8QuantizationPlan.Deltas Deltas { get; }
     internal (byte Root, byte Left, byte Right) SegmentProbabilities { get; private set; }
     internal bool UpdateMap => SegmentCount > 1 && SegmentProbabilities != ((byte)255, (byte)255, (byte)255);
@@ -84,11 +86,7 @@ internal sealed class Vp8FramePlan : IDisposable
         context.Work(0); var result = new Vp8FramePlan(input, segments, quantization, headerLimit, context);
         try
         {
-            var bytes = result.Count * 820L + 1056 + 16 * sizeof(int) + MetadataBytes;
-            context.Reserve(bytes); result.capacity = bytes; context.Work(0);
-            result.coefficients = new short[checked(result.Count * 400)]; result.blocks = new byte[checked(result.Count * BlockBytes)];
-            result.probabilities = Vp8Tables.CoefficientProbabilities.ToArray(); result.parameters = new int[16];
-            for (var s = 0; s < 4; s++) { result.parameters[s] = segments.Parameters[s].Quantizer; result.parameters[4 + s] = segments.Parameters[s].InitialFilter; }
+            result.Initialize(segments);
             var scratch = Vp8MacroblockDecision.ScratchBytes + 4096L + 49L * result.Columns + 4224 + 512;
             context.Reserve(scratch);
             try
@@ -99,6 +97,112 @@ internal sealed class Vp8FramePlan : IDisposable
             return result;
         }
         catch { result.Dispose(); throw; }
+    }
+
+    private void Initialize(Vp8SourceSegments segments)
+    {
+        var bytes = Count * 820L + 1056 + 16 * sizeof(int) + MetadataBytes;
+        context.Reserve(bytes); capacity = bytes; context.Work(0);
+        coefficients = new short[checked(Count * 400)]; blocks = new byte[checked(Count * BlockBytes)];
+        probabilities = Vp8Tables.CoefficientProbabilities.ToArray(); parameters = new int[16];
+        for (var s = 0; s < 4; s++) { parameters[s] = segments.Parameters[s].Quantizer; parameters[4 + s] = segments.Parameters[s].InitialFilter; }
+    }
+
+    internal static Vp8FramePlan CreateDistortion(Vp8PreparedInput input, Vp8SourceAnalysis analysis,
+        Vp8SourceSegments segments, Vp8QuantizationPlan quantization, int method, OperationContext context, bool correctDc = true)
+    {
+        if (method is < 0 or > 2 || analysis.Width != input.Stride / 16 || analysis.Height != input.StorageHeight / 16
+            || segments.Width != analysis.Width || segments.Height != analysis.Height || quantization.SegmentCount != segments.SegmentCount)
+            throw new ArgumentException("Inconsistent VP8 distortion frame preparation.");
+        context.Work(0); var result = new Vp8FramePlan(input, segments, quantization, 65536, context);
+        try
+        {
+            result.Initialize(segments);
+            var scratch = Vp8DistortionDecision.ScratchBytes + 4096L + 45L * result.Columns + 4224 + 512;
+            context.Reserve(scratch);
+            try { context.Work(0); result.PrepareDistortion(input, analysis, segments, quantization, method, correctDc); }
+            finally { context.Release(scratch); }
+            return result;
+        }
+        catch { result.Dispose(); throw; }
+    }
+
+    private void PrepareDistortion(Vp8PreparedInput input, Vp8SourceAnalysis analysis, Vp8SourceSegments segments,
+        Vp8QuantizationPlan quantization, int method, bool correctDc)
+    {
+        var yTop = new byte[Columns * 16]; var uvTop = new byte[Columns * 16]; var modeTop = new byte[Columns * 4];
+        var coefficientTop = new byte[Columns * 9]; var statistics = new uint[1056];
+        Span<byte> source = stackalloc byte[384]; Span<byte> neighbors = stackalloc byte[71]; Span<byte> modeContexts = stackalloc byte[8];
+        Span<byte> contexts = stackalloc byte[18]; Span<byte> modeLeft = stackalloc byte[4]; Span<sbyte> diffusion = stackalloc sbyte[8]; diffusion.Clear();
+        Span<sbyte> errors = stackalloc sbyte[14]; Span<byte> pixels = stackalloc byte[384]; Span<int> counts = stackalloc int[4]; counts.Clear();
+        context.Work(Count * 24L);
+        for (var index = 0; index < Count; index++)
+        {
+            var data = blocks!.AsSpan(index * BlockBytes, BlockBytes); var small = analysis.LumaModes[index] == 2;
+            data[16] = small ? (byte)0 : analysis.LumaModes[index]; data[17] = analysis.ChromaModes[index];
+            data[18] = small ? (byte)0 : (byte)1; data[19] = segments.Map[index]; counts[data[19]]++;
+        }
+        SegmentProbabilities = (Probability(counts[0] + counts[1], counts[2] + counts[3]), Probability(counts[0], counts[1]), Probability(counts[2], counts[3]));
+        using var rate = Vp8RatePlan.Create(probabilities!, context);
+        var headerCost = SegmentHeaderCost(counts, rate.Entropy); var skipped = 0;
+        var statisticsCount = method == 0 ? Math.Min(Count, Count > 200 ? Count >> 2 : 50) : Count;
+        for (var pass = 0; pass < 2; pass++)
+        {
+            context.Work(Columns * 45L); yTop.AsSpan().Fill(127); uvTop.AsSpan().Fill(127); modeTop.AsSpan().Clear();
+            coefficientTop.AsSpan().Clear(); contexts.Clear(); var count = pass == 0 ? statisticsCount : Count;
+            for (var index = 0; index < count; index++)
+            {
+                context.Work(32768); var x = index % Columns; var y = index / Columns;
+                if (x == 0)
+                {
+                    neighbors[..35].Fill(129); neighbors[0] = neighbors[17] = neighbors[26] = y == 0 ? (byte)127 : (byte)129;
+                    modeLeft.Clear(); contexts[9..].Clear();
+                }
+                for (var yy = 0; yy < 16; yy++) input.Y.Slice((y * 16 + yy) * input.Stride + x * 16, 16).CopyTo(source.Slice(yy * 16, 16));
+                for (var yy = 0; yy < 8; yy++)
+                {
+                    input.U.Slice((y * 8 + yy) * (input.Stride / 2) + x * 8, 8).CopyTo(source.Slice(256 + yy * 16, 8));
+                    input.V.Slice((y * 8 + yy) * (input.Stride / 2) + x * 8, 8).CopyTo(source.Slice(264 + yy * 16, 8));
+                }
+                yTop.AsSpan(x * 16, 16).CopyTo(neighbors[35..]); uvTop.AsSpan(x * 16, 16).CopyTo(neighbors[51..]);
+                for (var p = 0; p < 4; p++) neighbors[67 + p] = x + 1 < Columns ? yTop[(x + 1) * 16 + p] : yTop[x * 16 + 15];
+                modeTop.AsSpan(x * 4, 4).CopyTo(modeContexts); modeLeft.CopyTo(modeContexts[4..]);
+                var data = blocks!.AsSpan(index * BlockBytes, BlockBytes); var levels = coefficients!.AsSpan(index * 400, 400); var segment = data[19];
+                var score = Vp8DistortionDecision.Select(source, neighbors, modeContexts, diffusion, y != 0, x != 0,
+                    method, (data[18] & 1) != 0, data[17], 256L * 510 * 8 * 1024 / Count, correctDc,
+                    quantization.Matrix(segment, Vp8CoefficientPlane.Luma), quantization.Matrix(segment, Vp8CoefficientPlane.Walsh), quantization.Matrix(segment, Vp8CoefficientPlane.Chroma),
+                    quantization.Costs(segment), rate, pixels, levels, data[..16], errors, context);
+                data[16] = (byte)score.LumaMode; data[17] = (byte)score.ChromaMode;
+                data[18] = (byte)((score.Intra16 ? 1 : 0) | (score.Nonzero == 0 ? 2 : 0));
+                if (pass == 0)
+                {
+                    if (score.Nonzero == 0) skipped++;
+                    coefficientTop.AsSpan(x * 9, 9).CopyTo(contexts); Record(levels, score.Intra16, contexts, statistics, tokenBuffer: false);
+                    contexts[..9].CopyTo(coefficientTop.AsSpan(x * 9, 9));
+                }
+                for (var p = 0; p < 4; p++)
+                {
+                    modeTop[x * 4 + p] = score.Intra16 ? (byte)score.LumaMode : data[12 + p];
+                    modeLeft[p] = score.Intra16 ? (byte)score.LumaMode : data[p * 4 + 3];
+                }
+                if (x + 1 < Columns)
+                {
+                    neighbors[0] = neighbors[50]; neighbors[17] = neighbors[58]; neighbors[26] = neighbors[66];
+                    for (var p = 0; p < 16; p++) neighbors[1 + p] = pixels[p * 16 + 15];
+                    for (var p = 0; p < 8; p++) { neighbors[18 + p] = pixels[256 + p * 16 + 7]; neighbors[27 + p] = pixels[256 + p * 16 + 15]; }
+                }
+                if (y + 1 < Rows) { pixels.Slice(240, 16).CopyTo(yTop.AsSpan(x * 16, 16)); pixels.Slice(368, 16).CopyTo(uvTop.AsSpan(x * 16, 16)); }
+            }
+            if (pass == 0 && headerCost != 0)
+            {
+                // Native distortion-only scores have H=0. A zero map cost makes
+                // its statistics loop return before finalizing either profile;
+                // the final encoder still runs with defaults in that case.
+                context.Work(1056 * 16L); Vp8TokenStatistics.Update(statistics, rate.Entropy, probabilities!, out _);
+                SkipProbability = (byte)((Count - skipped) * 255L / Count); UseSkipProbability = SkipProbability < 250;
+            }
+        }
+        for (var s = 0; s < 4; s++) parameters![12 + s] = parameters[4 + s];
     }
 
     private void Prepare(Vp8PreparedInput input, Vp8SourceSegments segments, Vp8QuantizationPlan quantization)

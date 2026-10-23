@@ -119,7 +119,8 @@ internal sealed class Vp8FrameEncoding : IDisposable
         h.Write(0); // No subsequent frame's entropy refresh.
         var probabilities = frame.Probabilities;
         for (var i = 0; i < 1056; i++) { var changed = probabilities[i] != Vp8Tables.CoefficientProbabilities[i]; Bit(h, changed, Vp8Tables.CoefficientUpdateProbabilities[i]); if (changed) h.Literal(probabilities[i], 8); }
-        h.Write(0); // The pinned token-buffer path encodes every block, without skip syntax.
+        Bit(h, frame.UseSkipProbability);
+        if (frame.UseSkipProbability) h.Literal(frame.SkipProbability, 8);
         var modeTop = new byte[frame.Columns * 4]; var coefficientTop = new byte[frame.Columns * 9];
         Span<byte> modeLeft = stackalloc byte[4]; Span<byte> contexts = stackalloc byte[18];
         for (var index = 0; index < frame.Count; index++)
@@ -128,6 +129,7 @@ internal sealed class Vp8FrameEncoding : IDisposable
             if (x == 0) { modeLeft.Clear(); contexts[9..].Clear(); }
             var block = frame.Block(index); var modes = frame.SmallModes(index);
             if (frame.UpdateMap) { Bit(h, block.Segment >= 2, p.Root); Bit(h, (block.Segment & 1) != 0, block.Segment < 2 ? p.Left : p.Right); }
+            if (frame.UseSkipProbability) Bit(h, block.Skipped, frame.SkipProbability);
             Bit(h, block.Intra16, 145);
             if (block.Intra16)
             {
@@ -143,6 +145,10 @@ internal sealed class Vp8FrameEncoding : IDisposable
             }
             var uv = block.ChromaMode; Bit(h, uv != 0, 142); if (uv != 0) { Bit(h, uv != 2, 114); if (uv != 2) Bit(h, uv == 1, 183); }
             coefficientTop.AsSpan(x * 9, 9).CopyTo(contexts); var top = contexts[..9]; var left = contexts.Slice(9, 9); var levels = frame.Levels(index);
+            if (frame.UseSkipProbability && block.Skipped)
+            {
+                ResetAfterSkip(contexts, block.Intra16); top.CopyTo(coefficientTop.AsSpan(x * 9, 9)); continue;
+            }
             if (block.Intra16) top[8] = left[8] = Coefficients(t, levels[..16], 1, 0, top[8] + left[8], probabilities) ? (byte)1 : (byte)0;
             for (var by = 0; by < 4; by++) for (var bx = 0; bx < 4; bx++)
                 top[bx] = left[by] = Coefficients(t, levels.Slice(16 + (by * 4 + bx) * 16, 16), block.Intra16 ? 0 : 3, block.Intra16 ? 1 : 0, top[bx] + left[by], probabilities) ? (byte)1 : (byte)0;
@@ -153,6 +159,13 @@ internal sealed class Vp8FrameEncoding : IDisposable
             }
             top.CopyTo(coefficientTop.AsSpan(x * 9, 9));
         }
+    }
+
+    internal static void ResetAfterSkip(Span<byte> contexts, bool intra16)
+    {
+        if (contexts.Length < 18) throw new ArgumentException("Incomplete VP8 coefficient contexts.");
+        contexts[..8].Clear(); contexts.Slice(9, 8).Clear();
+        if (intra16) contexts[8] = contexts[17] = 0;
     }
 
     private void FrameHeader(Span<byte> bytes)

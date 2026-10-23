@@ -133,7 +133,7 @@ its task finishes. Terminal admission refusal, cleanup/recovery, local/work/outp
 limits and mismatched dimensions pass. Quality75 lossless packet checks also pass
 with the shared preparation changes; the scoped native inputs/settings stay fixed.
 
-The same immutable assembly passes430focused checks per platform on Windows/Linux,
+The same immutable assembly passes439focused checks per platform on Windows/Linux,
 normal and SIMD disabled, including the durable method3 packet row. The direct
 statistics extension reuses the prior decision/packet checks on that same producer. Shared admission covers
 owned capacity, retained results and replacement overlap. Refusal, cancellation,
@@ -154,9 +154,9 @@ targets; source-only qualification is distinct from complete-packet agreement:
 
 | Existing input / settings | Required policy | Native bytes | Managed status |
 |---|---|---:|---|
-| Diagram Q75 / method0 | Fast source and distortion selection, non-token probe | 9,980 | Decisions/statistics exact; emission open |
-| Diagram Q75 / method1 | Fast source plus UV reexamination | 9,244 | Decisions/statistics exact; emission open |
-| Diagram Q75 / method2 | Distortion-only I4/I16 reexamination | 7,330 | Decisions/statistics exact; emission open |
+| Diagram Q75 / method0 | Fast source and distortion selection, non-token probe | 9,980 | Complete packet exact |
+| Diagram Q75 / method1 | Fast source plus UV reexamination | 9,244 | Complete packet exact |
+| Diagram Q75 / method2 | Distortion-only I4/I16 reexamination | 7,330 | Complete packet exact |
 | Diagram Q75 / method3 | Basic RDO/token path, non-full SNS | 7,082 | Complete packet exact |
 | Diagram Q75 / method5 | Selected-mode trellis, including I16/Y2 | 7,026 | Open |
 | Diagram Q75 / method6 | Trellis on every candidate | 6,818 | Open |
@@ -164,7 +164,7 @@ targets; source-only qualification is distinct from complete-packet agreement:
 | Diagram Q85 / method4 | Public default quality | 8,898 | Open |
 | Diagram Q100 / method4 | Maximum quality and high-quality DC policy | 15,172 | Open |
 | Alpha Q75 / method6 | Internal alpha VP8L quality100 search | 85,796 | Open |
-| Diagram Q100 / method0 | High-quality fast source and distortion-only DC policy | 27,668 | Open |
+| Diagram Q100 / method0 | High-quality fast source and distortion-only DC policy | 27,668 | Complete packet exact |
 | Alpha Q75 / method0 | Low-effort alpha VP8L | 93,386 | Open |
 | Alpha Q75 / method1 | Alpha VP8L without cache/trace; small clustering bound | 106,588 | Open |
 
@@ -191,10 +191,9 @@ Default method4 source analysis and all earlier packet checks remain exact.
 
 The development observer captures iterator advancement before segmentation;
 observing only after analysis would report centroid-substituted susceptibility.
-Every accepted capture is gated by its unchanged complete native packet. Managed
-fast-source agreement is not yet full method0/1 packet agreement. Distortion
-refinement and non-token statistics/emission remain next, followed by the other
-named policies. No CPU or GC-allocation measurements were made.
+Every accepted capture is gated by its unchanged complete native packet. Managed complete-packet agreement now also passes for methods0/1/2. The remaining
+named quality, trellis, alpha and header policies precede public integration.
+No CPU or GC-allocation measurements were made.
 
 Distortion-only method0/1/2 selection now matches all2,945native statistics/final
 pass decisions on the existing Q75 diagram, including modes, coefficients,
@@ -214,10 +213,11 @@ same-build proof reused429checks and the small packet probe without rebuilding.
 Inspection identified three specific omitted boundaries in the table: high-quality
 fast encoding, low-effort alpha, and non-low-effort alpha below the cache/trace
 threshold. They reuse the same images; allthree native targets are frozen, and
-managed confirmation remains open. The low-quality clustering sampler must retain
+the fast high-quality packet now passes; the two alpha confirmations remain open.
+The low-quality clustering sampler must retain
 its nine-entry candidate capacity even when its greedy threshold is smaller.
-No shape/depth/quality cross-product is introduced. Non-token statistics/skip
-emission is next; full nondefault packet parity and public integration remain open.
+No shape/depth/quality cross-product is introduced. The other named policies and
+public integration remain open.
 
 Direct non-token statistics now matches the native post-statistics coefficient
 probabilities for methods0/1/2. All1,262sampled macroblocks also match complete
@@ -225,10 +225,19 @@ nonzero-context inputs:140for method0 and561each for methods1/2. The macroblock
 recorder forwards its existing direct/token policy explicitly; the default token
 path stays exact. This adds no retained storage or per-block admission. Earlier
 native captures provide all targets, so no new encode, fixture or quality search
-was needed. Final-loop skip resets and complete non-token packets remain open.
+was needed. Final-loop skip resets and complete non-token packets now also pass.
 
 Historical validation and profiler reports are stored losslessly in mirrored
 archives. Original producer, quality, size, timing and stack data are preserved;
 restore the original paths before historical replay. Release packages, reference
 sources and protected caches remain. This creates build headroom without rerunning
 measurements. The generated performance summary still matches retained evidence.
+
+The complete fast packets now match: diagramQ75 methods0/1/2 are9,980/9,244/7,330
+bytes; diagramQ100 method0 is27,668bytes. One admitted frame owner performs the
+statistics/final passes using rolling borders. Skip syntax resets Y/UV contexts,
+preserving Y2 only for I4. The high-quality case also verifies disabled DC
+correction and the zero-map-cost branch that leaves default probabilities intact.
+Both sync/async packets survive disposed source/frame owners. Owned/scratch/rate
+refusal, cancellation, work/local limits, replacement peaks and recovery pass.
+These cases are stopped as passing; public lossy encoding is still unchanged.
