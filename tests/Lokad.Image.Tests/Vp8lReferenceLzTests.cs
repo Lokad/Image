@@ -8,7 +8,7 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8lReferenceLzTests
 {
-    private static string SemanticHash(ReadOnlySpan<Vp8lToken> tokens, int width)
+    internal static string SemanticHash(ReadOnlySpan<Vp8lToken> tokens, int width)
     {
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
         Span<byte> record = stackalloc byte[16]; var position = 0;

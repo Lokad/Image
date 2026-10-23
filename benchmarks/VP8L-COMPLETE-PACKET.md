@@ -86,8 +86,13 @@ and palette auxiliary token streams, frozen greedy/repeat/trace decision costs,
 candidate/trace refusal cleanup, cancellation, late work failure and typed token
 ownership. Tokens use owned eight-byte entries; positions are derived cumulatively.
 Trace scratch is admitted before allocation and losing candidates are released.
-All 68 focused checks pass with one assembly on both platforms. No additional
-native encoding or timing was needed.
+Cached main parsing adds 11 checks. The asymmetric control matches all 110,306
+native semantic tokens, both cache choices and all candidate costs; the hidden-RGB
+repeat winner, ordinary/Box/cache-disabled palette streams and 18-color uncached
+decision also match. Cache conversion reuses owned token storage and trace shares
+the uncached traversal. All 79 focused checks pass with one assembly on both
+platforms, including refusal/cancellation/late-work cleanup. No additional native
+encoding or timing was needed.
 The last full shared-build qualification (E53) passed 3,884 offline tests per
 platform, the same private Release package and all three usage examples on both.
 These public paths remain unchanged. The encoder is not switched: complete-operation

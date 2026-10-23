@@ -19,6 +19,7 @@ internal sealed class Vp8lTokenBuffer : IDisposable
     internal int Count { get; private set; }
     internal int CacheBits { get; set; }
     internal ReadOnlySpan<Vp8lToken> Tokens => (tokens ?? throw new ObjectDisposedException(nameof(Vp8lTokenBuffer))).AsSpan(0, Count);
+    internal Span<Vp8lToken> Writable => (tokens ?? throw new ObjectDisposedException(nameof(Vp8lTokenBuffer))).AsSpan(0, Count);
     internal long CapacityBytes => (tokens ?? throw new ObjectDisposedException(nameof(Vp8lTokenBuffer))).Length * 8L;
 
     internal Vp8lTokenBuffer(OperationContext context, int capacity)

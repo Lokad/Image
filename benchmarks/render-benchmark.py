@@ -390,17 +390,13 @@ plain result. Numeric effort0 palette order now matches268B on the same18-color
 input. The existing two-color input qualifies both1026-entry box indices and46/50B
 candidate packets, with ordinary-first ties. These named effort primitives pass;
 admitted production and complete public operations remain open.
-Production matching/prediction/color transforms pass 8/9/10 focused checks with one
-Windows/Linux assembly. Native maps/residuals and shared admission pass; color search
-and map compaction operate in place while charging retained capacity. Analysis adds
-18 checks of frozen-control decisions, cardinality and cleanup. Palette adds 12
-native order/delta/index and ownership checks, packing in place with retained
-capacity charged. Uncached parsing adds 11 native-token/decision-cost and ownership
-checks, including trace/refusal cleanup: 68 focused passes with one assembly on
-both platforms. Unchanged
-public paths reuse E53's 3,884 offline checks per platform and the same private
-Release package/three usage examples on both. Public encoding does not call these
-components yet; integrated qualification remains open. No new timings or allocations.
+Typed production analysis, transforms, matching and uncached/cached/Box parsing
+pass 79 focused checks with one Windows/Linux assembly. Native maps, palette data,
+auxiliary streams and the complete asymmetric 110,306-token main stream match;
+shared admission, retained capacity and failure cleanup pass. Packed pixels and
+cache conversion operate in place. Unchanged public paths reuse E53's 3,884 offline
+checks per platform and same private package/three usage examples on both. Public
+encoding is not switched; integrated qualification and new timings/allocations remain open.
 The native encoder refuses16384; the model's existing axis cases instead pass exact
 pinned-FFmpeg decoding, without an encoder-byte or timing claim.
 These do not change production/timing claims below.

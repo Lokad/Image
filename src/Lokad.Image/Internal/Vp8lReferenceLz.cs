@@ -1,11 +1,9 @@
 namespace Lokad.Image.Internal;
 
-// Auxiliary-image parsing without a color cache. All candidates borrow the same
+// Auxiliary and main-image parsing. All candidates borrow the same
 // pixels/matches; only the chosen owned token buffer escapes, with capacity live.
 internal static class Vp8lReferenceLz
 {
-    private const int GreenSize = 280;
-    private const int Red = 280, Blue = 536, Alpha = 792, Distance = 1048, HistogramSize = 1088;
     private const long Scale = Vp8lReferenceCost.Scale;
 
     internal static Vp8lTokenBuffer Greedy(ReadOnlySpan<uint> pixels, ReadOnlySpan<uint> matches, OperationContext context)
@@ -68,73 +66,55 @@ internal static class Vp8lReferenceLz
         catch { result.Dispose(); throw; }
     }
 
-    private static void Histogram(ReadOnlySpan<Vp8lToken> tokens, int width, bool plane, Span<int> counts, OperationContext context)
+    internal static long Estimate(ReadOnlySpan<Vp8lToken> tokens, int width, OperationContext context, int cacheBits = 0)
     {
-        foreach (var token in tokens)
-        {
-            context.Work(4);
-            if (token.Code > 0)
-            {
-                counts[256 + Vp8lSymbols.Prefix(token.Code).Code]++;
-                counts[Distance + Vp8lSymbols.Prefix(plane ? Vp8lSymbols.Plane((int)token.Value, width) : (int)token.Value).Code]++;
-            }
-            else if (token.Code == 0)
-            {
-                var pixel = token.Value;
-                counts[(int)(pixel >> 8 & 255)]++; counts[Red + (int)(pixel >> 16 & 255)]++;
-                counts[Blue + (int)(pixel & 255)]++; counts[Alpha + (int)(pixel >> 24)]++;
-            }
-            else throw new InvalidOperationException("Uncached histogram received a cache token.");
-        }
-    }
-
-    internal static long Estimate(ReadOnlySpan<Vp8lToken> tokens, int width, OperationContext context)
-    {
-        context.Work(0); context.Reserve(HistogramSize * 4);
+        var layout = new Vp8lHistogramLayout(cacheBits);
+        context.Work(0); context.Reserve(layout.Total * 4L);
         try
         {
-            context.Work(0); var counts = new int[HistogramSize];
-            Histogram(tokens, width, false, counts, context);
-            var cost = Vp8lReferenceEntropy.Population(counts.AsSpan(0, GreenSize), context)
-                + Vp8lReferenceEntropy.Population(counts.AsSpan(Red, 256), context)
-                + Vp8lReferenceEntropy.Population(counts.AsSpan(Blue, 256), context)
-                + Vp8lReferenceEntropy.Population(counts.AsSpan(Alpha, 256), context)
-                + Vp8lReferenceEntropy.Population(counts.AsSpan(Distance, 40), context);
+            context.Work(0); var counts = new int[layout.Total];
+            layout.Fill(tokens, width, false, counts, context);
+            var cost = layout.Population(counts, context);
             context.Work(64);
             for (var code = 0; code < 24; code++) cost += counts[256 + code] * (long)Vp8lSymbols.Extra(code) * Scale;
-            for (var code = 0; code < 40; code++) cost += counts[Distance + code] * (long)Vp8lSymbols.Extra(code) * Scale;
+            for (var code = 0; code < 40; code++) cost += counts[layout.Distance + code] * (long)Vp8lSymbols.Extra(code) * Scale;
             return cost;
         }
-        finally { context.Release(HistogramSize * 4); }
+        finally { context.Release(layout.Total * 4L); }
     }
 
     private sealed class TraceState : IDisposable
     {
         private readonly OperationContext context;
         private readonly long reserved;
+        private readonly Vp8lHistogramLayout layout;
         private int[]? histogram;
         private long[]? prices, lengthPrices, costs, pending;
         private ushort[]? path;
         private int[]? pendingSource;
+        private uint[]? cache;
 
-        internal TraceState(int length, ReadOnlySpan<Vp8lToken> seed, int width, OperationContext context)
+        internal TraceState(int length, ReadOnlySpan<Vp8lToken> seed, int width, int cacheBits, OperationContext context)
         {
             this.context = context;
+            layout = new(cacheBits);
             var lengths = Math.Min(4095, length);
-            reserved = HistogramSize * 12L + lengths * 8L + length * 22L + 256;
+            reserved = layout.Total * 12L + lengths * 8L + length * 22L + layout.CacheSize * 4L + 320;
             context.Work(0); context.Reserve(reserved);
             try
             {
                 context.Work(0);
-                histogram = new int[HistogramSize]; prices = new long[HistogramSize]; lengthPrices = new long[lengths];
+                histogram = new int[layout.Total]; prices = new long[layout.Total]; lengthPrices = new long[lengths];
                 costs = new long[length]; pending = new long[length]; path = new ushort[length]; pendingSource = new int[length];
+                cache = new uint[layout.CacheSize];
                 for (var at = 0; at < length; at += 4096)
                 {
                     var count = Math.Min(4096, length - at); context.Work(count * 2L);
                     costs.AsSpan(at, count).Fill(long.MaxValue); pending.AsSpan(at, count).Fill(long.MaxValue);
                 }
-                Histogram(seed, width, true, histogram, context);
-                PricePlane(0, GreenSize); PricePlane(Red, 256); PricePlane(Blue, 256); PricePlane(Alpha, 256); PricePlane(Distance, 40);
+                layout.Fill(seed, width, true, histogram, context);
+                PricePlane(0, layout.GreenSize); PricePlane(layout.Red, 256); PricePlane(layout.Blue, 256);
+                PricePlane(layout.Alpha, 256); PricePlane(layout.Distance, 40);
                 context.Work(lengths);
                 for (var i = 0; i < lengths; i++)
                 {
@@ -165,16 +145,22 @@ internal static class Vp8lReferenceLz
         internal long DistancePrice(int distance, int width)
         {
             var prefix = Vp8lSymbols.Prefix(Vp8lSymbols.Plane(distance, width));
-            return prices![Distance + prefix.Code] + prefix.Extra * Scale;
+            return prices![layout.Distance + prefix.Code] + prefix.Extra * Scale;
         }
 
         internal void Literal(ReadOnlySpan<uint> pixels, int at, long prior)
         {
             context.Work(4);
-            var pixel = pixels[at];
-            var price = prices![(int)(pixel >> 8 & 255)] + prices[Red + (int)(pixel >> 16 & 255)]
-                + prices[Blue + (int)(pixel & 255)] + prices[Alpha + (int)(pixel >> 24)];
-            var value = prior + (price * 82 + 50) / 100;
+            var pixel = pixels[at]; var hit = false; var key = 0;
+            if (layout.CacheBits != 0)
+            {
+                key = Vp8lReferenceCache.Key(pixel, layout.CacheBits); hit = cache![key] == pixel;
+                if (!hit) cache[key] = pixel;
+            }
+            var price = hit ? prices![280 + key]
+                : prices![(int)(pixel >> 8 & 255)] + prices[layout.Red + (int)(pixel >> 16 & 255)]
+                    + prices[layout.Blue + (int)(pixel & 255)] + prices[layout.Alpha + (int)(pixel >> 24)];
+            var value = prior + (price * (hit ? 68 : 82) + 50) / 100;
             if (value < costs![at]) { costs[at] = value; path![at] = 1; }
         }
 
@@ -195,20 +181,20 @@ internal static class Vp8lReferenceLz
         public void Dispose()
         {
             if (Interlocked.Exchange(ref histogram, null) is null) return;
-            prices = lengthPrices = costs = pending = null; path = null; pendingSource = null;
+            prices = lengthPrices = costs = pending = null; path = null; pendingSource = null; cache = null;
             context.Release(reserved);
         }
     }
 
     internal static Vp8lTokenBuffer Trace(ReadOnlySpan<uint> pixels, ReadOnlySpan<uint> matches, int width,
-        ReadOnlySpan<Vp8lToken> seed, OperationContext context)
+        ReadOnlySpan<Vp8lToken> seed, OperationContext context, int cacheBits = 0)
     {
         Validate(pixels.Length, width);
         if (pixels.Length != matches.Length) throw new ArgumentException("Expected matching source/index lengths.");
         var result = new Vp8lTokenBuffer(context, pixels.Length);
         try
         {
-            using var state = new TraceState(pixels.Length, seed, width, context);
+            using var state = new TraceState(pixels.Length, seed, width, cacheBits, context);
             state.Literal(pixels, 0, 0);
             var previousDistance = -1; var previousLength = -1; var firstConstant = false; var reach = 0; long distancePrice = -1;
             for (var at = 1; at < pixels.Length; at++)
@@ -248,7 +234,9 @@ internal static class Vp8lReferenceLz
                 result.Add(length == 1 ? Vp8lToken.Literal(pixels[start]) : Vp8lToken.Copy(length, (int)(matches[start] >> 12)));
                 end -= length;
             }
-            result.Reverse(); return result;
+            result.Reverse(); state.Dispose();
+            if (cacheBits != 0) Vp8lReferenceCache.Apply(pixels, result, cacheBits, context);
+            return result;
         }
         catch { result.Dispose(); throw; }
     }
