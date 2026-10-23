@@ -87,7 +87,7 @@ public sealed class Vp8lReferenceLzTests
         using var root = new TestMemoryBudget(100_000);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         var pixels = Working(rgba, false, context);
-        using var palette = Vp8lReferencePalette.SelectAndPack(pixels, 23, 18, greedy, context);
+        using var palette = Vp8lReferencePalette.SelectAndPack(pixels, 23, 18, (greedy ? Vp8lPaletteOrder.MinDelta : Vp8lPaletteOrder.Sorted), context);
         using var matches = Vp8lReferenceMatcher.Build(palette.EncodedDeltas, palette.EncodedColorCount, 20, !greedy, context);
         var baseline = root.Bytes;
         using var parsed = Vp8lReferenceLz.Encode(palette.EncodedDeltas, matches.Values, palette.EncodedColorCount, false, context);

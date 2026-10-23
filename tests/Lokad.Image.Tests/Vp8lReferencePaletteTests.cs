@@ -40,7 +40,7 @@ public sealed class Vp8lReferencePaletteTests
         using var root = new TestMemoryBudget(1_000_000);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         var pixels = Working(rgba, false, context);
-        using var plan = Vp8lReferencePalette.SelectAndPack(pixels, width, count, greedy, context);
+        using var plan = Vp8lReferencePalette.SelectAndPack(pixels, width, count, (greedy ? Vp8lPaletteOrder.MinDelta : Vp8lPaletteOrder.Sorted), context);
         Assert.Equal((count, encodedCount, bits, packedCount), (plan.ColorCount, plan.EncodedColorCount, plan.PackingBits, plan.PackedPixelCount));
         Assert.Equal(paletteHash, Hash(plan.Colors)); Assert.Equal(deltaHash, Hash(plan.EncodedDeltas));
         Assert.Equal(packedHash, Hash(pixels.AsSpan(0, packedCount)));
@@ -60,10 +60,10 @@ public sealed class Vp8lReferencePaletteTests
         using var root = new TestMemoryBudget(10_000);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         var firstPixels = Working(rgba, false, context);
-        using var first = Vp8lReferencePalette.SelectAndPack(firstPixels, 7, 4, true, context);
+        using var first = Vp8lReferencePalette.SelectAndPack(firstPixels, 7, 4, Vp8lPaletteOrder.MinDelta, context);
         var paletteHash = Hash(first.Colors); var packedHash = Hash(firstPixels.AsSpan(0, first.PackedPixelCount));
         var secondPixels = Working(rgba, false, context);
-        using var second = Vp8lReferencePalette.SelectAndPack(secondPixels, 7, 4, true, context);
+        using var second = Vp8lReferencePalette.SelectAndPack(secondPixels, 7, 4, Vp8lPaletteOrder.MinDelta, context);
         Assert.Equal(rgba.Length * 2 + 64, root.Bytes);
         second.WritableColors[0] ^= 1; secondPixels[0] ^= 1; rgba.AsSpan().Clear();
         Assert.Equal(paletteHash, Hash(first.Colors)); Assert.Equal(packedHash, Hash(firstPixels.AsSpan(0, first.PackedPixelCount)));
@@ -78,13 +78,13 @@ public sealed class Vp8lReferencePaletteTests
         using var root = new TestMemoryBudget(3400);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         var firstPixels = Working(rgba, false, context);
-        using var first = Vp8lReferencePalette.SelectAndPack(firstPixels, 7, 4, true, context);
+        using var first = Vp8lReferencePalette.SelectAndPack(firstPixels, 7, 4, Vp8lPaletteOrder.MinDelta, context);
         var secondPixels = Working(rgba, false, context); var original = secondPixels.ToArray();
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferencePalette.SelectAndPack(secondPixels, 7, 4, true, context));
+        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferencePalette.SelectAndPack(secondPixels, 7, 4, Vp8lPaletteOrder.MinDelta, context));
         Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
         Assert.Equal(1, root.Refusals); Assert.Equal(84 * 2 + 32, root.Bytes); Assert.Equal(original, secondPixels);
         first.Dispose(); Assert.Equal(84 * 2, root.Bytes);
-        using var next = Vp8lReferencePalette.SelectAndPack(secondPixels, 7, 4, true, context);
+        using var next = Vp8lReferencePalette.SelectAndPack(secondPixels, 7, 4, Vp8lPaletteOrder.MinDelta, context);
         Assert.Equal(3400, root.Peak); next.Dispose(); Assert.Equal(84 * 2, root.Bytes);
     }
 
@@ -98,12 +98,12 @@ public sealed class Vp8lReferencePaletteTests
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         var pixels = Working(rgba, false, context); var original = pixels.ToArray();
         root.RefuseAtGrowth = root.GrowthAttempts + phase;
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferencePalette.SelectAndPack(pixels, 7, 4, true, context));
+        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferencePalette.SelectAndPack(pixels, 7, 4, Vp8lPaletteOrder.MinDelta, context));
         Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
         Assert.Equal(root.RefuseAtGrowth, root.GrowthAttempts); Assert.Equal(1, root.Refusals);
         Assert.Equal(rgba.Length, root.Bytes); Assert.Equal(original, pixels);
         root.RefuseAtGrowth = 0;
-        using var next = Vp8lReferencePalette.SelectAndPack(pixels, 7, 4, true, context);
+        using var next = Vp8lReferencePalette.SelectAndPack(pixels, 7, 4, Vp8lPaletteOrder.MinDelta, context);
         next.Dispose(); Assert.Equal(rgba.Length, root.Bytes);
     }
 
@@ -116,11 +116,11 @@ public sealed class Vp8lReferencePaletteTests
         var pixels = Working(rgba, false, context); var original = pixels.ToArray();
         var cancelAt = root.GrowthAttempts + 2;
         root.Admitted = _ => { if (root.GrowthAttempts == cancelAt) cancellation.Cancel(); };
-        Assert.Throws<OperationCanceledException>(() => Vp8lReferencePalette.SelectAndPack(pixels, 7, 4, true, context));
+        Assert.Throws<OperationCanceledException>(() => Vp8lReferencePalette.SelectAndPack(pixels, 7, 4, Vp8lPaletteOrder.MinDelta, context));
         Assert.True(cancellation.IsCancellationRequested); Assert.Equal(original, pixels); Assert.Equal(rgba.Length, root.Bytes);
         root.Admitted = null;
         using var nextContext = new OperationContext(new() { MemoryBudget = root }, default);
-        using var next = Vp8lReferencePalette.SelectAndPack(pixels, 7, 4, true, nextContext);
+        using var next = Vp8lReferencePalette.SelectAndPack(pixels, 7, 4, Vp8lPaletteOrder.MinDelta, nextContext);
         next.Dispose(); Assert.Equal(rgba.Length, root.Bytes); Assert.Equal(0, root.Refusals);
     }
 
@@ -131,7 +131,7 @@ public sealed class Vp8lReferencePaletteTests
         using (var calibration = new OperationContext(ImageLimits.Default, default))
         {
             var working = Working(rgba, false, calibration);
-            using var plan = Vp8lReferencePalette.SelectAndPack(working, 7, 4, true, calibration);
+            using var plan = Vp8lReferencePalette.SelectAndPack(working, 7, 4, Vp8lPaletteOrder.MinDelta, calibration);
             completeWork = calibration.ConsumedWork;
         }
         foreach (var budget in new[] { 2L, completeWork - 1 })
@@ -139,7 +139,7 @@ public sealed class Vp8lReferencePaletteTests
             using var root = new TestMemoryBudget(10_000);
             using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = budget }, default);
             var pixels = Working(rgba, false, context);
-            var error = Assert.Throws<ImageLimitException>(() => Vp8lReferencePalette.SelectAndPack(pixels, 7, 4, true, context));
+            var error = Assert.Throws<ImageLimitException>(() => Vp8lReferencePalette.SelectAndPack(pixels, 7, 4, Vp8lPaletteOrder.MinDelta, context));
             Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
             Assert.Equal(rgba.Length, root.Bytes); Assert.Equal(0, root.Refusals);
             if (budget != 2) Assert.NotEqual(0u, pixels[0]); // Packing had already begun in owned working storage.

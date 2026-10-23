@@ -104,7 +104,7 @@ public sealed class Vp8lReferenceMainParsingTests
         using var root = new TestMemoryBudget(100_000);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         var pixels = Working(PalettePackingInput.Create(23, 13, 18), false, context);
-        using var palette = Vp8lReferencePalette.SelectAndPack(pixels, 23, 18, true, context);
+        using var palette = Vp8lReferencePalette.SelectAndPack(pixels, 23, 18, Vp8lPaletteOrder.MinDelta, context);
         var input = pixels.AsSpan(0, palette.PackedPixelCount);
         using var matches = Vp8lReferenceMatcher.Build(input, palette.CodedWidth, 75, false, context);
         using var parsed = Vp8lReferenceMainParsing.Encode(input, matches.Values, palette.CodedWidth, false, 5, context);

@@ -63,7 +63,7 @@ public sealed class Vp8lReferenceFrameTests
         try
         {
             var analysis = Vp8lEncodingAnalysis.Select(pixels, width, spatial ? 5 : low ? 0 : 4, context);
-            using var palette = Vp8lReferencePalette.SelectAndPack(pixels, width, colors, !low, context);
+            using var palette = Vp8lReferencePalette.SelectAndPack(pixels, width, colors, (low ? Vp8lPaletteOrder.Sorted : Vp8lPaletteOrder.MinDelta), context);
             result.Prefix = result.Prefix with { Palette = Vp8lImageCode.Auxiliary(palette.EncodedDeltas, palette.EncodedColorCount, 20, low, context), PaletteEntries = palette.EncodedColorCount };
             var input = pixels.AsSpan(0, palette.PackedPixelCount);
             if (spatial)

@@ -7,7 +7,7 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8lSearchCandidateTests
 {
-    private static uint[] AlphaWorking(int filter, OperationContext context)
+    internal static uint[] AlphaWorking(int filter, OperationContext context)
     {
         var source = OriginalVp8lControls.Input("asymmetric");
         context.Reserve(source.Width * source.Height * 4L);
@@ -41,14 +41,25 @@ public sealed class Vp8lSearchCandidateTests
     [InlineData(1, 4, 11666, "19a44db0498319cc7d67ae5be3b4a9ff03244340d1e8559b3ee5657fc883cda7")]
     [InlineData(1, 5, 24341, "b10197ff0bd30a98a94a1d6ffca042e6a7ab355fddf0255e6faa8e1ca5deeacf")]
     public void ExplicitFamilyAndCacheComparisonMatchesEntireNativeBody(int filter, int kind, int bytes, string expected)
+        => AssertCandidate(filter, kind, bytes, expected, Vp8lPaletteOrder.MinDelta);
+
+    [Theory]
+    [InlineData(0, 4, 73280, "604a84b2f8b2ded8a2cdb61eee87597215327582c9d4bbaf53b3b6e6ec84154b")]
+    [InlineData(0, 5, 125429, "4cd5d4aa615989641516289521c8d6e26082bd8e1a3342759e5f05797c94e083")]
+    [InlineData(1, 4, 11672, "d01d75960233e6f9b926435df5a3977b8d457eee534fdb3f31c1b7d505608c3b")]
+    [InlineData(1, 5, 24107, "ba4513b22804da18d5257d8f7bde0efb27f61493d979ea1c5610e9eb356567ae")]
+    public void ModifiedZengCandidatesMatchEntireNativeBody(int filter, int kind, int bytes, string expected)
+        => AssertCandidate(filter, kind, bytes, expected, Vp8lPaletteOrder.ModifiedZeng);
+
+    private static void AssertCandidate(int filter, int kind, int bytes, string expected, Vp8lPaletteOrder order)
     {
         using var root = new TestMemoryBudget(128_000_000);
         // The default2B refusal is a separate gate below. This one expensive
         // native candidate receives an explicit caller allowance for byte proof.
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = filter == 0 && kind == 3 ? 8_000_000_000 : 2_000_000_000 }, default);
+        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = filter == 0 && kind == 3 || order == Vp8lPaletteOrder.ModifiedZeng ? 8_000_000_000 : 2_000_000_000 }, default);
         var transform = (Vp8lTransformKind)kind;
         var working = AlphaWorking(filter, context); var analysis = Vp8lEncodingAnalysis.Select(working, 513, 6, context);
-        using var prepared = Vp8lPreparedEncoding.PrepareCandidate(working, 513, analysis, transform, context);
+        using var prepared = Vp8lPreparedEncoding.PrepareCandidate(working, 513, analysis, transform, context, order);
         Assert.Equal(bytes + 5, prepared.PayloadBytes); Array.Clear(working); context.Release(working.Length * 4L); var retained = root.Bytes;
         using var first = new MemoryStream(); prepared.WriteAlphaBody(first); var body = first.ToArray();
         if (Environment.GetEnvironmentVariable("LOKAD_VP8L_CANDIDATE_TRACE") is { } path) File.WriteAllBytes(path + "-f" + filter + "-" + transform + ".bin", body);

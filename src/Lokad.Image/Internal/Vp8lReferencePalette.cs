@@ -1,5 +1,7 @@
 namespace Lokad.Image.Internal;
 
+internal enum Vp8lPaletteOrder { Sorted, MinDelta, ModifiedZeng }
+
 // Palette samples outlive packing, under the same borrowed operation context.
 // The working image remains owned by the outer encoder, including unused capacity.
 internal sealed class Vp8lPalettePlan : IDisposable
@@ -75,11 +77,14 @@ internal static class Vp8lReferencePalette
         return slot;
     }
 
-    private static void Order(Span<uint> colors, bool minimizeDeltas, OperationContext context)
+    private static void Order(Span<uint> colors, ReadOnlySpan<uint> working, int width, Vp8lPaletteOrder order, OperationContext context)
     {
         // Numeric order is independent of collection-table positions. At most
         // 256 elements bound this sort and its cancellation interval.
         context.Work(colors.Length * 16L); colors.Sort();
+        if (order == Vp8lPaletteOrder.ModifiedZeng)
+        { Vp8lPaletteAdjacency.Reorder(colors, working, width, context); return; }
+        var minimizeDeltas = order == Vp8lPaletteOrder.MinDelta;
         var positive = 0; var negative = 0; uint previous = 0;
         foreach (var color in colors)
         {
@@ -120,11 +125,12 @@ internal static class Vp8lReferencePalette
     // working is untransformed normalized ARGB in library-owned storage. Packing
     // may partially modify it on failure; the outer encoder then discards it.
     internal static Vp8lPalettePlan SelectAndPack(Span<uint> working, int width,
-        int colorCount, bool minimizeDeltas, OperationContext context)
+        int colorCount, Vp8lPaletteOrder order, OperationContext context)
     {
         if (width is < 1 or > 16384 || working.Length == 0 || working.Length % width != 0
             || working.Length / width > 16384) throw new ArgumentException("Expected complete VP8L image rows.");
         if (colorCount is < 1 or > 256) throw new ArgumentOutOfRangeException(nameof(colorCount));
+        if ((uint)order > (uint)Vp8lPaletteOrder.ModifiedZeng) throw new ArgumentOutOfRangeException(nameof(order));
         var height = working.Length / width;
         var result = new Vp8lPalettePlan(context, colorCount, width, height);
         long scratch = 0;
@@ -142,7 +148,7 @@ internal static class Vp8lReferencePalette
                 keys[slot] = pixel; indices[slot] = (ushort)(found + 1); colors[found++] = pixel;
             }
             if (found != colorCount) throw new ArgumentException("Palette color count differs from analysis.", nameof(colorCount));
-            Order(colors, minimizeDeltas, context);
+            Order(colors, working, width, order, context);
             var deltas = result.WritableDeltas; uint previous = 0;
             for (var i = 0; i < colorCount; i++)
             {

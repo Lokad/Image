@@ -102,19 +102,20 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
     // This owner holds its full transform/coding bundle independently of source
     // storage and other candidates. Alpha method6 routing remains separate.
     internal static Vp8lPreparedEncoding PrepareCandidate(Span<uint> working, int width,
-        Vp8lEncodingAnalysis analysis, Vp8lTransformKind transform, OperationContext context)
+        Vp8lEncodingAnalysis analysis, Vp8lTransformKind transform, OperationContext context, Vp8lPaletteOrder paletteOrder = Vp8lPaletteOrder.MinDelta)
     {
         if (width is < 1 or > 16384 || working.Length == 0 || working.Length % width != 0 || working.Length / width > 16384
             || (uint)transform > (uint)Vp8lTransformKind.PalettePrediction || analysis.HistogramBits is < 2 or > 9 || analysis.TransformBits is < 2 or > 9)
             throw new ArgumentException("Invalid VP8L search candidate layout.");
         if (transform is Vp8lTransformKind.Palette or Vp8lTransformKind.PalettePrediction && analysis.DistinctColorsCapped is < 1 or > 256)
             throw new ArgumentException("Palette candidate requires a representable source palette.");
+        if ((uint)paletteOrder > (uint)Vp8lPaletteOrder.ModifiedZeng) throw new ArgumentOutOfRangeException(nameof(paletteOrder));
         context.Work(0);
-        return PrepareCore(working, width, 6, context, 100, analysis with { Transform = transform }, comparePalettePrediction: false);
+        return PrepareCore(working, width, 6, context, 100, analysis with { Transform = transform }, comparePalettePrediction: false, paletteOrder);
     }
 
     private static Vp8lPreparedEncoding PrepareCore(Span<uint> working, int width, int effort,
-        OperationContext context, int quality, Vp8lEncodingAnalysis analysis, bool comparePalettePrediction)
+        OperationContext context, int quality, Vp8lEncodingAnalysis analysis, bool comparePalettePrediction, Vp8lPaletteOrder? paletteOrder = null)
     {
         var height = working.Length / width; var result = new Vp8lPreparedEncoding(context);
         var candidatePrefix = new Vp8lFramePrefix(width, height, analysis.HasNonOpaqueAlpha);
@@ -122,7 +123,8 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
         {
             if (analysis.Transform is Vp8lTransformKind.Palette or Vp8lTransformKind.PalettePrediction)
             {
-                using var plan = Vp8lReferencePalette.SelectAndPack(working, width, analysis.DistinctColorsCapped, effort != 0, context);
+                using var plan = Vp8lReferencePalette.SelectAndPack(working, width, analysis.DistinctColorsCapped,
+                    paletteOrder ?? (effort == 0 ? Vp8lPaletteOrder.Sorted : Vp8lPaletteOrder.MinDelta), context);
                 result.palette = Vp8lImageCode.Auxiliary(plan.EncodedDeltas, plan.EncodedColorCount, 20, effort == 0, context);
                 candidatePrefix = candidatePrefix with { Palette = result.palette, PaletteEntries = plan.EncodedColorCount };
                 var input = working[..plan.PackedPixelCount];

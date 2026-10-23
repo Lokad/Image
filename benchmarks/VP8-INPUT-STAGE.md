@@ -2,7 +2,7 @@
 
 The private managed pipeline reproduces the four method4/Q75 packet identities,
 the named diagram method/quality controls, and asymmetric method0/1 packets.
-Method4 ALPH is exact from RGBA8/16. Twelve high-quality ALPH6 candidate bodies
+Method4 ALPH is exact from RGBA8/16. All sixteen high-quality ALPH6 candidate bodies
 are now exact; complete ALPH6 search is still open. The public lossy encoder is
 unchanged. The named header/work boundaries and public integration remain open.
 
@@ -318,7 +318,7 @@ passing. The high-quality ALPH6 cruncher, header case and public adoption remain
 Single-family method6/search-quality100 preparation now matches twelve complete
 headerless candidate bodies: both existing alpha filters across direct, spatial,
 subtract-green, spatial/subtract-green, plain palette and spatial palette families.
-Palette cases currently use MinDelta. Each owner retains its entire transform and
+Those first twelve use MinDelta for palettes. Each owner retains its entire transform and
 coding state, independently of erased/released input. Cached/uncached choices keep
 strict earlier ties and skip an uncached retry when caching already selected zero.
 The original global red/blue-zero decision is preserved across forced families.
@@ -332,10 +332,26 @@ units: its positive byte proof uses an explicit8B caller allowance; default2B
 refusal remains a separate passing safeguard. These are accounting figures,
 without CPU or GC-allocation measurements. No limit was raised or work rescaled.
 
-The second palette ordering and four corresponding candidate bodies remain open,
-followed by complete eight-configuration selection. Matching a guessed winning
+The second palette ordering and four corresponding bodies now pass below;
+complete eight-configuration selection remains open. Matching a guessed winning
 subset does not establish complete ALPH6 parity. The two native alpha controls,
 all sixteen candidate bodies and their final unchanged85,796-byte reference packet
 are frozen; further work reuses them without another native encode or image grid.
 Completed qualification reports were compacted losslessly with byte verification,
 keeping both checkouts below5GB and preserving original replay paths and evidence.
+
+ModifiedZeng ordering now matches both frozen109/256-color permutations and the
+four remaining complete candidate bodies. All sixteen family/filter/order bodies
+are exact. This algorithm builds four-neighbor adjacency with one previous row,
+then orders by accumulated affinity and weighted end placement with fixed ties.
+Its matrix, row and bounded ordering spans reserve4*N*N+4*width+16*N bytes before
+allocation and release them promptly. Retained palette capacity stays charged.
+
+The same immutable assembly passes502 focused checks on both platforms with
+intrinsics enabled and disabled. Tests include exact permutations, every packed
+source sample, a hand-calculated tie example, singleton storage, terminal shared
+refusal, cancellation, independent local/work limits and successful recovery.
+The old boolean palette selector was replaced by an explicit private ordering
+enum. Existing Sorted/MinDelta decisions and public routing remain unchanged.
+No new native encode, timing or GC-allocation measurement was needed. Complete
+search composition, ALPH6, the named header case and public adoption remain open.
