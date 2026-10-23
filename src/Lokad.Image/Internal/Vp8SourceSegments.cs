@@ -22,6 +22,12 @@ internal sealed class Vp8SourceSegments : IDisposable
     private Vp8SourceSegments(OperationContext context, int width, int height)
     { this.context = context; Width = width; Height = height; }
 
+    internal static int FilterStrength(int quantizer, int beta)
+    {
+        var strength = (Vp8Tables.AcQuantizers[quantizer] >> 2) * 300 / (256 + beta);
+        return strength < 2 ? 0 : Math.Min(63, strength);
+    }
+
     // The histogram is a nonempty source distribution. Scratch/output are
     // borrowed; the enclosing owner admits their capacity once for the stage.
     internal static Clustering Cluster(ReadOnlySpan<int> histogram, Span<byte> assignment,
@@ -134,8 +140,7 @@ internal sealed class Vp8SourceSegments : IDisposable
                 {
                     var segment = result.parameters[k];
                     var quantizer = Math.Clamp((int)(127 * (1 - Math.Pow(compression, 1 - amplitude * segment.Alpha))), 0, 127);
-                    var strength = (Vp8Tables.AcQuantizers[quantizer] >> 2) * 300 / (256 + segment.Beta);
-                    result.parameters[k] = segment with { Quantizer = quantizer, InitialFilter = strength < 2 ? 0 : Math.Min(63, strength) };
+                    result.parameters[k] = segment with { Quantizer = quantizer, InitialFilter = FilterStrength(quantizer, segment.Beta) };
                 }
                 Span<byte> remap = stackalloc byte[4]; remap[0] = 0; var unique = 1;
                 for (var k = 1; k < 4; k++)

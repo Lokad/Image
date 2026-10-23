@@ -4,7 +4,7 @@ The private managed pipeline reproduces the four method4/Q75 packet identities,
 the named diagram method/quality controls, and asymmetric method0/1 packets.
 Method4 ALPH is exact from RGBA8/16. All sixteen high-quality ALPH6 candidate bodies
 are exact and complete ALPH6 search now passes at its stated work allowance. The public lossy encoder is
-unchanged. The named header/work boundaries and public integration remain open.
+unchanged. The named header retry now passes; work/public delivery boundaries and adoption remain open.
 
 Seven existing encoding rows have four reference packet identities:
 
@@ -115,7 +115,7 @@ instead of a reconstructed image. Owned partitions deliver directly to sync/asyn
 streams without a joined frame copy. Input/frame owners can release first; packet
 charges persist through actual asynchronous users, including cancellation. Refusal
 and failed growth copying refund unused capacity without retry or fallback.
-Allcurrent controls require zero header-strengthening retries; a native-positive
+The smaller controls require zero header-strengthening retries; the named native-positive
 large-header confirmation remains an explicit required coverage item.
 
 The fourth complete packet now matches98,590bytes from the existing transparent
@@ -146,8 +146,7 @@ accounting capacities; no new timing or GC-allocation measurements are claimed.
 
 [Structured evidence](vp8-byte-parity-evidence.json) records exact producers,
 reference observations, scope and preserved raw masters. Prior public codec and
-package evidence retains its stated scope. Next are the bounded required-option,
-work32M and native-positive header-retry confirmations, then public integration
+package evidence retains its stated scope. Next are required alpha effort forwarding and public work32M/delivery checks, then integration
 and packaged consumer qualification. No readiness claim follows from these private stages.
 
 The bounded option audit adds only settings that exercise a distinct required
@@ -171,8 +170,8 @@ targets; source-only qualification is distinct from complete-packet agreement:
 | Alpha Q75 / method1 | Alpha VP8L without cache/trace; small clustering bound | 106,588 | Complete packet exact |
 
 One named large-header case uses the same original procedural formula at
-5,632×5,632. Native-positive header strengthening is still unconfirmed; observe it
-before assuming an optimization is needed. There is no additional dimension grid.
+5,632×5,632. Native-positive header strengthening is now confirmed below, with one retry
+and an exact complete packet on both platforms. There is no additional dimension grid.
 
 The existing32M-work call exhausts source analysis at31,999,818consumed units on
 the frozen E80 assembly. Complete color-only encoding/delivery costs297,778,565
@@ -354,7 +353,7 @@ refusal, cancellation, independent local/work limits and successful recovery.
 The old boolean palette selector was replaced by an explicit private ordering
 enum. Existing Sorted/MinDelta decisions and public routing remain unchanged.
 No new native encode, timing or GC-allocation measurement was needed. Complete
-search composition, ALPH6, the named header case and public adoption remain open.
+search composition, ALPH6 and the named header case subsequently pass below; public adoption remains open.
 
 Complete method6 alpha search now matches the frozen11,667-byte ALPH payload and
 85,796-byte asymmetricQ75 RGBA8 packet on its first screen. Every family/order
@@ -373,3 +372,22 @@ Default2B refusal is separately qualified; no limit, work scale or fallback chan
 These are resource-accounting figures, without timing or GC-allocation claims.
 No new reference encode or image/settings grid was needed. The named native-positive
 header observation and coherent public adoption/qualification remain open.
+
+The named opaque5,632×5,632 Q75/method4 control takes one native header retry,
+reducing its limit65,536→32,768. The observer first reproduces the existing72,380-byte
+anchor, and independently verifies every generated source sample. The unchanged
+managed build already matches all token bytes and the16,787,132-byte packet length;
+only three header bytes differ. They describe an unused segment after merging.
+
+A retry now refreshes that unused quantizer from segment0 and recomputes its
+initial filter using retained beta. The initial pass keeps its original padding.
+The complete packet now matches every byte, SHA256
+`bf036683da898b9243c9992ef79060fbd6cf58cd5881f03235d3dd5438d5232f`,
+on Windows/Linux with and without intrinsics. All511 focused checks also pass
+on the same immutable build. There is no new production storage/admission boundary;
+source/frame disposal, retained packet ownership and independent sync/async delivery
+are verified under an explicit512B work allowance. These are correctness and
+resource proofs, without timing or GC-allocation measurements. The passing header
+case is stopped. Public alpha effort2/3/5 forwarding remains a concrete adoption
+boundary: public options accept these methods, while the private alpha factory
+currently rejects them. Existing input/settings/reference tools will be reused.

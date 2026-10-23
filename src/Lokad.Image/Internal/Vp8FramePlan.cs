@@ -108,6 +108,19 @@ internal sealed class Vp8FramePlan : IDisposable
         for (var s = 0; s < 4; s++) { parameters[s] = segments.Parameters[s].Quantizer; parameters[4 + s] = segments.Parameters[s].InitialFilter; }
     }
 
+    // Source setup can merge equal segments. A header retry refreshes the
+    // unused descriptors from the base quantizer, retaining their copied beta.
+    // These unused syntax fields still belong to complete packet exactness.
+    internal static void FillHeaderParameters(ReadOnlySpan<Vp8SourceSegments.Segment> segments, int count, Span<int> output)
+    {
+        if (segments.Length != 4 || count is < 1 or > 4 || output.Length < 8) throw new ArgumentException("Invalid VP8 segment parameters.");
+        for (var s = 0; s < 4; s++)
+        {
+            var q = s < count ? segments[s].Quantizer : segments[0].Quantizer;
+            output[s] = q; output[4 + s] = s < count ? segments[s].InitialFilter : Vp8SourceSegments.FilterStrength(q, segments[s].Beta);
+        }
+    }
+
     internal static Vp8FramePlan CreateDistortion(Vp8PreparedInput input, Vp8SourceAnalysis analysis,
         Vp8SourceSegments segments, Vp8QuantizationPlan quantization, int method, OperationContext context, bool correctDc = true)
     {
@@ -219,6 +232,7 @@ internal sealed class Vp8FramePlan : IDisposable
         SegmentProbabilities = (Probability(counts[0] + counts[1], counts[2] + counts[3]), Probability(counts[0], counts[1]), Probability(counts[2], counts[3]));
         while (true)
         {
+            if (HeaderRetries != 0) FillHeaderParameters(segments.Parameters, SegmentCount, ownedParameters);
             context.Work(Count); yTop.AsSpan().Fill(127); uvTop.AsSpan().Fill(127); modeTop.AsSpan().Clear();
             coefficientTop.AsSpan().Clear(); errorTop.AsSpan().Clear(); statistics.AsSpan().Clear(); ownedParameters.AsSpan(8, 4).Clear();
             Vp8RatePlan? rate = null;

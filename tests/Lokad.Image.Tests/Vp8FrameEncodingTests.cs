@@ -6,6 +6,19 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8FrameEncodingTests
 {
+    [Fact]
+    public void MergedSegmentPaddingMatchesTheFrozenNativeHeaderAndPreservesActiveDescriptors()
+    {
+        // The named5632square control has three live segments. The last source
+        // descriptor repeats segment2; frame syntax instead refreshes its Q from
+        // segment0. The resulting Q/filter fields are read from the frozen packet.
+        Vp8SourceSegments.Segment[] source = [new(0, 0, 0, 26, 8), new(0, 0, 128, 17, 4), new(0, 0, 255, 15, 2), new(0, 0, 255, 15, 2)];
+        var original = source.ToArray(); Span<int> values = stackalloc int[12]; values.Fill(99);
+        Vp8FramePlan.FillHeaderParameters(source, 3, values);
+        Assert.Equal(new[] { 26, 17, 15, 26, 8, 4, 2, 4 }, values[..8].ToArray());
+        Assert.Equal(new[] { 99, 99, 99, 99 }, values[8..].ToArray()); Assert.Equal(original, source);
+    }
+
     private sealed class Inputs : IDisposable
     {
         internal readonly OperationContext Context;
