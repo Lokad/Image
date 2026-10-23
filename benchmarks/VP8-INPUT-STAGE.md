@@ -87,5 +87,20 @@ Refusal, cancellation and work failure refund unused capacity; retained analysis
 survives source disposal. Same-assembly qualification passes141checks per platform,
 normal and SIMD disabled, including all131earlier checks.
 
-Next are segmentation/quantizers and macroblock decisions, then entropy/framing
-and ALPH coding, preserving the four fixed packet targets.
+The admitted segmentation continuation now reproduces all2,244complete native map
+bytes and all16quantizers. It derives centroids, signed susceptibility factors,
+initial filter settings and equal-parameter compaction from source analysis alone.
+Six iterations, lower ties, empty centers and rounding are explicit. A small
+original majority fragment verifies smoothing without neighbor feedback or changed
+edges. At561macroblocks the result retains769admitted bytes; optional smoothing
+adds561transient bytes beside the1,024-byte coarse scratch allowance. Independent
+ownership, replacement peaks, refusal/cancellation at all three allocation stages
+and late work cleanup pass. Same-assembly qualification passes157checks per
+platform, normal and SIMD disabled, including all141earlier checks.
+
+This remains private preparation at the frozen quality75/default analysis settings.
+Final filter adjustment also depends on reconstructed Y2edges; the photograph and
+diagram final levels are higher than their initial setup. No full packet, required
+option sweep or performance claim follows from these stage checks.
+Next are quantization matrices and macroblock decisions, then entropy/framing and
+ALPH coding, preserving the four fixed packet targets and required option audit.

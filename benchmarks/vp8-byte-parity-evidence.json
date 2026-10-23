@@ -1,7 +1,7 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E70",
-  "scope": "Private unwired input/transform/prediction/histogram and original-source analysis stages. Segmentation/full managed VP8 encoder remain open.",
+  "latestRound": "E71",
+  "scope": "Private unwired input/transform/prediction/histogram, source analysis and segmentation/initialquantizer stages. Actual RDO/full managed VP8 encoder remain open.",
   "productionPublicBehaviorChanged": false,
   "fullObjectiveOpen": true,
   "reference": {
@@ -1460,5 +1460,404 @@
         "linux": 4998782591
       }
     }
+  },
+  "sourceSegments": {
+    "round": "E71",
+    "publicEncoderSwitched": false,
+    "worker": {
+      "bytes": 1567232,
+      "sha256": "7badf1c4ea04a6bef921167711fbd83a4e632d611e3259fcccd200ad46685f81"
+    },
+    "sourceFiles": {
+      "src/Lokad.Image/Internal/Vp8SourceSegments.cs": {
+        "bytes": 8973,
+        "sha256": "51971bf87ecb1fb7bbcb9d45ce7127019bbfcecb805e558eec81f3aaa590a18c"
+      },
+      "tests/Lokad.Image.Tests/Vp8SourceSegmentsTests.cs": {
+        "bytes": 9809,
+        "sha256": "6a36fe5d5dfde77387ac2bb537dfa4a013410b8f9f5504d3b9d12f72d7a819d9"
+      }
+    },
+    "referenceEvidenceReused": [
+      "E70four original-source candidate streams",
+      "E68native complete-packet-verified maps and quantizers",
+      "RFC6386section14.1 existing normative AC quantizers"
+    ],
+    "inspectedPolicyChecks": [
+      {
+        "name": "opaque",
+        "centers": [
+          0,
+          35,
+          108,
+          154
+        ],
+        "mean": 11,
+        "alpha": [
+          -18,
+          39,
+          127,
+          127
+        ],
+        "beta": [
+          0,
+          57,
+          178,
+          255
+        ],
+        "iterations": 4,
+        "unsimplifiedCounts": [
+          508,
+          3,
+          33,
+          17
+        ],
+        "mapSha256": "9efde5881464f135c088399abe35c8a18afa5edd23e9bc7a642e29f0a76b1803",
+        "nativeFinalMapSha256": "872fd9e831d98ef6ac1363a90c431141a9bc8a63b8f2ecdf27e104fefc4cedcc",
+        "finalMapPairs": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "directFinalMapEqual": false,
+        "derivedUnmergedQuantizers": [
+          27,
+          22,
+          15,
+          15
+        ],
+        "derivedInitialFilterLevels": [
+          8,
+          5,
+          2,
+          2
+        ],
+        "derivedEqualParameterRemap": [
+          0,
+          1,
+          2,
+          2
+        ],
+        "everyFinalMapByteEqualAfterDerivedMerge": true,
+        "derivedMergedQuantizers": [
+          27,
+          22,
+          15,
+          15
+        ],
+        "nativeFinalFilterLevels": [
+          8,
+          5,
+          2,
+          2
+        ],
+        "finalFilterCaveat": "Final filter adjustment also depends on reconstructed Y2maxedge; initial setup is not full frame-level filter qualification."
+      },
+      {
+        "name": "photograph",
+        "centers": [
+          69,
+          124,
+          174,
+          219
+        ],
+        "mean": 172,
+        "alpha": [
+          -127,
+          -81,
+          3,
+          79
+        ],
+        "beta": [
+          0,
+          93,
+          178,
+          255
+        ],
+        "iterations": 6,
+        "unsimplifiedCounts": [
+          49,
+          100,
+          210,
+          202
+        ],
+        "mapSha256": "ccf2215ba2875d875a3a844250221ad05df6d184f8a0a8a019fece337786b528",
+        "nativeFinalMapSha256": "ccf2215ba2875d875a3a844250221ad05df6d184f8a0a8a019fece337786b528",
+        "finalMapPairs": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "directFinalMapEqual": true,
+        "derivedUnmergedQuantizers": [
+          36,
+          32,
+          25,
+          19
+        ],
+        "derivedInitialFilterLevels": [
+          11,
+          7,
+          4,
+          2
+        ],
+        "derivedEqualParameterRemap": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "everyFinalMapByteEqualAfterDerivedMerge": true,
+        "derivedMergedQuantizers": [
+          36,
+          32,
+          25,
+          19
+        ],
+        "nativeFinalFilterLevels": [
+          11,
+          7,
+          4,
+          13
+        ],
+        "finalFilterCaveat": "Final filter adjustment also depends on reconstructed Y2maxedge; initial setup is not full frame-level filter qualification."
+      },
+      {
+        "name": "diagram",
+        "centers": [
+          17,
+          124,
+          178,
+          252
+        ],
+        "mean": 214,
+        "alpha": [
+          -127,
+          -97,
+          -39,
+          41
+        ],
+        "beta": [
+          0,
+          116,
+          174,
+          255
+        ],
+        "iterations": 4,
+        "unsimplifiedCounts": [
+          5,
+          36,
+          212,
+          308
+        ],
+        "mapSha256": "d67c66d25d507e79371f3d9b66e2aefa1d911501dca93813ab0482773574d2f3",
+        "nativeFinalMapSha256": "d67c66d25d507e79371f3d9b66e2aefa1d911501dca93813ab0482773574d2f3",
+        "finalMapPairs": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "directFinalMapEqual": true,
+        "derivedUnmergedQuantizers": [
+          36,
+          33,
+          29,
+          22
+        ],
+        "derivedInitialFilterLevels": [
+          11,
+          7,
+          5,
+          3
+        ],
+        "derivedEqualParameterRemap": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "everyFinalMapByteEqualAfterDerivedMerge": true,
+        "derivedMergedQuantizers": [
+          36,
+          33,
+          29,
+          22
+        ],
+        "nativeFinalFilterLevels": [
+          11,
+          7,
+          6,
+          3
+        ],
+        "finalFilterCaveat": "Final filter adjustment also depends on reconstructed Y2maxedge; initial setup is not full frame-level filter qualification."
+      },
+      {
+        "name": "asymmetric",
+        "centers": [
+          0,
+          53,
+          103,
+          153
+        ],
+        "mean": 11,
+        "alpha": [
+          -18,
+          70,
+          127,
+          127
+        ],
+        "beta": [
+          0,
+          88,
+          171,
+          255
+        ],
+        "iterations": 3,
+        "unsimplifiedCounts": [
+          509,
+          2,
+          32,
+          18
+        ],
+        "mapSha256": "7c4bb0f81d5443689912d0ee8cc32813a4644d1b62533b69df0571953bb2c4f4",
+        "nativeFinalMapSha256": "5ae95290d4376ce3333e9ce4424c2944be2520455c0189167fd39b2ae6c8741a",
+        "finalMapPairs": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "directFinalMapEqual": false,
+        "derivedUnmergedQuantizers": [
+          27,
+          20,
+          15,
+          15
+        ],
+        "derivedInitialFilterLevels": [
+          8,
+          5,
+          2,
+          2
+        ],
+        "derivedEqualParameterRemap": [
+          0,
+          1,
+          2,
+          2
+        ],
+        "everyFinalMapByteEqualAfterDerivedMerge": true,
+        "derivedMergedQuantizers": [
+          27,
+          20,
+          15,
+          15
+        ],
+        "nativeFinalFilterLevels": [
+          8,
+          5,
+          2,
+          2
+        ],
+        "finalFilterCaveat": "Final filter adjustment also depends on reconstructed Y2maxedge; initial setup is not full frame-level filter qualification."
+      }
+    ],
+    "algorithm": "Independent weighted1Dcentroids: lower strict ties, unchanged emptyclasses, half-up means, sixiterations/stopdisplacement<5, finalassignment before lastcenter update. Signed alpha truncates towardzero. Optional8neighbor smoothing uses originalmap with>=5majority and unchangededges. Explicitquality curve/sns50/filter60/sharpness0 derives quantizers/initialfilters; compact equal quantizer/filter classes and duplicate final parameter slot.",
+    "memory": "OwnedCount-byte map plus4*5int parameters and128B coarse metadata, established/reserved before allocations on SAME borrowedoperation/root. At561MBs capacity769B plus1024B transient stack; smoothing addsCount=561B only while actually used. No source/pixel/histogram references retained, no independentallowance/retry/fallback. Owner stays within operation. Capacities are accounting, not GC allocation measurements.",
+    "verified": [
+      "All2244complete native segmentmap bytes and all16quantizers match frozen controls. No oracledata consumed by production. Source susceptibilities unchanged; result survives source/analysis disposal with independent charge.",
+      "Bounded original arithmetic fragments cover unchangedemptycenters/coincidentlower ties and halfintegral rounding. One original5x3 majority fragment catches in-placefeedback and preserves edges/tails; no new image/grid or timing case.",
+      "Result/scratch/smoothing admission refusal and postadmissioncancellation refund capacity, preserve borrowedinputs/root and permit nextoperation. Actualshared retained/replacement peak and lateworkcleanup pass."
+    ],
+    "qualification": {
+      "sameWindowsBuiltAssemblyBothOS": true,
+      "normalPerOS": 157,
+      "scalarPerOS": 157,
+      "windowsNormalUnion": [
+        16,
+        141
+      ],
+      "newSegmentChecks": 16,
+      "priorChecksReconfirmed": 141
+    },
+    "builds": {
+      "windowsLinkedInternalTests": 1,
+      "linux": 0,
+      "publicCore": 0,
+      "sourceModel": 0,
+      "native": 0
+    },
+    "nativePrimitiveObservations": 0,
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "scopeLimit": "Frozenquality75/method4/defaultsns/filter/sharpness only. Smoothing arithmetic qualified separately; no native preprocessing1packet claim. Final reconstructedY2maxedge raises photograph filter2->13 and diagram5->6; this is a later frame/RDO gate, not initialfilter exactness. Requiredfiniteoption audit remains open.",
+    "evidenceReuse": "All141earlier checks reconfirmed currentassembly normal/scalar bothOS; publiccodec bodies/calls unchanged, so no repeated local full/differential/package proof or CPU measurement. Parentc4be2d38c228ef443e73ccb529a03572da24efe8 CI39937479103 green in all3jobs, including bothOS actualpackage and liveFFmpeg suite.",
+    "rawArchive": {
+      "name": "e71-source-segments-qualified.tar.xz",
+      "bytes": 454716,
+      "members": 15,
+      "sha256": "084b20a60e0415d8f71208d4c49506ecd5e2c8f67ab6295ae2f43fc3887adfdb",
+      "everySourceMemberByteVerified": true,
+      "mirrored": true
+    },
+    "storage": {
+      "capBytes": 5000000000,
+      "windowsAfterMaster": 4998581663,
+      "linuxAfterMaster": 4999324949,
+      "completedWorkerRetired": "Only exact E70archivedDLL after E71Windowschecks; currentworker/publiccore/packages/reference/performanceworkers/citedmasters retained. All E71transfer/archive overlaps preflighted belowcap."
+    },
+    "remaining": "Quantization matrices/deadzones, actualintra4/intra16/chroma/RDO/coefficients, entropy/ALPH/fullpackets/publicintegration, finite requiredoptions, exactdecoders and original CPU/allocation/functional/memory/release objective remain open."
   }
 }
