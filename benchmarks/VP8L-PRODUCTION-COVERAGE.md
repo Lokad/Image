@@ -1,9 +1,9 @@
 # VP8L remaining production coverage
 
-One dependency-free source model reproduces eighteen packet identities on Windows/Linux:
+One dependency-free source model reproduces nineteen packet identities on Windows/Linux:
 thirteen default-method packets, the method-0 two-color variant and three
 non-palette effort controls on the existing asymmetric input, plus one adaptive
-photograph packet. Main quality
+photograph packet and one effort-0 numeric-palette packet. Main quality
 is 75 with `exact=1`; palette auxiliary encoding uses the backend's internal quality 20.
 Production adoption also has to preserve the existing public encoding scope.
 This bounded checklist comes from current tests and options; it adds no warm
@@ -71,12 +71,17 @@ performance grid.
    subtract-green or cross-color, and cache search is capped by palette size.
    This verifies both candidates and plain selection; it adds no spatial-winning
    input or selected packet identity.
-   Two named required effort algorithms remain: **Effort0NumericPalette18Color**
-   (numeric ordering instead of greedy ordering) and **SmallPaletteBox4Color**
-   (the short-distance box matcher and its complete-writer candidate). Reuse the
-   existing eighteen-color and four-color inputs. Ordinary fixed/adaptive effort
-   policies reuse the qualified primitives; complete routing and production
-   operations still need integration. Add no general settings grid.
+   The remaining two effort primitives now have named proofs.
+   **Effort0NumericPalette18Color** reproduces all 268 bytes with numeric order
+   and an omitted final zero. **SmallPaletteBoxTwoColor** reuses the existing
+   4103×2 input: every 1,026-entry box index matches (1,020 nonzero copies), as
+   do ordinary/box candidate packets at 46 bytes for plain indices and 50 bytes
+   with prediction. Equal writer sizes retain the ordinary candidate. The small
+   four-color carrier was not used for this proof because it has no long copies.
+   Both new packets pass exact pinned-FFmpeg decoding, including hidden RGB.
+   All nineteen selected packet identities and the forced candidate/index proofs
+   pass in one frozen model on both platforms. These are bounded algorithm proofs;
+   generic routing, admitted production and complete public operations remain open.
    Quality100/method6 brute-force search is outside this pinned quality75 scope.
    Reuse current two-color depths for complete public-operation qualification. Unpublished implementation
    assertions may change; exact normalized pixels and declared option/resource

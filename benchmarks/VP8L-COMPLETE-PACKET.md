@@ -1,6 +1,6 @@
 # VP8L complete-packet reproduction
 
-One dependency-free source model reproduces **18 complete packet identities** on
+One dependency-free source model reproduces **19 complete packet identities** on
 Windows and Linux with the same frozen assembly. Every packet byte, including
 framing and padding, matches; there is no metadata exception. The pinned reference
 is libwebp 1.6.0, quality 75, `exact=1`, explicitly labeled as FFmpeg's encoder
@@ -19,7 +19,7 @@ backend. This is development tooling; production adoption remains open.
 | Single axis, 16383×1 / 1×16383 | 4 | 74 / 74 |
 | Four-color partial packing, 7×3 | 4 | 66 |
 | Sixteen-color partial packing, 17×3 | 4 | 130 |
-| Eighteen-color implicit zero, 23×13 | 4 | 236 |
+| Eighteen-color implicit zero, 23×13 | 4 / 0 | 236 / 268 |
 | Asymmetric RGBA8, 513×259 | 0 / 1 / 5 | 316,566 / 176,216 / 155,162 |
 | Photograph, 513×259 | 5 | 160,600 |
 
@@ -48,17 +48,30 @@ opaque index carriers, applies palette-bounded cache analysis and compares compl
 writer payloads. Every byte of both candidates and the selected result matches.
 No new fixture or spatial-winning control was added.
 
-One frozen assembly passes all 18 selected identities and both candidate packets,
-source preservation, repeated outputs and mutation rejection on both platforms.
-The latest round needed one Windows model build and one native candidate adapter
-(two compile attempts), with two forced candidate encodes. Production, Linux model
-builds, timing/allocation runs and package requalification were unnecessary.
-Unchanged production evidence is reused. Numerical identities, exact scope and
-mirrored raw receipts are in [the evidence](vp8l-byte-parity-evidence.json).
+Effort 0 now reproduces the existing eighteen-color input's **268-byte** packet:
+numeric ordering moves zero last and omits it from storage. For small palettes,
+the independent box matcher derives its window from format distance geometry,
+reuses prior matches and compares complete writer payloads with the ordinary
+parser. The existing two-color control qualifies both 1,026-entry indices
+(1,020 nonzero copies) and complete **46/50-byte** plain/spatial box candidates.
+Their ordinary candidates tie and remain selected. No new image or settings grid
+was added. Pinned FFmpeg decodes both newly checked packets to exact source RGBA,
+including hidden RGB.
+
+One frozen assembly passes all 19 selected identities and the forced candidate/index
+checks, source preservation, independent outputs and mutation rejection on both
+platforms. This round used two Windows model builds: the first isolated the numeric
+palette mismatch, the second fixes its implicit-zero order. Two native adapter builds
+were needed to correct its input-width guard; four forced candidates and three
+public-worker preparation encodes reuse existing inputs. Production builds,
+timing/allocation runs and repeated package qualification were unnecessary.
+[The evidence](vp8l-byte-parity-evidence.json) records exact scope and mirrored raw
+receipts. Production integration is the next milestone.
 
 Build once with `dotnet build tools/WarmReference/Vp8lParityModel -c Release --tl:off`
 and reuse the assembly with the packet verifiers. The four-core verifier uses
 Lokad.Image only to prepare frozen PNG inputs, outside the encoding model.
+`verify-vp8l-small-palette-efforts.ps1` checks numeric order and box candidates/indices.
 `verify-vp8l-palette-candidates.ps1` checks the two transform candidates and selection.
 `verify-vp8l-adaptive-predictor.ps1` checks both adaptive selectors and packets;
 `verify-vp8l-nonpalette-efforts.ps1` checks the fixed effort/cache primitives.

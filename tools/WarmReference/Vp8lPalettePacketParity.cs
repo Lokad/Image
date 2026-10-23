@@ -4,28 +4,37 @@
 using System;
 using System.Linq;
 using System.Buffers.Binary;
-public sealed record Vp8lPalettePacketResult(byte[] Packet,object Details);
+public sealed record Vp8lPalettePacketResult(byte[] Packet,object Details,int Colors=0);
 public sealed record Vp8lPaletteComparisonResult(Vp8lPalettePacketResult Selected,Vp8lPalettePacketResult Plain,Vp8lPalettePacketResult Spatial);
 public static class Vp8lPalettePacketParity
 {
     public static Vp8lPalettePacketResult Encode(byte[] source,int width,int height,int method=4)
     {
         if(method==5)return CompareCandidates(source,width,height).Selected;
-        return EncodeCandidate(source,width,height,method,false);
+        return BestSubconfig(source,width,height,method,false);
     }
     public static Vp8lPaletteComparisonResult CompareCandidates(byte[] source,int width,int height)
     {
-        var plain=EncodeCandidate(source,width,height,5,false);
-        var spatial=EncodeCandidate(source,width,height,5,true);
+        var plain=BestSubconfig(source,width,height,5,false);
+        var spatial=BestSubconfig(source,width,height,5,true);
         return new(Payload(spatial.Packet)<Payload(plain.Packet)?spatial:plain,plain,spatial);
     }
+    public static Vp8lPalettePacketResult EncodeBoxCandidate(byte[] source,int width,int height,bool spatial)
+        => EncodeCandidate(source,width,height,5,spatial,true);
+    private static Vp8lPalettePacketResult BestSubconfig(byte[] source,int width,int height,int method,bool spatial)
+    {
+        var ordinary=EncodeCandidate(source,width,height,method,spatial);
+        if(method==0||ordinary.Colors>16)return ordinary;
+        var box=EncodeCandidate(source,width,height,method,spatial,true);
+        return Payload(box.Packet)<Payload(ordinary.Packet)?box:ordinary;
+    }
     private static uint Payload(byte[] packet)=>BinaryPrimitives.ReadUInt32LittleEndian(packet.AsSpan(16));
-    private static Vp8lPalettePacketResult EncodeCandidate(byte[] source,int width,int height,int method,bool spatial)
+    private static Vp8lPalettePacketResult EncodeCandidate(byte[] source,int width,int height,int method,bool spatial,bool box=false)
     {
         if(width<1||width>16384||height<1||height>16384||source.Length!=checked(width*height*4))throw new ArgumentException("Expected RGBA8 dimensions.");
         var choice=Vp8lInitialChoice.Select(source,width,height,method);
         if(choice.Mode!=4)throw new NotSupportedException("This stage composes palette coding only.");
-        var palette=Vp8lPaletteParity.Build(source,width,height);
+        var palette=Vp8lPaletteParity.Build(source,width,height,method!=0);
         var entries=palette.Colors.Length;
         if(entries>17&&palette.Colors[^1]==0)entries--; // RFC color-index padding supplies the final zero.
         var bits=new Vp8lParityBits();
@@ -60,14 +69,14 @@ public static class Vp8lPalettePacketParity
         }
         var stage=new Vp8lInputParity(bits.Finish(),bits.Count,coded,new{palette=palette.Colors.Length,spatial,predictorBits});
         var maximumCacheBits=System.Numerics.BitOperations.Log2((uint)palette.Colors.Length)+1;
-        var cached=Vp8lDirectPacketParity.Compose(stage,palette.CodedWidth,height,choice.HistogramBits,choice,method==0,false,maximumCacheBits);
+        var cached=Vp8lDirectPacketParity.Compose(stage,palette.CodedWidth,height,choice.HistogramBits,choice,method==0,false,maximumCacheBits,box);
         var frame=cached;int? uncachedBytes=null;
         if(method==5)
         {
-            var uncached=Vp8lDirectPacketParity.Compose(stage,palette.CodedWidth,height,choice.HistogramBits,choice,false,true,maximumCacheBits);
+            var uncached=Vp8lDirectPacketParity.Compose(stage,palette.CodedWidth,height,choice.HistogramBits,choice,false,true,maximumCacheBits,box);
             uncachedBytes=uncached.Packet.Length;
             if(Payload(uncached.Packet)<Payload(cached.Packet))frame=uncached;
         }
-        return new(frame.Packet,new{colors=palette.Colors.Length,packingBits=palette.PackingBits,codedWidth=palette.CodedWidth,spatial,predictorBits,cachedBytes=cached.Packet.Length,uncachedBytes,composition=frame.Details});
+        return new(frame.Packet,new{colors=palette.Colors.Length,packingBits=palette.PackingBits,codedWidth=palette.CodedWidth,spatial,box,predictorBits,cachedBytes=cached.Packet.Length,uncachedBytes,composition=frame.Details},palette.Colors.Length);
     }
 }

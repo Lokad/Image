@@ -23,6 +23,17 @@ internal static class Vp8lMainParsing
         return result;
     }
     internal sealed record Result(object Tokens,int Bits,object Summary);
+    internal static Result EncodeBox(uint[] pixels,uint[] matches,int width,bool disableCache,int maximumCacheBits)
+    {
+        var seed=Main("Tokens","Greedy",pixels,matches);
+        var bits=disableCache?0:BestCache(pixels,seed,maximumCacheBits);
+        seed=bits==0?Uncached("Greedy",pixels,matches):Main("WithCache",pixels,seed,bits);
+        long Cost(object tokens)=>(long)(bits==0?Uncached("Estimate",tokens,width):Main("Estimate",tokens,bits));
+        var cost=Cost(seed);
+        var trace=bits==0?Uncached("Trace",pixels,matches,width,seed):Main("Trace",pixels,matches,width,seed,bits);
+        var traceCost=Cost(trace);var traced=traceCost<cost;
+        return new(traced?trace:seed,bits,new{winner=traced?"box-trace":"box",cost,traceCost});
+    }
     internal static Result Encode(uint[] pixels,uint[] matches,int width=513,bool disableCache=false,int maximumCacheBits=10)
     {
         var standard=Main("Tokens","Greedy",pixels,matches);var repeated=Repeated(pixels,width);
