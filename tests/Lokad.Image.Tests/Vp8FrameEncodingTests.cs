@@ -14,14 +14,14 @@ public sealed class Vp8FrameEncodingTests
         internal readonly Vp8SourceAnalysis Analysis;
         internal readonly Vp8SourceSegments Segments;
         internal readonly Vp8QuantizationPlan Quantization;
-        internal Inputs(string name, TestMemoryBudget root)
+        internal Inputs(string name, TestMemoryBudget root, int method = 4)
         {
             Context = new(new() { MemoryBudget = root }, default); image = OriginalVp8lControls.Buffer(name, 8, root);
             // The existing original singleton color, made opaque for lifecycle
             // checks. It adds no benchmark/compression control or size claim.
             if (name == "singleton") image.GetRow8(0)[3] = 255;
-            Prepared = Vp8PreparedInput.Create(image, Context); Analysis = Vp8SourceAnalysis.Create(Prepared, Context);
-            Segments = Vp8SourceSegments.Create(Analysis, 75, false, Context); Quantization = Vp8QuantizationPlan.Create(Segments, Analysis.MeanChromaScore, Context);
+            Prepared = Vp8PreparedInput.Create(image, Context); Analysis = Vp8SourceAnalysis.Create(Prepared, Context, method);
+            Segments = Vp8SourceSegments.Create(Analysis, 75, false, Context); Quantization = Vp8QuantizationPlan.Create(Segments, Analysis.MeanChromaScore, Context, method);
         }
         internal Vp8FramePlan Frame(OperationContext? operation = null) => Vp8FramePlan.Create(Prepared, Segments, Quantization, operation ?? Context);
         internal void ReleaseInputs() { Quantization.Dispose(); Segments.Dispose(); Analysis.Dispose(); Prepared.Dispose(); image.Dispose(); }
@@ -29,12 +29,13 @@ public sealed class Vp8FrameEncodingTests
     }
 
     [Theory]
-    [InlineData("opaque", 72380, "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f")]
-    [InlineData("diagram", 7100, "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050")]
-    [InlineData("photograph", 17688, "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b")]
-    public async Task CompletePacketMatchesNativeWithIndependentSourceAndOutputLifetimes(string name, int bytes, string expected)
+    [InlineData("opaque", 72380, "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f", 4)]
+    [InlineData("diagram", 7100, "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050", 4)]
+    [InlineData("diagram", 7082, "3bea8726b4473a4f1436a621229d12a489603537ebbd54945044241d3d478dda", 3)]
+    [InlineData("photograph", 17688, "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b", 4)]
+    public async Task CompletePacketMatchesNativeWithIndependentSourceAndOutputLifetimes(string name, int bytes, string expected, int method)
     {
-        using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs(name, root); using var frame = input.Frame();
+        using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs(name, root, method); using var frame = input.Frame();
         Assert.Equal(0, frame.HeaderRetries); Assert.Equal(frame.Count * 820L + 1376, frame.CapacityBytes);
         using var packet = Vp8FrameEncoding.Create(frame, input.Context); input.ReleaseInputs(); frame.Dispose();
         Assert.Equal(packet.CapacityBytes, root.Bytes); Assert.Equal(bytes, packet.WebpLength);

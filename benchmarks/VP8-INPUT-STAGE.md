@@ -1,7 +1,7 @@
 # VP8 encoder preparation
 
-The private managed pipeline reproduces allfour existing complete packet identities,
-including exact ALPH from RGBA8/16. The public lossy encoder is unchanged. Required
+The private managed pipeline reproduces the four method4/Q75 packet identities
+and the method3/Q75 diagram packet, including exact method4 ALPH from RGBA8/16. The public lossy encoder is unchanged. Required
 options, the named header/work boundaries and public integration remain open.
 
 Seven existing encoding rows have four reference packet identities:
@@ -133,8 +133,9 @@ its task finishes. Terminal admission refusal, cleanup/recovery, local/work/outp
 limits and mismatched dimensions pass. Quality75 lossless packet checks also pass
 with the shared preparation changes; the scoped native inputs/settings stay fixed.
 
-The same immutable assembly passes421focused checks per platform on Windows/Linux,
-normal and SIMD disabled:259prior VP8 (including alpha),152VP8L and10fast-source checks. Shared admission covers
+The same immutable assembly passes429focused checks per platform on Windows/Linux,
+normal and SIMD disabled:421prior checks and8distortion-decision checks. The same
+producer also passes the complete method3 packet probe in allfour OS/CPU modes. Shared admission covers
 owned capacity, retained results and replacement overlap. Refusal, cancellation,
 local/work limits and cleanup/recovery pass; sources and caller roots stay borrowed.
 The matrix owner retains3,128/4,128admitted bytes for3/4used segments. Earlier source
@@ -149,20 +150,23 @@ and packaged consumer qualification. No readiness claim follows from these priva
 
 The bounded option audit adds only settings that exercise a distinct required
 policy, reusing the existing diagram and alpha inputs. These are frozen native
-packets awaiting managed confirmation:
+targets; source-only qualification is distinct from complete-packet agreement:
 
-| Existing input / settings | Required policy | Native bytes |
-|---|---|---:|
-| Diagram Q75 / method0 | Fast source decisions, distortion refinement, fast probability probe | 9,980 |
-| Diagram Q75 / method1 | Fast source decisions plus UV reexamination | 9,244 |
-| Diagram Q75 / method2 | Distortion-only I4/I16 reexamination | 7,330 |
-| Diagram Q75 / method3 | Basic RDO/token path and non-full SNS | 7,082 |
-| Diagram Q75 / method5 | Selected-mode trellis, including I16/Y2 | 7,026 |
-| Diagram Q75 / method6 | Trellis on every candidate | 6,818 |
-| Diagram Q1 / method4 | Minimum quality and quantizer clamps | 2,304 |
-| Diagram Q85 / method4 | Public default quality | 8,898 |
-| Diagram Q100 / method4 | Maximum quality and high-quality DC policy | 15,172 |
-| Alpha Q75 / method6 | Internal alpha VP8L quality100 search | 85,796 |
+| Existing input / settings | Required policy | Native bytes | Managed status |
+|---|---|---:|---|
+| Diagram Q75 / method0 | Fast source and distortion selection, non-token probe | 9,980 | Decisions exact; emission open |
+| Diagram Q75 / method1 | Fast source plus UV reexamination | 9,244 | Decisions exact; emission open |
+| Diagram Q75 / method2 | Distortion-only I4/I16 reexamination | 7,330 | Decisions exact; emission open |
+| Diagram Q75 / method3 | Basic RDO/token path, non-full SNS | 7,082 | Complete packet exact |
+| Diagram Q75 / method5 | Selected-mode trellis, including I16/Y2 | 7,026 | Open |
+| Diagram Q75 / method6 | Trellis on every candidate | 6,818 | Open |
+| Diagram Q1 / method4 | Minimum quality and quantizer clamps | 2,304 | Open |
+| Diagram Q85 / method4 | Public default quality | 8,898 | Open |
+| Diagram Q100 / method4 | Maximum quality and high-quality DC policy | 15,172 | Open |
+| Alpha Q75 / method6 | Internal alpha VP8L quality100 search | 85,796 | Open |
+| Diagram Q100 / method0 | High-quality fast source and distortion-only DC policy | 27,668 | Open |
+| Alpha Q75 / method0 | Low-effort alpha VP8L | 93,386 | Open |
+| Alpha Q75 / method1 | Alpha VP8L without cache/trace; small clustering bound | 106,588 | Open |
 
 One named large-header case uses the same original procedural formula at
 5,632×5,632. Native-positive header strengthening is still unconfirmed; observe it
@@ -191,3 +195,26 @@ Every accepted capture is gated by its unchanged complete native packet. Managed
 fast-source agreement is not yet full method0/1 packet agreement. Distortion
 refinement and non-token statistics/emission remain next, followed by the other
 named policies. No CPU or GC-allocation measurements were made.
+
+Distortion-only method0/1/2 selection now matches all2,945native statistics/final
+pass decisions on the existing Q75 diagram, including modes, coefficients,
+reconstructed pixels and decision scores. Initial segment parameters/matrices also
+match. Original prediction SSE and fixed header biases drive these decisions;
+selected blocks provide their reconstructed neighbors. This path performs local
+UV DC correction without propagating errors to adjacent macroblocks. Result aliasing,
+tails, refusal, cancellation, late work failure and cleanup/recovery pass.
+
+The unchanged production build also reproduces the complete7,082-byte method3
+packet through sync/async delivery after source/frame disposal. Its non-full-SNS
+matrix policy was the remaining difference. Only11,008accounting bytes remain
+owned during delivery; this is retained capacity, not measured GC allocations.
+The case is stopped. A durable packet regression is added for full CI; the local
+same-build proof reused429checks and the small packet probe without rebuilding.
+
+Inspection identified three specific omitted boundaries in the table: high-quality
+fast encoding, low-effort alpha, and non-low-effort alpha below the cache/trace
+threshold. They reuse the same images; allthree native targets are frozen, and
+managed confirmation remains open. The low-quality clustering sampler must retain
+its nine-entry candidate capacity even when its greedy threshold is smaller.
+No shape/depth/quality cross-product is introduced. Non-token statistics/skip
+emission is next; full nondefault packet parity and public integration remain open.

@@ -21,7 +21,7 @@ internal static class Vp8MacroblockDecision
     private static int Block(int number) => (number / 4 * 4) * 16 + number % 4 * 4;
     private static int UvBlock(int number) => (number / 4) * 8 + (number % 4 / 2 * 4) * 16 + number % 2 * 4;
 
-    private static void Transform(ReadOnlySpan<byte> source, ReadOnlySpan<byte> prediction, int offset, Span<short> coefficients)
+    internal static void Transform(ReadOnlySpan<byte> source, ReadOnlySpan<byte> prediction, int offset, Span<short> coefficients)
     {
         Span<short> residual = stackalloc short[16];
         for (var y = 0; y < 4; y++) for (var x = 0; x < 4; x++)
@@ -141,7 +141,7 @@ internal static class Vp8MacroblockDecision
         return (original - coefficient) >> 1;
     }
 
-    private static void CorrectDc(Span<short> coefficients, ReadOnlySpan<sbyte> input, Span<sbyte> errors, Vp8QuantizationMatrix matrix)
+    internal static void CorrectDc(Span<short> coefficients, ReadOnlySpan<sbyte> input, Span<sbyte> errors, Vp8QuantizationMatrix matrix)
     {
         for (var channel = 0; channel < 2; channel++)
         {

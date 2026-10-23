@@ -88,8 +88,9 @@ internal sealed class Vp8QuantizationPlan : IDisposable
         return (dc + 15 * ac + 8) >> 4;
     }
 
-    internal static Vp8QuantizationPlan Create(Vp8SourceSegments source, int chromaScore, OperationContext context)
+    internal static Vp8QuantizationPlan Create(Vp8SourceSegments source, int chromaScore, OperationContext context, int method = 4)
     {
+        if (method is < 0 or > 6) throw new ArgumentOutOfRangeException(nameof(method));
         if (chromaScore is < 0 or > 7905) throw new ArgumentOutOfRangeException(nameof(chromaScore));
         context.Work(0);
         var result = new Vp8QuantizationPlan(context, source.SegmentCount, chromaScore);
@@ -123,7 +124,7 @@ internal sealed class Vp8QuantizationPlan : IDisposable
                 costs[0] = Math.Max(1, 3 * y * y >> 7); costs[1] = Math.Max(1, 3 * y2 * y2);
                 costs[2] = Math.Max(1, 3 * uv * uv >> 6); costs[3] = Math.Max(1, y * y >> 7);
                 costs[4] = Math.Max(1, 7 * y * y >> 3); costs[5] = Math.Max(1, y2 * y2 >> 2);
-                costs[6] = Math.Max(1, uv * uv << 1); costs[7] = Math.Max(1, 50 * y >> 5);
+                costs[6] = Math.Max(1, uv * uv << 1); costs[7] = Math.Max(1, (method >= 4 ? 50 : 0) * y >> 5);
                 costs[8] = 20 * Vp8Tables.DcQuantizers[q];
                 // All VP8 steps bound the average to276, so this policy's
                 // penalty fits Int32. RDO combines scores with wide arithmetic.

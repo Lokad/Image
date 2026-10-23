@@ -1,7 +1,7 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E82",
-  "scope": "Private default method4 complete packet identities plus method0/1 fast source analysis on existing diagramQ75. Public lossy remains unchanged; full nondefault packets, public adoption, header/work and decoder/performance/release objectives remain open.",
+  "latestRound": "E84",
+  "scope": "Private method4/Q75 complete packet identities, method0/1/2Q75 source/distortion decisions and method3Q75 diagram complete packet. Public lossy remains unchanged. Remaining named policies, coherent public adoption, exact decoders, performance, functional and release objectives remain open.",
   "productionPublicBehaviorChanged": false,
   "fullObjectiveOpen": true,
   "reference": {
@@ -4113,7 +4113,7 @@
           "name": "diagram",
           "quality": 75,
           "method": 3,
-          "distinctRequiredReason": "Basic RDO/token path with fast probe and non-full SNS",
+          "distinctRequiredReason": "Basic RDO/token path with non-full SNS. Under pinned low_memory=0, the StatLoop fast-probe branch is not executed.",
           "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
           "packetBytes": 7082,
           "packetSha256": "3bea8726b4473a4f1436a621229d12a489603537ebbd54945044241d3d478dda",
@@ -4666,7 +4666,7 @@
         "why": "Fast source decision, distortion refinement without UV reexamination and fast probability probe",
         "nativeBytes": 9980,
         "nativeSha256": "1c454bdfaff968c856a479c9828f8396137556c0708354c85a5a9b37d2bbe5d5",
-        "managedStatus": "Fast source analysis verifiedE82; distortion/non-token/full-packet confirmation OPEN"
+        "managedStatus": "Source, initial parameters/matrices and statistics/final distortion decisions verifiedE83; non-token emission/full-packet confirmation OPEN."
       },
       {
         "id": "method1-quality75-diagram",
@@ -4676,7 +4676,7 @@
         "why": "Fast source decision plus UV distortion reexamination",
         "nativeBytes": 9244,
         "nativeSha256": "50d50af60b76e99dcb1f49eda60efc548a564dbaaaa931d06fc0164aa28c0bea",
-        "managedStatus": "Fast source analysis verifiedE82; distortion/non-token/full-packet confirmation OPEN"
+        "managedStatus": "Source, initial parameters/matrices and statistics/final distortion decisions verifiedE83; non-token emission/full-packet confirmation OPEN."
       },
       {
         "id": "method2-quality75-diagram",
@@ -4686,17 +4686,17 @@
         "why": "Full source analysis and distortion-only I4/I16 reexamination",
         "nativeBytes": 7330,
         "nativeSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
-        "managedStatus": "OPEN"
+        "managedStatus": "Source, initial parameters/matrices and statistics/final distortion decisions verifiedE83; non-token emission/full-packet confirmation OPEN."
       },
       {
         "id": "method3-quality75-diagram",
         "control": "diagram",
         "quality": 75,
         "method": 3,
-        "why": "Basic RDO/token path with fast probe and non-full SNS",
+        "why": "Basic RDO/token path with non-full SNS; pinned settings do not execute StatLoop fast probing.",
         "nativeBytes": 7082,
         "nativeSha256": "3bea8726b4473a4f1436a621229d12a489603537ebbd54945044241d3d478dda",
-        "managedStatus": "OPEN"
+        "managedStatus": "PASS E84: complete7082B packet, source-independent sync/async delivery, BOTHOSnormal/scalar on the unchanged E83 producer. Stop retuning this scoped case."
       },
       {
         "id": "method5-quality75-diagram",
@@ -4776,6 +4776,36 @@
         "control": "Existing opaque/asymmetricRGBA8/16 plus photograph/diagram",
         "why": "Private packet equality is not actual public API/stream/budget/cancellation/package qualification. Reuse normalization and unchanged primitive proofs; complete direct delivery boundaries at adoption.",
         "status": "OPEN; no new images/settings required."
+      },
+      {
+        "id": "method0-quality100-diagram",
+        "control": "diagram",
+        "quality": 100,
+        "method": 0,
+        "why": "Fast source dispersion at its high-quality threshold and distortion-only UV reconstruction without DC correction; distinct from Q100method4 RDO.",
+        "nativeBytes": 27668,
+        "nativeSha256": "eb4cd33ce7a5b39698b49fd94b4dd59a7ec9c0a0d8d5ac0bf12b10d8a0afbdba",
+        "managedStatus": "OPEN; added only because inspection identifies a distinct required path omitted by the original audit."
+      },
+      {
+        "id": "method0-quality75-asymmetric",
+        "control": "asymmetric",
+        "quality": 75,
+        "method": 0,
+        "why": "Alpha VP8L method0/quality0 uses the low-effort transform/reference policy, absent from existing opaque method0 and alpha method4/6 cases.",
+        "nativeBytes": 93386,
+        "nativeSha256": "eb12853d220295a4327d151827462eda69df74bc9a21b938af5ca31f40cf134d",
+        "managedStatus": "OPEN; added only because inspection identifies a distinct required path omitted by the original audit."
+      },
+      {
+        "id": "method1-quality75-asymmetric",
+        "control": "asymmetric",
+        "quality": 75,
+        "method": 1,
+        "why": "Alpha VP8L method1/quality8 disables cache/trace and uses a small clustering threshold; sampling requires its fixed nine-entry candidate capacity even at threshold1.",
+        "nativeBytes": 106588,
+        "nativeSha256": "9491f97d6c703e0d8869c02eb4ba0edabcde831992f7173cae5ef5b16ab330ce",
+        "managedStatus": "OPEN; added only because inspection identifies a distinct required path omitted by the original audit."
       }
     ],
     "rawArchive": {
@@ -4844,7 +4874,207 @@
         "allOriginalBytesVerified": true
       }
     },
-    "next": "Method0/1 fast source analysis as one private primitive. Then distortion/non-token decisions, method3 policy, trellis and quality/ALPH6 paths, one at a time. Confirm only passing named cases and stop them; no quality or timing sweeps."
+    "next": "E85 direct non-token coefficient statistics, reusing E83 final/native profiles and managed distortion decisions. Then fast frame/skip emission and the remaining named trellis/quality/alpha/header/public cases. Method3 packet is confirmed and stopped. No speed-only work while byte gates remain open.",
+    "additionalBoundaries": {
+      "round": "E83/E84-named-boundaries",
+      "scope": "Three concrete required paths identified by source inspection. Existing diagram/asymmetric controls only; no image/settings cross-product. Native-only frozen targets, managed qualification remains open.",
+      "referenceWorker": "E81 immutable worker reused from mirrored raw master; zero native rebuilds",
+      "workerSha256": "da53201b284be474a3d8b209a362ae4deed5aba64e88e28a7a7bea84cc75a9f2",
+      "cases": [
+        {
+          "name": "diagram",
+          "quality": 100,
+          "method": 0,
+          "distinctRequiredReason": "Fast source dispersion at its high-quality threshold and distortion-only UV reconstruction without DC correction; distinct from Q100method4 RDO.",
+          "sourceSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+          "packetBytes": 27668,
+          "packetSha256": "eb4cd33ce7a5b39698b49fd94b4dd59a7ec9c0a0d8d5ac0bf12b10d8a0afbdba",
+          "observation": {
+            "libwebpVersion": 67072,
+            "packetBytes": 27668,
+            "macroblocks": 561,
+            "extraInfoType": 2,
+            "config": {
+              "quality": 100,
+              "method": 0,
+              "threadLevel": 0,
+              "segments": 4,
+              "snsStrength": 50,
+              "filterStrength": 60,
+              "filterSharpness": 0,
+              "filterType": 1,
+              "autoFilter": 0,
+              "pass": 1,
+              "preprocessing": 0,
+              "partitions": 0,
+              "partitionLimit": 0,
+              "alphaCompression": 1,
+              "alphaFiltering": 1,
+              "alphaQuality": 100,
+              "exact": 0,
+              "lowMemory": 0,
+              "sharpYuv": 0
+            },
+            "segmentQuantizers": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "segmentFilterLevels": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "segmentSizes": [
+              561,
+              0,
+              0,
+              0
+            ],
+            "blockCounts": [
+              561,
+              0,
+              298
+            ],
+            "alphaDataBytes": 0,
+            "segmentMapHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          },
+          "raw": "tmp/e83-boundary-diagram-q100-m0.bin.gz",
+          "nativeOnlyNotManagedConfirmation": true
+        },
+        {
+          "name": "asymmetric",
+          "quality": 75,
+          "method": 0,
+          "distinctRequiredReason": "Alpha VP8L method0/quality0 uses the low-effort transform/reference policy, absent from existing opaque method0 and alpha method4/6 cases.",
+          "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "packetBytes": 93386,
+          "packetSha256": "eb12853d220295a4327d151827462eda69df74bc9a21b938af5ca31f40cf134d",
+          "observation": {
+            "libwebpVersion": 67072,
+            "packetBytes": 93386,
+            "macroblocks": 561,
+            "extraInfoType": 2,
+            "config": {
+              "quality": 75,
+              "method": 0,
+              "threadLevel": 0,
+              "segments": 4,
+              "snsStrength": 50,
+              "filterStrength": 60,
+              "filterSharpness": 0,
+              "filterType": 1,
+              "autoFilter": 0,
+              "pass": 1,
+              "preprocessing": 0,
+              "partitions": 0,
+              "partitionLimit": 0,
+              "alphaCompression": 1,
+              "alphaFiltering": 1,
+              "alphaQuality": 100,
+              "exact": 0,
+              "lowMemory": 0,
+              "sharpYuv": 0
+            },
+            "segmentQuantizers": [
+              34,
+              27,
+              21,
+              15
+            ],
+            "segmentFilterLevels": [
+              10,
+              6,
+              4,
+              2
+            ],
+            "segmentSizes": [
+              201,
+              133,
+              100,
+              127
+            ],
+            "blockCounts": [
+              0,
+              561,
+              0
+            ],
+            "alphaDataBytes": 15238,
+            "segmentMapHex": "010000000001010201020202020203030203020203020201010100000000000003000000000001000001010002010102030203010101000100000000000000000003010000010102010000010301020203030303020201010000010001010000000103000000000001000001000202020303030303020201000101000000000000000003000000000100010100010202020302030303030301010101010100000100000003000000000000000001010201010101030102010000020002000100020100000003000000000000010101020101000101030100010001000101010100000000000003000000010102000200010000000000020100010000010101030202000001000003010000010102020101000100000101030100000000010101030200020000000003020001010003020300000000000000020000000000000002020300020002000003020102010303030103000001000000010000000000000103030202010101010003010202010303030302000000000001030100000001010202030302020001000003030202030303030303030302020203030202020203030203030303030203030103020202020202030201010201010201030101010102010202030302020201010103020101010303030202000000000001020000000000000203030303030201010003020000010203030102000000000000020000000000000102020302010000010003030303030303030303030303030303030303030303030303030303030303030303"
+          },
+          "raw": "tmp/e83-boundary-asymmetric-q75-m0.bin.gz",
+          "nativeOnlyNotManagedConfirmation": true
+        },
+        {
+          "name": "asymmetric",
+          "quality": 75,
+          "method": 1,
+          "distinctRequiredReason": "Alpha VP8L method1/quality8 disables cache/trace and uses a small clustering threshold; sampling requires its fixed nine-entry candidate capacity even at threshold1.",
+          "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "packetBytes": 106588,
+          "packetSha256": "9491f97d6c703e0d8869c02eb4ba0edabcde831992f7173cae5ef5b16ab330ce",
+          "observation": {
+            "libwebpVersion": 67072,
+            "packetBytes": 106588,
+            "macroblocks": 561,
+            "extraInfoType": 2,
+            "config": {
+              "quality": 75,
+              "method": 1,
+              "threadLevel": 0,
+              "segments": 4,
+              "snsStrength": 50,
+              "filterStrength": 60,
+              "filterSharpness": 0,
+              "filterType": 1,
+              "autoFilter": 0,
+              "pass": 1,
+              "preprocessing": 0,
+              "partitions": 0,
+              "partitionLimit": 0,
+              "alphaCompression": 1,
+              "alphaFiltering": 1,
+              "alphaQuality": 100,
+              "exact": 0,
+              "lowMemory": 0,
+              "sharpYuv": 0
+            },
+            "segmentQuantizers": [
+              34,
+              27,
+              21,
+              15
+            ],
+            "segmentFilterLevels": [
+              10,
+              6,
+              4,
+              2
+            ],
+            "segmentSizes": [
+              201,
+              133,
+              100,
+              127
+            ],
+            "blockCounts": [
+              0,
+              561,
+              0
+            ],
+            "alphaDataBytes": 30101,
+            "segmentMapHex": "010000000001010201020202020203030203020203020201010100000000000003000000000001000001010002010102030203010101000100000000000000000003010000010102010000010301020203030303020201010000010001010000000103000000000001000001000202020303030303020201000101000000000000000003000000000100010100010202020302030303030301010101010100000100000003000000000000000001010201010101030102010000020002000100020100000003000000000000010101020101000101030100010001000101010100000000000003000000010102000200010000000000020100010000010101030202000001000003010000010102020101000100000101030100000000010101030200020000000003020001010003020300000000000000020000000000000002020300020002000003020102010303030103000001000000010000000000000103030202010101010003010202010303030302000000000001030100000001010202030302020001000003030202030303030303030302020203030202020203030203030303030203030103020202020202030201010201010201030101010102010202030302020201010103020101010303030202000000000001020000000000000203030303030201010003020000010203030102000000000000020000000000000102020302010000010003030303030303030303030303030303030303030303030303030303030303030303"
+          },
+          "raw": "tmp/e83-boundary-asymmetric-q75-m1.bin.gz",
+          "nativeOnlyNotManagedConfirmation": true
+        }
+      ],
+      "nativeCompleteEncodes": 3,
+      "timingRuns": 0
+    },
+    "additionalBoundaryImplementationNote": "Before low-quality ALPH wiring, qualify the shared clustering sampling capacity: it must hold the fixed nine-entry candidate queue even when the quality-dependent greedy threshold is1or2. Existing public lossless quality75 and private alpha quality32 proofs do not exercise this storage bound. No unrelated quality/settings grid is added."
   },
   "fastSourceAnalysis": {
     "round": "E82",
@@ -5892,5 +6122,345 @@
     },
     "qualificationReuse": "Public codec integration/full/differential/actual-package evidence remains scoped to its unchanged paths. No repeated local package proof for the private source primitive. Current commit receives automatic full/package/live CI.",
     "remaining": "Method0/1/2 distortion refinement and non-token statistics/emission are next; source-only agreement does not qualify their packets. Remaining named method3/trellis/quality/ALPH6/header/public/decoder/performance/functionality/release cases remain open."
+  },
+  "distortionDecision": {
+    "round": "E83",
+    "scope": "Private method0/1/2 distortion-only selection and reconstruction on existing diagramQ75, all statistics/final pass calls. Public lossy unchanged; no managed non-token full-packet claim yet.",
+    "files": {
+      "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": {
+        "bytes": 1740800,
+        "sha256": "87774d1b77a8a6aad2fa32f1ee68e1f82c7816f07d4d9d17ac3d587e7370d109"
+      },
+      "src/Lokad.Image/Internal/Vp8DistortionDecision.cs": {
+        "bytes": 11076,
+        "sha256": "0198a3273dbe4b8ac2a3cfcac6d9082d1e5858ba3f51f90ba77762ceacec90e8"
+      },
+      "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": {
+        "bytes": 17687,
+        "sha256": "5faee422612ff9f7929e9497b02b14ecee89045da2a0af7f118e6c49c52c5acd"
+      },
+      "src/Lokad.Image/Internal/Vp8QuantizationPlan.cs": {
+        "bytes": 7494,
+        "sha256": "13c2ef622c534fbc7c838bca51c9d8137e86dc66cf1333963886bb04cdfff5b3"
+      },
+      "tests/Lokad.Image.Tests/Vp8DistortionDecisionTests.cs": {
+        "bytes": 18660,
+        "sha256": "73bfd657d9ab376cde0fe6ed05d0afa24f7e95d0e4fbad14f71cd33650d8eacd"
+      },
+      "tools/WarmReference/vp8-distortion-decision-observer.c": {
+        "bytes": 5377,
+        "sha256": "f9d12606f11e5e0b329a29f06699b91d6a2d184ec29a86132a61080ab3c4199b"
+      },
+      "tmp/e83-frame-tests-before-method3.cs": {
+        "bytes": 11069,
+        "sha256": "a51fb34cfa61fd390839f73c24ddd9c8dc661027319d3f0d088692579b75007b"
+      }
+    },
+    "sameWindowsBuiltAssemblyBothOS": true,
+    "normalPerOS": 429,
+    "scalarPerOS": 429,
+    "newDecisionChecks": 8,
+    "priorChecksReconfirmed": 421,
+    "calls": 2945,
+    "beforeAndAfterDecisionBytes": 5280385,
+    "nativeParametersBytes": 12048,
+    "builds": {
+      "windowsLinkedTestsSuccessful": 2,
+      "windowsCompileAttempts": 3,
+      "linuxManaged": 0,
+      "publicCore": 0,
+      "sourceModel": 0,
+      "nativeObserver": 1,
+      "nativeObserverCompileAttempts": 1
+    },
+    "compileCorrection": "Choose the mutable MemoryMarshal.Cast overload explicitly in the aliasing test. No executed production arithmetic correction; stale DLL was not tested after the failed compile.",
+    "nativeCompleteEncodes": 3,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "nativeMaster": {
+      "name": "e83-native-distortion-decisions.tar.xz",
+      "bytes": 681396,
+      "members": 8,
+      "sha256": "d328b354e8ef012cd14bb0de2399c5cc4d8ae9f0380eca2a4fef895666e1759f",
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "linux": {
+        "beforeBytes": 4998871039,
+        "retiredArchiveVerifiedWorkerBytes": 727872,
+        "afterBytes": 4998824563,
+        "allMembersRead": true
+      }
+    },
+    "localDiagnosticTraces": "Initial successful build generated full managed decision traces. Production sources stayed unchanged while ownership tests were added. Final immutable assembly independently reconfirms every before/after native hash. Preserve traces as uncompressed payloads in the master for compression across repeated states.",
+    "newCiRegression": {
+      "source": "tests/Lokad.Image.Tests/Vp8FrameEncodingTests.cs",
+      "sha256": "12edf4d01569211e2f0643b65be0dbfa01d8ff6d1b0e5568250c20890fde4023",
+      "includedInLocalFrozenAssembly": false,
+      "reason": "A single durable method3 packet row is ported from the verified same-assembly E84 frontend and will compile/run in full Windows/Linux CI. Production inputs are unchanged; no extra local whole-test/package rebuild."
+    },
+    "algorithm": "Original prediction SSE is weighted256 and combined with fixed mode-header biases106/11/120 for I16/I4/UV. Strict earlier ties are preserved. Method0/1 retain source-selected block type; method2 reexamines I16/I4 with the dimension-derived header limit. Flat image borders force I16 DC/vertical while retaining the native decision score. I4 reconstructs only each selected mode to generate its next neighbors. Method0 retains source UV, method1/2 reexamine it. Within-macroblock chroma DC correction is reused without publishing errors to neighbor macroblocks, exactly as observed.",
+    "matrices": "All initial segment parameters, four sets of three80-int matrices and used costs match. Non-full-SNS method0/1/2 texture cost is clamped to1 rather than the method4 strength. The new explicit method parameter leaves default method4 unchanged.",
+    "verified": [
+      "All2945 statistics/final-pass decisions match native:701/1122/1122calls for methods0/1/2 on the original diagram. Source/border/mode/diffusion inputs and all output scores, modes, coefficients and reconstructed pixels match. All12048native parameter bytes also match.",
+      "Before-input comparison excludes coefficient NZ contexts, which the distortion-only decision never uses. Non-token NZ/skip/probability/emission qualification remains open; no managed method0/1/2 packet claim follows from this stage.",
+      "Result tails and aliases pass, with no per-block owned capacity or reservation. Invalid modes/options/result overlap reject before writes. Caller-owned scratch admission, terminal refusal, cancellation, late work failure, input preservation and recovery pass.",
+      "Same immutable assembly429checks per OS normal/scalar, including all421previous checks. No executed production arithmetic correction; one test-only mutable-span overload compile fix."
+    ],
+    "scratchBytes": 16384,
+    "rawArchive": {
+      "name": "e83-distortion-and-method3-qualified.tar.xz",
+      "bytes": 853784,
+      "members": 47,
+      "sha256": "2d4c145a65ee548de675620a56ecb9ae1ffd245d4d8fb7a6127e6bb01e59cb73",
+      "everySourceMemberByteVerified": true,
+      "mirrored": true,
+      "tracePayloads": [
+        {
+          "sourceGzip": "tmp/e83-managed-m0.bin.gz",
+          "storedPayload": "tmp/e83-managed-m0.bin",
+          "bytes": 1256893,
+          "sha256": "bf4a9334070a45b6af1176903fd09effa71b4f2b54731ba62088df088425a9df",
+          "everyByteEqualsNativeDecisionRecords": true
+        },
+        {
+          "sourceGzip": "tmp/e83-managed-m1.bin.gz",
+          "storedPayload": "tmp/e83-managed-m1.bin",
+          "bytes": 2011746,
+          "sha256": "b8056384316e3aab0a2d3b1cbc4bbc7e49fbdf0dc7837d3e8fcc8473b00dbed2",
+          "everyByteEqualsNativeDecisionRecords": true
+        },
+        {
+          "sourceGzip": "tmp/e83-managed-m2.bin.gz",
+          "storedPayload": "tmp/e83-managed-m2.bin",
+          "bytes": 2011746,
+          "sha256": "c95980b7b1c42e26423056802006426e6ce685cb633a74297d3222387696f330",
+          "everyByteEqualsNativeDecisionRecords": true
+        }
+      ],
+      "storage": {
+        "windowsAfterMaster": 4998550468,
+        "linux": {
+          "beforeMasterBytes": 4998860227,
+          "afterMasterBytes": 4999714011,
+          "allMembersRead": true
+        },
+        "capBytes": 5000000000,
+        "allPeaksBelowCap": true,
+        "windowsBuildPeak": 4999778390
+      }
+    },
+    "coldCoreCleanup": {
+      "archive": "tmp/e83-cold-completed-cores-linux.tar.xz",
+      "bytes": 341624,
+      "sha256": "e9449ea88cf91624397847e72e3f8cd0b7f3464c0dba92052d400c9b2013dcc4",
+      "mirrored": true,
+      "files": [
+        {
+          "path": "tmp/c182-runtime/Lokad.Image.dll",
+          "bytes": 738816,
+          "sha256": "2244006d91c7e215989a1e72076c0f8e9231241a7faa1d24e834ad2fe864ce18"
+        },
+        {
+          "path": "tmp/c3-runtime/Lokad.Image.dll",
+          "bytes": 612352,
+          "sha256": "d36ac29cd49593c680e62d79d74392658308883de79d367831e92f22215e205b"
+        },
+        {
+          "path": "tmp/c4c-runtime/Lokad.Image.dll",
+          "bytes": 614912,
+          "sha256": "74284a347144fb287888997b628ddad822fedb4faa8dfe845caedf4410e16217"
+        }
+      ],
+      "restoreForHistoricalReplay": true,
+      "scope": "Three completed qualification cores are cold archived byte-exact. Their deps and raw evidence remain; previously archived symbols can be restored for strict replay. ActiveE82 runner, packages and reference sources stay.",
+      "retirement": {
+        "beforeBytes": 4999762246,
+        "retiredLooseBytes": 1966080,
+        "archiveBytes": 341624,
+        "afterBytes": 4998137790,
+        "allOriginalBytesVerified": true
+      }
+    },
+    "windowsDuplicateCleanup": {
+      "buildCopies": [
+        {
+          "removed": "tests/Lokad.Image.Tests/obj/Release/net10.0/Lokad.Image.Tests.dll",
+          "retained": "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll",
+          "bytes": 1723392,
+          "sha256": "21daeb10f0af48c2949b189d1ae15d3b683cb9b50d7ebf9b7154c53ffec2ea7f"
+        },
+        {
+          "removed": "tests/Lokad.Image.Tests/obj/Release/net10.0/Lokad.Image.Tests.pdb",
+          "retained": "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb",
+          "bytes": 632580,
+          "sha256": "52b6fb5b7852972437e7c463cd1fdc7bedbb9921e3ebcc65d63f14397debbee7"
+        },
+        {
+          "removed": "tmp/e71-runtime/Lokad.Image.Tests.dll",
+          "retained": "tmp/e82-fast-source-analysis-qualified.tar.xz and current test bin",
+          "bytes": 1723392,
+          "sha256": "21daeb10f0af48c2949b189d1ae15d3b683cb9b50d7ebf9b7154c53ffec2ea7f"
+        }
+      ],
+      "archiveBackedPackets": [
+        {
+          "path": "tmp/e83-native-diagram-m0.bin.gz",
+          "archive": "tmp/e83-native-distortion-decisions.tar.xz",
+          "bytes": 105490,
+          "sha256": "85d3a0bbe31241d212c4c63851dbfcbcc34313ed98ea5951a92b01a1536f5130"
+        },
+        {
+          "path": "tmp/e83-native-diagram-m1.bin.gz",
+          "archive": "tmp/e83-native-distortion-decisions.tar.xz",
+          "bytes": 152833,
+          "sha256": "dac65c5cd96624aaa14162bccd270b64b13a73e05366baaa2d7a7891203fcd37"
+        },
+        {
+          "path": "tmp/e83-native-diagram-m2.bin.gz",
+          "archive": "tmp/e83-native-distortion-decisions.tar.xz",
+          "bytes": 149778,
+          "sha256": "2dcb922e7c69401598cec59ae38db3a1cf5c6a436580d91c9d14036a35daac0e"
+        },
+        {
+          "path": "tmp/e82-native-diagram-m0.bin",
+          "archive": "tmp/e82-fast-source-analysis-qualified.tar.xz",
+          "bytes": 16780,
+          "sha256": "8d681ce8fd471a5fa27286faae2f4bb4b9c47488c6f20a8866ff969045c6398e"
+        },
+        {
+          "path": "tmp/e82-native-diagram-m0.post-segment.bin",
+          "archive": "tmp/e82-fast-source-analysis-qualified.tar.xz",
+          "bytes": 16761,
+          "sha256": "f781e788c94cce2c1f26a613be74d0149b12aaa4804634cf312f4c1d91140094"
+        },
+        {
+          "path": "tmp/e82-native-diagram-m1.bin",
+          "archive": "tmp/e82-fast-source-analysis-qualified.tar.xz",
+          "bytes": 16044,
+          "sha256": "272df21d09fa68fca310ec83f20ef9d3e63475a0dbbc31f5e634fa31f9a24733"
+        },
+        {
+          "path": "tmp/e82-native-diagram-m1.post-segment.bin",
+          "archive": "tmp/e82-fast-source-analysis-qualified.tar.xz",
+          "bytes": 16025,
+          "sha256": "712fcd12cd4f15089fd9c6e113806363226f2dd0609cbf980c271aa0303239e9"
+        },
+        {
+          "path": "tmp/e82-native-diagram-m4.bin",
+          "archive": "tmp/e82-fast-source-analysis-qualified.tar.xz",
+          "bytes": 13899,
+          "sha256": "86e8c00d185585ea392d5c5e579cd632a8b64703ba2cd1844a1d6abb08778118"
+        },
+        {
+          "path": "tmp/e82-native-diagram-m4.post-segment.bin",
+          "archive": "tmp/e82-fast-source-analysis-qualified.tar.xz",
+          "bytes": 13881,
+          "sha256": "3bd155d2695d3c848bf96530c4f77979881e0526749783307be21865431c3e99"
+        }
+      ]
+    },
+    "parentCi": {
+      "headSha": "29f1154c67e680a42870d476739181d93f6618a9",
+      "run": 39981872086,
+      "conclusion": "success",
+      "allThreeJobs": true
+    }
+  },
+  "method3PacketReuse": {
+    "round": "E84",
+    "scope": "Private method3 quality75 original diagramRGBA8 packet only, using unchanged E83 production/test assembly; public lossy unchanged.",
+    "proofs": {
+      "normal-windows": {
+        "scope": "Private method3 quality75 existing diagram RGBA8 only; public lossy encoder unchanged",
+        "producerSha256": "87774d1b77a8a6aad2fa32f1ee68e1f82c7816f07d4d9d17ac3d587e7370d109",
+        "method": 3,
+        "quality": 75,
+        "packetBytes": 7082,
+        "packetSha256": "3bea8726b4473a4f1436a621229d12a489603537ebbd54945044241d3d478dda",
+        "syncAndAsyncExact": true,
+        "sourceAndFrameDisposedBeforeDelivery": true,
+        "borrowedRootAndStreamsSurvive": true,
+        "retainedAccountingBytes": 11008,
+        "releasedBeforeContextDisposal": 0,
+        "cpuOrGcAllocationMeasurements": false
+      },
+      "scalar-windows": {
+        "scope": "Private method3 quality75 existing diagram RGBA8 only; public lossy encoder unchanged",
+        "producerSha256": "87774d1b77a8a6aad2fa32f1ee68e1f82c7816f07d4d9d17ac3d587e7370d109",
+        "method": 3,
+        "quality": 75,
+        "packetBytes": 7082,
+        "packetSha256": "3bea8726b4473a4f1436a621229d12a489603537ebbd54945044241d3d478dda",
+        "syncAndAsyncExact": true,
+        "sourceAndFrameDisposedBeforeDelivery": true,
+        "borrowedRootAndStreamsSurvive": true,
+        "retainedAccountingBytes": 11008,
+        "releasedBeforeContextDisposal": 0,
+        "cpuOrGcAllocationMeasurements": false
+      },
+      "normal-linux": {
+        "scope": "Private method3 quality75 existing diagram RGBA8 only; public lossy encoder unchanged",
+        "producerSha256": "87774d1b77a8a6aad2fa32f1ee68e1f82c7816f07d4d9d17ac3d587e7370d109",
+        "method": 3,
+        "quality": 75,
+        "packetBytes": 7082,
+        "packetSha256": "3bea8726b4473a4f1436a621229d12a489603537ebbd54945044241d3d478dda",
+        "syncAndAsyncExact": true,
+        "sourceAndFrameDisposedBeforeDelivery": true,
+        "borrowedRootAndStreamsSurvive": true,
+        "retainedAccountingBytes": 11008,
+        "releasedBeforeContextDisposal": 0,
+        "cpuOrGcAllocationMeasurements": false
+      },
+      "scalar-linux": {
+        "scope": "Private method3 quality75 existing diagram RGBA8 only; public lossy encoder unchanged",
+        "producerSha256": "87774d1b77a8a6aad2fa32f1ee68e1f82c7816f07d4d9d17ac3d587e7370d109",
+        "method": 3,
+        "quality": 75,
+        "packetBytes": 7082,
+        "packetSha256": "3bea8726b4473a4f1436a621229d12a489603537ebbd54945044241d3d478dda",
+        "syncAndAsyncExact": true,
+        "sourceAndFrameDisposedBeforeDelivery": true,
+        "borrowedRootAndStreamsSurvive": true,
+        "retainedAccountingBytes": 11008,
+        "releasedBeforeContextDisposal": 0,
+        "cpuOrGcAllocationMeasurements": false
+      }
+    },
+    "frontendFiles": {
+      "tmp/e84-packet-probe.cs": {
+        "bytes": 4641,
+        "sha256": "11c75441dc1d76b930722f4c9753f40d35468412da40acf6d90e1c2b1a7634fd"
+      },
+      "tmp/e84-packet-probe.dll": {
+        "bytes": 14848,
+        "sha256": "4d1fcbf6ae3fd5aad00da18ca20611d04a231f9e0d44b5795904b66f7e326d9d"
+      },
+      "tmp/e84-packet-probe.runtimeconfig.json": {
+        "bytes": 107,
+        "sha256": "c0fd7db59ed475b07de84e1bd98738f894cd9c96c6bcfa72783b457807afecda"
+      }
+    },
+    "builds": {
+      "production": 0,
+      "testAssembly": 0,
+      "native": 0,
+      "probeFrontend": 1,
+      "probeFrontendCompileAttempts": 1
+    },
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "nativeReferenceReuse": "Existing E81 diagramQ75method3 complete7082B packet, no settings/input/calibration change. Method3 uses the token loop under pinned low_memory=0; fast-probe wording from the earlier audit was speculative and is corrected in the maintained ledger.",
+    "next": "Stop this passing private case; preserve the regression in CI/public integration. Continue the named non-token, trellis, quality/alpha/header/public/decoder/performance/functional/release checklist.",
+    "rawArchive": {
+      "name": "e83-distortion-and-method3-qualified.tar.xz",
+      "bytes": 853784,
+      "members": 47,
+      "sha256": "2d4c145a65ee548de675620a56ecb9ae1ffd245d4d8fb7a6127e6bb01e59cb73",
+      "mirrored": true,
+      "everySourceMemberByteVerified": true
+    },
+    "regressionTest": "One method3 row added to Vp8FrameEncodingTests from this verified probe. It is not in the local frozen DLL; full Windows/Linux CI compiles and runs it at this coherent checkpoint. Existing production inputs and their same-assembly proofs are reused."
   }
 }
