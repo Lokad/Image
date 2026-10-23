@@ -64,11 +64,17 @@ Coefficient histograms now match1,122 native luma/UV summaries on the same opaqu
 control, plus ten original population probes. Native SIMD/scalar results agree.
 Borrowed counters accumulate magnitude buckets with saturation; empty-bin and tie
 rules match. The separately inspected raw-score ratio stays unclamped until mixing.
-Current same-assembly qualification passes115checks per platform, normal and SIMD
+Histogram qualification passed115checks per platform, normal and SIMD
 disabled, including all103previous checks; no public encoder body changed.
 
 A public backend observer reproduces all four frozen FFmpeg packets before exposing
 segment maps, quantizers and filter levels. Those observations are fixed test data
-for the next source-analysis implementation. Next are source-border predictors,
-segmentation/quantizers and macroblock decisions, then entropy/framing and ALPH
-coding, preserving the four fixed packet targets.
+for the next source-analysis implementation. Large-block prediction now matches861,696 native candidate pixels across the
+same561macroblocks: all four DC/true-motion/vertical/horizontal modes at16×16Y
+and8×8UV. The control includes absent top/left borders, clipped true-motion and
+partial-image replication. Native SIMD/scalar streams agree. Borrowed destination
+can overlap its borders using a32-byte stack snapshot, with no retained storage.
+Current same-assembly qualification passes131checks per platform, normal and SIMD
+disabled, including all115previous checks. Actual mode decisions remain open.
+Next are composed source analysis, segmentation/quantizers and macroblock decisions,
+then entropy/framing and ALPH coding, preserving the four fixed packet targets.

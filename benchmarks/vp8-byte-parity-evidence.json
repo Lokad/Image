@@ -1,7 +1,7 @@
 {
   "project": "Lokad.Image",
-  "latestRound": "E68",
-  "scope": "Private unwired conversion/cleanup/forwardtransforms and coefficient-histogram summaries. Native analysis decisions frozen from4byte-matched FFmpeg packets; managed source analysis/full encoder still open.",
+  "latestRound": "E69",
+  "scope": "Private unwired input/transform/histogram and large-block prediction stages. Composed source analysis/full managed VP8 encoder remain open.",
   "productionPublicBehaviorChanged": false,
   "fullObjectiveOpen": true,
   "reference": {
@@ -1020,6 +1020,168 @@
       "members": 18,
       "sha256": "4c7adf32d490ee3bf0494c6c3bbb7168061285fc20ef8919f1815e146aa9021a",
       "everySourceMemberByteVerified": true,
+      "mirrored": true
+    }
+  },
+  "blockPredictionStage": {
+    "round": "E69",
+    "source": "src/Lokad.Image/Internal/Vp8BlockPrediction.cs",
+    "privatePreparationOnly": true,
+    "nativeObserver": {
+      "round": "E69",
+      "scope": "Large-blockprediction arithmetic only, all4native modes/16x16Y and8x8UV, source-border/edge replication on ONE existing opaque513x259raster. No actual RDO/mode-choice or complete managed encoder claim.",
+      "sourceYuvSha256": "f1e516c70c0d315b2f785b90fdd6a6c6e26e30eca898b7f1616380ab18aae715",
+      "sourceSha256": "d00285106a1b7b1738e39e792e9ce1e144b94cff864d22e705da399cf2f31ae0",
+      "workerSha256": "3126ebc8087176534c9707b91987dd1bbf06903da0c976b6cb76b678f4334884",
+      "backendArchiveSha256": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+      "flags": [
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "observations": [
+        {
+          "cpu": "normal",
+          "bytes": 861696,
+          "sha256": "5ed6b6c81fd98621682aabdd9399366e4334135dd6245d07f90062770becf67e",
+          "ready": {
+            "scalar": false,
+            "width": 513,
+            "height": 259,
+            "macroblocks": 561,
+            "modes": 4,
+            "bytesPerMacroblock": 1536
+          }
+        },
+        {
+          "cpu": "scalar",
+          "bytes": 861696,
+          "sha256": "5ed6b6c81fd98621682aabdd9399366e4334135dd6245d07f90062770becf67e",
+          "ready": {
+            "scalar": true,
+            "width": 513,
+            "height": 259,
+            "macroblocks": 561,
+            "modes": 4,
+            "bytesPerMacroblock": 1536
+          }
+        }
+      ],
+      "normalScalarEveryByteEqual": true,
+      "modeHashes": [
+        {
+          "mode": 0,
+          "size": 16,
+          "bytes": 143616,
+          "sha256": "234672ca1ab8b085ca584ef900a01f2d4a8a469b4f785557729a795f8dc33910"
+        },
+        {
+          "mode": 0,
+          "size": 8,
+          "bytes": 71808,
+          "sha256": "2abd06b92411540c4cb14409d06886914c3685c62287934c866600ca06b3ff30"
+        },
+        {
+          "mode": 1,
+          "size": 16,
+          "bytes": 143616,
+          "sha256": "909f9c0be9e98ccbd56974ab8fb8eb5ac3c41c776e73cce1e57ab1bb2cf22604"
+        },
+        {
+          "mode": 1,
+          "size": 8,
+          "bytes": 71808,
+          "sha256": "8bbb743ad5ea96f7cf2a5e3c394ba83bf31aa0aefbc1725917734525c3944e6d"
+        },
+        {
+          "mode": 2,
+          "size": 16,
+          "bytes": 143616,
+          "sha256": "d0f543b2356eb2efcbafe96fdea5e1898b3a8ad7a111ed1e75e396e3beb9b116"
+        },
+        {
+          "mode": 2,
+          "size": 8,
+          "bytes": 71808,
+          "sha256": "5b3ff97e0763c8682025d81b48988245a5fe4b6a5377430fec88ce0064f3ae55"
+        },
+        {
+          "mode": 3,
+          "size": 16,
+          "bytes": 143616,
+          "sha256": "9f477139957092ef48bed939276f178b6340364f4662434320c9af0470edd4bb"
+        },
+        {
+          "mode": 3,
+          "size": 8,
+          "bytes": 71808,
+          "sha256": "8a8311240abceefdf3da3029219a9a2fdc610e5cc4f0360469115c3e7d0c2713"
+        }
+      ],
+      "rawOrder": "macroblock row order, then mode0DC/1TM/2vertical/3horizontal; each mode hasY256bytes then8rows interleavedU8/V8.",
+      "compressedRaw": {
+        "name": "e69-native-predictions.bin.gz",
+        "bytes": 170089,
+        "sha256": "e399427508500f8527a41e38ef7c3e30cb3edae7d6db8598def6a27701b0db5a"
+      },
+      "nativeCompleteEncodes": 0,
+      "timingRuns": 0
+    },
+    "worker": {
+      "bytes": 1534976,
+      "sha256": "e7cc4726e470e025ac905c6c7faa40d24406e502e2d896eb63e242c4ff1ef8de"
+    },
+    "sourceFiles": {
+      "src/Lokad.Image/Internal/Vp8BlockPrediction.cs": {
+        "bytes": 2215,
+        "sha256": "1e48c51206b0632b568715b992ec807cf0c2b9146cf0b3cf6a35f2108587cadd"
+      },
+      "tests/Lokad.Image.Tests/Vp8BlockPredictionTests.cs": {
+        "bytes": 4376,
+        "sha256": "b6ec85bbfa8c41cb0d8acd4b62f7d31b93c1bd049382343eeb468ea731a869d6"
+      },
+      "tools/WarmReference/vp8-prediction-observer.c": {
+        "bytes": 3616,
+        "sha256": "d00285106a1b7b1738e39e792e9ce1e144b94cff864d22e705da399cf2f31ae0"
+      }
+    },
+    "algorithm": "Independent RFC6386section12 DC/true-motion/vertical/horizontal prediction at16luma/8chroma sizes. Explicit absent borders/default127/128/129 and clipped true-motion. Borrowed supplied borders/destination;32Bminor stack snapshot supports aliasing, no heap/cache/owner/per-block reservation. Caller selects source or reconstructed borders and admits work/cancellation.",
+    "verified": [
+      "All861696candidate pixel bytes on561MBs of ONE existing opaque control match pinned nativeDSP; nativeSIMD/forcedscalar streams byte-identical. Eight mode/size hashes qualify16x16Y and interleaved8x8U/V independently.",
+      "Source-border imports include firstrow/column/bothabsent, interior corners, clippedtrue-motion and right/bottom replication at513x259. This does not qualify actual RDO/mode decisions.",
+      "Separate borrowed border/source pixels remain unchanged; aliased destination uses original border values and preserves destination tails."
+    ],
+    "qualification": {
+      "sameWindowsBuiltAssemblyBothOS": true,
+      "normalPerOS": 131,
+      "scalarPerOS": 131,
+      "newPredictionChecks": 16,
+      "priorChecksReconfirmed": 115
+    },
+    "builds": {
+      "windowsLinkedInternalTests": 1,
+      "linux": 0,
+      "publicProductionCore": 0,
+      "nativeObserver": 1,
+      "sourceModel": 0
+    },
+    "nativePrimitiveObservations": 2,
+    "nativeCompleteEncodes": 0,
+    "timingRuns": 0,
+    "allocationsMeasured": false,
+    "evidenceReuse": "All existing private stage bodies unchanged, all115checks reconfirmed in one new assembly bothOS normal/scalar. Existing public codec body/call graph unchanged, so retain E62frozen public-core/full/differential/actualpackage and unaffected producer evidence; no repeated local full/package proof.",
+    "remaining": "Compose original-source perMB DC/TM scores/modes, mixed susceptibility, deterministic clustering/smoothing andquant/filter parameters. Actual intra4/intra16/RDO/coefficients, entropy/ALPH/fullpackets/public integration and all original decoder/performance/functional/memory/release scope remain open.",
+    "rawArchive": {
+      "name": "e69-block-prediction-qualified.tar.xz",
+      "bytes": 656820,
+      "members": 18,
+      "sha256": "db516b65fb158b7d749a46b9249b08053e22d9b76ec440867ee4a6535604ca05",
+      "everySourceMemberByteVerified": true,
+      "sameRawMembersAsInitialGzip": true,
+      "initialUnpublishedGzipSha256": "eceaf804c6170baa70f91a3ee0c93db6abfd21eac4d87a91866c6eb3b911f418",
+      "reason": "Smaller new container before publication, exact raw data retained.",
       "mirrored": true
     }
   }
