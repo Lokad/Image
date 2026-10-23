@@ -10,10 +10,10 @@ public sealed class Vp8MacroblockDecisionTests
 {
     private static void WriteBefore(Span<byte> bytes, int index, int x, int y, byte segment,
         ReadOnlySpan<byte> source, ReadOnlySpan<byte> neighbors, ReadOnlySpan<byte> modes,
-        uint top, uint left, byte leftDc, ReadOnlySpan<sbyte> errors)
+        uint top, uint left, byte leftDc, ReadOnlySpan<sbyte> errors, int decisionLevel = 1)
     {
         "BEF8"u8.CopyTo(bytes); var at = 4;
-        foreach (var value in new[] { index, x, y, 1, (int)segment }) { BinaryPrimitives.WriteInt32LittleEndian(bytes[at..], value); at += 4; }
+        foreach (var value in new[] { index, x, y, decisionLevel, (int)segment }) { BinaryPrimitives.WriteInt32LittleEndian(bytes[at..], value); at += 4; }
         source[..384].CopyTo(bytes[24..]); neighbors[..71].CopyTo(bytes[408..]); modes[..8].CopyTo(bytes[479..]);
         BinaryPrimitives.WriteUInt32LittleEndian(bytes[487..], top); BinaryPrimitives.WriteUInt32LittleEndian(bytes[491..], left);
         BinaryPrimitives.WriteInt32LittleEndian(bytes[495..], leftDc); BinaryPrimitives.WriteInt32LittleEndian(bytes[499..], 1);
@@ -64,10 +64,11 @@ public sealed class Vp8MacroblockDecisionTests
     // Inputs and all rolling state below are generated here, without an oracle
     // file, native dependency, copied corpus or expected-state input at runtime.
     [Theory]
-    [InlineData("opaque", "96434ac268b05cdc2e48575fb179dd6fc06bacb517161bfc220df443b7ee0783", "712746471599612d0c67af42d67aeb9313377efdc3abe5dddb8fcbb3d9176871", "c3d707570839159f043e2d20025c9a936c4f60504acca655faf8e4def24d7e26", 0, 0)]
-    [InlineData("diagram", "7edee9f0b7b7be0dce5074b0d9b38804f25fff5079fb6fd60a873110941d07e6", "53b0c735333ac5b2def299cac2d6636c42dbe66049a8aea2c6f40dd9ffa42138", "c5c3326ccf2ec81011734300af1120b4a535b60c38368335436ee9a5164477ab", 353, 255)]
+    [InlineData("opaque", "96434ac268b05cdc2e48575fb179dd6fc06bacb517161bfc220df443b7ee0783", "712746471599612d0c67af42d67aeb9313377efdc3abe5dddb8fcbb3d9176871", "c3d707570839159f043e2d20025c9a936c4f60504acca655faf8e4def24d7e26", 0, 0, 4)]
+    [InlineData("diagram", "7edee9f0b7b7be0dce5074b0d9b38804f25fff5079fb6fd60a873110941d07e6", "53b0c735333ac5b2def299cac2d6636c42dbe66049a8aea2c6f40dd9ffa42138", "c5c3326ccf2ec81011734300af1120b4a535b60c38368335436ee9a5164477ab", 353, 255, 4)]
+    [InlineData("diagram", "d47a2887f3a9107bcd60cb0690e1ba0c571a58f346fa8f979c7d5457b36c3175", "3edef52edaa67c7bb29446ea0032413353656520f6474a05cb829fce1417e9a4", "5df4edf14b246acc1a4f603b84a9e3afd331294dffd54cc40eea896226ea1b2d", 349, 240, 5)]
     public void CompleteDecisionAndRollingStateMatchNativeOnOriginalControls(string name, string expectedBefore,
-        string expectedAfter, string expectedProfiles, int expectedIntra16, int expectedSkips)
+        string expectedAfter, string expectedProfiles, int expectedIntra16, int expectedSkips, int method)
     {
         using var root = new TestMemoryBudget(16_000_000); using var image = OriginalVp8lControls.Buffer(name, 8, root);
         using var context = new OperationContext(new() { MemoryBudget = root }, default); using var input = Vp8PreparedInput.Create(image, context);
@@ -88,7 +89,7 @@ public sealed class Vp8MacroblockDecisionTests
         Span<byte> before = stackalloc byte[511]; Span<byte> after = stackalloc byte[1282]; Span<byte> profile = stackalloc byte[1064];
         Vp8Distortion.TextureWeights(weights); using var preHash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
         using var postHash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256); using var profileHash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
-        using var trace = Environment.GetEnvironmentVariable("LOKAD_VP8_DECISION_TRACE") is { } path ? File.Create(path + "-" + name + ".bin") : null;
+        using var trace = Environment.GetEnvironmentVariable("LOKAD_VP8_DECISION_TRACE") is { } path ? File.Create(path + "-" + name + "-m" + method + ".bin") : null;
         Vp8RatePlan? rate = null; var selected16 = 0; var skips = 0; var original = Vp8PreparedInputTests.Hash(input);
         try
         {
@@ -120,11 +121,11 @@ public sealed class Vp8MacroblockDecisionTests
                 for (var p = 0; p < 4; p++) neighbors[67 + p] = x + 1 < columns ? yTop[(x + 1) * 16 + p] : yTop[x * 16 + 15];
                 modeTop.AsSpan(x * 4, 4).CopyTo(modeContexts); modeLeft.CopyTo(modeContexts[4..]);
                 Contexts(nonzero[x + 1], nonzero[x], leftDc, contexts); topErrors.AsSpan(x * 4, 4).CopyTo(errorInput); errorLeft.CopyTo(errorInput[4..]);
-                var segment = segments.Map[index]; WriteBefore(before, index, x, y, segment, source, neighbors, modeContexts, nonzero[x + 1], nonzero[x], leftDc, errorInput);
+                var segment = segments.Map[index]; WriteBefore(before, index, x, y, segment, source, neighbors, modeContexts, nonzero[x + 1], nonzero[x], leftDc, errorInput, method == 5 ? 2 : 1);
                 var retained = root.Bytes;
                 var score = Vp8MacroblockDecision.Select(source, neighbors, modeContexts, contexts, errorInput, y != 0, x != 0,
                     quantization.Matrix(segment, Vp8CoefficientPlane.Luma), quantization.Matrix(segment, Vp8CoefficientPlane.Walsh), quantization.Matrix(segment, Vp8CoefficientPlane.Chroma),
-                    quantization.Costs(segment), rate, weights, 65536, pixels, levels, modes, errors, context);
+                    quantization.Costs(segment), rate, weights, 65536, pixels, levels, modes, errors, context, method: method);
                 Assert.Equal(retained, root.Bytes); WriteAfter(after, index, score, modes, levels, pixels, errors);
                 preHash.AppendData(before); postHash.AppendData(after); trace?.Write(before); trace?.Write(after);
                 if (score.Intra16) selected16++; if (score.Nonzero == 0) skips++;
@@ -153,9 +154,11 @@ public sealed class Vp8MacroblockDecisionTests
     }
 
     [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public void BorrowedInputsCanAliasResultsAndInvalidLayoutsOrCancellationPreserveSeparateInputs(bool correctDc)
+    [InlineData(true, 4)]
+    [InlineData(false, 4)]
+    [InlineData(true, 5)]
+    [InlineData(false, 5)]
+    public void BorrowedInputsCanAliasResultsAndInvalidLayoutsOrCancellationPreserveSeparateInputs(bool correctDc, int method)
     {
         using var root = new TestMemoryBudget(16_000_000); using var image = OriginalVp8lControls.Buffer("opaque", 8, root);
         using var context = new OperationContext(new() { MemoryBudget = root }, default); using var input = Vp8PreparedInput.Create(image, context);
@@ -172,7 +175,7 @@ public sealed class Vp8MacroblockDecisionTests
             Span<byte> dst, Span<short> coefficients, Span<byte> modeOut, Span<sbyte> errorOut, OperationContext operation)
             => Vp8MacroblockDecision.Select(src, neighbors, modesIn, ctxIn, errorsIn, false, false,
                 quantization.Matrix(segment, Vp8CoefficientPlane.Luma), quantization.Matrix(segment, Vp8CoefficientPlane.Walsh), quantization.Matrix(segment, Vp8CoefficientPlane.Chroma),
-                quantization.Costs(segment), rate, weights, 65536, dst, coefficients, modeOut, errorOut, operation, correctDc);
+                quantization.Costs(segment), rate, weights, 65536, dst, coefficients, modeOut, errorOut, operation, correctDc, method);
         context.Reserve(Vp8MacroblockDecision.ScratchBytes);
         try
         {

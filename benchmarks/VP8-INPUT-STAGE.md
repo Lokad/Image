@@ -133,7 +133,7 @@ its task finishes. Terminal admission refusal, cleanup/recovery, local/work/outp
 limits and mismatched dimensions pass. Quality75 lossless packet checks also pass
 with the shared preparation changes; the scoped native inputs/settings stay fixed.
 
-The same immutable assembly passes448focused checks per platform on Windows/Linux,
+The same immutable assembly passes455focused checks per platform on Windows/Linux,
 normal and SIMD disabled, including the durable method3 packet row. The direct
 statistics extension reuses the prior decision/packet checks on that same producer. Shared admission covers
 owned capacity, retained results and replacement overlap. Refusal, cancellation,
@@ -158,7 +158,7 @@ targets; source-only qualification is distinct from complete-packet agreement:
 | Diagram Q75 / method1 | Fast source plus UV reexamination | 9,244 | Complete packet exact |
 | Diagram Q75 / method2 | Distortion-only I4/I16 reexamination | 7,330 | Complete packet exact |
 | Diagram Q75 / method3 | Basic RDO/token path, non-full SNS | 7,082 | Complete packet exact |
-| Diagram Q75 / method5 | Selected-mode luma AC trellis; ordinary Y2 | 7,026 | Open |
+| Diagram Q75 / method5 | Selected-mode luma AC trellis; ordinary Y2 | 7,026 | Complete packet exact |
 | Diagram Q75 / method6 | Trellis on every candidate | 6,818 | Open |
 | Diagram Q1 / method4 | Minimum quality and quantizer clamps | 2,304 | Complete packet exact |
 | Diagram Q85 / method4 | Public default quality | 8,898 | Complete packet exact |
@@ -248,7 +248,7 @@ Only the demonstrated Q100 mismatch needed a policy change: disable chroma DC
 correction above quality98. Incoming diffusion errors are ignored and no errors
 propagate in that branch; source/result aliasing and cancellation remain covered.
 There is no additional allocation or changed admission boundary. The three cases
-are stopped as passing. Trellis methods5/6 and the named alpha/header cases remain.
+are stopped as passing. Trellis method6 and the named alpha/header cases remain.
 
 The private luma trellis primitive matches432native records across the existing36
 signed transform fragments, two coefficient-probability profiles and allthree
@@ -261,6 +261,21 @@ disabled in that reference policy and add no required implementation grid.
 
 There is no retained primitive storage; the enclosing operation admits2,048bytes
 of bounded stack scratch. Invalid inputs, overlap, tails, cancellation and work
-refusal preserve borrowed buffers, with successful recovery. Managed method5/6
-complete packets remain open: the next step composes selected-mode reconstruction,
-including its ordinary second chroma reconstruction and diffusion state.
+refusal preserve borrowed buffers, with successful recovery. Method5 complete-packet composition now also passes. Method6 all-candidate
+composition remains open.
+
+Selected-mode method5 now reproduces the complete7,026-byte diagramQ75 packet and
+all561native macroblock records, including scores, levels, reconstructed pixels,
+nonzero contexts, diffusion errors and updated probabilities. Initial RDO modes,
+scores and filter statistics remain; final luma reconstruction uses trellis.
+I16 refinement advances nonzero edges, while selected I4 reuses the original
+edges for every sub-block. A second ordinary UV reconstruction updates its local
+six errors while retaining the first selected diffusion edges for the next block.
+
+The first differing macroblock isolated the I4 context rule; correcting that
+advance resolved both the full trace and packet. No size/quality search was used.
+There is no new retained storage or reservation boundary; the existing16KiB
+macroblock scratch allowance covers nested trellis scratch. Frame replacement
+peaks, terminal admission refusal, cancellation/late-work/local limits, aliasing,
+tails, recovery and independent sync/async output lifetimes pass. Method5 is stopped
+as passing on this scope. Method6, named alpha/header cases and public adoption remain.

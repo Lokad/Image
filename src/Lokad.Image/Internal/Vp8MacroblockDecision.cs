@@ -8,7 +8,8 @@ internal readonly record struct Vp8MacroblockScore(long Distortion, long Texture
 // Composed private encoder decision. All image/state/result buffers are borrowed;
 // the enclosing operation admits ScratchBytes once and checks work below. Source
 // pixels use compact Y16x16 followed by eight rows of U8|V8, all with stride16.
-// This does not switch the public encoder or implement the later trellis path.
+// This does not switch the public encoder. Method5 refines selected modes;
+// the all-candidate trellis policy remains a separate composed gate.
 internal static class Vp8MacroblockDecision
 {
     internal const int ScratchBytes = 16_384;
@@ -203,6 +204,81 @@ internal static class Vp8MacroblockDecision
         return best;
     }
 
+    // Method5 keeps the original RDO score/modes/filter statistic, then repeats
+    // reconstruction for those modes with luma trellis. Chroma remains ordinary
+    // quantization but uses the FIRST selected diffusion edges. Its second six
+    // errors replace only the local result, never the edges retained for next MB.
+    private static uint ReconstructSelected(ReadOnlySpan<byte> source, ReadOnlySpan<byte> neighbors,
+        ReadOnlySpan<byte> contexts, bool hasTop, bool hasLeft, bool intra16, int lumaMode, int uvMode,
+        ReadOnlySpan<byte> modes, Vp8QuantizationMatrix luma, Vp8QuantizationMatrix walsh,
+        Vp8QuantizationMatrix chroma, Vp8QuantizationCosts costs, Vp8RatePlan rate, bool correctDc,
+        Span<byte> pixels, Span<short> levels, Span<sbyte> errors, OperationContext context)
+    {
+        context.Work(16_384);
+        Span<short> coefficients = stackalloc short[256]; Span<short> dc = stackalloc short[16]; Span<short> y2 = stackalloc short[16];
+        Span<ushort> weights = stackalloc ushort[16]; Vp8TrellisQuantization.Weights(weights);
+        Span<byte> topNz = stackalloc byte[4]; Span<byte> leftNz = stackalloc byte[4];
+        contexts[..4].CopyTo(topNz); contexts.Slice(9, 4).CopyTo(leftNz); uint nz = 0;
+        if (intra16)
+        {
+            Vp8BlockPrediction.Fill(16, (Vp8IntraMode)lumaMode, hasTop ? neighbors.Slice(35, 16) : default,
+                hasLeft ? neighbors.Slice(1, 16) : default, neighbors[0], pixels[..256]);
+            for (var b = 0; b < 16; b++) { Transform(source, pixels, Block(b), coefficients.Slice(b * 16, 16)); dc[b] = coefficients[b * 16]; }
+            Vp8ForwardTransform.WalshDc(dc, y2);
+            if (Vp8BlockQuantization.Apply(y2, levels[..16], walsh)) nz |= 1u << 24;
+            for (var b = 0; b < 16; b++)
+            {
+                var x = b & 3; var y = b >> 2;
+                var any = Vp8TrellisQuantization.Apply(coefficients.Slice(b * 16, 16), levels.Slice(16 + b * 16, 16),
+                    luma, rate, weights, 0, topNz[x] + leftNz[y], costs.Luma16Trellis, context);
+                topNz[x] = leftNz[y] = any ? (byte)1 : (byte)0; levels[16 + b * 16] = 0;
+                if (any) nz |= 1u << b;
+            }
+            Vp8BlockReconstruction.WriteWalshDc(y2, coefficients);
+            for (var b = 0; b < 16; b++) Vp8BlockReconstruction.Add(coefficients.Slice(b * 16, 16), pixels[Block(b)..], 16);
+        }
+        else
+        {
+            Span<byte> top = stackalloc byte[8]; Span<byte> left = stackalloc byte[4]; Span<byte> trial = stackalloc byte[16];
+            Span<short> residual = stackalloc short[16];
+            for (var b = 0; b < 16; b++)
+            {
+                var bx = b & 3; var by = b >> 2; var x = bx * 4; var y = by * 4; var offset = Block(b);
+                for (var p = 0; p < 8; p++) top[p] = by == 0 || bx == 3 && p >= 4 ? Top(neighbors, x + p) : pixels[(y - 1) * 16 + x + p];
+                for (var p = 0; p < 4; p++) left[p] = bx == 0 ? neighbors[1 + y + p] : pixels[(y + p) * 16 + x - 1];
+                var corner = bx == 0 ? neighbors[y] : by == 0 ? Top(neighbors, x - 1) : pixels[(y - 1) * 16 + x - 1];
+                Vp8Prediction.SmallBlock((Vp8SmallIntraMode)modes[b], top, left, corner, trial);
+                for (var yy = 0; yy < 4; yy++) for (var xx = 0; xx < 4; xx++) residual[yy * 4 + xx] = (short)(source[offset + yy * 16 + xx] - trial[yy * 4 + xx]);
+                Vp8ForwardTransform.Dct(residual, coefficients);
+                var any = Vp8TrellisQuantization.Apply(coefficients[..16], levels.Slice(16 + b * 16, 16),
+                    luma, rate, weights, 3, topNz[bx] + leftNz[by], costs.Luma4Trellis, context);
+                Vp8BlockReconstruction.Add(coefficients[..16], trial, 4);
+                for (var yy = 0; yy < 4; yy++) trial.Slice(yy * 4, 4).CopyTo(pixels.Slice(offset + yy * 16, 4));
+                // Selected-mode I4 refinement reads the original edge contexts
+                // for every block. Unlike I16/candidate RDO it does not advance
+                // them after each reconstructed block.
+                if (any) nz |= 1u << b;
+            }
+        }
+        Span<byte> prediction = stackalloc byte[64]; var uvPixels = pixels.Slice(256, 128);
+        for (var plane = 0; plane < 2; plane++)
+        {
+            var left = plane == 0 ? 17 : 26;
+            Vp8BlockPrediction.Fill(8, (Vp8IntraMode)uvMode, hasTop ? neighbors.Slice(51 + plane * 8, 8) : default,
+                hasLeft ? neighbors.Slice(left + 1, 8) : default, neighbors[left], prediction);
+            for (var y = 0; y < 8; y++) prediction.Slice(y * 8, 8).CopyTo(uvPixels.Slice(y * 16 + plane * 8, 8));
+        }
+        for (var b = 0; b < 8; b++) Transform(source[256..], uvPixels, UvBlock(b), coefficients.Slice(b * 16, 16));
+        if (correctDc) CorrectDc(coefficients[..128], errors.Slice(6, 8), errors[..6], chroma);
+        else errors[..6].Clear();
+        for (var b = 0; b < 8; b++)
+        {
+            if (Vp8BlockQuantization.Apply(coefficients.Slice(b * 16, 16), levels.Slice(272 + b * 16, 16), chroma)) nz |= 1u << (16 + b);
+            Vp8BlockReconstruction.Add(coefficients.Slice(b * 16, 16), uvPixels[UvBlock(b)..], 16);
+        }
+        return nz;
+    }
+
     // Neighbors: Yleft(corner+16), Uleft(corner+8), Vleft(corner+8), Ytop16,
     // UVtop16 and Ytop-right4. Modes: top4/left4. NZ contexts: top9/left9.
     // Diffusion input: topU2V2/leftU2V2; output: selected6errors/top4/left4.
@@ -210,8 +286,9 @@ internal static class Vp8MacroblockDecision
         ReadOnlySpan<byte> modeContexts, ReadOnlySpan<byte> coefficientContexts, ReadOnlySpan<sbyte> diffusion,
         bool hasTop, bool hasLeft, Vp8QuantizationMatrix luma, Vp8QuantizationMatrix walsh, Vp8QuantizationMatrix chroma,
         Vp8QuantizationCosts costs, Vp8RatePlan rate, ReadOnlySpan<ushort> weights, int headerLimit,
-        Span<byte> pixels, Span<short> levels, Span<byte> modes, Span<sbyte> errors, OperationContext context, bool correctDc = true)
+        Span<byte> pixels, Span<short> levels, Span<byte> modes, Span<sbyte> errors, OperationContext context, bool correctDc = true, int method = 4)
     {
+        if (method is < 3 or > 5) throw new ArgumentOutOfRangeException(nameof(method));
         if (source.Length < 384 || neighbors.Length < 71 || modeContexts.Length < 8 || coefficientContexts.Length < 18
             || diffusion.Length < 8 || weights.Length < 16 || headerLimit < 0 || pixels.Length < 384 || levels.Length < 400 || modes.Length < 16 || errors.Length < 14)
             throw new ArgumentException("Incomplete VP8 macroblock state or result layout.");
@@ -244,6 +321,9 @@ internal static class Vp8MacroblockDecision
         var uv = Chroma(sourceCopy[256..], neighborsCopy, coefficientCopy, errorInput, hasTop, hasLeft, chroma, costs, rate,
             pixels.Slice(256, 128), levels.Slice(272, 128), errors[..14], context, out var uvMode, out var uvNz, correctDc);
         best = best.Add(uv);
-        return new(best.D, best.S, best.H, best.R, best.Total, nz | uvNz, lumaMode, uvMode, intra16, maxEdge);
+        nz |= uvNz;
+        if (method == 5) nz = ReconstructSelected(sourceCopy, neighborsCopy, coefficientCopy, hasTop, hasLeft,
+            intra16, lumaMode, uvMode, modes[..16], luma, walsh, chroma, costs, rate, correctDc, pixels[..384], levels[..400], errors[..14], context);
+        return new(best.D, best.S, best.H, best.R, best.Total, nz, lumaMode, uvMode, intra16, maxEdge);
     }
 }

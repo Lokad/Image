@@ -27,7 +27,7 @@ public sealed class Vp8FrameEncodingTests
         }
         internal Vp8FramePlan Frame(OperationContext? operation = null) => method <= 2
             ? Vp8FramePlan.CreateDistortion(Prepared, Analysis, Segments, Quantization, method, operation ?? Context, correctDc: quality <= 98)
-            : Vp8FramePlan.Create(Prepared, Segments, Quantization, operation ?? Context, correctDc: quality <= 98);
+            : Vp8FramePlan.Create(Prepared, Segments, Quantization, operation ?? Context, correctDc: quality <= 98, method: method);
         internal void ReleaseInputs() { Quantization.Dispose(); Segments.Dispose(); Analysis.Dispose(); Prepared.Dispose(); image.Dispose(); }
         public void Dispose() { ReleaseInputs(); Context.Dispose(); }
     }
@@ -44,6 +44,7 @@ public sealed class Vp8FrameEncodingTests
     [InlineData("diagram", 2304, "28bff919826e67d69d393f457d3920017ffff21cc3732e3db06d55a80f873f54", 4, 1)]
     [InlineData("diagram", 8898, "51a4abeda30c4f8c8b1dea563ab6690a89a5feed93b69c467398f9b736aeb536", 4, 85)]
     [InlineData("diagram", 15172, "6a4332bb32c3b93248a76eb804a0dc74d2c519d4955f310dcb94ef798cd2616e", 4, 100)]
+    [InlineData("diagram", 7026, "0e994ebda4b10234f2e9f00caf7ea6c27ae03ce82c1f3cada8eda355430cba68", 5, 75)]
     public async Task CompletePacketMatchesNativeWithIndependentSourceAndOutputLifetimes(string name, int bytes, string expected, int method, int quality)
     {
         using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs(name, root, method, quality); using var frame = input.Frame();
@@ -58,10 +59,12 @@ public sealed class Vp8FrameEncodingTests
         Assert.Equal(expected, Convert.ToHexStringLower(SHA256.HashData(first))); Assert.True(sync.CanWrite); Assert.True(asynchronous.CanWrite); Assert.False(root.IsDisposed);
     }
 
-    [Fact]
-    public void RetainedFrameAndReplacementUseOneRootAndReleaseIndependentlyOfInputs()
+    [Theory]
+    [InlineData(4)]
+    [InlineData(5)]
+    public void RetainedFrameAndReplacementUseOneRootAndReleaseIndependentlyOfInputs(int method)
     {
-        using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs("singleton", root); using var first = input.Frame();
+        using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs("singleton", root, method); using var first = input.Frame();
         var original = first.Coefficients.ToArray(); using var caller = root.CreateScope();
         Assert.True(caller.TryReserve(16_000_000 - root.Bytes - first.CapacityBytes + 1, out var held)); var baseline = root.Bytes;
         var error = Assert.Throws<ImageLimitException>(() => input.Frame()); Assert.Equal(ImageLimitScope.SharedBudget, error.Scope);
@@ -72,12 +75,14 @@ public sealed class Vp8FrameEncodingTests
         second.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed); Assert.Throws<ObjectDisposedException>(() => second.Coefficients.Length);
     }
 
-    [Fact]
-    public void OwnedAndTransientFrameRefusalsAreTerminalAndAllowSubsequentOperations()
+    [Theory]
+    [InlineData(4)]
+    [InlineData(5)]
+    public void OwnedAndTransientFrameRefusalsAreTerminalAndAllowSubsequentOperations(int method)
     {
         foreach (var available in new long[] { 2195, 2196 + 25265 - 1, 2196 + 25265 + 20192 - 1 })
         {
-            using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs("singleton", root); using var caller = root.CreateScope();
+            using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs("singleton", root, method); using var caller = root.CreateScope();
             Assert.True(caller.TryReserve(16_000_000 - root.Bytes - available, out var held)); var baseline = root.Bytes;
             var refusals = root.Refusals; var error = Assert.Throws<ImageLimitException>(() => input.Frame());
             Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
@@ -86,10 +91,12 @@ public sealed class Vp8FrameEncodingTests
         }
     }
 
-    [Fact]
-    public void FrameCancellationAndLateWorkFailureRefundAllNewOwnership()
+    [Theory]
+    [InlineData(4)]
+    [InlineData(5)]
+    public void FrameCancellationAndLateWorkFailureRefundAllNewOwnership(int method)
     {
-        using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs("singleton", root); var baseline = root.Bytes;
+        using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs("singleton", root, method); var baseline = root.Bytes;
         using var cancel = new CancellationTokenSource(); using var cancelled = new OperationContext(new() { MemoryBudget = root }, cancel.Token);
         root.Admitted = _ => cancel.Cancel(); Assert.Throws<OperationCanceledException>(() => input.Frame(cancelled));
         Assert.Equal(baseline, root.Bytes); root.Admitted = null;
