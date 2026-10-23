@@ -133,8 +133,8 @@ its task finishes. Terminal admission refusal, cleanup/recovery, local/work/outp
 limits and mismatched dimensions pass. Quality75 lossless packet checks also pass
 with the shared preparation changes; the scoped native inputs/settings stay fixed.
 
-The same immutable assembly passes411focused checks per platform on Windows/Linux,
-normal and SIMD disabled:250prior VP8,152VP8L and9new alpha/container checks. Shared admission covers
+The same immutable assembly passes421focused checks per platform on Windows/Linux,
+normal and SIMD disabled:259prior VP8 (including alpha),152VP8L and10fast-source checks. Shared admission covers
 owned capacity, retained results and replacement overlap. Refusal, cancellation,
 local/work limits and cleanup/recovery pass; sources and caller roots stay borrowed.
 The matrix owner retains3,128/4,128admitted bytes for3/4used segments. Earlier source
@@ -177,3 +177,17 @@ structured-failure/cleanup check at public adoption. Its older successful benchm
 row retains its original producer scope; failed operations must not become timing
 or packet passes. No work rescaling, limit increase or alternate-encoder retry is
 introduced. Full default-operation comparisons remain required.
+
+Fast method0/1 source analysis now matches every pre-segmentation record and
+histogram on the existing Q75 diagram:561macroblocks per method,5sourceI4 and
+556I16 decisions, global means244/42. It compares dispersion of sixteen padded
+4×4luma-cell sums and reuses the qualified chroma analysis. Source DC4 is stored
+in the existing mode plane; retained/scratch capacities remain2,835/1,024bytes.
+Default method4 source analysis and all earlier packet checks remain exact.
+
+The development observer captures iterator advancement before segmentation;
+observing only after analysis would report centroid-substituted susceptibility.
+Every accepted capture is gated by its unchanged complete native packet. Managed
+fast-source agreement is not yet full method0/1 packet agreement. Distortion
+refinement and non-token statistics/emission remain next, followed by the other
+named policies. No CPU or GC-allocation measurements were made.

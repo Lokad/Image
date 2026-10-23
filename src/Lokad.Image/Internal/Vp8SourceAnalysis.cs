@@ -19,6 +19,8 @@ internal sealed class Vp8SourceAnalysis : IDisposable
     internal int MeanChromaScore { get; private set; }
     private ReadOnlySpan<byte> Records => records ?? throw new ObjectDisposedException(nameof(Vp8SourceAnalysis));
     internal ReadOnlySpan<byte> Alpha => Records[..Count];
+    // 0=DC16, 1=TM16, 2=DC4. The fast source pass can select a block type;
+    // its choice is distinct from the final reconstruction/RDO decision.
     internal ReadOnlySpan<byte> LumaModes => Records.Slice(Count, Count);
     internal ReadOnlySpan<byte> ChromaModes => Records.Slice(2 * Count, Count);
     internal ReadOnlySpan<int> Histogram => histogram ?? throw new ObjectDisposedException(nameof(Vp8SourceAnalysis));
@@ -60,14 +62,41 @@ internal sealed class Vp8SourceAnalysis : IDisposable
         population.Clear();
         CollectPlane(source.Y, source.Stride, x * 16, y * 16, 16, mode, prediction, population, context);
         var luma = Vp8SourceHistogram.Describe(population);
+        return new(luma, MeasureChroma(source, x, y, mode, prediction, population, context));
+    }
+
+    private static Vp8SourceHistogram.Shape MeasureChroma(Vp8PreparedInput source, int x, int y, Vp8IntraMode mode,
+        Span<byte> prediction, Span<int> population, OperationContext context)
+    {
         population.Clear();
         CollectPlane(source.U, source.Stride / 2, x * 8, y * 8, 8, mode, prediction, population, context);
         CollectPlane(source.V, source.Stride / 2, x * 8, y * 8, 8, mode, prediction, population, context);
-        return new(luma, Vp8SourceHistogram.Describe(population));
+        return Vp8SourceHistogram.Describe(population);
     }
 
-    internal static Vp8SourceAnalysis Create(Vp8PreparedInput source, OperationContext context)
+    private static byte FastLumaMode(Vp8PreparedInput source, int x, int y, int quality, OperationContext context)
     {
+        // Compare dispersion of the sixteen 4x4 cell sums. Source padding is
+        // already admitted and filled, including partial right/bottom blocks.
+        context.Work(512); uint total = 0, squares = 0;
+        var pixels = source.Y; var start = y * 16 * source.Stride + x * 16;
+        for (var cy = 0; cy < 4; cy++) for (var cx = 0; cx < 4; cx++)
+        {
+            uint cell = 0;
+            for (var row = 0; row < 4; row++) for (var column = 0; column < 4; column++)
+                cell += pixels[start + (cy * 4 + row) * source.Stride + cx * 4 + column];
+            total += cell; squares += cell * cell;
+        }
+        var threshold = (uint)(8 + 9 * quality / 100);
+        // The observed comparison uses modulo-2^32 unsigned products, including
+        // the high-quality extreme. Widening them changes that policy.
+        return unchecked(threshold * squares) < unchecked(total * total) ? (byte)0 : (byte)2;
+    }
+
+    internal static Vp8SourceAnalysis Create(Vp8PreparedInput source, OperationContext context, int method = 4, int quality = 75)
+    {
+        if (method is < 0 or > 6) throw new ArgumentOutOfRangeException(nameof(method));
+        if (quality is < 1 or > 100) throw new ArgumentOutOfRangeException(nameof(quality));
         context.Work(0);
         var result = new Vp8SourceAnalysis(context, source.Stride / 16, source.StorageHeight / 16);
         try
@@ -84,15 +113,25 @@ internal sealed class Vp8SourceAnalysis : IDisposable
                 for (var y = 0; y < result.Height; y++)
                 for (var x = 0; x < result.Width; x++)
                 {
-                    var dc = Measure(source, x, y, Vp8IntraMode.Dc, prediction, population, context);
-                    var tm = Measure(source, x, y, Vp8IntraMode.TrueMotion, prediction, population, context);
-                    var dcY = dc.Luma.RawScore; var tmY = tm.Luma.RawScore;
-                    var dcUv = dc.Chroma.RawScore; var tmUv = tm.Chroma.RawScore;
+                    int dcY, tmY, dcUv, tmUv; byte lumaMode;
+                    if (method <= 1)
+                    {
+                        lumaMode = FastLumaMode(source, x, y, quality, context); dcY = tmY = 0;
+                        dcUv = MeasureChroma(source, x, y, Vp8IntraMode.Dc, prediction, population, context).RawScore;
+                        tmUv = MeasureChroma(source, x, y, Vp8IntraMode.TrueMotion, prediction, population, context).RawScore;
+                    }
+                    else
+                    {
+                        var dc = Measure(source, x, y, Vp8IntraMode.Dc, prediction, population, context);
+                        var tm = Measure(source, x, y, Vp8IntraMode.TrueMotion, prediction, population, context);
+                        dcY = dc.Luma.RawScore; tmY = tm.Luma.RawScore; dcUv = dc.Chroma.RawScore; tmUv = tm.Chroma.RawScore;
+                        lumaMode = tmY > dcY ? (byte)1 : (byte)0;
+                    }
                     var uv = Math.Max(dcUv, tmUv);
                     var alpha = (byte)Math.Clamp(255 - ((3 * Math.Max(dcY, tmY) + uv + 2) >> 2), 0, 255);
                     var at = y * result.Width + x;
                     result.records[at] = alpha;
-                    result.records[result.Count + at] = tmY > dcY ? (byte)1 : (byte)0;
+                    result.records[result.Count + at] = lumaMode;
                     result.records[2 * result.Count + at] = tmUv < dcUv ? (byte)1 : (byte)0;
                     result.histogram[alpha]++; sumAlpha += alpha; sumChroma += uv;
                 }
