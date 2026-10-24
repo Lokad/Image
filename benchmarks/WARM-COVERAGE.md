@@ -1,13 +1,25 @@
 # Material warm coverage
 
-Updated2026-10-24. The declared finite codec byte checklist passes at E112 scope;
-see [decoder evidence](DECODER-EXACTNESS.md) and [encoder scope](../docs/codec-parity.md).
-CPU/allocation qualification resumes on the existing named cases. Changed PNG/
-JPEG/VP8L/VP8 encoder producers and JPEG/VP8 RGB decoder producers invalidate
-affected older costs; unchanged paths retain confirmations. No new timing is
-claimed. Reconcile frozen workers/output identities, then resolve uncertain current
-costs with short guarded screens before choosing the largest demonstrated gap.
-Broader native-profile equality and replacement readiness remain open.
+Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
+17 unmeasured**. All previous 256 controls and frozen inputs remain. Current
+verification counts come from the [three-table summary](../docs/benchmark.md).
+Warm single-CPU parity and replacement readiness remain open.
+
+[MemoryBudget/Jpeg420Rgba16](WARM-JPEG-COOPERATIVE-OWNER.md) is the one added
+required boundary: E136 introduced private coefficient storage for governed
+JPEG encoding, so pooled ungoverned evidence and the coarse `ImageBudget` quota
+cannot qualify it. It reuses the original resident RGBA16 input, settings and
+complete normalized encode/output operation. The guarded screen demonstrates
+a 3.667× CPU gap with 803,968 B/op and exact packets under the approved COM
+exception. Root borrowing/refunds, terminal refusal/recovery, cancellation and
+independent surviving outputs pass. Production is unchanged; its existing full
+qualification remains valid. No additional image/depth/settings grid is added.
+
+Declared codec byte controls remain qualified at their pinned scopes; see
+[decoder evidence](DECODER-EXACTNESS.md) and [encoder scope](../docs/codec-parity.md).
+Resolve uncertain current measurements before optimizing demonstrated gaps,
+one substantial primitive at a time. Stop passing unchanged cases. The earlier
+entries below retain their recorded producer scopes and historical counts.
 
 E115/E116 resolves four existing current encoder anchors with packet-exact smoke
 and guarded short screens, reusing the qualified production DLL. JPEG420 is13.763×,
@@ -29,11 +41,8 @@ reuse the prepared BDN host:10,523.95µs versus5,981.68µs,1,966,591B/op, ratio1
 timing rows remain prior-production; metadata timing uncertainties decrease31→30.
 Screen current encoder costs before selecting smaller decoder work.
 
-The historical inventory below retains its recorded producers. The finite scope remains
-**256 named cases:239 numeric and17 unmeasured**. Current tested-producer evidence
-contains60 independent passes,147 gaps,one confidence-open case,10 short cost
-screens and21 superseded encoder rows. Full warm CPU parity and replacement
-readiness remain open; no new shapes, settings or quality grid is added.
+The following inventory retains its earlier producer milestones; the current
+finite scope and verification counts are stated above.
 
 E62 adopts the complete managed VP8L encoder:19 selected packet identities plus two
 additional forced spatial/box candidates (21 distinct packets). The25 existing

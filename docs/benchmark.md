@@ -25,7 +25,12 @@ complete packets. RGBA8 has a same-build3.59× short screen. Its5,052-check prod
 and the same actual private package pass on each platform;
 [JPEG evidence](../benchmarks/WARM-JPEG-COEFFICIENT-REPLAY.md). Both controls admit
 430,848 B of coefficient capacity; caller-root operations use a private owner,
-whose new timing/allocation comparison remains open.
+whose distinct caller-root path now has a guarded screen: 6,746.29 µs versus
+1,839.67 µs, 803,968 B/op, ratio 3.667 (upper 4.407; conservative lower 2.952).
+The packets remain exact under the approved COM exception. Root/refund/refusal/
+cancellation and surviving outputs pass; [governed JPEG](../benchmarks/WARM-JPEG-COOPERATIVE-OWNER.md).
+This adds one named ownership boundary, with unchanged production and prior
+qualification reused; no repeat confirmation or general overhead claim.
 VP8L now confirms a3.091× gap after exact paired-population costs, saving24.5%
 elapsed and8,480 allocated bytes/op against the preceding confirmation. The
 paired-cost producer passes 5,062 checks on each platform and validates the same actual private package;
@@ -97,9 +102,9 @@ after exact codec work. The full warm single-CPU objective remains independent
 conservative upper<=1 for every material required path. Published0.1.0 is immutable;
 replacement readiness remains open.
 
-The [finite checklist](../benchmarks/WARM-COVERAGE.md) remains 256 named cases:
-239 numeric and 17 unmeasured. Tested-producer rows contain **46 passes,
-120 gaps, 1 confidence-open case, 2 short cost
+The [finite checklist](../benchmarks/WARM-COVERAGE.md) contains 257 named cases:
+240 numeric and 17 unmeasured. Tested-producer rows contain **46 passes,
+121 gaps, 1 confidence-open case, 2 short cost
 screens and 70 superseded encoder rows**. The latter predate
 JPEG decision/adaptive work or the managed PNG/VP8L encoder replacements; current packet evidence is
 reconciled and new costs are deferred while compression gates remain open.
@@ -256,7 +261,8 @@ is a CPU-parity confirmation.
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,579.93 | 2,354.66 | 1.096 / 1.227 | 294,116 | Prior production; reconfirm |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,633.91 | 2,421.91 | 1.088 / 1.220 | 294,116 | Prior production; reconfirm |
 | [JPEG RGBA8 4:2:0](../benchmarks/WARM-JPEG-COEFFICIENT-REPLAY.md) | 6,339.47 | 1,765.81 | 3.590 / 3.872 | 372,808 | Gap (short; qualified) |
-| [JPEG 4:2:0, shared budget / matched quality](../benchmarks/WARM-SHARED-BUDGET.md) | 2,026.04 | 1,769.43 | 1.145 / 1.272 | 297,781 | Prior production; reconfirm |
+| [JPEG RGBA8 4:2:0 / ImageBudget quota](../benchmarks/WARM-SHARED-BUDGET.md) | 2,026.04 | 1,769.43 | 1.145 / 1.272 | 297,781 | Prior production; reconfirm |
+| [JPEG RGBA16 4:2:0 / caller IMemoryBudget](../benchmarks/WARM-JPEG-COOPERATIVE-OWNER.md) | 6,746.29 | 1,839.67 | 3.667 / 4.407 | 803,968 | Gap (short; qualified) |
 | [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,019.53 | 1,611.25 | 1.253 / 1.455 | 297,781 | Prior production; reconfirm |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,310.38 | 1,769.17 | 1.306 / 1.488 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,393.98 | 1,839.60 | 1.301 / 1.415 | 263,819 | Prior production; reconfirm |

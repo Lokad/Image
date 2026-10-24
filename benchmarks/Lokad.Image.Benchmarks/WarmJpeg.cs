@@ -207,6 +207,12 @@ public partial class WarmJpeg
             && (budgetSelection != "1" || Case != WarmJpegCase.Encode420_8
                 || Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_SAMPLE_INPUT") is not null))
             throw new InvalidOperationException("Shared JPEG measurement requires resident RGBA8 Encode420_8.");
+        if (Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_MEMORY_BUDGET") is { } memorySelection
+            && (memorySelection != "rgba16-v1" || Case != WarmJpegCase.Encode420_16
+                || Environment.GetEnvironmentVariable("LOKAD_IMAGE_SHARED_BUDGET") is not null
+                || Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_SAMPLE_INPUT") is not null
+                || Environment.GetEnvironmentVariable("LOKAD_IMAGE_JPEG_ASYNC_NONSEEKABLE") is not null))
+            throw new InvalidOperationException("Caller memory measurement requires resident RGBA16 Encode420_16.");
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -269,10 +275,10 @@ public partial class WarmJpeg
                 catch (OperationCanceledException exception) when (exception.CancellationToken == canceled.Token) { }
                 if (rejected.Length != 0) throw new InvalidOperationException("Canceled JPEG wrote output.");
             }
-            ValidateManaged(); ValidateQuality(); ValidateSharedBudget();
+            ValidateManaged(); ValidateQuality(); ValidateSharedBudget(); ValidateCallerMemoryBudget();
             before = native.Measure(smoke, sampleCount: sampleCount); ready = true;
         }
-        catch { sharedCallerMemory?.Dispose(); native?.Dispose(); source?.Dispose(); cancellationSource?.Dispose(); state.Dispose(); throw; }
+        catch { sharedCallerMemory?.Dispose(); native?.Dispose(); source?.Dispose(); DisposeCallerMemoryBudget(); cancellationSource?.Dispose(); state.Dispose(); throw; }
     }
 
     private void ValidateManaged()
@@ -284,7 +290,7 @@ public partial class WarmJpeg
         if (ReferenceEquals(first.GetBuffer(), second.GetBuffer()) || !first.ToArray().AsSpan().SequenceEqual(encoded)
             || !second.ToArray().AsSpan().SequenceEqual(encoded) || !OriginalPixels.Bytes(source).AsSpan().SequenceEqual(pixels))
             throw new InvalidOperationException("Warm JPEG output is not independent/deterministic or source changed.");
-        if (sharedBudget is not null)
+        if (sharedBudget is not null || callerMemoryBudget is not null)
         {
             first.GetBuffer()[0] ^= 255; first.Dispose();
             if (!second.ToArray().AsSpan().SequenceEqual(encoded))
@@ -425,7 +431,7 @@ public partial class WarmJpeg
         try
         {
             if (!ready) return;
-            ValidateManaged(); ValidateSharedBudget();
+            ValidateManaged(); ValidateSharedBudget(); ValidateCallerMemoryBudget();
             var after = native.Measure(smoke, before[0].Operations, sampleCount); native.Check(); ValidateQuality(); native.Stop();
             var path = Path.Combine(state.Root, "artifacts", "benchmark-validation", nameof(WarmJpeg) + "-" + Guid.NewGuid().ToString("N") + ".json");
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);
@@ -436,6 +442,13 @@ public partial class WarmJpeg
                 sharedBudget = sharedBudget is not null, sharedBudgetWorkConsumed = sharedBudget?.ConsumedWork,
                 sharedBudgetResidentInputBytes = sharedCallerBytes,
                 sharedBudgetTemporaryMemoryReturned = sharedBudget is not null,
+                callerMemoryBudget = callerMemoryBudget is not null,
+                callerMemoryBudgetLimitBytes = callerMemoryBudget is null ? (long?)null : CallerMemoryLimit,
+                callerMemoryBudgetResidentSourceBytes = callerSourceMemory?.Bytes,
+                callerMemoryBudgetPeakBytes = callerMemoryBudget?.Peak,
+                callerMemoryBudgetTemporaryReturned = callerMemoryBudget is null ? (bool?)null : callerMemoryBudget.Bytes == sharedCallerBytes,
+                callerMemoryBudgetBorrowed = callerMemoryBudget is null ? (bool?)null : !callerMemoryBudget.IsDisposed,
+                callerMemoryBudgetRefusalRecoveryAndCancellation = callerMemoryBudget is null ? (bool?)null : true,
                 width = source.Width, height = source.Height, depth = Depth, encodedDepth = 8, cpu, managedAffinityCount = 1,
                 processorCount = Environment.ProcessorCount, serverGc = GCSettings.IsServerGC, gcConfiguration = GC.GetConfigurationVariables(),
                 managedIntrinsics = new { avx = System.Runtime.Intrinsics.X86.Avx.IsSupported, avx512F = System.Runtime.Intrinsics.X86.Avx512F.IsSupported },
@@ -464,6 +477,6 @@ public partial class WarmJpeg
             }, new JsonSerializerOptions(EncoderQualityCalibration.Json) { PropertyNamingPolicy = null }) + "\n");
             Console.WriteLine("Validated warm JPEG pair: " + path);
         }
-        finally { sharedCallerMemory?.Dispose(); native?.Dispose(); source?.Dispose(); cancellationSource?.Dispose(); state?.Dispose(); ready = false; }
+        finally { sharedCallerMemory?.Dispose(); native?.Dispose(); source?.Dispose(); DisposeCallerMemoryBudget(); cancellationSource?.Dispose(); state?.Dispose(); ready = false; }
     }
 }

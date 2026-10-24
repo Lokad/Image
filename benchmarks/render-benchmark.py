@@ -212,7 +212,8 @@ def render():
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG RGBA8 4:2:0', 'warm-jpeg-coefficient-replay-evidence.json', ['cases', 'rgba8', -1], 'WARM-JPEG-COEFFICIENT-REPLAY.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0, shared budget / matched quality', 'warm-shared-budget-evidence.json', ['cases', 'JpegBudgetEncode4208', -1], 'WARM-SHARED-BUDGET.md', verification='Prior production; reconfirm'),
+        row('JPEG RGBA8 4:2:0 / ImageBudget quota', 'warm-shared-budget-evidence.json', ['cases', 'JpegBudgetEncode4208', -1], 'WARM-SHARED-BUDGET.md', verification='Prior production; reconfirm'),
+        row('JPEG RGBA16 4:2:0 / caller IMemoryBudget', 'warm-jpeg-cooperative-owner-evidence.json', ['observations', -1], 'WARM-JPEG-COOPERATIVE-OWNER.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420Restart8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
@@ -345,7 +346,7 @@ def render():
     gap_count = sum(' | Gap' in value for value in producer_rows)
     reconfirm_count = sum(' | Prior production; reconfirm |' in value for value in producer_rows)
     cost_count = sum(' | Cost screen (CPU parity deferred) |' in value for value in producer_rows)
-    assert parity_count + confidence_count + gap_count + reconfirm_count + cost_count == 239
+    assert parity_count + confidence_count + gap_count + reconfirm_count + cost_count == 240
     return f'''# Lokad.Image benchmark state
 
 Updated 2026-10-24. **Declared encoder and decoder byte controls are qualified**
@@ -373,7 +374,12 @@ complete packets. RGBA8 has a same-build3.59× short screen. Its5,052-check prod
 and the same actual private package pass on each platform;
 [JPEG evidence](../benchmarks/WARM-JPEG-COEFFICIENT-REPLAY.md). Both controls admit
 430,848 B of coefficient capacity; caller-root operations use a private owner,
-whose new timing/allocation comparison remains open.
+whose distinct caller-root path now has a guarded screen: 6,746.29 µs versus
+1,839.67 µs, 803,968 B/op, ratio 3.667 (upper 4.407; conservative lower 2.952).
+The packets remain exact under the approved COM exception. Root/refund/refusal/
+cancellation and surviving outputs pass; [governed JPEG](../benchmarks/WARM-JPEG-COOPERATIVE-OWNER.md).
+This adds one named ownership boundary, with unchanged production and prior
+qualification reused; no repeat confirmation or general overhead claim.
 VP8L now confirms a3.091× gap after exact paired-population costs, saving24.5%
 elapsed and8,480 allocated bytes/op against the preceding confirmation. The
 paired-cost producer passes 5,062 checks on each platform and validates the same actual private package;
@@ -445,8 +451,8 @@ after exact codec work. The full warm single-CPU objective remains independent
 conservative upper<=1 for every material required path. Published0.1.0 is immutable;
 replacement readiness remains open.
 
-The [finite checklist](../benchmarks/WARM-COVERAGE.md) remains 256 named cases:
-239 numeric and 17 unmeasured. Tested-producer rows contain **{parity_count} passes,
+The [finite checklist](../benchmarks/WARM-COVERAGE.md) contains 257 named cases:
+240 numeric and 17 unmeasured. Tested-producer rows contain **{parity_count} passes,
 {gap_count} gaps, {confidence_count} confidence-open case, {cost_count} short cost
 screens and {reconfirm_count} superseded encoder rows**. The latter predate
 JPEG decision/adaptive work or the managed PNG/VP8L encoder replacements; current packet evidence is
