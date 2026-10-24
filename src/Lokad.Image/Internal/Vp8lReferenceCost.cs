@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace Lokad.Image.Internal;
 
@@ -7,10 +8,18 @@ internal static partial class Vp8lReferenceCost
 {
     internal const long Scale = 1L << 23;
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static long SLog(int count)
     {
         if (count < 2) return 0;
         if (count < 256) return SmallProducts[count];
+        return LargeSLog(count);
+    }
+
+    // Keep the uncommon arithmetic out of per-bin zero/small-count callers.
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static long LargeSLog(int count)
+    {
         if (count >= 65536) return (long)Math.Floor(Scale / Math.Log(2) * count * Math.Log(count) + 0.5);
         var shift = BitOperations.Log2((uint)count) - 7;
         var head = count >> shift;

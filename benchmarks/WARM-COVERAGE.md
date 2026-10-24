@@ -5,6 +5,15 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E197 common-count entropy](WARM-VP8L-COMMON-ENTROPY.md) independently
+confirms existing VP8L at1.798×/upper1.829, saving26.5% elapsed with unchanged
+48,184,648B/op and exact183,812B. Affected VP8 current short2.346×/upper2.465,
+24,329,736B/op, exact98,590B; no independent VP8 speedup claim. BothOS pass5,119
+checks and the SAMEactualpackage. Only common entropy-call structure changes;
+unaffected JPEG/PNG/decode/edit/text confirmations and all mathematical/native
+identities remain valid. No cases added. Larger JPEG/VP8 gaps take priority next;
+full257case/1× and replacement-readiness objectives remain open.
+
 [E189 current VP8L confirmation](WARM-VP8L-CACHE-HISTORY.md) resolves E186
 short uncertainty at2.431×/upper2.456,48,184,648B/op and raw-exact183,812B.
 Unchanged lossless path, same E188 qualified actual core/package and original

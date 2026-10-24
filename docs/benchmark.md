@@ -25,7 +25,7 @@ unchanged804,019B/op and1,704,856B shared-root peak. Both platforms pass5,117che
 and the same actual package; [normalization evidence](../benchmarks/WARM-JPEG-VECTOR-WORD-NORMALIZATION.md).
 Nongoverned RGBA16 current short2.279×/upper2.627 uses372,859B/op. Other affected
 RGBA16 JPEG timings remain historical; RGBA8/caller-sample evidence is unchanged.
-VP8L now leads the confirmed encoder gaps.
+JPEG and VP8 now lead the encoder gaps.
 The grayscale 0.962× claim came from the replaced 58,823-byte encoder. Current
 raw-exact 58,910-byte RGBA-gray encoding confirms1.726× after entropy replay,
 using35.3% less elapsed than its preceding confirmation and154,883B/op. Caller-gray
@@ -37,15 +37,14 @@ VP8/colorJPEG/VP8L now lead the measured encoder gaps; older affected gray timin
 stay historical.
 Other codecs, decoders, editing and text reuse
 unchanged confirmations where their production paths remain unchanged.
-VP8 now confirms a 2.412× gap after exact cache-history reuse, using
-3.6% less elapsed than its preceding confirmation, with 24,329,736 B/op
-(+248,784) and exact 98,590 B packets. Both platforms pass 5,115 checks and the
-same actual package; [cache-history evidence](../benchmarks/WARM-VP8-CACHE-HISTORY.md).
-Affected VP8L now independently confirms2.431×/upper2.456,48,184,648B/op
-and the same exact183,812B packet. This resolves short-run uncertainty, without a
-separate lossless speedup claim; [current lossless evidence](../benchmarks/WARM-VP8L-CACHE-HISTORY.md).
-The faster cache-history path applies to noncancellable paired selection.
-VP8L now leads the confirmed encoder gaps; full parity stays open.
+VP8L now independently confirms1.798×/upper1.829 after common-count entropy
+inlining, using26.5% less elapsed than its preceding confirmation, with unchanged
+48,184,648B/op and exact183,812B packets. Affected VP8 current short2.346×/upper2.465
+uses unchanged24,329,736B/op and exact98,590B packets; no independent VP8 speedup
+claim. Both platforms pass5,119checks and the SAMEactualpackage;
+[entropy evidence](../benchmarks/WARM-VP8L-COMMON-ENTROPY.md).
+The unchanged large-count formulas, work, ownership and shared admission remain.
+JPEG and VP8 now lead the measured encoder gaps; full parity stays open.
 No image/settings controls were added.
 
 Other replaced encoder observations remain historical.
@@ -282,10 +281,10 @@ is a CPU-parity confirmation.
 | [JPEG 4:2:0 from caller RGB / AC trellis and padding pruning](../benchmarks/JPEG420-AC-TRELLIS.md) | 68,162.15 | 1,579.24 | 43.161 / 50.354 | 170,648 | Cost screen (CPU parity deferred) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Prior production; reconfirm |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 75,226.22 | 15,616.85 | 4.817 / 5.060 | 1,006,520 | Prior production; reconfirm |
-| [VP8 RGBA8](../benchmarks/WARM-VP8-CACHE-HISTORY.md) | 129,327.57 | 53,621.51 | 2.412 / 2.430 | 24,329,736 | Gap (independent) |
+| [VP8 RGBA8](../benchmarks/WARM-VP8L-COMMON-ENTROPY.md) | 125,599.61 | 53,530.57 | 2.346 / 2.465 | 24,329,736 | Gap (short; qualified) |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 83,863.51 | 53,727.26 | 1.561 / 1.652 | 1,537,304 | Prior production; reconfirm |
 | [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-HISTOGRAM384.md) | 19,502.47 | 53,435.71 | 0.365 / 0.433 | 2,036,564 | Prior production; reconfirm |
-| [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-CACHE-HISTORY.md) | 297,488.76 | 122,398.05 | 2.431 / 2.456 | 48,184,648 | Gap (independent) |
+| [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-COMMON-ENTROPY.md) | 218,554.41 | 121,565.25 | 1.798 / 1.829 | 48,184,648 | Gap (independent) |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 464,921.62 | 121,865.49 | 3.815 / 4.757 | 55,238,624 | Prior production; reconfirm |
 | [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-COLOR-COST.md) | 612,338.64 | 83,533.61 | 7.330 / 8.250 | 67,414,112 | Prior production; reconfirm |
