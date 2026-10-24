@@ -307,7 +307,7 @@ public sealed class JpegReferenceTests
     [Theory]
     [InlineData(JpegSampling.YCbCr420)]
     [InlineData(JpegSampling.YCbCr422)]
-    public void CoefficientReplayAndTightWorkspacePreservePacketsWorkAndSource(JpegSampling sampling)
+    public void EntropyReplayAndTightWorkspacePreservePacketsWorkAndSource(JpegSampling sampling)
     {
         using var image = OriginalPixels.Buffer(17, 11, 16);
         var original = OriginalPixels.Bytes(image);
@@ -316,7 +316,7 @@ public sealed class JpegReferenceTests
         var cached = Options with { Sampling = sampling,
             Limits = ImageLimits.Default with { MemoryBudget = cachedRoot } };
         // Enough for the conservative table peak, but no simultaneous frame
-        // coefficients. Strategy selection must precede shared admission.
+        // records. Strategy selection must precede shared admission.
         var tight = cached with { Limits = cached.Limits with { MemoryBudget = tightRoot,
             MaxWorkingBytes = original.Length + 8192 + 16384 + 65536 + 257 * 2048 } };
         var cachedBudget = new ImageBudget(cached.Limits.MaxWorkingBytes, cached.Limits.MaxWork);
@@ -325,18 +325,18 @@ public sealed class JpegReferenceTests
         cachedBudget.EncodeJpeg(image, first, cached); tightBudget.EncodeJpeg(image, second, tight);
         Assert.Equal(first.ToArray(), second.ToArray()); Assert.Equal(original, OriginalPixels.Bytes(image));
         Assert.Equal(cachedBudget.ConsumedWork, tightBudget.ConsumedWork);
-        var coefficientCapacity = 2 * (sampling == JpegSampling.YCbCr420 ? 6 : 8) * 64 * 2;
-        Assert.Equal(coefficientCapacity, cachedRoot.Peak - tightRoot.Peak);
+        var recordCapacity = 2 * (sampling == JpegSampling.YCbCr420 ? 6 : 8) * 64 * 2 + 128;
+        Assert.Equal(recordCapacity, cachedRoot.Peak - tightRoot.Peak);
         Assert.Equal(0, cachedRoot.Bytes); Assert.Equal(0, tightRoot.Bytes);
         Assert.Equal(0, cachedRoot.Refusals); Assert.Equal(0, tightRoot.Refusals);
     }
 
     [Fact]
-    public void CoefficientAdmissionIsAggregateTerminalAndCancellationReleasesIt()
+    public void EntropyRecordAdmissionIsAggregateTerminalAndCancellationReleasesIt()
     {
         using var image = OriginalPixels.Buffer(17, 11, 16);
         var original = OriginalPixels.Bytes(image);
-        const int capacity = 2 * 6 * 64 * 2;
+        const int capacity = 2 * 6 * 64 * 2 + 128;
         using var root = new TestMemoryBudget(1024 * 1024);
         var options = Options with { Sampling = JpegSampling.YCbCr420,
             Limits = ImageLimits.Default with { MemoryBudget = root } };

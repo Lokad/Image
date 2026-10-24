@@ -46,7 +46,7 @@ internal static partial class JpegEncoder
         if (plannedWork > context.RemainingWork)
             throw new ImageLimitException(ImageLimitKind.Work, "Reference JPEG work exceeds the configured limit.");
         long borrowed = 0; var fixedReserved = image is null; var tablesReserved = false;
-        int[]? coefficientOwner = null; long coefficientBytes = 0;
+        JpegEntropyRecords? records = null;
         // Caller sample entry points already admitted their borrowed span and
         // 8 KiB fixed storage. This path consumes and releases that reservation.
         try
@@ -64,14 +64,10 @@ internal static partial class JpegEncoder
             const long tablePeak = ReferenceTableBytes + 65536L + 257 * 2048;
             if (!fixedTables && options.Sampling != JpegSampling.YCbCr444
                 && bytes <= JpegCoefficientPool.MaxRetainedBytes
-                && bytes <= context.RemainingWorkingBytes - tablePeak)
+                && bytes + 128 <= context.RemainingWorkingBytes - tablePeak)
             {
-                context.Reserve(bytes); coefficientBytes = bytes;
-                context.Work(0);
-                coefficientOwner = context.RentCoefficients((int)(bytes / sizeof(int)));
+                records = new JpegEntropyRecords(context, (int)(bytes / sizeof(int)));
             }
-            Span<short> savedCoefficients = coefficientOwner is null
-                ? default : MemoryMarshal.Cast<int, short>(coefficientOwner.AsSpan());
             var quantization = JpegReferenceTables.Quantization(ReferenceQScale(options.Quality));
             // Both passes share the same256-byte stack plan in the fixed owner.
             // Its two integer divisions per AC position run once per operation.
@@ -82,7 +78,7 @@ internal static partial class JpegEncoder
             {
                 for (var i = 0; i < 4; i++) histograms[i] = new int[256];
                 ReferencePass(image, source, width, height, options.BackgroundRgb, options.Sampling, quantizationPlan, histograms, null, null, context,
-                    coefficientCache: savedCoefficients);
+                    entropyCache: records);
             }
             // Establish the owner of all four surviving table arrays before the
             // generators allocate them. Their graph scratch has a shorter owner.
@@ -92,16 +88,15 @@ internal static partial class JpegEncoder
                 ? JpegFixedReferenceTables.Create(i, context) : JpegReferenceTables.Huffman(histograms[i], context);
             WriteReferenceHeader(output, width, height, options.Sampling, quantization, tables, context, options.RestartInterval);
             var writer = new JpegEntropyWriter(output, context);
-            if (savedCoefficients.IsEmpty)
+            if (records is null)
                 ReferencePass(image, source, width, height, options.BackgroundRgb, options.Sampling, quantizationPlan, histograms, tables, writer, context, options.RestartInterval);
             else
-                ReferenceReplay(savedCoefficients, options.Sampling, histograms, tables, writer, context);
+                records.Write(tables, writer, ReferenceSubsampledMcuWork);
             writer.Align(); context.Work(2); output.WriteByte(255); output.WriteByte(217);
         }
         finally
         {
-            if (coefficientOwner is not null) context.ReturnCoefficients(coefficientOwner);
-            if (coefficientBytes != 0) context.Release(coefficientBytes);
+            records?.Dispose();
             if (tablesReserved) context.Release(ReferenceTableBytes);
             if (fixedReserved) context.Release(ReferenceFixedBytes);
             if (borrowed != 0) context.ReleaseBorrowed(borrowed);
@@ -110,12 +105,12 @@ internal static partial class JpegEncoder
 
     private static void ReferencePass(ImageBuffer? image, JpegSampleInput source, int width, int height, uint? background, JpegSampling sampling,
         ReadOnlySpan<ushort> quantizationPlan, int[][] histograms, JpegEncodingTable[]? tables, JpegEntropyWriter? writer, OperationContext context, int restartInterval = 0,
-        Span<short> coefficientCache = default)
+        JpegEntropyRecords? entropyCache = null)
     {
         if (sampling != JpegSampling.YCbCr444)
         {
             ReferenceSubsampledPass(image, source, width, height, background, sampling,
-                quantizationPlan, histograms, tables, writer, context, restartInterval, coefficientCache);
+                quantizationPlan, histograms, tables, writer, context, restartInterval, entropyCache);
             return;
         }
         Span<byte> mcu = stackalloc byte[384]; Span<byte> row = stackalloc byte[24];
@@ -147,25 +142,6 @@ internal static partial class JpegEncoder
                 JpegReferenceTransform.Forward(mcu.Slice(component * 128 + vertical * 64, 64), transformed);
                 JpegReferenceTransform.Quantize(transformed, quantizationPlan, coefficients);
                 ReferenceBlock(coefficients, component, previous, histograms, tables, writer);
-            }
-        }
-    }
-
-    private static void ReferenceReplay(ReadOnlySpan<short> coefficients, JpegSampling sampling,
-        int[][] histograms, JpegEncodingTable[] tables, JpegEntropyWriter writer, OperationContext context)
-    {
-        Span<int> previous = stackalloc int[3]; previous.Clear();
-        var offset = 0;
-        while (offset < coefficients.Length)
-        {
-            // Keep the same admitted logical work and per-MCU cancellation
-            // boundary as the recomputed pass; each entropy write also checks.
-            context.Work(ReferenceSubsampledMcuWork);
-            for (var component = 0; component < 3; component++)
-            for (var block = 0; block < (component == 0 ? 4 : sampling == JpegSampling.YCbCr422 ? 2 : 1); block++)
-            {
-                ReferenceBlock(coefficients.Slice(offset, 64), component, previous, histograms, tables, writer);
-                offset += 64;
             }
         }
     }

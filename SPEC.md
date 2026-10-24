@@ -167,15 +167,17 @@ normalizes each bounded source row once, preserving single-round flattening
 without additional storage. Quality
 numbers remain specific to this encoder.
 
-Adaptive4:2:0/4:2:2 encoding may reserve an exact-size quantized-coefficient
-owner capped at4MiB to avoid repeating conversion and transforms. Selection
-uses checked geometry and the declared local allowance, including simultaneous
-table-building workspace; tight local allowances select recomputation before
-admission. Shared admission refusal remains terminal. Governed storage is
-private to the operation and releases promptly; only calls without a memory
-root may reuse the existing bounded coefficient pool. Logical work and
-cancellation checks remain equivalent. Fixed-table/restart,4:4:4 and grayscale
-paths do not use this owner.
+Adaptive4:2:0/4:2:2 encoding may retain packed entropy records to avoid repeating
+conversion, transforms and coefficient traversal. Initial data capacity is at
+most4MiB plus128bytes for ownership; one growth may double data capacity to8MiB.
+Growth admits old and new capacity together before copying, then releases the
+old charge. Selection uses checked geometry and the declared local allowance,
+including table-building workspace; tight local allowances select recomputation
+before admission. Any admission refusal is terminal. Governed storage is private
+to the operation and releases promptly. Calls without a memory root may reuse
+the existing pool, whose retained ceiling remains4MiB. Logical work, writer-call
+order and cancellation checks remain equivalent. Fixed-table/restart,4:4:4 and
+grayscale paths do not use this owner.
 
 Transforms return new owned buffers and preserve precision and source pixels.
 Outstanding raw orientation is retained until `AutoOrient` or decode with
@@ -1192,8 +1194,9 @@ transforms, quantization, canonical Huffman tables and entropy syntax. Subsample
 color uses the pinned conversion phase/rounding, with independently generated
 cell-area weights and edge handling. Color uses the reference's16-row MCU layout,
 including required vertical padding; grayscale uses8x8blocks. Two passes collect
-source frequencies and write optimized tables/coefficients, without retained
-full-frame YUV, coefficient or event arrays. Color restart intervals use generated
+source frequencies and write optimized entropy. Eligible subsampled paths retain
+operation-owned entropy records; other adaptive paths recompute. No full-frame
+YUV copy is needed. Color restart intervals use generated
 T.81 AnnexK fixed tables in one pass; grayscale optimizes tables with DC predictors
 reset at restart boundaries. Format constants come from public specifications.
 

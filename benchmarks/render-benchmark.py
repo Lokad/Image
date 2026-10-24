@@ -211,14 +211,14 @@ def render():
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
-        row('JPEG RGBA8 4:2:0', 'warm-jpeg-sparse-scan-evidence.json', ['cases', 'rgba8', -1], 'WARM-JPEG-SPARSE-SCAN.md', verification='Gap (short; qualified)'),
+        row('JPEG RGBA8 4:2:0', 'warm-jpeg-entropy-records-evidence.json', ['cases', 'rgba8', -1], 'WARM-JPEG-ENTROPY-RECORDS.md', verification='Gap (short; qualified)'),
         row('JPEG RGBA8 4:2:0 / ImageBudget quota', 'warm-shared-budget-evidence.json', ['cases', 'JpegBudgetEncode4208', -1], 'WARM-SHARED-BUDGET.md', verification='Prior production; reconfirm'),
-        row('JPEG RGBA16 4:2:0 / caller IMemoryBudget', 'warm-jpeg-sparse-scan-evidence.json', ['observations', -1], 'WARM-JPEG-SPARSE-SCAN.md', confirmed=True),
+        row('JPEG RGBA16 4:2:0 / caller IMemoryBudget', 'warm-jpeg-entropy-records-evidence.json', ['observations', -1], 'WARM-JPEG-ENTROPY-RECORDS.md', confirmed=True),
         row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420Restart8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
-        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-sparse-scan-evidence.json', ['cases', 'rgba16', -1], 'WARM-JPEG-SPARSE-SCAN.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-entropy-records-evidence.json', ['cases', 'rgba16', -1], 'WARM-JPEG-ENTROPY-RECORDS.md', verification='Gap (short; qualified)'),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-gray-avx2-transform-evidence.json', ['cases', 'rgbaGray', -1], 'WARM-JPEG-GRAY-AVX2-TRANSFORM.md', verification='Gap (short; qualified)'),
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-gray-avx2-transform-evidence.json', ['observations', -1], 'WARM-JPEG-GRAY-AVX2-TRANSFORM.md', confirmed=True),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
@@ -368,12 +368,14 @@ are exact, including checksums/framing. Both platforms pass4,807 Release checks,
 three examples. Four current RGBA8 encoder anchors have guarded packet-exact cost
 screens. JPEG has independently confirmed improvements from bounded MCU conversion,
 integer SIMD transforms/quantization, bounded chroma rows and coefficient replay.
-The caller-root RGBA16 JPEG420 control now confirms a 2.791× gap after exact
-sparse coefficient traversal, using 17.0% less elapsed than its preceding
-confirmation, with 803,971 B/op and unchanged packets. Ungoverned RGBA16/RGBA8
-have current 2.732×/2.611× screens and 372,811 B/op. Each platform passes 5,074
-checks and validates the same actual private package;
-[scan evidence](../benchmarks/WARM-JPEG-SPARSE-SCAN.md). Immutable workers were reused.
+The caller-root RGBA16 JPEG420 control now confirms 2.495× after exact
+entropy-record replay, using 10.7% less elapsed than its preceding confirmation
+and 804,019 B/op (+48). Admitted peak increases by 128 B to 1,704,856 B;
+data capacity is unchanged on this control. Nongoverned RGBA8/RGBA16 have current
+2.274×/2.439× screens and 372,856/372,859 B/op. Each platform passes 5,107 checks
+and validates the same actual private package;
+[entropy-record evidence](../benchmarks/WARM-JPEG-ENTROPY-RECORDS.md).
+Immutable workers were reused. Other affected color-JPEG timings stay historical.
 The grayscale 0.962× claim came from the replaced 58,823-byte encoder. Current
 raw-exact 58,910-byte controls confirm caller-gray at2.617× after vector DCT,
 using17.3% less elapsed than its preceding confirmation and154,839B/op. RGBA-gray
@@ -381,9 +383,9 @@ has a current2.648× screen and154,836B/op, including normalization on both subj
 Each platform passes5,088checks and the same actual private package;
 [vector-transform evidence](../benchmarks/WARM-JPEG-GRAY-AVX2-TRANSFORM.md).
 The reference is approved standalone SIMD libjpeg-turbo for these one-component
-boundaries. Color JPEG now has the largest current encoder gap. Older affected
-gray timings stay historical; colorJPEG/othercodecs/decoders/editing/text reuse
-unchanged confirmations.
+boundaries. VP8 now has the largest current encoder gap. Older affected
+gray timings stay historical. Other codecs, decoders, editing and text reuse
+unchanged confirmations where their production paths remain unchanged.
 VP8 now confirms a 2.714× gap after exact green-plane predictor scores, using
 6.0% less elapsed than its preceding confirmation, with unchanged 24,080,952 B/op
 and exact 98,590-byte packets. VP8L has a current 2.437× screen, 48,060,256 B/op
@@ -391,7 +393,6 @@ and exact 183,812-byte packets; no independently confirmed lossless speedup clai
 Each platform passes 5,101 checks and validates the same actual private package;
 [predictor-score evidence](../benchmarks/WARM-VP8-GREEN-PREDICTION-COST.md).
 The color-cost math remains unchanged; ordinary predictor dispatch is reconciled.
-Governed color JPEG420 from RGBA16 is now the largest measured encoder gap.
 No image/settings controls were added.
 
 Other replaced encoder observations remain historical.

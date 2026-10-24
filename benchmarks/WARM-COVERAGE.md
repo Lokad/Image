@@ -5,6 +5,15 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E174 JPEG entropy records](WARM-JPEG-ENTROPY-RECORDS.md) confirms the existing
+RGBA16/caller-root control at 2.495×/upper2.510, saving 10.7% elapsed with
+804,019 B/op (+48) and peak1,704,856 B (+128). Canonical packets/pixels remain exact,
+with only the approved COM attribution exception. Nongoverned RGBA8/16 costs are
+reconciled at 2.274×/upper2.628 and 2.439×/upper2.727 short, 372,856/372,859 B/op.
+Both OS pass 5,107 checks and the same actual private package. No cases were added.
+Other affected subsampled-JPEG CPU evidence is historical; gray/othercodecs/
+decoders/edit/text reuse unchanged evidence. VP8 now has the largest measured gap.
+
 [E171 exact green-plane scores](WARM-VP8-GREEN-PREDICTION-COST.md) confirms the
 existing VP8 RGBA8 control at 2.714×/upper2.729, saving 6.0% elapsed against its
 previous confirmation with unchanged 24,080,952 B/op and exact 98,590-byte packets.
