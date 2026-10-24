@@ -12,6 +12,25 @@ $config = Join-Path $ConsumerDirectory 'NuGet.Config'
 [xml]$consumerProject = Get-Content -LiteralPath (Join-Path $ConsumerDirectory 'Consumer.csproj') -Raw
 $packageVersion = ($consumerProject.Project.ItemGroup.PackageReference | Where-Object { $_.Include -eq 'Lokad.Image' }).Version
 
+# Keep each completed build from accumulating another extracted assembly.
+# Sources, inputs, the isolated package cache and the actual pack survive.
+$consumerRoot = [IO.Path]::GetFullPath($ConsumerDirectory).TrimEnd([char[]]@([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar))
+function Remove-CompletedBuildOutputs([string]$directory) {
+    foreach ($name in @('bin', 'obj')) {
+        $generated = [IO.Path]::GetFullPath((Join-Path $directory $name))
+        if (-not $generated.StartsWith($consumerRoot + [IO.Path]::DirectorySeparatorChar, [StringComparison]::Ordinal)) {
+            throw 'Generated build output escaped the package consumer.'
+        }
+        if (Test-Path -LiteralPath $generated -PathType Container) {
+            if ((Get-Item -LiteralPath $generated -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+                throw 'Generated build output must not be a link.'
+            }
+            Remove-Item -LiteralPath $generated -Recurse -Force
+        }
+    }
+}
+Remove-CompletedBuildOutputs $consumerRoot
+
 $inputSetup = @'
 const int docWidth = 300, docHeight = 200;
 using var docSeed = ImageBuffer.Create(docWidth, docHeight, 16);
@@ -130,5 +149,6 @@ for ($index = 0; $index -lt $snippets.Count; $index++) {
         dotnet (Join-Path $directory 'bin/Release/net10.0/Example.dll') $LibrarySha256
         if ($LASTEXITCODE -ne 0) { throw 'Usage example package-only execution failed.' }
     } finally { Pop-Location }
+    Remove-CompletedBuildOutputs $directory
 }
 Write-Host 'All three usage-guide examples passed through the exact dependency-free Release package.'

@@ -1,6 +1,6 @@
 namespace Lokad.Image.Internal;
 
-// Encoder-selected forward arithmetic, independently expressed as separable
+// Encoder-selected forward arithmetic, independently factored from separable
 // integer matrix projections. RFC6386 section14 specifies the inverse/geometry;
 // forward rounding is pinned separately by native coefficient observations.
 // Used by the public lossy encoder's prediction and reconstruction search.
@@ -8,14 +8,6 @@ internal static class Vp8ForwardTransform
 {
     private static readonly int Sine = (int)Math.Round(4096 * Math.Sqrt(2) * Math.Sin(Math.PI / 8));
     private static readonly int Cosine = (int)Math.Round(4096 * Math.Sqrt(2) * Math.Cos(Math.PI / 8));
-
-    private static int Weight(int frequency, int position) => frequency switch
-    {
-        0 => 1,
-        2 => position is 0 or 3 ? 1 : -1,
-        1 => position switch { 0 => Cosine, 1 => Sine, 2 => -Sine, _ => -Cosine },
-        _ => position switch { 0 => Sine, 1 => -Cosine, 2 => Cosine, _ => -Sine }
-    };
 
     // Only sixteen9-bit residuals are consumed, then sixteen coefficients are
     // written. Input/output may overlap; trailing caller samples stay untouched.
@@ -28,22 +20,26 @@ internal static class Vp8ForwardTransform
             if (residual[p] is < -255 or > 255) throw new ArgumentOutOfRangeException(nameof(residual), "VP8 prediction residuals must fit9bits.");
         Span<int> rows = stackalloc int[16];
         for (var y = 0; y < 4; y++)
-        for (var frequency = 0; frequency < 4; frequency++)
         {
-            var projection = 0;
-            for (var x = 0; x < 4; x++) projection += Weight(frequency, x) * residual[y * 4 + x];
-            rows[y * 4 + frequency] = (frequency & 1) == 0 ? projection * 8
-                : (projection + (frequency == 1 ? 1812 : 937)) >> 9;
+            var at = y * 4;
+            var outerSum = residual[at] + residual[at + 3];
+            var innerSum = residual[at + 1] + residual[at + 2];
+            var outerDifference = residual[at] - residual[at + 3];
+            var innerDifference = residual[at + 1] - residual[at + 2];
+            rows[at] = (outerSum + innerSum) * 8;
+            rows[at + 2] = (outerSum - innerSum) * 8;
+            rows[at + 1] = (Cosine * outerDifference + Sine * innerDifference + 1812) >> 9;
+            rows[at + 3] = (Sine * outerDifference - Cosine * innerDifference + 937) >> 9;
         }
-        for (var v = 0; v < 4; v++)
-        for (var u = 0; u < 4; u++)
+        for (var x = 0; x < 4; x++)
         {
-            var projection = 0;
-            for (var y = 0; y < 4; y++) projection += Weight(v, y) * rows[y * 4 + u];
-            var value = (v & 1) == 0 ? (projection + 7) >> 4
-                : (projection + (v == 1 ? 12000 : 51000)) >> 16;
-            if (v == 1 && rows[u] != rows[12 + u]) value++;
-            coefficients[v * 4 + u] = checked((short)value);
+            var outerSum = rows[x] + rows[12 + x]; var innerSum = rows[4 + x] + rows[8 + x];
+            var outerDifference = rows[x] - rows[12 + x]; var innerDifference = rows[4 + x] - rows[8 + x];
+            coefficients[x] = checked((short)((outerSum + innerSum + 7) >> 4));
+            coefficients[8 + x] = checked((short)((outerSum - innerSum + 7) >> 4));
+            var odd = (Cosine * outerDifference + Sine * innerDifference + 12000) >> 16;
+            coefficients[4 + x] = checked((short)(odd + (outerDifference != 0 ? 1 : 0)));
+            coefficients[12 + x] = checked((short)((Sine * outerDifference - Cosine * innerDifference + 51000) >> 16));
         }
     }
 

@@ -25,6 +25,7 @@
   removed the superseded floating/SIMD renderer and bounded RGB assertions.
 - Managed VP8 encoding matches20 declared complete reference packets, with all
   effort policies, exact normalized alpha and direct async partition delivery.
+  Forward4x4 transforms use exact integer butterfly projections.
   Removed superseded encoder experiments; new CPU/allocation qualification is open.
 - Caller-owned cooperative memory admission across nested work and retained
   images, fonts, layouts and caches, with structured limit/unsupported failures.

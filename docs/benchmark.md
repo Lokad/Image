@@ -26,10 +26,12 @@ and the same actual private package pass on each platform;
 [JPEG evidence](../benchmarks/WARM-JPEG-COEFFICIENT-REPLAY.md). Both controls admit
 430,848 B of coefficient capacity; caller-root operations use a private owner,
 whose new timing/allocation comparison remains open.
-VP8L now confirms a4.105× gap after exact small-log reuse, saving17.8% elapsed
-with unchanged allocations; the existing VP8 alpha anchor has a4.586× current-cost
-screen. The5,055-check producer and same actual private package pass on each
-platform; [entropy evidence](../benchmarks/WARM-VP8L-ENTROPY-CONSTANTS.md).
+VP8L confirms a4.105× gap after exact small-log reuse, saving17.8% elapsed
+with unchanged allocations; [entropy evidence](../benchmarks/WARM-VP8L-ENTROPY-CONSTANTS.md).
+The VP8 alpha anchor now confirms a3.784× gap after exact forward butterflies,
+saving17.2% elapsed with unchanged allocations/packets. The5,058-check producer
+and same actual private package pass on each platform;
+[transform evidence](../benchmarks/WARM-VP8-FORWARD-BUTTERFLY.md).
 Other replaced encoder observations remain historical.
 All17 historical BCL PNG timing rows below are superseded, as are the earlier
 JPEG encoder producers. No new timing or image/settings controls were added.
@@ -263,7 +265,7 @@ is a CPU-parity confirmation.
 | [JPEG 4:2:0 from caller RGB / AC trellis and padding pruning](../benchmarks/JPEG420-AC-TRELLIS.md) | 68,162.15 | 1,579.24 | 43.161 / 50.354 | 170,648 | Cost screen (CPU parity deferred) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Prior production; reconfirm |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 75,226.22 | 15,616.85 | 4.817 / 5.060 | 1,006,520 | Prior production; reconfirm |
-| [VP8 RGBA8](../benchmarks/WARM-VP8L-ENTROPY-CONSTANTS.md) | 245,441.85 | 53,516.53 | 4.586 / 5.114 | 24,093,944 | Gap (short; qualified) |
+| [VP8 RGBA8](../benchmarks/WARM-VP8-FORWARD-BUTTERFLY.md) | 203,322.25 | 53,732.55 | 3.784 / 3.808 | 24,093,944 | Gap (independent) |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 83,863.51 | 53,727.26 | 1.561 / 1.652 | 1,537,304 | Prior production; reconfirm |
 | [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-HISTOGRAM384.md) | 19,502.47 | 53,435.71 | 0.365 / 0.433 | 2,036,564 | Prior production; reconfirm |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-ENTROPY-CONSTANTS.md) | 497,273.01 | 121,131.97 | 4.105 / 4.153 | 48,064,592 | Gap (independent) |
