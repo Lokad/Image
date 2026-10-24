@@ -228,7 +228,7 @@ def render():
         row('VP8 RGBA8', 'warm-vp8-alpha-histogram-evidence.json', ['observations', -1], 'WARM-VP8-ALPHA-HISTOGRAM.md', confirmed=True),
         row('WebP VP8 + alpha from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 3], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-histogram384-evidence.json', ['observations', 0], 'WARM-VP8-HISTOGRAM384.md', verification='Cost screen (CPU parity deferred)'),
-        row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8-alpha-histogram-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8-ALPHA-HISTOGRAM.md', verification='Gap (short; qualified)'),
+        row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-color-history-evidence.json', ['observations', -1], 'WARM-VP8L-COLOR-HISTORY.md', confirmed=True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L from RGBA16, exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
     ]
@@ -381,18 +381,19 @@ has a current2.648× screen and154,836B/op, including normalization on both subj
 Each platform passes5,088checks and the same actual private package;
 [vector-transform evidence](../benchmarks/WARM-JPEG-GRAY-AVX2-TRANSFORM.md).
 The reference is approved standalone SIMD libjpeg-turbo for these one-component
-boundaries. VP8/VP8L now have the largest current encoder gaps. Older affected
+boundaries. VP8 now has the largest current encoder gap. Older affected
 gray timings stay historical; colorJPEG/othercodecs/decoders/editing/text reuse
 unchanged confirmations.
-VP8 now confirms a 2.878× gap after exact compressed-alpha histogram specialization,
-using 7.3% less elapsed than the preceding confirmation, with unchanged
-24,080,952 B/op and exact 98,590-byte packets. VP8L has a current 3.095× screen,
-48,056,112 B/op and exact 183,812-byte packets. Each platform passes 5,096 checks
-and validates the same actual private package;
+VP8 confirms a 2.878× gap after exact compressed-alpha histogram specialization,
+using 7.3% less elapsed than its preceding confirmation, with unchanged
+24,080,952 B/op and exact 98,590-byte packets;
 [alpha-histogram evidence](../benchmarks/WARM-VP8-ALPHA-HISTOGRAM.md).
-The VP8L algorithm remains generic; its previous 3.091× confirmation is consistent
-with this screen, without an independently confirmed speedup claim. VP8L now
-has the largest measured encoder gap. No image/settings controls were added.
+VP8L now confirms a 2.481× gap after invariant color-cost reuse, saving 19.5%
+elapsed against its preceding confirmation, with 48,060,256 B/op (+4,144) and
+exact 183,812-byte packets. Each platform passes 5,098 checks and validates the
+same actual private package; [color-cost evidence](../benchmarks/WARM-VP8L-COLOR-HISTORY.md).
+VP8's alpha path skips that color search, so its earlier confirmation remains
+valid. VP8 now has the largest measured encoder gap. No controls were added.
 
 Other replaced encoder observations remain historical.
 All17 historical BCL PNG timing rows below are superseded, as are the earlier

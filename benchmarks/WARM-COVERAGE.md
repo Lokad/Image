@@ -5,6 +5,15 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E169 invariant color costs](WARM-VP8L-COLOR-HISTORY.md) confirms the existing
+VP8L RGBA8 control at 2.481×/upper2.512, using 19.5% less elapsed than its previous
+confirmation, with 48,060,256 B/op (+4,144) and exact 183,812-byte packets. Both OS
+pass 5,098 checks and the same actual private package. No cases were added.
+Only VP8L color-search CPU consumers change. VP8's alpha path skips that search,
+so its E166 confirmation remains valid; JPEG/PNG/decoders/edit/text reuse unchanged
+evidence. Other affected VP8L color-search timings remain historical until
+reconciled. VP8 is now the largest current measured encoder gap.
+
 [E166 exact alpha histograms](WARM-VP8-ALPHA-HISTOGRAM.md) confirms the existing
 VP8 RGBA8 control at 2.878×/upper2.901, using 7.3% less elapsed than the previous
 confirmation with unchanged 24,080,952 B/op and exact 98,590-byte packets. The

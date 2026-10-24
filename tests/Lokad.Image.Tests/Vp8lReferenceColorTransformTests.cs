@@ -87,14 +87,14 @@ public sealed class Vp8lReferenceColorTransformTests
         Assert.Equal(9, color.StoredBits); Assert.Equal(2, color.Coefficients.Length);
         Assert.All(color.Coefficients.ToArray(), value => Assert.Equal(0xff000000u, value));
         Assert.Equal(65 * 4, color.CapacityBytes); Assert.Equal(4104 + 260, root.Bytes);
-        Assert.Equal(4104 + 260 + 3200, root.Peak); Assert.Equal(original, pixels);
+        Assert.Equal(4104 + 260 + 7296, root.Peak); Assert.Equal(original, pixels);
         color.Dispose(); Assert.Equal(4104, root.Bytes); Assert.False(root.IsDisposed);
     }
 
     [Fact]
     public void OverlappingResultCapacityRefusesOnceThenSucceedsAfterPriorOwnerEnds()
     {
-        using var root = new TestMemoryBudget(4104 + 260 + 3200);
+        using var root = new TestMemoryBudget(4104 + 260 + 7296);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         var pixels = Packed(context);
         using var first = Vp8lReferenceColorTransform.SelectAndApply(pixels, 513, 3, 75, context);
@@ -141,11 +141,13 @@ public sealed class Vp8lReferenceColorTransformTests
         next.Dispose(); Assert.Equal(4104, root.Bytes);
     }
 
-    [Fact]
-    public void IndependentWorkFailureReleasesMapAndSearchStorage()
+    [Theory]
+    [InlineData(2)]
+    [InlineData(256)]
+    public void IndependentWorkFailureReleasesMapAndSearchStorage(long maximum)
     {
         using var root = new TestMemoryBudget(100_000);
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = 2 }, default);
+        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = maximum }, default);
         var pixels = Packed(context); var original = pixels.ToArray();
         var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceColorTransform.SelectAndApply(pixels, 513, 3, 75, context));
         Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));

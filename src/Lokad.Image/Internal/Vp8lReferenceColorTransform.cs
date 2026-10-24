@@ -91,9 +91,13 @@ internal static class Vp8lReferenceColorTransform
 
     private sealed class Search : IDisposable
     {
-        private const long ScratchBytes = 3 * 256 * 4L + 128;
+        private const long ScratchBytes = 3 * 256 * 4L + 2 * 256 * 8L + 128;
         private readonly OperationContext context;
         private int[]? counts;
+        private long[]? products;
+        private long redBaseCost, blueBaseCost;
+        private Span<long> RedProducts => products.AsSpan(0, 256);
+        private Span<long> BlueProducts => products.AsSpan(256, 256);
         private Span<int> Histogram => counts.AsSpan(0, 256);
         private Span<int> RedHistory => counts.AsSpan(256, 256);
         private Span<int> BlueHistory => counts.AsSpan(512, 256);
@@ -102,29 +106,15 @@ internal static class Vp8lReferenceColorTransform
         {
             this.context = context;
             context.Work(0); context.Reserve(ScratchBytes);
-            try { context.Work(0); counts = new int[3 * 256]; }
+            try { context.Work(0); counts = new int[3 * 256]; products = new long[2 * 256]; }
             catch { context.Release(ScratchBytes); throw; }
         }
 
-        private long Cost(ReadOnlySpan<int> history)
+        private long Cost(bool red)
         {
             context.Work(256);
-            var histogram = Histogram; var total = 0; var combinedTotal = 0; long cost = 0;
-            for (var i = 0; i < 256; i++)
-            {
-                var count = histogram[i]; var combined = count + history[i];
-                total += count; combinedTotal += combined;
-                cost -= Vp8lReferenceCost.SLog(count) + Vp8lReferenceCost.SLog(combined);
-            }
-            cost += Vp8lReferenceCost.SLog(total) + Vp8lReferenceCost.SLog(combinedTotal);
-            var weighted = histogram[0] * 3 * Vp8lReferenceCost.Scale;
-            var weight = 240 * Vp8lReferenceCost.Scale;
-            for (var magnitude = 1; magnitude < 16; magnitude++)
-            {
-                weighted += (weight * (histogram[magnitude] + histogram[256 - magnitude]) + 50) / 100;
-                weight = (weight * 6 + 5) / 10;
-            }
-            return cost - (weighted + 5) / 10;
+            return Vp8lColorCost.Evaluate(Histogram, red ? RedHistory : BlueHistory,
+                red ? RedProducts : BlueProducts, red ? redBaseCost : blueBaseCost);
         }
 
         private long Score(ReadOnlySpan<uint> working, int width, int x0, int y0, int x1, int y1,
@@ -142,7 +132,7 @@ internal static class Vp8lReferenceColorTransform
                     histogram[(int)(red ? transformed >> 16 & 255 : transformed & 255)]++;
                 }
             }
-            var cost = Cost(red ? RedHistory : BlueHistory);
+            var cost = Cost(red);
             const long preference = 3 * Vp8lReferenceCost.Scale;
             if (red)
             {
@@ -174,6 +164,11 @@ internal static class Vp8lReferenceColorTransform
                 var x1 = Math.Min(width, x0 + (1 << bits)); var y1 = Math.Min(height, y0 + (1 << bits));
                 var tile = ty * columns + tx;
                 if (ty != 0) previousY = map[tile - columns];
+                // Both histories and tile population remain fixed through all
+                // coefficient trials. Charge and prepare each history once.
+                var population = (x1 - x0) * (y1 - y0);
+                context.Work(256); redBaseCost = Vp8lColorCost.Prepare(RedHistory, population, RedProducts);
+                context.Work(256); blueBaseCost = Vp8lColorCost.Prepare(BlueHistory, population, BlueProducts);
                 var bestGr = 0;
                 var bestRedCost = Score(working, width, x0, y0, x1, y1, previousX, previousY, true, 0, 0, 0);
                 for (var level = 0; level < 4 + ((7 * quality) >> 8); level++)
@@ -229,7 +224,9 @@ internal static class Vp8lReferenceColorTransform
 
         public void Dispose()
         {
-            if (Interlocked.Exchange(ref counts, null) is not null) context.Release(ScratchBytes);
+            var owned = Interlocked.Exchange(ref counts, null);
+            Interlocked.Exchange(ref products, null);
+            if (owned is not null) context.Release(ScratchBytes);
         }
     }
 
