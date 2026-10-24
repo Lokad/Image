@@ -70,10 +70,13 @@ optimized tables. These checks use the same backend, quality and quantizers.
 The production encoder uses a 512-byte MCU and a bounded18×18 packed tile, reused
 from normalized RGB through signed horizontal chroma. Negative guard samples
 survive until vertical rounding; two original yellow/cyan controls check this
-boundary against complete native packets. There is no full-frame YUV or coefficient
-copy. RGBA16 subsampling reads each bounded row once and shares alpha products,
+boundary against complete native packets. There is no full-frame YUV copy.
+RGBA16 subsampling reads each bounded row once and shares alpha products,
 preserving exact single-round normalization. Plans and scratch share the existing8-KiB owner. SSE2/AVX2 forward transforms
-and quantization retain exact scalar results and fallbacks. Optimal tables use two passes;
+and quantization retain exact scalar results and fallbacks. Adaptive4:2:0/4:2:2
+may retain quantized coefficients in an admitted owner capped at4MiB and replay
+them after table construction. Tight local allowances choose recomputation
+before admission; a shared-root refusal is terminal. Other optimal tables use two passes;
 color restarts use fixed tables in one pass. Grayscale uses a single 64-byte
 block. RGBA8/16 images and caller Gray8/RGB8 spans with stride support sync,
 forward-only and async delivery. Color quality maps to native qscale

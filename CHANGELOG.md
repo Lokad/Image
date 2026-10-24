@@ -9,6 +9,7 @@
   Color encoding reuses bounded MCU normalization/chroma storage and plans,
   with exact SSE2/AVX2 forward transforms/quantization and scalar fallbacks.
   RGBA16 subsampling normalizes bounded rows with exact single rounding.
+  Adaptive4:2:0/4:2:2 replays admitted, bounded quantized coefficients.
 - Fixed-point JPEG decoding with exact samples on30 frozen grayscale/4:4:4/4:2:2/4:2:0
   controls, shared caller RGB conversion and opt-in orientation. Removed superseded
   inverse variants. CMYK/YCCK now share reference-precision RGB/grayscale

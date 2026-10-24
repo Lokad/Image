@@ -167,6 +167,16 @@ normalizes each bounded source row once, preserving single-round flattening
 without additional storage. Quality
 numbers remain specific to this encoder.
 
+Adaptive4:2:0/4:2:2 encoding may reserve an exact-size quantized-coefficient
+owner capped at4MiB to avoid repeating conversion and transforms. Selection
+uses checked geometry and the declared local allowance, including simultaneous
+table-building workspace; tight local allowances select recomputation before
+admission. Shared admission refusal remains terminal. Governed storage is
+private to the operation and releases promptly; only calls without a memory
+root may reuse the existing bounded coefficient pool. Logical work and
+cancellation checks remain equivalent. Fixed-table/restart,4:4:4 and grayscale
+paths do not use this owner.
+
 Transforms return new owned buffers and preserve precision and source pixels.
 Outstanding raw orientation is retained until `AutoOrient` or decode with
 `ApplyOrientation=true` applies it and resets it to Normal. Coded and oriented

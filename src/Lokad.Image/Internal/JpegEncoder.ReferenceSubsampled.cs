@@ -10,10 +10,11 @@ internal static partial class JpegEncoder
 
     private static void ReferenceSubsampledPass(ImageBuffer? image, JpegSampleInput source, int width, int height,
         uint? background, JpegSampling sampling, ReadOnlySpan<ushort> quantizationPlan, int[][] histograms,
-        JpegEncodingTable[]? tables, JpegEntropyWriter? writer, OperationContext context, int restartInterval)
+        JpegEncodingTable[]? tables, JpegEntropyWriter? writer, OperationContext context, int restartInterval,
+        Span<short> coefficientCache)
     {
         // All per-MCU and nested tap storage fits the admitted8-KiB fixed owner.
-        // No row/filter plan, frame copy or coefficient cache escapes this call.
+        // Row/filter plans stay here; optional coefficients have an outer owner.
         Span<byte> mcu = stackalloc byte[512];
         Span<short> transformed = stackalloc short[64], coefficients = stackalloc short[64];
         Span<int> previous = stackalloc int[3]; previous.Clear();
@@ -34,7 +35,7 @@ internal static partial class JpegEncoder
         var chromaWidth = (width + 1) / 2;
         var chromaRows = sampling == JpegSampling.YCbCr420 ? 8 : 16;
         var chromaHeight = sampling == JpegSampling.YCbCr420 ? (height + 1) / 2 : height;
-        var mcuIndex = 0;
+        var mcuIndex = 0; var coefficientOffset = 0;
         for (var top = 0; top < height; top += 16)
         for (var left = 0; left < width; left += 16)
         {
@@ -134,6 +135,11 @@ internal static partial class JpegEncoder
                     : 256 + (component - 1) * chromaRows * 8 + vertical * 64;
                 JpegReferenceTransform.Forward(mcu.Slice(offset, 64), transformed);
                 JpegReferenceTransform.Quantize(transformed, quantizationPlan, coefficients);
+                if (!coefficientCache.IsEmpty)
+                {
+                    coefficients.CopyTo(coefficientCache.Slice(coefficientOffset, 64));
+                    coefficientOffset += 64;
+                }
                 ReferenceBlock(coefficients, component, previous, histograms, tables, writer);
             }
         }

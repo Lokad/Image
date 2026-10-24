@@ -211,13 +211,13 @@ def render():
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
-        row('JPEG RGBA8 4:2:0', 'warm-jpeg-separable-quantization-evidence.json', ['observations', -1], 'WARM-JPEG-SEPARABLE-QUANTIZATION.md', confirmed=True),
+        row('JPEG RGBA8 4:2:0', 'warm-jpeg-coefficient-replay-evidence.json', ['cases', 'rgba8', -1], 'WARM-JPEG-COEFFICIENT-REPLAY.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0, shared budget / matched quality', 'warm-shared-budget-evidence.json', ['cases', 'JpegBudgetEncode4208', -1], 'WARM-SHARED-BUDGET.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420Restart8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
-        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-word-normalization-evidence.json', ['observations', -1], 'WARM-JPEG-WORD-NORMALIZATION.md', confirmed=True),
+        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-coefficient-replay-evidence.json', ['observations', -1], 'WARM-JPEG-COEFFICIENT-REPLAY.md', confirmed=True),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-JPEG-VECTOR-AC.md', True),
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-compact-color-evidence.json', ['cases', 'OriginalGray', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
@@ -366,14 +366,14 @@ are exact, including checksums/framing. Both platforms pass4,807 Release checks,
 69 affected PNG scalar checks and the SAME actual private0.2.0 package with all
 three examples. Four current RGBA8 encoder anchors have guarded packet-exact cost
 screens. JPEG has independently confirmed improvements from bounded MCU conversion,
-integer SIMD transforms/quantization and separable chroma-row reuse. Its4.97× gap
-remains open. The current change passes5,047 checks and the same actual private
-package on each platform. See [JPEG evidence](../benchmarks/WARM-JPEG-SEPARABLE-QUANTIZATION.md).
-The existing RGBA16 JPEG420 control now confirms a5.36× gap after
-exact bounded word-row normalization, saving13.6% elapsed with unchanged
-allocations and complete packets. Its5,049-check producer and the same actual
-private package pass on each platform;
-[word-row evidence](../benchmarks/WARM-JPEG-WORD-NORMALIZATION.md).
+integer SIMD transforms/quantization, bounded chroma rows and coefficient replay.
+The existing RGBA16 JPEG420 control confirms a3.59× gap after removing duplicate
+conversion/transforms, saving33.1% elapsed with unchanged warm allocations and
+complete packets. RGBA8 has a same-build3.59× short screen. Its5,052-check producer
+and the same actual private package pass on each platform;
+[JPEG evidence](../benchmarks/WARM-JPEG-COEFFICIENT-REPLAY.md). Both controls admit
+430,848 B of coefficient capacity; caller-root operations use a private owner,
+whose new timing/allocation comparison remains open.
 Other replaced encoder observations remain historical.
 All17 historical BCL PNG timing rows below are superseded, as are the earlier
 JPEG encoder producers. No new timing or image/settings controls were added.

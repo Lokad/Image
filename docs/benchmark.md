@@ -18,14 +18,14 @@ are exact, including checksums/framing. Both platforms pass4,807 Release checks,
 69 affected PNG scalar checks and the SAME actual private0.2.0 package with all
 three examples. Four current RGBA8 encoder anchors have guarded packet-exact cost
 screens. JPEG has independently confirmed improvements from bounded MCU conversion,
-integer SIMD transforms/quantization and separable chroma-row reuse. Its4.97× gap
-remains open. The current change passes5,047 checks and the same actual private
-package on each platform. See [JPEG evidence](../benchmarks/WARM-JPEG-SEPARABLE-QUANTIZATION.md).
-The existing RGBA16 JPEG420 control now confirms a5.36× gap after
-exact bounded word-row normalization, saving13.6% elapsed with unchanged
-allocations and complete packets. Its5,049-check producer and the same actual
-private package pass on each platform;
-[word-row evidence](../benchmarks/WARM-JPEG-WORD-NORMALIZATION.md).
+integer SIMD transforms/quantization, bounded chroma rows and coefficient replay.
+The existing RGBA16 JPEG420 control confirms a3.59× gap after removing duplicate
+conversion/transforms, saving33.1% elapsed with unchanged warm allocations and
+complete packets. RGBA8 has a same-build3.59× short screen. Its5,052-check producer
+and the same actual private package pass on each platform;
+[JPEG evidence](../benchmarks/WARM-JPEG-COEFFICIENT-REPLAY.md). Both controls admit
+430,848 B of coefficient capacity; caller-root operations use a private owner,
+whose new timing/allocation comparison remains open.
 Other replaced encoder observations remain historical.
 All17 historical BCL PNG timing rows below are superseded, as are the earlier
 JPEG encoder producers. No new timing or image/settings controls were added.
@@ -246,13 +246,13 @@ is a CPU-parity confirmation.
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,980.90 | 3,855.74 | 1.032 / 1.135 | 556,284 | Prior production; reconfirm |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,579.93 | 2,354.66 | 1.096 / 1.227 | 294,116 | Prior production; reconfirm |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,633.91 | 2,421.91 | 1.088 / 1.220 | 294,116 | Prior production; reconfirm |
-| [JPEG RGBA8 4:2:0](../benchmarks/WARM-JPEG-SEPARABLE-QUANTIZATION.md) | 8,766.00 | 1,763.93 | 4.970 / 4.990 | 372,808 | Gap (independent) |
+| [JPEG RGBA8 4:2:0](../benchmarks/WARM-JPEG-COEFFICIENT-REPLAY.md) | 6,339.47 | 1,765.81 | 3.590 / 3.872 | 372,808 | Gap (short; qualified) |
 | [JPEG 4:2:0, shared budget / matched quality](../benchmarks/WARM-SHARED-BUDGET.md) | 2,026.04 | 1,769.43 | 1.145 / 1.272 | 297,781 | Prior production; reconfirm |
 | [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,019.53 | 1,611.25 | 1.253 / 1.455 | 297,781 | Prior production; reconfirm |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,310.38 | 1,769.17 | 1.306 / 1.488 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,393.98 | 1,839.60 | 1.301 / 1.415 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,444.30 | 1,841.37 | 1.327 / 1.443 | 263,787 | Prior production; reconfirm |
-| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-WORD-NORMALIZATION.md) | 9,874.51 | 1,841.22 | 5.363 / 5.385 | 372,808 | Gap (independent) |
+| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-COEFFICIENT-REPLAY.md) | 6,605.07 | 1,839.29 | 3.591 / 3.612 | 372,808 | Gap (independent) |
 | [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 1,350.95 | 1,404.64 | 0.962 / 0.970 | 154,892 | Parity confirmed |
 | [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,251.71 | 1,079.34 | 1.160 / 1.394 | 155,026 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |

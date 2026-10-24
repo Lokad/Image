@@ -304,6 +304,61 @@ public sealed class JpegReferenceTests
         Assert.Equal((17, 11, 8), (decoded.Width, decoded.Height, decoded.BitDepth));
     }
 
+    [Theory]
+    [InlineData(JpegSampling.YCbCr420)]
+    [InlineData(JpegSampling.YCbCr422)]
+    public void CoefficientReplayAndTightWorkspacePreservePacketsWorkAndSource(JpegSampling sampling)
+    {
+        using var image = OriginalPixels.Buffer(17, 11, 16);
+        var original = OriginalPixels.Bytes(image);
+        using var cachedRoot = new TestMemoryBudget(1024 * 1024);
+        using var tightRoot = new TestMemoryBudget(1024 * 1024);
+        var cached = Options with { Sampling = sampling,
+            Limits = ImageLimits.Default with { MemoryBudget = cachedRoot } };
+        // Enough for the conservative table peak, but no simultaneous frame
+        // coefficients. Strategy selection must precede shared admission.
+        var tight = cached with { Limits = cached.Limits with { MemoryBudget = tightRoot,
+            MaxWorkingBytes = original.Length + 8192 + 16384 + 65536 + 257 * 2048 } };
+        var cachedBudget = new ImageBudget(cached.Limits.MaxWorkingBytes, cached.Limits.MaxWork);
+        var tightBudget = new ImageBudget(tight.Limits.MaxWorkingBytes, tight.Limits.MaxWork);
+        using var first = new MemoryStream(); using var second = new MemoryStream();
+        cachedBudget.EncodeJpeg(image, first, cached); tightBudget.EncodeJpeg(image, second, tight);
+        Assert.Equal(first.ToArray(), second.ToArray()); Assert.Equal(original, OriginalPixels.Bytes(image));
+        Assert.Equal(cachedBudget.ConsumedWork, tightBudget.ConsumedWork);
+        var coefficientCapacity = 2 * (sampling == JpegSampling.YCbCr420 ? 6 : 8) * 64 * 2;
+        Assert.Equal(coefficientCapacity, cachedRoot.Peak - tightRoot.Peak);
+        Assert.Equal(0, cachedRoot.Bytes); Assert.Equal(0, tightRoot.Bytes);
+        Assert.Equal(0, cachedRoot.Refusals); Assert.Equal(0, tightRoot.Refusals);
+    }
+
+    [Fact]
+    public void CoefficientAdmissionIsAggregateTerminalAndCancellationReleasesIt()
+    {
+        using var image = OriginalPixels.Buffer(17, 11, 16);
+        var original = OriginalPixels.Bytes(image);
+        const int capacity = 2 * 6 * 64 * 2;
+        using var root = new TestMemoryBudget(1024 * 1024);
+        var options = Options with { Sampling = JpegSampling.YCbCr420,
+            Limits = ImageLimits.Default with { MemoryBudget = root } };
+        using var output = new MemoryStream();
+        Assert.True(root.TryReserve(1024 * 1024 - 8192 - capacity + 1, out var held));
+        using (held)
+        {
+            var retained = root.Bytes;
+            var failure = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(image, output, options));
+            Assert.Equal(ImageLimitScope.SharedBudget, failure.Scope); Assert.Equal(1, root.Refusals);
+            Assert.Equal(retained, root.Bytes); Assert.Equal(0, output.Length);
+        }
+        Assert.Equal(0, root.Bytes);
+        using var cancellation = new CancellationTokenSource(); var admissions = 0;
+        root.Admitted = _ => { if (++admissions == 2) cancellation.Cancel(); };
+        Assert.ThrowsAny<OperationCanceledException>(() => ImageCodec.EncodeJpeg(image, output, options, cancellation.Token));
+        Assert.Equal(0, root.Bytes); Assert.Equal(0, output.Length); Assert.Equal(2, admissions);
+        root.Admitted = null; ImageCodec.EncodeJpeg(image, output, options);
+        Assert.True(output.Length > 0); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        Assert.Equal(original, OriginalPixels.Bytes(image));
+    }
+
     private static byte[] GraySamples(byte[] rgba)
     {
         var gray = new byte[rgba.Length / 4];
