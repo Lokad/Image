@@ -133,7 +133,7 @@ public sealed class Vp8lReferenceMainParsingTests
     [Theory]
     [InlineData(3)]
     [InlineData(5)]
-    [InlineData(8)]
+    [InlineData(7)]
     public void CacheChoiceConversionAndHistogramRefusalsAreTerminalAndRefundCandidates(int phase)
     {
         using var root = new TestMemoryBudget(2_000_000);

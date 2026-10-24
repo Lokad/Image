@@ -5,6 +5,14 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E186 cache history](WARM-VP8-CACHE-HISTORY.md) independently confirms existing
+VP8 Q75/method4 at2.412×/upper2.430, saving3.6% elapsed with24,329,736B/op and
+exact98,590B packets. Affected VP8L current short2.442×/upper3.019,48,184,648B/op,
+same183,812B packet; no independent lossless speedup claim. BothOS pass5,115checks
+and the SAMEactualpackage. Only noncancellable paired cache selection changes;
+other unchanged confirmations and mathematical/native byte proofs remain valid.
+No cases added. ColorJPEG/VP8L now lead; full257case/1× objective remains open.
+
 [E181 grayscale replay](WARM-JPEG-GRAY-ENTROPY-RECORDS.md) confirms the existing
 RGBA-gray control at1.726×/upper1.739, saving35.3% elapsed with154,883B/op and exact
 58,910 B packets. Caller-gray current short1.886×/upper2.154,154,886B/op. BothOS

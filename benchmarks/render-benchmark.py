@@ -225,10 +225,10 @@ def render():
         row('JPEG 4:2:0 from caller RGB / AC trellis and padding pruning', 'jpeg420-ac-trellis-evidence.json', ['cases', 'Encode420_8', -1], 'JPEG420-AC-TRELLIS.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque‡', 'vp8-noise-spectrum-evidence.json', ['observations', 0], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 1], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
-        row('VP8 RGBA8', 'warm-vp8-vector-residual-evidence.json', ['observations', -1], 'WARM-VP8-VECTOR-RESIDUAL.md', confirmed=True),
+        row('VP8 RGBA8', 'warm-vp8-cache-history-evidence.json', ['observations', -1], 'WARM-VP8-CACHE-HISTORY.md', confirmed=True),
         row('WebP VP8 + alpha from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 3], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-histogram384-evidence.json', ['observations', 0], 'WARM-VP8-HISTOGRAM384.md', verification='Cost screen (CPU parity deferred)'),
-        row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8-green-prediction-cost-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8-GREEN-PREDICTION-COST.md', verification='Gap (short; qualified)'),
+        row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8-cache-history-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8-CACHE-HISTORY.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L from RGBA16, exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
     ]
@@ -387,13 +387,14 @@ VP8/colorJPEG/VP8L now lead the measured encoder gaps; older affected gray timin
 stay historical.
 Other codecs, decoders, editing and text reuse
 unchanged confirmations where their production paths remain unchanged.
-VP8 now confirms a 2.499× gap after exact vector residual preparation, using
-7.6% less elapsed than its preceding confirmation, with unchanged 24,080,952 B/op
-and exact 98,590-byte packets. Each platform passes 5,108 checks and validates
-the same actual package; [residual evidence](../benchmarks/WARM-VP8-VECTOR-RESIDUAL.md).
-VP8L reuses its unchanged current 2.437× screen, 48,060,256 B/op and exact
-183,812-byte packets; no independent lossless speedup claim.
-[predictor-score evidence](../benchmarks/WARM-VP8-GREEN-PREDICTION-COST.md).
+VP8 now confirms a 2.412× gap after exact cache-history reuse, using
+3.6% less elapsed than its preceding confirmation, with 24,329,736 B/op
+(+248,784) and exact 98,590 B packets. Both platforms pass 5,115 checks and the
+same actual package; [cache-history evidence](../benchmarks/WARM-VP8-CACHE-HISTORY.md).
+Affected VP8L has a current 2.442× screen/upper3.019, 48,184,648 B/op (+124,392)
+and the same exact 183,812 B packet; no independent lossless speedup claim.
+The faster path applies to noncancellable paired selection; other checks remain.
+Color JPEG and VP8L now lead the measured encoder gaps.
 No image/settings controls were added.
 
 Other replaced encoder observations remain historical.

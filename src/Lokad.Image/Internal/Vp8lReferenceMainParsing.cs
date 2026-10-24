@@ -11,8 +11,13 @@ internal static class Vp8lReferenceMainParsing
         {
             standard = Vp8lReferenceLz.Greedy(pixels, matches, context);
             repeated = Vp8lReferenceLz.Repeats(pixels, width, context);
-            var standardBits = disableCache ? 0 : Vp8lReferenceCache.BestBits(pixels, standard.Tokens, maximumCacheBits, context);
-            var repeatedBits = disableCache ? 0 : Vp8lReferenceCache.BestBits(pixels, repeated.Tokens, maximumCacheBits, context);
+            var standardBits = 0; var repeatedBits = 0;
+            if (!disableCache && !Vp8lReferenceCache.TryBestBitsWithHistory(pixels, standard.Tokens,
+                repeated.Tokens, maximumCacheBits, context, out standardBits, out repeatedBits))
+            {
+                standardBits = Vp8lReferenceCache.BestBits(pixels, standard.Tokens, maximumCacheBits, context);
+                repeatedBits = Vp8lReferenceCache.BestBits(pixels, repeated.Tokens, maximumCacheBits, context);
+            }
             Vp8lReferenceCache.Apply(pixels, standard, standardBits, context);
             Vp8lReferenceCache.Apply(pixels, repeated, repeatedBits, context);
             var standardCost = Vp8lReferenceLz.Estimate(standard.Tokens, width, context, standardBits);

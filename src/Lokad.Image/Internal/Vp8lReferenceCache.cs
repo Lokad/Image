@@ -1,6 +1,6 @@
 namespace Lokad.Image.Internal;
 
-internal static class Vp8lReferenceCache
+internal static partial class Vp8lReferenceCache
 {
     internal static int Key(uint pixel, int bits) => (int)(unchecked(pixel * 0x1e35a7bdu) >> (32 - bits));
 
