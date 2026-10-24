@@ -131,7 +131,9 @@ internal static class Vp8lReferencePredictor
             var modes = Map(level); var history = History(level); var chosen = 0; var best = long.MaxValue;
             for (var mode = 0; mode < 14; mode++)
             {
-                var cost = Vp8lReferenceCost.Prediction(histogram.Slice(mode * 1024, 1024), history, context);
+                var candidate = histogram.Slice(mode * 1024, 1024);
+                var cost = greenOnly ? Vp8lReferenceCost.PredictionGreen(candidate, history, context)
+                    : Vp8lReferenceCost.Prediction(candidate, history, context);
                 if (tx != 0 && modes[tile - 1] == mode) cost -= 15 * Vp8lReferenceCost.Scale;
                 if (ty != 0 && modes[tile - columns[level]] == mode) cost -= 15 * Vp8lReferenceCost.Scale;
                 if (cost < best) { best = cost; chosen = mode; }

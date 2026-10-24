@@ -37,4 +37,3 @@ internal static class Vp8lColorCost
         return cost - (weighted + 5) / 10;
     }
 }
-

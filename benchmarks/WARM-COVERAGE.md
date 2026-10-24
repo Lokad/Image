@@ -5,6 +5,17 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E171 exact green-plane scores](WARM-VP8-GREEN-PREDICTION-COST.md) confirms the
+existing VP8 RGBA8 control at 2.714×/upper2.729, saving 6.0% elapsed against its
+previous confirmation with unchanged 24,080,952 B/op and exact 98,590-byte packets.
+The existing VP8L control is reconciled at 2.437×/upper2.755 short, 48,060,256 B/op,
+exact 183,812-byte packets; no independent lossless speedup claim. Both OS pass
+5,101 checks and the same actual private package. No cases were added. Eligible
+ALPH score consumers change; generic predictor dispatch has a current screen.
+JPEG/PNG/decoders/edit/text reuse unchanged evidence. Other affected alpha timings
+remain historical until reconciled. Governed color JPEG420 from RGBA16 is now the
+largest current measured encoder gap; the full 257-case objective stays open.
+
 [E169 invariant color costs](WARM-VP8L-COLOR-HISTORY.md) confirms the existing
 VP8L RGBA8 control at 2.481×/upper2.512, using 19.5% less elapsed than its previous
 confirmation, with 48,060,256 B/op (+4,144) and exact 183,812-byte packets. Both OS
