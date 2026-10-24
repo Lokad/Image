@@ -18,7 +18,7 @@ public sealed class Vp8RateSearchFfmpegTests
         Assert.True(ImageCodec.Identify(encoded).HasAlpha);
         var expected = WebpOracle.Decode(encoded, width, height, alpha: true);
         using var decoded = ImageCodec.Decode(encoded); var actual = OriginalPixels.Bytes(decoded);
-        var maximum = 0; double squares = 0;
+        Assert.Equal(expected, actual);
         for (var i = 0; i < actual.Length; i++)
         {
             if (i % 4 == 3)
@@ -27,12 +27,7 @@ public sealed class Vp8RateSearchFfmpegTests
                     : (System.Buffers.Binary.BinaryPrimitives.ReadUInt16LittleEndian(unchanged.AsSpan(i * 2)) + 128) / 257;
                 Assert.Equal(alpha, expected[i]); Assert.Equal(alpha, actual[i]);
             }
-            else
-            {
-                var error = Math.Abs(expected[i] - actual[i]); maximum = Math.Max(maximum, error); squares += error * error;
-            }
         }
-        Assert.True(maximum <= 4 && Math.Sqrt(squares / (width * height * 3)) <= 1.5);
         Assert.Equal(unchanged, OriginalPixels.Bytes(source));
     }
 }

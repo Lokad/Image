@@ -1,7 +1,7 @@
 # Lokad.Image benchmark state
 
-Updated 2026-10-23. **Byte-exact codec replication takes priority over CPU parity:**
-encoders first, then exact decoder samples, against pinned FFmpeg builds/settings.
+Updated 2026-10-24. **Declared encoder and decoder byte controls are qualified**
+against pinned FFmpeg builds/settings; warm single-CPU parity remains open.
 Only explicitly approved encoder-attribution metadata may differ; see
 [codec compatibility](codec-parity.md).
 
@@ -64,6 +64,10 @@ Earlier JPEG
 decode timings and allocations describe the replaced producer and are marked
 **Prior production; reconfirm**. No new decoder timing/allocation run is claimed.
 
+VP8 decoder RGB now uses the exact integer normalization on164 frozen controls.
+Its earlier timings/allocations also describe the replaced renderer; no new
+decoder measurement is claimed.
+
 No timing or allocation runs accompanied the new PNG/JPEG/VP8L encoder adoption. Unchanged paths
 retain evidence on their recorded frozen inputs; new default-encoded fixtures do
 not silently replace those inputs. CPU tuning/independent confirmation resumes
@@ -73,8 +77,8 @@ replacement readiness remains open.
 
 The [finite checklist](../benchmarks/WARM-COVERAGE.md) remains 256 named cases:
 239 numeric and 17 unmeasured. Tested-producer rows contain **46 passes,
-119 gaps, 1 confidence-open case, 2 short cost
-screens and 71 superseded encoder rows**. The latter predate
+109 gaps, 1 confidence-open case, 2 short cost
+screens and 81 superseded encoder rows**. The latter predate
 JPEG decision/adaptive work or the managed PNG/VP8L encoder replacements; current packet evidence is
 reconciled and new costs are deferred while compression gates remain open.
 Their stored values are historical, not demonstrated current gaps. Another 31 marked
@@ -114,8 +118,8 @@ is a CPU-parity confirmation.
 | [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,918.97 | 1,393.95 | 1.377 / 1.583 | 4,552 | Gap (short; qualified) |
 | [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 3,054.27 | 3,091.94 | 0.988 / 0.991 | 8,648 | Parity confirmed |
 | [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,329.08 | 996.80 | 1.333 / 1.411 | 761,840 | Prior production; reconfirm; metadata timing open |
-| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 8,284.99 | 5,977.38 | 1.386 / 1.435 | 1,966,744 | Gap (short; qualified); metadata timing open |
-| [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 4,320.01 | 3,018.37 | 1.431 / 1.494 | 1,216,276 | Gap (short; qualified) |
+| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 8,284.99 | 5,977.38 | 1.386 / 1.435 | 1,966,744 | Prior production; reconfirm; metadata timing open |
+| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
 | [PNG RGBA8, None](../benchmarks/WARM-CURRENT-RESIDENT-PNG.md) | 1,575.30 | 1,388.57 | 1.134 / 1.330 | 4,480 | Gap (short; qualified); metadata timing open |
 | [PNG RGBA8, resident / ImageBudget quota](../benchmarks/WARM-SHARED-BUDGET.md) | 2,004.67 | 1,392.79 | 1.439 / 1.482 | 4,561 | Gap (short; qualified) |
 | [PNG RGBA8, None / live cancelable token](../benchmarks/WARM-PNG-CANCEL-BLOCKS.md) | 1,732.37 | 1,390.42 | 1.246 / 1.320 | 4,456 | Gap (short; qualified) |
@@ -190,14 +194,14 @@ is a CPU-parity confirmation.
 | [JPEG progressive 4:4:4 / live cancelable token](../benchmarks/WARM-JPEG-411-SIMD.md) | 5,069.78 | 3,349.49 | 1.514 / 1.611 | 984,298 | Prior production; reconfirm |
 | [JPEG progressive 4:2:2](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 3,071.46 | 2,238.43 | 1.372 / 1.508 | 847,162 | Prior production; reconfirm |
 | [JPEG progressive 4:4:4](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 5,037.72 | 3,361.01 | 1.499 / 1.715 | 984,298 | Prior production; reconfirm |
-| [WebP VP8 + alpha](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 8,353.50 | 5,968.68 | 1.400 / 1.436 | 1,966,648 | Gap (short; qualified); metadata timing open |
-| [WebP VP8 opaque, simple luma filter](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 6,888.59 | 4,890.64 | 1.409 / 1.450 | 760,572 | Gap (short; qualified); metadata timing open |
-| [WebP VP8 opaque, live cancelable token](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 6,687.81 | 4,793.83 | 1.395 / 1.437 | 760,572 | Gap (short; qualified); metadata timing open |
-| [WebP VP8, opaque](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 6,638.33 | 4,795.62 | 1.384 / 1.443 | 760,572 | Gap (short; qualified); metadata timing open |
-| [WebP VP8L, sixteen-color indexed input](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 785.58 | 544.96 | 1.442 / 1.495 | 1,351,972 | Gap (short; qualified) |
-| [WebP VP8L, literal/run input](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 2,269.12 | 2,157.09 | 1.052 / 1.074 | 1,074,326 | Gap (short; qualified) |
-| [WebP VP8L, native input](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 4,576.04 | 3,022.99 | 1.514 / 1.615 | 1,216,180 | Gap (short; qualified) |
-| [WebP VP8L, native input / live cancelable token](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 4,573.29 | 3,016.50 | 1.516 / 1.579 | 1,216,180 | Gap (short; qualified) |
+| [WebP VP8 + alpha](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 8,353.50 | 5,968.68 | 1.400 / 1.436 | 1,966,648 | Prior production; reconfirm; metadata timing open |
+| [WebP VP8 opaque, simple luma filter](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 6,888.59 | 4,890.64 | 1.409 / 1.450 | 760,572 | Prior production; reconfirm; metadata timing open |
+| [WebP VP8 opaque, live cancelable token](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 6,687.81 | 4,793.83 | 1.395 / 1.437 | 760,572 | Prior production; reconfirm; metadata timing open |
+| [WebP VP8, opaque](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 6,638.33 | 4,795.62 | 1.384 / 1.443 | 760,572 | Prior production; reconfirm; metadata timing open |
+| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
+| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
+| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
+| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
 
 **Encode**
 
@@ -245,7 +249,7 @@ is a CPU-parity confirmation.
 | [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 86,100.75 | 53,409.99 | 1.612 / 1.790 | 1,537,304 | Prior production; reconfirm |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 83,863.51 | 53,727.26 | 1.561 / 1.652 | 1,537,304 | Prior production; reconfirm |
 | [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-HISTOGRAM384.md) | 19,502.47 | 53,435.71 | 0.365 / 0.433 | 2,036,564 | Prior production; reconfirm |
-| [WebP VP8L, exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 445,941.10 | 121,336.20 | 3.675 / 5.157 | 55,238,624 | Prior production; reconfirm |
+| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 464,921.62 | 121,865.49 | 3.815 / 4.757 | 55,238,624 | Prior production; reconfirm |
 | [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-COLOR-COST.md) | 612,338.64 | 83,533.61 | 7.330 / 8.250 | 67,414,112 | Prior production; reconfirm |
@@ -385,11 +389,13 @@ elsewhere, retaining alpha≤1/both RMSE≤0.25. Managed frozen pixels and indep
 certified rational-half cases remain exact. Linked reports specify every halo
 and scope control; no managed tolerance is introduced.
 
-PNG8 Optimal uses managed9/native6 for all four output color types; RGBA Fastest uses2/1,
-SmallestSize9/9, with exact samples and the historical5% IDAT timing-equivalence
-gate. [Complete-packet reconciliation](../benchmarks/PNG-COMPLETE-PACKET-AUDIT.md)
-finds15 retained passes and two open level-6 RGBA8 boundaries, both218,775/210,973 B.
-A timing pass or IDAT tolerance is not a packet-size pass. Packed-gray
+The historical BCL PNG timing rows used managed9/native6 for Optimal,2/1 for
+Fastest and9/9 for SmallestSize, with a5% IDAT timing-equivalence gate.
+[Their packet audit](../benchmarks/PNG-COMPLETE-PACKET-AUDIT.md) found15 passes
+and two open level-6 RGBA8 boundaries. These are superseded producer observations:
+the current managed encoder instead requires all14 declared complete packets
+to match exactly. A timing pass or IDAT tolerance establishes no packet-size pass.
+Packed-gray
 transparency uses the approved exact timed native color-key correction. Raw
 incompatible baselines/refusals remain unscored; approved equivalent replacements
 are confirmed. GIF/animation, startup, concurrency and arbitrary profiles are

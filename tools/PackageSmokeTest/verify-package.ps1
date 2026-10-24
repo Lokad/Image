@@ -381,6 +381,31 @@ using (var packageWideRoot = new Lokad.Image.Tooling.TestMemoryBudget(513 * 259 
     if (packageWideRoot.Bytes != 0 || packageWideRoot.IsDisposed)
         throw new Exception("Package bounded bicubic root cleanup differs.");
 }
+foreach (var (name, width, height, expectedHash) in new[]
+{
+    ("vp8-ffmpeg-31x23-effort6-quality75-opaque", 31, 23, "0183ca82890160db504bf6e1265a9dd6471cdf0bf98617e7dd5b7c3365f83432"),
+    ("vp8-authored-filter-normal-level40", 33, 33, "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1")
+})
+{
+    var packet = File.ReadAllBytes(Path.Combine(Path.GetDirectoryName(args[5])!, name + ".webp"));
+    using var root = new Lokad.Image.Tooling.TestMemoryBudget(2 * 1024 * 1024);
+    var options = new DecodeOptions { Limits = ImageLimits.Default with { MemoryBudget = root } };
+    using (var retained = ImageCodec.Decode(packet, options))
+    {
+        using (var input = new MemoryStream(packet, writable: false))
+        {
+            using var asynchronous = await ImageCodec.DecodeAsync(input, options);
+            if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(Lokad.Image.Tooling.OriginalPixels.Bytes(asynchronous))) != expectedHash
+                || !input.CanRead || root.Bytes != 2L * width * height * 4)
+                throw new Exception("Packaged VP8 exact async samples or retained owners differ.");
+        }
+        Array.Clear(packet);
+        if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(Lokad.Image.Tooling.OriginalPixels.Bytes(retained))) != expectedHash
+            || root.Bytes != (long)width * height * 4 || root.IsDisposed)
+            throw new Exception("Packaged VP8 exact samples or independent input lifetime differ.");
+    }
+    if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged VP8 retained admission was not released.");
+}
 using (var packageVp8Source = Lokad.Image.Tooling.OriginalPixels.Buffer(64, 64, 8, opaque: true))
 using (var packageVp8Encoded = new MemoryStream())
 using (var packageVp8Root = new Lokad.Image.Tooling.TestMemoryBudget(2 * 1024 * 1024))

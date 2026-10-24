@@ -15,13 +15,6 @@ public sealed class AuthoredVp8FfmpegTests
         using var actual = ImageCodec.Decode(encoded); var samples = OriginalPixels.Bytes(actual);
         Assert.Equal((frame.Width, frame.Height, 8), (actual.Width, actual.Height, actual.BitDepth));
         Assert.Equal(expected.Length, samples.Length);
-        var maximum = 0; double squares = 0;
-        for (var i = 0; i < samples.Length; i++)
-        {
-            if (i % 4 == 3) Assert.Equal(255, samples[i]);
-            else { var difference = Math.Abs(expected[i] - samples[i]); maximum = Math.Max(maximum, difference); squares += difference * difference; }
-        }
-        Assert.True(maximum <= 4 && Math.Sqrt(squares / (frame.Width * frame.Height * 3)) <= 1.5,
-            $"{name}: RGB maximum {maximum}, RMSE {Math.Sqrt(squares / (frame.Width * frame.Height * 3))}.");
+        Assert.Equal(expected, samples);
     }
 }

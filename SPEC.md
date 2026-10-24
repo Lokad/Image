@@ -1279,17 +1279,19 @@ tables; decoding algorithms are independently written.
 VP8 reconstruction matches frozen FFmpeg Y/U/V planes and alpha exactly. Output is
 RGBA8 using centered bilinear chroma expansion with edge extension, rounded to
 8-bit chroma samples before explicit limited-range BT.601 conversion. Color
-conversion uses Y'=(Y-16)*255/219, U'=U-128, V'=V-128;
-R=Y'+1.596026786V', G=Y'-0.391762290U'-0.812967647V', B=Y'+2.017232143U',
-rounded and clamped. The original corpus requires RGB maximum error 4 and RMSE 1.5
-against FFmpeg with the same expansion/range settings, exact geometry and exact
-alpha. These bounds cover scaler/matrix rounding; they do not permit errors in
-integer reconstruction or alpha.
-The FFmpeg oracle saturates through RGBA16 before explicitly reducing to RGBA8.
-The registered 8.1 scalar direct-RGBA8 conversion wraps blue for the analytical
-YUV=(255,255,128) case; the 16-bit path clips correctly. This conversion choice is
-checked against analytical saturated colors and recorded in fixture arguments.
-The RGB tolerances remain unchanged. Original authored cases additionally cover
+conversion derives studio Q13 coefficients from the BT.601 rational weights,
+saturates a16-bit RGB intermediate, and preserves the approved Q15 studio-YUV
+round trip and15-bit truncation before final Q13 RGB byte rounding. This explicit
+precision contract matches all110 native and54 authored frozen RGBA controls,
+and existing live decoder/encoder comparisons require exact normalized samples.
+No intermediate frame/row is allocated. Work remains64 units per output pixel;
+shared admission, retained-output ownership and independent alpha are unchanged.
+The pinned oracle saturates through RGBA16 before explicitly reducing to RGBA8.
+Its registered8.1 scalar direct-RGBA8 conversion wraps blue for the analytical
+YUV=(255,255,128) case; the approved16-bit path clips correctly. This normalization
+and its existing fixture arguments remain unchanged. Exactness claims concern
+these declared normalized controls, not every possible native scaler invocation.
+Original authored cases additionally cover
 all token partition counts, sparse categories and probability updates, both
 segment feature modes, quantizer deltas/clamps and filter adjustment/sharpness
 boundaries. Empty partitions and inconsistent sizes are rejected.

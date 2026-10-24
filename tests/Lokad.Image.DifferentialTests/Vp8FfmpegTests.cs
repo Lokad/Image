@@ -28,13 +28,7 @@ public sealed class Vp8FfmpegTests
         encoded[27] = (byte)((encoded[27]&63)|(scale<<6)); encoded[29] = (byte)((encoded[29]&63)|(scale<<6));
         using var actual = ImageCodec.Decode(encoded);
         var expected = WebpOracle.Decode(encoded,31,23,false); var samples = OriginalPixels.Bytes(actual);
-        var maximum=0; double squares=0;
-        for (var i=0;i<samples.Length;i++)
-        {
-            if (i%4==3) Assert.Equal(expected[i],samples[i]);
-            else { var difference=Math.Abs(expected[i]-samples[i]); maximum=Math.Max(maximum,difference); squares+=difference*difference; }
-        }
-        Assert.True(maximum<=4 && Math.Sqrt(squares/(31*23*3))<=1.5,$"Version {version}, scale {scale}: RGB maximum {maximum}.");
+        Assert.Equal(expected, samples);
     }
 
     public static IEnumerable<object[]> Profiles()
@@ -55,14 +49,6 @@ public sealed class Vp8FfmpegTests
         using var decoded = ImageCodec.Decode(encoded);
         Assert.Equal((width, height, 8), (decoded.Width, decoded.Height, decoded.BitDepth));
         var expected = WebpOracle.Decode(encoded, width, height, info.HasAlpha);
-        var actual = OriginalPixels.Bytes(decoded); var maximum = 0; double squares = 0;
-        for (var sample = 0; sample < actual.Length; sample++)
-        {
-            if (sample % 4 == 3) { Assert.Equal(expected[sample], actual[sample]); continue; }
-            var difference = Math.Abs(actual[sample] - expected[sample]); maximum = Math.Max(maximum, difference);
-            squares += difference * difference;
-        }
-        var rmse = Math.Sqrt(squares / (width * height * 3));
-        Assert.True(maximum <= 4 && rmse <= 1.5, $"RGB max {maximum}, RMSE {rmse} ({width}x{height}, effort {effort}, quality {quality}, opaque {opaque}).");
+        Assert.Equal(expected, OriginalPixels.Bytes(decoded));
     }
 }

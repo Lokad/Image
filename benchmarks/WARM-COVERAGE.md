@@ -1,6 +1,15 @@
 # Material warm coverage
 
-Updated2026-10-23. Byte-exact codec qualification precedes CPU parity. The finite scope remains
+Updated2026-10-24. The declared finite codec byte checklist passes at E112 scope;
+see [decoder evidence](DECODER-EXACTNESS.md) and [encoder scope](../docs/codec-parity.md).
+CPU/allocation qualification resumes on the existing named cases. Changed PNG/
+JPEG/VP8L/VP8 encoder producers and JPEG/VP8 RGB decoder producers invalidate
+affected older costs; unchanged paths retain confirmations. No new timing is
+claimed. Reconcile frozen workers/output identities, then resolve uncertain current
+costs with short guarded screens before choosing the largest demonstrated gap.
+Broader native-profile equality and replacement readiness remain open.
+
+The historical inventory below retains its recorded producers. The finite scope remains
 **256 named cases:239 numeric and17 unmeasured**. Current tested-producer evidence
 contains60 independent passes,147 gaps,one confidence-open case,10 short cost
 screens and21 superseded encoder rows. Full warm CPU parity and replacement

@@ -188,3 +188,10 @@ those normalized8-bit components with the shared rational BT.601 Q15/Q14 luma
 precision. The fixture manifest records provenance, input/settings and normalized
 reference hashes. Caller RGB/gray orientation, padding, admission and stream/
 retained-result boundaries have exact gates; no new performance claim is implied.
+
+VP8 decoding now retains the approved saturated16-bit/Q15/Q13 normalization using
+integer scalars. All164 existing frozen RGBA controls and live comparisons require
+exact samples. Reconstruction, deblocking, centered chroma and alpha were already
+exact; their algorithms are unchanged. The previous floating color renderer is
+removed. Existing VP8 decode timing/allocation rows describe the replaced producer;
+current CPU/allocation qualification remains open.

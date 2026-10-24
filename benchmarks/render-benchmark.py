@@ -99,8 +99,8 @@ def render():
         row('PNG RGBA8, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'Png8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('PNG RGBA16, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'Png16', -1], 'WARM-INPUT-RECONCILIATION.md', True),
         row('JPEG420 restart, fresh seekable Stream', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'StreamDecode420Restart', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8-cancellable-block-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-VP8-CANCELLABLE-BLOCK.md', verification='Gap (short; qualified)'),
-        row('WebP VP8L, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'StreamNativeLossless8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
+        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8-cancellable-block-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-VP8-CANCELLABLE-BLOCK.md', verification='Prior production; reconfirm'),
+        row('WebP VP8L, opaque RGBA8 / exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
         row('PNG RGBA8, None', 'warm-current-resident-png-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-RESIDENT-PNG.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, resident / ImageBudget quota', 'warm-shared-budget-evidence.json', ['cases', 'PngBudgetDecode8', -1], 'WARM-SHARED-BUDGET.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None / live cancelable token', 'warm-png-cancel-blocks-evidence.json', ['cases', 'DecodeCancelable8', -1], 'WARM-PNG-CANCEL-BLOCKS.md', verification='Gap (short; qualified)'),
@@ -175,14 +175,14 @@ def render():
         row('JPEG progressive 4:4:4 / live cancelable token', 'warm-jpeg-411-simd-evidence.json', ['cases', 'ProgressiveCancelable444', -1], 'WARM-JPEG-411-SIMD.md', verification='Gap (short; qualified)'),
         row('JPEG progressive 4:2:2', 'warm-input-reconciliation-evidence.json', ['cases', 'Progressive422', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('JPEG progressive 4:4:4', 'warm-input-reconciliation-evidence.json', ['cases', 'Progressive444', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 + alpha', 'warm-vp8-cancellable-block-evidence.json', ['cases', 'Native8', -1], 'WARM-VP8-CANCELLABLE-BLOCK.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 opaque, simple luma filter', 'warm-vp8-cancellable-block-evidence.json', ['cases', 'SimpleOpaque8', -1], 'WARM-VP8-CANCELLABLE-BLOCK.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 opaque, live cancelable token', 'warm-vp8-cancellable-block-evidence.json', ['cases', 'OpaqueCancelable8', -1], 'WARM-VP8-CANCELLABLE-BLOCK.md', verification='Gap (short; qualified)'),
-        row('WebP VP8, opaque', 'warm-vp8-cancellable-block-evidence.json', ['cases', 'Opaque8', -1], 'WARM-VP8-CANCELLABLE-BLOCK.md', verification='Gap (short; qualified)'),
-        row('WebP VP8L, sixteen-color indexed input', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'IndexedNative16Colors8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
-        row('WebP VP8L, literal/run input', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'Lossless8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
-        row('WebP VP8L, native input', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'NativeLossless8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
-        row('WebP VP8L, native input / live cancelable token', 'warm-vp8l-simd-prediction-evidence.json', ['cases', 'NativeLosslessCancelable8', -1], 'WARM-VP8L-SIMD-PREDICTION.md', verification='Gap (short; qualified)'),
+        row('WebP VP8 + alpha', 'warm-vp8-cancellable-block-evidence.json', ['cases', 'Native8', -1], 'WARM-VP8-CANCELLABLE-BLOCK.md', verification='Prior production; reconfirm'),
+        row('WebP VP8 opaque, simple luma filter', 'warm-vp8-cancellable-block-evidence.json', ['cases', 'SimpleOpaque8', -1], 'WARM-VP8-CANCELLABLE-BLOCK.md', verification='Prior production; reconfirm'),
+        row('WebP VP8 opaque, live cancelable token', 'warm-vp8-cancellable-block-evidence.json', ['cases', 'OpaqueCancelable8', -1], 'WARM-VP8-CANCELLABLE-BLOCK.md', verification='Prior production; reconfirm'),
+        row('WebP VP8, opaque', 'warm-vp8-cancellable-block-evidence.json', ['cases', 'Opaque8', -1], 'WARM-VP8-CANCELLABLE-BLOCK.md', verification='Prior production; reconfirm'),
+        row('WebP VP8L, opaque RGBA8 / exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8L, opaque RGBA8 / exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8L, opaque RGBA8 / exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8L, opaque RGBA8 / exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
     ]
     encodes = [
         row('WebP EncodeWebpAsync, exact backend* / fresh nonseekable Stream', 'vp8l-color-cost-evidence.json', ['cases', 'WebpLossless8AsyncNonSeekable', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
@@ -227,7 +227,7 @@ def render():
         row('WebP VP8 + alpha‡', 'vp8-noise-spectrum-evidence.json', ['observations', 2], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 3], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-histogram384-evidence.json', ['observations', 0], 'WARM-VP8-HISTOGRAM384.md', verification='Cost screen (CPU parity deferred)'),
-        row('WebP VP8L, exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'Encode8', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
+        row('WebP VP8L, opaque RGBA8 / exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L from RGBA16, exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
     ]
@@ -346,8 +346,8 @@ def render():
     assert parity_count + confidence_count + gap_count + reconfirm_count + cost_count == 239
     return f'''# Lokad.Image benchmark state
 
-Updated 2026-10-23. **Byte-exact codec replication takes priority over CPU parity:**
-encoders first, then exact decoder samples, against pinned FFmpeg builds/settings.
+Updated 2026-10-24. **Declared encoder and decoder byte controls are qualified**
+against pinned FFmpeg builds/settings; warm single-CPU parity remains open.
 Only explicitly approved encoder-attribution metadata may differ; see
 [codec compatibility](codec-parity.md).
 
@@ -409,6 +409,10 @@ Direct-RGB422/420 caller grayscale shares integer BT.601 precision after normali
 Earlier JPEG
 decode timings and allocations describe the replaced producer and are marked
 **Prior production; reconfirm**. No new decoder timing/allocation run is claimed.
+
+VP8 decoder RGB now uses the exact integer normalization on164 frozen controls.
+Its earlier timings/allocations also describe the replaced renderer; no new
+decoder measurement is claimed.
 
 No timing or allocation runs accompanied the new PNG/JPEG/VP8L encoder adoption. Unchanged paths
 retain evidence on their recorded frozen inputs; new default-encoded fixtures do
@@ -488,11 +492,13 @@ elsewhere, retaining alpha≤1/both RMSE≤0.25. Managed frozen pixels and indep
 certified rational-half cases remain exact. Linked reports specify every halo
 and scope control; no managed tolerance is introduced.
 
-PNG8 Optimal uses managed9/native6 for all four output color types; RGBA Fastest uses2/1,
-SmallestSize9/9, with exact samples and the historical5% IDAT timing-equivalence
-gate. [Complete-packet reconciliation](../benchmarks/PNG-COMPLETE-PACKET-AUDIT.md)
-finds15 retained passes and two open level-6 RGBA8 boundaries, both218,775/210,973 B.
-A timing pass or IDAT tolerance is not a packet-size pass. Packed-gray
+The historical BCL PNG timing rows used managed9/native6 for Optimal,2/1 for
+Fastest and9/9 for SmallestSize, with a5% IDAT timing-equivalence gate.
+[Their packet audit](../benchmarks/PNG-COMPLETE-PACKET-AUDIT.md) found15 passes
+and two open level-6 RGBA8 boundaries. These are superseded producer observations:
+the current managed encoder instead requires all14 declared complete packets
+to match exactly. A timing pass or IDAT tolerance establishes no packet-size pass.
+Packed-gray
 transparency uses the approved exact timed native color-key correction. Raw
 incompatible baselines/refusals remain unscored; approved equivalent replacements
 are confirmed. GIF/animation, startup, concurrency and arbitrary profiles are

@@ -5,40 +5,6 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8ColorTests
 {
-    [Theory]
-    [InlineData(1, 7)] [InlineData(2, 3)] [InlineData(9, 1)]
-    [InlineData(14, 5)] [InlineData(15, 4)] [InlineData(16, 5)]
-    [InlineData(17, 4)] [InlineData(25, 5)] [InlineData(33, 4)] [InlineData(49, 7)]
-    public void CompleteRowsMatchScalarGeometryMatrixAndAlpha(int width, int height)
-    {
-        foreach (var pattern in new[] { 0, 1 })
-            foreach (var withAlpha in new[] { false, true })
-            {
-                var planes = Planes(width, height, pattern);
-                var before = planes.Y.Concat(planes.U).Concat(planes.V).ToArray();
-                var alpha = withAlpha ? Enumerable.Range(0, width * height)
-                    .Select(i => (byte)(i % 3 == 0 ? 0 : i * 73)).ToArray() : null;
-                var context = Context(planes, alpha);
-                using var result = Vp8Color.Render(planes, alpha, context);
-                Assert.Equal(8, result.BitDepth);
-                for (var y = 0; y < height; y++)
-                    for (var x = 0; x < width; x++)
-                    {
-                        var luma = (planes.Y[y * planes.Stride + x] - 16) * (255.0 / 219);
-                        var u = Chroma(planes.U, planes, x, y) - 128;
-                        var v = Chroma(planes.V, planes, x, y) - 128;
-                        var row = result.GetRow8(y);
-                        Assert.Equal(Sample(luma + 1.596026785714286 * v), row[x * 4]);
-                        Assert.Equal(Sample(luma - 0.391762290094914 * u - 0.812967647237771 * v), row[x * 4 + 1]);
-                        Assert.Equal(Sample(luma + 2.017232142857143 * u), row[x * 4 + 2]);
-                        Assert.Equal(alpha is null ? (byte)255 : alpha[y * width + x], row[x * 4 + 3]);
-                    }
-                Assert.Equal(before, planes.Y.Concat(planes.U).Concat(planes.V).ToArray());
-                Assert.Equal(ImageLimits.Default.MaxWork - width * height * 64L, context.RemainingWork);
-                Assert.Equal(width * height * 4L, LiveBytes(context));
-            }
-    }
-
     [Fact]
     public void WorkAdmissionIsAtomicPerRowAndPrecedesNextRowAccess()
     {
@@ -114,18 +80,4 @@ public sealed class Vp8ColorTests
         ? (byte)((x * 37 + y * 53 + x * y * 17 + (x ^ y) * 11 + 19) & 255)
         : (byte)((x + y) % 7 switch { 0 => 0, 1 => 255, 2 => 16, 3 => 235, 4 => 128, 5 => 127, _ => 129 });
 
-    // Independent original centered geometry and double interpolation recurrence.
-    private static double Chroma(byte[] plane, Vp8Planes planes, int x, int y)
-    {
-        var width = (planes.Width + 1) / 2; var height = (planes.Height + 1) / 2; var stride = planes.Stride / 2;
-        var sx = Math.Clamp((x + 0.5) / 2 - 0.5, 0, width - 1);
-        var sy = Math.Clamp((y + 0.5) / 2 - 0.5, 0, height - 1);
-        var left = (int)sx; var top = (int)sy;
-        var right = Math.Min(left + 1, width - 1); var bottom = Math.Min(top + 1, height - 1);
-        var dx = sx - left; var dy = sy - top;
-        return Math.Floor((plane[top * stride + left] * (1 - dx) + plane[top * stride + right] * dx) * (1 - dy)
-            + (plane[bottom * stride + left] * (1 - dx) + plane[bottom * stride + right] * dx) * dy + 0.5);
-    }
-
-    private static byte Sample(double value) => (byte)Math.Clamp((int)Math.Floor(value + 0.5), 0, 255);
 }

@@ -5,7 +5,7 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8ChromaTests
 {
-    private delegate double Expansion(byte[] plane, int stride, int width, int height, int x, int y);
+    private delegate int Expansion(byte[] plane, int stride, int width, int height, int x, int y);
     private static readonly Expansion Expand = typeof(Vp8Color).GetMethod("Chroma", BindingFlags.Static | BindingFlags.NonPublic)!.CreateDelegate<Expansion>();
 
     [Fact]
@@ -54,13 +54,13 @@ public sealed class Vp8ChromaTests
     }
 
     // Retained original centered geometry and double interpolation recurrence.
-    private static double Scalar(byte[] plane, int stride, int width, int height, int x, int y)
+    private static int Scalar(byte[] plane, int stride, int width, int height, int x, int y)
     {
         var sx = Math.Clamp((x + 0.5) / 2 - 0.5, 0, width - 1); var sy = Math.Clamp((y + 0.5) / 2 - 0.5, 0, height - 1);
         var left = (int)sx; var top = (int)sy; var right = Math.Min(left + 1, width - 1); var bottom = Math.Min(top + 1, height - 1);
         var dx = sx - left; var dy = sy - top;
         var sample = (plane[top * stride + left] * (1 - dx) + plane[top * stride + right] * dx) * (1 - dy)
             + (plane[bottom * stride + left] * (1 - dx) + plane[bottom * stride + right] * dx) * dy;
-        return Math.Floor(sample + 0.5);
+        return (int)Math.Floor(sample + 0.5);
     }
 }

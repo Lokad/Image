@@ -13,8 +13,8 @@ metadata are required; remaining error bounds are transitional functional checks
 | JPEG direct-RGB422/420 | Two original513x259 packets pass exact normalized RGBA, callerRGB and callerGRAY; stop. |
 | JPEG CMYK/YCCK and411/410 | Named constant/varying/progressive/saturated/AC and quarter-width controls pass at E106/E108 scope. |
 | JPEG caller grayscale/RGB/CMYK | Named source/options, padding/orientation, stream and retained-root checks pass; canonical ink contracts retained. |
-| VP8 reconstruction and deblocking | Current suites already pass exact YUV over110 native+54 authored fixtures. Reconfirm two named live controls. |
-| VP8 chroma/RGB and ALPH | RGB exactness uncertain; retain passing exact-alpha controls. |
+| VP8 reconstruction and deblocking | Exact YUV over110 native+54 authored fixtures; two named live controls reconfirmed on both OSes; stop. |
+| VP8 chroma/RGB and ALPH | E112: all164 frozen RGBA and existing live assertions require exact samples; approved normalization retained; stop. |
 | Typed source metadata, orientation and delivery | Existing sync/async, caller-buffer and lifetime checks pass. |
 
 E108 adopts independently derived quarter-width Q16 positions, Q14 horizontal/
@@ -31,8 +31,8 @@ tap reduction, a distinct required branch found during source inspection. Both
 frozen513x259 companion packets also match the existing live-JPEG decode options,
 on Windows/Linux with normal/scalar native execution.
 
-Both OSes pass5,044 full checks, including947 live comparisons, plus33 internal/
-128 public affected scalar checks. The SAME actual private0.2.0 package passes
+E112 passes5,034 full checks on both OSes, including947 live comparisons, plus20
+internal/123 public affected scalar checks. The SAME actual private0.2.0 package passes
 both consumers and all3 usage examples. Earlier qualified inverse/YCbCr/CMYK and
 encoder/metadata/editing/text paths retain their evidence and pass these suites.
 
@@ -41,11 +41,20 @@ Those baselines/raw data remain unchanged and prior-production; the new byte
 checks do not prove equivalent timing workloads or a performance pass. Align
 current output contracts before future CPU/allocation qualification.
 
-Next, reconfirm one existing31x23 VP8 native packet and one authored filter case
-against pinned live planar references, reusing the164 exact frozen controls.
-Resolve normalized chroma/RGB precision on those same inputs. No settings/shape
-grid or speed-only tuning. Broader decoder equality, warm single-CPU parity and
-replacement readiness remain open.
+E111's two existing VP8 controls isolated34/79 RGB samples differing by one;
+reconstruction, centered byte chroma and alpha were exact. E112 adopts independently
+derived studio Q13 color, saturated16-bit RGB and the approved Q15/15-bit/Q13
+precision reduction. The integer composition matches all164 frozen RGBA controls.
+No frame/row storage is added;64-per-pixel work and memory/ownership contracts
+remain. The replaced double/SIMD renderer, unused source-error method and ten
+implementation-only checks are removed. Resource and chroma geometry tests remain.
+
+The finite declared codec byte checklist now passes at its stated scopes. Resume
+current CPU/allocation evidence reconciliation on the existing named workloads;
+changed producers invalidate affected earlier timings. Reuse unchanged path
+confirmations, resolve uncertain costs before choosing the largest demonstrated
+gap, and stop passing cases. Broader native-profile equality, warm single-CPU
+parity and replacement readiness remain open; no workload grid is introduced.
 
 E109 confirms owned RGBA and caller RGB on the two existing513x259 direct-RGB422/
 420 packets, preserving approved phase/component normalization and original hashes.

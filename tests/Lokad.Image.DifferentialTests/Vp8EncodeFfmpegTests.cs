@@ -29,7 +29,7 @@ public sealed class Vp8EncodeFfmpegTests
         var expected = WebpOracle.Decode(encoded, width, height, info.HasAlpha);
         using var decoded = ImageCodec.Decode(encoded); var actual = OriginalPixels.Bytes(decoded);
         Assert.Equal(width * height * 4, expected.Length);
-        var maximum = 0; double squares = 0;
+        Assert.Equal(expected, actual);
         for (var i = 0; i < actual.Length; i++)
         {
             if (i % 4 == 3)
@@ -37,8 +37,6 @@ public sealed class Vp8EncodeFfmpegTests
                 var sample = depth == 8 ? input[i] : (System.Buffers.Binary.BinaryPrimitives.ReadUInt16LittleEndian(input.AsSpan(i * 2)) + 128) / 257;
                 Assert.Equal(sample, expected[i]); Assert.Equal(sample, actual[i]);
             }
-            else { var error = Math.Abs(expected[i] - actual[i]); maximum = Math.Max(maximum, error); squares += error * error; }
         }
-        Assert.True(maximum <= 4 && Math.Sqrt(squares / (width * height * 3)) <= 1.5, $"RGB maximum {maximum}, RMSE {Math.Sqrt(squares / (width * height * 3))}.");
     }
 }

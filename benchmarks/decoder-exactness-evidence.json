@@ -1,6 +1,6 @@
 {
   "project": "Lokad.Image",
-  "round": "E110",
+  "round": "E112",
   "policy": "Exact normalized output samples first. Reuse unchanged valid evidence. Resolve uncertainty before changing algorithms. Old lossy RGB tolerances are transitional interoperability checks, not completion gates. No new workload grid, CPU tuning or repeated package proof.",
   "reference": {
     "executableSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
@@ -97,7 +97,7 @@
       "id": "vp8-reconstruction",
       "controls": "Existing native/authored VP8 manifests and authored raw/compressed ALPH filters; first use one existing31x23 normal frame and one already-authored filter/edge control",
       "why": "Arithmetic decoding, intra prediction, inverse transform and deblocking must be distinguished from final chroma/RGB conversion",
-      "status": "Existing Vp8FixtureTests already require exact YUV over110 native+54 authored packets, passing current BOTHOS suites. Reuse this evidence; reconfirm the two named live controls before declaring stage closed. RGB conversion is separately uncertain.",
+      "status": "PASS and STOP at164 existing frozen YUV/ALPH controls and pinned live normal/scalar confirmations on the two named packets, BOTHOS. No reconstruction/filter change.",
       "tests": [
         "Vp8FfmpegTests",
         "AuthoredVp8FfmpegTests",
@@ -109,11 +109,14 @@
       "id": "vp8-color-alpha",
       "controls": "Same existing31x23 frame, authored matrix extremes and ALPH filter controls; retain existing exact alpha and hidden-RGB expectations",
       "why": "Limited-range matrix, chroma phase/rounding and independent exact alpha",
-      "status": "RGB UNCERTAIN under old bounds; exact alpha coverage reused and STOPPED. No new quality/shape grid.",
+      "status": "PASS and STOP at E112 scope: all164 existing frozen RGBA controls plus existing live decode/encode/partition/version/ALPH assertions now require exact normalized samples, BOTHOS/scalar. Approved saturation/phase unchanged. No new image/settings grid.",
       "tests": [
         "Vp8OracleColorTests",
         "Vp8FfmpegTests.AuthoredRawAndCompressedAlphaFiltersInteroperateExactly",
-        "Vp8Tests.RawAlphaFiltersPreserveIndependentSourceSamplesAndLossyRgb"
+        "Vp8Tests.RawAlphaFiltersPreserveIndependentSourceSamplesAndLossyRgb",
+        "Vp8Tests.FrozenLossyPixelsMatchExplicitFfmpegConversionAndExactAlpha",
+        "Vp8EncodeFfmpegTests",
+        "Vp8RateSearchFfmpegTests"
       ]
     },
     {
@@ -248,7 +251,7 @@
   },
   "cpuTimingRuns": 0,
   "gcAllocationsMeasured": false,
-  "next": "Reuse already passing exact planar assertions over110 frozen native and54 authored VP8 controls; reconfirm one31x23 native and one authored filter control against pinned live references before selecting any primitive. Resolve normalized chroma/RGB rounding on those same packets, retaining approved16-bit saturation normalization and exact ALPH. No settings/shape/quality grid, retuning of passing paths or CPU-only work. CPU/allocation parity and full replacement qualification remain open.",
+  "next": "Declared finite codec byte checklist passes at stated scopes. Resume bounded CPU/allocation evidence reconciliation on the existing named workloads: new PNG/JPEG/VP8L/VP8 encoder producers and JPEG/VP8 RGB decoder producers invalidate affected older timing/allocation evidence; unchanged primitives retain confirmations. Resolve uncertain current costs before choosing a demonstrated largest gap, one primitive at a time. First inspect existing prepared workers and frozen inputs/reference settings; no workload grid, native baseline change, repeat package proof or passing-case retuning. Keep quarter-width timing normalization mismatch explicit.",
   "rawArchive": {
     "name": "e100-decoder-audit.tar.xz",
     "bytes": 20372,
@@ -986,16 +989,16 @@
   "currentProductionProducer": {
     "windowsCore": {
       "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
-      "bytes": 751104,
-      "sha256": "607d91aa6c206aa8b091a839c8867dbaf346567ea59c5d5c8ca4418f37a0592f"
+      "bytes": 750592,
+      "sha256": "f801df66d145e7ee98133ee7963a3fe6a8bb2ae343c0ed050928fa663bfc25bc"
     },
     "linuxCore": {
       "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
-      "bytes": 751104,
-      "sha256": "646151dabf1750eb2e9fe92f1d2717fdad77902285b2509fe46af7f93a4f8e93"
+      "bytes": 750592,
+      "sha256": "8059987182f15319c2c17cbc5eb17b9a16153e374ab100fe53019a92fc04b14f"
     }
   },
-  "lastProductionRound": "E110",
+  "lastProductionRound": "E112",
   "productionChangedThisRound": true,
   "subsampledColorBoundary": {
     "round": "E104",
@@ -3323,6 +3326,1922 @@
       "everySourceMemberByteVerified": true,
       "linuxBeforeMirror": 4993830302,
       "linuxAfterMirror": 4995755030,
+      "allObservedAndProjectedPeaksBelowCap": true
+    }
+  },
+  "vp8ColorBoundary": {
+    "round": "E111",
+    "productionChanged": false,
+    "status": "Bounded diagnostic completed and adopted by E112 publicVp8ColorAdoption; original observations preserved.",
+    "scope": "Same31x23 opaque native frame and33x33 authored normal-filter-level40 control, then reuse exactly the existing110 native+54 authored frozen controls. No new settings/image grid.",
+    "finding": "Reconstruction/deblocking, alpha and centered byte chroma are already exact. Binary64 RGB conversion differs by1 at34/79 samples. Rationally derived studio Q13 color reaches the exact saturated16-bit intermediate; the approved native16-to8 normalization performs a Q15 RGB-to-studio-YUV round trip, truncates each16-bit sample to15bits, then Q13 RGB with final byte rounding. Merely rounding the16-bit RGB intermediate leaves25/49 differences. Complete independent integer composition matches164/164 existing frozen RGBA packets.",
+    "windows": {
+      "round": "E111",
+      "productionChanged": false,
+      "producerSha256": "607d91aa6c206aa8b091a839c8867dbaf346567ea59c5d5c8ca4418f37a0592f",
+      "referenceSha256": "1a65d5b0b10d8d9a81d2824a3538046a40ed3607c906b335a166add87613f705",
+      "rows": [
+        {
+          "name": "vp8-ffmpeg-31x23-effort6-quality75-opaque",
+          "width": 31,
+          "height": 23,
+          "encodedBytes": 664,
+          "inputSha256": "dcfcb2705cd2ae8893d2fa8dd236457f746cdbd51c8ad6468ab03978127f9265",
+          "native": [
+            {
+              "mode": "scalar",
+              "planar": {
+                "differingSamples": 0,
+                "maximum": 0,
+                "expectedSha256": "d1aec3542f19940a9f0b53c307a500a471973658327b0d5baec5f19d7c230b20",
+                "actualSha256": "d1aec3542f19940a9f0b53c307a500a471973658327b0d5baec5f19d7c230b20"
+              },
+              "rgba": {
+                "differingSamples": 0,
+                "maximum": 0,
+                "expectedSha256": "0183ca82890160db504bf6e1265a9dd6471cdf0bf98617e7dd5b7c3365f83432",
+                "actualSha256": "0183ca82890160db504bf6e1265a9dd6471cdf0bf98617e7dd5b7c3365f83432"
+              }
+            },
+            {
+              "mode": "normal",
+              "planar": {
+                "differingSamples": 0,
+                "maximum": 0,
+                "expectedSha256": "d1aec3542f19940a9f0b53c307a500a471973658327b0d5baec5f19d7c230b20",
+                "actualSha256": "d1aec3542f19940a9f0b53c307a500a471973658327b0d5baec5f19d7c230b20"
+              },
+              "rgba": {
+                "differingSamples": 0,
+                "maximum": 0,
+                "expectedSha256": "0183ca82890160db504bf6e1265a9dd6471cdf0bf98617e7dd5b7c3365f83432",
+                "actualSha256": "0183ca82890160db504bf6e1265a9dd6471cdf0bf98617e7dd5b7c3365f83432"
+              }
+            }
+          ],
+          "managedRgba": {
+            "differingSamples": 34,
+            "maximum": 1,
+            "expectedSha256": "0183ca82890160db504bf6e1265a9dd6471cdf0bf98617e7dd5b7c3365f83432",
+            "actualSha256": "ee5a79c4b7f1c0a56cc1c3cc093d9395aa4f8c92ce10016e459240de25cc4121"
+          },
+          "centeredChroma": {
+            "differingSamples": 0,
+            "maximum": 0,
+            "expectedSha256": "d0eced974162fed4818f865c61a98cae2bf8794fc31535d5d4362339e6c5291e",
+            "actualSha256": "d0eced974162fed4818f865c61a98cae2bf8794fc31535d5d4362339e6c5291e"
+          }
+        },
+        {
+          "name": "vp8-authored-filter-normal-level40",
+          "width": 33,
+          "height": 33,
+          "encodedBytes": 386,
+          "inputSha256": "847f6ded33319546d6a63d0445019242f05ae0b721475782f117922ee2079283",
+          "native": [
+            {
+              "mode": "scalar",
+              "planar": {
+                "differingSamples": 0,
+                "maximum": 0,
+                "expectedSha256": "57d358d856c070d5792392f5faa283bda0d62f93969b8751c80c7cfd5f98a032",
+                "actualSha256": "57d358d856c070d5792392f5faa283bda0d62f93969b8751c80c7cfd5f98a032"
+              },
+              "rgba": {
+                "differingSamples": 0,
+                "maximum": 0,
+                "expectedSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1",
+                "actualSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1"
+              }
+            },
+            {
+              "mode": "normal",
+              "planar": {
+                "differingSamples": 0,
+                "maximum": 0,
+                "expectedSha256": "57d358d856c070d5792392f5faa283bda0d62f93969b8751c80c7cfd5f98a032",
+                "actualSha256": "57d358d856c070d5792392f5faa283bda0d62f93969b8751c80c7cfd5f98a032"
+              },
+              "rgba": {
+                "differingSamples": 0,
+                "maximum": 0,
+                "expectedSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1",
+                "actualSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1"
+              }
+            }
+          ],
+          "managedRgba": {
+            "differingSamples": 79,
+            "maximum": 1,
+            "expectedSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1",
+            "actualSha256": "714398d5dc2d003eb924ed7874c19dda4c237d29fc17dcf3f11fafa2b764a94b"
+          },
+          "centeredChroma": {
+            "differingSamples": 0,
+            "maximum": 0,
+            "expectedSha256": "5f3ff7db2c6cba972820e22de8d1c3dd1f4ae56241efff39e83b6cc29b2b94bf",
+            "actualSha256": "5f3ff7db2c6cba972820e22de8d1c3dd1f4ae56241efff39e83b6cc29b2b94bf"
+          }
+        }
+      ],
+      "cpuTimingRuns": 0
+    },
+    "linux": {
+      "round": "E111",
+      "productionChanged": false,
+      "producerSha256": "646151dabf1750eb2e9fe92f1d2717fdad77902285b2509fe46af7f93a4f8e93",
+      "referenceSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
+      "rows": [
+        {
+          "name": "vp8-ffmpeg-31x23-effort6-quality75-opaque",
+          "width": 31,
+          "height": 23,
+          "encodedBytes": 664,
+          "inputSha256": "dcfcb2705cd2ae8893d2fa8dd236457f746cdbd51c8ad6468ab03978127f9265",
+          "native": [
+            {
+              "mode": "scalar",
+              "planar": {
+                "differingSamples": 0,
+                "maximum": 0,
+                "expectedSha256": "d1aec3542f19940a9f0b53c307a500a471973658327b0d5baec5f19d7c230b20",
+                "actualSha256": "d1aec3542f19940a9f0b53c307a500a471973658327b0d5baec5f19d7c230b20"
+              },
+              "rgba": {
+                "differingSamples": 0,
+                "maximum": 0,
+                "expectedSha256": "0183ca82890160db504bf6e1265a9dd6471cdf0bf98617e7dd5b7c3365f83432",
+                "actualSha256": "0183ca82890160db504bf6e1265a9dd6471cdf0bf98617e7dd5b7c3365f83432"
+              }
+            },
+            {
+              "mode": "normal",
+              "planar": {
+                "differingSamples": 0,
+                "maximum": 0,
+                "expectedSha256": "d1aec3542f19940a9f0b53c307a500a471973658327b0d5baec5f19d7c230b20",
+                "actualSha256": "d1aec3542f19940a9f0b53c307a500a471973658327b0d5baec5f19d7c230b20"
+              },
+              "rgba": {
+                "differingSamples": 0,
+                "maximum": 0,
+                "expectedSha256": "0183ca82890160db504bf6e1265a9dd6471cdf0bf98617e7dd5b7c3365f83432",
+                "actualSha256": "0183ca82890160db504bf6e1265a9dd6471cdf0bf98617e7dd5b7c3365f83432"
+              }
+            }
+          ],
+          "managedRgba": {
+            "differingSamples": 34,
+            "maximum": 1,
+            "expectedSha256": "0183ca82890160db504bf6e1265a9dd6471cdf0bf98617e7dd5b7c3365f83432",
+            "actualSha256": "ee5a79c4b7f1c0a56cc1c3cc093d9395aa4f8c92ce10016e459240de25cc4121"
+          },
+          "centeredChroma": {
+            "differingSamples": 0,
+            "maximum": 0,
+            "expectedSha256": "d0eced974162fed4818f865c61a98cae2bf8794fc31535d5d4362339e6c5291e",
+            "actualSha256": "d0eced974162fed4818f865c61a98cae2bf8794fc31535d5d4362339e6c5291e"
+          }
+        },
+        {
+          "name": "vp8-authored-filter-normal-level40",
+          "width": 33,
+          "height": 33,
+          "encodedBytes": 386,
+          "inputSha256": "847f6ded33319546d6a63d0445019242f05ae0b721475782f117922ee2079283",
+          "native": [
+            {
+              "mode": "scalar",
+              "planar": {
+                "differingSamples": 0,
+                "maximum": 0,
+                "expectedSha256": "57d358d856c070d5792392f5faa283bda0d62f93969b8751c80c7cfd5f98a032",
+                "actualSha256": "57d358d856c070d5792392f5faa283bda0d62f93969b8751c80c7cfd5f98a032"
+              },
+              "rgba": {
+                "differingSamples": 0,
+                "maximum": 0,
+                "expectedSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1",
+                "actualSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1"
+              }
+            },
+            {
+              "mode": "normal",
+              "planar": {
+                "differingSamples": 0,
+                "maximum": 0,
+                "expectedSha256": "57d358d856c070d5792392f5faa283bda0d62f93969b8751c80c7cfd5f98a032",
+                "actualSha256": "57d358d856c070d5792392f5faa283bda0d62f93969b8751c80c7cfd5f98a032"
+              },
+              "rgba": {
+                "differingSamples": 0,
+                "maximum": 0,
+                "expectedSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1",
+                "actualSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1"
+              }
+            }
+          ],
+          "managedRgba": {
+            "differingSamples": 79,
+            "maximum": 1,
+            "expectedSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1",
+            "actualSha256": "714398d5dc2d003eb924ed7874c19dda4c237d29fc17dcf3f11fafa2b764a94b"
+          },
+          "centeredChroma": {
+            "differingSamples": 0,
+            "maximum": 0,
+            "expectedSha256": "5f3ff7db2c6cba972820e22de8d1c3dd1f4ae56241efff39e83b6cc29b2b94bf",
+            "actualSha256": "5f3ff7db2c6cba972820e22de8d1c3dd1f4ae56241efff39e83b6cc29b2b94bf"
+          }
+        }
+      ],
+      "cpuTimingRuns": 0
+    },
+    "windowsColor": {
+      "coefficients": [
+        9539,
+        13075,
+        16525,
+        -3209,
+        -6660
+      ],
+      "rows": [
+        {
+          "name": "vp8-ffmpeg-31x23-effort6-quality75-opaque",
+          "q13To16": {
+            "differingSamples": 0,
+            "maximum": 0
+          },
+          "directQ13To8": {
+            "differingSamples": 25,
+            "maximum": 1
+          },
+          "native16To8HighByte": {
+            "differingSamples": 1060,
+            "maximum": 1
+          },
+          "native16To8Rounded": {
+            "differingSamples": 25,
+            "maximum": 1
+          },
+          "native16To8Div257": {
+            "differingSamples": 1054,
+            "maximum": 1
+          }
+        },
+        {
+          "name": "vp8-authored-filter-normal-level40",
+          "q13To16": {
+            "differingSamples": 0,
+            "maximum": 0
+          },
+          "directQ13To8": {
+            "differingSamples": 49,
+            "maximum": 1
+          },
+          "native16To8HighByte": {
+            "differingSamples": 1436,
+            "maximum": 1
+          },
+          "native16To8Rounded": {
+            "differingSamples": 49,
+            "maximum": 1
+          },
+          "native16To8Div257": {
+            "differingSamples": 1585,
+            "maximum": 1
+          }
+        }
+      ],
+      "productionChanged": false
+    },
+    "linuxColor": {
+      "coefficients": [
+        9539,
+        13075,
+        16525,
+        -3209,
+        -6660
+      ],
+      "rows": [
+        {
+          "name": "vp8-ffmpeg-31x23-effort6-quality75-opaque",
+          "q13To16": {
+            "differingSamples": 0,
+            "maximum": 0
+          },
+          "directQ13To8": {
+            "differingSamples": 25,
+            "maximum": 1
+          },
+          "native16To8HighByte": {
+            "differingSamples": 1060,
+            "maximum": 1
+          },
+          "native16To8Rounded": {
+            "differingSamples": 25,
+            "maximum": 1
+          },
+          "native16To8Div257": {
+            "differingSamples": 1054,
+            "maximum": 1
+          }
+        },
+        {
+          "name": "vp8-authored-filter-normal-level40",
+          "q13To16": {
+            "differingSamples": 0,
+            "maximum": 0
+          },
+          "directQ13To8": {
+            "differingSamples": 49,
+            "maximum": 1
+          },
+          "native16To8HighByte": {
+            "differingSamples": 1436,
+            "maximum": 1
+          },
+          "native16To8Rounded": {
+            "differingSamples": 49,
+            "maximum": 1
+          },
+          "native16To8Div257": {
+            "differingSamples": 1585,
+            "maximum": 1
+          }
+        }
+      ],
+      "productionChanged": false
+    },
+    "windowsReduction": {
+      "coefficients": [
+        [
+          8414,
+          16519,
+          3208
+        ],
+        [
+          -4865,
+          -9528,
+          14392
+        ],
+        [
+          14392,
+          -12061,
+          -2332
+        ]
+      ],
+      "rows": [
+        {
+          "name": "vp8-ffmpeg-31x23-effort6-quality75-opaque",
+          "composedIntegerRoundTrip": {
+            "differingSamples": 0,
+            "maximum": 0
+          },
+          "isolatedNativeReduction": {
+            "differingSamples": 0,
+            "maximum": 0
+          }
+        },
+        {
+          "name": "vp8-authored-filter-normal-level40",
+          "composedIntegerRoundTrip": {
+            "differingSamples": 0,
+            "maximum": 0
+          },
+          "isolatedNativeReduction": {
+            "differingSamples": 0,
+            "maximum": 0
+          }
+        }
+      ]
+    },
+    "linuxReduction": {
+      "coefficients": [
+        [
+          8414,
+          16519,
+          3208
+        ],
+        [
+          -4865,
+          -9528,
+          14392
+        ],
+        [
+          14392,
+          -12061,
+          -2332
+        ]
+      ],
+      "rows": [
+        {
+          "name": "vp8-ffmpeg-31x23-effort6-quality75-opaque",
+          "composedIntegerRoundTrip": {
+            "differingSamples": 0,
+            "maximum": 0
+          },
+          "isolatedNativeReduction": {
+            "differingSamples": 0,
+            "maximum": 0
+          }
+        },
+        {
+          "name": "vp8-authored-filter-normal-level40",
+          "composedIntegerRoundTrip": {
+            "differingSamples": 0,
+            "maximum": 0
+          },
+          "isolatedNativeReduction": {
+            "differingSamples": 0,
+            "maximum": 0
+          }
+        }
+      ]
+    },
+    "corpus": {
+      "round": "E111",
+      "scope": "Exactly the existing110 native+54 authored frozen packets; no new workload grid",
+      "productionChanged": false,
+      "rows": [
+        {
+          "name": "vp8-ffmpeg-1x1-effort0-quality1-alpha",
+          "inputSha256": "9eb311bc35cdc5537a3ed479b80e260b7797bbe9cae2a6c69a471d8e79461850",
+          "outputSha256": "c18c0dd42d49a05e00be9870a20c0237c3689646a86479a6ab6cdf4130776d6e",
+          "expectedSha256": "c18c0dd42d49a05e00be9870a20c0237c3689646a86479a6ab6cdf4130776d6e",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x1-effort0-quality1-opaque",
+          "inputSha256": "c3ae61084eee61726f96adb809eb216218e1c9b1199cd4f4b7eba63c1839703b",
+          "outputSha256": "cf1765014ee4155165c119f710b0f47f1b9fffdc1a0ce4694290907fe9342b03",
+          "expectedSha256": "cf1765014ee4155165c119f710b0f47f1b9fffdc1a0ce4694290907fe9342b03",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x1-effort0-quality75-alpha",
+          "inputSha256": "55cbf165f0b5b1f7664d98588e91c225b4a8a58b6c73fc2d7516626622c5005a",
+          "outputSha256": "e4813ff40707a805ece0e8489ae79cea8cb10a8c6b63202364b9bd7a5fa2c2a9",
+          "expectedSha256": "e4813ff40707a805ece0e8489ae79cea8cb10a8c6b63202364b9bd7a5fa2c2a9",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x1-effort0-quality75-opaque",
+          "inputSha256": "5f9a2e6b588c08b13881890844b1bc3a25909fd96795cf4c07aa601075d4cad6",
+          "outputSha256": "e61eeee7db3e5b4136a170cb7776def3da37dfa44cf5ac51c5490df018f42e55",
+          "expectedSha256": "e61eeee7db3e5b4136a170cb7776def3da37dfa44cf5ac51c5490df018f42e55",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x1-effort0-quality100-alpha",
+          "inputSha256": "d00fdad142ed7687de3cf7946e861d1fef0f2e1f332aac87dc148bd4900220bd",
+          "outputSha256": "1df26b4065cf913ff42d643198c42f9b09ad6463a86a4af22fe0047f3a7620da",
+          "expectedSha256": "1df26b4065cf913ff42d643198c42f9b09ad6463a86a4af22fe0047f3a7620da",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x1-effort0-quality100-opaque",
+          "inputSha256": "08eeb9acd71625ffb52ea74c2114bbdbba31a3beb0375f3ca77c72e00ad89718",
+          "outputSha256": "b5f8d88a1f5d9b759397d40e021c554494b64e86ac532352d11dea0a8b8450d5",
+          "expectedSha256": "b5f8d88a1f5d9b759397d40e021c554494b64e86ac532352d11dea0a8b8450d5",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x1-effort6-quality1-alpha",
+          "inputSha256": "296e84c9dd1fa076061788104d5a223ef2d7324cb67851e41947979d6169c83b",
+          "outputSha256": "c18c0dd42d49a05e00be9870a20c0237c3689646a86479a6ab6cdf4130776d6e",
+          "expectedSha256": "c18c0dd42d49a05e00be9870a20c0237c3689646a86479a6ab6cdf4130776d6e",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x1-effort6-quality1-opaque",
+          "inputSha256": "0c450d45c3e3824ff1f504ab713d469ee98ac8a97b02c0ff7e12f7a03c0b8675",
+          "outputSha256": "cf1765014ee4155165c119f710b0f47f1b9fffdc1a0ce4694290907fe9342b03",
+          "expectedSha256": "cf1765014ee4155165c119f710b0f47f1b9fffdc1a0ce4694290907fe9342b03",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x1-effort6-quality75-alpha",
+          "inputSha256": "f6b77a6fe40b3a2e86ca2ff46f11cd064accabc995c57391dd4c4b25c205e8d8",
+          "outputSha256": "e4813ff40707a805ece0e8489ae79cea8cb10a8c6b63202364b9bd7a5fa2c2a9",
+          "expectedSha256": "e4813ff40707a805ece0e8489ae79cea8cb10a8c6b63202364b9bd7a5fa2c2a9",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x1-effort6-quality75-opaque",
+          "inputSha256": "a0f1d22b92ed76a865a0ea1f0fd2ff88fcdafa9c9fb6742419fc211d429d9f76",
+          "outputSha256": "e61eeee7db3e5b4136a170cb7776def3da37dfa44cf5ac51c5490df018f42e55",
+          "expectedSha256": "e61eeee7db3e5b4136a170cb7776def3da37dfa44cf5ac51c5490df018f42e55",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x1-effort6-quality100-alpha",
+          "inputSha256": "d797eddd1ec8f8dfdda0e39b61beba75944d7e800008bf8f15df92d3ba440f4d",
+          "outputSha256": "1df26b4065cf913ff42d643198c42f9b09ad6463a86a4af22fe0047f3a7620da",
+          "expectedSha256": "1df26b4065cf913ff42d643198c42f9b09ad6463a86a4af22fe0047f3a7620da",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x1-effort6-quality100-opaque",
+          "inputSha256": "e9180ecf423e3f7cf512411040db58521706f5402e30b4b90706551656c3895c",
+          "outputSha256": "b5f8d88a1f5d9b759397d40e021c554494b64e86ac532352d11dea0a8b8450d5",
+          "expectedSha256": "b5f8d88a1f5d9b759397d40e021c554494b64e86ac532352d11dea0a8b8450d5",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x17-effort0-quality1-alpha",
+          "inputSha256": "bc246db01d7f9adbd73e259bf65e75971ce479631493a1c02b0f0595bf8b90cf",
+          "outputSha256": "a185a8e859ad86e6d08eae67316d10986d8268c3f1e497ee6c46a388cea9d5e9",
+          "expectedSha256": "a185a8e859ad86e6d08eae67316d10986d8268c3f1e497ee6c46a388cea9d5e9",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x17-effort0-quality1-opaque",
+          "inputSha256": "3977c12bc48e012e5dd8743c088336ae9ac0e194debb7d23ffafa7856c7bb970",
+          "outputSha256": "29425f82eff32c270161ce7019bb4b68d2f057320284825d6a4994d6b5bb365e",
+          "expectedSha256": "29425f82eff32c270161ce7019bb4b68d2f057320284825d6a4994d6b5bb365e",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x17-effort0-quality75-alpha",
+          "inputSha256": "6c4b31eae44846a1ab16b22e9cef199b21ace0a65de4f5f32efb35f4eb6bfe81",
+          "outputSha256": "4ccdd9b4a4781c6f76c97d08e91f50e39e62993efac56f1e3bc7039a9b8da2ec",
+          "expectedSha256": "4ccdd9b4a4781c6f76c97d08e91f50e39e62993efac56f1e3bc7039a9b8da2ec",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x17-effort0-quality75-opaque",
+          "inputSha256": "e5acb9ed4ecdbaba698db532fdcd59b477eb76af84b77e1825d1020ab67e1d2d",
+          "outputSha256": "a303f3030d21d13f2738709dc69db79a81e8d34044f0bb4e04800e470739f2fc",
+          "expectedSha256": "a303f3030d21d13f2738709dc69db79a81e8d34044f0bb4e04800e470739f2fc",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x17-effort0-quality100-alpha",
+          "inputSha256": "4f4050f2a0620e288b42b5469990e7f5c75d11f98aff8f4d0c08b55529632aa0",
+          "outputSha256": "3b1479aecbec938bfc7443715427d5b7fc1a622862e84e34197c1e92f33100fc",
+          "expectedSha256": "3b1479aecbec938bfc7443715427d5b7fc1a622862e84e34197c1e92f33100fc",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x17-effort0-quality100-opaque",
+          "inputSha256": "420cbe71a756b2349d6f70c0e6773cdca3d453ded2a23480cf807ff2663320a5",
+          "outputSha256": "f17bfcffc870ce15b348bba011e4e079b595a913733101ef88688a5eb451eb22",
+          "expectedSha256": "f17bfcffc870ce15b348bba011e4e079b595a913733101ef88688a5eb451eb22",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x17-effort6-quality1-alpha",
+          "inputSha256": "32730dc60199ba621885e6a4b83945ba522f3cd0f146487c444a0ad68032e1b7",
+          "outputSha256": "c9f65e1709d6c6a4a527521f660df496aab591e5f9c99ec6e0a7a96c12e8010d",
+          "expectedSha256": "c9f65e1709d6c6a4a527521f660df496aab591e5f9c99ec6e0a7a96c12e8010d",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x17-effort6-quality1-opaque",
+          "inputSha256": "34333b3bfaa6e1fb69184453809b072f571682f4d63d4967daacc86480e37a60",
+          "outputSha256": "6f3af4d1d3c44b44bbf05ef8d879d1b7035bc99d4c6f2a8f58e61637e730339e",
+          "expectedSha256": "6f3af4d1d3c44b44bbf05ef8d879d1b7035bc99d4c6f2a8f58e61637e730339e",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x17-effort6-quality75-alpha",
+          "inputSha256": "dab24264cbaf1df0ad9a65e714d1c09db8f10332e055f370d2ceec102f99800f",
+          "outputSha256": "0f90431ae9e569462adee5e1014d172eb2865e6c0d9145aa943bae185299cf17",
+          "expectedSha256": "0f90431ae9e569462adee5e1014d172eb2865e6c0d9145aa943bae185299cf17",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x17-effort6-quality75-opaque",
+          "inputSha256": "a3d75c7f955ece6a3480da57ee6b05dca05d7ae891f381c21e8f8dd8edb63654",
+          "outputSha256": "a1c859ba829ed6c1460ae061338793b0994b4320f9295f6aafd9a4d97c2ce14e",
+          "expectedSha256": "a1c859ba829ed6c1460ae061338793b0994b4320f9295f6aafd9a4d97c2ce14e",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x17-effort6-quality100-alpha",
+          "inputSha256": "3e10a63b846f0b5ae6a181742ec12d6bc39a4fd15431a772dcb679cb894ce59d",
+          "outputSha256": "d1143e50130436ed792b31114af69ba3bfedcf9cfeed3941d1d3e7f121ec7138",
+          "expectedSha256": "d1143e50130436ed792b31114af69ba3bfedcf9cfeed3941d1d3e7f121ec7138",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-1x17-effort6-quality100-opaque",
+          "inputSha256": "13b12fa1f84bbc6550c8794dc2bccff18dc1429106adac52d05e6deab9b4d182",
+          "outputSha256": "77b42bf3deb841031d5ccdf656a560108a31defb27bf8f40902af7a4af2fc9c4",
+          "expectedSha256": "77b42bf3deb841031d5ccdf656a560108a31defb27bf8f40902af7a4af2fc9c4",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-17x1-effort0-quality1-alpha",
+          "inputSha256": "f1073d28dec6f230483533e1f487841c35057bbbcae868468c6dba33a2875aa6",
+          "outputSha256": "083cb01632df6b1dcc601a5436080366fc2b2177f52f81c562b4ca491475be75",
+          "expectedSha256": "083cb01632df6b1dcc601a5436080366fc2b2177f52f81c562b4ca491475be75",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-17x1-effort0-quality1-opaque",
+          "inputSha256": "ff4af2d86793de0ef27138af787a354f0ad244ddf6a30275b0422dfc319c6d45",
+          "outputSha256": "d5117b7d899ed2b82c479045a89c853f46afa790cb86c3e595b4a6717866583b",
+          "expectedSha256": "d5117b7d899ed2b82c479045a89c853f46afa790cb86c3e595b4a6717866583b",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-17x1-effort0-quality75-alpha",
+          "inputSha256": "bc54e569172b78c33c146ec0ee8666129f05ca255c30f0d12906557c9a25dcd2",
+          "outputSha256": "1bede49574712c5df22e9de25acdfd3834a7b0347ace8ae582c57fb446e365c9",
+          "expectedSha256": "1bede49574712c5df22e9de25acdfd3834a7b0347ace8ae582c57fb446e365c9",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-17x1-effort0-quality75-opaque",
+          "inputSha256": "fd9f542c2ed958f88787093e9bbe08163fe414857962a3d8a6fc4daf568eb494",
+          "outputSha256": "0349aba80083d68f527f222b1c2884fedd0e2d3ba3edaed02a5ef4ac4a431f2f",
+          "expectedSha256": "0349aba80083d68f527f222b1c2884fedd0e2d3ba3edaed02a5ef4ac4a431f2f",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-17x1-effort0-quality100-alpha",
+          "inputSha256": "c57b25b86e35bcbc0ec9f80ed21c79142b882532677930f6d011138736cff436",
+          "outputSha256": "c46ecdf359238e6bf2f91f1bb459dc8c664e7db62ab4e96ec5799e5e91729c61",
+          "expectedSha256": "c46ecdf359238e6bf2f91f1bb459dc8c664e7db62ab4e96ec5799e5e91729c61",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-17x1-effort0-quality100-opaque",
+          "inputSha256": "79aecdceb2c2c0009e933f840b5fd012cdbf6c1a6520af4419b242fb1ff5dd55",
+          "outputSha256": "43f723a95cdd8df9228be2e0dbaf54e75bbd01854ec466ce08ea468bb8059356",
+          "expectedSha256": "43f723a95cdd8df9228be2e0dbaf54e75bbd01854ec466ce08ea468bb8059356",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-17x1-effort6-quality1-alpha",
+          "inputSha256": "8330a7308af0b68068cf8c26a610674488142d57a9671a577b72253d4bee32ed",
+          "outputSha256": "7900a6dad0d4d7248f1abad5c82eb016e718621af412004ec32da101490272e7",
+          "expectedSha256": "7900a6dad0d4d7248f1abad5c82eb016e718621af412004ec32da101490272e7",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-17x1-effort6-quality1-opaque",
+          "inputSha256": "52e31c6ed9eaaf4e50c6e02784adef103e7f903a8e155ccda53d56e019e4a893",
+          "outputSha256": "915fd9ee7c029b621d298590803f4684cef6aeccd3ec1b1e0bfda40fce281722",
+          "expectedSha256": "915fd9ee7c029b621d298590803f4684cef6aeccd3ec1b1e0bfda40fce281722",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-17x1-effort6-quality75-alpha",
+          "inputSha256": "140a1ffdb7af2a32982dead70d6395d94ff003c609e8c4da1c422f81935893df",
+          "outputSha256": "846550a7fdcba8f0f90ac8a4d391b64bb81aaac19f0fdb968bab829ccbf74655",
+          "expectedSha256": "846550a7fdcba8f0f90ac8a4d391b64bb81aaac19f0fdb968bab829ccbf74655",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-17x1-effort6-quality75-opaque",
+          "inputSha256": "6516652d0aacdc7f699c0b0ed6c5e50e85e919ca556441bd5e2bfd5e3ed1e961",
+          "outputSha256": "2eab68fd4f4e7ef489bed03eebe5f175a712db3e89e645889181a1da3b3c92dd",
+          "expectedSha256": "2eab68fd4f4e7ef489bed03eebe5f175a712db3e89e645889181a1da3b3c92dd",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-17x1-effort6-quality100-alpha",
+          "inputSha256": "725be37cbc99f39414162eddfd25a33364991fbd589049fa53d0c6caeba26022",
+          "outputSha256": "c46ecdf359238e6bf2f91f1bb459dc8c664e7db62ab4e96ec5799e5e91729c61",
+          "expectedSha256": "c46ecdf359238e6bf2f91f1bb459dc8c664e7db62ab4e96ec5799e5e91729c61",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-17x1-effort6-quality100-opaque",
+          "inputSha256": "fba6f8b6c888170a919dd906af499385936e9a1385df6d12135a20af2ddbc508",
+          "outputSha256": "43f723a95cdd8df9228be2e0dbaf54e75bbd01854ec466ce08ea468bb8059356",
+          "expectedSha256": "43f723a95cdd8df9228be2e0dbaf54e75bbd01854ec466ce08ea468bb8059356",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-31x23-effort0-quality1-alpha",
+          "inputSha256": "4eaee5c28f14bd2b72eeba91ba5ada81d01e392296deecf5532fcb60b8a741ac",
+          "outputSha256": "1302551a67c5d924ee764e30a6fa5bf9f703756f5ddb155f42595f77f4c09034",
+          "expectedSha256": "1302551a67c5d924ee764e30a6fa5bf9f703756f5ddb155f42595f77f4c09034",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-31x23-effort0-quality1-opaque",
+          "inputSha256": "c3c8a2ec329d6355f40c952d129ae88f767ebc15eed801c8c04045cdce386e41",
+          "outputSha256": "b5df08fd96813a97ee24ff09b5859ea7bb049c535d007f907459cedd7987c8db",
+          "expectedSha256": "b5df08fd96813a97ee24ff09b5859ea7bb049c535d007f907459cedd7987c8db",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-31x23-effort0-quality75-alpha",
+          "inputSha256": "b83eb158d41ac99462f316156a857947b7609107428e39f8cfced44373129afa",
+          "outputSha256": "023363a38e4478f7dd5692de90688a55a20915d40cfdb4fc05fa11ac956eb0ac",
+          "expectedSha256": "023363a38e4478f7dd5692de90688a55a20915d40cfdb4fc05fa11ac956eb0ac",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-31x23-effort0-quality75-opaque",
+          "inputSha256": "f07fcfbc9684ec22e1c92802bac1c9eb4305a09c0d01183b5bf86fb4f052b636",
+          "outputSha256": "1ab07566229219d6310117f6dde4e0b063cda934b0d4a5e92ded15f8c605d399",
+          "expectedSha256": "1ab07566229219d6310117f6dde4e0b063cda934b0d4a5e92ded15f8c605d399",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-31x23-effort0-quality100-alpha",
+          "inputSha256": "0b7ed569cc379b2c75732c8f16b86549504266263b33f802741feb3f28d31cd0",
+          "outputSha256": "dfa964f9fb1481a45c4d74ca7f3b114dc2e345cacb74cad117b4c50d4c826579",
+          "expectedSha256": "dfa964f9fb1481a45c4d74ca7f3b114dc2e345cacb74cad117b4c50d4c826579",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-31x23-effort0-quality100-opaque",
+          "inputSha256": "ed80a89f3c70a0c2334515bba1ca328fa990f34facdf60e57a70a2e26735816e",
+          "outputSha256": "e052541ea7009822c679a4560b7a6d65156ccc2abd83b10ddd5cc160be4ad388",
+          "expectedSha256": "e052541ea7009822c679a4560b7a6d65156ccc2abd83b10ddd5cc160be4ad388",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-31x23-effort6-quality1-alpha",
+          "inputSha256": "482c94807f7326427008fe531c93dc16667ccf263f04502354b48f2e98ccb724",
+          "outputSha256": "258037a10c9cb7ac8e3363e6e78686ec34d14089c07bffeaeee294c50332c154",
+          "expectedSha256": "258037a10c9cb7ac8e3363e6e78686ec34d14089c07bffeaeee294c50332c154",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-31x23-effort6-quality1-opaque",
+          "inputSha256": "8ac6799235caee066e882063a6a0ee59bcfdbcc3b30be59d5913fdf4f0bf3844",
+          "outputSha256": "e936cfab30bedccc6fe1981b089032a0e1a9b4ea49288c31a141c918a422664b",
+          "expectedSha256": "e936cfab30bedccc6fe1981b089032a0e1a9b4ea49288c31a141c918a422664b",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-31x23-effort6-quality75-alpha",
+          "inputSha256": "78baff3d5988a2904e946753256ec6efd16c5f4305f00638d2490cb86e5dd033",
+          "outputSha256": "6c08c4cad7a33c2525607d46b7655907439815deac74c89f157e8c78a8d495d5",
+          "expectedSha256": "6c08c4cad7a33c2525607d46b7655907439815deac74c89f157e8c78a8d495d5",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-31x23-effort6-quality75-opaque",
+          "inputSha256": "dcfcb2705cd2ae8893d2fa8dd236457f746cdbd51c8ad6468ab03978127f9265",
+          "outputSha256": "0183ca82890160db504bf6e1265a9dd6471cdf0bf98617e7dd5b7c3365f83432",
+          "expectedSha256": "0183ca82890160db504bf6e1265a9dd6471cdf0bf98617e7dd5b7c3365f83432",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-31x23-effort6-quality100-alpha",
+          "inputSha256": "4506c198e30f109d58595cd58265c908d9ea502b080a1f78b4e3073f1dc8a980",
+          "outputSha256": "08ebcc203209a239f29cf93a2259b8d69aabde339e83b32896502a5526b2a4b1",
+          "expectedSha256": "08ebcc203209a239f29cf93a2259b8d69aabde339e83b32896502a5526b2a4b1",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-31x23-effort6-quality100-opaque",
+          "inputSha256": "22b974eb8c20e959553fc10eefbfdfeb0123fed7ec155977aad91abaf0cb6e75",
+          "outputSha256": "6d60bf0df73551585a4851836d0c1462945fdb3e98460efbb893084476f66a19",
+          "expectedSha256": "6d60bf0df73551585a4851836d0c1462945fdb3e98460efbb893084476f66a19",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-129x67-effort0-quality1-alpha",
+          "inputSha256": "494e86ae4382e96440ebeb9d0367a21876ddfae4f0dec3ef94438d770b0492ed",
+          "outputSha256": "14c257c3bfd9d5518b246931ba66394339677e0a18880833dbf95b188c470c15",
+          "expectedSha256": "14c257c3bfd9d5518b246931ba66394339677e0a18880833dbf95b188c470c15",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-129x67-effort0-quality1-opaque",
+          "inputSha256": "e81a470582e7ac559399f89af0b903865f2883b1d0e05080c82320ecdd37e93c",
+          "outputSha256": "a8b0d577c02880bea50110e17eb44d17b47c6c2f2bcca6bbc1eec0996e0a1335",
+          "expectedSha256": "a8b0d577c02880bea50110e17eb44d17b47c6c2f2bcca6bbc1eec0996e0a1335",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-129x67-effort0-quality75-alpha",
+          "inputSha256": "9b97eb5428f5dcf71c6b6f1b890eb25cffa0b9a05c776a8e2eb514cd32332e10",
+          "outputSha256": "f20997813753b15d048f7c04edcbe3b72d96ddc939c7e2f18e1efda311abaadb",
+          "expectedSha256": "f20997813753b15d048f7c04edcbe3b72d96ddc939c7e2f18e1efda311abaadb",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-129x67-effort0-quality75-opaque",
+          "inputSha256": "d78beaadf20dd53836194248ace59bdb39b227a85273df5f5412ff849360b81a",
+          "outputSha256": "86e3a49d5294a14aade259c717c8982fb5d789ef816388aaf2f4a1848ed2c214",
+          "expectedSha256": "86e3a49d5294a14aade259c717c8982fb5d789ef816388aaf2f4a1848ed2c214",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-129x67-effort0-quality100-alpha",
+          "inputSha256": "c17dcfeaa7eff88a9ca522cecedc6f2314bc46570139ff3ad3132b3bb2029de7",
+          "outputSha256": "63f87156d3f576b2a7348e9cb21055e23cb4702267181c55ff9c17ac17868ca8",
+          "expectedSha256": "63f87156d3f576b2a7348e9cb21055e23cb4702267181c55ff9c17ac17868ca8",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-129x67-effort0-quality100-opaque",
+          "inputSha256": "5356f80b65d5ad73bde80ddd48b0feeeb7ef03e7430a56f6afc914c154042ff4",
+          "outputSha256": "6ac1d22888858ea336f94f2376a502e6aabad50b4ee94803a16c888e9bfd02ec",
+          "expectedSha256": "6ac1d22888858ea336f94f2376a502e6aabad50b4ee94803a16c888e9bfd02ec",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-129x67-effort6-quality1-alpha",
+          "inputSha256": "c0ea94831c76b3a985c3a5807679e6cadf7b122a6c406460742ca0942b465ff7",
+          "outputSha256": "f8e92efe191a3a3c1198565a35f012b9d946d913a5741f9b0c0f021365f49a1f",
+          "expectedSha256": "f8e92efe191a3a3c1198565a35f012b9d946d913a5741f9b0c0f021365f49a1f",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-129x67-effort6-quality1-opaque",
+          "inputSha256": "e044230c27a32f8efec44cb5e62f1ef1ddf8c8f6766f7267cbad1f1e7253d52d",
+          "outputSha256": "02919c65841d682c6a6fc87a075cf7f641268c4dbed68245dec88197327a6e4b",
+          "expectedSha256": "02919c65841d682c6a6fc87a075cf7f641268c4dbed68245dec88197327a6e4b",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-129x67-effort6-quality75-alpha",
+          "inputSha256": "0a8612fb160ca711d1536959317e1b3261968b19906f824f01098c209b748259",
+          "outputSha256": "355a6b15110332876a2547832a1114625f76255fc324a0a09c7720d73a6a3640",
+          "expectedSha256": "355a6b15110332876a2547832a1114625f76255fc324a0a09c7720d73a6a3640",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-129x67-effort6-quality75-opaque",
+          "inputSha256": "97e96c12e5d65ff7e29b67030bcae3a327f96e24f868dbd79926f34929c07ec7",
+          "outputSha256": "92be335a611994a79d7fa37469329256563c05664c652a225e6a533712fe9cd0",
+          "expectedSha256": "92be335a611994a79d7fa37469329256563c05664c652a225e6a533712fe9cd0",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-129x67-effort6-quality100-alpha",
+          "inputSha256": "d0b3f8a059cc9317ab2dbfc8721e6ede5a5c834f94482e5332c4f244df4aa79f",
+          "outputSha256": "2d3bc919ffe519912a1fc8ceea96dcb7cd863c9481ae4bab62b0adb990aa0821",
+          "expectedSha256": "2d3bc919ffe519912a1fc8ceea96dcb7cd863c9481ae4bab62b0adb990aa0821",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-129x67-effort6-quality100-opaque",
+          "inputSha256": "ec698d7549e446f3a53f8bcca28f8cec0f44dce9b93fbc57d20a1a6b9171f43e",
+          "outputSha256": "b88b6ad89edf7fc6a3254a9656fa1a9e85900ea36d82e9a2f85ea553b2e94762",
+          "expectedSha256": "b88b6ad89edf7fc6a3254a9656fa1a9e85900ea36d82e9a2f85ea553b2e94762",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-blue",
+          "inputSha256": "d4f4ceb98b156e6f043c4425d3356f6e9844756ad2de6df4a47cebcbab15c7be",
+          "outputSha256": "2aa47d40f553faa2d44e5670c2cf07ada7f2ef94c92025cd92d2dcd799bb3963",
+          "expectedSha256": "2aa47d40f553faa2d44e5670c2cf07ada7f2ef94c92025cd92d2dcd799bb3963",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-gray",
+          "inputSha256": "ea9177c417094eead0d7d6576853dab7079b88fd358094946e084cf0f86fdd8d",
+          "outputSha256": "8a15a2d94627f0e97605e8b1e925bc0ed421790016ffc47e33ccca5d9fa05226",
+          "expectedSha256": "8a15a2d94627f0e97605e8b1e925bc0ed421790016ffc47e33ccca5d9fa05226",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-horizontal",
+          "inputSha256": "fcdfd29747fde793d1780136ead8256bb2af7381d6dcfa7ebe717ab24aab039f",
+          "outputSha256": "261665197864bc1888d76e709628d3e9fc62b5d38d0d03f0fad0e5fa58885f63",
+          "expectedSha256": "261665197864bc1888d76e709628d3e9fc62b5d38d0d03f0fad0e5fa58885f63",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-ffmpeg-vertical",
+          "inputSha256": "f04b3b70dbf92663b0474c6c7c9b3b20f3a24f4c64a4d1fc021aa30c18279194",
+          "outputSha256": "6f2791490007e06c8eb5747a38a706c53d76d62ed9d0f78535ac00b9716da1f2",
+          "expectedSha256": "6f2791490007e06c8eb5747a38a706c53d76d62ed9d0f78535ac00b9716da1f2",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-raw-alpha-filter0",
+          "inputSha256": "d7d419b838221d2bd40022c4a3844a26df7f4bdb64332ec3010e9669861b4d19",
+          "outputSha256": "2e4ecc6204903f1770007f16995392f29aea94450b0967b3335bae2962618d17",
+          "expectedSha256": "2e4ecc6204903f1770007f16995392f29aea94450b0967b3335bae2962618d17",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-raw-alpha-filter1",
+          "inputSha256": "24513308c2141902963c56ee0e351dda43367042e8f5994a43b4adb788d33904",
+          "outputSha256": "2e4ecc6204903f1770007f16995392f29aea94450b0967b3335bae2962618d17",
+          "expectedSha256": "2e4ecc6204903f1770007f16995392f29aea94450b0967b3335bae2962618d17",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-raw-alpha-filter2",
+          "inputSha256": "7e07903a3b820d617606098c7159e0298a9c071a3514838f66dbec708dec3ded",
+          "outputSha256": "2e4ecc6204903f1770007f16995392f29aea94450b0967b3335bae2962618d17",
+          "expectedSha256": "2e4ecc6204903f1770007f16995392f29aea94450b0967b3335bae2962618d17",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-raw-alpha-filter3",
+          "inputSha256": "f30ff2d8ceea961a95b235c688e2a11c764bec181b20ace50838a70702846102",
+          "outputSha256": "2e4ecc6204903f1770007f16995392f29aea94450b0967b3335bae2962618d17",
+          "expectedSha256": "2e4ecc6204903f1770007f16995392f29aea94450b0967b3335bae2962618d17",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-1x1-effort0-quality1-alpha",
+          "inputSha256": "6ba76e6a82d4bf17c0d9d366bd518c82b440adcda8f34d1f06e8284857c6a1fc",
+          "outputSha256": "94f012e83cd695322588b1528835f1cd2823aac2898b6b1b468944915f980ad0",
+          "expectedSha256": "94f012e83cd695322588b1528835f1cd2823aac2898b6b1b468944915f980ad0",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-1x1-effort0-quality1-opaque",
+          "inputSha256": "3cd5402b2d18d58c69febd5f3bf16407b93d075227d1a2b409f6d20f451e2db2",
+          "outputSha256": "b47820e261a0de14ddb3d15d1d0c2883b7d2e78387cb6845fdef305f69f73d7b",
+          "expectedSha256": "b47820e261a0de14ddb3d15d1d0c2883b7d2e78387cb6845fdef305f69f73d7b",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-1x1-effort0-quality100-alpha",
+          "inputSha256": "23cccc2ff414fdf6f3a0213dac8471a42a11565c6e4a74e410dbc2a76c9d6094",
+          "outputSha256": "1df26b4065cf913ff42d643198c42f9b09ad6463a86a4af22fe0047f3a7620da",
+          "expectedSha256": "1df26b4065cf913ff42d643198c42f9b09ad6463a86a4af22fe0047f3a7620da",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-1x1-effort0-quality100-opaque",
+          "inputSha256": "c5eb20133400465d6de7e9b813f6aeae6c28855b44e7725fdcbadb4d7cb41be9",
+          "outputSha256": "b5f8d88a1f5d9b759397d40e021c554494b64e86ac532352d11dea0a8b8450d5",
+          "expectedSha256": "b5f8d88a1f5d9b759397d40e021c554494b64e86ac532352d11dea0a8b8450d5",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-1x1-effort6-quality1-alpha",
+          "inputSha256": "7879cb4f2fbc938a1ee39f0b29a62edcdec29761812977d838d726003b1655ca",
+          "outputSha256": "a5f004778f8db048bd1ff8184f9926e50643644973d9da6a29fe6b14669d8322",
+          "expectedSha256": "a5f004778f8db048bd1ff8184f9926e50643644973d9da6a29fe6b14669d8322",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-1x1-effort6-quality1-opaque",
+          "inputSha256": "a53bfb2ced0039d48e7fc013825ae3f17a2c6476b609bbc463cdb1ba65bd4704",
+          "outputSha256": "449ea2e08ab139c3e2c484da37cd20381e0e13921ec5535f5883c09b15233670",
+          "expectedSha256": "449ea2e08ab139c3e2c484da37cd20381e0e13921ec5535f5883c09b15233670",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-1x1-effort6-quality100-alpha",
+          "inputSha256": "5788f75cdd75b0a539a5a4bbced279a1217d56bdecaa533eaa19f5c2c3d791a9",
+          "outputSha256": "1df26b4065cf913ff42d643198c42f9b09ad6463a86a4af22fe0047f3a7620da",
+          "expectedSha256": "1df26b4065cf913ff42d643198c42f9b09ad6463a86a4af22fe0047f3a7620da",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-1x1-effort6-quality100-opaque",
+          "inputSha256": "b22a7d7a9d46f91882bf4fc4cf04dc8e7b44b67fbd603eeb9f0ca985a6093dfd",
+          "outputSha256": "b5f8d88a1f5d9b759397d40e021c554494b64e86ac532352d11dea0a8b8450d5",
+          "expectedSha256": "b5f8d88a1f5d9b759397d40e021c554494b64e86ac532352d11dea0a8b8450d5",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-1x17-effort0-quality1-alpha",
+          "inputSha256": "fbad91f102de457f4f511fff5c4d01b6c79b8c55f3295ec9969313ec60a1ad59",
+          "outputSha256": "09bfaf16c354ac1880fb093fd00d76fd55cb221eddf5f4df0668c3da3d5aa921",
+          "expectedSha256": "09bfaf16c354ac1880fb093fd00d76fd55cb221eddf5f4df0668c3da3d5aa921",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-1x17-effort0-quality1-opaque",
+          "inputSha256": "50c4ee2a9aa6de17da1201f72868017c63fe3aa0dbdbc0b9016a57259658e508",
+          "outputSha256": "d2ccd57542dfa0305d0080b6e285979f857145e14f20fdaa83998c2c267ced74",
+          "expectedSha256": "d2ccd57542dfa0305d0080b6e285979f857145e14f20fdaa83998c2c267ced74",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-1x17-effort0-quality100-alpha",
+          "inputSha256": "5bf3515e4e9193e62d556f24cc0d7bd380c156c94fa1b0e90de1c04c4e58c369",
+          "outputSha256": "7664eda39f2890e44afe86d7091aa17247c341ab4840331df9c62b329edf7b29",
+          "expectedSha256": "7664eda39f2890e44afe86d7091aa17247c341ab4840331df9c62b329edf7b29",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-1x17-effort0-quality100-opaque",
+          "inputSha256": "26ebb109600856198ade36f354d78f75cc6bea035639a3ded677b972fa77a799",
+          "outputSha256": "ca6bd2ec1d54140db9b308b4016ef8f7debbcf7b0836d9a26bd5c34041b0930a",
+          "expectedSha256": "ca6bd2ec1d54140db9b308b4016ef8f7debbcf7b0836d9a26bd5c34041b0930a",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-1x17-effort6-quality1-alpha",
+          "inputSha256": "6cb25380a6cbe487987e897b7304c69a7b5a088fdadd9e61cddd5420a11d1b2d",
+          "outputSha256": "352888b64c990a977123d4fd082a8be276f60a4d2d3cec4c2c444b0aac80e1fd",
+          "expectedSha256": "352888b64c990a977123d4fd082a8be276f60a4d2d3cec4c2c444b0aac80e1fd",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-1x17-effort6-quality1-opaque",
+          "inputSha256": "6054ffeceee2db487c96d8746288696ef1a1720360fe5a7c466754ab46b4e6bf",
+          "outputSha256": "1702dbbeee6430c1e59b4a084991ffe550a962e3df6e48a6acb993fd6e4d546b",
+          "expectedSha256": "1702dbbeee6430c1e59b4a084991ffe550a962e3df6e48a6acb993fd6e4d546b",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-1x17-effort6-quality100-alpha",
+          "inputSha256": "8a6ff9ec6d544d91a7cef03123e83fe919f83fb5aa5f2bc3f8fb9996e590a591",
+          "outputSha256": "12bfe6128ca0042e6d94719b201bbb8907482fabf594961ff1d3736b861adec8",
+          "expectedSha256": "12bfe6128ca0042e6d94719b201bbb8907482fabf594961ff1d3736b861adec8",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-1x17-effort6-quality100-opaque",
+          "inputSha256": "85772fda02bda2fd766c14ce9cec323682b55f13ad485c5244b756e86ace3cd8",
+          "outputSha256": "7e03329649a17200d9e12123cfed50b2f18887c44880fac210fa7599f9c83fe0",
+          "expectedSha256": "7e03329649a17200d9e12123cfed50b2f18887c44880fac210fa7599f9c83fe0",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-17x1-effort0-quality1-alpha",
+          "inputSha256": "c5d586319830cd060c00680710ebc3f9e4964075bd050c85853d45f595834221",
+          "outputSha256": "937f5792eafa7669cfdba49b076923fdc3e0cadc12e936ec120da301bdd202c3",
+          "expectedSha256": "937f5792eafa7669cfdba49b076923fdc3e0cadc12e936ec120da301bdd202c3",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-17x1-effort0-quality1-opaque",
+          "inputSha256": "cdebaf717dbd15d1273dd041a5ee81bdaa0cd7517f684248a156d99afa87d02f",
+          "outputSha256": "d2d87c6aac33a8c7e39e8849e069b730172df721f671e0deb5cd6c88e7235e13",
+          "expectedSha256": "d2d87c6aac33a8c7e39e8849e069b730172df721f671e0deb5cd6c88e7235e13",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-17x1-effort0-quality100-alpha",
+          "inputSha256": "78164cd1fb35b96c3cd19d1c659b92a746d056f8bbf1db50e3c053d30044766a",
+          "outputSha256": "953f8784d1d3ec9c6e70a97c785bfff40ab464aab954211c01f1631ca80032c1",
+          "expectedSha256": "953f8784d1d3ec9c6e70a97c785bfff40ab464aab954211c01f1631ca80032c1",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-17x1-effort0-quality100-opaque",
+          "inputSha256": "5104e076d9ce419e384634b7ed9ecba2431b2d7ee826c2ef5fb3292a8b622b1e",
+          "outputSha256": "b09fc8e62588d76da00a48601a1add0bee8c40cacc5e72c6d11fa69e3991e9fc",
+          "expectedSha256": "b09fc8e62588d76da00a48601a1add0bee8c40cacc5e72c6d11fa69e3991e9fc",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-17x1-effort6-quality1-alpha",
+          "inputSha256": "531ac49517d49ccf4b7b6e8b90d5b3519d54eccf9208a4bb371052db4b9e6846",
+          "outputSha256": "40ebd253546ac78d556277031dba1350920fcb5631b967117ca631e727e6b424",
+          "expectedSha256": "40ebd253546ac78d556277031dba1350920fcb5631b967117ca631e727e6b424",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-17x1-effort6-quality1-opaque",
+          "inputSha256": "8b7899f06c54778b0702e4226a4046813693d2c81aa77290c945f475654877c1",
+          "outputSha256": "5a6399315bb99ce668b534821b8c0facd8b92bc964291c67b34a71c2ee0f3c8e",
+          "expectedSha256": "5a6399315bb99ce668b534821b8c0facd8b92bc964291c67b34a71c2ee0f3c8e",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-17x1-effort6-quality100-alpha",
+          "inputSha256": "708ddf0dd0f34f8b53802b1f62d1dc310e32970b548c4e998bf99b8f4ab59301",
+          "outputSha256": "953f8784d1d3ec9c6e70a97c785bfff40ab464aab954211c01f1631ca80032c1",
+          "expectedSha256": "953f8784d1d3ec9c6e70a97c785bfff40ab464aab954211c01f1631ca80032c1",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-17x1-effort6-quality100-opaque",
+          "inputSha256": "fd2c1f93a10d1cf75cc9b5894ce70797c8663de2f952689dfa8db1ce69e5f059",
+          "outputSha256": "b09fc8e62588d76da00a48601a1add0bee8c40cacc5e72c6d11fa69e3991e9fc",
+          "expectedSha256": "b09fc8e62588d76da00a48601a1add0bee8c40cacc5e72c6d11fa69e3991e9fc",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-31x23-effort0-quality1-alpha",
+          "inputSha256": "e16bba7af9ba2983aecd65fc42ca602ed365074283f94b53e160611daacbd9be",
+          "outputSha256": "58497d86654f5a87e455ef9dc0d267e1befb6bb7f62620c6ff6ed90ded834b91",
+          "expectedSha256": "58497d86654f5a87e455ef9dc0d267e1befb6bb7f62620c6ff6ed90ded834b91",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-31x23-effort0-quality1-opaque",
+          "inputSha256": "a3bc308dfc26e17a19003a8719b00c9feba16282730a47733feb7eb12ee86b66",
+          "outputSha256": "7c080ec8a2c0b32e93ec5865478a452bd6335f02def6eea74bffcbb6da258a02",
+          "expectedSha256": "7c080ec8a2c0b32e93ec5865478a452bd6335f02def6eea74bffcbb6da258a02",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-31x23-effort0-quality100-alpha",
+          "inputSha256": "a4fe1ade9e5a51b3e341a33d87689d9a6259aee6a5b9431ae71e94fc7f351904",
+          "outputSha256": "b4626a74a4289951eb6560afb302f9ce6289194ae17bda2d06159a29bae5f81d",
+          "expectedSha256": "b4626a74a4289951eb6560afb302f9ce6289194ae17bda2d06159a29bae5f81d",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-31x23-effort0-quality100-opaque",
+          "inputSha256": "851622bea8be52d996e5fe71de26c2b8e9c4d31fb8f2ab1460e733ddc5ed2c8b",
+          "outputSha256": "d88fb4b546341c5199b9b7a0bb48122546e6b9f586e966e06aa099c4b2a9a211",
+          "expectedSha256": "d88fb4b546341c5199b9b7a0bb48122546e6b9f586e966e06aa099c4b2a9a211",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-31x23-effort6-quality1-alpha",
+          "inputSha256": "9bd95ebf94da1f5609e5be2021f804f7edf71d5c13b9ee323cf3587f0bfca229",
+          "outputSha256": "0b51f1ca3b97bff10d7f186aeb206e8512d07db1d8ef26f8753387a474772d8b",
+          "expectedSha256": "0b51f1ca3b97bff10d7f186aeb206e8512d07db1d8ef26f8753387a474772d8b",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-31x23-effort6-quality1-opaque",
+          "inputSha256": "004dd97b4b065ce09552c000487cdf90991ba698a536da07f93b8c76b5488697",
+          "outputSha256": "d0665b6e793141dddc6912663867eece31f54003b20dba27d8339d9a52eff009",
+          "expectedSha256": "d0665b6e793141dddc6912663867eece31f54003b20dba27d8339d9a52eff009",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-31x23-effort6-quality100-alpha",
+          "inputSha256": "20f4af775eb6a61cb933badf82482e1e01a1c197153637bac715de0256524027",
+          "outputSha256": "d04c44605e2fda424bad4947d295e03192574e49793d7adbe4600b55bfa0a5d6",
+          "expectedSha256": "d04c44605e2fda424bad4947d295e03192574e49793d7adbe4600b55bfa0a5d6",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-31x23-effort6-quality100-opaque",
+          "inputSha256": "3cad16d0ef6559638028f05bb14c9fed3c0e0c8b25b121d804e65eddae2f3a73",
+          "outputSha256": "aeceda25519e593fb976d59b38e661f390bae27222a5027b1255b3a6b85e94a7",
+          "expectedSha256": "aeceda25519e593fb976d59b38e661f390bae27222a5027b1255b3a6b85e94a7",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-129x67-effort0-quality1-alpha",
+          "inputSha256": "9d43ab10860dddedfa9e79e841eb90e000161d2a8ee1125dfac39bf9ccee1eb7",
+          "outputSha256": "a2dd0556c96273f3571e33b6fdcc69786515e53c381031da09f41adf106ac665",
+          "expectedSha256": "a2dd0556c96273f3571e33b6fdcc69786515e53c381031da09f41adf106ac665",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-129x67-effort0-quality1-opaque",
+          "inputSha256": "9db5ffa0fbaaa07685af60dbebe0d789222f0c27db052f866545013ea9749533",
+          "outputSha256": "d9b89b9026e059ed8f029ee7de312a3bcb361dbc21bc2732f8c1aaec8a88be71",
+          "expectedSha256": "d9b89b9026e059ed8f029ee7de312a3bcb361dbc21bc2732f8c1aaec8a88be71",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-129x67-effort0-quality100-alpha",
+          "inputSha256": "4bc2b18a3bce1590e69ed3f9929b62da327e407fee41255bfc1aab4af7583a42",
+          "outputSha256": "9b9be6439375ba73b0f49d83716f65f2dadd581cd817cd43a7bd1b26c0d43e28",
+          "expectedSha256": "9b9be6439375ba73b0f49d83716f65f2dadd581cd817cd43a7bd1b26c0d43e28",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-129x67-effort0-quality100-opaque",
+          "inputSha256": "4b57512b7b947302f6df1dd154a82c9d97b2292dcc08beb2723fdd1057bf974b",
+          "outputSha256": "5d9a8f33dd21e20c3a0e57f6a97d521166fc350e07dfb6e5985dde7a7f8c326e",
+          "expectedSha256": "5d9a8f33dd21e20c3a0e57f6a97d521166fc350e07dfb6e5985dde7a7f8c326e",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-129x67-effort6-quality1-alpha",
+          "inputSha256": "db98539e364a83f97b575fbd78eeba70763532d6b2a43ea5168d26075e179a5b",
+          "outputSha256": "6c7fc382c10fcadc0d5bce82a3cf5e3a1cb4cd2ee5fd1342ba6a621b3fd314e4",
+          "expectedSha256": "6c7fc382c10fcadc0d5bce82a3cf5e3a1cb4cd2ee5fd1342ba6a621b3fd314e4",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-129x67-effort6-quality1-opaque",
+          "inputSha256": "079620c2586fb65036130add500457ce0ec573ec008ce013b3f53041ff9b8580",
+          "outputSha256": "bd06a0acf0aff9e830ea5c0478d8e1bdcce98fe751a06056105d6d294078be3e",
+          "expectedSha256": "bd06a0acf0aff9e830ea5c0478d8e1bdcce98fe751a06056105d6d294078be3e",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-129x67-effort6-quality100-alpha",
+          "inputSha256": "d14bbdfecf1d806fc81cccff7752919e39b3fd5a09d63975808274d99e80d1d9",
+          "outputSha256": "944a70942987487d501c820063b75a93b2abf9e182c20122026a8b49dedc256d",
+          "expectedSha256": "944a70942987487d501c820063b75a93b2abf9e182c20122026a8b49dedc256d",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-129x67-effort6-quality100-opaque",
+          "inputSha256": "2a5385079e981c5cd90f8472808c7e42f1bbd1ec33df28160488720f778795a9",
+          "outputSha256": "515027381c24bdc0cb41113a827d559fa85c3107802be985f72ac2a45ab71441",
+          "expectedSha256": "515027381c24bdc0cb41113a827d559fa85c3107802be985f72ac2a45ab71441",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-31x23-depth16-effort4-quality85-alpha",
+          "inputSha256": "310ed896b27f75596aeba92b017af9e2d70013b295a63d20ad226bfb2a7719d3",
+          "outputSha256": "77cf65fcfc1befc650a4216f40368d6d447f605234dd62667b665d7932ce0ca1",
+          "expectedSha256": "77cf65fcfc1befc650a4216f40368d6d447f605234dd62667b665d7932ce0ca1",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-managed-31x23-depth16-effort4-quality85-opaque",
+          "inputSha256": "c865578e56062015af85912846929352187fcd8946b5ebafec5b819c40197738",
+          "outputSha256": "3cc4cbdcf8f7220c3d325e9d750ce9b943ff89d4db929321488e873dff4f5320",
+          "expectedSha256": "3cc4cbdcf8f7220c3d325e9d750ce9b943ff89d4db929321488e873dff4f5320",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-partitions-1",
+          "inputSha256": "3f6d839bdfe42dd64395bcffb5674688ce9576a724aa8ae1de2b26d9c90eef32",
+          "outputSha256": "37b4d167351f4ef5403fbaa41799d5a54b573aa4c7e07ab775c6e65a2cc86644",
+          "expectedSha256": "37b4d167351f4ef5403fbaa41799d5a54b573aa4c7e07ab775c6e65a2cc86644",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-partitions-2",
+          "inputSha256": "1d432e4bd5ba201dc5f2352788564bc86cfc1231cf787113ac6e64edaa058175",
+          "outputSha256": "37b4d167351f4ef5403fbaa41799d5a54b573aa4c7e07ab775c6e65a2cc86644",
+          "expectedSha256": "37b4d167351f4ef5403fbaa41799d5a54b573aa4c7e07ab775c6e65a2cc86644",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-partitions-4",
+          "inputSha256": "5fe2d049d6cff7697568eb49e4f42a07bd04e1e25b006a87aa660408cbbc9fe6",
+          "outputSha256": "37b4d167351f4ef5403fbaa41799d5a54b573aa4c7e07ab775c6e65a2cc86644",
+          "expectedSha256": "37b4d167351f4ef5403fbaa41799d5a54b573aa4c7e07ab775c6e65a2cc86644",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-partitions-8",
+          "inputSha256": "bd3eb30c54c87018867ea419a81d7782cefcc34765c10e83324abc1d34c1ac2c",
+          "outputSha256": "37b4d167351f4ef5403fbaa41799d5a54b573aa4c7e07ab775c6e65a2cc86644",
+          "expectedSha256": "37b4d167351f4ef5403fbaa41799d5a54b573aa4c7e07ab775c6e65a2cc86644",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-segments-delta-normal",
+          "inputSha256": "f033fcdae1abf233d47ea0de80cda11938f4c3fb6ef5da598f3b9848ced468ef",
+          "outputSha256": "bdedfd18444cea75c9049691bc22ec3a8a2e01b2380211ee5a6f908bdbb681cd",
+          "expectedSha256": "bdedfd18444cea75c9049691bc22ec3a8a2e01b2380211ee5a6f908bdbb681cd",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-segments-delta-simple",
+          "inputSha256": "4c97344052b629b95c06686fbb7861b5d1bf2e11a0425bcab8cccde778743da7",
+          "outputSha256": "af3792faf878a8eaf9c89e8de01d1bcecf158c6d9e448f12a3005d472b950b57",
+          "expectedSha256": "af3792faf878a8eaf9c89e8de01d1bcecf158c6d9e448f12a3005d472b950b57",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-segments-absolute-normal",
+          "inputSha256": "3d89e94a0dd755a429cdcd19d3ec06e7931f3dbbef5ab30a4926d4413d2226e3",
+          "outputSha256": "b05533b3767a2b9a0dbb09ea055f7d46afef2bd5ccdda80944d1261e77d2995a",
+          "expectedSha256": "b05533b3767a2b9a0dbb09ea055f7d46afef2bd5ccdda80944d1261e77d2995a",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-segments-absolute-simple",
+          "inputSha256": "de635f166ef0cba3d9de22198202ad9a8ca8280875ffba9dee9b5fa7c25faa1f",
+          "outputSha256": "2f93eb92d865516cd200fad247b7aabf47e14a3928070e2bce74bade302ea3f2",
+          "expectedSha256": "2f93eb92d865516cd200fad247b7aabf47e14a3928070e2bce74bade302ea3f2",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-segments-clamp-delta",
+          "inputSha256": "672c9c9ef39d37327b99076da868a65b2d17ab646a26ef462cc27ed5943092c9",
+          "outputSha256": "bb9e14248b8110df4bf0c1cab42c2a0e4f6efef3e7b99e27ede432a3e3a476a2",
+          "expectedSha256": "bb9e14248b8110df4bf0c1cab42c2a0e4f6efef3e7b99e27ede432a3e3a476a2",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-segments-clamp-absolute",
+          "inputSha256": "3da97b0981eae229a1c37424f54b7f7fe06f5362e5e209f7c5bea435d850cb4d",
+          "outputSha256": "7e11c4bb654c61f6815c348d3bb9abcb38f8507eae03ae8f7e9fd50b4865914c",
+          "expectedSha256": "7e11c4bb654c61f6815c348d3bb9abcb38f8507eae03ae8f7e9fd50b4865914c",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-segments-unchanged-defaults",
+          "inputSha256": "7b0811f9b7143a2e3b551b0537ff85fab37ea125ee81c5eff6b9c61802b97606",
+          "outputSha256": "915660cc4ee7bde971694397bcd2cd8f824988e2001a54450d8c1051a3f7307e",
+          "expectedSha256": "915660cc4ee7bde971694397bcd2cd8f824988e2001a54450d8c1051a3f7307e",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-normal-level0",
+          "inputSha256": "8d88bf53504e020b28071de4d81a01512690eb2415686df176e2159c3ab796de",
+          "outputSha256": "6bb146720cef77bd49df67f3a16072a95e01e81cb1aeb0083395e6b277cd269e",
+          "expectedSha256": "6bb146720cef77bd49df67f3a16072a95e01e81cb1aeb0083395e6b277cd269e",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-normal-level1",
+          "inputSha256": "fb7b8a1c62ccaeaeea1b0baa51fb0d5823501cb26c04acbd08379460044e386d",
+          "outputSha256": "368aedee34777d3cc8fd8f4304844ae168e92d60986d2ff8689b8cfe16f2e4fe",
+          "expectedSha256": "368aedee34777d3cc8fd8f4304844ae168e92d60986d2ff8689b8cfe16f2e4fe",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-normal-level14",
+          "inputSha256": "d6b0ced91ee3a0c038d165c9da5b1dc118643ed5d005dec04d91ae650afcbaa0",
+          "outputSha256": "9d5107a0c643158d7c12ed61eee5614b90cf45ca9c4b4f4f1d13a72a3eacbc84",
+          "expectedSha256": "9d5107a0c643158d7c12ed61eee5614b90cf45ca9c4b4f4f1d13a72a3eacbc84",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-normal-level15",
+          "inputSha256": "a54a81ae864583a08142a9501a58731a2dbe218fc8fc717d2e0972aab728e2e9",
+          "outputSha256": "2898dfcfa70534fb5642880ec547b32ff037d3bcf6b777b4bbbeddfafb78e891",
+          "expectedSha256": "2898dfcfa70534fb5642880ec547b32ff037d3bcf6b777b4bbbeddfafb78e891",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-normal-level39",
+          "inputSha256": "05f8e4a5a5ed40e180d58a1e66b6698b8b8480454ec6f62b5051eeeeec9575e8",
+          "outputSha256": "2898dfcfa70534fb5642880ec547b32ff037d3bcf6b777b4bbbeddfafb78e891",
+          "expectedSha256": "2898dfcfa70534fb5642880ec547b32ff037d3bcf6b777b4bbbeddfafb78e891",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-normal-level40",
+          "inputSha256": "847f6ded33319546d6a63d0445019242f05ae0b721475782f117922ee2079283",
+          "outputSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1",
+          "expectedSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-normal-level63",
+          "inputSha256": "b0875da948d7e353be174b862fae17fd7f54b367afff205cd16962460472df02",
+          "outputSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1",
+          "expectedSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-normal-sharpness1",
+          "inputSha256": "e48ede25f04366148dcf4683bce746d5a8a1364ba5959b1da756d3cc3f5e4933",
+          "outputSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1",
+          "expectedSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-normal-sharpness4",
+          "inputSha256": "4e34fba9197eccfbbfed387494afa628a74c28f02f95a8b8ab6632d19bdcfeb2",
+          "outputSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1",
+          "expectedSha256": "af9c71cdea27cf4a1d8e398d2a61bb70678c4a1a8c028cef86d80b4744f0aea1",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-normal-sharpness5",
+          "inputSha256": "7309ea49f0c09581ead0f1b292de597472c63ca260a637f2c0c2e36cd9721709",
+          "outputSha256": "4cacb8c27b5d34ca904056215b35a0b39f6bae761f8ebee2dfd41397ef472407",
+          "expectedSha256": "4cacb8c27b5d34ca904056215b35a0b39f6bae761f8ebee2dfd41397ef472407",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-normal-sharpness7",
+          "inputSha256": "636e54df2afcdde053f6ce0dc84ddd860f8bbfeff951ad06acb3fb58461ab0bc",
+          "outputSha256": "95ac9310fe992e3b179c4c545927a5b00c17f02eee20ff052c5fb0ad771ea515",
+          "expectedSha256": "95ac9310fe992e3b179c4c545927a5b00c17f02eee20ff052c5fb0ad771ea515",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-simple-level0",
+          "inputSha256": "d6a7faf2f974d5a815b3d6c7d195d79d5899734ca62364f1dbdf961d723737c1",
+          "outputSha256": "6bb146720cef77bd49df67f3a16072a95e01e81cb1aeb0083395e6b277cd269e",
+          "expectedSha256": "6bb146720cef77bd49df67f3a16072a95e01e81cb1aeb0083395e6b277cd269e",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-simple-level1",
+          "inputSha256": "8abf3cd2e447b2b6b4fa29aef25f6c22b30a718c507834be9ac1f82b283a5063",
+          "outputSha256": "e0fc2c92c6e44242227d9b7a55f24514c1ef979ca4931b2ba05c6df0f687e0b3",
+          "expectedSha256": "e0fc2c92c6e44242227d9b7a55f24514c1ef979ca4931b2ba05c6df0f687e0b3",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-simple-level14",
+          "inputSha256": "39831095e471591f077f0632d4a428255a3df708aafa927fcd82ec06c71db1b3",
+          "outputSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "expectedSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-simple-level15",
+          "inputSha256": "e03fef269b33fce61d35d567b0d590a3f1eddf93b9d2cc9a636a30ddf89dff75",
+          "outputSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "expectedSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-simple-level39",
+          "inputSha256": "f77a9dda2c94feca683b4795f5c820d609c56a1b3d8d92f064824d70ab8c5eec",
+          "outputSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "expectedSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-simple-level40",
+          "inputSha256": "10dce6b3b0f301762cdac6a0376c78d22f5ec9e4d769cd204b3c172ec39dcde4",
+          "outputSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "expectedSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-simple-level63",
+          "inputSha256": "9ff73d62ea97634f3dcf0ad8f2261f35544a69f51b8e826604122909e0680d85",
+          "outputSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "expectedSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-simple-sharpness1",
+          "inputSha256": "71479efc006964825f11e5a5586287dbfceacc3f8f49bd58d6075c0afc67a2a7",
+          "outputSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "expectedSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-simple-sharpness4",
+          "inputSha256": "217e500ec4d10178bf9136745cc5fcf9f89e9f2d045be2ede3d65c1be142f6f5",
+          "outputSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "expectedSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-simple-sharpness5",
+          "inputSha256": "e483805bcc252f737166c9171ff8621e8b8788b443805a18669bd287ac0a95bb",
+          "outputSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "expectedSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-simple-sharpness7",
+          "inputSha256": "56d3ff7619cd9a08f368e254ecce6f48f27f90bb23e41bdefcf4c855413ec7d1",
+          "outputSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "expectedSha256": "0d35b9e9d75c48bdf147934894a453021f78ab80e3094a6e2a4db2e69fe84c3d",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-deltas-unchanged",
+          "inputSha256": "3ea046de8624e3b987038c1473cfda59a54d208794332c1d528903140fbfa897",
+          "outputSha256": "cdcd1b38abc76edb82d13a14eabcf1334dc29632224b4c7b709ea35d7b9c34aa",
+          "expectedSha256": "cdcd1b38abc76edb82d13a14eabcf1334dc29632224b4c7b709ea35d7b9c34aa",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-deltas-update-empty",
+          "inputSha256": "cff4bcd2b860e4bbc260add0ebd9fc3bc08f3ddf04638ca292308ab95f34d7ff",
+          "outputSha256": "cdcd1b38abc76edb82d13a14eabcf1334dc29632224b4c7b709ea35d7b9c34aa",
+          "expectedSha256": "cdcd1b38abc76edb82d13a14eabcf1334dc29632224b4c7b709ea35d7b9c34aa",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-deltas-reference",
+          "inputSha256": "9be979e211c6a2a501d7c46850989f7e92bc8ca384936bedd3715a9d159b4e0d",
+          "outputSha256": "cdcd1b38abc76edb82d13a14eabcf1334dc29632224b4c7b709ea35d7b9c34aa",
+          "expectedSha256": "cdcd1b38abc76edb82d13a14eabcf1334dc29632224b4c7b709ea35d7b9c34aa",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-deltas-mode",
+          "inputSha256": "44f379aa56e1b078b8e709713bd30807dcb03394841681d7c8d29b1891444c71",
+          "outputSha256": "b9a50d960f2d62aacba4663d33d72706c10b3b0b214be213669d2c7ffe2525cf",
+          "expectedSha256": "b9a50d960f2d62aacba4663d33d72706c10b3b0b214be213669d2c7ffe2525cf",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-deltas-clamp",
+          "inputSha256": "887f65cac712f70f581abbd9f811ea52380a57ff32cabb12f42a9c54133b68b3",
+          "outputSha256": "4aede9f882aebe5d62c6f53ff3013261af33de0c0fe8a5b04a2e0eb3cf2637eb",
+          "expectedSha256": "4aede9f882aebe5d62c6f53ff3013261af33de0c0fe8a5b04a2e0eb3cf2637eb",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-deltas-zero-base",
+          "inputSha256": "7acfd616cb301c435df2c435ce46b5b7a052cb6841f0481634e4bd3a07d77eeb",
+          "outputSha256": "915660cc4ee7bde971694397bcd2cd8f824988e2001a54450d8c1051a3f7307e",
+          "expectedSha256": "915660cc4ee7bde971694397bcd2cd8f824988e2001a54450d8c1051a3f7307e",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-zero-base-segment-override",
+          "inputSha256": "063a843dc766a6bd4192b3bde522ee72d7adc7a763e998529d47cd5c7c81687f",
+          "outputSha256": "915660cc4ee7bde971694397bcd2cd8f824988e2001a54450d8c1051a3f7307e",
+          "expectedSha256": "915660cc4ee7bde971694397bcd2cd8f824988e2001a54450d8c1051a3f7307e",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-filter-zero-segment-positive-delta",
+          "inputSha256": "76dd359304b2a846177351178ed2cb06265ced1fe1535faed15b300e4843f99f",
+          "outputSha256": "63f097cc8754925e5172ca40475c468e88b9c02ff622045618f7770945fdf23e",
+          "expectedSha256": "63f097cc8754925e5172ca40475c468e88b9c02ff622045618f7770945fdf23e",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-quantizer-delta-0",
+          "inputSha256": "a9c640cbb235078c75035cfa71428ed2e034b9866cb45fefbd6377e3a3b42fcd",
+          "outputSha256": "7ad07a9d58107dc4ca9ef18988542de57473ba4c01fd116e05216ea3c78ff349",
+          "expectedSha256": "7ad07a9d58107dc4ca9ef18988542de57473ba4c01fd116e05216ea3c78ff349",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-quantizer-delta-1",
+          "inputSha256": "b3534b5cde410538b632beb31449dcd9255f069b712457ecce0f64709e2aaf9c",
+          "outputSha256": "38482b8d19dcea67cd86ca93748c020d573cce232cdc614243052317f72cf639",
+          "expectedSha256": "38482b8d19dcea67cd86ca93748c020d573cce232cdc614243052317f72cf639",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-quantizer-delta-2",
+          "inputSha256": "e203060d7b98d57a3cf770478aa6e63ab899d6e1d3b5e282c867d3c22adaa332",
+          "outputSha256": "d77229fd2d6c85029e201bbb436f6403b4e06aed5f2e438480f275c4aebcd730",
+          "expectedSha256": "d77229fd2d6c85029e201bbb436f6403b4e06aed5f2e438480f275c4aebcd730",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-quantizer-delta-3",
+          "inputSha256": "0ce72ecd762ec4c9c9ac3075db1baaba4247aa4e1b35fedc9feb6326e57decce",
+          "outputSha256": "41d84cf5176f151b1ce53004ac86d6db21849f6611a618a77d47b8104ba4aac1",
+          "expectedSha256": "41d84cf5176f151b1ce53004ac86d6db21849f6611a618a77d47b8104ba4aac1",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-quantizer-delta-4",
+          "inputSha256": "aecdedd8bec2d890fc4dcc85d2ae2f34c066ca5c9709d699bd522489d647d37f",
+          "outputSha256": "4524c7f4dfcc69645ef1b8385087dd6e1118c7beabbb357de7eb09286b6210e6",
+          "expectedSha256": "4524c7f4dfcc69645ef1b8385087dd6e1118c7beabbb357de7eb09286b6210e6",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-quantizer-deltas-low-clamp",
+          "inputSha256": "e0aba1f6b198c714f59b16ba2de5ddb0062829106c09b72e5db38b1f95b56a7f",
+          "outputSha256": "915660cc4ee7bde971694397bcd2cd8f824988e2001a54450d8c1051a3f7307e",
+          "expectedSha256": "915660cc4ee7bde971694397bcd2cd8f824988e2001a54450d8c1051a3f7307e",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-quantizer-deltas-high-clamp",
+          "inputSha256": "90788c5e760d0c4c8849ecbabba4eaf7bb5f1b24a2db4023c0c9148df24a537d",
+          "outputSha256": "067ed873c8d53a54408c7168b046765ca06319fc7d0fc7f32c148c1827acfe49",
+          "expectedSha256": "067ed873c8d53a54408c7168b046765ca06319fc7d0fc7f32c148c1827acfe49",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-contexts-y2-and-skip",
+          "inputSha256": "c6666a3b32e746a43fbb33c67528f3dabe35a62760484170be9ef5e502f240ba",
+          "outputSha256": "cc9828b028c7d26804ce05a5660c054869cba3511fb4d7b5d9fe477b69aae55b",
+          "expectedSha256": "cc9828b028c7d26804ce05a5660c054869cba3511fb4d7b5d9fe477b69aae55b",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-contexts-without-skip-syntax",
+          "inputSha256": "aaecaa1be841184537f08bed857b4e440f90357d2e37b12a4eeff832af53240b",
+          "outputSha256": "d54ef46282be0047dbf5d969ae8f1ef8474f82e7cc3743b2e91db4bb963cff39",
+          "expectedSha256": "d54ef46282be0047dbf5d969ae8f1ef8474f82e7cc3743b2e91db4bb963cff39",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-sparse-categories",
+          "inputSha256": "3d6306c3550841126791647cf6602cb34cc9a0838dd0b2309e10f26f68688d2c",
+          "outputSha256": "094422766ea8393870767e43d95e506b467c8d4dbb755a34ee561cf9fe719d56",
+          "expectedSha256": "094422766ea8393870767e43d95e506b467c8d4dbb755a34ee561cf9fe719d56",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-sparse-categories-high-quantizer",
+          "inputSha256": "3b58c0f80bca3c2f5f4294d8a79d118817c5f82ed97d09970b28d5dee803ab06",
+          "outputSha256": "018f37e791a17f07d1474778e4c5ec563075640df6c216654f527ba7f8b28cbe",
+          "expectedSha256": "018f37e791a17f07d1474778e4c5ec563075640df6c216654f527ba7f8b28cbe",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-sparse-custom-probabilities",
+          "inputSha256": "18a31fe5c468745854ccb2ec10f6c7d2ae674654940dbd17e416f7a5d26de85a",
+          "outputSha256": "094422766ea8393870767e43d95e506b467c8d4dbb755a34ee561cf9fe719d56",
+          "expectedSha256": "094422766ea8393870767e43d95e506b467c8d4dbb755a34ee561cf9fe719d56",
+          "differingSamples": 0,
+          "maximum": 0
+        },
+        {
+          "name": "vp8-authored-flat-dc",
+          "inputSha256": "3b4162d7f851a9845b677dc40521a4c987d0073d20ef740344acdad3aeda89ce",
+          "outputSha256": "3ec89e14a0821bb5838a03f9bb56e817b1a12c57a2b1eb60935ded0655c99d78",
+          "expectedSha256": "3ec89e14a0821bb5838a03f9bb56e817b1a12c57a2b1eb60935ded0655c99d78",
+          "differingSamples": 0,
+          "maximum": 0
+        }
+      ],
+      "passing": 164
+    },
+    "evidenceReuse": "E110 current bothOS full suites already require exact planar YUV and ALPH over164 frozen fixtures. Live pinned normal/scalar captures agree with those same frozen references on both diagnostic controls, bothOS. No production rebuild/timing/package proof.",
+    "cpuTimingRuns": 0,
+    "gcAllocationsMeasured": false,
+    "next": "Adopt integer normalized RGB, retire replaced double/SIMD color implementation and implementation-only expectations. Preserve already exact planar/chroma/alpha, work64perpixel, resource/ownership. Upgrade existing frozen/live RGB assertions to exact; coherent affected bothOS/scalar/actual-package qualification when production settles.",
+    "rawArchive": {
+      "name": "e111-vp8-color-diagnostic.tar.xz",
+      "bytes": 64644,
+      "sha256": "bc36d7956d0886c5fffa6b378eb594695102931dede16f98a42bf84320207496",
+      "members": 31,
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "linuxBeforeMirror": 4995795646,
+      "linuxAfterMirror": 4995860290,
+      "allObservedAndProjectedPeaksBelowCap": true
+    }
+  },
+  "publicVp8ColorAdoption": {
+    "round": "E112",
+    "status": "ACCEPTED; finite declared codec byte checklist passes, full objective remains open",
+    "scope": "Same164 existing frozen native/authored RGBA controls and existing live decode/encode/ALPH/version/partition cases. Two existing packet controls also exercise exact packaged async samples, retained-root owners and input/output lifetime. No new shape/settings/quality grid.",
+    "implementation": "Independent rational studio Q13 color, saturated16-bit RGB, approved Q15 studio-YUV round trip and15-bit truncation before final Q13 byte rounding. Replaced double/AVX512 renderer and unused SourceError removed. Centered byte chroma, integer reconstruction/deblocking and exact alpha unchanged. Only scalar arithmetic, no native source/table input.",
+    "resourceAndOwnership": {
+      "newOwnedHeapBytes": 0,
+      "intermediateFrameOrRowAllocated": false,
+      "rowWorkPerPixel": 64,
+      "borrowedRootAndIndependentRetainedOwnersPreserved": true
+    },
+    "windowsProducer": [
+      {
+        "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "bytes": 750592,
+        "sha256": "f801df66d145e7ee98133ee7963a3fe6a8bb2ae343c0ed050928fa663bfc25bc"
+      },
+      {
+        "path": "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll",
+        "bytes": 1590784,
+        "sha256": "e0d2d77bc22f98c2ec6144ace5fc656178b5f66b209f80335588ab66f6521441"
+      },
+      {
+        "path": "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll",
+        "bytes": 817664,
+        "sha256": "25a7763c8a324c09105847437f3f1e406ced38c6d867d63246eca8897ced57b2"
+      },
+      {
+        "path": "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.DifferentialTests.dll",
+        "bytes": 244224,
+        "sha256": "4cb5cb59f8920a39f3e03dcd5f977b3f5c9d5fa0dc14a5f9f855cde0bfca661f"
+      }
+    ],
+    "linuxProducer": [
+      {
+        "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "bytes": 750592,
+        "sha256": "8059987182f15319c2c17cbc5eb17b9a16153e374ab100fe53019a92fc04b14f"
+      },
+      {
+        "path": "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll",
+        "bytes": 1590784,
+        "sha256": "eeb1fec0406dba49601437264737daa68065b6e8e3b86bc8940f0100136d250e"
+      },
+      {
+        "path": "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll",
+        "bytes": 817664,
+        "sha256": "87216cb159e9927bf8872100e837166a37d671749757d2a514f9d4a97a06464c"
+      },
+      {
+        "path": "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.DifferentialTests.dll",
+        "bytes": 244224,
+        "sha256": "0a6876c92dadad4c359d5882b507f9ba403c70bd3447235275ef7235878e47d7"
+      }
+    ],
+    "qualification": {
+      "fullChecksEachOs": 5034,
+      "internalChecks": 1964,
+      "publicChecks": 2123,
+      "liveChecks": 947,
+      "scalarInternalEachOs": 20,
+      "scalarPublicEachOs": 123,
+      "sameActualPackageBothOs": true,
+      "usageExamplesEachOs": 3,
+      "windowsConsumer": "artifacts/package-smoke/80fabaf8003b4cd5b01d092f76cdb4c8",
+      "linuxConsumer": "artifacts/package-smoke/776cf14fa4e5401596b4cabd5a300710",
+      "productionStableDuringAcceptedQualification": true
+    },
+    "package": {
+      "path": "artifacts/qualification/vp8-color-final/Lokad.Image.0.2.0.nupkg",
+      "bytes": 389219,
+      "sha256": "3d15145ce23028d734650688d153f3289c5d3d705d0cd922f9b3026335cd4094",
+      "coreSha256": "f801df66d145e7ee98133ee7963a3fe6a8bb2ae343c0ed050928fa663bfc25bc",
+      "consumer": "artifacts/package-smoke/80fabaf8003b4cd5b01d092f76cdb4c8",
+      "passed": true,
+      "usageExamples": 3
+    },
+    "linuxPackage": {
+      "path": "artifacts/qualification/vp8-color-final/Lokad.Image.0.2.0.nupkg",
+      "bytes": 389219,
+      "sha256": "3d15145ce23028d734650688d153f3289c5d3d705d0cd922f9b3026335cd4094",
+      "coreSha256": "f801df66d145e7ee98133ee7963a3fe6a8bb2ae343c0ed050928fa663bfc25bc",
+      "passed": true,
+      "usageExamples": 3,
+      "linuxBefore": 4990220096,
+      "linuxAfter": 4997859685,
+      "exitCode": 0,
+      "sameActualPackage": true,
+      "log": "tmp/e112-package-linux.log",
+      "windowsConsumer": "artifacts/package-smoke/80fabaf8003b4cd5b01d092f76cdb4c8",
+      "consumer": "artifacts/package-smoke/776cf14fa4e5401596b4cabd5a300710"
+    },
+    "evidenceReuse": "E111 proved exact planar/chroma/alpha and independent composed color on all164 frozen controls before production adoption. Initial full suites caught eight test delegate bindings still declaring double after the private Chroma result became int. Fixed tests only and rebuilt internal test assemblies, reusing unchanged production DLLs and SAME actual package. Final full bothOS/scalar checks pass. All earlier JPEG, PNG, VP8L, encoder packet, editing, text and memory evidence remains applicable. Old VP8 RGB-renderer CPU/allocation rows now explicitly prior-production; no new CPU/GC measurement.",
+    "logs": [
+      "tmp/e112-full-before-test-delegate-windows.log",
+      "tmp/e112-full-before-test-delegate-linux.log",
+      "tmp/e112-full-windows.log",
+      "tmp/e112-full-linux.log",
+      "tmp/e112-scalar-internal-windows.log",
+      "tmp/e112-scalar-public-windows.log",
+      "tmp/e112-scalar-internal-linux.log",
+      "tmp/e112-scalar-public-linux.log",
+      "tmp/e112-package-windows.log",
+      "tmp/e112-package-linux.log"
+    ],
+    "storageCompaction": [
+      {
+        "archive": "tmp/e112-cold-e110-consumer-linux.tar.xz",
+        "bytes": 1383100,
+        "sha256": "9f07476b602a7293933755496f675a4703b7a7a43599485c1ce296c3d2083ff2",
+        "retiredRegularFiles": 139,
+        "retiredBytes": 7249665,
+        "mirrored": true,
+        "everySourceByteVerified": true,
+        "peak": 4997243390,
+        "after": 4989993725
+      },
+      {
+        "archive": "tmp/e112-cold-current-consumer-linux.tar.xz",
+        "bytes": 1382920,
+        "sha256": "4ceb90a25ec9cff5d37af5aedc4c2295e3cdeb6872ec0484c274516b39408cc0",
+        "retiredRegularFiles": 139,
+        "retiredBytes": 7250370,
+        "mirrored": true,
+        "everySourceByteVerified": true,
+        "peak": 4999242605,
+        "after": 4991992235
+      }
+    ],
+    "parentCi": {
+      "sha": "a3fb32384e09c1dc559ae2ca4372ddf0eb6ec160",
+      "run": 40046647009,
+      "conclusion": "success",
+      "jobs": 3
+    },
+    "cpuTimingRuns": 0,
+    "gcAllocationsMeasured": false,
+    "next": "Declared finite codec byte checklist passes at stated scopes. Resume bounded CPU/allocation evidence reconciliation on the existing named workloads: new PNG/JPEG/VP8L/VP8 encoder producers and JPEG/VP8 RGB decoder producers invalidate affected older timing/allocation evidence; unchanged primitives retain confirmations. Resolve uncertain current costs before choosing a demonstrated largest gap, one primitive at a time. First inspect existing prepared workers and frozen inputs/reference settings; no workload grid, native baseline change, repeat package proof or passing-case retuning. Keep quarter-width timing normalization mismatch explicit.",
+    "rawArchive": {
+      "name": "e112-public-vp8-color-qualified.tar.xz",
+      "bytes": 1716532,
+      "sha256": "ff83b7464412c44b6a42d2a323e0334ab2680fc4f3aa392a409d4da85eda3e07",
+      "members": 60,
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "linuxBeforeMirror": 4991992235,
+      "linuxAfterMirror": 4993708767,
       "allObservedAndProjectedPeaksBelowCap": true
     }
   }

@@ -71,15 +71,8 @@ public sealed class Vp8Tests
             Assert.Equal(fixture.GetProperty("expectedHash").GetString(), Hash(expected));
             using var actual = ImageCodec.Decode(encoded);
             Assert.Equal((fixture.GetProperty("width").GetInt32(), fixture.GetProperty("height").GetInt32(), 8), (actual.Width, actual.Height, actual.BitDepth));
-            var maximum = 0; double squares = 0;
             for (var y = 0; y < actual.Height; y++)
-                for (var x = 0; x < actual.Width * 4; x++)
-                {
-                    var predicted = expected[y * actual.Width * 4 + x]; var value = actual.GetRow8(y)[x];
-                    if (x % 4 == 3) { Assert.Equal(predicted, value); continue; }
-                    var difference = Math.Abs(predicted - value); maximum = Math.Max(maximum, difference); squares += difference * difference;
-                }
-            Assert.True(maximum <= 4 && Math.Sqrt(squares / (actual.Width * actual.Height * 3)) <= 1.5, $"{name}: RGB maximum {maximum}.");
+                Assert.Equal(expected.AsSpan(y * actual.Width * 4, actual.Width * 4).ToArray(), actual.GetRow8(y).ToArray());
         }
     }
 
