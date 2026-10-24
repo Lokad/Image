@@ -5,6 +5,16 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E152 sparse JPEG traversal](WARM-JPEG-SPARSE-SCAN.md) confirms governedRGBA16
+at2.791×/upper2.804, saving17.0% against its preceding confirmation. Current
+ungovernedRGBA16/RGBA8 screens are2.732×/2.611×. The previously advertised gray
+0.962× pass predates the raw-exact grayscale encoder adoption in3f36e3f and is
+invalid for current code: the existing raw-exact58,910-byte gray control now
+demonstrates6.973×. It is the largest current gap. Older caller-gray and affected
+JPEG timing rows are prior-production. No cases were added. Both platforms pass
+5,074 checks and the same actual private package. Other codecs/decoders/edit/text
+reuse unchanged-path evidence. The finite257case/1× objective remains open.
+
 [E149 exact vector quantization](WARM-VP8-AVX2-LEVELS.md) confirms the existing
 RGBA8 VP8 control at3.109×/upper3.128, with7.8% less elapsed than the preceding
 confirmation, unchanged24,080,952 B/op and exact98,590-byte packets. Both

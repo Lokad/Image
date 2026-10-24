@@ -183,6 +183,20 @@ internal static partial class JpegEncoder
         var family = component == 0 ? 0 : 1;
         var difference = coefficients[0] - previous[component]; previous[component] = coefficients[0];
         ReferenceCoefficient(writer, tables, histograms, family, 0, difference);
+        if (System.Runtime.Intrinsics.X86.Avx512BW.IsSupported)
+        {
+            var mask = JpegNonzeroMask.Ac(coefficients); var position = 0;
+            while (mask != 0)
+            {
+                var next = System.Numerics.BitOperations.TrailingZeroCount(mask); mask &= mask - 1;
+                var zeros = next - position - 1;
+                while (zeros >= 16) { ReferenceSymbol(writer, tables, histograms, family + 2, 240); zeros -= 16; }
+                ReferenceCoefficient(writer, tables, histograms, family + 2, zeros, coefficients[JpegTransform.Zigzag[next]]);
+                position = next;
+            }
+            if (position != 63) ReferenceSymbol(writer, tables, histograms, family + 2, 0);
+            return;
+        }
         var run = 0;
         for (var k = 1; k < 64; k++)
         {
