@@ -5,11 +5,18 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E147 AVX2 row reductions](WARM-JPEG-AVX2-ROWS.md) reconcile the current color-JPEG
+anchors without adding cases: governed RGBA16 confirms 3.366×, with 803,968 B/op,
+exact packets and 8.35% less elapsed time than its preceding screen. Ungoverned
+RGBA16/RGBA8 have current 3.390×/3.218× screens. Both platforms pass 5,068 checks
+and the same actual private package. Other affected color timings remain marked
+prior-production; unchanged grayscale/other paths reuse their relevant evidence.
+
 [MemoryBudget/Jpeg420Rgba16](WARM-JPEG-COOPERATIVE-OWNER.md) is the one added
 required boundary: E136 introduced private coefficient storage for governed
 JPEG encoding, so pooled ungoverned evidence and the coarse `ImageBudget` quota
 cannot qualify it. It reuses the original resident RGBA16 input, settings and
-complete normalized encode/output operation. The guarded screen demonstrates
+complete normalized encode/output operation. Its initial guarded screen demonstrated
 a 3.667× CPU gap with 803,968 B/op and exact packets under the approved COM
 exception. Root borrowing/refunds, terminal refusal/recovery, cancellation and
 independent surviving outputs pass. Production is unchanged; its existing full

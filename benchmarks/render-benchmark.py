@@ -211,14 +211,14 @@ def render():
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
-        row('JPEG RGBA8 4:2:0', 'warm-jpeg-coefficient-replay-evidence.json', ['cases', 'rgba8', -1], 'WARM-JPEG-COEFFICIENT-REPLAY.md', verification='Gap (short; qualified)'),
+        row('JPEG RGBA8 4:2:0', 'warm-jpeg-avx2-rows-evidence.json', ['cases', 'rgba8', -1], 'WARM-JPEG-AVX2-ROWS.md', verification='Gap (short; qualified)'),
         row('JPEG RGBA8 4:2:0 / ImageBudget quota', 'warm-shared-budget-evidence.json', ['cases', 'JpegBudgetEncode4208', -1], 'WARM-SHARED-BUDGET.md', verification='Prior production; reconfirm'),
-        row('JPEG RGBA16 4:2:0 / caller IMemoryBudget', 'warm-jpeg-cooperative-owner-evidence.json', ['observations', -1], 'WARM-JPEG-COOPERATIVE-OWNER.md', verification='Gap (short; qualified)'),
+        row('JPEG RGBA16 4:2:0 / caller IMemoryBudget', 'warm-jpeg-avx2-rows-evidence.json', ['observations', -1], 'WARM-JPEG-AVX2-ROWS.md', confirmed=True),
         row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420Restart8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
-        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-coefficient-replay-evidence.json', ['observations', -1], 'WARM-JPEG-COEFFICIENT-REPLAY.md', confirmed=True),
+        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-avx2-rows-evidence.json', ['cases', 'rgba16', -1], 'WARM-JPEG-AVX2-ROWS.md', verification='Gap (short; qualified)'),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'EncodeGray8', -1], 'WARM-JPEG-VECTOR-AC.md', True),
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-compact-color-evidence.json', ['cases', 'OriginalGray', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
@@ -368,18 +368,14 @@ are exact, including checksums/framing. Both platforms pass4,807 Release checks,
 three examples. Four current RGBA8 encoder anchors have guarded packet-exact cost
 screens. JPEG has independently confirmed improvements from bounded MCU conversion,
 integer SIMD transforms/quantization, bounded chroma rows and coefficient replay.
-The existing RGBA16 JPEG420 control confirms a3.59× gap after removing duplicate
-conversion/transforms, saving33.1% elapsed with unchanged warm allocations and
-complete packets. RGBA8 has a same-build3.59× short screen. Its5,052-check producer
-and the same actual private package pass on each platform;
-[JPEG evidence](../benchmarks/WARM-JPEG-COEFFICIENT-REPLAY.md). Both controls admit
-430,848 B of coefficient capacity; caller-root operations use a private owner,
-whose distinct caller-root path now has a guarded screen: 6,746.29 µs versus
-1,839.67 µs, 803,968 B/op, ratio 3.667 (upper 4.407; conservative lower 2.952).
-The packets remain exact under the approved COM exception. Root/refund/refusal/
-cancellation and surviving outputs pass; [governed JPEG](../benchmarks/WARM-JPEG-COOPERATIVE-OWNER.md).
-This adds one named ownership boundary, with unchanged production and prior
-qualification reused; no repeat confirmation or general overhead claim.
+The caller-root RGBA16 JPEG420 control now confirms a 3.366× gap after exact AVX2
+row reductions, using 8.35% less elapsed time than its preceding screen, with
+unchanged 803,968 B/op and packets. Existing ungoverned RGBA16/RGBA8 controls have
+current 3.390×/3.218× screens and 372,808/372,811 B/op. Each platform passes 5,068
+checks and validates the same actual private package; [row evidence](../benchmarks/WARM-JPEG-AVX2-ROWS.md).
+The benchmark/native/generated workers are reused; full suites ran through the
+test script against targeted, verified production/test builds. Other replaced
+color-JPEG rows remain historical; unchanged grayscale evidence is retained.
 VP8L now confirms a3.091× gap after exact paired-population costs, saving24.5%
 elapsed and8,480 allocated bytes/op against the preceding confirmation. The
 paired-cost producer passes 5,062 checks on each platform and validates the same actual private package;

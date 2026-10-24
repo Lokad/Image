@@ -131,13 +131,19 @@ internal static class JpegReferenceTransform
             if (Avx2.IsSupported)
             {
                 var twice = Vector256.Create(row, row);
-                for (var u = 0; u < 8; u += 2)
-                {
-                    var weights = MemoryMarshal.Read<Vector256<short>>(MemoryMarshal.AsBytes(RowWeights.AsSpan(v * 64 + u * 8, 16)));
-                    var products = Avx2.MultiplyAddAdjacent(twice, weights);
-                    output[v * 8 + u] = RoundRow(products.GetLower());
-                    output[v * 8 + u + 1] = RoundRow(products.GetUpper());
-                }
+                var weights = RowWeights.AsSpan(v * 64, 64);
+                var p01 = Avx2.MultiplyAddAdjacent(twice, MemoryMarshal.Read<Vector256<short>>(MemoryMarshal.AsBytes(weights[..16])));
+                var p23 = Avx2.MultiplyAddAdjacent(twice, MemoryMarshal.Read<Vector256<short>>(MemoryMarshal.AsBytes(weights.Slice(16, 16))));
+                var p45 = Avx2.MultiplyAddAdjacent(twice, MemoryMarshal.Read<Vector256<short>>(MemoryMarshal.AsBytes(weights.Slice(32, 16))));
+                var p67 = Avx2.MultiplyAddAdjacent(twice, MemoryMarshal.Read<Vector256<short>>(MemoryMarshal.AsBytes(weights.Slice(48, 16))));
+                // Byte-domain column bounds keep every absolute weighted row,
+                // including the bias, within 2,139,160,576. All partial Int32
+                // sums are exact; scalar widening/extraction is unnecessary.
+                var sums = Avx2.HorizontalAdd(Avx2.HorizontalAdd(p01, p23), Avx2.HorizontalAdd(p45, p67));
+                var rounded = Avx2.ShiftRightArithmetic(sums + Vector256.Create(1 << 16), 17);
+                var packed = Sse2.PackSignedSaturate(rounded.GetLower(), rounded.GetUpper());
+                // Horizontal reduction leaves even frequencies before odd ones.
+                Sse2.UnpackLow(packed, Sse2.ShiftRightLogical128BitLane(packed.AsByte(), 8).AsInt16()).CopyTo(output[(v * 8)..]);
             }
             else
                 for (var u = 0; u < 8; u++)
