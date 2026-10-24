@@ -16,7 +16,8 @@ match14 frozen complete packets raw-exact: all eight Optimal color/depth control
 plus RGBA8/16 stored, fast and smallest. The17 existing delivery/profile rows
 are exact, including checksums/framing. Both platforms pass4,807 Release checks,
 69 affected PNG scalar checks and the SAME actual private0.2.0 package with all
-three examples. **Current PNG/JPEG/VP8 encoding CPU and allocated B/op are unmeasured.**
+three examples. Four current RGBA8 encoder anchors now have guarded packet-exact cost screens;
+their rows below are current. Other replaced encoder observations remain historical.
 All17 historical BCL PNG timing rows below are superseded, as are the earlier
 JPEG encoder producers. No new timing or image/settings controls were added.
 
@@ -71,7 +72,7 @@ pixels and unchanged native baseline. Both quiet guards pass; it measures
 with no independent confirmation or speedup claim. The other four VP8 decode
 rows still describe the replaced renderer.
 
-No timing or allocation runs accompanied the new PNG/JPEG/VP8L encoder adoption. Unchanged paths
+The initial PNG/JPEG/VP8L encoder adoption had no timing/allocation runs; four existing anchors now have current guarded screens. Unchanged paths
 retain evidence on their recorded frozen inputs; new default-encoded fixtures do
 not silently replace those inputs. CPU tuning/independent confirmation resumes
 after exact codec work. The full warm single-CPU objective remains independent
@@ -80,8 +81,8 @@ replacement readiness remains open.
 
 The [finite checklist](../benchmarks/WARM-COVERAGE.md) remains 256 named cases:
 239 numeric and 17 unmeasured. Tested-producer rows contain **46 passes,
-110 gaps, 1 confidence-open case, 2 short cost
-screens and 80 superseded encoder rows**. The latter predate
+119 gaps, 1 confidence-open case, 2 short cost
+screens and 71 superseded encoder rows**. The latter predate
 JPEG decision/adaptive work or the managed PNG/VP8L encoder replacements; current packet evidence is
 reconciled and new costs are deferred while compression gates remain open.
 Their stored values are historical, not demonstrated current gaps. Another 30 marked
@@ -122,7 +123,7 @@ is a CPU-parity confirmation.
 | [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 3,054.27 | 3,091.94 | 0.988 / 0.991 | 8,648 | Parity confirmed |
 | [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,329.08 | 996.80 | 1.333 / 1.411 | 761,840 | Prior production; reconfirm; metadata timing open |
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-CURRENT-VP8-SAMPLES.md) | 10,523.95 | 5,981.68 | 1.759 / 1.903 | 1,966,591 | Gap (short; qualified) |
-| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
+| [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 4,320.01 | 3,018.37 | 1.431 / 1.494 | 1,216,276 | Gap (short; qualified) |
 | [PNG RGBA8, None](../benchmarks/WARM-CURRENT-RESIDENT-PNG.md) | 1,575.30 | 1,388.57 | 1.134 / 1.330 | 4,480 | Gap (short; qualified); metadata timing open |
 | [PNG RGBA8, resident / ImageBudget quota](../benchmarks/WARM-SHARED-BUDGET.md) | 2,004.67 | 1,392.79 | 1.439 / 1.482 | 4,561 | Gap (short; qualified) |
 | [PNG RGBA8, None / live cancelable token](../benchmarks/WARM-PNG-CANCEL-BLOCKS.md) | 1,732.37 | 1,390.42 | 1.246 / 1.320 | 4,456 | Gap (short; qualified) |
@@ -201,10 +202,10 @@ is a CPU-parity confirmation.
 | [WebP VP8 opaque, simple luma filter](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 6,888.59 | 4,890.64 | 1.409 / 1.450 | 760,572 | Prior production; reconfirm; metadata timing open |
 | [WebP VP8 opaque, live cancelable token](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 6,687.81 | 4,793.83 | 1.395 / 1.437 | 760,572 | Prior production; reconfirm; metadata timing open |
 | [WebP VP8, opaque](../benchmarks/WARM-VP8-CANCELLABLE-BLOCK.md) | 6,638.33 | 4,795.62 | 1.384 / 1.443 | 760,572 | Prior production; reconfirm; metadata timing open |
-| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
-| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
-| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
-| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
+| [WebP VP8L, sixteen-color indexed input](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 785.58 | 544.96 | 1.442 / 1.495 | 1,351,972 | Gap (short; qualified) |
+| [WebP VP8L, literal/run input](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 2,269.12 | 2,157.09 | 1.052 / 1.074 | 1,074,326 | Gap (short; qualified) |
+| [WebP VP8L, native input](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 4,576.04 | 3,022.99 | 1.514 / 1.615 | 1,216,180 | Gap (short; qualified) |
+| [WebP VP8L, native input / live cancelable token](../benchmarks/WARM-VP8L-SIMD-PREDICTION.md) | 4,573.29 | 3,016.50 | 1.516 / 1.579 | 1,216,180 | Gap (short; qualified) |
 
 **Encode**
 
@@ -214,7 +215,7 @@ is a CPU-parity confirmation.
 | [JPEG EncodeJpegAsync, caller RGB420 / fresh nonseekable Stream](../benchmarks/WARM-JPEG-ASYNC-SAMPLES.md) | 2,076.73 | 1,628.02 | 1.276 / 1.430 | 232,614 | Prior production; reconfirm |
 | [JPEG EncodeJpegAsync, RGBA8 / fresh nonseekable Stream / matched quality](../benchmarks/WARM-JPEG-ASYNC-ENCODE.md) | 3,982.03 | 3,849.79 | 1.034 / 1.158 | 494,254 | Prior production; reconfirm |
 | [PNG EncodePngAsync, Optimal managed9/native6 / prior timing](../benchmarks/PNG-OPTIMAL-RGBA8.md) | 5,397.36 | 17,268.11 | 0.313 / 0.314 | 658,560 | Prior production; reconfirm |
-| [PNG RGBA8, Optimal managed9/native6 / None](../benchmarks/PNG-OPTIMAL-RGBA8.md) | 14,417.46 | 17,231.33 | 0.837 / 0.885 | 527,580 | Prior production; reconfirm |
+| [PNG RGBA8 Optimal6/None](../benchmarks/WARM-CURRENT-ENCODER-COSTS.md) | 25,089.49 | 17,183.73 | 1.460 / 1.489 | 1,325,678 | Gap (short; qualified) |
 | [PNG RGBA8, NoCompression / None](../benchmarks/WARM-PNG-STORED-CAPACITY.md) | 245.37 | 189.47 | 1.295 / 1.430 | 604,319 | Prior production; reconfirm |
 | [PNG RGBA16, NoCompression / None](../benchmarks/WARM-PNG-STORED-CAPACITY.md) | 349.92 | 406.43 | 0.861 / 0.870 | 1,140,504 | Prior production; reconfirm |
 | [PNG RGBA8, Fastest managed2/native1 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 3,053.16 | 4,355.98 | 0.701 / 0.704 | 527,694 | Prior production; reconfirm |
@@ -236,7 +237,7 @@ is a CPU-parity confirmation.
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,980.90 | 3,855.74 | 1.032 / 1.135 | 556,284 | Prior production; reconfirm |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,579.93 | 2,354.66 | 1.096 / 1.227 | 294,116 | Prior production; reconfirm |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,633.91 | 2,421.91 | 1.088 / 1.220 | 294,116 | Prior production; reconfirm |
-| [JPEG 4:2:0, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,022.21 | 1,766.91 | 1.144 / 1.247 | 297,781 | Prior production; reconfirm |
+| [JPEG RGBA8 4:2:0](../benchmarks/WARM-CURRENT-ENCODER-COSTS.md) | 24,301.44 | 1,765.74 | 13.763 / 14.280 | 372,831 | Gap (short; qualified) |
 | [JPEG 4:2:0, shared budget / matched quality](../benchmarks/WARM-SHARED-BUDGET.md) | 2,026.04 | 1,769.43 | 1.145 / 1.272 | 297,781 | Prior production; reconfirm |
 | [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,019.53 | 1,611.25 | 1.253 / 1.455 | 297,781 | Prior production; reconfirm |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,310.38 | 1,769.17 | 1.306 / 1.488 | 263,819 | Prior production; reconfirm |
@@ -249,10 +250,10 @@ is a CPU-parity confirmation.
 | [JPEG 4:2:0 from caller RGB / AC trellis and padding pruning](../benchmarks/JPEG420-AC-TRELLIS.md) | 68,162.15 | 1,579.24 | 43.161 / 50.354 | 170,648 | Cost screen (CPU parity deferred) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Prior production; reconfirm |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 75,226.22 | 15,616.85 | 4.817 / 5.060 | 1,006,520 | Prior production; reconfirm |
-| [WebP VP8 + alpha‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 86,100.75 | 53,409.99 | 1.612 / 1.790 | 1,537,304 | Prior production; reconfirm |
+| [VP8 RGBA8](../benchmarks/WARM-CURRENT-ENCODER-COSTS.md) | 251,887.05 | 53,581.59 | 4.701 / 4.990 | 24,093,944 | Gap (short; qualified) |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 83,863.51 | 53,727.26 | 1.561 / 1.652 | 1,537,304 | Prior production; reconfirm |
 | [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-HISTOGRAM384.md) | 19,502.47 | 53,435.71 | 0.365 / 0.433 | 2,036,564 | Prior production; reconfirm |
-| [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
+| [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-CURRENT-ENCODER-COSTS.md) | 605,260.92 | 120,947.64 | 5.004 / 5.897 | 48,064,592 | Gap (short; qualified) |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 464,921.62 | 121,865.49 | 3.815 / 4.757 | 55,238,624 | Prior production; reconfirm |
 | [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-COLOR-COST.md) | 612,338.64 | 83,533.61 | 7.330 / 8.250 | 67,414,112 | Prior production; reconfirm |

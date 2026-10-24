@@ -9,6 +9,17 @@ claimed. Reconcile frozen workers/output identities, then resolve uncertain curr
 costs with short guarded screens before choosing the largest demonstrated gap.
 Broader native-profile equality and replacement readiness remain open.
 
+E115/E116 resolves four existing current encoder anchors with packet-exact smoke
+and guarded short screens, reusing the qualified production DLL. JPEG420 is13.763×,
+VP8L5.004×, VP8 4.701× and PNG Optimal1.460× their references. Allocation and
+complete packet sizes are in [the current cost report](WARM-CURRENT-ENCODER-COSTS.md).
+These are single screens, not independent confirmations or speedup claims. JPEG
+is the next primitive target; no workload grid or repeated production qualification.
+The VP8L reference helper had one necessary provenance refresh for a CLI-only
+method selector, with timed operation/backend/settings and packets preserved.
+The summary restores distinct VP8L decoder rows mistakenly duplicated by a label
+edit; their unchanged original evidence remains valid.
+
 E113 resolves the current fresh-Stream VP8 cost using the same98,590-byte input,
 unchanged native worker/settings and E112 production DLL. All three existing
 VP8 packets now have exact normalized pixels; the worker replaces former managed

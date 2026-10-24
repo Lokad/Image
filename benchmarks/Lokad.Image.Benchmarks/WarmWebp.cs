@@ -67,92 +67,43 @@ public class WarmWebp
 
     private static void ValidatePreparation(WarmWebpPreparation record, int depth = 8, bool opaque = false)
     {
-        var allowedPolicy = record.QualityPolicy switch
-        {
-            "fixed-anchor-v1" => record.NativeQuality == 75 && record.OwnedSettings.Length == 1
-                && record.OwnedSettings[0].Setting == 100 && record.OwnedEvaluationOrder.Length == 1
-                && record.OwnedEvaluationOrder[0] == 100,
-            "bounded-v1" => record.OwnedSettings.Length is >= 5 and <= EncoderQualityCalibration.MaximumOwnedSettings,
-            _ => false
-        };
-        if (record.SchemaVersion != 1 || record.Project != "Lokad.Image" || record.Recipe != RecipeFor(depth, opaque) || record.SourceDepth != depth || record.SourceOpaque != opaque || depth is not (8 or 16)
-            || record.NativeQuality is < 1 or > 100 || record.NativeQuality != record.Match.Native.Setting
-            || !record.Match.Matched || record.Match.PsnrGapDb is not (>= 0 and <= EncoderQualityCalibration.MaximumPsnrGapDb)
-            || !allowedPolicy || (depth == 16 || opaque) && record.QualityPolicy != "fixed-anchor-v1"
-            || record.OwnedEvaluationOrder.Length != record.OwnedSettings.Length
-            || record.OwnedEvaluationOrder.Distinct().Count() != record.OwnedSettings.Length
-            || !record.OwnedEvaluationOrder.Order().SequenceEqual(record.OwnedSettings.Select(sample => sample.Setting).Order())
-            || !record.Match.Native.AlphaExact || !record.Match.ClosestOwned.AlphaExact
-            || record.Match.Native.Codec != "VP8" || record.Match.ClosestOwned.Codec != "VP8"
-            || record.Match.Native.Sampling != "4:2:0" || record.Match.ClosestOwned.Sampling != "4:2:0"
-            || record.Match.Native.SourceError.Scale != (opaque ? 1 : 255)
-            || EncoderQualityCalibration.Match(record.Match.Native, record.OwnedSettings) != record.Match)
-            throw new InvalidOperationException("Warm VP8 quality preparation is unmatched or outside its bounded contract.");
+        var anchor = record.Match.Native;
+        // Archived managed quality-calibration fields do not select current
+        // settings. Frozen native identity plus complete packet equality does.
+        if (record.SchemaVersion != 1 || record.Project != "Lokad.Image"
+            || record.Recipe != RecipeFor(depth, opaque) || record.SourceDepth != depth
+            || record.SourceOpaque != opaque || depth is not (8 or 16)
+            || record.NativeQuality != 75 || anchor.Setting != 75
+            || anchor.EncodedBytes <= 0 || anchor.EncodedSha256.Length != 64
+            || !anchor.EncodedSha256.All(char.IsAsciiHexDigit)
+            || !anchor.AlphaExact || anchor.Codec != "VP8" || anchor.Sampling != "4:2:0")
+            throw new InvalidOperationException("Frozen VP8 native settings or source metadata differ.");
     }
 
     public static void ValidateControls()
     {
-        // Synthetic metadata only: no source raster, encode, native worker or
-        // timing. Exercise the actual pre-native preparation gate, including
-        // forged matched flags/gaps and duplicate/out-of-budget settings.
         using var document = JsonDocument.Parse("{}"); var empty = document.RootElement.Clone();
-        QualitySample Sample(int quality) => new(quality, 100, "", "", "", "VP8", "4:2:0", new(100000, 1, 3, 255), new(0, 0, 3));
-        int[] seeds = [1, 25, 50, 75, 100]; var owned = seeds.Select(Sample).ToArray(); var native = Sample(75);
-        var matched = EncoderQualityCalibration.Match(native, owned);
-        var record = new WarmWebpPreparation(1, "Lokad.Image", "", Recipe8, "", "", 75, "", "", matched,
-            owned, seeds, empty, "", "", "", empty, empty, "bounded-v1");
-        ValidatePreparation(record);
-        var fixedOwned = Sample(100);
-        var fixedRecord = record with { QualityPolicy = "fixed-anchor-v1", OwnedSettings = [fixedOwned],
-            OwnedEvaluationOrder = [100], Match = EncoderQualityCalibration.Match(native, [fixedOwned]) };
-        ValidatePreparation(fixedRecord);
-        var fixed16 = fixedRecord with { SourceDepth = 16, Recipe = RecipeFor(16) };
-        ValidatePreparation(fixed16, 16);
-        var opaqueNative = native with { SourceError = native.SourceError with { Scale = 1 } };
-        var opaqueOwned = fixedOwned with { SourceError = fixedOwned.SourceError with { Scale = 1 } };
-        var fixedOpaque = fixedRecord with { SourceOpaque = true, Recipe = RecipeFor(8, true), Match = EncoderQualityCalibration.Match(opaqueNative, [opaqueOwned]), OwnedSettings = [opaqueOwned] };
-        ValidatePreparation(fixedOpaque, 8, true);
-        var opaque16 = fixedOpaque with { SourceDepth = 16, Recipe = RecipeFor(16, true) };
-        ValidatePreparation(opaque16, 16, true);
-        foreach (var invalid in new[] { opaque16 with { SourceDepth = 8 }, opaque16 with { Recipe = fixedOpaque.Recipe }, opaque16 with { SourceOpaque = false } })
-        {
-            try { ValidatePreparation(invalid, 16, true); } catch (InvalidOperationException) { continue; }
-            throw new InvalidOperationException("Opaque RGBA16 VP8 gate accepted invalid depth/recipe metadata.");
-        }
-        foreach (var invalid in new[] { fixedOpaque with { SourceOpaque = false }, fixedOpaque with { Recipe = Recipe8 }, fixedOpaque with { Match = fixedRecord.Match, OwnedSettings = fixedRecord.OwnedSettings } })
-        {
-            try { ValidatePreparation(invalid, 8, true); } catch (InvalidOperationException) { continue; }
-            throw new InvalidOperationException("Opaque VP8 gate accepted invalid opacity/metric metadata.");
-        }
-        foreach (var invalid16 in new[] { fixed16 with { SourceDepth = 8 }, fixed16 with { Recipe = Recipe8 }, fixed16 with { QualityPolicy = "bounded-v1" } })
-        {
-            try { ValidatePreparation(invalid16, 16); } catch (InvalidOperationException) { continue; }
-            throw new InvalidOperationException("VP8 depth16 gate accepted invalid metadata.");
-        }
+        var anchor = new QualitySample(75, 100, new string('0', 64), "", "", "VP8", "4:2:0", new(0, 0, 3), new(0, 0, 3));
+        var record = new WarmWebpPreparation(1, "Lokad.Image", "", Recipe8, "", "", 75, "", "",
+            new(anchor, anchor, null, false, null), [], [], empty, "", "", "", empty, empty, "");
+        foreach (var depth in new[] { 8, 16 })
+        foreach (var opaque in new[] { false, true })
+            ValidatePreparation(record with { Recipe = RecipeFor(depth, opaque), SourceDepth = depth, SourceOpaque = opaque }, depth, opaque);
         WarmWebpPreparation[] rejected = [
-            record with { Match = matched with { Matched = false, PsnrGapDb = 0.8984, ExclusionReason = "Synthetic outside-band control" } },
-            record with { Match = matched with { PsnrGapDb = 0.8984 } },
-            record with { Match = matched with { PsnrGapDb = 0.1 } },
-            record with { NativeQuality = 101 },
-            record with { NativeQuality = 50 },
-            record with { Recipe = "Changed input recipe" },
-            record with { OwnedSettings = [.. owned, Sample(2), Sample(3), Sample(4), Sample(5)], OwnedEvaluationOrder = [.. seeds, 2, 3, 4, 5] },
-            record with { OwnedEvaluationOrder = [1, 25, 50, 75, 75] },
-            record with { OwnedEvaluationOrder = [1, 25, 50, 75, 99] },
-            record with { Match = matched with { Native = native with { AlphaExact = false } } },
-            record with { Match = matched with { ClosestOwned = matched.ClosestOwned with { Codec = "JPEG" } } },
-            fixedRecord with { NativeQuality = 74 },
-            fixedRecord with { OwnedSettings = [Sample(99)], OwnedEvaluationOrder = [99] },
-            fixedRecord with { OwnedSettings = [fixedOwned, fixedOwned], OwnedEvaluationOrder = [100, 100] },
-            fixedRecord with { QualityPolicy = "unknown" }
+            record with { NativeQuality = 74 }, record with { SourceDepth = 16 },
+            record with { SourceOpaque = true }, record with { Recipe = "Changed recipe" },
+            record with { Match = record.Match with { Native = anchor with { Setting = 74 } } },
+            record with { Match = record.Match with { Native = anchor with { EncodedSha256 = "invalid" } } },
+            record with { Match = record.Match with { Native = anchor with { AlphaExact = false } } },
+            record with { Match = record.Match with { Native = anchor with { Codec = "JPEG" } } },
+            record with { Match = record.Match with { Native = anchor with { Sampling = "4:4:4" } } }
         ];
         foreach (var invalid in rejected)
         {
-            try { ValidatePreparation(invalid); }
-            catch (InvalidOperationException) { continue; }
-            throw new InvalidOperationException("Warm VP8 gate accepted an invalid synthetic preparation.");
+            try { ValidatePreparation(invalid); } catch (InvalidOperationException) { continue; }
+            throw new InvalidOperationException("VP8 native-input gate accepted invalid metadata.");
         }
-        Console.WriteLine($"Warm VP8 preparation gate: valid metadata accepted; {rejected.Length} invalid controls rejected before any native worker. No raster/encode/timing.");
+        Console.WriteLine($"VP8 native-input gate: four existing depth/opacity forms accepted, {rejected.Length} invalid records rejected; no encode or timing.");
     }
 
     // Preparation is explicit and untimed. Benchmark launches validate the
@@ -160,7 +111,7 @@ public class WarmWebp
     public static void Prepare(int cpu, int nativeQuality = 75, int depth = 8, bool opaque = false)
     {
         if (!OperatingSystem.IsLinux() || cpu is < 0 or > 62 || nativeQuality != 75 || depth is not (8 or 16))
-            throw new ArgumentException("The fixed VP8 pair requires Linux, one allowed CPU, native quality 75 and owned quality 100.");
+            throw new ArgumentException("The fixed VP8 pair requires Linux, one allowed CPU, native/managed quality75 and complete packet equality.");
         using var process = Process.GetCurrentProcess(); var oldAffinity = process.ProcessorAffinity;
         process.ProcessorAffinity = new IntPtr(1L << cpu);
         try
@@ -175,9 +126,11 @@ public class WarmWebp
             var nativeBytes = File.ReadAllBytes(state.NativeOutput);
             var nativeSample = EncoderQualityCalibration.Validate(nativeBytes, reference, ProfileFor(depth, opaque), nativeQuality, state.Ffmpeg);
             using var output = new MemoryStream();
-            ImageCodec.EncodeWebp(source, output, new WebpEncodeOptions { Lossless = false, Quality = 100, Effort = 4 });
+            ImageCodec.EncodeWebp(source, output, new WebpEncodeOptions { Lossless = false, Quality = 75, Effort = 4 });
             var ownedBytes = output.ToArray();
-            QualitySample[] owned = [EncoderQualityCalibration.Validate(ownedBytes, reference, ProfileFor(depth, opaque), 100, state.Ffmpeg)];
+            QualitySample[] owned = [EncoderQualityCalibration.Validate(ownedBytes, reference, ProfileFor(depth, opaque), 75, state.Ffmpeg)];
+            if (!ownedBytes.AsSpan().SequenceEqual(nativeBytes))
+                throw new InvalidOperationException("Prepared managed/native VP8 packets differ.");
             var match = EncoderQualityCalibration.Match(nativeSample, owned);
             native.Check();
             if (!File.ReadAllBytes(state.NativeOutput).AsSpan().SequenceEqual(nativeBytes)
@@ -189,9 +142,9 @@ public class WarmWebp
             File.WriteAllBytes(nativeFile, nativeBytes); File.WriteAllBytes(managedFile, ownedBytes);
             var record = new WarmWebpPreparation(1, "Lokad.Image", DateTime.UtcNow.ToString("O"), RecipeFor(depth, opaque),
                 JpegBenchmarkCase.Hash(pixels), JpegBenchmarkCase.Hash(reference), nativeQuality,
-                Path.GetRelativePath(state.Root, nativeFile), Path.GetRelativePath(state.Root, managedFile), match, owned, [100], SourceIdentity(state.Root),
+                Path.GetRelativePath(state.Root, nativeFile), Path.GetRelativePath(state.Root, managedFile), match, owned, [75], SourceIdentity(state.Root),
                 JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), JpegBenchmarkCase.HashFile(typeof(WarmWebp).Assembly.Location),
-                JpegBenchmarkCase.HashFile(state.Ffmpeg), native.BuildIdentity, native.Ready, "fixed-anchor-v1", depth, opaque);
+                JpegBenchmarkCase.HashFile(state.Ffmpeg), native.BuildIdentity, native.Ready, "exact-packet-v1", depth, opaque);
             var path = Path.Combine(state.Root, "artifacts", "warm-reference", opaque ? depth == 16 ? "webp-opaque16-match.json" : "webp-opaque-match.json" : depth == 16 ? "webp16-match.json" : "webp-match.json");
             File.WriteAllText(path, JsonSerializer.Serialize(record, EncoderQualityCalibration.Json) + "\n");
             Console.WriteLine($"Prepared one warm VP8 pair: native quality {nativeQuality}, owned quality {match.ClosestOwned.Setting}, gap {match.PsnrGapDb:F4} dB, matched={match.Matched}; {owned.Length} owned settings, one source raster. {path}");
@@ -261,14 +214,14 @@ public class WarmWebp
             if (JpegBenchmarkCase.Hash(pixels) != prepared.RasterSha256 || JpegBenchmarkCase.Hash(reference) != prepared.ReferenceSha256
                 || JpegBenchmarkCase.HashFile(state.Ffmpeg) != prepared.FfmpegSha256)
                 throw new InvalidOperationException("Warm VP8 input/reference/oracle identity changed; prepare only this pair again.");
-            options = new() { Lossless = false, Quality = prepared.Match.ClosestOwned.Setting, Effort = 4,
+            options = new() { Lossless = false, Quality = prepared.NativeQuality, Effort = 4,
                 Limits = FixedBudget ? new ImageLimits { MaxWork = 32_000_000 } : ImageLimits.Default };
             source = JpegBenchmarkCase.Buffer(pixels, 513, 259, Depth); File.WriteAllBytes(state.Input, pixels);
             native = new NativeWarmReference(state, Depth, cpu, Opaque ? "webp-opaque-encode" : "webp-encode", expectedRaw: NormalizedInput(state.Root, pixels, reference, Depth, Opaque), nativeQuality: prepared.NativeQuality);
             if (native.BuildIdentity.GetProperty("workerSha256").GetString() != prepared.NativeBuild.GetProperty("workerSha256").GetString())
                 throw new InvalidOperationException("Native VP8 worker changed; prepare this pair again.");
-            encoded = File.ReadAllBytes(Path.Combine(state.Root, prepared.ManagedFile));
-            if (JpegBenchmarkCase.Hash(encoded) != prepared.Match.ClosestOwned.EncodedSha256
+            encoded = File.ReadAllBytes(Path.Combine(state.Root, prepared.NativeFile));
+            if (JpegBenchmarkCase.Hash(encoded) != prepared.Match.Native.EncodedSha256
                 || JpegBenchmarkCase.HashFile(state.NativeOutput) != prepared.Match.Native.EncodedSha256
                 || JpegBenchmarkCase.HashFile(Path.Combine(state.Root, prepared.NativeFile)) != prepared.Match.Native.EncodedSha256)
                 throw new InvalidOperationException("Prepared VP8 bitstreams changed.");
@@ -289,11 +242,15 @@ public class WarmWebp
 
     private void ValidateQuality()
     {
+        var nativePacket = File.ReadAllBytes(state.NativeOutput);
+        if (!encoded.AsSpan().SequenceEqual(nativePacket))
+            throw new InvalidOperationException("Complete managed/native VP8 packets differ.");
+        // Retain only a matched-packet reconstruction sanity check. Current
+        // public decoder hashes replace no frozen input or native setting.
         managedQuality = EncoderQualityCalibration.Validate(encoded, reference, TargetProfile, options.Quality, state.Ffmpeg);
-        nativeQuality = EncoderQualityCalibration.Validate(File.ReadAllBytes(state.NativeOutput), reference, TargetProfile, prepared.NativeQuality, state.Ffmpeg);
-        if (managedQuality != prepared.Match.ClosestOwned || nativeQuality != prepared.Match.Native
-            || !EncoderQualityCalibration.Match(nativeQuality, [managedQuality]).Matched)
-            throw new InvalidOperationException("Warm VP8 source/decoder quality changed; prepare this pair again.");
+        nativeQuality = EncoderQualityCalibration.Validate(nativePacket, reference, TargetProfile, prepared.NativeQuality, state.Ffmpeg);
+        if (!EncoderQualityCalibration.Match(nativeQuality, [managedQuality]).Matched)
+            throw new InvalidOperationException("Byte-matched VP8 packets reconstruct different quality.");
     }
 
     [Benchmark]
@@ -327,15 +284,15 @@ public class WarmWebp
                 managedEncodedSha256 = JpegBenchmarkCase.Hash(encoded), nativeOutputSha256 = JpegBenchmarkCase.HashFile(state.NativeOutput),
                 recipe = Recipe, opaque = Opaque,
                 entropyPolicy = "Coefficient modeling selected by the identified producer and local work/memory eligibility", maxWork = options.Limits.MaxWork, sourceQualityMetric = TargetProfile.SourceMetric, sampling = "4:2:0", effort = 4, lossless = false, qualityMatched = true, fullSourceNormalizationTimed = Depth == 16, normalizedReferenceExact = true, alphaExact = true, decoderAgreementWithinBounds = true,
-                psnrGapDb = prepared.Match.PsnrGapDb, maximumPsnrGapDb = EncoderQualityCalibration.MaximumPsnrGapDb,
-                ownedEnumeratedSettings = prepared.OwnedSettings.Length, ownedEvaluationOrder = prepared.OwnedEvaluationOrder,
-                ownedSettingsPolicy = prepared.QualityPolicy, qualityEnumerationPerformed = prepared.QualityPolicy != "fixed-anchor-v1",
-                ownedSettings = prepared.OwnedSettings, managedQuality, nativeQuality,
+                completePacketExact = true, psnrGapDb = EncoderQualityCalibration.Match(nativeQuality, [managedQuality]).PsnrGapDb, maximumPsnrGapDb = EncoderQualityCalibration.MaximumPsnrGapDb,
+                ownedEnumeratedSettings = 1, ownedEvaluationOrder = new[] { options.Quality },
+                ownedSettingsPolicy = "exact-packet-v1", qualityEnumerationPerformed = false,
+                ownedSettings = new[] { managedQuality }, managedQuality, nativeQuality,
                 sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmWebp).Assembly.Location), nativeBuild = native.BuildIdentity,
                 nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = $"Resident original RGBA{Depth} to complete independent VP8 WebP bytes with exact normalized alpha. Full source normalization and repacking included. Native codec/scratch/frame/packet wrappers reused; RGBA-to-BGRA repacking and complete encode execute every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Both effort settings fixed at 4; managed coefficient modeling follows the identified producer's local work/memory eligibility, with every actual work charge retained; native adaptive coding declared. {(Opaque ? "Opaque source: whole-raster RGB source-error matching, no alpha-plane encoding" : "Alpha-weighted RGB source-error matching before composite rounding")}, <=0.25 dB fixed band; unweighted decoder agreement includes hidden RGB. Fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded."
+                boundary = $"Resident original RGBA{Depth} to complete independent VP8 WebP bytes with exact normalized alpha. Full source normalization and repacking included. Native codec/scratch/frame/packet wrappers reused; RGBA-to-BGRA repacking and complete encode execute every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Both effort settings fixed at 4; managed coefficient modeling follows the identified producer's local work/memory eligibility, with every actual work charge retained; native adaptive coding declared. {(Opaque ? "Opaque source: whole-raster RGB source-error matching, no alpha-plane encoding" : "Alpha-weighted RGB source-error matching before composite rounding")}, Complete native packet equality at frozen quality75/method4 is required; matched-packet reconstruction is a sanity check, including hidden RGB. Fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded."
             }, new JsonSerializerOptions(EncoderQualityCalibration.Json) { PropertyNamingPolicy = null }) + "\n");
             Console.WriteLine("Validated warm VP8 pair: " + path);
         }

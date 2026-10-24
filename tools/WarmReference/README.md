@@ -564,11 +564,14 @@ dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchma
 ./bench.ps1 -DedicatedVm -Warm -WarmFamily Webp -Cpu 0 -NoBuild
 ```
 
-The first quality-75 preparation is [unmatched](../../benchmarks/WARM-WEBP-MATCH.md).
-Smoke/timing therefore cannot accept it. Run the benchmark executable with
-`--validate-warm-webp-controls` to check the preparation gate without encodes or
-native tools; eleven synthetic invalid records must be rejected before a worker
-can start. Retrieve and retain the full catalog when extending this evidence.
+Current VP8 encoding uses the already byte-qualified quality75/method4 settings
+against the frozen native packets. Complete packet equality is required; historical
+managed quality-calibration fields do not select the current encoder setting.
+`--validate-warm-webp-controls` checks the native-input metadata gate without
+encoding or native tools. Existing JPEG color workers likewise require complete
+packets with only the approved attribution COM replacement; lossless WebP requires
+complete packets from libwebp exact=1. Reconstruction metrics are sanity checks
+on matched packets, not a quality search or an inference from equal quality values.
 
 Encode8 reuses the existing 513x259 RGBA8 raster, including transparency. Each
 native operation repacks resident RGBA into its reused BGRA scratch frame,

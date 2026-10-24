@@ -154,6 +154,8 @@ public class WarmWebpLossless
         if (nativeEncoded.Length != 0 && !encoded.AsSpan().SequenceEqual(nativeEncoded))
             throw new InvalidOperationException("Native bitstream changed.");
         nativeEncoded = encoded; ValidateBitstream(encoded);
+        if (!managedEncoded.AsSpan().SequenceEqual(nativeEncoded))
+            throw new InvalidOperationException("Complete managed/native VP8L packets differ.");
         if (!File.ReadAllBytes(state.Input).AsSpan().SequenceEqual(pixels)) throw new InvalidOperationException("Native source changed.");
     }
     [Benchmark]
@@ -187,7 +189,7 @@ public class WarmWebpLossless
                 fullSourceNormalizationTimed = Depth == 16, normalizedReferenceExact = true,
                 managedOutputBytes = managedEncoded.Length, nativeOutputBytes = nativeEncoded.Length,
                 managedOutputSha256 = JpegBenchmarkCase.Hash(managedEncoded), nativeOutputSha256 = JpegBenchmarkCase.Hash(nativeEncoded),
-                allRgbaSamplesExact = true, alphaExact = true, hiddenRgbExact = true, nativeCliPixelsExact = true,
+                completePacketExact = true, allRgbaSamplesExact = true, alphaExact = true, hiddenRgbExact = true, nativeCliPixelsExact = true,
                 nativeCliNormalScalarPixelsExact = true, bitstreamSyntaxVerified = true,
                 sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmWebpLossless).Assembly.Location),

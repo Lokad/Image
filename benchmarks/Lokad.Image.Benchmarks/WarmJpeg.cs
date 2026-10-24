@@ -295,12 +295,16 @@ public partial class WarmJpeg
 
     private void ValidateQuality()
     {
-        if (Restart) { ValidateRestartPacket(encoded); ValidateRestartPacket(File.ReadAllBytes(state.NativeOutput)); }
+        var nativePacket = File.ReadAllBytes(state.NativeOutput);
+        if (!encoded.AsSpan().SequenceEqual(JpegReferencePacket.FromNative(nativePacket)))
+            throw new InvalidOperationException("Complete JPEG packets differ outside the approved attribution COM replacement.");
+        if (Restart) { ValidateRestartPacket(encoded); ValidateRestartPacket(nativePacket); }
         managedQuality = EncoderQualityCalibration.Validate(encoded, reference, TargetProfile, options.Quality, state.Ffmpeg);
         nativeQuality = EncoderQualityCalibration.Validate(File.ReadAllBytes(state.NativeOutput), reference, TargetProfile, prepared.NativeQuality, state.Ffmpeg);
-        if (nativeQuality != prepared.Match.Native
-            || !EncoderQualityCalibration.Match(nativeQuality, [managedQuality]).Matched)
-            throw new InvalidOperationException("Warm JPEG source/decoder quality changed; prepare this pair again.");
+        // Independent quality decoding is a sanity check on identical coded
+        // packets; historical public-decoder hashes do not select this producer.
+        if (!EncoderQualityCalibration.Match(nativeQuality, [managedQuality]).Matched)
+            throw new InvalidOperationException("Byte-matched JPEG packets reconstruct different quality.");
         if (Restart) ValidateRestartPixels(state.Root, managedQuality, nativeQuality);
         if (Case is WarmJpegCase.Encode444Stream8 or WarmJpegCase.Encode444Cancelable8) ValidateForward444Pixels(state.Root, managedQuality, nativeQuality);
     }
@@ -441,7 +445,7 @@ public partial class WarmJpeg
                 managedOutputBytes = encoded.Length, nativeOutputBytes = nativeQuality.EncodedBytes,
                 managedEncodedSha256 = JpegBenchmarkCase.Hash(encoded), nativeOutputSha256 = JpegBenchmarkCase.HashFile(state.NativeOutput),
                 recipe = Recipe, sampling = DisplaySampling, restartInterval = Restart ? 33 : 0, restartMarkers = Restart ? 16 : 0,
-                serialRestartFramingValidated = Restart, qualityPolicy = "exact-reference-v1",
+                serialRestartFramingValidated = Restart, qualityPolicy = "exact-reference-v1", completePacketExact = true,
                 outputBoundary = ForwardOnly ? "Fresh forward-only Stream wrapper over fresh owned MemoryStream storage; wrapper creation/disposal and storage growth included; no seek/length/position access." : "Fresh MemoryStream",
                 cancellationCanBeCanceled = encodeCancellation.CanBeCanceled, cancellationRequested = encodeCancellation.IsCancellationRequested,
                 alreadyCanceledRejectedWithoutOutput = Cancelable ? true : (bool?)null,
