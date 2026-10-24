@@ -6,8 +6,9 @@ packets remain52,091/52,093 B, allowing only the approved attribution COM.
 
 | Quiet one-CPU run | Lokad µs | FFmpeg µs | Ratio/upper | Allocated B/op |
 |---|---:|---:|---:|---:|---:|
-| short | 8,799.88 | 1,767.22 | 4.980/5.531 | 372,808 |
-| confirm | 8,766.00 | 1,763.93 | 4.970/4.990 | 372,808 |
+| RGBA8 short | 8,799.88 | 1,767.22 | 4.980/5.531 | 372,808 |
+| RGBA8 confirm | 8,766.00 | 1,763.93 | 4.970/4.990 | 372,808 |
+| RGBA16 current short | 11,434.83 | 1,840.77 | 6.212/6.758 | 372,808 |
 
 Independent confirmation reduces elapsed time by 23.0% against the
 [previous11,388.76-µs result](WARM-JPEG-ROW-NORMALIZATION.md). Full CPU parity
@@ -29,3 +30,11 @@ private0.2.0 package and all three examples pass on both platforms.
 [Evidence](warm-jpeg-separable-quantization-evidence.json) retains samples,
 identities, signed-corner provenance, ownership/qualification scope, unchanged
 evidence and the mirrored retirement of two completed consumer extractions.
+
+The existing RGBA16 control now has one same-build current-cost screen. Its
+52,115/52,117-B packets and frozen settings remain exact, with full16-bit alpha
+normalization included. This is a measured gap, without an independent repeat
+or speedup claim. It takes priority over the smaller VP8L encoder anchor gap.
+The archived host, prepared inputs and E129 qualification are reused. A stale
+documentation-source guard rejection ran no timing; production inputs/binaries
+were verified unchanged before refreshing source metadata. No rebuild was needed.
