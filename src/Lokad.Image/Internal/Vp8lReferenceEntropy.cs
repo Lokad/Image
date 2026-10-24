@@ -55,6 +55,45 @@ internal static class Vp8lReferenceEntropy
             + shortZero * 1840L + shortNonzero * 3360L) * (Scale >> 10);
         return refined + overhead;
     }
+
+    internal static long PopulationSum(ReadOnlySpan<int> a, ReadOnlySpan<int> b, OperationContext context)
+    {
+        if (a.Length != b.Length) throw new ArgumentException("Population lengths must match.", nameof(b));
+        // Keep the separate addition and population charges without materializing
+        // their sum. Equal summed runs share one exact integer logarithm.
+        context.Work(a.Length); context.Work(a.Length * 2L);
+        var sum = 0; var nonzero = 0; var maximum = 0; long entropy = 0;
+        var zeroRuns = 0; var nonzeroRuns = 0; var shortZero = 0; var shortNonzero = 0; var longZero = 0; var longNonzero = 0;
+        for (var start = 0; start < a.Length;)
+        {
+            var count = a[start] + b[start]; var end = start + 1;
+            while (end < a.Length && a[end] + b[end] == count) end++;
+            var length = end - start;
+            sum += count * length; if (count != 0) nonzero += length; maximum = Math.Max(maximum, count);
+            entropy -= Vp8lReferenceCost.SLog(count) * length;
+            if (length > 3)
+            {
+                if (count == 0) { zeroRuns++; longZero += length; }
+                else { nonzeroRuns++; longNonzero += length; }
+            }
+            else if (count == 0) shortZero += length; else shortNonzero += length;
+            start = end;
+        }
+        entropy += Vp8lReferenceCost.SLog(sum);
+        long refined;
+        if (nonzero <= 1) refined = 0;
+        else if (nonzero == 2) refined = (99L * sum * Scale + entropy + 50) / 100;
+        else
+        {
+            var mix = nonzero == 3 ? 950 : nonzero == 4 ? 700 : 627;
+            var lower = ((Int128)mix * (2L * sum - maximum) * Scale + (Int128)(1000 - mix) * entropy + 500) / 1000;
+            refined = Math.Max(entropy, (long)lower);
+        }
+        var overhead = 57 * Scale - (91 * Scale + 5) / 10;
+        overhead += (zeroRuns * 1600L + longZero * 240L + nonzeroRuns * 2640L + longNonzero * 720L
+            + shortZero * 1840L + shortNonzero * 3360L) * (Scale >> 10);
+        return refined + overhead;
+    }
 }
 
 internal static class Vp8lSymbols

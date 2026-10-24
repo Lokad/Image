@@ -50,14 +50,14 @@ internal static class Vp8lReferenceClustering
         private readonly OperationContext context;
         private readonly Vp8lHistogramLayout layout;
         private readonly int tiles, quality, threshold;
-        private readonly int[] original, working, scratch, slots;
+        private readonly int[] original, working, slots;
         private readonly Stats[] originals, items;
         private readonly Pair[] pool;
         private int count, pairs;
         internal State(int tiles, Vp8lHistogramLayout layout, OperationContext context, int quality, int threshold)
         {
             this.quality = quality; this.threshold = threshold; this.tiles = tiles; this.layout = layout; this.context = context;
-            original = new int[tiles * layout.Total]; working = new int[original.Length]; scratch = new int[layout.Total];
+            original = new int[tiles * layout.Total]; working = new int[original.Length];
             slots = new int[tiles]; originals = new Stats[tiles]; items = new Stats[tiles];
             pool = new Pair[PairCapacity(tiles, threshold)];
         }
@@ -112,9 +112,9 @@ internal static class Vp8lReferenceClustering
                     cost = (a.Used & flag) != 0 ? a.Cost(bank) : b.Cost(bank);
                 else
                 {
-                    var start = Start(bank); var size = Size(bank); context.Work(size);
-                    for (var i = 0; i < size; i++) scratch[start + i] = working[aSlot * layout.Total + start + i] + bCounts[bSlot * layout.Total + start + i];
-                    cost = Vp8lReferenceEntropy.Population(scratch.AsSpan(start, size), context);
+                    var start = Start(bank); var size = Size(bank);
+                    cost = Vp8lReferenceEntropy.PopulationSum(working.AsSpan(aSlot * layout.Total + start, size),
+                        bCounts.AsSpan(bSlot * layout.Total + start, size), context);
                 }
                 pair.Set(bank, cost); pair.Total += cost; if (pair.Total >= maximum) return false;
             }
@@ -299,8 +299,8 @@ internal static class Vp8lReferenceClustering
         if (tiles > 2600) throw new ArgumentException("Histogram tiling exceeds the analyzed bound.", nameof(tileBits));
         var layout = new Vp8lHistogramLayout(cacheBits); var pairCapacity = PairCapacity(tiles, threshold);
         // Two flat count slabs, two conservative metadata allowances, index
-        // slots, reusable sum scratch and a fixed pair pool. No candidate allocs.
-        var reserved = tiles * (layout.Total * 8L + 192) + layout.Total * 4L + pairCapacity * 64L + 512;
+        // slots and a fixed pair pool. Paired costs need no sum scratch.
+        var reserved = tiles * (layout.Total * 8L + 192) + pairCapacity * 64L + 512;
         context.Work(0); context.Reserve(reserved);
         try
         {

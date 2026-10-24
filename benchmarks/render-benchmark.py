@@ -224,10 +224,10 @@ def render():
         row('JPEG 4:2:0 from caller RGB / AC trellis and padding pruning', 'jpeg420-ac-trellis-evidence.json', ['cases', 'Encode420_8', -1], 'JPEG420-AC-TRELLIS.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque‡', 'vp8-noise-spectrum-evidence.json', ['observations', 0], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 1], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
-        row('VP8 RGBA8', 'warm-vp8-forward-butterfly-evidence.json', ['observations', -1], 'WARM-VP8-FORWARD-BUTTERFLY.md', confirmed=True),
+        row('VP8 RGBA8', 'warm-vp8l-paired-population-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8L-PAIRED-POPULATION.md', verification='Gap (short; qualified)'),
         row('WebP VP8 + alpha from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 3], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-histogram384-evidence.json', ['observations', 0], 'WARM-VP8-HISTOGRAM384.md', verification='Cost screen (CPU parity deferred)'),
-        row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-entropy-constants-evidence.json', ['observations', -1], 'WARM-VP8L-ENTROPY-CONSTANTS.md', confirmed=True),
+        row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-paired-population-evidence.json', ['observations', -1], 'WARM-VP8L-PAIRED-POPULATION.md', confirmed=True),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L from RGBA16, exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
     ]
@@ -374,12 +374,12 @@ and the same actual private package pass on each platform;
 [JPEG evidence](../benchmarks/WARM-JPEG-COEFFICIENT-REPLAY.md). Both controls admit
 430,848 B of coefficient capacity; caller-root operations use a private owner,
 whose new timing/allocation comparison remains open.
-VP8L confirms a4.105× gap after exact small-log reuse, saving17.8% elapsed
-with unchanged allocations; [entropy evidence](../benchmarks/WARM-VP8L-ENTROPY-CONSTANTS.md).
-The VP8 alpha anchor now confirms a3.784× gap after exact forward butterflies,
-saving17.2% elapsed with unchanged allocations/packets. The5,058-check producer
-and same actual private package pass on each platform;
-[transform evidence](../benchmarks/WARM-VP8-FORWARD-BUTTERFLY.md).
+VP8L now confirms a3.091× gap after exact paired-population costs, saving24.5%
+elapsed and8,480 allocated bytes/op against the preceding confirmation. The
+affected VP8 alpha anchor has a3.683× current-cost screen, without an independent
+speedup claim. The5,062-check producer and same actual private package pass on
+each platform; [paired-cost evidence](../benchmarks/WARM-VP8L-PAIRED-POPULATION.md).
+
 Other replaced encoder observations remain historical.
 All17 historical BCL PNG timing rows below are superseded, as are the earlier
 JPEG encoder producers. No new timing or image/settings controls were added.

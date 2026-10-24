@@ -1,4 +1,6 @@
+using System.Buffers.Binary;
 using System.Numerics;
+using System.Security.Cryptography;
 using Lokad.Image.Internal;
 
 namespace Lokad.Image.Tests;
@@ -34,6 +36,107 @@ public sealed class Vp8lEntropyCostTests
         for (var count = 0; count < 65536; count++) sum += Vp8lReferenceCost.SLog(count) ^ Vp8lReferenceEntropy.Log(count);
         var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
         Assert.NotEqual(0, sum); Assert.Equal(0, allocated);
+    }
+
+    [Fact]
+    public void PairedPopulationsMatchFrozenCostsWithoutChangingEitherInput()
+    {
+        using var context = new OperationContext(ImageLimits.Default with { MaxWork = long.MaxValue }, default);
+        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
+        var encoded = new byte[8]; var cases = 0; long pairedCounts = 0;
+        foreach (var length in new[] { 0, 1, 3, 4, 5, 40, 256, 280, 1304 })
+        {
+            var a = new int[length]; var b = new int[length]; var sum = new int[length];
+            foreach (var value in new[] { 0, 1, 2, 3, 255, 256, 257, 4095, 4096, 65535, 65536, 200000 })
+            {
+                Array.Fill(a, value / 2); Array.Fill(b, value - value / 2); CheckPair();
+                for (var i = 0; i < length; i++) { a[i] = (i & 1) == 0 ? value : 0; b[i] = value - a[i]; }
+                CheckPair();
+                foreach (var run in new[] { 1, 2, 3, 4, 5, 17 })
+                {
+                    for (var i = 0; i < length; i++)
+                    {
+                        var count = (i / run % 3) switch { 0 => 0, 1 => value, _ => value + 1 };
+                        a[i] = count / 3; b[i] = count - a[i];
+                    }
+                    CheckPair();
+                }
+            }
+            uint state = 0x9e3779b9;
+            for (var sample = 0; sample < 1024; sample++)
+            {
+                for (var i = 0; i < length; i++)
+                {
+                    a[i] = Next(); b[i] = Next();
+                }
+                CheckPair();
+            }
+            int Next()
+            {
+                state ^= state << 13; state ^= state >> 17; state ^= state << 5;
+                return (state & 7) == 0 ? (int)(state % 200001) : (state & 3) == 0 ? (int)(state % 257) : 0;
+            }
+            void CheckPair()
+            {
+                for (var i = 0; i < length; i++) sum[i] = a[i] + b[i];
+                var before = Checksum(a, b);
+                var expected = Vp8lReferenceEntropy.Population(sum, context);
+                Assert.Equal(expected, Vp8lReferenceEntropy.PopulationSum(a, b, context));
+                Assert.Equal(before, Checksum(a, b));
+                BinaryPrimitives.WriteInt64LittleEndian(encoded, expected); hash.AppendData(encoded);
+                cases++; pairedCounts += length;
+            }
+        }
+        // Frozen against the independently qualified production Population(a+b),
+        // before replacing the clustering primitive. These are original inputs.
+        Assert.Equal(10080, cases); Assert.Equal(2120160, pairedCounts);
+        Assert.Equal("cf96f30f42a423e1f1b61bec17319d534e9df4af09fb936c9a93ce53c0e879ca",
+            Convert.ToHexStringLower(hash.GetHashAndReset()));
+    }
+
+    [Fact]
+    public void PairedPopulationPreservesSeparateWorkChargesAndRejectsMismatchedLengths()
+    {
+        int[] a = [0, 1, 1, 1, 1], b = [0, 0, 0, 0, 0];
+        using var exact = new OperationContext(new() { MaxWork = 15 }, default);
+        _ = Vp8lReferenceEntropy.PopulationSum(a, b, exact); Assert.Equal(15, exact.ConsumedWork);
+        using var tight = new OperationContext(new() { MaxWork = 14 }, default);
+        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceEntropy.PopulationSum(a, b, tight));
+        Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
+        Assert.Equal(5, tight.ConsumedWork);
+        using var invalid = new OperationContext(ImageLimits.Default, default);
+        Assert.Throws<ArgumentException>(() => Vp8lReferenceEntropy.PopulationSum(a, [], invalid));
+        Assert.Equal(0, invalid.ConsumedWork);
+    }
+
+    [Fact]
+    public void PairedPopulationHonorsCancellationBeforeReadingInputs()
+    {
+        using var cancellation = new CancellationTokenSource();
+        using var context = new OperationContext(ImageLimits.Default, cancellation.Token);
+        cancellation.Cancel();
+        Assert.Throws<OperationCanceledException>(() => Vp8lReferenceEntropy.PopulationSum([1], [2], context));
+        Assert.Equal(0, context.ConsumedWork);
+    }
+
+    [Fact]
+    public void PairedPopulationAllocatesNoManagedStorage()
+    {
+        int[] a = [0, 1, 2, 3, 255, 256, 257, 4095, 4096, 65535, 65536, 200000];
+        var b = new int[a.Length]; Array.Fill(b, 1);
+        using var context = new OperationContext(ImageLimits.Default, default); long sum = 0;
+        for (var i = 0; i < 1024; i++) sum ^= Vp8lReferenceEntropy.PopulationSum(a, b, context);
+        var before = GC.GetAllocatedBytesForCurrentThread();
+        for (var i = 0; i < 1024; i++) sum ^= Vp8lReferenceEntropy.PopulationSum(a, b, context);
+        var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+        Assert.Equal(0, sum); Assert.Equal(0, allocated);
+    }
+
+    private static ulong Checksum(ReadOnlySpan<int> a, ReadOnlySpan<int> b)
+    {
+        ulong value = 0;
+        for (var i = 0; i < a.Length; i++) value = unchecked(value * 31 + (uint)a[i] * 257u + (uint)b[i]);
+        return value;
     }
 
     private static void Check(int count)
