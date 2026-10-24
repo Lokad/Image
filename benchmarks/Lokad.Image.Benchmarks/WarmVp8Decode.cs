@@ -14,7 +14,6 @@ public class WarmVp8Decode
     private const string InputHash = "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10";
     private const string RasterHash = "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80";
     private const string NativeHash = "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd";
-    private const string ManagedHash = "f8bc9742ab57cc3c399ff3506edeb91072fed7338e3c9997971157403000c75a";
     public static IEnumerable<WarmVp8DecodeCase> Cases => SelectedCases();
     [ParamsSource(nameof(Cases))] public WarmVp8DecodeCase Case { get; set; }
     private JpegBenchmarkCase state = null!;
@@ -22,7 +21,6 @@ public class WarmVp8Decode
     private byte[] encoded = [], pixels = [], expectedNative = [];
     private NativeWarmSample[] before = [];
     private JsonElement sourceIdentity;
-    private QualityError agreement = null!;
     private bool smoke, ready;
     private int cpu, sampleCount;
     private bool Opaque => Case is WarmVp8DecodeCase.Opaque8 or WarmVp8DecodeCase.OpaqueCancelable8 or WarmVp8DecodeCase.SimpleOpaque8;
@@ -33,7 +31,7 @@ public class WarmVp8Decode
     private CancellationToken decodeCancellation;
     private bool alreadyCanceledRejected;
     private bool StreamInput => Case == WarmVp8DecodeCase.StreamNative8;
-    private string expectedManagedHash = ManagedHash, expectedNativeHash = NativeHash;
+    private string expectedNativeHash = NativeHash;
 
     public static WarmVp8DecodeCase[] SelectedCases()
     {
@@ -79,23 +77,23 @@ public class WarmVp8Decode
             throw new InvalidOperationException("Prepared input identities differ.");
         var audit = new WarmVp8Decode { Case = WarmVp8DecodeCase.SimpleOpaque8, pixels = pixels };
         audit.expectedNative = OracleProcess.Run(state.Ffmpeg, audit.DecodeArguments(), encoded);
+        audit.expectedNativeHash = JpegBenchmarkCase.Hash(audit.expectedNative);
         audit.ValidateAlpha(audit.expectedNative);
         if (!OracleProcess.Run(state.Ffmpeg, ["-cpuflags", "0", .. audit.DecodeArguments()], encoded).AsSpan().SequenceEqual(audit.expectedNative))
             throw new InvalidOperationException("Normal/scalar simple-filter CLI pixels differ.");
         using var first = ImageCodec.Decode(encoded); using var second = ImageCodec.Decode(encoded);
-        audit.expectedManagedHash = JpegBenchmarkCase.Hash(OriginalPixels.Bytes(first));
         audit.ValidatePixels(first); audit.ValidatePixels(second); first.GetRow8(0)[0] ^= 255; audit.ValidatePixels(second);
         if (!File.ReadAllBytes(Path.Combine(state.Root, record.GetProperty("inputFile").GetString()!)).AsSpan().SequenceEqual(encoded))
             throw new InvalidOperationException("Encoded source changed.");
         var frozen = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(record.GetRawText())!;
-        frozen["managedOutputSha256"] = JsonSerializer.SerializeToElement(audit.expectedManagedHash);
+        frozen["managedOutputSha256"] = JsonSerializer.SerializeToElement(audit.expectedNativeHash);
         frozen["nativeOutputSha256"] = JsonSerializer.SerializeToElement(JpegBenchmarkCase.Hash(audit.expectedNative));
         frozen["anchorLibrarySha256"] = JsonSerializer.SerializeToElement(JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location));
         frozen["nativeCliNormalScalarPixelsExact"] = JsonSerializer.SerializeToElement(true);
-        frozen["decoderMaximum"] = JsonSerializer.SerializeToElement(audit.agreement.Maximum);
-        frozen["decoderRmse"] = JsonSerializer.SerializeToElement(audit.agreement.RgbRmse);
+        frozen["decoderMaximum"] = JsonSerializer.SerializeToElement(0);
+        frozen["decoderRmse"] = JsonSerializer.SerializeToElement(0.0);
         File.WriteAllText(path, JsonSerializer.Serialize(frozen, new JsonSerializerOptions { WriteIndented = true }) + "\n");
-        Console.WriteLine(JsonSerializer.Serialize(new { prepared = true, inputSha256 = JpegBenchmarkCase.Hash(encoded), managedOutputSha256 = audit.expectedManagedHash, decoderMaximum = audit.agreement.Maximum, decoderRmse = audit.agreement.RgbRmse }));
+        Console.WriteLine(JsonSerializer.Serialize(new { prepared = true, inputSha256 = JpegBenchmarkCase.Hash(encoded), managedOutputSha256 = audit.expectedNativeHash, decoderMaximum = 0, decoderRmse = 0.0 }));
     }
 
     [GlobalSetup]
@@ -123,7 +121,6 @@ public class WarmVp8Decode
                 if (JpegBenchmarkCase.Hash(pixels) != RasterHash) throw new InvalidOperationException("Original opaque projection source differs.");
                 for (var i = 3; i < pixels.Length; i += 4) pixels[i] = 255;
                 encoded = File.ReadAllBytes(Path.Combine(state.Root, receipt.GetProperty("inputFile").GetString()!));
-                expectedManagedHash = receipt.GetProperty("managedOutputSha256").GetString()!;
                 expectedNativeHash = receipt.GetProperty("nativeOutputSha256").GetString()!;
                 if (receipt.GetProperty("schemaVersion").GetInt32() != 1 || receipt.GetProperty("project").GetString() != "Lokad.Image"
                     || receipt.GetProperty("originalRasterSha256").GetString() != RasterHash
@@ -153,7 +150,7 @@ public class WarmVp8Decode
                     || encoded.Length != 98590 || JpegBenchmarkCase.Hash(encoded) != InputHash
                     || anchor.Setting != 75 || anchor.EncodedBytes != encoded.Length || anchor.EncodedSha256 != InputHash
                     || anchor.Codec != "VP8" || anchor.Sampling != "4:2:0" || !anchor.AlphaExact
-                    || anchor.NativeDecodedSha256 != NativeHash || anchor.PublicDecodedSha256 != ManagedHash)
+                    || anchor.NativeDecodedSha256 != NativeHash)
                     throw new InvalidOperationException("Frozen native VP8 input identity differs.");
             }
             var info = ImageCodec.Identify(encoded);
@@ -201,16 +198,8 @@ public class WarmVp8Decode
         if ((value.Width, value.Height, value.BitDepth, value.Orientation) != (513, 259, 8, ImageOrientation.Normal))
             throw new InvalidOperationException("VP8 decoded geometry/depth/orientation differs.");
         var actual = OriginalPixels.Bytes(value); ValidateAlpha(actual);
-        if (JpegBenchmarkCase.Hash(actual) != expectedManagedHash) throw new InvalidOperationException("Frozen public VP8 pixels changed.");
-        long sum = 0; var maximum = 0;
-        for (var index = 0; index < actual.Length; index++)
-        {
-            if (index % 4 == 3) continue;
-            var error = Math.Abs(actual[index] - expectedNative[index]);
-            maximum = Math.Max(maximum, error); sum += (long)error * error;
-        }
-        agreement = new(sum, maximum, actual.Length / 4 * 3);
-        if (agreement.RgbMaximum > 4 || agreement.RgbRmse > 1.5) throw new InvalidOperationException("VP8 RGB agreement exceeds the specified bounds, including hidden RGB.");
+        if (!actual.AsSpan().SequenceEqual(expectedNative))
+            throw new InvalidOperationException("VP8 normalized RGB/alpha must match the frozen native output exactly, including hidden RGB.");
     }
     private void ValidateManaged()
     {
@@ -264,7 +253,7 @@ public class WarmVp8Decode
                 sourceIdentity, inputOrigin = Simple ? "prepared-native-simple-filter-75" : "prepared-native-75", codec = "VP8", sampling = "4:2:0",
                 simpleFilter = Simple, simpleFilterInspection,
                 inputBytes = encoded.Length, inputSha256 = JpegBenchmarkCase.Hash(encoded), rasterSha256 = JpegBenchmarkCase.Hash(pixels),
-                managedOutputBytes = pixels.Length, nativeOutputBytes = pixels.Length, managedOutputSha256 = expectedManagedHash, nativeOutputSha256 = expectedNativeHash,
+                managedOutputBytes = pixels.Length, nativeOutputBytes = pixels.Length, managedOutputSha256 = expectedNativeHash, nativeOutputSha256 = expectedNativeHash,
                 opaque = Opaque, originalRasterSha256 = RasterHash, rasterRecipe = Opaque ? "Existing original RGBA8 RGB bytes unchanged; alpha set to255. No additional original image." : "Original RGBA8 including exact alpha and hidden RGB unchanged.",
                 alphaExact = true, nativeCliPixelsExact = true, decoderAgreementWithinBounds = true,
                 freshSeekableStream = StreamInput, inputView = false, inputCopiesTimed = StreamInput,
@@ -273,7 +262,7 @@ public class WarmVp8Decode
                 cancellationRequested = decodeCancellation.IsCancellationRequested,
                 alreadyCanceledRejected = Cancelable ? alreadyCanceledRejected : (bool?)null,
                 cancellationBoundary = Cancelable ? "One live never-signaled token supplied to every timed public Decode; token creation/disposal excluded. Pre-cancellation/token identity checked outside timing." : null,
-                decoderMaximum = agreement.Maximum, decoderRmse = agreement.RgbRmse, decoderSumSquared = agreement.SumSquared,
+                decoderMaximum = 0, decoderRmse = 0.0, decoderSumSquared = 0L,
                 sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmVp8Decode).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,

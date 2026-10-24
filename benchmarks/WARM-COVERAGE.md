@@ -9,6 +9,15 @@ claimed. Reconcile frozen workers/output identities, then resolve uncertain curr
 costs with short guarded screens before choosing the largest demonstrated gap.
 Broader native-profile equality and replacement readiness remain open.
 
+E113 resolves the current fresh-Stream VP8 cost using the same98,590-byte input,
+unchanged native worker/settings and E112 production DLL. All three existing
+VP8 packets now have exact normalized pixels; the worker replaces former managed
+hashes/error bounds with exact equality. One smoke and one guarded short screen
+reuse the prepared BDN host:10,523.95µs versus5,981.68µs,1,966,591B/op, ratio1.759
+(upper1.903). No independent confirmation or optimization claim. Other four VP8
+timing rows remain prior-production; metadata timing uncertainties decrease31→30.
+Screen current encoder costs before selecting smaller decoder work.
+
 The historical inventory below retains its recorded producers. The finite scope remains
 **256 named cases:239 numeric and17 unmeasured**. Current tested-producer evidence
 contains60 independent passes,147 gaps,one confidence-open case,10 short cost

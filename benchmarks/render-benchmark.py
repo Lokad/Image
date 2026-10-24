@@ -99,7 +99,7 @@ def render():
         row('PNG RGBA8, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'Png8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('PNG RGBA16, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'Png16', -1], 'WARM-INPUT-RECONCILIATION.md', True),
         row('JPEG420 restart, fresh seekable Stream', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'StreamDecode420Restart', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8-cancellable-block-evidence.json', ['cases', 'StreamNative8', -1], 'WARM-VP8-CANCELLABLE-BLOCK.md', verification='Prior production; reconfirm'),
+        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-current-vp8-samples-evidence.json', ['observations', -1], 'WARM-CURRENT-VP8-SAMPLES.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
         row('PNG RGBA8, None', 'warm-current-resident-png-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-RESIDENT-PNG.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, resident / ImageBudget quota', 'warm-shared-budget-evidence.json', ['cases', 'PngBudgetDecode8', -1], 'WARM-SHARED-BUDGET.md', verification='Gap (short; qualified)'),
@@ -336,7 +336,7 @@ def render():
         row('Lanczos3 enlargement RGBA16', 'warm-lanczos3-certified-fma-evidence.json', ['cases', 'Enlarge16', -1], 'WARM-LANCZOS3-CERTIFIED-FMA.md', verification='Gap (short; qualified)'),
     ])
     all_rows = decodes + encodes + edits
-    assert sum('; metadata timing open' in value for value in all_rows) == 31
+    assert sum('; metadata timing open' in value for value in all_rows) == 30
     producer_rows = [value.replace('; metadata timing open', '') for value in all_rows]
     parity_count = sum(' | Parity confirmed |' in value for value in producer_rows)
     confidence_count = sum(' | Confidence open |' in value for value in producer_rows)
@@ -411,8 +411,11 @@ decode timings and allocations describe the replaced producer and are marked
 **Prior production; reconfirm**. No new decoder timing/allocation run is claimed.
 
 VP8 decoder RGB now uses the exact integer normalization on164 frozen controls.
-Its earlier timings/allocations also describe the replaced renderer; no new
-decoder measurement is claimed.
+One current fresh-Stream screen uses the same98,590-byte input, exact normalized
+pixels and unchanged native baseline. Both quiet guards pass; it measures
+10,523.95µs versus5,981.68µs,1,966,591B/op. This is a short1.759× gap observation,
+with no independent confirmation or speedup claim. The other four VP8 decode
+rows still describe the replaced renderer.
 
 No timing or allocation runs accompanied the new PNG/JPEG/VP8L encoder adoption. Unchanged paths
 retain evidence on their recorded frozen inputs; new default-encoded fixtures do
@@ -427,7 +430,7 @@ The [finite checklist](../benchmarks/WARM-COVERAGE.md) remains 256 named cases:
 screens and {reconfirm_count} superseded encoder rows**. The latter predate
 JPEG decision/adaptive work or the managed PNG/VP8L encoder replacements; current packet evidence is
 reconciled and new costs are deferred while compression gates remain open.
-Their stored values are historical, not demonstrated current gaps. Another 31 marked
+Their stored values are historical, not demonstrated current gaps. Another 30 marked
 decode/inspection rows await confirmation after typed source-metadata changes;
 the PNG metadata reference first needs equivalent typed fields. Unaffected evidence
 is reused; the scope of every tested producer remains in its linked report.
