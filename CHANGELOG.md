@@ -20,6 +20,7 @@
   packet equality on14 frozen8/16-bit controls and shared admission throughout.
 - Managed VP8L prediction, palette, references/cache and entropy groups reproduce
   19 selected and two additional forced frozen libwebp packets.
+  Entropy scoring reuses exact Q23 mathematical constants without runtime allocation.
 - Integer VP8 color normalization matches all164 existing frozen RGBA controls;
   removed the superseded floating/SIMD renderer and bounded RGB assertions.
 - Managed VP8 encoding matches20 declared complete reference packets, with all

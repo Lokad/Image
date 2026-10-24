@@ -9,10 +9,10 @@ internal static class Vp8lReferenceEntropy
     internal static long Log(int count)
     {
         if (count < 2) return 0;
-        if (count < 256) return (long)Math.Round(Scale * Math.Log2(count));
+        if (count < 256) return Vp8lReferenceCost.SmallLog(count);
         if (count >= 65536) return (long)Math.Floor(Scale / Math.Log(2) * Math.Log(count) + 0.5);
         var shift = BitOperations.Log2((uint)count) - 7;
-        var value = (long)Math.Round(Scale * Math.Log2(count >> shift)) + shift * Scale;
+        var value = Vp8lReferenceCost.SmallLog(count >> shift) + shift * Scale;
         if (count >= 4096) value += ((long)(Scale / Math.Log(2)) * (count & ((1 << shift) - 1)) + count / 2) / count;
         return value;
     }

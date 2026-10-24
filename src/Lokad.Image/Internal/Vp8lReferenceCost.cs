@@ -3,18 +3,18 @@ using System.Numerics;
 namespace Lokad.Image.Internal;
 
 // Mathematical fixed-point entropy for encoder decisions. No imported tables.
-internal static class Vp8lReferenceCost
+internal static partial class Vp8lReferenceCost
 {
     internal const long Scale = 1L << 23;
 
     internal static long SLog(int count)
     {
         if (count < 2) return 0;
-        if (count < 256) return (long)Math.Round(Scale * Math.Log2(count) * count);
+        if (count < 256) return SmallProducts[count];
         if (count >= 65536) return (long)Math.Floor(Scale / Math.Log(2) * count * Math.Log(count) + 0.5);
         var shift = BitOperations.Log2((uint)count) - 7;
         var head = count >> shift;
-        var log = (long)Math.Round(Scale * Math.Log2(head)) + shift * Scale;
+        var log = SmallLog(head) + shift * Scale;
         return count * log + (long)(Scale / Math.Log(2)) * (count - (head << shift));
     }
 
