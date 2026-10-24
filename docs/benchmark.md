@@ -440,6 +440,9 @@ outside this still-image fixed warm scope.
 Maintain the selected evidence in [the renderer](../benchmarks/render-benchmark.py),
 regenerate with `python benchmarks/render-benchmark.py`, then run `--check`.
 Preserve raw evidence, failures, controls and package/source qualification.
+Exact allocation assertions use the qualified internal-test GC setting;
+[counter qualification](../benchmarks/ALLOCATION-COUNTER-QUALIFICATION.md) records
+the runtime accounting defect and allocating positive controls.
 Defer CPU-only optimization while compression gates are open; retain passing
 performance evidence. Add a later case only when evidence identifies a distinct
 required algorithm or public boundary omitted from the finite checklist.

@@ -1,5 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup><IsTestProject>true</IsTestProject></PropertyGroup>
+  <PropertyGroup>
+    <IsTestProject>true</IsTestProject>
+    <!-- Exact per-thread allocation assertions need stable allocation-context
+         accounting: https://github.com/dotnet/runtime/pull/134855 .
+         This affects only this test host; public/differential hosts retain
+         default GC settings and production has no runtime policy. -->
+    <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="xunit" />
