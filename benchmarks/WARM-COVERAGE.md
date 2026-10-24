@@ -5,6 +5,22 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E189 current VP8L confirmation](WARM-VP8L-CACHE-HISTORY.md) resolves E186
+short uncertainty at2.431×/upper2.456,48,184,648B/op and raw-exact183,812B.
+Unchanged lossless path, same E188 qualified actual core/package and original
+inputs/reference/settings. All12actual/12selected, bothidle-v2 pass. No separate
+speedup claim, rebuild/repeatedqualification or newcase. VP8L now leads confirmed
+encoder gaps; choose one substantial primitive from a bounded current profile.
+
+[E188 exact RGBA16 JPEG normalization](WARM-JPEG-VECTOR-WORD-NORMALIZATION.md)
+confirms governed420 at2.355×/upper2.369, saving5.5% elapsed with unchanged
+804,019B/op and1,704,856B root peak. Nongoverned420 current short2.279×/upper2.627,
+372,859B/op. Canonical packets/pixels exact; only approved attribution COM differs.
+BothOS pass5,117checks and the SAMEactualpackage. Other affected RGBA16 JPEG CPU
+evidence stays historical; unchangedRGBA8/caller/othercodec/edit/decode/text paths
+reuse valid confirmations. No cases added. Resolve VP8L short uncertainty next;
+full257case/1× and replacement-readiness objectives remain open.
+
 [E186 cache history](WARM-VP8-CACHE-HISTORY.md) independently confirms existing
 VP8 Q75/method4 at2.412×/upper2.430, saving3.6% elapsed with24,329,736B/op and
 exact98,590B packets. Affected VP8L current short2.442×/upper3.019,48,184,648B/op,

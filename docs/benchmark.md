@@ -19,14 +19,13 @@ are exact, including checksums/framing. Both platforms pass4,807 Release checks,
 three examples. Four current RGBA8 encoder anchors have guarded packet-exact cost
 screens. JPEG has independently confirmed improvements from bounded MCU conversion,
 integer SIMD transforms/quantization, bounded chroma rows and coefficient replay.
-The caller-root RGBA16 JPEG420 control now confirms 2.495× after exact
-entropy-record replay, using 10.7% less elapsed than its preceding confirmation
-and 804,019 B/op (+48). Admitted peak increases by 128 B to 1,704,856 B;
-data capacity is unchanged on this control. Nongoverned RGBA8/RGBA16 have current
-2.274×/2.439× screens and 372,856/372,859 B/op. Each platform passes 5,107 checks
-and validates the same actual private package;
-[entropy-record evidence](../benchmarks/WARM-JPEG-ENTROPY-RECORDS.md).
-Immutable workers were reused. Other affected color-JPEG timings stay historical.
+Governed color JPEG420 from RGBA16 confirms2.355× after exact vector
+normalization, using5.5% less elapsed than its preceding confirmation, with
+unchanged804,019B/op and1,704,856B shared-root peak. Both platforms pass5,117checks
+and the same actual package; [normalization evidence](../benchmarks/WARM-JPEG-VECTOR-WORD-NORMALIZATION.md).
+Nongoverned RGBA16 current short2.279×/upper2.627 uses372,859B/op. Other affected
+RGBA16 JPEG timings remain historical; RGBA8/caller-sample evidence is unchanged.
+VP8L now leads the confirmed encoder gaps.
 The grayscale 0.962× claim came from the replaced 58,823-byte encoder. Current
 raw-exact 58,910-byte RGBA-gray encoding confirms1.726× after entropy replay,
 using35.3% less elapsed than its preceding confirmation and154,883B/op. Caller-gray
@@ -42,10 +41,11 @@ VP8 now confirms a 2.412× gap after exact cache-history reuse, using
 3.6% less elapsed than its preceding confirmation, with 24,329,736 B/op
 (+248,784) and exact 98,590 B packets. Both platforms pass 5,115 checks and the
 same actual package; [cache-history evidence](../benchmarks/WARM-VP8-CACHE-HISTORY.md).
-Affected VP8L has a current 2.442× screen/upper3.019, 48,184,648 B/op (+124,392)
-and the same exact 183,812 B packet; no independent lossless speedup claim.
-The faster path applies to noncancellable paired selection; other checks remain.
-Color JPEG and VP8L now lead the measured encoder gaps.
+Affected VP8L now independently confirms2.431×/upper2.456,48,184,648B/op
+and the same exact183,812B packet. This resolves short-run uncertainty, without a
+separate lossless speedup claim; [current lossless evidence](../benchmarks/WARM-VP8L-CACHE-HISTORY.md).
+The faster cache-history path applies to noncancellable paired selection.
+VP8L now leads the confirmed encoder gaps; full parity stays open.
 No image/settings controls were added.
 
 Other replaced encoder observations remain historical.
@@ -270,12 +270,12 @@ is a CPU-parity confirmation.
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,633.91 | 2,421.91 | 1.088 / 1.220 | 294,116 | Prior production; reconfirm |
 | [JPEG RGBA8 4:2:0](../benchmarks/WARM-JPEG-ENTROPY-RECORDS.md) | 4,017.11 | 1,766.53 | 2.274 / 2.628 | 372,856 | Gap (short; qualified) |
 | [JPEG RGBA8 4:2:0 / ImageBudget quota](../benchmarks/WARM-SHARED-BUDGET.md) | 2,026.04 | 1,769.43 | 1.145 / 1.272 | 297,781 | Prior production; reconfirm |
-| [JPEG RGBA16 4:2:0 / caller IMemoryBudget](../benchmarks/WARM-JPEG-ENTROPY-RECORDS.md) | 4,584.96 | 1,837.34 | 2.495 / 2.510 | 804,019 | Gap (independent) |
+| [JPEG RGBA16 4:2:0 / caller IMemoryBudget](../benchmarks/WARM-JPEG-VECTOR-WORD-NORMALIZATION.md) | 4,332.72 | 1,840.05 | 2.355 / 2.369 | 804,019 | Gap (independent) |
 | [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,019.53 | 1,611.25 | 1.253 / 1.455 | 297,781 | Prior production; reconfirm |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,310.38 | 1,769.17 | 1.306 / 1.488 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,393.98 | 1,839.60 | 1.301 / 1.415 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,444.30 | 1,841.37 | 1.327 / 1.443 | 263,787 | Prior production; reconfirm |
-| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-ENTROPY-RECORDS.md) | 4,488.07 | 1,839.99 | 2.439 / 2.727 | 372,859 | Gap (short; qualified) |
+| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-VECTOR-WORD-NORMALIZATION.md) | 4,188.69 | 1,837.74 | 2.279 / 2.627 | 372,859 | Gap (short; qualified) |
 | [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAY-ENTROPY-RECORDS.md) | 2,432.29 | 1,409.20 | 1.726 / 1.739 | 154,883 | Gap (independent) |
 | [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAY-ENTROPY-RECORDS.md) | 2,038.89 | 1,080.83 | 1.886 / 2.154 | 154,886 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |
@@ -285,7 +285,7 @@ is a CPU-parity confirmation.
 | [VP8 RGBA8](../benchmarks/WARM-VP8-CACHE-HISTORY.md) | 129,327.57 | 53,621.51 | 2.412 / 2.430 | 24,329,736 | Gap (independent) |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 83,863.51 | 53,727.26 | 1.561 / 1.652 | 1,537,304 | Prior production; reconfirm |
 | [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-HISTOGRAM384.md) | 19,502.47 | 53,435.71 | 0.365 / 0.433 | 2,036,564 | Prior production; reconfirm |
-| [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8-CACHE-HISTORY.md) | 296,245.81 | 121,310.53 | 2.442 / 3.019 | 48,184,648 | Gap (short; qualified) |
+| [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-CACHE-HISTORY.md) | 297,488.76 | 122,398.05 | 2.431 / 2.456 | 48,184,648 | Gap (independent) |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 464,921.62 | 121,865.49 | 3.815 / 4.757 | 55,238,624 | Prior production; reconfirm |
 | [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-COLOR-COST.md) | 612,338.64 | 83,533.61 | 7.330 / 8.250 | 67,414,112 | Prior production; reconfirm |
