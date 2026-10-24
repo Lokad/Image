@@ -57,8 +57,6 @@ internal ref partial struct JpegDecoder
                         if (component.Approximation[0] < 0) throw new ImageDataException("JPEG component is missing a DC scan.");
                     if (components.Length == 4) return RenderCmyk(adobeTransform);
                     if (adobeTransform == 2) throw UnsupportedColorTransform();
-                    if (maxH == 4 && CanRenderYcbcr411()) return RenderYcbcr411();
-                    if (maxH == 4 && CanRenderYcbcr410()) return RenderYcbcr410();
                     return Render();
                 }
                 var payload = ReadSegment();
@@ -654,6 +652,7 @@ internal ref partial struct JpegDecoder
                 && components[1].H * 2 == maxH && components[1].V * 2 == maxV
                 && components[2].H == components[1].H && components[2].V == components[1].V;
             var subsampledYcbcr = !rgb && HasHalfResolutionChroma();
+            var quarterYcbcr = !rgb && HasQuarterWidthChroma();
             for (var y = 0; y < info.Height; y++)
             {
                 context.Work(info.Width * 32L);
@@ -721,6 +720,11 @@ internal ref partial struct JpegDecoder
                 if (subsampledYcbcr)
                 {
                     WriteYcbcrPixels(y, 0, info.Width, row, 4);
+                    continue;
+                }
+                if (quarterYcbcr)
+                {
+                    WriteQuarterYcbcrPixels(y, 0, info.Width, row, 4);
                     continue;
                 }
                 for (; x < info.Width; x++)

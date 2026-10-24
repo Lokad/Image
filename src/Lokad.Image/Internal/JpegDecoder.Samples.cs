@@ -136,6 +136,16 @@ internal ref partial struct JpegDecoder
             }
             return;
         }
+        var quarterYcbcr = source == JpegColorSpace.YCbCr && HasQuarterWidthChroma();
+        if (quarterYcbcr && format == JpegSampleFormat.Rgb && orientation == ImageOrientation.Normal)
+        {
+            for (var y = 0; y < info.Height; y++)
+            {
+                context.Work(info.Width * 32L);
+                WriteQuarterYcbcrPixels(y, 0, info.Width, destination.Slice(y * stride, info.Width * 3), 3);
+            }
+            return;
+        }
         if (format == JpegSampleFormat.Grayscale && source != JpegColorSpace.Rgb
             && orientation == ImageOrientation.Normal)
         {
@@ -176,6 +186,11 @@ internal ref partial struct JpegDecoder
                 if (subsampledYcbcr && format == JpegSampleFormat.Rgb)
                 {
                     WriteYcbcrPixels(y, x, 1, destination.Slice(offset, 3), 3);
+                    continue;
+                }
+                if (quarterYcbcr && format == JpegSampleFormat.Rgb)
+                {
+                    WriteQuarterYcbcrPixels(y, x, 1, destination.Slice(offset, 3), 3);
                     continue;
                 }
                 double first = firstRow[x];

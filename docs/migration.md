@@ -19,7 +19,8 @@ including oriented destinations and eight-bit chroma rounding. All30 existing
 frozen grayscale/color controls are exact. CMYK/YCCK RGB/grayscale use integer
 product, expansion and black-before-color precision, matching the named native
 controls; canonical ink samples keep their explicit interpretation. Three-component
-4:1:1/4:1:0 exactness remains under qualification. Older decoded half ties and performance results are superseded.
+4:1:1/4:1:0 uses dimension-aware integer filtering and retains fractional chroma
+through final color rounding, matching the named native controls. Older decoded half ties and performance results are superseded.
 The numerical policy is described in [inverse rounding](jpeg-inverse-rounding.md).
 
 All four PNG compression policies use the managed Deflate encoder. Fourteen

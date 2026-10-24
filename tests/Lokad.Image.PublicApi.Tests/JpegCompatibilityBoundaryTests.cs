@@ -7,7 +7,7 @@ public sealed class JpegCompatibilityBoundaryTests
     [Theory]
     [InlineData(false, 1)] [InlineData(true, 1)]
     [InlineData(false, 2)] [InlineData(true, 2)]
-    public void QuarterWidthChromaHasAnalyticalCenteredSampling(bool progressive, int vertical)
+    public void QuarterWidthChromaMatchesNativePixelsAndResourceBounds(bool progressive, int vertical)
     {
         const int width = 67, height = 19;
         byte[] values = [60, 105, 145];
@@ -16,15 +16,12 @@ public sealed class JpegCompatibilityBoundaryTests
         var original = data.ToArray();
         using var owned = ImageCodec.Decode(data);
         var rgb = new byte[width * height * 3]; ImageCodec.DecodeJpeg(data, rgb, JpegSampleFormat.Rgb);
+        JpegQuarterExactTests.AssertNative(OriginalPixels.Bytes(owned), vertical);
         for (var y = 0; y < height; y++)
         for (var x = 0; x < width; x++)
         {
-            var luma = Analytical(values[0], x, y, width, height, 1, 1);
-            var cb = Analytical(values[1], x, y, width, height, 4, vertical) - 128;
-            var cr = Analytical(values[2], x, y, width, height, 4, vertical) - 128;
-            byte[] expected = [Quantize(luma + 1.402m * cr), Quantize(luma - .344136286m * cb - .714136286m * cr), Quantize(luma + 1.772m * cb)];
-            Assert.Equal(expected, owned.GetRow8(y).Slice(x * 4, 3).ToArray());
-            Assert.Equal(expected, rgb.AsSpan((y * width + x) * 3, 3).ToArray()); Assert.Equal(255, owned.GetRow8(y)[x * 4 + 3]);
+            Assert.Equal(owned.GetRow8(y).Slice(x * 4, 3).ToArray(), rgb.AsSpan((y * width + x) * 3, 3).ToArray());
+            Assert.Equal(255, owned.GetRow8(y)[x * 4 + 3]);
         }
         var expectedBytes = OriginalPixels.Bytes(owned);
         var budget = new ImageBudget(16 * 1024 * 1024, 1_000_000_000);
@@ -121,14 +118,4 @@ public sealed class JpegCompatibilityBoundaryTests
         ImageCodec.DecodeJpeg(data, result, JpegSampleFormat.Cmyk, options: options); Assert.Equal(expected, result);
     }
 
-    private static byte Quantize(decimal value) => (byte)Math.Clamp(decimal.Round(value, 0, MidpointRounding.AwayFromZero), 0, 255);
-    private static decimal Analytical(int basis, int x, int y, int width, int height, int horizontal, int vertical)
-    {
-        var cx = (2m * x + 1 - horizontal) / (2 * horizontal); var cy = (2m * y + 1 - vertical) / (2 * vertical);
-        var ix = (int)decimal.Floor(cx); var iy = (int)decimal.Floor(cy); var fx = cx - ix; var fy = cy - iy;
-        var w = (width + horizontal - 1) / horizontal; var h = (height + vertical - 1) / vertical;
-        int Value(int sx, int sy) => (basis + Math.Clamp(sx, 0, w - 1) / 8 * 13 + Math.Clamp(sy, 0, h - 1) / 8 * 29) & 255;
-        return (Value(ix, iy) * (1 - fx) + Value(ix + 1, iy) * fx) * (1 - fy)
-            + (Value(ix, iy + 1) * (1 - fx) + Value(ix + 1, iy + 1) * fx) * fy;
-    }
 }

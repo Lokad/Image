@@ -862,6 +862,67 @@ foreach (var isYcck in new[] { false, true })
     }
     if(fourRoot.Bytes!=0||fourRoot.IsDisposed)throw new Exception("Package four-component admission cleanup differs.");
 }
+// Existing original quarter-width controls exercise direct RGB/Y and ownership.
+foreach (var vertical in new[] { 1, 2 })
+{
+    var quarterData = Lokad.Image.Tooling.AuthoredJpegCompatibility.Create(67, 19, new byte[] {60,105,145}, 4, vertical, restart:1, vary:true);
+    var quarterHash = vertical == 1 ? "da994d5e09fdd9775c14b64341bd5684ee2a5f7675f46750f57f8d027b9b3c3f" : "5cce3dca30a43f41ddfe87cc42ec1b42ee8eaec3132dc2e0bc702e4ee7b49fbd";
+    var grayHash = "373d0d5705ccba1e7ce7640e541c3fd1f37457dcaf5bbb28ec863e3485d1d167";
+    using var quarterRoot = new Lokad.Image.Tooling.TestMemoryBudget(4 * 1024 * 1024);
+    var quarterLimits = ImageLimits.Default with { MemoryBudget = quarterRoot };
+    using (var quarterImage = ImageCodec.Decode(quarterData, new DecodeOptions { Limits = quarterLimits }))
+    {
+        if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(Lokad.Image.Tooling.OriginalPixels.Bytes(quarterImage))) != quarterHash || quarterRoot.Bytes != 67*19*4)
+            throw new Exception("Package quarter-component native samples or retained charges differ.");
+        using (var quarterInput = new MemoryStream(quarterData, writable:false))
+        {
+            using var quarterSync = ImageCodec.Decode(quarterInput, new DecodeOptions { Limits = quarterLimits });
+            if (!quarterInput.CanRead || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(Lokad.Image.Tooling.OriginalPixels.Bytes(quarterSync))) != quarterHash)
+                throw new Exception("Package quarter-component synchronous delivery differs.");
+        }
+        using (var quarterInput = new MemoryStream(quarterData, writable:false))
+        {
+            using var quarterAsync = await ImageCodec.DecodeAsync(quarterInput, new DecodeOptions { Limits = quarterLimits });
+            if (!quarterInput.CanRead || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(Lokad.Image.Tooling.OriginalPixels.Bytes(quarterAsync))) != quarterHash)
+                throw new Exception("Package quarter-component asynchronous delivery differs.");
+        }
+    }
+    foreach (var oriented in new[] { false, true })
+    {
+        using var quarterPacket = new MemoryStream();quarterPacket.Write(quarterData.AsSpan(0,2));
+        quarterPacket.Write(new byte[] {255,225,(byte)(app1Length>>8),(byte)app1Length});
+        quarterPacket.Write("Exif\0\0"u8);quarterPacket.Write(tiff);quarterPacket.Write(quarterData.AsSpan(2));
+        var width = oriented ? 19 : 67; var height = oriented ? 67 : 19;
+        var rgbStride = width*3+5;var grayStride=width+5;
+        var rgbSamples=Enumerable.Repeat((byte)165,rgbStride*height+7).ToArray();
+        var graySamples=Enumerable.Repeat((byte)165,grayStride*height+7).ToArray();
+        var quarterOptions=new JpegDecodeOptions { ApplyOrientation=oriented, Limits=quarterLimits };
+        ImageCodec.DecodeJpeg(quarterPacket.ToArray(),rgbSamples,JpegSampleFormat.Rgb,rgbStride,quarterOptions);
+        ImageCodec.DecodeJpeg(quarterPacket.ToArray(),graySamples,JpegSampleFormat.Grayscale,grayStride,quarterOptions);
+        var rgbaSamples=new byte[67*19*4];var packedGray=new byte[67*19];
+        for(var y=0;y<19;y++)for(var x=0;x<67;x++)
+        {
+            var dx=oriented?18-y:x;var dy=oriented?x:y;
+            rgbSamples.AsSpan(dy*rgbStride+dx*3,3).CopyTo(rgbaSamples.AsSpan((y*67+x)*4,3));
+            rgbaSamples[(y*67+x)*4+3]=255;packedGray[y*67+x]=graySamples[dy*grayStride+dx];
+        }
+        if(Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(rgbaSamples))!=quarterHash
+            ||Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(packedGray))!=grayHash)
+            throw new Exception("Package quarter-component caller RGB/gray/orientation differs.");
+        for(var y=0;y<height;y++)if(rgbSamples.AsSpan(y*rgbStride+width*3,5).ContainsAnyExcept((byte)165)
+            ||graySamples.AsSpan(y*grayStride+width,5).ContainsAnyExcept((byte)165))throw new Exception("Package quarter-component row padding changed.");
+        if(rgbSamples.AsSpan(rgbStride*height).ContainsAnyExcept((byte)165)||graySamples.AsSpan(grayStride*height).ContainsAnyExcept((byte)165))
+            throw new Exception("Package quarter-component caller tail changed.");
+    }
+    if(quarterRoot.Bytes!=0||quarterRoot.IsDisposed)throw new Exception("Package quarter-component admission cleanup differs.");
+}
+using (var filterEdge = ImageCodec.Decode(Lokad.Image.Tooling.AuthoredJpegCompatibility.Create(513,259,
+    new byte[] {128,255,128},4,2,restart:1,blockSample:(c,x,y)=>c==1?(x<16?255:139):128)))
+{
+    if(Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(Lokad.Image.Tooling.OriginalPixels.Bytes(filterEdge)))
+        !="8770ce38bb893d8a545fe21e0f68885be77c8ab6b6e356ec1d4ed9c6ac0414d1")
+        throw new Exception("Packaged quarter-width near-integral filter precision differs.");
+}
 Console.WriteLine("Exact Release package consumer passed.");
 '@ | Set-Content -LiteralPath (Join-Path $consumer 'Program.cs') -Encoding utf8
     $config = [xml]'<configuration><packageSources><clear /><add key="local" value="" /></packageSources></configuration>'

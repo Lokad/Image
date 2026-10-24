@@ -27,7 +27,9 @@ Full-resolution color conversion separately derives BT.601 coefficients from
 rational Kr=299/1000 and Kb=114/1000, preserving Q16/range/Q13 rounding. Complete
 RGB/RGBA bytes, destination padding and opt-in orientation are checked through
 public APIs. The evidence ledger records the exact tested scope and remaining
-quarter-width and other decoder confirmation work. CMYK/YCCK RGB/grayscale use
+other decoder confirmation work. Quarter-width color uses dimension-aware Q16
+positions, Q14/Q12 weights and Q7/Q9 chroma, with final Q13 color rounding. The
+recorded original controls include near-zero leading-tap reduction. CMYK/YCCK RGB/grayscale use
 separate fixed-point black adjustment and shared integer color conversion.
 Their named constant, varying, saturated, AC and progressive controls have exact
 native sample gates. Canonical CMYK is an explicitly requested ink representation. Broader decoder equality and current

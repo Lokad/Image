@@ -26,11 +26,11 @@ public sealed class JpegCompatibilityFfmpegTests
     {
         const int width = 67, height = 19;
         // Constant planes give an independent native color/bitstream check.
-        // Authored decimal controls separately cover varying centered chroma.
+        // Existing varying controls separately cover expansion/filter precision.
         var data = AuthoredJpegCompatibility.Create(width, height, [90, 110, 150], 4, vertical,
             progressive: progressive, restart: 1);
         using var actual = ImageCodec.Decode(data);
-        Compare(OriginalPixels.Bytes(actual), JpegOracle.Decode(data, width, height, JpegSampling.YCbCr444));
+        Assert.Equal(JpegOracle.Decode(data, width, height, JpegSampling.YCbCr444), OriginalPixels.Bytes(actual));
     }
 
     [Theory] [InlineData(false)] [InlineData(true)]
@@ -49,16 +49,27 @@ public sealed class JpegCompatibilityFfmpegTests
         Assert.Equal(OracleProcess.Run(OracleProcess.Ffmpeg, args, data), gray);
     }
 
-    private static void Compare(byte[] actual, byte[] expected)
+    [Theory] [InlineData(1)] [InlineData(2)]
+    public void ExistingVaryingQuarterWidthRgbAndGrayMatchNativeExactly(int vertical)
     {
-        Assert.Equal(expected.Length, actual.Length);
-        int maximum = 0; double squared = 0;
-        for (var i = 0; i < actual.Length; i++)
-        {
-            if (i % 4 == 3) { Assert.Equal(255, actual[i]); Assert.Equal(255, expected[i]); continue; }
-            var error = Math.Abs(actual[i] - expected[i]); maximum = Math.Max(maximum, error); squared += error * error;
-        }
-        var rmse = Math.Sqrt(squared / (actual.Length / 4 * 3));
-        Assert.True(maximum <= 4 && rmse <= 1.5, $"JPEG compatibility: maximum {maximum}, RMSE {rmse:F4}");
+        const int width = 67, height = 19;
+        var data = AuthoredJpegCompatibility.Create(width, height, [60, 105, 145], 4, vertical, restart: 1, vary: true);
+        var expected = JpegOracle.Decode(data, width, height, JpegSampling.YCbCr444);
+        using var image = ImageCodec.Decode(data); Assert.Equal(expected, OriginalPixels.Bytes(image));
+        var rgb = new byte[width * height * 3]; ImageCodec.DecodeJpeg(data, rgb, JpegSampleFormat.Rgb);
+        for (var i = 0; i < width * height; i++) Assert.Equal(expected.AsSpan(i * 4, 3).ToArray(), rgb.AsSpan(i * 3, 3).ToArray());
+        var gray = new byte[width * height]; ImageCodec.DecodeJpeg(data, gray, JpegSampleFormat.Grayscale);
+        var args = JpegOracle.DecodeArguments(width, height, JpegSampling.YCbCr444); args[Array.IndexOf(args, "rgba")] = "gray";
+        Assert.Equal(OracleProcess.Run(OracleProcess.Ffmpeg, args, data), gray);
     }
+
+    [Fact]
+    public void QuarterWidthNearIntegralFilterTapMatchesNativeExactly()
+    {
+        var data = AuthoredJpegCompatibility.Create(513, 259, [128, 255, 128], 4, 2, restart: 1,
+            blockSample: (c, x, y) => c == 1 ? (x < 16 ? 255 : 139) : 128);
+        using var image = ImageCodec.Decode(data);
+        Assert.Equal(JpegOracle.Decode(data, 513, 259, JpegSampling.YCbCr444), OriginalPixels.Bytes(image));
+    }
+
 }

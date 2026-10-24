@@ -1,6 +1,6 @@
 {
   "project": "Lokad.Image",
-  "round": "E106",
+  "round": "E108",
   "policy": "Exact normalized output samples first. Reuse unchanged valid evidence. Resolve uncertainty before changing algorithms. Old lossy RGB tolerances are transitional interoperability checks, not completion gates. No new workload grid, CPU tuning or repeated package proof.",
   "reference": {
     "executableSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
@@ -64,22 +64,25 @@
     },
     {
       "id": "jpeg-four-component-and-quarter-width",
-      "controls": "Existing constant17x9 CMYK/YCCK baseline/progressive and420 controls;65x31 varying CMYK/YCCK420; existing saturated8x8 YCCK, CMYK AC1/63 and four odd-edge/progressive YCCK controls. Separately67x19 varying three-component411/410 controls and existing513x259 benchmark companions.",
+      "controls": "Existing constant17x9 CMYK/YCCK baseline/progressive and420 controls;65x31 varying CMYK/YCCK420; existing saturated8x8 YCCK, CMYK AC1/63 and four odd-edge/progressive YCCK controls. Separately67x19 varying three-component411/410 controls and existing513x259 benchmark companions. One513x259 high-contrast410 control isolates the native near-zero leading-tap reduction branch discovered in source inspection; no new dimension/depth/filter grid.",
       "why": "Explicit inversion, four-component conversion and distinct quarter-width/vertical chroma phases",
-      "status": "CMYK/YCCK RGB/gray PASS and STOP at E106 declared scope, BOTHOS/full/scalar/SAME package; canonical CMYK/source/inversion semantics and ownership/admission preserved. Three-component411/410 varying expansion and color are still UNCERTAIN; constant agreement is insufficient.",
+      "status": "PASS and STOP at E106/E108 tested scopes: named CMYK/YCCK plus three-component411/410 baseline/progressive, constant/varying, caller/gray/orientation/ownership and one targeted near-integral leading-tap control. Same frozen513x259 companions match the existing live decode options on BOTHOS/normal/scalar. Historical warm benchmarks have additional centered normalization, so no unchanged benchmark-output or timing-parity claim.",
       "tests": [
         "JpegCompatibilityFfmpegTests",
         "JpegCmykTests",
         "JpegYcckRowTests",
         "JpegFourComponentExactTests",
-        "JpegCompatibilityFfmpegTests.ExistingVaryingFourComponentRgbAndGrayMatchNativeExactly"
+        "JpegCompatibilityFfmpegTests.ExistingVaryingFourComponentRgbAndGrayMatchNativeExactly",
+        "JpegQuarterExactTests",
+        "JpegCompatibilityFfmpegTests.ExistingVaryingQuarterWidthRgbAndGrayMatchNativeExactly",
+        "JpegCompatibilityFfmpegTests.QuarterWidthNearIntegralFilterTapMatchesNativeExactly"
       ]
     },
     {
       "id": "jpeg-caller-samples",
       "controls": "Existing31x23 caller grayscale/RGB baseline/progressive controls and existing CMYK sample controls; existing stride/tail and ownership tests; existing8x8 authored direct-RGB control projected into caller GRAY8",
       "why": "Direct caller destinations use specialized packing/conversion without mandatory RGBA; retain inversion/options and untouched padding; direct-RGB to grayscale computes luminance rather than extracting decoded Y, a distinct existing public branch identified during adoption",
-      "status": "PASS and STOP: native Y, RGB444/422/420, named Adobe CMYK/YCCK RGB/gray, padding/orientation, stream and retained-root boundaries. Canonical ink/source/inversion cases retain explicit functional contracts. Direct-RGB8x8 grayscale has a live exact assertion. Direct-RGB subsampled caller output remains on the newly named distinct branch checklist.",
+      "status": "PASS and STOP at declared E104/E106/E108 scopes: native Y/RGB444/422/420, named Adobe CMYK/YCCK and411/410 RGB/gray, padding/orientation, arrays/streams and retained-root ownership. Canonical ink/source/inversion contracts retained. Direct-RGB8x8 grayscale has a live exact assertion; named subsampled direct-RGB output still needs confirmation.",
       "tests": [
         "JpegSampleFfmpegTests",
         "JpegSampleDecodeTests",
@@ -240,7 +243,7 @@
   },
   "cpuTimingRuns": 0,
   "gcAllocationsMeasured": false,
-  "next": "Resolve exactness of the named existing direct-RGB422/420 warm controls and67x19 varying three-component411/410 controls before changing them. These use distinct expansion/output branches. Preserve approved reference normalization/settings, existing input hashes and caller boundaries. Passing E106 CMYK/YCCK RGB/gray, E104 YCbCr, inverse, PNG/VP8L and metadata cases stop at their qualified scopes. Then VP8 planar reconstruction/RGB remains on the checklist. No new image/settings grid or CPU tuning.",
+  "next": "Resolve exact samples on the two already named513x259 direct-RGB422/420 warm packets using their approved component interpretation/centered normalization and existing input hashes. Reuse E108 immutable build and prepared probes; no new settings/shape grid. Stop qualified quarter-width, CMYK/YCCK, YCbCr, inverse, PNG/VP8L and metadata cases. VP8 reconstruction/color follows. Historical quarter-width timing workers include extra centered normalization; retain their baselines/raw data, keep prior-production status, and align equivalent current outputs before later CPU/allocation qualification. No speed-only work while byte gates remain open.",
   "rawArchive": {
     "name": "e100-decoder-audit.tar.xz",
     "bytes": 20372,
@@ -978,16 +981,16 @@
   "currentProductionProducer": {
     "windowsCore": {
       "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
-      "bytes": 754176,
-      "sha256": "3a75592d426ed3b2ce8be84473b59110ccba66c81d348764108b7a563bf145b1"
+      "bytes": 751104,
+      "sha256": "846eadfd2bc4f743108e5541eb0531dd90cd8c13819b90ca0e1b6e1de6b221a8"
     },
     "linuxCore": {
       "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
-      "bytes": 754176,
-      "sha256": "b7d6e94755312bd404034aa538352ed53a24eb5107ac43a17995ca0a4a9b21ea"
+      "bytes": 751104,
+      "sha256": "9c1e42471fe1e9ee595975cc3e54846178f3633dc77ba67cb28417c5320da725"
     }
   },
-  "lastProductionRound": "E106",
+  "lastProductionRound": "E108",
   "productionChangedThisRound": true,
   "subsampledColorBoundary": {
     "round": "E104",
@@ -2076,6 +2079,591 @@
       "linuxBeforeMirror": 4996485560,
       "linuxAfterMirror": 4998171640,
       "allObservedAndProjectedPeaksBelowCap": true
+    }
+  },
+  "quarterWidthBoundary": {
+    "round": "E107",
+    "status": "Diagnostic completed and adopted by E108 publicQuarterWidthAdoption; original observations preserved.",
+    "scope": "Two existing67x19 baseline varying three-component411/410 controls only. Reused immutable E106 core/prepared probes and original authored generator; no codec/library rebuild, new input grid, CPU timing or GC measurement.",
+    "coreSha256": "3a75592d426ed3b2ce8be84473b59110ccba66c81d348764108b7a563bf145b1",
+    "screen": [
+      {
+        "name": "411",
+        "packetSha256": "7d981d0a8234388240b3639e83a6abcafab10f75dce4517da283cd68a87e1c14",
+        "managedObservation": {
+          "Width": 67,
+          "Height": 19,
+          "format": "Rgb",
+          "sourceColor": "Rgb",
+          "inputSha256": "7d981d0a8234388240b3639e83a6abcafab10f75dce4517da283cd68a87e1c14",
+          "outputSha256": "6061d9b7869796016a405e729dc219fb25def2371d7b300bd08dd2be97910a41",
+          "coreSha256": "3a75592d426ed3b2ce8be84473b59110ccba66c81d348764108b7a563bf145b1"
+        },
+        "native": {
+          "normal": {
+            "sha256": "da994d5e09fdd9775c14b64341bd5684ee2a5f7675f46750f57f8d027b9b3c3f",
+            "mismatches": 582,
+            "maximum": 14,
+            "first": [
+              [
+                112,
+                123,
+                125
+              ],
+              [
+                113,
+                95,
+                93
+              ],
+              [
+                114,
+                58,
+                61
+              ],
+              [
+                116,
+                123,
+                129
+              ]
+            ]
+          },
+          "scalar": {
+            "sha256": "da994d5e09fdd9775c14b64341bd5684ee2a5f7675f46750f57f8d027b9b3c3f",
+            "mismatches": 582,
+            "maximum": 14,
+            "first": [
+              [
+                112,
+                123,
+                125
+              ],
+              [
+                113,
+                95,
+                93
+              ],
+              [
+                114,
+                58,
+                61
+              ],
+              [
+                116,
+                123,
+                129
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "name": "410",
+        "packetSha256": "c63426bb37e723fddbf112e236af1fb5e88fb00b836d1280591d02f55d74b32a",
+        "managedObservation": {
+          "Width": 67,
+          "Height": 19,
+          "format": "Rgb",
+          "sourceColor": "Rgb",
+          "inputSha256": "c63426bb37e723fddbf112e236af1fb5e88fb00b836d1280591d02f55d74b32a",
+          "outputSha256": "7d70dc65d2017230b3f4dcc313f2f88aa43a51d85426435b3a582d161ba413be",
+          "coreSha256": "3a75592d426ed3b2ce8be84473b59110ccba66c81d348764108b7a563bf145b1"
+        },
+        "native": {
+          "normal": {
+            "sha256": "5cce3dca30a43f41ddfe87cc42ec1b42ee8eaec3132dc2e0bc702e4ee7b49fbd",
+            "mismatches": 1130,
+            "maximum": 48,
+            "first": [
+              [
+                112,
+                123,
+                125
+              ],
+              [
+                113,
+                95,
+                93
+              ],
+              [
+                114,
+                58,
+                61
+              ],
+              [
+                116,
+                123,
+                129
+              ]
+            ]
+          },
+          "scalar": {
+            "sha256": "5cce3dca30a43f41ddfe87cc42ec1b42ee8eaec3132dc2e0bc702e4ee7b49fbd",
+            "mismatches": 1130,
+            "maximum": 48,
+            "first": [
+              [
+                112,
+                123,
+                125
+              ],
+              [
+                113,
+                95,
+                93
+              ],
+              [
+                114,
+                58,
+                61
+              ],
+              [
+                116,
+                123,
+                129
+              ]
+            ]
+          }
+        }
+      }
+    ],
+    "intermediates": [
+      {
+        "sampling": "411",
+        "scope": "Probe-only8-bit planar output; original nativeRGBA baseline/settings unchanged",
+        "expandedPlanes": [
+          {
+            "component": 0,
+            "mismatches": 0,
+            "maximum": 0,
+            "first": []
+          },
+          {
+            "component": 1,
+            "mismatches": 228,
+            "maximum": 8,
+            "first": [
+              [
+                28,
+                105,
+                106
+              ],
+              [
+                29,
+                105,
+                110
+              ],
+              [
+                30,
+                107,
+                113
+              ]
+            ]
+          },
+          {
+            "component": 2,
+            "mismatches": 228,
+            "maximum": 8,
+            "first": [
+              [
+                28,
+                145,
+                146
+              ],
+              [
+                29,
+                145,
+                150
+              ],
+              [
+                30,
+                147,
+                153
+              ]
+            ]
+          }
+        ],
+        "q13AfterPlanar8RgbaMismatches": 148,
+        "expandedSha256": "a8cfd56e251459c0690f712fa5643a74fab8a9303e1f90f65d1b60180f58429e"
+      },
+      {
+        "sampling": "410",
+        "scope": "Probe-only8-bit planar output; original nativeRGBA baseline/settings unchanged",
+        "expandedPlanes": [
+          {
+            "component": 0,
+            "mismatches": 0,
+            "maximum": 0,
+            "first": []
+          },
+          {
+            "component": 1,
+            "mismatches": 393,
+            "maximum": 27,
+            "first": [
+              [
+                28,
+                105,
+                106
+              ],
+              [
+                29,
+                105,
+                109
+              ],
+              [
+                30,
+                107,
+                113
+              ]
+            ]
+          },
+          {
+            "component": 2,
+            "mismatches": 393,
+            "maximum": 27,
+            "first": [
+              [
+                28,
+                145,
+                146
+              ],
+              [
+                29,
+                145,
+                149
+              ],
+              [
+                30,
+                147,
+                153
+              ]
+            ]
+          }
+        ],
+        "q13AfterPlanar8RgbaMismatches": 328,
+        "expandedSha256": "34a4331544b0563b23246d13ca8b17ce2128d939cd759e772ba59418ec25c960",
+        "nativeDecoderHalfGridPlaneMismatches": [
+          0,
+          0
+        ]
+      }
+    ],
+    "composition411": {
+      "scope": "Existing67x19 varying411 only; independently derived Q16 bilinear positions, Q14 normalized weights, Q7 horizontal samples and Q13 color composition. No production patch/build or timing.",
+      "xIncrementQ16": 16629,
+      "xOffsetQ16": 122,
+      "mismatches": 0,
+      "first": [],
+      "sha256": "da994d5e09fdd9775c14b64341bd5684ee2a5f7675f46750f57f8d027b9b3c3f",
+      "expectedSha256": "da994d5e09fdd9775c14b64341bd5684ee2a5f7675f46750f57f8d027b9b3c3f"
+    },
+    "composition410": {
+      "scope": "Existing67x19 varying410 only; already matched native half-grid plane expansion, followed by independently derived Q16 positions, Q14 horizontal/Q12 vertical weights, Q7/Q9 filtered chroma and Q13 color. No production patch/build/timing.",
+      "horizontalIncrementQ16": 33257,
+      "horizontalOffsetQ16": 244,
+      "verticalIncrementQ16": 34493,
+      "verticalOffsetQ16": 862,
+      "mismatches": 0,
+      "first": [],
+      "sha256": "5cce3dca30a43f41ddfe87cc42ec1b42ee8eaec3132dc2e0bc702e4ee7b49fbd",
+      "expectedSha256": "5cce3dca30a43f41ddfe87cc42ec1b42ee8eaec3132dc2e0bc702e4ee7b49fbd"
+    },
+    "observation": "Decoded Y is exact; native normal/scalar completeRGBA agree. Existing production differs at582/1130 channels with maxima14/48.410 native decoder first expands horizontal quarter-width to a half-grid, already matched exactly. Later resampling uses dimension-aware cosited positions and retains fractional chroma into color;8-bit planar rounding does not reproduce the originalRGBA baseline. Independently derived complete composition is exact on both controls.",
+    "rawArchive": {
+      "name": "e107-quarter-boundaries.tar.xz",
+      "bytes": 14912,
+      "sha256": "6c06a3cf2fbb51489b011450434ccf2cc26a02829aa687b27267ef8b0a1c3001",
+      "members": 27,
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "linuxAfterMirror": 4998186552
+    },
+    "parentCi": {
+      "sha": "26b2606e2313dfcf9bbe607be3768affa3c11445",
+      "run": 40041038891,
+      "conclusion": "success",
+      "jobs": 3
+    },
+    "next": "Adopt the demonstrated quarter-width expansion/filter precision on the same existing67x19 controls, then confirm existing odd-edge/progressive/caller and513x259 benchmark companions when affected. Derive Q16 positions, Q14 horizontal/Q12 vertical weights, Q7/Q9 filtered chroma and Q13 color independently; compute the410 decoder half-grid expansion without a frame intermediate. Retire replaced quarter-width paths/tests, keep4096 block/32-per-pixel work and shared ownership. Preserve original reference settings and sample hashes. Batch affected qualification after inputs settle. Direct-RGB422/420 and VP8 remain named pending paths; no grid or CPU tuning."
+  },
+  "publicQuarterWidthAdoption": {
+    "round": "E108",
+    "status": "ACCEPTED at declared scope; full objective remains open",
+    "scope": "Existing67x19 three-component411/410 baseline/progressive, constant/varying controls. Arrays/sync/async, callerRGB/Y padding/Rotate90 and retained-root lifetime. Same frozen513x259 packet companions compare to existing live decode options, both OSes/native modes. One targeted high-contrast410 control at the existing size isolates leading-tap reduction, a distinct omitted native filter branch identified during inspection.",
+    "implementation": "Independent Q16 sample positions and normalized Q14 horizontal/Q12 vertical weights, including the public1/500 leading-tap reduction threshold. Preserve Q7/Q9 fractional chroma into generated Q13 color. Compute410 decoder half-grid averages on demand; no filter table or intermediate raster. Removed both floating quarter-width renderers, their implementation-only tests and the now-unused floating sample-rounding helper.",
+    "resourceAndOwnership": {
+      "newOwnedHeapBytes": 0,
+      "filterTableAllocated": false,
+      "intermediateRasterAllocated": false,
+      "blockWork": 4096,
+      "rowWorkPerPixel": 32,
+      "borrowedRootAndIndependentRetainedOwnersPreserved": true
+    },
+    "windowsProducer": [
+      {
+        "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "bytes": 751104,
+        "sha256": "846eadfd2bc4f743108e5541eb0531dd90cd8c13819b90ca0e1b6e1de6b221a8"
+      },
+      {
+        "path": "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll",
+        "bytes": 1593344,
+        "sha256": "8d1cf59595aed436bd0da4e3f6cb53320a5c28ca0e5e6b4d29dfaed940850833"
+      },
+      {
+        "path": "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll",
+        "bytes": 810496,
+        "sha256": "3f0d664aa48b72354024f53df4af96746d64f468c6f3bf764330774de1b21b08"
+      },
+      {
+        "path": "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.DifferentialTests.dll",
+        "bytes": 240640,
+        "sha256": "66cb03c373d91b8c6453d416f32eee9510346b2d4512f4e58b9c1d7358d3d557"
+      }
+    ],
+    "linuxProducer": [
+      {
+        "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "bytes": 751104,
+        "sha256": "9c1e42471fe1e9ee595975cc3e54846178f3633dc77ba67cb28417c5320da725"
+      },
+      {
+        "path": "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll",
+        "bytes": 1593344,
+        "sha256": "8838feda769a99c59ce5d7d72cb202e90c98b73d3e379221a8b4ce61e493c346"
+      },
+      {
+        "path": "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll",
+        "bytes": 810496,
+        "sha256": "6dd20947a99948009b5dc4a9a51bbf25fa353a7a4dbe223262ec778a9c119376"
+      },
+      {
+        "path": "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.DifferentialTests.dll",
+        "bytes": 240640,
+        "sha256": "91eda7ee742bf36fa0dc2f563eadbefd871d98286dde10ccd02bf9f72eadd89b"
+      }
+    ],
+    "qualification": {
+      "fullChecksEachOs": 5034,
+      "internalChecks": 1974,
+      "publicChecks": 2115,
+      "liveChecks": 945,
+      "scalarInternalEachOs": 33,
+      "scalarPublicEachOs": 120,
+      "sameActualPackageBothOs": true,
+      "usageExamplesEachOs": 3,
+      "windowsConsumer": "artifacts/package-smoke/66c6fde9d9734752b25bd0946b4a27ad",
+      "linuxConsumer": "artifacts/package-smoke/67c63a09b4854578ab301fa5dba39451",
+      "productionStableDuringAcceptedQualification": true
+    },
+    "package": {
+      "path": "artifacts/qualification/jpeg-quarter-final/Lokad.Image.0.2.0.nupkg",
+      "bytes": 389772,
+      "sha256": "b8137b8ba8f9e46a1ba886767f4c531674195f937c69ef5b153feaf4f3041280",
+      "coreSha256": "846eadfd2bc4f743108e5541eb0531dd90cd8c13819b90ca0e1b6e1de6b221a8",
+      "consumer": "artifacts/package-smoke/66c6fde9d9734752b25bd0946b4a27ad",
+      "passed": true,
+      "usageExamples": 3
+    },
+    "linuxPackage": {
+      "path": "artifacts/qualification/jpeg-quarter-final/Lokad.Image.0.2.0.nupkg",
+      "bytes": 389772,
+      "sha256": "b8137b8ba8f9e46a1ba886767f4c531674195f937c69ef5b153feaf4f3041280",
+      "coreSha256": "846eadfd2bc4f743108e5541eb0531dd90cd8c13819b90ca0e1b6e1de6b221a8",
+      "passed": true,
+      "usageExamples": 3,
+      "linuxBefore": 4987145634,
+      "linuxAfter": 4994759425,
+      "exitCode": 0,
+      "sameActualPackage": true,
+      "log": "tmp/e108-package-linux.log",
+      "windowsConsumer": "artifacts/package-smoke/66c6fde9d9734752b25bd0946b4a27ad",
+      "consumer": "artifacts/package-smoke/67c63a09b4854578ab301fa5dba39451"
+    },
+    "companionWindows": {
+      "scope": "Same frozen513x259 packet companions, using unchanged existing live-JPEG native decode options. Historical warm benchmarks apply an additional centered normalization and are kept separate, unchanged and prior-production; this is not a new performance/baseline pass.",
+      "coreSha256": "846eadfd2bc4f743108e5541eb0531dd90cd8c13819b90ca0e1b6e1de6b221a8",
+      "cases": [
+        {
+          "sampling": "411",
+          "inputSha256": "eeb88c7589ae0f2dd91c967103a9e8f9a849b4ab1991d42671263d0a88a56e77",
+          "managedSha256": "c10fa7dbab42c9c11abe662095cf55415c67f49c4f0b2d2343c855e8fef99841",
+          "native": {
+            "normal": {
+              "sha256": "c10fa7dbab42c9c11abe662095cf55415c67f49c4f0b2d2343c855e8fef99841",
+              "mismatches": 0,
+              "maximum": 0,
+              "first": []
+            },
+            "scalar": {
+              "sha256": "c10fa7dbab42c9c11abe662095cf55415c67f49c4f0b2d2343c855e8fef99841",
+              "mismatches": 0,
+              "maximum": 0,
+              "first": []
+            }
+          }
+        },
+        {
+          "sampling": "410",
+          "inputSha256": "07b96d752c1e776d3302680254402d063b7eb8c111fda77c014399791db76a3e",
+          "managedSha256": "33f1ffae130709d4a7676141ff4bec07d300f62c08de06f31ff79603893a61af",
+          "native": {
+            "normal": {
+              "sha256": "33f1ffae130709d4a7676141ff4bec07d300f62c08de06f31ff79603893a61af",
+              "mismatches": 0,
+              "maximum": 0,
+              "first": []
+            },
+            "scalar": {
+              "sha256": "33f1ffae130709d4a7676141ff4bec07d300f62c08de06f31ff79603893a61af",
+              "mismatches": 0,
+              "maximum": 0,
+              "first": []
+            }
+          }
+        }
+      ],
+      "reusedUnchangedNativeCaptures": true,
+      "afterLeadingTapReductionPassed": true
+    },
+    "companionLinux": {
+      "scope": "Same two frozen513x259 companions, existing live native decode options. No timing pass or alteration of historical centered-normalization benchmark references.",
+      "core": {
+        "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "bytes": 751104,
+        "sha256": "9c1e42471fe1e9ee595975cc3e54846178f3633dc77ba67cb28417c5320da725"
+      },
+      "cases": [
+        {
+          "sampling": "411",
+          "inputSha256": "eeb88c7589ae0f2dd91c967103a9e8f9a849b4ab1991d42671263d0a88a56e77",
+          "rgbaSha256": "c10fa7dbab42c9c11abe662095cf55415c67f49c4f0b2d2343c855e8fef99841",
+          "linuxManagedAndBothNativeExact": true
+        },
+        {
+          "sampling": "410",
+          "inputSha256": "07b96d752c1e776d3302680254402d063b7eb8c111fda77c014399791db76a3e",
+          "rgbaSha256": "33f1ffae130709d4a7676141ff4bec07d300f62c08de06f31ff79603893a61af",
+          "linuxManagedAndBothNativeExact": true
+        }
+      ],
+      "nativeRuns": 4,
+      "productionUnchanged": true
+    },
+    "filterReductionControl": {
+      "scope": "One targeted high-contrast410 control at the existing513x259 size. Native near-zero leading-tap reduction is a distinct required filter branch identified in source inspection; no workload grid.",
+      "inputSha256": "3cb32bf010f217fbe8320a2f6b138b80d3f49f9fe5117d0b39f7c47ae3e40638",
+      "reference": [
+        {
+          "mode": "normal",
+          "sha256": "8770ce38bb893d8a545fe21e0f68885be77c8ab6b6e356ec1d4ed9c6ac0414d1",
+          "beforeMismatches": 259,
+          "first": [
+            [
+              2046,
+              148,
+              147
+            ],
+            [
+              4098,
+              148,
+              147
+            ],
+            [
+              6150,
+              148,
+              147
+            ]
+          ]
+        },
+        {
+          "mode": "scalar",
+          "sha256": "8770ce38bb893d8a545fe21e0f68885be77c8ab6b6e356ec1d4ed9c6ac0414d1",
+          "beforeMismatches": 259,
+          "first": [
+            [
+              2046,
+              148,
+              147
+            ],
+            [
+              4098,
+              148,
+              147
+            ],
+            [
+              6150,
+              148,
+              147
+            ]
+          ]
+        }
+      ],
+      "beforeCoreSha256": "98d3c87a73a4f9dce1d2db2541acdc91aef0121e813e789d2c1a61ee655f6f3e"
+    },
+    "evidenceReuse": "Initial E108 full checks passed before source inspection exposed the distinct near-zero leading-tap branch. A targeted control demonstrated259 differing blue samples; after the bounded production correction the complete qualification was repeated on the final immutable DLL. Native companion captures were reused because encoded inputs/reference/settings did not change. Unaffected earlier inverse, YCbCr, CMYK/YCCK, encoder, metadata and editing/text evidence remains valid. No CPU/GC measurement.",
+    "historicalBenchmarkBoundary": "Existing quarter-width timing workers perform additional centered-grid normalization. Their frozen references/raw evidence are preserved unchanged and their rows remain Prior production; reconfirm. Current companion byte proof uses the unchanged live-JPEG decode options and does not establish equivalent timing workloads. Reconcile those boundaries before future CPU/allocation qualification, without silently changing a baseline.",
+    "logs": [
+      "tmp/e108-full-before-filter-edge-windows.log",
+      "tmp/e108-full-windows.log",
+      "tmp/e108-full-linux.log",
+      "tmp/e108-scalar-internal-windows.log",
+      "tmp/e108-scalar-public-windows.log",
+      "tmp/e108-scalar-internal-linux.log",
+      "tmp/e108-scalar-public-linux.log",
+      "tmp/e108-package-windows.log",
+      "tmp/e108-package-linux.log"
+    ],
+    "storageCompaction": [
+      {
+        "archive": "tmp/e108-cold-e104-consumer-linux.tar.xz",
+        "bytes": 1373556,
+        "sha256": "af8878bf028874ff62cf87a733c4f1c1f0c8c0b3b9e26979709bb7625d78cbb7",
+        "retiredRegularFiles": 139,
+        "retiredBytes": 7227478,
+        "mirrored": true,
+        "everySourceByteVerified": true,
+        "peak": 4999560108,
+        "after": 4992332630
+      },
+      {
+        "archive": "tmp/e108-cold-e106-consumer-linux.tar.xz",
+        "bytes": 1376152,
+        "sha256": "45d6e45d6fbdd2f6be1c32839cbefde0645c4376550ade368268e6a586b08451",
+        "retiredRegularFiles": 139,
+        "retiredBytes": 7221663,
+        "mirrored": true,
+        "everySourceByteVerified": true,
+        "peak": 4993708782,
+        "after": 4986487119
+      }
+    ],
+    "parentCi": {
+      "sha": "26b2606e2313dfcf9bbe607be3768affa3c11445",
+      "run": 40041038891,
+      "conclusion": "success",
+      "jobs": 3
+    },
+    "cpuTimingRuns": 0,
+    "gcAllocationsMeasured": false,
+    "next": "Resolve exact samples on the two already named513x259 direct-RGB422/420 warm packets using their approved component interpretation/centered normalization and existing input hashes. Reuse E108 immutable build and prepared probes; no new settings/shape grid. Stop qualified quarter-width, CMYK/YCCK, YCbCr, inverse, PNG/VP8L and metadata cases. VP8 reconstruction/color follows. Historical quarter-width timing workers include extra centered normalization; retain their baselines/raw data, keep prior-production status, and align equivalent current outputs before later CPU/allocation qualification. No speed-only work while byte gates remain open.",
+    "rawArchive": {
+      "name": "e108-public-quarter-qualified.tar.xz",
+      "bytes": 1871928,
+      "sha256": "ac1ea2492b6ce5021bef014c7759e9234d649d2401db89c467d5671e1d84b7cb",
+      "members": 74,
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "linuxBeforeMirror": 4994759425,
+      "linuxAfterMirror": 4996631353,
+      "allObservedAndProjectedPeaksBelowCap": true
+    },
+    "duplicateRetirement": {
+      "retiredDuplicate": "tmp/e108-companion-transient.rgba",
+      "bytes": 531468,
+      "archivedMember": "tmp/e108-companions/410-managed.rgba",
+      "everyOriginalByteVerified": true,
+      "after": 4996099885
     }
   }
 }

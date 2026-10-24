@@ -170,8 +170,13 @@ native execution. Named CMYK/YCCK constant, varying, progressive, saturated and
 AC controls also require exact samples. The two65x31 varying controls cover
 RGB/grayscale, streams, caller padding and orientation. CMYK output preserves its
 explicit canonical ink contract. Four-component half-grid/black/color precision
-is shared across owned and caller outputs. Three-component4:1:1/4:1:0 still require
-further exact qualification.
+is shared across owned and caller outputs. Named three-component4:1:1/4:1:0
+controls also require exact RGB/Y through dimension-aware filtering and retained
+fractional chroma, including progressive, padded/oriented caller and near-integral
+filter cases. The same frozen513x259 companion packets match the existing live
+oracle's decode options. Historical timing workers apply additional centered
+normalization; their unchanged references and prior-production timings do not
+establish current workload equivalence or a new performance pass.
 [Decoder evidence](../benchmarks/decoder-exactness-evidence.json) states the scope;
 [rounding](jpeg-inverse-rounding.md) describes the integer boundaries. No old
 inverse variant or compatibility mode remains. Earlier JPEG decode CPU/allocation

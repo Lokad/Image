@@ -33,7 +33,7 @@ target; the existing implemented behavior below remains the current contract.
 | Exact edits | Implemented; hand-computed permutations and live FFmpeg checks | Crop, flips, quarter turns, transpose, all eight EXIF orientations |
 | Resize | Nearest/bilinear/bicubic implemented; Lanczos3 implemented in development, performance qualification pending | Exact dimensions, aspect-preserving fit and alpha-aware nearest/bilinear/bicubic/Lanczos3 at 8/16 bits |
 | JPEG caller samples | Gray/RGB/CMYK decode and gray/RGB encode implemented in development | Caller-provided 8-bit samples without mandatory RGBA; explicit source color space/inversion, quality and sampling |
-| JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4Ã—1) / 4:1:0 (4Ã—2) sampling |
+| JPEG compatibility extensions | Implemented in development | CMYK/YCCK and JPEG 4:1:1 (4×1) / 4:1:0 (4×2) sampling |
 | Stream extensions | Async Identify/Decode/Encode and fixed-workspace InspectHeaders implemented in development | Async I/O and bounded-memory large-image dimension/orientation inspection; avoid redundant encoded-input and full-frame copies |
 | Drawing/compositing | Implemented in development | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
 | Text | Supplied TrueType, logical/OpenType layout, Latin/Hebrew/Arabic shaping, alignment/fitting and 8/16-bit rendering in development; full replacement/performance qualification pending | Supplied faces, alignment/style, wrapping/line spacing, reliable bounds/fitting, combining marks and bidirectional/shaped text including Arabic |
@@ -1081,10 +1081,23 @@ RGB planes. Decode produces opaque RGBA8; no ICC conversion is applied.
 
 All30 existing frozen grayscale/4:4:4/4:2:2/4:2:0 controls require exact native
 samples, including baseline, odd edges, progressive refinement, EOB runs, split
-bands and restarts. Existing live controls require exact samples too. CMYK/YCCK
-and4:1:1/4:1:0 retain functional gates pending their exact-reference qualification;
-this is not a claim of exact decoding for every input. No superseded inverse or
+bands and restarts. Existing live controls require exact samples too. Named CMYK/
+YCCK and4:1:1/4:1:0 controls also require exact RGB samples and caller grayscale.
+This is not a claim of exact decoding for every input. No superseded inverse or
 floating half-resolution YCbCr color variant is retained.
+
+
+For three-component4:1:1/4:1:0, output uses the pinned decoder/converter's
+co-sited phase and dimension-aware Q16 positions. Normalized bilinear weights
+retain Q14 horizontal and Q12 vertical precision, including near-zero leading-tap
+reduction. Filtered chroma stays at Q7/Q9 through the shared Q13 color matrix;
+only final RGB channels are quantized.4:1:0 computes its initial horizontal
+half-grid byte expansion on demand. No filter table, owned scratch or frame
+intermediate is allocated. Owned RGBA and caller RGB, including opt-in orientation,
+share this path; caller grayscale still takes decoded Y. Existing4096 block and
+32-per-pixel row work, cancellation and admission/ownership remain. Original
+67x19 baseline/progressive, constant/varying and targeted near-integral filter
+controls have exact reference gates. No floating quarter-width renderer remains.
 
 
 Full-resolution direct RGB planes pack their already rounded/clipped bytes into

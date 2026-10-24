@@ -40,4 +40,18 @@ internal static class JpegInverseColor
             if (channels == 4) target[x * channels + 3] = 255;
         }
     }
+
+    internal static void WriteFilteredPixel(byte luma, int cbQ9, int crQ9, Span<byte> destination, int channels)
+    {
+        // Filtered chroma remains centered Q9 through Q13 multiplication.
+        // Quantize only the final RGB channels; the byte-plane path is unchanged.
+        if (channels is not (3 or 4)) throw new ArgumentOutOfRangeException(nameof(channels));
+        if (destination.Length < channels) throw new ArgumentException("Destination must cover one color pixel.");
+        var y = (luma << 22) + (1 << 21);
+        destination[0] = (byte)Math.Clamp((y + crQ9 * Red) >> 22, 0, 255);
+        destination[1] = (byte)Math.Clamp((y + cbQ9 * GreenU + crQ9 * GreenV) >> 22, 0, 255);
+        destination[2] = (byte)Math.Clamp((y + cbQ9 * Blue) >> 22, 0, 255);
+        if (channels == 4) destination[3] = 255;
+    }
+
 }

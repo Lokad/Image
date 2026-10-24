@@ -13,7 +13,7 @@ packets. [Codec compatibility](docs/codec-parity.md) states the tested inputs an
   subsampling, restart markers and explicit alpha flattening.
   CMYK/YCCK and 4:1:1/4:1:0 decode; caller-owned gray/RGB/CMYK decode samples
   and gray/RGB encode samples. Declared grayscale/4:4:4/4:2:2/4:2:0 decode controls
-  match exact reference pixels. Named CMYK/YCCK RGB and grayscale controls are exact too.
+  match exact reference pixels. Named CMYK/YCCK and 4:1:1/4:1:0 RGB/grayscale controls are exact too.
 - **WebP:** lossy VP8 and lossless VP8L, including alpha and lossless hidden RGB.
 - **Editing:** 8/16-bit RGBA, EXIF orientation, crop, flips, quarter turns,
   transpose and nearest/bilinear/bicubic/Lanczos3 resize; rectangle fill/copy and alpha compositing.

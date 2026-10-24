@@ -53,6 +53,11 @@ Current JPEG decoding uses the pinned integer inverse and rounded-chroma color
 policy. Thirty frozen grayscale/4:4:4/4:2:2/4:2:0 controls and the declared
 public stream/caller/orientation boundaries have exact pixel gates. Named CMYK/YCCK
 controls also require exact RGB/grayscale, including black-before-color precision.
+Named4:1:1/4:1:0 controls retain fractional chroma through final RGB rounding.
+Their historical timing workers include additional centered normalization; those
+unchanged references remain historical and need equivalent current outputs before
+new timing qualification. No baseline or performance pass is inferred from the
+new byte checks on the same frozen513x259 packets.
 Earlier JPEG
 decode timings and allocations describe the replaced producer and are marked
 **Prior production; reconfirm**. No new decoder timing/allocation run is claimed.
