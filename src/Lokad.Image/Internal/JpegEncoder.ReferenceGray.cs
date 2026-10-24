@@ -27,15 +27,18 @@ internal static partial class JpegEncoder
             }
             context.Work(0);
             var quantization = JpegGrayReferenceTransform.Quantization(options.Quality);
+            // Once per operation, inside the existing8KiB fixed workspace.
+            Span<ushort> reciprocals = stackalloc ushort[64];
+            JpegGrayQuantization.Prepare(quantization, reciprocals);
             var histograms = new int[4][]; histograms[0] = new int[256]; histograms[2] = new int[256];
-            ReferenceGrayPass(image, source, width, height, options.BackgroundRgb, quantization, histograms, null, null, context, options.RestartInterval);
+            ReferenceGrayPass(image, source, width, height, options.BackgroundRgb, quantization, reciprocals, histograms, null, null, context, options.RestartInterval);
             context.Reserve(ReferenceTableBytes); tablesReserved = true; context.Work(0);
             var tables = new JpegEncodingTable[4];
             tables[0] = JpegGrayReferenceTables.Huffman(histograms[0], context);
             tables[2] = JpegGrayReferenceTables.Huffman(histograms[2], context);
             WriteReferenceGrayHeader(output, width, height, quantization, tables, context, options.RestartInterval);
             var writer = new JpegEntropyWriter(output, context);
-            ReferenceGrayPass(image, source, width, height, options.BackgroundRgb, quantization, histograms, tables, writer, context, options.RestartInterval);
+            ReferenceGrayPass(image, source, width, height, options.BackgroundRgb, quantization, reciprocals, histograms, tables, writer, context, options.RestartInterval);
             writer.Align(); context.Work(2); output.WriteByte(255); output.WriteByte(217);
         }
         finally
@@ -47,7 +50,7 @@ internal static partial class JpegEncoder
     }
 
     private static void ReferenceGrayPass(ImageBuffer? image, JpegSampleInput source, int width, int height,
-        uint? background, ushort[] quantization, int[][] histograms, JpegEncodingTable[]? tables,
+        uint? background, ushort[] quantization, ReadOnlySpan<ushort> reciprocals, int[][] histograms, JpegEncodingTable[]? tables,
         JpegEntropyWriter? writer, OperationContext context, int restartInterval)
     {
         Span<byte> samples = stackalloc byte[64];
@@ -65,7 +68,7 @@ internal static partial class JpegEncoder
             else
                 JpegGrayPreparation.CopyBlock(image, source, width, height, left, top, background, samples);
             JpegGrayReferenceTransform.Forward(samples, transformed);
-            JpegGrayReferenceTransform.Quantize(transformed, quantization, coefficients);
+            JpegGrayQuantization.Quantize(transformed, quantization, reciprocals, coefficients);
             ReferenceBlock(coefficients, 0, previous, histograms, tables, writer);
         }
     }

@@ -70,14 +70,4 @@ internal static class JpegGrayReferenceTransform
         return result;
     }
 
-    public static void Quantize(ReadOnlySpan<short> transformed, ReadOnlySpan<ushort> quantization, Span<short> output)
-    {
-        for (int k = 0; k < 64; k++)
-        {
-            int value = transformed[k], divisor = quantization[k] * 8;
-            int magnitude = (Math.Abs(value) + divisor / 2) / divisor;
-            output[k] = (short)(value < 0 ? -magnitude : magnitude);
-        }
-    }
-
 }

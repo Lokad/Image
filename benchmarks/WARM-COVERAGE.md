@@ -5,6 +5,15 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E158 grayscale quantization](WARM-JPEG-GRAY-QUANTIZATION.md) confirms caller-gray
+at3.167×/upper3.183,22.8% less elapsed than its preceding screen,154,840B/op.
+RGBA-gray is reconciled at2.935×/upper3.280 short,154,838B/op. Both retain exact
+58,910-byte packets. Both platforms pass5,088checks and the same actual private
+package. No cases were added; only single-component grayscale quantization CPU
+proofs are affected. Color JPEG, other codecs/decoders/editing/text reuse unchanged
+paths. Earlier entries below retain their producer scopes and are superseded
+where affected. The full257-case/1× objective remains open.
+
 [E156 grayscale row preparation](WARM-JPEG-GRAY-ROWS.md) confirms the existing
 RGBA-to-gray control at3.697×/upper3.719,30.8% less elapsed than its preceding
 confirmation,154,838B/op and raw-exact58,910-byte packets. The direct caller-gray

@@ -23,6 +23,8 @@ public sealed class JpegGrayReferenceTests
         Assert.Equal("6b74f1d2c127f3bcccba2b377f4474b9fc7464890853d05bf058bbb38337df8d", Hash(gray));
         var dct = new byte[274560]; var quantized = new byte[274560]; var at = 0;
         var quantization = JpegGrayReferenceTransform.Quantization(69);
+        Span<ushort> reciprocals = stackalloc ushort[64];
+        JpegGrayQuantization.Prepare(quantization, reciprocals);
         Span<byte> samples = stackalloc byte[64];
         Span<short> transformed = stackalloc short[64], coefficients = stackalloc short[64];
         for (var top = 0; top < 259; top += 8)
@@ -32,7 +34,7 @@ public sealed class JpegGrayReferenceTests
             for (var x = 0; x < 8; x++)
                 samples[y * 8 + x] = gray[Math.Min(top + y, 258) * 513 + Math.Min(left + x, 512)];
             JpegGrayReferenceTransform.Forward(samples, transformed);
-            JpegGrayReferenceTransform.Quantize(transformed, quantization, coefficients);
+            JpegGrayQuantization.Quantize(transformed, quantization, reciprocals, coefficients);
             for (var k = 0; k < 64; k++, at += 2)
             {
                 BinaryPrimitives.WriteInt16LittleEndian(dct.AsSpan(at), transformed[k]);
