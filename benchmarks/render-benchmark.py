@@ -225,10 +225,10 @@ def render():
         row('JPEG 4:2:0 from caller RGB / AC trellis and padding pruning', 'jpeg420-ac-trellis-evidence.json', ['cases', 'Encode420_8', -1], 'JPEG420-AC-TRELLIS.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque‡', 'vp8-noise-spectrum-evidence.json', ['observations', 0], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 1], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
-        row('VP8 RGBA8', 'warm-vp8-avx2-levels-evidence.json', ['observations', -1], 'WARM-VP8-AVX2-LEVELS.md', confirmed=True),
+        row('VP8 RGBA8', 'warm-vp8-alpha-histogram-evidence.json', ['observations', -1], 'WARM-VP8-ALPHA-HISTOGRAM.md', confirmed=True),
         row('WebP VP8 + alpha from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 3], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-histogram384-evidence.json', ['observations', 0], 'WARM-VP8-HISTOGRAM384.md', verification='Cost screen (CPU parity deferred)'),
-        row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-paired-population-evidence.json', ['observations', -1], 'WARM-VP8L-PAIRED-POPULATION.md', confirmed=True),
+        row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8-alpha-histogram-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8-ALPHA-HISTOGRAM.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L from RGBA16, exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
     ]
@@ -384,14 +384,15 @@ The reference is approved standalone SIMD libjpeg-turbo for these one-component
 boundaries. VP8/VP8L now have the largest current encoder gaps. Older affected
 gray timings stay historical; colorJPEG/othercodecs/decoders/editing/text reuse
 unchanged confirmations.
-VP8L now confirms a3.091× gap after exact paired-population costs, saving24.5%
-elapsed and8,480 allocated bytes/op against the preceding confirmation. The
-paired-cost producer passes 5,062 checks on each platform and validates the same actual private package;
-[paired-cost evidence](../benchmarks/WARM-VP8L-PAIRED-POPULATION.md).
-VP8 now confirms a 3.109× gap after exact vector quantization, using 7.8% less
-elapsed time than the preceding confirmation, with unchanged allocations/packets.
-Each platform passes 5,072 checks and validates the same actual private package;
-[quantization evidence](../benchmarks/WARM-VP8-AVX2-LEVELS.md).
+VP8 now confirms a 2.878× gap after exact compressed-alpha histogram specialization,
+using 7.3% less elapsed than the preceding confirmation, with unchanged
+24,080,952 B/op and exact 98,590-byte packets. VP8L has a current 3.095× screen,
+48,056,112 B/op and exact 183,812-byte packets. Each platform passes 5,096 checks
+and validates the same actual private package;
+[alpha-histogram evidence](../benchmarks/WARM-VP8-ALPHA-HISTOGRAM.md).
+The VP8L algorithm remains generic; its previous 3.091× confirmation is consistent
+with this screen, without an independently confirmed speedup claim. VP8L now
+has the largest measured encoder gap. No image/settings controls were added.
 
 Other replaced encoder observations remain historical.
 All17 historical BCL PNG timing rows below are superseded, as are the earlier

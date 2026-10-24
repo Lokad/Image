@@ -41,14 +41,15 @@ internal static class Vp8lReferencePredictor
         private readonly OperationContext context;
         private readonly int width, height, minBits, maxBits, levels;
         private readonly long reserved;
+        private readonly bool greenOnly;
         private int[]? data;
         private byte[]? maps;
         private readonly int[] offsets;
         private readonly int[] columns;
 
-        internal Analysis(int width, int height, int minBits, int maxBits, OperationContext context)
+        internal Analysis(int width, int height, int minBits, int maxBits, OperationContext context, bool greenOnly)
         {
-            this.context = context; this.width = width; this.height = height;
+            this.context = context; this.width = width; this.height = height; this.greenOnly = greenOnly;
             this.minBits = minBits; this.maxBits = maxBits; levels = maxBits - minBits + 1;
             var mapLength = 0;
             for (var bits = minBits; bits <= maxBits; bits++) mapLength += Ceil(width, bits) * Ceil(height, bits);
@@ -85,7 +86,9 @@ internal static class Vp8lReferencePredictor
                 var count = Math.Min(4096, histogram.Length - at);
                 context.Work(count); histogram.Slice(at, count).Clear();
             }
-            if (level == 0)
+            if (level == 0 && greenOnly)
+                Vp8lGreenPredictorHistogram.Build(pixels, width, height, x0, y0, bits, histogram, context);
+            else if (level == 0)
             {
                 for (var y = y0; y < Math.Min(y0 + (1 << bits), height); y++)
                 for (var x = x0; x < Math.Min(x0 + (1 << bits), width); x++)
@@ -189,7 +192,7 @@ internal static class Vp8lReferencePredictor
     }
 
     internal static Vp8lPredictionPlan SelectAndApply(Span<uint> working, int width,
-        int minBits, int maxBits, bool lowEffort, OperationContext context)
+        int minBits, int maxBits, bool lowEffort, OperationContext context, bool greenOnly = false)
     {
         if (width is < 1 or > 16384 || working.Length == 0 || working.Length % width != 0
             || working.Length / width > 16384) throw new ArgumentException("Expected complete VP8L image rows.");
@@ -211,7 +214,7 @@ internal static class Vp8lReferencePredictor
             }
             else
             {
-                using var analysis = new Analysis(width, height, minBits, maxBits, context);
+                using var analysis = new Analysis(width, height, minBits, maxBits, context, greenOnly);
                 result = analysis.Select(working);
             }
             // Candidate maps and analysis counts are released before row scratch.

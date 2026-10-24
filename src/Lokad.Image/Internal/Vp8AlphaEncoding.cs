@@ -82,7 +82,7 @@ internal sealed class Vp8AlphaEncoding : IDisposable
                         // carried in green: this is an internal exact image.
                         working[i] = (uint)((alpha[i] - Predict(alpha, width, i, filter)) & 255) << 8;
                     }
-                    using var prepared = Vp8lPreparedEncoding.Prepare(working, width, method, context, quality: method == 6 ? 100 : 8 * method);
+                    using var prepared = Vp8lPreparedEncoding.Prepare(working, width, method, context, quality: method == 6 ? 100 : 8 * method, greenOnly: true);
                     var body = prepared.PayloadBytes - 5; var compressed = body <= alpha.Length;
                     var length = 1 + (compressed ? body : alpha.Length);
                     if (result.payload is not null && length >= result.payload.Length) continue;

@@ -5,6 +5,17 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E166 exact alpha histograms](WARM-VP8-ALPHA-HISTOGRAM.md) confirms the existing
+VP8 RGBA8 control at 2.878×/upper2.901, using 7.3% less elapsed than the previous
+confirmation with unchanged 24,080,952 B/op and exact 98,590-byte packets. The
+existing VP8L control is reconciled at 3.095×/upper3.544 short, 48,056,112 B/op,
+exact 183,812-byte packets; no independent lossless speedup claim. Both platforms
+pass 5,096 checks and the same actual private package. No cases were added.
+Only eligible compressed-alpha predictor analysis is specialized; other affected
+alpha CPU evidence is historical until reconciled. The generic VP8L algorithm
+remains unchanged apart from dispatch. JPEG/PNG/decoders/editing/text reuse
+unaffected evidence. VP8L now has the largest current measured encoder gap.
+
 [E160 vector grayscale DCT](WARM-JPEG-GRAY-AVX2-TRANSFORM.md) confirms caller-gray
 at2.617×/upper2.638,17.3% less elapsed than its preceding confirmation,154,839B/op.
 RGBA-gray is reconciled at2.648×/upper2.875 short,154,836B/op. Both retain exact

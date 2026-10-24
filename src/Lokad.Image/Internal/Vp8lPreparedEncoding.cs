@@ -71,11 +71,11 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
     }
 
     private Vp8lFramePrefix Predict(Span<uint> pixels, int width, int height, int effort, int transformBits,
-        Vp8lFramePrefix candidatePrefix, int quality)
+        Vp8lFramePrefix candidatePrefix, int quality, bool greenOnly = false)
     {
         var maximum = ClampPredictionBits(width, height, transformBits);
         var minimum = ClampPredictionBits(width, height, maximum - 2 * Math.Max(0, effort - 4));
-        using var plan = Vp8lReferencePredictor.SelectAndApply(pixels, width, minimum, maximum, effort == 0, context);
+        using var plan = Vp8lReferencePredictor.SelectAndApply(pixels, width, minimum, maximum, effort == 0, context, greenOnly);
         var reserved = plan.Modes.Length * 4L; context.Reserve(reserved);
         try
         {
@@ -90,12 +90,14 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
     // working is the library's admitted normalization buffer and is modified in
     // place. Its owner keeps the full capacity charged, including palette tails.
     // Returned prepared state owns no reference to this buffer.
-    internal static Vp8lPreparedEncoding Prepare(Span<uint> working, int width, int effort, OperationContext context, int quality = 75)
+    // greenOnly declares the normalized ALPH input representation, not an
+    // encoding option. Palette/subtract-green/all-family trials keep generic analysis.
+    internal static Vp8lPreparedEncoding Prepare(Span<uint> working, int width, int effort, OperationContext context, int quality = 75, bool greenOnly = false)
     {
         if (quality is < 0 or > 100) throw new ArgumentOutOfRangeException(nameof(quality));
         var analysis = Vp8lEncodingAnalysis.Select(working, width, effort, context);
         if (effort == 6 && quality == 100) return PrepareAllFamilies(working, width, analysis, context);
-        return PrepareCore(working, width, effort, context, quality, analysis, comparePalettePrediction: effort == 5 && quality >= 75);
+        return PrepareCore(working, width, effort, context, quality, analysis, comparePalettePrediction: effort == 5 && quality >= 75, greenOnly: greenOnly);
     }
 
     // One admitted mutable trial is reset from the borrowed untransformed input.
@@ -150,7 +152,7 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
     }
 
     private static Vp8lPreparedEncoding PrepareCore(Span<uint> working, int width, int effort,
-        OperationContext context, int quality, Vp8lEncodingAnalysis analysis, bool comparePalettePrediction, Vp8lPaletteOrder? paletteOrder = null)
+        OperationContext context, int quality, Vp8lEncodingAnalysis analysis, bool comparePalettePrediction, Vp8lPaletteOrder? paletteOrder = null, bool greenOnly = false)
     {
         var height = working.Length / width; var result = new Vp8lPreparedEncoding(context);
         var candidatePrefix = new Vp8lFramePrefix(width, height, analysis.HasNonOpaqueAlpha);
@@ -182,7 +184,7 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
                 { Vp8lReferenceColorTransform.SubtractGreen(working, context); candidatePrefix = candidatePrefix with { SubtractGreen = true }; }
                 if (predict)
                 {
-                    candidatePrefix = result.Predict(working, width, height, effort, analysis.TransformBits, candidatePrefix, quality);
+                    candidatePrefix = result.Predict(working, width, height, effort, analysis.TransformBits, candidatePrefix, quality, greenOnly && !subtractGreen);
                     if (effort != 0 && !analysis.RedBlueZero)
                     {
                         using var plan = Vp8lReferenceColorTransform.SelectAndApply(working, width, analysis.TransformBits, quality, context);
