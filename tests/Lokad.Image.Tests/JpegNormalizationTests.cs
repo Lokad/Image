@@ -7,7 +7,7 @@ public sealed class JpegNormalizationTests
     [Fact]
     public void ByteRowsPreserveEveryChannelAlphaAndBackgroundCombination()
     {
-        var source = new byte[256 * 4]; var actual = new byte[256 * 3];
+        var source = new byte[256 * 4]; var actual = new int[256];
         for (var background = 0; background < 256; background++)
         {
             var red = background; var green = (background * 73 + 29) & 255; var blue = 255 - background;
@@ -25,7 +25,7 @@ public sealed class JpegNormalizationTests
                 {
                     var backdrop = c == 0 ? red : c == 1 ? green : blue;
                     var expected = (source[x * 4 + c] * alpha + backdrop * (255 - alpha) + 127) / 255;
-                    if (actual[x * 3 + c] != expected)
+                    if ((actual[x] >> (c * 8) & 255) != expected || (actual[x] & ~0xFFFFFF) != 0)
                         Assert.Fail($"Channel {c}, source {source[x * 4 + c]}, alpha {alpha}, background {backdrop}.");
                 }
             }
@@ -34,6 +34,7 @@ public sealed class JpegNormalizationTests
 
     [Theory]
     [InlineData(1)]
+    [InlineData(2)]
     [InlineData(3)]
     [InlineData(4)]
     [InlineData(5)]
@@ -42,18 +43,19 @@ public sealed class JpegNormalizationTests
     public void UnalignedRowsAndScalarTailsPreserveBoundsAndRequireExplicitFlattening(int count)
     {
         var source = Enumerable.Repeat((byte)167, count * 4 + 4).ToArray();
-        var output = Enumerable.Repeat((byte)213, count * 3 + 6).ToArray();
+        var output = Enumerable.Repeat(213, count + 6).ToArray();
         for (var x = 0; x < count; x++)
         {
             source[2 + x * 4] = (byte)(x * 37); source[3 + x * 4] = (byte)(x * 59 + 7);
             source[4 + x * 4] = (byte)(255 - x * 11); source[5 + x * 4] = 255;
         }
         var original = source.ToArray();
-        JpegReferenceColor.NormalizeRgba8(source.AsSpan(2, count * 4), output.AsSpan(3, count * 3), null);
-        for (var x = 0; x < count; x++) Assert.True(source.AsSpan(2 + x * 4, 3).SequenceEqual(output.AsSpan(3 + x * 3, 3)));
+        JpegReferenceColor.NormalizeRgba8(source.AsSpan(2, count * 4), output.AsSpan(3, count), null);
+        for (var x = 0; x < count; x++)
+            Assert.Equal(source[2 + x * 4] | source[3 + x * 4] << 8 | source[4 + x * 4] << 16, output[3 + x]);
         Assert.Equal(original, source); Assert.All(output[..3], value => Assert.Equal(213, value));
         Assert.All(output[^3..], value => Assert.Equal(213, value));
         source[5 + (count - 1) * 4] = 254;
-        Assert.Throws<ArgumentException>(() => JpegReferenceColor.NormalizeRgba8(source.AsSpan(2, count * 4), output.AsSpan(3, count * 3), null));
+        Assert.Throws<ArgumentException>(() => JpegReferenceColor.NormalizeRgba8(source.AsSpan(2, count * 4), output.AsSpan(3, count), null));
     }
 }

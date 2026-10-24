@@ -67,10 +67,12 @@ independent16-bit normalization. The RGBA8 grayscale control with explicit MCU
 restart interval3 matches **61,152 B**, including714 sequenced markers and
 optimized tables. These checks use the same backend, quality and quantizers.
 
-The production encoder uses a 512-byte MCU and a bounded20×20 RGB tile, with no
-full-frame YUV or coefficient/event copy. Chroma/quantization plans and transform
-scratch share the existing8-KiB fixed owner. The SSE2/AVX2 integer forward transform
-retains exact scalar coefficients and a scalar fallback. Optimal tables use two passes;
+The production encoder uses a 512-byte MCU and a bounded18×18 packed tile, reused
+from normalized RGB through signed horizontal chroma. Negative guard samples
+survive until vertical rounding; two original yellow/cyan controls check this
+boundary against complete native packets. There is no full-frame YUV or coefficient
+copy. Plans and scratch share the existing8-KiB owner. SSE2/AVX2 forward transforms
+and quantization retain exact scalar results and fallbacks. Optimal tables use two passes;
 color restarts use fixed tables in one pass. Grayscale uses a single 64-byte
 block. RGBA8/16 images and caller Gray8/RGB8 spans with stride support sync,
 forward-only and async delivery. Color quality maps to native qscale

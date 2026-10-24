@@ -55,9 +55,9 @@ internal static partial class JpegEncoder
             }
             context.Work(0);
             var quantization = JpegReferenceTables.Quantization(ReferenceQScale(options.Quality));
-            // Both passes share the same512-byte stack plan in the fixed owner.
+            // Both passes share the same256-byte stack plan in the fixed owner.
             // Its two integer divisions per AC position run once per operation.
-            Span<int> quantizationPlan = stackalloc int[128];
+            Span<ushort> quantizationPlan = stackalloc ushort[128];
             JpegReferenceTransform.PrepareQuantization(quantization, quantizationPlan);
             var histograms = fixedTables ? Array.Empty<int[]>() : new int[4][];
             if (!fixedTables)
@@ -85,7 +85,7 @@ internal static partial class JpegEncoder
     }
 
     private static void ReferencePass(ImageBuffer? image, JpegSampleInput source, int width, int height, uint? background, JpegSampling sampling,
-        ReadOnlySpan<int> quantizationPlan, int[][] histograms, JpegEncodingTable[]? tables, JpegEntropyWriter? writer, OperationContext context, int restartInterval = 0)
+        ReadOnlySpan<ushort> quantizationPlan, int[][] histograms, JpegEncodingTable[]? tables, JpegEntropyWriter? writer, OperationContext context, int restartInterval = 0)
     {
         if (sampling != JpegSampling.YCbCr444)
         {

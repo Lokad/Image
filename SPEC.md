@@ -160,8 +160,9 @@ Bounded rows feed the same reference-compatible component conversion, integer
 transform, tables and entropy writer as image inputs. Borrowed source storage,
 8KiB fixed workspace, table capacity and temporary tree-building peaks remain
 separately admitted. Refusal stops the operation without another encoder path.
-The fixed workspace includes MCU normalization/filter plans and an exact integer
-forward transform with SSE2/AVX2 acceleration and a scalar fallback. Quality
+The fixed workspace includes a bounded MCU tile reused through signed chroma
+filtering, normalization/filter plans and exact integer forward transforms and
+quantization with SSE2/AVX2 acceleration and scalar fallbacks. Quality
 numbers remain specific to this encoder.
 
 Transforms return new owned buffers and preserve precision and source pixels.

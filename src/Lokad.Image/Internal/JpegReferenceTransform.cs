@@ -148,7 +148,7 @@ internal static class JpegReferenceTransform
         }
     }
 
-    internal static void PrepareQuantization(ReadOnlySpan<ushort> quantization, Span<int> plan)
+    internal static void PrepareQuantization(ReadOnlySpan<ushort> quantization, Span<ushort> plan)
     {
         if (quantization.Length != 64 || plan.Length != 128 || quantization[0] != 8)
             throw new ArgumentException("Complete blocks with the pinned DC precision required.");
@@ -157,16 +157,48 @@ internal static class JpegReferenceTransform
         {
             if (quantization[k] is 0 or > 255) throw new ArgumentException("Pinned 8-bit quantization required.");
             int reciprocal = 8192 / quantization[k];
-            plan[k] = reciprocal;
-            plan[64 + k] = (24576 + reciprocal / 2) / reciprocal;
+            plan[k] = checked((ushort)reciprocal);
+            plan[64 + k] = checked((ushort)((24576 + reciprocal / 2) / reciprocal));
         }
     }
 
-    public static void Quantize(ReadOnlySpan<short> transformed, ReadOnlySpan<int> plan, Span<short> output)
+    public static void Quantize(ReadOnlySpan<short> transformed, ReadOnlySpan<ushort> plan, Span<short> output)
     {
         if (transformed.Length != 64 || plan.Length != 128 || output.Length != 64)
             throw new ArgumentException("Complete blocks and prepared quantization required.");
-        output[0] = (short)(((transformed[0] + 32) >> 6) - 128);
+        var dc = (short)(((transformed[0] + 32) >> 6) - 128);
+        // Abs(-32768) and the largest rounding bias fit unsigned16bits. The
+        // unsigned high product is the exact scalar >>16, with sign restored
+        // afterward. The prepared zero DC lane is replaced independently.
+        if (Avx2.IsSupported && BitConverter.IsLittleEndian)
+        {
+            for (var k = 0; k < 64; k += 16)
+            {
+                var values = MemoryMarshal.Read<Vector256<short>>(MemoryMarshal.AsBytes(transformed[k..]));
+                var sign = Avx2.ShiftRightArithmetic(values, 15);
+                var magnitude = ((values ^ sign) - sign).AsUInt16();
+                var bias = MemoryMarshal.Read<Vector256<ushort>>(MemoryMarshal.AsBytes(plan[(64 + k)..]));
+                var reciprocal = MemoryMarshal.Read<Vector256<ushort>>(MemoryMarshal.AsBytes(plan[k..]));
+                var quantized = Avx2.MultiplyHigh(magnitude + bias, reciprocal).AsInt16();
+                ((quantized ^ sign) - sign).CopyTo(output[k..]);
+            }
+            output[0] = dc; return;
+        }
+        if (Sse2.IsSupported && BitConverter.IsLittleEndian)
+        {
+            for (var k = 0; k < 64; k += 8)
+            {
+                var values = MemoryMarshal.Read<Vector128<short>>(MemoryMarshal.AsBytes(transformed[k..]));
+                var sign = Sse2.ShiftRightArithmetic(values, 15);
+                var magnitude = ((values ^ sign) - sign).AsUInt16();
+                var bias = MemoryMarshal.Read<Vector128<ushort>>(MemoryMarshal.AsBytes(plan[(64 + k)..]));
+                var reciprocal = MemoryMarshal.Read<Vector128<ushort>>(MemoryMarshal.AsBytes(plan[k..]));
+                var quantized = Sse2.MultiplyHigh(magnitude + bias, reciprocal).AsInt16();
+                ((quantized ^ sign) - sign).CopyTo(output[k..]);
+            }
+            output[0] = dc; return;
+        }
+        output[0] = dc;
         for (int k = 1; k < 64; k++)
         {
             int value = transformed[k];

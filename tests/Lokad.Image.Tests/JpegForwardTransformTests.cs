@@ -10,7 +10,7 @@ public sealed class JpegForwardTransformTests
     public void PreparedQuantizationPreservesEverySignedCoefficientAtEveryEightBitStep()
     {
         Span<ushort> quantization = stackalloc ushort[64];
-        Span<int> plan = stackalloc int[128];
+        Span<ushort> plan = stackalloc ushort[128];
         Span<short> transformed = stackalloc short[64], output = stackalloc short[64];
         // Exhaust the full signed16-bit coefficient domain, including negative
         // magnitudes and every rounding threshold, for all legal8-bit steps.

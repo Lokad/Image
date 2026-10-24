@@ -25,8 +25,9 @@ a fallback after refusal. Cancellation and allocation failure remain distinct.
 Local limits and cumulative `ImageBudget` work quotas continue independently.
 
 The JPEG encoder borrows pixels. Its 8 KiB fixed owner covers a 512-byte MCU,
-a bounded20×20 RGB normalization tile, stack chroma/quantization plans and
-transform scratch; no frame or coefficient cache is retained. Optimal tables
+a bounded18×18 packed tile reused from RGB through signed horizontal chroma,
+stack plans, a 54-byte caller row and transform scratch; no frame or coefficient
+cache is retained. The quantization plan uses256 stack bytes. Optimal tables
 use two passes; color restarts use fixed format tables in one pass. It admits
 16 KiB for retained coding tables and coarse
 temporary table-building capacity before allocation, including grayscale tree/
