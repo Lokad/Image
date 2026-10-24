@@ -121,22 +121,30 @@ public sealed class AsyncInputTests
         using var caller = budget.Reserve(77);
         using var input = new AsyncOnlyInput(encoded) { Pause = true };
         var pending = budget.DecodeAsync(input, new() { Limits = limits }).AsTask();
-        await input.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5));
-        Assert.False(pending.IsCompleted); Assert.Equal(0, budget.RemainingWorkingBytes);
-        using var competing = new AsyncOnlyInput(encoded);
-        var failure = await Assert.ThrowsAsync<ImageLimitException>(() => budget.IdentifyAsync(competing, limits).AsTask());
-        Assert.Equal(ImageLimitScope.SharedBudget, failure.Scope); Assert.Equal(ImageLimitKind.WorkingBytes, failure.Limit);
-        Assert.Equal(0, competing.ReadCalls);
-        input.Resume.TrySetResult();
-        using var result = await pending;
-        var expected = OriginalPixels.Bytes(result.Image);
-        Assert.Equal(limits.MaxWorkingBytes - expected.Length, budget.RemainingWorkingBytes);
-        Assert.True(budget.ConsumedWork > encoded.Length); Assert.False(input.WasDisposed);
-        using var anotherInput = new AsyncOnlyInput(encoded);
-        using var another = await ImageCodec.DecodeAsync(anotherInput);
-        Assert.Equal(expected, OriginalPixels.Bytes(another));
-        another.Dispose(); Assert.Equal(expected, OriginalPixels.Bytes(result.Image));
-        result.Dispose(); Assert.Equal(limits.MaxWorkingBytes, budget.RemainingWorkingBytes);
+        try
+        {
+            await input.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5));
+            Assert.False(pending.IsCompleted); Assert.Equal(0, budget.RemainingWorkingBytes);
+            using var competing = new AsyncOnlyInput(encoded);
+            var failure = await Assert.ThrowsAsync<ImageLimitException>(() => budget.IdentifyAsync(competing, limits).AsTask());
+            Assert.Equal(ImageLimitScope.SharedBudget, failure.Scope); Assert.Equal(ImageLimitKind.WorkingBytes, failure.Limit);
+            Assert.Equal(0, competing.ReadCalls);
+            input.Resume.TrySetResult();
+            using var result = await pending;
+            var expected = OriginalPixels.Bytes(result.Image);
+            Assert.Equal(limits.MaxWorkingBytes - expected.Length, budget.RemainingWorkingBytes);
+            Assert.True(budget.ConsumedWork > encoded.Length); Assert.False(input.WasDisposed);
+            using var anotherInput = new AsyncOnlyInput(encoded);
+            using var another = await ImageCodec.DecodeAsync(anotherInput);
+            Assert.Equal(expected, OriginalPixels.Bytes(another));
+            another.Dispose(); Assert.Equal(expected, OriginalPixels.Bytes(result.Image));
+            result.Dispose(); Assert.Equal(limits.MaxWorkingBytes, budget.RemainingWorkingBytes);
+        }
+        finally
+        {
+            input.Resume.TrySetResult();
+            (await pending).Dispose();
+        }
     }
 
     [Fact]
@@ -148,11 +156,20 @@ public sealed class AsyncInputTests
         using var cancellation = new CancellationTokenSource();
         using var input = new AsyncOnlyInput(encoded) { Pause = true };
         var pending = budget.DecodeAsync(input, new() { Limits = limits }, cancellation.Token).AsTask();
-        await input.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5)); cancellation.Cancel();
-        var failure = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => pending);
-        Assert.Equal(cancellation.Token, failure.CancellationToken); Assert.Equal(cancellation.Token, input.LastToken);
-        Assert.Equal(0, budget.ConsumedWork); Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes);
-        Assert.Equal(budget.MaxWork, budget.RemainingWork); Assert.False(input.WasDisposed);
+        try
+        {
+            await input.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5)); cancellation.Cancel();
+            var failure = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => pending);
+            Assert.Equal(cancellation.Token, failure.CancellationToken); Assert.Equal(cancellation.Token, input.LastToken);
+            Assert.Equal(0, budget.ConsumedWork); Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes);
+            Assert.Equal(budget.MaxWork, budget.RemainingWork); Assert.False(input.WasDisposed);
+        }
+        finally
+        {
+            cancellation.Cancel(); input.Resume.TrySetResult();
+            try { (await pending).Dispose(); }
+            catch (OperationCanceledException) { }
+        }
     }
 
     [Fact]
@@ -194,8 +211,10 @@ public sealed class AsyncInputTests
         {
             ObjectDisposedException.ThrowIf(WasDisposed, this);
             LastToken = cancellationToken; ReadCalls++; LargestRequest = Math.Max(LargestRequest, buffer.Length);
-            await Task.Yield(); cancellationToken.ThrowIfCancellationRequested();
+            // Announce the actual suspension before queuing artificial yield
+            // work, so phase entry does not depend on other test continuations.
             if (Pause) { Entered.TrySetResult(); await Resume.Task.WaitAsync(cancellationToken); }
+            await Task.Yield(); cancellationToken.ThrowIfCancellationRequested();
             if (InvalidCount is { } invalid) return invalid;
             if (Consumed >= FailAfter && Failure is { } failure) throw failure;
             if (Consumed == data.Length) { EofReads++; CancelAtEof?.Cancel(); return 0; }
