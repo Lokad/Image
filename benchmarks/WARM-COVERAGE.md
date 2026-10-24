@@ -5,6 +5,14 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E202 compiled color matrix](WARM-JPEG-COMPILED-COLOR.md) confirms governed
+RGBA16 JPEG420 at2.168×/upper2.184, saving7.9%elapsed with exact approved-COM
+packets and unchanged1,704,856B admitted peak. Allocation804,075B/op (+56).
+Existing nongovernedRGBA8/16 short boundaries reconcile; no new cases.
+BothOS5,120checks/SAMEactualpackage pass. Other colorJPEG timings stay prior
+production; grayscaleJPEG/PNG/WebP/decode/edit/text evidence remains valid.
+VP8 is the next larger measured gap. Full257case/1× objective stays open.
+
 [E197 common-count entropy](WARM-VP8L-COMMON-ENTROPY.md) independently
 confirms existing VP8L at1.798×/upper1.829, saving26.5% elapsed with unchanged
 48,184,648B/op and exact183,812B. Affected VP8 current short2.346×/upper2.465,

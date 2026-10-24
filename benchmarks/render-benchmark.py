@@ -211,14 +211,14 @@ def render():
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
-        row('JPEG RGBA8 4:2:0', 'warm-jpeg-entropy-records-evidence.json', ['cases', 'rgba8', -1], 'WARM-JPEG-ENTROPY-RECORDS.md', verification='Gap (short; qualified)'),
+        row('JPEG RGBA8 4:2:0', 'warm-jpeg-compiled-color-evidence.json', ['cases', 'rgba8', -1], 'WARM-JPEG-COMPILED-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG RGBA8 4:2:0 / ImageBudget quota', 'warm-shared-budget-evidence.json', ['cases', 'JpegBudgetEncode4208', -1], 'WARM-SHARED-BUDGET.md', verification='Prior production; reconfirm'),
-        row('JPEG RGBA16 4:2:0 / caller IMemoryBudget', 'warm-jpeg-vector-word-normalization-evidence.json', ['observations', -1], 'WARM-JPEG-VECTOR-WORD-NORMALIZATION.md', confirmed=True),
+        row('JPEG RGBA16 4:2:0 / caller IMemoryBudget', 'warm-jpeg-compiled-color-evidence.json', ['observations', -1], 'WARM-JPEG-COMPILED-COLOR.md', confirmed=True),
         row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420Restart8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
-        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-vector-word-normalization-evidence.json', ['cases', 'rgba16', -1], 'WARM-JPEG-VECTOR-WORD-NORMALIZATION.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-compiled-color-evidence.json', ['cases', 'rgba16', -1], 'WARM-JPEG-COMPILED-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-gray-entropy-records-evidence.json', ['observations', -1], 'WARM-JPEG-GRAY-ENTROPY-RECORDS.md', confirmed=True),
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-gray-entropy-records-evidence.json', ['cases', 'callerGray', -1], 'WARM-JPEG-GRAY-ENTROPY-RECORDS.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
@@ -349,7 +349,7 @@ def render():
     assert parity_count + confidence_count + gap_count + reconfirm_count + cost_count == 240
     return f'''# Lokad.Image benchmark state
 
-Updated 2026-10-24. **Declared encoder and decoder byte controls are qualified**
+Updated 2026-10-25. **Declared encoder and decoder byte controls are qualified**
 against pinned FFmpeg builds/settings; warm single-CPU parity remains open.
 Only explicitly approved encoder-attribution metadata may differ; see
 [codec compatibility](codec-parity.md).
@@ -368,13 +368,14 @@ are exact, including checksums/framing. Both platforms pass4,807 Release checks,
 three examples. Four current RGBA8 encoder anchors have guarded packet-exact cost
 screens. JPEG has independently confirmed improvements from bounded MCU conversion,
 integer SIMD transforms/quantization, bounded chroma rows and coefficient replay.
-Governed color JPEG420 from RGBA16 confirms2.355× after exact vector
-normalization, using5.5% less elapsed than its preceding confirmation, with
-unchanged804,019B/op and1,704,856B shared-root peak. Both platforms pass5,117checks
-and the same actual package; [normalization evidence](../benchmarks/WARM-JPEG-VECTOR-WORD-NORMALIZATION.md).
-Nongoverned RGBA16 current short2.279×/upper2.627 uses372,859B/op. Other affected
-RGBA16 JPEG timings remain historical; RGBA8/caller-sample evidence is unchanged.
-JPEG and VP8 now lead the encoder gaps.
+Governed color JPEG420 from RGBA16 confirms2.168×/upper2.184 after compiling
+the unchanged color matrix, using7.9% less elapsed than its preceding confirmation.
+Allocation is804,075B/op (+56; attribution unproven); shared-root peak remains
+1,704,856B. Both platforms pass5,120checks and the SAMEactualpackage;
+[matrix evidence](../benchmarks/WARM-JPEG-COMPILED-COLOR.md).
+Nongoverned RGBA8/16 current shorts2.154×/2.127× use372,856B/op. Other affected
+colorJPEG CPU evidence remains historical; grayscaleJPEG is unchanged.
+VP8 is the next larger measured encoder gap. Full parity remains open.
 The grayscale 0.962× claim came from the replaced 58,823-byte encoder. Current
 raw-exact 58,910-byte RGBA-gray encoding confirms1.726× after entropy replay,
 using35.3% less elapsed than its preceding confirmation and154,883B/op. Caller-gray

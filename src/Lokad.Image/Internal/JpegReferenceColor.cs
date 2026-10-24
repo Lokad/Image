@@ -1,18 +1,21 @@
+using System.Runtime.CompilerServices;
+
 namespace Lokad.Image.Internal;
 
 // Pinned full-range BT.601 conversion: decimal matrix -> limited Q6 -> full Q7
 // -> byte, preserving each integer rounding stage. No frame or row storage.
 internal static partial class JpegReferenceColor
 {
-    private static readonly int Yr = Coefficient(299, 219), Yg = Coefficient(587, 219), Yb = Coefficient(114, 219);
-    private static readonly int Ur = Coefficient(-169, 224), Ug = Coefficient(-331, 224), Ub = Coefficient(500, 224);
-    private static readonly int Vr = Coefficient(500, 224), Vg = Coefficient(-419, 224), Vb = Coefficient(-81, 224);
-
-    private static int Coefficient(int value, int range)
-    {
-        var magnitude = (int)((Math.Abs((long)value) * range * 32768 + 127500) / 255000);
-        return value < 0 ? -magnitude : magnitude;
-    }
+    // Same independently derived rounded coefficients, evaluated at compile time.
+    private const int Yr = (int)((299L * 219 * 32768 + 127500) / 255000);
+    private const int Yg = (int)((587L * 219 * 32768 + 127500) / 255000);
+    private const int Yb = (int)((114L * 219 * 32768 + 127500) / 255000);
+    private const int Ur = -(int)((169L * 224 * 32768 + 127500) / 255000);
+    private const int Ug = -(int)((331L * 224 * 32768 + 127500) / 255000);
+    private const int Ub = (int)((500L * 224 * 32768 + 127500) / 255000);
+    private const int Vr = (int)((500L * 224 * 32768 + 127500) / 255000);
+    private const int Vg = -(int)((419L * 224 * 32768 + 127500) / 255000);
+    private const int Vb = -(int)((81L * 224 * 32768 + 127500) / 255000);
 
     private static byte FullRange(int limitedQ6, int range)
     {
@@ -29,11 +32,13 @@ internal static partial class JpegReferenceColor
         cr = FullRange((Vr * r + Vg * g + Vb * b + (128 << 15) + 256) >> 9, 224);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static byte Luma(int r, int g, int b)
         => FullRange((Yr * r + Yg * g + Yb * b + (16 << 15) + 256) >> 9, 219);
 
     // An even-width source combines RGB pairs before matrix rounding. Odd
     // widths instead filter full-resolution Q6 matrix samples horizontally.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static void LimitedChroma(int r, int g, int b, bool pair, out int cb, out int cr)
     {
         var shift = pair ? 10 : 9;

@@ -1,6 +1,6 @@
 # Lokad.Image benchmark state
 
-Updated 2026-10-24. **Declared encoder and decoder byte controls are qualified**
+Updated 2026-10-25. **Declared encoder and decoder byte controls are qualified**
 against pinned FFmpeg builds/settings; warm single-CPU parity remains open.
 Only explicitly approved encoder-attribution metadata may differ; see
 [codec compatibility](codec-parity.md).
@@ -19,13 +19,14 @@ are exact, including checksums/framing. Both platforms pass4,807 Release checks,
 three examples. Four current RGBA8 encoder anchors have guarded packet-exact cost
 screens. JPEG has independently confirmed improvements from bounded MCU conversion,
 integer SIMD transforms/quantization, bounded chroma rows and coefficient replay.
-Governed color JPEG420 from RGBA16 confirms2.355× after exact vector
-normalization, using5.5% less elapsed than its preceding confirmation, with
-unchanged804,019B/op and1,704,856B shared-root peak. Both platforms pass5,117checks
-and the same actual package; [normalization evidence](../benchmarks/WARM-JPEG-VECTOR-WORD-NORMALIZATION.md).
-Nongoverned RGBA16 current short2.279×/upper2.627 uses372,859B/op. Other affected
-RGBA16 JPEG timings remain historical; RGBA8/caller-sample evidence is unchanged.
-JPEG and VP8 now lead the encoder gaps.
+Governed color JPEG420 from RGBA16 confirms2.168×/upper2.184 after compiling
+the unchanged color matrix, using7.9% less elapsed than its preceding confirmation.
+Allocation is804,075B/op (+56; attribution unproven); shared-root peak remains
+1,704,856B. Both platforms pass5,120checks and the SAMEactualpackage;
+[matrix evidence](../benchmarks/WARM-JPEG-COMPILED-COLOR.md).
+Nongoverned RGBA8/16 current shorts2.154×/2.127× use372,856B/op. Other affected
+colorJPEG CPU evidence remains historical; grayscaleJPEG is unchanged.
+VP8 is the next larger measured encoder gap. Full parity remains open.
 The grayscale 0.962× claim came from the replaced 58,823-byte encoder. Current
 raw-exact 58,910-byte RGBA-gray encoding confirms1.726× after entropy replay,
 using35.3% less elapsed than its preceding confirmation and154,883B/op. Caller-gray
@@ -267,14 +268,14 @@ is a CPU-parity confirmation.
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,980.90 | 3,855.74 | 1.032 / 1.135 | 556,284 | Prior production; reconfirm |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,579.93 | 2,354.66 | 1.096 / 1.227 | 294,116 | Prior production; reconfirm |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,633.91 | 2,421.91 | 1.088 / 1.220 | 294,116 | Prior production; reconfirm |
-| [JPEG RGBA8 4:2:0](../benchmarks/WARM-JPEG-ENTROPY-RECORDS.md) | 4,017.11 | 1,766.53 | 2.274 / 2.628 | 372,856 | Gap (short; qualified) |
+| [JPEG RGBA8 4:2:0](../benchmarks/WARM-JPEG-COMPILED-COLOR.md) | 3,802.65 | 1,765.18 | 2.154 / 2.499 | 372,856 | Gap (short; qualified) |
 | [JPEG RGBA8 4:2:0 / ImageBudget quota](../benchmarks/WARM-SHARED-BUDGET.md) | 2,026.04 | 1,769.43 | 1.145 / 1.272 | 297,781 | Prior production; reconfirm |
-| [JPEG RGBA16 4:2:0 / caller IMemoryBudget](../benchmarks/WARM-JPEG-VECTOR-WORD-NORMALIZATION.md) | 4,332.72 | 1,840.05 | 2.355 / 2.369 | 804,019 | Gap (independent) |
+| [JPEG RGBA16 4:2:0 / caller IMemoryBudget](../benchmarks/WARM-JPEG-COMPILED-COLOR.md) | 3,988.50 | 1,839.84 | 2.168 / 2.184 | 804,075 | Gap (independent) |
 | [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,019.53 | 1,611.25 | 1.253 / 1.455 | 297,781 | Prior production; reconfirm |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,310.38 | 1,769.17 | 1.306 / 1.488 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,393.98 | 1,839.60 | 1.301 / 1.415 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,444.30 | 1,841.37 | 1.327 / 1.443 | 263,787 | Prior production; reconfirm |
-| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-VECTOR-WORD-NORMALIZATION.md) | 4,188.69 | 1,837.74 | 2.279 / 2.627 | 372,859 | Gap (short; qualified) |
+| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-COMPILED-COLOR.md) | 3,919.58 | 1,842.55 | 2.127 / 2.509 | 372,856 | Gap (short; qualified) |
 | [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAY-ENTROPY-RECORDS.md) | 2,432.29 | 1,409.20 | 1.726 / 1.739 | 154,883 | Gap (independent) |
 | [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAY-ENTROPY-RECORDS.md) | 2,038.89 | 1,080.83 | 1.886 / 2.154 | 154,886 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |
