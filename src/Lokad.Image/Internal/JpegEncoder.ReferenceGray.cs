@@ -63,16 +63,7 @@ internal static partial class JpegEncoder
             context.Work(ReferenceGrayBlockWork);
             if (image is null && source.Format == JpegSampleFormat.Grayscale) source.CopyGrayBlock(left, top, samples);
             else
-                for (var y = 0; y < 8; y++)
-                for (var x = 0; x < 8; x++)
-                {
-                    ReferenceRgb(image, source, Math.Min(left + x, width - 1), Math.Min(top + y, height - 1),
-                        background, out var r, out var g, out var b);
-                    // Preserve separate binary64 products/additions and nearest
-                    // rounding at the pinned RGB-to-gray normalization boundary.
-                    var luma = (0.299 * r + 0.587 * g) + 0.114 * b;
-                    samples[y * 8 + x] = (byte)Math.Floor(luma + 0.5);
-                }
+                JpegGrayPreparation.CopyBlock(image, source, width, height, left, top, background, samples);
             JpegGrayReferenceTransform.Forward(samples, transformed);
             JpegGrayReferenceTransform.Quantize(transformed, quantization, coefficients);
             ReferenceBlock(coefficients, 0, previous, histograms, tables, writer);

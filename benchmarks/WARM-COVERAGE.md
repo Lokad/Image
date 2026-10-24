@@ -5,6 +5,15 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E156 grayscale row preparation](WARM-JPEG-GRAY-ROWS.md) confirms the existing
+RGBA-to-gray control at3.697×/upper3.719,30.8% less elapsed than its preceding
+confirmation,154,838B/op and raw-exact58,910-byte packets. The direct caller-gray
+branch is unchanged, so its E154 current4.103× screen/154,843B/op remains valid.
+Both platforms pass5,084 checks and the same actual private package. No cases
+were added; only RGBA/RGB preparation CPU proofs are affected. Color JPEG,
+other codecs/decoders/editing/text reuse unchanged-path evidence. Older entries
+below retain their producer scopes and are superseded where affected.
+
 [E154 grayscale factorization](WARM-JPEG-GRAY-FACTOR.md) confirms the existing
 RGBA-to-gray control at5.365×/upper5.410, using23.7% less elapsed than its preceding
 screen with unchanged154,840B/op and exact58,910-byte packets. The existing

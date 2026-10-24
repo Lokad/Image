@@ -219,7 +219,7 @@ def render():
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-sparse-scan-evidence.json', ['cases', 'rgba16', -1], 'WARM-JPEG-SPARSE-SCAN.md', verification='Gap (short; qualified)'),
-        row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-gray-factor-evidence.json', ['observations', -1], 'WARM-JPEG-GRAY-FACTOR.md', confirmed=True),
+        row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-gray-rows-evidence.json', ['observations', -1], 'WARM-JPEG-GRAY-ROWS.md', confirmed=True),
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-gray-factor-evidence.json', ['cases', 'callerGray', -1], 'WARM-JPEG-GRAY-FACTOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / AC trellis and padding pruning', 'jpeg420-ac-trellis-evidence.json', ['cases', 'Encode420_8', -1], 'JPEG420-AC-TRELLIS.md', verification='Cost screen (CPU parity deferred)'),
@@ -375,14 +375,15 @@ have current 2.732×/2.611× screens and 372,811 B/op. Each platform passes 5,07
 checks and validates the same actual private package;
 [scan evidence](../benchmarks/WARM-JPEG-SPARSE-SCAN.md). Immutable workers were reused.
 The grayscale 0.962× claim came from the replaced 58,823-byte encoder. The current
-raw-exact 58,910-byte control confirms a 5.365× gap after integer factorization,
-using 23.7% less elapsed than its preceding screen, with unchanged 154,840 B/op.
-The existing caller-gray boundary now has a current 4.103× screen and 154,843 B/op;
-it bypasses RGBA normalization on both subjects. Each platform passes 5,079 checks
-and the same actual private package; [gray evidence](../benchmarks/WARM-JPEG-GRAY-FACTOR.md).
-The reference is approved standalone SIMD libjpeg-turbo for this one-component
-scope. Gray remains the next priority. Older affected gray timings stay historical;
-other codecs/decoders/editing/text and color-JPEG confirmations are unchanged.
+raw-exact 58,910-byte control confirms a 3.697× gap after row preparation,
+using 30.8% less elapsed than its preceding confirmation, with 154,838 B/op.
+The unchanged caller-gray boundary retains its current 4.103× screen and
+154,843 B/op; it bypasses RGBA normalization on both subjects. Each platform
+passes 5,084 checks and the same actual private package;
+[gray evidence](../benchmarks/WARM-JPEG-GRAY-ROWS.md). The reference is approved
+standalone SIMD libjpeg-turbo for this one-component scope. Grayscale remains
+the next priority. Older affected timings stay historical; color JPEG, other
+codecs/decoders/editing/text and their unchanged confirmations are reused.
 VP8L now confirms a3.091× gap after exact paired-population costs, saving24.5%
 elapsed and8,480 allocated bytes/op against the preceding confirmation. The
 paired-cost producer passes 5,062 checks on each platform and validates the same actual private package;
