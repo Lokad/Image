@@ -1,21 +1,38 @@
+using System.Runtime.CompilerServices;
+
 namespace Lokad.Image.Internal;
 
 // ALPH preparation supplies pixels with A/R/B zero and filtered alpha in green.
 // The caller admits and clears the complete histogram; all storage stays borrowed.
 internal static class Vp8lGreenPredictorHistogram
 {
-    internal static int Predict(int mode, int left, int top, int corner, int right)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void Add(Span<int> histogram, int mode, int residual)
+        => histogram[mode * 1024 + 512 + (residual & 255)]++;
+
+    // Every mode consumes the same neighbours. Share their loads and repeated
+    // averages, preserving the individual predictors' rounding and tie rules.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static void AccumulateInterior(Span<int> histogram, int actual,
+        int left, int top, int corner, int right)
     {
-        static int Average(int a, int b) => (a + b) / 2;
-        static int Half(int a, int c) => Math.Clamp(a + (a - c) / 2, 0, 255);
-        return mode switch {
-            0 => 0, 1 => left, 2 => top, 3 => right, 4 => corner,
-            5 => Average(Average(left, right), top), 6 => Average(left, corner),
-            7 => Average(left, top), 8 => Average(corner, top), 9 => Average(top, right),
-            10 => Average(Average(left, corner), Average(top, right)),
-            11 => Math.Abs(top - corner) < Math.Abs(left - corner) ? left : top,
-            12 => Math.Clamp(left + top - corner, 0, 255),
-            13 => Half(Average(left, top), corner), _ => throw new ArgumentOutOfRangeException(nameof(mode)) };
+        var leftCorner = (left + corner) / 2;
+        var leftTop = (left + top) / 2;
+        var topRight = (top + right) / 2;
+        Add(histogram, 0, actual);
+        Add(histogram, 1, actual - left);
+        Add(histogram, 2, actual - top);
+        Add(histogram, 3, actual - right);
+        Add(histogram, 4, actual - corner);
+        Add(histogram, 5, actual - ((left + right) / 2 + top) / 2);
+        Add(histogram, 6, actual - leftCorner);
+        Add(histogram, 7, actual - leftTop);
+        Add(histogram, 8, actual - (corner + top) / 2);
+        Add(histogram, 9, actual - topRight);
+        Add(histogram, 10, actual - (leftCorner + topRight) / 2);
+        Add(histogram, 11, actual - (Math.Abs(top - corner) < Math.Abs(left - corner) ? left : top));
+        Add(histogram, 12, actual - Math.Clamp(left + top - corner, 0, 255));
+        Add(histogram, 13, actual - Math.Clamp(leftTop + (leftTop - corner) / 2, 0, 255));
     }
 
     internal static void Build(ReadOnlySpan<uint> pixels, int width, int height,
@@ -39,14 +56,14 @@ internal static class Vp8lGreenPredictorHistogram
         {
             context.Work(56);
             var at = y * width + x; var actual = (int)(pixels[at] >> 8);
-            for (var mode = 0; mode < 14; mode++)
+            if (y == 0 || x == 0)
             {
-                var prediction = y == 0 ? x == 0 ? 0 : (int)(pixels[at - 1] >> 8)
-                    : x == 0 ? (int)(pixels[at - width] >> 8)
-                    : Predict(mode, (int)(pixels[at - 1] >> 8), (int)(pixels[at - width] >> 8),
-                        (int)(pixels[at - width - 1] >> 8), (int)(pixels[x == width - 1 ? y * width : at - width + 1] >> 8));
-                histogram[mode * 1024 + 512 + ((actual - prediction) & 255)]++;
+                var prediction = y == 0 ? x == 0 ? 0 : (int)(pixels[at - 1] >> 8) : (int)(pixels[at - width] >> 8);
+                for (var mode = 0; mode < 14; mode++) Add(histogram, mode, actual - prediction);
             }
+            else AccumulateInterior(histogram, actual,
+                (int)(pixels[at - 1] >> 8), (int)(pixels[at - width] >> 8),
+                (int)(pixels[at - width - 1] >> 8), (int)(pixels[x == width - 1 ? y * width : at - width + 1] >> 8));
         }
     }
 }

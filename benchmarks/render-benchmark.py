@@ -225,7 +225,7 @@ def render():
         row('JPEG 4:2:0 from caller RGB / AC trellis and padding pruning', 'jpeg420-ac-trellis-evidence.json', ['cases', 'Encode420_8', -1], 'JPEG420-AC-TRELLIS.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque‡', 'vp8-noise-spectrum-evidence.json', ['observations', 0], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 1], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
-        row('VP8 RGBA8', 'warm-vp8l-common-entropy-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8L-COMMON-ENTROPY.md', verification='Gap (short; qualified)'),
+        row('VP8 RGBA8', 'warm-vp8-fused-green-histogram-evidence.json', ['observations', -1], 'WARM-VP8-FUSED-GREEN-HISTOGRAM.md', confirmed=True),
         row('WebP VP8 + alpha from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 3], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-histogram384-evidence.json', ['observations', 0], 'WARM-VP8-HISTOGRAM384.md', verification='Cost screen (CPU parity deferred)'),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-common-entropy-evidence.json', ['observations', -1], 'WARM-VP8L-COMMON-ENTROPY.md', confirmed=True),
@@ -389,10 +389,11 @@ Other codecs, decoders, editing and text reuse
 unchanged confirmations where their production paths remain unchanged.
 VP8L now independently confirms1.798×/upper1.829 after common-count entropy
 inlining, using26.5% less elapsed than its preceding confirmation, with unchanged
-48,184,648B/op and exact183,812B packets. Affected VP8 current short2.346×/upper2.465
-uses unchanged24,329,736B/op and exact98,590B packets; no independent VP8 speedup
-claim. Both platforms pass5,119checks and the SAMEactualpackage;
-[entropy evidence](../benchmarks/WARM-VP8L-COMMON-ENTROPY.md).
+48,184,648B/op and exact183,812B packets. Current VP8 confirms 2.210×/upper 2.223 after fused green-only alpha
+histograms, saving 5.5% elapsed with unchanged 24,329,736 B/op and exact
+98,590 B packets. Both platforms pass 5,120 checks and the same actual package;
+[predictor evidence](../benchmarks/WARM-VP8-FUSED-GREEN-HISTOGRAM.md).
+JPEG, opaque VP8 and full-color VP8L paths reuse unchanged evidence.
 The unchanged large-count formulas, work, ownership and shared admission remain.
 JPEG and VP8 now lead the measured encoder gaps; full parity stays open.
 No image/settings controls were added.

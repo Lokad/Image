@@ -40,10 +40,11 @@ Other codecs, decoders, editing and text reuse
 unchanged confirmations where their production paths remain unchanged.
 VP8L now independently confirms1.798×/upper1.829 after common-count entropy
 inlining, using26.5% less elapsed than its preceding confirmation, with unchanged
-48,184,648B/op and exact183,812B packets. Affected VP8 current short2.346×/upper2.465
-uses unchanged24,329,736B/op and exact98,590B packets; no independent VP8 speedup
-claim. Both platforms pass5,119checks and the SAMEactualpackage;
-[entropy evidence](../benchmarks/WARM-VP8L-COMMON-ENTROPY.md).
+48,184,648B/op and exact183,812B packets. Current VP8 confirms 2.210×/upper 2.223 after fused green-only alpha
+histograms, saving 5.5% elapsed with unchanged 24,329,736 B/op and exact
+98,590 B packets. Both platforms pass 5,120 checks and the same actual package;
+[predictor evidence](../benchmarks/WARM-VP8-FUSED-GREEN-HISTOGRAM.md).
+JPEG, opaque VP8 and full-color VP8L paths reuse unchanged evidence.
 The unchanged large-count formulas, work, ownership and shared admission remain.
 JPEG and VP8 now lead the measured encoder gaps; full parity stays open.
 No image/settings controls were added.
@@ -282,7 +283,7 @@ is a CPU-parity confirmation.
 | [JPEG 4:2:0 from caller RGB / AC trellis and padding pruning](../benchmarks/JPEG420-AC-TRELLIS.md) | 68,162.15 | 1,579.24 | 43.161 / 50.354 | 170,648 | Cost screen (CPU parity deferred) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Prior production; reconfirm |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 75,226.22 | 15,616.85 | 4.817 / 5.060 | 1,006,520 | Prior production; reconfirm |
-| [VP8 RGBA8](../benchmarks/WARM-VP8L-COMMON-ENTROPY.md) | 125,599.61 | 53,530.57 | 2.346 / 2.465 | 24,329,736 | Gap (short; qualified) |
+| [VP8 RGBA8](../benchmarks/WARM-VP8-FUSED-GREEN-HISTOGRAM.md) | 118,536.73 | 53,629.80 | 2.210 / 2.223 | 24,329,736 | Gap (independent) |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 83,863.51 | 53,727.26 | 1.561 / 1.652 | 1,537,304 | Prior production; reconfirm |
 | [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-HISTOGRAM384.md) | 19,502.47 | 53,435.71 | 0.365 / 0.433 | 2,036,564 | Prior production; reconfirm |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-COMMON-ENTROPY.md) | 218,554.41 | 121,565.25 | 1.798 / 1.829 | 48,184,648 | Gap (independent) |

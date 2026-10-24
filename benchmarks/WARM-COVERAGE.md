@@ -5,6 +5,13 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E206 fused alpha histograms](WARM-VP8-FUSED-GREEN-HISTOGRAM.md) confirms
+VP8 at 2.210×/upper 2.223, saving 5.5% elapsed with unchanged 24,329,736 B/op
+and raw-exact 98,590 B. Both platforms pass 5,120 checks and the same package.
+Only compressed-alpha prediction changes; affected VP8 timings stay historical.
+Opaque VP8/full-color VP8L/JPEG/PNG/decode/edit/text evidence remains valid.
+No cases added; full 257-case/1× and readiness remain open.
+
 [E202 compiled color matrix](WARM-JPEG-COMPILED-COLOR.md) confirms governed
 RGBA16 JPEG420 at2.168×/upper2.184, saving7.9%elapsed with exact approved-COM
 packets and unchanged1,704,856B admitted peak. Allocation804,075B/op (+56).

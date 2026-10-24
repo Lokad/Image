@@ -12,13 +12,19 @@ public sealed class Vp8lGreenPredictorHistogramTests
     {
         uint state = 0x6d2b79f5;
         uint Next() { state ^= state << 13; state ^= state >> 17; state ^= state << 5; return state; }
+        var interior = new int[14 * 1024];
         for (var i = 0; i < 65536; i++)
         {
             var l = (int)(Next() & 255); var t = (int)(Next() & 255);
             var c = (int)(Next() & 255); var r = (int)(Next() & 255);
+            var sample = i & 255;
+            Vp8lGreenPredictorHistogram.AccumulateInterior(interior, sample, l, t, c, r);
             for (var mode = 0; mode < 14; mode++)
-                Assert.Equal((int)(WebpLosslessDecoder.Predict(mode, (uint)l << 8, (uint)t << 8, (uint)c << 8, (uint)r << 8) >> 8 & 255),
-                    Vp8lGreenPredictorHistogram.Predict(mode, l, t, c, r));
+            {
+                var prediction = (int)(WebpLosslessDecoder.Predict(mode, (uint)l << 8, (uint)t << 8, (uint)c << 8, (uint)r << 8) >> 8 & 255);
+                var at = mode * 1024 + 512 + ((sample - prediction) & 255);
+                Assert.Equal(1, interior[at]); interior[at] = 0;
+            }
         }
         var original = OriginalPixels.Generate(513, 259, 8); original[3] = original[513 * 4 - 1] = 0;
         Assert.Equal("70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", Convert.ToHexStringLower(SHA256.HashData(original)));
