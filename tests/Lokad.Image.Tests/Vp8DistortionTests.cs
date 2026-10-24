@@ -7,6 +7,78 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8DistortionTests
 {
+    [Fact]
+    public void OriginalByteDomainRetainsEverySpectralMagnitudeAndFrozenWeightedEnergy()
+    {
+        var pixels = new byte[128]; var zero = new byte[16];
+        Span<ushort> weights = stackalloc ushort[16]; Vp8Distortion.TextureWeights(weights);
+        Span<ushort> isolatedWeights = stackalloc ushort[16];
+        Span<byte> packed = stackalloc byte[4]; uint state = 0x9e3779b9;
+        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
+        for (var sample = 0; sample < 102656; sample++)
+        {
+            var stride = (sample % 4) switch { 0 => 4, 1 => 7, 2 => 16, _ => 31 }; var offset = sample % 4;
+            pixels.AsSpan().Fill(0x4d);
+            for (var y = 0; y < 4; y++) for (var x = 0; x < 4; x++)
+            {
+                byte value;
+                if (sample < 256) value = (byte)sample;
+                else if (sample < 4352)
+                {
+                    var impulse = sample - 256; value = y * 4 + x == impulse / 256 ? (byte)(impulse % 256) : (byte)0;
+                }
+                else if (sample < 69888) value = (byte)((((sample - 4352) >> (y * 4 + x)) & 1) * 255);
+                else { state ^= state << 13; state ^= state >> 17; state ^= state << 5; value = (byte)state; }
+                pixels[offset + y * stride + x] = value;
+            }
+            var before = PixelChecksum(pixels); var input = pixels.AsSpan(offset); var energy = 0;
+            for (var v = 0; v < 4; v++) for (var u = 0; u < 4; u++)
+            {
+                var expected = 0;
+                for (var y = 0; y < 4; y++) for (var x = 0; x < 4; x++)
+                    expected += SequencySign(v, y) * SequencySign(u, x) * input[y * stride + x];
+                isolatedWeights.Clear(); isolatedWeights[v * 4 + u] = 256;
+                // A zero second block and one weight of256 expose the complete
+                // coefficient magnitude through the existing metric, without
+                // losing any bits to its final division by32.
+                var magnitude = Vp8Distortion.Texture4(input, stride, zero, 4, isolatedWeights);
+                Assert.Equal(Math.Abs(expected) * 8, magnitude);
+                energy += weights[v * 4 + u] * (magnitude / 8);
+            }
+            Assert.Equal(energy >> 5, Vp8Distortion.Texture4(input, stride, zero, 4, weights));
+            Assert.Equal(before, PixelChecksum(pixels));
+            BinaryPrimitives.WriteInt32LittleEndian(packed, energy); hash.AppendData(packed);
+        }
+        // Frozen from the independently qualified matrix before factorization:
+        //256constants,4096impulses,all65536endpoint masks and32768seeded blocks.
+        Assert.Equal("68204ba3a00ef287e008c94b17e01fd3a0e3a65bb1e8231cdbce139e55abec8d",
+            Convert.ToHexStringLower(hash.GetHashAndReset()));
+    }
+
+    [Fact]
+    public void TextureMetricsAllocateNoManagedStorage()
+    {
+        var a = new byte[256]; var b = new byte[256]; var weights = new ushort[16];
+        for (var i = 0; i < a.Length; i++) { a[i] = (byte)(i * 13); b[i] = (byte)(i * 17 + 3); }
+        Vp8Distortion.TextureWeights(weights); var result = 0;
+        for (var i = 0; i < 1024; i++) result ^= Vp8Distortion.Texture16(a, 16, b, 16, weights);
+        var before = GC.GetAllocatedBytesForCurrentThread();
+        for (var i = 0; i < 1024; i++) result ^= Vp8Distortion.Texture16(a, 16, b, 16, weights);
+        var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+        Assert.Equal(0, result); Assert.Equal(0, allocated);
+    }
+
+    private static int SequencySign(int frequency, int position)
+    {
+        var gray = frequency ^ (frequency >> 1); var mask = (gray >> 1) | ((gray & 1) << 1);
+        var bits = mask & position; return ((bits ^ (bits >> 1)) & 1) == 0 ? 1 : -1;
+    }
+
+    private static uint PixelChecksum(ReadOnlySpan<byte> pixels)
+    {
+        uint result = 0; foreach (var value in pixels) result = unchecked(result * 31 + value); return result;
+    }
+
     private static void Predict(ReadOnlySpan<byte> plane, int stride, int x, int y, int size, Span<byte> output)
     {
         ReadOnlySpan<byte> top = y == 0 ? default : plane.Slice((y - 1) * stride + x, size);

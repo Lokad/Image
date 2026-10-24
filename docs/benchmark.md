@@ -28,9 +28,12 @@ and the same actual private package pass on each platform;
 whose new timing/allocation comparison remains open.
 VP8L now confirms a3.091× gap after exact paired-population costs, saving24.5%
 elapsed and8,480 allocated bytes/op against the preceding confirmation. The
-affected VP8 alpha anchor has a3.683× current-cost screen, without an independent
-speedup claim. The5,062-check producer and same actual private package pass on
-each platform; [paired-cost evidence](../benchmarks/WARM-VP8L-PAIRED-POPULATION.md).
+paired-cost producer passes 5,062 checks on each platform and validates the same actual private package;
+[paired-cost evidence](../benchmarks/WARM-VP8L-PAIRED-POPULATION.md).
+VP8 now confirms a 3.362× gap after exact texture butterflies, using 8.6% less elapsed
+time than the preceding screen, with unchanged allocations/packets.
+Each platform passes 5,064 checks and validates the same actual private package;
+[texture evidence](../benchmarks/WARM-VP8-TEXTURE-BUTTERFLY.md).
 
 Other replaced encoder observations remain historical.
 All17 historical BCL PNG timing rows below are superseded, as are the earlier
@@ -265,7 +268,7 @@ is a CPU-parity confirmation.
 | [JPEG 4:2:0 from caller RGB / AC trellis and padding pruning](../benchmarks/JPEG420-AC-TRELLIS.md) | 68,162.15 | 1,579.24 | 43.161 / 50.354 | 170,648 | Cost screen (CPU parity deferred) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Prior production; reconfirm |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 75,226.22 | 15,616.85 | 4.817 / 5.060 | 1,006,520 | Prior production; reconfirm |
-| [VP8 RGBA8](../benchmarks/WARM-VP8L-PAIRED-POPULATION.md) | 197,551.76 | 53,631.60 | 3.683 / 4.104 | 24,080,952 | Gap (short; qualified) |
+| [VP8 RGBA8](../benchmarks/WARM-VP8-TEXTURE-BUTTERFLY.md) | 180,626.55 | 53,726.61 | 3.362 / 3.382 | 24,080,952 | Gap (independent) |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 83,863.51 | 53,727.26 | 1.561 / 1.652 | 1,537,304 | Prior production; reconfirm |
 | [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-HISTOGRAM384.md) | 19,502.47 | 53,435.71 | 0.365 / 0.433 | 2,036,564 | Prior production; reconfirm |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-PAIRED-POPULATION.md) | 375,223.15 | 121,375.26 | 3.091 / 3.127 | 48,056,112 | Gap (independent) |

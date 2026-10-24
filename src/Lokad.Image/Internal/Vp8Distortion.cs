@@ -57,27 +57,26 @@ internal static class Vp8Distortion
         return sum;
     }
 
-    // Sequency Hadamard basis from reversed two-bit Gray-code parity. Unlike
-    // the forwardY2 transform, this projection has NO half-scale or rounding.
-    private static int Basis(int frequency, int position)
-    {
-        var gray = frequency ^ (frequency >> 1); var mask = (gray >> 1) | ((gray & 1) << 1);
-        var bits = mask & position; return ((bits ^ (bits >> 1)) & 1) == 0 ? 1 : -1;
-    }
-
+    // Factor the sequency Hadamard basis from reversed two-bit Gray-code
+    // parity. Unlike forwardY2, this has no half-scale or rounding.
     private static int Energy(ReadOnlySpan<byte> pixels, int stride, ReadOnlySpan<ushort> weights)
     {
         Span<int> rows = stackalloc int[16];
-        for (var y = 0; y < 4; y++) for (var u = 0; u < 4; u++)
+        for (var y = 0; y < 4; y++)
         {
-            var sum = 0; for (var x = 0; x < 4; x++) sum += Basis(u, x) * pixels[y * stride + x];
-            rows[y * 4 + u] = sum;
+            var at = y * stride;
+            var a = pixels[at] + pixels[at + 1]; var b = pixels[at + 2] + pixels[at + 3];
+            var c = pixels[at] - pixels[at + 1]; var d = pixels[at + 2] - pixels[at + 3];
+            rows[y * 4] = a + b; rows[y * 4 + 1] = a - b;
+            rows[y * 4 + 2] = c - d; rows[y * 4 + 3] = c + d;
         }
         var energy = 0;
-        for (var v = 0; v < 4; v++) for (var u = 0; u < 4; u++)
+        for (var u = 0; u < 4; u++)
         {
-            var sum = 0; for (var y = 0; y < 4; y++) sum += Basis(v, y) * rows[y * 4 + u];
-            energy += weights[v * 4 + u] * Math.Abs(sum);
+            var a = rows[u] + rows[4 + u]; var b = rows[8 + u] + rows[12 + u];
+            var c = rows[u] - rows[4 + u]; var d = rows[8 + u] - rows[12 + u];
+            energy += weights[u] * Math.Abs(a + b) + weights[4 + u] * Math.Abs(a - b)
+                + weights[8 + u] * Math.Abs(c - d) + weights[12 + u] * Math.Abs(c + d);
         }
         return energy;
     }
