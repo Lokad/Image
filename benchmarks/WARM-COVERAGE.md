@@ -5,6 +5,14 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E178 VP8 residual preparation](WARM-VP8-VECTOR-RESIDUAL.md) independently
+confirms the existing RGBA8/Q75/method4 control at 2.499×/upper2.518, saving7.6%
+elapsed with unchanged24,080,952 B/op and exact98,590 B packets. Both platforms
+pass5,108 checks and the same actual private package. Only lossy residual pricing
+changes; VP8L/othercodecs/decoders/edit/text reuse unchanged evidence. No cases
+added. Grayscale JPEG now leads the measured gaps; resolve the existing RGBAgray
+short uncertainty before selecting its next substantial primitive.
+
 [E174 JPEG entropy records](WARM-JPEG-ENTROPY-RECORDS.md) confirms the existing
 RGBA16/caller-root control at 2.495×/upper2.510, saving 10.7% elapsed with
 804,019 B/op (+48) and peak1,704,856 B (+128). Canonical packets/pixels remain exact,

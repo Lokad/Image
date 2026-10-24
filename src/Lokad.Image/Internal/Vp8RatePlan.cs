@@ -4,7 +4,7 @@ namespace Lokad.Image.Internal;
 // costs; probabilities and caller buffers remain borrowed. RFC6386 sections11/13
 // supply the mode/coefficient trees and category probabilities. No implementation
 // cost tables are imported. The public encoder borrows this operation-local plan.
-internal sealed class Vp8RatePlan : IDisposable
+internal sealed partial class Vp8RatePlan : IDisposable
 {
     private const int FixedAt = 256, ModesAt = FixedAt + 2048, EobAt = ModesAt + 1008;
     private const int LevelsAt = EobAt + 192, Length = LevelsAt + 4 * 8 * 3 * 68;
@@ -173,6 +173,8 @@ internal sealed class Vp8RatePlan : IDisposable
     internal int Residual(ReadOnlySpan<short> levels, int type, int first, int initialContext, out bool nonzero)
     {
         var values = Values;
+        if (System.Runtime.Intrinsics.X86.Avx2.IsSupported)
+            return ResidualVectors(values, levels, type, first, initialContext, out nonzero);
         if (levels.Length < 16 || (uint)type > 3 || (uint)first > 1 || (uint)initialContext > 2 || first == 1 && levels[0] != 0)
             throw new ArgumentException("Invalid VP8 residual layout or context.");
         var last = -1;

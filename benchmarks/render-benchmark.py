@@ -225,7 +225,7 @@ def render():
         row('JPEG 4:2:0 from caller RGB / AC trellis and padding pruning', 'jpeg420-ac-trellis-evidence.json', ['cases', 'Encode420_8', -1], 'JPEG420-AC-TRELLIS.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque‡', 'vp8-noise-spectrum-evidence.json', ['observations', 0], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 1], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
-        row('VP8 RGBA8', 'warm-vp8-green-prediction-cost-evidence.json', ['observations', -1], 'WARM-VP8-GREEN-PREDICTION-COST.md', confirmed=True),
+        row('VP8 RGBA8', 'warm-vp8-vector-residual-evidence.json', ['observations', -1], 'WARM-VP8-VECTOR-RESIDUAL.md', confirmed=True),
         row('WebP VP8 + alpha from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 3], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-histogram384-evidence.json', ['observations', 0], 'WARM-VP8-HISTOGRAM384.md', verification='Cost screen (CPU parity deferred)'),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8-green-prediction-cost-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8-GREEN-PREDICTION-COST.md', verification='Gap (short; qualified)'),
@@ -383,16 +383,16 @@ has a current2.648× screen and154,836B/op, including normalization on both subj
 Each platform passes5,088checks and the same actual private package;
 [vector-transform evidence](../benchmarks/WARM-JPEG-GRAY-AVX2-TRANSFORM.md).
 The reference is approved standalone SIMD libjpeg-turbo for these one-component
-boundaries. VP8 now has the largest current encoder gap. Older affected
+boundaries. Grayscale JPEG now has the largest measured encoder gaps. Older affected
 gray timings stay historical. Other codecs, decoders, editing and text reuse
 unchanged confirmations where their production paths remain unchanged.
-VP8 now confirms a 2.714× gap after exact green-plane predictor scores, using
-6.0% less elapsed than its preceding confirmation, with unchanged 24,080,952 B/op
-and exact 98,590-byte packets. VP8L has a current 2.437× screen, 48,060,256 B/op
-and exact 183,812-byte packets; no independently confirmed lossless speedup claim.
-Each platform passes 5,101 checks and validates the same actual private package;
+VP8 now confirms a 2.499× gap after exact vector residual preparation, using
+7.6% less elapsed than its preceding confirmation, with unchanged 24,080,952 B/op
+and exact 98,590-byte packets. Each platform passes 5,108 checks and validates
+the same actual package; [residual evidence](../benchmarks/WARM-VP8-VECTOR-RESIDUAL.md).
+VP8L reuses its unchanged current 2.437× screen, 48,060,256 B/op and exact
+183,812-byte packets; no independent lossless speedup claim.
 [predictor-score evidence](../benchmarks/WARM-VP8-GREEN-PREDICTION-COST.md).
-The color-cost math remains unchanged; ordinary predictor dispatch is reconciled.
 No image/settings controls were added.
 
 Other replaced encoder observations remain historical.

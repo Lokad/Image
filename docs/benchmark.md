@@ -34,16 +34,16 @@ has a current2.648× screen and154,836B/op, including normalization on both subj
 Each platform passes5,088checks and the same actual private package;
 [vector-transform evidence](../benchmarks/WARM-JPEG-GRAY-AVX2-TRANSFORM.md).
 The reference is approved standalone SIMD libjpeg-turbo for these one-component
-boundaries. VP8 now has the largest current encoder gap. Older affected
+boundaries. Grayscale JPEG now has the largest measured encoder gaps. Older affected
 gray timings stay historical. Other codecs, decoders, editing and text reuse
 unchanged confirmations where their production paths remain unchanged.
-VP8 now confirms a 2.714× gap after exact green-plane predictor scores, using
-6.0% less elapsed than its preceding confirmation, with unchanged 24,080,952 B/op
-and exact 98,590-byte packets. VP8L has a current 2.437× screen, 48,060,256 B/op
-and exact 183,812-byte packets; no independently confirmed lossless speedup claim.
-Each platform passes 5,101 checks and validates the same actual private package;
+VP8 now confirms a 2.499× gap after exact vector residual preparation, using
+7.6% less elapsed than its preceding confirmation, with unchanged 24,080,952 B/op
+and exact 98,590-byte packets. Each platform passes 5,108 checks and validates
+the same actual package; [residual evidence](../benchmarks/WARM-VP8-VECTOR-RESIDUAL.md).
+VP8L reuses its unchanged current 2.437× screen, 48,060,256 B/op and exact
+183,812-byte packets; no independent lossless speedup claim.
 [predictor-score evidence](../benchmarks/WARM-VP8-GREEN-PREDICTION-COST.md).
-The color-cost math remains unchanged; ordinary predictor dispatch is reconciled.
 No image/settings controls were added.
 
 Other replaced encoder observations remain historical.
@@ -280,7 +280,7 @@ is a CPU-parity confirmation.
 | [JPEG 4:2:0 from caller RGB / AC trellis and padding pruning](../benchmarks/JPEG420-AC-TRELLIS.md) | 68,162.15 | 1,579.24 | 43.161 / 50.354 | 170,648 | Cost screen (CPU parity deferred) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Prior production; reconfirm |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 75,226.22 | 15,616.85 | 4.817 / 5.060 | 1,006,520 | Prior production; reconfirm |
-| [VP8 RGBA8](../benchmarks/WARM-VP8-GREEN-PREDICTION-COST.md) | 145,179.99 | 53,491.71 | 2.714 / 2.729 | 24,080,952 | Gap (independent) |
+| [VP8 RGBA8](../benchmarks/WARM-VP8-VECTOR-RESIDUAL.md) | 134,090.08 | 53,649.34 | 2.499 / 2.518 | 24,080,952 | Gap (independent) |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 83,863.51 | 53,727.26 | 1.561 / 1.652 | 1,537,304 | Prior production; reconfirm |
 | [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-HISTOGRAM384.md) | 19,502.47 | 53,435.71 | 0.365 / 0.433 | 2,036,564 | Prior production; reconfirm |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8-GREEN-PREDICTION-COST.md) | 297,269.17 | 121,972.43 | 2.437 / 2.755 | 48,060,256 | Gap (short; qualified) |
