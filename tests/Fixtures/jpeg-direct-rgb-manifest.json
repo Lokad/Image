@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "provenance": "Existing original deterministic513x259 benchmark controls, reused without changing image content, source sampling/quality or normalized reference settings. WarmJpegRgbInput.Build changes only component identifiers/Adobe metadata; entropy/quantizers remain unchanged. No upstream corpus image is included.",
+  "authoring": "benchmarks/Lokad.Image.Benchmarks/WarmJpegRgbInput.cs; original raster from tools/Shared/OriginalPixels.cs and the established background flattening recipe.",
+  "reference": "Pinned FFmpeg n8.1; exact normalized RGB. GRAY8 is full-range BT.601 conversion of those normalized8-bit components, using the already qualified Q15/Q14 precision. Normal/scalar and Windows/Linux agree.",
+  "fixtures": [
+    {
+      "name": "jpeg-original-rgb422-513x259.jpg",
+      "sampling": "422",
+      "width": 513,
+      "height": 259,
+      "encodedBytes": 71184,
+      "encodedSha256": "0894aa4975ec61d5a3723bb04ee4703a23313532097e5bc080823b623134b9c9",
+      "sourceEncodedSha256": "f0b28dd0edce8c7286099c9b4572d7fd8baf6290bcd7b4ff9134f1e699354828",
+      "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "sourceRecipe": "Original RGBA8 513x259 raster; native baseline 4:2:2, alpha flatten RGB 0x204060, centered area chroma, optimal Huffman, fixed qscale 5; normal SIMD, one thread; no quality enumeration.",
+      "sourceEncoderSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
+      "rgbaSha256": "5cd92d09be1dc007dc2a696153cf50a3340e93bf015affe7146c3e28af195517",
+      "rgbSha256": "abfae64ec12d0ff02f37bdae1bb7c0bc5876d0493eedc4e94e9201b2c88e7e54",
+      "graySha256": "178d9293d668ae1210582ac2581c31a5986d301b48d9acf2b3a96a2e78576d4c",
+      "normalization": "Existing centered422 phase correction of decoded component samples"
+    },
+    {
+      "name": "jpeg-original-rgb420-513x259.jpg",
+      "sampling": "420",
+      "width": 513,
+      "height": 259,
+      "encodedBytes": 52109,
+      "encodedSha256": "26e897ecf53f5eb6ea45e6bb881c2168e989dddd5a62c7449268e0c1feeb34e5",
+      "sourceEncodedSha256": "ccca91bcdaddc90c7aecf62d07cdc629c09c27e607c955cfcc97a7bf91caaf08",
+      "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "sourceRecipe": "Original RGBA8 513x259 raster; native baseline 4:2:0, alpha flatten RGB 0x204060, centered area chroma, optimal Huffman, fixed qscale 5; normal SIMD, one thread; no quality enumeration.",
+      "sourceEncoderSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
+      "rgbaSha256": "e3a693f838f7e27c2764ac61a18db1dc82c4e881e4c4d24479e2f7dcbae325ca",
+      "rgbSha256": "125ed6a60cfd6ce8ef20dfc909d0641bf4f9964aaa5798195c57d647a9b9983c",
+      "graySha256": "d3cda875cf84437c48687af3d80b6bb98d76f658f2e7fd35c8b0e2042f52262c",
+      "normalization": "Existing420 decoded component-plane interpretation and centered bilinear expansion"
+    }
+  ]
+}

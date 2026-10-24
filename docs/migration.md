@@ -21,6 +21,9 @@ product, expansion and black-before-color precision, matching the named native
 controls; canonical ink samples keep their explicit interpretation. Three-component
 4:1:1/4:1:0 uses dimension-aware integer filtering and retains fractional chroma
 through final color rounding, matching the named native controls. Older decoded half ties and performance results are superseded.
+Direct-RGB caller grayscale now shares integer BT.601 precision after the
+normalized8-bit component boundary, matching the two frozen RGB422/420 controls.
+Passing RGBA/RGB pixels, source interpretation and buffer ownership remain.
 The numerical policy is described in [inverse rounding](jpeg-inverse-rounding.md).
 
 All four PNG compression policies use the managed Deflate encoder. Fourteen

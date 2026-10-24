@@ -119,7 +119,10 @@ Failures may leave a completed pixel prefix; no buffer ownership is transferred.
 `JpegDecodeOptions.SourceColorSpace` selects encoded Gray/RGB/YCbCr/CMYK/YCCK interpretation;
 Auto preserves component-count, Adobe and RGB-ID inference. RGB output uses the
 encoded-space color matrix at the documented integer precision. Grayscale takes decoded Y for
-YCbCr, repeats gray unchanged, or rounds `0.299 R + 0.587 G + 0.114 B` for RGB.
+YCbCr and repeats gray unchanged. For encoded RGB, components are first rounded to
+normalized8-bit RGB, then rational BT.601 Q15 studio luma and endpoint-aligned Q14
+full-range conversion produce GRAY8. This is the same luma precision used after
+CMYK multiplication; no RGBA intermediate or new owned scratch is required.
 EXIF reorientation is opt-in and writes directly to the oriented destination
 layout; returned dimensions/orientation describe those samples. ICC is not applied.
 

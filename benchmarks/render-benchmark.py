@@ -404,6 +404,8 @@ Their historical timing workers include additional centered normalization; those
 unchanged references remain historical and need equivalent current outputs before
 new timing qualification. No baseline or performance pass is inferred from the
 new byte checks on the same frozen513x259 packets.
+Direct-RGB422/420 caller grayscale shares integer BT.601 precision after normalized
+8-bit components; the existing RGBA/RGB reference settings and hashes remain.
 Earlier JPEG
 decode timings and allocations describe the replaced producer and are marked
 **Prior production; reconfirm**. No new decoder timing/allocation run is claimed.

@@ -6,22 +6,7 @@ namespace Lokad.Image.Internal;
 internal static class JpegBlackColor
 {
     internal const ushort ProductScale = (1 << 16) / byte.MaxValue;
-    private const int RedLuma = (int)((299L * 219 * 32768 + 127500) / 255000);
-    private const int GreenLuma = (int)((587L * 219 * 32768 + 127500) / 255000);
-    private const int BlueLuma = (int)((114L * 219 * 32768 + 127500) / 255000);
-    private const int RangeScale = (255 * 16384 + 218) / 219;
-    private const int RangeOffset = (255 << 21) - (235 << 7) * RangeScale + (1 << 13);
-
     internal static int Product(int value, int black) => value * black * ProductScale >> 16;
-
-    internal static byte Gray(int red, int green, int blue)
-    {
-        // Round studio luma at six fractional bits, retain seven through the
-        // endpoint-aligned full-range conversion, then round to an output byte.
-        var studio = (RedLuma * red + GreenLuma * green + BlueLuma * blue + (16 << 15) + 256) >> 9;
-        var full = Math.Min(32767, (studio * 2 * RangeScale + RangeOffset) >> 14);
-        return (byte)Math.Clamp((full + 64) >> 7, 0, 255);
-    }
 
     internal static void WriteCmyk(byte cyan, byte magenta, byte yellow, byte black, bool inverted,
         Span<byte> destination, int channels)
@@ -30,7 +15,7 @@ internal static class JpegBlackColor
         var red = Product(inverted ? cyan : 255 - cyan, k);
         var green = Product(inverted ? magenta : 255 - magenta, k);
         var blue = Product(inverted ? yellow : 255 - yellow, k);
-        if (channels == 1) { destination[0] = Gray(red, green, blue); return; }
+        if (channels == 1) { destination[0] = JpegRgbLuma.FromRgb((byte)red, (byte)green, (byte)blue); return; }
         destination[0] = (byte)red; destination[1] = (byte)green; destination[2] = (byte)blue;
         if (channels == 4) destination[3] = 255;
     }

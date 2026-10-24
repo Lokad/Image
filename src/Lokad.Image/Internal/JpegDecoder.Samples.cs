@@ -208,7 +208,8 @@ internal ref partial struct JpegDecoder
                     }
                 }
                 if (format == JpegSampleFormat.Grayscale)
-                    destination[offset] = Round(source == JpegColorSpace.Rgb ? 0.299 * red + 0.587 * green + 0.114 * blue : first);
+                    destination[offset] = source == JpegColorSpace.Rgb
+                        ? JpegRgbLuma.FromRgb(Round(red), Round(green), Round(blue)) : Round(first);
                 else
                 {
                     destination[offset] = Round(red); destination[offset + 1] = Round(green); destination[offset + 2] = Round(blue);

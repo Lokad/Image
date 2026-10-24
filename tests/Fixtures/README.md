@@ -171,3 +171,11 @@ manifests retain the identity of the executable that produced them.
 The small frozen corpus is used offline. Additional packed-depth, palette,
 transparency and orientation cases are independently authored binary builders in
 the internal tests. Their expected pixels are computed from simple sample grids.
+
+`jpeg-direct-rgb-manifest.json` freezes exactly two existing513×259 original direct-
+RGB JPEG controls. The marker-only author in `WarmJpegRgbInput.cs` preserves their
+native-generated entropy and quantizers. The manifest records original raster/
+packet hashes, settings, provenance and the approved component/phase normalization.
+Normalized RGBA/RGB and full-range BT.601 grayscale match pinned native normal/
+scalar output on Windows/Linux. These are original generated fixtures, without
+upstream image data; they do not change the earlier30-control JPEG manifest.

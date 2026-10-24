@@ -11,6 +11,7 @@
   inverse variants. CMYK/YCCK now share reference-precision RGB/grayscale
   conversion; 4:1:1/4:1:0 retains fractional chroma through final color rounding.
   Removed superseded floating renderers; named native sample controls are exact.
+  Direct-RGB caller grayscale shares integer luma precision after component rounding.
 - Bounded managed PNG stored/fast/optimal/smallest encoding, with complete raw
   packet equality on14 frozen8/16-bit controls and shared admission throughout.
 - Managed VP8L prediction, palette, references/cache and entropy groups reproduce

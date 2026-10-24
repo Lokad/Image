@@ -181,3 +181,10 @@ establish current workload equivalence or a new performance pass.
 [rounding](jpeg-inverse-rounding.md) describes the integer boundaries. No old
 inverse variant or compatibility mode remains. Earlier JPEG decode CPU/allocation
 rows describe the replaced producer; current measurements remain open.
+
+The two original513x259 direct-RGB422/420 packets retain their approved centered/
+component normalization and exact RGBA/RGB hashes. Caller grayscale now converts
+those normalized8-bit components with the shared rational BT.601 Q15/Q14 luma
+precision. The fixture manifest records provenance, input/settings and normalized
+reference hashes. Caller RGB/gray orientation, padding, admission and stream/
+retained-result boundaries have exact gates; no new performance claim is implied.

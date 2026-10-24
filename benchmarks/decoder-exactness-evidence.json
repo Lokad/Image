@@ -1,6 +1,6 @@
 {
   "project": "Lokad.Image",
-  "round": "E108",
+  "round": "E110",
   "policy": "Exact normalized output samples first. Reuse unchanged valid evidence. Resolve uncertainty before changing algorithms. Old lossy RGB tolerances are transitional interoperability checks, not completion gates. No new workload grid, CPU tuning or repeated package proof.",
   "reference": {
     "executableSha256": "8146c37e0388e8e82dc537f8c336cd75f5c7c7be1c26959f409be0c892fe2df2",
@@ -56,10 +56,12 @@
       "id": "jpeg-direct-rgb-subsampled",
       "controls": "Existing513x259 WarmJpegRgbInput RGB422 input0894aa4975ec61d5a3723bb04ee4703a23313532097e5bc080823b623134b9c9 and RGB420 input26e897ecf53f5eb6ea45e6bb881c2168e989dddd5a62c7449268e0c1feeb34e5; existing matching caller-RGB output",
       "why": "Required explicit RGB JPEG interpretation uses separate RenderRgb422Row/RenderRgb420Row and caller interpolation branches, rather than the now-qualified YCbCr matrix path; this distinct existing required path was omitted from the initial exact checklist. Reuse its approved native normalization/settings without silently changing reference phase.",
-      "status": "UNCERTAIN exact samples on current integer inverse. Resolve with those existing controls before optimizing or changing geometry; no new dimensions/quality matrix.",
+      "status": "PASS and STOP on the two original normalized-reference packets, E109/E110 BOTHOS/native normal+scalar. OwnedRGBA/callerRGB unchanged; callerGRAY uses shared integer precision after component rounding. No broader equality/timing claim.",
       "tests": [
         "WarmJpegRgbInput",
-        "JpegSampleDecodeTests"
+        "JpegSampleDecodeTests",
+        "JpegDirectRgbExactTests",
+        "JpegDirectRgbFfmpegTests"
       ]
     },
     {
@@ -80,24 +82,27 @@
     },
     {
       "id": "jpeg-caller-samples",
-      "controls": "Existing31x23 caller grayscale/RGB baseline/progressive controls and existing CMYK sample controls; existing stride/tail and ownership tests; existing8x8 authored direct-RGB control projected into caller GRAY8",
+      "controls": "Existing31x23 caller grayscale/RGB baseline/progressive controls and existing CMYK sample controls; existing stride/tail and ownership tests; existing8x8 authored direct-RGB control projected into caller GRAY8 Same two fixed513x259 direct-RGB controls also exercise callerGRAY after fractional component expansion, a distinct composed public boundary absent from the constant8x8 case; no additional image.",
       "why": "Direct caller destinations use specialized packing/conversion without mandatory RGBA; retain inversion/options and untouched padding; direct-RGB to grayscale computes luminance rather than extracting decoded Y, a distinct existing public branch identified during adoption",
-      "status": "PASS and STOP at declared E104/E106/E108 scopes: native Y/RGB444/422/420, named Adobe CMYK/YCCK and411/410 RGB/gray, padding/orientation, arrays/streams and retained-root ownership. Canonical ink/source/inversion contracts retained. Direct-RGB8x8 grayscale has a live exact assertion; named subsampled direct-RGB output still needs confirmation.",
+      "status": "PASS and STOP at E104/E106/E108/E110 scopes: Y/RGB/CMYK/YCCK/411/410 and both named direct-RGB422/420 RGB/GRAY, padding/orientation, arrays/streams and retained-root ownership. Canonical ink/source/inversion contracts retained. CallerGRAY needs no RGBA intermediate and fits the same RGB-plane peak.",
       "tests": [
         "JpegSampleFfmpegTests",
         "JpegSampleDecodeTests",
-        "JpegCmykPackingTests"
+        "JpegCmykPackingTests",
+        "JpegDirectRgbExactTests",
+        "JpegDirectRgbFfmpegTests"
       ]
     },
     {
       "id": "vp8-reconstruction",
       "controls": "Existing native/authored VP8 manifests and authored raw/compressed ALPH filters; first use one existing31x23 normal frame and one already-authored filter/edge control",
       "why": "Arithmetic decoding, intra prediction, inverse transform and deblocking must be distinguished from final chroma/RGB conversion",
-      "status": "UNCERTAIN; current full-frame native assertions permit RGB error. Measure planar samples before selecting a primitive; do not assume every reconstruction stage needs changes.",
+      "status": "Existing Vp8FixtureTests already require exact YUV over110 native+54 authored packets, passing current BOTHOS suites. Reuse this evidence; reconfirm the two named live controls before declaring stage closed. RGB conversion is separately uncertain.",
       "tests": [
         "Vp8FfmpegTests",
         "AuthoredVp8FfmpegTests",
-        "Vp8Tests.FrozenLossyPixelsMatchExplicitFfmpegConversionAndExactAlpha"
+        "Vp8Tests.FrozenLossyPixelsMatchExplicitFfmpegConversionAndExactAlpha",
+        "Vp8FixtureTests.FrozenFfmpegYuvReconstructionAndAlphaAreExact"
       ]
     },
     {
@@ -243,7 +248,7 @@
   },
   "cpuTimingRuns": 0,
   "gcAllocationsMeasured": false,
-  "next": "Resolve exact samples on the two already named513x259 direct-RGB422/420 warm packets using their approved component interpretation/centered normalization and existing input hashes. Reuse E108 immutable build and prepared probes; no new settings/shape grid. Stop qualified quarter-width, CMYK/YCCK, YCbCr, inverse, PNG/VP8L and metadata cases. VP8 reconstruction/color follows. Historical quarter-width timing workers include extra centered normalization; retain their baselines/raw data, keep prior-production status, and align equivalent current outputs before later CPU/allocation qualification. No speed-only work while byte gates remain open.",
+  "next": "Reuse already passing exact planar assertions over110 frozen native and54 authored VP8 controls; reconfirm one31x23 native and one authored filter control against pinned live references before selecting any primitive. Resolve normalized chroma/RGB rounding on those same packets, retaining approved16-bit saturation normalization and exact ALPH. No settings/shape/quality grid, retuning of passing paths or CPU-only work. CPU/allocation parity and full replacement qualification remain open.",
   "rawArchive": {
     "name": "e100-decoder-audit.tar.xz",
     "bytes": 20372,
@@ -982,15 +987,15 @@
     "windowsCore": {
       "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
       "bytes": 751104,
-      "sha256": "846eadfd2bc4f743108e5541eb0531dd90cd8c13819b90ca0e1b6e1de6b221a8"
+      "sha256": "607d91aa6c206aa8b091a839c8867dbaf346567ea59c5d5c8ca4418f37a0592f"
     },
     "linuxCore": {
       "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
       "bytes": 751104,
-      "sha256": "9c1e42471fe1e9ee595975cc3e54846178f3633dc77ba67cb28417c5320da725"
+      "sha256": "646151dabf1750eb2e9fe92f1d2717fdad77902285b2509fe46af7f93a4f8e93"
     }
   },
-  "lastProductionRound": "E108",
+  "lastProductionRound": "E110",
   "productionChangedThisRound": true,
   "subsampledColorBoundary": {
     "round": "E104",
@@ -2664,6 +2669,661 @@
       "archivedMember": "tmp/e108-companions/410-managed.rgba",
       "everyOriginalByteVerified": true,
       "after": 4996099885
+    }
+  },
+  "directRgbConfirmation": {
+    "round": "E109",
+    "status": "Diagnostic completed and adopted by E110 publicDirectRgbGrayAdoption; original observations preserved.",
+    "scope": "Exactly the two existing513x259 marker-only direct-RGB422/420 packets and their already approved centered/component interpretation. Same immutable E108 production builds and prepared probes; no production rebuild/change, CPU timing or GC measurement. CallerGRAY uses independent full-range BT.601 conversion of the same normalized8-bit RGB, a distinct public output boundary not isolated by the earlier constant8x8 gray control.",
+    "windows": {
+      "scope": "Exactly two existing frozen513x259 direct-RGB warm controls, their approved normalization/options and callerRGB. Reused immutable E108 core; no production rebuild/patch/timing or new matrix.",
+      "cases": [
+        {
+          "sampling": "422",
+          "packetSha256": "0894aa4975ec61d5a3723bb04ee4703a23313532097e5bc080823b623134b9c9",
+          "managedRgbaSha256": "5cd92d09be1dc007dc2a696153cf50a3340e93bf015affe7146c3e28af195517",
+          "callerRgbMismatches": 0,
+          "coreSha256": "846eadfd2bc4f743108e5541eb0531dd90cd8c13819b90ca0e1b6e1de6b221a8",
+          "native": {
+            "normal": {
+              "sha256": "5cd92d09be1dc007dc2a696153cf50a3340e93bf015affe7146c3e28af195517",
+              "mismatches": 0,
+              "maximum": 0,
+              "first": [],
+              "referenceArguments": [
+                "-hide_banner",
+                "-loglevel",
+                "error",
+                "-noautorotate",
+                "-f",
+                "image2pipe",
+                "-threads:v",
+                "1",
+                "-thread_type:v",
+                "0",
+                "-i",
+                "pipe:0",
+                "-filter_complex_threads",
+                "1",
+                "-filter_complex",
+                "format=rgba",
+                "-frames:v",
+                "1",
+                "-threads:v",
+                "1",
+                "-pix_fmt",
+                "rgba",
+                "-f",
+                "rawvideo",
+                "pipe:1"
+              ],
+              "normalization": "Existing timed centered422 phase correction"
+            },
+            "scalar": {
+              "sha256": "5cd92d09be1dc007dc2a696153cf50a3340e93bf015affe7146c3e28af195517",
+              "mismatches": 0,
+              "maximum": 0,
+              "first": [],
+              "referenceArguments": [
+                "-hide_banner",
+                "-loglevel",
+                "error",
+                "-cpuflags",
+                "0",
+                "-noautorotate",
+                "-f",
+                "image2pipe",
+                "-threads:v",
+                "1",
+                "-thread_type:v",
+                "0",
+                "-i",
+                "pipe:0",
+                "-filter_complex_threads",
+                "1",
+                "-filter_complex",
+                "format=rgba",
+                "-frames:v",
+                "1",
+                "-threads:v",
+                "1",
+                "-pix_fmt",
+                "rgba",
+                "-f",
+                "rawvideo",
+                "pipe:1"
+              ],
+              "normalization": "Existing timed centered422 phase correction"
+            }
+          }
+        },
+        {
+          "sampling": "420",
+          "packetSha256": "26e897ecf53f5eb6ea45e6bb881c2168e989dddd5a62c7449268e0c1feeb34e5",
+          "managedRgbaSha256": "e3a693f838f7e27c2764ac61a18db1dc82c4e881e4c4d24479e2f7dcbae325ca",
+          "callerRgbMismatches": 0,
+          "coreSha256": "846eadfd2bc4f743108e5541eb0531dd90cd8c13819b90ca0e1b6e1de6b221a8",
+          "native": {
+            "normal": {
+              "sha256": "e3a693f838f7e27c2764ac61a18db1dc82c4e881e4c4d24479e2f7dcbae325ca",
+              "mismatches": 0,
+              "maximum": 0,
+              "first": [],
+              "referenceArguments": [
+                "-hide_banner",
+                "-loglevel",
+                "error",
+                "-noautorotate",
+                "-f",
+                "image2pipe",
+                "-threads:v",
+                "1",
+                "-thread_type:v",
+                "0",
+                "-i",
+                "pipe:0",
+                "-filter_complex_threads",
+                "1",
+                "-filter_complex",
+                "extractplanes=y+u+v[r][g][b];[g]scale=iw*2:ih*2:flags=bilinear+accurate_rnd,crop=513:259,setsar=1[ge];[b]scale=iw*2:ih*2:flags=bilinear+accurate_rnd,crop=513:259,setsar=1[be];[r]setsar=1[re];[ge][be][re]mergeplanes=0x001020:format=gbrp,format=rgba",
+                "-frames:v",
+                "1",
+                "-threads:v",
+                "1",
+                "-pix_fmt",
+                "rgba",
+                "-f",
+                "rawvideo",
+                "pipe:1"
+              ],
+              "normalization": "Existing timed420 component-plane interpretation"
+            },
+            "scalar": {
+              "sha256": "e3a693f838f7e27c2764ac61a18db1dc82c4e881e4c4d24479e2f7dcbae325ca",
+              "mismatches": 0,
+              "maximum": 0,
+              "first": [],
+              "referenceArguments": [
+                "-hide_banner",
+                "-loglevel",
+                "error",
+                "-cpuflags",
+                "0",
+                "-noautorotate",
+                "-f",
+                "image2pipe",
+                "-threads:v",
+                "1",
+                "-thread_type:v",
+                "0",
+                "-i",
+                "pipe:0",
+                "-filter_complex_threads",
+                "1",
+                "-filter_complex",
+                "extractplanes=y+u+v[r][g][b];[g]scale=iw*2:ih*2:flags=bilinear+accurate_rnd,crop=513:259,setsar=1[ge];[b]scale=iw*2:ih*2:flags=bilinear+accurate_rnd,crop=513:259,setsar=1[be];[r]setsar=1[re];[ge][be][re]mergeplanes=0x001020:format=gbrp,format=rgba",
+                "-frames:v",
+                "1",
+                "-threads:v",
+                "1",
+                "-pix_fmt",
+                "rgba",
+                "-f",
+                "rawvideo",
+                "pipe:1"
+              ],
+              "normalization": "Existing timed420 component-plane interpretation"
+            }
+          }
+        }
+      ]
+    },
+    "grayWindows": [
+      {
+        "sampling": "422",
+        "scope": "CallerGRAY on the same two fixed direct-RGB packets. Independent full-range BT.601 grayscale of their approved normalized8-bit component outputs; no new image/settings grid or tolerance. Byte comparison only, no timing-boundary claim.",
+        "managedSha256": "502e4e0dcdbcfbd7009f4495a63a3e860f2abb9960d81689ebd052f8d396217d",
+        "native": {
+          "normal": {
+            "sha256": "178d9293d668ae1210582ac2581c31a5986d301b48d9acf2b3a96a2e78576d4c",
+            "mismatches": 20376,
+            "maximum": 1,
+            "first": [
+              [
+                5,
+                117,
+                118
+              ],
+              [
+                6,
+                118,
+                117
+              ],
+              [
+                11,
+                126,
+                127
+              ],
+              [
+                15,
+                121,
+                122
+              ]
+            ],
+            "referenceArguments": [
+              "-hide_banner",
+              "-loglevel",
+              "error",
+              "-f",
+              "rawvideo",
+              "-pixel_format",
+              "gbrp",
+              "-video_size",
+              "513x259",
+              "-i",
+              "pipe:0",
+              "-filter_threads",
+              "1",
+              "-vf",
+              "scale=in_range=pc:out_range=pc:in_color_matrix=bt601:out_color_matrix=bt601:flags=bilinear+accurate_rnd+full_chroma_int:in_h_chr_pos=0:in_v_chr_pos=0",
+              "-frames:v",
+              "1",
+              "-threads:v",
+              "1",
+              "-pix_fmt",
+              "gray",
+              "-f",
+              "rawvideo",
+              "pipe:1"
+            ]
+          },
+          "scalar": {
+            "sha256": "178d9293d668ae1210582ac2581c31a5986d301b48d9acf2b3a96a2e78576d4c",
+            "mismatches": 20376,
+            "maximum": 1,
+            "first": [
+              [
+                5,
+                117,
+                118
+              ],
+              [
+                6,
+                118,
+                117
+              ],
+              [
+                11,
+                126,
+                127
+              ],
+              [
+                15,
+                121,
+                122
+              ]
+            ],
+            "referenceArguments": [
+              "-hide_banner",
+              "-loglevel",
+              "error",
+              "-cpuflags",
+              "0",
+              "-f",
+              "rawvideo",
+              "-pixel_format",
+              "gbrp",
+              "-video_size",
+              "513x259",
+              "-i",
+              "pipe:0",
+              "-filter_threads",
+              "1",
+              "-vf",
+              "scale=in_range=pc:out_range=pc:in_color_matrix=bt601:out_color_matrix=bt601:flags=bilinear+accurate_rnd+full_chroma_int:in_h_chr_pos=0:in_v_chr_pos=0",
+              "-frames:v",
+              "1",
+              "-threads:v",
+              "1",
+              "-pix_fmt",
+              "gray",
+              "-f",
+              "rawvideo",
+              "pipe:1"
+            ]
+          }
+        }
+      },
+      {
+        "sampling": "420",
+        "scope": "CallerGRAY on the same two fixed direct-RGB packets. Independent full-range BT.601 grayscale of their approved normalized8-bit component outputs; no new image/settings grid or tolerance. Byte comparison only, no timing-boundary claim.",
+        "managedSha256": "10e4dc5f48b20a3a6d289a85f2c62958e26503176d39770aaf23709db86b0b7e",
+        "native": {
+          "normal": {
+            "sha256": "d3cda875cf84437c48687af3d80b6bb98d76f658f2e7fd35c8b0e2042f52262c",
+            "mismatches": 18306,
+            "maximum": 1,
+            "first": [
+              [
+                10,
+                134,
+                135
+              ],
+              [
+                11,
+                122,
+                121
+              ],
+              [
+                25,
+                124,
+                125
+              ],
+              [
+                29,
+                124,
+                123
+              ]
+            ],
+            "referenceArguments": [
+              "-hide_banner",
+              "-loglevel",
+              "error",
+              "-f",
+              "rawvideo",
+              "-pixel_format",
+              "gbrp",
+              "-video_size",
+              "513x259",
+              "-i",
+              "pipe:0",
+              "-filter_threads",
+              "1",
+              "-vf",
+              "scale=in_range=pc:out_range=pc:in_color_matrix=bt601:out_color_matrix=bt601:flags=bilinear+accurate_rnd+full_chroma_int:in_h_chr_pos=0:in_v_chr_pos=0",
+              "-frames:v",
+              "1",
+              "-threads:v",
+              "1",
+              "-pix_fmt",
+              "gray",
+              "-f",
+              "rawvideo",
+              "pipe:1"
+            ]
+          },
+          "scalar": {
+            "sha256": "d3cda875cf84437c48687af3d80b6bb98d76f658f2e7fd35c8b0e2042f52262c",
+            "mismatches": 18306,
+            "maximum": 1,
+            "first": [
+              [
+                10,
+                134,
+                135
+              ],
+              [
+                11,
+                122,
+                121
+              ],
+              [
+                25,
+                124,
+                125
+              ],
+              [
+                29,
+                124,
+                123
+              ]
+            ],
+            "referenceArguments": [
+              "-hide_banner",
+              "-loglevel",
+              "error",
+              "-cpuflags",
+              "0",
+              "-f",
+              "rawvideo",
+              "-pixel_format",
+              "gbrp",
+              "-video_size",
+              "513x259",
+              "-i",
+              "pipe:0",
+              "-filter_threads",
+              "1",
+              "-vf",
+              "scale=in_range=pc:out_range=pc:in_color_matrix=bt601:out_color_matrix=bt601:flags=bilinear+accurate_rnd+full_chroma_int:in_h_chr_pos=0:in_v_chr_pos=0",
+              "-frames:v",
+              "1",
+              "-threads:v",
+              "1",
+              "-pix_fmt",
+              "gray",
+              "-f",
+              "rawvideo",
+              "pipe:1"
+            ]
+          }
+        }
+      }
+    ],
+    "grayComposition": {
+      "scope": "Same two direct-RGB controls; compose their already exact normalized8-bit RGB with the previously qualified rational Q15/Q14 grayscale precision. Byte-only experiment; no production change/build/timing.",
+      "weightsQ15": [
+        8414,
+        16519,
+        3208
+      ],
+      "rangeScaleQ14": 19078,
+      "rangeOffset": -39084288,
+      "cases": [
+        {
+          "sampling": "422",
+          "mismatches": 0,
+          "sha256": "178d9293d668ae1210582ac2581c31a5986d301b48d9acf2b3a96a2e78576d4c",
+          "referenceSha256": "178d9293d668ae1210582ac2581c31a5986d301b48d9acf2b3a96a2e78576d4c"
+        },
+        {
+          "sampling": "420",
+          "mismatches": 0,
+          "sha256": "d3cda875cf84437c48687af3d80b6bb98d76f658f2e7fd35c8b0e2042f52262c",
+          "referenceSha256": "d3cda875cf84437c48687af3d80b6bb98d76f658f2e7fd35c8b0e2042f52262c"
+        }
+      ]
+    },
+    "linux": {
+      "scope": "Two unchanged direct-RGB packets, approved normalization and callerRGB/GRAY. Native grayscale reference is the same normalized8-bit RGB converted as full-range BT.601. Byte-only comparison, no production change/build/timing.",
+      "producer": {
+        "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "bytes": 751104,
+        "sha256": "9c1e42471fe1e9ee595975cc3e54846178f3633dc77ba67cb28417c5320da725"
+      },
+      "results": [
+        {
+          "sampling": "422",
+          "ownedRgbaSha256": "5cd92d09be1dc007dc2a696153cf50a3340e93bf015affe7146c3e28af195517",
+          "callerRgbExact": true,
+          "currentGraySha256": "502e4e0dcdbcfbd7009f4495a63a3e860f2abb9960d81689ebd052f8d396217d",
+          "native": {
+            "normal": {
+              "rgbaExact": true,
+              "grayReferenceSha256": "178d9293d668ae1210582ac2581c31a5986d301b48d9acf2b3a96a2e78576d4c",
+              "currentGrayMismatches": 20376
+            },
+            "scalar": {
+              "rgbaExact": true,
+              "grayReferenceSha256": "178d9293d668ae1210582ac2581c31a5986d301b48d9acf2b3a96a2e78576d4c",
+              "currentGrayMismatches": 20376
+            }
+          }
+        },
+        {
+          "sampling": "420",
+          "ownedRgbaSha256": "e3a693f838f7e27c2764ac61a18db1dc82c4e881e4c4d24479e2f7dcbae325ca",
+          "callerRgbExact": true,
+          "currentGraySha256": "10e4dc5f48b20a3a6d289a85f2c62958e26503176d39770aaf23709db86b0b7e",
+          "native": {
+            "normal": {
+              "rgbaExact": true,
+              "grayReferenceSha256": "d3cda875cf84437c48687af3d80b6bb98d76f658f2e7fd35c8b0e2042f52262c",
+              "currentGrayMismatches": 18306
+            },
+            "scalar": {
+              "rgbaExact": true,
+              "grayReferenceSha256": "d3cda875cf84437c48687af3d80b6bb98d76f658f2e7fd35c8b0e2042f52262c",
+              "currentGrayMismatches": 18306
+            }
+          }
+        }
+      ]
+    },
+    "rawArchive": {
+      "archive": "tmp/e109-direct-rgb-confirmation.tar.xz",
+      "bytes": 1259084,
+      "sha256": "4fbac53d86ff55c1ce9edf6bfb9d682513bec169d8fb0fa27bac973445ee37f4",
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "retiredVerifiedDuplicates": [
+        {
+          "path": "tmp/e109-transient.rgba",
+          "bytes": 531468,
+          "archivedMember": "tmp/e109-rgb420-managed.rgba"
+        },
+        {
+          "path": "tmp/e109-transient.rgb",
+          "bytes": 398601,
+          "archivedMember": "tmp/e109-rgb420-caller.rgb"
+        },
+        {
+          "path": "tmp/e109-transient.gray",
+          "bytes": 132867,
+          "archivedMember": "tmp/e109-rgb420-caller.gray"
+        }
+      ],
+      "after": 4997492617,
+      "members": 36,
+      "peakBeforeDuplicateRetirement": 4998555553
+    },
+    "parentCi": {
+      "sha": "73645a156e59cdfbcffc0aaad7f0a683a1310f5f",
+      "run": 40044059935,
+      "conclusion": "success",
+      "jobs": 3
+    },
+    "next": "Unify direct-RGB callerGRAY with the already qualified Q15/Q14 RGB-byte grayscale primitive, after the existing8-bit component interpolation boundary. Same two fixed direct-RGB422/420 packets demonstrate20376/18306 one-sample gaps; independent composition is exact on both, normal/scalar native, both OSes. Preserve passing RGBA/callerRGB and approved normalization; no new image/settings grid. Add durable original fixtures/provenance and exact RGB/GRAY/public-boundary checks when adopting; canonical source/ink, work/root/cancellation/ownership remain. Batch affected qualification only for the accepted production change. Then VP8 reconstruction/color remains."
+  },
+  "publicDirectRgbGrayAdoption": {
+    "round": "E110",
+    "status": "ACCEPTED at declared scope; full objective remains open",
+    "scope": "Exactly the two original513x259 direct-RGB422/420 packets and existing approved normalization. Arrays/sync/async ownedRGBA, callerRGB/GRAY with padding and explicit Rotate90, independent input/result/root lifetimes and callerGRAY peak admission. No new workload matrix.",
+    "implementation": "Shared rationally derived Q15 studio/Q14 full-range luma from normalized8-bit RGB, after existing direct-RGB component interpolation rounding. Extracted the already qualified CMYK grayscale primitive into JpegRgbLuma; CMYK product and all non-RGB paths unchanged. Removes binary64 fractional-RGB grayscale weighting; no alias or replaced mode.",
+    "resourceAndOwnership": {
+      "newOwnedHeapBytes": 0,
+      "rgbaIntermediateAllocated": false,
+      "filterTableAllocated": false,
+      "blockWork": 4096,
+      "rowWorkPerPixel": 32,
+      "borrowedRootAndIndependentRetainedOwnersPreserved": true
+    },
+    "windowsProducer": [
+      {
+        "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "bytes": 751104,
+        "sha256": "607d91aa6c206aa8b091a839c8867dbaf346567ea59c5d5c8ca4418f37a0592f"
+      },
+      {
+        "path": "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll",
+        "bytes": 1593344,
+        "sha256": "a5f251af9ed05baa86d18ac296c7c8687c3c461715276a198378c408be8f9d2a"
+      },
+      {
+        "path": "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll",
+        "bytes": 817664,
+        "sha256": "6d7486bbb7541e21422056d4f7201d7248cd42f374b3902608d05b2c3b925327"
+      },
+      {
+        "path": "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.DifferentialTests.dll",
+        "bytes": 245760,
+        "sha256": "9086b3c09e289224173a190caa3c92a29d1a734184a2f0792fdf08d419b5a6c7"
+      }
+    ],
+    "linuxProducer": [
+      {
+        "path": "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "bytes": 751104,
+        "sha256": "646151dabf1750eb2e9fe92f1d2717fdad77902285b2509fe46af7f93a4f8e93"
+      },
+      {
+        "path": "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll",
+        "bytes": 1593344,
+        "sha256": "5fb5f585b22539c8bf710cfa325c425a748fe39914a4c0eb2b290fbc66ae96ec"
+      },
+      {
+        "path": "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll",
+        "bytes": 817664,
+        "sha256": "c3def8fef61e71bab96c63856b05f203e002be99a6348e29c9979c926775a179"
+      },
+      {
+        "path": "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.DifferentialTests.dll",
+        "bytes": 245760,
+        "sha256": "9191989a3ea96b9161f29975c03492bd280fc208f41a61bc770b9138139ff81b"
+      }
+    ],
+    "qualification": {
+      "fullChecksEachOs": 5044,
+      "internalChecks": 1974,
+      "publicChecks": 2123,
+      "liveChecks": 947,
+      "scalarInternalEachOs": 33,
+      "scalarPublicEachOs": 128,
+      "sameActualPackageBothOs": true,
+      "usageExamplesEachOs": 3,
+      "windowsConsumer": "artifacts/package-smoke/4fb01c02df7849818c5cfbcdd30852b7",
+      "linuxConsumer": "artifacts/package-smoke/9e105ef14829494ca98f2a03a10ea186",
+      "productionStableDuringAcceptedQualification": true
+    },
+    "package": {
+      "path": "artifacts/qualification/jpeg-gray-final/Lokad.Image.0.2.0.nupkg",
+      "bytes": 390045,
+      "sha256": "47af2d80d36e6cf0d82f835a5a18a63902a2e7cd97fffe1a8fec8de0fce0256e",
+      "coreSha256": "607d91aa6c206aa8b091a839c8867dbaf346567ea59c5d5c8ca4418f37a0592f",
+      "consumer": "artifacts/package-smoke/4fb01c02df7849818c5cfbcdd30852b7",
+      "passed": true,
+      "usageExamples": 3
+    },
+    "linuxPackage": {
+      "path": "artifacts/qualification/jpeg-gray-final/Lokad.Image.0.2.0.nupkg",
+      "bytes": 390045,
+      "sha256": "47af2d80d36e6cf0d82f835a5a18a63902a2e7cd97fffe1a8fec8de0fce0256e",
+      "coreSha256": "607d91aa6c206aa8b091a839c8867dbaf346567ea59c5d5c8ca4418f37a0592f",
+      "passed": true,
+      "usageExamples": 3,
+      "linuxBefore": 4986190592,
+      "linuxAfter": 4993830302,
+      "exitCode": 0,
+      "sameActualPackage": true,
+      "log": "tmp/e110-package-linux.log",
+      "windowsConsumer": "artifacts/package-smoke/4fb01c02df7849818c5cfbcdd30852b7",
+      "consumer": "artifacts/package-smoke/9e105ef14829494ca98f2a03a10ea186"
+    },
+    "controlsManifest": "tests/Fixtures/jpeg-direct-rgb-manifest.json",
+    "evidenceReuse": "E109 immutable-build diagnostic established exact ownedRGBA/callerRGB and the shared gray composition on both native modes/OSes. Only direct-RGB callerGRAY bytes change. CMYK helper extraction preserves its integer expression exactly. BothOS suites and affected scalar tests retain inverse, YCbCr, four-component/quarter-width, encoder, metadata, editing and text evidence. No CPU/GC measurement or timing confirmation.",
+    "logs": [
+      "tmp/e110-full-windows.log",
+      "tmp/e110-full-linux.log",
+      "tmp/e110-scalar-internal-windows.log",
+      "tmp/e110-scalar-public-windows.log",
+      "tmp/e110-scalar-internal-linux.log",
+      "tmp/e110-scalar-public-linux.log",
+      "tmp/e110-package-windows.log",
+      "tmp/e110-package-linux.log"
+    ],
+    "storageCompaction": [
+      {
+        "archive": "tmp/e110-cold-e108-consumer-linux.tar.xz",
+        "bytes": 1378760,
+        "sha256": "33245f5e52d9ab12975c95dc9f3af8c12f411080dd0b2af0d5322ce93d060d1b",
+        "retiredRegularFiles": 139,
+        "retiredBytes": 7224019,
+        "mirrored": true,
+        "everySourceByteVerified": true,
+        "peak": 4998871377,
+        "after": 4991647358
+      },
+      {
+        "archive": "tmp/e110-cold-pngfast16-controls-linux.tar.xz",
+        "bytes": 3294536,
+        "sha256": "82226d28f7625dd3e9a899167361986c03535c3a707615f77ca85bed511f96bc",
+        "retiredRegularFiles": 22,
+        "retiredBytes": 9242287,
+        "mirrored": true,
+        "everySourceByteVerified": true,
+        "peak": 4994941894,
+        "after": 4985699607
+      }
+    ],
+    "parentCi": {
+      "sha": "73645a156e59cdfbcffc0aaad7f0a683a1310f5f",
+      "run": 40044059935,
+      "conclusion": "success",
+      "jobs": 3
+    },
+    "cpuTimingRuns": 0,
+    "gcAllocationsMeasured": false,
+    "next": "Reuse already passing exact planar assertions over110 frozen native and54 authored VP8 controls; reconfirm one31x23 native and one authored filter control against pinned live references before selecting any primitive. Resolve normalized chroma/RGB rounding on those same packets, retaining approved16-bit saturation normalization and exact ALPH. No settings/shape/quality grid, retuning of passing paths or CPU-only work. CPU/allocation parity and full replacement qualification remain open.",
+    "rawArchive": {
+      "name": "e110-public-gray-qualified.tar.xz",
+      "bytes": 1924728,
+      "sha256": "433093f82ec5488a5858c15328a17af2f8f02e9659c8d640faeeb04b444f2d50",
+      "members": 53,
+      "mirrored": true,
+      "everySourceMemberByteVerified": true,
+      "linuxBeforeMirror": 4993830302,
+      "linuxAfterMirror": 4995755030,
+      "allObservedAndProjectedPeaksBelowCap": true
     }
   }
 }
