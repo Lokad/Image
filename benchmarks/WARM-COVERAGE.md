@@ -5,6 +5,12 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+E179 resolves the existing RGBA-gray short uncertainty with unchanged production:
+2.696×/upper2.711 independently confirmed,154,836 B/op, exact58,910 B packets.
+Approved standalone SIMDlibjpeg-turbo baseline and complete normalization/output
+ownership remain. All12actual/12selected and bothidle guards; no build/sync/full
+qualification/package repeat or new cases. [Gray evidence](WARM-JPEG-GRAY-AVX2-TRANSFORM.md).
+
 [E178 VP8 residual preparation](WARM-VP8-VECTOR-RESIDUAL.md) independently
 confirms the existing RGBA8/Q75/method4 control at 2.499×/upper2.518, saving7.6%
 elapsed with unchanged24,080,952 B/op and exact98,590 B packets. Both platforms

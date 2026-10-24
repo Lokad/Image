@@ -219,7 +219,7 @@ def render():
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-entropy-records-evidence.json', ['cases', 'rgba16', -1], 'WARM-JPEG-ENTROPY-RECORDS.md', verification='Gap (short; qualified)'),
-        row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-gray-avx2-transform-evidence.json', ['cases', 'rgbaGray', -1], 'WARM-JPEG-GRAY-AVX2-TRANSFORM.md', verification='Gap (short; qualified)'),
+        row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-gray-avx2-transform-evidence.json', ['cases', 'rgbaGray', -1], 'WARM-JPEG-GRAY-AVX2-TRANSFORM.md', confirmed=True),
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-gray-avx2-transform-evidence.json', ['observations', -1], 'WARM-JPEG-GRAY-AVX2-TRANSFORM.md', confirmed=True),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / AC trellis and padding pruning', 'jpeg420-ac-trellis-evidence.json', ['cases', 'Encode420_8', -1], 'JPEG420-AC-TRELLIS.md', verification='Cost screen (CPU parity deferred)'),
@@ -379,7 +379,8 @@ Immutable workers were reused. Other affected color-JPEG timings stay historical
 The grayscale 0.962× claim came from the replaced 58,823-byte encoder. Current
 raw-exact 58,910-byte controls confirm caller-gray at2.617× after vector DCT,
 using17.3% less elapsed than its preceding confirmation and154,839B/op. RGBA-gray
-has a current2.648× screen and154,836B/op, including normalization on both subjects.
+now independently confirms2.696×/upper2.711 and154,836B/op, including
+normalization on both subjects. Its unchanged paths reuse current E178 qualification.
 Each platform passes5,088checks and the same actual private package;
 [vector-transform evidence](../benchmarks/WARM-JPEG-GRAY-AVX2-TRANSFORM.md).
 The reference is approved standalone SIMD libjpeg-turbo for these one-component

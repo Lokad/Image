@@ -36,3 +36,9 @@ both platforms. Pre-package headroom reserves5MB plus margin.
 identities and exact reuse. Color JPEG, other codecs, decoders/editing/text remain
 unchanged. VP8/VP8L now have the largest current encoder gaps. The full257-case
 CPU-parity objective remains open.
+
+E179 independently confirms the same RGBA-to-grayscale boundary on unchanged
+production paths: 3,758.47 µs, 2.696×/upper2.711, 154,836 B/op and the same exact
+58,910 B packets. Both idle guards pass; all 12 actual iterations are retained
+and selected. The current core and package reuse E178 qualification. This resolves
+an earlier short-run uncertainty; it is not a new production speedup claim.

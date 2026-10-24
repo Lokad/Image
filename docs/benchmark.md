@@ -30,7 +30,8 @@ Immutable workers were reused. Other affected color-JPEG timings stay historical
 The grayscale 0.962× claim came from the replaced 58,823-byte encoder. Current
 raw-exact 58,910-byte controls confirm caller-gray at2.617× after vector DCT,
 using17.3% less elapsed than its preceding confirmation and154,839B/op. RGBA-gray
-has a current2.648× screen and154,836B/op, including normalization on both subjects.
+now independently confirms2.696×/upper2.711 and154,836B/op, including
+normalization on both subjects. Its unchanged paths reuse current E178 qualification.
 Each platform passes5,088checks and the same actual private package;
 [vector-transform evidence](../benchmarks/WARM-JPEG-GRAY-AVX2-TRANSFORM.md).
 The reference is approved standalone SIMD libjpeg-turbo for these one-component
@@ -274,7 +275,7 @@ is a CPU-parity confirmation.
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,393.98 | 1,839.60 | 1.301 / 1.415 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,444.30 | 1,841.37 | 1.327 / 1.443 | 263,787 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-ENTROPY-RECORDS.md) | 4,488.07 | 1,839.99 | 2.439 / 2.727 | 372,859 | Gap (short; qualified) |
-| [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAY-AVX2-TRANSFORM.md) | 3,747.82 | 1,415.35 | 2.648 / 2.875 | 154,836 | Gap (short; qualified) |
+| [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAY-AVX2-TRANSFORM.md) | 3,758.47 | 1,394.29 | 2.696 / 2.711 | 154,836 | Gap (independent) |
 | [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAY-AVX2-TRANSFORM.md) | 2,824.38 | 1,079.44 | 2.617 / 2.638 | 154,839 | Gap (independent) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / AC trellis and padding pruning](../benchmarks/JPEG420-AC-TRELLIS.md) | 68,162.15 | 1,579.24 | 43.161 / 50.354 | 170,648 | Cost screen (CPU parity deferred) |
