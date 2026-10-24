@@ -1,3 +1,9 @@
+using System.Buffers.Binary;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+
 namespace Lokad.Image.Internal;
 
 // Private encoder metrics. All buffers/weights are borrowed; the enclosing
@@ -61,6 +67,7 @@ internal static class Vp8Distortion
     // parity. Unlike forwardY2, this has no half-scale or rounding.
     private static int Energy(ReadOnlySpan<byte> pixels, int stride, ReadOnlySpan<ushort> weights)
     {
+        if (Avx2.IsSupported) return EnergyVectors(pixels, stride, weights);
         Span<int> rows = stackalloc int[16];
         for (var y = 0; y < 4; y++)
         {
@@ -79,6 +86,36 @@ internal static class Vp8Distortion
                 + weights[8 + u] * Math.Abs(c - d) + weights[12 + u] * Math.Abs(c + d);
         }
         return energy;
+    }
+
+    // Sequency butterflies stay inside signed16: each coefficient is bounded
+    // by16*255. Nonnegative weights sum256, so weighted energy fits signed32.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector256<short> TextureSpectrum(ReadOnlySpan<byte> pixels, int stride)
+    {
+        var packed = Vector128.Create(
+            BinaryPrimitives.ReadUInt32LittleEndian(pixels[..4]),
+            BinaryPrimitives.ReadUInt32LittleEndian(pixels.Slice(stride, 4)),
+            BinaryPrimitives.ReadUInt32LittleEndian(pixels.Slice(2 * stride, 4)),
+            BinaryPrimitives.ReadUInt32LittleEndian(pixels.Slice(3 * stride, 4)));
+        var values = Avx2.ConvertToVector256Int16(packed.AsByte());
+        var swap = Avx2.ShuffleLow(Avx2.ShuffleHigh(values, 0xb1), 0xb1);
+        values = Avx2.Blend(Avx2.Add(values, swap), Avx2.Subtract(swap, values), 0xaa);
+        swap = Avx2.ShuffleLow(Avx2.ShuffleHigh(values, 0x4e), 0x4e);
+        values = Avx2.Blend(Avx2.Add(values, swap), Avx2.Subtract(swap, values), 0xcc);
+        values = Avx2.ShuffleLow(Avx2.ShuffleHigh(values, 0x78), 0x78);
+        swap = Avx2.Permute4x64(values.AsInt64(), 0xb1).AsInt16();
+        values = Avx2.Blend(Avx2.Add(values, swap), Avx2.Subtract(swap, values), 0xf0);
+        swap = Avx2.Permute4x64(values.AsInt64(), 0x4e).AsInt16();
+        values = Vector256.Create(Avx2.Add(values, swap).GetLower(), Avx2.Subtract(swap, values).GetUpper());
+        return Avx2.Permute4x64(values.AsInt64(), 0x78).AsInt16();
+    }
+
+    private static int EnergyVectors(ReadOnlySpan<byte> pixels, int stride, ReadOnlySpan<ushort> weights)
+    {
+        var magnitudes = Avx2.Abs(TextureSpectrum(pixels, stride)).AsInt16();
+        var importance = Vector256.LoadUnsafe(ref MemoryMarshal.GetReference(weights)).AsInt16();
+        return Vector256.Sum(Avx2.MultiplyAddAdjacent(magnitudes, importance));
     }
 
     private static int Texture(ReadOnlySpan<byte> a, int aStride, ReadOnlySpan<byte> b, int bStride, ReadOnlySpan<ushort> weights)

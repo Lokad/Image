@@ -5,6 +5,12 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E211 vector texture scoring](WARM-VP8-VECTOR-TEXTURE.md) confirms VP8 at
+2.107×/upper 2.118, saving 4.7% elapsed with unchanged 24,329,736 B/op and
+raw-exact 98,590 B. Both platforms pass 5,120 checks and the same actual package.
+Other VP8 CPU observations stay historical; JPEG/full-color VP8L/PNG/decode/edit/
+text evidence remains valid. No cases added; full 257-case/1× stays open.
+
 [E206 fused alpha histograms](WARM-VP8-FUSED-GREEN-HISTOGRAM.md) confirms
 VP8 at 2.210×/upper 2.223, saving 5.5% elapsed with unchanged 24,329,736 B/op
 and raw-exact 98,590 B. Both platforms pass 5,120 checks and the same package.
