@@ -71,7 +71,8 @@ The production encoder uses a 512-byte MCU and a bounded18×18 packed tile, reus
 from normalized RGB through signed horizontal chroma. Negative guard samples
 survive until vertical rounding; two original yellow/cyan controls check this
 boundary against complete native packets. There is no full-frame YUV or coefficient
-copy. Plans and scratch share the existing8-KiB owner. SSE2/AVX2 forward transforms
+copy. RGBA16 subsampling reads each bounded row once and shares alpha products,
+preserving exact single-round normalization. Plans and scratch share the existing8-KiB owner. SSE2/AVX2 forward transforms
 and quantization retain exact scalar results and fallbacks. Optimal tables use two passes;
 color restarts use fixed tables in one pass. Grayscale uses a single 64-byte
 block. RGBA8/16 images and caller Gray8/RGB8 spans with stride support sync,

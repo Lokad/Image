@@ -47,6 +47,29 @@ internal static partial class JpegReferenceColor
         }
     }
 
+    internal static void NormalizeRgba16(ReadOnlySpan<ushort> rgba, Span<int> rgb, uint? background)
+    {
+        if (rgba.Length % 4 != 0 || rgb.Length != rgba.Length / 4)
+            throw new ArgumentException("Complete RGBA input and matching RGB output required.");
+        const long denominator = 65535L * 65535;
+        var color = background ?? 0;
+        var red = (int)(color >> 16 & 255); var green = (int)(color >> 8 & 255); var blue = (int)(color & 255);
+        for (var x = 0; x < rgb.Length; x++)
+        {
+            var alpha = rgba[x * 4 + 3];
+            if (alpha != 65535 && background is null)
+                throw new ArgumentException("JPEG requires opaque pixels or an explicit RGB background.", "image");
+            // Factor shared products without introducing an intermediate
+            // rounded sample. Every numerator stays below256*65535^2.
+            var scaledAlpha = alpha * 255L;
+            var inverseAlpha = (65535L - alpha) * 65535;
+            var r = (int)((rgba[x * 4] * scaledAlpha + red * inverseAlpha + denominator / 2) / denominator);
+            var g = (int)((rgba[x * 4 + 1] * scaledAlpha + green * inverseAlpha + denominator / 2) / denominator);
+            var b = (int)((rgba[x * 4 + 2] * scaledAlpha + blue * inverseAlpha + denominator / 2) / denominator);
+            rgb[x] = r | g << 8 | b << 16;
+        }
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static Vector128<ushort> FlattenWords(Vector128<ushort> pixels, Vector128<ushort> alpha, Vector128<ushort> background)
     {

@@ -21,8 +21,11 @@ screens. JPEG has independently confirmed improvements from bounded MCU conversi
 integer SIMD transforms/quantization and separable chroma-row reuse. Its4.97× gap
 remains open. The current change passes5,047 checks and the same actual private
 package on each platform. See [JPEG evidence](../benchmarks/WARM-JPEG-SEPARABLE-QUANTIZATION.md).
-An existing same-build RGBA16 JPEG420 screen shows a6.21× gap, with complete
-packet equality and full16-bit normalization inside the operation.
+The existing RGBA16 JPEG420 control now confirms a5.36× gap after
+exact bounded word-row normalization, saving13.6% elapsed with unchanged
+allocations and complete packets. Its5,049-check producer and the same actual
+private package pass on each platform;
+[word-row evidence](../benchmarks/WARM-JPEG-WORD-NORMALIZATION.md).
 Other replaced encoder observations remain historical.
 All17 historical BCL PNG timing rows below are superseded, as are the earlier
 JPEG encoder producers. No new timing or image/settings controls were added.
@@ -249,7 +252,7 @@ is a CPU-parity confirmation.
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,310.38 | 1,769.17 | 1.306 / 1.488 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,393.98 | 1,839.60 | 1.301 / 1.415 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,444.30 | 1,841.37 | 1.327 / 1.443 | 263,787 | Prior production; reconfirm |
-| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-SEPARABLE-QUANTIZATION.md) | 11,434.83 | 1,840.77 | 6.212 / 6.758 | 372,808 | Gap (short; qualified) |
+| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-WORD-NORMALIZATION.md) | 9,874.51 | 1,841.22 | 5.363 / 5.385 | 372,808 | Gap (independent) |
 | [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 1,350.95 | 1,404.64 | 0.962 / 0.970 | 154,892 | Parity confirmed |
 | [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,251.71 | 1,079.34 | 1.160 / 1.394 | 155,026 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |

@@ -71,11 +71,7 @@ internal static partial class JpegEncoder
                 else if (image.BitDepth == 8)
                     JpegReferenceColor.NormalizeRgba8(image.GetRow8(sy).Slice(firstX * 4, columns * 4), row, background);
                 else
-                    for (var sx = firstX; sx <= lastX; sx++)
-                    {
-                        ReadRgb(image, sx, sy, background, out var r, out var g, out var b);
-                        row[sx - firstX] = r | g << 8 | b << 16;
-                    }
+                    JpegReferenceColor.NormalizeRgba16(image.GetRow16(sy).Slice(firstX * 4, columns * 4), row, background);
             }
             for (var y = 0; y < 16; y++)
             for (var x = 0; x < 16; x++)

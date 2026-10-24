@@ -162,7 +162,9 @@ transform, tables and entropy writer as image inputs. Borrowed source storage,
 separately admitted. Refusal stops the operation without another encoder path.
 The fixed workspace includes a bounded MCU tile reused through signed chroma
 filtering, normalization/filter plans and exact integer forward transforms and
-quantization with SSE2/AVX2 acceleration and scalar fallbacks. Quality
+quantization with SSE2/AVX2 acceleration and scalar fallbacks. RGBA16 subsampling
+normalizes each bounded source row once, preserving single-round flattening
+without additional storage. Quality
 numbers remain specific to this encoder.
 
 Transforms return new owned buffers and preserve precision and source pixels.
