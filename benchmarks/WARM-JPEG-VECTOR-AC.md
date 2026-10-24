@@ -1,8 +1,8 @@
 # Parallel adaptive JPEG AC preparation
 
 Historical producer: its grayscale parity claim predates admitted raw-exact
-gray encoding in3f36e3f. The [current control](WARM-JPEG-SPARSE-SCAN.md) has a
-6.973× gap; the table below is retained as evidence of the earlier encoder.
+gray encoding in3f36e3f. The [current control](WARM-JPEG-GRAY-FACTOR.md) confirms a
+5.365× gap; the table below is retained as evidence of the earlier encoder.
 
 The eight existing adaptive JPEG encodes improve **20.8–23.5%** with unchanged
 packets, quality and production allocation strategy. **Single-component grayscale

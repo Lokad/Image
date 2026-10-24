@@ -5,6 +5,14 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E154 grayscale factorization](WARM-JPEG-GRAY-FACTOR.md) confirms the existing
+RGBA-to-gray control at5.365×/upper5.410, using23.7% less elapsed than its preceding
+screen with unchanged154,840B/op and exact58,910-byte packets. The existing
+caller-gray boundary is reconciled at4.103×/upper4.542,154,843B/op, same packet;
+it is no longer an uncertain old-producer observation. Neither is a parity pass.
+Both platforms pass5,079 checks and the same actual private package. No cases
+were added. Color JPEG/other codecs/decoders/edit/text reuse unchanged evidence.
+
 [E152 sparse JPEG traversal](WARM-JPEG-SPARSE-SCAN.md) confirms governedRGBA16
 at2.791×/upper2.804, saving17.0% against its preceding confirmation. Current
 ungovernedRGBA16/RGBA8 screens are2.732×/2.611×. The previously advertised gray

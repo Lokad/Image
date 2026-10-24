@@ -25,13 +25,15 @@ confirmation, with 803,971 B/op and unchanged packets. Ungoverned RGBA16/RGBA8
 have current 2.732×/2.611× screens and 372,811 B/op. Each platform passes 5,074
 checks and validates the same actual private package;
 [scan evidence](../benchmarks/WARM-JPEG-SPARSE-SCAN.md). Immutable workers were reused.
-The grayscale 0.962× claim came from the replaced 58,823-byte encoder. Its current
-raw-exact 58,910-byte control demonstrates a 6.973× gap against approved standalone
-SIMD libjpeg-turbo, with 154,840 B/op. It is the next priority. Old caller-gray
-timings also remain prior-production; their own boundary needs confirmation.
-Other affected JPEG readings remain historical. Prepared gray metadata changed
-only to reflect the now-exact public decoder; native source quality/settings/packet
-and all gates stayed unchanged. PNG/WebP and decoders/editing/text are unchanged.
+The grayscale 0.962× claim came from the replaced 58,823-byte encoder. The current
+raw-exact 58,910-byte control confirms a 5.365× gap after integer factorization,
+using 23.7% less elapsed than its preceding screen, with unchanged 154,840 B/op.
+The existing caller-gray boundary now has a current 4.103× screen and 154,843 B/op;
+it bypasses RGBA normalization on both subjects. Each platform passes 5,079 checks
+and the same actual private package; [gray evidence](../benchmarks/WARM-JPEG-GRAY-FACTOR.md).
+The reference is approved standalone SIMD libjpeg-turbo for this one-component
+scope. Gray remains the next priority. Older affected gray timings stay historical;
+other codecs/decoders/editing/text and color-JPEG confirmations are unchanged.
 VP8L now confirms a3.091× gap after exact paired-population costs, saving24.5%
 elapsed and8,480 allocated bytes/op against the preceding confirmation. The
 paired-cost producer passes 5,062 checks on each platform and validates the same actual private package;
@@ -105,8 +107,8 @@ replacement readiness remains open.
 
 The [finite checklist](../benchmarks/WARM-COVERAGE.md) contains 257 named cases:
 240 numeric and 17 unmeasured. Tested-producer rows contain **45 passes,
-121 gaps, 1 confidence-open case, 2 short cost
-screens and 71 superseded encoder rows**. The latter predate
+122 gaps, 1 confidence-open case, 2 short cost
+screens and 70 superseded encoder rows**. The latter predate
 JPEG decision/adaptive work or the managed PNG/VP8L encoder replacements; current packet evidence is
 reconciled and new costs are deferred while compression gates remain open.
 Their stored values are historical, not demonstrated current gaps. Another 30 marked
@@ -269,8 +271,8 @@ is a CPU-parity confirmation.
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,393.98 | 1,839.60 | 1.301 / 1.415 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,444.30 | 1,841.37 | 1.327 / 1.443 | 263,787 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-SPARSE-SCAN.md) | 5,017.63 | 1,836.89 | 2.732 / 2.968 | 372,811 | Gap (short; qualified) |
-| [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-SPARSE-SCAN.md) | 9,829.15 | 1,409.55 | 6.973 / 7.422 | 154,840 | Gap (short; qualified) |
-| [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,251.71 | 1,079.34 | 1.160 / 1.394 | 155,026 | Prior production; reconfirm |
+| [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAY-FACTOR.md) | 7,498.78 | 1,397.74 | 5.365 / 5.410 | 154,840 | Gap (independent) |
+| [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAY-FACTOR.md) | 4,425.94 | 1,078.60 | 4.103 / 4.542 | 154,843 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / AC trellis and padding pruning](../benchmarks/JPEG420-AC-TRELLIS.md) | 68,162.15 | 1,579.24 | 43.161 / 50.354 | 170,648 | Cost screen (CPU parity deferred) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Prior production; reconfirm |
