@@ -58,6 +58,8 @@ internal static partial class JpegEncoder
             {
                 var row = rgb.Slice((sy - firstY) * stride, stride);
                 if (image is null) source.CopyRgbRow(firstX, sy, row);
+                else if (image.BitDepth == 8)
+                    JpegReferenceColor.NormalizeRgba8(image.GetRow8(sy).Slice(firstX * 4, stride / 3 * 4), row, background);
                 else
                     for (var sx = firstX; sx <= lastX; sx++)
                     {

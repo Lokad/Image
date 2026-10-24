@@ -2,7 +2,7 @@ namespace Lokad.Image.Internal;
 
 // Pinned full-range BT.601 conversion: decimal matrix -> limited Q6 -> full Q7
 // -> byte, preserving each integer rounding stage. No frame or row storage.
-internal static class JpegReferenceColor
+internal static partial class JpegReferenceColor
 {
     private static readonly int Yr = Coefficient(299, 219), Yg = Coefficient(587, 219), Yb = Coefficient(114, 219);
     private static readonly int Ur = Coefficient(-169, 224), Ug = Coefficient(-331, 224), Ub = Coefficient(500, 224);

@@ -211,7 +211,7 @@ def render():
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
-        row('JPEG RGBA8 4:2:0', 'warm-jpeg-mcu-evidence.json', ['observations', -1], 'WARM-JPEG-MCU.md', confirmed=True),
+        row('JPEG RGBA8 4:2:0', 'warm-jpeg-row-normalization-evidence.json', ['observations', -1], 'WARM-JPEG-ROW-NORMALIZATION.md', confirmed=True),
         row('JPEG 4:2:0, shared budget / matched quality', 'warm-shared-budget-evidence.json', ['cases', 'JpegBudgetEncode4208', -1], 'WARM-SHARED-BUDGET.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420Restart8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
@@ -365,10 +365,10 @@ plus RGBA8/16 stored, fast and smallest. The17 existing delivery/profile rows
 are exact, including checksums/framing. Both platforms pass4,807 Release checks,
 69 affected PNG scalar checks and the SAME actual private0.2.0 package with all
 three examples. Four current RGBA8 encoder anchors have guarded packet-exact cost
-screens. JPEG now has an independently confirmed44.5% reduction in elapsed time
-through bounded MCU conversion and exact integer SIMD transforms; its7.57× gap
-remains open. The combined change passes5,036 checks and the same actual private
-package on each platform. See [JPEG evidence](../benchmarks/WARM-JPEG-MCU.md).
+screens. JPEG has independently confirmed improvements from bounded MCU conversion,
+integer SIMD transforms and exact byte-row normalization. Its6.44× gap remains
+open. The current change passes5,043 checks and the same actual private package
+on each platform. See [JPEG evidence](../benchmarks/WARM-JPEG-ROW-NORMALIZATION.md).
 Other replaced encoder observations remain historical.
 All17 historical BCL PNG timing rows below are superseded, as are the earlier
 JPEG encoder producers. No new timing or image/settings controls were added.
