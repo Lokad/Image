@@ -4,7 +4,7 @@
 // defines the transform; the rounded linear map is independently qualified.
 namespace Lokad.Image.Internal;
 
-internal static class JpegGrayReferenceTransform
+internal static partial class JpegGrayReferenceTransform
 {
     private static int Fixed(double value) => (int)Math.Round(value * 8192, MidpointRounding.AwayFromZero);
     private static readonly double Root = Math.Sqrt(2), C1 = Math.Cos(Math.PI / 16), C3 = Math.Cos(3 * Math.PI / 16),
@@ -43,6 +43,11 @@ internal static class JpegGrayReferenceTransform
     public static void Forward(ReadOnlySpan<byte> samples, Span<short> transformed)
     {
         if (samples.Length != 64 || transformed.Length != 64) throw new ArgumentException("Complete8x8 block required.");
+        if (System.Runtime.Intrinsics.X86.Avx2.IsSupported)
+        {
+            ForwardAvx2(samples, transformed);
+            return;
+        }
         // Same256-byte snapshot inside the existing fixed operation admission.
         // Gather all eight column inputs before replacing that column in place;
         // all source bytes are consumed before any possibly overlapping output.

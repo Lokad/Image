@@ -26,14 +26,15 @@ have current 2.732×/2.611× screens and 372,811 B/op. Each platform passes 5,07
 checks and validates the same actual private package;
 [scan evidence](../benchmarks/WARM-JPEG-SPARSE-SCAN.md). Immutable workers were reused.
 The grayscale 0.962× claim came from the replaced 58,823-byte encoder. Current
-raw-exact 58,910-byte controls now confirm caller-gray at3.167×, using22.8% less
-elapsed than its preceding screen and154,840B/op. RGBA-gray has a current2.935×
-screen and154,838B/op; it includes normalization on both subjects. Each platform
-passes5,088checks and the same actual private package;
-[quantization evidence](../benchmarks/WARM-JPEG-GRAY-QUANTIZATION.md). The reference
-is approved standalone SIMD libjpeg-turbo for these one-component boundaries.
-Grayscale remains a material priority. Older affected timings stay historical;
-color JPEG, other codecs/decoders/editing/text reuse unchanged confirmations.
+raw-exact 58,910-byte controls confirm caller-gray at2.617× after vector DCT,
+using17.3% less elapsed than its preceding confirmation and154,839B/op. RGBA-gray
+has a current2.648× screen and154,836B/op, including normalization on both subjects.
+Each platform passes5,088checks and the same actual private package;
+[vector-transform evidence](../benchmarks/WARM-JPEG-GRAY-AVX2-TRANSFORM.md).
+The reference is approved standalone SIMD libjpeg-turbo for these one-component
+boundaries. VP8/VP8L now have the largest current encoder gaps. Older affected
+gray timings stay historical; colorJPEG/othercodecs/decoders/editing/text reuse
+unchanged confirmations.
 VP8L now confirms a3.091× gap after exact paired-population costs, saving24.5%
 elapsed and8,480 allocated bytes/op against the preceding confirmation. The
 paired-cost producer passes 5,062 checks on each platform and validates the same actual private package;
@@ -271,8 +272,8 @@ is a CPU-parity confirmation.
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,393.98 | 1,839.60 | 1.301 / 1.415 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,444.30 | 1,841.37 | 1.327 / 1.443 | 263,787 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-SPARSE-SCAN.md) | 5,017.63 | 1,836.89 | 2.732 / 2.968 | 372,811 | Gap (short; qualified) |
-| [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAY-QUANTIZATION.md) | 4,155.49 | 1,416.07 | 2.935 / 3.280 | 154,838 | Gap (short; qualified) |
-| [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAY-QUANTIZATION.md) | 3,415.99 | 1,078.78 | 3.167 / 3.183 | 154,840 | Gap (independent) |
+| [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAY-AVX2-TRANSFORM.md) | 3,747.82 | 1,415.35 | 2.648 / 2.875 | 154,836 | Gap (short; qualified) |
+| [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAY-AVX2-TRANSFORM.md) | 2,824.38 | 1,079.44 | 2.617 / 2.638 | 154,839 | Gap (independent) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / AC trellis and padding pruning](../benchmarks/JPEG420-AC-TRELLIS.md) | 68,162.15 | 1,579.24 | 43.161 / 50.354 | 170,648 | Cost screen (CPU parity deferred) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Prior production; reconfirm |

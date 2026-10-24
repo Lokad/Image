@@ -5,6 +5,14 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E160 vector grayscale DCT](WARM-JPEG-GRAY-AVX2-TRANSFORM.md) confirms caller-gray
+at2.617×/upper2.638,17.3% less elapsed than its preceding confirmation,154,839B/op.
+RGBA-gray is reconciled at2.648×/upper2.875 short,154,836B/op. Both retain exact
+58,910-byte packets. Both platforms pass5,088checks and the same actual private
+package. No cases were added; only grayscale forward-transform CPU proofs change.
+ColorJPEG/othercodecs/decoders/editing/text reuse unchanged paths. VP8/VP8L now
+have the largest current encoder gaps; the full257-case/1× objective stays open.
+
 [E158 grayscale quantization](WARM-JPEG-GRAY-QUANTIZATION.md) confirms caller-gray
 at3.167×/upper3.183,22.8% less elapsed than its preceding screen,154,840B/op.
 RGBA-gray is reconciled at2.935×/upper3.280 short,154,838B/op. Both retain exact
