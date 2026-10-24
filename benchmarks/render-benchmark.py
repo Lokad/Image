@@ -219,8 +219,8 @@ def render():
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-entropy-records-evidence.json', ['cases', 'rgba16', -1], 'WARM-JPEG-ENTROPY-RECORDS.md', verification='Gap (short; qualified)'),
-        row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-gray-avx2-transform-evidence.json', ['cases', 'rgbaGray', -1], 'WARM-JPEG-GRAY-AVX2-TRANSFORM.md', confirmed=True),
-        row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-gray-avx2-transform-evidence.json', ['observations', -1], 'WARM-JPEG-GRAY-AVX2-TRANSFORM.md', confirmed=True),
+        row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-gray-entropy-records-evidence.json', ['observations', -1], 'WARM-JPEG-GRAY-ENTROPY-RECORDS.md', confirmed=True),
+        row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-gray-entropy-records-evidence.json', ['cases', 'callerGray', -1], 'WARM-JPEG-GRAY-ENTROPY-RECORDS.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / AC trellis and padding pruning', 'jpeg420-ac-trellis-evidence.json', ['cases', 'Encode420_8', -1], 'JPEG420-AC-TRELLIS.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque‡', 'vp8-noise-spectrum-evidence.json', ['observations', 0], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
@@ -377,15 +377,15 @@ and validates the same actual private package;
 [entropy-record evidence](../benchmarks/WARM-JPEG-ENTROPY-RECORDS.md).
 Immutable workers were reused. Other affected color-JPEG timings stay historical.
 The grayscale 0.962× claim came from the replaced 58,823-byte encoder. Current
-raw-exact 58,910-byte controls confirm caller-gray at2.617× after vector DCT,
-using17.3% less elapsed than its preceding confirmation and154,839B/op. RGBA-gray
-now independently confirms2.696×/upper2.711 and154,836B/op, including
-normalization on both subjects. Its unchanged paths reuse current E178 qualification.
-Each platform passes5,088checks and the same actual private package;
-[vector-transform evidence](../benchmarks/WARM-JPEG-GRAY-AVX2-TRANSFORM.md).
-The reference is approved standalone SIMD libjpeg-turbo for these one-component
-boundaries. Grayscale JPEG now has the largest measured encoder gaps. Older affected
-gray timings stay historical. Other codecs, decoders, editing and text reuse
+raw-exact 58,910-byte RGBA-gray encoding confirms1.726× after entropy replay,
+using35.3% less elapsed than its preceding confirmation and154,883B/op. Caller-gray
+has a current1.886× screen and154,886B/op. The48B owner adds bounded record storage;
+fullcapacity/replacement peaks remain governed. Each platform passes5,111checks
+and the same actual package; [replay evidence](../benchmarks/WARM-JPEG-GRAY-ENTROPY-RECORDS.md).
+The reference is approved standalone SIMDlibjpeg-turbo for both complete boundaries.
+VP8/colorJPEG/VP8L now lead the measured encoder gaps; older affected gray timings
+stay historical.
+Other codecs, decoders, editing and text reuse
 unchanged confirmations where their production paths remain unchanged.
 VP8 now confirms a 2.499× gap after exact vector residual preparation, using
 7.6% less elapsed than its preceding confirmation, with unchanged 24,080,952 B/op

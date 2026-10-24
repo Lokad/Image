@@ -18,6 +18,7 @@ internal static partial class JpegEncoder
         if (plannedWork > context.RemainingWork)
             throw new ImageLimitException(ImageLimitKind.Work, "Reference grayscale JPEG work exceeds the configured limit.");
         long borrowed = 0; var fixedReserved = image is null; var tablesReserved = false;
+        JpegEntropyRecords? records = null;
         try
         {
             if (image is not null)
@@ -26,23 +27,34 @@ internal static partial class JpegEncoder
                 context.Reserve(ReferenceFixedBytes); fixedReserved = true;
             }
             context.Work(0);
+            // Select using declared local limits before shared admission. A
+            // refused reservation is terminal, never retried by recomputation.
+            var recordBytes = blocks * 32 * sizeof(int);
+            const long tablePeak = ReferenceTableBytes + 65536L + 257 * 2048;
+            if (options.RestartInterval == 0 && recordBytes <= JpegCoefficientPool.MaxRetainedBytes
+                && recordBytes + 128 <= context.RemainingWorkingBytes - tablePeak)
+                records = new JpegEntropyRecords(context, (int)(recordBytes / sizeof(int)));
             var quantization = JpegGrayReferenceTransform.Quantization(options.Quality);
             // Once per operation, inside the existing8KiB fixed workspace.
             Span<ushort> reciprocals = stackalloc ushort[64];
             JpegGrayQuantization.Prepare(quantization, reciprocals);
             var histograms = new int[4][]; histograms[0] = new int[256]; histograms[2] = new int[256];
-            ReferenceGrayPass(image, source, width, height, options.BackgroundRgb, quantization, reciprocals, histograms, null, null, context, options.RestartInterval);
+            ReferenceGrayPass(image, source, width, height, options.BackgroundRgb, quantization, reciprocals, histograms, null, null, context, options.RestartInterval, records);
             context.Reserve(ReferenceTableBytes); tablesReserved = true; context.Work(0);
             var tables = new JpegEncodingTable[4];
             tables[0] = JpegGrayReferenceTables.Huffman(histograms[0], context);
             tables[2] = JpegGrayReferenceTables.Huffman(histograms[2], context);
             WriteReferenceGrayHeader(output, width, height, quantization, tables, context, options.RestartInterval);
             var writer = new JpegEntropyWriter(output, context);
-            ReferenceGrayPass(image, source, width, height, options.BackgroundRgb, quantization, reciprocals, histograms, tables, writer, context, options.RestartInterval);
+            if (records is null)
+                ReferenceGrayPass(image, source, width, height, options.BackgroundRgb, quantization, reciprocals, histograms, tables, writer, context, options.RestartInterval);
+            else
+                records.Write(tables, writer, ReferenceGrayBlockWork);
             writer.Align(); context.Work(2); output.WriteByte(255); output.WriteByte(217);
         }
         finally
         {
+            records?.Dispose();
             if (tablesReserved) context.Release(ReferenceTableBytes);
             if (fixedReserved) context.Release(ReferenceFixedBytes);
             if (borrowed != 0) context.ReleaseBorrowed(borrowed);
@@ -51,7 +63,7 @@ internal static partial class JpegEncoder
 
     private static void ReferenceGrayPass(ImageBuffer? image, JpegSampleInput source, int width, int height,
         uint? background, ushort[] quantization, ReadOnlySpan<ushort> reciprocals, int[][] histograms, JpegEncodingTable[]? tables,
-        JpegEntropyWriter? writer, OperationContext context, int restartInterval)
+        JpegEntropyWriter? writer, OperationContext context, int restartInterval, JpegEntropyRecords? entropyCache = null)
     {
         Span<byte> samples = stackalloc byte[64];
         Span<short> transformed = stackalloc short[64], coefficients = stackalloc short[64];
@@ -69,7 +81,14 @@ internal static partial class JpegEncoder
                 JpegGrayPreparation.CopyBlock(image, source, width, height, left, top, background, samples);
             JpegGrayReferenceTransform.Forward(samples, transformed);
             JpegGrayQuantization.Quantize(transformed, quantization, reciprocals, coefficients);
-            ReferenceBlock(coefficients, 0, previous, histograms, tables, writer);
+            if (entropyCache is null)
+                ReferenceBlock(coefficients, 0, previous, histograms, tables, writer);
+            else
+            {
+                var target = entropyCache.BeginBlock();
+                var count = JpegEntropyRecords.RecordBlock(coefficients, 0, previous, histograms, target);
+                entropyCache.Commit(count); entropyCache.MarkMcuEnd();
+            }
         }
     }
 

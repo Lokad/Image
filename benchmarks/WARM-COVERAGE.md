@@ -5,6 +5,13 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E181 grayscale replay](WARM-JPEG-GRAY-ENTROPY-RECORDS.md) confirms the existing
+RGBA-gray control at1.726×/upper1.739, saving35.3% elapsed with154,883B/op and exact
+58,910 B packets. Caller-gray current short1.886×/upper2.154,154,886B/op. BothOS
+pass5,111 checks and the SAMEactualpackage. Only nonrestartgray CPU paths change;
+othercodec/edit/decode/text confirmations remain valid where unchanged. No cases
+added. VP8/colorJPEG/VP8L now lead the measured gaps; full1× objective stays open.
+
 E179 resolves the existing RGBA-gray short uncertainty with unchanged production:
 2.696×/upper2.711 independently confirmed,154,836 B/op, exact58,910 B packets.
 Approved standalone SIMDlibjpeg-turbo baseline and complete normalization/output
