@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Lokad.Image.Internal;
 using Lokad.Image.Tooling;
@@ -137,5 +138,117 @@ public sealed class Vp8BlockQuantizationTests
         var values = new int[80]; MinimumStep(values);
         Assert.Throws<ArgumentException>(() => Vp8BlockQuantization.Apply(data.AsSpan(0, 18), data.AsSpan(8, 18), new(values)));
         Assert.Equal(original, data);
+    }
+
+    [Fact]
+    public void EntireCoefficientDomainAndInt32BoundariesRetainFrozenScalarLevels()
+    {
+        var coefficients = new short[18]; var levels = new short[18]; var values = new int[80];
+        coefficients[16] = 30000; coefficients[17] = -30000; levels[16] = 97; levels[17] = -98;
+        var packed = new byte[64]; uint state = 0x9e3779b9; var blocks = 0;
+        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
+        int Next() { state ^= state << 13; state ^= state >> 17; state ^= state << 5; return (int)state; }
+        void Check()
+        {
+            var nonzero = Vp8BlockQuantization.Apply(coefficients, levels, new(values)); var any = false;
+            for (var p = 0; p < 16; p++)
+            {
+                // Unit reconstruction steps expose raster levels directly;
+                // independently check diagonal placement and the return value.
+                var x = p & 3; var y = p >> 2; var d = x + y;
+                var before = d < 4 ? d * (d + 1) / 2 : 16 - (7 - d) * (8 - d) / 2;
+                var rank = before + ((d & 1) != 0 ? Math.Min(3, d) - x : x - Math.Max(0, d - 3));
+                Assert.Equal(coefficients[p], levels[rank]); any |= coefficients[p] != 0;
+                BinaryPrimitives.WriteInt32LittleEndian(packed.AsSpan(4 * p), coefficients[p]);
+            }
+            Assert.Equal(any, nonzero); hash.AppendData(packed); blocks++;
+        }
+        for (var policy = 0; policy < 32; policy++)
+        {
+            for (var p = 0; p < 16; p++)
+            {
+                values[p] = 1;
+                values[16 + p] = policy < 16 ? 131072 / (4 + policy * 7 + p) : Next();
+                values[32 + p] = policy < 16 ? (96 + p) << 9 : Next();
+                values[48 + p] = policy < 16 ? policy + p : Next();
+                values[64 + p] = policy < 16 ? policy * p : Next();
+            }
+            var saved = values.ToArray();
+            for (var value = -16320; value <= 16320; value += 16)
+            {
+                for (var p = 0; p < 16; p++) coefficients[p] = (short)Math.Min(16320, value + p);
+                Check();
+            }
+            Assert.Equal(saved, values);
+        }
+        int[] edges = [int.MinValue, int.MinValue + 1, -131073, -131072, -1, 0, 1,
+            131071, 131072, 131073, (2047 << 17) - 1, 2047 << 17,
+            (2048 << 17) - 1, 2048 << 17, int.MaxValue - 1, int.MaxValue];
+        for (var sample = 0; sample < 8192; sample++)
+        {
+            for (var p = 0; p < 16; p++)
+            {
+                var value = sample % 4 == 0 ? 0 : (Next() & int.MaxValue) % 32641 - 16320;
+                coefficients[p] = (short)value; values[p] = 1;
+                values[64 + p] = sample % 3 == 0 ? edges[(sample + p) & 15] : Next();
+                var magnitude = unchecked(Math.Abs(value) + values[64 + p]);
+                values[48 + p] = unchecked(magnitude + sample % 3 - 1);
+                values[16 + p] = edges[(sample / 16 + p) & 15]; values[32 + p] = edges[(sample + p) & 15];
+            }
+            Check();
+        }
+        Assert.Equal(73504, blocks);
+        Assert.Equal("c3ac724b5e6973263f3eca415480a53a63c4951e177b92e1f84332eb0d076991",
+            Convert.ToHexStringLower(hash.GetHashAndReset()));
+        Assert.Equal((30000, -30000, 97, -98), ((int)coefficients[16], (int)coefficients[17], (int)levels[16], (int)levels[17]));
+    }
+
+    [Fact]
+    public void CheckedReconstructionPublishesOnlyTheValidPrefix()
+    {
+        foreach (var position in Enumerable.Range(0, 16))
+        foreach (var step in new[] { int.MinValue, int.MaxValue, 65536, -65536, 32768, -32769 })
+        {
+            var coefficients = new short[16]; var levels = Enumerable.Repeat((short)29999, 16).ToArray(); var values = new int[80];
+            for (var p = 0; p < 16; p++)
+            {
+                coefficients[p] = (short)(p % 2 == 0 ? 1000 : -1000);
+                values[p] = p == position ? step : 1; values[16 + p] = 32768;
+            }
+            Assert.Throws<OverflowException>(() => Vp8BlockQuantization.Apply(coefficients, levels, new(values)));
+            for (var p = 0; p < 16; p++)
+            {
+                Assert.Equal((short)((p < position ? 250 : 1000) * (p % 2 == 0 ? 1 : -1)), coefficients[p]);
+                var x = p & 3; var y = p >> 2; var d = x + y;
+                var before = d < 4 ? d * (d + 1) / 2 : 16 - (7 - d) * (8 - d) / 2;
+                var rank = before + ((d & 1) != 0 ? Math.Min(3, d) - x : x - Math.Max(0, d - 3));
+                Assert.Equal((short)(p < position ? (p % 2 == 0 ? 250 : -250) : 29999), levels[rank]);
+            }
+        }
+    }
+
+    [Fact]
+    public void OutputAliasingBorrowedMatrixFailsBeforeAnyMutation()
+    {
+        var values = new int[96]; MinimumStep(values); var saved = values.ToArray();
+        var ordinary = Enumerable.Repeat((short)77, 18).ToArray(); var original = ordinary.ToArray();
+        Assert.Throws<ArgumentException>(() => Vp8BlockQuantization.Apply(
+            MemoryMarshal.Cast<int, short>(values.AsSpan()).Slice(0, 18), ordinary, new(values.AsSpan(0, 80))));
+        Assert.Equal(saved, values); Assert.Equal(original, ordinary);
+        Assert.Throws<ArgumentException>(() => Vp8BlockQuantization.Apply(
+            ordinary, MemoryMarshal.Cast<int, short>(values.AsSpan()).Slice(32, 18), new(values.AsSpan(0, 80))));
+        Assert.Equal(saved, values); Assert.Equal(original, ordinary);
+    }
+
+    [Fact]
+    public void WarmQuantizationDoesNotAllocate()
+    {
+        var values = new int[80]; MinimumStep(values);
+        Span<short> coefficients = stackalloc short[16]; coefficients.Fill(1000);
+        Span<short> levels = stackalloc short[16]; var matrix = new Vp8QuantizationMatrix(values);
+        for (var i = 0; i < 256; i++) Vp8BlockQuantization.Apply(coefficients, levels, matrix);
+        var before = GC.GetAllocatedBytesForCurrentThread();
+        for (var i = 0; i < 10000; i++) Vp8BlockQuantization.Apply(coefficients, levels, matrix);
+        Assert.Equal(0, GC.GetAllocatedBytesForCurrentThread() - before);
     }
 }

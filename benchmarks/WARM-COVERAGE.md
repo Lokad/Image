@@ -5,6 +5,13 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E149 exact vector quantization](WARM-VP8-AVX2-LEVELS.md) confirms the existing
+RGBA8 VP8 control at3.109×/upper3.128, with7.8% less elapsed than the preceding
+confirmation, unchanged24,080,952 B/op and exact98,590-byte packets. Both
+platforms pass5,072 checks and the same actual private package. No cases were
+added. JPEG/PNG/VP8L and all decoder/editing/text paths reuse unchanged evidence;
+older affected VP8 encoder timings remain historical.
+
 [E147 AVX2 row reductions](WARM-JPEG-AVX2-ROWS.md) reconcile the current color-JPEG
 anchors without adding cases: governed RGBA16 confirms 3.366×, with 803,968 B/op,
 exact packets and 8.35% less elapsed time than its preceding screen. Ungoverned

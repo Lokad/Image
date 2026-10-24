@@ -225,7 +225,7 @@ def render():
         row('JPEG 4:2:0 from caller RGB / AC trellis and padding pruning', 'jpeg420-ac-trellis-evidence.json', ['cases', 'Encode420_8', -1], 'JPEG420-AC-TRELLIS.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque‡', 'vp8-noise-spectrum-evidence.json', ['observations', 0], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 1], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
-        row('VP8 RGBA8', 'warm-vp8-texture-butterfly-evidence.json', ['observations', -1], 'WARM-VP8-TEXTURE-BUTTERFLY.md', confirmed=True),
+        row('VP8 RGBA8', 'warm-vp8-avx2-levels-evidence.json', ['observations', -1], 'WARM-VP8-AVX2-LEVELS.md', confirmed=True),
         row('WebP VP8 + alpha from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 3], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-histogram384-evidence.json', ['observations', 0], 'WARM-VP8-HISTOGRAM384.md', verification='Cost screen (CPU parity deferred)'),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-paired-population-evidence.json', ['observations', -1], 'WARM-VP8L-PAIRED-POPULATION.md', confirmed=True),
@@ -380,10 +380,10 @@ VP8L now confirms a3.091× gap after exact paired-population costs, saving24.5%
 elapsed and8,480 allocated bytes/op against the preceding confirmation. The
 paired-cost producer passes 5,062 checks on each platform and validates the same actual private package;
 [paired-cost evidence](../benchmarks/WARM-VP8L-PAIRED-POPULATION.md).
-VP8 now confirms a 3.362× gap after exact texture butterflies, using 8.6% less elapsed
-time than the preceding screen, with unchanged allocations/packets.
-Each platform passes 5,064 checks and validates the same actual private package;
-[texture evidence](../benchmarks/WARM-VP8-TEXTURE-BUTTERFLY.md).
+VP8 now confirms a 3.109× gap after exact vector quantization, using 7.8% less
+elapsed time than the preceding confirmation, with unchanged allocations/packets.
+Each platform passes 5,072 checks and validates the same actual private package;
+[quantization evidence](../benchmarks/WARM-VP8-AVX2-LEVELS.md).
 
 Other replaced encoder observations remain historical.
 All17 historical BCL PNG timing rows below are superseded, as are the earlier
