@@ -91,7 +91,7 @@ public sealed class TextOutlineFailureTests
 
     [Theory]
     [InlineData("version", true)] [InlineData("format", true)] [InlineData("pairs", false)] [InlineData("glyph", false)]
-    public void LegacyKerningValidationIsExplicitAndCanBeDisabled(string field, bool unsupported)
+    public void VersionZeroKerningValidationIsExplicitAndCanBeDisabled(string field, bool unsupported)
     {
         var bytes = AuthoredTrueType.Build(); var offset = AuthoredTrueType.Offset(bytes, "kern");
         switch (field)

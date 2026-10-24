@@ -1,7 +1,11 @@
-// Independent scalar factorization of the eight-point DCT. Tangent rotations
+// Independent integer factorization of the eight-point DCT. Tangent rotations
 // and cosine row weights are generated mathematically; no implementation tables
 // are imported. Integer scale, high-product truncation, odd corrections and final
-// rounding intentionally match the pinned forward stage. Safe scalar reference encoder arithmetic.
+// rounding intentionally match the pinned forward stage.
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+
 namespace Lokad.Image.Internal;
 
 internal static class JpegReferenceTransform
@@ -10,14 +14,14 @@ internal static class JpegReferenceTransform
     private static readonly int Tangent2 = Fixed(Math.Tan(Math.PI / 8), 16);
     private static readonly int Tangent3 = Fixed(Math.Tan(3 * Math.PI / 16), 16) - (1 << 16);
     private static readonly int HalfCosine = Fixed(Math.Cos(Math.PI / 4), 15);
-    private static readonly int[] RowWeights = GenerateWeights();
+    private static readonly short[] RowWeights = GenerateWeights();
 
     private static int Fixed(double value, int bits) => (int)Math.Round(value * (1 << bits), MidpointRounding.AwayFromZero);
     private static int HighProduct(int value, int multiplier) => value * multiplier >> 16;
 
-    private static int[] GenerateWeights()
+    private static short[] GenerateWeights()
     {
-        var result = new int[512];
+        var result = new short[512];
         for (int v = 0; v < 8; v++)
         {
             int angle = v == 0 || v == 4 ? 4 : Math.Min(v, 8 - v);
@@ -26,7 +30,7 @@ internal static class JpegReferenceTransform
                 for (int x = 0; x < 8; x++)
                 {
                     double cosine = u == 0 ? Math.Cos(Math.PI / 4) : Math.Cos((2 * x + 1) * u * Math.PI / 16);
-                    result[v * 64 + u * 8 + x] = Fixed(cosine * scale, 15);
+                    result[v * 64 + u * 8 + x] = checked((short)Fixed(cosine * scale, 15));
                 }
         }
         return result;
@@ -35,6 +39,11 @@ internal static class JpegReferenceTransform
     public static void Forward(ReadOnlySpan<byte> samples, Span<short> output)
     {
         if (samples.Length != 64 || output.Length != 64) throw new ArgumentException("Complete 8x8 block required.");
+        if (Sse2.IsSupported && BitConverter.IsLittleEndian)
+        {
+            ForwardVectors(samples, output);
+            return;
+        }
         Span<int> columns = stackalloc int[64];
         for (int x = 0; x < 8; x++)
         {
@@ -71,18 +80,97 @@ internal static class JpegReferenceTransform
             }
     }
 
-    public static void Quantize(ReadOnlySpan<short> transformed, ReadOnlySpan<ushort> quantization, Span<short> output)
+    private static Vector128<short> Samples8(ReadOnlySpan<byte> samples)
+        => Sse2.UnpackLow(Vector128.CreateScalar(MemoryMarshal.Read<ulong>(samples)).AsByte(), Vector128<byte>.Zero).AsInt16();
+
+    private static Vector128<short> HighProduct(Vector128<short> value, int multiplier)
+        => Sse2.MultiplyHigh(value, Vector128.Create((short)multiplier));
+
+    private static short RoundRow(Vector128<int> products)
     {
-        if (transformed.Length != 64 || quantization.Length != 64 || output.Length != 64 || quantization[0] != 8)
+        // Each signed pair fits32bits. Widen before the row reduction so the
+        // scalar expression's exact sum and rounding remain explicit.
+        var sum = (long)products.GetElement(0) + products.GetElement(1)
+            + products.GetElement(2) + products.GetElement(3) + (1 << 16);
+        return (short)Math.Clamp(sum >> 17, short.MinValue, short.MaxValue);
+    }
+
+    private static void ForwardVectors(ReadOnlySpan<byte> samples, Span<short> output)
+    {
+        // Eight byte-valued columns run the same signed butterfly together.
+        // All column intermediates fit signed16bits (the largest even sum is
+        // 8*8*255=16320); signed high products retain negative truncation.
+        var s0 = Samples8(samples); var s1 = Samples8(samples[8..]);
+        var s2 = Samples8(samples[16..]); var s3 = Samples8(samples[24..]);
+        var s4 = Samples8(samples[32..]); var s5 = Samples8(samples[40..]);
+        var s6 = Samples8(samples[48..]); var s7 = Samples8(samples[56..]);
+        var a = Sse2.ShiftLeftLogical(s0 + s7, 3); var b = Sse2.ShiftLeftLogical(s1 + s6, 3);
+        var c = Sse2.ShiftLeftLogical(s2 + s5, 3); var d = Sse2.ShiftLeftLogical(s3 + s4, 3);
+        var outside = a + d; var inside = b + c;
+        var outsideDifference = a - d; var insideDifference = b - c;
+        var one = Vector128.Create((short)1);
+        Span<Vector128<short>> rows = stackalloc Vector128<short>[8];
+        rows[0] = outside + inside; rows[4] = outside - inside;
+        rows[2] = (outsideDifference + HighProduct(insideDifference, Tangent2)) | one;
+        rows[6] = (HighProduct(outsideDifference, Tangent2) - insideDifference) | one;
+        var first = Sse2.ShiftLeftLogical(s0 - s7, 3);
+        var middle1 = Sse2.ShiftLeftLogical(s1 - s6, 4);
+        var middle2 = Sse2.ShiftLeftLogical(s2 - s5, 4);
+        var last = Sse2.ShiftLeftLogical(s3 - s4, 3);
+        var sumRotation = HighProduct(middle1 + middle2, HalfCosine) | one;
+        var differenceRotation = HighProduct(middle1 - middle2, HalfCosine);
+        var low = first + sumRotation; var high = first - sumRotation;
+        var lowRotation = last + differenceRotation; var highRotation = last - differenceRotation;
+        rows[1] = (low + HighProduct(lowRotation, Tangent1)) | one;
+        rows[7] = HighProduct(low, Tangent1) - lowRotation;
+        rows[3] = high - highRotation - HighProduct(highRotation, Tangent3);
+        rows[5] = highRotation + high + HighProduct(high, Tangent3);
+        for (var v = 0; v < 8; v++)
+        {
+            var row = rows[v];
+            if (Avx2.IsSupported)
+            {
+                var twice = Vector256.Create(row, row);
+                for (var u = 0; u < 8; u += 2)
+                {
+                    var weights = MemoryMarshal.Read<Vector256<short>>(MemoryMarshal.AsBytes(RowWeights.AsSpan(v * 64 + u * 8, 16)));
+                    var products = Avx2.MultiplyAddAdjacent(twice, weights);
+                    output[v * 8 + u] = RoundRow(products.GetLower());
+                    output[v * 8 + u + 1] = RoundRow(products.GetUpper());
+                }
+            }
+            else
+                for (var u = 0; u < 8; u++)
+                {
+                    var weights = MemoryMarshal.Read<Vector128<short>>(MemoryMarshal.AsBytes(RowWeights.AsSpan(v * 64 + u * 8, 8)));
+                    output[v * 8 + u] = RoundRow(Sse2.MultiplyAddAdjacent(row, weights));
+                }
+        }
+    }
+
+    internal static void PrepareQuantization(ReadOnlySpan<ushort> quantization, Span<int> plan)
+    {
+        if (quantization.Length != 64 || plan.Length != 128 || quantization[0] != 8)
             throw new ArgumentException("Complete blocks with the pinned DC precision required.");
-        output[0] = (short)(((transformed[0] + 32) >> 6) - 128);
+        plan.Clear();
         for (int k = 1; k < 64; k++)
         {
             if (quantization[k] is 0 or > 255) throw new ArgumentException("Pinned 8-bit quantization required.");
             int reciprocal = 8192 / quantization[k];
-            int rounding = (24576 + reciprocal / 2) / reciprocal;
+            plan[k] = reciprocal;
+            plan[64 + k] = (24576 + reciprocal / 2) / reciprocal;
+        }
+    }
+
+    public static void Quantize(ReadOnlySpan<short> transformed, ReadOnlySpan<int> plan, Span<short> output)
+    {
+        if (transformed.Length != 64 || plan.Length != 128 || output.Length != 64)
+            throw new ArgumentException("Complete blocks and prepared quantization required.");
+        output[0] = (short)(((transformed[0] + 32) >> 6) - 128);
+        for (int k = 1; k < 64; k++)
+        {
             int value = transformed[k];
-            int magnitude = ((Math.Abs(value) + rounding) * reciprocal) >> 16;
+            int magnitude = ((Math.Abs(value) + plan[64 + k]) * plan[k]) >> 16;
             output[k] = (short)(value < 0 ? -magnitude : magnitude);
         }
     }

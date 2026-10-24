@@ -55,11 +55,15 @@ internal static partial class JpegEncoder
             }
             context.Work(0);
             var quantization = JpegReferenceTables.Quantization(ReferenceQScale(options.Quality));
+            // Both passes share the same512-byte stack plan in the fixed owner.
+            // Its two integer divisions per AC position run once per operation.
+            Span<int> quantizationPlan = stackalloc int[128];
+            JpegReferenceTransform.PrepareQuantization(quantization, quantizationPlan);
             var histograms = fixedTables ? Array.Empty<int[]>() : new int[4][];
             if (!fixedTables)
             {
                 for (var i = 0; i < 4; i++) histograms[i] = new int[256];
-                ReferencePass(image, source, width, height, options.BackgroundRgb, options.Sampling, quantization, histograms, null, null, context);
+                ReferencePass(image, source, width, height, options.BackgroundRgb, options.Sampling, quantizationPlan, histograms, null, null, context);
             }
             // Establish the owner of all four surviving table arrays before the
             // generators allocate them. Their graph scratch has a shorter owner.
@@ -69,7 +73,7 @@ internal static partial class JpegEncoder
                 ? JpegFixedReferenceTables.Create(i, context) : JpegReferenceTables.Huffman(histograms[i], context);
             WriteReferenceHeader(output, width, height, options.Sampling, quantization, tables, context, options.RestartInterval);
             var writer = new JpegEntropyWriter(output, context);
-            ReferencePass(image, source, width, height, options.BackgroundRgb, options.Sampling, quantization, histograms, tables, writer, context, options.RestartInterval);
+            ReferencePass(image, source, width, height, options.BackgroundRgb, options.Sampling, quantizationPlan, histograms, tables, writer, context, options.RestartInterval);
             writer.Align(); context.Work(2); output.WriteByte(255); output.WriteByte(217);
         }
         finally
@@ -81,12 +85,12 @@ internal static partial class JpegEncoder
     }
 
     private static void ReferencePass(ImageBuffer? image, JpegSampleInput source, int width, int height, uint? background, JpegSampling sampling,
-        ushort[] quantization, int[][] histograms, JpegEncodingTable[]? tables, JpegEntropyWriter? writer, OperationContext context, int restartInterval = 0)
+        ReadOnlySpan<int> quantizationPlan, int[][] histograms, JpegEncodingTable[]? tables, JpegEntropyWriter? writer, OperationContext context, int restartInterval = 0)
     {
         if (sampling != JpegSampling.YCbCr444)
         {
             ReferenceSubsampledPass(image, source, width, height, background, sampling,
-                quantization, histograms, tables, writer, context, restartInterval);
+                quantizationPlan, histograms, tables, writer, context, restartInterval);
             return;
         }
         Span<byte> mcu = stackalloc byte[384]; Span<byte> row = stackalloc byte[24];
@@ -116,7 +120,7 @@ internal static partial class JpegEncoder
             for (var vertical = 0; vertical < 2; vertical++)
             {
                 JpegReferenceTransform.Forward(mcu.Slice(component * 128 + vertical * 64, 64), transformed);
-                JpegReferenceTransform.Quantize(transformed, quantization, coefficients);
+                JpegReferenceTransform.Quantize(transformed, quantizationPlan, coefficients);
                 ReferenceBlock(coefficients, component, previous, histograms, tables, writer);
             }
         }

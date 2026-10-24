@@ -67,9 +67,10 @@ independent16-bit normalization. The RGBA8 grayscale control with explicit MCU
 restart interval3 matches **61,152 B**, including714 sequenced markers and
 optimized tables. These checks use the same backend, quality and quantizers.
 
-The production encoder uses at most a 512-byte MCU buffer, with no
-full-frame YUV or coefficient/event copy. Chroma weights are generated on the
-stack; no retained row or filter plan is needed. Optimal tables use two passes;
+The production encoder uses a 512-byte MCU and a bounded20×20 RGB tile, with no
+full-frame YUV or coefficient/event copy. Chroma/quantization plans and transform
+scratch share the existing8-KiB fixed owner. The SSE2/AVX2 integer forward transform
+retains exact scalar coefficients and a scalar fallback. Optimal tables use two passes;
 color restarts use fixed tables in one pass. Grayscale uses a single 64-byte
 block. RGBA8/16 images and caller Gray8/RGB8 spans with stride support sync,
 forward-only and async delivery. Color quality maps to native qscale
@@ -84,10 +85,10 @@ Shared admission reserves fixed/table capacity and coarse table-building peaks
 before allocation. Temporary storage is released before async delivery; encoded
 chunks remain charged until the actual writer finishes, including cancellation
 and failure. Inputs and the shared root are borrowed. Existing local/work limits
-remain independent; refusal has no fallback. Other required codecs, JPEG settings
-and exact decoding remain open.
-These two procedural controls establish no general compression claim. CPU and allocations for the Reference profile are unmeasured; tables retain
-Original-profile observations with their recorded producer identities.
+remain independent; refusal has no fallback. Other settings/scopes need separate
+qualification. These procedural controls establish no general compression claim.
+Current JPEG timing/allocation scope and older producer-specific observations are
+identified in the [benchmark state](benchmark.md); full CPU parity remains open.
 
 All four PNG compression policies use original managed streaming Deflate:
 stored level0, greedy level1, lazy level6 and longer lazy level9. The existing

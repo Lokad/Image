@@ -24,10 +24,11 @@ operation and releases relinquished storage. It never waits, retries or selects
 a fallback after refusal. Cancellation and allocation failure remain distinct.
 Local limits and cumulative `ImageBudget` work quotas continue independently.
 
-The JPEG Reference profile borrows pixels and uses at most a 512-byte MCU buffer,
-generating chroma weights on the stack without retained filter plans. Optimal tables
-use two passes; color restarts use fixed format tables in one pass. It admits 8 KiB
-fixed storage, 16 KiB for retained coding tables, and coarse
+The JPEG encoder borrows pixels. Its 8 KiB fixed owner covers a 512-byte MCU,
+a bounded20×20 RGB normalization tile, stack chroma/quantization plans and
+transform scratch; no frame or coefficient cache is retained. Optimal tables
+use two passes; color restarts use fixed format tables in one pass. It admits
+16 KiB for retained coding tables and coarse
 temporary table-building capacity before allocation, including grayscale tree/
 priority-queue replacement peaks. Grayscale uses a single64-byte block. Scratch is released after
 each builder; codec workspace is released before asynchronous delivery, whose

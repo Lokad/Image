@@ -16,8 +16,12 @@ match14 frozen complete packets raw-exact: all eight Optimal color/depth control
 plus RGBA8/16 stored, fast and smallest. The17 existing delivery/profile rows
 are exact, including checksums/framing. Both platforms pass4,807 Release checks,
 69 affected PNG scalar checks and the SAME actual private0.2.0 package with all
-three examples. Four current RGBA8 encoder anchors now have guarded packet-exact cost screens;
-their rows below are current. Other replaced encoder observations remain historical.
+three examples. Four current RGBA8 encoder anchors have guarded packet-exact cost
+screens. JPEG now has an independently confirmed44.5% reduction in elapsed time
+through bounded MCU conversion and exact integer SIMD transforms; its7.57× gap
+remains open. The combined change passes5,036 checks and the same actual private
+package on each platform. See [JPEG evidence](../benchmarks/WARM-JPEG-MCU.md).
+Other replaced encoder observations remain historical.
 All17 historical BCL PNG timing rows below are superseded, as are the earlier
 JPEG encoder producers. No new timing or image/settings controls were added.
 
@@ -237,7 +241,7 @@ is a CPU-parity confirmation.
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,980.90 | 3,855.74 | 1.032 / 1.135 | 556,284 | Prior production; reconfirm |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,579.93 | 2,354.66 | 1.096 / 1.227 | 294,116 | Prior production; reconfirm |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,633.91 | 2,421.91 | 1.088 / 1.220 | 294,116 | Prior production; reconfirm |
-| [JPEG RGBA8 4:2:0](../benchmarks/WARM-CURRENT-ENCODER-COSTS.md) | 24,301.44 | 1,765.74 | 13.763 / 14.280 | 372,831 | Gap (short; qualified) |
+| [JPEG RGBA8 4:2:0](../benchmarks/WARM-JPEG-MCU.md) | 13,495.10 | 1,783.59 | 7.566 / 7.611 | 372,817 | Gap (independent) |
 | [JPEG 4:2:0, shared budget / matched quality](../benchmarks/WARM-SHARED-BUDGET.md) | 2,026.04 | 1,769.43 | 1.145 / 1.272 | 297,781 | Prior production; reconfirm |
 | [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,019.53 | 1,611.25 | 1.253 / 1.455 | 297,781 | Prior production; reconfirm |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,310.38 | 1,769.17 | 1.306 / 1.488 | 263,819 | Prior production; reconfirm |

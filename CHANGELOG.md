@@ -6,6 +6,8 @@
   including restarts, direct caller samples and async output. Removed superseded
   experimental encoders and switches. Ten frozen controls match complete reference
   packets, allowing only the documented color attribution replacement.
+  Color encoding reuses bounded MCU normalization/filter plans and prepared
+  quantization, with an exact SSE2/AVX2 forward transform and scalar fallback.
 - Fixed-point JPEG decoding with exact samples on30 frozen grayscale/4:4:4/4:2:2/4:2:0
   controls, shared caller RGB conversion and opt-in orientation. Removed superseded
   inverse variants. CMYK/YCCK now share reference-precision RGB/grayscale
