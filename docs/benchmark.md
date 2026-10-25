@@ -52,7 +52,7 @@ VP8 and caller RGB420 lead current confirmed encoder gaps; full parity stays ope
 No image/settings controls were added.
 
 Other replaced encoder observations remain historical.
-All17 historical BCL PNG timing rows below are superseded, as are the earlier
+The remaining16 historical BCL PNG timing rows below are superseded, as are the earlier
 JPEG encoder producers. No new timing or image/settings controls were added.
 
 The production VP8 pipeline now matches20 pinned complete packet identities
@@ -115,8 +115,8 @@ replacement readiness remains open.
 
 The [finite checklist](../benchmarks/WARM-COVERAGE.md) contains 257 named cases:
 240 numeric and 17 unmeasured. Tested-producer rows contain **45 passes,
-126 gaps, 1 confidence-open case, 0 short cost
-screens and 68 superseded encoder rows**. The latter predate
+127 gaps, 1 confidence-open case, 0 short cost
+screens and 67 superseded encoder rows**. The latter predate
 JPEG decision/adaptive work or the managed PNG/VP8L encoder replacements; current packet evidence is
 reconciled and new costs are deferred while compression gates remain open.
 Their stored values are historical, not demonstrated current gaps. Another 30 marked
@@ -257,7 +257,7 @@ is a CPU-parity confirmation.
 | [PNG RGBA16, Fastest managed2/native1 / live cancelable token](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 12,846.40 | 17,513.32 | 0.734 / 0.743 | 2,103,738 | Prior production; reconfirm |
 | [PNG RGBA16, Fastest managed2/native1 / forward-only output](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 12,790.89 | 17,465.07 | 0.732 / 0.740 | 2,103,770 | Prior production; reconfirm |
 | [PNG RGBA16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 14,604.45 | 20,095.18 | 0.727 / 0.731 | 2,103,624 | Prior production; reconfirm |
-| [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 14,486.25 | 17,324.40 | 0.836 / 0.843 | 527,564 | Prior production; reconfirm |
+| [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-CURRENT-PNG-SMALLEST8.md) | 25,360.59 | 17,299.67 | 1.466 / 1.601 | 1,325,678 | Gap (short; qualified) |
 | [PNG RGBA16, SmallestSize managed9/native9 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 19,610.01 | 20,110.26 | 0.975 / 0.980 | 2,103,522 | Prior production; reconfirm |
 | [PNG RGB8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 8,712.51 | 9,507.55 | 0.916 / 0.922 | 527,032 | Prior production; reconfirm |
 | [PNG RGB16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 13,163.23 | 15,313.53 | 0.860 / 0.863 | 2,102,732 | Prior production; reconfirm |

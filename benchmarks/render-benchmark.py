@@ -197,7 +197,7 @@ def render():
         row('PNG RGBA16, Fastest managed2/native1 / live cancelable token', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeFastCancelable16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
         row('PNG RGBA16, Fastest managed2/native1 / forward-only output', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeFastForward16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
         row('PNG RGBA16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'Encode16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
-        row('PNG RGBA8, SmallestSize9 / native9', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeSmallest8', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
+        row('PNG RGBA8, SmallestSize9 / native9', 'warm-current-png-smallest8-evidence.json', ['observations', -1], 'WARM-CURRENT-PNG-SMALLEST8.md', verification='Gap (short; qualified)'),
         row('PNG RGBA16, SmallestSize managed9/native9 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeSmallest16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
         row('PNG RGB8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeRgb8', -1], 'WARM-PNG-BYTE-PACKING.md', verification='Prior production; reconfirm'),
         row('PNG RGB16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeRgb16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
@@ -401,7 +401,7 @@ VP8 and caller RGB420 lead current confirmed encoder gaps; full parity stays ope
 No image/settings controls were added.
 
 Other replaced encoder observations remain historical.
-All17 historical BCL PNG timing rows below are superseded, as are the earlier
+The remaining16 historical BCL PNG timing rows below are superseded, as are the earlier
 JPEG encoder producers. No new timing or image/settings controls were added.
 
 The production VP8 pipeline now matches20 pinned complete packet identities
