@@ -5,6 +5,15 @@ Updated 2026-10-25. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E249 JPEG444 replay](WARM-JPEG444-ENTROPY-REPLAY.md) confirms1.337×/upper1.343,
+48.4%lesselapsed vsE247short,820131B/op,exact133039/133041B approvedCOM. Existing
+RGBA16short1.348×/820099B/op; no newcases. Shared-root peaks/source lifetimes,
+replacement overlap/refusal/cancel/recovery are explicit. BothOS5133checks,
+13focusednormal/scalar/148publicscalar/SAMEactualpackage/allthreeexamples pass.
+Only adaptive444 replay changes; otheraffected444CPU evidence remains historical.
+Fixed/restart/420/422/gray andunrelatedpaths stayvalid. VP8 again leads current
+confirmed encoder anchors; full257-case/1× remainsopen.
+
 [E247b current JPEG444](WARM-CURRENT-JPEG444-STREAM.md) resolves the existing
 forward-only producer uncertainty:2.593×/upper2.792,820080B/op,exact133039/133041B
 approvedCOM packets. Same production/benchmark/native/fixtures, archived case9

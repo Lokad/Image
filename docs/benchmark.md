@@ -30,13 +30,16 @@ Both platforms pass 5,129 checks and the same actual package;
 Other affected cached JPEG timings remain historical; 444/direct JPEG, decoding,
 other codecs/edit/text reuse unchanged evidence. No meaningful allocation change
 is inferred from differences of a few bytes per operation.
-The existing forward-only JPEG444 boundary now has a current packet-exact short:
-9,777.77µs/3,770.50µs, 2.593×/upper2.792, 820,080B/op, 133,039/133,041B with
-only approved COM attribution. This is a gap observation, not a speedup or
-independent confirmation; [current444 evidence](../benchmarks/WARM-CURRENT-JPEG444-STREAM.md).
-The 512× source-histogram result describes removed code and remains historical.
-Unchanged production/full suites/actual package are reused, with no rebuild.
-JPEG444 now leads demonstrated current encoder gaps.
+Current JPEG444 forward-only confirms1.337×/upper1.343,48.4%lesselapsed than
+the preceding short,820,131B/op; RGBA16short1.348×,820,099B/op. Complete packets
+retain only approved COM attribution. Shared-root audit peaks3,085,708B including
+the531,468B residentRGBA8source,2,328,960B above its prior audit; old/new cache
+growth overlaps undercharge. These untimed root figures are separate from timed
+nongoverned B/op. Both platforms pass5,133checks and the SAMEactualpackage;
+[replay evidence](../benchmarks/WARM-JPEG444-ENTROPY-REPLAY.md).
+Tight declared local limits preselect recomputation; shared refusal is terminal.
+Other affected444timings remain historical. Fixed/restart JPEG,420/422/gray and
+unrelated paths retain evidence. VP8 now leads current confirmed encoder anchors.
 Current VP8 confirms 1.870×/upper 1.911 after batched intra4 preparation,
 saving 2.3% elapsed with unchanged 24,424,952 B/op and exact 98,590 B packets.
 Both platforms pass 5,130 checks and the same actual package;
@@ -45,7 +48,7 @@ Other affected VP8 CPU timings remain historical. Full-color VP8L, JPEG, PNG,
 decoding, editing and text reuse unchanged evidence. VP8L's unchanged current
 short is 1.757×, 48,232,256 B/op, exact 183,812 B; no independent short-speedup claim.
 The unchanged large-count formulas, work, ownership and shared admission remain.
-JPEG444 and VP8 now lead the demonstrated encoder gaps; full parity stays open.
+VP8 and caller RGB420 lead current confirmed encoder gaps; full parity stays open.
 No image/settings controls were added.
 
 Other replaced encoder observations remain historical.
@@ -112,8 +115,8 @@ replacement readiness remains open.
 
 The [finite checklist](../benchmarks/WARM-COVERAGE.md) contains 257 named cases:
 240 numeric and 17 unmeasured. Tested-producer rows contain **45 passes,
-125 gaps, 1 confidence-open case, 0 short cost
-screens and 69 superseded encoder rows**. The latter predate
+126 gaps, 1 confidence-open case, 0 short cost
+screens and 68 superseded encoder rows**. The latter predate
 JPEG decision/adaptive work or the managed PNG/VP8L encoder replacements; current packet evidence is
 reconciled and new costs are deferred while compression gates remain open.
 Their stored values are historical, not demonstrated current gaps. Another 30 marked
@@ -263,9 +266,9 @@ is a CPU-parity confirmation.
 | [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 4,174.10 | 4,289.79 | 0.973 / 0.980 | 264,179 | Prior production; reconfirm |
 | [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 9,426.43 | 10,150.04 | 0.929 / 0.933 | 1,052,317 | Prior production; reconfirm |
 | [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,894.69 | 3,771.76 | 1.033 / 1.115 | 559,418 | Prior production; reconfirm |
-| [JPEG 4:4:4, forward-only / exact reference](../benchmarks/WARM-CURRENT-JPEG444-STREAM.md) | 9,777.77 | 3,770.50 | 2.593 / 2.792 | 820,080 | Gap (short; qualified) |
+| [JPEG 4:4:4, forward-only / exact reference](../benchmarks/WARM-JPEG444-ENTROPY-REPLAY.md) | 5,049.03 | 3,776.93 | 1.337 / 1.343 | 820,131 | Gap (independent) |
 | [JPEG 4:4:4, live cancelable token / prior geometric Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 4,465.15 | 3,775.40 | 1.183 / 1.364 | 525,997 | Prior production; reconfirm |
-| [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,980.90 | 3,855.74 | 1.032 / 1.135 | 556,284 | Prior production; reconfirm |
+| [JPEG 4:4:4 from RGBA16, exact reference / full normalization](../benchmarks/WARM-JPEG444-ENTROPY-REPLAY.md) | 5,170.10 | 3,836.09 | 1.348 / 1.484 | 820,099 | Gap (short; qualified) |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-RECORDS.md) | 3,220.60 | 2,350.36 | 1.370 / 1.590 | 515,072 | Gap (short; qualified) |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,633.91 | 2,421.91 | 1.088 / 1.220 | 294,116 | Prior production; reconfirm |
 | [JPEG RGBA8 4:2:0](../benchmarks/WARM-JPEG-VECTOR-RECORDS.md) | 2,624.06 | 1,762.84 | 1.489 / 1.716 | 373,415 | Gap (short; qualified) |

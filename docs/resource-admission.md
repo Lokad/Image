@@ -28,14 +28,21 @@ The JPEG encoder borrows pixels. Its 8 KiB fixed owner covers a 512-byte MCU,
 a bounded18×18 packed tile reused from RGB through signed horizontal chroma,
 stack plans, a 54-byte caller row and transform scratch; sampling needs no
 full-frame YUV workspace. The quantization plan uses256 stack bytes. Optimal tables
-use two passes; color restarts use fixed format tables in one pass. It admits
+use preparation and emission passes; bounded entropy records can avoid repeated
+pixel work. Color restarts use fixed format tables in one pass. It admits
 16 KiB for retained coding tables and coarse
 temporary table-building capacity before allocation, including grayscale tree/
 priority-queue replacement peaks. Grayscale uses a single64-byte block. Scratch is released after
-each builder; codec workspace is released before asynchronous delivery, whose
-encoded chunks remain charged until their actual users finish. Refusal is terminal.
+each builder; codec workspace releases when its producer finishes, while encoded chunks remain
+charged until their actual I/O users finish. Refusal is terminal.
 Entropy output has a lazy 512-byte buffer plus 128 bytes of coarse metadata,
 admitted separately before allocation and released before asynchronous delivery.
+
+JPEG4:4:4 cache selection covers its worst replacement peak and table workspace.
+A tighter declared `MaxWorkingBytes` selects recomputation before admission;
+a shared-root refusal never triggers that alternative. The representative
+513×259 RGBA8 cache audit peaks at3,085,708 B including the531,468 B source owner;
+[benchmark evidence](../benchmarks/WARM-JPEG444-ENTROPY-REPLAY.md) gives its scope.
 
 `ImageLimits` bounds one operation's admitted buffers and algorithm work. It is
 not a process RSS, GC-heap, elapsed-time or global-cache quota. Supplied pixel or
@@ -105,7 +112,7 @@ remain caller-managed. Existing `ImageCodec` entry points use per-operation limi
 | JPEG decode | Encoded input, parser/tables, padded coefficient/sample planes and RGBA result; orientation is admitted in the same operation. Integer inverse blocks use256 stack bytes and a minor256-byte generated kernel payload, without per-block heap buffers |
 | JPEG caller-sample decode | Supplied encoded/destination spans and the same parser/planes; orientation writes directly into caller storage without an RGBA frame |
 | Four-component JPEG | The same bounds with four coefficient/sample planes and descriptors; K is color, and shared admission counts caller CMYK storage |
-| JPEG encode | Borrowed source,8KiB fixed workspace,16KiB table owner and temporary Huffman-building peaks. Adaptive4:2:0/4:2:2 and nonrestart grayscale may retain entropy records: initial data up to4MiB plus128B ownership, one doubling up to8MiB, and old/new capacity charged together during growth. Shared refusal is terminal; the retained pool ceiling stays4MiB |
+| JPEG encode | Borrowed source,8KiB fixed workspace,16KiB table owner and temporary Huffman-building peaks. Adaptive4:4:4/4:2:2/4:2:0 and nonrestart grayscale may retain entropy records: initial data up to4MiB plus128B ownership, one doubling up to8MiB, and old/new capacity charged together during growth. Shared refusal is terminal; the retained pool ceiling stays4MiB |
 | JPEG caller-sample encode | Borrowed gray/RGB span and the same fixed/table/tree owners; bounded rows without RGBA conversion storage |
 | VP8L decode / encode | Decode admits trees/cache/transform rasters and simultaneous conversion buffers. Encode admits one normalized working image, predictor/color/palette maps, matching/trace scratch, original/working histogram slabs, cache-selection history and all-width populations, fixed candidate storage and overlapping token/code owners. It releases populations after code construction and working pixels before delivery; prepared state counts/emits without an encoded-frame buffer. Tight budgets fail without choosing a different encoder. |
 | VP8 decode / encode | Decode admits models/modes, padded YUV, alpha and RGBA phases; encode admits source/reconstruction planes, coefficient caches, alpha and optional bounded alpha history/tables, plus arithmetic-buffer capacity and old/new growth overlap |

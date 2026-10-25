@@ -62,9 +62,13 @@ internal static partial class JpegEncoder
             // The conservative future table peak also fits beside this owner.
             var bytes = mcus * blocks * 64 * sizeof(short);
             const long tablePeak = ReferenceTableBytes + 65536L + 257 * 2048;
-            if (!fixedTables && options.Sampling != JpegSampling.YCbCr444
-                && bytes <= JpegCoefficientPool.MaxRetainedBytes
-                && bytes + 128 <= context.RemainingWorkingBytes - tablePeak)
+            // The new444 route commonly grows. Select it only when declared
+            // local workspace covers both the old/new replacement overlap and
+            // future tables beside the maximum retained record capacity.
+            if (!fixedTables && bytes <= JpegCoefficientPool.MaxRetainedBytes
+                && (options.Sampling == JpegSampling.YCbCr444
+                    ? Math.Max(bytes * 3, bytes * 2 + tablePeak) + 128 <= context.RemainingWorkingBytes
+                    : bytes + 128 <= context.RemainingWorkingBytes - tablePeak))
             {
                 records = new JpegEntropyRecords(context, (int)(bytes / sizeof(int)));
             }
@@ -91,7 +95,7 @@ internal static partial class JpegEncoder
             if (records is null)
                 ReferencePass(image, source, width, height, options.BackgroundRgb, options.Sampling, quantizationPlan, histograms, tables, writer, context, options.RestartInterval);
             else
-                records.Write(tables, writer, ReferenceSubsampledMcuWork);
+                records.Write(tables, writer, mcuWork);
             writer.Align(); context.Work(2); output.WriteByte(255); output.WriteByte(217);
         }
         finally
@@ -141,8 +145,16 @@ internal static partial class JpegEncoder
             {
                 JpegReferenceTransform.Forward(mcu.Slice(component * 128 + vertical * 64, 64), transformed);
                 JpegReferenceTransform.Quantize(transformed, quantizationPlan, coefficients);
-                ReferenceBlock(coefficients, component, previous, histograms, tables, writer);
+                if (entropyCache is null)
+                    ReferenceBlock(coefficients, component, previous, histograms, tables, writer);
+                else
+                {
+                    var target = entropyCache.BeginBlock();
+                    var count = JpegEntropyRecords.RecordBlock(coefficients, component, previous, histograms, target);
+                    entropyCache.Commit(count);
+                }
             }
+            entropyCache?.MarkMcuEnd();
         }
     }
 

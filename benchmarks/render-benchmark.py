@@ -206,9 +206,9 @@ def render():
         row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeGrayAlpha8', -1], 'WARM-PNG-BYTE-PACKING.md', verification='Prior production; reconfirm'),
         row('PNG gray-alpha16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGrayAlpha16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
-        row('JPEG 4:4:4, forward-only / exact reference', 'warm-current-jpeg444-stream-evidence.json', ['observations', -1], 'WARM-CURRENT-JPEG444-STREAM.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:4:4, forward-only / exact reference', 'warm-jpeg444-entropy-replay-evidence.json', ['observations', -1], 'WARM-JPEG444-ENTROPY-REPLAY.md', confirmed=True),
         row('JPEG 4:4:4, live cancelable token / prior geometric Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode444Cancelable8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
-        row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
+        row('JPEG 4:4:4 from RGBA16, exact reference / full normalization', 'warm-jpeg444-entropy-replay-evidence.json', ['cases', 'rgba16', -1], 'WARM-JPEG444-ENTROPY-REPLAY.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-records-evidence.json', ['cases', 'rgba422', -1], 'WARM-JPEG-VECTOR-RECORDS.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG RGBA8 4:2:0', 'warm-jpeg-vector-records-evidence.json', ['cases', 'rgba8', -1], 'WARM-JPEG-VECTOR-RECORDS.md', verification='Gap (short; qualified)'),
@@ -379,13 +379,16 @@ Both platforms pass 5,129 checks and the same actual package;
 Other affected cached JPEG timings remain historical; 444/direct JPEG, decoding,
 other codecs/edit/text reuse unchanged evidence. No meaningful allocation change
 is inferred from differences of a few bytes per operation.
-The existing forward-only JPEG444 boundary now has a current packet-exact short:
-9,777.77µs/3,770.50µs, 2.593×/upper2.792, 820,080B/op, 133,039/133,041B with
-only approved COM attribution. This is a gap observation, not a speedup or
-independent confirmation; [current444 evidence](../benchmarks/WARM-CURRENT-JPEG444-STREAM.md).
-The 512× source-histogram result describes removed code and remains historical.
-Unchanged production/full suites/actual package are reused, with no rebuild.
-JPEG444 now leads demonstrated current encoder gaps.
+Current JPEG444 forward-only confirms1.337×/upper1.343,48.4%lesselapsed than
+the preceding short,820,131B/op; RGBA16short1.348×,820,099B/op. Complete packets
+retain only approved COM attribution. Shared-root audit peaks3,085,708B including
+the531,468B residentRGBA8source,2,328,960B above its prior audit; old/new cache
+growth overlaps undercharge. These untimed root figures are separate from timed
+nongoverned B/op. Both platforms pass5,133checks and the SAMEactualpackage;
+[replay evidence](../benchmarks/WARM-JPEG444-ENTROPY-REPLAY.md).
+Tight declared local limits preselect recomputation; shared refusal is terminal.
+Other affected444timings remain historical. Fixed/restart JPEG,420/422/gray and
+unrelated paths retain evidence. VP8 now leads current confirmed encoder anchors.
 Current VP8 confirms 1.870×/upper 1.911 after batched intra4 preparation,
 saving 2.3% elapsed with unchanged 24,424,952 B/op and exact 98,590 B packets.
 Both platforms pass 5,130 checks and the same actual package;
@@ -394,7 +397,7 @@ Other affected VP8 CPU timings remain historical. Full-color VP8L, JPEG, PNG,
 decoding, editing and text reuse unchanged evidence. VP8L's unchanged current
 short is 1.757×, 48,232,256 B/op, exact 183,812 B; no independent short-speedup claim.
 The unchanged large-count formulas, work, ownership and shared admission remain.
-JPEG444 and VP8 now lead the demonstrated encoder gaps; full parity stays open.
+VP8 and caller RGB420 lead current confirmed encoder gaps; full parity stays open.
 No image/settings controls were added.
 
 Other replaced encoder observations remain historical.

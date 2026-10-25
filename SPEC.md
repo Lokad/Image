@@ -167,18 +167,18 @@ normalizes each bounded source row once, preserving single-round flattening
 without additional storage. Quality
 numbers remain specific to this encoder.
 
-Adaptive4:2:0/4:2:2 and nonrestart grayscale encoding may retain packed entropy
+Adaptive4:4:4/4:2:2/4:2:0 and nonrestart grayscale encoding may retain packed entropy
 records to avoid repeating conversion, transforms and coefficient traversal.
 Initial data capacity is at most4MiB plus128bytes for ownership; one growth may
 double data capacity to8MiB.
 Growth admits old and new capacity together before copying, then releases the
 old charge. Selection uses checked geometry and the declared local allowance,
-including table-building workspace; tight local allowances select recomputation
+including table-building workspace. For4:4:4, selection covers the worst single
+growth overlap and future tables beside maximum record capacity. Tight local allowances select recomputation
 before admission. Any admission refusal is terminal. Governed storage is private
 to the operation and releases promptly. Calls without a memory root may reuse
 the existing pool, whose retained ceiling remains4MiB. Logical work, writer-call
-order and cancellation checks remain equivalent. Fixed-table color,4:4:4 and
-restart grayscale paths do not use this owner.
+order and cancellation checks remain equivalent. Fixed-table color and restart grayscale paths do not use this owner.
 
 Transforms return new owned buffers and preserve precision and source pixels.
 Outstanding raw orientation is retained until `AutoOrient` or decode with

@@ -179,7 +179,8 @@ foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YC
     using var referenceImage = Lokad.Image.Tooling.OriginalPixels.Buffer(513, 259, referenceDepth);
     if (referenceDepth == 8) { referenceImage.GetRow8(0)[3] = 0; referenceImage.GetRow8(0)[513 * 4 - 1] = 0; }
     else { referenceImage.GetRow16(0)[3] = 0; referenceImage.GetRow16(0)[513 * 4 - 1] = 0; }
-    using var referenceRoot = new Lokad.Image.Tooling.TestMemoryBudget(2 * 1024 * 1024);
+    using var referenceRoot = new Lokad.Image.Tooling.TestMemoryBudget(
+        (referenceSampling == JpegSampling.YCbCr444 ? 4 : 2) * 1024 * 1024);
     using var referencePacket = new MemoryStream();
     await ImageCodec.EncodeJpegAsync(referenceImage, referencePacket, new JpegEncodeOptions
     {
@@ -202,6 +203,31 @@ foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YC
     if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(referencePacket.ToArray())).ToLowerInvariant()
         != expectedReferenceHash || referenceRoot.Bytes != 0 || referenceRoot.IsDisposed)
         throw new Exception("Packaged reference JPEG bytes or shared ownership differ.");
+    if (referenceSampling == JpegSampling.YCbCr444)
+    {
+        // Keep the former2MiB shared root as a terminal-refusal check. A new,
+        // independent call declares a tight local workspace before admission,
+        // selecting recomputation without a retry inside the failed operation.
+        using var constrainedRoot = new Lokad.Image.Tooling.TestMemoryBudget(2 * 1024 * 1024);
+        using var refusedPacket = new MemoryStream();
+        var constrained = new JpegEncodeOptions
+        { Sampling = referenceSampling, Quality = 85, BackgroundRgb = 0x204060,
+            Limits = ImageLimits.Default with { MemoryBudget = constrainedRoot } };
+        try
+        {
+            await ImageCodec.EncodeJpegAsync(referenceImage, refusedPacket, constrained);
+            throw new Exception("Packaged JPEG444 ignored insufficient shared admission.");
+        }
+        catch (ImageLimitException e) when (e.Limit == ImageLimitKind.WorkingBytes && e.Scope == ImageLimitScope.SharedBudget) { }
+        if (constrainedRoot.Bytes != 0 || constrainedRoot.Refusals != 1 || refusedPacket.Length != 0 || constrainedRoot.IsDisposed)
+            throw new Exception("Packaged JPEG444 retried refusal or retained storage.");
+        using var recomputedPacket = new MemoryStream();
+        await ImageCodec.EncodeJpegAsync(referenceImage, recomputedPacket, constrained with
+        { Limits = constrained.Limits with { MaxWorkingBytes = 2 * 1024 * 1024 } });
+        if (!recomputedPacket.ToArray().AsSpan().SequenceEqual(referencePacket.ToArray())
+            || constrainedRoot.Bytes != 0 || constrainedRoot.Refusals != 1 || constrainedRoot.IsDisposed)
+            throw new Exception("Packaged JPEG444 declared-tight recovery differs.");
+    }
     if (referenceSampling == JpegSampling.YCbCr420 && referenceDepth == 8)
     {
         using var restartPacket = new MemoryStream();
