@@ -206,7 +206,7 @@ def render():
         row('PNG gray-alpha8, Optimal managed9/native6 / None', 'warm-png-byte-packing-evidence.json', ['cases', 'EncodeGrayAlpha8', -1], 'WARM-PNG-BYTE-PACKING.md', verification='Prior production; reconfirm'),
         row('PNG gray-alpha16, level 6 / None', 'warm-png-chunk-crc-evidence.json', ['cases', 'EncodeGrayAlpha16', -1], 'WARM-PNG-CHUNK-CRC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:4:4, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
-        row('JPEG 4:4:4, forward-only / coded source histograms', 'jpeg444-coded-source-histogram-evidence.json', ['cases', 'Encode444Stream8', -1], 'JPEG444-CODED-SOURCE-HISTOGRAMS.md', verification='Prior production; reconfirm'),
+        row('JPEG 4:4:4, forward-only / exact reference', 'warm-current-jpeg444-stream-evidence.json', ['observations', -1], 'WARM-CURRENT-JPEG444-STREAM.md', verification='Gap (short; qualified)'),
         row('JPEG 4:4:4, live cancelable token / prior geometric Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode444Cancelable8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-records-evidence.json', ['cases', 'rgba422', -1], 'WARM-JPEG-VECTOR-RECORDS.md', verification='Gap (short; qualified)'),
@@ -379,6 +379,13 @@ Both platforms pass 5,129 checks and the same actual package;
 Other affected cached JPEG timings remain historical; 444/direct JPEG, decoding,
 other codecs/edit/text reuse unchanged evidence. No meaningful allocation change
 is inferred from differences of a few bytes per operation.
+The existing forward-only JPEG444 boundary now has a current packet-exact short:
+9,777.77µs/3,770.50µs, 2.593×/upper2.792, 820,080B/op, 133,039/133,041B with
+only approved COM attribution. This is a gap observation, not a speedup or
+independent confirmation; [current444 evidence](../benchmarks/WARM-CURRENT-JPEG444-STREAM.md).
+The 512× source-histogram result describes removed code and remains historical.
+Unchanged production/full suites/actual package are reused, with no rebuild.
+JPEG444 now leads demonstrated current encoder gaps.
 Current VP8 confirms 1.870×/upper 1.911 after batched intra4 preparation,
 saving 2.3% elapsed with unchanged 24,424,952 B/op and exact 98,590 B packets.
 Both platforms pass 5,130 checks and the same actual package;
@@ -387,7 +394,7 @@ Other affected VP8 CPU timings remain historical. Full-color VP8L, JPEG, PNG,
 decoding, editing and text reuse unchanged evidence. VP8L's unchanged current
 short is 1.757×, 48,232,256 B/op, exact 183,812 B; no independent short-speedup claim.
 The unchanged large-count formulas, work, ownership and shared admission remain.
-JPEG and VP8 now lead the measured encoder gaps; full parity stays open.
+JPEG444 and VP8 now lead the demonstrated encoder gaps; full parity stays open.
 No image/settings controls were added.
 
 Other replaced encoder observations remain historical.

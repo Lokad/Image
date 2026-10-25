@@ -5,6 +5,12 @@ Updated 2026-10-25. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E247b current JPEG444](WARM-CURRENT-JPEG444-STREAM.md) resolves the existing
+forward-only producer uncertainty:2.593×/upper2.792,820080B/op,exact133039/133041B
+approvedCOM packets. Same production/benchmark/native/fixtures, archived case9
+host reused, no build or new case. Original512× screen is historical; this is no
+speedup claim. JPEG444 takes priority over smaller current VP8 encoder gaps.
+
 The 512× C193 forward-only JPEG444 screen describes the removed source-histogram
 encoder and is historical. Its raw result is retained; it does not demonstrate
 a current production gap. That existing public boundary needs a current exact
