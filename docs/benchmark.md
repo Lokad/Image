@@ -19,22 +19,23 @@ are exact, including checksums/framing. Both platforms pass4,807 Release checks,
 three examples. Four current RGBA8 encoder anchors have guarded packet-exact cost
 screens. JPEG has independently confirmed improvements from bounded MCU conversion,
 integer SIMD transforms/quantization, bounded chroma rows and coefficient replay.
-Governed RGBA16 JPEG420 confirms 1.789×/upper 1.799 after exact SIMD row matrices,
-saving 13.7% elapsed with unchanged 804,635 B/op and observed 1,704,856 B root peak.
-Current RGBA8/16 nongoverned 420 shorts are 1.754×/1.757×, 373,416 B/op; 422 RGBA8 is
-1.623×, 515,072 B/op. Caller RGB420 confirms 1.951×/upper 1.967, 373,424 B/op;
-[confirmation](../benchmarks/WARM-JPEG-CALLER-CONFIRMATION.md). All packets remain exact
-apart from approved COM. Both platforms pass 5,128 checks and the same actual
-package; [row evidence](../benchmarks/WARM-JPEG-VECTOR-ROW-MATRIX.md).
-Other affected 420/422 CPU observations stay historical. 444/grayscale/decode and
-other codecs/edit/text reuse unchanged evidence. Approved SIMD libjpeg-turbo
-gray rows remain 1.593×/1.690× short, 155,443/155,449 B/op, exact 58,910 B packets.
+Caller RGB420 independently confirms 1.658×/upper 1.669 after exact SIMD record
+packing, saving 15.1% elapsed at 373,421 B/op. Existing governed RGBA16 is 1.555×
+short, 804,645 B/op and unchanged observed 1,704,856 B root peak; nongoverned
+RGBA8/16 420 are 1.489×/1.504×, 373,415 B/op; RGBA8 422 is 1.370×, 515,072 B/op.
+Approved SIMD libjpeg-turbo gray shorts are 1.258×/1.266×, 155,445/155,447 B/op,
+exact 58,910 B packets. Color packets retain only the approved COM difference.
+Both platforms pass 5,129 checks and the same actual package;
+[record evidence](../benchmarks/WARM-JPEG-VECTOR-RECORDS.md).
+Other affected cached JPEG timings remain historical; 444/direct JPEG, decoding,
+other codecs/edit/text reuse unchanged evidence. No meaningful allocation change
+is inferred from differences of a few bytes per operation.
 Current VP8 confirms 1.911×/upper 1.923 after fused SIMD reconstruction,
 saving 4.4% elapsed with unchanged 24,424,952 B/op and exact 98,590 B packets.
 Both platforms pass 5,129 checks and the same actual package;
 [reconstruction evidence](../benchmarks/WARM-VP8-VECTOR-RECONSTRUCTION.md).
 Other affected VP8 CPU timings remain historical. Full-color VP8L, JPEG, PNG,
-decoding, editing and text reuse unchanged evidence; caller RGB420 now leads
+decoding, editing and text reuse unchanged evidence; VP8 now leads
 confirmed encoder gaps. VP8L's unchanged current short is 1.757×,
 48,232,256 B/op, exact 183,812 B; no independent short-speedup claim.
 The unchanged large-count formulas, work, ownership and shared admission remain.
@@ -259,20 +260,20 @@ is a CPU-parity confirmation.
 | [JPEG 4:4:4, forward-only / coded source histograms](../benchmarks/JPEG444-CODED-SOURCE-HISTOGRAMS.md) | 1,929,269.70 | 3,768.09 | 512.002 / 585.587 | 644,112 | Cost screen (CPU parity deferred) |
 | [JPEG 4:4:4, live cancelable token / prior geometric Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 4,465.15 | 3,775.40 | 1.183 / 1.364 | 525,997 | Prior production; reconfirm |
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,980.90 | 3,855.74 | 1.032 / 1.135 | 556,284 | Prior production; reconfirm |
-| [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-ROW-MATRIX.md) | 3,805.19 | 2,345.20 | 1.623 / 1.894 | 515,072 | Gap (short; qualified) |
+| [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-RECORDS.md) | 3,220.60 | 2,350.36 | 1.370 / 1.590 | 515,072 | Gap (short; qualified) |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,633.91 | 2,421.91 | 1.088 / 1.220 | 294,116 | Prior production; reconfirm |
-| [JPEG RGBA8 4:2:0](../benchmarks/WARM-JPEG-VECTOR-ROW-MATRIX.md) | 3,105.04 | 1,770.55 | 1.754 / 2.020 | 373,416 | Gap (short; qualified) |
+| [JPEG RGBA8 4:2:0](../benchmarks/WARM-JPEG-VECTOR-RECORDS.md) | 2,624.06 | 1,762.84 | 1.489 / 1.716 | 373,415 | Gap (short; qualified) |
 | [JPEG RGBA8 4:2:0 / ImageBudget quota](../benchmarks/WARM-SHARED-BUDGET.md) | 2,026.04 | 1,769.43 | 1.145 / 1.272 | 297,781 | Prior production; reconfirm |
-| [JPEG RGBA16 4:2:0 / caller IMemoryBudget](../benchmarks/WARM-JPEG-VECTOR-ROW-MATRIX.md) | 3,289.84 | 1,838.76 | 1.789 / 1.799 | 804,635 | Gap (independent) |
+| [JPEG RGBA16 4:2:0 / caller IMemoryBudget](../benchmarks/WARM-JPEG-VECTOR-RECORDS.md) | 2,855.77 | 1,836.48 | 1.555 / 1.649 | 804,645 | Gap (short; qualified) |
 | [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,019.53 | 1,611.25 | 1.253 / 1.455 | 297,781 | Prior production; reconfirm |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,310.38 | 1,769.17 | 1.306 / 1.488 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,393.98 | 1,839.60 | 1.301 / 1.415 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,444.30 | 1,841.37 | 1.327 / 1.443 | 263,787 | Prior production; reconfirm |
-| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-VECTOR-ROW-MATRIX.md) | 3,231.33 | 1,839.60 | 1.757 / 2.042 | 373,416 | Gap (short; qualified) |
-| [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md) | 2,237.75 | 1,405.01 | 1.593 / 1.742 | 155,443 | Gap (short; qualified) |
-| [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md) | 1,822.25 | 1,078.35 | 1.690 / 2.000 | 155,449 | Gap (short; qualified) |
+| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-VECTOR-RECORDS.md) | 2,763.25 | 1,837.30 | 1.504 / 1.799 | 373,415 | Gap (short; qualified) |
+| [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-VECTOR-RECORDS.md) | 1,774.27 | 1,409.99 | 1.258 / 1.417 | 155,445 | Gap (short; qualified) |
+| [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-VECTOR-RECORDS.md) | 1,367.26 | 1,080.21 | 1.266 / 1.517 | 155,447 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |
-| [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-CALLER-CONFIRMATION.md) | 3,080.71 | 1,579.41 | 1.951 / 1.967 | 373,424 | Gap (independent) |
+| [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-VECTOR-RECORDS.md) | 2,617.06 | 1,578.04 | 1.658 / 1.669 | 373,421 | Gap (independent) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Prior production; reconfirm |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 75,226.22 | 15,616.85 | 4.817 / 5.060 | 1,006,520 | Prior production; reconfirm |
 | [VP8 RGBA8](../benchmarks/WARM-VP8-VECTOR-RECONSTRUCTION.md) | 102,032.50 | 53,405.80 | 1.911 / 1.923 | 24,424,952 | Gap (independent) |

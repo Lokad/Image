@@ -2,7 +2,7 @@ namespace Lokad.Image.Internal;
 
 // Independent private record format: payload16/symbol8/table2/MCU-end1/count5.
 // Count31 means no amplitude write; count0 preserves a zero-bit DC write.
-internal sealed class JpegEntropyRecords : IDisposable
+internal sealed partial class JpegEntropyRecords : IDisposable
 {
     private const long MetadataBytes = 128;
     private readonly OperationContext context;
@@ -107,6 +107,29 @@ internal sealed class JpegEntropyRecords : IDisposable
         if (System.Runtime.Intrinsics.X86.Avx512BW.IsSupported)
         {
             var mask = JpegNonzeroMask.Ac(coefficients); var position = 0;
+            // Only the arithmetic is batched. Scalar emission preserves every
+            // histogram/record write, including partial exceptional prefixes.
+            var inputBytes = System.Runtime.InteropServices.MemoryMarshal.AsBytes(coefficients[..64]);
+            var acHistogram = histograms[family + 2];
+            var independent = !inputBytes.Overlaps(System.Runtime.InteropServices.MemoryMarshal.AsBytes(target))
+                && !inputBytes.Overlaps(System.Runtime.InteropServices.MemoryMarshal.AsBytes(acHistogram.AsSpan()));
+            if (System.Runtime.Intrinsics.X86.Avx512F.IsSupported && System.Runtime.Intrinsics.X86.Avx512CD.IsSupported && System.Numerics.BitOperations.PopCount(mask) >= 16 && independent)
+            {
+                Span<int> prepared = stackalloc int[64]; PrepareRecordValues(coefficients, prepared);
+                while (mask != 0)
+                {
+                    var next = System.Numerics.BitOperations.TrailingZeroCount(mask); mask &= mask - 1;
+                    var zeros = next - position - 1;
+                    while (zeros >= 16) { Symbol(family + 2, 240, histograms, target, ref count); zeros -= 16; }
+                    var packed = (uint)prepared[JpegTransform.Zigzag[next]];
+                    var bits = (int)(packed >> 27); var symbol = zeros * 16 + bits;
+                    acHistogram[symbol]++;
+                    target[count++] = unchecked((int)((packed + (uint)(zeros << 20)) | (uint)(family + 2) << 24));
+                    position = next;
+                }
+                if (position != 63) Symbol(family + 2, 0, histograms, target, ref count);
+                return count;
+            }
             while (mask != 0)
             {
                 var next = System.Numerics.BitOperations.TrailingZeroCount(mask); mask &= mask - 1;

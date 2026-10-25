@@ -59,7 +59,11 @@ newHistogram[table] = new int[256];
             for (var b = 0; b < blocks; b++)
             {
                 var block = coefficients.AsSpan(b * 64, 64); var component = Component(b, chroma);
+                records.AsSpan(used, 64).Fill(0x5a5a5a5a);
                 var count = JpegEntropyRecords.RecordBlock(block, component, newPrevious, newHistogram, records.AsSpan(used, 64));
+                var untouched = true;
+                foreach (var value in records.AsSpan(used + count, 64 - count)) untouched &= value == 0x5a5a5a5a;
+                Assert.True(untouched);
                 if (count is < 1 or > 64) throw new Exception("Record capacity bound exceeded");
                 maximumPerBlock = Math.Max(maximumPerBlock, count); used += count; totalBlocks++;
             }

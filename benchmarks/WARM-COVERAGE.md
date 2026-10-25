@@ -5,6 +5,14 @@ Updated 2026-10-25. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E239 exact record packing](WARM-JPEG-VECTOR-RECORDS.md) confirms callerRGB420
+at1.658×/upper1.669,15.1%lesselapsed,373421B/op and exact52091/52093BapprovedCOM.
+Six existing color/gray boundaries reconcile with exact packets and unchanged
+1704856B governedrootpeak. Both platforms pass5129checks/SAMEactualpackage.
+Only cachedgray/420/422records change; other affected CPU evidence is historical.
+444/directJPEG/decoding/PNG/WebP/edit/text remain valid. VP8 now leads current
+confirmed anchors; no cases added, full257-case/1× remains open.
+
 [E237 fused reconstruction](WARM-VP8-VECTOR-RECONSTRUCTION.md) confirms VP8
 at1.911×/upper1.923,4.4%lesselapsed, unchanged24,424,952B/op and exact98,590B.
 Both platforms pass5,129checks and the SAMEactualpackage. Only encoder
