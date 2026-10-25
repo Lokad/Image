@@ -105,8 +105,8 @@ replacement readiness remains open.
 
 The [finite checklist](../benchmarks/WARM-COVERAGE.md) contains 257 named cases:
 240 numeric and 17 unmeasured. Tested-producer rows contain **45 passes,
-124 gaps, 1 confidence-open case, 1 short cost
-screens and 69 superseded encoder rows**. The latter predate
+124 gaps, 1 confidence-open case, 0 short cost
+screens and 70 superseded encoder rows**. The latter predate
 JPEG decision/adaptive work or the managed PNG/VP8L encoder replacements; current packet evidence is
 reconciled and new costs are deferred while compression gates remain open.
 Their stored values are historical, not demonstrated current gaps. Another 30 marked
@@ -256,7 +256,7 @@ is a CPU-parity confirmation.
 | [PNG gray-alpha8, Optimal managed9/native6 / None](../benchmarks/WARM-PNG-BYTE-PACKING.md) | 4,174.10 | 4,289.79 | 0.973 / 0.980 | 264,179 | Prior production; reconfirm |
 | [PNG gray-alpha16, level 6 / None](../benchmarks/WARM-PNG-CHUNK-CRC.md) | 9,426.43 | 10,150.04 | 0.929 / 0.933 | 1,052,317 | Prior production; reconfirm |
 | [JPEG 4:4:4, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,894.69 | 3,771.76 | 1.033 / 1.115 | 559,418 | Prior production; reconfirm |
-| [JPEG 4:4:4, forward-only / coded source histograms](../benchmarks/JPEG444-CODED-SOURCE-HISTOGRAMS.md) | 1,929,269.70 | 3,768.09 | 512.002 / 585.587 | 644,112 | Cost screen (CPU parity deferred) |
+| [JPEG 4:4:4, forward-only / coded source histograms](../benchmarks/JPEG444-CODED-SOURCE-HISTOGRAMS.md) | 1,929,269.70 | 3,768.09 | 512.002 / 585.587 | 644,112 | Prior production; reconfirm |
 | [JPEG 4:4:4, live cancelable token / prior geometric Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 4,465.15 | 3,775.40 | 1.183 / 1.364 | 525,997 | Prior production; reconfirm |
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,980.90 | 3,855.74 | 1.032 / 1.135 | 556,284 | Prior production; reconfirm |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-RECORDS.md) | 3,220.60 | 2,350.36 | 1.370 / 1.590 | 515,072 | Gap (short; qualified) |

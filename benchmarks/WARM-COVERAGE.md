@@ -5,6 +5,11 @@ Updated 2026-10-25. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+The 512× C193 forward-only JPEG444 screen describes the removed source-histogram
+encoder and is historical. Its raw result is retained; it does not demonstrate
+a current production gap. That existing public boundary needs a current exact
+packet/cost observation before optimization. No workload is added.
+
 [E240 batched intra4 preparation](WARM-VP8-FOUR-CANDIDATE.md) confirms VP8
 at1.870×/upper1.911,2.3%lesselapsed, unchanged24,424,952B/op and exact98,590B.
 Both platforms pass5,130checks and the SAMEactualpackage. Only non-trellis,
