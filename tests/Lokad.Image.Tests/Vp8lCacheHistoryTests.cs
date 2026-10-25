@@ -54,13 +54,16 @@ public sealed class Vp8lCacheHistoryTests
                     cache[key] = pixels[position];
                 }
             }
-            var counts = new int[new Vp8lHistogramLayout(maximumBits).Total];
+            var firstCounts = new int[Vp8lReferenceCache.HistogramValues(maximumBits)];
+            var secondCounts = new int[firstCounts.Length];
+            Vp8lReferenceCache.FillAllFromHistory(pixels, a, history, maximumBits, firstCounts);
+            Vp8lReferenceCache.FillAllFromHistory(pixels, b, history, maximumBits, secondCounts);
             for (var bits = 0; bits <= maximumBits; bits++)
             for (var side = 0; side < 2; side++)
             {
-                var layout = new Vp8lHistogramLayout(bits); counts.AsSpan(0, layout.Total).Clear();
-                Vp8lReferenceCache.FillFromHistory(pixels, side == 0 ? a : b, history, layout, counts);
-                hash.AppendData(MemoryMarshal.AsBytes(counts.AsSpan(0, layout.Total))); compared++;
+                var layout = new Vp8lHistogramLayout(bits);
+                var counts = (side == 0 ? firstCounts : secondCounts).AsSpan(Vp8lReferenceCache.HistogramOffset(bits), layout.Total);
+                hash.AppendData(MemoryMarshal.AsBytes(counts)); compared++;
             }
             hash.AppendData(MemoryMarshal.AsBytes(pixels.AsSpan()));
             int[] choice=[before.Item1,before.Item2];hash.AppendData(MemoryMarshal.AsBytes(choice.AsSpan()));
@@ -76,8 +79,8 @@ public sealed class Vp8lCacheHistoryAdmissionTests
     private static readonly uint[] Pixels = [0, 7, 7, 0];
     private static readonly Vp8lToken[] First = [Vp8lToken.Literal(0), Vp8lToken.Literal(7), Vp8lToken.Copy(2, 1)];
     private static readonly Vp8lToken[] Second = [Vp8lToken.Literal(0), Vp8lToken.Copy(3, 1)];
-    // Four history bytes,2,046uint cache entries,2,112int histogram entries,128B metadata.
-    private const long Scratch = 16_764;
+    // Four history bytes,2,046uint cache entries,14,014int all-width histograms,128B metadata.
+    private const long Scratch = 64_372;
 
     [Fact]
     public void ZeroWidthCancellableTightWorkAndTightLocalCasesSelectBeforeAdmission()

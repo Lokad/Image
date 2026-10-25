@@ -31,14 +31,13 @@ short-run speedup claims. The earlier grayscale output-growth regression is
 resolved before acceptance; other affected JPEG encode timings remain historical.
 Other codecs, decoders, editing and text reuse
 unchanged confirmations where their production paths remain unchanged.
-VP8L now independently confirms1.798×/upper1.829 after common-count entropy
-inlining, using26.5% less elapsed than its preceding confirmation, with unchanged
-48,184,648B/op and exact183,812B packets. Current VP8 confirms 2.107×/upper 2.118 after exact vector texture scoring,
-saving 4.7% elapsed with unchanged 24,329,736 B/op and raw-exact 98,590 B packets.
-Both platforms pass 5,120 checks and the same actual package;
-[texture evidence](../benchmarks/WARM-VP8-VECTOR-TEXTURE.md).
-Other affected VP8 timings stay historical. JPEG and full-color VP8L reuse
-unchanged evidence; JPEG now has the slightly larger confirmed encoder gap.
+Current VP8 confirms 1.988×/upper1.998 after sharing cache histograms across
+widths, saving5.6%elapsed with24,424,952B/op(+95,216) and exact98,590B packets.
+VP8L current short is1.757×,48,232,256B/op(+47,608), exact183,812B; no independent
+speedup claim. Both platforms pass5,127checks and the same actual package;
+[all-width histogram evidence](../benchmarks/WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md).
+Other affected VP8/VP8L CPU timings stay historical. JPEG/PNG/decode/edit/text
+reuse unchanged evidence; governed JPEG now leads confirmed encoder gaps.
 The unchanged large-count formulas, work, ownership and shared admission remain.
 JPEG and VP8 now lead the measured encoder gaps; full parity stays open.
 No image/settings controls were added.
@@ -277,10 +276,10 @@ is a CPU-parity confirmation.
 | [JPEG 4:2:0 from caller RGB / AC trellis and padding pruning](../benchmarks/JPEG420-AC-TRELLIS.md) | 68,162.15 | 1,579.24 | 43.161 / 50.354 | 170,648 | Cost screen (CPU parity deferred) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Prior production; reconfirm |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 75,226.22 | 15,616.85 | 4.817 / 5.060 | 1,006,520 | Prior production; reconfirm |
-| [VP8 RGBA8](../benchmarks/WARM-VP8-VECTOR-TEXTURE.md) | 113,006.89 | 53,643.55 | 2.107 / 2.118 | 24,329,736 | Gap (independent) |
+| [VP8 RGBA8](../benchmarks/WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md) | 106,690.16 | 53,676.58 | 1.988 / 1.998 | 24,424,952 | Gap (independent) |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 83,863.51 | 53,727.26 | 1.561 / 1.652 | 1,537,304 | Prior production; reconfirm |
 | [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-HISTOGRAM384.md) | 19,502.47 | 53,435.71 | 0.365 / 0.433 | 2,036,564 | Prior production; reconfirm |
-| [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-COMMON-ENTROPY.md) | 218,554.41 | 121,565.25 | 1.798 / 1.829 | 48,184,648 | Gap (independent) |
+| [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md) | 215,589.68 | 122,725.26 | 1.757 / 2.462 | 48,232,256 | Gap (short; qualified) |
 | [WebP VP8L, opaque RGBA8 / exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 481,885.87 | 69,570.25 | 6.927 / 8.486 | 53,104,872 | Prior production; reconfirm |
 | [WebP VP8L from RGBA16, exact backend*](../benchmarks/WARM-VP8L-COLOR-COST.md) | 464,921.62 | 121,865.49 | 3.815 / 4.757 | 55,238,624 | Prior production; reconfirm |
 | [WebP VP8L photograph RGBA8](../benchmarks/WARM-VP8L-COLOR-COST.md) | 612,338.64 | 83,533.61 | 7.330 / 8.250 | 67,414,112 | Prior production; reconfirm |

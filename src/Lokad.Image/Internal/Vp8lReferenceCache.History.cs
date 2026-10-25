@@ -4,9 +4,8 @@ internal static partial class Vp8lReferenceCache
 {
     internal static long HistoryBytes(int pixelCount, int maximumBits)
     {
-        var maximum = new Vp8lHistogramLayout(maximumBits);
         var entries = (1 << (maximumBits + 1)) - 2;
-        return pixelCount + (entries + (long)maximum.Total) * 4 + 128;
+        return pixelCount + (entries + (long)HistogramValues(maximumBits)) * 4 + 128;
     }
 
     internal static long HistoryWorkBound(int pixels, int firstCount, int secondCount, int maximumBits)
@@ -32,14 +31,13 @@ internal static partial class Vp8lReferenceCache
             return false;
         // Eligibility uses only declared local allowances. Shared refusal below
         // is terminal and never selects a second, lower-memory attempt.
-        var maximum = new Vp8lHistogramLayout(maximumBits);
         context.Work(0); context.Reserve(reserved);
         try
         {
             context.Work(0);
             var minimum = new byte[pixels.Length];
             var cache = new uint[(1 << (maximumBits + 1)) - 2];
-            var counts = new int[maximum.Total];
+            var counts = new int[HistogramValues(maximumBits)];
             BuildHistory(pixels, maximumBits, cache, minimum);
             firstBits = ScoreHistory(pixels, first, maximumBits, minimum, counts, context);
             secondBits = ScoreHistory(pixels, second, maximumBits, minimum, counts, context);
@@ -80,44 +78,68 @@ internal static partial class Vp8lReferenceCache
     private static int ScoreHistory(ReadOnlySpan<uint> pixels, ReadOnlySpan<Vp8lToken> seed, int maximumBits,
         ReadOnlySpan<byte> minimum, Span<int> counts, OperationContext context)
     {
+        FillAllFromHistory(pixels, seed, minimum, maximumBits, counts);
         var best = 0; var bestCost = long.MaxValue; long copied = 0;
         foreach (var token in seed) if (token.Code > 0) copied += token.Length;
         for (var bits = 0; bits <= maximumBits; bits++)
         {
             var layout = new Vp8lHistogramLayout(bits);
-            context.Work(layout.CacheSize + layout.Total); counts[..layout.Total].Clear();
+            context.Work(layout.CacheSize + layout.Total);
             // The exclusive noncancellable operation proved the full original
             // work upper fits before admission. Publish exactly those charges.
             context.Work(4L * seed.Length + (bits == 0 ? 0 : copied));
-            FillFromHistory(pixels, seed, minimum, layout, counts);
-            var cost = layout.Population(counts[..layout.Total], context);
+            var cost = layout.Population(counts.Slice(HistogramOffset(bits), layout.Total), context);
             if (cost < bestCost) { bestCost = cost; best = bits; }
         }
         return best;
     }
 
-    // Source/seeds/history stay borrowed and read-only. Counts are admitted and
-    // cleared by the owner. Copy distances do not enter cache-size selection.
-    internal static void FillFromHistory(ReadOnlySpan<uint> pixels, ReadOnlySpan<Vp8lToken> seed,
-        ReadOnlySpan<byte> minimum, Vp8lHistogramLayout layout, Span<int> counts)
+    internal static int HistogramOffset(int bits)
+        => bits * new Vp8lHistogramLayout(0).Total + (bits == 0 ? 0 : (1 << bits) - 2);
+
+    internal static int HistogramValues(int maximumBits)
+        => HistogramOffset(maximumBits) + new Vp8lHistogramLayout(maximumBits).Total;
+
+    // A literal misses precisely the widths below its first cache hit. Count
+    // its channels once at the last miss, then form lower-width suffix sums.
+    // Copy-length populations are independent of cache width.
+    internal static void FillAllFromHistory(ReadOnlySpan<uint> pixels, ReadOnlySpan<Vp8lToken> seed,
+        ReadOnlySpan<byte> minimum, int maximumBits, Span<int> counts)
     {
+        counts[..HistogramValues(maximumBits)].Clear();
+        Span<int> offsets = stackalloc int[11];
+        for (var bits = 0; bits <= maximumBits; bits++) offsets[bits] = HistogramOffset(bits);
         var position = 0;
         foreach (var token in seed)
         {
             if (token.Code > 0) counts[256 + Vp8lSymbols.Prefix(token.Code).Code]++;
             else
             {
-                var pixel = pixels[position];
-                if (layout.CacheBits != 0 && minimum[position] <= layout.CacheBits)
-                    counts[280 + Key(pixel, layout.CacheBits)]++;
-                else
-                {
-                    counts[(int)(pixel >> 8 & 255)]++; counts[layout.Red + (int)(pixel >> 16 & 255)]++;
-                    counts[layout.Blue + (int)(pixel & 255)]++; counts[layout.Alpha + (int)(pixel >> 24)]++;
-                }
+                var pixel = pixels[position]; var threshold = minimum[position];
+                var lastMiss = threshold - 1; var layout = new Vp8lHistogramLayout(lastMiss);
+                var offset = offsets[lastMiss];
+                counts[offset + (int)(pixel >> 8 & 255)]++;
+                counts[offset + layout.Red + (int)(pixel >> 16 & 255)]++;
+                counts[offset + layout.Blue + (int)(pixel & 255)]++;
+                counts[offset + layout.Alpha + (int)(pixel >> 24)]++;
+                var hash = unchecked(pixel * 0x1e35a7bdu);
+                for (var bits = threshold; bits <= maximumBits; bits++)
+                    counts[offsets[bits] + 280 + (int)(hash >> (32 - bits))]++;
             }
             position += token.Length;
         }
         if (position != pixels.Length) throw new ArgumentException("Token seed does not cover its source.", nameof(seed));
+        for (var bits = maximumBits - 1; bits >= 0; bits--)
+        {
+            var lower = new Vp8lHistogramLayout(bits); var upper = new Vp8lHistogramLayout(bits + 1);
+            var a = counts.Slice(offsets[bits], lower.Total); var b = counts.Slice(offsets[bits + 1], upper.Total);
+            for (var value = 0; value < 256; value++)
+            {
+                a[value] += b[value]; a[lower.Red + value] += b[upper.Red + value];
+                a[lower.Blue + value] += b[upper.Blue + value]; a[lower.Alpha + value] += b[upper.Alpha + value];
+            }
+        }
+        for (var bits = 1; bits <= maximumBits; bits++)
+            counts.Slice(256, 24).CopyTo(counts.Slice(offsets[bits] + 256, 24));
     }
 }

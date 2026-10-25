@@ -75,23 +75,26 @@ public sealed class Vp8AdmissionTests
         using var source = OriginalPixels.Buffer(width, height, depth, opaque: opaque);
         var unchanged = OriginalPixels.Bytes(source);
         var options = new WebpEncodeOptions { Lossless = false, Quality = quality, Effort = effort };
-        var reference = WebpAdmissionControl.Reference(source, effort, lossless: false, quality: quality);
+        // A cancellable token selects individual cache traversal consistently.
+        // A generous operation's optional history peak is not a minimum limit.
+        using var traversal = new CancellationTokenSource();
+        var reference = WebpAdmissionControl.Reference(source, effort, lossless: false, quality: quality, cancellationToken: traversal.Token);
         var expected = reference.Packet; var peak = reference.WorkingBytes;
         var limits = new ImageLimits { MaxWorkingBytes = peak };
         using var exact = new NonseekableOutput();
-        ImageCodec.EncodeWebp(source, exact, options with { Limits = limits });
+        ImageCodec.EncodeWebp(source, exact, options with { Limits = limits }, traversal.Token);
         Assert.Equal(expected, exact.ToArray());
         Assert.True(exact.CanWrite);
         using var rejectedMemory = new MemoryStream();
         Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, rejectedMemory, options with
-        { Limits = limits with { MaxWorkingBytes = peak - 1 } }));
+        { Limits = limits with { MaxWorkingBytes = peak - 1 } }, traversal.Token));
         Assert.Equal(0, rejectedMemory.Length); Assert.True(rejectedMemory.CanWrite);
         using var exactSize = new MemoryStream();
-        ImageCodec.EncodeWebp(source, exactSize, options with { Limits = limits with { MaxOutputBytes = expected.Length } });
+        ImageCodec.EncodeWebp(source, exactSize, options with { Limits = limits with { MaxOutputBytes = expected.Length } }, traversal.Token);
         Assert.Equal(expected, exactSize.ToArray());
         using var rejectedSize = new MemoryStream();
         Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, rejectedSize, options with
-        { Limits = limits with { MaxOutputBytes = expected.Length - 1 } }));
+        { Limits = limits with { MaxOutputBytes = expected.Length - 1 } }, traversal.Token));
         Assert.Equal(0, rejectedSize.Length); Assert.True(rejectedSize.CanWrite);
         using var canceled = new MemoryStream();
         Assert.Throws<OperationCanceledException>(() => ImageCodec.EncodeWebp(source, canceled, options, new CancellationToken(true)));

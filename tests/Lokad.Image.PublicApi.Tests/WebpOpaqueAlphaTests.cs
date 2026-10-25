@@ -58,9 +58,12 @@ public sealed class WebpOpaqueAlphaTests
             if (depth == 8) new byte[] { (byte)(color * 17), (byte)(color * 29), (byte)(color * 47), 255 }.CopyTo(source.GetRow8(y)[(x * 4)..]);
             else new ushort[] { (ushort)((color * 12347) & 65535), (ushort)((color * 7919) & 65535), (ushort)((color * 101) & 65535), 65534 }.CopyTo(source.GetRow16(y)[(x * 4)..]);
         }
-        var unchanged = OriginalPixels.Bytes(source); var reference = WebpAdmissionControl.Reference(source); var packet = reference.Packet;
+        // Fix the traversal when qualifying an exact local-memory boundary;
+        // optional all-width histograms can otherwise be omitted at tighter limits.
+        using var traversal = new CancellationTokenSource();
+        var unchanged = OriginalPixels.Bytes(source); var reference = WebpAdmissionControl.Reference(source, cancellationToken: traversal.Token); var packet = reference.Packet;
         var limits = new ImageLimits { MaxWorkingBytes = reference.WorkingBytes, MaxOutputBytes = packet.Length };
-        using var exact = new NonseekableOutput(); ImageCodec.EncodeWebp(source, exact, new() { Limits = limits });
+        using var exact = new NonseekableOutput(); ImageCodec.EncodeWebp(source, exact, new() { Limits = limits }, traversal.Token);
         Assert.Equal(packet, exact.Bytes); Assert.True(exact.CanWrite);
         using var decoded = ImageCodec.Decode(packet);
         for (var y = 0; y < source.Height; y++)
@@ -74,7 +77,7 @@ public sealed class WebpOpaqueAlphaTests
         })
         {
             using var rejected = new MemoryStream();
-            var failure = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, rejected, new() { Limits = denied }));
+            var failure = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, rejected, new() { Limits = denied }, traversal.Token));
             Assert.Equal(expected, failure.Limit); Assert.Equal(0, rejected.Length);
         }
         using var cancellation = new CancellationTokenSource(); cancellation.Cancel(); using var cancelled = new MemoryStream();

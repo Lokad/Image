@@ -5,6 +5,13 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E223 all-width cache histograms](WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md) confirms
+VP8 at1.988×/upper1.998, saving5.6%elapsed with24,424,952B/op(+95,216) and exact
+98,590B packets. The affected VP8L short is1.757×,48,232,256B/op(+47,608),
+exact183,812B; no independent speedup claim. Both platforms pass5,127checks and
+the same actual package. Other eligible cache-history VP8/VP8L CPU evidence is
+historical; JPEG/PNG/decode/edit/text remain valid. No cases added; full257/1× open.
+
 [E217 bounded JPEG entropy output](WARM-JPEG-BUFFERED-ENTROPY.md) confirms
 governed RGBA16 at 2.074×/upper 2.084, saving 4.4% elapsed with exact packets,
 804,635 B/op (+560) and unchanged observed 1,704,856 B root peak. Four existing

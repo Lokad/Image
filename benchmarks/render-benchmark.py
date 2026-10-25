@@ -225,10 +225,10 @@ def render():
         row('JPEG 4:2:0 from caller RGB / AC trellis and padding pruning', 'jpeg420-ac-trellis-evidence.json', ['cases', 'Encode420_8', -1], 'JPEG420-AC-TRELLIS.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque‡', 'vp8-noise-spectrum-evidence.json', ['observations', 0], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 1], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
-        row('VP8 RGBA8', 'warm-vp8-vector-texture-evidence.json', ['observations', -1], 'WARM-VP8-VECTOR-TEXTURE.md', confirmed=True),
+        row('VP8 RGBA8', 'warm-webp-all-width-histograms-evidence.json', ['observations', -1], 'WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md', confirmed=True),
         row('WebP VP8 + alpha from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 3], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-histogram384-evidence.json', ['observations', 0], 'WARM-VP8-HISTOGRAM384.md', verification='Cost screen (CPU parity deferred)'),
-        row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-common-entropy-evidence.json', ['observations', -1], 'WARM-VP8L-COMMON-ENTROPY.md', confirmed=True),
+        row('VP8L RGBA8 / libwebp exact=1', 'warm-webp-all-width-histograms-evidence.json', ['cases', 'vp8l', -1], 'WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md', verification='Gap (short; qualified)'),
         row('WebP VP8L, opaque RGBA8 / exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'EncodeOpaque8', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8L from RGBA16, exact backend*', 'vp8l-color-cost-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-COLOR-COST.md', verification='Cost screen (CPU parity deferred)'),
     ]
@@ -380,14 +380,13 @@ short-run speedup claims. The earlier grayscale output-growth regression is
 resolved before acceptance; other affected JPEG encode timings remain historical.
 Other codecs, decoders, editing and text reuse
 unchanged confirmations where their production paths remain unchanged.
-VP8L now independently confirms1.798×/upper1.829 after common-count entropy
-inlining, using26.5% less elapsed than its preceding confirmation, with unchanged
-48,184,648B/op and exact183,812B packets. Current VP8 confirms 2.107×/upper 2.118 after exact vector texture scoring,
-saving 4.7% elapsed with unchanged 24,329,736 B/op and raw-exact 98,590 B packets.
-Both platforms pass 5,120 checks and the same actual package;
-[texture evidence](../benchmarks/WARM-VP8-VECTOR-TEXTURE.md).
-Other affected VP8 timings stay historical. JPEG and full-color VP8L reuse
-unchanged evidence; JPEG now has the slightly larger confirmed encoder gap.
+Current VP8 confirms 1.988×/upper1.998 after sharing cache histograms across
+widths, saving5.6%elapsed with24,424,952B/op(+95,216) and exact98,590B packets.
+VP8L current short is1.757×,48,232,256B/op(+47,608), exact183,812B; no independent
+speedup claim. Both platforms pass5,127checks and the same actual package;
+[all-width histogram evidence](../benchmarks/WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md).
+Other affected VP8/VP8L CPU timings stay historical. JPEG/PNG/decode/edit/text
+reuse unchanged evidence; governed JPEG now leads confirmed encoder gaps.
 The unchanged large-count formulas, work, ownership and shared admission remain.
 JPEG and VP8 now lead the measured encoder gaps; full parity stays open.
 No image/settings controls were added.
