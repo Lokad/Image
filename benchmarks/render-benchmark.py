@@ -222,7 +222,7 @@ def render():
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-buffered-entropy-evidence.json', ['cases', 'gray', -1], 'WARM-JPEG-BUFFERED-ENTROPY.md', verification='Gap (short; qualified)'),
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-buffered-entropy-evidence.json', ['cases', 'callerGray', -1], 'WARM-JPEG-BUFFERED-ENTROPY.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-vector-row-matrix-evidence.json', ['cases', 'caller420', -1], 'WARM-JPEG-VECTOR-ROW-MATRIX.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-caller-confirmation-evidence.json', ['observations', -1], 'WARM-JPEG-CALLER-CONFIRMATION.md', confirmed=True),
         row('WebP VP8, opaque‡', 'vp8-noise-spectrum-evidence.json', ['observations', 0], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 1], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('VP8 RGBA8', 'warm-webp-all-width-histograms-evidence.json', ['observations', -1], 'WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md', confirmed=True),
@@ -371,7 +371,8 @@ integer SIMD transforms/quantization, bounded chroma rows and coefficient replay
 Governed RGBA16 JPEG420 confirms 1.789×/upper 1.799 after exact SIMD row matrices,
 saving 13.7% elapsed with unchanged 804,635 B/op and observed 1,704,856 B root peak.
 Current RGBA8/16 nongoverned 420 shorts are 1.754×/1.757×, 373,416 B/op; 422 RGBA8 is
-1.623×, 515,072 B/op; caller RGB420 is 1.963×, 373,424 B/op. All packets remain exact
+1.623×, 515,072 B/op. Caller RGB420 confirms 1.951×/upper 1.967, 373,424 B/op;
+[confirmation](../benchmarks/WARM-JPEG-CALLER-CONFIRMATION.md). All packets remain exact
 apart from approved COM. Both platforms pass 5,128 checks and the same actual
 package; [row evidence](../benchmarks/WARM-JPEG-VECTOR-ROW-MATRIX.md).
 Other affected 420/422 CPU observations stay historical. 444/grayscale/decode and

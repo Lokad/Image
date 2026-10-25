@@ -5,6 +5,11 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E230 caller RGB420](WARM-JPEG-CALLER-CONFIRMATION.md) confirms1.951×/upper1.967,
+373,424B/op and exact52,091/52,093BapprovedCOMpackets on unchangedE227production.
+Same5128checks/SAMEpackage evidence reused; no build/qualification repeats.
+VP81.988× remains the largest currentconfirmed encoder anchor. No cases added.
+
 [E227 exact row matrices](WARM-JPEG-VECTOR-ROW-MATRIX.md) confirms governed
 RGBA16JPEG420 at1.789×/upper1.799,13.7%lesselapsed, unchanged804,635B/op and
 observed1,704,856B root peak. ExistingRGBA8/16 420,RGBA8 422 and callerRGB420

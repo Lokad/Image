@@ -22,7 +22,8 @@ integer SIMD transforms/quantization, bounded chroma rows and coefficient replay
 Governed RGBA16 JPEG420 confirms 1.789×/upper 1.799 after exact SIMD row matrices,
 saving 13.7% elapsed with unchanged 804,635 B/op and observed 1,704,856 B root peak.
 Current RGBA8/16 nongoverned 420 shorts are 1.754×/1.757×, 373,416 B/op; 422 RGBA8 is
-1.623×, 515,072 B/op; caller RGB420 is 1.963×, 373,424 B/op. All packets remain exact
+1.623×, 515,072 B/op. Caller RGB420 confirms 1.951×/upper 1.967, 373,424 B/op;
+[confirmation](../benchmarks/WARM-JPEG-CALLER-CONFIRMATION.md). All packets remain exact
 apart from approved COM. Both platforms pass 5,128 checks and the same actual
 package; [row evidence](../benchmarks/WARM-JPEG-VECTOR-ROW-MATRIX.md).
 Other affected 420/422 CPU observations stay historical. 444/grayscale/decode and
@@ -270,7 +271,7 @@ is a CPU-parity confirmation.
 | [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md) | 2,237.75 | 1,405.01 | 1.593 / 1.742 | 155,443 | Gap (short; qualified) |
 | [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md) | 1,822.25 | 1,078.35 | 1.690 / 2.000 | 155,449 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |
-| [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-VECTOR-ROW-MATRIX.md) | 3,101.43 | 1,579.65 | 1.963 / 2.333 | 373,424 | Gap (short; qualified) |
+| [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-CALLER-CONFIRMATION.md) | 3,080.71 | 1,579.41 | 1.951 / 1.967 | 373,424 | Gap (independent) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Prior production; reconfirm |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 75,226.22 | 15,616.85 | 4.817 / 5.060 | 1,006,520 | Prior production; reconfirm |
 | [VP8 RGBA8](../benchmarks/WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md) | 106,690.16 | 53,676.58 | 1.988 / 1.998 | 24,424,952 | Gap (independent) |
