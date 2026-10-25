@@ -112,6 +112,7 @@ internal static class Vp8MacroblockDecision
         Span<short> coefficients = stackalloc short[16]; Span<short> trialLevels = stackalloc short[16]; Span<short> residual = stackalloc short[16];
         Span<byte> topNz = stackalloc byte[4]; Span<byte> leftNz = stackalloc byte[4];
         Span<ushort> trellisWeights = stackalloc ushort[16]; if (trellis) Vp8TrellisQuantization.Weights(trellisWeights);
+        Span<byte> predictions = stackalloc byte[192]; Span<short> transforms = stackalloc short[192];
         contexts[..4].CopyTo(topNz); contexts.Slice(9, 4).CopyTo(leftNz); long headers = 0;
         for (var b = 0; b < 16; b++)
         {
@@ -122,16 +123,36 @@ internal static class Vp8MacroblockDecision
             var aboveMode = by == 0 ? modeContexts[bx] : modes[b - 4];
             var leftMode = bx == 0 ? modeContexts[4 + by] : modes[b - 1];
             var bestMode = -1; Metric best = default; var bestNonzero = false;
+            // Pure candidate inputs stay fixed until the winner is published.
+            // Ordinary quantization/rate/reconstruction have no nested work.
+            // Tight work, cancellable and trellis searches retain their original
+            // traversal. The extra 576 stack bytes fit ScratchBytes above.
+            var batch = Vp8ForwardTransform.SupportsFour && !trellis && !context.Cancellation.CanBeCanceled
+                && context.RemainingWork >= 10 * 2048;
+            if (batch)
+            {
+                for (var mode = 0; mode < 10; mode++)
+                    Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, top, left, corner, predictions.Slice(mode * 16, 16));
+                predictions.Slice(128, 32).CopyTo(predictions[160..]);
+                for (var mode = 0; mode < 12; mode += 4)
+                    Vp8ForwardTransform.DctFourPredictions(source[offset..], 16,
+                        predictions.Slice(mode * 16, 64), transforms.Slice(mode * 16, 64));
+            }
             for (var mode = 0; mode < 10; mode++)
             {
                 context.Work(2048);
-                Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, top, left, corner, trial);
-                for (var yy = 0; yy < 4; yy++) for (var xx = 0; xx < 4; xx++) residual[yy * 4 + xx] = (short)(source[offset + yy * 16 + xx] - trial[yy * 4 + xx]);
-                Vp8ForwardTransform.Dct(residual, coefficients);
+                var candidate = batch ? transforms.Slice(mode * 16, 16) : coefficients;
+                if (batch) predictions.Slice(mode * 16, 16).CopyTo(trial);
+                else
+                {
+                    Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, top, left, corner, trial);
+                    for (var yy = 0; yy < 4; yy++) for (var xx = 0; xx < 4; xx++) residual[yy * 4 + xx] = (short)(source[offset + yy * 16 + xx] - trial[yy * 4 + xx]);
+                    Vp8ForwardTransform.Dct(residual, candidate);
+                }
                 var any = trellis
-                    ? Vp8TrellisQuantization.Apply(coefficients, trialLevels, matrix, rate, trellisWeights, 3, topNz[bx] + leftNz[by], costs.Luma4Trellis, context)
-                    : Vp8BlockQuantization.Apply(coefficients, trialLevels, matrix);
-                Vp8BlockReconstruction.Add(coefficients, trial, 4);
+                    ? Vp8TrellisQuantization.Apply(candidate, trialLevels, matrix, rate, trellisWeights, 3, topNz[bx] + leftNz[by], costs.Luma4Trellis, context)
+                    : Vp8BlockQuantization.Apply(candidate, trialLevels, matrix);
+                Vp8BlockReconstruction.Add(candidate, trial, 4);
                 var distortion = Vp8Distortion.Squared(source[offset..], 16, trial, 4, 4, 4);
                 var texture = costs.Texture == 0 ? 0 : Spectral(costs.Texture, Vp8Distortion.Texture4(source[offset..], 16, trial, 4, weights));
                 var header = rate.Modes[8 + (aboveMode * 10 + leftMode) * 10 + mode];

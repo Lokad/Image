@@ -5,6 +5,13 @@ Updated 2026-10-25. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E240 batched intra4 preparation](WARM-VP8-FOUR-CANDIDATE.md) confirms VP8
+at1.870×/upper1.911,2.3%lesselapsed, unchanged24,424,952B/op and exact98,590B.
+Both platforms pass5,130checks and the SAMEactualpackage. Only non-trellis,
+noncancellable work-covered intra4 preparation changes; other affected VP8
+CPU observations are historical. JPEG/VP8L/PNG/decode/edit/text retain valid
+evidence. No cases added; full257-case/1× remains open.
+
 [E239 exact record packing](WARM-JPEG-VECTOR-RECORDS.md) confirms callerRGB420
 at1.658×/upper1.669,15.1%lesselapsed,373421B/op and exact52091/52093BapprovedCOM.
 Six existing color/gray boundaries reconcile with exact packets and unchanged

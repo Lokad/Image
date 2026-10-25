@@ -225,7 +225,7 @@ def render():
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-vector-records-evidence.json', ['observations', -1], 'WARM-JPEG-VECTOR-RECORDS.md', confirmed=True),
         row('WebP VP8, opaque‡', 'vp8-noise-spectrum-evidence.json', ['observations', 0], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 1], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
-        row('VP8 RGBA8', 'warm-vp8-vector-reconstruction-evidence.json', ['observations', -1], 'WARM-VP8-VECTOR-RECONSTRUCTION.md', confirmed=True),
+        row('VP8 RGBA8', 'warm-vp8-four-candidate-evidence.json', ['observations', -1], 'WARM-VP8-FOUR-CANDIDATE.md', confirmed=True),
         row('WebP VP8 + alpha from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 3], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8 + alpha‡, caller work budget32M', 'vp8-histogram384-evidence.json', ['observations', 0], 'WARM-VP8-HISTOGRAM384.md', verification='Cost screen (CPU parity deferred)'),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-webp-all-width-histograms-evidence.json', ['cases', 'vp8l', -1], 'WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md', verification='Gap (short; qualified)'),
@@ -379,14 +379,13 @@ Both platforms pass 5,129 checks and the same actual package;
 Other affected cached JPEG timings remain historical; 444/direct JPEG, decoding,
 other codecs/edit/text reuse unchanged evidence. No meaningful allocation change
 is inferred from differences of a few bytes per operation.
-Current VP8 confirms 1.911×/upper 1.923 after fused SIMD reconstruction,
-saving 4.4% elapsed with unchanged 24,424,952 B/op and exact 98,590 B packets.
-Both platforms pass 5,129 checks and the same actual package;
-[reconstruction evidence](../benchmarks/WARM-VP8-VECTOR-RECONSTRUCTION.md).
+Current VP8 confirms 1.870×/upper 1.911 after batched intra4 preparation,
+saving 2.3% elapsed with unchanged 24,424,952 B/op and exact 98,590 B packets.
+Both platforms pass 5,130 checks and the same actual package;
+[batched preparation evidence](../benchmarks/WARM-VP8-FOUR-CANDIDATE.md).
 Other affected VP8 CPU timings remain historical. Full-color VP8L, JPEG, PNG,
-decoding, editing and text reuse unchanged evidence; VP8 now leads
-confirmed encoder gaps. VP8L's unchanged current short is 1.757×,
-48,232,256 B/op, exact 183,812 B; no independent short-speedup claim.
+decoding, editing and text reuse unchanged evidence. VP8L's unchanged current
+short is 1.757×, 48,232,256 B/op, exact 183,812 B; no independent short-speedup claim.
 The unchanged large-count formulas, work, ownership and shared admission remain.
 JPEG and VP8 now lead the measured encoder gaps; full parity stays open.
 No image/settings controls were added.

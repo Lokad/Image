@@ -30,14 +30,13 @@ Both platforms pass 5,129 checks and the same actual package;
 Other affected cached JPEG timings remain historical; 444/direct JPEG, decoding,
 other codecs/edit/text reuse unchanged evidence. No meaningful allocation change
 is inferred from differences of a few bytes per operation.
-Current VP8 confirms 1.911×/upper 1.923 after fused SIMD reconstruction,
-saving 4.4% elapsed with unchanged 24,424,952 B/op and exact 98,590 B packets.
-Both platforms pass 5,129 checks and the same actual package;
-[reconstruction evidence](../benchmarks/WARM-VP8-VECTOR-RECONSTRUCTION.md).
+Current VP8 confirms 1.870×/upper 1.911 after batched intra4 preparation,
+saving 2.3% elapsed with unchanged 24,424,952 B/op and exact 98,590 B packets.
+Both platforms pass 5,130 checks and the same actual package;
+[batched preparation evidence](../benchmarks/WARM-VP8-FOUR-CANDIDATE.md).
 Other affected VP8 CPU timings remain historical. Full-color VP8L, JPEG, PNG,
-decoding, editing and text reuse unchanged evidence; VP8 now leads
-confirmed encoder gaps. VP8L's unchanged current short is 1.757×,
-48,232,256 B/op, exact 183,812 B; no independent short-speedup claim.
+decoding, editing and text reuse unchanged evidence. VP8L's unchanged current
+short is 1.757×, 48,232,256 B/op, exact 183,812 B; no independent short-speedup claim.
 The unchanged large-count formulas, work, ownership and shared admission remain.
 JPEG and VP8 now lead the measured encoder gaps; full parity stays open.
 No image/settings controls were added.
@@ -276,7 +275,7 @@ is a CPU-parity confirmation.
 | [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-VECTOR-RECORDS.md) | 2,617.06 | 1,578.04 | 1.658 / 1.669 | 373,421 | Gap (independent) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Prior production; reconfirm |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 75,226.22 | 15,616.85 | 4.817 / 5.060 | 1,006,520 | Prior production; reconfirm |
-| [VP8 RGBA8](../benchmarks/WARM-VP8-VECTOR-RECONSTRUCTION.md) | 102,032.50 | 53,405.80 | 1.911 / 1.923 | 24,424,952 | Gap (independent) |
+| [VP8 RGBA8](../benchmarks/WARM-VP8-FOUR-CANDIDATE.md) | 99,721.94 | 53,340.56 | 1.870 / 1.911 | 24,424,952 | Gap (independent) |
 | [WebP VP8 + alpha from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 83,863.51 | 53,727.26 | 1.561 / 1.652 | 1,537,304 | Prior production; reconfirm |
 | [WebP VP8 + alpha‡, caller work budget32M](../benchmarks/WARM-VP8-HISTOGRAM384.md) | 19,502.47 | 53,435.71 | 0.365 / 0.433 | 2,036,564 | Prior production; reconfirm |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md) | 215,589.68 | 122,725.26 | 1.757 / 2.462 | 48,232,256 | Gap (short; qualified) |

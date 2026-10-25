@@ -8,6 +8,33 @@ namespace Lokad.Image.Tests;
 public sealed class Vp8ForwardTransformTests
 {
     [Fact]
+    public void FourPredictionsPreserveIndependentCoefficientsAndOverlappingStorage()
+    {
+        var random = new Random(240);
+        var residual = new short[16]; var expected = new short[64];
+        foreach (var stride in new[] { 4, 5, 16, 21 })
+        foreach (var offset in new[] { 0, 1, 3 })
+        {
+            var original = new byte[512]; random.NextBytes(original);
+            for (var mode = 0; mode < 4; mode++)
+            {
+                for (var y = 0; y < 4; y++) for (var x = 0; x < 4; x++)
+                    residual[y * 4 + x] = (short)(original[offset + y * stride + x]
+                        - original[140 + offset + mode * 16 + y * 4 + x]);
+                Vp8ForwardTransform.Dct(residual, expected.AsSpan(mode * 16, 16));
+            }
+            foreach (var destination in new[] { 0, 2, 10, 136, 140, 144, 216, 256 })
+            {
+                var bytes = original.ToArray(); var wanted = original.ToArray();
+                System.Runtime.InteropServices.MemoryMarshal.AsBytes(expected.AsSpan()).CopyTo(wanted.AsSpan(destination));
+                Vp8ForwardTransform.DctFourPredictions(bytes.AsSpan(offset, 3 * stride + 4), stride,
+                    bytes.AsSpan(140 + offset, 64), System.Runtime.InteropServices.MemoryMarshal.Cast<byte, short>(bytes.AsSpan(destination, 132)));
+                Assert.Equal(wanted, bytes);
+            }
+        }
+    }
+
+    [Fact]
     public void OriginalDomainVectorsKeepEveryCoefficientAcrossFactorization()
     {
         // Frozen from the independently expressed matrix on the original
