@@ -209,20 +209,20 @@ def render():
         row('JPEG 4:4:4, forward-only / coded source histograms', 'jpeg444-coded-source-histogram-evidence.json', ['cases', 'Encode444Stream8', -1], 'JPEG444-CODED-SOURCE-HISTOGRAMS.md', verification='Cost screen (CPU parity deferred)'),
         row('JPEG 4:4:4, live cancelable token / prior geometric Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode444Cancelable8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
-        row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
+        row('JPEG 4:2:2, adaptive Huffman / matched quality', 'warm-jpeg-vector-row-matrix-evidence.json', ['cases', 'rgba422', -1], 'WARM-JPEG-VECTOR-ROW-MATRIX.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode422_16', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
-        row('JPEG RGBA8 4:2:0', 'warm-jpeg-buffered-entropy-evidence.json', ['cases', 'rgba8', -1], 'WARM-JPEG-BUFFERED-ENTROPY.md', verification='Gap (short; qualified)'),
+        row('JPEG RGBA8 4:2:0', 'warm-jpeg-vector-row-matrix-evidence.json', ['cases', 'rgba8', -1], 'WARM-JPEG-VECTOR-ROW-MATRIX.md', verification='Gap (short; qualified)'),
         row('JPEG RGBA8 4:2:0 / ImageBudget quota', 'warm-shared-budget-evidence.json', ['cases', 'JpegBudgetEncode4208', -1], 'WARM-SHARED-BUDGET.md', verification='Prior production; reconfirm'),
-        row('JPEG RGBA16 4:2:0 / caller IMemoryBudget', 'warm-jpeg-buffered-entropy-evidence.json', ['observations', -1], 'WARM-JPEG-BUFFERED-ENTROPY.md', confirmed=True),
+        row('JPEG RGBA16 4:2:0 / caller IMemoryBudget', 'warm-jpeg-vector-row-matrix-evidence.json', ['observations', -1], 'WARM-JPEG-VECTOR-ROW-MATRIX.md', confirmed=True),
         row('JPEG 4:2:0, adaptive / row restart markers', 'warm-jpeg-vector-ac-evidence.json', ['cases', 'Encode420Restart8', -1], 'WARM-JPEG-VECTOR-AC.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0, forward-only output / geometric AC Huffman', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream8', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, forward-only output', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Stream16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
         row('JPEG 4:2:0 from RGBA16, live cancelable token', 'warm-jpeg-fixed-fields-evidence.json', ['cases', 'Encode420Cancelable16', -1], 'WARM-JPEG-FIXED-FIELDS.md', verification='Prior production; reconfirm'),
-        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-buffered-entropy-evidence.json', ['cases', 'rgba16', -1], 'WARM-JPEG-BUFFERED-ENTROPY.md', verification='Gap (short; qualified)'),
+        row('JPEG 4:2:0 from RGBA16, adaptive Huffman', 'warm-jpeg-vector-row-matrix-evidence.json', ['cases', 'rgba16', -1], 'WARM-JPEG-VECTOR-ROW-MATRIX.md', verification='Gap (short; qualified)'),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-buffered-entropy-evidence.json', ['cases', 'gray', -1], 'WARM-JPEG-BUFFERED-ENTROPY.md', verification='Gap (short; qualified)'),
         row('JPEG from caller gray samples, standalone SIMD libjpeg-turbo', 'warm-jpeg-buffered-entropy-evidence.json', ['cases', 'callerGray', -1], 'WARM-JPEG-BUFFERED-ENTROPY.md', verification='Gap (short; qualified)'),
         row('JPEG 4:2:0 from caller RGB / optional CompactColor', 'warm-jpeg-compact-color-evidence.json', ['cases', 'CompactColorRgb420', -1], 'WARM-JPEG-COMPACT-COLOR.md', verification='Gap (short; qualified)'),
-        row('JPEG 4:2:0 from caller RGB / AC trellis and padding pruning', 'jpeg420-ac-trellis-evidence.json', ['cases', 'Encode420_8', -1], 'JPEG420-AC-TRELLIS.md', verification='Cost screen (CPU parity deferred)'),
+        row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-vector-row-matrix-evidence.json', ['cases', 'caller420', -1], 'WARM-JPEG-VECTOR-ROW-MATRIX.md', verification='Gap (short; qualified)'),
         row('WebP VP8, opaque‡', 'vp8-noise-spectrum-evidence.json', ['observations', 0], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('WebP VP8, opaque from RGBA16‡', 'vp8-noise-spectrum-evidence.json', ['observations', 1], 'WARM-VP8-NOISE-SPECTRUM.md', verification='Cost screen (CPU parity deferred)'),
         row('VP8 RGBA8', 'warm-webp-all-width-histograms-evidence.json', ['observations', -1], 'WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md', confirmed=True),
@@ -368,25 +368,22 @@ are exact, including checksums/framing. Both platforms pass4,807 Release checks,
 three examples. Four current RGBA8 encoder anchors have guarded packet-exact cost
 screens. JPEG has independently confirmed improvements from bounded MCU conversion,
 integer SIMD transforms/quantization, bounded chroma rows and coefficient replay.
-Governed color JPEG420 from RGBA16 confirms 2.074×/upper 2.084 after bounded
-entropy output, using 4.4% less elapsed than its preceding confirmation. Allocation
-is 804,635 B/op (+560); observed shared-root peak remains 1,704,856 B while the
-new 640 B owner is charged during use. Both platforms pass 5,127 checks and the
-same actual package; [output evidence](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md).
-Existing nongoverned RGBA8/16 shorts are 2.069×/2.039× and 373,416 B/op. RGBA-gray
-and caller-gray shorts are 1.593×/1.690×, 155,443/155,449 B/op, with raw-exact
-58,910 B packets against approved standalone SIMD libjpeg-turbo. No separate
-short-run speedup claims. The earlier grayscale output-growth regression is
-resolved before acceptance; other affected JPEG encode timings remain historical.
-Other codecs, decoders, editing and text reuse
-unchanged confirmations where their production paths remain unchanged.
+Governed RGBA16 JPEG420 confirms 1.789×/upper 1.799 after exact SIMD row matrices,
+saving 13.7% elapsed with unchanged 804,635 B/op and observed 1,704,856 B root peak.
+Current RGBA8/16 nongoverned 420 shorts are 1.754×/1.757×, 373,416 B/op; 422 RGBA8 is
+1.623×, 515,072 B/op; caller RGB420 is 1.963×, 373,424 B/op. All packets remain exact
+apart from approved COM. Both platforms pass 5,128 checks and the same actual
+package; [row evidence](../benchmarks/WARM-JPEG-VECTOR-ROW-MATRIX.md).
+Other affected 420/422 CPU observations stay historical. 444/grayscale/decode and
+other codecs/edit/text reuse unchanged evidence. Approved SIMD libjpeg-turbo
+gray rows remain 1.593×/1.690× short, 155,443/155,449 B/op, exact 58,910 B packets.
 Current VP8 confirms 1.988×/upper1.998 after sharing cache histograms across
 widths, saving5.6%elapsed with24,424,952B/op(+95,216) and exact98,590B packets.
 VP8L current short is1.757×,48,232,256B/op(+47,608), exact183,812B; no independent
 speedup claim. Both platforms pass5,127checks and the same actual package;
 [all-width histogram evidence](../benchmarks/WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md).
 Other affected VP8/VP8L CPU timings stay historical. JPEG/PNG/decode/edit/text
-reuse unchanged evidence; governed JPEG now leads confirmed encoder gaps.
+reuse unchanged evidence; VP8 now leads confirmed encoder gaps.
 The unchanged large-count formulas, work, ownership and shared admission remain.
 JPEG and VP8 now lead the measured encoder gaps; full parity stays open.
 No image/settings controls were added.

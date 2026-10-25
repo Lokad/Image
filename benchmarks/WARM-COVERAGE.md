@@ -5,6 +5,13 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E227 exact row matrices](WARM-JPEG-VECTOR-ROW-MATRIX.md) confirms governed
+RGBA16JPEG420 at1.789×/upper1.799,13.7%lesselapsed, unchanged804,635B/op and
+observed1,704,856B root peak. ExistingRGBA8/16 420,RGBA8 422 and callerRGB420
+costs reconcile with exact packets/approvedCOM. Both platforms pass5,128checks
+and the same actual package. Other affected420/422CPU evidence is historical;
+444/grayscale/decoders/othercodecs/edit/text remain valid. No cases added.
+
 [E223 all-width cache histograms](WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md) confirms
 VP8 at1.988×/upper1.998, saving5.6%elapsed with24,424,952B/op(+95,216) and exact
 98,590B packets. The affected VP8L short is1.757×,48,232,256B/op(+47,608),

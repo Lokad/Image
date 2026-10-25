@@ -75,13 +75,11 @@ internal static partial class JpegEncoder
                     JpegReferenceColor.NormalizeRgba16(image.GetRow16(sy).Slice(firstX * 4, columns * 4), row, background);
             }
             for (var y = 0; y < 16; y++)
-            for (var x = 0; x < 16; x++)
             {
-                var at = (Math.Min(top + y, height - 1) - firstY) * stride
-                    + Math.Min(left + x, width - 1) - firstX;
-                var rgb = pixels[at];
-                mcu[(y / 8 * 2 + x / 8) * 64 + y % 8 * 8 + x % 8] =
-                    JpegReferenceColor.Luma(rgb & 255, rgb >> 8 & 255, rgb >> 16 & 255);
+                var row = pixels.Slice((Math.Min(top + y, height - 1) - firstY) * stride, columns);
+                var offset = y / 8 * 128 + y % 8 * 8;
+                JpegReferenceColor.MatrixLumaRow(row, firstX, left, width,
+                    mcu.Slice(offset, 8), mcu.Slice(offset + 64, 8));
             }
             // Every luma sample is now independent of this tile. Convert each
             // distinct chroma input once, pairing RGB before matrix rounding.
@@ -89,18 +87,7 @@ internal static partial class JpegEncoder
             for (var row = 0; row <= lastY - firstY; row++)
             {
                 var rowPixels = pixels.Slice(row * stride, stride);
-                for (var x = 0; x < columns; x += pair ? 2 : 1)
-                {
-                    var rgb = rowPixels[x];
-                    var r = rgb & 255; var g = rgb >> 8 & 255; var b = rgb >> 16 & 255;
-                    if (pair)
-                    {
-                        var next = rowPixels[x + 1];
-                        r += next & 255; g += next >> 8 & 255; b += next >> 16 & 255;
-                    }
-                    JpegReferenceColor.LimitedChroma(r, g, b, pair, out var u, out var v);
-                    rowPixels[x] = u | v << 16;
-                }
+                JpegReferenceColor.MatrixChromaRow(rowPixels, columns, pair);
                 for (var x = 0; x < 8; x++)
                 {
                     var plan = horizontalPlans[x]; var sumU = 0; var sumV = 0;

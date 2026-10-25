@@ -19,25 +19,22 @@ are exact, including checksums/framing. Both platforms pass4,807 Release checks,
 three examples. Four current RGBA8 encoder anchors have guarded packet-exact cost
 screens. JPEG has independently confirmed improvements from bounded MCU conversion,
 integer SIMD transforms/quantization, bounded chroma rows and coefficient replay.
-Governed color JPEG420 from RGBA16 confirms 2.074×/upper 2.084 after bounded
-entropy output, using 4.4% less elapsed than its preceding confirmation. Allocation
-is 804,635 B/op (+560); observed shared-root peak remains 1,704,856 B while the
-new 640 B owner is charged during use. Both platforms pass 5,127 checks and the
-same actual package; [output evidence](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md).
-Existing nongoverned RGBA8/16 shorts are 2.069×/2.039× and 373,416 B/op. RGBA-gray
-and caller-gray shorts are 1.593×/1.690×, 155,443/155,449 B/op, with raw-exact
-58,910 B packets against approved standalone SIMD libjpeg-turbo. No separate
-short-run speedup claims. The earlier grayscale output-growth regression is
-resolved before acceptance; other affected JPEG encode timings remain historical.
-Other codecs, decoders, editing and text reuse
-unchanged confirmations where their production paths remain unchanged.
+Governed RGBA16 JPEG420 confirms 1.789×/upper 1.799 after exact SIMD row matrices,
+saving 13.7% elapsed with unchanged 804,635 B/op and observed 1,704,856 B root peak.
+Current RGBA8/16 nongoverned 420 shorts are 1.754×/1.757×, 373,416 B/op; 422 RGBA8 is
+1.623×, 515,072 B/op; caller RGB420 is 1.963×, 373,424 B/op. All packets remain exact
+apart from approved COM. Both platforms pass 5,128 checks and the same actual
+package; [row evidence](../benchmarks/WARM-JPEG-VECTOR-ROW-MATRIX.md).
+Other affected 420/422 CPU observations stay historical. 444/grayscale/decode and
+other codecs/edit/text reuse unchanged evidence. Approved SIMD libjpeg-turbo
+gray rows remain 1.593×/1.690× short, 155,443/155,449 B/op, exact 58,910 B packets.
 Current VP8 confirms 1.988×/upper1.998 after sharing cache histograms across
 widths, saving5.6%elapsed with24,424,952B/op(+95,216) and exact98,590B packets.
 VP8L current short is1.757×,48,232,256B/op(+47,608), exact183,812B; no independent
 speedup claim. Both platforms pass5,127checks and the same actual package;
 [all-width histogram evidence](../benchmarks/WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md).
 Other affected VP8/VP8L CPU timings stay historical. JPEG/PNG/decode/edit/text
-reuse unchanged evidence; governed JPEG now leads confirmed encoder gaps.
+reuse unchanged evidence; VP8 now leads confirmed encoder gaps.
 The unchanged large-count formulas, work, ownership and shared admission remain.
 JPEG and VP8 now lead the measured encoder gaps; full parity stays open.
 No image/settings controls were added.
@@ -106,8 +103,8 @@ replacement readiness remains open.
 
 The [finite checklist](../benchmarks/WARM-COVERAGE.md) contains 257 named cases:
 240 numeric and 17 unmeasured. Tested-producer rows contain **45 passes,
-122 gaps, 1 confidence-open case, 2 short cost
-screens and 70 superseded encoder rows**. The latter predate
+124 gaps, 1 confidence-open case, 1 short cost
+screens and 69 superseded encoder rows**. The latter predate
 JPEG decision/adaptive work or the managed PNG/VP8L encoder replacements; current packet evidence is
 reconciled and new costs are deferred while compression gates remain open.
 Their stored values are historical, not demonstrated current gaps. Another 30 marked
@@ -260,20 +257,20 @@ is a CPU-parity confirmation.
 | [JPEG 4:4:4, forward-only / coded source histograms](../benchmarks/JPEG444-CODED-SOURCE-HISTOGRAMS.md) | 1,929,269.70 | 3,768.09 | 512.002 / 585.587 | 644,112 | Cost screen (CPU parity deferred) |
 | [JPEG 4:4:4, live cancelable token / prior geometric Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 4,465.15 | 3,775.40 | 1.183 / 1.364 | 525,997 | Prior production; reconfirm |
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,980.90 | 3,855.74 | 1.032 / 1.135 | 556,284 | Prior production; reconfirm |
-| [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,579.93 | 2,354.66 | 1.096 / 1.227 | 294,116 | Prior production; reconfirm |
+| [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-ROW-MATRIX.md) | 3,805.19 | 2,345.20 | 1.623 / 1.894 | 515,072 | Gap (short; qualified) |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,633.91 | 2,421.91 | 1.088 / 1.220 | 294,116 | Prior production; reconfirm |
-| [JPEG RGBA8 4:2:0](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md) | 3,651.90 | 1,765.34 | 2.069 / 2.507 | 373,416 | Gap (short; qualified) |
+| [JPEG RGBA8 4:2:0](../benchmarks/WARM-JPEG-VECTOR-ROW-MATRIX.md) | 3,105.04 | 1,770.55 | 1.754 / 2.020 | 373,416 | Gap (short; qualified) |
 | [JPEG RGBA8 4:2:0 / ImageBudget quota](../benchmarks/WARM-SHARED-BUDGET.md) | 2,026.04 | 1,769.43 | 1.145 / 1.272 | 297,781 | Prior production; reconfirm |
-| [JPEG RGBA16 4:2:0 / caller IMemoryBudget](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md) | 3,811.21 | 1,837.69 | 2.074 / 2.084 | 804,635 | Gap (independent) |
+| [JPEG RGBA16 4:2:0 / caller IMemoryBudget](../benchmarks/WARM-JPEG-VECTOR-ROW-MATRIX.md) | 3,289.84 | 1,838.76 | 1.789 / 1.799 | 804,635 | Gap (independent) |
 | [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,019.53 | 1,611.25 | 1.253 / 1.455 | 297,781 | Prior production; reconfirm |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,310.38 | 1,769.17 | 1.306 / 1.488 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,393.98 | 1,839.60 | 1.301 / 1.415 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,444.30 | 1,841.37 | 1.327 / 1.443 | 263,787 | Prior production; reconfirm |
-| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md) | 3,744.72 | 1,836.31 | 2.039 / 2.384 | 373,416 | Gap (short; qualified) |
+| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-VECTOR-ROW-MATRIX.md) | 3,231.33 | 1,839.60 | 1.757 / 2.042 | 373,416 | Gap (short; qualified) |
 | [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md) | 2,237.75 | 1,405.01 | 1.593 / 1.742 | 155,443 | Gap (short; qualified) |
 | [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md) | 1,822.25 | 1,078.35 | 1.690 / 2.000 | 155,449 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |
-| [JPEG 4:2:0 from caller RGB / AC trellis and padding pruning](../benchmarks/JPEG420-AC-TRELLIS.md) | 68,162.15 | 1,579.24 | 43.161 / 50.354 | 170,648 | Cost screen (CPU parity deferred) |
+| [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-VECTOR-ROW-MATRIX.md) | 3,101.43 | 1,579.65 | 1.963 / 2.333 | 373,424 | Gap (short; qualified) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Prior production; reconfirm |
 | [WebP VP8, opaque from RGBA16‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 75,226.22 | 15,616.85 | 4.817 / 5.060 | 1,006,520 | Prior production; reconfirm |
 | [VP8 RGBA8](../benchmarks/WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md) | 106,690.16 | 53,676.58 | 1.988 / 1.998 | 24,424,952 | Gap (independent) |
