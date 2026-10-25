@@ -5,6 +5,13 @@ Updated 2026-10-24. The finite scope is **257 named cases: 240 numeric and
 verification counts come from the [three-table summary](../docs/benchmark.md).
 Warm single-CPU parity and replacement readiness remain open.
 
+[E217 bounded JPEG entropy output](WARM-JPEG-BUFFERED-ENTROPY.md) confirms
+governed RGBA16 at 2.074×/upper 2.084, saving 4.4% elapsed with exact packets,
+804,635 B/op (+560) and unchanged observed 1,704,856 B root peak. Four existing
+color/gray boundaries reconcile. Both platforms pass 5,127 checks and the same
+actual package. Other affected JPEG encode timings stay historical; decoding/
+PNG/WebP/edit/text evidence remains valid. No cases added; full 257-case/1× open.
+
 [E211 vector texture scoring](WARM-VP8-VECTOR-TEXTURE.md) confirms VP8 at
 2.107×/upper 2.118, saving 4.7% elapsed with unchanged 24,329,736 B/op and
 raw-exact 98,590 B. Both platforms pass 5,120 checks and the same actual package.

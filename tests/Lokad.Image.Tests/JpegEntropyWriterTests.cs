@@ -26,8 +26,8 @@ public sealed class JpegEntropyWriterTests
                 }
                 expected[length++] = 255; expected[length++] = 0xD0;
                 using var output = new MemoryStream();
-                var context = Context(padding == 0 ? 1 : 2);
-                var writer = new JpegEntropyWriter(output, context);
+                using var context = Context(padding == 0 ? 1 : 2);
+                using var writer = new JpegEntropyWriter(output, context);
                 writer.Signed(sign * magnitude, width); writer.Restart(0);
                 Assert.True(expected.AsSpan(0, length).SequenceEqual(output.GetBuffer().AsSpan(0, (int)output.Length)));
                 Assert.Throws<ImageLimitException>(() => context.Work(1));
@@ -39,12 +39,13 @@ public sealed class JpegEntropyWriterTests
     [Fact]
     public void ZeroWidthStillAdmitsWorkAndObservesCancellation()
     {
-        using var output = new MemoryStream(); var context = Context(1);
-        new JpegEntropyWriter(output, context).Signed(0, 0);
+        using var output = new MemoryStream(); using var context = Context(1);
+        using var writer = new JpegEntropyWriter(output, context); writer.Signed(0, 0);
         Assert.Equal(0, output.Length); Assert.Throws<ImageLimitException>(() => context.Work(1));
         using var cancellation = new CancellationTokenSource();
-        var canceled = new OperationContext(ImageLimits.Default, cancellation.Token); cancellation.Cancel();
-        Assert.Throws<OperationCanceledException>(() => new JpegEntropyWriter(output, canceled).Signed(0, 0));
+        using var canceled = new OperationContext(ImageLimits.Default, cancellation.Token); cancellation.Cancel();
+        using var stopped = new JpegEntropyWriter(output, canceled);
+        Assert.Throws<OperationCanceledException>(() => stopped.Signed(0, 0));
         Assert.Equal(0, output.Length);
     }
 
@@ -60,8 +61,9 @@ public sealed class JpegEntropyWriterTests
         }
         static void Check(int value, int width)
         {
-            using var output = new MemoryStream(); var context = Context(1);
-            var error = Assert.Throws<ArgumentOutOfRangeException>(() => new JpegEntropyWriter(output, context).Signed(value, width));
+            using var output = new MemoryStream(); using var context = Context(1);
+            using var writer = new JpegEntropyWriter(output, context);
+            var error = Assert.Throws<ArgumentOutOfRangeException>(() => writer.Signed(value, width));
             Assert.Equal("value", error.ParamName); Assert.Equal(0, output.Length);
             context.Work(1); Assert.Throws<ImageLimitException>(() => context.Work(1));
         }

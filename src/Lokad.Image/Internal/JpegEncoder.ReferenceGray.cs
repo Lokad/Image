@@ -45,7 +45,7 @@ internal static partial class JpegEncoder
             tables[0] = JpegGrayReferenceTables.Huffman(histograms[0], context);
             tables[2] = JpegGrayReferenceTables.Huffman(histograms[2], context);
             WriteReferenceGrayHeader(output, width, height, quantization, tables, context, options.RestartInterval);
-            var writer = new JpegEntropyWriter(output, context);
+            using var writer = new JpegEntropyWriter(output, context);
             if (records is null)
                 ReferenceGrayPass(image, source, width, height, options.BackgroundRgb, quantization, reciprocals, histograms, tables, writer, context, options.RestartInterval);
             else

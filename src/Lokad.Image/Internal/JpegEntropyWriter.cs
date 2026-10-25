@@ -1,12 +1,49 @@
+using System;
+using System.IO;
+using System.Threading;
+
 namespace Lokad.Image.Internal;
 
-internal sealed class JpegEntropyWriter(Stream output, OperationContext context)
+// Borrows output/context. Lazily admits its bounded byte buffer through the
+// same operation root and releases it before that context ends. Failure disposal
+// drops pending bytes; only explicit alignment publishes a partial final chunk.
+internal sealed class JpegEntropyWriter(Stream output, OperationContext context) : IDisposable
 {
+    internal const int Capacity = 512;
+    internal const long StorageBytes = Capacity + 128;
+    private byte[]? buffer;
+    private int used;
+    // A smaller first full chunk avoids oversized initial growth in caller
+    // streams after small JPEG headers. Partial restart flushes keep this bound.
+    private int flushAt = Capacity / 2;
     private uint bits;
     private int available;
+    private bool disposed;
+
+    private void Emit(byte value)
+    {
+        if (buffer is null)
+        {
+            context.Work(0);
+            context.Reserve(StorageBytes);
+            try { context.Work(0); buffer = new byte[Capacity]; }
+            catch { context.Release(StorageBytes); throw; }
+        }
+        buffer[used++] = value;
+        if (used == flushAt) { Flush(); flushAt = Capacity; }
+    }
+
+    private void Flush()
+    {
+        if (used == 0) return;
+        context.Work(0);
+        output.Write(buffer.AsSpan(0, used));
+        used = 0;
+    }
 
     public void Write(int value, int count)
     {
+        ObjectDisposedException.ThrowIf(disposed, this);
         if (count is < 0 or > 16 || value < 0 || value >= 1 << count) throw new ArgumentOutOfRangeException(nameof(value));
         context.Work(1);
         bits = bits << count | (uint)value; available += count;
@@ -14,8 +51,8 @@ internal sealed class JpegEntropyWriter(Stream output, OperationContext context)
         {
             available -= 8;
             var next = (byte)(bits >> available);
-            output.WriteByte(next);
-            if (next == 255) output.WriteByte(0);
+            Emit(next);
+            if (next == 255) Emit(0);
         }
     }
 
@@ -24,8 +61,10 @@ internal sealed class JpegEntropyWriter(Stream output, OperationContext context)
 
     public void Align()
     {
+        ObjectDisposedException.ThrowIf(disposed, this);
         if (available != 0) Write((1 << (8 - available)) - 1, 8 - available);
         bits = 0; available = 0;
+        Flush();
     }
 
     public void Restart(int index)
@@ -33,4 +72,11 @@ internal sealed class JpegEntropyWriter(Stream output, OperationContext context)
         Align(); output.WriteByte(255); output.WriteByte((byte)(0xD0 + (index & 7)));
     }
 
+    public void Dispose()
+    {
+        // Failure disposal drops pending bytes, performs no output I/O and
+        // releases only owned storage. Output/context/root remain borrowed.
+        disposed = true; used = 0;
+        if (Interlocked.Exchange(ref buffer, null) is not null) context.Release(StorageBytes);
+    }
 }

@@ -34,6 +34,8 @@ temporary table-building capacity before allocation, including grayscale tree/
 priority-queue replacement peaks. Grayscale uses a single64-byte block. Scratch is released after
 each builder; codec workspace is released before asynchronous delivery, whose
 encoded chunks remain charged until their actual users finish. Refusal is terminal.
+Entropy output has a lazy 512-byte buffer plus 128 bytes of coarse metadata,
+admitted separately before allocation and released before asynchronous delivery.
 
 `ImageLimits` bounds one operation's admitted buffers and algorithm work. It is
 not a process RSS, GC-heap, elapsed-time or global-cache quota. Supplied pixel or

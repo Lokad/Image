@@ -54,7 +54,7 @@ newHistogram[table] = new int[256];
             Input(coefficients, test, blocks); Array.Clear(newPrevious);
             foreach (var values in newHistogram) Array.Clear(values);
             newOutput.SetLength(0);
-            var newWriter = new JpegEntropyWriter(newOutput, newContext);
+            using var newWriter = new JpegEntropyWriter(newOutput, newContext);
             var used = 0; newContext.Work(262144);
             for (var b = 0; b < blocks; b++)
             {

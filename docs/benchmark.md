@@ -19,23 +19,16 @@ are exact, including checksums/framing. Both platforms pass4,807 Release checks,
 three examples. Four current RGBA8 encoder anchors have guarded packet-exact cost
 screens. JPEG has independently confirmed improvements from bounded MCU conversion,
 integer SIMD transforms/quantization, bounded chroma rows and coefficient replay.
-Governed color JPEG420 from RGBA16 confirms2.168×/upper2.184 after compiling
-the unchanged color matrix, using7.9% less elapsed than its preceding confirmation.
-Allocation is804,075B/op (+56; attribution unproven); shared-root peak remains
-1,704,856B. Both platforms pass5,120checks and the SAMEactualpackage;
-[matrix evidence](../benchmarks/WARM-JPEG-COMPILED-COLOR.md).
-Nongoverned RGBA8/16 current shorts2.154×/2.127× use372,856B/op. Other affected
-colorJPEG CPU evidence remains historical; grayscaleJPEG is unchanged.
-VP8 is the next larger measured encoder gap. Full parity remains open.
-The grayscale 0.962× claim came from the replaced 58,823-byte encoder. Current
-raw-exact 58,910-byte RGBA-gray encoding confirms1.726× after entropy replay,
-using35.3% less elapsed than its preceding confirmation and154,883B/op. Caller-gray
-has a current1.886× screen and154,886B/op. The48B owner adds bounded record storage;
-fullcapacity/replacement peaks remain governed. Each platform passes5,111checks
-and the same actual package; [replay evidence](../benchmarks/WARM-JPEG-GRAY-ENTROPY-RECORDS.md).
-The reference is approved standalone SIMDlibjpeg-turbo for both complete boundaries.
-VP8/colorJPEG/VP8L now lead the measured encoder gaps; older affected gray timings
-stay historical.
+Governed color JPEG420 from RGBA16 confirms 2.074×/upper 2.084 after bounded
+entropy output, using 4.4% less elapsed than its preceding confirmation. Allocation
+is 804,635 B/op (+560); observed shared-root peak remains 1,704,856 B while the
+new 640 B owner is charged during use. Both platforms pass 5,127 checks and the
+same actual package; [output evidence](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md).
+Existing nongoverned RGBA8/16 shorts are 2.069×/2.039× and 373,416 B/op. RGBA-gray
+and caller-gray shorts are 1.593×/1.690×, 155,443/155,449 B/op, with raw-exact
+58,910 B packets against approved standalone SIMD libjpeg-turbo. No separate
+short-run speedup claims. The earlier grayscale output-growth regression is
+resolved before acceptance; other affected JPEG encode timings remain historical.
 Other codecs, decoders, editing and text reuse
 unchanged confirmations where their production paths remain unchanged.
 VP8L now independently confirms1.798×/upper1.829 after common-count entropy
@@ -270,16 +263,16 @@ is a CPU-parity confirmation.
 | [JPEG 4:4:4 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 3,980.90 | 3,855.74 | 1.032 / 1.135 | 556,284 | Prior production; reconfirm |
 | [JPEG 4:2:2, adaptive Huffman / matched quality](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,579.93 | 2,354.66 | 1.096 / 1.227 | 294,116 | Prior production; reconfirm |
 | [JPEG 4:2:2 from RGBA16, adaptive Huffman / full normalization](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,633.91 | 2,421.91 | 1.088 / 1.220 | 294,116 | Prior production; reconfirm |
-| [JPEG RGBA8 4:2:0](../benchmarks/WARM-JPEG-COMPILED-COLOR.md) | 3,802.65 | 1,765.18 | 2.154 / 2.499 | 372,856 | Gap (short; qualified) |
+| [JPEG RGBA8 4:2:0](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md) | 3,651.90 | 1,765.34 | 2.069 / 2.507 | 373,416 | Gap (short; qualified) |
 | [JPEG RGBA8 4:2:0 / ImageBudget quota](../benchmarks/WARM-SHARED-BUDGET.md) | 2,026.04 | 1,769.43 | 1.145 / 1.272 | 297,781 | Prior production; reconfirm |
-| [JPEG RGBA16 4:2:0 / caller IMemoryBudget](../benchmarks/WARM-JPEG-COMPILED-COLOR.md) | 3,988.50 | 1,839.84 | 2.168 / 2.184 | 804,075 | Gap (independent) |
+| [JPEG RGBA16 4:2:0 / caller IMemoryBudget](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md) | 3,811.21 | 1,837.69 | 2.074 / 2.084 | 804,635 | Gap (independent) |
 | [JPEG 4:2:0, adaptive / row restart markers](../benchmarks/WARM-JPEG-VECTOR-AC.md) | 2,019.53 | 1,611.25 | 1.253 / 1.455 | 297,781 | Prior production; reconfirm |
 | [JPEG 4:2:0, forward-only output / geometric AC Huffman](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,310.38 | 1,769.17 | 1.306 / 1.488 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, forward-only output](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,393.98 | 1,839.60 | 1.301 / 1.415 | 263,819 | Prior production; reconfirm |
 | [JPEG 4:2:0 from RGBA16, live cancelable token](../benchmarks/WARM-JPEG-FIXED-FIELDS.md) | 2,444.30 | 1,841.37 | 1.327 / 1.443 | 263,787 | Prior production; reconfirm |
-| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-COMPILED-COLOR.md) | 3,919.58 | 1,842.55 | 2.127 / 2.509 | 372,856 | Gap (short; qualified) |
-| [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAY-ENTROPY-RECORDS.md) | 2,432.29 | 1,409.20 | 1.726 / 1.739 | 154,883 | Gap (independent) |
-| [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-GRAY-ENTROPY-RECORDS.md) | 2,038.89 | 1,080.83 | 1.886 / 2.154 | 154,886 | Gap (short; qualified) |
+| [JPEG 4:2:0 from RGBA16, adaptive Huffman](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md) | 3,744.72 | 1,836.31 | 2.039 / 2.384 | 373,416 | Gap (short; qualified) |
+| [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md) | 2,237.75 | 1,405.01 | 1.593 / 1.742 | 155,443 | Gap (short; qualified) |
+| [JPEG from caller gray samples, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-BUFFERED-ENTROPY.md) | 1,822.25 | 1,078.35 | 1.690 / 2.000 | 155,449 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / optional CompactColor](../benchmarks/WARM-JPEG-COMPACT-COLOR.md) | 1,774.21 | 1,576.12 | 1.126 / 1.362 | 162,110 | Gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB / AC trellis and padding pruning](../benchmarks/JPEG420-AC-TRELLIS.md) | 68,162.15 | 1,579.24 | 43.161 / 50.354 | 170,648 | Cost screen (CPU parity deferred) |
 | [WebP VP8, opaque‡](../benchmarks/WARM-VP8-NOISE-SPECTRUM.md) | 74,428.73 | 15,537.01 | 4.790 / 4.924 | 1,006,520 | Prior production; reconfirm |

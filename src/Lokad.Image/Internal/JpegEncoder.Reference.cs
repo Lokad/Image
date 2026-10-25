@@ -87,7 +87,7 @@ internal static partial class JpegEncoder
             for (var i = 0; i < 4; i++) tables[i] = fixedTables
                 ? JpegFixedReferenceTables.Create(i, context) : JpegReferenceTables.Huffman(histograms[i], context);
             WriteReferenceHeader(output, width, height, options.Sampling, quantization, tables, context, options.RestartInterval);
-            var writer = new JpegEntropyWriter(output, context);
+            using var writer = new JpegEntropyWriter(output, context);
             if (records is null)
                 ReferencePass(image, source, width, height, options.BackgroundRgb, options.Sampling, quantizationPlan, histograms, tables, writer, context, options.RestartInterval);
             else
