@@ -4,7 +4,7 @@ namespace Lokad.Image.Internal;
 // inverse transforms on minor stack snapshots, preserving separate input buffers.
 // These kernels retain no storage; the outer encoder admits block work/cancel
 // and coarse workspace. This does not switch the public lossy encoder.
-internal static class Vp8BlockReconstruction
+internal static partial class Vp8BlockReconstruction
 {
     // Pixels initially contain prediction. A pair adds two horizontally adjacent
     // 4x4 blocks from consecutive16-coefficient records. Snapshot BOTH blocks
@@ -15,6 +15,11 @@ internal static class Vp8BlockReconstruction
         if (coefficients.Length < blocks * 16 || stride < width || (long)stride * 3 + width > pixels.Length)
             throw new ArgumentException("Reconstruction requires complete coefficient blocks and four pixel rows.");
         Span<short> snapshot = stackalloc short[32]; coefficients[..(blocks * 16)].CopyTo(snapshot);
+        if (System.Runtime.Intrinsics.X86.Sse41.IsSupported)
+        {
+            for (var block = 0; block < blocks; block++) AddVector(snapshot.Slice(block * 16, 16), pixels[(block * 4)..], stride);
+            return;
+        }
         for (var block = 0; block < blocks; block++)
         {
             var residual = snapshot.Slice(block * 16, 16); Vp8Transforms.InverseDct(residual);
