@@ -99,12 +99,14 @@ Earlier JPEG
 decode timings and allocations describe the replaced producer and are marked
 **Prior production; reconfirm**. No new decoder timing/allocation run is claimed.
 
-VP8 decoder RGB now uses the exact integer normalization on164 frozen controls.
-One current fresh-Stream screen uses the same98,590-byte input, exact normalized
-pixels and unchanged native baseline. Both quiet guards pass; it measures
-10,523.95µs versus5,981.68µs,1,966,591B/op. This is a short1.759× gap observation,
-with no independent confirmation or speedup claim. The other four VP8 decode
-rows still describe the replaced renderer.
+VP8 decoder RGB uses exact integer normalization on164 frozen controls.
+The [fused reconstruction round](../benchmarks/WARM-VP8-DECODER-RECONSTRUCTION.md)
+reuses the proven SIMD inverse-transform/add/clamp kernel. Independent confirmation
+on the same98,590-byte fresh-Stream input measures10,046.91µs versus5,991.89µs,
+1.677×/upper1.684, with unchanged1,966,591B/op and exact pixels. This is4.53% less
+elapsed than the retained prior short. BothOS5,133checks, affected scalar controls
+and the SAMEactualprivate Release package/allthreeexamples pass. Other VP8 decode
+CPU rows require confirmation; unchanged paths retain applicable evidence.
 
 The initial PNG/JPEG/VP8L encoder adoption had no timing/allocation runs; four existing anchors now have current guarded screens. Unchanged paths
 retain evidence on their recorded frozen inputs; new default-encoded fixtures do
@@ -156,7 +158,7 @@ is a CPU-parity confirmation.
 | [PNG RGBA8, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 1,918.97 | 1,393.95 | 1.377 / 1.583 | 4,552 | Gap (short; qualified) |
 | [PNG RGBA16, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 3,054.27 | 3,091.94 | 0.988 / 0.991 | 8,648 | Parity confirmed |
 | [JPEG420 restart, fresh seekable Stream](../benchmarks/WARM-JPEG-BUFFERED-EOB.md) | 1,329.08 | 996.80 | 1.333 / 1.411 | 761,840 | Prior production; reconfirm; metadata timing open |
-| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-CURRENT-VP8-SAMPLES.md) | 10,523.95 | 5,981.68 | 1.759 / 1.903 | 1,966,591 | Gap (short; qualified) |
+| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-DECODER-RECONSTRUCTION.md) | 10,046.91 | 5,991.89 | 1.677 / 1.684 | 1,966,591 | Gap (independent) |
 | [WebP VP8L, fresh seekable Stream](../benchmarks/WARM-INPUT-RECONCILIATION.md) | 4,320.01 | 3,018.37 | 1.431 / 1.494 | 1,216,276 | Gap (short; qualified) |
 | [PNG RGBA8, None](../benchmarks/WARM-CURRENT-RESIDENT-PNG.md) | 1,575.30 | 1,388.57 | 1.134 / 1.330 | 4,480 | Gap (short; qualified); metadata timing open |
 | [PNG RGBA8, resident / ImageBudget quota](../benchmarks/WARM-SHARED-BUDGET.md) | 2,004.67 | 1,392.79 | 1.439 / 1.482 | 4,561 | Gap (short; qualified) |

@@ -192,13 +192,9 @@ internal ref struct Vp8Decoder
                     }
                     var subblock = coefficients.Slice((b + 1) * 16, 16);
                     if (luma && hasY2) subblock[0] = coefficients[b];
-                    Vp8Transforms.InverseDct(subblock);
-                    for (var dy = 0; dy < 4; dy++)
-                        for (var dx = 0; dx < 4; dx++)
-                        {
-                            var pixel = (by + dy) * pitch + bx + dx;
-                            plane[pixel] = (byte)Math.Clamp(plane[pixel] + subblock[dy * 4 + dx], 0, 255);
-                        }
+                    // Residual scratch is dead after reconstruction. Keep the Y2
+                    // DCs in the separate leading block for subsequent luma blocks.
+                    Vp8BlockReconstruction.Add(subblock, plane.AsSpan(by * pitch + bx), pitch);
                 }
             }
         }

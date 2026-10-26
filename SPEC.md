@@ -25,7 +25,7 @@ target; the existing implemented behavior below remains the current contract.
 | PNG decode | Implemented; full authored profile matrix with exact analytical and FFmpeg RGBA | All legal static color/depth combinations, palette/tRNS, five filters and Adam7 |
 | PNG encode | Implemented; all four managed compression policies match14 frozen complete FFmpeg packets | Noninterlaced gray/RGB/gray-alpha/RGBA, 8/16-bit |
 | JPEG identify | Implemented; live and authored header checks | Bounded baseline/progressive 8-bit inspection and orientation |
-| JPEG pixels | Implemented; authored analytical cases, frozen FFmpeg expectations and live comparisons | Baseline/progressive gray/RGB/YCbCr/CMYK/YCCK decode; baseline gray/YCbCr and admitted progressive 4:4:4 encode |
+| JPEG pixels | Implemented; authored analytical cases, frozen FFmpeg expectations and live comparisons | Baseline/progressive gray/RGB/YCbCr/CMYK/YCCK decode; baseline gray/YCbCr encode |
 | WebP identify | Implemented; live and authored header checks | Bounded simple/extended still-container inspection and orientation |
 | WebP lossless pixels | Implemented; exact frozen and live FFmpeg comparisons plus authored transform/entropy cases | VP8L decode/encode with transparency and hidden RGB |
 | WebP lossy decode | Implemented; exact frozen YUV/alpha reconstruction and bounded RGB comparisons | VP8 key frames with raw/compressed ALPH |
@@ -1195,7 +1195,7 @@ transforms, quantization, canonical Huffman tables and entropy syntax. Subsample
 color uses the pinned conversion phase/rounding, with independently generated
 cell-area weights and edge handling. Color uses the reference's16-row MCU layout,
 including required vertical padding; grayscale uses8x8blocks. Two passes collect
-source frequencies and write optimized entropy. Eligible subsampled and nonrestart grayscale paths retain
+source frequencies and write optimized entropy. Eligible adaptive color and nonrestart grayscale paths retain
 operation-owned entropy records; other adaptive paths recompute. No full-frame
 YUV copy is needed. Color restart intervals use generated
 T.81 AnnexK fixed tables in one pass; grayscale optimizes tables with DC predictors

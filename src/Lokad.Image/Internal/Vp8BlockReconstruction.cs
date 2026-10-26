@@ -1,9 +1,9 @@
 namespace Lokad.Image.Internal;
 
-// Borrowed encoder reconstruction. Reuse the independently implemented RFC6386
+// Borrowed block reconstruction. Reuse the independently implemented RFC6386
 // inverse transforms on minor stack snapshots, preserving separate input buffers.
-// These kernels retain no storage; the outer encoder admits block work/cancel
-// and coarse workspace. This does not switch the public lossy encoder.
+// These kernels retain no storage; the outer codec admits block work/cancel
+// and coarse workspace.
 internal static partial class Vp8BlockReconstruction
 {
     // Pixels initially contain prediction. A pair adds two horizontally adjacent

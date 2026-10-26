@@ -99,7 +99,7 @@ def render():
         row('PNG RGBA8, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'Png8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('PNG RGBA16, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'Png16', -1], 'WARM-INPUT-RECONCILIATION.md', True),
         row('JPEG420 restart, fresh seekable Stream', 'warm-jpeg-buffered-eob-evidence.json', ['cases', 'StreamDecode420Restart', -1], 'WARM-JPEG-BUFFERED-EOB.md', verification='Gap (short; qualified)'),
-        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-current-vp8-samples-evidence.json', ['observations', -1], 'WARM-CURRENT-VP8-SAMPLES.md', verification='Gap (short; qualified)'),
+        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8-decoder-reconstruction-evidence.json', ['observations', -1], 'WARM-VP8-DECODER-RECONSTRUCTION.md', confirmed=True),
         row('WebP VP8L, fresh seekable Stream', 'warm-input-reconciliation-evidence.json', ['cases', 'StreamNativeLossless8', -1], 'WARM-INPUT-RECONCILIATION.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, None', 'warm-current-resident-png-evidence.json', ['cases', 'Decode8', -1], 'WARM-CURRENT-RESIDENT-PNG.md', verification='Gap (short; qualified)'),
         row('PNG RGBA8, resident / ImageBudget quota', 'warm-shared-budget-evidence.json', ['cases', 'PngBudgetDecode8', -1], 'WARM-SHARED-BUDGET.md', verification='Gap (short; qualified)'),
@@ -448,12 +448,14 @@ Earlier JPEG
 decode timings and allocations describe the replaced producer and are marked
 **Prior production; reconfirm**. No new decoder timing/allocation run is claimed.
 
-VP8 decoder RGB now uses the exact integer normalization on164 frozen controls.
-One current fresh-Stream screen uses the same98,590-byte input, exact normalized
-pixels and unchanged native baseline. Both quiet guards pass; it measures
-10,523.95µs versus5,981.68µs,1,966,591B/op. This is a short1.759× gap observation,
-with no independent confirmation or speedup claim. The other four VP8 decode
-rows still describe the replaced renderer.
+VP8 decoder RGB uses exact integer normalization on164 frozen controls.
+The [fused reconstruction round](../benchmarks/WARM-VP8-DECODER-RECONSTRUCTION.md)
+reuses the proven SIMD inverse-transform/add/clamp kernel. Independent confirmation
+on the same98,590-byte fresh-Stream input measures10,046.91µs versus5,991.89µs,
+1.677×/upper1.684, with unchanged1,966,591B/op and exact pixels. This is4.53% less
+elapsed than the retained prior short. BothOS5,133checks, affected scalar controls
+and the SAMEactualprivate Release package/allthreeexamples pass. Other VP8 decode
+CPU rows require confirmation; unchanged paths retain applicable evidence.
 
 The initial PNG/JPEG/VP8L encoder adoption had no timing/allocation runs; four existing anchors now have current guarded screens. Unchanged paths
 retain evidence on their recorded frozen inputs; new default-encoded fixtures do
