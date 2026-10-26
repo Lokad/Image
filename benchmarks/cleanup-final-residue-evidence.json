@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "round": "FinalFuelResidueCleanup",
+  "productionChanged": true,
+  "scope": "Remove the VP8L cache copied-length accumulator/pass used solely by the retired work charge, and its adjacent duplicate cancellation poll. No entropy, ownership, memory, public API or packet decision changes.",
+  "changedProductionFiles": {
+    "src/Lokad.Image/Internal/Vp8lReferenceCache.History.cs": "62d895be70a90e9f2199b49320e87af4cea2a556eb8fd23f03eed3e9f75409b9"
+  },
+  "previousQualification": "cleanup-20261026-evidence.json",
+  "cores": {
+    "windowsSha256": "92ee70881ec6fa392ce7344c0f4dbbc99d37bf42687733713f7609396968f18e",
+    "linuxSha256": "4d7c849505f3f27cfc0de49dab91ddb6f6643ba30694194f5f153e443da9083d"
+  },
+  "qualification": {
+    "windows": {
+      "normal": {
+        "internal": 1921,
+        "public": 2035,
+        "liveFfmpeg": 947,
+        "failed": 0,
+        "skipped": 0
+      },
+      "affectedScalar": {
+        "vp8lAndVp8Alpha": 224,
+        "failed": 0,
+        "skipped": 0
+      },
+      "sameActualPackageConsumerPassed": true,
+      "usageExamplesPassed": 3,
+      "logs": [
+        {
+          "path": "tmp/cleanup-copy-count-regression-windows.log",
+          "sha256": "ae296e56fa16dc040bdb5620325843e627a3b0fe18e71005ce1e33af28fe2040"
+        },
+        {
+          "path": "tmp/cleanup-copy-count-scalar-windows.log",
+          "sha256": "6cf4247d62d6a73367b03c9c3310f0951f5121ad0e7a69da19b6532f4d1947d8"
+        },
+        {
+          "path": "tmp/cleanup-final-residue-package-windows.log",
+          "sha256": "7c10d124f94a18c1dc4b098614f080be96b408cefdd09f853f2461d78a6ce70f"
+        }
+      ]
+    },
+    "linux": {
+      "normal": {
+        "internal": 1921,
+        "public": 2035,
+        "liveFfmpeg": 947,
+        "failed": 0,
+        "skipped": 0
+      },
+      "affectedScalar": {
+        "vp8lAndVp8Alpha": 224,
+        "failed": 0,
+        "skipped": 0
+      },
+      "sameActualPackageConsumerPassed": true,
+      "usageExamplesPassed": 3,
+      "logs": [
+        {
+          "path": "tmp/cleanup-final-residue-linux/cleanup-copy-count-regression-linux.log",
+          "sha256": "d20ea09f090ee8baa35b56015c7bf3a24770461969f4902b9eea491b56f38aaf"
+        },
+        {
+          "path": "tmp/cleanup-final-residue-linux/cleanup-copy-count-scalar-linux.log",
+          "sha256": "aadb79da841c656687998bc88521882c7ed0f58ae9594dc2a9c106b65957f875"
+        },
+        {
+          "path": "tmp/cleanup-final-residue-linux/cleanup-final-residue-package-linux.log",
+          "sha256": "156591b68bc3d669fee5ca9ad1aa74a13b030d80e6b851b3153c2f27a233e2ad"
+        }
+      ]
+    }
+  },
+  "scalarEvidenceReuse": "Initial3956-scalar proof retained for unaffected code. The224 affected VP8L/VP8-alpha checks rerun normally/intrinsics-disabled within current full normal qualification.",
+  "actualPackage": {
+    "path": "artifacts/qualification/cleanup-final-residue/Lokad.Image.0.2.0.nupkg",
+    "sha256": "65d0889d08bb0638548d89a04b5e3563ac1a1992176e34fe8f14df3f7c487135",
+    "bytes": 374327,
+    "containedLibrarySha256": "92ee70881ec6fa392ce7344c0f4dbbc99d37bf42687733713f7609396968f18e",
+    "configuration": "Release",
+    "nugetDependencies": 0
+  },
+  "publishedReleaseModified": false,
+  "packagePublished": false,
+  "rawArchive": {
+    "path": "tmp/cleanup-final-fuel-residue-qualified.tar.xz",
+    "sha256": "2727ca82cb4adabe668427d532bca54c647e92879fd1a99f618a264d2ab51126",
+    "bytes": 802268,
+    "members": 15,
+    "allMembersVerified": true
+  },
+  "evidenceInvalidation": "The affected history scorer is shared by VP8L and compressed VP8 alpha. Their earlier cleaned-build CPU screens predate this final residue removal and cannot establish its parity. Packet/pixel oracles, memory ownership and unrelated qualification remain valid. Refresh only these affected anchors on the same build; no speedup is assumed.",
+  "remaining": "Full253-case warm <=1x and replacement readiness remain open."
+}

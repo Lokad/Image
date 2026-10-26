@@ -56,6 +56,13 @@ records the actual package/core/archive hashes and verification results; no pack
 is published by this round. Cited raw logs and the helper-extraction proof are
 retained with the source manifest.
 
+A final bounded check removed the copied-pixel accumulator/pass used solely by
+the former VP8L cache fuel charge, plus its duplicate cancellation poll. Encoding
+decisions, owners and bytes are unchanged. The affected paths are rechecked;
+unaffected scalar evidence is reused. The
+[final qualification](../benchmarks/cleanup-final-residue-evidence.json) records
+the resulting cores/package and supersedes the initial binary identities above.
+
 Timing and allocation confirmations from changed callers remain historical; this
 cleanup makes no CPU-speed claim. Full warm parity and replacement readiness remain
 open, with the finite required paths in [coverage](../benchmarks/WARM-COVERAGE.md).

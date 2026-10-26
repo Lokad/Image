@@ -67,14 +67,10 @@ internal static partial class Vp8lReferenceCache
         ReadOnlySpan<byte> minimum, Span<int> counts, OperationContext context)
     {
         FillAllFromHistory(pixels, seed, minimum, maximumBits, counts);
-        var best = 0; var bestCost = long.MaxValue; long copied = 0;
-        foreach (var token in seed) if (token.Code > 0) copied += token.Length;
+        var best = 0; var bestCost = long.MaxValue;
         for (var bits = 0; bits <= maximumBits; bits++)
         {
             var layout = new Vp8lHistogramLayout(bits);
-            context.Cancellation.ThrowIfCancellationRequested();
-            // The exclusive noncancellable operation proved the full original
-            // bounded histogram traversal preserves the original counts.
             context.Cancellation.ThrowIfCancellationRequested();
             var cost = layout.Population(counts.Slice(HistogramOffset(bits), layout.Total), context);
             if (cost < bestCost) { bestCost = cost; best = bits; }

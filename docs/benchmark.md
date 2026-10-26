@@ -26,8 +26,8 @@ are leads for measurement, not current demonstrated gaps.
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-DECODER-RECONSTRUCTION.md) | 10,046.91 | 5,991.89 | 1.677 / 1.684 | 1,966,591 | Historical independent; remeasure |
 | [JPEG 4:4:4, forward-only / exact reference](../benchmarks/WARM-JPEG444-ENTROPY-REPLAY.md) | 5,049.03 | 3,776.93 | 1.337 / 1.343 | 820,131 | Historical independent; remeasure |
 | [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-VECTOR-RECORDS.md) | 2,617.06 | 1,578.04 | 1.658 / 1.669 | 373,421 | Historical independent; remeasure |
-| [VP8 RGBA8](../benchmarks/WARM-POST-CLEANUP-WEBP.md) | 94,853.24 | 53,467.74 | 1.774 / 1.911 | 24,424,944 | Current gap (short; qualified) |
-| [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-POST-CLEANUP-WEBP.md) | 223,136.69 | 121,152.46 | 1.842 / 2.624 | 48,232,248 | Current gap (short; qualified) |
+| [VP8 RGBA8](../benchmarks/WARM-POST-CLEANUP-WEBP.md) | 94,930.99 | 53,630.43 | 1.770 / 2.015 | 24,424,944 | Current gap (short; qualified) |
+| [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-POST-CLEANUP-WEBP.md) | 226,254.12 | 121,530.92 | 1.862 / 2.230 | 48,232,248 | Current gap (short; qualified) |
 | [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-CURRENT-PNG-SMALLEST8.md) | 25,360.59 | 17,299.67 | 1.466 / 1.601 | 1,325,678 | Historical short; remeasure |
 | [Bilinear resize RGBA16](../benchmarks/WARM-BILINEAR-WORD-CACHE.md) | 534.35 | 418.51 | 1.277 / 1.336 | 290,127 | Historical short; remeasure |
 | [Bicubic resize RGBA8](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 635.08 | 416.65 | 1.524 / 1.610 | 332,178 | Historical short; remeasure |
