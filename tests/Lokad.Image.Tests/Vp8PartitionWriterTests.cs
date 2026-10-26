@@ -80,4 +80,25 @@ public sealed class Vp8PartitionWriterTests
         using var next = new Vp8PartitionWriter(context, 2); Assert.Throws<ArgumentOutOfRangeException>(() => next.Write(2));
         Assert.Throws<ArgumentOutOfRangeException>(() => next.Write(0, 256)); next.Finish(); Assert.Equal(new byte[2], next.Bytes.ToArray());
     }
+
+    [Fact]
+    public void OutputLimitsAtFragmentAndGrowthBoundariesReleaseOnlyOwnedStorage()
+    {
+        using var root = new TestMemoryBudget(1_000_000);
+        foreach (var (name, symbols, length) in new[] { ("mixed", 4096, 731), ("pending-ff-carry", 520, 457) })
+        foreach (var limit in new[] { 0, 1, 2, 63, 64, 65, 127, 128, 129, 255, 256, 257, 456, 457, 730 })
+        {
+            if (limit >= length) continue;
+            using var context = new OperationContext(new() { MemoryBudget = root }, default);
+            using var writer = new Vp8PartitionWriter(context, limit);
+            var error = Assert.Throws<ImageLimitException>(() => { Feed(writer, name, symbols); writer.Finish(); });
+            Assert.Equal(ImageLimitKind.OutputBytes, error.Limit); Assert.Equal(writer.CapacityBytes, root.Bytes);
+            writer.Dispose(); writer.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        }
+        using var later = new OperationContext(new() { MemoryBudget = root }, default);
+        using var next = new Vp8PartitionWriter(later, 731); Feed(next, "mixed", 4096); next.Finish();
+        Assert.Equal("1b0e79ec837012005e5e2168c4b5bafefd0f36dc7a4e93195980b5d21dc36cdb",
+            Convert.ToHexStringLower(SHA256.HashData(next.Bytes)));
+        next.Dispose(); Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals);
+    }
 }

@@ -35,3 +35,6 @@ independently confirm only a promising result. Remove no-gain code.
 trace, source/producer identities, validation, arithmetic proof and mirrored
 archive. Current regression/scalar/actual-package qualification is reused unchanged.
 Full 253-path warm parity and replacement readiness remain open.
+
+Disposition: the [group-emission screen](WARM-VP8-GROUP-EMISSION-SCREEN.md) was
+flat and is rejected. Production is restored exactly; stop emitter tuning.

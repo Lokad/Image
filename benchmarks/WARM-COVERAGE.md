@@ -32,10 +32,11 @@ unchanged complete Stream boundary. The historical1.677× is no longer its curre
 cost reference. This is a gap screen, not independent confirmation or parity.
 Builds/qualification/workers are reused without rebuilding or repeated package
 proof. Stop remeasuring that gap. The [current VP8 emitter profile](WARM-CURRENT-VP8-EMITTER-PROFILE.md)
-selects a bounded normalization/publication investigation, with522,240exact
-arithmetic states but no production or speedup claim. Qualify the actual writer's
-carry/termination/limits/ownership before one candidate/screen; no prefix/source-
-energy/storage/bound retuning.
+led to one [group-emission screen](WARM-VP8-GROUP-EMISSION-SCREEN.md): flat,
+unchanged allocation, rejected. Actual source/binaries restored exactly; useful
+output-limit ownership coverage retained, normal/scalar bothOS. No independent/
+full/package repeat or variant sweep. Stop emitter tuning. Next reconcile existing
+JPEG444 forward-only cost, invalidated by the accepted shared JPEGwriter change.
 
 
 Retire four named controls: PNG RGBA8 resident/ImageBudget, JPEG RGBA8 420/ImageBudget,
