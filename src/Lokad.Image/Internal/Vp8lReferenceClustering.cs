@@ -89,12 +89,17 @@ internal static class Vp8lReferenceClustering
                 if (tokens[i].Length > (long)width * height - position) throw new ArgumentException("Tokens exceed their image.", nameof(tokens));
                 var tile = (position / width >> bits) * columns + (position % width >> bits);
                 layout.Fill(tokens.Slice(i, 1), width, true, original.AsSpan(tile * layout.Total, layout.Total), context);
+                // Every token contributes a green symbol to its start tile.
+                // Reuse the pending stats' Used field to avoid scanning empty tiles.
+                originals[tile].Used = 1;
                 position += tokens[i].Length;
             }
             if (position != width * height) throw new ArgumentException("Tokens do not cover their image.", nameof(tokens));
             context.Cancellation.ThrowIfCancellationRequested(); original.CopyTo(working, 0);
             for (var tile = 0; tile < tiles; tile++)
             {
+                context.Cancellation.ThrowIfCancellationRequested();
+                if (originals[tile].Used == 0) continue;
                 var stats = Initial(original.AsSpan(tile * layout.Total, layout.Total)); originals[tile] = items[tile] = stats;
                 if (stats.Used != 0) slots[count++] = tile;
             }
@@ -277,7 +282,9 @@ internal static class Vp8lReferenceClustering
                 var output = result.WritablePopulations;
                 for (var tile = 0; tile < tiles; tile++)
                 {
-                    context.Cancellation.ThrowIfCancellationRequested(); var start = map[tile] * layout.Total;
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    if (originals[tile].Used == 0) continue;
+                    var start = map[tile] * layout.Total;
                     for (var i = 0; i < layout.Total; i++) output[start + i] += original[tile * layout.Total + i];
                 }
                 return result;

@@ -6,6 +6,19 @@ dimensions/depth/filter/quality choices and approved references. No shape/settin
 grid is added. Only a demonstrated distinct omitted required path permits a later
 case. Full replacement readiness and independent warm upper≤1× remain open.
 
+[Empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md) is the latest qualified
+production change. The existing diagram lossless WebP control independently
+confirms 1.362×/upper1.408,45,404,838 B/op and exact7,234 B:40.0% less elapsed than
+the preceding quiet short, without a paired independent-baseline gain claim.
+Photograph, asymmetric VP8L and VP8+alpha are reconciled with current shorts
+1.605/1.566/1.732×,29,610,520/47,674,928/23,358,400 B/op. Both OS pass4,924Release,
+603affectedscalarWebP and the same actual package/allthreeexamples. The shared
+clustering change invalidates older VP8L/compressed-alpha encoding cost proofs;
+other required affected boundaries remain uncertain. All decoders, JPEG/PNG,
+editing and text retain their valid evidence. Stop this primitive round. Next
+reconcile the existing WarmCompression PhotographLossy8/DiagramLossy8 cases;
+frozen complete packets and reference settings remain the gates, no new grid.
+
 [Paired JPEG entropy append](WARM-JPEG-PAIRED-ENTROPY.md) independently confirms
 the existing caller-RGB420 case at1.543×/upper1.556,373,413B/op and exact
 52,091/52,093B except approved COM. Elapsed is6.7% lower than the preceding quiet
@@ -15,10 +28,11 @@ The shared entropy writer changes JPEG encoding, including gray/444/422/420,
 restart/caller/stream/async/root boundaries: other prior CPU/allocation evidence
 on those paths is historical until reconciled. No unmeasured speedup is claimed.
 
-[VP8 rate pruning](WARM-VP8-LUMA4-RATE-BOUND.md) retains1.735×/upper1.744,
+[VP8 rate pruning](WARM-VP8-LUMA4-RATE-BOUND.md) recorded1.735×/upper1.744,
 23,358,400B/op and exact98,590B. [VP8L matcher storage](WARM-VP8L-CHAIN-CAPACITY.md)
-retains1.582×/upper1.607,47,674,928B/op and exact183,812B. Their relevant production
-paths are unchanged. [PNG SmallestSize8](WARM-CURRENT-ENCODER-ANCHORS.md) retains
+recorded1.582×/upper1.607,47,674,928B/op and exact183,812B. Their earlier CPU
+confirmations are historical after the shared clustering change; current screens
+are linked above. [PNG SmallestSize8](WARM-CURRENT-ENCODER-ANCHORS.md) retains
 its current1.417× short. No other cleaned-build CPU result is inferred from
 historical ratios. Full warm1× remains open.
 
@@ -60,18 +74,19 @@ and useful actual-trace ownership coverage retained normal/scalar bothOS. No new
 full/package proof or tuning sweep. Current accepted rows remain unchanged. Follow-up endpoint counts show maximum
 length108/85 and no length≥128; no batching candidate is justified on these inputs.
 The existing [VP8L photograph/diagram controls](WARM-CURRENT-COMPRESSION-CONTROLS.md)
-are now reconciled: current quiet shorts 1.619×/2.282×, 29,610,520/45,404,827 B/op,
+were reconciled before empty-tile pruning: quiet shorts1.619×/2.282×,
+29,610,520/45,404,827 B/op,
 exact 160,032/7,234-byte packets. The old 7.330×/2.291× figures describe superseded
 producers. The current harness uses frozen fixture/complete-packet identities;
 four existing lossless/lossy smoke controls pass reconstructed normal/scalar pixels
 and independent ownership. No production rebuild, native/selector rebuild, timing
-confirmation or full/package repeat. No new workload grid is added. Next inspect
-the diagram's actual dominant primitive before selecting a substantial change.
+confirmation or full/package repeat in that tooling-only round. No new workload
+grid was added. The next diagram investigation identified a substantial change.
 One bounded follow-up profile is now retained in that report: clustering Build
 appears on 539/743 workload stacks, Finish on 299 and Fill on 232. Inclusive counts
 overlap and inlining limits phase attribution; profiled timings are discarded.
-Inspect dense population materialization/empty-bank scans next, without reopening
-completed entropy variants or broadening the input/settings matrix.
+Those dense empty-tile scans led to the accepted pruning linked above. No reopened
+entropy variants or broader input/settings matrix were required.
 
 Retire four named controls: PNG RGBA8 resident/ImageBudget, JPEG RGBA8 420/ImageBudget,
 VP8 alpha/caller work budget32M, and optional JPEG callerRGB420/CompactColor.
