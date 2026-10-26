@@ -72,7 +72,7 @@ def table(rows):
 
 def render():
     anchors = [
-        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8-decoder-reconstruction-evidence.json', ['observations', -1], 'WARM-VP8-DECODER-RECONSTRUCTION.md', confirmed=True),
+        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-current-vp8-stream-decoder-evidence.json', ['observations', -1], 'WARM-CURRENT-VP8-STREAM-DECODER.md', verification='Current gap (short; qualified)', current=True),
         row('JPEG 4:4:4, forward-only / exact reference', 'warm-current-encoder-anchors-evidence.json', ['cases', 'jpeg444', -1], 'WARM-CURRENT-ENCODER-ANCHORS.md', verification='Prior shared writer; remeasure'),
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-paired-entropy-evidence.json', ['observations', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', confirmed=True, current=True),
         row('VP8 RGBA8', 'warm-vp8-luma4-rate-bound-evidence.json', ['observations', -1], 'WARM-VP8-LUMA4-RATE-BOUND.md', confirmed=True, current=True),
@@ -96,7 +96,8 @@ VP8, VP8L and caller-RGB420 JPEG have current independent cost confirmations.
 Paired JPEG entropy appends use 6.7% less elapsed than the preceding quiet short,
 with unchanged allocations and exact packets. Other shared-writer JPEG encoding
 costs become historical. VP8 rate pruning and matcher storage remain qualified;
-PNG SmallestSize retains unchanged current short evidence. Parity remains open.
+PNG SmallestSize retains unchanged current short evidence. VP8 stream decoding
+has a current 1.658× short gap with exact pixels; parity remains open.
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
 defines the remaining finite scope and evidence invalidation.

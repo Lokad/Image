@@ -10,7 +10,8 @@ VP8, VP8L and caller-RGB420 JPEG have current independent cost confirmations.
 Paired JPEG entropy appends use 6.7% less elapsed than the preceding quiet short,
 with unchanged allocations and exact packets. Other shared-writer JPEG encoding
 costs become historical. VP8 rate pruning and matcher storage remain qualified;
-PNG SmallestSize retains unchanged current short evidence. Parity remains open.
+PNG SmallestSize retains unchanged current short evidence. VP8 stream decoding
+has a current 1.658× short gap with exact pixels; parity remains open.
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
 defines the remaining finite scope and evidence invalidation.
@@ -28,7 +29,7 @@ are leads for measurement, not current demonstrated gaps.
 
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-DECODER-RECONSTRUCTION.md) | 10,046.91 | 5,991.89 | 1.677 / 1.684 | 1,966,591 | Historical independent; remeasure |
+| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-CURRENT-VP8-STREAM-DECODER.md) | 9,920.34 | 5,984.62 | 1.658 / 1.781 | 1,966,583 | Current gap (short; qualified) |
 | [JPEG 4:4:4, forward-only / exact reference](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | 4,971.54 | 3,769.20 | 1.319 / 1.434 | 820,123 | Historical short; remeasure |
 | [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 2,432.58 | 1,576.20 | 1.543 / 1.556 | 373,413 | Current gap (independent) |
 | [VP8 RGBA8](../benchmarks/WARM-VP8-LUMA4-RATE-BOUND.md) | 92,818.18 | 53,494.23 | 1.735 / 1.744 | 23,358,400 | Current gap (independent) |

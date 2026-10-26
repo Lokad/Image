@@ -26,11 +26,17 @@ Stop completed primitive rounds. The [prefix](WARM-VP8L-PREFIX-SCREEN.md) and
 [source-energy](WARM-VP8-SOURCE-ENERGY-SCREEN.md) screens offered no useful gain;
 their prototypes are removed and useful behavioral tests retained. The bounded
 [caller JPEG profile](WARM-JPEG-CALLER420-PROFILE.md) led to the accepted append.
-Next resolve the existing fresh-seekable VP8+alpha decoder case, StreamNative8:
-its historical1.677× ratio predates cleanup and cannot establish a current gap.
-Reuse existing source/packet/workers and unchanged qualified build; one short
-complete-operation measurement first, independent confirmation if promising.
-No new raster/settings or repeated whole-library/package proof for this measurement.
+The [current VP8 stream-decoder screen](WARM-CURRENT-VP8-STREAM-DECODER.md)
+resolves StreamNative8 at1.658×/upper1.781,1,966,583B/op with exact pixels and
+unchanged complete Stream boundary. The historical1.677× is no longer its current
+cost reference. This is a gap screen, not independent confirmation or parity.
+Builds/qualification/workers are reused without rebuilding or repeated package
+proof. Stop remeasuring that gap. The [current VP8 emitter profile](WARM-CURRENT-VP8-EMITTER-PROFILE.md)
+selects a bounded normalization/publication investigation, with522,240exact
+arithmetic states but no production or speedup claim. Qualify the actual writer's
+carry/termination/limits/ownership before one candidate/screen; no prefix/source-
+energy/storage/bound retuning.
+
 
 Retire four named controls: PNG RGBA8 resident/ImageBudget, JPEG RGBA8 420/ImageBudget,
 VP8 alpha/caller work budget32M, and optional JPEG callerRGB420/CompactColor.
