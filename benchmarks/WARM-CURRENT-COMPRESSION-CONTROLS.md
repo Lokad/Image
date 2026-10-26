@@ -39,3 +39,13 @@ producers rather than current cost claims.
 allocations, tool/core identities, reused qualification and the mirrored,
 member-verified raw archive. The diagram path now warrants one bounded dominant
 primitive investigation. The finite 253-case warm upper≤1× objective remains open.
+
+A subsequent one-second bounded profile reuses the same immutable builds and
+existing diagram driver. Both quiet guards, exact 7,234-byte packets and ownership
+checks pass. The 743 workload samples (715 managed) identify clustering as the next
+lead: Build appears on 539 stacks, Finish on 299 and Fill on 232. Exclusive samples
+include Finish 153, Population 133, PopulationSum 114 and Initial 60. Inclusive
+counts overlap; inlining prevents exact phase-cost attribution. Instrumented
+timings are discarded. The mirrored raw profile and sampler identity are retained
+in the evidence. Next inspect dense population materialization and repeated empty
+bank scans before choosing one substantial candidate; no broad retuning sweep.

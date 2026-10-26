@@ -66,7 +66,12 @@ producers. The current harness uses frozen fixture/complete-packet identities;
 four existing lossless/lossy smoke controls pass reconstructed normal/scalar pixels
 and independent ownership. No production rebuild, native/selector rebuild, timing
 confirmation or full/package repeat. No new workload grid is added. Next inspect
-the diagram's actual dominant primitive once before selecting a substantial change.
+the diagram's actual dominant primitive before selecting a substantial change.
+One bounded follow-up profile is now retained in that report: clustering Build
+appears on 539/743 workload stacks, Finish on 299 and Fill on 232. Inclusive counts
+overlap and inlining limits phase attribution; profiled timings are discarded.
+Inspect dense population materialization/empty-bank scans next, without reopening
+completed entropy variants or broadening the input/settings matrix.
 
 Retire four named controls: PNG RGBA8 resident/ImageBudget, JPEG RGBA8 420/ImageBudget,
 VP8 alpha/caller work budget32M, and optional JPEG callerRGB420/CompactColor.
