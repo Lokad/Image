@@ -6,15 +6,16 @@ dimensions/depth/filter/quality choices and approved references. No shape/settin
 grid is added. Only a demonstrated distinct omitted required path permits a later
 case. Full replacement readiness and independent warm upper≤1× remain open.
 
-[Bounded entropy refinement](WARM-VP8L-BOUNDED-REFINEMENT.md) independently confirms
-VP8L1.792x/upper1.820,48,232,248B/op and exact183,812B. Elapsed is3.5% lower than
-its prior quiet short, without a paired-baseline gain claim. Shared VP8 alpha has
-current short1.784x/upper2.031,24,424,944B/op and exact98,590B. Both remain parity
-gaps; broad short confidence is not a demonstrated regression. Earlier affected
-scorer costs stay historical. BothOS4,904checks/225affected scalar/SAMEactualpackage
-andallthreeexamples pass. No material cases or rasters added. Stop PopulationSum
-polishing after this bounded round; predictor scoring is the next substantial
-primitive. Other named producer uncertainties remain to resolve before tuning.
+[Sparse predictor scoring](WARM-VP8L-SPARSE-PREDICTOR.md) independently confirms
+VP8L at 1.624×/upper 1.648, 48,232,248 B/op and exact 183,812 B. Elapsed is 9.8% lower
+than the preceding independent run, comparing separate quiet runs. Shared VP8 alpha has
+a current short screen at 1.779×/upper 2.697, 24,424,944 B/op and exact 98,590 B. Both remain parity
+gaps; broad short confidence supports no speedup/regression or independent parity
+claim. Earlier affected scorer costs stay historical. Both systems pass 4,907 checks,
+228 affected scalar/five focused Vector256 checks, the same actual package and all three examples.
+No material cases or rasters added. Stop this bounded predictor round and prior
+PopulationSum polishing. Resolve existing JPEG444/callerRGB420/PNGSmallest8
+producer uncertainties before choosing the next substantial demonstrated primitive.
 
 Retire four named controls: PNG RGBA8 resident/ImageBudget, JPEG RGBA8 420/ImageBudget,
 VP8 alpha/caller work budget32M, and optional JPEG callerRGB420/CompactColor.

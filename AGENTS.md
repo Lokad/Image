@@ -20,7 +20,7 @@ Forward the borrowed ImageLimits.MemoryBudget root through nested work; reserve
 owned capacity before allocation and keep retained results charged until disposal.
 Admission refusal is terminal, without retry, waiting or a lower-memory fallback.
 Preserve input, output, dimension, container and memory bounds and await actual
-asynchronous users before releasing their storage. Fuel accounting is being
+asynchronous users before releasing their storage. Fuel accounting has been
 removed: do not retain MaxWork, cumulative work quotas, work reservations or
 partial-charge semantics. Use direct cooperative cancellation checkpoints.
 IMemoryBudget is the sole shared admission model; do not recreate ImageBudget,
@@ -63,9 +63,8 @@ more artifacts. Reinstallable tool caches may be removed; keep reference sources
 The local PLAN.md is ignored. Durable requirements belong in tracked documents
 and tests. Keep all public files exclusively about Lokad.Image.
 
-Finish the cleanup before further performance optimization. Preserve encoder
-byte exactness, decoder correctness and meaningful editing coverage. Review
-bicubic duplication with bounded evidence; keep useful measured kernels and
-portable fallbacks rather than starting an open-ended tuning campaign. Qualify
-accepted production cleanup on Windows/Linux and through the actual Release
-package consumer. Historical benchmark evidence is retained, not current proof.
+Preserve encoder byte exactness, decoder correctness and meaningful editing
+coverage. The fuel, ownership and bicubic cleanup is complete; keep useful
+measured kernels and portable fallbacks. Qualify accepted production changes
+on Windows/Linux and through the actual Release-package consumer. Historical
+benchmark evidence is retained, not current proof.

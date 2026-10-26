@@ -29,6 +29,7 @@
   19 selected and two additional forced frozen libwebp packets.
   Entropy scoring reuses exact Q23 mathematical constants without runtime allocation.
   Bounded Int64 refinement retains full-range Int128 arithmetic when needed.
+  Safe SIMD masks skip zero predictor bins with exact costs and scalar fallback.
 - Integer VP8 color normalization matches all164 existing frozen RGBA controls;
   removed the superseded floating/SIMD renderer and bounded RGB assertions.
 - Managed VP8 encoding matches20 declared complete reference packets, with all
@@ -49,7 +50,7 @@ See [SPEC.md](SPEC.md) for supported boundaries and [benchmark state](docs/bench
 for measured scope. Exact codec replication, full performance parity and replacement
 release qualification remain in progress.
 
-## 0.1.0 â€” 2026-10-17
+## 0.1.0 — 2026-10-17
 
 Initial release of the safe, dependency-free .NET 10 library, published on
 [NuGet](https://www.nuget.org/packages/Lokad.Image/0.1.0).
@@ -60,7 +61,7 @@ Initial release of the safe, dependency-free .NET 10 library, published on
   and nearest/bilinear/bicubic resizing.
 - Stream and span APIs, independent buffer ownership, finite resource limits
   and cancellation. See [SPEC.md](SPEC.md) for supported profiles and exclusions.
-- Named warm single-CPU workloads within the â‰¤2Ã— FFmpeg-reference target, with
+- Named warm single-CPU workloads within the ≤2× FFmpeg-reference target, with
   exact-pixel/quality gates and documented [allocations and scope](docs/benchmark.md).
 - Windows/Linux validation, including live FFmpeg comparisons and the same NuGet
   package exercised by an isolated consumer and all three usage examples.

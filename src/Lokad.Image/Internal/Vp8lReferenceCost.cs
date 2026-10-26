@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics;
 
 namespace Lokad.Image.Internal;
 
@@ -47,17 +48,54 @@ internal static partial class Vp8lReferenceCost
         {
             var tile = current.Slice(plane * 256, 256);
             var prior = previous.Slice(plane * 256, 256);
-            var sumCurrent = 0; var sumCombined = 0;
-            cost += SmallResidualBias(tile);
+            cost += SmallResidualBias(tile) + PredictionEntropy(tile, prior);
+        }
+        return cost;
+    }
+
+    // Each caller supplies complete 256-bin planes. A pair of zero counts
+    // contributes zero to both sums and both entropy terms. Masks enumerate
+    // every other bin in ascending order, without narrowing any count.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static long PredictionEntropy(ReadOnlySpan<int> current, ReadOnlySpan<int> previous)
+    {
+        var sumCurrent = 0; var sumCombined = 0; long cost = 0;
+        if (Vector256.IsHardwareAccelerated)
+        {
+            var width = Vector512.IsHardwareAccelerated ? 16 : 8;
+            for (var start = 0; start < 256; start += width)
+            {
+                uint active;
+                if (Vector512.IsHardwareAccelerated)
+                {
+                    var values = Vector512.Create(current.Slice(start, 16)) | Vector512.Create(previous.Slice(start, 16));
+                    active = (uint)Vector512.Equals(values, Vector512<int>.Zero).ExtractMostSignificantBits() ^ 0xffffu;
+                }
+                else
+                {
+                    var values = Vector256.Create(current.Slice(start, 8)) | Vector256.Create(previous.Slice(start, 8));
+                    active = Vector256.Equals(values, Vector256<int>.Zero).ExtractMostSignificantBits() ^ 0xffu;
+                }
+                while (active != 0)
+                {
+                    var symbol = start + BitOperations.TrailingZeroCount(active);
+                    var x = current[symbol]; var combined = x + previous[symbol];
+                    sumCurrent += x; sumCombined += combined;
+                    cost -= SLog(x) + SLog(combined);
+                    active &= active - 1;
+                }
+            }
+        }
+        else
+        {
             for (var symbol = 0; symbol < 256; symbol++)
             {
-                var x = tile[symbol]; var combined = x + prior[symbol];
+                var x = current[symbol]; var combined = x + previous[symbol];
                 sumCurrent += x; sumCombined += combined;
                 cost -= SLog(x) + SLog(combined);
             }
-            cost += SLog(sumCurrent) + SLog(sumCombined);
         }
-        return cost;
+        return cost + SLog(sumCurrent) + SLog(sumCombined);
     }
 
     internal static long Shannon(ReadOnlySpan<int> counts, OperationContext context)

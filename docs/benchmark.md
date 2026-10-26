@@ -13,7 +13,7 @@ defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8L-BOUNDED-REFINEMENT.md) | 4,904 checks/OS; affected scalar and same actual package passed |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8L-SPARSE-PREDICTOR.md) | 4,907 checks/OS; affected scalar/Vector256 and same actual package passed |
 | CPU and allocation measurements after cleanup | VP8L independent; VP8 alpha current short; other required paths pending | Exact packets; full parity open |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
@@ -27,8 +27,8 @@ are leads for measurement, not current demonstrated gaps.
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-DECODER-RECONSTRUCTION.md) | 10,046.91 | 5,991.89 | 1.677 / 1.684 | 1,966,591 | Historical independent; remeasure |
 | [JPEG 4:4:4, forward-only / exact reference](../benchmarks/WARM-JPEG444-ENTROPY-REPLAY.md) | 5,049.03 | 3,776.93 | 1.337 / 1.343 | 820,131 | Historical independent; remeasure |
 | [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-VECTOR-RECORDS.md) | 2,617.06 | 1,578.04 | 1.658 / 1.669 | 373,421 | Historical independent; remeasure |
-| [VP8 RGBA8](../benchmarks/WARM-VP8L-BOUNDED-REFINEMENT.md) | 95,456.35 | 53,515.81 | 1.784 / 2.031 | 24,424,944 | Current gap (short; qualified) |
-| [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-BOUNDED-REFINEMENT.md) | 218,359.14 | 121,829.83 | 1.792 / 1.820 | 48,232,248 | Current gap (independent) |
+| [VP8 RGBA8](../benchmarks/WARM-VP8L-SPARSE-PREDICTOR.md) | 94,953.68 | 53,366.70 | 1.779 / 2.697 | 24,424,944 | Current gap (short; qualified) |
+| [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-SPARSE-PREDICTOR.md) | 196,989.06 | 121,270.80 | 1.624 / 1.648 | 48,232,248 | Current gap (independent) |
 | [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-CURRENT-PNG-SMALLEST8.md) | 25,360.59 | 17,299.67 | 1.466 / 1.601 | 1,325,678 | Historical short; remeasure |
 | [Bilinear resize RGBA16](../benchmarks/WARM-BILINEAR-WORD-CACHE.md) | 534.35 | 418.51 | 1.277 / 1.336 | 290,127 | Historical short; remeasure |
 | [Bicubic resize RGBA8](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 635.08 | 416.65 | 1.524 / 1.610 | 332,178 | Historical short; remeasure |

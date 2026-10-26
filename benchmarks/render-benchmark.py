@@ -75,8 +75,8 @@ def render():
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8-decoder-reconstruction-evidence.json', ['observations', -1], 'WARM-VP8-DECODER-RECONSTRUCTION.md', confirmed=True),
         row('JPEG 4:4:4, forward-only / exact reference', 'warm-jpeg444-entropy-replay-evidence.json', ['observations', -1], 'WARM-JPEG444-ENTROPY-REPLAY.md', confirmed=True),
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-vector-records-evidence.json', ['observations', -1], 'WARM-JPEG-VECTOR-RECORDS.md', confirmed=True),
-        row('VP8 RGBA8', 'warm-vp8l-bounded-refinement-evidence.json', ['cases', 'vp8Alpha', -1], 'WARM-VP8L-BOUNDED-REFINEMENT.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-bounded-refinement-evidence.json', ['observations', -1], 'WARM-VP8L-BOUNDED-REFINEMENT.md', confirmed=True, current=True),
+        row('VP8 RGBA8', 'warm-vp8l-sparse-predictor-evidence.json', ['cases', 'vp8Alpha', -1], 'WARM-VP8L-SPARSE-PREDICTOR.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-sparse-predictor-evidence.json', ['observations', -1], 'WARM-VP8L-SPARSE-PREDICTOR.md', confirmed=True, current=True),
         row('PNG RGBA8, SmallestSize9 / native9', 'warm-current-png-smallest8-evidence.json', ['observations', -1], 'WARM-CURRENT-PNG-SMALLEST8.md', verification='Gap (short; qualified)'),
         row('Bilinear resize RGBA16', 'warm-bilinear-word-cache-evidence.json', ['observations', -1], 'WARM-BILINEAR-WORD-CACHE.md', verification='Gap (short; qualified)'),
         row('Bicubic resize RGBA8', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Down8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
@@ -99,7 +99,7 @@ defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8L-BOUNDED-REFINEMENT.md) | 4,904 checks/OS; affected scalar and same actual package passed |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8L-SPARSE-PREDICTOR.md) | 4,907 checks/OS; affected scalar/Vector256 and same actual package passed |
 | CPU and allocation measurements after cleanup | VP8L independent; VP8 alpha current short; other required paths pending | Exact packets; full parity open |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
