@@ -6,24 +6,27 @@ dimensions/depth/filter/quality choices and approved references. No shape/settin
 grid is added. Only a demonstrated distinct omitted required path permits a later
 case. Full replacement readiness and independent warm upper≤1× remain open.
 
-[Sparse predictor scoring](WARM-VP8L-SPARSE-PREDICTOR.md) independently confirms
-VP8L at 1.624×/upper 1.648, 48,232,248 B/op and exact 183,812 B. Elapsed is 9.8% lower
-than the preceding independent run, comparing separate quiet runs. Earlier affected
-scorer costs stay historical. Both systems pass 4,907 checks,
-228 affected scalar/five focused Vector256 checks, the same actual package and all three examples.
-No material cases or rasters added. Stop this bounded predictor round and prior
-PopulationSum polishing.
+[Matcher capacity reuse](WARM-VP8L-CHAIN-CAPACITY.md) independently confirms VP8L
+at 1.582×/upper 1.607, 47,674,928 B/op and exact 183,812 B. Separate quiet runs use
+2.4% less elapsed and 557,320 fewer allocated bytes than the preceding confirmation.
+Shared VP8 alpha has current short 1.779×/upper 2.095, 23,358,400 B/op and exact
+98,590 B: 1,066,544 fewer allocated bytes, with flat elapsed and no independent
+speedup/parity claim. Older affected costs stay historical. Both OS pass 4,908
+checks, 229 affected scalar checks, the SAME actual package and all three examples.
+The separate full-frame chain is removed; one signed result array has safe
+unsigned views. No new owner or allowance. An initial span-indexed representation
+had a confirmed CPU cost and was replaced; its raw evidence remains retained.
+Stop storage representation tuning, predictor and PopulationSum polishing.
 
 [Current encoder anchors](WARM-CURRENT-ENCODER-ANCHORS.md) resolve the existing
 JPEG444/callerRGB420/PNGSmallest8 producer uncertainty at short ratios
-1.319/1.653/1.417, with exact packets and allocations recorded. VP8 alpha now has
-independent 1.776×/upper 1.789 evidence, 24,424,944 B/op and exact 98,590 B;
-its preceding broad short confidence is superseded. No production input changed;
-the same verified core, qualification and workers were reused without rebuilding
-or repeating package checks. All remain warm 1× gaps. One current 744-sample VP8
-profile identifies matcher construction as the largest exclusive attribution
-(11.7%, not component timing). Inspect one substantial matcher primitive next;
-other named producer uncertainties remain open. Do not repeat these screens.
+1.319/1.653/1.417, with exact packets and allocations recorded. Those production
+paths are unchanged by matcher storage and their relevant evidence is reused.
+VP8 alpha's older independent cost is prior production. All remain warm 1× gaps.
+The retained 744-sample VP8 profile is a lead, not exact current component timing;
+matcher/short-probe counts and unchanged macroblock bodies guide the next bounded
+primitive. No material cases or rasters were added. Other named producer
+uncertainties remain open; do not repeat unchanged encoder-anchor screens.
 
 Retire four named controls: PNG RGBA8 resident/ImageBudget, JPEG RGBA8 420/ImageBudget,
 VP8 alpha/caller work budget32M, and optional JPEG callerRGB420/CompactColor.

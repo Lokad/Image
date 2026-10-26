@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace Lokad.Image.Internal;
 
 // Encoder workspace owned by its operation. Dispose before the operation context;
@@ -5,9 +7,10 @@ namespace Lokad.Image.Internal;
 internal sealed class Vp8lMatchIndex : IDisposable
 {
     private readonly OperationContext context;
-    private uint[]? values;
-    internal ReadOnlySpan<uint> Values => values ?? throw new ObjectDisposedException(nameof(Vp8lMatchIndex));
-    internal Span<uint> Writable => values ?? throw new ObjectDisposedException(nameof(Vp8lMatchIndex));
+    private int[]? values;
+    internal int[] Storage => values ?? throw new ObjectDisposedException(nameof(Vp8lMatchIndex));
+    internal ReadOnlySpan<uint> Values => MemoryMarshal.Cast<int, uint>(Storage.AsSpan());
+    internal Span<uint> Writable => MemoryMarshal.Cast<int, uint>(Storage.AsSpan());
 
     internal Vp8lMatchIndex(OperationContext context, int length)
     {
@@ -15,7 +18,7 @@ internal sealed class Vp8lMatchIndex : IDisposable
         this.context = context;
         context.Cancellation.ThrowIfCancellationRequested();
         context.Reserve(length * 4L);
-        try { context.Cancellation.ThrowIfCancellationRequested(); values = new uint[length]; }
+        try { context.Cancellation.ThrowIfCancellationRequested(); values = new int[length]; }
         catch { context.Release(length * 4L); throw; }
     }
 
@@ -76,11 +79,14 @@ internal static class Vp8lReferenceMatcher
             // entries and prime rounding. No dictionary grows after construction:
             // there can be at most pixels.Length inserted keys.
             var headBytes = pixels.Length < 16384 ? pixels.Length * 32L + 512 : HeadCount * 4L;
-            var required = headBytes + pixels.Length * 4L;
-            context.Reserve(required); scratch = required;
+            context.Reserve(headBytes); scratch = headBytes;
             context.Cancellation.ThrowIfCancellationRequested();
             var heads = new Heads(pixels.Length, context);
-            var previous = new int[pixels.Length];
+            var values = result.Writable;
+            // Each chain link points strictly backward. Output is written from
+            // right to left, after its chain entry and all later entries have
+            // finished being read, so both phases can borrow the same capacity.
+            var previous = result.Storage;
             for (var at = 0; at < previous.Length; at += 4096)
             {
                 var length = Math.Min(4096, previous.Length - at);
@@ -119,7 +125,6 @@ internal static class Vp8lReferenceMatcher
             var window = Math.Min((1 << 20) - 120,
                 quality > 75 ? (1 << 20) - 120 : width * (quality > 50 ? 256 : quality > 25 ? 64 : 16));
             var checks = 8 + quality * quality / 128;
-            var values = result.Writable;
             position = pixels.Length - 2;
             while (position > 0)
             {
@@ -161,6 +166,8 @@ internal static class Vp8lReferenceMatcher
                     if (length < MaximumLength) { length++; extensionOrigin = position; }
                 }
             }
+            // These entries contain chain sentinels until every link is read.
+            values[0] = values[^1] = 0;
             return result;
         }
         catch { result.Dispose(); throw; }

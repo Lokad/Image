@@ -30,6 +30,8 @@
   Entropy scoring reuses exact Q23 mathematical constants without runtime allocation.
   Bounded Int64 refinement retains full-range Int128 arithmetic when needed.
   Safe SIMD masks skip zero predictor bins with exact costs and scalar fallback.
+  Matcher construction reuses result capacity for backward chains, removing a
+  full-frame temporary array while preserving exact indices and packet bytes.
 - Integer VP8 color normalization matches all164 existing frozen RGBA controls;
   removed the superseded floating/SIMD renderer and bounded RGB assertions.
 - Managed VP8 encoding matches20 declared complete reference packets, with all
