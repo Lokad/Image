@@ -99,15 +99,21 @@ gain; its implementation and private table format are removed, actual qualified
 binaries/sources restored exactly. Two extreme-probability admission tests remain,
 passing normally/scalar on both OS. Existing full/package proof is reused.
 
-Forward batching and the two-state trellis rewrite are accepted and fully
-qualified. Stop their variants. Effort-4 photograph is now the largest measured
-gap. Its last profile predates shared small-row prediction, so one bounded sample
-trace on the current immutable complete operation will resolve changed hotspot
-uncertainty. Reuse the prepared worker/selector/sampler; score no instrumented
-timings. Select one substantial primitive from that evidence, preserving all
-integer decisions, exact packets, ownership and scalar/live-token fallbacks.
-No settings/image grid, unrelated audit or proof repeat. Continue to reuse valid
-unaffected costs and batch full qualification only for accepted production changes.
+Forward batching and two-state trellis scoring are accepted and fully qualified.
+Stop their variants. The [current photograph trace](WARM-VP8-CURRENT-PHOTO-PROFILE.md)
+resolves changed attribution after shared prediction: 97/706 exclusive residual
+samples and 42/706 large-block prediction samples. Instrumented timings are not
+scored. The single-coefficient residual shortcut gives only a 0.825% short change;
+it is rejected and actual qualified sources/binaries restored. Per-mode score
+arithmetic is already inlined, so no score-copy trial is needed.
+
+Next try one bounded large-block prediction primitive: dispatch DC/vertical/
+horizontal/true-motion once per block and fill/copy rows, with packed true-motion
+where supported. Preserve the 32-byte border snapshot, missing-edge values,
+saturation, aliases/tails, safe managed arithmetic and portable fallback. Use the
+same photograph short; independently confirm only a material gain. No new grid,
+profile, unrelated audit or proof repeat. Reuse valid unaffected costs and batch
+full qualification only for accepted production changes.
 
 Useful rejected screens and earlier accepted rounds remain linked in the
 [prior coverage checkpoint](https://github.com/lokad/image/blob/0bd4a507cd87dcf85bfec4f9ac0a38c49174b86b/benchmarks/WARM-COVERAGE.md)

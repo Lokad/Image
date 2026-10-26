@@ -1,0 +1,120 @@
+{
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "productionChanged": false,
+  "preGuardPassed": true,
+  "postGuardPassed": true,
+  "traceBytes": 1387326,
+  "traceSha256": "9243b90d5ffec3a75fc945ce96db871e89270ab6f20f6eab5e4ea12d9da15217",
+  "summarySha256": "95b64e7ed41a628840aab51101c0a54caa4bb93f9d3662433e8dc670c0ed6c1a",
+  "workloadSamples": 706,
+  "managedSamples": 706,
+  "coreSha256": "b6450036e3f0c63bf59283f2957990013e858f073b68b7c35d31ea4c618db1a6",
+  "harnessSha256": "c1ae8a2a38e2594f78bf2ee491bac6d4eb0ad6a12e01f1c4358ea3c9db0fc985",
+  "samplerSha256": "23581c695c93b5b5dce0c6e99332af889120238afea4144d41e005da3ca57cc1",
+  "immutableBuildsWorkersSelectorsReused": true,
+  "instrumentedTimingsDiscarded": true,
+  "validation": {
+    "caseId": "PhotographLossy8",
+    "managedOutputBytes": 17688,
+    "completePacketExact": true,
+    "allReconstructedSamplesExact": true,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true
+  },
+  "exclusive": [
+    {
+      "method": "Lokad.Image.Internal.Vp8MacroblockDecision.Luma4(value class System.ReadOnlySpan`1<unsigned int8>,value class System.ReadOnlySpan`1<unsigned int8>,value class System.ReadOnlySpan`1<unsigned int8>,value class System.ReadOnlySpan`1<unsigned int8>,value class Lokad.Image.Internal.Vp8QuantizationMatrix,value class Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,value class System.ReadOnlySpan`1<unsigned int16>,int32,int64,value class System.Span`1<unsigned int8>,value class System.Span`1<int16>,value class System.Span`1<unsigned int8>,class Lokad.Image.Internal.OperationContext,bool,value class Metric&,unsigned int32&)",
+      "samples": 110,
+      "fraction": 0.1558073654390935
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8RatePlan.ResidualVectors(value class System.ReadOnlySpan`1<unsigned int16>,value class System.ReadOnlySpan`1<int16>,int32,int32,int32,bool&)",
+      "samples": 97,
+      "fraction": 0.13739376770538245
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8PartitionWriter.Write(int32,int32)",
+      "samples": 43,
+      "fraction": 0.060906515580736544
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8BlockPrediction.Fill(int32,value class Lokad.Image.Internal.Vp8IntraMode,value class System.ReadOnlySpan`1<unsigned int8>,value class System.ReadOnlySpan`1<unsigned int8>,unsigned int8,value class System.Span`1<unsigned int8>)",
+      "samples": 42,
+      "fraction": 0.059490084985835696
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8SourceHistogram.AddBlock(value class System.ReadOnlySpan`1<int16>,value class System.Span`1<int32>)",
+      "samples": 42,
+      "fraction": 0.059490084985835696
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8BlockReconstruction.Add(value class System.ReadOnlySpan`1<int16>,value class System.Span`1<unsigned int8>,int32,bool)",
+      "samples": 39,
+      "fraction": 0.05524079320113314
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8Prediction.SmallBlock(value class Lokad.Image.Internal.Vp8SmallIntraMode,value class System.ReadOnlySpan`1<unsigned int8>,value class System.ReadOnlySpan`1<unsigned int8>,unsigned int8,value class System.Span`1<unsigned int8>)",
+      "samples": 38,
+      "fraction": 0.053824362606232294
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8MacroblockDecision.Luma16(value class System.ReadOnlySpan`1<unsigned int8>,value class System.ReadOnlySpan`1<unsigned int8>,value class System.ReadOnlySpan`1<unsigned int8>,bool,bool,value class Lokad.Image.Internal.Vp8QuantizationMatrix,value class Lokad.Image.Internal.Vp8QuantizationMatrix,value class Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,value class System.ReadOnlySpan`1<unsigned int16>,value class System.Span`1<unsigned int8>,value class System.Span`1<int16>,class Lokad.Image.Internal.OperationContext,bool,int32&,unsigned int32&,int32&)",
+      "samples": 30,
+      "fraction": 0.042492917847025496
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8RatePlan.Residual(value class System.ReadOnlySpan`1<int16>,int32,int32,int32,bool&)",
+      "samples": 30,
+      "fraction": 0.042492917847025496
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8BlockQuantization.Apply(value class System.Span`1<int16>,value class System.Span`1<int16>,value class Lokad.Image.Internal.Vp8QuantizationMatrix)",
+      "samples": 24,
+      "fraction": 0.0339943342776204
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8PreparedInput.Create(class Lokad.Image.ImageBuffer,class Lokad.Image.Internal.OperationContext)",
+      "samples": 23,
+      "fraction": 0.032577903682719546
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8MacroblockDecision.Flat(value class System.ReadOnlySpan`1<int16>,int32,int32)",
+      "samples": 22,
+      "fraction": 0.031161473087818695
+    }
+  ],
+  "jitSmoke": {
+    "validationOnly": true,
+    "completePacketExact": true,
+    "assemblySha256": "abccb58bfe06038ad85776190514d9d458983335a17f2c293a6d34546e0193b3",
+    "finding": "One live first coefficient still prepares all sixteen context/lookup addresses. Initial first0/1 band equals first; following band is first+1. No unsafe gather or new table needed."
+  },
+  "rawArchive": {
+    "path": "tmp/vp8-current-photo-profile.tar.xz",
+    "sha256": "ea1b21ab71a51e42f2dfe22c826c080c72c378970ab95865152499c27c3babfa",
+    "bytes": 192016,
+    "members": 21,
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "baselineProduction": "warm-vp8-trellis-state-pair-evidence.json",
+  "next": "Sparse first-coefficient shortcut rejected; see warm-vp8-sparse-residual-screen-evidence.json. Per-mode score arithmetic already inlined; no score-copy trial. Next bounded primitive: large-block prediction row dispatch.",
+  "scoreInspection": {
+    "validationOnly": true,
+    "instrumentedTimingsDiscarded": true,
+    "completePacketExact": true,
+    "luma4Bytes": 4969,
+    "PriceBytes": 51,
+    "AddBytes": 67,
+    "finding": "Per-mode score arithmetic inlined; residual Price/Add calls occur post-block, so no score-copy trial.",
+    "rawArchive": {
+      "path": "tmp/vp8-score-inspection.tar.xz",
+      "sha256": "9cb4a094b03757fd52feee7a70d8042d534b361f62cfd413e7e06c98bb551dbb",
+      "bytes": 11504,
+      "members": 6,
+      "mirrored": true,
+      "allMembersVerified": true
+    }
+  }
+}
