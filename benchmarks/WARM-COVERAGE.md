@@ -6,14 +6,15 @@ dimensions/depth/filter/quality choices and approved references. No shape/settin
 grid is added. Only a demonstrated distinct omitted required path permits a later
 case. Full replacement readiness and independent warm upper≤1× remain open.
 
-[Current WebP screens](WARM-POST-CLEANUP-WEBP.md) resolve two producer uncertainties
-on the final qualified cleanup core: VP8 1.770×/upper2.015,24,424,944B/op;
-VP8L 1.862×/upper2.230,48,232,248B/op. Exact packets and both quiet guards pass;
-neither is independently confirmed or a speedup claim. Both remain parity gaps.
-Earlier cleanup-core screens predate the final shared-cache fuel-only counter
-removal and remain historical. Only these two affected anchors were refreshed;
-the final Windows/Linux/package proof is reused. VP8L's larger absolute excess
-cost/allocation justifies bounded diagnostics next. No cases or rasters added.
+[Bounded entropy refinement](WARM-VP8L-BOUNDED-REFINEMENT.md) independently confirms
+VP8L1.792x/upper1.820,48,232,248B/op and exact183,812B. Elapsed is3.5% lower than
+its prior quiet short, without a paired-baseline gain claim. Shared VP8 alpha has
+current short1.784x/upper2.031,24,424,944B/op and exact98,590B. Both remain parity
+gaps; broad short confidence is not a demonstrated regression. Earlier affected
+scorer costs stay historical. BothOS4,904checks/225affected scalar/SAMEactualpackage
+andallthreeexamples pass. No material cases or rasters added. Stop PopulationSum
+polishing after this bounded round; predictor scoring is the next substantial
+primitive. Other named producer uncertainties remain to resolve before tuning.
 
 Retire four named controls: PNG RGBA8 resident/ImageBudget, JPEG RGBA8 420/ImageBudget,
 VP8 alpha/caller work budget32M, and optional JPEG callerRGB420/CompactColor.

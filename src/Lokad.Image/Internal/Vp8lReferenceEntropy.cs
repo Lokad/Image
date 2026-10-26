@@ -59,9 +59,9 @@ internal static class Vp8lReferenceEntropy
     internal static long PopulationSum(ReadOnlySpan<int> a, ReadOnlySpan<int> b, OperationContext context)
     {
         if (a.Length != b.Length) throw new ArgumentException("Population lengths must match.", nameof(b));
-        // Keep the separate addition and population charges without materializing
-        // their sum. Equal summed runs share one exact integer logarithm.
-        context.Cancellation.ThrowIfCancellationRequested(); context.Cancellation.ThrowIfCancellationRequested();
+        // Compute combined costs without allocating their sum. Equal summed
+        // runs share one exact integer logarithm.
+        context.Cancellation.ThrowIfCancellationRequested();
         var sum = 0; var nonzero = 0; var maximum = 0; long entropy = 0;
         var zeroRuns = 0; var nonzeroRuns = 0; var shortZero = 0; var shortNonzero = 0; var longZero = 0; var longNonzero = 0;
         for (var start = 0; start < a.Length;)
@@ -86,8 +86,15 @@ internal static class Vp8lReferenceEntropy
         else
         {
             var mix = nonzero == 3 ? 950 : nonzero == 4 ? 700 : 627;
-            var lower = ((Int128)mix * (2L * sum - maximum) * Scale + (Int128)(1000 - mix) * entropy + 500) / 1000;
-            refined = Math.Max(entropy, (long)lower);
+            long lower;
+            // With sum<=2^28, maximum<=sum and 0<=entropy<=2^53, the numerator
+            // is at most (950+2*373)*2^52+500, strictly below Int64.MaxValue.
+            // All terms are nonnegative; integer division has identical rounding.
+            if ((uint)sum <= 1u << 28 && maximum <= sum && (ulong)entropy <= 1UL << 53)
+                lower = (mix * (2L * sum - maximum) * Scale + (1000 - mix) * entropy + 500) / 1000;
+            else
+                lower = (long)(((Int128)mix * (2L * sum - maximum) * Scale + (Int128)(1000 - mix) * entropy + 500) / 1000);
+            refined = Math.Max(entropy, lower);
         }
         var overhead = 57 * Scale - (91 * Scale + 5) / 10;
         overhead += (zeroRuns * 1600L + longZero * 240L + nonzeroRuns * 2640L + longNonzero * 720L

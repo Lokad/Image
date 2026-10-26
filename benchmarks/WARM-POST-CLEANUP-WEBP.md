@@ -1,5 +1,9 @@
 # Current WebP costs after cleanup
 
+Historical checkpoint: the [bounded refinement round](WARM-VP8L-BOUNDED-REFINEMENT.md)
+supersedes these affected CPU costs. Raw observations and qualification identities
+below retain their original producer scope.
+
 Two existing 513×259 RGBA8 anchors were screened on the final qualified cleanup
 library. Complete operations include normalization/repacking, encoding, fresh
 independent output acquisition and release, on one CPU. Reference settings remain

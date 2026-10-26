@@ -95,15 +95,38 @@ public sealed class Vp8lEntropyCostTests
     }
 
     [Fact]
-    public void PairedPopulationPreservesSeparateChargesAndRejectsMismatchedLengths()
+    public void PairedPopulationRejectsMismatchedLengths()
     {
-        int[] a = [0, 1, 1, 1, 1], b = [0, 0, 0, 0, 0];
-        using var exact = new OperationContext(new() { }, default);
-        _ = Vp8lReferenceEntropy.PopulationSum(a, b, exact);         using var tight = new OperationContext(new() { }, default);
-
+        int[] a = [0, 1, 1, 1, 1];
         using var invalid = new OperationContext(ImageLimits.Default, default);
         Assert.Throws<ArgumentException>(() => Vp8lReferenceEntropy.PopulationSum(a, [], invalid));
     }
+
+    [Fact]
+    public void PairedPopulationKeepsFullRangeCostsAcrossNarrowArithmeticBounds()
+    {
+        using var context = new OperationContext(ImageLimits.Default, default);
+        foreach (var size in new[] { 3, 4, 5, 256, 1304 })
+        foreach (var total in new[] { (1 << 28) - 1, 1 << 28, (1 << 28) + 1, int.MaxValue })
+        {
+            var a = new int[size]; var b = new int[size]; var combined = new int[size];
+            for (var i = 0; i < size; i++)
+            {
+                combined[i] = total / size + (i < total % size ? 1 : 0);
+                a[i] = combined[i] / 2; b[i] = combined[i] - a[i];
+            }
+            Assert.Equal(Vp8lReferenceEntropy.Population(combined, context),
+                Vp8lReferenceEntropy.PopulationSum(a, b, context));
+        }
+        foreach (var count in new[] { 65535, 65536, 65537, 131072 })
+        {
+            var a = new int[1304]; var b = new int[1304]; var combined = new int[1304];
+            Array.Fill(a, count); Array.Fill(b, 1); Array.Fill(combined, count + 1);
+            Assert.Equal(Vp8lReferenceEntropy.Population(combined, context),
+                Vp8lReferenceEntropy.PopulationSum(a, b, context));
+        }
+    }
+
 
     [Fact]
     public void PairedPopulationHonorsCancellationBeforeReadingInputs()

@@ -57,8 +57,11 @@ def row(label, name, path, report, confirmed=False, verification=None, current=F
     assert allocated >= 0
     status = 'Historical independent; remeasure' if confirmed else 'Historical short; remeasure'
     if current:
-        assert verification
-        status = verification
+        if confirmed:
+            status = 'Current parity confirmed' if upper <= 1 else ('Current gap (independent)' if ratio > 1 else 'Current confidence open')
+        else:
+            assert verification
+            status = verification
     return f'| [{label}](../benchmarks/{report}) | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | {ratio:.3f} / {upper:.3f} | {allocated:,} | {status} |'
 
 
@@ -72,8 +75,8 @@ def render():
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8-decoder-reconstruction-evidence.json', ['observations', -1], 'WARM-VP8-DECODER-RECONSTRUCTION.md', confirmed=True),
         row('JPEG 4:4:4, forward-only / exact reference', 'warm-jpeg444-entropy-replay-evidence.json', ['observations', -1], 'WARM-JPEG444-ENTROPY-REPLAY.md', confirmed=True),
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-vector-records-evidence.json', ['observations', -1], 'WARM-JPEG-VECTOR-RECORDS.md', confirmed=True),
-        row('VP8 RGBA8', 'warm-post-cleanup-webp-evidence.json', ['cases', 'vp8', -1], 'WARM-POST-CLEANUP-WEBP.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8L RGBA8 / libwebp exact=1', 'warm-post-cleanup-webp-evidence.json', ['cases', 'vp8l', -1], 'WARM-POST-CLEANUP-WEBP.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 RGBA8', 'warm-vp8l-bounded-refinement-evidence.json', ['cases', 'vp8Alpha', -1], 'WARM-VP8L-BOUNDED-REFINEMENT.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-bounded-refinement-evidence.json', ['observations', -1], 'WARM-VP8L-BOUNDED-REFINEMENT.md', confirmed=True, current=True),
         row('PNG RGBA8, SmallestSize9 / native9', 'warm-current-png-smallest8-evidence.json', ['observations', -1], 'WARM-CURRENT-PNG-SMALLEST8.md', verification='Gap (short; qualified)'),
         row('Bilinear resize RGBA16', 'warm-bilinear-word-cache-evidence.json', ['observations', -1], 'WARM-BILINEAR-WORD-CACHE.md', verification='Gap (short; qualified)'),
         row('Bicubic resize RGBA8', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Down8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
@@ -88,15 +91,16 @@ parity and replacement readiness are open. Compression correctness precedes CPU
 gains. Published0.1.0 remains unchanged.
 
 The cleanup removes fuel, ceiling reservations and unpublished wrappers. Earlier timings describe their frozen producers, **not the cleaned build**.
-Two current WebP screens reuse the qualified cleaned library; parity remains open.
+Current VP8L has independent cost confirmation; shared VP8 alpha has a current
+short screen on the same qualified library. Parity remains open.
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
 defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Cleanup qualification](cleanup-qualification.md) | See current Windows/Linux/scalar/package results |
-| CPU and allocation measurements after cleanup | VP8/VP8L current shorts; other required paths pending | No independent parity or speedup claim |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8L-BOUNDED-REFINEMENT.md) | 4,904 checks/OS; affected scalar and same actual package passed |
+| CPU and allocation measurements after cleanup | VP8L independent; VP8 alpha current short; other required paths pending | Exact packets; full parity open |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
 Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct
