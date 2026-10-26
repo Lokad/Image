@@ -53,6 +53,13 @@ workers and qualification are reused without rebuilding. Historical1.277× is no
 longer its current cost reference. This is a short gap, not an independent pass;
 its unchanged path evidence is reused after VP8decode color batching, without new rasters/settings.
 
+[Trace-token reuse](WARM-VP8L-TRACE-REUSE-SCREEN.md) reduces allocations but
+offers no demonstrated CPU benefit after two narrow independent confirmations;
+it is rejected. Source/binaries are restored exactly, reuse-only APIs/tests removed,
+and useful actual-trace ownership coverage retained normal/scalar bothOS. No new
+full/package proof or tuning sweep. Current accepted rows remain unchanged; next
+bound long-copy update counts before a CPU-oriented primitive on the same inputs.
+
 Retire four named controls: PNG RGBA8 resident/ImageBudget, JPEG RGBA8 420/ImageBudget,
 VP8 alpha/caller work budget32M, and optional JPEG callerRGB420/CompactColor.
 The remaining scope is 253 cases (236 historical numeric,17 unmeasured).
