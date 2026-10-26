@@ -8,11 +8,6 @@ using Lokad.Image.Tooling;
 
 public enum WarmCompressionCase { PhotographLossless8, DiagramLossless8, PhotographLossy8, DiagramLossy8 }
 
-internal sealed record CompressionSizes(int ManagedBytes, int NativeBytes, string ManagedSha256, string NativeSha256);
-internal sealed record CompressionLossy(QualitySample[] OwnedSettings, int[] OwnedEvaluationOrder, QualityMatch Match);
-internal sealed record CompressionControl(string Name, string SourceSha256, CompressionSizes Lossless, CompressionLossy Lossy);
-internal sealed record CompressionQuality(string LibrarySha256, CompressionControl[] Cases);
-
 /// <summary>Four fixed complete encode operations on the required photographic/text controls.</summary>
 [MemoryDiagnoser]
 public class WarmCompression
@@ -34,12 +29,12 @@ public class WarmCompression
     private ImageBuffer source = null!;
     private byte[] pixels = [], packet = [];
     private WebpEncodeOptions options = null!;
-    private CompressionControl control = null!;
+    private int packetBytes;
+    private string packetSha256 = "";
     private NativeWarmSample[] before = [];
     private JsonElement sourceIdentity;
     private bool smoke, ready;
     private int cpu, count;
-    private static readonly EncoderQualityProfile Profile = new(513, 8, QualityEncoder.Vp8, QualityPattern.Asymmetric, QualityAlpha.Opaque);
 
     [GlobalSetup]
     public void Setup()
@@ -55,15 +50,23 @@ public class WarmCompression
         state = new JpegBenchmarkCase(".webp");
         try
         {
-            var catalog = JsonSerializer.Deserialize<CompressionQuality>(File.ReadAllBytes(Path.Combine(state.Root, "benchmarks/warm-webp-compression-quality-evidence.json")), EncoderQualityCalibration.Json)
-                ?? throw new InvalidOperationException("Missing compression quality controls.");
-            if (catalog.LibrarySha256 != JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location)) throw new InvalidOperationException("Refresh affected quality controls for changed production.");
-            control = catalog.Cases.Single(v => v.Name == InputName);
-            options = new() { Lossless = Lossless, Quality = Lossless ? 85 : control.Lossy.Match.ClosestOwned.Setting, Effort = 4 };
-            var fixture = Path.Combine(state.Root, "benchmarks/Fixtures/Compression", InputName == "Photograph8" ? "photograph.png" : "diagram.png");
+            // Fixture pixels and independently frozen native packets qualify the
+            // operation directly. Historical quality-search catalogs are evidence
+            // of their own producers, not current build-dependent inputs.
+            var name = InputName == "Photograph8" ? "photograph" : "diagram";
+            var expected = Lossless
+                ? OriginalVp8lControls.Cases().Single(v => (string)v[0] == name && (int)v[1] == 4)
+                : OriginalVp8Controls.Cases().Single(v => (string)v[0] == name && (int)v[1] == 8 && (int)v[2] == 4 && (int)v[3] == 75);
+            packetBytes = (int)expected[Lossless ? 2 : 4]; packetSha256 = (string)expected[Lossless ? 3 : 5];
+            options = new() { Lossless = Lossless, Quality = Lossless ? 85 : 75, Effort = 4 };
+            using var fixtures = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "benchmarks/Fixtures/Compression/manifest.json")));
+            var input = fixtures.RootElement.GetProperty("inputs").EnumerateArray().Single(v => v.GetProperty("name").GetString() == InputName);
+            var fixture = Path.Combine(state.Root, "benchmarks/Fixtures/Compression", input.GetProperty("file").GetString()!);
+            if (JpegBenchmarkCase.HashFile(fixture) != input.GetProperty("pngSha256").GetString()) throw new InvalidOperationException("Frozen compression PNG differs.");
             source = ImageCodec.Decode(File.ReadAllBytes(fixture)); pixels = OriginalPixels.Bytes(source);
-            if ((source.Width, source.Height, source.BitDepth) != (513, 259, 8) || JpegBenchmarkCase.Hash(pixels) != control.SourceSha256)
+            if ((source.Width, source.Height, source.BitDepth) != (513, 259, 8) || JpegBenchmarkCase.Hash(pixels) != input.GetProperty("rgbaSha256").GetString())
                 throw new InvalidOperationException("Frozen compression pixels differ.");
+            for (var i = 3; i < pixels.Length; i += 4) if (pixels[i] != 255) throw new InvalidOperationException("Expected an opaque compression control.");
             File.WriteAllBytes(state.Input, pixels);
             using var manifest = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/benchmark-source.json")));
             sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = manifest.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = manifest.RootElement.GetProperty("sourceRevision").GetString() });
@@ -81,34 +84,35 @@ public class WarmCompression
         if (ReferenceEquals(a.GetBuffer(), b.GetBuffer()) || !encoded.AsSpan().SequenceEqual(b.ToArray()) || !OriginalPixels.Bytes(source).AsSpan().SequenceEqual(pixels)
             || packet.Length != 0 && !packet.AsSpan().SequenceEqual(encoded)) throw new InvalidOperationException("Source, deterministic bytes or output ownership differ.");
         var baseline = File.ReadAllBytes(state.NativeOutput);
-        if (Lossless)
+        if (encoded.Length != packetBytes || baseline.Length != packetBytes
+            || JpegBenchmarkCase.Hash(encoded) != packetSha256 || JpegBenchmarkCase.Hash(baseline) != packetSha256)
+            throw new InvalidOperationException("Frozen complete compression packet differs.");
+        var nativePixels = Lossless ? pixels : OracleProcess.Run(state.Ffmpeg, DecodeArguments(false), baseline);
+        foreach (var bytes in new[] { encoded, baseline })
         {
-            if (encoded.Length != control.Lossless.ManagedBytes || baseline.Length != control.Lossless.NativeBytes
-                || JpegBenchmarkCase.Hash(encoded) != control.Lossless.ManagedSha256 || JpegBenchmarkCase.Hash(baseline) != control.Lossless.NativeSha256)
-                throw new InvalidOperationException("Frozen lossless packets differ.");
-            foreach (var bytes in new[] { encoded, baseline })
-            {
-                var info = ImageCodec.Identify(bytes);
-                using var decoded = ImageCodec.Decode(bytes);
-                if ((info.Format, info.Width, info.Height, info.BitDepth) != (ImageFormat.WebP, 513, 259, 8) || !OriginalPixels.Bytes(decoded).AsSpan().SequenceEqual(pixels))
-                    throw new InvalidOperationException("Lossless syntax/pixels differ.");
-                foreach (var scalar in new[] { false, true })
-                {
-                    var arguments = new List<string> { "-v", "error", "-threads", "1", "-filter_threads", "1", "-noautorotate" };
-                    if (scalar) arguments.AddRange(["-cpuflags", "0"]);
-                    arguments.AddRange(["-f", "image2pipe", "-i", "pipe:0", "-frames:v", "1", "-threads:v", "1", "-thread_type:v", "0", "-pix_fmt", "rgba", "-f", "rawvideo", "pipe:1"]);
-                    if (!OracleProcess.Run(state.Ffmpeg, arguments, bytes).AsSpan().SequenceEqual(pixels)) throw new InvalidOperationException("Normal/scalar native lossless pixels differ.");
-                }
-            }
-        }
-        else
-        {
-            var managedQuality = EncoderQualityCalibration.Validate(encoded, pixels, Profile, options.Quality, state.Ffmpeg);
-            var nativeQuality = EncoderQualityCalibration.Validate(baseline, pixels, Profile, 75, state.Ffmpeg);
-            if (managedQuality != control.Lossy.Match.ClosestOwned || nativeQuality != control.Lossy.Match.Native || !EncoderQualityCalibration.Match(nativeQuality, [managedQuality]).Matched)
-                throw new InvalidOperationException("Frozen quality, alpha or decoder gates differ.");
+            var info = ImageCodec.Identify(bytes);
+            using var decoded = ImageCodec.Decode(bytes);
+            if ((info.Format, info.Width, info.Height, info.BitDepth) != (ImageFormat.WebP, 513, 259, 8)
+                || !OriginalPixels.Bytes(decoded).AsSpan().SequenceEqual(nativePixels)) throw new InvalidOperationException("Compression syntax/reconstructed pixels differ.");
+            foreach (var scalar in new[] { false, true })
+                if (!OracleProcess.Run(state.Ffmpeg, DecodeArguments(scalar), bytes).AsSpan().SequenceEqual(nativePixels))
+                    throw new InvalidOperationException("Normal/scalar native compression pixels differ.");
         }
         packet = encoded;
+    }
+
+    private string[] DecodeArguments(bool scalar)
+    {
+        if (!Lossless)
+        {
+            var normalized = WebpOracle.DecodeArguments(513, 259, false).ToList();
+            if (!scalar) normalized.RemoveRange(normalized.IndexOf("-cpuflags"), 2);
+            return normalized.ToArray();
+        }
+        var arguments = new List<string> { "-v", "error", "-threads", "1", "-filter_threads", "1", "-noautorotate" };
+        if (scalar) arguments.AddRange(["-cpuflags", "0"]);
+        arguments.AddRange(["-f", "image2pipe", "-i", "pipe:0", "-frames:v", "1", "-threads:v", "1", "-thread_type:v", "0", "-pix_fmt", "rgba", "-f", "rawvideo", "pipe:1"]);
+        return arguments.ToArray();
     }
 
     [Benchmark]
@@ -137,14 +141,13 @@ public class WarmCompression
                 baselineBackend = Lossless ? "libwebp exact=1 (FFmpeg encoder backend)" : "FFmpeg libwebp",
                 inputSha256 = JpegBenchmarkCase.Hash(pixels), rasterSha256 = JpegBenchmarkCase.Hash(pixels),
                 managedOutputBytes = packet.Length, managedOutputSha256 = JpegBenchmarkCase.Hash(packet),
-                nativeOutputBytes = Lossless ? control.Lossless.NativeBytes : control.Lossy.Match.Native.EncodedBytes,
-                nativeOutputSha256 = Lossless ? control.Lossless.NativeSha256 : control.Lossy.Match.Native.EncodedSha256,
-                qualityMatched = true, psnrGapDb = Lossless ? 0 : control.Lossy.Match.PsnrGapDb, maximumPsnrGapDb = EncoderQualityCalibration.MaximumPsnrGapDb,
-                allRgbaSamplesExact = Lossless, alphaExact = true, hiddenRgbExact = Lossless, nativeCliNormalScalarPixelsExact = Lossless,
+                nativeOutputBytes = packetBytes, nativeOutputSha256 = packetSha256, completePacketExact = true,
+                qualityMatched = true, qualityGate = "Frozen complete packet equality, including reconstructed pixels; no equal-quality-number inference.",
+                allRgbaSamplesExact = Lossless, allReconstructedSamplesExact = true, alphaExact = true, hiddenRgbExact = Lossless, nativeCliNormalScalarPixelsExact = true,
                 decoderAgreementWithinBounds = true, bitstreamSyntaxVerified = true, sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmCompression).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort4. VP8L exact pixels; VP8 frozen matched source quality and decoder/alpha gates."
+                boundary = "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort4, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
         }
         finally { native?.Dispose(); source?.Dispose(); state?.Dispose(); ready = false; }

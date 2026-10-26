@@ -59,9 +59,14 @@ it is rejected. Source/binaries are restored exactly, reuse-only APIs/tests remo
 and useful actual-trace ownership coverage retained normal/scalar bothOS. No new
 full/package proof or tuning sweep. Current accepted rows remain unchanged. Follow-up endpoint counts show maximum
 length108/85 and no length≥128; no batching candidate is justified on these inputs.
-Next reconcile the existing VP8L photograph/diagram controls and retire their
-obsolete current-harness quality-catalog dependency. Historical ratios are leads,
-not current gaps; no new workload grid is added.
+The existing [VP8L photograph/diagram controls](WARM-CURRENT-COMPRESSION-CONTROLS.md)
+are now reconciled: current quiet shorts 1.619×/2.282×, 29,610,520/45,404,827 B/op,
+exact 160,032/7,234-byte packets. The old 7.330×/2.291× figures describe superseded
+producers. The current harness uses frozen fixture/complete-packet identities;
+four existing lossless/lossy smoke controls pass reconstructed normal/scalar pixels
+and independent ownership. No production rebuild, native/selector rebuild, timing
+confirmation or full/package repeat. No new workload grid is added. Next inspect
+the diagram's actual dominant primitive once before selecting a substantial change.
 
 Retire four named controls: PNG RGBA8 resident/ImageBudget, JPEG RGBA8 420/ImageBudget,
 VP8 alpha/caller work budget32M, and optional JPEG callerRGB420/CompactColor.

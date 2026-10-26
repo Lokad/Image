@@ -79,6 +79,8 @@ def render():
         row('JPEG from caller GRAY8, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'callerGray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
         row('VP8 RGBA8', 'warm-vp8-luma4-rate-bound-evidence.json', ['observations', -1], 'WARM-VP8-LUMA4-RATE-BOUND.md', confirmed=True, current=True),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-chain-capacity-evidence.json', ['observations', -1], 'WARM-VP8L-CHAIN-CAPACITY.md', confirmed=True, current=True),
+        row('VP8L photograph / libwebp exact=1', 'warm-current-compression-controls-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-CURRENT-COMPRESSION-CONTROLS.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8L text/diagram / libwebp exact=1', 'warm-current-compression-controls-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-CURRENT-COMPRESSION-CONTROLS.md', verification='Current gap (short; qualified)', current=True),
         row('PNG RGBA8, SmallestSize9 / native9', 'warm-current-encoder-anchors-evidence.json', ['cases', 'png8', -1], 'WARM-CURRENT-ENCODER-ANCHORS.md', verification='Current gap (short; qualified)', current=True),
         row('Bilinear resize RGBA16', 'warm-current-editing-anchors-evidence.json', ['cases', 'bilinearDown16', -1], 'WARM-CURRENT-EDITING-ANCHORS.md', verification='Current gap (short; qualified)', current=True),
         row('Bicubic resize RGBA8', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Down8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
@@ -104,7 +106,9 @@ storage remain qualified;
 PNG SmallestSize retains unchanged current short evidence. Exact eight-pixel
 VP8 color/chroma batching reduces complete decode elapsed by21.5% versus its
 preceding short, confirming a1.301× gap with unchanged1,966,583B/op; RGBA16 bilinear reduction has
-a current 1.339× short gap with exact managed words. Parity remains open.
+a current 1.339× short gap with exact managed words. Existing VP8L photograph and
+diagram controls now have current 1.619×/2.282× screens and 29,610,520/45,404,827 B/op;
+their packets remain byte exact. Older producer ratios are historical. Parity remains open.
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
 defines the remaining finite scope and evidence invalidation.

@@ -96,7 +96,7 @@ internal static class WarmBenchmarks
                         : "RGBA" + e.Value.GetProperty("depth").GetInt32() == caseId);
                     var value = receipt.Value;
                     var depth = value.GetProperty("depth").GetInt32();
-                    var outputVerified = family == "Compression" ? value.GetProperty("qualityMatched").GetBoolean() && value.GetProperty("alphaExact").GetBoolean() && value.GetProperty("decoderAgreementWithinBounds").GetBoolean() && value.GetProperty("bitstreamSyntaxVerified").GetBoolean() && value.GetProperty("psnrGapDb").GetDouble() <= EncoderQualityCalibration.MaximumPsnrGapDb : family == "StreamIdentify"
+                    var outputVerified = family == "Compression" ? value.GetProperty("completePacketExact").GetBoolean() && value.GetProperty("allReconstructedSamplesExact").GetBoolean() && value.GetProperty("alphaExact").GetBoolean() && value.GetProperty("nativeCliNormalScalarPixelsExact").GetBoolean() && value.GetProperty("bitstreamSyntaxVerified").GetBoolean() : family == "StreamIdentify"
                         ? value.GetProperty("descriptorExact").GetBoolean() && value.GetProperty("freshStreamControlsExact").GetBoolean() && value.GetProperty("eofChecked").GetBoolean() && value.GetProperty("callerSourceLeftOpen").GetBoolean() && value.GetProperty("invalidDeflateAcceptedWithoutPixelDecode").GetBoolean() && value.GetProperty("preparedEquivalentBoundaryControls").GetInt32() == 21
                         : family == "Identify"
                         ? value.GetProperty("descriptorExact").GetBoolean() && value.GetProperty("directSpanControlsExact").GetBoolean()

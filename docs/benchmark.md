@@ -16,7 +16,9 @@ storage remain qualified;
 PNG SmallestSize retains unchanged current short evidence. Exact eight-pixel
 VP8 color/chroma batching reduces complete decode elapsed by21.5% versus its
 preceding short, confirming a1.301× gap with unchanged1,966,583B/op; RGBA16 bilinear reduction has
-a current 1.339× short gap with exact managed words. Parity remains open.
+a current 1.339× short gap with exact managed words. Existing VP8L photograph and
+diagram controls now have current 1.619×/2.282× screens and 29,610,520/45,404,827 B/op;
+their packets remain byte exact. Older producer ratios are historical. Parity remains open.
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
 defines the remaining finite scope and evidence invalidation.
@@ -41,6 +43,8 @@ are leads for measurement, not current demonstrated gaps.
 | [JPEG from caller GRAY8, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 1,162.42 | 1,077.77 | 1.079 / 1.416 | 155,438 | Current gap (short; qualified) |
 | [VP8 RGBA8](../benchmarks/WARM-VP8-LUMA4-RATE-BOUND.md) | 92,818.18 | 53,494.23 | 1.735 / 1.744 | 23,358,400 | Current gap (independent) |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-CHAIN-CAPACITY.md) | 192,274.46 | 121,576.90 | 1.582 / 1.607 | 47,674,928 | Current gap (independent) |
+| [VP8L photograph / libwebp exact=1](../benchmarks/WARM-CURRENT-COMPRESSION-CONTROLS.md) | 133,724.16 | 82,618.55 | 1.619 / 2.098 | 29,610,520 | Current gap (short; qualified) |
+| [VP8L text/diagram / libwebp exact=1](../benchmarks/WARM-CURRENT-COMPRESSION-CONTROLS.md) | 21,976.22 | 9,631.04 | 2.282 / 3.413 | 45,404,827 | Current gap (short; qualified) |
 | [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | 24,517.23 | 17,302.12 | 1.417 / 1.498 | 1,325,670 | Current gap (short; qualified) |
 | [Bilinear resize RGBA16](../benchmarks/WARM-CURRENT-EDITING-ANCHORS.md) | 547.29 | 408.78 | 1.339 / 1.426 | 290,124 | Current gap (short; qualified) |
 | [Bicubic resize RGBA8](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 635.08 | 416.65 | 1.524 / 1.610 | 332,178 | Historical short; remeasure |
