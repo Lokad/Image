@@ -78,6 +78,8 @@ def render():
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'gray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
         row('JPEG from caller GRAY8, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'callerGray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
         row('VP8 RGBA8', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 opaque photograph', 'warm-current-opaque-vp8-controls-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-CURRENT-OPAQUE-VP8-CONTROLS.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 opaque text/diagram', 'warm-current-opaque-vp8-controls-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-CURRENT-OPAQUE-VP8-CONTROLS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L photograph / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L text/diagram / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', confirmed=True, current=True),
@@ -112,6 +114,9 @@ diagram controls now have a current 1.605× short and 1.362× independent gap, w
 29,610,520/45,404,838 B/op. Skipping empty token-start tiles uses40.0% less diagram
 elapsed than the preceding quiet short; packets remain byte exact. Older affected
 encoding timings are historical. Parity remains open.
+The two existing opaque VP8 photograph/diagram controls have current3.557×/3.784×
+gaps with909,696/841,608 B/op and exact17,688/7,100-byte packets. These larger gaps
+now take priority over smaller gains; no new input/settings matrix is added.
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
 defines the remaining finite scope and evidence invalidation.

@@ -22,6 +22,9 @@ diagram controls now have a current 1.605× short and 1.362× independent gap, w
 29,610,520/45,404,838 B/op. Skipping empty token-start tiles uses40.0% less diagram
 elapsed than the preceding quiet short; packets remain byte exact. Older affected
 encoding timings are historical. Parity remains open.
+The two existing opaque VP8 photograph/diagram controls have current3.557×/3.784×
+gaps with909,696/841,608 B/op and exact17,688/7,100-byte packets. These larger gaps
+now take priority over smaller gains; no new input/settings matrix is added.
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
 defines the remaining finite scope and evidence invalidation.
@@ -45,6 +48,8 @@ are leads for measurement, not current demonstrated gaps.
 | [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 1,585.89 | 1,405.11 | 1.129 / 1.256 | 155,436 | Current gap (short; qualified) |
 | [JPEG from caller GRAY8, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 1,162.42 | 1,077.77 | 1.079 / 1.416 | 155,438 | Current gap (short; qualified) |
 | [VP8 RGBA8](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 92,523.60 | 53,407.61 | 1.732 / 1.948 | 23,358,400 | Current gap (short; qualified) |
+| [VP8 opaque photograph](../benchmarks/WARM-CURRENT-OPAQUE-VP8-CONTROLS.md) | 34,540.06 | 9,711.78 | 3.557 / 3.845 | 909,696 | Current gap (short; qualified) |
+| [VP8 opaque text/diagram](../benchmarks/WARM-CURRENT-OPAQUE-VP8-CONTROLS.md) | 22,048.89 | 5,827.02 | 3.784 / 3.951 | 841,608 | Current gap (short; qualified) |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 191,649.39 | 122,403.16 | 1.566 / 1.827 | 47,674,928 | Current gap (short; qualified) |
 | [VP8L photograph / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 133,800.97 | 83,340.00 | 1.605 / 2.159 | 29,610,520 | Current gap (short; qualified) |
 | [VP8L text/diagram / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 13,192.85 | 9,685.69 | 1.362 / 1.408 | 45,404,838 | Current gap (independent) |

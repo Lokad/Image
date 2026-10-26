@@ -15,9 +15,13 @@ Photograph, asymmetric VP8L and VP8+alpha are reconciled with current shorts
 603affectedscalarWebP and the same actual package/allthreeexamples. The shared
 clustering change invalidates older VP8L/compressed-alpha encoding cost proofs;
 other required affected boundaries remain uncertain. All decoders, JPEG/PNG,
-editing and text retain their valid evidence. Stop this primitive round. Next
-reconcile the existing WarmCompression PhotographLossy8/DiagramLossy8 cases;
-frozen complete packets and reference settings remain the gates, no new grid.
+editing and text retain their valid evidence. Stop this primitive round.
+The existing [PhotographLossy8/DiagramLossy8 controls](WARM-CURRENT-OPAQUE-VP8-CONTROLS.md)
+are now reconciled at3.557×/3.784×,909,696/841,608 B/op, exact17,688/7,100 B.
+They take priority over smaller gaps. One diagram profile has715managed workload
+samples, with prediction/transform/quantization search as the lead; its timings
+are discarded. Count repeated identical mode predictions before selecting one
+substantial candidate. No new image/settings grid or repeated full/package proof.
 
 [Paired JPEG entropy append](WARM-JPEG-PAIRED-ENTROPY.md) independently confirms
 the existing caller-RGB420 case at1.543×/upper1.556,373,413B/op and exact
