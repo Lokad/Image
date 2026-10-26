@@ -1,0 +1,947 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "round": "CurrentCallerRgb420Profile",
+  "productionChanged": false,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "warmParityComplete": false,
+  "scope": "One existing513x259 resident packed RGB8 JPEG420 control; quality85/nativeqscale5, unchanged source/settings/COM-only packet boundary. One CPU complete conversion/encoding/fresh independent output acquisition/release. Instrumented times discarded; no image/settings grid.",
+  "profile": {
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "workloadSamples": 775,
+    "managedSamples": 774,
+    "scope": "One original513x259 resident RGB8 JPEG420 Q85/nativeqscale5 control; unchanged complete-operation worker including warmup. Sample attribution only, not numerical timing. Original parser generic label retained as metadata.",
+    "exclusive": [
+      {
+        "method": "Lokad.Image.Internal.JpegEncoder.ReferenceSubsampledPass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)",
+        "samples": 256,
+        "fraction": 0.3303225806451613
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegEntropyRecords.WriteRecords(value class System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext)",
+        "samples": 140,
+        "fraction": 0.18064516129032257
+      },
+      {
+        "method": "System.Buffer.MemmoveInternal(unsigned int8&,unsigned int8&,unsigned int)",
+        "samples": 58,
+        "fraction": 0.07483870967741936
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegEntropyRecords.RecordBlock(value class System.ReadOnlySpan`1<int16>,int32,value class System.Span`1<int32>,int32[][],value class System.Span`1<int32>)",
+        "samples": 55,
+        "fraction": 0.07096774193548387
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegEncoder.ReferenceChroma(value class System.ReadOnlySpan`1<int16>,int32,int32,int32,value class Lokad.Image.Internal.JpegReferenceArea,unsigned int8&,unsigned int8&)",
+        "samples": 39,
+        "fraction": 0.05032258064516129
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegReferenceColor.MatrixChromaRow(value class System.Span`1<int32>,int32,bool)",
+        "samples": 38,
+        "fraction": 0.04903225806451613
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegReferenceArea.Create(int32,int32,int32,int32)",
+        "samples": 36,
+        "fraction": 0.04645161290322581
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegReferenceTransform.ForwardVectors(value class System.ReadOnlySpan`1<unsigned int8>,value class System.Span`1<int16>)",
+        "samples": 31,
+        "fraction": 0.04
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegReferenceColor.MatrixLumaRow(value class System.ReadOnlySpan`1<int32>,int32,int32,int32,value class System.Span`1<unsigned int8>,value class System.Span`1<unsigned int8>)",
+        "samples": 28,
+        "fraction": 0.03612903225806452
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegReferenceTables.Build(int32[],class Lokad.Image.Internal.OperationContext)",
+        "samples": 19,
+        "fraction": 0.024516129032258065
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegEntropyWriter.Write(int32,int32)",
+        "samples": 18,
+        "fraction": 0.023225806451612905
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)",
+        "samples": 17,
+        "fraction": 0.02193548387096774
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegEntropyWriter.Emit(unsigned int8)",
+        "samples": 10,
+        "fraction": 0.012903225806451613
+      },
+      {
+        "method": "System.Threading.Thread.<PollGC>g__PollGCWorker|67_0()",
+        "samples": 10,
+        "fraction": 0.012903225806451613
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegReferenceTransform.Quantize(value class System.ReadOnlySpan`1<int16>,value class System.ReadOnlySpan`1<unsigned int16>,value class System.Span`1<int16>)",
+        "samples": 8,
+        "fraction": 0.01032258064516129
+      },
+      {
+        "method": "System.Array.Copy(class System.Array,class System.Array,int32)",
+        "samples": 3,
+        "fraction": 0.003870967741935484
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegEntropyRecords.PrepareRecordValues(value class System.ReadOnlySpan`1<int16>,value class System.Span`1<int32>)",
+        "samples": 2,
+        "fraction": 0.0025806451612903226
+      },
+      {
+        "method": "System.Buffer.ZeroMemoryInternal(unsigned int8&,unsigned int)",
+        "samples": 2,
+        "fraction": 0.0025806451612903226
+      },
+      {
+        "method": "Lokad.Image.Internal.LimitedWriteStream.Write(value class System.ReadOnlySpan`1<unsigned int8>)",
+        "samples": 1,
+        "fraction": 0.0012903225806451613
+      },
+      {
+        "method": "System.Threading.Thread.PollGC()",
+        "samples": 1,
+        "fraction": 0.0012903225806451613
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegCoefficientPool.Return(int32[])",
+        "samples": 1,
+        "fraction": 0.0012903225806451613
+      },
+      {
+        "method": "System.SpanHelpers.Memmove(unsigned int8&,unsigned int8&,unsigned int)",
+        "samples": 1,
+        "fraction": 0.0012903225806451613
+      },
+      {
+        "method": "System.IO.MemoryStream.Write(value class System.ReadOnlySpan`1<unsigned int8>)",
+        "samples": 1,
+        "fraction": 0.0012903225806451613
+      }
+    ],
+    "inclusive": [
+      {
+        "method": "Lokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)",
+        "samples": 775,
+        "fraction": 1
+      },
+      {
+        "method": "Lokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)",
+        "samples": 775,
+        "fraction": 1
+      },
+      {
+        "method": "WarmJpegSamples.Apply()",
+        "samples": 775,
+        "fraction": 1
+      },
+      {
+        "method": "BenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)",
+        "samples": 775,
+        "fraction": 1
+      },
+      {
+        "method": "BenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)",
+        "samples": 775,
+        "fraction": 1
+      },
+      {
+        "method": "BenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)",
+        "samples": 775,
+        "fraction": 1
+      },
+      {
+        "method": "BenchmarkDotNet.Engines.Engine.Run()",
+        "samples": 775,
+        "fraction": 1
+      },
+      {
+        "method": "BenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)",
+        "samples": 775,
+        "fraction": 1
+      },
+      {
+        "method": "System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)",
+        "samples": 775,
+        "fraction": 1
+      },
+      {
+        "method": "System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)",
+        "samples": 775,
+        "fraction": 1
+      },
+      {
+        "method": "System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)",
+        "samples": 775,
+        "fraction": 1
+      },
+      {
+        "method": "System.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)",
+        "samples": 775,
+        "fraction": 1
+      },
+      {
+        "method": "BenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])",
+        "samples": 775,
+        "fraction": 1
+      },
+      {
+        "method": "BenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 775,
+        "fraction": 1
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegEncoder.ReferenceSubsampledPass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)",
+        "samples": 494,
+        "fraction": 0.6374193548387097
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegEncoder.ReferencePass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)",
+        "samples": 494,
+        "fraction": 0.6374193548387097
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegEntropyRecords.WriteRecords(value class System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext)",
+        "samples": 228,
+        "fraction": 0.29419354838709677
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegEntropyWriter.Write(int32,int32)",
+        "samples": 88,
+        "fraction": 0.1135483870967742
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegEntropyWriter.Emit(unsigned int8)",
+        "samples": 70,
+        "fraction": 0.09032258064516129
+      },
+      {
+        "method": "Lokad.Image.Internal.LimitedWriteStream.Write(value class System.ReadOnlySpan`1<unsigned int8>)",
+        "samples": 60,
+        "fraction": 0.07741935483870968
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegEntropyWriter.Flush()",
+        "samples": 60,
+        "fraction": 0.07741935483870968
+      },
+      {
+        "method": "System.IO.MemoryStream.Write(value class System.ReadOnlySpan`1<unsigned int8>)",
+        "samples": 59,
+        "fraction": 0.07612903225806451
+      },
+      {
+        "method": "System.Buffer.MemmoveInternal(unsigned int8&,unsigned int8&,unsigned int)",
+        "samples": 58,
+        "fraction": 0.07483870967741936
+      },
+      {
+        "method": "System.Buffer.BlockCopy(class System.Array,int32,class System.Array,int32,int32)",
+        "samples": 58,
+        "fraction": 0.07483870967741936
+      },
+      {
+        "method": "System.IO.MemoryStream.set_Capacity(int32)",
+        "samples": 58,
+        "fraction": 0.07483870967741936
+      },
+      {
+        "method": "System.IO.MemoryStream.EnsureCapacity(int32)",
+        "samples": 58,
+        "fraction": 0.07483870967741936
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegEntropyRecords.RecordBlock(value class System.ReadOnlySpan`1<int16>,int32,value class System.Span`1<int32>,int32[][],value class System.Span`1<int32>)",
+        "samples": 57,
+        "fraction": 0.07354838709677419
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegEncoder.ReferenceChroma(value class System.ReadOnlySpan`1<int16>,int32,int32,int32,value class Lokad.Image.Internal.JpegReferenceArea,unsigned int8&,unsigned int8&)",
+        "samples": 39,
+        "fraction": 0.05032258064516129
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegReferenceColor.MatrixChromaRow(value class System.Span`1<int32>,int32,bool)",
+        "samples": 38,
+        "fraction": 0.04903225806451613
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegReferenceArea.Create(int32,int32,int32,int32)",
+        "samples": 36,
+        "fraction": 0.04645161290322581
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegReferenceTables.Build(int32[],class Lokad.Image.Internal.OperationContext)",
+        "samples": 33,
+        "fraction": 0.04258064516129032
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegReferenceTables.Huffman(int32[],class Lokad.Image.Internal.OperationContext)",
+        "samples": 33,
+        "fraction": 0.04258064516129032
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegReferenceTransform.ForwardVectors(value class System.ReadOnlySpan`1<unsigned int8>,value class System.Span`1<int16>)",
+        "samples": 31,
+        "fraction": 0.04
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegReferenceColor.MatrixLumaRow(value class System.ReadOnlySpan`1<int32>,int32,int32,int32,value class System.Span`1<unsigned int8>,value class System.Span`1<unsigned int8>)",
+        "samples": 28,
+        "fraction": 0.03612903225806452
+      },
+      {
+        "method": "System.Array.Copy(class System.Array,class System.Array,int32)",
+        "samples": 14,
+        "fraction": 0.01806451612903226
+      },
+      {
+        "method": "System.Collections.Generic.List`1[System.__Canon].set_Capacity(int32)",
+        "samples": 14,
+        "fraction": 0.01806451612903226
+      },
+      {
+        "method": "System.Collections.Generic.List`1[System.__Canon].AddWithResize(!0)",
+        "samples": 14,
+        "fraction": 0.01806451612903226
+      },
+      {
+        "method": "System.Threading.Thread.<PollGC>g__PollGCWorker|67_0()",
+        "samples": 10,
+        "fraction": 0.012903225806451613
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegReferenceTransform.Quantize(value class System.ReadOnlySpan`1<int16>,value class System.ReadOnlySpan`1<unsigned int16>,value class System.Span`1<int16>)",
+        "samples": 8,
+        "fraction": 0.01032258064516129
+      },
+      {
+        "method": "Lokad.Image.Internal.JpegEntropyRecords.PrepareRecordValues(value class System.ReadOnlySpan`1<int16>,value class System.Span`1<int32>)",
+        "samples": 2,
+        "fraction": 0.0025806451612903226
+      }
+    ],
+    "stacks": [
+      {
+        "stack": "Lokad.Image.Internal.JpegEncoder.ReferenceSubsampledPass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.ReferencePass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 256
+      },
+      {
+        "stack": "Lokad.Image.Internal.JpegEntropyRecords.WriteRecords(value class System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 140
+      },
+      {
+        "stack": "System.Buffer.MemmoveInternal(unsigned int8&,unsigned int8&,unsigned int)\nSystem.Buffer.BlockCopy(class System.Array,int32,class System.Array,int32,int32)\nSystem.IO.MemoryStream.set_Capacity(int32)\nSystem.IO.MemoryStream.EnsureCapacity(int32)\nSystem.IO.MemoryStream.Write(value class System.ReadOnlySpan`1<unsigned int8>)\nLokad.Image.Internal.LimitedWriteStream.Write(value class System.ReadOnlySpan`1<unsigned int8>)\nLokad.Image.Internal.JpegEntropyWriter.Flush()\nLokad.Image.Internal.JpegEntropyWriter.Emit(unsigned int8)\nLokad.Image.Internal.JpegEntropyWriter.Write(int32,int32)\nLokad.Image.Internal.JpegEntropyRecords.WriteRecords(value class System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 58
+      },
+      {
+        "stack": "Lokad.Image.Internal.JpegEntropyRecords.RecordBlock(value class System.ReadOnlySpan`1<int16>,int32,value class System.Span`1<int32>,int32[][],value class System.Span`1<int32>)\nLokad.Image.Internal.JpegEncoder.ReferenceSubsampledPass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.ReferencePass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 55
+      },
+      {
+        "stack": "Lokad.Image.Internal.JpegEncoder.ReferenceChroma(value class System.ReadOnlySpan`1<int16>,int32,int32,int32,value class Lokad.Image.Internal.JpegReferenceArea,unsigned int8&,unsigned int8&)\nLokad.Image.Internal.JpegEncoder.ReferenceSubsampledPass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.ReferencePass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 39
+      },
+      {
+        "stack": "Lokad.Image.Internal.JpegReferenceColor.MatrixChromaRow(value class System.Span`1<int32>,int32,bool)\nLokad.Image.Internal.JpegEncoder.ReferenceSubsampledPass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.ReferencePass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 38
+      },
+      {
+        "stack": "Lokad.Image.Internal.JpegReferenceArea.Create(int32,int32,int32,int32)\nLokad.Image.Internal.JpegEncoder.ReferenceSubsampledPass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.ReferencePass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 36
+      },
+      {
+        "stack": "Lokad.Image.Internal.JpegReferenceTransform.ForwardVectors(value class System.ReadOnlySpan`1<unsigned int8>,value class System.Span`1<int16>)\nLokad.Image.Internal.JpegEncoder.ReferenceSubsampledPass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.ReferencePass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 31
+      },
+      {
+        "stack": "Lokad.Image.Internal.JpegReferenceColor.MatrixLumaRow(value class System.ReadOnlySpan`1<int32>,int32,int32,int32,value class System.Span`1<unsigned int8>,value class System.Span`1<unsigned int8>)\nLokad.Image.Internal.JpegEncoder.ReferenceSubsampledPass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.ReferencePass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 28
+      },
+      {
+        "stack": "Lokad.Image.Internal.JpegReferenceTables.Build(int32[],class Lokad.Image.Internal.OperationContext)\nLokad.Image.Internal.JpegReferenceTables.Huffman(int32[],class Lokad.Image.Internal.OperationContext)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 19
+      },
+      {
+        "stack": "Lokad.Image.Internal.JpegEntropyWriter.Write(int32,int32)\nLokad.Image.Internal.JpegEntropyRecords.WriteRecords(value class System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 18
+      },
+      {
+        "stack": "Lokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 17
+      },
+      {
+        "stack": "Lokad.Image.Internal.JpegEntropyWriter.Emit(unsigned int8)\nLokad.Image.Internal.JpegEntropyWriter.Write(int32,int32)\nLokad.Image.Internal.JpegEntropyRecords.WriteRecords(value class System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 10
+      },
+      {
+        "stack": "System.Threading.Thread.<PollGC>g__PollGCWorker|67_0()\nSystem.Array.Copy(class System.Array,class System.Array,int32)\nSystem.Collections.Generic.List`1[System.__Canon].set_Capacity(int32)\nSystem.Collections.Generic.List`1[System.__Canon].AddWithResize(!0)\nLokad.Image.Internal.JpegReferenceTables.Build(int32[],class Lokad.Image.Internal.OperationContext)\nLokad.Image.Internal.JpegReferenceTables.Huffman(int32[],class Lokad.Image.Internal.OperationContext)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 10
+      },
+      {
+        "stack": "Lokad.Image.Internal.JpegReferenceTransform.Quantize(value class System.ReadOnlySpan`1<int16>,value class System.ReadOnlySpan`1<unsigned int16>,value class System.Span`1<int16>)\nLokad.Image.Internal.JpegEncoder.ReferenceSubsampledPass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.ReferencePass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 8
+      },
+      {
+        "stack": "System.Array.Copy(class System.Array,class System.Array,int32)\nSystem.Collections.Generic.List`1[System.__Canon].set_Capacity(int32)\nSystem.Collections.Generic.List`1[System.__Canon].AddWithResize(!0)\nLokad.Image.Internal.JpegReferenceTables.Build(int32[],class Lokad.Image.Internal.OperationContext)\nLokad.Image.Internal.JpegReferenceTables.Huffman(int32[],class Lokad.Image.Internal.OperationContext)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 3
+      },
+      {
+        "stack": "Lokad.Image.Internal.JpegEntropyRecords.PrepareRecordValues(value class System.ReadOnlySpan`1<int16>,value class System.Span`1<int32>)\nLokad.Image.Internal.JpegEntropyRecords.RecordBlock(value class System.ReadOnlySpan`1<int16>,int32,value class System.Span`1<int32>,int32[][],value class System.Span`1<int32>)\nLokad.Image.Internal.JpegEncoder.ReferenceSubsampledPass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.ReferencePass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 2
+      },
+      {
+        "stack": "Lokad.Image.Internal.LimitedWriteStream.Write(value class System.ReadOnlySpan`1<unsigned int8>)\nLokad.Image.Internal.JpegEntropyWriter.Flush()\nLokad.Image.Internal.JpegEntropyWriter.Emit(unsigned int8)\nLokad.Image.Internal.JpegEntropyWriter.Write(int32,int32)\nLokad.Image.Internal.JpegEntropyRecords.WriteRecords(value class System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 1
+      },
+      {
+        "stack": "System.Threading.Thread.PollGC()\nSystem.Array.Copy(class System.Array,class System.Array,int32)\nSystem.Collections.Generic.List`1[System.__Canon].set_Capacity(int32)\nSystem.Collections.Generic.List`1[System.__Canon].AddWithResize(!0)\nLokad.Image.Internal.JpegReferenceTables.Build(int32[],class Lokad.Image.Internal.OperationContext)\nLokad.Image.Internal.JpegReferenceTables.Huffman(int32[],class Lokad.Image.Internal.OperationContext)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 1
+      },
+      {
+        "stack": "System.Buffer.ZeroMemoryInternal(unsigned int8&,unsigned int)\nSystem.Array.Clear(class System.Array)\nLokad.Image.Internal.JpegCoefficientPool.Rent(int32)\nLokad.Image.Internal.JpegEntropyRecords..ctor(class Lokad.Image.Internal.OperationContext,int32)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 1
+      },
+      {
+        "stack": "System.Buffer.ZeroMemoryInternal(unsigned int8&,unsigned int)\nLokad.Image.Internal.JpegEncoder.WriteReferenceHeader(class System.IO.Stream,int32,int32,value class Lokad.Image.JpegSampling,unsigned int16[],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.OperationContext,int32)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 1
+      },
+      {
+        "stack": "Lokad.Image.Internal.JpegCoefficientPool.Return(int32[])\nLokad.Image.Internal.JpegEntropyRecords.Dispose()\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 1
+      },
+      {
+        "stack": "System.SpanHelpers.Memmove(unsigned int8&,unsigned int8&,unsigned int)\nLokad.Image.Internal.JpegSampleInput.CopyRgbRow(int32,int32,value class System.Span`1<unsigned int8>)\nLokad.Image.Internal.JpegEncoder.ReferenceSubsampledPass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.ReferencePass(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,int32,int32,value class System.Nullable`1<unsigned int32>,value class Lokad.Image.JpegSampling,value class System.ReadOnlySpan`1<unsigned int16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 1
+      },
+      {
+        "stack": "System.IO.MemoryStream.Write(value class System.ReadOnlySpan`1<unsigned int8>)\nLokad.Image.Internal.LimitedWriteStream.Write(value class System.ReadOnlySpan`1<unsigned int8>)\nLokad.Image.Internal.JpegEntropyWriter.Flush()\nLokad.Image.Internal.JpegEntropyWriter.Emit(unsigned int8)\nLokad.Image.Internal.JpegEntropyWriter.Write(int32,int32)\nLokad.Image.Internal.JpegEntropyRecords.WriteRecords(value class System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext)\nLokad.Image.Internal.JpegEncoder.EncodeReference(class Lokad.Image.ImageBuffer,value class Lokad.Image.Internal.JpegSampleInput,class System.IO.Stream,class Lokad.Image.JpegEncodeOptions,class Lokad.Image.Internal.OperationContext)\nLokad.Image.ImageCodec.EncodeJpeg(value class System.ReadOnlySpan`1<unsigned int8>,int32,int32,value class Lokad.Image.JpegSampleFormat,class System.IO.Stream,int32,class Lokad.Image.JpegEncodeOptions,value class System.Threading.CancellationToken)\nWarmJpegSamples.Apply()\nBenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)\nBenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)\nBenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)\nBenchmarkDotNet.Engines.Engine.Run()\nBenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)\nSystem.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)\nSystem.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)\nSystem.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nSystem.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)\nBenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])\nBenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "samples": 1
+      }
+    ],
+    "originalAnalyzerScope": "One original control, existing immutable complete-operation worker; sample attribution only, including warmup. Inlining and native/runtime coverage limit method-cost interpretation."
+  },
+  "receipt": {
+    "round": "CallerRgb420Profile",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "source": "One original513x259 resident RGB8 JPEG420 Q85/nativeqscale5 complete-operation worker, including normalization, fresh output acquisition/release; existing case only. WarmConfirm host used solely as the existing execution driver; its instrumented timings are discarded.",
+    "librarySha256": "10a515f61780e77fc860327db24c7613628b44686ef144f228ec3b68c5433f29",
+    "benchmarkSha256": "85e25b548f9c599e4d608b75b0f3f2e0317670c2ffe912d102413fa86beab0e4",
+    "samplerSha256": "23581c695c93b5b5dce0c6e99332af889120238afea4144d41e005da3ca57cc1",
+    "traceSha256": "c0e14d464a4c9de0e9c8bfcec45bb88b912abc2bd89d3aebfe14fe0be906cf0f",
+    "traceBytes": 1444974,
+    "summarySha256": "bc99356d4d3670b7f8117f0669d75269c4b2eb2ebfa34497cec8f1e381dd5cb1",
+    "validationPath": "artifacts/benchmark-validation/WarmJpeg-687e059e995a4d359b7524261c82e98d.json",
+    "validation": {
+      "schemaVersion": 1,
+      "name": "WarmJpeg",
+      "caseId": "Encode420_8",
+      "publicBoundary": "JpegSamplesEncode/Rgb420Resident",
+      "encodingProfile": "reference-compatible",
+      "runId": "j1-caller420-profile",
+      "smoke": false,
+      "nativeSampleCount": 12,
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "cpu": 0,
+      "referenceLabel": "FFmpeg n8.1 MJPEG",
+      "managedAffinityCount": 1,
+      "processorCount": 1,
+      "serverGc": false,
+      "gcConfiguration": {
+        "ServerGC": false,
+        "ConcurrentGC": false,
+        "RetainVM": false,
+        "NoAffinitize": false,
+        "GCCpuGroup": false,
+        "GCLargePages": false,
+        "LOHThreshold": 85000,
+        "HeapCount": 1,
+        "MaxHeapCount": 0,
+        "GCHeapAffinitizeMask": 0,
+        "GCHeapAffinitizeRanges": "",
+        "GCHighMemPercent": 90,
+        "GCGen0MaxBudget": 134217728,
+        "GCHeapHardLimit": 0,
+        "GCHeapHardLimitPercent": 0,
+        "GCRegionRange": 33532829696,
+        "GCRegionSize": 0,
+        "UOHWaitBGCSizeIncPercent": 200,
+        "GCHeapHardLimitSOH": 0,
+        "GCHeapHardLimitLOH": 0,
+        "GCHeapHardLimitPOH": 0,
+        "GCHeapHardLimitSOHPercent": 0,
+        "GCHeapHardLimitLOHPercent": 0,
+        "GCHeapHardLimitPOHPercent": 0,
+        "GCConserveMem": 0,
+        "GCName": "",
+        "GCPath": "",
+        "GCDynamicAdaptationMode": 1,
+        "GCDTargetTCP": 0,
+        "GCDGen0GrowthPercent": 0,
+        "GCDGen0GrowthMinFactor": 0,
+        "GCDGen0GrowthMaxFactor": 0
+      },
+      "sourceIdentity": {
+        "sourceSha256": "a8360ae282e90be513a63cc7c0ff4dc23ddd9d554bef93405a0c123f06d2c41b",
+        "sourceRevision": "791e0d8d0402356d5a2605d7b3b6df62c9851c5b"
+      },
+      "inputSha256": "257210317c8bb87ec196f89d511de45f014c66e73049fbcf5f44f399184d9668",
+      "referenceSha256": "ec2ea910c09a839ea55987103b9a2efa1c0bec62658fa55cda9c14726e88b5cd",
+      "rawInputChannels": 3,
+      "managedOutputBytes": 52091,
+      "nativeOutputBytes": 52093,
+      "managedQuality": {
+        "setting": 85,
+        "encodedBytes": 52091,
+        "encodedSha256": "83e9e80a87c1928c8e23e2929b15348d0e8e8ce5568247420f6e366abeb830e3",
+        "nativeDecodedSha256": "77a081d5a545919ed10e7304c1c25aeff4c6cf21ea0de62b782bc76323628b5e",
+        "publicDecodedSha256": "77a081d5a545919ed10e7304c1c25aeff4c6cf21ea0de62b782bc76323628b5e",
+        "codec": "JPEG",
+        "sampling": "2x2,1x1,1x1",
+        "sourceError": {
+          "sumSquared": 772539182,
+          "maximum": 141,
+          "samples": 398601,
+          "scale": 1,
+          "rgbMaximum": 141,
+          "rgbRmse": 44.02415873833117,
+          "rgbPsnr": 15.256982293765109
+        },
+        "decoderDifference": {
+          "sumSquared": 0,
+          "maximum": 0,
+          "samples": 398601,
+          "scale": 1,
+          "rgbMaximum": 0,
+          "rgbRmse": 0,
+          "rgbPsnr": null
+        },
+        "alphaExact": true,
+        "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+      },
+      "nativeQuality": {
+        "setting": 5,
+        "encodedBytes": 52093,
+        "encodedSha256": "ccca91bcdaddc90c7aecf62d07cdc629c09c27e607c955cfcc97a7bf91caaf08",
+        "nativeDecodedSha256": "77a081d5a545919ed10e7304c1c25aeff4c6cf21ea0de62b782bc76323628b5e",
+        "publicDecodedSha256": "77a081d5a545919ed10e7304c1c25aeff4c6cf21ea0de62b782bc76323628b5e",
+        "codec": "JPEG",
+        "sampling": "2x2,1x1,1x1",
+        "sourceError": {
+          "sumSquared": 772539182,
+          "maximum": 141,
+          "samples": 398601,
+          "scale": 1,
+          "rgbMaximum": 141,
+          "rgbRmse": 44.02415873833117,
+          "rgbPsnr": 15.256982293765109
+        },
+        "decoderDifference": {
+          "sumSquared": 0,
+          "maximum": 0,
+          "samples": 398601,
+          "scale": 1,
+          "rgbMaximum": 0,
+          "rgbRmse": 0,
+          "rgbPsnr": null
+        },
+        "alphaExact": true,
+        "alphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+      },
+      "qualityMatched": true,
+      "alphaExact": true,
+      "decoderAgreementWithinBounds": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "psnrGapDb": 0,
+      "maximumPsnrGapDb": 0.25,
+      "librarySha256": "10a515f61780e77fc860327db24c7613628b44686ef144f228ec3b68c5433f29",
+      "benchmarkAssemblySha256": "85e25b548f9c599e4d608b75b0f3f2e0317670c2ffe912d102413fa86beab0e4",
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "sampleFormat": "rgb",
+        "sourceSha256": "89656f6181868ffacf99eb45e3e27c767999e085974c8cb3eee04f646e2f7654",
+        "buildScriptSha256": "e2e739c66599f9819d554ac77df46d7267dd7ad024f9f3c81972155a8cf86e8e",
+        "workerSha256": "258303ad4ca873f5ca447ef65078f3404248fcfc2934e1b3504334eac0c55916",
+        "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "simdEnabled": true,
+        "reference": "FFmpeg n8.1 MJPEG",
+        "staticArchives": {
+          "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+          "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+          "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+          "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+          "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+          "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+          "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+          "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+          "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+          "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+          "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        }
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "jpeg-samples-encode",
+        "sampleFormat": "rgb",
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "cpu": 0,
+        "affinityCount": 1,
+        "codecThreads": 1,
+        "conversionThreads": 1,
+        "initialCompletedOperations": 2,
+        "outputBytes": 52093,
+        "rawInputBorrowed": true,
+        "normalizationTimed": true,
+        "outputAcquisitionAndReleaseTimed": true,
+        "independentLiveOutputs": true,
+        "frozenPacketExact": true
+      },
+      "nativeBefore": [
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50483055,
+          "completedOperations": 193,
+          "observed": 43232,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1577595.46875
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50513841,
+          "completedOperations": 225,
+          "observed": 50400,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1578557.53125
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50507822,
+          "completedOperations": 257,
+          "observed": 57568,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1578369.4375
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50503355,
+          "completedOperations": 289,
+          "observed": 64736,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1578229.84375
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50439809,
+          "completedOperations": 321,
+          "observed": 71904,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1576244.03125
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50524377,
+          "completedOperations": 353,
+          "observed": 79072,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1578886.78125
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50527683,
+          "completedOperations": 385,
+          "observed": 86240,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1578990.09375
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50407780,
+          "completedOperations": 417,
+          "observed": 93408,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1575243.125
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50447571,
+          "completedOperations": 449,
+          "observed": 100576,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1576486.59375
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50436474,
+          "completedOperations": 481,
+          "observed": 107744,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1576139.8125
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50417185,
+          "completedOperations": 513,
+          "observed": 114912,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1575537.03125
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50415833,
+          "completedOperations": 545,
+          "observed": 122080,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1575494.78125
+        }
+      ],
+      "nativeAfter": [
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50563502,
+          "completedOperations": 673,
+          "observed": 150752,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1580109.4375
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50496401,
+          "completedOperations": 705,
+          "observed": 157920,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1578012.53125
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50514959,
+          "completedOperations": 737,
+          "observed": 165088,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1578592.46875
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50515791,
+          "completedOperations": 769,
+          "observed": 172256,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1578618.46875
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50481909,
+          "completedOperations": 801,
+          "observed": 179424,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1577559.65625
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50685668,
+          "completedOperations": 833,
+          "observed": 186592,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1583927.125
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50483452,
+          "completedOperations": 865,
+          "observed": 193760,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1577607.875
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50497773,
+          "completedOperations": 897,
+          "observed": 200928,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1578055.40625
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50485885,
+          "completedOperations": 929,
+          "observed": 208096,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1577683.90625
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50471793,
+          "completedOperations": 961,
+          "observed": 215264,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1577243.53125
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50468589,
+          "completedOperations": 993,
+          "observed": 222432,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1577143.40625
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 50423731,
+          "completedOperations": 1025,
+          "observed": 229600,
+          "outputStride": 0,
+          "cpu": 0,
+          "outputBytes": 52093,
+          "cpuElapsedNanoseconds": null,
+          "nanosecondsPerOperation": 1575741.59375
+        }
+      ],
+      "nativeExitCode": 0,
+      "boundary": "Identical resident packed 8-bit caller gray/RGB samples to complete fresh independent JPEG bytes. Public EncodeJpeg admission, bounded block/row normalization, color conversion when RGB, transform, quantization, adaptive Huffman/entropy coding, MemoryStream creation/growth and owned output release are timed. Native borrows resident packed samples, reuses codec and private conversion scratch only; every operation processes/encodes all samples and acquires/releases a fresh owned packet. No RGBA staging or alpha flattening in either operation. Input projection, startup, disk I/O, IPC, hashing and quality checks excluded. One CPU; frozen matched-quality packets exact, no quality-number equivalence assumption."
+    },
+    "preGuardPassed": true,
+    "postGuardPassed": true,
+    "beforeBytes": null,
+    "afterCaptureBytes": null,
+    "afterAnalysisBytes": null,
+    "projectedAllowance": 19500000,
+    "traceCap": 2000000,
+    "captureWriteLoopCap": 2000000,
+    "captureProcessFileLimitApplied": false,
+    "etlxFileLimit": 16000000,
+    "summaryCap": 1000000,
+    "productionAndBenchmarkNotRebuilt": true,
+    "workloadPid": 2386855
+  },
+  "reuse": "Qualified10a515 core, benchmark85e25, E172Sampler23581 and prepared JpegEncodeConfirmHost reused. No production/harness/native rebuild or package proof repeat. Source inventory/docs/tests synchronized once for guard provenance. Existing actual-package qualification and current1.653short/upper1.899 evidence remain valid for unchanged path.",
+  "currentCostEvidence": {
+    "evidence": "warm-current-encoder-anchors-evidence.json",
+    "path": [
+      "cases",
+      "caller420",
+      -1
+    ],
+    "independentPassClaim": false
+  },
+  "rawArchive": {
+    "path": "tmp/jpeg-caller420-current-profile.tar.xz",
+    "sha256": "cd7bfb3d35a2847aae2be37aee1954b7473c39f8a87b042acae5034721486f13",
+    "bytes": 340876,
+    "members": 18,
+    "allMembersVerified": true
+  },
+  "next": "Inspect one substantial primitive: entropy replay is18.1%exclusive samples and appends Huffman+amplitude through two separately checked writer calls. Prove a single combined append can preserve bits/stuffing/restarts, cancellation and refusal cleanup before changing production. The33.0%subsampled-pass lead includes several inlined normalization/filter stages; no exact component-time inference. No further checked texture-energy variants."
+}

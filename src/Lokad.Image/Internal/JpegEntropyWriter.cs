@@ -16,7 +16,8 @@ internal sealed class JpegEntropyWriter(Stream output, OperationContext context)
     // A smaller first full chunk avoids oversized initial growth in caller
     // streams after small JPEG headers. Partial restart flushes keep this bound.
     private int flushAt = Capacity / 2;
-    private uint bits;
+    // At most seven pending bits plus two 16-bit entropy groups are live.
+    private ulong bits;
     private int available;
     private bool disposed;
 
@@ -46,7 +47,21 @@ internal sealed class JpegEntropyWriter(Stream output, OperationContext context)
         ObjectDisposedException.ThrowIf(disposed, this);
         if (count is < 0 or > 16 || value < 0 || value >= 1 << count) throw new ArgumentOutOfRangeException(nameof(value));
         context.Cancellation.ThrowIfCancellationRequested();
-        bits = bits << count | (uint)value; available += count;
+        Append((uint)value, count);
+    }
+
+    internal void WritePair(int first, int firstCount, int second, int secondCount)
+    {
+        ObjectDisposedException.ThrowIf(disposed, this);
+        if (firstCount is < 0 or > 16 || first < 0 || first >= 1 << firstCount) throw new ArgumentOutOfRangeException(nameof(first));
+        if (secondCount is < 0 or > 16 || second < 0 || second >= 1 << secondCount) throw new ArgumentOutOfRangeException(nameof(second));
+        context.Cancellation.ThrowIfCancellationRequested();
+        Append((ulong)(uint)first << secondCount | (uint)second, firstCount + secondCount);
+    }
+
+    private void Append(ulong value, int count)
+    {
+        bits = bits << count | value; available += count;
         while (available >= 8)
         {
             available -= 8;

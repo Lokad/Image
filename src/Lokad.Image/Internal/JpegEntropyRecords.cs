@@ -164,9 +164,9 @@ internal sealed partial class JpegEntropyRecords : IDisposable
                 record = (uint)records[offset++]; var table = tables[(int)(record >> 24 & 3)];
                 var symbol = (int)(record >> 16 & 255); var length = table.Lengths[symbol];
                 if (length == 0) throw new ImageDataException("JPEG source changed between encoding passes.");
-                writer.Write(table.Codes[symbol], length);
                 var bits = (int)(record >> 27);
-                if (bits != 31) writer.Write((int)(record & 65535), bits);
+                if (bits == 31) writer.Write(table.Codes[symbol], length);
+                else writer.WritePair(table.Codes[symbol], length, (int)(record & 65535), bits);
             } while ((record & EndMcuBit) == 0);
         }
     }

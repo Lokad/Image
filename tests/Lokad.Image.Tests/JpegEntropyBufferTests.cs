@@ -49,19 +49,22 @@ public sealed class JpegEntropyBufferTests
     }
 
     [Theory]
-    [InlineData(false)]
-    [InlineData(true)]
-    public void RefusalOrCancellationAfterAdmissionCleansUpWithoutRetryAndAllowsRecovery(bool cancel)
+    [InlineData(false, false)]
+    [InlineData(true, false)]
+    [InlineData(false, true)]
+    [InlineData(true, true)]
+    public void RefusalOrCancellationAfterAdmissionCleansUpWithoutRetryAndAllowsRecovery(bool cancel, bool pair)
     {
         using var root = new TestMemoryBudget(JpegEntropyWriter.StorageBytes);
         using var cancellation = new CancellationTokenSource();
         if (cancel) root.Admitted = _ => cancellation.Cancel(); else root.RefuseAtGrowth = 1;
         using var context = new OperationContext(new() { MemoryBudget = root }, cancellation.Token);
         using var output = new MemoryStream(); using var writer = new JpegEntropyWriter(output, context);
-        if (cancel) Assert.Throws<OperationCanceledException>(() => writer.Write(255, 8));
+        void Write() { if (pair) writer.WritePair(255, 8, 65535, 16); else writer.Write(255, 8); }
+        if (cancel) Assert.Throws<OperationCanceledException>(Write);
         else
         {
-            var error = Assert.Throws<ImageLimitException>(() => writer.Write(255, 8));
+            var error = Assert.Throws<ImageLimitException>(Write);
             Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
         }
 Assert.Equal(1, root.GrowthAttempts);
@@ -84,9 +87,11 @@ Assert.Equal(1, root.GrowthAttempts);
     }
 
     [Theory]
-    [InlineData(false)]
-    [InlineData(true)]
-    public void OutputUserKeepsItsChargeAndFailureDisposalDoesNotPublishPendingBytes(bool cancel)
+    [InlineData(false, false)]
+    [InlineData(true, false)]
+    [InlineData(false, true)]
+    [InlineData(true, true)]
+    public void OutputUserKeepsItsChargeAndFailureDisposalDoesNotPublishPendingBytes(bool cancel, bool pair)
     {
         using var root = new TestMemoryBudget(JpegEntropyWriter.StorageBytes);
         using var cancellation = new CancellationTokenSource();
@@ -97,7 +102,7 @@ Assert.Equal(1, root.GrowthAttempts);
             if (cancel) cancellation.Cancel(); else throw new IOException("Authored output failure");
         });
         using var writer = new JpegEntropyWriter(output, context);
-        void Encode() { for (var i = 0; i < 1024; i++) writer.Write(91, 8); }
+        void Encode() { for (var i = 0; i < 1024; i++) { if (pair) writer.WritePair(91, 8, 91, 8); else writer.Write(91, 8); } }
         if (cancel) Assert.Throws<OperationCanceledException>(Encode); else Assert.Throws<IOException>(Encode);
         var writes = output.Writes; var length = output.Length;
         writer.Dispose(); writer.Dispose(); Assert.Equal(0, root.Bytes);

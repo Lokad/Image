@@ -6,52 +6,31 @@ dimensions/depth/filter/quality choices and approved references. No shape/settin
 grid is added. Only a demonstrated distinct omitted required path permits a later
 case. Full replacement readiness and independent warm upper≤1× remain open.
 
-[Exact luma rate-cost pruning](WARM-VP8-LUMA4-RATE-BOUND.md) confirms current VP8
-at 1.735×/upper 1.744, unchanged 23,358,400 B/op and exact 98,590 B. Elapsed is
-2.0% lower than the prior quiet short, without a paired independent-baseline gain
-claim. Rate/header is a lower bound on the exact full candidate score; skip only
-losers before reconstruction/texture. Existing native decisions and all packets
-remain exact. Both OS pass 4,911 checks, 597 affected scalar checks, the SAME actual
-package and all three examples. One immutable timing core and existing workers
-are reused; VP8L/JPEG/PNG and unrelated paths are unchanged. Stop this bound round.
+[Paired JPEG entropy append](WARM-JPEG-PAIRED-ENTROPY.md) independently confirms
+the existing caller-RGB420 case at1.543×/upper1.556,373,413B/op and exact
+52,091/52,093B except approved COM. Elapsed is6.7% lower than the preceding quiet
+short, without a paired independent-baseline gain claim. BothOS pass4,919Release
+checks,317internal/291public scalarJPEG, SAMEactual package and allthree examples.
+The shared entropy writer changes JPEG encoding, including gray/444/422/420,
+restart/caller/stream/async/root boundaries: other prior CPU/allocation evidence
+on those paths is historical until reconciled. No unmeasured speedup is claimed.
 
-[Matcher capacity reuse](WARM-VP8L-CHAIN-CAPACITY.md) independently confirms VP8L
-at 1.582×/upper 1.607, 47,674,928 B/op and exact 183,812 B. Separate quiet runs use
-2.4% less elapsed and 557,320 fewer allocated bytes than the preceding confirmation.
-Shared VP8 alpha's preceding short was 1.779×/upper 2.095, 23,358,400 B/op and exact
-98,590 B: 1,066,544 fewer allocated bytes, with flat elapsed and no independent
-speedup/parity claim. Older affected costs stay historical. Both OS pass 4,908
-checks, 229 affected scalar checks, the SAME actual package and all three examples.
-The separate full-frame chain is removed; one signed result array has safe
-unsigned views. No new owner or allowance. An initial span-indexed representation
-had a confirmed CPU cost and was replaced; its raw evidence remains retained.
-Stop storage representation tuning, predictor and PopulationSum polishing.
+[VP8 rate pruning](WARM-VP8-LUMA4-RATE-BOUND.md) retains1.735×/upper1.744,
+23,358,400B/op and exact98,590B. [VP8L matcher storage](WARM-VP8L-CHAIN-CAPACITY.md)
+retains1.582×/upper1.607,47,674,928B/op and exact183,812B. Their relevant production
+paths are unchanged. [PNG SmallestSize8](WARM-CURRENT-ENCODER-ANCHORS.md) retains
+its current1.417× short. No other cleaned-build CPU result is inferred from
+historical ratios. Full warm1× remains open.
 
-[The four-lane prefix screen](WARM-VP8L-PREFIX-SCREEN.md) showed no useful material
-complete-operation gain and is discarded. Production source and qualified binaries
-were restored exactly for that discarded round; its qualification was reused.
-Three new focused prefix/pruning tests pass normal/scalar on both OS. No vector
-prototype, visibility change, width sweep or package-proof repeat remains. The
-named Luma4 traversal produced the accepted exact bound above. Next assess
-repeated fixed-source texture energy/validation within a block; preserve all
-score/rounding/ownership behavior and qualify one substantial primitive at a time.
-
-[The fixed-source energy screen](WARM-VP8-SOURCE-ENERGY-SCREEN.md) is flat with
-unchanged allocation and is discarded. Production files/binaries are restored
-exactly; selected qualification and package proof are reused. One independent
-dense-energy/overlap/low-bit test passes normal/scalar on both OS. Stop source-energy
-variants and retain validation. Next profile the existing caller-RGB420 JPEG
-boundary to identify a larger demonstrated opportunity; no matrix expansion.
-
-[Current encoder anchors](WARM-CURRENT-ENCODER-ANCHORS.md) resolve the existing
-JPEG444/callerRGB420/PNGSmallest8 producer uncertainty at short ratios
-1.319/1.653/1.417, with exact packets and allocations recorded. Those production
-paths are unchanged by matcher storage and their relevant evidence is reused.
-VP8 alpha's older independent cost is prior production. All remain warm 1× gaps.
-The retained 744-sample VP8 profile is a lead, not exact current component timing;
-matcher/short-probe counts and unchanged macroblock bodies guide the next bounded
-primitive. No material cases or rasters were added. Other named producer
-uncertainties remain open; do not repeat unchanged encoder-anchor screens.
+Stop completed primitive rounds. The [prefix](WARM-VP8L-PREFIX-SCREEN.md) and
+[source-energy](WARM-VP8-SOURCE-ENERGY-SCREEN.md) screens offered no useful gain;
+their prototypes are removed and useful behavioral tests retained. The bounded
+[caller JPEG profile](WARM-JPEG-CALLER420-PROFILE.md) led to the accepted append.
+Next resolve the existing fresh-seekable VP8+alpha decoder case, StreamNative8:
+its historical1.677× ratio predates cleanup and cannot establish a current gap.
+Reuse existing source/packet/workers and unchanged qualified build; one short
+complete-operation measurement first, independent confirmation if promising.
+No new raster/settings or repeated whole-library/package proof for this measurement.
 
 Retire four named controls: PNG RGBA8 resident/ImageBudget, JPEG RGBA8 420/ImageBudget,
 VP8 alpha/caller work budget32M, and optional JPEG callerRGB420/CompactColor.
@@ -68,9 +47,10 @@ all remaining required algorithms/public boundaries:
   Identify, InspectHeaders, PNG/JPEG/VP8/VP8L decode and all current encoder policies.
   Stream delivery/EOF, output ownership, byte identity and source metadata remain
   part of each named boundary. Metadata baselines must include matching validation.
-- Remeasure existing JPEG444, callerRGB420, VP8, VP8L and PNGSmallest8 anchors,
-  then order demonstrated gaps by material cost. Do not infer a cleaned-build
-  speedup or regression from historical ratios. Encoder complete packets precede
+- Reuse current callerRGB420, VP8, VP8L and PNGSmallest8 anchors; JPEG444's
+  previous short predates the shared-writer change. Reconcile remaining named
+  uncertainties, then order demonstrated gaps by material cost. Do not infer
+  a cleaned-build speedup or regression from historical ratios. Encoder complete packets precede
   CPU optimization; no return to matched-dB tuning for declared exact controls.
 - Existing transform controls retain nearest/bilinear/bicubic/Lanczos3 reduction,
   enlargement, mixed/identity axes, tiny-alpha/half-rounding and8/16-depth paths;
