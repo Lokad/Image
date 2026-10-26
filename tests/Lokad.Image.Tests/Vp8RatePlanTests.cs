@@ -16,6 +16,20 @@ public sealed class Vp8RatePlanTests
         foreach (var value in values) { BinaryPrimitives.WriteUInt16LittleEndian(word, value); hash.AppendData(word); }
     }
 
+    [Theory]
+    [InlineData(0)]
+    [InlineData(255)]
+    public void ExtremeProbabilityTablesFitExistingOwnerAndWordRange(int probability)
+    {
+        using var root = new TestMemoryBudget(21_216); using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        using var plan = Vp8RatePlan.Create(Enumerable.Repeat((byte)probability, 1056).ToArray(), context);
+        Assert.Equal(20_192, plan.CapacityBytes); Assert.Equal(plan.CapacityBytes, root.Bytes);
+        Assert.Equal(21_216, root.Peak);
+        foreach (var cost in plan.VariableLevels) Assert.InRange((int)cost, 0, 14336);
+        foreach (var cost in plan.FixedLevels) Assert.InRange((int)cost, 0, 22784);
+        plan.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
     [Fact]
     public void AllGeneratedTablesMatchNativeDefaultAndArithmeticProbabilityProfiles()
     {

@@ -4,8 +4,8 @@ Updated 2026-10-26. Full replacement readiness and independent warm upper ≤1×
 remain open. Compression correctness takes priority over CPU gains.
 
 The finite checklist is the [fixed inventory](../docs/benchmark-pre-cleanup.md):
-257 named controls, minus these four retired boundaries, leaving 253 required
-cases (236 previously numeric, 17 unmeasured):
+257 named controls, minus these four retired boundaries, plus the one distinct
+trellis path below: 254 required named cases. The earlier 253 remain required.
 
 - PNG RGBA8 resident / ImageBudget quota.
 - JPEG RGBA8 4:2:0 / ImageBudget quota.
@@ -17,6 +17,19 @@ Caller-root retained-result and async controls cover actual IMemoryBudget
 admission. Keep existing images, dimensions, depths, filters, quality settings and
 approved references; add a case only for a demonstrated distinct omitted required
 algorithm or public boundary. No replacement quota benchmark or settings grid.
+
+## One required algorithm omitted from the earlier inventory
+
+`DiagramLossyTrellis8`: the existing 513×259 opaque RGBA8 diagram, quality75,
+effort6. Its [frozen complete packet](../tools/Shared/OriginalVp8Controls.cs) is
+6,818 B, SHA256 `3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee`.
+[Method6 search](../src/Lokad.Image/Internal/Vp8MacroblockDecision.cs) runs
+coefficient-domain dynamic-programming trellis for every luma candidate; the
+current method4 warm controls never execute this required algorithm. Functional
+packet/ownership proof already exists; warm elapsed/allocation evidence is missing.
+Prepare one equivalent complete FFmpeg/libwebp method6 operation and measure before
+assuming optimization is needed. Keep source, depth and quality frozen: no grid or
+new image. Other effort/settings receive no broader performance claim from it.
 
 ## Current qualification and demonstrated gaps
 
@@ -78,16 +91,17 @@ comparisons remain reusable. Regression/package proof is not CPU parity proof.
 
 ## Next execution and retained history
 
-Stop completed primitive variants, including shared prediction rows. The earlier
-bounded photograph sample recorded 76 exclusive residual-vector samples and
-31 exclusive residual-wrapper samples among 706 workload samples. Their code is
-unchanged; this is a code lead, not current phase attribution or a speed forecast.
-Inspect address/table lookup work before one bounded residual-pricing candidate,
-preserving exact costs/errors and safe managed fallback. No fresh profile or new
-workload/settings grid without concrete uncertainty. Screen one complete photo
-operation, independently confirm promising changes, and batch affected
-cross-platform/scalar/actual-package qualification when accepted. Reuse unaffected
-proof; do not rerun unrelated audits/builds/package checks for rejected trials.
+The [combined-price screen](WARM-VP8-COMBINED-PRICES-SCREEN.md) shows no useful
+gain; its implementation and private table format are removed, actual qualified
+binaries/sources restored exactly. Two extreme-probability admission tests remain,
+passing normally/scalar on both OS. Existing full/package proof is reused.
+
+Resolve the one newly identified trellis algorithm path first. Then order current
+demonstrated gaps by material cost. Stop combined-price, row-prediction, uniform,
+cache, forward and publication variants. No profile, grid, unrelated audit,
+production rebuild or package repeat for unchanged/rejected work. Screen complete
+operations, independently confirm promising changes, and batch affected
+cross-platform/scalar/actual-package qualification only for accepted production.
 
 Useful rejected screens and earlier accepted rounds remain linked in the
 [prior coverage checkpoint](https://github.com/lokad/image/blob/0bd4a507cd87dcf85bfec4f9ac0a38c49174b86b/benchmarks/WARM-COVERAGE.md)

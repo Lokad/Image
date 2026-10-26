@@ -36,6 +36,7 @@ are leads for measurement, not current demonstrated gaps.
 | [VP8 RGBA8](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | 83,452.21 | 53,391.09 | 1.563 / 1.832 | 23,358,400 | Current gap (short; qualified) |
 | [VP8 opaque photograph](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | 24,541.14 | 9,722.14 | 2.524 / 2.538 | 909,696 | Current gap (independent) |
 | [VP8 opaque text/diagram](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | 14,351.18 | 5,828.44 | 2.462 / 2.723 | 841,608 | Current gap (short; qualified) |
+| [VP8 diagram, effort6 / trellis](../benchmarks/WARM-COVERAGE.md) | — | — | — | — | Required algorithm; unmeasured |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 191,649.39 | 122,403.16 | 1.566 / 1.827 | 47,674,928 | Current gap (short; qualified) |
 | [VP8L photograph / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 133,800.97 | 83,340.00 | 1.605 / 2.159 | 29,610,520 | Current gap (short; qualified) |
 | [VP8L text/diagram / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 13,192.85 | 9,685.69 | 1.362 / 1.408 | 45,404,838 | Current gap (independent) |

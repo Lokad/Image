@@ -80,6 +80,7 @@ def render():
         row('VP8 RGBA8', 'warm-vp8-shared-small-rows-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8-SHARED-SMALL-ROWS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8 opaque photograph', 'warm-vp8-shared-small-rows-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-SHARED-SMALL-ROWS.md', confirmed=True, current=True),
         row('VP8 opaque text/diagram', 'warm-vp8-shared-small-rows-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-SHARED-SMALL-ROWS.md', verification='Current gap (short; qualified)', current=True),
+        '| [VP8 diagram, effort6 / trellis](../benchmarks/WARM-COVERAGE.md) | — | — | — | — | Required algorithm; unmeasured |',
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L photograph / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L text/diagram / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', confirmed=True, current=True),
