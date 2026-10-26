@@ -30,5 +30,24 @@ Selected4,922/full/601scalar checks and SAMEactualpackage qualification are reus
 no full suite/package repeat follows rejection. The accepted VP8decoder gain and
 all current summary rows remain unchanged. [Evidence](warm-vp8l-trace-reuse-screen-evidence.json)
 retains candidate/source/binaries, raw results, restoration and mirrored archive.
-Next count long-copy endpoint updates in TraceState.Push on the same inputs before
-a CPU batching candidate. Full253-path warm parity/readiness remain open.
+A bounded follow-up counts TraceState.Push endpoints on the same inputs; it does
+not justify a CPU batching candidate. Full253-path warm parity/readiness remain open.
+
+
+The count-only follow-up retains exact packets and both guards. Production stays
+unchanged; an ignored instrumented copy supplies these per-operation counts:
+
+| Existing control | Push calls | Endpoint updates | Updates for length≥10 | Maximum length |
+| --- | ---: | ---: | ---: | ---: |
+| VP8+alpha | 117,811 | 643,358 | 182,701 | 108 |
+| VP8L | 47,900 | 124,590 | 11,784 | 85 |
+
+No call has length≥128. Short updates dominate;574,369/119,693prefix runs offer
+little reduction of endpoint work. These are counts, not CPU attribution or a
+general-content claim. No production batching prototype follows.
+
+Next reconcile the already named VP8L photograph/diagram controls. Their old
+7.330×/2.291× timings describe superseded encoders. The current benchmark class
+still requires a stale quality-catalog build hash; replace that coupling with
+the declared frozen complete-packet gates before measuring. Keep inputs/settings,
+native references and complete delivery/ownership unchanged. No new matrix.

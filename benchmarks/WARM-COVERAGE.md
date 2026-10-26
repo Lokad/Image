@@ -57,8 +57,11 @@ its unchanged path evidence is reused after VP8decode color batching, without ne
 offers no demonstrated CPU benefit after two narrow independent confirmations;
 it is rejected. Source/binaries are restored exactly, reuse-only APIs/tests removed,
 and useful actual-trace ownership coverage retained normal/scalar bothOS. No new
-full/package proof or tuning sweep. Current accepted rows remain unchanged; next
-bound long-copy update counts before a CPU-oriented primitive on the same inputs.
+full/package proof or tuning sweep. Current accepted rows remain unchanged. Follow-up endpoint counts show maximum
+length108/85 and no length≥128; no batching candidate is justified on these inputs.
+Next reconcile the existing VP8L photograph/diagram controls and retire their
+obsolete current-harness quality-catalog dependency. Historical ratios are leads,
+not current gaps; no new workload grid is added.
 
 Retire four named controls: PNG RGBA8 resident/ImageBudget, JPEG RGBA8 420/ImageBudget,
 VP8 alpha/caller work budget32M, and optional JPEG callerRGB420/CompactColor.
