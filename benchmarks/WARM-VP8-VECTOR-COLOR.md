@@ -1,5 +1,9 @@
 # Exact VP8 chroma and color batching
 
+The costs below describe the recorded producer. [Shared small-prediction rows](WARM-VP8-SHARED-SMALL-ROWS.md)
+supersedes affected VP8 encode/decode calling costs; unchanged arithmetic and
+packet/pixel proofs remain valid. Read that report for current measurements.
+
 The existing 513×259 VP8/ALPH control decodes its frozen 98,590-byte packet from
 a fresh seekable Stream to independently owned RGBA8. Complete input buffering,
 copies, EOF, decode, chroma/color, exact alpha and output release run on one CPU.

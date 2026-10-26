@@ -46,6 +46,8 @@
   checks and the existing checked scalar publication fallback.
   Four-block forward batching shares exact arithmetic across adjacent luma/chroma
   blocks, retaining scalar fallback, block order and read-before-write semantics.
+  Encoder and decoder share exact whole-row small-block predictions, preserving
+  aliasing, mode order and pixels while removing per-pixel production dispatch.
   Removed superseded encoder experiments; full CPU parity remains open.
 - Caller-owned cooperative memory admission across nested work and retained
   images, fonts, layouts and caches, with structured limit/unsupported failures.

@@ -1,5 +1,9 @@
 # Exact adjacent VP8 forward-block batching
 
+The costs below describe the recorded producer. [Shared small-prediction rows](WARM-VP8-SHARED-SMALL-ROWS.md)
+supersedes affected VP8 encode/decode calling costs; unchanged arithmetic and
+packet/pixel proofs remain valid. Read that report for current measurements.
+
 The existing 513×259 opaque photograph independently confirms27.78 ms,
 2.879× reference time / upper2.900×, with unchanged909,696 B/op and exact17,688 B.
 Elapsed is 8.6% lower than the preceding quiet short. This is not a paired

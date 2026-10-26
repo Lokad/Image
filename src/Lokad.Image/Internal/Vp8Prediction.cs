@@ -24,12 +24,12 @@ internal static class Vp8Prediction
         if ((uint)mode > 9) throw new ArgumentOutOfRangeException(nameof(mode));
         if (topSamples.Length < 8 || leftSamples.Length < 4 || destination.Length < 16)
             throw new ArgumentException("Small prediction requires eight top samples, four left samples and sixteen output pixels.");
-        Span<int> neighbors = stackalloc int[21];
-        var top = neighbors[..8]; var left = neighbors.Slice(8, 4); var edge = neighbors.Slice(12, 9);
-        for (var p = 0; p < 8; p++) top[p] = topSamples[p];
-        for (var p = 0; p < 4; p++) { left[p] = leftSamples[p]; edge[3 - p] = left[p]; edge[5 + p] = top[p]; }
-        edge[4] = corner;
-        var dc = (top[0] + top[1] + top[2] + top[3] + left[0] + left[1] + left[2] + left[3] + 4) >> 3;
+        Span<int> neighbors = stackalloc int[13];
+        for (var p = 0; p < 8; p++) neighbors[p] = topSamples[p];
+        for (var p = 0; p < 4; p++) neighbors[8 + p] = leftSamples[p];
+        neighbors[12] = corner;
+        var dc = (neighbors[0] + neighbors[1] + neighbors[2] + neighbors[3]
+            + neighbors[8] + neighbors[9] + neighbors[10] + neighbors[11] + 4) >> 3;
         // Shared geometry indexes LD/RD/VR as4/5/6; encoder visits RD/VR/LD.
         var geometry = mode switch
         {
@@ -38,8 +38,7 @@ internal static class Vp8Prediction
             Vp8SmallIntraMode.DownLeft => 4,
             _ => (int)mode
         };
-        for (var y = 0; y < 4; y++) for (var x = 0; x < 4; x++)
-            destination[y * 4 + x] = (byte)Math.Clamp(SmallPixel(geometry, x, y, top, left, edge, corner, dc), 0, 255);
+        SmallPrepared(destination, 4, 0, 0, geometry, neighbors, dc);
     }
 
     public static int Sample(byte[] plane, int stride, int x, int y)
@@ -74,20 +73,6 @@ internal static class Vp8Prediction
             }
     }
 
-    public static void Small(byte[] plane, int stride, int x, int y, int macroX, int macroY, int mode)
-    {
-        Span<int> top = stackalloc int[8]; Span<int> left = stackalloc int[4]; Span<int> edge = stackalloc int[9];
-        for (var i = 0; i < 8; i++)
-            top[i] = i >= 4 && x == macroX + 12
-                ? Sample(plane, stride, macroX + 12 + i, macroY - 1) : Sample(plane, stride, x + i, y - 1);
-        for (var i = 0; i < 4; i++) { left[i] = Sample(plane, stride, x - 1, y + i); edge[3 - i] = left[i]; edge[5 + i] = top[i]; }
-        var corner = edge[4] = Sample(plane, stride, x - 1, y - 1);
-        var dc = (top[0] + top[1] + top[2] + top[3] + left[0] + left[1] + left[2] + left[3] + 4) >> 3;
-        for (var row = 0; row < 4; row++)
-            for (var column = 0; column < 4; column++)
-                plane[(y + row) * stride + x + column] = (byte)Math.Clamp(SmallPixel(mode, column, row, top, left, edge, corner, dc), 0, 255);
-    }
-
     // RFC 6386 section 12: encoder candidates overwrite only this block;
     // every top/left/corner sample lies outside it and is immutable throughout
     // their ordered search. Caller retains each original cancellation checkpoint.
@@ -104,9 +89,9 @@ internal static class Vp8Prediction
             + prepared[8] + prepared[9] + prepared[10] + prepared[11] + 4) >> 3;
     }
 
-    // Whole-block expansion of the original geometric SmallPixel formulas.
+    // Shared whole-row expansion of RFC6386 section12 geometric prediction.
     // Averaged samples are bytes; only true motion needs an explicit clamp.
-    internal static void SmallPrepared(byte[] plane, int stride, int x, int y, int mode,
+    internal static void SmallPrepared(Span<byte> plane, int stride, int x, int y, int mode,
         ReadOnlySpan<int> prepared, int dc)
     {
         if (prepared.Length < 13) throw new ArgumentException("Small prediction needs thirteen samples.", nameof(prepared));
@@ -272,57 +257,16 @@ internal static class Vp8Prediction
             default: throw new ImageDataException("Invalid VP8 subblock prediction.");
         }
         var offset = y * stride + x;
-        BinaryPrimitives.WriteUInt32LittleEndian(plane.AsSpan(offset, 4), row0);
-        BinaryPrimitives.WriteUInt32LittleEndian(plane.AsSpan(offset + stride, 4), row1);
-        BinaryPrimitives.WriteUInt32LittleEndian(plane.AsSpan(offset + 2 * stride, 4), row2);
-        BinaryPrimitives.WriteUInt32LittleEndian(plane.AsSpan(offset + 3 * stride, 4), row3);
+        BinaryPrimitives.WriteUInt32LittleEndian(plane.Slice(offset, 4), row0);
+        BinaryPrimitives.WriteUInt32LittleEndian(plane.Slice(offset + stride, 4), row1);
+        BinaryPrimitives.WriteUInt32LittleEndian(plane.Slice(offset + 2 * stride, 4), row2);
+        BinaryPrimitives.WriteUInt32LittleEndian(plane.Slice(offset + 3 * stride, 4), row3);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static uint PackRow(int a, int b, int c, int d)
         => (uint)a | (uint)b << 8 | (uint)c << 16 | (uint)d << 24;
 
-    private static int SmallPixel(int mode, int x, int y, ReadOnlySpan<int> top, ReadOnlySpan<int> left,
-        ReadOnlySpan<int> edge, int corner, int dc)
-    {
-        switch (mode)
-        {
-            case 0: return dc;
-            case 1: return left[y] + top[x] - corner;
-            case 2: return Average3(x == 0 ? corner : top[x - 1], top[x], top[x + 1]);
-            case 3: return Average3(y == 0 ? corner : left[y - 1], left[y], left[Math.Min(y + 1, 3)]);
-            case 4: { var z = x + y; return Average3(top[z], top[z + 1], top[Math.Min(z + 2, 7)]); }
-            case 5: return Center(edge, 4 + x - y);
-            case 6:
-                {
-                    var z = 2 * x - y;
-                    if (z < -1) return Center(edge, 5 + z);
-                    return (z & 1) == 0 ? Average2(edge[4 + z / 2], edge[5 + z / 2]) : Center(edge, 4 + (z + 1) / 2);
-                }
-            case 7:
-                {
-                    var z = 2 * x + y;
-                    if (z >= 8) return Center(top, z - 3);
-                    return (z & 1) == 0 ? Average2(top[z / 2], top[z / 2 + 1]) : Center(top, (z + 1) / 2);
-                }
-            case 8:
-                {
-                    var z = 2 * y - x;
-                    if (z < -1) return Center(edge, 3 - z);
-                    return (z & 1) == 0 ? Average2(edge[3 - z / 2], edge[4 - z / 2]) : Center(edge, 3 - (z - 1) / 2);
-                }
-            case 9:
-                {
-                    var z = 2 * y + x;
-                    if (z >= 6) return left[3];
-                    return (z & 1) == 0 ? Average2(left[z / 2], left[z / 2 + 1])
-                        : Average3(left[z / 2], left[z / 2 + 1], left[Math.Min(z / 2 + 2, 3)]);
-                }
-            default: throw new ImageDataException("Invalid VP8 subblock prediction.");
-        }
-    }
-
     private static int Average2(int a, int b) => (a + b + 1) >> 1;
     private static int Average3(int a, int b, int c) => (a + 2 * b + c + 2) >> 2;
-    private static int Center(ReadOnlySpan<int> values, int index) => Average3(values[index - 1], values[index], values[index + 1]);
 }

@@ -69,6 +69,42 @@ var x = mx + bx; var y = my + by;
     }
 
     [Fact]
+    public void CompactRowsMatchIndependentGeometryWithPartialAliasingAndNoAllocation()
+    {
+        var random = new Random(638612); var expected = new byte[16];
+        var original = new byte[64]; var plane = new byte[96];
+        int[] geometry = [0, 1, 2, 3, 5, 6, 4, 7, 8, 9];
+        for (var sample = 0; sample < 128; sample++)
+        {
+            random.NextBytes(original); var corner = (byte)random.Next(256);
+            if (sample < 2)
+            {
+                original.AsSpan(1, 8).Fill(sample == 0 ? (byte)0 : (byte)255);
+                original.AsSpan(17, 4).Fill(sample == 0 ? (byte)255 : (byte)0);
+                corner = sample == 0 ? (byte)255 : (byte)0;
+            }
+            original.AsSpan(1, 8).CopyTo(plane.AsSpan(4)); plane[3] = corner;
+            for (var y = 0; y < 4; y++) plane[(y + 1) * 16 + 3] = original[17 + y];
+            for (var mode = 0; mode < 10; mode++)
+            {
+                Vp8PredictionReference.Small(plane, 16, 4, 1, 0, 0, geometry[mode]);
+                for (var y = 0; y < 4; y++) plane.AsSpan((y + 1) * 16 + 4, 4).CopyTo(expected.AsSpan(y * 4));
+                foreach (var offset in new[] { 0, 3, 12, 16, 22, 40 })
+                {
+                    var actual = original.ToArray(); var wanted = original.ToArray(); expected.CopyTo(wanted, offset);
+                    Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, actual.AsSpan(1, 8), actual.AsSpan(17, 4), corner, actual.AsSpan(offset, 18));
+                    Assert.Equal(wanted, actual);
+                }
+            }
+        }
+        var output = new byte[18];
+        for (var i = 0; i < 128; i++) Vp8Prediction.SmallBlock((Vp8SmallIntraMode)(i % 10), original.AsSpan(1, 8), original.AsSpan(17, 4), 129, output);
+        var allocated = GC.GetAllocatedBytesForCurrentThread();
+        for (var i = 0; i < 1000; i++) Vp8Prediction.SmallBlock((Vp8SmallIntraMode)(i % 10), original.AsSpan(1, 8), original.AsSpan(17, 4), 129, output);
+        Assert.Equal(0, GC.GetAllocatedBytesForCurrentThread() - allocated);
+    }
+
+    [Fact]
     public void InvalidModesOrIncompleteBordersFailBeforeWritingOutput()
     {
         var top = new byte[8]; var left = new byte[4]; var output = Enumerable.Repeat((byte)73, 18).ToArray();

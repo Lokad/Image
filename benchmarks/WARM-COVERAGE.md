@@ -20,8 +20,8 @@ algorithm or public boundary. No replacement quota benchmark or settings grid.
 
 ## Current qualification and demonstrated gaps
 
-[Adjacent VP8 forward batching](WARM-VP8-ADJACENT-FORWARD.md) is the latest
-qualified producer: 4,932 Release checks and 611 affected scalar WebP checks per
+[Shared VP8 small-prediction rows](WARM-VP8-SHARED-SMALL-ROWS.md) is the latest
+qualified producer: 4,933 Release checks and 612 affected scalar WebP checks per
 OS, plus the same actual private 0.2.0 package and all three usage examples.
 Complete encoder packets, decoded pixels, editing precision, cancellation and
 explicit admission/ownership remain acceptance gates. Published 0.1.0 is unchanged.
@@ -29,15 +29,16 @@ explicit admission/ownership remain acceptance gates. Published 0.1.0 is unchang
 The [current three-table summary](../docs/benchmark.md) selects valid costs,
 allocations, reference boundaries and confirmation status. Current evidence:
 
-- [VP8 forward batching](WARM-VP8-ADJACENT-FORWARD.md): photograph independent
-  2.879× / upper 2.900; diagram/asymmetric-alpha shorts 2.733× / 1.626×.
+- [Shared VP8 rows](WARM-VP8-SHARED-SMALL-ROWS.md): photograph independent
+  2.524× / upper 2.538; diagram/asymmetric-alpha shorts 2.462× / 1.563×.
   Older affected VP8 costs are historical. These largest demonstrated gaps lead.
 - [VP8L empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md): diagram
   independent 1.362×; photograph/asymmetric VP8L shorts 1.605× / 1.566×.
 - [JPEG paired entropy](WARM-JPEG-PAIRED-ENTROPY.md): caller RGB420 independent
   1.543×; 444, RGBA grayscale and caller GRAY8 shorts 1.216× / 1.129× / 1.079×.
-- [VP8 decoder color batching](WARM-VP8-VECTOR-COLOR.md): StreamNative8
-  independent 1.301× with exact pixels.
+- [VP8 decoder calling-cost reconciliation](WARM-VP8-SHARED-SMALL-ROWS.md):
+  StreamNative8 short 1.309× with exact pixels. Color arithmetic proof is unchanged;
+  its earlier end-to-end timing is historical after shared-predictor calling changes.
 - [PNG SmallestSize8](WARM-CURRENT-ENCODER-ANCHORS.md) and
   [RGBA16 bilinear reduction](WARM-CURRENT-EDITING-ANCHORS.md): current shorts
   1.417× / 1.339×; exact packets/managed words and approved native-only bounds.
@@ -69,6 +70,7 @@ observations never become required failures or performance passes.
 Later invalidation is path-specific: paired entropy changes JPEG encoding;
 clustering changes VP8L/compressed-alpha encoding; prediction/quantization/forward
 batching changes VP8 encoding; decoder color batching changes VP8 decode rendering.
+Shared small-row prediction changes both VP8 encoder and decoder calling code.
 Current anchors above reconcile only their named boundaries. Unchanged unrelated
 paths keep valid evidence. Frozen inputs/settings/native workers, approved baseline
 adjustments, packet/pixel oracles, rounding certificates and unaffected font
@@ -76,17 +78,16 @@ comparisons remain reusable. Regression/package proof is not CPU parity proof.
 
 ## Next execution and retained history
 
-Stop completed primitive variants. The latest bounded photograph profile reuses
-the qualified core and prepared longer selector: 706 samples, 101 exclusive in
-SmallBlock. Source inspection identifies per-pixel encoder dispatch where the
-decoder already has exact whole-row formulas. Sharing those formulas is the next
-bounded primitive, preserving mapping/aliasing/rounding/errors. This reopens no
-uniform/cache variant. Instrumented timings are discarded; the failed first
-short-target attempt is retained without an attribution claim. Screen one equivalent
-complete operation, independently confirm promising changes, and batch affected
-cross-platform/scalar/actual-package qualification when accepted. Reconcile decoder
-caller costs if shared code changes them. No unrelated audit, rebuild or package
-proof for unchanged/rejected trials.
+Stop completed primitive variants, including shared prediction rows. The earlier
+bounded photograph sample recorded 76 exclusive residual-vector samples and
+31 exclusive residual-wrapper samples among 706 workload samples. Their code is
+unchanged; this is a code lead, not current phase attribution or a speed forecast.
+Inspect address/table lookup work before one bounded residual-pricing candidate,
+preserving exact costs/errors and safe managed fallback. No fresh profile or new
+workload/settings grid without concrete uncertainty. Screen one complete photo
+operation, independently confirm promising changes, and batch affected
+cross-platform/scalar/actual-package qualification when accepted. Reuse unaffected
+proof; do not rerun unrelated audits/builds/package checks for rejected trials.
 
 Useful rejected screens and earlier accepted rounds remain linked in the
 [prior coverage checkpoint](https://github.com/lokad/image/blob/0bd4a507cd87dcf85bfec4f9ac0a38c49174b86b/benchmarks/WARM-COVERAGE.md)

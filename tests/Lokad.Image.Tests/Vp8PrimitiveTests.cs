@@ -28,7 +28,7 @@ public sealed class Vp8PrimitiveTests
             // Shared samples must remain valid through the final chosen mode.
             foreach (var mode in Enumerable.Range(0, 10).Concat(new[] { 3, 1, 0, 9 }))
             {
-                Vp8Prediction.Small(expected, stride, x, y, macroX, macroY, mode);
+                Vp8PredictionReference.Small(expected, stride, x, y, macroX, macroY, mode);
                 Vp8Prediction.SmallPrepared(actual, stride, x, y, mode, prepared, dc);
                 Assert.Equal(expected, actual); Assert.Equal(unchanged, prepared);
             }
@@ -42,9 +42,8 @@ public sealed class Vp8PrimitiveTests
         var dc = Vp8Prediction.PrepareSmall(plane, 16, 0, 0, 0, 0, prepared); var unchanged = plane.ToArray();
         foreach (var mode in new[] { -1, 10 })
         {
-            var expected = Assert.Throws<ImageDataException>(() => Vp8Prediction.Small(plane, 16, 0, 0, 0, 0, mode));
-            var actual = Assert.Throws<ImageDataException>(() => Vp8Prediction.SmallPrepared(plane, 16, 0, 0, mode, prepared, dc));
-            Assert.Equal(expected.Message, actual.Message); Assert.Equal(unchanged, plane);
+            Assert.Throws<ImageDataException>(() => Vp8Prediction.SmallPrepared(plane, 16, 0, 0, mode, prepared, dc));
+            Assert.Equal(unchanged, plane);
         }
     }
 
@@ -109,7 +108,9 @@ public sealed class Vp8PrimitiveTests
         var plane = new byte[32 * 32]; plane[3 * 32 + 3] = 130;
         for (var x = 0; x < 8; x++) plane[3 * 32 + 4 + x] = (byte)(10 + x * 10);
         for (var y = 0; y < 4; y++) plane[(y + 4) * 32 + 3] = (byte)(90 + y * 10);
-        Vp8Prediction.Small(plane, 32, 4, 4, 0, 0, mode);
+        Span<int> prepared = stackalloc int[13];
+        var dc = Vp8Prediction.PrepareSmall(plane, 32, 4, 4, 0, 0, prepared);
+        Vp8Prediction.SmallPrepared(plane, 32, 4, 4, mode, prepared, dc);
         for (var y = 0; y < 4; y++)
             for (var x = 0; x < 4; x++) Assert.Equal(expected[y * 4 + x], plane[(y + 4) * 32 + 4 + x]);
     }
