@@ -6,22 +6,23 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmCompressionCase { PhotographLossless8, DiagramLossless8, PhotographLossy8, DiagramLossy8 }
+public enum WarmCompressionCase { PhotographLossless8, DiagramLossless8, PhotographLossy8, DiagramLossy8, DiagramLossyTrellis8 }
 
-/// <summary>Four fixed complete encode operations on the required photographic/text controls.</summary>
+/// <summary>Fixed photographic/text controls, plus the distinct effort6 trellis algorithm.</summary>
 [MemoryDiagnoser]
 public class WarmCompression
 {
     [ParamsSource(nameof(Cases))] public WarmCompressionCase Case { get; set; }
     public static IEnumerable<WarmCompressionCase> Cases => SelectedCases();
     private bool Lossless => Case is WarmCompressionCase.PhotographLossless8 or WarmCompressionCase.DiagramLossless8;
+    private int Effort => Case == WarmCompressionCase.DiagramLossyTrellis8 ? 6 : 4;
     private string InputName => Case is WarmCompressionCase.PhotographLossless8 or WarmCompressionCase.PhotographLossy8 ? "Photograph8" : "Diagram8";
     public static WarmCompressionCase[] SelectedCases()
     {
         var selected = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
         if (selected == "All") return Enum.GetValues<WarmCompressionCase>();
         if (Enum.TryParse<WarmCompressionCase>(selected, out var value) && Enum.IsDefined(value)) return [value];
-        throw new ArgumentException("Choose one named compression control or All for the four fixed cases.");
+        throw new ArgumentException("Choose one named compression control or All for the five named controls.");
     }
 
     private JpegBenchmarkCase state = null!;
@@ -56,9 +57,9 @@ public class WarmCompression
             var name = InputName == "Photograph8" ? "photograph" : "diagram";
             var expected = Lossless
                 ? OriginalVp8lControls.Cases().Single(v => (string)v[0] == name && (int)v[1] == 4)
-                : OriginalVp8Controls.Cases().Single(v => (string)v[0] == name && (int)v[1] == 8 && (int)v[2] == 4 && (int)v[3] == 75);
+                : OriginalVp8Controls.Cases().Single(v => (string)v[0] == name && (int)v[1] == 8 && (int)v[2] == Effort && (int)v[3] == 75);
             packetBytes = (int)expected[Lossless ? 2 : 4]; packetSha256 = (string)expected[Lossless ? 3 : 5];
-            options = new() { Lossless = Lossless, Quality = Lossless ? 85 : 75, Effort = 4 };
+            options = new() { Lossless = Lossless, Quality = Lossless ? 85 : 75, Effort = Effort };
             using var fixtures = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "benchmarks/Fixtures/Compression/manifest.json")));
             var input = fixtures.RootElement.GetProperty("inputs").EnumerateArray().Single(v => v.GetProperty("name").GetString() == InputName);
             var fixture = Path.Combine(state.Root, "benchmarks/Fixtures/Compression", input.GetProperty("file").GetString()!);
@@ -70,7 +71,7 @@ public class WarmCompression
             File.WriteAllBytes(state.Input, pixels);
             using var manifest = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/benchmark-source.json")));
             sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = manifest.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = manifest.RootElement.GetProperty("sourceRevision").GetString() });
-            native = new NativeWarmReference(state, 8, cpu, Lossless ? "webp-lossless-encode" : "webp-opaque-encode", nativeQuality: 75);
+            native = new NativeWarmReference(state, 8, cpu, Lossless ? "webp-lossless-encode" : "webp-opaque-encode", nativeQuality: 75, vp8Trellis: Effort == 6);
             Validate(); before = native.Measure(smoke, sampleCount: count); ready = true;
         }
         catch { native?.Dispose(); source?.Dispose(); state.Dispose(); throw; }
@@ -137,7 +138,7 @@ public class WarmCompression
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), sourceIdentity,
                 width = 513, height = 259, depth = 8, encodedDepth = 8, cpu, managedAffinityCount = 1, processorCount = Environment.ProcessorCount,
                 serverGc = GCSettings.IsServerGC, gcConfiguration = GC.GetConfigurationVariables(), runtime = RuntimeInformation.FrameworkDescription, platform = RuntimeInformation.RuntimeIdentifier,
-                lossless = Lossless, effort = 4, managedQuality = options.Quality, nativeQuality = 75,
+                lossless = Lossless, effort = Effort, managedQuality = options.Quality, nativeQuality = 75,
                 baselineBackend = Lossless ? "libwebp exact=1 (FFmpeg encoder backend)" : "FFmpeg libwebp",
                 inputSha256 = JpegBenchmarkCase.Hash(pixels), rasterSha256 = JpegBenchmarkCase.Hash(pixels),
                 managedOutputBytes = packet.Length, managedOutputSha256 = JpegBenchmarkCase.Hash(packet),
@@ -147,7 +148,7 @@ public class WarmCompression
                 decoderAgreementWithinBounds = true, bitstreamSyntaxVerified = true, sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmCompression).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort4, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion."
+                boundary = $"One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort{Effort}, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
         }
         finally { native?.Dispose(); source?.Dispose(); state?.Dispose(); ready = false; }

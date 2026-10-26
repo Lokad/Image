@@ -26,10 +26,11 @@ effort6. Its [frozen complete packet](../tools/Shared/OriginalVp8Controls.cs) is
 [Method6 search](../src/Lokad.Image/Internal/Vp8MacroblockDecision.cs) runs
 coefficient-domain dynamic-programming trellis for every luma candidate; the
 current method4 warm controls never execute this required algorithm. Functional
-packet/ownership proof already exists; warm elapsed/allocation evidence is missing.
-Prepare one equivalent complete FFmpeg/libwebp method6 operation and measure before
-assuming optimization is needed. Keep source, depth and quality frozen: no grid or
-new image. Other effort/settings receive no broader performance claim from it.
+packet/ownership proof already exists. Its [current complete-operation short](WARM-VP8-TRELLIS-BASELINE.md)
+measures 2.813× / upper2.948, 854,968 B/op, with exact packets and reconstructed
+pixels. This is now the largest demonstrated gap. Source, depth and quality stay
+frozen: no grid or new image. Other effort/settings receive no broader performance
+claim from it.
 
 ## Current qualification and demonstrated gaps
 
@@ -42,9 +43,11 @@ explicit admission/ownership remain acceptance gates. Published 0.1.0 is unchang
 The [current three-table summary](../docs/benchmark.md) selects valid costs,
 allocations, reference boundaries and confirmation status. Current evidence:
 
+- [Effort6 trellis](WARM-VP8-TRELLIS-BASELINE.md): diagram short 2.813×, exact
+  6,818 B and 854,968 B/op. The selected production core and earlier proof are reused.
 - [Shared VP8 rows](WARM-VP8-SHARED-SMALL-ROWS.md): photograph independent
   2.524× / upper 2.538; diagram/asymmetric-alpha shorts 2.462× / 1.563×.
-  Older affected VP8 costs are historical. These largest demonstrated gaps lead.
+  Older affected VP8 costs are historical; these remain current effort4 anchors.
 - [VP8L empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md): diagram
   independent 1.362×; photograph/asymmetric VP8L shorts 1.605× / 1.566×.
 - [JPEG paired entropy](WARM-JPEG-PAIRED-ENTROPY.md): caller RGB420 independent
@@ -96,10 +99,12 @@ gain; its implementation and private table format are removed, actual qualified
 binaries/sources restored exactly. Two extreme-probability admission tests remain,
 passing normally/scalar on both OS. Existing full/package proof is reused.
 
-Resolve the one newly identified trellis algorithm path first. Then order current
-demonstrated gaps by material cost. Stop combined-price, row-prediction, uniform,
-cache, forward and publication variants. No profile, grid, unrelated audit,
-production rebuild or package repeat for unchanged/rejected work. Screen complete
+The trellis measurement resolves that uncertainty. Next try one bounded reuse of
+the existing four-prediction forward transform for uncancelable trellis candidates.
+Keep trellis/score traversal ordered and uniform-score reuse disabled for trellis;
+no new kernel, cache or workspace. Preserve scalar/live-token behavior. Stop old
+combined-price, row-prediction, uniform/cache and publication variants. No profile,
+grid, unrelated audit, production rebuild or package repeat for unchanged/rejected work. Screen complete
 operations, independently confirm promising changes, and batch affected
 cross-platform/scalar/actual-package qualification only for accepted production.
 

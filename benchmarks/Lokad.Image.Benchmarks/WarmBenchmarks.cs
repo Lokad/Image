@@ -178,7 +178,7 @@ internal static class WarmBenchmarks
                         evidenceFile = Path.GetFileName(receipt.Path), evidenceSha256 = JpegBenchmarkCase.HashFile(receipt.Path),
                         managedStatistics = report.ResultStatistics, nativeBeforeNanoseconds = before, nativeAfterNanoseconds = after,
                         ratio = validationOnly ? (double?)null : ratio,
-                        status = validationOnly ? "execution/output check only" : ratio > 2 ? ">2x-screened" : "<=2x-screened; independent repeat needed"
+                        status = validationOnly ? "execution/output check only" : ratio > 1 ? ">1x-screened" : "<=1x-screened; independent repeat needed"
                     });
                     if (!validationOnly) Console.WriteLine($"Warm {family}/{caseId}: managed {managed / 1000:F2} us; native before/after {nativeBefore / 1000:F2}/{nativeAfter / 1000:F2} us; worst bracket ratio {ratio:F2}x (screening).");
                 }
@@ -210,6 +210,14 @@ internal static class WarmBenchmarks
     private sealed class ProjectGenerator(string root) : CsProjGenerator("net10.0", null!, null!, null!)
     {
         protected override FileInfo GetProjectFilePath(Type benchmarkTarget, ILogger logger)
-            => new(Path.Combine(root, "benchmarks", "Lokad.Image.Benchmarks", "Lokad.Image.Benchmarks.csproj"));
+        {
+            var supplied = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_PROJECT");
+            var path = string.IsNullOrWhiteSpace(supplied)
+                ? Path.Combine(root, "benchmarks", "Lokad.Image.Benchmarks", "Lokad.Image.Benchmarks.csproj")
+                : Path.GetFullPath(supplied, root);
+            if (!File.Exists(path) || !path.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase))
+                throw new ArgumentException("Warm preparation requires an existing benchmark project.");
+            return new(path);
+        }
     }
 }

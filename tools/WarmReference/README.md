@@ -49,6 +49,11 @@ explicitly build the production project when it changes. Build/prepare outside
 scored intervals. Capture owned sources with `capture-source.ps1` and retain actual
 DLLs, runtime configuration, generated dispatch, native identity and raw receipts.
 
+For an isolated binary-reference harness, set `LOKAD_IMAGE_WARM_PROJECT` to its
+existing `.csproj` and launch that harness's DLL for preparation. This overrides
+the default repository project and avoids rebuilding production dependencies.
+Reuse its completed child and verify actual selected assembly hashes afterward.
+
 A new fixed selection can be prepared with the existing script, for example:
 
 ```powershell
@@ -103,6 +108,11 @@ linked case report to preserve exact input, packing and ownership boundaries.
   caller-sample, restart, retained-result, stream and async workers preserve their
   named delivery/ownership boundaries. Consult each report rather than substituting
   a convenient CLI graph or reusing historical output correction blindly.
+- `DiagramLossyTrellis8` reuses the existing diagram at Q75/effort6. Build with
+  `build-webp-trellis-linux.sh`; it derives our owned opaque adapter with three
+  checked effort substitutions. Original effort4 source/worker/identity stay
+  unchanged; the generated source and worker stay ignored. Require the frozen
+  complete 6,818-byte packet, exact reconstructed pixels and independent outputs.
 - Single-component grayscale JPEG encoding explicitly uses SIMD-enabled standalone
   libjpeg-turbo 3.1.4.1 (`build-libjpeg-gray-linux.sh`), the approved tooling-only
   exception. Include flattening, BT.601 normalization, encoding and fresh packet
