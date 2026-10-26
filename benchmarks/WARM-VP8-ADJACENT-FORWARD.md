@@ -41,8 +41,16 @@ fully qualified. No new images/settings or benchmark/native/selector rebuild.
 Older affected VP8costs are historical; VP8L/JPEG/PNG, decoders/editing/text and valid
 unrelated evidence remain unchanged. [Evidence](warm-vp8-adjacent-forward-evidence.json)
 records samples, allocations, geometry proof, qualified core/package identities
-and the mirrored member-verified raw archive. Stop this primitive round; one
-current photograph profile is the next bounded lead, without a timing claim.
+and the mirrored member-verified raw archive. Stop this primitive round.
 The first short-target collection failed when the process exited before EventPipe
 Stop. Its raw trace/logs are retained; no phase attribution or timing is accepted.
 Production qualification and measured costs above remain valid.
+
+A follow-up reused the prepared longer selector and same qualified core: 706
+workload samples, including 101 exclusive SmallBlock samples and 343 inclusive
+Luma4 samples. Counts overlap and inlining limits attribution; instrumented timings
+are discarded. Source inspection identifies encoder per-pixel geometric dispatch
+where the decoder already has verified whole-row formulas. Sharing those formulas
+is the next bounded primitive, preserving enum mapping, snapshot/overlap behavior,
+rounding, clamping, errors and tails. No memoization or new workload/settings grid.
+The evidence retains both profile attempts and their mirrored raw archives.

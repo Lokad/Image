@@ -76,14 +76,17 @@ comparisons remain reusable. Regression/package proof is not CPU parity proof.
 
 ## Next execution and retained history
 
-Stop completed primitive variants. One bounded current photograph profile can
-identify the next substantial VP8 primitive using the immutable qualified core.
-The first short-target collection failed when the process exited before EventPipe
-Stop: its retained trace provides no accepted attribution or timing conclusion.
-Use the prepared longer selector if needed; discard instrumented timings. Then
-screen one equivalent complete operation, independently confirm promising changes,
-and batch affected cross-platform/scalar/actual-package qualification when accepted.
-No unrelated audit, rebuild or package proof for unchanged/rejected trials.
+Stop completed primitive variants. The latest bounded photograph profile reuses
+the qualified core and prepared longer selector: 706 samples, 101 exclusive in
+SmallBlock. Source inspection identifies per-pixel encoder dispatch where the
+decoder already has exact whole-row formulas. Sharing those formulas is the next
+bounded primitive, preserving mapping/aliasing/rounding/errors. This reopens no
+uniform/cache variant. Instrumented timings are discarded; the failed first
+short-target attempt is retained without an attribution claim. Screen one equivalent
+complete operation, independently confirm promising changes, and batch affected
+cross-platform/scalar/actual-package qualification when accepted. Reconcile decoder
+caller costs if shared code changes them. No unrelated audit, rebuild or package
+proof for unchanged/rejected trials.
 
 Useful rejected screens and earlier accepted rounds remain linked in the
 [prior coverage checkpoint](https://github.com/lokad/image/blob/0bd4a507cd87dcf85bfec4f9ac0a38c49174b86b/benchmarks/WARM-COVERAGE.md)
