@@ -25,9 +25,6 @@ internal static class Vp8TrellisQuantization
     { 0 => 0, 1 => 1, 2 => 2, 3 => 3, 5 => 4, 6 => 5, 15 => 7, _ => 6 };
 
     private static int Index(int type, int position, int context) => (type * 8 + Band(position)) * 3 + context;
-    private static int LevelCost(Vp8RatePlan rate, int index, int level)
-        => rate.FixedLevels[level] + rate.VariableLevels[index * 68 + Math.Min(level, 67)];
-
     // Raster coefficients become dequantized raster coefficients; levels use
     // zigzag order. I16 AC preserves both DC slots. The transform domain here
     // is DCT only (not the larger Y2 Walsh domain). Tails remain untouched.
@@ -44,6 +41,8 @@ internal static class Vp8TrellisQuantization
         var sum = 0; foreach (var weight in weights[..16]) sum += weight;
         if (sum != 256) throw new ArgumentException("Trellis importance must sum to256.");
         _ = rate.Values; operation.Cancellation.ThrowIfCancellationRequested();
+        var fixedLevels = rate.FixedLevels; var variableLevels = rate.VariableLevels; var endOfBlock = rate.EndOfBlock;
+        var steps = matrix.Steps; var reciprocals = matrix.Reciprocals; var sharpening = matrix.Sharpening;
         Span<byte> scan = stackalloc byte[16]; var at = 0;
         for (var diagonal = 0; diagonal <= 6; diagonal++)
         {
@@ -56,51 +55,56 @@ internal static class Vp8TrellisQuantization
         }
         Span<short> original = stackalloc short[16]; coefficients[..16].CopyTo(original);
         Span<short> nodes = stackalloc short[32]; Span<byte> predecessors = stackalloc byte[32];
-        Span<long> scores = stackalloc long[4]; Span<byte> contexts = stackalloc byte[4];
         var first = type == 0 ? 1 : 0; var last = first - 1;
-        var threshold = matrix.Steps[1] * matrix.Steps[1] / 4;
+        var threshold = steps[1] * steps[1] / 4;
         for (var n = 15; n >= first; n--) if (original[scan[n]] * original[scan[n]] > threshold) { last = n; break; }
         if (last < 15) last++;
         var start = Index(type, first, initialContext);
-        var best = (long)lambda * rate.EndOfBlock[start * 2]; var bestEnd = -1; var bestNode = 0;
-        var previous = 0; var current = 2;
-        scores[0] = scores[1] = initialContext == 0 ? (long)lambda * rate.EndOfBlock[start * 2 + 1] : 0;
-        contexts[0] = contexts[1] = (byte)initialContext;
+        var best = (long)lambda * endOfBlock[start * 2]; var bestEnd = -1; var bestNode = 0;
+        var score0 = initialContext == 0 ? (long)lambda * endOfBlock[start * 2 + 1] : 0; var score1 = score0;
+        var context0 = initialContext; var context1 = initialContext;
         const long dead = 0x7fffffffffffffL;
         for (var n = first; n <= last; n++)
         {
-            var p = scan[n]; var magnitude = Math.Abs((int)original[p]) + matrix.Sharpening[p];
-            var floor = Math.Min(2047, magnitude * matrix.Reciprocals[p] >> 17);
-            var ceiling = Math.Min(2047, (magnitude * matrix.Reciprocals[p] + (128 << 9)) >> 17);
+            var p = scan[n]; var magnitude = Math.Abs((int)original[p]) + sharpening[p];
+            var floor = Math.Min(2047, magnitude * reciprocals[p] >> 17);
+            var ceiling = Math.Min(2047, (magnitude * reciprocals[p] + (128 << 9)) >> 17);
+            // Both candidate levels use the same two predecessor rows. Borrow
+            // each row offset once; keep the strict alternate/tie comparison.
+            var band = (type * 8 + Band(n)) * 3;
+            var row0 = (band + context0) * 68; var row1 = (band + context1) * 68;
+            var nextScore0 = dead; var nextScore1 = dead;
             for (var choice = 0; choice < 2; choice++)
             {
-                var level = floor + choice; var state = current + choice;
-                contexts[state] = (byte)Math.Min(level, 2);
-                if (level > ceiling) { scores[state] = dead; continue; }
-                var error = magnitude - level * matrix.Steps[p];
+                var level = floor + choice;
+                if (level > ceiling) continue;
+                var error = magnitude - level * steps[p];
                 var delta = (long)weights[p] * (error * error - magnitude * magnitude) * 256;
                 var winner = 0;
-                var score = scores[previous] + (long)lambda * LevelCost(rate, Index(type, n, contexts[previous]), level);
-                var alternate = scores[previous + 1] + (long)lambda * LevelCost(rate, Index(type, n, contexts[previous + 1]), level);
+                var fixedCost = fixedLevels[level]; var variable = Math.Min(level, 67);
+                var score = score0 + (long)lambda * (fixedCost + variableLevels[row0 + variable]);
+                var alternate = score1 + (long)lambda * (fixedCost + variableLevels[row1 + variable]);
                 if (alternate < score) { score = alternate; winner = 1; }
-                score += delta; scores[state] = score;
+                score += delta;
+                if (choice == 0) nextScore0 = score; else nextScore1 = score;
                 nodes[n * 2 + choice] = (short)(original[p] < 0 ? -level : level);
                 predecessors[n * 2 + choice] = (byte)winner;
                 if (level != 0 && score < best)
                 {
-                    var end = n == 15 ? 0 : rate.EndOfBlock[Index(type, n + 1, contexts[state]) * 2];
+                    var end = n == 15 ? 0 : endOfBlock[Index(type, n + 1, Math.Min(level, 2)) * 2];
                     var terminal = score + (long)lambda * end;
                     if (terminal < best) { best = terminal; bestEnd = n; bestNode = choice; }
                 }
             }
-            (previous, current) = (current, previous);
+            score0 = nextScore0; score1 = nextScore1;
+            context0 = Math.Min(floor, 2); context1 = Math.Min(floor + 1, 2);
         }
         coefficients.Slice(first, 16 - first).Clear(); levels.Slice(first, 16 - first).Clear();
         if (bestEnd < 0) return false;
         for (var n = bestEnd; n >= first; n--)
         {
             var level = nodes[n * 2 + bestNode]; var p = scan[n]; levels[n] = level;
-            coefficients[p] = checked((short)(level * matrix.Steps[p])); bestNode = predecessors[n * 2 + bestNode];
+            coefficients[p] = checked((short)(level * steps[p])); bestNode = predecessors[n * 2 + bestNode];
         }
         return true;
     }

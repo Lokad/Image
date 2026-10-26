@@ -80,7 +80,7 @@ def render():
         row('VP8 RGBA8', 'warm-vp8-trellis-forward-batch-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8-TRELLIS-FORWARD-BATCH.md', verification='Current gap (short; qualified)', current=True),
         row('VP8 opaque photograph', 'warm-vp8-trellis-forward-batch-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-TRELLIS-FORWARD-BATCH.md', verification='Current gap (short; qualified)', current=True),
         row('VP8 opaque text/diagram', 'warm-vp8-trellis-forward-batch-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-TRELLIS-FORWARD-BATCH.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 diagram, effort6 / trellis', 'warm-vp8-trellis-forward-batch-evidence.json', ['cases', 'DiagramLossyTrellis8', -1], 'WARM-VP8-TRELLIS-FORWARD-BATCH.md', confirmed=True, current=True),
+        row('VP8 diagram, effort6 / trellis', 'warm-vp8-trellis-state-pair-evidence.json', ['cases', 'DiagramLossyTrellis8', -1], 'WARM-VP8-TRELLIS-STATE-PAIR.md', confirmed=True, current=True),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L photograph / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L text/diagram / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', confirmed=True, current=True),
@@ -93,17 +93,17 @@ def render():
     ]
     return """# Benchmark state
 
-Updated2026-10-26. Development0.2.0 remains under qualification; warm single-CPU
+Updated 2026-10-27. Development0.2.0 remains under qualification; warm single-CPU
 parity and replacement readiness are open. Compression correctness precedes CPU
 gains. Published0.1.0 remains unchanged.
 
 Pre-cleanup costs describe their frozen producers, **not the cleaned build**.
 Current independent confirmations and short screens are labeled below; other
-required paths remain open. Trellis forward batching independently measures 2.700× reference time on the
-existing effort-6 diagram, with exact packets and unchanged allocations. Its
-26.41 ms is 4.12% below the preceding quiet short, without a paired independent
-baseline gain claim. Affected effort-4 photograph, diagram and alpha costs have
-current short measurements below. Other required confirmations remain open.
+required paths remain open. Trellis scoring now independently measures 2.380× reference time on the existing
+effort-6 diagram, with exact packets and unchanged allocations. Its 23.35 ms is
+11.6% below the preceding independent mean; no paired baseline gain is claimed.
+Effort-4 photograph, diagram and alpha paths are unchanged and retain their current
+short measurements. Other required confirmations remain open.
 
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
@@ -111,8 +111,8 @@ defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-TRELLIS-FORWARD-BATCH.md) | 4,937 checks/OS; 616 affected scalar WebP/OS and same actual package passed |
-| CPU and allocation measurements after cleanup | [trellis batching](../benchmarks/WARM-VP8-TRELLIS-FORWARD-BATCH.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; other required paths and full parity open |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-TRELLIS-STATE-PAIR.md) | 4,937 checks/OS; 616 affected scalar WebP/OS and same actual package passed |
+| CPU and allocation measurements after cleanup | [trellis states](../benchmarks/WARM-VP8-TRELLIS-STATE-PAIR.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; other required paths and full parity open |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
 Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct

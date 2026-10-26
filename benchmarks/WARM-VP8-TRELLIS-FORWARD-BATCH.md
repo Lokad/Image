@@ -1,5 +1,8 @@
 # Existing forward batching during VP8 trellis
 
+[Trellis state simplification](WARM-VP8-TRELLIS-STATE-PAIR.md) supersedes the
+effort-6 cost below. Effort-4 costs remain valid because that routine is unchanged.
+
 The effort-6 diagram independently measures 26.41 ms: 2.700× reference time
 (upper 2.721×), 854,968 B/op and an exact 6,818-byte packet. Elapsed time is 4.12%
 lower than the preceding quiet short; this is not a paired independent-baseline
