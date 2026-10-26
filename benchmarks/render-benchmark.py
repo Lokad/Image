@@ -19,7 +19,7 @@ def select(value, path):
     return value
 
 
-def row(label, name, path, report, confirmed=False, verification=None):
+def row(label, name, path, report, confirmed=False, verification=None, current=False):
     evidence = read(name)
     observation = select(evidence, path)
     if 'quietnessBefore' not in observation and 'quietness' not in observation and len(path) >= 2 and path[-2] == 'cases':
@@ -56,6 +56,9 @@ def row(label, name, path, report, confirmed=False, verification=None):
         allocated = math.ceil(int(match[1]) / int(match[2]))
     assert allocated >= 0
     status = 'Historical independent; remeasure' if confirmed else 'Historical short; remeasure'
+    if current:
+        assert verification
+        status = verification
     return f'| [{label}](../benchmarks/{report}) | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | {ratio:.3f} / {upper:.3f} | {allocated:,} | {status} |'
 
 
@@ -69,8 +72,8 @@ def render():
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8-decoder-reconstruction-evidence.json', ['observations', -1], 'WARM-VP8-DECODER-RECONSTRUCTION.md', confirmed=True),
         row('JPEG 4:4:4, forward-only / exact reference', 'warm-jpeg444-entropy-replay-evidence.json', ['observations', -1], 'WARM-JPEG444-ENTROPY-REPLAY.md', confirmed=True),
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-vector-records-evidence.json', ['observations', -1], 'WARM-JPEG-VECTOR-RECORDS.md', confirmed=True),
-        row('VP8 RGBA8', 'warm-vp8-four-candidate-evidence.json', ['observations', -1], 'WARM-VP8-FOUR-CANDIDATE.md', confirmed=True),
-        row('VP8L RGBA8 / libwebp exact=1', 'warm-webp-all-width-histograms-evidence.json', ['cases', 'vp8l', -1], 'WARM-WEBP-ALL-WIDTH-HISTOGRAMS.md', verification='Gap (short; qualified)'),
+        row('VP8 RGBA8', 'warm-post-cleanup-webp-evidence.json', ['cases', 'vp8', -1], 'WARM-POST-CLEANUP-WEBP.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8L RGBA8 / libwebp exact=1', 'warm-post-cleanup-webp-evidence.json', ['cases', 'vp8l', -1], 'WARM-POST-CLEANUP-WEBP.md', verification='Current gap (short; qualified)', current=True),
         row('PNG RGBA8, SmallestSize9 / native9', 'warm-current-png-smallest8-evidence.json', ['observations', -1], 'WARM-CURRENT-PNG-SMALLEST8.md', verification='Gap (short; qualified)'),
         row('Bilinear resize RGBA16', 'warm-bilinear-word-cache-evidence.json', ['observations', -1], 'WARM-BILINEAR-WORD-CACHE.md', verification='Gap (short; qualified)'),
         row('Bicubic resize RGBA8', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Down8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
@@ -84,8 +87,8 @@ Updated2026-10-26. Development0.2.0 remains under qualification; warm single-CPU
 parity and replacement readiness are open. Compression correctness precedes CPU
 gains. Published0.1.0 remains unchanged.
 
-The cleanup removes fuel, ceiling reservations and unpublished wrappers. Existing
-timings therefore describe their frozen producers, **not the cleaned build**.
+The cleanup removes fuel, ceiling reservations and unpublished wrappers. Earlier timings describe their frozen producers, **not the cleaned build**.
+Two current WebP screens reuse the qualified cleaned library; parity remains open.
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
 defines the remaining finite scope and evidence invalidation.
@@ -93,10 +96,10 @@ defines the remaining finite scope and evidence invalidation.
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
 | Packet/pixel/memory/cancellation regression | [Cleanup qualification](cleanup-qualification.md) | See current Windows/Linux/scalar/package results |
-| CPU and allocation measurements after cleanup | Existing inputs/reference settings retained | Pending; no new timing claim |
+| CPU and allocation measurements after cleanup | VP8/VP8L current shorts; other required paths pending | No independent parity or speedup claim |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
-Selected **pre-cleanup** cost anchors follow. B/op is managed allocation, distinct
+Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct
 from peak cooperative admission and native allocation. Ratios use the faster native
 bracket; upper is the recorded conservative confidence bound. Historical shorts
 are leads for measurement, not current demonstrated gaps.

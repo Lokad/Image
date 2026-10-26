@@ -6,6 +6,14 @@ dimensions/depth/filter/quality choices and approved references. No shape/settin
 grid is added. Only a demonstrated distinct omitted required path permits a later
 case. Full replacement readiness and independent warm upper≤1× remain open.
 
+[Current WebP screens](WARM-POST-CLEANUP-WEBP.md) resolve two producer uncertainties
+on the qualified cleanup core: VP8 1.774×/upper1.911,24,424,944B/op;
+VP8L 1.842×/upper2.624,48,232,248B/op. Both complete packets and quiet guards pass;
+neither is independently confirmed or a speedup claim. Both remain parity gaps.
+Their unchanged production/test/package qualification is reused. VP8L's larger
+absolute excess cost/allocation justifies bounded diagnostics next; other existing
+anchor uncertainties remain. No cases or rasters added.
+
 Retire four named controls: PNG RGBA8 resident/ImageBudget, JPEG RGBA8 420/ImageBudget,
 VP8 alpha/caller work budget32M, and optional JPEG callerRGB420/CompactColor.
 The remaining scope is 253 cases (236 historical numeric,17 unmeasured).
