@@ -4,30 +4,13 @@ Updated2026-10-26. Development0.2.0 remains under qualification; warm single-CPU
 parity and replacement readiness are open. Compression correctness precedes CPU
 gains. Published0.1.0 remains unchanged.
 
-The cleanup removes fuel, ceiling reservations and unpublished wrappers.
-Pre-cleanup timings describe their frozen producers, **not the cleaned build**.
-VP8 stream decoding, caller-RGB420 JPEG, VP8 opaque photograph and VP8L text/diagram have current
-independent cost confirmations. Other VP8/VP8L encoding anchors have current
-short screens after empty spatial histogram pruning.
-Paired JPEG entropy appends use 6.7% less elapsed than the preceding quiet short,
-with unchanged allocations and exact packets. Other shared-writer JPEG encoding
-costs become historical; JPEG444 and the two grayscale boundaries now have current
-short screens, without an independent parity claim. VP8 rate pruning and matcher
-storage remain qualified;
-PNG SmallestSize retains unchanged current short evidence. Exact eight-pixel
-VP8 color/chroma batching reduces complete decode elapsed by21.5% versus its
-preceding short, confirming a1.301× gap with unchanged1,966,583B/op; RGBA16 bilinear reduction has
-a current 1.339× short gap with exact managed words. Existing VP8L photograph and
-diagram controls now have a current 1.605× short and 1.362× independent gap, with
-29,610,520/45,404,838 B/op. Skipping empty token-start tiles uses40.0% less diagram
-elapsed than the preceding quiet short; packets remain byte exact. Older affected
-encoding timings are historical. Parity remains open.
-The two existing opaque VP8 photograph/diagram controls have current2.879×/2.733×
-gaps with909,696/841,608 B/op and exact17,688/7,100-byte packets. These larger gaps
-now take priority over smaller gains. Adjacent forward-block batching confirms
-8.6% less photograph elapsed than its preceding quiet short, with unchanged
-allocation and exact bytes. Packed quantization and uniform prediction reuse remain
-qualified; no new input/settings matrix.
+Pre-cleanup costs describe their frozen producers, **not the cleaned build**.
+Current independent confirmations and short screens are labeled below; other
+required paths remain open. The largest current gaps are opaque VP8 photograph /
+text-diagram at 2.879× / 2.733×. Adjacent forward batching reduces photograph elapsed
+by 8.6% versus the preceding quiet short, with exact packets and unchanged
+allocations; this is not a paired independent-baseline gain claim.
+
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
 defines the remaining finite scope and evidence invalidation.

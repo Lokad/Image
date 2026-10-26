@@ -1,5 +1,9 @@
 # 0.2.0 cleanup qualification
 
+This records the cleanup milestone. [Current qualification](benchmark.md) selects
+later accepted production builds; the logs and package identities below remain
+evidence for their recorded producers.
+
 This cleanup deliberately breaks unpublished APIs. Published 0.1.0 artifacts stay
 unchanged. `MaxWork`, cumulative quotas/counters/reservations, `ImageLimitKind.Work`,
 `ImageBudget`, `BudgetedImage` and their wrappers are removed. Direct cancellation
@@ -66,3 +70,9 @@ the resulting cores/package and supersedes the initial binary identities above.
 Timing and allocation confirmations from changed callers remain historical; this
 cleanup makes no CPU-speed claim. Full warm parity and replacement readiness remain
 open, with the finite required paths in [coverage](../benchmarks/WARM-COVERAGE.md).
+
+The maintenance follow-up compacts current coverage and reference-tool instructions,
+removing stale work-limit, matched-dB and IDAT-only acceptance claims. Historical
+recipes remain linked at their Git checkpoint; adapters, verifiers and cited raw
+evidence remain available. This documentation pass changes no production inputs,
+so valid cross-platform, scalar and actual-package qualification is reused.

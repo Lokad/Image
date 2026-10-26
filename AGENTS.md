@@ -52,6 +52,9 @@ VM use is exclusive; do not wait for historical load average to decay after our 
 Maintain `docs/benchmark.md` after every accepted performance round. Keep at most
 three tables, include allocations and verification status, and check the generated
 summary with `python benchmarks/render-benchmark.py --check`.
+Keep current summaries focused on valid evidence, remaining gaps and next actions.
+Link superseded experiments instead of repeating their history; retain their raw
+evidence and reproducibility. Reuse qualification for unchanged production paths.
 
 Keep artifacts manageable without an arbitrary checkout-size cap. Routine builds
 and package verification must not be blocked by negligible workspace growth;

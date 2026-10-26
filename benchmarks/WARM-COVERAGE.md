@@ -1,175 +1,97 @@
 # Material warm coverage
 
-Updated2026-10-26. The pre-cleanup [fixed inventory](../docs/benchmark-pre-cleanup.md)
-contains257named controls (240numeric,17unmeasured). Keep its frozen images,
-dimensions/depth/filter/quality choices and approved references. No shape/settings
-grid is added. Only a demonstrated distinct omitted required path permits a later
-case. Full replacement readiness and independent warm upper≤1× remain open.
+Updated 2026-10-26. Full replacement readiness and independent warm upper ≤1×
+remain open. Compression correctness takes priority over CPU gains.
 
-[Adjacent VP8 forward blocks](WARM-VP8-ADJACENT-FORWARD.md) is the latest qualified
-production change. Photograph independently confirms2.879×/upper2.900,909,696 B/op,
-exact17,688 B and8.6% less elapsed than the preceding quiet short. Diagram and
-asymmetric VP8+alpha shorts are2.733/1.626×,841,608/23,358,400 B/op,exact7,100/98,590 B.
-Both OS pass4,932Release/611scalarWebP and the same actual package/allthreeexamples.
-Scalar coefficients, native decisions, source/pair order, overlapping inputs,
-holes/tails, invalid geometry and zero allocation pass. Stop batching variants;
-one bounded current photograph profile is the next lead. No new workload grid.
+The finite checklist is the [fixed inventory](../docs/benchmark-pre-cleanup.md):
+257 named controls, minus these four retired boundaries, leaving 253 required
+cases (236 previously numeric, 17 unmeasured):
 
-[Packed VP8 quantization](WARM-VP8-VECTOR-QUANTIZATION.md) remains an accepted
-primitive. Its photograph confirmation was3.119×/upper3.133,909,696 B/op,
-exact17,688 B and12.2% less elapsed than the preceding quiet short. Diagram and
-asymmetric VP8+alpha current shorts are3.046/1.645×,841,608/23,358,400 B/op and
-exact7,100/98,590 B. That milestone passed4,930Release/609scalarWebP perOS and the
-same actual package/allthreeexamples. Signed-word endpoints, checked prefix/overflow,
-native hashes and zero allocation remain qualified. Adjacent-block batching above
-supersedes its affected VP8costs. No further publication variants or new workload grid.
+- PNG RGBA8 resident / ImageBudget quota.
+- JPEG RGBA8 4:2:0 / ImageBudget quota.
+- VP8 alpha / caller work budget 32M.
+- Optional JPEG caller RGB420 / CompactColor.
 
-[Uniform VP8 predictions](WARM-VP8-UNIFORM-PREDICTIONS.md) remains an accepted
-primitive; its earlier diagram confirmation was3.544×/
-upper3.557,841,608 B/op and exact7,100 B:6.4% less elapsed than its preceding quiet
-short. Its photograph/asymmetric VP8+alpha screens were3.556/1.727× and
-909,696/23,358,400 B/op,exact17,688/98,590 B. That milestone passed4,926Release/605scalar
-WebP perOS and the same actual package/allthreeexamples. The general reuse prototype
-is removed after a4.7% short gain; no further prediction variants are planned.
-Older affected VP8encoding cost proofs are historical. VP8L/JPEG/PNG, all decoders,
-editing and text retain their valid evidence. Its next quantization code lead led
-to the packed publication above; no further uniform-prediction variants are planned.
+Their removed APIs/quotas/experimental encoder are not required operations.
+Caller-root retained-result and async controls cover actual IMemoryBudget
+admission. Keep existing images, dimensions, depths, filters, quality settings and
+approved references; add a case only for a demonstrated distinct omitted required
+algorithm or public boundary. No replacement quota benchmark or settings grid.
 
-[Empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md) remains valid for unchanged
-VP8L paths. The existing diagram lossless WebP control independently
-confirms 1.362×/upper1.408,45,404,838 B/op and exact7,234 B:40.0% less elapsed than
-the preceding quiet short, without a paired independent-baseline gain claim.
-Photograph, asymmetric VP8L and VP8+alpha are reconciled with current shorts
-1.605/1.566/1.732×,29,610,520/47,674,928/23,358,400 B/op. Both OS pass4,924Release,
-603affectedscalarWebP and the same actual package/allthreeexamples. The shared
-clustering change invalidates older VP8L/compressed-alpha encoding cost proofs;
-other required affected boundaries remain uncertain. All decoders, JPEG/PNG,
-editing and text retain their valid evidence. Stop this primitive round.
-The earlier [PhotographLossy8/DiagramLossy8 screens](WARM-CURRENT-OPAQUE-VP8-CONTROLS.md)
-record3.557×/3.784×,909,696/841,608 B/op,exact17,688/7,100 B; current costs are above.
-These larger gaps take priority. One diagram profile has715managed workload
-samples, with prediction/transform/quantization search as the lead; its timings
-are discarded. Counts of repeated predictions led to the accepted uniform path.
-No new image/settings grid or repeated full/package proof for the rejected prototype.
+## Current qualification and demonstrated gaps
 
-[Paired JPEG entropy append](WARM-JPEG-PAIRED-ENTROPY.md) independently confirms
-the existing caller-RGB420 case at1.543×/upper1.556,373,413B/op and exact
-52,091/52,093B except approved COM. Elapsed is6.7% lower than the preceding quiet
-short, without a paired independent-baseline gain claim. BothOS pass4,919Release
-checks,317internal/291public scalarJPEG, SAMEactual package and allthree examples.
-The shared entropy writer changes JPEG encoding, including gray/444/422/420,
-restart/caller/stream/async/root boundaries: other prior CPU/allocation evidence
-on those paths is historical until reconciled. No unmeasured speedup is claimed.
+[Adjacent VP8 forward batching](WARM-VP8-ADJACENT-FORWARD.md) is the latest
+qualified producer: 4,932 Release checks and 611 affected scalar WebP checks per
+OS, plus the same actual private 0.2.0 package and all three usage examples.
+Complete encoder packets, decoded pixels, editing precision, cancellation and
+explicit admission/ownership remain acceptance gates. Published 0.1.0 is unchanged.
 
-[VP8 rate pruning](WARM-VP8-LUMA4-RATE-BOUND.md) recorded1.735×/upper1.744,
-23,358,400B/op and exact98,590B. [VP8L matcher storage](WARM-VP8L-CHAIN-CAPACITY.md)
-recorded1.582×/upper1.607,47,674,928B/op and exact183,812B. Their earlier CPU
-confirmations are historical after the shared clustering change; current screens
-are linked above. [PNG SmallestSize8](WARM-CURRENT-ENCODER-ANCHORS.md) retains
-its current1.417× short. No other cleaned-build CPU result is inferred from
-historical ratios. Full warm1× remains open.
+The [current three-table summary](../docs/benchmark.md) selects valid costs,
+allocations, reference boundaries and confirmation status. Current evidence:
 
-Stop completed primitive rounds. The [prefix](WARM-VP8L-PREFIX-SCREEN.md) and
-[source-energy](WARM-VP8-SOURCE-ENERGY-SCREEN.md) screens offered no useful gain;
-their prototypes are removed and useful behavioral tests retained. The bounded
-[caller JPEG profile](WARM-JPEG-CALLER420-PROFILE.md) led to the accepted append.
-[Exact VP8 chroma/color batching](WARM-VP8-VECTOR-COLOR.md) independently confirms
-the existing StreamNative8 decoder at1.301×/upper1.308,1,966,583B/op, exact pixels.
-Elapsed is21.5% lower than the preceding quiet short; no paired-baseline gain claim.
-All16,777,216byte-color combinations and256render controls remain exact; signed32
-range proof preserves every scalar precision step. BothOS4,922Release/601scalar,
-SAMEactualpackage/allthreeexamples pass. Only VP8decode rendering changes; older
-affected decode costs become historical. Unrelated encoder/decoder/editing/text
-paths and current editing anchors remain valid. Stop color tuning.
-The [current VP8 emitter profile](WARM-CURRENT-VP8-EMITTER-PROFILE.md)
-led to one [group-emission screen](WARM-VP8-GROUP-EMISSION-SCREEN.md): flat,
-unchanged allocation, rejected. Actual source/binaries restored exactly; useful
-output-limit ownership coverage retained, normal/scalar bothOS. No independent/
-full/package repeat or variant sweep. Stop emitter tuning.
-JPEG444 forward-only and the two grayscale costs, invalidated by the accepted
-shared JPEGwriter change, are now [reconciled](WARM-JPEG-PAIRED-ENTROPY.md): shorts
-1.216/1.129/1.079×,820,123/155,436/155,438B/op,exact packets/quality/ownership.
-These are current screens, not independent parity confirmations. No rebuild or
-full/package repeat. Other affected named JPEG boundaries remain historical.
+- [VP8 forward batching](WARM-VP8-ADJACENT-FORWARD.md): photograph independent
+  2.879× / upper 2.900; diagram/asymmetric-alpha shorts 2.733× / 1.626×.
+  Older affected VP8 costs are historical. These largest demonstrated gaps lead.
+- [VP8L empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md): diagram
+  independent 1.362×; photograph/asymmetric VP8L shorts 1.605× / 1.566×.
+- [JPEG paired entropy](WARM-JPEG-PAIRED-ENTROPY.md): caller RGB420 independent
+  1.543×; 444, RGBA grayscale and caller GRAY8 shorts 1.216× / 1.129× / 1.079×.
+- [VP8 decoder color batching](WARM-VP8-VECTOR-COLOR.md): StreamNative8
+  independent 1.301× with exact pixels.
+- [PNG SmallestSize8](WARM-CURRENT-ENCODER-ANCHORS.md) and
+  [RGBA16 bilinear reduction](WARM-CURRENT-EDITING-ANCHORS.md): current shorts
+  1.417× / 1.339×; exact packets/managed words and approved native-only bounds.
 
+These are gaps, not broad parity claims. Shorts are not independent confirmations.
+Complete operations include normalization, equivalent input delivery, fresh output
+ownership and release. Do not revive matched-dB tuning on byte-exact controls.
 
-[Current editing anchors](WARM-CURRENT-EDITING-ANCHORS.md) reconcile the existing
-bilinear Down16 case at1.339×/upper1.426,290,124B/op,exact managedwords/approved
-native bounds. The archived selection driver, current production/benchmark/native
-workers and qualification are reused without rebuilding. Historical1.277× is no
-longer its current cost reference. This is a short gap, not an independent pass;
-its unchanged path evidence is reused after VP8decode color batching, without new rasters/settings.
+## Remaining measurements and evidence validity
 
-[Trace-token reuse](WARM-VP8L-TRACE-REUSE-SCREEN.md) reduces allocations but
-offers no demonstrated CPU benefit after two narrow independent confirmations;
-it is rejected. Source/binaries are restored exactly, reuse-only APIs/tests removed,
-and useful actual-trace ownership coverage retained normal/scalar bothOS. No new
-full/package proof or tuning sweep. Current accepted rows remain unchanged. Follow-up endpoint counts show maximum
-length108/85 and no length≥128; no batching candidate is justified on these inputs.
-The existing [VP8L photograph/diagram controls](WARM-CURRENT-COMPRESSION-CONTROLS.md)
-were reconciled before empty-tile pruning: quiet shorts1.619×/2.282×,
-29,610,520/45,404,827 B/op,
-exact 160,032/7,234-byte packets. The old 7.330×/2.291× figures describe superseded
-producers. The current harness uses frozen fixture/complete-packet identities;
-four existing lossless/lossy smoke controls pass reconstructed normal/scalar pixels
-and independent ownership. No production rebuild, native/selector rebuild, timing
-confirmation or full/package repeat in that tooling-only round. No new workload
-grid was added. The next diagram investigation identified a substantial change.
-One bounded follow-up profile is now retained in that report: clustering Build
-appears on 539/743 workload stacks, Finish on 299 and Fill on 232. Inclusive counts
-overlap and inlining limits phase attribution; profiled timings are discarded.
-Those dense empty-tile scans led to the accepted pruning linked above. No reopened
-entropy variants or broader input/settings matrix were required.
+Resolve uncertainty before assuming optimization is needed. Every remaining named
+inventory boundary stays required, including:
 
-Retire four named controls: PNG RGBA8 resident/ImageBudget, JPEG RGBA8 420/ImageBudget,
-VP8 alpha/caller work budget32M, and optional JPEG callerRGB420/CompactColor.
-The remaining scope is 253 cases (236 historical numeric,17 unmeasured).
-The removed APIs/quotas/encoder switches are not required operations. Retain their
-raw observations as history. Current caller-root retained-result and async cases
-cover actual IMemoryBudget admission; no replacement quota benchmark is needed.
+- Resident/stream/async Identify and InspectHeaders: matching typed source fields,
+  structural validation, delivery/EOF and bounded workspace.
+- PNG/JPEG/VP8/VP8L decoding and encoder policies: current caller gray/RGB/CMYK,
+  CMYK/YCCK/411/410, restart/normalization, stream/async and caller-root boundaries.
+- Nearest/bilinear/bicubic/Lanczos3: existing reduction/enlargement, mixed/identity
+  axes, tiny-alpha/half-rounding and 8/16-bit controls; crop/clone/eight orientations.
+- Logical/OpenType text, bidi/Arabic, wrapping/alignment/fitting, prepared rendering
+  and recorded supplied faces; fill/copy/composite and retained ownership.
 
-The finite execution checklist is the existing named inventory, less those retired
-boundaries and superseded optional JPEG CompactColor encoder controls. Preserve
-all remaining required algorithms/public boundaries:
+Cleanup changed work-poll/reader, framing/entropy/MCU and nested callers; prior
+end-to-end CPU/allocation confirmations do not qualify the cleaned build. Bicubic
+helper extraction preserves token-identical math but changes code layout: exact
+pixel proofs carry forward, while old costs need measurement. Retired quota/API
+observations never become required failures or performance passes.
 
-- Resolve current producer/measurement uncertainty first: resident/stream/async
-  Identify, InspectHeaders, PNG/JPEG/VP8/VP8L decode and all current encoder policies.
-  Stream delivery/EOF, output ownership, byte identity and source metadata remain
-  part of each named boundary. Metadata baselines must include matching validation.
-- Reuse current callerRGB420, VP8, VP8L and PNGSmallest8 anchors; JPEG444's
-  current short is reconciled above, along with two grayscale boundaries. Reconcile remaining named
-  uncertainties, then order demonstrated gaps by material cost. Do not infer
-  a cleaned-build speedup or regression from historical ratios. Encoder complete packets precede
-  CPU optimization; no return to matched-dB tuning for declared exact controls.
-- Existing transform controls retain nearest/bilinear/bicubic/Lanczos3 reduction,
-  enlargement, mixed/identity axes, tiny-alpha/half-rounding and8/16-depth paths;
-  crop/clone/eight exact orientations keep independent outputs. No extra grid.
-- Existing named text/drawing cases retain logical/OpenType layout, bidi/Arabic,
-  wrapping/alignment/fitting, fill/copy/composite and prepared rendering; use their
-  recorded supplied-font/ownership boundaries rather than simple Latin inference.
-- Keep existing caller gray/RGB/CMYK JPEG, CMYK/YCCK/411/410, normalization/restart,
-  cancellation and caller-root controls. Required unmeasured cases remain open;
-  resolve them before declaring completion, without duplicating confirmed paths.
+Later invalidation is path-specific: paired entropy changes JPEG encoding;
+clustering changes VP8L/compressed-alpha encoding; prediction/quantization/forward
+batching changes VP8 encoding; decoder color batching changes VP8 decode rendering.
+Current anchors above reconcile only their named boundaries. Unchanged unrelated
+paths keep valid evidence. Frozen inputs/settings/native workers, approved baseline
+adjustments, packet/pixel oracles, rounding certificates and unaffected font
+comparisons remain reusable. Regression/package proof is not CPU parity proof.
 
-Precisely invalidated by cleanup: all MaxWork eligibility, work-poll/reader counter,
-materialized/framing, entropy/MCU and nested operation paths changed; whole-ceiling
-API observations are retired. Direct cancellation and fewer context branches also
-change the callers' emitted code. Consequently prior end-to-end CPU/allocation
-confirmations do not qualify the cleaned build. Numeric JSON/guards remain facts
-about their pinned producers. Bicubic helper extraction is token-identical math,
-but call/code layout changed: exact pixel proofs carry forward; end-to-end timing
-must be measured again. No evidence of a current gap is inferred from this change.
+## Next execution and retained history
 
-Reusable evidence: frozen inputs/settings/native workers, approved reference
-adjustments, pixel/packet oracles, mathematical rounding certificates and unaffected
-font comparisons. Current cross-platform regression/package checks qualify the
-cleanup; they do not certify CPU parity. Rebuild production/harness once for the
-next bounded measurement batch, reuse that immutable build, and reconfirm only
-affected paths after accepted changes. No unrelated audit/package proof per trial.
+Stop completed primitive variants. One bounded current photograph profile can
+identify the next substantial VP8 primitive using the immutable qualified core.
+The first short-target collection failed when the process exited before EventPipe
+Stop: its retained trace provides no accepted attribution or timing conclusion.
+Use the prepared longer selector if needed; discard instrumented timings. Then
+screen one equivalent complete operation, independently confirm promising changes,
+and batch affected cross-platform/scalar/actual-package qualification when accepted.
+No unrelated audit, rebuild or package proof for unchanged/rejected trials.
 
-Completion requires valid independent passing evidence for every remaining required
-named path, exact stated scope and quiet-VM guards. Confirmed passing cases stop.
-Keep source/build/native/fixture identities and cited raw archives. The
-[current three-table summary](../docs/benchmark.md) is synthetic; the historical
-inventory and linked reports retain individual observations. Full earlier coverage
-history remains in [39402e7](https://github.com/lokad/image/blob/39402e74e0f95c82ab209e5a950066a206c2af65/benchmarks/WARM-COVERAGE.md).
+Useful rejected screens and earlier accepted rounds remain linked in the
+[prior coverage checkpoint](https://github.com/lokad/image/blob/0bd4a507cd87dcf85bfec4f9ac0a38c49174b86b/benchmarks/WARM-COVERAGE.md)
+and individual reports. Retain cited raw archives, failures, source/native/fixture
+identities and release packages; current summaries need not repeat that chronology.
+
+Completion requires valid independent quiet-VM conservative upper ≤1× evidence for
+every remaining required named path, with exact tested scope. Stop confirmed
+passing paths. Keep functional compatibility, cooperative memory, compression,
+CPU and release readiness distinct. GIF/animation, startup and multithread
+concurrency remain outside this fixed still-image warm scope.

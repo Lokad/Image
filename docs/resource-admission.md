@@ -52,5 +52,5 @@ stream validation and pixel details and [migration](migration.md) for0.2 API rem
 Focused tests cover aggregate/nested admission, retained outputs/fonts/layouts,
 replacement overlap, refusal/cancellation cleanup, real suspended I/O users and
 successful subsequent calls after release. [Cleanup qualification](cleanup-qualification.md)
-records current Windows/Linux/package checks. [Benchmark state](benchmark.md)
-separately identifies historical timing/allocation evidence.
+records the ownership cleanup milestone. [Benchmark state](benchmark.md) selects
+current Windows/Linux/package checks and distinguishes historical cost evidence.
