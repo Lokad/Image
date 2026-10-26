@@ -40,6 +40,8 @@
   effort policies, exact normalized alpha and direct async partition delivery.
   Forward4x4 transforms use exact integer butterfly projections.
   Exact rate/header bounds skip reconstruction of losing luma candidates.
+  Uniform-boundary luma blocks share identical prediction work while preserving
+  each mode's header, flat-level surcharge and exact tie decisions.
   Removed superseded encoder experiments; full CPU parity remains open.
 - Caller-owned cooperative memory admission across nested work and retained
   images, fonts, layouts and caches, with structured limit/unsupported failures.

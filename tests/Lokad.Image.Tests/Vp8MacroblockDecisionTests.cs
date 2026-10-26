@@ -8,6 +8,30 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8MacroblockDecisionTests
 {
+    [Theory]
+    [InlineData("diagram", 7100, "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050")]
+    [InlineData("photograph", 17688, "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b")]
+    public void LiveCancellationTraversalKeepsFrozenPacketsAndBorrowedInputOwnership(string name, int size, string expected)
+    {
+        using var root = new TestMemoryBudget(128_000_000);
+        using var image = OriginalVp8lControls.Buffer(name, 8, root);
+        var pixels = OriginalPixels.Bytes(image); var retained = root.Bytes;
+        using var cancellation = new CancellationTokenSource();
+        using var first = new MemoryStream(); using var second = new MemoryStream();
+        var limits = new ImageLimits { MemoryBudget = root };
+        var options = new WebpEncodeOptions { Lossless = false, Quality = 75, Effort = 4, Limits = limits };
+        ImageCodec.EncodeWebp(image, first, options);
+        Assert.Equal(retained, root.Bytes);
+        ImageCodec.EncodeWebp(image, second, options, cancellation.Token);
+        Assert.Equal(retained, root.Bytes); Assert.False(root.IsDisposed);
+        Assert.Equal(size, first.Length); Assert.Equal(first.ToArray(), second.ToArray());
+        Assert.Equal(expected, Convert.ToHexStringLower(SHA256.HashData(first.ToArray())));
+        Assert.NotSame(first.GetBuffer(), second.GetBuffer());
+        Assert.Equal(pixels, OriginalPixels.Bytes(image)); image.Dispose(); Assert.Equal(0, root.Bytes);
+        first.Dispose(); Assert.Equal(size, second.Length);
+        Assert.Equal(expected, Convert.ToHexStringLower(SHA256.HashData(second.ToArray())));
+    }
+
     private static void WriteBefore(Span<byte> bytes, int index, int x, int y, byte segment,
         ReadOnlySpan<byte> source, ReadOnlySpan<byte> neighbors, ReadOnlySpan<byte> modes,
         uint top, uint left, byte leftDc, ReadOnlySpan<sbyte> errors, int decisionLevel = 1)

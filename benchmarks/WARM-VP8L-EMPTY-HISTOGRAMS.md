@@ -1,5 +1,8 @@
 # Exact empty spatial histogram pruning
 
+Unchanged VP8L cost evidence remains valid. VP8 encoder anchors and the latest
+qualification are recorded in [uniform prediction reuse](WARM-VP8-UNIFORM-PREDICTIONS.md).
+
 The existing 513×259 text/diagram lossless WebP control independently confirms
 13.19 ms, 1.362× reference time / upper 1.408×, with the exact 7,234-byte packet.
 Elapsed is 40.0% lower than the preceding quiet short; this is not a paired

@@ -123,9 +123,15 @@ internal static class Vp8MacroblockDecision
             var aboveMode = by == 0 ? modeContexts[bx] : modes[b - 4];
             var leftMode = bx == 0 ? modeContexts[4 + by] : modes[b - 1];
             var bestMode = -1; Metric best = default; var bestNonzero = false;
-            // Pure candidate inputs stay fixed until the winner is published.
-            // Cancellable and trellis searches retain their separate traversal. The extra 576 stack bytes fit ScratchBytes above.
-            var batch = Vp8ForwardTransform.SupportsFour && !trellis && !context.Cancellation.CanBeCanceled;
+            // Equal boundary samples make all ten predictions the same constant.
+            // Only header prices and the non-DC flat-level surcharge differ.
+            // Cancellable and trellis searches keep their existing traversal.
+            var pure = !trellis && !context.Cancellation.CanBeCanceled;
+            var uniform = pure && top.IndexOfAnyExcept(corner) < 0 && left.IndexOfAnyExcept(corner) < 0;
+            Metric uniformScore = default; var uniformFlat = false;
+            // Other pure candidates retain their existing four-way transform.
+            // Its extra 576 stack bytes fit ScratchBytes above.
+            var batch = Vp8ForwardTransform.SupportsFour && pure && !uniform;
             if (batch)
             {
                 for (var mode = 0; mode < 10; mode++)
@@ -138,6 +144,13 @@ internal static class Vp8MacroblockDecision
             for (var mode = 0; mode < 10; mode++)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
+                if (uniform && mode != 0)
+                {
+                    var modeHeader = rate.Modes[8 + (aboveMode * 10 + leftMode) * 10 + mode];
+                    var repeatedScore = (uniformScore with { H = modeHeader, R = uniformScore.R + (uniformFlat ? 140 : 0) }).Price(costs.Luma4);
+                    if (repeatedScore.Total < best.Total) { bestMode = mode; best = repeatedScore; }
+                    continue;
+                }
                 var candidate = batch ? transforms.Slice(mode * 16, 16) : coefficients;
                 if (batch) predictions.Slice(mode * 16, 16).CopyTo(trial);
                 else
@@ -159,6 +172,7 @@ internal static class Vp8MacroblockDecision
                 var distortion = Vp8Distortion.Squared(source[offset..], 16, trial, 4, 4, 4);
                 var texture = costs.Texture == 0 ? 0 : Spectral(costs.Texture, Vp8Distortion.Texture4(source[offset..], 16, trial, 4, weights));
                 var score = new Metric(distortion, texture, header, rateCost).Price(costs.Luma4);
+                if (uniform) { uniformScore = score; uniformFlat = Flat(trialLevels, 1, 3); }
                 if (bestMode >= 0 && score.Total >= best.Total) continue;
                 bestMode = mode; best = score; bestNonzero = any; trial.CopyTo(bestPixels); trialLevels.CopyTo(levels.Slice(b * 16, 16));
             }

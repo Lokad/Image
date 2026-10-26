@@ -77,9 +77,9 @@ def render():
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-paired-entropy-evidence.json', ['observations', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', confirmed=True, current=True),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'gray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
         row('JPEG from caller GRAY8, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'callerGray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 RGBA8', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 opaque photograph', 'warm-current-opaque-vp8-controls-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-CURRENT-OPAQUE-VP8-CONTROLS.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 opaque text/diagram', 'warm-current-opaque-vp8-controls-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-CURRENT-OPAQUE-VP8-CONTROLS.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 RGBA8', 'warm-vp8-uniform-predictions-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8-UNIFORM-PREDICTIONS.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 opaque photograph', 'warm-vp8-uniform-predictions-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-UNIFORM-PREDICTIONS.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 opaque text/diagram', 'warm-vp8-uniform-predictions-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-UNIFORM-PREDICTIONS.md', confirmed=True, current=True),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L photograph / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L text/diagram / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', confirmed=True, current=True),
@@ -98,7 +98,7 @@ gains. Published0.1.0 remains unchanged.
 
 The cleanup removes fuel, ceiling reservations and unpublished wrappers.
 Pre-cleanup timings describe their frozen producers, **not the cleaned build**.
-VP8 stream decoding, caller-RGB420 JPEG and VP8L text/diagram have current
+VP8 stream decoding, caller-RGB420 JPEG, VP8 opaque diagram and VP8L text/diagram have current
 independent cost confirmations. Other VP8/VP8L encoding anchors have current
 short screens after empty spatial histogram pruning.
 Paired JPEG entropy appends use 6.7% less elapsed than the preceding quiet short,
@@ -114,17 +114,19 @@ diagram controls now have a current 1.605× short and 1.362× independent gap, w
 29,610,520/45,404,838 B/op. Skipping empty token-start tiles uses40.0% less diagram
 elapsed than the preceding quiet short; packets remain byte exact. Older affected
 encoding timings are historical. Parity remains open.
-The two existing opaque VP8 photograph/diagram controls have current3.557×/3.784×
+The two existing opaque VP8 photograph/diagram controls have current3.556×/3.544×
 gaps with909,696/841,608 B/op and exact17,688/7,100-byte packets. These larger gaps
-now take priority over smaller gains; no new input/settings matrix is added.
+now take priority over smaller gains. Uniform-boundary prediction reuse confirms
+6.4% less diagram elapsed than its preceding quiet short, with unchanged allocation
+and exact bytes. The general memoization prototype is rejected; no new input/settings matrix.
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
 defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 4,924 checks/OS; 603 affected scalar WebP/OS and same actual package passed |
-| CPU and allocation measurements after cleanup | [VP8 decode color](../benchmarks/WARM-VP8-VECTOR-COLOR.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | Exact packets; other required paths and full parity open |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-UNIFORM-PREDICTIONS.md) | 4,926 checks/OS; 605 affected scalar WebP/OS and same actual package passed |
+| CPU and allocation measurements after cleanup | [VP8 decode color](../benchmarks/WARM-VP8-VECTOR-COLOR.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [uniform predictions](../benchmarks/WARM-VP8-UNIFORM-PREDICTIONS.md) | Exact packets; other required paths and full parity open |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
 Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct

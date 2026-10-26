@@ -1,5 +1,9 @@
 # Current opaque VP8 photograph and diagram controls
 
+These screens precede [uniform prediction reuse](WARM-VP8-UNIFORM-PREDICTIONS.md),
+which records current CPU/qualification. The profile and repeat counts here remain
+leads from this frozen producer; their percentages are not current cost attribution.
+
 The two existing 513×259 opaque RGBA8 controls now have current cost evidence on
 the qualified production build. Both complete packets match the frozen FFmpeg
 libwebp quality75/method4 reference, including reconstructed pixels. Equal quality

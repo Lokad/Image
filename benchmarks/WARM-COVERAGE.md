@@ -6,8 +6,20 @@ dimensions/depth/filter/quality choices and approved references. No shape/settin
 grid is added. Only a demonstrated distinct omitted required path permits a later
 case. Full replacement readiness and independent warm upper≤1× remain open.
 
-[Empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md) is the latest qualified
-production change. The existing diagram lossless WebP control independently
+[Uniform VP8 predictions](WARM-VP8-UNIFORM-PREDICTIONS.md) is the latest qualified
+production change. The existing opaque diagram independently confirms3.544×/
+upper3.557,841,608 B/op and exact7,100 B:6.4% less elapsed than its preceding quiet
+short. Photograph and asymmetric VP8+alpha retain current shorts3.556/1.727× and
+909,696/23,358,400 B/op,exact17,688/98,590 B. Both OS pass4,926Release/605scalar
+WebP and the same actual package/allthreeexamples. The general reuse prototype
+is removed after a4.7% short gain; no further prediction variants are planned.
+Older affected VP8encoding cost proofs are historical. VP8L/JPEG/PNG, all decoders,
+editing and text retain their valid evidence. Next inspect complete SIMD
+quantization publication/validation as one distinct primitive; the earlier profile
+is only a lead. Preserve checked overflow, publication and scalar fallback behavior.
+
+[Empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md) remains valid for unchanged
+VP8L paths. The existing diagram lossless WebP control independently
 confirms 1.362×/upper1.408,45,404,838 B/op and exact7,234 B:40.0% less elapsed than
 the preceding quiet short, without a paired independent-baseline gain claim.
 Photograph, asymmetric VP8L and VP8+alpha are reconciled with current shorts
@@ -16,12 +28,12 @@ Photograph, asymmetric VP8L and VP8+alpha are reconciled with current shorts
 clustering change invalidates older VP8L/compressed-alpha encoding cost proofs;
 other required affected boundaries remain uncertain. All decoders, JPEG/PNG,
 editing and text retain their valid evidence. Stop this primitive round.
-The existing [PhotographLossy8/DiagramLossy8 controls](WARM-CURRENT-OPAQUE-VP8-CONTROLS.md)
-are now reconciled at3.557×/3.784×,909,696/841,608 B/op, exact17,688/7,100 B.
-They take priority over smaller gaps. One diagram profile has715managed workload
+The earlier [PhotographLossy8/DiagramLossy8 screens](WARM-CURRENT-OPAQUE-VP8-CONTROLS.md)
+record3.557×/3.784×,909,696/841,608 B/op,exact17,688/7,100 B; current costs are above.
+These larger gaps take priority. One diagram profile has715managed workload
 samples, with prediction/transform/quantization search as the lead; its timings
-are discarded. Count repeated identical mode predictions before selecting one
-substantial candidate. No new image/settings grid or repeated full/package proof.
+are discarded. Counts of repeated predictions led to the accepted uniform path.
+No new image/settings grid or repeated full/package proof for the rejected prototype.
 
 [Paired JPEG entropy append](WARM-JPEG-PAIRED-ENTROPY.md) independently confirms
 the existing caller-RGB420 case at1.543×/upper1.556,373,413B/op and exact
