@@ -9,9 +9,11 @@ namespace Lokad.Image.Tests;
 public sealed class Vp8MacroblockDecisionTests
 {
     [Theory]
-    [InlineData("diagram", 7100, "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050")]
-    [InlineData("photograph", 17688, "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b")]
-    public void LiveCancellationTraversalKeepsFrozenPacketsAndBorrowedInputOwnership(string name, int size, string expected)
+    [InlineData("diagram", 4, 7100, "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050")]
+    [InlineData("photograph", 4, 17688, "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b")]
+    [InlineData("diagram", 6, 6818, "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee")]
+    [InlineData("asymmetric", 6, 85796, "e58f431cec4412c38b3ee49da4ff62c25cc896fa71bcffe9f131dd08e1bccc96")]
+    public void LiveCancellationTraversalKeepsFrozenPacketsAndBorrowedInputOwnership(string name, int effort, int size, string expected)
     {
         using var root = new TestMemoryBudget(128_000_000);
         using var image = OriginalVp8lControls.Buffer(name, 8, root);
@@ -19,7 +21,7 @@ public sealed class Vp8MacroblockDecisionTests
         using var cancellation = new CancellationTokenSource();
         using var first = new MemoryStream(); using var second = new MemoryStream();
         var limits = new ImageLimits { MemoryBudget = root };
-        var options = new WebpEncodeOptions { Lossless = false, Quality = 75, Effort = 4, Limits = limits };
+        var options = new WebpEncodeOptions { Lossless = false, Quality = 75, Effort = effort, Limits = limits };
         ImageCodec.EncodeWebp(image, first, options);
         Assert.Equal(retained, root.Bytes);
         ImageCodec.EncodeWebp(image, second, options, cancellation.Token);

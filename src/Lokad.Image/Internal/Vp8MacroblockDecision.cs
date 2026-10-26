@@ -127,13 +127,13 @@ internal static class Vp8MacroblockDecision
             var bestMode = -1; Metric best = default; var bestNonzero = false;
             // Equal boundary samples make all ten predictions the same constant.
             // Only header prices and the non-DC flat-level surcharge differ.
-            // Cancellable and trellis searches keep their existing traversal.
+            // Uniform-score reuse stays disabled for cancellable/trellis searches.
             var pure = !trellis && !context.Cancellation.CanBeCanceled;
             var uniform = pure && top.IndexOfAnyExcept(corner) < 0 && left.IndexOfAnyExcept(corner) < 0;
             Metric uniformScore = default; var uniformFlat = false;
-            // Other pure candidates retain their existing four-way transform.
+            // Prediction/forward math can batch before ordered trellis decisions.
             // Its extra 576 stack bytes fit ScratchBytes above.
-            var batch = Vp8ForwardTransform.SupportsFour && pure && !uniform;
+            var batch = Vp8ForwardTransform.SupportsFour && !context.Cancellation.CanBeCanceled && !uniform;
             if (batch)
             {
                 for (var mode = 0; mode < 10; mode++)

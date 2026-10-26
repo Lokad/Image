@@ -26,16 +26,16 @@ effort6. Its [frozen complete packet](../tools/Shared/OriginalVp8Controls.cs) is
 [Method6 search](../src/Lokad.Image/Internal/Vp8MacroblockDecision.cs) runs
 coefficient-domain dynamic-programming trellis for every luma candidate; the
 current method4 warm controls never execute this required algorithm. Functional
-packet/ownership proof already exists. Its [current complete-operation short](WARM-VP8-TRELLIS-BASELINE.md)
-measures 2.813× / upper2.948, 854,968 B/op, with exact packets and reconstructed
-pixels. This is now the largest demonstrated gap. Source, depth and quality stay
-frozen: no grid or new image. Other effort/settings receive no broader performance
-claim from it.
+packet/ownership proof and the [current complete-operation confirmation](WARM-VP8-TRELLIS-FORWARD-BATCH.md)
+measure 2.700× / upper 2.721, 854,968 B/op, with exact packets and reconstructed
+pixels. It remains the largest demonstrated gap. Source, depth and quality stay
+frozen: no grid or new image. Other efforts/settings receive no broader
+performance claim.
 
 ## Current qualification and demonstrated gaps
 
-[Shared VP8 small-prediction rows](WARM-VP8-SHARED-SMALL-ROWS.md) is the latest
-qualified producer: 4,933 Release checks and 612 affected scalar WebP checks per
+[VP8 trellis forward batching](WARM-VP8-TRELLIS-FORWARD-BATCH.md) is the latest
+qualified producer: 4,937 Release checks and 616 affected scalar WebP checks per
 OS, plus the same actual private 0.2.0 package and all three usage examples.
 Complete encoder packets, decoded pixels, editing precision, cancellation and
 explicit admission/ownership remain acceptance gates. Published 0.1.0 is unchanged.
@@ -43,11 +43,10 @@ explicit admission/ownership remain acceptance gates. Published 0.1.0 is unchang
 The [current three-table summary](../docs/benchmark.md) selects valid costs,
 allocations, reference boundaries and confirmation status. Current evidence:
 
-- [Effort6 trellis](WARM-VP8-TRELLIS-BASELINE.md): diagram short 2.813×, exact
-  6,818 B and 854,968 B/op. The selected production core and earlier proof are reused.
-- [Shared VP8 rows](WARM-VP8-SHARED-SMALL-ROWS.md): photograph independent
-  2.524× / upper 2.538; diagram/asymmetric-alpha shorts 2.462× / 1.563×.
-  Older affected VP8 costs are historical; these remain current effort4 anchors.
+- [Trellis forward batching](WARM-VP8-TRELLIS-FORWARD-BATCH.md): effort-6 diagram
+  independent 2.700× / upper 2.721, exact 6,818 B and 854,968 B/op. Affected
+  effort-4 photograph/diagram/alpha shorts are 2.541× / 2.486× / 1.584×.
+  Older affected encoder costs are historical. No new workspace or kernel.
 - [VP8L empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md): diagram
   independent 1.362×; photograph/asymmetric VP8L shorts 1.605× / 1.566×.
 - [JPEG paired entropy](WARM-JPEG-PAIRED-ENTROPY.md): caller RGB420 independent
@@ -99,14 +98,15 @@ gain; its implementation and private table format are removed, actual qualified
 binaries/sources restored exactly. Two extreme-probability admission tests remain,
 passing normally/scalar on both OS. Existing full/package proof is reused.
 
-The trellis measurement resolves that uncertainty. Next try one bounded reuse of
-the existing four-prediction forward transform for uncancelable trellis candidates.
-Keep trellis/score traversal ordered and uniform-score reuse disabled for trellis;
-no new kernel, cache or workspace. Preserve scalar/live-token behavior. Stop old
-combined-price, row-prediction, uniform/cache and publication variants. No profile,
-grid, unrelated audit, production rebuild or package repeat for unchanged/rejected work. Screen complete
-operations, independently confirm promising changes, and batch affected
-cross-platform/scalar/actual-package qualification only for accepted production.
+Forward batching is accepted and fully qualified. Stop its variants. The next
+bounded lead is coefficient-domain trellis setup and repeated rate/matrix span
+and index work. Compare the reference strategy for insight; preserve integer
+scores, ties, exact packets, admitted workspace and scalar/live-token behavior.
+Use the same control and immutable harnesses/selectors, then independently
+confirm a promising candidate. No new profile or settings grid without concrete
+uncertainty. Stop old combined-price, row-prediction, uniform/cache and publication
+variants. Reuse unaffected evidence and batch full qualification only for accepted
+production changes.
 
 Useful rejected screens and earlier accepted rounds remain linked in the
 [prior coverage checkpoint](https://github.com/lokad/image/blob/0bd4a507cd87dcf85bfec4f9ac0a38c49174b86b/benchmarks/WARM-COVERAGE.md)

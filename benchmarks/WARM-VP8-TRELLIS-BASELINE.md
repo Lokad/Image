@@ -1,5 +1,8 @@
 # Effort-6 WebP trellis warm baseline
 
+Historical producer: [forward batching](WARM-VP8-TRELLIS-FORWARD-BATCH.md)
+now supplies the current qualified cost. Raw baseline evidence remains retained.
+
 The existing diagram at effort6 exposes the coefficient-domain dynamic-programming
 trellis algorithm absent from the effort4 warm controls. It adds one required
 named path to the finite checklist (254 total), with no new image/depth/quality
@@ -7,7 +10,7 @@ grid. Complete source/settings and the frozen 6,818-byte packet are unchanged.
 
 | DiagramLossyTrellis8, Q75 / effort6 | Lokad µs | FFmpeg/libwebp µs | Ratio / upper | Allocated B/op | Both packet bytes |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Current short | 27,547.84 | 9,794.54 | 2.813 / 2.948 | 854,968 | 6,818 |
+| Baseline short | 27,547.84 | 9,794.54 | 2.813 / 2.948 | 854,968 | 6,818 |
 
 Both idle-v2 guards pass. This is a demonstrated gap, not an independent parity
 confirmation. Both complete operations include normalization/source processing,
