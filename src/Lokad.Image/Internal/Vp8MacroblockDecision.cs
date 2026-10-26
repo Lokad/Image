@@ -149,13 +149,16 @@ internal static class Vp8MacroblockDecision
                 var any = trellis
                     ? Vp8TrellisQuantization.Apply(candidate, trialLevels, matrix, rate, trellisWeights, 3, topNz[bx] + leftNz[by], costs.Luma4Trellis, context)
                     : Vp8BlockQuantization.Apply(candidate, trialLevels, matrix);
+                var header = rate.Modes[8 + (aboveMode * 10 + leftMode) * 10 + mode];
+                long rateCost = mode > 0 && Flat(trialLevels, 1, 3) ? 140 : 0;
+                rateCost += rate.Residual(trialLevels, 3, 0, topNz[bx] + leftNz[by], out _);
+                // Reconstruction and texture add nonnegative distortion. This
+                // rate/header bound cannot discard a strictly better candidate.
+                if (bestMode >= 0 && (rateCost + header) * costs.Luma4 >= best.Total) continue;
                 Vp8BlockReconstruction.Add(candidate, trial, 4);
                 var distortion = Vp8Distortion.Squared(source[offset..], 16, trial, 4, 4, 4);
                 var texture = costs.Texture == 0 ? 0 : Spectral(costs.Texture, Vp8Distortion.Texture4(source[offset..], 16, trial, 4, weights));
-                var header = rate.Modes[8 + (aboveMode * 10 + leftMode) * 10 + mode];
-                var score = new Metric(distortion, texture, header, mode > 0 && Flat(trialLevels, 1, 3) ? 140 : 0).Price(costs.Luma4);
-                if (bestMode >= 0 && score.Total >= best.Total) continue;
-                score = (score with { R = score.R + rate.Residual(trialLevels, 3, 0, topNz[bx] + leftNz[by], out _) }).Price(costs.Luma4);
+                var score = new Metric(distortion, texture, header, rateCost).Price(costs.Luma4);
                 if (bestMode >= 0 && score.Total >= best.Total) continue;
                 bestMode = mode; best = score; bestNonzero = any; trial.CopyTo(bestPixels); trialLevels.CopyTo(levels.Slice(b * 16, 16));
             }

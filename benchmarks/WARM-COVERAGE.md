@@ -6,10 +6,19 @@ dimensions/depth/filter/quality choices and approved references. No shape/settin
 grid is added. Only a demonstrated distinct omitted required path permits a later
 case. Full replacement readiness and independent warm upper≤1× remain open.
 
+[Exact luma rate-cost pruning](WARM-VP8-LUMA4-RATE-BOUND.md) confirms current VP8
+at 1.735×/upper 1.744, unchanged 23,358,400 B/op and exact 98,590 B. Elapsed is
+2.0% lower than the prior quiet short, without a paired independent-baseline gain
+claim. Rate/header is a lower bound on the exact full candidate score; skip only
+losers before reconstruction/texture. Existing native decisions and all packets
+remain exact. Both OS pass 4,911 checks, 597 affected scalar checks, the SAME actual
+package and all three examples. One immutable timing core and existing workers
+are reused; VP8L/JPEG/PNG and unrelated paths are unchanged. Stop this bound round.
+
 [Matcher capacity reuse](WARM-VP8L-CHAIN-CAPACITY.md) independently confirms VP8L
 at 1.582×/upper 1.607, 47,674,928 B/op and exact 183,812 B. Separate quiet runs use
 2.4% less elapsed and 557,320 fewer allocated bytes than the preceding confirmation.
-Shared VP8 alpha has current short 1.779×/upper 2.095, 23,358,400 B/op and exact
+Shared VP8 alpha's preceding short was 1.779×/upper 2.095, 23,358,400 B/op and exact
 98,590 B: 1,066,544 fewer allocated bytes, with flat elapsed and no independent
 speedup/parity claim. Older affected costs stay historical. Both OS pass 4,908
 checks, 229 affected scalar checks, the SAME actual package and all three examples.
@@ -20,10 +29,12 @@ Stop storage representation tuning, predictor and PopulationSum polishing.
 
 [The four-lane prefix screen](WARM-VP8L-PREFIX-SCREEN.md) showed no useful material
 complete-operation gain and is discarded. Production source and qualified binaries
-are restored exactly; current evidence and actual-package qualification are reused.
+were restored exactly for that discarded round; its qualification was reused.
 Three new focused prefix/pruning tests pass normal/scalar on both OS. No vector
-prototype, visibility change, width sweep or package-proof repeat remains. Move
-to the named Luma4 traversal and inspect an exact rate-cost pruning bound next.
+prototype, visibility change, width sweep or package-proof repeat remains. The
+named Luma4 traversal produced the accepted exact bound above. Next assess
+repeated fixed-source texture energy/validation within a block; preserve all
+score/rounding/ownership behavior and qualify one substantial primitive at a time.
 
 [Current encoder anchors](WARM-CURRENT-ENCODER-ANCHORS.md) resolve the existing
 JPEG444/callerRGB420/PNGSmallest8 producer uncertainty at short ratios

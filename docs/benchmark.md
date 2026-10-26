@@ -6,18 +6,18 @@ gains. Published0.1.0 remains unchanged.
 
 The cleanup removes fuel, ceiling reservations and unpublished wrappers.
 Pre-cleanup timings describe their frozen producers, **not the cleaned build**.
-VP8L has current independent cost confirmation; shared VP8 alpha has a current
-short screen. Matcher chain/result reuse lowers their allocations while keeping
-packets exact. JPEG444, caller-RGB420 and PNG SmallestSize reuse unchanged current
-short evidence. Parity remains open.
+VP8 and VP8L have current independent cost confirmations. Exact VP8 rate-cost
+pruning skips losing candidate work; matcher chain/result reuse lowers allocation.
+Packets stay exact. JPEG444, caller-RGB420 and PNG SmallestSize reuse unchanged
+current short evidence. Parity remains open.
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
 defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8L-CHAIN-CAPACITY.md) | 4,908 checks/OS; 229 affected scalar/OS and same actual package passed |
-| CPU and allocation measurements after cleanup | [Matcher storage](../benchmarks/WARM-VP8L-CHAIN-CAPACITY.md), [unchanged encoder anchors](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | Exact packets; other required paths and full parity open |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-LUMA4-RATE-BOUND.md) | 4,911 checks/OS; 597 affected scalar/OS and same actual package passed |
+| CPU and allocation measurements after cleanup | [VP8 rate bound](../benchmarks/WARM-VP8-LUMA4-RATE-BOUND.md), [matcher storage](../benchmarks/WARM-VP8L-CHAIN-CAPACITY.md), [unchanged anchors](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | Exact packets; other required paths and full parity open |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
 Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct
@@ -30,7 +30,7 @@ are leads for measurement, not current demonstrated gaps.
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-DECODER-RECONSTRUCTION.md) | 10,046.91 | 5,991.89 | 1.677 / 1.684 | 1,966,591 | Historical independent; remeasure |
 | [JPEG 4:4:4, forward-only / exact reference](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | 4,971.54 | 3,769.20 | 1.319 / 1.434 | 820,123 | Current gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | 2,606.80 | 1,576.55 | 1.653 / 1.899 | 373,413 | Current gap (short; qualified) |
-| [VP8 RGBA8](../benchmarks/WARM-VP8L-CHAIN-CAPACITY.md) | 94,707.52 | 53,231.19 | 1.779 / 2.095 | 23,358,400 | Current gap (short; qualified) |
+| [VP8 RGBA8](../benchmarks/WARM-VP8-LUMA4-RATE-BOUND.md) | 92,818.18 | 53,494.23 | 1.735 / 1.744 | 23,358,400 | Current gap (independent) |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-CHAIN-CAPACITY.md) | 192,274.46 | 121,576.90 | 1.582 / 1.607 | 47,674,928 | Current gap (independent) |
 | [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | 24,517.23 | 17,302.12 | 1.417 / 1.498 | 1,325,670 | Current gap (short; qualified) |
 | [Bilinear resize RGBA16](../benchmarks/WARM-BILINEAR-WORD-CACHE.md) | 534.35 | 418.51 | 1.277 / 1.336 | 290,127 | Historical short; remeasure |

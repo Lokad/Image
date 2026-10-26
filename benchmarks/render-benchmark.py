@@ -75,7 +75,7 @@ def render():
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8-decoder-reconstruction-evidence.json', ['observations', -1], 'WARM-VP8-DECODER-RECONSTRUCTION.md', confirmed=True),
         row('JPEG 4:4:4, forward-only / exact reference', 'warm-current-encoder-anchors-evidence.json', ['cases', 'jpeg444', -1], 'WARM-CURRENT-ENCODER-ANCHORS.md', verification='Current gap (short; qualified)', current=True),
         row('JPEG 4:2:0 from caller RGB samples', 'warm-current-encoder-anchors-evidence.json', ['cases', 'caller420', -1], 'WARM-CURRENT-ENCODER-ANCHORS.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 RGBA8', 'warm-vp8l-chain-capacity-evidence.json', ['cases', 'vp8Alpha', -1], 'WARM-VP8L-CHAIN-CAPACITY.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 RGBA8', 'warm-vp8-luma4-rate-bound-evidence.json', ['observations', -1], 'WARM-VP8-LUMA4-RATE-BOUND.md', confirmed=True, current=True),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-chain-capacity-evidence.json', ['observations', -1], 'WARM-VP8L-CHAIN-CAPACITY.md', confirmed=True, current=True),
         row('PNG RGBA8, SmallestSize9 / native9', 'warm-current-encoder-anchors-evidence.json', ['cases', 'png8', -1], 'WARM-CURRENT-ENCODER-ANCHORS.md', verification='Current gap (short; qualified)', current=True),
         row('Bilinear resize RGBA16', 'warm-bilinear-word-cache-evidence.json', ['observations', -1], 'WARM-BILINEAR-WORD-CACHE.md', verification='Gap (short; qualified)'),
@@ -92,18 +92,18 @@ gains. Published0.1.0 remains unchanged.
 
 The cleanup removes fuel, ceiling reservations and unpublished wrappers.
 Pre-cleanup timings describe their frozen producers, **not the cleaned build**.
-VP8L has current independent cost confirmation; shared VP8 alpha has a current
-short screen. Matcher chain/result reuse lowers their allocations while keeping
-packets exact. JPEG444, caller-RGB420 and PNG SmallestSize reuse unchanged current
-short evidence. Parity remains open.
+VP8 and VP8L have current independent cost confirmations. Exact VP8 rate-cost
+pruning skips losing candidate work; matcher chain/result reuse lowers allocation.
+Packets stay exact. JPEG444, caller-RGB420 and PNG SmallestSize reuse unchanged
+current short evidence. Parity remains open.
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
 defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8L-CHAIN-CAPACITY.md) | 4,908 checks/OS; 229 affected scalar/OS and same actual package passed |
-| CPU and allocation measurements after cleanup | [Matcher storage](../benchmarks/WARM-VP8L-CHAIN-CAPACITY.md), [unchanged encoder anchors](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | Exact packets; other required paths and full parity open |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-LUMA4-RATE-BOUND.md) | 4,911 checks/OS; 597 affected scalar/OS and same actual package passed |
+| CPU and allocation measurements after cleanup | [VP8 rate bound](../benchmarks/WARM-VP8-LUMA4-RATE-BOUND.md), [matcher storage](../benchmarks/WARM-VP8L-CHAIN-CAPACITY.md), [unchanged anchors](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | Exact packets; other required paths and full parity open |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
 Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct

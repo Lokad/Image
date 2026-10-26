@@ -37,7 +37,8 @@
 - Managed VP8 encoding matches20 declared complete reference packets, with all
   effort policies, exact normalized alpha and direct async partition delivery.
   Forward4x4 transforms use exact integer butterfly projections.
-  Removed superseded encoder experiments; new CPU/allocation qualification is open.
+  Exact rate/header bounds skip reconstruction of losing luma candidates.
+  Removed superseded encoder experiments; full CPU parity remains open.
 - Caller-owned cooperative memory admission across nested work and retained
   images, fonts, layouts and caches, with structured limit/unsupported failures.
 - Typed source color/alpha metadata, bounded header inspection and async stream
