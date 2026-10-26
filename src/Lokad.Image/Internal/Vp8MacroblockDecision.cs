@@ -57,7 +57,7 @@ internal static class Vp8MacroblockDecision
             Vp8BlockPrediction.Fill(16, (Vp8IntraMode)mode, hasTop ? neighbors.Slice(35, 16) : default,
                 hasLeft ? neighbors.Slice(1, 16) : default, neighbors[0], trial);
             for (var b = 0; b < 16; b += 4)
-                Vp8ForwardTransform.DctFourBlocks(source[Block(b)..], trial[Block(b)..], 16, coefficients.Slice(b * 16, 64));
+                Vp8ForwardTransform.DctFourBlocks(source[Block(b)..], trial[Block(b)..], 16, 16, coefficients.Slice(b * 16, 64));
             for (var b = 0; b < 16; b++) dc[b] = coefficients[b * 16];
             Vp8ForwardTransform.WalshDc(dc, walsh);
             var nz = Vp8BlockQuantization.Apply(walsh, trialLevels[..16], y2) ? 1u << 24 : 0;
@@ -229,8 +229,8 @@ internal static class Vp8MacroblockDecision
                     hasLeft ? neighbors.Slice(left + 1, 8) : default, neighbors[left], prediction);
                 for (var y = 0; y < 8; y++) prediction.Slice(y * 8, 8).CopyTo(trial.Slice(y * 16 + plane * 8, 8));
             }
-            Vp8ForwardTransform.DctFourBlocks(source, trial, 16, coefficients, 64);
-            Vp8ForwardTransform.DctFourBlocks(source[64..], trial[64..], 16, coefficients[32..], 64);
+            Vp8ForwardTransform.DctFourBlocks(source, trial, 16, 16, coefficients, 64);
+            Vp8ForwardTransform.DctFourBlocks(source[64..], trial[64..], 16, 16, coefficients[32..], 64);
             if (correctDc) CorrectDc(coefficients, diffusion, trialErrors, matrix);
             else trialErrors.Clear();
             uint nz = 0;
@@ -280,7 +280,7 @@ internal static class Vp8MacroblockDecision
             Vp8BlockPrediction.Fill(16, (Vp8IntraMode)lumaMode, hasTop ? neighbors.Slice(35, 16) : default,
                 hasLeft ? neighbors.Slice(1, 16) : default, neighbors[0], pixels[..256]);
             for (var b = 0; b < 16; b += 4)
-                Vp8ForwardTransform.DctFourBlocks(source[Block(b)..], pixels[Block(b)..], 16, coefficients.Slice(b * 16, 64));
+                Vp8ForwardTransform.DctFourBlocks(source[Block(b)..], pixels[Block(b)..], 16, 16, coefficients.Slice(b * 16, 64));
             for (var b = 0; b < 16; b++) dc[b] = coefficients[b * 16];
             Vp8ForwardTransform.WalshDc(dc, y2);
             if (Vp8BlockQuantization.Apply(y2, levels[..16], walsh)) nz |= 1u << 24;
@@ -326,8 +326,8 @@ internal static class Vp8MacroblockDecision
                 hasLeft ? neighbors.Slice(left + 1, 8) : default, neighbors[left], prediction);
             for (var y = 0; y < 8; y++) prediction.Slice(y * 8, 8).CopyTo(uvPixels.Slice(y * 16 + plane * 8, 8));
         }
-        Vp8ForwardTransform.DctFourBlocks(source[256..], uvPixels, 16, coefficients, 64);
-        Vp8ForwardTransform.DctFourBlocks(source[320..], uvPixels[64..], 16, coefficients[32..], 64);
+        Vp8ForwardTransform.DctFourBlocks(source[256..], uvPixels, 16, 16, coefficients, 64);
+        Vp8ForwardTransform.DctFourBlocks(source[320..], uvPixels[64..], 16, 16, coefficients[32..], 64);
         if (correctDc) CorrectDc(coefficients[..128], errors.Slice(6, 8), errors[..6], chroma);
         else errors[..6].Clear();
         for (var b = 0; b < 8; b++)

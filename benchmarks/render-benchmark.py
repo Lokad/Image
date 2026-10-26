@@ -77,10 +77,10 @@ def render():
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-paired-entropy-evidence.json', ['observations', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', confirmed=True, current=True),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'gray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
         row('JPEG from caller GRAY8, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'callerGray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 RGBA8', 'warm-vp8-large-block-rows-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8-LARGE-BLOCK-ROWS.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 opaque photograph', 'warm-vp8-large-block-rows-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-LARGE-BLOCK-ROWS.md', confirmed=True, current=True),
-        row('VP8 opaque text/diagram', 'warm-vp8-large-block-rows-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-LARGE-BLOCK-ROWS.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 diagram, effort6 / trellis', 'warm-vp8-large-block-rows-evidence.json', ['cases', 'DiagramLossyTrellis8', -1], 'WARM-VP8-LARGE-BLOCK-ROWS.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 RGBA8', 'warm-vp8-source-analysis-forward-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8-SOURCE-ANALYSIS-FORWARD.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 opaque photograph', 'warm-vp8-source-analysis-forward-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-SOURCE-ANALYSIS-FORWARD.md', confirmed=True, current=True),
+        row('VP8 opaque text/diagram', 'warm-vp8-source-analysis-forward-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-SOURCE-ANALYSIS-FORWARD.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 diagram, effort6 / trellis', 'warm-vp8-source-analysis-forward-evidence.json', ['cases', 'DiagramLossyTrellis8', -1], 'WARM-VP8-SOURCE-ANALYSIS-FORWARD.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L photograph / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L text/diagram / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', confirmed=True, current=True),
@@ -99,9 +99,9 @@ gains. Published0.1.0 remains unchanged.
 
 Pre-cleanup costs describe their frozen producers, **not the cleaned build**.
 Current independent confirmations and short screens are labeled below; other
-required paths remain open. Large-block prediction independently measures 2.416× reference time on the
-existing photograph, with exact packets and unchanged allocations. Its 23.46 ms
-is 4.77% below the preceding quiet short; no paired baseline gain is claimed.
+required paths remain open. Source-analysis DCT batching independently measures 2.341× reference time on the
+existing photograph, with exact packets and unchanged allocations. Its 22.62 ms
+is 3.58% below the preceding independent mean; no paired baseline gain is claimed.
 Diagram, alpha and effort-6 trellis have current guarded shorts. Other required
 confirmations remain open.
 
@@ -111,8 +111,8 @@ defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-LARGE-BLOCK-ROWS.md) | 4,937 checks/OS; 616 affected scalar WebP/OS and same actual package passed |
-| CPU and allocation measurements after cleanup | [large-block prediction](../benchmarks/WARM-VP8-LARGE-BLOCK-ROWS.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; other required paths and full parity open |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-SOURCE-ANALYSIS-FORWARD.md) | 4,937 checks/OS; 616 affected scalar WebP/OS and same actual package passed |
+| CPU and allocation measurements after cleanup | [source-analysis batching](../benchmarks/WARM-VP8-SOURCE-ANALYSIS-FORWARD.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; other required paths and full parity open |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
 Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct

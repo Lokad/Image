@@ -1,5 +1,8 @@
 # VP8 large-block prediction rows
 
+Historical encoder cost: [source-analysis batching](WARM-VP8-SOURCE-ANALYSIS-FORWARD.md)
+now supplies current affected timings. Prediction arithmetic remains unchanged.
+
 The photograph independently measures 23.46 ms: 2.416× reference time (upper
 2.435×), 909,696 B/op and an exact 17,688-byte packet. Elapsed time is 4.77% below
 the preceding quiet short; this is not a paired independent-baseline gain claim.

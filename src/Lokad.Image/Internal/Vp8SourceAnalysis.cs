@@ -40,17 +40,29 @@ internal sealed class Vp8SourceAnalysis : IDisposable
         else for (var p = 0; p < size; p++) left[p] = plane[(y + p) * stride + x - 1];
         var corner = x != 0 && y != 0 ? plane[(y - 1) * stride + x - 1] : (byte)0;
         Vp8BlockPrediction.Fill(size, mode, top, left, corner, prediction);
-        Span<short> residual = stackalloc short[16]; Span<short> coefficients = stackalloc short[16];
+        Span<short> residual = stackalloc short[16]; Span<short> coefficients = stackalloc short[64];
+        // Existing four-block arithmetic consumes strided source and compact
+        // prediction directly. Extra96 stack bytes fit ScratchBytes; live tokens
+        // retain their original per-block checkpoints and traversal.
+        var batch = size == 16 && Vp8ForwardTransform.SupportsFour && !context.Cancellation.CanBeCanceled;
         for (var by = 0; by < size; by += 4)
-        for (var bx = 0; bx < size; bx += 4)
         {
-            context.Cancellation.ThrowIfCancellationRequested();
-            for (var py = 0; py < 4; py++)
-            for (var px = 0; px < 4; px++)
-                residual[py * 4 + px] = (short)(plane[(y + by + py) * stride + x + bx + px]
-                    - prediction[(by + py) * size + bx + px]);
-            Vp8ForwardTransform.Dct(residual, coefficients);
-            Vp8SourceHistogram.AddBlock(coefficients, population);
+            if (batch)
+            {
+                Vp8ForwardTransform.DctFourBlocks(plane[((y + by) * stride + x)..], prediction[(by * size)..],
+                    stride, size, coefficients);
+                for (var block = 0; block < 4; block++) Vp8SourceHistogram.AddBlock(coefficients.Slice(block * 16, 16), population);
+            }
+            else for (var bx = 0; bx < size; bx += 4)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                for (var py = 0; py < 4; py++)
+                for (var px = 0; px < 4; px++)
+                    residual[py * 4 + px] = (short)(plane[(y + by + py) * stride + x + bx + px]
+                        - prediction[(by + py) * size + bx + px]);
+                Vp8ForwardTransform.Dct(residual, coefficients);
+                Vp8SourceHistogram.AddBlock(coefficients, population);
+            }
         }
     }
 
