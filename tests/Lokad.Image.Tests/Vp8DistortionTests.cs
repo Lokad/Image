@@ -68,6 +68,43 @@ public sealed class Vp8DistortionTests
         Assert.Equal(0, result); Assert.Equal(0, allocated);
     }
 
+    [Fact]
+    public void DenseEnergyDefinitionKeepsLowBitsAndOverlappingTextureMetrics()
+    {
+        var pixels = new byte[260]; var weights = new ushort[16]; Vp8Distortion.TextureWeights(weights);
+        uint state = 0x7f4a7c15; var sawLowBits = false;
+        for (var sample = 0; sample < 64; sample++)
+        {
+            for (var i = 0; i < pixels.Length; i++)
+            { state ^= state << 13; state ^= state >> 17; state ^= state << 5; pixels[i] = (byte)state; }
+            var original = pixels.ToArray(); var source = pixels.AsSpan(1);
+            var expectedSource = ExpectedEnergy(source, 7, weights);
+            sawLowBits |= (expectedSource & 31) != 0;
+            foreach (var offset in new[] { 0, 1, 2, 3, 9, 31, 97 })
+            foreach (var stride in new[] { 4, 7, 9 })
+            {
+                var candidate = pixels.AsSpan(offset); var expected = Math.Abs(expectedSource - ExpectedEnergy(candidate, stride, weights)) >> 5;
+                Assert.Equal(expected, Vp8Distortion.Texture4(source, 7, candidate, stride, weights));
+            }
+            Assert.Equal(0, Vp8Distortion.Texture4(source, 7, source, 7, weights));
+            Assert.Equal(original, pixels);
+        }
+        Assert.True(sawLowBits);
+    }
+
+    private static int ExpectedEnergy(ReadOnlySpan<byte> pixels, int stride, ReadOnlySpan<ushort> weights)
+    {
+        var energy = 0;
+        for (var v = 0; v < 4; v++) for (var u = 0; u < 4; u++)
+        {
+            var coefficient = 0;
+            for (var y = 0; y < 4; y++) for (var x = 0; x < 4; x++)
+                coefficient += SequencySign(v, y) * SequencySign(u, x) * pixels[y * stride + x];
+            energy += weights[v * 4 + u] * Math.Abs(coefficient);
+        }
+        return energy;
+    }
+
     private static int SequencySign(int frequency, int position)
     {
         var gray = frequency ^ (frequency >> 1); var mask = (gray >> 1) | ((gray & 1) << 1);

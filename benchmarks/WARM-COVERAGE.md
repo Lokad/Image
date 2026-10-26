@@ -36,6 +36,13 @@ named Luma4 traversal produced the accepted exact bound above. Next assess
 repeated fixed-source texture energy/validation within a block; preserve all
 score/rounding/ownership behavior and qualify one substantial primitive at a time.
 
+[The fixed-source energy screen](WARM-VP8-SOURCE-ENERGY-SCREEN.md) is flat with
+unchanged allocation and is discarded. Production files/binaries are restored
+exactly; selected qualification and package proof are reused. One independent
+dense-energy/overlap/low-bit test passes normal/scalar on both OS. Stop source-energy
+variants and retain validation. Next profile the existing caller-RGB420 JPEG
+boundary to identify a larger demonstrated opportunity; no matrix expansion.
+
 [Current encoder anchors](WARM-CURRENT-ENCODER-ANCHORS.md) resolve the existing
 JPEG444/callerRGB420/PNGSmallest8 producer uncertainty at short ratios
 1.319/1.653/1.417, with exact packets and allocations recorded. Those production
