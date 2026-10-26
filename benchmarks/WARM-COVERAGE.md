@@ -18,6 +18,13 @@ unsigned views. No new owner or allowance. An initial span-indexed representatio
 had a confirmed CPU cost and was replaced; its raw evidence remains retained.
 Stop storage representation tuning, predictor and PopulationSum polishing.
 
+[The four-lane prefix screen](WARM-VP8L-PREFIX-SCREEN.md) showed no useful material
+complete-operation gain and is discarded. Production source and qualified binaries
+are restored exactly; current evidence and actual-package qualification are reused.
+Three new focused prefix/pruning tests pass normal/scalar on both OS. No vector
+prototype, visibility change, width sweep or package-proof repeat remains. Move
+to the named Luma4 traversal and inspect an exact rate-cost pruning bound next.
+
 [Current encoder anchors](WARM-CURRENT-ENCODER-ANCHORS.md) resolve the existing
 JPEG444/callerRGB420/PNGSmallest8 producer uncertainty at short ratios
 1.319/1.653/1.417, with exact packets and allocations recorded. Those production
