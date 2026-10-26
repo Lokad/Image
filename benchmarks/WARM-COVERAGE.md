@@ -6,16 +6,23 @@ dimensions/depth/filter/quality choices and approved references. No shape/settin
 grid is added. Only a demonstrated distinct omitted required path permits a later
 case. Full replacement readiness and independent warm upper≤1× remain open.
 
-[Packed VP8 quantization](WARM-VP8-VECTOR-QUANTIZATION.md) is the latest qualified
-production change. Photograph independently confirms3.119×/upper3.133,909,696 B/op,
+[Adjacent VP8 forward blocks](WARM-VP8-ADJACENT-FORWARD.md) is the latest qualified
+production change. Photograph independently confirms2.879×/upper2.900,909,696 B/op,
+exact17,688 B and8.6% less elapsed than the preceding quiet short. Diagram and
+asymmetric VP8+alpha shorts are2.733/1.626×,841,608/23,358,400 B/op,exact7,100/98,590 B.
+Both OS pass4,932Release/611scalarWebP and the same actual package/allthreeexamples.
+Scalar coefficients, native decisions, source/pair order, overlapping inputs,
+holes/tails, invalid geometry and zero allocation pass. Stop batching variants;
+one bounded current photograph profile is the next lead. No new workload grid.
+
+[Packed VP8 quantization](WARM-VP8-VECTOR-QUANTIZATION.md) remains an accepted
+primitive. Its photograph confirmation was3.119×/upper3.133,909,696 B/op,
 exact17,688 B and12.2% less elapsed than the preceding quiet short. Diagram and
 asymmetric VP8+alpha current shorts are3.046/1.645×,841,608/23,358,400 B/op and
-exact7,100/98,590 B. Both OS pass4,930Release/609scalarWebP and the same actual
-package/allthreeexamples. Guards, signed-word endpoints, checked prefix/overflow,
-native hashes and zero warm allocation pass. Stop publication variants. Next
-inspect batching four adjacent intra16 forward blocks using the existing exact
-four-lane transform; preserve DC order/geometry, scalar fallback, ownership and
-checkpoints. Older affected VP8 CPU evidence is historical. No new workload grid.
+exact7,100/98,590 B. That milestone passed4,930Release/609scalarWebP perOS and the
+same actual package/allthreeexamples. Signed-word endpoints, checked prefix/overflow,
+native hashes and zero allocation remain qualified. Adjacent-block batching above
+supersedes its affected VP8costs. No further publication variants or new workload grid.
 
 [Uniform VP8 predictions](WARM-VP8-UNIFORM-PREDICTIONS.md) remains an accepted
 primitive; its earlier diagram confirmation was3.544×/

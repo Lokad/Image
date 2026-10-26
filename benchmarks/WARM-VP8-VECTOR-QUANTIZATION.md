@@ -1,5 +1,8 @@
 # Exact packed VP8 quantization publication
 
+These CPU observations precede [adjacent forward-block batching](WARM-VP8-ADJACENT-FORWARD.md),
+which records current VP8 costs/qualification. Range, byte and ownership proofs remain valid.
+
 The existing 513×259 opaque photograph independently confirms30.31 ms,
 3.119× reference time / upper3.133×, with unchanged909,696 B/op and exact17,688 B.
 Elapsed is 12.2% lower than the preceding quiet short. This is not a paired

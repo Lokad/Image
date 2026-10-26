@@ -23,7 +23,7 @@ internal static partial class Vp8ForwardTransform
         r3 = Avx512F.UnpackHigh(b.AsInt64(), d.AsInt64()).AsInt32();
     }
 
-    static void Transform(Vector512<int> r0, Vector512<int> r1, Vector512<int> r2, Vector512<int> r3, Span<short> output)
+    static void Transform(Vector512<int> r0, Vector512<int> r1, Vector512<int> r2, Vector512<int> r3, Span<short> output, int secondPair = 32)
     {
         Transpose(ref r0, ref r1, ref r2, ref r3);
         var a = r0 + r3; var b = r1 + r2; var c = r0 - r3; var d = r1 - r2;
@@ -42,7 +42,7 @@ internal static partial class Vp8ForwardTransform
         var first = Avx512BW.PackSignedSaturate(r0, r1).AsInt64();
         var second = Avx512BW.PackSignedSaturate(r2, r3).AsInt64();
         Avx512F.PermuteVar8x64x2(first, Vector512.Create(0L, 1, 8, 9, 2, 3, 10, 11), second).AsInt16().CopyTo(output);
-        Avx512F.PermuteVar8x64x2(first, Vector512.Create(4L, 5, 12, 13, 6, 7, 14, 15), second).AsInt16().CopyTo(output[32..]);
+        Avx512F.PermuteVar8x64x2(first, Vector512.Create(4L, 5, 12, 13, 6, 7, 14, 15), second).AsInt16().CopyTo(output[secondPair..]);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -73,5 +73,28 @@ internal static partial class Vp8ForwardTransform
         var r0 = ResidualRow(source, predictions, 0); var r1 = ResidualRow(source[stride..], predictions, 4);
         var r2 = ResidualRow(source[(stride * 2)..], predictions, 8); var r3 = ResidualRow(source[(stride * 3)..], predictions, 12);
         Transform(r0, r1, r2, r3, output);
+    }
+
+    // Four adjacent4x4 source/prediction blocks in four strided16-byte rows.
+    // Read both inputs completely before publishing two ordered coefficient pairs.
+    // A separated second pair preserves the interleaved U8|V8 plane layout.
+    internal static void DctFourBlocks(ReadOnlySpan<byte> source, ReadOnlySpan<byte> prediction, int stride, Span<short> output, int secondPair = 32)
+    {
+        if (stride < 16 || (long)stride * 3 + 16 > source.Length || (long)stride * 3 + 16 > prediction.Length || secondPair < 32 || secondPair > output.Length - 32)
+            throw new ArgumentException("Four adjacent blocks require complete rows and nonoverlapping coefficient pairs.");
+        if (!SupportsFour)
+        {
+            Span<short> residual = stackalloc short[64];
+            for (var block = 0; block < 4; block++) for (var y = 0; y < 4; y++) for (var x = 0; x < 4; x++)
+                residual[block * 16 + y * 4 + x] = (short)(source[y * stride + block * 4 + x] - prediction[y * stride + block * 4 + x]);
+            for (var block = 0; block < 4; block++)
+                Dct(residual.Slice(block * 16, 16), output.Slice(block < 2 ? block * 16 : secondPair + (block - 2) * 16, 16));
+            return;
+        }
+        var r0 = Avx512F.ConvertToVector512Int32(Vector128.Create(source)) - Avx512F.ConvertToVector512Int32(Vector128.Create(prediction));
+        var r1 = Avx512F.ConvertToVector512Int32(Vector128.Create(source[stride..])) - Avx512F.ConvertToVector512Int32(Vector128.Create(prediction[stride..]));
+        var r2 = Avx512F.ConvertToVector512Int32(Vector128.Create(source[(stride * 2)..])) - Avx512F.ConvertToVector512Int32(Vector128.Create(prediction[(stride * 2)..]));
+        var r3 = Avx512F.ConvertToVector512Int32(Vector128.Create(source[(stride * 3)..])) - Avx512F.ConvertToVector512Int32(Vector128.Create(prediction[(stride * 3)..]));
+        Transform(r0, r1, r2, r3, output, secondPair);
     }
 }

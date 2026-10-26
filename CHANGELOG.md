@@ -44,6 +44,8 @@
   each mode's header, flat-level surcharge and exact tie decisions.
   AVX2 quantization publishes packed raster/zigzag results with exact range
   checks and the existing checked scalar publication fallback.
+  Four-block forward batching shares exact arithmetic across adjacent luma/chroma
+  blocks, retaining scalar fallback, block order and read-before-write semantics.
   Removed superseded encoder experiments; full CPU parity remains open.
 - Caller-owned cooperative memory admission across nested work and retained
   images, fonts, layouts and caches, with structured limit/unsupported failures.

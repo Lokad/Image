@@ -8,6 +8,63 @@ namespace Lokad.Image.Tests;
 public sealed class Vp8ForwardTransformTests
 {
     [Fact]
+    public void FourAdjacentBlocksMatchScalarWithStridesOffsetsAndOverlappingStorage()
+    {
+        var random = new Random(4241); var residual = new short[16]; var expected = new short[64];
+        foreach (var stride in new[] { 16, 23 }) foreach (var offset in new[] { 0, 1 })
+        for (var sample = 0; sample < 256; sample++)
+        {
+            var original = new byte[512]; random.NextBytes(original);
+            if (sample < 2)
+                for (var y = 0; y < 4; y++)
+                {
+                    original.AsSpan(offset + y * stride, 16).Fill(sample == 0 ? (byte)255 : (byte)0);
+                    original.AsSpan(128 + offset + y * stride, 16).Fill(sample == 0 ? (byte)0 : (byte)255);
+                }
+            for (var block = 0; block < 4; block++)
+            {
+                for (var y = 0; y < 4; y++) for (var x = 0; x < 4; x++)
+                    residual[y * 4 + x] = (short)(original[offset + y * stride + block * 4 + x]
+                        - original[128 + offset + y * stride + block * 4 + x]);
+                Vp8ForwardTransform.Dct(residual, expected.AsSpan(block * 16, 16));
+            }
+            foreach (var secondPair in new[] { 32, 64 })
+            foreach (var destination in new[] { offset + 9, 135 + offset, 300 + offset })
+            {
+                var bytes = original.ToArray(); var wanted = original.ToArray();
+                System.Runtime.InteropServices.MemoryMarshal.AsBytes(expected.AsSpan(0, 32)).CopyTo(wanted.AsSpan(destination));
+                System.Runtime.InteropServices.MemoryMarshal.AsBytes(expected.AsSpan(32, 32)).CopyTo(wanted.AsSpan(destination + secondPair * 2));
+                Vp8ForwardTransform.DctFourBlocks(bytes.AsSpan(offset, 3 * stride + 16),
+                    bytes.AsSpan(128 + offset, 3 * stride + 16), stride,
+                    System.Runtime.InteropServices.MemoryMarshal.Cast<byte, short>(bytes.AsSpan(destination, (secondPair + 34) * 2)), secondPair);
+                Assert.Equal(wanted, bytes);
+            }
+        }
+        var source = new byte[64]; var prediction = new byte[64]; var output = new short[64];
+        for (var i = 0; i < 128; i++) Vp8ForwardTransform.DctFourBlocks(source, prediction, 16, output);
+        var allocated = GC.GetAllocatedBytesForCurrentThread();
+        for (var i = 0; i < 1000; i++) Vp8ForwardTransform.DctFourBlocks(source, prediction, 16, output);
+        Assert.Equal(0, GC.GetAllocatedBytesForCurrentThread() - allocated);
+    }
+
+    [Fact]
+    public void FourAdjacentBlocksRejectIncompleteGeometryBeforePublishing()
+    {
+        var source = Enumerable.Repeat((byte)23, 160).ToArray(); var prediction = source.ToArray();
+        var output = Enumerable.Repeat((short)29999, 64).ToArray();
+        Assert.Throws<ArgumentException>(() => Vp8ForwardTransform.DctFourBlocks(source.AsSpan(0, 63), prediction, 16, output));
+        Assert.Throws<ArgumentException>(() => Vp8ForwardTransform.DctFourBlocks(source, prediction.AsSpan(0, 63), 16, output));
+        Assert.Throws<ArgumentException>(() => Vp8ForwardTransform.DctFourBlocks(source, prediction, 15, output));
+        Assert.Throws<ArgumentException>(() => Vp8ForwardTransform.DctFourBlocks(source, prediction, int.MaxValue, output));
+        Assert.Throws<ArgumentException>(() => Vp8ForwardTransform.DctFourBlocks(source, prediction, 16, output.AsSpan(0, 63)));
+        Assert.Throws<ArgumentException>(() => Vp8ForwardTransform.DctFourBlocks(source, prediction, 16, output, 31));
+        Assert.Throws<ArgumentException>(() => Vp8ForwardTransform.DctFourBlocks(source, prediction, 16, output, 33));
+        Assert.Throws<ArgumentException>(() => Vp8ForwardTransform.DctFourBlocks(source, prediction, 16, output, int.MaxValue));
+        Assert.All(output, value => Assert.Equal((short)29999, value));
+        Assert.All(source, value => Assert.Equal((byte)23, value)); Assert.Equal(source, prediction);
+    }
+
+    [Fact]
     public void FourPredictionsPreserveIndependentCoefficientsAndOverlappingStorage()
     {
         var random = new Random(240);

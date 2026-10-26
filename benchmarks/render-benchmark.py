@@ -77,9 +77,9 @@ def render():
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-paired-entropy-evidence.json', ['observations', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', confirmed=True, current=True),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'gray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
         row('JPEG from caller GRAY8, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'callerGray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 RGBA8', 'warm-vp8-vector-quantization-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8-VECTOR-QUANTIZATION.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 opaque photograph', 'warm-vp8-vector-quantization-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-VECTOR-QUANTIZATION.md', confirmed=True, current=True),
-        row('VP8 opaque text/diagram', 'warm-vp8-vector-quantization-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-VECTOR-QUANTIZATION.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 RGBA8', 'warm-vp8-adjacent-forward-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8-ADJACENT-FORWARD.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 opaque photograph', 'warm-vp8-adjacent-forward-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-ADJACENT-FORWARD.md', confirmed=True, current=True),
+        row('VP8 opaque text/diagram', 'warm-vp8-adjacent-forward-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-ADJACENT-FORWARD.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L photograph / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L text/diagram / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', confirmed=True, current=True),
@@ -114,19 +114,20 @@ diagram controls now have a current 1.605× short and 1.362× independent gap, w
 29,610,520/45,404,838 B/op. Skipping empty token-start tiles uses40.0% less diagram
 elapsed than the preceding quiet short; packets remain byte exact. Older affected
 encoding timings are historical. Parity remains open.
-The two existing opaque VP8 photograph/diagram controls have current3.119×/3.046×
+The two existing opaque VP8 photograph/diagram controls have current2.879×/2.733×
 gaps with909,696/841,608 B/op and exact17,688/7,100-byte packets. These larger gaps
-now take priority over smaller gains. Packed quantization publication confirms
-12.2% less photograph elapsed than its preceding quiet short, with unchanged
-allocation and exact bytes. Uniform prediction reuse remains qualified; no new input/settings matrix.
+now take priority over smaller gains. Adjacent forward-block batching confirms
+8.6% less photograph elapsed than its preceding quiet short, with unchanged
+allocation and exact bytes. Packed quantization and uniform prediction reuse remain
+qualified; no new input/settings matrix.
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
 defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-VECTOR-QUANTIZATION.md) | 4,930 checks/OS; 609 affected scalar WebP/OS and same actual package passed |
-| CPU and allocation measurements after cleanup | [VP8 decode color](../benchmarks/WARM-VP8-VECTOR-COLOR.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [packed quantization](../benchmarks/WARM-VP8-VECTOR-QUANTIZATION.md) | Exact packets; other required paths and full parity open |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-ADJACENT-FORWARD.md) | 4,932 checks/OS; 611 affected scalar WebP/OS and same actual package passed |
+| CPU and allocation measurements after cleanup | [VP8 decode color](../benchmarks/WARM-VP8-VECTOR-COLOR.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [adjacent forward blocks](../benchmarks/WARM-VP8-ADJACENT-FORWARD.md) | Exact packets; other required paths and full parity open |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
 Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct
