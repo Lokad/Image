@@ -35,6 +35,26 @@ Published 0.1.0 stays unchanged.
 [Evidence](warm-jpeg-paired-entropy-evidence.json) records raw samples, producer
 and actual-package identities, qualification and reuse. One immutable build serves
 the round; native/benchmark/generated workers are reused. Shared JPEG encoding
-cost evidence becomes historical except the reconciled caller-RGB420 case.
+cost evidence becomes historical except the reconciled caller-RGB420, JPEG444
+forward-only and two grayscale boundaries described here.
 JPEG decoding and other codecs/editing/text are unchanged. Stop append tuning;
 full 253-path parity and replacement readiness remain open.
+
+
+Three existing boundaries are subsequently reconciled on the same qualified
+immutable build, without rebuilding or repeating full/package qualification:
+
+| Current quiet short | Lokad µs | Reference µs | Ratio / upper | Allocated B/op |
+| --- | ---: | ---: | ---: | ---: |
+| RGBA8 JPEG444, forward-only / FFmpeg | 4,599.19 | 3,783.31 | 1.216 / 1.414 | 820,123 |
+| RGBA8 to gray / SIMD libjpeg-turbo | 1,585.89 | 1,405.11 | 1.129 / 1.256 | 155,436 |
+| Caller GRAY8 / SIMD libjpeg-turbo | 1,162.42 | 1,077.77 | 1.079 / 1.416 | 155,438 |
+
+These are current screens, without independent confirmations, parity passes or
+cross-producer speedup claims. Both guards and exact packets pass. JPEG444 retains
+133,039/133,041 B except approved COM. Grayscale retains the raw-exact 58,910-byte
+packet, Q69/owned quantizers and explicitly approved SIMD libjpeg-turbo reference;
+RGBA normalization flattens on0x204060, while caller GRAY8 borrows resident samples
+without RGBA staging on either subject. Complete input delivery/normalization as
+applicable, encoding, fresh output acquisition/release and one CPU remain timed.
+Existing inputs/settings/native workers and quality/ownership gates are reused.

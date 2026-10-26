@@ -9,7 +9,9 @@ Pre-cleanup timings describe their frozen producers, **not the cleaned build**.
 VP8, VP8L and caller-RGB420 JPEG have current independent cost confirmations.
 Paired JPEG entropy appends use 6.7% less elapsed than the preceding quiet short,
 with unchanged allocations and exact packets. Other shared-writer JPEG encoding
-costs become historical. VP8 rate pruning and matcher storage remain qualified;
+costs become historical; JPEG444 and the two grayscale boundaries now have current
+short screens, without an independent parity claim. VP8 rate pruning and matcher
+storage remain qualified;
 PNG SmallestSize retains unchanged current short evidence. VP8 stream decoding
 has a current 1.658× short gap with exact pixels; parity remains open.
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
@@ -30,8 +32,10 @@ are leads for measurement, not current demonstrated gaps.
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-CURRENT-VP8-STREAM-DECODER.md) | 9,920.34 | 5,984.62 | 1.658 / 1.781 | 1,966,583 | Current gap (short; qualified) |
-| [JPEG 4:4:4, forward-only / exact reference](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | 4,971.54 | 3,769.20 | 1.319 / 1.434 | 820,123 | Historical short; remeasure |
+| [JPEG 4:4:4, forward-only / exact reference](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 4,599.19 | 3,783.31 | 1.216 / 1.414 | 820,123 | Current gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 2,432.58 | 1,576.20 | 1.543 / 1.556 | 373,413 | Current gap (independent) |
+| [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 1,585.89 | 1,405.11 | 1.129 / 1.256 | 155,436 | Current gap (short; qualified) |
+| [JPEG from caller GRAY8, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 1,162.42 | 1,077.77 | 1.079 / 1.416 | 155,438 | Current gap (short; qualified) |
 | [VP8 RGBA8](../benchmarks/WARM-VP8-LUMA4-RATE-BOUND.md) | 92,818.18 | 53,494.23 | 1.735 / 1.744 | 23,358,400 | Current gap (independent) |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-CHAIN-CAPACITY.md) | 192,274.46 | 121,576.90 | 1.582 / 1.607 | 47,674,928 | Current gap (independent) |
 | [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | 24,517.23 | 17,302.12 | 1.417 / 1.498 | 1,325,670 | Current gap (short; qualified) |

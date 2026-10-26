@@ -35,8 +35,12 @@ proof. Stop remeasuring that gap. The [current VP8 emitter profile](WARM-CURRENT
 led to one [group-emission screen](WARM-VP8-GROUP-EMISSION-SCREEN.md): flat,
 unchanged allocation, rejected. Actual source/binaries restored exactly; useful
 output-limit ownership coverage retained, normal/scalar bothOS. No independent/
-full/package repeat or variant sweep. Stop emitter tuning. Next reconcile existing
-JPEG444 forward-only cost, invalidated by the accepted shared JPEGwriter change.
+full/package repeat or variant sweep. Stop emitter tuning.
+JPEG444 forward-only and the two grayscale costs, invalidated by the accepted
+shared JPEGwriter change, are now [reconciled](WARM-JPEG-PAIRED-ENTROPY.md): shorts
+1.216/1.129/1.079×,820,123/155,436/155,438B/op,exact packets/quality/ownership.
+These are current screens, not independent parity confirmations. No rebuild or
+full/package repeat. Other affected named JPEG boundaries remain historical.
 
 
 Retire four named controls: PNG RGBA8 resident/ImageBudget, JPEG RGBA8 420/ImageBudget,
@@ -55,7 +59,7 @@ all remaining required algorithms/public boundaries:
   Stream delivery/EOF, output ownership, byte identity and source metadata remain
   part of each named boundary. Metadata baselines must include matching validation.
 - Reuse current callerRGB420, VP8, VP8L and PNGSmallest8 anchors; JPEG444's
-  previous short predates the shared-writer change. Reconcile remaining named
+  current short is reconciled above, along with two grayscale boundaries. Reconcile remaining named
   uncertainties, then order demonstrated gaps by material cost. Do not infer
   a cleaned-build speedup or regression from historical ratios. Encoder complete packets precede
   CPU optimization; no return to matched-dB tuning for declared exact controls.
