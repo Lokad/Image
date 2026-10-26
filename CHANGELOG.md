@@ -42,6 +42,8 @@
   Exact rate/header bounds skip reconstruction of losing luma candidates.
   Uniform-boundary luma blocks share identical prediction work while preserving
   each mode's header, flat-level surcharge and exact tie decisions.
+  AVX2 quantization publishes packed raster/zigzag results with exact range
+  checks and the existing checked scalar publication fallback.
   Removed superseded encoder experiments; full CPU parity remains open.
 - Caller-owned cooperative memory admission across nested work and retained
   images, fonts, layouts and caches, with structured limit/unsupported failures.

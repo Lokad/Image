@@ -8,6 +8,50 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8BlockQuantizationTests
 {
+    [Theory]
+    [InlineData(1, 32767, 32767)]
+    [InlineData(-2, 16384, -32768)]
+    public void SignedWordEndpointsPublishAtEveryRasterAndDiagonalPosition(short input, int step, short expected)
+    {
+        int[] order = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
+        var values = new int[80]; var coefficients = new short[18]; var levels = new short[18];
+        for (var p = 0; p < 16; p++) values[16 + p] = 131072;
+        coefficients[16] = 30000; coefficients[17] = -30000; levels[16] = 97; levels[17] = -98;
+        for (var position = 0; position < 16; position++)
+        {
+            Array.Fill(values, 1, 0, 16); values[position] = step;
+            coefficients.AsSpan(0, 16).Clear(); coefficients[position] = input; levels.AsSpan(0, 16).Fill(29999);
+            Assert.True(Vp8BlockQuantization.Apply(coefficients, levels, new(values)));
+            for (var p = 0; p < 16; p++)
+            {
+                Assert.Equal(p == position ? expected : (short)0, coefficients[p]);
+                Assert.Equal(order[p] == position ? input : (short)0, levels[p]);
+            }
+            Assert.Equal((30000, -30000, 97, -98), ((int)coefficients[16], (int)coefficients[17], (int)levels[16], (int)levels[17]));
+        }
+    }
+
+    [Theory]
+    [InlineData(8, 16384)]
+    [InlineData(-12, 10923)]
+    public void ReconstructionOnePastSignedWordEndpointsKeepsTheExactValidPrefix(short input, int step)
+    {
+        int[] order = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
+        for (var position = 0; position < 16; position++)
+        {
+            var values = new int[80]; var coefficients = Enumerable.Repeat((short)4, 16).ToArray();
+            var levels = Enumerable.Repeat((short)29999, 16).ToArray();
+            for (var p = 0; p < 16; p++) { values[p] = 1; values[16 + p] = 32768; }
+            values[position] = step; coefficients[position] = input;
+            Assert.Throws<OverflowException>(() => Vp8BlockQuantization.Apply(coefficients, levels, new(values)));
+            for (var p = 0; p < 16; p++)
+            {
+                Assert.Equal(p == position ? input : p < position ? (short)1 : (short)4, coefficients[p]);
+                Assert.Equal(order[p] < position ? (short)1 : (short)29999, levels[p]);
+            }
+        }
+    }
+
     private static void MinimumStep(Span<int> values)
     {
         for (var p = 0; p < 16; p++)

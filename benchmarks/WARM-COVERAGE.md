@@ -6,17 +6,27 @@ dimensions/depth/filter/quality choices and approved references. No shape/settin
 grid is added. Only a demonstrated distinct omitted required path permits a later
 case. Full replacement readiness and independent warm upper≤1× remain open.
 
-[Uniform VP8 predictions](WARM-VP8-UNIFORM-PREDICTIONS.md) is the latest qualified
-production change. The existing opaque diagram independently confirms3.544×/
+[Packed VP8 quantization](WARM-VP8-VECTOR-QUANTIZATION.md) is the latest qualified
+production change. Photograph independently confirms3.119×/upper3.133,909,696 B/op,
+exact17,688 B and12.2% less elapsed than the preceding quiet short. Diagram and
+asymmetric VP8+alpha current shorts are3.046/1.645×,841,608/23,358,400 B/op and
+exact7,100/98,590 B. Both OS pass4,930Release/609scalarWebP and the same actual
+package/allthreeexamples. Guards, signed-word endpoints, checked prefix/overflow,
+native hashes and zero warm allocation pass. Stop publication variants. Next
+inspect batching four adjacent intra16 forward blocks using the existing exact
+four-lane transform; preserve DC order/geometry, scalar fallback, ownership and
+checkpoints. Older affected VP8 CPU evidence is historical. No new workload grid.
+
+[Uniform VP8 predictions](WARM-VP8-UNIFORM-PREDICTIONS.md) remains an accepted
+primitive; its earlier diagram confirmation was3.544×/
 upper3.557,841,608 B/op and exact7,100 B:6.4% less elapsed than its preceding quiet
-short. Photograph and asymmetric VP8+alpha retain current shorts3.556/1.727× and
-909,696/23,358,400 B/op,exact17,688/98,590 B. Both OS pass4,926Release/605scalar
-WebP and the same actual package/allthreeexamples. The general reuse prototype
+short. Its photograph/asymmetric VP8+alpha screens were3.556/1.727× and
+909,696/23,358,400 B/op,exact17,688/98,590 B. That milestone passed4,926Release/605scalar
+WebP perOS and the same actual package/allthreeexamples. The general reuse prototype
 is removed after a4.7% short gain; no further prediction variants are planned.
 Older affected VP8encoding cost proofs are historical. VP8L/JPEG/PNG, all decoders,
-editing and text retain their valid evidence. Next inspect complete SIMD
-quantization publication/validation as one distinct primitive; the earlier profile
-is only a lead. Preserve checked overflow, publication and scalar fallback behavior.
+editing and text retain their valid evidence. Its next quantization code lead led
+to the packed publication above; no further uniform-prediction variants are planned.
 
 [Empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md) remains valid for unchanged
 VP8L paths. The existing diagram lossless WebP control independently

@@ -1,5 +1,8 @@
 # Exact uniform-boundary VP8 prediction reuse
 
+This round's CPU observations precede [packed quantization publication](WARM-VP8-VECTOR-QUANTIZATION.md),
+which records current VP8 costs and qualification. Frozen byte/ownership proofs remain valid.
+
 The existing 513×259 opaque text/diagram control independently confirms20.65 ms,
 3.544× reference time / upper3.557×, with unchanged841,608 B/op and exact7,100 B.
 Elapsed is 6.4% lower than the preceding quiet short. This is not a paired
