@@ -1,10 +1,67 @@
 using System.Reflection;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 using Lokad.Image.Internal;
 
 namespace Lokad.Image.Tests;
 
 public sealed class Vp8ColorTests
 {
+    private delegate void Pixel(byte luma, int u, int v, Span<byte> output);
+    private delegate void Pixels8(ReadOnlySpan<byte> luma, Vector256<int> u, Vector256<int> v, Vector256<int> alpha, Span<byte> output);
+    private delegate int Expansion(byte[] plane, int stride, int width, int height, int x, int y);
+    private static readonly Pixel Scalar = typeof(Vp8Color).GetMethod("WritePixel", BindingFlags.Static | BindingFlags.NonPublic)!.CreateDelegate<Pixel>();
+    private static readonly Expansion Expand = typeof(Vp8Color).GetMethod("Chroma", BindingFlags.Static | BindingFlags.NonPublic)!.CreateDelegate<Expansion>();
+
+    [Fact]
+    public void DenseByteColorCubeKeepsEveryScalarRoundingAndAlphaLane()
+    {
+        if (!Avx2.IsSupported || !Sse41.IsSupported) return;
+        var vector = typeof(Vp8Color).GetMethod("WritePixels8", BindingFlags.Static | BindingFlags.NonPublic)!.CreateDelegate<Pixels8>();
+        Span<byte> luma = stackalloc byte[8]; Span<byte> actual = stackalloc byte[32]; Span<byte> expected = stackalloc byte[32];
+        var alpha = Vector256.Create(0, 1, 127, 255, 254, 128, 7, 19);
+        for (var y = 0; y < 256; y++)
+        {
+            luma.Fill((byte)y);
+            for (var u = -128; u < 128; u++)
+            for (var v = -128; v < 128; v += 8)
+            {
+                vector(luma, Vector256.Create(u), Vector256.Create(v, v + 1, v + 2, v + 3, v + 4, v + 5, v + 6, v + 7), alpha, actual);
+                for (var lane = 0; lane < 8; lane++)
+                {
+                    Scalar((byte)y, u, v + lane, expected.Slice(lane * 4, 3)); expected[lane * 4 + 3] = (byte)alpha.GetElement(lane);
+                }
+                if (!actual.SequenceEqual(expected)) Assert.Fail($"Color mismatch at Y={y},U={u},V={v}.");
+            }
+        }
+    }
+
+    [Fact]
+    public void RenderKeepsCenteredChromaEdgesTailsPaddingAndAlphaOwnership()
+    {
+        Span<byte> expected = stackalloc byte[3];
+        foreach (var width in new[] { 1, 2, 8, 9, 10, 16, 17, 18, 31, 32, 33, 34, 63, 64, 65, 66 })
+        foreach (var height in new[] { 1, 2, 3, 5 })
+        foreach (var pattern in new[] { 0, 1 })
+        foreach (var opaque in new[] { false, true })
+        {
+            var planes = Planes(width, height, pattern); var originalY = planes.Y.ToArray(); var originalU = planes.U.ToArray(); var originalV = planes.V.ToArray();
+            var alpha = opaque ? null : Enumerable.Range(0, width * height).Select(i => (byte)(i * 43)).ToArray(); var originalAlpha = alpha?.ToArray();
+            using var context = Context(planes, alpha); using var actual = Vp8Color.Render(planes, alpha, context);
+            for (var y = 0; y < height; y++)
+            {
+                var row = actual.GetRow8(y);
+                for (var x = 0; x < width; x++)
+                {
+                    var u = Expand(planes.U, planes.Stride / 2, (width + 1) / 2, (height + 1) / 2, x, y) - 128;
+                    var v = Expand(planes.V, planes.Stride / 2, (width + 1) / 2, (height + 1) / 2, x, y) - 128;
+                    Scalar(planes.Y[y * planes.Stride + x], u, v, expected);
+                    Assert.True(expected.SequenceEqual(row.Slice(x * 4, 3))); Assert.Equal(alpha is null ? (byte)255 : alpha[y * width + x], row[x * 4 + 3]);
+                }
+            }
+            Assert.Equal(originalY, planes.Y); Assert.Equal(originalU, planes.U); Assert.Equal(originalV, planes.V); Assert.Equal(originalAlpha, alpha);
+        }
+    }
 
     [Fact]
     public void ExactOutputMemoryAdmissionAndPlaneReleaseRemain()

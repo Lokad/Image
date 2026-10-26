@@ -26,12 +26,15 @@ Stop completed primitive rounds. The [prefix](WARM-VP8L-PREFIX-SCREEN.md) and
 [source-energy](WARM-VP8-SOURCE-ENERGY-SCREEN.md) screens offered no useful gain;
 their prototypes are removed and useful behavioral tests retained. The bounded
 [caller JPEG profile](WARM-JPEG-CALLER420-PROFILE.md) led to the accepted append.
-The [current VP8 stream-decoder screen](WARM-CURRENT-VP8-STREAM-DECODER.md)
-resolves StreamNative8 at1.658×/upper1.781,1,966,583B/op with exact pixels and
-unchanged complete Stream boundary. The historical1.677× is no longer its current
-cost reference. This is a gap screen, not independent confirmation or parity.
-Builds/qualification/workers are reused without rebuilding or repeated package
-proof. Stop remeasuring that gap. The [current VP8 emitter profile](WARM-CURRENT-VP8-EMITTER-PROFILE.md)
+[Exact VP8 chroma/color batching](WARM-VP8-VECTOR-COLOR.md) independently confirms
+the existing StreamNative8 decoder at1.301×/upper1.308,1,966,583B/op, exact pixels.
+Elapsed is21.5% lower than the preceding quiet short; no paired-baseline gain claim.
+All16,777,216byte-color combinations and256render controls remain exact; signed32
+range proof preserves every scalar precision step. BothOS4,922Release/601scalar,
+SAMEactualpackage/allthreeexamples pass. Only VP8decode rendering changes; older
+affected decode costs become historical. Unrelated encoder/decoder/editing/text
+paths and current editing anchors remain valid. Stop color tuning.
+The [current VP8 emitter profile](WARM-CURRENT-VP8-EMITTER-PROFILE.md)
 led to one [group-emission screen](WARM-VP8-GROUP-EMISSION-SCREEN.md): flat,
 unchanged allocation, rejected. Actual source/binaries restored exactly; useful
 output-limit ownership coverage retained, normal/scalar bothOS. No independent/
@@ -42,6 +45,13 @@ shared JPEGwriter change, are now [reconciled](WARM-JPEG-PAIRED-ENTROPY.md): sho
 These are current screens, not independent parity confirmations. No rebuild or
 full/package repeat. Other affected named JPEG boundaries remain historical.
 
+
+[Current editing anchors](WARM-CURRENT-EDITING-ANCHORS.md) reconcile the existing
+bilinear Down16 case at1.339×/upper1.426,290,124B/op,exact managedwords/approved
+native bounds. The archived selection driver, current production/benchmark/native
+workers and qualification are reused without rebuilding. Historical1.277× is no
+longer its current cost reference. This is a short gap, not an independent pass;
+its unchanged path evidence is reused after VP8decode color batching, without new rasters/settings.
 
 Retire four named controls: PNG RGBA8 resident/ImageBudget, JPEG RGBA8 420/ImageBudget,
 VP8 alpha/caller work budget32M, and optional JPEG callerRGB420/CompactColor.

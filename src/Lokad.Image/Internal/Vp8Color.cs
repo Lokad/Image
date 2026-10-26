@@ -1,3 +1,7 @@
+using System.Buffers.Binary;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+
 namespace Lokad.Image.Internal;
 
 /// <summary>Centered byte chroma and explicitly normalized limited-range BT.601.</summary>
@@ -32,7 +36,9 @@ internal static class Vp8Color
             {
                 context.Cancellation.ThrowIfCancellationRequested();
                 var row = result.GetRow8(y);
-                for (var x = 0; x < planes.Width; x++)
+                var first = Avx2.IsSupported && Sse41.IsSupported && planes.Width >= 9
+                    ? WriteVectorRow(planes, alpha, y, row) : 0;
+                for (var x = first; x < planes.Width; x++)
                 {
                     var u = Chroma(planes.U, planes.Stride / 2, (planes.Width + 1) / 2, (planes.Height + 1) / 2, x, y) - 128;
                     var v = Chroma(planes.V, planes.Stride / 2, (planes.Width + 1) / 2, (planes.Height + 1) / 2, x, y) - 128;
@@ -44,6 +50,69 @@ internal static class Vp8Color
             return result;
         }
         catch { result.Dispose(); throw; }
+    }
+
+    private static int WriteVectorRow(Vp8Planes planes, byte[]? alpha, int y, Span<byte> output)
+    {
+        // Each group starts on an odd pixel. Its four adjacent odd/even pairs
+        // share five chroma columns and the same two source rows.
+        var width = planes.Width; var chromaWidth = (width + 1) / 2;
+        var stride = planes.Stride / 2; var top = (y - 1) / 2;
+        var bottom = Math.Min(top + 1, (planes.Height + 1) / 2 - 1);
+        var dy = y == 0 ? 0 : (y & 1) == 0 ? 3 : 1;
+        var ut = planes.U.AsSpan(top * stride, chromaWidth); var ub = planes.U.AsSpan(bottom * stride, chromaWidth);
+        var vt = planes.V.AsSpan(top * stride, chromaWidth); var vb = planes.V.AsSpan(bottom * stride, chromaWidth);
+        var luma = planes.Y.AsSpan(y * planes.Stride, width);
+        var alphaRow = alpha is null ? ReadOnlySpan<byte>.Empty : alpha.AsSpan(y * width, width);
+        WritePixel(luma[0], Chroma(planes.U, stride, chromaWidth, (planes.Height + 1) / 2, 0, y) - 128,
+            Chroma(planes.V, stride, chromaWidth, (planes.Height + 1) / 2, 0, y) - 128, output[..3]);
+        output[3] = alpha is null ? (byte)255 : alphaRow[0];
+        var x = 1;
+        for (; x <= width - 8; x += 8)
+        {
+            var u = Chroma8(ut, ub, (x - 1) / 2, dy); var v = Chroma8(vt, vb, (x - 1) / 2, dy);
+            var a = alpha is null ? Vector256.Create(255)
+                : Avx2.ConvertToVector256Int32(Vector128.CreateScalar(BinaryPrimitives.ReadUInt64LittleEndian(alphaRow.Slice(x, 8))).AsByte());
+            WritePixels8(luma.Slice(x, 8), u, v, a, output.Slice(x * 4, 32));
+        }
+        return x;
+    }
+
+    private static Vector128<int> Chroma4(ReadOnlySpan<byte> row, int x)
+        => Sse41.ConvertToVector128Int32(Vector128.CreateScalar(BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(x, 4))).AsByte());
+
+    private static Vector256<int> Chroma8(ReadOnlySpan<byte> top, ReadOnlySpan<byte> bottom, int x, int dy)
+    {
+        var a = Chroma4(top, x) * (4 - dy) + Chroma4(bottom, x) * dy;
+        var b = Chroma4(top, x + 1) * (4 - dy) + Chroma4(bottom, x + 1) * dy;
+        var odd = (a * 3 + b + Vector128.Create(8)) >> 4;
+        var even = (a + b * 3 + Vector128.Create(8)) >> 4;
+        return Vector256.Create(Sse2.UnpackLow(odd, even), Sse2.UnpackHigh(odd, even)) - Vector256.Create(128);
+    }
+
+    private static Vector256<int> Clip16(Vector256<int> value)
+        => Vector256.Min(Vector256.Max(value, Vector256<int>.Zero), Vector256.Create(65535));
+
+    private static Vector256<int> Sample8(Vector256<int> value)
+        => Vector256.Min(Vector256.Max((value + Vector256.Create(1 << 19)) >> 20, Vector256<int>.Zero), Vector256.Create(255));
+
+    private static void WritePixels8(ReadOnlySpan<byte> luma, Vector256<int> u, Vector256<int> v,
+        Vector256<int> alpha, Span<byte> output)
+    {
+        var y = (Avx2.ConvertToVector256Int32(Vector128.CreateScalar(BinaryPrimitives.ReadUInt64LittleEndian(luma)).AsByte()) - Vector256.Create(16)) * Luma;
+        var red = Clip16((y + v * Red + Vector256.Create(16)) >> 5);
+        var green = Clip16((y + u * GreenU + v * GreenV + Vector256.Create(16)) >> 5);
+        var blue = Clip16((y + u * Blue + Vector256.Create(16)) >> 5);
+        // The complete saturated RGB16 cube bounds every product, partial sum
+        // and bias to signed32: Y<=1,978,454,547, U/V<=2,016,937,928.
+        // Thus low-word SIMD multiplication preserves the scalar Int64 result.
+        var studioY = (red * Yr + green * Yg + blue * Yb + Vector256.Create(8193 << 14)) >> 15;
+        var studioU = (red * Ur + green * Ug + blue * Ub + Vector256.Create(65537 << 14)) >> 15;
+        var studioV = (red * Vr + green * Vg + blue * Vb + Vector256.Create(65537 << 14)) >> 15;
+        y = ((studioY >> 1) - Vector256.Create(2048)) * Luma;
+        u = (studioU >> 1) - Vector256.Create(16384); v = (studioV >> 1) - Vector256.Create(16384);
+        red = Sample8(y + v * Red); green = Sample8(y + u * GreenU + v * GreenV); blue = Sample8(y + u * Blue);
+        (red | green << 8 | blue << 16 | alpha << 24).AsByte().CopyTo(output);
     }
 
     private static void WritePixel(byte luma, int u, int v, Span<byte> output)
